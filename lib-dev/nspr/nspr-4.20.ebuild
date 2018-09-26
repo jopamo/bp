@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools eutils multilib toolchain-funcs versionator multilib-minimal
+inherit autotools multilib toolchain-funcs versionator multilib-minimal
 
 MIN_PV="$(get_version_component_range 2)"
 
@@ -17,16 +17,6 @@ IUSE="debug"
 
 MULTILIB_CHOST_TOOLS=(
 	/usr/bin/nspr-config
-)
-
-PATCHES=(
-	"${FILESDIR}"/${PN}-4.7.0-prtime.patch
-	"${FILESDIR}"/${PN}-4.7.1-solaris.patch
-	"${FILESDIR}"/${PN}-4.10.6-solaris.patch
-	"${FILESDIR}"/${PN}-4.8.4-darwin-install_name.patch
-	"${FILESDIR}"/${PN}-4.8.9-link-flags.patch
-	# We do not need to pass -L$libdir via nspr-config --libs
-	"${FILESDIR}"/${PN}-4.9.5_nspr_config.patch
 )
 
 src_prepare() {

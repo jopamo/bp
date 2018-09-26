@@ -1,6 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
+
 inherit multilib-minimal meson
 
 DESCRIPTION="A free implementation of the unicode bidirectional algorithm"
@@ -15,3 +16,4 @@ RDEPEND=">=lib-dev/glib-2.34.3:2[${MULTILIB_USEDEP}]"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 
+PATCHES=( ${FILESDIR}/46f52d588ab5382a10b68605359e14cc775c86fd.patch )

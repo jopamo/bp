@@ -1,0 +1,14 @@
+diff -urN iniparser/src/dictionary.c iniparser_new/src/dictionary.c
+--- iniparser/src/dictionary.c	2018-07-04 10:12:12.015823536 -0500
++++ iniparser_new/src/dictionary.c	2018-07-04 10:13:51.639825984 -0500
+@@ -43,6 +43,10 @@
+   for systems that do not have it.
+  */
+ /*--------------------------------------------------------------------------*/
++#ifdef __cplusplus
++	extern "C" {
++#endif
++
+ static char * xstrdup(const char * s)
+ {
+     char * t ;

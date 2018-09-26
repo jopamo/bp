@@ -1,0 +1,36 @@
+diff -urN a/main.c b/main.c
+--- a/main.c	
++++ b/main.c
+@@ -857,10 +857,10 @@
+ 		_Q_EVS(ISTR, FEATURES,            features,            "noman noinfo nodoc")
+ 		_Q_EVS(STR,  EPREFIX,             eprefix,             CONFIG_EPREFIX)
+ 		_Q_EVS(STR,  EMERGE_LOG_DIR,      portlogdir,          CONFIG_EPREFIX "var/log")
+-		_Q_EVS(STR,  PORTDIR,             main_overlay,        CONFIG_EPREFIX "usr/portage")
++		_Q_EVS(STR,  PORTDIR,             main_overlay,        CONFIG_EPREFIX "var/db/repos/backpack")
+ 		_Q_EVS(STR,  PORTAGE_BINHOST,     binhost,             DEFAULT_PORTAGE_BINHOST)
+ 		_Q_EVS(STR,  PORTAGE_TMPDIR,      port_tmpdir,         CONFIG_EPREFIX "var/tmp/portage/")
+-		_Q_EVS(STR,  PKGDIR,              pkgdir,              CONFIG_EPREFIX "usr/portage/packages/")
++		_Q_EVS(STR,  PKGDIR,              pkgdir,              CONFIG_EPREFIX "var/cache/packages/")
+ 		_Q_EVS(STR,  Q_VDB,               portvdb,             CONFIG_EPREFIX "var/db/pkg")
+ 		_Q_EVS(STR,  Q_EDB,               portedb,             CONFIG_EPREFIX "var/cache/edb")
+ 		{ NULL, 0, _Q_BOOL, { NULL }, 0, NULL, }
+@@ -897,7 +897,7 @@
+ 			set_portage_env_var(var, s);
+ 	}
+ 
+-	/* expand any nested variables e.g. PORTDIR=${EPREFIX}/usr/portage */
++	/* expand any nested variables */
+ 	for (i = 0; vars_to_read[i].name; ++i) {
+ 		char *svar;
+ 
+diff -urN a/qsync b/qsync
+--- a/qsync
++++ b/qsync	
+@@ -13,7 +13,7 @@
+ 	export ${var}=$(portageq envvar ${var})
+ 	[[ -z ${!var} ]] && export ${var}=$2
+ }
+-get_portage_var PORTDIR /usr/portage
++get_portage_var PORTDIR
+ get_portage_var RSYNC_TIMEOUT 300
+ get_portage_var RSYNC_EXCLUDEFROM

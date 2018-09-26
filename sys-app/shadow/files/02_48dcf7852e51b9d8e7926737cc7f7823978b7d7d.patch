@@ -1,0 +1,34 @@
+From 48dcf7852e51b9d8e7926737cc7f7823978b7d7d Mon Sep 17 00:00:00 2001
+From: Serge Hallyn <shallyn@cisco.com>
+Date: Tue, 8 May 2018 21:37:55 -0500
+Subject: [PATCH] usermod: prevent a segv
+
+in the case where prefix does not exist.
+
+Signed-off-by: Serge Hallyn <shallyn@cisco.com>
+---
+ libmisc/prefix_flag.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/libmisc/prefix_flag.c b/libmisc/prefix_flag.c
+index 8ceffd26..96b11faa 100644
+--- a/libmisc/prefix_flag.c
++++ b/libmisc/prefix_flag.c
+@@ -319,6 +319,7 @@ extern struct group *prefix_getgr_nam_gid(const char *grname)
+ {
+ 	long long int gid;
+ 	char *endptr;
++	struct group *g;
+ 
+ 	if (NULL == grname) {
+ 		return NULL;
+@@ -333,7 +334,8 @@ extern struct group *prefix_getgr_nam_gid(const char *grname)
+ 	    	&& (gid == (gid_t)gid)) {
+ 			return prefix_getgrgid ((gid_t) gid);
+ 		}
+-		return __gr_dup(prefix_getgrnam (grname));
++		g = prefix_getgrnam (grname);
++		return g ? __gr_dup(g) : NULL;
+ 	}
+ 	else
+ 		return getgr_nam_gid(grname);

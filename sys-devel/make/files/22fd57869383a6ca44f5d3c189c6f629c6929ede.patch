@@ -1,0 +1,24 @@
+From 22fd57869383a6ca44f5d3c189c6f629c6929ede Mon Sep 17 00:00:00 2001
+From: Paul Smith <psmith@gnu.org>
+Date: Sun, 9 Jul 2017 18:56:36 -0400
+Subject: [PATCH] * variable.c (create_pattern_var): [SV 51266] Create with
+ xcalloc().
+
+Reported by Chris Metcalf <cmetcalf@mellanox.com>
+---
+ variable.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/variable.c b/variable.c
+index 364774f..e9bf5b5 100644
+--- a/variable.c
++++ b/variable.c
+@@ -51,7 +51,7 @@ struct pattern_var *
+ create_pattern_var (const char *target, const char *suffix)
+ {
+   register unsigned int len = strlen (target);
+-  register struct pattern_var *p = xmalloc (sizeof (struct pattern_var));
++  register struct pattern_var *p = xcalloc (sizeof (struct pattern_var));
+ 
+   if (pattern_vars != 0)
+     {

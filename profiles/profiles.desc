@@ -1,0 +1,29 @@
+#############################################
+# This is a list of valid profiles for each architecture.  This file is used by
+# repoman when doing a repoman scan or repoman full.
+# DO NOT ADD PROFILES WITH A "die" or "exit" IN THEM OR IT KILLS REPOMAN
+#
+#layout:
+#arch		profile_directory				status
+
+# AMD64 Profiles
+amd64           default/linux/amd64/17.0                                stable
+amd64           default/linux/amd64/17.0/selinux                        stable
+amd64           default/linux/amd64/17.0/hardened                       stable
+amd64           default/linux/amd64/17.0/hardened/selinux               stable
+amd64           default/linux/amd64/17.0/no-multilib                    stable
+amd64           default/linux/amd64/17.0/no-multilib/hardened           stable
+amd64           default/linux/amd64/17.0/no-multilib/hardened/selinux   stable
+amd64           default/linux/amd64/17.0/x32                            dev
+
+# ARM64 Profiles
+# @MAINTAINER: arm64@gentoo.org
+arm64           default/linux/arm64/17.0                        dev
+
+# musl profiles
+# @MAINTAINER: musl@gentoo.org
+amd64		default/linux/amd64/17.0/musl/hardened			exp
+amd64		default/linux/amd64/17.0/musl/hardened/selinux		exp
+arm64		default/linux/musl/arm64 				exp
+
+# vim: set ts=8:

@@ -1,0 +1,49 @@
+From e4a1c685a4b6b470194f4f5d1b69e7d9b2b4c63a Mon Sep 17 00:00:00 2001
+From: "Dmitry V. Levin" <ldv@altlinux.org>
+Date: Thu, 31 May 2018 00:20:18 +0000
+Subject: [PATCH] pam_unix: remove obsolete _UNIX_AUTHTOK, _UNIX_OLD_AUTHTOK,
+ and _UNIX_NEW_AUTHTOK macros
+
+The last use of these macros was removed by commit Linux-PAM-1.3.0~5
+so their definitions should go as well.
+
+* modules/pam_unix/pam_unix_auth.c (_UNIX_AUTHTOK): Remove.
+* modules/pam_unix/pam_unix_passwd.c (_UNIX_OLD_AUTHTOK,
+_UNIX_NEW_AUTHTOK): Likewise.
+
+Complements: 7e09188c5dc4 ("pam_unix: Use pam_get_authtok() instead of
+direct pam_prompt() calls.")
+---
+ modules/pam_unix/pam_unix_auth.c   | 2 --
+ modules/pam_unix/pam_unix_passwd.c | 5 -----
+ 2 files changed, 7 deletions(-)
+
+diff --git a/modules/pam_unix/pam_unix_auth.c b/modules/pam_unix/pam_unix_auth.c
+index fce6bce1..9d9f709d 100644
+--- a/modules/pam_unix/pam_unix_auth.c
++++ b/modules/pam_unix/pam_unix_auth.c
+@@ -74,8 +74,6 @@
+  *      onto a normal UNIX authentication
+  */
+ 
+-#define _UNIX_AUTHTOK  "-UN*X-PASS"
+-
+ #define AUTH_RETURN						\
+ do {									\
+ 	D(("recording return code for next time [%d]",		\
+diff --git a/modules/pam_unix/pam_unix_passwd.c b/modules/pam_unix/pam_unix_passwd.c
+index 9fdebefb..302cf126 100644
+--- a/modules/pam_unix/pam_unix_passwd.c
++++ b/modules/pam_unix/pam_unix_passwd.c
+@@ -106,11 +106,6 @@ extern int getrpcport(const char *host, unsigned long prognum,
+    Sets it.
+  */
+ 
+-/* data tokens */
+-
+-#define _UNIX_OLD_AUTHTOK	"-UN*X-OLD-PASS"
+-#define _UNIX_NEW_AUTHTOK	"-UN*X-NEW-PASS"
+-
+ #define MAX_PASSWD_TRIES	3
+ 
+ #ifdef HAVE_NIS

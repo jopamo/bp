@@ -1,0 +1,111 @@
+From 80861cce431a835c260bf5c7646c86da5e7bf296 Mon Sep 17 00:00:00 2001
+From: Paul Smith <psmith@gnu.org>
+Date: Sun, 18 Dec 2016 13:49:14 -0500
+Subject: [PATCH] * read.c (get_next_mword): [SV 49865] Make fallthrough
+ explicit.
+
+---
+ read.c | 52 ++++++++++++++++++++++++++--------------------------
+ 1 file changed, 26 insertions(+), 26 deletions(-)
+
+diff --git a/read.c b/read.c
+index 51fa70f..e8b505d 100644
+--- a/read.c
++++ b/read.c
+@@ -2629,7 +2629,7 @@ readline (struct ebuffer *ebuf)
+ static enum make_word_type
+ get_next_mword (char *buffer, char *delim, char **startp, unsigned int *length)
+ {
+-  enum make_word_type wtype = w_bogus;
++  enum make_word_type wtype;
+   char *p = buffer, *beg;
+   char c;
+ 
+@@ -2639,41 +2639,42 @@ get_next_mword (char *buffer, char *delim, char **startp, unsigned int *length)
+ 
+   beg = p;
+   c = *(p++);
++
++  /* Look at the start of the word to see if it's simple.  */
+   switch (c)
+     {
+     case '\0':
+       wtype = w_eol;
+-      break;
++      goto done;
+ 
+     case ';':
+       wtype = w_semicolon;
+-      break;
++      goto done;
+ 
+     case '=':
+       wtype = w_varassign;
+-      break;
++      goto done;
+ 
+     case ':':
+-      wtype = w_colon;
+-      switch (*p)
++      if (*p == '=')
+         {
+-        case ':':
+           ++p;
+-          if (p[1] != '=')
+-            wtype = w_dcolon;
+-          else
++          wtype = w_varassign; /* := */
++        }
++      else if (*p == ':')
++        {
++          ++p;
++          if (p[1] == '=')
+             {
+-              wtype = w_varassign;
+               ++p;
++              wtype = w_varassign; /* ::= */
+             }
+-          break;
+-
+-        case '=':
+-          ++p;
+-          wtype = w_varassign;
+-          break;
++          else
++            wtype = w_dcolon;
+         }
+-      break;
++      else
++        wtype = w_colon;
++      goto done;
+ 
+     case '+':
+     case '?':
+@@ -2681,20 +2682,19 @@ get_next_mword (char *buffer, char *delim, char **startp, unsigned int *length)
+       if (*p == '=')
+         {
+           ++p;
+-          wtype = w_varassign;
+-          break;
++          wtype = w_varassign; /* += or ?= or != */
++          goto done;
+         }
++      /* FALLTHROUGH */
+ 
+     default:
+       if (delim && strchr (delim, c))
+-        wtype = w_static;
+-      break;
++        {
++          wtype = w_static;
++          goto done;
++        }
+     }
+ 
+-  /* Did we find something?  If so, return now.  */
+-  if (wtype != w_bogus)
+-    goto done;
+-
+   /* This is some non-operator word.  A word consists of the longest
+      string of characters that doesn't contain whitespace, one of [:=#],
+      or [?+!]=, or one of the chars in the DELIM string.  */

@@ -1,0 +1,3684 @@
+diff -Naur bash-4.4.18/builtins/trap.def bash_new/builtins/trap.def
+--- bash-4.4.18/builtins/trap.def	2016-01-25 12:32:38.000000000 -0600
++++ bash_new/builtins/trap.def	2018-06-15 03:44:16.065948251 -0500
+@@ -98,6 +98,7 @@
+ #define IGNORE 2		/* Ignore this signal. */
+ 
+ extern int posixly_correct, subshell_environment;
++extern int sourcelevel, running_trap;
+ 
+ int
+ trap_builtin (list)
+@@ -212,6 +213,9 @@
+ 			   was SIG_IGN? */
+ 			if (interactive)
+ 			  set_signal_handler (SIGINT, sigint_sighandler);
++			/* special cases for interactive == 0 */
++			else if (interactive_shell && (sourcelevel||running_trap))
++			  set_signal_handler (SIGINT, sigint_sighandler);
+ 			else
+ 			  set_signal_handler (SIGINT, termsig_sighandler);
+ 			break;
+diff -Naur bash-4.4.18/configure.in bash_new/configure.in
+--- bash-4.4.18/configure.in	1969-12-31 18:00:00.000000000 -0600
++++ bash_new/configure.in	2018-06-15 03:44:16.069948251 -0500
+@@ -0,0 +1,1161 @@
++dnl
++dnl Configure script for bash-4.2
++dnl
++dnl report bugs to chet@po.cwru.edu
++dnl
++dnl Process this file with autoconf to produce a configure script.
++
++# Copyright (C) 1987-2011 Free Software Foundation, Inc.
++
++#
++#   This program is free software: you can redistribute it and/or modify
++#   it under the terms of the GNU General Public License as published by
++#   the Free Software Foundation, either version 3 of the License, or
++#   (at your option) any later version.
++#
++#   This program is distributed in the hope that it will be useful,
++#   but WITHOUT ANY WARRANTY; without even the implied warranty of
++#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++#   GNU General Public License for more details.
++#
++#   You should have received a copy of the GNU General Public License
++#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
++
++AC_REVISION([for Bash 4.2, version 4.037])dnl
++
++define(bashvers, 4.2)
++define(relstatus, release)
++
++AC_INIT([bash], bashvers-relstatus, [bug-bash@gnu.org])
++
++dnl make sure we are using a recent autoconf version
++AC_PREREQ(2.50)
++
++AC_CONFIG_SRCDIR(shell.h)
++dnl where to find install.sh, config.sub, and config.guess
++AC_CONFIG_AUX_DIR(./support)
++AC_CONFIG_HEADERS(config.h)
++
++dnl checks for version info
++BASHVERS=bashvers
++RELSTATUS=relstatus
++
++dnl defaults for debug settings
++case "$RELSTATUS" in
++alp*|bet*|dev*|rc*|maint*)	DEBUG='-DDEBUG' MALLOC_DEBUG='-DMALLOC_DEBUG' ;;
++*)	DEBUG= MALLOC_DEBUG= ;;
++esac
++
++dnl canonicalize the host and os so we can do some tricky things before
++dnl parsing options
++AC_CANONICAL_HOST
++
++dnl configure defaults
++opt_bash_malloc=yes
++opt_purify=no
++opt_purecov=no
++opt_afs=no
++opt_curses=no
++opt_with_installed_readline=no
++
++#htmldir=
++
++dnl some systems should be configured without the bash malloc by default
++dnl and some need a special compiler or loader
++dnl look in the NOTES file for more
++case "${host_cpu}-${host_os}" in
++alpha*-*)	opt_bash_malloc=no ;;	# alpha running osf/1 or linux
++*[[Cc]]ray*-*)	opt_bash_malloc=no ;;	# Crays
++*-osf1*)	opt_bash_malloc=no ;;	# other osf/1 machines
++sparc-svr4*)	opt_bash_malloc=no ;;	# sparc SVR4, SVR4.2
++sparc-netbsd*)	opt_bash_malloc=no ;;	# needs 8-byte alignment
++mips-irix6*)	opt_bash_malloc=no ;;	# needs 8-byte alignment
++m68k-sysv)	opt_bash_malloc=no ;;	# fixes file descriptor leak in closedir
++sparc-linux*)	opt_bash_malloc=no ;;	# sparc running linux; requires ELF
++#*-freebsd*-gnu)	opt_bash_malloc=no ;;	# there's some undetermined problem here
++#*-freebsd*)	opt_bash_malloc=no ;;	# they claim it's better; I disagree
++*-openbsd*)	opt_bash_malloc=no ;;	# they claim it needs eight-bit alignment
++*-aix*)		opt_bash_malloc=no ;;	# AIX machines
++*-nextstep*)	opt_bash_malloc=no ;;	# NeXT machines running NeXTstep
++*-macos*)	opt_bash_malloc=no ;;	# Apple MacOS X
++*-rhapsody*)	opt_bash_malloc=no ;;	# Apple Rhapsody (MacOS X)
++*-darwin*)	opt_bash_malloc=no ;;	# Apple Darwin (MacOS X)
++*-dgux*)	opt_bash_malloc=no ;;	# DG/UX machines
++*-qnx*)		opt_bash_malloc=no ;;	# QNX 4.2, QNX 6.x
++*-machten4)	opt_bash_malloc=no ;;	# MachTen 4.x
++*-bsdi2.1|*-bsdi3.?)	opt_bash_malloc=no ; : ${CC:=shlicc2} ;; # for loadable builtins
++*-beos*)	opt_bash_malloc=no ;;	# they say it's suitable
++*-cygwin*)	opt_bash_malloc=no ;;	# Cygnus's CYGWIN environment
++*-opennt*|*-interix*)	opt_bash_malloc=no ;;	# Interix, now owned by Microsoft
++esac
++
++# memory scrambling on free()
++case "${host_os}" in
++sco3.2v5*|sco3.2v4*)	opt_memscramble=no ;;
++*)			opt_memscramble=yes ;;
++esac
++
++dnl
++dnl macros for the bash debugger
++dnl
++dnl AM_PATH_LISPDIR
++AC_ARG_VAR(DEBUGGER_START_FILE, [location of bash debugger initialization file])
++
++dnl arguments to configure
++dnl packages
++AC_ARG_WITH(afs, AC_HELP_STRING([--with-afs], [if you are running AFS]), opt_afs=$withval)
++AC_ARG_WITH(bash-malloc, AC_HELP_STRING([--with-bash-malloc], [use the Bash version of malloc]), opt_bash_malloc=$withval)
++AC_ARG_WITH(curses, AC_HELP_STRING([--with-curses], [use the curses library instead of the termcap library]), opt_curses=$withval)
++AC_ARG_WITH(gnu-malloc, AC_HELP_STRING([--with-gnu-malloc], [synonym for --with-bash-malloc]), opt_bash_malloc=$withval)
++AC_ARG_WITH(installed-readline, AC_HELP_STRING([--with-installed-readline], [use a version of the readline library that is already installed]), opt_with_installed_readline=$withval)
++AC_ARG_WITH(purecov, AC_HELP_STRING([--with-purecov], [configure to postprocess with pure coverage]), opt_purecov=$withval)
++AC_ARG_WITH(purify, AC_HELP_STRING([--with-purify], [configure to postprocess with purify]), opt_purify=$withval)
++
++if test "$opt_bash_malloc" = yes; then
++	MALLOC_TARGET=malloc
++	MALLOC_SRC=malloc.c
++
++	MALLOC_LIB='-lmalloc'
++	MALLOC_LIBRARY='$(ALLOC_LIBDIR)/libmalloc.a'
++	MALLOC_LDFLAGS='-L$(ALLOC_LIBDIR)'
++	MALLOC_DEP='$(MALLOC_LIBRARY)'
++
++	AC_DEFINE(USING_BASH_MALLOC)
++else
++	MALLOC_LIB=
++	MALLOC_LIBRARY=
++	MALLOC_LDFLAGS=
++	MALLOC_DEP=	
++fi
++
++if test "$opt_purify" = yes; then
++	PURIFY="purify "
++	AC_DEFINE(DISABLE_MALLOC_WRAPPERS)
++else
++	PURIFY=
++fi
++
++if test "$opt_purecov" = yes; then
++	PURIFY="${PURIFY}purecov"
++fi
++
++if test "$opt_afs" = yes; then
++	AC_DEFINE(AFS)
++fi
++
++if test "$opt_curses" = yes; then
++	prefer_curses=yes
++fi
++
++if test -z "${DEBUGGER_START_FILE}"; then
++	DEBUGGER_START_FILE='${datadir}/bashdb/bashdb-main.inc'
++fi
++
++dnl optional shell features in config.h.in
++opt_minimal_config=no
++
++opt_job_control=yes
++opt_alias=yes
++opt_readline=yes
++opt_history=yes
++opt_bang_history=yes
++opt_dirstack=yes
++opt_restricted=yes
++opt_process_subst=yes
++opt_prompt_decoding=yes
++opt_select=yes
++opt_help=yes
++opt_array_variables=yes
++opt_dparen_arith=yes
++opt_extended_glob=yes
++opt_brace_expansion=yes
++opt_disabled_builtins=no
++opt_command_timing=yes
++opt_xpg_echo=no
++opt_strict_posix=no
++opt_cond_command=yes
++opt_cond_regexp=yes
++opt_coproc=yes
++opt_arith_for_command=yes
++opt_net_redirs=yes
++opt_progcomp=yes
++opt_separate_help=no
++opt_multibyte=yes
++opt_debugger=yes
++opt_single_longdoc_strings=yes
++opt_casemod_attrs=yes
++opt_casemod_expansions=yes
++opt_extglob_default=no
++
++dnl options that affect how bash is compiled and linked
++opt_static_link=no
++opt_profiling=no
++
++dnl argument parsing for optional features
++AC_ARG_ENABLE(minimal-config, AC_HELP_STRING([--enable-minimal-config], [a minimal sh-like configuration]), opt_minimal_config=$enableval)
++
++dnl a minimal configuration turns everything off, but features can be
++dnl added individually
++if test $opt_minimal_config = yes; then
++	opt_job_control=no opt_alias=no opt_readline=no
++	opt_history=no opt_bang_history=no opt_dirstack=no
++	opt_restricted=no opt_process_subst=no opt_prompt_decoding=no
++	opt_select=no opt_help=no opt_array_variables=no opt_dparen_arith=no
++	opt_brace_expansion=no opt_disabled_builtins=no opt_command_timing=no
++	opt_extended_glob=no opt_cond_command=no opt_arith_for_command=no
++	opt_net_redirs=no opt_progcomp=no opt_separate_help=no
++	opt_multibyte=yes opt_cond_regexp=no opt_coproc=no
++	opt_casemod_attrs=no opt_casemod_expansions=no opt_extglob_default=no
++fi
++
++AC_ARG_ENABLE(alias, AC_HELP_STRING([--enable-alias], [enable shell aliases]), opt_alias=$enableval)
++AC_ARG_ENABLE(arith-for-command, AC_HELP_STRING([--enable-arith-for-command], [enable arithmetic for command]), opt_arith_for_command=$enableval)
++AC_ARG_ENABLE(array-variables, AC_HELP_STRING([--enable-array-variables], [include shell array variables]), opt_array_variables=$enableval)
++AC_ARG_ENABLE(bang-history, AC_HELP_STRING([--enable-bang-history], [turn on csh-style history substitution]), opt_bang_history=$enableval)
++AC_ARG_ENABLE(brace-expansion, AC_HELP_STRING([--enable-brace-expansion], [include brace expansion]), opt_brace_expansion=$enableval)
++AC_ARG_ENABLE(casemod-attributes, AC_HELP_STRING([--enable-casemod-attributes], [include case-modifying variable attributes]), opt_casemod_attrs=$enableval)
++AC_ARG_ENABLE(casemod-expansions, AC_HELP_STRING([--enable-casemod-expansions], [include case-modifying word expansions]), opt_casemod_expansions=$enableval)
++AC_ARG_ENABLE(command-timing, AC_HELP_STRING([--enable-command-timing], [enable the time reserved word and command timing]), opt_command_timing=$enableval)
++AC_ARG_ENABLE(cond-command, AC_HELP_STRING([--enable-cond-command], [enable the conditional command]), opt_cond_command=$enableval)
++AC_ARG_ENABLE(cond-regexp, AC_HELP_STRING([--enable-cond-regexp], [enable extended regular expression matching in conditional commands]), opt_cond_regexp=$enableval)
++AC_ARG_ENABLE(coprocesses, AC_HELP_STRING([--enable-coprocesses], [enable coprocess support and the coproc reserved word]), opt_coproc=$enableval)
++AC_ARG_ENABLE(debugger, AC_HELP_STRING([--enable-debugger], [enable support for bash debugger]), opt_debugger=$enableval)
++AC_ARG_ENABLE(directory-stack, AC_HELP_STRING([--enable-directory-stack], [enable builtins pushd/popd/dirs]), opt_dirstack=$enableval)
++AC_ARG_ENABLE(disabled-builtins, AC_HELP_STRING([--enable-disabled-builtins], [allow disabled builtins to still be invoked]), opt_disabled_builtins=$enableval)
++AC_ARG_ENABLE(dparen-arithmetic, AC_HELP_STRING([--enable-dparen-arithmetic], [include ((...)) command]), opt_dparen_arith=$enableval)
++AC_ARG_ENABLE(extended-glob, AC_HELP_STRING([--enable-extended-glob], [include ksh-style extended pattern matching]), opt_extended_glob=$enableval)
++AC_ARG_ENABLE(extended-glob-default, AC_HELP_STRING([--enable-extended-glob-default], [force extended pattern matching to be enabled by default]), opt_extglob_default=$enableval)
++AC_ARG_ENABLE(help-builtin, AC_HELP_STRING([--enable-help-builtin], [include the help builtin]), opt_help=$enableval)
++AC_ARG_ENABLE(history, AC_HELP_STRING([--enable-history], [turn on command history]), opt_history=$enableval)
++AC_ARG_ENABLE(job-control, AC_HELP_STRING([--enable-job-control], [enable job control features]), opt_job_control=$enableval)
++AC_ARG_ENABLE(multibyte, AC_HELP_STRING([--enable-multibyte], [enable multibyte characters if OS supports them]), opt_multibyte=$enableval)
++AC_ARG_ENABLE(net-redirections, AC_HELP_STRING([--enable-net-redirections], [enable /dev/tcp/host/port redirection]), opt_net_redirs=$enableval)
++AC_ARG_ENABLE(process-substitution, AC_HELP_STRING([--enable-process-substitution], [enable process substitution]), opt_process_subst=$enableval)
++AC_ARG_ENABLE(progcomp, AC_HELP_STRING([--enable-progcomp], [enable programmable completion and the complete builtin]), opt_progcomp=$enableval)
++AC_ARG_ENABLE(prompt-string-decoding, AC_HELP_STRING([--enable-prompt-string-decoding], [turn on escape character decoding in prompts]), opt_prompt_decoding=$enableval)
++AC_ARG_ENABLE(readline, AC_HELP_STRING([--enable-readline], [turn on command line editing]), opt_readline=$enableval)
++AC_ARG_ENABLE(restricted, AC_HELP_STRING([--enable-restricted], [enable a restricted shell]), opt_restricted=$enableval)
++AC_ARG_ENABLE(select, AC_HELP_STRING([--enable-select], [include select command]), opt_select=$enableval)
++AC_ARG_ENABLE(separate-helpfiles, AC_HELP_STRING([--enable-separate-helpfiles], [use external files for help builtin documentation]), opt_separate_help=$enableval)
++AC_ARG_ENABLE(single-help-strings, AC_HELP_STRING([--enable-single-help-strings], [store help documentation as a single string to ease translation]), opt_single_longdoc_strings=$enableval)
++AC_ARG_ENABLE(strict-posix-default, AC_HELP_STRING([--enable-strict-posix-default], [configure bash to be posix-conformant by default]), opt_strict_posix=$enableval)
++AC_ARG_ENABLE(usg-echo-default, AC_HELP_STRING([--enable-usg-echo-default], [a synonym for --enable-xpg-echo-default]), opt_xpg_echo=$enableval)
++AC_ARG_ENABLE(xpg-echo-default, AC_HELP_STRING([--enable-xpg-echo-default], [make the echo builtin expand escape sequences by default]), opt_xpg_echo=$enableval)
++
++dnl options that alter how bash is compiled and linked
++AC_ARG_ENABLE(mem-scramble, AC_HELP_STRING([--enable-mem-scramble], [scramble memory on calls to malloc and free]), opt_memscramble=$enableval)
++AC_ARG_ENABLE(profiling, AC_HELP_STRING([--enable-profiling], [allow profiling with gprof]), opt_profiling=$enableval)
++AC_ARG_ENABLE(static-link, AC_HELP_STRING([--enable-static-link], [link bash statically, for use as a root shell]), opt_static_link=$enableval)
++
++dnl opt_job_control is handled later, after BASH_JOB_CONTROL_MISSING runs
++
++dnl opt_readline and opt_history are handled later, because AC_PROG_CC needs
++dnl to be run before we can check the version of an already-installed readline
++dnl library
++
++if test $opt_alias = yes; then
++AC_DEFINE(ALIAS)
++fi
++if test $opt_dirstack = yes; then
++AC_DEFINE(PUSHD_AND_POPD)
++fi
++if test $opt_restricted = yes; then
++AC_DEFINE(RESTRICTED_SHELL)
++fi
++if test $opt_process_subst = yes; then
++AC_DEFINE(PROCESS_SUBSTITUTION)
++fi
++if test $opt_prompt_decoding = yes; then
++AC_DEFINE(PROMPT_STRING_DECODE)
++fi
++if test $opt_select = yes; then
++AC_DEFINE(SELECT_COMMAND)
++fi
++if test $opt_help = yes; then
++AC_DEFINE(HELP_BUILTIN)
++fi
++if test $opt_array_variables = yes; then
++AC_DEFINE(ARRAY_VARS)
++fi
++if test $opt_dparen_arith = yes; then
++AC_DEFINE(DPAREN_ARITHMETIC)
++fi
++if test $opt_brace_expansion = yes; then
++AC_DEFINE(BRACE_EXPANSION)
++fi
++if test $opt_disabled_builtins = yes; then
++AC_DEFINE(DISABLED_BUILTINS)
++fi
++if test $opt_command_timing = yes; then
++AC_DEFINE(COMMAND_TIMING)
++fi
++if test $opt_xpg_echo = yes ; then
++AC_DEFINE(DEFAULT_ECHO_TO_XPG)
++fi
++if test $opt_strict_posix = yes; then
++AC_DEFINE(STRICT_POSIX)
++fi
++if test $opt_extended_glob = yes ; then
++AC_DEFINE(EXTENDED_GLOB)
++fi
++if test $opt_extglob_default = yes; then
++AC_DEFINE(EXTGLOB_DEFAULT, 1)
++else
++AC_DEFINE(EXTGLOB_DEFAULT, 0)
++fi
++if test $opt_cond_command = yes ; then
++AC_DEFINE(COND_COMMAND)
++fi
++if test $opt_cond_regexp = yes ; then
++AC_DEFINE(COND_REGEXP)
++fi
++if test $opt_coproc = yes; then
++AC_DEFINE(COPROCESS_SUPPORT)
++fi
++if test $opt_arith_for_command = yes; then
++AC_DEFINE(ARITH_FOR_COMMAND)
++fi
++if test $opt_net_redirs = yes; then
++AC_DEFINE(NETWORK_REDIRECTIONS)
++fi
++if test $opt_progcomp = yes; then
++AC_DEFINE(PROGRAMMABLE_COMPLETION)
++fi
++if test $opt_multibyte = no; then
++AC_DEFINE(NO_MULTIBYTE_SUPPORT)
++fi
++if test $opt_debugger = yes; then
++AC_DEFINE(DEBUGGER)
++fi
++if test $opt_casemod_attrs = yes; then
++AC_DEFINE(CASEMOD_ATTRS)
++fi
++if test $opt_casemod_expansions = yes; then
++AC_DEFINE(CASEMOD_EXPANSIONS)
++fi
++
++if test $opt_memscramble = yes; then
++AC_DEFINE(MEMSCRAMBLE)
++fi
++
++if test "$opt_minimal_config" = yes; then
++	TESTSCRIPT=run-minimal
++else
++	TESTSCRIPT=run-all
++fi
++
++HELPDIR= HELPDIRDEFINE= HELPINSTALL=
++if test "$opt_separate_help" != no; then
++	if test "$opt_separate_help" = "yes" ; then
++		HELPDIR='${datadir}/bash'
++	else
++		HELPDIR=$opt_separate_help
++	fi
++	HELPDIRDEFINE='-H ${HELPDIR}'
++	HELPINSTALL='install-help'
++fi
++HELPSTRINGS=
++if test "$opt_single_longdoc_strings" != "yes"; then
++	HELPSTRINGS='-S'
++fi
++
++dnl now substitute in the values generated by arguments
++AC_SUBST(TESTSCRIPT)
++AC_SUBST(PURIFY)
++AC_SUBST(MALLOC_TARGET)
++AC_SUBST(MALLOC_SRC)
++
++AC_SUBST(MALLOC_LIB)
++AC_SUBST(MALLOC_LIBRARY)
++AC_SUBST(MALLOC_LDFLAGS)
++AC_SUBST(MALLOC_DEP)
++
++AC_SUBST(htmldir)
++
++AC_SUBST(HELPDIR)
++AC_SUBST(HELPDIRDEFINE)
++AC_SUBST(HELPINSTALL)
++AC_SUBST(HELPSTRINGS)
++
++echo ""
++echo "Beginning configuration for bash-$BASHVERS-$RELSTATUS for ${host_cpu}-${host_vendor}-${host_os}"
++echo ""
++
++dnl compilation checks
++dnl AC_PROG_CC sets $cross_compiling to `yes' if cross-compiling for a
++dnl different environment
++AC_PROG_CC
++
++dnl test for Unix variants
++AC_ISC_POSIX
++AC_MINIX
++
++AC_SYS_LARGEFILE
++
++dnl BEGIN changes for cross-building (currently cygwin, minGW, and
++dnl (obsolete) BeOS)
++
++SIGNAMES_O=
++SIGNAMES_H=lsignames.h
++
++dnl load up the cross-building cache file -- add more cases and cache
++dnl files as necessary
++
++dnl Note that host and target machine are the same, and different than the
++dnl build machine.
++dnl Set SIGNAMES_H based on whether or not we're cross-compiling.
++
++CROSS_COMPILE=
++if test "x$cross_compiling" = "xyes"; then
++    case "${host}" in
++    *-cygwin*)
++	cross_cache=${srcdir}/cross-build/cygwin32.cache
++	;;
++    *-mingw*)
++	cross_cache=${srcdir}/cross-build/cygwin32.cache
++	;;
++    i[[3456]]86-*-beos*)
++	cross_cache=${srcdir}/cross-build/x86-beos.cache
++	;;
++    *)	echo "configure: cross-compiling for $host is not supported" >&2
++	;;
++    esac
++    if test -n "${cross_cache}" && test -r "${cross_cache}"; then
++	echo "loading cross-build cache file ${cross_cache}"
++	. ${cross_cache}
++    fi
++    unset cross_cache
++    SIGNAMES_O='signames.o'
++    CROSS_COMPILE='-DCROSS_COMPILING'
++    AC_SUBST(CROSS_COMPILE)
++fi
++AC_SUBST(SIGNAMES_H)
++AC_SUBST(SIGNAMES_O)
++
++if test -z "$CC_FOR_BUILD"; then
++    if test "x$cross_compiling" = "xno"; then
++	CC_FOR_BUILD='$(CC)'
++    else
++	CC_FOR_BUILD=gcc
++    fi
++fi
++AC_SUBST(CC_FOR_BUILD)
++
++dnl END changes for cross-building
++
++dnl We want these before the checks, so the checks can modify their values.
++test -z "$CFLAGS" && CFLAGS=-g auto_cflags=1
++
++dnl If we're using gcc and the user hasn't specified CFLAGS, add -O2 to CFLAGS.
++test -n "$GCC" && test -n "$auto_cflags" && CFLAGS="$CFLAGS -O2"
++
++dnl handle options that alter how bash is compiled and linked
++dnl these must come after the test for cc/gcc
++if test "$opt_profiling" = "yes"; then
++	PROFILE_FLAGS=-pg
++	case "$host_os" in
++	solaris2*)	;;
++	*)		opt_static_link=yes ;;
++	esac
++	DEBUG= MALLOC_DEBUG=
++fi
++
++if test "$opt_static_link" = yes; then
++	# if we're using gcc, add `-static' to LDFLAGS, except on Solaris >= 2
++	if test -n "$GCC" || test "$ac_cv_prog_gcc" = "yes"; then
++		STATIC_LD="-static" 
++		case "$host_os" in
++		solaris2*)	;;
++		*)		LDFLAGS="$LDFLAGS -static" ;;	# XXX experimental
++		esac
++	fi
++fi
++
++if test "X$cross_compiling" = "Xno"; then
++	CPPFLAGS_FOR_BUILD=${CPPFLAGS_FOR_BUILD-"$CPPFLAGS"}
++	LDFLAGS_FOR_BUILD=${LDFLAGS_FOR_BUILD-'$(LDFLAGS)'}
++else
++	CPPFLAGS_FOR_BUILD=${CPPFLAGS_FOR_BUILD-""}
++	LDFLAGS_FOR_BUILD=${LDFLAGS_FOR_BUILD-""}
++fi
++
++test -z "$CFLAGS_FOR_BUILD" && CFLAGS_FOR_BUILD="-g"
++
++AC_SUBST(CFLAGS)
++AC_SUBST(CPPFLAGS)
++AC_SUBST(LDFLAGS)
++AC_SUBST(STATIC_LD)
++
++AC_SUBST(CFLAGS_FOR_BUILD)
++AC_SUBST(CPPFLAGS_FOR_BUILD)
++AC_SUBST(LDFLAGS_FOR_BUILD)
++
++AC_PROG_GCC_TRADITIONAL
++
++dnl BEGIN READLINE and HISTORY LIBRARY SECTION
++dnl prepare to allow bash to be linked against an already-installed readline
++
++dnl first test that the readline version is new enough to link bash against
++if test "$opt_readline" = yes && test "$opt_with_installed_readline" != "no"
++then
++	# If the user specified --with-installed-readline=PREFIX and PREFIX
++	# is not `yes', set ac_cv_rl_prefix to PREFIX
++	test $opt_with_installed_readline != "yes" && ac_cv_rl_prefix=$opt_with_installed_readline
++
++	RL_LIB_READLINE_VERSION
++
++	case "$ac_cv_rl_version" in
++	5*|6*|7*|8*|9*)	;;
++	*)	opt_with_installed_readline=no 
++		AC_MSG_WARN([installed readline library is too old to be linked with bash])
++		AC_MSG_WARN([using private bash version])
++		;;
++	esac
++fi
++
++TILDE_LIB=-ltilde
++if test $opt_readline = yes; then
++	AC_DEFINE(READLINE)
++	if test "$opt_with_installed_readline" != "no" ; then
++		case "$opt_with_installed_readline" in
++		yes)	RL_INCLUDE= ;;
++		*)	case "$RL_INCLUDEDIR" in
++			/usr/include)	;;
++			*)		RL_INCLUDE='-I${RL_INCLUDEDIR}' ;;
++			esac
++			;;
++		esac
++		READLINE_DEP=
++		READLINE_LIB=-lreadline
++		# section for OS versions that don't allow unresolved symbols
++		# to be compiled into dynamic libraries.
++		case "$host_os" in
++		cygwin*)	TILDE_LIB= ;;
++		esac
++	else
++		RL_LIBDIR='$(dot)/$(LIBSUBDIR)/readline'
++		READLINE_DEP='$(READLINE_LIBRARY)'
++		# section for OS versions that ship an older/broken version of
++		# readline as a standard dynamic library and don't allow a
++		# static version specified as -llibname to override the
++		# dynamic version
++		case "${host_os}" in
++		darwin[[89]]*|darwin10*) READLINE_LIB='${READLINE_LIBRARY}' ;;
++		*)		READLINE_LIB=-lreadline ;;
++		esac
++	fi
++else
++	RL_LIBDIR='$(dot)/$(LIBSUBDIR)/readline'
++	READLINE_LIB= READLINE_DEP=
++fi
++if test $opt_history = yes || test $opt_bang_history = yes; then
++	if test $opt_history = yes; then
++		AC_DEFINE(HISTORY)
++	fi
++	if test $opt_bang_history = yes; then
++		AC_DEFINE(BANG_HISTORY)
++	fi
++ 	if test "$opt_with_installed_readline" != "no"; then
++		HIST_LIBDIR=$RL_LIBDIR
++		HISTORY_DEP=
++		HISTORY_LIB=-lhistory
++		case "$opt_with_installed_readline" in
++		yes)	RL_INCLUDE= ;;
++		*)	case "$RL_INCLUDEDIR" in
++			/usr/include)	;;
++			*)		RL_INCLUDE='-I${RL_INCLUDEDIR}' ;;
++			esac
++			;;
++		esac
++	else
++		HIST_LIBDIR='$(dot)/$(LIBSUBDIR)/readline'
++		HISTORY_DEP='$(HISTORY_LIBRARY)'
++		# section for OS versions that ship an older version of
++		# readline as a standard dynamic library and don't allow a
++		# static version specified as -llibname to override the
++		# dynamic version
++		case "${host_os}" in
++		darwin[[89]]*|darwin10*) HISTORY_LIB='${HISTORY_LIBRARY}' ;;
++		*)		HISTORY_LIB=-lhistory ;;
++		esac
++	fi
++else
++	HIST_LIBDIR='$(dot)/$(LIBSUBDIR)/readline'
++	HISTORY_LIB= HISTORY_DEP=
++fi
++AC_SUBST(READLINE_LIB)
++AC_SUBST(READLINE_DEP)
++AC_SUBST(RL_LIBDIR)
++AC_SUBST(RL_INCLUDEDIR)
++AC_SUBST(RL_INCLUDE)
++AC_SUBST(HISTORY_LIB)
++AC_SUBST(HISTORY_DEP)
++AC_SUBST(HIST_LIBDIR)
++AC_SUBST(TILDE_LIB)
++
++dnl END READLINE and HISTORY LIBRARY SECTION
++
++dnl programs needed by the build and install process
++AC_PROG_INSTALL
++AC_CHECK_PROG(AR, ar, , ar)
++dnl Set default for ARFLAGS, since autoconf does not have a macro for it.
++dnl This allows people to set it when running configure or make
++test -n "$ARFLAGS" || ARFLAGS="cr"
++AC_PROG_RANLIB
++AC_PROG_YACC
++AC_PROG_MAKE_SET
++
++case "$host_os" in
++opennt*|interix*)	MAKE_SHELL="$INTERIX_ROOT/bin/sh" ;;
++*)			MAKE_SHELL=/bin/sh ;;
++esac
++AC_SUBST(MAKE_SHELL)
++
++dnl this is similar to the expanded AC_PROG_RANLIB
++if test x$SIZE = x; then
++	if test x$ac_tool_prefix = x; then
++		SIZE=size
++	else
++		SIZE=${ac_tool_prefix}size
++		save_IFS=$IFS ; IFS=:
++		size_found=0
++		for dir in $PATH; do
++			if test -x $dir/$SIZE ; then
++				size_found=1
++				break
++			fi
++		done
++		if test $size_found -eq 0; then
++			SIZE=:
++		fi
++		IFS=$save_IFS
++	fi
++fi
++AC_SUBST(SIZE)
++
++dnl Turn on any extensions available in the GNU C library.
++AC_DEFINE(_GNU_SOURCE, 1)
++
++dnl C compiler characteristics
++AC_C_CONST
++AC_C_INLINE
++AC_C_BIGENDIAN
++AC_C_STRINGIZE
++AC_C_LONG_DOUBLE
++AC_C_PROTOTYPES
++AC_C_CHAR_UNSIGNED
++AC_C_VOLATILE
++AC_C_RESTRICT
++
++dnl initialize GNU gettext
++AM_GNU_GETTEXT([no-libtool], [need-ngettext], [lib/intl])
++
++dnl header files
++AC_HEADER_DIRENT
++AC_HEADER_TIME
++
++BASH_HEADER_INTTYPES
++
++AC_CHECK_HEADERS(unistd.h stdlib.h stdarg.h varargs.h limits.h string.h \
++		 memory.h locale.h termcap.h termio.h termios.h dlfcn.h \
++		 stddef.h stdint.h netdb.h pwd.h grp.h strings.h regex.h \
++		 syslog.h ulimit.h)
++AC_CHECK_HEADERS(sys/pte.h sys/stream.h sys/select.h sys/file.h \
++		 sys/resource.h sys/param.h sys/socket.h sys/stat.h \
++		 sys/time.h sys/times.h sys/types.h sys/wait.h)
++AC_CHECK_HEADERS(netinet/in.h arpa/inet.h)
++
++dnl sys/ptem.h requires definitions from sys/stream.h on systems where it
++dnl exists
++AC_CHECK_HEADER(sys/ptem.h, , ,[[
++#if HAVE_SYS_STREAM_H
++#  include <sys/stream.h>
++#endif
++]])
++
++dnl special checks for libc functions
++AC_FUNC_ALLOCA
++AC_FUNC_GETPGRP
++AC_FUNC_SETVBUF_REVERSED
++AC_FUNC_VPRINTF
++AC_FUNC_STRCOLL
++
++dnl if we're not using the bash malloc but require the C alloca, set things
++dnl up to build a libmalloc.a containing only alloca.o
++
++if test "$ac_cv_func_alloca_works" = "no" && test "$opt_bash_malloc" = "no"; then
++	MALLOC_TARGET=alloca
++	MALLOC_SRC=alloca.c
++
++	MALLOC_LIB='-lmalloc'
++	MALLOC_LIBRARY='$(ALLOC_LIBDIR)/libmalloc.a'
++	MALLOC_LDFLAGS='-L$(ALLOC_LIBDIR)'
++	MALLOC_DEP='$(MALLOC_LIBRARY)'
++fi
++
++dnl if vprintf is not in libc, see if it's defined in stdio.h
++if test "$ac_cv_func_vprintf" = no; then
++    AC_MSG_CHECKING(for declaration of vprintf in stdio.h)
++    AC_EGREP_HEADER([[int[ 	]*vprintf[^a-zA-Z0-9]]],stdio.h,ac_cv_func_vprintf=yes)
++    AC_MSG_RESULT($ac_cv_func_vprintf)
++    if test $ac_cv_func_vprintf = yes; then
++	AC_DEFINE(HAVE_VPRINTF)
++    fi
++fi
++
++if test "$ac_cv_func_vprintf" = no && test "$ac_cv_func__doprnt" = "yes"; then
++  AC_LIBOBJ(vprint)
++fi
++
++dnl signal stuff
++AC_TYPE_SIGNAL
++
++dnl checks for certain version-specific system calls and libc functions
++AC_CHECK_FUNC(__setostype, AC_DEFINE(HAVE_SETOSTYPE))
++AC_CHECK_FUNC(wait3, AC_DEFINE(HAVE_WAIT3))
++AC_CHECK_FUNC(isinf, AC_DEFINE(HAVE_ISINF_IN_LIBC))
++AC_CHECK_FUNC(isnan, AC_DEFINE(HAVE_ISNAN_IN_LIBC))
++
++dnl checks for missing libc functions
++AC_CHECK_FUNC(mkfifo,AC_DEFINE(HAVE_MKFIFO),AC_DEFINE(MKFIFO_MISSING))
++
++dnl checks for system calls
++AC_CHECK_FUNCS(dup2 eaccess fcntl getdtablesize getgroups gethostname \
++		getpagesize getpeername getrlimit getrusage gettimeofday \
++		kill killpg lstat readlink sbrk select setdtablesize \
++		setitimer tcgetpgrp uname ulimit waitpid)
++AC_REPLACE_FUNCS(rename)
++
++dnl checks for c library functions
++AC_CHECK_FUNCS(bcopy bzero confstr faccessat fnmatch \
++		getaddrinfo gethostbyname getservbyname getservent inet_aton \
++		memmove pathconf putenv raise regcomp regexec \
++		setenv setlinebuf setlocale setvbuf siginterrupt strchr \
++		sysconf syslog tcgetattr times ttyname tzset unsetenv)
++
++AC_CHECK_FUNCS(vasprintf asprintf)
++AC_CHECK_FUNCS(isascii isblank isgraph isprint isspace isxdigit)
++AC_CHECK_FUNCS(getpwent getpwnam getpwuid)
++AC_REPLACE_FUNCS(getcwd memset)
++AC_REPLACE_FUNCS(strcasecmp strcasestr strerror strftime strnlen strpbrk strstr)
++AC_REPLACE_FUNCS(strtod strtol strtoul strtoll strtoull strtoimax strtoumax)
++AC_REPLACE_FUNCS(dprintf)
++AC_REPLACE_FUNCS(strchrnul)
++
++AC_CHECK_DECLS([confstr])
++AC_CHECK_DECLS([printf])
++AC_CHECK_DECLS([sbrk])
++AC_CHECK_DECLS([setregid])
++AC_CHECK_DECLS([strcpy])
++AC_CHECK_DECLS([strsignal])
++
++dnl Extra test to detect the horribly broken HP/UX 11.00 strtold(3)
++AC_CHECK_DECLS([strtold], [
++    AC_MSG_CHECKING([for broken strtold])
++    AC_CACHE_VAL(bash_cv_strtold_broken,
++	[AC_TRY_COMPILE(
++	    [#include <stdlib.h>],
++	    [int main() { long double r; char *foo, bar; r = strtold(foo, &bar);}],
++	    bash_cv_strtold_broken=no, bash_cv_strtold_broken=yes,
++	    [AC_MSG_WARN(cannot check for broken strtold if cross-compiling, defaulting to no)])
++	]
++    )
++    AC_MSG_RESULT($bash_cv_strtold_broken)
++    if test "$bash_cv_strtold_broken" = "yes" ; then
++	AC_DEFINE(STRTOLD_BROKEN)
++    fi
++])
++    
++
++BASH_CHECK_DECL(strtoimax)
++BASH_CHECK_DECL(strtol)
++BASH_CHECK_DECL(strtoll)
++BASH_CHECK_DECL(strtoul)
++BASH_CHECK_DECL(strtoull)
++BASH_CHECK_DECL(strtoumax)
++
++AC_FUNC_MKTIME
++
++dnl
++dnl Checks for lib/intl and related code (uses some of the output from
++dnl AM_GNU_GETTEXT)
++dnl
++
++AC_CHECK_HEADERS([argz.h errno.h fcntl.h malloc.h stdio_ext.h])
++
++dnl AC_FUNC_MALLOC
++AC_FUNC_MMAP
++AC_CHECK_FUNCS([__argz_count __argz_next __argz_stringify dcgettext mempcpy \
++		munmap stpcpy strcspn strdup])
++
++INTL_DEP= INTL_INC= LIBINTL_H=
++if test "x$USE_INCLUDED_LIBINTL" = "xyes"; then
++	INTL_DEP='${INTL_LIBDIR}/libintl.a'
++	INTL_INC='-I${INTL_LIBSRC} -I${INTL_BUILDDIR}'
++	LIBINTL_H='${INTL_BUILDDIR}/libintl.h'
++fi
++AC_SUBST(INTL_DEP)
++AC_SUBST(INTL_INC)
++AC_SUBST(LIBINTL_H)
++
++dnl
++dnl End of checks needed by files in lib/intl
++dnl
++
++BASH_CHECK_MULTIBYTE
++
++dnl checks for the dynamic loading library functions in libc and libdl
++if test "$opt_static_link" != yes; then
++AC_CHECK_LIB(dl, dlopen)
++AC_CHECK_FUNCS(dlopen dlclose dlsym)
++fi
++
++dnl this defines HAVE_DECL_SYS_SIGLIST
++AC_DECL_SYS_SIGLIST
++
++dnl network functions -- check for inet_aton again
++if test "$ac_cv_func_inet_aton" != 'yes'; then
++BASH_FUNC_INET_ATON
++fi
++
++dnl libraries
++dnl this is reportedly no longer necessary for irix[56].?
++case "$host_os" in
++irix4*)	AC_CHECK_LIB(sun, getpwent) ;;
++esac
++
++dnl check for getpeername in the socket library only if it's not in libc
++if test "$ac_cv_func_getpeername" = no; then
++	BASH_CHECK_LIB_SOCKET
++fi
++dnl check for gethostbyname in socket libraries if it's not in libc
++if test "$ac_cv_func_gethostbyname" = no; then
++	BASH_FUNC_GETHOSTBYNAME
++fi
++
++dnl system types
++AC_TYPE_GETGROUPS
++AC_TYPE_OFF_T
++AC_TYPE_MODE_T
++AC_TYPE_UID_T
++AC_TYPE_PID_T
++AC_TYPE_SIZE_T
++AC_CHECK_TYPE(ssize_t, int)
++AC_CHECK_TYPE(time_t, long)
++
++BASH_TYPE_LONG_LONG
++BASH_TYPE_UNSIGNED_LONG_LONG
++
++AC_TYPE_SIGNAL
++BASH_TYPE_SIG_ATOMIC_T
++
++AC_CHECK_SIZEOF(char, 1)
++AC_CHECK_SIZEOF(short, 2)
++AC_CHECK_SIZEOF(int, 4)
++AC_CHECK_SIZEOF(long, 4)
++AC_CHECK_SIZEOF(char *, 4)
++AC_CHECK_SIZEOF(double, 8)
++AC_CHECK_SIZEOF([long long], 8)
++
++AC_CHECK_TYPE(u_int, [unsigned int])
++AC_CHECK_TYPE(u_long, [unsigned long])
++
++BASH_TYPE_BITS16_T
++BASH_TYPE_U_BITS16_T
++BASH_TYPE_BITS32_T
++BASH_TYPE_U_BITS32_T
++BASH_TYPE_BITS64_T
++
++BASH_TYPE_PTRDIFF_T
++
++dnl structures
++AC_HEADER_STAT
++
++dnl system services
++AC_SYS_INTERPRETER
++if test $ac_cv_sys_interpreter = yes; then
++AC_DEFINE(HAVE_HASH_BANG_EXEC)
++fi
++
++dnl Miscellaneous Bash tests
++if test "$ac_cv_func_lstat" = "no"; then
++BASH_FUNC_LSTAT
++fi
++
++dnl behavior of system calls and library functions
++BASH_FUNC_CTYPE_NONASCII
++BASH_FUNC_DUP2_CLOEXEC_CHECK
++BASH_SYS_PGRP_SYNC
++BASH_SYS_SIGNAL_VINTAGE
++
++dnl checking for the presence of certain library symbols
++BASH_SYS_ERRLIST
++BASH_SYS_SIGLIST
++BASH_UNDER_SYS_SIGLIST
++
++dnl various system types
++BASH_TYPE_SIGHANDLER
++BASH_CHECK_TYPE(clock_t, [#include <sys/times.h>], long)
++BASH_CHECK_TYPE(sigset_t, [#include <signal.h>], int)
++BASH_CHECK_TYPE(quad_t, , long, HAVE_QUAD_T)
++BASH_CHECK_TYPE(intmax_t, , $bash_cv_type_long_long)
++BASH_CHECK_TYPE(uintmax_t, , $bash_cv_type_unsigned_long_long)
++if test "$ac_cv_header_sys_socket_h" = "yes"; then
++BASH_CHECK_TYPE(socklen_t, [#include <sys/socket.h>], int, HAVE_SOCKLEN_T)
++fi
++BASH_TYPE_RLIMIT
++
++AC_CHECK_SIZEOF(intmax_t, 8)
++
++dnl presence and contents of structures used by system calls
++BASH_STRUCT_TERMIOS_LDISC
++BASH_STRUCT_TERMIO_LDISC
++BASH_STRUCT_DIRENT_D_INO
++BASH_STRUCT_DIRENT_D_FILENO
++BASH_STRUCT_DIRENT_D_NAMLEN
++BASH_STRUCT_WINSIZE
++BASH_STRUCT_TIMEVAL
++AC_CHECK_MEMBERS([struct stat.st_blocks])
++AC_STRUCT_TM
++AC_STRUCT_TIMEZONE
++BASH_STRUCT_TIMEZONE
++
++BASH_STRUCT_WEXITSTATUS_OFFSET
++
++dnl presence and behavior of C library functions
++BASH_FUNC_STRSIGNAL
++BASH_FUNC_OPENDIR_CHECK
++BASH_FUNC_ULIMIT_MAXFDS
++BASH_FUNC_FPURGE
++BASH_FUNC_GETENV
++if test "$ac_cv_func_getcwd" = "yes"; then
++BASH_FUNC_GETCWD
++fi
++BASH_FUNC_POSIX_SETJMP
++BASH_FUNC_STRCOLL
++BASH_FUNC_SNPRINTF
++BASH_FUNC_VSNPRINTF
++
++dnl If putenv or unsetenv is not present, set the right define so the
++dnl prototype and declaration in lib/sh/getenv.c will be standard-conformant
++
++if test "$ac_cv_func_putenv" = "yes"; then
++BASH_FUNC_STD_PUTENV
++else
++AC_DEFINE(HAVE_STD_PUTENV)
++fi
++if test "$ac_cv_func_unsetenv" = "yes"; then
++BASH_FUNC_STD_UNSETENV
++else
++AC_DEFINE(HAVE_STD_UNSETENV)
++fi
++
++BASH_FUNC_PRINTF_A_FORMAT
++
++dnl presence and behavior of OS functions
++BASH_SYS_REINSTALL_SIGHANDLERS
++BASH_SYS_JOB_CONTROL_MISSING
++BASH_SYS_NAMED_PIPES
++
++dnl presence of certain CPP defines
++AC_HEADER_TIOCGWINSZ
++BASH_HAVE_TIOCSTAT
++BASH_HAVE_FIONREAD
++
++BASH_CHECK_WCONTINUED
++
++dnl miscellaneous
++BASH_CHECK_SPEED_T
++BASH_CHECK_GETPW_FUNCS
++BASH_CHECK_RTSIGS
++BASH_CHECK_SYS_SIGLIST
++
++dnl special checks
++case "$host_os" in
++hpux*)	BASH_CHECK_KERNEL_RLIMIT ;;
++esac
++
++if test "$opt_readline" = yes; then
++dnl yuck
++case "$host_os" in
++aix*)	prefer_curses=yes ;;
++esac
++BASH_CHECK_LIB_TERMCAP
++fi
++AC_SUBST(TERMCAP_LIB)
++AC_SUBST(TERMCAP_DEP)
++
++BASH_CHECK_DEV_FD
++BASH_CHECK_DEV_STDIN
++BASH_SYS_DEFAULT_MAIL_DIR
++
++if test "$bash_cv_job_control_missing" = missing; then
++	opt_job_control=no
++fi
++
++if test "$opt_job_control" = yes; then
++AC_DEFINE(JOB_CONTROL)
++JOBS_O=jobs.o
++else
++JOBS_O=nojobs.o
++fi
++
++AC_SUBST(JOBS_O)
++
++dnl Defines that we want to propagate to the Makefiles in subdirectories,
++dnl like glob and readline
++
++LOCAL_DEFS=-DSHELL
++
++dnl use this section to possibly define more cpp variables, specify local
++dnl libraries, and specify any additional local cc or ld flags
++dnl
++dnl this should really go away someday
++
++case "${host_os}" in
++sysv4.2*)	AC_DEFINE(SVR4_2)
++		AC_DEFINE(SVR4) ;;
++sysv4*)		AC_DEFINE(SVR4) ;;
++sysv5*)		AC_DEFINE(SVR5) ;;
++hpux9*)		LOCAL_CFLAGS="-DHPUX9 -DHPUX" ;;
++hpux*)		LOCAL_CFLAGS=-DHPUX ;;
++dgux*)		LOCAL_CFLAGS=-D_DGUX_SOURCE; LOCAL_LIBS=-ldgc ;;
++isc*)		LOCAL_CFLAGS=-Disc386 ;;
++rhapsody*)	LOCAL_CFLAGS=-DRHAPSODY ;;
++darwin*)	LOCAL_CFLAGS=-DMACOSX ;;
++sco3.2v5*)	LOCAL_CFLAGS="-b elf -DWAITPID_BROKEN -DPATH_MAX=1024" ;;
++sco3.2v4*)	LOCAL_CFLAGS="-DMUST_UNBLOCK_CHLD -DPATH_MAX=1024" ;;
++sco3.2*)	LOCAL_CFLAGS=-DMUST_UNBLOCK_CHLD ;;
++sunos4*)	LOCAL_CFLAGS=-DSunOS4 ;;
++solaris2.5*)	LOCAL_CFLAGS="-DSunOS5 -DSOLARIS" ;;
++solaris2.8*)	LOCAL_CFLAGS=-DSOLARIS  ;;
++solaris2.9*)	LOCAL_CFLAGS=-DSOLARIS  ;;
++solaris2.10*)	LOCAL_CFLAGS=-DSOLARIS  ;;
++solaris2*)	LOCAL_CFLAGS=-DSOLARIS ;;
++lynxos*)	LOCAL_CFLAGS=-DRECYCLES_PIDS ;;
++linux*)		LOCAL_LDFLAGS=-rdynamic		 # allow dynamic loading
++		case "`uname -r`" in
++		2.[[456789]]*|3*)	AC_DEFINE(PGRP_PIPE) ;;
++		esac ;;
++*qnx6*)		LOCAL_CFLAGS="-Dqnx -Dqnx6" LOCAL_LIBS="-lncurses" ;;
++*qnx*)		LOCAL_CFLAGS="-Dqnx -F -3s" LOCAL_LDFLAGS="-3s" LOCAL_LIBS="-lunix -lncurses" ;;
++powerux*)	LOCAL_LIBS="-lgen" ;;
++cygwin*)	LOCAL_CFLAGS=-DRECYCLES_PIDS ;;
++opennt*|interix*) LOCAL_CFLAGS="-DNO_MAIN_ENV_ARG -DBROKEN_DIRENT_D_INO -D_POSIX_SOURCE -D_ALL_SOURCE" ;;
++esac
++
++dnl Stanza for OS/compiler pair-specific flags
++case "${host_os}-${CC}" in
++aix4.2*-*gcc*)	LOCAL_LDFLAGS="-Xlinker -bexpall -Xlinker -brtl" ;;
++aix4.2*)	LOCAL_LDFLAGS="-bexpall -brtl" ;;
++bsdi4*-*gcc*)	LOCAL_LDFLAGS="-rdynamic" ;;	# allow dynamic loading, like Linux
++esac
++
++dnl FreeBSD-3.x can have either a.out or ELF
++case "${host_os}" in
++freebsd[[3-9]]*)
++		if test -x /usr/bin/objformat && test "`/usr/bin/objformat`" = "elf" ; then
++			LOCAL_LDFLAGS=-rdynamic # allow dynamic loading
++		fi ;;
++freebsdelf*)	LOCAL_LDFLAGS=-rdynamic ;;	# allow dynamic loading
++dragonfly*)	LOCAL_LDFLAGS=-rdynamic ;;	# allow dynamic loading
++esac
++
++case "$host_cpu" in
++*cray*)		LOCAL_CFLAGS="-DCRAY" ;; # shell var so config.h can use it
++esac
++
++case "$host_cpu-$host_os" in
++ibmrt-*bsd4*)	LOCAL_CFLAGS="-ma -U__STDC__" ;;
++esac
++
++case "$host_cpu-$host_vendor-$host_os" in
++m88k-motorola-sysv3)	LOCAL_CFLAGS=-DWAITPID_BROKEN ;;
++mips-pyramid-sysv4)	LOCAL_CFLAGS=-Xa ;;
++esac
++
++#
++# Shared object configuration section.  These values are generated by
++# ${srcdir}/support/shobj-conf
++#
++if test "$ac_cv_func_dlopen" = "yes" && test -f ${srcdir}/support/shobj-conf
++then
++	AC_MSG_CHECKING(shared object configuration for loadable builtins)
++	eval `${CONFIG_SHELL-/bin/sh} ${srcdir}/support/shobj-conf -C "${CC}" -c "${host_cpu}" -o "${host_os}" -v "${host_vendor}"`
++	AC_SUBST(SHOBJ_CC)
++	AC_SUBST(SHOBJ_CFLAGS)
++	AC_SUBST(SHOBJ_LD)
++	AC_SUBST(SHOBJ_LDFLAGS)
++	AC_SUBST(SHOBJ_XLDFLAGS)
++	AC_SUBST(SHOBJ_LIBS)
++	AC_SUBST(SHOBJ_STATUS)
++	AC_MSG_RESULT($SHOBJ_STATUS)
++fi
++
++# try to create a directory tree if the source is elsewhere
++# this should be packaged into a script accessible via ${srcdir}/support
++case "$srcdir" in
++.)	;;
++*)	for d in doc tests support lib examples; do	# dirs
++		test -d $d || mkdir $d
++	done
++	for ld in readline glob tilde malloc sh termcap; do	# libdirs
++		test -d lib/$ld || mkdir lib/$ld
++	done
++	test -d examples/loadables || mkdir examples/loadables	# loadable builtins
++	test -d examples/loadables/perl || mkdir examples/loadables/perl
++	;;
++esac
++
++BUILD_DIR=`pwd`
++case "$BUILD_DIR" in
++*\ *)	BUILD_DIR=`echo "$BUILD_DIR" | sed 's: :\\\\ :g'` ;;
++*)	;;
++esac
++
++if test -z "$localedir"; then
++	localedir='${datarootdir}/locale'
++fi
++if test -z "$datarootdir"; then
++	datarootdir='${prefix}/share'
++fi
++
++AC_SUBST(PROFILE_FLAGS)
++
++AC_SUBST(incdir)
++AC_SUBST(BUILD_DIR)
++
++# Some versions of autoconf don't substitute these automatically
++AC_SUBST(datarootdir)
++AC_SUBST(localedir)
++
++AC_SUBST(YACC)
++AC_SUBST(AR)
++AC_SUBST(ARFLAGS)
++
++AC_SUBST(BASHVERS)
++AC_SUBST(RELSTATUS)
++AC_SUBST(DEBUG)
++AC_SUBST(MALLOC_DEBUG)
++
++AC_SUBST(host_cpu)
++AC_SUBST(host_vendor)
++AC_SUBST(host_os)
++
++AC_SUBST(LOCAL_LIBS)
++AC_SUBST(LOCAL_CFLAGS)
++AC_SUBST(LOCAL_LDFLAGS)
++AC_SUBST(LOCAL_DEFS)
++
++#AC_SUBST(ALLOCA_SOURCE)
++#AC_SUBST(ALLOCA_OBJECT)
++
++AC_OUTPUT([Makefile builtins/Makefile lib/readline/Makefile lib/glob/Makefile \
++	  lib/intl/Makefile \
++	  lib/malloc/Makefile lib/sh/Makefile lib/termcap/Makefile \
++	  lib/tilde/Makefile doc/Makefile support/Makefile po/Makefile.in \
++	  examples/loadables/Makefile examples/loadables/perl/Makefile],
++[
++# Makefile uses this timestamp file to record whether config.h is up to date.
++echo timestamp > stamp-h
++])
+diff -Naur bash-4.4.18/CWRU/audit-patch bash_new/CWRU/audit-patch
+--- bash-4.4.18/CWRU/audit-patch	1969-12-31 18:00:00.000000000 -0600
++++ bash_new/CWRU/audit-patch	2018-06-15 03:44:16.041948250 -0500
+@@ -0,0 +1,339 @@
++Date: Tue, 06 Feb 2007 16:06:58 -0500
++From: Steve Grubb <sgrubb@redhat.com>
++Subject: Re: bash and linux audit
++To: chet.ramey@case.edu
++Organization: Red Hat
++
++OK, I released audit 1.4 Sunday which has the logging function for user
++commands. It produces audit events like this:
++
++type=USER_CMD msg=audit(01/30/2007 18:23:45.793:143) : user pid=22862 uid=root
++auid=root subj=system_u:system_r:unconfined_t:s0-s0:c0.c1023
++msg='cwd=/root/test dir cmd=ls -l (terminal=tty1 res=success)'
++
++diff -urp bash-3.2.orig/config-bot.h bash-3.2/config-bot.h
++--- bash-3.2.orig/config-bot.h	2007-01-03 09:01:05.000000000 -0500
+++++ bash-3.2/config-bot.h	2007-01-20 11:59:23.000000000 -0500
++@@ -97,6 +97,11 @@
++ #  define RESTRICTED_SHELL_NAME "rbash"
++ #endif
++ 
+++/* If the shell is called by this name, it will become audited. */
+++#if defined (AUDIT_SHELL)
+++#  define AUDIT_SHELL_NAME "aubash"
+++#endif
+++
++ /***********************************************************/
++ /* Make sure feature defines have necessary prerequisites. */
++ /***********************************************************/
++diff -urp bash-3.2.orig/config.h.in bash-3.2/config.h.in
++--- bash-3.2.orig/config.h.in	2007-01-03 09:01:05.000000000 -0500
+++++ bash-3.2/config.h.in	2007-01-20 11:59:23.000000000 -0500
++@@ -81,6 +81,11 @@
++    flag. */
++ #undef RESTRICTED_SHELL
++ 
+++/* Define AUDIT_SHELL if you want the generated shell to audit all
+++   actions performed by root account.  The shell thus generated can become
+++   audited by being run with the name "aubash". */
+++#undef AUDIT_SHELL
+++
++ /* Define DISABLED_BUILTINS if you want "builtin foo" to always run the
++    shell builtin "foo", even if it has been disabled with "enable -n foo". */
++ #undef DISABLED_BUILTINS
++diff -urp bash-3.2.orig/configure.in bash-3.2/configure.in
++--- bash-3.2.orig/configure.in	2007-01-03 09:01:05.000000000 -0500
+++++ bash-3.2/configure.in	2007-01-20 11:59:23.000000000 -0500
++@@ -162,6 +162,7 @@ opt_history=yes
++ opt_bang_history=yes
++ opt_dirstack=yes
++ opt_restricted=yes
+++opt_audit=yes
++ opt_process_subst=yes
++ opt_prompt_decoding=yes
++ opt_select=yes
++@@ -195,8 +196,8 @@ dnl a minimal configuration turns everyt
++ dnl added individually
++ if test $opt_minimal_config = yes; then
++ 	opt_job_control=no opt_alias=no opt_readline=no
++-	opt_history=no opt_bang_history=no opt_dirstack=no
++-	opt_restricted=no opt_process_subst=no opt_prompt_decoding=no
+++	opt_history=no opt_bang_history=no opt_dirstack=no opt_restricted=no
+++	opt_audit=no opt_process_subst=no opt_prompt_decoding=no
++ 	opt_select=no opt_help=no opt_array_variables=no opt_dparen_arith=no
++ 	opt_brace_expansion=no opt_disabled_builtins=no opt_command_timing=no
++ 	opt_extended_glob=no opt_cond_command=no opt_arith_for_command=no
++@@ -227,6 +228,7 @@ AC_ARG_ENABLE(progcomp, AC_HELP_STRING([
++ AC_ARG_ENABLE(prompt-string-decoding, AC_HELP_STRING([--enable-prompt-string-decoding], [turn on escape character decoding in prompts]), opt_prompt_decoding=$enableval)
++ AC_ARG_ENABLE(readline, AC_HELP_STRING([--enable-readline], [turn on command line editing]), opt_readline=$enableval)
++ AC_ARG_ENABLE(restricted, AC_HELP_STRING([--enable-restricted], [enable a restricted shell]), opt_restricted=$enableval)
+++AC_ARG_ENABLE(audit, AC_HELP_STRING([--enable-audit], [enable an audited shell]), opt_audit=$enableval)
++ AC_ARG_ENABLE(select, AC_HELP_STRING([--enable-select], [include select command]), opt_select=$enableval)
++ AC_ARG_ENABLE(separate-helpfiles, AC_HELP_STRING([--enable-separate-helpfiles], [use external files for help builtin documentation]), opt_separate_help=$enableval)
++ AC_ARG_ENABLE(single-help-strings, AC_HELP_STRING([--enable-single-help-strings], [store help documentation as a single string to ease translation]), opt_single_longdoc_strings=$enableval)
++@@ -254,6 +256,10 @@ fi
++ if test $opt_restricted = yes; then
++ AC_DEFINE(RESTRICTED_SHELL)
++ fi
+++if test $opt_audit = yes; then
+++AC_DEFINE(AUDIT_SHELL)
+++AUDIT_LIB='-laudit'
+++fi
++ if test $opt_process_subst = yes; then
++ AC_DEFINE(PROCESS_SUBSTITUTION)
++ fi
++@@ -355,6 +361,8 @@ AC_SUBST(HELPDIRDEFINE)
++ AC_SUBST(HELPINSTALL)
++ AC_SUBST(HELPSTRINGS)
++ 
+++AC_SUBST(AUDIT_LIB)
+++
++ echo ""
++ echo "Beginning configuration for bash-$BASHVERS-$RELSTATUS for ${host_cpu}-${host_vendor}-${host_os}"
++ echo ""
++diff -urp bash-3.2.orig/doc/bash.1 bash-3.2/doc/bash.1
++--- bash-3.2.orig/doc/bash.1	2007-01-03 09:01:05.000000000 -0500
+++++ bash-3.2/doc/bash.1	2007-01-20 11:59:23.000000000 -0500
++@@ -155,6 +155,12 @@ single-character options to be recognize
++ .PP
++ .PD 0
++ .TP
+++.B \-\-audit
+++The shell logs all commands run by the root user (see
+++.SM
+++.B "AUDIT SHELL"
+++below).
+++.TP
++ .B \-\-debugger
++ Arrange for the debugger profile to be executed before the shell
++ starts.
++@@ -8770,6 +8776,17 @@ turns off any restrictions in the shell 
++ script.
++ .\" end of rbash.1
++ .if \n(zY=1 .ig zY
+++.SH "AUDIT SHELL"
+++.zY
+++.PP
+++If
+++.B bash
+++is started with the name
+++.BR aubash ,
+++or the
+++.B \-\-audit
+++option is supplied at invocation, the shell logs all commands issued by the root user to the audit system.
+++.if \n(zY=1 .ig zY
++ .SH "SEE ALSO"
++ .PD 0
++ .TP
++diff -urp bash-3.2.orig/eval.c bash-3.2/eval.c
++--- bash-3.2.orig/eval.c	2007-01-03 09:01:06.000000000 -0500
+++++ bash-3.2/eval.c	2007-01-20 11:59:23.000000000 -0500
++@@ -45,6 +45,11 @@
++ #  include "bashhist.h"
++ #endif
++ 
+++#if defined (AUDIT_SHELL)
+++#  include <libaudit.h>
+++#  include <errno.h>
+++#endif
+++
++ extern int EOF_reached;
++ extern int indirection_level;
++ extern int posixly_correct;
++@@ -58,6 +63,38 @@ extern int rpm_requires;
++ static void send_pwd_to_eterm __P((void));
++ static sighandler alrm_catcher __P((int));
++ 
+++#if defined (AUDIT_SHELL)
+++static int audit_fd = -1;
+++
+++static int
+++audit_start ()
+++{
+++  audit_fd = audit_open ();
+++  if (audit_fd < 0)
+++    return -1;
+++  else
+++    return 0;
+++}
+++
+++static int
+++audit (cmd, result)
+++        char *cmd;
+++        int result;
+++{
+++  int rc;
+++
+++  if (audit_fd < 0)
+++    return 0;
+++
+++  rc = audit_log_user_command (audit_fd, AUDIT_USER_CMD, cmd,
+++                               NULL, !result);
+++  close (audit_fd);
+++  audit_fd = -1;
+++  return rc;
+++}
+++#endif
+++
+++
++ /* Read and execute commands until EOF is reached.  This assumes that
++    the input source has already been initialized. */
++ int
++@@ -145,7 +182,25 @@ reader_loop ()
++ 
++ 	      executing = 1;
++ 	      stdin_redir = 0;
+++#if defined (AUDIT_SHELL)
+++              if (audited && interactive_shell && getuid () == 0)
+++                {
+++                  if (audit_start () < 0)
+++                    {
+++                      if (errno != EINVAL && errno != EPROTONOSUPPORT &&
+++                          errno != EAFNOSUPPORT)
+++                        return EXECUTION_FAILURE;
+++                    }
+++                }
+++#endif
+++
++ 	      execute_command (current_command);
+++#if defined (AUDIT_SHELL)
+++              {
+++                extern char *shell_input_line;
+++                audit (shell_input_line, last_command_exit_value);
+++              }
+++#endif
++ 
++ 	    exec_done:
++ 	      QUIT;
++diff -urp bash-3.2.orig/externs.h bash-3.2/externs.h
++--- bash-3.2.orig/externs.h	2007-01-03 09:01:06.000000000 -0500
+++++ bash-3.2/externs.h	2007-01-20 12:05:00.000000000 -0500
++@@ -77,6 +77,10 @@ extern int shell_is_restricted __P((char
++ extern int maybe_make_restricted __P((char *));
++ #endif
++ 
+++#if defined (AUDIT_SHELL)
+++extern int maybe_make_audited __P((char *));
+++#endif
+++
++ extern void unset_bash_input __P((int));
++ extern void get_current_user_info __P((void));
++ 
++diff -urp bash-3.2.orig/flags.c bash-3.2/flags.c
++--- bash-3.2.orig/flags.c	2007-01-03 09:01:06.000000000 -0500
+++++ bash-3.2/flags.c	2007-01-20 11:59:23.000000000 -0500
++@@ -142,6 +142,12 @@ int restricted = 0;		/* currently restri
++ int restricted_shell = 0;	/* shell was started in restricted mode. */
++ #endif /* RESTRICTED_SHELL */
++ 
+++#if defined (AUDIT_SHELL)
+++/* Non-zero means that this shell is audited. An audited shell records
+++   each command that the root user executes. */
+++int audited = 0;		/* shell was started in audit mode. */
+++#endif /* AUDIT_SHELL */
+++
++ /* Non-zero means that this shell is running in `privileged' mode.  This
++    is required if the shell is to run setuid.  If the `-p' option is
++    not supplied at startup, and the real and effective uids or gids
++diff -urp bash-3.2.orig/flags.h bash-3.2/flags.h
++--- bash-3.2.orig/flags.h	2007-01-03 09:01:06.000000000 -0500
+++++ bash-3.2/flags.h	2007-01-20 11:59:23.000000000 -0500
++@@ -66,6 +66,10 @@ extern int restricted;
++ extern int restricted_shell;
++ #endif /* RESTRICTED_SHELL */
++ 
+++#if defined (AUDIT_SHELL)
+++extern int audited;
+++#endif /* AUDIT_SHELL */
+++
++ extern int *find_flag __P((int));
++ extern int change_flag __P((int, int));
++ extern char *which_set_flags __P((void));
++Only in bash-3.2: .made
++diff -urp bash-3.2.orig/Makefile.in bash-3.2/Makefile.in
++--- bash-3.2.orig/Makefile.in	2007-01-03 09:01:06.000000000 -0500
+++++ bash-3.2/Makefile.in	2007-01-20 11:59:23.000000000 -0500
++@@ -366,6 +366,8 @@ MALLOC_LIBRARY = @MALLOC_LIBRARY@
++ MALLOC_LDFLAGS = @MALLOC_LDFLAGS@
++ MALLOC_DEP = @MALLOC_DEP@
++ 
+++AUDIT_LIB = @AUDIT_LIB@
+++
++ ALLOC_HEADERS = $(ALLOC_LIBSRC)/getpagesize.h $(ALLOC_LIBSRC)/shmalloc.h \
++ 		$(ALLOC_LIBSRC)/imalloc.h $(ALLOC_LIBSRC)/mstats.h \
++ 		$(ALLOC_LIBSRC)/table.h $(ALLOC_LIBSRC)/watch.h
++@@ -386,7 +388,7 @@ BASHINCFILES =	 $(BASHINCDIR)/posixstat.
++ 		 $(BASHINCDIR)/ocache.h
++ 
++ LIBRARIES = $(SHLIB_LIB) $(READLINE_LIB) $(HISTORY_LIB) $(TERMCAP_LIB) $(GLOB_LIB) \
++-	    $(TILDE_LIB) $(MALLOC_LIB) $(INTL_LIB) $(LOCAL_LIBS)
+++	    $(TILDE_LIB) $(MALLOC_LIB) $(INTL_LIB) $(LOCAL_LIBS) $(AUDIT_LIB)
++ 
++ LIBDEP = $(SHLIB_DEP) $(INTL_DEP) $(READLINE_DEP) $(HISTORY_DEP) $(TERMCAP_DEP) $(GLOB_DEP) \
++ 	 $(TILDE_DEP) $(MALLOC_DEP)
++diff -urp bash-3.2.orig/parse.y bash-3.2/parse.y
++--- bash-3.2.orig/parse.y	2007-01-03 09:01:06.000000000 -0500
+++++ bash-3.2/parse.y	2007-01-20 11:59:23.000000000 -0500
++@@ -258,7 +258,7 @@ int need_here_doc;
++ 
++ /* Where shell input comes from.  History expansion is performed on each
++    line when the shell is interactive. */
++-static char *shell_input_line = (char *)NULL;
+++char *shell_input_line = (char *)NULL;
++ static int shell_input_line_index;
++ static int shell_input_line_size;	/* Amount allocated for shell_input_line. */
++ static int shell_input_line_len;	/* strlen (shell_input_line) */
++diff -urp bash-3.2.orig/shell.c bash-3.2/shell.c
++--- bash-3.2.orig/shell.c	2007-01-03 09:01:06.000000000 -0500
+++++ bash-3.2/shell.c	2007-01-20 12:04:23.000000000 -0500
++@@ -240,6 +240,9 @@ struct {
++ #if defined (RESTRICTED_SHELL)
++   { "restricted", Int, &restricted, (char **)0x0 },
++ #endif
+++#if defined (AUDIT_SHELL)
+++  { "audit", Int, &audited, (char **)0x0 },
+++#endif
++   { "verbose", Int, &echo_input_at_read, (char **)0x0 },
++   { "version", Int, &do_version, (char **)0x0 },
++   { "wordexp", Int, &wordexp_only, (char **)0x0 },
++@@ -644,6 +647,10 @@ main (argc, argv, env)
++     maybe_make_restricted (shell_name);
++ #endif /* RESTRICTED_SHELL */
++ 
+++#if defined (AUDIT_SHELL)
+++    maybe_make_audited (shell_name);
+++#endif
+++
++   if (wordexp_only)
++     {
++       startup_state = 3;
++@@ -1143,6 +1150,29 @@ maybe_make_restricted (name)
++ }
++ #endif /* RESTRICTED_SHELL */
++ 
+++#if defined (AUDIT_SHELL)
+++/* Perhaps make this shell an `audited' one, based on NAME.  If the
+++   basename of NAME is "aubash", then this shell is audited.  The
+++   name of the audited shell is a configurable option, see config.h.
+++   In an audited shell, all actions performed by root will be logged
+++   to the audit system.
+++   Do this also if `audited' is already set to 1 maybe the shell was
+++   started with --audit. */
+++int
+++maybe_make_audited (name)
+++     char *name;
+++{
+++  char *temp;
+++
+++  temp = base_pathname (name);
+++  if (*temp == '-')
+++    temp++;
+++  if (audited || (STREQ (temp, AUDIT_SHELL_NAME)))
+++    audited = 1;
+++  return (audited);
+++}
+++#endif /* AUDIT_SHELL */
+++
++ /* Fetch the current set of uids and gids and return 1 if we're running
++    setuid or setgid. */
++ static int
+diff -Naur bash-4.4.18/CWRU/mh-folder-comp bash_new/CWRU/mh-folder-comp
+--- bash-4.4.18/CWRU/mh-folder-comp	1969-12-31 18:00:00.000000000 -0600
++++ bash_new/CWRU/mh-folder-comp	2018-06-15 03:44:16.041948250 -0500
+@@ -0,0 +1,449 @@
++From jwe@che.utexas.edu Wed Sep 21 17:23:40 1994
++Flags: 10
++Return-Path: jwe@che.utexas.edu
++Received: from po.CWRU.Edu (root@po.CWRU.Edu [129.22.4.2]) by odin.INS.CWRU.Edu with ESMTP (8.6.8.1+cwru/CWRU-2.1-ins)
++	id RAA04010; Wed, 21 Sep 1994 17:23:39 -0400 (from jwe@che.utexas.edu for <chet@odin.INS.CWRU.Edu>)
++Received: from life.ai.mit.edu (life.ai.mit.edu [128.52.32.80]) by po.CWRU.Edu with SMTP (8.6.8.1+cwru/CWRU-2.2)
++	id RAA02121; Wed, 21 Sep 1994 17:23:28 -0400 (from jwe@che.utexas.edu for <chet@po.cwru.edu>)
++Received: from schoch.che.utexas.edu by life.ai.mit.edu (4.1/AI-4.10) for chet@po.cwru.edu id AA09989; Wed, 21 Sep 94 17:23:17 EDT
++Received: from localhost (jwe@localhost) by schoch.che.utexas.edu (8.6.8.1/8.6) with SMTP id QAA05737; Wed, 21 Sep 1994 16:22:01 -0500
++Message-Id: <199409212122.QAA05737@schoch.che.utexas.edu>
++To: march@tudor.com
++Cc: bug-bash@prep.ai.mit.edu
++Subject: Re: Completion feature possible?
++In-Reply-To: Your message of 21 Sep 94 13:30:22 EDT
++Date: Wed, 21 Sep 94 16:22:00 EDT
++From: John Eaton <jwe@che.utexas.edu>
++
++Gregory F. March <march@tudor.com> wrote:
++
++: I was having a discussion about MH with one of my friends the other
++: day and I got to thinking that the +folder/subfolder scheme for naming
++: mail folders is a real pain because completion doesn't work on
++: them. Someone then mentioned that zsh (I think) has the ability to
++: specify how to complete (I guess where to look for the files) for
++: different prefixes. Bash right now knows about '@', '~', and '$' (any
++: others?). It would be really helpful if one could define something
++: like:
++: 
++: 	completion '+' "$HOME/Mail"
++: 
++: in a config file someplace. Would this be easy? Is there a list of
++: TODO item that someone might want to add this to?
++
++It would be nice to have a general completion feature like this.
++
++Until that happens, maybe you will find the following patch useful.
++It makes MH folder name completion work with bash.  The diffs are
++relative to version 1.14.2.
++
++I realize that changes to readline.c and and complete.c are not good
++since they add some MH-specific stuff to the readline code and not to
++bash, but when I first wrote this, I had no idea what else to do.
++
++Chet, would you consider adding this if it were cleaned up a bit?
++Made optional with cpp conditionals?
++
++This feature has been very useful to me for the last several years
++(since about 1.05 or 1.06, I think).
++
++Thanks,
++
++--
++John W. Eaton      | 4.3BSD is not perfect.  -- Leffler, et al. (1989).
++jwe@che.utexas.edu |
++
++
++-------------------------------cut here-------------------------------
++diff -rc bash-1.14.2/bashline.c bash-1.14.2.local/bashline.c
++*** bash-1.14.2/bashline.c	Wed Aug  3 09:32:45 1994
++--- bash-1.14.2.local/bashline.c	Wed Sep 21 15:39:04 1994
++***************
++*** 58,63 ****
++--- 58,64 ----
++  static char *hostname_completion_function ();
++  static char *command_word_completion_function ();
++  static char *command_subst_completion_function ();
+++ static char *mh_folder_completion_function ();
++  
++  static void snarf_hosts_from_file (), add_host_name ();
++  static void sort_hostname_list ();
++***************
++*** 90,95 ****
++--- 91,98 ----
++    bash_complete_username_internal (),
++    bash_complete_hostname (), bash_possible_hostname_completions (),
++    bash_complete_hostname_internal (),
+++   bash_complete_mh_folder (), bash_possible_mh_folder_completions (),
+++   bash_complete_mh_folder_internal (),
++    bash_complete_variable (), bash_possible_variable_completions (),
++    bash_complete_variable_internal (),
++    bash_complete_command (), bash_possible_command_completions (),
++***************
++*** 134,140 ****
++    rl_terminal_name = get_string_value ("TERM");
++    rl_instream = stdin;
++    rl_outstream = stderr;
++!   rl_special_prefixes = "$@";
++  
++    /* Allow conditional parsing of the ~/.inputrc file. */
++    rl_readline_name = "Bash";
++--- 137,143 ----
++    rl_terminal_name = get_string_value ("TERM");
++    rl_instream = stdin;
++    rl_outstream = stderr;
++!   rl_special_prefixes = "$@+";
++  
++    /* Allow conditional parsing of the ~/.inputrc file. */
++    rl_readline_name = "Bash";
++***************
++*** 193,198 ****
++--- 196,207 ----
++    rl_bind_key_in_map ('@', bash_possible_hostname_completions,
++  		      emacs_ctlx_keymap);
++  
+++   rl_add_defun ("complete-mh-folder", bash_complete_mh_folder, META('+'));
+++   rl_add_defun ("possible-mh-folder-completions",
+++ 		bash_possible_mh_folder_completions, -1);
+++   rl_bind_key_in_map ('+', bash_possible_mh_folder_completions,
+++ 		      emacs_ctlx_keymap);
+++ 
++    rl_add_defun ("complete-variable", bash_complete_variable, -1);
++    rl_bind_key_in_map ('$', bash_complete_variable, emacs_meta_keymap);
++    rl_add_defun ("possible-variable-completions",
++***************
++*** 656,661 ****
++--- 665,677 ----
++    if (!matches && *text == '@')
++      matches = completion_matches (text, hostname_completion_function);
++  
+++   /* Another one.  Why not?  If the word starts in '+', then look for
+++      matching mh folders for completion first. */
+++   if (!matches && *text == '+')
+++     {
+++       matches = completion_matches (text, mh_folder_completion_function);
+++     }
+++ 
++    /* And last, (but not least) if this word is in a command position, then
++       complete over possible command names, including aliases, functions,
++       and command names. */
++***************
++*** 1077,1082 ****
++--- 1093,1185 ----
++      return ((char *)NULL);
++  }
++  
+++ /* How about a completion function for mh folders? */
+++ static char *
+++ mh_folder_completion_function (text, state)
+++      int state;
+++      char *text;
+++ {
+++   extern int rl_filename_completion_desired;
+++ 
+++   extern char *get_mh_path ();
+++ 
+++   static char *mh_path = (char *)NULL;
+++   static int len;
+++   static int istate;
+++   static char *val;
+++   char *hint;
+++ 
+++   static char *mh_folder_hint = (char *)NULL;
+++ 
+++   /* If we don't have any state, make some. */
+++   if (!state)
+++     {
+++       val = (char *)NULL;
+++ 
+++       if (mh_path)
+++ 	free (mh_path);
+++ 
+++       mh_path = get_mh_path ();
+++       if (!mh_path && !(hint[1] == '/' || hint[1] == '.'))
+++ 	return ((char *)NULL);
+++ 
+++       len = strlen (mh_path);
+++     }
+++ 
+++   if (mh_folder_hint)
+++     free (mh_folder_hint);
+++ 
+++   hint = text;
+++   if (*hint == '+')
+++     hint++;
+++ 
+++   mh_folder_hint = (char *)xmalloc (2 + len + strlen (hint));
+++   if (*hint == '/' || *hint == '.') {
+++     len = -1;
+++     sprintf (mh_folder_hint, "%s", hint);
+++   } else
+++     sprintf (mh_folder_hint, "%s/%s", mh_path, hint);
+++ 
+++   istate = (val != (char *)NULL);
+++ 
+++  again:
+++   val = filename_completion_function (mh_folder_hint, istate);
+++   istate = 1;
+++ 
+++   if (!val)
+++     {
+++       return ((char *)NULL);
+++     }
+++   else
+++     {
+++       char *ptr = val + len + 1, *temp;
+++       struct stat sb;
+++       int status = stat (val, &sb);
+++ 
+++       if (status != 0)
+++ 	return ((char *)NULL);
+++ 
+++       if ((sb.st_mode & S_IFDIR) == S_IFDIR)
+++ 	{
+++ 	  temp = (char *)xmalloc (2 + strlen (ptr));
+++ 	  *temp = '+';
+++ 	  strcpy (temp + 1, ptr);
+++ 
+++ 	  free (val);
+++ 	  val = "";
+++ 
+++ 	  rl_filename_completion_desired = 1;
+++ 
+++ 	  return (temp);
+++ 	}
+++       else
+++ 	{
+++ 	  free (val);
+++ 	}
+++       goto again;
+++     }
+++ }
+++ 
++  /* History and alias expand the line. */
++  static char *
++  history_expand_line_internal (line)
++***************
++*** 1628,1633 ****
++--- 1731,1773 ----
++  {
++    bash_specific_completion
++      (what_to_do, (Function *)username_completion_function);
+++ }
+++ 
+++ static void
+++ bash_complete_mh_folder (ignore, ignore2)
+++      int ignore, ignore2;
+++ {
+++   bash_complete_mh_folder_internal (TAB);
+++ }
+++ 
+++ static void
+++ bash_possible_mh_folder_completions (ignore, ignore2)
+++      int ignore, ignore2;
+++ {
+++   bash_complete_mh_folder_internal ('?');
+++ }
+++ 
+++ static void
+++ bash_complete_mh_folder_internal (what_to_do)
+++      int what_to_do;
+++ {
+++   Function  *orig_func;
+++   CPPFunction *orig_attempt_func;
+++   char *orig_rl_completer_word_break_characters;
+++   extern char *rl_completer_word_break_characters;
+++ 
+++   orig_func = rl_completion_entry_function;
+++   orig_attempt_func = rl_attempted_completion_function;
+++   orig_rl_completer_word_break_characters = rl_completer_word_break_characters;
+++   rl_completion_entry_function = (Function *)mh_folder_completion_function;
+++   rl_attempted_completion_function = (CPPFunction *)NULL;
+++   rl_completer_word_break_characters = " \t\n\"\'";
+++ 
+++   rl_complete_internal (what_to_do);
+++ 
+++   rl_completion_entry_function = orig_func;
+++   rl_attempted_completion_function = orig_attempt_func;
+++   rl_completer_word_break_characters = orig_rl_completer_word_break_characters;
++  }
++  
++  static void
++Only in bash-1.14.2.local: bashline.c.orig
++diff -rc bash-1.14.2/lib/readline/complete.c bash-1.14.2.local/lib/readline/complete.c
++*** bash-1.14.2/lib/readline/complete.c	Tue Jul 26 12:59:57 1994
++--- bash-1.14.2.local/lib/readline/complete.c	Wed Sep 21 15:41:19 1994
++***************
++*** 733,751 ****
++  	      if (rl_filename_completion_desired)
++  		{
++  		  struct stat finfo;
++! 		  char *filename = tilde_expand (matches[0]);
++  
++! 		  if ((stat (filename, &finfo) == 0) && S_ISDIR (finfo.st_mode))
++  		    {
++! 		      if (rl_line_buffer[rl_point] != '/')
++! 			rl_insert_text ("/");
++  		    }
++! 		  else
++  		    {
++! 		      if (rl_point == rl_end)
++! 			rl_insert_text (temp_string);
++  		    }
++- 		  free (filename);
++  		}
++  	      else
++  		{
++--- 733,768 ----
++  	      if (rl_filename_completion_desired)
++  		{
++  		  struct stat finfo;
++! 		  char *tilde_expand ();
++! 		  char *plus_expand ();
++! 		  char *filename = (char *) NULL;
++  
++! 		  switch (*matches[0])
++  		    {
++! 		    case '+':
++! 		      filename = plus_expand (matches[0]);
++! 		      break;
++! 		    case '~':
++! 		    default:
++! 		      filename = tilde_expand (matches[0]);
++! 		      break;
++  		    }
++! 
++! 		  if (filename)
++  		    {
++! 		      if ((stat (filename, &finfo) == 0)
++! 			  && S_ISDIR (finfo.st_mode))
++! 			{
++! 			  if (rl_line_buffer[rl_point] != '/')
++! 			    rl_insert_text ("/");
++! 			}
++! 		      else
++! 			{
++! 			  if (rl_point == rl_end)
++! 			    rl_insert_text (temp_string);
++! 			}
++! 		      free (filename);
++  		    }
++  		}
++  	      else
++  		{
++Only in bash-1.14.2.local/lib/readline: diffs
++diff -rc bash-1.14.2/lib/readline/readline.c bash-1.14.2.local/lib/readline/readline.c
++*** bash-1.14.2/lib/readline/readline.c	Fri Aug 12 12:47:46 1994
++--- bash-1.14.2.local/lib/readline/readline.c	Wed Sep 21 15:36:07 1994
++***************
++*** 23,28 ****
++--- 23,29 ----
++  #define READLINE_LIBRARY
++  
++  #include <stdio.h>
+++ #include <string.h>
++  #include <sys/types.h>
++  #include <fcntl.h>
++  #if !defined (NO_SYS_FILE)
++***************
++*** 3518,3523 ****
++--- 3519,3616 ----
++  }
++  
++  #endif /* TEST */
+++ 
+++ #define cr_whitespace(c) ((c) == '\r' || (c) == '\n' || whitespace(c))
+++ 
+++ char *
+++ get_mh_path ()
+++ {
+++   static FILE *fp = (FILE *)NULL;
+++   char buf[512];      /* XXX */
+++   char profile[512];  /* XXX */
+++   char *bp;
+++   char *temp_home;
+++   char *temp_path;
+++ 
+++   temp_home = (char *)getenv ("HOME");
+++   if (!temp_home)
+++     return ((char *)NULL);
+++ 
+++   strcpy (profile, temp_home);
+++   strcat (profile, "/.mh_profile");
+++ 
+++   if (fp)
+++     fclose (fp);
+++ 
+++   fp = fopen (profile, "r");
+++   if (fp == (FILE *)NULL)
+++     return ((char *)NULL);
+++ 
+++   while (fgets (buf, 512, fp) != (char *)NULL)  /* XXX */
+++     {
+++       if ((bp = strstr (buf, "Path:")) != (char *)NULL)
+++ 	{
+++ 	  bp += 5;
+++ 	  while (whitespace (*bp))
+++ 	    bp++;
+++ 
+++ 	  if (*bp == '\0')
+++ 	    return ((char *)NULL);
+++ 
+++ 	  temp_path = (char *)xmalloc (3 + strlen (bp) + strlen (temp_home));
+++ 
+++ 	  strcpy (temp_path, temp_home);
+++ 	  strcat (temp_path, "/");
+++ 	  strcat (temp_path, bp);
+++ 
+++ 	  bp = temp_path;
+++ 
+++ 	  while (!(cr_whitespace (*bp)))
+++ 	    bp++;
+++ 
+++ 	  *bp = '\0';
+++ 
+++ 	  return temp_path;
+++ 	}
+++     }
+++ 
+++   return ((char *)NULL);
+++ }
+++ 
+++ /* Expand FILENAME if it begins with a plus.  This always returns
+++    a new string. */
+++ char *
+++ plus_expand (filename)
+++      char *filename;
+++ {
+++   static char *dirname = (char *)NULL;
+++ 
+++   if (filename && *filename == '+')
+++     {
+++       char *mh_path = get_mh_path ();
+++ 
+++       if (filename[1] == '/' || filename[1] == '.')
+++ 	{
+++ 	  dirname = (char *)xmalloc (1 + strlen (filename));
+++ 
+++ 	  strcpy(dirname, filename+1);
+++ 
+++ 	  return dirname;
+++ 	}
+++ 
+++       if (mh_path)
+++ 	{
+++ 	  dirname = (char *)xmalloc (1 + strlen (filename) + strlen (mh_path));
+++ 
+++ 	  strcpy (dirname, mh_path);
+++ 	  strcat (dirname, "/");
+++ 	  strcat (dirname, filename+1);
+++ 
+++ 	  return dirname;
+++ 	}
+++     }
+++   return (char *)NULL;
+++ }
++  
++  
++  /*
++
+diff -Naur bash-4.4.18/.gitignore bash_new/.gitignore
+--- bash-4.4.18/.gitignore	1969-12-31 18:00:00.000000000 -0600
++++ bash_new/.gitignore	2018-06-15 03:44:16.037948250 -0500
+@@ -0,0 +1,81 @@
++# don't push out -i
++-i
++
++*.save
++.DS_Store
++.DS_Store?
++._*
++.Spotlight-V100
++#
++# these files are all created by the build process; none are in the repository
++#
++*.o
++*.a
++*.dSYM
++.build
++.made
++
++config.h
++config.status
++config.cache
++config.log
++
++autom4te.cache
++
++bash
++bashbug
++bashversion
++
++Makefile
++builtins/Makefile
++builtins/builtext.h
++builtins/builtins.c
++builtins/mkbuiltins
++builtins/pipesize.h
++builtins/psize.aux
++
++doc/Makefile
++examples/loadables/Makefile
++examples/loadables/Makefile.inc
++examples/loadables/perl/Makefile
++lib/glob/Makefile
++lib/intl/Makefile
++lib/malloc/Makefile
++lib/readline/Makefile
++lib/sh/Makefile
++lib/termcap/Makefile
++lib/tilde/Makefile
++support/Makefile
++
++lib/intl/charset.alias
++lib/intl/libgnuintl.h
++lib/intl/libintl.h
++lib/intl/ref-add.sed
++lib/intl/ref-del.sed
++
++po/Makefile
++po/Makefile.in
++po/POTFILES
++
++support/bash.pc
++support/man2html
++support/bashbug.sh
++
++lsignames.h
++pathnames.h
++signames.h
++version.h
++syntax.c
++stamp-h
++
++mksignames
++mksyntax
++
++printenv
++recho
++xcase
++zecho
++tests/printenv
++tests/recho
++tests/xcase
++tests/zecho
+diff -Naur bash-4.4.18/jobs.c bash_new/jobs.c
+--- bash-4.4.18/jobs.c	2016-11-11 13:06:24.000000000 -0600
++++ bash_new/jobs.c	2018-06-15 03:44:16.161948253 -0500
+@@ -812,8 +812,22 @@
+   ps_index_t *bucket, psi;
+   struct pidstat *ps;
+ 
+-  bucket = pshash_getbucket (pid);
+-  psi = bgp_getindex ();
++  /* bucket == existing chain of pids hashing to same value
++     psi = where were going to put this pid/status */
++
++  bucket = pshash_getbucket (pid);	/* index into pidstat_table */
++  psi = bgp_getindex ();		/* bgpids.head, index into storage */
++
++  /* XXX - what if psi == *bucket? */
++  if (psi == *bucket)
++    {
++#ifdef DEBUG
++      internal_warning ("hashed pid %d (pid %d) collides with bgpids.head, skipping", psi, pid);
++#endif
++      bgpids.storage[psi].pid = NO_PID;		/* make sure */
++      psi = bgp_getindex ();			/* skip to next one */
++    }
++
+   ps = &bgpids.storage[psi];
+ 
+   ps->pid = pid;
+@@ -841,32 +855,47 @@
+      ps_index_t psi;
+ {
+   struct pidstat *ps;
++  ps_index_t *bucket;
+ 
+   ps = &bgpids.storage[psi];
+   if (ps->pid == NO_PID)
+     return;
+ 
+-  if (ps->bucket_next != NO_PID)
++  if (ps->bucket_next != NO_PIDSTAT)
+     bgpids.storage[ps->bucket_next].bucket_prev = ps->bucket_prev;
+-  if (ps->bucket_prev != NO_PID)
++  if (ps->bucket_prev != NO_PIDSTAT)
+     bgpids.storage[ps->bucket_prev].bucket_next = ps->bucket_next;
+   else
+-    *(pshash_getbucket (ps->pid)) = ps->bucket_next;
++    {
++      bucket = pshash_getbucket (ps->pid);
++      *bucket = ps->bucket_next;	/* deleting chain head in hash table */
++    }
++
++  /* clear out this cell, just in case */
++  ps->pid = NO_PID;
++  ps->bucket_next = ps->bucket_prev = NO_PIDSTAT;
+ }
+ 
+ static int
+ bgp_delete (pid)
+      pid_t pid;
+ {
+-  ps_index_t psi;
++  ps_index_t psi, orig_psi;
+ 
+   if (bgpids.storage == 0 || bgpids.nalloc == 0 || bgpids.npid == 0)
+     return 0;
+ 
+   /* Search chain using hash to find bucket in pidstat_table */
+-  for (psi = *(pshash_getbucket (pid)); psi != NO_PIDSTAT; psi = bgpids.storage[psi].bucket_next)
+-    if (bgpids.storage[psi].pid == pid)
+-      break;
++  for (orig_psi = psi = *(pshash_getbucket (pid)); psi != NO_PIDSTAT; psi = bgpids.storage[psi].bucket_next)
++    {
++      if (bgpids.storage[psi].pid == pid)
++	break;
++      if (orig_psi == bgpids.storage[psi].bucket_next)	/* catch reported bug */
++	{
++	  internal_warning ("bgp_delete: LOOP: psi (%d) == storage[psi].bucket_next", psi);
++	  return 0;
++	}
++    }
+ 
+   if (psi == NO_PIDSTAT)
+     return 0;		/* not found */
+@@ -904,15 +933,22 @@
+ bgp_search (pid)
+      pid_t pid;
+ {
+-  ps_index_t psi;
++  ps_index_t psi, orig_psi;
+ 
+   if (bgpids.storage == 0 || bgpids.nalloc == 0 || bgpids.npid == 0)
+     return -1;
+ 
+   /* Search chain using hash to find bucket in pidstat_table */
+-  for (psi = *(pshash_getbucket (pid)); psi != NO_PIDSTAT; psi = bgpids.storage[psi].bucket_next)
+-    if (bgpids.storage[psi].pid == pid)
+-      return (bgpids.storage[psi].status);
++  for (orig_psi = psi = *(pshash_getbucket (pid)); psi != NO_PIDSTAT; psi = bgpids.storage[psi].bucket_next)
++    {
++      if (bgpids.storage[psi].pid == pid)
++	return (bgpids.storage[psi].status);
++      if (orig_psi == bgpids.storage[psi].bucket_next)	/* catch reported bug */
++	{
++	  internal_warning ("bgp_search: LOOP: psi (%d) == storage[psi].bucket_next", psi);
++	  return -1;
++	}
++    }
+ 
+   return -1;
+ }
+@@ -2653,7 +2689,17 @@
+   wait_sigint_received = child_caught_sigint = 0;
+   if (job_control == 0 || (subshell_environment&SUBSHELL_COMSUB))
+     {
+-      old_sigint_handler = set_signal_handler (SIGINT, wait_sigint_handler);
++      SigHandler *temp_sigint_handler;
++
++      temp_sigint_handler = set_signal_handler (SIGINT, wait_sigint_handler);
++      if (temp_sigint_handler == wait_sigint_handler)
++        {
++#if defined (DEBUG)
++	  internal_warning ("wait_for: recursively setting old_sigint_handler to wait_sigint_handler: running_trap = %d", running_trap);
++#endif
++        }
++      else
++	old_sigint_handler = temp_sigint_handler;
+       waiting_for_child = 0;
+       if (old_sigint_handler == SIG_IGN)
+ 	set_signal_handler (SIGINT, old_sigint_handler);
+diff -Naur bash-4.4.18/lib/readline/display.c bash_new/lib/readline/display.c
+--- bash-4.4.18/lib/readline/display.c	2016-07-28 13:49:33.000000000 -0500
++++ bash_new/lib/readline/display.c	2018-06-15 03:44:16.181948254 -0500
+@@ -771,7 +771,9 @@
+ 	 appear in the first and last lines of the prompt */
+       wadjust = (newlines == 0)
+ 		  ? prompt_invis_chars_first_line
+-		  : ((newlines == prompt_lines_estimate) ? wrap_offset : prompt_invis_chars_first_line);
++		  : ((newlines == prompt_lines_estimate)
++		  	? (wrap_offset - prompt_invis_chars_first_line)
++		  	: 0);
+ 
+       /* fix from Darin Johnson <darin@acuson.com> for prompt string with
+          invisible characters that is longer than the screen width.  The
+diff -Naur bash-4.4.18/lib/readline/readline.c bash_new/lib/readline/readline.c
+--- bash-4.4.18/lib/readline/readline.c	2016-04-20 14:53:52.000000000 -0500
++++ bash_new/lib/readline/readline.c	2018-06-15 03:44:16.193948254 -0500
+@@ -1057,7 +1057,7 @@
+ 	/* We probably shadowed a keymap, so keep going. */
+ 	r = _rl_dispatch (ANYOTHERKEY, m);
+     }
+-  else if (r && map[ANYOTHERKEY].function)
++  else if (r < 0 && map[ANYOTHERKEY].function)
+     {
+       /* We didn't match (r is probably -1), so return something to
+ 	 tell the caller that it should try ANYOTHERKEY for an
+@@ -1069,7 +1069,7 @@
+       _rl_dispatching_keymap = map;
+       return -2;
+     }
+-  else if (r && got_subseq)
++  else if (r < 0 && got_subseq)		/* XXX */
+     {
+       /* OK, back up the chain. */
+       if (RL_ISSTATE (RL_STATE_MACROINPUT))
+diff -Naur bash-4.4.18/lib/readline/readline.c.orig bash_new/lib/readline/readline.c.orig
+--- bash-4.4.18/lib/readline/readline.c.orig	1969-12-31 18:00:00.000000000 -0600
++++ bash_new/lib/readline/readline.c.orig	2018-06-15 03:44:16.193948254 -0500
+@@ -0,0 +1,1364 @@
++/* readline.c -- a general facility for reading lines of input
++   with emacs style editing and completion. */
++
++/* Copyright (C) 1987-2013 Free Software Foundation, Inc.
++
++   This file is part of the GNU Readline Library (Readline), a library
++   for reading lines of text with interactive input and history editing.      
++
++   Readline is free software: you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation, either version 3 of the License, or
++   (at your option) any later version.
++
++   Readline is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with Readline.  If not, see <http://www.gnu.org/licenses/>.
++*/
++
++#define READLINE_LIBRARY
++
++#if defined (HAVE_CONFIG_H)
++#  include <config.h>
++#endif
++
++#include <sys/types.h>
++#include "posixstat.h"
++#include <fcntl.h>
++#if defined (HAVE_SYS_FILE_H)
++#  include <sys/file.h>
++#endif /* HAVE_SYS_FILE_H */
++
++#if defined (HAVE_UNISTD_H)
++#  include <unistd.h>
++#endif /* HAVE_UNISTD_H */
++
++#if defined (HAVE_STDLIB_H)
++#  include <stdlib.h>
++#else
++#  include "ansi_stdlib.h"
++#endif /* HAVE_STDLIB_H */
++
++#if defined (HAVE_LOCALE_H)
++#  include <locale.h>
++#endif
++
++#include <stdio.h>
++#include "posixjmp.h"
++#include <errno.h>
++
++#if !defined (errno)
++extern int errno;
++#endif /* !errno */
++
++/* System-specific feature definitions and include files. */
++#include "rldefs.h"
++#include "rlmbutil.h"
++
++#if defined (__EMX__)
++#  define INCL_DOSPROCESS
++#  include <os2.h>
++#endif /* __EMX__ */
++
++/* Some standard library routines. */
++#include "readline.h"
++#include "history.h"
++
++#include "rlprivate.h"
++#include "rlshell.h"
++#include "xmalloc.h"
++
++#ifndef RL_LIBRARY_VERSION
++#  define RL_LIBRARY_VERSION "5.1"
++#endif
++
++#ifndef RL_READLINE_VERSION
++#  define RL_READLINE_VERSION	0x0501
++#endif
++
++extern void _rl_free_history_entry PARAMS((HIST_ENTRY *));
++
++#if defined (COLOR_SUPPORT)
++extern void _rl_parse_colors PARAMS((void));		/* XXX */
++#endif
++
++
++/* Forward declarations used in this file. */
++static char *readline_internal PARAMS((void));
++static void readline_initialize_everything PARAMS((void));
++
++static void bind_arrow_keys_internal PARAMS((Keymap));
++static void bind_arrow_keys PARAMS((void));
++
++static void readline_default_bindings PARAMS((void));
++static void reset_default_bindings PARAMS((void));
++
++static int _rl_subseq_result PARAMS((int, Keymap, int, int));
++static int _rl_subseq_getchar PARAMS((int));
++
++/* **************************************************************** */
++/*								    */
++/*			Line editing input utility		    */
++/*								    */
++/* **************************************************************** */
++
++const char *rl_library_version = RL_LIBRARY_VERSION;
++
++int rl_readline_version = RL_READLINE_VERSION;
++
++/* True if this is `real' readline as opposed to some stub substitute. */
++int rl_gnu_readline_p = 1;
++
++/* A pointer to the keymap that is currently in use.
++   By default, it is the standard emacs keymap. */
++Keymap _rl_keymap = emacs_standard_keymap;
++
++/* The current style of editing. */
++int rl_editing_mode = emacs_mode;
++
++/* The current insert mode:  input (the default) or overwrite */
++int rl_insert_mode = RL_IM_DEFAULT;
++
++/* Non-zero if we called this function from _rl_dispatch().  It's present
++   so functions can find out whether they were called from a key binding
++   or directly from an application. */
++int rl_dispatching;
++
++/* Non-zero if the previous command was a kill command. */
++int _rl_last_command_was_kill = 0;
++
++/* The current value of the numeric argument specified by the user. */
++int rl_numeric_arg = 1;
++
++/* Non-zero if an argument was typed. */
++int rl_explicit_arg = 0;
++
++/* Temporary value used while generating the argument. */
++int rl_arg_sign = 1;
++
++/* Non-zero means we have been called at least once before. */
++static int rl_initialized;
++
++#if 0
++/* If non-zero, this program is running in an EMACS buffer. */
++static int running_in_emacs;
++#endif
++
++/* Flags word encapsulating the current readline state. */
++int rl_readline_state = RL_STATE_NONE;
++
++/* The current offset in the current input line. */
++int rl_point;
++
++/* Mark in the current input line. */
++int rl_mark;
++
++/* Length of the current input line. */
++int rl_end;
++
++/* Make this non-zero to return the current input_line. */
++int rl_done;
++
++/* The last function executed by readline. */
++rl_command_func_t *rl_last_func = (rl_command_func_t *)NULL;
++
++/* Top level environment for readline_internal (). */
++procenv_t _rl_top_level;
++
++/* The streams we interact with. */
++FILE *_rl_in_stream, *_rl_out_stream;
++
++/* The names of the streams that we do input and output to. */
++FILE *rl_instream = (FILE *)NULL;
++FILE *rl_outstream = (FILE *)NULL;
++
++/* Non-zero means echo characters as they are read.  Defaults to no echo;
++   set to 1 if there is a controlling terminal, we can get its attributes,
++   and the attributes include `echo'.  Look at rltty.c:prepare_terminal_settings
++   for the code that sets it. */
++int _rl_echoing_p = 0;
++
++/* Current prompt. */
++char *rl_prompt = (char *)NULL;
++int rl_visible_prompt_length = 0;
++
++/* Set to non-zero by calling application if it has already printed rl_prompt
++   and does not want readline to do it the first time. */
++int rl_already_prompted = 0;
++
++/* The number of characters read in order to type this complete command. */
++int rl_key_sequence_length = 0;
++
++/* If non-zero, then this is the address of a function to call just
++   before readline_internal_setup () prints the first prompt. */
++rl_hook_func_t *rl_startup_hook = (rl_hook_func_t *)NULL;
++
++/* If non-zero, this is the address of a function to call just before
++   readline_internal_setup () returns and readline_internal starts
++   reading input characters. */
++rl_hook_func_t *rl_pre_input_hook = (rl_hook_func_t *)NULL;
++
++/* What we use internally.  You should always refer to RL_LINE_BUFFER. */
++static char *the_line;
++
++/* The character that can generate an EOF.  Really read from
++   the terminal driver... just defaulted here. */
++int _rl_eof_char = CTRL ('D');
++
++/* Non-zero makes this the next keystroke to read. */
++int rl_pending_input = 0;
++
++/* Pointer to a useful terminal name. */
++const char *rl_terminal_name = (const char *)NULL;
++
++/* Non-zero means to always use horizontal scrolling in line display. */
++int _rl_horizontal_scroll_mode = 0;
++
++/* Non-zero means to display an asterisk at the starts of history lines
++   which have been modified. */
++int _rl_mark_modified_lines = 0;  
++
++/* The style of `bell' notification preferred.  This can be set to NO_BELL,
++   AUDIBLE_BELL, or VISIBLE_BELL. */
++int _rl_bell_preference = AUDIBLE_BELL;
++     
++/* String inserted into the line by rl_insert_comment (). */
++char *_rl_comment_begin;
++
++/* Keymap holding the function currently being executed. */
++Keymap rl_executing_keymap;
++
++/* Keymap we're currently using to dispatch. */
++Keymap _rl_dispatching_keymap;
++
++/* Non-zero means to erase entire line, including prompt, on empty input lines. */
++int rl_erase_empty_line = 0;
++
++/* Non-zero means to read only this many characters rather than up to a
++   character bound to accept-line. */
++int rl_num_chars_to_read;
++
++/* Line buffer and maintenance. */
++char *rl_line_buffer = (char *)NULL;
++int rl_line_buffer_len = 0;
++
++/* Key sequence `contexts' */
++_rl_keyseq_cxt *_rl_kscxt = 0;
++
++int rl_executing_key;
++char *rl_executing_keyseq = 0;
++int _rl_executing_keyseq_size = 0;
++
++/* Timeout (specified in milliseconds) when reading characters making up an
++   ambiguous multiple-key sequence */
++int _rl_keyseq_timeout = 500;
++
++#define RESIZE_KEYSEQ_BUFFER() \
++  do \
++    { \
++      if (rl_key_sequence_length + 2 >= _rl_executing_keyseq_size) \
++	{ \
++	  _rl_executing_keyseq_size += 16; \
++	  rl_executing_keyseq = xrealloc (rl_executing_keyseq, _rl_executing_keyseq_size); \
++	} \
++    } \
++  while (0);
++        
++/* Forward declarations used by the display, termcap, and history code. */
++
++/* **************************************************************** */
++/*								    */
++/*			`Forward' declarations  		    */
++/*								    */
++/* **************************************************************** */
++
++/* Non-zero means do not parse any lines other than comments and
++   parser directives. */
++unsigned char _rl_parsing_conditionalized_out = 0;
++
++/* Non-zero means to convert characters with the meta bit set to
++   escape-prefixed characters so we can indirect through
++   emacs_meta_keymap or vi_escape_keymap. */
++int _rl_convert_meta_chars_to_ascii = 1;
++
++/* Non-zero means to output characters with the meta bit set directly
++   rather than as a meta-prefixed escape sequence. */
++int _rl_output_meta_chars = 0;
++
++/* Non-zero means to look at the termios special characters and bind
++   them to equivalent readline functions at startup. */
++int _rl_bind_stty_chars = 1;
++
++/* Non-zero means to go through the history list at every newline (or
++   whenever rl_done is set and readline returns) and revert each line to
++   its initial state. */
++int _rl_revert_all_at_newline = 0;
++
++/* Non-zero means to honor the termios ECHOCTL bit and echo control
++   characters corresponding to keyboard-generated signals. */
++int _rl_echo_control_chars = 1;
++
++/* Non-zero means to prefix the displayed prompt with a character indicating
++   the editing mode: @ for emacs, : for vi-command, + for vi-insert. */
++int _rl_show_mode_in_prompt = 0;
++
++/* **************************************************************** */
++/*								    */
++/*			Top Level Functions			    */
++/*								    */
++/* **************************************************************** */
++
++/* Non-zero means treat 0200 bit in terminal input as Meta bit. */
++int _rl_meta_flag = 0;	/* Forward declaration */
++
++/* Set up the prompt and expand it.  Called from readline() and
++   rl_callback_handler_install (). */
++int
++rl_set_prompt (prompt)
++     const char *prompt;
++{
++  FREE (rl_prompt);
++  rl_prompt = prompt ? savestring (prompt) : (char *)NULL;
++  rl_display_prompt = rl_prompt ? rl_prompt : "";
++
++  rl_visible_prompt_length = rl_expand_prompt (rl_prompt);
++  return 0;
++}
++  
++/* Read a line of input.  Prompt with PROMPT.  An empty PROMPT means
++   none.  A return value of NULL means that EOF was encountered. */
++char *
++readline (prompt)
++     const char *prompt;
++{
++  char *value;
++#if 0
++  int in_callback;
++#endif
++
++  /* If we are at EOF return a NULL string. */
++  if (rl_pending_input == EOF)
++    {
++      rl_clear_pending_input ();
++      return ((char *)NULL);
++    }
++
++#if 0
++  /* If readline() is called after installing a callback handler, temporarily
++     turn off the callback state to avoid ensuing messiness.  Patch supplied
++     by the gdb folks.  XXX -- disabled.  This can be fooled and readline
++     left in a strange state by a poorly-timed longjmp. */
++  if (in_callback = RL_ISSTATE (RL_STATE_CALLBACK))
++    RL_UNSETSTATE (RL_STATE_CALLBACK);
++#endif
++
++  rl_set_prompt (prompt);
++
++  rl_initialize ();
++  if (rl_prep_term_function)
++    (*rl_prep_term_function) (_rl_meta_flag);
++
++#if defined (HANDLE_SIGNALS)
++  rl_set_signals ();
++#endif
++
++  value = readline_internal ();
++  if (rl_deprep_term_function)
++    (*rl_deprep_term_function) ();
++
++#if defined (HANDLE_SIGNALS)
++  rl_clear_signals ();
++#endif
++
++#if 0
++  if (in_callback)
++    RL_SETSTATE (RL_STATE_CALLBACK);
++#endif
++
++#if HAVE_DECL_AUDIT_TTY && defined (ENABLE_TTY_AUDIT_SUPPORT)
++  if (value)
++    _rl_audit_tty (value);
++#endif
++
++  return (value);
++}
++
++#if defined (READLINE_CALLBACKS)
++#  define STATIC_CALLBACK
++#else
++#  define STATIC_CALLBACK static
++#endif
++
++STATIC_CALLBACK void
++readline_internal_setup ()
++{
++  char *nprompt;
++
++  _rl_in_stream = rl_instream;
++  _rl_out_stream = rl_outstream;
++
++  /* Enable the meta key only for the duration of readline(), if this
++     terminal has one and the terminal has been initialized */
++  if (_rl_enable_meta & RL_ISSTATE (RL_STATE_TERMPREPPED))
++    _rl_enable_meta_key ();
++
++  if (rl_startup_hook)
++    (*rl_startup_hook) ();
++
++#if defined (VI_MODE)
++  if (rl_editing_mode == vi_mode)
++    rl_vi_insertion_mode (1, 'i');	/* don't want to reset last */
++#endif /* VI_MODE */
++
++  /* If we're not echoing, we still want to at least print a prompt, because
++     rl_redisplay will not do it for us.  If the calling application has a
++     custom redisplay function, though, let that function handle it. */
++  if (_rl_echoing_p == 0 && rl_redisplay_function == rl_redisplay)
++    {
++      if (rl_prompt && rl_already_prompted == 0)
++	{
++	  nprompt = _rl_strip_prompt (rl_prompt);
++	  fprintf (_rl_out_stream, "%s", nprompt);
++	  fflush (_rl_out_stream);
++	  xfree (nprompt);
++	}
++    }
++  else
++    {
++      if (rl_prompt && rl_already_prompted)
++	rl_on_new_line_with_prompt ();
++      else
++	rl_on_new_line ();
++      (*rl_redisplay_function) ();
++    }
++
++  if (rl_pre_input_hook)
++    (*rl_pre_input_hook) ();
++
++  RL_CHECK_SIGNALS ();
++}
++
++STATIC_CALLBACK char *
++readline_internal_teardown (eof)
++     int eof;
++{
++  char *temp;
++  HIST_ENTRY *entry;
++
++  RL_CHECK_SIGNALS ();
++
++  /* Restore the original of this history line, iff the line that we
++     are editing was originally in the history, AND the line has changed. */
++  entry = current_history ();
++
++  if (entry && rl_undo_list)
++    {
++      temp = savestring (the_line);
++      rl_revert_line (1, 0);
++      entry = replace_history_entry (where_history (), the_line, (histdata_t)NULL);
++      _rl_free_history_entry (entry);
++
++      strcpy (the_line, temp);
++      xfree (temp);
++    }
++
++  if (_rl_revert_all_at_newline)
++    _rl_revert_all_lines ();
++
++  /* At any rate, it is highly likely that this line has an undo list.  Get
++     rid of it now. */
++  if (rl_undo_list)
++    rl_free_undo_list ();
++
++  /* Disable the meta key, if this terminal has one and we were told to use it.
++     The check whether or not we sent the enable string is in
++     _rl_disable_meta_key(); the flag is set in _rl_enable_meta_key */
++  _rl_disable_meta_key ();
++
++  /* Restore normal cursor, if available. */
++  _rl_set_insert_mode (RL_IM_INSERT, 0);
++
++  return (eof ? (char *)NULL : savestring (the_line));
++}
++
++void
++_rl_internal_char_cleanup ()
++{
++#if defined (VI_MODE)
++  /* In vi mode, when you exit insert mode, the cursor moves back
++     over the previous character.  We explicitly check for that here. */
++  if (rl_editing_mode == vi_mode && _rl_keymap == vi_movement_keymap)
++    rl_vi_check ();
++#endif /* VI_MODE */
++
++  if (rl_num_chars_to_read && rl_end >= rl_num_chars_to_read)
++    {
++      (*rl_redisplay_function) ();
++      _rl_want_redisplay = 0;
++      rl_newline (1, '\n');
++    }
++
++  if (rl_done == 0)
++    {
++      (*rl_redisplay_function) ();
++      _rl_want_redisplay = 0;
++    }
++
++  /* If the application writer has told us to erase the entire line if
++     the only character typed was something bound to rl_newline, do so. */
++  if (rl_erase_empty_line && rl_done && rl_last_func == rl_newline &&
++      rl_point == 0 && rl_end == 0)
++    _rl_erase_entire_line ();
++}
++
++STATIC_CALLBACK int
++#if defined (READLINE_CALLBACKS)
++readline_internal_char ()
++#else
++readline_internal_charloop ()
++#endif
++{
++  static int lastc, eof_found;
++  int c, code, lk;
++
++  lastc = -1;
++  eof_found = 0;
++
++#if !defined (READLINE_CALLBACKS)
++  while (rl_done == 0)
++    {
++#endif
++      lk = _rl_last_command_was_kill;
++
++#if defined (HAVE_POSIX_SIGSETJMP)
++      code = sigsetjmp (_rl_top_level, 0);
++#else
++      code = setjmp (_rl_top_level);
++#endif
++
++      if (code)
++	{
++	  (*rl_redisplay_function) ();
++	  _rl_want_redisplay = 0;
++	  /* If we get here, we're not being called from something dispatched
++	     from _rl_callback_read_char(), which sets up its own value of
++	     _rl_top_level (saving and restoring the old, of course), so
++	     we can just return here. */
++	  if (RL_ISSTATE (RL_STATE_CALLBACK))
++	    return (0);
++	}
++
++      if (rl_pending_input == 0)
++	{
++	  /* Then initialize the argument and number of keys read. */
++	  _rl_reset_argument ();
++	  rl_key_sequence_length = 0;
++	  rl_executing_keyseq[0] = 0;
++	}
++
++      RL_SETSTATE(RL_STATE_READCMD);
++      c = rl_read_key ();
++      RL_UNSETSTATE(RL_STATE_READCMD);
++
++      /* look at input.c:rl_getc() for the circumstances under which this will
++	 be returned; punt immediately on read error without converting it to
++	 a newline; assume that rl_read_key has already called the signal
++	 handler. */
++      if (c == READERR)
++	{
++#if defined (READLINE_CALLBACKS)
++	  RL_SETSTATE(RL_STATE_DONE);
++	  return (rl_done = 1);
++#else
++	  eof_found = 1;
++	  break;
++#endif
++	}
++
++      /* EOF typed to a non-blank line is a <NL>.  If we want to change this,
++	 to force any existing line to be ignored when read(2) reads EOF,
++	 for example, this is the place to change. */
++      if (c == EOF && rl_end)
++	c = NEWLINE;
++
++      /* The character _rl_eof_char typed to blank line, and not as the
++	 previous character is interpreted as EOF. */
++      if (((c == _rl_eof_char && lastc != c) || c == EOF) && !rl_end)
++	{
++#if defined (READLINE_CALLBACKS)
++	  RL_SETSTATE(RL_STATE_DONE);
++	  return (rl_done = 1);
++#else
++	  eof_found = 1;
++	  break;
++#endif
++	}
++
++      lastc = c;
++      _rl_dispatch ((unsigned char)c, _rl_keymap);
++      RL_CHECK_SIGNALS ();
++
++      /* If there was no change in _rl_last_command_was_kill, then no kill
++	 has taken place.  Note that if input is pending we are reading
++	 a prefix command, so nothing has changed yet. */
++      if (rl_pending_input == 0 && lk == _rl_last_command_was_kill)
++	_rl_last_command_was_kill = 0;
++
++      _rl_internal_char_cleanup ();
++
++#if defined (READLINE_CALLBACKS)
++      return 0;
++#else
++    }
++
++  return (eof_found);
++#endif
++}
++
++#if defined (READLINE_CALLBACKS)
++static int
++readline_internal_charloop ()
++{
++  int eof = 1;
++
++  while (rl_done == 0)
++    eof = readline_internal_char ();
++  return (eof);
++}
++#endif /* READLINE_CALLBACKS */
++
++/* Read a line of input from the global rl_instream, doing output on
++   the global rl_outstream.
++   If rl_prompt is non-null, then that is our prompt. */
++static char *
++readline_internal ()
++{
++  int eof;
++
++  readline_internal_setup ();
++  eof = readline_internal_charloop ();
++  return (readline_internal_teardown (eof));
++}
++
++void
++_rl_init_line_state ()
++{
++  rl_point = rl_end = rl_mark = 0;
++  the_line = rl_line_buffer;
++  the_line[0] = 0;
++}
++
++void
++_rl_set_the_line ()
++{
++  the_line = rl_line_buffer;
++}
++
++#if defined (READLINE_CALLBACKS)
++_rl_keyseq_cxt *
++_rl_keyseq_cxt_alloc ()
++{
++  _rl_keyseq_cxt *cxt;
++
++  cxt = (_rl_keyseq_cxt *)xmalloc (sizeof (_rl_keyseq_cxt));
++
++  cxt->flags = cxt->subseq_arg = cxt->subseq_retval = 0;
++
++  cxt->okey = 0;
++  cxt->ocxt = _rl_kscxt;
++  cxt->childval = 42;		/* sentinel value */
++
++  return cxt;
++}
++
++void
++_rl_keyseq_cxt_dispose (cxt)
++    _rl_keyseq_cxt *cxt;
++{
++  xfree (cxt);
++}
++
++void
++_rl_keyseq_chain_dispose ()
++{
++  _rl_keyseq_cxt *cxt;
++
++  while (_rl_kscxt)
++    {
++      cxt = _rl_kscxt;
++      _rl_kscxt = _rl_kscxt->ocxt;
++      _rl_keyseq_cxt_dispose (cxt);
++    }
++}
++#endif
++
++static int
++_rl_subseq_getchar (key)
++     int key;
++{
++  int k;
++
++  if (key == ESC)
++    RL_SETSTATE(RL_STATE_METANEXT);
++  RL_SETSTATE(RL_STATE_MOREINPUT);
++  k = rl_read_key ();
++  RL_UNSETSTATE(RL_STATE_MOREINPUT);
++  if (key == ESC)
++    RL_UNSETSTATE(RL_STATE_METANEXT);
++
++  return k;
++}
++
++#if defined (READLINE_CALLBACKS)
++int
++_rl_dispatch_callback (cxt)
++     _rl_keyseq_cxt *cxt;
++{
++  int nkey, r;
++
++  /* For now */
++  /* The first time this context is used, we want to read input and dispatch
++     on it.  When traversing the chain of contexts back `up', we want to use
++     the value from the next context down.  We're simulating recursion using
++     a chain of contexts. */
++  if ((cxt->flags & KSEQ_DISPATCHED) == 0)
++    {
++      nkey = _rl_subseq_getchar (cxt->okey);
++      if (nkey < 0)
++	{
++	  _rl_abort_internal ();
++	  return -1;
++	}
++      r = _rl_dispatch_subseq (nkey, cxt->dmap, cxt->subseq_arg);
++      cxt->flags |= KSEQ_DISPATCHED;
++    }
++  else
++    r = cxt->childval;
++
++  /* For now */
++  if (r != -3)	/* don't do this if we indicate there will be other matches */
++    r = _rl_subseq_result (r, cxt->oldmap, cxt->okey, (cxt->flags & KSEQ_SUBSEQ));
++
++  RL_CHECK_SIGNALS ();
++  /* We only treat values < 0 specially to simulate recursion. */
++  if (r >= 0 || (r == -1 && (cxt->flags & KSEQ_SUBSEQ) == 0))	/* success! or failure! */
++    {
++      _rl_keyseq_chain_dispose ();
++      RL_UNSETSTATE (RL_STATE_MULTIKEY);
++      return r;
++    }
++
++  if (r != -3)			/* magic value that says we added to the chain */
++    _rl_kscxt = cxt->ocxt;
++  if (_rl_kscxt)
++    _rl_kscxt->childval = r;
++  if (r != -3)
++    _rl_keyseq_cxt_dispose (cxt);
++
++  return r;
++}
++#endif /* READLINE_CALLBACKS */
++  
++/* Do the command associated with KEY in MAP.
++   If the associated command is really a keymap, then read
++   another key, and dispatch into that map. */
++int
++_rl_dispatch (key, map)
++     register int key;
++     Keymap map;
++{
++  _rl_dispatching_keymap = map;
++  return _rl_dispatch_subseq (key, map, 0);
++}
++
++int
++_rl_dispatch_subseq (key, map, got_subseq)
++     register int key;
++     Keymap map;
++     int got_subseq;
++{
++  int r, newkey;
++  char *macro;
++  rl_command_func_t *func;
++#if defined (READLINE_CALLBACKS)
++  _rl_keyseq_cxt *cxt;
++#endif
++
++  if (META_CHAR (key) && _rl_convert_meta_chars_to_ascii)
++    {
++      if (map[ESC].type == ISKMAP)
++	{
++	  if (RL_ISSTATE (RL_STATE_MACRODEF))
++	    _rl_add_macro_char (ESC);
++	  RESIZE_KEYSEQ_BUFFER ();
++	  rl_executing_keyseq[rl_key_sequence_length++] = ESC;
++	  map = FUNCTION_TO_KEYMAP (map, ESC);
++	  key = UNMETA (key);
++	  return (_rl_dispatch (key, map));
++	}
++      else
++	rl_ding ();
++      return 0;
++    }
++
++  if (RL_ISSTATE (RL_STATE_MACRODEF))
++    _rl_add_macro_char (key);
++
++  r = 0;
++  switch (map[key].type)
++    {
++    case ISFUNC:
++      func = map[key].function;
++      if (func)
++	{
++	  /* Special case rl_do_lowercase_version (). */
++	  if (func == rl_do_lowercase_version)
++	    /* Should we do anything special if key == ANYOTHERKEY? */
++	    return (_rl_dispatch (_rl_to_lower (key), map));
++
++	  rl_executing_keymap = map;
++	  rl_executing_key = key;
++
++	  RESIZE_KEYSEQ_BUFFER();
++	  rl_executing_keyseq[rl_key_sequence_length++] = key;
++	  rl_executing_keyseq[rl_key_sequence_length] = '\0';
++
++	  rl_dispatching = 1;
++	  RL_SETSTATE(RL_STATE_DISPATCHING);
++	  r = (*func) (rl_numeric_arg * rl_arg_sign, key);
++	  RL_UNSETSTATE(RL_STATE_DISPATCHING);
++	  rl_dispatching = 0;
++
++	  /* If we have input pending, then the last command was a prefix
++	     command.  Don't change the state of rl_last_func.  Otherwise,
++	     remember the last command executed in this variable. */
++	  if (rl_pending_input == 0 && map[key].function != rl_digit_argument)
++	    rl_last_func = map[key].function;
++
++	  RL_CHECK_SIGNALS ();
++	}
++      else if (map[ANYOTHERKEY].function)
++	{
++	  /* OK, there's no function bound in this map, but there is a
++	     shadow function that was overridden when the current keymap
++	     was created.  Return -2 to note  that. */
++	  if (RL_ISSTATE (RL_STATE_MACROINPUT))
++	    _rl_prev_macro_key ();
++	  else
++	    _rl_unget_char  (key);
++	  return -2;
++	}
++      else if (got_subseq)
++	{
++	  /* Return -1 to note that we're in a subsequence, but  we don't
++	     have a matching key, nor was one overridden.  This means
++	     we need to back up the recursion chain and find the last
++	     subsequence that is bound to a function. */
++	  if (RL_ISSTATE (RL_STATE_MACROINPUT))
++	    _rl_prev_macro_key ();
++	  else
++	    _rl_unget_char (key);
++	  return -1;
++	}
++      else
++	{
++#if defined (READLINE_CALLBACKS)
++	  RL_UNSETSTATE (RL_STATE_MULTIKEY);
++	  _rl_keyseq_chain_dispose ();
++#endif
++	  _rl_abort_internal ();
++	  return -1;
++	}
++      break;
++
++    case ISKMAP:
++      if (map[key].function != 0)
++	{
++#if defined (VI_MODE)
++	  /* The only way this test will be true is if a subsequence has been
++	     bound starting with ESC, generally the arrow keys.  What we do is
++	     check whether there's input in the queue, which there generally
++	     will be if an arrow key has been pressed, and, if there's not,
++	     just dispatch to (what we assume is) rl_vi_movement_mode right
++	     away.  This is essentially an input test with a zero timeout (by
++	     default) or a timeout determined by the value of `keyseq-timeout' */
++	  /* _rl_keyseq_timeout specified in milliseconds; _rl_input_queued
++	     takes microseconds, so multiply by 1000 */
++	  if (rl_editing_mode == vi_mode && key == ESC && map == vi_insertion_keymap
++	      && _rl_input_queued ((_rl_keyseq_timeout > 0) ? _rl_keyseq_timeout*1000 : 0) == 0)
++	    return (_rl_dispatch (ANYOTHERKEY, FUNCTION_TO_KEYMAP (map, key)));
++#endif
++
++	  RESIZE_KEYSEQ_BUFFER ();
++	  rl_executing_keyseq[rl_key_sequence_length++] = key;
++	  _rl_dispatching_keymap = FUNCTION_TO_KEYMAP (map, key);
++
++	  /* Allocate new context here.  Use linked contexts (linked through
++	     cxt->ocxt) to simulate recursion */
++#if defined (READLINE_CALLBACKS)
++	  if (RL_ISSTATE (RL_STATE_CALLBACK))
++	    {
++	      /* Return 0 only the first time, to indicate success to
++		 _rl_callback_read_char.  The rest of the time, we're called
++		 from _rl_dispatch_callback, so we return -3 to indicate
++		 special handling is necessary. */
++	      r = RL_ISSTATE (RL_STATE_MULTIKEY) ? -3 : 0;
++	      cxt = _rl_keyseq_cxt_alloc ();
++
++	      if (got_subseq)
++		cxt->flags |= KSEQ_SUBSEQ;
++	      cxt->okey = key;
++	      cxt->oldmap = map;
++	      cxt->dmap = _rl_dispatching_keymap;
++	      cxt->subseq_arg = got_subseq || cxt->dmap[ANYOTHERKEY].function;
++
++	      RL_SETSTATE (RL_STATE_MULTIKEY);
++	      _rl_kscxt = cxt;
++
++	      return r;		/* don't indicate immediate success */
++	    }
++#endif
++
++	  /* Tentative inter-character timeout for potential multi-key
++	     sequences?  If no input within timeout, abort sequence and
++	     act as if we got non-matching input. */
++	  /* _rl_keyseq_timeout specified in milliseconds; _rl_input_queued
++	     takes microseconds, so multiply by 1000 */
++	  if (_rl_keyseq_timeout > 0 &&
++	  	(RL_ISSTATE (RL_STATE_INPUTPENDING|RL_STATE_MACROINPUT) == 0) &&
++	  	_rl_pushed_input_available () == 0 &&
++		_rl_dispatching_keymap[ANYOTHERKEY].function &&
++		_rl_input_queued (_rl_keyseq_timeout*1000) == 0)
++	    return (_rl_subseq_result (-2, map, key, got_subseq));
++
++	  newkey = _rl_subseq_getchar (key);
++	  if (newkey < 0)
++	    {
++	      _rl_abort_internal ();
++	      return -1;
++	    }
++
++	  r = _rl_dispatch_subseq (newkey, _rl_dispatching_keymap, got_subseq || map[ANYOTHERKEY].function);
++	  return _rl_subseq_result (r, map, key, got_subseq);
++	}
++      else
++	{
++	  _rl_abort_internal ();
++	  return -1;
++	}
++      break;
++
++    case ISMACR:
++      if (map[key].function != 0)
++	{
++	  rl_executing_keyseq[rl_key_sequence_length] = '\0';
++	  macro = savestring ((char *)map[key].function);
++	  _rl_with_macro_input (macro);
++	  return 0;
++	}
++      break;
++    }
++#if defined (VI_MODE)
++  if (rl_editing_mode == vi_mode && _rl_keymap == vi_movement_keymap &&
++      key != ANYOTHERKEY &&
++      rl_key_sequence_length == 1 &&	/* XXX */
++      _rl_vi_textmod_command (key))
++    _rl_vi_set_last (key, rl_numeric_arg, rl_arg_sign);
++#endif
++
++  return (r);
++}
++
++static int
++_rl_subseq_result (r, map, key, got_subseq)
++     int r;
++     Keymap map;
++     int key, got_subseq;
++{
++  Keymap m;
++  int type, nt;
++  rl_command_func_t *func, *nf;
++
++  if (r == -2)
++    /* We didn't match anything, and the keymap we're indexed into
++       shadowed a function previously bound to that prefix.  Call
++       the function.  The recursive call to _rl_dispatch_subseq has
++       already taken care of pushing any necessary input back onto
++       the input queue with _rl_unget_char. */
++    {
++      m = _rl_dispatching_keymap;
++      type = m[ANYOTHERKEY].type;
++      func = m[ANYOTHERKEY].function;
++      if (type == ISFUNC && func == rl_do_lowercase_version)
++	r = _rl_dispatch (_rl_to_lower (key), map);
++      else if (type == ISFUNC && func == rl_insert)
++	{
++	  /* If the function that was shadowed was self-insert, we
++	     somehow need a keymap with map[key].func == self-insert.
++	     Let's use this one. */
++	  nt = m[key].type;
++	  nf = m[key].function;
++
++	  m[key].type = type;
++	  m[key].function = func;
++	  r = _rl_dispatch (key, m);
++	  m[key].type = nt;
++	  m[key].function = nf;
++	}
++      else
++	r = _rl_dispatch (ANYOTHERKEY, m);
++    }
++  else if (r && map[ANYOTHERKEY].function)
++    {
++      /* We didn't match (r is probably -1), so return something to
++	 tell the caller that it should try ANYOTHERKEY for an
++	 overridden function. */
++      if (RL_ISSTATE (RL_STATE_MACROINPUT))
++	_rl_prev_macro_key ();
++      else
++	_rl_unget_char (key);
++      _rl_dispatching_keymap = map;
++      return -2;
++    }
++  else if (r && got_subseq)
++    {
++      /* OK, back up the chain. */
++      if (RL_ISSTATE (RL_STATE_MACROINPUT))
++	_rl_prev_macro_key ();
++      else
++	_rl_unget_char (key);
++      _rl_dispatching_keymap = map;
++      return -1;
++    }
++
++  return r;
++}
++
++/* **************************************************************** */
++/*								    */
++/*			Initializations 			    */
++/*								    */
++/* **************************************************************** */
++
++/* Initialize readline (and terminal if not already). */
++int
++rl_initialize ()
++{
++  /* If we have never been called before, initialize the
++     terminal and data structures. */
++  if (!rl_initialized)
++    {
++      RL_SETSTATE(RL_STATE_INITIALIZING);
++      readline_initialize_everything ();
++      RL_UNSETSTATE(RL_STATE_INITIALIZING);
++      rl_initialized++;
++      RL_SETSTATE(RL_STATE_INITIALIZED);
++    }
++
++  /* Initialize the current line information. */
++  _rl_init_line_state ();
++
++  /* We aren't done yet.  We haven't even gotten started yet! */
++  rl_done = 0;
++  RL_UNSETSTATE(RL_STATE_DONE);
++
++  /* Tell the history routines what is going on. */
++  _rl_start_using_history ();
++
++  /* Make the display buffer match the state of the line. */
++  rl_reset_line_state ();
++
++  /* No such function typed yet. */
++  rl_last_func = (rl_command_func_t *)NULL;
++
++  /* Parsing of key-bindings begins in an enabled state. */
++  _rl_parsing_conditionalized_out = 0;
++
++#if defined (VI_MODE)
++  if (rl_editing_mode == vi_mode)
++    _rl_vi_initialize_line ();
++#endif
++
++  /* Each line starts in insert mode (the default). */
++  _rl_set_insert_mode (RL_IM_DEFAULT, 1);
++
++  return 0;
++}
++
++#if 0
++#if defined (__EMX__)
++static void
++_emx_build_environ ()
++{
++  TIB *tibp;
++  PIB *pibp;
++  char *t, **tp;
++  int c;
++
++  DosGetInfoBlocks (&tibp, &pibp);
++  t = pibp->pib_pchenv;
++  for (c = 1; *t; c++)
++    t += strlen (t) + 1;
++  tp = environ = (char **)xmalloc ((c + 1) * sizeof (char *));
++  t = pibp->pib_pchenv;
++  while (*t)
++    {
++      *tp++ = t;
++      t += strlen (t) + 1;
++    }
++  *tp = 0;
++}
++#endif /* __EMX__ */
++#endif
++
++/* Initialize the entire state of the world. */
++static void
++readline_initialize_everything ()
++{
++#if 0
++#if defined (__EMX__)
++  if (environ == 0)
++    _emx_build_environ ();
++#endif
++#endif
++
++#if 0
++  /* Find out if we are running in Emacs -- UNUSED. */
++  running_in_emacs = sh_get_env_value ("EMACS") != (char *)0;
++#endif
++
++  /* Set up input and output if they are not already set up. */
++  if (!rl_instream)
++    rl_instream = stdin;
++
++  if (!rl_outstream)
++    rl_outstream = stdout;
++
++  /* Bind _rl_in_stream and _rl_out_stream immediately.  These values
++     may change, but they may also be used before readline_internal ()
++     is called. */
++  _rl_in_stream = rl_instream;
++  _rl_out_stream = rl_outstream;
++
++  /* Allocate data structures. */
++  if (rl_line_buffer == 0)
++    rl_line_buffer = (char *)xmalloc (rl_line_buffer_len = DEFAULT_BUFFER_SIZE);
++
++  /* Initialize the terminal interface. */
++  if (rl_terminal_name == 0)
++    rl_terminal_name = sh_get_env_value ("TERM");
++  _rl_init_terminal_io (rl_terminal_name);
++
++  /* Bind tty characters to readline functions. */
++  readline_default_bindings ();
++
++  /* Initialize the function names. */
++  rl_initialize_funmap ();
++
++  /* Decide whether we should automatically go into eight-bit mode. */
++  _rl_init_eightbit ();
++      
++  /* Read in the init file. */
++  rl_read_init_file ((char *)NULL);
++
++  /* XXX */
++  if (_rl_horizontal_scroll_mode && _rl_term_autowrap)
++    {
++      _rl_screenwidth--;
++      _rl_screenchars -= _rl_screenheight;
++    }
++
++  /* Override the effect of any `set keymap' assignments in the
++     inputrc file. */
++  rl_set_keymap_from_edit_mode ();
++
++  /* Try to bind a common arrow key prefix, if not already bound. */
++  bind_arrow_keys ();
++
++  /* If the completion parser's default word break characters haven't
++     been set yet, then do so now. */
++  if (rl_completer_word_break_characters == (char *)NULL)
++    rl_completer_word_break_characters = (char *)rl_basic_word_break_characters;
++
++#if defined (COLOR_SUPPORT)
++  if (_rl_colored_stats)
++    _rl_parse_colors ();
++#endif
++
++  rl_executing_keyseq = malloc (_rl_executing_keyseq_size = 16);
++  if (rl_executing_keyseq)
++    rl_executing_keyseq[0] = '\0';
++}
++
++/* If this system allows us to look at the values of the regular
++   input editing characters, then bind them to their readline
++   equivalents, iff the characters are not bound to keymaps. */
++static void
++readline_default_bindings ()
++{
++  if (_rl_bind_stty_chars)
++    rl_tty_set_default_bindings (_rl_keymap);
++}
++
++/* Reset the default bindings for the terminal special characters we're
++   interested in back to rl_insert and read the new ones. */
++static void
++reset_default_bindings ()
++{
++  if (_rl_bind_stty_chars)
++    {
++      rl_tty_unset_default_bindings (_rl_keymap);
++      rl_tty_set_default_bindings (_rl_keymap);
++    }
++}
++
++/* Bind some common arrow key sequences in MAP. */
++static void
++bind_arrow_keys_internal (map)
++     Keymap map;
++{
++  Keymap xkeymap;
++
++  xkeymap = _rl_keymap;
++  _rl_keymap = map;
++
++#if defined (__MSDOS__)
++  rl_bind_keyseq_if_unbound ("\033[0A", rl_get_previous_history);
++  rl_bind_keyseq_if_unbound ("\033[0B", rl_backward_char);
++  rl_bind_keyseq_if_unbound ("\033[0C", rl_forward_char);
++  rl_bind_keyseq_if_unbound ("\033[0D", rl_get_next_history);
++#endif
++
++  rl_bind_keyseq_if_unbound ("\033[A", rl_get_previous_history);
++  rl_bind_keyseq_if_unbound ("\033[B", rl_get_next_history);
++  rl_bind_keyseq_if_unbound ("\033[C", rl_forward_char);
++  rl_bind_keyseq_if_unbound ("\033[D", rl_backward_char);
++  rl_bind_keyseq_if_unbound ("\033[H", rl_beg_of_line);
++  rl_bind_keyseq_if_unbound ("\033[F", rl_end_of_line);
++
++  rl_bind_keyseq_if_unbound ("\033OA", rl_get_previous_history);
++  rl_bind_keyseq_if_unbound ("\033OB", rl_get_next_history);
++  rl_bind_keyseq_if_unbound ("\033OC", rl_forward_char);
++  rl_bind_keyseq_if_unbound ("\033OD", rl_backward_char);
++  rl_bind_keyseq_if_unbound ("\033OH", rl_beg_of_line);
++  rl_bind_keyseq_if_unbound ("\033OF", rl_end_of_line);
++
++#if defined (__MINGW32__)
++  rl_bind_keyseq_if_unbound ("\340H", rl_get_previous_history);
++  rl_bind_keyseq_if_unbound ("\340P", rl_get_next_history);
++  rl_bind_keyseq_if_unbound ("\340M", rl_forward_char);
++  rl_bind_keyseq_if_unbound ("\340K", rl_backward_char);
++  rl_bind_keyseq_if_unbound ("\340G", rl_beg_of_line);
++  rl_bind_keyseq_if_unbound ("\340O", rl_end_of_line);
++  rl_bind_keyseq_if_unbound ("\340S", rl_delete);
++  rl_bind_keyseq_if_unbound ("\340R", rl_overwrite_mode);
++
++  /* These may or may not work because of the embedded NUL. */
++  rl_bind_keyseq_if_unbound ("\\000H", rl_get_previous_history);
++  rl_bind_keyseq_if_unbound ("\\000P", rl_get_next_history);
++  rl_bind_keyseq_if_unbound ("\\000M", rl_forward_char);
++  rl_bind_keyseq_if_unbound ("\\000K", rl_backward_char);
++  rl_bind_keyseq_if_unbound ("\\000G", rl_beg_of_line);
++  rl_bind_keyseq_if_unbound ("\\000O", rl_end_of_line);
++  rl_bind_keyseq_if_unbound ("\\000S", rl_delete);
++  rl_bind_keyseq_if_unbound ("\\000R", rl_overwrite_mode);
++#endif
++
++  _rl_keymap = xkeymap;
++}
++
++/* Try and bind the common arrow key prefixes after giving termcap and
++   the inputrc file a chance to bind them and create `real' keymaps
++   for the arrow key prefix. */
++static void
++bind_arrow_keys ()
++{
++  bind_arrow_keys_internal (emacs_standard_keymap);
++
++#if defined (VI_MODE)
++  bind_arrow_keys_internal (vi_movement_keymap);
++  /* Unbind vi_movement_keymap[ESC] to allow users to repeatedly hit ESC
++     in vi command mode while still allowing the arrow keys to work. */
++  if (vi_movement_keymap[ESC].type == ISKMAP)
++    rl_bind_keyseq_in_map ("\033", (rl_command_func_t *)NULL, vi_movement_keymap);
++  bind_arrow_keys_internal (vi_insertion_keymap);
++#endif
++}
++
++/* **************************************************************** */
++/*								    */
++/*		Saving and Restoring Readline's state		    */
++/*								    */
++/* **************************************************************** */
++
++int
++rl_save_state (sp)
++     struct readline_state *sp;
++{
++  if (sp == 0)
++    return -1;
++
++  sp->point = rl_point;
++  sp->end = rl_end;
++  sp->mark = rl_mark;
++  sp->buffer = rl_line_buffer;
++  sp->buflen = rl_line_buffer_len;
++  sp->ul = rl_undo_list;
++  sp->prompt = rl_prompt;
++
++  sp->rlstate = rl_readline_state;
++  sp->done = rl_done;
++  sp->kmap = _rl_keymap;
++
++  sp->lastfunc = rl_last_func;
++  sp->insmode = rl_insert_mode;
++  sp->edmode = rl_editing_mode;
++  sp->kseqlen = rl_key_sequence_length;
++  sp->inf = rl_instream;
++  sp->outf = rl_outstream;
++  sp->pendingin = rl_pending_input;
++  sp->macro = rl_executing_macro;
++
++  sp->catchsigs = rl_catch_signals;
++  sp->catchsigwinch = rl_catch_sigwinch;
++
++  return (0);
++}
++
++int
++rl_restore_state (sp)
++     struct readline_state *sp;
++{
++  if (sp == 0)
++    return -1;
++
++  rl_point = sp->point;
++  rl_end = sp->end;
++  rl_mark = sp->mark;
++  the_line = rl_line_buffer = sp->buffer;
++  rl_line_buffer_len = sp->buflen;
++  rl_undo_list = sp->ul;
++  rl_prompt = sp->prompt;
++
++  rl_readline_state = sp->rlstate;
++  rl_done = sp->done;
++  _rl_keymap = sp->kmap;
++
++  rl_last_func = sp->lastfunc;
++  rl_insert_mode = sp->insmode;
++  rl_editing_mode = sp->edmode;
++  rl_key_sequence_length = sp->kseqlen;
++  rl_instream = sp->inf;
++  rl_outstream = sp->outf;
++  rl_pending_input = sp->pendingin;
++  rl_executing_macro = sp->macro;
++
++  rl_catch_signals = sp->catchsigs;
++  rl_catch_sigwinch = sp->catchsigwinch;
++
++  return (0);
++}
+diff -Naur bash-4.4.18/MANIFEST.doc bash_new/MANIFEST.doc
+--- bash-4.4.18/MANIFEST.doc	1969-12-31 18:00:00.000000000 -0600
++++ bash_new/MANIFEST.doc	2018-06-15 03:44:16.045948250 -0500
+@@ -0,0 +1,24 @@
++#
++# Master Manifest file for documentation-only distribution
++#
++doc	d
++MANIFEST.doc	f
++doc/article.ps	f
++doc/rose94.ps	f
++doc/bash.ps		f
++doc/bashbug.ps	f
++doc/builtins.ps	f
++doc/rbash.ps	f
++doc/bashref.ps	f
++doc/bashref.dvi	f
++doc/bash.0		f
++doc/bashbug.0		f
++doc/builtins.0	f
++doc/rbash.0	f
++doc/article.txt	f
++doc/bash.html		f
++doc/bashref.html	f
++doc/article.pdf	f
++doc/bash.pdf	f
++doc/bashref.pdf	f
++doc/rose94.pdf	f
+diff -Naur bash-4.4.18/patchlevel.h bash_new/patchlevel.h
+--- bash-4.4.18/patchlevel.h	2018-01-29 14:13:31.000000000 -0600
++++ bash_new/patchlevel.h	2018-06-15 03:44:16.217948254 -0500
+@@ -25,6 +25,6 @@
+    regexp `^#define[ 	]*PATCHLEVEL', since that's what support/mkversion.sh
+    looks for to find the patch level (for the sccs version string). */
+ 
+-#define PATCHLEVEL 18
++#define PATCHLEVEL 23
+ 
+ #endif /* _PATCHLEVEL_H_ */
+diff -Naur bash-4.4.18/tests/cond-regexp.sub bash_new/tests/cond-regexp.sub
+--- bash-4.4.18/tests/cond-regexp.sub	1969-12-31 18:00:00.000000000 -0600
++++ bash_new/tests/cond-regexp.sub	2018-06-15 03:44:16.321948257 -0500
+@@ -0,0 +1,42 @@
++VAR='[[:alpha:]]'
++
++[[ $VAR =~ '[[:alpha:]]' ]] && echo match 1
++
++[[ a =~ '[[:alpha:]]' ]] || echo match 2
++
++[[ a =~ [[:alpha:]] ]] && echo match 3
++
++[[ a =~ $VAR ]] && echo match 4
++
++[[ a =~ "$VAR" ]] || echo match 5
++
++line=aab
++[[ $line =~ [[:space:]]*(a)?b ]] && echo match 6
++
++V="alphabet"
++[[ $V == alphabet ]] && echo yes 1
++[[ $V == "alphabet" ]] && echo yes 2
++[[ $V == 'alphabet' ]] && echo yes 3
++[[ $V =~ alphabet ]] && echo yes 4
++[[ $V =~ "alphabet" ]] && echo yes 5
++[[ $V =~ 'alphabet' ]] && echo yes 6
++
++DOG="Dog name - 01 - Wiggles"
++REPAT='([[:alpha:][:blank:]]*)- ([[:digit:]]*) - (.*)$'
++if [[ $DOG =~ ([[:alpha:][:blank:]]*)-\ ([[:digit:]]*)\ -\ (.*)$ ]]
++then
++   echo Dog ${BASH_REMATCH[2]} is ${BASH_REMATCH[3]}
++fi
++if [[ $DOG =~ $REPAT ]]
++then
++   echo Dog ${BASH_REMATCH[2]} is ${BASH_REMATCH[3]}
++fi
++
++[[ $REPAT =~ "$REPAT" ]] && echo rematch 1
++
++v="one two buckle my shoe"
++[[ ${v} =~ "one two" ]] && echo matches 7
++
++[[ ${v} =~ (one two) ]] && echo matches 8
++
++[[ ${v} =~ one\ two ]] && echo matches 9

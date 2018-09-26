@@ -1,0 +1,12 @@
+# Distributed under the terms of the GNU General Public License v2
+
+# Magnus Granberg <zorry@gentoo.org> (14 Jan, 2015)
+# We need to have the pic flag on.
+# Bugs 358929, 490276, 513464, 523736 and 512208.
+lib-media/x264 pic
+app-media/ffmpeg pic
+app-media/libav pic
+lib-media/mesa pic
+lib-media/libpostproc pic
+lib-media/xvid pic
+app-misc-misc/open-vm-tools pic

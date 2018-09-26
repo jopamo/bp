@@ -1,0 +1,11 @@
+--- hwloc-1.8.1/config/hwloc.m4.orig
++++ hwloc-1.8.1/config/hwloc.m4	
+@@ -920,7 +920,7 @@
+                hwloc_gl_happy=no])
+ 
+         AC_CHECK_HEADERS([NVCtrl/NVCtrl.h], [
+-          AC_CHECK_LIB([XNVCtrl], [XNVCTRLQueryTargetAttribute], [:], [hwloc_gl_happy=no], [-lXext])
++          AC_CHECK_LIB([XNVCtrl], [XNVCTRLQueryTargetAttribute], [:], [hwloc_gl_happy=no], [-lXext -lX11])
+         ], [hwloc_gl_happy=no])
+ 
+         if test "x$hwloc_gl_happy" = "xyes"; then

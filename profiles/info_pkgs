@@ -1,0 +1,29 @@
+##
+## These ATOMS are printed with a standard 'emerge info' in
+## portage as of 2.0.51-r5. Do not overcrowd the output please.
+##
+sys-app/bash:0
+sys-devel/autoconf
+sys-devel/automake
+sys-app/copperhead-sources
+lib-sys/glibc
+lib-sys/musl
+lib-sys/uclibc
+lib-sys/uclibc-ng
+sys-freebsd/freebsd-lib
+sys-devel/binutils
+sys-devel/libtool
+sys-devel/make
+dev-lang/python
+dev-lang/perl
+sys-app/sandbox
+dev-util/ccache
+sys-devel/gcc
+sys-devel/gcc-config
+dev-java/java-config
+dev-util/cmake
+dev-util/pkgconfig
+# NOTE: portage no longer list /etc/gentoo-release,
+# so this is not redundant
+sys-app/baselayout
+sys-app/openrc

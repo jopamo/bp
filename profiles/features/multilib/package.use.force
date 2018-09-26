@@ -1,0 +1,5 @@
+# Distributed under the terms of the GNU General Public License, v2
+
+# These packages must have multilib turned on in order to work sanely.
+sys-devel/gcc multilib
+lib-sys/glibc multilib

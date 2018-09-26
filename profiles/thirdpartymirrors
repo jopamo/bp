@@ -1,0 +1,14 @@
+apache		http://apache.lauf-forum.at/ http://apache.mirror.digionline.de/ http://apache.mirror.iphh.net/ http://artfiles.org/apache.org/ http://ftp-stud.hs-esslingen.de/pub/Mirrors/ftp.apache.org/dist/ http://ftp.fau.de/apache/ http://ftp.halifax.rwth-aachen.de/apache/ http://ftp.heikorichter.name/apache/ http://mirror.23media.de/apache/ http://apache.mirrors.hoobly.com/ http://www.gtlib.gatech.edu/pub/apache/ http://apache.osuosl.org/
+cpan		http://cpan.metacpan.org http://search.cpan.org/CPAN http://www.cpan.org
+debian		http://http.debian.net/debian/
+gentoo		https://gentoo.osuosl.org/distfiles/
+github		https://github.com/downloads
+gnu-alpha	https://ftp.osuosl.org/pub/blfs/conglomeration/ ftp://alpha.gnu.org/gnu/ http://alpha.gnu.org/gnu/ ftp://ftp.funet.fi/pub/gnu/alpha/gnu/ http://www.nic.funet.fi/pub/gnu/alpha/gnu/ ftp://gnualpha.uib.no/pub/gnualpha/ http://gnualpha.uib.no/ ftp://mirrors.fe.up.pt/pub/gnu-alpha/ http://mirrors.fe.up.pt/pub/gnu-alpha/ http://mirror.lihnidos.org/GNU/alpha/gnu/ http://mirrors.ibiblio.org/gnu/alpha/gnu/
+gnupg		https://ftp.osuosl.org/pub/blfs/conglomeration/ ftp://ftp.gnupg.org/gcrypt/ http://mirrors.dotsrc.org/gcrypt/ http://artfiles.org/gnupg.org/ http://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/ ftp://sunsite.icm.edu.pl/pub/security/gnupg/ http://gd.tuwien.ac.at/privacy/gnupg/ http://www.ring.gr.jp/pub/net/gnupg/ ftp://ftp.ring.gr.jp/pub/net/gnupg/
+kernel		https://www.kernel.org/pub/
+mysql		http://mirror.leaseweb.com/mysql/ ftp://mirror.leaseweb.com/mysql/ http://sunsite.icm.edu.pl/mysql/ ftp://sunsite.icm.edu.pl/pub/unix/mysql/ http://mysql.nfsi.pt/ ftp://ftp.nfsi.pt/pub/mysql/ http://mirrors.xservers.ro/mysql/ http://ftp.arnes.si/mysql/ ftp://ftp.arnes.si/packages/mysql/ http://ftp.sunet.se/pub/unix/databases/relational/mysql/ ftp://ftp.sunet.se/pub/unix/databases/relational/mysql/ http://mirror.switch.ch/ftp/mirror/mysql/ ftp://mirror.switch.ch/mirror/mysql/ http://ftp.itu.edu.tr/Mirror/Mysql/ ftp://ftp.itu.edu.tr/Mirror/Mysql/ http://www.mirrorservice.org/sites/ftp.mysql.com/ ftp://ftp.mirrorservice.org/sites/ftp.mysql.com/ http://mirrors.dedipower.com/www.mysql.com/ http://mirrors.ukfast.co.uk/sites/ftp.mysql.com/
+gnu		https://download-mirror.savannah.gnu.org/releases/  https://mirrors.tripadvisor.com/gnu/ https://ftp.osuosl.org/pub/blfs/conglomeration/
+pypi		https://pypi.python.org/packages/source https://files.pythonhosted.org/packages/source
+samba		https://download.samba.org/pub/samba/ ftp://ftp.samba.gr.jp/pub/samba http://ftp.cc.uoc.gr/mirrors/samba
+sourceforge	http://download.sourceforge.net
+

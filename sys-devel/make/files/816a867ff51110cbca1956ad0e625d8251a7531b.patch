@@ -1,0 +1,24 @@
+From 816a867ff51110cbca1956ad0e625d8251a7531b Mon Sep 17 00:00:00 2001
+From: Enrique Olaizola <enrique_olaizola16@hotmail.com>
+Date: Sat, 27 May 2017 14:56:57 -0400
+Subject: [PATCH] * read.c (read_all_makefiles): [SV 50909] Add MAKEFILES to
+ strcache
+
+Copyright-paperwork-exempt: yes
+---
+ read.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/read.c b/read.c
+index 0ca456c..5e2bc5b 100644
+--- a/read.c
++++ b/read.c
+@@ -205,7 +205,7 @@ read_all_makefiles (const char **makefiles)
+       {
+         if (*p != '\0')
+           *p++ = '\0';
+-        eval_makefile (name, RM_NO_DEFAULT_GOAL|RM_INCLUDED|RM_DONTCARE);
++        eval_makefile (strcache_add (name), RM_NO_DEFAULT_GOAL|RM_INCLUDED|RM_DONTCARE);
+       }
+ 
+     free (value);

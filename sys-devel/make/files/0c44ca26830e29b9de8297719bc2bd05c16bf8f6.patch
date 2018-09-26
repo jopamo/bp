@@ -1,0 +1,28 @@
+From 0c44ca26830e29b9de8297719bc2bd05c16bf8f6 Mon Sep 17 00:00:00 2001
+From: Paolo Bonzini <pbonzini@redhat.com>
+Date: Fri, 11 Aug 2017 13:44:33 +0200
+Subject: [PATCH] Do not use STOP_SET for singleton compares.
+
+Compare against '$' directly rather than using MAP_VARIABLE.
+This saves ~10% for find_map_function, which is the top hotspot in
+QEMU's no-op build.  The build is sped up overall by about 1.5%
+more (from 11.1s to 10.95s).
+
+* read.c (find_map_function): Do not compare against singleton sets.
+---
+ read.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/read.c b/read.c
+index 2cd497a..db1a42d 100644
+--- a/read.c
++++ b/read.c
+@@ -2249,7 +2249,7 @@ find_map_unquote (char *string, int stopmap)
+         break;
+ 
+       /* If we stopped due to a variable reference, skip over its contents.  */
+-      if (STOP_SET (*p, MAP_VARIABLE))
++      if (*p == '$')
+         {
+           char openparen = p[1];
+ 

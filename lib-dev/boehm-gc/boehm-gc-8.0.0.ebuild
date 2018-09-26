@@ -1,0 +1,49 @@
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI="6"
+
+inherit multilib-minimal libtool
+
+MY_P="gc-${PV}"
+
+DESCRIPTION="The Boehm-Demers-Weiser conservative garbage collector"
+HOMEPAGE="http://www.hboehm.info/gc/ https://github.com/ivmai/bdwgc/"
+SRC_URI="https://github.com/ivmai/bdwgc/releases/download/v${PV}/${MY_P}.tar.gz"
+
+LICENSE="boehm-gc"
+SLOT="0"
+KEYWORDS="amd64 arm64 x86"
+
+IUSE="cxx static-libs threads"
+
+DEPEND="
+	>=lib-dev/libatomic_ops-7.4[${MULTILIB_USEDEP}]
+	dev-util/pkgconfig"
+
+S="${WORKDIR}/${MY_P}"
+
+src_prepare() {
+	default
+	elibtoolize
+}
+
+multilib_src_configure() {
+	local myconf=(
+		--bindir="${EPREFIX}"/usr/bin
+		--sbindir="${EPREFIX}"/usr/sbin
+		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libexecdir="${EPREFIX}"/usr/libexec
+		--sysconfdir="${EPREFIX}"/etc
+		--localstatedir="${EPREFIX}"/var
+		--disable-docs
+		--with-libatomic-ops
+		$(use_enable cxx cplusplus)
+		$(use_enable static-libs static)
+		$(use threads || echo --disable-threads)
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+multilib_src_install_all() {
+	find "${ED}" -name '*.la' -delete || die
+}

@@ -1,0 +1,57 @@
+From 212cb00923606c89a0a00eff445f91405e5e459d Mon Sep 17 00:00:00 2001
+From: Paul Smith <psmith@gnu.org>
+Date: Sat, 17 Dec 2016 13:16:22 -0500
+Subject: [PATCH] * po/Makevars, makeint.h, debug.h: Add xgettext C format
+ flags.
+
+---
+ debug.h     | 2 ++
+ makeint.h   | 2 ++
+ po/Makevars | 8 +++++++-
+ 3 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/debug.h b/debug.h
+index 17c394b..2915975 100644
+--- a/debug.h
++++ b/debug.h
+@@ -27,6 +27,8 @@ extern int db_level;
+ 
+ #define ISDB(_l)    ((_l)&db_level)
+ 
++/* When adding macros to this list be sure to update the value of
++   XGETTEXT_OPTIONS in the po/Makevars file.  */
+ #define DBS(_l,_x)  do{ if(ISDB(_l)) {print_spaces (depth); \
+                                       printf _x; fflush (stdout);} }while(0)
+ 
+diff --git a/makeint.h b/makeint.h
+index 6d7df4b..5eb5cb8 100644
+--- a/makeint.h
++++ b/makeint.h
+@@ -485,6 +485,8 @@ void error (const floc *flocp, size_t length, const char *fmt, ...)
+ void fatal (const floc *flocp, size_t length, const char *fmt, ...)
+             __attribute__ ((noreturn, __format__ (__printf__, 3, 4)));
+ 
++/* When adding macros to this list be sure to update the value of
++   XGETTEXT_OPTIONS in the po/Makevars file.  */
+ #define O(_t,_a,_f)           _t((_a), 0, (_f))
+ #define OS(_t,_a,_f,_s)       _t((_a), strlen (_s), (_f), (_s))
+ #define OSS(_t,_a,_f,_s1,_s2) _t((_a), strlen (_s1) + strlen (_s2), \
+diff --git a/po/Makevars b/po/Makevars
+index ee01884..e32ea34 100644
+--- a/po/Makevars
++++ b/po/Makevars
+@@ -26,7 +26,13 @@ subdir = po
+ top_builddir = ..
+ 
+ # These options get passed to xgettext.
+-XGETTEXT_OPTIONS = --keyword=_ --keyword=N_
++# Ensure that all our magical output macros are correctly marked as
++# C (printf) format strings.
++XGETTEXT_OPTIONS = --keyword=_ --keyword=N_ \
++	--flag=DB:2:c-format --flag=DBF:2:c-format --flag=DBS:2:c-format \
++	--flag=O:3:c-format  --flag=OSN:3:c-format --flag=ONS:3:c-format \
++	--flag=OS:3:c-format --flag=OSS:3:c-format --flag=OSSS:3:c-format \
++	--flag=ON:3:c-format --flag=ONN:3:c-format
+ 
+ # This is the copyright holder that gets inserted into the header of the
+ # $(DOMAIN).pot file.  Set this to the copyright holder of the surrounding

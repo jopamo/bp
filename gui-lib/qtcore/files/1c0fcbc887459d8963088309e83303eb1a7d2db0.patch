@@ -1,0 +1,100 @@
+From 1c0fcbc887459d8963088309e83303eb1a7d2db0 Mon Sep 17 00:00:00 2001
+From: Christian Ehrlicher <ch.ehrlicher@gmx.de>
+Date: Fri, 10 Nov 2017 21:17:47 +0100
+Subject: QSortFilterProxyModel: Clear persistent indexes on source model
+ change
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+When a new source model was set to QSortFilterProxyModel, the model
+tried to remap the persistent indexes to the new model which was wrong.
+The correct solution is to clear the persistent indexes with
+_q_sourceModelDestroyed() since the old source model went away.
+
+Task-number: QTBUG-44962
+Change-Id: Id39e9ac83324250e8bfa434aae467a9206d2590e
+Reviewed-by: Thorbjørn Lund Martsum <tmartsum@gmail.com>
+---
+ src/corelib/itemmodels/qsortfilterproxymodel.cpp    |  5 ++++-
+ .../tst_qsortfilterproxymodel.cpp                   | 21 +++++++++++++++++++++
+ 2 files changed, 25 insertions(+), 1 deletion(-)
+
+diff --git a/src/corelib/itemmodels/qsortfilterproxymodel.cpp b/src/corelib/itemmodels/qsortfilterproxymodel.cpp
+index fad980f568..b4ba1a2823 100644
+--- a/src/corelib/itemmodels/qsortfilterproxymodel.cpp
++++ b/src/corelib/itemmodels/qsortfilterproxymodel.cpp
+@@ -1857,6 +1857,9 @@ void QSortFilterProxyModel::setSourceModel(QAbstractItemModel *sourceModel)
+ {
+     Q_D(QSortFilterProxyModel);
+ 
++    if (sourceModel == d->model)
++        return;
++
+     beginResetModel();
+ 
+     disconnect(d->model, SIGNAL(dataChanged(QModelIndex,QModelIndex,QVector<int>)),
+@@ -1910,6 +1913,7 @@ void QSortFilterProxyModel::setSourceModel(QAbstractItemModel *sourceModel)
+     disconnect(d->model, SIGNAL(modelAboutToBeReset()), this, SLOT(_q_sourceAboutToBeReset()));
+     disconnect(d->model, SIGNAL(modelReset()), this, SLOT(_q_sourceReset()));
+ 
++    d->_q_sourceModelDestroyed();
+     QAbstractProxyModel::setSourceModel(sourceModel);
+ 
+     connect(d->model, SIGNAL(dataChanged(QModelIndex,QModelIndex,QVector<int>)),
+@@ -1963,7 +1967,6 @@ void QSortFilterProxyModel::setSourceModel(QAbstractItemModel *sourceModel)
+     connect(d->model, SIGNAL(modelAboutToBeReset()), this, SLOT(_q_sourceAboutToBeReset()));
+     connect(d->model, SIGNAL(modelReset()), this, SLOT(_q_sourceReset()));
+ 
+-    d->_q_clearMapping();
+     endResetModel();
+     if (d->update_source_sort_column() && d->dynamic_sortfilter)
+         d->sort();
+diff --git a/tests/auto/corelib/itemmodels/qsortfilterproxymodel/tst_qsortfilterproxymodel.cpp b/tests/auto/corelib/itemmodels/qsortfilterproxymodel/tst_qsortfilterproxymodel.cpp
+index 8333809c40..dd5394d452 100644
+--- a/tests/auto/corelib/itemmodels/qsortfilterproxymodel/tst_qsortfilterproxymodel.cpp
++++ b/tests/auto/corelib/itemmodels/qsortfilterproxymodel/tst_qsortfilterproxymodel.cpp
+@@ -152,6 +152,7 @@ private slots:
+     void emitLayoutChangedOnlyIfSortingChanged_data();
+     void emitLayoutChangedOnlyIfSortingChanged();
+ 
++    void checkSetNewModel();
+ protected:
+     void buildHierarchy(const QStringList &data, QAbstractItemModel *model);
+     void checkHierarchy(const QStringList &data, const QAbstractItemModel *model);
+@@ -4227,6 +4228,10 @@ public:
+ 
+     QModelIndex index(int, int, const QModelIndex& parent = QModelIndex()) const override
+     {
++        // QTBUG-44962: Would we always expect the parent to belong to the model
++        qDebug() << parent.model() << this;
++        Q_ASSERT(!parent.isValid() || parent.model() == this);
++
+         quintptr parentId = (parent.isValid()) ? parent.internalId() : 0;
+         if (parentId >= m_depth)
+             return QModelIndex();
+@@ -4507,5 +4512,21 @@ void tst_QSortFilterProxyModel::dynamicFilterWithoutSort()
+     QCOMPARE(resetSpy.count(), 1);
+ }
+ 
++void tst_QSortFilterProxyModel::checkSetNewModel()
++{
++    QTreeView tv;
++    StepTreeModel model1;
++    model1.setDepth(4);
++    StepTreeModel model2;
++    model2.setDepth(4);
++
++    QSortFilterProxyModel proxy;
++    proxy.setSourceModel(&model1);
++    tv.setModel(&proxy);
++    tv.show();
++    tv.expandAll(); // create persistent indexes
++    proxy.setSourceModel(&model2);
++}
++
+ QTEST_MAIN(tst_QSortFilterProxyModel)
+ #include "tst_qsortfilterproxymodel.moc"
+-- 
+cgit v1.1-6-g87c4
+

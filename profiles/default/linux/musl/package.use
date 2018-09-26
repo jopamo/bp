@@ -1,0 +1,6 @@
+# Distributed under the terms of the GNU General Public License v2
+
+# Anthony G. Basile <blueness@gentoo.org> (14 Jul 2016)
+# We need this to break a circular dependency with
+# 'lib-sys/libcap pam' in stage3 catalyst builds
+lib-sys/pam -filecaps

@@ -1,0 +1,71 @@
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=5
+
+inherit eutils multilib-minimal toolchain-funcs flag-o-matic
+
+DESCRIPTION="Asynchronous input/output library that uses the kernels native interface"
+HOMEPAGE="http://lse.sourceforge.net/io/aio.html"
+SRC_URI="mirror://debian/pool/main/liba/${PN}/${PN}_${PV}.orig.tar.gz -> ${P}.tar.gz"
+
+LICENSE="LGPL-2"
+SLOT="0"
+KEYWORDS="amd64 arm64 x86"
+IUSE="static-libs test"
+
+src_prepare() {
+	epatch \
+		"${FILESDIR}"/${PN}-0.3.109-install.patch \
+		"${FILESDIR}"/${PN}-0.3.110-cppflags.patch \
+		"${FILESDIR}"/${PN}-0.3.110-link-stdlib.patch #558406
+
+	local sed_args=(
+		-e "/^prefix=/s:/usr:${EPREFIX}/usr:"
+		-e '/^libdir=/s:lib$:$(ABI_LIBDIR):'
+	)
+	if ! use static-libs; then
+		sed_args+=( -e '/\tinstall .*\/libaio.a/d' )
+		# Tests require the static library to be built.
+		use test || sed_args+=( -e '/^all_targets +=/s/ libaio.a//' )
+	fi
+	sed -i "${sed_args[@]}" src/Makefile Makefile || die
+
+	multilib_copy_sources
+}
+
+multilib_src_configure() {
+	if use arm ; then
+		# When building for thumb, we can't allow frame pointers.
+		# http://crbug.com/464517
+		if $(tc-getCPP) ${CFLAGS} ${CPPFLAGS} - <<<$'#ifndef __thumb__\n#error\n#endif' >&/dev/null ; then
+			append-flags -fomit-frame-pointer
+		fi
+	fi
+}
+
+_emake() {
+	CC=$(tc-getCC) \
+	AR=$(tc-getAR) \
+	RANLIB=$(tc-getRANLIB) \
+	ABI_LIBDIR=$(get_libdir) \
+	CFLAGS_WERROR= \
+	emake "$@"
+}
+
+multilib_src_compile() {
+	_emake
+}
+
+multilib_src_test() {
+	mkdir -p testdir || die
+	# 'make check' breaks with sandbox, 'make partcheck' works
+	_emake partcheck prefix="${S}/src" libdir="${S}/src"
+}
+
+multilib_src_install() {
+	_emake install DESTDIR="${D}"
+}
+
+multilib_src_install_all() {
+	export QA_DT_NEEDED=$(find "${ED}" -type f -name 'libaio.so.*' -printf '/%P\n')
+}

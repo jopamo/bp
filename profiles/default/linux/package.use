@@ -1,0 +1,4 @@
+app-net/networkmanager -nss gnutls
+app-media/avidemux qt5
+gui-lib/lxqt-panel -alsa clock -desktopswitch -kbindicator -mainmenu -pulseaudio -quicklaunch -showdesktop taskbar tray -volume -colorpicker -cpuload -dom -mount -networkmonitor -sensors -statusnotifier -sysstat -worldclock
+lib-dev/libxml2 python

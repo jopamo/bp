@@ -1,0 +1,6 @@
+# Distributed under the terms of the GNU General Public License v2
+
+# Michał Górny <mgorny@gentoo.org> (08 Apr 2017)
+# Require sandbox to be multilib-capable to avoid failures when building
+# multilib packages, #611292.
+sys-app/sandbox abi_x86_64

@@ -7,15 +7,15 @@ inherit toolchain-funcs
 DESCRIPTION="A perfect hash function generator"
 HOMEPAGE="https://www.gnu.org/software/gperf/"
 SRC_URI="mirror://gnu/gperf/${P}.tar.gz
-		https://1g4.org/files/gperf-patch-20180909.patch.tar.xz"
+		https://1g4.org/files/gperf-20180909.patch.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64 x86"
 
 PATCHES=(
-		${WORKDIR}/gperf-patch-20180909.patch
-		)
+		"${WORKDIR}/gperf-patch-20180909.patch"
+	)
 src_prepare() {
 	sed -i \
 		-e "/^CPPFLAGS /s:=:+=:" \

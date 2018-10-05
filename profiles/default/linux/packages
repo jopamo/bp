@@ -48,7 +48,7 @@
 *sys-fs/e2fsprogs
 *sys-app/busybox
 *sys-app/util-linux
-*app-net/chrony
+*app-crypt/jitterentropy
 *sys-app/nftables
 *sys-app/ulogd
 *sys-app/sshguard

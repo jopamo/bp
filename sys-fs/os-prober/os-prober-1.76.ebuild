@@ -1,9 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
-
-#inherit eutils multilib toolchain-funcs
-inherit toolchain-funcs
+EAPI=7
 
 DESCRIPTION="Utility to detect other OSs on a set of drives"
 HOMEPAGE="https://packages.debian.org/source/sid/os-prober"
@@ -11,24 +8,13 @@ SRC_URI="http://http.debian.net/debian/pool/main/o/${PN}/${PN}_${PV}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 x86"
 
 QA_MULTILIB_PATHS="usr/lib/os-prober/.*"
-
-src_prepare() {
-	# use default GNU rules
-	rm Makefile || die 'rm Makefile failed'
-}
-
-src_compile() {
-	tc-export CC
-	emake newns
-}
 
 src_install() {
 	dobin os-prober linux-boot-prober
 
-	# Note: as no shared libraries are installed, /usr/lib is correct
 	exeinto /usr/lib/os-prober
 	doexe newns
 

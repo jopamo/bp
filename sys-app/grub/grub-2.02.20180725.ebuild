@@ -52,7 +52,7 @@ RDEPEND="
 	)
 	device-mapper? ( >=sys-fs/lvm2-2.02.45 )
 	libzfs? ( sys-fs/zfs )
-	mount? ( sys-fs/libfuse )
+	mount? ( =sys-fs/fuse-2.9.9999 )
 	truetype? ( lib-media/freetype:2= )
 	ppc? ( sys-app/ibm-powerpc-utils sys-app/powerpc-utils )
 	ppc64? ( sys-app/ibm-powerpc-utils sys-app/powerpc-utils )

@@ -11,6 +11,8 @@ KEYWORDS="amd64 arm64 x86"
 SLOT=0
 IUSE="doc"
 
+DEPEND="x11/util-macros"
+
 src_prepare() {
 	eautoreconf
 	default

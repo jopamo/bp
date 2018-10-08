@@ -1468,8 +1468,6 @@ kernel-2_src_unpack() {
 # Apply any user patches
 
 kernel-2_src_prepare() {
-	cp -n "${FILESDIR}"/current-config "${S}"/config.1g4 || die
-
 	debug-print "Applying any user patches"
 
 	# apply any user patches

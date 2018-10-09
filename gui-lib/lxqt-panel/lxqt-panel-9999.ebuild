@@ -17,7 +17,7 @@ fi
 LICENSE="LGPL-2.1+"
 SLOT="0"
 IUSE="+alsa +clock colorpicker cpuload +desktopswitch dom +kbindicator +mainmenu
-	+mount networkmonitor pulseaudio +quicklaunch sensors +showdesktop
+	networkmonitor pulseaudio +quicklaunch sensors +showdesktop
 	statusnotifier sysstat +taskbar +tray +volume"
 REQUIRED_USE="volume? ( || ( alsa pulseaudio ) )"
 
@@ -38,7 +38,6 @@ CDEPEND="
 	x11-libs/libX11
 	cpuload? ( lib-sys/libstatgrab )
 	kbindicator? ( x11-libs/libxkbcommon )
-	mount? ( x11/solid:5 )
 	networkmonitor? ( lib-sys/libstatgrab )
 	sensors? ( sys-app/lm_sensors )
 	statusnotifier? ( >=lib-dev/libdbusmenu-qt-0.9.3_pre20160218-r1 )
@@ -68,7 +67,6 @@ src_configure() {
 		$(usex dom '-DDOM_PLUGIN=ON' '-DDOM_PLUGIN=OFF')
 		$(usex kbindicator '-DKBINDICATOR_PLUGIN=ON' '-DKBINDICATOR_PLUGIN=OFF')
 		$(usex mainmenu '-DMAINMENU_PLUGIN=ON' '-DMAINMENU_PLUGIN=OFF')
-		$(usex mount '-DMOUNT_PLUGIN=ON' '-DMOUNT_PLUGIN=OFF')
 		$(usex networkmonitor '-DNETWORKMONITOR_PLUGIN=ON' '-DNETWORKMONITOR_PLUGIN=OFF')
 		$(usex quicklaunch '-DQUICKLAUNCH_PLUGIN=ON' '-DQUICKLAUNCH_PLUGIN=OFF')
 		$(usex sensors '-DSENSORS_PLUGIN=ON' '-DSENSORS_PLUGIN=OFF')

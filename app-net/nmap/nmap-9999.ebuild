@@ -77,6 +77,8 @@ src_configure() {
 }
 
 src_compile() {
+	append-flags -fno-strict-aliasing
+
 	local directory
 	for directory in . libnetutil nsock/src \
 		$(usex ncat ncat '') \

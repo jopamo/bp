@@ -6,7 +6,7 @@ PYTHON_COMPAT=( python3_7 )
 
 inherit eutils user systemd unpacker python-single-r1
 
-MINOR_VERSION="5291-6fa5e50a8"
+MINOR_VERSION="5439-7303bc002"
 
 _APPNAME="plexmediaserver"
 _USERNAME="plex"

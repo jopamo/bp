@@ -4,7 +4,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-WAF_PV=2.0.10
+WAF_PV=2.0.12
 
 inherit gnome2-utils python-r1 toolchain-funcs versionator waf-utils xdg-utils
 
@@ -226,6 +226,8 @@ src_install() {
 		insinto /usr/share/${PN}
 		doins -r TOOLS/lua
 	fi
+
+	rm -rf "${ED}"/usr/share/doc/mpv
 }
 
 pkg_postinst() {

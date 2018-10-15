@@ -35,7 +35,6 @@ CDEPEND="
 	lib-dev/libbsd[${MULTILIB_USEDEP}]
 	lib-dev/iniparser:0
 	lib-dev/popt[${MULTILIB_USEDEP}]
-	>=dev-util/cmocka-1.1.1[${MULTILIB_USEDEP}]
 	lib-net/libnsl:=[${MULTILIB_USEDEP}]
 	sys-app/attr[${MULTILIB_USEDEP}]
 	lib-sys/libcap

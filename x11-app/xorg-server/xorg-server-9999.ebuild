@@ -5,7 +5,7 @@ EAPI=6
 inherit multilib-minimal meson git-r3
 
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/xorg/xserver.git"
-
+EGIT_BRANCH="server-1.20-branch"
 DESCRIPTION="X.Org X servers"
 SLOT="0/${PV}"
 KEYWORDS="amd64 arm64 x86"

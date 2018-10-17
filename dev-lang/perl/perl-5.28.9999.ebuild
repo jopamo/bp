@@ -15,10 +15,9 @@ SLOT="0"
 
 KEYWORDS="amd64 arm64 x86"
 
-IUSE="berkdb debug doc gdbm"
+IUSE="debug doc gdbm"
 
 RDEPEND="
-	berkdb? ( lib-sys/db:= )
 	gdbm? ( >=lib-sys/gdbm-1.8.3 )
 	app-compression/bzip2
 	lib-sys/zlib
@@ -90,21 +89,9 @@ src_configure() {
 	mydb='U'
 	if use gdbm ; then
 		mygdbm='D'
-		if use berkdb ; then
-			myndbm='D'
-		fi
-	fi
-	if use berkdb ; then
-		mydb='D'
-		has_version '=lib-sys/db-1*' && myndbm='D'
 	fi
 
 	myconf "-${myndbm}i_ndbm" "-${mygdbm}i_gdbm" "-${mydb}i_db"
-
-	if use alpha && [[ "$(tc-getCC)" = "ccc" ]] ; then
-		ewarn "Perl will not be built with berkdb support, use gcc if you needed it..."
-		myconf -Ui_db -Ui_ndbm
-	fi
 
 	if use debug ; then
 		append-cflags "-g"

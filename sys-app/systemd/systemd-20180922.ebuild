@@ -146,7 +146,7 @@ multilib_src_configure() {
 		-Dapparmor=$(meson_multilib_native_use apparmor)
 		-Daudit=$(meson_multilib_native_use audit)
 		-Dbacklight=false
-		-Dbinfmt=$(meson_multilib)
+		-Dbinfmt=true
 		-Dblkid=true
 		-Dbuildtype=release
 		-Dbzip2=true
@@ -160,15 +160,15 @@ multilib_src_configure() {
 		-Ddns-servers=1.1.1.1
 		-Defi=false
 		-Delfutils=true
-		-Denvironment-d=$(meson_multilib)
+		-Denvironment-d=true
 		-Dfirstboot=true
 		-Dgcrypt=true
 		-Dgnu-efi=false
 		-Dgnutls=true
 		-Dhibernate=false
-		-Dhostnamed=$(meson_multilib)
+		-Dhostnamed=true
 		-Dhtml=false
-		-Dhwdb=$(meson_multilib)
+		-Dhwdb=true
 		-Dima=true
 		-Dimportd=true
 		-Dkill-path=/usr/bin/kill
@@ -190,9 +190,9 @@ multilib_src_configure() {
 		-Dpcre2=$(meson_multilib_native_use pcre)
 		-Dpolkit=false
 		-Dqrencode=$(meson_multilib_native_use qrcode)
-		-Dquotacheck=$(meson_multilib)
+		-Dquotacheck=true
 		-Drandomseed=true
-		-Drfkill=$(meson_multilib)
+		-Drfkill=true
 		-Drootlibdir="${EPREFIX}"/usr/$(get_libdir)
 		-Drootprefix="${EPREFIX}"/usr
 		-Dseccomp=$(meson_multilib_native_use seccomp)
@@ -202,8 +202,8 @@ multilib_src_configure() {
 		-Dsysusers=false
 		-Dtimedated=true
 		-Dtimesyncd=false
-		-Dtmpfiles=$(meson_multilib)
-		-Dvconsole=$(meson_multilib)
+		-Dtmpfiles=true
+		-Dvconsole=true
 		-Dxkbcommon=$(meson_multilib_native_use xkb)
 		-Dxz=true
 		-Dzlib=true
@@ -243,7 +243,7 @@ multilib_src_install_all() {
 
 	# If we install these, there's no way to remove them
 	# permanently.
-	rm -rf "${ED}"/etc/systemd/system/* || die
+	#rm -rf "${ED}"/etc/systemd/system/* || die
 	rm -rf "${ED}"/etc/init.d
 
 	rm -rf "${ED}"/usr/share/polkit-1
@@ -280,11 +280,7 @@ pkg_postinst() {
 
 	systemd_update_catalog
 
-	# Keep this here in case the database format changes so it gets updated
-	# when required. Despite that this file is owned by sys-app/systemd.
-	if has_version "sys-app/systemd[udev]"; then
-		udevadm hwdb --update --root="${EROOT%/}"
-	fi
+	udevadm hwdb --update --root="${EROOT%/}"
 
 	udev_reload || FAIL=1
 

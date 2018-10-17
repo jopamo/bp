@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit meson tmpfiles git-r3 tmpfiles
+inherit meson tmpfiles git-r3
 
 EGIT_REPO_URI="https://github.com/vaeth/${PN}.git"
 

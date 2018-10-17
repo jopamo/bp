@@ -45,8 +45,6 @@ CDEPEND="
 	tray? ( x11-libs/libXcomposite
 		x11-libs/libXdamage
 		x11-libs/libXrender )
-	volume? ( alsa? ( lib-media/alsa-lib )
-		pulseaudio? ( app-media/pulseaudio ) )
 "
 DEPEND="${CDEPEND}
 	gui-lib/linguist-tools:5
@@ -75,15 +73,9 @@ src_configure() {
 		$(usex sysstat '-DSYSSTAT_PLUGIN=ON' '-DSYSSTAT_PLUGIN=OFF')
 		$(usex taskbar '-DTASKBAR_PLUGIN=ON' '-DTASKBAR_PLUGIN=OFF')
 		$(usex tray '-DTRAY_PLUGIN=ON' '-DTRAY_PLUGIN=OFF')
-		$(usex volume '-DVOLUME_PLUGIN=ON' '-DVOLUME_PLUGIN=OFF')
+		-DVOLUME_PLUGIN=OFF
+		-DMOUNT_PLUGIN=OFF
 	)
-
-	if use volume; then
-		mycmakeargs+=(
-			$(usex alsa '-DVOLUME_USE_ALSA=ON' '-DVOLUME_USE_ALSA=OFF')
-			$(usex pulseaudio '-DVOLUME_USE_PULSEAUDIO=ON' '-DVOLUME_USE_PULSEAUDIO=OFF')
-		)
-	fi
 
 	cmake-utils_src_configure
 }

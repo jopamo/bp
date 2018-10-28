@@ -37,6 +37,7 @@ DEPEND="
 	${RDEPEND}
 	gui-lib/linguist-tools:5
 	gui-lib/qtconcurrent:5
+	app-media/qrencode
 	test? ( gui-lib/qttest:5 )
 "
 

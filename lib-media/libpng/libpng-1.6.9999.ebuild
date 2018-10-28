@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools git-r3 libtool ltprune multilib-minimal
+inherit autotools git-r3 libtool multilib-minimal
 
 DESCRIPTION="Portable Network Graphics library"
 HOMEPAGE="http://www.libpng.org/"
@@ -38,10 +38,4 @@ multilib_src_configure() {
 		--enable-arm-neon=$(usex neon)
 	)
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
-}
-
-multilib_src_install_all() {
-	DOCS=( ANNOUNCE CHANGES libpng-manual.txt README TODO )
-	einstalldocs
-	prune_libtool_files --all
 }

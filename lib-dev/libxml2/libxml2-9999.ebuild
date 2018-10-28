@@ -1,10 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit libtool flag-o-matic ltprune python-r1 autotools prefix multilib-minimal
+inherit libtool flag-o-matic python-r1 autotools prefix multilib-minimal
 
 DESCRIPTION="Version 2 of the library to manipulate XML files"
 HOMEPAGE="http://www.xmlsoft.org/"
@@ -12,7 +12,7 @@ HOMEPAGE="http://www.xmlsoft.org/"
 LICENSE="MIT"
 SLOT="2"
 KEYWORDS="amd64 arm64 x86"
-IUSE="debug examples icu ipv6 lzma python readline static-libs"
+IUSE="debug icu ipv6 lzma python readline static-libs"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 if [[ ${PV} == "9999" ]] ; then
@@ -42,32 +42,36 @@ MULTILIB_CHOST_TOOLS=(
 	/usr/bin/xml2-config
 )
 
+PATCHES=(
+	"${FILESDIR}"/${PN}-2.7.1-catalog_path.patch
+	"${FILESDIR}"/${PN}-9999-python-ABIFLAG.patch
+)
+
 src_prepare() {
 	default
-
-	# Patches needed for prefix support
-	eapply "${FILESDIR}"/${PN}-2.7.1-catalog_path.patch
-
 	eprefixify catalog.c xmlcatalog.c runtest.c xmllint.c
-
-
-	eapply "${FILESDIR}"/${PN}-9999-python-ABIFLAG.patch
-
 	eautoreconf
 }
 
 multilib_src_configure() {
 	libxml2_configure() {
-		ECONF_SOURCE="${S}" econf \
-			--with-html-subdir=${PF}/html \
-			$(use_with debug run-debug) \
-			$(use_with icu) \
-			$(use_with lzma) \
-			$(use_enable ipv6) \
-			$(use_enable static-libs static) \
-			$(multilib_native_use_with readline) \
-			$(multilib_native_use_with readline history) \
-			"$@"
+		local myeconfargs=(
+		--bindir="${EPREFIX}"/usr/bin
+		--sbindir="${EPREFIX}"/usr/sbin
+		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libexecdir="${EPREFIX}"/usr/libexec
+		--sysconfdir="${EPREFIX}/etc"
+		--localstatedir="${EPREFIX}/var"
+		--with-html-subdir=${PF}/html \
+		$(use_with debug run-debug)
+		$(use_with icu)
+		$(use_with lzma)
+		$(use_enable ipv6)
+		$(use_enable static-libs static)
+		$(multilib_native_use_with readline)
+		$(multilib_native_use_with readline history)
+	)
+		ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 	}
 
 	libxml2_py_configure() {
@@ -96,8 +100,7 @@ multilib_src_test() {
 }
 
 multilib_src_install() {
-	emake DESTDIR="${D}" \
-		EXAMPLES_DIR="${EPREFIX}"/usr/share/doc/${PF}/examples install
+	emake DESTDIR="${D}" EXAMPLES_DIR="${EPREFIX}"/usr/share/doc/${PF}/examples install
 
 	if multilib_is_native_abi && use python; then
 		python_foreach_impl libxml2_py_emake \
@@ -110,38 +113,16 @@ multilib_src_install() {
 }
 
 multilib_src_install_all() {
-	# on windows, xmllint is installed by interix libxml2 in parent prefix.
-	# this is the version to use. the native winnt version does not support
-	# symlinks, which makes repoman fail if the portage tree is linked in
-	# from another location (which is my default). -- mduft
-	if [[ ${CHOST} == *-winnt* ]]; then
-		rm -rf "${ED}"/usr/bin/xmllint
-		rm -rf "${ED}"/usr/bin/xmlcatalog
-	fi
-
-	rm -rf "${ED}"/usr/share/doc/${P}
-	einstalldocs
-
-	if ! use examples; then
-		rm -rf "${ED}"/usr/share/doc/${PF}/examples
-		rm -rf "${ED}"/usr/share/doc/${PF}/python/examples
-	fi
-
-	prune_libtool_files --modules
+	rm -rf "${ED}"/usr/share/doc
+	find "${ED}" -name "*.la" -delete || die
 }
 
 pkg_postinst() {
-	# We don't want to do the xmlcatalog during stage1, as xmlcatalog will not
-	# be in / and stage1 builds to ROOT=/tmp/stage1root. This fixes bug #208887.
 	if [[ "${ROOT}" != "/" ]]; then
 		elog "Skipping XML catalog creation for stage building (bug #208887)."
 	else
-		# need an XML catalog, so no-one writes to a non-existent one
 		CATALOG="${EROOT}etc/xml/catalog"
 
-		# we dont want to clobber an existing catalog though,
-		# only ensure that one is there
-		# <obz@gentoo.org>
 		if [[ ! -e ${CATALOG} ]]; then
 			[[ -d "${EROOT}etc/xml" ]] || mkdir -p "${EROOT}etc/xml"
 			"${EPREFIX}"/usr/bin/xmlcatalog --create > "${CATALOG}"

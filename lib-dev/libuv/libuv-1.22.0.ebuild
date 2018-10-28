@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit autotools ltprune multilib-minimal
+inherit autotools multilib-minimal
 
 DESCRIPTION="Cross-platform asychronous I/O"
 HOMEPAGE="https://github.com/libuv/libuv"
@@ -41,6 +41,5 @@ multilib_src_test() {
 }
 
 multilib_src_install_all() {
-	einstalldocs
-	prune_libtool_files
+	find "${ED}" -name "*.la" -delete || die
 }

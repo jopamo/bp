@@ -32,8 +32,3 @@ multilib_src_configure() {
 		--enable-symbol-hiding \
 		$(use_enable static-libs static)
 }
-
-multilib_src_install_all() {
-	einstalldocs
-	prune_libtool_files --all
-}

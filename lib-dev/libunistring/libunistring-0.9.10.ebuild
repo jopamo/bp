@@ -27,8 +27,3 @@ multilib_src_configure() {
 	ECONF_SOURCE="${S}" \
 	econf $(use_enable static-libs static)
 }
-
-multilib_src_install() {
-	default
-	prune_libtool_files
-}

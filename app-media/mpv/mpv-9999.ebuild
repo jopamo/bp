@@ -170,6 +170,7 @@ src_configure() {
 		--disable-opensles
 		$(use_enable alsa)
 		$(use_enable coreaudio)
+		--disable-vulkan
 
 		# Video outputs:
 		$(use_enable aqua cocoa)

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit eutils multilib libtool flag-o-matic toolchain-funcs multilib-minimal
 
@@ -19,26 +19,16 @@ LICENSE="BSD"
 SLOT="3"
 KEYWORDS="amd64 arm64 x86"
 
-IUSE="bzip2 +cxx +jit libedit pcre16 pcre32 +readline +recursion-limit static-libs unicode zlib"
-REQUIRED_USE="readline? ( !libedit )
-	libedit? ( !readline )"
+IUSE="+cxx +jit +recursion-limit static-libs"
 
 RDEPEND="
-	bzip2? ( app-compression/lbzip2 )
-	zlib? ( lib-sys/zlib )
-	libedit? ( lib-dev/libedit )
-	readline? ( lib-sys/readline:0= )
+	app-compression/lbzip2
+	lib-sys/zlib
+	lib-sys/readline
 "
 DEPEND="
 	${RDEPEND}
 	dev-util/pkgconfig
-"
-RDEPEND="
-	${RDEPEND}
-	abi_x86_32? (
-		!<=app-misc/emul-linux-x86-baselibs-20131008-r2
-		!app-misc/emul-linux-x86-baselibs[-abi_x86_32(-)]
-	)
 "
 
 S="${WORKDIR}/${MY_P}"
@@ -62,43 +52,30 @@ multilib_src_configure() {
 		--sysconfdir="${EPREFIX}/etc"
 		--localstatedir="${EPREFIX}/var"
 		--with-match-limit-recursion=$(usex recursion-limit 8192 MATCH_LIMIT)
-		$(multilib_native_use_enable bzip2 pcregrep-libbz2)
-		$(use_enable cxx cpp)
-		$(use_enable jit) $(use_enable jit pcregrep-jit)
-		$(use_enable pcre16)
-		$(use_enable pcre32)
-		$(multilib_native_use_enable libedit pcretest-libedit)
-		$(multilib_native_use_enable readline pcretest-libreadline)
-		$(use_enable static-libs static)
-		$(use_enable unicode utf) $(use_enable unicode unicode-properties)
-		$(multilib_native_use_enable zlib pcregrep-libz)
-		--enable-pcre8
+		--enable-unicode-properties
+		--enable-pcre16
+		--enable-pcre32
+		--enable-pcregrep-libz
+		--enable-pcregrep-libbz2
+		--enable-pcretest-libreadline
 		--enable-shared
 		--htmldir="${EPREFIX}"/usr/share/doc/${PF}/html
 		--docdir="${EPREFIX}"/usr/share/doc/${PF}
+		$(use_enable cxx cpp)
+		$(use_enable jit) $(use_enable jit pcregrep-jit)
+		$(use_enable static-libs static)
 	)
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }
 
 multilib_src_compile() {
-	emake V=1 $(multilib_is_native_abi || echo "bin_PROGRAMS=")
+	emake V=1
 }
 
 multilib_src_install() {
-	emake \
-		DESTDIR="${D}" \
-		$(multilib_is_native_abi || echo "bin_PROGRAMS= dist_html_DATA=") \
-		install
+	emake DESTDIR="${ED}" install
 }
 
 multilib_src_install_all() {
-	prune_libtool_files
-}
-
-pkg_preinst() {
-	preserve_old_lib /$(get_libdir)/libpcre.so.0
-}
-
-pkg_postinst() {
-	preserve_old_lib_notify /$(get_libdir)/libpcre.so.0
+	find "${ED}" -name "*.la" -delete || die
 }

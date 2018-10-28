@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools ltprune flag-o-matic git-r3
+inherit autotools flag-o-matic git-r3
 
 MY_PN="MediaInfo"
 DESCRIPTION="MediaInfo libraries"

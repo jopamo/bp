@@ -35,12 +35,3 @@ multilib_src_configure() {
 		$(use_enable doc docs) \
 		--with-doc-dir="${EPREFIX}"/usr/share/doc/${PF}
 }
-
-multilib_src_install() {
-	emake DESTDIR="${D}" install
-}
-
-multilib_src_install_all() {
-	prune_libtool_files
-	rm -f "${ED}"/usr/share/doc/${PF}/{ABOUT-NLS,COPYING}
-}

@@ -40,25 +40,3 @@ multilib_src_test() {
 	# noinst_PROGRAMS from tests/Makefile.am
 	tests/stress || die
 }
-
-multilib_src_install() {
-	emake DESTDIR="${D}" install
-
-	if multilib_is_native_abi; then
-
-		use doc && dohtml doc/html/*
-	fi
-}
-
-multilib_src_install_all() {
-	prune_libtool_files
-
-	dodoc AUTHORS ChangeLog NEWS PORTING README TODO
-
-	if use examples; then
-		insinto /usr/share/doc/${PF}/examples
-		doins examples/*.{c,h}
-		insinto /usr/share/doc/${PF}/examples/getopt
-		doins examples/getopt/*.{c,h}
-	fi
-}

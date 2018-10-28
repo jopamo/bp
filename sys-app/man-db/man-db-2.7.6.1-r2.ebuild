@@ -56,9 +56,7 @@ src_configure() {
 
 src_install() {
 	default
-	dodoc docs/{HACKING,TODO}
-	prune_libtool_files
-
+	use static-libs || find "${ED}" -name "*.la" -delete || die
 	exeinto /etc/cron.daily
 	newexe "${FILESDIR}"/man-db.cron man-db #289884
 }

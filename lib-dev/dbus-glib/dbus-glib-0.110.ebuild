@@ -83,6 +83,5 @@ multilib_src_test() {
 }
 
 multilib_src_install_all() {
-	einstalldocs
-	prune_libtool_files
+	find "${ED}" -name "*.la" -delete || die
 }

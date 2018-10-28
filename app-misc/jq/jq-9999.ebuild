@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools ltprune git-r3
+inherit autotools git-r3
 
 DESCRIPTION="A lightweight and flexible command-line JSON processor"
 HOMEPAGE="https://stedolan.github.com/jq/"
@@ -30,7 +30,6 @@ src_prepare() {
 	sed -i -r "s:(m4_define\(\[jq_version\],) .+\):\1 \[${PV}\]):" \
 		configure.ac || die
 
-	#glibc 2.27 workaround
 	sed -i '/pow10/d' configure.ac || die
 	default
 

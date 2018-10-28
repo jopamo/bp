@@ -263,17 +263,3 @@ multilib_src_install() {
 		unset -f install_tool
 	fi
 }
-
-multilib_src_install_all() {
-	prune_libtool_files
-
-	doman sqlite3.1
-
-	if use doc; then
-		rm "${WORKDIR}/${PN}-doc-${DOC_PV}/"*.{db,txt}
-		(
-			docinto html
-			dodoc -r "${WORKDIR}/${PN}-doc-${DOC_PV}/"*
-		)
-	fi
-}

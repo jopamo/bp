@@ -294,5 +294,5 @@ multilib_src_install_all() {
 	# Prevent warnings when system-wide is not used, bug #447694
 	use system-wide || rm "${ED}"/etc/dbus-1/system.d/pulseaudio-system.conf
 
-	prune_libtool_files --all
+	find "${ED}" -name "*.la" -delete || die
 }

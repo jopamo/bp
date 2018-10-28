@@ -81,7 +81,7 @@ src_install() {
 	default
 
 	use suid && fperms u+s /usr/bin/${MY_PN}
-	prune_libtool_files
+	use static-libs || find "${ED}" -name "*.la" -delete || die
 
 	dosym mount.ntfs-3g /usr/sbin/mount.ntfs #374197
 }

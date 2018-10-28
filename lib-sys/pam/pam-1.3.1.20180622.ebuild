@@ -79,17 +79,6 @@ multilib_src_install() {
 		sepermitlockdir="${EPREFIX}/run/sepermit"
 }
 
-multilib_src_install_all() {
-	prune_libtool_files --all
-
-	if use selinux; then
-		dodir /usr/lib/tmpfiles.d
-		cat - > "${D}"/usr/lib/tmpfiles.d/${CATEGORY}:${PN}:${SLOT}.conf <<EOF
-d /run/sepermit 0755 root root
-EOF
-	fi
-}
-
 pkg_postinst() {
 	fcaps cap_dac_override usr/sbin/unix_chkpwd
 }

@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils libtool ltprune toolchain-funcs multilib-minimal
+inherit eutils libtool toolchain-funcs multilib-minimal
 
 DESCRIPTION="access control list utilities, libraries and headers"
 HOMEPAGE="https://savannah.nongnu.org/projects/acl"
@@ -39,10 +39,4 @@ multilib_src_configure() {
 		$(use_enable nls)
 	)
 	econf "${myeconfargs[@]}"
-}
-
-multilib_src_install_all() {
-	default
-	use static-libs || find "${ED}" -name '*.*a' -delete
-	use static-libs || prune_libtool_files --all
 }

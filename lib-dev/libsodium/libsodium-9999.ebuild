@@ -36,8 +36,3 @@ src_configure() {
 		$(use_enable cpu_flags_x86_aes aesni) \
 		${myconf}
 }
-
-src_install() {
-	default
-	prune_libtool_files
-}

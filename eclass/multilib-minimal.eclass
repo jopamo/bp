@@ -31,6 +31,8 @@ esac
 [[ ${EAPI} == [45] ]] && inherit eutils
 inherit multilib-build
 
+IUSE+="static-libs"
+
 EXPORT_FUNCTIONS src_configure src_compile src_test src_install
 
 
@@ -117,7 +119,7 @@ multilib-minimal_src_install() {
 
 	if declare -f multilib_src_install_all >/dev/null ; then
 		multilib_src_install_all
-	else
-		einstalldocs
 	fi
+
+	use static-libs || find "${ED}" -name "*.la" -delete || die
 }

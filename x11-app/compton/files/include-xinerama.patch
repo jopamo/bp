@@ -1,0 +1,10 @@
+--- a/src/compton.c
++++ b/src/compton.c
+@@ -15,6 +15,7 @@
+ #include <xcb/damage.h>
+ #include <xcb/render.h>
+ #include <xcb/xcb_image.h>
++#include <xcb/xinerama.h>
+ 
+ #include <ev.h>
+ 

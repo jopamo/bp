@@ -2,7 +2,7 @@
 
 EAPI="6"
 
-inherit systemd flag-o-matic prefix toolchain-funcs user cmake-utils multilib-minimal git-r3
+inherit systemd flag-o-matic prefix toolchain-funcs user cmake-utils git-r3
 
 HOMEPAGE="https://mariadb.org/"
 DESCRIPTION="An enhanced, drop-in replacement for MySQL"
@@ -12,7 +12,7 @@ EGIT_BRANCH="10.4"
 
 SLOT="0/${SUBSLOT:-0}"
 IUSE="+backup bindist client-libs cracklib debug extraengine galera innodb-lz4
-	innodb-lzo innodb-snappy jdbc jemalloc kerberos latin1 libressl mroonga
+	innodb-lzo innodb-snappy jdbc jemalloc kerberos libressl mroonga
 	numa odbc oqgraph pam +perl profiling rocksdb selinux +server sphinx
 	sst-rsync sst-mariabackup sst-xtrabackup static static-libs systemd systemtap tcmalloc
 	test tokudb xml yassl"
@@ -67,8 +67,6 @@ COMMON_DEPEND="
 	>=lib-dev/libpcre-8.41-r1:3=
 "
 
-#app-server/mariadb-connector-c[${MULTILIB_USEDEP},static-libs?]
-
 DEPEND="sys-devel/bison
 	static? ( lib-sys/ncurses[static-libs] )
 	|| ( >=sys-devel/gcc-3.4.6 >=sys-devel/gcc-apple-4.0 )
@@ -92,15 +90,11 @@ pkg_setup() {
 src_configure(){
 	# bug 508724 mariadb cannot use ld.gold
 	tc-ld-disable-gold
-	# Bug #114895, bug #110149
-	filter-flags "-O" "-O[01]"
 
 	append-cxxflags -felide-constructors
+	append-flags -fno-strict-aliasing -fPIC
 
-	# bug #283926, with GCC4.4, this is required to get correct behavior.
-	append-flags -fno-strict-aliasing
-
-	CMAKE_BUILD_TYPE="RelWithDebInfo"
+	CMAKE_BUILD_TYPE="Release"
 
 	# debug hack wrt #497532
 	mycmakeargs=(
@@ -146,6 +140,7 @@ src_configure(){
 		-DCLIENT_PLUGIN_DIALOG=OFF
 		-DCLIENT_PLUGIN_AUTH_GSSAPI_CLIENT=OFF
 		-DCLIENT_PLUGIN_MYSQL_CLEAR_PASSWORD=STATIC
+		-DBUILD_CONFIG=mysql_release
 	)
 	if use test ; then
 		mycmakeargs+=( -DINSTALL_MYSQLTESTDIR=share/mariadb/mysql-test )
@@ -205,6 +200,15 @@ src_configure(){
 			# systemd is only linked to for server notification
 			-DWITH_SYSTEMD=$(usex systemd yes no)
 			-DWITH_NUMA=$(usex numa ON OFF)
+			-DDEFAULT_CHARSET=utf8
+			-DDEFAULT_COLLATION=utf8_general_ci
+			-DEXTRA_CHARSETS=all
+			-DMYSQL_USER=mysql
+			-DDISABLE_SHARED=$(usex static YES NO)
+			-DWITH_DEBUG=$(usex debug)
+			-DWITH_EMBEDDED_SERVER=OFF
+			-DWITH_PROFILING=$(usex profiling)
+			-DAWS_SDK_EXTERNAL_PROJECT=OFF
 		)
 
 		# Workaround for MDEV-14524
@@ -215,36 +219,6 @@ src_configure(){
 			mycmakeargs+=( -DSKIP_TESTS=ON )
 		fi
 
-		if [[ ( -n ${MYSQL_DEFAULT_CHARSET} ) && ( -n ${MYSQL_DEFAULT_COLLATION} ) ]]; then
-			ewarn "You are using a custom charset of ${MYSQL_DEFAULT_CHARSET}"
-			ewarn "and a collation of ${MYSQL_DEFAULT_COLLATION}."
-			ewarn "You MUST file bugs without these variables set."
-
-			mycmakeargs+=(
-				-DDEFAULT_CHARSET=${MYSQL_DEFAULT_CHARSET}
-				-DDEFAULT_COLLATION=${MYSQL_DEFAULT_COLLATION}
-			)
-
-		elif ! use latin1 ; then
-			mycmakeargs+=(
-				-DDEFAULT_CHARSET=utf8
-				-DDEFAULT_COLLATION=utf8_general_ci
-			)
-		else
-			mycmakeargs+=(
-				-DDEFAULT_CHARSET=latin1
-				-DDEFAULT_COLLATION=latin1_swedish_ci
-			)
-		fi
-		mycmakeargs+=(
-			-DEXTRA_CHARSETS=all
-			-DMYSQL_USER=mysql
-			-DDISABLE_SHARED=$(usex static YES NO)
-			-DWITH_DEBUG=$(usex debug)
-			-DWITH_EMBEDDED_SERVER=OFF
-			-DWITH_PROFILING=$(usex profiling)
-		)
-
 		if use static; then
 			mycmakeargs+=( -DWITH_PIC=1 )
 		fi
@@ -252,19 +226,6 @@ src_configure(){
 		if use jemalloc || use tcmalloc ; then
 			mycmakeargs+=( -DWITH_SAFEMALLOC=OFF )
 		fi
-
-		# Storage engines
-		mycmakeargs+=(
-			-DWITH_ARCHIVE_STORAGE_ENGINE=1
-			-DWITH_BLACKHOLE_STORAGE_ENGINE=1
-			-DWITH_CSV_STORAGE_ENGINE=1
-			-DWITH_HEAP_STORAGE_ENGINE=1
-			-DWITH_INNOBASE_STORAGE_ENGINE=0
-			-DWITH_MYISAMMRG_STORAGE_ENGINE=1
-			-DWITH_MYISAM_STORAGE_ENGINE=1
-			-DWITH_PARTITION_STORAGE_ENGINE=1
-		)
-
 	else
 		mycmakeargs+=(
 			-DWITHOUT_SERVER=1
@@ -278,7 +239,7 @@ src_configure(){
 	cmake-utils_src_configure
 }
 
-multilib_src_compile() {
+src_compile() {
 	cmake-utils_src_compile
 }
 
@@ -332,11 +293,7 @@ src_install() {
 			sed -i -r -e '/^user[[:space:]]*=[[:space:]]*mysql$/d' \
 				"${TMPDIR}/my.cnf.ok" || die
 		fi
-		if use latin1 ; then
-			sed -i \
-				-e "/character-set/s|utf8|latin1|g" \
-				"${TMPDIR}/my.cnf.ok" || die
-		fi
+
 		eprefixify "${TMPDIR}/my.cnf.ok"
 		newins "${TMPDIR}/my.cnf.ok" 50-distro-server.cnf
 

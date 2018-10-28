@@ -241,8 +241,6 @@ multilib_src_configure() {
 }
 
 multilib_src_install_all() {
-	einstalldocs
-	prune_libtool_files --all
-
+	find "${ED}" -name "*.la" -delete || die
 	rm -rf "${ED}"/etc/
 }

@@ -1,9 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
+
 PYTHON_COMPAT=( python3_7 )
 
-inherit autotools ltprune python-r1 toolchain-funcs multilib-minimal git-r3
+inherit autotools python-r1 toolchain-funcs multilib-minimal git-r3
 
 DESCRIPTION="XSLT libraries and tools"
 HOMEPAGE="http://www.xmlsoft.org/"
@@ -35,14 +36,7 @@ MULTILIB_WRAPPED_HEADERS=(
 
 src_prepare() {
 	default
-
 	eautoreconf
-	# If eautoreconf'd with new autoconf, then epunt_cxx is not necessary
-	# and it is propably otherwise too if upstream generated with new
-	# autoconf
-#	epunt_cxx
-	# But Prefix always needs elibtoolize if not eautoreconf'd.
-#	elibtoolize
 }
 
 multilib_src_configure() {
@@ -94,14 +88,10 @@ multilib_src_install() {
 }
 
 multilib_src_install_all() {
-	einstalldocs
+	rm -rf "${ED}"/usr/share/doc/${PF}/examples
+	rm -rf "${ED}"/usr/share/doc/${PF}/python/examples
 
-	if ! use examples; then
-		rm -rf "${ED}"/usr/share/doc/${PF}/examples
-		rm -rf "${ED}"/usr/share/doc/${PF}/python/examples
-	fi
-
-	prune_libtool_files --modules
+	find "${ED}" -name "*.la" -delete || die
 }
 
 libxslt_foreach_py_emake() {

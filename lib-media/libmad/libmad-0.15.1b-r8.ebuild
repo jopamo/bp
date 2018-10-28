@@ -2,7 +2,7 @@
 
 EAPI=5
 
-inherit autotools epatch flag-o-matic libtool ltprune multilib-minimal
+inherit autotools epatch flag-o-matic libtool multilib-minimal
 
 DESCRIPTION="\"M\"peg \"A\"udio \"D\"ecoder library"
 HOMEPAGE="http://mad.sourceforge.net"
@@ -71,5 +71,5 @@ multilib_src_install() {
 	sed -i -e "s:^libdir.*:libdir=${EPREFIX}/usr/$(get_libdir):" \
 		"${ED}"/usr/$(get_libdir)/pkgconfig/mad.pc
 
-	prune_libtool_files --all
+	find "${ED}" -name "*.la" -delete || die
 }

@@ -37,34 +37,3 @@ multilib_src_configure() {
 	ECONF_SOURCE="${S}" \
 	econf "${myeconfargs[@]}"
 }
-
-multilib_src_compile() {
-	default
-
-	if use doc && multilib_is_native_abi; then
-		emake -C doc
-	fi
-}
-
-multilib_src_install() {
-	default
-
-	# for static libs the .la file is required if built with +X
-	use static-libs || prune_libtool_files --all
-
-	if use doc && multilib_is_native_abi; then
-		docinto html
-		dodoc doc/*.html
-	fi
-}
-
-multilib_src_install_all() {
-	doman doc/*.1
-	docinto
-	dodoc AUTHORS BUGS ChangeLog NEWS README TODO
-	if use doc; then
-		dodoc doc/*.txt
-		docinto html
-		dodoc -r doc/whatsinagif
-	fi
-}

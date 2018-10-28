@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit autotools git-r3 multilib-minimal ltprune
+inherit autotools git-r3 multilib-minimal
 
 DESCRIPTION="A system-independent library for user-level network packet capture"
 EGIT_REPO_URI="https://github.com/the-tcpdump-group/libpcap"
@@ -41,11 +41,4 @@ multilib_src_configure() {
 
 multilib_src_compile() {
 	emake all shared
-}
-
-multilib_src_install_all() {
-	if ! use static-libs; then
-		find "${ED}" -name '*.a' -exec rm {} + || die
-	fi
-	prune_libtool_files
 }

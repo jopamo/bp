@@ -1,8 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
-
-inherit ltprune
+EAPI=7
 
 DESCRIPTION="X.509 and CMS (PKCS#7) library"
 HOMEPAGE="http://www.gnupg.org/related_software/libksba"
@@ -22,6 +20,5 @@ src_configure() {
 
 src_install() {
 	default
-	# ppl need to use lib*-config for --cflags and --libs
-	prune_libtool_files
+	find "${ED}" -name "*.la" -delete || die
 }

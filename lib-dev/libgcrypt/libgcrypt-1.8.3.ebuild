@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit autotools flag-o-matic ltprune multilib-minimal
+inherit autotools flag-o-matic multilib-minimal
 
 DESCRIPTION="General purpose crypto library based on the code used in GnuPG"
 HOMEPAGE="http://www.gnupg.org/"
@@ -54,5 +54,5 @@ multilib_src_install() {
 
 multilib_src_install_all() {
 	default
-	prune_libtool_files
+	find "${ED}" -name "*.la" -delete || die
 }

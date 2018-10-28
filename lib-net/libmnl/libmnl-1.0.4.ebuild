@@ -16,15 +16,3 @@ IUSE="examples static-libs"
 src_configure() {
 	econf $(use_enable static-libs static)
 }
-
-src_install() {
-	default
-
-	prune_libtool_files
-
-	if use examples; then
-		find examples/ -name 'Makefile*' -delete
-		dodoc -r examples/
-		docompress -x /usr/share/doc/${PF}/examples
-	fi
-}

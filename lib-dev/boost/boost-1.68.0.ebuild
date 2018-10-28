@@ -26,7 +26,7 @@ RDEPEND="icu? ( >=lib-dev/icu-3.6:=[${MULTILIB_USEDEP}] )
 	lib-sys/zlib[${MULTILIB_USEDEP}]
 	!sys-app/eselect-boost"
 DEPEND="${RDEPEND}
-	=dev-util/boost-build-${MAJOR_V}*"
+	=lib-dev/boost-build-${MAJOR_V}*"
 REQUIRED_USE="
 	mpi? ( threads )
 	python? ( ${PYTHON_REQUIRED_USE} )"
@@ -99,9 +99,9 @@ __EOF__
 pkg_setup() {
 	# Bail out on unsupported build configuration, bug #456792
 	if [[ -f "${EROOT%/}/etc/site-config.jam" ]]; then
-		grep -q gentoorelease "${EROOT%/}/etc/site-config.jam" && grep -q gentoodebug "${EROOT%/}/etc/site-config.jam" ||
+		grep -q trelease "${EROOT%/}/etc/site-config.jam" && grep -q tdebug "${EROOT%/}/etc/site-config.jam" ||
 		(
-			eerror "You are using custom ${EROOT%/}/etc/site-config.jam without defined gentoorelease/gentoodebug targets."
+			eerror "You are using custom ${EROOT%/}/etc/site-config.jam without defined trelease/tdebug targets."
 			eerror "Boost can not be built in such configuration."
 			eerror "Please, either remove this file or add targets from ${EROOT%/}/usr/share/boost-build/site-config.jam to it."
 			die
@@ -133,7 +133,7 @@ src_configure() {
 	[[ "$(makeopts_jobs)" -gt 64 ]] && MAKEOPTS="${MAKEOPTS} -j64"
 
 	OPTIONS=(
-		$(usex debug gentoodebug gentoorelease)
+		$(usex debug tdebug trelease)
 		"-j$(makeopts_jobs)"
 		-q
 		-d+2
@@ -234,22 +234,6 @@ multilib_src_compile() {
 				mv ${dir} ${dir}-${EPYTHON} \
 					|| die "Renaming of '${dir}' to '${dir}-${EPYTHON}' failed"
 			done
-
-			if use mpi; then
-				if [[ -z "${MPI_PYTHON_MODULE}" ]]; then
-					MPI_PYTHON_MODULE="$(find bin.v2/libs/mpi/build/*/gentoo* -name mpi.so)"
-					if [[ "$(echo "${MPI_PYTHON_MODULE}" | wc -l)" -ne 1 ]]; then
-						die "Multiple mpi.so files found"
-					fi
-				else
-					if [[ "${MPI_PYTHON_MODULE}" != "$(find bin.v2/libs/mpi/build/*/gentoo* -name mpi.so)" ]]; then
-						die "Inconsistent structure of build directories"
-					fi
-				fi
-
-				mv stage/lib/mpi.so stage/lib/mpi.so-${EPYTHON} \
-					|| die "Renaming of 'stage/lib/mpi.so' to 'stage/lib/mpi.so-${EPYTHON}' failed"
-			fi
 		fi
 	}
 	if python_bindings_needed; then

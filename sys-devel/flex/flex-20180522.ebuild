@@ -14,7 +14,7 @@ S=${WORKDIR}/${PN}-${SNAPSHOT}
 LICENSE="FLEX"
 SLOT="0"
 KEYWORDS="amd64 arm64 x86"
-IUSE="nls static test"
+IUSE="nls static-libs test"
 
 # We want bison explicitly and not yacc in general #381273
 RDEPEND="sys-devel/m4"
@@ -37,7 +37,7 @@ src_prepare() {
 }
 
 src_configure() {
-	use static && append-ldflags -static
+	use static-libs && append-ldflags -static
 
 	multilib-minimal_src_configure
 }
@@ -76,7 +76,7 @@ multilib_src_install() {
 multilib_src_install_all() {
 	einstalldocs
 	dodoc ONEWS
-	prune_libtool_files --all
+	use static-libs || find "${ED}" -name "*.la" -delete || die
 	rm "${ED}"/usr/share/doc/${PF}/COPYING || die
 	dosym flex /usr/bin/lex
 }

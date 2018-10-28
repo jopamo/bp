@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-AUTOTOOLS_AUTO_DEPEND="no"
 
 inherit autotools toolchain-funcs multilib multilib-minimal
 
@@ -15,13 +14,6 @@ LICENSE="ZLIB"
 SLOT="0/1" # subslot = SONAME
 KEYWORDS="amd64 arm64 x86"
 IUSE="+minizip static-libs"
-
-DEPEND="minizip? ( ${AUTOTOOLS_DEPEND} )"
-RDEPEND="abi_x86_32? (
-		!<=app-misc/emul-linux-x86-baselibs-20130224
-		!app-misc/emul-linux-x86-baselibs[-abi_x86_32(-)]
-	)
-	!<lib-dev/libxml2-2.7.7" #309623
 
 src_prepare() {
 	epatch "${FILESDIR}"/${PN}-1.2.11-fix-deflateParams-usage.patch

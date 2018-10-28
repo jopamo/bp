@@ -17,11 +17,8 @@ DESCRIPTION="A vector graphics library with cross-device output support"
 HOMEPAGE="https://www.cairographics.org"
 LICENSE="|| ( LGPL-2.1 MPL-1.1 )"
 SLOT="0"
-IUSE="X aqua debug gles2 +glib opengl static-libs +svg utils valgrind xcb"
-# gtk-doc regeneration doesn't seem to work with out-of-source builds
-#[[ ${PV} == *9999* ]] && IUSE="${IUSE} doc" # API docs are provided in tarball, no need to regenerate
+IUSE="X aqua debug doc gles2 +glib opengl static-libs +svg utils valgrind xcb"
 
-# Test causes a circular depend on gtk+... since gtk+ needs cairo but test needs gtk+ so we need to block it
 RESTRICT="test"
 
 RDEPEND="
@@ -51,7 +48,7 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	>=sys-devel/libtool-2
 	X? ( x11/xorgproto )"
-	
+
 REQUIRED_USE="
 	gles2? ( !opengl )
 "
@@ -80,54 +77,41 @@ src_prepare() {
 }
 
 multilib_src_configure() {
-	local myopts
-
-	[[ ${CHOST} == *-interix* ]] && append-flags -D_REENTRANT
-
-	use elibc_FreeBSD && myopts+=" --disable-symbol-lookup"
-
-	# TODO: remove this (and add USE-dep) when qtgui is converted, bug #498010
-	if ! multilib_is_native_abi; then
-		myopts+=" --disable-qt"
-	fi
-
-	# [[ ${PV} == *9999* ]] && myopts+=" $(use_enable doc gtk-doc)"
-
-	ECONF_SOURCE="${S}" \
-	econf \
-		--disable-dependency-tracking \
-		$(use_with X x) \
-		$(use_enable X tee) \
-		$(use_enable X xlib) \
-		$(use_enable X xlib-xrender) \
-		$(use_enable aqua quartz) \
-		$(use_enable aqua quartz-image) \
-		$(use_enable debug test-surfaces) \
-		$(use_enable gles2 glesv2) \
-		$(use_enable glib gobject) \
-		$(use_enable opengl gl) \
-		$(use_enable static-libs static) \
-		$(use_enable svg) \
-		$(use_enable utils interpreter) \
-		$(use_enable utils script) \
-		$(use_enable utils trace) \
-		$(use_enable valgrind) \
-		$(use_enable xcb) \
-		$(use_enable xcb xcb-shm) \
-		--enable-ft \
-		--enable-pdf \
-		--enable-png \
-		--enable-ps \
-		--disable-drm \
-		--disable-directfb \
-		--disable-gallium \
-		--disable-qt \
-		--disable-vg \
-		--disable-xlib-xcb \
-		${myopts}
+	local myconf=(
+		--bindir="${EPREFIX}"/usr/bin
+		--sbindir="${EPREFIX}"/usr/sbin
+		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libexecdir="${EPREFIX}"/usr/libexec
+		--sysconfdir="${EPREFIX}"/etc
+		--localstatedir="${EPREFIX}"/var
+		--disable-dependency-tracking
+		$(use_with X x)
+		$(use_enable X tee)
+		$(use_enable X xlib)
+		$(use_enable X xlib-xrender)
+		$(use_enable aqua quartz)
+		$(use_enable aqua quartz-image)
+		$(use_enable debug test-surfaces)
+		$(use_enable doc gtk-doc)
+		$(use_enable gles2 glesv2)
+		$(use_enable glib gobject)
+		$(use_enable opengl gl)
+		$(use_enable static-libs static)
+		$(use_enable svg)
+		$(use_enable utils interpreter)
+		$(use_enable utils script)
+		$(use_enable utils trace)
+		$(use_enable valgrind)
+		$(use_enable xcb)
+		$(use_enable xcb xcb-shm)
+		--enable-ft
+		--enable-pdf
+		--enable-png
+		--enable-ps
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
 multilib_src_install_all() {
-	prune_libtool_files --all
-	einstalldocs
+	find "${ED}" -name "*.la" -delete || die
 }

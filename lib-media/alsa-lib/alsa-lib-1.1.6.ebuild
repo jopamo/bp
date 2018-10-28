@@ -44,28 +44,3 @@ multilib_src_configure() {
 		$(use_enable alisp) \
 		${myconf}
 }
-
-multilib_src_compile() {
-	emake
-
-	if multilib_is_native_abi && use doc; then
-		emake doc
-		fgrep -Zrl "${S}" doc/doxygen/html | \
-			xargs -0 sed -i -e "s:${S}::"
-	fi
-}
-
-multilib_src_install() {
-	emake DESTDIR="${D}" install
-	if multilib_is_native_abi && use doc; then
-		docinto html
-		dodoc -r doc/doxygen/html/.
-	fi
-}
-
-multilib_src_install_all() {
-	prune_libtool_files --all
-	find "${ED}"/usr/$(get_libdir)/alsa-lib -name '*.a' -exec rm -f {} +
-	docinto ""
-	dodoc ChangeLog doc/asoundrc.txt NOTES TODO
-}

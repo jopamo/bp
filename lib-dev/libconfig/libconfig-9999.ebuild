@@ -51,6 +51,5 @@ multilib_src_test() {
 
 multilib_src_install() {
 	default
-
-	prune_libtool_files
+	find "${ED}" -name "*.la" -delete || die
 }

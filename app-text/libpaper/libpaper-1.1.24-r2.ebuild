@@ -34,8 +34,7 @@ multilib_src_configure() {
 }
 
 multilib_src_install_all() {
-	prune_libtool_files --all
-	einstalldocs
+	find "${ED}" -name "*.la" -delete || die
 
 	dodir /etc
 	(paperconf 2>/dev/null || echo a4) > "${ED}"/etc/papersize \

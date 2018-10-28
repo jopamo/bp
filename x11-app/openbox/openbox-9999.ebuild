@@ -14,14 +14,13 @@ EGIT_REPO_URI="https://github.com/danakj/openbox.git"
 KEYWORDS="amd64 arm64 x86"
 
 LICENSE="GPL-2"
-SLOT="3"
-IUSE="debug imlib nls session startup-notification static-libs svg xdg"
+SLOT=0
+IUSE="debug nls session static-libs"
 
 RDEPEND="lib-dev/glib:2
 	>=lib-dev/libxml2-2.0
 	>=lib-media/fontconfig-2
 	x11-libs/libXft
-	x11-libs/libXinerama
 	x11-libs/libXrandr
 	x11-libs/libXt
 	x11-libs/pango
@@ -72,17 +71,4 @@ multilib_src_configure() {
 		--with-x
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-multilib_src_install() {
-	dodir /etc/X11/Sessions
-	echo "/usr/bin/openbox-session" > "${ED}/etc/X11/Sessions/${PN}"
-	fperms a+x /etc/X11/Sessions/${PN}
-	emake DESTDIR="${D}" install
-	use static-libs || prune_libtool_files --all
-	if use xdg ; then
-		python_replicate_script "${ED}"/usr/libexec/openbox-xdg-autostart
-	else
-		rm "${ED}"/usr/libexec/openbox-xdg-autostart || die
-	fi
 }

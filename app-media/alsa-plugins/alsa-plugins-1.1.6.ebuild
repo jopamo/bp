@@ -1,6 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
+
 inherit autotools eutils flag-o-matic multilib multilib-minimal
 
 DESCRIPTION="ALSA extra plugins"
@@ -27,9 +28,6 @@ DEPEND="${RDEPEND}
 src_prepare() {
 	default
 
-	# For some reasons the polyp/pulse plugin does fail with alsaplayer with a
-	# failed assert. As the code works just fine with asserts disabled, for now
-	# disable them waiting for a better solution.
 	sed -i \
 		-e '/AM_CFLAGS/s:-Wall:-DNDEBUG -Wall:' \
 		pulse/Makefile.am || die
@@ -72,14 +70,5 @@ multilib_src_install_all() {
 			"${ED}"/usr/share/alsa/alsa.conf.d/51-pulseaudio-probe.conf || die #410261
 	fi
 
-	prune_libtool_files --all
-}
-
-pkg_postinst() {
-	if use pulseaudio; then
-		einfo "The PulseAudio device is now set as the default device if the"
-		einfo "PulseAudio server is found to be running. Any custom"
-		einfo "configuration in /etc/asound.conf or ~/.asoundrc for this"
-		einfo "purpose should now be unnecessary."
-	fi
+	find "${ED}" -name "*.la" -delete || die
 }

@@ -91,7 +91,7 @@ multilib_src_compile() {
 }
 
 multilib_src_install() {
-	emake DESTDIR="${D}" install
+	default
 
 	if multilib_is_native_abi && use python; then
 		# Unset DOCS= since distutils-r1.eclass interferes
@@ -99,9 +99,4 @@ multilib_src_install() {
 		cd python || die
 		distutils-r1_src_install
 	fi
-}
-
-multilib_src_install_all() {
-	einstalldocs
-	prune_libtool_files --modules
 }

@@ -85,11 +85,6 @@ cuda_gccdir() {
 		fi
 		echo ${ret}
 		return 0
-	else
-		eerror "Only gcc version(s) ${args} are supported,"
-		eerror "of which none is installed"
-		die "Only gcc version(s) ${args} are supported"
-		return 1
 	fi
 }
 

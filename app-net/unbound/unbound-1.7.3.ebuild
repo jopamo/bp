@@ -71,39 +71,45 @@ src_prepare() {
 }
 
 src_configure() {
-	[[ ${CHOST} == *-darwin* ]] || append-ldflags -Wl,-z,noexecstack
+	append-ldflags -Wl,-z,noexecstack
 	multilib-minimal_src_configure
 }
 
 multilib_src_configure() {
-	econf \
-		$(use_enable debug) \
-		$(use_enable gost) \
-		$(use_enable dnscrypt) \
-		$(use_enable dnstap) \
-		$(use_enable ecdsa) \
-		$(use_enable static-libs static) \
-		$(use_enable systemd) \
-		$(multilib_native_use_with python pythonmodule) \
-		$(multilib_native_use_with python pyunbound) \
-		$(use_with threads pthreads) \
-		--disable-flto \
-		--disable-rpath \
-		--with-libevent="${EPREFIX}"/usr \
-		--with-pidfile="${EPREFIX}"/run/unbound.pid \
-		--with-rootkey-file="${EPREFIX}"/etc/dnssec/root-anchors.txt \
-		--with-ssl="${EPREFIX}"/usr \
+	local myconf=(
+		--bindir="${EPREFIX}"/usr/bin
+		--sbindir="${EPREFIX}"/usr/sbin
+		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libexecdir="${EPREFIX}"/usr/libexec
+		--sysconfdir="${EPREFIX}"/etc
+		--localstatedir="${EPREFIX}"/var
+		$(use_enable debug)
+		$(use_enable gost)
+		$(use_enable dnscrypt)
+		$(use_enable dnstap)
+		$(use_enable ecdsa)
+		$(use_enable static-libs static)
+		$(use_enable systemd)
+		$(multilib_native_use_with python pythonmodule)
+		$(multilib_native_use_with python pyunbound)
+		$(use_with threads pthreads)
+		--disable-flto
+		--disable-rpath
+		--with-libevent="${EPREFIX}"/usr
+		--with-pidfile="${EPREFIX}"/run/unbound.pid
+		--with-rootkey-file="${EPREFIX}"/etc/dnssec/root-anchors.txt
+		--with-ssl="${EPREFIX}"/usr
 		--with-libexpat="${EPREFIX}"/usr
-
-		# http://unbound.nlnetlabs.nl/pipermail/unbound-users/2011-April/001801.html
-		# $(use_enable debug lock-checks) \
-		# $(use_enable debug alloc-checks) \
-		# $(use_enable debug alloc-lite) \
-		# $(use_enable debug alloc-nonregional) \
+		# $(use_enable debug lock-checks)
+		# $(use_enable debug alloc-checks)
+		# $(use_enable debug alloc-lite)
+		# $(use_enable debug alloc-nonregional)
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
 multilib_src_install_all() {
-	prune_libtool_files --modules
+	find "${ED}" -name "*.la" -delete || die
 	use python && python_optimize
 
 	systemd_dounit "${FILESDIR}"/unbound.service
@@ -111,13 +117,7 @@ multilib_src_install_all() {
 	systemd_newunit "${FILESDIR}"/unbound_at.service "unbound@.service"
 	systemd_dounit "${FILESDIR}"/unbound-anchor.service
 
-	dodoc doc/{README,CREDITS,TODO,Changelog,FEATURES}
-
-	# bug #315519
 	dodoc contrib/unbound_munin_
-
-	docinto selinux
-	dodoc contrib/selinux/*
 
 	exeinto /usr/share/${PN}
 	doexe contrib/update-anchor.sh

@@ -85,10 +85,7 @@ src_compile() {
 src_install() {
 	einfo "Installing userspace"
 	default
-	prune_libtool_files
 
-	newinitd "${FILESDIR}"/ipset.initd-r4 ${PN}
-	newconfd "${FILESDIR}"/ipset.confd ${PN}
 	keepdir /var/lib/ipset
 
 	if [[ ${build_modules} -eq 1 ]]; then

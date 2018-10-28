@@ -78,14 +78,10 @@ python_test() {
 
 multilib_src_install() {
 	default
-	# move shared libs to /
-
 	do_python
 }
 
 multilib_src_install_all() {
-	einstalldocs
-	prune_libtool_files
 	rm -r "${ED}"/usr/share/cracklib
 	mv ${DISTDIR}/darkc0de.txt darkc0de.dict
 	insinto /usr/share/dict

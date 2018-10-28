@@ -4,7 +4,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit ltprune multilib python-r1
+inherit multilib python-r1
 
 if [[ ${PV} == 9999* ]]; then
 	EGIT_REPO_URI="git://git.kernel.org/pub/scm/utils/kernel/${PN}/${PN}.git"
@@ -133,7 +133,7 @@ src_install() {
 		python_foreach_impl python_install
 	fi
 
-	prune_libtool_files --modules
+	use static-libs || find "${ED}" -name "*.la" -delete || die
 
 	mkdir "${ED}"/usr/sbin
 	mv "${ED}"/usr/bin/kmod "${ED}"/usr/sbin/kmod

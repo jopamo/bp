@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5  # sgml-catalog inherits base, banned in 6
+EAPI=5
 
 inherit autotools sgml-catalog eutils flag-o-matic multilib toolchain-funcs
 
@@ -88,7 +88,7 @@ src_install() {
 		libdir="${EPREFIX}"/usr/$(get_libdir) \
 		install install-man
 
-	prune_libtool_files
+	find "${ED}" -name "*.la" -delete || die
 
 	dosym openjade  /usr/bin/jade
 	dosym onsgmls   /usr/bin/nsgmls

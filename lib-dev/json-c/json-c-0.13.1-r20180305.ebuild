@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit autotools multilib-minimal ltprune
+inherit autotools multilib-minimal
 
 DESCRIPTION="A JSON implementation in C"
 HOMEPAGE="https://github.com/json-c/json-c/wiki"
@@ -42,6 +42,5 @@ multilib_src_test() {
 
 multilib_src_install_all() {
 	dosym ../json-c /usr/include/json-c/json
-
-	prune_libtool_files
+	find "${ED}" -name "*.la" -delete || die
 }

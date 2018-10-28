@@ -6,7 +6,7 @@ PYTHON_COMPAT=( python3_{6,7,8} )
 
 DISTUTILS_OPTIONAL=1
 
-inherit distutils-r1 flag-o-matic ltprune qmake-utils toolchain-funcs
+inherit distutils-r1 flag-o-matic qmake-utils toolchain-funcs
 
 if [[ ${PV} == "9999" ]] ; then
 	inherit git-r3 autotools
@@ -101,7 +101,7 @@ src_test() {
 src_install() {
 	default
 	do_python
-	prune_libtool_files
+	find "${ED}" -name "*.la" -delete || die
 
 	# backward compatibility for gentoo
 	# in the past we had slots

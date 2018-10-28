@@ -87,5 +87,5 @@ multilib_src_install_all() {
 		doins examples/*.c
 	fi
 
-	prune_libtool_files
+	find "${ED}" -name "*.la" -delete || die
 }

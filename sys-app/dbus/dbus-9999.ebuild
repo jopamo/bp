@@ -4,7 +4,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit git-r3 autotools ltprune linux-info flag-o-matic python-any-r1 systemd virtualx user multilib-minimal
+inherit git-r3 autotools linux-info flag-o-matic python-any-r1 systemd virtualx user multilib-minimal
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="https://dbus.freedesktop.org/"
@@ -44,11 +44,6 @@ DEPEND="${CDEPEND}
 		)
 "
 RDEPEND="${CDEPEND}
-"
-
-DOC_CONTENTS="
-	Some applications require a session bus in addition to the system
-	bus. Please see \`man dbus-launch\` for more information.
 "
 
 # out of sources build dir for make check
@@ -98,8 +93,8 @@ multilib_src_configure() {
 		--sbindir="${EPREFIX}"/usr/sbin
 		--libdir="${EPREFIX}"/usr/$(get_libdir)
 		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}/etc"
-		--localstatedir="${EPREFIX}/var"
+		--sysconfdir="${EPREFIX}"/etc
+		--localstatedir="${EPREFIX}"/var
 		$(use_enable static-libs static)
 		$(use_enable debug verbose-mode)
 		--disable-asserts
@@ -217,5 +212,6 @@ multilib_src_install_all() {
 	rm -rf "${ED}"/var/run
 	rm -rf "${ED}"/run
 
-	prune_libtool_files --all
+	cp "${FILESDIR}"/dbus.conf "${ED}"/usr/lib/tmpfiles.d/
+	find "${ED}" -name "*.la" -delete || die
 }

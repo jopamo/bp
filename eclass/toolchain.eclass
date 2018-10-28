@@ -802,7 +802,6 @@ gcc_do_filter_flags() {
 	filter-flags -frecord-gcc-switches # 490738
 	filter-flags -mno-rtm -mno-htm # 506202
 
-	append-ldflags -lintl
 	append-flags -Wa,--noexecstack
 
 	if tc_version_is_between 3.2 3.4 ; then
@@ -816,35 +815,6 @@ gcc_do_filter_flags() {
 		filter-flags -f{no-,}unit-at-a-time -f{no-,}web -mno-tls-direct-seg-refs
 		filter-flags -f{no-,}stack-protector{,-all}
 		filter-flags -fvisibility-inlines-hidden -fvisibility=hidden
-	fi
-
-	if tc_version_is_at_least 3.4 ; then
-		case $(tc-arch) in
-			amd64|x86)
-				filter-flags '-mcpu=*'
-
-
-				if tc_version_is_between 4.6 4.7 ; then
-					# https://bugs.gentoo.org/411333
-					# https://bugs.gentoo.org/466454
-					replace-cpu-flags c3-2 pentium2 pentium3 pentium3m pentium-m i686
-				fi
-				;;
-			alpha)
-				# https://bugs.gentoo.org/454426
-				append-ldflags -Wl,--no-relax
-				;;
-			sparc)
-				# temporary workaround for random ICEs reproduced by multiple users
-				# https://bugs.gentoo.org/457062
-				tc_version_is_between 4.6 4.8 && MAKEOPTS+=" -j1"
-				;;
-			*-macos)
-				# http://gcc.gnu.org/PR25127
-				tc_version_is_between 4.0 4.2 && \
-					filter-flags '-mcpu=*' '-march=*' '-mtune=*'
-				;;
-		esac
 	fi
 
 	strip-unsupported-flags

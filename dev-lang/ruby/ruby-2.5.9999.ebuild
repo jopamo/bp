@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
 inherit autotools flag-o-matic git-r3 multilib-minimal
 
@@ -11,11 +11,14 @@ HOMEPAGE="https://www.ruby-lang.org/"
 EGIT_REPO_URI="https://github.com/ruby/ruby.git"
 EGIT_BRANCH="ruby_2_5"
 
+SRC_URI="https://1g4.org/files/ruby-configure.tar.xz"
+
 LICENSE="|| ( Ruby-BSD BSD-2 )"
 KEYWORDS="amd64 arm64 x86"
 IUSE="debug doc jemalloc socks5 static-libs"
 
 src_prepare() {
+	cp ${WORKDIR}/ruby-configure configure
 	einfo "Removing bundled libraries..."
 	rm -fr ext/fiddle/libffi-3.2.1 || die
 	eautoreconf

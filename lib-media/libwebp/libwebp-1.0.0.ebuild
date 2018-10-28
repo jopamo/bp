@@ -56,12 +56,3 @@ multilib_src_configure() {
 
 	econf "${args[@]}"
 }
-
-multilib_src_install() {
-	emake DESTDIR="${D}" install
-}
-
-multilib_src_install_all() {
-	prune_libtool_files
-	dodoc AUTHORS ChangeLog doc/*.txt NEWS README{,.mux}
-}

@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit libtool ltprune multilib-minimal toolchain-funcs
+inherit libtool multilib-minimal toolchain-funcs
 
 DESCRIPTION="Contains error handling functions used by GnuPG software"
 HOMEPAGE="http://www.gnupg.org/related_software/libgpg-error"
@@ -45,6 +45,5 @@ multilib_src_configure() {
 }
 
 multilib_src_install_all() {
-	einstalldocs
-	prune_libtool_files --all
+	find "${ED}" -name "*.la" -delete || die
 }

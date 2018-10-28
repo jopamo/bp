@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://anongit.freedesktop.org/git/xcb/libxcb.git"
 
 KEYWORDS="amd64 arm64 x86"
 IUSE="doc selinux test xkb static-libs"
-SLOT="0/1.12"
+SLOT=0
 
 RDEPEND=">=lib-dev/libpthread-stubs-0.3-r1[${MULTILIB_USEDEP}]
 	>=x11-libs/libXau-1.0.7-r1[${MULTILIB_USEDEP}]

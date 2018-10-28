@@ -16,7 +16,7 @@ REQUIRED_USE="
 DEPEND="
 	~gui-lib/qtcore-${PV}
 	freetds? ( dev-db/freetds )
-	mysql? ( virtual/libmysqlclient:= )
+	mysql? ( app-server/mariadb:= )
 	oci8? ( dev-db/oracle-instantclient-basic )
 	odbc? ( || ( dev-db/unixODBC dev-db/libiodbc ) )
 	postgres? ( dev-db/postgresql:* )

@@ -67,7 +67,5 @@ src_install() {
 		pkgdocdir="${EPREFIX}"/usr/share/doc/${PF} \
 		install
 
-	prune_libtool_files
-
-	dodoc AUTHORS BUGS ChangeLog NEWS README
+	find "${ED}" -name "*.la" -delete || die
 }

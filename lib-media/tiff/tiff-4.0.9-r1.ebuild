@@ -72,7 +72,3 @@ multilib_src_test() {
 	emake check
 }
 
-multilib_src_install_all() {
-	prune_libtool_files --all
-	rm -f "${ED}"/usr/share/doc/${PF}/{COPYRIGHT,README*,RELEASE-DATE,TODO,VERSION}
-}

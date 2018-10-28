@@ -4,7 +4,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit autotools python-single-r1 linux-info libtool ltprune versionator multilib-minimal
+inherit autotools python-single-r1 linux-info libtool versionator multilib-minimal
 
 DESCRIPTION="Tool to setup encrypted devices with dm-crypt"
 HOMEPAGE="https://gitlab.com/cryptsetup/cryptsetup/blob/master/README.md"
@@ -119,5 +119,5 @@ multilib_src_install() {
 		mv "${ED%}"/usr/sbin/veritysetup{.static,} || die
 		use reencrypt && { mv "${ED%}"/usr/sbin/cryptsetup-reencrypt{.static,} || die ; }
 	fi
-	prune_libtool_files --modules
+	use static-libs || find "${ED}" -name "*.la" -delete || die
 }

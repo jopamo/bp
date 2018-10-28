@@ -17,11 +17,10 @@ SLOT="0/${PV}"
 
 IUSE_INPUT_DEVICES="input_devices_joystick"
 IUSE="alsa altivec autostart bluray cec crystalhd debug dvb dvd egl fftw +hls \
-	ieee1394 jack lcd libass lirc +mythlogserver perl pulseaudio python systemd +theora \
-	vaapi vdpau +vorbis +wrapper +xml xmltv +xvid zeroconf ${IUSE_INPUT_DEVICES}"
+	ieee1394 jack lcd libass lirc +mythlogserver perl pulseaudio python systemd \
+	vaapi vdpau +wrapper +xml xmltv ${IUSE_INPUT_DEVICES}"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
-	bluray? ( xml )
-	theora? ( vorbis )"
+	bluray? ( xml )"
 
 COMMON="
 	lib-dev/glib:2
@@ -31,7 +30,6 @@ COMMON="
 	gui-lib/qtnetwork:5
 	gui-lib/qtsql:5[mysql]
 	gui-lib/qtopengl:5
-	gui-lib/qtwebkit:5
 	gui-lib/qtwidgets:5
 	gui-lib/qtxml:5
 	app-media/exiv2:=
@@ -39,7 +37,7 @@ COMMON="
 	lib-media/taglib
 	>=app-media/lame-3.93.1
 	lib-sys/zlib
-	virtual/mysql
+	app-server/mariadb
 	lib-media/mesa
 	x11-libs/libX11
 	x11-libs/libXext
@@ -47,7 +45,6 @@ COMMON="
 	x11-libs/libXv
 	x11-libs/libXrandr
 	x11-libs/libXxf86vm
-	x11-misc/wmctrl
 	alsa? ( >=lib-media/alsa-lib-1.0.24 )
 	bluray? (
 		lib-dev/libcdio:=
@@ -64,11 +61,6 @@ COMMON="
 	)
 	egl? ( lib-media/mesa[egl] )
 	fftw? ( sci-libs/fftw:3.0= )
-	hls? (
-		lib-media/faac
-		<lib-media/libvpx-1.7.0:=
-		>=lib-media/x264-0.0.20111220:=
-	)
 	ieee1394? (
 		>=lib-media/libiec61883-1.0.0
 		>=lib-sys/libavc1394-0.5.3
@@ -94,24 +86,14 @@ COMMON="
 		dev-python/urlgrabber
 	)
 	systemd? ( sys-app/systemd:= )
-	theora? ( lib-media/libtheora lib-media/libogg )
 	vaapi? ( x11-libs/libva:=[opengl] )
 	vdpau? ( x11-libs/libvdpau )
-	vorbis? ( >=lib-media/libvorbis-1.0 lib-media/libogg )
 	xml? ( >=lib-dev/libxml2-2.6.0 )
-	xvid? ( >=lib-media/xvid-1.1.0 )
-	zeroconf? (
-		lib-dev/openssl:0=
-		lib-net/avahi[mdnsresponder-compat]
-	)
 "
 RDEPEND="${COMMON}
 	!media-tv/mythtv-bindings
 	!x11-misc/mythtv-themes
-	fonts/corefonts
-	fonts/dejavu
 	fonts/liberation-fonts
-	x11-app/xinit
 	autostart? (
 		net-dialup/mingetty
 		x11-app/xset
@@ -123,27 +105,9 @@ RDEPEND="${COMMON}
 DEPEND="${COMMON}
 	dev-lang/yasm
 	dev-util/pkgconfig
-	x11-misc/xorg-proto
 "
 
 S="${WORKDIR}/${P}/mythtv"
-
-DISABLE_AUTOFORMATTING="yes"
-DOC_CONTENTS="
-To have this machine operate as recording host for MythTV,
-mythbackend must be running. Run the following:
-rc-update add mythbackend default
-
-Your recordings folder must be owned 'mythtv'. e.g.
-chown -R mythtv /var/lib/mythtv
-
-Want mythfrontend to start automatically?
-Set USE=autostart. Details can be found at:
-https://dev.gentoo.org/~cardoe/mythtv/autostart.html
-
-Note that the systemd unit now restarts by default and logs
-to journald via the console at the notice verbosity.
-"
 
 MYTHTV_GROUPS="video,audio,tty,uucp"
 
@@ -168,9 +132,6 @@ src_prepare() {
 
 	echo "setting.extra -= -ldconfig" >> "${S}"/programs/mythfrontend/mythfrontend.pro
 
-	eapply "${FILESDIR}/${P}-glibc225.patch"
-	eapply -p2 "${FILESDIR}/${PN}-29.2-freetype_pkgconfig.patch" #658534
-	eapply "${FILESDIR}/${P}-qt511.patch"
 }
 
 src_configure() {
@@ -191,7 +152,6 @@ src_configure() {
 	myconf="${myconf} $(use_enable dvb)"
 	myconf="${myconf} $(use_enable ieee1394 firewire)"
 	myconf="${myconf} $(use_enable lirc)"
-	myconf="${myconf} $(use_enable xvid libxvid)"
 	myconf="${myconf} --dvb-path=/usr/include"
 	myconf="${myconf} --enable-xrandr"
 	myconf="${myconf} --enable-xv"
@@ -199,15 +159,9 @@ src_configure() {
 	myconf="${myconf} --enable-nonfree"
 	myconf="${myconf} --enable-libmp3lame"
 	use cec || myconf="${myconf} --disable-libcec"
-	use zeroconf || myconf="${myconf} --disable-libdns-sd"
-	myconf="${myconf} $(use_enable theora libtheora)"
-	myconf="${myconf} $(use_enable vorbis libvorbis)"
+	myconf="${myconf} --disable-libdns-sd"
 
-	if use hls; then
-		myconf="${myconf} --enable-libx264"
-		myconf="${myconf} --enable-libvpx"
-		myconf="${myconf} --enable-libfaac"
-	fi
+	myconf="${myconf} --enable-libx264"
 
 	myconf="${myconf} $(use_enable libass)"
 
@@ -268,6 +222,8 @@ src_configure() {
 
 	einfo "Running ./configure ${myconf}"
 	./configure \
+		--disable-qtwebkit \
+		--disable-libbluray_external \
 		--cc="$(tc-getCC)" \
 		--cxx="$(tc-getCXX)" \
 		--ar="$(tc-getAR)" \
@@ -286,8 +242,6 @@ src_install() {
 	insinto /usr/share/mythtv/database
 	doins database/*
 
-	newinitd "${FILESDIR}"/mythbackend.init-r2 mythbackend
-	newconfd "${FILESDIR}"/mythbackend.conf-r1 mythbackend
 	systemd_newunit "${FILESDIR}"/mythbackend.service-28 mythbackend.service
 
 	dodoc keys.txt
@@ -307,22 +261,6 @@ src_install() {
 	# Ensure we don't install scripts needing the python bindings (bug #516968)
 	use python || find contrib/ -name '*.py' -exec rm -f {} \;
 	doins -r contrib/*
-
-	# Install our mythfrontend wrapper which is similar to Mythbuntu's
-	if use wrapper; then
-		mv "${ED}/usr/bin/mythfrontend" "${ED}/usr/bin/mythfrontend.real"
-		newbin "${FILESDIR}"/mythfrontend.wrapper mythfrontend
-		newconfd "${FILESDIR}"/mythfrontend.conf mythfrontend
-	fi
-
-	if use autostart; then
-		dodir /etc/env.d/
-		echo 'CONFIG_PROTECT="/home/mythtv/"' > "${ED}"/etc/env.d/95mythtv
-
-		insinto /home/mythtv
-		newins "${FILESDIR}"/bash_profile .bash_profile
-		newins "${FILESDIR}"/xinitrc-r1 .xinitrc
-	fi
 
 	# Make Python files executable
 	find "${ED}/usr/share/mythtv" -type f -name '*.py' | while read file; do

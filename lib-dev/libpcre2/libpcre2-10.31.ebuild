@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit flag-o-matic libtool ltprune multilib-minimal toolchain-funcs
+inherit flag-o-matic libtool multilib-minimal toolchain-funcs
 
 DESCRIPTION="Perl-compatible regular expression library"
 HOMEPAGE="http://www.pcre.org/"
@@ -38,7 +38,6 @@ MULTILIB_CHOST_TOOLS=(
 
 src_prepare() {
 	default
-
 	elibtoolize
 }
 
@@ -80,5 +79,5 @@ multilib_src_install() {
 }
 
 multilib_src_install_all() {
-	prune_libtool_files
+	find "${ED}" -name "*.la" -delete || die
 }

@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit libtool ltprune toolchain-funcs multilib-minimal
+inherit libtool toolchain-funcs multilib-minimal
 
 DESCRIPTION="Extended attributes tools"
 HOMEPAGE="https://savannah.nongnu.org/projects/attr"
@@ -46,8 +46,4 @@ multilib_src_install() {
 	emake DESTDIR="${D}" install
 	insinto /usr/include/attr
 	newins "${FILESDIR}"/xattr-shim.h xattr.h
-}
-
-multilib_src_install_all() {
-	use static-libs || prune_libtool_files --all
 }

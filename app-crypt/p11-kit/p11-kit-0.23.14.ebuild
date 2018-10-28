@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit ltprune multilib-minimal
+inherit multilib-minimal
 
 DESCRIPTION="Provides a standard configuration setup for installing PKCS#11"
 HOMEPAGE="https://p11-glue.freedesktop.org/p11-kit.html https://github.com/p11-glue/p11-kit"
@@ -28,4 +28,9 @@ multilib_src_configure() {
 		--without-libtasn1	\
 		$(use_enable debug) \
 		$(use_with libffi)
+}
+
+multilib_src_install() {
+	default
+	find "${ED}" -name "*.la" -delete || die
 }

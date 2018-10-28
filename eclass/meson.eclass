@@ -213,7 +213,7 @@ meson_src_configure() {
 		--sbindir "${EPREFIX}"/usr/sbin
 		--libexecdir "${EPREFIX}"/usr/libexec
 		--localstatedir "${EPREFIX}"/var
-		--libdir "$(get_libdir)"
+		--libdir "${EPREFIX}"/usr/$(get_libdir)
 		--prefix "${EPREFIX}"/usr
 		--sysconfdir "${EPREFIX}/"etc
 		--wrap-mode nodownload

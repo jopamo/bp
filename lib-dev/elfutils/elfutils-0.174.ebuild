@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
 inherit flag-o-matic multilib-minimal
 
@@ -21,8 +21,6 @@ DEPEND="${RDEPEND}
 	>=sys-devel/flex-2.5.4a
 	sys-devel/m4"
 
-PATCHES=("${FILESDIR}"/${PN}-0.118-PaX-support.patch)
-
 src_prepare() {
 	default
 
@@ -38,20 +36,20 @@ src_configure() {
 }
 
 multilib_src_configure() {
-	local myeconfargs=(
+	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
 		--libdir="${EPREFIX}"/usr/$(get_libdir)
 		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}/etc"
-		--localstatedir="${EPREFIX}/var"
+		--sysconfdir="${EPREFIX}"/etc
+		--localstatedir="${EPREFIX}"/var
 		$(use_enable nls)
 		--program-prefix="eu-"
 		--with-zlib
 		$(use_with bzip2 bzlib)
 		$(use_with lzma)
 	)
-	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
 multilib_src_test() {

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=6
 
 inherit eutils multilib-minimal toolchain-funcs flag-o-matic
 
@@ -13,12 +13,14 @@ SLOT="0"
 KEYWORDS="amd64 arm64 x86"
 IUSE="static-libs test"
 
-src_prepare() {
-	epatch \
-		"${FILESDIR}"/${PN}-0.3.109-install.patch \
-		"${FILESDIR}"/${PN}-0.3.110-cppflags.patch \
-		"${FILESDIR}"/${PN}-0.3.110-link-stdlib.patch #558406
+PATCHES=(
+	"${FILESDIR}"/${PN}-0.3.109-install.patch
+	"${FILESDIR}"/${PN}-0.3.110-cppflags.patch
+	"${FILESDIR}"/${PN}-0.3.110-link-stdlib.patch
+)
 
+src_prepare() {
+	default
 	local sed_args=(
 		-e "/^prefix=/s:/usr:${EPREFIX}/usr:"
 		-e '/^libdir=/s:lib$:$(ABI_LIBDIR):'
@@ -31,16 +33,6 @@ src_prepare() {
 	sed -i "${sed_args[@]}" src/Makefile Makefile || die
 
 	multilib_copy_sources
-}
-
-multilib_src_configure() {
-	if use arm ; then
-		# When building for thumb, we can't allow frame pointers.
-		# http://crbug.com/464517
-		if $(tc-getCPP) ${CFLAGS} ${CPPFLAGS} - <<<$'#ifndef __thumb__\n#error\n#endif' >&/dev/null ; then
-			append-flags -fomit-frame-pointer
-		fi
-	fi
 }
 
 _emake() {

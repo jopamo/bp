@@ -6,7 +6,7 @@ PYTHON_COMPAT=( python3_{6,7,8} )
 
 DISTUTILS_OPTIONAL=1
 
-inherit distutils-r1 libtool ltprune toolchain-funcs multilib-minimal autotools
+inherit distutils-r1 libtool toolchain-funcs multilib-minimal autotools
 
 if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/file/file.git"
@@ -115,5 +115,4 @@ multilib_src_install_all() {
 		cd python || die
 		distutils-r1_src_install
 	fi
-	prune_libtool_files
 }

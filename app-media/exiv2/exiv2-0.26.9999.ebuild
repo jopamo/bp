@@ -15,7 +15,7 @@ HOMEPAGE="http://www.exiv2.org/"
 
 LICENSE="GPL-2"
 SLOT="0/26"
-IUSE="doc examples nls png webready xmp"
+IUSE="doc examples nls png static-libs webready xmp"
 
 RDEPEND="
 	nls? ( >=sys-devel/gettext-0-r1[${MULTILIB_USEDEP}] )
@@ -98,8 +98,4 @@ multilib_src_compile() {
 	if multilib_is_native_abi; then
 		use doc && emake -j1 doc
 	fi
-}
-
-multilib_src_install_all() {
-	find "${D}" -name '*.la' -delete || die
 }

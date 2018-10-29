@@ -23,7 +23,7 @@ RDEPEND="
 	~gui-lib/qtcore-${PV}
 	lib-media/fontconfig
 	>=lib-media/freetype-2.6.1:2
-	>=lib-media/harfbuzz-1.0.6:=
+	lib-media/harfbuzz
 	>=lib-sys/zlib-1.2.5
 	lib-media/mesa
 	dbus? ( ~gui-lib/qtdbus-${PV} )

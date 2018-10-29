@@ -100,6 +100,7 @@ DEPEND="${COMMON_DEPEND}
 	dev-python/docutils
 	dev-util/pkgconfig
 	app-media/ffmpeg
+	x11/vulkan-headers
 	dvb? ( virtual/linuxtv-dvb-headers )
 	test? ( >=dev-util/cmocka-1.0.0 )
 	v4l? ( sys-kernel/stable-sources )

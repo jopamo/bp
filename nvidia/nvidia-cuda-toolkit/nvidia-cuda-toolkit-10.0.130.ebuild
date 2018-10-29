@@ -45,8 +45,7 @@ src_prepare() {
 		"${FILESDIR}"/cuda-config.in > "${T}"/cuda-config || die
 
 	default
-		epatch "${FILESDIR}/cuda_gcc7.patch"
-
+	epatch "${FILESDIR}/cuda_gcc7.patch"
 }
 
 src_install() {
@@ -54,32 +53,7 @@ src_install() {
 	local cudadir=/opt/cuda
 	local ecudadir="${EPREFIX}${cudadir}"
 
-	if use doc; then
-		DOCS+=( doc/pdf/. )
-		HTML_DOCS+=( doc/html/. )
-	fi
-	einstalldocs
-
-	mv doc/man/man3/{,cuda-}deprecated.3 || die
-	doman doc/man/man*/*
-
 	use debugger || remove+=( bin/cuda-gdb extras/Debugger extras/cuda-gdb-${PV}.src.tar.gz )
-
-	if use profiler; then
-		# hack found in install-linux.pl
-		for i in nvvp nsight; do
-			cat > bin/${i} <<- EOF || die
-				#!/usr/bin/env sh
-				LD_LIBRARY_PATH=\${LD_LIBRARY_PATH}:${ecudadir}/lib:${ecudadir}/lib64 \
-					UBUNTU_MENUPROXY=0 LIBOVERLAY_SCROLLBAR=0 \
-					${ecudadir}/lib${i}/${i} -vm ${EPREFIX}/usr/bin/java
-			EOF
-			chmod a+x bin/${i} || die
-		done
-	else
-		use eclipse || remove+=( libnvvp libnsight )
-		remove+=( extras/CUPTI )
-	fi
 
 	for i in "${remove[@]}"; do
 		ebegin "Cleaning ${i}..."
@@ -101,4 +75,6 @@ src_install() {
 		make_wrapper nvprof "${ecudadir}/bin/nvprof" "." "${ecudadir}/lib64:${ecudadir}/lib"
 
 	dobin "${T}"/cuda-config
+
+	rm -rf "${ED}"/opt/cuda/NsightCompute-1.0
 }

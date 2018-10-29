@@ -22,7 +22,7 @@ KEYWORDS="amd64"
 RESTRICT="bindist mirror"
 EMULTILIB_PKG="true"
 
-IUSE="compat +driver +kms multilib static-libs +tools uvm wayland +X"
+IUSE="+driver +kms multilib static-libs +tools uvm wayland +X"
 REQUIRED_USE="
 	tools? ( X )
 	static-libs? ( tools )
@@ -127,7 +127,6 @@ pkg_setup() {
 		NV_SRC="${S}/kernel"
 		NV_MAN="${S}"
 		NV_X11="${S}"
-		NV_SOVER=${PV}
 	else
 		die "Could not determine proper NVIDIA package"
 	fi
@@ -197,9 +196,6 @@ donvidia() {
 	# Full path to library
 	nv_LIB="${1}"
 
-	# SOVER to use
-	nv_SOVER="$(scanelf -qF'%S#F' ${nv_LIB})"
-
 	# Where to install
 	nv_DEST="${2}"
 
@@ -219,9 +215,9 @@ donvidia() {
 
 	# If the library has a SONAME and SONAME does not match the library name,
 	# then we need to create a symlink
-	if [[ ${nv_SOVER} ]] && ! [[ "${nv_SOVER}" = "${nv_LIBNAME}" ]]; then
-		dosym ${nv_LIBNAME} ${nv_DEST}/${nv_SOVER} \
-			|| die "failed to create ${nv_DEST}/${nv_SOVER} symlink"
+	if [[ ${PV} ]] && ! [[ "${PV}" = "${nv_LIBNAME}" ]]; then
+		dosym ${nv_LIBNAME} ${nv_DEST}/${PV} \
+			|| die "failed to create ${nv_DEST}/${PV} symlink"
 	fi
 
 	dosym ${nv_LIBNAME} ${nv_DEST}/${nv_LIBNAME/.so*/.so} \
@@ -229,9 +225,6 @@ donvidia() {
 }
 
 src_install() {
-	cd "${WORKDIR}"
-	ln -s libGLX.so.0 libglx.so.${PV}
-
 	if use driver; then
 		linux-mod_src_install
 
@@ -249,14 +242,14 @@ src_install() {
 	fi
 
 	# NVIDIA kernel <-> userspace driver config lib
-	donvidia ${NV_OBJ}/libnvidia-cfg.so.${NV_SOVER}
+	donvidia ${NV_OBJ}/libnvidia-cfg.so.${PV}
 
 	# NVIDIA framebuffer capture library
-	donvidia ${NV_OBJ}/libnvidia-fbc.so.${NV_SOVER}
+	donvidia ${NV_OBJ}/libnvidia-fbc.so.${PV}
 
 	# NVIDIA video encode/decode <-> CUDA
-	donvidia ${NV_OBJ}/libnvcuvid.so.${NV_SOVER}
-	donvidia ${NV_OBJ}/libnvidia-encode.so.${NV_SOVER}
+	donvidia ${NV_OBJ}/libnvcuvid.so.${PV}
+	donvidia ${NV_OBJ}/libnvidia-encode.so.${PV}
 
 	if use X; then
 		# Xorg DDX driver
@@ -264,14 +257,13 @@ src_install() {
 		doins ${NV_X11}/nvidia_drv.so
 
 		# Xorg GLX driver
-		donvidia ${NV_X11}/libglx.so.${NV_SOVER} \
-			/usr/$(get_libdir)/opengl/nvidia/extensions
+		donvidia ${NV_X11}/libglxserver_nvidia.so.${PV} /usr/$(get_libdir)/nvidia/xorg
+		dosym ${NV_X11}/libglxserver_nvidia.so.${PV} ${NV_X11}/libglxserver_nvidia.so
+		dosym ${NV_X11}/libglxserver_nvidia.so.${PV} ${NV_X11}/libglxserver_nvidia.so.1
 
 		# Xorg nvidia.conf
-		if has_version '>=x11-base/xorg-server-1.16'; then
-			insinto /usr/share/X11/xorg.conf.d
-			newins {,50-}nvidia-drm-outputclass.conf
-		fi
+		insinto /usr/share/X11/xorg.conf.d
+		newins {,50-}nvidia-drm-outputclass.conf
 
 		insinto /usr/share/glvnd/egl_vendor.d
 		doins ${NV_X11}/10_nvidia.json
@@ -359,7 +351,7 @@ src_install() {
 
 src_install-libs() {
 	local inslibdir=$(get_libdir)
-	local GL_ROOT="/usr/$(get_libdir)/opengl/nvidia/lib"
+	local GL_ROOT="/usr/$(get_libdir)/nvidia/xorg"
 	local CL_ROOT="/usr/$(get_libdir)/OpenCL/vendors/nvidia"
 	local nv_libdir="${NV_OBJ}"
 
@@ -369,32 +361,32 @@ src_install-libs() {
 
 	if use X; then
 		NV_GLX_LIBRARIES=(
-			"libEGL.so.$(usex compat ${NV_SOVER} 1.1.0) ${GL_ROOT}"
-			"libEGL_nvidia.so.${NV_SOVER} ${GL_ROOT}"
-			"libGL.so.$(usex compat ${NV_SOVER} 1.7.0) ${GL_ROOT}"
+			"libEGL.so.${PV} ${GL_ROOT}"
+			"libEGL_nvidia.so.${PV} ${GL_ROOT}"
+			"libGL.so.${PV} ${GL_ROOT}"
 			"libGLESv1_CM.so.1.2.0 ${GL_ROOT}"
-			"libGLESv1_CM_nvidia.so.${NV_SOVER} ${GL_ROOT}"
+			"libGLESv1_CM_nvidia.so.${PV} ${GL_ROOT}"
 			"libGLESv2.so.2.1.0 ${GL_ROOT}"
-			"libGLESv2_nvidia.so.${NV_SOVER} ${GL_ROOT}"
+			"libGLESv2_nvidia.so.${PV} ${GL_ROOT}"
 			"libGLX.so.0 ${GL_ROOT}"
-			"libGLX_nvidia.so.${NV_SOVER} ${GL_ROOT}"
+			"libGLX_nvidia.so.${PV} ${GL_ROOT}"
 			"libGLdispatch.so.0 ${GL_ROOT}"
 			"libOpenCL.so.1.0.0 ${CL_ROOT}"
 			"libOpenGL.so.0 ${GL_ROOT}"
-			"libcuda.so.${NV_SOVER}"
-			"libnvcuvid.so.${NV_SOVER}"
-			"libnvidia-compiler.so.${NV_SOVER}"
-			"libnvidia-eglcore.so.${NV_SOVER}"
-			"libnvidia-encode.so.${NV_SOVER}"
-			"libnvidia-fatbinaryloader.so.${NV_SOVER}"
-			"libnvidia-fbc.so.${NV_SOVER}"
-			"libnvidia-glcore.so.${NV_SOVER}"
-			"libnvidia-glsi.so.${NV_SOVER}"
-			"libnvidia-glvkspirv.so.${NV_SOVER}"
-			"libnvidia-ifr.so.${NV_SOVER}"
-			"libnvidia-opencl.so.${NV_SOVER}"
-			"libnvidia-ptxjitcompiler.so.${NV_SOVER}"
-			"libvdpau_nvidia.so.${NV_SOVER}"
+			"libcuda.so.${PV}"
+			"libnvcuvid.so.${PV}"
+			"libnvidia-compiler.so.${PV}"
+			"libnvidia-eglcore.so.${PV}"
+			"libnvidia-encode.so.${PV}"
+			"libnvidia-fatbinaryloader.so.${PV}"
+			"libnvidia-fbc.so.${PV}"
+			"libnvidia-glcore.so.${PV}"
+			"libnvidia-glsi.so.${PV}"
+			"libnvidia-glvkspirv.so.${PV}"
+			"libnvidia-ifr.so.${PV}"
+			"libnvidia-opencl.so.${PV}"
+			"libnvidia-ptxjitcompiler.so.${PV}"
+			"libvdpau_nvidia.so.${PV}"
 		)
 
 		if use wayland && has_multilib_profile && [[ ${ABI} == "amd64" ]];
@@ -407,13 +399,13 @@ src_install-libs() {
 		if has_multilib_profile && [[ ${ABI} == "amd64" ]];
 		then
 			NV_GLX_LIBRARIES+=(
-				"libnvidia-wfb.so.${NV_SOVER}"
+				"libnvidia-wfb.so.${PV}"
 			)
 		fi
 
 		NV_GLX_LIBRARIES+=(
-			"libnvidia-ml.so.${NV_SOVER}"
-			"tls/libnvidia-tls.so.${NV_SOVER}"
+			"libnvidia-ml.so.${PV}"
+			"tls/libnvidia-tls.so.${PV}"
 		)
 
 		for NV_LIB in "${NV_GLX_LIBRARIES[@]}"; do
@@ -423,9 +415,6 @@ src_install-libs() {
 }
 
 pkg_preinst() {
-	if use driver; then
-		linux-mod_pkg_preinst
-
 		local videogroup="$(egetent group video | cut -d ':' -f 3)"
 		if [ -z "${videogroup}" ]; then
 			eerror "Failed to determine the video group gid"
@@ -436,48 +425,4 @@ pkg_preinst() {
 				-e "s:VIDEOGID:${videogroup}:" \
 				"${D}"/etc/modprobe.d/nvidia.conf || die
 		fi
-	fi
-
-	# Clean the dynamic libGL stuff's home to ensure
-	# we dont have stale libs floating around
-	if [ -d "${ROOT}"/usr/lib/opengl/nvidia ]; then
-		rm -rf "${ROOT}"/usr/lib/opengl/nvidia/*
-	fi
-	# Make sure we nuke the old nvidia-glx's env.d file
-	if [ -e "${ROOT}"/etc/env.d/09nvidia ]; then
-		rm -f "${ROOT}"/etc/env.d/09nvidia
-	fi
-}
-
-pkg_postinst() {
-	use driver && linux-mod_pkg_postinst
-
-	# Switch to the nvidia implementation
-	use X && "${ROOT}"/usr/bin/eselect opengl set --use-old nvidia
-
-	if ! use X; then
-		elog "You have elected to not install the X.org driver. Along with"
-		elog "this the OpenGL libraries and VDPAU libraries were not"
-		elog "installed. Additionally, once the driver is loaded your card"
-		elog "and fan will run at max speed which may not be desirable."
-		elog "Use the 'nvidia-smi' init script to have your card and fan"
-		elog "speed scale appropriately."
-		elog
-	fi
-	if ! use tools; then
-		elog "USE=tools controls whether the nvidia-settings application"
-		elog "is installed. If you would like to use it, enable that"
-		elog "flag and re-emerge this ebuild. Optionally you can install"
-		elog "media-video/nvidia-settings"
-		elog
-	fi
-}
-
-pkg_prerm() {
-	use X && "${ROOT}"/usr/bin/eselect opengl set --use-old xorg-x11
-}
-
-pkg_postrm() {
-	use driver && linux-mod_pkg_postrm
-	use X && "${ROOT}"/usr/bin/eselect opengl set --use-old xorg-x11
 }

@@ -10,7 +10,7 @@ DESCRIPTION="X.Org X servers"
 SLOT="0/${PV}"
 KEYWORDS="amd64 arm64 x86"
 
-IUSE="${IUSE_SERVERS} debug +glamor ipv6 libressl minimal selinux systemd +udev unwind wayland xcsecurity xorg"
+IUSE="${IUSE_SERVERS} debug +glamor ipv6 libressl minimal selinux systemd +udev unwind wayland xcsecurity"
 
 CDEPEND=">=app-eselect/eselect-opengl-1.3.0
 	!libressl? ( lib-dev/openssl:0= )
@@ -32,7 +32,7 @@ CDEPEND=">=app-eselect/eselect-opengl-1.3.0
 	>=x11/xkeyboard-config-2.4.1-r3
 	glamor? (
 		lib-media/libepoxy[X]
-		>=lib-media/mesa-10.3.4-r1[egl,gbm]
+		lib-media/mesa
 	)
 	!minimal? (
 		>=x11-libs/libX11-1.1.5
@@ -60,7 +60,7 @@ DEPEND="${CDEPEND}
 RDEPEND="${CDEPEND}
 	selinux? ( sec-policy/selinux-xserver )"
 
-PDEPEND="xorg? ( x11/xorg-drivers )"
+PDEPEND="x11/xf86-input-libinput"
 
 multilib_src_configure() {
         local emesonargs=(

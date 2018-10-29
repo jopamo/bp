@@ -14,11 +14,11 @@ if [[ ${PV} = 9999 ]] ; then
 	inherit git-r3 autotools
 else
 	SRC_URI="https://www.freedesktop.org/software/${PN}/release/${P}.tar.bz2"
-	KEYWORDS="amd64 arm64 x86"
 fi
 
+KEYWORDS="amd64 arm64 x86"
 LICENSE="Old-MIT ISC icu"
-SLOT="0/0.9.18" # 0.9.18 introduced the harfbuzz-icu split; bug #472416
+SLOT="0"
 
 IUSE="+cairo debug fontconfig +glib icu +introspection static-libs test +truetype"
 REQUIRED_USE="introspection? ( glib )"

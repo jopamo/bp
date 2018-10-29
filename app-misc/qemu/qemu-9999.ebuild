@@ -113,7 +113,6 @@ SOFTMMU_TOOLS_DEPEND="
 		lib-media/mesa
 		lib-media/libepoxy[static-libs(+)]
 		lib-media/mesa[static-libs(+)]
-		lib-media/mesa[egl,gbm]
 	)
 	png? ( lib-media/libpng:0=[static-libs(+)] )
 	pulseaudio? ( app-media/pulseaudio )

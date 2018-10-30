@@ -12,7 +12,7 @@ RESTRICT="strip" # Strip ourself #46186
 EMULTILIB_PKG="true"
 
 EGIT_REPO_URI="git://sourceware.org/git/glibc.git"
-EGIT_BRANCH="release/2.27/master"
+EGIT_BRANCH="release/2.28/master"
 
 KEYWORDS="amd64 arm64 x86"
 

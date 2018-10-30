@@ -20,16 +20,11 @@ fi
 
 LICENSE="BSD"
 SLOT="0/9"
-
-###do the flags
-IUSE="debug +dht doc examples libressl +ssl static-libs test"
+IUSE="static-libs"
 
 RDEPEND="
-	lib-dev/boost:=[threads]
-	ssl? (
-		!libressl? ( lib-dev/openssl:0= )
-		libressl? ( lib-dev/libressl:= )
-	)
+	lib-dev/boost
+	lib-dev/openssl
 "
 DEPEND="${RDEPEND}
 	sys-devel/libtool
@@ -57,14 +52,9 @@ multilib_src_configure() {
 
 multilib_src_compile() {
 	cmake-utils_src_compile
-	multilib_is_native_abi && use doc && cmake-utils_src_compile doc
 }
 
 multilib_src_install() {
 	cmake-utils_src_install
-
 	use static-libs || rm -f "${ED}"usr/$(get_libdir)/libssh{,_threads}.a
-
-	#multilib ugly
-	mv "${ED}"usr/lib "${ED}"usr/$(get_libdir)
 }

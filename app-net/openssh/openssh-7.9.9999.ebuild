@@ -2,13 +2,14 @@
 
 EAPI=6
 
-inherit user flag-o-matic multilib-minimal autotools pam systemd versionator
+inherit user flag-o-matic multilib-minimal autotools pam systemd versionator git-r3
 
 MY_PV="$(replace_all_version_separators _)"
 
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="http://www.openssh.org/"
-SRC_URI="https://github.com/rapier1/openssh-portable/archive/hpn-${MY_PV^^}.tar.gz -> ${PN}-${PV}.tar.gz"
+EGIT_REPO_URI="https://github.com/openssh/openssh-portable.git"
+EGIT_BRANCH="V_7_9"
 
 LICENSE="BSD GPL-2"
 SLOT="0"
@@ -46,8 +47,6 @@ RDEPEND="${RDEPEND}
 	pam? ( >=lib-sys/pambase-20081028 )
 	sys-app/shadow
 	X? ( x11/xauth )"
-
-S="${WORKDIR}/${PN}-portable-hpn-${MY_PV^^}"
 
 src_prepare() {
 	default

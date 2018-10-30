@@ -2,20 +2,20 @@
 
 EAPI="6"
 
-inherit eutils flag-o-matic toolchain-funcs multilib multilib-minimal git-r3
+inherit eutils flag-o-matic toolchain-funcs git-r3
 
 DESCRIPTION="full-strength general purpose cryptography library (including SSL and TLS)"
 HOMEPAGE="https://www.openssl.org/"
 EGIT_REPO_URI="https://github.com/openssl/openssl.git"
 EGIT_BRANCH="OpenSSL_1_1_0-stable"
+#KEYWORDS="amd64 arm64 x86"
 
 LICENSE="openssl"
 SLOT="0"
-KEYWORDS=""
 IUSE="+asm bindist rfc3779 sctp cpu_flags_x86_sse2 static-libs test vanilla zlib"
 RESTRICT="!bindist? ( bindist )"
 
-RDEPEND="zlib? ( >=lib-sys/zlib-1.2.8-r1[static-libs(+)?,${MULTILIB_USEDEP}] )"
+RDEPEND="zlib? ( >=lib-sys/zlib-1.2.8-r1[static-libs(+)?] )"
 
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5
@@ -26,10 +26,6 @@ DEPEND="${RDEPEND}
 	)"
 PDEPEND="app-misc/ca-certificates"
 
-MULTILIB_WRAPPED_HEADERS=(
-	usr/include/openssl/opensslconf.h
-)
-
 src_prepare() {
 	SSL_CNF_DIR="/etc/ssl"
 	rm -f Makefile
@@ -39,7 +35,7 @@ src_prepare() {
 	# show the actual commands in the log
 	sed -i '/^SET_X/s:=.*:=set -x:' Makefile.shared
 
-	[[ ${CC} == *clang* ]] && append-flags -Qunused-arguments
+	append-flags -Wunused-parameter
 
 	append-flags -fno-strict-aliasing
 	append-flags $(test-flags-CC -Wa,--noexecstack)
@@ -48,11 +44,9 @@ src_prepare() {
 	sed -i '1s,^:$,#!'${EPREFIX}'/usr/bin/perl,' Configure #141906
 	sed -i '/stty -icanon min 0 time 50; read waste/d' config || die
 	./config --test-sanity || die "I AM NOT SANE"
-
-	multilib_copy_sources
 }
 
-multilib_src_configure() {
+src_configure() {
 	unset APPS
 	unset SCRIPTS
 	unset CROSS_COMPILE
@@ -62,31 +56,15 @@ multilib_src_configure() {
 	use_ssl() { usex $1 "enable-${2:-$1}" "no-${2:-$1}" " ${*:3}" ; }
 	echoit() { echo "$@" ; "$@" ; }
 
-	local krb5=$(has_version app-crypt/mit-krb5 && echo "MIT" || echo "Heimdal")
-
 	local ec_nistp_64_gcc_128
 
 	echoit \
 	${S}/config \
-		${sslout} \
-		$(use cpu_flags_x86_sse2 || echo "no-sse2") \
-		enable-camellia \
-		$(use_ssl !bindist ec) \
-		${ec_nistp_64_gcc_128} \
-		enable-idea \
-		enable-mdc2 \
-		enable-rc5 \
-		$(use_ssl asm) \
-		$(use_ssl rfc3779) \
-		$(use_ssl sctp) \
-		-DOPENSSL_NO_SSL2 \
-		-DOPENSSL_NO_SSL3 \
-		-DOPENSSL_NO_HEARTBEATS \
-		$(use_ssl zlib) \
+		no-deprecated \
 		--prefix="${EPREFIX}"/usr \
 		--openssldir="${EPREFIX}"${SSL_CNF_DIR} \
 		--libdir=$(get_libdir) \
-		shared threads \
+		shared zlib-dynamic \
 		|| die
 
 	# Clean out hardcoded flags that openssl uses
@@ -106,22 +84,19 @@ multilib_src_configure() {
 		Makefile || die
 }
 
-multilib_src_compile() {
-	# depend is needed to use $confopts; it also doesn't matter
-	# that it's -j1 as the code itself serializes subdirs
-	emake -j1 depend
+src_compile() {
 	emake all
 }
 
-multilib_src_test() {
+src_test() {
 	emake -j1 test
 }
 
-multilib_src_install() {
+src_install() {
 	emake DESTDIR="${D}" install
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	use static-libs || rm -f "${ED}"/usr/lib*/lib*.a
 
 	keepdir ${SSL_CNF_DIR}/certs
@@ -131,6 +106,7 @@ multilib_src_install_all() {
 
 	diropts -m0700
 	keepdir ${SSL_CNF_DIR}/private
+	rm -rf ${ED}/usr/share/doc
 }
 
 pkg_postinst() {

@@ -24,6 +24,7 @@ REQUIRED_USE="
 	wayland? ( egl )
 "
 
+DEPEND="dev-python/mako"
 RDEPEND="
 	!<x11-app/xorg-server-1.7
 	abi_x86_32? ( !app-misc/emul-linux-x86-opengl[-abi_x86_32(-)] )
@@ -49,8 +50,8 @@ src_configure() {
 		-Dgallium-drivers=""
 		-Dllvm=false
 		-Dgbm=true
-    	-Dgles1=true
-    	-Dgles2=true
+    	-Dgles1=false
+    	-Dgles2=false
     	-Dglvnd=true
     	-Dglx=dri
     	-Dshared-glapi=true
@@ -75,5 +76,4 @@ src_test() {
 
 src_install() {
 	meson_src_install
-	rm -f ${ED}/usr/lib/libGLESv{1_CM,2}.so*
 }

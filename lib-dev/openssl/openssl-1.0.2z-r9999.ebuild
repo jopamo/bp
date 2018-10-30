@@ -8,11 +8,10 @@ DESCRIPTION="full-strength general purpose cryptography library (including SSL a
 HOMEPAGE="https://www.openssl.org/"
 EGIT_REPO_URI="https://github.com/openssl/openssl.git"
 EGIT_BRANCH="OpenSSL_1_0_2-stable"
-
+KEYWORDS="amd64 arm64 x86"
 
 LICENSE="openssl"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
 IUSE="+asm bindist gmp rfc3779 sctp cpu_flags_x86_sse2 static-libs test vanilla zlib"
 RESTRICT="!bindist? ( bindist )"
 

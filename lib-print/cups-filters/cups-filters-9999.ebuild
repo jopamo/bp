@@ -2,23 +2,16 @@
 
 EAPI=6
 
-GENTOO_DEPEND_ON_PERL=no
-
-inherit perl-module systemd flag-o-matic
-
-if [[ "${PV}" == "9999" ]] ; then
-	inherit git-r3 autotools
-	EGIT_REPO_URI="https://github.com/OpenPrinting/cups-filters.git"
-else
-	SRC_URI="http://www.openprinting.org/download/${PN}/${P}.tar.xz"
-fi
+inherit perl-module systemd flag-o-matic git-r3 autotools
 
 DESCRIPTION="Cups filters"
 HOMEPAGE="https://wiki.linuxfoundation.org/openprinting/cups-filters"
+EGIT_REPO_URI="https://github.com/OpenPrinting/cups-filters.git"
+
 KEYWORDS="amd64 arm64 x86"
 LICENSE="MIT GPL-2"
 SLOT="0"
-IUSE="dbus +foomatic ipp_autosetup jpeg ldap pclm pdf perl png +postscript static-libs test tiff zeroconf"
+IUSE="dbus ipp_autosetup jpeg ldap pclm pdf perl png static-libs test tiff"
 
 RDEPEND="
 	>=app-text/poppler-0.32:=[cxx,jpeg?,lcms,tiff?,utils]
@@ -32,16 +25,14 @@ RDEPEND="
 	sys-devel/bc
 	lib-sys/zlib
 	dbus? ( sys-app/dbus )
-	foomatic? ( !lib-print/foomatic-filters )
 	jpeg? ( lib-media/libjpeg-turbo )
 	ldap? ( net-nds/openldap )
 	pclm? ( >=app-text/qpdf-7.0_beta1 )
 	pdf? ( app-text/mupdf )
 	perl? ( dev-lang/perl:= )
 	png? ( lib-media/libpng:0= )
-	postscript? ( >=app-text/ghostscript-gpl-9.09[cups] )
+	>=app-text/ghostscript-gpl-9.09[cups]
 	tiff? ( lib-media/tiff:0 )
-	zeroconf? ( lib-net/avahi[dbus] )
 "
 DEPEND="${RDEPEND}
 	test? ( fonts/dejavu )
@@ -49,10 +40,7 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
 	default
-	[[ "${PV}" == "9999" ]] && eautoreconf
-
-	# Bug #626800
-	append-cxxflags -std=c++11
+	eautoreconf
 }
 
 src_configure() {
@@ -67,15 +55,15 @@ src_configure() {
 		--with-rcdir=no
 		--without-php
 		$(use_enable dbus)
-		$(use_enable foomatic)
+		--enable-foomatic
 		$(use_enable ipp_autosetup auto-setup-driverless)
 		$(use_enable ldap)
 		$(use_enable pclm)
 		$(use_enable pdf mutool)
-		$(use_enable postscript ghostscript)
-		$(use_enable postscript ijs)
+		--enable-ghostscript
+		--enable-ijs
 		$(use_enable static-libs static)
-		$(use_enable zeroconf avahi)
+		--disable-avahi
 		$(use_with jpeg)
 		$(use_with png)
 		$(use_with tiff)
@@ -104,12 +92,6 @@ src_install() {
 		popd > /dev/null
 	fi
 
-	if use postscript; then
-		# workaround: some printer drivers still require pstoraster and pstopxl, bug #383831
-		dosym gstoraster /usr/libexec/cups/filter/pstoraster
-		dosym gstopxl /usr/libexec/cups/filter/pstopxl
-	fi
-
 	find "${ED}" \( -name "*.a" -o -name "*.la" \) -delete || die
 
 	systemd_dounit "${S}/utils/cups-browsed.service"
@@ -117,11 +99,4 @@ src_install() {
 
 src_test() {
 	emake check
-}
-
-pkg_postinst() {
-	if ! use foomatic ; then
-		ewarn "You are disabling the foomatic code in cups-filters. Please do that ONLY if absolutely."
-		ewarn "necessary. lib-print/foomatic-filters as replacement is deprecated and unmaintained."
-	fi
 }

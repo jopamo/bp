@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=c16ce12acb997e6ebd81eeb37bf5f9a20e95ea19
+	SNAPSHOT=8e14bfedb8759a58724cb611323d010aa55aea5e
 	SRC_URI="https://github.com/libarchive/libarchive/archive/${SNAPSHOT}.zip -> ${P}.zip"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64 x86"
@@ -20,9 +20,9 @@ fi
 
 LICENSE="BSD BSD-2 BSD-4 public-domain"
 SLOT="0/1"
-IUSE="acl +bzip2 +e2fsprogs expat libressl lzo nettle static-libs xattr +zlib"
+IUSE="acl +bzip2 expat libressl lzo nettle static-libs xattr +zlib"
 
-RDEPEND="
+DEPEND="
 	acl? ( sys-app/acl[${MULTILIB_USEDEP}] )
 	bzip2? ( app-compression/lbzip2[${MULTILIB_USEDEP}] )
 	expat? ( lib-dev/expat[${MULTILIB_USEDEP}] )
@@ -35,17 +35,12 @@ RDEPEND="
 	lzo? ( >=lib-dev/lzo-2[${MULTILIB_USEDEP}] )
 	nettle? ( lib-dev/nettle:0=[${MULTILIB_USEDEP}] )
 	zlib? ( lib-sys/zlib[${MULTILIB_USEDEP}] )"
-DEPEND="${RDEPEND}
-		sys-kernel/stable-sources
-		e2fsprogs? ( sys-fs/e2fsprogs )"
 
 src_prepare() {
 	eautoreconf
 	default
 }
 multilib_src_configure() {
-	export ac_cv_header_ext2fs_ext2_fs_h=$(usex e2fsprogs) #354923
-
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -65,20 +60,10 @@ multilib_src_configure() {
 		--without-lzo2
 		$(use_with nettle)
 		$(use_with zlib)
+		--disable-bsdcat
+		--disable-bsdcpio
+		--disable-bsdtar
 	)
-	if multilib_is_native_abi ; then
-		myconf+=(
-			--enable-bsdcat=$(tc-is-static-only && echo static || echo shared)
-			--enable-bsdcpio=$(tc-is-static-only && echo static || echo shared)
-			--enable-bsdtar=$(tc-is-static-only && echo static || echo shared)
-		)
-	else
-		myconf+=(
-			--disable-bsdcat
-			--disable-bsdcpio
-			--disable-bsdtar
-		)
-	fi
 
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }

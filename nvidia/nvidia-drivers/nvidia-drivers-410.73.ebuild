@@ -65,7 +65,8 @@ RDEPEND="
 	)
 "
 
-PDEPEND="lib-media/nv-codec-headers"
+PDEPEND="lib-media/nv-codec-headers
+		lib-media/libglvnd"
 
 QA_PREBUILT="opt/* usr/lib*"
 S=${WORKDIR}/

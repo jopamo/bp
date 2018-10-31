@@ -1,9 +1,0 @@
-# Distributed under the terms of the GNU General Public License v2
-
-# Base SELinux packages
-*lib-sys/libsepol
-*lib-sys/libselinux
-*lib-sys/libsemanage
-*sys-app/checkpolicy
-*sys-app/policycoreutils
-*sec-policy/selinux-base

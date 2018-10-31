@@ -7,23 +7,23 @@
 #arch		profile_directory				status
 
 # AMD64 Profiles
-amd64           default/linux/amd64/17.0                                stable
-amd64           default/linux/amd64/17.0/selinux                        stable
-amd64           default/linux/amd64/17.0/hardened                       stable
-amd64           default/linux/amd64/17.0/hardened/selinux               stable
-amd64           default/linux/amd64/17.0/no-multilib                    stable
-amd64           default/linux/amd64/17.0/no-multilib/hardened           stable
-amd64           default/linux/amd64/17.0/no-multilib/hardened/selinux   stable
-amd64           default/linux/amd64/17.0/x32                            dev
+amd64           default/linux/amd64/1.0                                stable
+amd64           default/linux/amd64/1.0/gui                        stable
+amd64           default/linux/amd64/1.0/hardened                       stable
+amd64           default/linux/amd64/1.0/hardened/gui               stable
+amd64           default/linux/amd64/1.0/no-multilib                    stable
+amd64           default/linux/amd64/1.0/no-multilib/hardened           stable
+amd64           default/linux/amd64/1.0/no-multilib/hardened/gui   stable
+amd64           default/linux/amd64/1.0/x32                            dev
 
 # ARM64 Profiles
 # @MAINTAINER: arm64@gentoo.org
-arm64           default/linux/arm64/17.0                        dev
+arm64           default/linux/arm64/1.0                        dev
 
 # musl profiles
 # @MAINTAINER: musl@gentoo.org
-amd64		default/linux/amd64/17.0/musl/hardened			exp
-amd64		default/linux/amd64/17.0/musl/hardened/selinux		exp
+amd64		default/linux/amd64/1.0/musl/hardened			exp
+amd64		default/linux/amd64/1.0/musl/hardened/gui		exp
 arm64		default/linux/musl/arm64 				exp
 
 # vim: set ts=8:

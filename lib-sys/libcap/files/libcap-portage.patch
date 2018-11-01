@@ -1,0 +1,23 @@
+diff -urN a/Make.Rules b/Make.Rules
+--- a/Make.Rules	2018-10-31 19:17:14.487977014 -0500
++++ b/Make.Rules	2018-10-31 19:31:12.984319026 -0500
+@@ -16,18 +16,11 @@
+ lib=$(shell ldd /usr/bin/ld|egrep "ld-linux|ld.so"|cut -d/ -f2)
+ endif
+ 
+-ifdef prefix
+-exec_prefix=$(prefix)
+-lib_prefix=$(exec_prefix)
+-inc_prefix=$(lib_prefix)
+-man_prefix=$(prefix)/share
+-else
+ prefix=/usr
+-exec_prefix=
++exec_prefix=$(prefix)
+ lib_prefix=$(exec_prefix)
+ inc_prefix=$(prefix)
+ man_prefix=$(prefix)/share
+-endif
+ 
+ # Target directories
+ 

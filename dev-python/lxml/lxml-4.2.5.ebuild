@@ -13,7 +13,7 @@ SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 LICENSE="BSD ElementTree GPL-2 PSF-2"
 SLOT="0"
 KEYWORDS="amd64 arm64 x86"
-IUSE="doc examples +threads test"
+IUSE="test"
 
 # Note: lib{xml2,xslt} are used as C libraries, not Python modules.
 RDEPEND="
@@ -56,19 +56,5 @@ python_test() {
 }
 
 python_install_all() {
-	if use doc; then
-		local DOCS=( *.txt doc/*.txt )
-		local HTML_DOCS=( doc/html/. )
-	fi
-	if use examples; then
-		docinto examples
-		dodoc -r samples/.
-	fi
-
 	distutils-r1_python_install_all
-}
-
-pkg_postinst() {
-	optfeature "Support for BeautifulSoup3 as a parser backend" dev-python/beautifulsoup
-	optfeature "Translates CSS selectors to XPath 1.0 expressions" dev-python/cssselect
 }

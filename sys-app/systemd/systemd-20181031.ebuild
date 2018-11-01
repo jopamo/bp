@@ -14,7 +14,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=feae122f3e02471dc3a24097c1395369ab40dfab
+	SNAPSHOT=46054ac030c5aa498fcbe325fedec67dfc5b8134
 	SRC_URI="https://github.com/systemd/systemd/archive/${SNAPSHOT}.zip -> ${P}.zip"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64 x86"
@@ -92,9 +92,6 @@ pkg_pretend() {
 			if [[ -n ${uevent_helper_path} ]] && [[ ${uevent_helper_path} != '""' ]]; then
 				ewarn "It's recommended to set an empty value to the following kernel config option:"
 				ewarn "CONFIG_UEVENT_HELPER_PATH=${uevent_helper_path}"
-			fi
-			if linux_chkconfig_present X86; then
-				CONFIG_CHECK+=" ~DMIID"
 			fi
 		fi
 

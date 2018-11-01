@@ -1,0 +1,54 @@
+From be92eaacb73faace76f048dc1b2555578caa843b Mon Sep 17 00:00:00 2001
+From: "Andrew G. Morgan" <morgan@kernel.org>
+Date: Sun, 9 Sep 2018 12:38:51 -0700
+Subject: Use calloc instead of malloc for initialization purposes.
+
+Sami Kerola <kerolasa@iki.fi> provided a patch but before applying it
+I reorderd the calloc arguments to match the documented calloc() API.
+
+Concerning the issue, Sami writes:
+
+"While checking ping(1) with address sanitizer I came across with libcap
+error.  Looking the code this error might be false positive, but I think it
+is good idea to clear out the error so that people using address sanitizer
+are not tripped over by a library due something that is easy to avoid.
+
+Uninitialized bytes in __interceptor_capget at offset 0 inside [0x703000000004, 8)
+==5700==WARNING: MemorySanitizer: use-of-uninitialized-value
+    #0 0x7f83109eb79a in cap_init /home/src/libcap/libcap/cap_alloc.c:32:5
+    #1 0x7f83109eb835 in cap_get_proc /home/src/libcap/libcap/cap_proc.c:16:14
+    #2 0x556168d34936 in limit_capabilities /home/src/iputils/builddir/../ping_common.c:158:14
+    #3 0x556168d1b784 in main /home/src/iputils/builddir/../ping.c:203:2
+    #4 0x7f830f7a406a in __libc_start_main (/usr/lib/libc.so.6+0x2306a)
+    #5 0x556168c96f29 in _start (/home/src/iputils/builddir/ping+0x31f29)"
+
+Signed-off-by: Andrew G. Morgan <morgan@kernel.org>
+---
+ libcap/cap_alloc.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/libcap/cap_alloc.c b/libcap/cap_alloc.c
+index 525ea90..cad0c0a 100644
+--- a/libcap/cap_alloc.c
++++ b/libcap/cap_alloc.c
+@@ -16,8 +16,7 @@ cap_t cap_init(void)
+     __u32 *raw_data;
+     cap_t result;
+ 
+-    raw_data = malloc( sizeof(__u32) + sizeof(*result) );
+-
++    raw_data = calloc(1, sizeof(__u32) + sizeof(*result));
+     if (raw_data == NULL) {
+ 	_cap_debug("out of memory");
+ 	errno = ENOMEM;
+@@ -26,7 +25,6 @@ cap_t cap_init(void)
+ 
+     *raw_data = CAP_T_MAGIC;
+     result = (cap_t) (raw_data + 1);
+-    memset(result, 0, sizeof(*result));
+ 
+     result->head.version = _LIBCAP_CAPABILITY_VERSION;
+     capget(&result->head, NULL);      /* load the kernel-capability version */
+-- 
+cgit 1.2-0.3.lf.el7
+

@@ -8,7 +8,6 @@ DESCRIPTION="POSIX 1003.1e capabilities"
 HOMEPAGE="http://www.friedhoff.org/posixfilecaps.html"
 SRC_URI="mirror://kernel/linux/libs/security/linux-privs/libcap2/${P}.tar.xz"
 
-# it's available under either of the licenses
 LICENSE="|| ( GPL-2 BSD )"
 SLOT="0"
 KEYWORDS="amd64 arm64 x86"
@@ -25,6 +24,10 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-2.25-ignore-RAISE_SETFCAP-install-failures.patch
 	"${FILESDIR}"/${PN}-2.25-gperf.patch
 	"${FILESDIR}"/libcap-portage.patch
+	"${FILESDIR}"/7cd35dbe44e9bf3023c61ea94117e45905f86db1.patch
+	"${FILESDIR}"/8030da1b54606260b5e1af6b7dcf5ce2405cf2a8.patch
+	"${FILESDIR}"/8dfead766c6e540b9175bb06b0be7fb3bb715620.patch
+	"${FILESDIR}"/be92eaacb73faace76f048dc1b2555578caa843b.patch
 )
 
 src_prepare() {

@@ -37,6 +37,8 @@ COMMON_DEPEND=">=lib-media/libass-0.13.4
 	lib-dev/libxml2
 	>=lib-dev/lzo-2.04
 	lib-dev/libfstrcmp
+	lib-media/taglib
+	lib-dev/tinyxml
 	lib-dev/libcdio
 	gles? ( lib-media/mesa[gles2] )
 	lcms? ( lib-media/lcms:2 )
@@ -172,10 +174,5 @@ src_test() {
 
 src_install() {
 	cmake-utils_src_install
-
-	pax-mark Em "${ED%/}"/usr/$(get_libdir)/${PN}/${PN}.bin
-
-	rm "${ED%/}"/usr/share/doc/*/{LICENSE.GPL,copying.txt}* || die
-
-	newicon media/icon48x48.png kodi.png
+	rm -rf "${ED}"/usr/share/doc || die
 }

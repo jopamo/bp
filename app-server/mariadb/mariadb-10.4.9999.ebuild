@@ -11,7 +11,7 @@ EGIT_REPO_URI="https://github.com/MariaDB/server.git"
 EGIT_BRANCH="10.4"
 
 SLOT="0/${SUBSLOT:-0}"
-IUSE="+backup bindist client-libs cracklib debug extraengine galera innodb-lz4
+IUSE="backup bindist client-libs cracklib debug extraengine galera innodb-lz4
 	innodb-lzo innodb-snappy jdbc jemalloc kerberos libressl mroonga
 	numa odbc oqgraph pam +perl profiling rocksdb selinux +server sphinx
 	sst-rsync sst-mariabackup sst-xtrabackup static static-libs systemd systemtap tcmalloc

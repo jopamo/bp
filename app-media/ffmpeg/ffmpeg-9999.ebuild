@@ -14,7 +14,7 @@ LICENSE="GPL-3"
 
 KEYWORDS="amd64 arm64 x86"
 
-IUSE="alsa mp3 gcrypt openssl vpx doc X +encode jack nvidia oss pic static-libs test v4l +threads vaapi
+IUSE="alsa debug mp3 gcrypt openssl vpx doc X +encode jack nvidia oss pic static-libs test v4l +threads vaapi
 "
 
 RDEPEND="
@@ -50,31 +50,41 @@ MULTILIB_WRAPPED_HEADERS=(
 multilib_src_configure() {
 	${S}/configure \
 		--prefix="${EPREFIX}/usr" \
-		--libdir="${EPREFIX}/usr/$(get_libdir)" \
 		--shlibdir="${EPREFIX}/usr/$(get_libdir)" \
+		--bindir="${EPREFIX}"/usr/bin \
+		--libdir="${EPREFIX}"/usr/$(get_libdir) \
 		--enable-shared \
 		--cc="$(tc-getCC)" \
 		--cxx="$(tc-getCXX)" \
 		--ar="$(tc-getAR)" \
 		--optflags="${CFLAGS}" \
-		--enable-openssl		\
-		--enable-nonfree	\
-		--enable-gpl	\
-		--enable-version3	\
-		--disable-encoders	\
+		--disable-all \
+		--enable-openssl \
+		--enable-nonfree \
+		--enable-gpl \
+		--enable-version3 \
+		--enable-avutil \
+        --enable-avcodec \
+        --enable-avformat \
+        --enable-swscale \
+        --enable-avresample \
+        --enable-swresample \
+        --enable-avfilter \
 		--enable-libmp3lame \
 		--enable-encoder=flac,png \
 		--enable-encoder=libmp3lame \
-		--enable-lto	\
-		--disable-gnutls	\
-		--enable-avfilter	\
-		--enable-avresample	\
-		--disable-indevs	\
-		--disable-doc	\
-		--disable-htmlpages	\
-		--disable-manpages	\
-		--disable-podpages	\
-		--disable-txtpages	\
-		--enable-decoders	\
-		$(use_enable static-libs static)
+		--disable-gnutls \
+		--disable-indevs \
+		--disable-doc \
+		--disable-htmlpages \
+		--disable-manpages \
+		--disable-podpages \
+		--disable-txtpages \
+		--enable-decoders \
+		--enable-demuxers \
+        --enable-muxer=matroska \
+        --enable-muxer=mp4 \
+		$(use_enable static-libs static) \
+		--enable-filters \
+		$(use_enable debug)
 }

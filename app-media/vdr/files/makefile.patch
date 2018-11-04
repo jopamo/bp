@@ -1,0 +1,21 @@
+diff -urN a/Makefile b/Makefile
+--- a/Makefile	2017-05-29 03:48:42.000000000 -0500
++++ b/Makefile	2018-11-04 12:18:31.524996601 -0600
+@@ -29,12 +29,12 @@
+ PLUGINDIR ?= $(CWD)/PLUGINS
+ 
+ DESTDIR   ?=
+-VIDEODIR  ?= /srv/vdr/video
+-CONFDIR   ?= /var/lib/vdr
+-ARGSDIR   ?= /etc/vdr/conf.d
+-CACHEDIR  ?= /var/cache/vdr
++VIDEODIR  ?= "${EPREFIX}"/srv/vdr/video
++CONFDIR   ?= "${EPREFIX}"/var/lib/vdr
++ARGSDIR   ?= "${EPREFIX}"/etc/vdr
++CACHEDIR  ?= "${EPREFIX}"/var/cache/vdr
+ 
+-PREFIX    ?= /usr/local
++PREFIX    ?= "${EPREFIX}"/usr
+ BINDIR    ?= $(PREFIX)/bin
+ INCDIR    ?= $(PREFIX)/include
+ LIBDIR    ?= $(PREFIX)/lib/vdr

@@ -4,21 +4,14 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{7,8} )
 
-inherit flag-o-matic linux-info meson multilib-minimal ninja-utils python-any-r1 systemd toolchain-funcs udev user
+inherit flag-o-matic linux-info meson multilib-minimal ninja-utils python-any-r1 systemd toolchain-funcs udev user git-r3
 
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
 
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/systemd/systemd.git"
-	inherit git-r3
-	KEYWORDS=""
-else
-	SNAPSHOT=46054ac030c5aa498fcbe325fedec67dfc5b8134
-	SRC_URI="https://github.com/systemd/systemd/archive/${SNAPSHOT}.zip -> ${P}.zip"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64 x86"
-fi
+EGIT_REPO_URI="https://github.com/systemd/systemd-stable.git"
+EGIT_BRANCH="v239-stable"
+KEYWORDS="amd64 arm64 x86"
 
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0/2"
@@ -103,17 +96,8 @@ PATCHES=(
 		"${FILESDIR}/disable_audit.patch"
 		)
 
-src_unpack() {
-	default
-	[[ ${PV} != 9999 ]] || git-r3_src_unpack
-}
-
 src_configure() {
-	# Prevent conflicts with i686 cross toolchain, bug 559726
-	tc-export AR CC NM OBJCOPY RANLIB
-
 	python_setup
-
 	multilib-minimal_src_configure
 }
 
@@ -153,7 +137,7 @@ multilib_src_configure() {
 		-Ddefault-dnssec=yes
 		-Ddefault-hierarchy=unified
 		-Ddefault-kill-user-processes=false
-		-Ddns-over-tls=gnutls
+		-Ddns-over-tls=true
 		-Ddns-servers=1.1.1.1
 		-Defi=false
 		-Delfutils=true

@@ -1,15 +1,14 @@
 [Unit]
-Description=tvheadend
-After=network.target
+Description=Tvheadend - a TV streaming server and DVR
+After=syslog.target network.target auditd.service
 
 [Service]
-Type=forking
+EnvironmentFile=/etc/tvheadend
+ExecStart=/usr/bin/tvheadend -f -p /run/tvheadend.pid
 PIDFile=/run/tvheadend.pid
-ExecStart=/usr/bin/tvheadend -f -p /run/tvheadend.pid -C
-ExecStop=/usr/bin/rm /run/tvheadend.pid
-Restart=always
-RestartSec=5
-ProtectSystem=full
+Type=forking
+Restart=on-failure
+RestartSec=54s
 
 [Install]
 WantedBy=multi-user.target

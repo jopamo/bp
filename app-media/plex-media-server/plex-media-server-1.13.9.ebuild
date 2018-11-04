@@ -73,12 +73,8 @@ src_install() {
 	dodir "${DEFAULT_LIBRARY_DIR}"
 	chown "${_USERNAME}":"${_USERNAME}" "${ED%/}/${DEFAULT_LIBRARY_DIR}" || die
 
-	# Disabling due to Bug 644694
-	#_handle_multilib
-
-	# Mask Plex libraries so that revdep-rebuild doesn't try to rebuild them.
-	# Plex has its own precompiled libraries.
-	_mask_plex_libraries_revdep
+	dodir /etc/revdep-rebuild/
+	echo "SEARCH_DIRS_MASK=\"${EPREFIX}/usr/$(get_libdir)/plexmediaserver\"" > "${ED}"/etc/revdep-rebuild/80plexmediaserver
 
 	# Install systemd service file
 	local INIT_NAME="${PN}.service"
@@ -93,34 +89,4 @@ src_install() {
 	keepdir /var/{lib,log}
 	keepdir /var/lib/plexmediaserver
 	keepdir /var/log/pms
-}
-
-pkg_postinst() {
-	einfo ""
-	elog "Plex Media Server is now installed. Please check the configuration file in /etc/${_SHORTNAME}/${_APPNAME} to verify the default settings."
-	elog "To start the Plex Server, run 'rc-config start plex-media-server', you will then be able to access your library at http://<ip>:32400/web/"
-}
-
-# Disabling the follow function due to Bug 644694.
-# We shouldn't register plex libraries in global
-# library path since this will cause other packages
-# on the system to break.
-
-# Finds out where the library directory is for this system
-# and handles ldflags as to not break library dependencies
-# during rebuilds.
-_handle_multilib() {
-	# Prevent revdep-rebuild, @preserved-rebuild breakage
-	cat > "${T}"/66plex <<-EOF || die
-		LDPATH="${EPREFIX}/usr/$(get_libdir)/plexmediaserver"
-	EOF
-
-	doenvd "${T}"/66plex
-}
-
-# Adds the precompiled plex libraries to the revdep-rebuild's mask list
-# so it doesn't try to rebuild libraries that can't be rebuilt.
-_mask_plex_libraries_revdep() {
-	dodir /etc/revdep-rebuild/
-	echo "SEARCH_DIRS_MASK=\"${EPREFIX}/usr/$(get_libdir)/plexmediaserver\"" > "${ED}"/etc/revdep-rebuild/80plexmediaserver
 }

@@ -35,6 +35,7 @@ RDEPEND="
 	dev-python/zope-component[${PYTHON_USEDEP}]
 	dev-python/zope-interface[${PYTHON_USEDEP}]"
 DEPEND="
+	dev-python/mock
 	${CDEPEND}
 	test? (
 		>=dev-python/astroid-1.3.5[${PYTHON_USEDEP}]

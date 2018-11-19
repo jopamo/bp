@@ -26,9 +26,6 @@ REQUIRED_USE="
 
 DEPEND="dev-python/mako"
 RDEPEND="
-	!<x11-app/xorg-server-1.7
-	abi_x86_32? ( !app-misc/emul-linux-x86-opengl[-abi_x86_32(-)] )
-	>=app-eselect/eselect-opengl-1.3.0
 	>=lib-dev/expat-2.1.0-r3:=[${MULTILIB_USEDEP}]
 	>=lib-sys/zlib-1.2.8[${MULTILIB_USEDEP}]
 	>=x11-libs/libX11-1.6.2:=[${MULTILIB_USEDEP}]

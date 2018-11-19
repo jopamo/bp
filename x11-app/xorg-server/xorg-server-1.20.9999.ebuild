@@ -12,8 +12,7 @@ KEYWORDS="amd64 arm64 x86"
 
 IUSE="${IUSE_SERVERS} debug +glamor ipv6 libressl minimal selinux systemd +udev unwind wayland xcsecurity"
 
-CDEPEND=">=app-eselect/eselect-opengl-1.3.0
-	!libressl? ( lib-dev/openssl:0= )
+CDEPEND="!libressl? ( lib-dev/openssl:0= )
 	libressl? ( lib-dev/libressl )
 	>=x11/iceauth-1.0.2
 	>=x11/rgb-1.0.3

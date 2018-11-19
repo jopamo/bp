@@ -44,9 +44,6 @@ COMMON="
 		x11-libs/libXxf86vm
 		x11-libs/pango
 	)
-	X? (
-		>=app-eselect/eselect-opengl-1.0.9
-	)
 "
 DEPEND="
 	${COMMON}

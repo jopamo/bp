@@ -97,20 +97,15 @@ multilib_src_install() {
 		;;
 
 	*)
-		emake install DESTDIR="${D}" LDCONFIG=:
+		emake install DESTDIR="${ED}" LDCONFIG=:
 		;;
 	esac
 	sed_macros "${ED}"/usr/include/*.h
 
 	if use minizip ; then
-		emake -C contrib/minizip install DESTDIR="${D}"
+		emake -C contrib/minizip install DESTDIR="${ED}"
 		sed_macros "${ED}"/usr/include/minizip/*.h
 	fi
 
 	use static-libs || rm -f "${ED}"/usr/$(get_libdir)/lib{z,minizip}.{a,la} #419645
-}
-
-multilib_src_install_all() {
-	dodoc FAQ README ChangeLog doc/*.txt
-	use minizip && dodoc contrib/minizip/*.txt
 }

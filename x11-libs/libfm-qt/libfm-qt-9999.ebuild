@@ -4,18 +4,18 @@ EAPI=6
 
 inherit cmake-utils xdg-utils
 
+DESCRIPTION="Qt port of libfm, a library providing components to build desktop file managers"
+HOMEPAGE="http://lxqt.org/"
+
 if [[ "${PV}" == "9999" ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/lxde/${PN}.git"
 	KEYWORDS="amd64 arm64 x86"
 else
-	SNAPSHOT=1dbc642b5f872038bf749a4b826aefdb39dbfeef
+	SNAPSHOT=
 	SRC_URI="https://github.com/lxde/libfm-qt/archive/${SNAPSHOT}.zip -> ${P}.zip"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
-
-DESCRIPTION="Qt port of libfm, a library providing components to build desktop file managers"
-HOMEPAGE="http://lxqt.org/"
 
 LICENSE="LGPL-2.1+"
 SLOT="0/3"

@@ -11,14 +11,13 @@ HOMEPAGE="https://wiki.linuxfoundation.org/networking/iputils"
 
 LICENSE="BSD GPL-2+ rdisc"
 SLOT="0"
-IUSE="+arping caps clockdiff doc idn ninfod +ping rarpd rdisc rdisc_server static +tftpd +tracepath +traceroute"
+IUSE="+arping caps clockdiff doc idn ninfod +ping rarpd rdisc rdisc_server static +tftpd +tracepath traceroute6"
 
 LIB_DEPEND="caps? ( lib-sys/libcap[static-libs(+)] )
 	idn? ( lib-net/libidn[static-libs(+)] )"
 
 RDEPEND="arping? ( !app-net/arping )
 	rarpd? ( !app-net/rarpd )
-	traceroute? ( !app-net/traceroute )
 	!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
 
 DEPEND="${RDEPEND}
@@ -37,7 +36,7 @@ src_configure() {
 		$(meson_use rdisc_server ENABLE_RDISC_SERVER)
 		$(meson_use tftpd BUILD_TFTPD)
 		$(meson_use tracepath BUILD_TRACEPATH)
-		$(meson_use traceroute BUILD_TRACEROUTE6)
+		$(meson_use traceroute6 BUILD_TRACEROUTE6)
 		$(meson_use ninfod BUILD_NINFOD)
 		$(meson_use doc BUILD_MANS)
 		-DUSE_CRYPTO="gcrypt"

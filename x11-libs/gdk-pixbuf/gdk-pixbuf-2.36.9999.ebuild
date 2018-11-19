@@ -12,7 +12,7 @@ EGIT_BRANCH=gdk-pixbuf-2-36
 LICENSE="LGPL-2+"
 SLOT="2"
 KEYWORDS="amd64 arm64 x86"
-IUSE="+introspection debug +png +tiff +jpeg +jasper x11 docs man test +relocatable +native_windows_loaders"
+IUSE="+introspection debug +png +tiff +jpeg +jasper X docs man test +relocatable +native_windows_loaders"
 
 COMMON_DEPEND="
 	>=lib-dev/glib-2.48.0:2[${MULTILIB_USEDEP}]
@@ -21,7 +21,7 @@ COMMON_DEPEND="
 	jpeg? ( lib-media/libjpeg-turbo[${MULTILIB_USEDEP}] )
 	jasper? ( lib-media/jasper:=[${MULTILIB_USEDEP}] )
 	tiff? ( >=lib-media/tiff-3.9.2:0=[${MULTILIB_USEDEP}] )
-	x11? ( x11-libs/libX11[${MULTILIB_USEDEP}] )
+	X? ( x11-libs/libX11[${MULTILIB_USEDEP}] )
 "
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/gtk-doc-am-1.20
@@ -49,7 +49,7 @@ multilib_src_configure() {
 		$(use_with jasper libjasper)
 		$(use_with tiff libtiff)
 		$(multilib_native_use_enable introspection)
-		$(use_with x11 x11)
+		$(use_with X x11)
 		--with-libpng
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

@@ -1,0 +1,1 @@
+USE="${USE} X xkb pic drm qml opengl xdg xcb jpeg dbus pulseaudio kmod cups mount"

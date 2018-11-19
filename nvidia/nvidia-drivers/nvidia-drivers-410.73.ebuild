@@ -36,7 +36,7 @@ COMMON="
 		lib-dev/jansson
 		x11-libs/gtk+:2
 		x11-libs/cairo
-		x11-libs/gdk-pixbuf[x11]
+		x11-libs/gdk-pixbuf[X]
 		x11-libs/libX11
 		x11-libs/libXext
 		x11-libs/libXrandr

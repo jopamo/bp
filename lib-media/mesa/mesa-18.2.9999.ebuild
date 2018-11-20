@@ -24,7 +24,8 @@ REQUIRED_USE="
 	wayland? ( egl )
 "
 
-DEPEND="dev-python/mako"
+DEPEND="dev-python/mako
+		lib-media/libglvnd"
 RDEPEND="
 	>=lib-dev/expat-2.1.0-r3:=[${MULTILIB_USEDEP}]
 	>=lib-sys/zlib-1.2.8[${MULTILIB_USEDEP}]
@@ -40,7 +41,7 @@ RDEPEND="
 
 src_configure() {
 	local emesonargs=(
-		-Db_lto=true
+		-Db_lto=false
 		-Dplatforms=x11
 		$(meson_use dri3)
 		-Ddri-drivers=swrast

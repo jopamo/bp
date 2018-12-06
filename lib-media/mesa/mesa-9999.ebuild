@@ -16,19 +16,11 @@ SLOT="0"
 
 IUSE="+dri3"
 
-<<<<<<< HEAD:lib-media/mesa/mesa-9999.ebuild
 DEPEND="dev-python/mako
 		lib-sys/libunwind"
-=======
-REQUIRED_USE="
-	gles1?  ( egl )
-	gles2?  ( egl )
-	wayland? ( egl )
-"
 
 DEPEND="dev-python/mako
 		lib-media/libglvnd"
->>>>>>> 227dce8bf507ee1ec44acb450921fa3bc57e1d21:lib-media/mesa/mesa-18.2.9999.ebuild
 RDEPEND="
 	>=lib-dev/expat-2.1.0-r3:=[${MULTILIB_USEDEP}]
 	>=lib-sys/zlib-1.2.8[${MULTILIB_USEDEP}]

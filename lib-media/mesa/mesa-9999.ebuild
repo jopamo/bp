@@ -14,10 +14,12 @@ EGIT_REPO_URI="https://anongit.freedesktop.org/git/mesa/mesa.git"
 LICENSE="MIT"
 SLOT="0"
 
-IUSE="dri3 +egl gles1 gles2 unwind
-	+nptl opencl osmesa openmax pic selinux vaapi valgrind
-	llvm vulkan wayland xvmc xa"
+IUSE="+dri3"
 
+<<<<<<< HEAD:lib-media/mesa/mesa-9999.ebuild
+DEPEND="dev-python/mako
+		lib-sys/libunwind"
+=======
 REQUIRED_USE="
 	gles1?  ( egl )
 	gles2?  ( egl )
@@ -26,6 +28,7 @@ REQUIRED_USE="
 
 DEPEND="dev-python/mako
 		lib-media/libglvnd"
+>>>>>>> 227dce8bf507ee1ec44acb450921fa3bc57e1d21:lib-media/mesa/mesa-18.2.9999.ebuild
 RDEPEND="
 	>=lib-dev/expat-2.1.0-r3:=[${MULTILIB_USEDEP}]
 	>=lib-sys/zlib-1.2.8[${MULTILIB_USEDEP}]
@@ -44,22 +47,16 @@ src_configure() {
 		-Db_lto=false
 		-Dplatforms=x11
 		$(meson_use dri3)
-		-Ddri-drivers=swrast
+		-Ddri-drivers=i965
 		-Dgallium-drivers=""
 		-Dllvm=false
-		-Dgbm=true
     	-Dgles1=false
     	-Dgles2=false
     	-Dglvnd=true
     	-Dglx=dri
     	-Dshared-glapi=true
     	-Dtexture-float=true
-		-Dgallium-xvmc=false
-		-Dgallium-va=false
-		-Dgallium-xa=false
-		-Dvulkan-drivers=""
-		-Dshader-cache=false
-		-Dosmesa=classic
+		-Dvulkan-drivers="intel"
 		)
 		meson_src_configure
 }

@@ -57,7 +57,6 @@ COMMON_DEPEND="
 		>=lib-media/libdvdnav-4.2.0
 		>=lib-media/libdvdread-4.1.0
 	)
-	egl? ( lib-media/mesa[egl,gbm(-)?,wayland(-)?] )
 	uchardet? ( lib-media/uchardet )
 	jack? ( virtual/jack )
 	javascript? ( >=dev-lang/mujs-1.0.0 )

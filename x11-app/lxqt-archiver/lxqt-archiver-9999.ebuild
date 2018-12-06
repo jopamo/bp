@@ -4,8 +4,8 @@ EAPI=6
 
 inherit cmake-utils xdg-utils git-r3
 
-DESCRIPTION="Fast lightweight tabbed filemanager (Qt port)"
-HOMEPAGE="https://wiki.lxde.org/en/PCManFM"
+DESCRIPTION="a simple & lightweight desktop-agnostic Qt file archiver"
+HOMEPAGE="ttps://github.com/lxqt/lxqt-archiver"
 KEYWORDS="amd64 arm64 x86"
 EGIT_REPO_URI="https://github.com/lxqt/lxqt-archiver.git"
 

@@ -8,9 +8,9 @@ HOMEPAGE="http://lxqt.org/"
 
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="http://www.github.com/lxde/${PN}.git"
+	EGIT_REPO_URI="http://www.github.com/lxqt/${PN}.git"
 else
-	SRC_URI="https://downloads.lxqt.org/lxqt/${PV}/${P}.tar.xz"
+	SRC_URI="https://github.com/lxqt/liblxqt/releases/download/${PV}/${P}.tar.xz"
 fi
 
 LICENSE="GPL-2 LGPL-2.1+"
@@ -29,13 +29,9 @@ RDEPEND=">=lib-dev/libqtxdg-1.3.0
 	x11-libs/libXScrnSaver"
 DEPEND="${RDEPEND}
 	gui-lib/linguist-tools:5"
-
-src_prepare() {
-	cp "${FILESDIR}/CMakeLists.txt" "${S}/CMakeLists.txt"
-	default
-}
+	
+PATCHES=( ${FILESDIR}/remove_polkit.patch )
 
 src_configure() {
-	local mycmakeargs=( -DPULL_TRANSLATIONS=OFF )
 	cmake-utils_src_configure
 }

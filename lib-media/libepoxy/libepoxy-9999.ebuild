@@ -23,7 +23,7 @@ SLOT="0"
 IUSE="test +X"
 
 DEPEND="${PYTHON_DEPS}
-	lib-media/mesa[egl,${MULTILIB_USEDEP}]
+	lib-media/mesa[${MULTILIB_USEDEP}]
 	x11/util-macros
 	X? ( x11-libs/libX11[${MULTILIB_USEDEP}] )"
 

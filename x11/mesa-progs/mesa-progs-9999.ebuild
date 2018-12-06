@@ -16,7 +16,6 @@ SLOT="0"
 IUSE="egl gles2"
 
 RDEPEND="
-	lib-media/mesa[egl?,gles2?]
 	lib-media/mesa
 	x11-libs/libX11"
 DEPEND="${RDEPEND}

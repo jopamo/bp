@@ -6,7 +6,7 @@ inherit cmake-utils git-r3
 DESCRIPTION="Openbox window manager configuration tool"
 HOMEPAGE="http://lxqt.org/"
 
-EGIT_REPO_URI="https://www.github.com/lxde/${PN}.git"
+EGIT_REPO_URI="https://www.github.com/lxqt/${PN}.git"
 
 KEYWORDS="amd64 arm64 x86"
 

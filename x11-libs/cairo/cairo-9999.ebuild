@@ -28,9 +28,9 @@ RDEPEND="
 	lib-sys/binutils-libs:0=[${MULTILIB_USEDEP}]
 	>=lib-sys/zlib-1.2.8-r1[${MULTILIB_USEDEP}]
 	>=x11-libs/pixman-0.32.4[${MULTILIB_USEDEP}]
-	gles2? ( >=lib-media/mesa-9.1.6[gles2,${MULTILIB_USEDEP}] )
+	>=lib-media/mesa-9.1.6[${MULTILIB_USEDEP}]
 	glib? ( >=lib-dev/glib-2.34.3:2[${MULTILIB_USEDEP}] )
-	opengl? ( >=lib-media/mesa-9.1.6[egl,${MULTILIB_USEDEP}] )
+	opengl? ( >=lib-media/mesa-9.1.6[${MULTILIB_USEDEP}] )
 	utils? ( >=lib-dev/lzo-2.06-r1[${MULTILIB_USEDEP}] )
 	X? (
 		>=x11-libs/libXrender-0.9.8[${MULTILIB_USEDEP}]

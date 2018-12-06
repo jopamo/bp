@@ -2,11 +2,11 @@
 
 EAPI=6
 
-EGIT_REPO_URI="https://github.com/lxde/${PN}"
 inherit autotools git-r3 multilib-minimal xdg-utils
 
 DESCRIPTION="A library for file management"
-HOMEPAGE="http://pcmanfm.sourceforge.net/"
+HOMEPAGE="https://github.com/lxde/libfm"
+EGIT_REPO_URI="https://github.com/lxde/${PN}"
 
 LICENSE="GPL-2"
 SLOT="0"

@@ -8,10 +8,10 @@ HOMEPAGE="http://lxqt.org/"
 
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/lxde/${PN}.git"
+	EGIT_REPO_URI="https://github.com/lxqt/${PN}.git"
 	KEYWORDS="amd64 arm64 x86"
 else
-	SRC_URI="https://github.com/lxde/${PN}/releases/download/${PV}/${P}.tar.xz"
+	SRC_URI="https://github.com/lxqt/${PN}/releases/download/${PV}/${P}.tar.xz"
 fi
 
 LICENSE="|| ( GPL-2+ LGPL-2.1+ )"
@@ -38,13 +38,6 @@ DEPEND="${RDEPEND}
 	gui-lib/liblxqt
 	dev-util/pkgconfig
 "
-
-src_configure() {
-	local mycmakeargs=(
-		-DPULL_TRANSLATIONS=OFF
-	)
-	cmake-utils_src_configure
-}
 
 pkg_postinst() {
 	xdg_desktop_database_update

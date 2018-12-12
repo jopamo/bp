@@ -22,8 +22,6 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	>=lib-dev/glib-2.38:2
 	>=lib-dev/gobject-introspection-1.46.0:=
 "
-DEPEND="${COMMON_DEPEND}
-	virtual/pkgconfig"
 
 RDEPEND="${COMMON_DEPEND}"
 

@@ -32,13 +32,6 @@ FILECAPS=(
 	cap_dac_override,cap_sys_admin,cap_net_bind_service,cap_sys_rawio+ep usr/bin/readcd
 )
 
-cdrtools_os() {
-	local os="linux"
-	[[ ${CHOST} == *-darwin* ]] && os="mac-os10"
-	[[ ${CHOST} == *-freebsd* ]] && os="freebsd"
-	echo "${os}"
-}
-
 src_prepare() {
 	default
 
@@ -90,26 +83,6 @@ src_prepare() {
 		cc-gcc.rul || die "sed cc-gcc.rul"
 	sed -i -e "s|^#\(CONFFLAGS +=\).*|\1\t-cc=${tcCC}|" \
 		rules.cnf || die "sed rules.cnf"
-
-	# Schily make setup.
-	cd "${S}"/DEFAULTS || die
-	local os=$(cdrtools_os)
-
-	sed -i \
-		-e "s|^\(DEFLINKMODE=\).*|\1\tdynamic|" \
-		-e "s|^\(LINUX_INCL_PATH=\).*|\1|" \
-		-e "s|^\(LDPATH=\).*|\1|" \
-		-e "s|^\(RUNPATH=\).*|\1|" \
-		-e "s|^\(INS_BASE=\).*|\1\t${ED}/usr|" \
-		-e "s|^\(INS_RBASE=\).*|\1\t${ED}|" \
-		-e "s|^\(DEFINSGRP=\).*|\1\t0|" \
-		-e '/^DEFUMASK/s,002,022,g' \
-		Defaults.${os} || die "sed Schily make setup"
-	# re DEFUMASK above:
-	# bug 486680: grsec TPE will block the exec if the directory is
-	# group-writable. This is painful with cdrtools, because it makes a bunch of
-	# group-writable directories during build. Change the umask on their
-	# creation to prevent this.
 }
 
 ac_cv_sizeof() {
@@ -182,8 +155,6 @@ src_configure() {
 		export ac_cv_file__dev_{fd_{0,1,2},null,std{err,in,out},tty,zero}="yes"
 		export ac_cv_file__usr_src_linux_include="no"
 
-		case $(cdrtools_os) in
-		linux)
 			export ac_cv_func_bsd_{g,s}etpgrp="no"
 			export ac_cv_hard_symlinks="yes"
 			export ac_cv_link_nofollow="yes"
@@ -214,8 +185,6 @@ src_configure() {
 			elif grep -q 'StArT_T_eNdX' "${T}"/test.o ; then
 				export ac_cv_c_bitfields_htol="yes"
 			fi
-			;;
-		esac
 	fi
 }
 
@@ -230,44 +199,24 @@ src_compile() {
 		fi
 	fi
 
+	strip-flags -flto
+
 	# If not built with -j1, "sometimes" cdda2wav will not be built.
-	emake -j1 CPPOPTX="${CPPFLAGS}" COPTX="${CFLAGS}" C++OPTX="${CXXFLAGS}" \
-		LDOPTX="${LDFLAGS}" GMAKE_NOWARN="true"
+	emake -j1 CPPOPTX="${CPPFLAGS} -fPIC" COPTX="${CFLAGS} -fPIC" C++OPTX="${CXXFLAGS} -fPIC" \
+		LDOPTX="${LDFLAGS} -fPIC" GMAKE_NOWARN="true"
 }
 
 src_install() {
-	# If not built with -j1, "sometimes" manpages are not installed.
-	emake -j1 CPPOPTX="${CPPFLAGS}" COPTX="${CFLAGS}" C++OPTX="${CXXFLAGS}" \
+	emake CPPOPTX="${CPPFLAGS}" COPTX="${CFLAGS}" C++OPTX="${CXXFLAGS}" \
 		LDOPTX="${LDFLAGS}" GMAKE_NOWARN="true" install
 
 	# These symlinks are for compat with cdrkit.
 	dosym schily /usr/include/scsilib
 	dosym ../scg /usr/include/schily/scg
 
-	dodoc ABOUT Changelog* CONTRIBUTING PORTING README.linux-shm READMEs/README.linux
-
-	cd "${S}"/cdda2wav || die
-	docinto cdda2wav
-	dodoc Changelog FAQ Frontends HOWTOUSE NEEDED README THANKS TODO
-
-	cd "${S}"/mkisofs || die
-	docinto mkisofs
-	dodoc ChangeLog* TODO
-
-	# Remove man pages related to the build system
 	rm -rvf "${ED}"/usr/share/man/man5 || die
 }
 
 pkg_postinst() {
 	fcaps_pkg_postinst
-
-	if [[ ${CHOST} == *-darwin* ]] ; then
-		einfo
-		einfo "Darwin/OS X use the following device names:"
-		einfo
-		einfo "CD burners: (probably) ./cdrecord dev=IOCompactDiscServices"
-		einfo
-		einfo "DVD burners: (probably) ./cdrecord dev=IODVDServices"
-		einfo
-	fi
 }

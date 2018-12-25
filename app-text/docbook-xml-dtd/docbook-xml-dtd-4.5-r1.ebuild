@@ -10,6 +10,7 @@ SRC_URI="http://www.docbook.org/xml/${PV}/${MY_P}.zip"
 LICENSE="docbook"
 SLOT="${PV}"
 KEYWORDS="amd64 arm64 x86"
+IUSE="prefix"
 
 RDEPEND=""
 DEPEND=">=lib-dev/libxml2-2.4

@@ -25,7 +25,7 @@ RDEPEND="${DEPEND}
 	sys-app/coreutils
 	sys-app/busybox
 	sys-app/util-linux
-	sys-app/parted
+	sys-fs/parted
 	sys-app/grub:2
 	sys-fs/ntfs3g
 	sys-fs/dosfstools"

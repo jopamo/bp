@@ -25,7 +25,6 @@ RDEPEND="
 	>=lib-media/fontconfig-2.10.92[${MULTILIB_USEDEP}]
 	>=lib-media/freetype-2.5.0.1:2[${MULTILIB_USEDEP}]
 	>=lib-media/libpng-1.6.10:0=[${MULTILIB_USEDEP}]
-	lib-sys/binutils-libs:0=[${MULTILIB_USEDEP}]
 	>=lib-sys/zlib-1.2.8-r1[${MULTILIB_USEDEP}]
 	>=x11-libs/pixman-0.32.4[${MULTILIB_USEDEP}]
 	>=lib-media/mesa-9.1.6[${MULTILIB_USEDEP}]

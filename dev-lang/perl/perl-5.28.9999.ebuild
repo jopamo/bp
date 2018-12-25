@@ -223,4 +223,6 @@ src_install() {
 	done
 
 	[[ -d ${ED}/usr/local ]] && rm -r "${ED}"/usr/local
+
+	rm -rf "${ED}"/usr/share/man
 }

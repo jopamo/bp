@@ -4,7 +4,7 @@ EAPI=6
 
 EGIT_REPO_URI="https://www.github.com/ffmpeg/ffmpeg.git"
 
-inherit multilib-minimal git-r3
+inherit multilib-minimal git-r3 flag-o-matic
 
 DESCRIPTION="Complete solution to record, convert and stream audio and video. Includes libavcodec"
 HOMEPAGE="http://ffmpeg.org/"
@@ -14,32 +14,14 @@ LICENSE="GPL-3"
 
 KEYWORDS="amd64 arm64 x86"
 
-IUSE="alsa debug mp3 gcrypt openssl vpx doc X +encode jack nvidia oss pic static-libs test v4l +threads vaapi
+IUSE="debug nvidia static-libs
 "
 
-RDEPEND="
-	alsa? ( >=lib-media/alsa-lib-1.0.27.2[${MULTILIB_USEDEP}] )
+DEPEND="
 	>=app-media/lame-3.99.5-r1[${MULTILIB_USEDEP}]
-	openssl? ( >=lib-dev/openssl-1.0.1h-r2:0[${MULTILIB_USEDEP}] )
+	dev-lang/yasm
 	nvidia? ( lib-media/nv-codec-headers[${MULTILIB_USEDEP}] )
-	X? (
-		>=x11-libs/libX11-1.6.2[${MULTILIB_USEDEP}]
-		>=x11-libs/libXext-1.3.2[${MULTILIB_USEDEP}]
-		>=x11-libs/libXv-1.0.10[${MULTILIB_USEDEP}]
-		>=x11-libs/libxcb-1.4[${MULTILIB_USEDEP}]
-	)
 "
-
-DEPEND="${RDEPEND}
-	>=sys-devel/make-3.81
-	doc? ( sys-app/texinfo )
-	>=dev-util/pkgconfig-0-r1[${MULTILIB_USEDEP}]
-	>=dev-lang/yasm-1.3
-	test? ( app-net/wget sys-devel/bc )
-	v4l? ( sys-kernel/stable-sources )
-"
-
-RDEPEND="${RDEPEND}"
 
 S=${WORKDIR}/${P/_/-}
 
@@ -48,6 +30,8 @@ MULTILIB_WRAPPED_HEADERS=(
 )
 
 multilib_src_configure() {
+	filter-flags -fno-common
+
 	${S}/configure \
 		--prefix="${EPREFIX}/usr" \
 		--shlibdir="${EPREFIX}/usr/$(get_libdir)" \
@@ -59,7 +43,6 @@ multilib_src_configure() {
 		--ar="$(tc-getAR)" \
 		--optflags="${CFLAGS}" \
 		--disable-all \
-		--enable-openssl \
 		--enable-nonfree \
 		--enable-gpl \
 		--enable-version3 \
@@ -73,7 +56,7 @@ multilib_src_configure() {
 		--enable-libmp3lame \
 		--enable-encoder=flac,png \
 		--enable-encoder=libmp3lame \
-		--disable-gnutls \
+		--enable-gnutls \
 		--disable-indevs \
 		--disable-doc \
 		--disable-htmlpages \

@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# Maintainer: Toolchain Ninjas <toolchain@gentoo.org>
-
 DESCRIPTION="The GNU Compiler Collection"
 HOMEPAGE="https://gcc.gnu.org/"
 RESTRICT="strip" # cross-compilers need controlled stripping
@@ -11,8 +9,8 @@ inherit eutils fixheadtails flag-o-matic gnuconfig libtool multilib toolchain-fu
 FEATURES=${FEATURES/multilib-strict/}
 
 case ${EAPI:-0} in
-	0|1|2|3|4|5*) die "Need to upgrade to at least EAPI=6" ;;
-	6|7*)   ;;
+	0|1|2|3|4*) die "Need to upgrade to at least EAPI=5" ;;
+	5|6|7*)   ;;
 	*)       die "I don't speak EAPI ${EAPI}." ;;
 esac
 EXPORT_FUNCTIONS src_unpack src_prepare src_configure \
@@ -176,7 +174,7 @@ S=${WORKDIR}/${PN}-${SNAPSHOT}
 toolchain_src_prepare() {
 	cd "${S}"
 
-	eapply_user
+	default
 
 	# make sure the pkg config files install into multilib dirs.
 	# since we configure with just one --libdir, we can't use that

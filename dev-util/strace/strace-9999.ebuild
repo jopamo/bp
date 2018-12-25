@@ -51,7 +51,7 @@ src_configure() {
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
 		--enable-mpers=check
-		--with-libiberty
+		--with-libunwind
 	)
 	econf ${myconf[@]}
 }

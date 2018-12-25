@@ -2,8 +2,6 @@
 
 EAPI=6
 
-CMAKE_MAKEFILE_GENERATOR="ninja"
-
 inherit eutils flag-o-matic toolchain-funcs versionator cmake-utils
 
 MY_P="${P/_/-}"

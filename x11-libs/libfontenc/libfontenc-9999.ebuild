@@ -13,7 +13,8 @@ SLOT=0
 RDEPEND="lib-sys/zlib
 	x11/xorgproto"
 
-DEPEND="${RDEPEND}"
+DEPEND="${RDEPEND}
+		fonts/font-util"
 
 src_prepare() {
 	eautoreconf

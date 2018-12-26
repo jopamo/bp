@@ -7,10 +7,9 @@ inherit eutils flag-o-matic autotools multilib-minimal
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://anongit.freedesktop.org/git/cairo"
-	SRC_URI=""
+	KEYWORDS="amd64 arm64 x86"
 else
 	SRC_URI="https://www.cairographics.org/releases/${P}.tar.xz"
-	KEYWORDS="amd64 arm64 x86"
 fi
 
 DESCRIPTION="A vector graphics library with cross-device output support"

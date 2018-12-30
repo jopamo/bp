@@ -2,24 +2,17 @@
 
 EAPI=6
 
-inherit cmake-multilib
+inherit cmake-multilib git-r3
 
 DESCRIPTION="C++ BitTorrent implementation focusing on efficiency and scalability"
 HOMEPAGE="http://libtorrent.org"
 
-if [[ ${PV} == "9999" ]] ; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/arvidn/libtorrent.git"
-else
-	inherit versionator
-	MY_PV=$(replace_all_version_separators _)
-	SRC_URI="https://github.com/arvidn/libtorrent/archive/libtorrent-${MY_PV}.tar.gz"
-	S=${WORKDIR}/${PN}-${PN}-${MY_PV}
-	KEYWORDS="amd64 arm64 x86"
-fi
+EGIT_REPO_URI="https://github.com/arvidn/libtorrent.git"
+EGIT_BRANCH="RC_1_1"
 
+KEYWORDS="amd64 arm64 x86"
 LICENSE="BSD"
-SLOT="0/9"
+SLOT="0"
 IUSE="static-libs"
 
 RDEPEND="

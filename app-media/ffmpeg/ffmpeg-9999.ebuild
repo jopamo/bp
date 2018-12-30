@@ -56,7 +56,7 @@ multilib_src_configure() {
 		--enable-libmp3lame \
 		--enable-encoder=flac,png \
 		--enable-encoder=libmp3lame \
-		--enable-gnutls \
+		--enable-openssl \
 		--disable-indevs \
 		--disable-doc \
 		--disable-htmlpages \

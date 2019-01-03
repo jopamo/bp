@@ -55,10 +55,12 @@ multilib_src_install() {
 		STRIP=: \
 		root_libdir="${EPREFIX}/usr/$(get_libdir)" \
 		DESTDIR="${D}" \
-		install install-libs
+		install
 
 	insinto /etc
 	doins "${FILESDIR}"/e2fsck.conf
+
+	rm -rf "${ED}"/usr/share/info
 
 	if ! use static-libs ; then
 		find "${D}" -name '*.a' -delete || die

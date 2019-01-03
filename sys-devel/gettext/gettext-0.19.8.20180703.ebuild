@@ -30,6 +30,8 @@ MULTILIB_WRAPPED_HEADERS=(
 	/usr/include/gettext-po.h
 )
 
+filter-flags -flto
+
 src_prepare() {
 	eapply "${WORKDIR}"/gettext-20180703.patch
 	default

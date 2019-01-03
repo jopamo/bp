@@ -2,9 +2,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{6,7,8} )
-
-inherit linux-info multilib python-any-r1 systemd \
+inherit linux-info multilib systemd \
 	user toolchain-funcs versionator virtualx udev multilib-minimal git-r3 meson
 
 DESCRIPTION="A set of co-operative tools that make networking simple and straightforward"
@@ -72,13 +70,16 @@ src_configure() {
 	local emesonargs=(
 		$(meson_use nmtui)
 		-Dprefix-default="${EPREFIX}"
+		-Dintrospection=false
 		-Dselinux=false
 		-Dlibaudit=no
-		-Dpolkit=no
+		-Dpolkit=false
 		-Dppp=false
 		-Dmodem_manager=false
 		-Dlibpsl=false
 		-Dqt=false
+		-Dwext=false
+		-Dovs=false
 		)
 		meson_src_configure
 }

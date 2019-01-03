@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit linux-info systemd user
+inherit linux-info systemd user flag-o-matic
 
 DESCRIPTION="A userspace logging daemon for netfilter/iptables related logging"
 HOMEPAGE="https://netfilter.org/projects/ulogd/index.html"
@@ -58,6 +58,7 @@ pkg_setup() {
 
 src_configure() {
 	append-lfs-flags
+
 	local myeconfargs=(
 		$(use_with dbi)
 		$(use_with json jansson)

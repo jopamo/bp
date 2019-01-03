@@ -10,7 +10,6 @@ if [[ ${PV} == *9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/pkgcore/snakeoil.git"
 	inherit git-r3
 	KEYWORDS="amd64 arm64 x86"
-	EGIT_COMMIT=d8ee09e2c479f95c0a1fca8572eaa4da86bd145f
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 	SRC_URI="https://github.com/pkgcore/snakeoil/releases/download/v${PV}/${P}.tar.gz"
@@ -30,6 +29,10 @@ DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]
 	)"
 [[ ${PV} == 9999 ]] && DEPEND+=" dev-python/cython[${PYTHON_USEDEP}]"
 
-python_test() {
-	esetup.py test
+python_prepare_all() {
+	distutils-r1_python_prepare_all
+}
+
+python_install_all() {
+	distutils-r1_python_install_all
 }

@@ -16,10 +16,7 @@ KEYWORDS="amd64 arm64 x86"
 
 IUSE="doc test"
 
-RDEPEND=""
-
-DEPEND="${RDEPEND}
-	>=dev-python/setuptools-9.1[${PYTHON_USEDEP}]
+DEPEND=">=dev-python/setuptools-9.1[${PYTHON_USEDEP}]
 	doc? ( dev-python/sphinx[${PYTHON_USEDEP}] )
 	test? ( dev-python/numpy[${PYTHON_USEDEP}] )"
 

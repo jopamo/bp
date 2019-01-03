@@ -19,10 +19,6 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="static-libs"
 
-PATCHES=(
-	"${FILESDIR}"/${PN}-2.0.10-numademo-cflags.patch #540856
-)
-
 src_prepare() {
 	default
 	eautoreconf

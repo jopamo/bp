@@ -36,10 +36,8 @@ RDEPEND="${COMMON_DEPEND}
 DEPEND="${COMMON_DEPEND}
 	dev-util/pkgconfig
 	x11/xorgproto
+	lib-dev/libxdg-base
 	drm? ( x11-libs/libdrm )"
-
-PATCHES=( "${FILESDIR}/noasciidoc.patch"
-			"${FILESDIR}/include-xinerama.patch" )
 
 src_configure() {
 	append-flags -I/usr/include/xcb

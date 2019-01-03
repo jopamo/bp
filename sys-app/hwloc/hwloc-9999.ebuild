@@ -12,7 +12,7 @@ if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI="https://github.com/open-mpi/${PN}.git"
 
 else
-	SRC_URI="https://github.com/open-mpi/${PN}/archive/${PN}-${PV}.tar.gz"
+	SRC_URI="https://download.open-mpi.org/release/hwloc/v2.0/hwloc-${PV}.tar.bz2"
 	S="${WORKDIR}/${PN}-${PN}-${PV}"
 fi
 
@@ -21,11 +21,6 @@ SLOT="0"
 KEYWORDS="amd64 arm64 x86"
 
 IUSE="cairo cuda debug gl +numa +pci plugins svg static-libs xml X"
-
-# opencl support dropped with x11/ati-drivers being removed (#582406).
-# Anyone with hardware is welcome to step up and help test to get it re-added.
-
-# nvidia/nvidia-cuda-toolkit is always multilib
 
 RDEPEND="
 	>=lib-sys/ncurses-5.9-r3:0[${MULTILIB_USEDEP}]
@@ -43,9 +38,6 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0-r1[${MULTILIB_USEDEP}]"
 
-PATCHES=( "${FILESDIR}/${PN}-gl.patch" )
-DOCS=( AUTHORS NEWS README VERSION )
-
 src_prepare() {
 	default
 	eautoreconf
@@ -56,20 +48,26 @@ src_prepare() {
 	fi
 }
 multilib_src_configure() {
-	export HWLOC_PKG_CONFIG=$(tc-getPKG_CONFIG) #393467
-
 	if use cuda ; then
 		append-ldflags -L"${EPREFIX}"/opt/cuda/$(get_libdir)
 	fi
 
-	ECONF_SOURCE=${S} econf \
-		$(use_enable static-libs static) \
-		$(use_enable cairo) \
-		$(multilib_native_use_enable cuda) \
-		$(use_enable debug) \
-		$(multilib_native_use_enable gl) \
-		$(use_enable pci) \
-		$(use_enable plugins) \
-		$(use_enable xml libxml2) \
+	local myconf=(
+		--bindir="${EPREFIX}"/usr/bin
+		--sbindir="${EPREFIX}"/usr/sbin
+		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libexecdir="${EPREFIX}"/usr/libexec
+		--sysconfdir="${EPREFIX}"/etc
+		--localstatedir="${EPREFIX}"/var
+		$(use_enable static-libs static)
+		$(use_enable cairo)
+		$(multilib_native_use_enable cuda)
+		$(use_enable debug)
+		$(multilib_native_use_enable gl)
+		$(use_enable pci)
+		$(use_enable plugins)
+		$(use_enable xml libxml2)
 		$(use_with X x)
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

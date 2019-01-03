@@ -31,9 +31,9 @@ src_configure() {
 		--enable-shared
 		--disable-werror
 		--with-system-zlib
-		--enable-64-bit-bfd
 		--enable-gold
 		--enable-plugins
+		--enable-lto
 		--disable-gdb
 		--without-included-gettext
 		$(use_enable static-libs static)
@@ -42,6 +42,8 @@ src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_install_all() {
-	use static-libs || find "${ED}"/usr -name '*.la' -delete
+src_install() {
+	default
+	rm -rf "${ED}"/usr/bin/ld
+	dosym /usr/bin/ld.gold /usr/bin/ld
 }

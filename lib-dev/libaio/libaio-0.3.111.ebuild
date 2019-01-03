@@ -45,6 +45,7 @@ _emake() {
 }
 
 multilib_src_compile() {
+	filter-flags -flto
 	_emake
 }
 

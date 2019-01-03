@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit linux-info
+inherit linux-info flag-o-matic
 
 DESCRIPTION="interface to packets that have been logged by the kernel packet filter"
 HOMEPAGE="https://www.netfilter.org/projects/libnetfilter_log/"
@@ -21,5 +21,5 @@ CONFIG_CHECK="~NETFILTER_NETLINK_LOG"
 
 pkg_setup() {
 	linux-info_pkg_setup
-	kernel_is lt 2 6 14 && die "requires at least 2.6.14 kernel version"
+	filter-flags -flto
 }

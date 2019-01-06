@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib autotools
+inherit multilib autotools flag-o-matic
 
 DESCRIPTION="Redhat's Newt windowing toolkit development files"
 HOMEPAGE="https://pagure.io/newt"
@@ -15,6 +15,8 @@ KEYWORDS="amd64 arm64 x86"
 DEPEND="lib-dev/popt
 		lib-dev/slang
 		"
+
+filter-flags -flto
 
 src_prepare() {
 	eautoreconf

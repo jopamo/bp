@@ -36,6 +36,8 @@ QT5_GENTOO_PRIVATE_CONFIG=(
 	!:xml
 )
 
+filter-flags -flto
+
 #src_prepare() {
 #	git apply -R ${FILESDIR}/1c0fcbc887459d8963088309e83303eb1a7d2db0.patch
 #	eapply_user

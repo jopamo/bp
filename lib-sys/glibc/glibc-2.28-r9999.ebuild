@@ -77,10 +77,6 @@ else
 	PDEPEND+=" !vanilla? ( lib-sys/timezone-data )"
 fi
 
-#
-# the phases
-#
-
 pkg_pretend() {
 	# Make sure devpts is mounted correctly for use w/out setuid pt_chown
 	check_devpts

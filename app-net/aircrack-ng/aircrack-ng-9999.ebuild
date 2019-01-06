@@ -48,6 +48,8 @@ pkg_setup() {
 	)
 }
 
+filter-flags -flto
+
 src_prepare() {
 	eautoreconf
 	default

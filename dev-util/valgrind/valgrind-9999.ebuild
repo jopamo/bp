@@ -17,6 +17,8 @@ else
 	SRC_URI="ftp://sourceware.org/pub/valgrind/${P}.tar.bz2"
 fi
 
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+
 src_prepare() {
 	sed -i -e "s:doc/valgrind:doc/${PF}:" docs/Makefile.am || die
 	sed -i -e 's:-arch \(i386\|x86_64\)::g' Makefile.all.am || die

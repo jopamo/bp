@@ -28,6 +28,8 @@ DEPEND="${CDEPEND}
 RDEPEND="${CDEPEND}"
 PDEPEND="manpager? ( sys-app/less )"
 
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+
 pkg_setup() {
 	# Create user now as Makefile in src_install does setuid/chown
 	enewgroup man 15
@@ -35,7 +37,6 @@ pkg_setup() {
 }
 
 src_configure() {
-	filter-flags -flto
 	export ac_cv_lib_z_gzopen=$(usex zlib)
 	local myeconfargs=(
 		--docdir='$(datarootdir)'/doc/${PF}

@@ -54,6 +54,8 @@ DEPEND="${DEPEND_COMMON}
 
 S=${WORKDIR}/${PN/lvm/LVM}.${PV}
 
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+
 src_prepare() {
 	default
 
@@ -71,7 +73,6 @@ src_prepare() {
 }
 
 src_configure() {
-	filter-flags -flto
 	local myconf=()
 	local buildmode
 

@@ -4,7 +4,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_7 )
 
-inherit python-single-r1 toolchain-funcs versionator autotools
+inherit python-single-r1 toolchain-funcs versionator autotools flag-o-matic
 
 DESCRIPTION="Introspection system for GObject-based libraries"
 HOMEPAGE="https://wiki.gnome.org/Projects/GObjectIntrospection"
@@ -40,6 +40,8 @@ DEPEND="${RDEPEND}
 	sys-devel/flex
 "
 PDEPEND="cairo? ( x11-libs/cairo[glib] )"
+
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 pkg_setup() {
 	python-single-r1_pkg_setup

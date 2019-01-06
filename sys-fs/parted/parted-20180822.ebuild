@@ -25,6 +25,8 @@ DEPEND="
 	dev-util/pkgconfig
 "
 
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+
 src_prepare() {
 	default
 	eautoreconf

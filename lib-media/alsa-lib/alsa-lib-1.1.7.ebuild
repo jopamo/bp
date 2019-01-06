@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools eutils multilib multilib-minimal
+inherit autotools eutils multilib multilib-minimal flag-o-matic
 
 DESCRIPTION="Advanced Linux Sound Architecture Library"
 HOMEPAGE="http://www.alsa-project.org/"
@@ -25,6 +25,8 @@ RDEPEND="abi_x86_32? (
 	)"
 DEPEND="${RDEPEND}
 	doc? ( >=app-text/doxygen-1.2.6 )"
+
+filter-flags -flto
 
 multilib_src_configure() {
 	local myconf

@@ -4,7 +4,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit meson git-r3 python-r1
+inherit meson git-r3 python-r1 flag-o-matic
 
 DESCRIPTION="GLib's GObject library bindings for Python"
 HOMEPAGE="https://wiki.gnome.org/Projects/PyGObject"
@@ -24,6 +24,8 @@ COMMON_DEPEND="${PYTHON_DEPS}
 "
 
 RDEPEND="${COMMON_DEPEND}"
+
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 src_configure() {
         local emesonargs=(

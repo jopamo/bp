@@ -25,18 +25,8 @@ PDEPEND="!x86-winnt? ( app-eselect/eselect-fontconfig )
 
 MULTILIB_CHOST_TOOLS=( /usr/bin/fc-cache$(get_exeext) )
 
-pkg_setup() {
-	DOC_CONTENTS="Please make fontconfig configuration changes using
-	\`eselect fontconfig\`. Any changes made to /etc/fonts/fonts.conf will be
-	overwritten. If you need to reset your configuration to upstream defaults,
-	delete the directory ${EROOT}etc/fonts/conf.d/ and re-emerge fontconfig."
-}
-
 src_prepare() {
 	default
-	export GPERF=$(type -P true)  # avoid dependency on gperf, #631980
-	sed -i -e 's/FC_GPERF_SIZE_T="unsigned int"/FC_GPERF_SIZE_T=size_t/' \
-		configure.ac || die # rest of gperf dependency fix, #631920
 	eautoreconf
 }
 
@@ -86,6 +76,7 @@ multilib_src_install_all() {
 		rm -rf "${ED}"usr/share/doc/fontconfig
 	fi
 
+	rm -rf "${ED}"var/cache/
 	# Changes should be made to /etc/fonts/local.conf, and as we had
 	# too much problems with broken fonts.conf we force update it ...
 	echo 'CONFIG_PROTECT_MASK="/etc/fonts/fonts.conf"' > "${T}"/37fontconfig
@@ -127,7 +118,7 @@ pkg_postinst() {
 		}
 
 		multilib_parallel_foreach_abi multilib_pkg_postinst
-		
+
 		eselect fontconfig enable 11-lcdfilter-default.conf
 		eselect fontconfig enable 10-sub-pixel-rgb.conf
 		eselect fontconfig enable 60-liberation.conf

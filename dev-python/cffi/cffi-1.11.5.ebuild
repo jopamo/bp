@@ -4,7 +4,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit distutils-r1
+inherit distutils-r1 flag-o-matic
 
 DESCRIPTION="Foreign Function Interface for Python calling C code"
 HOMEPAGE="https://cffi.readthedocs.io/ https://pypi.python.org/pypi/cffi"
@@ -23,8 +23,9 @@ DEPEND="${RDEPEND}
 	doc? ( dev-python/sphinx[${PYTHON_USEDEP}] )
 	test? ( dev-python/pytest[${PYTHON_USEDEP}] )"
 
-# Avoid race on _configtest.c (distutils/command/config.py:_gen_temp_sourcefile)
 DISTUTILS_IN_SOURCE_BUILD=1
+
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 python_compile_all() {
 	use doc && emake -C doc html

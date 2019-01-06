@@ -2,12 +2,11 @@
 
 EAPI=6
 
-EGIT_REPO_URI="https://www.github.com/ffmpeg/ffmpeg.git"
-
 inherit multilib-minimal git-r3 flag-o-matic
 
 DESCRIPTION="Complete solution to record, convert and stream audio and video. Includes libavcodec"
 HOMEPAGE="http://ffmpeg.org/"
+EGIT_REPO_URI="https://www.github.com/ffmpeg/ffmpeg.git"
 
 SLOT="0"
 LICENSE="GPL-3"
@@ -29,9 +28,9 @@ MULTILIB_WRAPPED_HEADERS=(
 	/usr/include/libavutil/avconfig.h
 )
 
-multilib_src_configure() {
-	filter-flags -fno-common
+filter-flags -flto -fno-common
 
+multilib_src_configure() {
 	${S}/configure \
 		--prefix="${EPREFIX}/usr" \
 		--shlibdir="${EPREFIX}/usr/$(get_libdir)" \

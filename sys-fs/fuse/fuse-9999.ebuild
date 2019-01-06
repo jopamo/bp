@@ -22,6 +22,8 @@ DEPEND="dev-util/pkgconfig
 	)
 		"
 
+filter-flags -flto
+
 src_prepare() {
 	default
 

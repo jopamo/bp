@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit gnome2-utils xdg-utils autotools git-r3 multilib-minimal
+inherit gnome2-utils xdg-utils autotools git-r3 multilib-minimal flag-o-matic
 
 DESCRIPTION="Audacious Player - Your music, your way, no exceptions"
 HOMEPAGE="https://audacious-media-player.org/"
@@ -27,6 +27,8 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	nls? ( dev-util/intltool )"
+
+filter-flags -flto
 
 src_prepare() {
 	eautoreconf

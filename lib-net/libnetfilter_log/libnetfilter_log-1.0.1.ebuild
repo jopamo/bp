@@ -19,7 +19,8 @@ DEPEND="${RDEPEND}
 
 CONFIG_CHECK="~NETFILTER_NETLINK_LOG"
 
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+
 pkg_setup() {
 	linux-info_pkg_setup
-	filter-flags -flto
 }

@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit meson multilib-minimal git-r3
+inherit meson multilib-minimal git-r3 flag-o-matic
 
 DESCRIPTION="OpenGL-like graphic library for Linux"
 HOMEPAGE="https://www.mesa3d.org/ https://mesa.freedesktop.org/"
@@ -33,6 +33,7 @@ RDEPEND="
 	x11-libs/libXfixes:=[${MULTILIB_USEDEP}]
 "
 
+filter-flags -flto
 
 src_configure() {
 	local emesonargs=(

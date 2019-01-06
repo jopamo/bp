@@ -45,6 +45,8 @@ PATCHES=(
 		"${FILESDIR}/9d9ea2cd70a369a7f665a322e6c53631e01a2570.patch"
 		)
 
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+
 pkg_setup() {
 	linux-info_pkg_setup
 

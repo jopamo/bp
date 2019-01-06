@@ -2,18 +2,15 @@
 
 EAPI=6
 
-inherit meson git-r3 
+inherit meson git-r3 flag-o-matic
 
 DESCRIPTION="X.Org driver for Intel cards"
 
 KEYWORDS="amd64 arm64 x86"
-IUSE="debug dri3 +sna tools +udev uxa xvmc"
+IUSE="+sna +uxa +xaa +ums +kms +dri1 +dri2 +dri3 +present xvmc valgrind +tools backlight backlight-helper +tearfree use-create2 async-swap"
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/xorg/driver/xf86-video-intel.git"
 SLOT=0
 
-REQUIRED_USE="
-	|| ( sna uxa )
-"
 RDEPEND="
 	dev-util/valgrind
 	x11-libs/libXext
@@ -39,9 +36,6 @@ RDEPEND="
 		x11-libs/libxshmfence
 		x11-libs/libXtst
 	)
-	udev? (
-		sys-app/systemd
-	)
 	xvmc? (
 		x11-libs/libXvMC
 		>=x11-libs/libxcb-1.5
@@ -51,9 +45,29 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	x11/xorgproto"
 
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+
 src_configure() {
         local emesonargs=(
-        		$(meson_use xvmc)
+        		$(meson_use sna)
+				$(meson_use uxa)
+				$(meson_use xaa)
+				$(meson_use ums)
+				$(meson_use kms)
+				$(meson_use dri1)
+				$(meson_use dri2)
+				$(meson_use dri3)
+				$(meson_use present)
+				$(meson_use xvmc)
+				$(meson_use valgrind)
+				$(meson_use tools)
+				$(meson_use backlight)
+				$(meson_use backlight-helper)
+				$(meson_use tearfree)
+				$(meson_use use-create2)
+				$(meson_use async-swap)
+				-Ddefault-dri=3
+				-Ddefault-accel=sna
         )
         meson_src_configure
 }

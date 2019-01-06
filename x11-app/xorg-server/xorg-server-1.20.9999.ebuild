@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib-minimal meson git-r3
+inherit multilib-minimal meson git-r3 flag-o-matic
 
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/xorg/xserver.git"
 EGIT_BRANCH="server-1.20-branch"
@@ -60,6 +60,8 @@ RDEPEND="${CDEPEND}
 	selinux? ( sec-policy/selinux-xserver )"
 
 PDEPEND="x11/xf86-input-libinput"
+
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 multilib_src_configure() {
         local emesonargs=(

@@ -56,6 +56,8 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-respect-fontconfig.patch
 )
 
+filter-flags -flto
+
 src_prepare() {
 	default
 

@@ -11,6 +11,8 @@ LICENSE="docbook"
 SLOT="3.1"
 KEYWORDS="amd64 arm64 x86"
 
+IUSE="prefix"
+
 RDEPEND="app-text/sgml-common"
 
 S=${WORKDIR}

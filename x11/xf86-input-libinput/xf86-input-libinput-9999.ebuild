@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit linux-info git-r3 autotools multilib
+inherit linux-info git-r3 autotools multilib flag-o-matic
 
 DESCRIPTION="X.org input driver based on libinput"
 
@@ -14,6 +14,8 @@ EGIT_REPO_URI="https://anongit.freedesktop.org/git/xorg/driver/${PN}.git"
 RDEPEND=">=lib-dev/libinput-1.5.0:0="
 DEPEND="${RDEPEND}
 	x11-app/xorg-server"
+
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 pkg_pretend() {
 	CONFIG_CHECK="~TIMERFD"

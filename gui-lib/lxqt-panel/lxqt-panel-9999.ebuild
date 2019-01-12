@@ -55,9 +55,10 @@ RDEPEND="${CDEPEND}
 	>=gui-lib/lxmenu-data-0.1.2
 "
 
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+
 src_configure() {
 	local mycmakeargs=(
-		-DPULL_TRANSLATIONS=OFF
 		$(usex clock '-DWORLDCLOCK_PLUGIN=ON' '-DWORLDCLOCK_PLUGIN=OFF')
 		$(usex colorpicker '-DCOLORPICKER_PLUGIN=ON' '-DCOLORPICKER_PLUGIN=OFF')
 		$(usex cpuload '-DCPULOAD_PLUGIN=ON' '-DCPULOAD_PLUGIN=OFF')

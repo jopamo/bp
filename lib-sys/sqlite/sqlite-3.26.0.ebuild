@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools multilib-minimal versionator
+inherit autotools multilib-minimal versionator flag-o-matic
 
 MY_PV="$(printf "%u%02u%02u%02u" $(get_version_components))"
 
@@ -36,12 +36,7 @@ multilib_src_configure() {
 		$(use_enable static-libs static)
 		--enable-fts5
 		CFLAGS="${CFLAGS}
-		-DSQLITE_ENABLE_FTS4=1
-		-DSQLITE_ENABLE_COLUMN_METADATA=1
-		-DSQLITE_ENABLE_UNLOCK_NOTIFY=1
-		-DSQLITE_ENABLE_DBSTAT_VTAB=1
-		-DSQLITE_SECURE_DELETE=1
-		-DSQLITE_ENABLE_FTS3_TOKENIZER=1"
+		-DSQLITE_ENABLE_RTREE=1"
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

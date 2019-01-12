@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="5"
+EAPI=6
 
 inherit eutils autotools flag-o-matic toolchain-funcs
 
@@ -11,7 +11,7 @@ MY_P="${MY_PN}-${MY_PV}"
 
 DESCRIPTION="bind tools: dig, nslookup, host, nsupdate, dnssec-keygen"
 HOMEPAGE="http://www.isc.org/software/bind"
-SRC_URI="https://www.isc.org/downloads/file/${MY_P}/?version=tar-gz -> ${MY_PN}-${PV}.tar.gz"
+SRC_URI="https://ftp.isc.org/isc/bind9/${PV}/bind-${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="Apache-2.0 BSD BSD-2 GPL-2 HPND ISC MPL-2.0"
 SLOT="0"
@@ -43,8 +43,7 @@ S="${WORKDIR}/${MY_P}"
 RESTRICT="test"
 
 src_prepare() {
-	epatch "${FILESDIR}"/${PN}-9.5.0_p1-lwconfig.patch #231247
-
+	default
 	# Disable tests for now, bug 406399
 	sed -i '/^SUBDIRS/s:tests::' bin/Makefile.in lib/Makefile.in || die
 
@@ -52,7 +51,6 @@ src_prepare() {
 	rm aclocal.m4
 	rm -rf libtool.m4/
 
-	mv configure.in configure.ac || die # configure.in is deprecated
 	eautoreconf
 }
 
@@ -103,8 +101,6 @@ src_compile() {
 }
 
 src_install() {
-	dodoc README CHANGES
-
 	cd "${S}"/bin/delv
 	dobin delv
 	doman delv.1
@@ -116,9 +112,6 @@ src_install() {
 	cd "${S}"/bin/nsupdate
 	dobin nsupdate
 	doman nsupdate.1
-	if use doc; then
-		dohtml nsupdate.html
-	fi
 
 	cd "${S}"/bin/dnssec
 	for tool in dsfromkey importkey keyfromlabel keygen \

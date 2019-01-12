@@ -2,27 +2,21 @@
 
 EAPI=6
 
-MY_PV=${PV/_/-}
-MY_P=${PN}-${MY_PV}
-inherit eutils libtool multilib-minimal
+inherit autotools multilib-minimal git-r3 flag-o-matic
 
 DESCRIPTION="Portable and efficient API to determine the call-chain of a program"
 HOMEPAGE="https://savannah.nongnu.org/projects/libunwind"
-SRC_URI="mirror://gnu/libunwind/${MY_P}.tar.gz"
+EGIT_REPO_URI="https://github.com/libunwind/libunwind.git"
+EGIT_BRANCH="v1.4-stable"
 
 LICENSE="MIT"
 SLOT="7"
 KEYWORDS="amd64 arm64 x86"
 IUSE="debug debug-frame doc libatomic lzma +static-libs"
 
-RESTRICT="test" # half of tests are broken (toolchain version dependent)
-
-# We just use the header from libatomic.
 RDEPEND="lzma? ( app-compression/xz-utils )"
 DEPEND="${RDEPEND}
 	libatomic? ( lib-dev/libatomic_ops )"
-
-S="${WORKDIR}/${MY_P}"
 
 MULTILIB_WRAPPED_HEADERS=(
 	/usr/include/libunwind.h
@@ -41,21 +35,14 @@ MULTILIB_WRAPPED_HEADERS=(
 	/usr/include/libunwind-x86_64.h
 )
 
-PATCHES=(
-	"${FILESDIR}"/${PN}-1.2-coredump-regs.patch #586092
-	"${FILESDIR}"/${PN}-1.2-ia64-undwarf.patch
-	"${FILESDIR}"/${PN}-1.2-ia64-ptrace-coredump.patch
-	"${FILESDIR}"/${PN}-1.2-ia64-missing.patch
-)
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 src_prepare() {
+	eautoreconf
 	default
-	chmod +x src/ia64/mk_cursor_i || die
 	# Since we have tests disabled via RESTRICT, disable building in the subdir
 	# entirely.  This worksaround some build errors too. #484846
 	sed -i -e '/^SUBDIRS/s:tests::' Makefile.in || die
-
-	elibtoolize
 }
 
 multilib_src_configure() {

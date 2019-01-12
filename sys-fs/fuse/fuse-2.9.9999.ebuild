@@ -4,7 +4,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_7 )
 
-inherit autotools multilib-minimal git-r3
+inherit autotools multilib-minimal git-r3 flag-o-matic
 
 DESCRIPTION="An interface for filesystems implemented in userspace"
 HOMEPAGE="https://github.com/libfuse/libfuse"
@@ -15,6 +15,8 @@ LICENSE="GPL-2 LGPL-2.1"
 SLOT=2
 KEYWORDS="amd64 arm64 x86"
 IUSE="test"
+
+filter-flags -flto
 
 src_prepare() {
 	default

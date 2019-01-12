@@ -19,7 +19,8 @@ LICENSE="BSD"
 SLOT="0"
 IUSE="aio perl static"
 
-DEPEND="aio? ( >=lib-dev/libaio-0.3.106 )"
+DEPEND="aio? ( >=lib-dev/libaio-0.3.106 )
+		lib-sys/libunwind"
 
 src_prepare() {
 	default

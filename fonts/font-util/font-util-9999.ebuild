@@ -2,12 +2,17 @@
 
 EAPI=6
 
-inherit multilib-minimal
+inherit multilib-minimal git-r3 autotools
 
 DESCRIPTION="X.Org font utilities"
-SRC_URI="https://www.x.org/archive/individual/font/${P}.tar.bz2"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/font/util.git"
 SLOT=0
 KEYWORDS="amd64 arm64 x86"
+
+src_prepare() {
+	eautoreconf
+	default
+}
 
 multilib_src_configure() {
 	local myconf=(
@@ -17,7 +22,7 @@ multilib_src_configure() {
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
-		--with-mapdir=${EPREFIX}/usr/share/fonts/util 
+		--with-mapdir=${EPREFIX}/usr/share/fonts/util
 		--with-fontrootdir=${EPREFIX}/usr/share/fonts
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

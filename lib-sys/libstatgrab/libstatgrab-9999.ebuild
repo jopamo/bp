@@ -2,9 +2,11 @@
 
 EAPI=6
 
+inherit git-r3
+
 DESCRIPTION="A tool to provide access to statistics about the system on which it's run"
 HOMEPAGE="http://www.i-scream.org/libstatgrab/"
-SRC_URI="http://www.mirrorservice.org/sites/ftp.i-scream.org/pub/i-scream/libstatgrab/${P}.tar.gz"
+EGIT_REPO_URI="https://github.com/i-scream/libstatgrab.git"
 
 LICENSE="|| ( GPL-2 LGPL-2.1 )"
 SLOT=0

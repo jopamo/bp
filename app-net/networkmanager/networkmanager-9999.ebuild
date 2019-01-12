@@ -2,8 +2,7 @@
 
 EAPI=6
 
-inherit linux-info multilib systemd \
-	user toolchain-funcs versionator virtualx udev multilib-minimal git-r3 meson
+inherit linux-info multilib systemd flag-o-matic user toolchain-funcs versionator virtualx udev multilib-minimal git-r3 meson
 
 DESCRIPTION="A set of co-operative tools that make networking simple and straightforward"
 HOMEPAGE="https://wiki.gnome.org/Projects/NetworkManager"
@@ -65,6 +64,8 @@ DEPEND="${COMMON_DEPEND}
 	lib-dev/newt
 	dev-python/pygobject
 "
+
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 src_configure() {
 	local emesonargs=(

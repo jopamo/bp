@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit toolchain-funcs
+inherit toolchain-funcs flag-o-matic
 
 MY_P="${P/_/-}"
 
@@ -44,6 +44,8 @@ RDEPEND="${COMMON_DEPEND_LIBS}
 	nls? ( sys-devel/gettext )"
 
 S="${WORKDIR}/${MY_P}"
+
+append-flags -fno-strict-aliasing
 
 src_configure() {
 	local myconf=(

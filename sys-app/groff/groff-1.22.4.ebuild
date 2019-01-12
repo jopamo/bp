@@ -14,6 +14,8 @@ KEYWORDS="amd64 arm64 x86"
 
 DEPEND="dev-lang/perl"
 
+filter-flags -flto
+
 src_prepare() {
 	if tc-is-cross-compiler ; then
 		sed -i \

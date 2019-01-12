@@ -4,7 +4,7 @@ EAPI=7
 
 DESCRIPTION="fast compiler cache"
 HOMEPAGE="https://ccache.samba.org/"
-SRC_URI="https://www.samba.org/ftp/ccache/${P}.tar.xz"
+SRC_URI="https://www.samba.org/ftp/ccache/${P}a.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"

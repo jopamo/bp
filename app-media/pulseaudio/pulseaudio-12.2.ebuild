@@ -5,7 +5,10 @@ inherit autotools eutils flag-o-matic gnome2-utils linux-info systemd user versi
 
 DESCRIPTION="A networked sound server with an advanced plugin system"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/PulseAudio/"
+
 SRC_URI="https://freedesktop.org/software/pulseaudio/releases/${P}.tar.xz"
+
+KEYWORDS="amd64 arm64 x86"
 
 # libpulse-simple and libpulse link to libpulse-core; this is daemon's
 # library and can link to gdbm and other GPL-only libraries. In this
@@ -102,6 +105,8 @@ RDEPEND="${RDEPEND}
 	)
 "
 
+filter-flags -flto
+
 pkg_pretend() {
 	CONFIG_CHECK="~HIGH_RES_TIMERS"
 	WARNING_HIGH_RES_TIMERS="CONFIG_HIGH_RES_TIMERS:\tis not set (required for enabling timer-based scheduling in pulseaudio)\n"
@@ -149,12 +154,12 @@ multilib_src_configure() {
 
 	if use bluetooth; then
 		if multilib_is_native_abi; then
-			myconf+=( --enable-bluez5 --disable-bluez4
+			myconf+=( --enable-bluez5
 				$(use_enable native-headset bluez5-native-headset)
 				$(use_enable ofono-headset bluez5-ofono-headset) )
 		fi
 	else
-		myconf+=( --disable-bluez5 --disable-bluez4 )
+		myconf+=( --disable-bluez5 )
 	fi
 
 	myconf+=(
@@ -204,7 +209,6 @@ multilib_src_configure() {
 			--disable-gconf
 			--disable-gtk3
 			--disable-samplerate
-			--disable-bluez4
 			--disable-bluez5
 			--disable-udev
 			--disable-openssl

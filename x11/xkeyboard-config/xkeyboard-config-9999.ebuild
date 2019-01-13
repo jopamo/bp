@@ -2,11 +2,18 @@
 
 EAPI=6
 
-inherit autotools git-r3 multilib-minimal
+inherit autotools multilib-minimal
 
 DESCRIPTION="X keyboard configuration database"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/XKeyboardConfig"
-EGIT_REPO_URI="https://anongit.freedesktop.org/git/xkeyboard-config.git"
+
+if [[ ${PV} == "9999" ]] ; then
+	EGIT_REPO_URI=https://github.com/freedesktop/${PN}.git
+	inherit git-r3
+else
+	SRC_URI="https://www.x.org/pub/individual/data/${PN}/${P}.tar.bz2"
+	KEYWORDS="amd64 arm64 x86"
+fi
 
 KEYWORDS="amd64 arm64 x86"
 

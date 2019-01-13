@@ -154,8 +154,7 @@ src_configure() {
 	if use minimal; then
 		myconf=(
 			--with-features=tiny
-			--disable-nls
-			--disable-multibyte
+			--enable-nls
 			--disable-acl
 			--enable-gui=no
 			--without-x

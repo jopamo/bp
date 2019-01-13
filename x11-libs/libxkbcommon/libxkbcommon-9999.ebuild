@@ -2,13 +2,21 @@
 
 EAPI=6
 
-inherit multilib-minimal git-r3 autotools
+inherit multilib-minimal autotools
 
 DESCRIPTION="X.Org xkbcommon library"
 HOMEPAGE="https://xkbcommon.org/"
 KEYWORDS="amd64 arm64 x86"
 IUSE="X doc test"
-EGIT_REPO_URI="https://github.com/xkbcommon/libxkbcommon.git"
+
+if [[ ${PV} == "9999" ]] ; then
+	EGIT_REPO_URI="https://github.com/xkbcommon/libxkbcommon.git"
+	inherit git-r3
+	KEYWORDS="amd64 arm64 x86"
+else
+	SRC_URI="https://xkbcommon.org/download/${P}.tar.xz"
+fi
+
 SLOT=0
 
 DEPEND="sys-devel/bison

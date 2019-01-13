@@ -1,15 +1,22 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit meson udev git-r3
+
+inherit meson udev
 
 DESCRIPTION="Library to handle input devices in Wayland"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/libinput/"
-EGIT_REPO_URI="https://github.com/wayland-project/libinput.git"
+
+if [[ ${PV} == "9999" ]] ; then
+	EGIT_REPO_URI="https://github.com/wayland-project/libinput.git"
+	inherit git-r3
+	KEYWORDS="amd64 arm64 x86"
+else
+	SRC_URI="https://www.freedesktop.org/software/libinput/${P}.tar.xz"
+fi
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
 IUSE="input_devices_wacom test"
 
 RESTRICT="test"

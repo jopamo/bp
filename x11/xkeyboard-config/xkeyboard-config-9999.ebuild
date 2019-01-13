@@ -15,8 +15,6 @@ else
 	KEYWORDS="amd64 arm64 x86"
 fi
 
-KEYWORDS="amd64 arm64 x86"
-
 LICENSE="MIT"
 SLOT="0"
 

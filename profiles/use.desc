@@ -175,7 +175,6 @@ libav - Prefer libav over ffmpeg whenever both are supported
 libcaca - Add support for colored ASCII-art graphics
 libedit - Use the libedit library (replacement for readline)
 libffi - Enable support for Foreign Function Interface library
-libnotify - Enable desktop notification support
 libressl - Use lib-dev/libressl instead of lib-dev/openssl when applicable (see also the ssl useflag)
 libsamplerate - Build with support for converting sample rates using libsamplerate
 libwww - Add libwww support (General purpose WEB API)

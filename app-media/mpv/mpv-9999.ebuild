@@ -2,11 +2,11 @@
 
 EAPI=6
 
+
+WAF_PV=2.0.14
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-WAF_PV=2.0.12
-
-inherit gnome2-utils python-r1 toolchain-funcs versionator waf-utils xdg-utils
+inherit gnome2-utils toolchain-funcs versionator waf-utils xdg-utils python-r1
 
 DESCRIPTION="Media player based on MPlayer and mplayer2"
 HOMEPAGE="https://mpv.io/"
@@ -22,29 +22,21 @@ SRC_URI+=" https://waf.io/waf-${WAF_PV}"
 
 LICENSE="LGPL-2.1+ GPL-2+ BSD ISC"
 SLOT="0"
-IUSE="+alsa aqua archive bluray cdda +cli coreaudio cplugins cuda drm dvb
-	dvd +egl gbm jack javascript jpeg lcms +libass libcaca
-	libmpv +lua openal +opengl oss pulseaudio raspberry-pi rubberband
-	sdl test +uchardet v4l vaapi wayland +X +xv zlib
-	zsh-completion"
+IUSE="+alsa +archive bluray cdda +cli coreaudio cplugins cuda drm dvb
+	dvd +egl jack javascript jpeg lcms +libass libcaca
+	libmpv +lua +opengl pulseaudio raspberry-pi rubberband
+	sdl test uchardet vaapi wayland +X zlib
+"
 
 REQUIRED_USE="
 	|| ( cli libmpv )
-	aqua? ( opengl )
 	cuda? ( opengl )
-	egl? ( || ( gbm X wayland ) )
-	gbm? ( drm egl opengl )
 	lcms? ( opengl )
-	opengl? ( || ( aqua egl X raspberry-pi !cli ) )
+	opengl? ( || ( egl X raspberry-pi !cli ) )
 	raspberry-pi? ( opengl )
 	test? ( opengl )
-	v4l? ( || ( alsa oss ) )
-	vaapi? ( || ( gbm X wayland ) )
+	vaapi? ( || ( X wayland ) )
 	wayland? ( egl )
-	X? ( egl? ( opengl ) )
-	xv? ( X )
-	zsh-completion? ( cli )
-	${PYTHON_REQUIRED_USE}
 "
 
 COMMON_DEPEND="
@@ -68,12 +60,10 @@ COMMON_DEPEND="
 	)
 	libcaca? ( >=lib-media/libcaca-0.99_beta18 )
 	lua? ( dev-lang/luajit )
-	openal? ( >=lib-media/openal-1.13 )
 	pulseaudio? ( app-media/pulseaudio )
 	raspberry-pi? ( >=lib-media/raspberrypi-userland-0_pre20160305-r1 )
 	rubberband? ( >=lib-media/rubberband-1.8.0 )
 	sdl? ( lib-media/libsdl2[sound,threads,video] )
-	v4l? ( lib-media/libv4l )
 	vaapi? ( x11-libs/libva:=[drm?,X?,wayland?] )
 	wayland? (
 		>=lib-dev/wayland-1.6.0
@@ -90,20 +80,15 @@ COMMON_DEPEND="
 			x11-libs/libXdamage
 			lib-media/mesa
 		)
-		xv? ( x11-libs/libXv )
 	)
 	zlib? ( lib-sys/zlib )
 "
 DEPEND="${COMMON_DEPEND}
-	${PYTHON_DEPS}
-	dev-python/docutils
 	dev-util/pkgconfig
 	app-media/ffmpeg
 	x11/vulkan-headers
 	dvb? ( virtual/linuxtv-dvb-headers )
 	test? ( >=dev-util/cmocka-1.0.0 )
-	v4l? ( sys-kernel/stable-sources )
-	zsh-completion? ( dev-lang/perl )
 "
 RDEPEND="${COMMON_DEPEND}
 	cuda? ( nvidia/nvidia-drivers[X]
@@ -113,14 +98,11 @@ RDEPEND="${COMMON_DEPEND}
 		)
 "
 
-pkg_setup() {
-	[[ ${MERGE_TYPE} != "binary" ]] && python_setup
-}
-
 src_prepare() {
 	cp "${DISTDIR}/waf-${WAF_PV}" "${S}"/waf || die
 	chmod +x "${S}"/waf || die
-	default_src_prepare
+	default
+	python_setup
 }
 
 src_configure() {
@@ -140,7 +122,6 @@ src_configure() {
 		--disable-manpage-build
 		--disable-pdf-build
 		$(use_enable cplugins)
-		$(use_enable zsh-completion zsh-comp)
 		$(use_enable test)
 		--disable-android
 		$(use_enable lua)
@@ -161,35 +142,27 @@ src_configure() {
 
 		# Audio outputs:
 		$(use_enable sdl sdl2)	# Listed under audio, but also includes video.
-		$(use_enable oss oss-audio)
 		--disable-rsound
 		--disable-sndio
 		$(use_enable pulseaudio pulse)
 		$(use_enable jack)
-		$(use_enable openal)
 		--disable-opensles
 		$(use_enable alsa)
 		$(use_enable coreaudio)
 		--disable-vulkan
 
 		# Video outputs:
-		$(use_enable aqua cocoa)
 		$(use_enable drm)
-		$(use_enable gbm)
 		$(use_enable wayland wayland-scanner)
 		$(use_enable wayland wayland-protocols)
 		$(use_enable wayland)
 		$(use_enable X x11)
-		$(use_enable xv)
-		$(usex opengl "$(use_enable aqua gl-cocoa)" '--disable-gl-cocoa')
 		$(usex opengl "$(use_enable X gl-x11)" '--disable-gl-x11')
 		$(usex egl "$(use_enable X egl-x11)" '--disable-egl-x11')
-		$(usex egl "$(use_enable gbm egl-drm)" '--disable-egl-drm')
 		$(usex opengl "$(use_enable wayland gl-wayland)" '--disable-gl-wayland')
 		$(use_enable vaapi)		# See below for vaapi-glx, vaapi-x-egl.
 		$(usex vaapi "$(use_enable X vaapi-x11)" '--disable-vaapi-x11')
 		$(usex vaapi "$(use_enable wayland vaapi-wayland)" '--disable-vaapi-wayland')
-		$(usex vaapi "$(use_enable gbm vaapi-drm)" '--disable-vaapi-drm')
 		$(use_enable libcaca caca)
 		$(use_enable jpeg)
 		$(use_enable raspberry-pi rpi)
@@ -199,14 +172,7 @@ src_configure() {
 
 		$(use_enable cuda cuda-hwaccel)
 
-		# TV features:
-		$(use_enable v4l tv)
-		$(use_enable v4l tv-v4l2)
-		$(use_enable v4l libv4l2)
-		$(use_enable v4l audio-input)
 		$(use_enable dvb dvbin)
-
-		# Miscellaneous features:
 		--disable-apple-remote
 	)
 

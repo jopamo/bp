@@ -13,7 +13,7 @@ EGIT_BRANCH=v2.1
 LICENSE="MIT"
 SLOT="2"
 KEYWORDS="amd64 arm64 x86"
-IUSE="lua52compat static-libs"
+IUSE="+lua52compat static-libs"
 
 _emake() {
 	emake \
@@ -33,7 +33,7 @@ _emake() {
 }
 
 src_compile() {
-	_emake XCFLAGS="$(usex lua52compat "-DLUAJIT_ENABLE_LUA52COMPAT" "")"
+	_emake XCFLAGS="$(usex lua52compat "-DLUAJIT_ENABLE_LUA51COMPAT" "")"
 }
 
 src_install(){

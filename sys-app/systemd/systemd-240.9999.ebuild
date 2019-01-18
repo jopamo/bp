@@ -64,6 +64,8 @@ DEPEND="${COMMON_DEPEND}
 	$(python_gen_any_dep 'dev-python/lxml[${PYTHON_USEDEP}]')
 "
 
+replace-flags "-O{1,2,3}" -Ofast
+
 pkg_pretend() {
 	if [[ ${MERGE_TYPE} != buildonly ]]; then
 		local CONFIG_CHECK="~AUTOFS4_FS ~BLK_DEV_BSG ~CGROUPS

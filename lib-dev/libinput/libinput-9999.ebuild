@@ -14,7 +14,7 @@ if [[ ${PV} == "9999" ]] ; then
 else
 	SRC_URI="https://www.freedesktop.org/software/libinput/${P}.tar.xz"
 fi
-
+KEYWORDS=amd64
 LICENSE="MIT"
 SLOT="0"
 IUSE="input_devices_wacom test"

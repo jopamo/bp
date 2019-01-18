@@ -40,8 +40,9 @@ src_configure() {
 		-Db_lto=false
 		-Dplatforms=x11
 		$(meson_use dri3)
-		-Ddri-drivers=i965
+		-Ddri-drivers="i965,swrast"
 		-Dgallium-drivers=""
+		-Dgbm=true
 		-Dllvm=false
     	-Dgles1=false
     	-Dgles2=false
@@ -50,6 +51,7 @@ src_configure() {
     	-Dshared-glapi=true
     	-Dtexture-float=true
 		-Dvulkan-drivers="intel"
+		-Dosmesa=classic
 		)
 		meson_src_configure
 }

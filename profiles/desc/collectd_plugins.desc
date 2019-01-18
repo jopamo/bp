@@ -70,7 +70,6 @@ netlink - Build the netlink input plugin (collects statistics for interfaces, qd
 network - Build the network input/output plugin (send values to other and/or receive values from from other collectd instances)
 nfs - Build the nfs input plugin (collects information about the usage of the Network File System (NFS))
 nginx - Build the nginx input plugin (collects number of requests handled and the number of current connections by connection state by the nginx daemon)
-notify_desktop - Build the notify_desktop output plugin (uses x11-libs/libnotify to display notifications to the user)
 notify_email - Build the notify_email output plugin (uses lib-net/libesmtp to send notifications to a configured email address)
 notify_nagios - Build the notify_nagios output plugin (sends notifications to Nagios as a passive check result)
 ntpd - Build the ntpd input plugin (collects statistics from a NTP server)

@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit autotools eutils git-r3 multilib-minimal
+inherit autotools eutils git-r3 multilib-minimal flag-o-matic
 
 DESCRIPTION="Library to execute a function when a specific event occurs on a file descriptor"
 HOMEPAGE="http://libevent.org/"
@@ -27,9 +27,8 @@ RDEPEND="
 MULTILIB_WRAPPED_HEADERS=(
 	/usr/include/event2/event-config.h
 )
-DOCS=(
-	ChangeLog{,-1.4,-2.0}
-)
+
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 src_prepare() {
 	default

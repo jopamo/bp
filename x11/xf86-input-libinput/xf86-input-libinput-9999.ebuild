@@ -13,7 +13,7 @@ if [[ ${PV} == "9999" ]] ; then
 else
 	SRC_URI="https://www.x.org/releases/individual/driver/${P}.tar.bz2"
 fi
-
+KEYWORDS=amd64
 SLOT=0
 
 RDEPEND=">=lib-dev/libinput-1.5.0:0="

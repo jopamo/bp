@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="6"
-inherit meson eutils user systemd git-r3 multilib-minimal
+inherit meson eutils user systemd git-r3 multilib-minimal flag-o-matic
 
 DESCRIPTION="Lightweight high-performance web server"
 HOMEPAGE="http://www.lighttpd.net/"
@@ -32,6 +32,8 @@ DEPEND="${CDEPEND}
 
 RDEPEND="${CDEPEND}
 "
+
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 pkg_setup() {
 	enewgroup lighttpd

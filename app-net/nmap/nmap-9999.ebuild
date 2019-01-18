@@ -4,8 +4,6 @@ EAPI=6
 
 inherit autotools flag-o-matic git-r3 toolchain-funcs user
 
-MY_P=${P/_beta/BETA}
-
 DESCRIPTION="A utility for network discovery and security auditing"
 HOMEPAGE="https://nmap.org/"
 
@@ -15,31 +13,24 @@ KEYWORDS="amd64 arm64 x86"
 LICENSE="GPL-2"
 SLOT="0"
 
-IUSE="ipv6 libressl +libssh2 +ncat nls +nping +nse ssl +system-lua"
+IUSE="ipv6 libressl +libssh2 +ncat nls +nping ssl"
 
-REQUIRED_USE="
-	system-lua? ( nse )
-"
-RDEPEND="
+DEPEND="
 	lib-dev/liblinear:=
 	lib-dev/libpcre
 	lib-net/libpcap
 	lib-net/libssh2[zlib]
 	lib-sys/zlib
 	nls? ( sys-devel/gettext )
-	nse? ( lib-sys/zlib )
+	lib-sys/zlib
 	ssl? (
 		!libressl? ( lib-dev/openssl:0= )
 		libressl? ( lib-dev/libressl:= )
 	)
-	system-lua? ( >=dev-lang/lua-5.2:*[deprecated] )
-"
-DEPEND="
-	${RDEPEND}
-	nls? ( sys-devel/gettext )
 "
 
-S="${WORKDIR}/${MY_P}"
+append-flags "-fno-strict-aliasing"
+filter-flags "-flto" "-Wl,-z,defs" "-Wl,-z,relro"
 
 src_prepare() {
 	rm -r liblinear/ libpcap/ libpcre/ libz/ || die
@@ -68,17 +59,12 @@ src_configure() {
 		$(use_with ncat) \
 		$(use_with nping) \
 		$(use_with ssl openssl) \
-		$(usex nse --with-liblua=$(usex system-lua /usr included '' '') --without-liblua) \
 		--cache-file="${S}"/config.cache \
 		--with-libdnet=included \
 		--with-pcre=/usr
-	#	Commented out because configure does weird things
-	#	--with-liblinear=/usr \
 }
 
 src_compile() {
-	append-flags -fno-strict-aliasing
-
 	local directory
 	for directory in . libnetutil nsock/src \
 		$(usex ncat ncat '') \

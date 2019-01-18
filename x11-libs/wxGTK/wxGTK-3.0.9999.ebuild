@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/wxWidgets/wxWidgets.git"
 EGIT_BRANCH="WX_3_0_BRANCH"
 
 KEYWORDS="amd64 arm64 x86"
-IUSE="+X aqua doc debug gstreamer libnotify opengl sdl tiff webkit"
+IUSE="+X aqua doc debug opengl sdl tiff"
 
 SLOT="3.0-gtk3"
 
@@ -29,13 +29,8 @@ RDEPEND="
 		x11-libs/libX11[${MULTILIB_USEDEP}]
 		x11-libs/libXxf86vm[${MULTILIB_USEDEP}]
 		x11-libs/pango[${MULTILIB_USEDEP}]
-		gstreamer? (
-			lib-media/gstreamer:1.0[${MULTILIB_USEDEP}]
-			lib-media/gst-plugins-base:1.0[${MULTILIB_USEDEP}] )
-		libnotify? ( x11-libs/libnotify[${MULTILIB_USEDEP}] )
 		opengl? ( lib-media/mesa[${MULTILIB_USEDEP}] )
 		tiff?   ( lib-media/tiff:0[${MULTILIB_USEDEP}] )
-		webkit? ( lib-net/webkit-gtk:4 )
 		)
 	aqua? (
 		x11-libs/gtk+:3[aqua=,${MULTILIB_USEDEP}]
@@ -71,7 +66,6 @@ multilib_src_configure() {
 		--with-libpng=sys
 		--with-libjpeg=sys
 		--without-gnomevfs
-		$(use_with libnotify)
 		$(use_with opengl)
 		$(use_with tiff libtiff sys)
 	)

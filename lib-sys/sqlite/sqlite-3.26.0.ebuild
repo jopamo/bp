@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools multilib-minimal versionator flag-o-matic
+inherit autotools multilib-minimal versionator
 
 MY_PV="$(printf "%u%02u%02u%02u" $(get_version_components))"
 
@@ -14,10 +14,8 @@ S="${WORKDIR}/sqlite-src-${MY_PV}"
 LICENSE="public-domain"
 SLOT="3"
 KEYWORDS="amd64 arm64 x86"
-IUSE="debug doc icu +readline secure-delete static-libs test tools"
+IUSE="static-libs"
 
-RDEPEND="icu? ( lib-dev/icu:0=[${MULTILIB_USEDEP}] )
-	readline? ( lib-sys/readline:0=[${MULTILIB_USEDEP}] )"
 DEPEND="dev-lang/tcl"
 
 src_prepare() {

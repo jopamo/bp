@@ -2,13 +2,9 @@
 
 EAPI=6
 
-MOZ_PV="${PV/_beta/b}" # Handle beta for SRC_URI
-MOZ_PV="${MOZ_PV/_rc/rc}" # Handle rc for SRC_URI
 MOZ_PN="${PN/-bin}"
-if [[ ${MOZ_ESR} == 1 ]]; then
-	# ESR releases have slightly version numbers
-	MOZ_PV="${MOZ_PV}esr"
-fi
+MOZ_PV="${PV}esr"
+
 MOZ_P="${MOZ_PN}-${MOZ_PV}"
 
 MOZ_HTTP_URI="http://archive.mozilla.org/pub/mozilla.org/${MOZ_PN}/releases/"

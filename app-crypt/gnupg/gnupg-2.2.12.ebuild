@@ -53,6 +53,18 @@ src_configure() {
 			--sbindir="${EPREFIX}"/usr/sbin
 			--libdir="${EPREFIX}"/usr/$(get_libdir)
 			--libexecdir="${EPREFIX}"/usr/libexec
+			--enable-symcryptrun
+			$(use_enable bzip2) 
+			$(use_enable ssl gnutls) 
+			$(use_enable nls) 
+			$(use_enable tofu) 
+			$(use_enable wks-server wks-tools) 
+			$(use_with ldap) 
+			$(use_with readline) 
+			--enable-gpg 
+			--enable-gpgsm 
+			--enable-large-secmem 
+			--enable-all-tests 
 		)
 
 	if use smartcard; then
@@ -64,30 +76,12 @@ src_configure() {
 		myconf+=( --disable-scdaemon )
 	fi
 
-	if use elibc_SunOS || use elibc_AIX; then
-		myconf+=( --disable-symcryptrun )
-	else
-		myconf+=( --enable-symcryptrun )
-	fi
-
 	# glib fails and picks up clang's internal stdint.h causing weird errors
 	[[ ${CC} == *clang ]] && \
 		export gl_cv_absolute_stdint_h=/usr/include/stdint.h
 
 	econf \
-		"${myconf[@]}" \
-		$(use_enable bzip2) \
-		$(use_enable ssl gnutls) \
-		$(use_enable nls) \
-		$(use_enable tofu) \
-		$(use_enable wks-server wks-tools) \
-		$(use_with ldap) \
-		$(use_with readline) \
-		--enable-gpg \
-		--enable-gpgsm \
-		--enable-large-secmem \
-		--enable-all-tests \
-		CC_FOR_BUILD="$(tc-getBUILD_CC)"
+		"${myconf[@]}" CC_FOR_BUILD="$(tc-getBUILD_CC)"
 }
 
 src_compile() {

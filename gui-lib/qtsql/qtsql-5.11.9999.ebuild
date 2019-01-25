@@ -41,7 +41,6 @@ src_configure() {
 		$(qt_use odbc     sql-odbc   plugin)
 		$(qt_use postgres sql-psql   plugin)
 		$(qt_use sqlite   sql-sqlite plugin)
-		$(usex sqlite -system-sqlite '')
 	)
 
 	use mysql && myconf+=("-I${EPREFIX}/usr/include/mysql" "-L${EPREFIX}/usr/$(get_libdir)/mysql")

@@ -70,16 +70,6 @@ multilib_src_configure() {
 			# add the libdir for libtool, otherwise it'll make love with system
 			# installed libiconv
 			append-ldflags "-L${EPREFIX}/usr/$(get_libdir)"
-			# the glib objects reference symbols from these frameworks,
-			# not good, esp. since Carbon should be deprecated
-			[[ ${CHOST} == *-darwin* ]] && \
-				append-ldflags -framework CoreFoundation -framework Carbon
-			if [[ ${CHOST} == *-solaris* ]] ; then
-				# required due to __EXTENSIONS__
-				append-cppflags -DENABLE_NLS
-				# similar to Darwin
-				append-ldflags -lintl
-			fi
 		fi
 	else
 		if ! has_version --host-root dev-util/pkgconfig; then
@@ -87,12 +77,6 @@ multilib_src_configure() {
 			export GLIB_LIBS="-lglib-2.0"
 		fi
 	fi
-
-	use ppc64 && use hardened && replace-flags -O[2-3] -O1
-
-	# Force using all the requirements when linking, so that needed -pthread
-	# lines are inherited between libraries
-	use elibc_FreeBSD && myconf+=' --enable-indirect-deps'
 
 	[[ ${PV} == *9999* ]] && myconf+=' --enable-maintainer-mode'
 

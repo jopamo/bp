@@ -11,7 +11,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64 x86"
 
-IUSE="elibc_FreeBSD examples static-libs unicode"
+IUSE="examples static-libs unicode"
 DEPEND="unicode? ( ${AUTOTOOLS_DEPEND} )"
 RDEPEND="abi_x86_32? ( !<=app-misc/emul-linux-x86-baselibs-20130224-r6
 		!app-misc/emul-linux-x86-baselibs[-abi_x86_32(-)] )"

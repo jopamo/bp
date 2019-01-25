@@ -49,6 +49,8 @@ RDEPEND="${CDEPEND}
 # out of sources build dir for make check
 TBD="${WORKDIR}/${P}-tests-build"
 
+append-flags -rdynamic
+
 pkg_setup() {
 	enewgroup messagebus
 	enewuser messagebus -1 -1 -1 messagebus
@@ -62,29 +64,12 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Tests were restricted because of this
-	sed -i \
-		-e 's/.*bus_dispatch_test.*/printf ("Disabled due to excess noise\\n");/' \
-		-e '/"dispatch"/d' \
-		bus/test-main.c || die
-
 	default
-
 	eautoreconf
 }
 
 multilib_src_configure() {
 	local docconf myconf
-
-	# so we can get backtraces from app-misc
-	case ${CHOST} in
-		*-mingw*)
-			# error: unrecognized command line option '-rdynamic' wrt #488036
-			;;
-		*)
-			append-flags -rdynamic
-			;;
-	esac
 
 	# libaudit is *only* used in DBus wrt SELinux support, so disable it, if
 	# not on an SELinux profile.
@@ -103,7 +88,6 @@ multilib_src_configure() {
 		$(use_enable selinux libaudit)
 		--disable-apparmor
 		$(use_enable kernel_linux inotify)
-		$(use_enable kernel_FreeBSD kqueue)
 		$(use_enable systemd)
 		$(use_enable user-session)
 		--disable-embedded-tests

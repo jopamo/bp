@@ -29,7 +29,6 @@ RDEPEND="
 		>=dev-python/lxml-3.6.0[${PYTHON_USEDEP}]
 		>=sys-app/sed-4.0.5
 	)
-	elibc_FreeBSD? ( sys-freebsd/freebsd-bin )
 	elibc_glibc? ( >=sys-app/sandbox-2.2 )
 	elibc_musl? ( >=sys-app/sandbox-2.2 )
 	elibc_uclibc? ( >=sys-app/sandbox-2.2 )

@@ -21,6 +21,7 @@ fi
 LICENSE="MIT"
 SLOT="0"
 IUSE="test +X"
+KEYWORDS="amd64 arm64 x86"
 
 DEPEND="${PYTHON_DEPS}
 	lib-media/mesa[${MULTILIB_USEDEP}]

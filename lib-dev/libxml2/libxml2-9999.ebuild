@@ -33,7 +33,6 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	dev-util/gtk-doc-am
 	dev-util/pkgconfig
-	hppa? ( >=sys-devel/binutils-2.15.92.0.2 )
 "
 
 S="${WORKDIR}/${PN}-${PV%_rc*}"

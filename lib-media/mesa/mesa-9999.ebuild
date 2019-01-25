@@ -9,18 +9,16 @@ HOMEPAGE="https://www.mesa3d.org/ https://mesa.freedesktop.org/"
 KEYWORDS="amd64 arm64 x86"
 
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/mesa/mesa.git"
-#EGIT_BRANCH=18.2
+#EGIT_BRANCH=18.3
 
 LICENSE="MIT"
 SLOT="0"
 
-IUSE="+dri3"
-
 DEPEND="dev-python/mako
-		lib-sys/libunwind"
-
-DEPEND="dev-python/mako
+		lib-sys/libunwind
+		lib-sys/llvm
 		lib-media/libglvnd"
+
 RDEPEND="
 	>=lib-dev/expat-2.1.0-r3:=[${MULTILIB_USEDEP}]
 	>=lib-sys/zlib-1.2.8[${MULTILIB_USEDEP}]
@@ -38,20 +36,25 @@ filter-flags -flto
 src_configure() {
 	local emesonargs=(
 		-Db_lto=false
-		-Dplatforms=x11
-		$(meson_use dri3)
+		-Dplatforms=x11,drm
 		-Ddri-drivers="i965,swrast"
 		-Dgallium-drivers=""
+		-Dswr-arches=avx,avx2 
+		-Ddri3=true 
+  		-Degl=true 
 		-Dgbm=true
-		-Dllvm=false
-    	-Dgles1=false
-    	-Dgles2=false
+		-Dllvm=true
+    	-Dgles1=true
+    	-Dgles2=true
     	-Dglvnd=true
     	-Dglx=dri
     	-Dshared-glapi=true
     	-Dtexture-float=true
 		-Dvulkan-drivers="intel"
 		-Dosmesa=classic
+		-Dlibunwind=true 
+    	-Dlmsensors=false 
+    	-Dvalgrind=false
 		)
 		meson_src_configure
 }
@@ -66,4 +69,5 @@ src_test() {
 
 src_install() {
 	meson_src_install
+	rm -rf "${ED}"/usr/$(get_libdir)/libGLESv{1_CM,2}.so*
 }

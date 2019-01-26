@@ -27,7 +27,6 @@ src_install() {
 
 	case ${debarch} in
 		amd64)		debarch=x86 ;;
-		ppc|ppc64)	debarch=powerpc ;;
 	esac
 
 	for dir in os-probes{,/mounted,/init} linux-boot-probes{,/mounted}; do

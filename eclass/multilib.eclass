@@ -350,67 +350,6 @@ multilib_env() {
 				;;
 			esac
 		;;
-		mips64*)
-			export CFLAGS_o32=${CFLAGS_o32--mabi=32}
-			export CHOST_o32=${CTARGET/mips64/mips}
-			export CTARGET_o32=${CHOST_o32}
-			export LIBDIR_o32="lib"
-
-			export CFLAGS_n32=${CFLAGS_n32--mabi=n32}
-			export CHOST_n32=${CTARGET}
-			export CTARGET_n32=${CHOST_n32}
-			export LIBDIR_n32="lib32"
-
-			export CFLAGS_n64=${CFLAGS_n64--mabi=64}
-			export CHOST_n64=${CTARGET}
-			export CTARGET_n64=${CHOST_n64}
-			export LIBDIR_n64="lib64"
-
-			: ${MULTILIB_ABIS=n64 n32 o32}
-			: ${DEFAULT_ABI=n32}
-		;;
-		powerpc64*)
-			export CFLAGS_ppc=${CFLAGS_ppc--m32}
-			export CHOST_ppc=${CTARGET/powerpc64/powerpc}
-			export CTARGET_ppc=${CHOST_ppc}
-			export LIBDIR_ppc="lib"
-
-			export CFLAGS_ppc64=${CFLAGS_ppc64--m64}
-			export CHOST_ppc64=${CTARGET}
-			export CTARGET_ppc64=${CHOST_ppc64}
-			export LIBDIR_ppc64="lib64"
-
-			: ${MULTILIB_ABIS=ppc64 ppc}
-			: ${DEFAULT_ABI=ppc64}
-		;;
-		s390x*)
-			export CFLAGS_s390=${CFLAGS_s390--m31} # the 31 is not a typo
-			export CHOST_s390=${CTARGET/s390x/s390}
-			export CTARGET_s390=${CHOST_s390}
-			export LIBDIR_s390="lib"
-
-			export CFLAGS_s390x=${CFLAGS_s390x--m64}
-			export CHOST_s390x=${CTARGET}
-			export CTARGET_s390x=${CHOST_s390x}
-			export LIBDIR_s390x="lib64"
-
-			: ${MULTILIB_ABIS=s390x s390}
-			: ${DEFAULT_ABI=s390x}
-		;;
-		sparc64*)
-			export CFLAGS_sparc32=${CFLAGS_sparc32--m32}
-			export CHOST_sparc32=${CTARGET/sparc64/sparc}
-			export CTARGET_sparc32=${CHOST_sparc32}
-			export LIBDIR_sparc32="lib"
-
-			export CFLAGS_sparc64=${CFLAGS_sparc64--m64}
-			export CHOST_sparc64=${CTARGET}
-			export CTARGET_sparc64=${CHOST_sparc64}
-			export LIBDIR_sparc64="lib64"
-
-			: ${MULTILIB_ABIS=sparc64 sparc32}
-			: ${DEFAULT_ABI=sparc64}
-		;;
 		*)
 			: ${MULTILIB_ABIS=default}
 			: ${DEFAULT_ABI=default}

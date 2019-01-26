@@ -28,12 +28,12 @@ IUSE="accessibility +aio alsa bluetooth bzip2 capstone +caps +curl debug
 	+vhost-net virgl virtfs +vnc vte xattr xen xfs"
 
 COMMON_TARGETS="aarch64 alpha arm cris hppa i386 m68k microblaze microblazeel
-	mips mips64 mips64el mipsel nios2 or1k ppc ppc64 riscv32 riscv64 s390x
+	mips mips64 mips64el mipsel nios2 or1k riscv32 riscv64 s390x
 	sh4 sh4eb sparc sparc64 x86_64 xtensa xtensaeb"
 IUSE_SOFTMMU_TARGETS="${COMMON_TARGETS}
-	lm32 moxie ppcemb tricore unicore32"
+	lm32 moxie tricore unicore32"
 IUSE_USER_TARGETS="${COMMON_TARGETS}
-	aarch64_be armeb mipsn32 mipsn32el ppc64abi32 ppc64le sparc32plus
+	aarch64_be armeb mipsn32 mipsn32el sparc32plus
 	tilegx"
 
 use_softmmu_targets=$(printf ' qemu_softmmu_targets_%s' ${IUSE_SOFTMMU_TARGETS})
@@ -44,11 +44,6 @@ IUSE+=" ${use_softmmu_targets} ${use_user_targets}"
 # Block USE flag configurations known to not work.
 REQUIRED_USE="
 	gtk2? ( gtk )
-	qemu_softmmu_targets_arm? ( fdt )
-	qemu_softmmu_targets_microblaze? ( fdt )
-	qemu_softmmu_targets_mips64el? ( fdt )
-	qemu_softmmu_targets_ppc? ( fdt )
-	qemu_softmmu_targets_ppc64? ( fdt )
 	sdl2? ( sdl )
 	static? ( static-user !alsa !bluetooth !gtk !gtk2 !opengl !pulseaudio !snappy )
 	virtfs? ( xattr )
@@ -175,36 +170,13 @@ PATCHES=(
 STRIP_MASK="/usr/share/qemu/palcode-clipper"
 
 QA_PREBUILT="
-	usr/share/qemu/openbios-ppc
-	usr/share/qemu/openbios-sparc64
-	usr/share/qemu/openbios-sparc32
 	usr/share/qemu/palcode-clipper
-	usr/share/qemu/s390-ccw.img
 	usr/share/qemu/s390-netboot.img
 	usr/share/qemu/u-boot.e500"
 
 QA_WX_LOAD="usr/bin/qemu-i386
 	usr/bin/qemu-x86_64
-	usr/bin/qemu-alpha
-	usr/bin/qemu-arm
-	usr/bin/qemu-cris
-	usr/bin/qemu-m68k
-	usr/bin/qemu-microblaze
-	usr/bin/qemu-microblazeel
-	usr/bin/qemu-mips
-	usr/bin/qemu-mipsel
-	usr/bin/qemu-or1k
-	usr/bin/qemu-ppc
-	usr/bin/qemu-ppc64
-	usr/bin/qemu-ppc64abi32
-	usr/bin/qemu-sh4
-	usr/bin/qemu-sh4eb
-	usr/bin/qemu-sparc
-	usr/bin/qemu-sparc64
-	usr/bin/qemu-armeb
-	usr/bin/qemu-sparc32plus
-	usr/bin/qemu-s390x
-	usr/bin/qemu-unicore32"
+"
 
 DOC_CONTENTS="If you don't have kvm compiled into the kernel, make sure you have the
 kernel module loaded before running kvm. The easiest way to ensure that the

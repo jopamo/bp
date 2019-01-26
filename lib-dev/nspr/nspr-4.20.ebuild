@@ -57,24 +57,22 @@ multilib_src_configure() {
 	)
 
 	# The configure has some fancy --enable-{{n,x}32,64bit} switches
-	# that trigger some code conditional to platform & arch. This really
-	# matters for the few common arches (x86, ppc) but we pass a little
-	# more of them to be future-proof.
+	# that trigger some code conditional to platform & arch. 
 
 	# use ABI first, this will work for most cases
 	case "${ABI}" in
-		alpha|arm|hppa|m68k|o32|ppc|s390|sh|sparc|x86) ;;
+		x86) ;;
 		n32) myconf+=( --enable-n32 );;
 		x32) myconf+=( --enable-x32 );;
-		s390x|*64) myconf+=( --enable-64bit );;
+		*64) myconf+=( --enable-64bit );;
 		default) # no abi actually set, fall back to old check
 			einfo "Running a short build test to determine 64bit'ness"
 			echo > "${T}"/test.c || die
 			${CC} ${CFLAGS} ${CPPFLAGS} -c "${T}"/test.c -o "${T}"/test.o || die
 			case $(file "${T}"/test.o) in
 				*32-bit*x86-64*) myconf+=( --enable-x32 );;
-				*64-bit*|*ppc64*|*x86_64*) myconf+=( --enable-64bit );;
-				*32-bit*|*ppc*|*i386*) ;;
+				*64-bit*|*x86_64*) myconf+=( --enable-64bit );;
+				*32-bit*|*i386*) ;;
 				*) die "Failed to detect whether your arch is 64bits or 32bits, disable distcc if you're using it, please";;
 			esac ;;
 		*) ;;

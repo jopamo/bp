@@ -126,8 +126,8 @@ nssbits() {
 	${cc} ${!cppflags} ${!cflags} -c "${T}"/test.c -o "${T}/${1}test.o" || die
 	case $(file "${T}/${1}test.o") in
 		*32-bit*x86-64*) echo USE_X32=1;;
-		*64-bit*|*ppc64*|*x86_64*) echo USE_64=1;;
-		*32-bit*|*ppc*|*i386*) ;;
+		*64-bit*|*x86_64*) echo USE_64=1;;
+		*32-bit*|*i386*) ;;
 		*) die "Failed to detect whether ${cc} builds 64bits or 32bits, disable distcc if you're using it, please";;
 	esac
 }

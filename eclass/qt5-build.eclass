@@ -619,11 +619,6 @@ qt5_base_configure() {
 		# link-time code generation is not something we want to enable by default
 		-no-ltcg
 
-		# reduced relocations cause major breakage on at least arm and ppc, so
-		# don't specify anything and let the configure figure out if they are
-		# supported; see also https://bugreports.qt.io/browse/QTBUG-36129
-		#-reduce-relocations
-
 		# use the system linker (gold will be selected automagically otherwise)
 		$(tc-ld-is-gold && echo -use-gold-linker || echo -no-use-gold-linker)
 

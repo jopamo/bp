@@ -90,7 +90,7 @@ IUSE="regression-test vanilla"
 IUSE_DEF=( nptl )
 
 if [[ ${PN} != "kgcc64" && ${PN} != gcc-* ]] ; then
-	IUSE+=" altivec debug"
+	IUSE+=" debug"
 	IUSE_DEF+=( cxx fortran )
 	tc_version_is_at_least 3 && IUSE+=" doc gcj awt hardened multilib objc"
 	tc_version_is_at_least 3.3 && IUSE+=" pgo"
@@ -464,9 +464,6 @@ toolchain_src_configure() {
 
 	gcc-multilib-configure
 
-	# ppc altivec support
-	use altivec && confgcc+=( $(use_enable altivec) )
-
 	# gcc has fixed-point arithmetic support in 4.3 for mips targets that can
 	# significantly increase compile time by several hours.  This will allow
 	# users to control this feature in the event they need the support.
@@ -519,10 +516,6 @@ toolchain_src_configure() {
 			esac
 		fi
 		;;
-	mips)
-		# Add --with-abi flags to set default ABI
-		confgcc+=( --with-abi=$(gcc-abi-map ${TARGET_DEFAULT_ABI}) )
-		;;
 	amd64)
 		# drop the older/ABI checks once this get's merged into some
 		# version of gcc upstream
@@ -535,23 +528,12 @@ toolchain_src_configure() {
 		# since glibc will do so based on CTARGET anyways
 		confgcc+=( --with-arch=${CTARGET%%-*} )
 		;;
-	hppa)
-		# Enable sjlj exceptions for backward compatibility on hppa
-		[[ ${GCCMAJOR} == "3" ]] && confgcc+=( --enable-sjlj-exceptions )
-		;;
-	ppc)
-		# Set up defaults based on current CFLAGS
-		is-flagq -mfloat-gprs=double && confgcc+=( --enable-e500-double )
-		[[ ${CTARGET//_/-} == *-e500v2-* ]] && confgcc+=( --enable-e500-double )
-		;;
 	esac
 
 	# if the target can do biarch (-m32/-m64), enable it.  overhead should
 	# be small, and should simplify building of 64bit kernels in a 32bit
 	# userland by not needing sys-devel/kgcc64.  #349405
 	case $(tc-arch) in
-	ppc|ppc64) tc_version_is_at_least 3.4 && confgcc+=( --enable-targets=all ) ;;
-	sparc)     tc_version_is_at_least 4.4 && confgcc+=( --enable-targets=all ) ;;
 	amd64|x86) tc_version_is_at_least 4.3 && confgcc+=( --enable-targets=all ) ;;
 	esac
 

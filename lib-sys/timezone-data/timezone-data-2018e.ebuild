@@ -14,7 +14,7 @@ SRC_URI="http://www.iana.org/time-zones/repository/releases/tzdata${data_ver}.ta
 LICENSE="BSD public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64 x86"
-IUSE="nls leaps_timezone elibc_FreeBSD"
+IUSE="nls leaps_timezone"
 
 DEPEND="nls? ( sys-devel/gettext )"
 RDEPEND="${DEPEND}
@@ -31,10 +31,6 @@ src_configure() {
 	tc-export CC
 
 	append-lfs-flags #471102
-
-	if use elibc_FreeBSD || use elibc_Darwin ; then
-		append-cppflags -DSTD_INSPIRED #138251
-	fi
 
 	append-cppflags -DHAVE_GETTEXT=$(usex nls 1 0) -DTZ_DOMAIN='\"libc\"'
 	LDLIBS=""

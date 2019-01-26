@@ -13,8 +13,8 @@ EGIT_BRANCH="3.7"
 LICENSE="PSF-2"
 SLOT="3.7"
 KEYWORDS="amd64 arm64 x86"
-IUSE="build examples hardened ipv6 libressl test"
-RESTRICT="!test? ( test )"
+IUSE="build examples hardened ipv6 libressl"
+RESTRICT="test"
 
 RDEPEND="app-compression/bzip2:0=
 	app-compression/xz-utils:0=
@@ -31,7 +31,6 @@ RDEPEND="app-compression/bzip2:0=
 "
 
 DEPEND="${RDEPEND}
-	test? ( app-compression/xz-utils[extra-filters(+)] )
 	dev-util/pkgconfig
 "
 PDEPEND=">=app-eselect/eselect-python-20140125-r1"
@@ -87,50 +86,9 @@ src_configure() {
 		--with-system-expat
 		--with-system-ffi
 		--with-lto
-		--enable-optimizations
 	)
 
 	OPT="" econf "${myeconfargs[@]}"
-}
-
-src_compile() {
-	local -x LC_ALL=C
-	emake CPPFLAGS= CFLAGS= LDFLAGS=
-}
-
-src_test() {
-	if tc-is-cross-compiler; then
-		elog "Disabling tests due to crosscompiling."
-		return
-	fi
-
-	local skipped_tests="gdb"
-
-	for test in ${skipped_tests}; do
-		mv "${S}"/Lib/test/test_${test}.py "${T}"
-	done
-
-	local -x PYTHONDONTWRITEBYTECODE=
-
-	emake test EXTRATESTOPTS="-u-network" CPPFLAGS= CFLAGS= LDFLAGS= < /dev/tty
-	local result=$?
-
-	for test in ${skipped_tests}; do
-		mv "${T}/test_${test}.py" "${S}"/Lib/test
-	done
-
-	elog "The following tests have been skipped:"
-	for test in ${skipped_tests}; do
-		elog "test_${test}.py"
-	done
-
-	elog "If you would like to run them, you may:"
-	elog "cd '${EPREFIX}/usr/$(get_libdir)/python${PYVER}/test'"
-	elog "and run the tests separately."
-
-	if [[ ${result} -ne 0 ]]; then
-		die "emake test failed"
-	fi
 }
 
 src_install() {

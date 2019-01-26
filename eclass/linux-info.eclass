@@ -116,14 +116,6 @@ IUSE="kernel_linux"
 # ---------------------------------------
 KERNEL_DIR="${KERNEL_DIR:-${ROOT%/}/usr/src/linux}"
 
-
-# Bug fixes
-# fix to bug #75034
-case ${ARCH} in
-	ppc)	BUILD_FIXES="${BUILD_FIXES} TOUT=${T}/.tmp_gas_check";;
-	ppc64)	BUILD_FIXES="${BUILD_FIXES} TOUT=${T}/.tmp_gas_check";;
-esac
-
 # @FUNCTION: set_arch_to_kernel
 # @DESCRIPTION:
 # Set the env ARCH to match what the kernel expects.

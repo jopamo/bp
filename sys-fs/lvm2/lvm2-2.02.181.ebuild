@@ -110,9 +110,6 @@ src_configure() {
 		myconf+=( --with-thin=none --with-cache=none )
 	fi
 
-	# disable O_DIRECT support on hppa, breaks pv detection (#99532)
-	use hppa && myconf+=( --disable-o_direct )
-
 	if use clvm; then
 		myconf+=( --with-cluster=${buildmode} )
 		local clvmd=""

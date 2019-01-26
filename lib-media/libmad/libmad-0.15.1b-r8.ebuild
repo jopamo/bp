@@ -51,8 +51,6 @@ multilib_src_configure() {
 
 	[[ $(tc-arch) == "amd64" ]] && myconf+=" --enable-fpm=64bit"
 	[[ $(tc-arch) == "x86" ]] && myconf+=" --enable-fpm=intel"
-	[[ $(tc-arch) == "ppc" ]] && myconf+=" --enable-fpm=default"
-	[[ $(tc-arch) == "ppc64" ]] && myconf+=" --enable-fpm=64bit"
 
 	ECONF_SOURCE="${S}" econf \
 		$(use_enable debug debugging) \

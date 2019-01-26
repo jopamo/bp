@@ -509,15 +509,6 @@ ninj() { [[ ${type} == "kern" ]] && echo $1 || echo $2 ; }
 
 	case ${host} in
 		aarch64*)	echo arm64;;
-		alpha*)		echo alpha;;
-		arm*)		echo arm;;
-		avr*)		ninj avr32 avr;;
-		bfin*)		ninj blackfin bfin;;
-		c6x*)		echo c6x;;
-		cris*)		echo cris;;
-		frv*)		echo frv;;
-		hexagon*)	echo hexagon;;
-		hppa*)		ninj parisc hppa;;
 		i?86*)
 			# Starting with linux-2.6.24, the 'x86_64' and 'i386'
 			# trees have been unified into 'x86'.
@@ -528,39 +519,6 @@ ninj() { [[ ${type} == "kern" ]] && echo $1 || echo $2 ; }
 				echo x86
 			fi
 			;;
-		ia64*)		echo ia64;;
-		m68*)		echo m68k;;
-		metag*)		echo metag;;
-		microblaze*)	echo microblaze;;
-		mips*)		echo mips;;
-		nios2*)		echo nios2;;
-		nios*)		echo nios;;
-		or1k|or32*)	echo openrisc;;
-		powerpc*)
-			# Starting with linux-2.6.15, the 'ppc' and 'ppc64' trees
-			# have been unified into simply 'powerpc', but until 2.6.16,
-			# ppc32 is still using ARCH="ppc" as default
-			if [[ ${type} == "kern" ]] ; then
-				echo powerpc
-			elif [[ ${host} == powerpc64* ]] ; then
-				echo ppc64
-			else
-				echo ppc
-			fi
-			;;
-		riscv*)		echo riscv;;
-		s390*)		echo s390;;
-		score*)		echo score;;
-		sh64*)		ninj sh64 sh;;
-		sh*)		echo sh;;
-		sparc64*)	ninj sparc64 sparc;;
-		sparc*)		[[ ${PROFILE_ARCH} == "sparc64" ]] \
-						&& ninj sparc64 sparc \
-						|| echo sparc
-					;;
-		tile*)		echo tile;;
-		vax*)		echo vax;;
-		x86_64*freebsd*) echo amd64;;
 		x86_64*)
 			# Starting with linux-2.6.24, the 'x86_64' and 'i386'
 			# trees have been unified into 'x86'.
@@ -570,7 +528,6 @@ ninj() { [[ ${type} == "kern" ]] && echo $1 || echo $2 ; }
 				echo amd64
 			fi
 			;;
-		xtensa*)	echo xtensa;;
 
 		# since our usage of tc-arch is largely concerned with
 		# normalizing inputs for testing ${CTARGET}, let's filter

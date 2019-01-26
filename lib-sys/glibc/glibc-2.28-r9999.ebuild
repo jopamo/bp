@@ -345,8 +345,6 @@ glibc_headers_configure() {
 		libc_cv_gcc___thread=yes
 		libc_cv_mlong_double_128=yes
 		libc_cv_mlong_double_128ibm=yes
-		libc_cv_ppc_machine=yes
-		libc_cv_ppc_rel16=yes
 		libc_cv_predef_fortify_source=no
 		libc_cv_visibility_attribute=yes
 		libc_cv_z_combreloc=yes
@@ -371,8 +369,6 @@ glibc_headers_configure() {
 	# Blow away some random CC settings that screw things up. #550192
 	if [[ -d ${S}/sysdeps/mips ]]; then
 		pushd "${S}"/sysdeps/mips >/dev/null
-		sed -i -e '/^CC +=/s:=.*:= -D_MIPS_SZPTR=32:' mips32/Makefile mips64/n32/Makefile || die
-		sed -i -e '/^CC +=/s:=.*:= -D_MIPS_SZPTR=64:' mips64/n64/Makefile || die
 
 		# Force the mips ABI to the default.  This is OK because the set of
 		# installed headers in this phase is the same between the 3 ABIs.
@@ -597,8 +593,7 @@ glibc_do_src_install() {
 	insinto /usr/bin && doins "${FILESDIR}/locale-gen/locale-gen"
 	insinto /etc/ && doins "${FILESDIR}/locale-gen/locale.gen"
 
-	cp -r "${ED}"/{lib,lib64,bin,sbin} "${ED}"/usr/
-	rm -rf "${ED}"/{lib,lib64,bin,sbin}
+	cp -r "${ED}"/sbin "${ED}"/usr/ && rm -rf "${ED}"/sbin
 }
 
 glibc_headers_install() {

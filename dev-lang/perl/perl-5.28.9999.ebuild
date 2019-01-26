@@ -70,11 +70,6 @@ src_configure() {
 	# This flag makes compiling crash in interesting ways
 	filter-flags "-malign-double"
 
-	# Fixes bug #97645
-	use ppc && filter-flags "-mpowerpc-gpopt"
-
-	use sparc && myconf -Ud_longdbl
-
 	export BUILD_BZIP2=0
 	export BZIP2_INCLUDE=${EROOT}/usr/include
 	export BZIP2_LIB=${EROOT}/usr/$(get_libdir)

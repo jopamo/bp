@@ -23,14 +23,6 @@ MULTILIB_WRAPPED_HEADERS=(
 
 	# see libunwind.h for the full list of arch-specific headers
 	/usr/include/libunwind-aarch64.h
-	/usr/include/libunwind-arm.h
-	/usr/include/libunwind-hppa.h
-	/usr/include/libunwind-ia64.h
-	/usr/include/libunwind-mips.h
-	/usr/include/libunwind-ppc32.h
-	/usr/include/libunwind-ppc64.h
-	/usr/include/libunwind-sh.h
-	/usr/include/libunwind-tilegx.h
 	/usr/include/libunwind-x86.h
 	/usr/include/libunwind-x86_64.h
 )

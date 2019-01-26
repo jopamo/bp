@@ -119,8 +119,6 @@ src_prepare() {
 }
 
 multilib_src_configure() {
-	[[ ${ABI} == ppc64 ]] && append-flags -mminimal-toc
-
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

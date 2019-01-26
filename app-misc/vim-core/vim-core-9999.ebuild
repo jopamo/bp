@@ -111,9 +111,8 @@ src_configure() {
 
 	emake -j1 -C src autoconf
 
-	# This should fix a sandbox violation (see bug 24447). The hvc
-	# things are for ppc64, see bug 86433.
-	for file in /dev/pty/s* /dev/console /dev/hvc/* /dev/hvc*; do
+	# This should fix a sandbox violation (see bug 24447).
+	for file in /dev/pty/s* /dev/console ; do
 		if [[ -e "${file}" ]]; then
 			addwrite $file
 		fi

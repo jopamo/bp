@@ -850,8 +850,6 @@ compile_headers() {
 		if [[ -z ${K_DEFCONFIG} ]]; then
 			if kernel_is ge 2 6 16 ; then
 				case ${CTARGET} in
-					powerpc64*)	K_DEFCONFIG="ppc64_defconfig";;
-					powerpc*)	K_DEFCONFIG="pmac32_defconfig";;
 					*)			K_DEFCONFIG="defconfig";;
 				esac
 			else
@@ -1387,7 +1385,7 @@ detect_arch() {
 	ARCH_URI=""
 	ARCH_PATCH=""
 	TC_ARCH_KERNEL=""
-	ALL_ARCH="ALPHA AMD64 ARM HPPA IA64 M68K MIPS PPC PPC64 S390 SH SPARC X86"
+	ALL_ARCH="AMD64 ARM X86"
 
 	for LOOP_ARCH in ${ALL_ARCH}; do
 		COMPAT_URI="${LOOP_ARCH}_URI"
@@ -1446,19 +1444,6 @@ kernel-2_src_unpack() {
 		cp "${DISTDIR}/${DEBLOB_A}" "${T}" || die "cp ${DEBLOB_A} failed"
 		cp "${DISTDIR}/${DEBLOB_CHECK_A}" "${T}/deblob-check" || die "cp ${DEBLOB_CHECK_A} failed"
 		chmod +x "${T}/${DEBLOB_A}" "${T}/deblob-check" || die "chmod deblob scripts failed"
-	fi
-
-	# fix a problem on ppc where TOUT writes to /usr/src/linux breaking sandbox
-	# only do this for kernel < 2.6.27 since this file does not exist in later
-	# kernels
-	if [[ -n ${KV_MINOR} &&  ${KV_MAJOR}.${KV_MINOR}.${KV_PATCH} < 2.6.27 ]] ; then
-		sed -i \
-			-e 's|TOUT      := .tmp_gas_check|TOUT  := $(T).tmp_gas_check|' \
-			"${S}"/arch/ppc/Makefile
-	else
-		sed -i \
-			-e 's|TOUT      := .tmp_gas_check|TOUT  := $(T).tmp_gas_check|' \
-			"${S}"/arch/powerpc/Makefile
 	fi
 }
 

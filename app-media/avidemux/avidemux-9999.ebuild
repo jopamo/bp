@@ -72,11 +72,6 @@ src_prepare() {
 }
 
 src_configure() {
-	# Add lax vector typing for PowerPC.
-	if use ppc || use ppc64 ; then
-		append-cflags -flax-vector-conversions
-	fi
-
 	# See bug 432322.
 	use x86 && replace-flags -O0 -O1
 

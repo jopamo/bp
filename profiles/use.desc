@@ -14,7 +14,6 @@ acpi - Add support for Advanced Configuration and Power Interface
 adns - Add support for asynchronous DNS resolution
 afs - Add OpenAFS support (distributed file system)
 alsa - Add support for lib-media/alsa-lib (Advanced Linux Sound Architecture)
-altivec - Add support for optimizations for G4 and G5/ppc970 processors
 ao - Use libao audio output library for sound playback
 apache2 - Add Apache2 support
 apm - Add APM (Advanced Power Management) support
@@ -134,7 +133,6 @@ hddtemp - Enable monitoring of hdd temperature (sys-app/hddtemp)
 hdf5 - Add support for the Hierarchical Data Format v5
 headers-only - Install only C headers instead of whole package. Mainly used by sys-devel/crossdev for toolchain bootstrap.
 hscolour - Include coloured haskell sources to generated documentation (dev-haskell/hscolour)
-ibm - Add support for IBM ppc64 specific systems
 iconv - Enable support for the iconv character set conversion library
 icq - Enable ICQ IM protocol support
 icu - Enable ICU (Internationalization Components for Unicode) support, using lib-dev/icu

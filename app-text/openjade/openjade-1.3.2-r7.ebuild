@@ -34,10 +34,6 @@ src_prepare() {
 	#ALLOWED_FLAGS="-O -O1 -O2 -pipe -g -march"
 	strip-flags
 
-	# Default CFLAGS and CXXFLAGS is -O2 but this make openjade segfault
-	# on hppa. Using -O1 works fine. So I force it here.
-	use hppa && replace-flags -O2 -O1
-
 	ln -s config/configure.in configure.ac || die
 	cp "${FILESDIR}"/${P}-acinclude.m4 acinclude.m4 || die
 	rm config/missing || die

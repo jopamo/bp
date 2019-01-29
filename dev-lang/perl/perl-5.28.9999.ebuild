@@ -17,13 +17,10 @@ KEYWORDS="amd64 arm64 x86"
 
 IUSE="debug doc gdbm"
 
-RDEPEND="
+DEPEND="
 	gdbm? ( >=lib-sys/gdbm-1.8.3 )
 	app-compression/bzip2
 	lib-sys/zlib
-"
-DEPEND="${RDEPEND}
-	!prefix? ( elibc_FreeBSD? ( sys-freebsd/freebsd-mk-defs ) )
 "
 
 PDEPEND="=app-text/docbook-sgml-dtd-4.1-r3

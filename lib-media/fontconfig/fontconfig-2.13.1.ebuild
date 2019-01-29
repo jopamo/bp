@@ -20,7 +20,7 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	dev-util/itstool
 "
-PDEPEND="!x86-winnt? ( app-eselect/eselect-fontconfig )
+PDEPEND="app-eselect/eselect-fontconfig
 	fonts/liberation-fonts"
 
 MULTILIB_CHOST_TOOLS=( /usr/bin/fc-cache$(get_exeext) )

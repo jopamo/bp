@@ -97,7 +97,6 @@ QT5_GENTOO_CONFIG=(
 	jpeg:system-jpeg:IMAGEFORMAT_JPEG
 	!jpeg:no-jpeg:
 	libinput
-	libinput:xkbcommon-evdev:
 	:opengl
 	png:png:
 	png:system-png:IMAGEFORMAT_PNG
@@ -148,17 +147,16 @@ src_configure() {
 		-system-freetype
 		$(usex gif '' -no-gif)
 		-gui
+		-no-avx
+		-no-avx2
 		-system-harfbuzz
 		$(qt_use jpeg libjpeg system)
 		$(qt_use libinput)
-		$(qt_use libinput xkbcommon-evdev)
 		-opengl $(usex gles2 es2 desktop)
 		$(qt_use png libpng system)
 		$(qt_use tslib)
 		$(qt_use udev libudev)
 		$(qt_use xcb xcb system)
-		$(qt_use xcb xkbcommon-x11 system)
-		$(usex xcb '-xcb-xlib -xinput2 -xkb' '')
 	)
 	qt5-build_src_configure
 }

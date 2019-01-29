@@ -263,7 +263,7 @@ src_install() {
 
 		# Xorg GLX driver
 		donvidia ${NV_X11}/libglxserver_nvidia.so.${NV_SOVER} \
-			/usr/$(get_libdir)/nvidia/xorg
+			/usr/$(get_libdir)/xorg/modules/extensions
 
 		# Xorg nvidia.conf
 		if has_version '>=x11-base/xorg-server-1.16'; then

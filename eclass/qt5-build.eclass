@@ -133,6 +133,8 @@ fi
 
 EXPORT_FUNCTIONS src_unpack src_prepare src_configure src_compile src_install src_test pkg_postinst pkg_postrm
 
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+
 # @FUNCTION: qt5-build_src_unpack
 # @DESCRIPTION:
 # Unpacks the sources.
@@ -193,11 +195,6 @@ qt5-build_src_prepare() {
 			find config.tests/unix -name '*.test' -type f -execdir \
 				sed -i -e 's/-nocache //' '{}' + || die
 		fi
-
-		# Don't inject -msse/-mavx/... into CXXFLAGS when detecting
-		# compiler support for extended instruction sets (bug 552942)
-		find config.tests/common -name '*.pro' -type f -execdir \
-			sed -i -e '/QMAKE_CXXFLAGS\s*+=/ d' '{}' + || die
 
 		# Don't add -O3 to CXXFLAGS (bug 549140)
 		sed -i -e '/CONFIG\s*+=/ s/optimize_full//' \
@@ -579,8 +576,6 @@ qt5_base_configure() {
 		-no-libpng -no-libjpeg
 		-no-freetype -no-harfbuzz
 		-no-openssl -no-libproxy
-		-no-xkbcommon-x11 -no-xkbcommon-evdev
-		-no-xinput2 -no-xcb-xlib
 
 		# cannot use -no-gif because there is no way to override it later
 		#-no-gif

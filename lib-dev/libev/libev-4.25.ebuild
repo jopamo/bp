@@ -32,3 +32,8 @@ multilib_src_configure() {
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
+
+multilib_src_install() {
+	default
+	rm "${ED}"/usr/include/event.h
+}

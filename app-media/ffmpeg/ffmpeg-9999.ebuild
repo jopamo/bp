@@ -42,6 +42,9 @@ multilib_src_configure() {
 		--ar="$(tc-getAR)" \
 		--optflags="${CFLAGS}" \
 		--disable-all \
+		--enable-ffmpeg \
+		--enable-network	\
+		--enable-protocols	\
 		--enable-nonfree \
 		--enable-gpl \
 		--enable-version3 \
@@ -56,7 +59,6 @@ multilib_src_configure() {
 		--enable-encoder=flac,png \
 		--enable-encoder=libmp3lame \
 		--enable-openssl \
-		--disable-indevs \
 		--disable-doc \
 		--disable-htmlpages \
 		--disable-manpages \

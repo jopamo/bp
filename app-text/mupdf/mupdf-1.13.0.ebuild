@@ -53,7 +53,6 @@ PATCHES=(
 
 src_prepare() {
 	default
-	use hppa && append-cflags -ffunction-sections
 
 	# specialized lcms2, keep it if wanted inside lubmupdfthird
 	if ! use lcms ; then

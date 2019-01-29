@@ -36,6 +36,7 @@ RDEPEND="${COMMON_DEPEND}
 DEPEND="${COMMON_DEPEND}
 	dev-util/pkgconfig
 	x11/xorgproto
+	lib-dev/libev
 	lib-dev/libxdg-base
 	drm? ( x11-libs/libdrm )"
 

@@ -4,25 +4,26 @@ EAPI=6
 
 inherit flag-o-matic toolchain-funcs multilib prefix
 
-# The version of readline this bash normally ships with.
-READLINE_VER="7.0"
-
 DESCRIPTION="The standard GNU Bourne again shell"
 HOMEPAGE="http://tiswww.case.edu/php/chet/bash/bashtop.html"
-SRC_URI="ftp://ftp.gnu.org/gnu/bash/${PN}-4.4.18.tar.gz"
-S=${WORKDIR}/${PN}-4.4.18
+SRC_URI="http://ftp.gnu.org/gnu/bash/bash-5.0.tar.gz
+		http://ftp.gnu.org/gnu/bash/bash-5.0-patches/bash50-001
+		http://ftp.gnu.org/gnu/bash/bash-5.0-patches/bash50-002"
+
+S=${WORKDIR}/${PN}-5.0
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64 x86"
-IUSE="afs bashlogger examples mem-scramble +net nls plugins +readline"
+IUSE="afs bashlogger examples mem-scramble +net nls plugins"
 
 DEPEND="
 	>=lib-sys/ncurses-5.2-r2:0=
-	readline? ( >=lib-sys/readline-${READLINE_VER}:0= )
+	lib-sys/readline
 	nls? ( sys-devel/gettext )"
 
-PATCHES=( ${FILESDIR}/bash_18_23.patch	)
+PATCHES=( ${DISTDIR}/bash50-001
+			${DISTDIR}/bash50-002	)
 
 
 pkg_setup() {
@@ -39,11 +40,9 @@ pkg_setup() {
 
 
 src_prepare() {
+	cd ../
 	default
-	# Clean out local libs so we know we use system ones w/releases.
-		rm -rf lib/{readline,termcap}/*
-		touch lib/{readline,termcap}/Makefile.in # for config.status
-		sed -ri -e 's:\$[(](RL|HIST)_LIBSRC[)]/[[:alpha:]]*.h::g' Makefile.in || die
+	cd ${S}
 
 	# Prefixify hardcoded path names. No-op for non-prefix.
 	hprefixify pathnames.h.in
@@ -64,9 +63,9 @@ src_configure() {
 		--with-curses
 		$(use_enable mem-scramble)
 		$(use_enable net net-redirections)
-		$(use_enable readline)
-		$(use_enable readline bang-history)
-		$(use_enable readline history)
+		--enable-readline
+		--enable-bang-history
+		--enable-history
 		$(use_with afs)
 		$(use_with mem-scramble bash-malloc)
 		$(use_enable nls)
@@ -75,8 +74,8 @@ src_configure() {
 	# For descriptions of these, see config-top.h
 	# bashrc/#26952 bash_logout/#90488 ssh/#24762 mktemp/#574426
 	append-cppflags \
-		-DDEFAULT_PATH_VALUE=\'\"${EPREFIX}/usr/local/sbin:${EPREFIX}/usr/local/bin:${EPREFIX}/usr/sbin:${EPREFIX}/usr/bin:${EPREFIX}/sbin:${EPREFIX}/bin\"\' \
-		-DSTANDARD_UTILS_PATH=\'\"${EPREFIX}/bin:${EPREFIX}/usr/bin:${EPREFIX}/sbin:${EPREFIX}/usr/sbin\"\' \
+		-DDEFAULT_PATH_VALUE=\'\"${EPREFIX}/usr/local/sbin:${EPREFIX}/usr/local/bin:${EPREFIX}/usr/sbin:${EPREFIX}/usr/bin\"\' \
+		-DSTANDARD_UTILS_PATH=\'\"${EPREFIX}/usr/bin:${EPREFIX}/usr/sbin\"\' \
 		-DSYS_BASHRC=\'\"${EPREFIX}/etc/bash/bashrc\"\' \
 		-DSYS_BASH_LOGOUT=\'\"${EPREFIX}/etc/bash/bash_logout\"\' \
 		-DNON_INTERACTIVE_LOGIN_SHELLS \
@@ -87,23 +86,6 @@ src_configure() {
 	# reading Bug 7714 first.  If you still build it statically,
 	# don't come crying to us with bugs ;).
 	#use static && export LDFLAGS="${LDFLAGS} -static"
-
-	# Historically, we always used the builtin readline, but since
-	# our handling of SONAME upgrades has gotten much more stable
-	# in the PM (and the readline ebuild itself preserves the old
-	# libs during upgrades), linking against the system copy should
-	# be safe.
-	# Exact cached version here doesn't really matter as long as it
-	# is at least what's in the DEPEND up above.
-	export ac_cv_rl_version=${READLINE_VER%%_*}
-
-	# Force linking with system curses ... the bundled termcap lib
-	# sucks bad compared to ncurses.  For the most part, ncurses
-	# is here because readline needs it.  But bash itself calls
-	# ncurses in one or two small places :(.
-
-		# Use system readline only with released versions.
-		myconf+=( --with-installed-readline=. )
 
 	if use plugins; then
 		append-ldflags -Wl,-rpath,/usr/$(get_libdir)/bash
@@ -146,12 +128,7 @@ src_install() {
 		-e "s:#${USERLAND}#@::"
 		-e '/#@/d'
 	)
-	if ! use readline ; then
-		sed_args+=( #432338
-			-e '/^shopt -s histappend/s:^:#:'
-			-e 's:use_color=true:use_color=false:'
-		)
-	fi
+
 	sed -i \
 		"${sed_args[@]}" \
 		"${ED%/}"/etc/skel/.bashrc \

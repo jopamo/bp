@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools
+inherit autotools flag-o-matic
 
 DESCRIPTION="Command-line tool for structural, content-preserving transformation of PDF files"
 HOMEPAGE="http://qpdf.sourceforge.net/"
@@ -15,9 +15,10 @@ KEYWORDS="amd64 arm64 x86"
 
 DEPEND="lib-media/libjpeg-turbo"
 
+filter-flags -flto
+
 src_prepare() {
-	${S}/autogen.sh
-	eautoreconf
+	./autogen.sh
 	default
 }
 

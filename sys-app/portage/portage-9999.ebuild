@@ -25,7 +25,7 @@ RDEPEND="
 	!build? (
 		sys-app/eselect
 		>=app-crypt/gnupg-2.2.4-r2[ssl(-)]
-		sys-app/bash:0[readline]
+		sys-app/bash
 		>=dev-python/lxml-3.6.0[${PYTHON_USEDEP}]
 		>=sys-app/sed-4.0.5
 	)

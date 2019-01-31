@@ -49,6 +49,7 @@ DEPEND="
 	${COMMON}
 	tools? ( sys-app/dbus )
 	sys-app/kmod
+	x11/vdpau-headers
 "
 RDEPEND="
 	${COMMON}
@@ -265,6 +266,10 @@ src_install() {
 		donvidia ${NV_X11}/libglxserver_nvidia.so.${NV_SOVER} \
 			/usr/$(get_libdir)/xorg/modules/extensions
 
+		# X module for wrapped software rendering
+		donvidia "libnvidia-wfb.so.${NV_SOVER}" \
+			/usr/$(get_libdir)/xorg/modules
+
 		# Xorg nvidia.conf
 		if has_version '>=x11-base/xorg-server-1.16'; then
 			insinto /usr/share/X11/xorg.conf.d
@@ -386,7 +391,6 @@ src_install-libs() {
 			"libnvidia-ptxjitcompiler.so.${NV_SOVER}"
 			"libnvidia-rtcore.so.${NV_SOVER}"
 			"libnvidia-tls.so.${NV_SOVER}"
-			"libnvidia-wfb.so.${NV_SOVER}"
 			"libnvoptix.so.${NV_SOVER}"
 			"libvdpau_nvidia.so.${NV_SOVER}"
 		)

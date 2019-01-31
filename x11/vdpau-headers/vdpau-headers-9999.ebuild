@@ -4,19 +4,14 @@ EAPI=6
 
 inherit git-r3
 
-DESCRIPTION="Vulkan Header files and API registry "
-HOMEPAGE="https://github.com/KhronosGroup/Vulkan-Docs"
-EGIT_REPO_URI="https://github.com/KhronosGroup/Vulkan-Docs.git"
+DESCRIPTION="Headers for Video Decode and Presentation API for UNIX"
+HOMEPAGE="https://github.com/freedesktop/libvdpau"
+EGIT_REPO_URI="https://github.com/freedesktop/libvdpau.git"
 
 KEYWORDS="amd64"
 
-LICENSE="apache"
+LICENSE="nvidia"
 SLOT="0"
-
-src_prepare() {
-	rm "${S}"/Makefile
-	default
-}
 
 src_install() {
 	mkdir -p "${ED}"/usr || die

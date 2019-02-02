@@ -6,7 +6,7 @@ PYTHON_COMPAT=( python3_7 )
 
 inherit eutils user systemd unpacker python-single-r1
 
-MINOR_VERSION="5456-ecd600442"
+MINOR_VERSION="5488-cc260c476"
 
 _APPNAME="plexmediaserver"
 _USERNAME="plex"
@@ -78,7 +78,7 @@ src_install() {
 
 	# Install systemd service file
 	local INIT_NAME="${PN}.service"
-	local INIT="${FILESDIR}/systemd/${INIT_NAME}"
+	local INIT="${FILESDIR}/${INIT_NAME}"
 	systemd_newunit "${INIT}" "${INIT_NAME}"
 
 	einfo "Configuring virtualenv"

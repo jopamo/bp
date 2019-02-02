@@ -1,6 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
+
 inherit cmake-multilib
 
 DESCRIPTION="Daemon used to register global keyboard shortcuts"
@@ -35,11 +36,6 @@ DEPEND="${RDEPEND}
 	gui-lib/linguist-tools:5
 	>=dev-util/lxqt-build-tools-0.1.0
 "
-
-multilib_src_configure() {
-	local mycmakeargs=( -DPULL_TRANSLATIONS=OFF )
-	cmake-utils_src_configure
-}
 
 multilib_src_install() {
 	cmake-utils_src_install

@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit cmake-utils xdg-utils
+inherit cmake-utils
 
 DESCRIPTION="Qt port of libfm, a library providing components to build desktop file managers"
 HOMEPAGE="http://lxqt.org/"
@@ -36,21 +36,7 @@ DEPEND="${RDEPEND}
 	lib-media/libexif
 "
 
-src_configure() {
-	local mycmakeargs=(
-		-DPULL_TRANSLATIONS=NO
-	)
-
-	cmake-utils_src_configure
+src_install() {
+	cmake-utils_src_install
+	rm -rf "${ED}"/usr/share/{mime,doc}
 }
-
-pkg_postinst() {
-	xdg_desktop_database_update
-	xdg_mimeinfo_database_update
-}
-
-pkg_postrm() {
-	xdg_desktop_database_update
-	xdg_mimeinfo_database_update
-}
-

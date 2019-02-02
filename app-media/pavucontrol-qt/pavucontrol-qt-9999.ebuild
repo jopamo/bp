@@ -18,17 +18,3 @@ DEPEND=( ">=dev-util/lxqt-build-tools-${PV}
 	app-media/pulseaudio
 "
 )
-RDEPEND="${DEPEND}"
-
-src_prepare() {
-	default
-	cmake-utils_src_prepare
-}
-
-src_configure() {
-	local mycmakeargs=(
-		-DPULL_TRANSLATIONS=false
-	)
-
-	cmake-utils_src_configure
-}

@@ -2,8 +2,6 @@
 
 EAPI=6
 
-inherit eutils
-
 DESCRIPTION="WoeUSB  creates a Windows USB stick installer from a real Windows DVD or image."
 HOMEPAGE="https://github.com/slacka/WoeUSB"
 
@@ -21,8 +19,7 @@ LICENSE="GPL-3"
 SLOT="0"
 
 DEPEND="sys-app/sed"
-RDEPEND="${DEPEND}
-	sys-app/coreutils
+RDEPEND="sys-app/coreutils
 	sys-app/busybox
 	sys-app/util-linux
 	sys-fs/parted
@@ -30,9 +27,10 @@ RDEPEND="${DEPEND}
 	sys-fs/ntfs3g
 	sys-fs/dosfstools"
 
+PATCHES=( "${FILESDIR}"/woeusb_only_for_gui_ref.patch )
+
 src_install() {
 	sed -i.bak -e "s/@@WOEUSB_VERSION@@/${PV}/g" "src/woeusb"
-	epatch "${FILESDIR}"/woeusb_only_for_gui_ref.patch
 	dosbin src/woeusb
 	doman src/woeusb.1
 }

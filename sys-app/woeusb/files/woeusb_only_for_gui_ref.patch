@@ -1,5 +1,5 @@
---- src/woeusb
-+++ src/woeusb
+--- a/src/woeusb
++++ b/src/woeusb
 @@ -430,7 +430,6 @@
  	local -n new_file_system_label_ref="${1}"; shift
  	local -n workaround_bios_boot_flag_ref="${1}"; shift

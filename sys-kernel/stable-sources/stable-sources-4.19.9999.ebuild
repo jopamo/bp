@@ -9,7 +9,7 @@ inherit kernel-2 git-r3
 SLOT=0
 DESCRIPTION="Linux kernel source tree"
 HOMEPAGE="https://github.com/torvalds/linux"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="amd64 arm64"
 
 DEPEND="sys-app/ed
 		sys-devel/bc"

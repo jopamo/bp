@@ -34,8 +34,13 @@ RDEPEND="
 	dev-python/pytz[${PYTHON_USEDEP}]
 	dev-python/zope-component[${PYTHON_USEDEP}]
 	dev-python/zope-interface[${PYTHON_USEDEP}]
+	dev-python/zope-deferredimport[${PYTHON_USEDEP}]
+	dev-python/zope-deprecation[${PYTHON_USEDEP}]
+	dev-python/zope-hookable[${PYTHON_USEDEP}]
+	dev-python/zope-proxy[${PYTHON_USEDEP}]
 	dev-python/mock
 	dev-python/requests-toolbelt"
+
 DEPEND="
 	${CDEPEND}
 	test? (

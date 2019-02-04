@@ -12,7 +12,7 @@ RESTRICT="strip" # Strip ourself #46186
 EMULTILIB_PKG="true"
 
 EGIT_REPO_URI="git://sourceware.org/git/glibc.git"
-EGIT_BRANCH="release/2.28/master"
+EGIT_BRANCH="release/2.29/master"
 
 KEYWORDS="amd64 arm64 x86"
 
@@ -186,9 +186,6 @@ src_unpack() {
 	else
 		unpack ${P}.tar.xz
 	fi
-
-	cd "${S}"
-	touch locale/C-translit.h #185476 #218003
 }
 
 src_prepare() {

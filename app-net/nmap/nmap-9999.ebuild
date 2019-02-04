@@ -19,6 +19,7 @@ DEPEND="
 	lib-dev/liblinear:=
 	lib-dev/libpcre
 	lib-net/libpcap
+	dev-lang/lua
 	lib-net/libssh2[zlib]
 	lib-sys/zlib
 	nls? ( sys-devel/gettext )
@@ -55,7 +56,7 @@ src_configure() {
 		$(use_enable nls) \
 		--with-libssh2 \
 		--with-zlib \
-		--without-liblua \
+		--with-liblua="${EROOT}"/usr \
 		--without-zenmap \
 		$(use_with ncat) \
 		$(use_with nping) \

@@ -1,0 +1,30 @@
+From 8030da1b54606260b5e1af6b7dcf5ce2405cf2a8 Mon Sep 17 00:00:00 2001
+From: "Andrew G. Morgan" <morgan@kernel.org>
+Date: Sun, 9 Sep 2018 12:32:56 -0700
+Subject: Add a convenient make top level 'test' target
+
+The test does things with privilege on the current system, so it
+invokes sudo to run.
+
+Signed-off-by: Andrew G. Morgan <morgan@kernel.org>
+---
+ Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index ad58c3a..0a31124 100644
+--- a/Makefile
++++ b/Makefile
+@@ -31,6 +31,9 @@ release: distclean
+ 	cd .. && ln -s libcap libcap-$(VERSION).$(MINOR) && tar cvf libcap-$(VERSION).$(MINOR).tar libcap-$(VERSION).$(MINOR)/* && rm libcap-$(VERSION).$(MINOR)
+ 	cd .. && gpg -sba -u E2CCF3F4 libcap-$(VERSION).$(MINOR).tar
+ 
++test: all
++	cd progs && sudo ./quicktest.sh
++
+ tagrelease: distclean
+ 	@echo "sign the tag twice: older DSA key; and newer RSA kernel.org key"
+ 	git tag -u D41A6DF2 -s libcap-$(VERSION).$(MINOR)
+-- 
+cgit 1.2-0.3.lf.el7
+

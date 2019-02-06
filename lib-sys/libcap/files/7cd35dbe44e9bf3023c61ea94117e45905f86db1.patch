@@ -1,0 +1,76 @@
+From 7cd35dbe44e9bf3023c61ea94117e45905f86db1 Mon Sep 17 00:00:00 2001
+From: "Andrew G. Morgan" <morgan@kernel.org>
+Date: Sat, 8 Sep 2018 15:03:55 -0700
+Subject: Add v3 (NS aware VFS) capabilitie defs to header.
+
+Note, the kernel version of this file has evolved away from the libcap
+license so we are managing this source separately. The slightly more
+open nature of the libcap version can be merged into the kernel if wanted.
+
+Signed-off-by: Andrew G. Morgan <morgan@kernel.org>
+---
+ libcap/include/uapi/linux/capability.h | 29 ++++++++++++++++++++++-------
+ 1 file changed, 22 insertions(+), 7 deletions(-)
+
+diff --git a/libcap/include/uapi/linux/capability.h b/libcap/include/uapi/linux/capability.h
+index 432e023..0e950a3 100644
+--- a/libcap/include/uapi/linux/capability.h
++++ b/libcap/include/uapi/linux/capability.h
+@@ -7,6 +7,7 @@
+  *
+  * See here for the libcap library ("POSIX draft" compliance):
+  *
++ * https://git.kernel.org/pub/scm/libs/libcap/libcap.git/refs/
+  * http://www.kernel.org/pub/linux/libs/security/linux-privs/
+  */
+ 
+@@ -15,8 +16,6 @@
+ 
+ #include <linux/types.h>
+ 
+-struct task_struct;
+-
+ /* User-level do most of the mapping between kernel and user
+    capabilities based on the version tag given by the kernel. The
+    kernel might be somewhat backwards compatible, but don't bet on
+@@ -62,16 +61,32 @@ typedef struct __user_cap_data_struct {
+ #define VFS_CAP_U32_2           2
+ #define XATTR_CAPS_SZ_2         (sizeof(__le32)*(1 + 2*VFS_CAP_U32_2))
+ 
++#define VFS_CAP_REVISION_3	0x03000000
++#define VFS_CAP_U32_3           VFS_CAP_U32_2
++#define XATTR_CAPS_SZ_3         (sizeof(__le32)+XATTR_CAPS_SZ_2)
++
++/*
++ * Kernel capabilities default to v2. The v3 VFS caps are only used,
++ * at present, for namespace specific filesystem capabilities.
++ */
+ #define XATTR_CAPS_SZ           XATTR_CAPS_SZ_2
+ #define VFS_CAP_U32             VFS_CAP_U32_2
+ #define VFS_CAP_REVISION	VFS_CAP_REVISION_2
+ 
++#define _VFS_CAP_DATA_HEAD \
++	__le32 magic_etc;            /* Little endian */ \
++	struct {                                         \
++		__le32 permitted;    /* Little endian */ \
++		__le32 inheritable;  /* Little endian */ \
++	} data[VFS_CAP_U32]
++
+ struct vfs_cap_data {
+-	__le32 magic_etc;            /* Little endian */
+-	struct {
+-		__le32 permitted;    /* Little endian */
+-		__le32 inheritable;  /* Little endian */
+-	} data[VFS_CAP_U32];
++	_VFS_CAP_DATA_HEAD;
++};
++
++struct vfs_ns_cap_data {
++	_VFS_CAP_DATA_HEAD;
++	__le32 rootid;
+ };
+ 
+ #ifndef __KERNEL__
+-- 
+cgit 1.2-0.3.lf.el7
+

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=6
 
 inherit eutils flag-o-matic multilib systemd toolchain-funcs udev
 
@@ -27,14 +27,16 @@ RDEPEND="sys-app/util-linux"
 
 RESTRICT="test"
 
+PATCHES=( ${FILESDIR}/mdadm-portage.patch )
+
 mdadm_emake() {
 	emake \
 		PKG_CONFIG="$(tc-getPKG_CONFIG)" \
 		CC="$(tc-getCC)" \
-		CWFLAGS="-Wall" \
+		CWFLAGS="-Wall -DBINDIR=\"/usr/sbin\"" \
 		CXFLAGS="${CFLAGS}" \
 		UDEVDIR="$(get_udevdir)" \
-		SYSTEMD_DIR="$(systemd_get_unitdir)" \
+		SYSTEMD_DIR="$(systemd_get_systemunitdir)" \
 		COROSYNC="-DNO_COROSYNC" \
 		DLM="-DNO_DLM" \
 		"$@"

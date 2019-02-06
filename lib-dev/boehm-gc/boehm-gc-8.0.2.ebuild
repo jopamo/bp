@@ -2,7 +2,7 @@
 
 EAPI="6"
 
-inherit multilib-minimal libtool
+inherit multilib-minimal libtool flag-o-matic
 
 MY_P="gc-${PV}"
 
@@ -21,6 +21,8 @@ DEPEND="
 	dev-util/pkgconfig"
 
 S="${WORKDIR}/${MY_P}"
+
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 src_prepare() {
 	default

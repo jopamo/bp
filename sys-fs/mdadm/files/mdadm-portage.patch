@@ -1,0 +1,35 @@
+diff -urN a/Makefile b/Makefile
+--- a/Makefile	2019-02-06 05:15:56.239546747 -0600
++++ b/Makefile	2019-02-06 06:29:23.775475931 -0600
+@@ -67,7 +67,7 @@
+ 
+ PKG_CONFIG ?= pkg-config
+ 
+-SYSCONFDIR = /etc
++SYSCONFDIR = ${EPREFIX}/etc
+ CONFFILE = $(SYSCONFDIR)/mdadm.conf
+ CONFFILE2 = $(SYSCONFDIR)/mdadm/mdadm.conf
+ MAILCMD =/usr/sbin/sendmail -t
+@@ -114,10 +114,10 @@
+ # STRIP = -s
+ LDLIBS=-ldl
+ 
+-INSTALL = /usr/bin/install
++INSTALL = ${EROOT}usr/bin/install
+ DESTDIR =
+-BINDIR  = /sbin
+-MANDIR  = /usr/share/man
++BINDIR  = ${EPREFIX}usr/sbin
++MANDIR  = ${EPREFIX}usr/share/man
+ MAN4DIR = $(MANDIR)/man4
+ MAN5DIR = $(MANDIR)/man5
+ MAN8DIR = $(MANDIR)/man8
+@@ -258,7 +258,7 @@
+ 	$(INSTALL) -D -m 644 mdadm.conf.5 $(DESTDIR)$(MAN5DIR)/mdadm.conf.5
+ 
+ install-udev: udev-md-raid-arrays.rules udev-md-raid-assembly.rules udev-md-raid-creating.rules \
+-		udev-md-clustered-confirm-device.rules 
++		udev-md-clustered-confirm-device.rules
+ 	@for file in 01-md-raid-creating.rules 63-md-raid-arrays.rules 64-md-raid-assembly.rules \
+ 		69-md-clustered-confirm-device.rules ; \
+ 	do sed -e 's,BINDIR,$(BINDIR),g' udev-$${file#??-} > .install.tmp.1 && \

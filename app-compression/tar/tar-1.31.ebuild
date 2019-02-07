@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
 inherit flag-o-matic
 
@@ -9,14 +9,12 @@ HOMEPAGE="https://www.gnu.org/software/tar/"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 LICENSE="GPL-3+"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
-IUSE="acl elibc_glibc nls selinux static xattr"
+KEYWORDS="amd64 arm64"
+IUSE="acl nls static xattr"
 
-RDEPEND="acl? ( sys-app/acl )
-	selinux? ( lib-sys/libselinux )"
-DEPEND="${RDEPEND}
+DEPEND="acl? ( sys-app/acl )
 	nls? ( >=sys-devel/gettext-0.10.35 )
-	xattr? ( elibc_glibc? ( sys-app/attr ) )"
+	xattr? ( sys-app/attr )"
 
 src_configure() {
 	use static && append-ldflags -static
@@ -30,7 +28,6 @@ src_configure() {
 		--enable-backup-scripts
 		$(use_with acl posix-acls)
 		$(use_enable nls)
-		$(use_with selinux)
 		$(use_with xattr xattrs)
 	)
 	FORCE_UNSAFE_CONFIGURE=1 econf "${myeconfargs[@]}"

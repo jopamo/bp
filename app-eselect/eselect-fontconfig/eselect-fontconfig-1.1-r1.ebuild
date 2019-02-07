@@ -8,7 +8,7 @@ SRC_URI="mirror://gentoo/fontconfig.eselect-${PV}.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND=">=sys-app/eselect-1.2.3
 		 >=lib-media/fontconfig-2.4"

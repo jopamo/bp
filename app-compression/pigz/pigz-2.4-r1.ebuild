@@ -1,15 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-inherit toolchain-funcs flag-o-matic multilib-minimal
+inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="A parallel implementation of gzip"
 HOMEPAGE="http://www.zlib.net/pigz/"
 SRC_URI="http://www.zlib.net/pigz/${P}.tar.gz"
 LICENSE="ZLIB"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="static test"
 
 LIB_DEPEND="lib-sys/zlib[static-libs(+)]"
@@ -23,19 +23,14 @@ PATCHES=(
 		${FILESDIR}/43752cc2e4c455d24327ec02dfef7f1618e6849f.patch
 		${FILESDIR}/5b86ed0f203a76d33eaf0c4cde29ae59c49a4254.patch
 		${FILESDIR}/13c1f55f00c820885bde90c024b6d55346055e41.patch
-		)
+)
 
-src_prepare() {
-	default
-	multilib_copy_sources
-}
-
-multilib_src_compile() {
+src_compile() {
 	use static && append-ldflags -static
 	emake CC="$(tc-getCC)" CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}"
 }
 
-multilib_src_install() {
+src_install() {
 	dobin ${PN}
 	dosym ${PN} /usr/bin/gzip
 	dosym ${PN} /usr/bin/gunzip

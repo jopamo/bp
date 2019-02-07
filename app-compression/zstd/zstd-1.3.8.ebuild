@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
 inherit toolchain-funcs
 
@@ -10,11 +10,10 @@ SRC_URI="https://github.com/facebook/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0/1"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
-RDEPEND="app-compression/xz-utils"
-DEPEND="${RDEPEND}"
+DEPEND="app-compression/xz-utils"
 
 src_compile() {
 	emake \
@@ -48,8 +47,6 @@ src_install() {
 		DESTDIR="${D}" \
 		PREFIX="${EPREFIX}/usr" \
 		LIBDIR="${EPREFIX}/usr/$(get_libdir)" install
-
-	einstalldocs
 
 	if ! use static-libs; then
 		rm "${ED%/}"/usr/$(get_libdir)/libzstd.a || die

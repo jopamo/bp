@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
 inherit toolchain-funcs
 
@@ -9,13 +9,10 @@ HOMEPAGE="http://p7zip.sourceforge.net/"
 SRC_URI="mirror://sourceforge/${PN}/${PN}_${PV}_src_all.tar.bz2"
 LICENSE="LGPL-2.1 unRAR"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
-IUSE="abi_x86_x32 static"
+KEYWORDS="amd64 arm64"
+IUSE="static"
 
-DEPEND="${RDEPEND}
-	abi_x86_x32? ( >=dev-lang/yasm-1.2.0-r1 )
-	amd64? ( dev-lang/yasm )
-	x86? ( dev-lang/nasm )"
+DEPEND="dev-lang/yasm"
 
 S=${WORKDIR}/${PN}_${PV}
 
@@ -32,17 +29,7 @@ src_prepare() {
 		-e "/OPTFLAGS=/s:=.*:=${CXXFLAGS}:" \
 		-i makefile* || die
 
-	if use abi_x86_x32; then
-		sed -i -e "/^ASM=/s:amd64:x32:" makefile* || die
-		cp -f makefile.linux_amd64_asm makefile.machine || die
-	elif use amd64; then
-		cp -f makefile.linux_amd64_asm makefile.machine || die
-	elif use x86; then
-		cp -f makefile.linux_x86_asm_gcc_4.X makefile.machine || die
-	elif use x86-fbsd; then
-		# FreeBSD needs this special makefile, because it hasn't -ldl
-		sed -e 's/-lc_r/-pthread/' makefile.freebsd > makefile.machine
-	fi
+	cp -f makefile.linux_amd64_asm makefile.machine || die
 
 	if use static; then
 		sed -i -e '/^LOCAL_LIBS=/s/LOCAL_LIBS=/&-static /' makefile.machine || die

@@ -4,15 +4,15 @@ EAPI=7
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
+inherit distutils-r1
+
 if [[ ${PV} == 9999* ]]; then
 	EGIT_REPO_URI="https://github.com/certbot/certbot.git"
 	inherit git-r3
 else
 	SRC_URI="https://github.com/${PN}/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 fi
-
-inherit distutils-r1
 
 DESCRIPTION="Let's encrypt client to automate deployment of X.509 certificates"
 HOMEPAGE="https://github.com/certbot/certbot https://letsencrypt.org/"

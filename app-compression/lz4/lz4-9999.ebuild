@@ -2,10 +2,10 @@
 
 EAPI=6
 
-inherit cmake-multilib git-r3
+inherit cmake-utils git-r3
 
 EGIT_REPO_URI="https://github.com/lz4/lz4.git"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 DESCRIPTION="Extremely Fast Compression algorithm"
 HOMEPAGE="https://github.com/lz4/lz4"
@@ -15,7 +15,7 @@ IUSE="static-libs"
 
 CMAKE_USE_DIR=${S}/contrib/cmake_unofficial
 
-multilib_src_configure() {
+src_configure() {
 	local mycmakeargs=(
 		-DBUILD_STATIC_LIBS=$(usex static-libs)
 	)

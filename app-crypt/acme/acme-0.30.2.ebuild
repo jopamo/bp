@@ -1,8 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
 PYTHON_COMPAT=( python3_{6,7,8} )
+
+inherit distutils-r1
 
 if [[ ${PV} == 9999* ]]; then
 	EGIT_REPO_URI="https://github.com/certbot/certbot.git"
@@ -10,11 +12,9 @@ if [[ ${PV} == 9999* ]]; then
 	S=${WORKDIR}/${P}/${PN}
 else
 	SRC_URI="https://github.com/certbot/certbot/archive/v${PV}.tar.gz -> certbot-${PV}.tar.gz"
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 	S=${WORKDIR}/certbot-${PV}/acme
 fi
-
-inherit distutils-r1
 
 DESCRIPTION="An implementation of the ACME protocol"
 HOMEPAGE="https://github.com/certbot/certbot https://letsencrypt.org/"

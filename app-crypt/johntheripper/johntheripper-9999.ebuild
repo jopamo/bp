@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
 inherit flag-o-matic toolchain-funcs git-r3
 
@@ -8,7 +8,7 @@ DESCRIPTION="fast password cracker"
 HOMEPAGE="http://www.openwall.com/john/"
 
 EGIT_REPO_URI="https://github.com/magnumripper/${PN}.git"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"
 SLOT="0"

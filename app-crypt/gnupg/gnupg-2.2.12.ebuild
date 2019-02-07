@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
 inherit toolchain-funcs flag-o-matic
 
@@ -12,7 +12,7 @@ SRC_URI="mirror://gnupg/gnupg/${MY_P}.tar.bz2"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="bzip2 doc ldap nls readline selinux +smartcard ssl tofu tools usb wks-server"
 
@@ -54,17 +54,17 @@ src_configure() {
 			--libdir="${EPREFIX}"/usr/$(get_libdir)
 			--libexecdir="${EPREFIX}"/usr/libexec
 			--enable-symcryptrun
-			$(use_enable bzip2) 
-			$(use_enable ssl gnutls) 
-			$(use_enable nls) 
-			$(use_enable tofu) 
-			$(use_enable wks-server wks-tools) 
-			$(use_with ldap) 
-			$(use_with readline) 
-			--enable-gpg 
-			--enable-gpgsm 
-			--enable-large-secmem 
-			--enable-all-tests 
+			$(use_enable bzip2)
+			$(use_enable ssl gnutls)
+			$(use_enable nls)
+			$(use_enable tofu)
+			$(use_enable wks-server wks-tools)
+			$(use_with ldap)
+			$(use_with readline)
+			--enable-gpg
+			--enable-gpgsm
+			--enable-large-secmem
+			--enable-all-tests
 		)
 
 	if use smartcard; then

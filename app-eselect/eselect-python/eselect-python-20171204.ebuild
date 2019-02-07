@@ -9,7 +9,7 @@ HOMEPAGE="https://www.gentoo.org/proj/en/Python/"
 LICENSE="GPL-2"
 SLOT="0"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND=">=sys-app/eselect-1.2.3
 	>=dev-lang/python-exec-2.4.2"

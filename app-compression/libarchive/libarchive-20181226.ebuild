@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-inherit eutils libtool multilib-minimal toolchain-funcs autotools
+inherit autotools
 
 DESCRIPTION="BSD tar command"
 HOMEPAGE="http://www.libarchive.org/"
@@ -15,7 +15,7 @@ else
 	SNAPSHOT=9802b2a22714543aa44ec9ca351194dbd6ea025b
 	SRC_URI="https://github.com/libarchive/libarchive/archive/${SNAPSHOT}.zip -> ${P}.zip"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="BSD BSD-2 BSD-4 public-domain"
@@ -23,24 +23,25 @@ SLOT="0/1"
 IUSE="acl +bzip2 expat libressl lzo nettle static-libs xattr +zlib"
 
 DEPEND="
-	acl? ( sys-app/acl[${MULTILIB_USEDEP}] )
-	bzip2? ( app-compression/lbzip2[${MULTILIB_USEDEP}] )
-	expat? ( lib-dev/expat[${MULTILIB_USEDEP}] )
-	!expat? ( lib-dev/libxml2[${MULTILIB_USEDEP}] )
-	xattr? ( sys-app/attr[${MULTILIB_USEDEP}] )
-	!libressl? ( lib-dev/openssl:0=[${MULTILIB_USEDEP}] )
-	libressl? ( lib-dev/libressl:0=[${MULTILIB_USEDEP}] )
-	>=app-compression/lz4-0_p131:0=[${MULTILIB_USEDEP}]
-	app-compression/xz-utils[${MULTILIB_USEDEP}]
-	lzo? ( >=lib-dev/lzo-2[${MULTILIB_USEDEP}] )
-	nettle? ( lib-dev/nettle:0=[${MULTILIB_USEDEP}] )
-	zlib? ( lib-sys/zlib[${MULTILIB_USEDEP}] )"
+	acl? ( sys-app/acl )
+	bzip2? ( app-compression/lbzip2 )
+	expat? ( lib-dev/expat )
+	!expat? ( lib-dev/libxml2 )
+	xattr? ( sys-app/attr )
+	!libressl? ( lib-dev/openssl:0= )
+	libressl? ( lib-dev/libressl:0= )
+	>=app-compression/lz4-0_p131:0=
+	app-compression/xz-utils
+	lzo? ( >=lib-dev/lzo-2 )
+	nettle? ( lib-dev/nettle:0= )
+	zlib? ( lib-sys/zlib )"
 
 src_prepare() {
 	eautoreconf
 	default
 }
-multilib_src_configure() {
+
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -67,29 +68,3 @@ multilib_src_configure() {
 
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }
-
-multilib_src_compile() {
-	if multilib_is_native_abi ; then
-		emake
-	else
-		emake libarchive.la
-	fi
-}
-
-multilib_src_test() {
-	multilib_is_native_abi && emake check
-}
-
-multilib_src_install() {
-	if multilib_is_native_abi ; then
-		emake DESTDIR="${D}" install
-	else
-		local install_targets=(
-			install-includeHEADERS
-			install-libLTLIBRARIES
-			install-pkgconfigDATA
-		)
-		emake DESTDIR="${D}" "${install_targets[@]}"
-	fi
-}
-

@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-inherit eutils flag-o-matic multilib toolchain-funcs
+inherit eutils flag-o-matic toolchain-funcs
 
 MY_PN=${PN}src
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.rarlab.com/rar_add.htm"
 SRC_URI="http://www.rarlab.com/rar/${MY_PN}-${PV}.tar.gz -> ${P}.tar.gz"
 LICENSE="unRAR"
 SLOT="0/5"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 S=${WORKDIR}/unrar
 
@@ -22,13 +22,8 @@ PATCHES=(
 
 src_prepare() {
 	default
-
 	local sed_args=( -e "/libunrar/s:.so:$(get_libname ${PV%.*.*}):" )
-	if [[ ${CHOST} == *-darwin* ]] ; then
-		sed_args+=( -e "s:-shared:-dynamiclib -install_name ${EPREFIX}/usr/$(get_libdir)/libunrar$(get_libname ${PV%.*.*}):" )
-	else
-		sed_args+=( -e "s:-shared:& -Wl,-soname -Wl,libunrar$(get_libname ${PV%.*.*}):" )
-	fi
+	sed_args+=( -e "s:-shared:& -Wl,-soname -Wl,libunrar$(get_libname ${PV%.*.*}):" )
 	sed -i "${sed_args[@]}" makefile || die
 }
 

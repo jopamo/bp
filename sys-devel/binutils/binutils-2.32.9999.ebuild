@@ -8,7 +8,7 @@ DESCRIPTION="Core binutils libraries (libbfd, libopcodes, libiberty) for externa
 HOMEPAGE="https://sourceware.org/binutils/"
 
 EGIT_REPO_URI="git://sourceware.org/git/binutils-gdb.git"
-EGIT_BRANCH="binutils-2_31-branch"
+EGIT_BRANCH="binutils-2_32-branch"
 
 SLOT="0"
 

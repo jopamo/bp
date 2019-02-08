@@ -27,11 +27,13 @@ src_configure() {
 		--sysconfdir="${EPREFIX}/etc"
 		--localstatedir="${EPREFIX}/var"
 		--enable-ld=default
+		--disable-multilib
 		--disable-obsolete
-		--enable-shared
 		--disable-werror
 		--with-system-zlib
 		--enable-gold
+		--enable-deterministic-archives
+		--disable-nls
 		--enable-plugins
 		--enable-lto
 		--disable-gdb

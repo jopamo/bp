@@ -1,5 +1,0 @@
-# Distributed under the terms of the GNU General Public License, v2
-
-# Enable all ABIs by default so we can protect any non-native binaries that
-# might be executed.
-sys-app/sandbox abi_x86_32 abi_x86_64 abi_x86_x32

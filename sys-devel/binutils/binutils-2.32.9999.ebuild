@@ -30,6 +30,7 @@ src_configure() {
 		--disable-multilib
 		--disable-obsolete
 		--disable-werror
+		--enable-shared
 		--with-system-zlib
 		--enable-gold
 		--enable-deterministic-archives

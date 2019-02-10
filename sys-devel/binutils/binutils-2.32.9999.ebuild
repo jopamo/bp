@@ -33,11 +33,13 @@ src_configure() {
 		--enable-shared
 		--with-system-zlib
 		--enable-gold
+		--enable-install-libiberty
 		--enable-deterministic-archives
 		--disable-nls
+		--enable-default-hash-style=gnu
 		--enable-plugins
 		--enable-lto
-		--disable-gdb
+		--disable-{gdb,sim}
 		--without-included-gettext
 		$(use_enable static-libs static)
 	)

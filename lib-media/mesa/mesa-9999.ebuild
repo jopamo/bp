@@ -6,7 +6,7 @@ inherit meson multilib-minimal git-r3 flag-o-matic
 
 DESCRIPTION="OpenGL-like graphic library for Linux"
 HOMEPAGE="https://www.mesa3d.org/ https://mesa.freedesktop.org/"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/mesa/mesa.git"
 #EGIT_BRANCH=18.3

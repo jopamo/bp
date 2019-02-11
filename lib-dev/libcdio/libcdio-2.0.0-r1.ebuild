@@ -10,7 +10,7 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0/18" # subslot is based on SONAME
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="cddb +cxx minimal static-libs test"
 

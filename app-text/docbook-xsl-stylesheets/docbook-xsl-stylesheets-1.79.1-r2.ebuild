@@ -12,7 +12,7 @@ SRC_URI="mirror://sourceforge/docbook/${MY_P}.tar.bz2"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND=">=app-text/build-docbook-catalog-1.1
 "

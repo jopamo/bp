@@ -17,7 +17,7 @@ fi
 
 LICENSE="BSD"
 SLOT="3"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="+cxx +jit +recursion-limit static-libs"
 

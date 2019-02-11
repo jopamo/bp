@@ -8,7 +8,7 @@ DESCRIPTION="unix-like reverse engineering framework and commandline tools"
 HOMEPAGE="http://www.radare.org"
 
 EGIT_REPO_URI="https://github.com/radare/radare2"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"
 SLOT="0"

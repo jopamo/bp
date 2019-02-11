@@ -10,7 +10,7 @@ SRC_URI="https://www.netfilter.org/projects/${PN}/files/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 RDEPEND=">=lib-net/libnfnetlink-1.0.0"

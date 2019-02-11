@@ -10,7 +10,7 @@ SRC_URI="https://github.com/jemalloc/jemalloc/releases/download/${PV}/${P}.tar.b
 
 LICENSE="BSD"
 SLOT="0/2"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="debug hardened +hugepages lazy-lock static-libs stats xmalloc"
 
 MULTILIB_WRAPPED_HEADERS=( /usr/include/jemalloc/jemalloc.h )

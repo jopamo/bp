@@ -15,7 +15,7 @@ else
 	SNAPSHOT=ef2f368219152771ac32adaa05dc1aee4c2bfe29
 	SRC_URI="https://github.com/OpenSMTPD/OpenSMTPD/archive/${SNAPSHOT}.zip -> ${P}.zip"
 	S=${WORKDIR}/OpenSMTPD-${SNAPSHOT}
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="ISC BSD BSD-1 BSD-2 BSD-4"

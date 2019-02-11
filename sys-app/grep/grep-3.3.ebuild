@@ -10,7 +10,7 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="nls pcre static"
 

@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{6,7,8} )
 inherit eutils flag-o-matic linux-info multilib pam prefix python-single-r1 \
 		systemd user versionator git-r3 multilib-minimal
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 SLOT=$(get_major_version)
 

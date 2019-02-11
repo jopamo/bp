@@ -6,7 +6,7 @@ inherit cmake-multilib
 
 DESCRIPTION="Daemon used to register global keyboard shortcuts"
 HOMEPAGE="http://lxqt.org/"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3

@@ -5,7 +5,7 @@ QT5_MODULE="qttools"
 inherit qt5-build
 
 DESCRIPTION="Qt5 module for integrating online documentation into applications"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 DEPEND="
 	~gui-lib/qtcore-${PV}

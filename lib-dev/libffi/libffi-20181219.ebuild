@@ -15,7 +15,7 @@ else
 	SNAPSHOT=8fa88373a1d433c675b11200ccd58418e91f81e4
 	SRC_URI="https://github.com/libffi/libffi/archive/${SNAPSHOT}.zip -> ${P}.zip"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="MIT"

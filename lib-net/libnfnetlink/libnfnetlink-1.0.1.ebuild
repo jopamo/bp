@@ -12,7 +12,7 @@ SRC_URI="http://www.netfilter.org/projects/${PN}/files/${P}.tar.bz2
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 DOCS=( README )

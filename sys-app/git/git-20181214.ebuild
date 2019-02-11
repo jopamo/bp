@@ -15,7 +15,7 @@ else
 	SNAPSHOT=0d0ac3826a3bbb9247e39e12623bbcfdd722f24c
 	SRC_URI="https://github.com/git/git/archive/${SNAPSHOT}.zip -> ${P}.zip"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="GPL-2"

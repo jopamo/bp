@@ -6,7 +6,7 @@ DESCRIPTION="Used to create autoconfiguration files"
 HOMEPAGE="https://www.gnu.org/software/autoconf/autoconf.html"
 
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-3"
 SLOT="${PV}"

@@ -11,7 +11,7 @@ EGIT_BRANCH=gdk-pixbuf-2-36
 
 LICENSE="LGPL-2+"
 SLOT="2"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="+introspection debug +png +tiff +jpeg +jasper X docs man test +relocatable +native_windows_loaders"
 
 COMMON_DEPEND="

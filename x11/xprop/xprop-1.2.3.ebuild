@@ -8,7 +8,7 @@ DESCRIPTION="property displayer for X"
 SRC_URI="https://www.x.org/archive//individual/app/${P}.tar.gz"
 SLOT=0
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="x11-libs/libX11"
 DEPEND="${RDEPEND}

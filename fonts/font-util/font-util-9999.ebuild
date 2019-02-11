@@ -7,7 +7,7 @@ inherit multilib-minimal git-r3 autotools
 DESCRIPTION="X.Org font utilities"
 EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/font/util.git"
 SLOT=0
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 src_prepare() {
 	eautoreconf

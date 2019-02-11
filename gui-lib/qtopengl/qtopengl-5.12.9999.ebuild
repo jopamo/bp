@@ -6,7 +6,7 @@ VIRTUALX_REQUIRED="test"
 inherit qt5-build
 
 DESCRIPTION="OpenGL support library for the Qt5 framework (deprecated)"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="gles2"
 

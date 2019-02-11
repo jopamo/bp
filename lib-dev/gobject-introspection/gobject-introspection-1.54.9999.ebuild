@@ -14,7 +14,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/GNOME/gobject-introspection.git"
 	inherit git-r3
 	EGIT_BRANCH=gnome-3-26
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 else
 	SNAPSHOT=dd231b0faf587ff4e0e77519f724214e5876d5c2
 	SRC_URI="https://github.com/GNOME/gobject-introspection/archive/${SNAPSHOT}.zip -> ${P}.zip"

@@ -11,7 +11,7 @@ SRC_URI="http://download.osgeo.org/libtiff/${P}.tar.gz
 
 LICENSE="libtiff"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="+cxx jbig jpeg lzma static-libs test zlib"
 
 RDEPEND="jpeg? ( lib-media/libjpeg-turbo[${MULTILIB_USEDEP}] )

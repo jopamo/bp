@@ -10,7 +10,7 @@ SRC_URI="https://github.com/json-c/json-c/archive/json-c-0.13.1-20180305.tar.gz"
 S=${WORKDIR}/${PN}-${P}-20180305
 LICENSE="MIT"
 SLOT="0/3"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_prepare() {

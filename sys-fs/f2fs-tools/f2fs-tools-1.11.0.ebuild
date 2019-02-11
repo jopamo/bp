@@ -10,7 +10,7 @@ SRC_URI="https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/
 
 LICENSE="GPL-2"
 SLOT="0/3"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="selinux"
 
 RDEPEND="

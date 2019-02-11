@@ -10,7 +10,7 @@ SRC_URI="https://ftp.gnu.org/gnu/mpc/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0/3"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 DEPEND=">=lib-dev/gmp-5.0.0:0=[${MULTILIB_USEDEP},static-libs?]

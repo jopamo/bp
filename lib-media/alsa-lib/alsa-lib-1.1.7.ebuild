@@ -16,7 +16,7 @@ fi
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="alisp debug doc elibc_uclibc"
 
 RDEPEND="abi_x86_32? (

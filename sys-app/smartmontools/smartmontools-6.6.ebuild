@@ -5,7 +5,7 @@ EAPI="6"
 inherit autotools flag-o-matic systemd
 
 SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 DESCRIPTION="Tools to monitor storage systems to provide advanced warning of disk degradation"
 HOMEPAGE="https://www.smartmontools.org"

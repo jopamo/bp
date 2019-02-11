@@ -17,7 +17,7 @@ else
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2" # GPL-2 only
 SLOT="0"

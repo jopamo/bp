@@ -12,7 +12,7 @@ SRC_URI="https://files.pythonhosted.org/packages/41/f5/3cf63735d54aa9974e544aa25
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="test"
 
 DEPEND="dev-python/setuptools"

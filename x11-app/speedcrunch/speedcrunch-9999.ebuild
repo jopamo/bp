@@ -9,7 +9,7 @@ inherit cmake-utils xdg-utils git-r3
 DESCRIPTION="Fast and usable calculator for power users"
 HOMEPAGE="http://speedcrunch.org/"
 EGIT_REPO_URI="https://bitbucket.org/heldercorreia/speedcrunch.git"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"
 SLOT="0"

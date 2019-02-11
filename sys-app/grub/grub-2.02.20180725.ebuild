@@ -10,12 +10,12 @@ else
 	SNAPSHOT=c79ebcd18cf3e208e9dda5e2ae008f76c92fe451
 	SRC_URI="http://git.savannah.gnu.org/cgit/grub.git/snapshot/grub-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 fi
 
 inherit autotools flag-o-matic multibuild toolchain-funcs
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 PATCHES=(
 	"${FILESDIR}"/gfxpayload.patch

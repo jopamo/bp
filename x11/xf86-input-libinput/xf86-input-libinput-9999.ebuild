@@ -9,7 +9,7 @@ DESCRIPTION="X.org input driver based on libinput"
 if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI="https://github.com/whot/xf86-input-libinput.git"
 	inherit git-r3
-	#KEYWORDS="amd64 arm64 x86"
+	#KEYWORDS="amd64 arm64"
 else
 	SRC_URI="https://www.x.org/releases/individual/driver/${P}.tar.bz2"
 	KEYWORDS="amd64 arm64"

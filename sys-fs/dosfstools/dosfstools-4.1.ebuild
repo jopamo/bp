@@ -8,7 +8,7 @@ SRC_URI="https://github.com/dosfstools/dosfstools/releases/download/v${PV}/${P}.
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="+udev"
 
 CDEPEND="udev? ( sys-app/systemd )"

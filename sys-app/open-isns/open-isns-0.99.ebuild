@@ -10,7 +10,7 @@ SRC_URI="https://github.com/open-iscsi/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.g
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="debug slp ssl static"
 
 src_configure() {

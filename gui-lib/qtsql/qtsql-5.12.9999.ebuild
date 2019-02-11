@@ -5,7 +5,7 @@ QT5_MODULE="qtbase"
 inherit qt5-build
 
 DESCRIPTION="SQL abstraction library for the Qt5 framework"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="freetds mysql oci8 odbc postgres +sqlite"
 

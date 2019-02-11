@@ -10,7 +10,7 @@ SRC_URI="https://github.com/nodejs/http-parser/archive/v${PV}.tar.gz -> ${P}.tar
 
 LICENSE="MIT"
 SLOT="0/2.8.0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_prepare() {

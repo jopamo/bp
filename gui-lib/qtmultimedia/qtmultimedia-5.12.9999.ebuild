@@ -4,7 +4,7 @@ EAPI=6
 inherit qt5-build
 
 DESCRIPTION="Multimedia (audio, video, radio, camera) library for the Qt5 framework"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="alsa gles2 gstreamer openal pulseaudio qml widgets"
 

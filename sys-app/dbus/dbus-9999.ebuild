@@ -13,7 +13,7 @@ EGIT_REPO_URI="https://anongit.freedesktop.org/git/dbus/dbus.git"
 
 LICENSE="|| ( AFL-2.1 GPL-2 )"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="debug doc selinux static-libs systemd test user-session X"
 
 #RESTRICT="test"

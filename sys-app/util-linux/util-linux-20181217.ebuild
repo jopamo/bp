@@ -14,7 +14,7 @@ else
 	SNAPSHOT=200769b6c0dff6863089ea2a9ff4ea9ccbd15d0f
 	SRC_URI="https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/snapshot/util-linux-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 fi
 
 DESCRIPTION="Various useful Linux utilities"

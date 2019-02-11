@@ -11,7 +11,7 @@ EGIT_BRANCH=libpng16
 
 LICENSE="libpng"
 SLOT="0/16"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="apng cpu_flags_x86_sse neon static-libs"
 
 RDEPEND=">=lib-sys/zlib-1.2.8-r1:=[${MULTILIB_USEDEP}]

@@ -11,7 +11,7 @@ EGIT_BRANCH="stable"
 
 LICENSE="ISC"
 SLOT="0/23"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="+asm minimal static-libs +urandom cpu_flags_x86_sse4_1 cpu_flags_x86_aes"
 
 PATCHES=( "${FILESDIR}"/${PN}-1.0.10-cpuflags.patch )

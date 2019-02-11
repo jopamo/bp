@@ -5,7 +5,7 @@ EAPI=6
 inherit multilib-minimal git-r3 autotools
 
 DESCRIPTION="X.Org Xcursor library"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 EGIT_REPO_URI=https://github.com/freedesktop/xorg-${PN}.git
 SLOT=0
 

@@ -10,7 +10,7 @@ SRC_URI="http://ipset.netfilter.org/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND=">=sys-app/iptables-1.4.7
 	lib-net/libmnl"

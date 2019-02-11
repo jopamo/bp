@@ -12,7 +12,7 @@ EGIT_REPO_URI="https://github.com/GNOME/gtk-doc.git"
 
 LICENSE="GPL-2 FDL-1.1"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="debug highlight vim"
 

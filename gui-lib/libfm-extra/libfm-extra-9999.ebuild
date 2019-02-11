@@ -7,7 +7,7 @@ DESCRIPTION="A library for file management"
 HOMEPAGE="http://pcmanfm.sourceforge.net/"
 EGIT_REPO_URI="https://github.com/lxde/libfm.git"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 LICENSE="GPL-2"
 SLOT="0/4.5.0" #copy ABI_VERSION because it seems upstream change it randomly
 

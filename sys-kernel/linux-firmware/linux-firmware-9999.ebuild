@@ -7,7 +7,7 @@ inherit git-r3
 EGIT_REPO_URI="https://git.kernel.org/pub/scm/linux/kernel/git/firmware/${PN}.git"
 DESCRIPTION="Linux firmware files"
 HOMEPAGE="https://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 LICENSE="linux-firmware ( BSD ISC MIT no-source-code ) GPL-2 GPL-2+ freedist"
 SLOT="0"
 

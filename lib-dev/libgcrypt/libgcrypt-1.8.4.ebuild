@@ -10,7 +10,7 @@ SRC_URI="mirror://gnupg/${PN}/${P}.tar.bz2"
 
 LICENSE="LGPL-2.1 MIT"
 SLOT="0/20"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="o-flag-munging static-libs"
 
 RDEPEND=">=lib-dev/libgpg-error-1.25[${MULTILIB_USEDEP}]"

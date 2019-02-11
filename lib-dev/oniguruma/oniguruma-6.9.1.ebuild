@@ -12,7 +12,7 @@ SRC_URI="https://github.com/kkos/${PN}/releases/download/v${PV}/${MY_P}.tar.gz"
 
 LICENSE="BSD-2"
 SLOT="0/4"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="crnl-as-line-terminator static-libs"
 
 S="${WORKDIR}/${MY_P}"

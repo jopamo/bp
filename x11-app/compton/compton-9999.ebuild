@@ -13,7 +13,7 @@ EGIT_REPO_URI="https://github.com/yshui/compton.git"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="sanitize doc dbus +drm opengl +pcre +xinerama"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 

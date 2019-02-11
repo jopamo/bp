@@ -11,7 +11,7 @@ HOMEPAGE="http://openbox.org/"
 
 EGIT_REPO_URI="https://github.com/danakj/openbox.git"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"
 SLOT=0

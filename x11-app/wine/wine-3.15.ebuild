@@ -11,7 +11,7 @@ else
 	SRC_URI="https://github.com/wine-mirror/wine/archive/${P}.tar.gz
 			staging? ( https://github.com/wine-staging/wine-staging/archive/v${PV}.tar.gz )"
 	S=${WORKDIR}/wine-wine-${PV}
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 fi
 
 DESCRIPTION="Free implementation of Windows(tm) on Unix, without external patchsets"

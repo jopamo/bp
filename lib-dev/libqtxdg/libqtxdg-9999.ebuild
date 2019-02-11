@@ -16,7 +16,7 @@ fi
 LICENSE="LGPL-2.1"
 SLOT="0"
 IUSE="test"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 CDEPEND="
 	gui-lib/qtcore:5
 	gui-lib/qtdbus:5

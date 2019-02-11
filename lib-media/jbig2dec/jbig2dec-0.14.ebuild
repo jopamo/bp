@@ -10,7 +10,7 @@ SRC_URI="https://github.com/ArtifexSoftware/jbig2dec/archive/${PV}.tar.gz -> ${P
 
 LICENSE="AGPL-3"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="png static-libs test"
 
 RDEPEND="png? ( lib-media/libpng:0= )"

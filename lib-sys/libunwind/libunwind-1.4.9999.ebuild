@@ -11,7 +11,7 @@ EGIT_BRANCH="v1.4-stable"
 
 LICENSE="MIT"
 SLOT="7"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="debug debug-frame doc libatomic lzma +static-libs"
 
 RDEPEND="lzma? ( app-compression/xz-utils )"

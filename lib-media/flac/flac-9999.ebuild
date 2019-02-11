@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/xiph/flac.git"
 
 LICENSE="BSD FDL-1.2 GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="altivec +cxx debug ogg cpu_flags_x86_sse static-libs"
 
 RDEPEND="ogg? ( >=lib-media/libogg-1.3.0[${MULTILIB_USEDEP}] )"

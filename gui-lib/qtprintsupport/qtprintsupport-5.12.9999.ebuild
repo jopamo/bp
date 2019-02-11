@@ -6,7 +6,7 @@ VIRTUALX_REQUIRED="test"
 inherit qt5-build
 
 DESCRIPTION="Printing support library for the Qt5 framework"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="cups gles2"
 

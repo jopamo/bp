@@ -9,7 +9,7 @@ if [[ ${PV} == "9999" ]] ; then
 	EGIT_BRANCH="master"
 else
 	SRC_URI="https://www.kernel.org/pub/linux/utils/kbd/${P}.tar.xz"
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 fi
 
 inherit eutils ${SCM}

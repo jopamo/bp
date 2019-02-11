@@ -9,7 +9,7 @@ if [[ ${PV} == "9999" ]] ; then
 	inherit git-r3 autotools
 else
 	SRC_URI="https://github.com/strace/strace/releases/download/v${PV}/${P}.tar.xz"
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 fi
 
 DESCRIPTION="A useful diagnostic, instructional, and debugging tool"

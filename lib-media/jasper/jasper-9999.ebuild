@@ -8,7 +8,7 @@ DESCRIPTION="Implementation of the codec specified in the JPEG-2000 Part-1 stand
 HOMEPAGE="https://www.ece.uvic.ca/~mdadams/jasper/"
 
 EGIT_REPO_URI="https://github.com/mdadams/jasper.git"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="JasPer2.0"
 SLOT="0"

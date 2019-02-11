@@ -8,7 +8,7 @@ SRC_URI=""
 
 LICENSE="GPL-2"
 SLOT="5"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND=">=x11/xdg-utils-1.1.1-r1"
 

@@ -12,7 +12,7 @@ EGIT_REPO_URI="https://github.com/KDE/extra-cmake-modules.git"
 SLOT=0
 
 LICENSE="BSD"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="doc test"
 
 DEPEND="

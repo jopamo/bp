@@ -14,7 +14,7 @@ else
 	SNAPSHOT=e8b90ce2d6ebf846cb0c9a3255d4deacf075f9c4
 	SRC_URI="https://github.com/jpirko/${PN}/archive/${SNAPSHOT}.zip -> ${P}.zip"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="GPL-2"

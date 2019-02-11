@@ -8,7 +8,7 @@ inherit perl-module
 DESCRIPTION="Perl library for parsing the output of nsgmls"
 LICENSE="GPL-2+"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 DEPEND="dev-lang/perl"
 

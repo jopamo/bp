@@ -12,7 +12,7 @@ LICENSE="BSD"
 
 SLOT="0/${PV}"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="debug doc examples static-libs"
 
 DEPEND="

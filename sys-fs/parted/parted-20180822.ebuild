@@ -10,7 +10,7 @@ SRC_URI="https://1g4.org/files/parted-20180822.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="+debug device-mapper nls readline selinux static-libs"
 RESTRICT="test"
 

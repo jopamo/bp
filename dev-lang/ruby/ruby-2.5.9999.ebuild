@@ -14,7 +14,7 @@ EGIT_BRANCH="ruby_2_5"
 SRC_URI="https://1g4.org/files/ruby-configure"
 
 LICENSE="|| ( Ruby-BSD BSD-2 )"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="debug doc jemalloc socks5 static-libs"
 
 src_prepare() {

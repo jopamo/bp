@@ -18,7 +18,7 @@ LICENSE="PHP-3.01
 	unicode? ( BSD-2 LGPL-2.1 )"
 
 SLOT=0
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 # We can build the following SAPIs in the given order
 SAPIS="embed cli cgi fpm phpdbg"

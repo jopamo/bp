@@ -18,7 +18,7 @@ SRC_URI="https://archive.mozilla.org/pub/security/nss/releases/${RTM_NAME}/src/$
 
 LICENSE="|| ( MPL-2.0 GPL-2 LGPL-2.1 )"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="cacert +nss-pem utils"
 CDEPEND=">=lib-sys/sqlite-3.8.2[${MULTILIB_USEDEP}]
 	>=lib-sys/zlib-1.2.8-r1[${MULTILIB_USEDEP}]"

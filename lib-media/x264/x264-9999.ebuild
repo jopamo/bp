@@ -8,7 +8,7 @@ DESCRIPTION="A free library for encoding X264/AVC streams"
 HOMEPAGE="https://www.videolan.org/developers/x264.html"
 
 EGIT_REPO_URI="https://git.videolan.org/git/x264.git"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 SONAME="152"
 SLOT="0/${SONAME}"

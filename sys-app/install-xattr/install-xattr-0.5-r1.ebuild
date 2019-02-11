@@ -12,7 +12,7 @@ if [[ ${PV} == "9999" ]] ; then
 	inherit git-r3
 else
 	SRC_URI="https://dev.gentoo.org/~blueness/install-xattr/${P}.tar.bz2"
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 	S=${WORKDIR}/${PN}
 fi
 

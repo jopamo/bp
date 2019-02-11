@@ -8,7 +8,7 @@ DESCRIPTION="Low-level pixel manipulation routines"
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/pixman.git"
 SLOT=0
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="altivec iwmmxt loongson2f cpu_flags_x86_mmxext neon cpu_flags_x86_sse2 cpu_flags_x86_ssse3"
 

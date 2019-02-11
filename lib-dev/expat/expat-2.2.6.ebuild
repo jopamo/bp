@@ -9,7 +9,7 @@ SRC_URI="https://github.com/libexpat/libexpat/releases/download/R_${PV//\./_}/ex
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="examples static-libs unicode"
 DEPEND="unicode? ( ${AUTOTOOLS_DEPEND} )"

@@ -12,7 +12,7 @@ EGIT_REPO_URI="https://github.com/GNOME/pygobject.git"
 
 LICENSE="LGPL-2.1+"
 SLOT="3"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 REQUIRED_USE="
 	${PYTHON_REQUIRED_USE}

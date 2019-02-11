@@ -35,7 +35,7 @@ esac
 
 LICENSE="GPL-3"
 SLOT="0/7"  # subslot matches SONAME major
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="static-libs utils"
 
 RDEPEND=">=lib-sys/ncurses-5.9-r3:0=[static-libs?,${MULTILIB_USEDEP}]"

@@ -6,7 +6,7 @@ inherit meson git-r3 flag-o-matic
 
 DESCRIPTION="X.Org driver for Intel cards"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="+sna +uxa +xaa +ums +kms +dri1 +dri2 +dri3 +present xvmc valgrind +tools backlight backlight-helper +tearfree use-create2 async-swap"
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/xorg/driver/xf86-video-intel.git"
 SLOT=0

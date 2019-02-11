@@ -10,7 +10,7 @@ HOMEPAGE="https://www.freedesktop.org/wiki/Software/libevdev/"
 SRC_URI="https://www.freedesktop.org/software/libevdev/${P}.tar.xz"
 SLOT=0
 RESTRICT="test" # Tests need to run as root.
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 multilib_src_configure() {

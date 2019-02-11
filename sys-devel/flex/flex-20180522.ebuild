@@ -13,7 +13,7 @@ S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="FLEX"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="nls static-libs test"
 
 # We want bison explicitly and not yacc in general #381273

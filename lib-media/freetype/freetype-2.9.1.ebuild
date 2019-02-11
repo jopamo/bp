@@ -15,7 +15,7 @@ if [[ "${PV}" != 9999 ]] ; then
 			mirror://gnu/freetype/ft2demos-${PV}.tar.bz2 )
 		doc?	( mirror://sourceforge/freetype/${PN}-doc-${PV}.tar.bz2
 			mirror://gnu/freetype/${PN}-doc-${PV}.tar.bz2 )"
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 	IUSE+=" doc"
 else
 	inherit autotools git-r3

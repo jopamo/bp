@@ -8,7 +8,7 @@ DESCRIPTION="(FFmpeg) Libavcodec-SMASH decoder/demuxer wrapper library"
 HOMEPAGE="https://github.com/l-smash/l-smash"
 EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="ISC"
 SLOT="0"

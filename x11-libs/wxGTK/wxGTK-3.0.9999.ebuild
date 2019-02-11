@@ -9,7 +9,7 @@ HOMEPAGE="https://wxwidgets.org/"
 EGIT_REPO_URI="https://github.com/wxWidgets/wxWidgets.git"
 EGIT_BRANCH="WX_3_0_BRANCH"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="+X aqua doc debug opengl sdl tiff"
 
 SLOT="3.0-gtk3"

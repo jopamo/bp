@@ -13,7 +13,7 @@ SRC_URI="mirror://kernel/linux/utils/${PN}/v$(get_version_component_range 1-2)/$
 LICENSE="GPL-2+"
 SLOT="0/12" # libcryptsetup.so version
 [[ ${PV} != *_rc* ]] && \
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 CRYPTO_BACKENDS="+gcrypt kernel nettle openssl"
 
 IUSE="${CRYPTO_BACKENDS} libressl nls pwquality python reencrypt static static-libs udev urandom"

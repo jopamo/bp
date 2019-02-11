@@ -10,7 +10,7 @@ SRC_URI="mirror://sourceforge/tcl/${PN}-core${PV}-src.tar.gz"
 
 LICENSE="tcltk"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 S="${WORKDIR}/tcl${PV}/unix"
 

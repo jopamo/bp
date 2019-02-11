@@ -5,7 +5,7 @@ QT5_MODULE="qtbase"
 inherit qt5-build
 
 DESCRIPTION="The GUI module and platform plugins for the Qt5 framework"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="accessibility dbus egl eglfs evdev +gif gles2 ibus
 	jpeg +libinput +png tslib tuio +udev vnc +xcb"

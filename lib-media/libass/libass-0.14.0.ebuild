@@ -10,7 +10,7 @@ SRC_URI="https://github.com/libass/libass/releases/download/${PV}/${P}.tar.xz"
 
 LICENSE="ISC"
 SLOT="0/9" # subslot = libass soname version
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="+fontconfig +harfbuzz static-libs"
 
 RDEPEND="fontconfig? ( >=lib-media/fontconfig-2.10.92[${MULTILIB_USEDEP}] )

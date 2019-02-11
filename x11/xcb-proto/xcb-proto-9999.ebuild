@@ -9,7 +9,7 @@ HOMEPAGE="https://xcb.freedesktop.org/"
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/xcb/proto.git"
 SLOT=0
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 DEPEND="${RDEPEND}
 	lib-dev/libxml2"

@@ -13,7 +13,7 @@ EGIT_BRANCH="gdb-8.2-branch"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="+client lzma multitarget nls +python +server test vanilla xml"
 REQUIRED_USE="

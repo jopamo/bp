@@ -11,7 +11,7 @@ HOMEPAGE="http://www.xmlsoft.org/"
 
 LICENSE="MIT"
 SLOT="2"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="debug icu ipv6 lzma python readline static-libs"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 

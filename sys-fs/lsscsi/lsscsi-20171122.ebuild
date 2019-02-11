@@ -13,7 +13,7 @@ else
 	SNAPSHOT=c6afad0cc983096fe6f8870c30c5f63076c94c03
 	SRC_URI="https://github.com/hreinecke/lsscsi/archive/${SNAPSHOT}.zip -> ${P}.zip"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="GPL-2"

@@ -19,7 +19,7 @@ REQUIRED_USE="
 	xinerama? ( X )
 "
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 # Upstream wants us to do their job:
 # https://bugzilla./show_bug.cgi?id=768662#c1

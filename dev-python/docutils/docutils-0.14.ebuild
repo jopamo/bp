@@ -12,7 +12,7 @@ SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
 
 LICENSE="BSD-2 GPL-3 public-domain"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 DEPEND="dev-python/pygments[${PYTHON_USEDEP}]"
 RDEPEND="${DEPEND}"

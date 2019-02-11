@@ -11,7 +11,7 @@ SRC_URI="https://github.com/qpdf/qpdf/archive/release-${P}.tar.gz -> ${P}.tar.gz
 LICENSE="|| ( Apache-2.0 Artistic-2 )"
 S=${WORKDIR}/${PN}-release-${P}
 SLOT="0/18"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 DEPEND="lib-media/libjpeg-turbo"
 

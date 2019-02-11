@@ -7,7 +7,7 @@ HOMEPAGE="https://poppler.freedesktop.org/"
 SRC_URI="https://poppler.freedesktop.org/${P}.tar.gz"
 
 LICENSE="BSD GPL-2 MIT"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 SLOT="0"
 
 src_install() {

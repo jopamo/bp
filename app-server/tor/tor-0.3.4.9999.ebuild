@@ -11,7 +11,7 @@ EGIT_BRANCH=maint-0.3.4
 
 LICENSE="BSD GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="libressl lzma scrypt seccomp selinux systemd tor-hardening test web zstd"
 

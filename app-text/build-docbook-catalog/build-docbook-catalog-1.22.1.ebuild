@@ -8,7 +8,7 @@ SRC_URI="https://github.com/somasis/build-docbook-catalog/archive/v${PV}.tar.gz 
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="|| ( sys-app/util-linux app-misc/getopt )
 	!<app-text/docbook-xsl-stylesheets-1.73.1

@@ -10,7 +10,7 @@ HOMEPAGE="https://01.org/linuxmedia/vaapi"
 LICENSE="MIT"
 SLOT="0/$(get_version_component_range 1)"
 EGIT_REPO_URI="https://github.com/01org/libva"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="+drm opengl wayland X utils"
 

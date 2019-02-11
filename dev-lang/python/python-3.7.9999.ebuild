@@ -12,7 +12,7 @@ EGIT_BRANCH="3.7"
 
 LICENSE="PSF-2"
 SLOT="3.7"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="build examples hardened ipv6 libressl"
 RESTRICT="test"
 

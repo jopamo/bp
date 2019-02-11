@@ -8,7 +8,7 @@ DESCRIPTION="create an index of scalable font files for X"
 EGIT_REPO_URI=https://github.com/freedesktop/xorg-${PN}.git
 SLOT=0
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="x11-libs/libfontenc
 	lib-media/freetype:2

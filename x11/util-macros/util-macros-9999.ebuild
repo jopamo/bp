@@ -8,7 +8,7 @@ EGIT_REPO_URI="https://anongit.freedesktop.org/git/xorg/util/macros.git"
 DESCRIPTION="X.Org autotools utility macros"
 SLOT=0
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 src_prepare() {
 	default

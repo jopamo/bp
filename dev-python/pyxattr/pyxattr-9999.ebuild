@@ -12,7 +12,7 @@ EGIT_REPO_URI="https://github.com/iustin/${PN}.git"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="test"
 
 RDEPEND="sys-app/attr"

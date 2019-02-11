@@ -9,7 +9,7 @@ EGIT_REPO_URI="https://github.com/GNOME/gnome-common.git"
 
 LICENSE="GPL-3"
 SLOT="3"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="+autoconf-archive"
 
 src_prepare() {

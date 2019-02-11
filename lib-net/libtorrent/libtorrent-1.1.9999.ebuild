@@ -10,7 +10,7 @@ HOMEPAGE="http://libtorrent.org"
 EGIT_REPO_URI="https://github.com/arvidn/libtorrent.git"
 EGIT_BRANCH="RC_1_1"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 LICENSE="BSD"
 SLOT="0"
 IUSE="static-libs"

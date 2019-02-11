@@ -6,7 +6,7 @@ inherit qt5-build
 
 DESCRIPTION="Set of components for creating classic desktop-style UIs for the Qt5 framework"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 # keep IUSE defaults in sync with qtgui
 IUSE="gles2 gtk +png +xcb"

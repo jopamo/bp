@@ -15,7 +15,7 @@ fi
 
 DESCRIPTION="Fast lightweight tabbed filemanager"
 HOMEPAGE="https://github.com/lxqt/pcmanfm-qt"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2+"
 SLOT="0"

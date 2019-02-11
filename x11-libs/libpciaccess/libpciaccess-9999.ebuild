@@ -11,7 +11,7 @@ SLOT=0
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/libpciaccess"
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 else
 	SRC_URI="https://www.x.org/archive/individual/lib/${P}.tar.bz2"
 fi

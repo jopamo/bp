@@ -14,7 +14,7 @@ EMULTILIB_PKG="true"
 EGIT_REPO_URI="git://sourceware.org/git/glibc.git"
 EGIT_BRANCH="release/2.29/master"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RELEASE_VER=${PV}
 

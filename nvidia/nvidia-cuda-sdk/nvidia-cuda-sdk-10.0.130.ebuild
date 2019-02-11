@@ -13,7 +13,7 @@ SRC_URI="https://developer.nvidia.com/compute/cuda/${MYD}/Prod2/local_installers
 
 LICENSE="CUDPP"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="+cuda debug +doc examples opencl mpi"
 
 RDEPEND="

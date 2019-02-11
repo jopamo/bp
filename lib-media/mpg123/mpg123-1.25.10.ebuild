@@ -10,7 +10,7 @@ SRC_URI="https://www.mpg123.org/download/${P}.tar.bz2"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="alsa ipv6 pulseaudio"
 

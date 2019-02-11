@@ -6,7 +6,7 @@ inherit cmake-multilib git-r3 gnome2-utils
 
 DESCRIPTION="Breeze SVG icon theme"
 LICENSE="LGPL-3"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 SLOT=0
 
 IUSE="test"

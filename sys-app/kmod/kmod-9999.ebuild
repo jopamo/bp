@@ -9,7 +9,7 @@ inherit multilib python-r1
 if [[ ${PV} == 9999* ]]; then
 	EGIT_REPO_URI="git://git.kernel.org/pub/scm/utils/kernel/${PN}/${PN}.git"
 	inherit autotools git-r3
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 else
 	SRC_URI="mirror://kernel/linux/utils/kernel/kmod/${P}.tar.xz"
 	inherit libtool

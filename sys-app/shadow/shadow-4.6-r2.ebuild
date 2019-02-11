@@ -7,7 +7,7 @@ inherit eutils libtool pam multilib autotools
 DESCRIPTION="Utilities to deal with user accounts"
 HOMEPAGE="https://github.com/shadow-maint/shadow http://pkg-shadow.alioth.debian.org/"
 SRC_URI="https://github.com/shadow-maint/shadow/releases/download/${PV}/${P}.tar.gz"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="BSD GPL-2"
 SLOT="0"

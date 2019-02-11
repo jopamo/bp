@@ -15,7 +15,7 @@ fi
 
 DESCRIPTION="HTTP/2 C Library"
 HOMEPAGE="https://nghttp2.org/"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="MIT"
 SLOT="0/1.14" # <C++>.<C> SONAMEs

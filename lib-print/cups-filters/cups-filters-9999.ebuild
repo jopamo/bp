@@ -8,7 +8,7 @@ DESCRIPTION="Cups filters"
 HOMEPAGE="https://wiki.linuxfoundation.org/openprinting/cups-filters"
 EGIT_REPO_URI="https://github.com/OpenPrinting/cups-filters.git"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 LICENSE="MIT GPL-2"
 SLOT="0"
 IUSE="dbus ipp_autosetup jpeg ldap pclm pdf perl png static-libs test tiff"

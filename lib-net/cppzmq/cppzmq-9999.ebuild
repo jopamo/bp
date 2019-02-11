@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/zeromq/${PN}.git"
 
 SLOT="0"
 LICENSE="MIT"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="lib-net/libzmq"
 DEPEND=""

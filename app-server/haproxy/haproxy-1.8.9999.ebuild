@@ -6,7 +6,7 @@ inherit user versionator toolchain-funcs flag-o-matic systemd linux-info git-r3
 
 DESCRIPTION="A TCP/HTTP reverse proxy for high availability environments"
 HOMEPAGE="http://haproxy.1wt.eu"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 EGIT_REPO_URI="http://git.haproxy.org/git/haproxy-1.8.git/"
 EGIT_MIN_CLONE_TYPE=single
 LICENSE="GPL-2 LGPL-2.1"

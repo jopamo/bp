@@ -10,7 +10,7 @@ SRC_URI="https://github.com/Kitware/CMake/releases/download/v${PV}/cmake-${PV}.t
 
 LICENSE="CMake"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="doc qt5"
 
 RDEPEND="

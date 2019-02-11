@@ -10,7 +10,7 @@ DESCRIPTION="X C-language Bindings sample implementations"
 HOMEPAGE="https://xcb.freedesktop.org/"
 SLOT=0
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="test doc"
 
 RDEPEND=">=x11-libs/libxcb-1.9.1[${MULTILIB_USEDEP}]

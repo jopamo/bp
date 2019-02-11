@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/zeromq/${PN}.git"
 
 LICENSE="LGPL-3"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="doc static-libs test"
 
 RDEPEND="

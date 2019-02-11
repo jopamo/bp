@@ -9,7 +9,7 @@ HOMEPAGE="http://www.gnupg.org/related_software/libassuan/index.en.html"
 SRC_URI="https://www.gnupg.org/ftp/gcrypt/${PN}/${P}.tar.bz2"
 LICENSE="GPL-3 LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 RDEPEND=">=lib-dev/libgpg-error-1.8"

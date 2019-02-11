@@ -14,7 +14,7 @@ HOMEPAGE="https://www.gnu.org/software/findutils/"
 
 SRC_URI="mirror://gnu/${PN}/${MY_P}.tar.gz
 		https://1g4.org/files/findutils-20180716.patch.tar.xz"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 S="${WORKDIR}/${MY_P}"
 

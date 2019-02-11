@@ -15,7 +15,7 @@ inherit cmake-utils
 
 DESCRIPTION="Core libraries for simple video cutting, filtering and encoding tasks"
 HOMEPAGE="http://fixounet.free.fr/avidemux"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 # Multiple licenses because of all the bundled stuff.
 LICENSE="GPL-1 GPL-2 MIT PSF-2 public-domain"

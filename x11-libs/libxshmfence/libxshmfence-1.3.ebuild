@@ -9,7 +9,7 @@ SRC_URI="https://www.x.org/releases/individual/lib/${P}.tar.bz2"
 
 SLOT=0
 IUSE=static-libs
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 DEPEND="x11/xorgproto"
 

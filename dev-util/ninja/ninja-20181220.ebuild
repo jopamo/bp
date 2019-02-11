@@ -9,7 +9,7 @@ inherit python-any-r1 toolchain-funcs
 SNAPSHOT=6e02ebc4b5947095fa64b5bf814f14dd6f6f6a9a
 
 SRC_URI="https://github.com/ninja-build/ninja/archive/${SNAPSHOT}.zip -> ${P}.zip"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 DESCRIPTION="A small build system similar to make"
 HOMEPAGE="https://ninja-build.org/"

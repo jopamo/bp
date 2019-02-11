@@ -9,7 +9,7 @@ inherit git-r3 meson
 DESCRIPTION="X.Org combined protocol headers"
 HOMEPAGE="https://cgit.freedesktop.org/xorg/proto/xorgproto/"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 LICENSE="MIT"
 SLOT="0"
 

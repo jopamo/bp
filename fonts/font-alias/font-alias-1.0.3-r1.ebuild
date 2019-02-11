@@ -5,7 +5,7 @@ EAPI=6
 DESCRIPTION="X.Org font aliases"
 SRC_URI="https://www.x.org/archive/individual/font/${P}.tar.bz2"
 SLOT=0
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 DEPEND="${RDEPEND}
 	x11/mkfontscale

@@ -10,7 +10,7 @@ SRC_URI="mirror://kernel/linux/libs/security/linux-privs/libcap2/${P}.tar.xz"
 
 LICENSE="|| ( GPL-2 BSD )"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="pam static-libs"
 
 RDEPEND=">=sys-app/attr-2.4.47[${MULTILIB_USEDEP}]

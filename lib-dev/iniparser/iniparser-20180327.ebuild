@@ -10,11 +10,11 @@ HOMEPAGE="http://ndevilla.free.fr/iniparser/"
 SNAPSHOT=7b68537ac11fa62e923fd26aa87e206dc93a9a55
 SRC_URI="https://github.com/ndevilla/iniparser/archive/${SNAPSHOT}.zip -> ${P}.zip"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RESTRICT="test"
 

@@ -6,7 +6,7 @@ inherit git-r3 autotools
 
 DESCRIPTION="X.Org font encodings"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 EGIT_REPO_URI="https://github.com/freedesktop/xorg-encodings.git"
 SLOT=0
 

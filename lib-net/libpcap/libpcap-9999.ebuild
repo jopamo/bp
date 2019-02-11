@@ -10,7 +10,7 @@ HOMEPAGE="http://www.tcpdump.org/"
 LICENSE="BSD"
 SLOT="0"
 IUSE="bluetooth dbus netlink static-libs usb"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	bluetooth? ( app-net/bluez:=[${MULTILIB_USEDEP}] )

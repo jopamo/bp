@@ -13,7 +13,7 @@ S="${WORKDIR}/sqlite-src-${MY_PV}"
 
 LICENSE="public-domain"
 SLOT="3"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 DEPEND="dev-lang/tcl"

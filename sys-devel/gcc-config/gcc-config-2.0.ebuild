@@ -9,7 +9,7 @@ HOMEPAGE="https://gitweb.gentoo.org/proj/gcc-config.git/"
 LICENSE="GPL-2"
 SLOT="0"
 SRC_URI="mirror://gentoo/${P}.tar.xz"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND=">=sys-app/gentoo-functions-0.10"
 

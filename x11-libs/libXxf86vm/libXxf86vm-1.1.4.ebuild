@@ -9,7 +9,7 @@ EGIT_REPO_URI=https://github.com/freedesktop/xorg-${PN}.git
 DESCRIPTION="X.Org Xxf86vm library"
 SLOT=0
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 DEPEND=">=x11-libs/libX11-1.6.2[${MULTILIB_USEDEP}]
 	>=x11-libs/libXext-1.3.2[${MULTILIB_USEDEP}]

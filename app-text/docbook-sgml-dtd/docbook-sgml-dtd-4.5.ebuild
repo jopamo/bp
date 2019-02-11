@@ -9,7 +9,7 @@ SRC_URI="http://www.docbook.org/sgml/${PV}/${MY_P}.zip"
 
 LICENSE="docbook"
 SLOT="4.5"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="prefix"
 

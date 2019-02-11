@@ -10,7 +10,7 @@ SRC_URI="mirror://gnu/gdbm/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0/6"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="nls +readline static-libs"
 
 DEPEND="readline? ( lib-sys/readline:0=[${MULTILIB_USEDEP}] )"

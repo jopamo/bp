@@ -16,7 +16,7 @@ else
 	SNAPSHOT=1e64feb5f1a9ea02687228e3073e8b784a04ce46
 	SRC_URI="https://github.com/seccomp/libseccomp/archive/${SNAPSHOT}.zip -> ${P}.zip"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="LGPL-2.1"

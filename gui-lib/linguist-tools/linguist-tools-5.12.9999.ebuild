@@ -5,7 +5,7 @@ QT5_MODULE="qttools"
 inherit qt5-build
 
 DESCRIPTION="Tools for working with Qt translation data files"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="qml"
 

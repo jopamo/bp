@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib-minimal linux-info systemd git-r3
+inherit linux-info systemd git-r3
 
 EGIT_REPO_URI=https://github.com/samba-team/samba.git
 KEYWORDS="amd64 arm64"
@@ -16,31 +16,19 @@ SLOT="0"
 IUSE="acl -addc -addns -ads -ceph client -cluster cups debug dmapi fam gnutls gpg iprint json -ldap
 pam quota selinux syslog systemd test winbind zeroconf"
 
-MULTILIB_WRAPPED_HEADERS=(
-	/usr/include/samba-4.0/policy.h
-	/usr/include/samba-4.0/dcerpc_server.h
-	/usr/include/samba-4.0/ctdb.h
-	/usr/include/samba-4.0/ctdb_client.h
-	/usr/include/samba-4.0/ctdb_protocol.h
-	/usr/include/samba-4.0/ctdb_private.h
-	/usr/include/samba-4.0/ctdb_typesafe_cb.h
-	/usr/include/samba-4.0/ctdb_version.h
-)
-
-# sys-app/attr is an automagic dependency (see bug #489748)
 CDEPEND="
-	>=app-compression/libarchive-3.1.2[${MULTILIB_USEDEP}]
+	>=app-compression/libarchive-3.1.2
 	dev-lang/perl:=
-	lib-dev/libaio[${MULTILIB_USEDEP}]
-	lib-dev/libbsd[${MULTILIB_USEDEP}]
+	lib-dev/libaio
+	lib-dev/libbsd
 	lib-dev/iniparser:0
-	lib-dev/popt[${MULTILIB_USEDEP}]
-	lib-net/libnsl:=[${MULTILIB_USEDEP}]
-	sys-app/attr[${MULTILIB_USEDEP}]
+	lib-dev/popt
+	lib-net/libnsl:=
+	sys-app/attr
 	lib-sys/libcap
-	lib-sys/ncurses:0=[${MULTILIB_USEDEP}]
+	lib-sys/ncurses:0=
 	lib-sys/readline:0=
-	lib-sys/zlib[${MULTILIB_USEDEP}]
+	lib-sys/zlib
 	pam? ( lib-sys/pam )
 	ceph? ( sys-cluster/ceph )
 	cluster? (
@@ -57,7 +45,7 @@ CDEPEND="
 	)
 	gpg? ( app-crypt/gpgme )
 	json? ( lib-dev/jansson )
-	ldap? ( net-nds/openldap[${MULTILIB_USEDEP}] )
+	ldap? ( net-nds/openldap )
 	systemd? ( sys-app/systemd:0= )
 "
 DEPEND="${CDEPEND}
@@ -65,7 +53,7 @@ DEPEND="${CDEPEND}
 	lib-dev/libxslt
 	=dev-lang/python-2.7.9999
 	lib-net/rpcsvc-proto
-	lib-net/libtirpc[${MULTILIB_USEDEP}]"
+	lib-net/libtirpc"
 RDEPEND="${CDEPEND}
 	client? ( sys-app/cifs-utils[ads?] )
 	selinux? ( sec-policy/selinux-samba )
@@ -117,7 +105,7 @@ multilib_src_configure() {
 		--with-piddir="${EPREFIX}/run/${PN}"
 		--disable-rpath
 		--disable-rpath-install
-		$(multilib_native_use_with acl acl-support)
+		$(use_with acl acl-support)
 		--without-ad-dc
 		--without-dnsupdate
 		--without-ads
@@ -125,20 +113,20 @@ multilib_src_configure() {
 		--disable-avahi
 		--without-ldap
 		--disable-iprint
-		$(multilib_native_use_enable ceph cephfs)
-		$(multilib_native_use_with cluster cluster-support)
-		$(multilib_native_use_enable cups)
-		$(multilib_native_use_with dmapi)
-		$(multilib_native_use_with fam)
-		$(multilib_native_use_with gpg gpgme)
-		$(multilib_native_use_with json json-audit)
-		$(multilib_native_use_enable iprint)
-		$(multilib_native_use_with pam)
-		$(multilib_native_usex pam "--with-pammodulesdir=${EPREFIX}/$(get_libdir)/security" '')
-		$(multilib_native_use_with quota quotas)
-		$(multilib_native_use_with syslog)
-		$(multilib_native_use_with systemd)
-		$(multilib_native_usex test '--enable-selftest' '')
+		$(use_enable ceph cephfs)
+		$(use_with cluster cluster-support)
+		$(use_enable cups)
+		$(use_with dmapi)
+		$(use_with fam)
+		$(use_with gpg gpgme)
+		$(use_with json json-audit)
+		$(use_enable iprint)
+		$(use_with pam)
+		$(usex pam "--with-pammodulesdir=${EPREFIX}/$(get_libdir)/security" '')
+		$(use_with quota quotas)
+		$(use_with syslog)
+		$(use_with systemd)
+		$(usex test '--enable-selftest' '')
 		$(use_enable gnutls)
 		$(use_with debug lttng)
 	)
@@ -147,13 +135,10 @@ multilib_src_configure() {
 		./configure ${myconf[@]}
 }
 
-multilib_src_install() {
+src_install() {
 	default
 
-	# Make all .so files executable
-	#find "${ED}" -type f -name "*.so" -exec chmod +x {} +
 
-	if multilib_is_native_abi ; then
 		# create symlink for cups (bug #552310)
 		if use cups ; then
 			dosym ../../../bin/smbspool /usr/libexec/cups/backend/smb
@@ -177,5 +162,4 @@ multilib_src_install() {
 		systemd_dounit "${FILESDIR}"/smbd.{service,socket}
 		systemd_newunit "${FILESDIR}"/smbd_at.service 'smbd@.service'
 		systemd_dounit "${FILESDIR}"/samba.service
-	fi
 }

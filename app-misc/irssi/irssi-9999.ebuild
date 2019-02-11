@@ -2,7 +2,7 @@
 
 EAPI="6"
 
-inherit autotools perl-module git-r3 multilib-minimal
+inherit autotools perl-module git-r3
 
 EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
 
@@ -10,24 +10,14 @@ DESCRIPTION="A modular textUI IRC client with IPv6 support"
 HOMEPAGE="https://irssi.org/"
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
-IUSE="+perl selinux socks5 +proxy libressl"
+KEYWORDS="amd64 arm64"
+IUSE="+perl socks5 +proxy libressl"
 
-CDEPEND="lib-sys/ncurses:0=
+DEPEND="lib-sys/ncurses:0=
 	>=lib-dev/glib-2.6.0
 	!libressl? ( lib-dev/openssl:= )
 	libressl? ( lib-dev/libressl:= )
 	perl? ( dev-lang/perl:= )"
-
-DEPEND="
-	${CDEPEND}
-	dev-util/pkgconfig
-	dev-lang/perl"
-
-RDEPEND="
-	${CDEPEND}
-	selinux? ( sec-policy/selinux-irc )
-	perl? ( !net-im/silc-client )"
 
 src_prepare() {
 	sed -i -e /^autoreconf/d autogen.sh || die
@@ -37,7 +27,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -53,6 +43,6 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_install() {
+src_install() {
 	emake DESTDIR="${D}" install
 }

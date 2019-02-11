@@ -10,7 +10,7 @@ SRC_URI="https://w1.fi/releases/${P}.tar.gz"
 LICENSE="|| ( GPL-2 BSD )"
 
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="ap dbus eap-sim eapol_test fasteap gnutls +hs2-0 libressl p2p privsep ps3 qt5 readline selinux smartcard ssl tdls uncommon-eap-types wimax wps kernel_linux kernel_FreeBSD"
 REQUIRED_USE="fasteap? ( !ssl ) smartcard? ( ssl )"
 
@@ -120,9 +120,6 @@ src_prepare() {
 		# generate-libeap-peer.patch comes before
 		# fix-undefined-reference-to-random_get_bytes.patch
 		eapply "${FILESDIR}/${P}-generate-libeap-peer.patch"
-
-		# multilib-strict fix (bug #373685)
-		sed -e "s/\/usr\/lib/\/usr\/$(get_libdir)/" -i src/eap_peer/Makefile || die
 	fi
 
 	# bug (320097)

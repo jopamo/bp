@@ -2,14 +2,14 @@
 
 EAPI=6
 
-inherit autotools eutils fcaps flag-o-matic gnome2-utils multilib qmake-utils user xdg-utils git-r3
+inherit autotools eutils fcaps flag-o-matic gnome2-utils qmake-utils user xdg-utils git-r3
 
 DESCRIPTION="A network protocol analyzer formerly known as ethereal"
 HOMEPAGE="https://www.wireshark.org/"
 EGIT_REPO_URI="https://github.com/wireshark/wireshark.git"
 EGIT_BRANCH="master-2.4"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"
 SLOT="0/${PV}"

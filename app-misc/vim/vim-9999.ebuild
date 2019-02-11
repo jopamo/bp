@@ -14,7 +14,7 @@ EGIT_REPO_URI="https://github.com/vim/vim.git"
 
 SLOT="0"
 LICENSE="vim"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="X acl cscope debug gpm +minimal nls perl python racket ruby selinux tcl terminal vim-pager"
 REQUIRED_USE="
@@ -143,7 +143,7 @@ src_configure() {
 	rm src/auto/configure || die "rm failed"
 	emake -j1 -C src autoconf
 
-	# This should fix a sandbox violation (see bug 24447). 
+	# This should fix a sandbox violation (see bug 24447).
 	for file in /dev/pty/s* /dev/console; do
 		if [[ -e "${file}" ]]; then
 			addwrite $file

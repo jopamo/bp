@@ -9,7 +9,7 @@ HOMEPAGE="https://www.gnu.org/software/screen/"
 
 if [[ "${PV}" != 9999 ]] ; then
 	SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 else
 	EGIT_REPO_URI="git://git.savannah.gnu.org/screen.git"
 	EGIT_CHECKOUT_DIR="${WORKDIR}/${P}" # needed for setting S later on

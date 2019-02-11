@@ -10,7 +10,7 @@ SRC_URI="https://curl.haxx.se/download/${P}.tar.bz2"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="ldap ssl adns ssh test ipv6 static-libs"
 
@@ -54,7 +54,7 @@ src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_install() {
+src_install() {
 	find "${ED}" -name "*.la" -delete || die
 	rm -rf "${ED}"/etc/
 }

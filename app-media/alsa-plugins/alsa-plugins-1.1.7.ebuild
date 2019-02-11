@@ -2,25 +2,24 @@
 
 EAPI=6
 
-inherit autotools eutils flag-o-matic multilib multilib-minimal
+inherit autotools eutils flag-o-matic
 
 DESCRIPTION="ALSA extra plugins"
 HOMEPAGE="http://www.alsa-project.org/"
 SRC_URI="ftp://ftp.alsa-project.org/pub/plugins/${P}.tar.bz2"
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
-IUSE="debug ffmpeg jack libav libsamplerate pulseaudio"
+KEYWORDS="amd64 arm64"
+IUSE="debug ffmpeg libav libsamplerate pulseaudio"
 
 RDEPEND="
-	>=lib-media/alsa-lib-${PV}:=[${MULTILIB_USEDEP}]
+	>=lib-media/alsa-lib-${PV}
 	ffmpeg? (
 		libav? ( app-media/libav:= )
 		!libav? ( app-media/ffmpeg:0= )
 	)
-	jack? ( virtual/jack[${MULTILIB_USEDEP}] )
-	libsamplerate? ( >=lib-media/libsamplerate-0.1.8-r1:=[${MULTILIB_USEDEP}] )
-	pulseaudio? ( >=app-media/pulseaudio-2.1-r1[${MULTILIB_USEDEP}] )
+	libsamplerate? ( >=lib-media/libsamplerate-0.1.8-r1 )
+	pulseaudio? ( >=app-media/pulseaudio-2.1-r1 )
 "
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
@@ -35,13 +34,12 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	use debug || append-cppflags -DNDEBUG
 
 	ECONF_SOURCE=${S} \
 	econf \
 		$(use_enable ffmpeg avcodec) \
-		$(use_enable jack) \
 		$(use_enable libsamplerate samplerate) \
 		$(use_enable pulseaudio) \
 		--with-speex=no \
@@ -51,10 +49,7 @@ multilib_src_configure() {
 		--disable-usbstream
 }
 
-multilib_src_install_all() {
-	use jack && dodoc README-jack
-	use libsamplerate && dodoc samplerate.txt
-	use ffmpeg && dodoc lavcrate.txt a52.txt
+src_install_all() {
 
 	if use pulseaudio; then
 		# install ALSA configuration files

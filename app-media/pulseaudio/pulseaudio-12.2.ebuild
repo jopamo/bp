@@ -1,14 +1,14 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit autotools eutils flag-o-matic gnome2-utils linux-info systemd user versionator udev multilib-minimal
+inherit autotools eutils flag-o-matic gnome2-utils linux-info systemd user versionator udev
 
 DESCRIPTION="A networked sound server with an advanced plugin system"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/PulseAudio/"
 
 SRC_URI="https://freedesktop.org/software/pulseaudio/releases/${P}.tar.xz"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 # libpulse-simple and libpulse link to libpulse-core; this is daemon's
 # library and can link to gdbm and other GPL-only libraries. In this
@@ -18,7 +18,7 @@ KEYWORDS="amd64 arm64 x86"
 LICENSE="!gdbm? ( LGPL-2.1 ) gdbm? ( GPL-2 ) equalizer? ( AGPL-3+ )"
 
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 # +alsa-plugin as discussed in bug #519530
 IUSE="+alsa +alsa-plugin +asyncns bluetooth +caps dbus doc equalizer +gdbm +glib
@@ -35,22 +35,22 @@ REQUIRED_USE="
 	udev? ( || ( alsa oss ) )
 "
 
-RDEPEND=">=lib-media/libsndfile-1.0.20[${MULTILIB_USEDEP}]
+RDEPEND=">=lib-media/libsndfile-1.0.20
 	X? (
-		>=x11-libs/libX11-1.4.0[${MULTILIB_USEDEP}]
-		>=x11-libs/libxcb-1.6[${MULTILIB_USEDEP}]
-		x11-libs/libSM[${MULTILIB_USEDEP}]
-		x11-libs/libICE[${MULTILIB_USEDEP}]
-		x11-libs/libXtst[${MULTILIB_USEDEP}]
+		>=x11-libs/libX11-1.4.0
+		>=x11-libs/libxcb-1.6
+		x11-libs/libSM
+		x11-libs/libICE
+		x11-libs/libXtst
 	)
-	caps? ( >=lib-sys/libcap-2.22-r2[${MULTILIB_USEDEP}] )
+	caps? ( >=lib-sys/libcap-2.22-r2 )
 	libsamplerate? ( >=lib-media/libsamplerate-0.1.1-r1 )
 	alsa? ( >=lib-media/alsa-lib-1.0.19 )
-	glib? ( >=lib-dev/glib-2.4.0:2[${MULTILIB_USEDEP}] )
+	glib? ( >=lib-dev/glib-2.4.0:2 )
 	zeroconf? ( >=lib-net/avahi-0.6.12[dbus] )
 	jack? ( virtual/jack )
 	lirc? ( app-misc/lirc )
-	dbus? ( >=sys-app/dbus-1.0.0[${MULTILIB_USEDEP}] )
+	dbus? ( >=sys-app/dbus-1.0.0 )
 	gtk? ( x11-libs/gtk+:3 )
 	gnome? ( >=gui-lib/gconf-2.4.0 )
 	bluetooth? (
@@ -58,7 +58,7 @@ RDEPEND=">=lib-media/libsndfile-1.0.20[${MULTILIB_USEDEP}]
 		>=sys-app/dbus-1.0.0
 		lib-media/sbc
 	)
-	asyncns? ( lib-net/libasyncns[${MULTILIB_USEDEP}] )
+	asyncns? ( lib-net/libasyncns )
 	udev? ( >=sys-app/systemd-143[hwdb(+)] )
 	realtime? ( lib-sys/rtkit )
 	equalizer? ( sci-libs/fftw:3.0 )
@@ -70,7 +70,7 @@ RDEPEND=">=lib-media/libsndfile-1.0.20[${MULTILIB_USEDEP}]
 		libressl? ( lib-dev/libressl:= )
 	)
 	gdbm? ( lib-sys/gdbm:= )
-	systemd? ( sys-app/systemd:0=[${MULTILIB_USEDEP}] )
+	systemd? ( sys-app/systemd:0= )
 	lib-dev/libltdl:0
 "
 # it's a valid RDEPEND, libltdl.so is used for native abi
@@ -81,7 +81,7 @@ DEPEND="${RDEPEND}
 	test? ( >=lib-dev/check-0.9.10 )
 	X? (
 		x11/xorgproto
-		>=x11-libs/libXtst-1.0.99.2[${MULTILIB_USEDEP}]
+		>=x11-libs/libXtst-1.0.99.2
 	)
 	lib-dev/libatomic_ops
 	dev-util/pkgconfig
@@ -91,7 +91,7 @@ DEPEND="${RDEPEND}
 "
 # This is a PDEPEND to avoid a circular dep
 PDEPEND="
-	alsa? ( alsa-plugin? ( >=app-media/alsa-plugins-1.0.27-r1[pulseaudio,${MULTILIB_USEDEP}] ) )
+	alsa? ( alsa-plugin? ( >=app-media/alsa-plugins-1.0.27-r1[pulseaudio] ) )
 "
 
 # alsa-utils dep is for the alsasound init.d script (see bug #155707)
@@ -143,7 +143,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=()
 
 	if use gdbm; then
@@ -153,11 +153,9 @@ multilib_src_configure() {
 	fi
 
 	if use bluetooth; then
-		if multilib_is_native_abi; then
-			myconf+=( --enable-bluez5
+		myconf+=( --enable-bluez5
 				$(use_enable native-headset bluez5-native-headset)
 				$(use_enable ofono-headset bluez5-ofono-headset) )
-		fi
 	else
 		myconf+=( --disable-bluez5 )
 	fi
@@ -198,77 +196,19 @@ multilib_src_configure() {
 		--with-systemduserunitdir=$(systemd_get_userunitdir)
 	)
 
-	if ! multilib_is_native_abi; then
-		# disable all the modules and stuff
-		myconf+=(
-			--disable-oss-output
-			--disable-alsa
-			--disable-lirc
-			--disable-jack
-			--disable-avahi
-			--disable-gconf
-			--disable-gtk3
-			--disable-samplerate
-			--disable-bluez5
-			--disable-udev
-			--disable-openssl
-			--disable-orc
-			--disable-webrtc-aec
-			--without-fftw
-			--without-soxr
-			--without-speex
-
-			# tests involve random modules, so just do them for the native
-			--disable-default-build-tests
-
-			# hack around unnecessary checks
-			# (results don't matter, we're not building anything using it)
-			ac_cv_lib_ltdl_lt_dladvise_init=yes
-			--with-database=simple
-		)
-	fi
-
 	ECONF_SOURCE=${S} \
 	econf "${myconf[@]}"
 }
 
-multilib_src_compile() {
-	if multilib_is_native_abi; then
-		emake
-		use doc && emake doxygen
-	else
-		local targets=( libpulse.la libpulsedsp.la libpulse-simple.la )
-		use glib && targets+=( libpulse-mainloop-glib.la )
-		emake -C src ${targets[*]}
-	fi
+src_test() {
+	emake -C src check
 }
 
-multilib_src_test() {
-	# We avoid running the toplevel check target because that will run
-	# po/'s tests too, and they are broken. Officially, it should work
-	# with intltool 0.41, but that doesn't look like a stable release.
-	if multilib_is_native_abi; then
-		emake -C src check
-	fi
+src_install() {
+	emake -j1 DESTDIR="${D}" install
 }
 
-multilib_src_install() {
-	if multilib_is_native_abi; then
-		emake -j1 DESTDIR="${D}" install
-		use doc && dohtml -r doxygen/html/
-	else
-		local targets=( libpulse.la libpulse-simple.la )
-		use glib && targets+=( libpulse-mainloop-glib.la )
-		emake DESTDIR="${D}" install-pkgconfigDATA
-		emake DESTDIR="${D}" -C src \
-			install-libLTLIBRARIES \
-			install-padsplibLTLIBRARIES \
-			lib_LTLIBRARIES="${targets[*]}" \
-			install-pulseincludeHEADERS
-	fi
-}
-
-multilib_src_install_all() {
+src_install_all() {
 	# Drop the script entirely if X is disabled
 	use X || rm "${ED}"/usr/bin/start-pulseaudio-x11
 

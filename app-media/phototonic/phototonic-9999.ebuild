@@ -5,7 +5,7 @@ EAPI=6
 inherit qmake-utils git-r3 xdg-utils gnome2-utils
 
 EGIT_REPO_URI="https://github.com/oferkv/phototonic.git"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 LICENSE="GPL-3"
 SLOT="0"
 IUSE="svg tiff"

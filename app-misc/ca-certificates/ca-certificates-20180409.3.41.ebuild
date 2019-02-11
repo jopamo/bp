@@ -32,7 +32,7 @@ fi
 
 LICENSE="MPL-1.1"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 DEPEND=""
 if ${PRECOMPILED} ; then

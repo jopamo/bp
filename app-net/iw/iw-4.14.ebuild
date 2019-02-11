@@ -10,7 +10,7 @@ SRC_URI="https://www.kernel.org/pub/software/network/${PN}/${P}.tar.xz"
 
 LICENSE="ISC"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="lib-dev/libnl:="
 DEPEND="${RDEPEND}

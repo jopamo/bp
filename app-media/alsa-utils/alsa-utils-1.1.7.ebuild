@@ -1,6 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
+
 inherit eutils systemd udev
 
 DESCRIPTION="Advanced Linux Sound Architecture Utils (alsactl, alsamixer, etc.)"
@@ -9,7 +10,7 @@ SRC_URI="ftp://ftp.alsa-project.org/pub/utils/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0.9"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="bat doc +libsamplerate +ncurses nls"
 
 CDEPEND=">=lib-media/alsa-lib-${PV}

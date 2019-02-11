@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit linux-info multilib systemd flag-o-matic user toolchain-funcs versionator virtualx udev multilib-minimal git-r3 meson
+inherit linux-info systemd flag-o-matic user toolchain-funcs versionator virtualx udev git-r3 meson
 
 DESCRIPTION="A set of co-operative tools that make networking simple and straightforward"
 HOMEPAGE="https://wiki.gnome.org/Projects/NetworkManager"
@@ -19,27 +19,27 @@ REQUIRED_USE="
 	?? ( systemd )
 "
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 COMMON_DEPEND="
-	>=sys-app/dbus-1.2[${MULTILIB_USEDEP}]
-	>=lib-dev/dbus-glib-0.100[${MULTILIB_USEDEP}]
-	>=lib-dev/glib-2.37.6:2[${MULTILIB_USEDEP}]
-	>=lib-dev/libnl-3.2.8:3=[${MULTILIB_USEDEP}]
-	lib-net/libndp[${MULTILIB_USEDEP}]
+	>=sys-app/dbus-1.2
+	>=lib-dev/dbus-glib-0.100
+	>=lib-dev/glib-2.37.6:2
+	>=lib-dev/libnl-3.2.8:3=
+	lib-net/libndp
 	>=app-net/curl-7.24
 	app-net/iputils
-	sys-app/util-linux[${MULTILIB_USEDEP}]
+	sys-app/util-linux
 	lib-sys/readline:0=
-	>=sys-app/systemd-175:=[${MULTILIB_USEDEP}]
+	>=sys-app/systemd-175:=
 	audit? ( sys-app/audit )
 	bluetooth? ( >=app-net/bluez-5 )
 	dhcpcd? ( app-net/dhcpcd )
 	gnutls? (
-		lib-dev/libgcrypt:0=[${MULTILIB_USEDEP}]
-		>=lib-net/gnutls-2.12:=[${MULTILIB_USEDEP}] )
-	json? ( lib-dev/jansson[${MULTILIB_USEDEP}] )
-	nss? ( >=lib-dev/nss-3.11:=[${MULTILIB_USEDEP}] )
+		lib-dev/libgcrypt:0=
+		>=lib-net/gnutls-2.12:= )
+	json? ( lib-dev/jansson )
+	nss? ( >=lib-dev/nss-3.11:= )
 	resolvconf? ( lib-net/openresolv )
 	systemd? ( >=sys-app/systemd-209:0= )
 	teamd? (
@@ -60,7 +60,7 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
 	>=sys-kernel/stable-sources-2.6.29
-	dev-util/pkgconfig[${MULTILIB_USEDEP}]
+	dev-util/pkgconfig
 	lib-dev/newt
 	dev-python/pygobject
 "

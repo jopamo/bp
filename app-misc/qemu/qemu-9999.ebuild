@@ -3,18 +3,18 @@
 EAPI="6"
 
 
-inherit eutils flag-o-matic linux-info toolchain-funcs multilib \
-	user udev l10n
+inherit eutils flag-o-matic linux-info toolchain-funcs user udev l10n
 
 if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/qemu/qemu.git"
 	inherit git-r3
 	SRC_URI=""
+	KEYWORDS="amd64 arm64"
 else
 	SRC_URI="http://wiki.qemu-project.org/download/${P}.tar.bz2"
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 fi
-KEYWORDS="amd64 arm64 x86"
+
 DESCRIPTION="QEMU + Kernel-based Virtual Machine userland tools"
 HOMEPAGE="http://www.qemu.org http://www.linux-kvm.org"
 
@@ -221,7 +221,7 @@ pkg_pretend() {
 			ERROR_VHOST_NET="You must enable VHOST_NET to have vhost-net"
 			ERROR_VHOST_NET+=" support"
 
-			if use amd64 || use x86 || use amd64-linux || use x86-linux; then
+			if use amd64; then
 				if grep -q AuthenticAMD /proc/cpuinfo; then
 					CONFIG_CHECK+=" ~KVM_AMD"
 				elif grep -q GenuineIntel /proc/cpuinfo; then

@@ -10,7 +10,7 @@ SRC_URI="mirror://sourceforge/crunch-wordlist/crunch-wordlist/${P}.tgz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 src_prepare() {
 	epatch_user

@@ -1,6 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
+
 inherit autotools eutils
 
 DESCRIPTION="display bandwidth usage on an interface"
@@ -9,7 +10,7 @@ HOMEPAGE="http://www.ex-parrot.com/pdw/iftop/"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	lib-net/libpcap

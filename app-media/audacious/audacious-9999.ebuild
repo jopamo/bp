@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit gnome2-utils xdg-utils autotools git-r3 multilib-minimal flag-o-matic
+inherit gnome2-utils xdg-utils autotools git-r3 flag-o-matic
 
 DESCRIPTION="Audacious Player - Your music, your way, no exceptions"
 HOMEPAGE="https://audacious-media-player.org/"
@@ -11,7 +11,7 @@ EGIT_REPO_URI="https://github.com/audacious-media-player/audacious.git"
 LICENSE="BSD-2"
 SLOT="0"
 IUSE="nls"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 PDEPEND="~app-media/audacious-plugins-${PV}"
 
@@ -33,10 +33,9 @@ filter-flags -flto
 src_prepare() {
 	eautoreconf
 	default
-	multilib_copy_sources
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

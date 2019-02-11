@@ -10,7 +10,7 @@ HOMEPAGE="http://www.aircrack-ng.org"
 if [[ ${PV} == "9999" ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/aircrack-ng/aircrack-ng.git"
-	KEYWORDS=""
+	KEYWORDS="amd64 arm64"
 else
 	MY_PV=${PV/_/-}
 	SRC_URI="http://download.${PN}.org/${PN}-${MY_PV}.tar.gz"
@@ -19,7 +19,6 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
 
 IUSE="+airdrop-ng +airgraph-ng kernel_linux kernel_FreeBSD +netlink +pcre +sqlite +experimental"
 

@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/stedolan/jq.git"
 
 LICENSE="MIT CC-BY-3.0"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="oniguruma static-libs"
 
 DEPEND="

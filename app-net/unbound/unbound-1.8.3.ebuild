@@ -4,7 +4,7 @@ EAPI=5
 
 PYTHON_COMPAT=( python3_7 )
 
-inherit eutils flag-o-matic multilib-minimal python-single-r1 systemd user
+inherit eutils flag-o-matic python-single-r1 systemd user
 
 MY_P=${PN}-${PV/_/}
 DESCRIPTION="A validating, recursive and caching DNS resolver"
@@ -13,23 +13,18 @@ SRC_URI="http://unbound.net/downloads/${MY_P}.tar.gz"
 
 LICENSE="BSD GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="debug dnscrypt dnstap +ecdsa gost libressl python selinux static-libs systemd test threads"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
-# Note: expat is needed by executable only but the Makefile is custom
-# and doesn't make it possible to easily install the library without
-# the executables. MULTILIB_USEDEP may be dropped once build system
-# is fixed.
-
-CDEPEND=">=lib-dev/expat-2.1.0-r3[${MULTILIB_USEDEP}]
-	>=lib-dev/libevent-2.0.21:0=[${MULTILIB_USEDEP}]
-	libressl? ( >=lib-dev/libressl-2.2.4:0[${MULTILIB_USEDEP}] )
-	!libressl? ( >=lib-dev/openssl-1.0.1h-r2:0[${MULTILIB_USEDEP}] )
-	dnscrypt? ( lib-dev/libsodium[${MULTILIB_USEDEP}] )
+CDEPEND=">=lib-dev/expat-2.1.0-r3
+	>=lib-dev/libevent-2.0.21:0=
+	libressl? ( >=lib-dev/libressl-2.2.4:0 )
+	!libressl? ( >=lib-dev/openssl-1.0.1h-r2:0 )
+	dnscrypt? ( lib-dev/libsodium )
 	dnstap? (
-		lib-dev/fstrm[${MULTILIB_USEDEP}]
-		>=lib-dev/protobuf-c-1.0.2-r1[${MULTILIB_USEDEP}]
+		lib-dev/fstrm
+		>=lib-dev/protobuf-c-1.0.2-r1
 	)
 	ecdsa? (
 		!libressl? ( lib-dev/openssl:0[-bindist] )
@@ -54,6 +49,8 @@ RDEPEND="${RDEPEND}"
 
 S=${WORKDIR}/${MY_P}
 
+append-ldflags -Wl,-z,noexecstack
+
 pkg_setup() {
 	enewgroup unbound
 	enewuser unbound -1 -1 /etc/unbound unbound
@@ -66,16 +63,7 @@ pkg_setup() {
 	use python && python-single-r1_pkg_setup
 }
 
-src_prepare() {
-	multilib_copy_sources
-}
-
 src_configure() {
-	append-ldflags -Wl,-z,noexecstack
-	multilib-minimal_src_configure
-}
-
-multilib_src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -90,8 +78,6 @@ multilib_src_configure() {
 		$(use_enable ecdsa)
 		$(use_enable static-libs static)
 		$(use_enable systemd)
-		$(multilib_native_use_with python pythonmodule)
-		$(multilib_native_use_with python pyunbound)
 		$(use_with threads pthreads)
 		--disable-flto
 		--disable-rpath
@@ -108,7 +94,7 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	find "${ED}" -name "*.la" -delete || die
 	use python && python_optimize
 

@@ -10,6 +10,6 @@ EGIT_REPO_URI="https://github.com/tjko/jpegoptim.git"
 
 LICENSE="GPL-2+" # While COPYING is plain GPL-2, COPYRIGHT is clarifying it to be 'any later version'
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 DEPEND="lib-media/libjpeg-turbo"

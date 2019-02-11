@@ -8,7 +8,7 @@ DESCRIPTION="A free and open source media-player and entertainment hub"
 HOMEPAGE="https://kodi.tv/ https://kodi.wiki/"
 EGIT_REPO_URI="https://github.com/xbmc/xbmc.git"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 LICENSE="GPL-2"
 SLOT="0"
 
@@ -85,7 +85,6 @@ DEPEND="${COMMON_DEPEND}
 	>=lib-media/libpng-1.6.26:0=
 	test? ( dev-cpp/gtest )
 	dev-util/pkgconfig
-	x86? ( dev-lang/nasm )
 "
 
 src_prepare() {

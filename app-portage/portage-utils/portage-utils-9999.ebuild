@@ -9,7 +9,7 @@ HOMEPAGE="https://wiki.gentoo.org/wiki/Portage-utils"
 EGIT_REPO_URI="https://github.com/gentoo/portage-utils.git"
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="nls static"
 

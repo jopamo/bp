@@ -14,7 +14,7 @@ if [[ ${PV} == *9999* ]] ; then
 	MY_P="${P}"
 	EGIT_REPO_URI="https://github.com/mean00/avidemux2.git"
 	inherit git-r3
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 else
 	MY_P="${PN}_${PV}"
 	SRC_URI="mirror://sourceforge/${PN}/${PN}/${PV}/${MY_P}.tar.gz"
@@ -72,9 +72,6 @@ src_prepare() {
 }
 
 src_configure() {
-	# See bug 432322.
-	use x86 && replace-flags -O0 -O1
-
 	# The build relies on an avidemux-core header that uses 'nullptr'
 	# which is from >=C++11. Let's use the GCC-6 default C++ dialect.
 	append-cxxflags -std=c++14

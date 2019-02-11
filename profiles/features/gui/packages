@@ -1,5 +1,6 @@
 *app-media/alsa-utils
 *app-media/audacious
+*app-media/lximage-qt
 *app-media/mpv
 *app-media/pavucontrol-qt
 *fonts/fira-code
@@ -15,5 +16,6 @@
 *x11-app/obconf-qt
 *x11-app/openbox
 *x11-app/pcmanfm-qt
+*x11-app/speedcrunch
 *x11-app/qterminal
 *x11/mesa-progs

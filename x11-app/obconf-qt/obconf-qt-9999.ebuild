@@ -8,7 +8,7 @@ HOMEPAGE="http://lxqt.org/"
 
 EGIT_REPO_URI="https://www.github.com/lxqt/${PN}.git"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2 LGPL-2.1+"
 SLOT="0"

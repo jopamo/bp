@@ -8,7 +8,7 @@ DESCRIPTION="X.Org Xfont library"
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/xorg/lib/libXfont.git"
 SLOT=0
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="bzip2 ipv6 truetype doc"
 
 RDEPEND="x11-libs/xtrans

@@ -9,11 +9,11 @@ HOMEPAGE="https://tls.mbed.org/"
 EGIT_REPO_URI="https://github.com/ARMmbed/mbedtls.git"
 EGIT_BRANCH="mbedtls-2.7"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="Apache-2.0"
 SLOT="0/10" # slot for libmbedtls.so
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="cpu_flags_x86_sse2 doc havege libressl programs test threads zlib"
 
 RDEPEND="

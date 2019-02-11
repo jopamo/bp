@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/GNOME/atk.git"
 LICENSE="LGPL-2+"
 SLOT="2.27"
 SONAME="${SLOT}"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="+introspection"
 

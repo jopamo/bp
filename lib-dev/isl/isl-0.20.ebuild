@@ -10,7 +10,7 @@ SRC_URI="http://isl.gforge.inria.fr/${P}.tar.xz"
 
 LICENSE="LGPL-2.1"
 SLOT="0/19"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 RDEPEND=">=lib-dev/gmp-5.1.3-r1[${MULTILIB_USEDEP}]"

@@ -8,7 +8,7 @@ SRC_URI="http://files.itstool.org/itstool/${P}.tar.bz2"
 
 LICENSE="GPL-3+ || ( HPND GPL-3+ )"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="lib-dev/libxml2"
 DEPEND="${RDEPEND}"

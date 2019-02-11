@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/MediaArea/ZenLib.git"
 
 LICENSE="ZLIB"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 DEPEND="dev-util/pkgconfig"

@@ -10,7 +10,7 @@ SRC_URI="https://src.fedoraproject.org/repo/pkgs/schedtool/schedtool-1.3.0.tar.b
 
 LICENSE="GPL-2"
 SLOT=0
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 src_prepare() {
 	sed -i '/^CFLAGS=/d;/^install:/s/install-doc//' Makefile || die

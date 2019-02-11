@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/zeromq/${PN}.git"
 
 LICENSE="LGPL-3"
 SLOT="0/5"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="pgm +sodium static-libs test unwind elibc_Darwin"
 
 RDEPEND="

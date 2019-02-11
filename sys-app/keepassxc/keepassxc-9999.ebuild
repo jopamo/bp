@@ -10,7 +10,7 @@ HOMEPAGE="https://keepassxc.org"
 EGIT_REPO_URI="https://github.com/keepassxreboot/${PN}.git"
 EGIT_BRANCH=master
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="LGPL-2.1 GPL-2 GPL-3"
 SLOT="0"

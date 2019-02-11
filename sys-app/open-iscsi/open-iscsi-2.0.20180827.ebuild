@@ -15,7 +15,7 @@ else
 	SNAPSHOT=96c1a8e344d93594a3bb4faa848f878cc7315bde
 	SRC_URI="https://github.com/open-iscsi/open-iscsi/archive/${SNAPSHOT}.zip -> ${P}.zip"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="GPL-2"

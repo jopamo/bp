@@ -10,7 +10,7 @@ SRC_URI="https://mupdf.com/downloads/${P}-source.tar.xz"
 
 LICENSE="AGPL-3"
 SLOT="0/${PV}"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="X +curl javascript lcms libressl opengl +openssl static static-libs"
 

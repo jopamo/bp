@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/GNOME/libcroco.git"
 
 LICENSE="LGPL-2"
 SLOT="0.6"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="test"
 
 RDEPEND="

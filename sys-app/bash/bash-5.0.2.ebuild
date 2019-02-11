@@ -14,7 +14,7 @@ S=${WORKDIR}/${PN}-5.0
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="afs bashlogger examples mem-scramble +net nls plugins"
 
 DEPEND="

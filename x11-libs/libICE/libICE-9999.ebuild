@@ -7,7 +7,7 @@ inherit autotools git-r3 multilib-minimal
 DESCRIPTION="X.Org Inter-Client Exchange library"
 EGIT_REPO_URI="https://github.com/freedesktop/xorg-libICE.git"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="ipv6 doc static-libs"
 SLOT=0
 RDEPEND="elibc_glibc? ( lib-dev/libbsd )

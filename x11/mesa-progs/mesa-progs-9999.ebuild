@@ -9,7 +9,7 @@ HOMEPAGE="https://www.mesa3d.org/ https://mesa.freedesktop.org/"
 
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/mesa/demos.git"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="LGPL-2"
 SLOT="0"

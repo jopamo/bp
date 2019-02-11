@@ -10,7 +10,7 @@ SRC_URI="https://security.appspot.com/downloads/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="caps libressl pam ssl selinux xinetd"
 
 DEPEND="lib-sys/libcap

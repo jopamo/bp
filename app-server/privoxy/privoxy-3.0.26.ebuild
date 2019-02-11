@@ -17,7 +17,7 @@ external-filters +fast-redirects +force graceful-termination
 ie-images +image-blocking ipv6 lfs png-images selinux +stats
 +threads toggle tools whitelists +zlib"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 LICENSE="GPL-2"
 
 DEPEND="

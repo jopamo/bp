@@ -8,7 +8,7 @@ DESCRIPTION="X Window System initializer"
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/xorg/app/xinit.git"
 
 LICENSE="${LICENSE} GPL-2"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 SLOT=0
 
 RDEPEND="

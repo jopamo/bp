@@ -10,7 +10,7 @@ SRC_URI="https://www.netfilter.org/projects/ulogd/files/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="dbi doc json mysql nfacct +nfct +nflog pcap postgres selinux sqlite"
 
 COMMON_DEPEND="

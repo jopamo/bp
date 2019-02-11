@@ -19,12 +19,12 @@ else
 	SRC_URI="https://github.com/linux-pam/linux-pam/releases/download/v${BASEVERSION}/Linux-PAM-${BASEVERSION}.tar.xz
 	https://1g4.org/files/pam-20181220.patch.tar.xz"
 	S=${WORKDIR}/Linux-PAM-${BASEVERSION}
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="audit +cracklib debug nis nls +pie selinux test vim-syntax"
 
 RDEPEND="

@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/google/double-conversion.git"
 
 LICENSE="BSD"
 SLOT="0/1"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 multilib_src_configure() {
 	local mycmakeargs=(

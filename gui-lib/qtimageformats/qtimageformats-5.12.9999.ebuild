@@ -4,7 +4,7 @@ EAPI=6
 inherit qt5-build
 
 DESCRIPTION="Additional format plugins for the Qt image I/O system"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="jpeg2k mng"
 

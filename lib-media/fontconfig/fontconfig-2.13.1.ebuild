@@ -10,7 +10,7 @@ SRC_URI="http://fontconfig.org/release/${P}.tar.bz2"
 
 LICENSE="MIT"
 SLOT="1.0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="doc static-libs"
 
 RDEPEND=">=lib-dev/expat-2.1.0-r3[${MULTILIB_USEDEP}]

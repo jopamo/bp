@@ -8,7 +8,7 @@ DESCRIPTION="X.Org Xmu library"
 EGIT_REPO_URI=https://github.com/freedesktop/xorg-${PN}.git
 SLOT=0
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="ipv6 doc"
 

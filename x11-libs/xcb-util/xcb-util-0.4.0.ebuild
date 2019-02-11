@@ -9,7 +9,7 @@ HOMEPAGE="https://xcb.freedesktop.org/"
 SRC_URI="https://www.x.org/archive/individual/xcb/${P}.tar.bz2"
 SLOT=0
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="test static-libs doc"
 
 RDEPEND=">=x11-libs/libxcb-1.9.1:=[${MULTILIB_USEDEP}]

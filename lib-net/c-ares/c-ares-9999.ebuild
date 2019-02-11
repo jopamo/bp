@@ -8,7 +8,7 @@ DESCRIPTION="C library that resolves names asynchronously"
 HOMEPAGE="https://c-ares.haxx.se/"
 EGIT_REPO_URI="https://github.com/c-ares/c-ares.git"
 LICENSE="MIT"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 # Subslot = SONAME of libcares.so.2

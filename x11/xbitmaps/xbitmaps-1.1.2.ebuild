@@ -8,7 +8,7 @@ DESCRIPTION="X.Org bitmaps data"
 SRC_URI="https://www.x.org/archive/individual/data/${P}.tar.bz2"
 SLOT=0
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 multilib_src_configure() {
 	local myconf=(

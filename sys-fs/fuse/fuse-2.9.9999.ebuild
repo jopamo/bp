@@ -13,7 +13,7 @@ EGIT_BRANCH="fuse_2_9_bugfix"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT=2
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="test"
 
 filter-flags -flto

@@ -7,7 +7,7 @@ inherit git-r3 cmake-multilib
 DESCRIPTION="Framework providing access to properties and features of the window manager"
 LICENSE="|| ( LGPL-2.1 LGPL-3 ) MIT"
 SLOT=0
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="nls X"
 
 EGIT_REPO_URI="https://github.com/KDE/kwindowsystem.git"

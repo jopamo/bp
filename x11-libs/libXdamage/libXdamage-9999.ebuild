@@ -7,7 +7,7 @@ inherit multilib-minimal git-r3 autotools
 EGIT_REPO_URI=https://github.com/freedesktop/xorg-${PN}.git
 
 DESCRIPTION="X.Org Xdamage library"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 SLOT=0
 
 DEPEND=">=x11-libs/libX11-1.6.2[${MULTILIB_USEDEP}]

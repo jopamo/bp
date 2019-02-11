@@ -12,7 +12,7 @@ EGIT_BRANCH="2.7"
 
 LICENSE="PSF-2"
 SLOT="2.7"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="bluetooth build doc elibc_uclibc examples gdbm hardened ipv6 libressl +ncurses +readline sqlite +ssl +threads tk +wide-unicode wininst +xml"
 
 RDEPEND="app-compression/bzip2:0=

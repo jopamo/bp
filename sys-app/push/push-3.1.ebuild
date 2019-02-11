@@ -8,7 +8,7 @@ SRC_URI="https://github.com/vaeth/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 src_install() {
 	emake DESTDIR="${ED}" PREFIX="${EPREFIX}"/usr install

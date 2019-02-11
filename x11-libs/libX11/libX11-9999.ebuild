@@ -6,7 +6,7 @@ inherit multilib-minimal toolchain-funcs git-r3 autotools
 
 DESCRIPTION="X.Org X11 library"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="ipv6 test doc static-libs"
 EGIT_REPO_URI="https://github.com/freedesktop/xorg-libX11.git"
 SLOT=0

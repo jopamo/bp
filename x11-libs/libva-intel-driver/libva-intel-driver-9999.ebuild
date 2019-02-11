@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/01org/intel-vaapi-driver"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 EGIT_REPO_URI="https://github.com/01org/intel-vaapi-driver.git"
 

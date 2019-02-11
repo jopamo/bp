@@ -11,7 +11,7 @@ HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
 
 EGIT_REPO_URI="https://github.com/systemd/systemd-stable.git"
 EGIT_BRANCH="v240-stable"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0/2"

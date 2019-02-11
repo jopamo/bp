@@ -9,7 +9,7 @@ EGIT_REPO_URI="https://github.com/devzero2000/POPT.git"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="nls static-libs"
 
 RDEPEND="nls? ( >=sys-devel/gettext-0-r1[${MULTILIB_USEDEP}] )"

@@ -15,7 +15,7 @@ SRC_URI="https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download
 
 LICENSE="AGPL-3 CPL-1.0"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="cups dbus gtk static-libs tiff X"
 
 COMMON_DEPEND="

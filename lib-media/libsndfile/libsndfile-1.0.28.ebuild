@@ -10,7 +10,7 @@ DESCRIPTION="A C library for reading and writing files containing sampled sound"
 HOMEPAGE="http://www.mega-nerd.com/libsndfile"
 
 SRC_URI="http://www.mega-nerd.com/libsndfile/files/${P}.tar.gz"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="LGPL-2.1"
 SLOT="0"

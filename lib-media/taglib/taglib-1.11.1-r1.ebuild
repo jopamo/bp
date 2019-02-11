@@ -9,7 +9,7 @@ HOMEPAGE="https://taglib.github.io/"
 SRC_URI="https://github.com/${PN}/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="LGPL-2.1 MPL-1.1"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 SLOT="0"
 IUSE="boost debug examples test"
 

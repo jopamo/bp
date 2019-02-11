@@ -5,7 +5,7 @@ QT5_MODULE="qtbase"
 inherit qt5-build
 
 DESCRIPTION="Implementation of SAX and DOM for the Qt5 framework"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	~gui-lib/qtcore-${PV}

@@ -17,7 +17,7 @@ http://downloads.skullsecurity.org/passwords/rockyou.txt.bz2"
 S=${WORKDIR}/cracklib-${SNAPSHOT}/src
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="nls python static-libs zlib"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 

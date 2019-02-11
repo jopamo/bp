@@ -8,7 +8,7 @@ DESCRIPTION="The OpenGL Utility Library"
 HOMEPAGE="https://cgit.freedesktop.org/mesa/glu/"
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/mesa/glu.git"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="SGI-B-2.0"
 SLOT="0"

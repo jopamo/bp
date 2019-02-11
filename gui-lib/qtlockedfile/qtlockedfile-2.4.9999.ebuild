@@ -11,7 +11,7 @@ S=${WORKDIR}/${P}/${PN}
 
 LICENSE="|| ( LGPL-2.1 GPL-3 )"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="doc qt4 +qt5"
 
 REQUIRED_USE="|| ( qt4 qt5 )"

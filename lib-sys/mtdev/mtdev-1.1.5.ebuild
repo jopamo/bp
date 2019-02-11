@@ -8,7 +8,7 @@ SRC_URI="http://bitmath.org/code/mtdev/${P}.tar.bz2"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 DEPEND=">=sys-kernel/stable-sources-2.6.31"

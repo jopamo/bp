@@ -7,7 +7,7 @@ inherit flag-o-matic
 DESCRIPTION="Multi-platform library designed to allow a developer to create robust software"
 HOMEPAGE="http://www.jedsoft.org/slang/"
 SRC_URI="http://www.jedsoft.org/releases/${PN}/${P}.tar.bz2"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"
 SLOT="0"

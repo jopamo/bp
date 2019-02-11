@@ -15,7 +15,7 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_CHECKOUT_DIR=${WORKDIR}/${MY_P}
 	inherit autotools git-r3
 else
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 	SRC_URI="https://pkgconfig.freedesktop.org/releases/${MY_P}.tar.gz"
 fi
 

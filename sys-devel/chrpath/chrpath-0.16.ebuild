@@ -10,7 +10,7 @@ SRC_URI="https://ftp.osuosl.org/pub/blfs/conglomeration/chrpath/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 src_prepare() {
 	default

@@ -11,7 +11,7 @@ EGIT_REPO_URI="https://github.com/libfuse/libfuse.git"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="3"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="test"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 

@@ -11,7 +11,7 @@ SRC_URI="http://ftp.debian.org/debian/pool/main/libp/libpaper/libpaper_1.1.24+nm
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="abi_x86_32? (
 		!<=app-misc/emul-linux-x86-baselibs-20130224-r10

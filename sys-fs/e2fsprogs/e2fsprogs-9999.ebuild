@@ -11,7 +11,7 @@ EGIT_BRANCH=maint
 
 LICENSE="GPL-2 BSD"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="fuse static-libs"
 
 RDEPEND=">=sys-app/util-linux-2.16

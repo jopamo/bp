@@ -16,7 +16,7 @@ else
 	SRC_URI="https://www.freedesktop.org/software/${PN}/release/${P}.tar.bz2"
 fi
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 LICENSE="Old-MIT ISC icu"
 SLOT="0"
 

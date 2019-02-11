@@ -6,7 +6,7 @@ inherit git-r3 cmake-multilib
 
 DESCRIPTION="Framework providing assorted high-level user interface components"
 LICENSE="LGPL-2+"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 SLOT=0
 EGIT_REPO_URI="https://github.com/KDE/kguiaddons.git"
 

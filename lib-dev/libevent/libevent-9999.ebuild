@@ -9,7 +9,7 @@ EGIT_REPO_URI="https://github.com/libevent/libevent"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="debug libressl +ssl static-libs test +threads"
 RESTRICT="test"
 

@@ -19,7 +19,7 @@ REQUIRED_USE="
 	utils? ( ${PYTHON_REQUIRED_USE} )
 "
 
-#KEYWORDS="amd64 arm64 x86"
+#KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	>=lib-dev/libpcre-8.13:3

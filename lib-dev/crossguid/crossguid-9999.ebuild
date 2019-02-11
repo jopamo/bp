@@ -10,4 +10,4 @@ EGIT_REPO_URI="https://github.com/graeme-hill/crossguid.git"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"

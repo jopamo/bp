@@ -9,7 +9,7 @@ EGIT_REPO_URI="https://github.com/GNOME/pango.git"
 
 LICENSE="LGPL-2+ FTL"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="X +introspection test"
 

@@ -10,7 +10,7 @@ SRC_URI="mirror://sourceforge/giflib/${P}.tar.bz2"
 
 LICENSE="MIT"
 SLOT="0/7"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="doc static-libs"
 
 RDEPEND="

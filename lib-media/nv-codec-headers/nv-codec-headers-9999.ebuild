@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/FFmpeg/nv-codec-headers.git"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="nvidia/nvidia-drivers[${MULTILIB_USEDEP}]"
 

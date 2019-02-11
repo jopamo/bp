@@ -10,7 +10,7 @@ SRC_URI="https://ftp.gnu.org/gnu/${PN}/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="static test xattr"
 
 RDEPEND="xattr? ( sys-app/attr )"

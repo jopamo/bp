@@ -10,7 +10,7 @@ SRC_URI="mirror://sourceforge/mad/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="debug static-libs"
 
 RDEPEND="abi_x86_32? ( !<=app-misc/emul-linux-x86-medialibs-20130224-r3

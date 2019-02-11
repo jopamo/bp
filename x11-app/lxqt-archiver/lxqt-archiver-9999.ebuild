@@ -6,7 +6,7 @@ inherit cmake-utils xdg-utils git-r3
 
 DESCRIPTION="a simple & lightweight desktop-agnostic Qt file archiver"
 HOMEPAGE="https://github.com/lxqt/lxqt-archiver"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 EGIT_REPO_URI="https://github.com/lxqt/lxqt-archiver.git"
 
 LICENSE="GPL-2+"

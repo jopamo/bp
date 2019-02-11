@@ -11,7 +11,7 @@ EGIT_REPO_URI="https://github.com/lxde/${PN}"
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="debug doc exif"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 COMMON_DEPEND=">=lib-dev/glib-2.18:2
 	>=gui-lib/menu-cache-0.3.2:=

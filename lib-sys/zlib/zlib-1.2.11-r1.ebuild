@@ -12,7 +12,7 @@ SRC_URI="https://zlib.net/${P}.tar.gz
 
 LICENSE="ZLIB"
 SLOT="0/1" # subslot = SONAME
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="+minizip static-libs"
 
 src_prepare() {

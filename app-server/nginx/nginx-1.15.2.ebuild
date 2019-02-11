@@ -193,7 +193,7 @@ LICENSE="BSD-2 BSD SSLeay MIT GPL-2 GPL-2+
 	nginx_modules_http_push_stream? ( GPL-3 )"
 
 SLOT="mainline"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 # Package doesn't provide a real test suite
 RESTRICT="test"

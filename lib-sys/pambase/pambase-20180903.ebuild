@@ -8,7 +8,7 @@ SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="+cracklib debug minimal mktemp +nullok securetty systemd"
 
 RESTRICT="binchecks"

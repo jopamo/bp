@@ -10,7 +10,7 @@ HOMEPAGE="http://lxqt.org/"
 if [[ "${PV}" == "9999" ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/lxqt/${PN}.git"
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 else
 	SNAPSHOT=
 	SRC_URI="https://github.com/lxqt/libfm-qt/archive/${SNAPSHOT}.zip -> ${P}.zip"

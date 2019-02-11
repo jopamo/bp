@@ -14,7 +14,7 @@ S="${WORKDIR}/${MY_P}"
 LICENSE="MIT"
 # The subslot reflects the SONAME.
 SLOT="0/6"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="ada +cxx debug doc gpm minimal profile static-libs test threads tinfo trace unicode"
 
 DEPEND="gpm? ( lib-sys/gpm[${MULTILIB_USEDEP}] )"

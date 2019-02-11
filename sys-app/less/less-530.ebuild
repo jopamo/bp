@@ -8,7 +8,7 @@ SRC_URI="http://www.greenwoodsoftware.com/less/${P}.tar.gz"
 
 LICENSE="|| ( GPL-3 BSD-2 )"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="pcre unicode"
 
 DEPEND=">=app-misc/editor-wrapper-3

@@ -10,7 +10,7 @@ SRC_URI="https://downloads.xiph.org/releases/vorbis/${P}.tar.xz"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 RDEPEND=">=lib-media/libogg-1.3.0[${MULTILIB_USEDEP}]

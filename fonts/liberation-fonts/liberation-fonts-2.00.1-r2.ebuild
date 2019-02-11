@@ -10,7 +10,7 @@ DESCRIPTION="A Helvetica/Times/Courier replacement TrueType font set, courtesy o
 HOMEPAGE="https://pagure.io/liberation-fonts"
 SRC_URI="https://releases.pagure.org/liberation-fonts/${PN}-ttf-${PV}.tar.gz"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 SLOT="0"
 LICENSE="OFL-1.1"
 IUSE="fontforge X"

@@ -7,7 +7,7 @@ inherit multilib-minimal git-r3 autotools
 EGIT_REPO_URI=https://github.com/freedesktop/xorg-lib${PN}.git
 
 DESCRIPTION="X.Org xtrans library"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 SLOT=0
 IUSE="doc"
 

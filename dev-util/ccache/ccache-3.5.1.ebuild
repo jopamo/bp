@@ -8,7 +8,7 @@ SRC_URI="https://www.samba.org/ftp/ccache/${P}a.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 DEPEND="app-compression/xz-utils
 	lib-sys/zlib"

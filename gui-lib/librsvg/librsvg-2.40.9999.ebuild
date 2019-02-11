@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/GNOME/librsvg.git"
 EGIT_BRANCH="librsvg-2.40"
 LICENSE="LGPL-2"
 SLOT="2"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="+introspection tools gtk"
 

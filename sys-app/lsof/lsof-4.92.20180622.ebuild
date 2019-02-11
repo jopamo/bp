@@ -14,7 +14,7 @@ S=${WORKDIR}/${PN}-linux-${SNAPSHOT}
 
 LICENSE="lsof"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="examples ipv6 rpc selinux static"
 
 RDEPEND="rpc? ( lib-net/libtirpc )

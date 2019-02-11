@@ -10,7 +10,7 @@ SRC_URI="https://github.com/ivmai/${PN}/releases/download/v${PV}/${P}.tar.gz"
 
 LICENSE="MIT boehm-gc GPL-2+"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 multilib_src_configure() {
 	ECONF_SOURCE=${S} econf

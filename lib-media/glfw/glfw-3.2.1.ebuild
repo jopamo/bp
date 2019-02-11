@@ -9,7 +9,7 @@ SRC_URI="mirror://sourceforge/glfw/${P}.tar.bz2"
 
 LICENSE="ZLIB"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="examples wayland"
 
 RDEPEND="

@@ -10,7 +10,7 @@ SRC_URI="https://www.freedesktop.org/software/uchardet/releases/${P}.tar.xz"
 
 LICENSE="|| ( MPL-1.1 GPL-2+ LGPL-2.1+ )"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="cpu_flags_x86_sse2 static-libs test"
 
 PATCHES=( "${FILESDIR}/${P}-enforce-IEEE-float-precision-r1.patch" )

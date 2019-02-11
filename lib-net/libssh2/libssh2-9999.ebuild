@@ -9,7 +9,7 @@ HOMEPAGE="http://www.libssh2.org/"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="gcrypt libressl static-libs test zlib"
 
 DEPEND="

@@ -15,7 +15,7 @@ SRC_URI="mirror://gnu/libtool/${MY_P}.tar.xz
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 RESTRICT="test"
 

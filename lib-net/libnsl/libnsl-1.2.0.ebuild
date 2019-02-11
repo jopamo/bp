@@ -11,7 +11,7 @@ SRC_URI="https://github.com/thkukuk/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 SLOT="0/2"
 LICENSE="LGPL-2.1+"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 DEPEND="
 	lib-net/libtirpc[${MULTILIB_USEDEP}]

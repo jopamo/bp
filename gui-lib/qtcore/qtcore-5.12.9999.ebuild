@@ -5,7 +5,7 @@ QT5_MODULE="qtbase"
 inherit qt5-build
 
 DESCRIPTION="Cross-platform application development framework"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="icu systemd"
 

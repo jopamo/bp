@@ -14,7 +14,7 @@ SLOT="0"
 
 LICENSE="|| ( GPL-3 LGPL-3 )"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 

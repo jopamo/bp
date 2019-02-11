@@ -7,7 +7,7 @@ QT5_MODULE="qtbase"
 inherit qt5-build
 
 DESCRIPTION="Qt5 module for inter-process communication over the D-Bus protocol"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 DEPEND="
 	~gui-lib/qtcore-${PV}

@@ -13,7 +13,7 @@ if [[ ${PV} == *9999 ]]; then
 else
 	SRC_URI="http://www.mega-nerd.com/SRC/${P}.tar.gz"
 fi
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="BSD-2"
 SLOT="0"

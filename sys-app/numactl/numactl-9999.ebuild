@@ -14,7 +14,7 @@ else
 	SRC_URI="ftp://oss.sgi.com/www/projects/libnuma/download/${P}.tar.gz"
 fi
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="static-libs"

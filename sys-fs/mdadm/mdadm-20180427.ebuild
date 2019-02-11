@@ -15,7 +15,7 @@ else
 	SNAPSHOT=5d518de84e7cd3382b4984cc1243ddb4102aa4f4
 	SRC_URI="https://github.com/neilbrown/mdadm/archive/${SNAPSHOT}.zip -> ${P}.zip"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 fi
 LICENSE="GPL-2"
 SLOT="0"

@@ -14,7 +14,7 @@ SRC_URI="http://www.mpfr.org/mpfr-${MY_PV}/${MY_P}.tar.xz
 
 LICENSE="LGPL-2.1"
 SLOT="0/6" # libmpfr.so version
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 RDEPEND=">=lib-dev/gmp-5.0.0[${MULTILIB_USEDEP},static-libs?]"

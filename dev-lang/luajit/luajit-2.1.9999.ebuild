@@ -12,7 +12,7 @@ EGIT_BRANCH=v2.1
 
 LICENSE="MIT"
 SLOT="2"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="+lua52compat static-libs"
 
 _emake() {

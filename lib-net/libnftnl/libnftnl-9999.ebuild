@@ -10,7 +10,7 @@ EGIT_REPO_URI="git://git.netfilter.org/${PN}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="static-libs test"
 
 RDEPEND=">=lib-net/libmnl-1.0.0"

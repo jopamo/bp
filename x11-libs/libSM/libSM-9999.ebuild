@@ -9,7 +9,7 @@ EGIT_REPO_URI=https://github.com/freedesktop/xorg-${PN}.git
 
 SLOT=0
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="doc ipv6 +uuid"
 
 RDEPEND=">=x11-libs/libICE-1.0.8-r1[${MULTILIB_USEDEP}]

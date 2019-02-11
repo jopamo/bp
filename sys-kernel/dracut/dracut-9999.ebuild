@@ -9,7 +9,7 @@ if [[ ${PV} == 9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/dracutdevs/dracut"
 else
 	[[ "${PV}" = *_rc* ]] || \
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 	SRC_URI="mirror://kernel/linux/utils/boot/${PN}/${P}.tar.xz"
 fi
 
@@ -19,7 +19,7 @@ HOMEPAGE="https://dracut.wiki.kernel.org"
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="debug"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 RESTRICT="test"
 
 CDEPEND="sys-app/systemd

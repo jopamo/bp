@@ -8,7 +8,7 @@ DESCRIPTION="uncompile an rgb color-name database"
 EGIT_REPO_URI=https://github.com/freedesktop/xorg-${PN}.git
 SLOT=0
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 DEPEND="x11/util-macros
 	x11/xorgproto"

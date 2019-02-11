@@ -11,7 +11,7 @@ SRC_URI="mirror://gnu/gperf/${P}.tar.gz
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 PATCHES=(
 		"${WORKDIR}/gperf-patch-20180909.patch"

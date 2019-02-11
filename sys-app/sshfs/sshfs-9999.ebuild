@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/libfuse/sshfs"
 EGIT_REPO_URI="https://github.com/libfuse/sshfs.git"
 
 LICENSE="GPL-2"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 SLOT="0"
 
 CDEPEND=">=sys-fs/fuse-3.1.0:3

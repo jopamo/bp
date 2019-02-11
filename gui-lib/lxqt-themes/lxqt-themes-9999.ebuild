@@ -6,7 +6,7 @@ inherit cmake-utils git-r3
 
 DESCRIPTION="Themes, graphics, and icons for LXQt"
 HOMEPAGE="http://lxqt.org/"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 EGIT_REPO_URI="https://github.com/lxde/${PN}.git"
 

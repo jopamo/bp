@@ -12,7 +12,7 @@ HOMEPAGE="https://github.com/mgorny/python-exec/"
 SRC_URI="https://github.com/mgorny/python-exec/releases/download/v${PV}/${P}.tar.bz2"
 LICENSE="BSD-2"
 SLOT="2"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 src_configure() {
 	local pyimpls=() i EPYTHON

@@ -10,7 +10,7 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
 
 LICENSE="|| ( LGPL-3 LGPL-2.1 )"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="+gmp static-libs test cpu_flags_x86_aes"
 
 DEPEND="gmp? ( >=lib-dev/gmp-5.0:0=[${MULTILIB_USEDEP}] )"

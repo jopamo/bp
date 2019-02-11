@@ -14,7 +14,7 @@ else
 	SNAPSHOT=9c4af0f9d2e7c6329fab5901ab6dd0cbd603e930
 	SRC_URI="https://github.com/pali/udftools/archive/${SNAPSHOT}.zip -> ${P}.zip"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="GPL-2"

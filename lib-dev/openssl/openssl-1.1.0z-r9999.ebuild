@@ -8,7 +8,7 @@ DESCRIPTION="full-strength general purpose cryptography library (including SSL a
 HOMEPAGE="https://www.openssl.org/"
 EGIT_REPO_URI="https://github.com/openssl/openssl.git"
 EGIT_BRANCH="OpenSSL_1_1_0-stable"
-#KEYWORDS="amd64 arm64 x86"
+#KEYWORDS="amd64 arm64"
 
 LICENSE="openssl"
 SLOT="0"

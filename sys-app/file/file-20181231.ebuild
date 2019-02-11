@@ -12,7 +12,7 @@ else
 	SNAPSHOT=580927e7a376c3c46709a0be201e16b351fd7e20
 	SRC_URI="https://github.com/file/file/archive/${SNAPSHOT}.zip -> ${P}.zip"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 fi
 
 DESCRIPTION="identify a file's format by scanning binary data for patterns"

@@ -10,7 +10,7 @@ DESCRIPTION="Fork of Portage focused on cleaning up and useful features"
 HOMEPAGE="https://github.com/mgorny/portage"
 EGIT_REPO_URI="https://github.com/mgorny/portage-mgorny.git"
 LICENSE="GPL-2"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 SLOT="0"
 IUSE="build +ipc +native-extensions selinux xattr kernel_linux"
 

@@ -8,7 +8,7 @@ DESCRIPTION="Robust and highly flexible tunneling application compatible with ma
 EGIT_REPO_URI="https://github.com/OpenVPN/${PN}.git"
 EGIT_SUBMODULES=(-cmocka)
 HOMEPAGE="http://openvpn.net/"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"
 SLOT="0"

@@ -8,7 +8,7 @@ DESCRIPTION="X authority file utility"
 EGIT_REPO_URI=https://anongit.freedesktop.org/git/xorg/app/xauth.git
 SLOT=0
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="ipv6 test"
 

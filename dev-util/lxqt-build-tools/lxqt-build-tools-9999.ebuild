@@ -14,7 +14,7 @@ else
 	KEYWORDS="~amd64 ~arm64 ~x86"
 fi
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="BSD"
 SLOT="0"

@@ -8,7 +8,7 @@ DESCRIPTION="X C-language Bindings library"
 HOMEPAGE="https://xcb.freedesktop.org/"
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/xcb/libxcb.git"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="doc selinux test xkb static-libs"
 SLOT=0
 

@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/shadowsocks/shadowsocks-libev"
 EGIT_REPO_URI="https://github.com/shadowsocks/shadowsocks-libev.git"
 LICENSE="GPL-3+"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="debug"
 
 RDEPEND="lib-net/mbedtls

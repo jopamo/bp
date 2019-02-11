@@ -11,7 +11,7 @@ EGIT_CLONE_TYPE=mirror
 
 LICENSE="BSD-2 BSD || ( Artistic GPL-2 LGPL-2 )"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="nls"
 
 RDEPEND="

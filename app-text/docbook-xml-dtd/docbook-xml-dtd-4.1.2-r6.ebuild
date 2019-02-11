@@ -9,7 +9,7 @@ SRC_URI="http://www.docbook.org/xml/${PV}/${MY_P}.zip"
 
 LICENSE="docbook"
 SLOT="${PV}"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="prefix"
 
 RDEPEND=">=app-text/docbook-xsl-stylesheets-1.65

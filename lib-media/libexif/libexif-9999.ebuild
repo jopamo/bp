@@ -7,7 +7,7 @@ DESCRIPTION="Library for parsing, editing, and saving EXIF data"
 HOMEPAGE="https://github.com/libexif"
 EGIT_REPO_URI="https://github.com/libexif/libexif.git"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 LICENSE="LGPL-2.1"
 SLOT="0"
 

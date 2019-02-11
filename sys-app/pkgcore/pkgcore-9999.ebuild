@@ -14,7 +14,7 @@ IUSE="doc test"
 if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/pkgcore/pkgcore.git"
 	inherit git-r3
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 else
 	SNAPSHOT=97936ef26f0ceaeeb545861d7f5be864ac78d3bf
 	SRC_URI="https://github.com/pkgcore/pkgcore/archive/${SNAPSHOT}.zip -> ${P}.zip"

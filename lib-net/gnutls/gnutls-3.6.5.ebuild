@@ -10,7 +10,7 @@ SRC_URI="mirror://gnupg/gnutls/v$(get_version_component_range 1-2)/${P}.tar.xz"
 
 LICENSE="GPL-3 LGPL-2.1"
 SLOT="0/30" # libgnutls.so number
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="+cxx dane nls +pkcs11 +seccomp static-libs test tools valgrind"
 
 RDEPEND=">=lib-dev/nettle-3.1:=[gmp,${MULTILIB_USEDEP}]

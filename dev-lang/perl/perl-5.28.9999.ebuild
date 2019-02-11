@@ -13,7 +13,7 @@ EGIT_BRANCH="maint-5.28"
 LICENSE="|| ( Artistic GPL-1+ )"
 SLOT="0"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="debug doc gdbm"
 

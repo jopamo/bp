@@ -5,7 +5,7 @@ EAPI=6
 inherit multilib-minimal linux-info systemd git-r3
 
 EGIT_REPO_URI=https://github.com/samba-team/samba.git
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 DESCRIPTION="Samba Suite Version 4"
 HOMEPAGE="https://www.samba.org/"

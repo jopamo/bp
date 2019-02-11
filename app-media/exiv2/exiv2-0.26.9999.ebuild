@@ -4,11 +4,11 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit cmake-multilib python-any-r1 git-r3
+inherit cmake-utils python-any-r1 git-r3
 
 EGIT_REPO_URI="https://github.com/Exiv2/exiv2.git"
 EGIT_BRANCH="0.26"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 DESCRIPTION="EXIF, IPTC and XMP metadata C++ library and command line utility"
 HOMEPAGE="http://www.exiv2.org/"
@@ -18,13 +18,13 @@ SLOT="0/26"
 IUSE="doc examples nls png static-libs webready xmp"
 
 RDEPEND="
-	nls? ( >=sys-devel/gettext-0-r1[${MULTILIB_USEDEP}] )
-	png? ( >=lib-sys/zlib-1.2.8-r1[${MULTILIB_USEDEP}] )
+	nls? ( >=sys-devel/gettext-0-r1 )
+	png? ( >=lib-sys/zlib-1.2.8-r1 )
 	webready? (
-		lib-net/libssh[${MULTILIB_USEDEP}]
-		app-net/curl[${MULTILIB_USEDEP}]
+		lib-net/libssh
+		app-net/curl
 	)
-	xmp? ( >=lib-dev/expat-2.1.0-r3[${MULTILIB_USEDEP}] )
+	xmp? ( >=lib-dev/expat-2.1.0-r3 )
 "
 DEPEND="${RDEPEND}
 	doc? (
@@ -75,7 +75,7 @@ src_prepare() {
 	cmake-utils_src_prepare
 }
 
-multilib_src_configure() {
+src_configure() {
 	local mycmakeargs=(
 		-DEXIV2_ENABLE_BUILD_SAMPLES=NO
 		-DEXIV2_ENABLE_BUILD_PO=$(usex nls)
@@ -86,16 +86,7 @@ multilib_src_configure() {
 		-DEXIV2_ENABLE_WEBREADY=$(usex webready)
 		-DEXIV2_ENABLE_XMP=$(usex xmp)
 		-DEXIV2_ENABLE_LIBXMP=NO
-		$(multilib_is_native_abi || echo -DEXIV2_ENABLE_TOOLS=NO)
 	)
 
 	cmake-utils_src_configure
-}
-
-multilib_src_compile() {
-	cmake-utils_src_compile
-
-	if multilib_is_native_abi; then
-		use doc && emake -j1 doc
-	fi
 }

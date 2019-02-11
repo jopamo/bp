@@ -8,7 +8,7 @@ HOMEPAGE="https://www.gentoo.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="pam"
 
 RDEPEND="pam? ( lib-sys/pam )"

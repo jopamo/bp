@@ -10,7 +10,7 @@ SRC_URI="https://rsync.samba.org/ftp/rsync/src/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="acl examples iconv ipv6 static stunnel xattr"
 
 LIB_DEPEND="acl? ( sys-app/acl[static-libs(+)] )

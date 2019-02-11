@@ -14,7 +14,7 @@ fi
 
 DESCRIPTION="vim and gvim shared files"
 HOMEPAGE="https://vim.sourceforge.io/ https://github.com/vim/vim"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 SLOT="0"
 LICENSE="vim"

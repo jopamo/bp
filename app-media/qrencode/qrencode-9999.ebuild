@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/fukuchi/libqrencode.git"
 
 LICENSE="LGPL-2"
 SLOT="0/4"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="lib-media/libpng"
 

@@ -5,7 +5,7 @@ EAPI=6
 inherit meson git-r3
 
 EGIT_REPO_URI="https://github.com/iputils/iputils.git"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 DESCRIPTION="Network monitoring tools including ping and ping6"
 HOMEPAGE="https://wiki.linuxfoundation.org/networking/iputils"
 

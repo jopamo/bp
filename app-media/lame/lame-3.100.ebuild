@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools multilib-minimal
+inherit autotools
 
 DESCRIPTION="LAME Ain't an MP3 Encoder"
 HOMEPAGE="http://lame.sourceforge.net/"
@@ -10,7 +10,7 @@ SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="debug static-libs"
 
@@ -21,7 +21,7 @@ src_prepare() {
 	AT_M4DIR=. eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		$(use_enable static-libs static)
 		$(use_enable debug debug norm)
@@ -34,6 +34,6 @@ multilib_src_configure() {
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }
 
-multilib_src_install() {
+src_install() {
 	emake DESTDIR="${D}" pkghtmldir="${EPREFIX}/usr/share/doc/${PF}/html" install
 }

@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit fcaps multilib toolchain-funcs flag-o-matic gnuconfig
+inherit fcaps toolchain-funcs flag-o-matic gnuconfig
 
 MY_P="${P/_alpha/a}"
 
@@ -12,7 +12,7 @@ SRC_URI="mirror://sourceforge/${PN}/$([[ -z ${PV/*_alpha*} ]] && echo 'alpha')/$
 
 LICENSE="GPL-2 LGPL-2.1 CDDL-Schily"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="acl caps nls unicode"
 
@@ -54,11 +54,6 @@ src_prepare() {
 	sed -i -e "s|\(^INSDIR=\t\tshare/doc/\)|\1${PF}/|" \
 		$(find ./ -type f -exec grep -l '^INSDIR.\+doc' '{}' '+') \
 		|| die "sed doc"
-
-	# Respect libdir.
-	sed -i -e "s|\(^INSDIR=\t\t\)lib|\1$(get_libdir)|" \
-		$(find ./ -type f -exec grep -l '^INSDIR.\+lib\(/siconv\)\?$' '{}' '+') \
-		|| die "sed multilib"
 
 	# Do not install static libraries.
 	sed -i -e "s|include\t\t.*rules.lib||" \

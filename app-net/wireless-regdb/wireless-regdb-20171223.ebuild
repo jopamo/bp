@@ -9,7 +9,7 @@ SRC_URI="https://www.kernel.org/pub/software/network/${PN}/${MY_P}.tar.xz"
 
 LICENSE="ISC"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 S="${WORKDIR}/${MY_P}"
 

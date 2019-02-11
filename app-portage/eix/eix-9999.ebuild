@@ -11,7 +11,7 @@ HOMEPAGE="https://github.com/vaeth/eix/"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="debug +dep +jumbo-build +required-use sqlite swap-remote tools nls"
 

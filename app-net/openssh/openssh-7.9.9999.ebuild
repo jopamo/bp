@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit user flag-o-matic multilib-minimal autotools pam systemd versionator git-r3
+inherit user flag-o-matic autotools pam systemd versionator git-r3
 
 MY_PV="$(replace_all_version_separators _)"
 
@@ -13,7 +13,7 @@ EGIT_BRANCH="V_7_9"
 
 LICENSE="BSD GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 IUSE="audit bindist debug libedit libressl pam +pie sctp selinux +ssl static test X"
 REQUIRED_USE="pie? ( !static )
@@ -53,7 +53,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	use debug && append-cppflags -DSANDBOX_SECCOMP_FILTER_DEBUG
 	use static && append-ldflags -static
 
@@ -83,7 +83,7 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_install() {
+src_install() {
 	emake install-nokeys DESTDIR="${D}"
 
 	newpamd "${FILESDIR}"/sshd.pam_include.2 sshd

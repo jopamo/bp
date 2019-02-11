@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib-minimal git-r3 flag-o-matic
+inherit git-r3 flag-o-matic
 
 DESCRIPTION="Complete solution to record, convert and stream audio and video. Includes libavcodec"
 HOMEPAGE="http://ffmpeg.org/"
@@ -11,26 +11,21 @@ EGIT_REPO_URI="https://www.github.com/ffmpeg/ffmpeg.git"
 SLOT="0"
 LICENSE="GPL-3"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
-IUSE="debug nvidia static-libs
-"
+IUSE="debug nvidia static-libs"
 
 DEPEND="
-	>=app-media/lame-3.99.5-r1[${MULTILIB_USEDEP}]
+	>=app-media/lame-3.99.5-r1
 	dev-lang/yasm
-	nvidia? ( lib-media/nv-codec-headers[${MULTILIB_USEDEP}] )
+	nvidia? ( lib-media/nv-codec-headers )
 "
 
 S=${WORKDIR}/${P/_/-}
 
-MULTILIB_WRAPPED_HEADERS=(
-	/usr/include/libavutil/avconfig.h
-)
-
 filter-flags -flto -fno-common
 
-multilib_src_configure() {
+src_configure() {
 	${S}/configure \
 		--prefix="${EPREFIX}/usr" \
 		--shlibdir="${EPREFIX}/usr/$(get_libdir)" \

@@ -2,7 +2,6 @@
 
 EAPI=6
 
-
 WAF_PV=2.0.14
 PYTHON_COMPAT=( python3_{6,7,8} )
 
@@ -16,7 +15,7 @@ if [[ ${PV} != *9999* ]]; then
 else
 	EGIT_REPO_URI="https://github.com/mpv-player/mpv.git"
 	inherit git-r3
-	KEYWORDS="amd64 arm64 x86"
+	KEYWORDS="amd64 arm64"
 fi
 SRC_URI+=" https://waf.io/waf-${WAF_PV}"
 

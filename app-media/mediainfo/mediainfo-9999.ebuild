@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/MediaArea/MediaInfo.git"
 
 LICENSE="BSD-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="lib-sys/zlib
 	>=lib-media/libzen-0.4.37

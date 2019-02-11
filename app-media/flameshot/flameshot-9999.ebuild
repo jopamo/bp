@@ -8,7 +8,7 @@ DESCRIPTION="Powerful yet simple to use screenshot software for GNU/Linux"
 HOMEPAGE="https://github.com/lupoDharkael/flameshot"
 
 EGIT_REPO_URI="https://github.com/lupoDharkael/flameshot.git"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 LICENSE="FreeArt GPL-3+ Apache-2.0"
 SLOT="0"

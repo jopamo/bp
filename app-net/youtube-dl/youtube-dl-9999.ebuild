@@ -12,7 +12,7 @@ EGIT_REPO_URI="https://github.com/rg3/youtube-dl.git"
 
 LICENSE="public-domain"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]

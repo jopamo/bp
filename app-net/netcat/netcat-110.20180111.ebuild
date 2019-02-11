@@ -10,7 +10,7 @@ SRC_URI="mirror://sourceforge/nc110/nc${PV}.tar.xz -> ${P}.tar.xz"
 
 LICENSE="netcat"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="ipv6 static"
 
 S=${WORKDIR}/nc110

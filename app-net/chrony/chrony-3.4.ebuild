@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
 inherit systemd toolchain-funcs autotools
 
@@ -11,17 +11,12 @@ SRC_URI="https://download.tuxfamily.org/${PN}/${P/_/-}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="caps +cmdmon ipv6 +ntp +phc pps +refclock +rtc +adns"
 
-CDEPEND="
+DEPEND="
 	caps? ( lib-sys/libcap )
 	lib-sys/libseccomp
-"
-DEPEND="
-	${CDEPEND}"
-RDEPEND="
-	${CDEPEND}
 "
 
 RESTRICT=test

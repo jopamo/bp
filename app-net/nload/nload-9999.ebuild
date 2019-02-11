@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/rolandriegel/nload.git"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 x86"
+KEYWORDS="amd64 arm64"
 
 RDEPEND=">=lib-sys/ncurses-5.2:0="
 DEPEND="

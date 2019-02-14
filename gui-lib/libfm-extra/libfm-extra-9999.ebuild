@@ -1,7 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit autotools git-r3 multilib-minimal
+
+inherit autotools git-r3
 
 DESCRIPTION="A library for file management"
 HOMEPAGE="http://pcmanfm.sourceforge.net/"
@@ -20,14 +21,12 @@ DEPEND="${RDEPEND}
 	dev-util/gtk-doc
 "
 
-
 src_prepare() {
 	default
 	eautoreconf
-	multilib_copy_sources
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

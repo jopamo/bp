@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib-minimal git-r3 autotools
+inherit git-r3 autotools
 
 DESCRIPTION="Generic Cascading Style Sheet (CSS) parsing and manipulation toolkit"
 HOMEPAGE="https://git.gnome.org/browse/libcroco/"
@@ -14,12 +14,12 @@ KEYWORDS="amd64 arm64"
 IUSE="test"
 
 RDEPEND="
-	>=lib-dev/glib-2.34.3:2[${MULTILIB_USEDEP}]
-	>=lib-dev/libxml2-2.9.1-r4[${MULTILIB_USEDEP}]
+	>=lib-dev/glib-2.34.3:2
+	>=lib-dev/libxml2-2.9.1-r4
 "
 DEPEND="${RDEPEND}
 	dev-util/gtk-doc-am
-	>=dev-util/pkgconfig-0-r1[${MULTILIB_USEDEP}]
+	>=dev-util/pkgconfig-0-r1
 "
 
 src_prepare() {
@@ -29,10 +29,9 @@ src_prepare() {
 	NOCONFIGURE=1 ${S}/autogen.sh || die
 	eautoreconf
 	eapply_user
-	multilib_copy_sources
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

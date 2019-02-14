@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-inherit multilib-minimal git-r3 autotools
+inherit git-r3 autotools
 
 DESCRIPTION="D-Bus bindings for glib"
 HOMEPAGE="https://dbus.freedesktop.org/"
@@ -14,26 +14,21 @@ KEYWORDS="amd64 arm64"
 IUSE="debug static-libs test"
 
 CDEPEND="
-	>=lib-dev/expat-2.1.0-r3[${MULTILIB_USEDEP}]
-	>=lib-dev/glib-2.34.3:2[${MULTILIB_USEDEP}]
-	>=sys-app/dbus-1.8[${MULTILIB_USEDEP}]
+	>=lib-dev/expat-2.1.0-r3
+	>=lib-dev/glib-2.34.3:2
+	>=sys-app/dbus-1.8
 "
 DEPEND="${CDEPEND}
 	>=dev-util/gtk-doc-am-1.14
 	dev-util/pkgconfig
 "
 
-set_TBD() {
-	# out of sources build dir for make check
-	export TBD="${BUILD_DIR}-tests"
-}
-
 src_prepare() {
 	eautoreconf
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--localstatedir="${EPREFIX}"/var
 		--disable-gtk-doc

@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-inherit flag-o-matic libtool multilib-minimal toolchain-funcs
+inherit flag-o-matic libtool toolchain-funcs
 
 DESCRIPTION="Perl-compatible regular expression library"
 HOMEPAGE="http://www.pcre.org/"
@@ -32,16 +32,12 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
-MULTILIB_CHOST_TOOLS=(
-	/usr/bin/pcre2-config
-)
-
 src_prepare() {
 	default
 	elibtoolize
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myeconfargs=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -53,10 +49,10 @@ multilib_src_configure() {
 		--enable-shared
 		--htmldir="${EPREFIX}"/usr/share/doc/${PF}/html
 		--with-match-limit-depth=$(usex recursion-limit 8192 MATCH_LIMIT)
-		$(multilib_native_use_enable bzip2 pcre2grep-libbz2)
-		$(multilib_native_use_enable libedit pcre2test-libedit)
-		$(multilib_native_use_enable readline pcre2test-libreadline)
-		$(multilib_native_use_enable zlib pcre2grep-libz)
+		$(use_enable bzip2 pcre2grep-libbz2)
+		$(use_enable libedit pcre2test-libedit)
+		$(use_enable readline pcre2test-libreadline)
+		$(use_enable zlib pcre2grep-libz)
 		$(use_enable jit)
 		$(use_enable jit pcre2grep-jit)
 		$(use_enable pcre16 pcre2-16)
@@ -67,17 +63,15 @@ multilib_src_configure() {
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }
 
-multilib_src_compile() {
-	emake V=1 $(multilib_is_native_abi || echo "bin_PROGRAMS=")
+src_compile() {
+	emake V=1
 }
 
-multilib_src_install() {
+src_install() {
 	emake \
-		DESTDIR="${D}" \
-		$(multilib_is_native_abi || echo "bin_PROGRAMS= dist_html_DATA=") \
-		install
+		DESTDIR="${D}" install
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	find "${ED}" -name "*.la" -delete || die
 }

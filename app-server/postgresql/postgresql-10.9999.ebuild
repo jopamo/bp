@@ -4,8 +4,8 @@ EAPI="6"
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit eutils flag-o-matic linux-info multilib pam prefix python-single-r1 \
-		systemd user versionator git-r3 multilib-minimal
+inherit eutils flag-o-matic linux-info pam prefix python-single-r1 \
+		systemd user versionator git-r3
 
 KEYWORDS="amd64 arm64"
 
@@ -76,7 +76,7 @@ src_prepare() {
 	eapply_user
 }
 
-multilib_src_configure() {
+src_configure() {
 	case ${CHOST} in
 		*-darwin*|*-solaris*)
 			use nls && append-libs intl
@@ -106,13 +106,13 @@ multilib_src_configure() {
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
-		--prefix="${PO}/usr/$(get_libdir)/postgresql" \
-		--datadir="${PO}/usr/share/postgresql" \
-		--docdir="${PO}/usr/share/doc/${PF}" \
-		--includedir="${PO}/usr/include/postgresql" \
-		--mandir="${PO}/usr/share/postgresql/man" \
-		--sysconfdir="${PO}/etc/postgresql" \
-		--with-system-tzdata="${PO}/usr/share/zoneinfo" \
+		--prefix="${PO}"/usr/$(get_libdir)/postgresql
+		--datadir="${PO}"/usr/share/postgresql
+		--docdir="${PO}"/usr/share/doc/${PF}
+		--includedir="${PO}"/usr/include/postgresql
+		--mandir="${PO}"/usr/share/postgresql/man
+		--sysconfdir="${PO}"/etc/postgresql
+		--with-system-tzdata="${PO}"/usr/share/zoneinfo
 		$(use_with ldap)
 		$(use_with pam)
 		$(use_with perl)
@@ -129,12 +129,12 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_compile() {
+src_compile() {
 	emake
 	emake -C contrib
 }
 
-multilib_src_install() {
+src_install() {
 	emake DESTDIR="${D}" install
 	emake DESTDIR="${D}" install -C contrib
 

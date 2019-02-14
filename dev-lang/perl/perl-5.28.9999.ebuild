@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib-minimal eutils flag-o-matic toolchain-funcs multilib multiprocessing git-r3
+inherit eutils flag-o-matic toolchain-funcs multiprocessing git-r3
 
 DESCRIPTION="Larry Wall's Practical Extraction and Report Language"
 
@@ -11,7 +11,7 @@ HOMEPAGE="https://www.perl.org/"
 EGIT_BRANCH="maint-5.28"
 
 LICENSE="|| ( Artistic GPL-1+ )"
-SLOT="0"
+SLOT="0/1"
 
 KEYWORDS="amd64 arm64"
 
@@ -44,7 +44,6 @@ src_prepare() {
 		sed -i "/my..sysroot/s:'':'${EPREFIX}':" ext/Errno/Errno_pm.PL || die
 	fi
 	default
-	multilib_copy_sources
 }
 
 myconf() {
@@ -110,23 +109,7 @@ src_configure() {
 			sort -u -nr -t'.' -k1,1 -k2,2 -k3,3
 	)"
 
-	# Prefix: the host system needs not to follow Gentoo multilib stuff, and in
-	# Prefix itself we don't do multilib either, so make sure perl can find
-	# something compatible.
-	if use prefix ; then
-		# Set a hook to check for each detected library whether it actually works.
-		export libscheck="
-			( echo 'main(){}' > '${T}'/conftest.c &&
-			  $(tc-getCC) -o '${T}'/conftest '${T}'/conftest.c -l\$thislib >/dev/null 2>/dev/null
-			) || xxx=/dev/null"
-
-		# Use all host paths that might contain useful stuff, the hook above will filter out bad choices.
-		local paths="/lib/*-linux-gnu /usr/lib/*-linux-gnu /lib64 /lib/64 /usr/lib64 /usr/lib/64 /lib32 /usr/lib32 /lib /usr/lib"
-		myconf "-Dlibpth=${EPREFIX}/$(get_libdir) ${EPREFIX}/usr/$(get_libdir) ${paths}"
-	elif [[ $(get_libdir) != "lib" ]] ; then
-		# We need to use " and not ', as the written config.sh use ' ...
-		myconf "-Dlibpth=/usr/$(get_libdir)"
-	fi
+	myconf "-Dlibpth=/usr/$(get_libdir)"
 
 	# don't try building ODBM, bug #354453
 	disabled_extensions="ODBM_File"

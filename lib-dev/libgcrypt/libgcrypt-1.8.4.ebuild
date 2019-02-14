@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-inherit autotools flag-o-matic multilib-minimal
+inherit autotools flag-o-matic
 
 DESCRIPTION="General purpose crypto library based on the code used in GnuPG"
 HOMEPAGE="http://www.gnupg.org/"
@@ -13,17 +13,12 @@ SLOT="0/20"
 KEYWORDS="amd64 arm64"
 IUSE="o-flag-munging static-libs"
 
-RDEPEND=">=lib-dev/libgpg-error-1.25[${MULTILIB_USEDEP}]"
+RDEPEND=">=lib-dev/libgpg-error-1.25"
 
 DEPEND="${RDEPEND}"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.6.1-uscore.patch
-	"${FILESDIR}"/${PN}-multilib-syspath.patch
-)
-
-MULTILIB_CHOST_TOOLS=(
-	/usr/bin/libgcrypt-config
 )
 
 src_prepare() {
@@ -31,7 +26,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -48,11 +43,11 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_install() {
+src_install() {
 	emake DESTDIR="${D}" install
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	default
 	find "${ED}" -name "*.la" -delete || die
 }

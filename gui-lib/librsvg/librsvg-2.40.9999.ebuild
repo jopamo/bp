@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools eutils multilib-minimal git-r3
+inherit autotools eutils git-r3
 
 DESCRIPTION="Scalable Vector Graphics (SVG) rendering library"
 HOMEPAGE="https://wiki.gnome.org/Projects/LibRsvg"
@@ -15,12 +15,12 @@ KEYWORDS="amd64 arm64"
 IUSE="+introspection tools gtk"
 
 RDEPEND="
-	>=lib-dev/glib-2.34.3:2[${MULTILIB_USEDEP}]
-	>=x11-libs/cairo-1.12.14-r4[${MULTILIB_USEDEP}]
-	>=x11-libs/pango-1.36.3[${MULTILIB_USEDEP}]
-	>=lib-dev/libxml2-2.9.1-r4:2[${MULTILIB_USEDEP}]
-	>=lib-dev/libcroco-0.6.8-r1[${MULTILIB_USEDEP}]
-	>=x11-libs/gdk-pixbuf-2.30.7:2[introspection?,${MULTILIB_USEDEP}]
+	>=lib-dev/glib-2.34.3:2
+	>=x11-libs/cairo-1.12.14-r4
+	>=x11-libs/pango-1.36.3
+	>=lib-dev/libxml2-2.9.1-r4:2
+	>=lib-dev/libcroco-0.6.8-r1
+	>=x11-libs/gdk-pixbuf-2.30.7:2[introspection]
 	introspection? ( >=lib-dev/gobject-introspection-0.10.8:= )
 	tools? ( >=x11-libs/gtk+-3.10.0:3 )
 "
@@ -28,16 +28,15 @@ DEPEND="${RDEPEND}
 	lib-dev/gobject-introspection-common
 	dev-util/gtk-doc
 	gtk? ( x11-libs/gtk+ )
-	>=dev-util/pkgconfig-0-r1[${MULTILIB_USEDEP}]
+	>=dev-util/pkgconfig-0-r1
 "
 src_prepare() {
 	${S}/autogen.sh
 	eautoreconf
 	default
-	multilib_copy_sources
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -47,7 +46,7 @@ multilib_src_configure() {
 		--localstatedir="${EPREFIX}"/var
 		--disable-static
 		--disable-tools
-		$(multilib_native_use_enable introspection)
+		$(use_enable introspection)
 		--enable-pixbuf-loader
 	)
 	econf ${myconf[@]}

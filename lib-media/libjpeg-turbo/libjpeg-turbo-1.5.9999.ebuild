@@ -14,13 +14,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
-ASM_DEPEND="|| ( dev-lang/nasm dev-lang/yasm )"
-COMMON_DEPEND="!lib-media/jpeg:0
-	!lib-media/jpeg:62"
-RDEPEND="${COMMON_DEPEND}"
-DEPEND="${COMMON_DEPEND}
-	amd64? ( ${ASM_DEPEND} )
-	x86? ( ${ASM_DEPEND} )"
+DEPEND="|| ( dev-lang/nasm dev-lang/yasm )"
 
 src_prepare() {
 	default

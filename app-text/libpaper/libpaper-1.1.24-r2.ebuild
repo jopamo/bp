@@ -2,7 +2,7 @@
 
 EAPI=4
 
-inherit eutils autotools multilib-minimal
+inherit eutils autotools
 
 MY_PV=${PV/_p/+nmu}
 DESCRIPTION="Library for handling paper characteristics"
@@ -13,27 +13,19 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="abi_x86_32? (
-		!<=app-misc/emul-linux-x86-baselibs-20130224-r10
-		!app-misc/emul-linux-x86-baselibs[-abi_x86_32(-)]
-	)"
-DEPEND=""
-
 S="${WORKDIR}/${P}+nmu5"
-
-DOCS=( README ChangeLog debian/changelog )
 
 src_prepare() {
 	sed -e "s/AM_CONFIG_HEADER/AC_CONFIG_HEADERS/" -i configure.ac || die
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	ECONF_SOURCE="${S}"	econf \
 		--disable-static
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	find "${ED}" -name "*.la" -delete || die
 
 	dodir /etc

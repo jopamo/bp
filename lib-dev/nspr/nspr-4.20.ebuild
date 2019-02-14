@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools multilib toolchain-funcs versionator multilib-minimal
+inherit autotools toolchain-funcs versionator
 
 MIN_PV="$(get_version_component_range 2)"
 
@@ -14,10 +14,6 @@ LICENSE="|| ( MPL-2.0 GPL-2 LGPL-2.1 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="debug"
-
-MULTILIB_CHOST_TOOLS=(
-	/usr/bin/nspr-config
-)
 
 src_prepare() {
 	cd "${S}"/nspr || die
@@ -41,7 +37,7 @@ src_prepare() {
 		"${S}"/nspr/config/rules.mk || die
 }
 
-multilib_src_configure() {
+src_configure() {
 	# We use the standard BUILD_xxx but nspr uses HOST_xxx
 	tc-export_build_env BUILD_CC
 	export HOST_CC=${BUILD_CC} HOST_CFLAGS=${BUILD_CFLAGS} HOST_LDFLAGS=${BUILD_LDFLAGS}
@@ -54,29 +50,8 @@ multilib_src_configure() {
 		--libdir="${EPREFIX}/usr/$(get_libdir)"
 		$(use_enable debug)
 		$(use_enable !debug optimize)
+		--enable-64bit
 	)
-
-	# The configure has some fancy --enable-{{n,x}32,64bit} switches
-	# that trigger some code conditional to platform & arch. 
-
-	# use ABI first, this will work for most cases
-	case "${ABI}" in
-		x86) ;;
-		n32) myconf+=( --enable-n32 );;
-		x32) myconf+=( --enable-x32 );;
-		*64) myconf+=( --enable-64bit );;
-		default) # no abi actually set, fall back to old check
-			einfo "Running a short build test to determine 64bit'ness"
-			echo > "${T}"/test.c || die
-			${CC} ${CFLAGS} ${CPPFLAGS} -c "${T}"/test.c -o "${T}"/test.o || die
-			case $(file "${T}"/test.o) in
-				*32-bit*x86-64*) myconf+=( --enable-x32 );;
-				*64-bit*|*x86_64*) myconf+=( --enable-64bit );;
-				*32-bit*|*i386*) ;;
-				*) die "Failed to detect whether your arch is 64bits or 32bits, disable distcc if you're using it, please";;
-			esac ;;
-		*) ;;
-	esac
 
 	# Ancient autoconf needs help finding the right tools.
 	LC_ALL="C" ECONF_SOURCE="${S}/nspr" \
@@ -84,7 +59,7 @@ multilib_src_configure() {
 	econf "${myconf[@]}"
 }
 
-multilib_src_install() {
+src_install() {
 	# Their build system is royally confusing, as usual
 	MINOR_VERSION=${MIN_PV} # Used for .so version
 	emake DESTDIR="${D}" install

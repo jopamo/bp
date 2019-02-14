@@ -1,7 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit autotools eutils git-r3 multilib-minimal flag-o-matic
+
+inherit autotools eutils git-r3 flag-o-matic
 
 DESCRIPTION="Library to execute a function when a specific event occurs on a file descriptor"
 HOMEPAGE="http://libevent.org/"
@@ -15,18 +16,14 @@ RESTRICT="test"
 
 DEPEND="
 	ssl? (
-		!libressl? ( >=lib-dev/openssl-1.0.1h-r2:0[${MULTILIB_USEDEP}] )
-		libressl? ( lib-dev/libressl[${MULTILIB_USEDEP}] )
+		!libressl? ( >=lib-dev/openssl-1.0.1h-r2:0 )
+		libressl? ( lib-dev/libressl )
 	)
 "
 RDEPEND="
 	${DEPEND}
 	!<=lib-dev/9libs-1.0
 "
-
-MULTILIB_WRAPPED_HEADERS=(
-	/usr/include/event2/event-config.h
-)
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
@@ -35,7 +32,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	# fix out-of-source builds
 	mkdir -p test || die
 
@@ -58,6 +55,6 @@ multilib_src_configure() {
 	ECONF_SOURCE="${S}" econf ${myconf[@]}
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	find "${ED}" -name "*.la" -delete || die
 }

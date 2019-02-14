@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib-minimal autotools
+inherit autotools
 
 DESCRIPTION="A free stand-alone ini file parsing library"
 HOMEPAGE="http://ndevilla.free.fr/iniparser/"
@@ -27,7 +27,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myeconfargs=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

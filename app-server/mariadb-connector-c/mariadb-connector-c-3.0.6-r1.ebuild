@@ -2,9 +2,8 @@
 
 EAPI=6
 
-VCS_INHERIT=""
 if [[ "${PV}" == 9999 ]] ; then
-	VCS_INHERIT="git-r3"
+	inherit git-r3
 	EGIT_REPO_URI="https://github.com/MariaDB/mariadb-connector-c.git"
 else
 	MY_PN=${PN#mariadb-}
@@ -14,13 +13,7 @@ else
 	KEYWORDS="amd64 arm64"
 fi
 
-inherit cmake-utils multilib-minimal toolchain-funcs ${VCS_INHERIT}
-
-MULTILIB_CHOST_TOOLS=( /usr/bin/mariadb_config )
-
-MULTILIB_WRAPPED_HEADERS+=(
-	/usr/include/mariadb/mariadb_version.h
-)
+inherit cmake-utils toolchain-funcs
 
 DESCRIPTION="C client library for MariaDB/MySQL"
 HOMEPAGE="https://mariadb.org/"
@@ -29,13 +22,13 @@ LICENSE="LGPL-2.1"
 SLOT="0/3"
 IUSE="+curl gnutls kerberos libressl mysqlcompat +ssl static-libs test"
 
-DEPEND="lib-sys/zlib:=[${MULTILIB_USEDEP}]
-	curl? ( app-net/curl:0=[${MULTILIB_USEDEP}] )
+DEPEND="lib-sys/zlib:=
+	curl? ( app-net/curl:0= )
 	ssl? (
-		gnutls? ( >=lib-net/gnutls-3.3.24:0=[${MULTILIB_USEDEP}] )
+		gnutls? ( >=lib-net/gnutls-3.3.24:0= )
 		!gnutls? (
-			libressl? ( lib-dev/libressl:0=[${MULTILIB_USEDEP}] )
-			!libressl? ( lib-dev/openssl:0=[${MULTILIB_USEDEP}] )
+			libressl? ( lib-dev/libressl:0= )
+			!libressl? ( lib-dev/openssl:0= )
 		)
 	)
 	"
@@ -53,10 +46,9 @@ RDEPEND="${DEPEND}
 src_configure() {
 	# bug 508724 mariadb cannot use ld.gold
 	tc-ld-disable-gold
-	multilib-minimal_src_configure
 }
 
-multilib_src_configure() {
+src_configure() {
 	local mycmakeargs=(
 		-DWITH_EXTERNAL_ZLIB=ON
 		-DWITH_SSL:STRING=$(usex ssl $(usex gnutls GNUTLS OPENSSL) OFF)
@@ -70,11 +62,11 @@ multilib_src_configure() {
 	cmake-utils_src_configure
 }
 
-multilib_src_compile() {
+src_compile() {
 	cmake-utils_src_compile
 }
 
-multilib_src_install() {
+src_install() {
 	cmake-utils_src_install
 	if use mysqlcompat ; then
 		dosym libmariadb.so.3 /usr/$(get_libdir)/libmysqlclient.so.19
@@ -82,7 +74,7 @@ multilib_src_install() {
 	fi
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	if ! use static-libs ; then
 		find "${D}" -name "*.a" -delete || die
 	fi

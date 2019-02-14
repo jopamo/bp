@@ -2,8 +2,7 @@
 
 EAPI=6
 
-# Do not inherit autotools in non-live ebuild - causes circular dependency, bug #550856
-inherit eutils flag-o-matic libtool multilib multilib-minimal
+inherit eutils flag-o-matic libtool
 
 MY_P=pkg-config-${PV}
 
@@ -26,7 +25,7 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="elibc_FreeBSD elibc_glibc hardened internal-glib"
 
-RDEPEND="!internal-glib? ( >=lib-dev/glib-2.34.3[${MULTILIB_USEDEP}] )
+RDEPEND="!internal-glib? ( >=lib-dev/glib-2.34.3 )
 	!dev-util/pkgconf[pkg-config]
 	!dev-util/pkg-config-lite
 	!dev-util/pkgconfig-openbsd[pkg-config]
@@ -34,8 +33,6 @@ RDEPEND="!internal-glib? ( >=lib-dev/glib-2.34.3[${MULTILIB_USEDEP}] )
 DEPEND="${RDEPEND}"
 
 S=${WORKDIR}/${MY_P}
-
-DOCS=( AUTHORS NEWS README )
 
 src_prepare() {
 	sed -i -e "s|^prefix=/usr\$|prefix=${EPREFIX}/usr|" check/simple.pc || die #434320
@@ -57,7 +54,7 @@ src_prepare() {
 	fi
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf
 
 	if use internal-glib; then
@@ -88,7 +85,7 @@ multilib_src_configure() {
 		${myconf}
 }
 
-multilib_src_install() {
+src_install() {
 	emake DESTDIR="${D}" install
 
 	if use prefix; then

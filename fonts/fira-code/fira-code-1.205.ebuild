@@ -11,14 +11,11 @@ https://github.com/tonsky/FiraCode/files/412440/FiraCode-Regular-Symbol.zip"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-KEYWORDS="amd64 arm arm64 x86"
-IUSE=""
+KEYWORDS="amd64 arm64"
 
 S="${WORKDIR}/FiraCode-${PV}"
 FONT_S="${S}/distr/otf"
 FONT_SUFFIX="otf"
-
-DOCS="README.md"
 
 src_prepare() {
 	default

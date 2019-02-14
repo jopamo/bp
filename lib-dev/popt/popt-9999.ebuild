@@ -1,7 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit eutils multilib-minimal autotools git-r3
+
+inherit eutils autotools git-r3
 
 DESCRIPTION="Parse Options - Command line parser"
 HOMEPAGE="http://rpm5.org/"
@@ -21,7 +22,7 @@ src_prepare() {
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

@@ -1,8 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-
-inherit multilib-minimal
+EAPI=6
 
 BASEVERSION="2.4.6"
 MY_P="libtool-${BASEVERSION}"
@@ -29,14 +27,14 @@ src_prepare() {
 	eapply "${WORKDIR}"/libtool-20180724.patch
 }
 
-multilib_src_configure() {
+src_configure() {
 	ECONF_SOURCE=${S} \
 	econf \
 		--enable-ltdl-install \
 		$(use_enable static-libs static)
 }
 
-multilib_src_install() {
+src_install() {
 	emake DESTDIR="${D}" install
 
 	# While the libltdl.la file is not used directly, the m4 ltdl logic

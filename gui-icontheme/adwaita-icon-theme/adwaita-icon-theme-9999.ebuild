@@ -2,7 +2,7 @@
 
 EAPI="6"
 
-inherit multilib-minimal autotools git-r3 gnome2-utils
+inherit autotools git-r3 gnome2-utils
 
 DESCRIPTION="GNOME default icon theme"
 HOMEPAGE="https://git.gnome.org/browse/adwaita-icon-theme/"
@@ -38,7 +38,7 @@ src_prepare() {
 		-i "${S}"/Makefile.in || die
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

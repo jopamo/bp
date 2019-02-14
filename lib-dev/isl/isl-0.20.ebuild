@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="5"
+EAPI=5
 
-inherit eutils multilib-minimal preserve-libs
+inherit eutils preserve-libs
 
 DESCRIPTION="A library for manipulating integer points bounded by linear constraints"
 HOMEPAGE="http://isl.gforge.inria.fr/"
@@ -23,7 +23,7 @@ src_prepare() {
 	sed -i -e '/Libs:/s:@LDFLAGS@ ::' configure || die #382737
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

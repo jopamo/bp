@@ -13,7 +13,8 @@ IUSE="doc static-libs"
 
 RDEPEND="elibc_glibc? ( lib-dev/libbsd )
 	x11/xorgproto"
-DEPEND="${RDEPEND}"
+DEPEND="${RDEPEND}
+	x11/util-macros"
 
 src_prepare() {
 	eautoreconf

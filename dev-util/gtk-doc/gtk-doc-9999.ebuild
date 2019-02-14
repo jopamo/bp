@@ -4,7 +4,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit eutils python-single-r1 multilib-minimal git-r3 autotools
+inherit eutils python-single-r1 git-r3 autotools
 
 DESCRIPTION="GTK+ Documentation Generator"
 HOMEPAGE="https://www.gtk.org/gtk-doc/"
@@ -35,10 +35,9 @@ src_prepare() {
 	NOCONFIGURE=1 ${S}/autogen.sh || die
 	eautoreconf
 	default
-	multilib_copy_sources
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -57,7 +56,7 @@ multilib_src_configure() {
 	econf ${myconf[@]}
 }
 
-multilib_src_install() {
+src_install() {
 	default
 	rm "${ED}"/usr/share/aclocal/gtk-doc.m4 || die
 }

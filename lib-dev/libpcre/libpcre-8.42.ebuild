@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-inherit eutils multilib libtool flag-o-matic toolchain-funcs multilib-minimal
+inherit eutils libtool flag-o-matic toolchain-funcs
 
 DESCRIPTION="Perl-compatible regular expression library"
 HOMEPAGE="http://www.pcre.org/"
@@ -33,17 +33,13 @@ DEPEND="
 
 S="${WORKDIR}/${MY_P}"
 
-MULTILIB_CHOST_TOOLS=(
-	/usr/bin/pcre-config
-)
-
 src_prepare() {
 	default
 	sed -i -e "s:-lpcre ::" libpcrecpp.pc.in || die
 	elibtoolize
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myeconfargs=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -68,14 +64,14 @@ multilib_src_configure() {
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }
 
-multilib_src_compile() {
+src_compile() {
 	emake V=1
 }
 
-multilib_src_install() {
+src_install() {
 	emake DESTDIR="${ED}" install
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	find "${ED}" -name "*.la" -delete || die
 }

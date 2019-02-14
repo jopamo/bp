@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-inherit autotools multilib-minimal
+inherit autotools
 
 DESCRIPTION="A JSON implementation in C"
 HOMEPAGE="https://github.com/json-c/json-c/wiki"
@@ -17,12 +17,9 @@ src_prepare() {
 	default
 	sed -i -e "s:-Werror::" configure.ac || die
 	eautoreconf
-
-	# tests break otherwise
-	multilib_copy_sources
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -35,12 +32,12 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_test() {
+src_test() {
 	export USE_VALGRIND=0 VERBOSE=1
 	default
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	dosym ../json-c /usr/include/json-c/json
 	find "${ED}" -name "*.la" -delete || die
 }

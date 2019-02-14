@@ -2,7 +2,7 @@
 
 EAPI="5"
 
-inherit flag-o-matic eutils libtool multilib-minimal
+inherit flag-o-matic eutils libtool
 
 MY_PV=${PV/_p*}
 MY_PV=${MY_PV/_/-}
@@ -26,8 +26,6 @@ RDEPEND=""
 
 S=${WORKDIR}/${MY_P%a}
 
-MULTILIB_WRAPPED_HEADERS=( /usr/include/gmp.h )
-
 src_prepare() {
 	elibtoolize
 
@@ -42,25 +40,8 @@ src_prepare() {
 	chmod a+rx configure{,.wrapped}
 }
 
-multilib_src_configure() {
-	# Because of our 32-bit userland, 1.0 is the only HPPA ABI that works
-	# http://gmplib.org/manual/ABI-and-ISA.html#ABI-and-ISA (bug #344613)
-	if [[ ${CHOST} == hppa2.0-* ]] ; then
-		GMPABI="1.0"
-	fi
-
-	# ABI mappings (needs all architectures supported)
-	case ${ABI} in
-		32|x86)       GMPABI=32;;
-		64|amd64|n64) GMPABI=64;;
-		[onx]32)      GMPABI=${ABI};;
-	esac
-	export GMPABI
-
-	#367719
-	if [[ ${CHOST} == *-mint* ]]; then
-		filter-flags -O?
-	fi
+src_configure() {
+	export GMPABI=64
 
 	tc-export CC
 	ECONF_SOURCE="${S}" econf \
@@ -71,7 +52,7 @@ multilib_src_configure() {
 		$(use_enable static-libs static)
 }
 
-multilib_src_compile() {
+src_compile() {
 	emake
 
 	if use pgo ; then
@@ -86,11 +67,11 @@ multilib_src_compile() {
 	fi
 }
 
-multilib_src_test() {
+src_test() {
 	emake check
 }
 
-multilib_src_install() {
+src_install() {
 	emake DESTDIR="${D}" install
 
 	# should be a standalone lib
@@ -100,9 +81,4 @@ multilib_src_install() {
 	use static-libs \
 		&& sed -i 's:/[^ ]*/libgmp.la:-lgmp:' "${la}" \
 		|| rm -f "${la}"
-}
-
-multilib_src_install_all() {
-	einstalldocs
-	use doc && cp "${DISTDIR}"/gmp-man-${MY_PV}.pdf "${ED}"/usr/share/doc/${PF}/
 }

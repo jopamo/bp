@@ -11,7 +11,8 @@ IUSE=static-libs
 
 KEYWORDS="amd64 arm64"
 
-DEPEND="x11/xorgproto"
+DEPEND="x11/xorgproto
+	x11/util-macros"
 
 src_prepare() {
 	eautoreconf

@@ -2,9 +2,9 @@
 
 EAPI=6
 
-inherit autotools flag-o-matic git-r3 multilib-minimal
+inherit autotools flag-o-matic git-r3
 
-SLOT=0
+SLOT=0/1
 
 DESCRIPTION="An object-oriented scripting language"
 HOMEPAGE="https://www.ruby-lang.org/"
@@ -17,6 +17,9 @@ LICENSE="|| ( Ruby-BSD BSD-2 )"
 KEYWORDS="amd64 arm64"
 IUSE="debug doc jemalloc socks5 static-libs"
 
+filter-flags -fomit-frame-pointer
+append-flags -fno-strict-aliasing
+
 src_prepare() {
 	cp "${DISTDIR}/ruby-configure" "${S}"/configure || die
 	chmod 700 "${S}"/configure || die
@@ -26,10 +29,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
-	filter-flags -fomit-frame-pointer
-	append-flags -fno-strict-aliasing
-
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

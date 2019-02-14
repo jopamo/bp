@@ -55,6 +55,7 @@ src_configure() {
 }
 
 src_install() {
+	default
 	find "${ED}" -name "*.la" -delete || die
 	rm -rf "${ED}"/etc/
 }

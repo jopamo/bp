@@ -1,10 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
 PYTHON_COMPAT=( python3_7 )
 
-inherit autotools python-r1 toolchain-funcs multilib-minimal git-r3
+inherit autotools python-r1 toolchain-funcs git-r3
 
 DESCRIPTION="XSLT libraries and tools"
 HOMEPAGE="http://www.xmlsoft.org/"
@@ -18,28 +18,20 @@ IUSE="crypt debug examples python static-libs elibc_Darwin"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 RDEPEND="
-	>=lib-dev/libxml2-2.9.1-r5:2[${MULTILIB_USEDEP}]
-	crypt?  ( >=lib-dev/libgcrypt-1.5.3:0=[${MULTILIB_USEDEP}] )
+	>=lib-dev/libxml2-2.9.1-r5:2
+	crypt?  ( >=lib-dev/libgcrypt-1.5.3:0= )
 	python? (
 		${PYTHON_DEPS}
 		lib-dev/libxml2:2[python,${PYTHON_USEDEP}] )
 "
 DEPEND="${RDEPEND}"
 
-MULTILIB_CHOST_TOOLS=(
-	/usr/bin/xslt-config
-)
-
-MULTILIB_WRAPPED_HEADERS=(
-	/usr/include/libxslt/xsltconfig.h
-)
-
 src_prepare() {
 	default
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	libxslt_configure() {
 		ECONF_SOURCE="${S}" econf \
 			--with-html-dir="${EPREFIX}"/usr/share/doc/${PF} \
@@ -58,26 +50,25 @@ multilib_src_configure() {
 
 	libxslt_configure --without-python # build python bindings separately
 
-	if multilib_is_native_abi && use python; then
+	if use python; then
 		python_foreach_impl libxslt_py_configure
 	fi
 }
 
-multilib_src_compile() {
+src_compile() {
 	default
-	multilib_is_native_abi && use python && libxslt_foreach_py_emake all
+	use python && libxslt_foreach_py_emake all
 }
 
-multilib_src_test() {
+src_test() {
 	default
-	multilib_is_native_abi && use python && libxslt_foreach_py_emake test
+	use python && libxslt_foreach_py_emake test
 }
 
-multilib_src_install() {
-	# "default" does not work here - docs are installed by multilib_src_install_all
+src_install() {
 	emake DESTDIR="${D}" install
 
-	if multilib_is_native_abi && use python; then
+	if use python; then
 		libxslt_foreach_py_emake \
 			DESTDIR="${D}" \
 			docsdir="${EPREFIX}"/usr/share/doc/${PF}/python \
@@ -87,7 +78,7 @@ multilib_src_install() {
 	fi
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	rm -rf "${ED}"/usr/share/doc/${PF}/examples
 	rm -rf "${ED}"/usr/share/doc/${PF}/python/examples
 

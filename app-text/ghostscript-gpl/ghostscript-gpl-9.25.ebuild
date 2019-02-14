@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools multilib versionator flag-o-matic toolchain-funcs
+inherit autotools versionator flag-o-matic toolchain-funcs
 
 DESCRIPTION="Ghostscript is an interpreter for the PostScript language and for PDF"
 HOMEPAGE="http://ghostscript.com/"

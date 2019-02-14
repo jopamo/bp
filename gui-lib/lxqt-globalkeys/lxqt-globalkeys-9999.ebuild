@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit cmake-multilib
+inherit cmake-utils
 
 DESCRIPTION="Daemon used to register global keyboard shortcuts"
 HOMEPAGE="http://lxqt.org/"
@@ -37,7 +37,7 @@ DEPEND="${RDEPEND}
 	>=dev-util/lxqt-build-tools-0.1.0
 "
 
-multilib_src_install() {
+src_install() {
 	cmake-utils_src_install
 	rm "${ED}"/usr/share/applications/lxqt-config-globalkeyshortcuts.desktop
 }

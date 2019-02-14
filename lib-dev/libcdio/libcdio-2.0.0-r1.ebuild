@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools libtool multilib-minimal
+inherit autotools libtool
 
 DESCRIPTION="A library to encapsulate CD-ROM reading and control"
 HOMEPAGE="https://www.gnu.org/software/libcdio/"
@@ -25,11 +25,6 @@ DEPEND="${RDEPEND}
 	test? ( dev-lang/perl )
 "
 
-MULTILIB_WRAPPED_HEADERS=(
-	/usr/include/cdio/cdio_config.h
-	/usr/include/cdio/version.h
-)
-
 PATCHES=( "${FILESDIR}/${P}-iso-ioleak.patch" )
 
 src_prepare() {
@@ -44,9 +39,9 @@ src_prepare() {
 	elibtoolize # to prevent -L/usr/lib ending up in the linker line wrt 499510
 }
 
-multilib_src_configure() {
+src_configure() {
 	local util_switch
-	if ! multilib_is_native_abi || use minimal ; then
+	if use minimal ; then
 		util_switch="--without"
 	else
 		util_switch="--with"
@@ -64,7 +59,6 @@ multilib_src_configure() {
 		${util_switch}-{cd-drive,cd-info,cdda-player,cd-read,iso-info,iso-read}
 }
 
-multilib_src_install_all() {
-	einstalldocs
+src_install_all() {
 	find "${ED}" -name '*.la' -delete || die
 }

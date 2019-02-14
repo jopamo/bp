@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools multilib-minimal
+inherit autotools
 
 DESCRIPTION="Low-level cryptographic library"
 HOMEPAGE="http://www.lysator.liu.se/~nisse/nettle/"
@@ -13,19 +13,14 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="+gmp static-libs test cpu_flags_x86_aes"
 
-DEPEND="gmp? ( >=lib-dev/gmp-5.0:0=[${MULTILIB_USEDEP}] )"
-
-MULTILIB_WRAPPED_HEADERS=(
-	/usr/include/nettle/nettle-stdint.h
-	/usr/include/nettle/version.h
-)
+DEPEND="gmp? ( >=lib-dev/gmp-5.0:0= )"
 
 src_prepare() {
 	default
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	ECONF_SOURCE="${S}" econf \
 		--libdir="${EPREFIX}"/usr/$(get_libdir) \
 		$(use_enable gmp public-key) \

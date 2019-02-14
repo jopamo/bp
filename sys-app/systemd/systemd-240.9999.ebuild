@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0/2"
 
-IUSE="acl apparmor audit build cryptsetup docs kmod +lz4 pam pcre qrcode +seccomp test xkb"
+IUSE="acl apparmor audit build cryptsetup docs efi kmod +lz4 pam pcre qrcode +seccomp test xkb"
 
 RESTRICT="!test? ( test )"
 
@@ -38,7 +38,8 @@ COMMON_DEPEND=">=sys-app/util-linux-2.30:0=[${MULTILIB_USEDEP}]
 	pcre? ( lib-dev/libpcre2 )
 	qrcode? ( app-media/qrencode:0= )
 	seccomp? ( >=lib-sys/libseccomp-2.3.3:0= )
-	xkb? ( >=x11-libs/libxkbcommon-0.4.1:0= )"
+	xkb? ( >=x11-libs/libxkbcommon-0.4.1:0= )
+	efi? ( sys-app/gnu-efi )"
 
 RDEPEND="${COMMON_DEPEND}
 	>=sys-app/baselayout-2.2
@@ -141,12 +142,12 @@ multilib_src_configure() {
 		-Ddefault-kill-user-processes=false
 		-Ddns-over-tls=true
 		-Ddns-servers=1.1.1.1
-		-Defi=false
+		-Defi=$(meson_use efi )
+		-Dgnu-efi=$(meson_use efi)
 		-Delfutils=true
 		-Denvironment-d=true
 		-Dfirstboot=true
 		-Dgcrypt=true
-		-Dgnu-efi=false
 		-Dgnutls=true
 		-Dhibernate=false
 		-Dhostnamed=true

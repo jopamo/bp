@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib user flag-o-matic eutils pam toolchain-funcs autotools systemd versionator
+inherit user flag-o-matic eutils pam toolchain-funcs autotools systemd versionator
 
 DESCRIPTION="Lightweight but featured SMTP daemon from OpenBSD"
 HOMEPAGE="https://www.opensmtpd.org"

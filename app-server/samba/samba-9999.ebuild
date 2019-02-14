@@ -87,12 +87,9 @@ src_prepare() {
 	sed -e 's:<gpgme\.h>:<gpgme/gpgme.h>:' \
 		-i source4/dsdb/samdb/ldb_modules/password_hash.c \
 		|| die
-
-	# Friggin' WAF shit
-	multilib_copy_sources
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--enable-fhs
 		--bindir="${EPREFIX}"/usr/bin

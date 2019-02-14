@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit libtool multilib-minimal
+inherit libtool
 
 MY_PV=${PV/_p*}
 MY_P=${PN}-${MY_PV}
@@ -37,7 +37,7 @@ src_prepare() {
 	elibtoolize
 }
 
-multilib_src_configure() {
+src_configure() {
 	# Make sure mpfr doesn't go probing toolchains it shouldn't #476336#19
 	ECONF_SOURCE=${S} \
 	user_redefine_cc=yes \
@@ -46,6 +46,6 @@ multilib_src_configure() {
 		$(use_enable static-libs static)
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	use static-libs || find "${ED}"/usr -name '*.la' -delete
 }

@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit cmake-multilib git-r3 gnome2-utils
+inherit cmake-utils git-r3 gnome2-utils
 
 DESCRIPTION="Breeze SVG icon theme"
 LICENSE="LGPL-3"
@@ -25,7 +25,7 @@ src_configure() {
 	local mycmakeargs=(
 		-DBINARY_ICONS_RESOURCE=OFF
 	)
-	cmake-multilib_src_configure
+	cmake-utils_src_configure
 }
 
 pkg_postinst() {

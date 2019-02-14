@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit autotools eutils libtool multilib toolchain-funcs multilib-minimal
+inherit autotools eutils libtool toolchain-funcs
 
 DESCRIPTION="Stream-oriented XML parser library"
 HOMEPAGE="https://libexpat.github.io/"
@@ -13,10 +13,6 @@ KEYWORDS="amd64 arm64"
 
 IUSE="examples static-libs unicode"
 DEPEND="unicode? ( ${AUTOTOOLS_DEPEND} )"
-RDEPEND="abi_x86_32? ( !<=app-misc/emul-linux-x86-baselibs-20130224-r6
-		!app-misc/emul-linux-x86-baselibs[-abi_x86_32(-)] )"
-
-DOCS=( README.md )
 
 src_prepare() {
 	eapply_user
@@ -36,7 +32,7 @@ src_prepare() {
 	fi
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf="$(use_enable static-libs static) --without-docbook"
 
 	mkdir -p "${BUILD_DIR}"w || die
@@ -50,7 +46,7 @@ multilib_src_configure() {
 	ECONF_SOURCE="${S}" econf ${myconf}
 }
 
-multilib_src_compile() {
+src_compile() {
 	emake
 
 	if use unicode; then
@@ -60,7 +56,7 @@ multilib_src_compile() {
 	fi
 }
 
-multilib_src_install() {
+src_install() {
 	emake install DESTDIR="${D}"
 
 	if use unicode; then
@@ -75,17 +71,6 @@ multilib_src_install() {
 	fi
 }
 
-multilib_src_install_all() {
-	einstalldocs
-
-	# Note: Use of HTML_DOCS would add unwanted "doc" subfolder
-	docinto html
-	dodoc doc/*.{css,html,png}
-
-	if use examples; then
-		insinto /usr/share/doc/${PF}/examples
-		doins examples/*.c
-	fi
-
+src_install_all() {
 	find "${ED}" -name "*.la" -delete || die
 }

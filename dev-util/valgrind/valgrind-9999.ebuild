@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-inherit autotools flag-o-matic multilib
+inherit autotools flag-o-matic
 
 DESCRIPTION="An open-source memory debugger for GNU/Linux"
 HOMEPAGE="http://www.valgrind.org"
@@ -18,6 +18,10 @@ else
 fi
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+filter-flags -fomit-frame-pointer
+filter-flags -fstack-protector
+filter-flags -fstack-protector-all
+filter-flags -fstack-protector-strong
 
 src_prepare() {
 	sed -i -e "s:doc/valgrind:doc/${PF}:" docs/Makefile.am || die
@@ -30,10 +34,5 @@ src_prepare() {
 }
 
 src_configure() {
-	filter-flags -fomit-frame-pointer
-	filter-flags -fstack-protector
-	filter-flags -fstack-protector-all
-	filter-flags -fstack-protector-strong
-
 	econf --enable-only64bit
 }

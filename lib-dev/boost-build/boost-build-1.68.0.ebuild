@@ -56,7 +56,6 @@ src_prepare() {
 	popd >/dev/null || die
 
 	# Remove stripping option
-	# Fix python components build on multilib systems, bug #496446
 	cd "${S}/engine" || die
 	sed -i \
 		-e 's|-s\b||' \
@@ -90,14 +89,7 @@ src_configure() {
 src_compile() {
 	cd engine || die
 
-	local toolset
-
-	if [[ ${CHOST} == *-darwin* ]]; then
-		toolset=darwin
-	else
-		# Using boost's generic toolset here, which respects CC and CFLAGS
-		toolset=cc
-	fi
+	local toolset=cc
 
 	CC=$(tc-getCC) ./build.sh ${toolset} -d+2 $(use_with python python "${EROOT%/}"/usr) || die "building bjam failed"
 }

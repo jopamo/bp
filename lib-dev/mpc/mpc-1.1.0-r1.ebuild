@@ -2,8 +2,6 @@
 
 EAPI=6
 
-inherit multilib-minimal
-
 DESCRIPTION="A library for multiprecision complex arithmetic with exact rounding"
 HOMEPAGE="http://mpc.multiprecision.org/"
 SRC_URI="https://ftp.gnu.org/gnu/mpc/${P}.tar.gz"
@@ -13,15 +11,13 @@ SLOT="0/3"
 KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
-DEPEND=">=lib-dev/gmp-5.0.0:0=[${MULTILIB_USEDEP},static-libs?]
-	>=lib-dev/mpfr-3.0.0:0=[${MULTILIB_USEDEP},static-libs?]"
-RDEPEND="${DEPEND}"
+DEPEND=">=lib-dev/gmp-5.0.0:0=[static-libs?]
+	>=lib-dev/mpfr-3.0.0:0=[static-libs?]"
 
-multilib_src_configure() {
+src_configure() {
 	ECONF_SOURCE=${S} econf $(use_enable static-libs static)
 }
 
-multilib_src_install_all() {
-	einstalldocs
+src_install_all() {
 	find "${D}" -name '*.la' -delete || die
 }

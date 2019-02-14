@@ -84,7 +84,6 @@ nvidia_drivers_versions_check() {
 
 	# Kernel features/options to check for
 	CONFIG_CHECK="~ZONE_DMA ~MTRR ~!LOCKDEP"
-	use x86 && CONFIG_CHECK+=" ~HIGHMEM"
 
 	check_extra_config
 }

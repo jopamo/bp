@@ -1,7 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit autotools eutils multilib-minimal
+
+inherit autotools eutils
 
 DESCRIPTION="Libconfig is a simple library for manipulating structured configuration files"
 HOMEPAGE="
@@ -34,22 +35,21 @@ src_prepare() {
 		-e 's|AM_CONFIG_HEADER|AC_CONFIG_HEADERS|g' \
 		configure.ac || die
 	eautoreconf
-	multilib_copy_sources
 }
 
-multilib_src_configure() {
+src_configure() {
 	econf \
 		$(use_enable cxx) \
 		$(use_enable static-libs static) \
 		--disable-examples
 }
 
-multilib_src_test() {
+src_test() {
 	# It responds to check but that does not work as intended
 	emake test
 }
 
-multilib_src_install() {
+src_install() {
 	default
 	find "${ED}" -name "*.la" -delete || die
 }

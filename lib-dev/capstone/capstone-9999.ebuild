@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit cmake-multilib git-r3
+inherit cmake-utils git-r3
 
 DESCRIPTION="disassembly/disassembler framework + bindings"
 HOMEPAGE="http://www.capstone-engine.org/"

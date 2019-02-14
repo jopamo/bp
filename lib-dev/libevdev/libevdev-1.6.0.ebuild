@@ -2,8 +2,6 @@
 
 EAPI=6
 
-inherit multilib-minimal
-
 DESCRIPTION="Handler library for evdev events"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/libevdev/"
 
@@ -13,7 +11,7 @@ RESTRICT="test" # Tests need to run as root.
 KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

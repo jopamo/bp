@@ -18,4 +18,5 @@ RDEPEND="
 "
 DEPEND="${DEPEND}
 	dev-util/lxqt-build-tools
+	gui-lib/linguist-tools
 "

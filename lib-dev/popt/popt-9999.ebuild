@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="nls static-libs"
 
-RDEPEND="nls? ( >=sys-devel/gettext-0-r1[${MULTILIB_USEDEP}] )"
+RDEPEND="nls? ( >=sys-devel/gettext-0-r1 )"
 DEPEND="nls? ( sys-devel/gettext )"
 
 src_prepare() {

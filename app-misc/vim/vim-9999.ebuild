@@ -16,7 +16,7 @@ SLOT="0"
 LICENSE="vim"
 KEYWORDS="amd64 arm64"
 
-IUSE="X acl cscope debug gpm +minimal nls perl python racket ruby selinux tcl terminal vim-pager"
+IUSE="acl cscope debug gpm nls python racket terminal vim-pager"
 REQUIRED_USE="
 	python? ( ${PYTHON_REQUIRED_USE} )
 "
@@ -27,15 +27,7 @@ RDEPEND="
 	acl? ( kernel_linux? ( sys-app/acl ) )
 	cscope? ( dev-util/cscope )
 	gpm? ( >=lib-sys/gpm-1.19.3 )
-	!minimal? (
-		~app-misc/vim-core-${PV}
-		dev-util/ctags
-	)
-	perl? ( dev-lang/perl:= )
 	python? ( ${PYTHON_DEPS} )
-	selinux? ( lib-sys/libselinux )
-	tcl? ( dev-lang/tcl:0= )
-	X? ( x11-libs/libXt )
 "
 
 DEPEND="
@@ -47,10 +39,6 @@ DEPEND="
 pkg_setup() {
 	unset LANG LC_ALL
 	export LC_COLLATE="C"
-
-	# Gnome sandbox silliness. bug #114475.
-	mkdir -p "${T}"/home || die "mkdir failed"
-	export HOME="${T}"/home
 
 	use python && python-single-r1_pkg_setup
 }
@@ -150,8 +138,7 @@ src_configure() {
 		fi
 	done
 
-	if use minimal; then
-		myconf=(
+	myconf=(
 			--with-features=tiny
 			--enable-nls
 			--disable-acl
@@ -167,41 +154,8 @@ src_configure() {
 			--disable-tclinterp
 			--disable-gpm
 		)
-	else
-		use debug && append-flags "-DDEBUG"
 
-		myconf=(
-			--with-features=huge
-			--enable-multibyte
-			$(use_enable acl)
-			$(use_enable cscope)
-			$(use_enable gpm)
-			$(use_enable nls)
-			$(use_enable perl perlinterp)
-			$(use_enable python pythoninterp)
-			$(use_enable python python3interp)
-			$(use_enable racket mzschemeinterp)
-			$(use_enable ruby rubyinterp)
-			$(use_enable selinux)
-			$(use_enable tcl tclinterp)
-			$(use_enable terminal)
-		)
-
-		# --with-features=huge forces on cscope even if we --disable it. We need
-		# to sed this out to avoid screwiness. (1 Sep 2004 ciaranm)
-		if ! use cscope; then
-			sed -i -e \
-				'/# define FEAT_CSCOPE/d' src/feature.h || die "sed failed"
-		fi
-
-		# don't test USE=X here ... see bug #19115
-		# but need to provide a way to link against X ... see bug #20093
-		myconf+=(
-			--enable-gui=no
-			--disable-darwin
-			$(use_with X x)
-		)
-	fi
+	use debug && append-flags "-DDEBUG"
 
 	# let package manager strip binaries
 	export ac_cv_prog_STRIP="$(type -P true ) faking strip"

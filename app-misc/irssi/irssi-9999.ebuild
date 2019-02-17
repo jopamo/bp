@@ -2,7 +2,7 @@
 
 EAPI="6"
 
-inherit autotools perl-module git-r3
+inherit autotools perl-module git-r3 flag-o-matic
 
 EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
 
@@ -18,6 +18,8 @@ DEPEND="lib-sys/ncurses:0=
 	!libressl? ( lib-dev/openssl:= )
 	libressl? ( lib-dev/libressl:= )
 	perl? ( dev-lang/perl:= )"
+
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 src_prepare() {
 	sed -i -e /^autoreconf/d autogen.sh || die

@@ -4,7 +4,7 @@ EAPI=5
 
 PYTHON_COMPAT=( python3_7 )
 
-inherit eutils flag-o-matic python-single-r1 systemd user
+inherit eutils flag-o-matic python-single-r1 systemd user autotools
 
 MY_P=${PN}-${PV/_/}
 DESCRIPTION="A validating, recursive and caching DNS resolver"
@@ -14,7 +14,7 @@ SRC_URI="http://unbound.net/downloads/${MY_P}.tar.gz"
 LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="debug dnscrypt dnstap +ecdsa gost libressl python selinux static-libs systemd test threads"
+IUSE="debug dnscrypt dnstap +ecdsa gost libressl python selinux static-libs test threads"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 CDEPEND=">=lib-dev/expat-2.1.0-r3
@@ -38,7 +38,6 @@ DEPEND="${CDEPEND}
 		dev-util/splint
 		app-text/wdiff
 	)
-	systemd? ( sys-app/systemd )
 	dev-util/pkgconfig"
 
 RDEPEND="${CDEPEND}
@@ -63,6 +62,11 @@ pkg_setup() {
 	use python && python-single-r1_pkg_setup
 }
 
+src_prepare() {
+	eautoreconf
+	default
+}
+
 src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
@@ -77,7 +81,6 @@ src_configure() {
 		$(use_enable dnstap)
 		$(use_enable ecdsa)
 		$(use_enable static-libs static)
-		$(use_enable systemd)
 		$(use_with threads pthreads)
 		--disable-flto
 		--disable-rpath
@@ -99,7 +102,6 @@ src_install_all() {
 	use python && python_optimize
 
 	systemd_dounit "${FILESDIR}"/unbound.service
-	systemd_dounit "${FILESDIR}"/unbound.socket
 	systemd_newunit "${FILESDIR}"/unbound_at.service "unbound@.service"
 	systemd_dounit "${FILESDIR}"/unbound-anchor.service
 

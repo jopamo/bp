@@ -72,6 +72,8 @@ RDEPEND="
 	selinux? ( sec-policy/selinux-wireshark )
 "
 
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+
 pkg_setup() {
 	enewgroup wireshark
 }

@@ -53,3 +53,4 @@
 *sys-app/sshguard
 *app-portage/gentoolkit
 *sys-fs/btrfs-progs
+*app-portage/smart-live-rebuild

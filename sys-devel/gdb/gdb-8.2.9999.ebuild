@@ -8,7 +8,7 @@ inherit flag-o-matic eutils python-single-r1 git-r3
 
 DESCRIPTION="GNU debugger"
 HOMEPAGE="https://sourceware.org/gdb/"
-EGIT_REPO_URI="git://sourceware.org/git/binutils-gdb.git"
+EGIT_REPO_URI="https://github.com/1g4-linux/binutils-gdb.git"
 EGIT_BRANCH="gdb-8.2-branch"
 
 LICENSE="GPL-2 LGPL-2"

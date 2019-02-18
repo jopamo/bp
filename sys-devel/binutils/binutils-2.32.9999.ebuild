@@ -7,7 +7,7 @@ inherit git-r3
 DESCRIPTION="Core binutils libraries (libbfd, libopcodes, libiberty) for external packages"
 HOMEPAGE="https://sourceware.org/binutils/"
 
-EGIT_REPO_URI="git://sourceware.org/git/binutils-gdb.git"
+EGIT_REPO_URI="https://github.com/1g4-linux/binutils-gdb.git"
 EGIT_BRANCH="binutils-2_32-branch"
 
 SLOT="0"

@@ -12,7 +12,7 @@ EGIT_BRANCH="OpenSSL_1_1_0-stable"
 
 LICENSE="openssl"
 SLOT="0"
-IUSE="+asm bindist rfc3779 sctp cpu_flags_x86_sse2 static-libs test vanilla zlib"
+IUSE="+asm bindist rfc3779 sctp static-libs test vanilla zlib"
 RESTRICT="!bindist? ( bindist )"
 
 RDEPEND="zlib? ( >=lib-sys/zlib-1.2.8-r1[static-libs(+)?] )"

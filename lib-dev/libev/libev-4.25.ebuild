@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools multilib-minimal
+inherit autotools
 
 DESCRIPTION="A high-performance event loop/event model with lots of feature"
 HOMEPAGE="http://software.schmorp.de/pkg/libev.html"
@@ -19,7 +19,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -33,7 +33,7 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_install() {
+src_install() {
 	default
 	rm "${ED}"/usr/include/event.h
 }

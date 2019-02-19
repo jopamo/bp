@@ -4,7 +4,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit python-r1 git-r3 multilib-minimal multilib meson
+inherit python-r1 git-r3 meson
 
 DESCRIPTION="The GLib library of C routines"
 HOMEPAGE="https://www.gtk.org/"
@@ -36,11 +36,6 @@ DEPEND="
 	>=app-text/docbook-xml-dtd-4.5
 	>=app-text/docbook-xsl-stylesheets-1.79.1
 "
-
-src_prepare() {
-	multilib_copy_sources
-	default
-}
 
 src_configure() {
         local emesonargs=(

@@ -12,7 +12,7 @@ EGIT_BRANCH="stable"
 LICENSE="ISC"
 SLOT="0/23"
 KEYWORDS="amd64 arm64"
-IUSE="+asm minimal static-libs +urandom cpu_flags_x86_sse4_1 cpu_flags_x86_aes"
+IUSE="+asm minimal static-libs +urandom"
 
 PATCHES=( "${FILESDIR}"/${PN}-1.0.10-cpuflags.patch )
 
@@ -24,15 +24,10 @@ src_prepare() {
 src_configure() {
 	local myconf
 
-	# --disable-pie needed on x86, bug #512734
-	use x86 && myconf="${myconf} --disable-pie"
-
 	econf \
 		$(use_enable asm) \
 		$(use_enable minimal) \
 		$(use_enable !urandom blocking-random) \
 		$(use_enable static-libs static) \
-		$(use_enable cpu_flags_x86_sse4_1 sse4_1) \
-		$(use_enable cpu_flags_x86_aes aesni) \
 		${myconf}
 }

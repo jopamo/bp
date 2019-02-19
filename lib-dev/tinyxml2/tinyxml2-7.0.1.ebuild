@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit cmake-multilib
+inherit cmake-utils
 
 DESCRIPTION="A simple, small, efficient, C++ XML parser"
 HOMEPAGE="http://www.grinninglizard.com/tinyxml2/ https://github.com/leethomason/tinyxml2/"
@@ -13,7 +13,7 @@ SLOT="0/6"
 KEYWORDS="amd64 arm64"
 IUSE="static-libs test"
 
-multilib_src_configure() {
+src_configure() {
 	local mycmakeargs=(
 		-DBUILD_STATIC_LIBS=$(usex static-libs)
 		-DBUILD_TESTING=$(usex test)

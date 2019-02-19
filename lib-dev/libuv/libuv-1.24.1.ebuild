@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-inherit autotools multilib-minimal
+inherit autotools
 
 DESCRIPTION="Cross-platform asychronous I/O"
 HOMEPAGE="https://github.com/libuv/libuv"
@@ -15,7 +15,7 @@ IUSE="static-libs"
 RESTRICT="test"
 
 DEPEND="sys-devel/libtool
-	dev-util/pkgconfig[${MULTILIB_USEDEP}]"
+	dev-util/pkgconfig"
 
 src_prepare() {
 	default
@@ -26,7 +26,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myeconfargs=(
 		cc_cv_cflags__g=no
 		$(use_enable static-libs static)
@@ -34,12 +34,12 @@ multilib_src_configure() {
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }
 
-multilib_src_test() {
+src_test() {
 	mkdir "${BUILD_DIR}"/test || die
 	cp -pPR "${S}"/test/fixtures "${BUILD_DIR}"/test/fixtures || die
 	default
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	find "${ED}" -name "*.la" -delete || die
 }

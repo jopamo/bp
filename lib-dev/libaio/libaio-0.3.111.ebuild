@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils multilib-minimal toolchain-funcs flag-o-matic
+inherit eutils toolchain-funcs flag-o-matic
 
 DESCRIPTION="Asynchronous input/output library that uses the kernels native interface"
 HOMEPAGE="http://lse.sourceforge.net/io/aio.html"
@@ -31,8 +31,6 @@ src_prepare() {
 		use test || sed_args+=( -e '/^all_targets +=/s/ libaio.a//' )
 	fi
 	sed -i "${sed_args[@]}" src/Makefile Makefile || die
-
-	multilib_copy_sources
 }
 
 _emake() {
@@ -44,21 +42,21 @@ _emake() {
 	emake "$@"
 }
 
-multilib_src_compile() {
+src_compile() {
 	filter-flags -flto
 	_emake
 }
 
-multilib_src_test() {
+src_test() {
 	mkdir -p testdir || die
 	# 'make check' breaks with sandbox, 'make partcheck' works
 	_emake partcheck prefix="${S}/src" libdir="${S}/src"
 }
 
-multilib_src_install() {
+src_install() {
 	_emake install DESTDIR="${D}"
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	export QA_DT_NEEDED=$(find "${ED}" -type f -name 'libaio.so.*' -printf '/%P\n')
 }

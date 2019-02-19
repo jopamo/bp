@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit cmake-multilib
+inherit cmake-utils
 
 DESCRIPTION="Small, safe and fast formatting library"
 HOMEPAGE="https://github.com/fmtlib/fmt"
@@ -19,9 +19,9 @@ else
 	S="${WORKDIR}/fmt-${PV}"
 fi
 
-KEYWORDS="amd64"
+KEYWORDS="amd64 arm64"
 
-multilib_src_configure() {
+src_configure() {
 	local mycmakeargs=(
 		-DFMT_CMAKE_DIR="$(get_libdir)/cmake/fmt"
 		-DFMT_LIB_DIR="$(get_libdir)"

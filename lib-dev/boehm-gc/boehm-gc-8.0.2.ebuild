@@ -2,7 +2,7 @@
 
 EAPI="6"
 
-inherit multilib-minimal libtool flag-o-matic
+inherit libtool flag-o-matic
 
 MY_P="gc-${PV}"
 
@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 IUSE="cxx static-libs threads"
 
 DEPEND="
-	>=lib-dev/libatomic_ops-7.4[${MULTILIB_USEDEP}]
+	>=lib-dev/libatomic_ops-7.4
 	dev-util/pkgconfig"
 
 S="${WORKDIR}/${MY_P}"
@@ -29,7 +29,7 @@ src_prepare() {
 	elibtoolize
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -46,6 +46,6 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	find "${ED}" -name '*.la' -delete || die
 }

@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils multilib-minimal libtool
+inherit eutils libtool
 
 DESCRIPTION="Library for manipulating Unicode and C strings according to Unicode standard"
 HOMEPAGE="https://www.gnu.org/software/libunistring/"
@@ -23,7 +23,7 @@ src_prepare() {
 	elibtoolize
 }
 
-multilib_src_configure() {
+src_configure() {
 	ECONF_SOURCE="${S}" \
 	econf $(use_enable static-libs static)
 }

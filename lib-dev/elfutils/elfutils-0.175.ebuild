@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-inherit flag-o-matic multilib-minimal
+inherit flag-o-matic
 
 DESCRIPTION="Libraries/utilities to handle ELF objects (drop in replacement for libelf)"
 HOMEPAGE="http://elfutils.org/"
@@ -13,9 +13,9 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="bzip2 lzma nls static-libs test +threads +utils"
 
-RDEPEND=">=lib-sys/zlib-1.2.8-r1[${MULTILIB_USEDEP}]
-	bzip2? ( >=app-compression/lbzip2-1.0.6-r4[${MULTILIB_USEDEP}] )
-	lzma? ( >=app-compression/xz-utils-5.0.5-r1[${MULTILIB_USEDEP}] )
+RDEPEND=">=lib-sys/zlib-1.2.8-r1
+	bzip2? ( >=app-compression/lbzip2-1.0.6-r4 )
+	lzma? ( >=app-compression/xz-utils-5.0.5-r1 )
 	!lib-dev/libelf"
 DEPEND="${RDEPEND}
 	>=sys-devel/flex-2.5.4a
@@ -34,10 +34,10 @@ src_prepare() {
 
 src_configure() {
 	use test && append-flags -g #407135
-	multilib-minimal_src_configure
+	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -54,13 +54,13 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_test() {
+src_test() {
 	env	LD_LIBRARY_PATH="${BUILD_DIR}/libelf:${BUILD_DIR}/libebl:${BUILD_DIR}/libdw:${BUILD_DIR}/libasm" \
 		LC_ALL="C" \
 		emake check
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	if ! use utils; then
 		rm -rf "${ED}"/usr/bin || die
 	fi

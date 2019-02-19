@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-inherit libtool multilib-minimal toolchain-funcs
+inherit libtool toolchain-funcs
 
 DESCRIPTION="Contains error handling functions used by GnuPG software"
 HOMEPAGE="http://www.gnupg.org/related_software/libgpg-error"
@@ -13,37 +13,24 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="common-lisp nls static-libs"
 
-RDEPEND="nls? ( >=sys-devel/gettext-0-r1[${MULTILIB_USEDEP}] )
-	abi_x86_32? (
-		!app-misc/emul-linux-x86-baselibs[-abi_x86_32(-)]
-		!<=app-misc/emul-linux-x86-baselibs-20131008-r12
-	)"
+RDEPEND="nls? ( >=sys-devel/gettext-0-r1 )"
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )"
-
-MULTILIB_CHOST_TOOLS=(
-	/usr/bin/gpg-error-config
-)
-MULTILIB_WRAPPED_HEADERS=(
-	/usr/include/gpg-error.h
-	/usr/include/gpgrt.h
-)
 
 src_prepare() {
 	default
 	elibtoolize
 }
 
-multilib_src_configure() {
+src_configure() {
 	ECONF_SOURCE="${S}" econf \
 		CC_FOR_BUILD="$(tc-getBUILD_CC)" \
 		--enable-threads \
 		$(use_enable nls) \
 		$(use_enable static-libs static) \
-		$(use_enable common-lisp languages) \
-		$(multilib_is_native_abi || echo --disable-languages)
+		$(use_enable common-lisp languages)
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	find "${ED}" -name "*.la" -delete || die
 }

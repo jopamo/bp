@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools toolchain-funcs multilib-minimal
+inherit autotools toolchain-funcs
 
 DESCRIPTION="Jemalloc is a general-purpose scalable concurrent allocator"
 HOMEPAGE="http://jemalloc.net/ https://github.com/jemalloc/jemalloc"
@@ -13,8 +13,6 @@ SLOT="0/2"
 KEYWORDS="amd64 arm64"
 IUSE="debug hardened +hugepages lazy-lock static-libs stats xmalloc"
 
-MULTILIB_WRAPPED_HEADERS=( /usr/include/jemalloc/jemalloc.h )
-
 QA_CONFIGURE_OPTIONS="--enable-static --disable-static --enable-shared --disable-shared"
 
 src_prepare() {
@@ -22,7 +20,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=()
 
 	if use hardened ; then
@@ -44,12 +42,12 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_install() {
+src_install() {
 	touch doc/{jemalloc.3,jemalloc.html}
 	emake DESTDIR="${D}" install
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	if [[ ${CHOST} == *-darwin* ]] ; then
 		# fixup install_name, #437362
 		install_name_tool \

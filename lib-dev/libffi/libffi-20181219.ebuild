@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-inherit autotools multilib-minimal
+inherit autotools
 
 DESCRIPTION="a portable, high level programming interface to various calling conventions"
 HOMEPAGE="https://sourceware.org/libffi/"
@@ -28,7 +28,7 @@ src_prepare() {
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

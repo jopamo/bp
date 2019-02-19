@@ -2,7 +2,7 @@
 
 EAPI="6"
 
-inherit eutils flag-o-matic toolchain-funcs multilib multilib-minimal git-r3
+inherit eutils flag-o-matic toolchain-funcs git-r3
 
 DESCRIPTION="full-strength general purpose cryptography library (including SSL and TLS)"
 HOMEPAGE="https://www.openssl.org/"
@@ -12,11 +12,11 @@ KEYWORDS="amd64 arm64"
 
 LICENSE="openssl"
 SLOT="0"
-IUSE="+asm bindist gmp rfc3779 sctp cpu_flags_x86_sse2 static-libs test vanilla zlib"
+IUSE="+asm bindist gmp rfc3779 sctp static-libs test vanilla zlib"
 RESTRICT="!bindist? ( bindist )"
 
-RDEPEND="gmp? ( >=lib-dev/gmp-5.1.3-r1[static-libs(+)?,${MULTILIB_USEDEP}] )
-	zlib? ( >=lib-sys/zlib-1.2.8-r1[static-libs(+)?,${MULTILIB_USEDEP}] )"
+RDEPEND="gmp? ( >=lib-dev/gmp-5.1.3-r1[static-libs(+)?] )
+	zlib? ( >=lib-sys/zlib-1.2.8-r1[static-libs(+)?] )"
 
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5
@@ -26,10 +26,6 @@ DEPEND="${RDEPEND}
 		sys-devel/bc
 	)"
 PDEPEND="app-misc/ca-certificates"
-
-MULTILIB_WRAPPED_HEADERS=(
-	usr/include/openssl/opensslconf.h
-)
 
 src_prepare() {
 	SSL_CNF_DIR="/etc/ssl"
@@ -60,11 +56,9 @@ src_prepare() {
 	sed -i '1s,^:$,#!'${EPREFIX}'/usr/bin/perl,' Configure #141906
 	sed -i '/stty -icanon min 0 time 50; read waste/d' config || die
 	./config --test-sanity || die "I AM NOT SANE"
-
-	multilib_copy_sources
 }
 
-multilib_src_configure() {
+src_configure() {
 	unset APPS
 	unset SCRIPTS
 	unset CROSS_COMPILE
@@ -81,7 +75,6 @@ multilib_src_configure() {
 	echoit \
 	${S}/config \
 		${sslout} \
-		$(use cpu_flags_x86_sse2 || echo "no-sse2") \
 		enable-camellia \
 		$(use_ssl !bindist ec) \
 		${ec_nistp_64_gcc_128} \
@@ -118,7 +111,7 @@ multilib_src_configure() {
 		Makefile || die
 }
 
-multilib_src_compile() {
+src_compile() {
 	# depend is needed to use $confopts; it also doesn't matter
 	# that it's -j1 as the code itself serializes subdirs
 	make -j1 depend
@@ -128,15 +121,15 @@ multilib_src_compile() {
 	emake -j1 rehash
 }
 
-multilib_src_test() {
+src_test() {
 	emake -j1 test
 }
 
-multilib_src_install() {
+src_install() {
 	emake -j1 INSTALL_PREFIX="${D}" install
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	use static-libs || rm -f "${ED}"/usr/lib*/lib*.a
 
 	dodir ${SSL_CNF_DIR}/certs

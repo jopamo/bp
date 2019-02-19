@@ -1,10 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_7 )
 
-inherit libtool flag-o-matic python-r1 autotools prefix multilib-minimal
+inherit libtool flag-o-matic python-r1 autotools prefix
 
 DESCRIPTION="Version 2 of the library to manipulate XML files"
 HOMEPAGE="http://www.xmlsoft.org/"
@@ -12,8 +12,8 @@ HOMEPAGE="http://www.xmlsoft.org/"
 LICENSE="MIT"
 SLOT="2"
 KEYWORDS="amd64 arm64"
-IUSE="debug icu ipv6 lzma python readline static-libs"
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
+IUSE="debug icu ipv6 lzma readline static-libs"
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 if [[ ${PV} == "9999" ]] ; then
 	inherit git-r3
@@ -24,10 +24,10 @@ else
 fi
 
 RDEPEND="
-	>=lib-sys/zlib-1.2.8-r1:=[${MULTILIB_USEDEP}]
-	icu? ( >=lib-dev/icu-51.2-r1:=[${MULTILIB_USEDEP}] )
-	lzma? ( >=app-compression/xz-utils-5.0.5-r1:=[${MULTILIB_USEDEP}] )
-	python? ( ${PYTHON_DEPS} )
+	>=lib-sys/zlib-1.2.8-r1:=
+	icu? ( >=lib-dev/icu-51.2-r1:= )
+	lzma? ( >=app-compression/xz-utils-5.0.5-r1:= )
+	${PYTHON_DEPS}
 	readline? ( lib-sys/readline:= )
 "
 DEPEND="${RDEPEND}
@@ -36,10 +36,6 @@ DEPEND="${RDEPEND}
 "
 
 S="${WORKDIR}/${PN}-${PV%_rc*}"
-
-MULTILIB_CHOST_TOOLS=(
-	/usr/bin/xml2-config
-)
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-2.7.1-catalog_path.patch
@@ -52,9 +48,8 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
-	libxml2_configure() {
-		local myeconfargs=(
+src_configure() {
+	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
 		--libdir="${EPREFIX}"/usr/$(get_libdir)
@@ -67,51 +62,18 @@ multilib_src_configure() {
 		$(use_with lzma)
 		$(use_enable ipv6)
 		$(use_enable static-libs static)
-		$(multilib_native_use_with readline)
-		$(multilib_native_use_with readline history)
+		$(use_with readline)
+		$(use_with readline history)
+		--with-python=${ROOT%/}${PYTHON}
 	)
 		ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
-	}
-
-	libxml2_py_configure() {
-		mkdir -p "${BUILD_DIR}" || die # ensure python build dirs exist
-		run_in_build_dir libxml2_configure "--with-python=${ROOT%/}${PYTHON}" # odd build system, also see bug #582130
-	}
-
-	libxml2_configure --without-python # build python bindings separately
-
-	if multilib_is_native_abi && use python; then
-		python_foreach_impl libxml2_py_configure
-	fi
 }
 
-multilib_src_compile() {
-	default
-	if multilib_is_native_abi && use python; then
-		local native_builddir=${BUILD_DIR}
-		python_foreach_impl libxml2_py_emake top_builddir="${native_builddir}" all
-	fi
+src_install() {
+	emake DESTDIR="${D}" install
 }
 
-multilib_src_test() {
-	emake check
-	multilib_is_native_abi && use python && python_foreach_impl libxml2_py_emake test
-}
-
-multilib_src_install() {
-	emake DESTDIR="${D}" EXAMPLES_DIR="${EPREFIX}"/usr/share/doc/${PF}/examples install
-
-	if multilib_is_native_abi && use python; then
-		python_foreach_impl libxml2_py_emake \
-			DESTDIR="${D}" \
-			docsdir="${EPREFIX}"/usr/share/doc/${PF}/python \
-			exampledir="${EPREFIX}"/usr/share/doc/${PF}/python/examples \
-			install
-		python_foreach_impl python_optimize
-	fi
-}
-
-multilib_src_install_all() {
+src_install_all() {
 	rm -rf "${ED}"/usr/share/doc
 	find "${ED}" -name "*.la" -delete || die
 }
@@ -128,10 +90,4 @@ pkg_postinst() {
 			einfo "Created XML catalog in ${CATALOG}"
 		fi
 	fi
-}
-
-libxml2_py_emake() {
-	pushd "${BUILD_DIR}/python" > /dev/null || die
-	emake "$@"
-	popd > /dev/null
 }

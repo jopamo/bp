@@ -11,7 +11,7 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
 LICENSE="|| ( LGPL-3 LGPL-2.1 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="+gmp static-libs test cpu_flags_x86_aes"
+IUSE="+gmp static-libs test"
 
 DEPEND="gmp? ( >=lib-dev/gmp-5.0:0= )"
 
@@ -26,6 +26,5 @@ src_configure() {
 		$(use_enable gmp public-key) \
 		$(use_enable static-libs static) \
 		$(tc-is-static-only && echo --disable-shared) \
-		--disable-documentation \
-		$(use_enable cpu_flags_x86_aes x86-aesni)
+		--disable-documentation
 }

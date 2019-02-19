@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib-minimal meson
+inherit meson
 
 DESCRIPTION="A free implementation of the unicode bidirectional algorithm"
 HOMEPAGE="https://fribidi.org/"
@@ -12,7 +12,7 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND=">=lib-dev/glib-2.34.3:2[${MULTILIB_USEDEP}]"
+RDEPEND=">=lib-dev/glib-2.34.3:2"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 

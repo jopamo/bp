@@ -5,7 +5,7 @@ EAPI=6
 PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit autotools epunt-cxx flag-o-matic libtool linux-info \
-	multilib multilib-minimal python-r1 toolchain-funcs versionator virtualx git-r3
+	python-r1 toolchain-funcs versionator virtualx git-r3
 
 DESCRIPTION="The GLib library of C routines"
 HOMEPAGE="https://www.gtk.org/"
@@ -25,13 +25,13 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	!<dev-util/gdbus-codegen-${PV}
-	>=lib-dev/libpcre-8.13:3[${MULTILIB_USEDEP},static-libs?]
-	>=sys-devel/gettext-0-r2[${MULTILIB_USEDEP}]
-	>=lib-sys/zlib-1.2.8-r1[${MULTILIB_USEDEP}]
-	kernel_linux? ( sys-app/util-linux[${MULTILIB_USEDEP}] )
-	selinux? ( >=lib-sys/libselinux-2.2.2-r5[${MULTILIB_USEDEP}] )
-	xattr? ( >=sys-app/attr-2.4.47-r1[${MULTILIB_USEDEP}] )
-	fam? ( >=virtual/fam-0-r1[${MULTILIB_USEDEP}] )
+	>=lib-dev/libpcre-8.13:3[static-libs?]
+	>=sys-devel/gettext-0-r2
+	>=lib-sys/zlib-1.2.8-r1
+	kernel_linux? ( sys-app/util-linux )
+	selinux? ( >=lib-sys/libselinux-2.2.2-r5 )
+	xattr? ( >=sys-app/attr-2.4.47-r1 )
+	fam? ( >=virtual/fam-0-r1 )
 	utils? (
 		${PYTHON_DEPS}
 		virtual/libelf:0=
@@ -49,10 +49,6 @@ DEPEND="${RDEPEND}
 		>=sys-app/dbus-1.2.14 )
 	!<dev-util/gtk-doc-1.15-r2
 "
-
-MULTILIB_CHOST_TOOLS=(
-	/usr/bin/gio-querymodules$(get_exeext)
-)
 
 pkg_setup() {
 	if use kernel_linux ; then
@@ -97,7 +93,7 @@ src_prepare() {
 	epunt_cxx
 }
 
-multilib_src_configure() {
+src_configure() {
 	# Avoid circular depend with dev-util/pkgconfig and
 	# native builds (cross-compiles won't need pkg-config
 	# in the target ROOT to work here)
@@ -138,7 +134,7 @@ multilib_src_configure() {
 		$(use_enable kernel_linux libmount)
 		$(use_enable selinux)
 		$(use_enable static-libs static)
-		$(multilib_native_use_enable utils libelf)
+		$(use_enable utils libelf)
 		--disable-compile-warnings
 		--enable-man
 		--with-threads=posix
@@ -148,7 +144,7 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_test() {
+src_test() {
 	export XDG_CONFIG_DIRS=/etc/xdg
 	export XDG_DATA_DIRS=/usr/local/share:/usr/share
 	export G_DBUS_COOKIE_SHA1_KEYRING_DIR="${T}/temp"
@@ -170,14 +166,12 @@ multilib_src_test() {
 	virtx emake check
 }
 
-multilib_src_install() {
+src_install() {
 	default
 	keepdir /usr/$(get_libdir)/gio/modules
 }
 
-multilib_src_install_all() {
-	einstalldocs
-
+src_install_all() {
 	if use utils ; then
 		python_replicate_script "${ED}"/usr/bin/gtester-report
 	else
@@ -202,16 +196,14 @@ pkg_preinst() {
 		touch "${ED}"/${cache} || die
 	fi
 
-	multilib_pkg_preinst() {
-		# Make giomodule.cache belong to glib alone
-		local cache="usr/$(get_libdir)/gio/modules/giomodule.cache"
+	# Make giomodule.cache belong to glib alone
+	local cache="usr/$(get_libdir)/gio/modules/giomodule.cache"
 
-		if [[ -e ${EROOT}${cache} ]]; then
-			cp "${EROOT}"${cache} "${ED}"/${cache} || die
-		else
-			touch "${ED}"/${cache} || die
-		fi
-	}
+	if [[ -e ${EROOT}${cache} ]]; then
+		cp "${EROOT}"${cache} "${ED}"/${cache} || die
+	else
+		touch "${ED}"/${cache} || die
+	fi
 }
 
 pkg_postinst() {

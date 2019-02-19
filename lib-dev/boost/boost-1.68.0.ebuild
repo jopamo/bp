@@ -4,7 +4,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit eutils flag-o-matic multiprocessing python-r1 toolchain-funcs versionator multilib-minimal
+inherit eutils flag-o-matic multiprocessing python-r1 toolchain-funcs versionator
 
 MY_P="${PN}_$(replace_all_version_separators _)"
 MAJOR_V="$(get_version_component_range 1-2)"
@@ -19,11 +19,11 @@ KEYWORDS="amd64 arm64"
 
 IUSE="context debug doc icu +nls mpi python static-libs +threads tools"
 
-RDEPEND="icu? ( >=lib-dev/icu-3.6:=[${MULTILIB_USEDEP}] )
-	mpi? ( >=virtual/mpi-2.0-r4[${MULTILIB_USEDEP},cxx,threads] )
+RDEPEND="icu? ( >=lib-dev/icu-3.6:= )
+	mpi? ( >=virtual/mpi-2.0-r4[cxx,threads] )
 	python? ( ${PYTHON_DEPS} )
-	app-compression/bzip2[${MULTILIB_USEDEP}]
-	lib-sys/zlib[${MULTILIB_USEDEP}]
+	app-compression/bzip2
+	lib-sys/zlib
 	!sys-app/eselect-boost"
 DEPEND="${RDEPEND}
 	=lib-dev/boost-build-${MAJOR_V}*"
@@ -33,68 +33,12 @@ REQUIRED_USE="
 
 S="${WORKDIR}/${MY_P}"
 
-# the tests will never fail because these are not intended as sanity
-# tests at all. They are more a way for upstream to check their own code
-# on new compilers. Since they would either be completely unreliable
-# (failing for no good reason) or completely useless (never failing)
-# there is no point in having them in the ebuild to begin with.
 RESTRICT="test"
 
 PATCHES=(
 	"${FILESDIR}/${PN}-1.48.0-disable_icu_rpath.patch"
-	"${FILESDIR}/${PN}-1.55.0-context-x32.patch"
 	"${FILESDIR}/${PN}-1.56.0-build-auto_index-tool.patch"
 )
-
-python_bindings_needed() {
-	multilib_is_native_abi && use python
-}
-
-tools_needed() {
-	multilib_is_native_abi && use tools
-}
-
-create_user-config.jam() {
-	local compiler compiler_version compiler_executable
-
-	if [[ ${CHOST} == *-darwin* ]]; then
-		compiler="darwin"
-		compiler_version="$(gcc-fullversion)"
-		compiler_executable="$(tc-getCXX)"
-	else
-		compiler="gcc"
-		compiler_version="$(gcc-version)"
-		compiler_executable="$(tc-getCXX)"
-	fi
-	local mpi_configuration python_configuration
-
-	if use mpi; then
-		mpi_configuration="using mpi ;"
-	fi
-
-	if python_bindings_needed; then
-		# boost expects libpython$(pyver) and doesn't allow overrides
-		# and the build system is so creepy that it's easier just to
-		# provide a symlink (linker's going to use SONAME anyway)
-		# TODO: replace it with proper override one day
-		ln -f -s "$(python_get_library_path)" "${T}/lib${EPYTHON}$(get_libname)" || die
-
-		if tc-is-cross-compiler; then
-			python_configuration="using python : ${EPYTHON#python} : : ${SYSROOT:-${EROOT}}/usr/include/${EPYTHON} : ${SYSROOT:-${EROOT}}/usr/$(get_libdir) ;"
-		else
-			# note: we need to provide version explicitly because of
-			# a bug in the build system:
-			# https://github.com/boostorg/build/pull/104
-			python_configuration="using python : ${EPYTHON#python} : ${PYTHON} : $(python_get_includedir) : ${T} ;"
-		fi
-	fi
-
-	cat > "${BOOST_ROOT}/user-config.jam" << __EOF__ || die
-using ${compiler} : ${compiler_version} : ${compiler_executable} : <cflags>"${CFLAGS}" <cxxflags>"${CXXFLAGS}" <linkflags>"${LDFLAGS}" ;
-${mpi_configuration}
-${python_configuration}
-__EOF__
-}
 
 pkg_setup() {
 	# Bail out on unsupported build configuration, bug #456792
@@ -115,13 +59,10 @@ src_prepare() {
 	# Do not try to build missing 'wave' tool, bug #522682
 	# Upstream bugreport - https://svn.boost.org/trac/boost/ticket/10507
 	sed -i -e 's:wave/build//wave::' tools/Jamfile.v2 || die
-
-	multilib_copy_sources
 }
 
 ejam() {
 	local b2_opts=(
-		"--user-config=${BOOST_ROOT}/user-config.jam"
 		"$@"
 	)
 	echo b2 "${b2_opts[@]}"
@@ -138,21 +79,6 @@ src_configure() {
 		-q
 		-d+2
 	)
-
-	if [[ ${CHOST} == *-darwin* ]]; then
-		# We need to add the prefix, and in two cases this exceeds, so prepare
-		# for the largest possible space allocation.
-		append-ldflags -Wl,-headerpad_max_install_names
-	elif [[ ${CHOST} == *-winnt* ]]; then
-		compiler=parity
-		if [[ $($(tc-getCXX) -v) == *trunk* ]]; then
-			compilerVersion=trunk
-		else
-			compilerVersion=$($(tc-getCXX) -v | sed '1q' \
-				| sed -e 's,\([a-z]*\) \([0-9]\.[0-9]\.[0-9][^ \t]*\) .*,\2,')
-		fi
-		compilerExecutable=$(tc-getCXX)
-	fi
 
 	# Use C++14 globally as of 1.62
 	append-cxxflags -std=c++14
@@ -195,16 +121,14 @@ src_configure() {
 		)
 }
 
-multilib_src_compile() {
+src_compile() {
 	local -x BOOST_ROOT="${BUILD_DIR}"
 	PYTHON_DIRS=""
 	MPI_PYTHON_MODULE=""
 
 	building() {
-		create_user-config.jam
-
 		local PYTHON_OPTIONS
-		if python_bindings_needed; then
+		if use python; then
 			PYTHON_OPTIONS=" --python-buildid=${EPYTHON#python}"
 		else
 			PYTHON_OPTIONS=" --without-python"
@@ -215,7 +139,7 @@ multilib_src_compile() {
 			${PYTHON_OPTIONS} \
 			|| die "Building of Boost libraries failed"
 
-		if python_bindings_needed; then
+		if use python; then
 			if [[ -z "${PYTHON_DIRS}" ]]; then
 				PYTHON_DIRS="$(find bin.v2/libs -name python | sort)"
 			else
@@ -231,13 +155,13 @@ multilib_src_compile() {
 			done
 		fi
 	}
-	if python_bindings_needed; then
+	if use python; then
 		python_foreach_impl building
 	else
 		building
 	fi
 
-	if tools_needed; then
+	if use tools; then
 		pushd tools >/dev/null || die
 
 		ejam \
@@ -248,7 +172,7 @@ multilib_src_compile() {
 	fi
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	if ! use python; then
 		rm -r "${ED%/}"/usr/include/boost/python* || die
 	fi
@@ -281,13 +205,11 @@ multilib_src_install_all() {
 	fi
 }
 
-multilib_src_install() {
+src_install() {
 	local -x BOOST_ROOT="${BUILD_DIR}"
 	installation() {
-		create_user-config.jam
-
 		local PYTHON_OPTIONS
-		if python_bindings_needed; then
+		if use python; then
 			local dir
 			for dir in ${PYTHON_DIRS}; do
 				cp -pr ${dir}-${EPYTHON} ${dir} \
@@ -312,7 +234,7 @@ multilib_src_install() {
 			--libdir="${ED%/}/usr/$(get_libdir)" \
 			install || die "Installation of Boost libraries failed"
 
-		if python_bindings_needed; then
+		if use python; then
 			rm -r ${PYTHON_DIRS} || die
 
 			# Move mpi.so Python module to Python site-packages directory.
@@ -340,7 +262,7 @@ EOF
 			python_optimize
 		fi
 	}
-	if python_bindings_needed; then
+	if use python; then
 		python_foreach_impl installation
 	else
 		installation
@@ -358,43 +280,11 @@ EOF
 
 	popd >/dev/null || die
 
-	if tools_needed; then
+	if use tools; then
 		dobin dist/bin/*
 
 		insinto /usr/share
 		doins -r dist/share/boostbook
-	fi
-
-	# boost's build system truely sucks for not having a destdir.  Because for
-	# this reason we are forced to build with a prefix that includes the
-	# DESTROOT, dynamic libraries on Darwin end messed up, referencing the
-	# DESTROOT instread of the actual EPREFIX.  There is no way out of here
-	# but to do it the dirty way of manually setting the right install_names.
-	if [[ ${CHOST} == *-darwin* ]]; then
-		einfo "Working around completely broken build-system(tm)"
-		local d
-		for d in "${ED%/}"/usr/lib/*.dylib; do
-			if [[ -f ${d} ]]; then
-				# fix the "soname"
-				ebegin "  correcting install_name of ${d#${ED}}"
-				install_name_tool -id "/${d#${D}}" "${d}"
-				eend $?
-				# fix references to other libs
-				refs=$(otool -XL "${d}" | \
-					sed -e '1d' -e 's/^\t//' | \
-					grep "^libboost_" | \
-					cut -f1 -d' ')
-				local r
-				for r in ${refs}; do
-					ebegin "    correcting reference to ${r}"
-					install_name_tool -change \
-						"${r}" \
-						"${EPREFIX}/usr/lib/${r}" \
-						"${d}"
-					eend $?
-				done
-			fi
-		done
 	fi
 }
 

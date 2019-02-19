@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit multilib-minimal
 
 DESCRIPTION="An library to provide useful functions commonly found on BSD systems"
 HOMEPAGE="https://libbsd.freedesktop.org/wiki/"
@@ -11,9 +10,6 @@ LICENSE="BSD BSD-2 BSD-4 ISC"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="static-libs"
-
-DEPEND=">=sys-kernel/stable-sources-3.17"
-RDEPEND=""
 
 pkg_setup() {
 	local f="${EROOT}/usr/$(get_libdir)/${PN}.a"
@@ -26,14 +22,14 @@ pkg_setup() {
 	fi
 }
 
-multilib_src_configure() {
+src_configure() {
 	# The build system will install libbsd-ctor.a despite of USE="-static-libs"
 	# which is correct, see:
 	# https://cgit.freedesktop.org/libbsd/commit/?id=c5b959028734ca2281250c85773d9b5e1d259bc8
 	ECONF_SOURCE="${S}" econf $(use_enable static-libs static)
 }
 
-multilib_src_install() {
+src_install() {
 	emake DESTDIR="${D}" install
 	find "${ED}" -name "*.la" -delete || die
 }

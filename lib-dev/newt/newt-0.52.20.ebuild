@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib autotools flag-o-matic
+inherit autotools flag-o-matic
 
 DESCRIPTION="Redhat's Newt windowing toolkit development files"
 HOMEPAGE="https://pagure.io/newt"

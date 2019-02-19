@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils flag-o-matic toolchain-funcs autotools multilib-minimal
+inherit eutils flag-o-matic toolchain-funcs autotools
 
 DESCRIPTION="International Components for Unicode"
 HOMEPAGE="http://www.icu-project.org/"
@@ -13,20 +13,11 @@ LICENSE="BSD"
 SLOT="0/${PV}"
 
 KEYWORDS="amd64 arm64"
-IUSE="debug doc examples static-libs"
+IUSE="debug static-libs"
 
-DEPEND="
-	dev-util/pkgconfig
-	doc? (
-		app-text/doxygen[dot]
-	)
-"
+DEPEND="dev-util/pkgconfig"
 
 S="${WORKDIR}/${PN}/source"
-
-MULTILIB_CHOST_TOOLS=(
-	/usr/bin/icu-config
-)
 
 pkg_pretend() {
 	if tc-is-gcc ; then
@@ -86,23 +77,12 @@ src_configure() {
 		popd >/dev/null || die
 	fi
 
-	multilib-minimal_src_configure
-}
-
-multilib_src_configure() {
 	local myeconfargs=(
 		--disable-renaming
 		--disable-samples
 		--disable-layoutex
 		$(use_enable debug)
 		$(use_enable static-libs static)
-	)
-
-	multilib_is_native_abi && myeconfargs+=(
-		$(use_enable examples samples)
-	)
-	tc-is-cross-compiler && myeconfargs+=(
-		--with-cross-build="${WORKDIR}"/host
 	)
 
 	# icu tries to use clang by default
@@ -118,16 +98,7 @@ multilib_src_configure() {
 	econf "${myeconfargs[@]}"
 }
 
-multilib_src_compile() {
-	default
-
-	if multilib_is_native_abi && use doc; then
-		doxygen -u Doxyfile || die
-		doxygen Doxyfile || die
-	fi
-}
-
-multilib_src_test() {
+src_test() {
 	# INTLTEST_OPTS: intltest options
 	#   -e: Exhaustive testing
 	#   -l: Reporting of memory leaks
@@ -139,19 +110,4 @@ multilib_src_test() {
 	#   -e: Exhaustive testing
 	#   -v: Increased verbosity
 	emake -j1 VERBOSE="1" check
-}
-
-multilib_src_install() {
-	default
-
-	if multilib_is_native_abi && use doc; then
-		docinto html
-		dodoc -r doc/html/*
-	fi
-}
-
-multilib_src_install_all() {
-	einstalldocs
-	docinto html
-	dodoc ../readme.html
 }

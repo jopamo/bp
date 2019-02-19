@@ -2,8 +2,6 @@
 
 EAPI="6"
 
-inherit multilib-minimal
-
 MY_P="onig-${PV}"
 
 DESCRIPTION="Regular expression library for different character encodings"
@@ -17,12 +15,12 @@ IUSE="crnl-as-line-terminator static-libs"
 
 S="${WORKDIR}/${MY_P}"
 
-multilib_src_configure() {
+src_configure() {
 	ECONF_SOURCE="${S}" econf \
 		$(use_enable crnl-as-line-terminator) \
 		$(use_enable static-libs static)
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	find "${D}" -name "*.la" -delete || die
 }

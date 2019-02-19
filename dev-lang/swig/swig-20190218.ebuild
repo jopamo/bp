@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Simplified Wrapper and Interface Generator"
 HOMEPAGE="http://www.swig.org/"
 
-SNAPSHOT=0078c7d84d965296d7088ce9da20045aba6cbf55
+SNAPSHOT=9038a9987dc1440422a60aab8b943e42568be973
 SRC_URI="https://github.com/swig/swig/archive/${SNAPSHOT}.zip -> ${P}.zip"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

@@ -14,7 +14,7 @@ SRC_URI="mirror://sourceforge/ijbswa/${P%_*}-${PRIVOXY_STATUS}-src.tar.gz"
 
 IUSE="+acl client-tags compression editor extended-host-patterns
 external-filters +fast-redirects +force graceful-termination
-ie-images +image-blocking ipv6 lfs png-images selinux +stats
++image-blocking ipv6 lfs png-images selinux +stats
 +threads toggle tools whitelists +zlib"
 SLOT="0"
 KEYWORDS="amd64 arm64"
@@ -83,10 +83,8 @@ src_configure() {
 		$(use_enable fast-redirects) \
 		$(use_enable force) \
 		$(use_enable graceful-termination) \
-		$(use_enable ie-images) \
 		$(use_enable image-blocking) \
 		$(use_enable ipv6 ipv6-support) \
-		$(use_enable kernel_FreeBSD accept-filter) \
 		$(use_enable lfs large-file-support) \
 		$(use_enable png-images no-gifs) \
 		$(use_enable stats) \
@@ -112,6 +110,8 @@ src_install () {
 		dobin tools/{privoxy-log-parser.pl,privoxy-regression-test.pl}
 		newbin tools/uagen.pl privoxy-uagen.pl
 	fi
+
+	rm -rf "${ED}"/var/run
 }
 
 pkg_postinst() {

@@ -9,11 +9,10 @@ SRC_URI="mirror://sourceforge/${PN}-ng/${PN}-ng-${PV}.tar.xz"
 LICENSE="GPL-2"
 SLOT="0/5" # libprocps.so
 KEYWORDS="amd64 arm64"
-IUSE="+kill modern-top nls +ncurses selinux static-libs systemd test unicode"
+IUSE="+kill modern-top nls +ncurses static-libs systemd test unicode"
 
 COMMON_DEPEND="
-	ncurses? ( >=lib-sys/ncurses-5.7-r7:=[unicode?] )
-	selinux? ( lib-sys/libselinux )
+	ncurses? ( lib-sys/ncurses )
 	systemd? ( sys-app/systemd )
 "
 DEPEND="${COMMON_DEPEND}
@@ -44,7 +43,6 @@ src_configure() {
 		$(use_enable modern-top)
 		$(use_with ncurses)
 		$(use_enable nls)
-		$(use_enable selinux libselinux)
 		$(use_enable static-libs static)
 		$(use_with systemd)
 		$(use_enable unicode watch8bit)

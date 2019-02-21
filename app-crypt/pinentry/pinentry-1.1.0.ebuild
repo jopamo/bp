@@ -44,6 +44,7 @@ src_configure() {
 		--sysconfdir="${EPREFIX}/etc"
 		--localstatedir="${EPREFIX}/var"
 		--enable-pinentry-tty
+		--disable-ncurses
 		--enable-pinentry-gtk2=no
 		$(use_with caps libcap)
 	)

@@ -26,7 +26,7 @@ IUSE="build caps +cramfs fdformat kill ncurses nls pam python +readline selinux 
 
 RDEPEND="caps? ( lib-sys/libcap-ng )
 	cramfs? ( lib-sys/zlib )
-	ncurses? ( >=lib-sys/ncurses-5.2-r2:0=[unicode?] )
+	ncurses? ( >=lib-sys/ncurses-5.2-r2:0= )
 	pam? ( lib-sys/pam )
 	python? ( ${PYTHON_DEPS} )
 	readline? ( lib-sys/readline:0= )

@@ -11,7 +11,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	lib-sys/ncurses:0=[unicode]
+	lib-sys/ncurses
 "
 DEPEND="
 	${RDEPEND}

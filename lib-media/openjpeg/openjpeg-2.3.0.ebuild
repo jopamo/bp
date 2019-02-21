@@ -1,7 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit multilib cmake-multilib
+
+inherit cmake-utils
 
 # Make sure that test data are not newer than release;
 # otherwise we will see "Found-But-No-Test" test failures!
@@ -24,8 +25,6 @@ RDEPEND="lib-media/lcms:2=
 DEPEND="${RDEPEND}
 	doc? ( app-text/doxygen )"
 
-DOCS=( AUTHORS.md CHANGELOG.md NEWS.md README.md THANKS.md )
-
 src_prepare() {
 	if use test; then
 		mv "${WORKDIR}"/openjpeg-data-${MY_TESTDATA_COMMIT} "${WORKDIR}"/data || die "Failed to rename test data"
@@ -40,12 +39,12 @@ src_prepare() {
 	sed -i -e "s:DESTINATION\s*share/doc:\0/${PF}:" doc/CMakeLists.txt || die
 }
 
-multilib_src_configure() {
+src_configure() {
 	local mycmakeargs=(
 		-DOPENJPEG_INSTALL_LIB_DIR="$(get_libdir)"
-		-DBUILD_TESTING="$(multilib_native_usex test)"
-		-DBUILD_DOC=$(multilib_native_usex doc ON OFF)
-		-DBUILD_CODEC=$(multilib_is_native_abi && echo ON || echo OFF)
+		-DBUILD_TESTING="$(usex test)"
+		-DBUILD_DOC=$(usex doc ON OFF)
+		-DBUILD_CODEC=ON
 		)
 
 	cmake-utils_src_configure
@@ -61,7 +60,7 @@ multilib_src_configure() {
 	fi
 }
 
-multilib_src_compile() {
+src_compile() {
 	cmake-utils_src_compile
 
 	if use static-libs; then
@@ -69,12 +68,7 @@ multilib_src_compile() {
 	fi
 }
 
-multilib_src_test() {
-	if ! multilib_is_native_abi ; then
-		elog "Cannot run tests for non-multilib abi."
-		return 0
-	fi
-
+src_test() {
 	local myctestargs=
 
 	pushd "${BUILD_DIR}" > /dev/null || die
@@ -125,7 +119,7 @@ multilib_src_test() {
 	fi
 }
 
-multilib_src_install() {
+src_install() {
 	if use static-libs; then
 		BUILD_DIR=${BUILD_DIR}_static cmake-utils_src_install
 	fi

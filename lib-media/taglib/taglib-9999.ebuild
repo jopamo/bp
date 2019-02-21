@@ -2,29 +2,21 @@
 
 EAPI=6
 
-inherit cmake-multilib flag-o-matic
+inherit cmake-utils flag-o-matic git-r3
 
 DESCRIPTION="A library for reading and editing audio meta data"
 HOMEPAGE="https://taglib.github.io/"
-SRC_URI="https://github.com/${PN}/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+EGIT_REPO_URI="https://github.com/taglib/taglib.git"
 
 LICENSE="LGPL-2.1 MPL-1.1"
 KEYWORDS="amd64 arm64"
 SLOT="0"
-IUSE="boost debug examples test"
+IUSE="debug examples test"
 
-RDEPEND="boost? ( dev-libs/boost:=[${MULTILIB_USEDEP}] )"
 DEPEND="${RDEPEND}
 "
 
-PATCHES=(
-	"${FILESDIR}"/${PN}-1.11-install-examples.patch
-	"${FILESDIR}"/${P}-CVE-2017-12678.patch
-)
-
-MULTILIB_CHOST_TOOLS=(
-	/usr/bin/taglib-config
-)
+append-cxxflags -std=c++11
 
 src_prepare() {
 	cmake-utils_src_prepare
@@ -37,10 +29,9 @@ src_prepare() {
 	append-cxxflags -std=c++11
 }
 
-multilib_src_configure() {
+src_configure() {
 	local mycmakeargs=(
-		-DBUILD_EXAMPLES=$(multilib_native_usex examples)
-		$(cmake-utils_use_find_package boost Boost)
+		-DBUILD_EXAMPLES=$(usex examples)
 		-DBUILD_SHARED_LIBS=ON
 		-DBUILD_TESTS=$(usex test)
 	)
@@ -48,7 +39,7 @@ multilib_src_configure() {
 	cmake-utils_src_configure
 }
 
-multilib_src_test() {
+src_test() {
 	# ctest does not work
 	emake -C "${BUILD_DIR}" check
 }

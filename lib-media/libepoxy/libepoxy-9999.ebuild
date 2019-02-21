@@ -4,7 +4,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit meson multilib-minimal python-any-r1
+inherit meson python-any-r1
 
 DESCRIPTION="Epoxy is a library for handling OpenGL function pointer management for you"
 HOMEPAGE="https://github.com/anholt/libepoxy"
@@ -24,25 +24,25 @@ IUSE="test +X"
 KEYWORDS="amd64 arm64"
 
 DEPEND="${PYTHON_DEPS}
-	lib-media/mesa[${MULTILIB_USEDEP}]
+	lib-media/mesa
 	x11/util-macros
-	X? ( x11-libs/libX11[${MULTILIB_USEDEP}] )"
+	X? ( x11-libs/libX11 )"
 
-multilib_src_configure() {
+src_configure() {
 	local emesonargs=(
 		-Denable-glx=$(usex X)
 	)
 	meson_src_configure
 }
 
-multilib_src_compile() {
+src_compile() {
 	meson_src_compile
 }
 
-multilib_src_test() {
+src_test() {
 	meson_src_test
 }
 
-multilib_src_install() {
+src_install() {
 	meson_src_install
 }

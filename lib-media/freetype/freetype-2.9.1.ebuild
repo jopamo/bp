@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit flag-o-matic libtool multilib multilib-build multilib-minimal toolchain-funcs
+inherit flag-o-matic libtool toolchain-funcs
 
 DESCRIPTION="A high-quality and portable font engine"
 HOMEPAGE="https://www.freetype.org/"
@@ -25,15 +25,15 @@ LICENSE="|| ( FTL GPL-2+ )"
 SLOT="2"
 RESTRICT="!bindist? ( bindist )" # bug 541408
 
-RDEPEND=">=lib-sys/zlib-1.2.8-r1[${MULTILIB_USEDEP}]
-	bzip2? ( >=app-compression/bzip2-1.0.6[${MULTILIB_USEDEP}] )
-	harfbuzz? ( >=lib-media/harfbuzz-1.3.0[truetype,${MULTILIB_USEDEP}] )
-	png? ( >=lib-media/libpng-1.2.51:0=[${MULTILIB_USEDEP}] )
+RDEPEND=">=lib-sys/zlib-1.2.8-r1
+	bzip2? ( >=app-compression/bzip2-1.0.6 )
+	harfbuzz? ( >=lib-media/harfbuzz-1.3.0[truetype] )
+	png? ( >=lib-media/libpng-1.2.51:0= )
 	utils? (
 		X? (
-			>=x11-libs/libX11-1.6.2[${MULTILIB_USEDEP}]
-			>=x11-libs/libXau-1.0.7-r1[${MULTILIB_USEDEP}]
-			>=x11-libs/libXdmcp-1.1.1-r1[${MULTILIB_USEDEP}]
+			>=x11-libs/libX11-1.6.2
+			>=x11-libs/libXau-1.0.7-r1
+			>=x11-libs/libXdmcp-1.1.1-r1
 		)
 	)"
 DEPEND="${RDEPEND}
@@ -41,10 +41,7 @@ DEPEND="${RDEPEND}
 PDEPEND="infinality? ( lib-media/fontconfig-infinality )"
 
 PATCHES=(
-	# This is the same as the 01 patch from infinality
 	"${FILESDIR}"/${PN}-2.7-enable-valid.patch
-
-	"${FILESDIR}"/${PN}-2.4.11-sizeof-types.patch # 459966
 )
 
 _egit_repo_handler() {
@@ -79,6 +76,8 @@ src_fetch() {
 src_unpack() {
 	_egit_repo_handler unpack
 }
+
+append-flags -fno-strict-aliasing
 
 src_prepare() {
 	if [[ "${PV}" == 9999 ]] ; then
@@ -156,7 +155,7 @@ src_prepare() {
 	elibtoolize --patch-only
 }
 
-multilib_src_configure() {
+src_configure() {
 	append-flags -fno-strict-aliasing
 	type -P gmake &> /dev/null && export GNUMAKE=gmake
 
@@ -184,10 +183,10 @@ multilib_src_configure() {
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }
 
-multilib_src_compile() {
+src_compile() {
 	default
 
-	if multilib_is_native_abi && use utils; then
+	if use utils; then
 		einfo "Building utils"
 		# fix for Prefix, bug #339334
 		emake \
@@ -196,10 +195,10 @@ multilib_src_compile() {
 	fi
 }
 
-multilib_src_install() {
+src_install() {
 	default
 
-	if multilib_is_native_abi && use utils; then
+	if use utils; then
 		einfo "Installing utils"
 		rm "${WORKDIR}"/ft2demos-${PV}/bin/README || die
 		dodir /usr/bin #654780
@@ -211,7 +210,7 @@ multilib_src_install() {
 	fi
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	if use fontforge; then
 		# Probably fontforge needs less but this way makes things simplier...
 		einfo "Installing internal headers required for fontforge"

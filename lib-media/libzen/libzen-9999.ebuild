@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools multilib git-r3
+inherit autotools git-r3
 
 DESCRIPTION="Shared library for libmediainfo and mediainfo"
 HOMEPAGE="https://github.com/MediaArea/ZenLib"

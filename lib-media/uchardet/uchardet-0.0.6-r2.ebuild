@@ -11,9 +11,8 @@ SRC_URI="https://www.freedesktop.org/software/uchardet/releases/${P}.tar.xz"
 LICENSE="|| ( MPL-1.1 GPL-2+ LGPL-2.1+ )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="cpu_flags_x86_sse2 static-libs test"
+IUSE="static-libs test"
 
-PATCHES=( "${FILESDIR}/${P}-enforce-IEEE-float-precision-r1.patch" )
 
 src_prepare() {
 	cmake-utils_src_prepare
@@ -22,9 +21,7 @@ src_prepare() {
 
 src_configure() {
 	local mycmakeargs=(
-		-DTARGET_ARCHITECTURE="${ARCH}"
 		-DBUILD_STATIC=$(usex static-libs)
-		-DCHECK_SSE2=$(usex cpu_flags_x86_sse2)
 	)
 	cmake-utils_src_configure
 }

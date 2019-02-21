@@ -2,8 +2,6 @@
 
 EAPI=6
 
-inherit multilib-minimal
-
 DESCRIPTION="Secret Rabbit Code (aka libsamplerate) is a Sample Rate Converter for audio"
 HOMEPAGE="http://www.mega-nerd.com/SRC/"
 
@@ -22,15 +20,15 @@ REQUIRED_USE="test? ( sndfile )"
 
 RDEPEND="
 	sndfile? (
-		lib-media/libsndfile:=[${MULTILIB_USEDEP}]
+		lib-media/libsndfile:=
 	)"
 # Alsa/FFTW are only consumed
 # by tests, not by the main library.
 DEPEND="
 	${RDEPEND}
 	test? (
-		lib-media/alsa-lib[${MULTILIB_USEDEP}]
-		sci-libs/fftw:3.0[${MULTILIB_USEDEP}]
+		lib-media/alsa-lib
+		sci-libs/fftw:3.0
 	)
 	dev-util/pkgconfig"
 
@@ -40,7 +38,7 @@ src_prepare() {
 	[[ ${PV} == *9999 ]] && eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	ECONF_SOURCE="${S}" econf \
 		$(use_enable sndfile) \
 		$(use_enable static-libs static) \
@@ -48,9 +46,6 @@ multilib_src_configure() {
 		$(use_enable test fftw)
 }
 
-multilib_src_install_all() {
-	einstalldocs
-
-	# package provides .pc files
+src_install_all() {
 	find "${D}" -name '*.la' -delete || die
 }

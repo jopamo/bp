@@ -1,10 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit autotools git-r3
+inherit autotools
 
 DESCRIPTION="A system-independent library for user-level network packet capture"
-EGIT_REPO_URI="https://github.com/the-tcpdump-group/libpcap"
+SRC_URI="https://www.tcpdump.org/release/${P}.tar.gz"
 HOMEPAGE="http://www.tcpdump.org/"
 
 LICENSE="BSD"

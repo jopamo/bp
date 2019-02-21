@@ -19,10 +19,11 @@ HOMEPAGE="https://www.winehq.org/"
 
 LICENSE="LGPL-2.1"
 SLOT="${PV}"
-IUSE="+alsa capi cups custom-cflags dos elibc_glibcpath +fontconfig gphoto2 gsm +jpeg  kernel_FreeBSD +lcms ldap +mono mp3 ncurses netapi nls odbc openal opencl +opengl osmesa oss +perl pcap +png prelink pulseaudio +realtime +run-exes samba scanner selinux +ssl +staging test +threads +truetype udev +udisks v4l +X +xcomposite xinerama +xml"
-REQUIRED_USE="X? ( truetype )
-	elibc_glibc? ( threads )
-	osmesa? ( opengl )"
+IUSE="+alsa cups custom-cflags +fontconfig +jpeg ldap mp3 netapi nls odbc openal +opencl
+ +opengl osmesa perl pcap +png prelink pulseaudio samba test +X +xcomposite
+ xinerama +xml"
+
+REQUIRED_USE="osmesa? ( opengl )"
 
 RESTRICT="test"
 
@@ -36,21 +37,13 @@ COMMON_DEPEND="
 		x11-libs/libXxf86vm
 	)
 	alsa? ( lib-media/alsa-lib )
-	capi? ( lib-net/libcapi )
 	cups? ( lib-print/cups:= )
 	fontconfig? ( lib-media/fontconfig:= )
-	gphoto2? ( lib-media/libgphoto2:= )
-	gsm? ( app-media/gsm:= )
 	jpeg? ( lib-media/libjpeg-turbo )
-	lcms? ( lib-media/lcms:2= )
 	ldap? ( net-nds/openldap:= )
 	mp3? ( >=lib-media/mpg123-1.5.0 )
-	ncurses? ( >=lib-sys/ncurses-5.2:0= )
 	netapi? ( app-server/samba )
-	nls? ( sys-devel/gettext )
-	odbc? ( dev-db/unixODBC:= )
 	openal? ( lib-media/openal:= )
-	opencl? ( virtual/opencl )
 	opengl? (
 		lib-media/glu
 		lib-media/mesa
@@ -59,12 +52,6 @@ COMMON_DEPEND="
 	pcap? ( lib-net/libpcap )
 	png? ( lib-media/libpng:0= )
 	pulseaudio? ( app-media/pulseaudio )
-	scanner? ( app-media/sane-backends:= )
-	ssl? ( lib-net/gnutls:= )
-	truetype? ( >=lib-media/freetype-2.0.0 )
-	udev? ( sys-app/systemd:= )
-	udisks? ( sys-app/dbus )
-	v4l? ( lib-media/libv4l )
 	xcomposite? ( x11-libs/libXcomposite )
 	xinerama? ( x11-libs/libXinerama )
 	xml? (
@@ -74,18 +61,11 @@ COMMON_DEPEND="
 "
 
 RDEPEND="${COMMON_DEPEND}
-	dos? ( >=games-emulation/dosbox-0.74_p20160629 )
-	perl? (
-		dev-lang/perl
-	)
-	samba? ( >=app-server/samba-3.0.25[winbind] )
-	selinux? ( sec-policy/selinux-wine )
-"
+	perl? (	dev-lang/perl )
+	samba? ( >=app-server/samba-3.0.25[winbind] )"
 
-# tools/make_requests requires perl
 DEPEND="${COMMON_DEPEND}
 	sys-devel/flex
-	>=sys-kernel/stable-sources-2.6
 	dev-util/pkgconfig
 	sys-devel/bison
 	X? ( x11/xorgproto )
@@ -107,6 +87,25 @@ src_configure() {
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
 		--enable-win64
+		$(use_with netapi)
+		$(use_with netapi)
+		$(use_with netapi)
+		$(use_with cups)
+		$(use_with fontconfig)
+		$(use_with jpeg)
+		$(use_with ldap)
+		$(use_with mp3 mpg123)
+		$(use_with netapi)
+		$(use_with openal)
+		$(use_with opencl)
+		$(use_with opengl)
+		$(use_with osmesa)
+		$(use_with pcap)
+		$(use_with png)
+		$(use_with pulseaudio pulse)
+		$(use_with xcomposite)
+		$(use_with xinerama)
+		$(use_with xml)
 	)
 	econf ${myconf[@]}
 }

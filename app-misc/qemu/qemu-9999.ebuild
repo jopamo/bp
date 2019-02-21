@@ -99,7 +99,7 @@ SOFTMMU_TOOLS_DEPEND="
 	jpeg? ( lib-media/libjpeg-turbo:0=[static-libs(+)] )
 	lzo? ( lib-dev/lzo:2[static-libs(+)] )
 	ncurses? (
-		lib-sys/ncurses:0=[unicode]
+		lib-sys/ncurses:0=
 		lib-sys/ncurses:0=[static-libs(+)]
 	)
 	nfs? ( >=sys-app/libnfs-1.9.3:=[static-libs(+)] )

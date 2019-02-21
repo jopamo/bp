@@ -87,9 +87,6 @@ src_configure() {
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
 		--enable-win64
-		$(use_with netapi)
-		$(use_with netapi)
-		$(use_with netapi)
 		$(use_with cups)
 		$(use_with fontconfig)
 		$(use_with jpeg)

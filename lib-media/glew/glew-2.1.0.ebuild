@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib-minimal toolchain-funcs versionator
+inherit toolchain-funcs versionator
 
 DESCRIPTION="The OpenGL Extension Wrangler Library"
 HOMEPAGE="http://glew.sourceforge.net/"
@@ -14,12 +14,12 @@ KEYWORDS="amd64 arm64"
 IUSE="doc static-libs"
 
 DEPEND="
-	lib-media/glu[${MULTILIB_USEDEP}]
-	>=lib-media/mesa-7.0-r1[${MULTILIB_USEDEP}]
-	>=x11-libs/libX11-1.6.2[${MULTILIB_USEDEP}]
-	>=x11-libs/libXext-1.3.2[${MULTILIB_USEDEP}]
-	>=x11-libs/libXi-1.7.2[${MULTILIB_USEDEP}]
-	>=x11-libs/libXmu-1.1.1-r1[${MULTILIB_USEDEP}]
+	lib-media/glu
+	>=lib-media/mesa-7.0-r1
+	>=x11-libs/libX11-1.6.2
+	>=x11-libs/libXext-1.3.2
+	>=x11-libs/libXi-1.7.2
+	>=x11-libs/libXmu-1.1.1-r1
 "
 RDEPEND="${DEPEND}"
 
@@ -46,7 +46,6 @@ src_prepare() {
 	cp config/Makefile.linux config/Makefile.freebsd || die
 
 	default
-	multilib_copy_sources
 }
 
 glew_system() {
@@ -74,7 +73,7 @@ set_opts() {
 	)
 }
 
-multilib_src_compile() {
+src_compile() {
 	set_opts
 	emake \
 		GLEW_PREFIX="${EPREFIX}/usr" \
@@ -83,7 +82,7 @@ multilib_src_compile() {
 		"${myglewopts[@]}"
 }
 
-multilib_src_install() {
+src_install() {
 	set_opts
 	emake \
 		GLEW_DEST="${ED}/usr" \

@@ -4,7 +4,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_7 )
 
-inherit flag-o-matic libtool multilib-minimal python-any-r1 xdg-utils autotools
+inherit flag-o-matic libtool python-any-r1 xdg-utils autotools
 
 DESCRIPTION="An OpenType text shaping engine"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/HarfBuzz"
@@ -25,11 +25,11 @@ REQUIRED_USE="introspection? ( glib )"
 
 RDEPEND="
 	cairo? ( x11-libs/cairo:= )
-	fontconfig? ( lib-media/fontconfig:1.0[${MULTILIB_USEDEP}] )
-	glib? ( >=lib-dev/glib-2.38:2[${MULTILIB_USEDEP}] )
-	icu? ( >=lib-dev/icu-51.2-r1:=[${MULTILIB_USEDEP}] )
+	fontconfig? ( lib-media/fontconfig:1.0 )
+	glib? ( >=lib-dev/glib-2.38:2 )
+	icu? ( >=lib-dev/icu-51.2-r1:= )
 	introspection? ( >=lib-dev/gobject-introspection-1.34:= )
-	truetype? ( >=lib-media/freetype-2.5.0.1:2=[${MULTILIB_USEDEP}] )
+	truetype? ( >=lib-media/freetype-2.5.0.1:2= )
 "
 DEPEND="${RDEPEND}
 	dev-util/gtk-doc-am
@@ -63,18 +63,18 @@ src_prepare() {
 	sed -e 's#tests/arabic-fallback-shaping.tests##' -i test/shaping/Makefile.in || die "sed failed"
 }
 
-multilib_src_configure() {
+src_configure() {
 	# harfbuzz-gobject only used for instrospection, bug #535852
 	local myeconfargs=(
 		--without-coretext
 		--without-uniscribe
 		$(use_enable static-libs static)
-		$(multilib_native_use_with cairo)
+		$(use_with cairo)
 		$(use_with fontconfig)
 		$(use_with glib)
 		$(use_with introspection gobject)
 		$(use_with icu)
-		$(multilib_native_use_enable introspection)
+		$(use_enable introspection)
 		$(use_with truetype freetype)
 	)
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"

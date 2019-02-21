@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools git-r3 multilib
+inherit autotools git-r3
 
 DESCRIPTION="An FFmpeg based source library and Avisynth/VapourSynth plugin for easy frame accurate access"
 HOMEPAGE="https://github.com/FFMS/ffms2"
@@ -22,18 +22,6 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
 	mkdir -p "${S}/src/config"
-	default_src_prepare
+	default
 	eautoreconf
-}
-
-multilib_src_configure() {
-	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

@@ -2,7 +2,7 @@
 
 EAPI="6"
 
-inherit autotools eutils libtool multilib-minimal
+inherit autotools eutils libtool
 
 DESCRIPTION="Tag Image File Format (TIFF) library"
 HOMEPAGE="http://libtiff.maptools.org"
@@ -14,28 +14,19 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="+cxx jbig jpeg lzma static-libs test zlib"
 
-RDEPEND="jpeg? ( lib-media/libjpeg-turbo[${MULTILIB_USEDEP}] )
-	jbig? ( >=lib-media/jbigkit-2.1:=[${MULTILIB_USEDEP}] )
-	lzma? ( >=app-compression/xz-utils-5.0.5-r1:=[${MULTILIB_USEDEP}] )
-	zlib? ( >=lib-sys/zlib-1.2.8-r1:=[${MULTILIB_USEDEP}] )
-	abi_x86_32? (
-		!<=app-misc/emul-linux-x86-baselibs-20130224-r9
-		!app-misc/emul-linux-x86-baselibs[-abi_x86_32(-)]
-	)"
-DEPEND="${RDEPEND}"
+DEPEND="jpeg? ( lib-media/libjpeg-turbo )
+	jbig? ( >=lib-media/jbigkit-2.1:= )
+	lzma? ( >=app-compression/xz-utils-5.0.5-r1:= )
+	zlib? ( >=lib-sys/zlib-1.2.8-r1:= )"
 
 REQUIRED_USE="test? ( jpeg )" #483132
-
-MULTILIB_WRAPPED_HEADERS=(
-	/usr/include/tiffconf.h
-)
 
 src_prepare() {
 	default
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	ECONF_SOURCE="${S}" econf \
 		$(use_enable static-libs static) \
 		$(use_enable zlib) \
@@ -44,22 +35,8 @@ multilib_src_configure() {
 		$(use_enable lzma) \
 		$(use_enable cxx) \
 		--without-x
-
-	# remove useless subdirs
-	if ! multilib_is_native_abi ; then
-		sed -i \
-			-e 's/ tools//' \
-			-e 's/ contrib//' \
-			-e 's/ man//' \
-			-e 's/ html//' \
-			Makefile || die
-	fi
 }
 
-multilib_src_test() {
-	if ! multilib_is_native_abi ; then
-		emake -C tools
-	fi
+src_test() {
 	emake check
 }
-

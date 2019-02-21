@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit toolchain-funcs multilib-minimal git-r3
+inherit toolchain-funcs git-r3
 
 DESCRIPTION="WebM VP8 and VP9 Codec SDK"
 HOMEPAGE="https://www.webmproject.org"
@@ -15,7 +15,7 @@ IUSE="static-libs test"
 
 DEPEND="dev-lang/yasm"
 
-multilib_src_configure() {
+src_configure() {
 	local conf=(
 		--prefix="${EPREFIX}"/usr
 		--libdir="${EPREFIX}"/usr/$(get_libdir)
@@ -36,10 +36,10 @@ multilib_src_configure() {
 	"${S}"/configure "${conf[@]}"
 }
 
-multilib_src_compile() {
+src_compile() {
 	emake verbose=yes GEN_EXAMPLES=""
 }
 
-multilib_src_install() {
+src_install() {
 	emake verbose=yes GEN_EXAMPLES="" DESTDIR="${D}" install
 }

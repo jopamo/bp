@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools git-r3 libtool multilib-minimal
+inherit autotools git-r3 libtool
 
 DESCRIPTION="Portable Network Graphics library"
 HOMEPAGE="http://www.libpng.org/"
@@ -12,11 +12,9 @@ EGIT_BRANCH=libpng16
 LICENSE="libpng"
 SLOT="0/16"
 KEYWORDS="amd64 arm64"
-IUSE="apng cpu_flags_x86_sse neon static-libs"
+IUSE="apng static-libs"
 
-RDEPEND=">=lib-sys/zlib-1.2.8-r1:=[${MULTILIB_USEDEP}]
-	abi_x86_32? ( !<=app-misc/emul-linux-x86-baselibs-20130224-r1
-		!app-misc/emul-linux-x86-baselibs[-abi_x86_32(-)] )"
+RDEPEND=">=lib-sys/zlib-1.2.8-r1:="
 DEPEND="${RDEPEND}
 	app-compression/xz-utils"
 
@@ -31,11 +29,9 @@ src_prepare() {
 	elibtoolize
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myeconfargs=(
-		$(use_enable cpu_flags_x86_sse intel-sse)
 		$(use_enable static-libs static)
-		--enable-arm-neon=$(usex neon)
 	)
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }

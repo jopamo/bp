@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit multilib-minimal
 
 DESCRIPTION="the Ogg media file format library"
 HOMEPAGE="https://xiph.org/ogg/"
@@ -12,13 +11,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
-DOCS=( AUTHORS CHANGES )
-
-MULTILIB_WRAPPED_HEADERS=(
-	/usr/include/ogg/config_types.h
-)
-
-multilib_src_configure() {
+src_configure() {
 	local myeconfargs=(
 		--htmldir="${EPREFIX}"/usr/share/doc/${PF}/html
 		$(use_enable static-libs static)
@@ -26,7 +19,6 @@ multilib_src_configure() {
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }
 
-multilib_src_install_all() {
-	einstalldocs
+src_install_all() {
 	find "${ED}" -name "*.la" -delete || die
 }

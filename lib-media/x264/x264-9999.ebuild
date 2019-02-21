@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=6
 
-inherit flag-o-matic multilib toolchain-funcs eutils multilib-minimal git-r3
+inherit flag-o-matic toolchain-funcs eutils git-r3
 
 DESCRIPTION="A free library for encoding X264/AVC streams"
 HOMEPAGE="https://www.videolan.org/developers/x264.html"
@@ -16,23 +16,17 @@ SLOT="0/${SONAME}"
 LICENSE="GPL-2"
 IUSE="+interlaced opencl static-libs pic"
 
-ASM_DEP=">=dev-lang/nasm-2.13"
-DEPEND="abi_x86_32? ( ${ASM_DEP} )
-	abi_x86_64? ( ${ASM_DEP} )
+DEPEND="dev-lang/nasm
 	opencl? ( dev-lang/perl )
-	app-media/ffmpeg[${MULTILIB_USEDEP}]
-	lib-media/l-smash[${MULTILIB_USEDEP}]
-	lib-media/ffmpegsource[${MULTILIB_USEDEP}]"
-
-RDEPEND="opencl? ( >=virtual/opencl-0-r3[${MULTILIB_USEDEP}] )
-	abi_x86_32? ( !<=app-misc/emul-linux-x86-medialibs-20130224-r7
-		!app-misc/emul-linux-x86-medialibs[-abi_x86_32(-)] )
-		${DEPEND}"
+	app-media/ffmpeg
+	lib-media/l-smash
+	lib-media/ffmpegsource"
 
 RESTRICT="test"
 
-multilib_src_configure() {
-	append-flags -ffat-lto-objects
+append-flags -ffat-lto-objects
+
+src_configure() {
 	tc-export CC
 
 	"${S}/configure" \

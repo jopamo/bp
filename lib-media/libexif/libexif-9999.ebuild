@@ -1,7 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
-inherit eutils libtool multilib-minimal git-r3 autotools
+EAPI=6
+
+inherit eutils libtool git-r3 autotools
 
 DESCRIPTION="Library for parsing, editing, and saving EXIF data"
 HOMEPAGE="https://github.com/libexif"
@@ -28,7 +29,7 @@ src_prepare() {
 	elibtoolize # For *-bsd
 }
 
-multilib_src_configure() {
+src_configure() {
 	econf \
 		$(use_enable static-libs static) \
 		$(use_enable nls) \

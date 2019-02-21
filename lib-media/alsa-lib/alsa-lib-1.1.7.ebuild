@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools eutils multilib multilib-minimal flag-o-matic
+inherit flag-o-matic
 
 DESCRIPTION="Advanced Linux Sound Architecture Library"
 HOMEPAGE="http://www.alsa-project.org/"
@@ -17,32 +17,27 @@ fi
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="alisp debug doc elibc_uclibc"
-
-RDEPEND="abi_x86_32? (
-		!<=app-misc/emul-linux-x86-soundlibs-20130224-r1
-		!app-misc/emul-linux-x86-soundlibs[-abi_x86_32(-)]
-	)"
-DEPEND="${RDEPEND}
-	doc? ( >=app-text/doxygen-1.2.6 )"
+IUSE="alisp debug"
 
 filter-flags -flto
 
-multilib_src_configure() {
-	local myconf
-
-	use elibc_uclibc && myconf+=" --without-versioned"
-
-	ECONF_SOURCE=${S} \
-	econf \
-		--disable-maintainer-mode \
-		--disable-python \
-		--enable-shared \
-		--disable-resmgr \
-		--enable-rawmidi \
-		--enable-seq \
-		--enable-aload \
-		$(use_with debug) \
-		$(use_enable alisp) \
-		${myconf}
+src_configure() {
+	local myconf=(
+		--bindir="${EPREFIX}"/usr/bin
+		--sbindir="${EPREFIX}"/usr/sbin
+		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libexecdir="${EPREFIX}"/usr/libexec
+		--sysconfdir="${EPREFIX}"/etc
+		--localstatedir="${EPREFIX}"/var
+		--disable-maintainer-mode
+		--disable-python
+		--enable-shared
+		--disable-resmgr
+		--enable-rawmidi
+		--enable-seq
+		--enable-aload
+		$(use_with debug)
+		$(use_enable alisp)
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

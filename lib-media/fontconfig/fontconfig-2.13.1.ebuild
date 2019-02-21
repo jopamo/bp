@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools multilib-minimal
+inherit autotools
 
 DESCRIPTION="A library for configuring and customizing font access"
 HOMEPAGE="http://fontconfig.org/"
@@ -13,9 +13,8 @@ SLOT="1.0"
 KEYWORDS="amd64 arm64"
 IUSE="doc static-libs"
 
-RDEPEND=">=lib-dev/expat-2.1.0-r3[${MULTILIB_USEDEP}]
-	>=lib-media/freetype-2.5.3-r1[${MULTILIB_USEDEP}]
-	abi_x86_32? ( !app-misc/emul-linux-x86-xlibs[-abi_x86_32(-)] )"
+RDEPEND=">=lib-dev/expat-2.1.0-r3
+	>=lib-media/freetype-2.5.3-r1"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	dev-util/itstool
@@ -23,14 +22,12 @@ DEPEND="${RDEPEND}
 PDEPEND="app-eselect/eselect-fontconfig
 	fonts/liberation-fonts"
 
-MULTILIB_CHOST_TOOLS=( /usr/bin/fc-cache$(get_exeext) )
-
 src_prepare() {
 	default
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local addfonts
 	use prefix && [[ -d /usr/share/fonts ]] && addfonts=",/usr/share/fonts"
 
@@ -47,21 +44,14 @@ multilib_src_configure() {
 	econf "${myeconfargs[@]}"
 }
 
-multilib_src_install() {
+src_install() {
 	default
 
-	# avoid calling this multiple times, bug #459210
-	if multilib_is_native_abi; then
-		# stuff installed from build-dir
-		emake -C doc DESTDIR="${D}" install-man
-
-		insinto /etc/fonts
-		doins fonts.conf
-	fi
+	insinto /etc/fonts
+	doins fonts.conf
 }
 
-multilib_src_install_all() {
-	einstalldocs
+src_install_all() {
 	find "${ED}" -name "*.la" -delete || die
 
 	# fc-lang directory contains language coverage datafiles
@@ -110,17 +100,10 @@ pkg_postinst() {
 	einfo "Cleaning broken symlinks in "${EROOT}"etc/fonts/conf.d/"
 	find -L "${EROOT}"etc/fonts/conf.d/ -type l -delete
 
-	if [[ ${ROOT} = / ]]; then
-		multilib_pkg_postinst() {
-			ebegin "Creating global font cache for ${ABI}"
-			"${EPREFIX}"/usr/bin/${CHOST}-fc-cache -srf
-			eend $?
-		}
+	ebegin "Creating global font cache for ${ABI}"
+	"${EPREFIX}"/usr/bin/${CHOST}-fc-cache -srf
 
-		multilib_parallel_foreach_abi multilib_pkg_postinst
-
-		eselect fontconfig enable 11-lcdfilter-default.conf
-		eselect fontconfig enable 10-sub-pixel-rgb.conf
-		eselect fontconfig enable 60-liberation.conf
-	fi
+	eselect fontconfig enable 11-lcdfilter-default.conf
+	eselect fontconfig enable 10-sub-pixel-rgb.conf
+	eselect fontconfig enable 60-liberation.conf
 }

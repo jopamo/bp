@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools multilib-minimal
+inherit autotools
 
 DESCRIPTION="A decoder implementation of the JBIG2 image compression format"
 HOMEPAGE="http://ghostscript.com/jbig2dec.html"
@@ -29,7 +29,7 @@ src_prepare() {
 	eapply_user
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

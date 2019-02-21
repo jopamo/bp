@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit flag-o-matic multilib-minimal
+inherit flag-o-matic
 
 DESCRIPTION="a realtime MPEG 1.0/2.0/2.5 audio player for layers 1, 2 and 3"
 HOMEPAGE="https://www.mpg123.org/"
@@ -26,7 +26,7 @@ pkg_setup() {
 	append-cflags -D_GNU_SOURCE
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

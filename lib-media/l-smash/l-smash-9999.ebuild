@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib-minimal git-r3
+inherit git-r3 toolchain-funcs
 
 DESCRIPTION="(FFmpeg) Libavcodec-SMASH decoder/demuxer wrapper library"
 HOMEPAGE="https://github.com/l-smash/l-smash"
@@ -14,27 +14,26 @@ LICENSE="ISC"
 SLOT="0"
 IUSE="debug static-libs"
 
-RDEPEND=">=app-media/ffmpeg-2.4.0:=[${MULTILIB_USEDEP}]"
+RDEPEND=">=app-media/ffmpeg-2.4.0:="
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 
 src_prepare() {
 	default
 	sed -e 's/-O[s0]//g' -i configure
-	multilib_copy_sources
 }
 
-multilib_src_configure()
+src_configure()
 {
 	chmod +x configure
 	local myeconfargs=(
 		${EXTRA_LSMASH_CONF}
 		$(usex debug '--enable-debug' '')
 		$(usex static-libs '' '--disable-static --enable-shared')
-		--prefix=/usr
-		--libdir="/usr/$(get_libdir)"
+		--prefix="${EPREFIX}"/usr
+		--libdir="${EPREFIX}"/usr/$(get_libdir)
 		--destdir="${ED}"
-		--includedir=/usr/include
+		--includedir="${EPREFIX}"/usr/include
 		--cc="$(tc-getCC)"
 		--extra-cflags="${CFLAGS}"
 		--extra-ldflags="${LDFLAGS}"

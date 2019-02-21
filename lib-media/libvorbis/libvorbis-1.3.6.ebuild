@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools multilib-minimal
+inherit autotools
 
 DESCRIPTION="The Ogg Vorbis sound file format library"
 HOMEPAGE="https://xiph.org/vorbis/"
@@ -13,8 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
-RDEPEND=">=lib-media/libogg-1.3.0[${MULTILIB_USEDEP}]
-	abi_x86_32? ( !app-misc/emul-linux-x86-soundlibs[-abi_x86_32(-)] )"
+RDEPEND=">=lib-media/libogg-1.3.0"
 DEPEND="${RDEPEND}
 	app-compression/xz-utils
 	dev-util/pkgconfig"

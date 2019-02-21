@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools multilib-minimal git-r3
+inherit autotools git-r3
 
 DESCRIPTION="The OpenGL Utility Library"
 HOMEPAGE="https://cgit.freedesktop.org/mesa/glu/"
@@ -14,14 +14,14 @@ LICENSE="SGI-B-2.0"
 SLOT="0"
 IUSE="static-libs"
 
-DEPEND=">=lib-media/mesa-7.0-r1[${MULTILIB_USEDEP}]"
+DEPEND=">=lib-media/mesa-7.0-r1"
 
 src_prepare() {
 	default
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

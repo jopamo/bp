@@ -9,7 +9,6 @@ HOMEPAGE="https://www.gnu.org/software/libc/"
 
 LICENSE="LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
 RESTRICT="strip" # Strip ourself #46186
-EMULTILIB_PKG="true"
 
 EGIT_REPO_URI="git://sourceware.org/git/glibc.git"
 EGIT_BRANCH="release/2.29/master"
@@ -20,9 +19,7 @@ RELEASE_VER=${PV}
 
 GCC_BOOTSTRAP_VER="4.7.3-r1"
 
-SRC_URI+=" multilib? ( mirror://gentoo/gcc-${GCC_BOOTSTRAP_VER}-multilib-bootstrap.tar.bz2 )"
-
-IUSE="audit caps debug doc gd hardened multilib nscd selinux systemtap profile suid vanilla headers-only"
+IUSE="audit caps debug doc gd hardened nscd selinux systemtap profile suid vanilla headers-only"
 
 
 export CBUILD=${CBUILD:-${CHOST}}
@@ -174,8 +171,6 @@ pkg_pretend() {
 }
 
 src_unpack() {
-	use multilib && unpack gcc-${GCC_BOOTSTRAP_VER}-multilib-bootstrap.tar.bz2
-
 	setup_env
 
 	# Check NPTL support _before_ we unpack things to save some time
@@ -215,8 +210,6 @@ glibc_do_configure() {
 	# Glibc does not work with gold (for various reasons) #269274.
 	tc-ld-disable-gold
 
-	# CXX isnt handled by the multilib system, so if we dont unset here
-	# we accumulate crap across abis
 	unset CXX
 
 	einfo "Configuring glibc for $1"
@@ -241,24 +234,6 @@ glibc_do_configure() {
 	einfo " $(printf '%15s' 'Manual CXX:')   ${CXX}"
 
 
-	# Since SELinux support is only required for nscd, only enable it if:
-	# 1. USE selinux
-	# 2. only for the primary ABI on multilib systems
-	# 3. Not a crosscompile
-	if ! is_crosscompile && use selinux ; then
-		if use multilib ; then
-			if is_final_abi ; then
-				myconf+=( --with-selinux )
-			else
-				myconf+=( --without-selinux )
-			fi
-		else
-			myconf+=( --with-selinux )
-		fi
-	else
-		myconf+=( --without-selinux )
-	fi
-
 	# Force a few tests where we always know the answer but
 	# configure is incapable of finding it.
 	if is_crosscompile ; then
@@ -276,6 +251,7 @@ glibc_do_configure() {
 		--enable-stackguard-randomization
 		--build=${CBUILD_OPT:-${CBUILD}}
 		--host=${CTARGET_OPT:-${CTARGET}}
+		--without-selinux
 		$(use_enable profile)
 		$(use_with gd)
 		--with-headers=$(alt_build_headers)
@@ -309,17 +285,6 @@ glibc_do_configure() {
 	set -- "${S}"/configure "${myconf[@]}"
 	echo "$@"
 	"$@" || die "failed to configure glibc"
-
-	# If we're trying to migrate between ABI sets, we need
-	# to lie and use a local copy of gcc.  Like if the system
-	# is built with MULTILIB_ABIS="amd64 x86" but we want to
-	# add x32 to it, gcc/glibc don't yet support x32.
-	if [[ -n ${GCC_BOOTSTRAP_VER} ]] && use multilib ; then
-		echo 'main(){}' > "${T}"/test.c
-		if ! $(tc-getCC ${CTARGET}) ${CFLAGS} ${LDFLAGS} "${T}"/test.c -Wl,-emain -lgcc 2>/dev/null ; then
-			sed -i -e '/^CC = /s:$: -B$(objdir)/../'"gcc-${GCC_BOOTSTRAP_VER}/${ABI}:" config.make || die
-		fi
-	fi
 }
 
 glibc_headers_configure() {
@@ -482,26 +447,18 @@ glibc_do_src_install() {
 	# Everything past this point just needs to be done once ...
 	is_final_abi || return 0
 
-	# Make sure the non-native interp can be found on multilib systems even
-	# if the main library set isn't installed into the right place.  Maybe
-	# we should query the active gcc for info instead of hardcoding it ?
 	local i ldso_abi ldso_name
 	local ldso_abi_list=(
-		# x86
 		amd64   /usr/lib64/ld-linux-x86-64.so.2
-		x32     /usr/libx32/ld-linux-x32.so.2
-		x86     /usr/lib/ld-linux.so.2
 	)
 	case $(tc-endian) in
 	little)
 		ldso_abi_list+=(
-			# arm
 			arm64   /usr/lib64/ld-linux-aarch64.so.1
 		)
 		;;
 	big)
 		ldso_abi_list+=(
-			# arm
 			arm64   /usr/lib64/ld-linux-aarch64_be.so.1
 		)
 		;;
@@ -531,9 +488,6 @@ glibc_do_src_install() {
 	# headers correctly.  See gcc/doc/gccinstall.info
 	if is_crosscompile ; then
 		# We need to make sure that /lib and /usr/lib always exists.
-		# gcc likes to use relative paths to get to its multilibs like
-		# /usr/lib/../lib64/.  So while we don't install any files into
-		# /usr/lib/, we do need it to exist.
 		cd "${ED}"$(alt_libdir)/..
 		[[ -e lib ]] || mkdir lib
 		cd "${ED}"$(alt_usrlibdir)/..

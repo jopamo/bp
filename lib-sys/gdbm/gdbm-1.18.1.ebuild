@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools flag-o-matic multilib multilib-minimal
+inherit autotools flag-o-matic
 
 DESCRIPTION="Standard GNU database libraries"
 HOMEPAGE="https://www.gnu.org/software/gdbm/"
@@ -13,7 +13,7 @@ SLOT="0/6"
 KEYWORDS="amd64 arm64"
 IUSE="nls +readline static-libs"
 
-DEPEND="readline? ( lib-sys/readline:0=[${MULTILIB_USEDEP}] )"
+DEPEND="readline? ( lib-sys/readline:0= )"
 RDEPEND="${DEPEND}"
 
 src_prepare() {
@@ -21,7 +21,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	export ac_cv_lib_dbm_main=no ac_cv_lib_ndbm_main=no
 
 	local myeconfargs=(

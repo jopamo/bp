@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-inherit autotools multilib-minimal
+inherit autotools
 
 DESCRIPTION="high level interface to Linux seccomp filter"
 HOMEPAGE="https://github.com/seccomp/libseccomp"
@@ -31,7 +31,7 @@ src_prepare() {
 	sed -i.bak -e "s/0.0.0/2.3.9999/g" "configure"
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -45,7 +45,7 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_install() {
+src_install() {
 	default
 	chrpath -d "${ED}"/usr/bin/scmp_sys_resolver
 

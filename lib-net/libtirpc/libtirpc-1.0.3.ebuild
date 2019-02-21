@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools multilib-minimal toolchain-funcs eutils
+inherit autotools toolchain-funcs eutils
 
 DESCRIPTION="Transport Independent RPC library (SunRPC replacement)"
 HOMEPAGE="http://libtirpc.sourceforge.net/"
@@ -14,14 +14,14 @@ KEYWORDS="amd64 arm64"
 IUSE="ipv6 static-libs"
 
 DEPEND="app-compression/xz-utils
-	>=dev-util/pkgconfig-0-r1[${MULTILIB_USEDEP}]"
+	>=dev-util/pkgconfig-0-r1"
 
 src_prepare() {
 	eautoreconf
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -36,11 +36,11 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf ${myconf[@]}
 }
 
-multilib_src_install() {
+src_install() {
 	default
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	insinto /etc
 	doins doc/netconfig
 

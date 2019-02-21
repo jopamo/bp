@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit cmake-utils git-r3 multilib-minimal
+inherit cmake-utils git-r3
 
 DESCRIPTION="Cryptographic library for embedded systems"
 HOMEPAGE="https://tls.mbed.org/"
@@ -14,14 +14,14 @@ KEYWORDS="amd64 arm64"
 LICENSE="Apache-2.0"
 SLOT="0/10" # slot for libmbedtls.so
 KEYWORDS="amd64 arm64"
-IUSE="cpu_flags_x86_sse2 doc havege libressl programs test threads zlib"
+IUSE="doc havege libressl programs test zlib"
 
 RDEPEND="
 	programs? (
 		!libressl? ( lib-dev/openssl:0= )
 		libressl? ( lib-dev/libressl:0= )
 	)
-	zlib? ( >=lib-sys/zlib-1.2.8-r1[${MULTILIB_USEDEP}] )"
+	zlib? ( >=lib-sys/zlib-1.2.8-r1 )"
 DEPEND="${RDEPEND}
 	doc? ( app-text/doxygen app-media/graphviz )
 	test? ( dev-lang/perl )"
@@ -35,18 +35,15 @@ enable_mbedtls_option() {
 }
 
 src_prepare() {
-	use cpu_flags_x86_sse2 && enable_mbedtls_option MBEDTLS_HAVE_SSE2
 	use zlib && enable_mbedtls_option MBEDTLS_ZLIB_SUPPORT
 	use havege && enable_mbedtls_option MBEDTLS_HAVEGE_C
-	use threads && enable_mbedtls_option MBEDTLS_THREADING_C
-	use threads && enable_mbedtls_option MBEDTLS_THREADING_PTHREAD
 
 	cmake-utils_src_prepare
 }
 
-multilib_src_configure() {
+src_configure() {
 	local mycmakeargs=(
-		-DENABLE_PROGRAMS=$(multilib_native_usex programs)
+		-DENABLE_PROGRAMS=$(usex programs)
 		-DENABLE_ZLIB_SUPPORT=$(usex zlib)
 		-DUSE_STATIC_MBEDTLS_LIBRARY=OFF
 		-DENABLE_TESTING=$(usex test)
@@ -58,25 +55,20 @@ multilib_src_configure() {
 	cmake-utils_src_configure
 }
 
-multilib_src_compile() {
+src_compile() {
 	cmake-utils_src_compile
-	use doc && multilib_is_native_abi && emake apidoc
 }
 
-multilib_src_test() {
+src_test() {
 	LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${BUILD_DIR}/library" \
 		cmake-utils_src_test
 }
 
-multilib_src_install() {
+src_install() {
 	cmake-utils_src_install
 }
 
-multilib_src_install_all() {
-	use doc && HTML_DOCS=( apidoc )
-
-	einstalldocs
-
+src_install_all() {
 	if use programs ; then
 		# avoid file collisions with sys-app/coreutils
 		local p e

@@ -1,7 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit autotools git-r3 multilib-minimal
+
+inherit autotools git-r3
 
 EGIT_REPO_URI="https://github.com/libssh2/libssh2"
 DESCRIPTION="Library implementing the SSH2 protocol"
@@ -14,11 +15,11 @@ IUSE="gcrypt libressl static-libs test zlib"
 
 DEPEND="
 	!gcrypt? (
-		!libressl? ( >=lib-dev/openssl-1.0.1h-r2:0[${MULTILIB_USEDEP}] )
-		libressl? ( lib-dev/libressl[${MULTILIB_USEDEP}] )
+		!libressl? ( >=lib-dev/openssl-1.0.1h-r2:0 )
+		libressl? ( lib-dev/libressl )
 	)
-	gcrypt? ( >=lib-dev/libgcrypt-1.5.3:0[${MULTILIB_USEDEP}] )
-	zlib? ( >=lib-sys/zlib-1.2.8-r1[${MULTILIB_USEDEP}] )
+	gcrypt? ( >=lib-dev/libgcrypt-1.5.3:0 )
+	zlib? ( >=lib-sys/zlib-1.2.8-r1 )
 "
 RDEPEND="${DEPEND}"
 
@@ -33,7 +34,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	# Disable tests that require extra permissions (bug #333319)
 	use test && local -x ac_cv_path_SSHD=
 

@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools flag-o-matic multilib-minimal git-r3
+inherit autotools flag-o-matic git-r3
 
 DESCRIPTION="C library that resolves names asynchronously"
 HOMEPAGE="https://c-ares.haxx.se/"
@@ -14,18 +14,12 @@ IUSE="static-libs"
 # Subslot = SONAME of libcares.so.2
 SLOT="0/2"
 
-DOCS=( AUTHORS CHANGES NEWS README.md RELEASE-NOTES TODO )
-
-MULTILIB_WRAPPED_HEADERS=(
-	/usr/include/ares_build.h
-)
-
 src_prepare() {
 	eapply_user
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	ECONF_SOURCE=${S} \
 	econf \
 		--enable-nonblocking \

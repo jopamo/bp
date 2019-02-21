@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit cmake-multilib git-r3
+inherit cmake-utils git-r3
 
 DESCRIPTION="C++ BitTorrent implementation focusing on efficiency and scalability"
 HOMEPAGE="http://libtorrent.org"
@@ -28,7 +28,7 @@ src_prepare() {
 	cmake-utils_src_prepare
 }
 
-multilib_src_configure() {
+src_configure() {
 	local mycmakeargs=(
 					-Dshared=ON
 					-Dstatic_runtime=OFF
@@ -43,11 +43,11 @@ multilib_src_configure() {
 	cmake-utils_src_configure
 }
 
-multilib_src_compile() {
+src_compile() {
 	cmake-utils_src_compile
 }
 
-multilib_src_install() {
+src_install() {
 	cmake-utils_src_install
 	use static-libs || rm -f "${ED}"usr/$(get_libdir)/libssh{,_threads}.a
 }

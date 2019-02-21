@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=6
 
-inherit autotools multilib-minimal
+inherit autotools
 
 DESCRIPTION="Public client interface for NIS(YP) and NIS+ in a IPv6 ready version"
 HOMEPAGE="https://github.com/thkukuk/libnsl"
@@ -14,7 +14,7 @@ LICENSE="LGPL-2.1+"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	lib-net/libtirpc[${MULTILIB_USEDEP}]
+	lib-net/libtirpc
 "
 
 src_prepare(){
@@ -22,7 +22,7 @@ src_prepare(){
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--enable-shared
 		--disable-static
@@ -31,7 +31,6 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_install_all() {
-	einstalldocs
+src_install_all() {
 	find "${ED}" -name '*.la' -delete || die
 }

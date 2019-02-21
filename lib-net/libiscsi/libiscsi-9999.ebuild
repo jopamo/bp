@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools multilib-minimal
+inherit autotools
 
 DESCRIPTION="iscsi client library and utilities"
 HOMEPAGE="https://github.com/sahlberg/libiscsi"
@@ -10,7 +10,7 @@ HOMEPAGE="https://github.com/sahlberg/libiscsi"
 if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/sahlberg/${PN}.git"
 	inherit git-r3
-	KEYWORDS="amd64 arm arm64 x86"
+	KEYWORDS="amd64 arm64"
 else
 	SNAPSHOT=054528ed2db9755218ab5bec6ad7a6cf875d11e0
 	SRC_URI="https://github.com/sahlberg/${PN}/archive/${SNAPSHOT}.zip -> ${P}.zip"
@@ -27,10 +27,9 @@ DEPEND="${RDEPEND}"
 src_prepare() {
 	default
 	eautoreconf
-	multilib_copy_sources
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

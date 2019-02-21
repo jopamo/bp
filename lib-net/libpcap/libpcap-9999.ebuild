@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit autotools git-r3 multilib-minimal
+inherit autotools git-r3
 
 DESCRIPTION="A system-independent library for user-level network packet capture"
 EGIT_REPO_URI="https://github.com/the-tcpdump-group/libpcap"
@@ -13,16 +13,16 @@ IUSE="bluetooth dbus netlink static-libs usb"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	bluetooth? ( app-net/bluez:=[${MULTILIB_USEDEP}] )
-	dbus? ( sys-app/dbus[${MULTILIB_USEDEP}] )
-	netlink? ( lib-dev/libnl:3[${MULTILIB_USEDEP}] )
-	usb? ( lib-dev/libusb[${MULTILIB_USEDEP}] )
+	bluetooth? ( app-net/bluez:= )
+	dbus? ( sys-app/dbus )
+	netlink? ( lib-dev/libnl:3 )
+	usb? ( lib-dev/libusb )
 "
 DEPEND="
 	${RDEPEND}
 	sys-devel/flex
 	sys-devel/bison
-	dbus? ( dev-util/pkgconfig[${MULTILIB_USEDEP}] )
+	dbus? ( dev-util/pkgconfig )
 "
 
 src_prepare() {
@@ -30,7 +30,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	ECONF_SOURCE="${S}" \
 	econf \
 		$(use_enable bluetooth) \
@@ -39,6 +39,6 @@ multilib_src_configure() {
 		$(use_with netlink libnl)
 }
 
-multilib_src_compile() {
+src_compile() {
 	emake all shared
 }

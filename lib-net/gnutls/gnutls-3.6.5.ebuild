@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit libtool multilib-minimal versionator
+inherit libtool versionator
 
 DESCRIPTION="A TLS 1.2 and SSL 3.0 implementation for the GNU project"
 HOMEPAGE="http://www.gnutls.org/"
@@ -13,18 +13,15 @@ SLOT="0/30" # libgnutls.so number
 KEYWORDS="amd64 arm64"
 IUSE="+cxx dane nls +pkcs11 +seccomp static-libs test tools valgrind"
 
-RDEPEND=">=lib-dev/nettle-3.1:=[gmp,${MULTILIB_USEDEP}]
-	>=lib-dev/gmp-5.1.3-r1:=[${MULTILIB_USEDEP}]
+RDEPEND=">=lib-dev/nettle-3.1:=[gmp]
+	>=lib-dev/gmp-5.1.3-r1:=
 	tools? ( sys-devel/autogen )
-	dane? ( >=lib-net/unbound-1.4.20[${MULTILIB_USEDEP}] )
-	nls? ( >=sys-devel/gettext-0-r1[${MULTILIB_USEDEP}] )
-	pkcs11? ( >=app-crypt/p11-kit-0.23.1[${MULTILIB_USEDEP}] )
-	abi_x86_32? (
-		!<=app-misc/emul-linux-x86-baselibs-20140508
-		!app-misc/emul-linux-x86-baselibs[-abi_x86_32(-)]
-	)"
+	dane? ( >=lib-net/unbound-1.4.20 )
+	nls? ( >=sys-devel/gettext-0-r1 )
+	pkcs11? ( >=app-crypt/p11-kit-0.23.1 )
+"
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0-r1[${MULTILIB_USEDEP}]
+	>=dev-util/pkgconfig-0-r1
 	nls? ( sys-devel/gettext )
 	valgrind? ( dev-util/valgrind )
 	test? (	seccomp? ( lib-sys/libseccomp )	)"
@@ -43,7 +40,7 @@ src_prepare() {
 	done
 }
 
-multilib_src_configure() {
+src_configure() {
 	local libconf=($("${S}/configure" --help | grep -- '--without-.*-prefix' | sed -e 's/^ *\([^ ]*\) .*/\1/g'))
 
 	ECONF_SOURCE=${S} econf \
@@ -53,11 +50,11 @@ multilib_src_configure() {
 		--disable-gtk-doc				\
 		--disable-doc					\
 		--without-tpm		\
-		$(multilib_native_use_enable seccomp seccomp-tests) \
-		$(multilib_native_use_enable test tests) \
+		$(use_enable seccomp seccomp-tests) \
+		$(use_enable test tests) \
 		--disable-full-test-suite \
-		$(multilib_native_use_enable tools) \
-		$(multilib_native_use_enable valgrind valgrind-tests) \
+		$(use_enable tools) \
+		$(use_enable valgrind valgrind-tests) \
 		$(use_enable cxx) \
 		$(use_enable dane libdane) \
 		$(use_enable nls) \

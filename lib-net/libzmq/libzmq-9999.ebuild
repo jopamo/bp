@@ -11,7 +11,7 @@ EGIT_REPO_URI="https://github.com/zeromq/${PN}.git"
 LICENSE="LGPL-3"
 SLOT="0/5"
 KEYWORDS="amd64 arm64"
-IUSE="pgm +sodium static-libs test unwind elibc_Darwin"
+IUSE="pgm +sodium static-libs test unwind"
 
 RDEPEND="
 	unwind? ( lib-sys/libunwind )
@@ -34,7 +34,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -53,14 +53,11 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_test() {
-	# Restricting to one job because multiple tests are using the same port.
-	# Upstream knows the problem and says it doesn't support parallel test
-	# execution, see ${S}/INSTALL.
+src_test() {
 	emake -j1 check
 }
 
-multilib_src_install() {
+src_install() {
 	default
 	find "${ED}"usr/lib* -name '*.la' -delete || die
 }

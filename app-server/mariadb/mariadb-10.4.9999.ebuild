@@ -45,7 +45,6 @@ COMMON_DEPEND="
 	)
 	lib-sys/ncurses:0=
 	!bindist? (
-		lib-sys/binutils-libs:0=
 		>=lib-sys/readline-4.1:0=
 	)
 	server? (
@@ -82,6 +81,10 @@ RDEPEND="selinux? ( sec-policy/selinux-mysql )
 	) )
 "
 
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+append-cxxflags -felide-constructors
+append-flags -fno-strict-aliasing -fPIC
+
 pkg_setup() {
 	enewgroup mysql 60 || die "problem adding 'mysql' group"
 	enewuser mysql 60 -1 /dev/null mysql || die "problem adding 'mysql' user"
@@ -90,9 +93,6 @@ pkg_setup() {
 src_configure(){
 	# bug 508724 mariadb cannot use ld.gold
 	tc-ld-disable-gold
-
-	append-cxxflags -felide-constructors
-	append-flags -fno-strict-aliasing -fPIC
 
 	CMAKE_BUILD_TYPE="Release"
 

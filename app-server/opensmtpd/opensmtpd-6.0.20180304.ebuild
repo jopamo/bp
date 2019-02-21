@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=ef2f368219152771ac32adaa05dc1aee4c2bfe29
+	SNAPSHOT=96df5cee6291fed387abc1e42aeae9e3fa94ebf7
 	SRC_URI="https://github.com/OpenSMTPD/OpenSMTPD/archive/${SNAPSHOT}.zip -> ${P}.zip"
 	S=${WORKDIR}/OpenSMTPD-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
@@ -44,6 +44,8 @@ DEPEND="!libressl? ( lib-dev/openssl:0 )
 		!app-net/ssmtp[mta]
 "
 RDEPEND="${DEPEND}"
+
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 src_prepare() {
 	default

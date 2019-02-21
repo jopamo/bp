@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit linux-info systemd git-r3
+inherit linux-info systemd git-r3 flag-o-matic
 
 EGIT_REPO_URI=https://github.com/samba-team/samba.git
 KEYWORDS="amd64 arm64"
@@ -69,11 +69,9 @@ REQUIRED_USE="
 
 RESTRICT="test"
 
-PATCHES=(
-	"${FILESDIR}/${PN}-4.5.1-compile_et_fix.patch"
-)
-
 WAF_BINARY="${S}/buildtools/bin/waf"
+
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 src_prepare() {
 	default
@@ -116,7 +114,6 @@ src_configure() {
 		$(use_with dmapi)
 		$(use_with fam)
 		$(use_with gpg gpgme)
-		$(use_with json json-audit)
 		$(use_enable iprint)
 		$(use_with pam)
 		$(usex pam "--with-pammodulesdir=${EPREFIX}/$(get_libdir)/security" '')

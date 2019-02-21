@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools linux-info multilib-minimal git-r3
+inherit autotools linux-info git-r3
 
 DESCRIPTION="Netlink API to the in-kernel nf_tables subsystem"
 HOMEPAGE="https://netfilter.org/projects/nftables/"
@@ -27,7 +27,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -40,7 +40,7 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_test() {
+src_test() {
 	default
 	cd tests || die
 	./test-script.sh || die

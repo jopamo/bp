@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools eutils flag-o-matic libtool multilib multilib-minimal
+inherit autotools eutils flag-o-matic libtool
 
 DESCRIPTION="C library for executing name service queries asynchronously"
 HOMEPAGE="http://0pointer.de/lennart/projects/libasyncns/"
@@ -26,10 +26,10 @@ src_prepare() {
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	# libasyncns uses assert()
 	use debug || append-cppflags -DNDEBUG
-	
+
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -37,32 +37,19 @@ multilib_src_configure() {
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
-		--docdir="${EPREFIX}"/usr/share/doc/${PF} 
-		--htmldir="${EPREFIX}"/usr/share/doc/${PF}/html 
-		--disable-dependency-tracking 
-		--disable-lynx 
+		--docdir="${EPREFIX}"/usr/share/doc/${PF}
+		--htmldir="${EPREFIX}"/usr/share/doc/${PF}/html
+		--disable-dependency-tracking
+		--disable-lynx
 		--disable-static
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_compile() {
-	emake || die "emake failed"
-
-	if multilib_is_native_abi && use doc; then
-		doxygen doxygen/doxygen.conf || die "doxygen failed"
-	fi
-}
-
-multilib_src_install() {
+src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
-
-	if multilib_is_native_abi && use doc; then
-		docinto apidocs
-		dohtml html/*
-	fi
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	find "${D}" -name '*.la' -delete
 }

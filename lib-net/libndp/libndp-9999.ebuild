@@ -1,7 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit multilib-minimal autotools
+
+inherit autotools
 
 DESCRIPTION="Library for Neighbor Discovery Protocol"
 HOMEPAGE="http://libndp.org"
@@ -24,7 +25,7 @@ src_prepare() {
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

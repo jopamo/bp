@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit toolchain-funcs multilib-minimal
+inherit toolchain-funcs
 
 DESCRIPTION="HTTP request/response parser for C"
 HOMEPAGE="https://github.com/nodejs/http-parser"
@@ -16,19 +16,18 @@ IUSE="static-libs"
 src_prepare() {
 	default
 	tc-export CC AR
-	multilib_copy_sources
 }
 
-multilib_src_compile() {
+src_compile() {
 	emake PREFIX="${EPREFIX}/usr" LIBDIR="${EPREFIX}/usr/$(get_libdir)" CFLAGS_FAST="${CFLAGS}" library
 	use static-libs && emake CFLAGS_FAST="${CFLAGS}" package
 }
 
-multilib_src_test() {
+src_test() {
 	emake CFLAGS_DEBUG="${CFLAGS}" CFLAGS_FAST="${CFLAGS}" test
 }
 
-multilib_src_install() {
+src_install() {
 	emake DESTDIR="${D}" PREFIX="${EPREFIX}/usr" LIBDIR="${EPREFIX}/usr/$(get_libdir)" install
 	use static-libs && dolib.a libhttp_parser.a
 }

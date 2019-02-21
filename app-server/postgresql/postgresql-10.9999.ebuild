@@ -53,6 +53,8 @@ RDEPEND="${CDEPEND}
 selinux? ( sec-policy/selinux-postgresql )
 "
 
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+
 pkg_setup() {
 	enewgroup postgres 70
 	enewuser postgres 70 /bin/sh /var/lib/postgresql postgres

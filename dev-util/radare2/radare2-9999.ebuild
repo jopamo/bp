@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit git-r3
+inherit git-r3 flag-o-matic
 
 DESCRIPTION="unix-like reverse engineering framework and commandline tools"
 HOMEPAGE="http://www.radare.org"
@@ -23,6 +23,8 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
+
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 src_configure() {
 	local myconf=(

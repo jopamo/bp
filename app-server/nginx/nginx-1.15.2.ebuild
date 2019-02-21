@@ -316,7 +316,6 @@ RDEPEND="${CDEPEND}
 DEPEND="${CDEPEND}
 	nginx_modules_http_brotli? ( dev-util/pkgconfig )
 	nginx_modules_http_security? ( ${AUTOTOOLS_DEPEND} )
-	arm? ( lib-dev/libatomic_ops )
 	libatomic? ( lib-dev/libatomic_ops )"
 PDEPEND="vim-syntax? ( app-text/nginx-syntax )"
 

@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-inherit eutils linux-info systemd user
+inherit eutils linux-info systemd user flag-o-matic
 
 DESCRIPTION="IPsec-based VPN solution focused on security and ease of use, supporting IKEv1/IKEv2 and MOBIKE"
 HOMEPAGE="http://www.strongswan.org/"
@@ -42,6 +42,8 @@ RDEPEND="${COMMON_DEPEND}
 	selinux? ( sec-policy/selinux-ipsec )"
 
 UGID="ipsec"
+
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 pkg_setup() {
 	linux-info_pkg_setup

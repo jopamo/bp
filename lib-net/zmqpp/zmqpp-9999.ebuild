@@ -2,7 +2,7 @@
 
 EAPI=5
 
-inherit cmake-utils
+inherit cmake-utils flag-o-matic
 
 CMAKE_MAKEFILE_GENERATOR=ninja
 
@@ -23,6 +23,8 @@ IUSE="static-libs"
 
 DEPEND="lib-net/libzmq[static-libs?]"
 RDEPEND="${DEPEND}"
+
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 src_prepare() {
 	sed -i.1 -e "s/DESTINATION\ lib/DESTINATION\ $(get_libdir)/g" "CMakeLists.txt"

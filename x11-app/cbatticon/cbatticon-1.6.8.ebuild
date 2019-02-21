@@ -22,6 +22,7 @@ src_compile() {
 	emake \
 		V=1 \
 		VERSION="${PF}" \
+		WITH_NOTIFY=0 \
 		WITH_GTK3=1
 }
 

@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools multilib-minimal eutils
+inherit autotools flag-o-matic
 
 if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI="https://github.com/wine-mirror/wine.git"
@@ -19,12 +19,10 @@ HOMEPAGE="https://www.winehq.org/"
 
 LICENSE="LGPL-2.1"
 SLOT="${PV}"
-IUSE="+abi_x86_32 +abi_x86_64 +alsa capi cups custom-cflags dos elibc_glibcpath +fontconfig gphoto2 gsm +jpeg  kernel_FreeBSD +lcms ldap +mono mp3 ncurses netapi nls odbc openal opencl +opengl osmesa oss +perl pcap +png prelink pulseaudio +realtime +run-exes samba scanner selinux +ssl +staging test +threads +truetype udev +udisks v4l +X +xcomposite xinerama +xml"
-REQUIRED_USE="|| ( abi_x86_32 abi_x86_64 )
-	X? ( truetype )
+IUSE="+alsa capi cups custom-cflags dos elibc_glibcpath +fontconfig gphoto2 gsm +jpeg  kernel_FreeBSD +lcms ldap +mono mp3 ncurses netapi nls odbc openal opencl +opengl osmesa oss +perl pcap +png prelink pulseaudio +realtime +run-exes samba scanner selinux +ssl +staging test +threads +truetype udev +udisks v4l +X +xcomposite xinerama +xml"
+REQUIRED_USE="X? ( truetype )
 	elibc_glibc? ( threads )
-	osmesa? ( opengl )
-	test? ( abi_x86_32 )" # osmesa-opengl #286560 # X-truetype #551124
+	osmesa? ( opengl )"
 
 RESTRICT="test"
 
@@ -46,7 +44,7 @@ COMMON_DEPEND="
 	jpeg? ( lib-media/libjpeg-turbo )
 	lcms? ( lib-media/lcms:2= )
 	ldap? ( net-nds/openldap:= )
-	mp3? ( >=app-media/mpg123-1.5.0 )
+	mp3? ( >=lib-media/mpg123-1.5.0 )
 	ncurses? ( >=lib-sys/ncurses-5.2:0= )
 	netapi? ( app-server/samba )
 	nls? ( sys-devel/gettext )
@@ -93,13 +91,14 @@ DEPEND="${COMMON_DEPEND}
 	X? ( x11/xorgproto )
 "
 
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+
 src_prepare() {
 	${WORKDIR}/wine-staging-${PV}/patches/patchinstall.sh DESTDIR="${S}" --all
 	default
-	multilib_copy_sources
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

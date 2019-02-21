@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils libtool git-r3 autotools
+inherit git-r3 autotools
 
 DESCRIPTION="Library for parsing, editing, and saving EXIF data"
 HOMEPAGE="https://github.com/libexif"
@@ -22,11 +22,12 @@ DEPEND="${RDEPEND}
 
 ECONF_SOURCE=${S}
 
+PATCHES=( "${FILESDIR}"/${PN}-0.6.13-pkgconfig.patch )
+
 src_prepare() {
 	eautoreconf
-	epatch "${FILESDIR}"/${PN}-0.6.13-pkgconfig.patch
+	default
 	sed -i -e '/FLAGS=/s:-g::' configure || die #390249
-	elibtoolize # For *-bsd
 }
 
 src_configure() {

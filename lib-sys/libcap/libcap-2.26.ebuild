@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib-minimal toolchain-funcs pam flag-o-matic
+inherit toolchain-funcs pam flag-o-matic
 
 DESCRIPTION="POSIX 1003.1e capabilities"
 HOMEPAGE="http://www.friedhoff.org/posixfilecaps.html"
@@ -26,12 +26,7 @@ PATCHES=(
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
-src_prepare() {
-	default
-	multilib_copy_sources
-}
-
-multilib_src_compile() {
+src_compile() {
 	tc-export AR CC RANLIB
 	local BUILD_CC
 	tc-export_build_env BUILD_CC
@@ -39,13 +34,13 @@ multilib_src_compile() {
 	default
 }
 
-multilib_src_install() {
+src_install() {
 	emake DESTDIR="${D}" install
 
 	use static-libs || rm "${ED}"/usr/$(get_libdir)/libcap.a
 
 	rm -rf "${ED}"/usr/$(get_libdir)/security
-	if multilib_is_native_abi && use pam; then
+	if use pam; then
 		dopammod pam_cap/pam_cap.so
 		dopamsecurity '' pam_cap/capability.conf
 	fi

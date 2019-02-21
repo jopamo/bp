@@ -3,7 +3,7 @@
 EAPI=6
 
 inherit autotools flag-o-matic linux-info xdg-utils \
-	multilib multilib-minimal pam user versionator \
+	pam user versionator \
 	systemd toolchain-funcs git-r3
 
 DESCRIPTION="The Common Unix Printing System"
@@ -27,11 +27,11 @@ CDEPEND="
 			sys-app/attr
 		)
 	)
-	dbus? ( >=sys-app/dbus-1.6.18-r1[${MULTILIB_USEDEP}] )
+	dbus? ( >=sys-app/dbus-1.6.18-r1 )
 	!lprng-compat? ( !lib-print/lprng )
 	pam? ( lib-sys/pam )
 	ssl? (
-		>=lib-net/gnutls-2.12.23-r6:0=[${MULTILIB_USEDEP}]
+		>=lib-net/gnutls-2.12.23-r6:0=
 	)
 	systemd? ( sys-app/systemd )
 	usb? ( lib-dev/libusb )
@@ -40,7 +40,7 @@ CDEPEND="
 "
 
 DEPEND="${CDEPEND}
-	>=dev-util/pkgconfig-0-r1[${MULTILIB_USEDEP}]
+	>=dev-util/pkgconfig-0-r1
 "
 
 RDEPEND="${CDEPEND}
@@ -53,10 +53,6 @@ REQUIRED_USE="
 "
 
 RESTRICT="test"
-
-MULTILIB_CHOST_TOOLS=(
-	/usr/bin/cups-config
-)
 
 pkg_setup() {
 	enewgroup lp
@@ -106,12 +102,9 @@ src_prepare() {
 
 	AT_M4DIR=config-scripts eaclocal
 	eautoconf
-
-	# custom Makefiles
-	multilib_copy_sources
 }
 
-multilib_src_configure() {
+src_configure() {
 	export DSOFLAGS="${LDFLAGS}"
 
 	einfo LINGUAS=\"${LINGUAS}\"
@@ -132,20 +125,20 @@ multilib_src_configure() {
 		--with-system-groups=lpadmin
 		--disable-gssapi
 		--with-xinetd="${EPREFIX}"/etc/xinetd.d
-		$(multilib_native_use_enable acl)
+		$(use_enable acl)
 		$(use_enable dbus)
 		$(use_enable debug)
 		$(use_enable debug debug-guards)
 		$(use_enable debug debug-printfs)
-		$(multilib_native_use_enable pam)
+		$(use_enable pam)
 		$(use_enable static-libs static)
 		$(use_enable threads)
 		$(use_enable ssl gnutls)
 		$(use_enable systemd)
-		$(multilib_native_use_enable usb libusb)
+		$(use_enable usb libusb)
 		--disable-avahi
 		--disable-dnssd
-		$(multilib_is_native_abi && echo --enable-libpaper || echo --disable-libpaper)
+		--enable-libpaper
 	)
 
 	if tc-is-static-only; then
@@ -156,8 +149,7 @@ multilib_src_configure() {
 
 	econf "${myeconfargs[@]}"
 
-	# install in /usr/libexec always, instead of using /usr/lib/cups, as that
-	# makes more sense when facing multilib support.
+	# install in /usr/libexec always, instead of using /usr/lib/cups
 	sed -i -e "s:SERVERBIN.*:SERVERBIN = \"\$\(BUILDROOT\)${EPREFIX}/usr/libexec/cups\":" Makedefs || die
 	sed -i -e "s:#define CUPS_SERVERBIN.*:#define CUPS_SERVERBIN \"${EPREFIX}/usr/libexec/cups\":" config.h || die
 	sed -i -e "s:cups_serverbin=.*:cups_serverbin=\"${EPREFIX}/usr/libexec/cups\":" cups-config || die
@@ -169,30 +161,11 @@ multilib_src_configure() {
 	sed -i -e "s:MENUDIR.*:MENUDIR = ${EPREFIX}/usr/share/applications:" Makedefs || die
 }
 
-multilib_src_compile() {
-	if multilib_is_native_abi; then
-		default
-	else
-		emake libs
-	fi
+src_install() {
+	emake BUILDROOT="${D}" install
 }
 
-multilib_src_test() {
-	multilib_is_native_abi && default
-}
-
-multilib_src_install() {
-	if multilib_is_native_abi; then
-		emake BUILDROOT="${D}" install
-	else
-		emake BUILDROOT="${D}" install-libs install-headers
-		dobin cups-config
-	fi
-}
-
-multilib_src_install_all() {
-	dodoc {CHANGES,CREDITS,README}.md
-
+src_install_all() {
 	# move the default config file to docs
 	dodoc "${ED}"/etc/cups/cupsd.conf.default
 	rm -f "${ED}"/etc/cups/cupsd.conf.default

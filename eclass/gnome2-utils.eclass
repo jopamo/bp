@@ -13,7 +13,6 @@
 #  * GConf schemas management
 #  * scrollkeeper (old Gnome help system) management
 
-[[ ${EAPI:-0} == [012345] ]] && inherit multilib
 inherit eutils xdg-utils
 
 case "${EAPI:-0}" in

@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit git-r3 multilib-minimal multilib autotools
+inherit git-r3 autotools
 
 DESCRIPTION="Image loading library for GTK+"
 HOMEPAGE="https://git.gnome.org/browse/gdk-pixbuf"
@@ -15,13 +15,13 @@ KEYWORDS="amd64 arm64"
 IUSE="+introspection debug +png +tiff +jpeg +jasper X docs man test +relocatable +native_windows_loaders"
 
 COMMON_DEPEND="
-	>=lib-dev/glib-2.48.0:2[${MULTILIB_USEDEP}]
-	png? ( >=lib-media/libpng-1.4:0=[${MULTILIB_USEDEP}] )
+	>=lib-dev/glib-2.48.0:2
+	png? ( >=lib-media/libpng-1.4:0= )
 	introspection? ( >=lib-dev/gobject-introspection-0.9.3:= )
-	jpeg? ( lib-media/libjpeg-turbo[${MULTILIB_USEDEP}] )
-	jasper? ( lib-media/jasper:=[${MULTILIB_USEDEP}] )
-	tiff? ( >=lib-media/tiff-3.9.2:0=[${MULTILIB_USEDEP}] )
-	X? ( x11-libs/libX11[${MULTILIB_USEDEP}] )
+	jpeg? ( lib-media/libjpeg-turbo )
+	jasper? ( lib-media/jasper:= )
+	tiff? ( >=lib-media/tiff-3.9.2:0= )
+	X? ( x11-libs/libX11 )
 "
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/gtk-doc-am-1.20
@@ -36,7 +36,7 @@ src_prepare() {
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -48,31 +48,27 @@ multilib_src_configure() {
 		$(use_with jpeg libjpeg)
 		$(use_with jasper libjasper)
 		$(use_with tiff libtiff)
-		$(multilib_native_use_enable introspection)
+		$(use_enable introspection)
 		$(use_with X x11)
 		--with-libpng
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_install() {
+src_install() {
 	# Parallel install fails when no gdk-pixbuf is already installed, bug #481372
 	MAKEOPTS="${MAKEOPTS} -j1" emake DESTDIR="${ED}" install
 }
 
 pkg_preinst() {
-	multilib_pkg_preinst() {
-		# Make sure loaders.cache belongs to gdk-pixbuf alone
-		local cache="usr/$(get_libdir)/${PN}-2.0/2.10.0/loaders.cache"
+	# Make sure loaders.cache belongs to gdk-pixbuf alone
+	local cache="usr/$(get_libdir)/${PN}-2.0/2.10.0/loaders.cache"
 
-		if [[ -e ${EROOT}${cache} ]]; then
-			cp "${EROOT}"${cache} "${ED}"/${cache} || die
-		else
-			touch "${ED}"/${cache} || die
-		fi
-	}
-
-	multilib_foreach_abi multilib_pkg_preinst
+	if [[ -e ${EROOT}${cache} ]]; then
+		cp "${EROOT}"${cache} "${ED}"/${cache} || die
+	else
+		touch "${ED}"/${cache} || die
+	fi
 }
 
 pkg_postinst() {

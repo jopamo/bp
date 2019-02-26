@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils flag-o-matic autotools multilib-minimal
+inherit eutils flag-o-matic autotools
 
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -21,27 +21,24 @@ IUSE="X aqua debug doc gles2 +glib opengl static-libs +svg utils valgrind xcb"
 RESTRICT="test"
 
 RDEPEND="
-	>=lib-media/fontconfig-2.10.92[${MULTILIB_USEDEP}]
-	>=lib-media/freetype-2.5.0.1:2[${MULTILIB_USEDEP}]
-	>=lib-media/libpng-1.6.10:0=[${MULTILIB_USEDEP}]
-	>=lib-sys/zlib-1.2.8-r1[${MULTILIB_USEDEP}]
-	>=x11-libs/pixman-0.32.4[${MULTILIB_USEDEP}]
-	>=lib-media/mesa-9.1.6[${MULTILIB_USEDEP}]
-	glib? ( >=lib-dev/glib-2.34.3:2[${MULTILIB_USEDEP}] )
-	opengl? ( >=lib-media/mesa-9.1.6[${MULTILIB_USEDEP}] )
-	utils? ( >=lib-dev/lzo-2.06-r1[${MULTILIB_USEDEP}] )
+	>=lib-media/fontconfig-2.10.92
+	>=lib-media/freetype-2.5.0.1:2
+	>=lib-media/libpng-1.6.10:0=
+	>=lib-sys/zlib-1.2.8-r1
+	>=x11-libs/pixman-0.32.4
+	>=lib-media/mesa-9.1.6
+	glib? ( >=lib-dev/glib-2.34.3:2 )
+	opengl? ( >=lib-media/mesa-9.1.6 )
+	utils? ( >=lib-dev/lzo-2.06-r1 )
 	X? (
-		>=x11-libs/libXrender-0.9.8[${MULTILIB_USEDEP}]
-		>=x11-libs/libXext-1.3.2[${MULTILIB_USEDEP}]
-		>=x11-libs/libX11-1.6.2[${MULTILIB_USEDEP}]
+		>=x11-libs/libXrender-0.9.8
+		>=x11-libs/libXext-1.3.2
+		>=x11-libs/libX11-1.6.2
 	)
 	xcb? (
-		>=x11-libs/libxcb-1.9.1[${MULTILIB_USEDEP}]
-	)
-	abi_x86_32? (
-		!<=app-misc/emul-linux-x86-gtklibs-20131008-r1
-		!app-misc/emul-linux-x86-gtklibs[-abi_x86_32(-)]
+		>=x11-libs/libxcb-1.9.1
 	)"
+
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	>=sys-devel/libtool-2
@@ -76,7 +73,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -112,6 +109,6 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	find "${ED}" -name "*.la" -delete || die
 }

@@ -4,7 +4,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit autotools python-single-r1 linux-info libtool versionator multilib-minimal
+inherit autotools python-single-r1 linux-info libtool versionator
 
 DESCRIPTION="Tool to setup encrypted devices with dm-crypt"
 HOMEPAGE="https://gitlab.com/cryptsetup/cryptsetup/blob/master/README.md"
@@ -63,7 +63,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	if use kernel ; then
 		ewarn "Note that kernel backend is very slow for this type of operation"
 		ewarn "and is provided mainly for embedded systems wanting to avoid"
@@ -97,7 +97,7 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_test() {
+src_test() {
 	if [[ ! -e /dev/mapper/control ]] ; then
 		ewarn "No /dev/mapper/control found -- skipping tests"
 		return 0
@@ -111,7 +111,7 @@ multilib_src_test() {
 	default
 }
 
-multilib_src_install() {
+src_install() {
 	default
 
 	if use static ; then

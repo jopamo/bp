@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools git-r3 multilib-minimal xdg-utils
+inherit autotools git-r3 xdg-utils
 
 DESCRIPTION="A library for file management"
 HOMEPAGE="https://github.com/lxde/libfm"
@@ -30,10 +30,10 @@ DEPEND="${COMMON_DEPEND}
 src_prepare() {
 	default
 	eautoreconf
-	multilib_copy_sources
+	copy_sources
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -55,7 +55,7 @@ multilib_src_configure() {
 	econf ${myconf[@]}
 }
 
-multilib_src_install() {
+src_install() {
 	default
 	rm ${ED}/usr/include/libfm/{fm-extra.h,fm-version.h,fm-xml-file.h}*
 	rm ${ED}/usr/lib64/libfm-extra*

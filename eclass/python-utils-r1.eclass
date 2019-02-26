@@ -32,7 +32,7 @@ fi
 
 if [[ ! ${_PYTHON_UTILS_R1} ]]; then
 
-[[ ${EAPI:-0} == [012345] ]] && inherit eutils multilib
+[[ ${EAPI:-0} == [012345] ]] && inherit eutils
 inherit toolchain-funcs
 
 # @ECLASS-VARIABLE: _PYTHON_ALL_IMPLS

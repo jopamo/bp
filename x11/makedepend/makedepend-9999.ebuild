@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib-minimal git-r3 autotools
+inherit git-r3 autotools
 
 DESCRIPTION="create dependencies in makefiles"
 KEYWORDS="amd64 arm64"
@@ -17,7 +17,7 @@ src_prepare() {
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

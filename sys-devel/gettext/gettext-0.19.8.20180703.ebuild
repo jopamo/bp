@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-inherit multilib-minimal libtool toolchain-funcs flag-o-matic
+inherit libtool toolchain-funcs flag-o-matic
 
 BASEVERSION="0.19.8.1"
 MY_P="gettext-${BASEVERSION}"
@@ -25,11 +25,6 @@ DEPEND="acl? ( sys-app/acl )
 
 RDEPEND="lib-dev/expat"
 
-MULTILIB_WRAPPED_HEADERS=(
-	# only installed for native ABI
-	/usr/include/gettext-po.h
-)
-
 filter-flags -flto
 
 src_prepare() {
@@ -38,7 +33,7 @@ src_prepare() {
 	elibtoolize "${WORKDIR}"
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -66,34 +61,28 @@ multilib_src_configure() {
 	)
 
 	local ECONF_SOURCE=${S}
-	if ! multilib_is_native_abi ; then
-		# for non-native ABIs, we build runtime only
-		ECONF_SOURCE+=/gettext-runtime
-	fi
 
 	econf "${myconf[@]}"
 }
 
-multilib_src_compile() {
+src_compile() {
 	default
 	cd gettext-runtime
 	emake -C intl
 	cd ../
 }
 
-multilib_src_install() {
+src_install() {
 	default
 
-	if multilib_is_native_abi ; then
-		dosym msgfmt /usr/bin/gmsgfmt #43435
-		dobin gettext-tools/misc/gettextize
-	fi
+	dosym msgfmt /usr/bin/gmsgfmt #43435
+	dobin gettext-tools/misc/gettextize
 
 	cp -r "${ED}"/{lib,lib64,bin,sbin} "${ED}"/usr/
 	rm -rf "${ED}"/{lib,lib64,bin,sbin}
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	rm -f "${ED}"/usr/share/locale/locale.alias "${ED}"/usr/lib/charset.alias "${ED}"/usr/include/libintl.h "${ED}"/usr/share/doc/${PF}/*.html
 	rm -rf "${ED}"/usr/share/doc/${PF}/{csharpdoc,examples,javadoc2,javadoc1}
 }

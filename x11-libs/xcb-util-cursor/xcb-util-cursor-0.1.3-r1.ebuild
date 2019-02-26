@@ -2,8 +2,6 @@
 
 EAPI=6
 
-inherit multilib-minimal 
-
 SRC_URI="https://www.x.org/archive/individual/xcb/${P}.tar.bz2"
 
 DESCRIPTION="X C-language Bindings sample implementations"
@@ -13,17 +11,17 @@ SLOT=0
 KEYWORDS="amd64 arm64"
 IUSE="test doc"
 
-RDEPEND=">=x11-libs/libxcb-1.9.1[${MULTILIB_USEDEP}]
-	>=x11-libs/xcb-util-image-0.3.9-r1[${MULTILIB_USEDEP}]
-	>=x11-libs/xcb-util-renderutil-0.3.9[${MULTILIB_USEDEP}]
-	>=x11/xcb-proto-1.8-r3:=[${MULTILIB_USEDEP}]
+RDEPEND=">=x11-libs/libxcb-1.9.1
+	>=x11-libs/xcb-util-image-0.3.9-r1
+	>=x11-libs/xcb-util-renderutil-0.3.9
+	>=x11/xcb-proto-1.8-r3:=
 	x11/xorgproto"
-	
+
 DEPEND="${RDEPEND}
 	>=dev-util/gperf-3.0.1
-	test? ( >=lib-dev/check-0.9.11[${MULTILIB_USEDEP}] )"
+	test? ( >=lib-dev/check-0.9.11 )"
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

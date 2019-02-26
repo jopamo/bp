@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib-minimal git-r3 autotools
+inherit git-r3 autotools
 
 DESCRIPTION="X.Org Xmu library"
 EGIT_REPO_URI=https://github.com/freedesktop/xorg-${PN}.git
@@ -22,7 +22,7 @@ src_prepare() {
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

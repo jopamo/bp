@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
 DESCRIPTION="Utility to detect other OSs on a set of drives"
 HOMEPAGE="https://packages.debian.org/source/sid/os-prober"
@@ -8,9 +8,7 @@ SRC_URI="http://http.debian.net/debian/pool/main/o/${PN}/${PN}_${PV}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="amd64 x86"
-
-QA_MULTILIB_PATHS="usr/lib/os-prober/.*"
+KEYWORDS="amd64"
 
 src_install() {
 	dobin os-prober linux-boot-prober
@@ -41,7 +39,7 @@ src_install() {
 		fi
 	done
 
-	if use amd64 || use x86; then
+	if use amd64 ; then
 		exeinto /usr/lib/os-probes/mounted
 		doexe os-probes/mounted/powerpc/20macosx
 	fi

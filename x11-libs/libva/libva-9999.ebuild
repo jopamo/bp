@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools git-r3 multilib-minimal versionator
+inherit autotools git-r3 versionator
 
 DESCRIPTION="Video Acceleration (VA) API for Linux"
 HOMEPAGE="https://01.org/linuxmedia/vaapi"
@@ -51,7 +51,7 @@ src_prepare() {
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

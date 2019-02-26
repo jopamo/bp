@@ -26,7 +26,7 @@ src_prepare() {
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	use static && append-ldflags -static
 	use test || export ac_cv_path_PERL=true
 
@@ -44,7 +44,7 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_install() {
+src_install() {
 	default
 
 	mv "${ED}"/usr/bin/yacc{,.bison} || die

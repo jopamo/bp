@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit multilib-minimal toolchain-funcs git-r3 autotools
+inherit toolchain-funcs git-r3 autotools
 
 DESCRIPTION="X.Org X11 library"
 
@@ -22,7 +22,7 @@ src_prepare() {
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -38,7 +38,7 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-multilib_src_compile() {
+src_compile() {
 	if tc-is-cross-compiler; then
 		# Make sure the build-time tool "makekeys" uses build settings.
 		tc-export_build_env BUILD_CC

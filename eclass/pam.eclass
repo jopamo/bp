@@ -13,7 +13,7 @@
 if [[ -z ${_PAM_ECLASS} ]]; then
 _PAM_ECLASS=1
 
-inherit flag-o-matic multilib
+inherit flag-o-matic
 
 # @FUNCTION: dopamd
 # @USAGE: <file> [more files]

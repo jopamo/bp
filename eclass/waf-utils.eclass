@@ -14,7 +14,7 @@
 # Its main features are support of common portage default settings.
 
 [[ ${EAPI} == [45] ]] && inherit eutils
-inherit multilib toolchain-funcs multiprocessing
+inherit toolchain-funcs multiprocessing
 
 case ${EAPI:-0} in
 	4|5|6) EXPORT_FUNCTIONS src_configure src_compile src_install ;;

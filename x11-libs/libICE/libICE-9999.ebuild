@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools git-r3 multilib-minimal
+inherit autotools git-r3
 
 DESCRIPTION="X.Org Inter-Client Exchange library"
 EGIT_REPO_URI="https://github.com/freedesktop/xorg-libICE.git"
@@ -20,7 +20,7 @@ src_prepare() {
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

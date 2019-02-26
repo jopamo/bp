@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib-minimal git-r3 meson
+inherit git-r3 meson
 
 DESCRIPTION="X.Org libdrm library"
 HOMEPAGE="https://dri.freedesktop.org/"
@@ -19,9 +19,9 @@ done
 IUSE="${IUSE_VIDEO_CARDS} libkms valgrind static-libs"
 RESTRICT="test" # see bug #236845
 
-RDEPEND=">=lib-dev/libpthread-stubs-0.3-r1:=[${MULTILIB_USEDEP}]
-	video_cards_intel? ( >=x11-libs/libpciaccess-0.13.1-r1:=[${MULTILIB_USEDEP}] )
-	abi_x86_32? ( !app-misc/emul-linux-x86-opengl[-abi_x86_32(-)] )"
+RDEPEND=">=lib-dev/libpthread-stubs-0.3-r1:=
+	video_cards_intel? ( >=x11-libs/libpciaccess-0.13.1-r1:= )"
+
 DEPEND="${RDEPEND}
 	x11/util-macros
 	valgrind? ( dev-util/valgrind )"

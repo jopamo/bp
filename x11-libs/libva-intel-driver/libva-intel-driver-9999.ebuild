@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools multilib-minimal git-r3
+inherit autotools git-r3
 
 DESCRIPTION="HW video decode support for Intel integrated graphics"
 HOMEPAGE="https://github.com/01org/intel-vaapi-driver"
@@ -28,7 +28,7 @@ src_prepare() {
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

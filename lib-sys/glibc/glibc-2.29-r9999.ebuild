@@ -124,12 +124,6 @@ pkg_pretend() {
 		die "Please fix your CHOST"
 	fi
 
-	if [[ -e /proc/xen ]] && [[ $(tc-arch) == "x86" ]] && ! is-flag -mno-tls-direct-seg-refs ; then
-		ewarn "You are using Xen but don't have -mno-tls-direct-seg-refs in your CFLAGS."
-		ewarn "This will result in a 50% performance penalty when running with a 32bit"
-		ewarn "hypervisor, which is probably not what you want."
-	fi
-
 	# Make sure host system is up to date #394453
 	if has_version '<lib-sys/glibc-2.13' && \
 	   [[ -n $(scanelf -qys__guard -F'#s%F' "${EROOT}"/lib*/l*-*.so) ]]
@@ -299,7 +293,7 @@ glibc_headers_configure() {
 	# the best here ...
 	local v vars=(
 		ac_cv_header_cpuid_h=yes
-		libc_cv_{386,390,alpha,arm,hppa,ia64,mips,{powerpc,sparc}{,32,64},sh,x86_64}_tls=yes
+		libc_cv_x86_64_tls=yes
 		libc_cv_asm_cfi_directives=yes
 		libc_cv_broken_visibility_attribute=no
 		libc_cv_c_cleanup=yes

@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools cuda flag-o-matic versionator multilib-minimal
+inherit autotools cuda flag-o-matic versionator
 
 DESCRIPTION="displays the hardware topology in convenient formats"
 HOMEPAGE="http://www.open-mpi.org/projects/hwloc/"
@@ -23,20 +23,20 @@ KEYWORDS="amd64 arm64"
 IUSE="cairo cuda debug gl +numa +pci plugins svg static-libs xml X"
 
 RDEPEND="
-	>=lib-sys/ncurses-5.9-r3:0[${MULTILIB_USEDEP}]
-	cairo? ( >=x11-libs/cairo-1.12.14-r4[X?,svg?,${MULTILIB_USEDEP}] )
+	>=lib-sys/ncurses-5.9-r3:0
+	cairo? ( >=x11-libs/cairo-1.12.14-r4[X?,svg?] )
 	cuda? ( >=nvidia/nvidia-cuda-toolkit-6.5.19-r1 )
 	gl? ( nvidia/nvidia-drivers[static-libs,tools]  )
 	pci? (
-		>=sys-app/pciutils-3.3.0-r2[${MULTILIB_USEDEP}]
-		>=x11-libs/libpciaccess-0.13.1-r1[${MULTILIB_USEDEP}]
+		>=sys-app/pciutils-3.3.0-r2
+		>=x11-libs/libpciaccess-0.13.1-r1
 	)
-	plugins? ( lib-dev/libltdl:0[${MULTILIB_USEDEP}] )
-	numa? ( >=sys-app/numactl-2.0.11-r1[${MULTILIB_USEDEP}] )
-	xml? ( >=lib-dev/libxml2-2.9.1-r4[${MULTILIB_USEDEP}] )"
+	plugins? ( lib-dev/libltdl:0 )
+	numa? ( >=sys-app/numactl-2.0.11-r1 )
+	xml? ( >=lib-dev/libxml2-2.9.1-r4 )"
 
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0-r1[${MULTILIB_USEDEP}]"
+	>=dev-util/pkgconfig-0-r1"
 
 src_prepare() {
 	default
@@ -47,7 +47,8 @@ src_prepare() {
 		append-cppflags -I"${EPREFIX}"/opt/cuda/include
 	fi
 }
-multilib_src_configure() {
+
+src_configure() {
 	if use cuda ; then
 		append-ldflags -L"${EPREFIX}"/opt/cuda/$(get_libdir)
 	fi
@@ -61,9 +62,9 @@ multilib_src_configure() {
 		--localstatedir="${EPREFIX}"/var
 		$(use_enable static-libs static)
 		$(use_enable cairo)
-		$(multilib_native_use_enable cuda)
+		$(use_enable cuda)
 		$(use_enable debug)
-		$(multilib_native_use_enable gl)
+		$(use_enable gl)
 		$(use_enable pci)
 		$(use_enable plugins)
 		$(use_enable xml libxml2)

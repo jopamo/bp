@@ -2,7 +2,7 @@
 
 EAPI="5"
 
-inherit eutils multilib toolchain-funcs flag-o-matic multilib-minimal
+inherit eutils toolchain-funcs flag-o-matic
 
 # Official patches
 # See ftp://ftp.cwru.edu/pub/bash/readline-7.0-patches/
@@ -38,7 +38,7 @@ SLOT="0/7"  # subslot matches SONAME major
 KEYWORDS="amd64 arm64"
 IUSE="static-libs utils"
 
-RDEPEND=">=lib-sys/ncurses-5.9-r3:0=[static-libs?,${MULTILIB_USEDEP}]"
+RDEPEND=">=lib-sys/ncurses-5.9-r3:0=[static-libs?]"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 
@@ -96,10 +96,10 @@ src_configure() {
 	# so we can re-use the config cache file between the two.
 	append-ldflags -L.
 
-	multilib-minimal_src_configure
+	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	ECONF_SOURCE=${S} \
 	econf \
 		--cache-file="${BUILD_DIR}"/config.cache \
@@ -107,7 +107,7 @@ multilib_src_configure() {
 		--with-curses \
 		$(use_enable static-libs static)
 
-	if use utils && multilib_is_native_abi && ! tc-is-cross-compiler ; then
+	if use utils ; then
 		# code is full of AC_TRY_RUN()
 		mkdir -p examples/rlfe || die
 		cd examples/rlfe || die
@@ -116,10 +116,10 @@ multilib_src_configure() {
 	fi
 }
 
-multilib_src_compile() {
+src_compile() {
 	emake
 
-	if use utils && multilib_is_native_abi && ! tc-is-cross-compiler ; then
+	if use utils ; then
 		# code is full of AC_TRY_RUN()
 		cd examples/rlfe || die
 		local l
@@ -129,32 +129,4 @@ multilib_src_compile() {
 		done
 		emake
 	fi
-}
-
-multilib_src_install() {
-	default
-
-	if multilib_is_native_abi ; then
-
-		if use utils && ! tc-is-cross-compiler; then
-			dobin examples/rlfe/rlfe
-		fi
-	fi
-}
-
-multilib_src_install_all() {
-	einstalldocs
-	dodoc USAGE
-	dohtml -r doc/.
-	docinto ps
-	dodoc doc/*.ps
-}
-pkg_preinst() {
-	# bug #29865
-	# Reappeared in #595324 with paludis so keeping this for now...
-	preserve_old_lib /$(get_libdir)/lib{history,readline}.so.{4,5,6}
-}
-
-pkg_postinst() {
-	preserve_old_lib_notify /$(get_libdir)/lib{history,readline}.so.{4,5,6}
 }

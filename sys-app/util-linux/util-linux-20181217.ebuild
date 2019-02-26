@@ -5,7 +5,7 @@ EAPI=6
 PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit toolchain-funcs libtool flag-o-matic  \
-	pam python-single-r1 multilib-minimal systemd autotools
+	pam python-single-r1 systemd autotools
 
 if [[ ${PV} == 9999 ]] ; then
 	inherit git-r3
@@ -30,7 +30,7 @@ RDEPEND="caps? ( lib-sys/libcap-ng )
 	pam? ( lib-sys/pam )
 	python? ( ${PYTHON_DEPS} )
 	readline? ( lib-sys/readline:0= )
-	selinux? ( >=lib-sys/libselinux-2.2.2-r4[${MULTILIB_USEDEP}] )
+	selinux? ( >=lib-sys/libselinux-2.2.2-r4 )
 	!build? ( systemd? ( sys-app/systemd ) )
 	udev? ( sys-app/systemd:= )"
 
@@ -79,14 +79,14 @@ lfs_fallocate_test() {
 	rm -f "${T}"/fallocate.${ABI}.c
 }
 
-multilib_src_configure() {
+src_configure() {
 	lfs_fallocate_test
 	# The scanf test in a run-time test which fails while cross-compiling.
 	# Blindly assume a POSIX setup since we require libmount, and libmount
 	# itself fails when the scanf test fails. #531856
 	tc-is-cross-compiler && export scanf_cv_alloc_modifier=ms
-	export ac_cv_header_security_pam_misc_h=$(multilib_native_usex pam) #485486
-	export ac_cv_header_security_pam_appl_h=$(multilib_native_usex pam) #545042
+	export ac_cv_header_security_pam_misc_h=$(usex pam) #485486
+	export ac_cv_header_security_pam_appl_h=$(usex pam) #545042
 
 	local myeconfargs=(
 		--bindir="${EPREFIX}"/usr/bin
@@ -108,22 +108,22 @@ multilib_src_configure() {
 		--enable-rename
 		--enable-rfkill
 		--enable-schedutils
-		--with-systemdsystemunitdir=$(multilib_native_usex systemd "$(systemd_get_systemunitdir)" "no")
-		$(multilib_native_use_enable caps setpriv)
-		$(multilib_native_use_enable cramfs)
-		$(multilib_native_use_enable fdformat)
-		$(multilib_native_use_enable nls)
-		$(multilib_native_use_enable suid makeinstall-chown)
-		$(multilib_native_use_enable suid makeinstall-setuid)
-		$(multilib_native_use_enable tty-helpers mesg)
-		$(multilib_native_use_enable tty-helpers wall)
-		$(multilib_native_use_enable tty-helpers write)
-		$(multilib_native_use_with python)
-		$(multilib_native_use_with readline)
-		$(multilib_native_use_with systemd)
-		$(multilib_native_use_with udev)
-		$(multilib_native_usex ncurses "$(use_with unicode ncursesw)" '--without-ncursesw')
-		$(multilib_native_usex ncurses "$(use_with !unicode ncurses)" '--without-ncurses')
+		--with-systemdsystemunitdir=$(usex systemd "$(systemd_get_systemunitdir)" "no")
+		$(use_enable caps setpriv)
+		$(use_enable cramfs)
+		$(use_enable fdformat)
+		$(use_enable nls)
+		$(use_enable suid makeinstall-chown)
+		$(use_enable suid makeinstall-setuid)
+		$(use_enable tty-helpers mesg)
+		$(use_enable tty-helpers wall)
+		$(use_enable tty-helpers write)
+		$(use_with python)
+		$(use_with readline)
+		$(use_with systemd)
+		$(use_with udev)
+		$(usex ncurses "$(use_with unicode ncursesw)" '--without-ncursesw')
+		$(usex ncurses "$(use_with !unicode ncurses)" '--without-ncurses')
 		$(tc-has-tls || echo --disable-tls)
 		$(use_enable unicode widechar)
 		$(use_enable kill)
@@ -134,36 +134,17 @@ multilib_src_configure() {
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }
 
-multilib_src_compile() {
-	if multilib_is_native_abi; then
-		default
-	else
-		# build libraries only
-		emake -f Makefile -f - mylibs \
-			<<< 'mylibs: $(usrlib_exec_LTLIBRARIES) $(pkgconfig_DATA)'
-	fi
+src_test() {
+	emake check
 }
 
-multilib_src_test() {
-	multilib_is_native_abi && emake check
+src_install() {
+	default
+
+	use python && python_optimize
 }
 
-multilib_src_install() {
-	if multilib_is_native_abi; then
-		default
-	else
-		emake DESTDIR="${D}" install-usrlib_execLTLIBRARIES \
-			install-pkgconfigDATA install-uuidincHEADERS \
-			install-nodist_blkidincHEADERS install-nodist_mountincHEADERS \
-			install-nodist_smartcolsincHEADERS install-nodist_fdiskincHEADERS
-	fi
-
-	if multilib_is_native_abi; then
-		use python && python_optimize
-	fi
-}
-
-multilib_src_install_all() {
+src_install_all() {
 	find "${ED}" -name "*.la" -delete || die
 
 	if use pam; then

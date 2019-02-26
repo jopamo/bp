@@ -4,7 +4,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit git-r3 autotools linux-info flag-o-matic python-any-r1 systemd virtualx user multilib-minimal
+inherit git-r3 autotools linux-info flag-o-matic python-any-r1 systemd virtualx user
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="https://dbus.freedesktop.org/"
@@ -68,7 +68,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local docconf myconf
 
 	# libaudit is *only* used in DBus wrt SELinux support, so disable it, if
@@ -99,41 +99,14 @@ multilib_src_configure() {
 		--with-systemdsystemunitdir="$(systemd_get_systemunitdir)"
 		--with-dbus-user=messagebus
 		$(use_with X x)
+		--disable-xml-docs
+		--disable-doxygen-docs
 	)
-
-	if [[ ${CHOST} == *-darwin* ]]; then
-		myconf+=(
-			--enable-launchd
-			--with-launchd-agent-dir="${EPREFIX}"/Library/LaunchAgents
-		)
-	fi
-
-	if multilib_is_native_abi; then
-		docconf=(
-			--enable-xml-docs
-			$(use_enable doc doxygen-docs)
-		)
-	else
-		docconf=(
-			--disable-xml-docs
-			--disable-doxygen-docs
-		)
-		myconf+=(
-			--disable-selinux
-			--disable-libaudit
-			--disable-systemd
-			--without-x
-
-			# expat is used for the daemon only
-			# fake the check for multilib library build
-			ac_cv_lib_expat_XML_ParserCreate_MM=yes
-		)
-	fi
 
 	einfo "Running configure in ${BUILD_DIR}"
 	ECONF_SOURCE="${S}" econf "${myconf[@]}" "${docconf[@]}"
 
-	if multilib_is_native_abi && use test; then
+	if use test; then
 		mkdir "${TBD}" || die
 		cd "${TBD}" || die
 		einfo "Running configure in ${TBD}"
@@ -145,21 +118,17 @@ multilib_src_configure() {
 	fi
 }
 
-multilib_src_compile() {
-	if multilib_is_native_abi; then
-		# after the compile, it uses a selinuxfs interface to
-		# check if the SELinux policy has the right support
-		use selinux && addwrite /selinux/access
+src_compile() {
+	# after the compile, it uses a selinuxfs interface to
+	# check if the SELinux policy has the right support
+	use selinux && addwrite /selinux/access
 
-		einfo "Running make in ${BUILD_DIR}"
-		emake
+	einfo "Running make in ${BUILD_DIR}"
+	emake
 
-		if use test; then
-			einfo "Running make in ${TBD}"
-			emake -C "${TBD}"
-		fi
-	else
-		emake -C dbus libdbus-1.la
+	if use test; then
+		einfo "Running make in ${TBD}"
+		emake -C "${TBD}"
 	fi
 }
 
@@ -167,18 +136,11 @@ src_test() {
 	DBUS_VERBOSE=1 virtx emake -j1 -C "${TBD}" check
 }
 
-multilib_src_install() {
-	if multilib_is_native_abi; then
-		emake DESTDIR="${D}" install
-	else
-		emake DESTDIR="${D}" install-pkgconfigDATA
-		emake DESTDIR="${D}" -C dbus \
-			install-libLTLIBRARIES install-dbusincludeHEADERS \
-			install-nodist_dbusarchincludeHEADERS
-	fi
+src_install() {
+	emake DESTDIR="${D}" install
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	if use X; then
 		# dbus X session script (#77504)
 		# turns out to only work for GDM (and startx). has been merged into

@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit libtool toolchain-funcs multilib-minimal
+inherit libtool toolchain-funcs
 
 DESCRIPTION="Extended attributes tools"
 HOMEPAGE="https://savannah.nongnu.org/projects/attr"
@@ -20,7 +20,7 @@ src_prepare() {
 	elibtoolize
 }
 
-multilib_src_configure() {
+src_configure() {
 	unset PLATFORM
 	export OPTIMIZER=${CFLAGS}
 	export DEBUG=-DNDEBUG
@@ -42,7 +42,7 @@ multilib_src_configure() {
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }
 
-multilib_src_install() {
+src_install() {
 	emake DESTDIR="${D}" install
 	insinto /usr/include/attr
 	newins "${FILESDIR}"/xattr-shim.h xattr.h

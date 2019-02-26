@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit toolchain-funcs flag-o-matic multilib
+inherit toolchain-funcs flag-o-matic
 
 if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI="git://git.kernel.org/pub/scm/linux/kernel/git/shemminger/iproute2.git"
@@ -19,15 +19,13 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="atm elf ipv6 minimal selinux"
 
-# We could make libmnl optional, but it's tiny, so eh
 RDEPEND="
-	!app-net/arpd
 	!minimal? ( lib-net/libmnl )
 	elf? ( virtual/libelf )
 	atm? ( net-dialup/linux-atm )
 	selinux? ( lib-sys/libselinux )
 "
-# We require newer stable-sources for ipset support #549948 and some defines #553876
+
 DEPEND="
 	${RDEPEND}
 	app-compression/xz-utils

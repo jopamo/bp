@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
-inherit multilib-minimal autotools
+inherit autotools
 
 if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/file/file.git"
@@ -24,13 +24,14 @@ IUSE="static-libs zlib"
 
 DEPEND="
 	lib-sys/libseccomp
-	zlib? ( >=lib-sys/zlib-1.2.8-r1[${MULTILIB_USEDEP}] )"
+	zlib? ( >=lib-sys/zlib-1.2.8-r1 )"
 
 src_prepare() {
 	default
 	eautoreconf
 }
-multilib_src_configure() {
+
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

@@ -9,7 +9,7 @@
 if [[ -z ${_TOOLCHAIN_GLIBC_ECLASS} ]]; then
 
 inherit eutils versionator toolchain-funcs flag-o-matic gnuconfig \
-	multilib systemd unpacker multiprocessing prefix
+	systemd unpacker multiprocessing prefix
 
 case ${EAPI:-0} in
 	0|1|2|34|5)  die "Unsupported EAPI=${EAPI}";;
@@ -62,23 +62,6 @@ setup_target_flags() {
 	just_headers && return 0
 
 	case $(tc-arch) in
-		x86)
-			# -march needed for #185404 #199334
-			# TODO: When creating the first glibc cross-compile, this test will
-			# always fail as it does a full link which in turn requires glibc.
-			# Probably also applies when changing multilib profile settings (e.g.
-			# enabling x86 when the profile was amd64-only previously).
-			# We could change main to _start and pass -nostdlib here so that we
-			# only test the gcc code compilation.  Or we could do a compile and
-			# then look for the symbol via scanelf.
-			if ! glibc_compile_test "" 'void f(int i, void *p) {if (__sync_fetch_and_add(&i, 1)) f(i, p);}\nint main(){return 0;}\n' 2>/dev/null ; then
-				local t=${CTARGET_OPT:-${CTARGET}}
-				t=${t%%-*}
-				filter-flags '-march=*'
-				export CFLAGS="-march=${t} ${CFLAGS}"
-				einfo "Auto adding -march=${t} to CFLAGS #185404"
-			fi
-		;;
 		amd64)
 			# -march needed for #185404 #199334
 			# Note: This test only matters when the x86 ABI is enabled, so we could
@@ -123,10 +106,6 @@ setup_flags() {
 	filter-flags -frecord-gcc-switches
 
 	unset CBUILD_OPT CTARGET_OPT
-	if use multilib ; then
-		CTARGET_OPT=$(get_abi_CTARGET)
-		[[ -z ${CTARGET_OPT} ]] && CTARGET_OPT=$(get_abi_CHOST)
-	fi
 
 	setup_target_flags
 
@@ -190,22 +169,6 @@ setup_env() {
 	unset LD_RUN_PATH
 	unset LD_ASSUME_KERNEL
 
-	if is_crosscompile || tc-is-cross-compiler ; then
-		multilib_env ${CTARGET_OPT:-${CTARGET}}
-
-		if ! use multilib ; then
-			MULTILIB_ABIS=${DEFAULT_ABI}
-		else
-			MULTILIB_ABIS=${MULTILIB_ABIS:-${DEFAULT_ABI}}
-		fi
-
-		# If the user has CFLAGS_<CTARGET> in their make.conf, use that,
-		# and fall back on CFLAGS.
-		local VAR=CFLAGS_${CTARGET//[-.]/_}
-		CFLAGS=${!VAR-${CFLAGS}}
-		einfo " $(printf '%15s' 'Manual CFLAGS:')   ${CFLAGS}"
-	fi
-
 	setup_flags
 
 	export ABI=${ABI:-${DEFAULT_ABI:-default}}
@@ -233,11 +196,7 @@ foreach_abi() {
 
 	local ret=0
 	local abilist=""
-	if use multilib ; then
-		abilist=$(get_install_abis)
-	else
-		abilist=${DEFAULT_ABI}
-	fi
+	abilist=${DEFAULT_ABI}
 	local -x ABI
 	for ABI in ${abilist:-default} ; do
 		setup_env

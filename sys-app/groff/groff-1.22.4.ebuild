@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils toolchain-funcs multilib-minimal multilib flag-o-matic
+inherit eutils toolchain-funcs flag-o-matic
 
 DESCRIPTION="Text formatter used for man pages"
 HOMEPAGE="https://www.gnu.org/software/groff/groff.html"
@@ -37,10 +37,9 @@ src_prepare() {
 
 	sed -i -e 's/^[ \t]\+g=g$/g=/' configure || die
 	default
-	multilib_copy_sources
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -53,11 +52,11 @@ multilib_src_configure() {
 	econf ${myconf[@]}
 }
 
-multilib_src_compile() {
+src_compile() {
 	emake -j1
 }
 
-multilib_src_install() {
+src_install() {
 	default
 
 	dosym eqn /usr/bin/geqn

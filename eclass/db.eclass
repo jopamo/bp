@@ -5,7 +5,7 @@
 # base-system@gentoo.org
 # @BLURB: Internal eclass used by lib-sys/db ebuilds
 
-inherit eutils multilib multiprocessing
+inherit eutils multiprocessing
 
 IUSE="doc test examples"
 

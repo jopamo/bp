@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit git-r3 cmake-multilib
+inherit git-r3 cmake-utils
 
 DESCRIPTION="Framework providing assorted high-level user interface components"
 LICENSE="LGPL-2+"

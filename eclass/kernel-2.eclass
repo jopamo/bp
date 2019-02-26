@@ -191,7 +191,7 @@
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit eutils toolchain-funcs versionator multilib python-any-r1
+inherit eutils toolchain-funcs versionator python-any-r1
 case ${EAPI:-0} in
 	0|1)
 		EXPORT_FUNCTIONS src_{unpack,compile,install,test} \

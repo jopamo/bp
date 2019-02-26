@@ -4,7 +4,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit cmake-multilib python-any-r1 git-r3
+inherit cmake-utils python-any-r1 git-r3
 
 DESCRIPTION="Extra modules and scripts for CMake"
 HOMEPAGE="https://cgit.kde.org/extra-cmake-modules.git"
@@ -45,5 +45,5 @@ src_configure() {
 	)
 	use test && mycmakeargs+=( -DCMAKE_DISABLE_FIND_PACKAGE_PythonModuleGeneration=ON )
 
-	cmake-multilib_src_configure
+	cmake-utils_src_configure
 }

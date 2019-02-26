@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib-minimal autotools
+inherit autotools
 
 DESCRIPTION="property displayer for X"
 SRC_URI="https://www.x.org/archive//individual/app/${P}.tar.gz"
@@ -19,7 +19,7 @@ src_prepare() {
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

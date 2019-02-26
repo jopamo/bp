@@ -1,9 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
+
 PYTHON_COMPAT=( python3_7 )
 
-inherit meson multilib-minimal flag-o-matic python-single-r1 git-r3
+inherit meson flag-o-matic python-single-r1 git-r3
 
 DESCRIPTION="An interface for filesystems implemented in userspace"
 HOMEPAGE="https://github.com/libfuse/libfuse"
@@ -31,23 +32,23 @@ src_prepare() {
 	cat /dev/null > example/meson.build || die
 }
 
-multilib_src_configure() {
+src_configure() {
 	meson_src_configure
 }
 
-multilib_src_compile() {
+src_compile() {
 	eninja
 }
 
-multilib_src_test() {
+src_test() {
 	python3 -m pytest test || die
 }
 
-multilib_src_install() {
+src_install() {
 	DESTDIR="${D}" eninja install
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	# manually install man pages
 	rm -r "${ED%/}"/usr/share/man || die
 	doman doc/fusermount3.1

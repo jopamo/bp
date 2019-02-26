@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit flag-o-matic multilib-minimal toolchain-funcs autotools git-r3
+inherit flag-o-matic toolchain-funcs autotools git-r3
 
 DESCRIPTION="Standard EXT2/EXT3/EXT4 filesystem utilities"
 HOMEPAGE="http://ext4.wiki.kernel.org/"
@@ -26,7 +26,7 @@ src_prepare() {
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	append-cflags -fno-strict-aliasing
 	append-cppflags -D_GNU_SOURCE
 
@@ -50,7 +50,7 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf "${myeconfargs[@]}"
 }
 
-multilib_src_install() {
+src_install() {
 	emake \
 		STRIP=: \
 		root_libdir="${EPREFIX}/usr/$(get_libdir)" \

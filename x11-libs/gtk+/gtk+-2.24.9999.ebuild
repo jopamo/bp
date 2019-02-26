@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools eutils flag-o-matic multilib multilib-minimal virtualx git-r3
+inherit autotools eutils flag-o-matic virtualx git-r3
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
@@ -24,28 +24,28 @@ KEYWORDS="amd64 arm64"
 RESTRICT="test"
 
 COMMON_DEPEND="
-	>=gui-lib/atk-2.10.0[${MULTILIB_USEDEP}]
-	>=lib-dev/glib-2.34.3:2[${MULTILIB_USEDEP}]
-	>=lib-media/fontconfig-2.10.92[${MULTILIB_USEDEP}]
-	>=x11-libs/cairo-1.12.14-r4:=[aqua?,svg,${MULTILIB_USEDEP}]
-	>=x11-libs/gdk-pixbuf-2.30.7:2[introspection?,${MULTILIB_USEDEP}]
-	>=x11-libs/pango-1.36.3[introspection?,${MULTILIB_USEDEP}]
+	>=gui-lib/atk-2.10.0
+	>=lib-dev/glib-2.34.3:2
+	>=lib-media/fontconfig-2.10.92
+	>=x11-libs/cairo-1.12.14-r4:=[aqua?,svg]
+	>=x11-libs/gdk-pixbuf-2.30.7:2[introspection?]
+	>=x11-libs/pango-1.36.3[introspection?]
 	x11/shared-mime-info
 
-	cups? ( >=lib-print/cups-1.7.1-r2:=[${MULTILIB_USEDEP}] )
+	cups? ( >=lib-print/cups-1.7.1-r2:= )
 	introspection? ( >=lib-dev/gobject-introspection-0.9.3:= )
 	!aqua? (
-		>=x11-libs/cairo-1.12.14-r4:=[aqua?,svg,X,${MULTILIB_USEDEP}]
-		>=x11-libs/libXrender-0.9.8[${MULTILIB_USEDEP}]
-		>=x11-libs/libX11-1.6.2[${MULTILIB_USEDEP}]
-		>=x11-libs/libXi-1.7.2[${MULTILIB_USEDEP}]
-		>=x11-libs/libXext-1.3.2[${MULTILIB_USEDEP}]
-		>=x11-libs/libXrandr-1.5[${MULTILIB_USEDEP}]
-		>=x11-libs/libXcursor-1.1.14[${MULTILIB_USEDEP}]
-		>=x11-libs/libXfixes-5.0.1[${MULTILIB_USEDEP}]
-		>=x11-libs/libXcomposite-0.4.4-r1[${MULTILIB_USEDEP}]
-		>=x11-libs/libXdamage-1.1.4-r1[${MULTILIB_USEDEP}]
-		xinerama? ( >=x11-libs/libXinerama-1.1.3[${MULTILIB_USEDEP}] )
+		>=x11-libs/cairo-1.12.14-r4:=[aqua?,svg,X]
+		>=x11-libs/libXrender-0.9.8
+		>=x11-libs/libX11-1.6.2
+		>=x11-libs/libXi-1.7.2
+		>=x11-libs/libXext-1.3.2
+		>=x11-libs/libXrandr-1.5
+		>=x11-libs/libXcursor-1.1.14
+		>=x11-libs/libXfixes-5.0.1
+		>=x11-libs/libXcomposite-0.4.4-r1
+		>=x11-libs/libXdamage-1.1.4-r1
+		xinerama? ( >=x11-libs/libXinerama-1.1.3 )
 	)
 "
 
@@ -53,9 +53,9 @@ DEPEND="${COMMON_DEPEND}
 	lib-dev/libxslt
 	lib-dev/gobject-introspection-common
 	>=dev-util/gtk-doc-am-1.20
-	>=sys-devel/gettext-0.18.3[${MULTILIB_USEDEP}]
-	>=dev-util/pkgconfig-0-r1[${MULTILIB_USEDEP}]
-	xinerama? ( >=x11/xorgproto-1.2.1-r1[${MULTILIB_USEDEP}] )
+	>=sys-devel/gettext-0.18.3
+	>=dev-util/pkgconfig-0-r1
+	xinerama? ( >=x11/xorgproto-1.2.1-r1 )
 
 	test? (
 		x11/hicolor-icon-theme
@@ -68,18 +68,13 @@ RDEPEND="${COMMON_DEPEND}
 
 
 PDEPEND="
-	gui-lib/librsvg[${MULTILIB_USEDEP}]
+	gui-lib/librsvg
 	vim-syntax? ( app-text/gtk-syntax )
 "
 
 DISABLE_AUTOFORMATTING="yes"
 
-MULTILIB_CHOST_TOOLS=(
-	/usr/bin/gtk-query-immodules-2.0$(get_exeext)
-)
-
 set_gtk2_confdir() {
-	# An arch specific config directory is used on multilib systems
 	GTK2_CONFDIR="/etc/gtk-2.0/${CHOST}"
 }
 
@@ -118,7 +113,7 @@ src_prepare() {
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -129,7 +124,7 @@ multilib_src_configure() {
 		$(usex aqua --with-gdktarget=quartz --with-gdktarget=x11)
 		$(usex aqua "" --with-xinput)
 		$(use_enable cups cups auto)
-		$(multilib_native_use_enable introspection)
+		$(use_enable introspection)
 		$(use_enable xinerama)
 		--disable-papi
 		--with-xml-catalog="${EPREFIX}"/etc/xml/catalog
@@ -137,15 +132,15 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} econf ${myconf[@]}
 }
 
-multilib_src_test() {
+src_test() {
 	virtx emake check
 }
 
-multilib_src_install() {
+src_install() {
 	default
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	# see bug #133241
 	# Also set more default variables in sync with gtk3 and other distributions
 	echo 'gtk-fallback-icon-theme = "gnome"' > "${T}/gtkrc"
@@ -159,22 +154,17 @@ multilib_src_install_all() {
 }
 
 pkg_preinst() {
-	multilib_pkg_preinst() {
-		# Make immodules.cache belongs to gtk+ alone
-		local cache="usr/$(get_libdir)/gtk-2.0/2.10.0/immodules.cache"
+	# Make immodules.cache belongs to gtk+ alone
+	local cache="usr/$(get_libdir)/gtk-2.0/2.10.0/immodules.cache"
 
-		if [[ -e ${EROOT}${cache} ]]; then
-			cp "${EROOT}"${cache} "${ED}"/${cache} || die
-		else
-			touch "${ED}"/${cache} || die
-		fi
-	}
-	multilib_parallel_foreach_abi multilib_pkg_preinst
+	if [[ -e ${EROOT}${cache} ]]; then
+		cp "${EROOT}"${cache} "${ED}"/${cache} || die
+	else
+		touch "${ED}"/${cache} || die
+	fi
 }
 
 pkg_postinst() {
-	multilib_parallel_foreach_abi multilib_pkg_postinst
-
 	if [ -e "${EROOT%/}/etc/gtk-2.0/gtk.immodules" ]; then
 		elog "File /etc/gtk-2.0/gtk.immodules has been moved to \$CHOST"
 		elog "aware location. Removing deprecated file."
@@ -195,13 +185,6 @@ pkg_postinst() {
 		rm -f ${EROOT%/}${GTK2_CONFDIR}/gdk-pixbuf.loaders
 	fi
 
-	# two checks needed since we dropped multilib conditional
-	if [ -e "${EROOT%/}/etc/gtk-2.0/gdk-pixbuf.loaders" ]; then
-		elog "File ${EROOT%/}/etc/gtk-2.0/gdk-pixbuf.loaders is now handled by x11-libs/gdk-pixbuf"
-		elog "Removing deprecated file."
-		rm -f ${EROOT%/}/etc/gtk-2.0/gdk-pixbuf.loaders
-	fi
-
 	if [ -e "${EROOT%/}"/usr/lib/gtk-2.0/2.[^1]* ]; then
 		elog "You need to rebuild ebuilds that installed into" "${EROOT%/}"/usr/lib/gtk-2.0/2.[^1]*
 		elog "to do that you can use qfile from portage-utils:"
@@ -219,9 +202,6 @@ pkg_postinst() {
 
 pkg_postrm() {
 	if [[ -z ${REPLACED_BY_VERSION} ]]; then
-		multilib_pkg_postrm() {
-			rm -f "${EROOT}"usr/$(get_libdir)/gtk-2.0/2.10.0/immodules.cache
-		}
-		multilib_foreach_abi multilib_pkg_postrm
+		rm -f "${EROOT}"usr/$(get_libdir)/gtk-2.0/2.10.0/immodules.cache
 	fi
 }

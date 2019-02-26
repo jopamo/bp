@@ -112,7 +112,7 @@ inherit toolchain-funcs ninja-utils flag-o-matic multiprocessing xdg-utils
 
 case ${EAPI} in
 	7) ;;
-	*) inherit eapi7-ver eutils multilib ;;
+	*) inherit eapi7-ver eutils ;;
 esac
 
 EXPORT_FUNCTIONS src_prepare src_configure src_compile src_test src_install

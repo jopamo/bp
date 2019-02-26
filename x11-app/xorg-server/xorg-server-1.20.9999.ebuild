@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib-minimal meson git-r3 flag-o-matic
+inherit meson git-r3 flag-o-matic
 
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/xorg/xserver.git"
 EGIT_BRANCH="server-1.20-branch"
@@ -63,7 +63,7 @@ PDEPEND="x11/xf86-input-libinput"
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
-multilib_src_configure() {
+src_configure() {
         local emesonargs=(
         		$(meson_use glamor)
         		$(meson_use ipv6)

@@ -4,7 +4,7 @@ EAPI="6"
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit multilib-minimal autotools python-r1 eutils git-r3
+inherit autotools python-r1 eutils git-r3
 
 DESCRIPTION="A standards compliant, fast, light-weight, extensible window manager"
 HOMEPAGE="http://openbox.org/"
@@ -54,7 +54,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

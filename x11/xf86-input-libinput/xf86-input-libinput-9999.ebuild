@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit linux-info autotools multilib flag-o-matic
+inherit linux-info autotools flag-o-matic
 
 DESCRIPTION="X.org input driver based on libinput"
 
@@ -27,10 +27,3 @@ pkg_pretend() {
 	CONFIG_CHECK="~TIMERFD"
 	check_extra_config
 }
-
-#src_prepare() {
-	#sed -i -e /^autoreconf/d autogen.sh || die
-#	NOCONFIGURE=1 ${S}/autogen.sh || die
-#	eautoreconf
-#	default
-#}

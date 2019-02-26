@@ -19,7 +19,7 @@ _EUTILS_ECLASS=1
 # implicitly inherited (now split) eclasses
 case ${EAPI:-0} in
 0|1|2|3|4|5|6)
-	inherit desktop epatch estack multilib preserve-libs toolchain-funcs vcs-clean
+	inherit desktop epatch estack preserve-libs toolchain-funcs vcs-clean
 	;;
 esac
 

@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit git-r3 cmake-multilib
+inherit git-r3 cmake-utils
 
 DESCRIPTION="Framework providing access to properties and features of the window manager"
 LICENSE="|| ( LGPL-2.1 LGPL-3 ) MIT"

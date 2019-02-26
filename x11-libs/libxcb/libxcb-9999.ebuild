@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib-minimal git-r3 autotools flag-o-matic
+inherit git-r3 autotools flag-o-matic
 
 DESCRIPTION="X C-language Bindings library"
 HOMEPAGE="https://xcb.freedesktop.org/"
@@ -27,7 +27,7 @@ src_prepare() {
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

@@ -8,11 +8,11 @@ HOMEPAGE="https://github.com/slacka/WoeUSB"
 if [[ ${PV} == "9999" ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/slacka/${PN}.git"
-	KEYWORDS="amd64 x86"
+	KEYWORDS="amd64"
 else
 	SRC_URI="https://github.com/slacka/${PN}/archive/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 	S="${WORKDIR}/WoeUSB-${PV}"
-	KEYWORDS="amd64 x86"
+	KEYWORDS="amd64"
 fi
 
 LICENSE="GPL-3"

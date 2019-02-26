@@ -2,7 +2,7 @@
 
 EAPI="6"
 
-inherit eutils autotools flag-o-matic libtool multilib-minimal
+inherit eutils autotools flag-o-matic libtool
 
 DESCRIPTION="The Fast Lexical Analyzer"
 HOMEPAGE="https://github.com/westes/flex"
@@ -39,11 +39,6 @@ src_prepare() {
 src_configure() {
 	use static-libs && append-ldflags -static
 
-	multilib-minimal_src_configure
-}
-
-multilib_src_configure() {
-	# Do not install shared libs #503522
 	ECONF_SOURCE=${S} \
 	econf \
 		--disable-shared \
@@ -51,31 +46,11 @@ multilib_src_configure() {
 		--docdir='$(datarootdir)/doc/'${PF}
 }
 
-multilib_src_compile() {
-	if multilib_is_native_abi; then
-		default
-	else
-		cd src || die
-		emake -f Makefile -f - lib <<< 'lib: $(lib_LTLIBRARIES)'
-	fi
+src_test() {
+	emake check
 }
 
-multilib_src_test() {
-	multilib_is_native_abi && emake check
-}
-
-multilib_src_install() {
-	if multilib_is_native_abi; then
-		default
-	else
-		cd src || die
-		emake DESTDIR="${D}" install-libLTLIBRARIES install-includeHEADERS
-	fi
-}
-
-multilib_src_install_all() {
-	einstalldocs
-	dodoc ONEWS
+src_install_all() {
 	use static-libs || find "${ED}" -name "*.la" -delete || die
 	rm "${ED}"/usr/share/doc/${PF}/COPYING || die
 	dosym flex /usr/bin/lex

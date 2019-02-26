@@ -11,7 +11,7 @@
 if [[ -z ${_FLAG_O_MATIC_ECLASS} ]]; then
 _FLAG_O_MATIC_ECLASS=1
 
-inherit eutils toolchain-funcs multilib
+inherit eutils toolchain-funcs
 
 # Return all the flag variables that our high level funcs operate on.
 all-flag-vars() {

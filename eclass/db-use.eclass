@@ -3,7 +3,7 @@
 #
 # Bugs: maintainer-needed@gentoo.org
 
-inherit versionator multilib
+inherit versionator
 
 #Convert a version to a db slot
 db_ver_to_slot() {

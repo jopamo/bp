@@ -4,7 +4,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_7 )
 
-inherit autotools multilib-minimal git-r3 flag-o-matic
+inherit autotools git-r3 flag-o-matic
 
 DESCRIPTION="An interface for filesystems implemented in userspace"
 HOMEPAGE="https://github.com/libfuse/libfuse"
@@ -24,7 +24,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

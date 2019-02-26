@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib-minimal git-r3 autotools
+inherit git-r3 autotools
 
 DESCRIPTION="X.Org Xfont library"
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/xorg/lib/libXfont.git"
@@ -24,7 +24,7 @@ src_prepare() {
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

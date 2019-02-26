@@ -4,9 +4,7 @@ DESCRIPTION="The GNU Compiler Collection"
 HOMEPAGE="https://gcc.gnu.org/"
 RESTRICT="strip" # cross-compilers need controlled stripping
 
-inherit eutils fixheadtails flag-o-matic gnuconfig libtool multilib toolchain-funcs versionator prefix
-
-FEATURES=${FEATURES/multilib-strict/}
+inherit eutils fixheadtails flag-o-matic gnuconfig libtool toolchain-funcs versionator prefix
 
 case ${EAPI:-0} in
 	0|1|2|3|4*) die "Need to upgrade to at least EAPI=5" ;;
@@ -25,7 +23,6 @@ if [[ ${CTARGET} = ${CHOST} ]] ; then
 	fi
 fi
 : ${TARGET_ABI:=${ABI}}
-: ${TARGET_MULTILIB_ABIS:=${MULTILIB_ABIS}}
 : ${TARGET_DEFAULT_ABI:=${DEFAULT_ABI}}
 
 is_crosscompile() {
@@ -92,7 +89,7 @@ IUSE_DEF=( nptl )
 if [[ ${PN} != "kgcc64" && ${PN} != gcc-* ]] ; then
 	IUSE+=" debug"
 	IUSE_DEF+=( cxx fortran )
-	tc_version_is_at_least 3 && IUSE+=" doc gcj awt hardened multilib objc"
+	tc_version_is_at_least 3 && IUSE+=" doc gcj awt hardened objc"
 	tc_version_is_at_least 3.3 && IUSE+=" pgo"
 	tc_version_is_at_least 4.0 && IUSE+=" objc-gc"
 	tc_version_is_at_least 4.1 && IUSE+=" objc++"
@@ -175,12 +172,6 @@ toolchain_src_prepare() {
 	cd "${S}"
 
 	default
-
-	# make sure the pkg config files install into multilib dirs.
-	# since we configure with just one --libdir, we can't use that
-	# (as gcc itself takes care of building multilibs).  #435728
-	find "${S}" -name Makefile.in \
-		-exec sed -i '/^pkgconfigdir/s:=.*:=$(toolexeclibdir)/pkgconfig:' {} +
 
 	if tc_version_is_at_least 4.1 ; then
 		if [[ -n ${SNAPSHOT} || -n ${PRERELEASE} ]] ; then
@@ -462,8 +453,6 @@ toolchain_src_configure() {
 
 	### arch options
 
-	gcc-multilib-configure
-
 	# gcc has fixed-point arithmetic support in 4.3 for mips targets that can
 	# significantly increase compile time by several hours.  This will allow
 	# users to control this feature in the event they need the support.
@@ -606,12 +595,6 @@ toolchain_src_configure() {
 	# Disable gcc info regeneration -- it ships with generated info pages
 	# already.  Our custom version/urls/etc... trigger it.  #464008
 	export gcc_cv_prog_makeinfo_modern=no
-
-	# Do not let the X detection get in our way.  We know things can be found
-	# via system paths, so no need to hardcode things that'll break multilib.
-	# Older gcc versions will detect ac_x_libraries=/usr/lib64 which ends up
-	# killing the 32bit builds which want /usr/lib.
-	export ac_cv_have_x='have_x=yes ac_x_includes= ac_x_libraries='
 
 	confgcc+=( "$@" ${EXTRA_ECONF} )
 
@@ -812,32 +795,6 @@ gcc_do_filter_flags() {
 	fi
 
 	export GCJFLAGS=${GCJFLAGS:-${CFLAGS}}
-}
-
-gcc-multilib-configure() {
-	if ! is_multilib ; then
-		confgcc+=( --disable-multilib )
-		# Fun times: if we are building for a target that has multiple
-		# possible ABI formats, and the user has told us to pick one
-		# that isn't the default, then not specifying it via the list
-		# below will break that on us.
-	else
-		confgcc+=( --enable-multilib )
-	fi
-
-	# translate our notion of multilibs into gcc's
-	local abi list
-	for abi in $(get_all_abis TARGET) ; do
-		local l=$(gcc-abi-map ${abi})
-		[[ -n ${l} ]] && list+=",${l}"
-	done
-	if [[ -n ${list} ]] ; then
-		case ${CTARGET} in
-		x86_64*)
-			tc_version_is_at_least 4.8 && confgcc+=( --with-multilib-list=${list:1} )
-			;;
-		esac
-	fi
 }
 
 gcc-abi-map() {
@@ -1212,26 +1169,9 @@ create_gcc_env_entry() {
 
 	local gcc_envd_file="${ED}${gcc_envd_base}"
 
-	# We want to list the default ABI's LIBPATH first so libtool
-	# searches that directory first.  This is a temporary
-	# workaround for libtool being stupid and using .la's from
-	# conflicting ABIs by using the first one in the search path
-	local ldpaths mosdirs
-	if tc_version_is_at_least 3.2 ; then
-		local mdir mosdir abi ldpath
-		for abi in $(get_all_abis TARGET) ; do
-			mdir=$($(XGCC) $(get_abi_CFLAGS ${abi}) --print-multi-directory)
-			ldpath=${LIBPATH}
-			[[ ${mdir} != "." ]] && ldpath+="/${mdir}"
-			ldpaths="${ldpath}${ldpaths:+:${ldpaths}}"
+	local ldpaths
 
-			mosdir=$($(XGCC) $(get_abi_CFLAGS ${abi}) -print-multi-os-directory)
-			mosdirs="${mosdir}${mosdirs:+:${mosdirs}}"
-		done
-	else
-		# Older gcc's didn't do multilib, so logic is simple.
-		ldpaths=${LIBPATH}
-	fi
+	ldpaths=${LIBPATH}
 
 	cat <<-EOF > ${gcc_envd_file}
 	PATH="${BINPATH}"
@@ -1447,11 +1387,6 @@ is_go() {
 is_jit() {
 	gcc-lang-supported jit || return 1
 	use_if_iuse jit
-}
-
-is_multilib() {
-	tc_version_is_at_least 3 || return 1
-	use_if_iuse multilib
 }
 
 is_objc() {

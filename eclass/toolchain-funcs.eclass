@@ -6,15 +6,12 @@
 # @BLURB: functions to query common info about the toolchain
 # @DESCRIPTION:
 # The toolchain-funcs aims to provide a complete suite of functions
-# for gleaning useful information about the toolchain and to simplify
-# ugly things like cross-compiling and multilib.  All of this is done
+# for gleaning useful information about the toolchain. All of this is done
 # in such a way that you can rely on the function always returning
 # something sane.
 
 if [[ -z ${_TOOLCHAIN_FUNCS_ECLASS} ]]; then
 _TOOLCHAIN_FUNCS_ECLASS=1
-
-inherit multilib
 
 # tc-getPROG <VAR [search vars]> <default> [tuple]
 _tc-getPROG() {
@@ -384,7 +381,7 @@ tc-ld-disable-gold() {
 
 	# Set up LD to point directly to bfd if it's available.
 	# We need to extract the first word in case there are flags appended
-	# to its value (like multilib).  #545218
+	# to its value.
 	local ld=$(tc-getLD "$@")
 	local bfd_ld="${ld%% *}.bfd"
 	local path_ld=$(which "${bfd_ld}" 2>/dev/null)
@@ -863,14 +860,8 @@ gen_usr_ldscript() {
 
 	tc-is-static-only && return
 
-	# We only care about stuffing / for the native ABI. #479448
-	if [[ $(type -t multilib_is_native_abi) == "function" ]] ; then
-		multilib_is_native_abi || return 0
-	fi
-
 	# Eventually we'd like to get rid of this func completely #417451
 	case ${CTARGET:-${CHOST}} in
-	*-darwin*) ;;
 	*-android*) return 0 ;;
 	*linux*|*-freebsd*|*-openbsd*|*-netbsd*)
 		use prefix && return 0 ;;
@@ -885,19 +876,6 @@ gen_usr_ldscript() {
 		shift
 		dodir /${libdir}
 	fi
-
-	# OUTPUT_FORMAT gives hints to the linker as to what binary format
-	# is referenced ... makes multilib saner
-	local flags=( ${CFLAGS} ${LDFLAGS} -Wl,--verbose )
-	if $(tc-getLD) --version | grep -q 'GNU gold' ; then
-		# If they're using gold, manually invoke the old bfd. #487696
-		local d="${T}/bfd-linker"
-		mkdir -p "${d}"
-		ln -sf $(which ${CHOST}-ld.bfd) "${d}"/ld
-		flags+=( -B"${d}" )
-	fi
-	output_format=$($(tc-getCC) "${flags[@]}" 2>&1 | sed -n 's/^OUTPUT_FORMAT("\([^"]*\)",.*/\1/p')
-	[[ -n ${output_format} ]] && output_format="OUTPUT_FORMAT ( ${output_format} )"
 
 	for lib in "$@" ; do
 		local tlib

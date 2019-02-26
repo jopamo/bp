@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit git-r3 multilib-minimal autotools
+inherit git-r3 autotools
 
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/xorg/util/macros.git"
 DESCRIPTION="X.Org autotools utility macros"
@@ -15,7 +15,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

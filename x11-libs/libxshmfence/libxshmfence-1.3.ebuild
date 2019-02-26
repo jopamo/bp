@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib-minimal autotools
+inherit autotools
 
 DESCRIPTION="Shared memory fences using futexes"
 SRC_URI="https://www.x.org/releases/individual/lib/${P}.tar.bz2"
@@ -19,7 +19,7 @@ src_prepare() {
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools multilib-minimal versionator
+inherit autotools versionator
 
 MY_PV="$(printf "%u%02u%02u%02u" $(get_version_components))"
 
@@ -23,7 +23,7 @@ src_prepare() {
 	default
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit eutils flag-o-matic linux-info linux-mod multilib-minimal nvidia-driver \
+inherit eutils flag-o-matic linux-info linux-mod nvidia-driver \
 	portability toolchain-funcs unpacker user udev
 
 NV_URI="http://http.download.nvidia.com/XFree86/"
@@ -20,9 +20,8 @@ LICENSE="GPL-2 NVIDIA-r2"
 SLOT="0/${PV%.*}"
 KEYWORDS="amd64"
 RESTRICT="bindist mirror"
-EMULTILIB_PKG="true"
 
-IUSE="compat +driver +kms multilib static-libs +tools uvm wayland +X"
+IUSE="compat +driver +kms static-libs +tools uvm wayland +X"
 REQUIRED_USE="
 	tools? ( X )
 	static-libs? ( tools )
@@ -54,12 +53,12 @@ DEPEND="
 RDEPEND="
 	${COMMON}
 	tools? ( !app-media/nvidia-settings )
-	wayland? ( lib-dev/wayland[${MULTILIB_USEDEP}] )
+	wayland? ( lib-dev/wayland )
 	X? (
 		x11-app/xorg-server
-		>=x11-libs/libX11-1.6.2[${MULTILIB_USEDEP}]
-		>=x11-libs/libXext-1.3.2[${MULTILIB_USEDEP}]
-		lib-sys/zlib[${MULTILIB_USEDEP}]
+		>=x11-libs/libX11-1.6.2
+		>=x11-libs/libXext-1.3.2
+		lib-sys/zlib
 	)
 "
 
@@ -70,12 +69,6 @@ QA_PREBUILT="opt/* usr/lib*"
 S=${WORKDIR}/
 
 nvidia_drivers_versions_check() {
-	if use amd64 && has_multilib_profile && \
-		[ "${DEFAULT_ABI}" != "amd64" ]; then
-		eerror "This ebuild doesn't currently support changing your default ABI"
-		die "Unexpected \${DEFAULT_ABI} = ${DEFAULT_ABI}"
-	fi
-
 	# Since Nvidia ships many different series of drivers, we need to give the user
 	# some kind of guidance as to what version they should install. This tries
 	# to point the user in the right direction but can't be perfect. check
@@ -345,16 +338,7 @@ src_install() {
 
 	dobin ${NV_OBJ}/nvidia-bug-report.sh
 
-	if has_multilib_profile && use multilib; then
-		local OABI=${ABI}
-		for ABI in $(get_install_abis); do
-			src_install-libs
-		done
-		ABI=${OABI}
-		unset OABI
-	else
-		src_install-libs
-	fi
+	src_install-libs
 
 	is_final_abi || die "failed to iterate through all ABIs"
 }
@@ -394,7 +378,7 @@ src_install-libs() {
 			"libvdpau_nvidia.so.${NV_SOVER}"
 		)
 
-		if use wayland && has_multilib_profile && [[ ${ABI} == "amd64" ]];
+		if use wayland ;
 		then
 			NV_GLX_LIBRARIES+=(
 				"libnvidia-egl-wayland.so.1.0.3"

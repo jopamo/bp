@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils multilib versionator prefix
+inherit eutils versionator prefix
 
 DESCRIPTION="Filesystem baselayout"
 SRC_URI="https://1g4.org/files/layout-${PV}.tar.xz"
@@ -11,102 +11,6 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE=build
-pkg_setup() {
-	multilib_layout
-}
-
-# Create our multilib dirs - the Makefile has no knowledge of this
-multilib_layout() {
-	local libdir libdirs=$(get_all_libdirs) def_libdir=$(get_abi_LIBDIR $DEFAULT_ABI)
-	: ${libdirs:=lib}	# it isn't that we don't trust multilib.eclass...
-
-	[ -z "${def_libdir}" ] && die "your DEFAULT_ABI=$DEFAULT_ABI appears to be invalid"
-
-	# figure out which paths should be symlinks and which should be directories
-	local dirs syms exp d
-	for libdir in ${libdirs} ; do
-		exp=( {,usr/,usr/local/}${libdir} )
-		for d in "${exp[@]}" ; do
-			# most things should be dirs
-			if [ "${SYMLINK_LIB}" = "yes" ] && [ "${libdir}" = "lib" ] ; then
-				[ ! -h "${d}" ] && [ -e "${d}" ] && dirs+=" ${d}"
-			else
-				[ -h "${d}" ] && syms+=" ${d}"
-			fi
-		done
-	done
-	if [ -n "${syms}${dirs}" ] ; then
-		ewarn "Your system profile has SYMLINK_LIB=${SYMLINK_LIB:-no}, so that means you need to"
-		ewarn "have these paths configured as follows:"
-		[ -n "${dirs}" ] && ewarn "symlinks to '${def_libdir}':${dirs}"
-		[ -n "${syms}" ] && ewarn "directories:${syms}"
-		ewarn "The ebuild will attempt to fix these, but only for trivial conversions."
-		ewarn "If things fail, you will need to manually create/move the directories."
-		echo
-	fi
-
-	# setup symlinks and dirs where we expect them to be; do not migrate
-	# data ... just fall over in that case.
-	local prefix
-	for prefix in "${EROOT}"{,usr/,usr/local/} ; do
-		if [ "${SYMLINK_LIB}" = yes ] ; then
-			# we need to make sure "lib" points to the native libdir
-			if [ -h "${prefix}lib" ] ; then
-				# it's already a symlink!  assume it's pointing to right place ...
-				continue
-			elif [ -d "${prefix}lib" ] ; then
-				# "lib" is a dir, so need to convert to a symlink
-				ewarn "Converting ${prefix}lib from a dir to a symlink"
-				rm -f "${prefix}lib"/.keep
-				if rmdir "${prefix}lib" 2>/dev/null ; then
-					ln -s ${def_libdir} "${prefix}lib" || die
-				else
-					die "non-empty dir found where we needed a symlink: ${prefix}lib"
-				fi
-			else
-				# nothing exists, so just set it up sanely
-				ewarn "Initializing ${prefix}lib as a symlink"
-				mkdir -p "${prefix}" || die
-				rm -f "${prefix}lib" || die
-				ln -s ${def_libdir} "${prefix}lib" || die
-				mkdir -p "${prefix}${def_libdir}" #423571
-			fi
-		else
-			# we need to make sure "lib" is a dir
-			if [ -h "${prefix}lib" ] ; then
-				# "lib" is a symlink, so need to convert to a dir
-				ewarn "Converting ${prefix}lib from a symlink to a dir"
-				rm -f "${prefix}lib" || die
-				if [ -d "${prefix}lib32" ] ; then
-					ewarn "Migrating ${prefix}lib32 to ${prefix}lib"
-					mv "${prefix}lib32" "${prefix}lib" || die
-				else
-					mkdir -p "${prefix}lib" || die
-				fi
-			elif [ -d "${prefix}lib" ] && ! has lib32 ${libdirs} ; then
-				# make sure the old "lib" ABI location does not exist; we
-				# only symlinked the lib dir on systems where we moved it
-				# to "lib32" ...
-				case ${CHOST} in
-				*-gentoo-freebsd*) ;; # We want it the other way on fbsd.
-				i?86*|x86_64*|powerpc*|sparc*|s390*)
-					if [[ -d ${prefix}lib32 && ! -h ${prefix}lib32 ]] ; then
-						rm -f "${prefix}lib32"/.keep
-						if ! rmdir "${prefix}lib32" 2>/dev/null ; then
-							ewarn "You need to merge ${prefix}lib32 into ${prefix}lib"
-							die "non-empty dir found where there should be none: ${prefix}lib32"
-						fi
-					fi
-					;;
-				esac
-			else
-				# nothing exists, so just set it up sanely
-				ewarn "Initializing ${prefix}lib as a dir"
-				mkdir -p "${prefix}lib" || die
-			fi
-		fi
-	done
-}
 
 pkg_preinst() {
 	# Bug #217848 - Since the remap_dns_vars() called by pkg_preinst() of
@@ -116,10 +20,6 @@ pkg_preinst() {
 	# upgrade, modify their timestamps.
 	touch "${EROOT}"/etc/conf.d/* 2>/dev/null
 
-	# We need to install directories and maybe some dev nodes when building
-	# stages, but they cannot be in CONTENTS.
-	# Also, we cannot reference $S as binpkg will break so we do this.
-	multilib_layout
 	if use build ; then
 		emake -C "${ED}/usr/share/${PN}" DESTDIR="${EROOT}" layout || die
 	fi

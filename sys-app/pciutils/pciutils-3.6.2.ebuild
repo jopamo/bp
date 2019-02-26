@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit multilib toolchain-funcs multilib-minimal flag-o-matic
+inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="Various utilities dealing with the PCI bus"
 HOMEPAGE="http://mj.ucw.cz/sw/pciutils/ https://git.kernel.org/?p=utils/pciutils/pciutils.git"
@@ -16,8 +16,8 @@ IUSE="dns +kmod static-libs +udev zlib"
 # Have the sub-libs in RDEPEND with [static-libs] since, logically,
 # our libpci.a depends on libz.a/etc... at runtime.
 LIB_DEPEND="
-	zlib? ( >=lib-sys/zlib-1.2.8-r1[static-libs(+),${MULTILIB_USEDEP}] )
-	udev? ( >=sys-app/systemd-208[static-libs(+),${MULTILIB_USEDEP}] )
+	zlib? ( >=lib-sys/zlib-1.2.8-r1[static-libs(+)] )
+	udev? ( >=sys-app/systemd-208[static-libs(+)] )
 "
 DEPEND="
 	kmod? ( sys-app/kmod )
@@ -32,8 +32,6 @@ DEPEND="
 	${DEPEND}
 	kmod? ( dev-util/pkgconfig )
 "
-
-MULTILIB_WRAPPED_HEADERS=( /usr/include/pci/config.h )
 
 switch_config() {
 	[[ $# -ne 2 ]] && return 1
@@ -50,11 +48,9 @@ src_prepare() {
 		cp -pPR "${S}" "${S}.static" || die
 		mv "${S}.static" "${S}/static" || die
 	fi
-
-	multilib_copy_sources
 }
 
-multilib_src_configure() {
+src_configure() {
 	append-lfs-flags #471102
 }
 
@@ -76,12 +72,12 @@ pemake() {
 		PCI_COMPRESSED_IDS=0 \
 		PCI_IDS=pci.ids \
 		LIBDIR="\${PREFIX}/$(get_libdir)" \
-		LIBKMOD=$(multilib_native_usex kmod) \
+		LIBKMOD=$(usex kmod) \
 		HWDB=$(usex udev) \
 		"$@"
 }
 
-multilib_src_compile() {
+src_compile() {
 	pemake OPT="${CFLAGS}" all
 	if use static-libs ; then
 		pemake \
@@ -92,14 +88,12 @@ multilib_src_compile() {
 	fi
 }
 
-multilib_src_install() {
+src_install() {
 	pemake DESTDIR="${D}" install install-lib
 	use static-libs && dolib.a "${BUILD_DIR}/static/lib/libpci.a"
 }
 
-multilib_src_install_all() {
-	dodoc ChangeLog README TODO
-
+src_install_all() {
 	rm "${ED}"/usr/sbin/update-pciids "${ED}"/usr/share/misc/pci.ids \
 		"${ED}"/usr/share/man/man8/update-pciids.8*
 }

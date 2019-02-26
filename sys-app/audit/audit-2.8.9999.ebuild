@@ -4,7 +4,7 @@ EAPI="6"
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit autotools multilib multilib-minimal toolchain-funcs preserve-libs python-r1 linux-info systemd git-r3
+inherit autotools toolchain-funcs preserve-libs python-r1 linux-info systemd git-r3
 
 DESCRIPTION="Userspace utilities for storing and processing auditing records"
 HOMEPAGE="https://people.redhat.com/sgrubb/audit/"
@@ -65,7 +65,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local ECONF_SOURCE=${S}
 	econf \
 		--sbindir="${EPREFIX}/sbin" \
@@ -75,8 +75,7 @@ multilib_src_configure() {
 		--without-python \
 		--without-python3
 
-	if multilib_is_native_abi; then
-		python_configure() {
+	python_configure() {
 			mkdir -p "${BUILD_DIR}" || die
 			cd "${BUILD_DIR}" || die
 
@@ -88,7 +87,6 @@ multilib_src_configure() {
 		}
 
 		use python && python_foreach_impl python_configure
-	fi
 }
 
 src_configure() {
@@ -96,12 +94,11 @@ src_configure() {
 	export CC_FOR_BUILD="${BUILD_CC}"
 	export CPP_FOR_BUILD="${BUILD_CPP}"
 
-	multilib-minimal_src_configure
+	default
 }
 
-multilib_src_compile() {
-	if multilib_is_native_abi; then
-		default
+src_compile() {
+	default
 
 		python_compile() {
 			local pysuffix pydef
@@ -127,15 +124,10 @@ multilib_src_compile() {
 
 		local native_build="${BUILD_DIR}"
 		use python && python_foreach_impl python_compile
-	else
-		emake -C lib
-		emake -C auparse
-	fi
 }
 
-multilib_src_install() {
-	if multilib_is_native_abi; then
-		emake DESTDIR="${D}" initdir="$(systemd_get_systemunitdir)" install
+src_install() {
+	emake DESTDIR="${D}" initdir="$(systemd_get_systemunitdir)" install
 
 		python_install() {
 			local pysuffix pydef
@@ -163,16 +155,9 @@ multilib_src_install() {
 
 		local native_build=${BUILD_DIR}
 		use python && python_foreach_impl python_install
-
-		# things like shadow use this so we need to be in /
-		gen_usr_ldscript -a audit auparse
-	else
-		emake -C lib DESTDIR="${D}" install
-		emake -C auparse DESTDIR="${D}" install
-	fi
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	docinto contrib
 	dodoc contrib/{avc_snap,skeleton.c}
 	docinto contrib/plugin

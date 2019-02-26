@@ -2,7 +2,7 @@
 
 EAPI=5
 
-inherit autotools toolchain-funcs multilib multilib-minimal
+inherit autotools toolchain-funcs
 
 DESCRIPTION="Standard (de)compression library"
 HOMEPAGE="https://zlib.net/"
@@ -22,18 +22,11 @@ src_prepare() {
 		cd contrib/minizip || die
 		eautoreconf
 	fi
-
-	case ${CHOST} in
-	*-mingw*|mingw*)
-		# uses preconfigured Makefile rather than configure script
-		multilib_copy_sources
-		;;
-	esac
 }
 
 echoit() { echo "$@"; "$@"; }
 
-multilib_src_configure() {
+src_configure() {
 	case ${CHOST} in
 	*-mingw*|mingw*)
 		;;
@@ -57,7 +50,7 @@ multilib_src_configure() {
 	fi
 }
 
-multilib_src_compile() {
+src_compile() {
 	case ${CHOST} in
 	*-mingw*|mingw*)
 		emake -f win32/Makefile.gcc STRIP=true PREFIX=${CHOST}-
@@ -83,7 +76,7 @@ sed_macros() {
 	sed -i -r 's:\<(O[FN])\>:_Z_\1:g' "$@" || die
 }
 
-multilib_src_install() {
+src_install() {
 	case ${CHOST} in
 	*-mingw*|mingw*)
 		emake -f win32/Makefile.gcc install \

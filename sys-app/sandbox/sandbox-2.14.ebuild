@@ -2,7 +2,7 @@
 
 EAPI="6"
 
-inherit eutils flag-o-matic multilib-minimal multiprocessing
+inherit eutils flag-o-matic multiprocessing
 
 DESCRIPTION="sandbox'd LD_PRELOAD hack"
 HOMEPAGE="https://www.gentoo.org/proj/en/portage/sandbox/"
@@ -21,7 +21,7 @@ sandbox_death_notice() {
 	ewarn "FEATURES='-sandbox -usersandbox' emerge sandbox"
 }
 
-multilib_src_configure() {
+src_configure() {
 	filter-lfs-flags #90228
 
 	local myconf=()
@@ -30,12 +30,12 @@ multilib_src_configure() {
 	econf "${myconf[@]}"
 }
 
-multilib_src_test() {
+src_test() {
 	# Default sandbox build will run with --jobs set to # cpus.
 	emake check TESTSUITEFLAGS="--jobs=$(makeopts_jobs)"
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	keepdir /var/log/sandbox
 	fowners root:portage /var/log/sandbox
 	fperms 0770 /var/log/sandbox

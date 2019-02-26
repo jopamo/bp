@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="pam static-libs"
 
-RDEPEND=">=sys-app/attr-2.4.47[${MULTILIB_USEDEP}]
+RDEPEND=">=sys-app/attr-2.4.47
 	pam? ( lib-sys/pam )"
 DEPEND="${RDEPEND}
 	sys-kernel/stable-sources"

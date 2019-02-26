@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools toolchain-funcs multilib-minimal
+inherit autotools toolchain-funcs
 
 DESCRIPTION="Utilities and libraries for NUMA systems"
 HOMEPAGE="https://github.com/numactl/numactl"
@@ -22,32 +22,24 @@ IUSE="static-libs"
 src_prepare() {
 	default
 	eautoreconf
-	# We need to copy the sources or else tests will fail
-	multilib_copy_sources
 }
 
-multilib_src_configure() {
+src_configure() {
 	ECONF_SOURCE="${S}" econf $(use_enable static-libs static)
 }
 
-multilib_src_compile() {
-	multilib_is_native_abi && default || emake libnuma.la
-}
-
-multilib_src_test() {
-	if multilib_is_native_abi ; then
-		if [ -d /sys/devices/system/node ]; then
-			einfo "The only generically safe test is regress2."
-			einfo "The other test cases require 2 NUMA nodes."
-			emake regress2
-		else
-			ewarn "You do not have baseline NUMA support in your kernel, skipping tests."
-		fi
+src_test() {
+	if [ -d /sys/devices/system/node ]; then
+		einfo "The only generically safe test is regress2."
+		einfo "The other test cases require 2 NUMA nodes."
+		emake regress2
+	else
+		ewarn "You do not have baseline NUMA support in your kernel, skipping tests."
 	fi
 }
 
-multilib_src_install() {
-	emake DESTDIR="${D}" \
-		install$(multilib_is_native_abi || echo "-libLTLIBRARIES install-includeHEADERS")
+src_install() {
+	emake DESTDIR="${D}" install
+
 	find "${ED%/}"/usr/ -name libnuma.la -delete || die
 }

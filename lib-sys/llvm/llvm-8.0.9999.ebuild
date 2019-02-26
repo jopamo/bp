@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit cmake-utils flag-o-matic git-r3 multilib-minimal \
+inherit cmake-utils flag-o-matic git-r3 \
 	multiprocessing toolchain-funcs
 
 DESCRIPTION="Low Level Virtual Machine"
@@ -39,7 +39,7 @@ src_prepare() {
 	cmake-utils_src_prepare
 }
 
-multilib_src_configure() {
+src_configure() {
 	local ffi_cflags ffi_ldflags
 	if use libffi; then
 		ffi_cflags=$($(tc-getPKG_CONFIG) --cflags-only-I libffi)
@@ -72,11 +72,11 @@ multilib_src_configure() {
 		-DFFI_INCLUDE_DIR="${ffi_cflags#-I}"
 		-DFFI_LIBRARY_DIR="${ffi_ldflags#-L}"
 		# used only for llvm-objdump tool
-		-DHAVE_LIBXAR=$(multilib_native_usex xar 1 0)
+		-DHAVE_LIBXAR=$(usex xar 1 0)
 
 		# disable OCaml bindings (now in dev-ml/llvm-ocaml)
 		-DOCAMLFIND=NO
-		
+
 		-DLLVM_BUILD_DOCS=OFF
 		-DLLVM_ENABLE_OCAMLDOC=OFF
 		-DLLVM_ENABLE_SPHINX=OFF
@@ -93,14 +93,6 @@ multilib_src_configure() {
 			-DLLVM_VERSION_SUFFIX="libcxx"
 		)
 	fi
-
-#	Note: go bindings have no CMake rules at the moment
-#	but let's kill the check in case they are introduced
-#	if ! multilib_is_native_abi || ! use go; then
-		mycmakeargs+=(
-			-DGO_EXECUTABLE=GO_EXECUTABLE-NOTFOUND
-		)
-#	fi
 
 	use test && mycmakeargs+=(
 		-DLLVM_LIT_ARGS="-vv;-j;${LIT_JOBS:-$(makeopts_jobs "${MAKEOPTS}" "$(get_nproc)")}"
@@ -121,29 +113,21 @@ multilib_src_configure() {
 	cmake-utils_src_configure
 }
 
-multilib_src_compile() {
+src_compile() {
 	cmake-utils_src_compile
 }
 
-multilib_src_test() {
+src_test() {
 	# respect TMPDIR!
 	local -x LIT_PRESERVES_TMP=1
 	cmake-utils_src_make check
 }
 
 src_install() {
-	local MULTILIB_CHOST_TOOLS=(
-		/usr/bin/llvm-config
-	)
-
-	local MULTILIB_WRAPPED_HEADERS=(
-		/usr/include/llvm/Config/llvm-config.h
-	)
-
 	local LLVM_LDPATHS=()
-	multilib-minimal_src_install
+	default
 }
 
-multilib_src_install() {
+src_install() {
 	cmake-utils_src_install
 }

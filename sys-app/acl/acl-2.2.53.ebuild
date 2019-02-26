@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils libtool toolchain-funcs multilib-minimal
+inherit eutils libtool toolchain-funcs
 
 DESCRIPTION="access control list utilities, libraries and headers"
 HOMEPAGE="https://savannah.nongnu.org/projects/acl"
@@ -14,16 +14,15 @@ KEYWORDS="amd64 arm64"
 
 IUSE="nls static-libs"
 
-DEPEND=">=sys-app/attr-2.4.47-r1[${MULTILIB_USEDEP}]"
+DEPEND=">=sys-app/attr-2.4.47-r1"
 
 src_prepare() {
 	default
 	strip-linguas po
 	elibtoolize
-	multilib_copy_sources
 }
 
-multilib_src_configure() {
+src_configure() {
 	unset PLATFORM
 	export OPTIMIZER=${CFLAGS}
 	export DEBUG=-DNDEBUG

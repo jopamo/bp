@@ -4,7 +4,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{7,8} )
 
-inherit flag-o-matic linux-info meson multilib-minimal ninja-utils python-any-r1 systemd toolchain-funcs udev user git-r3
+inherit flag-o-matic linux-info meson ninja-utils python-any-r1 systemd toolchain-funcs udev user git-r3
 
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
@@ -16,25 +16,25 @@ KEYWORDS="amd64 arm64"
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0/2"
 
-IUSE="acl apparmor audit build cryptsetup docs efi kmod +lz4 pam pcre qrcode +seccomp test xkb"
+IUSE="acl apparmor audit build cryptsetup docs efi kmod +lz4 +networkd pam pcre qrcode +seccomp test xkb"
 
 RESTRICT="!test? ( test )"
 
-COMMON_DEPEND=">=sys-app/util-linux-2.30:0=[${MULTILIB_USEDEP}]
-	sys-devel/gettext:0=[${MULTILIB_USEDEP}]
-	lib-sys/libcap:0=[${MULTILIB_USEDEP}]
+COMMON_DEPEND=">=sys-app/util-linux-2.30:0=
+	sys-devel/gettext:0=
+	lib-sys/libcap:0=
 	!<lib-sys/glibc-2.16
 	acl? ( sys-app/acl:0= )
 	apparmor? ( lib-sys/libapparmor:0= )
 	audit? ( >=sys-app/audit-2:0= )
 	cryptsetup? ( >=sys-fs/cryptsetup-1.6:0= )
 	app-net/curl
-	>=lib-dev/libgcrypt-1.4.5:0=[${MULTILIB_USEDEP}]
+	>=lib-dev/libgcrypt-1.4.5:0=
 	app-compression/bzip2:0=
 	lib-sys/zlib:0=
 	kmod? ( >=sys-app/kmod-15:0= )
-	lz4? ( >=app-compression/lz4-0_p131:0=[${MULTILIB_USEDEP}] )
-	pam? ( lib-sys/pam:=[${MULTILIB_USEDEP}] )
+	lz4? ( >=app-compression/lz4-0_p131:0= )
+	pam? ( lib-sys/pam:= )
 	pcre? ( lib-dev/libpcre2 )
 	qrcode? ( app-media/qrencode:0= )
 	seccomp? ( >=lib-sys/libseccomp-2.3.3:0= )
@@ -49,8 +49,7 @@ RDEPEND="${COMMON_DEPEND}
 		sys-app/coreutils[kill(-)]
 	) )"
 
-PDEPEND=">=sys-app/dbus-1.9.8[systemd]
-"
+PDEPEND=">=sys-app/dbus-1.9.8[systemd]"
 
 DEPEND="${COMMON_DEPEND}
 	app-compression/xz-utils:0
@@ -101,49 +100,28 @@ PATCHES=(
 
 src_configure() {
 	python_setup
-	multilib-minimal_src_configure
 }
 
-meson_use() {
-	usex "$1" true false
-}
-
-meson_multilib() {
-	if multilib_is_native_abi; then
-		echo true
-	else
-		echo false
-	fi
-}
-
-meson_multilib_native_use() {
-	if multilib_is_native_abi && use "$1"; then
-		echo true
-	else
-		echo false
-	fi
-}
-
-multilib_src_configure() {
+src_configure() {
 	local myconf=(
-		-Dacl=$(meson_multilib_native_use acl)
-		-Dapparmor=$(meson_multilib_native_use apparmor)
-		-Daudit=$(meson_multilib_native_use audit)
+		$(meson_use acl)
+		$(meson_use apparmor)
+		$(meson_use audit)
 		-Dbacklight=false
 		-Dbinfmt=true
 		-Dblkid=true
 		-Dbuildtype=release
 		-Dbzip2=true
 		-Dcoredump=false
-		-Ddbus=$(meson_multilib_native_use test)
+		$(meson_use test dbus)
 		-Ddefault-dns-over-tls=opportunistic
 		-Ddefault-dnssec=yes
 		-Ddefault-hierarchy=unified
 		-Ddefault-kill-user-processes=false
 		-Ddns-over-tls=true
 		-Ddns-servers=1.1.1.1
-		-Defi=$(meson_use efi )
-		-Dgnu-efi=$(meson_use efi)
+		$(meson_use efi )
+		$(meson_use efi gnu-efi)
 		-Delfutils=true
 		-Denvironment-d=true
 		-Dfirstboot=true
@@ -156,9 +134,9 @@ multilib_src_configure() {
 		-Dima=true
 		-Dimportd=true
 		-Dkill-path=/usr/bin/kill
-		-Dkmod=$(meson_multilib_native_use kmod)
+		$(meson_use kmod)
 		-Dldconfig=true
-		-Dlibcryptsetup=$(meson_multilib_native_use cryptsetup)
+		$(meson_use cryptsetup libcryptsetup)
 		-Dlibcurl=true
 		-Dlibidn2=false
 		-Dlibidn=false
@@ -168,18 +146,18 @@ multilib_src_configure() {
 		-Dmachined=true
 		-Dman=false
 		-Dmicrohttpd=false
-		-Dnetworkd=$(meson_multilib)
-		-Dpam=$(meson_use pam)
+		$(meson_use networkd)
+		$(meson_use pam)
 		-Dpamlibdir="${EPREFIX}"/usr/$(get_libdir)
-		-Dpcre2=$(meson_multilib_native_use pcre)
+		$(meson_use pcre pcre2)
 		-Dpolkit=false
-		-Dqrencode=$(meson_multilib_native_use qrcode)
+		$(meson_use qrcode qrencode)
 		-Dquotacheck=true
 		-Drandomseed=true
 		-Drfkill=true
 		-Drootlibdir="${EPREFIX}"/usr/$(get_libdir)
 		-Drootprefix="${EPREFIX}"/usr
-		-Dseccomp=$(meson_multilib_native_use seccomp)
+		-Dseccomp=$(meson_use seccomp)
 		-Dsmack=false
 		-Dsplit-bin=true
 		-Dsplit-usr=false
@@ -188,7 +166,7 @@ multilib_src_configure() {
 		-Dtimesyncd=false
 		-Dtmpfiles=true
 		-Dvconsole=true
-		-Dxkbcommon=$(meson_multilib_native_use xkb)
+		$(meson_use xkb xkbcommon)
 		-Dxz=true
 		-Dzlib=true
 
@@ -205,24 +183,23 @@ multilib_src_configure() {
 		-Dnss-systemd=false
 	)
 
-
-	meson_src_configure "${myconf[@]}"
+	meson_src_configure
 }
 
-multilib_src_compile() {
+src_compile() {
 	append-cflags -Wno-error=format-truncation
-	eninja
+	meson_src_compile
 }
 
-multilib_src_test() {
-	eninja test
+msrc_test() {
+	meson_src_test
 }
 
-multilib_src_install() {
-	DESTDIR="${D}" eninja install
+src_install() {
+	meson_src_install
 }
 
-multilib_src_install_all() {
+src_install_all() {
 	dosym ../sysctl.conf /etc/sysctl.d/99-sysctl.conf
 
 	# If we install these, there's no way to remove them

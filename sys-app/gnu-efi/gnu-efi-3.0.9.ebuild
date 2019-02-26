@@ -16,7 +16,7 @@ SRC_URI="mirror://sourceforge/gnu-efi/${P}.tar.bz2"
 LICENSE="GPL-2+ BSD BSD-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="abi_x86_32 abi_x86_64 -custom-cflags"
+IUSE="abi_x86_64 -custom-cflags"
 
 DEPEND="sys-app/pciutils"
 RDEPEND=""
@@ -34,10 +34,7 @@ src_prepare() {
 efimake() {
 	local arch=
 	case ${CHOST} in
-		arm*) arch=arm ;;
 		aarch64*) arch=aarch64 ;;
-		ia64*) arch=ia64 ;;
-		i?86*) arch=ia32 ;;
 		x86_64*) arch=x86_64 ;;
 		*) die "Unknown CHOST" ;;
 	esac
@@ -69,7 +66,6 @@ src_compile() {
 	fi
 
 	if [[ ${CHOST} == x86_64* ]]; then
-		use abi_x86_32 && CHOST=i686 ABI=x86 efimake
 		use abi_x86_64 && efimake
 	else
 		efimake
@@ -78,7 +74,6 @@ src_compile() {
 
 src_install() {
 	if [[ ${CHOST} == x86_64* ]]; then
-		use abi_x86_32 && CHOST=i686 ABI=x86 efimake INSTALLROOT="${D}" install
 		use abi_x86_64 && efimake INSTALLROOT="${D}" install
 	else
 		efimake INSTALLROOT="${D}" install

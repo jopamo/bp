@@ -2,7 +2,7 @@
 
 EAPI="6"
 
-inherit toolchain-funcs flag-o-matic linux-info git-r3 multilib-minimal
+inherit toolchain-funcs flag-o-matic linux-info git-r3
 
 DESCRIPTION="show detailed info about what is happening on a block device io queue"
 HOMEPAGE="http://git.kernel.dk/cgit/blktrace/"

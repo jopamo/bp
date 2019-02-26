@@ -4,7 +4,7 @@ EAPI=6
 
 SNAPSHOT=20181220
 
-inherit libtool multilib multilib-minimal eutils pam toolchain-funcs flag-o-matic db-use fcaps autotools
+inherit libtool eutils pam toolchain-funcs flag-o-matic db-use fcaps autotools
 
 MY_PN="Linux-PAM"
 BASEVERSION="1.3.1"
@@ -28,17 +28,17 @@ KEYWORDS="amd64 arm64"
 IUSE="audit +cracklib debug nis nls +pie selinux test vim-syntax"
 
 RDEPEND="
-	cracklib? ( >=lib-sys/cracklib-2.9.1-r1[${MULTILIB_USEDEP}] )
-	audit? ( >=sys-app/audit-2.2.2[${MULTILIB_USEDEP}] )
-	selinux? ( >=lib-sys/libselinux-2.2.2-r4[${MULTILIB_USEDEP}] )
-	nis? ( >=lib-net/libtirpc-0.2.4-r2[${MULTILIB_USEDEP}] )"
+	cracklib? ( >=lib-sys/cracklib-2.9.1-r1 )
+	audit? ( >=sys-app/audit-2.2.2 )
+	selinux? ( >=lib-sys/libselinux-2.2.2-r4 )
+	nis? ( >=lib-net/libtirpc-0.2.4-r2 )"
 
 DEPEND="
 	${RDEPEND}
 	>=sys-devel/libtool-2
-	>=sys-devel/flex-2.5.39-r1[${MULTILIB_USEDEP}]
+	>=sys-devel/flex-2.5.39-r1
 	app-text/docbook-xml-dtd:4.3
-	nis? ( >=dev-util/pkgconfig-0-r1[${MULTILIB_USEDEP}] )"
+	nis? ( >=dev-util/pkgconfig-0-r1 )"
 
 PDEPEND="
 	lib-sys/pambase
@@ -48,7 +48,7 @@ PATCHES=(
 		"${WORKDIR}"/pam-${SNAPSHOT}.patch
 )
 
-multilib_src_configure() {
+src_configure() {
 	export ac_cv_header_xcrypt_h=no
 
 	local myconf=(
@@ -74,11 +74,11 @@ multilib_src_configure() {
 	econf "${myconf[@]}"
 }
 
-multilib_src_compile() {
+src_compile() {
 	emake sepermitlockdir="${EPREFIX}/run/sepermit"
 }
 
-multilib_src_install() {
+src_install() {
 	emake DESTDIR="${D}" install \
 		sepermitlockdir="${EPREFIX}/run/sepermit"
 }

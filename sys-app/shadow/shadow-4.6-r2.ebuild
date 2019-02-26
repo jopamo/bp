@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils libtool pam multilib autotools
+inherit eutils libtool pam autotools
 
 DESCRIPTION="Utilities to deal with user accounts"
 HOMEPAGE="https://github.com/shadow-maint/shadow http://pkg-shadow.alioth.debian.org/"

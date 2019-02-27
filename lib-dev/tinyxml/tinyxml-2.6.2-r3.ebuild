@@ -39,7 +39,7 @@ src_prepare() {
 
 	tc-export AR CXX RANLIB
 
-	[[ ${CHOST} == *-darwin* ]] && export LIBDIR="${EPREFIX}"/usr/$(get_libdir)
+	[[ ${CHOST} == *-darwin* ]] && export LIBDIR="${EPREFIX}"/usr/lib64
 	eapply_user
 }
 

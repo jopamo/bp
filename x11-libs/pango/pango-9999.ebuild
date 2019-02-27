@@ -14,15 +14,15 @@ KEYWORDS="amd64 arm64"
 IUSE="X +introspection test"
 
 RDEPEND="
-	>=lib-media/harfbuzz-1.2.3:=[glib(+),truetype(+),${MULTILIB_USEDEP}]
-	>=lib-dev/glib-2.34.3:2[${MULTILIB_USEDEP}]
-	>=lib-media/fontconfig-2.10.92:1.0=[${MULTILIB_USEDEP}]
-	>=lib-media/freetype-2.5.0.1:2=[${MULTILIB_USEDEP}]
-	>=x11-libs/cairo-1.12.14-r4:=[${MULTILIB_USEDEP}]
+	>=lib-media/harfbuzz-1.2.3:=[glib(+),truetype(+)]
+	>=lib-dev/glib-2.34.3:2
+	>=lib-media/fontconfig-2.10.92:1.0=
+	>=lib-media/freetype-2.5.0.1:2=
+	>=x11-libs/cairo-1.12.14-r4:=
 	introspection? ( >=lib-dev/gobject-introspection-0.9.5:= )
 "
 DEPEND="${RDEPEND}
 	>=dev-util/gtk-doc-am-1.20
-	dev-util/pkgconfig[${MULTILIB_USEDEP}]
+	dev-util/pkgconfig
 	lib-dev/fribidi
 "

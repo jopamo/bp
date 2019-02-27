@@ -28,14 +28,14 @@ src_compile() {
 src_install() {
 	emake	\
 		INSTALL_TOP="${ED}"/usr \
-		INSTALL_LIB="${ED}"/usr/$(get_libdir) \
+		INSTALL_LIB="${ED}"/usr/lib64 \
     	TO_LIB="liblua.a liblua.so.${PV}" \
     	INSTALL_MAN="${ED}"/usr/share/man/man1 \
     	install
 
-	insinto "/usr/$(get_libdir)/pkgconfig"
+	insinto "/usr/lib64/pkgconfig"
 	doins "${FILESDIR}/lua.pc"
-	cd "${ED}"/usr/$(get_libdir)/
+	cd "${ED}"/usr/lib64/
 	ln -s liblua.so.${PV} liblua.so.5.3
 	ln -s liblua.so.${PV} liblua.so
 }

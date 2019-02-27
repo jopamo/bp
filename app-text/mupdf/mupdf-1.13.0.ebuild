@@ -74,7 +74,7 @@ src_prepare() {
 		sed -e '/* #define FZ_ENABLE_JS/ a\#define FZ_ENABLE_JS 0' \
 			-i include/mupdf/fitz/config.h
 
-	sed -e "/^libdir=/s:/lib:/$(get_libdir):" \
+	sed -e "/^libdir=/s:/lib:/lib64:" \
 		-e "/^prefix=/s:=.*:=${EROOT}/usr:" \
 		-i platform/debian/${PN}.pc || die
 
@@ -85,7 +85,7 @@ src_prepare() {
 		-e "1iverbose = yes" \
 		-e "1ibuild = debug" \
 		-e "1iprefix = ${ED}usr" \
-		-e "1ilibdir = ${ED}usr/$(get_libdir)" \
+		-e "1ilibdir = ${ED}usr/lib64" \
 		-e "1idocdir = ${ED}usr/share/doc/${PF}" \
 		-e "1iWANT_X11 = $(usex X)" \
 		-e "1iWANT_OPENSSL = $(usex openssl)" \
@@ -134,7 +134,7 @@ src_install() {
 	fi
 
 	emake install
-	dosym ${my_soname} /usr/$(get_libdir)/lib${PN}.so
+	dosym ${my_soname} /usr/lib64/lib${PN}.so
 
 	use static-libs && \
 		dolib.a "${S}"-static/build/debug/lib${PN}{,-js-none}.a
@@ -149,7 +149,7 @@ src_install() {
 		einfo "mupdf symlink points to mupdf-x11 (bug 616654)"
 		dosym ${PN}-x11 /usr/bin/${PN}
 	fi
-	insinto /usr/$(get_libdir)/pkgconfig
+	insinto /usr/lib64/pkgconfig
 	doins platform/debian/${PN}.pc
 
 	rm "${ED}"/usr/share/applications/mupdf.desktop

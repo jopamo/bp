@@ -20,20 +20,20 @@ src_compile() {
 		CC="$(tc-getCC)" \
 		AR="$(tc-getAR)" \
 		PREFIX="${EPREFIX}/usr" \
-		LIBDIR="${EPREFIX}/usr/$(get_libdir)" zstd
+		LIBDIR="${EPREFIX}/usr/lib64" zstd
 
 	emake -C lib \
 		CC="$(tc-getCC)" \
 		AR="$(tc-getAR)" \
 		PREFIX="${EPREFIX}/usr" \
-		LIBDIR="${EPREFIX}/usr/$(get_libdir)" libzstd
+		LIBDIR="${EPREFIX}/usr/lib64" libzstd
 
 	emake -C contrib/pzstd \
 		CC="$(tc-getCC)" \
 		CXX="$(tc-getCXX)" \
 		AR="$(tc-getAR)" \
 		PREFIX="${EPREFIX}/usr" \
-		LIBDIR="${EPREFIX}/usr/$(get_libdir)"
+		LIBDIR="${EPREFIX}/usr/lib64"
 
 }
 
@@ -41,14 +41,14 @@ src_install() {
 	emake \
 		DESTDIR="${D}" \
 		PREFIX="${EPREFIX}/usr" \
-		LIBDIR="${EPREFIX}/usr/$(get_libdir)" install
+		LIBDIR="${EPREFIX}/usr/lib64" install
 
 	emake -C contrib/pzstd \
 		DESTDIR="${D}" \
 		PREFIX="${EPREFIX}/usr" \
-		LIBDIR="${EPREFIX}/usr/$(get_libdir)" install
+		LIBDIR="${EPREFIX}/usr/lib64" install
 
 	if ! use static-libs; then
-		rm "${ED%/}"/usr/$(get_libdir)/libzstd.a || die
+		rm "${ED%/}"/usr/lib64/libzstd.a || die
 	fi
 }

@@ -50,13 +50,13 @@ src_prepare() {
 
 src_configure() {
 	if use cuda ; then
-		append-ldflags -L"${EPREFIX}"/opt/cuda/$(get_libdir)
+		append-ldflags -L"${EPREFIX}"/opt/cuda/lib64
 	fi
 
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var

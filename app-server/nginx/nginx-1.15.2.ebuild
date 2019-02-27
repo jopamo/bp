@@ -669,7 +669,7 @@ src_configure() {
 		--pid-path="${EPREFIX}"/run/${PN}.pid \
 		--lock-path="${EPREFIX}"/run/lock/${PN}.lock \
 		--with-cc-opt="-I${EROOT}usr/include${WITHOUT_IPV6}" \
-		--with-ld-opt="-L${EROOT}usr/$(get_libdir)" \
+		--with-ld-opt="-L${EROOT}usr/lib64" \
 		--http-log-path="${EPREFIX}"/var/log/${PN}/access_log \
 		--http-client-body-temp-path="${EPREFIX}${NGINX_HOME_TMP}"/client \
 		--http-proxy-temp-path="${EPREFIX}${NGINX_HOME_TMP}"/proxy \

@@ -187,13 +187,13 @@ src_install_all() {
 
 pkg_preinst() {
 	# Preserve from the audit-1 series
-	preserve_old_lib /$(get_libdir)/libaudit.so.0
+	preserve_old_lib /lib64/libaudit.so.0
 }
 
 pkg_postinst() {
 	lockdown_perms "${EROOT}"
 	# Preserve from the audit-1 series
-	preserve_old_lib_notify /$(get_libdir)/libaudit.so.0
+	preserve_old_lib_notify /lib64/libaudit.so.0
 }
 
 lockdown_perms() {

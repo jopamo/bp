@@ -50,7 +50,7 @@ src_prepare() {
 
 	default
 
-	sed -i -e "s:@@GENTOO_LIBDIR@@:$(get_libdir):g" \
+	sed -i -e "s:@@GENTOO_LIBDIR@@:lib64:g" \
 		Lib/distutils/command/install.py \
 		Lib/distutils/sysconfig.py \
 		Lib/site.py \
@@ -195,7 +195,7 @@ src_test() {
 	done
 
 	elog "If you would like to run them, you may:"
-	elog "cd '${EPREFIX}/usr/$(get_libdir)/python${SLOT}/test'"
+	elog "cd '${EPREFIX}/usr/lib64/python${SLOT}/test'"
 	elog "and run the tests separately."
 
 	if [[ "${result}" -ne 0 ]]; then
@@ -204,7 +204,7 @@ src_test() {
 }
 
 src_install() {
-	local libdir=${ED}/usr/$(get_libdir)/python${SLOT}
+	local libdir=${ED}/usr/lib64/python${SLOT}
 
 	cd "${BUILD_DIR}" || die
 	emake DESTDIR="${D}" altinstall
@@ -219,7 +219,7 @@ src_install() {
 
 	use elibc_uclibc && rm -fr "${libdir}/"{bsddb/test,test}
 
-	insinto /usr/share/gdb/auto-load/usr/$(get_libdir) #443510
+	insinto /usr/share/gdb/auto-load/usr/lib64 #443510
 	local libname=$(printf 'e:\n\t@echo $(INSTSONAME)\ninclude Makefile\n' | \
 		emake --no-print-directory -s -f - 2>/dev/null)
 	newins "${S}"/Tools/gdb/libpython.py "${libname}"-gdb.py

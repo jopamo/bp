@@ -95,12 +95,12 @@ src_install() {
 
 	# Create /usr/bin/firefox-bin
 	dodir /usr/bin/
-	local apulselib=$(usex pulseaudio "/usr/$(get_libdir)/apulse:" "")
+	local apulselib=$(usex pulseaudio "/usr/lib64/apulse:" "")
 	cat <<-EOF >"${ED}"usr/bin/${PN}
 	#!/bin/sh
 	unset LD_PRELOAD
 	LD_LIBRARY_PATH="${apulselib}/opt/firefox/" \\
-	GTK_PATH=/usr/$(get_libdir)/gtk-3.0/ \\
+	GTK_PATH=/usr/lib64/gtk-3.0/ \\
 	exec /opt/${MOZ_PN}/${MOZ_PN} "\$@"
 	EOF
 	fperms 0755 /usr/bin/${PN}

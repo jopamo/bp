@@ -12,12 +12,12 @@ KEYWORDS="amd64 arm64"
 IUSE="doc selinux test xkb static-libs"
 SLOT=0
 
-RDEPEND=">=lib-dev/libpthread-stubs-0.3-r1[${MULTILIB_USEDEP}]
-	>=x11-libs/libXau-1.0.7-r1[${MULTILIB_USEDEP}]
-	>=x11-libs/libXdmcp-1.1.1-r1[${MULTILIB_USEDEP}]"
+RDEPEND=">=lib-dev/libpthread-stubs-0.3-r1
+	>=x11-libs/libXau-1.0.7-r1
+	>=x11-libs/libXdmcp-1.1.1-r1"
 # Note: ${PYTHON_USEDEP} needs to go verbatim
 DEPEND="${RDEPEND}
-	test? ( lib-dev/check[${MULTILIB_USEDEP}] )
+	test? ( lib-dev/check )
 	doc? ( app-text/doxygen[dot] )
 	lib-dev/libxslt
 	x11/xcb-proto"
@@ -31,7 +31,7 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var

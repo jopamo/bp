@@ -103,7 +103,7 @@ src_configure() {
 		--disable-mir-backend \
 		--disable-papi \
 		--with-xml-catalog="${EPREFIX}"/etc/xml/catalog \
-		--libdir="${EPREFIX}"/usr/$(get_libdir) \
+		--libdir="${EPREFIX}"/usr/lib64 \
 		CUPS_CONFIG="${EPREFIX}/usr/bin/${CHOST}-cups-config"
 }
 
@@ -120,7 +120,7 @@ src_install_all() {
 
 pkg_preinst() {
 	# Make immodules.cache belongs to gtk+ alone
-	local cache="usr/$(get_libdir)/gtk-3.0/3.0.0/immodules.cache"
+	local cache="usr/lib64/gtk-3.0/3.0.0/immodules.cache"
 
 	if [[ -e ${EROOT}${cache} ]]; then
 		cp "${EROOT}"${cache} "${ED}"/${cache} || die
@@ -131,6 +131,6 @@ pkg_preinst() {
 
 pkg_postrm() {
 	if [[ -z ${REPLACED_BY_VERSION} ]]; then
-		rm -f "${EROOT}"usr/$(get_libdir)/gtk-3.0/3.0.0/immodules.cache
+		rm -f "${EROOT}"usr/lib64/gtk-3.0/3.0.0/immodules.cache
 	fi
 }

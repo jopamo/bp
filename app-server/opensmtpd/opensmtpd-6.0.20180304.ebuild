@@ -74,7 +74,7 @@ src_install() {
 		dodir /usr/sbin
 		dosym /usr/sbin/smtpctl /usr/sbin/sendmail
 		dosym /usr/sbin/smtpctl /usr/bin/sendmail
-		dosym /usr/sbin/smtpctl /usr/$(get_libdir)/sendmail
+		dosym /usr/sbin/smtpctl /usr/lib64/sendmail
 	fi
 }
 

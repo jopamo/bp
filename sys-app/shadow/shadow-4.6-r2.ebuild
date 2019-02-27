@@ -42,7 +42,7 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
@@ -84,7 +84,7 @@ src_install() {
 	emake DESTDIR="${D}" suidperms=4711 install
 
 	# Remove libshadow and libmisc; internal use only
-	rm -f "${ED}"/{,usr/}$(get_libdir)/lib{misc,shadow}.{a,la}
+	rm -f "${ED}"/{,usr/}lib64/lib{misc,shadow}.{a,la}
 
 	insinto /etc
 	if ! use pam ; then
@@ -106,7 +106,7 @@ src_install() {
 	if ! use pam ; then
 		set_login_opt MAIL_CHECK_ENAB no
 		set_login_opt SU_WHEEL_ONLY yes
-		set_login_opt CRACKLIB_DICTPATH /usr/$(get_libdir)/cracklib_dict
+		set_login_opt CRACKLIB_DICTPATH /usr/lib64/cracklib_dict
 		set_login_opt LOGIN_RETRIES 3
 		set_login_opt ENCRYPT_METHOD SHA512
 		set_login_opt CONSOLE

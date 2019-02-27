@@ -17,7 +17,7 @@ else
 fi
 
 DEPEND="!<x11-app/xorg-server-1.5
-	zlib? (	>=lib-sys/zlib-1.2.8-r1:=[${MULTILIB_USEDEP}] )"
+	zlib? (	>=lib-sys/zlib-1.2.8-r1:= )"
 RDEPEND="${DEPEND}
 	sys-app/systemd"
 
@@ -30,7 +30,7 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var

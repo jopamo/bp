@@ -30,7 +30,7 @@ src_configure() {
 	myconf+=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
@@ -51,8 +51,8 @@ src_install_all() {
 	if [[ ${CHOST} == *-darwin* ]] ; then
 		# fixup install_name, #437362
 		install_name_tool \
-			-id "${EPREFIX}"/usr/$(get_libdir)/libjemalloc.2.dylib \
-			"${ED}"/usr/$(get_libdir)/libjemalloc.2.dylib || die
+			-id "${EPREFIX}"/usr/lib64/libjemalloc.2.dylib \
+			"${ED}"/usr/lib64/libjemalloc.2.dylib || die
 	fi
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

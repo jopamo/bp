@@ -13,16 +13,9 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="dns +kmod static-libs +udev zlib"
 
-# Have the sub-libs in RDEPEND with [static-libs] since, logically,
-# our libpci.a depends on libz.a/etc... at runtime.
-LIB_DEPEND="
-	zlib? ( >=lib-sys/zlib-1.2.8-r1[static-libs(+)] )
-	udev? ( >=sys-app/systemd-208[static-libs(+)] )
-"
 DEPEND="
 	kmod? ( sys-app/kmod )
-	static-libs? ( ${LIB_DEPEND} )
-	!static-libs? ( ${LIB_DEPEND//static-libs(+),} )
+	zlib? ( >=lib-sys/zlib-1.2.8-r1[static-libs(+)?] )
 "
 RDEPEND="
 	${DEPEND}
@@ -71,7 +64,7 @@ pemake() {
 		ZLIB=$(usex zlib) \
 		PCI_COMPRESSED_IDS=0 \
 		PCI_IDS=pci.ids \
-		LIBDIR="\${PREFIX}/$(get_libdir)" \
+		LIBDIR="\${PREFIX}/lib64" \
 		LIBKMOD=$(usex kmod) \
 		HWDB=$(usex udev) \
 		"$@"

@@ -27,7 +27,7 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
@@ -40,6 +40,6 @@ src_configure() {
 
 src_install() {
 	default
-	insinto /usr/$(get_libdir)/pkgconfig
+	insinto /usr/lib64/pkgconfig
 	doins ${PN}.pc
 }

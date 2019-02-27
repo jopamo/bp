@@ -92,11 +92,11 @@ src_configure() {
 		--enable-fhs
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
-		--with-modulesdir="${EPREFIX}/usr/$(get_libdir)/samba"
+		--with-modulesdir="${EPREFIX}/usr/lib64/samba"
 		--with-piddir="${EPREFIX}/run/${PN}"
 		--disable-rpath
 		--disable-rpath-install
@@ -116,7 +116,7 @@ src_configure() {
 		$(use_with gpg gpgme)
 		$(use_enable iprint)
 		$(use_with pam)
-		$(usex pam "--with-pammodulesdir=${EPREFIX}/$(get_libdir)/security" '')
+		$(usex pam "--with-pammodulesdir=${EPREFIX}/lib64/security" '')
 		$(use_with quota quotas)
 		$(use_with syslog)
 		$(use_with systemd)

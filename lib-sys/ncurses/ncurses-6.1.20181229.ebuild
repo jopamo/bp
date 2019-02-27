@@ -31,7 +31,7 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
@@ -40,7 +40,7 @@ src_configure() {
 		--with-terminfo-dirs="${EPREFIX}"/usr/share/terminfo
 		--enable-pc-files
 		--with-pkg-config="$(tc-getPKG_CONFIG)"
-		--with-pkg-config-libdir="${EPREFIX}/usr/$(get_libdir)/pkgconfig"
+		--with-pkg-config-libdir="${EPREFIX}/usr/lib64/pkgconfig"
 		--without-normal
 		--with-symlinks
 		--enable-overwrite
@@ -62,13 +62,13 @@ src_install() {
 	local lib
 
 	for lib in ncurses form panel menu ; do
-    	echo "INPUT(-l${lib}tw)" > "${ED}"/usr/$(get_libdir)/lib${lib}.so
-    	echo "INPUT(-l${lib}tw)" > "${ED}"/usr/$(get_libdir)/lib${lib}w.so
-    	ln -sfv ${lib}tw.pc        "${ED}"/usr/$(get_libdir)/pkgconfig/${lib}.pc
-    	ln -sfv ${lib}tw.pc        "${ED}"/usr/$(get_libdir)/pkgconfig/${lib}w.pc
+    	echo "INPUT(-l${lib}tw)" > "${ED}"/usr/lib64/lib${lib}.so
+    	echo "INPUT(-l${lib}tw)" > "${ED}"/usr/lib64/lib${lib}w.so
+    	ln -sfv ${lib}tw.pc        "${ED}"/usr/lib64/pkgconfig/${lib}.pc
+    	ln -sfv ${lib}tw.pc        "${ED}"/usr/lib64/pkgconfig/${lib}w.pc
 	done
 
-	echo "INPUT(-lncursestw)" > "${ED}"/usr/$(get_libdir)/libcurses.so
+	echo "INPUT(-lncursestw)" > "${ED}"/usr/lib64/libcurses.so
 
 	use static-libs || find "${ED}"/usr/ -name '*.a' -delete
 }

@@ -106,8 +106,8 @@ src_prepare() {
 
 	# Change configuration to match Gentoo locations (bug #143750)
 	sed -i \
-		-e "s:/usr/lib/opensc:/usr/$(get_libdir):" \
-		-e "s:/usr/lib/pkcs11:/usr/$(get_libdir):" \
+		-e "s:/usr/lib/opensc:/usr/lib64:" \
+		-e "s:/usr/lib/pkcs11:/usr/lib64:" \
 		wpa_supplicant.conf || die
 
 	# systemd entries to D-Bus service files (bug #372877)

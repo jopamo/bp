@@ -19,7 +19,7 @@ _emake() {
 	emake \
 		Q= \
 		PREFIX="${EPREFIX}/usr" \
-		MULTILIB="$(get_libdir)" \
+		MULTILIB="lib64" \
 		DESTDIR="${D}" \
 		HOST_CC="$(tc-getBUILD_CC)" \
 		STATIC_CC="$(tc-getCC)" \
@@ -28,7 +28,7 @@ _emake() {
 		TARGET_AR="$(tc-getAR) rcus" \
 		BUILDMODE="$(usex static-libs mixed dynamic)" \
 		TARGET_STRIP="true" \
-		INSTALL_LIB="${ED%/}/usr/$(get_libdir)" \
+		INSTALL_LIB="${ED%/}/usr/lib64" \
 		"$@"
 }
 

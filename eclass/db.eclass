@@ -17,7 +17,7 @@ RDEPEND=""
 
 db_fix_so() {
 	has "${EAPI:-0}" 0 1 2 && ! use prefix && EROOT="${ROOT}"
-	LIB="${EROOT}/usr/$(get_libdir)"
+	LIB="${EROOT}/usr/lib64"
 
 	cd "${LIB}"
 
@@ -120,7 +120,7 @@ db_src_install_headerslot() {
 
 db_src_install_usrlibcleanup() {
 	has "${EAPI:-0}" 0 1 2 && ! use prefix && ED="${D}"
-	LIB="${ED}/usr/$(get_libdir)"
+	LIB="${ED}/usr/lib64"
 	# Clean out the symlinks so that they will not be recorded in the
 	# contents (bug #60732)
 

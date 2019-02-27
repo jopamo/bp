@@ -37,7 +37,7 @@ _emake() {
 	CC=$(tc-getCC) \
 	AR=$(tc-getAR) \
 	RANLIB=$(tc-getRANLIB) \
-	ABI_LIBDIR=$(get_libdir) \
+	ABI_LIBDIR=lib64 \
 	CFLAGS_WERROR= \
 	emake "$@"
 }

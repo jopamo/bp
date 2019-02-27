@@ -40,7 +40,7 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
@@ -62,7 +62,7 @@ src_install() {
 
 pkg_preinst() {
 	# Make sure loaders.cache belongs to gdk-pixbuf alone
-	local cache="usr/$(get_libdir)/${PN}-2.0/2.10.0/loaders.cache"
+	local cache="usr/lib64/${PN}-2.0/2.10.0/loaders.cache"
 
 	if [[ -e ${EROOT}${cache} ]]; then
 		cp "${EROOT}"${cache} "${ED}"/${cache} || die

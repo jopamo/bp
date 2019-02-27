@@ -15,9 +15,9 @@ KEYWORDS="amd64 arm64"
 RDEPEND="nvidia/nvidia-drivers"
 
 src_compile() {
-	emake PREFIX="${EPREFIX}/usr" LIBDIR="$(get_libdir)"
+	emake PREFIX="${EPREFIX}/usr" LIBDIR="lib64"
 }
 
 src_install() {
-	emake PREFIX="${EPREFIX}/usr" LIBDIR="$(get_libdir)" DESTDIR="${D}" install
+	emake PREFIX="${EPREFIX}/usr" LIBDIR="lib64" DESTDIR="${D}" install
 }

@@ -345,6 +345,7 @@ toolchain_src_configure() {
 		--enable-nls
 		--enable-libstdcxx-time
 		--enable-gold
+		--disable-multilib
 )
 
 	# Use the default ("release") checking because upstream usually neglects
@@ -1057,7 +1058,7 @@ toolchain_src_install() {
 	chown -R root:0 "${D}${LIBPATH}" 2>/dev/null
 
 	# Move pretty-printers to gdb datadir to shut ldconfig up
-	local py gdbdir=/usr/share/gdb/auto-load${LIBPATH/\/lib\//\/$(get_libdir)\/}
+	local py gdbdir=/usr/share/gdb/auto-load${LIBPATH/\/lib\//\/lib64\/}
 	pushd "${D}${LIBPATH}" >/dev/null
 	for py in $(find . -name '*-gdb.py') ; do
 		local multidir=${py%/*}
@@ -1087,7 +1088,7 @@ gcc_movelibs() {
 	# code to run on the target.
 	if tc_version_is_at_least 5 && is_crosscompile ; then
 		dodir "${HOSTLIBPATH#${EPREFIX}}"
-		mv "${ED}"usr/$(get_libdir)/libcc1* "${D}${HOSTLIBPATH}" || die
+		mv "${ED}"usr/lib64/libcc1* "${D}${HOSTLIBPATH}" || die
 	fi
 
 	# For all the libs that are built for CTARGET, move them into the
@@ -1201,7 +1202,7 @@ gcc_slot_java() {
 		fi
 	done
 
-	if [[ -d ${D}${PREFIX}/lib/security ]] || [[ -d ${D}${PREFIX}/$(get_libdir)/security ]] ; then
+	if [[ -d ${D}${PREFIX}/lib/security ]] || [[ -d ${D}${PREFIX}/lib64/security ]] ; then
 		dodir /${LIBPATH#${EPREFIX}}/security
 		mv -f "${D}${PREFIX}"/lib*/security/* "${D}${LIBPATH}"/security
 		rm -rf "${D}${PREFIX}"/lib*/security

@@ -83,7 +83,7 @@ src_prepare() {
 
 	# search path fix
 	# put LDFLAGS after BINDIR, bug #383447
-	sed -i -e "s:\$\(gsdatadir\)/lib:@datarootdir@/ghostscript/${PVM}/$(get_libdir):" \
+	sed -i -e "s:\$\(gsdatadir\)/lib:@datarootdir@/ghostscript/${PVM}/lib64:" \
 		-e "s:exdir=.*:exdir=@datarootdir@/doc/${PF}/examples:" \
 		-e "s:docdir=.*:docdir=@datarootdir@/doc/${PF}/html:" \
 		-e "s:GS_DOCDIR=.*:GS_DOCDIR=@datarootdir@/doc/${PF}/html:" \

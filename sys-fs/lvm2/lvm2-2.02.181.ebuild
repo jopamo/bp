@@ -129,7 +129,7 @@ src_configure() {
 	myconf+=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}/etc"
 		--with-confdir="${EPREFIX}"/etc
@@ -139,7 +139,7 @@ src_configure() {
 		$(use_enable selinux)
 		--enable-pkgconfig
 		--with-staticdir="${EPREFIX}"/usr/sbin
-		--with-usrlibdir="${EPREFIX}"/usr/$(get_libdir)
+		--with-usrlibdir="${EPREFIX}"/usr/lib64
 		--with-default-dm-run-dir=/run
 		--with-default-run-dir=/run/lvm
 		--with-default-locking-dir=/run/lock/lvm
@@ -170,7 +170,7 @@ src_install() {
 		dolib.a libdaemon/client/libdaemonclient.a #462908
 		dolib.a daemons/dmeventd/libdevmapper-event.a
 	else
-		rm -f "${ED}"usr/$(get_libdir)/{libdevmapper-event,liblvm2cmd,liblvm2app,libdevmapper}.a
+		rm -f "${ED}"usr/lib64/{libdevmapper-event,liblvm2cmd,liblvm2app,libdevmapper}.a
 	fi
 
 	if use lvm2create_initrd; then

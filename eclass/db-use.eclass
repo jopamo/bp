@@ -90,7 +90,7 @@ db_libname() {
 	has "${EAPI:-0}" 0 1 2 && ! use prefix && EPREFIX=
 	if [ $# -eq 0 ]; then
 		VER="$(db_findver lib-sys/db)" || return 1
-		if [ -e "${EPREFIX}/usr/$(get_libdir)/libdb-${VER}$(get_libname)" ]; then
+		if [ -e "${EPREFIX}/usr/lib64/libdb-${VER}$(get_libname)" ]; then
 			echo -n "db-${VER}"
 			return 0
 		else
@@ -102,7 +102,7 @@ db_libname() {
 		for x in $@
 		do
 			if VER=$(db_findver "=lib-sys/db-${x}*"); then
-				if [ -e "${EPREFIX}/usr/$(get_libdir)/libdb-${VER}$(get_libname)" ]; then
+				if [ -e "${EPREFIX}/usr/lib64/libdb-${VER}$(get_libname)" ]; then
 					echo -n "db-${VER}"
 					return 0
 				fi

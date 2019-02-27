@@ -12,10 +12,10 @@ SLOT=0
 KEYWORDS="amd64 arm64"
 IUSE="doc ipv6 +uuid"
 
-RDEPEND=">=x11-libs/libICE-1.0.8-r1[${MULTILIB_USEDEP}]
+RDEPEND=">=x11-libs/libICE-1.0.8-r1
 	x11-libs/xtrans
 	x11/xorgproto
-	>=sys-app/util-linux-2.24.1-r3[${MULTILIB_USEDEP}]"
+	>=sys-app/util-linux-2.24.1-r3"
 
 DEPEND="${RDEPEND}"
 
@@ -33,7 +33,7 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var

@@ -39,12 +39,12 @@ src_install() {
 	emake DESTDIR="${D}" install
 
 	# This file must be updated with each version update
-	insinto /usr/$(get_libdir)/pkgconfig
+	insinto /usr/lib64/pkgconfig
 	doins "${FILESDIR}"/mad.pc
 
 	# Use correct libdir in pkgconfig file
-	sed -i -e "s:^libdir.*:libdir=${EPREFIX}/usr/$(get_libdir):" \
-		"${ED}"/usr/$(get_libdir)/pkgconfig/mad.pc
+	sed -i -e "s:^libdir.*:libdir=${EPREFIX}/usr/lib64:" \
+		"${ED}"/usr/lib64/pkgconfig/mad.pc
 
 	find "${ED}" -name "*.la" -delete || die
 }

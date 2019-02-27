@@ -66,11 +66,11 @@ src_configure() {
 			myconf+=" --with-libiconv=gnu"
 			# add the libdir for libtool, otherwise it'll make love with system
 			# installed libiconv
-			append-ldflags "-L${EPREFIX}/usr/$(get_libdir)"
+			append-ldflags "-L${EPREFIX}/usr/lib64"
 		fi
 	else
 		if ! has_version --host-root dev-util/pkgconfig; then
-			export GLIB_CFLAGS="-I${EPREFIX}/usr/include/glib-2.0 -I${EPREFIX}/usr/$(get_libdir)/glib-2.0/include"
+			export GLIB_CFLAGS="-I${EPREFIX}/usr/include/glib-2.0 -I${EPREFIX}/usr/lib64/glib-2.0/include"
 			export GLIB_LIBS="-lglib-2.0"
 		fi
 	fi
@@ -81,7 +81,7 @@ src_configure() {
 	econf \
 		--docdir="${EPREFIX}"/usr/share/doc/${PF}/html \
 		--with-system-include-path="${EPREFIX}"/usr/include \
-		--with-system-library-path="${EPREFIX}"/usr/$(get_libdir) \
+		--with-system-library-path="${EPREFIX}"/usr/lib64 \
 		${myconf}
 }
 
@@ -91,7 +91,7 @@ src_install() {
 	if use prefix; then
 		# Add an explicit reference to $EPREFIX to PKG_CONFIG_PATH to
 		# simplify cross-prefix builds
-		echo "PKG_CONFIG_PATH=${EPREFIX}/usr/$(get_libdir)/pkgconfig:${EPREFIX}/usr/share/pkgconfig" >> "${T}"/99${PN}
+		echo "PKG_CONFIG_PATH=${EPREFIX}/usr/lib64/pkgconfig:${EPREFIX}/usr/share/pkgconfig" >> "${T}"/99${PN}
 		doenvd "${T}"/99${PN}
 	fi
 }

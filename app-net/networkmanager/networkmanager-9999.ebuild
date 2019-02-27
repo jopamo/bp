@@ -11,11 +11,11 @@ EGIT_REPO_URI="https://github.com/NetworkManager/NetworkManager.git"
 LICENSE="GPL-2+"
 SLOT="0" # add subslot if libnm-util.so.2 or libnm-glib.so.4 bumps soname version
 
-IUSE="audit bluetooth gnutls json kernel_linux +nmtui +nss resolvconf systemd teamd test +wext +wifi"
+IUSE="audit bluetooth gnutls json kernel_linux +nmtui resolvconf systemd teamd test +wext +wifi"
 
 REQUIRED_USE="
 	wext? ( wifi )
-	^^ ( nss gnutls )
+	^^ ( gnutls )
 	?? ( systemd )
 "
 
@@ -38,7 +38,6 @@ COMMON_DEPEND="
 		lib-dev/libgcrypt:0=
 		>=lib-net/gnutls-2.12:= )
 	json? ( lib-dev/jansson )
-	nss? ( >=lib-dev/nss-3.11:= )
 	resolvconf? ( lib-net/openresolv )
 	systemd? ( >=sys-app/systemd-209:0= )
 	teamd? (
@@ -62,7 +61,6 @@ DEPEND="${COMMON_DEPEND}
 	dev-util/pkgconfig
 	lib-dev/newt
 	dev-python/pygobject
-	lib-dev/nss
 "
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro
@@ -81,6 +79,7 @@ src_configure() {
 		-Dqt=false
 		-Dwext=false
 		-Dovs=false
+		-Dcrypto=gnutls
 		)
 		meson_src_configure
 }

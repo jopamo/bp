@@ -47,7 +47,7 @@ efimake() {
 		LD="${LD}"
 		AR="${AR}"
 		PREFIX="${EPREFIX}/usr"
-		LIBDIR='$(PREFIX)'/$(get_libdir)
+		LIBDIR='$(PREFIX)'/lib64
 	)
 	emake -j1 "${args[@]}" "$@"
 }

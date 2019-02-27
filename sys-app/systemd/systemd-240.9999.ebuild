@@ -148,14 +148,14 @@ src_configure() {
 		-Dmicrohttpd=false
 		$(meson_use networkd)
 		$(meson_use pam)
-		-Dpamlibdir="${EPREFIX}"/usr/$(get_libdir)
+		-Dpamlibdir="${EPREFIX}"/usr/lib64
 		$(meson_use pcre pcre2)
 		-Dpolkit=false
 		$(meson_use qrcode qrencode)
 		-Dquotacheck=true
 		-Drandomseed=true
 		-Drfkill=true
-		-Drootlibdir="${EPREFIX}"/usr/$(get_libdir)
+		-Drootlibdir="${EPREFIX}"/usr/lib64
 		-Drootprefix="${EPREFIX}"/usr
 		-Dseccomp=$(meson_use seccomp)
 		-Dsmack=false

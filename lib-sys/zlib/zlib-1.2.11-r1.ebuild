@@ -2,7 +2,7 @@
 
 EAPI=5
 
-inherit autotools toolchain-funcs
+inherit autotools toolchain-funcs eutils
 
 DESCRIPTION="Standard (de)compression library"
 HOMEPAGE="https://zlib.net/"
@@ -35,7 +35,7 @@ src_configure() {
 		echoit "${S}"/configure \
 			--shared \
 			--prefix="${EPREFIX}/usr" \
-			--libdir="${EPREFIX}/usr/$(get_libdir)" \
+			--libdir="${EPREFIX}/usr/lib64" \
 			${uname:+--uname=${uname}} \
 			|| die
 		;;
@@ -43,7 +43,7 @@ src_configure() {
 
 	if use minizip ; then
 		local minizipdir="contrib/minizip"
-		mkdir -p "${BUILD_DIR}/${minizipdir}" || die
+		mkdir -p "${minizipdir}" || die
 		cd ${minizipdir} || die
 		ECONF_SOURCE="${S}/${minizipdir}" \
 		econf $(use_enable static-libs static)
@@ -57,8 +57,8 @@ src_compile() {
 		sed \
 			-e 's|@prefix@|/usr|g' \
 			-e 's|@exec_prefix@|${prefix}|g' \
-			-e 's|@libdir@|${exec_prefix}/'$(get_libdir)'|g' \
-			-e 's|@sharedlibdir@|${exec_prefix}/'$(get_libdir)'|g' \
+			-e 's|@libdir@|${exec_prefix}/'lib64'|g' \
+			-e 's|@sharedlibdir@|${exec_prefix}/'lib64'|g' \
 			-e 's|@includedir@|${prefix}/include|g' \
 			-e 's|@VERSION@|'${PV}'|g' \
 			zlib.pc.in > zlib.pc || die
@@ -81,11 +81,11 @@ src_install() {
 	*-mingw*|mingw*)
 		emake -f win32/Makefile.gcc install \
 			BINARY_PATH="${ED}/usr/bin" \
-			LIBRARY_PATH="${ED}/usr/$(get_libdir)" \
+			LIBRARY_PATH="${ED}/usr/lib64" \
 			INCLUDE_PATH="${ED}/usr/include" \
 			SHARED_MODE=1
 		# overwrites zlib.pc created from win32/Makefile.gcc #620136
-		insinto /usr/$(get_libdir)/pkgconfig
+		insinto /usr/lib64/pkgconfig
 		doins zlib.pc
 		;;
 
@@ -100,5 +100,5 @@ src_install() {
 		sed_macros "${ED}"/usr/include/minizip/*.h
 	fi
 
-	use static-libs || rm -f "${ED}"/usr/$(get_libdir)/lib{z,minizip}.{a,la} #419645
+	use static-libs || rm -f "${ED}"/usr/lib64/lib{z,minizip}.{a,la} #419645
 }

@@ -231,7 +231,7 @@ src_install() {
 			"${OPTIONS[@]}" \
 			${PYTHON_OPTIONS} \
 			--includedir="${ED%/}/usr/include" \
-			--libdir="${ED%/}/usr/$(get_libdir)" \
+			--libdir="${ED%/}/usr/lib64" \
 			install || die "Installation of Boost libraries failed"
 
 		if use python; then
@@ -243,7 +243,7 @@ src_install() {
 				local moddir=$(python_get_sitedir)/boost
 				# moddir already includes eprefix
 				mkdir -p "${D}${moddir}" || die
-				mv "${ED%/}/usr/$(get_libdir)/mpi.so" "${D}${moddir}" || die
+				mv "${ED%/}/usr/lib64/mpi.so" "${D}${moddir}" || die
 				cat << EOF > "${D}${moddir}/__init__.py" || die
 import sys
 if sys.platform.startswith('linux'):
@@ -267,18 +267,6 @@ EOF
 	else
 		installation
 	fi
-
-	pushd "${ED%/}/usr/$(get_libdir)" >/dev/null || die
-
-	local ext=$(get_libname)
-	if use threads; then
-		local f
-		for f in *${ext}; do
-			dosym ${f} /usr/$(get_libdir)/${f/${ext}/-mt${ext}}
-		done
-	fi
-
-	popd >/dev/null || die
 
 	if use tools; then
 		dobin dist/bin/*

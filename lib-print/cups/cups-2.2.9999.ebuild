@@ -114,7 +114,7 @@ src_configure() {
 	myeconfargs+=(
 		CC="$(tc-getCC)"
 		CXX="$(tc-getCXX)"
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--localstatedir="${EPREFIX}"/var
 		--with-exe-file-perm=755
 		--with-rundir="${EPREFIX}"/run/cups

@@ -16,14 +16,14 @@ RDEPEND=">=sys-app/gentoo-functions-0.10"
 src_compile() {
 	emake CC="$(tc-getCC)" \
 		PV="${PV}" \
-		SUBLIBDIR="$(get_libdir)"
+		SUBLIBDIR="lib64"
 }
 
 src_install() {
 	emake \
 		DESTDIR="${D}" \
 		PV="${PV}" \
-		SUBLIBDIR="$(get_libdir)" \
+		SUBLIBDIR="lib64" \
 		install
 }
 

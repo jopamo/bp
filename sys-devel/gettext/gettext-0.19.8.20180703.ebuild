@@ -37,7 +37,7 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
@@ -80,9 +80,7 @@ src_install() {
 
 	cp -r "${ED}"/{lib,lib64,bin,sbin} "${ED}"/usr/
 	rm -rf "${ED}"/{lib,lib64,bin,sbin}
-}
 
-src_install_all() {
 	rm -f "${ED}"/usr/share/locale/locale.alias "${ED}"/usr/lib/charset.alias "${ED}"/usr/include/libintl.h "${ED}"/usr/share/doc/${PF}/*.html
 	rm -rf "${ED}"/usr/share/doc/${PF}/{csharpdoc,examples,javadoc2,javadoc1}
 }

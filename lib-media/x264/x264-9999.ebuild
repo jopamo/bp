@@ -31,7 +31,7 @@ src_configure() {
 
 	"${S}/configure" \
 		--prefix="${EPREFIX}"/usr \
-		--libdir="${EPREFIX}"/usr/$(get_libdir) \
+		--libdir="${EPREFIX}"/usr/lib64 \
 		--disable-avs \
 		--disable-gpac \
 		$(usex pic "--enable-pic" "") \

@@ -18,7 +18,7 @@ DESCRIPTION="PDF rendering library based on the xpdf-3.0 code base"
 HOMEPAGE="https://poppler.freedesktop.org/"
 
 LICENSE="GPL-2"
-IUSE="cairo cjk curl cxx debug doc +introspection +jpeg +jpeg2k +lcms nss png qt5 tiff +utils"
+IUSE="cairo cjk curl cxx debug doc +introspection +jpeg +jpeg2k +lcms png qt5 tiff +utils"
 
 # No test data provided
 RESTRICT="test"
@@ -36,7 +36,6 @@ COMMON_DEPEND="
 	jpeg? ( lib-media/libjpeg-turbo )
 	jpeg2k? ( lib-media/openjpeg:2= )
 	lcms? ( lib-media/lcms:2 )
-	nss? ( >=lib-dev/nss-3.19:0 )
 	png? ( lib-media/libpng:0= )
 	qt5? (
 		gui-lib/qtcore:5
@@ -100,7 +99,7 @@ src_configure() {
 		-DENABLE_DCTDECODER=$(usex jpeg libjpeg none)
 		-DENABLE_LIBOPENJPEG=$(usex jpeg2k openjpeg2 none)
 		-DENABLE_CMS=$(usex lcms lcms2 none)
-		-DWITH_NSS3=$(usex nss)
+		-DWITH_NSS3=OFF
 		-DWITH_PNG=$(usex png)
 		$(cmake-utils_use_find_package qt5 Qt5Core)
 		-DWITH_TIFF=$(usex tiff)

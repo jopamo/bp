@@ -46,7 +46,7 @@ src_configure() {
 		ffi_ldflags=$($(tc-getPKG_CONFIG) --libs-only-L libffi)
 	fi
 
-	local libdir=$(get_libdir)
+	local libdir=lib64
 	local mycmakeargs=(
 		-DLLVM_APPEND_VC_REV=OFF
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"

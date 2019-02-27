@@ -92,7 +92,7 @@ src_configure() {
 		$(use_ssl zlib) \
 		--prefix="${EPREFIX}"/usr \
 		--openssldir="${EPREFIX}"${SSL_CNF_DIR} \
-		--libdir=$(get_libdir) \
+		--libdir=lib64 \
 		shared threads \
 		|| die
 

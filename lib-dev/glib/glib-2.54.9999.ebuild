@@ -99,10 +99,10 @@ src_configure() {
 	# in the target ROOT to work here)
 	if ! tc-is-cross-compiler && ! $(tc-getPKG_CONFIG) --version >& /dev/null; then
 		if has_version sys-app/dbus; then
-			export DBUS1_CFLAGS="-I/usr/include/dbus-1.0 -I/usr/$(get_libdir)/dbus-1.0/include"
+			export DBUS1_CFLAGS="-I/usr/include/dbus-1.0 -I/usr/lib64/dbus-1.0/include"
 			export DBUS1_LIBS="-ldbus-1"
 		fi
-		export LIBFFI_CFLAGS="-I$(echo /usr/$(get_libdir)/libffi-*/include)"
+		export LIBFFI_CFLAGS="-I$(echo /usr/lib64/libffi-*/include)"
 		export LIBFFI_LIBS="-lffi"
 		export PCRE_CFLAGS=" " # test -n "$PCRE_CFLAGS" needs to pass
 		export PCRE_LIBS="-lpcre"
@@ -124,7 +124,7 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
@@ -168,7 +168,7 @@ src_test() {
 
 src_install() {
 	default
-	keepdir /usr/$(get_libdir)/gio/modules
+	keepdir /usr/lib64/gio/modules
 }
 
 src_install_all() {
@@ -197,7 +197,7 @@ pkg_preinst() {
 	fi
 
 	# Make giomodule.cache belong to glib alone
-	local cache="usr/$(get_libdir)/gio/modules/giomodule.cache"
+	local cache="usr/lib64/gio/modules/giomodule.cache"
 
 	if [[ -e ${EROOT}${cache} ]]; then
 		cp "${EROOT}"${cache} "${ED}"/${cache} || die
@@ -212,7 +212,7 @@ pkg_postinst() {
 
 pkg_postrm() {
 	if [[ -z ${REPLACED_BY_VERSION} ]]; then
-		rm -f "${EROOT}"usr/$(get_libdir)/gio/modules/giomodule.cache
+		rm -f "${EROOT}"usr/lib64/gio/modules/giomodule.cache
 		rm -f "${EROOT}"usr/share/glib-2.0/schemas/gschemas.compiled
 	fi
 }

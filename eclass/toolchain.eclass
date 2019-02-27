@@ -470,56 +470,6 @@ toolchain_src_configure() {
 		esac
 	esac
 
-	local with_abi_map=()
-	case $(tc-arch) in
-	arm)	#264534 #414395
-		local a arm_arch=${CTARGET%%-*}
-		# Remove trailing endian variations first: eb el be bl b l
-		for a in e{b,l} {b,l}e b l ; do
-			if [[ ${arm_arch} == *${a} ]] ; then
-				arm_arch=${arm_arch%${a}}
-				break
-			fi
-		done
-		# Convert armv7{a,r,m} to armv7-{a,r,m}
-		[[ ${arm_arch} == armv7? ]] && arm_arch=${arm_arch/7/7-}
-		# See if this is a valid --with-arch flag
-		if (srcdir=${S}/gcc target=${CTARGET} with_arch=${arm_arch};
-		    . "${srcdir}"/config.gcc) &>/dev/null
-		then
-			confgcc+=( --with-arch=${arm_arch} )
-		fi
-
-		# Make default mode thumb for microcontroller classes #418209
-		[[ ${arm_arch} == *-m ]] && confgcc+=( --with-mode=thumb )
-
-		# Enable hardvfp
-		if [[ $(tc-is-softfloat) == "no" ]] && \
-		   [[ ${CTARGET} == armv[67]* ]] && \
-		   tc_version_is_at_least 4.5
-		then
-			# Follow the new arm hardfp distro standard by default
-			confgcc+=( --with-float=hard )
-			case ${CTARGET} in
-			armv6*) confgcc+=( --with-fpu=vfp ) ;;
-			armv7*) confgcc+=( --with-fpu=vfpv3-d16 ) ;;
-			esac
-		fi
-		;;
-	amd64)
-		# drop the older/ABI checks once this get's merged into some
-		# version of gcc upstream
-		if tc_version_is_at_least 4.8 && has x32 $(get_all_abis TARGET) ; then
-			confgcc+=( --with-abi=$(gcc-abi-map ${TARGET_DEFAULT_ABI}) )
-		fi
-		;;
-	x86)
-		# Default arch for x86 is normally i386, lets give it a bump
-		# since glibc will do so based on CTARGET anyways
-		confgcc+=( --with-arch=${CTARGET%%-*} )
-		;;
-	esac
-
 	# if the target can do biarch (-m32/-m64), enable it.  overhead should
 	# be small, and should simplify building of 64bit kernels in a 32bit
 	# userland by not needing sys-devel/kgcc64.  #349405
@@ -861,7 +811,7 @@ gcc_do_make() {
 	else
 		# we only want to use the system's CFLAGS if not building a
 		# cross-compiler.
-		BOOT_CFLAGS=${BOOT_CFLAGS-"$(get_abi_CFLAGS ${TARGET_DEFAULT_ABI}) ${CFLAGS}"}
+		BOOT_CFLAGS=${BOOT_CFLAGS-"${CFLAGS}"}
 	fi
 
 	einfo "Compiling ${PN} (${GCC_MAKE_TARGET})..."

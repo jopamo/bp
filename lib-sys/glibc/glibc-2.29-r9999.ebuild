@@ -223,11 +223,6 @@ glibc_do_configure() {
 	export CC="$(tc-getCC ${CTARGET}) ${LDFLAGS}"
 	einfo " $(printf '%15s' 'Manual CC:')   ${CC}"
 
-	# Some of the tests are written in C++, so we need to force our multlib abis in, bug 623548
-	export CXX="$(tc-getCXX ${CTARGET}) $(get_abi_CFLAGS)"
-	einfo " $(printf '%15s' 'Manual CXX:')   ${CXX}"
-
-
 	# Force a few tests where we always know the answer but
 	# configure is incapable of finding it.
 	if is_crosscompile ; then
@@ -438,9 +433,6 @@ glibc_do_src_install() {
 	# We'll take care of the cache ourselves
 	rm -f "${ED}"/etc/ld.so.cache
 
-	# Everything past this point just needs to be done once ...
-	is_final_abi || return 0
-
 	local i ldso_abi ldso_name
 	local ldso_abi_list=(
 		amd64   /usr/lib64/ld-linux-x86-64.so.2
@@ -460,7 +452,7 @@ glibc_do_src_install() {
 
 	for (( i = 0; i < ${#ldso_abi_list[@]}; i += 2 )) ; do
 		ldso_abi=${ldso_abi_list[i]}
-		has ${ldso_abi} $(get_install_abis) || continue
+		has ${ldso_abi} || continue
 
 		ldso_name="$(alt_prefix)${ldso_abi_list[i+1]}"
 		if [[ ! -L ${ED}/${ldso_name} && ! -e ${ED}/${ldso_name} ]] ; then
@@ -499,16 +491,6 @@ glibc_do_src_install() {
 		-e "s: \\\\::g" -e "s:/: :g" \
 		"${S}"/localedata/SUPPORTED > "${ED}"/usr/share/i18n/SUPPORTED \
 		|| die "generating /usr/share/i18n/SUPPORTED failed"
-
-	# Make sure all the ABI's can find the locales and so we only
-	# have to generate one set
-	local a
-	keepdir /usr/lib64/locale
-	for a in $(get_install_abis) ; do
-		if [[ ! -e ${ED}/usr/$(get_abi_LIBDIR ${a})/locale ]] ; then
-			dosym ../lib64/locale /usr/$(get_abi_LIBDIR ${a})/locale
-		fi
-	done
 
 	cd "${S}"
 

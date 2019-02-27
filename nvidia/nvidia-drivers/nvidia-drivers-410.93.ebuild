@@ -339,8 +339,6 @@ src_install() {
 	dobin ${NV_OBJ}/nvidia-bug-report.sh
 
 	src_install-libs
-
-	is_final_abi || die "failed to iterate through all ABIs"
 }
 
 src_install-libs() {

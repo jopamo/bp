@@ -585,7 +585,7 @@ cmake-utils_src_configure() {
 			# right ... except for Darwin hosts
 			IF (NOT APPLE)
 			SET (CMAKE_SKIP_RPATH OFF CACHE BOOL "" FORCE)
-			SET (CMAKE_PLATFORM_REQUIRED_RUNTIME_PATH "${EPREFIX}/usr/${CHOST}/lib/gcc;${EPREFIX}/usr/${CHOST}/lib;${EPREFIX}/usr/$(get_libdir);${EPREFIX}/$(get_libdir)"
+			SET (CMAKE_PLATFORM_REQUIRED_RUNTIME_PATH "${EPREFIX}/usr/${CHOST}/lib/gcc;${EPREFIX}/usr/${CHOST}/lib;${EPREFIX}/usr/lib64;${EPREFIX}/lib64"
 			CACHE STRING "" FORCE)
 
 			ELSE ()
@@ -602,7 +602,7 @@ cmake-utils_src_configure() {
 
 	# Common configure parameters (invariants)
 	local common_config=${BUILD_DIR}/1g4_common_config.cmake
-	local libdir=$(get_libdir)
+	local libdir=lib64
 	cat > "${common_config}" <<- _EOF_ || die
 		SET (CMAKE_1g4_BUILD ON CACHE BOOL "Indicate 1g4 package build")
 		SET (LIB_SUFFIX ${libdir/lib} CACHE STRING "library path suffix" FORCE)

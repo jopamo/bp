@@ -49,5 +49,5 @@ src_compile() {
 
 src_install() {
 	cmake-utils_src_install
-	use static-libs || rm -f "${ED}"usr/$(get_libdir)/libssh{,_threads}.a
+	use static-libs || rm -f "${ED}"usr/lib64/libssh{,_threads}.a
 }

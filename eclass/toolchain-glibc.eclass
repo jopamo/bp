@@ -46,10 +46,10 @@ alt_build_headers() {
 }
 
 alt_libdir() {
-	echo $(alt_prefix)/usr/$(get_libdir)
+	echo $(alt_prefix)/usr/lib64
 }
 alt_usrlibdir() {
-	echo $(alt_prefix)/usr/$(get_libdir)
+	echo $(alt_prefix)/usr/lib64
 }
 
 builddir() {
@@ -384,7 +384,7 @@ src_strip() {
 }
 
 glibc_sanity_check() {
-	pushd "${ED}"/usr/$(get_libdir) >/dev/null
+	pushd "${ED}"/usr/lib64 >/dev/null
 
 	local x striptest
 	for x in cal date env free ls true uname uptime ; do

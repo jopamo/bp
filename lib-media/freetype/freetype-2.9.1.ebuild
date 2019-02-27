@@ -190,7 +190,7 @@ src_compile() {
 		einfo "Building utils"
 		# fix for Prefix, bug #339334
 		emake \
-			X11_PATH="${EPREFIX}/usr/$(get_libdir)" \
+			X11_PATH="${EPREFIX}/usr/lib64" \
 			FT2DEMOS=1 TOP_DIR_2="${WORKDIR}/ft2demos-${PV}"
 	fi
 }

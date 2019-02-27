@@ -71,7 +71,7 @@ waf-utils_src_configure() {
 	# @DESCRIPTION:
 	# Variable specifying that you don't want to set the libdir for waf script.
 	# Some scripts does not allow setting it at all and die if they find it.
-	[[ -z ${NO_WAF_LIBDIR} ]] && libdir=(--libdir="${EPREFIX}/usr/$(get_libdir)")
+	[[ -z ${NO_WAF_LIBDIR} ]] && libdir=(--libdir="${EPREFIX}/usr/lib64")
 
 	tc-export AR CC CPP CXX RANLIB
 	echo "CCFLAGS=\"${CFLAGS}\" LINKFLAGS=\"${CFLAGS} ${LDFLAGS}\" \"${WAF_BINARY}\" --prefix=${EPREFIX}/usr ${libdir[@]} $@ configure"

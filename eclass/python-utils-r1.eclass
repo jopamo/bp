@@ -1035,7 +1035,7 @@ python_wrapper_setup() {
 			ln -s "${PYTHON/python/2to3-}" "${workdir}"/bin/2to3 || die
 
 			# Python 2.7+.
-			ln -s "${EPREFIX}"/usr/$(get_libdir)/pkgconfig/${EPYTHON/n/n-}.pc \
+			ln -s "${EPREFIX}"/usr/lib64/pkgconfig/${EPYTHON/n/n-}.pc \
 				"${workdir}"/pkgconfig/python.pc || die
 			ln -s python.pc "${workdir}"/pkgconfig/python${pyver}.pc || die
 		else

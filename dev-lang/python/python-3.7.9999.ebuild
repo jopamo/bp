@@ -45,7 +45,7 @@ src_prepare() {
 
 	default
 
-	sed -i -e "s:@@GENTOO_LIBDIR@@:$(get_libdir):g" \
+	sed -i -e "s:@@GENTOO_LIBDIR@@:lib64:g" \
 		Lib/distutils/command/install.py \
 		Lib/distutils/sysconfig.py \
 		Lib/site.py \
@@ -92,12 +92,12 @@ src_configure() {
 }
 
 src_install() {
-	local libdir=${ED}/usr/$(get_libdir)/python${PYVER}
+	local libdir=${ED}/usr/lib64/python${PYVER}
 
 	emake DESTDIR="${D}" altinstall
 
 	# Fix collisions between different slots of Python.
-	rm -f "${ED}usr/$(get_libdir)/libpython3.so"
+	rm -f "${ED}usr/lib64/libpython3.so"
 
 	# Cheap hack to get version with ABIFLAGS
 	local abiver=$(cd "${ED}usr/include"; echo python*)
@@ -108,10 +108,10 @@ src_install() {
 		# Create python3.X-config symlink
 		dosym "${abiver}-config" "/usr/bin/python${PYVER}-config"
 		# Create python-3.5m.pc symlink
-		dosym "python-${PYVER}.pc" "/usr/$(get_libdir)/pkgconfig/${abiver/${PYVER}/-${PYVER}}.pc"
+		dosym "python-${PYVER}.pc" "/usr/lib64/pkgconfig/${abiver/${PYVER}/-${PYVER}}.pc"
 	fi
 
-	insinto /usr/share/gdb/auto-load/usr/$(get_libdir) #443510
+	insinto /usr/share/gdb/auto-load/usr/lib64 #443510
 	local libname=$(printf 'e:\n\t@echo $(INSTSONAME)\ninclude Makefile\n' | \
 		emake --no-print-directory -s -f - 2>/dev/null)
 	newins "${S}"/Tools/gdb/libpython.py "${libname}"-gdb.py

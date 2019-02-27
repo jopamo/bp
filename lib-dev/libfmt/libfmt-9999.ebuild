@@ -23,8 +23,8 @@ KEYWORDS="amd64 arm64"
 
 src_configure() {
 	local mycmakeargs=(
-		-DFMT_CMAKE_DIR="$(get_libdir)/cmake/fmt"
-		-DFMT_LIB_DIR="$(get_libdir)"
+		-DFMT_CMAKE_DIR="lib64/cmake/fmt"
+		-DFMT_LIB_DIR="lib64"
 		-DFMT_TEST=$(usex test)
 		-DBUILD_SHARED_LIBS=ON
 	)

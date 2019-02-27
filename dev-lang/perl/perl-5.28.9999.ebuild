@@ -68,11 +68,11 @@ src_configure() {
 
 	export BUILD_BZIP2=0
 	export BZIP2_INCLUDE=${EROOT}/usr/include
-	export BZIP2_LIB=${EROOT}/usr/$(get_libdir)
+	export BZIP2_LIB=${EROOT}/usr/lib64
 
 	export BUILD_ZLIB=False
 	export ZLIB_INCLUDE=${EROOT}/usr/include
-	export ZLIB_LIB=${EROOT}/usr/$(get_libdir)
+	export ZLIB_LIB=${EROOT}/usr/lib64
 
 	# allow either gdbm to provide ndbm (in <gdbm/ndbm.h>) or db1
 	myndbm='U'
@@ -109,7 +109,7 @@ src_configure() {
 			sort -u -nr -t'.' -k1,1 -k2,2 -k3,3
 	)"
 
-	myconf "-Dlibpth=/usr/$(get_libdir)"
+	myconf "-Dlibpth=/usr/lib64"
 
 	# don't try building ODBM, bug #354453
 	disabled_extensions="ODBM_File"
@@ -137,12 +137,12 @@ src_configure() {
 		-Dsiteprefix="${EPREFIX}"'/usr' \
 		-Dvendorprefix="${EPREFIX}"'/usr' \
 		-Dscriptdir="${EPREFIX}"'/usr/bin' \
-		-Dprivlib="${EPREFIX}"/usr/$(get_libdir)/perl5 \
-		-Darchlib="${EPREFIX}"/usr/$(get_libdir)/perl5 \
-		-Dsitelib="${EPREFIX}"/usr/$(get_libdir)/perl5 \
-		-Dsitearch="${EPREFIX}"/usr/$(get_libdir)/perl5 \
-		-Dvendorlib="${EPREFIX}"/usr/$(get_libdir)/perl5 \
-		-Dvendorarch="${EPREFIX}"/usr/$(get_libdir)/perl5 \
+		-Dprivlib="${EPREFIX}"/usr/lib64/perl5 \
+		-Darchlib="${EPREFIX}"/usr/lib64/perl5 \
+		-Dsitelib="${EPREFIX}"/usr/lib64/perl5 \
+		-Dsitearch="${EPREFIX}"/usr/lib64/perl5 \
+		-Dvendorlib="${EPREFIX}"/usr/lib64/perl5 \
+		-Dvendorarch="${EPREFIX}"/usr/lib64/perl5 \
 		-Dman1dir="${EPREFIX}"/usr/share/man/man1 \
 		-Dman3dir="${EPREFIX}"/usr/share/man/man3 \
 		-Dsiteman1dir="${EPREFIX}"/usr/share/man/man1 \
@@ -152,7 +152,7 @@ src_configure() {
 		-Dman1ext='1' \
 		-Dman3ext='3pm' \
 		-Dlocincpth="${EPREFIX}"'/usr/include ' \
-		-Dglibpth="${EPREFIX}/usr/$(get_libdir)"' ' \
+		-Dglibpth="${EPREFIX}/usr/lib64"' ' \
 		-Duselargefiles \
 		-Dd_semctl_semun \
 		-Dmyhostname='localhost' \
@@ -184,7 +184,7 @@ src_test() {
 
 src_install() {
 	local i
-	local coredir="${EPREFIX}/"/usr/$(get_libdir)/perl5/CORE
+	local coredir="${EPREFIX}/"/usr/lib64/perl5/CORE
 	emake DESTDIR="${D}" install
 
 	rm -f "${ED}/usr/bin/perl5*"

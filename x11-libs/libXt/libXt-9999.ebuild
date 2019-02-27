@@ -12,9 +12,9 @@ KEYWORDS="amd64 arm64"
 
 IUSE="test"
 
-RDEPEND=">=x11-libs/libX11-1.6.2[${MULTILIB_USEDEP}]
-	>=x11-libs/libSM-1.2.1-r1[${MULTILIB_USEDEP}]
-	>=x11-libs/libICE-1.0.8-r1[${MULTILIB_USEDEP}]
+RDEPEND=">=x11-libs/libX11-1.6.2
+	>=x11-libs/libSM-1.2.1-r1
+	>=x11-libs/libICE-1.0.8-r1
 	x11/xorgproto"
 DEPEND="${RDEPEND}
 	test? ( lib-dev/glib )"
@@ -28,7 +28,7 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var

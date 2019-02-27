@@ -49,7 +49,7 @@ src_configure() {
 		-DENABLE_TESTING=$(usex test)
 		-DUSE_SHARED_MBEDTLS_LIBRARY=ON
 		-DINSTALL_MBEDTLS_HEADERS=ON
-		-DLIB_INSTALL_DIR="/usr/$(get_libdir)"
+		-DLIB_INSTALL_DIR="/usr/lib64"
 	)
 
 	cmake-utils_src_configure

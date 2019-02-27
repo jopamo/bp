@@ -88,7 +88,7 @@ src_configure() {
 	#use static && export LDFLAGS="${LDFLAGS} -static"
 
 	if use plugins; then
-		append-ldflags -Wl,-rpath,/usr/$(get_libdir)/bash
+		append-ldflags -Wl,-rpath,/usr/lib64/bash
 	else
 		# Disable the plugins logic by hand since bash doesn't
 		# provide a way of doing it.
@@ -135,7 +135,7 @@ src_install() {
 		"${ED%/}"/etc/bash/bashrc || die
 
 	if use plugins ; then
-		exeinto /usr/$(get_libdir)/bash
+		exeinto /usr/lib64/bash
 		doexe $(echo examples/loadables/*.o | sed 's:\.o::g')
 		insinto /usr/include/bash-plugins
 		doins *.h builtins/*.h include/*.h lib/{glob/glob.h,tilde/tilde.h}

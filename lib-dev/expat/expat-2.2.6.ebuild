@@ -64,7 +64,7 @@ src_install() {
 		emake -C lib install DESTDIR="${D}"
 		popd >/dev/null
 
-		pushd "${ED}"/usr/$(get_libdir)/pkgconfig >/dev/null
+		pushd "${ED}"/usr/lib64/pkgconfig >/dev/null
 		cp expat.pc expatw.pc
 		sed -i -e '/^Libs/s:-lexpat:&w:' expatw.pc || die
 		popd >/dev/null

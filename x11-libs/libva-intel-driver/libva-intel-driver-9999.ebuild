@@ -15,9 +15,9 @@ EGIT_REPO_URI="https://github.com/01org/intel-vaapi-driver.git"
 
 IUSE="wayland X"
 
-RDEPEND=">=x11-libs/libva-2.0.0:=[X?,wayland?,drm?,${MULTILIB_USEDEP}]
-	>=x11-libs/libdrm-2.4.52[video_cards_intel,${MULTILIB_USEDEP}]
-	wayland? ( >=lib-media/mesa-9.1.6[egl,${MULTILIB_USEDEP}] >=lib-dev/wayland-1.11[${MULTILIB_USEDEP}] )"
+RDEPEND=">=x11-libs/libva-2.0.0:=[X?,wayland?,drm?]
+	>=x11-libs/libdrm-2.4.52[video_cards_intel]
+	wayland? ( >=lib-media/mesa-9.1.6[egl] >=lib-dev/wayland-1.11 )"
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
@@ -32,7 +32,7 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var

@@ -28,9 +28,9 @@ filter-flags -flto -fno-common
 src_configure() {
 	${S}/configure \
 		--prefix="${EPREFIX}/usr" \
-		--shlibdir="${EPREFIX}/usr/$(get_libdir)" \
+		--shlibdir="${EPREFIX}/usr/lib64" \
 		--bindir="${EPREFIX}"/usr/bin \
-		--libdir="${EPREFIX}"/usr/$(get_libdir) \
+		--libdir="${EPREFIX}"/usr/lib64 \
 		--enable-shared \
 		--cc="$(tc-getCC)" \
 		--cxx="$(tc-getCXX)" \

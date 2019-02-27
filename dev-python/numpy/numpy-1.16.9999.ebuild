@@ -41,7 +41,7 @@ pc_libs() {
 python_prepare_all() {
 	if use lapack; then
 		append-ldflags "$($(tc-getPKG_CONFIG) --libs-only-other cblas lapack)"
-		local libdir="${EPREFIX}"/usr/$(get_libdir)
+		local libdir="${EPREFIX}"/usr/lib64
 		cat >> site.cfg <<-EOF || die
 			[blas]
 			include_dirs = $(pc_incdir cblas)

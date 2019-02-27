@@ -20,13 +20,6 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-5.5.5-honor-flags.patch
 )
 
-src_prepare() {
-	default
-	local sed_args=( -e "/libunrar/s:.so:$(get_libname ${PV%.*.*}):" )
-	sed_args+=( -e "s:-shared:& -Wl,-soname -Wl,libunrar$(get_libname ${PV%.*.*}):" )
-	sed -i "${sed_args[@]}" makefile || die
-}
-
 src_configure() {
 	mkdir -p build-{lib,bin}
 	printf 'VPATH = ..\ninclude ../makefile' > build-lib/Makefile || die
@@ -39,8 +32,6 @@ src_compile() {
 	}
 
 	unrar_make CXXFLAGS+=" -fPIC" -C build-lib lib
-	ln -s libunrar$(get_libname ${PV%.*.*}) build-lib/libunrar$(get_libname) || die
-	ln -s libunrar$(get_libname ${PV%.*.*}) build-lib/libunrar$(get_libname ${PV}) || die
 
 	unrar_make -C build-bin
 }

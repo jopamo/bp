@@ -56,14 +56,14 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
 		--enable-http
 		--enable-default-catalog="${EPREFIX}"/etc/sgml/catalog
 		--enable-default-search-path="${EPREFIX}"/usr/share/sgml
-		--enable-splibdir="${EPREFIX}"/usr/$(get_libdir)
+		--enable-splibdir="${EPREFIX}"/usr/lib64
 		--datadir="${EPREFIX}"/usr/share/sgml/${P}
 		$(use_enable static-libs static)
 	)
@@ -77,11 +77,11 @@ src_compile() {
 }
 
 src_install() {
-	insinto /usr/$(get_libdir)
+	insinto /usr/lib64
 
 	make DESTDIR="${D}" \
 		SHELL="${BASH}" \
-		libdir="${EPREFIX}"/usr/$(get_libdir) \
+		libdir="${EPREFIX}"/usr/lib64 \
 		install install-man
 
 	find "${ED}" -name "*.la" -delete || die

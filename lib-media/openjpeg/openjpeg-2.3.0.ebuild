@@ -41,7 +41,7 @@ src_prepare() {
 
 src_configure() {
 	local mycmakeargs=(
-		-DOPENJPEG_INSTALL_LIB_DIR="$(get_libdir)"
+		-DOPENJPEG_INSTALL_LIB_DIR="lib64"
 		-DBUILD_TESTING="$(usex test)"
 		-DBUILD_DOC=$(usex doc ON OFF)
 		-DBUILD_CODEC=ON
@@ -51,7 +51,7 @@ src_configure() {
 
 	if use static-libs; then
 		mycmakeargs=(
-			-DOPENJPEG_INSTALL_LIB_DIR="$(get_libdir)"
+			-DOPENJPEG_INSTALL_LIB_DIR="lib64"
 			-DBUILD_TESTING="$(usex test)"
 			-DBUILD_SHARED_LIBS=OFF
 			-DBUILD_CODEC="$(usex test)"

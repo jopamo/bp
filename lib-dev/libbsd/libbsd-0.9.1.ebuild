@@ -12,7 +12,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 pkg_setup() {
-	local f="${EROOT}/usr/$(get_libdir)/${PN}.a"
+	local f="${EROOT}/usr/lib64/${PN}.a"
 	local m="You need to remove ${f} by hand or re-emerge lib-sys/glibc first."
 	if ! has_version ${CATEGORY}/${PN}; then
 		if [[ -e ${f} ]]; then

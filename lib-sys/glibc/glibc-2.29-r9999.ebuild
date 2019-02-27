@@ -252,7 +252,7 @@ glibc_do_configure() {
 		--prefix="${EPREFIX}"/usr
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
@@ -270,7 +270,7 @@ glibc_do_configure() {
 	ac_cv_lib_cap_cap_init=$(in_iuse caps && usex caps || echo no)
 
 	export libc_cv_rootsbindir="${EPREFIX}"/usr/sbin
-	export libc_cv_slibdir="${EPREFIX}"/usr/$(get_libdir)
+	export libc_cv_slibdir="${EPREFIX}"/usr/lib64
 	export libc_cv_hashstyle=no
 
 	local builddir=$(builddir "$1")
@@ -503,10 +503,10 @@ glibc_do_src_install() {
 	# Make sure all the ABI's can find the locales and so we only
 	# have to generate one set
 	local a
-	keepdir /usr/$(get_libdir)/locale
+	keepdir /usr/lib64/locale
 	for a in $(get_install_abis) ; do
 		if [[ ! -e ${ED}/usr/$(get_abi_LIBDIR ${a})/locale ]] ; then
-			dosym ../$(get_libdir)/locale /usr/$(get_abi_LIBDIR ${a})/locale
+			dosym ../lib64/locale /usr/$(get_abi_LIBDIR ${a})/locale
 		fi
 	done
 
@@ -576,7 +576,7 @@ pkg_preinst() {
 	mkdir -p "${EROOT}"/etc/ld.so.conf.d
 
 	[[ ${ROOT} != "/" ]] && return 0
-	[[ -d ${ED}/usr/$(get_libdir) ]] || return 0
+	[[ -d ${ED}/usr/lib64 ]] || return 0
 	[[ -z ${BOOTSTRAP_RAP} ]] && glibc_sanity_check
 }
 

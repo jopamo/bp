@@ -70,12 +70,12 @@ src_configure() {
 	local myeconfargs=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
 		--enable-shared
-		--with-rootlibdir="${EPREFIX}"/usr/$(get_libdir)
+		--with-rootlibdir="${EPREFIX}"/usr/lib64
 		--disable-gtk-doc
 		$(use_enable debug)
 		$(use_enable static-libs static)

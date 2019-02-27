@@ -42,7 +42,7 @@ S="${WORKDIR}"
 # @DESCRIPTION:
 # The freedict src_install function, which is exported
 freedict_src_install() {
-	insinto /usr/$(get_libdir)/dict
+	insinto /usr/lib64/dict
 	doins ${MY_P}.dict.dz
 	doins ${MY_P}.index
 }

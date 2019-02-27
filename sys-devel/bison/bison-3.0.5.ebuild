@@ -11,34 +11,30 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="examples nls static test"
+IUSE="nls static test"
 
 RDEPEND=">=sys-devel/m4-1.4.16"
 DEPEND="${RDEPEND}
 	sys-devel/flex
-	examples? ( dev-lang/perl )
 	nls? ( sys-devel/gettext )
 	test? ( dev-lang/perl )"
 
 src_prepare() {
-	touch doc/bison.1 #548778 #538300#9
+	touch doc/bison.1
 	sed -i '2iexport TZ=UTC' build-aux/mdate-sh || die
 	default
 }
 
 src_configure() {
 	use static && append-ldflags -static
-	use test || export ac_cv_path_PERL=true
 
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
-		--docdir='$(datarootdir)'/doc/${PF} \
-		$(use_enable examples) \
 		$(use_enable nls)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

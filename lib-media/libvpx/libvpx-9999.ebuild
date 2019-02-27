@@ -18,7 +18,7 @@ DEPEND="dev-lang/yasm"
 src_configure() {
 	local conf=(
 		--prefix="${EPREFIX}"/usr
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--enable-pic
 		--enable-vp8
 		--enable-vp9

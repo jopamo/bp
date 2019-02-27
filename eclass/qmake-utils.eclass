@@ -47,7 +47,7 @@ qt4_get_headerdir() {
 # Echoes the directory where Qt4 libraries are installed.
 qt4_get_libdir() {
 	[[ ${EAPI:-0} == [0123456] ]] || die "${FUNCNAME[1]} is banned in EAPI 7 and later"
-	echo /usr/$(get_libdir)/qt4
+	echo /usr/lib64/qt4
 }
 
 # @FUNCTION: qt4_get_mkspecsdir
@@ -87,7 +87,7 @@ qt5_get_headerdir() {
 # @DESCRIPTION:
 # Echoes the directory where Qt5 libraries are installed.
 qt5_get_libdir() {
-	echo /usr/$(get_libdir)
+	echo /usr/lib64
 }
 
 # @FUNCTION: qt5_get_mkspecsdir
@@ -265,8 +265,8 @@ eqmake4() {
 		QMAKE_LFLAGS_RELEASE= \
 		QMAKE_LFLAGS_DEBUG= \
 		QMAKE_LIBDIR_QT="${EPREFIX}$(qt4_get_libdir)" \
-		QMAKE_LIBDIR_X11="${EPREFIX}/usr/$(get_libdir)" \
-		QMAKE_LIBDIR_OPENGL="${EPREFIX}/usr/$(get_libdir)" \
+		QMAKE_LIBDIR_X11="${EPREFIX}/usr/lib64" \
+		QMAKE_LIBDIR_OPENGL="${EPREFIX}/usr/lib64" \
 		"${qmake_args[@]}"
 
 	if ! eend $? ; then

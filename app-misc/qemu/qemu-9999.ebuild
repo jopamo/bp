@@ -310,7 +310,7 @@ qemu_src_configure() {
 	local conf_opts=(
 		--prefix=/usr
 		--sysconfdir=/etc
-		--libdir=/usr/$(get_libdir)
+		--libdir=/usr/lib64
 		--docdir=/usr/share/doc/${PF}/html
 		--disable-bsd-user
 		--disable-guest-agent

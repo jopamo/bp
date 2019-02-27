@@ -54,11 +54,11 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}/etc"
 		--localstatedir="${EPREFIX}/var"
-		--enable-securedir="${EPREFIX}"/usr/$(get_libdir)/security
+		--enable-securedir="${EPREFIX}"/usr/lib64/security
 		$(use_enable nls)
 		$(use_enable selinux)
 		$(use_enable cracklib)

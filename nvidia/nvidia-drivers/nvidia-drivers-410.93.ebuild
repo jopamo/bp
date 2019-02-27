@@ -161,7 +161,7 @@ src_compile() {
 			CC="$(tc-getCC)" \
 			DO_STRIP= \
 			LD="$(tc-getCC)" \
-			LIBDIR="$(get_libdir)" \
+			LIBDIR="lib64" \
 			NVLD="$(tc-getLD)" \
 			NV_VERBOSE=1 \
 			RANLIB="$(tc-getRANLIB)" \
@@ -172,7 +172,7 @@ src_compile() {
 			DO_STRIP= \
 			GTK3_AVAILABLE=1 \
 			LD="$(tc-getCC)" \
-			LIBDIR="$(get_libdir)" \
+			LIBDIR="lib64" \
 			NVLD="$(tc-getLD)" \
 			NVML_ENABLED=0 \
 			NV_USE_BUNDLED_LIBJANSSON=0 \
@@ -201,7 +201,7 @@ donvidia() {
 		exeinto ${nv_DEST}
 		action="doexe"
 	else
-		nv_DEST="/usr/$(get_libdir)"
+		nv_DEST="/usr/lib64"
 		action="dolib.so"
 	fi
 
@@ -251,16 +251,16 @@ src_install() {
 
 	if use X; then
 		# Xorg DDX driver
-		insinto /usr/$(get_libdir)/xorg/modules/drivers
+		insinto /usr/lib64/xorg/modules/drivers
 		doins ${NV_X11}/nvidia_drv.so
 
 		# Xorg GLX driver
 		donvidia ${NV_X11}/libglxserver_nvidia.so.${NV_SOVER} \
-			/usr/$(get_libdir)/xorg/modules/extensions
+			/usr/lib64/xorg/modules/extensions
 
 		# X module for wrapped software rendering
 		donvidia "libnvidia-wfb.so.${NV_SOVER}" \
-			/usr/$(get_libdir)/xorg/modules
+			/usr/lib64/xorg/modules
 
 		# Xorg nvidia.conf
 		if has_version '>=x11-base/xorg-server-1.16'; then
@@ -311,7 +311,7 @@ src_install() {
 		emake -C "${S}"/nvidia-settings-${PV}/src/ \
 			DESTDIR="${D}" \
 			GTK3_AVAILABLE=1 \
-			LIBDIR="${D}/usr/$(get_libdir)" \
+			LIBDIR="${D}/usr/lib64" \
 			NV_USE_BUNDLED_LIBJANSSON=0 \
 			NV_VERBOSE=1 \
 			PREFIX=/usr \
@@ -344,9 +344,9 @@ src_install() {
 }
 
 src_install-libs() {
-	local inslibdir=$(get_libdir)
-	local GL_ROOT="/usr/$(get_libdir)"
-	local CL_ROOT="/usr/$(get_libdir)/OpenCL/vendors/nvidia"
+	local inslibdir=lib64
+	local GL_ROOT="/usr/lib64"
+	local CL_ROOT="/usr/lib64/OpenCL/vendors/nvidia"
 	local nv_libdir="${NV_OBJ}"
 
 	if use X; then

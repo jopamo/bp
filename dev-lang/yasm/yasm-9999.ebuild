@@ -35,7 +35,7 @@ src_configure() {
 
 src_install() {
 	cmake-utils_src_install
-	mv "${ED}"/usr/lib "${ED}"/usr/$(get_libdir)
-	cd "${ED}"/usr/$(get_libdir)
+	mv "${ED}"/usr/lib "${ED}"/usr/lib64
+	cd "${ED}"/usr/lib64
 	ln -s libyasmstd.so libyasmstd.so.1
 }

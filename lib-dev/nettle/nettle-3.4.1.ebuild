@@ -22,7 +22,7 @@ src_prepare() {
 
 src_configure() {
 	ECONF_SOURCE="${S}" econf \
-		--libdir="${EPREFIX}"/usr/$(get_libdir) \
+		--libdir="${EPREFIX}"/usr/lib64 \
 		$(use_enable gmp public-key) \
 		$(use_enable static-libs static) \
 		$(tc-is-static-only && echo --disable-shared) \

@@ -425,7 +425,7 @@ gnome2_gdk_pixbuf_update() {
 	local tmp_file=$(emktemp)
 	${updater} 1> "${tmp_file}" &&
 	chmod 0644 "${tmp_file}" &&
-	cp -f "${tmp_file}" "${EROOT}usr/$(get_libdir)/gdk-pixbuf-2.0/2.10.0/loaders.cache" &&
+	cp -f "${tmp_file}" "${EROOT}usr/lib64/gdk-pixbuf-2.0/2.10.0/loaders.cache" &&
 	rm "${tmp_file}" # don't replace this with mv, required for SELinux support
 	eend $?
 }
@@ -439,7 +439,7 @@ gnome2_query_immodules_gtk2() {
 	[[ ! -x ${updater} ]] && updater=${EPREFIX}/usr/bin/gtk-query-immodules-2.0
 
 	ebegin "Updating gtk2 input method module cache"
-	GTK_IM_MODULE_FILE="${EROOT}usr/$(get_libdir)/gtk-2.0/2.10.0/immodules.cache" \
+	GTK_IM_MODULE_FILE="${EROOT}usr/lib64/gtk-2.0/2.10.0/immodules.cache" \
 		"${updater}" --update-cache
 	eend $?
 }
@@ -453,7 +453,7 @@ gnome2_query_immodules_gtk3() {
 	[[ ! -x ${updater} ]] && updater=${EPREFIX}/usr/bin/gtk-query-immodules-3.0
 
 	ebegin "Updating gtk3 input method module cache"
-	GTK_IM_MODULE_FILE="${EROOT}usr/$(get_libdir)/gtk-3.0/3.0.0/immodules.cache" \
+	GTK_IM_MODULE_FILE="${EROOT}usr/lib64/gtk-3.0/3.0.0/immodules.cache" \
 		"${updater}" --update-cache
 	eend $?
 }
@@ -477,7 +477,7 @@ gnome2_giomodule_cache_update() {
 	fi
 
 	ebegin "Updating GIO modules cache"
-	${updater} "${EROOT%/}"/usr/$(get_libdir)/gio/modules
+	${updater} "${EROOT%/}"/usr/lib64/gio/modules
 	eend $?
 }
 

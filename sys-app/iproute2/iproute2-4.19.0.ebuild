@@ -46,7 +46,7 @@ src_prepare() {
 
 	sed -i \
 		-e '/^CC :\?=/d' \
-		-e "/^LIBDIR/s:=.*:=/$(get_libdir):" \
+		-e "/^LIBDIR/s:=.*:=/lib64:" \
 		-e "s:-O2:${CFLAGS} ${CPPFLAGS}:" \
 		-e "/^HOSTCC/s:=.*:= $(tc-getBUILD_CC):" \
 		-e "/^WFLAGS/s:-Werror::" \
@@ -109,7 +109,7 @@ src_install() {
 
 	emake \
 		DESTDIR="${D}" \
-		LIBDIR="${EPREFIX}"/usr/$(get_libdir) \
+		LIBDIR="${EPREFIX}"/usr/lib64 \
 		SBINDIR="${EPREFIX}"/usr/sbin		\
 		CONFDIR="${EPREFIX}"/etc/iproute2 \
 		DOCDIR="${EPREFIX}"/usr/share/doc/${PF} \

@@ -117,7 +117,7 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
@@ -155,7 +155,7 @@ src_install_all() {
 
 pkg_preinst() {
 	# Make immodules.cache belongs to gtk+ alone
-	local cache="usr/$(get_libdir)/gtk-2.0/2.10.0/immodules.cache"
+	local cache="usr/lib64/gtk-2.0/2.10.0/immodules.cache"
 
 	if [[ -e ${EROOT}${cache} ]]; then
 		cp "${EROOT}"${cache} "${ED}"/${cache} || die
@@ -173,7 +173,7 @@ pkg_postinst() {
 
 	if [ -e "${EROOT%/}${GTK2_CONFDIR}/gtk.immodules" ]; then
 		elog "File /etc/gtk-2.0/gtk.immodules has been moved to"
-		elog "${EROOT%/}/usr/$(get_libdir)/gtk-2.0/2.10.0/immodules.cache"
+		elog "${EROOT%/}/usr/lib64/gtk-2.0/2.10.0/immodules.cache"
 		elog "Removing deprecated file."
 		rm -f ${EROOT%/}${GTK2_CONFDIR}/gtk.immodules
 	fi
@@ -202,6 +202,6 @@ pkg_postinst() {
 
 pkg_postrm() {
 	if [[ -z ${REPLACED_BY_VERSION} ]]; then
-		rm -f "${EROOT}"usr/$(get_libdir)/gtk-2.0/2.10.0/immodules.cache
+		rm -f "${EROOT}"usr/lib64/gtk-2.0/2.10.0/immodules.cache
 	fi
 }

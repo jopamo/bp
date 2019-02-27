@@ -39,14 +39,18 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}/etc"
 		--localstatedir="${EPREFIX}/var"
 		--enable-pinentry-tty
 		--disable-ncurses
-		--enable-pinentry-gtk2=no
+		--disable-pinentry-curses
+		--disable-pinentry-emacs
+		--disable-fallback-curses
+		--disable-pinentry-gtk2
+		--without-ncurses-include-dir
 		$(use_with caps libcap)
 	)
-	econf ${myconf[@]}
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

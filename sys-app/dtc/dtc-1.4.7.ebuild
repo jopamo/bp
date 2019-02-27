@@ -37,7 +37,7 @@ src_prepare() {
 		-e 's:-Werror::' \
 		-e 's:-g -Os::' \
 		-e "/^PREFIX =/s:=.*:= ${EPREFIX}/usr:" \
-		-e "/^LIBDIR =/s:=.*:= \$(PREFIX)/$(get_libdir):" \
+		-e "/^LIBDIR =/s:=.*:= \$(PREFIX)/lib64:" \
 		Makefile || die
 
 	tc-export AR CC

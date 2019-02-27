@@ -37,9 +37,9 @@ src_compile() {
 src_install() {
 	emake DESTDIR="${D}" install
 
-	use static-libs || rm "${ED}"/usr/$(get_libdir)/libcap.a
+	use static-libs || rm "${ED}"/usr/lib64/libcap.a
 
-	rm -rf "${ED}"/usr/$(get_libdir)/security
+	rm -rf "${ED}"/usr/lib64/security
 	if use pam; then
 		dopammod pam_cap/pam_cap.so
 		dopamsecurity '' pam_cap/capability.conf

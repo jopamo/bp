@@ -22,7 +22,7 @@ SLOT=0
 DEPEND="sys-devel/bison
 	X? ( x11/xorgproto )
 	doc? ( app-text/doxygen )"
-RDEPEND="X? ( >=x11-libs/libxcb-1.10[${MULTILIB_USEDEP},xkb] )"
+RDEPEND="X? ( >=x11-libs/libxcb-1.10[xkb] )"
 
 src_prepare() {
 	eautoreconf
@@ -33,7 +33,7 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var

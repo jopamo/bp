@@ -104,11 +104,11 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
-		--prefix="${PO}"/usr/$(get_libdir)/postgresql
+		--prefix="${PO}"/usr/lib64/postgresql
 		--datadir="${PO}"/usr/share/postgresql
 		--docdir="${PO}"/usr/share/doc/${PF}
 		--includedir="${PO}"/usr/include/postgresql

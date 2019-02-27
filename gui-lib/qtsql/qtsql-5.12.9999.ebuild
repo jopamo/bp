@@ -43,8 +43,8 @@ src_configure() {
 		$(qt_use sqlite   sql-sqlite plugin)
 	)
 
-	use mysql && myconf+=("-I${EPREFIX}/usr/include/mysql" "-L${EPREFIX}/usr/$(get_libdir)/mysql")
-	use oci8 && myconf+=("-I${ORACLE_HOME}/include" "-L${ORACLE_HOME}/$(get_libdir)")
+	use mysql && myconf+=("-I${EPREFIX}/usr/include/mysql" "-L${EPREFIX}/usr/lib64/mysql")
+	use oci8 && myconf+=("-I${ORACLE_HOME}/include" "-L${ORACLE_HOME}/lib64")
 	use odbc && myconf+=("-I${EPREFIX}/usr/include/iodbc")
 	use postgres && myconf+=("-I${EPREFIX}/usr/include/postgresql/pgsql")
 

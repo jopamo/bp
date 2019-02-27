@@ -35,16 +35,8 @@ src_prepare() {
 		echo ROOTPATH=/usr/sbin:/sbin:/usr/bin:/bin >> etc/env.d/99host
 	fi
 
-	# handle multilib paths.  do it here because we want this behavior
-	# regardless of the C library that you're using.  we do explicitly
-	# list paths which the native ldconfig searches, but this isn't
-	# problematic as it doesn't change the resulting ld.so.cache or
-	# take longer to generate.  similarly, listing both the native
-	# path and the symlinked path doesn't change the resulting cache.
 	local libdir ldpaths
-	for libdir in $(get_all_libdirs) ; do
-		ldpaths+=":${EPREFIX}/usr/${libdir}"
-	done
+	ldpaths+=":${EPREFIX}/usr/${get_libdir}"
 	echo "LDPATH='${ldpaths#:}'" >> etc/env.d/50baselayout
 }
 

@@ -11,7 +11,7 @@ IUSE="ipv6 test doc static-libs"
 EGIT_REPO_URI="https://github.com/freedesktop/xorg-libX11.git"
 SLOT=0
 
-RDEPEND=">=x11-libs/libxcb-1.11.1[${MULTILIB_USEDEP}]
+RDEPEND=">=x11-libs/libxcb-1.11.1
 	x11-libs/xtrans
 	x11/xorgproto"
 DEPEND="${RDEPEND}
@@ -26,7 +26,7 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var

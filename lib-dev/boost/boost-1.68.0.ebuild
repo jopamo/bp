@@ -172,39 +172,6 @@ src_compile() {
 	fi
 }
 
-src_install_all() {
-	if ! use python; then
-		rm -r "${ED%/}"/usr/include/boost/python* || die
-	fi
-
-	if ! use nls; then
-		rm -r "${ED%/}"/usr/include/boost/locale || die
-	fi
-
-	if ! use context; then
-		rm -r "${ED%/}"/usr/include/boost/context || die
-		rm -r "${ED%/}"/usr/include/boost/coroutine{,2} || die
-		rm "${ED%/}"/usr/include/boost/asio/spawn.hpp || die
-	fi
-
-	if use doc; then
-		# find extraneous files that shouldn't be installed
-		# as part of the documentation and remove them.
-		find libs/*/* \( -iname 'test' -o -iname 'src' \) -exec rm -rf '{}' + || die
-		find doc \( -name 'Jamfile.v2' -o -name 'build' -o -name '*.manifest' \) -exec rm -rf '{}' + || die
-		find tools \( -name 'Jamfile.v2' -o -name 'src' -o -name '*.cpp' -o -name '*.hpp' \) -exec rm -rf '{}' + || die
-
-		docinto html
-		dodoc *.{htm,html,png,css}
-		dodoc -r doc libs more tools
-
-		# To avoid broken links
-		dodoc LICENSE_1_0.txt
-
-		dosym ../../../../include/boost /usr/share/doc/${PF}/html/boost
-	fi
-}
-
 src_install() {
 	local -x BOOST_ROOT="${BUILD_DIR}"
 	installation() {
@@ -273,6 +240,37 @@ EOF
 
 		insinto /usr/share
 		doins -r dist/share/boostbook
+	fi
+
+	if ! use python; then
+		rm -r "${ED%/}"/usr/include/boost/python* || die
+	fi
+
+	if ! use nls; then
+		rm -r "${ED%/}"/usr/include/boost/locale || die
+	fi
+
+	if ! use context; then
+		rm -r "${ED%/}"/usr/include/boost/context || die
+		rm -r "${ED%/}"/usr/include/boost/coroutine{,2} || die
+		rm "${ED%/}"/usr/include/boost/asio/spawn.hpp || die
+	fi
+
+	if use doc; then
+		# find extraneous files that shouldn't be installed
+		# as part of the documentation and remove them.
+		find libs/*/* \( -iname 'test' -o -iname 'src' \) -exec rm -rf '{}' + || die
+		find doc \( -name 'Jamfile.v2' -o -name 'build' -o -name '*.manifest' \) -exec rm -rf '{}' + || die
+		find tools \( -name 'Jamfile.v2' -o -name 'src' -o -name '*.cpp' -o -name '*.hpp' \) -exec rm -rf '{}' + || die
+
+		docinto html
+		dodoc *.{htm,html,png,css}
+		dodoc -r doc libs more tools
+
+		# To avoid broken links
+		dodoc LICENSE_1_0.txt
+
+		dosym ../../../../include/boost /usr/share/doc/${PF}/html/boost
 	fi
 }
 

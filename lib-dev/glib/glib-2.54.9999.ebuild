@@ -169,9 +169,7 @@ src_test() {
 src_install() {
 	default
 	keepdir /usr/lib64/gio/modules
-}
 
-src_install_all() {
 	if use utils ; then
 		python_replicate_script "${ED}"/usr/bin/gtester-report
 	else

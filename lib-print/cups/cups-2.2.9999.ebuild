@@ -163,9 +163,7 @@ src_configure() {
 
 src_install() {
 	emake BUILDROOT="${D}" install
-}
 
-src_install_all() {
 	# move the default config file to docs
 	dodoc "${ED}"/etc/cups/cupsd.conf.default
 	rm -f "${ED}"/etc/cups/cupsd.conf.default

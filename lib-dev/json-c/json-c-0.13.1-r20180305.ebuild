@@ -37,7 +37,8 @@ src_test() {
 	default
 }
 
-src_install_all() {
+src_install() {
+	default
 	dosym ../json-c /usr/include/json-c/json
 	find "${ED}" -name "*.la" -delete || die
 }

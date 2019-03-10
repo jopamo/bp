@@ -142,9 +142,7 @@ src_install() {
 	default
 
 	use python && python_optimize
-}
 
-src_install_all() {
 	find "${ED}" -name "*.la" -delete || die
 
 	if use pam; then

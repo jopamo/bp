@@ -50,7 +50,8 @@ src_test() {
 	emake check
 }
 
-src_install_all() {
+src_install() {
+	default
 	use static-libs || find "${ED}" -name "*.la" -delete || die
 	rm "${ED}"/usr/share/doc/${PF}/COPYING || die
 	dosym flex /usr/bin/lex

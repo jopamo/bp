@@ -208,9 +208,7 @@ src_install() {
 				"${ED%/}"/usr/bin || die
 		done
 	fi
-}
 
-src_install_all() {
 	if use fontforge; then
 		# Probably fontforge needs less but this way makes things simplier...
 		einfo "Installing internal headers required for fontforge"

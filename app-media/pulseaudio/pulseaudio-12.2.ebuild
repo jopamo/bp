@@ -26,7 +26,6 @@ gnome gtk ipv6 jack libsamplerate libressl lirc native-headset neon ofono-headse
 +orc oss qt4 realtime sox ssl systemd system-wide test +udev
 +X zeroconf"
 
-# See "*** BLUEZ support not found (requires D-Bus)" in configure.ac
 REQUIRED_USE="
 	bluetooth? ( dbus )
 	equalizer? ( dbus )
@@ -206,10 +205,7 @@ src_test() {
 
 src_install() {
 	emake -j1 DESTDIR="${D}" install
-}
 
-src_install_all() {
-	# Drop the script entirely if X is disabled
 	use X || rm "${ED}"/usr/bin/start-pulseaudio-x11
 
 	if use system-wide; then

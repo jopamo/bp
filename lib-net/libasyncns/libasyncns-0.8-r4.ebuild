@@ -48,8 +48,5 @@ src_configure() {
 
 src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
-}
-
-src_install_all() {
 	find "${D}" -name '*.la' -delete
 }

@@ -38,9 +38,7 @@ src_configure() {
 
 src_install() {
 	default
-}
 
-src_install_all() {
 	insinto /etc
 	doins doc/netconfig
 

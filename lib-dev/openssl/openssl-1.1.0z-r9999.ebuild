@@ -94,9 +94,7 @@ src_test() {
 
 src_install() {
 	emake DESTDIR="${D}" install
-}
 
-src_install_all() {
 	use static-libs || rm -f "${ED}"/usr/lib*/lib*.a
 
 	keepdir ${SSL_CNF_DIR}/certs

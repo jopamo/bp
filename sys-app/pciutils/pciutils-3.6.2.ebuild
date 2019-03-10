@@ -84,16 +84,6 @@ src_compile() {
 src_install() {
 	pemake DESTDIR="${D}" install install-lib
 	use static-libs && dolib.a "${BUILD_DIR}/static/lib/libpci.a"
-}
-
-src_install_all() {
 	rm "${ED}"/usr/sbin/update-pciids "${ED}"/usr/share/misc/pci.ids \
 		"${ED}"/usr/share/man/man8/update-pciids.8*
-}
-
-pkg_postinst() {
-	if [[ ${REPLACING_VERSIONS} ]] && [[ ${REPLACING_VERSIONS} < 3.2.0 ]]; then
-		elog "The 'network-cron' USE flag is gone; if you want a more up-to-date"
-		elog "pci.ids file, you should use sys-app/systemd-99999999 (live ebuild)."
-	fi
 }

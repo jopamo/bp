@@ -21,13 +21,7 @@ src_prepare() {
 }
 
 src_configure() {
-	local myconf=()
-
-	if use hardened ; then
-		myconf+=( --disable-syscall )
-	fi
-
-	myconf+=(
+	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
 		--libdir="${EPREFIX}"/usr/lib64
@@ -38,6 +32,7 @@ src_configure() {
 		$(use_enable lazy-lock)
 		$(use_enable stats)
 		$(use_enable xmalloc)
+		--disable-syscall
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
@@ -45,14 +40,5 @@ src_configure() {
 src_install() {
 	touch doc/{jemalloc.3,jemalloc.html}
 	emake DESTDIR="${D}" install
-}
-
-src_install_all() {
-	if [[ ${CHOST} == *-darwin* ]] ; then
-		# fixup install_name, #437362
-		install_name_tool \
-			-id "${EPREFIX}"/usr/lib64/libjemalloc.2.dylib \
-			"${ED}"/usr/lib64/libjemalloc.2.dylib || die
-	fi
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

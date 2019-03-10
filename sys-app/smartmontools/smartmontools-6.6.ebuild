@@ -12,21 +12,15 @@ HOMEPAGE="https://www.smartmontools.org"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="caps +daemon selinux static update_drivedb"
+IUSE="caps +daemon static update_drivedb"
 
 DEPEND="
 	caps? (
 		static? ( lib-sys/libcap-ng[static-libs] )
 		!static? ( lib-sys/libcap-ng )
-	)
-	kernel_FreeBSD? (
-		sys-freebsd/freebsd-lib[usb]
-	)
-	selinux? (
-		lib-sys/libselinux
 	)"
+
 RDEPEND="${DEPEND}
-	selinux? ( sec-policy/selinux-smartmon )
 	update_drivedb? (
 		app-crypt/gnupg
 		|| (
@@ -60,7 +54,6 @@ src_configure() {
 		--with-drivedbdir="${EPREFIX}/var/db/${PN}" #575292
 		--with-initscriptdir="${EPREFIX}/etc/init.d"
 		$(use_with caps libcap-ng)
-		$(use_with selinux)
 		--with-systemdsystemunitdir="$(systemd_get_systemunitdir)"
 		$(use_with update_drivedb gnupg)
 		$(use_with update_drivedb update-smart-drivedb)

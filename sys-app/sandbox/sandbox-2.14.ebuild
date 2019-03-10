@@ -35,7 +35,8 @@ src_test() {
 	emake check TESTSUITEFLAGS="--jobs=$(makeopts_jobs)"
 }
 
-src_install_all() {
+src_install() {
+	default
 	keepdir /var/log/sandbox
 	fowners root:portage /var/log/sandbox
 	fperms 0770 /var/log/sandbox

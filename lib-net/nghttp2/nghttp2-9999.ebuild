@@ -56,6 +56,7 @@ src_configure() {
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }
 
-src_install_all() {
+src_install() {
+	default
 	use static-libs || find "${ED%/}"/usr -name '*.la' -delete
 }

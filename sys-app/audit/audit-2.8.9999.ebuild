@@ -155,9 +155,7 @@ src_install() {
 
 		local native_build=${BUILD_DIR}
 		use python && python_foreach_impl python_install
-}
 
-src_install_all() {
 	docinto contrib
 	dodoc contrib/{avc_snap,skeleton.c}
 	docinto contrib/plugin

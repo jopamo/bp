@@ -326,7 +326,7 @@ qemu_src_configure() {
 		--host-cc="$(tc-getBUILD_CC)"
 		$(use_enable debug debug-info)
 		$(use_enable debug debug-tcg)
-		--enable-docs
+		--disable-docs
 		$(use_enable tci tcg-interpreter)
 		$(use_enable xattr attr)
 	)

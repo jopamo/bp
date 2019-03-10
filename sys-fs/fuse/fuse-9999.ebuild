@@ -46,10 +46,6 @@ src_test() {
 
 src_install() {
 	DESTDIR="${D}" eninja install
-}
-
-src_install_all() {
-	# manually install man pages
 	rm -r "${ED%/}"/usr/share/man || die
 	doman doc/fusermount3.1
 }

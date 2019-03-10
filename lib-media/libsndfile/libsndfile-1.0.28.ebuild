@@ -48,6 +48,7 @@ src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-src_install_all() {
+src_install() {
+	default
 	find "${D}" -name '*.la' -delete || die
 }

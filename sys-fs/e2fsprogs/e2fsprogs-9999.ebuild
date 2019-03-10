@@ -60,7 +60,7 @@ src_install() {
 	insinto /etc
 	doins "${FILESDIR}"/e2fsck.conf
 
-	rm -rf "${ED}"/usr/share/info
+	rm -rf "${ED}"/usr/share/info "${ED}"/yes
 
 	if ! use static-libs ; then
 		find "${D}" -name '*.a' -delete || die

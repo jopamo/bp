@@ -127,9 +127,7 @@ src_test() {
 
 src_install() {
 	emake -j1 INSTALL_PREFIX="${D}" install
-}
 
-src_install_all() {
 	use static-libs || rm -f "${ED}"/usr/lib*/lib*.a
 
 	dodir ${SSL_CNF_DIR}/certs

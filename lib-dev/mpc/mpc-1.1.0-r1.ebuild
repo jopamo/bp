@@ -18,6 +18,7 @@ src_configure() {
 	ECONF_SOURCE=${S} econf $(use_enable static-libs static)
 }
 
-src_install_all() {
+src_install() {
+	default
 	find "${D}" -name '*.la' -delete || die
 }

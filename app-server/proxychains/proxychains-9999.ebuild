@@ -2,20 +2,15 @@
 
 EAPI=6
 
-inherit toolchain-funcs
-
-MY_PN=${PN}-ng
-MY_P=${MY_PN}-${PV}
+inherit toolchain-funcs git-r3
 
 DESCRIPTION="force any tcp connections to flow through a proxy (or proxy chain)"
 HOMEPAGE="https://github.com/rofl0r/proxychains-ng/"
-SRC_URI="https://github.com/rofl0r/${MY_PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+EGIT_REPO_URI="https://github.com/rofl0r/proxychains-ng.git"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-S=${WORKDIR}/${MY_P}
 
 src_prepare() {
 	default

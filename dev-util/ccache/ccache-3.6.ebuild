@@ -1,10 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=6
 
 DESCRIPTION="fast compiler cache"
 HOMEPAGE="https://ccache.samba.org/"
-SRC_URI="https://www.samba.org/ftp/ccache/${P}a.tar.xz"
+SRC_URI="https://www.samba.org/ftp/ccache/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"

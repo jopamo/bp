@@ -259,8 +259,8 @@ src_install() {
 			/usr/lib64/xorg/modules/extensions
 
 		# X module for wrapped software rendering
-		donvidia "libnvidia-wfb.so.${NV_SOVER}" \
-			/usr/lib64/xorg/modules
+		#donvidia "libnvidia-wfb.so.${NV_SOVER}" \
+		#	/usr/lib64/xorg/modules
 
 		# Xorg nvidia.conf
 		if has_version '>=x11-base/xorg-server-1.16'; then

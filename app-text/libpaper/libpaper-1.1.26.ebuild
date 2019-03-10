@@ -4,16 +4,13 @@ EAPI=4
 
 inherit eutils autotools
 
-MY_PV=${PV/_p/+nmu}
 DESCRIPTION="Library for handling paper characteristics"
 HOMEPAGE="http://packages.debian.org/unstable/source/libpaper"
-SRC_URI="http://ftp.debian.org/debian/pool/main/libp/libpaper/libpaper_1.1.24+nmu5.tar.gz -> ${P}.tar.gz"
+SRC_URI="http://deb.debian.org/debian/pool/main/libp/libpaper/libpaper_${PV}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-S="${WORKDIR}/${P}+nmu5"
 
 src_prepare() {
 	sed -e "s/AM_CONFIG_HEADER/AC_CONFIG_HEADERS/" -i configure.ac || die

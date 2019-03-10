@@ -4,6 +4,8 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
+SNAPSHOT="20190110"
+
 inherit eutils python-any-r1
 
 if [[ ${PV} == *.* ]] ; then
@@ -70,7 +72,7 @@ src_prepare() {
 	cd "image/${EPREFIX}" || die
 	if ! ${PRECOMPILED} ; then
 		mkdir -p usr/sbin
-		cp -p "${S}"/${PN}/sbin/update-ca-certificates usr/sbin/ || die
+		cp -p "${S}"/${PN}-${SNAPSHOT}/sbin/update-ca-certificates usr/sbin/ || die
 	fi
 
 	default
@@ -87,7 +89,7 @@ src_compile() {
 	cd "image/${EPREFIX}" || die
 	if ! ${PRECOMPILED} ; then
 		python_setup
-		local d="${S}/${PN}/mozilla" c="usr/share/${PN}"
+		local d="${S}/${PN}-${SNAPSHOT}/mozilla" c="usr/share/${PN}"
 		# Grab the database from the nss sources.
 		cp "${S}"/nss-${NSS_VER}/nss/lib/ckfw/builtins/{certdata.txt,nssckbi.h} "${d}" || die
 		emake -C "${d}"
@@ -112,11 +114,6 @@ src_compile() {
 
 src_install() {
 	cp -pPR image/* "${D}"/ || die
-	if ! ${PRECOMPILED} ; then
-		cd ca-certificates
-		doman sbin/*.8
-		dodoc debian/README.* examples/ca-certificates-local/README
-	fi
 
 	echo 'CONFIG_PROTECT_MASK="/etc/ca-certificates.conf"' > 98ca-certificates
 	doenvd 98ca-certificates

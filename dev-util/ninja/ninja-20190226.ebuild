@@ -6,7 +6,7 @@ PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit python-any-r1 toolchain-funcs
 
-SNAPSHOT=6e02ebc4b5947095fa64b5bf814f14dd6f6f6a9a
+SNAPSHOT=1bcc689324bdee090eed035353724abc3fa7c909
 
 SRC_URI="https://github.com/ninja-build/ninja/archive/${SNAPSHOT}.zip -> ${P}.zip"
 KEYWORDS="amd64 arm64"

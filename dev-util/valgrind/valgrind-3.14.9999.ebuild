@@ -10,9 +10,10 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-if [[ ${PV} == "9999" ]]; then
-	EGIT_REPO_URI="git://sourceware.org/git/valgrind.git"
+if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
+	EGIT_REPO_URI="git://sourceware.org/git/valgrind.git"
+	EGIT_BRANCH="VALGRIND_3_14_BRANCH"
 else
 	SRC_URI="ftp://sourceware.org/pub/valgrind/${P}.tar.bz2"
 fi

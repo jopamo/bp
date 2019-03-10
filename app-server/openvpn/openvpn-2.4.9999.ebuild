@@ -6,6 +6,7 @@ inherit autotools flag-o-matic user systemd linux-info git-r3
 
 DESCRIPTION="Robust and highly flexible tunneling application compatible with many OSes"
 EGIT_REPO_URI="https://github.com/OpenVPN/${PN}.git"
+EGIT_BRANCH="release/2.4"
 EGIT_SUBMODULES=(-cmocka)
 HOMEPAGE="http://openvpn.net/"
 KEYWORDS="amd64 arm64"
@@ -14,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 
 IUSE="down-root examples inotify +iproute2 libressl lz4 +lzo mbedtls pam"
-IUSE+=" pkcs11 +plugins selinux +ssl static systemd test userland_BSD"
+IUSE+=" pkcs11 +plugins selinux +ssl static systemd test"
 
 REQUIRED_USE="static? ( !plugins !pkcs11 )
 	lzo? ( !lz4 )

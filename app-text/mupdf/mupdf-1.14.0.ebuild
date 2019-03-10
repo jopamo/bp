@@ -6,7 +6,7 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="a lightweight PDF viewer and toolkit written in portable C"
 HOMEPAGE="http://mupdf.com/"
-SRC_URI="https://mupdf.com/downloads/${P}-source.tar.xz"
+SRC_URI="https://mupdf.com/downloads/archive/${P}-source.tar.xz"
 
 LICENSE="AGPL-3"
 SLOT="0/${PV}"

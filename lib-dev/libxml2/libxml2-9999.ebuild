@@ -71,9 +71,7 @@ src_configure() {
 
 src_install() {
 	emake DESTDIR="${D}" install
-}
 
-src_install_all() {
 	rm -rf "${ED}"/usr/share/doc
 	find "${ED}" -name "*.la" -delete || die
 }

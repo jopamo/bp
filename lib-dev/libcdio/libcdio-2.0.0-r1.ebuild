@@ -59,6 +59,7 @@ src_configure() {
 		${util_switch}-{cd-drive,cd-info,cdda-player,cd-read,iso-info,iso-read}
 }
 
-src_install_all() {
+src_install() {
+	default
 	find "${ED}" -name '*.la' -delete || die
 }

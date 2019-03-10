@@ -49,9 +49,7 @@ src_install() {
 
 	insinto /etc/fonts
 	doins fonts.conf
-}
 
-src_install_all() {
 	find "${ED}" -name "*.la" -delete || die
 
 	# fc-lang directory contains language coverage datafiles
@@ -75,8 +73,6 @@ src_install_all() {
 	# As of fontconfig 2.7, everything sticks their noses in here.
 	dodir /etc/sandbox.d
 	echo 'SANDBOX_PREDICT="/var/cache/fontconfig"' > "${ED}"/etc/sandbox.d/37fontconfig
-
-
 }
 
 pkg_preinst() {

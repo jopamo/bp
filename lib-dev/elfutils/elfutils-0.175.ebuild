@@ -60,7 +60,8 @@ src_test() {
 		emake check
 }
 
-src_install_all() {
+src_install() {
+	default
 	if ! use utils; then
 		rm -rf "${ED}"/usr/bin || die
 	fi

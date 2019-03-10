@@ -25,7 +25,8 @@ src_configure() {
 		--disable-static
 }
 
-src_install_all() {
+src_install() {
+	default
 	find "${ED}" -name "*.la" -delete || die
 
 	dodir /etc

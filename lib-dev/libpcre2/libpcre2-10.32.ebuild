@@ -68,10 +68,6 @@ src_compile() {
 }
 
 src_install() {
-	emake \
-		DESTDIR="${D}" install
-}
-
-src_install_all() {
+	emake DESTDIR="${D}" install
 	find "${ED}" -name "*.la" -delete || die
 }

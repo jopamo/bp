@@ -19,7 +19,7 @@ HOMEPAGE="https://www.winehq.org/"
 
 LICENSE="LGPL-2.1"
 SLOT="${PV}"
-IUSE="+alsa cups custom-cflags +fontconfig +jpeg ldap mp3 netapi nls odbc openal +opencl
+IUSE="+alsa cups custom-cflags +fontconfig +jpeg ldap mp3 netapi nls odbc openal opencl
  +opengl osmesa perl pcap +png prelink pulseaudio samba test +X +xcomposite
  xinerama +xml"
 

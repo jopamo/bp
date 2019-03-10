@@ -11,7 +11,7 @@ EGIT_REPO_URI="https://github.com/libevent/libevent"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="debug libressl +ssl static-libs test +threads"
+IUSE="debug libressl +ssl static-libs test"
 RESTRICT="test"
 
 DEPEND="
@@ -19,10 +19,6 @@ DEPEND="
 		!libressl? ( >=lib-dev/openssl-1.0.1h-r2:0 )
 		libressl? ( lib-dev/libressl )
 	)
-"
-RDEPEND="
-	${DEPEND}
-	!<=lib-dev/9libs-1.0
 "
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro
@@ -49,12 +45,13 @@ src_configure() {
 		$(use_enable ssl openssl)
 		$(use_enable static-libs static)
 		$(use_enable test libevent-regress)
-		$(use_enable threads thread-support)
+		--enable-thread-support
 	)
 
 	ECONF_SOURCE="${S}" econf ${myconf[@]}
 }
 
-src_install_all() {
+src_install() {
+	default
 	find "${ED}" -name "*.la" -delete || die
 }

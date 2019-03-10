@@ -49,8 +49,8 @@ src_configure() {
 		--disable-usbstream
 }
 
-src_install_all() {
-
+src_install() {
+	default
 	if use pulseaudio; then
 		# install ALSA configuration files
 		# making PA to be used by alsa clients

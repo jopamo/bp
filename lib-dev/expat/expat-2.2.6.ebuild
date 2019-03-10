@@ -69,8 +69,6 @@ src_install() {
 		sed -i -e '/^Libs/s:-lexpat:&w:' expatw.pc || die
 		popd >/dev/null
 	fi
-}
 
-src_install_all() {
 	find "${ED}" -name "*.la" -delete || die
 }

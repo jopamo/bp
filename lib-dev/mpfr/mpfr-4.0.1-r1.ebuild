@@ -46,6 +46,7 @@ src_configure() {
 		$(use_enable static-libs static)
 }
 
-src_install_all() {
+src_install() {
+	default
 	use static-libs || find "${ED}"/usr -name '*.la' -delete
 }

@@ -24,7 +24,6 @@ REQUIRED_USE="
 
 CDEPEND="
 	>=lib-dev/expat-2.1.0
-	selinux? ( lib-sys/libselinux )
 	systemd? ( sys-app/systemd:0= )
 	X? (
 		x11-libs/libX11
@@ -138,9 +137,7 @@ src_test() {
 
 src_install() {
 	emake DESTDIR="${D}" install
-}
 
-src_install_all() {
 	if use X; then
 		# dbus X session script (#77504)
 		# turns out to only work for GDM (and startx). has been merged into

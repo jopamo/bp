@@ -28,6 +28,7 @@ src_configure() {
 		--disable-require-system-font-provider
 }
 
-src_install_all() {
+src_install() {
+	default
 	find "${ED}" -name "*.la" -delete || die
 }

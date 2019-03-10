@@ -55,8 +55,5 @@ src_test() {
 
 src_install() {
 	_emake install DESTDIR="${D}"
-}
-
-src_install_all() {
 	export QA_DT_NEEDED=$(find "${ED}" -type f -name 'libaio.so.*' -printf '/%P\n')
 }

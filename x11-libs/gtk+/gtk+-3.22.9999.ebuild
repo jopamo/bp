@@ -90,7 +90,7 @@ src_configure() {
 		$(use_enable aqua quartz-backend) \
 		$(use_enable broadway broadway-backend) \
 		$(use_enable colord) \
-		$(use_enable cups cups auto) \
+		$(use_enable cups) \
 		$(use_enable introspection) \
 		$(use_enable wayland wayland-backend) \
 		$(use_enable X x11-backend) \
@@ -104,7 +104,7 @@ src_configure() {
 		--disable-papi \
 		--with-xml-catalog="${EPREFIX}"/etc/xml/catalog \
 		--libdir="${EPREFIX}"/usr/lib64 \
-		CUPS_CONFIG="${EPREFIX}/usr/bin/${CHOST}-cups-config"
+		CUPS_CONFIG="${EROOT}/usr/bin/cups-config"
 }
 
 src_test() {
@@ -113,7 +113,8 @@ src_test() {
 }
 
 
-src_install_all() {
+src_install() {
+	default
 	insinto /etc/gtk-3.0
 	doins "${FILESDIR}"/settings.ini
 }

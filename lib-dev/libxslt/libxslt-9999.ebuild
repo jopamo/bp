@@ -76,9 +76,7 @@ src_install() {
 			install
 		python_foreach_impl python_optimize
 	fi
-}
 
-src_install_all() {
 	rm -rf "${ED}"/usr/share/doc/${PF}/examples
 	rm -rf "${ED}"/usr/share/doc/${PF}/python/examples
 

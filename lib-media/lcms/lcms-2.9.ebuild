@@ -30,6 +30,7 @@ src_configure() {
 	econf ${myeconfargs[@]}
 }
 
-src_install_all() {
+src_install() {
+	default
 	find "${ED}" -name "*.la" -delete || die
 }

@@ -66,9 +66,7 @@ src_test() {
 
 src_install() {
 	cmake-utils_src_install
-}
 
-src_install_all() {
 	if use programs ; then
 		# avoid file collisions with sys-app/coreutils
 		local p e

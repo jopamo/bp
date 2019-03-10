@@ -197,9 +197,7 @@ msrc_test() {
 
 src_install() {
 	meson_src_install
-}
 
-src_install_all() {
 	dosym ../sysctl.conf /etc/sysctl.d/99-sysctl.conf
 
 	# If we install these, there's no way to remove them

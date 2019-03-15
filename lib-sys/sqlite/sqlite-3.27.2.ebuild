@@ -8,7 +8,7 @@ MY_PV="$(printf "%u%02u%02u%02u" $(get_version_components))"
 
 DESCRIPTION="A SQL Database Engine in a C Library"
 HOMEPAGE="https://sqlite.org/"
-SRC_URI="https://www.sqlite.org/2018/sqlite-src-${MY_PV}.zip"
+SRC_URI="https://www.sqlite.org/2019/sqlite-src-${MY_PV}.zip"
 S="${WORKDIR}/sqlite-src-${MY_PV}"
 
 LICENSE="public-domain"

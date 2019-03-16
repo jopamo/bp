@@ -6,7 +6,7 @@ PYTHON_COMPAT=( python3_{6,7,8} )
 
 DISTUTILS_OPTIONAL=1
 
-SNAPSHOT=62014dc50612ec6b2572676b94aa559f3583998e
+SNAPSHOT=a1379d0081e14958b2ada6dcc1fcb7f128e4bd94
 
 inherit autotools eutils distutils-r1 libtool toolchain-funcs
 

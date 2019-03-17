@@ -44,7 +44,7 @@ IUSE="${IUSE} acl argon2 bcmath bzip2 calendar cdb cjk
 # the ./configure script. Other versions *work*, but we need to stick to
 # the ones that can be detected to avoid a repeat of bug #564824.
 COMMON_DEPEND="
-	>=lib-dev/libpcre-8.32[unicode]
+	>=lib-dev/libpcre-8.32
 	acl? ( sys-app/acl )
 	argon2? ( app-crypt/argon2:= )
 	bzip2? ( app-compression/lbzip2:0= )
@@ -131,6 +131,8 @@ REQUIRED_USE="
 	zip-encryption? ( zip )
 "
 
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+
 src_prepare() {
 	default
 	eautoreconf
@@ -150,6 +152,8 @@ src_configure() {
 		--with-fpm-group=lighttpd	\
 		--with-config-file-path="${EPREFIX}"/etc	\
 		--with-zlib	\
+		--enable-calendar \
+		--enable-dba=shared \
 		--with-curl	\
 		--without-pear	\
 		--with-openssl	\

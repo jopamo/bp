@@ -13,20 +13,10 @@ SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="doc examples"
 
-# not contained in the tarball
 RESTRICT=test
 
-PATCHES=( "${FILESDIR}"/${PN}-distutils.patch )
-
 python_install_all() {
-	local HTML_DOCS=( HowToUsePyparsing.html )
-	if use doc; then
-		HTML_DOCS+=( htmldoc/. )
-		dodoc docs/*.pdf
-	fi
-	use examples && dodoc -r examples
 	distutils-r1_python_install_all
 }
 

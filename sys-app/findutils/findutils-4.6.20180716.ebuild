@@ -49,9 +49,7 @@ src_prepare() {
 src_configure() {
 	use static && append-ldflags -static
 
-	program_prefix=$(usex userland_GNU '' g)
 	econf \
-		--program-prefix=${program_prefix} \
 		$(use_enable nls) \
 		$(use_with selinux)
 }

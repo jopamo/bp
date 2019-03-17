@@ -236,7 +236,7 @@ NGINX_MODULES_3RD="
 "
 
 IUSE="aio debug +http +http2 +http-cache +ipv6 libatomic luajit +pcre
-	pcre-jit rtmp selinux ssl threads userland_GNU vim-syntax"
+	pcre-jit rtmp selinux ssl threads vim-syntax"
 
 for mod in $NGINX_MODULES_STD; do
 	IUSE="${IUSE} +nginx_modules_http_${mod}"

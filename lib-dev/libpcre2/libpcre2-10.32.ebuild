@@ -28,7 +28,7 @@ RDEPEND="bzip2? ( app-compression/lbzip2 )
 	readline? ( lib-sys/readline:0= )"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
-	userland_GNU? ( >=sys-app/findutils-4.4.0 )"
+	>=sys-app/findutils-4.4.0"
 
 S="${WORKDIR}/${MY_P}"
 

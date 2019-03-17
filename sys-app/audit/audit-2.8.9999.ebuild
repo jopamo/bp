@@ -4,7 +4,7 @@ EAPI="6"
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit autotools toolchain-funcs preserve-libs python-r1 linux-info systemd git-r3
+inherit autotools toolchain-funcs preserve-libs python-r1 linux-info systemd git-r3 flag-o-matic
 
 DESCRIPTION="Userspace utilities for storing and processing auditing records"
 HOMEPAGE="https://people.redhat.com/sgrubb/audit/"
@@ -25,10 +25,11 @@ RDEPEND="gssapi? ( virtual/krb5 )
 	python? ( ${PYTHON_DEPS} )"
 DEPEND="${RDEPEND}
 	>=sys-kernel/stable-sources-2.6.34
-	python? ( dev-lang/swig:0 )"
-# Do not use os-headers as this is linux specific
+	dev-lang/swig:0"
 
 CONFIG_CHECK="~AUDIT"
+
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 pkg_setup() {
 	linux-info_pkg_setup
@@ -66,11 +67,16 @@ src_prepare() {
 }
 
 src_configure() {
+	tc-export_build_env BUILD_{CC,CPP}
+	export CC_FOR_BUILD="${BUILD_CC}"
+	export CPP_FOR_BUILD="${BUILD_CPP}"
+
 	local ECONF_SOURCE=${S}
 	econf \
-		--sbindir="${EPREFIX}/sbin" \
+		--sbindir="${EPREFIX}/usr/sbin" \
 		$(use_enable gssapi gssapi-krb5) \
 		$(use_enable static-libs static) \
+		$(use_enable ldap zos-remote) \
 		--enable-systemd \
 		--without-python \
 		--without-python3
@@ -87,14 +93,6 @@ src_configure() {
 		}
 
 		use python && python_foreach_impl python_configure
-}
-
-src_configure() {
-	tc-export_build_env BUILD_{CC,CPP}
-	export CC_FOR_BUILD="${BUILD_CC}"
-	export CPP_FOR_BUILD="${BUILD_CPP}"
-
-	default
 }
 
 src_compile() {
@@ -165,10 +163,6 @@ src_install() {
 
 	fperms 644 "$(systemd_get_systemunitdir)"/auditd.service # 556436
 
-	[ -f "${ED}"/sbin/audisp-remote ] && \
-	dodir /usr/sbin && \
-	mv "${ED}"/{sbin,usr/sbin}/audisp-remote || die
-
 	# Gentoo rules
 	insinto /etc/audit/
 	newins "${FILESDIR}"/audit.rules-2.1.3 audit.rules
@@ -183,22 +177,15 @@ src_install() {
 	lockdown_perms "${ED}"
 }
 
-pkg_preinst() {
-	# Preserve from the audit-1 series
-	preserve_old_lib /lib64/libaudit.so.0
-}
-
 pkg_postinst() {
 	lockdown_perms "${EROOT}"
-	# Preserve from the audit-1 series
-	preserve_old_lib_notify /lib64/libaudit.so.0
 }
 
 lockdown_perms() {
 	# Upstream wants these to have restrictive perms.
 	# Should not || die as not all paths may exist.
 	local basedir="$1"
-	chmod 0750 "${basedir}"/sbin/au{ditctl,report,dispd,ditd,search,trace} 2>/dev/null
+	chmod 0750 "${basedir}"/usr/sbin/au{ditctl,report,dispd,ditd,search,trace} 2>/dev/null
 	chmod 0750 "${basedir}"/var/log/audit/ 2>/dev/null
 	chmod 0640 "${basedir}"/etc/{audit/,}{auditd.conf,audit.rules*} 2>/dev/null
 }

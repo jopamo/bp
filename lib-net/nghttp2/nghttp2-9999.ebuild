@@ -2,6 +2,8 @@
 
 EAPI=6
 
+inherit flag-o-matic
+
 if [[ ${PV} == 9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/nghttp2/nghttp2.git"
 	inherit autotools git-r3
@@ -31,6 +33,8 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	test? ( >=dev-util/cunit-2.1 )"
+
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 src_prepare() {
 	default

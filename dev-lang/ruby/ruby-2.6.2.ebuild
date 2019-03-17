@@ -2,16 +2,13 @@
 
 EAPI=6
 
-inherit autotools flag-o-matic git-r3
+inherit flag-o-matic
 
 SLOT=0/1
 
 DESCRIPTION="An object-oriented scripting language"
 HOMEPAGE="https://www.ruby-lang.org/"
-EGIT_REPO_URI="https://github.com/ruby/ruby.git"
-EGIT_BRANCH="ruby_2_5"
-
-SRC_URI="https://1g4.org/files/ruby-configure"
+SRC_URI=https://cache.ruby-lang.org/pub/ruby/2.6/${P}.tar.gz
 
 LICENSE="|| ( Ruby-BSD BSD-2 )"
 KEYWORDS="amd64 arm64"
@@ -19,14 +16,12 @@ IUSE="debug doc jemalloc socks5 static-libs"
 
 filter-flags -fomit-frame-pointer
 append-flags -fno-strict-aliasing
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 src_prepare() {
-	cp "${DISTDIR}/ruby-configure" "${S}"/configure || die
-	chmod 700 "${S}"/configure || die
 	default
 	einfo "Removing bundled libraries..."
 	rm -fr ext/fiddle/libffi-3.2.1 || die
-	eautoreconf
 }
 
 src_configure() {

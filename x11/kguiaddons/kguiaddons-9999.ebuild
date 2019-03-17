@@ -18,4 +18,5 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	x11-libs/libxcb
 	x11/xorgproto
+	x11/kf-env
 "

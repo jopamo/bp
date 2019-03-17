@@ -26,22 +26,6 @@ CDEPEND="
 DEPEND="${CDEPEND}
 	>=sys-app/sed-4"
 
-STATEFILE="/var/lib/misc/logrotate.status"
-OLDSTATEFILE="/var/lib/logrotate.status"
-
-move_old_state_file() {
-	elog "logrotate state file is now located at ${STATEFILE}"
-	elog "See bug #357275"
-	if [[ -e "${OLDSTATEFILE}" ]] ; then
-		elog "Moving your current state file to new location: ${STATEFILE}"
-		mv -n "${OLDSTATEFILE}" "${STATEFILE}"
-	fi
-}
-
-PATCHES=(
-	"${FILESDIR}/${P}-ignore-hidden.patch"
-)
-
 src_prepare() {
 	cd ${S}
 	./autogen.sh
@@ -66,20 +50,4 @@ src_install() {
 	doins "${FILESDIR}"/logrotate.conf
 
 	keepdir /etc/logrotate.d
-}
-
-pkg_postinst() {
-	elog
-	elog "The ${PN} binary is now installed under /usr/bin. Please"
-	elog "update your links"
-	elog
-	move_old_state_file
-	if [[ -z ${REPLACING_VERSIONS} ]] ; then
-		elog "If you wish to have logrotate e-mail you updates, please"
-		elog "emerge virtual/mailx and configure logrotate in"
-		elog "/etc/logrotate.conf appropriately"
-		elog
-		elog "Additionally, /etc/logrotate.conf may need to be modified"
-		elog "for your particular needs. See man logrotate for details."
-	fi
 }

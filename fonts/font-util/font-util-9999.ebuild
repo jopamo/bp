@@ -9,7 +9,8 @@ EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/font/util.git"
 SLOT=0
 KEYWORDS="amd64 arm64"
 
-DEPEND="fonts/font-alias"
+DEPEND="fonts/font-alias
+		fonts/bdftopcf"
 
 src_prepare() {
 	eautoreconf

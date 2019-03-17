@@ -11,7 +11,7 @@ LICENSE="|| ( GPL-2 BSD )"
 
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="ap dbus eap-sim eapol_test fasteap gnutls +hs2-0 libressl p2p privsep ps3 qt5 readline selinux smartcard ssl tdls uncommon-eap-types wimax wps kernel_linux kernel_FreeBSD"
+IUSE="ap dbus eap-sim eapol_test fasteap gnutls +hs2-0 p2p privsep ps3 qt5 readline selinux smartcard ssl tdls uncommon-eap-types wimax wps kernel_linux kernel_FreeBSD"
 REQUIRED_USE="fasteap? ( !ssl ) smartcard? ( ssl )"
 
 CDEPEND="dbus? ( sys-app/dbus )
@@ -35,10 +35,7 @@ CDEPEND="dbus? ( sys-app/dbus )
 			lib-dev/libgcrypt:0=
 			lib-net/gnutls:=
 		)
-		!gnutls? (
-			!libressl? ( lib-dev/openssl:0= )
-			libressl? ( lib-dev/libressl:0= )
-		)
+		!gnutls? ( lib-dev/openssl:0= )
 	)
 	!ssl? ( lib-dev/libtommath )
 "
@@ -79,16 +76,6 @@ Kconfig_style_config() {
 		fi
 }
 
-pkg_setup() {
-	if use ssl ; then
-		if use gnutls && use libressl ; then
-			elog "You have both 'gnutls' and 'libressl' USE flags enabled: defaulting to USE=\"gnutls\""
-		fi
-	else
-		elog "You have 'ssl' USE flag disabled: defaulting to internal TLS implementation"
-	fi
-}
-
 src_prepare() {
 	default
 
@@ -124,9 +111,6 @@ src_prepare() {
 
 	# bug (320097)
 	eapply "${FILESDIR}/${P}-do-not-call-dbus-functions-with-NULL-path.patch"
-
-	# bug (596332)
-	eapply "${FILESDIR}/${P}-libressl.patch"
 
 	# https://w1.fi/security/2017-1/wpa-packet-number-reuse-with-replayed-messages.txt
 	eapply "${FILESDIR}/2017-1/rebased-v2.6-0001-hostapd-Avoid-key-reinstallation-in-FT-handshake.patch"

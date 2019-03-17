@@ -14,7 +14,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug gnutls idn ipv6 libressl nls ntlm pcre +ssl static test uuid zlib"
+IUSE="debug gnutls idn ipv6 nls ntlm pcre +ssl static test uuid zlib"
 REQUIRED_USE=" ntlm? ( !gnutls ssl ) gnutls? ( ssl )"
 
 # Force a newer libidn2 to avoid libunistring deps. #612498
@@ -23,10 +23,7 @@ LIB_DEPEND="
 	pcre? ( lib-dev/libpcre[static-libs(+)] )
 	ssl? (
 		gnutls? ( lib-net/gnutls:0=[static-libs(+)] )
-		!gnutls? (
-			!libressl? ( lib-dev/openssl:0=[static-libs(+)] )
-			libressl? ( lib-dev/libressl[static-libs(+)] )
-		)
+		!gnutls? ( lib-dev/openssl:0=[static-libs(+)] )
 	)
 	uuid? ( sys-app/util-linux[static-libs(+)] )
 	zlib? ( lib-sys/zlib[static-libs(+)] )

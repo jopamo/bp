@@ -16,7 +16,7 @@ SLOT="0/12" # libcryptsetup.so version
 KEYWORDS="amd64 arm64"
 CRYPTO_BACKENDS="+gcrypt kernel nettle openssl"
 
-IUSE="${CRYPTO_BACKENDS} libressl nls pwquality python reencrypt static static-libs udev urandom"
+IUSE="${CRYPTO_BACKENDS} nls pwquality python reencrypt static static-libs udev urandom"
 REQUIRED_USE="^^ ( ${CRYPTO_BACKENDS//+/} )
 	python? ( ${PYTHON_REQUIRED_USE} )
 	static? ( !gcrypt )" #496612
@@ -29,10 +29,7 @@ LIB_DEPEND="
 	app-crypt/argon2:=[static-libs(+)]
 	gcrypt? ( lib-dev/libgcrypt:0=[static-libs(+)] )
 	nettle? ( >=lib-dev/nettle-2.4[static-libs(+)] )
-	openssl? (
-		!libressl? ( lib-dev/openssl:0=[static-libs(+)] )
-		libressl? ( lib-dev/libressl:=[static-libs(+)] )
-	)
+	openssl? ( lib-dev/openssl:0=[static-libs(+)] )
 	pwquality? ( lib-dev/libpwquality[static-libs(+)] )
 	sys-fs/lvm2[static-libs(+)]
 	udev? ( sys-app/systemd[static-libs(+)] )"

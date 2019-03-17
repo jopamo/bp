@@ -13,13 +13,12 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="libressl lzma scrypt seccomp selinux systemd tor-hardening test web zstd"
+IUSE="lzma scrypt seccomp selinux systemd tor-hardening test web zstd"
 
 DEPEND="
 	lib-dev/libevent[ssl]
 	lib-sys/zlib
-	!libressl? ( lib-dev/openssl:0=[-bindist] )
-	libressl? ( lib-dev/libressl:0= )
+	lib-dev/openssl:0=[-bindist]
 	lzma? ( app-compression/xz-utils )
 	scrypt? ( app-crypt/libscrypt )
 	seccomp? ( lib-sys/libseccomp )

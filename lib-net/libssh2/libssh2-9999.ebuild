@@ -11,13 +11,10 @@ HOMEPAGE="http://www.libssh2.org/"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="gcrypt libressl static-libs test zlib"
+IUSE="gcrypt static-libs test zlib"
 
 DEPEND="
-	!gcrypt? (
-		!libressl? ( >=lib-dev/openssl-1.0.1h-r2:0 )
-		libressl? ( lib-dev/libressl )
-	)
+	!gcrypt? ( >=lib-dev/openssl-1.0.1h-r2:0 )
 	gcrypt? ( >=lib-dev/libgcrypt-1.5.3:0 )
 	zlib? ( >=lib-sys/zlib-1.2.8-r1 )
 "

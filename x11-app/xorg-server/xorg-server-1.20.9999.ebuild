@@ -10,10 +10,10 @@ DESCRIPTION="X.Org X servers"
 SLOT="0/${PV}"
 KEYWORDS="amd64 arm64"
 
-IUSE="${IUSE_SERVERS} debug +glamor ipv6 libressl minimal selinux systemd +udev unwind wayland xcsecurity"
+IUSE="${IUSE_SERVERS} debug +glamor ipv6 minimal selinux systemd +udev unwind wayland xcsecurity"
 
-CDEPEND="!libressl? ( lib-dev/openssl:0= )
-	libressl? ( lib-dev/libressl )
+CDEPEND="
+	lib-dev/openssl:0=
 	>=x11/iceauth-1.0.2
 	>=x11/rgb-1.0.3
 	>=x11/xauth-1.0.3

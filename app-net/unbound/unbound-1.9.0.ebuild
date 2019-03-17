@@ -14,21 +14,18 @@ SRC_URI="http://unbound.net/downloads/${MY_P}.tar.gz"
 LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="debug dnscrypt dnstap +ecdsa gost libressl python selinux static-libs test threads"
+IUSE="debug dnscrypt dnstap +ecdsa gost python selinux static-libs test threads"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 CDEPEND=">=lib-dev/expat-2.1.0-r3
 	>=lib-dev/libevent-2.0.21:0=
-	libressl? ( >=lib-dev/libressl-2.2.4:0 )
-	!libressl? ( >=lib-dev/openssl-1.0.1h-r2:0 )
+	>=lib-dev/openssl-1.0.1h-r2:0
 	dnscrypt? ( lib-dev/libsodium )
 	dnstap? (
 		lib-dev/fstrm
 		>=lib-dev/protobuf-c-1.0.2-r1
 	)
-	ecdsa? (
-		!libressl? ( lib-dev/openssl:0[-bindist] )
-	)
+	ecdsa? ( lib-dev/openssl:0[-bindist] )
 	python? ( ${PYTHON_DEPS} )"
 
 DEPEND="${CDEPEND}

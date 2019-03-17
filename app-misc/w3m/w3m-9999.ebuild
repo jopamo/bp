@@ -1,6 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
+
 inherit autotools flag-o-matic eutils prefix git-r3
 
 DESCRIPTION="Text based WWW browser, supports tables and frames"
@@ -10,7 +11,7 @@ KEYWORDS="amd64 arm64"
 
 LICENSE="w3m"
 SLOT="0"
-IUSE="X fbcon gpm imlib libressl lynxkeymap nls nntp ssl unicode xface"
+IUSE="X fbcon gpm imlib lynxkeymap nls nntp ssl unicode xface"
 
 RDEPEND=">=lib-sys/ncurses-5.2-r3:0=
 	>=lib-sys/zlib-1.1.3-r2
@@ -19,10 +20,9 @@ RDEPEND=">=lib-sys/ncurses-5.2-r3:0=
 	imlib? ( >=lib-media/imlib2-1.1.0[X] )
 	xface? ( lib-media/compface )
 	gpm? ( >=lib-sys/gpm-1.19.3-r5 )
-	ssl? (
-		!libressl? ( lib-dev/openssl:0= )
-		libressl? ( lib-dev/libressl:0= )
-	)"
+	ssl? ( lib-dev/openssl:0= )
+"
+
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 

@@ -32,7 +32,7 @@ IUSE="${IUSE} acl argon2 bcmath bzip2 calendar cdb cjk
 	coverage +ctype curl debug
 	enchant exif +fileinfo +filter firebird
 	flatfile ftp gd gdbm gmp +hash +iconv imap inifile
-	intl iodbc ipv6 +json ldap ldap-sasl libedit libressl
+	intl iodbc ipv6 +json ldap ldap-sasl libedit
 	mhash mssql mysql mysqli nls
 	oci8-instant-client odbc +opcache pcntl pdo +phar +posix postgres qdbm
 	readline recode selinux +session session-mm sharedmem
@@ -75,10 +75,7 @@ COMMON_DEPEND="
 	soap? ( >=lib-dev/libxml2-2.6.8 )
 	spell? ( >=app-text/aspell-0.50 )
 	sqlite? ( >=lib-sys/sqlite-3.7.6.3 )
-	ssl? (
-		!libressl? ( lib-dev/openssl:0= )
-		libressl? ( lib-dev/libressl:0= )
-	)
+	ssl? ( lib-dev/openssl:0= )
 	tidy? ( || ( app-text/tidy-html5 app-text/htmltidy ) )
 	tokyocabinet? ( dev-db/tokyocabinet )
 	truetype? ( lib-media/freetype )

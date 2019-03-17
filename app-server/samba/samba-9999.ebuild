@@ -14,7 +14,7 @@ LICENSE="GPL-3"
 SLOT="0"
 
 IUSE="acl -addc -addns -ads -ceph client -cluster cups debug dmapi fam gnutls gpg iprint json -ldap
-pam quota syslog systemd test winbind zeroconf"
+quota syslog systemd test winbind zeroconf"
 
 CDEPEND="
 	>=app-compression/libarchive-3.1.2
@@ -29,7 +29,7 @@ CDEPEND="
 	lib-sys/ncurses:0=
 	lib-sys/readline:0=
 	lib-sys/zlib
-	pam? ( lib-sys/pam )
+	lib-sys/pam
 	ceph? ( sys-cluster/ceph )
 	cluster? (
 		lib-net/rpcsvc-proto
@@ -89,14 +89,16 @@ src_prepare() {
 src_configure() {
 	local myconf=(
 		--enable-fhs
+		--prefix="${EPREFIX}"/usr
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
 		--libdir="${EPREFIX}"/usr/lib64
+		--with-pammodulesdir="${EPREFIX}"/usr/lib64/security
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
-		--with-modulesdir="${EPREFIX}/usr/lib64/samba"
-		--with-piddir="${EPREFIX}/run/${PN}"
+		--with-modulesdir="${EPREFIX}"/usr/lib64/samba
+		--with-piddir="${EPREFIX}"/run/${PN}
 		--disable-rpath
 		--disable-rpath-install
 		$(use_with acl acl-support)
@@ -114,8 +116,6 @@ src_configure() {
 		$(use_with fam)
 		$(use_with gpg gpgme)
 		$(use_enable iprint)
-		$(use_with pam)
-		$(usex pam "--with-pammodulesdir=${EPREFIX}/lib64/security" '')
 		$(use_with quota quotas)
 		$(use_with syslog)
 		$(use_with systemd)

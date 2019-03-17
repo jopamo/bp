@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools toolchain-funcs
+inherit autotools toolchain-funcs flag-o-matic
 
 DESCRIPTION="Utilities and libraries for NUMA systems"
 HOMEPAGE="https://github.com/numactl/numactl"
@@ -18,6 +18,8 @@ KEYWORDS="amd64 arm64"
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="static-libs"
+
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 src_prepare() {
 	default

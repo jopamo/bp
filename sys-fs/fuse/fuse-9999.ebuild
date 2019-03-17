@@ -25,19 +25,12 @@ DEPEND="dev-util/pkgconfig
 
 filter-flags -flto
 
-src_prepare() {
-	default
-
-	# passthough_ll is broken on systems with 32-bit pointers
-	cat /dev/null > example/meson.build || die
-}
-
 src_configure() {
 	meson_src_configure
 }
 
 src_compile() {
-	eninja
+	meson_src_compile
 }
 
 src_test() {
@@ -45,7 +38,6 @@ src_test() {
 }
 
 src_install() {
-	DESTDIR="${D}" eninja install
+	meson_src_install
 	rm -r "${ED%/}"/usr/share/man || die
-	doman doc/fusermount3.1
 }

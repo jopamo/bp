@@ -9,7 +9,7 @@ HOMEPAGE="https://xcb.freedesktop.org/"
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/xcb/libxcb.git"
 
 KEYWORDS="amd64 arm64"
-IUSE="doc selinux test xkb static-libs"
+IUSE="doc test xkb static-libs"
 SLOT=0
 
 RDEPEND=">=lib-dev/libpthread-stubs-0.3-r1
@@ -36,7 +36,6 @@ src_configure() {
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
 		$(use_enable doc devel-docs)
-		$(use_enable selinux)
 		$(use_enable xkb)
 		--enable-xinput
 	)

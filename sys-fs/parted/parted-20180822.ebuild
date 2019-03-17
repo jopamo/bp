@@ -11,14 +11,14 @@ SRC_URI="https://1g4.org/files/parted-20180822.tar.xz"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="+debug device-mapper nls readline selinux static-libs"
+IUSE="+debug device-mapper nls readline static-libs"
 RESTRICT="test"
 
 RDEPEND="
 	>=sys-fs/e2fsprogs-1.27
 	device-mapper? ( >=sys-fs/lvm2-2.02.45 )
-	readline? ( >=lib-sys/readline-5.2:0= >=lib-sys/ncurses-5.7-r7:0= )
-	selinux? ( lib-sys/libselinux )"
+	readline? ( >=lib-sys/readline-5.2:0= >=lib-sys/ncurses-5.7-r7:0= )"
+
 DEPEND="
 	${RDEPEND}
 	nls? ( >=sys-devel/gettext-0.12.1-r2 )
@@ -45,7 +45,6 @@ src_configure() {
 		$(use_enable debug)
 		$(use_enable device-mapper)
 		$(use_enable nls)
-		$(use_enable selinux)
 		$(use_enable static-libs static)
 		$(use_with readline)
 		--disable-rpath

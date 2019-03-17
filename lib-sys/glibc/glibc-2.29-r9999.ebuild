@@ -19,7 +19,7 @@ RELEASE_VER=${PV}
 
 GCC_BOOTSTRAP_VER="4.7.3-r1"
 
-IUSE="audit caps debug doc gd hardened nscd selinux systemtap profile suid vanilla headers-only"
+IUSE="audit caps debug doc gd hardened nscd systemtap profile suid vanilla headers-only"
 
 
 export CBUILD=${CBUILD:-${CHOST}}
@@ -39,12 +39,7 @@ SLOT="2.2"
 # General: We need a new-enough binutils/gcc to match upstream baseline.
 # arch: we need to make sure our binutils/gcc supports TLS.
 COMMON_DEPEND="
-	nscd? ( selinux? (
-		audit? ( sys-app/audit )
-		caps? ( lib-sys/libcap )
-	) )
 	suid? ( caps? ( lib-sys/libcap ) )
-	selinux? ( lib-sys/libselinux )
 	systemtap? ( dev-util/systemtap )
 "
 DEPEND="${COMMON_DEPEND}

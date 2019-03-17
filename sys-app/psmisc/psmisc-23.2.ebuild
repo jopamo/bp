@@ -9,17 +9,15 @@ SRC_URI="mirror://sourceforge/${PN}/${P}.tar.xz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="ipv6 nls selinux X"
+IUSE="ipv6 nls X"
 
-RDEPEND="lib-sys/ncurses
-	selinux? ( lib-sys/libselinux )"
+RDEPEND="lib-sys/ncurses"
 
 DEPEND="${RDEPEND}
 	sys-devel/libtool"
 
 src_configure() {
 	local myeconfargs=(
-		$(use_enable selinux)
 		--disable-harden-flags
 		$(use_enable nls)
 		$(use_enable ipv6)

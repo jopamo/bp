@@ -14,7 +14,7 @@ SRC_URI="http://unbound.net/downloads/${MY_P}.tar.gz"
 LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="debug dnscrypt dnstap +ecdsa gost python selinux static-libs test threads"
+IUSE="debug dnscrypt dnstap +ecdsa gost python static-libs test threads"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 CDEPEND=">=lib-dev/expat-2.1.0-r3
@@ -36,12 +36,6 @@ DEPEND="${CDEPEND}
 		app-text/wdiff
 	)
 	dev-util/pkgconfig"
-
-RDEPEND="${CDEPEND}
-	selinux? ( sec-policy/selinux-bind )"
-
-# bug #347415
-RDEPEND="${RDEPEND}"
 
 S=${WORKDIR}/${MY_P}
 

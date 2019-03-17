@@ -11,7 +11,7 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="+manpager nls selinux static-libs zlib"
+IUSE="+manpager nls static-libs zlib"
 
 CDEPEND=">=lib-dev/libpipeline-1.4.0
 	lib-sys/gdbm

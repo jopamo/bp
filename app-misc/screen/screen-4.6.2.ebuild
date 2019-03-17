@@ -18,14 +18,11 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="debug nethack pam selinux multiuser"
+IUSE="debug nethack pam multiuser"
 
-CDEPEND="
+DEPEND="
 	>=lib-sys/ncurses-5.2:0=
-	pam? ( lib-sys/pam )"
-RDEPEND="${CDEPEND}
-	selinux? ( sec-policy/selinux-screen )"
-DEPEND="${CDEPEND}
+	pam? ( lib-sys/pam )
 	sys-app/texinfo"
 
 PATCHES=(

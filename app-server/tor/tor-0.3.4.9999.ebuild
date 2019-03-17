@@ -13,7 +13,7 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="lzma scrypt seccomp selinux systemd tor-hardening test web zstd"
+IUSE="lzma scrypt seccomp systemd tor-hardening test web zstd"
 
 DEPEND="
 	lib-dev/libevent[ssl]
@@ -24,8 +24,6 @@ DEPEND="
 	seccomp? ( lib-sys/libseccomp )
 	systemd? ( sys-app/systemd )
 	zstd? ( app-compression/zstd )"
-RDEPEND="${DEPEND}
-	selinux? ( sec-policy/selinux-tor )"
 
 pkg_setup() {
 	enewgroup tor

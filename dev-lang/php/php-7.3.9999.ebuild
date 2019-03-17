@@ -35,7 +35,7 @@ IUSE="${IUSE} acl argon2 bcmath bzip2 calendar cdb cjk
 	intl iodbc ipv6 +json ldap ldap-sasl libedit
 	mhash mssql mysql mysqli nls
 	oci8-instant-client odbc +opcache pcntl pdo +phar +posix postgres qdbm
-	readline recode selinux +session session-mm sharedmem
+	readline recode +session session-mm sharedmem
 	+simplexml snmp soap sockets spell sqlite ssl
 	sysvipc systemd test tidy +tokenizer tokyocabinet truetype unicode wddx webp
 	+xml xmlreader xmlwriter xmlrpc xpm xslt zip zip-encryption zlib"
@@ -95,9 +95,7 @@ COMMON_DEPEND="
 
 RDEPEND="${COMMON_DEPEND}
 	app-server/opensmtpd
-	fpm? (
-		selinux? ( sec-policy/selinux-phpfpm )
-		systemd? ( sys-app/systemd ) )"
+	fpm? ( systemd? ( sys-app/systemd ) )"
 
 # Bison isn't actually needed when building from a release tarball
 # However, the configure script will warn if it's absent or if you

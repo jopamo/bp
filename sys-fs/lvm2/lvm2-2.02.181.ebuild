@@ -12,7 +12,7 @@ SRC_URI="ftp://sourceware.org/pub/lvm2/${PN/lvm/LVM}.${PV}.tgz
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="readline static static-libs systemd clvm cman corosync lvm2create_initrd openais sanlock selinux +udev +thin device-mapper-only"
+IUSE="readline static static-libs systemd clvm cman corosync lvm2create_initrd openais sanlock +udev +thin device-mapper-only"
 REQUIRED_USE="device-mapper-only? ( !clvm !cman !corosync !lvm2create_initrd !openais !sanlock !thin )
 	systemd? ( udev )
 	clvm? ( !systemd )"
@@ -48,7 +48,6 @@ DEPEND="${DEPEND_COMMON}
 	>=sys-devel/binutils-2.20.1-r1
 	sys-devel/autoconf-archive
 	static? (
-		selinux? ( lib-sys/libselinux[static-libs] )
 		udev? ( >=sys-fs/eudev-3.1.2[static-libs] )
 		>=sys-app/util-linux-2.16[static-libs]
 	)"
@@ -136,7 +135,6 @@ src_configure() {
 		--exec-prefix="${EPREFIX}"
 		--localstatedir="${EPREFIX}/var"
 		$(use_enable readline)
-		$(use_enable selinux)
 		--enable-pkgconfig
 		--with-staticdir="${EPREFIX}"/usr/sbin
 		--with-usrlibdir="${EPREFIX}"/usr/lib64

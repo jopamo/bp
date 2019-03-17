@@ -12,7 +12,7 @@ EGIT_REPO_URI="https://github.com/mgorny/portage-mgorny.git"
 LICENSE="GPL-2"
 KEYWORDS="amd64 arm64"
 SLOT="0"
-IUSE="build +ipc +native-extensions selinux xattr kernel_linux"
+IUSE="build +ipc +native-extensions xattr kernel_linux"
 
 DEPEND="!build? ( $(python_gen_impl_dep 'ssl(+)') )
 	>=app-compression/tar-1.27
@@ -32,7 +32,6 @@ RDEPEND="
 	elibc_glibc? ( >=sys-app/sandbox-2.2 )
 	elibc_musl? ( >=sys-app/sandbox-2.2 )
 	elibc_uclibc? ( >=sys-app/sandbox-2.2 )
-	selinux? ( >=lib-sys/libselinux-2.0.94[python,${PYTHON_USEDEP}] )
 	xattr? ( kernel_linux? (
 		>=sys-app/install-xattr-0.3
 		) )

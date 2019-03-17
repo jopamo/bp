@@ -22,7 +22,7 @@ HOMEPAGE="https://www.kernel.org/pub/linux/utils/util-linux/"
 
 LICENSE="GPL-2 LGPL-2.1 BSD-4 MIT public-domain"
 SLOT="0"
-IUSE="build caps +cramfs fdformat kill ncurses nls pam python +readline selinux static-libs +suid systemd test +tty-helpers udev unicode"
+IUSE="build caps +cramfs fdformat kill ncurses nls pam python +readline static-libs +suid systemd test +tty-helpers udev unicode"
 
 RDEPEND="caps? ( lib-sys/libcap-ng )
 	cramfs? ( lib-sys/zlib )
@@ -30,7 +30,6 @@ RDEPEND="caps? ( lib-sys/libcap-ng )
 	pam? ( lib-sys/pam )
 	python? ( ${PYTHON_DEPS} )
 	readline? ( lib-sys/readline:0= )
-	selinux? ( >=lib-sys/libselinux-2.2.2-r4 )
 	!build? ( systemd? ( sys-app/systemd ) )
 	udev? ( sys-app/systemd:= )"
 
@@ -128,7 +127,6 @@ src_configure() {
 		$(use_enable unicode widechar)
 		$(use_enable kill)
 		$(use_enable static-libs static)
-		$(use_with selinux)
 		$(usex ncurses '' '--without-tinfo')
 	)
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"

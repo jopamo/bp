@@ -15,7 +15,7 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="audit bindist debug libedit pam +pie sctp selinux +ssl static test X"
+IUSE="audit bindist debug libedit pam +pie sctp +ssl static test X"
 REQUIRED_USE="pie? ( !static )
 	static? ( !pam )
 	test? ( ssl )"
@@ -24,7 +24,6 @@ LIB_DEPEND="
 	audit? ( sys-app/audit[static-libs(+)] )
 	libedit? ( lib-dev/libedit:=[static-libs(+)] )
 	sctp? ( app-net/lksctp-tools[static-libs(+)] )
-	selinux? ( >=lib-sys/libselinux-1.28[static-libs(+)] )
 	ssl? ( >=lib-dev/openssl-1.0.1:0=[bindist=]	)
 	>=lib-sys/zlib-1.2.3:=[static-libs(+)]"
 
@@ -70,7 +69,6 @@ src_configure() {
 		$(use_with libedit)
 		$(use_with pam)
 		$(use_with pie)
-		$(use_with selinux)
 		$(use_with ssl openssl)
 		$(use_with ssl ssl-engine)
 	)

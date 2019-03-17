@@ -11,7 +11,7 @@ LICENSE="|| ( GPL-2 BSD )"
 
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="ap dbus eap-sim eapol_test fasteap gnutls +hs2-0 p2p privsep ps3 qt5 readline selinux smartcard ssl tdls uncommon-eap-types wimax wps kernel_linux kernel_FreeBSD"
+IUSE="ap dbus eap-sim eapol_test fasteap gnutls +hs2-0 p2p privsep ps3 qt5 readline smartcard ssl tdls uncommon-eap-types wimax wps kernel_linux kernel_FreeBSD"
 REQUIRED_USE="fasteap? ( !ssl ) smartcard? ( ssl )"
 
 CDEPEND="dbus? ( sys-app/dbus )
@@ -41,9 +41,6 @@ CDEPEND="dbus? ( sys-app/dbus )
 "
 DEPEND="${CDEPEND}
 	dev-util/pkgconfig
-"
-RDEPEND="${CDEPEND}
-	selinux? ( sec-policy/selinux-networkmanager )
 "
 
 DOC_CONTENTS="

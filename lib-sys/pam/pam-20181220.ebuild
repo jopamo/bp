@@ -25,12 +25,11 @@ fi
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="audit +cracklib debug nis nls +pie selinux test vim-syntax"
+IUSE="audit +cracklib debug nis nls +pie test vim-syntax"
 
 RDEPEND="
 	cracklib? ( >=lib-sys/cracklib-2.9.1-r1 )
 	audit? ( >=sys-app/audit-2.2.2 )
-	selinux? ( >=lib-sys/libselinux-2.2.2-r4 )
 	nis? ( >=lib-net/libtirpc-0.2.4-r2 )"
 
 DEPEND="
@@ -60,7 +59,6 @@ src_configure() {
 		--localstatedir="${EPREFIX}/var"
 		--enable-securedir="${EPREFIX}"/usr/lib64/security
 		$(use_enable nls)
-		$(use_enable selinux)
 		$(use_enable cracklib)
 		$(use_enable audit)
 		$(use_enable debug)

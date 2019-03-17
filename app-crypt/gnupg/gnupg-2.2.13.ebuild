@@ -14,7 +14,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 doc ldap nls readline selinux +smartcard ssl tofu tools usb wks-server"
+IUSE="bzip2 doc ldap nls readline +smartcard ssl tofu tools usb wks-server"
 
 COMMON_DEPEND_LIBS="
 	>=lib-dev/npth-1.2

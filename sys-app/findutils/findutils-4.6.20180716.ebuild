@@ -20,11 +20,9 @@ S="${WORKDIR}/${MY_P}"
 
 LICENSE="GPL-3+"
 SLOT="0"
-IUSE="nls selinux static test"
+IUSE="nls static test"
 
-RDEPEND="selinux? ( lib-sys/libselinux )"
-DEPEND="${RDEPEND}
-	test? ( ${PYTHON_DEPS} )"
+DEPEND="test? ( ${PYTHON_DEPS} )"
 
 PATCHES=(
 		"${WORKDIR}"/findutils-20180716.patch
@@ -49,9 +47,7 @@ src_prepare() {
 src_configure() {
 	use static && append-ldflags -static
 
-	econf \
-		$(use_enable nls) \
-		$(use_with selinux)
+	econf $(use_enable nls)
 }
 
 src_compile() {

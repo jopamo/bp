@@ -17,7 +17,7 @@ IUSE="
 	adns androiddump +capinfos +caps +captype ciscodump cpu_flags_x86_sse4_2
 	+dftest doc +dumpcap +editcap +gtk libssh libxml2 lua
 	lz4 +mergecap +netlink nghttp2 +pcap portaudio +randpkt +randpktdump
-	+reordercap sbc selinux +sharkd smi snappy spandsp sshdump ssl +text2pcap
+	+reordercap sbc +sharkd smi snappy spandsp sshdump ssl +text2pcap
 	tfshark +tshark +udpdump zlib
 "
 REQUIRED_USE="
@@ -66,10 +66,6 @@ DEPEND="
 	sys-devel/bison
 	sys-devel/flex
 	dev-util/pkgconfig
-"
-RDEPEND="
-	${CDEPEND}
-	selinux? ( sec-policy/selinux-wireshark )
 "
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro

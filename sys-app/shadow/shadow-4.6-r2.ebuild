@@ -11,17 +11,13 @@ KEYWORDS="amd64 arm64"
 
 LICENSE="BSD GPL-2"
 SLOT="0"
-IUSE="acl audit +cracklib pam selinux skey xattr"
+IUSE="acl audit +cracklib pam skey xattr"
 
 RDEPEND="acl? ( sys-app/acl:0= )
 	audit? ( >=sys-app/audit-2.6:0= )
 	cracklib? ( >=lib-sys/cracklib-2.7-r3:0= )
 	pam? ( lib-sys/pam:0= )
 	skey? ( lib-sys/skey:0= )
-	selinux? (
-		>=lib-sys/libselinux-1.28:0=
-		lib-sys/libsemanage:0=
-	)
 	xattr? ( sys-app/attr:0= )"
 DEPEND="${RDEPEND}
 	app-compression/xz-utils"
@@ -55,7 +51,6 @@ src_configure() {
 		$(use_with cracklib libcrack)
 		$(use_with pam libpam)
 		$(use_with skey)
-		$(use_with selinux)
 		$(use_with elibc_glibc nscd)
 		$(use_with xattr attr)
 	)

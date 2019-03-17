@@ -17,19 +17,14 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl selinux"
+IUSE="acl"
 
 CDEPEND="
 	>=lib-dev/popt-1.5
-	selinux? ( lib-sys/libselinux )
-	acl? ( virtual/acl )"
+	acl? ( sys-app/acl )"
 
 DEPEND="${CDEPEND}
 	>=sys-app/sed-4"
-
-RDEPEND="${CDEPEND}
-	selinux? ( sec-policy/selinux-logrotate )
-"
 
 STATEFILE="/var/lib/misc/logrotate.status"
 OLDSTATEFILE="/var/lib/logrotate.status"
@@ -55,7 +50,7 @@ src_prepare() {
 }
 
 src_configure() {
-	econf $(use_with acl) $(use_with selinux) --with-state-file-path="${STATEFILE}"
+	econf $(use_with acl) --with-state-file-path="${STATEFILE}"
 }
 
 src_test() {

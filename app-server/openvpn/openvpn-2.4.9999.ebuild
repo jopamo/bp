@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 
 IUSE="down-root examples inotify +iproute2 lz4 +lzo mbedtls pam"
-IUSE+=" pkcs11 +plugins selinux +ssl static systemd test"
+IUSE+=" pkcs11 +plugins +ssl static systemd test"
 
 REQUIRED_USE="static? ( !plugins !pkcs11 )
 	lzo? ( !lz4 )

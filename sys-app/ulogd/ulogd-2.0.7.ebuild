@@ -11,7 +11,7 @@ SRC_URI="https://www.netfilter.org/projects/ulogd/files/${P}.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="dbi doc json mysql nfacct +nfct +nflog pcap postgres selinux sqlite"
+IUSE="dbi doc json mysql nfacct +nfct +nflog pcap postgres sqlite"
 
 COMMON_DEPEND="
 	|| ( sys-app/iptables sys-app/nftables )
@@ -36,9 +36,6 @@ DEPEND="${COMMON_DEPEND}
 		app-textlive/texlive-fontsrecommended
 		virtual/latex-base
 	)
-"
-RDEPEND="${COMMON_DEPEND}
-	selinux? ( sec-policy/selinux-ulogd )
 "
 
 PATCHES=(

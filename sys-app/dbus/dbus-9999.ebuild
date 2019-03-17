@@ -14,7 +14,7 @@ EGIT_REPO_URI="https://anongit.freedesktop.org/git/dbus/dbus.git"
 LICENSE="|| ( AFL-2.1 GPL-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="debug doc selinux static-libs systemd test user-session X"
+IUSE="debug doc static-libs systemd test user-session X"
 
 #RESTRICT="test"
 
@@ -70,8 +70,6 @@ src_prepare() {
 src_configure() {
 	local docconf myconf
 
-	# libaudit is *only* used in DBus wrt SELinux support, so disable it, if
-	# not on an SELinux profile.
 	myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -83,8 +81,6 @@ src_configure() {
 		$(use_enable debug verbose-mode)
 		--disable-asserts
 		--disable-checks
-		$(use_enable selinux)
-		$(use_enable selinux libaudit)
 		--disable-apparmor
 		$(use_enable kernel_linux inotify)
 		$(use_enable systemd)
@@ -118,10 +114,6 @@ src_configure() {
 }
 
 src_compile() {
-	# after the compile, it uses a selinuxfs interface to
-	# check if the SELinux policy has the right support
-	use selinux && addwrite /selinux/access
-
 	einfo "Running make in ${BUILD_DIR}"
 	emake
 

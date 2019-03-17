@@ -11,11 +11,11 @@ SRC_URI="mirror://gnu/sed/${P}.tar.xz"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="acl nls selinux static"
+IUSE="acl nls static"
 
 RDEPEND="acl? ( sys-app/acl )
-	nls? ( sys-devel/gettext )
-	selinux? ( lib-sys/libselinux )"
+	nls? ( sys-devel/gettext )"
+
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )"
 
@@ -42,8 +42,6 @@ src_configure() {
 	local myconf=()
 	myconf+=( --exec-prefix="${EPREFIX}" )
 
-	export ac_cv_search_setfilecon=$(usex selinux -lselinux)
-	export ac_cv_header_selinux_{context,selinux}_h=$(usex selinux)
 	use static && append-ldflags -static
 	myconf+=(
 		--bindir="${EPREFIX}"/usr/bin

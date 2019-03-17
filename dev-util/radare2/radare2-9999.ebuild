@@ -12,13 +12,10 @@ KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="ssl libressl +system-capstone"
+IUSE="ssl +system-capstone"
 
 RDEPEND="
-	ssl? (
-		!libressl? ( lib-dev/openssl:0= )
-		libressl? ( lib-dev/libressl:0= )
-	)
+	ssl? ( lib-dev/openssl:0= )
 	system-capstone? ( lib-dev/capstone:0= )
 "
 DEPEND="${RDEPEND}

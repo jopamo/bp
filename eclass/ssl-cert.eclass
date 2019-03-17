@@ -40,10 +40,10 @@ esac
 
 if [[ "${SSL_DEPS_SKIP}" == "0" ]]; then
 	if [[ "${SSL_CERT_MANDATORY}" == "0" ]]; then
-		DEPEND="${SSL_CERT_USE}? ( || ( lib-dev/openssl:0 lib-dev/libressl:0 ) )"
+		DEPEND="${SSL_CERT_USE}? ( lib-dev/openssl:0 )"
 		IUSE="${SSL_CERT_USE}"
 	else
-		DEPEND="|| ( lib-dev/openssl:0 lib-dev/libressl:0 )"
+		DEPEND="lib-dev/openssl:0"
 	fi
 fi
 
@@ -124,7 +124,7 @@ get_base() {
 gen_key() {
 	local base=$(get_base "$1")
 	ebegin "Generating ${SSL_BITS} bit RSA key${1:+ for CA}"
-	if openssl version | grep -i libressl > /dev/null; then
+	if openssl version > /dev/null; then
 		openssl genrsa -out "${base}.key" "${SSL_BITS}" &> /dev/null
 	else
 		openssl genrsa -rand "${SSL_RANDOM}" \

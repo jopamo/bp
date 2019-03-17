@@ -14,13 +14,10 @@ KEYWORDS="amd64 arm64"
 LICENSE="Apache-2.0"
 SLOT="0/10" # slot for libmbedtls.so
 KEYWORDS="amd64 arm64"
-IUSE="doc havege libressl programs test zlib"
+IUSE="doc havege programs test zlib"
 
 RDEPEND="
-	programs? (
-		!libressl? ( lib-dev/openssl:0= )
-		libressl? ( lib-dev/libressl:0= )
-	)
+	programs? ( lib-dev/openssl:0= )
 	zlib? ( >=lib-sys/zlib-1.2.8-r1 )"
 DEPEND="${RDEPEND}
 	doc? ( app-text/doxygen app-media/graphviz )

@@ -14,13 +14,13 @@ KEYWORDS="amd64 arm64"
 LICENSE="GPL-2"
 SLOT="0"
 
-IUSE="down-root examples inotify +iproute2 libressl lz4 +lzo mbedtls pam"
+IUSE="down-root examples inotify +iproute2 lz4 +lzo mbedtls pam"
 IUSE+=" pkcs11 +plugins selinux +ssl static systemd test"
 
 REQUIRED_USE="static? ( !plugins !pkcs11 )
 	lzo? ( !lz4 )
 	pkcs11? ( ssl )
-	mbedtls? ( ssl !libressl )
+	mbedtls? ( ssl  )
 	pkcs11? ( ssl )
 	!plugins? ( !pam !down-root )
 	inotify? ( plugins )"
@@ -32,10 +32,7 @@ CDEPEND="
 	)
 	pam? ( lib-sys/pam )
 	ssl? (
-		!mbedtls? (
-			!libressl? ( >=lib-dev/openssl-0.9.8:* )
-			libressl? ( lib-dev/libressl )
-		)
+		!mbedtls? ( >=lib-dev/openssl-0.9.8:* )
 		mbedtls? ( lib-net/mbedtls )
 	)
 	lz4? ( app-compression/lz4 )

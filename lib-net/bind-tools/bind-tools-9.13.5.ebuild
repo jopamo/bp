@@ -16,16 +16,13 @@ SRC_URI="https://ftp.isc.org/isc/bind9/${PV}/bind-${PV}.tar.gz -> ${P}.tar.gz"
 LICENSE="Apache-2.0 BSD BSD-2 GPL-2 HPND ISC MPL-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="doc gost gssapi idn ipv6 libressl readline seccomp ssl urandom xml"
+IUSE="doc gost gssapi idn ipv6 readline seccomp ssl urandom xml"
 # no PKCS11 currently as it requires OpenSSL to be patched, also see bug 409687
 
-REQUIRED_USE="gost? ( !libressl ssl )"
+REQUIRED_USE="gost? ( ssl )"
 
 CDEPEND="
-	ssl? (
-		!libressl? ( lib-dev/openssl:0 )
-		libressl? ( lib-dev/libressl )
-	)
+	ssl? ( lib-dev/openssl:0 )
 	gost? ( >=lib-dev/openssl-1.0.0:0[-bindist] )
 	xml? ( lib-dev/libxml2 )
 	idn? ( lib-net/idnkit )

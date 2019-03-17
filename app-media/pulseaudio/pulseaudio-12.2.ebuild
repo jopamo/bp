@@ -22,7 +22,7 @@ KEYWORDS="amd64 arm64"
 
 # +alsa-plugin as discussed in bug #519530
 IUSE="+alsa +alsa-plugin +asyncns bluetooth +caps dbus doc equalizer +gdbm +glib
-gnome gtk ipv6 jack libsamplerate libressl lirc native-headset neon ofono-headset
+gnome gtk ipv6 jack libsamplerate lirc native-headset neon ofono-headset
 +orc oss qt4 realtime sox ssl systemd system-wide test +udev
 +X zeroconf"
 
@@ -64,10 +64,7 @@ RDEPEND=">=lib-media/libsndfile-1.0.20
 	ofono-headset? ( >=app-net/ofono-1.13 )
 	orc? ( >=dev-lang/orc-0.4.15 )
 	sox? ( >=lib-media/soxr-0.1.1 )
-	ssl? (
-		!libressl? ( lib-dev/openssl:0= )
-		libressl? ( lib-dev/libressl:= )
-	)
+	ssl? ( lib-dev/openssl:0= )
 	gdbm? ( lib-sys/gdbm:= )
 	systemd? ( sys-app/systemd:0= )
 	lib-dev/libltdl:0

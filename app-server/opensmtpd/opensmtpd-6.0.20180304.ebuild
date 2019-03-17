@@ -20,10 +20,9 @@ fi
 
 LICENSE="ISC BSD BSD-1 BSD-2 BSD-4"
 SLOT="0"
-IUSE="libressl pam +mta"
+IUSE="pam +mta"
 
-DEPEND="!libressl? ( lib-dev/openssl:0 )
-		libressl? ( lib-dev/libressl )
+DEPEND="lib-dev/openssl:0
 		elibc_musl? ( lib-sys/fts-standalone )
 		lib-sys/zlib
 		pam? ( lib-sys/pam )

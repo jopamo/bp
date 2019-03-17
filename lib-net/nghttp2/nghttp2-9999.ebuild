@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 LICENSE="MIT"
 SLOT="0/1.14" # <C++>.<C> SONAMEs
-IUSE="cxx debug hpack-tools jemalloc libressl static-libs test utils xml"
+IUSE="cxx debug hpack-tools jemalloc static-libs test utils xml"
 
 RDEPEND="
 	cxx? ( lib-dev/boost:=[threads] )
@@ -23,8 +23,7 @@ RDEPEND="
 	jemalloc? ( lib-dev/jemalloc )
 	utils? (
 		>=lib-dev/libev-4.15
-		!libressl? ( >=lib-dev/openssl-1.0.2:0[-bindist] )
-		libressl? ( lib-dev/libressl )
+		>=lib-dev/openssl-1.0.2:0[-bindist]
 		>=lib-sys/zlib-1.2.3
 		lib-net/c-ares:=
 	)

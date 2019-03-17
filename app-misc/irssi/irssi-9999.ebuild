@@ -11,12 +11,11 @@ HOMEPAGE="https://irssi.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="+perl socks5 +proxy libressl"
+IUSE="+perl socks5 +proxy"
 
 DEPEND="lib-sys/ncurses:0=
 	>=lib-dev/glib-2.6.0
-	!libressl? ( lib-dev/openssl:= )
-	libressl? ( lib-dev/libressl:= )
+	lib-dev/openssl:=
 	perl? ( dev-lang/perl:= )"
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro

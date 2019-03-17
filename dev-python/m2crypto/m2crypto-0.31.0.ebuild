@@ -6,22 +6,23 @@ PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit distutils-r1
 
+MY_PN="M2Crypto"
+
 DESCRIPTION="M2Crypto: A Python crypto and SSL toolkit"
 HOMEPAGE="https://gitlab.com/m2crypto/m2crypto"
-SRC_URI="https://files.pythonhosted.org/packages/0a/d3/ecef6a0eaef77448deb6c9768af936fec71c0c4b42af983699cfa1499962/M2Crypto-${PV}.tar.gz"
+SRC_URI="mirror://pypi/${MY_PN:0:1}/${MY_PN}/${MY_PN}-${PV}.tar.gz"
 S="${WORKDIR}/M2Crypto-${PV}"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="libressl swig"
+IUSE="swig"
 
 RESTRICT=test
 
 RDEPEND="
-	!libressl? ( lib-dev/openssl[-bindist(-)] )
-	libressl? ( lib-dev/libressl:0= )
+	lib-dev/openssl[-bindist(-)]
 	dev-python/typing[${PYTHON_USEDEP}]
 "
 DEPEND="${RDEPEND}

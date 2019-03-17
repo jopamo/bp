@@ -13,7 +13,7 @@ KEYWORDS="amd64 arm64"
 LICENSE="GPL-2"
 SLOT="0"
 
-IUSE="ipv6 libressl +libssh2 +ncat nls +nping ssl"
+IUSE="ipv6 +libssh2 +ncat nls +nping ssl"
 
 DEPEND="
 	lib-dev/liblinear:=
@@ -24,10 +24,7 @@ DEPEND="
 	lib-sys/zlib
 	nls? ( sys-devel/gettext )
 	lib-sys/zlib
-	ssl? (
-		!libressl? ( lib-dev/openssl:0= )
-		libressl? ( lib-dev/libressl:= )
-	)
+	ssl? ( lib-dev/openssl:0= )
 "
 
 append-flags "-fno-strict-aliasing"

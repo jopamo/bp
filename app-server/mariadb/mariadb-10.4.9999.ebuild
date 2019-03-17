@@ -12,13 +12,10 @@ EGIT_BRANCH="10.4"
 
 SLOT="0/${SUBSLOT:-0}"
 IUSE="backup bindist client-libs cracklib debug extraengine galera innodb-lz4
-	innodb-lzo innodb-snappy jdbc jemalloc kerberos libressl mroonga
+	innodb-lzo innodb-snappy jdbc jemalloc kerberos mroonga
 	numa odbc oqgraph pam +perl profiling rocksdb selinux +server sphinx
 	sst-rsync sst-mariabackup sst-xtrabackup static static-libs systemd systemtap tcmalloc
 	test tokudb xml yassl"
-
-# Tests always fail when libressl is enabled due to hard-coded ciphers in the tests
-RESTRICT="!bindist? ( bindist ) libressl? ( test )"
 
 REQUIRED_USE="jdbc? ( extraengine server !static )
 	server? ( tokudb? ( jemalloc !tcmalloc ) )
@@ -39,10 +36,7 @@ COMMON_DEPEND="
 	systemtap? ( >=dev-util/systemtap-1.3:0= )
 	>=lib-sys/zlib-1.2.3:0=
 	yassl? ( lib-net/gnutls:0= )
-	!yassl? (
-		!libressl? ( >=lib-dev/openssl-1.0.0:0= )
-		libressl? ( lib-dev/libressl:0= )
-	)
+	!yassl? ( >=lib-dev/openssl-1.0.0:0= )
 	lib-sys/ncurses:0=
 	!bindist? (
 		>=lib-sys/readline-4.1:0=

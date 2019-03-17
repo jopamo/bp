@@ -20,7 +20,7 @@ fi
 
 LICENSE="BSD BSD-2 BSD-4 public-domain"
 SLOT="0/1"
-IUSE="acl +bzip2 expat libressl lzo nettle static-libs xattr +zlib"
+IUSE="acl +bzip2 expat lzo nettle static-libs xattr +zlib"
 
 DEPEND="
 	acl? ( sys-app/acl )
@@ -28,8 +28,7 @@ DEPEND="
 	expat? ( lib-dev/expat )
 	!expat? ( lib-dev/libxml2 )
 	xattr? ( sys-app/attr )
-	!libressl? ( lib-dev/openssl:0= )
-	libressl? ( lib-dev/libressl:0= )
+	lib-dev/openssl:0=
 	>=app-compression/lz4-0_p131:0=
 	app-compression/xz-utils
 	lzo? ( >=lib-dev/lzo-2 )

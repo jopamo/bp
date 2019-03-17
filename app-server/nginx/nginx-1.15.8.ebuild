@@ -235,7 +235,7 @@ NGINX_MODULES_3RD="
 	stream_javascript
 "
 
-IUSE="aio debug +http +http2 +http-cache +ipv6 libatomic libressl luajit +pcre
+IUSE="aio debug +http +http2 +http-cache +ipv6 libatomic luajit +pcre
 	pcre-jit rtmp selinux ssl threads userland_GNU vim-syntax"
 
 for mod in $NGINX_MODULES_STD; do
@@ -269,20 +269,9 @@ IUSE="${IUSE} nginx_modules_http_spdy"
 CDEPEND="
 	pcre? ( lib-dev/libpcre:= )
 	pcre-jit? ( lib-dev/libpcre:=[jit] )
-	ssl? (
-		!libressl? ( lib-dev/openssl:0= )
-		libressl? ( lib-dev/libressl:= )
-	)
-	http2? (
-		!libressl? ( >=lib-dev/openssl-1.0.1c:0= )
-		libressl? ( lib-dev/libressl:= )
-	)
-	http-cache? (
-		userland_GNU? (
-			!libressl? ( lib-dev/openssl:0= )
-			libressl? ( lib-dev/libressl:= )
-		)
-	)
+	ssl? ( lib-dev/openssl:0= )
+	http2? ( >=lib-dev/openssl-1.0.1c:0= )
+	http-cache? ( lib-dev/openssl:0= )
 	nginx_modules_http_brotli? ( app-compression/brotli:= )
 	nginx_modules_http_geoip? ( lib-dev/geoip )
 	nginx_modules_http_gunzip? ( lib-sys/zlib )
@@ -291,12 +280,7 @@ CDEPEND="
 	nginx_modules_http_image_filter? ( lib-media/gd:=[jpeg,png] )
 	nginx_modules_http_perl? ( >=dev-lang/perl-5.8:= )
 	nginx_modules_http_rewrite? ( lib-dev/libpcre:= )
-	nginx_modules_http_secure_link? (
-		userland_GNU? (
-			!libressl? ( lib-dev/openssl:0= )
-			libressl? ( lib-dev/libressl:= )
-		)
-	)
+	nginx_modules_http_secure_link? ( lib-dev/openssl:0= )
 	nginx_modules_http_xslt? ( lib-dev/libxml2:= lib-dev/libxslt )
 	nginx_modules_http_lua? ( !luajit? ( dev-lang/lua:0= ) luajit? ( dev-lang/luajit:2= ) )
 	nginx_modules_http_auth_pam? ( lib-sys/pam )

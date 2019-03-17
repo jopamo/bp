@@ -11,7 +11,7 @@ EGIT_REPO_URI="http://git.haproxy.org/git/haproxy-1.8.git/"
 EGIT_MIN_CLONE_TYPE=single
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-IUSE="+crypt doc examples libressl slz net_ns +pcre pcre-jit pcre2 pcre2-jit ssl
+IUSE="+crypt doc examples slz net_ns +pcre pcre-jit pcre2 pcre2-jit ssl
 systemd +threads tools vim-syntax +zlib lua device-atlas 51degrees wurfl"
 
 REQUIRED_USE="pcre-jit? ( pcre )
@@ -29,10 +29,7 @@ DEPEND="
 		lib-dev/libpcre
 		pcre2-jit? ( lib-dev/libpcre2[jit] )
 	)
-	ssl? (
-		!libressl? ( lib-dev/openssl:0=[zlib?] )
-		libressl? ( lib-dev/libressl:0= )
-	)
+	ssl? ( lib-dev/openssl:0=[zlib?] )
 	slz? ( lib-dev/libslz:= )
 	zlib? ( lib-sys/zlib )
 	lua? ( dev-lang/lua:5.3 )

@@ -24,6 +24,7 @@ RESTRICT="bindist strip"
 KEYWORDS="amd64"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
+DEPEND="lib-media/taglib"
 RDEPEND="lib-sys/zlib[minizip]
 	${PYTHON_DEPS}"
 

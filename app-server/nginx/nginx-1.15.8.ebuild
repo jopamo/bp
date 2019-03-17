@@ -236,7 +236,7 @@ NGINX_MODULES_3RD="
 "
 
 IUSE="aio debug +http +http2 +http-cache +ipv6 libatomic luajit +pcre
-	pcre-jit rtmp selinux ssl threads vim-syntax"
+	pcre-jit rtmp ssl threads vim-syntax"
 
 for mod in $NGINX_MODULES_STD; do
 	IUSE="${IUSE} +nginx_modules_http_${mod}"
@@ -294,9 +294,7 @@ CDEPEND="
 		app-server/apache
 	)
 	nginx_modules_http_auth_ldap? ( net-nds/openldap[ssl?] )"
-RDEPEND="${CDEPEND}
-	selinux? ( sec-policy/selinux-nginx )
-	!app-server/nginx:0"
+
 DEPEND="${CDEPEND}
 	nginx_modules_http_brotli? ( dev-util/pkgconfig )
 	nginx_modules_http_security? ( ${AUTOTOOLS_DEPEND} )
@@ -699,11 +697,6 @@ src_install() {
 	done
 
 	keepdir /var/log/nginx ${keepdir_list}
-
-	# this solves a problem with SELinux where nginx doesn't see the directories
-	# as root and tries to create them as nginx
-	fperms 0750 "${NGINX_HOME_TMP}"
-	fowners ${PN}:0 "${NGINX_HOME_TMP}"
 
 	fperms 0700 ${keepdir_list}
 	fowners ${PN}:${PN} ${keepdir_list}

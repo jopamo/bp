@@ -15,7 +15,7 @@ EGIT_BRANCH=glib-2-54
 
 LICENSE="LGPL-2.1+"
 SLOT="2"
-IUSE="dbus debug fam kernel_linux +mime selinux static-libs test utils xattr"
+IUSE="dbus debug fam kernel_linux +mime static-libs test utils xattr"
 REQUIRED_USE="
 	utils? ( ${PYTHON_REQUIRED_USE} )
 	test? ( ${PYTHON_REQUIRED_USE} )
@@ -29,7 +29,6 @@ RDEPEND="
 	>=sys-devel/gettext-0-r2
 	>=lib-sys/zlib-1.2.8-r1
 	kernel_linux? ( sys-app/util-linux )
-	selinux? ( >=lib-sys/libselinux-2.2.2-r5 )
 	xattr? ( >=sys-app/attr-2.4.47-r1 )
 	fam? ( >=virtual/fam-0-r1 )
 	utils? (
@@ -132,7 +131,6 @@ src_configure() {
 		$(use_enable xattr)
 		$(use_enable fam)
 		$(use_enable kernel_linux libmount)
-		$(use_enable selinux)
 		$(use_enable static-libs static)
 		$(use_enable utils libelf)
 		--disable-compile-warnings

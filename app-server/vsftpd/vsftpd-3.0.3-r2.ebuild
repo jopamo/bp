@@ -11,14 +11,13 @@ SRC_URI="https://security.appspot.com/downloads/${P}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="caps pam ssl selinux xinetd"
+IUSE="caps pam ssl xinetd"
 
 DEPEND="lib-sys/libcap
 	pam? ( lib-sys/pam )
 	ssl? ( lib-dev/openssl:0= )
 "
 RDEPEND="${DEPEND}
-	selinux? ( sec-policy/selinux-ftp )
 	xinetd? ( sys-app/xinetd )"
 
 src_prepare() {

@@ -11,12 +11,8 @@ SRC_URI="https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/
 LICENSE="GPL-2"
 SLOT="0/3"
 KEYWORDS="amd64 arm64"
-IUSE="selinux"
 
-RDEPEND="
-	sys-app/util-linux
-	selinux? ( lib-sys/libselinux )"
-DEPEND="$RDEPEND"
+DEPEND="sys-app/util-linux"
 
 src_prepare() {
 	default
@@ -32,7 +28,6 @@ src_configure() {
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
-		$(use_with selinux)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

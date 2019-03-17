@@ -14,7 +14,7 @@ LICENSE="GPL-3"
 SLOT="0"
 
 IUSE="acl -addc -addns -ads -ceph client -cluster cups debug dmapi fam gnutls gpg iprint json -ldap
-pam quota selinux syslog systemd test winbind zeroconf"
+pam quota syslog systemd test winbind zeroconf"
 
 CDEPEND="
 	>=app-compression/libarchive-3.1.2
@@ -56,7 +56,6 @@ DEPEND="${CDEPEND}
 	lib-net/libtirpc"
 RDEPEND="${CDEPEND}
 	client? ( sys-app/cifs-utils[ads?] )
-	selinux? ( sec-policy/selinux-samba )
 	!dev-perl/Parse-Yapp
 "
 

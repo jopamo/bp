@@ -14,7 +14,7 @@ EGIT_BRANCH=glib-2-56
 LICENSE="LGPL-2+"
 SLOT="2"
 SONAME="2"
-IUSE="debug kernel_linux mime selinux static-libs utils xattr libmount internal_pcre docs dtrace systemtap static-libs"
+IUSE="debug kernel_linux mime static-libs utils xattr libmount internal_pcre docs dtrace systemtap static-libs"
 REQUIRED_USE="
 	utils? ( ${PYTHON_REQUIRED_USE} )
 "
@@ -24,7 +24,6 @@ REQUIRED_USE="
 RDEPEND="
 	>=lib-dev/libpcre-8.13:3
 	kernel_linux? ( sys-app/util-linux )
-	selinux? ( >=lib-sys/libselinux-2.2.2-r5 )
 	xattr? ( >=sys-app/attr-2.4.47-r1 )
 	utils? (
 		${PYTHON_DEPS}
@@ -39,7 +38,6 @@ DEPEND="
 
 src_configure() {
         local emesonargs=(
-                $(meson_use selinux)
                 $(meson_use xattr)
                 $(meson_use libmount)
                 $(meson_use internal_pcre)

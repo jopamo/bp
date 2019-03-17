@@ -14,7 +14,7 @@ SRC_URI="mirror://sourceforge/ijbswa/${P%_*}-${PRIVOXY_STATUS}-src.tar.gz"
 
 IUSE="+acl client-tags compression editor extended-host-patterns
 external-filters +fast-redirects +force graceful-termination
-+image-blocking ipv6 lfs png-images selinux +stats
++image-blocking ipv6 lfs png-images +stats
 +threads toggle tools whitelists +zlib"
 SLOT="0"
 KEYWORDS="amd64 arm64"
@@ -26,7 +26,6 @@ DEPEND="
 "
 RDEPEND="${DEPEND}
 	extended-host-patterns? ( dev-lang/perl )
-	selinux? ( sec-policy/selinux-privoxy )
 	tools? (
 		app-net/curl
 		dev-lang/perl

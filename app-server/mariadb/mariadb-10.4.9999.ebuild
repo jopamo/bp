@@ -13,7 +13,7 @@ EGIT_BRANCH="10.4"
 SLOT="0/${SUBSLOT:-0}"
 IUSE="backup bindist client-libs cracklib debug extraengine galera innodb-lz4
 	innodb-lzo innodb-snappy jdbc jemalloc kerberos mroonga
-	numa odbc oqgraph pam +perl profiling rocksdb selinux +server sphinx
+	numa odbc oqgraph pam +perl profiling rocksdb +server sphinx
 	sst-rsync sst-mariabackup sst-xtrabackup static static-libs systemd systemtap tcmalloc
 	test tokudb xml yassl"
 
@@ -64,8 +64,7 @@ DEPEND="sys-devel/bison
 	static? ( lib-sys/ncurses[static-libs] )
 	|| ( >=sys-devel/gcc-3.4.6 >=sys-devel/gcc-apple-4.0 )
 	${COMMON_DEPEND}"
-RDEPEND="selinux? ( sec-policy/selinux-mysql )
-	${COMMON_DEPEND}
+RDEPEND="${COMMON_DEPEND}
 	server? ( galera? (
 		sys-app/iproute2
 		=sys-cluster/galera-25*

@@ -17,13 +17,12 @@ HOMEPAGE="https://wiki.linuxfoundation.org/networking/iproute2"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="atm elf ipv6 minimal selinux"
+IUSE="atm elf ipv6 minimal"
 
 RDEPEND="
 	!minimal? ( lib-net/libmnl )
 	elf? ( virtual/libelf )
 	atm? ( net-dialup/linux-atm )
-	selinux? ( lib-sys/libselinux )
 "
 
 DEPEND="
@@ -90,7 +89,6 @@ src_configure() {
 	HAVE_BERKELEY_DB := n
 	HAVE_MNL      := $(usex minimal n y)
 	HAVE_ELF      := $(usex elf y n)
-	HAVE_SELINUX  := $(usex selinux y n)
 	IP_CONFIG_SETNS := ${setns}
 	EOF
 }

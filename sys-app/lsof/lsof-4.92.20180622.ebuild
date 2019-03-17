@@ -15,10 +15,10 @@ S=${WORKDIR}/${PN}-linux-${SNAPSHOT}
 LICENSE="lsof"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="examples ipv6 rpc selinux static"
+IUSE="examples ipv6 rpc static"
 
-RDEPEND="rpc? ( lib-net/libtirpc )
-	selinux? ( lib-sys/libselinux )"
+RDEPEND="rpc? ( lib-net/libtirpc )"
+
 DEPEND="${RDEPEND}
 	rpc? ( dev-util/pkgconfig )"
 
@@ -61,7 +61,6 @@ src_configure() {
 	# Set LSOF_INCLUDE to a dummy location so the script doesn't poke
 	# around in it and mix /usr/include paths with cross-compile/etc.
 	touch .neverInv
-	LINUX_HASSELINUX=$(usex selinux y n) \
 	LSOF_INCLUDE=${T} \
 	LSOF_CC=$(tc-getCC) \
 	LSOF_AR="$(tc-getAR) rc" \

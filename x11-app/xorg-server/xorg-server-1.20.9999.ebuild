@@ -10,7 +10,7 @@ DESCRIPTION="X.Org X servers"
 SLOT="0/${PV}"
 KEYWORDS="amd64 arm64"
 
-IUSE="${IUSE_SERVERS} debug +glamor ipv6 minimal selinux systemd +udev unwind wayland xcsecurity"
+IUSE="${IUSE_SERVERS} debug +glamor ipv6 minimal systemd +udev unwind wayland xcsecurity"
 
 CDEPEND="
 	lib-dev/openssl:0=
@@ -55,9 +55,6 @@ DEPEND="${CDEPEND}
 	sys-devel/flex
 	x11/xorgproto
 "
-
-RDEPEND="${CDEPEND}
-	selinux? ( sec-policy/selinux-xserver )"
 
 PDEPEND="x11/xf86-input-libinput"
 

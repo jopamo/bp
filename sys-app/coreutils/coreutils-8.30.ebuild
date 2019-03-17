@@ -14,14 +14,13 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="acl caps gmp multicall nls selinux static test xattr"
+IUSE="acl caps gmp multicall nls static test xattr"
 
 LIB_DEPEND="acl? ( sys-app/acl[static-libs] )
 	caps? ( lib-sys/libcap )
 	gmp? ( lib-dev/gmp:=[static-libs] )
 	xattr? ( sys-app/attr[static-libs] )"
 RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs]} )
-	selinux? ( lib-sys/libselinux )
 	nls? ( sys-devel/gettext )"
 DEPEND="${RDEPEND}
 	static? ( ${LIB_DEPEND} )
@@ -40,6 +39,8 @@ pkg_setup() {
 }
 
 src_configure() {
+	export ac_cv_{header_selinux_{context,flash,selinux}_h,search_setfilecon}=no
+
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -64,7 +65,7 @@ src_configure() {
 
 	export gl_cv_func_mknod_works=yes #409919
 	use static && append-ldflags -static && sed -i '/elf_sys=yes/s:yes:no:' configure #321821
-	use selinux || export ac_cv_{header_selinux_{context,flash,selinux}_h,search_setfilecon}=no #301782
+
 	econf "${myconf[@]}"
 }
 

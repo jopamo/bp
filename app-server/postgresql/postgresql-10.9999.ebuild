@@ -19,7 +19,7 @@ DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="http://www.postgresql.org/"
 
 IUSE="doc kerberos kernel_linux ldap nls pam perl python +readline
-	  selinux +server systemd ssl static-libs tcl threads uuid xml zlib"
+	  +server systemd ssl static-libs tcl threads uuid xml zlib"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 CDEPEND="
@@ -44,10 +44,6 @@ sys-devel/bison
 sys-devel/flex
 nls? ( sys-devel/gettext )
 xml? ( dev-util/pkgconfig )
-"
-
-RDEPEND="${CDEPEND}
-selinux? ( sec-policy/selinux-postgresql )
 "
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro

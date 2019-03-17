@@ -4,12 +4,14 @@ EAPI=6
 
 inherit git-r3 autotools
 
-DESCRIPTION="X.Org font utilities"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/font/util.git"
+DESCRIPTION="X.Org font aliases"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/font/alias.git"
 SLOT=0
 KEYWORDS="amd64 arm64"
 
-DEPEND="fonts/font-alias"
+DEPEND="${RDEPEND}
+	x11/mkfontscale
+	>=fonts/font-util-1.1.1-r1"
 
 src_prepare() {
 	eautoreconf
@@ -24,7 +26,6 @@ src_configure() {
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
-		--with-mapdir=${EPREFIX}/usr/share/fonts/util
 		--with-fontrootdir=${EPREFIX}/usr/share/fonts
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

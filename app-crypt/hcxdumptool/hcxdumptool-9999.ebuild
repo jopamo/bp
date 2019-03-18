@@ -7,6 +7,7 @@ inherit git-r3
 DESCRIPTION="Small tool to capture packets from wlan devices"
 HOMEPAGE="https://github.com/ZerBea/hcxdumptool"
 EGIT_REPO_URI="https://github.com/ZerBea/hcxdumptool.git"
+EGIT_SUBMODULES=()
 
 LICENSE="MIT"
 SLOT="0"

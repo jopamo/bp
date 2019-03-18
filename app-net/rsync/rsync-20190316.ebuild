@@ -2,11 +2,11 @@
 
 EAPI=6
 
-inherit flag-o-matic
+inherit flag-o-matic autotools
 
 DESCRIPTION="File transfer program to keep remote files into sync"
 HOMEPAGE="https://rsync.samba.org/"
-SRC_URI="https://rsync.samba.org/ftp/rsync/src/${P}.tar.gz"
+SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -23,6 +23,11 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${P/_/}"
 
+src_prepare() {
+	eautoreconf
+	default
+}
+
 src_configure() {
 	use static && append-ldflags -static
 	local myeconfargs=(
@@ -32,7 +37,6 @@ src_configure() {
 		$(use_enable xattr xattr-support)
 	)
 	econf "${myeconfargs[@]}"
-	touch proto.h-tstamp #421625
 }
 
 src_install() {

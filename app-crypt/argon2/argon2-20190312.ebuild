@@ -5,7 +5,7 @@ EAPI=6
 DESCRIPTION="Password hashing software that won the Password Hashing Competition (PHC)"
 HOMEPAGE="https://github.com/P-H-C/phc-winner-argon2"
 
-SNAPSHOT=6c8653c3b6859a2d21850fa5979327feee8ca3ee
+SNAPSHOT=e4ca309b044fdc6ec547a3e1a106b4bfd06563b4
 SRC_URI="https://github.com/P-H-C/phc-winner-argon2/archive/${SNAPSHOT}.zip -> ${P}.zip"
 S=${WORKDIR}/phc-winner-${PN}-${SNAPSHOT}
 

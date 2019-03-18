@@ -28,5 +28,6 @@ src_compile() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" PREFIX="${EPREFIX}/usr" install
+	emake DESTDIR="${ED}" PREFIX="${EPREFIX}/usr" install
+	rm -rf "${ED}"/usr/share/man
 }

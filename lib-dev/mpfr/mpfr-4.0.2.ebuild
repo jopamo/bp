@@ -9,8 +9,7 @@ MY_P=${PN}-${MY_PV}
 PLEVEL=${PV/*p}
 DESCRIPTION="library for multiple-precision floating-point computations with exact rounding"
 HOMEPAGE="http://www.mpfr.org/"
-SRC_URI="http://www.mpfr.org/mpfr-${MY_PV}/${MY_P}.tar.xz
-		https://www.mpfr.org/mpfr-current/allpatches"
+SRC_URI="http://www.mpfr.org/mpfr-${MY_PV}/${MY_P}.tar.xz"
 
 LICENSE="LGPL-2.1"
 SLOT="0/6" # libmpfr.so version
@@ -22,16 +21,7 @@ DEPEND="${RDEPEND}"
 
 S=${WORKDIR}/${MY_P}
 
-PATCHES=(
-		"${DISTDIR}/allpatches"
-		)
 src_prepare() {
-	if [[ ${PLEVEL} != ${PV} ]] ; then
-		local i
-		for (( i = 1; i <= PLEVEL; ++i )) ; do
-			epatch "${FILESDIR}"/${MY_PV}/patch$(printf '%02d' ${i})
-		done
-	fi
 	default
 	find . -type f -exec touch -r configure {} +
 	elibtoolize

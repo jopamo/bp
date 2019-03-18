@@ -14,11 +14,6 @@ IUSE="static-libs test"
 DEPEND="dev-util/pkgconfig
 	test? ( lib-dev/check )"
 
-PATCHES=(
-	"${FILESDIR}"/${PN}-1.4.1-gnulib-cygwin-sys_select.patch
-	"${FILESDIR}"/${PN}-1.4.1-gnulib-darwin-program_name.patch
-)
-
 src_configure() {
 	econf $(use_enable static-libs static)
 }

@@ -6,7 +6,7 @@ inherit eutils toolchain-funcs flag-o-matic
 
 DESCRIPTION="Asynchronous input/output library that uses the kernels native interface"
 HOMEPAGE="http://lse.sourceforge.net/io/aio.html"
-SRC_URI="mirror://debian/pool/main/liba/${PN}/${PN}_${PV}.orig.tar.gz -> ${P}.tar.gz"
+SRC_URI="mirror://debian/pool/main/liba/${PN}/${PN}_${PV}.orig.tar.xz -> ${P}.tar.xz"
 
 LICENSE="LGPL-2"
 SLOT="0"
@@ -14,7 +14,6 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs test"
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-0.3.109-install.patch
 	"${FILESDIR}"/${PN}-0.3.110-cppflags.patch
 	"${FILESDIR}"/${PN}-0.3.110-link-stdlib.patch
 )

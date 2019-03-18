@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils qmake-utils systemd toolchain-funcs
+inherit eutils qmake-utils systemd toolchain-funcs flag-o-matic
 
 DESCRIPTION="IEEE 802.1X/WPA supplicant for secure wireless transfers"
 HOMEPAGE="https://w1.fi/wpa_supplicant/"
@@ -11,15 +11,12 @@ LICENSE="|| ( GPL-2 BSD )"
 
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="ap dbus eap-sim eapol_test fasteap gnutls +hs2-0 p2p privsep ps3 qt5 readline smartcard ssl tdls uncommon-eap-types wimax wps kernel_linux kernel_FreeBSD"
+IUSE="ap dbus eapol_test fasteap gnutls +hs2-0 p2p privsep qt5 readline smartcard ssl tdls uncommon-eap-types wps"
 REQUIRED_USE="fasteap? ( !ssl ) smartcard? ( ssl )"
 
-CDEPEND="dbus? ( sys-app/dbus )
-	kernel_linux? (
-		lib-dev/libnl:3
-		eap-sim? ( sys-app/pcsc-lite )
-	)
-	!kernel_linux? ( lib-net/libpcap )
+CDEPEND="
+	dbus? ( sys-app/dbus )
+	lib-dev/libnl:3
 	qt5? (
 		gui-lib/qtcore:5
 		gui-lib/qtgui:5
@@ -41,14 +38,6 @@ CDEPEND="dbus? ( sys-app/dbus )
 "
 DEPEND="${CDEPEND}
 	dev-util/pkgconfig
-"
-
-DOC_CONTENTS="
-	If this is a clean installation of wpa_supplicant, you
-	have to create a configuration file named
-	${EROOT%/}/etc/wpa_supplicant/wpa_supplicant.conf
-	An example configuration file is available for reference in
-	${EROOT%/}/usr/share/doc/${PF}/
 "
 
 S="${WORKDIR}/${P}/${PN}"
@@ -100,24 +89,7 @@ src_prepare() {
 
 	cd "${WORKDIR}/${P}" || die
 
-	if use wimax; then
-		# generate-libeap-peer.patch comes before
-		# fix-undefined-reference-to-random_get_bytes.patch
-		eapply "${FILESDIR}/${P}-generate-libeap-peer.patch"
-	fi
-
-	# bug (320097)
-	eapply "${FILESDIR}/${P}-do-not-call-dbus-functions-with-NULL-path.patch"
-
-	# https://w1.fi/security/2017-1/wpa-packet-number-reuse-with-replayed-messages.txt
-	eapply "${FILESDIR}/2017-1/rebased-v2.6-0001-hostapd-Avoid-key-reinstallation-in-FT-handshake.patch"
-	eapply "${FILESDIR}/2017-1/rebased-v2.6-0002-Prevent-reinstallation-of-an-already-in-use-group-ke.patch"
-	eapply "${FILESDIR}/2017-1/rebased-v2.6-0003-Extend-protection-of-GTK-IGTK-reinstallation-of-WNM-.patch"
-	eapply "${FILESDIR}/2017-1/rebased-v2.6-0004-Prevent-installation-of-an-all-zero-TK.patch"
-	eapply "${FILESDIR}/2017-1/rebased-v2.6-0005-Fix-PTK-rekeying-to-generate-a-new-ANonce.patch"
-	eapply "${FILESDIR}/2017-1/rebased-v2.6-0006-TDLS-Reject-TPK-TK-reconfiguration.patch"
-	eapply "${FILESDIR}/2017-1/rebased-v2.6-0007-WNM-Ignore-WNM-Sleep-Mode-Response-without-pending-r.patch"
-	eapply "${FILESDIR}/2017-1/rebased-v2.6-0008-FT-Do-not-allow-multiple-Reassociation-Response-fram.patch"
+	eapply "${FILESDIR}/wpa_supplicant-2.7-fix-undefined-remove-ie.patch"
 }
 
 src_configure() {
@@ -184,14 +156,6 @@ src_configure() {
 		Kconfig_style_config EAP_EKE
 	fi
 
-	if use eap-sim ; then
-		# Smart card authentication
-		Kconfig_style_config EAP_SIM
-		Kconfig_style_config EAP_AKA
-		Kconfig_style_config EAP_AKA_PRIME
-		Kconfig_style_config PCSC
-	fi
-
 	if use fasteap ; then
 		Kconfig_style_config EAP_FAST
 	fi
@@ -228,24 +192,13 @@ src_configure() {
 		Kconfig_style_config TDLS
 	fi
 
-	if use kernel_linux ; then
-		# Linux specific drivers
-		Kconfig_style_config DRIVER_ATMEL
-		Kconfig_style_config DRIVER_HOSTAP
-		Kconfig_style_config DRIVER_IPW
-		Kconfig_style_config DRIVER_NL80211
-		Kconfig_style_config DRIVER_RALINK
-		Kconfig_style_config DRIVER_WEXT
-		Kconfig_style_config DRIVER_WIRED
-
-		if use ps3 ; then
-			Kconfig_style_config DRIVER_PS3
-		fi
-
-	elif use kernel_FreeBSD ; then
-		# FreeBSD specific driver
-		Kconfig_style_config DRIVER_BSD
-	fi
+	Kconfig_style_config DRIVER_ATMEL
+	Kconfig_style_config DRIVER_HOSTAP
+	Kconfig_style_config DRIVER_IPW
+	Kconfig_style_config DRIVER_NL80211
+	Kconfig_style_config DRIVER_RALINK
+	Kconfig_style_config DRIVER_WEXT
+	Kconfig_style_config DRIVER_WIRED
 
 	# Wi-Fi Protected Setup (WPS)
 	if use wps ; then
@@ -307,11 +260,6 @@ src_compile() {
 	einfo "Building wpa_supplicant"
 	emake V=1 BINDIR=/usr/sbin
 
-	if use wimax; then
-		emake -C ../src/eap_peer clean
-		emake -C ../src/eap_peer
-	fi
-
 	if use qt5; then
 		einfo "Building wpa_gui"
 		emake -C "${S}"/wpa_gui-qt4
@@ -335,11 +283,6 @@ src_install() {
 		dosym ../usr/bin/wpa_cli /bin/wpa_cli
 	fi
 
-	if has_version ">=sys-app/openrc-0.5.0"; then
-		newinitd "${FILESDIR}/${PN}-init.d" wpa_supplicant
-		newconfd "${FILESDIR}/${PN}-conf.d" wpa_supplicant
-	fi
-
 	exeinto /etc/wpa_supplicant/
 	newexe "${FILESDIR}/wpa_cli.sh" wpa_cli.sh
 
@@ -359,8 +302,6 @@ src_install() {
 	else
 		rm "${ED}"/usr/share/man/man8/wpa_gui.8
 	fi
-
-	use wimax && emake DESTDIR="${D}" -C ../src/eap_peer install
 
 	if use dbus ; then
 		pushd "${S}"/dbus > /dev/null || die

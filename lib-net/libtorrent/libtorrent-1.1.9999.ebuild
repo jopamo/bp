@@ -30,7 +30,6 @@ src_prepare() {
 
 src_configure() {
 	local mycmakeargs=(
-					-Dshared=ON
 					-Dstatic_runtime=OFF
 					-Dencryption=ON
 					-Ddht=ON

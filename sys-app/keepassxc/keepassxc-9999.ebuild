@@ -2,19 +2,23 @@
 
 EAPI=6
 
-inherit cmake-utils gnome2-utils xdg-utils git-r3
+inherit cmake-utils gnome2-utils xdg-utils
 
 DESCRIPTION="KeePassXC - KeePass Cross-platform Community Edition"
 HOMEPAGE="https://keepassxc.org"
 
-EGIT_REPO_URI="https://github.com/keepassxreboot/${PN}.git"
-EGIT_BRANCH=master
-
-KEYWORDS="amd64 arm64"
+if [[ ${PV} == "9999" ]] ; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/keepassxreboot/${PN}.git"
+	EGIT_BRANCH=master
+else
+	SRC_URI="https://github.com/keepassxreboot/keepassxc/releases/download/${PV}/keepassxc-${PV}-src.tar.xz -> ${P}.tar.xz"
+	KEYWORDS="amd64 arm64"
+fi
 
 LICENSE="LGPL-2.1 GPL-2 GPL-3"
 SLOT="0"
-IUSE="autotype debug http test yubikey"
+IUSE="autotype debug http test"
 
 RDEPEND="
 	lib-dev/libgcrypt:=
@@ -32,7 +36,6 @@ RDEPEND="
 		x11-libs/libXi
 		x11-libs/libXtst
 	)
-	yubikey? ( lib-sys/ykpers )
 "
 
 DEPEND="
@@ -55,7 +58,7 @@ src_configure() {
 		-DWITH_GUI_TESTS=OFF
 		-DWITH_TESTS="$(usex test)"
 		-DWITH_XC_AUTOTYPE="$(usex autotype)"
-		-DWITH_XC_YUBIKEY="$(usex yubikey)"
+		-DWITH_XC_YUBIKEY=OFF
 		-DKEEPASSXC_BUILD_TYPE_RELEASE=on
 	)
 	cmake-utils_src_configure

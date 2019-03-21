@@ -46,6 +46,7 @@ src_configure() {
 		$(use_with readline cli)
 		$(use_with !gmp mini_gmp)
 		$(use_enable static-libs static)
+		--disable-man-doc
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

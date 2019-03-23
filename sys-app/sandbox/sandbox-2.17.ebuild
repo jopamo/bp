@@ -6,7 +6,7 @@ inherit eutils flag-o-matic multiprocessing
 
 DESCRIPTION="sandbox'd LD_PRELOAD hack"
 HOMEPAGE="https://www.gentoo.org/proj/en/portage/sandbox/"
-SRC_URI="https://dev.gentoo.org/~mgorny/dist/${P}.tar.xz"
+SRC_URI="https://dev.gentoo.org/~dilfridge/distfiles/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"

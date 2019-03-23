@@ -6,9 +6,17 @@ inherit autotools toolchain-funcs eutils
 
 DESCRIPTION="Standard (de)compression library"
 HOMEPAGE="https://zlib.net/"
-SRC_URI="https://zlib.net/${P}.tar.gz
-	http://www.gzip.org/zlib/${P}.tar.gz
-	http://www.zlib.net/current/beta/${P}.tar.gz"
+
+if [[ ${PV} == 9999 ]]; then
+	EGIT_REPO_URI="https://github.com/madler/zlib.git"
+	inherit git-r3
+	KEYWORDS=""
+else
+	SNAPSHOT=deb44b57429b05d4ad5b4f793c969e58a9328f06
+	SRC_URI="https://github.com/madler/zlib/archive/${SNAPSHOT}.zip -> ${P}.zip"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	KEYWORDS="amd64 arm64"
+fi
 
 LICENSE="ZLIB"
 SLOT="0/1" # subslot = SONAME
@@ -16,8 +24,6 @@ KEYWORDS="amd64 arm64"
 IUSE="+minizip static-libs"
 
 src_prepare() {
-	epatch "${FILESDIR}"/${PN}-1.2.11-fix-deflateParams-usage.patch
-
 	if use minizip ; then
 		cd contrib/minizip || die
 		eautoreconf

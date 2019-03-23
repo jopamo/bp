@@ -1,0 +1,45 @@
+diff -urN a/configure.ac b/configure.ac
+--- a/configure.ac	2019-03-23 12:32:11.894667641 -0500
++++ b/configure.ac	2019-03-23 12:34:08.018904864 -0500
+@@ -645,29 +645,6 @@
+ 
+ AC_CONFIG_FILES([
+ 	Makefile
+-	po/Makefile.in
+-	doc/Makefile
+-	man/Makefile
+-	man/config.xml
+-	man/po/Makefile
+-	man/cs/Makefile
+-	man/da/Makefile
+-	man/de/Makefile
+-	man/es/Makefile
+-	man/fi/Makefile
+-	man/fr/Makefile
+-	man/hu/Makefile
+-	man/id/Makefile
+-	man/it/Makefile
+-	man/ja/Makefile
+-	man/ko/Makefile
+-	man/pl/Makefile
+-	man/pt_BR/Makefile
+-	man/ru/Makefile
+-	man/sv/Makefile
+-	man/tr/Makefile
+-	man/zh_CN/Makefile
+-	man/zh_TW/Makefile
+ 	libmisc/Makefile
+ 	lib/Makefile
+ 	src/Makefile
+diff -urN a/Makefile.am b/Makefile.am
+--- a/Makefile.am	2019-03-23 12:31:03.726528384 -0500
++++ b/Makefile.am	2019-03-23 12:38:26.343432791 -0500
+@@ -1,6 +1,5 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+-EXTRA_DIST = NEWS README TODO shadow.spec.in
++EXTRA_DIST = shadow.spec.in
+ 
+-SUBDIRS = po man libmisc lib src \
+-	contrib doc etc
++SUBDIRS = libmisc lib src contrib etc

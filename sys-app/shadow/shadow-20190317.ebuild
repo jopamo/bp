@@ -6,7 +6,11 @@ inherit eutils libtool pam autotools
 
 DESCRIPTION="Utilities to deal with user accounts"
 HOMEPAGE="https://github.com/shadow-maint/shadow http://pkg-shadow.alioth.debian.org/"
-SRC_URI="https://github.com/shadow-maint/shadow/releases/download/${PV}/${P}.tar.gz"
+
+SNAPSHOT=d2e1e9ce8561898d3494f0d7a23c50d8153b479a
+SRC_URI="https://github.com/shadow-maint/shadow/archive/${SNAPSHOT}.zip -> ${P}.zip"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
+
 KEYWORDS="amd64 arm64"
 
 LICENSE="BSD GPL-2"
@@ -25,14 +29,12 @@ DEPEND="${RDEPEND}
 RDEPEND="${RDEPEND}
 	pam? ( >=lib-sys/pambase-20150213 )"
 
-PATCHES=(
-			${FILESDIR}/01_73a876a05612c278da747faeaeea40c3b8d34a53.patch
-			${FILESDIR}/02_48dcf7852e51b9d8e7926737cc7f7823978b7d7d.patch
-			${FILESDIR}/03_b3b6d9d77c1d18b98670b97157777bb74092cd69.patch
-			${FILESDIR}/05_2fd58155464fb4e753e8789c923aa640c1336127.patch
-			${FILESDIR}/07_89b96cb85cbd86a3f07a47e5e6826f7c5a69e3d5.patch
-			${FILESDIR}/10_4be18d32991e73c460ca59c43384f75419602a35.patch
-		)
+PATCHES=( "${FILESDIR}"/disable_man_and_docs.patch )
+
+src_prepare() {
+	default
+	eautoreconf
+}
 
 src_configure() {
 	local myconf=(
@@ -53,6 +55,7 @@ src_configure() {
 		$(use_with skey)
 		$(use_with elibc_glibc nscd)
 		$(use_with xattr attr)
+		--enable-man
 	)
 	econf ${myconf[@]}
 
@@ -148,17 +151,9 @@ src_install() {
 			-e ': exit' \
 			"${ED}"/etc/login.defs || die
 
-		# remove manpages that pam will install for us
-		# and/or don't apply when using pam
-		find "${ED}"/usr/share/man \
-			'(' -name 'limits.5*' -o -name 'suauth.5*' ')' \
-			-delete
-
 		# Remove pam.d files provided by pambase.
 		rm "${ED}"/etc/pam.d/{login,passwd,su} || die
 	fi
-
-	rm "${ED}"/usr/share/man/man1/passwd.1* || die
 }
 
 pkg_preinst() {

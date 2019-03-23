@@ -17,7 +17,7 @@ HOMEPAGE="https://wiki.linuxfoundation.org/networking/iproute2"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="atm elf ipv6 minimal"
+IUSE="atm elf minimal"
 
 RDEPEND="
 	!minimal? ( lib-net/libmnl )
@@ -35,12 +35,6 @@ DEPEND="
 "
 
 src_prepare() {
-	if ! use ipv6 ; then
-		PATCHES+=(
-			"${FILESDIR}"/${PN}-4.11.0-no-ipv6.patch #326849
-		)
-	fi
-
 	default
 
 	sed -i \

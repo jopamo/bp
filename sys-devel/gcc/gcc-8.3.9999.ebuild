@@ -2,7 +2,7 @@
 
 EAPI=6
 
-SNAPSHOT="8-20190222"
+SNAPSHOT="8-20190322"
 
 inherit toolchain
 

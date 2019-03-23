@@ -8,7 +8,8 @@ DESCRIPTION="The standard GNU Bourne again shell"
 HOMEPAGE="http://tiswww.case.edu/php/chet/bash/bashtop.html"
 SRC_URI="http://ftp.gnu.org/gnu/bash/bash-5.0.tar.gz
 		http://ftp.gnu.org/gnu/bash/bash-5.0-patches/bash50-001
-		http://ftp.gnu.org/gnu/bash/bash-5.0-patches/bash50-002"
+		http://ftp.gnu.org/gnu/bash/bash-5.0-patches/bash50-002
+		http://ftp.gnu.org/gnu/bash/bash-5.0-patches/bash50-003"
 
 S=${WORKDIR}/${PN}-5.0
 
@@ -22,16 +23,12 @@ DEPEND="
 	lib-sys/readline
 	nls? ( sys-devel/gettext )"
 
-PATCHES=( ${DISTDIR}/bash50-001
-			${DISTDIR}/bash50-002	)
+PATCHES=( 	${DISTDIR}/bash50-001
+			${DISTDIR}/bash50-002
+			${WORKDIR}/bash50-003	)
 
 
 pkg_setup() {
-	if is-flag -malign-double ; then #7332
-		eerror "Detected bad CFLAGS '-malign-double'.  Do not use this"
-		eerror "as it breaks LFS (struct stat64) on x86."
-		die "remove -malign-double from your CFLAGS mr ricer"
-	fi
 	if use bashlogger ; then
 		ewarn "The logging patch should ONLY be used in restricted (i.e. honeypot) envs."
 		ewarn "This will log ALL output you enter into the shell, you have been warned."
@@ -40,6 +37,8 @@ pkg_setup() {
 
 
 src_prepare() {
+	cp "${DISTDIR}/bash50-003" "${WORKDIR}/bash50-003" || die
+	sed -i.bak -e "s/bash-5.0-patched/bash-5.0/g" "${WORKDIR}/bash50-003" || die
 	cd ../
 	default
 	cd ${S}

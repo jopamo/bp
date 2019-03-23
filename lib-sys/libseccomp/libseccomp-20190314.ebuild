@@ -13,7 +13,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=1e64feb5f1a9ea02687228e3073e8b784a04ce46
+	SNAPSHOT=7fbf639526eb37a011318736587c3a6f8206b888
 	SRC_URI="https://github.com/seccomp/libseccomp/archive/${SNAPSHOT}.zip -> ${P}.zip"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
@@ -28,7 +28,7 @@ DEPEND="sys-kernel/stable-sources"
 src_prepare() {
 	default
 	eautoreconf
-	sed -i.bak -e "s/0.0.0/2.3.9999/g" "configure"
+	sed -i.bak -e "s/0.0.0/2.4.9999/g" "configure"
 }
 
 src_configure() {

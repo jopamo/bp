@@ -1,9 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# Note: if your package uses the texi2dvi utility, it must depend on the
-# virtual/texi2dvi package to pull in all the right deps.  The tool is not
-# usable out-of-the-box because it requires the large tex packages.
-
 EAPI=6
 
 inherit flag-o-matic
@@ -24,9 +20,6 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	app-compression/xz-utils
 	nls? ( >=sys-devel/gettext-0.19.6 )"
-
-PATCHES=( ${FILESDIR}/perl5.28.patch
-			${FILESDIR}/locale.patch )
 
 src_configure() {
 	use static && append-ldflags -static

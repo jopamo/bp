@@ -34,11 +34,6 @@ RDEPEND="${DEPEND}
 
 REQUIRED_USE="( caps? ( daemon ) )"
 
-PATCHES=(
-	"${FILESDIR}"/${P}-fix-build-on-musl.patch
-	"${FILESDIR}"/${P}-set-broadcast-nsid.patch
-)
-
 src_prepare() {
 	default
 

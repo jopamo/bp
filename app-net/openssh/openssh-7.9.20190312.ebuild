@@ -2,20 +2,26 @@
 
 EAPI=6
 
-inherit user flag-o-matic autotools pam systemd versionator git-r3
-
-MY_PV="$(replace_all_version_separators _)"
+inherit user flag-o-matic autotools pam systemd
 
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="http://www.openssh.org/"
-EGIT_REPO_URI="https://github.com/openssh/openssh-portable.git"
-EGIT_BRANCH="V_7_9"
+
+if [[ ${PV} == 9999 ]]; then
+	EGIT_REPO_URI="https://github.com/openssh/openssh-portable.git"
+	inherit git-r3
+	KEYWORDS=""
+else
+	SNAPSHOT=9edbd7821e6837e98e7e95546cede804dac96754
+	SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.zip -> ${P}.zip"
+	S=${WORKDIR}/${PN}-portable-${SNAPSHOT}
+	KEYWORDS="amd64 arm64"
+fi
 
 LICENSE="BSD GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64"
 
-IUSE="audit bindist debug libedit pam +pie sctp +ssl static test X"
+IUSE="audit bindist debug libedit pam +pie +ssl static test X"
 REQUIRED_USE="pie? ( !static )
 	static? ( !pam )
 	test? ( ssl )"
@@ -23,7 +29,6 @@ REQUIRED_USE="pie? ( !static )
 LIB_DEPEND="
 	audit? ( sys-app/audit[static-libs(+)] )
 	libedit? ( lib-dev/libedit:=[static-libs(+)] )
-	sctp? ( app-net/lksctp-tools[static-libs(+)] )
 	ssl? ( >=lib-dev/openssl-1.0.1:0=[bindist=]	)
 	>=lib-sys/zlib-1.2.3:=[static-libs(+)]"
 

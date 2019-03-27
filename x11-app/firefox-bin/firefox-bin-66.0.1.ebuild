@@ -3,11 +3,11 @@
 EAPI=6
 
 MOZ_PN="${PN/-bin}"
-MOZ_PV="${PV}esr"
+MOZ_PV="${PV}"
 
 MOZ_P="${MOZ_PN}-${MOZ_PV}"
 
-MOZ_HTTP_URI="http://archive.mozilla.org/pub/mozilla.org/${MOZ_PN}/releases/"
+MOZ_HTTP_URI="https://archive.mozilla.org/pub/mozilla.org/${MOZ_PN}/releases/"
 
 inherit eutils xdg-utils gnome2-utils
 

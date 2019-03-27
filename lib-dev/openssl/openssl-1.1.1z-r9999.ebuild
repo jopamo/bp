@@ -7,19 +7,18 @@ inherit eutils flag-o-matic toolchain-funcs git-r3
 DESCRIPTION="full-strength general purpose cryptography library (including SSL and TLS)"
 HOMEPAGE="https://www.openssl.org/"
 EGIT_REPO_URI="https://github.com/openssl/openssl.git"
-EGIT_BRANCH="OpenSSL_1_1_0-stable"
+EGIT_BRANCH="OpenSSL_1_1_1-stable"
 #KEYWORDS="amd64 arm64"
 
 LICENSE="openssl"
 SLOT="0"
-IUSE="+asm bindist rfc3779 sctp static-libs test vanilla zlib"
+IUSE="+asm bindist rfc3779 static-libs test vanilla zlib"
 RESTRICT="!bindist? ( bindist )"
 
 RDEPEND="zlib? ( >=lib-sys/zlib-1.2.8-r1[static-libs(+)?] )"
 
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5
-	sctp? ( >=app-net/lksctp-tools-1.0.12 )
 	test? (
 		sys-app/diffutils
 		sys-devel/bc

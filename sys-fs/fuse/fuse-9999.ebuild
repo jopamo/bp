@@ -25,19 +25,6 @@ DEPEND="dev-util/pkgconfig
 
 filter-flags -flto
 
-src_configure() {
-	meson_src_configure
-}
-
-src_compile() {
-	meson_src_compile
-}
-
 src_test() {
 	python3 -m pytest test || die
-}
-
-src_install() {
-	meson_src_install
-	rm -r "${ED%/}"/usr/share/man || die
 }

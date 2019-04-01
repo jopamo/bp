@@ -40,9 +40,9 @@ DEPEND="${COMMON_DEPEND}
 	lib-dev/libxdg-base
 	drm? ( x11-libs/libdrm )"
 
-src_configure() {
-	append-flags -I/usr/include/xcb
+append-cppflags -I/usr/include/xcb
 
+src_configure() {
 	local emesonargs=(
 		$(meson_use sanitize)
 		$(meson_use xinerama)
@@ -51,14 +51,6 @@ src_configure() {
 		$(meson_use dbus)
 	)
 		meson_src_configure
-}
-
-src_compile() {
-	meson_src_compile
-}
-
-src_test() {
-	meson_src_test
 }
 
 src_install() {

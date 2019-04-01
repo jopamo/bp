@@ -35,7 +35,6 @@ src_prepare() {
 }
 
 src_configure() {
-	export LINGUAS=de
 	local emesonargs=(
 		$(meson_use jumbo-build)
 		$(meson_use sqlite)
@@ -49,19 +48,9 @@ src_configure() {
 		-Dzsh-completion="${EPREFIX}/usr/share/zsh/site-functions"
 		-Dportage-rootpath="${ROOTPATH}"
 		-Deprefix-default="${EPREFIX}"
-		-Ddocdir="/dev/null"
-		-Dhtmldir="/dev/null"
 		-Dextra-doc=false
 		)
 		meson_src_configure
-}
-
-src_compile() {
-	meson_src_compile
-}
-
-src_test() {
-	meson_src_test
 }
 
 src_install() {

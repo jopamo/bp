@@ -217,7 +217,6 @@ meson_src_configure() {
 		--prefix "${EPREFIX}"/usr
 		--sysconfdir "${EPREFIX}/"etc
 		--wrap-mode nodownload
-		-Ddocs=false
 		)
 
 	if tc-is-cross-compiler || [[ ${ABI} != ${DEFAULT_ABI-${ABI}} ]]; then
@@ -263,7 +262,8 @@ meson_src_install() {
 	debug-print-function ${FUNCNAME} "$@"
 
 	DESTDIR="${D}" eninja -C "${BUILD_DIR}" install
-	einstalldocs
+	rm -rf ${ED}/usr/share/doc/
+	rm -rf ${ED}/var/lib
 }
 
 fi

@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit git-r3 flag-o-matic
+inherit git-r3 flag-o-matic meson
 
 DESCRIPTION="unix-like reverse engineering framework and commandline tools"
 HOMEPAGE="http://www.radare.org"
@@ -14,30 +14,20 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="ssl +system-capstone"
 
-RDEPEND="
+DEPEND="
 	ssl? ( lib-dev/openssl:0= )
 	system-capstone? ( lib-dev/capstone:0= )
 "
-DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 src_configure() {
-	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib64
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-		$(use_with ssl openssl)
-		$(use_with system-capstone syscapstone)
+	local emesonargs=(
+		$(meson_use ssl use_sys_openssl)
+		$(meson_use system-capstone use_sys_capstone)
+		-Duse_sys_magic=true
+		-Duse_sys_zlib=true
+		-Duse_sys_lz4=true
 	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-src_install() {
-	default
-	rm -rf ${ED}/usr/lib64/radare2/
+		meson_src_configure
 }

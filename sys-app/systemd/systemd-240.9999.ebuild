@@ -65,6 +65,7 @@ DEPEND="${COMMON_DEPEND}
 "
 
 replace-flags "-O{1,2,3}" -Ofast
+append-cflags -Wno-error=format-truncation
 
 pkg_pretend() {
 	if [[ ${MERGE_TYPE} != buildonly ]]; then
@@ -169,14 +170,12 @@ src_configure() {
 		$(meson_use xkb xkbcommon)
 		-Dxz=true
 		-Dzlib=true
-
 		-Dsysvinit-path=""
 		-Dsysvrcnd-path=""
 		-Dtelinit-path=""
 		-Drc-local=""
 		-Dhalt-local=""
 		-Dntp-servers=""
-
 		-Dnss-myhostname=false
 		-Dnss-mymachines=false
 		-Dnss-resolve=false
@@ -184,15 +183,6 @@ src_configure() {
 	)
 
 	meson_src_configure
-}
-
-src_compile() {
-	append-cflags -Wno-error=format-truncation
-	meson_src_compile
-}
-
-msrc_test() {
-	meson_src_test
 }
 
 src_install() {
@@ -212,7 +202,6 @@ src_install() {
 	use xkb || rm -rf "${ED}"/etc/X11 "${ED}"/etc/xdg/ "${ED}"/etc/systemd/user
 
 	rm -rf "${ED}"/lib*
-	rm -rf "${ED}"/usr/share/doc
 
 	keepdir /var/lib/systemd
 	keepdir /var/log/journal

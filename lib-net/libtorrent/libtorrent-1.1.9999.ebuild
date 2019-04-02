@@ -13,7 +13,6 @@ EGIT_BRANCH="RC_1_1"
 KEYWORDS="amd64 arm64"
 LICENSE="BSD"
 SLOT="0"
-IUSE="static-libs"
 
 RDEPEND="
 	lib-dev/boost
@@ -23,10 +22,7 @@ DEPEND="${RDEPEND}
 	sys-devel/libtool
 "
 
-src_prepare() {
-	append-cxxflags -lboost_system
-	cmake-utils_src_prepare
-}
+append-cxxflags -lboost_system
 
 src_configure() {
 	local mycmakeargs=(
@@ -40,13 +36,4 @@ src_configure() {
 					)
 
 	cmake-utils_src_configure
-}
-
-src_compile() {
-	cmake-utils_src_compile
-}
-
-src_install() {
-	cmake-utils_src_install
-	use static-libs || rm -f "${ED}"usr/lib64/libssh{,_threads}.a
 }

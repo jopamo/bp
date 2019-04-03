@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit git-r3
+inherit git-r3 flag-o-matic
 
 DESCRIPTION="World's fastest and most advanced password recovery utility"
 HOMEPAGE="https://github.com/hashcat/hashcat"
@@ -13,6 +13,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="custom-cflags nvidia"
+
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 src_prepare() {
 	#do not strip

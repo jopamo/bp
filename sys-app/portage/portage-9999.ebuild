@@ -9,6 +9,7 @@ inherit distutils-r1 git-r3
 DESCRIPTION="Fork of Portage focused on cleaning up and useful features"
 HOMEPAGE="https://github.com/1g4-linux/portage"
 EGIT_REPO_URI="https://github.com/1g4-linux/portage.git"
+
 LICENSE="GPL-2"
 KEYWORDS="amd64 arm64"
 SLOT="0"
@@ -43,9 +44,6 @@ PDEPEND="
 # NOTE: FEATURES=installsources requires debugedit and rsync
 
 python_prepare_all() {
-	cp ${FILESDIR}/repos.conf ${S}/cnf/
-	cp ${FILESDIR}/make.globals ${S}/cnf/
-
 	distutils-r1_python_prepare_all
 
 	if ! use ipc ; then

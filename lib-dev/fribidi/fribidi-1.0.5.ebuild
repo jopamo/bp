@@ -17,3 +17,10 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 
 PATCHES=( ${FILESDIR}/46f52d588ab5382a10b68605359e14cc775c86fd.patch )
+
+src_configure() {
+	local emesonargs=(
+		-Ddocs=false
+		)
+		meson_src_configure
+}

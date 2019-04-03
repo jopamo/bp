@@ -23,6 +23,7 @@ fi
 
 DEPEND="dev-python/snakeoil[${PYTHON_USEDEP}]
 	dev-python/sphinx[${PYTHON_USEDEP}]
+	dev-python/packaging[${PYTHON_USEDEP}]
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	dev-python/pyparsing[${PYTHON_USEDEP}]
 	test? ( dev-python/pytest[${PYTHON_USEDEP}] )"

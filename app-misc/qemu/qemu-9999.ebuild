@@ -290,9 +290,6 @@ src_prepare() {
 
 	# Run after we've applied all patches.
 	handle_locales
-
-	# Remove bundled copy of libfdt
-	rm -r dtc || die
 }
 
 ##

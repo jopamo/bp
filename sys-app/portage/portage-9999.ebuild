@@ -7,8 +7,8 @@ PYTHON_COMPAT=( python3_7 )
 inherit distutils-r1 git-r3
 
 DESCRIPTION="Fork of Portage focused on cleaning up and useful features"
-HOMEPAGE="https://github.com/mgorny/portage"
-EGIT_REPO_URI="https://github.com/mgorny/portage-mgorny.git"
+HOMEPAGE="https://github.com/1g4-linux/portage"
+EGIT_REPO_URI="https://github.com/1g4-linux/portage.git"
 LICENSE="GPL-2"
 KEYWORDS="amd64 arm64"
 SLOT="0"

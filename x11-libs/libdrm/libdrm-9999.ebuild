@@ -7,7 +7,7 @@ inherit git-r3 meson
 DESCRIPTION="X.Org libdrm library"
 HOMEPAGE="https://dri.freedesktop.org/"
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/mesa/drm.git"
-EGIT_COMMIT="b7a7a90336fbb19efb3f91f92b5d964b0dfb7ec2"
+
 KEYWORDS="amd64 arm64"
 SLOT=0
 

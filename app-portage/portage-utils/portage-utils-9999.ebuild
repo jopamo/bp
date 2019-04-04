@@ -7,7 +7,7 @@ inherit git-r3
 DESCRIPTION="small and fast portage helper tools written in C"
 HOMEPAGE="https://wiki.gentoo.org/wiki/Portage-utils"
 EGIT_REPO_URI="https://github.com/gentoo/portage-utils.git"
-EGIT_COMMIT=43d8c0998aafc279cdfdb18c715ae945e945138a
+
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"

@@ -14,7 +14,6 @@ LICENSE="nvidia"
 SLOT="0"
 
 src_install() {
-	mkdir -p "${ED}"/usr || die
-	cp -pPR	include "${ED}"/usr/ || die
-	find "${ED}" -type d -empty -exec rmdir -v {} + || die
+	insinto usr/include/vdpau/
+	doins include/vdpau/*
 }

@@ -19,7 +19,6 @@ src_prepare() {
 }
 
 src_install() {
-	mkdir -p "${ED}"/usr || die
-	cp -pPR	include "${ED}"/usr/ || die
-	find "${ED}" -type d -empty -exec rmdir -v {} + || die
+	insinto usr/include/vulkan/
+	doins include/vulkan/*
 }

@@ -263,7 +263,6 @@ meson_src_install() {
 
 	DESTDIR="${D}" eninja -C "${BUILD_DIR}" install
 	rm -rf ${ED}/usr/share/doc/
-	rm -rf ${ED}/var/lib
 }
 
 fi

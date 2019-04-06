@@ -120,14 +120,10 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
-	use ffmpeg || ewarn "USE=-ffmpeg : HTML5 video will not render without app-media/ffmpeg installed"
-	use pulseaudio || ewarn "USE=-pulseaudio : audio will not play without pulseaudio installed"
-
-	# Update mimedb for the new .desktop file
 	xdg_desktop_database_update
-	gnome2_icon_cache_update
+	xdg_icon_cache_update
 }
 
 pkg_postrm() {
-	gnome2_icon_cache_update
+	xdg_icon_cache_update
 }

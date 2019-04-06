@@ -2,7 +2,7 @@
 
 EAPI="6"
 
-inherit autotools git-r3 gnome2-utils
+inherit autotools git-r3 xdg-utils
 
 DESCRIPTION="GNOME default icon theme"
 HOMEPAGE="https://git.gnome.org/browse/adwaita-icon-theme/"
@@ -51,9 +51,9 @@ src_configure() {
 }
 
 pkg_postinst() {
-	gnome2_icon_cache_update
+	xdg_icon_cache_update
 }
 
 pkg_postrm() {
-	gnome2_icon_cache_update
+	xdg_icon_cache_update
 }

@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools eutils fcaps flag-o-matic gnome2-utils qmake-utils user xdg-utils git-r3
+inherit autotools eutils fcaps flag-o-matic qmake-utils user xdg-utils git-r3
 
 DESCRIPTION="A network protocol analyzer formerly known as ethereal"
 HOMEPAGE="https://www.wireshark.org/"
@@ -192,7 +192,7 @@ src_configure() {
 }
 
 pkg_postinst() {
-	gnome2_icon_cache_update
+	xdg_icon_cache_update
 	xdg_desktop_database_update
 	xdg_mimeinfo_database_update
 
@@ -211,7 +211,7 @@ pkg_postinst() {
 }
 
 pkg_postrm() {
-	gnome2_icon_cache_update
+	xdg_icon_cache_update
 	xdg_desktop_database_update
 	xdg_mimeinfo_database_update
 }

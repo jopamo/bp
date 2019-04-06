@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit qmake-utils git-r3 xdg-utils gnome2-utils
+inherit qmake-utils git-r3 xdg-utils
 
 EGIT_REPO_URI="https://github.com/oferkv/phototonic.git"
 KEYWORDS="amd64 arm64"
@@ -28,10 +28,10 @@ src_install() {
 
 pkg_postinst() {
 	xdg_desktop_database_update
-	gnome2_icon_cache_update
+	xdg_icon_cache_update
 }
 
 pkg_postrm() {
 	xdg_desktop_database_update
-	gnome2_icon_cache_update
+	xdg_icon_cache_update
 }

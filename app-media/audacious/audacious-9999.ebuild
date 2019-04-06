@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit gnome2-utils xdg-utils autotools git-r3 flag-o-matic
+inherit xdg-utils autotools git-r3 flag-o-matic
 
 DESCRIPTION="Audacious Player - Your music, your way, no exceptions"
 HOMEPAGE="https://audacious-media-player.org/"
@@ -54,10 +54,10 @@ src_configure() {
 
 pkg_postinst() {
 	xdg_desktop_database_update
-	gnome2_icon_cache_update
+	xdg_icon_cache_update
 }
 
 pkg_postrm() {
 	xdg_desktop_database_update
-	gnome2_icon_cache_update
+	xdg_icon_cache_update
 }

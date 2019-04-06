@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit cmake-utils git-r3 gnome2-utils
+inherit cmake-utils git-r3 xdg-utils
 
 DESCRIPTION="Breeze SVG icon theme"
 LICENSE="LGPL-3"
@@ -29,9 +29,9 @@ src_configure() {
 }
 
 pkg_postinst() {
-	gnome2_icon_cache_update
+	xdg_icon_cache_update
 }
 
 pkg_postrm() {
-	gnome2_icon_cache_update
+	xdg_icon_cache_update
 }

@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit gnome2-utils git-r3 qmake-utils autotools
+inherit xdg-utils git-r3 qmake-utils autotools
 
 DESCRIPTION="BitTorrent client in C++ and Qt"
 HOMEPAGE="https://www.qbittorrent.org/"
@@ -12,24 +12,22 @@ KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="static-libs debug webui +gui"
+IUSE="debug webui gui"
 
-RDEPEND="
-	>=lib-dev/boost-1.62.0-r1:=
+DEPEND=">=lib-dev/boost-1.62.0-r1:=
+	lib-net/libtorrent
+	dev-util/pkgconfig
 	gui-lib/qtcore:5
 	gui-lib/qtnetwork:5[ssl]
-	gui-lib/qtsingleapplication
 	gui-lib/qtxml:5
-	lib-net/libtorrent
-	lib-sys/zlib
-	gui-lib/qtdbus:5
-	gui-lib/qtgui:5
-	gui-lib/qtsvg:5
-	gui-lib/qtwidgets:5"
-
-DEPEND="${RDEPEND}
 	gui-lib/linguist-tools:5
-	dev-util/pkgconfig"
+	gui? (
+			gui-lib/qtsingleapplication
+			gui-lib/qtdbus:5
+			gui-lib/qtgui:5
+			gui-lib/qtsvg:5
+			gui-lib/qtwidgets:5
+		)"
 
 src_prepare() {
 	default
@@ -59,9 +57,9 @@ src_install() {
 }
 
 pkg_postinst() {
-	gnome2_icon_cache_update
+	xdg_icon_cache_update
 }
 
 pkg_postrm() {
-	gnome2_icon_cache_update
+	xdg_icon_cache_update
 }

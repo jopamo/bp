@@ -5,7 +5,7 @@ EAPI=6
 WAF_PV=2.0.14
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit gnome2-utils toolchain-funcs versionator waf-utils xdg-utils python-r1
+inherit toolchain-funcs versionator waf-utils xdg-utils python-r1
 
 DESCRIPTION="Media player based on MPlayer and mplayer2"
 HOMEPAGE="https://mpv.io/"
@@ -197,12 +197,12 @@ src_install() {
 }
 
 pkg_postinst() {
-	gnome2_icon_cache_update
+	xdg_icon_cache_update
 	xdg_desktop_database_update
 }
 
 pkg_postrm() {
-	gnome2_icon_cache_update
+	xdg_icon_cache_update
 	xdg_desktop_database_update
 }
 

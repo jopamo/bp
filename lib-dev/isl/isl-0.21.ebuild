@@ -1,8 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
-
-inherit eutils preserve-libs
+EAPI=6
 
 DESCRIPTION="A library for manipulating integer points bounded by linear constraints"
 HOMEPAGE="http://isl.gforge.inria.fr/"
@@ -19,7 +17,7 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 
 src_prepare() {
-	epatch "${FILESDIR}"/${PN}-0.19-gdb-autoload-dir.patch
+	default
 	sed -i -e '/Libs:/s:@LDFLAGS@ ::' configure || die #382737
 }
 

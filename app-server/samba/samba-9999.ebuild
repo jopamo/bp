@@ -131,28 +131,29 @@ src_configure() {
 src_install() {
 	default
 
+	# create symlink for cups (bug #552310)
+	if use cups ; then
+		dosym ../../../bin/smbspool /usr/libexec/cups/backend/smb
+	fi
 
-		# create symlink for cups (bug #552310)
-		if use cups ; then
-			dosym ../../../bin/smbspool /usr/libexec/cups/backend/smb
-		fi
+	# install example config file
+	insinto /etc/samba
+	doins examples/smb.conf.default
 
-		# install example config file
-		insinto /etc/samba
-		doins examples/smb.conf.default
+	# Fix paths in example file (#603964)
+	sed \
+		-e '/log file =/s@/usr/local/samba/var/@/var/log/samba/@' \
+		-e '/include =/s@/usr/local/samba/lib/@/etc/samba/@' \
+		-e '/path =/s@/usr/local/samba/lib/@/var/lib/samba/@' \
+		-e '/path =/s@/usr/local/samba/@/var/lib/samba/@' \
+		-e '/path =/s@/usr/spool/samba@/var/spool/samba@' \
+		-i "${ED%/}"/etc/samba/smb.conf.default || die
 
-		# Fix paths in example file (#603964)
-		sed \
-			-e '/log file =/s@/usr/local/samba/var/@/var/log/samba/@' \
-			-e '/include =/s@/usr/local/samba/lib/@/etc/samba/@' \
-			-e '/path =/s@/usr/local/samba/lib/@/var/lib/samba/@' \
-			-e '/path =/s@/usr/local/samba/@/var/lib/samba/@' \
-			-e '/path =/s@/usr/spool/samba@/var/spool/samba@' \
-			-i "${ED%/}"/etc/samba/smb.conf.default || die
+	systemd_dotmpfilesd "${FILESDIR}"/samba.conf
+	systemd_dounit "${FILESDIR}"/nmbd.service
+	systemd_dounit "${FILESDIR}"/smbd.{service,socket}
+	systemd_newunit "${FILESDIR}"/smbd_at.service 'smbd@.service'
+	systemd_dounit "${FILESDIR}"/samba.service
 
-		systemd_dotmpfilesd "${FILESDIR}"/samba.conf
-		systemd_dounit "${FILESDIR}"/nmbd.service
-		systemd_dounit "${FILESDIR}"/smbd.{service,socket}
-		systemd_newunit "${FILESDIR}"/smbd_at.service 'smbd@.service'
-		systemd_dounit "${FILESDIR}"/samba.service
+	find "${ED}" -type d -empty -delete
 }

@@ -7,9 +7,8 @@ After=network.target network-online.target
 [Service]
 Type=notify
 NotifyAccess=all
-PIDFile=/var/run/samba.pid
+PIDFile=/run/samba.pid
 LimitNOFILE=16384
-EnvironmentFile=-/etc/conf.d/samba
 ExecStart=/usr/bin/samba --foreground --no-process-group $SAMBAOPTIONS
 ExecReload=/usr/bin/kill -HUP $MAINPID
 

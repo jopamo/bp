@@ -36,7 +36,6 @@ src_configure() {
 		--cxx="$(tc-getCXX)" \
 		--ar="$(tc-getAR)" \
 		--optflags="${CFLAGS}" \
-		--disable-all \
 		--enable-ffmpeg \
 		--enable-network	\
 		--enable-protocols	\
@@ -51,6 +50,7 @@ src_configure() {
         --enable-swresample \
         --enable-avfilter \
 		--enable-libmp3lame \
+		--enable-libvorbis \
 		--enable-encoder=flac,png \
 		--enable-encoder=libmp3lame \
 		--enable-openssl \

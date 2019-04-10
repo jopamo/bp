@@ -1,0 +1,25 @@
+From 23866318ff15188d784a81b99ed6eeb618254577 Mon Sep 17 00:00:00 2001
+From: "Brian C. Lane" <bcl@redhat.com>
+Date: Mon, 11 Feb 2019 10:13:25 -0800
+Subject: Fix align-check help output
+
+---
+ parted/parted.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/parted/parted.c b/parted/parted.c
+index c0600ea..fe7c26d 100644
+--- a/parted/parted.c
++++ b/parted/parted.c
+@@ -1975,7 +1975,7 @@ _init_commands ()
+ 		     do_align_check,
+ 		     str_list_create (
+ 				      _("align-check TYPE N"
+-					"                        "
++					"                       "
+ 					"check partition N for"
+ 					" TYPE(min|opt) alignment"), NULL),
+ 
+-- 
+cgit v1.0-41-gc330
+

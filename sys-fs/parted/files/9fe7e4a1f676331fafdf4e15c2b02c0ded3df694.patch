@@ -1,0 +1,47 @@
+From 9fe7e4a1f676331fafdf4e15c2b02c0ded3df694 Mon Sep 17 00:00:00 2001
+From: "Brian C. Lane" <bcl@redhat.com>
+Date: Wed, 30 Jan 2019 15:43:28 -0800
+Subject: docs: Update GNU License version in parted .text files
+
+---
+ doc/parted-pt_BR.texi | 6 +++---
+ doc/parted.texi       | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/doc/parted-pt_BR.texi b/doc/parted-pt_BR.texi
+index 4297c70..7ec016e 100644
+--- a/doc/parted-pt_BR.texi
++++ b/doc/parted-pt_BR.texi
+@@ -240,9 +240,9 @@ necessidade.  
+ @cindex gpl
+ 
+ O GNU Parted é software livre, previsto pela GNU General Public
+-Licese Version 2. Ela deve vir com a distribuição do Parted, no arquivo
+-COPYING. Se não, escreva para a Free Software Foundation, Inc.,
+-51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
++Licese Version 3, ou (a seu critério) qualquer versão posterior.
++Ela deve vir com a distribuição do Parted, no arquivo COPYING.
++Se não, veja <http://www.gnu.org/licenses/>.
+ 
+ Libparted é considerada parte do GNU Parted. Ela é prevista pela GNU
+ General Public License. NÃO é lançada sobre a GNU Lesser General Public
+diff --git a/doc/parted.texi b/doc/parted.texi
+index c08cdc7..6f8c378 100644
+--- a/doc/parted.texi
++++ b/doc/parted.texi
+@@ -203,9 +203,9 @@ Linux versions 2.0 and up, on Alpha, x86 PCs, PC98, Macintosh PowerPC, Sun hardw
+ @cindex gpl
+ 
+ GNU Parted is free software, covered by the GNU General Public License
+-Version 2.  This should have been included with the Parted distribution,
+-in the COPYING file.  If not, write to the Free Software Foundation,
+-Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
++Version 3, or (at your option) any later version.  This should have been
++included with the Parted distribution, in the COPYING file.  If not,
++see <http://www.gnu.org/licenses/>.
+ 
+ Libparted is considered part of GNU Parted.  It is covered by the GNU
+ General Public License.  It is NOT released under the GNU Lesser General
+-- 
+cgit v1.0-41-gc330
+

@@ -5,7 +5,7 @@ EAPI=6
 inherit git-r3 autotools
 
 DESCRIPTION="window information utility for X"
-EGIT_REPO_URI=https://github.com/freedesktop/xorg-${PN}.git
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/app/${PN}.git"
 SLOT=0
 
 KEYWORDS="amd64 arm64"

@@ -2,17 +2,13 @@
 
 EAPI=6
 
-inherit autotools
+inherit git-r3 autotools
 
-DESCRIPTION="property displayer for X"
-SRC_URI="https://www.x.org/archive//individual/app/${P}.tar.gz"
+DESCRIPTION="X.Org bitmaps data"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/data/bitmaps.git"
 SLOT=0
 
 KEYWORDS="amd64 arm64"
-
-RDEPEND="x11-libs/libX11"
-DEPEND="${RDEPEND}
-	x11/xorgproto"
 
 src_prepare() {
 	eautoreconf

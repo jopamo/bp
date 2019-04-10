@@ -17,3 +17,7 @@ DEPEND="
 	${RDEPEND}
 	dev-util/pkgconfig
 "
+
+PATCHES=( 	${FILESDIR}/8e021a46ee2d455c8c677a7eb982b56c3c408942.patch
+			${FILESDIR}/ec0de4afa8f6119a737f731433134bed4fc48f32.patch
+		)

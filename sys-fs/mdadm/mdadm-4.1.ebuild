@@ -8,13 +8,11 @@ DESCRIPTION="Tool for running RAID systems - replacement for the raidtools"
 HOMEPAGE="http://neil.brown.name/blog/mdadm"
 
 if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/neilbrown/mdadm.git"
+	EGIT_REPO_URI="git://neil.brown.name/mdadm"
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=5d518de84e7cd3382b4984cc1243ddb4102aa4f4
-	SRC_URI="https://github.com/neilbrown/mdadm/archive/${SNAPSHOT}.zip -> ${P}.zip"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	SRC_URI="https://mirrors.edge.kernel.org/pub/linux/utils/raid/mdadm/${P}.tar.xz"
 	KEYWORDS="amd64 arm64"
 fi
 LICENSE="GPL-2"

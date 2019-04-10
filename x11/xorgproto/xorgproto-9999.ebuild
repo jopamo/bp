@@ -2,12 +2,11 @@
 
 EAPI=6
 
-EGIT_REPO_URI="https://github.com/freedesktop/xorg-xorgproto.git"
-
-inherit git-r3 meson 
+inherit git-r3 meson
 
 DESCRIPTION="X.Org combined protocol headers"
 HOMEPAGE="https://cgit.freedesktop.org/xorg/proto/xorgproto/"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/proto/xorgproto.git"
 
 KEYWORDS="amd64 arm64"
 LICENSE="MIT"

@@ -2,11 +2,22 @@
 
 EAPI=6
 
-DESCRIPTION="X.Org bitmaps data"
-SRC_URI="https://www.x.org/archive/individual/data/${P}.tar.bz2"
+inherit autotools git-r3
+
+DESCRIPTION="property displayer for X"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/app/${PN}.git"
 SLOT=0
 
 KEYWORDS="amd64 arm64"
+
+RDEPEND="x11-libs/libX11"
+DEPEND="${RDEPEND}
+	x11/xorgproto"
+
+src_prepare() {
+	eautoreconf
+	default
+}
 
 src_configure() {
 	local myconf=(

@@ -1,0 +1,33 @@
+From 214865ed5c66d8e363b16ea74509f23d93456707 Mon Sep 17 00:00:00 2001
+From: Paul Smith <psmith@gnu.org>
+Date: Sun, 16 Sep 2018 01:09:10 -0400
+Subject: * src/arscan.c (ar_member_touch): [SV 54533] Stop \0 in archive
+ headers
+
+---
+ arscan.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/src/arscan.c b/src/arscan.c
+index 9487917..798bf56 100644
+--- a/arscan.c
++++ b/arscan.c
+@@ -904,14 +904,12 @@ ar_member_touch (const char *arname, const char *memname)
+   EINTRLOOP (r, fstat (fd, &statbuf));
+   if (r < 0)
+     goto lose;
+-#if defined(ARFMAG) || defined(ARFZMAG) || defined(AIAMAG) || defined(WINDOWS32)
+   /* Advance member's time to that time */
++#if defined(ARFMAG) || defined(ARFZMAG) || defined(AIAMAG) || defined(WINDOWS32)
+   for (ui = 0; ui < sizeof ar_hdr.ar_date; ui++)
+     ar_hdr.ar_date[ui] = ' ';
+   sprintf (TOCHAR (ar_hdr.ar_date), "%lu", (long unsigned) statbuf.st_mtime);
+-#ifdef AIAMAG
+   ar_hdr.ar_date[strlen (ar_hdr.ar_date)] = ' ';
+-#endif
+ #else
+   ar_hdr.ar_date = statbuf.st_mtime;
+ #endif
+-- 
+cgit v1.0-41-gc330
+

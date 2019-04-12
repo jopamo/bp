@@ -8,7 +8,7 @@
 -libvirt
 -apparmor
 -systemd
--abi_x86_32
+abi_x86_32
 -abi_x86_64
 -vdpau
 -sane_backends_canon_pp
@@ -52,4 +52,4 @@
 -cpu_flags_x86_sse4a
 -cpu_flags_x86_ssse3
 -cpu_flags_x86_xop
-
+multilib

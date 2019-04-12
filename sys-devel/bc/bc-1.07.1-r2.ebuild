@@ -27,6 +27,11 @@ DEPEND="
 	sys-devel/bison
 "
 
+PATCHES=(
+			${FILESDIR}/26f275502dd28114e78bc098fed81acde1d86d62.patch
+			${FILESDIR}/2dcee958a412210cd1260f866ac199f68f28cf08.patch
+		)
+
 src_configure() {
 	local myconf=(
 		$(use_with readline)
@@ -46,5 +51,5 @@ src_configure() {
 }
 
 src_compile() {
-	emake AR="$(tc-getAR)"
+	emake -j1 AR="$(tc-getAR)"
 }

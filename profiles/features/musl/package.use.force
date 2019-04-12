@@ -1,8 +1,0 @@
-# Distributed under the terms of the GNU General Public License v2
-
-# Force system-libevent use flag on mozilla packages, since the building of
-# bundled libevent cannot accomodate a system without sysctl.h
-# See bug 574830 for more info.
->=app-misc/firefox-45.0 system-libevent
->=app-misc/seamonkey-2.40 system-libevent
->=mail-misc/thunderbird-45.0 system-libevent

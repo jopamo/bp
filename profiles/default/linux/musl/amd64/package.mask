@@ -1,6 +1,0 @@
-# Distributed under the terms of the GNU General Public License v2
-
-# Ulrich Müller <ulm@gentoo.org> (18 Mar 2013)
-# Packages that rely on multilib
-app-misc/emacs:18
-app-net/icaclient

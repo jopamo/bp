@@ -785,7 +785,7 @@ cmake-utils_src_install() {
 	popd > /dev/null || die
 
 	pushd "${S}" > /dev/null || die
-	einstalldocs
+	rm -rf ${ED}/usr/share/doc/
 	popd > /dev/null || die
 }
 

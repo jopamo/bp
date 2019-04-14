@@ -5,11 +5,11 @@ EAPI=6
 inherit cuda flag-o-matic portability toolchain-funcs unpacker versionator
 
 MYD=$(get_version_component_range 1-2)
-DRIVER_PV="410.48"
+DRIVER_PV="418.39"
 
 DESCRIPTION="NVIDIA CUDA Software Development Kit"
 HOMEPAGE="https://developer.nvidia.com/cuda-zone"
-SRC_URI="https://developer.nvidia.com/compute/cuda/${MYD}/Prod2/local_installers/cuda_${PV}_${DRIVER_PV}_linux -> cuda_${PV}_${DRIVER_PV}_linux.run"
+SRC_URI="https://developer.nvidia.com/compute/cuda/${MYD}/Prod/local_installers/cuda_${PV}_${DRIVER_PV}_linux.run -> cuda_${PV}_${DRIVER_PV}_linux.run"
 
 LICENSE="CUDPP"
 SLOT="0"
@@ -29,7 +29,7 @@ DEPEND="${RDEPEND}"
 
 RESTRICT="test"
 
-S=${WORKDIR}/samples
+S=${WORKDIR}/builds/cuda-samples
 
 QA_EXECSTACK=(
 	opt/cuda/sdk/0_Simple/cdpSimplePrint/cdpSimplePrint
@@ -42,7 +42,6 @@ src_unpack() {
 	# We first need to unpack the cuda_${PV}_linux.run file
 	# which includes the cuda-samples*run file.
 	unpacker
-	unpacker run_files/cuda-samples*run
 }
 
 pkg_setup() {

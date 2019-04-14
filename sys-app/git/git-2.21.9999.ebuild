@@ -4,13 +4,14 @@ EAPI=6
 
 inherit autotools
 
-DESCRIPTION="Git is a fast, scalable, distributed revision control system with an unusually rich command set that provides both high-level operations and full access to internals."
+DESCRIPTION="Git is a fast, scalable, distributed revision control system with a rich command set that provides high-level operations and full access to internals."
 HOMEPAGE="http://www.git-scm.com/"
 
-if [[ ${PV} == 9999 ]]; then
+if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/git/git.git"
+	EGIT_BRANCH=maint
 	inherit git-r3
-	KEYWORDS=""
+	KEYWORDS="amd64 arm64"
 else
 	SNAPSHOT=041f5ea1cf987a4068ef5f39ba0a09be85952064
 	SRC_URI="https://github.com/git/git/archive/${SNAPSHOT}.zip -> ${P}.zip"

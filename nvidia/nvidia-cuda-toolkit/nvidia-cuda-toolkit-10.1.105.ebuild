@@ -5,11 +5,11 @@ EAPI=6
 inherit cuda toolchain-funcs unpacker versionator
 
 MYD=$(get_version_component_range 1-2)
-DRIVER_PV="410.48"
+DRIVER_PV="418.39"
 
 DESCRIPTION="NVIDIA CUDA Toolkit (compiler and friends)"
 HOMEPAGE="https://developer.nvidia.com/cuda-zone"
-SRC_URI="https://developer.nvidia.com/compute/cuda/${MYD}/Prod/local_installers/cuda_${PV}_${DRIVER_PV}_linux -> cuda_${PV}_${DRIVER_PV}_linux.run"
+SRC_URI="https://developer.nvidia.com/compute/cuda/${MYD}/Prod/local_installers/cuda_${PV}_${DRIVER_PV}_linux.run -> cuda_${PV}_${DRIVER_PV}_linux.run"
 
 LICENSE="NVIDIA-CUDA"
 SLOT="0/${PV}"
@@ -38,14 +38,13 @@ src_unpack() {
 src_prepare() {
 	local cuda_supported_gcc
 
-	cuda_supported_gcc="4.7 4.8 4.9 5.3 5.4 6.3 6.4 8.1"
+	cuda_supported_gcc="8.3"
 
 	sed \
 		-e "s:CUDA_SUPPORTED_GCC:${cuda_supported_gcc}:g" \
 		"${FILESDIR}"/cuda-config.in > "${T}"/cuda-config || die
 
 	default
-	epatch "${FILESDIR}/cuda_gcc7.patch"
 }
 
 src_install() {

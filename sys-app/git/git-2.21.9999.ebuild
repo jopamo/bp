@@ -13,7 +13,7 @@ if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
 	KEYWORDS="amd64 arm64"
 else
-	SNAPSHOT=041f5ea1cf987a4068ef5f39ba0a09be85952064
+	SNAPSHOT=aeb582a98374c094361cba1bd756dc6307432c42
 	SRC_URI="https://github.com/git/git/archive/${SNAPSHOT}.zip -> ${P}.zip"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"

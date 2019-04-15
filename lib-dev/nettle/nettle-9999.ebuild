@@ -18,9 +18,14 @@ fi
 LICENSE="|| ( LGPL-3 LGPL-2.1 )"
 SLOT="0"
 
-IUSE="+gmp static-libs test aes"
+IUSE="+gmp static-libs test"
 
 DEPEND="gmp? ( >=lib-dev/gmp-5.0:0= )"
+
+src_prepare() {
+	eautoreconf
+	default
+}
 
 src_configure() {
 	local myconf=(
@@ -32,7 +37,8 @@ src_configure() {
 		--localstatedir="${EPREFIX}"/var
 		$(use_enable gmp public-key)
 		$(use_enable static-libs static)
-		$(use_enable aes x86-aesni)
+		--enable-fat
+		--disable-assembler
 		$(tc-is-static-only && echo --disable-shared)
 		--disable-documentation
 	)

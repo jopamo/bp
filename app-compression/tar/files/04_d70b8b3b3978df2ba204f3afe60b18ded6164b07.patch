@@ -1,0 +1,210 @@
+From d70b8b3b3978df2ba204f3afe60b18ded6164b07 Mon Sep 17 00:00:00 2001
+From: Sergey Poznyakoff <gray@gnu.org>
+Date: Thu, 11 Apr 2019 13:45:32 +0300
+Subject: Fix --delay-directory-restore on archives with reversed member
+ ordering.
+
+* src/extract.c (find_direct_ancestor): Remove useless test.
+(delay_set_stat): If the file name being added is already in
+the list, update stored data instead of creating a new entry.
+This works for archives with reversed order of members.
+* tests/extrac22.at: New testcase.
+* tests/Makefile.am: Add new testcase.
+* tests/testsuite.at: Include new testcase.
+---
+ src/extract.c      | 51 ++++++++++++++++++++++++++++++++++++----------
+ tests/Makefile.am  |  1 +
+ tests/extrac22.at  | 60 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tests/testsuite.at |  1 +
+ 4 files changed, 102 insertions(+), 11 deletions(-)
+ create mode 100644 tests/extrac22.at
+
+diff --git a/src/extract.c b/src/extract.c
+index 8276f8f..20918fe 100644
+--- a/src/extract.c
++++ b/src/extract.c
+@@ -400,7 +400,7 @@ find_direct_ancestor (char const *file_name)
+   struct delayed_set_stat *h = delayed_set_stat_head;
+   while (h)
+     {
+-      if (h && ! h->after_links
++      if (! h->after_links
+ 	  && strncmp (file_name, h->file_name, h->file_name_len) == 0
+ 	  && ISSLASH (file_name[h->file_name_len])
+ 	  && (last_component (file_name) == file_name + h->file_name_len + 1))
+@@ -458,25 +458,56 @@ delay_set_stat (char const *file_name, struct tar_stat_info const *st,
+ 		mode_t mode, int atflag)
+ {
+   size_t file_name_len = strlen (file_name);
+-  struct delayed_set_stat *data = xmalloc (sizeof (*data));
+-  data->next = delayed_set_stat_head;
++  struct delayed_set_stat *data;
++
++  for (data = delayed_set_stat_head; data; data = data->next)
++    if (strcmp (data->file_name, file_name) == 0)
++      break;
++
++  if (data)
++    {
++      if (data->interdir)
++	{
++	  struct stat real_st;
++	  if (fstatat (chdir_fd, data->file_name,
++		       &real_st, data->atflag) != 0)
++	    {
++	      stat_error (data->file_name);
++	    }
++	  else
++	    {
++	      data->dev = real_st.st_dev;
++	      data->ino = real_st.st_ino;
++	    }
++	}
++    }
++  else
++    {
++      data = xmalloc (sizeof (*data));
++      data->next = delayed_set_stat_head;
++      delayed_set_stat_head = data;
++      data->file_name_len = file_name_len;
++      data->file_name = xstrdup (file_name);
++      data->after_links = false;
++      if (st)
++	{
++	  data->dev = st->stat.st_dev;
++	  data->ino = st->stat.st_ino;
++	}
++    }
++
+   data->mode = mode;
+   if (st)
+     {
+-      data->dev = st->stat.st_dev;
+-      data->ino = st->stat.st_ino;
+       data->uid = st->stat.st_uid;
+       data->gid = st->stat.st_gid;
+       data->atime = st->atime;
+       data->mtime = st->mtime;
+     }
+-  data->file_name_len = file_name_len;
+-  data->file_name = xstrdup (file_name);
+   data->current_mode = current_mode;
+   data->current_mode_mask = current_mode_mask;
+   data->interdir = ! st;
+   data->atflag = atflag;
+-  data->after_links = 0;
+   data->change_dir = chdir_current;
+   data->cntx_name = NULL;
+   if (st)
+@@ -508,8 +539,6 @@ delay_set_stat (char const *file_name, struct tar_stat_info const *st,
+       data->xattr_map = NULL;
+       data->xattr_map_size = 0;
+     }
+-  strcpy (data->file_name, file_name);
+-  delayed_set_stat_head = data;
+   if (must_be_dot_or_slash (file_name))
+     mark_after_links (data);
+ }
+@@ -523,7 +552,7 @@ repair_delayed_set_stat (char const *dir,
+ 			 struct stat const *dir_stat_info)
+ {
+   struct delayed_set_stat *data;
+-  for (data = delayed_set_stat_head;  data;  data = data->next)
++  for (data = delayed_set_stat_head; data; data = data->next)
+     {
+       struct stat st;
+       if (fstatat (chdir_fd, data->file_name, &st, data->atflag) != 0)
+diff --git a/tests/Makefile.am b/tests/Makefile.am
+index bc657da..0369a95 100644
+--- a/tests/Makefile.am
++++ b/tests/Makefile.am
+@@ -120,6 +120,7 @@ TESTSUITE_AT = \
+  extrac19.at\
+  extrac20.at\
+  extrac21.at\
++ extrac22.at\
+  filerem01.at\
+  filerem02.at\
+  dirrem01.at\
+diff --git a/tests/extrac22.at b/tests/extrac22.at
+new file mode 100644
+index 0000000..449d4df
+--- /dev/null
++++ b/tests/extrac22.at
+@@ -0,0 +1,60 @@
++# Test suite for GNU tar.                             -*- Autotest -*-
++# Copyright 2017-2019 Free Software Foundation, Inc.
++#
++# This file is part of GNU tar.
++#
++# GNU tar is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 3 of the License, or
++# (at your option) any later version.
++#
++# GNU tar is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program.  If not, see <http://www.gnu.org/licenses/>.
++
++AT_SETUP([delay-directory-restore on reversed ordering])
++
++# The --delay-directory-resore option worked incorrectly on archives with
++# reversed member ordering (which was documented, anyway). This is illustrated
++# in
++#   http://lists.gnu.org/archive/html/bug-tar/2019-03/msg00022.html
++# which was taken as a base for this testcase.
++# The bug affected tar versions <= 1.32.
++
++AT_KEYWORDS([extract extrac22 delay delay-reversed])
++AT_TAR_CHECK([
++AT_UNPRIVILEGED_PREREQ
++AT_SORT_PREREQ
++mkdir t
++(cd t
++ genfile --length 100 --file data1
++ mkdir dir1
++ cp data1 dir1
++ mkdir dir2
++ cd dir2
++ ln -s ../dir1/data1 data2
++ cd ..
++ chmod -w dir2)
++
++AT_DATA([filelist],
++[./dir2/data2
++./dir2
++./dir1/data1
++./dir1
++./data1
++])
++
++tar -C t -c -f a.tar --no-recursion -T filelist
++
++mkdir restore
++tar -x -p --delay-directory-restore -C restore -f a.tar
++# Previous versions of tar would fail here with the following diagnostics:
++# tar: ./dir2/data2: Cannot unlink: Permission denied
++],
++[0],
++[])
++AT_CLEANUP
+\ No newline at end of file
+diff --git a/tests/testsuite.at b/tests/testsuite.at
+index 6b804d5..2cc43a1 100644
+--- a/tests/testsuite.at
++++ b/tests/testsuite.at
+@@ -342,6 +342,7 @@ m4_include([extrac18.at])
+ m4_include([extrac19.at])
+ m4_include([extrac20.at])
+ m4_include([extrac21.at])
++m4_include([extrac22.at])
+ 
+ m4_include([backup01.at])
+ 
+-- 
+cgit v1.0-41-gc330
+

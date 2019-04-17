@@ -11,6 +11,7 @@ if [[ ${PV} == "9999" ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/keepassxreboot/${PN}.git"
 	EGIT_BRANCH=master
+	KEYWORDS="amd64 arm64"
 else
 	SRC_URI="https://github.com/keepassxreboot/keepassxc/releases/download/${PV}/keepassxc-${PV}-src.tar.xz -> ${P}.tar.xz"
 	KEYWORDS="amd64 arm64"

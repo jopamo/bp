@@ -31,7 +31,6 @@ bindist - Flag to enable or disable options for prebuilt (GRP) packages (eg. due
 blas - Add support for the virtual/blas numerical library
 bluetooth - Enable Bluetooth Support
 bootstrap - !!internal use only!! DO NOT SET THIS FLAG YOURSELF!, used during original system bootstrapping [make stage2]
-boundschecking - Add the bounds checking patch by Haj Ten Brugge, this will DISABLE the hardened PIE+SSP patches
 branding - Enable Gentoo specific branding
 bsf - Enable support for Apache Bean Scripting Framework (dev-java/bsf)
 build - !!internal use only!! DO NOT SET THIS FLAG YOURSELF!, used for creating build images and the first half of bootstrapping [make stage1]
@@ -128,7 +127,6 @@ gtk - Add support for x11-libs/gtk+ (The GIMP Toolkit)
 guile - Add support for the guile Scheme interpreter
 gzip - Compress files with Lempel-Ziv coding (LZ77)
 handbook - Enable handbooks generation for packages by KDE
-hardened - Activate default security enhancements for toolchain (gcc, glibc, binutils)
 hddtemp - Enable monitoring of hdd temperature (sys-app/hddtemp)
 hdf5 - Add support for the Hierarchical Data Format v5
 headers-only - Install only C headers instead of whole package. Mainly used by sys-devel/crossdev for toolchain bootstrap.

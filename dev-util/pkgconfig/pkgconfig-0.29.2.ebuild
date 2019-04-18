@@ -23,7 +23,7 @@ HOMEPAGE="https://pkgconfig.freedesktop.org/wiki/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="elibc_FreeBSD elibc_glibc hardened internal-glib"
+IUSE="elibc_FreeBSD elibc_glibc internal-glib"
 
 RDEPEND="!internal-glib? ( >=lib-dev/glib-2.34.3 )
 	!dev-util/pkgconf[pkg-config]

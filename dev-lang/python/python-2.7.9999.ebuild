@@ -13,7 +13,7 @@ EGIT_BRANCH="2.7"
 LICENSE="PSF-2"
 SLOT="2.7"
 KEYWORDS="amd64 arm64"
-IUSE="bluetooth build doc elibc_uclibc examples gdbm hardened ipv6 +ncurses +readline sqlite +ssl +threads tk +wide-unicode wininst +xml"
+IUSE="bluetooth build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlite +ssl +threads tk +wide-unicode wininst +xml"
 
 RDEPEND="app-compression/bzip2:0=
 	app-compression/xz-utils:0=
@@ -95,12 +95,6 @@ src_configure() {
 	fi
 
 	filter-flags -malign-double
-
-	# https://bugs.gentoo.org/show_bug.cgi?id=50309
-	if is-flagq -O3; then
-		is-flagq -fstack-protector-all && replace-flags -O3 -O2
-		use hardened && replace-flags -O3 -O2
-	fi
 
 	if tc-is-cross-compiler; then
 		# Force some tests that try to poke fs paths.

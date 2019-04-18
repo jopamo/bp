@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit flag-o-matic eutils
+inherit flag-o-matic autotools
 
 DESCRIPTION="Utility to apply diffs to files"
 HOMEPAGE="https://www.gnu.org/software/patch/patch.html"
@@ -17,7 +17,12 @@ DEPEND="xattr? ( sys-app/attr )
 		test? ( sys-app/ed )"
 
 PATCHES=( 	${FILESDIR}/tmp_and_ed_cleanup.patch
-		)
+	)
+
+src_prepare() {
+	default
+	eautoreconf
+}
 
 src_configure() {
 	use static && append-ldflags -static

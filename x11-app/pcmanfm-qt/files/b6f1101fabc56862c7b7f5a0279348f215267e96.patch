@@ -1,0 +1,261 @@
+From b6f1101fabc56862c7b7f5a0279348f215267e96 Mon Sep 17 00:00:00 2001
+From: Tsu Jan <tsujan2000@gmail.com>
+Date: Fri, 12 Apr 2019 12:20:45 +0430
+Subject: [PATCH] Removed WM menu from desktop
+
+Because:
+(1) Only some X11 WMs have desktop context menus, while LXQt is WM-agnostic;
+(2) It hid our FM desktop context menu; and
+(3) X11 codes should be kept only when really useful because they are an obstacle to preparing for Wayland.
+
+NOTE: "Advanced" is preserved for the tab name because an extra item is added to it outside LXQt.
+
+Closes https://github.com/lxqt/pcmanfm-qt/issues/931
+---
+ pcmanfm/desktop-preferences.ui       | 16 ------
+ pcmanfm/desktoppreferencesdialog.cpp |  4 --
+ pcmanfm/desktopwindow.cpp            | 84 ----------------------------
+ pcmanfm/desktopwindow.h              |  1 -
+ pcmanfm/settings.cpp                 |  3 -
+ pcmanfm/settings.h                   |  9 ---
+ 6 files changed, 117 deletions(-)
+
+diff --git a/pcmanfm/desktop-preferences.ui b/pcmanfm/desktop-preferences.ui
+index 0ad0e1f..1f0bc23 100644
+--- a/pcmanfm/desktop-preferences.ui
++++ b/pcmanfm/desktop-preferences.ui
+@@ -506,22 +506,6 @@ A space is also reserved for 3 lines of text.</string>
+          </layout>
+         </widget>
+        </item>
+-       <item>
+-        <widget class="QGroupBox" name="groupBox_4">
+-         <property name="title">
+-          <string>Window Manager</string>
+-         </property>
+-         <layout class="QHBoxLayout" name="horizontalLayout_3">
+-          <item>
+-           <widget class="QCheckBox" name="showWmMenu">
+-            <property name="text">
+-             <string>Show menus provided by window managers when desktop is clicked</string>
+-            </property>
+-           </widget>
+-          </item>
+-         </layout>
+-        </widget>
+-       </item>
+        <item>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+diff --git a/pcmanfm/desktoppreferencesdialog.cpp b/pcmanfm/desktoppreferencesdialog.cpp
+index 327a8a8..27d7e4e 100644
+--- a/pcmanfm/desktoppreferencesdialog.cpp
++++ b/pcmanfm/desktoppreferencesdialog.cpp
+@@ -111,8 +111,6 @@ DesktopPreferencesDialog::DesktopPreferencesDialog(QWidget* parent, Qt::WindowFl
+   ui.computerBox->setChecked(ds.contains(QLatin1String("Computer")));
+   ui.networkBox->setChecked(ds.contains(QLatin1String("Network")));
+ 
+-  ui.showWmMenu->setChecked(settings.showWmMenu());
+-
+   connect(ui.buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked,
+           this, &DesktopPreferencesDialog::onApplyClicked);
+ 
+@@ -190,8 +188,6 @@ void DesktopPreferencesDialog::applySettings()
+   }
+   settings.setDesktopShortcuts(ds);
+ 
+-  settings.setShowWmMenu(ui.showWmMenu->isChecked());
+-
+   settings.setDesktopCellMargins(QSize(ui.hMargin->value(), ui.vMargin->value()));
+ 
+   settings.save();
+diff --git a/pcmanfm/desktopwindow.cpp b/pcmanfm/desktopwindow.cpp
+index 057b4ce..405eefd 100644
+--- a/pcmanfm/desktopwindow.cpp
++++ b/pcmanfm/desktopwindow.cpp
+@@ -75,7 +75,6 @@ DesktopWindow::DesktopWindow(int screenNum):
+     wallpaperTimer_(nullptr),
+     wallpaperRandomize_(false),
+     fileLauncher_(nullptr),
+-    showWmMenu_(false),
+     desktopHideItems_(false),
+     screenNum_(screenNum),
+     relayoutTimer_(nullptr),
+@@ -740,7 +739,6 @@ void DesktopWindow::updateFromSettings(Settings& settings, bool changeSlide) {
+     setForeground(settings.desktopFgColor());
+     setBackground(settings.desktopBgColor());
+     setShadow(settings.desktopShadowColor());
+-    showWmMenu_ = settings.showWmMenu();
+     desktopHideItems_ = settings.desktopHideItems();
+     if(desktopHideItems_) {
+         // hide all items by hiding the list view and also
+@@ -783,9 +781,6 @@ void DesktopWindow::updateFromSettings(Settings& settings, bool changeSlide) {
+ }
+ 
+ void DesktopWindow::onFileClicked(int type, const std::shared_ptr<const Fm::FileInfo>& fileInfo) {
+-    if(!fileInfo && showWmMenu_) {
+-        return;    // do not show the popup if we want to use the desktop menu provided by the WM.
+-    }
+     if(desktopHideItems_) { // only a context menu with desktop actions
+         if(type == Fm::FolderView::ActivatedClick) {
+             return;
+@@ -1388,72 +1383,6 @@ void DesktopWindow::onFilePropertiesActivated() {
+     }
+ }
+ 
+-static void forwardMouseEventToRoot(QMouseEvent* event) {
+-    xcb_ungrab_pointer(QX11Info::connection(), event->timestamp());
+-    // forward the event to the root window
+-    xcb_button_press_event_t xcb_event;
+-    uint32_t mask = 0;
+-    xcb_event.state = 0;
+-    switch(event->type()) {
+-    case QEvent::MouseButtonPress:
+-        xcb_event.response_type = XCB_BUTTON_PRESS;
+-        mask = XCB_EVENT_MASK_BUTTON_PRESS;
+-        break;
+-    case QEvent::MouseButtonRelease:
+-        xcb_event.response_type = XCB_BUTTON_RELEASE;
+-        mask = XCB_EVENT_MASK_BUTTON_RELEASE;
+-        break;
+-    default:
+-        return;
+-    }
+-
+-    // convert Qt button to XCB button
+-    switch(event->button()) {
+-    case Qt::LeftButton:
+-        xcb_event.detail = 1;
+-        xcb_event.state |= XCB_BUTTON_MASK_1;
+-        break;
+-    case Qt::MiddleButton:
+-        xcb_event.detail = 2;
+-        xcb_event.state |= XCB_BUTTON_MASK_2;
+-        break;
+-    case Qt::RightButton:
+-        xcb_event.detail = 3;
+-        xcb_event.state |= XCB_BUTTON_MASK_3;
+-        break;
+-    default:
+-        xcb_event.detail = 0;
+-    }
+-
+-    // convert Qt modifiers to XCB states
+-    if(event->modifiers() & Qt::ShiftModifier) {
+-        xcb_event.state |= XCB_MOD_MASK_SHIFT;
+-    }
+-    if(event->modifiers() & Qt::ControlModifier) {
+-        xcb_event.state |= XCB_MOD_MASK_SHIFT;
+-    }
+-    if(event->modifiers() & Qt::AltModifier) {
+-        xcb_event.state |= XCB_MOD_MASK_1;
+-    }
+-
+-    xcb_event.sequence = 0;
+-    xcb_event.time = event->timestamp();
+-
+-    WId root = QX11Info::appRootWindow(QX11Info::appScreen());
+-    xcb_event.event = root;
+-    xcb_event.root = root;
+-    xcb_event.child = 0;
+-
+-    xcb_event.root_x = event->globalX();
+-    xcb_event.root_y = event->globalY();
+-    xcb_event.event_x = event->x();
+-    xcb_event.event_y = event->y();
+-    xcb_event.same_screen = 1;
+-
+-    xcb_send_event(QX11Info::connection(), 0, root, mask, (char*)&xcb_event);
+-    xcb_flush(QX11Info::connection());
+-}
+-
+ bool DesktopWindow::event(QEvent* event) {
+     switch(event->type()) {
+     case QEvent::WinIdChange: {
+@@ -1503,19 +1432,6 @@ bool DesktopWindow::eventFilter(QObject* watched, QEvent* event) {
+     }
+     else if(watched == listView_->viewport()) {
+         switch(event->type()) {
+-        case QEvent::MouseButtonPress:
+-        case QEvent::MouseButtonRelease:
+-            if(showWmMenu_) {
+-                QMouseEvent* e = static_cast<QMouseEvent*>(event);
+-                // If we want to show the desktop menus provided by the window manager instead of ours,
+-                // we have to forward the mouse events we received to the root window.
+-                // check if the user click on blank area
+-                QModelIndex index = listView_->indexAt(e->pos());
+-                if(!index.isValid() && e->button() != Qt::LeftButton) {
+-                    forwardMouseEventToRoot(e);
+-                }
+-            }
+-            break;
+         case QEvent::Paint:
+             // NOTE: The drop indicator isn't drawn/updated automatically, perhaps,
+             // because we paint desktop ourself. So, we draw it here.
+diff --git a/pcmanfm/desktopwindow.h b/pcmanfm/desktopwindow.h
+index 477cf07..8a26bed 100644
+--- a/pcmanfm/desktopwindow.h
++++ b/pcmanfm/desktopwindow.h
+@@ -175,7 +175,6 @@ protected Q_SLOTS:
+     bool wallpaperRandomize_;
+     QPixmap wallpaperPixmap_;
+     Launcher fileLauncher_;
+-    bool showWmMenu_;
+     bool desktopHideItems_;
+ 
+     int screenNum_;
+diff --git a/pcmanfm/settings.cpp b/pcmanfm/settings.cpp
+index 88d4056..304505b 100644
+--- a/pcmanfm/settings.cpp
++++ b/pcmanfm/settings.cpp
+@@ -72,7 +72,6 @@ Settings::Settings():
+     desktopFgColor_(),
+     desktopShadowColor_(),
+     desktopIconSize_(48),
+-    showWmMenu_(false),
+     desktopShowHidden_(false),
+     desktopHideItems_(false),
+     desktopSortOrder_(Qt::AscendingOrder),
+@@ -233,7 +232,6 @@ bool Settings::loadFile(QString filePath) {
+     }
+     desktopIconSize_ = settings.value("DesktopIconSize", 48).toInt();
+     desktopShortcuts_ = settings.value("DesktopShortcuts").toStringList();
+-    showWmMenu_ = settings.value("ShowWmMenu", false).toBool();
+     desktopShowHidden_ = settings.value("ShowHidden", false).toBool();
+     desktopHideItems_ = settings.value("HideItems", false).toBool();
+ 
+@@ -369,7 +367,6 @@ bool Settings::saveFile(QString filePath) {
+     settings.setValue("Font", desktopFont_.toString());
+     settings.setValue("DesktopIconSize", desktopIconSize_);
+     settings.setValue("DesktopShortcuts", desktopShortcuts_);
+-    settings.setValue("ShowWmMenu", showWmMenu_);
+     settings.setValue("ShowHidden", desktopShowHidden_);
+     settings.setValue("HideItems", desktopHideItems_);
+     settings.setValue("SortOrder", sortOrderToString(desktopSortOrder_));
+diff --git a/pcmanfm/settings.h b/pcmanfm/settings.h
+index 11cea6c..3e10bb1 100644
+--- a/pcmanfm/settings.h
++++ b/pcmanfm/settings.h
+@@ -321,14 +321,6 @@ class Settings : public QObject {
+         desktopShortcuts_ = list;
+     }
+ 
+-    bool showWmMenu() const {
+-        return showWmMenu_;
+-    }
+-
+-    void setShowWmMenu(bool value) {
+-        showWmMenu_ = value;
+-    }
+-
+     bool desktopShowHidden() const {
+         return desktopShowHidden_;
+     }
+@@ -938,7 +930,6 @@ class Settings : public QObject {
+     QFont desktopFont_;
+     int desktopIconSize_;
+     QStringList desktopShortcuts_;
+-    bool showWmMenu_;
+ 
+     bool desktopShowHidden_;
+     bool desktopHideItems_;

@@ -68,7 +68,7 @@ src_prepare() {
 }
 
 src_configure() {
-	local docconf myconf
+	local myconf
 
 	myconf=(
 		--bindir="${EPREFIX}"/usr/bin
@@ -96,10 +96,11 @@ src_configure() {
 		$(use_with X x)
 		--disable-xml-docs
 		--disable-doxygen-docs
+		--disable-traditional-activation
 	)
 
 	einfo "Running configure in ${BUILD_DIR}"
-	ECONF_SOURCE="${S}" econf "${myconf[@]}" "${docconf[@]}"
+	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 
 	if use test; then
 		mkdir "${TBD}" || die
@@ -149,4 +150,5 @@ src_install() {
 
 	cp "${FILESDIR}"/dbus.conf "${ED}"/usr/lib/tmpfiles.d/
 	find "${ED}" -name "*.la" -delete || die
+	cp "${FILESDIR}"/dbus.service "${ED}"/usr/lib/systemd/system/dbus.service
 }

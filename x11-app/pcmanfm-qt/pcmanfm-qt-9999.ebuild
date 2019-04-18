@@ -40,6 +40,11 @@ DEPEND="${CDEPEND}
 	sys-devel/gettext
 	dev-util/pkgconfig"
 
+src_prepare() {
+	cmake-utils_src_prepare
+	git apply -R ${FILESDIR}/b6f1101fabc56862c7b7f5a0279348f215267e96.patch
+}
+
 pkg_postinst() {
 	xdg_desktop_database_update
 	xdg_mimeinfo_database_update

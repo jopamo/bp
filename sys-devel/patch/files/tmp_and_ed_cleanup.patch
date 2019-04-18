@@ -1,0 +1,299 @@
+diff -urN a/src/common.h b/src/common.h
+--- a/src/common.h	2018-02-03 06:41:49.000000000 -0600
++++ b/src/common.h	2019-04-18 17:02:08.105472806 -0500
+@@ -94,10 +94,12 @@
+ XTERN char const * TMPINNAME;
+ XTERN char const * TMPOUTNAME;
+ XTERN char const * TMPPATNAME;
++XTERN char const * TMPEDNAME;
+ 
+ XTERN bool TMPINNAME_needs_removal;
+ XTERN bool TMPOUTNAME_needs_removal;
+ XTERN bool TMPPATNAME_needs_removal;
++XTERN bool TMPEDNAME_needs_removal;
+ 
+ #ifdef DEBUGGING
+ XTERN int debug;
+diff -urN a/src/patch.c b/src/patch.c
+--- a/src/patch.c	2018-02-03 06:41:49.000000000 -0600
++++ b/src/patch.c	2019-04-18 17:02:26.337510412 -0500
+@@ -2,7 +2,7 @@
+ 
+ /* Copyright (C) 1984, 1985, 1986, 1987, 1988 Larry Wall
+ 
+-   Copyright (C) 1989-1993, 1997-1999, 2002-2003, 2006, 2009-2012 Free Software
++   Copyright (C) 1989-1993, 1997-1999, 2002-2003, 2006, 2009-2018 Free Software
+    Foundation, Inc.
+ 
+    This program is free software: you can redistribute it and/or modify
+@@ -236,6 +236,7 @@
+ 	    }
+ 	  remove_if_needed (TMPOUTNAME, &TMPOUTNAME_needs_removal);
+ 	}
++      remove_if_needed (TMPEDNAME, &TMPEDNAME_needs_removal);
+ 
+       if (! skip_rest_of_patch && ! file_type)
+ 	{
+@@ -1641,7 +1642,7 @@
+ 	if (size)
+ 	  {
+ 	    if ((! outstate->after_newline  &&  putc ('\n', fp) == EOF)
+-		|| ! fwrite (s, sizeof *s, size, fp))
++		|| fwrite (s, sizeof *s, size, fp) < size)
+ 	      write_fatal ();
+ 	    outstate->after_newline = s[size - 1] == '\n';
+ 	    outstate->zero_output = false;
+@@ -1999,6 +2000,7 @@
+   remove_if_needed (TMPINNAME, &TMPINNAME_needs_removal);
+   remove_if_needed (TMPOUTNAME, &TMPOUTNAME_needs_removal);
+   remove_if_needed (TMPPATNAME, &TMPPATNAME_needs_removal);
++  remove_if_needed (TMPEDNAME, &TMPEDNAME_needs_removal);
+   remove_if_needed (TMPREJNAME, &TMPREJNAME_needs_removal);
+   output_files (NULL);
+ }
+diff -urN a/src/pch.c b/src/pch.c
+--- a/src/pch.c	2018-02-03 06:41:49.000000000 -0600
++++ b/src/pch.c	2019-04-18 17:05:16.521861368 -0500
+@@ -33,6 +33,7 @@
+ # include <io.h>
+ #endif
+ #include <safe.h>
++#include <sys/wait.h>
+ 
+ #define INITHUNKMAX 125			/* initial dynamic allocation size */
+ 
+@@ -974,7 +975,8 @@
+     if ((pch_rename () || pch_copy ())
+ 	&& ! inname
+ 	&& ! ((i == OLD || i == NEW) &&
+-	      p_name[! reverse] &&
++	      p_name[reverse] && p_name[! reverse] &&
++	      name_is_valid (p_name[reverse]) &&
+ 	      name_is_valid (p_name[! reverse])))
+       {
+ 	say ("Cannot %s file without two valid file names\n", pch_rename () ? "rename" : "copy");
+@@ -2113,7 +2115,7 @@
+     }
+     if (p_efake >= 0) {			/* fix non-freeable ptr range */
+ 	if (p_efake <= i)
+-	    n = p_end - i + 1;
++	    n = p_end - p_ptrn_lines;
+ 	else
+ 	    n = -i;
+ 	p_efake += n;
+@@ -2276,8 +2278,11 @@
+ bool
+ pch_write_line (lin line, FILE *file)
+ {
+-  bool after_newline = (p_len[line] > 0) && (p_line[line][p_len[line] - 1] == '\n');
+-  if (! fwrite (p_line[line], sizeof (*p_line[line]), p_len[line], file))
++  bool after_newline =
++    (p_len[line] > 0) && (p_line[line][p_len[line] - 1] == '\n');
++
++  if (fwrite (p_line[line], sizeof (*p_line[line]), p_len[line], file)
++      < p_len[line])
+     write_fatal ();
+   return after_newline;
+ }
+@@ -2388,22 +2393,28 @@
+     static char const editor_program[] = EDITOR_PROGRAM;
+ 
+     file_offset beginning_of_this_line;
+-    FILE *pipefp = 0;
+     size_t chars_read;
++    FILE *tmpfp = 0;
++    int tmpfd = -1; /* placate gcc's -Wmaybe-uninitialized */
++    pid_t pid;
++
++    if (! dry_run && ! skip_rest_of_patch)
++      {
++	/* Write ed script to a temporary file.  This causes ed to abort on
++	   invalid commands such as when line numbers or ranges exceed the
++	   number of available lines.  When ed reads from a pipe, it rejects
++	   invalid commands and treats the next line as a new command, which
++	   can lead to arbitrary command execution.  */
++
++	tmpfd = make_tempfile (&TMPEDNAME, 'e', NULL, O_RDWR | O_BINARY, 0);
++	if (tmpfd == -1)
++	  pfatal ("Can't create temporary file %s", quotearg (TMPEDNAME));
++	TMPEDNAME_needs_removal = true;
++	tmpfp = fdopen (tmpfd, "w+b");
++	if (! tmpfp)
++	  pfatal ("Can't open stream for file %s", quotearg (TMPEDNAME));
++      }
+ 
+-    if (! dry_run && ! skip_rest_of_patch) {
+-	int exclusive = *outname_needs_removal ? 0 : O_EXCL;
+-	assert (! inerrno);
+-	*outname_needs_removal = true;
+-	copy_file (inname, outname, 0, exclusive, instat.st_mode, true);
+-	sprintf (buf, "%s %s%s", editor_program,
+-		 verbosity == VERBOSE ? "" : "- ",
+-		 outname);
+-	fflush (stdout);
+-	pipefp = popen(buf, binary_transput ? "wb" : "w");
+-	if (!pipefp)
+-	  pfatal ("Can't open pipe to %s", quotearg (buf));
+-    }
+     for (;;) {
+ 	char ed_command_letter;
+ 	beginning_of_this_line = file_tell (pfp);
+@@ -2414,14 +2425,15 @@
+ 	}
+ 	ed_command_letter = get_ed_command_letter (buf);
+ 	if (ed_command_letter) {
+-	    if (pipefp)
+-		if (! fwrite (buf, sizeof *buf, chars_read, pipefp))
++	    if (tmpfp)
++		if (fwrite (buf, sizeof *buf, chars_read, tmpfp) < chars_read)
+ 		    write_fatal ();
+ 	    if (ed_command_letter != 'd' && ed_command_letter != 's') {
+ 	        p_pass_comments_through = true;
+ 		while ((chars_read = get_line ()) != 0) {
+-		    if (pipefp)
+-			if (! fwrite (buf, sizeof *buf, chars_read, pipefp))
++		    if (tmpfp)
++			if (fwrite (buf, sizeof *buf, chars_read, tmpfp)
++			    < chars_read)
+ 			    write_fatal ();
+ 		    if (chars_read == 2  &&  strEQ (buf, ".\n"))
+ 			break;
+@@ -2434,13 +2446,46 @@
+ 	    break;
+ 	}
+     }
+-    if (!pipefp)
++    if (!tmpfp)
+       return;
+-    if (fwrite ("w\nq\n", sizeof (char), (size_t) 4, pipefp) == 0
+-	|| fflush (pipefp) != 0)
++    if (fwrite ("w\nq\n", sizeof (char), (size_t) 4, tmpfp) < (size_t) 4
++	|| fflush (tmpfp) != 0)
+       write_fatal ();
+-    if (pclose (pipefp) != 0)
+-      fatal ("%s FAILED", editor_program);
++
++    if (lseek (tmpfd, 0, SEEK_SET) == -1)
++      pfatal ("Can't rewind to the beginning of file %s", quotearg (TMPEDNAME));
++
++    if (! dry_run && ! skip_rest_of_patch) {
++	int exclusive = *outname_needs_removal ? 0 : O_EXCL;
++	*outname_needs_removal = true;
++	if (inerrno != ENOENT)
++	  {
++	    *outname_needs_removal = true;
++	    copy_file (inname, outname, 0, exclusive, instat.st_mode, true);
++	  }
++	fflush (stdout);
++
++	pid = fork();
++	if (pid == -1)
++	  pfatal ("Can't fork");
++	else if (pid == 0)
++	  {
++	    dup2 (tmpfd, 0);
++	    assert (outname[0] != '!' && outname[0] != '-');
++	    execlp (editor_program, editor_program, "-", outname, (char  *) NULL);
++	    _exit (2);
++	  }
++	else
++	  {
++	    int wstatus;
++	    if (waitpid (pid, &wstatus, 0) == -1
++	        || ! WIFEXITED (wstatus)
++		|| WEXITSTATUS (wstatus) != 0)
++	      fatal ("%s FAILED", editor_program);
++	  }
++    }
++
++    fclose (tmpfp);
+ 
+     if (ofp)
+       {
+diff -urN a/tests/ed-style b/tests/ed-style
+--- a/tests/ed-style	1969-12-31 18:00:00.000000000 -0600
++++ b/tests/ed-style	2019-04-18 17:00:11.953233323 -0500
+@@ -0,0 +1,72 @@
++# Copyright (C) 2018 Free Software Foundation, Inc.
++#
++# Copying and distribution of this file, with or without modification,
++# in any medium, are permitted without royalty provided the copyright
++# notice and this notice are preserved.
++
++. $srcdir/test-lib.sh
++
++require cat
++use_local_patch
++use_tmpdir
++
++# ==============================================================
++
++cat > ed1.diff <<EOF
++0a
++foo
++.
++EOF
++
++check 'patch -e foo -i ed1.diff' <<EOF
++EOF
++
++check 'cat foo' <<EOF
++foo
++EOF
++
++cat > ed2.diff <<EOF
++1337a
++r !echo bar
++,p
++EOF
++
++check 'patch -e foo -i ed2.diff 2> /dev/null || echo "Status: $?"' <<EOF
++?
++Status: 2
++EOF
++
++check 'cat foo' <<EOF
++foo
++EOF
++
++# Test the case where one ed-style patch modifies several files
++
++cat > ed3.diff <<EOF
++--- foo
+++++ foo
++1c
++bar
++.
++--- baz
+++++ baz
++0a
++baz
++.
++EOF
++
++# Apparently we can't create a file with such a patch, while it works fine
++# when the file name is provided on the command line
++cat > baz <<EOF
++EOF
++
++check 'patch -e -i ed3.diff' <<EOF
++EOF
++
++check 'cat foo' <<EOF
++bar
++EOF
++
++check 'cat baz' <<EOF
++baz
++EOF
+diff -urN a/tests/Makefile.am b/tests/Makefile.am
+--- a/tests/Makefile.am	2018-02-03 06:41:49.000000000 -0600
++++ b/tests/Makefile.am	2019-04-18 17:00:11.921233260 -0500
+@@ -32,6 +32,7 @@
+ 	crlf-handling \
+ 	dash-o-append \
+ 	deep-directories \
++	ed-style \
+ 	empty-files \
+ 	false-match \
+ 	fifo \

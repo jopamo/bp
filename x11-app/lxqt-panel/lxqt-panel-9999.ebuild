@@ -16,9 +16,9 @@ fi
 
 LICENSE="LGPL-2.1+"
 SLOT="0"
-IUSE="+alsa +clock colorpicker cpuload +desktopswitch dom +kbindicator +mainmenu
-	networkmonitor pulseaudio +quicklaunch sensors +showdesktop
-	statusnotifier sysstat +taskbar +tray +volume"
+IUSE="alsa +clock colorpicker cpuload desktopswitch dom kbindicator
+	mainmenu networkmonitor pulseaudio quicklaunch sensors showdesktop
+	statusnotifier sysstat +taskbar +tray volume"
 REQUIRED_USE="volume? ( || ( alsa pulseaudio ) )"
 
 CDEPEND="

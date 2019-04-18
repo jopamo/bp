@@ -5,7 +5,6 @@
 *app-media/pavucontrol-qt
 *fonts/fira-code
 *gui-icontheme/breeze-icons
-*gui-lib/lxqt-panel
 *gui-lib/lxqt-themes
 *sys-app/keepassxc
 *x11-app/compton
@@ -13,6 +12,7 @@
 *x11-app/firefox-bin
 *x11-app/lxqt-archiver
 *x11-app/lxqt-config
+*x11-app/lxqt-panel
 *x11-app/obconf-qt
 *x11-app/openbox
 *x11-app/pcmanfm-qt

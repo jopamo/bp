@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=4
+EAPI=6
 
 inherit flag-o-matic eutils
 
@@ -13,16 +13,14 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="static test xattr"
 
-RDEPEND="xattr? ( sys-app/attr )"
-DEPEND="${RDEPEND}
-	test? ( sys-app/ed )"
+DEPEND="xattr? ( sys-app/attr )
+		test? ( sys-app/ed )"
+
+PATCHES=( 	${FILESDIR}/tmp_and_ed_cleanup.patch
+		)
 
 src_configure() {
 	use static && append-ldflags -static
 
-	# Do not let $ED mess up the search for `ed` 470210.
-	ac_cv_path_ED=$(type -P ed) \
-	econf \
-		$(use_enable xattr) \
-		--program-prefix="$(use userland_BSD && echo g)"
+	econf $(use_enable xattr)
 }

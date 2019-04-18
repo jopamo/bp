@@ -55,7 +55,7 @@ RDEPEND="${CDEPEND}
 	>=gui-lib/lxmenu-data-0.1.2
 "
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs -Wl,-z,relro
 
 src_configure() {
 	local mycmakeargs=(

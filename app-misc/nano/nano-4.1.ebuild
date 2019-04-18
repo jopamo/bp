@@ -8,9 +8,7 @@ if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI="git://git.sv.gnu.org/nano.git"
 	inherit git-r3 autotools
 else
-	#MY_P=${PN}-${PV/_}
-	#SRC_URI="https://www.nano-editor.org/dist/v${PV:0:3}/${MY_P}.tar.gz"
-	SRC_URI="https://www.nano-editor.org/dist/v3/${P}.tar.xz"
+	SRC_URI="https://www.nano-editor.org/dist/v4/${P}.tar.xz"
 	KEYWORDS="amd64 arm64"
 fi
 

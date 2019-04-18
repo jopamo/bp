@@ -607,7 +607,7 @@ qt5_base_configure() {
 		# let portage handle stripping
 		-no-strip
 
-		# precompiled headers can cause problems on hardened, so turn them off
+		# precompiled headers can cause problems
 		-no-pch
 
 		# link-time code generation is not something we want to enable by default

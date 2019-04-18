@@ -19,7 +19,7 @@ RELEASE_VER=${PV}
 
 GCC_BOOTSTRAP_VER="4.7.3-r1"
 
-IUSE="audit caps debug doc gd hardened nscd systemtap profile suid vanilla headers-only"
+IUSE="audit caps debug doc gd nscd systemtap profile suid vanilla headers-only"
 
 
 export CBUILD=${CBUILD:-${CHOST}}

@@ -11,7 +11,7 @@ SRC_URI="https://github.com/jemalloc/jemalloc/releases/download/${PV}/${P}.tar.b
 LICENSE="BSD"
 SLOT="0/2"
 KEYWORDS="amd64 arm64"
-IUSE="debug hardened +hugepages lazy-lock static-libs stats xmalloc"
+IUSE="debug +hugepages lazy-lock static-libs stats xmalloc"
 
 QA_CONFIGURE_OPTIONS="--enable-static --disable-static --enable-shared --disable-shared"
 

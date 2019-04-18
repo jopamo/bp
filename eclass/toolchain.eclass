@@ -89,7 +89,7 @@ IUSE_DEF=( nptl )
 if [[ ${PN} != "kgcc64" && ${PN} != gcc-* ]] ; then
 	IUSE+=" debug"
 	IUSE_DEF+=( cxx fortran )
-	tc_version_is_at_least 3 && IUSE+=" doc gcj awt hardened objc"
+	tc_version_is_at_least 3 && IUSE+=" doc gcj awt objc"
 	tc_version_is_at_least 3.3 && IUSE+=" pgo"
 	tc_version_is_at_least 4.0 && IUSE+=" objc-gc"
 	tc_version_is_at_least 4.1 && IUSE+=" objc++"
@@ -790,13 +790,6 @@ gcc_do_make() {
 		else
 			GCC_MAKE_TARGET=${GCC_MAKE_TARGET-bootstrap-lean}
 		fi
-	fi
-
-	# Older versions of GCC could not do profiledbootstrap in parallel due to
-	# collisions with profiling info.
-	# boundschecking also seems to introduce parallel build issues.
-	if [[ ${GCC_MAKE_TARGET} == "profiledbootstrap" ]] || use_if_iuse boundschecking ; then
-		! tc_version_is_at_least 4.6 && export MAKEOPTS="${MAKEOPTS} -j1"
 	fi
 
 	if [[ ${GCC_MAKE_TARGET} == "all" ]] ; then

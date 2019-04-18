@@ -56,28 +56,17 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Work around PPC{,64} compilation bug where bool is already defined
-	sed '/#ifndef __cplusplus/a #undef bool' -i src/include/c.h || die
-
 	# Set proper run directory
 	sed "s|\(PGSOCKET_DIR\s\+\)\"/tmp\"|\1\"${EPREFIX}/run/postgresql\"|" \
 		-i src/include/pg_config_manual.h || die
 
-	# Rely on $PATH being in the proper order so that the correct
-	# install program is used for modules utilizing PGXS in both
-	# hardened and non-hardened environments. (Bug #528786)
+	# Rely on $PATH being in the proper order
 	sed 's/@install_bin@/install -c/' -i src/Makefile.global.in || die
 
 	eapply_user
 }
 
 src_configure() {
-	case ${CHOST} in
-		*-darwin*|*-solaris*)
-			use nls && append-libs intl
-			;;
-	esac
-
 	export LDFLAGS_SL="${LDFLAGS}"
 	export LDFLAGS_EX="${LDFLAGS}"
 

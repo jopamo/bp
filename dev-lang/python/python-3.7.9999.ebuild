@@ -43,19 +43,6 @@ src_prepare() {
 	rm -fr Modules/zlib
 
 	default
-
-	sed -i -e "s:@@GENTOO_LIBDIR@@:lib64:g" \
-		Lib/distutils/command/install.py \
-		Lib/distutils/sysconfig.py \
-		Lib/site.py \
-		Lib/sysconfig.py \
-		Lib/test/test_site.py \
-		Makefile.pre.in \
-		Modules/Setup.dist \
-		Modules/getpath.c \
-		configure.ac \
-		setup.py || die "sed failed to replace @@GENTOO_LIBDIR@@"
-
 	eautoreconf
 }
 

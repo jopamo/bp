@@ -132,6 +132,7 @@ REQUIRED_USE="
 "
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+replace-flags -Ofast -O2
 
 src_prepare() {
 	default

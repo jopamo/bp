@@ -41,4 +41,5 @@ src_install() {
 	touch doc/{jemalloc.3,jemalloc.html}
 	emake DESTDIR="${D}" install
 	use static-libs || find "${ED}" -name '*.a' -delete
+	rm -rf ${ED}/usr/share/doc
 }

@@ -2,9 +2,11 @@
 
 EAPI="6"
 
+inherit git-r3
+
 DESCRIPTION="Provides files needed for LXDE application menus"
 HOMEPAGE="http://lxde.org/"
-SRC_URI="mirror://sourceforge/lxde/${P}.tar.xz"
+EGIT_REPO_URI="https://github.com/lxde/lxmenu-data.git"
 
 LICENSE="GPL-2"
 SLOT="0"

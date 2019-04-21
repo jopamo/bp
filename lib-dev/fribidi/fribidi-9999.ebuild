@@ -2,21 +2,18 @@
 
 EAPI=6
 
-inherit meson
+inherit meson git-r3
 
 DESCRIPTION="A free implementation of the unicode bidirectional algorithm"
 HOMEPAGE="https://fribidi.org/"
-SRC_URI="https://github.com/fribidi/fribidi/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+EGIT_REPO_URI="https://github.com/fribidi/fribidi.git"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND=">=lib-dev/glib-2.34.3:2"
-DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
-
-PATCHES=( ${FILESDIR}/46f52d588ab5382a10b68605359e14cc775c86fd.patch )
+DEPEND="lib-dev/glib
+		dev-util/pkgconfig"
 
 src_configure() {
 	local emesonargs=(

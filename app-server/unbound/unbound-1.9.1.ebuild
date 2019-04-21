@@ -2,7 +2,6 @@
 
 EAPI=5
 
-PYTHON_COMPAT=( python3_7 )
 
 inherit eutils flag-o-matic python-single-r1 systemd user autotools
 

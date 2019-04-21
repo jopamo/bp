@@ -2,7 +2,6 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit git-r3 autotools linux-info flag-o-matic python-any-r1 systemd virtualx user
 

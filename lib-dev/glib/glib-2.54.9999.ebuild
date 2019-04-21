@@ -2,7 +2,6 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit autotools epunt-cxx flag-o-matic libtool linux-info \
 	python-r1 toolchain-funcs versionator virtualx git-r3

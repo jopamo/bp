@@ -2,7 +2,6 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{7,8} )
 
 inherit flag-o-matic linux-info meson ninja-utils python-any-r1 systemd toolchain-funcs udev user git-r3
 

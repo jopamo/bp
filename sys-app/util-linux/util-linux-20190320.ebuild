@@ -2,7 +2,6 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit toolchain-funcs libtool flag-o-matic  \
 	pam python-single-r1 systemd autotools

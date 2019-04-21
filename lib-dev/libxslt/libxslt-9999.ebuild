@@ -2,7 +2,6 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_7 )
 
 inherit autotools python-r1 toolchain-funcs git-r3
 

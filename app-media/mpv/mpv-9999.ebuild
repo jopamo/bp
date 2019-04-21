@@ -3,7 +3,6 @@
 EAPI=6
 
 WAF_PV=2.0.14
-PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit toolchain-funcs versionator waf-utils xdg-utils python-r1
 

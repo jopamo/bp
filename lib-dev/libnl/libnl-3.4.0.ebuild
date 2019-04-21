@@ -2,7 +2,6 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{6,7,8} )
 
 DISTUTILS_OPTIONAL=1
 inherit distutils-r1 eutils libtool

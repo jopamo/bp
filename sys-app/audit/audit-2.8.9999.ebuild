@@ -2,7 +2,6 @@
 
 EAPI="6"
 
-PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit autotools toolchain-funcs preserve-libs python-r1 linux-info systemd git-r3 flag-o-matic
 

@@ -2,7 +2,6 @@
 
 EAPI=5
 
-PYTHON_COMPAT=( python3_7 )
 
 inherit font python-any-r1
 

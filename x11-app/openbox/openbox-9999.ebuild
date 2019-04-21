@@ -2,7 +2,6 @@
 
 EAPI="6"
 
-PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit autotools python-r1 eutils git-r3
 

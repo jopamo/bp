@@ -19,7 +19,7 @@ RELEASE_VER=${PV}
 
 GCC_BOOTSTRAP_VER="4.7.3-r1"
 
-IUSE="audit caps debug doc gd nscd systemtap profile suid vanilla headers-only"
+IUSE="audit caps debug doc gd nscd systemtap profile suid headers-only"
 
 
 export CBUILD=${CBUILD:-${CHOST}}
@@ -65,8 +65,7 @@ else
 		>=sys-devel/gcc-4.9
 		sys-kernel/stable-sources
 	"
-	RDEPEND+=" vanilla? ( !lib-sys/timezone-data )"
-	PDEPEND+=" !vanilla? ( lib-sys/timezone-data )"
+	PDEPEND+="lib-sys/tzdb"
 fi
 
 pkg_pretend() {
@@ -250,11 +249,9 @@ glibc_do_configure() {
 		--infodir="${EPREFIX}"/usr/share/info
 		$(in_iuse systemtap && use_enable systemtap)
 		$(in_iuse nscd && use_enable nscd)
+		--enable-timezone-tools
 		${EXTRA_ECONF}
 	)
-
-	# We rely on lib-sys/timezone-data for timezone tools normally.
-	myconf+=( $(use_enable vanilla timezone-tools) )
 
 	ac_cv_lib_audit_audit_log_user_avc_message=$(in_iuse audit && usex audit || echo no)
 	ac_cv_lib_cap_cap_init=$(in_iuse caps && usex caps || echo no)

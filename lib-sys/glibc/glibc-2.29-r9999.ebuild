@@ -249,7 +249,7 @@ glibc_do_configure() {
 		--infodir="${EPREFIX}"/usr/share/info
 		$(in_iuse systemtap && use_enable systemtap)
 		$(in_iuse nscd && use_enable nscd)
-		--enable-timezone-tools
+		--disable-timezone-tools
 		${EXTRA_ECONF}
 	)
 

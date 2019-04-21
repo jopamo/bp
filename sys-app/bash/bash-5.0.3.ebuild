@@ -6,10 +6,10 @@ inherit flag-o-matic toolchain-funcs prefix
 
 DESCRIPTION="The standard GNU Bourne again shell"
 HOMEPAGE="http://tiswww.case.edu/php/chet/bash/bashtop.html"
-SRC_URI="http://ftp.gnu.org/gnu/bash/bash-5.0.tar.gz
-		http://ftp.gnu.org/gnu/bash/bash-5.0-patches/bash50-001
-		http://ftp.gnu.org/gnu/bash/bash-5.0-patches/bash50-002
-		http://ftp.gnu.org/gnu/bash/bash-5.0-patches/bash50-003"
+SRC_URI="mirror://gnu/${PN}/bash-5.0.tar.gz
+		mirror://gnu/${PN}/bash-5.0-patches/bash50-001
+		mirror://gnu/${PN}/bash-5.0-patches/bash50-002
+		mirror://gnu/${PN}/bash-5.0-patches/bash50-003"
 
 S=${WORKDIR}/${PN}-5.0
 

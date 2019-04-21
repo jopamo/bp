@@ -2,7 +2,6 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit flag-o-matic python-any-r1 toolchain-funcs
 

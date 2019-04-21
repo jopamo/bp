@@ -2,7 +2,6 @@
 
 EAPI="6"
 
-PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit eutils flag-o-matic linux-info pam prefix python-single-r1 \
 		systemd user versionator git-r3

@@ -2,7 +2,6 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_7 )
 
 inherit python-single-r1 toolchain-funcs versionator autotools flag-o-matic
 

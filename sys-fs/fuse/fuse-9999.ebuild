@@ -2,7 +2,6 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_7 )
 
 inherit meson flag-o-matic python-single-r1 git-r3
 

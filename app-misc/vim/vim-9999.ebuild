@@ -4,7 +4,6 @@ EAPI=6
 
 VIM_VERSION="8.0"
 
-PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit vim-doc flag-o-matic versionator python-single-r1 git-r3
 

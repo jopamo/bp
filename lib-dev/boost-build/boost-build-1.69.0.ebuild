@@ -4,7 +4,6 @@ EAPI=6
 
 RESTRICT="test"
 
-PYTHON_COMPAT=( python3_7 )
 
 inherit eutils flag-o-matic python-single-r1 toolchain-funcs versionator
 

@@ -2,8 +2,6 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_7 )
-
 inherit distutils-r1 git-r3
 
 DESCRIPTION="Fork of Portage focused on cleaning up and useful features"

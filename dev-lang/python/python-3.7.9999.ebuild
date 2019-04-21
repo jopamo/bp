@@ -3,7 +3,7 @@
 EAPI="6"
 WANT_LIBTOOL="none"
 
-inherit autotools flag-o-matic python-utils-r1 toolchain-funcs git-r3
+inherit flag-o-matic python-utils-r1 toolchain-funcs git-r3 eutils
 
 DESCRIPTION="An interpreted, interactive, object-oriented programming language"
 HOMEPAGE="https://www.python.org/"
@@ -13,28 +13,27 @@ EGIT_BRANCH="3.7"
 LICENSE="PSF-2"
 SLOT="3.7"
 KEYWORDS="amd64 arm64"
-IUSE="build examples ipv6"
+IUSE="ipv6 +embed valgrind"
 RESTRICT="test"
 
-RDEPEND="app-compression/bzip2:0=
-	app-compression/xz-utils:0=
-	>=lib-sys/zlib-1.1.3:0=
-	lib-dev/libffi
-	sys-devel/gettext
-	lib-net/libnsl
-	>=lib-sys/ncurses-5.2:0=
-	>=lib-sys/readline-4.1:0=
-	>=lib-sys/sqlite-3.3.8:3=
-	lib-dev/openssl:0=
-	>=lib-dev/expat-2.1:0=
-"
-
-DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+DEPEND="!embed? ( lib-sys/sqlite )
+		app-compression/bzip2:0=
+		app-compression/xz-utils:0=
+		>=lib-sys/zlib-1.1.3:0=
+		lib-dev/libffi
+		sys-devel/gettext
+		lib-sys/gdbm
+		lib-net/libnsl
+		>=lib-sys/ncurses-5.2:0=
+		>=lib-sys/readline-4.1:0=
+		lib-dev/openssl:0=
+		dev-util/pkgconfig
 "
 PDEPEND=">=app-eselect/eselect-python-20140125-r1"
 
 PYVER=${SLOT%/*}
+
+replace-flags -Ofast -O2
 
 src_prepare() {
 	# Ensure that internal copies of expat, libffi and zlib are not used.
@@ -42,32 +41,26 @@ src_prepare() {
 	rm -fr Modules/_ctypes/libffi*
 	rm -fr Modules/zlib
 
+	use embed && epatch ${FILESDIR}/shrink_python.patch
+
 	default
-	eautoreconf
 }
 
 src_configure() {
-	local disable
-
-	disable+=" gdbm"
-	disable+=" _tkinter"
-	export PYTHON_DISABLE_MODULES="${disable}"
-
-	if [[ -n "${PYTHON_DISABLE_MODULES}" ]]; then
-		einfo "Disabled modules: ${PYTHON_DISABLE_MODULES}"
-	fi
+	export PYTHON_DISABLE_MODULES="gdbm tkinter _codecs_{hk,tw,cn,jp,kr} ossaudiodev"
 
 	tc-export CXX
 
 	local myeconfargs=(
 		--enable-shared
 		$(use_enable ipv6)
+		$(use_with valgrind)
+		$(usex embed --disable-loadable-sqlite-extensions --enable-loadable-sqlite-extensions)
 		--infodir='${prefix}/share/info'
 		--mandir='${prefix}/share/man'
 		--with-computed-gotos
-		--with-dbmliborder="${dbmliborder}"
+		--with-dbmliborder="gdbm"
 		--with-libc=
-		--enable-loadable-sqlite-extensions
 		--without-ensurepip
 		--with-system-expat
 		--with-system-ffi

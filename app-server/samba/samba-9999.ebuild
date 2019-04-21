@@ -51,7 +51,7 @@ CDEPEND="
 DEPEND="${CDEPEND}
 	app-text/docbook-xsl-stylesheets
 	lib-dev/libxslt
-	=dev-lang/python-2.7.9999
+	dev-lang/python
 	lib-net/rpcsvc-proto
 	lib-net/libtirpc"
 RDEPEND="${CDEPEND}

@@ -2,8 +2,6 @@
 
 EAPI=7
 
-inherit eutils
-
 DESCRIPTION="A lightweight and fast battery icon that sits in your system tray"
 HOMEPAGE="https://github.com/ColinJones/cbatticon"
 SRC_URI="https://github.com/ColinJones/cbatticon/archive/${PV}.tar.gz -> ${P}.tar.gz"
@@ -14,7 +12,6 @@ KEYWORDS="amd64 arm64"
 
 src_prepare() {
 	default
-
 	strip-linguas -i .
 }
 
@@ -32,6 +29,5 @@ src_install() {
 		LANGUAGES="${LINGUAS}" \
 		V=1 VERSION="${PF}" \
 		install
-
-	rm -rf "${ED}"/usr/share/doc/
+	default
 }

@@ -1,9 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-
-inherit flag-o-matic eutils python-single-r1 git-r3
+inherit flag-o-matic python-single-r1 git-r3
 
 DESCRIPTION="GNU debugger"
 HOMEPAGE="https://sourceware.org/gdb/"

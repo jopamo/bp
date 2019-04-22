@@ -1,18 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: eutils.eclass
-# @MAINTAINER:
-# base-system@gentoo.org
-# @BLURB: many extra (but common) functions that are used in ebuilds
-# @DESCRIPTION:
-# The eutils eclass contains a suite of functions that complement
-# the ones that ebuild.sh already contain.  The idea is that the functions
-# are not required in all ebuilds but enough utilize them to have a common
-# home rather than having multiple ebuilds implementing the same thing.
-#
-# Due to the nature of this eclass, some functions may have maintainers
-# different from the overall eclass!
-
 if [[ -z ${_EUTILS_ECLASS} ]]; then
 _EUTILS_ECLASS=1
 
@@ -81,55 +68,6 @@ emktemp() {
 edos2unix() {
 	[[ $# -eq 0 ]] && return 0
 	sed -i 's/\r$//' -- "$@" || die
-}
-
-# @FUNCTION: strip-linguas
-# @USAGE: [<allow LINGUAS>|<-i|-u> <directories of .po files>]
-# @DESCRIPTION:
-# Make sure that LINGUAS only contains languages that
-# a package can support.  The first form allows you to
-# specify a list of LINGUAS.  The -i builds a list of po
-# files found in all the directories and uses the
-# intersection of the lists.  The -u builds a list of po
-# files found in all the directories and uses the union
-# of the lists.
-strip-linguas() {
-	local ls newls nols
-	if [[ $1 == "-i" ]] || [[ $1 == "-u" ]] ; then
-		local op=$1; shift
-		ls=$(find "$1" -name '*.po' -exec basename {} .po ';'); shift
-		local d f
-		for d in "$@" ; do
-			if [[ ${op} == "-u" ]] ; then
-				newls=${ls}
-			else
-				newls=""
-			fi
-			for f in $(find "$d" -name '*.po' -exec basename {} .po ';') ; do
-				if [[ ${op} == "-i" ]] ; then
-					has ${f} ${ls} && newls="${newls} ${f}"
-				else
-					has ${f} ${ls} || newls="${newls} ${f}"
-				fi
-			done
-			ls=${newls}
-		done
-	else
-		ls="$@"
-	fi
-
-	nols=""
-	newls=""
-	for f in ${LINGUAS} ; do
-		if has ${f} ${ls} ; then
-			newls="${newls} ${f}"
-		else
-			nols="${nols} ${f}"
-		fi
-	done
-	[[ -n ${nols} ]] \
-		&& einfo "Sorry, but ${PN} does not support the LINGUAS:" ${nols}
-	export LINGUAS=${newls:1}
 }
 
 # @FUNCTION: make_wrapper
@@ -310,87 +248,6 @@ epause() {
 
 ;;
 esac
-
-case ${EAPI:-0} in
-0|1|2|3|4)
-
-# @FUNCTION: usex
-# @USAGE: <USE flag> [true output] [false output] [true suffix] [false suffix]
-# @DESCRIPTION:
-# Proxy to declare usex for package managers or EAPIs that do not provide it
-# and use the package manager implementation when available (i.e. EAPI >= 5).
-# If USE flag is set, echo [true output][true suffix] (defaults to "yes"),
-# otherwise echo [false output][false suffix] (defaults to "no").
-usex() { use "$1" && echo "${2-yes}$4" || echo "${3-no}$5" ; } #382963
-
-;;
-esac
-
-case ${EAPI:-0} in
-0|1|2|3|4|5)
-
-# @FUNCTION: einstalldocs
-# @DESCRIPTION:
-# Install documentation using DOCS and HTML_DOCS, in EAPIs that do not
-# provide this function.  When available (i.e., in EAPI 6 or later),
-# the package manager implementation should be used instead.
-#
-# If DOCS is declared and non-empty, all files listed in it are
-# installed.  The files must exist, otherwise the function will fail.
-# In EAPI 4 and 5, DOCS may specify directories as well; in earlier
-# EAPIs using directories is unsupported.
-#
-# If DOCS is not declared, the files matching patterns given
-# in the default EAPI implementation of src_install will be installed.
-# If this is undesired, DOCS can be set to empty value to prevent any
-# documentation from being installed.
-#
-# If HTML_DOCS is declared and non-empty, all files and/or directories
-# listed in it are installed as HTML docs (using dohtml).
-#
-# Both DOCS and HTML_DOCS can either be an array or a whitespace-
-# separated list. Whenever directories are allowed, '<directory>/.' may
-# be specified in order to install all files within the directory
-# without creating a sub-directory in docdir.
-#
-# Passing additional options to dodoc and dohtml is not supported.
-# If you needed such a thing, you need to call those helpers explicitly.
-einstalldocs() {
-	debug-print-function ${FUNCNAME} "${@}"
-
-	local dodoc_opts=-r
-	has ${EAPI} 0 1 2 3 && dodoc_opts=
-
-	if ! declare -p DOCS &>/dev/null ; then
-		local d
-		for d in README* ChangeLog AUTHORS NEWS TODO CHANGES \
-				THANKS BUGS FAQ CREDITS CHANGELOG ; do
-			if [[ -s ${d} ]] ; then
-				dodoc "${d}" || die
-			fi
-		done
-	elif [[ $(declare -p DOCS) == "declare -a"* ]] ; then
-		if [[ ${DOCS[@]} ]] ; then
-			dodoc ${dodoc_opts} "${DOCS[@]}" || die
-		fi
-	else
-		if [[ ${DOCS} ]] ; then
-			dodoc ${dodoc_opts} ${DOCS} || die
-		fi
-	fi
-
-	if [[ $(declare -p HTML_DOCS 2>/dev/null) == "declare -a"* ]] ; then
-		if [[ ${HTML_DOCS[@]} ]] ; then
-			dohtml -r "${HTML_DOCS[@]}" || die
-		fi
-	else
-		if [[ ${HTML_DOCS} ]] ; then
-			dohtml -r ${HTML_DOCS} || die
-		fi
-	fi
-
-	return 0
-}
 
 # @FUNCTION: in_iuse
 # @USAGE: <flag>

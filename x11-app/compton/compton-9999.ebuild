@@ -2,7 +2,6 @@
 
 EAPI=6
 
-
 inherit meson git-r3 python-r1 flag-o-matic
 
 DESCRIPTION="A compositor for X, and a fork of xcompmgr-dana"

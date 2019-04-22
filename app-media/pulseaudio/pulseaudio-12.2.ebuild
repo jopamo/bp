@@ -1,7 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit autotools eutils flag-o-matic gnome2-utils linux-info systemd user versionator udev
+
+inherit autotools eutils flag-o-matic gnome2-utils linux-info systemd user versionator
 
 DESCRIPTION="A networked sound server with an advanced plugin system"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/PulseAudio/"

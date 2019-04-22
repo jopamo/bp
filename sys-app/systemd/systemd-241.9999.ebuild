@@ -3,7 +3,7 @@
 EAPI=6
 
 
-inherit flag-o-matic linux-info meson ninja-utils python-any-r1 systemd toolchain-funcs udev user git-r3
+inherit flag-o-matic linux-info meson ninja-utils python-any-r1 systemd toolchain-funcs user git-r3
 
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"

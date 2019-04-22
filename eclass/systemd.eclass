@@ -467,3 +467,66 @@ systemd_reenable() {
 		fi
 	done
 }
+
+# @FUNCTION: _udev_get_udevdir
+# @INTERNAL
+# @DESCRIPTION:
+# Get unprefixed udevdir.
+_udev_get_udevdir() {
+	if $($(tc-getPKG_CONFIG) --exists udev); then
+		echo "$($(tc-getPKG_CONFIG) --variable=udevdir udev)"
+	else
+		echo /lib/udev
+	fi
+}
+
+# @FUNCTION: udev_get_udevdir
+# @DESCRIPTION:
+# Use the short version $(get_udevdir) instead!
+udev_get_udevdir() {
+	debug-print-function ${FUNCNAME} "${@}"
+
+	eerror "This ebuild should be using the get_udevdir() function instead of the deprecated udev_get_udevdir()"
+	die "Deprecated function call: udev_get_udevdir(), please report to (overlay) maintainers."
+}
+
+# @FUNCTION: get_udevdir
+# @DESCRIPTION:
+# Output the path for the udev directory (not including ${D}).
+# This function always succeeds, even if udev is not installed.
+# The fallback value is set to /lib/udev
+get_udevdir() {
+	debug-print-function ${FUNCNAME} "${@}"
+
+	echo "$(_udev_get_udevdir)"
+}
+
+# @FUNCTION: udev_newrules
+# @USAGE: oldname newname
+# @DESCRIPTION:
+# Install udev rule with a new name. Uses newins, thus it is fatal
+# in EAPI 4 and non-fatal in earlier EAPIs.
+udev_newrules() {
+	debug-print-function ${FUNCNAME} "${@}"
+
+	(
+		insopts -m 0644
+		insinto "$(_udev_get_udevdir)"/rules.d
+		newins "${@}"
+	)
+}
+
+# @FUNCTION: udev_reload
+# @DESCRIPTION:
+# Run udevadm control --reload to refresh rules and databases
+udev_reload() {
+	if [[ ${ROOT} != "" ]] && [[ ${ROOT} != "/" ]]; then
+		return 0
+	fi
+
+	if [[ -d ${ROOT}/run/udev ]]; then
+		ebegin "Running udev control --reload for reloading rules and databases"
+		udevadm control --reload
+		eend $?
+	fi
+}

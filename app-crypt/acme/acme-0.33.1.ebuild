@@ -2,8 +2,10 @@
 
 EAPI=6
 
-
 inherit distutils-r1
+
+DESCRIPTION="An implementation of the ACME protocol"
+HOMEPAGE="https://github.com/certbot/certbot https://letsencrypt.org/"
 
 if [[ ${PV} == 9999* ]]; then
 	EGIT_REPO_URI="https://github.com/certbot/certbot.git"
@@ -14,9 +16,6 @@ else
 	KEYWORDS="amd64 arm64"
 	S=${WORKDIR}/certbot-${PV}/acme
 fi
-
-DESCRIPTION="An implementation of the ACME protocol"
-HOMEPAGE="https://github.com/certbot/certbot https://letsencrypt.org/"
 
 LICENSE="Apache-2.0"
 SLOT="0"

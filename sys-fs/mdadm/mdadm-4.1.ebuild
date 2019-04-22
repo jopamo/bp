@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils flag-o-matic systemd toolchain-funcs udev
+inherit eutils flag-o-matic systemd toolchain-funcs
 
 DESCRIPTION="Tool for running RAID systems - replacement for the raidtools"
 HOMEPAGE="http://neil.brown.name/blog/mdadm"

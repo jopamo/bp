@@ -2,8 +2,10 @@
 
 EAPI=7
 
-
 inherit distutils-r1
+
+DESCRIPTION="Let's encrypt client to automate deployment of X.509 certificates"
+HOMEPAGE="https://github.com/certbot/certbot https://letsencrypt.org/"
 
 if [[ ${PV} == 9999* ]]; then
 	EGIT_REPO_URI="https://github.com/certbot/certbot.git"
@@ -12,9 +14,6 @@ else
 	SRC_URI="https://github.com/${PN}/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="amd64 arm64"
 fi
-
-DESCRIPTION="Let's encrypt client to automate deployment of X.509 certificates"
-HOMEPAGE="https://github.com/certbot/certbot https://letsencrypt.org/"
 
 LICENSE="Apache-2.0"
 SLOT="0"

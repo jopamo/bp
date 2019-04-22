@@ -1,8 +1,9 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
+
 inherit eutils flag-o-matic linux-info linux-mod nvidia-driver \
-	portability toolchain-funcs unpacker user udev
+	portability toolchain-funcs unpacker user
 
 NV_URI="http://http.download.nvidia.com/XFree86/"
 AMD64_NV_PACKAGE="NVIDIA-Linux-x86_64-${PV}"

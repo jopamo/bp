@@ -3,7 +3,7 @@
 EAPI="6"
 
 
-inherit eutils flag-o-matic linux-info toolchain-funcs user udev l10n
+inherit eutils flag-o-matic linux-info toolchain-funcs user l10n
 
 if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/qemu/qemu.git"

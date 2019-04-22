@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit linux-info systemd flag-o-matic user toolchain-funcs versionator virtualx udev git-r3 meson
+inherit linux-info systemd flag-o-matic user toolchain-funcs versionator virtualx git-r3 meson
 
 DESCRIPTION="A set of co-operative tools that make networking simple and straightforward"
 HOMEPAGE="https://wiki.gnome.org/Projects/NetworkManager"

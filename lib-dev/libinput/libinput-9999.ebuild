@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit meson udev
+inherit meson
 
 DESCRIPTION="Library to handle input devices in Wayland"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/libinput/"

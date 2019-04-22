@@ -267,7 +267,4 @@ in_iuse() {
 	has "${flag}" "${liuse[@]#[+-]}"
 }
 
-;;
-esac
-
 fi

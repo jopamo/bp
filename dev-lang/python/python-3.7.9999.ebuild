@@ -34,6 +34,7 @@ PDEPEND=">=app-eselect/eselect-python-20140125-r1"
 PYVER=${SLOT%/*}
 
 replace-flags -Ofast -O2
+replace-flags -Wl,-Ofast -Wl,-O2
 
 src_prepare() {
 	# Ensure that internal copies of expat, libffi and zlib are not used.

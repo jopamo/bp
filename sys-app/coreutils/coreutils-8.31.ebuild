@@ -31,6 +31,10 @@ DEPEND="${RDEPEND}
 		$(python_gen_any_dep 'dev-python/pyinotify[${PYTHON_USEDEP}]')
 	)"
 
+replace-flags -Ofast -O2
+replace-flags -Wl,-Ofast -Wl,-O2
+append-flags -fno-strict-aliasing
+
 pkg_setup() {
 	if use test ; then
 		python-any-r1_pkg_setup

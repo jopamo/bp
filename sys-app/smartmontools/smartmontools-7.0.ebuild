@@ -90,9 +90,6 @@ src_install() {
 	# of the acutal image so we don't record hashes because user
 	# can modify that file
 	rm -f "${ED%/}${db_path}/drivedb.h" || die
-
-	# Bug #622072
-	find "${ED%/}"/usr/share/doc -type f -exec chmod a-x '{}' \; || die
 }
 
 pkg_postinst() {

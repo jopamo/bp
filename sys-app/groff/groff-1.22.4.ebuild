@@ -15,6 +15,8 @@ KEYWORDS="amd64 arm64"
 DEPEND="dev-lang/perl"
 
 filter-flags -flto
+replace-flags -Ofast -O2
+replace-flags -Wl,-Ofast -Wl,-O2
 
 src_prepare() {
 	if tc-is-cross-compiler ; then

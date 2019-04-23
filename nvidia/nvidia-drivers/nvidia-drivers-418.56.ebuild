@@ -3,7 +3,7 @@
 EAPI=6
 
 inherit eutils flag-o-matic linux-info linux-mod nvidia-driver \
-	portability toolchain-funcs unpacker user
+	portability toolchain-funcs unpacker user systemd
 
 NV_URI="http://http.download.nvidia.com/XFree86/"
 AMD64_NV_PACKAGE="NVIDIA-Linux-x86_64-${PV}"

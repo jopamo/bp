@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools versionator
+inherit autotools versionator flag-o-matic
 
 MY_PV="$(printf "%u%02u%02u%02u" $(get_version_components))"
 
@@ -17,6 +17,9 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 DEPEND="dev-lang/tcl"
+
+replace-flags -Ofast -O2
+replace-flags -Wl,-Ofast -Wl,-O2
 
 src_prepare() {
 	eautoreconf

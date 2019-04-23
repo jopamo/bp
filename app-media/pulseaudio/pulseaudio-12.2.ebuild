@@ -102,7 +102,7 @@ RDEPEND="${RDEPEND}
 	)
 "
 
-filter-flags -flto
+filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 pkg_pretend() {
 	CONFIG_CHECK="~HIGH_RES_TIMERS"
@@ -188,6 +188,7 @@ src_configure() {
 		--disable-webrtc-aec
 		--enable-adrian-aec
 		--disable-esound
+		--disable-rpath
 		--localstatedir="${EPREFIX}"/var
 		--with-udev-rules-dir="${EPREFIX}/$(get_udevdir)"/rules.d
 		--with-systemduserunitdir=$(systemd_get_userunitdir)

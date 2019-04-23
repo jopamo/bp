@@ -9,7 +9,7 @@ DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
 
 EGIT_REPO_URI="https://github.com/systemd/systemd-stable.git"
-EGIT_BRANCH="v241-stable"
+EGIT_BRANCH="master"
 KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
@@ -63,7 +63,6 @@ DEPEND="${COMMON_DEPEND}
 	$(python_gen_any_dep 'dev-python/lxml[${PYTHON_USEDEP}]')
 "
 
-replace-flags "-O{1,2,3}" -Ofast
 append-cflags -Wno-error=format-truncation
 
 pkg_pretend() {

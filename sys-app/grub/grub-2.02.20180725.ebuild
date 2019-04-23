@@ -102,6 +102,9 @@ QA_EXECSTACK="usr/bin/grub*-emu* usr/lib/grub/*"
 QA_WX_LOAD="usr/lib/grub/*"
 QA_MULTILIB_PATHS="usr/lib/grub/.*"
 
+replace-flags -Ofast -O2
+replace-flags -Wl,-Ofast -Wl,-O2
+
 src_unpack() {
 	if [[ ${PV} == 9999 ]]; then
 		git-r3_src_unpack
@@ -194,10 +197,6 @@ grub_configure() {
 }
 
 src_configure() {
-	# Bug 508758.
-	replace-flags -O3 -O2
-
-	# We don't want to leak flags onto boot code.
 	export HOST_CCASFLAGS=${CCASFLAGS}
 	export HOST_CFLAGS=${CFLAGS}
 	export HOST_CPPFLAGS=${CPPFLAGS}

@@ -2,7 +2,7 @@
 
 EAPI="6"
 
-inherit eutils autotools flag-o-matic libtool
+inherit autotools flag-o-matic
 
 DESCRIPTION="The Fast Lexical Analyzer"
 HOMEPAGE="https://github.com/westes/flex"
@@ -16,15 +16,13 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="nls static-libs test"
 
-# We want bison explicitly and not yacc in general #381273
-RDEPEND="sys-devel/m4"
-DEPEND="${RDEPEND}
-	app-compression/xz-utils
-	nls? ( sys-devel/gettext )
-	test? ( sys-devel/bison )"
+DEPEND="sys-devel/m4
+		app-compression/xz-utils
+		nls? ( sys-devel/gettext )
+		test? ( sys-devel/bison )"
 
 src_prepare() {
-	${S}/autogen.sh
+	#${S}/autogen.sh
 	eautoreconf
 	default
 
@@ -33,7 +31,6 @@ src_prepare() {
 			-e '/^SUBDIRS =/,/^$/{/tests/d}' \
 			Makefile.in || die
 	fi
-	elibtoolize # Prefix always needs this
 }
 
 src_configure() {
@@ -42,8 +39,7 @@ src_configure() {
 	ECONF_SOURCE=${S} \
 	econf \
 		--disable-shared \
-		$(use_enable nls) \
-		--docdir='$(datarootdir)/doc/'${PF}
+		$(use_enable nls)
 }
 
 src_test() {
@@ -53,6 +49,5 @@ src_test() {
 src_install() {
 	default
 	use static-libs || find "${ED}" -name "*.la" -delete || die
-	rm "${ED}"/usr/share/doc/${PF}/COPYING || die
 	dosym flex /usr/bin/lex
 }

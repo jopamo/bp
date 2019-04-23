@@ -1,8 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
+
 QT5_MODULE="qtbase"
-inherit qt5-build
+
+inherit qt5-build flag-o-matic
 
 DESCRIPTION="SQL abstraction library for the Qt5 framework"
 KEYWORDS="amd64 arm64"
@@ -32,6 +34,9 @@ QT5_TARGET_SUBDIRS=(
 QT5_GENTOO_PRIVATE_CONFIG=(
 	:sql
 )
+
+replace-flags -Ofast -O2
+replace-flags -Wl,-Ofast -Wl,-O2
 
 src_configure() {
 	local myconf=(

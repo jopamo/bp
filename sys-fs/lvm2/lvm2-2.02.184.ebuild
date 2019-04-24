@@ -29,11 +29,9 @@ DEPEND_COMMON="
 	sanlock? ( sys-cluster/sanlock )
 	systemd? ( >=sys-app/systemd-205:0= )
 "
-# /run is now required for locking during early boot. /var cannot be assumed to
-# be available -- thus, pull in recent enough baselayout for /run.
-# This version of LVM is incompatible with cryptsetup <1.1.2.
+
 RDEPEND="${DEPEND_COMMON}
-	>=sys-app/baselayout-2.2
+	sys-app/layout
 	!<sys-fs/cryptsetup-1.1.2
 	!!sys-fs/clvm
 	!!sys-fs/lvm-user

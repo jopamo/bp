@@ -16,7 +16,7 @@ app-net/wget
 sys-devel/autoconf
 sys-devel/automake
 sys-devel/libtool
-sys-app/baselayout
+sys-app/layout
 sys-app/makedev
 sys-app/coreutils
 sys-app/diffutils

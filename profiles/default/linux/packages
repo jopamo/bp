@@ -1,4 +1,4 @@
-*sys-app/baselayout
+*sys-app/layout
 *app-compression/bzip2
 *app-compression/lbzip2
 *app-compression/pigz

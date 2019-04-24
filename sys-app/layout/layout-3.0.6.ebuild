@@ -5,7 +5,7 @@ EAPI=6
 inherit eutils versionator prefix
 
 DESCRIPTION="Filesystem baselayout"
-SRC_URI="https://1g4.org/files/layout-${PV}.tar.xz"
+SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"

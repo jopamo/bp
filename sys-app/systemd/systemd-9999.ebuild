@@ -41,7 +41,7 @@ COMMON_DEPEND=">=sys-app/util-linux-2.30:0=
 	efi? ( sys-app/gnu-efi )"
 
 RDEPEND="${COMMON_DEPEND}
-	>=sys-app/baselayout-2.2
+	>=sys-app/layout-2.2
 	!build? ( || (
 		sys-app/util-linux[kill(-)]
 		sys-app/procps[kill(+)]
@@ -113,12 +113,9 @@ src_configure() {
 		-Dbzip2=true
 		-Dcoredump=false
 		$(meson_use test dbus)
-		-Ddefault-dns-over-tls=opportunistic
-		-Ddefault-dnssec=yes
 		-Ddefault-hierarchy=unified
 		-Ddefault-kill-user-processes=false
-		-Ddns-over-tls=true
-		-Ddns-servers=1.1.1.1
+		-Ddns-servers="1.1.1.1 1.0.0.1"
 		$(meson_use efi )
 		$(meson_use efi gnu-efi)
 		-Delfutils=true
@@ -190,9 +187,9 @@ src_install() {
 
 	# If we install these, there's no way to remove them
 	# permanently.
-	#rm -rf "${ED}"/etc/systemd/system/* || die
+	rm -rf "${ED}"/etc/systemd/system/* || die
 	rm -rf "${ED}"/etc/init.d
-
+	rm "${ED}"/var/log/README
 	rm -rf "${ED}"/usr/share/polkit-1
 
 	local udevdir=/usr/lib/udev
@@ -203,27 +200,10 @@ src_install() {
 
 	keepdir /var/lib/systemd
 	keepdir /var/log/journal
-	use xkb && mkdir -p "${ED}"/etc/systemd/user
-	keepdir /etc/systemd/user
+	use xkb && mkdir -p "${ED}"/etc/systemd/user && keepdir /etc/systemd/user
 }
 
 pkg_postinst() {
-	newusergroup() {
-		enewgroup "$1"
-		enewuser "$1" -1 -1 -1 "$1"
-	}
-
-	enewgroup input
-	enewgroup kvm 78
-	enewgroup render
-	enewgroup systemd-journal
-	newusergroup systemd-bus-proxy
-	newusergroup systemd-journal-gateway
-	newusergroup systemd-journal-remote
-	newusergroup systemd-journal-upload
-	newusergroup systemd-network
-	newusergroup systemd-resolve
-
 	systemd_update_catalog
 
 	udevadm hwdb --update --root="${EROOT%/}"
@@ -237,12 +217,5 @@ pkg_postinst() {
 		eerror "for errors. You may need to clean up your system and/or try installing"
 		eerror "systemd again."
 		eerror
-	fi
-}
-
-pkg_prerm() {
-	# If removing systemd completely, remove the catalog database.
-	if [[ ! ${REPLACED_BY_VERSION} ]]; then
-		rm -f -v "${EROOT}"/var/lib/systemd/catalog/database
 	fi
 }

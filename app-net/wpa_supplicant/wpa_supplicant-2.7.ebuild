@@ -241,13 +241,7 @@ src_configure() {
 		Kconfig_style_config PRIVSEP
 	fi
 
-	# If we are using libnl 2.0 and above, enable support for it
-	# Bug 382159
-	# Removed for now, since the 3.2 version is broken, and we don't
-	# support it.
-	if has_version ">=lib-dev/libnl-3.2"; then
-		Kconfig_style_config LIBNL32
-	fi
+	Kconfig_style_config LIBNL32
 
 	if use qt5 ; then
 		pushd "${S}"/wpa_gui-qt4 > /dev/null || die
@@ -275,20 +269,11 @@ src_install() {
 	use privsep && dosbin wpa_priv
 	dobin wpa_cli wpa_passphrase
 
-	# baselayout-1 compat
-	if has_version "<sys-app/baselayout-2.0.0"; then
-		dodir /sbin
-		dosym ../usr/sbin/wpa_supplicant /sbin/wpa_supplicant
-		dodir /bin
-		dosym ../usr/bin/wpa_cli /bin/wpa_cli
-	fi
-
 	exeinto /etc/wpa_supplicant/
 	newexe "${FILESDIR}/wpa_cli.sh" wpa_cli.sh
 
 
-	dodoc ChangeLog {eap_testing,todo}.txt README{,-WPS} \
-		wpa_supplicant.conf
+	dodoc wpa_supplicant.conf
 
 	newdoc .config build-config
 

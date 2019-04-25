@@ -13,13 +13,6 @@ KEYWORDS="amd64 arm64"
 IUSE=build
 
 pkg_preinst() {
-	# Bug #217848 - Since the remap_dns_vars() called by pkg_preinst() of
-	# the baselayout-1.x ebuild copies all the real configs from the user's
-	# /etc/conf.d into ${D}, it makes them all appear to be the default
-	# versions. In order to protect them from being unmerged after this
-	# upgrade, modify their timestamps.
-	touch "${EROOT}"/etc/conf.d/* 2>/dev/null
-
 	if use build ; then
 		emake -C "${ED}/usr/share/${PN}" DESTDIR="${EROOT}" layout || die
 	fi
@@ -91,30 +84,5 @@ pkg_postinst() {
 			ewarn "The following users have non-existent shells!"
 			ewarn "${bad_shells}"
 		fi
-	fi
-
-	# https://bugs.gentoo.org/361349
-	if use kernel_linux; then
-		mkdir -p "${EROOT}"run
-
-		local found fstype mountpoint
-		while read -r _ mountpoint fstype _; do
-		[[ ${mountpoint} = /run ]] && [[ ${fstype} = tmpfs ]] && found=1
-		done < "${ROOT}"proc/mounts
-		[[ -z ${found} ]] &&
-			ewarn "You should reboot now to get /run mounted with tmpfs!"
-	fi
-
-	for x in ${REPLACING_VERSIONS}; do
-		if ! version_is_at_least 2.4 ${v}; then
-			ewarn "After updating ${EROOT}etc/profile, please run"
-			ewarn "env-update and . /etc/profile"
-			break
-		fi
-	done
-
-	if [[ -e "${EROOT}"etc/env.d/00basic ]]; then
-		ewarn "${EROOT}etc/env.d/00basic is now ${EROOT}etc/env.d/50baselayout"
-		ewarn "Please migrate your changes."
 	fi
 }

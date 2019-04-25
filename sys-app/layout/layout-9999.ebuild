@@ -2,10 +2,10 @@
 
 EAPI=6
 
-inherit eutils versionator prefix
+inherit eutils git-r3
 
-DESCRIPTION="Filesystem baselayout"
-SRC_URI="https://1g4.org/files/${P}.tar.xz"
+DESCRIPTION="Base Configuration"
+EGIT_REPO_URI="https://github.com/1g4-linux/layout.git"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -21,12 +21,6 @@ pkg_preinst() {
 
 src_prepare() {
 	default
-	if use prefix; then
-		hprefixify -e "/EUID/s,0,${EUID}," -q '"' etc/profile
-		hprefixify etc/{env.d/50baselayout,shells} share.Linux/passwd
-		echo PATH=/usr/bin:/bin >> etc/env.d/99host
-		echo ROOTPATH=/usr/sbin:/sbin:/usr/bin:/bin >> etc/env.d/99host
-	fi
 
 	local libdir ldpaths
 	ldpaths+=":${EPREFIX}/usr/${get_libdir}"

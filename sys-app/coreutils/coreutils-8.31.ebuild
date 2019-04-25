@@ -113,7 +113,7 @@ src_install() {
 	default
 
 	insinto /etc
-	newins src/dircolors.hin DIR_COLORS
+	doins ${FILESDIR}/DIR_COLORS
 
 	rm -rf "${ED%/}"/usr/share/man
 }

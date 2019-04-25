@@ -114,24 +114,7 @@ src_install() {
 
 	default
 
-	insinto /etc/bash
-	doins "${FILESDIR}"/bash_logout
-	doins "$(prefixify_ro "${FILESDIR}"/bashrc)"
 	keepdir /etc/bash/bashrc.d
-	insinto /etc/skel
-	for f in bash{_logout,_profile,rc} ; do
-		newins "${FILESDIR}"/dot-${f} .${f}
-	done
-
-	local sed_args=(
-		-e "s:#${USERLAND}#@::"
-		-e '/#@/d'
-	)
-
-	sed -i \
-		"${sed_args[@]}" \
-		"${ED%/}"/etc/skel/.bashrc \
-		"${ED%/}"/etc/bash/bashrc || die
 
 	if use plugins ; then
 		exeinto /usr/lib64/bash

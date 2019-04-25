@@ -185,8 +185,6 @@ src_install() {
 
 	dosym ../sysctl.conf /etc/sysctl.d/99-sysctl.conf
 
-	# If we install these, there's no way to remove them
-	# permanently.
 	rm -rf "${ED}"/etc/systemd/system/* || die
 	rm -rf "${ED}"/etc/init.d
 	rm "${ED}"/var/log/README
@@ -194,13 +192,11 @@ src_install() {
 
 	local udevdir=/usr/lib/udev
 
-	use xkb || rm -rf "${ED}"/etc/X11 "${ED}"/etc/xdg/ "${ED}"/etc/systemd/user
-
-	rm -rf "${ED}"/lib*
-
 	keepdir /var/lib/systemd
 	keepdir /var/log/journal
+
 	use xkb && mkdir -p "${ED}"/etc/systemd/user && keepdir /etc/systemd/user
+	use xkb || rm -rf "${ED}"/etc/X11 "${ED}"/etc/xdg/ "${ED}"/etc/systemd/user
 }
 
 pkg_postinst() {
@@ -210,12 +206,5 @@ pkg_postinst() {
 
 	udev_reload || FAIL=1
 
-	systemd_reenable systemd-networkd.service systemd-resolved.service
-
-	if [[ ${FAIL} ]]; then
-		eerror "One of the postinst commands failed. Please check the postinst output"
-		eerror "for errors. You may need to clean up your system and/or try installing"
-		eerror "systemd again."
-		eerror
-	fi
+	systemd_reenable systemd-networkd.service systemd-resolved.service getty@tty1.service remote-fs.target
 }

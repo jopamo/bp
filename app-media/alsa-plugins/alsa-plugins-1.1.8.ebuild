@@ -2,12 +2,11 @@
 
 EAPI=6
 
-inherit autotools eutils flag-o-matic git-r3
+inherit autotools eutils flag-o-matic
 
 DESCRIPTION="ALSA extra plugins"
 HOMEPAGE="http://www.alsa-project.org/"
-EGIT_REPO_URI="https://github.com/alsa-project/${PN}.git"
-
+SRC_URI="ftp://ftp.alsa-project.org/pub/plugins/${P}.tar.bz2"
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"

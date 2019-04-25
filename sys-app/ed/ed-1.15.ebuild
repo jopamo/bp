@@ -6,7 +6,7 @@ inherit toolchain-funcs autotools
 
 DESCRIPTION="Your basic line editor"
 HOMEPAGE="https://www.gnu.org/software/ed/"
-SRC_URI="http://fossies.org/linux/privat/${P}.tar.gz"
+SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"

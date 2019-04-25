@@ -9,10 +9,6 @@ defmonitor on
 attrcolor b ".I"
 term xterm-256color
 
-termcapinfo xterm "Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm"
-termcapinfo xterm-color "Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm"
-termcapinfo xterm-256color "Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm"
-termcapinfo xterm* ti@:te@
 defbce "on"
 truecolor on
 defutf8 on
@@ -31,8 +27,4 @@ defnonblock 1
 
 ### backticks
 backtick 3 30 30 sh -c 'screen -ls | grep --color=no -o "$PPID[^[:space:]]*"' # session title
-
-caption always "%{= kw}|%{= kG} %3`: %{+r kg}%-w%{-r} %{+r kw}%n %t%{-r} %{+r kg}%+w%{-r} %{kG}%=%D %Y-%m-%d | %c:%s %{= kw}|" #`"
-
-hardstatus off			# emulation of the terminal’s hardstatus line
-hardstatus lastline "%{= kw}|_%=%{kG}$USER@%H%{kw}|%{kG}%1`%{kw}|%{kG}L:%l%{kw}|%{kG}%2`%{kw}|%{kG}%4`%=%{kw}_|" #`"
+hardstatus off

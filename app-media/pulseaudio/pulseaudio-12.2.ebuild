@@ -24,7 +24,7 @@ KEYWORDS="amd64 arm64"
 # +alsa-plugin as discussed in bug #519530
 IUSE="+alsa +alsa-plugin +asyncns bluetooth +caps dbus doc equalizer +gdbm +glib
 gnome gtk ipv6 jack libsamplerate lirc native-headset neon ofono-headset
-+orc oss qt4 realtime sox ssl systemd system-wide test +udev
++orc oss qt4 realtime sox ssl systemd test +udev
 +X zeroconf"
 
 REQUIRED_USE="
@@ -82,7 +82,6 @@ DEPEND="${RDEPEND}
 	)
 	lib-dev/libatomic_ops
 	dev-util/pkgconfig
-	system-wide? ( || ( dev-util/unifdef sys-freebsd/freebsd-ubin ) )
 	dev-util/intltool
 	>=sys-devel/gettext-0.18.1
 "
@@ -96,13 +95,10 @@ PDEPEND="
 # PyQt4 dep is for the qpaeq script
 RDEPEND="${RDEPEND}
 	equalizer? ( qt4? ( dev-python/PyQt4[dbus] ) )
-	system-wide? (
-		alsa? ( app-media/alsa-utils )
-		bluetooth? ( >=app-net/bluez-5 )
-	)
 "
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+replace-flags -Ofast -O2
 
 pkg_pretend() {
 	CONFIG_CHECK="~HIGH_RES_TIMERS"
@@ -123,12 +119,6 @@ pkg_setup() {
 	gnome2_environment_reset #543364
 
 	enewgroup audio 18 # Just make sure it exists
-
-	if use system-wide; then
-		enewgroup pulse-access
-		enewgroup pulse
-		enewuser pulse -1 -1 /run/pulse pulse,audio
-	fi
 }
 
 src_prepare() {
@@ -207,31 +197,12 @@ src_install() {
 
 	use X || rm "${ED}"/usr/bin/start-pulseaudio-x11
 
-	if use system-wide; then
-		use_define() {
-			local define=${2:-$(echo $1 | tr '[:lower:]' '[:upper:]')}
-
-			use "$1" && echo "-D$define" || echo "-U$define"
-		}
-
-		unifdef $(use_define zeroconf AVAHI) \
-			$(use_define alsa) \
-			$(use_define bluetooth) \
-			$(use_define udev) \
-			> "${T}/pulseaudio"
-
-		doinitd "${T}/pulseaudio"
-
-		systemd_dounit "${FILESDIR}/${PN}.service"
-	fi
-
 	use zeroconf && sed -i -e '/module-zeroconf-publish/s:^#::' "${ED}/etc/pulse/default.pa"
 
 	# Create the state directory
 	use prefix || diropts -o pulse -g pulse -m0755
 
-	# Prevent warnings when system-wide is not used, bug #447694
-	use system-wide || rm "${ED}"/etc/dbus-1/system.d/pulseaudio-system.conf
+	rm "${ED}"/etc/dbus-1/system.d/pulseaudio-system.conf
 
 	find "${ED}" -name "*.la" -delete || die
 }

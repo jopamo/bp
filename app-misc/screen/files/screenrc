@@ -28,3 +28,5 @@ defnonblock 1
 ### backticks
 backtick 3 30 30 sh -c 'screen -ls | grep --color=no -o "$PPID[^[:space:]]*"' # session title
 hardstatus off
+
+termcapinfo xterm* ti@:te@

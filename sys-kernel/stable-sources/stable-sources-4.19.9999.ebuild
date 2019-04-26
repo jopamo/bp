@@ -19,3 +19,9 @@ EGIT_BRANCH=linux-4.19.y
 EGIT_CLONE_TYPE=shallow
 S="${WORKDIR}/linux-${PV}"
 EGIT_CHECKOUT_DIR="${S}"
+
+src_prepare() {
+	kernel-2_src_prepare
+
+	epatch "${FILESDIR}"/unsigned_long_zero_ul.patch
+}

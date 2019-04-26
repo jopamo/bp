@@ -2,11 +2,12 @@
 
 EAPI=6
 
-inherit git-r3
-
 DESCRIPTION="small and fast portage helper tools written in C"
 HOMEPAGE="https://wiki.gentoo.org/wiki/Portage-utils"
-EGIT_REPO_URI="https://github.com/gentoo/portage-utils.git"
+
+SNAPSHOT=868b2b4b4f5140da7188389acf9f719fcf343ab2
+SRC_URI="https://github.com/gentoo/portage-utils/archive/${SNAPSHOT}.zip -> ${P}.zip"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"

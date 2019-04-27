@@ -19,7 +19,7 @@ RELEASE_VER=${PV}
 
 GCC_BOOTSTRAP_VER="4.7.3-r1"
 
-IUSE="audit caps debug doc gd nscd systemtap profile suid headers-only"
+IUSE="audit caps debug doc gd nscd systemtap profile suid headers-only static-pie"
 
 
 export CBUILD=${CBUILD:-${CHOST}}
@@ -237,6 +237,7 @@ glibc_do_configure() {
 		--without-selinux
 		$(use_enable profile)
 		$(use_with gd)
+		$(use_enable static-pie)
 		--with-headers=$(alt_build_headers)
 		--prefix="${EPREFIX}"/usr
 		--bindir="${EPREFIX}"/usr/bin

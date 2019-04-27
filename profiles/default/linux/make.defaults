@@ -30,7 +30,7 @@ USE="${USE} cli pcre"
 USE="${USE} cxx"
 USE="${USE} dri graphite gnutls gcrypt -sslv3 -tls-heartbeat urandom pic"
 USE="${USE} iconv -manpager -doc -smartcard -vnc -mono -udisks -debug -jit -icu sqlite -thin -pcre-jit"
-USE="${USE} seccomp cryptsetup"
+USE="${USE} seccomp"
 USE="${USE} xattr acl"
 USE="${USE} pic urandom xtpax -orc crypt -ipv6 ncurses pam readline ssl tcpd systemd threads udev lzo pcre16 device-mapper acpi zlib iscsi caps"
 

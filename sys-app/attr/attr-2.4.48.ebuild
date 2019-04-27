@@ -43,7 +43,7 @@ src_configure() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" install
+	default
 	insinto /usr/include/attr
 	newins "${FILESDIR}"/xattr-shim.h xattr.h
 }

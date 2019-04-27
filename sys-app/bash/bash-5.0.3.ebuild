@@ -114,8 +114,6 @@ src_install() {
 
 	default
 
-	keepdir /etc/bash/bashrc.d
-
 	if use plugins ; then
 		exeinto /usr/lib64/bash
 		doexe $(echo examples/loadables/*.o | sed 's:\.o::g')

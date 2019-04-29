@@ -32,7 +32,7 @@ HOMEPAGE="https://www.gnu.org/software/grub/"
 # Includes licenses for dejavu and unifont
 LICENSE="GPL-3 fonts? ( GPL-2-with-font-exception ) themes? ( BitstreamVera )"
 SLOT="2/${PVR}"
-IUSE="debug device-mapper doc efiemu +fonts mount multislot nls static sdl test +themes truetype libzfs"
+IUSE="debug device-mapper efiemu +fonts mount multislot nls static sdl test +themes truetype libzfs"
 
 GRUB_ALL_PLATFORMS=( coreboot efi-32 efi-64 emu ieee1275 loongson multiboot qemu qemu-mips pc uboot xen xen-32 )
 IUSE+=" ${GRUB_ALL_PLATFORMS[@]/#/grub_platforms_}"
@@ -167,7 +167,6 @@ grub_configure() {
 		--disable-werror
 		--program-prefix=
 		--libdir="${EPREFIX}"/usr/lib
-		--htmldir="${EPREFIX}"/usr/share/doc/${PF}/html
 		$(use_enable debug mm-debug)
 		$(use_enable device-mapper)
 		$(use_enable mount grub-mount)
@@ -226,7 +225,6 @@ src_compile() {
 	use libzfs && addpredict /etc/dfs:/dev/zfs
 
 	grub_do emake
-	use doc && grub_do_once emake -C docs html
 }
 
 src_test() {
@@ -237,9 +235,6 @@ src_test() {
 
 src_install() {
 	grub_do emake install DESTDIR="${D}"
-	use doc && grub_do_once emake -C docs install-html DESTDIR="${D}"
-
-	einstalldocs
 
 	if use multislot; then
 		mv "${ED%/}"/usr/share/info/grub{,2}.info || die

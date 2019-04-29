@@ -124,9 +124,7 @@ fi
 # @ECLASS-VARIABLE: DOCS
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# An array containing documents installed using dodoc. The files listed
-# there must exist in the directory from which
-# distutils-r1_python_install_all() is run (${S} by default).
+# An array containing documents installed using dodoc.
 #
 # If unset, the function will instead look up files matching default
 # filename pattern list (from the Package Manager Specification),
@@ -140,9 +138,7 @@ fi
 # @ECLASS-VARIABLE: HTML_DOCS
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# An array containing documents installed using dohtml. The files
-# and directories listed there must exist in the directory from which
-# distutils-r1_python_install_all() is run (${S} by default).
+# An array containing documents installed using dohtml.
 #
 # If unset, no HTML docs will be installed.
 #
@@ -157,9 +153,7 @@ fi
 # OBSOLETE: this variable is deprecated and banned in EAPI 6
 #
 # An array containing examples installed into 'examples' doc
-# subdirectory. The files and directories listed there must exist
-# in the directory from which distutils-r1_python_install_all() is run
-# (${S} by default).
+# subdirectory.
 #
 # The 'examples' subdirectory will be marked not to be compressed
 # automatically.
@@ -606,27 +600,6 @@ distutils-r1_python_install() {
 	fi
 }
 
-# @FUNCTION: distutils-r1_python_install_all
-# @DESCRIPTION:
-# The default python_install_all(). It installs the documentation.
-distutils-r1_python_install_all() {
-	debug-print-function ${FUNCNAME} "${@}"
-
-	einstalldocs
-
-	if declare -p EXAMPLES &>/dev/null; then
-		[[ ${EAPI} != [45] ]] && die "EXAMPLES are banned in EAPI ${EAPI}"
-
-		(
-			docinto examples
-			dodoc -r "${EXAMPLES[@]}"
-		)
-		docompress -x "/usr/share/doc/${PF}/examples"
-	fi
-
-	_DISTUTILS_DEFAULT_CALLED=1
-}
-
 # @FUNCTION: distutils-r1_run_phase
 # @USAGE: [<argv>...]
 # @INTERNAL
@@ -845,18 +818,7 @@ distutils-r1_src_install() {
 
 	local _DISTUTILS_DEFAULT_CALLED
 
-	if declare -f python_install_all >/dev/null; then
-		_distutils-r1_run_common_phase python_install_all
-	else
-		_distutils-r1_run_common_phase distutils-r1_python_install_all
-	fi
-
-	if [[ ! ${_DISTUTILS_DEFAULT_CALLED} ]]; then
-		local cmd=die
-		[[ ${EAPI} == [45] ]] && cmd=eqawarn
-
-		"${cmd}" "QA: python_install_all() didn't call distutils-r1_python_install_all"
-	fi
+	_distutils-r1_run_common_phase python_install_all
 
 	_distutils-r1_check_namespace_pth
 }

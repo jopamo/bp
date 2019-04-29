@@ -104,7 +104,4 @@ waf-utils_src_install() {
 
 	echo "\"${WAF_BINARY}\" --destdir=\"${D}\" install"
 	"${WAF_BINARY}" --destdir="${D}" install  || die "Make install failed"
-
-	# Manual document installation
-	einstalldocs
 }

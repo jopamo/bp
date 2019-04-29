@@ -14,7 +14,6 @@
 # base_src_configure() - default
 # base_src_compile() - default
 # base_src_install() - default
-# base_src_install_docs() - einstalldocs from eutils.eclass
 
 # @ECLASS: base.eclass
 # @MAINTAINER:

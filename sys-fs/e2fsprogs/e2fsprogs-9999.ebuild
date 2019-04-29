@@ -29,7 +29,7 @@ src_prepare() {
 src_configure() {
 	append-cflags -fno-strict-aliasing
 	append-cppflags -D_GNU_SOURCE
-die
+
 	local myeconfargs=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

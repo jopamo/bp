@@ -78,5 +78,4 @@ src_install() {
 	else
 		efimake INSTALLROOT="${D}" install
 	fi
-	einstalldocs
 }

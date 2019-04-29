@@ -87,9 +87,6 @@ src_test() {
 }
 
 src_install() {
-	einstalldocs
 	emake "${MAKE_COMMON[@]}" install
-
-	#we don't need aircrack-ng's oui updater, we have our own
 	rm "${ED}"/usr/sbin/airodump-ng-oui-update
 }

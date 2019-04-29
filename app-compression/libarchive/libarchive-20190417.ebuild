@@ -20,7 +20,7 @@ fi
 
 LICENSE="BSD BSD-2 BSD-4 public-domain"
 SLOT="0/1"
-IUSE="acl +bzip2 expat lzo nettle static-libs xattr +zlib"
+IUSE="acl +bzip2 expat lzo nettle static-libs xattr +zlib lz4 zstd"
 
 DEPEND="
 	acl? ( sys-app/acl )
@@ -29,9 +29,10 @@ DEPEND="
 	!expat? ( lib-dev/libxml2 )
 	xattr? ( sys-app/attr )
 	lib-dev/openssl:0=
-	>=app-compression/lz4-0_p131:0=
+	lz4? ( app-compression/lz4 )
+	zstd? ( app-compression/zstd )
+	lzo? ( lib-dev/lzo )
 	app-compression/xz-utils
-	lzo? ( >=lib-dev/lzo-2 )
 	nettle? ( lib-dev/nettle:0= )
 	zlib? ( lib-sys/zlib )"
 
@@ -55,9 +56,10 @@ src_configure() {
 		$(use_with expat)
 		$(use_with !expat xml2)
 		--with-iconv
-		--with-lz4
+		$(use_with lz4)
+		$(use_with zstd)
 		--with-lzma
-		--without-lzo2
+		$(use_with lzo lzo2)
 		$(use_with nettle)
 		$(use_with zlib)
 		--disable-bsdcat

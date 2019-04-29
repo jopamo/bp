@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="git://git.busybox.net/busybox"
 	EGIT_BRANCH="1_30_stable"
 else
-	SNAPSHOT=
+	SNAPSHOT=a92a9601f89d59597b268e29e7098597a8766778
 	SRC_URI="https://git.busybox.net/busybox/snapshot/${PN}-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

@@ -13,7 +13,7 @@ EGIT_BRANCH="3.7"
 LICENSE="PSF-2"
 SLOT="3.7"
 KEYWORDS="amd64 arm64"
-IUSE="ipv6 +embed valgrind"
+IUSE="ipv6 +embed valgrind static"
 RESTRICT="test"
 
 DEPEND="!embed? ( lib-sys/sqlite )
@@ -51,9 +51,9 @@ src_configure() {
 	export PYTHON_DISABLE_MODULES="gdbm tkinter _codecs_{hk,tw,cn,jp,kr} ossaudiodev"
 
 	tc-export CXX
-
+	use static && LDFLAGS="-static"
 	local myeconfargs=(
-		--enable-shared
+		$(usex static --disable-shared --enable-shared)
 		$(use_enable ipv6)
 		$(use_with valgrind)
 		$(usex embed --disable-loadable-sqlite-extensions --enable-loadable-sqlite-extensions)

@@ -23,15 +23,18 @@ src_prepare() {
 }
 
 src_configure() {
-	ECONF_SOURCE="${S}" econf \
-		CC_FOR_BUILD="$(tc-getBUILD_CC)" \
-		--enable-threads \
-		$(use_enable nls) \
-		$(use_enable static-libs static) \
+	local myconf=(
+		--bindir="${EPREFIX}"/usr/bin
+		--sbindir="${EPREFIX}"/usr/sbin
+		--libdir="${EPREFIX}"/usr/lib64
+		--libexecdir="${EPREFIX}"/usr/libexec
+		--sysconfdir="${EPREFIX}"/etc
+		--localstatedir="${EPREFIX}"/var
+		CC_FOR_BUILD="$(tc-getBUILD_CC)"
+		--enable-threads
+		$(use_enable nls)
+		$(use_enable static-libs static)
 		$(use_enable common-lisp languages)
-}
-
-src_install() {
-	default
-	find "${ED}" -name "*.la" -delete || die
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

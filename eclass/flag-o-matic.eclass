@@ -42,7 +42,7 @@ setup-allowed-flags() {
 		-fno-omit-frame-pointer '-fno-builtin*'
 	)
 	ALLOWED_FLAGS+=(
-		-mregparm -mno-app-regs -mapp-regs -mno-mmx -mno-sse
+		-mregparm -mno-app-regs -mapp-regs -mno-mmx -mno-sse -static-libgcc -static-libstdc++
 		-mno-sse2 -mno-sse3 -mno-ssse3 -mno-sse4 -mno-sse4.1 -mno-sse4.2
 		-mno-avx -mno-aes -mno-pclmul -mno-sse4a -mno-3dnow -mno-popcnt
 		-mno-abm -mips1 -mips2 -mips3 -mips4 -mips32 -mips64 -mips16 -mplt

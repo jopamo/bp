@@ -18,7 +18,7 @@ fi
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="audit +cracklib debug nis nls +pie test vim-syntax"
+IUSE="audit cracklib debug nis nls +pie test vim-syntax"
 
 RDEPEND="
 	cracklib? ( >=lib-sys/cracklib-2.9.1-r1 )

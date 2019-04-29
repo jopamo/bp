@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0/2"
 
-IUSE="acl apparmor audit build cryptsetup docs efi kmod +lz4 +networkd pam pcre qrcode +seccomp test xkb"
+IUSE="acl apparmor audit build cryptsetup docs efi +gnu_nss kmod lz4 +networkd pam pcre qrcode +seccomp test xkb"
 
 RESTRICT="!test? ( test )"
 
@@ -32,7 +32,7 @@ COMMON_DEPEND=">=sys-app/util-linux-2.30:0=
 	app-compression/bzip2:0=
 	lib-sys/zlib:0=
 	kmod? ( >=sys-app/kmod-15:0= )
-	lz4? ( >=app-compression/lz4-0_p131:0= )
+	lz4? ( app-compression/lz4 )
 	pam? ( lib-sys/pam:= )
 	pcre? ( lib-dev/libpcre2 )
 	qrcode? ( app-media/qrencode:0= )
@@ -98,38 +98,29 @@ PATCHES=(
 		)
 
 src_configure() {
-	python_setup
-}
-
-src_configure() {
-	local myconf=(
+	local emesonargs=(
 		$(meson_use acl)
 		$(meson_use apparmor)
 		$(meson_use audit)
 		-Dbacklight=false
-		-Dbinfmt=true
-		-Dblkid=true
-		-Dbuildtype=release
-		-Dbzip2=true
+		-Dbinfmt=false
+		-Dblkid=false
+		-Dbzip2=false
 		-Dcoredump=false
 		$(meson_use test dbus)
-		-Ddefault-hierarchy=unified
-		-Ddefault-kill-user-processes=false
-		-Ddns-servers="1.1.1.1 1.0.0.1"
 		$(meson_use efi )
 		$(meson_use efi gnu-efi)
-		-Delfutils=true
-		-Denvironment-d=true
-		-Dfirstboot=true
+		-Delfutils=false
+		-Denvironment-d=false
+		-Dfirstboot=false
 		-Dgcrypt=true
 		-Dgnutls=true
 		-Dhibernate=false
 		-Dhostnamed=true
 		-Dhtml=false
 		-Dhwdb=true
-		-Dima=true
+		-Dima=false
 		-Dimportd=true
-		-Dkill-path=/usr/bin/kill
 		$(meson_use kmod)
 		-Dldconfig=true
 		$(meson_use cryptsetup libcryptsetup)
@@ -138,22 +129,19 @@ src_configure() {
 		-Dlibidn=false
 		-Dlibiptc=false
 		-Dlocaled=true
-		-Dlz4=true
+		$(meson_use lz4)
 		-Dmachined=true
 		-Dman=false
 		-Dmicrohttpd=false
 		$(meson_use networkd)
 		$(meson_use pam)
-		-Dpamlibdir="${EPREFIX}"/usr/lib64
 		$(meson_use pcre pcre2)
 		-Dpolkit=false
 		$(meson_use qrcode qrencode)
-		-Dquotacheck=true
-		-Drandomseed=true
-		-Drfkill=true
-		-Drootlibdir="${EPREFIX}"/usr/lib64
-		-Drootprefix="${EPREFIX}"/usr
-		-Dseccomp=$(meson_use seccomp)
+		-Dquotacheck=false
+		-Drandomseed=false
+		-Drfkill=false
+		$(meson_use seccomp)
 		-Dsmack=false
 		-Dsplit-bin=true
 		-Dsplit-usr=false
@@ -165,17 +153,107 @@ src_configure() {
 		$(meson_use xkb xkbcommon)
 		-Dxz=true
 		-Dzlib=true
+		-Dpamlibdir="${EPREFIX}"/usr/lib64
+		-Drootlibdir="${EPREFIX}"/usr/lib64
+		-Drootprefix="${EPREFIX}"/usr
+		-Ddefault-hierarchy=unified
+		-Ddefault-kill-user-processes=false
+		-Ddns-servers="1.1.1.1 1.0.0.1"
+		-Dkill-path=/usr/bin/kill
+		-Dbuildtype=release
 		-Dsysvinit-path=""
 		-Dsysvrcnd-path=""
 		-Dtelinit-path=""
 		-Drc-local=""
 		-Dhalt-local=""
 		-Dntp-servers=""
-		-Dnss-myhostname=false
-		-Dnss-mymachines=false
-		-Dnss-resolve=false
-		-Dnss-systemd=false
+		$(meson_use gnu_nss Dnss-myhostname)
+		$(meson_use gnu_nss Dnss-mymachines)
+		$(meson_use gnu_nss Dnss-resolve)
+		$(meson_use gnu_nss Dnss-systemd)
 	)
+
+	local embed=(
+		-Dnls=false
+		-Ddbus=false
+		-Dutmp=false
+		-Dkmod=false
+		-Dxkbcommon=false
+		-Dblkid=false
+		-Dseccomp=false
+		-Dima=false
+		-Dselinux=false
+		-Dapparmor=false
+		-Dadm-group=false
+		-Dwheel-group=false
+		-Dbzip2=false
+		-Dxz=false
+		-Dzlib=false
+		-Dlz4=false
+		-Dpam=true
+		-Dacl=false
+		-Dsmack=false
+		-Dgcrypt=false
+		-Daudit=false
+		-Delfutils=false
+		-Dlibcryptsetup=false
+		-Dqrencode=false
+		-Dgnutls=false
+		-Dmicrohttpd=false
+		-Dlibcurl=false
+		-Dlibidn=false
+		-Dlibidn2=false
+		-Didn=false
+		-Dnss-systemd=false
+		-Dgshadow=false
+		-Denvironment-d=false
+		-Dglib=false
+		-Dlibiptc=false
+		-Dbinfmt=false
+		-Dvconsole=false
+		-Dquotacheck=false
+		-Dtmpfiles=true
+		-Dsysusers=false
+		-Dfirstboot=false
+		-Drandomseed=false
+		-Dbacklight=false
+		-Drfkill=false
+		-Dlogind=false
+		-Dmachined=false
+		-Dimportd=false
+		-Dhostnamed=false
+		-Dtimedated=false
+		-Dtimesyncd=false
+		-Dlocaled=false
+		-Dcoredump=false
+		-Dpolkit=false
+		-Dresolved=false
+		-Dnetworkd=true
+		-Defi=false
+		-Dgnuefi=false
+		-Dtpm=false
+		-Dmyhostname=false
+		-Dhwdb=false
+		-Dmanpages=false
+		-Dhibernate=false
+		-Dldconfig=false
+		-Dtests=false
+		-Dpamlibdir="${EPREFIX}"/usr/lib64
+		-Drootlibdir="${EPREFIX}"/usr/lib64
+		-Drootprefix="${EPREFIX}"/usr
+		-Ddefault-hierarchy=unified
+		-Ddefault-kill-user-processes=false
+		-Ddns-servers="1.1.1.1 1.0.0.1"
+		-Dkill-path=/usr/bin/kill
+		-Dbuildtype=release
+		-Dsysvinit-path=""
+		-Dsysvrcnd-path=""
+		-Dtelinit-path=""
+		-Drc-local=""
+		-Dhalt-local=""
+		-Dntp-servers=""
+  	)
+
 
 	meson_src_configure
 }

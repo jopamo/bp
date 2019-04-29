@@ -2,7 +2,7 @@
 
 EAPI="6"
 
-inherit git-r3
+inherit git-r3 flag-o-matic
 
 DESCRIPTION="Core binutils libraries (libbfd, libopcodes, libiberty) for external packages"
 HOMEPAGE="https://sourceware.org/binutils/"
@@ -30,7 +30,7 @@ src_configure() {
 		--disable-multilib
 		--disable-obsolete
 		--disable-werror
-		--enable-shared
+		$(usex static-libs '--disable-shared' '--enable-shared')
 		--with-system-zlib
 		--enable-gold
 		--enable-install-libiberty

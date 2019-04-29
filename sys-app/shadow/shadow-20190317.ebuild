@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 LICENSE="BSD GPL-2"
 SLOT="0"
-IUSE="acl audit +cracklib pam skey xattr"
+IUSE="acl audit cracklib pam skey xattr"
 
 RDEPEND="acl? ( sys-app/acl:0= )
 	audit? ( >=sys-app/audit-2.6:0= )

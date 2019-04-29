@@ -9,14 +9,14 @@ SRC_URI="https://1g4.org/files/${P}.tar.xz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="+cracklib debug minimal mktemp +nullok securetty systemd"
+IUSE="cracklib debug minimal mktemp +nullok securetty systemd"
 
 RESTRICT="binchecks"
 
 MIN_PAM_REQ=1.1.3
 
 RDEPEND="
-	lib-sys/pam[cracklib]
+	cracklib? ( lib-sys/pam[cracklib] )
 	systemd? ( sys-app/systemd[pam] )
 "
 DEPEND="

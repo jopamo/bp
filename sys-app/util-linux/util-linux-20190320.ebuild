@@ -97,6 +97,7 @@ src_configure() {
 		--disable-login
 		--disable-nologin
 		--disable-su
+		--disable-libmount-support-mtab
 		--docdir='${datarootdir}'/doc/${PF}
 		--enable-agetty
 		--enable-fs-paths-extra="${EPREFIX}/usr/sbin:${EPREFIX}/bin:${EPREFIX}/usr/bin"

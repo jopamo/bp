@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0/2"
 
-IUSE="acl apparmor audit build cryptsetup docs efi +gnu_nss kmod lz4 +networkd pam pcre qrcode +seccomp test xkb"
+IUSE="acl apparmor audit build cryptsetup docs efi embed +gnu_nss kmod lz4 +networkd pam pcre qrcode +seccomp test xkb"
 
 RESTRICT="!test? ( test )"
 
@@ -98,7 +98,10 @@ PATCHES=(
 		)
 
 src_configure() {
-	local emesonargs=(
+	use embed || mesonargs+=("${noembed[@]}")
+	use embed && mesonargs+=("${embed[@]}")
+
+	local noembed=(
 		$(meson_use acl)
 		$(meson_use apparmor)
 		$(meson_use audit)

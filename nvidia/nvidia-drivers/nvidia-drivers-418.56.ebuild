@@ -22,7 +22,7 @@ SLOT="0/${PV%.*}"
 KEYWORDS="amd64"
 RESTRICT="bindist mirror"
 
-IUSE="compat +driver +kms static-libs +tools uvm wayland +X"
+IUSE="compat +driver +kms static-libs +tools +uvm wayland +X"
 REQUIRED_USE="
 	tools? ( X )
 	static-libs? ( tools )

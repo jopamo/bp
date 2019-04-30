@@ -50,7 +50,6 @@ fi
 if [[ -z ${_MESON_ECLASS} ]]; then
 
 inherit ninja-utils python-utils-r1 toolchain-funcs
-IUSE="embed"
 
 fi
 
@@ -229,8 +228,7 @@ meson_src_configure() {
 	python_export_utf8_locale
 
 	# Append additional arguments from ebuild
-	use embed || mesonargs+=("${emesonargs[@]}")
-	use embed && mesonargs+=("${embed[@]}")
+	mesonargs+=("${emesonargs[@]}")
 
 	BUILD_DIR="${BUILD_DIR:-${WORKDIR}/${P}-build}"
 	set -- meson "${mesonargs[@]}" "$@" \

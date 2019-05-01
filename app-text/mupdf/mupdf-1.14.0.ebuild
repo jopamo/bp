@@ -58,7 +58,7 @@ src_prepare() {
 		-e "1iverbose = yes" \
 		-e "1ibuild = debug" \
 		-e "1iprefix = ${ED}usr" \
-		-e "1ilibdir = ${ED}usr/$(get_libdir)" \
+		-e "1ilibdir = ${ED}usr/lib" \
 		-e "1idocdir = ${ED}usr/share/doc/${PF}" \
 		-i Makerules || die
 }
@@ -88,7 +88,7 @@ src_install() {
 
 	_emake install
 
-	dosym libmupdf.so.${PV} /usr/$(get_libdir)/lib${PN}.so
+	dosym libmupdf.so.${PV} /usr/lib/lib${PN}.so
 
 	use static-libs && \
 		dolib.a build/debug/lib${PN}.a

@@ -98,9 +98,6 @@ PATCHES=(
 		)
 
 src_configure() {
-	use embed || mesonargs+=("${noembed[@]}")
-	use embed && mesonargs+=("${embed[@]}")
-
 	local noembed=(
 		$(meson_use acl)
 		$(meson_use apparmor)
@@ -257,8 +254,27 @@ src_configure() {
 		-Dntp-servers=""
   	)
 
+	local mesonargs=(
+		--bindir "${EPREFIX}"/usr/bin
+		--sbindir "${EPREFIX}"/usr/sbin
+		--libexecdir "${EPREFIX}"/usr/libexec
+		--localstatedir "${EPREFIX}"/var
+		--libdir "${EPREFIX}"/usr/lib64
+		--prefix "${EPREFIX}"/usr
+		--sysconfdir "${EPREFIX}/"etc
+		--wrap-mode nodownload
+		)
 
-	meson_src_configure
+	python_export_utf8_locale
+
+	use embed || mesonargs+=("${noembed[@]}")
+	use embed && mesonargs+=("${embed[@]}")
+
+	BUILD_DIR="${BUILD_DIR:-${WORKDIR}/${P}-build}"
+	set -- meson "${mesonargs[@]}" "$@" \
+		"${EMESON_SOURCE:-${S}}" "${BUILD_DIR}"
+	echo "$@"
+	tc-env_build "$@" || die
 }
 
 src_install() {

@@ -1,5 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
+PYTHON_COMPAT=( python3_7 )
+
 case "${EAPI:-0}" in
 	0|1|2|3|4|5|6|7)
 		;;
@@ -20,9 +22,95 @@ inherit python-utils-r1
 
 fi
 
-PYTHON_COMPAT=( python3_7 )
-
 EXPORT_FUNCTIONS pkg_setup
+
+# @ECLASS-VARIABLE: PYTHON_COMPAT
+# @REQUIRED
+# @DESCRIPTION:
+# This variable contains a list of Python implementations the package
+# supports. It must be set before the `inherit' call. It has to be
+# an array.
+#
+# Example:
+# @CODE
+# PYTHON_COMPAT=( python{2_5,2_6,2_7} )
+# @CODE
+
+# @ECLASS-VARIABLE: PYTHON_COMPAT_OVERRIDE
+# @INTERNAL
+# @DESCRIPTION:
+# This variable can be used when working with ebuilds to override
+# the in-ebuild PYTHON_COMPAT. It is a string naming the implementation
+# which will be used to build the package. It needs to be specified
+# in the calling environment, and not in ebuilds.
+#
+# It should be noted that in order to preserve metadata immutability,
+# PYTHON_COMPAT_OVERRIDE does not affect dependencies. The value of
+# EPYTHON and eselect-python preferences are ignored. Dependencies need
+# to be satisfied manually.
+#
+# Example:
+# @CODE
+# PYTHON_COMPAT_OVERRIDE='pypy' emerge -1v dev-python/bar
+# @CODE
+
+# @ECLASS-VARIABLE: PYTHON_REQ_USE
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# The list of USEflags required to be enabled on the Python
+# implementations, formed as a USE-dependency string. It should be valid
+# for all implementations in PYTHON_COMPAT, so it may be necessary to
+# use USE defaults.
+#
+# Example:
+# @CODE
+# PYTHON_REQ_USE="gdbm,ncurses(-)?"
+# @CODE
+#
+# It will cause the Python dependencies to look like:
+# @CODE
+# || ( dev-lang/python:X.Y[gdbm,ncurses(-)?] ... )
+# @CODE
+
+# @ECLASS-VARIABLE: PYTHON_DEPS
+# @DESCRIPTION:
+# This is an eclass-generated Python dependency string for all
+# implementations listed in PYTHON_COMPAT.
+#
+# Any of the supported interpreters will satisfy the dependency.
+#
+# Example use:
+# @CODE
+# DEPEND="${RDEPEND}
+#	${PYTHON_DEPS}"
+# @CODE
+#
+# Example value:
+# @CODE
+# || ( dev-lang/python:2.7[gdbm]
+# 	dev-lang/python:2.6[gdbm] )
+# @CODE
+
+# @ECLASS-VARIABLE: PYTHON_USEDEP
+# @DESCRIPTION:
+# An eclass-generated USE-dependency string for the currently tested
+# implementation. It is set locally for python_check_deps() call.
+#
+# The generate USE-flag list is compatible with packages using python-r1,
+# python-single-r1 and python-distutils-ng eclasses. It must not be used
+# on packages using python.eclass.
+#
+# Example use:
+# @CODE
+# python_check_deps() {
+#	has_version "dev-python/foo[${PYTHON_USEDEP}]"
+# }
+# @CODE
+#
+# Example value:
+# @CODE
+# python_targets_python2_7(-)?,python_single_target_python2_7(+)?
+# @CODE
 
 _python_any_set_globals() {
 	local usestr deps i PYTHON_PKG_DEP

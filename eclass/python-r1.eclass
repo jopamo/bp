@@ -1,5 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
+PYTHON_COMPAT=( python3_7 )
+
 case "${EAPI:-0}" in
 	0|1|2|3|4)
 		die "Unsupported EAPI=${EAPI:-0} (too old) for ${ECLASS}"
@@ -25,7 +27,118 @@ inherit multibuild python-utils-r1
 
 fi
 
-PYTHON_COMPAT=( python3_7 )
+# @ECLASS-VARIABLE: PYTHON_COMPAT
+# @REQUIRED
+# @DESCRIPTION:
+# This variable contains a list of Python implementations the package
+# supports. It must be set before the `inherit' call. It has to be
+# an array.
+#
+# Example:
+# @CODE
+# PYTHON_COMPAT=( python2_7 python3_3 python3_4 )
+# @CODE
+#
+# Please note that you can also use bash brace expansion if you like:
+# @CODE
+# PYTHON_COMPAT=( python2_7 python3_{3,4} )
+# @CODE
+
+# @ECLASS-VARIABLE: PYTHON_COMPAT_OVERRIDE
+# @INTERNAL
+# @DESCRIPTION:
+# This variable can be used when working with ebuilds to override
+# the in-ebuild PYTHON_COMPAT. It is a string listing all
+# the implementations which package will be built for. It need be
+# specified in the calling environment, and not in ebuilds.
+#
+# It should be noted that in order to preserve metadata immutability,
+# PYTHON_COMPAT_OVERRIDE does not affect IUSE nor dependencies.
+# The state of PYTHON_TARGETS is ignored, and all the implementations
+# in PYTHON_COMPAT_OVERRIDE are built. Dependencies need to be satisfied
+# manually.
+#
+# Example:
+# @CODE
+# PYTHON_COMPAT_OVERRIDE='pypy python3_3' emerge -1v dev-python/foo
+# @CODE
+
+# @ECLASS-VARIABLE: PYTHON_REQ_USE
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# The list of USEflags required to be enabled on the chosen Python
+# implementations, formed as a USE-dependency string. It should be valid
+# for all implementations in PYTHON_COMPAT, so it may be necessary to
+# use USE defaults.
+#
+# This should be set before calling `inherit'.
+#
+# Example:
+# @CODE
+# PYTHON_REQ_USE="gdbm,ncurses(-)?"
+# @CODE
+#
+# It will cause the Python dependencies to look like:
+# @CODE
+# python_targets_pythonX_Y? ( dev-lang/python:X.Y[gdbm,ncurses(-)?] )
+# @CODE
+
+# @ECLASS-VARIABLE: PYTHON_DEPS
+# @DESCRIPTION:
+# This is an eclass-generated Python dependency string for all
+# implementations listed in PYTHON_COMPAT.
+#
+# Example use:
+# @CODE
+# RDEPEND="${PYTHON_DEPS}
+#	dev-foo/mydep"
+# DEPEND="${RDEPEND}"
+# @CODE
+#
+# Example value:
+# @CODE
+# dev-lang/python-exec:=
+# python_targets_python2_7? ( dev-lang/python:2.7[gdbm] )
+# python_targets_pypy? ( virtual/pypy[gdbm] )
+# @CODE
+
+# @ECLASS-VARIABLE: PYTHON_USEDEP
+# @DESCRIPTION:
+# This is an eclass-generated USE-dependency string which can be used to
+# depend on another Python package being built for the same Python
+# implementations.
+#
+# The generate USE-flag list is compatible with packages using python-r1
+# and python-distutils-ng eclasses. It must not be used on packages
+# using python.eclass.
+#
+# Example use:
+# @CODE
+# RDEPEND="dev-python/foo[${PYTHON_USEDEP}]"
+# @CODE
+#
+# Example value:
+# @CODE
+# python_targets_python2_7(-)?,python_targets_python3_4(-)?
+# @CODE
+
+# @ECLASS-VARIABLE: PYTHON_REQUIRED_USE
+# @DESCRIPTION:
+# This is an eclass-generated required-use expression which ensures at
+# least one Python implementation has been enabled.
+#
+# This expression should be utilized in an ebuild by including it in
+# REQUIRED_USE, optionally behind a use flag.
+#
+# Example use:
+# @CODE
+# REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
+# @CODE
+#
+# Example value:
+# @CODE
+# || ( python_targets_python2_7 python_targets_python3_4 )
+# @CODE
 
 _python_set_globals() {
 	local deps i PYTHON_PKG_DEP

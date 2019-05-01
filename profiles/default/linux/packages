@@ -20,7 +20,7 @@
 *app-misc/nano
 *lib-sys/glibc
 *sys-app/man-db
-*sys-kernel/stable-sources
+*sys-kernel/linux-headers
 *sys-app/portage
 *sys-app/less
 *sys-app/shadow

@@ -31,7 +31,5 @@ src_compile() {
 
 python_install_all() {
 	distutils-r1_python_install_all
-
 	rm -r "${ED}"/usr/etc || die
-	rm -r "${ED}"/usr/share/doc || die
 }

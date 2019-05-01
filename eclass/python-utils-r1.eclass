@@ -1,3 +1,4 @@
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: python-utils-r1.eclass
@@ -43,7 +44,7 @@ _PYTHON_ALL_IMPLS=(
 	jython2_7
 	pypy pypy3
 	python2_7
-	python3_4 python3_5 python3_6 python3_7
+	python3_5 python3_6 python3_7
 )
 readonly _PYTHON_ALL_IMPLS
 
@@ -79,10 +80,10 @@ _python_impl_supported() {
 	# keep in sync with _PYTHON_ALL_IMPLS!
 	# (not using that list because inline patterns shall be faster)
 	case "${impl}" in
-		python2_7|python3_[45678]|jython2_7)
+		python2_7|python3_[567]|jython2_7)
 			return 0
 			;;
-		pypy1_[89]|pypy2_0|python2_[56]|python3_[123])
+		pypy1_[89]|pypy2_0|python2_[56]|python3_[1234])
 			return 1
 			;;
 		pypy|pypy3)
@@ -1035,7 +1036,7 @@ python_wrapper_setup() {
 			ln -s "${PYTHON/python/2to3-}" "${workdir}"/bin/2to3 || die
 
 			# Python 2.7+.
-			ln -s "${EPREFIX}"/usr/lib64/pkgconfig/${EPYTHON/n/n-}.pc \
+			ln -s "${EPREFIX}"/usr/lib/pkgconfig/${EPYTHON/n/n-}.pc \
 				"${workdir}"/pkgconfig/python.pc || die
 			ln -s python.pc "${workdir}"/pkgconfig/python${pyver}.pc || die
 		else

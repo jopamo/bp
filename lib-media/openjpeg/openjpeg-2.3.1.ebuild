@@ -6,7 +6,7 @@ inherit cmake-utils
 
 # Make sure that test data are not newer than release;
 # otherwise we will see "Found-But-No-Test" test failures!
-MY_TESTDATA_COMMIT="c07f38fae1e67adc288c2d6679df5d3652017fbe"
+MY_TESTDATA_COMMIT="69a7a312dccebc8b5f28f8a5e4a703cb8d447d44"
 
 DESCRIPTION="An open-source JPEG 2000 library"
 HOMEPAGE="http://www.openjpeg.org"

@@ -12,7 +12,6 @@ dev-lang/perl
 sys-app/sandbox
 dev-util/ccache
 sys-devel/gcc
-sys-devel/gcc-config
 dev-util/cmake
 dev-util/pkgconfig
 sys-app/layout

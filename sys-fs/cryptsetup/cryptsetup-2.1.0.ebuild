@@ -2,12 +2,11 @@
 
 EAPI=6
 
-
-inherit autotools python-single-r1 linux-info libtool versionator
+inherit autotools python-single-r1 linux-info libtool
 
 DESCRIPTION="Tool to setup encrypted devices with dm-crypt"
 HOMEPAGE="https://gitlab.com/cryptsetup/cryptsetup/blob/master/README.md"
-SRC_URI="mirror://kernel/linux/utils/${PN}/v$(get_version_component_range 1-2)/${P/_/-}.tar.xz"
+SRC_URI="mirror://kernel/linux/utils/${PN}/v$(ver_cut 1-2)/${P}.tar.xz"
 
 LICENSE="GPL-2+"
 SLOT="0/12" # libcryptsetup.so version
@@ -32,9 +31,7 @@ LIB_DEPEND="
 	pwquality? ( lib-dev/libpwquality[static-libs(+)] )
 	sys-fs/lvm2[static-libs(+)]
 	udev? ( sys-app/systemd[static-libs(+)] )"
-# We have to always depend on ${LIB_DEPEND} rather than put behind
-# !static? () because we provide a shared library which links against
-# these other packages. #414665
+
 RDEPEND="static-libs? ( ${LIB_DEPEND} )
 	${LIB_DEPEND//\[static-libs\(+\)\]}
 	python? ( ${PYTHON_DEPS} )"

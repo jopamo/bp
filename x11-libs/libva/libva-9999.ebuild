@@ -2,13 +2,13 @@
 
 EAPI=6
 
-inherit autotools git-r3 versionator
+inherit autotools git-r3
 
 DESCRIPTION="Video Acceleration (VA) API for Linux"
 HOMEPAGE="https://01.org/linuxmedia/vaapi"
 
 LICENSE="MIT"
-SLOT="0/$(get_version_component_range 1)"
+SLOT="0/1"
 EGIT_REPO_URI="https://github.com/01org/libva"
 KEYWORDS="amd64 arm64"
 

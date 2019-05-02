@@ -67,6 +67,8 @@ src_compile() {
 src_install() {
 	emake DESTDIR="${D}" install \
 		sepermitlockdir="${EPREFIX}/run/sepermit"
+
+	cleanup_install
 }
 
 pkg_postinst() {

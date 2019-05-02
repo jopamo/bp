@@ -16,7 +16,7 @@ IUSE="debug doc examples static-libs test udev"
 RDEPEND=""
 DEPEND="${RDEPEND}
 	doc? ( app-text/doxygen )
-	!udev? ( sys-kernel/stable-sources )"
+	!udev? ( sys-kernel/linux-headers )"
 
 src_configure() {
 	ECONF_SOURCE=${S} \

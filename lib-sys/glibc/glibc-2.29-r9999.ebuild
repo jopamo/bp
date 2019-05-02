@@ -46,6 +46,7 @@ DEPEND="${COMMON_DEPEND}
 	!<sys-app/sandbox-1.6
 	!<sys-app/portage-2.1.2
 	doc? ( sys-app/texinfo )
+	sys-kernel/linux-headers
 "
 RDEPEND="${COMMON_DEPEND}
 	!sys-app/ps3-sources
@@ -58,12 +59,11 @@ if [[ ${CATEGORY} == cross-* ]] ; then
 		>=${CATEGORY}/binutils-2.24
 		>=${CATEGORY}/gcc-4.9
 	)"
-	[[ ${CATEGORY} == *-linux* ]] && DEPEND+=" ${CATEGORY}/stable-sources"
 else
 	DEPEND+="
 		>=sys-devel/binutils-2.24
 		>=sys-devel/gcc-4.9
-		sys-kernel/stable-sources
+		sys-kernel/linux-headers
 	"
 	PDEPEND+="lib-sys/tzdb"
 fi

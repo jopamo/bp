@@ -39,7 +39,7 @@ DEPEND="${RDEPEND}
 	static? ( ${LIB_DEPEND} )
 	dev-util/pkgconfig
 	lib-sys/libseccomp
-	sys-kernel/stable-sources
+	sys-kernel/linux-headers
 	sys-devel/autoconf"
 
 RDEPEND="${RDEPEND}

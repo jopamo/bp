@@ -23,7 +23,7 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 IUSE="static-libs"
 
-DEPEND="sys-kernel/stable-sources"
+DEPEND="sys-kernel/linux-headers"
 
 src_prepare() {
 	default

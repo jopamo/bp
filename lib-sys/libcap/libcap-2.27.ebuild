@@ -16,7 +16,7 @@ IUSE="pam static-libs"
 RDEPEND=">=sys-app/attr-2.4.47
 	pam? ( lib-sys/pam )"
 DEPEND="${RDEPEND}
-	sys-kernel/stable-sources"
+	sys-kernel/linux-headers"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-2.25-build-system-fixes.patch

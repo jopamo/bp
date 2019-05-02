@@ -22,7 +22,7 @@ RDEPEND="arping? ( !app-net/arping )
 
 DEPEND="${RDEPEND}
 	static? ( ${LIB_DEPEND} )
-	sys-kernel/stable-sources"
+	sys-kernel/linux-headers"
 
 src_configure() {
 	local emesonargs=(

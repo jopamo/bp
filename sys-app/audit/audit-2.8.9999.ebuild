@@ -23,7 +23,7 @@ RDEPEND="gssapi? ( virtual/krb5 )
 	lib-sys/libcap-ng
 	python? ( ${PYTHON_DEPS} )"
 DEPEND="${RDEPEND}
-	>=sys-kernel/stable-sources-2.6.34
+	sys-kernel/linux-headers
 	dev-lang/swig:0"
 
 CONFIG_CHECK="~AUDIT"

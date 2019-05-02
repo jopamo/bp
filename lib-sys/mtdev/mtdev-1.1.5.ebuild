@@ -11,7 +11,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
-DEPEND=">=sys-kernel/stable-sources-2.6.31"
+DEPEND="sys-kernel/linux-headers"
 
 src_configure() {
 	econf $(use_enable static-libs static)

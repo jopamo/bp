@@ -267,8 +267,9 @@ src_install() {
 
 	rm -rf "${ED}"/etc/systemd/system/* || die
 	rm -rf "${ED}"/etc/init.d
-	rm "${ED}"/var/log/README
+	rm -f "${ED}"/var/log/README
 	rm -rf "${ED}"/usr/share/polkit-1
+	rm -f "${ED}"/etc/systemd/logind.conf
 
 	local udevdir=/usr/lib/udev
 

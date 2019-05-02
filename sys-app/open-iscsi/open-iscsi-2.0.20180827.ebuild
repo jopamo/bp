@@ -24,7 +24,7 @@ IUSE="debug infiniband +tcp rdma"
 
 DEPEND="sys-app/open-isns:=
 	infiniband? ( sys-fabric/ofed )
-	sys-kernel/stable-sources"
+	sys-kernel/linux-headers"
 RDEPEND="${DEPEND}
 	sys-fs/lsscsi
 	sys-app/util-linux"

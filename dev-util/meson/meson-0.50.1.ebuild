@@ -18,11 +18,9 @@ HOMEPAGE="http://mesonbuild.com/"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE=""
 RESTRICT="test"
 
 DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"
-RDEPEND=""
 
 python_test() {
 	${EPYTHON} run_tests.py || die
@@ -33,6 +31,6 @@ python_install_all() {
 
 	insinto /usr/share/vim/vimfiles
 	doins -r data/syntax-highlighting/vim/{ftdetect,indent,syntax}
-	insinto /usr/share/zsh/site-functions
-	doins data/shell-completions/zsh/_meson
+
+	rm -rf "${ED}"/usr/share/polkit-1
 }

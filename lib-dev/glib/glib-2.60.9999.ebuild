@@ -2,32 +2,24 @@
 
 EAPI=6
 
-
 inherit python-r1 git-r3 meson
 
 DESCRIPTION="The GLib library of C routines"
 HOMEPAGE="https://www.gtk.org/"
 EGIT_REPO_URI="https://github.com/GNOME/${PN}.git"
-EGIT_BRANCH=glib-2-56
+EGIT_BRANCH=glib-2-60
 
 LICENSE="LGPL-2+"
 SLOT="2"
 SONAME="2"
-IUSE="debug kernel_linux mime static-libs utils xattr libmount internal_pcre docs dtrace systemtap static-libs"
-REQUIRED_USE="
-	utils? ( ${PYTHON_REQUIRED_USE} )
-"
+IUSE="debug static-libs xattr libmount internal_pcre dtrace"
 
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	>=lib-dev/libpcre-8.13:3
 	kernel_linux? ( sys-app/util-linux )
-	xattr? ( >=sys-app/attr-2.4.47-r1 )
-	utils? (
-		${PYTHON_DEPS}
-		virtual/libelf:0=
-	)
+	>=sys-app/attr-2.4.47-r1
 "
 DEPEND="
 	lib-dev/libxslt
@@ -37,13 +29,14 @@ DEPEND="
 
 src_configure() {
         local emesonargs=(
+        		-Ddefault_library=$(usex static-libs static shared)
+        		$(meson_use xattr)
                 $(meson_use xattr)
                 $(meson_use libmount)
                 $(meson_use internal_pcre)
-                $(meson_use docs)
                 $(meson_use dtrace)
-                $(meson_use systemtap)
                 -Dgtk_doc=false
+                -Dselinux=disabled
         )
         meson_src_configure
 }

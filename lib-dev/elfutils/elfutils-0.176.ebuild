@@ -11,7 +11,7 @@ SRC_URI="https://sourceware.org/elfutils/ftp/${PV}/${P}.tar.bz2"
 LICENSE="|| ( GPL-2+ LGPL-3+ ) utils? ( GPL-3+ )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="bzip2 lzma nls static-libs test +threads +utils"
+IUSE="bzip2 lzma nls static-libs test +utils"
 
 RDEPEND=">=lib-sys/zlib-1.2.8-r1
 	bzip2? ( >=app-compression/lbzip2-1.0.6-r4 )

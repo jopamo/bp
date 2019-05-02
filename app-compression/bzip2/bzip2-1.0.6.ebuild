@@ -29,8 +29,11 @@ src_compile() {
 
 src_install() {
 	dolib.so libbz2.so.1.0.6
-	dosym libbz2.so.1.0.6 usr/lib64/libbz2.so.1
-	dosym libbz2.so.1.0.6 usr/lib64/libbz2.so.1.0
+
+	for x in libbz2.so.1 libbz2.so.1.0 libbz2.so ; do
+		dosym libbz2.so.1.0.6 usr/lib64/${x}
+	done
+
 	use static-libs && dolib.a libbz2.a
 
 	insinto /usr/include

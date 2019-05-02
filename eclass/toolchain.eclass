@@ -698,9 +698,7 @@ toolchain_src_install() {
 	export QA_EXECSTACK="usr/lib*/go/*/*.gox"
 	export QA_WX_LOAD="usr/lib*/go/*/*.gox"
 
-	#fperms 444 /usr/lib/gcc/x86_64-pc-linux-gnu/${PV}/libgcc.a
-
-	chrpath -r /usr/lib64 "${ED}"/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.9999/libstdc++.so.6.0.25
+	cleanup_install
 }
 
 
@@ -734,23 +732,18 @@ fix_libtool_libdir_paths() {
 #---->> pkg_post* <<----
 
 toolchain_pkg_postinst() {
-	do_gcc_config
-	if [[ ${ROOT} == / && -f ${EPREFIX}/usr/share/eselect/modules/compiler-shadow.eselect ]] ; then
-		eselect compiler-shadow update all
-	fi
+	# Clean up old paths
+	rm -f "${EROOT}"*/rcscripts/awk/fixlafiles.awk "${EROOT}"sbin/fix_libtool_files.sh
+	rmdir "${EROOT}"*/rcscripts{/awk,} 2>/dev/null
 
-		# Clean up old paths
-		rm -f "${EROOT}"*/rcscripts/awk/fixlafiles.awk "${EROOT}"sbin/fix_libtool_files.sh
-		rmdir "${EROOT}"*/rcscripts{/awk,} 2>/dev/null
+	mkdir -p "${EROOT}"usr/{share/gcc-data,sbin,bin}
+	# DATAPATH has EPREFIX already, use ROOT with it
+	cp "${ROOT}${DATAPATH}"/fixlafiles.awk "${EROOT}"usr/share/gcc-data/ || die
+	cp "${ROOT}${DATAPATH}"/fix_libtool_files.sh "${EROOT}"usr/sbin/ || die
 
-		mkdir -p "${EROOT}"usr/{share/gcc-data,sbin,bin}
-		# DATAPATH has EPREFIX already, use ROOT with it
-		cp "${ROOT}${DATAPATH}"/fixlafiles.awk "${EROOT}"usr/share/gcc-data/ || die
-		cp "${ROOT}${DATAPATH}"/fix_libtool_files.sh "${EROOT}"usr/sbin/ || die
-
-		# Since these aren't critical files and portage sucks with
-		# handling of binpkgs, don't require these to be found
-		cp "${ROOT}${DATAPATH}"/c{89,99} "${EROOT}"usr/bin/ 2>/dev/null
+	# Since these aren't critical files and portage sucks with
+	# handling of binpkgs, don't require these to be found
+	cp "${ROOT}${DATAPATH}"/c{89,99} "${EROOT}"usr/bin/ 2>/dev/null
 
 	if use regression-test ; then
 		elog "Testsuite results have been installed into /usr/share/doc/${PF}/testsuite"
@@ -772,9 +765,6 @@ toolchain_pkg_postrm() {
 	[[ ${ROOT} != "/" ]] && return 0
 
 	if [[ ! -e ${LIBPATH}/libstdc++.so ]] ; then
-		# make sure the profile is sane during same-slot upgrade #289403
-		do_gcc_config
-
 		einfo "Running 'fix_libtool_files.sh ${GCC_RELEASE_VER}'"
 		fix_libtool_files.sh ${GCC_RELEASE_VER}
 		if [[ -n ${BRANCH_UPDATE} ]] ; then

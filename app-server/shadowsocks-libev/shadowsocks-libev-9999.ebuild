@@ -18,7 +18,7 @@ RDEPEND="lib-net/mbedtls
 	lib-dev/libpcre
 	"
 DEPEND="${RDEPEND}
-	sys-kernel/stable-sources
+	sys-kernel/linux-headers
 	lib-net/c-ares"
 
 src_prepare() {

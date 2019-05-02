@@ -36,20 +36,13 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	nls? ( sys-devel/gettext )
 	test? ( sys-devel/bc )
-	sys-kernel/stable-sources"
+	sys-kernel/linux-headers"
 
 RDEPEND+="
 	kill? (
 		!sys-app/coreutils[kill]
 		!sys-app/procps[kill]
-	)
-	!app-net/rfkill
-	!sys-app/schedutils
-	!sys-app/setarch
-	!<sys-app/sysvinit-2.88-r7
-	!<lib-sys/e2fsprogs-libs-1.41.8
-	!<sys-fs/e2fsprogs-1.41.8
-	!<sys-app/s390-tools-1.36.1-r1"
+	)"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 

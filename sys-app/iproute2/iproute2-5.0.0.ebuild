@@ -21,8 +21,7 @@ IUSE="atm elf minimal"
 
 RDEPEND="
 	!minimal? ( lib-net/libmnl )
-	elf? ( virtual/libelf )
-	atm? ( net-dialup/linux-atm )
+	elf? ( lib-dev/elfutils )
 "
 
 DEPEND="
@@ -30,7 +29,7 @@ DEPEND="
 	app-compression/xz-utils
 	>=sys-devel/bison-2.4
 	sys-devel/flex
-	>=sys-kernel/stable-sources-3.16
+	sys-kernel/linux-headers
 	elibc_glibc? ( >=lib-sys/glibc-2.7 )
 "
 

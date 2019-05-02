@@ -58,8 +58,8 @@ RDEPEND="
 	)
 "
 DEPEND="${RDEPEND}
-	evdev? ( sys-kernel/stable-sources )
-	udev? ( sys-kernel/stable-sources )
+	evdev? ( lib-dev/libevdev )
+	udev? ( sys-app/systemd )
 "
 PDEPEND="
 	ibus? ( lib-media/ibus )

@@ -35,7 +35,7 @@ COMMON_DEPEND="!app-net/openswan
 	pam? ( lib-sys/pam )
 	strongswan_plugins_unbound? ( lib-net/unbound lib-net/ldns )"
 DEPEND="${COMMON_DEPEND}
-	sys-kernel/stable-sources"
+	sys-kernel/linux-headers"
 RDEPEND="${COMMON_DEPEND}
 	sys-app/iproute2
 	!app-server/libreswan

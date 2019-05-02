@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 RDEPEND="lib-dev/libaio"
 # This is a Linux specific app!
 DEPEND="${RDEPEND}
-	sys-kernel/stable-sources"
+	sys-kernel/linux-headers"
 
 CONFIG_CHECK="~BLK_DEV_IO_TRACE"
 WARNING_BLK_DEV_IO_TRACE="you need to enable BLK_DEV_IO_TRACE kernel option if you want to gather traces from this machine"

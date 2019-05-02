@@ -21,7 +21,6 @@ RDEPEND="sys-app/push
 	sqlite? ( lib-sys/sqlite )"
 
 DEPEND="${RDEPEND}
-		>=sys-devel/gcc-config-1.9.1
 		>=sys-devel/gettext-0.19.6"
 
 pkg_setup() {

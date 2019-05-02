@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-SNAPSHOT="8-20190405"
+SNAPSHOT="$(ver_cut 1)-$(ver_cut 3-)"
 
 inherit toolchain
 

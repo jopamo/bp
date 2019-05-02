@@ -17,7 +17,7 @@ RDEPEND="
 	>=app-compression/libarchive-3.0.0:=
 	>=lib-dev/expat-2.0.1
 	>=lib-dev/libuv-1.0.0:=
-	>=app-net/curl-7.21.5[ssl]
+	>=app-net/curl-7.21.5
 	lib-sys/zlib
 	dev-util/pkgconfig
 	qt5? (

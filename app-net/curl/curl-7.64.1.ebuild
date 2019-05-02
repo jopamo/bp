@@ -12,7 +12,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="ldap ssl adns ssh test ipv6 static-libs"
+IUSE="ldap adns ssh test ipv6 static-libs embed"
 
 RDEPEND="ldap? ( net-nds/openldap )
 		adns? ( lib-net/c-ares:0 )
@@ -22,7 +22,7 @@ RDEPEND="ldap? ( net-nds/openldap )
 
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0-r1
-	lib-net/mbedtls
+	embed? ( lib-net/mbedtls )
 	test? (
 		sys-app/diffutils
 		dev-lang/perl
@@ -42,8 +42,9 @@ src_configure() {
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
 		$(use_enable static-libs static)
-		--with-mbedtls
+		$(use_with embed mbedtls)
 		--without-ca-bundle
+		--enable-threaded-resolver
 		$(use_enable ldap)
 		$(use_enable ldap ldaps)
 		$(use_with ssh libssh2)

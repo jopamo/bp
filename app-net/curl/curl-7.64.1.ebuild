@@ -2,8 +2,6 @@
 
 EAPI="6"
 
-inherit autotools
-
 DESCRIPTION="A Client that groks URLs"
 HOMEPAGE="https://curl.haxx.se/"
 SRC_URI="https://curl.haxx.se/download/${P}.tar.bz2"
@@ -28,11 +26,6 @@ DEPEND="${RDEPEND}
 		dev-lang/perl
 	)"
 
-src_prepare() {
-	eautoreconf
-	default
-}
-
 src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
@@ -44,6 +37,7 @@ src_configure() {
 		$(use_enable static-libs static)
 		$(use_with embed mbedtls)
 		--without-ca-bundle
+		--without-nss
 		--enable-threaded-resolver
 		$(use_enable ldap)
 		$(use_enable ldap ldaps)
@@ -57,6 +51,5 @@ src_configure() {
 
 src_install() {
 	default
-	find "${ED}" -name "*.la" -delete || die
 	rm -rf "${ED}"/etc/
 }

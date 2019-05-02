@@ -23,7 +23,6 @@ LICENSE="GPL-2"
 SLOT="0"
 
 DEPEND="sys-devel/gettext
-		lib-dev/openssl
 		app-net/curl
 		lib-dev/libpcre2
 		lib-dev/expat"

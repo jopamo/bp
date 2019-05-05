@@ -25,7 +25,7 @@ KEYWORDS="amd64 arm64"
 IUSE="+alsa +alsa-plugin +asyncns bluetooth +caps dbus doc equalizer +gdbm +glib
 gnome gtk ipv6 jack libsamplerate lirc native-headset neon ofono-headset
 +orc oss qt4 realtime sox ssl systemd test +udev
-+X zeroconf"
++X"
 
 REQUIRED_USE="
 	bluetooth? ( dbus )
@@ -47,7 +47,6 @@ RDEPEND=">=lib-media/libsndfile-1.0.20
 	libsamplerate? ( >=lib-media/libsamplerate-0.1.1-r1 )
 	alsa? ( >=lib-media/alsa-lib-1.0.19 )
 	glib? ( >=lib-dev/glib-2.4.0:2 )
-	zeroconf? ( >=lib-net/avahi-0.6.12[dbus] )
 	jack? ( virtual/jack )
 	lirc? ( app-misc/lirc )
 	dbus? ( >=sys-app/dbus-1.0.0 )
@@ -84,6 +83,7 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	dev-util/intltool
 	>=sys-devel/gettext-0.18.1
+	lib-media/speexdsp
 "
 # This is a PDEPEND to avoid a circular dep
 PDEPEND="
@@ -157,7 +157,6 @@ src_configure() {
 		$(use_enable lirc)
 		$(use_enable neon neon-opt)
 		$(use_enable jack)
-		$(use_enable zeroconf avahi)
 		$(use_enable dbus)
 		$(use_enable gnome gconf)
 		$(use_enable gtk gtk3)
@@ -174,7 +173,7 @@ src_configure() {
 		$(use_enable ssl openssl)
 		$(use_with caps)
 		$(use_with equalizer fftw)
-		--without-speex
+		--with-speex
 		--disable-webrtc-aec
 		--enable-adrian-aec
 		--disable-esound
@@ -193,16 +192,11 @@ src_test() {
 }
 
 src_install() {
-	emake -j1 DESTDIR="${D}" install
+	default
 
 	use X || rm "${ED}"/usr/bin/start-pulseaudio-x11
 
-	use zeroconf && sed -i -e '/module-zeroconf-publish/s:^#::' "${ED}/etc/pulse/default.pa"
-
-	# Create the state directory
-	use prefix || diropts -o pulse -g pulse -m0755
+	diropts -o pulse -g pulse -m0755
 
 	rm "${ED}"/etc/dbus-1/system.d/pulseaudio-system.conf
-
-	find "${ED}" -name "*.la" -delete || die
 }

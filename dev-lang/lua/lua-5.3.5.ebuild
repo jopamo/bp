@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit flag-o-matic
 
@@ -11,6 +11,8 @@ SRC_URI="http://www.lua.org/ftp/${P}.tar.gz"
 LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
+IUSE="static-libs"
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
@@ -35,7 +37,10 @@ src_install() {
 
 	insinto "/usr/lib64/pkgconfig"
 	doins "${FILESDIR}/lua.pc"
-	cd "${ED}"/usr/lib64/
-	ln -s liblua.so.${PV} liblua.so.5.3
-	ln -s liblua.so.${PV} liblua.so
+
+	for x in liblua.so.1 liblua.so.$(ver_cut 1-2) liblua.so ; do
+		dosym liblua.so.${PV} usr/lib64/${x}
+	done
+
+	use static-libs || rm -f "${ED}"/usr/lib64/liblua.a
 }

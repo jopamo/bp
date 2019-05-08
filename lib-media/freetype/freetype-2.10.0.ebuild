@@ -8,18 +8,12 @@ DESCRIPTION="A high-quality and portable font engine"
 HOMEPAGE="https://www.freetype.org/"
 IUSE="X +adobe-cff bindist bzip2 +cleartype_hinting debug fontforge harfbuzz infinality png static-libs utils"
 
-if [[ "${PV}" != 9999 ]] ; then
-	SRC_URI="mirror://sourceforge/freetype/${P/_/}.tar.bz2
+SRC_URI="mirror://sourceforge/freetype/${P/_/}.tar.bz2
 		mirror://gnu/freetype/${P/_/}.tar.bz2
 		utils?	( mirror://sourceforge/freetype/ft2demos-${PV}.tar.bz2
-			mirror://gnu/freetype/ft2demos-${PV}.tar.bz2 )
-		doc?	( mirror://sourceforge/freetype/${PN}-doc-${PV}.tar.bz2
-			mirror://gnu/freetype/${PN}-doc-${PV}.tar.bz2 )"
-	KEYWORDS="amd64 arm64"
-	IUSE+=" doc"
-else
-	inherit autotools git-r3
-fi
+			mirror://gnu/freetype/ft2demos-${PV}.tar.bz2 )"
+
+KEYWORDS="amd64 arm64"
 
 LICENSE="|| ( FTL GPL-2+ )"
 SLOT="2"
@@ -40,59 +34,9 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 PDEPEND="infinality? ( lib-media/fontconfig-infinality )"
 
-PATCHES=(
-	"${FILESDIR}"/${PN}-2.7-enable-valid.patch
-)
-
-_egit_repo_handler() {
-	if [[ "${PV}" == 9999 ]] ; then
-		local phase="${1}"
-		case ${phase} in
-			fetch|unpack)
-				:;
-			;;
-			*)
-				die "Please use this function with either \"fetch\" or \"unpack\""
-			;;
-		esac
-
-		local EGIT_REPO_URI
-		EGIT_REPO_URI="https://git.savannah.gnu.org/r/freetype/freetype2.git"
-		git-r3_src_${phase}
-		if use utils ; then
-			EGIT_REPO_URI="https://git.savannah.gnu.org/r/freetype/freetype2-demos.git"
-			local EGIT_CHECKOUT_DIR="${WORKDIR}/ft2demos-${PV}"
-			git-r3_src_${phase}
-		fi
-	else
-		default
-	fi
-}
-
-src_fetch() {
-	_egit_repo_handler fetch
-}
-
-src_unpack() {
-	_egit_repo_handler unpack
-}
-
 append-flags -fno-strict-aliasing
 
 src_prepare() {
-	if [[ "${PV}" == 9999 ]] ; then
-		# inspired by shipped autogen.sh script
-		eval $(sed -nf version.sed include/freetype/freetype.h)
-		pushd builds/unix &>/dev/null || die
-		sed -e "s;@VERSION@;$freetype_major$freetype_minor$freetype_patch;" \
-			< configure.raw > configure.ac || die
-		# eautoheader produces broken ftconfig.in
-		eautoheader() { return 0 ; }
-		AT_M4DIR="." eautoreconf
-		unset freetype_major freetype_minor freetype_patch
-		popd &>/dev/null || die
-	fi
-
 	default
 
 	enable_option() {
@@ -220,13 +164,6 @@ src_install() {
 		done
 	fi
 
-	dodoc docs/{CHANGES,CUSTOMIZE,DEBUG,INSTALL.UNIX,*.txt,PROBLEMS,TODO}
-	if [[ "${PV}" != 9999 ]] && use doc ; then
-		docinto html
-		dodoc -r docs/*
-	fi
-
-	find "${ED}" -name '*.la' -delete || die
 	if ! use static-libs ; then
 		find "${ED}" -name '*.a' -delete || die
 	fi

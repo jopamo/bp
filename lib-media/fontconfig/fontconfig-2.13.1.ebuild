@@ -102,4 +102,5 @@ pkg_postinst() {
 	eselect fontconfig enable 11-lcdfilter-default.conf
 	eselect fontconfig enable 10-sub-pixel-rgb.conf
 	eselect fontconfig enable 60-liberation.conf
+	eselect fontconfig enable 70-no-bitmaps.conf
 }

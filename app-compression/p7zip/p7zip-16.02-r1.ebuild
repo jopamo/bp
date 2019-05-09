@@ -45,7 +45,5 @@ src_test() {
 }
 
 src_install() {
-	exeinto /usr/lib64/${PN}
-	doexe bin/7z bin/7za bin/7zr bin/7zCon.sfx
-	doexe bin/*$(get_modname)
+	dobin bin/7z bin/7za bin/7zr
 }

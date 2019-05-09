@@ -5,7 +5,7 @@ EAPI=6
 
 inherit eutils user systemd unpacker python-single-r1
 
-MINOR_VERSION="5488-cc260c476"
+MINOR_VERSION="994-107756f7e"
 
 _APPNAME="plexmediaserver"
 _USERNAME="plex"

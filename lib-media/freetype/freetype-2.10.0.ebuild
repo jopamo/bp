@@ -6,33 +6,23 @@ inherit flag-o-matic libtool toolchain-funcs
 
 DESCRIPTION="A high-quality and portable font engine"
 HOMEPAGE="https://www.freetype.org/"
-IUSE="X +adobe-cff bindist bzip2 +cleartype_hinting debug fontforge harfbuzz infinality png static-libs utils"
+IUSE="bzip2 debug harfbuzz png static-libs"
 
 SRC_URI="mirror://sourceforge/freetype/${P/_/}.tar.bz2
-		mirror://gnu/freetype/${P/_/}.tar.bz2
-		utils?	( mirror://sourceforge/freetype/ft2demos-${PV}.tar.bz2
-			mirror://gnu/freetype/ft2demos-${PV}.tar.bz2 )"
+		mirror://gnu/freetype/${P/_/}.tar.bz2"
 
 KEYWORDS="amd64 arm64"
 
 LICENSE="|| ( FTL GPL-2+ )"
 SLOT="2"
-RESTRICT="!bindist? ( bindist )" # bug 541408
 
 RDEPEND=">=lib-sys/zlib-1.2.8-r1
 	bzip2? ( >=app-compression/bzip2-1.0.6 )
 	harfbuzz? ( >=lib-media/harfbuzz-1.3.0[truetype] )
-	png? ( >=lib-media/libpng-1.2.51:0= )
-	utils? (
-		X? (
-			>=x11-libs/libX11-1.6.2
-			>=x11-libs/libXau-1.0.7-r1
-			>=x11-libs/libXdmcp-1.1.1-r1
-		)
-	)"
+	png? ( >=lib-media/libpng-1.2.51:0= )"
+
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
-PDEPEND="infinality? ( lib-media/fontconfig-infinality )"
 
 append-flags -fno-strict-aliasing
 
@@ -51,43 +41,13 @@ src_prepare() {
 			|| die "unable to disable option $1"
 	}
 
-	# Will be the new default for >=freetype-2.7.0
-	disable_option "TT_CONFIG_OPTION_SUBPIXEL_HINTING  2"
-
-	if use infinality && use cleartype_hinting; then
-		enable_option "TT_CONFIG_OPTION_SUBPIXEL_HINTING  ( 1 | 2 )"
-	elif use infinality; then
-		enable_option "TT_CONFIG_OPTION_SUBPIXEL_HINTING  1"
-	elif use cleartype_hinting; then
-		enable_option "TT_CONFIG_OPTION_SUBPIXEL_HINTING  2"
-	fi
-
-	# Can be disabled with FREETYPE_PROPERTIES="pcf:no-long-family-names=1"
-	# via environment (new since v2.8)
+	enable_option "TT_CONFIG_OPTION_SUBPIXEL_HINTING  2"
 	enable_option PCF_CONFIG_OPTION_LONG_FAMILY_NAMES
-
-	if ! use bindist; then
-		# See http://freetype.org/patents.html
-		# ClearType is covered by several Microsoft patents in the US
-		enable_option FT_CONFIG_OPTION_SUBPIXEL_RENDERING
-	fi
-
-	if ! use adobe-cff; then
-		enable_option CFF_CONFIG_OPTION_OLD_ENGINE
-	fi
+	enable_option FT_CONFIG_OPTION_SUBPIXEL_RENDERING
 
 	if use debug; then
 		enable_option FT_DEBUG_LEVEL_TRACE
 		enable_option FT_DEBUG_MEMORY
-	fi
-
-	if use utils; then
-		cd "${WORKDIR}/ft2demos-${PV}" || die
-		# Disable tests needing X11 when USE="-X". (bug #177597)
-		if ! use X; then
-			sed -i -e "/EXES\ +=\ ftdiff/ s:^:#:" Makefile || die
-		fi
-		cd "${S}" || die
 	fi
 
 	# we need non-/bin/sh to run configure
@@ -117,52 +77,11 @@ src_configure() {
 		LIBPNG_LDFLAGS="$($(tc-getPKG_CONFIG) --libs libpng)"
 	)
 
-	case ${CHOST} in
-		mingw*|*-mingw*) ;;
-		# Workaround windows mis-detection: bug #654712
-		# Have to do it for both ${CHOST}-windres and windres
-		*) myeconfargs+=( ac_cv_prog_RC= ac_cv_prog_ac_ct_RC= ) ;;
-	esac
-
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
-}
-
-src_compile() {
-	default
-
-	if use utils; then
-		einfo "Building utils"
-		# fix for Prefix, bug #339334
-		emake \
-			X11_PATH="${EPREFIX}/usr/lib64" \
-			FT2DEMOS=1 TOP_DIR_2="${WORKDIR}/ft2demos-${PV}"
-	fi
 }
 
 src_install() {
 	default
-
-	if use utils; then
-		einfo "Installing utils"
-		rm "${WORKDIR}"/ft2demos-${PV}/bin/README || die
-		dodir /usr/bin #654780
-		local ft2demo
-		for ft2demo in ../ft2demos-${PV}/bin/*; do
-			./libtool --mode=install $(type -P install) -m 755 "$ft2demo" \
-				"${ED%/}"/usr/bin || die
-		done
-	fi
-
-	if use fontforge; then
-		# Probably fontforge needs less but this way makes things simplier...
-		einfo "Installing internal headers required for fontforge"
-		local header
-		find src/truetype include/freetype/internal -name '*.h' | \
-		while read header; do
-			mkdir -p "${ED%/}/usr/include/freetype2/internal4fontforge/$(dirname ${header})" || die
-			cp ${header} "${ED%/}/usr/include/freetype2/internal4fontforge/$(dirname ${header})" || die
-		done
-	fi
 
 	if ! use static-libs ; then
 		find "${ED}" -name '*.a' -delete || die

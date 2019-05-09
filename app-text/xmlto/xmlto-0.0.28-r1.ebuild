@@ -1,6 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
+
 inherit eutils
 
 DESCRIPTION="script for converting XML and DocBook documents to a variety of output formats"
@@ -17,15 +18,8 @@ RDEPEND="app-text/docbook-xsl-stylesheets
 	sys-app/bash:0
 	lib-dev/libxslt
 	sys-app/sed
-	|| ( >=sys-app/coreutils-6.10-r1 sys-freebsd/freebsd-ubin )
-	|| ( sys-app/util-linux app-misc/getopt )
-	|| ( sys-app/busybox sys-freebsd/freebsd-ubin )
-	text? ( app-misc/w3m  )
-	latex? ( >=app-text/passivetex-1.25 >=app-text/xmltex-1.9-r2 )"
-# We only depend on flex when we patch the imput lexer.
-DEPEND="${RDEPEND}"
+	text? ( app-misc/lynx  )"
 
-DOCS="AUTHORS ChangeLog FAQ NEWS README THANKS"
 
 src_prepare() {
 	epatch "${FILESDIR}"/${PN}-0.0.22-format_fo_passivetex_check.patch

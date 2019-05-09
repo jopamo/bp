@@ -12,9 +12,7 @@ SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 IUSE="prefix"
 
-RDEPEND=""
-DEPEND=">=lib-dev/libxml2-2.4
-	>=app-text/docbook-xsl-stylesheets-1.65
+RDEPEND=">=app-text/docbook-xsl-stylesheets-1.65
 	>=app-text/build-docbook-catalog-1.2"
 
 sgml-catalog_cat_include "/etc/sgml/xml-docbook-${PV}.cat" \
@@ -35,16 +33,11 @@ src_install() {
 	keepdir /etc/xml
 
 	insinto /usr/share/sgml/docbook/xml-dtd-${PV}
-	doins *.cat *.dtd *.mod *.xml || die
+	doins *.cat *.dtd *.mod || die
 	insinto /usr/share/sgml/docbook/xml-dtd-${PV}/ent
 	doins ent/*.ent || die
 
-	# work around unicode parser issues #238785
-	dosym ../../../xml-iso-entities-8879.1986/ISOgrk4.ent \
-		/usr/share/sgml/docbook/xml-dtd-${PV}/ent/isogrk4.ent || die
-
-	cp ent/README README.ent
-	dodoc ChangeLog README*
+	dodoc ChangeLog README
 }
 
 pkg_postinst() {

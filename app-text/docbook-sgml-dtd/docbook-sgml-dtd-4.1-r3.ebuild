@@ -1,14 +1,14 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit eutils sgml-catalog
+inherit sgml-catalog eutils
 
-MY_P="docbook-${PV}"
-DESCRIPTION="Docbook SGML DTD 4.5"
+MY_P="docbk41"
+DESCRIPTION="Docbook SGML DTD 4.1"
 HOMEPAGE="http://docbook.org/sgml/"
-SRC_URI="http://www.docbook.org/sgml/${PV}/${MY_P}.zip"
+SRC_URI="http://www.oasis-open.org/docbook/sgml/${PV}/${MY_P}.zip"
 
 LICENSE="docbook"
-SLOT="4.5"
+SLOT="4.1"
 KEYWORDS="amd64 arm64"
 
 IUSE="prefix"
@@ -29,8 +29,8 @@ src_unpack() {
 
 src_install() {
 	insinto /usr/share/sgml/docbook/sgml-dtd-${PV}
-	doins *.dcl *.dtd *.mod *.xml || die "doins failed"
+	doins *.dcl *.dtd *.mod || die "doins failed"
 	newins docbook.cat catalog || die "newins failed"
 
-	dodoc README
+	dodoc *.txt
 }

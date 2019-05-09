@@ -23,10 +23,7 @@ DEPEND="
 	lib-sys/zlib
 "
 
-PDEPEND="=app-text/docbook-sgml-dtd-4.1-r3
-		=app-text/docbook-sgml-dtd-4.3-r2
-		=app-text/docbook-sgml-dtd-4.4
-		=app-text/docbook-sgml-dtd-4.5
+PDEPEND="=app-text/docbook-sgml-dtd-4.5
 		sys-app/man-db
 		sys-app/help2man
 		app-text/po4a

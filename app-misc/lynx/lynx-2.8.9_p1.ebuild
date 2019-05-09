@@ -20,18 +20,15 @@ SRC_URI="http://invisible-mirror.net/archives/lynx/tarballs/${MY_P}.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="bzip2 cjk gnutls idn ipv6 nls ssl"
 
 S=${WORKDIR}/${MY_P}
 
 src_configure() {
 	local myconf=(
+		--with-zlib
+		--with-bzlib
+		--with-ssl
 		--with-screen=ncursesw
-		$(use_enable nls)
-		$(use_enable idn idna)
-		$(use_enable ipv6)
-		$(use_enable cjk)
-		$(use_with bzip2 bzlib)
 	)
 
 	econf "${myconf[@]}"
@@ -42,3 +39,13 @@ src_compile() {
 	use nls && emake -C po -j1
 	emake
 }
+
+src_install() {
+	default
+	sed -e '/#LOCALE/     a LOCALE_CHARSET:TRUE'     \
+    -i "${ED}"/etc/lynx/lynx.cfg
+
+    sed -e '/#DEFAULT_ED/ a DEFAULT_EDITOR:vi'       \
+    -i "${ED}"/etc/lynx/lynx.cfg
+}
+

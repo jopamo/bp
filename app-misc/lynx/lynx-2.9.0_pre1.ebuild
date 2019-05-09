@@ -34,12 +34,6 @@ src_configure() {
 	econf "${myconf[@]}"
 }
 
-src_compile() {
-	# generating translation files in parallel is currently broken
-	use nls && emake -C po -j1
-	emake
-}
-
 src_install() {
 	default
 	sed -e '/#LOCALE/     a LOCALE_CHARSET:TRUE'     \

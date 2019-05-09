@@ -12,15 +12,17 @@ _USERNAME="plex"
 _SHORTNAME="${_USERNAME}"
 _FULL_VERSION="${PV}.${MINOR_VERSION}"
 
-URI="https://downloads.plex.tv/plex-media-server"
+URI="https://downloads.plex.tv/plex-media-server-new"
 
 DESCRIPTION="A free media library that is intended for use with a plex client."
 HOMEPAGE="http://www.plex.tv/"
-SRC_URI="amd64? ( ${URI}/${_FULL_VERSION}/plexmediaserver_${_FULL_VERSION}_amd64.deb )"
+SRC_URI="amd64? ( ${URI}/${_FULL_VERSION}/debian/plexmediaserver_${_FULL_VERSION}_amd64.deb )
+		arm64? ( ${URI}/${_FULL_VERSION}/debian/plexmediaserver_${_FULL_VERSION}_arm64.deb )"
+
 SLOT="0"
 LICENSE="Plex"
 RESTRICT="bindist strip"
-KEYWORDS="amd64"
+KEYWORDS="amd64 arm64"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 DEPEND="lib-media/taglib"

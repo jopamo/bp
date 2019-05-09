@@ -2,7 +2,6 @@
 
 EAPI=6
 
-
 inherit libtool flag-o-matic python-r1 autotools prefix
 
 DESCRIPTION="Version 2 of the library to manipulate XML files"

@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=5
 
-inherit libtool eutils pam toolchain-funcs flag-o-matic db-use fcaps
+inherit fcaps
 
 DESCRIPTION="Linux-PAM (Pluggable Authentication Modules)"
 HOMEPAGE="http://www.linux-pam.org/ https://fedorahosted.org/linux-pam/"
@@ -18,23 +18,26 @@ fi
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="audit cracklib debug nis nls +pie test vim-syntax"
+IUSE="audit cracklib debug nls test vim-syntax"
 
 RDEPEND="
 	cracklib? ( >=lib-sys/cracklib-2.9.1-r1 )
-	audit? ( >=sys-app/audit-2.2.2 )
-	nis? ( >=lib-net/libtirpc-0.2.4-r2 )"
+	audit? ( >=sys-app/audit-2.2.2 )"
 
-DEPEND="
-	${RDEPEND}
-	>=sys-devel/libtool-2
-	>=sys-devel/flex-2.5.39-r1
-	app-text/docbook-xml-dtd:4.3
-	nis? ( >=dev-util/pkgconf-0-r1 )"
+DEPEND="app-text/docbook-xml-dtd:4.5
+		lib-dev/libxslt
+		sys-devel/flex"
 
 PDEPEND="
 	lib-sys/pambase
 	vim-syntax? ( app-misc/vim )"
+
+src_prepare() {
+	default
+	sed -e 's/dummy links/dummy lynx/'                                     \
+    -e 's/-no-numbering -no-references/-force-html -nonumbers -stdin/' \
+    -i configure
+}
 
 src_configure() {
 	export ac_cv_header_xcrypt_h=no
@@ -52,8 +55,6 @@ src_configure() {
 		$(use_enable audit)
 		$(use_enable debug)
 		--disable-db
-		$(use_enable nis)
-		$(use_enable pie)
 		--disable-prelude
 	)
 

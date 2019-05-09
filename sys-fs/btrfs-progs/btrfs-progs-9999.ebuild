@@ -31,8 +31,6 @@ RDEPEND="lib-dev/lzo:2=
 
 DEPEND="${RDEPEND}
 	app-compression/zstd
-	app-text/docbook-xml-dtd:4.5
-	app-text/xmlto
 	static? (
 		lib-dev/lzo:2[static-libs(+)]
 		sys-app/util-linux:0[static-libs(+)]

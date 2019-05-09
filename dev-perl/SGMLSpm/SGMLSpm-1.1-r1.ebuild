@@ -10,7 +10,7 @@ LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="dev-lang/perl"
+DEPEND="dev-perl/Module-Build"
 
 src_install() {
 	perl-module_src_install

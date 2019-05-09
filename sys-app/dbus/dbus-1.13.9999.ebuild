@@ -7,8 +7,8 @@ inherit git-r3 autotools linux-info flag-o-matic python-any-r1 systemd virtualx 
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="https://dbus.freedesktop.org/"
-#SRC_URI="https://dbus.freedesktop.org/releases/dbus/${P}.tar.gz"
-EGIT_REPO_URI="https://anongit.freedesktop.org/git/dbus/dbus.git"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/dbus/dbus.git"
+#EGIT_BRANCH="dbus-1.14"
 
 LICENSE="|| ( AFL-2.1 GPL-2 )"
 SLOT="0"
@@ -30,8 +30,6 @@ CDEPEND="
 		)
 "
 DEPEND="${CDEPEND}
-	app-text/xmlto
-	app-text/docbook-xml-dtd:4.4
 	lib-dev/expat
 	sys-devel/autoconf-archive
 	dev-util/pkgconf
@@ -140,14 +138,19 @@ src_install() {
 
 	# needs to exist for dbus sessions to launch
 	keepdir /usr/share/dbus-1/services
-	keepdir /etc/dbus-1/{session,system}.d
+
 	# machine-id symlink from pkg_postinst()
 	keepdir /var/lib/dbus
+
 	# let the init script create the /var/run/dbus directory
 	rm -rf "${ED}"/var/run
 	rm -rf "${ED}"/run
 
-	cp "${FILESDIR}"/dbus.conf "${ED}"/usr/lib/tmpfiles.d/
-	find "${ED}" -name "*.la" -delete || die
-	cp "${FILESDIR}"/dbus.service "${ED}"/usr/lib/systemd/system/dbus.service
+	rm -rf "${ED}"/etc/dbus-1
+
+	insinto /usr/lib/tmpfiles.d/
+	doins "${FILESDIR}"/dbus.conf
+
+	insinto /usr/lib/systemd/system/
+	doins "${FILESDIR}"/dbus.service
 }

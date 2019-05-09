@@ -21,7 +21,7 @@ RDEPEND="highlight? (
 	)
 "
 DEPEND="lib-dev/libxslt
-	app-text/docbook-xml-dtd:4.3
+	app-text/docbook-xml-dtd
 	>=app-text/docbook-xsl-stylesheets-1.79.1
 	dev-python/six
 	dev-util/itstool

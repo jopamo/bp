@@ -56,8 +56,7 @@ DEPEND="${COMMON_DEPEND}
 	>=sys-app/coreutils-8.16
 	dev-util/pkgconf
 	test? ( sys-app/dbus )
-	app-text/docbook-xml-dtd:4.2
-	app-text/docbook-xml-dtd:4.5
+	app-text/docbook-xml-dtd
 	app-text/docbook-xsl-stylesheets
 	lib-dev/libxslt:0
 	$(python_gen_any_dep 'dev-python/lxml[${PYTHON_USEDEP}]')

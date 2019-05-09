@@ -18,8 +18,7 @@ LICENSE="MIT"
 DEPEND="dev-lang/perl
 	lib-dev/libxslt
 	app-text/docbook-xsl-stylesheets
-	=app-text/docbook-xml-dtd-4.2*"
-RDEPEND="${DEPEND}"
+	app-text/docbook-xml-dtd"
 
 PATCHES=(
 	"${FILESDIR}/${P}-filename_whitespace_handling.patch"

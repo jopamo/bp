@@ -49,7 +49,21 @@ src_install() {
 	insinto ${DOCBOOKDIR}
 	doins VERSION VERSION.xsl
 
-	cleanup_install
+	local i
+	for i in */; do
+		i=${i%/}
+
+		cd "${S}"/${i}
+		for doc in ChangeLog README; do
+			if [ -e "$doc" ]; then
+				mv ${doc} ${doc}.${i}
+				dodoc ${doc}.${i}
+				rm ${doc}.${i}
+			fi
+		done
+
+		doins -r "${S}"/${i}
+	done
 }
 
 pkg_postinst() {

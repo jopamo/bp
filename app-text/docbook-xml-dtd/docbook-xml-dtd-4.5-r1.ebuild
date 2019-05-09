@@ -43,6 +43,8 @@ src_install() {
 	dosym ../../../xml-iso-entities-8879.1986/ISOgrk4.ent \
 		/usr/share/sgml/docbook/xml-dtd-${PV}/ent/isogrk4.ent || die
 
+	cp ent/README README.ent
+
 	cleanup_install
 }
 

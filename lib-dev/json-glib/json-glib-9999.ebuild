@@ -16,7 +16,7 @@ RDEPEND="
 	>=lib-dev/glib-2.37.6:2
 "
 DEPEND="${RDEPEND}
-	~app-text/docbook-xml-dtd-4.1.2
+	app-text/docbook-xml-dtd
 	app-text/docbook-xsl-stylesheets
 	lib-dev/libxslt
 	>=dev-util/gtk-doc-am-1.20

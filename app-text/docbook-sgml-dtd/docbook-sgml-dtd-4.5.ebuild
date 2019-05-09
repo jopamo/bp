@@ -31,6 +31,4 @@ src_install() {
 	insinto /usr/share/sgml/docbook/sgml-dtd-${PV}
 	doins *.dcl *.dtd *.mod *.xml || die "doins failed"
 	newins docbook.cat catalog || die "newins failed"
-
-	cleanup_install
 }

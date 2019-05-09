@@ -16,10 +16,10 @@ IUSE="doc nls static-libs test"
 
 DEPEND="doc? (
 		app-text/xmlto
-		app-text/docbook-xml-dtd:4.1.2
+		app-text/docbook-xml-dtd
 	)
 	test? (
-		app-text/docbook-xml-dtd:4.5
+		app-text/docbook-xml-dtd
 		app-text/openjade
 		app-text/sgml-common
 	)"

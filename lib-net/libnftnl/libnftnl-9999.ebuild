@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs test"
 
 RDEPEND=">=lib-net/libmnl-1.0.0"
-DEPEND="dev-util/pkgconfig
+DEPEND="dev-util/pkgconf
 	${RDEPEND}"
 
 pkg_setup() {

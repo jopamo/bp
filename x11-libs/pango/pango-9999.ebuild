@@ -23,6 +23,6 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	>=dev-util/gtk-doc-am-1.20
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	lib-dev/fribidi
 "

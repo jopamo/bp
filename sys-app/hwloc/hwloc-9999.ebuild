@@ -36,7 +36,7 @@ RDEPEND="
 	xml? ( >=lib-dev/libxml2-2.9.1-r4 )"
 
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0-r1"
+	>=dev-util/pkgconf-0-r1"
 
 src_prepare() {
 	default

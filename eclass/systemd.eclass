@@ -29,7 +29,7 @@ case ${EAPI:-0} in
 	*) die "${ECLASS}.eclass API in EAPI ${EAPI} not yet established."
 esac
 
-DEPEND="dev-util/pkgconfig"
+DEPEND="dev-util/pkgconf"
 
 # @FUNCTION: _systemd_get_dir
 # @USAGE: <variable-name> <fallback-directory>

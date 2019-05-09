@@ -296,7 +296,7 @@ CDEPEND="
 	nginx_modules_http_auth_ldap? ( net-nds/openldap[ssl?] )"
 
 DEPEND="${CDEPEND}
-	nginx_modules_http_brotli? ( dev-util/pkgconfig )
+	nginx_modules_http_brotli? ( dev-util/pkgconf )
 	nginx_modules_http_security? ( ${AUTOTOOLS_DEPEND} )
 	libatomic? ( lib-dev/libatomic_ops )"
 PDEPEND="vim-syntax? ( app-text/nginx-syntax )"

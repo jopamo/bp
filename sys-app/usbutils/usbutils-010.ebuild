@@ -15,7 +15,7 @@ CDEPEND="lib-dev/libusb
 	sys-app/systemd:="
 DEPEND="${CDEPEND}
 	app-compression/xz-utils
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 RDEPEND="${CDEPEND}
 	sys-app/systemd
 "

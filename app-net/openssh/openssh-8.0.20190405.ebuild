@@ -37,7 +37,7 @@ RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
 
 DEPEND="${RDEPEND}
 	static? ( ${LIB_DEPEND} )
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	lib-sys/libseccomp
 	sys-kernel/linux-headers
 	sys-devel/autoconf"

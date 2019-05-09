@@ -17,7 +17,7 @@ RDEPEND="lib-dev/popt
 	 >=lib-media/libexif-${PV}"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	nls? ( sys-devel/gettext )"
 
 src_prepare() {

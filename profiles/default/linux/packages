@@ -33,7 +33,7 @@
 *sys-fs/e2fsprogs
 *sys-app/busybox
 *sys-app/util-linux
-*sys-app/iproute2
+*app-net/iproute2
 *app-net/iputils
 *app-portage/eix
 *app-crypt/jitterentropy

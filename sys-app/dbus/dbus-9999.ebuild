@@ -34,7 +34,7 @@ DEPEND="${CDEPEND}
 	app-text/docbook-xml-dtd:4.4
 	lib-dev/expat
 	sys-devel/autoconf-archive
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	doc? ( app-text/doxygen )
 	test? (
 		>=lib-dev/glib-2.40:2
@@ -128,7 +128,7 @@ src_test() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" install
+	default
 
 	if use X; then
 		# dbus X session script (#77504)

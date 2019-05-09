@@ -19,7 +19,7 @@ RDEPEND="
 	>=lib-dev/libuv-1.0.0:=
 	>=app-net/curl-7.21.5
 	lib-sys/zlib
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	qt5? (
 		gui-lib/qtcore:5
 		gui-lib/qtgui:5

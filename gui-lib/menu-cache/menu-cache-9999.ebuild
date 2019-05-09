@@ -15,7 +15,7 @@ SLOT="0/2"
 RDEPEND="lib-dev/glib:2"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	gui-lib/libfm-extra
 	dev-util/gtk-doc"
 

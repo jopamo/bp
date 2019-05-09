@@ -42,7 +42,7 @@ DEPEND="${CDEPEND}
 sys-devel/bison
 sys-devel/flex
 nls? ( sys-devel/gettext )
-xml? ( dev-util/pkgconfig )
+xml? ( dev-util/pkgconf )
 "
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro

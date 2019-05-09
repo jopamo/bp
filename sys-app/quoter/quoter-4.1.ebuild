@@ -1,6 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
+
 inherit toolchain-funcs
 
 DESCRIPTION="Quote arguments or standard input for usage in POSIX shell by eval"
@@ -17,5 +18,5 @@ src_compile() {
 
 src_install() {
 	emake DESTDIR="${ED}" EPREFIX="${EPREFIX}" install
-	dodoc README.md
+	cleanup_install
 }

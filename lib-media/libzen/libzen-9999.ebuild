@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
-DEPEND="dev-util/pkgconfig"
+DEPEND="dev-util/pkgconf"
 
 S=${WORKDIR}/${P}/Project/GNU/Library
 

@@ -40,7 +40,7 @@ CDEPEND="
 "
 
 DEPEND="${CDEPEND}
-	>=dev-util/pkgconfig-0-r1
+	>=dev-util/pkgconf-0-r1
 "
 
 RDEPEND="${CDEPEND}

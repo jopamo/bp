@@ -32,5 +32,5 @@ src_install() {
 	doins *.dcl *.dtd *.mod *.xml || die "doins failed"
 	newins docbook.cat catalog || die "newins failed"
 
-	dodoc README
+	cleanup_install
 }

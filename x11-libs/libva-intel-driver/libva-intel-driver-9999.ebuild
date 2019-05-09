@@ -20,7 +20,7 @@ RDEPEND=">=x11-libs/libva-2.0.0:=[X?,wayland?,drm?]
 	wayland? ( >=lib-media/mesa-9.1.6[egl] >=lib-dev/wayland-1.11 )"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 
 src_prepare() {

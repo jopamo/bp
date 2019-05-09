@@ -24,7 +24,7 @@ RDEPEND="lib-media/freetype:2
 		>=x11-libs/libXext-1.3.2
 	)"
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0-r1
+	>=dev-util/pkgconf-0-r1
 	X? ( x11/xorgproto )"
 
 src_prepare() {

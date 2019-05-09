@@ -15,7 +15,7 @@ IUSE="static-libs"
 
 RDEPEND=">=lib-net/libnfnetlink-1.0.0"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 CONFIG_CHECK="~NETFILTER_NETLINK_LOG"
 

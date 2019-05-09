@@ -20,7 +20,7 @@ CDEPEND=">=lib-dev/libpipeline-1.4.0
 	!sys-app/man"
 DEPEND="${CDEPEND}
 	app-compression/xz-utils
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	nls? (
 		>=app-text/po4a-0.45
 		sys-devel/gettext

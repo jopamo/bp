@@ -22,7 +22,7 @@ DEPEND="
 	${RDEPEND}
 	sys-devel/flex
 	sys-devel/bison
-	dbus? ( dev-util/pkgconfig )
+	dbus? ( dev-util/pkgconf )
 "
 
 src_prepare() {

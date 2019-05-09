@@ -21,7 +21,7 @@ RDEPEND=">=lib-dev/nettle-3.1:=[gmp]
 	pkcs11? ( >=app-crypt/p11-kit-0.23.1 )
 "
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0-r1
+	>=dev-util/pkgconf-0-r1
 	nls? ( sys-devel/gettext )
 	valgrind? ( dev-util/valgrind )
 	test? (	seccomp? ( lib-sys/libseccomp )	)"

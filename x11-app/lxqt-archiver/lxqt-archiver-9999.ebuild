@@ -23,7 +23,7 @@ DEPEND=">=lib-dev/glib-2.18:2
 	lib-dev/json-glib
 	app-compression/p7zip
 	app-compression/unrar
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 pkg_postinst() {
 	xdg_desktop_database_update

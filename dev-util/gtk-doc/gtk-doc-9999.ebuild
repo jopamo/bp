@@ -25,7 +25,7 @@ DEPEND="lib-dev/libxslt
 	>=app-text/docbook-xsl-stylesheets-1.79.1
 	dev-python/six
 	dev-util/itstool
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	lib-dev/glib
 "
 

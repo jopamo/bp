@@ -25,7 +25,7 @@ RDEPEND="
 	gui-lib/qtwidgets:5"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	nls? ( dev-util/intltool )"
 
 filter-flags -flto

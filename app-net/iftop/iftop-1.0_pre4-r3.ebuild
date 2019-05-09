@@ -18,7 +18,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 "
 S="${WORKDIR}"/${P/_/}
 PATCHES=(

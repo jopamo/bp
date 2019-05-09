@@ -26,7 +26,7 @@ CDEPEND="
 	gui-lib/qtxml:5
 "
 DEPEND="${CDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	test? ( gui-lib/qttest:5 )
 "
 RDEPEND="${CDEPEND}

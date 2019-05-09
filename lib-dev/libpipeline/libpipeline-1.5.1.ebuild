@@ -11,7 +11,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="static-libs test"
 
-DEPEND="dev-util/pkgconfig
+DEPEND="dev-util/pkgconf
 	test? ( lib-dev/check )"
 
 src_configure() {

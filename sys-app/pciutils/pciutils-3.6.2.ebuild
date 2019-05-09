@@ -23,7 +23,7 @@ RDEPEND="
 "
 DEPEND="
 	${DEPEND}
-	kmod? ( dev-util/pkgconfig )
+	kmod? ( dev-util/pkgconf )
 "
 
 switch_config() {

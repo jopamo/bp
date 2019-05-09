@@ -28,7 +28,7 @@ DEPEND="${RDEPEND}
 	lib-dev/gobject-introspection-common
 	dev-util/gtk-doc
 	gtk? ( x11-libs/gtk+ )
-	>=dev-util/pkgconfig-0-r1
+	>=dev-util/pkgconf-0-r1
 "
 src_prepare() {
 	${S}/autogen.sh

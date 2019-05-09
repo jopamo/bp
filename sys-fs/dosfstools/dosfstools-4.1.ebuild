@@ -13,7 +13,7 @@ IUSE="+udev"
 
 CDEPEND="udev? ( sys-app/systemd )"
 DEPEND="${CDEPEND}
-	udev? ( dev-util/pkgconfig )"
+	udev? ( dev-util/pkgconf )"
 RDEPEND="${CDEPEND}"
 
 src_configure() {

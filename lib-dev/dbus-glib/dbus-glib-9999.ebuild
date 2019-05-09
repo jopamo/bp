@@ -20,7 +20,7 @@ CDEPEND="
 "
 DEPEND="${CDEPEND}
 	>=dev-util/gtk-doc-am-1.14
-	dev-util/pkgconfig
+	dev-util/pkgconf
 "
 
 src_prepare() {

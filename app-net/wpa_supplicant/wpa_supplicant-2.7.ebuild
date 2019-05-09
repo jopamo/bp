@@ -37,7 +37,7 @@ CDEPEND="
 	!ssl? ( lib-dev/libtommath )
 "
 DEPEND="${CDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 "
 
 S="${WORKDIR}/${P}/${PN}"

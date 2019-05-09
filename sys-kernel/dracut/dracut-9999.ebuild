@@ -23,7 +23,7 @@ KEYWORDS="amd64 arm64"
 RESTRICT="test"
 
 CDEPEND="sys-app/systemd
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	>=sys-app/kmod-15[tools]
 	"
 RDEPEND="${CDEPEND}
@@ -112,7 +112,7 @@ pkg_postinst() {
 	elog "dependencies may be installed:"
 	elog ""
 	optfeature "Networking support"  app-net/curl "app-net/dhcp[client]" \
-		sys-app/iproute2 "app-net/iputils[arping]"
+		app-net/iproute2 "app-net/iputils[arping]"
 	optfeature \
 		"Measure performance of the boot process for later visualisation" \
 		app-benchmarks/bootchart2 sys-app/killproc sys-app/acct

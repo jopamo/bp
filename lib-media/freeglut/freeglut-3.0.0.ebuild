@@ -23,7 +23,7 @@ RDEPEND="lib-media/glu
 	>=x11-libs/libXxf86vm-1.1.3
 "
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	x11/xorgproto"
 
 src_configure() {

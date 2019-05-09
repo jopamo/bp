@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="lib-dev/glib
-		dev-util/pkgconfig"
+		dev-util/pkgconf"
 
 src_configure() {
 	local emesonargs=(

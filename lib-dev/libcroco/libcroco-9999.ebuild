@@ -19,7 +19,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	dev-util/gtk-doc-am
-	>=dev-util/pkgconfig-0-r1
+	>=dev-util/pkgconf-0-r1
 "
 
 src_prepare() {

@@ -17,7 +17,7 @@ RDEPEND="ogg? ( >=lib-media/libogg-1.3.0 )"
 DEPEND="${RDEPEND}
 	app-compression/xz-utils
 	!elibc_uclibc? ( sys-devel/gettext )
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 src_prepare() {
 	default

@@ -45,7 +45,7 @@ COMMON_DEPEND="
 	tiff? ( lib-media/tiff:0 )
 "
 DEPEND="${COMMON_DEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 "
 RDEPEND="${COMMON_DEPEND}
 	cjk? ( >=app-text/poppler-data-0.4.7 )

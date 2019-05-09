@@ -20,7 +20,7 @@ IUSE="examples ipv6 rpc static"
 RDEPEND="rpc? ( lib-net/libtirpc )"
 
 DEPEND="${RDEPEND}
-	rpc? ( dev-util/pkgconfig )"
+	rpc? ( dev-util/pkgconf )"
 
 PATCHES=(
 		"${FILESDIR}"/${PN}-4.85-cross.patch #432120

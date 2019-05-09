@@ -22,7 +22,7 @@ RDEPEND="
 	pulseaudio? ( >=app-media/pulseaudio-2.1-r1 )
 "
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 src_prepare() {
 	default

@@ -67,5 +67,5 @@ src_install() {
 		pkgdocdir="${EPREFIX}"/usr/share/doc/${PF} \
 		install
 
-	find "${ED}" -name "*.la" -delete || die
+	cleanup_install
 }

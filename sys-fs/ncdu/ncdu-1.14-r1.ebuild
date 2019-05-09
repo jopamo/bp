@@ -15,7 +15,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 "
 
 PATCHES=( 	${FILESDIR}/8e021a46ee2d455c8c677a7eb982b56c3c408942.patch

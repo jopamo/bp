@@ -28,7 +28,7 @@ RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
 
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	static? ( ${LIB_DEPEND} )"
 
 src_prepare() {

@@ -46,28 +46,10 @@ src_test() {
 }
 
 src_install() {
-	# The changelog is now zipped, and copied as the RELEASE-NOTES, so we
-	# don't need to install it
-	dodoc AUTHORS BUGS NEWS README RELEASE-NOTES.txt TODO
-
 	insinto ${DOCBOOKDIR}
 	doins VERSION VERSION.xsl
 
-	local i
-	for i in */; do
-		i=${i%/}
-
-		cd "${S}"/${i}
-		for doc in ChangeLog README; do
-			if [ -e "$doc" ]; then
-				mv ${doc} ${doc}.${i}
-				dodoc ${doc}.${i}
-				rm ${doc}.${i}
-			fi
-		done
-
-		doins -r "${S}"/${i}
-	done
+	cleanup_install
 }
 
 pkg_postinst() {

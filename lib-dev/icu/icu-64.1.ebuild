@@ -15,7 +15,7 @@ SLOT="0/${PV}"
 KEYWORDS="amd64 arm64"
 IUSE="debug static-libs"
 
-DEPEND="dev-util/pkgconfig"
+DEPEND="dev-util/pkgconf"
 
 S="${WORKDIR}/${PN}/source"
 

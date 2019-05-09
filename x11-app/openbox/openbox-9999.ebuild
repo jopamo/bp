@@ -29,7 +29,7 @@ RDEPEND="lib-dev/glib:2
 
 DEPEND="${RDEPEND}
 	sys-devel/gettext
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	x11/xorgproto
 "
 

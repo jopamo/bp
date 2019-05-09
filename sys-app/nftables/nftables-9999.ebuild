@@ -22,7 +22,7 @@ DEPEND="${RDEPEND}
 	sys-devel/bison
 	app-text/docbook2X
 	sys-devel/flex
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 pkg_setup() {
 	CONFIG_CHECK="~NF_TABLES"

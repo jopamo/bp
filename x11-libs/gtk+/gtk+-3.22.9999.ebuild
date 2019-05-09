@@ -65,7 +65,7 @@ DEPEND="${COMMON_DEPEND}
 	lib-dev/gobject-introspection-common
 	>=dev-util/gtk-doc-am-1.20
 	>=sys-devel/gettext-0.19.7
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	X? ( xinerama? ( x11/xorgproto ) )
 	test? (
 		fonts/font-misc-misc

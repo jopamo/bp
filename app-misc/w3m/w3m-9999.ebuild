@@ -24,7 +24,7 @@ RDEPEND=">=lib-sys/ncurses-5.2-r3:0=
 "
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 src_prepare() {
 	default

@@ -16,7 +16,7 @@ IUSE="doc static-libs"
 RDEPEND=">=lib-dev/expat-2.1.0-r3
 	>=lib-media/freetype-2.5.3-r1"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	dev-util/itstool
 "
 PDEPEND="app-eselect/eselect-fontconfig

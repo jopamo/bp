@@ -24,7 +24,7 @@ DEPEND="${COMMON_DEPEND}
 		dev-util/gtk-doc
 	)
 	>=dev-util/intltool-0.40
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	sys-devel/gettext"
 
 src_prepare() {

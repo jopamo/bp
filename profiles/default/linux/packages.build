@@ -38,6 +38,6 @@ sys-devel/patch
 virtual/editor
 virtual/libc
 sys-kernel/linux-headers
-dev-util/pkgconfig
+dev-util/pkgconf
 sys-app/shadow
 sys-app/busybox

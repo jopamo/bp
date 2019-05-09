@@ -18,7 +18,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	blas? ( dev-util/pkgconfig )
+	blas? ( dev-util/pkgconf )
 "
 
 src_prepare() {

@@ -18,8 +18,8 @@ IUSE="caps debug python seccomp"
 DEPEND="caps? ( >=lib-sys/libcap-2.24 )
 		python? ( dev-python/pyelftools )
 		seccomp? ( lib-sys/libseccomp )
-		caps? ( dev-util/pkgconfig )
-		seccomp? ( dev-util/pkgconfig )
+		caps? ( dev-util/pkgconf )
+		seccomp? ( dev-util/pkgconf )
 		app-compression/xz-utils"
 
 append-flags -fno-strict-aliasing
@@ -47,4 +47,5 @@ src_test() {
 
 src_install() {
 	_emake DESTDIR="${D}" PKGDOCDIR='$(DOCDIR)'/${PF} install
+	cleanup_install
 }

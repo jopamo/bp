@@ -19,7 +19,7 @@ RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
 	nls? ( sys-devel/gettext )"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	nls? ( sys-devel/gettext )
 	static? ( ${LIB_DEPEND} )"
 

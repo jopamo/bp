@@ -13,5 +13,5 @@ sys-app/sandbox
 dev-util/ccache
 sys-devel/gcc
 dev-util/cmake
-dev-util/pkgconfig
+dev-util/pkgconf
 sys-app/layout

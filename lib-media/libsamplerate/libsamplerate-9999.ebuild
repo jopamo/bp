@@ -30,7 +30,7 @@ DEPEND="
 		lib-media/alsa-lib
 		sci-libs/fftw:3.0
 	)
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 src_prepare() {
 	default

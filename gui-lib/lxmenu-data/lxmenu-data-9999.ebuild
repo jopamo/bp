@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="sys-devel/gettext
 	>=dev-util/intltool-0.40.0
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 src_prepare() {
 	default

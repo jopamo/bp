@@ -17,4 +17,4 @@ CDEPEND=">=sys-fs/fuse-3.1.0:3
 RDEPEND="${CDEPEND}
 	>=app-net/openssh-4.4"
 DEPEND="${CDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconf"

@@ -31,7 +31,7 @@ DEPEND="${RDEPEND}
 		app-text/doxygen
 		lib-dev/libxslt
 		app-media/graphviz
-		dev-util/pkgconfig
+		dev-util/pkgconf
 	)
 	nls? ( sys-devel/gettext )
 "

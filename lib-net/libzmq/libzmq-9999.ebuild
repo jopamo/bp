@@ -20,7 +20,7 @@ RDEPEND="
 
 DEPEND="${RDEPEND}
 	sys-app/util-linux
-	pgm? ( dev-util/pkgconfig )"
+	pgm? ( dev-util/pkgconf )"
 
 PDEPEND="lib-net/cppzmq
 		lib-net/czmq

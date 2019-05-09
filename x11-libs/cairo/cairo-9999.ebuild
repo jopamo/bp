@@ -40,7 +40,7 @@ RDEPEND="
 	)"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	>=sys-devel/libtool-2
 	X? ( x11/xorgproto )"
 

@@ -27,7 +27,7 @@ REQUIRED_USE="static? ( !plugins !pkcs11 )
 
 CDEPEND="
 	kernel_linux? (
-		iproute2? ( sys-app/iproute2[-minimal] )
+		iproute2? ( app-net/iproute2[-minimal] )
 		!iproute2? ( sys-app/net-tools )
 	)
 	pam? ( lib-sys/pam )

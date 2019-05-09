@@ -33,7 +33,7 @@ RDEPEND="caps? ( lib-sys/libcap-ng )
 	udev? ( sys-app/systemd:= )"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	nls? ( sys-devel/gettext )
 	test? ( sys-devel/bc )
 	sys-kernel/linux-headers"

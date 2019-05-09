@@ -31,7 +31,7 @@ RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
 DEPEND="
 	${RDEPEND}
 	app-compression/xz-utils
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	static? ( ${LIB_DEPEND} )
 	test? (
 		${PYTHON_DEPS}

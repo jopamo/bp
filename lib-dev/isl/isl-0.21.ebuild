@@ -14,7 +14,7 @@ IUSE="static-libs"
 RDEPEND=">=lib-dev/gmp-5.1.3-r1"
 DEPEND="${RDEPEND}
 	app-compression/xz-utils
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 src_prepare() {
 	default

@@ -12,9 +12,7 @@ SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 IUSE="prefix"
 
-RDEPEND=""
-DEPEND=">=lib-dev/libxml2-2.4
-	>=app-text/docbook-xsl-stylesheets-1.65
+RDEPEND=">=app-text/docbook-xsl-stylesheets-1.65
 	>=app-text/build-docbook-catalog-1.2"
 
 sgml-catalog_cat_include "/etc/sgml/xml-docbook-${PV}.cat" \

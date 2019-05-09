@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
 inherit fcaps
 
@@ -20,24 +20,19 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="audit cracklib debug nls test vim-syntax"
 
+BDEPEND="app-misc/w3m
+		app-text/docbook-xml-dtd:4.1
+		app-text/docbook-xml-dtd:4.3
+		app-text/docbook-xml-dtd:4.4
+		app-text/docbook-sgml-dtd:4.5"
+
 RDEPEND="
 	cracklib? ( >=lib-sys/cracklib-2.9.1-r1 )
 	audit? ( >=sys-app/audit-2.2.2 )"
 
-DEPEND="app-text/docbook-xml-dtd:4.5
-		lib-dev/libxslt
-		sys-devel/flex"
-
 PDEPEND="
 	lib-sys/pambase
 	vim-syntax? ( app-misc/vim )"
-
-src_prepare() {
-	default
-	sed -e 's/dummy links/dummy lynx/'                                     \
-    -e 's/-no-numbering -no-references/-force-html -nonumbers -stdin/' \
-    -i configure
-}
 
 src_configure() {
 	export ac_cv_header_xcrypt_h=no

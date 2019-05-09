@@ -17,7 +17,7 @@ RDEPEND="fontconfig? ( >=lib-media/fontconfig-2.10.92 )
 	harfbuzz? ( >=lib-media/harfbuzz-0.9.12[truetype] )"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	dev-lang/nasm"
 
 src_configure() {

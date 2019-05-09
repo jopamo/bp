@@ -15,7 +15,7 @@ IUSE="static-libs"
 RESTRICT="test"
 
 DEPEND="sys-devel/libtool
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 src_prepare() {
 	default

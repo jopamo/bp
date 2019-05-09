@@ -32,7 +32,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	gui-lib/linguist-tools:5
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	lib-media/libexif
 "
 

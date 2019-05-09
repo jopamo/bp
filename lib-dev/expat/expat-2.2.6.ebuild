@@ -57,7 +57,7 @@ src_compile() {
 }
 
 src_install() {
-	emake install DESTDIR="${D}"
+	default
 
 	if use unicode; then
 		pushd "${BUILD_DIR}"w >/dev/null
@@ -69,6 +69,4 @@ src_install() {
 		sed -i -e '/^Libs/s:-lexpat:&w:' expatw.pc || die
 		popd >/dev/null
 	fi
-
-	find "${ED}" -name "*.la" -delete || die
 }

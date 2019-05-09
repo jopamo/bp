@@ -16,7 +16,7 @@ IUSE="debug static-libs"
 
 RDEPEND=">=app-media/ffmpeg-2.4.0:="
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 src_prepare() {
 	default

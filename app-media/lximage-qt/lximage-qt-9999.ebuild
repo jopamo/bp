@@ -36,7 +36,7 @@ DEPEND="${RDEPEND}
 	gui-lib/linguist-tools:5
 	>=dev-util/lxqt-build-tools-0.4.0
 	gui-lib/liblxqt
-	dev-util/pkgconfig
+	dev-util/pkgconf
 "
 
 pkg_postinst() {

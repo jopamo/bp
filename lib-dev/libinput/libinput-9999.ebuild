@@ -27,7 +27,7 @@ RDEPEND="
 	>=lib-sys/mtdev-1.1"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 src_configure() {
 	local emesonargs=(

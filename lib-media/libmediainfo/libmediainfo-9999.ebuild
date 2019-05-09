@@ -19,7 +19,7 @@ RDEPEND="lib-sys/zlib
 	>=lib-media/libzen-0.4.37[static-libs=]"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 RESTRICT="test"
 

@@ -31,4 +31,4 @@ RDEPEND="lib-dev/glib:2
 "
 DEPEND="${RDEPEND}
 	gui-lib/linguist-tools:5
-	dev-util/pkgconfig"
+	dev-util/pkgconf"

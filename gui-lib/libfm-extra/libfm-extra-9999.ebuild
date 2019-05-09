@@ -16,7 +16,7 @@ RDEPEND=">=lib-dev/glib-2.18:2"
 DEPEND="${RDEPEND}
 	app-compression/xz-utils
 	>=dev-util/intltool-0.40
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	sys-devel/gettext
 	dev-util/gtk-doc
 "

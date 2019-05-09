@@ -36,7 +36,7 @@ COMMON_DEPEND="
 "
 
 DEPEND="${COMMON_DEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 "
 
 RDEPEND="${COMMON_DEPEND}

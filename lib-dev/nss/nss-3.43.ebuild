@@ -22,7 +22,7 @@ KEYWORDS="amd64 arm64"
 IUSE="cacert +nss-pem utils"
 CDEPEND=">=lib-sys/sqlite-3.8.2
 	>=lib-sys/zlib-1.2.8-r1"
-DEPEND=">=dev-util/pkgconfig-0-r1
+DEPEND=">=dev-util/pkgconf-0-r1
 	>=lib-dev/nspr-${NSPR_VER}
 	${CDEPEND}"
 RDEPEND=">=lib-dev/nspr-${NSPR_VER}

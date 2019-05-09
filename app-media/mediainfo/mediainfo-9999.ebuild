@@ -17,7 +17,7 @@ RDEPEND="lib-sys/zlib
 	lib-media/libmediainfo"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 S=${WORKDIR}/${P}/Project/GNU/CLI
 

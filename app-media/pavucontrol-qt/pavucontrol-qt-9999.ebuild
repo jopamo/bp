@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND=( ">=dev-util/lxqt-build-tools-${PV}
 	gui-lib/linguist-tools:5
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	app-media/pulseaudio
 "
 )

@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="lib-dev/popt"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 "
 
 src_prepare() {

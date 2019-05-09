@@ -65,7 +65,7 @@ RDEPEND="
 	wavpack? ( >=app-media/wavpack-4.50.1-r1 )"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	nls? ( dev-util/intltool )"
 
 src_prepare() {

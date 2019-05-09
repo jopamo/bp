@@ -17,7 +17,7 @@ RDEPEND="
 	app-media/ffmpeg
 "
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 "
 
 src_prepare() {

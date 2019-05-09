@@ -31,7 +31,7 @@ RDEPEND="
 	)
 	xml? ( >=lib-dev/libxml2-2.7.7:2 )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	test? ( >=dev-util/cunit-2.1 )"
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro

@@ -27,7 +27,7 @@ RDEPEND="bzip2? ( app-compression/lbzip2 )
 	libedit? ( lib-dev/libedit )
 	readline? ( lib-sys/readline:0= )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	>=sys-app/findutils-4.4.0"
 
 S="${WORKDIR}/${MY_P}"
@@ -65,9 +65,4 @@ src_configure() {
 
 src_compile() {
 	emake V=1
-}
-
-src_install() {
-	emake DESTDIR="${D}" install
-	find "${ED}" -name "*.la" -delete || die
 }

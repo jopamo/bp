@@ -36,7 +36,7 @@ RDEPEND="static-libs? ( ${LIB_DEPEND} )
 	${LIB_DEPEND//\[static-libs\(+\)\]}
 	python? ( ${PYTHON_DEPS} )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	static? ( ${LIB_DEPEND} )"
 
 S="${WORKDIR}/${P/_/-}"

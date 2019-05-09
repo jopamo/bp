@@ -18,7 +18,7 @@ RDEPEND=">=sys-app/util-linux-2.16
 	fuse? ( sys-fs/fuse )"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	sys-app/texinfo"
 
 src_prepare() {

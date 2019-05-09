@@ -20,7 +20,7 @@ RDEPEND="lib-dev/libltdl:0
 
 DEPEND="${RDEPEND}
 	sys-devel/libtool
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 pkg_setup() {
 	append-cflags -D_GNU_SOURCE

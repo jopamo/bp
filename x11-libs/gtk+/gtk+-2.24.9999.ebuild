@@ -54,7 +54,7 @@ DEPEND="${COMMON_DEPEND}
 	lib-dev/gobject-introspection-common
 	>=dev-util/gtk-doc-am-1.20
 	>=sys-devel/gettext-0.18.3
-	>=dev-util/pkgconfig-0-r1
+	>=dev-util/pkgconf-0-r1
 	xinerama? ( >=x11/xorgproto-1.2.1-r1 )
 
 	test? (

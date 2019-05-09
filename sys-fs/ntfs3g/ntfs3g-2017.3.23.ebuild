@@ -25,7 +25,7 @@ RDEPEND="!<sys-app/util-linux-2.20.1-r2
 "
 DEPEND="${RDEPEND}
 	sys-app/attr
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 S="${WORKDIR}/${MY_P}"
 

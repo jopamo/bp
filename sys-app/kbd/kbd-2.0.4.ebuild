@@ -24,7 +24,7 @@ IUSE="nls pam test"
 RDEPEND="pam? ( lib-sys/pam )
 	app-compression/pigz"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	test? ( lib-dev/check )"
 
 src_unpack() {
@@ -54,9 +54,4 @@ src_configure() {
 		$(use_enable nls) \
 		$(use_enable pam vlock) \
 		$(use_enable test tests)
-}
-
-src_install() {
-	default
-	dohtml docs/doc/*.html
 }

@@ -25,7 +25,7 @@ RDEPEND="${COMMON_DEPEND}
 	!<gnome-extra/at-spi-1.32.0-r1
 "
 DEPEND="${COMMON_DEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 "
 
 src_configure() {

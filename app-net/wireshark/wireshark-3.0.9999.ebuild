@@ -59,7 +59,7 @@ DEPEND="
 	dev-lang/perl
 	sys-devel/bison
 	sys-devel/flex
-	dev-util/pkgconfig
+	dev-util/pkgconf
 "
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro

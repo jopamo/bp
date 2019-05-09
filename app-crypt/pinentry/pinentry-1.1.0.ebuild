@@ -24,7 +24,7 @@ CDEPEND="
 "
 DEPEND="${CDEPEND}
 	sys-devel/gettext
-	dev-util/pkgconfig
+	dev-util/pkgconf
 "
 
 src_prepare() {

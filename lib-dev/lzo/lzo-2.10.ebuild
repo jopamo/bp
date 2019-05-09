@@ -19,11 +19,3 @@ src_configure() {
 		--enable-shared \
 		$(use_enable static-libs static)
 }
-
-src_install() {
-	emake DESTDIR="${D}" install
-
-	rm "${ED}"/usr/share/doc/${PF}/COPYING || die
-
-	find "${ED}" -name '*.la' -delete || die
-}

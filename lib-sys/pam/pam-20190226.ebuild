@@ -30,7 +30,7 @@ DEPEND="
 	>=sys-devel/libtool-2
 	>=sys-devel/flex-2.5.39-r1
 	app-text/docbook-xml-dtd:4.3
-	nis? ( >=dev-util/pkgconfig-0-r1 )"
+	nis? ( >=dev-util/pkgconf-0-r1 )"
 
 PDEPEND="
 	lib-sys/pambase

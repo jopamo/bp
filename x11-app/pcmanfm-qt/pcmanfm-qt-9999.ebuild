@@ -38,7 +38,7 @@ DEPEND="${CDEPEND}
 	gui-lib/linguist-tools:5
 	>=dev-util/intltool-0.40
 	sys-devel/gettext
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 src_prepare() {
 	cmake-utils_src_prepare

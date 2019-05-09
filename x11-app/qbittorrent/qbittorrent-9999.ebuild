@@ -16,7 +16,7 @@ IUSE="debug webui gui"
 
 DEPEND=">=lib-dev/boost-1.62.0-r1:=
 	lib-net/libtorrent
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	gui-lib/qtcore:5
 	gui-lib/qtnetwork:5[ssl]
 	gui-lib/qtxml:5

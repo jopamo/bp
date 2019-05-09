@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 IUSE="ipv6 static-libs"
 
 DEPEND="app-compression/xz-utils
-	>=dev-util/pkgconfig-0-r1"
+	>=dev-util/pkgconf-0-r1"
 
 src_prepare() {
 	eautoreconf

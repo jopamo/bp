@@ -121,8 +121,6 @@ src_compile() {
 }
 
 src_install() {
-	local d f
-
 	default
 
 	if use plugins ; then
@@ -131,24 +129,6 @@ src_install() {
 		insinto /usr/include/bash-plugins
 		doins *.h builtins/*.h include/*.h lib/{glob/glob.h,tilde/tilde.h}
 	fi
-
-	if use examples ; then
-		for d in examples/{functions,misc,scripts,startup-files} ; do
-			exeinto /usr/share/doc/${PF}/${d}
-			insinto /usr/share/doc/${PF}/${d}
-			for f in ${d}/* ; do
-				if [[ ${f##*/} != PERMISSION ]] && [[ ${f##*/} != *README ]] ; then
-					doexe ${f}
-				else
-					doins ${f}
-				fi
-			done
-		done
-	fi
-
-	doman doc/*.1
-	newdoc CWRU/changelog ChangeLog
-	dosym bash.info /usr/share/info/bashref.info
 }
 
 pkg_preinst() {

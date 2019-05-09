@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs utils"
 
 DEPEND=">=lib-sys/ncurses-5.9-r3:0=[static-libs?]
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 PATCHES=( 	"${FILESDIR}"/${PN}-5.0-no_rpath.patch
 			"${FILESDIR}"/${PN}-6.2-rlfe-tgoto.patch

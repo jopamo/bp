@@ -16,8 +16,8 @@ COMMON_DEPEND="
 	systemd? ( sys-app/systemd )
 "
 DEPEND="${COMMON_DEPEND}
-	ncurses? ( dev-util/pkgconfig )
-	systemd? ( dev-util/pkgconfig )
+	ncurses? ( dev-util/pkgconf )
+	systemd? ( dev-util/pkgconf )
 	test? ( dev-util/dejagnu )"
 RDEPEND="
 	${COMMON_DEPEND}

@@ -34,7 +34,7 @@ DEPEND="${CDEPEND}
 		dev-util/splint
 		app-text/wdiff
 	)
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 S=${WORKDIR}/${MY_P}
 

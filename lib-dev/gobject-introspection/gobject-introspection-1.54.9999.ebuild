@@ -29,7 +29,7 @@ RDEPEND="
 	lib-dev/glib
 	doctool? ( dev-python/mako[${PYTHON_USEDEP}] )
 	lib-dev/libffi
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	!<dev-lang/vala-0.20.0
 	${PYTHON_DEPS}
 "

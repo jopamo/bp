@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 RDEPEND=">=lib-sys/ncurses-5.2:0="
 DEPEND="
 	${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 "
 src_prepare() {
 	eautoreconf

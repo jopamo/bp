@@ -77,14 +77,10 @@ src_compile() {
 }
 
 src_install() {
-	insinto /usr/lib64
-
 	make DESTDIR="${D}" \
 		SHELL="${BASH}" \
 		libdir="${EPREFIX}"/usr/lib64 \
 		install install-man
-
-	find "${ED}" -name "*.la" -delete || die
 
 	dosym openjade  /usr/bin/jade
 	dosym onsgmls   /usr/bin/nsgmls
@@ -106,13 +102,7 @@ src_install() {
 	insinto /usr/share/sgml/${P}/pubtext
 	doins pubtext/*
 
-	dodoc NEWS README VERSION
-	dohtml doc/*.htm
-
-	insinto /usr/share/doc/${PF}/jadedoc
-	doins jadedoc/*.htm
-	insinto /usr/share/doc/${PF}/jadedoc/images
-	doins jadedoc/images/*
+	cleanup_install
 }
 
 sgml-catalog_cat_include "/etc/sgml/${P}.cat" \

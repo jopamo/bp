@@ -32,7 +32,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	dev-util/gtk-doc-am
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	test? ( ${PYTHON_DEPS} )
 "
 # eautoreconf requires gobject-introspection-common

@@ -19,7 +19,7 @@ RDEPEND="ldap? ( net-nds/openldap )
 "
 
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0-r1
+	>=dev-util/pkgconf-0-r1
 	embed? ( lib-net/mbedtls )
 	test? (
 		sys-app/diffutils

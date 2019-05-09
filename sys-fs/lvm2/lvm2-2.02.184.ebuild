@@ -41,7 +41,7 @@ RDEPEND="${DEPEND_COMMON}
 # note: thin- 0.3.0 is required to avoid --disable-thin_check_needs_check
 # USE 'static' currently only works with eudev, bug 520450
 DEPEND="${DEPEND_COMMON}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	lib-dev/libaio
 	>=sys-devel/binutils-2.20.1-r1
 	sys-devel/autoconf-archive

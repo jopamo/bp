@@ -431,6 +431,8 @@ perl-module_src_install() {
 	fi
 
 	perl_link_duallife_scripts
+
+	cleanup_install
 }
 
 # @FUNCTION: perl-module_pkg_postinst

@@ -19,7 +19,7 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="static"
 
-DEPEND="dev-util/pkgconfig
+DEPEND="dev-util/pkgconf
 		app-compression/xz-utils"
 RDEPEND="sys-app/util-linux"
 

@@ -66,7 +66,7 @@ DEPEND="sys-devel/bison
 	${COMMON_DEPEND}"
 RDEPEND="${COMMON_DEPEND}
 	server? ( galera? (
-		sys-app/iproute2
+		app-net/iproute2
 		=sys-cluster/galera-25*
 		sst-rsync? ( sys-app/lsof )
 		sst-mariabackup? ( app-net/socat[ssl] )

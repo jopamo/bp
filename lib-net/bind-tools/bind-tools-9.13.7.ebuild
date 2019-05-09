@@ -30,7 +30,7 @@ CDEPEND="
 	readline? ( lib-sys/readline:0= )
 	seccomp? ( lib-sys/libseccomp )"
 DEPEND="${CDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 RDEPEND="${CDEPEND}
 	!<lib-net/bind-9.10.2"
 

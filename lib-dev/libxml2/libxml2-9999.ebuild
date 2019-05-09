@@ -31,7 +31,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	dev-util/gtk-doc-am
-	dev-util/pkgconfig
+	dev-util/pkgconf
 "
 
 S="${WORKDIR}/${PN}-${PV%_rc*}"

@@ -25,7 +25,7 @@ CDEPEND="
 	>=lib-sys/zlib-1.1"
 
 DEPEND="${CDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	test? (
 		lib-dev/fcgi
 	)"

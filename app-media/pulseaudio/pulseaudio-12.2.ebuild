@@ -80,7 +80,7 @@ DEPEND="${RDEPEND}
 		>=x11-libs/libXtst-1.0.99.2
 	)
 	lib-dev/libatomic_ops
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	dev-util/intltool
 	>=sys-devel/gettext-0.18.1
 	lib-media/speexdsp

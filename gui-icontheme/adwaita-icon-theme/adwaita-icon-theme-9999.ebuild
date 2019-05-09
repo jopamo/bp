@@ -25,7 +25,7 @@ RDEPEND="${COMMON_DEPEND}
 DEPEND="${COMMON_DEPEND}
 	x11-libs/gtk+:3
 	sys-devel/gettext
-	dev-util/pkgconfig
+	dev-util/pkgconf
 "
 # This ebuild does not install any binaries
 RESTRICT="binchecks strip"

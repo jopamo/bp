@@ -54,7 +54,7 @@ DEPEND="${COMMON_DEPEND}
 	app-compression/xz-utils:0
 	dev-util/gperf
 	>=sys-app/coreutils-8.16
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	test? ( sys-app/dbus )
 	app-text/docbook-xml-dtd:4.2
 	app-text/docbook-xml-dtd:4.5

@@ -23,5 +23,5 @@ src_install() {
 	insinto /usr/share/${PN}
 	doins config.{sub,guess} || die
 	fperms +x /usr/share/${PN}/config.{sub,guess}
-	dodoc ChangeLog
+	cleanup_install
 }

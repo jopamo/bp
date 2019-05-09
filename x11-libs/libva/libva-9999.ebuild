@@ -29,7 +29,7 @@ RDEPEND=">=x11-libs/libdrm-2.4.46
 	wayland? ( >=lib-dev/wayland-1.11 )"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 PDEPEND="video_cards_intel? ( >=x11-libs/libva-intel-driver-2.0.0 )
 	video_cards_i965? ( >=x11-libs/libva-intel-driver-2.0.0 )
 	utils? ( app-media/libva-utils )

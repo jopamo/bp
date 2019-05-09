@@ -27,7 +27,7 @@ LIB_DEPEND="
 RDEPEND="${LIB_DEPEND}"
 DEPEND="${RDEPEND}
 	lib-media/freeglut
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	static-libs? ( ${LIB_DEPEND} )
 	static? ( ${LIB_DEPEND//?}
 		app-compression/lbzip2[static-libs]

@@ -32,12 +32,12 @@ RDEPEND="!sys-app/module-init-tools
 	zlib? ( >=lib-sys/zlib-1.2.6 )" #427130
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )
-	lzma? ( dev-util/pkgconfig )
+	lzma? ( dev-util/pkgconf )
 	python? (
 		dev-python/cython[${PYTHON_USEDEP}]
-		dev-util/pkgconfig
+		dev-util/pkgconf
 		)
-	zlib? ( dev-util/pkgconfig )"
+	zlib? ( dev-util/pkgconf )"
 if [[ ${PV} == 9999* ]]; then
 	DEPEND="${DEPEND}
 		lib-dev/libxslt"

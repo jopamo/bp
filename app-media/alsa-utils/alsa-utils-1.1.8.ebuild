@@ -18,7 +18,7 @@ CDEPEND=">=lib-media/alsa-lib-${PV}
 	ncurses? ( >=lib-sys/ncurses-5.7-r7:0= )
 	bat? ( sci-libs/fftw:= )"
 DEPEND="${CDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	doc? ( app-text/xmlto )"
 RDEPEND="${CDEPEND}
 "

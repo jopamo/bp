@@ -76,10 +76,7 @@ src_install() {
 		python_foreach_impl python_optimize
 	fi
 
-	rm -rf "${ED}"/usr/share/doc/${PF}/examples
-	rm -rf "${ED}"/usr/share/doc/${PF}/python/examples
-
-	find "${ED}" -name "*.la" -delete || die
+	cleanup_install
 }
 
 libxslt_foreach_py_emake() {

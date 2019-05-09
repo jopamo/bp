@@ -28,7 +28,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 "
 
 S="${WORKDIR}/${MY_P}"
@@ -66,9 +66,4 @@ src_configure() {
 
 src_compile() {
 	emake V=1
-}
-
-src_install() {
-	emake DESTDIR="${ED}" install
-	find "${ED}" -name "*.la" -delete || die
 }

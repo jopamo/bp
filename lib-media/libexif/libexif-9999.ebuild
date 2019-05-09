@@ -16,7 +16,7 @@ IUSE="doc nls static-libs"
 
 RDEPEND="nls? ( sys-devel/gettext )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	doc? ( app-text/doxygen )
 	nls? ( sys-devel/gettext )"
 

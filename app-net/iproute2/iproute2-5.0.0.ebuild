@@ -114,6 +114,7 @@ src_install() {
 	dolib.a lib/libnetlink.a
 	insinto /usr/include
 	doins include/libnetlink.h
-	find "${ED}" -type d -empty -delete
 	sed -i '/linux\/netconf.h/d' "${ED%/}"/usr/include/libnetlink.h || die
+
+	cleanup_install
 }

@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="test"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-DEPEND="dev-util/pkgconfig
+DEPEND="dev-util/pkgconf
 	test? (
 		${PYTHON_DEPS}
 		dev-python/pytest[${PYTHON_USEDEP}]

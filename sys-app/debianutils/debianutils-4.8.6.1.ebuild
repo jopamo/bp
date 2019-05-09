@@ -32,6 +32,7 @@ src_install() {
 	doman tempfile.1 run-parts.8 savelog.8
 	use installkernel && doman installkernel.8
 	cd debian || die
-	dodoc changelog control
 	keepdir /etc/kernel/postinst.d
+
+	cleanup_install
 }

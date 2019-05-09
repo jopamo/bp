@@ -82,7 +82,7 @@ COMMON_DEPEND="
 	zlib? ( lib-sys/zlib )
 "
 DEPEND="${COMMON_DEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	app-media/ffmpeg
 	x11/vulkan-headers
 	dvb? ( virtual/linuxtv-dvb-headers )

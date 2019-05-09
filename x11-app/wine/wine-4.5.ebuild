@@ -66,7 +66,7 @@ RDEPEND="${COMMON_DEPEND}
 
 DEPEND="${COMMON_DEPEND}
 	sys-devel/flex
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	sys-devel/bison
 	X? ( x11/xorgproto )
 "

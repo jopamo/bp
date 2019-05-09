@@ -122,7 +122,7 @@ IUSE="debug test"
 
 DEPEND="
 	dev-lang/perl
-	dev-util/pkgconfig
+	dev-util/pkgconf
 "
 if [[ (${PN} != qttest && ${PN} != qtwebkit) || (${PN} == qtwebkit && ${QT5_MINOR_VERSION} -lt 9) ]]; then
 	DEPEND+=" test? ( ~gui-lib/qttest-${PV} )"

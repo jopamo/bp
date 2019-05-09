@@ -16,7 +16,7 @@ RDEPEND="lib-dev/libxml2"
 DEPEND="lib-dev/glib
 	dev-util/intltool
 	sys-devel/gettext
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 src_prepare() {
 	eautoreconf

@@ -32,7 +32,7 @@ RDEPEND="${COMMON_DEPEND}
 	x11/xprop
 	x11/xwininfo"
 DEPEND="${COMMON_DEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconf
 	x11/xorgproto
 	lib-dev/libev
 	lib-dev/uthash

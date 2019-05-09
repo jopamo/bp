@@ -14,7 +14,7 @@ IUSE="debug +libffi"
 
 RDEPEND="libffi? ( >=lib-dev/libffi-3.0.0 )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 pkg_setup() {
 	# disable unsafe tests, bug#502088

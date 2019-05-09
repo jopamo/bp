@@ -22,7 +22,7 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	nls? ( >=sys-devel/gettext-0.12.1-r2 )
-	dev-util/pkgconfig
+	dev-util/pkgconf
 "
 
 PATCHES=(	${FILESDIR}/0002-include.patch

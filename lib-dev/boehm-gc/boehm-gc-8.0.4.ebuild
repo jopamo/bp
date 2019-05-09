@@ -18,7 +18,7 @@ IUSE="cxx static-libs threads"
 
 DEPEND="
 	>=lib-dev/libatomic_ops-7.4
-	dev-util/pkgconfig"
+	dev-util/pkgconf"
 
 S="${WORKDIR}/${MY_P}"
 

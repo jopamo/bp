@@ -37,7 +37,7 @@ COMMON_DEPEND="!app-net/openswan
 DEPEND="${COMMON_DEPEND}
 	sys-kernel/linux-headers"
 RDEPEND="${COMMON_DEPEND}
-	sys-app/iproute2
+	app-net/iproute2
 	!app-server/libreswan
 "
 

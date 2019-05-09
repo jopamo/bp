@@ -17,7 +17,7 @@ IUSE="lapack test"
 
 DEPEND="dev-python/cython
 	dev-python/setuptools[${PYTHON_USEDEP}]
-	lapack? ( dev-util/pkgconfig )
+	lapack? ( dev-util/pkgconf )
 	test? ( >=dev-python/nose-1.0[${PYTHON_USEDEP}] )"
 
 pc_incdir() {

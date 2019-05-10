@@ -1,1 +1,1 @@
-USE="${USE} X xkb pic drm qml opengl xdg xcb jpeg dbus pulseaudio kmod cups mount bzip2 gif jpeg mp3 png tiff zlib icu gui libinput"
+USE="${USE} X xkb pic drm qml opengl xdg xcb jpeg dbus pulseaudio kmod cups mount bzip2 gif jpeg mp3 png tiff zlib icu gui libinput cairo"

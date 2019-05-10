@@ -9,7 +9,7 @@ HOMEPAGE="https://www.mesa3d.org/ https://mesa.freedesktop.org/"
 KEYWORDS="amd64 arm64"
 
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/mesa/mesa.git"
-#EGIT_BRANCH=18.3
+EGIT_BRANCH=19.1
 
 IUSE="llvm"
 
@@ -41,9 +41,9 @@ src_configure() {
 		-Dplatforms=x11,drm
 		-Ddri-drivers="i965,swrast"
 		-Dgallium-drivers=""
-		-Dswr-arches=avx,avx2 
-		-Ddri3=true 
-  		-Degl=true 
+		-Dswr-arches=avx,avx2
+		-Ddri3=true
+  		-Degl=true
 		-Dgbm=true
 		$(meson_use llvm)
 	    	-Dgles1=true
@@ -54,8 +54,8 @@ src_configure() {
 	    	-Dtexture-float=true
 		-Dvulkan-drivers="intel"
 		-Dosmesa=classic
-		-Dlibunwind=true 
-	    	-Dlmsensors=false 
+		-Dlibunwind=true
+	    	-Dlmsensors=false
     		-Dvalgrind=false
 		)
 	meson_src_configure

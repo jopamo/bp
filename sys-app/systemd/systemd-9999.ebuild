@@ -14,50 +14,44 @@ KEYWORDS="amd64 arm64"
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0/2"
 
-IUSE="acl apparmor audit build coredump cryptsetup docs efi embed +gnu_nss kmod lz4 +networkd pam pcre resolved timesyncd qrcode +seccomp test xkb"
+IUSE="acl apparmor audit build coredump cryptsetup curl efi embed gcrypt gnutls +gnu_nss +hostnamed hwdb importd kmod ldconfig +localed lz4 machined +networkd pam pcre resolved +timedated timesyncd +tmpfiles qrcode +seccomp test +vconsole xkb xz zlib"
 
 RESTRICT="!test? ( test )"
 
-COMMON_DEPEND=">=sys-app/util-linux-2.30:0=
-	sys-devel/gettext:0=
-	lib-sys/libcap:0=
-	!<lib-sys/glibc-2.16
+DEPEND="
 	acl? ( sys-app/acl:0= )
 	apparmor? ( lib-sys/libapparmor:0= )
 	audit? ( >=sys-app/audit-2:0= )
 	cryptsetup? ( >=sys-fs/cryptsetup-1.6:0= )
-	app-net/curl
-	>=lib-dev/libgcrypt-1.4.5:0=
-	app-compression/bzip2:0=
-	lib-sys/zlib:0=
+	curl? ( app-net/curl )
+	efi? ( sys-app/gnu-efi )
+	gcrypt? ( lib-dev/libgcrypt )
+	gnutls? ( lib-net/gnutls )
 	kmod? ( >=sys-app/kmod-15:0= )
 	lz4? ( app-compression/lz4 )
 	pam? ( lib-sys/pam:= )
 	pcre? ( lib-dev/libpcre2 )
 	qrcode? ( app-media/qrencode:0= )
 	seccomp? ( >=lib-sys/libseccomp-2.3.3:0= )
-	xkb? ( >=x11-libs/libxkbcommon-0.4.1:0= )
-	efi? ( sys-app/gnu-efi )"
-
-RDEPEND="${COMMON_DEPEND}
-	>=sys-app/layout-2.2
-	!build? ( || (
-		sys-app/util-linux[kill(-)]
-		sys-app/procps[kill(+)]
-		sys-app/coreutils[kill(-)]
-	) )"
-
-PDEPEND=">=sys-app/dbus-1.9.8[systemd]"
-
-DEPEND="${COMMON_DEPEND}
-	app-compression/xz-utils:0
-	dev-util/gperf
-	>=sys-app/coreutils-8.16
-	dev-util/pkgconf
 	test? ( sys-app/dbus )
+	xkb? ( >=x11-libs/libxkbcommon-0.4.1:0= )
+	xz? ( app-compression/xz-utils )
+	zlib? ( lib-sys/zlib )
+
+	app-compression/bzip2:0=
 	app-text/docbook-xml-dtd
 	app-text/docbook-xsl-stylesheets
-	lib-dev/libxslt:0"
+	dev-util/gperf
+	dev-util/pkgconf
+	lib-dev/libxslt:0
+	lib-sys/libcap
+	sys-app/coreutils
+	sys-app/procps[kill(+)]
+	sys-app/util-linux
+	sys-devel/gettext
+"
+
+PDEPEND=">=sys-app/dbus-1.9.8[systemd]"
 
 append-cflags -Wno-error=format-truncation
 
@@ -121,30 +115,35 @@ src_configure() {
 		-Dbinfmt=false
 		-Dblkid=false
 		-Dbuildtype=release
-		-Dbzip2=false
+		-Dbzip2=true
 		-Ddefault-hierarchy=unified
 		-Ddefault-kill-user-processes=false
 		-Ddns-servers="1.1.1.1 1.0.0.1"
 		-Delfutils=false
 		-Denvironment-d=false
 		-Dfirstboot=false
-		-Dgcrypt=true
-		-Dgnutls=true
+		$(meson_use gcrypt)
+		$(meson_use gnutls)
+		$(meson_use hostnamed)
+		$(meson_use hwdb)
+		$(meson_use importd)
+		$(meson_use ldconfig)
+		$(meson_use curl)
+		$(meson_use localed)
+		$(meson_use machined)
+		$(meson_use timedated)
+		$(meson_use tmpfiles)
+		$(meson_use vconsole)
+		$(meson_use zlib)
+		$(meson_use xz)
 		-Dhalt-local=""
 		-Dhibernate=false
-		-Dhostnamed=true
 		-Dhtml=false
-		-Dhwdb=true
 		-Dima=false
-		-Dimportd=true
 		-Dkill-path=/usr/bin/kill
-		-Dldconfig=true
-		-Dlibcurl=true
 		-Dlibidn2=false
 		-Dlibidn=false
 		-Dlibiptc=false
-		-Dlocaled=true
-		-Dmachined=true
 		-Dman=false
 		-Dmicrohttpd=false
 		-Dntp-servers=""
@@ -163,11 +162,6 @@ src_configure() {
 		-Dsysvinit-path=""
 		-Dsysvrcnd-path=""
 		-Dtelinit-path=""
-		-Dtimedated=true
-		-Dtmpfiles=true
-		-Dvconsole=true
-		-Dxz=true
-		-Dzlib=true
 	)
 
 	local embed=(

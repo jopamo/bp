@@ -1,17 +1,16 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit qmake-utils toolchain-funcs versionator git-r3
+inherit qmake-utils toolchain-funcs git-r3
 
 DESCRIPTION="Powerful yet simple to use screenshot software for GNU/Linux"
 HOMEPAGE="https://github.com/lupoDharkael/flameshot"
-
 EGIT_REPO_URI="https://github.com/lupoDharkael/flameshot.git"
-KEYWORDS="amd64 arm64"
 
 LICENSE="FreeArt GPL-3+ Apache-2.0"
-SLOT="0"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
 
 DEPEND="
 	>=gui-lib/qtcore-5.3.0:5

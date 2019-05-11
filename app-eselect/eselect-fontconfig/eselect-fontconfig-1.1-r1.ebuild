@@ -1,13 +1,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
 DESCRIPTION="An eselect module to manage /etc/fonts/conf.d symlinks"
 HOMEPAGE="https://www.gentoo.org"
 SRC_URI="mirror://gentoo/fontconfig.eselect-${PV}.bz2"
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 RDEPEND=">=sys-app/eselect-1.2.3

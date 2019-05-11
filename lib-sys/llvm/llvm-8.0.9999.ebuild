@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit cmake-utils flag-o-matic git-r3 \
 	multiprocessing toolchain-funcs

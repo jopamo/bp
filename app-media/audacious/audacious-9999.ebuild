@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit xdg-utils autotools git-r3 flag-o-matic
 
@@ -9,9 +9,10 @@ HOMEPAGE="https://audacious-media-player.org/"
 EGIT_REPO_URI="https://github.com/audacious-media-player/audacious.git"
 
 LICENSE="BSD-2"
-SLOT="0"
-IUSE="nls"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
+IUSE="nls"
 
 PDEPEND="~app-media/audacious-plugins-${PV}"
 

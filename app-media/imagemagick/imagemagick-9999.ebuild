@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit git-r3
 
@@ -10,7 +10,9 @@ EGIT_REPO_URI="https://github.com/ImageMagick/ImageMagick.git"
 KEYWORDS="amd64 arm64"
 
 LICENSE="imagemagick"
-SLOT="0"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
 IUSE="bzip2 cxx fftw fontconfig fpx graphviz hdri heif jbig jpeg jpeg2k lcms lqr lzma opencl openexr pango perl png postscript raw static-libs svg test tiff truetype webp wmf X xml zlib"
 
 src_configure() {

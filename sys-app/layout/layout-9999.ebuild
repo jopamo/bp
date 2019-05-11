@@ -23,7 +23,7 @@ src_prepare() {
 	default
 
 	local libdir ldpaths
-	ldpaths+=":${EPREFIX}/usr/${get_libdir}"
+	ldpaths+=":${EPREFIX}/usr/lib"
 	echo "LDPATH='${ldpaths#:}'" >> etc/env.d/50baselayout
 }
 

@@ -1,13 +1,9 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 DESCRIPTION="utils for managing LZMA compressed files"
 HOMEPAGE="http://tukaani.org/xz/"
-
-LICENSE="public-domain LGPL-2.1+ GPL-2+"
-SLOT="0"
-IUSE="nls static-libs"
 
 if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI="http://git.tukaani.org/xz.git"
@@ -18,6 +14,11 @@ else
 	S=${WORKDIR}/xz-${PV}
 	KEYWORDS="amd64 arm64"
 fi
+
+LICENSE="public-domain LGPL-2.1+ GPL-2+"
+SLOT="0/1"
+
+IUSE="nls static-libs"
 
 src_prepare() {
 	if [[ ${PV} == "9999" ]] ; then

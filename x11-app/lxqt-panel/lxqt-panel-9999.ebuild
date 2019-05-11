@@ -1,11 +1,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
+
 inherit cmake-utils
 
 DESCRIPTION="LXQt desktop panel and plugins"
 HOMEPAGE="http://lxqt.org/"
-KEYWORDS="amd64 arm64"
 
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -16,6 +16,8 @@ fi
 
 LICENSE="LGPL-2.1+"
 SLOT="0"
+KEYWORDS="amd64 arm64"
+
 IUSE="alsa +clock colorpicker cpuload desktopswitch dom kbindicator
 	mainmenu networkmonitor pulseaudio quicklaunch sensors showdesktop
 	statusnotifier sysstat +taskbar +tray volume"
@@ -79,9 +81,4 @@ src_configure() {
 	)
 
 	cmake-utils_src_configure
-}
-
-src_install(){
-	cmake-utils_src_install
-	doman panel/man/*.1
 }

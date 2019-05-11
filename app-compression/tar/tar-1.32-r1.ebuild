@@ -1,15 +1,17 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit flag-o-matic autotools
 
-DESCRIPTION="Use this to make tarballs :)"
+DESCRIPTION="An archiver that creates and handles file archives in various formats."
 HOMEPAGE="https://www.gnu.org/software/tar/"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+
 LICENSE="GPL-3+"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="acl nls static xattr"
 
 DEPEND="acl? ( sys-app/acl )

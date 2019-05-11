@@ -1,14 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: sgml-catalog.eclass
-# @MAINTAINER:
-# No maintainer <maintainer-needed@gentoo.org>
-# @AUTHOR:
-# Author Matthew Turk <satai@gentoo.org>
-# @BLURB: Functions for installing SGML catalogs
-
-inherit base
-
 DEPEND=">=app-text/sgml-common-0.6.3-r2"
 
 # @ECLASS-VARIABLE: SGML_TOINSTALL

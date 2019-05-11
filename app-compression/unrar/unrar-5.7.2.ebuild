@@ -1,16 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit eutils flag-o-matic toolchain-funcs
-
-MY_PN=${PN}src
+inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Uncompress rar files"
 HOMEPAGE="http://www.rarlab.com/rar_add.htm"
-SRC_URI="http://www.rarlab.com/rar/${MY_PN}-${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="http://www.rarlab.com/rar/${PN}src-${PV}.tar.gz -> ${P}.tar.gz"
+
 LICENSE="unRAR"
-SLOT="0/5"
+SLOT="0/$(ver_cut 0-1)"
 KEYWORDS="amd64 arm64"
 
 S=${WORKDIR}/unrar
@@ -19,6 +18,8 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-5.5.5-build.patch
 	"${FILESDIR}"/${PN}-5.5.5-honor-flags.patch
 )
+
+append-ldflags -Wl,-soname,libunrar.so.$(ver_cut 0-1)
 
 src_configure() {
 	mkdir -p build-{lib,bin}
@@ -38,11 +39,15 @@ src_compile() {
 
 src_install() {
 	dobin build-bin/unrar
-	dodoc readme.txt
 
-	dolib.so build-lib/libunrar*
+	newlib.so build-lib/libunrar.so libunrar.so.${PV}
+
+	for x in libunrar.so.$(ver_cut 0-1) libunrar.so ; do
+		dosym libunrar.so.${PV} usr/lib64/${x}
+	done
 
 	insinto /usr/include/libunrar${PV%.*.*}
 	doins *.hpp
-	dosym libunrar${PV%.*.*} /usr/include/libunrar
+
+	dosym libunrar$(ver_cut 0-1) usr/include/libunrar
 }

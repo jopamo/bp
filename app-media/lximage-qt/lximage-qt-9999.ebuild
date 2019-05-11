@@ -1,6 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
+
 inherit cmake-utils xdg-utils
 
 DESCRIPTION="Lightweight Qt image viewer from the LXQt Project"
@@ -15,7 +16,7 @@ else
 fi
 
 LICENSE="|| ( GPL-2+ LGPL-2.1+ )"
-SLOT="0"
+SLOT="0/1"
 
 RDEPEND="
 	lib-dev/glib:2

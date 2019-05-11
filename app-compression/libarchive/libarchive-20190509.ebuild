@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools
 
@@ -20,6 +20,7 @@ fi
 
 LICENSE="BSD BSD-2 BSD-4 public-domain"
 SLOT="0/1"
+
 IUSE="acl +bzip2 expat lzo nettle static-libs xattr +zlib lz4 zstd"
 
 DEPEND="

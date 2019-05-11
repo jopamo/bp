@@ -1,32 +1,27 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-GNOME2_LA_PUNT="yes"
+EAPI=7
 
 inherit autotools flag-o-matic virtualx git-r3
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
-
 EGIT_REPO_URI="https://github.com/GNOME/gtk.git"
-EGIT_BRANCH=gtk-3-22
+EGIT_BRANCH=gtk-$(ver_cut 1)-$(ver_cut 2)
 
 LICENSE="LGPL-2+"
 SLOT="3"
+KEYWORDS="amd64 arm64"
+
 IUSE="aqua broadway colord cups examples +introspection test vim-syntax wayland +X xinerama"
+
 REQUIRED_USE="
 	|| ( aqua wayland X )
 	xinerama? ( X )
 "
 
-KEYWORDS="amd64 arm64"
-
-# Upstream wants us to do their job:
-# https://bugzilla./show_bug.cgi?id=768662#c1
 RESTRICT="test"
 
-# FIXME: introspection data is built against system installation of gtk+:3,
-# bug #????
 COMMON_DEPEND="
 	gui-lib/atk[introspection?]
 	>=lib-dev/glib-2.49.4:2
@@ -103,7 +98,7 @@ src_configure() {
 		--disable-mir-backend \
 		--disable-papi \
 		--with-xml-catalog="${EPREFIX}"/etc/xml/catalog \
-		--libdir="${EPREFIX}"/usr/lib64 \
+		--libdir="${EPREFIX}"/usr/lib \
 		CUPS_CONFIG="${EROOT}/usr/bin/cups-config"
 }
 
@@ -121,7 +116,7 @@ src_install() {
 
 pkg_preinst() {
 	# Make immodules.cache belongs to gtk+ alone
-	local cache="usr/lib64/gtk-3.0/3.0.0/immodules.cache"
+	local cache="usr/lib/gtk-3.0/3.0.0/immodules.cache"
 
 	if [[ -e ${EROOT}${cache} ]]; then
 		cp "${EROOT}"${cache} "${ED}"/${cache} || die
@@ -132,6 +127,6 @@ pkg_preinst() {
 
 pkg_postrm() {
 	if [[ -z ${REPLACED_BY_VERSION} ]]; then
-		rm -f "${EROOT}"usr/lib64/gtk-3.0/3.0.0/immodules.cache
+		rm -f "${EROOT}"usr/lib/gtk-3.0/3.0.0/immodules.cache
 	fi
 }

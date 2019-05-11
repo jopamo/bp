@@ -1,9 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
-
-inherit eutils user systemd unpacker python-single-r1
+EAPI=7
 
 MINOR_VERSION="994-107756f7e"
 
@@ -14,15 +11,19 @@ _FULL_VERSION="${PV}.${MINOR_VERSION}"
 
 URI="https://downloads.plex.tv/plex-media-server-new"
 
+inherit eutils user systemd unpacker python-single-r1
+
 DESCRIPTION="A free media library that is intended for use with a plex client."
 HOMEPAGE="http://www.plex.tv/"
 SRC_URI="amd64? ( ${URI}/${_FULL_VERSION}/debian/plexmediaserver_${_FULL_VERSION}_amd64.deb )
 		arm64? ( ${URI}/${_FULL_VERSION}/debian/plexmediaserver_${_FULL_VERSION}_arm64.deb )"
 
-SLOT="0"
+SLOT="0/1"
 LICENSE="Plex"
-RESTRICT="bindist strip"
 KEYWORDS="amd64 arm64"
+
+RESTRICT="bindist strip"
+
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 DEPEND="lib-media/taglib"

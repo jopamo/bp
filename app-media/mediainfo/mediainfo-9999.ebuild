@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools git-r3
 
@@ -9,7 +9,7 @@ HOMEPAGE="https://mediaarea.net/mediainfo/ https://github.com/MediaArea/MediaInf
 EGIT_REPO_URI="https://github.com/MediaArea/MediaInfo.git"
 
 LICENSE="BSD-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="lib-sys/zlib

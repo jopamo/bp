@@ -1,16 +1,17 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit eutils systemd
+inherit systemd
 
 DESCRIPTION="Advanced Linux Sound Architecture Utils (alsactl, alsamixer, etc.)"
 HOMEPAGE="http://www.alsa-project.org/"
 SRC_URI="ftp://ftp.alsa-project.org/pub/utils/${P}.tar.bz2"
 
 LICENSE="GPL-2"
-SLOT="0.9"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="bat doc +libsamplerate +ncurses nls"
 
 CDEPEND=">=lib-media/alsa-lib-${PV}
@@ -45,9 +46,9 @@ src_configure() {
 }
 
 src_install() {
+	default
 	mkdir -p "${ED}"/var/lib/alsa/
 	touch "${ED}"/var/lib/alsa/asound.state
-	default
 	keepdir /var/lib/alsa
 	keepdir /usr/share/alsa/ucm
 }

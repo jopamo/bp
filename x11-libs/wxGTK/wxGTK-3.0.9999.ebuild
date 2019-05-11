@@ -1,18 +1,19 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit git-r3
 
 DESCRIPTION="GTK+ version of wxWidgets, a cross-platform C++ GUI toolkit"
 HOMEPAGE="https://wxwidgets.org/"
 EGIT_REPO_URI="https://github.com/wxWidgets/wxWidgets.git"
-EGIT_BRANCH="WX_3_0_BRANCH"
+EGIT_BRANCH="WX_$(ver_cut 1)_$(ver_cut 2)_BRANCH"
 
+LICENSE="wxWinLL-3 GPL-2 doc? ( wxWinFDL-3 )"
+SLOT="3"
 KEYWORDS="amd64 arm64"
-IUSE="+X aqua doc debug opengl sdl tiff"
 
-SLOT="3.0-gtk3"
+IUSE="+X aqua doc debug opengl sdl tiff"
 
 RDEPEND="
 	lib-dev/expat
@@ -44,8 +45,6 @@ DEPEND="${RDEPEND}
 	X? (
 		x11/xorgproto
 	)"
-
-LICENSE="wxWinLL-3 GPL-2 doc? ( wxWinFDL-3 )"
 
 src_configure() {
 	local myconf=(

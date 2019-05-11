@@ -1,19 +1,18 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
+EAPI=7
 
 inherit cmake-utils python-any-r1 git-r3
 
-EGIT_REPO_URI="https://github.com/Exiv2/exiv2.git"
-EGIT_BRANCH="0.26"
-KEYWORDS="amd64 arm64"
-
 DESCRIPTION="EXIF, IPTC and XMP metadata C++ library and command line utility"
 HOMEPAGE="http://www.exiv2.org/"
+EGIT_REPO_URI="https://github.com/Exiv2/exiv2.git"
+EGIT_BRANCH="0.26"
 
 LICENSE="GPL-2"
 SLOT="0/26"
+KEYWORDS="amd64 arm64"
+
 IUSE="doc examples nls png static-libs webready xmp"
 
 RDEPEND="

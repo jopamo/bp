@@ -16,7 +16,8 @@ else
 fi
 
 LICENSE="Apache-2.0"
-SLOT="0"
+SLOT="0/1"
+
 IUSE="test"
 
 CDEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"

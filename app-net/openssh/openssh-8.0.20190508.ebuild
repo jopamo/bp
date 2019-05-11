@@ -87,8 +87,7 @@ src_install() {
 	newpamd "${FILESDIR}"/sshd.pam_include.2 sshd
 
 	systemd_dounit "${FILESDIR}"/sshd.socket
-	mkdir -p "${ED}"/etc/systemd/system/
-	cp "${FILESDIR}"/sshd.socket "${ED}"/etc/systemd/system/
+
 	systemd_dounit "${FILESDIR}"/sshdgenkeys.service
 	systemd_newunit "${FILESDIR}"/sshd_at.service 'sshd@.service'
 

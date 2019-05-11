@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit eutils flag-o-matic toolchain-funcs cmake-utils
 
@@ -9,26 +9,16 @@ HOMEPAGE="https://cmake.org/"
 SRC_URI="https://github.com/Kitware/CMake/releases/download/v${PV}/cmake-${PV}.tar.gz"
 
 LICENSE="CMake"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
-IUSE="doc qt5"
 
-RDEPEND="
+DEPEND="
 	>=app-compression/libarchive-3.0.0:=
 	>=lib-dev/expat-2.0.1
 	>=lib-dev/libuv-1.0.0:=
 	>=app-net/curl-7.21.5
 	lib-sys/zlib
-	dev-util/pkgconf
-	qt5? (
-		gui-lib/qtcore:5
-		gui-lib/qtgui:5
-		gui-lib/qtwidgets:5
-	)
-"
-DEPEND="${RDEPEND}
-	doc? ( dev-python/sphinx )
-"
+	dev-util/pkgconf"
 
 cmake_src_bootstrap() {
 	# Cleanup args to extract only JOBS.
@@ -93,6 +83,7 @@ src_prepare() {
 		Modules/Platform/{UnixPaths,Darwin}.cmake || die "sed failed"
 
 	if ! has_version \>=${CATEGORY}/${PN}-3.10.0 ; then
+		CMAKE_MAKEFILE_GENERATOR=emake
 		CMAKE_BINARY="${S}/Bootstrap.cmk/cmake"
 		cmake_src_bootstrap
 	fi
@@ -102,8 +93,8 @@ src_configure() {
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}"/usr
 		-DCMAKE_DATA_DIR=/share/${PN}
-		-DSPHINX_MAN=$(usex doc)
-		-DSPHINX_HTML=$(usex doc)
+		-DSPHINX_MAN=OFF
+		-DSPHINX_HTML=OFF
 		-DCMAKE_USE_SYSTEM_LIBRARY_LIBLZMA=ON
 		-DCMAKE_USE_SYSTEM_LIBARCHIVE=ON
 		-DCMAKE_USE_SYSTEM_LIBRARY_CURL=ON
@@ -113,29 +104,12 @@ src_configure() {
 		-DCMAKE_USE_SYSTEM_LIBUV=ON
 	)
 
-	if use qt5 ; then
-		mycmakeargs+=(
-			-DBUILD_QtDialog=ON
-			$(cmake-utils_use_find_package qt5 Qt5Widgets)
-		)
-	fi
-
 	cmake-utils_src_configure
-}
-
-src_compile() {
-	cmake-utils_src_compile
 }
 
 src_install() {
 	cmake-utils_src_install
 
-	insinto /usr/share/vim/vimfiles/syntax
-	doins Auxiliary/vim/syntax/cmake.vim
-
-	insinto /usr/share/vim/vimfiles/indent
-	doins Auxiliary/vim/indent/cmake.vim
-
-	rm -r "${ED}"/usr/share/cmake/{completions,editors} || die
+	rm -rf "${ED}"/usr/share/cmake/{completions,editors} || die
 	rm -rf "${ED}"/usr/doc || die
 }

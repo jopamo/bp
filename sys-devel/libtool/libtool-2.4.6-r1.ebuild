@@ -35,6 +35,7 @@ RDEPEND="sys-devel/gnuconfig
 	lib-dev/libltdl:0
 	!<sys-app/sandbox-2.10-r4"
 DEPEND="${RDEPEND}
+	dev-perl/libintl-perl
 	app-compression/xz-utils"
 
 PATCHES=(
@@ -47,18 +48,10 @@ src_prepare() {
 }
 
 src_configure() {
-	# the libtool script uses bash code in it and at configure time, tries
-	# to find a bash shell.  if /bin/sh is bash, it uses that.  this can
-	# cause problems for people who switch /bin/sh on the fly to other
-	# shells, so just force libtool to use /bin/bash all the time.
-	export CONFIG_SHELL="$(type -P bash)"
-
 	# Do not bother hardcoding the full path to sed.  Just rely on $PATH. #574550
 	export ac_cv_path_SED="$(basename "$(type -P sed)")"
 
-	local myconf
-	[[ ${CHOST} == *-darwin* ]] && myconf="--program-prefix=g"
-	ECONF_SOURCE=${S} econf ${myconf} --disable-ltdl-install
+	ECONF_SOURCE=${S} econf --disable-ltdl-install
 }
 
 src_test() {

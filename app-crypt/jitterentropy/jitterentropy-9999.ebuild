@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit toolchain-funcs git-r3
 
@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/smuellerDD/jitterentropy-library"
 EGIT_REPO_URI="https://github.com/smuellerDD/jitterentropy-rngd.git"
 
 LICENSE="BSD"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 src_prepare() {

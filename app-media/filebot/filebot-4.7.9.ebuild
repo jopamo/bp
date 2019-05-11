@@ -2,16 +2,19 @@
 
 EAPI=7
 
-KEYWORDS="amd64"
-
-DESCRIPTION="A tool for organizing and renaming your Movies, TV Shows and Anime as well as fetching subtitles and artwork."
+DESCRIPTION="A tool for organizing and renaming video files."
 HOMEPAGE="https://www.filebot.net/"
 SRC_URI="https://1g4.org/files/FileBot_${PV}-portable.tar.xz"
 
 LICENSE="Oracle-BCLA-JavaSE"
-SLOT="0"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
 RESTRICT="preserve-libs strip"
 QA_PREBUILT="*"
+
+RDEPEND="dev-lang/oracle-jre"
+
 S=${WORKDIR}
 
 src_install() {

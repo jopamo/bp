@@ -1,31 +1,20 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools eutils flag-o-matic gnome2-utils linux-info systemd user versionator
 
 DESCRIPTION="A networked sound server with an advanced plugin system"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/PulseAudio/"
-
 SRC_URI="https://freedesktop.org/software/pulseaudio/releases/${P}.tar.xz"
 
-KEYWORDS="amd64 arm64"
-
-# libpulse-simple and libpulse link to libpulse-core; this is daemon's
-# library and can link to gdbm and other GPL-only libraries. In this
-# cases, we have a fully GPL-2 package. Leaving the rest of the
-# GPL-forcing USE flags for those who use them.
-# qpaeq equalizer pyqt GUI frontend is AGPL-3+
 LICENSE="!gdbm? ( LGPL-2.1 ) gdbm? ( GPL-2 ) equalizer? ( AGPL-3+ )"
-
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-# +alsa-plugin as discussed in bug #519530
 IUSE="+alsa +alsa-plugin +asyncns bluetooth +caps dbus doc equalizer +gdbm +glib
 gnome gtk ipv6 jack libsamplerate lirc native-headset neon ofono-headset
-+orc oss qt4 realtime sox ssl systemd test +udev
-+X"
++orc oss qt4 realtime sox ssl systemd test +udev +X"
 
 REQUIRED_USE="
 	bluetooth? ( dbus )

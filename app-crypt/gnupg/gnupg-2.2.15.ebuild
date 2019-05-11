@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit toolchain-funcs flag-o-matic
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gnupg.org/"
 SRC_URI="mirror://gnupg/gnupg/${MY_P}.tar.bz2"
 
 LICENSE="GPL-3"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 IUSE="bzip2 doc ldap nls readline +smartcard ssl tofu tools usb wks-server"

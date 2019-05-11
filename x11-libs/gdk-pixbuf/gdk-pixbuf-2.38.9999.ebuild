@@ -1,18 +1,19 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit git-r3 autotools
+inherit git-r3 meson
 
 DESCRIPTION="Image loading library for GTK+"
 HOMEPAGE="https://git.gnome.org/browse/gdk-pixbuf"
 EGIT_REPO_URI="https://github.com/GNOME/${PN}.git"
-EGIT_BRANCH=gdk-pixbuf-2-36
+EGIT_BRANCH=gdk-pixbuf-$(ver_cut 1)-$(ver_cut 2)
 
 LICENSE="LGPL-2+"
 SLOT="2"
 KEYWORDS="amd64 arm64"
-IUSE="+introspection debug +png +tiff +jpeg +jasper X docs man test +relocatable +native_windows_loaders"
+
+IUSE="+introspection +png +tiff +jpeg +jasper X"
 
 COMMON_DEPEND="
 	>=lib-dev/glib-2.48.0:2
@@ -31,38 +32,22 @@ DEPEND="${COMMON_DEPEND}
 
 RDEPEND="${COMMON_DEPEND}"
 
-src_prepare() {
-	eautoreconf
-	default
-}
-
 src_configure() {
-	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib64
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-		$(usex debug --enable-debug=yes "")
-		$(use_with jpeg libjpeg)
-		$(use_with jasper libjasper)
-		$(use_with tiff libtiff)
-		$(use_enable introspection)
-		$(use_with X x11)
-		--with-libpng
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-src_install() {
-	# Parallel install fails when no gdk-pixbuf is already installed, bug #481372
-	MAKEOPTS="${MAKEOPTS} -j1" emake DESTDIR="${ED}" install
+	local emesonargs=(
+		$(meson_use png)
+		$(meson_use tiff)
+		$(meson_use jpeg)
+		$(meson_use jasper)
+		$(meson_use X x11)
+		$(meson_use introspection gir)
+		-Ddocs=false
+		)
+		meson_src_configure
 }
 
 pkg_preinst() {
 	# Make sure loaders.cache belongs to gdk-pixbuf alone
-	local cache="usr/lib64/${PN}-2.0/2.10.0/loaders.cache"
+	local cache="usr/lib/${PN}-2.0/2.10.0/loaders.cache"
 
 	if [[ -e ${EROOT}${cache} ]]; then
 		cp "${EROOT}"${cache} "${ED}"/${cache} || die
@@ -77,6 +62,6 @@ pkg_postinst() {
 
 pkg_postrm() {
 	if [[ -z ${REPLACED_BY_VERSION} ]]; then
-		rm -f "${EROOT}"usr/lib*/${PN}-2.0/2.10.0/loaders.cache
+		rm -f "${EROOT}"usr/lib/${PN}-2.0/2.10.0/loaders.cache
 	fi
 }

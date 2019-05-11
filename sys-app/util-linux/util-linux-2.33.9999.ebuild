@@ -1,26 +1,28 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
+inherit toolchain-funcs libtool flag-o-matic pam python-single-r1 systemd autotools
 
-inherit toolchain-funcs libtool flag-o-matic  \
-	pam python-single-r1 systemd autotools
+DESCRIPTION="Various useful Linux utilities"
+HOMEPAGE="https://www.kernel.org/pub/linux/utils/util-linux/"
 
-if [[ ${PV} == 9999 ]] ; then
+if [[ ${PV} == *9999 ]] ; then
 	inherit git-r3
-	EGIT_REPO_URI="git://git.kernel.org/pub/scm/utils/util-linux/util-linux.git"
+	EGIT_REPO_URI="https://github.com/karelzak/util-linux.git"
+	EGIT_BRANCH="stable/v$(ver_cut 1-2)"
+	KEYWORDS="amd64 arm64"
 else
-	SNAPSHOT=65bcbf105bfc5f6510b8df8db09d9458f942c799
+	SNAPSHOT=
 	SRC_URI="https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/snapshot/util-linux-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
 fi
 
-DESCRIPTION="Various useful Linux utilities"
-HOMEPAGE="https://www.kernel.org/pub/linux/utils/util-linux/"
 
 LICENSE="GPL-2 LGPL-2.1 BSD-4 MIT public-domain"
 SLOT="0"
+
 IUSE="build caps +cramfs fdformat kill ncurses nls pam python +readline static-libs +suid systemd test +tty-helpers udev unicode"
 
 RDEPEND="caps? ( lib-sys/libcap-ng )
@@ -51,7 +53,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	${S}/autogen.sh
+	po/update-potfiles || die
 	default
 	eautoreconf
 	sed -i.bak -e "s/UNKNOWN/${PV}/g" "configure"
@@ -133,8 +135,6 @@ src_install() {
 	default
 
 	use python && python_optimize
-
-	find "${ED}" -name "*.la" -delete || die
 
 	if use pam; then
 		newpamd "${FILESDIR}/runuser.pamd" runuser

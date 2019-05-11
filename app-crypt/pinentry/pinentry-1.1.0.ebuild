@@ -1,15 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit autotools flag-o-matic toolchain-funcs
+inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Simple passphrase entry dialogs which utilize the Assuan protocol"
 HOMEPAGE="https://gnupg.org/aegypten2/index.html"
 SRC_URI="https://www.gnupg.org/ftp/gcrypt/${PN}/${P}.tar.bz2"
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 IUSE="caps ncurses static"
@@ -26,11 +26,6 @@ DEPEND="${CDEPEND}
 	sys-devel/gettext
 	dev-util/pkgconf
 "
-
-src_prepare() {
-	eautoreconf
-	default
-}
 
 src_configure() {
 	use static && append-ldflags -static

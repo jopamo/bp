@@ -1,15 +1,17 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit toolchain-funcs
 
 DESCRIPTION="Port of 7-Zip archiver for Unix"
 HOMEPAGE="http://p7zip.sourceforge.net/"
 SRC_URI="mirror://sourceforge/${PN}/${PN}_${PV}_src_all.tar.bz2"
+
 LICENSE="LGPL-2.1 unRAR"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="static"
 
 DEPEND="dev-lang/yasm"

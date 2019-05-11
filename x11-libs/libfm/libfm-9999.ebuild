@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools git-r3 xdg-utils
 
@@ -9,9 +9,10 @@ HOMEPAGE="https://github.com/lxde/libfm"
 EGIT_REPO_URI="https://github.com/lxde/${PN}"
 
 LICENSE="GPL-2"
-SLOT="0"
-IUSE="debug doc exif"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
+IUSE="debug doc exif"
 
 COMMON_DEPEND=">=lib-dev/glib-2.18:2
 	>=gui-lib/menu-cache-0.3.2:=
@@ -30,7 +31,6 @@ DEPEND="${COMMON_DEPEND}
 src_prepare() {
 	default
 	eautoreconf
-	copy_sources
 }
 
 src_configure() {
@@ -49,7 +49,6 @@ src_configure() {
 		--disable-udisks
 		--without-gtk
 		$(use_enable doc gtk-doc)
-		--with-html-dir=/usr/share/doc/${PF}/html
 		--disable-old-actions
 	)
 	econf ${myconf[@]}
@@ -57,9 +56,9 @@ src_configure() {
 
 src_install() {
 	default
-	rm ${ED}/usr/include/libfm/{fm-extra.h,fm-version.h,fm-xml-file.h}*
-	rm ${ED}/usr/lib64/libfm-extra*
-	rm ${ED}/usr/lib64/pkgconfig/libfm-extra.pc
+	rm "${ED}"/usr/include/libfm/{fm-extra.h,fm-version.h,fm-xml-file.h}*
+	rm "${ED}"/usr/lib64/libfm-extra*
+	rm "${ED}"/usr/lib64/pkgconfig/libfm-extra.pc
 }
 
 pkg_postinst() {

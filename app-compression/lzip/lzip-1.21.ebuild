@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit toolchain-funcs
 
@@ -9,7 +9,7 @@ HOMEPAGE="https://www.nongnu.org/lzip/lzip.html"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-2+"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 src_configure() {

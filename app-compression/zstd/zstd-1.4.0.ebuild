@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit toolchain-funcs
 
@@ -11,6 +11,7 @@ SRC_URI="https://github.com/facebook/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="static-libs"
 
 DEPEND="app-compression/xz-utils"

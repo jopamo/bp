@@ -7,10 +7,11 @@ inherit autotools git-r3
 DESCRIPTION="Audacious Player - Your music, your way, no exceptions"
 HOMEPAGE="https://audacious-media-player.org/"
 EGIT_REPO_URI="https://github.com/audacious-media-player/audacious-plugins.git"
-KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
 IUSE="aac alsa aosd bs2b cdda cue +ffmpeg +flac fluidsynth hotkeys http gme jack libsamplerate lirc
 mms modplug nls pulseaudio scrobbler sdl sid sndfile soxr speedpitch vorbis wavpack"
 

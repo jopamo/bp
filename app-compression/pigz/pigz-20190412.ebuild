@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit toolchain-funcs flag-o-matic
 
@@ -12,14 +12,12 @@ SRC_URI="https://github.com/madler/pigz/archive/${SNAPSHOT}.zip -> ${P}.zip"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="ZLIB"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="static test"
 
-LIB_DEPEND="lib-sys/zlib[static-libs(+)]"
-RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
-DEPEND="${RDEPEND}
-	static? ( ${LIB_DEPEND} )"
+DEPEND="static? ( lib-sys/zlib[static-libs(+)] )"
 
 src_compile() {
 	use static && append-ldflags -static
@@ -28,7 +26,8 @@ src_compile() {
 
 src_install() {
 	dobin ${PN}
-	dosym ${PN} /usr/bin/gzip
-	dosym ${PN} /usr/bin/gunzip
-	dosym ${PN} /usr/bin/zcat
+
+	for x in gzip gunzip zcat ; do
+		dosym ${PN} usr/bin/${x}
+	done
 }

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 WAF_PV=2.0.14
 
@@ -16,15 +16,15 @@ else
 	inherit git-r3
 	KEYWORDS="amd64 arm64"
 fi
+
 SRC_URI+=" https://waf.io/waf-${WAF_PV}"
 
 LICENSE="LGPL-2.1+ GPL-2+ BSD ISC"
-SLOT="0"
+SLOT="0/1"
 IUSE="+alsa +archive bluray cdda +cli coreaudio cplugins cuda drm dvb
 	dvd +egl jack javascript jpeg lcms +libass libcaca
 	libmpv +lua +opengl pulseaudio raspberry-pi rubberband
-	sdl test uchardet vaapi wayland +X zlib
-"
+	sdl test uchardet vaapi wayland +X zlib"
 
 REQUIRED_USE="
 	|| ( cli libmpv )

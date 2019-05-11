@@ -1,12 +1,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit meson git-r3 flag-o-matic
 
+DESCRIPTION="X.Org X servers"
 EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/xserver.git"
 EGIT_BRANCH="server-1.20-branch"
-DESCRIPTION="X.Org X servers"
+
 SLOT="0/${PV}"
 KEYWORDS="amd64 arm64"
 

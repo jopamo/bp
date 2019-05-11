@@ -1,15 +1,17 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit autotools eutils flag-o-matic
+inherit autotools flag-o-matic
 
 DESCRIPTION="ALSA extra plugins"
 HOMEPAGE="http://www.alsa-project.org/"
 SRC_URI="ftp://ftp.alsa-project.org/pub/plugins/${P}.tar.bz2"
+
 LICENSE="GPL-2 LGPL-2.1"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="debug ffmpeg libav libsamplerate pulseaudio"
 
 RDEPEND="
@@ -64,6 +66,4 @@ src_install() {
 			-e "s:/usr/lib/alsa-lib/::" \
 			"${ED}"/usr/share/alsa/alsa.conf.d/51-pulseaudio-probe.conf || die #410261
 	fi
-
-	find "${ED}" -name "*.la" -delete || die
 }

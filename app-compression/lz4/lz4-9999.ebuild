@@ -1,16 +1,17 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit cmake-utils git-r3
 
-EGIT_REPO_URI="https://github.com/lz4/lz4.git"
-KEYWORDS="amd64 arm64"
-
 DESCRIPTION="Extremely Fast Compression algorithm"
 HOMEPAGE="https://github.com/lz4/lz4"
+EGIT_REPO_URI="https://github.com/lz4/lz4.git"
+
 LICENSE="BSD-2 GPL-2"
-SLOT="0/r131"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
 IUSE="static-libs"
 
 CMAKE_USE_DIR=${S}/contrib/cmake_unofficial

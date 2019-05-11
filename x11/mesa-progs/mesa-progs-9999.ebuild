@@ -1,18 +1,17 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
-inherit base autotools toolchain-funcs git-r3
+inherit autotools toolchain-funcs git-r3
 
 DESCRIPTION="Mesa's OpenGL utility and demo programs (glxgears and glxinfo)"
 HOMEPAGE="https://www.mesa3d.org/ https://mesa.freedesktop.org/"
-
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/mesa/demos.git"
-
-KEYWORDS="amd64 arm64"
 
 LICENSE="LGPL-2"
 SLOT="0"
+KEYWORDS="amd64 arm64"
+
 IUSE="egl gles2"
 
 RDEPEND="
@@ -25,7 +24,7 @@ DEPEND="${RDEPEND}
 
 
 src_prepare() {
-	base_src_prepare
+	default
 	eautoreconf
 }
 

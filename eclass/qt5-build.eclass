@@ -292,8 +292,7 @@ qt5-build_src_install() {
 
 	qt5_install_module_config
 
-	# prune libtool files
-	find "${D}" -name '*.la' -delete || die
+	cleanup_install
 }
 
 # @FUNCTION: qt5-build_pkg_postinst

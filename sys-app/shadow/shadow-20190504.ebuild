@@ -146,9 +146,6 @@ src_install() {
 			-e ': pamnote; i# NOTE: This setting should be configured via /etc/pam.d/ and not in this file.' \
 			-e ': exit' \
 			"${ED}"/etc/login.defs || die
-
-		# Remove pam.d files provided by pambase.
-		rm "${ED}"/etc/pam.d/{login,passwd,su} || die
 	fi
 
 	cleanup_install

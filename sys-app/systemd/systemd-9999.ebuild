@@ -272,11 +272,6 @@ src_install() {
 }
 
 pkg_postinst() {
-	newusergroup() {
-		enewgroup "$1"
-		enewuser "$1" -1 -1 -1 "$1"
-	}
-
 	newusergroup messagebus
 
 	enewgroup systemd-journal

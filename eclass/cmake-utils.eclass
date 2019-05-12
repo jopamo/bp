@@ -17,6 +17,19 @@ _CMAKE_UTILS_ECLASS=1
 # specific compiler flags overriding make.conf.
 : ${CMAKE_BUILD_TYPE:=1g4}
 
+# @ECLASS-VARIABLE: CMAKE_IN_SOURCE_BUILD
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# Set to enable in-source build.
+
+# @ECLASS-VARIABLE: CMAKE_MAKEFILE_GENERATOR
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# Specify a makefile generator to be used by cmake.
+# At this point only "emake" and "ninja" are supported.
+# In EAPI 7 and above, the default is set to "ninja",
+# whereas in EAPIs below 7, it is set to "emake".
+
 # @ECLASS-VARIABLE: CMAKE_MIN_VERSION
 # @DESCRIPTION:
 # Specify the minimum required CMake version.
@@ -76,7 +89,6 @@ inherit toolchain-funcs ninja-utils flag-o-matic multiprocessing xdg-utils
 case ${EAPI} in
 	[56])
 		: ${CMAKE_MAKEFILE_GENERATOR:=emake}
-		inherit eutils
 		;;
 	*)
 		: ${CMAKE_MAKEFILE_GENERATOR:=ninja}
@@ -590,10 +602,11 @@ cmake-utils_src_configure() {
 
 	# Common configure parameters (invariants)
 	local common_config=${BUILD_DIR}/1g4_common_config.cmake
+	local libdir=lib
 	cat > "${common_config}" <<- _EOF_ || die
 		SET (CMAKE_1G4_BUILD ON CACHE BOOL "Indicate 1g4 package build")
-		SET (LIB_SUFFIX lib CACHE STRING "library path suffix" FORCE)
-		SET (CMAKE_INSTALL_LIBDIR "${EPREFIX}/usr/lib" CACHE PATH "Output directory for libraries")
+		SET (LIB_SUFFIX ${libdir/lib} CACHE STRING "library path suffix" FORCE)
+		SET (CMAKE_INSTALL_LIBDIR ${libdir} CACHE PATH "Output directory for libraries")
 		SET (CMAKE_INSTALL_INFODIR "${EPREFIX}/usr/share/info" CACHE PATH "")
 		SET (CMAKE_INSTALL_MANDIR "${EPREFIX}/usr/share/man" CACHE PATH "")
 		SET (CMAKE_USER_MAKE_RULES_OVERRIDE "${build_rules}" CACHE FILEPATH "1g4 override rules")

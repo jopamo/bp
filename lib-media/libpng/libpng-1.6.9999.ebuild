@@ -1,17 +1,18 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools git-r3 libtool
 
 DESCRIPTION="Portable Network Graphics library"
 HOMEPAGE="http://www.libpng.org/"
 EGIT_REPO_URI="https://github.com/glennrp/libpng.git"
-EGIT_BRANCH=libpng16
+EGIT_BRANCH=libpng$(ver_cut 1)$(ver_cut 2)
 
 LICENSE="libpng"
 SLOT="0/16"
 KEYWORDS="amd64 arm64"
+
 IUSE="apng static-libs"
 
 RDEPEND=">=lib-sys/zlib-1.2.8-r1:="

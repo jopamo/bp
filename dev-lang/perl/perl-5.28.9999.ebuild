@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit eutils flag-o-matic toolchain-funcs multiprocessing git-r3
 
@@ -8,7 +8,7 @@ DESCRIPTION="Larry Wall's Practical Extraction and Report Language"
 
 EGIT_REPO_URI="https://github.com/Perl/perl5.git"
 HOMEPAGE="https://www.perl.org/"
-EGIT_BRANCH="maint-5.28"
+EGIT_BRANCH="maint-$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="|| ( Artistic GPL-1+ )"
 SLOT="0/1"

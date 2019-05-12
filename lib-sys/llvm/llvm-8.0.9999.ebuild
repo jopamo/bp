@@ -10,7 +10,7 @@ HOMEPAGE="https://llvm.org/"
 SRC_URI=""
 EGIT_REPO_URI="https://git.llvm.org/git/llvm.git
 	https://github.com/llvm-mirror/llvm.git"
-EGIT_BRANCH="release_80"
+EGIT_BRANCH="release_$(ver_cut 1)$(ver_cut 2)"
 
 ALL_LLVM_TARGETS=( AArch64 X86 )
 ALL_LLVM_TARGETS=( "${ALL_LLVM_TARGETS[@]/#/llvm_targets_}" )

@@ -10,7 +10,7 @@ HOMEPAGE="https://www.busybox.net/"
 if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="git://git.busybox.net/busybox"
-	EGIT_BRANCH="1_30_stable"
+	EGIT_BRANCH="$(ver_cut 1)_$(ver_cut 2)_stable"
 else
 	SNAPSHOT=a92a9601f89d59597b268e29e7098597a8766778
 	SRC_URI="https://git.busybox.net/busybox/snapshot/${PN}-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"

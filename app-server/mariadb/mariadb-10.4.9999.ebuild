@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
 
 inherit systemd flag-o-matic prefix toolchain-funcs user cmake-utils git-r3
 
@@ -8,7 +8,7 @@ HOMEPAGE="https://mariadb.org/"
 DESCRIPTION="An enhanced, drop-in replacement for MySQL"
 LICENSE="GPL-2 LGPL-2.1+"
 EGIT_REPO_URI="https://github.com/MariaDB/server.git"
-EGIT_BRANCH="10.4"
+EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
 
 SLOT="0/${SUBSLOT:-0}"
 IUSE="backup bindist client-libs debug extraengine galera innodb-lz4

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit toolchain-funcs versionator git-r3
 
@@ -8,7 +8,7 @@ DESCRIPTION="Just-In-Time Compiler for the Lua programming language"
 HOMEPAGE="http://luajit.org/"
 
 EGIT_REPO_URI="https://github.com/LuaJIT/LuaJIT.git"
-EGIT_BRANCH=v2.1
+EGIT_BRANCH="v$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="MIT"
 SLOT="2"

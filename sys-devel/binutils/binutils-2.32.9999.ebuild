@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
 
 inherit git-r3 flag-o-matic
 
@@ -8,7 +8,7 @@ DESCRIPTION="Core binutils libraries (libbfd, libopcodes, libiberty) for externa
 HOMEPAGE="https://sourceware.org/binutils/"
 
 EGIT_REPO_URI="https://github.com/1g4-linux/binutils-gdb.git"
-EGIT_BRANCH="binutils-2_32-branch"
+EGIT_BRANCH="binutils-$(ver_cut 1)_$(ver_cut 2)-branch"
 
 SLOT="0"
 

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit meson git-r3 flag-o-matic
 
@@ -9,7 +9,7 @@ HOMEPAGE="https://www.mesa3d.org/ https://mesa.freedesktop.org/"
 KEYWORDS="amd64 arm64"
 
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/mesa/mesa.git"
-EGIT_BRANCH=19.1
+EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
 
 IUSE="llvm"
 

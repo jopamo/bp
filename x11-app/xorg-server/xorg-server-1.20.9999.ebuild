@@ -6,7 +6,7 @@ inherit meson git-r3 flag-o-matic
 
 DESCRIPTION="X.Org X servers"
 EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/xserver.git"
-EGIT_BRANCH="server-1.20-branch"
+EGIT_BRANCH="server-$(ver_cut 1).$(ver_cut 2)-branch"
 
 SLOT="0/${PV}"
 KEYWORDS="amd64 arm64"

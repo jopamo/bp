@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools eutils flag-o-matic virtualx git-r3
 
@@ -8,7 +8,7 @@ DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
 
 EGIT_REPO_URI="https://github.com/GNOME/gtk.git"
-EGIT_BRANCH=gtk-2-24
+EGIT_BRANCH=gtk-$(ver_cut 1)-$(ver_cut 2)
 
 LICENSE="LGPL-2+"
 SLOT="2"

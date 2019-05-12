@@ -3,10 +3,11 @@
 PYTHON_COMPAT=( python3_7 )
 
 inherit toolchain-funcs python-any-r1
+
 [[ ${EAPI:-0} == [012345] ]] && inherit epatch
 [[ ${EAPI:-0} == [0123456] ]] && inherit estack eapi7-ver
 case ${EAPI:-0} in
-	2|3|4|5|6)
+	2|3|4|5|6|7)
 		EXPORT_FUNCTIONS src_{unpack,prepare,compile,install,test} \
 			pkg_{setup,preinst,postinst,postrm} ;;
 	*) die "${ECLASS}: EAPI ${EAPI} not supported" ;;

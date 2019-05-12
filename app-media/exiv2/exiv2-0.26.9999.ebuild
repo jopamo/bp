@@ -7,7 +7,7 @@ inherit cmake-utils python-any-r1 git-r3
 DESCRIPTION="EXIF, IPTC and XMP metadata C++ library and command line utility"
 HOMEPAGE="http://www.exiv2.org/"
 EGIT_REPO_URI="https://github.com/Exiv2/exiv2.git"
-EGIT_BRANCH="0.26"
+EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="GPL-2"
 SLOT="0/26"

@@ -1,12 +1,12 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools flag-o-matic user systemd linux-info git-r3
 
 DESCRIPTION="Robust and highly flexible tunneling application compatible with many OSes"
 EGIT_REPO_URI="https://github.com/OpenVPN/${PN}.git"
-EGIT_BRANCH="release/2.4"
+EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)"
 EGIT_SUBMODULES=(-cmocka)
 HOMEPAGE="http://openvpn.net/"
 KEYWORDS="amd64 arm64"

@@ -1,13 +1,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools eutils git-r3
 
 DESCRIPTION="Scalable Vector Graphics (SVG) rendering library"
 HOMEPAGE="https://wiki.gnome.org/Projects/LibRsvg"
 EGIT_REPO_URI="https://github.com/GNOME/librsvg.git"
-EGIT_BRANCH="librsvg-2.40"
+EGIT_BRANCH="librsvg-$(ver_cut 1).$(ver_cut 2)"
 LICENSE="LGPL-2"
 SLOT="2"
 KEYWORDS="amd64 arm64"

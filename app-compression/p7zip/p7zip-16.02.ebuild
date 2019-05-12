@@ -18,6 +18,13 @@ DEPEND="dev-lang/yasm"
 
 S=${WORKDIR}/${PN}_${PV}
 
+PATCHES=(
+		"${FILESDIR}"/01-makefile.patch
+		"${FILESDIR}"/05-hardening-flags.patch
+		"${FILESDIR}"/12-CVE-2016-9296.patch
+		"${FILESDIR}"/13-CVE-2017-17969.patch
+	)
+
 src_prepare() {
 	default
 
@@ -47,5 +54,10 @@ src_test() {
 }
 
 src_install() {
-	dobin bin/7z bin/7za bin/7zr
+	make install \
+    DEST_DIR="${ED}" \
+    DEST_HOME=/usr \
+    DEST_MAN=/usr/share/man
+
+	cleanup_install
 }

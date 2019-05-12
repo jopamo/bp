@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0/2"
 
-IUSE="acl apparmor audit build coredump cryptsetup curl efi embed gcrypt gnutls +gnu_nss +hostnamed hwdb importd kmod ldconfig +localed lz4 machined +networkd pam pcre resolved +timedated timesyncd +tmpfiles qrcode +seccomp test +vconsole xkb xz zlib"
+IUSE="acl apparmor audit build coredump cryptsetup curl +efi embed gcrypt gnutls +gnu_nss +hostnamed +hwdb importd kmod ldconfig +localed lz4 machined +networkd pam pcre resolved +timedated timesyncd +tmpfiles qrcode +seccomp test +vconsole xkb xz zlib"
 
 RESTRICT="!test? ( test )"
 

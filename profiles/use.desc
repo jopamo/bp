@@ -50,7 +50,6 @@ cjk - Add support for Multi-byte character languages (Chinese, Japanese, Korean)
 clamav - Add support for Clam AntiVirus software (usually with a plugin)
 connman - Add support for app-net/connman
 coreaudio - Build the CoreAudio driver on Mac OS X systems
-cracklib - Support for cracklib strong password checking
 crypt - Add support for encryption -- using mcrypt or gpg where applicable
 cscope - Enable cscope interface -- in vim for example
 css - Enable reading of encrypted DVDs

@@ -18,7 +18,7 @@ fi
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="audit cracklib debug nls test vim-syntax"
+IUSE="audit debug nls test vim-syntax"
 
 BDEPEND="app-misc/w3m
 		app-text/docbook-xml-dtd:4.1
@@ -27,7 +27,6 @@ BDEPEND="app-misc/w3m
 		app-text/docbook-sgml-dtd:4.5"
 
 RDEPEND="
-	cracklib? ( >=lib-sys/cracklib-2.9.1-r1 )
 	audit? ( >=sys-app/audit-2.2.2 )"
 
 PDEPEND="
@@ -46,7 +45,6 @@ src_configure() {
 		--localstatedir="${EPREFIX}/var"
 		--enable-securedir="${EPREFIX}"/usr/lib64/security
 		$(use_enable nls)
-		$(use_enable cracklib)
 		$(use_enable audit)
 		$(use_enable debug)
 		--disable-db

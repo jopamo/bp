@@ -11,7 +11,7 @@ EGIT_REPO_URI="https://github.com/MariaDB/server.git"
 EGIT_BRANCH="10.4"
 
 SLOT="0/${SUBSLOT:-0}"
-IUSE="backup bindist client-libs cracklib debug extraengine galera innodb-lz4
+IUSE="backup bindist client-libs debug extraengine galera innodb-lz4
 	innodb-lzo innodb-snappy jdbc jemalloc kerberos mroonga
 	numa odbc oqgraph pam +perl profiling rocksdb +server sphinx
 	sst-rsync sst-mariabackup sst-xtrabackup static static-libs systemd systemtap tcmalloc
@@ -43,7 +43,6 @@ COMMON_DEPEND="
 	)
 	server? (
 		backup? ( app-compression/libarchive:0= )
-		cracklib? ( lib-sys/cracklib:0= )
 		extraengine? (
 			odbc? ( dev-db/unixODBC:0= )
 			xml? ( lib-dev/libxml2:2= )
@@ -169,7 +168,6 @@ src_configure(){
 			-DPLUGIN_SPHINX=$(usex sphinx YES NO)
 			-DPLUGIN_TOKUDB=$(usex tokudb YES NO)
 			-DPLUGIN_AUTH_PAM=$(usex pam YES NO)
-			-DPLUGIN_CRACKLIB_PASSWORD_CHECK=$(usex cracklib YES NO)
 			-DPLUGIN_CASSANDRA=NO
 			-DPLUGIN_SEQUENCE=$(usex extraengine YES NO)
 			-DPLUGIN_SPIDER=$(usex extraengine YES NO)
@@ -374,7 +372,7 @@ src_test() {
 	# segfaults at random under Portage only, suspect resource limits.
 
 	local t
-	for t in plugins.cracklib_password_check plugins.two_password_validations ; do
+	for t in plugins.two_password_validations ; do
 		_disable_test  "$t" "False positive due to varying policies"
 	done
 

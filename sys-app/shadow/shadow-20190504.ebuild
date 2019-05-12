@@ -7,7 +7,7 @@ inherit eutils libtool pam autotools
 DESCRIPTION="Utilities to deal with user accounts"
 HOMEPAGE="https://github.com/shadow-maint/shadow http://pkg-shadow.alioth.debian.org/"
 
-SNAPSHOT=d2e1e9ce8561898d3494f0d7a23c50d8153b479a
+SNAPSHOT=aff40d8515c66cc12fd4376f05e867700115304a
 SRC_URI="https://github.com/shadow-maint/shadow/archive/${SNAPSHOT}.zip -> ${P}.zip"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -15,11 +15,10 @@ KEYWORDS="amd64 arm64"
 
 LICENSE="BSD GPL-2"
 SLOT="0"
-IUSE="acl audit cracklib pam skey xattr"
+IUSE="acl audit pam skey xattr"
 
 RDEPEND="acl? ( sys-app/acl:0= )
 	audit? ( >=sys-app/audit-2.6:0= )
-	cracklib? ( >=lib-sys/cracklib-2.7-r3:0= )
 	pam? ( lib-sys/pam:0= )
 	skey? ( lib-sys/skey:0= )
 	xattr? ( sys-app/attr:0= )"
@@ -50,7 +49,6 @@ src_configure() {
 		--enable-static=yes
 		$(use_with acl)
 		$(use_with audit)
-		$(use_with cracklib libcrack)
 		$(use_with pam libpam)
 		$(use_with skey)
 		$(use_with elibc_glibc nscd)
@@ -104,7 +102,6 @@ src_install() {
 	if ! use pam ; then
 		set_login_opt MAIL_CHECK_ENAB no
 		set_login_opt SU_WHEEL_ONLY yes
-		set_login_opt CRACKLIB_DICTPATH /usr/lib64/cracklib_dict
 		set_login_opt LOGIN_RETRIES 3
 		set_login_opt ENCRYPT_METHOD SHA512
 		set_login_opt CONSOLE
@@ -125,7 +122,6 @@ src_install() {
 		for opt in \
 			CHFN_AUTH \
 			CONSOLE \
-			CRACKLIB_DICTPATH \
 			ENV_HZ \
 			ENVIRON_FILE \
 			FAILLOG_ENAB \
@@ -154,6 +150,8 @@ src_install() {
 		# Remove pam.d files provided by pambase.
 		rm "${ED}"/etc/pam.d/{login,passwd,su} || die
 	fi
+
+	cleanup_install
 }
 
 pkg_preinst() {

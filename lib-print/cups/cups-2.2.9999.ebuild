@@ -3,8 +3,7 @@
 EAPI=7
 
 inherit autotools flag-o-matic linux-info xdg-utils \
-	pam user versionator \
-	systemd toolchain-funcs git-r3
+	pam user systemd toolchain-funcs git-r3
 
 DESCRIPTION="The Common Unix Printing System"
 HOMEPAGE="https://www.cups.org/"

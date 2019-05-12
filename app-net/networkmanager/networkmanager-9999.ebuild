@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit linux-info systemd flag-o-matic user toolchain-funcs versionator virtualx git-r3 meson
+inherit linux-info systemd flag-o-matic user toolchain-funcs virtualx git-r3 meson
 
 DESCRIPTION="A set of co-operative tools that make networking simple and straightforward"
 HOMEPAGE="https://wiki.gnome.org/Projects/NetworkManager"

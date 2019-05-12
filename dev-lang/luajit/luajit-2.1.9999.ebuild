@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit toolchain-funcs versionator git-r3
+inherit toolchain-funcs git-r3
 
 DESCRIPTION="Just-In-Time Compiler for the Lua programming language"
 HOMEPAGE="http://luajit.org/"

@@ -2,7 +2,7 @@
 
 EAPI=5
 
-inherit eutils user versionator flag-o-matic
+inherit eutils user flag-o-matic
 
 DESCRIPTION="a man replacement that utilizes gdbm instead of flat files"
 HOMEPAGE="http://www.nongnu.org/man-db/"

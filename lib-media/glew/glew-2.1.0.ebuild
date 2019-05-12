@@ -1,15 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit toolchain-funcs versionator
+inherit toolchain-funcs
 
 DESCRIPTION="The OpenGL Extension Wrangler Library"
 HOMEPAGE="http://glew.sourceforge.net/"
 SRC_URI="mirror://sourceforge/${PN}/${P}.tgz"
 
 LICENSE="BSD MIT"
-SLOT="0/$(get_version_component_range 1-2)"
+SLOT="0/$(ver_cut 1-2)"
 KEYWORDS="amd64 arm64"
 IUSE="doc static-libs"
 

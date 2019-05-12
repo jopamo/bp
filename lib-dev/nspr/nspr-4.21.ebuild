@@ -1,10 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit autotools toolchain-funcs versionator
+inherit autotools toolchain-funcs
 
-MIN_PV="$(get_version_component_range 2)"
+MIN_PV="$(ver_cut 2)"
 
 DESCRIPTION="Netscape Portable Runtime"
 HOMEPAGE="http://www.mozilla.org/projects/nspr/"

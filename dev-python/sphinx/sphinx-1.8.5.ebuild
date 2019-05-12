@@ -1,9 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-
-inherit distutils-r1 eutils versionator
+inherit distutils-r1 eutils
 
 DESCRIPTION="Python documentation generator"
 HOMEPAGE="http://www.sphinx-doc.org/"
@@ -12,6 +11,7 @@ SRC_URI="mirror://pypi/S/${PN^}/${P^}.tar.gz"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="doc net test"
 
 RDEPEND="

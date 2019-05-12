@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit user flag-o-matic eutils pam toolchain-funcs autotools systemd versionator
+inherit user flag-o-matic eutils pam toolchain-funcs autotools systemd
 
 DESCRIPTION="Lightweight but featured SMTP daemon from OpenBSD"
 HOMEPAGE="https://www.opensmtpd.org"

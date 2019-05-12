@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic versionator systemd git-r3 autotools
+inherit flag-o-matic systemd git-r3 autotools
 
 DESCRIPTION="The PHP language runtime engine"
 HOMEPAGE="https://secure.php.net/"

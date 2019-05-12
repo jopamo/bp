@@ -3,11 +3,11 @@
 EAPI=7
 
 inherit eutils flag-o-matic linux-info pam prefix python-single-r1 \
-		systemd user versionator git-r3
+		systemd user git-r3
 
 KEYWORDS="amd64 arm64"
 
-SLOT=$(get_major_version)
+SLOT=$(ver_cut 1)
 
 EGIT_REPO_URI="https://git.postgresql.org/git/postgresql.git"
 EGIT_BRANCH=REL_$(ver_cut 1)_STABLE

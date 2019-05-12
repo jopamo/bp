@@ -106,7 +106,6 @@
 
 # And to ensure all the weirdness with crosscompile
 inherit toolchain-funcs
-[[ ${EAPI:-0} == [0123456] ]] && inherit eapi7-ver
 
 EXPORT_FUNCTIONS pkg_setup
 

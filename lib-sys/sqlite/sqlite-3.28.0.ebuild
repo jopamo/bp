@@ -1,10 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit autotools versionator flag-o-matic
+inherit autotools flag-o-matic
 
-MY_PV="$(printf "%u%02u%02u%02u" $(get_version_components))"
+MY_PV="$(ver_cut 1)$(ver_cut 2)$(ver_cut 3)000"
 
 DESCRIPTION="A SQL Database Engine in a C Library"
 HOMEPAGE="https://sqlite.org/"

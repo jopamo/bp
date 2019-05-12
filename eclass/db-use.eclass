@@ -1,9 +1,4 @@
 # Distributed under the terms of the GNU General Public License v2
-# This is a common location for functions that aid the use of lib-sys/db
-#
-# Bugs: maintainer-needed@gentoo.org
-
-inherit versionator
 
 #Convert a version to a db slot
 db_ver_to_slot() {

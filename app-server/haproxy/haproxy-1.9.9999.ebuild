@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
 
-inherit user versionator toolchain-funcs flag-o-matic systemd linux-info git-r3
+inherit user toolchain-funcs flag-o-matic systemd linux-info git-r3
 
 DESCRIPTION="A TCP/HTTP reverse proxy for high availability environments"
 HOMEPAGE="http://haproxy.1wt.eu"

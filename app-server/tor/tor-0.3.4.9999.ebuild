@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic systemd versionator user git-r3 autotools
+inherit flag-o-matic systemd user git-r3 autotools
 
 DESCRIPTION="Anonymizing overlay network for TCP"
 HOMEPAGE="http://www.torproject.org/"

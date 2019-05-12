@@ -149,6 +149,8 @@ src_install() {
 	fi
 
 	cleanup_install
+
+	rm -f "${ED}"/etc/pam.d/{su,login}
 }
 
 pkg_preinst() {

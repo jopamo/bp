@@ -1,13 +1,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit cmake-utils eutils fcaps flag-o-matic qmake-utils user xdg-utils git-r3
 
 DESCRIPTION="A network protocol analyzer formerly known as ethereal"
 HOMEPAGE="https://www.wireshark.org/"
 EGIT_REPO_URI="https://github.com/wireshark/wireshark.git"
-EGIT_BRANCH="master-3.0"
+EGIT_BRANCH="master-$(ver_cut 1).$(ver_cut 2)"
 
 KEYWORDS="amd64 arm64"
 

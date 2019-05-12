@@ -1,13 +1,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
 
 inherit flag-o-matic systemd versionator user git-r3 autotools
 
 DESCRIPTION="Anonymizing overlay network for TCP"
 HOMEPAGE="http://www.torproject.org/"
 EGIT_REPO_URI="https://git.torproject.org/tor.git"
-EGIT_BRANCH=maint-0.3.4
+EGIT_BRANCH=maint-$(ver_cut 1).$(ver_cut 2).$(ver_cut 3)
 
 LICENSE="BSD GPL-2"
 SLOT="0"

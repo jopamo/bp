@@ -1,14 +1,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
+EAPI=7
 
 inherit distutils-r1 flag-o-matic multiprocessing toolchain-funcs versionator git-r3
 
 DESCRIPTION="Fast array and numerical python library"
 HOMEPAGE="http://www.numpy.org/"
 EGIT_REPO_URI="https://github.com/numpy/numpy.git"
-EGIT_BRANCH="maintenance/1.16.x"
+EGIT_BRANCH="maintenance/$(ver_cut 1).$(ver_cut 2).x"
 
 LICENSE="BSD"
 SLOT="0"

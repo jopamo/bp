@@ -1,6 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
+
 WANT_LIBTOOL="none"
 
 inherit flag-o-matic python-utils-r1 toolchain-funcs git-r3 eutils
@@ -8,7 +9,7 @@ inherit flag-o-matic python-utils-r1 toolchain-funcs git-r3 eutils
 DESCRIPTION="An interpreted, interactive, object-oriented programming language"
 HOMEPAGE="https://www.python.org/"
 EGIT_REPO_URI="https://github.com/python/cpython.git"
-EGIT_BRANCH="3.7"
+EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="PSF-2"
 SLOT="3.7"

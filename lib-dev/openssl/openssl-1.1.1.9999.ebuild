@@ -1,26 +1,24 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
 
 inherit eutils flag-o-matic toolchain-funcs git-r3
 
 DESCRIPTION="full-strength general purpose cryptography library (including SSL and TLS)"
 HOMEPAGE="https://www.openssl.org/"
 EGIT_REPO_URI="https://github.com/openssl/openssl.git"
-EGIT_BRANCH="OpenSSL_1_0_2-stable"
-KEYWORDS="amd64 arm64"
+EGIT_BRANCH="OpenSSL_$(ver_cut 1)_$(ver_cut 2)_$(ver_cut 3)-stable"
+#KEYWORDS="amd64 arm64"
 
 LICENSE="openssl"
 SLOT="0"
-IUSE="+asm bindist gmp rfc3779 sctp static-libs test vanilla zlib"
+IUSE="+asm bindist rfc3779 static-libs test vanilla zlib"
 RESTRICT="!bindist? ( bindist )"
 
-RDEPEND="gmp? ( >=lib-dev/gmp-5.1.3-r1[static-libs(+)?] )
-	zlib? ( >=lib-sys/zlib-1.2.8-r1[static-libs(+)?] )"
+RDEPEND="zlib? ( >=lib-sys/zlib-1.2.8-r1[static-libs(+)?] )"
 
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5
-	sctp? ( >=app-net/lksctp-tools-1.0.12 )
 	test? (
 		sys-app/diffutils
 		sys-devel/bc
@@ -33,21 +31,10 @@ src_prepare() {
 
 	eapply_user
 
-	sed -i \
-		-e '/DIRS/s: fips : :g' \
-		-e '/^MANSUFFIX/s:=.*:=ssl:' \
-		-e '/^MAKEDEPPROG/s:=.*:=$(CC):' \
-		-e $(has noman FEATURES \
-			&& echo '/^install:/s:install_docs::' \
-			|| echo '/^MANDIR=/s:=.*:='${EPREFIX}'/usr/share/man:') \
-		Makefile.org \
-		|| die
 	# show the actual commands in the log
 	sed -i '/^SET_X/s:=.*:=set -x:' Makefile.shared
 
-	sed -i 's/expr.*MAKEDEPEND.*;/true;/' util/domd || die
-
-	[[ ${CC} == *clang* ]] && append-flags -Qunused-arguments
+	append-flags -Wunused-parameter
 
 	append-flags -fno-strict-aliasing
 	append-flags $(test-flags-CC -Wa,--noexecstack)
@@ -68,57 +55,36 @@ src_configure() {
 	use_ssl() { usex $1 "enable-${2:-$1}" "no-${2:-$1}" " ${*:3}" ; }
 	echoit() { echo "$@" ; "$@" ; }
 
-	local krb5=$(has_version app-crypt/mit-krb5 && echo "MIT" || echo "Heimdal")
-
 	local ec_nistp_64_gcc_128
 
 	echoit \
 	${S}/config \
-		${sslout} \
-		enable-camellia \
-		$(use_ssl !bindist ec) \
-		${ec_nistp_64_gcc_128} \
-		enable-idea \
-		enable-mdc2 \
-		enable-rc5 \
-		enable-tlsext \
-		$(use_ssl asm) \
-		$(use_ssl gmp gmp -lgmp) \
-		$(use_ssl rfc3779) \
-		$(use_ssl sctp) \
-		-DOPENSSL_NO_SSL2 \
-		-DOPENSSL_NO_SSL3 \
-		-DOPENSSL_NO_HEARTBEATS \
-		$(use_ssl zlib) \
+		no-deprecated \
 		--prefix="${EPREFIX}"/usr \
 		--openssldir="${EPREFIX}"${SSL_CNF_DIR} \
 		--libdir=lib64 \
-		shared threads \
+		shared zlib-dynamic \
 		|| die
 
 	# Clean out hardcoded flags that openssl uses
-	local CFLAG=$(grep ^CFLAG= Makefile | LC_ALL=C sed \
-		-e 's:^CFLAG=::' \
+	# Fix quoting for sed
+	local DEFAULT_CFLAGS=$(grep ^CFLAGS= Makefile | LC_ALL=C sed \
+		-e 's:^CFLAGS=::' \
 		-e 's:-fomit-frame-pointer ::g' \
 		-e 's:-O[0-9] ::g' \
 		-e 's:-march=[-a-z0-9]* ::g' \
 		-e 's:-mcpu=[-a-z0-9]* ::g' \
 		-e 's:-m[a-z0-9]* ::g' \
+		-e 's:\\:\\\\:g' \
 	)
 	sed -i \
-		-e "/^CFLAG/s|=.*|=${CFLAG} ${CFLAGS}|" \
-		-e "/^SHARED_LDFLAGS=/s|$| ${LDFLAGS}|" \
+		-e "/^CFLAGS=/s|=.*|=${DEFAULT_CFLAGS} ${CFLAGS}|" \
+		-e "/^LDFLAGS=/s|=[[:space:]]*$|=${LDFLAGS}|" \
 		Makefile || die
 }
 
 src_compile() {
-	# depend is needed to use $confopts; it also doesn't matter
-	# that it's -j1 as the code itself serializes subdirs
-	make -j1 depend
-	emake -j1 all
-	# rehash is needed to prep the certs/ dir; do this
-	# separately to avoid parallel build issues.
-	emake -j1 rehash
+	emake all
 }
 
 src_test() {
@@ -126,19 +92,18 @@ src_test() {
 }
 
 src_install() {
-	emake -j1 INSTALL_PREFIX="${D}" install
+	emake DESTDIR="${D}" install
 
 	use static-libs || rm -f "${ED}"/usr/lib*/lib*.a
 
-	dodir ${SSL_CNF_DIR}/certs
-	cp -RP certs/* "${ED}"${SSL_CNF_DIR}/certs/ || die
-	rm -r "${ED}"${SSL_CNF_DIR}/certs/{demo,expired}
+	keepdir ${SSL_CNF_DIR}/certs
 
 	dodir /etc/sandbox.d #254521
 	echo 'SANDBOX_PREDICT="/dev/crypto"' > "${ED}"/etc/sandbox.d/10openssl
 
 	diropts -m0700
 	keepdir ${SSL_CNF_DIR}/private
+	rm -rf ${ED}/usr/share/doc
 }
 
 pkg_postinst() {

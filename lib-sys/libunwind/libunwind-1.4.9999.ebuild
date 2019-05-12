@@ -1,13 +1,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools git-r3 flag-o-matic
 
 DESCRIPTION="Portable and efficient API to determine the call-chain of a program"
 HOMEPAGE="https://savannah.nongnu.org/projects/libunwind"
 EGIT_REPO_URI="https://github.com/libunwind/libunwind.git"
-EGIT_BRANCH="v1.4-stable"
+EGIT_BRANCH="v$(ver_cut 1).$(ver_cut 2)-stable"
 
 LICENSE="MIT"
 SLOT="7"

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools flag-o-matic linux-info xdg-utils \
 	pam user versionator \
@@ -9,7 +9,7 @@ inherit autotools flag-o-matic linux-info xdg-utils \
 DESCRIPTION="The Common Unix Printing System"
 HOMEPAGE="https://www.cups.org/"
 EGIT_REPO_URI="https://github.com/apple/cups.git"
-EGIT_BRANCH="branch-2.2"
+EGIT_BRANCH="branch-$(ver_cut 1).$(ver_cut 2)"
 
 KEYWORDS="amd64 arm64"
 

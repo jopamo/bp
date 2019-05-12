@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit prefix toolchain-glibc git-r3 flag-o-matic
 
@@ -11,7 +11,7 @@ LICENSE="LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
 RESTRICT="strip" # Strip ourself #46186
 
 EGIT_REPO_URI="git://sourceware.org/git/glibc.git"
-EGIT_BRANCH="release/2.29/master"
+EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)/master"
 
 KEYWORDS="amd64 arm64"
 

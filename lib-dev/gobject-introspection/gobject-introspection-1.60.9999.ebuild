@@ -2,7 +2,6 @@
 
 EAPI=6
 
-
 inherit python-single-r1 toolchain-funcs versionator autotools flag-o-matic
 
 DESCRIPTION="Introspection system for GObject-based libraries"

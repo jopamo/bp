@@ -1,13 +1,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit cmake-utils git-r3
 
 DESCRIPTION="Cryptographic library for embedded systems"
 HOMEPAGE="https://tls.mbed.org/"
 EGIT_REPO_URI="https://github.com/ARMmbed/mbedtls.git"
-EGIT_BRANCH="mbedtls-2.7"
+EGIT_BRANCH="mbedtls-$(ver_cut 1).$(ver_cut 2)"
 
 KEYWORDS="amd64 arm64"
 

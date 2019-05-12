@@ -1,13 +1,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit flag-o-matic versionator systemd git-r3 autotools
 
 DESCRIPTION="The PHP language runtime engine"
 HOMEPAGE="https://secure.php.net/"
 EGIT_REPO_URI="https://github.com/php/php-src.git"
-EGIT_BRANCH="PHP-7.3"
+EGIT_BRANCH="PHP-$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="PHP-3.01
 	BSD

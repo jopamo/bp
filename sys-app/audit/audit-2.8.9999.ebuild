@@ -8,7 +8,7 @@ inherit autotools toolchain-funcs preserve-libs python-r1 linux-info systemd git
 DESCRIPTION="Userspace utilities for storing and processing auditing records"
 HOMEPAGE="https://people.redhat.com/sgrubb/audit/"
 EGIT_REPO_URI="https://github.com/linux-audit/audit-userspace.git"
-EGIT_BRANCH="2.8_maintenance"
+EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)_maintenance"
 
 LICENSE="GPL-2"
 SLOT="0"

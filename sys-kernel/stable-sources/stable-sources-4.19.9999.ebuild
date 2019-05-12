@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
 
 K_NOUSENAME="yes"
 K_NOSETEXTRAVERSION="yes"
@@ -17,7 +17,7 @@ DEPEND="sys-app/ed
 		sys-devel/bc"
 
 EGIT_REPO_URI="https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git"
-EGIT_BRANCH=linux-4.19.y
+EGIT_BRANCH=linux-$(ver_cut 1).$(ver_cut 2).y
 EGIT_CLONE_TYPE=shallow
 S="${WORKDIR}/linux-${PV}"
 EGIT_CHECKOUT_DIR="${S}"

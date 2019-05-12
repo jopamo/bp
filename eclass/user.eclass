@@ -1,13 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: user.eclass
-# @MAINTAINER:
-# base-system@gentoo.org (Linux)
-# @BLURB: user management in ebuilds
-# @DESCRIPTION:
-# The user eclass contains a suite of functions that allow ebuilds
-# to quickly make sure users in the installed system are sane.
-
 if [[ -z ${_USER_ECLASS} ]]; then
 _USER_ECLASS=1
 
@@ -24,12 +16,16 @@ _assert_pkg_ebuild_phase() {
 		die "Bad package!  $1 is only for use in some pkg_* functions!"
 	esac
 }
+# @FUNCTION: _newusergroup
+newusergroup() {
+		enewgroup "$1"
+		enewuser "$1" -1 -1 -1 "$1"
+	}
 
 # @FUNCTION: egetent
 # @USAGE: <database> <key>
 # @DESCRIPTION:
-# Small wrapper for getent (Linux), nidump (< Mac OS X 10.5),
-# dscl (Mac OS X 10.5), and pw (FreeBSD) used in enewuser()/enewgroup().
+# Small wrapper for getent
 #
 # Supported databases: group passwd
 egetent() {
@@ -43,49 +39,6 @@ egetent() {
 	esac
 
 	case ${CHOST} in
-	*-darwin[678])
-		case ${key} in
-		*[!0-9]*) # Non numeric
-			nidump ${db} . | awk -F: "(\$1 ~ /^${key}\$/) {print;exit;}"
-			;;
-		*)	# Numeric
-			nidump ${db} . | awk -F: "(\$3 == ${key}) {print;exit;}"
-			;;
-		esac
-		;;
-	*-darwin*)
-		local mykey
-		case ${db} in
-		passwd) db="Users"  mykey="UniqueID" ;;
-		group)  db="Groups" mykey="PrimaryGroupID" ;;
-		esac
-
-		case ${key} in
-		*[!0-9]*) # Non numeric
-			dscl . -read /${db}/${key} 2>/dev/null |grep RecordName
-			;;
-		*)	# Numeric
-			dscl . -search /${db} ${mykey} ${key} 2>/dev/null
-			;;
-		esac
-		;;
-	*-freebsd*|*-dragonfly*)
-		case ${db} in
-		passwd) db="user" ;;
-		*) ;;
-		esac
-
-		# lookup by uid/gid
-		local opts
-		if [[ ${key} == [[:digit:]]* ]] ; then
-			[[ ${db} == "user" ]] && opts="-u" || opts="-g"
-		fi
-
-		pw show ${db} ${opts} "${key}" -q
-		;;
-	*-netbsd*|*-openbsd*)
-		grep "${key}:\*:" /etc/${db}
-		;;
 	*)
 		# ignore output if nscd doesn't exist, or we're not running as root
 		nscd -i "${db}" 2>/dev/null
@@ -100,7 +53,7 @@ egetent() {
 # Same as enewgroup, you are not required to understand how to properly add
 # a user to the system.  The only required parameter is the username.
 # Default uid is (pass -1 for this) next available, default shell is
-# /bin/false, default homedir is /dev/null, and there are no default groups.
+# /usr/bin/false, default homedir is /dev/null, and there are no default groups.
 enewuser() {
 	if [[ ${EUID} != 0 ]] ; then
 		einfo "Insufficient privileges to execute ${FUNCNAME[0]}"
@@ -158,16 +111,14 @@ enewuser() {
 			die "Pass '-1' as the shell parameter"
 		fi
 	else
-		for eshell in /sbin/nologin /usr/sbin/nologin /bin/false /usr/bin/false /dev/null ; do
+		for eshell in /usr/bin/false /usr/sbin/nologin /dev/null ; do
 			[[ -x ${ROOT}${eshell} ]] && break
 		done
 
 		if [[ ${eshell} == "/dev/null" ]] ; then
 			eerror "Unable to identify the shell to use, proceeding with userland default."
 			case ${USERLAND} in
-				GNU)    eshell="/bin/false" ;;
-				BSD)    eshell="/sbin/nologin" ;;
-				Darwin) eshell="/usr/sbin/nologin" ;;
+				GNU)    eshell="/usr/bin/false" ;;
 				*) die "Unable to identify the default shell for userland ${USERLAND}"
 			esac
 		fi
@@ -218,32 +169,6 @@ enewuser() {
 
 	# add the user
 	case ${CHOST} in
-	*-darwin*)
-		### Make the user
-		dscl . create "/users/${euser}" uid ${euid}
-		dscl . create "/users/${euser}" shell "${eshell}"
-		dscl . create "/users/${euser}" home "${ehome}"
-		dscl . create "/users/${euser}" realname "added by portage for ${PN}"
-		### Add the user to the groups specified
-		for g in "${egroups_arr[@]}" ; do
-			dscl . merge "/groups/${g}" users "${euser}"
-		done
-		;;
-
-	*-freebsd*|*-dragonfly*)
-		pw useradd "${euser}" "${opts[@]}" || die
-		;;
-
-	*-netbsd*)
-		useradd "${opts[@]}" "${euser}" || die
-		;;
-
-	*-openbsd*)
-		# all ops the same, except the -g vs -g/-G ...
-		useradd -u ${euid} -s "${eshell}" \
-			-d "${ehome}" -g "${egroups}" "${euser}" || die
-		;;
-
 	*)
 		useradd -r "${opts[@]}" "${euser}" || die
 		;;
@@ -317,22 +242,6 @@ enewgroup() {
 
 	# add the group
 	case ${CHOST} in
-	*-darwin*)
-		_enewgroup_next_gid
-		dscl . create "/groups/${egroup}" gid ${egid}
-		dscl . create "/groups/${egroup}" passwd '*'
-		;;
-
-	*-freebsd*|*-dragonfly*)
-		_enewgroup_next_gid
-		pw groupadd "${egroup}" -g ${egid} || die
-		;;
-
-	*-netbsd*)
-		_enewgroup_next_gid
-		groupadd -g ${egid} "${egroup}" || die
-		;;
-
 	*)
 		local opts
 		if [[ ${egid} == *[!0-9]* ]] ; then
@@ -357,9 +266,6 @@ egethome() {
 	[[ $# -eq 1 ]] || die "usage: egethome <user>"
 
 	case ${CHOST} in
-	*-darwin*|*-freebsd*|*-dragonfly*)
-		pos=9
-		;;
 	*)	# Linux, NetBSD, OpenBSD, etc...
 		pos=6
 		;;
@@ -378,9 +284,6 @@ egetshell() {
 	[[ $# -eq 1 ]] || die "usage: egetshell <user>"
 
 	case ${CHOST} in
-	*-darwin*|*-freebsd*|*-dragonfly*)
-		pos=10
-		;;
 	*)	# Linux, NetBSD, OpenBSD, etc...
 		pos=7
 		;;
@@ -443,18 +346,6 @@ esethome() {
 
 	# update the home directory
 	case ${CHOST} in
-	*-darwin*)
-		dscl . change "/users/${euser}" home "${ehome}"
-		;;
-
-	*-freebsd*|*-dragonfly*)
-		pw usermod "${euser}" -d "${ehome}" && return 0
-		[[ $? == 8 ]] && eerror "${euser} is in use, cannot update home"
-		eerror "There was an error when attempting to update the home directory for ${euser}"
-		eerror "Please update it manually on your system:"
-		eerror "\t pw usermod \"${euser}\" -d \"${ehome}\""
-		;;
-
 	*)
 		usermod -d "${ehome}" "${euser}" && return 0
 		[[ $? == 8 ]] && eerror "${euser} is in use, cannot update home"

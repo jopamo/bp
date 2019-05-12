@@ -1,18 +1,18 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit xdg-utils git-r3 qmake-utils autotools
+inherit xdg-utils git-r3 qmake-utils autotools systemd user
 
 DESCRIPTION="BitTorrent client in C++ and Qt"
 HOMEPAGE="https://www.qbittorrent.org/"
 EGIT_REPO_URI="https://github.com/${PN}/qBittorrent.git"
 
-KEYWORDS="amd64 arm64"
-
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="debug webui gui"
+KEYWORDS="amd64 arm64"
+
+IUSE="debug server gui"
 
 DEPEND=">=lib-dev/boost-1.62.0-r1:=
 	lib-net/libtorrent
@@ -44,7 +44,7 @@ src_configure() {
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
-		$(use_enable webui)
+		$(use_enable server webui)
 		$(use_enable debug)
 		$(use_enable gui)
 	)
@@ -53,7 +53,13 @@ src_configure() {
 }
 
 src_install() {
-	emake INSTALL_ROOT="${D}" install
+	emake INSTALL_ROOT="${ED}" install
+
+	use server && systemd_dounit "${FILESDIR}"/qbittorrent.service
+}
+
+pkg_preinst() {
+	use server && newusergroup qbtuser
 }
 
 pkg_postinst() {

@@ -28,6 +28,17 @@ PDEPEND="=app-text/docbook-sgml-dtd-4.5
 		sys-app/help2man
 		app-text/po4a
 		app-text/docbook-xsl-stylesheets
+		dev-perl/Date-Manip
+		dev-perl/HTTP-Date
+		dev-perl/IO-Socket-SSL
+		dev-perl/Module-Build
+		dev-perl/SGMLSpm
+		dev-perl/Text-Unidecode
+		dev-perl/Unicode-EastAsianWidth
+		dev-perl/Unicode-LineBreak
+		dev-perl/XML-Parser
+		dev-perl/XML-SAX
+		dev-perl/YAML-Tiny
 "
 
 src_prepare() {
@@ -65,11 +76,11 @@ src_configure() {
 
 	export BUILD_BZIP2=0
 	export BZIP2_INCLUDE=${EROOT}/usr/include
-	export BZIP2_LIB=${EROOT}/usr/lib64
+	export BZIP2_LIB=${EROOT}/usr/lib
 
 	export BUILD_ZLIB=False
 	export ZLIB_INCLUDE=${EROOT}/usr/include
-	export ZLIB_LIB=${EROOT}/usr/lib64
+	export ZLIB_LIB=${EROOT}/usr/lib
 
 	# allow either gdbm to provide ndbm (in <gdbm/ndbm.h>) or db1
 	myndbm='U'
@@ -106,7 +117,7 @@ src_configure() {
 			sort -u -nr -t'.' -k1,1 -k2,2 -k3,3
 	)"
 
-	myconf "-Dlibpth=/usr/lib64"
+	myconf "-Dlibpth=/usr/lib"
 
 	# don't try building ODBM, bug #354453
 	disabled_extensions="ODBM_File"
@@ -134,12 +145,12 @@ src_configure() {
 		-Dsiteprefix="${EPREFIX}"'/usr' \
 		-Dvendorprefix="${EPREFIX}"'/usr' \
 		-Dscriptdir="${EPREFIX}"'/usr/bin' \
-		-Dprivlib="${EPREFIX}"/usr/lib64/perl5 \
-		-Darchlib="${EPREFIX}"/usr/lib64/perl5 \
-		-Dsitelib="${EPREFIX}"/usr/lib64/perl5 \
-		-Dsitearch="${EPREFIX}"/usr/lib64/perl5 \
-		-Dvendorlib="${EPREFIX}"/usr/lib64/perl5 \
-		-Dvendorarch="${EPREFIX}"/usr/lib64/perl5 \
+		-Dprivlib="${EPREFIX}"/usr/lib/perl5 \
+		-Darchlib="${EPREFIX}"/usr/lib/perl5 \
+		-Dsitelib="${EPREFIX}"/usr/lib/perl5 \
+		-Dsitearch="${EPREFIX}"/usr/lib/perl5 \
+		-Dvendorlib="${EPREFIX}"/usr/lib/perl5 \
+		-Dvendorarch="${EPREFIX}"/usr/lib/perl5 \
 		-Dman1dir="${EPREFIX}"/usr/share/man/man1 \
 		-Dman3dir="${EPREFIX}"/usr/share/man/man3 \
 		-Dsiteman1dir="${EPREFIX}"/usr/share/man/man1 \
@@ -149,7 +160,7 @@ src_configure() {
 		-Dman1ext='1' \
 		-Dman3ext='3pm' \
 		-Dlocincpth="${EPREFIX}"'/usr/include ' \
-		-Dglibpth="${EPREFIX}/usr/lib64"' ' \
+		-Dglibpth="${EPREFIX}/usr/lib"' ' \
 		-Duselargefiles \
 		-Dd_semctl_semun \
 		-Dmyhostname='localhost' \
@@ -181,7 +192,7 @@ src_test() {
 
 src_install() {
 	local i
-	local coredir="${EPREFIX}/"/usr/lib64/perl5/CORE
+	local coredir="${EPREFIX}/"/usr/lib/perl5/CORE
 	emake DESTDIR="${D}" install
 
 	rm -f "${ED}/usr/bin/perl5*"

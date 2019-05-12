@@ -3,7 +3,6 @@
 EAPI=6
 
 DIST_AUTHOR=GUIDO
-DIST_VERSION=1.28
 
 inherit perl-module flag-o-matic
 

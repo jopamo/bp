@@ -26,7 +26,7 @@ DEPEND="${RDEPEND}
 	app-compression/xz-utils"
 
 RDEPEND="${RDEPEND}
-	pam? ( >=lib-sys/pambase-20150213 )"
+	pam? ( lib-sys/pambase )"
 
 PATCHES=( "${FILESDIR}"/disable_man_and_docs.patch )
 

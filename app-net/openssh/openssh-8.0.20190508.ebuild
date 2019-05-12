@@ -43,7 +43,7 @@ DEPEND="${RDEPEND}
 	sys-devel/autoconf"
 
 RDEPEND="${RDEPEND}
-	pam? ( >=lib-sys/pambase-20081028 )
+	pam? ( lib-sys/pambase )
 	sys-app/shadow
 	X? ( x11/xauth )"
 

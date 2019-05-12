@@ -2,8 +2,10 @@
 
 EAPI=6
 
+inherit git-r3
+
 DESCRIPTION="PAM base configuration files"
-SRC_URI="https://1g4.org/files/${P}.tar.xz"
+EGIT_REPO_URI="https://github.com/1g4-linux/pambase.git"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -18,7 +20,7 @@ src_test() { :; }
 src_install() {
 	insinto /etc/pam.d/
 
-	for x in system-auth system-login system-local-login system-remote-login system-services other  ; do
+	for x in login su system-auth system-login system-local-login system-remote-login system-services other  ; do
 		doins ${x}
 	done
 }

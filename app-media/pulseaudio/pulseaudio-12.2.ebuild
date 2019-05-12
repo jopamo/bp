@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit autotools eutils flag-o-matic gnome2-utils linux-info systemd user versionator
+inherit autotools eutils flag-o-matic gnome2-utils linux-info systemd user
 
 DESCRIPTION="A networked sound server with an advanced plugin system"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/PulseAudio/"

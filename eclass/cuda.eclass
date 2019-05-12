@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit flag-o-matic toolchain-funcs versionator
+inherit flag-o-matic toolchain-funcs
 
 # @ECLASS: cuda.eclass
 # @MAINTAINER:
@@ -130,7 +130,7 @@ cuda_src_prepare() {
 case "${EAPI:-0}" in
 	0|1)
 		EXPORT_FUNCTIONS pkg_setup ;;
-	2|3|4|5|6)
+	2|3|4|5|6|7)
 		EXPORT_FUNCTIONS src_prepare ;;
 	*) die "EAPI=${EAPI} is not supported" ;;
 esac

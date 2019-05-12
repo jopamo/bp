@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools versionator linux-info flag-o-matic toolchain-funcs systemd
+inherit autotools linux-info flag-o-matic toolchain-funcs systemd
 
 DESCRIPTION="A performant, transport independent, multi-platform implementation of RFC3720"
 HOMEPAGE="http://www.open-iscsi.com/"

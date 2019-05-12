@@ -1,15 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit autotools versionator flag-o-matic toolchain-funcs
+inherit autotools flag-o-matic toolchain-funcs
 
 DESCRIPTION="Ghostscript is an interpreter for the PostScript language and for PDF"
 HOMEPAGE="http://ghostscript.com/"
 
 MY_P=${P/-gpl}
-PVM=$(get_version_component_range 1-2)
-PVM_S=$(replace_all_version_separators "" ${PVM})
+PVM=$(ver_cut 1-2)
+PVM_S=$(ver_rs 1- "" ${PVM})
 
 SRC_URI="https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${PVM_S}/${MY_P}.tar.xz"
 

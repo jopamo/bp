@@ -12,7 +12,7 @@
 # Requires EAPI 6.
 
 case ${EAPI} in
-	6)	: ;;
+	7)	: ;;
 	*)	die "qt5-build.eclass: unsupported EAPI=${EAPI:-0}" ;;
 esac
 
@@ -52,7 +52,7 @@ esac
 # for tests you should proceed with setting VIRTUALX_REQUIRED=test.
 : ${VIRTUALX_REQUIRED:=manual}
 
-inherit eapi7-ver estack flag-o-matic toolchain-funcs virtualx
+inherit estack flag-o-matic toolchain-funcs virtualx
 
 HOMEPAGE="https://www.qt.io/"
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"

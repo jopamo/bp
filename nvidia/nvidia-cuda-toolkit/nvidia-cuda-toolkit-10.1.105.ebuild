@@ -1,10 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit cuda toolchain-funcs unpacker versionator
+inherit cuda toolchain-funcs unpacker
 
-MYD=$(get_version_component_range 1-2)
+MYD=$(ver_cut 1-2)
 DRIVER_PV="418.39"
 
 DESCRIPTION="NVIDIA CUDA Toolkit (compiler and friends)"

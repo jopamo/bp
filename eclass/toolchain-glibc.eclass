@@ -8,7 +8,7 @@
 
 if [[ -z ${_TOOLCHAIN_GLIBC_ECLASS} ]]; then
 
-inherit eutils versionator toolchain-funcs flag-o-matic gnuconfig \
+inherit eutils toolchain-funcs flag-o-matic gnuconfig \
 	systemd unpacker multiprocessing prefix
 
 case ${EAPI:-0} in

@@ -1,11 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 VIM_VERSION="8.0"
 
-
-inherit vim-doc flag-o-matic versionator python-single-r1 git-r3
+inherit vim-doc flag-o-matic python-single-r1 git-r3
 
 DESCRIPTION="Vim, an improved vi-style text editor"
 HOMEPAGE="https://vim.sourceforge.io/ https://github.com/vim/vim"

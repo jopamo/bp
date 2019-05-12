@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit distutils-r1 flag-o-matic multiprocessing toolchain-funcs versionator git-r3
+inherit distutils-r1 flag-o-matic multiprocessing toolchain-funcs git-r3
 
 DESCRIPTION="Fast array and numerical python library"
 HOMEPAGE="http://www.numpy.org/"
@@ -12,6 +12,7 @@ EGIT_BRANCH="maintenance/$(ver_cut 1).$(ver_cut 2).x"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="lapack test"
 
 DEPEND="dev-python/cython

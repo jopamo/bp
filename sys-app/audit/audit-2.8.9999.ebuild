@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
-
+EAPI=7
 
 inherit autotools toolchain-funcs preserve-libs python-r1 linux-info systemd git-r3 flag-o-matic
 

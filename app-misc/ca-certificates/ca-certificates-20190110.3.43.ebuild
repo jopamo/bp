@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
+EAPI=7
 
 SNAPSHOT="20190110"
 
@@ -10,10 +9,9 @@ inherit eutils python-any-r1
 if [[ ${PV} == *.* ]] ; then
 	# Compile from source ourselves.
 	PRECOMPILED=false
-	inherit versionator
 
-	DEB_VER=$(get_version_component_range 1)
-	NSS_VER=$(get_version_component_range 2-)
+	DEB_VER=$(ver_cut 1)
+	NSS_VER=$(ver_cut 2-)
 	RTM_NAME="NSS_${NSS_VER//./_}_RTM"
 else
 	# Debian precompiled version.

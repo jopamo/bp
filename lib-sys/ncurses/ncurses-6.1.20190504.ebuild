@@ -1,13 +1,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit toolchain-funcs versionator
+inherit toolchain-funcs
 
 DESCRIPTION="console display library"
 HOMEPAGE="http://invisible-island.net/ncurses/ https://www.gnu.org/software/ncurses/"
 
-MY_P="${PN}-$(replace_version_separator 2 -)"
+MY_P="${PN}-$(ver_rs 2 -)"
 SRC_URI="https://invisible-mirror.net/archives/ncurses/current/${MY_P}.tgz"
 S="${WORKDIR}/${MY_P}"
 

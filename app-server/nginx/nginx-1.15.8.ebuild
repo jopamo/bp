@@ -158,7 +158,7 @@ NJS_MODULE_WD="${WORKDIR}/njs-${NJS_MODULE_PV}"
 SSL_DEPS_SKIP=1
 AUTOTOOLS_AUTO_DEPEND="no"
 
-inherit autotools ssl-cert toolchain-funcs perl-module flag-o-matic user systemd versionator
+inherit autotools ssl-cert toolchain-funcs perl-module flag-o-matic user systemd
 
 DESCRIPTION="Robust, small and high performance http and reverse proxy server"
 HOMEPAGE="https://nginx.org"
@@ -844,7 +844,7 @@ pkg_postinst() {
 			break
 		fi
 
-		local _replacing_version_branch=$(get_version_component_range 1-2 "${_replacing_version}")
+		local _replacing_version_branch=$(ver_cut 1-2 "${_replacing_version}")
 		debug-print "Updating an existing installation (v${_replacing_version}; branch '${_replacing_version_branch}') ..."
 
 		# Do we need to adjust permissions to fix CVE-2013-0337 (bug #458726, #469094)?

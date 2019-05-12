@@ -1,12 +1,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
+inherit eutils flag-o-matic multiprocessing python-r1 toolchain-funcs
 
-inherit eutils flag-o-matic multiprocessing python-r1 toolchain-funcs versionator
-
-MY_P="${PN}_$(replace_all_version_separators _)"
-MAJOR_V="$(get_version_component_range 1-2)"
+MY_P="${PN}_$(ver_rs 1- _)"
+MAJOR_V="$(ver_cut 1-2)"
 
 DESCRIPTION="Boost Libraries for C++"
 HOMEPAGE="http://www.boost.org/"

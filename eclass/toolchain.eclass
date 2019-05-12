@@ -4,7 +4,7 @@ DESCRIPTION="The GNU Compiler Collection"
 HOMEPAGE="https://gcc.gnu.org/"
 RESTRICT="strip" # cross-compilers need controlled stripping
 
-inherit eutils fixheadtails flag-o-matic gnuconfig libtool toolchain-funcs versionator prefix
+inherit eutils fixheadtails flag-o-matic gnuconfig libtool toolchain-funcs prefix
 
 case ${EAPI:-0} in
 	0|1|2|3|4*) die "Need to upgrade to at least EAPI=5" ;;
@@ -25,27 +25,16 @@ fi
 : ${TARGET_ABI:=${ABI}}
 : ${TARGET_DEFAULT_ABI:=${DEFAULT_ABI}}
 
-# General purpose version check.  Without a second arg matches up to minor version (x.x.x)
-tc_version_is_at_least() {
-	version_is_at_least "$1" "${2:-${GCC_RELEASE_VER}}"
-}
-
-# General purpose version range check
-# Note that it matches up to but NOT including the second version
-tc_version_is_between() {
-	tc_version_is_at_least "${1}" && ! tc_version_is_at_least "${2}"
-}
-
 GCC_PV=${TOOLCHAIN_GCC_PV:-${PV}}
 GCC_PVR=${GCC_PV}
 [[ ${PR} != "r0" ]] && GCC_PVR=${GCC_PVR}-${PR}
-GCC_RELEASE_VER=$(get_version_component_range 1-3 ${GCC_PV})
-GCC_BRANCH_VER=$(get_version_component_range 1-2 ${GCC_PV})
-GCCMAJOR=$(get_version_component_range 1 ${GCC_PV})
-GCCMINOR=$(get_version_component_range 2 ${GCC_PV})
-GCCMICRO=$(get_version_component_range 3 ${GCC_PV})
+GCC_RELEASE_VER=$(ver_cut 1-3 ${GCC_PV})
+GCC_BRANCH_VER=$(ver_cut 1-2 ${GCC_PV})
+GCCMAJOR=$(ver_cut 1 ${GCC_PV})
+GCCMINOR=$(ver_cut 2 ${GCC_PV})
+GCCMICRO=$(ver_cut 3 ${GCC_PV})
 [[ ${BRANCH_UPDATE-notset} == "notset" ]] && \
-	BRANCH_UPDATE=$(get_version_component_range 4 ${GCC_PV})
+	BRANCH_UPDATE=$(ver_cut 4 ${GCC_PV})
 
 PREFIX="${EPREFIX}"/usr
 BINPATH="${EPREFIX}"/usr/bin
@@ -54,9 +43,7 @@ DATAPATH="${EPREFIX}"/usr/share
 
 #---->> LICENSE+SLOT+IUSE logic <<----
 
-if tc_version_is_at_least 4.6 ; then
-	LICENSE="GPL-3+ LGPL-3+ || ( GPL-3+ libgcc libstdc++ gcc-runtime-library-exception-3.1 ) FDL-1.3+"
-fi
+LICENSE="GPL-3+ LGPL-3+ || ( GPL-3+ libgcc libstdc++ gcc-runtime-library-exception-3.1 ) FDL-1.3+"
 
 IUSE="regression-test vanilla debug cxx fortran doc objc nptl
 		pgo objc-gc objc++ openmp fixed-point go +isl sanitize
@@ -100,17 +87,9 @@ gcc_quick_unpack() {
 	pushd "${WORKDIR}" > /dev/null
 
 	if [[ -n ${SNAPSHOT} ]] ; then
-		if tc_version_is_between 5.5 6 || tc_version_is_between 6.4 7 || tc_version_is_at_least 7.2 ; then
 			unpack gcc-${SNAPSHOT}.tar.xz
-		else
-			unpack gcc-${SNAPSHOT}.tar.bz2
-		fi
 	elif [[ ${PV} != *9999* ]] ; then
-		if tc_version_is_between 5.5 6 || tc_version_is_between 6.4 7 || tc_version_is_at_least 7.2 ; then
 			unpack gcc-${GCC_RELEASE_VER}.tar.xz
-		else
-			unpack gcc-${GCC_RELEASE_VER}.tar.bz2
-		fi
 		# We want branch updates to be against a release tarball
 		if [[ -n ${BRANCH_UPDATE} ]] ; then
 			pushd "${S}" > /dev/null
@@ -130,15 +109,13 @@ toolchain_src_prepare() {
 
 	default
 
-	if tc_version_is_at_least 4.1 ; then
-		if [[ -n ${SNAPSHOT} || -n ${PRERELEASE} ]] ; then
-			# BASE-VER must be a three-digit version number
-			# followed by an optional -pre string
-			#   eg. 4.5.1, 4.6.2-pre20120213, 4.7.0-pre9999
-			# If BASE-VER differs from ${PV/_/-} then libraries get installed in
-			# the wrong directory.
-			echo ${PV/_/-} > "${S}"/gcc/BASE-VER
-		fi
+	if [[ -n ${SNAPSHOT} || -n ${PRERELEASE} ]] ; then
+		# BASE-VER must be a three-digit version number
+		# followed by an optional -pre string
+		#   eg. 4.5.1, 4.6.2-pre20120213, 4.7.0-pre9999
+		# If BASE-VER differs from ${PV/_/-} then libraries get installed in
+		# the wrong directory.
+		echo ${PV/_/-} > "${S}"/gcc/BASE-VER
 	fi
 
 	# Fixup libtool to correctly generate .la files with portage
@@ -198,18 +175,8 @@ toolchain_src_configure() {
 		--infodir="${EPREFIX}"/usr/share/info
 	)
 
-	# Stick the python scripts in their own slotted directory (bug #279252)
-	#
-	#  --with-python-dir=DIR
-	#  Specifies where to install the Python modules used for aot-compile. DIR
-	#  should not include the prefix used in installation. For example, if the
-	#  Python modules are to be installed in /usr/lib/python2.5/site-packages,
-	#  then --with-python-dir=/lib/python2.5/site-packages should be passed.
-	#
-	# This should translate into "/share/gcc-data/${CTARGET}/${GCC_CONFIG_VER}/python"
-	if tc_version_is_at_least 4.4 ; then
-		confgcc+=( --with-python-dir=${DATAPATH/$PREFIX/}/python )
-	fi
+
+	confgcc+=( --with-python-dir=${DATAPATH/$PREFIX/}/python )
 
 	### language options
 
@@ -220,9 +187,7 @@ toolchain_src_configure() {
 	is_jit && GCC_LANG+=",jit"
 	if is_objc || is_objcxx ; then
 		GCC_LANG+=",objc"
-		if tc_version_is_at_least 4 ; then
-			use objc-gc && confgcc+=( --enable-objc-gc )
-		fi
+		use objc-gc && confgcc+=( --enable-objc-gc )
 		is_objcxx && GCC_LANG+=",obj-c++"
 	fi
 
@@ -271,11 +236,9 @@ toolchain_src_configure() {
 		$(use_enable sanitize libsanitizer)
 )
 
-	# Use the default ("release") checking because upstream usually neglects
-	# to test "disabled" so it has a history of breaking. #317217
-	if tc_version_is_at_least 3.4 && use debug ; then
+	if use debug ; then
 		# The "release" keyword is new to 4.0. #551636
-		local off=$(tc_version_is_at_least 4.0 && echo release || echo no)
+		local off=$(echo release)
 		confgcc+=( --enable-checking="${GCC_CHECKS_LIST:-$(usex debug yes ${off})}" )
 	fi
 
@@ -287,10 +250,7 @@ toolchain_src_configure() {
 
 	### arch options
 
-	# gcc has fixed-point arithmetic support in 4.3 for mips targets that can
-	# significantly increase compile time by several hours.  This will allow
-	# users to control this feature in the event they need the support.
-	tc_version_is_at_least 4.3 && use fixed-point && confgcc+=( $(use_enable fixed-point) )
+	use fixed-point && confgcc+=( $(use_enable fixed-point) )
 
 	case $(tc-is-softfloat) in
 	yes)    confgcc+=( --with-float=soft ) ;;
@@ -307,7 +267,7 @@ toolchain_src_configure() {
 	# be small, and should simplify building of 64bit kernels in a 32bit
 	# userland by not needing sys-devel/kgcc64.  #349405
 	case $(tc-arch) in
-	amd64|x86) tc_version_is_at_least 4.3 && confgcc+=( --enable-targets=all ) ;;
+	amd64|x86) confgcc+=( --enable-targets=all ) ;;
 	esac
 
 	### library options
@@ -490,19 +450,6 @@ gcc_do_filter_flags() {
 
 	append-flags -Wa,--noexecstack
 
-	if tc_version_is_between 3.2 3.4 ; then
-		# XXX: this is so outdated it's barely useful, but it don't hurt...
-		replace-cpu-flags G3 750
-		replace-cpu-flags G4 7400
-		replace-cpu-flags G5 7400
-
-		# XXX: should add a sed or something to query all supported flags
-		#      from the gcc source and trim everything else ...
-		filter-flags -f{no-,}unit-at-a-time -f{no-,}web -mno-tls-direct-seg-refs
-		filter-flags -f{no-,}stack-protector{,-all}
-		filter-flags -fvisibility-inlines-hidden -fvisibility=hidden
-	fi
-
 	strip-unsupported-flags
 }
 
@@ -537,7 +484,7 @@ gcc_do_make() {
 
 	[[ -n ${1} ]] && GCC_MAKE_TARGET=${1}
 
-	if tc_version_is_at_least 3.3 && use_if_iuse pgo; then
+	if use_if_iuse pgo; then
 		GCC_MAKE_TARGET=${GCC_MAKE_TARGET-profiledbootstrap}
 	else
 		GCC_MAKE_TARGET=${GCC_MAKE_TARGET-bootstrap-lean}
@@ -796,7 +743,7 @@ is_ada() {
 
 is_cxx() {
 	gcc-lang-supported 'c++' || return 1
-	tc_version_is_at_least 4.8 && return 0
+	return 0
 	use_if_iuse cxx
 }
 

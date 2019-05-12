@@ -1,13 +1,12 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 RESTRICT="test"
 
+inherit eutils flag-o-matic python-single-r1 toolchain-funcs
 
-inherit eutils flag-o-matic python-single-r1 toolchain-funcs versionator
-
-MY_PV="$(replace_all_version_separators _)"
+MY_PV="$(ver_rs 1- _)"
 
 DESCRIPTION="A system for large project software construction, simple to use and powerful"
 HOMEPAGE="http://www.boost.org/doc/tools/build/index.html"

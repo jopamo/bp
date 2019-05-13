@@ -4,7 +4,7 @@ EAPI=7
 
 WANT_LIBTOOL="none"
 
-inherit flag-o-matic python-utils-r1 toolchain-funcs git-r3 eutils
+inherit flag-o-matic python-utils-r1 toolchain-funcs git-r3
 
 DESCRIPTION="An interpreted, interactive, object-oriented programming language"
 HOMEPAGE="https://www.python.org/"
@@ -14,7 +14,9 @@ EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
 LICENSE="PSF-2"
 SLOT="3.7"
 KEYWORDS="amd64 arm64"
+
 IUSE="ipv6 +embed valgrind static"
+
 RESTRICT="test"
 
 DEPEND="!embed? ( lib-sys/sqlite )
@@ -43,7 +45,7 @@ src_prepare() {
 	rm -fr Modules/_ctypes/libffi*
 	rm -fr Modules/zlib
 
-	use embed && epatch ${FILESDIR}/shrink_python.patch
+	use embed && eapply ${FILESDIR}/shrink_python.patch
 
 	default
 }
@@ -73,26 +75,26 @@ src_configure() {
 }
 
 src_install() {
-	local libdir=${ED}/usr/lib64/python${PYVER}
+	local libdir="${ED}"/usr/lib/python${PYVER}
 
 	emake DESTDIR="${D}" altinstall
 
 	# Fix collisions between different slots of Python.
-	rm -f "${ED}usr/lib64/libpython3.so"
+	rm -f "${ED}"/usr/lib/libpython3.so
 
 	# Cheap hack to get version with ABIFLAGS
-	local abiver=$(cd "${ED}usr/include"; echo python*)
+	local abiver=$(cd "${ED}"/usr/include; echo python*)
 	if [[ ${abiver} != python${PYVER} ]]; then
 		# Replace python3.X with a symlink to python3.Xm
-		rm "${ED}usr/bin/python${PYVER}" || die
+		rm "${ED}"/usr/bin/python${PYVER} || die
 		dosym "${abiver}" "/usr/bin/python${PYVER}"
 		# Create python3.X-config symlink
 		dosym "${abiver}-config" "/usr/bin/python${PYVER}-config"
 		# Create python-3.5m.pc symlink
-		dosym "python-${PYVER}.pc" "/usr/lib64/pkgconfig/${abiver/${PYVER}/-${PYVER}}.pc"
+		dosym "python-${PYVER}.pc" "/usr/lib/pkgconfig/${abiver/${PYVER}/-${PYVER}}.pc"
 	fi
 
-	insinto /usr/share/gdb/auto-load/usr/lib64 #443510
+	insinto /usr/share/gdb/auto-load/usr/lib #443510
 	local libname=$(printf 'e:\n\t@echo $(INSTSONAME)\ninclude Makefile\n' | \
 		emake --no-print-directory -s -f - 2>/dev/null)
 	newins "${S}"/Tools/gdb/libpython.py "${libname}"-gdb.py

@@ -18,7 +18,7 @@ if [[ ${CTARGET} == ${CHOST} && ${CATEGORY/cross-} != ${CATEGORY} ]]; then
 	export CTARGET=${CATEGORY/cross-}
 fi
 
-HOMEPAGE="https://www.kernel.org/ https://www.gentoo.org/ ${HOMEPAGE}"
+HOMEPAGE="https://www.kernel.org/ ${HOMEPAGE}"
 : ${LICENSE:="GPL-2"}
 
 # This is the latest KV_PATCH of the deblob tool available from the
@@ -42,67 +42,8 @@ RESTRICT="binchecks strip"
 
 debug-print-kernel2-variables() {
 	for v in PVR CKV OKV KV KV_FULL KV_MAJOR KV_MINOR KV_PATCH RELEASETYPE \
-			RELEASE UNIPATCH_LIST_DEFAULT UNIPATCH_LIST_GENPATCHES \
-			UNIPATCH_LIST S KERNEL_URI K_WANT_GENPATCHES ; do
+			RELEASE S KERNEL_URI ; do
 		debug-print "${v}: ${!v}"
-	done
-}
-
-# @FUNCTION: handle_genpatches
-# @USAGE: [--set-unipatch-list]
-# @DESCRIPTION:
-# add genpatches to list of patches to apply if wanted
-
-handle_genpatches() {
-	local tarball want_unipatch_list
-	[[ -z ${K_WANT_GENPATCHES} || -z ${K_GENPATCHES_VER} ]] && return 1
-
-	if [[ -n ${1} ]]; then
-		# set UNIPATCH_LIST_GENPATCHES only on explicit request
-		# since that requires 'use' call which can be used only in phase
-		# functions, while the function is also called in global scope
-		if [[ ${1} == --set-unipatch-list ]]; then
-			want_unipatch_list=1
-		else
-			die "Usage: ${FUNCNAME} [--set-unipatch-list]"
-		fi
-	fi
-
-	debug-print "Inside handle_genpatches"
-	local OKV_ARRAY
-	IFS="." read -r -a OKV_ARRAY <<<"${OKV}"
-
-	# for > 3.0 kernels, handle genpatches tarball name
-	# genpatches for 3.0 and 3.0.1 might be named
-	# genpatches-3.0-1.base.tar.xz and genpatches-3.0-2.base.tar.xz
-	# respectively.  Handle this.
-
-	for i in ${K_WANT_GENPATCHES} ; do
-		if [[ ${KV_MAJOR} -ge 3 ]]; then
-			if [[ ${#OKV_ARRAY[@]} -ge 3 ]]; then
-				tarball="genpatches-${KV_MAJOR}.${KV_MINOR}-${K_GENPATCHES_VER}.${i}.tar.xz"
-			else
-				tarball="genpatches-${KV_MAJOR}.${KV_PATCH}-${K_GENPATCHES_VER}.${i}.tar.xz"
-			fi
-		else
-			tarball="genpatches-${OKV}-${K_GENPATCHES_VER}.${i}.tar.xz"
-		fi
-
-		local use_cond_start="" use_cond_end=""
-
-		if [[ "${i}" == "experimental" && -z ${K_EXP_GENPATCHES_PULL} && -z ${K_EXP_GENPATCHES_NOUSE} ]] ; then
-			use_cond_start="experimental? ( "
-			use_cond_end=" )"
-
-			if [[ -n ${want_unipatch_list} ]] && use experimental ; then
-				UNIPATCH_LIST_GENPATCHES+=" ${DISTDIR}/${tarball}"
-				debug-print "genpatches tarball: $tarball"
-			fi
-		elif [[ -n ${want_unipatch_list} ]]; then
-			UNIPATCH_LIST_GENPATCHES+=" ${DISTDIR}/${tarball}"
-			debug-print "genpatches tarball: $tarball"
-		fi
-		GENPATCHES_URI+=" ${use_cond_start}mirror://gentoo/${tarball}${use_cond_end}"
 	done
 }
 
@@ -199,11 +140,6 @@ detect_version() {
 	debug-print "KERNEL_BASE_URI is ${KERNEL_BASE_URI}"
 
 	if [[ ${#OKV_ARRAY[@]} -ge 3 ]] && [[ ${KV_MAJOR} -ge 3 ]]; then
-		# handle non genpatch using sources correctly
-		if [[ -z ${K_WANT_GENPATCHES} && -z ${K_GENPATCHES_VER} && ${KV_PATCH} -gt 0 ]]; then
-			KERNEL_URI="${KERNEL_BASE_URI}/patch-${OKV}.xz"
-			UNIPATCH_LIST_DEFAULT="${DISTDIR}/patch-${CKV}.xz"
-		fi
 		KERNEL_URI="${KERNEL_URI} ${KERNEL_BASE_URI}/linux-${KV_MAJOR}.${KV_MINOR}.tar.xz"
 	else
 		KERNEL_URI="${KERNEL_BASE_URI}/linux-${OKV}.tar.xz"
@@ -262,7 +198,6 @@ detect_version() {
 		fi
 		KERNEL_URI="${KERNEL_BASE_URI}/patch-${CKV}.xz
 					${KERNEL_BASE_URI}/linux-${OKV}.tar.xz"
-		UNIPATCH_LIST_DEFAULT="${DISTDIR}/patch-${CKV}.xz"
 	fi
 
 	# We need to set this using OKV, but we need to set it before we do any
@@ -285,13 +220,11 @@ detect_version() {
 			OKV="${KV_MAJOR}.${KV_MINOR}.$((${KV_PATCH} - 1))"
 			KERNEL_URI="${KERNEL_BASE_URI}/testing/patch-${CKV//_/-}.xz
 						${KERNEL_BASE_URI}/linux-${OKV}.tar.xz"
-			UNIPATCH_LIST_DEFAULT="${DISTDIR}/patch-${CKV//_/-}.xz"
 		fi
 
 		if [[ ${RELEASETYPE} == -git ]]; then
 			KERNEL_URI="${KERNEL_BASE_URI}/snapshots/patch-${OKV}${RELEASE}.xz
 						${KERNEL_BASE_URI}/linux-${OKV}.tar.xz"
-			UNIPATCH_LIST_DEFAULT="${DISTDIR}/patch-${OKV}${RELEASE}.xz"
 		fi
 
 		if [[ ${RELEASETYPE} == -rc-git ]]; then
@@ -299,8 +232,6 @@ detect_version() {
 			KERNEL_URI="${KERNEL_BASE_URI}/snapshots/patch-${KV_MAJOR}.${KV_MINOR}.${KV_PATCH}${RELEASE}.xz
 						${KERNEL_BASE_URI}/testing/patch-${KV_MAJOR}.${KV_MINOR}.${KV_PATCH}${RELEASE/-git*}.xz
 						${KERNEL_BASE_URI}/linux-${OKV}.tar.xz"
-
-			UNIPATCH_LIST_DEFAULT="${DISTDIR}/patch-${KV_MAJOR}.${KV_MINOR}.${KV_PATCH}${RELEASE/-git*}.xz ${DISTDIR}/patch-${KV_MAJOR}.${KV_MINOR}.${KV_PATCH}${RELEASE}.xz"
 		fi
 	else
 		KV_PATCH_ARR=(${KV_PATCH//\./ })
@@ -317,18 +248,15 @@ detect_version() {
 			if ver_test "${KV_MAJOR}.${KV_PATCH}" -ge "4.12"; then
 				KERNEL_URI="https://git.kernel.org/torvalds/p/v${KV_FULL}/v${OKV} -> patch-${KV_FULL}.patch
 							${KERNEL_BASE_URI}/linux-${OKV}.tar.xz"
-				UNIPATCH_LIST_DEFAULT="${DISTDIR}/patch-${CKV//_/-}.patch"
 			else
 				KERNEL_URI="${KERNEL_BASE_URI}/testing/patch-${CKV//_/-}.xz
 							${KERNEL_BASE_URI}/linux-${OKV}.tar.xz"
-				UNIPATCH_LIST_DEFAULT="${DISTDIR}/patch-${CKV//_/-}.xz"
 			fi
 		fi
 
 		if [[ ${RELEASETYPE} == -git ]]; then
 			KERNEL_URI="${KERNEL_BASE_URI}/snapshots/patch-${OKV}${RELEASE}.xz
 						${KERNEL_BASE_URI}/linux-${OKV}.tar.xz"
-			UNIPATCH_LIST_DEFAULT="${DISTDIR}/patch-${OKV}${RELEASE}.xz"
 		fi
 
 		if [[ ${RELEASETYPE} == -rc-git ]]; then
@@ -336,16 +264,12 @@ detect_version() {
 			KERNEL_URI="${KERNEL_BASE_URI}/snapshots/patch-${KV_MAJOR}.${KV_PATCH}${RELEASE}.xz
 						${KERNEL_BASE_URI}/testing/patch-${KV_MAJOR}.${KV_PATCH}${RELEASE/-git*}.xz
 						${KERNEL_BASE_URI}/linux-${OKV}.tar.xz"
-
-			UNIPATCH_LIST_DEFAULT="${DISTDIR}/patch-${KV_MAJOR}.${KV_PATCH}${RELEASE/-git*}.xz ${DISTDIR}/patch-${KV_MAJOR}.${KV_PATCH}${RELEASE}.xz"
 		fi
 
 
 	fi
 
 	debug-print-kernel2-variables
-
-	handle_genpatches
 }
 
 # @FUNCTION: kernel_is
@@ -648,7 +572,7 @@ compile_headers() {
 
 		# autoconf.h isnt generated unless it already exists. plus, we have
 		# no guarantee that any headers are installed on the system...
-		[[ -f ${EROOT}usr/include/linux/autoconf.h ]] \
+		[[ -f "${EROOT}"/usr/include/linux/autoconf.h ]] \
 			|| touch include/linux/autoconf.h
 
 		# if K_DEFCONFIG isn't set, force to "defconfig"
@@ -725,10 +649,10 @@ install_headers() {
 	# of this crap anymore :D
 	if kernel_is ge 2 6 18 ; then
 		env_setup_xmakeopts
-		emake headers_install INSTALL_HDR_PATH="${ED}"${ddir}/.. ${xmakeopts} || die
+		emake headers_install INSTALL_HDR_PATH="${ED}"/${ddir}/.. ${xmakeopts} || die
 
 		# let other packages install some of these headers
-		rm -rf "${ED}"${ddir}/scsi || die #glibc/uclibc/etc...
+		rm -rf "${ED}"/${ddir}/scsi || die #glibc/uclibc/etc...
 		return 0
 	fi
 
@@ -736,15 +660,15 @@ install_headers() {
 	# $S values where the cmdline to cp is too long
 	pushd "${S}" >/dev/null
 	dodir ${ddir}/linux
-	cp -pPR "${S}"/include/linux "${ED}"${ddir}/ || die
-	rm -rf "${ED}"${ddir}/linux/modules || die
+	cp -pPR "${S}"/include/linux "${ED}"/${ddir}/ || die
+	rm -rf "${ED}"/${ddir}/linux/modules || die
 
 	dodir ${ddir}/asm
-	cp -pPR "${S}"/include/asm/* "${ED}"${ddir}/asm || die
+	cp -pPR "${S}"/include/asm/* "${ED}"/${ddir}/asm || die
 
 	if kernel_is 2 6 ; then
 		dodir ${ddir}/asm-generic
-		cp -pPR "${S}"/include/asm-generic/* "${ED}"${ddir}/asm-generic || die
+		cp -pPR "${S}"/include/asm-generic/* "${ED}"/${ddir}/asm-generic || die
 	fi
 
 	# clean up
@@ -776,13 +700,7 @@ install_sources() {
 		done
 	fi
 
-	mv "${WORKDIR}"/linux* "${ED}"usr/src || die
-
-	if [[ -n "${UNIPATCH_DOCS}" ]] ; then
-		for i in ${UNIPATCH_DOCS}; do
-			dodoc "${T}"/${i}
-		done
-	fi
+	mv "${WORKDIR}"/linux* "${ED}"/usr/src || die
 }
 
 # @FUNCTION: preinst_headers
@@ -818,25 +736,19 @@ postinst_sources() {
 
 	# if we are to forcably symlink, delete it if it already exists first.
 	if [[ ${K_SYMLINK} > 0 ]]; then
-		[[ -h ${EROOT}usr/src/linux ]] && { rm "${EROOT}"usr/src/linux || die; }
+		[[ -h "${EROOT}"/usr/src/linux ]] && { rm "${EROOT}"/usr/src/linux || die; }
 		MAKELINK=1
 	fi
 
 	# if the link doesnt exist, lets create it
-	[[ ! -h ${EROOT}usr/src/linux ]] && MAKELINK=1
+	[[ ! -h "${EROOT}"/usr/src/linux ]] && MAKELINK=1
 
 	if [[ ${MAKELINK} == 1 ]]; then
-		ln -sf linux-${KV_FULL} "${EROOT}"usr/src/linux || die
+		ln -sf linux-${KV_FULL} "${EROOT}"/usr/src/linux || die
 	fi
 
 	# Don't forget to make directory for sysfs
-	[[ ! -d ${EROOT}sys ]] && kernel_is 2 6 && { mkdir "${EROOT}"sys || die ; }
-
-	echo
-	elog "If you are upgrading from a previous kernel, you may be interested"
-	elog "in the following document:"
-	elog "  - General upgrade guide: https://wiki.gentoo.org/wiki/Kernel/Upgrade"
-	echo
+	[[ ! -d "${EROOT}"/sys ]] && kernel_is 2 6 && { mkdir "${EROOT}"/sys || die ; }
 
 	# if K_EXTRAEINFO is set then lets display it now
 	if [[ -n ${K_EXTRAEINFO} ]]; then
@@ -854,44 +766,6 @@ postinst_sources() {
 	if [[ -n ${K_EXTRAEWARN} ]]; then
 		echo ${K_EXTRAEWARN} | fmt |
 		while read -s ELINE; do ewarn "${ELINE}"; done
-	fi
-
-	# optionally display security unsupported message
-	#  Start with why
-	if [[ -n ${K_SECURITY_UNSUPPORTED} ]]; then
-		ewarn "${PN} is UNSUPPORTED by Gentoo Security."
-	fi
-	#  And now the general message.
-	if [[ -n ${K_SECURITY_UNSUPPORTED} ]]; then
-		ewarn "This means that it is likely to be vulnerable to recent security issues."
-		echo
-		ewarn "Upstream kernel developers recommend always running the latest "
-		ewarn "release of any current long term supported Linux kernel version."
-		ewarn "To see a list of these versions, their most current release and "
-		ewarn "long term support status, please go to https://www.kernel.org ."
-		echo
-		ewarn "For specific information on why this kernel is unsupported, please read:"
-		ewarn "https://wiki.gentoo.org/wiki/Project:Kernel_Security"
-	fi
-
-	# warn sparc users that they need to do cross-compiling with >= 2.6.25(bug #214765)
-	KV_MAJOR=$(ver_cut 1 ${OKV})
-	KV_MINOR=$(ver_cut 2 ${OKV})
-	KV_PATCH=$(ver_cut 3 ${OKV})
-	if [[ "$(tc-arch)" = "sparc" ]]; then
-		if [[ $(gcc-major-version) -lt 4 && $(gcc-minor-version) -lt 4 ]]; then
-			if [[ ${KV_MAJOR} -ge 3 || ${KV_MAJOR}.${KV_MINOR}.${KV_PATCH} > 2.6.24 ]] ; then
-				echo
-				elog "NOTE: Since 2.6.25 the kernel Makefile has changed in a way that"
-				elog "you now need to do"
-				elog "  make CROSS_COMPILE=sparc64-unknown-linux-gnu-"
-				elog "instead of just"
-				elog "  make"
-				elog "to compile the kernel. For more information please browse to"
-				elog "https://bugs.gentoo.org/show_bug.cgi?id=214765"
-				echo
-			fi
-		fi
 	fi
 }
 
@@ -915,269 +789,6 @@ setup_headers() {
 		eerror "(but not all) this will be called $(tc-arch)-headers."
 		die "Package unsupported for $(tc-arch)"
 	fi
-}
-
-# @FUNCTION: unipatch
-# @USAGE: <list of patches to apply>
-# @DESCRIPTION:
-# Universal function that will apply patches to source
-
-unipatch() {
-	local i x y z extention PIPE_CMD UNIPATCH_DROP KPATCH_DIR PATCH_DEPTH ELINE
-	local STRICT_COUNT PATCH_LEVEL myLC_ALL myLANG
-
-	# set to a standard locale to ensure sorts are ordered properly.
-	myLC_ALL="${LC_ALL}"
-	myLANG="${LANG}"
-	LC_ALL="C"
-	LANG=""
-
-	[ -z "${KPATCH_DIR}" ] && KPATCH_DIR="${WORKDIR}/patches/"
-	[ ! -d ${KPATCH_DIR} ] && mkdir -p ${KPATCH_DIR}
-
-	# We're gonna need it when doing patches with a predefined patchlevel
-	eshopts_push -s extglob
-
-	# This function will unpack all passed tarballs, add any passed patches,
-	# and remove any passed patchnumbers
-	# usage can be either via an env var or by params
-	# although due to the nature we pass this within this eclass
-	# it shall be by param only.
-	# -z "${UNIPATCH_LIST}" ] && UNIPATCH_LIST="${@}"
-	UNIPATCH_LIST="${@}"
-
-	#unpack any passed tarballs
-	for i in ${UNIPATCH_LIST}; do
-		if echo ${i} | grep -qs -e "\.tar" -e "\.tbz" -e "\.tgz" ; then
-			if [ -n "${UNIPATCH_STRICTORDER}" ]; then
-				unset z
-				STRICT_COUNT=$((10#${STRICT_COUNT} + 1))
-				for((y=0; y<$((6 - ${#STRICT_COUNT})); y++));
-					do z="${z}0";
-				done
-				PATCH_ORDER="${z}${STRICT_COUNT}"
-
-				mkdir -p "${KPATCH_DIR}/${PATCH_ORDER}"
-				pushd "${KPATCH_DIR}/${PATCH_ORDER}" >/dev/null
-				unpack ${i##*/}
-				popd >/dev/null
-			else
-				pushd "${KPATCH_DIR}" >/dev/null
-				unpack ${i##*/}
-				popd >/dev/null
-			fi
-
-			[[ ${i} == *:* ]] && echo ">>> Strict patch levels not currently supported for tarballed patchsets"
-		else
-			extention=${i/*./}
-			extention=${extention/:*/}
-			PIPE_CMD=""
-			case ${extention} in
-				     xz) PIPE_CMD="xz -dc";;
-				   lzma) PIPE_CMD="lzma -dc";;
-				    bz2) PIPE_CMD="bzip2 -dc";;
-				 patch*) PIPE_CMD="cat";;
-				   diff) PIPE_CMD="cat";;
-				 gz|Z|z) PIPE_CMD="gzip -dc";;
-				ZIP|zip) PIPE_CMD="unzip -p";;
-				      *) UNIPATCH_DROP="${UNIPATCH_DROP} ${i/:*/}";;
-			esac
-
-			PATCH_LEVEL=${i/*([^:])?(:)}
-			i=${i/:*/}
-			x=${i/*\//}
-			x=${x/\.${extention}/}
-
-			if [ -n "${PIPE_CMD}" ]; then
-				if [ ! -r "${i}" ]; then
-					echo
-					eerror "FATAL: unable to locate:"
-					eerror "${i}"
-					eerror "for read-only. The file either has incorrect permissions"
-					eerror "or does not exist."
-					die Unable to locate ${i}
-				fi
-
-				if [ -n "${UNIPATCH_STRICTORDER}" ]; then
-					unset z
-					STRICT_COUNT=$((10#${STRICT_COUNT} + 1))
-					for((y=0; y<$((6 - ${#STRICT_COUNT})); y++));
-						do z="${z}0";
-					done
-					PATCH_ORDER="${z}${STRICT_COUNT}"
-
-					mkdir -p ${KPATCH_DIR}/${PATCH_ORDER}/
-					$(${PIPE_CMD} ${i} > ${KPATCH_DIR}/${PATCH_ORDER}/${x}.patch${PATCH_LEVEL}) || die "uncompressing patch failed"
-				else
-					$(${PIPE_CMD} ${i} > ${KPATCH_DIR}/${x}.patch${PATCH_LEVEL}) || die "uncompressing patch failed"
-				fi
-			fi
-		fi
-
-		# If experimental was not chosen by the user, drop experimental patches not in K_EXP_GENPATCHES_LIST.
-		if [[ "${i}" == *"genpatches-"*".experimental."* && -n ${K_EXP_GENPATCHES_PULL} ]] ; then
-			if [[ -z ${K_EXP_GENPATCHES_NOUSE} ]] && use experimental; then
-				continue
-			fi
-
-			local j
-			for j in ${KPATCH_DIR}/*/50*_*.patch*; do
-				for k in ${K_EXP_GENPATCHES_LIST} ; do
-					[[ "$(basename ${j})" == ${k}* ]] && continue 2
-				done
-				UNIPATCH_DROP+=" $(basename ${j})"
-			done
-		else
-			UNIPATCH_LIST_GENPATCHES+=" ${DISTDIR}/${tarball}"
-			debug-print "genpatches tarball: $tarball"
-
-	        local GCC_MAJOR_VER=$(gcc-major-version)
-			local GCC_MINOR_VER=$(gcc-minor-version)
-
-			# optimization patch for gcc < 8.X and kernel > 4.13
-			if [[ ${GCC_MAJOR_VER} -lt 8 ]] && [[ ${GCC_MAJOR_VER} -gt 4 ]]; then
-				if kernel_is ge 4 13 ; then
-					UNIPATCH_DROP+=" 5011_enable-cpu-optimizations-for-gcc8.patch"
-				fi
-			# optimization patch for gcc >= 8 and kernel ge 4.13
-			elif [[ "${GCC_MAJOR_VER}" -ge 8 ]]; then
-				if kernel_is ge 4 13; then
-					# support old kernels for a period. For now, remove as all gcc versions required are masked
-					UNIPATCH_DROP+=" 5010_enable-additional-cpu-optimizations-for-gcc.patch"
-					UNIPATCH_DROP+=" 5010_enable-additional-cpu-optimizations-for-gcc-4.9.patch"
-				fi
-			fi
-		fi
-	done
-
-	#populate KPATCH_DIRS so we know where to look to remove the excludes
-	x=${KPATCH_DIR}
-	KPATCH_DIR=""
-	for i in $(find ${x} -type d | sort -n); do
-		KPATCH_DIR="${KPATCH_DIR} ${i}"
-	done
-
-	# do not apply fbcondecor patch to sparc/sparc64 as it breaks boot
-	# bug #272676
-	if [[ "$(tc-arch)" = "sparc" || "$(tc-arch)" = "sparc64" ]]; then
-		if [[ ${KV_MAJOR} -ge 3 || ${KV_MAJOR}.${KV_MINOR}.${KV_PATCH} > 2.6.28 ]]; then
-			if [[ ! -z ${K_WANT_GENPATCHES} ]] ; then
-				UNIPATCH_DROP="${UNIPATCH_DROP} *_fbcondecor*.patch"
-				echo
-				ewarn "fbcondecor currently prevents sparc/sparc64 from booting"
-				ewarn "for kernel versions >= 2.6.29. Removing fbcondecor patch."
-				ewarn "See https://bugs.gentoo.org/show_bug.cgi?id=272676 for details"
-				echo
-			fi
-		fi
-	fi
-
-	#so now lets get rid of the patchno's we want to exclude
-	UNIPATCH_DROP="${UNIPATCH_EXCLUDE} ${UNIPATCH_DROP}"
-	for i in ${UNIPATCH_DROP}; do
-		ebegin "Excluding Patch #${i}"
-		for x in ${KPATCH_DIR}; do rm -f ${x}/${i}* 2>/dev/null; done
-		eend $?
-	done
-
-	# and now, finally, we patch it :)
-	for x in ${KPATCH_DIR}; do
-		for i in $(find ${x} -maxdepth 1 -iname "*.patch*" -or -iname "*.diff*" | sort -n); do
-			STDERR_T="${T}/${i/*\//}"
-			STDERR_T="${STDERR_T/.patch*/.err}"
-
-			[ -z ${i/*.patch*/} ] && PATCH_DEPTH=${i/*.patch/}
-			#[ -z ${i/*.diff*/} ]  && PATCH_DEPTH=${i/*.diff/}
-
-			if [ -z "${PATCH_DEPTH}" ]; then PATCH_DEPTH=0; fi
-
-			####################################################################
-			# IMPORTANT: This is temporary code to support Linux git 3.15_rc1! #
-			#                                                                  #
-			# The patch contains a removal of a symlink, followed by addition  #
-			# of a file with the same name as the symlink in the same          #
-			# location; this causes the dry-run to fail, filed bug #507656.    #
-			#                                                                  #
-			# https://bugs.gentoo.org/show_bug.cgi?id=507656                   #
-			####################################################################
-			if [[ -n ${K_FROM_GIT} ]] ; then
-				if [[ ${KV_MAJOR} -gt 3 || ( ${KV_MAJOR} -eq 3 && ${KV_PATCH} -gt 15 ) &&
-					${RELEASETYPE} == -rc ]] ; then
-					ebegin "Applying ${i/*\//} (-p1)"
-					if [ $(patch -p1 --no-backup-if-mismatch -f < ${i} >> ${STDERR_T}) "$?" -le 2 ]; then
-						eend 0
-						rm ${STDERR_T} || die
-						break
-					else
-						eend 1
-						eerror "Failed to apply patch ${i/*\//}"
-						eerror "Please attach ${STDERR_T} to any bug you may post."
-						eshopts_pop
-						die "Failed to apply ${i/*\//} on patch depth 1."
-					fi
-				fi
-			fi
-			####################################################################
-
-			while [ ${PATCH_DEPTH} -lt 5 ]; do
-				echo "Attempting Dry-run:" >> ${STDERR_T}
-				echo "cmd: patch -p${PATCH_DEPTH} --no-backup-if-mismatch --dry-run -f < ${i}" >> ${STDERR_T}
-				echo "=======================================================" >> ${STDERR_T}
-				if [ $(patch -p${PATCH_DEPTH} --no-backup-if-mismatch --dry-run -f < ${i} >> ${STDERR_T}) $? -eq 0 ]; then
-					ebegin "Applying ${i/*\//} (-p${PATCH_DEPTH})"
-					echo "Attempting patch:" > ${STDERR_T}
-					echo "cmd: patch -p${PATCH_DEPTH} --no-backup-if-mismatch -f < ${i}" >> ${STDERR_T}
-					echo "=======================================================" >> ${STDERR_T}
-					if [ $(patch -p${PATCH_DEPTH} --no-backup-if-mismatch -f < ${i} >> ${STDERR_T}) "$?" -eq 0 ]; then
-						eend 0
-						rm ${STDERR_T} || die
-						break
-					else
-						eend 1
-						eerror "Failed to apply patch ${i/*\//}"
-						eerror "Please attach ${STDERR_T} to any bug you may post."
-						eshopts_pop
-						die "Failed to apply ${i/*\//} on patch depth ${PATCH_DEPTH}."
-					fi
-				else
-					PATCH_DEPTH=$((${PATCH_DEPTH} + 1))
-				fi
-			done
-			if [ ${PATCH_DEPTH} -eq 5 ]; then
-				eerror "Failed to dry-run patch ${i/*\//}"
-				eerror "Please attach ${STDERR_T} to any bug you may post."
-				eshopts_pop
-				die "Unable to dry-run patch on any patch depth lower than 5."
-			fi
-		done
-	done
-
-	# When genpatches is used, we want to install 0000_README which documents
-	# the patches that were used; such that the user can see them, bug #301478.
-	if [[ ! -z ${K_WANT_GENPATCHES} ]] ; then
-		UNIPATCH_DOCS="${UNIPATCH_DOCS} 0000_README"
-	fi
-
-	# When files listed in UNIPATCH_DOCS are found in KPATCH_DIR's, we copy it
-	# to the temporary directory and remember them in UNIPATCH_DOCS to install
-	# them during the install phase.
-	local tmp
-	for x in ${KPATCH_DIR}; do
-		for i in ${UNIPATCH_DOCS}; do
-			if [[ -f ${x}/${i} ]] ; then
-				tmp="${tmp} ${i}"
-				cp -f "${x}/${i}" "${T}"/ || die
-			fi
-		done
-	done
-	UNIPATCH_DOCS="${tmp}"
-
-	# clean up  KPATCH_DIR's - fixes bug #53610
-	for x in ${KPATCH_DIR}; do rm -Rf ${x}; done
-
-	LC_ALL="${myLC_ALL}"
-	LANG="${myLANG}"
-	eshopts_pop
 }
 
 # @FUNCTION: getfilevar
@@ -1220,7 +831,6 @@ detect_arch() {
 
 	# COMPAT_URI is the contents of ${ARCH}_URI
 	# ARCH_URI is the URI for all the ${ARCH}_URI patches
-	# ARCH_PATCH is ARCH_URI broken into files for UNIPATCH
 
 	ARCH_URI=""
 	ARCH_PATCH=""
@@ -1265,16 +875,10 @@ headers___fix() {
 # @FUNCTION: kernel-2_src_unpack
 # @USAGE:
 # @DESCRIPTION:
-# unpack sources, handle genpatches, deblob
+# unpack sources, deblob
 
 kernel-2_src_unpack() {
 	universal_unpack
-	debug-print "Doing unipatch"
-
-	# request UNIPATCH_LIST_GENPATCHES in phase since it calls 'use'
-	handle_genpatches --set-unipatch-list
-	[[ -n ${UNIPATCH_LIST} || -n ${UNIPATCH_LIST_DEFAULT} || -n ${UNIPATCH_LIST_GENPATCHES} ]] && \
-		unipatch "${UNIPATCH_LIST_DEFAULT} ${UNIPATCH_LIST_GENPATCHES} ${UNIPATCH_LIST}"
 
 	debug-print "Doing premake"
 
@@ -1332,7 +936,7 @@ kernel-2_src_prepare() {
 	# apply any user patches
 	case ${EAPI:-0} in
 		0|1|2|3|4|5) epatch_user ;;
-		6) eapply_user ;;
+		6|7) eapply_user ;;
 	esac
 }
 
@@ -1432,15 +1036,12 @@ kernel-2_pkg_postrm() {
 	[[ ${ETYPE} == headers ]] && return 0
 
 	# If there isn't anything left behind, then don't complain.
-	[[ -e ${EROOT}usr/src/linux-${KV_FULL} ]] || return 0
+	[[ -e "${EROOT}"/usr/src/linux-${KV_FULL} ]] || return 0
 	echo
 	ewarn "Note: Even though you have successfully unmerged "
 	ewarn "your kernel package, directories in kernel source location: "
-	ewarn "${EROOT}usr/src/linux-${KV_FULL}"
+	ewarn "${EROOT}"/usr/src/linux-${KV_FULL}
 	ewarn "with modified files will remain behind. By design, package managers"
 	ewarn "will not remove these modified files and the directories they reside in."
-	echo
-	ewarn "For more detailed kernel removal instructions, please see: "
-	ewarn "https://wiki.gentoo.org/wiki/Kernel/Removal"
 	echo
 }

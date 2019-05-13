@@ -27,67 +27,6 @@ if [[ -z ${_CUDA_ECLASS} ]]; then
 # Being verbose during compilation to see underlying commands
 : ${CUDA_VERBOSE:=true}
 
-# @FUNCTION: cuda_gccdir
-# @USAGE: [-f]
-# @RETURN: gcc bindir compatible with current cuda, optionally (-f) prefixed with "--compiler-bindir "
-# @DESCRIPTION:
-# Helper for determination of the latest gcc bindir supported by
-# then current nvidia cuda toolkit.
-#
-# Example:
-# @CODE
-# cuda_gccdir -f
-# -> --compiler-bindir "/usr/x86_64-pc-linux-gnu/gcc-bin/4.6.3"
-# @CODE
-cuda_gccdir() {
-	debug-print-function ${FUNCNAME} "$@"
-
-	local gcc_bindir ver args="" flag ret
-
-	# Currently we only support the gnu compiler suite
-	if  ! tc-is-gcc ; then
-		ewarn "Currently we only support the gnu compiler suite"
-		return 2
-	fi
-
-	while [ "$1" ]; do
-		case $1 in
-			-f)
-				flag="--compiler-bindir "
-				;;
-			*)
-				;;
-		esac
-		shift
-	done
-
-	if ! args=$(cuda-config -s); then
-		eerror "Could not execute cuda-config"
-		eerror "Make sure >=nvidia/nvidia-cuda-toolkit-4.2.9-r1 is installed"
-		die "cuda-config not found"
-	else
-		args=$(version_sort ${args})
-		if [[ -z ${args} ]]; then
-			die "Could not determine supported gcc versions from cuda-config"
-		fi
-	fi
-
-	for ver in ${args}; do
-		has_version "=sys-devel/gcc-${ver}*" && \
-		 gcc_bindir="$(ls -d ${EPREFIX}/usr/*pc-linux-gnu/gcc-bin/${ver}* | tail -n 1)"
-	done
-
-	if [[ -n ${gcc_bindir} ]]; then
-		if [[ -n ${flag} ]]; then
-			ret="${flag}\"${gcc_bindir}\""
-		else
-			ret="${gcc_bindir}"
-		fi
-		echo ${ret}
-		return 0
-	fi
-}
-
 # @FUNCTION: cuda_sanitize
 # @DESCRIPTION:
 # Correct NVCCFLAGS by adding the necessary reference to gcc bindir and
@@ -98,9 +37,6 @@ cuda_sanitize() {
 	local rawldflags=$(raw-ldflags)
 	# Be verbose if wanted
 	[[ "${CUDA_VERBOSE}" == true ]] && NVCCFLAGS+=" -v"
-
-	# Tell nvcc where to find a compatible compiler
-	NVCCFLAGS+=" $(cuda_gccdir -f)"
 
 	# Tell nvcc which flags should be used for underlying C compiler
 	NVCCFLAGS+=" --compiler-options \"${CXXFLAGS}\" --linker-options \"${rawldflags// /,}\""

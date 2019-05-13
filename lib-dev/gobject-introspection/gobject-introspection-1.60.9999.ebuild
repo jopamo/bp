@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit python-single-r1 toolchain-funcs autotools flag-o-matic
+inherit python-single-r1 meson flag-o-matic
 
 DESCRIPTION="Introspection system for GObject-based libraries"
 HOMEPAGE="https://wiki.gnome.org/Projects/GObjectIntrospection"
@@ -21,15 +21,12 @@ fi
 
 LICENSE="LGPL-2+ GPL-2+"
 SLOT="0"
-IUSE="cairo doctool test"
 
 RDEPEND="
 	>=lib-dev/gobject-introspection-common-${PV}
 	lib-dev/glib
-	doctool? ( dev-python/mako[${PYTHON_USEDEP}] )
 	lib-dev/libffi
 	dev-util/pkgconf
-	!<dev-lang/vala-0.20.0
 	${PYTHON_DEPS}
 "
 DEPEND="${RDEPEND}
@@ -37,7 +34,6 @@ DEPEND="${RDEPEND}
 	sys-devel/bison
 	sys-devel/flex
 "
-PDEPEND="cairo? ( x11-libs/cairo[glib] )"
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
@@ -45,41 +41,11 @@ pkg_setup() {
 	python-single-r1_pkg_setup
 }
 
-src_prepare() {
-	${S}/autogen.sh
-	eautoreconf
-	default
-}
-
-src_configure() {
-	if ! has_version "x11-libs/cairo[glib]"; then
-		# Bug #391213: enable cairo-gobject support even if it's not installed
-		# We only PDEPEND on cairo to avoid circular dependencies
-		export CAIRO_LIBS="-lcairo -lcairo-gobject"
-		export CAIRO_CFLAGS="-I${EPREFIX}/usr/include/cairo"
-	fi
-
-	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib64
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-		--disable-static
-		CC="$(tc-getCC)"
-		YACC="$(type -p yacc)"
-		$(use_with cairo)
-		$(use_enable doctool)
-	)
-	econf ${myconf[@]}
-}
-
 src_install() {
-	default
+	meson_src_install
 
 	# Prevent collision with gobject-introspection-common
-	rm -v "${ED}"usr/share/aclocal/introspection.m4 \
-		"${ED}"usr/share/gobject-introspection-1.0/Makefile.introspection || die
-	rmdir "${ED}"usr/share/aclocal || die
+	rm -v "${ED}"/usr/share/aclocal/introspection.m4 \
+		"${ED}"/usr/share/gobject-introspection-1.0/Makefile.introspection || die
+	rmdir "${ED}"/usr/share/aclocal || die
 }

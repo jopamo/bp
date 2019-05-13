@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit eutils flag-o-matic linux-info linux-mod nvidia-driver \
+inherit eutils flag-o-matic linux-info linux-mod \
 	portability toolchain-funcs unpacker user systemd
 
 NV_URI="http://http.download.nvidia.com/XFree86/"
@@ -70,12 +70,6 @@ QA_PREBUILT="opt/* usr/lib*"
 S=${WORKDIR}/
 
 nvidia_drivers_versions_check() {
-	# Since Nvidia ships many different series of drivers, we need to give the user
-	# some kind of guidance as to what version they should install. This tries
-	# to point the user in the right direction but can't be perfect. check
-	# nvidia-driver.eclass
-	nvidia-driver-check-warning
-
 	# Kernel features/options to check for
 	CONFIG_CHECK="~ZONE_DMA ~MTRR ~!LOCKDEP"
 

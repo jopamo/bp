@@ -13,9 +13,7 @@ KEYWORDS="amd64 arm64"
 IUSE="test"
 LICENSE="MIT"
 
-# dev-perl/XML-LibXML - although not mentioned upstream is required
-# for make check to complete.
-DEPEND="dev-lang/perl
+DEPEND="dev-perl/XML-SAX-Base
 	lib-dev/libxslt
 	app-text/docbook-xsl-stylesheets
 	app-text/docbook-xml-dtd"

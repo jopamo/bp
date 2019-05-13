@@ -6,10 +6,18 @@ After=network.target
 User=qbtuser
 ExecStart=/usr/bin/qbittorrent-nox
 ExecStop=/usr/bin/killall -w qbittorrent-nox
+NoNewPrivileges=yes
 PrivateTmp=yes
-ProtectHome=yes
+PrivateDevices=yes
+DevicePolicy=closed
 ProtectSystem=full
-NoNewPrivileges=true
+ProtectHome=yes
+ProtectControlGroups=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+RestrictRealtime=yes
+RestrictNamespaces=yes
+MemoryDenyWriteExecute=yes
 
 [Install]
 WantedBy=multi-user.target

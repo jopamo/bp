@@ -1,136 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: linux-mod.eclass
-# @MAINTAINER:
-# kernel@gentoo.org
-# @AUTHOR:
-# John Mylchreest <johnm@gentoo.org>,
-# Stefan Schweizer <genstef@gentoo.org>
-# @BLURB: It provides the functionality required to install external modules against a kernel source tree.
-# @DESCRIPTION:
-# This eclass is used to interface with linux-info.eclass in such a way
-# to provide the functionality and initial functions
-# required to install external modules against a kernel source
-# tree.
-
-# A Couple of env vars are available to effect usage of this eclass
-# These are as follows:
-
-# @ECLASS-VARIABLE: MODULES_OPTIONAL_USE
-# @DESCRIPTION:
-# A string containing the USE flag to use for making this eclass optional
-# The recommended non-empty value is 'modules'
-
-# @ECLASS-VARIABLE: MODULES_OPTIONAL_USE_IUSE_DEFAULT
-# @DESCRIPTION:
-# A boolean to control the IUSE default state for the MODULES_OPTIONAL_USE USE
-# flag. Default value is unset (false). True represented by 1 or 'on', other
-# values including unset treated as false.
-
-# @ECLASS-VARIABLE: KERNEL_DIR
-# @DESCRIPTION:
-# A string containing the directory of the target kernel sources. The default value is
-# "/usr/src/linux"
-
-# @ECLASS-VARIABLE: ECONF_PARAMS
-# @DESCRIPTION:
-# It's a string containing the parameters to pass to econf.
-# If this is not set, then econf isn't run.
-
-# @ECLASS-VARIABLE: BUILD_PARAMS
-# @DESCRIPTION:
-# It's a string with the parameters to pass to emake.
-
-# @ECLASS-VARIABLE: BUILD_TARGETS
-# @DESCRIPTION:
-# It's a string with the build targets to pass to make. The default value is "clean module"
-
-# @ECLASS-VARIABLE: MODULE_NAMES
-# @DESCRIPTION:
-# It's a string containing the modules to be built automatically using the default
-# src_compile/src_install. It will only make ${BUILD_TARGETS} once in any directory.
-#
-# The structure of each MODULE_NAMES entry is as follows:
-#
-#   modulename(libdir:srcdir:objdir)
-#
-# where:
-#
-#   modulename = name of the module file excluding the .ko
-#   libdir     = place in system modules directory where module is installed (by default it's misc)
-#   srcdir     = place for ebuild to cd to before running make (by default it's ${S})
-#   objdir     = place the .ko and objects are located after make runs (by default it's set to srcdir)
-#
-# To get an idea of how these variables are used, here's a few lines
-# of code from around line 540 in this eclass:
-#
-#	einfo "Installing ${modulename} module"
-#	cd ${objdir} || die "${objdir} does not exist"
-#	insinto /lib/modules/${KV_FULL}/${libdir}
-#	doins ${modulename}.${KV_OBJ} || die "doins ${modulename}.${KV_OBJ} failed"
-#
-# For example:
-#   MODULE_NAMES="module_pci(pci:${S}/pci:${S}) module_usb(usb:${S}/usb:${S})"
-#
-# what this would do is
-#
-#   cd "${S}"/pci
-#   make ${BUILD_PARAMS} ${BUILD_TARGETS}
-#   cd "${S}"
-#   insinto /lib/modules/${KV_FULL}/pci
-#   doins module_pci.${KV_OBJ}
-#
-#   cd "${S}"/usb
-#   make ${BUILD_PARAMS} ${BUILD_TARGETS}
-#   cd "${S}"
-#   insinto /lib/modules/${KV_FULL}/usb
-#   doins module_usb.${KV_OBJ}
-
-# There is also support for automated modprobe.d file generation.
-# This can be explicitly enabled by setting any of the following variables.
-
-# @ECLASS-VARIABLE: MODULESD_<modulename>_ENABLED
-# @DESCRIPTION:
-# This is used to disable the modprobe.d file generation otherwise the file will be
-# always generated (unless no MODULESD_<modulename>_* variable is provided). Set to "no" to disable
-# the generation of the file and the installation of the documentation.
-
-# @ECLASS-VARIABLE: MODULESD_<modulename>_EXAMPLES
-# @DESCRIPTION:
-# This is a bash array containing a list of examples which should
-# be used. If you want us to try and take a guess set this to "guess".
-#
-# For each array_component it's added an options line in the modprobe.d file
-#
-#   options array_component
-#
-# where array_component is "<modulename> options" (see modprobe.conf(5))
-
-# @ECLASS-VARIABLE: MODULESD_<modulename>_ALIASES
-# @DESCRIPTION:
-# This is a bash array containing a list of associated aliases.
-#
-# For each array_component it's added an alias line in the modprobe.d file
-#
-#   alias array_component
-#
-# where array_component is "wildcard <modulename>" (see modprobe.conf(5))
-
-# @ECLASS-VARIABLE: MODULESD_<modulename>_ADDITIONS
-# @DESCRIPTION:
-# This is a bash array containing a list of additional things to
-# add to the bottom of the file. This can be absolutely anything.
-# Each entry is a new line.
-
-# @ECLASS-VARIABLE: MODULESD_<modulename>_DOCS
-# @DESCRIPTION:
-# This is a string list which contains the full path to any associated
-# documents for <modulename>. These files are installed in the live tree.
-
-# @ECLASS-VARIABLE: KV_OBJ
-# @DESCRIPTION:
-# It's a read-only variable. It contains the extension of the kernel modules.
-
 inherit eutils linux-info
 EXPORT_FUNCTIONS pkg_setup pkg_preinst pkg_postinst src_install src_compile pkg_postrm
 
@@ -145,8 +14,11 @@ esac
 
 IUSE="kernel_linux ${MODULES_OPTIONAL_USE:+${_modules_optional_use_iuse_default}}${MODULES_OPTIONAL_USE}"
 SLOT="0"
-DEPEND="${MODULES_OPTIONAL_USE}${MODULES_OPTIONAL_USE:+? (}
+RDEPEND="${MODULES_OPTIONAL_USE}${MODULES_OPTIONAL_USE:+? (} kernel_linux? ( sys-app/kmod ) ${MODULES_OPTIONAL_USE:+)}"
+DEPEND="${RDEPEND}
+    ${MODULES_OPTIONAL_USE}${MODULES_OPTIONAL_USE:+? (}
 	sys-app/sed
+	kernel_linux? ( sys-kernel/stable-sources lib-dev/elfutils )
 	${MODULES_OPTIONAL_USE:+)}"
 
 # eclass utilities
@@ -240,7 +112,7 @@ update_depmod() {
 	ebegin "Updating module dependencies for ${KV_FULL}"
 	if [ -r "${KV_OUT_DIR}"/System.map ]
 	then
-		depmod -ae -F "${KV_OUT_DIR}"/System.map -b "${ROOT}" ${KV_FULL}
+		depmod -ae -F "${KV_OUT_DIR}"/System.map -b "${ROOT:-/}" ${KV_FULL}
 		eend $?
 	else
 		ewarn
@@ -259,8 +131,8 @@ update_depmod() {
 move_old_moduledb() {
 	debug-print-function ${FUNCNAME} $*
 
-	local OLDDIR="${ROOT}"/usr/share/module-rebuild/
-	local NEWDIR="${ROOT}"/var/lib/module-rebuild/
+	local OLDDIR="${ROOT%/}"/usr/share/module-rebuild
+	local NEWDIR="${ROOT%/}"/var/lib/module-rebuild
 
 	if [[ -f "${OLDDIR}"/moduledb ]]; then
 		[[ ! -d "${NEWDIR}" ]] && mkdir -p "${NEWDIR}"
@@ -279,7 +151,7 @@ move_old_moduledb() {
 update_moduledb() {
 	debug-print-function ${FUNCNAME} $*
 
-	local MODULEDB_DIR="${ROOT}"/var/lib/module-rebuild/
+	local MODULEDB_DIR="${ROOT%/}"/var/lib/module-rebuild
 	move_old_moduledb
 
 	if [[ ! -f "${MODULEDB_DIR}"/moduledb ]]; then
@@ -302,7 +174,7 @@ update_moduledb() {
 remove_moduledb() {
 	debug-print-function ${FUNCNAME} $*
 
-	local MODULEDB_DIR="${ROOT}"/var/lib/module-rebuild/
+	local MODULEDB_DIR="${ROOT%/}"/var/lib/module-rebuild
 	move_old_moduledb
 
 	if grep -qs ${CATEGORY}/${PN}-${PVR} "${MODULEDB_DIR}"/moduledb ; then
@@ -634,6 +506,8 @@ linux-mod_src_compile() {
 	set_arch_to_kernel
 	ABI="${KERNEL_ABI}"
 
+	[[ -n ${KERNEL_DIR} ]] && addpredict "${KERNEL_DIR}/null.dwo"
+
 	BUILD_TARGETS=${BUILD_TARGETS:-clean module}
 	strip_modulenames;
 	cd "${S}"
@@ -697,6 +571,8 @@ linux-mod_src_install() {
 
 	local modulename libdir srcdir objdir i n
 
+	[[ -n ${KERNEL_DIR} ]] && addpredict "${KERNEL_DIR}/null.dwo"
+
 	strip_modulenames;
 	for i in ${MODULE_NAMES}
 	do
@@ -726,8 +602,8 @@ linux-mod_pkg_preinst() {
 	debug-print-function ${FUNCNAME} $*
 	[ -n "${MODULES_OPTIONAL_USE}" ] && use !${MODULES_OPTIONAL_USE} && return
 
-	[ -d "${D}lib/modules" ] && UPDATE_DEPMOD=true || UPDATE_DEPMOD=false
-	[ -d "${D}lib/modules" ] && UPDATE_MODULEDB=true || UPDATE_MODULEDB=false
+	[ -d "${D%/}/lib/modules" ] && UPDATE_DEPMOD=true || UPDATE_DEPMOD=false
+	[ -d "${D%/}/lib/modules" ] && UPDATE_MODULEDB=true || UPDATE_MODULEDB=false
 }
 
 # @FUNCTION: linux-mod_pkg_postinst

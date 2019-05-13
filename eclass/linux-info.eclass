@@ -1,3 +1,4 @@
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: linux-info.eclass
@@ -114,6 +115,14 @@ IUSE="kernel_linux"
 # Overwritable environment Var's
 # ---------------------------------------
 KERNEL_DIR="${KERNEL_DIR:-${ROOT%/}/usr/src/linux}"
+
+
+# Bug fixes
+# fix to bug #75034
+case ${ARCH} in
+	ppc)	BUILD_FIXES="${BUILD_FIXES} TOUT=${T}/.tmp_gas_check";;
+	ppc64)	BUILD_FIXES="${BUILD_FIXES} TOUT=${T}/.tmp_gas_check";;
+esac
 
 # @FUNCTION: set_arch_to_kernel
 # @DESCRIPTION:
@@ -538,20 +547,6 @@ get_version() {
 		return 1
 	fi
 
-	# and in newer versions we can also pull LOCALVERSION if it is set.
-	# but before we do this, we need to find if we use a different object directory.
-	# This *WILL* break if the user is using localversions, but we assume it was
-	# caught before this if they are.
-	if [[ -z ${OUTPUT_DIR} ]] ; then
-		# Try to locate a kernel that is most relevant for us.
-		for OUTPUT_DIR in "${SYSROOT}" "${ROOT%/}" "" ; do
-			OUTPUT_DIR+="/lib/modules/${KV_MAJOR}.${KV_MINOR}.${KV_PATCH}${KV_EXTRA}/build"
-			if [[ -e ${OUTPUT_DIR} ]] ; then
-				break
-			fi
-		done
-	fi
-
 	[ -d "${OUTPUT_DIR}" ] && KV_OUT_DIR="${OUTPUT_DIR}"
 	if [ -n "${KV_OUT_DIR}" ];
 	then
@@ -583,6 +578,20 @@ get_version() {
 		KV_LOCAL=
 	else
 		KV_LOCAL=$tmplocal
+	fi
+
+	# and in newer versions we can also pull LOCALVERSION if it is set.
+	# but before we do this, we need to find if we use a different object directory.
+	# This *WILL* break if the user is using localversions, but we assume it was
+	# caught before this if they are.
+	if [[ -z ${OUTPUT_DIR} ]] ; then
+		# Try to locate a kernel that is most relevant for us.
+		for OUTPUT_DIR in "${SYSROOT}" "${ROOT%/}" "" ; do
+			OUTPUT_DIR+="/lib/modules/${KV_MAJOR}.${KV_MINOR}.${KV_PATCH}${KV_EXTRA}${KV_LOCAL}/build"
+			if [[ -e ${OUTPUT_DIR} ]] ; then
+				break
+			fi
+		done
 	fi
 
 	# And we should set KV_FULL to the full expanded version

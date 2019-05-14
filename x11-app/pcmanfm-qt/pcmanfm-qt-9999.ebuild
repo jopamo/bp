@@ -1,8 +1,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit cmake-utils xdg-utils
+
+DESCRIPTION="Fast lightweight tabbed filemanager"
+HOMEPAGE="https://github.com/lxqt/pcmanfm-qt"
 
 if [[ "${PV}" == "9999" ]]; then
 	inherit git-r3
@@ -13,14 +16,11 @@ else
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 
-DESCRIPTION="Fast lightweight tabbed filemanager"
-HOMEPAGE="https://github.com/lxqt/pcmanfm-qt"
+LICENSE="GPL-2+"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-LICENSE="GPL-2+"
-SLOT="0"
-
-CDEPEND=">=lib-dev/glib-2.18:2
+DEPEND=">=lib-dev/glib-2.18:2
 	gui-lib/qtcore:5
 	gui-lib/qtdbus:5
 	gui-lib/qtgui:5
@@ -29,21 +29,8 @@ CDEPEND=">=lib-dev/glib-2.18:2
 	>=x11-libs/libfm-1.2.0:=
 	x11-libs/libfm-qt:=
 	x11-libs/libxcb:=
-"
-RDEPEND="${CDEPEND}
-	x11/xdg-utils
-	sys-app/util-linux"
-
-DEPEND="${CDEPEND}
 	gui-lib/linguist-tools:5
-	>=dev-util/intltool-0.40
-	sys-devel/gettext
-	dev-util/pkgconf"
-
-src_prepare() {
-	cmake-utils_src_prepare
-	git apply -R ${FILESDIR}/b6f1101fabc56862c7b7f5a0279348f215267e96.patch
-}
+	>=dev-util/intltool-0.40"
 
 pkg_postinst() {
 	xdg_desktop_database_update

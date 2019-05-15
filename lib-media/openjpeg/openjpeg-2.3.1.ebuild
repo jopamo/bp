@@ -1,29 +1,26 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit cmake-utils
 
-# Make sure that test data are not newer than release;
-# otherwise we will see "Found-But-No-Test" test failures!
-MY_TESTDATA_COMMIT="69a7a312dccebc8b5f28f8a5e4a703cb8d447d44"
+MY_TESTDATA_COMMIT="61328e38efdc1f5e4602d98614c5ef1b35cb9e71"
 
 DESCRIPTION="An open-source JPEG 2000 library"
 HOMEPAGE="http://www.openjpeg.org"
 SRC_URI="https://github.com/uclouvain/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz
-	test? ( https://github.com/uclouvain/openjpeg-data/archive/${MY_TESTDATA_COMMIT}.tar.gz -> ${PN}-data_20170814.tar.gz )"
+	test? ( https://github.com/uclouvain/openjpeg-data/archive/${MY_TESTDATA_COMMIT}.tar.gz )"
 
 LICENSE="BSD-2"
 SLOT="2/7" # based on SONAME
 KEYWORDS="amd64 arm64"
-IUSE="doc static-libs test"
 
-RDEPEND="lib-media/lcms:2=
+IUSE="static-libs test"
+
+DEPEND="lib-media/lcms:2=
 	lib-media/libpng:0=
 	lib-media/tiff:0=
 	lib-sys/zlib:="
-DEPEND="${RDEPEND}
-	doc? ( app-text/doxygen )"
 
 src_prepare() {
 	if use test; then
@@ -31,19 +28,13 @@ src_prepare() {
 	fi
 
 	cmake-utils_src_prepare
-
-	# Stop installing LICENSE file, and install CHANGES from DOCS instead:
-	sed -i -e '/install.*FILES.*DESTINATION.*OPENJPEG_INSTALL_DOC_DIR/d' CMakeLists.txt || die
-
-	# Install doxygen docs to the right directory:
-	sed -i -e "s:DESTINATION\s*share/doc:\0/${PF}:" doc/CMakeLists.txt || die
 }
 
 src_configure() {
 	local mycmakeargs=(
 		-DOPENJPEG_INSTALL_LIB_DIR="lib64"
 		-DBUILD_TESTING="$(usex test)"
-		-DBUILD_DOC=$(usex doc ON OFF)
+		-DBUILD_DOC=OFF
 		-DBUILD_CODEC=ON
 		)
 

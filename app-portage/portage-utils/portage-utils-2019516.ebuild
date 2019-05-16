@@ -1,12 +1,12 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 DESCRIPTION="small and fast portage helper tools written in C"
 HOMEPAGE="https://wiki.gentoo.org/wiki/Portage-utils"
 
-SNAPSHOT=868b2b4b4f5140da7188389acf9f719fcf343ab2
-SRC_URI="https://github.com/gentoo/portage-utils/archive/${SNAPSHOT}.zip -> ${P}.zip"
+SNAPSHOT=8a5215917d1d1a40d7a127c9218fa1c2166954de
+SRC_URI="https://github.com/gentoo/portage-utils/archive/${SNAPSHOT}.zip -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"
@@ -19,5 +19,3 @@ RDEPEND="lib-dev/iniparser:0"
 DEPEND="${RDEPEND}
 	app-compression/xz-utils
 	static? ( lib-dev/iniparser:0[static-libs] )"
-
-PATCHES=( ${FILESDIR}/portage-utils.patch )

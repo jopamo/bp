@@ -10,7 +10,7 @@ if [[ ${PV} == 9999 ]]; then
 	KEYWORDS=""
 else
 	SNAPSHOT=13ba1a3639f7a40f3bffbabf2737cbdde314faf4
-	SRC_URI="https://github.com/file/file/archive/${SNAPSHOT}.zip -> ${P}.zip"
+	SRC_URI="https://github.com/file/file/archive/${SNAPSHOT}.zip -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
 fi

@@ -13,7 +13,7 @@ if [[ ${PV} == 9999 ]]; then
 	KEYWORDS=""
 else
 	SNAPSHOT=96df5cee6291fed387abc1e42aeae9e3fa94ebf7
-	SRC_URI="https://github.com/OpenSMTPD/OpenSMTPD/archive/${SNAPSHOT}.zip -> ${P}.zip"
+	SRC_URI="https://github.com/OpenSMTPD/OpenSMTPD/archive/${SNAPSHOT}.zip -> ${P}.tar.gz"
 	S=${WORKDIR}/OpenSMTPD-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
 fi

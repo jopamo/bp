@@ -13,7 +13,7 @@ if [[ "${PV}" == "9999" ]]; then
 	KEYWORDS="amd64 arm64"
 else
 	SNAPSHOT=
-	SRC_URI="https://github.com/lxqt/libfm-qt/archive/${SNAPSHOT}.zip -> ${P}.zip"
+	SRC_URI="https://github.com/lxqt/libfm-qt/archive/${SNAPSHOT}.zip -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 

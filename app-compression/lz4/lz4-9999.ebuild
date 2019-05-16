@@ -7,6 +7,7 @@ inherit cmake-utils git-r3
 DESCRIPTION="Extremely Fast Compression algorithm"
 HOMEPAGE="https://github.com/lz4/lz4"
 EGIT_REPO_URI="https://github.com/lz4/lz4.git"
+EGIT_BRANCH="master"
 
 LICENSE="BSD-2 GPL-2"
 SLOT="0/1"

@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit autotools git-r3 libtool
+inherit git-r3 libtool
 
 DESCRIPTION="Portable Network Graphics library"
 HOMEPAGE="http://www.libpng.org/"
@@ -13,20 +13,19 @@ LICENSE="libpng"
 SLOT="0/16"
 KEYWORDS="amd64 arm64"
 
-IUSE="apng static-libs"
+IUSE="static-libs"
 
-RDEPEND=">=lib-sys/zlib-1.2.8-r1:="
-DEPEND="${RDEPEND}
-	app-compression/xz-utils"
+DEPEND=">=lib-sys/zlib-1.2.8-r1:=
+		app-compression/xz-utils"
+
+PATCHES=( "${FILESDIR}"/libpng-1.6.37-apng.patch )
 
 src_prepare() {
-	eautoreconf
 	default
-	if use apng; then
-		eapply -p0 "${WORKDIR}"/${PN}-*-apng.patch
-		# Don't execute symbols check with apng patch wrt #378111
-		sed -i -e '/^check/s:scripts/symbols.chk::' Makefile.in || die
-	fi
+
+	# Don't execute symbols check with apng patch wrt #378111
+	sed -i -e '/^check/s:scripts/symbols.chk::' Makefile.in || die
+
 	elibtoolize
 }
 

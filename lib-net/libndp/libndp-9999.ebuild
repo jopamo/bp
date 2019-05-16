@@ -13,7 +13,7 @@ if [[ ${PV} == 9999 ]]; then
 	KEYWORDS="amd64 arm64"
 else
 	SNAPSHOT=e8b90ce2d6ebf846cb0c9a3255d4deacf075f9c4
-	SRC_URI="https://github.com/jpirko/${PN}/archive/${SNAPSHOT}.zip -> ${P}.zip"
+	SRC_URI="https://github.com/jpirko/${PN}/archive/${SNAPSHOT}.zip -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 

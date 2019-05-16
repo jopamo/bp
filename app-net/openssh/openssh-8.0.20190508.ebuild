@@ -13,7 +13,7 @@ if [[ ${PV} == 9999 ]]; then
 	KEYWORDS=""
 else
 	SNAPSHOT=62dd70613b77b229f53db3cc1c3e8a206fa2b582
-	SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.zip -> ${P}.zip"
+	SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.zip -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-portable-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
 fi

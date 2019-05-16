@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	KEYWORDS=""
 else
 	SNAPSHOT=bbdd65427977996264bc94bad3516bda6c42db37
-	SRC_URI="https://github.com/pali/udftools/archive/${SNAPSHOT}.zip -> ${P}.zip"
+	SRC_URI="https://github.com/pali/udftools/archive/${SNAPSHOT}.zip -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
 fi

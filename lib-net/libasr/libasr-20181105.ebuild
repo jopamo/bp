@@ -8,7 +8,7 @@ DESCRIPTION="Async Resolver Library from OpenBSD/OpenSMTPD"
 HOMEPAGE="https://github.com/OpenSMTPD/libasr"
 
 SNAPSHOT=d7e6e51a17cca19bc3b4bc8826625ff545b84d6c
-SRC_URI="https://github.com/OpenSMTPD/libasr/archive/${SNAPSHOT}.zip -> ${P}.zip"
+SRC_URI="https://github.com/OpenSMTPD/libasr/archive/${SNAPSHOT}.zip -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 KEYWORDS="amd64 arm64"
 

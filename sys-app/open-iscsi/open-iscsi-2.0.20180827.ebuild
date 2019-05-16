@@ -13,7 +13,7 @@ if [[ ${PV} == 9999 ]]; then
 	KEYWORDS=""
 else
 	SNAPSHOT=96c1a8e344d93594a3bb4faa848f878cc7315bde
-	SRC_URI="https://github.com/open-iscsi/open-iscsi/archive/${SNAPSHOT}.zip -> ${P}.zip"
+	SRC_URI="https://github.com/open-iscsi/open-iscsi/archive/${SNAPSHOT}.zip -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
 fi

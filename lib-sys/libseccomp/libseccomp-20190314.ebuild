@@ -14,7 +14,7 @@ if [[ ${PV} == 9999 ]]; then
 	KEYWORDS=""
 else
 	SNAPSHOT=7fbf639526eb37a011318736587c3a6f8206b888
-	SRC_URI="https://github.com/seccomp/libseccomp/archive/${SNAPSHOT}.zip -> ${P}.zip"
+	SRC_URI="https://github.com/seccomp/libseccomp/archive/${SNAPSHOT}.zip -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
 fi

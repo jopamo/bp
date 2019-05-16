@@ -13,7 +13,7 @@ if [[ ${PV} == 9999 ]]; then
 	KEYWORDS=""
 else
 	SNAPSHOT=deb44b57429b05d4ad5b4f793c969e58a9328f06
-	SRC_URI="https://github.com/madler/zlib/archive/${SNAPSHOT}.zip -> ${P}.zip"
+	SRC_URI="https://github.com/madler/zlib/archive/${SNAPSHOT}.zip -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
 fi

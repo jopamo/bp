@@ -6,7 +6,7 @@ inherit distutils-r1
 
 DESCRIPTION="Collection of administration scripts for Gentoo"
 HOMEPAGE="https://wiki.gentoo.org/wiki/Project:Portage-Tools"
-SRC_URI="https://dev.gentoo.org/~mgorny/dist/${P}.tar.gz"
+SRC_URI="https://gitweb.gentoo.org/proj/gentoolkit.git/snapshot/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"

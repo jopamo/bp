@@ -1,15 +1,17 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit git-r3 autotools
 
+DESCRIPTION="X.Org Xlib-based client API for the XTEST & RECORD extensions library"
 EGIT_REPO_URI=https://github.com/freedesktop/xorg-${PN}.git
 
-DESCRIPTION="X.Org Xlib-based client API for the XTEST & RECORD extensions library"
-SLOT=0
-IUSE=static-libs
+LICENSE="MIT"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
+IUSE=static-libs
 
 DEPEND=">=x11-libs/libX11-1.6.2
 	>=x11-libs/libXext-1.3.2

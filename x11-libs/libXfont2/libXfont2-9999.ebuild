@@ -1,14 +1,16 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit git-r3 autotools
 
 DESCRIPTION="X.Org Xfont library"
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/xorg/lib/libXfont.git"
-SLOT=0
 
+LICENSE="MIT"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="bzip2 ipv6 truetype doc"
 
 RDEPEND="x11-libs/xtrans

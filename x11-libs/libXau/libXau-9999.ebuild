@@ -1,15 +1,17 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit git-r3 autotools
 
 DESCRIPTION="X.Org X authorization library"
 EGIT_REPO_URI=https://github.com/freedesktop/xorg-${PN}.git
-SLOT=0
-IUSE=static-libs
 
+LICENSE="MIT"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
+IUSE=static-libs
 
 DEPEND="x11/xorgproto
 	x11/util-macros"

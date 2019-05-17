@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit git-r3 autotools flag-o-matic
 
@@ -8,9 +8,11 @@ DESCRIPTION="X C-language Bindings library"
 HOMEPAGE="https://xcb.freedesktop.org/"
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/xcb/libxcb.git"
 
+LICENSE="MIT"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="doc test xkb static-libs"
-SLOT=0
 
 RDEPEND=">=lib-dev/libpthread-stubs-0.3-r1
 	>=x11-libs/libXau-1.0.7-r1

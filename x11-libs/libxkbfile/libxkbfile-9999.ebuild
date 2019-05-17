@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools
 
@@ -15,8 +15,8 @@ else
 	S="${WORKDIR}/xorg-${PN}-${P}"
 fi
 
-SLOT=0
-
+LICENSE="MIT"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 DEPEND="x11-libs/libX11

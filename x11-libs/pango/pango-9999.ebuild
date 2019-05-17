@@ -1,6 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
+
 inherit git-r3 meson git-r3
 
 DESCRIPTION="Internationalized text layout and rendering library"
@@ -8,7 +9,7 @@ HOMEPAGE="http://www.pango.org/"
 EGIT_REPO_URI="https://github.com/GNOME/pango.git"
 
 LICENSE="LGPL-2+ FTL"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 IUSE="X +introspection test"

@@ -5,11 +5,13 @@ EAPI=7
 inherit toolchain-funcs git-r3 autotools
 
 DESCRIPTION="X.Org X11 library"
-
-KEYWORDS="amd64 arm64"
-IUSE="ipv6 test doc static-libs"
 EGIT_REPO_URI="https://github.com/freedesktop/xorg-libX11.git"
-SLOT=0
+
+LICENSE="MIT"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
+IUSE="ipv6 test doc static-libs"
 
 RDEPEND=">=x11-libs/libxcb-1.11.1
 	x11-libs/xtrans

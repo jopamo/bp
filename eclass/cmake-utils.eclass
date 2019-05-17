@@ -541,7 +541,7 @@ cmake-utils_src_configure() {
 		SET (CMAKE_Fortran_COMPILER "${myFC/ /;}")
 		SET (CMAKE_AR $(type -P $(tc-getAR)) CACHE FILEPATH "Archive manager" FORCE)
 		SET (CMAKE_RANLIB $(type -P $(tc-getRANLIB)) CACHE FILEPATH "Archive index generator" FORCE)
-		SET (CMAKE_SYSTEM_PROCESSOR "${CHOST%%-*}")
+		SET (CMAKE_SYSTEM_PROCESSOR "$(uname -m)")
 	_EOF_
 
 	# We are using the C compiler for assembly by default.
@@ -612,13 +612,6 @@ cmake-utils_src_configure() {
 		SET (CMAKE_USER_MAKE_RULES_OVERRIDE "${build_rules}" CACHE FILEPATH "1g4 override rules")
 	_EOF_
 	[[ "${NOCOLOR}" = true || "${NOCOLOR}" = yes ]] && echo 'SET (CMAKE_COLOR_MAKEFILE OFF CACHE BOOL "pretty colors during make" FORCE)' >> "${common_config}"
-
-	if [[ ${EAPI} != [56] ]]; then
-		cat >> "${common_config}" <<- _EOF_ || die
-			SET (CMAKE_INSTALL_DOCDIR "${EPREFIX}/usr/share/doc/${PF}" CACHE PATH "")
-			SET (BUILD_SHARED_LIBS ON CACHE BOOLEAN "")
-		_EOF_
-	fi
 
 	# Wipe the default optimization flags out of CMake
 	if [[ ${CMAKE_BUILD_TYPE} != 1g4 && ${EAPI} != 5 ]]; then

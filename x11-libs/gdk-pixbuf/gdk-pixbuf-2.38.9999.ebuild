@@ -49,8 +49,8 @@ pkg_preinst() {
 	# Make sure loaders.cache belongs to gdk-pixbuf alone
 	local cache="usr/lib/${PN}-2.0/2.10.0/loaders.cache"
 
-	if [[ -e ${EROOT}${cache} ]]; then
-		cp "${EROOT}"${cache} "${ED}"/${cache} || die
+	if [[ -e ${EROOT}/${cache} ]]; then
+		cp "${EROOT}"/${cache} "${ED}"/${cache} || die
 	else
 		touch "${ED}"/${cache} || die
 	fi
@@ -58,10 +58,5 @@ pkg_preinst() {
 
 pkg_postinst() {
 	unset __GL_NO_DSO_FINALIZER
-}
-
-pkg_postrm() {
-	if [[ -z ${REPLACED_BY_VERSION} ]]; then
-		rm -f "${EROOT}"usr/lib/${PN}-2.0/2.10.0/loaders.cache
-	fi
+	gdk-pixbuf-query-loaders > "${EROOT}"/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
 }

@@ -1,9 +1,11 @@
+*app-gui/hsetroot
 *app-media/alsa-utils
 *app-media/audacious
 *app-media/lximage-qt
 *app-media/mpv
 *app-media/pavucontrol-qt
 *fonts/fira-code
+*fonts/inconsolata
 *gui-icontheme/breeze-icons
 *gui-lib/lxqt-themes
 *app-gui/keepassxc

@@ -15,7 +15,7 @@ if [[ ${PV} == *9999 ]]; then
 	KEYWORDS="amd64 arm64"
 else
 	SNAPSHOT=dd231b0faf587ff4e0e77519f724214e5876d5c2
-	SRC_URI="https://github.com/GNOME/gobject-introspection/archive/${SNAPSHOT}.zip -> ${P}.tar.gz"
+	SRC_URI="https://github.com/GNOME/gobject-introspection/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 

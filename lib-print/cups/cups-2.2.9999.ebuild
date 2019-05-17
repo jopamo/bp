@@ -2,8 +2,7 @@
 
 EAPI=7
 
-inherit autotools flag-o-matic linux-info xdg-utils \
-	pam user systemd toolchain-funcs git-r3
+inherit autotools flag-o-matic linux-info pam user systemd toolchain-funcs git-r3
 
 DESCRIPTION="The Common Unix Printing System"
 HOMEPAGE="https://www.cups.org/"
@@ -15,7 +14,7 @@ KEYWORDS="amd64 arm64"
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="acl dbus debug lprng-compat pam
-	+ssl static-libs systemd +threads usb X xinetd"
+	+ssl static-libs systemd usb X xinetd"
 
 CDEPEND="
 	app-text/libpaper
@@ -46,10 +45,6 @@ RDEPEND="${CDEPEND}
 "
 
 PDEPEND=">=lib-print/cups-filters-1.0.43"
-
-REQUIRED_USE="
-	usb? ( threads )
-"
 
 RESTRICT="test"
 
@@ -131,7 +126,6 @@ src_configure() {
 		$(use_enable debug debug-printfs)
 		$(use_enable pam)
 		$(use_enable static-libs static)
-		$(use_enable threads)
 		$(use_enable ssl gnutls)
 		$(use_enable systemd)
 		$(use_enable usb libusb)
@@ -213,6 +207,9 @@ src_install() {
 		ewarn "Unless you plan to install an exotic server setup, you most likely"
 		ewarn "do not want this. Disable the useflag then and all will be fine."
 	fi
+
+	find "${ED}"/ -xtype l -delete
+	rm -rf "${ED}"/run
 }
 
 pkg_postinst() {

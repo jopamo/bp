@@ -8,7 +8,7 @@ DESCRIPTION="A free stand-alone ini file parsing library"
 HOMEPAGE="http://ndevilla.free.fr/iniparser/"
 
 SNAPSHOT=7b68537ac11fa62e923fd26aa87e206dc93a9a55
-SRC_URI="https://github.com/ndevilla/iniparser/archive/${SNAPSHOT}.zip -> ${P}.tar.gz"
+SRC_URI="https://github.com/ndevilla/iniparser/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 KEYWORDS="amd64 arm64"
 

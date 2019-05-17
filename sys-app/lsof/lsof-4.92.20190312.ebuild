@@ -9,7 +9,7 @@ DESCRIPTION="Lists open files for running Unix processes"
 HOMEPAGE="ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/"
 
 SNAPSHOT=f60c6a26f3cb58676560e3b41d8a1823efad8b49
-SRC_URI="https://github.com/lsof-org/lsof-linux/archive/${SNAPSHOT}.zip -> ${P}.tar.gz"
+SRC_URI="https://github.com/lsof-org/lsof-linux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-linux-${SNAPSHOT}
 
 LICENSE="lsof"

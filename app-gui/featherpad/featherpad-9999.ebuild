@@ -30,4 +30,6 @@ src_configure() {
 
 src_install() {
 	emake INSTALL_ROOT="${D}" install
+	insinto /etc/xdg/featherpad
+	doins "${FILESDIR}"/fp.conf
 }

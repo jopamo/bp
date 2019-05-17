@@ -119,6 +119,125 @@ xdg_mimeinfo_database_update() {
 	eend $?
 }
 
+# @FUNCTION: _iconins
+# @INTERNAL
+# @DESCRIPTION:
+# function for use in doicon and newicon
+_iconins() {
+	(
+	# wrap the env here so that the 'insinto' call
+	# doesn't corrupt the env of the caller
+	insopts -m 0644
+	local funcname=$1; shift
+	local size dir
+	local context=apps
+	local theme=hicolor
+
+	while [[ $# -gt 0 ]] ; do
+		case $1 in
+		-s|--size)
+			if [[ ${2%%x*}x${2%%x*} == "$2" ]] ; then
+				size=${2%%x*}
+			else
+				size=${2}
+			fi
+			case ${size} in
+			16|22|24|32|36|48|64|72|96|128|192|256|512)
+				size=${size}x${size};;
+			scalable)
+				;;
+			*)
+				eerror "${size} is an unsupported icon size!"
+				exit 1;;
+			esac
+			shift 2;;
+		-t|--theme)
+			theme=${2}
+			shift 2;;
+		-c|--context)
+			context=${2}
+			shift 2;;
+		*)
+			if [[ -z ${size} ]] ; then
+				insinto /usr/share/pixmaps
+			else
+				insinto /usr/share/icons/${theme}/${size}/${context}
+			fi
+
+			if [[ ${funcname} == doicon ]] ; then
+				if [[ -f $1 ]] ; then
+					doins "${1}"
+				elif [[ -d $1 ]] ; then
+					shopt -s nullglob
+					doins "${1}"/*.{png,svg}
+					shopt -u nullglob
+				else
+					eerror "${1} is not a valid file/directory!"
+					exit 1
+				fi
+			else
+				break
+			fi
+			shift 1;;
+		esac
+	done
+	if [[ ${funcname} == newicon ]] ; then
+		newins "$@"
+	fi
+	) || die
+}
+
+# @FUNCTION: doicon
+# @USAGE: [options] <icons>
+# @DESCRIPTION:
+# Install icon into the icon directory /usr/share/icons or into
+# /usr/share/pixmaps if "--size" is not set.
+# This is useful in conjunction with creating desktop/menu files.
+#
+# @CODE
+#  options:
+#  -s, --size
+#    !!! must specify to install into /usr/share/icons/... !!!
+#    size of the icon, like 48 or 48x48
+#    supported icon sizes are:
+#    16 22 24 32 36 48 64 72 96 128 192 256 512 scalable
+#  -c, --context
+#    defaults to "apps"
+#  -t, --theme
+#    defaults to "hicolor"
+#
+# icons: list of icons
+#
+# example 1: doicon foobar.png fuqbar.svg suckbar.png
+# results in: insinto /usr/share/pixmaps
+#             doins foobar.png fuqbar.svg suckbar.png
+#
+# example 2: doicon -s 48 foobar.png fuqbar.png blobbar.png
+# results in: insinto /usr/share/icons/hicolor/48x48/apps
+#             doins foobar.png fuqbar.png blobbar.png
+# @CODE
+doicon() {
+	_iconins ${FUNCNAME} "$@"
+}
+
+# @FUNCTION: newicon
+# @USAGE: [options] <icon> <newname>
+# @DESCRIPTION:
+# Like doicon, install the specified icon as newname.
+#
+# @CODE
+# example 1: newicon foobar.png NEWNAME.png
+# results in: insinto /usr/share/pixmaps
+#             newins foobar.png NEWNAME.png
+#
+# example 2: newicon -s 48 foobar.png NEWNAME.png
+# results in: insinto /usr/share/icons/hicolor/48x48/apps
+#             newins foobar.png NEWNAME.png
+# @CODE
+newicon() {
+	_iconins ${FUNCNAME} "$@"
+}
+
 xdg-utils_pkg_postinst() {
 	xdg_desktop_database_update
 	xdg_mimeinfo_database_update

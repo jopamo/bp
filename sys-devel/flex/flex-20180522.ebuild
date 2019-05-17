@@ -8,7 +8,7 @@ DESCRIPTION="The Fast Lexical Analyzer"
 HOMEPAGE="https://github.com/westes/flex"
 
 SNAPSHOT=98018e3f58d79e082216d406866942841d4bdf8a
-SRC_URI="https://github.com/westes/flex/archive/${SNAPSHOT}.zip -> ${P}.tar.gz"
+SRC_URI="https://github.com/westes/flex/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="FLEX"

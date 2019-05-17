@@ -12,7 +12,7 @@ LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug +glamor ipv6 minimal systemd +udev unwind wayland xcsecurity"
+IUSE="debug +glamor ipv6 minimal systemd suid_wrapper +udev wayland xcsecurity X"
 
 CDEPEND="
 	lib-dev/openssl:0=
@@ -41,7 +41,6 @@ CDEPEND="
 		>=lib-media/mesa-10.3.4-r1
 	)
 	udev? ( >=sys-app/systemd-150 )
-	unwind? ( lib-sys/libunwind )
 	wayland? (
 		>=lib-dev/wayland-1.3.0
 		lib-media/libepoxy
@@ -64,8 +63,21 @@ filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 src_configure() {
         local emesonargs=(
-        		$(meson_use glamor)
-        		$(meson_use ipv6)
+		$(meson_use glamor)
+		$(meson_use ipv6)
+		$(meson_use udev)
+		$(meson_use systemd systemd_logind)
+		$(meson_use wayland xwayland)
+		$(meson_use wayland xwayland_eglstream)
+		$(meson_use xcsecurity)
+		$(meson_use suid_wrapper)
+		$(meson_use X xorg)
+		-D os_vendor="1g4 Linux"
         )
         meson_src_configure
+}
+
+src_install() {
+        meson_src_install
+	dosym Xorg usr/bin/X
 }

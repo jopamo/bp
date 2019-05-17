@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit autotools git-r3
+inherit meson git-r3
 
 DESCRIPTION="HW video decode support for Intel integrated graphics"
 HOMEPAGE="https://github.com/01org/intel-vaapi-driver"
@@ -12,27 +12,18 @@ LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="wayland X"
+IUSE="wayland X test hybrid_codec"
 
-DEPEND=">=x11-libs/libva-2.0.0:=[X?,wayland?,drm?]
-	>=x11-libs/libdrm-2.4.52[video_cards_intel]
+DEPEND=">=x11-libs/libva-2.0.0:=
+	>=x11-libs/libdrm-2.4.52
 	wayland? ( >=lib-media/mesa-9.1.6[egl] >=lib-dev/wayland-1.11 )"
 
-src_prepare() {
-	eautoreconf
-	default
-}
-
 src_configure() {
-	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib64
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-		$(use_enable wayland)
-		$(use_enable X x11)
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
+	local emesonargs=(
+		$(meson_use X with_x11)
+		$(meson_use wayland with_wayland)
+		$(meson_use hybrid_codec enable_hybrid_codec)
+		$(meson_use test enable_tests)
+		)
+		meson_src_configure
 }

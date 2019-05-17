@@ -23,6 +23,7 @@ RDEPEND="
 	introspection? ( >=lib-dev/gobject-introspection-0.9.5:= )
 "
 DEPEND="${RDEPEND}
+	x11-libs/libXft
 	>=dev-util/gtk-doc-am-1.20
 	dev-util/pkgconf
 	lib-dev/fribidi

@@ -12,7 +12,7 @@ if [[ "${PV}" == "9999" ]]; then
 	EGIT_REPO_URI="https://www.github.com/lxqt/${PN}"
 else
 	SNAPSHOT=9458ba41d94327ab833e1134d76c4eb67a7a799b
-	SRC_URI="https://github.com/lxqt/pcmanfm-qt/archive/${SNAPSHOT}.zip -> ${P}.tar.gz"
+	SRC_URI="https://github.com/lxqt/pcmanfm-qt/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 

@@ -9,7 +9,7 @@ HOMEPAGE="https://www.cairographics.org"
 
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://anongit.freedesktop.org/git/cairo"
+	EGIT_REPO_URI="https://gitlab.freedesktop.org/cairo/cairo.git"
 else
 	SRC_URI="https://www.cairographics.org/releases/${P}.tar.xz"
 fi

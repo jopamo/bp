@@ -8,7 +8,7 @@ DESCRIPTION="X.Org xkbcommon library"
 HOMEPAGE="https://xkbcommon.org/"
 
 if [[ ${PV} == "9999" ]] ; then
-	EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/${PN}.git"
+	EGIT_REPO_URI="https://github.com/xkbcommon/${PN}.git"
 	inherit git-r3
 else
 	SRC_URI="https://xkbcommon.org/download/${P}.tar.xz"

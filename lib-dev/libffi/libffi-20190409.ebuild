@@ -13,7 +13,7 @@ if [[ ${PV} == 9999 ]]; then
 	KEYWORDS=""
 else
 	SNAPSHOT=d1e9b4b96cc8d237c3532cf83da0d4b99d19abb5
-	SRC_URI="https://github.com/libffi/libffi/archive/${SNAPSHOT}.zip -> ${P}.tar.gz"
+	SRC_URI="https://github.com/libffi/libffi/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
 fi

@@ -11,11 +11,10 @@ LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="
+DEPEND="x11-misc/util-macros
 	x11-libs/libX11
 	x11-libs/libXmu
 	x11-libs/libXext"
-DEPEND="${RDEPEND}"
 
 src_prepare() {
 	eautoreconf

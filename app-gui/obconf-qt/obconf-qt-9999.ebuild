@@ -21,7 +21,7 @@ RDEPEND="lib-dev/glib:2
 	gui-lib/qtx11extras:5
 	lib-media/fontconfig
 	lib-media/freetype
-	x11-app/openbox
+	app-gui/openbox
 	x11-libs/libICE
 	x11-libs/libSM
 	x11-libs/libX11

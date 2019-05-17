@@ -14,11 +14,6 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+drm opengl wayland X utils"
 
-VIDEO_CARDS="nvidia intel i965 nouveau"
-for x in ${VIDEO_CARDS}; do
-	IUSE+=" video_cards_${x}"
-done
-
 RDEPEND=">=x11-libs/libdrm-2.4.46
 	X? (
 		>=x11-libs/libX11-1.6.2
@@ -27,13 +22,6 @@ RDEPEND=">=x11-libs/libdrm-2.4.46
 	)
 	opengl? ( >=lib-media/mesa-7.0-r1 )
 	wayland? ( >=lib-dev/wayland-1.11 )"
-
-DEPEND="${RDEPEND}
-	dev-util/pkgconf"
-PDEPEND="video_cards_intel? ( >=x11-libs/libva-intel-driver-2.0.0 )
-	video_cards_i965? ( >=x11-libs/libva-intel-driver-2.0.0 )
-	utils? ( app-media/libva-utils )
-	"
 
 REQUIRED_USE="|| ( drm wayland X )
 		opengl? ( X )"

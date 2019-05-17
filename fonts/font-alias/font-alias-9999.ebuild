@@ -10,7 +10,7 @@ SLOT=0
 KEYWORDS="amd64 arm64"
 
 DEPEND="${RDEPEND}
-	x11/mkfontscale
+	x11-misc/mkfontscale
 	>=fonts/font-util-1.1.1-r1"
 
 src_prepare() {

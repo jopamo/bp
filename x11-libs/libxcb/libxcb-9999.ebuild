@@ -6,7 +6,7 @@ inherit git-r3 autotools flag-o-matic
 
 DESCRIPTION="X C-language Bindings library"
 HOMEPAGE="https://xcb.freedesktop.org/"
-EGIT_REPO_URI="https://anongit.freedesktop.org/git/xcb/libxcb.git"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/${PN}.git"
 
 LICENSE="MIT"
 SLOT="0/1"
@@ -14,15 +14,13 @@ KEYWORDS="amd64 arm64"
 
 IUSE="doc test xkb static-libs"
 
-RDEPEND=">=lib-dev/libpthread-stubs-0.3-r1
+DEPEND=">=lib-dev/libpthread-stubs-0.3-r1
 	>=x11-libs/libXau-1.0.7-r1
-	>=x11-libs/libXdmcp-1.1.1-r1"
-# Note: ${PYTHON_USEDEP} needs to go verbatim
-DEPEND="${RDEPEND}
+	>=x11-libs/libXdmcp-1.1.1-r1
 	test? ( lib-dev/check )
 	doc? ( app-text/doxygen[dot] )
 	lib-dev/libxslt
-	x11/xcb-proto"
+	x11-misc/xcb-proto"
 
 src_prepare() {
 	eautoreconf

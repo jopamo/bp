@@ -24,7 +24,7 @@ RDEPEND="lib-media/glu
 "
 DEPEND="${RDEPEND}
 	dev-util/pkgconf
-	x11/xorgproto"
+	x11-misc/xorgproto"
 
 src_configure() {
 	local mycmakeargs=(

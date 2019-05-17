@@ -5,7 +5,7 @@ EAPI=7
 inherit git-r3 autotools
 
 DESCRIPTION="Low-level pixel manipulation routines"
-EGIT_REPO_URI="https://anongit.freedesktop.org/git/pixman.git"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/pixman/pixman.git"
 
 LICENSE="MIT"
 SLOT="0/1"

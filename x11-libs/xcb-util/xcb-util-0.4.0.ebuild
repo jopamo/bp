@@ -13,7 +13,7 @@ KEYWORDS="amd64 arm64"
 IUSE="test static-libs doc"
 
 RDEPEND=">=x11-libs/libxcb-1.9.1:=
-	x11/xorgproto"
+	x11-misc/xorgproto"
 
 DEPEND="${RDEPEND}
 	>=dev-util/gperf-3.0.1

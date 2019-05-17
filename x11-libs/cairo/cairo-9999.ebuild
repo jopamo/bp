@@ -44,7 +44,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	dev-util/pkgconf
 	>=sys-devel/libtool-2
-	X? ( x11/xorgproto )"
+	X? ( x11-misc/xorgproto )"
 
 REQUIRED_USE="
 	gles2? ( !opengl )

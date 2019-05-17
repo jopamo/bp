@@ -45,7 +45,7 @@ DEPEND="${RDEPEND}
 RDEPEND="${RDEPEND}
 	pam? ( lib-sys/pambase )
 	sys-app/shadow
-	X? ( x11/xauth )"
+	X? ( x11-app/xauth )"
 
 src_prepare() {
 	default

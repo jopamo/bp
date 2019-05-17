@@ -5,7 +5,7 @@ EAPI=7
 inherit git-r3 autotools
 
 DESCRIPTION="X.Org xtrans library"
-EGIT_REPO_URI=https://github.com/freedesktop/xorg-lib${PN}.git
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/lib${PN}.git"
 
 LICENSE="MIT"
 SLOT="0/1"
@@ -13,7 +13,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="doc"
 
-DEPEND="x11/util-macros"
+DEPEND="x11-misc/util-macros"
 
 src_prepare() {
 	eautoreconf

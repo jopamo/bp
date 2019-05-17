@@ -5,7 +5,7 @@ EAPI=7
 inherit git-r3 autotools
 
 DESCRIPTION="X.Org Xcursor library"
-EGIT_REPO_URI=https://github.com/freedesktop/xorg-${PN}.git
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/${PN}.git"
 
 LICENSE="MIT"
 SLOT="0/1"

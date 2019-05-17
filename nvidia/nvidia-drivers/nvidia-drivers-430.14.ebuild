@@ -49,7 +49,7 @@ DEPEND="
 	${COMMON}
 	tools? ( sys-app/dbus )
 	sys-app/kmod
-	x11/vdpau-headers
+	x11-misc/vdpau-headers
 "
 RDEPEND="
 	${COMMON}

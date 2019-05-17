@@ -5,7 +5,7 @@ EAPI=7
 inherit git-r3 autotools
 
 DESCRIPTION="X.Org Session Management library"
-EGIT_REPO_URI=https://github.com/freedesktop/xorg-${PN}.git
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/${PN}.git"
 
 LICENSE="MIT"
 SLOT="0/1"
@@ -15,7 +15,7 @@ IUSE="doc ipv6 +uuid"
 
 RDEPEND=">=x11-libs/libICE-1.0.8-r1
 	x11-libs/xtrans
-	x11/xorgproto
+	x11-misc/xorgproto
 	>=sys-app/util-linux-2.24.1-r3"
 
 DEPEND="${RDEPEND}"

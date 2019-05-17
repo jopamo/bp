@@ -5,7 +5,7 @@ EAPI=6
 inherit git-r3 autotools
 
 DESCRIPTION="X.Org Xft library"
-EGIT_REPO_URI=https://github.com/freedesktop/xorg-${PN}.git
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/${PN}.git"
 
 LICENSE="MIT"
 SLOT="0/1"
@@ -16,7 +16,7 @@ DEPEND=">=x11-libs/libXrender-0.9.8
 	>=x11-libs/libXext-1.3.2
 	>=lib-media/freetype-2.5.0.1
 	>=lib-media/fontconfig-2.10.92
-	x11/xorgproto
+	x11-misc/xorgproto
 	fonts/liberation-fonts"
 
 src_prepare() {

@@ -8,7 +8,7 @@ DESCRIPTION="X.Org xkbcommon library"
 HOMEPAGE="https://xkbcommon.org/"
 
 if [[ ${PV} == "9999" ]] ; then
-	EGIT_REPO_URI="https://github.com/xkbcommon/libxkbcommon.git"
+	EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/${PN}.git"
 	inherit git-r3
 else
 	SRC_URI="https://xkbcommon.org/download/${P}.tar.xz"
@@ -21,7 +21,7 @@ KEYWORDS="amd64 arm64"
 IUSE="X doc test"
 
 DEPEND="sys-devel/bison
-	X? ( x11/xorgproto )
+	X? ( x11-misc/xorgproto )
 	doc? ( app-text/doxygen )"
 RDEPEND="X? ( >=x11-libs/libxcb-1.10[xkb] )"
 

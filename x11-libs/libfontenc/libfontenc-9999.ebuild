@@ -5,14 +5,14 @@ EAPI=7
 inherit git-r3 autotools
 
 DESCRIPTION="X.Org fontenc library"
-EGIT_REPO_URI=https://github.com/freedesktop/xorg-${PN}.git
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/${PN}.git"
 
 LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="lib-sys/zlib
-	x11/xorgproto"
+	x11-misc/xorgproto"
 
 DEPEND="${RDEPEND}
 		fonts/font-util"

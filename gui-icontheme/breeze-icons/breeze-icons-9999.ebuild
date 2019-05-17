@@ -13,7 +13,7 @@ IUSE="test"
 EGIT_REPO_URI="https://github.com/KDE/breeze-icons.git"
 
 DEPEND="
-	x11/extra-cmake-modules
+	x11-misc/extra-cmake-modules
 	gui-lib/qtcore
 	test? (
 		gui-lib/qttest

@@ -65,7 +65,7 @@ DEPEND="${RDEPEND}
 	doc? ( app-text/doxygen )
 	test? ( >=lib-dev/check-0.9.10 )
 	X? (
-		x11/xorgproto
+		x11-misc/xorgproto
 		>=x11-libs/libXtst-1.0.99.2
 	)
 	lib-dev/libatomic_ops

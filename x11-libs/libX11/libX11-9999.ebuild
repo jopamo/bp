@@ -5,7 +5,7 @@ EAPI=7
 inherit toolchain-funcs git-r3 autotools
 
 DESCRIPTION="X.Org X11 library"
-EGIT_REPO_URI="https://github.com/freedesktop/xorg-libX11.git"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/${PN}.git"
 
 LICENSE="MIT"
 SLOT="0/1"
@@ -15,7 +15,7 @@ IUSE="ipv6 test doc static-libs"
 
 RDEPEND=">=x11-libs/libxcb-1.11.1
 	x11-libs/xtrans
-	x11/xorgproto"
+	x11-misc/xorgproto"
 DEPEND="${RDEPEND}
 	test? ( dev-lang/perl )"
 

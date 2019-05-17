@@ -5,7 +5,7 @@ EAPI=7
 inherit git-r3 autotools
 
 DESCRIPTION="X.Org Xfont library"
-EGIT_REPO_URI="https://anongit.freedesktop.org/git/xorg/lib/libXfont.git"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/${PN}.git"
 
 LICENSE="MIT"
 SLOT="0/1"
@@ -18,7 +18,7 @@ RDEPEND="x11-libs/xtrans
 	lib-sys/zlib
 	truetype? ( >=lib-media/freetype-2 )
 	bzip2? ( app-compression/lbzip2 )
-	x11/xorgproto"
+	x11-misc/xorgproto"
 DEPEND="${RDEPEND}"
 
 src_prepare() {

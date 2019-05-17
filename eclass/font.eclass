@@ -49,7 +49,7 @@ DOCS=${DOCS:-}
 IUSE="X"
 
 DEPEND="X? (
-		x11/mkfontscale
+		x11-misc/mkfontscale
 		fonts/encodings
 	)"
 RDEPEND=""

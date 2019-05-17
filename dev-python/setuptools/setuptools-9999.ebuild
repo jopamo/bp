@@ -1,9 +1,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
+EAPI=7
 
 inherit distutils-r1
+
+DESCRIPTION="Collection of extensions to Distutils"
+HOMEPAGE="https://github.com/pypa/setuptools https://pypi.python.org/pypi/setuptools"
 
 if [[ ${PV} == "9999" ]]; then
 	EGIT_REPO_URI="https://github.com/pypa/setuptools.git"
@@ -13,32 +15,24 @@ else
 	KEYWORDS="amd64 arm64"
 fi
 
-DESCRIPTION="Collection of extensions to Distutils"
-HOMEPAGE="https://github.com/pypa/setuptools https://pypi.python.org/pypi/setuptools"
-
 LICENSE="MIT"
 SLOT="0"
 IUSE="test"
 
-RDEPEND="
-"
-DEPEND="${RDEPEND}
-	test? (
+DEPEND="test? (
 		dev-python/pip[${PYTHON_USEDEP}]
 		>=dev-python/pytest-2.8[${PYTHON_USEDEP}]
 		dev-python/pytest-fixture-config[${PYTHON_USEDEP}]
 		dev-python/pytest-virtualenv[${PYTHON_USEDEP}]
 		>=dev-python/backports-unittest-mock-1.2[${PYTHON_USEDEP}]
 		dev-python/wheel[${PYTHON_USEDEP}]
-	)
-"
+	)"
+
 PDEPEND="
 	>=dev-python/certifi-2016.9.26[${PYTHON_USEDEP}]"
 
 # Force in-source build because build system modifies sources.
 DISTUTILS_IN_SOURCE_BUILD=1
-
-DOCS=( {CHANGES,README}.rst docs/{easy_install.txt,pkg_resources.txt,setuptools.txt} )
 
 python_prepare_all() {
 	if [[ ${PV} == "9999" ]]; then

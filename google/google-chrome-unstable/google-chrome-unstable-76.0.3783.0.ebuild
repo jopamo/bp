@@ -55,7 +55,7 @@ RDEPEND="
 	x11-libs/libXtst
 	x11-libs/libxcb
 	x11-libs/pango
-	x11/xdg-utils
+	x11-misc/xdg-utils
 "
 
 QA_PREBUILT="*"

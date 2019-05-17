@@ -14,7 +14,7 @@ IUSE="test doc"
 
 RDEPEND=">=x11-libs/libxcb-1.9.1:=
 	>=x11-libs/xcb-util-${PV}:=
-	x11/xorgproto"
+	x11-misc/xorgproto"
 DEPEND="${RDEPEND}
 	>=dev-util/gperf-3.0.1
 	test? ( >=lib-dev/check-0.9.11 )"

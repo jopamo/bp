@@ -24,7 +24,7 @@ RDEPEND=">=lib-dev/libqtxdg-1.3.0
 	gui-lib/qtwidgets:5
 	gui-lib/qtx11extras:5
 	gui-lib/qtxml:5
-	x11/kwindowsystem
+	x11-misc/kwindowsystem
 	lib-dev/libqtxdg
 	x11-libs/libXScrnSaver"
 DEPEND="${RDEPEND}

@@ -38,7 +38,7 @@ CDEPEND="
 		x11-libs/gdk-pixbuf
 		x11-libs/gtk+:3
 		x11-libs/pango
-		x11/xdg-utils
+		x11-misc/xdg-utils
 	)
 	libssh? ( >=lib-net/libssh-0.6 )
 	libxml2? ( lib-dev/libxml2 )

@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X.Org xkbfile library"
 
 if [[ ${PV} == "9999" ]] ; then
-	EGIT_REPO_URI=https://github.com/freedesktop/xorg-${PN}.git
+	EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/${PN}.git"
 	inherit git-r3
 	KEYWORDS="amd64 arm64"
 else
@@ -20,7 +20,7 @@ SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 DEPEND="x11-libs/libX11
-	x11/xorgproto"
+	x11-misc/xorgproto"
 
 src_prepare() {
 	eautoreconf

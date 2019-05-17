@@ -30,7 +30,7 @@ COMMON_DEPEND="
 	>=x11-libs/cairo-1.12.14-r4:=[aqua?,svg]
 	>=x11-libs/gdk-pixbuf-2.30.7:2[introspection?]
 	>=x11-libs/pango-1.36.3[introspection?]
-	x11/shared-mime-info
+	x11-misc/shared-mime-info
 
 	cups? ( >=lib-print/cups-1.7.1-r2:= )
 	introspection? ( >=lib-dev/gobject-introspection-0.9.3:= )
@@ -55,7 +55,7 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/gtk-doc-am-1.20
 	>=sys-devel/gettext-0.18.3
 	>=dev-util/pkgconf-0-r1
-	xinerama? ( >=x11/xorgproto-1.2.1-r1 )
+	xinerama? ( >=x11-misc/xorgproto-1.2.1-r1 )
 
 	test? (
 		x11/hicolor-icon-theme

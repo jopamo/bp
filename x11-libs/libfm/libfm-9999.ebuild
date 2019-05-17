@@ -18,7 +18,7 @@ COMMON_DEPEND=">=lib-dev/glib-2.18:2
 	>=gui-lib/menu-cache-0.3.2:=
 "
 RDEPEND="${COMMON_DEPEND}
-	x11/shared-mime-info
+	x11-misc/shared-mime-info
 	exif? ( lib-media/libexif )"
 DEPEND="${COMMON_DEPEND}
 	doc? (

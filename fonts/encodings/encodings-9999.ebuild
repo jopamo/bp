@@ -10,7 +10,7 @@ KEYWORDS="amd64 arm64"
 EGIT_REPO_URI="https://github.com/freedesktop/xorg-encodings.git"
 SLOT=0
 
-DEPEND="x11/mkfontscale
+DEPEND="x11-misc/mkfontscale
 	>=fonts/font-util-1.1.1-r1"
 
 src_prepare() {

@@ -43,7 +43,7 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconf
 	opengl? ( lib-media/glu )
 	X? (
-		x11/xorgproto
+		x11-misc/xorgproto
 	)"
 
 src_configure() {

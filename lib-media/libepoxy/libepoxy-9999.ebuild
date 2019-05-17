@@ -24,7 +24,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="${PYTHON_DEPS}
 	lib-media/mesa
-	x11/util-macros
+	x11-misc/util-macros
 	X? ( x11-libs/libX11 )"
 
 src_configure() {

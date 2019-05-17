@@ -30,7 +30,7 @@ DEPEND="${CDEPEND}
 	test? ( gui-lib/qttest:5 )
 "
 RDEPEND="${CDEPEND}
-	x11/xdg-utils
+	x11-misc/xdg-utils
 "
 
 src_configure() {

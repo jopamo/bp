@@ -31,7 +31,7 @@ DEPEND="
 	${RDEPEND}
 	wayland? (
 		lib-dev/wayland-protocols
-		x11/extra-cmake-modules
+		x11-misc/extra-cmake-modules
 	)
 "
 

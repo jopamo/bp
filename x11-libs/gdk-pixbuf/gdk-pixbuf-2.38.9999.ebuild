@@ -28,7 +28,7 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/gtk-doc-am-1.20
 	>=sys-devel/gettext-0.19
 	dev-util/pkgconf
-	x11/shared-mime-info"
+	x11-misc/shared-mime-info"
 
 RDEPEND="${COMMON_DEPEND}"
 

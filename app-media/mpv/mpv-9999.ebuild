@@ -84,7 +84,7 @@ COMMON_DEPEND="
 DEPEND="${COMMON_DEPEND}
 	dev-util/pkgconf
 	app-media/ffmpeg
-	x11/vulkan-headers
+	x11-misc/vulkan-headers
 	dvb? ( virtual/linuxtv-dvb-headers )
 	test? ( >=dev-util/cmocka-1.0.0 )
 "

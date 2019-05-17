@@ -1,24 +1,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: xdg-utils.eclass
-# @MAINTAINER:
-# gnome@gentoo.org
-# @AUTHOR:
-# Original author: Gilles Dartiguelongue <eva@gentoo.org>
-# @SUPPORTED_EAPIS: 0 1 2 3 4 5 6 7
-# @BLURB: Auxiliary functions commonly used by XDG compliant packages.
-# @DESCRIPTION:
-# This eclass provides a set of auxiliary functions needed by most XDG
-# compliant packages.
-# It provides XDG stack related functions such as:
-#  * GTK/Qt5 icon theme cache management
-#  * XDG .desktop files cache management
-#  * XDG mime information database management
-
 case "${EAPI:-0}" in
 	0|1|2|3|4|5|6|7) ;;
 	*) die "EAPI=${EAPI} is not supported" ;;
 esac
+
+EXPORT_FUNCTIONS pkg_postinst pkg_postrm
 
 # @ECLASS-VARIABLE: DESKTOP_DATABASE_DIR
 # @INTERNAL
@@ -130,4 +117,14 @@ xdg_mimeinfo_database_update() {
 	ebegin "Updating shared mime info database"
 	update-mime-database "${EROOT%/}${MIMEINFO_DATABASE_DIR}"
 	eend $?
+}
+
+xdg-utils_pkg_postinst() {
+	xdg_desktop_database_update
+	xdg_mimeinfo_database_update
+}
+
+xdg-utils_pkg_postrm() {
+	xdg_desktop_database_update
+	xdg_mimeinfo_database_update
 }

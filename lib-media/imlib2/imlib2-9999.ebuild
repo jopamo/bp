@@ -25,7 +25,7 @@ RDEPEND="lib-media/freetype:2
 	)"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconf-0-r1
-	X? ( x11/xorgproto )"
+	X? ( x11-misc/xorgproto )"
 
 src_prepare() {
 	eautoreconf

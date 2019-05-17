@@ -5,9 +5,10 @@ EAPI=7
 inherit git-r3 autotools
 
 DESCRIPTION="primitive command line interface to RandR extension"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/app/xrandr"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/app/${PN}.git"
 
-SLOT=0
+LICENSE="MIT"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 DEPEND=">=x11-libs/libXrandr-1.5

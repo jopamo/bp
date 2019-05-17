@@ -5,7 +5,7 @@ EAPI=7
 inherit autotools git-r3
 
 DESCRIPTION="X.Org Inter-Client Exchange library"
-EGIT_REPO_URI="https://github.com/freedesktop/xorg-libICE.git"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/${PN}.git"
 
 LICENSE="MIT"
 SLOT="0/1"
@@ -15,7 +15,7 @@ IUSE="ipv6 doc static-libs"
 
 RDEPEND="elibc_glibc? ( lib-dev/libbsd )
 	x11-libs/xtrans
-	x11/xorgproto"
+	x11-misc/xorgproto"
 DEPEND="${RDEPEND}"
 
 src_prepare() {

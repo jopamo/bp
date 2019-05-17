@@ -1,13 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit git-r3 autotools
 
 DESCRIPTION="X.Org Xcursor library"
-KEYWORDS="amd64 arm64"
 EGIT_REPO_URI=https://github.com/freedesktop/xorg-${PN}.git
-SLOT=0
+
+LICENSE="MIT"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
 
 RDEPEND=">=x11-libs/libXrender-0.9.8
 	>=x11-libs/libXfixes-5.0.1

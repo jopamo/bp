@@ -1,15 +1,18 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools git-r3
 
 DESCRIPTION="X.Org Inter-Client Exchange library"
 EGIT_REPO_URI="https://github.com/freedesktop/xorg-libICE.git"
 
+LICENSE="MIT"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="ipv6 doc static-libs"
-SLOT=0
+
 RDEPEND="elibc_glibc? ( lib-dev/libbsd )
 	x11-libs/xtrans
 	x11/xorgproto"

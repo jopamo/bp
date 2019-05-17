@@ -1,14 +1,16 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit git-r3 autotools
 
+DESCRIPTION="X.Org xtrans library"
 EGIT_REPO_URI=https://github.com/freedesktop/xorg-lib${PN}.git
 
-DESCRIPTION="X.Org xtrans library"
+LICENSE="MIT"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
-SLOT=0
+
 IUSE="doc"
 
 DEPEND="x11/util-macros"

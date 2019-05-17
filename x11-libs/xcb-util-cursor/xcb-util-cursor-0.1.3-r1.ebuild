@@ -1,14 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
-SRC_URI="https://www.x.org/archive/individual/xcb/${P}.tar.bz2"
+EAPI=7
 
 DESCRIPTION="X C-language Bindings sample implementations"
 HOMEPAGE="https://xcb.freedesktop.org/"
-SLOT=0
+SRC_URI="https://www.x.org/archive/individual/xcb/${P}.tar.bz2"
 
+LICENSE="MIT"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="test doc"
 
 RDEPEND=">=x11-libs/libxcb-1.9.1

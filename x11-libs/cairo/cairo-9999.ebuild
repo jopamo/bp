@@ -1,21 +1,23 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit eutils flag-o-matic autotools
+inherit flag-o-matic autotools
+
+DESCRIPTION="A vector graphics library with cross-device output support"
+HOMEPAGE="https://www.cairographics.org"
 
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://anongit.freedesktop.org/git/cairo"
-	KEYWORDS="amd64 arm64"
 else
 	SRC_URI="https://www.cairographics.org/releases/${P}.tar.xz"
 fi
 
-DESCRIPTION="A vector graphics library with cross-device output support"
-HOMEPAGE="https://www.cairographics.org"
 LICENSE="|| ( LGPL-2.1 MPL-1.1 )"
-SLOT="0"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
 IUSE="X aqua debug doc gles2 +glib opengl static-libs +svg utils valgrind xcb"
 
 RESTRICT="test"
@@ -107,9 +109,4 @@ src_configure() {
 		--enable-ps
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-src_install() {
-	default
-	find "${ED}" -name "*.la" -delete || die
 }

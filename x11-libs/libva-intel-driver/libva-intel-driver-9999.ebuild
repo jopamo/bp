@@ -1,27 +1,22 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools git-r3
 
 DESCRIPTION="HW video decode support for Intel integrated graphics"
 HOMEPAGE="https://github.com/01org/intel-vaapi-driver"
+EGIT_REPO_URI="https://github.com/01org/intel-vaapi-driver.git"
 
 LICENSE="MIT"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
-
-EGIT_REPO_URI="https://github.com/01org/intel-vaapi-driver.git"
 
 IUSE="wayland X"
 
-RDEPEND=">=x11-libs/libva-2.0.0:=[X?,wayland?,drm?]
+DEPEND=">=x11-libs/libva-2.0.0:=[X?,wayland?,drm?]
 	>=x11-libs/libdrm-2.4.52[video_cards_intel]
 	wayland? ( >=lib-media/mesa-9.1.6[egl] >=lib-dev/wayland-1.11 )"
-
-DEPEND="${RDEPEND}
-	dev-util/pkgconf"
-
 
 src_prepare() {
 	eautoreconf

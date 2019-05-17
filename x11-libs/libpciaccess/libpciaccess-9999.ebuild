@@ -1,20 +1,23 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit git-r3 autotools
 
 DESCRIPTION="Library providing generic access to the PCI bus and devices"
-IUSE="zlib"
-SLOT=0
 
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/libpciaccess"
-	KEYWORDS="amd64 arm64"
 else
 	SRC_URI="https://www.x.org/archive/individual/lib/${P}.tar.bz2"
 fi
+
+LICENSE="MIT"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
+IUSE="zlib"
 
 DEPEND="!<x11-app/xorg-server-1.5
 	zlib? (	>=lib-sys/zlib-1.2.8-r1:= )"
@@ -38,13 +41,4 @@ src_configure() {
 		--with-pciids-path=${EPREFIX}/usr/share/misc
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-src_install() {
-	default
-
-	if is_native_abi; then
-		dodir /usr/bin
-		${BASH} libtool --mode=install "$(type -P install)" -c scanpci/scanpci "${ED}"/usr/bin || die
-	fi
 }

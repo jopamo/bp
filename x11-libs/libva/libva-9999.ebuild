@@ -1,15 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools git-r3
 
 DESCRIPTION="Video Acceleration (VA) API for Linux"
 HOMEPAGE="https://01.org/linuxmedia/vaapi"
+EGIT_REPO_URI="https://github.com/01org/libva"
 
 LICENSE="MIT"
 SLOT="0/1"
-EGIT_REPO_URI="https://github.com/01org/libva"
 KEYWORDS="amd64 arm64"
 
 IUSE="+drm opengl wayland X utils"
@@ -37,14 +37,6 @@ PDEPEND="video_cards_intel? ( >=x11-libs/libva-intel-driver-2.0.0 )
 
 REQUIRED_USE="|| ( drm wayland X )
 		opengl? ( X )"
-
-MULTILIB_WRAPPED_HEADERS=(
-		/usr/include/va/va_backend_glx.h
-		/usr/include/va/va_x11.h
-		/usr/include/va/va_dri2.h
-		/usr/include/va/va_dricommon.h
-		/usr/include/va/va_glx.h
-)
 
 src_prepare() {
 	eautoreconf

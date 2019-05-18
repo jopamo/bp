@@ -1,9 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-
-inherit flag-o-matic libtool python-any-r1 xdg-utils autotools
+inherit flag-o-matic libtool python-any-r1 autotools
 
 DESCRIPTION="An OpenType text shaping engine"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/HarfBuzz"
@@ -15,11 +14,12 @@ else
 	SRC_URI="https://www.freedesktop.org/software/${PN}/release/${P}.tar.bz2"
 fi
 
-KEYWORDS="amd64 arm64"
 LICENSE="Old-MIT ISC icu"
-SLOT="0"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
 
 IUSE="+cairo debug fontconfig +glib icu +introspection static-libs test +truetype"
+
 REQUIRED_USE="introspection? ( glib )"
 
 RDEPEND="
@@ -35,8 +35,7 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconf
 	test? ( ${PYTHON_DEPS} )
 "
-# eautoreconf requires gobject-introspection-common
-# ragel needed if regenerating *.hh files from *.rl
+
 if [[ ${PV} = 9999 ]] ; then
 	DEPEND+="
 		>=lib-dev/gobject-introspection-common-1.34
@@ -53,9 +52,7 @@ pkg_setup() {
 
 src_prepare() {
 	default
-
 	xdg_environment_reset
-
 	eautoreconf
 
 	# failing test, https://bugs.freedesktop.org/show_bug.cgi?id=89190

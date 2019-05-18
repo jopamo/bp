@@ -27,7 +27,7 @@ RESTRICT="bindist strip"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 DEPEND="lib-media/taglib"
-RDEPEND="lib-sys/zlib[minizip]
+RDEPEND="app-compression/minizip
 	${PYTHON_DEPS}"
 
 QA_DESKTOP_FILE="usr/share/applications/plexmediamanager.desktop"

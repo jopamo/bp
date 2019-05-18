@@ -19,24 +19,6 @@ EXPORT_FUNCTIONS pkg_postinst pkg_postrm
 # Directory where .desktop files database is stored
 : ${MIMEINFO_DATABASE_DIR:="/usr/share/mime"}
 
-# @FUNCTION: xdg_environment_reset
-# @DESCRIPTION:
-# Clean up environment for clean builds.
-xdg_environment_reset() {
-	# Prepare XDG base directories
-	export XDG_DATA_HOME="${HOME}/.local/share"
-	export XDG_CONFIG_HOME="${HOME}/.config"
-	export XDG_CACHE_HOME="${HOME}/.cache"
-	export XDG_RUNTIME_DIR="${T}/run"
-	mkdir -p "${XDG_DATA_HOME}" "${XDG_CONFIG_HOME}" "${XDG_CACHE_HOME}" \
-		"${XDG_RUNTIME_DIR}" || die
-	# This directory needs to be owned by the user, and chmod 0700
-	# https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
-	chmod 0700 "${XDG_RUNTIME_DIR}" || die
-
-	unset DBUS_SESSION_BUS_ADDRESS
-}
-
 # @FUNCTION: xdg_desktop_database_update
 # @DESCRIPTION:
 # Updates the .desktop files database.

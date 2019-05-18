@@ -1,46 +1,45 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
+EAPI=7
 
 inherit python-r1
+
+DESCRIPTION="library and tools for managing linux kernel modules"
+HOMEPAGE="https://git.kernel.org/?p=utils/kernel/kmod/kmod.git"
 
 if [[ ${PV} == 9999* ]]; then
 	EGIT_REPO_URI="git://git.kernel.org/pub/scm/utils/kernel/${PN}/${PN}.git"
 	inherit autotools git-r3
-	KEYWORDS="amd64 arm64"
 else
 	SRC_URI="mirror://kernel/linux/utils/kernel/kmod/${P}.tar.xz"
 	inherit libtool
 fi
 
-DESCRIPTION="library and tools for managing linux kernel modules"
-HOMEPAGE="https://git.kernel.org/?p=utils/kernel/kmod/kmod.git"
-
 LICENSE="LGPL-2"
-SLOT="0"
-IUSE="debug doc lzma python static-libs +tools zlib"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
+IUSE="debug lzma python static-libs +tools zlib"
 
 RESTRICT="test"
 
-RDEPEND="!sys-app/module-init-tools
-	!sys-app/modutils
-	!<sys-app/openrc-0.13.8
-	!<sys-app/systemd-216-r3
+RDEPEND="
 	lzma? ( >=app-compression/xz-utils-5.0.4-r1 )
 	python? ( ${PYTHON_DEPS} )
-	zlib? ( >=lib-sys/zlib-1.2.6 )" #427130
+	zlib? ( >=lib-sys/zlib-1.2.6 )"
+
 DEPEND="${RDEPEND}
-	doc? ( dev-util/gtk-doc )
 	lzma? ( dev-util/pkgconf )
 	python? (
 		dev-python/cython[${PYTHON_USEDEP}]
 		dev-util/pkgconf
 		)
 	zlib? ( dev-util/pkgconf )"
+
 if [[ ${PV} == 9999* ]]; then
 	DEPEND="${DEPEND}
-		lib-dev/libxslt"
+		lib-dev/libxslt
+		app-text/docbook-xml-dtd:4.2"
 fi
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
@@ -49,11 +48,7 @@ src_prepare() {
 	default
 
 	if [ ! -e configure ]; then
-		if use doc; then
-			gtkdocize --copy --docdir libkmod/docs || die
-		else
-			touch libkmod/docs/gtk-doc.make
-		fi
+		touch libkmod/docs/gtk-doc.make
 		eautoreconf
 	else
 		elibtoolize
@@ -151,4 +146,6 @@ src_install() {
 
 	insinto /lib/modprobe.d
 	doins "${T}"/usb-load-ehci-first.conf #260139
+
+	cleanup_install
 }

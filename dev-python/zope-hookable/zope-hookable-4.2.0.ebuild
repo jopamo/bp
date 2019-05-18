@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
+EAPI=7
 
 inherit distutils-r1 flag-o-matic
 
@@ -13,9 +12,10 @@ HOMEPAGE="https://pypi.org/project/zope.interface/ https://github.com/zopefounda
 SRC_URI="mirror://pypi/${MY_PN:0:1}/${MY_PN}/${MY_P}.tar.gz"
 
 LICENSE="ZPL"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 IUSE="test"
+
 
 RDEPEND="
 	dev-python/namespace-zope[${PYTHON_USEDEP}]"

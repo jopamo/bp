@@ -80,7 +80,7 @@ esac
 # Reset various variables inherited from root's evironment to a reasonable
 # default for ebuilds to help avoid access violations and test failures.
 gnome2_environment_reset() {
-	xdg_environment_reset
+	[[ ${EAPI} == [7] ]] && xdg_environment_reset
 
 	# Respected by >=glib-2.30.1-r1
 	export G_HOME="${T}"

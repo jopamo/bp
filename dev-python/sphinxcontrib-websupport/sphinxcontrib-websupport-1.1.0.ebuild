@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
+EAPI=7
 
 inherit distutils-r1
 
@@ -10,8 +9,9 @@ HOMEPAGE="http://www.sphinx-doc.org"
 SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="BSD-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="test"
 
 RDEPEND="

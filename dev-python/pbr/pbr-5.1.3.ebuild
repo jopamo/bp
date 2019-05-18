@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
+EAPI=7
 
 inherit distutils-r1
 
@@ -10,13 +9,11 @@ HOMEPAGE="https://github.com/openstack-dev/pbr"
 SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="Apache-2.0"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 IUSE="test"
 
-# git is needed for tests, see https://bugs.launchpad.net/pbr/+bug/1326682 and https://bugs.gentoo.org/show_bug.cgi?id=561038
-# docutils is needed for sphinx exceptions... https://bugs.gentoo.org/show_bug.cgi?id=603848
 DEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	test? (

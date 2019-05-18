@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/numpy/numpy.git"
 EGIT_BRANCH="maintenance/$(ver_cut 1).$(ver_cut 2).x"
 
 LICENSE="BSD"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 IUSE="lapack test"

@@ -1,9 +1,9 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
+EAPI=7
 
 inherit distutils-r1
+
 MY_PN=pyRFC3339
 
 MY_P=${MY_PN}-${PV}
@@ -12,8 +12,9 @@ HOMEPAGE="https://github.com/kurtraschke/pyRFC3339"
 SRC_URI="mirror://pypi/${MY_PN:0:1}/${MY_PN}/${MY_P}.tar.gz"
 
 LICENSE="MIT"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="test"
 
 RDEPEND="dev-python/pytz[${PYTHON_USEDEP}]"

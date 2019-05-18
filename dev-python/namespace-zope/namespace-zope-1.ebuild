@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
+EAPI=7
 
 inherit python-r1
 
@@ -10,7 +9,7 @@ HOMEPAGE="https://wiki.gentoo.org/wiki/Project:Python/Namespace_packages"
 SRC_URI=""
 
 LICENSE="public-domain"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="dev-python/setuptools[${PYTHON_USEDEP}]

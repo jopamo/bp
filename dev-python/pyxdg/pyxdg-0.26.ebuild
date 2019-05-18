@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
+EAPI=7
 
 inherit distutils-r1
 
@@ -12,8 +11,9 @@ HOMEPAGE="https://freedesktop.org/wiki/Software/pyxdg https://cgit.freedesktop.o
 SRC_URI="https://github.com/takluyver/pyxdg/archive/rel-${PV}.tar.gz -> ${MY_P}.tar.gz"
 
 LICENSE="LGPL-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="test"
 
 DEPEND="

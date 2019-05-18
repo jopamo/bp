@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit flag-o-matic toolchain-funcs autotools git-r3
 
@@ -12,6 +12,7 @@ EGIT_BRANCH=maint
 LICENSE="GPL-2 BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="fuse static-libs"
 
 RDEPEND=">=sys-app/util-linux-2.16
@@ -56,9 +57,6 @@ src_install() {
 		root_libdir="${EPREFIX}/usr/lib64" \
 		DESTDIR="${D}" \
 		install
-
-	insinto /etc
-	doins "${FILESDIR}"/e2fsck.conf
 
 	rm -rf "${ED}"/usr/share/info "${ED}"/yes
 

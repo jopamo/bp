@@ -6,7 +6,7 @@ diff -urN a/Makefile b/Makefile
  PKG_CONFIG ?= pkg-config
  
 -SYSCONFDIR = /etc
-+SYSCONFDIR = ${EPREFIX}/etc
++SYSCONFDIR = "${EPREFIX}"/etc
  CONFFILE = $(SYSCONFDIR)/mdadm.conf
  CONFFILE2 = $(SYSCONFDIR)/mdadm/mdadm.conf
  MAILCMD =/usr/sbin/sendmail -t
@@ -15,12 +15,12 @@ diff -urN a/Makefile b/Makefile
  LDLIBS=-ldl
  
 -INSTALL = /usr/bin/install
-+INSTALL = ${EROOT}usr/bin/install
++INSTALL = "${EROOT}"/usr/bin/install
  DESTDIR =
 -BINDIR  = /sbin
 -MANDIR  = /usr/share/man
-+BINDIR  = ${EPREFIX}usr/sbin
-+MANDIR  = ${EPREFIX}usr/share/man
++BINDIR  = "${EPREFIX}"/usr/sbin
++MANDIR  = "${EPREFIX}"/usr/share/man
  MAN4DIR = $(MANDIR)/man4
  MAN5DIR = $(MANDIR)/man5
  MAN8DIR = $(MANDIR)/man8

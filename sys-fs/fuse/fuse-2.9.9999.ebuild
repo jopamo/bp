@@ -18,8 +18,9 @@ IUSE="test"
 filter-flags -flto
 
 src_prepare() {
+	ln -s "${EPREFIX}"/usr/share/gettext/config.rpath config.rpath
+	sed -i.bak -e "s/\/sbin/\/usr\/sbin/g" "configure.ac"
 	default
-	./makeconf.sh
 	eautoreconf
 }
 
@@ -34,3 +35,4 @@ src_configure() {
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
+

@@ -1,25 +1,27 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools
+
+DESCRIPTION="identify a file's format by scanning binary data for patterns"
+HOMEPAGE="https://www.darwinsys.com/file/"
 
 if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/file/file.git"
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=13ba1a3639f7a40f3bffbabf2737cbdde314faf4
+	SNAPSHOT=a0d5b0e4e9f97d74a9911e95cedd579852e25398
 	SRC_URI="https://github.com/file/file/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64"
 fi
 
-DESCRIPTION="identify a file's format by scanning binary data for patterns"
-HOMEPAGE="https://www.darwinsys.com/file/"
 
 LICENSE="BSD-2"
-SLOT="0"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
 IUSE="static-libs zlib"
 
 DEPEND="

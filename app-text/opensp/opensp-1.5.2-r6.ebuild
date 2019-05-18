@@ -1,6 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
+
 inherit flag-o-matic autotools
 
 MY_P=${P/opensp/OpenSP}
@@ -10,8 +11,9 @@ HOMEPAGE="http://openjade.sourceforge.net/"
 SRC_URI="mirror://sourceforge/openjade/${MY_P}.tar.gz"
 
 LICENSE="MIT"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="doc nls static-libs test"
 
 DEPEND="doc? (
@@ -27,7 +29,7 @@ DEPEND="doc? (
 S=${WORKDIR}/${MY_P}
 
 src_prepare() {
-	epatch "${FILESDIR}"/${P}-fix-segfault.patch
+	eapply "${FILESDIR}"/${P}-fix-segfault.patch
 	use prefix && eautoreconf
 }
 

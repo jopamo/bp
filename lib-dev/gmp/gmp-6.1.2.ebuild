@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="5"
+EAPI=7
 
 inherit flag-o-matic libtool
 
@@ -15,9 +15,9 @@ SRC_URI="ftp://ftp.gmplib.org/pub/${MY_P}/${MY_P}.tar.xz
 	doc? ( http://gmplib.org/${PN}-man-${MY_PV}.pdf )"
 
 LICENSE="|| ( LGPL-3+ GPL-2+ )"
-# The subslot reflects the C & C++ SONAMEs.
 SLOT="0/10.4"
 KEYWORDS="amd64 arm64"
+
 IUSE="+asm doc cxx pgo static-libs"
 
 DEPEND="sys-devel/m4
@@ -29,7 +29,7 @@ S=${WORKDIR}/${MY_P%a}
 src_prepare() {
 	elibtoolize
 
-	epatch "${FILESDIR}"/${PN}-6.1.0-noexecstack-detect.patch
+	eapply "${FILESDIR}"/${PN}-6.1.0-noexecstack-detect.patch
 
 	mv configure configure.wrapped || die
 	cat <<-\EOF > configure

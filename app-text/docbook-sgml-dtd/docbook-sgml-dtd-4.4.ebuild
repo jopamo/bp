@@ -24,13 +24,11 @@ sgml-catalog_cat_include "/etc/sgml/sgml-docbook-${PV}.cat" \
 
 src_unpack() {
 	unpack ${A}
-	epatch "${FILESDIR}"/${P}-catalog.diff
+	eapply "${FILESDIR}"/${P}-catalog.diff
 }
 
 src_install() {
 	insinto /usr/share/sgml/docbook/sgml-dtd-${PV}
 	doins *.dcl *.dtd *.mod || die "doins failed"
 	newins docbook.cat catalog || die "newins failed"
-
-	dodoc ChangeLog README
 }

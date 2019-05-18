@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
 inherit autotools sgml-catalog flag-o-matic toolchain-funcs
 
@@ -9,8 +9,9 @@ HOMEPAGE="http://openjade.sourceforge.net"
 SRC_URI="mirror://sourceforge/openjade/${P}.tar.gz"
 
 LICENSE="MIT"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="static-libs"
 
 RDEPEND="app-text/sgml-common
@@ -18,15 +19,19 @@ RDEPEND="app-text/sgml-common
 DEPEND="dev-lang/perl
 	${RDEPEND}"
 
+PATCHES=(
+			"${FILESDIR}"/${P}-deplibs.patch
+			"${FILESDIR}"/${P}-ldflags.patch
+			"${FILESDIR}"/${P}-msggen.pl.patch
+			"${FILESDIR}"/${P}-respect-ldflags.patch
+			"${FILESDIR}"/${P}-libosp-la.patch
+			"${FILESDIR}"/${P}-gcc46.patch
+			"${FILESDIR}"/${P}-no-undefined.patch
+			"${FILESDIR}"/${P}-wchar_t-uint.patch
+		)
+
 src_prepare() {
-	epatch "${FILESDIR}"/${P}-deplibs.patch
-	epatch "${FILESDIR}"/${P}-ldflags.patch
-	epatch "${FILESDIR}"/${P}-msggen.pl.patch
-	epatch "${FILESDIR}"/${P}-respect-ldflags.patch
-	epatch "${FILESDIR}"/${P}-libosp-la.patch
-	epatch "${FILESDIR}"/${P}-gcc46.patch
-	epatch "${FILESDIR}"/${P}-no-undefined.patch
-	epatch "${FILESDIR}"/${P}-wchar_t-uint.patch
+	default
 
 	# Please note!  Opts are disabled.  If you know what you're doing
 	# feel free to remove this line.  It may cause problems with

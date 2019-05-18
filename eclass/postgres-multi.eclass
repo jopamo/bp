@@ -16,7 +16,7 @@ EXPORT_FUNCTIONS pkg_setup src_prepare src_compile src_install src_test
 
 
 case ${EAPI:-0} in
-	5|6) ;;
+	6|7) ;;
 	*) die "Unsupported EAPI=${EAPI} (unknown) for ${ECLASS}" ;;
 esac
 
@@ -143,7 +143,7 @@ postgres-multi_src_prepare() {
 	done
 
 	case ${EAPI:-0} in
-		0|1|2|3|4|5) epatch_user ;;
+		0|1|2|3|4|5) eapply_user ;;
 		6) eapply_user ;;
 	esac
 

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 LIBTOOLIZE="true"
 WANT_LIBTOOL="none"
@@ -9,7 +9,7 @@ BASEVERSION="2.4.6"
 MY_P="${PN}-${BASEVERSION}"
 SNAPSHOT="20180724"
 
-inherit autotools epatch epunt-cxx unpacker prefix
+inherit autotools epunt-cxx unpacker prefix
 
 if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI="git://git.savannah.gnu.org/${PN}.git

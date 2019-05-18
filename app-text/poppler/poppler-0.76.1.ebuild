@@ -1,8 +1,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit cmake-utils flag-o-matic toolchain-funcs xdg-utils
+inherit cmake-utils flag-o-matic toolchain-funcs
+
+DESCRIPTION="PDF rendering library based on the xpdf-3.0 code base"
+HOMEPAGE="https://poppler.freedesktop.org/"
 
 if [[ "${PV}" == "9999" ]] ; then
 	inherit git-r3
@@ -11,16 +14,14 @@ if [[ "${PV}" == "9999" ]] ; then
 else
 	SRC_URI="https://poppler.freedesktop.org/${P}.tar.xz"
 	KEYWORDS="amd64 arm64"
-	SLOT="0/73"   # CHECK THIS WHEN BUMPING!!! SUBSLOT IS libpoppler.so SOVERSION
 fi
 
-DESCRIPTION="PDF rendering library based on the xpdf-3.0 code base"
-HOMEPAGE="https://poppler.freedesktop.org/"
-
 LICENSE="GPL-2"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
 IUSE="cairo cjk curl cxx debug doc +introspection +jpeg +jpeg2k +lcms png qt5 tiff +utils"
 
-# No test data provided
 RESTRICT="test"
 
 COMMON_DEPEND="
@@ -78,6 +79,7 @@ src_prepare() {
 
 src_configure() {
 	xdg_environment_reset
+
 	local mycmakeargs=(
 		-DBUILD_GTK_TESTS=OFF
 		-DBUILD_QT5_TESTS=OFF

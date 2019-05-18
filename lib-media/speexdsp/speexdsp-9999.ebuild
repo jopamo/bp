@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools flag-o-matic git-r3
 
@@ -9,8 +9,9 @@ HOMEPAGE="https://www.speex.org/"
 EGIT_REPO_URI="https://github.com/xiph/speexdsp.git"
 
 LICENSE="BSD"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="static-libs"
 
 src_prepare() {
@@ -18,14 +19,9 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	append-lfs-flags
 
 	ECONF_SOURCE="${S}" econf \
 		$(use_enable static-libs static)
-}
-
-multilib_src_install_all() {
-	default
-	find "${D}" -name '*.la' -delete || die
 }

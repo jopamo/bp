@@ -84,7 +84,7 @@ case ${EAPI} in
 	*) die "EAPI=${EAPI:-0} is not supported" ;;
 esac
 
-inherit toolchain-funcs ninja-utils flag-o-matic multiprocessing xdg-utils
+inherit toolchain-funcs ninja-utils flag-o-matic multiprocessing
 
 case ${EAPI} in
 	[56])
@@ -501,7 +501,6 @@ cmake-utils_src_configure() {
 
 	_cmake_check_build_dir
 
-	# Fix xdg collision with sandbox
 	xdg_environment_reset
 
 	# @SEE CMAKE_BUILD_TYPE

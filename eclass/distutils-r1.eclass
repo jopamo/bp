@@ -16,7 +16,7 @@ esac
 if [[ ! ${_DISTUTILS_R1} ]]; then
 
 [[ ${EAPI} == [45] ]] && inherit eutils
-[[ ${EAPI} == [56] ]] && inherit xdg-utils
+
 inherit multiprocessing toolchain-funcs
 
 if [[ ! ${DISTUTILS_SINGLE_IMPL} ]]; then
@@ -572,7 +572,8 @@ distutils-r1_src_prepare() {
 
 distutils-r1_src_configure() {
 	python_export_utf8_locale
-	[[ ${EAPI} == [56] ]] && xdg_environment_reset # Bug 577704
+
+	xdg_environment_reset
 
 	if declare -f python_configure >/dev/null; then
 		_distutils-r1_run_foreach_impl python_configure

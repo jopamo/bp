@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools flag-o-matic
 
@@ -9,9 +9,11 @@ HOMEPAGE="https://www.gnu.org/software/parted"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 
 LICENSE="GPL-3"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
-IUSE="+debug device-mapper nls readline static-libs"
+
+IUSE="debug device-mapper nls readline static-libs"
+
 RESTRICT="test"
 
 RDEPEND="
@@ -57,8 +59,6 @@ src_prepare() {
 }
 
 src_configure() {
-	use elibc_uclibc && append-libs -liconv
-
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -75,9 +75,4 @@ src_configure() {
 		--disable-silent-rules
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-src_install() {
-	default
-	find "${D}" -name '*.la' -delete || die
 }

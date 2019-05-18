@@ -1,7 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-inherit eutils linux-info toolchain-funcs libtool
+EAPI=7
+
+inherit linux-info libtool
 
 MY_PN=${PN/3g/-3g}
 MY_P=${MY_PN}_ntfsprogs-${PV}
@@ -11,9 +12,9 @@ HOMEPAGE="http://www.tuxera.com/community/ntfs-3g-download/"
 SRC_URI="http://tuxera.com/opensource/${MY_P}.tgz"
 
 LICENSE="GPL-2"
-# The subslot matches the SONAME major #.
 SLOT="0/87"
 KEYWORDS="amd64 arm64"
+
 IUSE="acl debug +external-fuse ntfsdecrypt +ntfsprogs static-libs suid xattr"
 
 RDEPEND="!<sys-app/util-linux-2.20.1-r2
@@ -28,8 +29,6 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconf"
 
 S="${WORKDIR}/${MY_P}"
-
-DOCS="AUTHORS ChangeLog CREDITS README"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-2014.2.15-no-split-usr.patch
@@ -59,7 +58,6 @@ src_prepare() {
 }
 
 src_configure() {
-	tc-ld-disable-gold
 	econf \
 		--prefix="${EPREFIX}"/usr \
 		--exec-prefix="${EPREFIX}"/usr \

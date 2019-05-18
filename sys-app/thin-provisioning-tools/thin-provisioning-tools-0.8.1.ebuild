@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools flag-o-matic
 
@@ -9,18 +9,17 @@ HOMEPAGE="https://github.com/jthornber/thin-provisioning-tools"
 SRC_URI="https://github.com/jthornber/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-3"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="static test"
 
-LIB_DEPEND="lib-dev/expat[static-libs(+)]
-	lib-dev/libaio[static-libs(+)]"
-RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
-# || ( ) is a non-future proof workaround for Portage unefficiency wrt #477050
-DEPEND="${RDEPEND}
-	static? ( ${LIB_DEPEND} )
+DEPEND="
+	static? ( 	lib-dev/expat[static-libs(+)]
+				lib-dev/libaio[static-libs(+)]
+			)
 	test? (
-		|| ( dev-lang/ruby:2.9 dev-lang/ruby:2.8 dev-lang/ruby:2.7 dev-lang/ruby:2.6 dev-lang/ruby:2.5 dev-lang/ruby:2.4 dev-lang/ruby:2.3 dev-lang/ruby:2.2 dev-lang/ruby:2.1 )
+		dev-lang/ruby
 		>=dev-cpp/gmock-1.6
 		>=dev-cpp/gtest-1.6
 		dev-util/cucumber
@@ -58,4 +57,5 @@ src_test() {
 
 src_install() {
 	emake DESTDIR="${D}" DATADIR="${ED%/}/usr/share" install
+	cleanup_install
 }

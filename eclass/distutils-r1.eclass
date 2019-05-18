@@ -148,8 +148,8 @@ distutils-r1_python_prepare_all() {
 		if [[ ${EAPI} != [45] ]]; then
 			default
 		else
-			[[ ${PATCHES} ]] && epatch "${PATCHES[@]}"
-			epatch_user
+			[[ ${PATCHES} ]] && eapply "${PATCHES[@]}"
+			eapply_user
 		fi
 	fi
 

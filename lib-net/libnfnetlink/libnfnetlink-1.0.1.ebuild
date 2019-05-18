@@ -1,6 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=4
+EAPI=7
+
 inherit linux-info
 
 DESCRIPTION="the low-level library for netfilter related kernel/userspace communication"
@@ -15,12 +16,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
-DOCS=( README )
 PATCHES=( "${DISTDIR}/${PATCH_FN}" )
-
-src_prepare() {
-	epatch "${PATCHES[@]}"
-}
 
 pkg_setup() {
 	linux-info_pkg_setup

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
 inherit toolchain-funcs
 
@@ -9,11 +9,11 @@ HOMEPAGE="https://sourceforge.net/projects/crunch-wordlist/"
 SRC_URI="mirror://sourceforge/crunch-wordlist/crunch-wordlist/${P}.tgz"
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 src_prepare() {
-	epatch_user
+	eapply_user
 }
 
 src_compile() {

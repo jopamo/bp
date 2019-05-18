@@ -185,9 +185,9 @@ perl-module_src_prepare() {
 	debug-print-function $FUNCNAME "$@"
 
 	if [[ ${EAPI:-0} == 5 ]] ; then
-		[[ ${PATCHES[@]} ]] && epatch "${PATCHES[@]}"
+		[[ ${PATCHES[@]} ]] && eapply "${PATCHES[@]}"
 		debug-print "$FUNCNAME: applying user patches"
-		epatch_user
+		eapply_user
 	else
 		default
 	fi

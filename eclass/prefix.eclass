@@ -116,7 +116,7 @@ hprefixify() {
 # copies the files to ${T}, prefixies it, echos the new file.
 # @EXAMPLE:
 # doexe "$(prefixify_ro "${FILESDIR}"/fix_libtool_files.sh)"
-# epatch "$(prefixify_ro "${FILESDIR}"/${PN}-4.0.2-path.patch)"
+# eapply "$(prefixify_ro "${FILESDIR}"/${PN}-4.0.2-path.patch)"
 prefixify_ro() {
 	if [[ -e $1 ]] ; then
 		local f=${1##*/}

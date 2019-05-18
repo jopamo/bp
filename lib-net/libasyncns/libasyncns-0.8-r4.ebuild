@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools flag-o-matic libtool
 
@@ -19,9 +19,9 @@ DEPEND="doc? ( app-text/doxygen )"
 
 src_prepare() {
 	# fix libdir in pkgconfig file
-	epatch "${FILESDIR}/${P}-libdir.patch"
+	eapply "${FILESDIR}/${P}-libdir.patch"
 	# fix configure check for res_query
-	epatch "${FILESDIR}/${P}-configure-res_query.patch"
+	eapply "${FILESDIR}/${P}-configure-res_query.patch"
 	eautoreconf
 	default
 }

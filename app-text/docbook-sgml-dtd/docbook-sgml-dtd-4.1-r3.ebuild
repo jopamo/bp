@@ -3,6 +3,7 @@
 inherit sgml-catalog
 
 MY_P="docbk41"
+
 DESCRIPTION="Docbook SGML DTD 4.1"
 HOMEPAGE="http://docbook.org/sgml/"
 SRC_URI="http://www.oasis-open.org/docbook/sgml/${PV}/${MY_P}.zip"
@@ -24,13 +25,11 @@ sgml-catalog_cat_include "/etc/sgml/sgml-docbook-${PV}.cat" \
 
 src_unpack() {
 	unpack ${A}
-	epatch "${FILESDIR}"/${P}-catalog.diff
+	eapply "${FILESDIR}"/${P}-catalog.diff
 }
 
 src_install() {
 	insinto /usr/share/sgml/docbook/sgml-dtd-${PV}
 	doins *.dcl *.dtd *.mod || die "doins failed"
 	newins docbook.cat catalog || die "newins failed"
-
-	dodoc *.txt
 }

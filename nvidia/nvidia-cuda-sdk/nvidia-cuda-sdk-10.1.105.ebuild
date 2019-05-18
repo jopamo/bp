@@ -12,8 +12,9 @@ HOMEPAGE="https://developer.nvidia.com/cuda-zone"
 SRC_URI="https://developer.nvidia.com/compute/cuda/${MYD}/Prod/local_installers/cuda_${PV}_${DRIVER_PV}_linux.run -> cuda_${PV}_${DRIVER_PV}_linux.run"
 
 LICENSE="CUDPP"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="+cuda debug +doc examples opencl mpi"
 
 RDEPEND="
@@ -52,7 +53,6 @@ pkg_setup() {
 
 src_prepare() {
 	export RAWLDFLAGS="$(raw-ldflags)"
-#	epatch "${FILESDIR}"/${P}-asneeded.patch
 
 	local file
 	while IFS="" read -d $'\0' -r file; do

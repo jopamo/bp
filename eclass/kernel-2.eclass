@@ -4,10 +4,9 @@ PYTHON_COMPAT=( python3_7 )
 
 inherit toolchain-funcs python-any-r1
 
-[[ ${EAPI:-0} == [012345] ]] && inherit epatch
-[[ ${EAPI:-0} == [0123456] ]] && inherit estack
+[[ ${EAPI:-0} == [01234567] ]] && inherit estack
 case ${EAPI:-0} in
-	2|3|4|5|6|7)
+	6|7)
 		EXPORT_FUNCTIONS src_{unpack,prepare,compile,install,test} \
 			pkg_{setup,preinst,postinst,postrm} ;;
 	*) die "${ECLASS}: EAPI ${EAPI} not supported" ;;
@@ -935,7 +934,6 @@ kernel-2_src_prepare() {
 
 	# apply any user patches
 	case ${EAPI:-0} in
-		0|1|2|3|4|5) epatch_user ;;
 		6|7) eapply_user ;;
 	esac
 }

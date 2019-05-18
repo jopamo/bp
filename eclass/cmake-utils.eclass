@@ -451,10 +451,10 @@ cmake-utils_src_prepare() {
 		_cmake_cleanup_cmake
 	else
 		debug-print "$FUNCNAME: PATCHES=$PATCHES"
-		[[ ${PATCHES[@]} ]] && epatch "${PATCHES[@]}"
+		[[ ${PATCHES[@]} ]] && eapply "${PATCHES[@]}"
 
 		debug-print "$FUNCNAME: applying user patches"
-		epatch_user
+		eapply_user
 	fi
 
 	popd > /dev/null || die

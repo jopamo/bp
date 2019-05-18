@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
+EAPI=7
 
 inherit meson git-r3 python-r1 flag-o-matic
 
@@ -10,7 +9,7 @@ HOMEPAGE="https://wiki.gnome.org/Projects/PyGObject"
 EGIT_REPO_URI="https://github.com/GNOME/pygobject.git"
 
 LICENSE="LGPL-2.1+"
-SLOT="3"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 REQUIRED_USE="

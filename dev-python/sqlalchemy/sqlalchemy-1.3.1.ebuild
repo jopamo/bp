@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
+EAPI=7
 
 inherit distutils-r1 eutils flag-o-matic
 
@@ -13,9 +12,9 @@ HOMEPAGE="http://www.sqlalchemy.org/ https://pypi.python.org/pypi/SQLAlchemy"
 SRC_URI="mirror://pypi/${MY_P:0:1}/${MY_PN}/${MY_P}.tar.gz"
 
 LICENSE="MIT"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
-IUSE="doc examples +sqlite test"
+IUSE="+sqlite test"
 
 REQUIRED_USE="test? ( sqlite )"
 
@@ -56,13 +55,6 @@ python_test() {
 	# "${PYTHON}" sqla_nose.py || die "Testsuite failed under ${EPYTHON}"
 	py.test --verbose test || die "Testsuite failed under ${EPYTHON}"
 	popd > /dev/null
-}
-
-python_install_all() {
-	use doc && HTML_DOCS=( doc/. )
-	use examples && dodoc -r examples
-
-	distutils-r1_python_install_all
 }
 
 pkg_postinst() {

@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
+EAPI=7
 
 inherit distutils-r1
 
@@ -10,13 +9,13 @@ HOMEPAGE="https://bitbucket.org/mchaput/whoosh/wiki/Home/ https://pypi.python.or
 SRC_URI="mirror://pypi/W/${PN^}/${P^}.tar.gz"
 
 LICENSE="BSD-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
-IUSE="doc test"
+
+IUSE="test"
 
 DEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
-	doc? ( dev-python/sphinx )
 	test? ( dev-python/pytest[${PYTHON_USEDEP}] )"
 
 S="${WORKDIR}/${P^}"
@@ -35,16 +34,7 @@ python_prepare_all() {
 	distutils-r1_python_prepare_all
 }
 
-python_compile_all() {
-	# https://bitbucket.org/mchaput/whoosh/issue/403/
-	if use doc; then
-		sphinx-build -b html -c docs/source/ docs/source/ docs/source/build/html || die
-		HTML_DOCS=( docs/source/build/html/. )
-	fi
-}
 
 python_test() {
-	# https://bitbucket.org/mchaput/whoosh/issue/412/tarball-of-whoosh-270-pypi-missing-english
-	# tarball missing a file english-words.10.gz which when added sees all tests pass.
 	esetup.py test
 }

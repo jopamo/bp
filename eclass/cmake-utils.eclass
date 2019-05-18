@@ -501,7 +501,7 @@ cmake-utils_src_configure() {
 
 	_cmake_check_build_dir
 
-	xdg_environment_reset
+	[[ ${EAPI} == [7] ]] && xdg_environment_reset
 
 	# @SEE CMAKE_BUILD_TYPE
 	if [[ ${CMAKE_BUILD_TYPE} = 1g4 ]]; then

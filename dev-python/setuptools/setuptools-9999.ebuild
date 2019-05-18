@@ -16,7 +16,8 @@ else
 fi
 
 LICENSE="MIT"
-SLOT="0"
+SLOT="0/1"
+
 IUSE="test"
 
 DEPEND="test? (

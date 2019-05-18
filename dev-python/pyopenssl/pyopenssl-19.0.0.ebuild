@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
+EAPI=7
 
 inherit distutils-r1 flag-o-matic
 
@@ -17,18 +16,15 @@ HOMEPAGE="
 SRC_URI="mirror://pypi/${MY_PN:0:1}/${MY_PN}/${MY_P}.tar.gz"
 
 LICENSE="Apache-2.0"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="doc examples test"
 
 RDEPEND="
 	>=dev-python/six-1.5.2[${PYTHON_USEDEP}]
 	>=dev-python/cryptography-2.1.4[${PYTHON_USEDEP}]"
 DEPEND="${RDEPEND}
-	doc? (
-		dev-python/sphinx[${PYTHON_USEDEP}]
-		dev-python/sphinx_rtd_theme[${PYTHON_USEDEP}]
-	)
 	test? (
 		virtual/python-cffi[${PYTHON_USEDEP}]
 		dev-python/flaky[${PYTHON_USEDEP}]
@@ -43,21 +39,6 @@ python_prepare_all() {
 	distutils-r1_python_prepare_all
 }
 
-python_compile_all() {
-	use doc && emake -C doc html
-}
-
 python_test() {
 	TZ=UTC py.test -v || die "Testing failed with ${EPYTHON}" # Fixes bug #627530
-}
-
-python_install_all() {
-	use doc && local HTML_DOCS=( doc/_build/html/. )
-	if use examples ; then
-		docinto examples
-		dodoc -r examples/*
-		docompress -x /usr/share/doc/${PF}/examples
-	fi
-
-	distutils-r1_python_install_all
 }

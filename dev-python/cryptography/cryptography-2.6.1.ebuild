@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
+EAPI=7
 
 inherit distutils-r1 flag-o-matic
 
@@ -10,8 +9,9 @@ HOMEPAGE="https://github.com/pyca/cryptography/ https://pypi.python.org/pypi/cry
 SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="|| ( Apache-2.0 BSD )"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="test"
 
 RDEPEND="
@@ -33,8 +33,6 @@ DEPEND="${RDEPEND}
 		>=dev-python/pytest-2.9.0[${PYTHON_USEDEP}]
 		dev-python/pytz[${PYTHON_USEDEP}]
 	)"
-
-DOCS=( AUTHORS.rst CONTRIBUTING.rst README.rst )
 
 python_configure_all() {
 	append-cflags $(test-flags-CC -pthread)

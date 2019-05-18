@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
+EAPI=7
 
 inherit distutils-r1
 
@@ -11,11 +10,11 @@ HOMEPAGE="https://github.com/wbond/asn1crypto/ https://pypi.python.org/pypi/asn1
 SRC_URI="https://github.com/wbond/asn1crypto/archive/${PV}.tar.gz -> ${P}.gh.tar.gz"
 
 LICENSE="MIT"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="test"
 
-RDEPEND=""
 DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"
 
 python_test() {

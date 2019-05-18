@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
+EAPI=7
 
 inherit distutils-r1
 
@@ -10,9 +9,12 @@ HOMEPAGE="http://python-requests.org/"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="Apache-2.0"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="socks5 +ssl"
+
+RESTRICT="test"
 
 RDEPEND="
 	>=dev-python/certifi-2017.4.17[${PYTHON_USEDEP}]
@@ -30,5 +32,3 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
 "
-
-RESTRICT="test"

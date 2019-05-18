@@ -2,14 +2,14 @@
 
 EAPI=7
 
-inherit distutils-r1 eutils git-r3
+inherit distutils-r1 git-r3
 
 DESCRIPTION="A Python templating language"
 HOMEPAGE="http://www.makotemplates.org/ https://pypi.python.org/pypi/Mako"
 EGIT_REPO_URI="https://github.com/zzzeek/mako.git"
 
 LICENSE="MIT"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 IUSE="test"

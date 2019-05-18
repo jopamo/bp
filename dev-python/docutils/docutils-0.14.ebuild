@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
+EAPI=7
 
 inherit distutils-r1
 
@@ -10,7 +9,7 @@ HOMEPAGE="http://docutils.sourceforge.net/ https://pypi.python.org/pypi/docutils
 SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
 
 LICENSE="BSD-2 GPL-3 public-domain"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 DEPEND="dev-python/pygments[${PYTHON_USEDEP}]"
@@ -42,8 +41,4 @@ python_install() {
 
 	# Install tools.
 	python_doscript tools/{buildhtml,quicktest}.py
-}
-
-python_install_all() {
-	distutils-r1_python_install_all
 }

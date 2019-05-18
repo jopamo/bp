@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils autotools git-r3
+inherit autotools git-r3
 
 DESCRIPTION="A portable fork of NaCl, a higher-level cryptographic library"
 HOMEPAGE="https://github.com/jedisct1/libsodium"

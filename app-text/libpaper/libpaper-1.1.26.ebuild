@@ -2,7 +2,7 @@
 
 EAPI=4
 
-inherit eutils autotools
+inherit autotools
 
 DESCRIPTION="Library for handling paper characteristics"
 HOMEPAGE="http://packages.debian.org/unstable/source/libpaper"

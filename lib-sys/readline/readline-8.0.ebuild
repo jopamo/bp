@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit eutils toolchain-funcs flag-o-matic
+inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="Another cute console display library"
 HOMEPAGE="https://tiswww.case.edu/php/chet/readline/rltop.html"
@@ -11,6 +11,7 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0/8"  # subslot matches SONAME major
 KEYWORDS="amd64 arm64"
+
 IUSE="static-libs utils"
 
 DEPEND=">=lib-sys/ncurses-5.9-r3:0=[static-libs?]

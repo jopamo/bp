@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit sgml-catalog eutils
+inherit sgml-catalog
 
 MY_P="docbook-${PV}"
 DESCRIPTION="Docbook SGML DTD 4.3"

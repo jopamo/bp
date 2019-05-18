@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit autotools toolchain-funcs eutils
+inherit autotools toolchain-funcs
 
 DESCRIPTION="Transport Independent RPC library (SunRPC replacement)"
 HOMEPAGE="http://libtirpc.sourceforge.net/"
@@ -11,6 +11,7 @@ SRC_URI="https://downloads.sourceforge.net/libtirpc/${P}.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0/3" # subslot matches SONAME major
 KEYWORDS="amd64 arm64"
+
 IUSE="ipv6 static-libs"
 
 DEPEND="app-compression/xz-utils

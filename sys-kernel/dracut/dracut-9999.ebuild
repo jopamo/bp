@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit eutils linux-info toolchain-funcs systemd
+inherit linux-info toolchain-funcs systemd
 
 if [[ ${PV} == 9999 ]] ; then
 	inherit git-r3
@@ -17,9 +17,11 @@ DESCRIPTION="Generic initramfs generation tool"
 HOMEPAGE="https://dracut.wiki.kernel.org"
 
 LICENSE="GPL-2"
-SLOT="0"
-IUSE="debug"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
+IUSE="debug"
+
 RESTRICT="test"
 
 CDEPEND="sys-app/systemd
@@ -40,8 +42,6 @@ DEPEND="${CDEPEND}
 	app-text/docbook-xml-dtd:4.5
 	>=app-text/docbook-xsl-stylesheets-1.75.2
 	"
-
-QA_MULTILIB_PATHS="usr/lib/dracut/.*"
 
 src_configure() {
 	local myconf=(

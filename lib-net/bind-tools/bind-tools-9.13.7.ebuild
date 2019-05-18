@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils autotools flag-o-matic toolchain-funcs
+inherit autotools flag-o-matic toolchain-funcs
 
 MY_PN=${PN//-tools}
 MY_PV=${PV/_p/-P}

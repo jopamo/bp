@@ -1,25 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: gnome2-utils.eclass
-# @MAINTAINER:
-# gnome@gentoo.org
-# @SUPPORTED_EAPIS: 0 1 2 3 4 5 6 7
-# @BLURB: Auxiliary functions commonly used by Gnome packages.
-# @DESCRIPTION:
-# This eclass provides a set of auxiliary functions needed by most Gnome
-# packages. It may be used by non-Gnome packages as needed for handling various
-# Gnome stack related functions such as:
-#  * GSettings schemas management
-#  * GConf schemas management
-#  * scrollkeeper (old Gnome help system) management
-
-[[ ${EAPI:-0} == [0123456] ]] && inherit eutils
-
-case "${EAPI:-0}" in
-	0|1|2|3|4|5|6|7) ;;
-	*) die "EAPI=${EAPI} is not supported" ;;
-esac
-
 # @ECLASS-VARIABLE: GCONFTOOL_BIN
 # @INTERNAL
 # @DESCRIPTION:

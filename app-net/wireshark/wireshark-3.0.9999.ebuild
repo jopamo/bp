@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake-utils eutils fcaps flag-o-matic qmake-utils user xdg-utils git-r3
+inherit cmake-utils fcaps flag-o-matic qmake-utils user xdg-utils git-r3
 
 DESCRIPTION="A network protocol analyzer formerly known as ethereal"
 HOMEPAGE="https://www.wireshark.org/"

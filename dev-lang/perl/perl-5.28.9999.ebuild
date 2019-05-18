@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit eutils flag-o-matic toolchain-funcs multiprocessing git-r3
+inherit flag-o-matic toolchain-funcs multiprocessing git-r3
 
 DESCRIPTION="Larry Wall's Practical Extraction and Report Language"
 

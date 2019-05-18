@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools eutils git-r3 flag-o-matic
+inherit autotools git-r3 flag-o-matic
 
 DESCRIPTION="Library to execute a function when a specific event occurs on a file descriptor"
 HOMEPAGE="http://libevent.org/"

@@ -1,24 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: perl-module.eclass
-# @MAINTAINER:
-# perl@gentoo.org
-# @AUTHOR:
-# Seemant Kulleen <seemant@gentoo.org>
-# Andreas K. Hüttel <dilfridge@gentoo.org>
-# @BLURB: eclass for installing Perl module distributions
-# @DESCRIPTION:
-# The perl-module eclass is designed to allow easier installation of Perl
-# module distributions, and their incorporation into the Gentoo Linux system.
-# All exported functions from perl-functions.eclass (inherited here)
-# explicitly also belong to the interface of perl-module.eclass.
-# If your package does not use any Perl-specific build system (as, e.g.,
-# ExtUtils::MakeMaker or Module::Build), we recommend to use perl-functions.eclass
-# instead.
-
 case ${EAPI:-0} in
 	5)
-		inherit eutils multiprocessing unpacker perl-functions
+		inherit multiprocessing unpacker perl-functions
 		PERL_EXPF="src_unpack src_prepare src_configure src_compile src_test src_install"
 		;;
 	6)

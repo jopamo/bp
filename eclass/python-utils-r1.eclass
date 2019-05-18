@@ -1,23 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-
-# @ECLASS: python-utils-r1.eclass
-# @MAINTAINER:
-# Python team <python@gentoo.org>
-# @AUTHOR:
-# Author: Michał Górny <mgorny@gentoo.org>
-# Based on work of: Krzysztof Pawlik <nelchael@gentoo.org>
-# @SUPPORTED_EAPIS: 0 1 2 3 4 5 6 7
-# @BLURB: Utility functions for packages with Python parts.
-# @DESCRIPTION:
-# A utility eclass providing functions to query Python implementations,
-# install Python modules and scripts.
-#
-# This eclass does not set any metadata variables nor export any phase
-# functions. It can be inherited safely.
-#
-# For more information, please see the wiki:
-# https://wiki.gentoo.org/wiki/Project:Python/python-utils-r1
 
 case "${EAPI:-0}" in
 	0|1|2|3|4|5|6|7)
@@ -33,7 +14,6 @@ fi
 
 if [[ ! ${_PYTHON_UTILS_R1} ]]; then
 
-[[ ${EAPI:-0} == [012345] ]] && inherit eutils
 inherit toolchain-funcs
 
 # @ECLASS-VARIABLE: _PYTHON_ALL_IMPLS

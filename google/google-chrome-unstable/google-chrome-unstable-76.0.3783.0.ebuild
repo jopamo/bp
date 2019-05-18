@@ -2,7 +2,7 @@
 
 EAPI="6"
 
-inherit linux-info eutils gnome2-utils unpacker xdg-utils
+inherit linux-info gnome2-utils unpacker xdg-utils
 
 DESCRIPTION="The web browser from Google"
 HOMEPAGE="https://www.google.com/chrome"

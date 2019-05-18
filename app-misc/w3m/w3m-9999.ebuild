@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools flag-o-matic eutils prefix git-r3
+inherit autotools flag-o-matic prefix git-r3
 
 DESCRIPTION="Text based WWW browser, supports tables and frames"
 HOMEPAGE="https://github.com/tats/w3m"

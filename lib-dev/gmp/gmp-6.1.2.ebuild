@@ -2,7 +2,7 @@
 
 EAPI="5"
 
-inherit flag-o-matic eutils libtool
+inherit flag-o-matic libtool
 
 MY_PV=${PV/_p*}
 MY_PV=${MY_PV/_/-}

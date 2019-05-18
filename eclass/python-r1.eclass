@@ -22,7 +22,6 @@ elif [[ ${_PYTHON_ANY_R1} ]]; then
 	die 'python-r1.eclass can not be used with python-any-r1.eclass.'
 fi
 
-[[ ${EAPI} == [45] ]] && inherit eutils
 inherit multibuild python-utils-r1
 
 fi

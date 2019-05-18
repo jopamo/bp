@@ -4,7 +4,7 @@ EAPI=7
 
 RESTRICT="test"
 
-inherit eutils flag-o-matic python-single-r1 toolchain-funcs
+inherit flag-o-matic python-single-r1 toolchain-funcs
 
 MY_PV="$(ver_rs 1- _)"
 

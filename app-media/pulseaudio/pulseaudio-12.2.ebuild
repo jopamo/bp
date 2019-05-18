@@ -2,14 +2,14 @@
 
 EAPI=7
 
-inherit autotools eutils flag-o-matic gnome2-utils linux-info systemd user
+inherit autotools flag-o-matic gnome2-utils linux-info systemd user
 
 DESCRIPTION="A networked sound server with an advanced plugin system"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/PulseAudio/"
 SRC_URI="https://freedesktop.org/software/pulseaudio/releases/${P}.tar.xz"
 
 LICENSE="!gdbm? ( LGPL-2.1 ) gdbm? ( GPL-2 ) equalizer? ( AGPL-3+ )"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 IUSE="+alsa +alsa-plugin +asyncns bluetooth +caps dbus doc equalizer +gdbm +glib

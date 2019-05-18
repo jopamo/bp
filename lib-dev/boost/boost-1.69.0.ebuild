@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit eutils flag-o-matic multiprocessing python-r1 toolchain-funcs
+inherit flag-o-matic multiprocessing python-r1 toolchain-funcs
 
 MY_P="${PN}_$(ver_rs 1- _)"
 MAJOR_V="$(ver_cut 1-2)"

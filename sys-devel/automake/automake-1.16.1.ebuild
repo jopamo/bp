@@ -2,8 +2,6 @@
 
 EAPI=7
 
-inherit eutils
-
 DESCRIPTION="Used to generate Makefile.in from Makefile.am"
 HOMEPAGE="https://www.gnu.org/software/automake/"
 

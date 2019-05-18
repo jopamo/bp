@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils toolchain-funcs
+inherit toolchain-funcs
 
 DESCRIPTION="Minimalistic netlink library"
 HOMEPAGE="http://netfilter.org/projects/libmnl"

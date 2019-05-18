@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils autotools git-r3
+inherit autotools git-r3
 
 DESCRIPTION="Parse Options - Command line parser"
 HOMEPAGE="http://rpm5.org/"

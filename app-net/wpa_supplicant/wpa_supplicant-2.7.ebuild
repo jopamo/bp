@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils qmake-utils systemd toolchain-funcs flag-o-matic
+inherit qmake-utils systemd toolchain-funcs flag-o-matic
 
 DESCRIPTION="IEEE 802.1X/WPA supplicant for secure wireless transfers"
 HOMEPAGE="https://w1.fi/wpa_supplicant/"

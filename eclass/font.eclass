@@ -1,12 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: font.eclass
-# @MAINTAINER:
-# fonts@gentoo.org
-# @BLURB: Eclass to make font installation uniform
-
-inherit eutils
-
 EXPORT_FUNCTIONS pkg_setup src_install pkg_postinst pkg_postrm
 
 # @ECLASS-VARIABLE: FONT_SUFFIX

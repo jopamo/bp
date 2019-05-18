@@ -10,9 +10,6 @@
 
 if [[ -z ${_EPUNT_CXX_ECLASS} ]]; then
 
-# eutils for eqawarn
-inherit eutils
-
 DEPEND=">=app-portage/elt-patches-20170317"
 
 # @FUNCTION: epunt_cxx

@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools eutils flag-o-matic libtool
+inherit autotools flag-o-matic libtool
 
 DESCRIPTION="C library for executing name service queries asynchronously"
 HOMEPAGE="http://0pointer.de/lennart/projects/libasyncns/"

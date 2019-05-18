@@ -11,7 +11,7 @@ _FULL_VERSION="${PV}.${MINOR_VERSION}"
 
 URI="https://downloads.plex.tv/plex-media-server-new"
 
-inherit eutils user systemd unpacker python-single-r1
+inherit user systemd unpacker python-single-r1
 
 DESCRIPTION="A free media library that is intended for use with a plex client."
 HOMEPAGE="http://www.plex.tv/"

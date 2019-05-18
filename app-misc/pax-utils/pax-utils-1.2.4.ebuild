@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils toolchain-funcs unpacker flag-o-matic
+inherit toolchain-funcs unpacker flag-o-matic
 
 DESCRIPTION="ELF utils that can check files for security relevant properties"
 HOMEPAGE="https://wiki.gentoo.org/index.php?title=Project:Hardened/PaX_Utilities"

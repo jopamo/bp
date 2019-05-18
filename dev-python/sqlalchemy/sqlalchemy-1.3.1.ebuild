@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit distutils-r1 eutils flag-o-matic
+inherit distutils-r1 flag-o-matic
 
 MY_PN="SQLAlchemy"
 MY_P="${MY_PN}-${PV/_beta/b}"

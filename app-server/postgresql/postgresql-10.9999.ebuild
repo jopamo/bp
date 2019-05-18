@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit eutils flag-o-matic linux-info pam prefix python-single-r1 \
+inherit flag-o-matic linux-info pam prefix python-single-r1 \
 		systemd user git-r3
 
 KEYWORDS="amd64 arm64"

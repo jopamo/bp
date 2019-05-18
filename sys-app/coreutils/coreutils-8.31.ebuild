@@ -3,7 +3,7 @@
 EAPI="6"
 
 
-inherit eutils flag-o-matic python-any-r1 toolchain-funcs
+inherit flag-o-matic python-any-r1 toolchain-funcs
 
 PATCH_VER="1.0"
 DESCRIPTION="Standard GNU utilities (chmod, cp, dd, ls, sort, tr, head, wc, who,...)"

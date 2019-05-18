@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools eutils
+inherit autotools
 
 DESCRIPTION="Libconfig is a simple library for manipulating structured configuration files"
 HOMEPAGE="

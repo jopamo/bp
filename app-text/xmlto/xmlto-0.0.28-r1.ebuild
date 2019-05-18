@@ -2,7 +2,7 @@
 
 EAPI=5
 
-inherit eutils
+inherit
 
 DESCRIPTION="script for converting XML and DocBook documents to a variety of output formats"
 HOMEPAGE="https://pagure.io/xmlto"

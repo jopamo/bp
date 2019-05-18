@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit eutils flag-o-matic toolchain-funcs
+inherit flag-o-matic toolchain-funcs
 
 MY_P=${P/-/_}
 DESCRIPTION="Lists open files for running Unix processes"
@@ -13,9 +13,10 @@ SRC_URI="https://github.com/lsof-org/lsof-linux/archive/${SNAPSHOT}.tar.gz -> ${
 S=${WORKDIR}/${PN}-linux-${SNAPSHOT}
 
 LICENSE="lsof"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
-IUSE="examples ipv6 rpc static"
+
+IUSE="ipv6 rpc static"
 
 RDEPEND="rpc? ( lib-net/libtirpc )"
 
@@ -39,16 +40,6 @@ src_prepare() {
 	default
 }
 
-target() {
-	case ${CHOST} in
-	*-darwin*)  echo darwin  ;;
-	*-freebsd*) echo freebsd ;;
-	*-solaris*) echo solaris ;;
-	*-aix*)     echo aixgcc  ;;
-	*)          echo linux   ;;
-	esac
-}
-
 src_configure() {
 	use static && append-ldflags -static
 
@@ -66,7 +57,7 @@ src_configure() {
 	LSOF_AR="$(tc-getAR) rc" \
 	LSOF_RANLIB=$(tc-getRANLIB) \
 	LSOF_CFGF="${CFLAGS} ${CPPFLAGS}" \
-	./Configure -n $(target) || die
+	./Configure -n linux || die
 }
 
 src_compile() {

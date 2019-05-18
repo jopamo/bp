@@ -1,19 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: waf-utils.eclass
-# @MAINTAINER:
-# maintainer-needed@gentoo.org
-# @AUTHOR:
-# Original Author: Gilles Dartiguelongue <eva@gentoo.org>
-# Various improvements based on cmake-utils.eclass: Tomáš Chvátal <scarabeus@gentoo.org>
-# Proper prefix support: Jonathan Callen <jcallen@gentoo.org>
-# @BLURB: common ebuild functions for waf-based packages
-# @DESCRIPTION:
-# The waf-utils eclass contains functions that make creating ebuild for
-# waf-based packages much easier.
-# Its main features are support of common portage default settings.
-
-[[ ${EAPI} == [45] ]] && inherit eutils
 inherit toolchain-funcs multiprocessing
 
 case ${EAPI:-0} in

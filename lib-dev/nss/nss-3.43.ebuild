@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils flag-o-matic toolchain-funcs
+inherit flag-o-matic toolchain-funcs
 
 NSPR_VER="4.16"
 RTM_NAME="NSS_${PV//./_}_RTM"

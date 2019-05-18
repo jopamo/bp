@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit autotools eutils flag-o-matic virtualx git-r3
+inherit autotools flag-o-matic virtualx git-r3
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
@@ -19,8 +19,6 @@ REQUIRED_USE="
 
 KEYWORDS="amd64 arm64"
 
-# Upstream wants us to do their job:
-# https://bugzilla./show_bug.cgi?id=768663#c1
 RESTRICT="test"
 
 COMMON_DEPEND="

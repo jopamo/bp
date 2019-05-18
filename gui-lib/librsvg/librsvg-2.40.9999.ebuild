@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit autotools eutils git-r3
+inherit autotools git-r3
 
 DESCRIPTION="Scalable Vector Graphics (SVG) rendering library"
 HOMEPAGE="https://wiki.gnome.org/Projects/LibRsvg"

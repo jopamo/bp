@@ -1,0 +1,22 @@
+From cd38a62aa835e84af6920e75a264e4a80ce1ad10 Mon Sep 17 00:00:00 2001
+From: Yorhel <git@yorhel.nl>
+Date: Fri, 19 Apr 2019 15:01:56 +0200
+Subject: [PATCH] Clear errno before getch()
+
+Fixes #128.
+---
+ src/main.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/main.c b/src/main.c
+index a7dcea6..a9f4bdc 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -86,6 +86,7 @@ int input_handle(int wait) {
+     return wait == 0 ? 1 : 0;
+ 
+   nodelay(stdscr, wait?1:0);
++  errno = 0;
+   while((ch = getch()) != ERR) {
+     if(ch == KEY_RESIZE) {
+       if(ncresize(min_rows, min_cols))

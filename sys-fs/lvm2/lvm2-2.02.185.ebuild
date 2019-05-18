@@ -1,18 +1,19 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools eutils linux-info systemd toolchain-funcs flag-o-matic
 
 DESCRIPTION="User-land utilities for LVM2 (device-mapper) software"
 HOMEPAGE="https://sourceware.org/lvm2/"
-SRC_URI="ftp://sourceware.org/pub/lvm2/${PN/lvm/LVM}.${PV}.tgz
-	ftp://sourceware.org/pub/lvm2/old/${PN/lvm/LVM}.${PV}.tgz"
+SRC_URI="https://sourceware.org/pub/lvm2/LVM2.${PV}.tgz"
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="readline static static-libs systemd clvm cman corosync lvm2create_initrd openais sanlock +udev +thin device-mapper-only"
+
 REQUIRED_USE="device-mapper-only? ( !clvm !cman !corosync !lvm2create_initrd !openais !sanlock !thin )
 	systemd? ( udev )
 	clvm? ( !systemd )"

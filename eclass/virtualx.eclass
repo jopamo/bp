@@ -1,12 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: virtualx.eclass
-# @MAINTAINER:
-# x11@gentoo.org
-# @AUTHOR:
-# Original author: Martin Schlemmer <azarah@gentoo.org>
-# @BLURB: This eclass can be used for packages that needs a working X environment to build.
-
 if [[ ! ${_VIRTUAL_X} ]]; then
 
 case "${EAPI:-0}" in
@@ -19,8 +12,6 @@ case "${EAPI:-0}" in
 		die "virtualx.eclass: EAPI ${EAPI} is not supported yet."
 		;;
 esac
-
-[[ ${EAPI} == [45] ]] && inherit eutils
 
 # @ECLASS-VARIABLE: VIRTUALX_REQUIRED
 # @DESCRIPTION:

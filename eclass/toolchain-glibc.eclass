@@ -1,14 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: toolchain-glibc.eclass
-# @BLURB: Common code for lib-sys/glibc ebuilds
-# @DESCRIPTION:
-# This eclass contains the common phase functions migrated from
-# lib-sys/glibc eblits.
-
 if [[ -z ${_TOOLCHAIN_GLIBC_ECLASS} ]]; then
 
-inherit eutils toolchain-funcs flag-o-matic \
+inherit toolchain-funcs flag-o-matic \
 	systemd unpacker multiprocessing prefix
 
 case ${EAPI:-0} in

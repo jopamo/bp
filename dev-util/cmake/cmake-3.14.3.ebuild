@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit eutils flag-o-matic toolchain-funcs cmake-utils
+inherit flag-o-matic toolchain-funcs cmake-utils
 
 DESCRIPTION="Cross platform Make"
 HOMEPAGE="https://cmake.org/"

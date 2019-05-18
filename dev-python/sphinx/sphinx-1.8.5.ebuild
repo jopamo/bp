@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit distutils-r1 eutils
+inherit distutils-r1
 
 DESCRIPTION="Python documentation generator"
 HOMEPAGE="http://www.sphinx-doc.org/"

@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit eutils flag-o-matic toolchain-funcs git-r3
+inherit flag-o-matic toolchain-funcs git-r3
 
 DESCRIPTION="full-strength general purpose cryptography library (including SSL and TLS)"
 HOMEPAGE="https://www.openssl.org/"

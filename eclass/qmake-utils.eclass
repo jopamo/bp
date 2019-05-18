@@ -1,21 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: qmake-utils.eclass
-# @MAINTAINER:
-# qt@gentoo.org
-# @AUTHOR:
-# Davide Pesavento <pesa@gentoo.org>
-# @BLURB: Common functions for qmake-based packages.
-# @DESCRIPTION:
-# Utility eclass providing wrapper functions for Qt4 and Qt5 qmake.
-#
-# This eclass does not set any metadata variables nor export any phase
-# functions. It can be inherited safely.
-
 if [[ -z ${_QMAKE_UTILS_ECLASS} ]]; then
 _QMAKE_UTILS_ECLASS=1
 
-[[ ${EAPI:-0} == [012345] ]] && inherit eutils
 inherit estack toolchain-funcs
 
 # @FUNCTION: qt4_get_bindir

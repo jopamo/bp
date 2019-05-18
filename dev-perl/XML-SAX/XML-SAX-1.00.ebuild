@@ -3,7 +3,7 @@
 EAPI=6
 
 DIST_AUTHOR=GRANTM
-inherit perl-module eutils
+inherit perl-module
 
 DESCRIPTION="Perl module for using and building Perl SAX2 XML parsers, filters, and drivers"
 

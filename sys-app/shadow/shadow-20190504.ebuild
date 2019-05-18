@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit eutils libtool pam autotools
+inherit libtool pam autotools
 
 DESCRIPTION="Utilities to deal with user accounts"
 HOMEPAGE="https://github.com/shadow-maint/shadow http://pkg-shadow.alioth.debian.org/"
@@ -11,10 +11,10 @@ SNAPSHOT=aff40d8515c66cc12fd4376f05e867700115304a
 SRC_URI="https://github.com/shadow-maint/shadow/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
+LICENSE="BSD GPL-2"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-LICENSE="BSD GPL-2"
-SLOT="0"
 IUSE="acl audit pam skey xattr"
 
 RDEPEND="acl? ( sys-app/acl:0= )

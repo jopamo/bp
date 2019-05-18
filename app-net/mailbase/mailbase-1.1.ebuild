@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit pam eutils user
+inherit pam user
 
 DESCRIPTION="MTA layout package"
 SRC_URI=""

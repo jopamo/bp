@@ -2,8 +2,7 @@
 
 EAPI=7
 
-inherit eutils flag-o-matic linux-info linux-mod \
-	portability toolchain-funcs unpacker user systemd
+inherit flag-o-matic linux-info linux-mod portability toolchain-funcs unpacker user systemd
 
 NV_URI="http://http.download.nvidia.com/XFree86/"
 AMD64_NV_PACKAGE="NVIDIA-Linux-x86_64-${PV}"
@@ -20,9 +19,11 @@ SRC_URI="
 LICENSE="GPL-2 NVIDIA-r2"
 SLOT="0/${PV%.*}"
 KEYWORDS="amd64"
-RESTRICT="bindist mirror"
 
 IUSE="compat +driver +kms static-libs +tools +uvm wayland +X"
+
+RESTRICT="bindist mirror"
+
 REQUIRED_USE="
 	tools? ( X )
 	static-libs? ( tools )

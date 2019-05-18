@@ -1,24 +1,22 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="5"
-
-SCM=""
-if [[ ${PV} == "9999" ]] ; then
-	SCM="autotools git-r3"
-	EGIT_REPO_URI="https://git.kernel.org/cgit/linux/kernel/git/legion/${PN}.git"
-	EGIT_BRANCH="master"
-else
-	SRC_URI="https://www.kernel.org/pub/linux/utils/kbd/${P}.tar.xz"
-	KEYWORDS="amd64 arm64"
-fi
-
-inherit eutils ${SCM}
+EAPI=7
 
 DESCRIPTION="Keyboard and console utilities"
 HOMEPAGE="http://kbd-project.org/"
 
+if [[ ${PV} == "9999" ]] ; then
+	inherit autotools git-r3
+	EGIT_REPO_URI="https://git.kernel.org/cgit/linux/kernel/git/legion/${PN}.git"
+	EGIT_BRANCH="master"
+else
+	SRC_URI="https://www.kernel.org/pub/linux/utils/kbd/${P}.tar.xz"
+fi
+
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
 IUSE="nls pam test"
 
 RDEPEND="pam? ( lib-sys/pam )

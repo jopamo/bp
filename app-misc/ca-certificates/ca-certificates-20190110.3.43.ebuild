@@ -4,7 +4,7 @@ EAPI=7
 
 SNAPSHOT="20190110"
 
-inherit eutils python-any-r1
+inherit python-any-r1
 
 if [[ ${PV} == *.* ]] ; then
 	# Compile from source ourselves.

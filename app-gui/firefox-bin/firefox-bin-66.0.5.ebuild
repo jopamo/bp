@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 MOZ_PN="${PN/-bin}"
 MOZ_PV="${PV}"
@@ -9,7 +9,7 @@ MOZ_P="${MOZ_PN}-${MOZ_PV}"
 
 MOZ_HTTP_URI="https://archive.mozilla.org/pub/mozilla.org/${MOZ_PN}/releases/"
 
-inherit eutils xdg-utils gnome2-utils
+inherit xdg-utils gnome2-utils
 
 DESCRIPTION="Firefox Web Browser"
 SRC_URI="${SRC_URI}

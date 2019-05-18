@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils toolchain-funcs flag-o-matic
+inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="Asynchronous input/output library that uses the kernels native interface"
 HOMEPAGE="http://lse.sourceforge.net/io/aio.html"

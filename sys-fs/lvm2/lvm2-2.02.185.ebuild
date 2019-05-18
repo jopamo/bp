@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit autotools eutils linux-info systemd toolchain-funcs flag-o-matic
+inherit autotools linux-info systemd toolchain-funcs flag-o-matic
 
 DESCRIPTION="User-land utilities for LVM2 (device-mapper) software"
 HOMEPAGE="https://sourceware.org/lvm2/"

@@ -1,22 +1,23 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit toolchain-funcs eutils
+inherit toolchain-funcs
+
+DESCRIPTION="Open Firmware device tree compiler"
+HOMEPAGE="https://devicetree.org/ https://git.kernel.org/cgit/utils/dtc/dtc.git/"
 
 if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI="git://git.kernel.org/pub/scm/utils/dtc/dtc.git"
 	inherit git-r3
 else
 	SRC_URI="mirror://kernel/software/utils/${PN}/${P}.tar.xz"
-	KEYWORDS="amd64 arm64"
 fi
 
-DESCRIPTION="Open Firmware device tree compiler"
-HOMEPAGE="https://devicetree.org/ https://git.kernel.org/cgit/utils/dtc/dtc.git/"
-
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
 IUSE="static-libs"
 
 DEPEND="

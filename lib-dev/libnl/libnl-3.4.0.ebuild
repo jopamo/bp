@@ -4,7 +4,7 @@ EAPI=6
 
 
 DISTUTILS_OPTIONAL=1
-inherit distutils-r1 eutils libtool
+inherit distutils-r1 libtool
 
 LIBNL_P=${P/_/-}
 LIBNL_DIR=${PV/_/}

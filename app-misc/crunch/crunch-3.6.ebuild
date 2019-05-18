@@ -2,7 +2,7 @@
 
 EAPI=5
 
-inherit eutils toolchain-funcs
+inherit toolchain-funcs
 
 DESCRIPTION="A wordlist generator"
 HOMEPAGE="https://sourceforge.net/projects/crunch-wordlist/"

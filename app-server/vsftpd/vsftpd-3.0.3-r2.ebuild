@@ -2,7 +2,7 @@
 
 EAPI="6"
 
-inherit eutils systemd toolchain-funcs
+inherit systemd toolchain-funcs
 
 DESCRIPTION="Very Secure FTP Daemon written with speed, size and security in mind"
 HOMEPAGE="http://vsftpd.beasts.org/"

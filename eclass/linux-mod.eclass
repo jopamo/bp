@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit eutils linux-info
+inherit linux-info
 EXPORT_FUNCTIONS pkg_setup pkg_preinst pkg_postinst src_install src_compile pkg_postrm
 
 case ${MODULES_OPTIONAL_USE_IUSE_DEFAULT:-n} in

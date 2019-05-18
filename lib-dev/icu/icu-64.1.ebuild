@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit eutils flag-o-matic toolchain-funcs autotools
+inherit flag-o-matic toolchain-funcs autotools
 
 DESCRIPTION="International Components for Unicode"
 HOMEPAGE="http://www.icu-project.org/"

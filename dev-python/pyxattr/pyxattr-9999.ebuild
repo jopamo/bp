@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit distutils-r1 eutils git-r3
+inherit distutils-r1 git-r3
 
 DESCRIPTION="Python interface to xattr"
 HOMEPAGE="http://pyxattr.k1024.org/"

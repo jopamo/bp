@@ -1,16 +1,17 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="5"
+EAPI=7
 
-inherit eutils flag-o-matic toolchain-funcs
+inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Super-useful stream editor"
 HOMEPAGE="http://sed.sourceforge.net/"
 SRC_URI="mirror://gnu/sed/${P}.tar.xz"
 
 LICENSE="GPL-3"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="acl nls static"
 
 RDEPEND="acl? ( sys-app/acl )
@@ -18,9 +19,6 @@ RDEPEND="acl? ( sys-app/acl )
 
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )"
-
-#PATCHES=(
-#)
 
 src_bootstrap_sed() {
 	# make sure system-sed works #40786

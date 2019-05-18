@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit autotools eutils
+inherit autotools
 
 DESCRIPTION="display bandwidth usage on an interface"
 SRC_URI="http://www.ex-parrot.com/pdw/iftop/download/${P/_/}.tar.gz"

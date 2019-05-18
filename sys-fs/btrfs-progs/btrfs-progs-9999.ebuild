@@ -2,25 +2,24 @@
 
 EAPI=7
 
-libbtrfs_soname=0
+DESCRIPTION="Btrfs filesystem utilities"
+HOMEPAGE="https://btrfs.wiki.kernel.org"
 
 if [[ ${PV} != 9999 ]]; then
 	MY_PV=v${PV}
-	KEYWORDS="amd64 arm64"
 	SRC_URI="https://www.kernel.org/pub/linux/kernel/people/kdave/${PN}/${PN}-${MY_PV}.tar.xz"
 	S="${WORKDIR}"/${PN}-${MY_PV}
 else
 	WANT_LIBTOOL=none
 	inherit autotools git-r3
 	EGIT_REPO_URI="https://github.com/kdave/btrfs-progs.git"
-	EGIT_BRANCH="devel"
+	EGIT_BRANCH="master"
 fi
 
-DESCRIPTION="Btrfs filesystem utilities"
-HOMEPAGE="https://btrfs.wiki.kernel.org"
-
 LICENSE="GPL-2"
-SLOT="0/${libbtrfs_soname}"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
 IUSE="static static-libs"
 
 RESTRICT=test # tries to mount repared filesystems
@@ -60,7 +59,7 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib64
+		--libdir="${EPREFIX}"/usr/lib
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var

@@ -56,9 +56,3 @@ python_test() {
 	py.test --verbose test || die "Testsuite failed under ${EPYTHON}"
 	popd > /dev/null
 }
-
-pkg_postinst() {
-	optfeature "MySQL support" dev-python/mysql-python dev-python/mysql-connector-python
-	optfeature "mssql support" dev-python/pymssql
-	optfeature "postgresql support" dev-python/psycopg:2
-}

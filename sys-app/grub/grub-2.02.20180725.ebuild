@@ -243,13 +243,3 @@ src_install() {
 	insinto /etc/default
 	newins "${FILESDIR}"/grub.default-3 grub
 }
-
-pkg_postinst() {
-	if [[ -z ${REPLACING_VERSIONS} ]]; then
-		elog
-		elog "You may consider installing the following optional packages:"
-		optfeature "Detect other operating systems (grub-mkconfig)" sys-app/os-prober
-		optfeature "Create rescue media (grub-mkrescue)" lib-dev/libisoburn
-		optfeature "Enable RAID device detection" sys-fs/mdadm
-	fi
-}

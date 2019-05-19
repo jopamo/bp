@@ -107,39 +107,4 @@ pkg_postinst() {
 		ewarn "  CONFIG_DEVTMPFS"
 		ewarn ""
 	fi
-
-	elog "To get additional features, a number of optional runtime"
-	elog "dependencies may be installed:"
-	elog ""
-	optfeature "Networking support"  app-net/curl "app-net/dhcp[client]" \
-		app-net/iproute2 "app-net/iputils[arping]"
-	optfeature \
-		"Measure performance of the boot process for later visualisation" \
-		app-benchmarks/bootchart2 sys-app/killproc sys-app/acct
-	optfeature "Scan for Btrfs on block devices"  sys-fs/btrfs-progs
-	optfeature "Load kernel modules and drop this privilege for real init" \
-		lib-sys/libcap
-	optfeature "Support CIFS" sys-app/cifs-utils
-	optfeature "Decrypt devices encrypted with cryptsetup/LUKS" \
-		"sys-fs/cryptsetup[-static-libs]"
-	optfeature "Support for GPG-encrypted keys for crypt module" \
-		app-crypt/gnupg
-	optfeature \
-		"Allows use of dash instead of default bash (on your own risk)" \
-		sys-app/dash
-	optfeature "Framebuffer splash (app-media/splashutils)" \
-		app-media/splashutils
-	optfeature "Support iSCSI" sys-app/open-iscsi
-	optfeature "Support Logical Volume Manager" sys-fs/lvm2
-	optfeature "Support MD devices, also known as software RAID devices" \
-		sys-fs/mdadm
-	optfeature "Support Device Mapper multipathing" sys-fs/multipath-tools
-	optfeature "Plymouth boot splash"  '>=sys-app/plymouth-0.8.5-r5'
-	optfeature "Support network block devices" sys-app/nbd
-	optfeature "Support NFS" sys-app/nfs-utils net-nds/rpcbind
-	optfeature \
-		"Install ssh and scp along with config files and specified keys" \
-		app-net/openssh
-	optfeature "Enable logging with syslog-ng or rsyslog" sys-app/syslog-ng \
-		sys-app/rsyslog
 }

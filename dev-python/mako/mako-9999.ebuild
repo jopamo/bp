@@ -31,16 +31,3 @@ python_install_all() {
 
 	distutils-r1_python_install_all
 }
-
-pkg_postinst() {
-	optfeature "Caching support" dev-python/beaker
-	for v in ${REPLACING_VERSIONS}; do
-		if ! version_is_at_least 0.7.3-r2 $v; then
-			ewarn "dev-python/beaker is no longer hard dependency of ${P}"
-			ewarn "If you rely on it, you should add beaker to your world"
-			ewarn "file:"
-			ewarn "# emerge --noreplace beaker"
-			break
-		fi
-	done
-}

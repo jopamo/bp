@@ -12,17 +12,15 @@ LICENSE="GPL-3+"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="
+DEPEND="
 	gui-lib/qtcore:5
 	gui-lib/qtgui:5
 	gui-lib/qtprintsupport:5
 	gui-lib/qtsvg:5
 	gui-lib/qtx11extras
 	gui-lib/qtnetwork
+	app-text/hunspell
 "
-DEPEND="${RDEPEND}
-"
-
 src_configure() {
 	eqmake5 fp.pro \
 		PREFIX="/usr"

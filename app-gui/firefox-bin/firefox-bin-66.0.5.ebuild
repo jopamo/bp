@@ -21,7 +21,7 @@ LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
 SLOT="0/1"
 KEYWORDS="amd64"
 
-IUSE="+ffmpeg +pulseaudio startup-notification"
+IUSE="+ffmpeg +pulseaudio"
 
 RDEPEND="gui-lib/atk
 	>=sys-app/dbus-0.60
@@ -33,6 +33,7 @@ RDEPEND="gui-lib/atk
 	x11-libs/gdk-pixbuf
 	lib-dev/nss
 	>=x11-libs/gtk+-3.4.0:3
+	app-text/hunspell
 	x11-libs/libX11
 	x11-libs/libXcomposite
 	x11-libs/libXdamage
@@ -64,8 +65,6 @@ src_unpack() {
 }
 
 src_install() {
-	declare MOZILLA_FIVE_HOME=/opt/${MOZ_PN}
-
 	local size sizes icon_path icon name
 	sizes="16 32 48"
 	icon_path="${S}/browser/chrome/icons/default"
@@ -78,27 +77,24 @@ src_install() {
 		newins "${icon_path}/default${size}.png" "${icon}.png" || die
 	done
 
-	# Add StartupNotify=true bug 237317
-	if use startup-notification; then
-		echo "StartupNotify=true" >> "${ED}"usr/share/applications/${PN}.desktop
-	fi
-
 	# Install firefox in /opt
-	dodir ${MOZILLA_FIVE_HOME%/*}
-	mv "${S}" "${ED}"${MOZILLA_FIVE_HOME} || die
+	dodir opt/firefox
+	mv "${S}" "${ED}"/opt/ || die
 
-	local LANG=${linguas%% *}
-	if [[ -n ${LANG} && ${LANG} != "en" ]]; then
-		elog "Setting default locale to ${LANG}"
-		echo "pref(\"general.useragent.locale\", \"${LANG}\");" \
-			>> "${ED}${MOZILLA_FIVE_HOME}"/defaults/pref/${PN}-prefs.js || \
-			die "sed failed to change locale"
-	fi
+	# Disable built-in auto-update because we update firefox-bin through package manager
+	insinto opt/firefox/distribution/
+	newins "${FILESDIR}"/disable-auto-update.policy.json policies.json
+
+	# Fix prefs that make no sense for a system-wide install
+	insinto opt/firefox/defaults/pref/
+	doins "${FILESDIR}"/local-settings.js
+	insinto opt/firefox
+	doins "${FILESDIR}"/all-set.js
 
 	# Create /usr/bin/firefox-bin
 	dodir /usr/bin/
 	local apulselib=$(usex pulseaudio "/usr/lib64/apulse:" "")
-	cat <<-EOF >"${ED}"usr/bin/${PN}
+	cat <<-EOF >"${ED}"/usr/bin/${PN}
 	#!/bin/sh
 	unset LD_PRELOAD
 	LD_LIBRARY_PATH="${apulselib}/opt/firefox/" \\
@@ -109,11 +105,16 @@ src_install() {
 
 	# revdep-rebuild entry
 	insinto /etc/revdep-rebuild
-	echo "SEARCH_DIRS_MASK=${MOZILLA_FIVE_HOME}" >> ${T}/10${PN}
+	echo "SEARCH_DIRS_MASK=opt/firefox" >> ${T}/10${PN}
 	doins "${T}"/10${PN} || die
 
-	rm -f ${ED}/opt/firefox/pingsender
-	rm -f ${ED}/opt/firefox/minidump-analyzer
+	rm -f "${ED}"/opt/firefox/pingsender
+	rm -f "${ED}"/opt/firefox/minidump-analyzer
+	rm -f "${ED}"/opt/firefox/crashreporter*
+	rm -f "${ED}"/opt/firefox/libnssckbi.so
+
+	dosym /usr/share/hunspell opt/firefox/dictionaries
+	dosym /usr/lib/libnssckbi.so opt/firefox/libnssckbi.so
 }
 
 pkg_preinst() {

@@ -14,6 +14,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
+DEPEND="app-text/hunspell-dictionaries"
+
 src_prepare() {
 	default
 	eautoreconf

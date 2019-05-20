@@ -2,10 +2,10 @@
 2. build shared library
 3. add optional static lib target
 4. Don't install COPYING
-diff --git a/Makefile b/Makefile
-index 37fc48e6..4303e9fa 100644
---- a/Makefile
-+++ b/Makefile
+
+diff -urN a/Makefile b/Makefile
+--- a/Makefile	2019-05-20 17:16:59.168724034 -0500
++++ b/Makefile	2019-05-20 17:20:12.860726606 -0500
 @@ -3,7 +3,7 @@
  -include user.make
  
@@ -15,13 +15,13 @@ index 37fc48e6..4303e9fa 100644
  endif
  
  ifndef OUT
-@@ -190,13 +190,15 @@ generate: source/pdf/js/util.js.h
+@@ -187,13 +187,15 @@
  
  # --- Library ---
  
 -MUPDF_LIB = $(OUT)/libmupdf.a
 -THIRD_LIB = $(OUT)/libmupdf-third.a
-+MUPDF_LIB = libmupdf.so.$(GENTOO_PV)
++MUPDF_LIB = libmupdf.so.${PV}
 +MUPDF_STATIC = $(OUT)/libmupdf.a
 +THIRD_LIB =
  THREAD_LIB = $(OUT)/libmupdf-threads.a
@@ -35,12 +35,12 @@ index 37fc48e6..4303e9fa 100644
  $(THREAD_LIB) : $(THREAD_OBJ)
  $(PKCS7_LIB) : $(PKCS7_OBJ)
  
-@@ -355,7 +357,7 @@ install: libs apps
+@@ -322,7 +324,7 @@
  
  	install -d $(DESTDIR)$(docdir)
  	install -d $(DESTDIR)$(docdir)/examples
--	install README COPYING CHANGES $(DESTDIR)$(docdir)
-+	install README CHANGES $(DESTDIR)$(docdir)
- 	install docs/*.html docs/*.css docs/*.png $(DESTDIR)$(docdir)
- 	install docs/examples/* $(DESTDIR)$(docdir)/examples
+-	install -m 644 README COPYING CHANGES $(DESTDIR)$(docdir)
++	install -m 644 README CHANGES $(DESTDIR)$(docdir)
+ 	install -m 644 docs/*.html docs/*.css docs/*.png $(DESTDIR)$(docdir)
+ 	install -m 644 docs/examples/* $(DESTDIR)$(docdir)/examples
  

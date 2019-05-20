@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit toolchain-funcs
 
@@ -40,9 +40,7 @@ REQUIRED_USE="opengl? ( !static !static-libs )"
 S=${WORKDIR}/${P}-source
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-1.14-CFLAGS.patch
-	"${FILESDIR}"/${PN}-1.14-Makefile.patch
-	"${FILESDIR}"/${PN}-1.14-fix-big-endian.patch
+	"${FILESDIR}"/${PN}-1.15-Makefile.patch
 )
 
 src_prepare() {
@@ -57,15 +55,14 @@ src_prepare() {
 		-e "1iAR = $(tc-getAR)" \
 		-e "1iverbose = yes" \
 		-e "1ibuild = debug" \
-		-e "1iprefix = ${ED}usr" \
-		-e "1ilibdir = ${ED}usr/lib" \
-		-e "1idocdir = ${ED}usr/share/doc/${PF}" \
+		-e "1iprefix = ${ED}/usr" \
+		-e "1ilibdir = ${ED}/usr/lib" \
+		-e "1idocdir = ${ED}/usr/share/doc/${PF}" \
 		-i Makerules || die
 }
 
 _emake() {
 	emake \
-		GENTOO_PV=${PV} \
 		HAVE_GLUT=$(usex opengl) \
 		HAVE_CURL=no \
 		HAVE_LIBCRYPTO=no \
@@ -88,7 +85,9 @@ src_install() {
 
 	_emake install
 
-	dosym libmupdf.so.${PV} /usr/lib/lib${PN}.so
+	for x in libmupdf.so.1 libmupdf.so.1.0 libmupdf.so ; do
+		dosym libmupdf.so.${PV} usr/lib64/${x}
+	done
 
 	use static-libs && \
 		dolib.a build/debug/lib${PN}.a
@@ -99,4 +98,6 @@ src_install() {
 		einfo "mupdf symlink points to mupdf-x11 (bug 616654)"
 		dosym ${PN}-x11 /usr/bin/${PN}
 	fi
+
+	cleanup_install
 }

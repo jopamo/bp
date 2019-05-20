@@ -1,6 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
+
 inherit cmake-utils
 
 DESCRIPTION="The Portable OpenGL FrameWork"
@@ -8,8 +9,9 @@ HOMEPAGE="http://www.glfw.org/"
 SRC_URI="mirror://sourceforge/glfw/${P}.tar.bz2"
 
 LICENSE="ZLIB"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="examples wayland"
 
 RDEPEND="

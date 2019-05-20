@@ -12,7 +12,7 @@ LICENSE="BSD"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="doc net test"
+IUSE="net test"
 
 RDEPEND="
 	>=dev-python/alabaster-0.7.9[${PYTHON_USEDEP}]
@@ -52,7 +52,6 @@ S="${WORKDIR}/${P^}"
 
 python_prepare_all() {
 	# remove tests that fail due to network-sandbox
-	rm tests/test_websupport.py || die "Failed to remove web tests"
 	rm tests/test_build_linkcheck.py || die "Failed to remove web tests"
 
 	distutils-r1_python_prepare_all
@@ -70,35 +69,10 @@ python_compile() {
 	popd >/dev/null || die
 }
 
-python_compile_all() {
-	if use doc; then
-		emake -C doc SPHINXBUILD='"${EPYTHON}" "${S}/sphinx-build.py"' html
-		HTML_DOCS=( doc/_build/html/. )
-	fi
-}
-
 python_test() {
 	mkdir -p "${BUILD_DIR}/sphinx_tempdir" || die
 	local -x SPHINX_TEST_TEMPDIR="${BUILD_DIR}/sphinx_tempdir"
 	cp -r -l tests "${BUILD_DIR}"/ || die "Failed to copy tests"
 	cp Makefile "${BUILD_DIR}"/ || die "Failed to copy Makefile"
 	emake test
-}
-
-pkg_postinst() {
-	replacing_python_eclass() {
-		local pv
-		for pv in ${REPLACING_VERSIONS}; do
-			if ! version_is_at_least 1.1.3-r4 ${pv}; then
-				return 0
-			fi
-		done
-
-		return 1
-	}
-
-	if replacing_python_eclass; then
-		ewarn "Replaced a very old sphinx version. If you are"
-		ewarn "experiencing problems, please re-emerge sphinx."
-	fi
 }

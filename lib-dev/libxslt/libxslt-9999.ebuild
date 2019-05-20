@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-
+EAPI=7
 
 inherit autotools python-r1 toolchain-funcs git-r3
 
@@ -10,10 +9,11 @@ HOMEPAGE="http://www.xmlsoft.org/"
 EGIT_REPO_URI="https://github.com/GNOME/libxslt.git"
 
 LICENSE="MIT"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="crypt debug examples python static-libs elibc_Darwin"
+IUSE="crypt debug examples python static-libs"
+
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 RDEPEND="

@@ -14,8 +14,6 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"
 
-PATCHES=( "${FILESDIR}/3.6-picklefile-IOError.patch" )
-
 python_test() {
 	cp -r -l test "${BUILD_DIR}"/ || die
 	cd "${BUILD_DIR}"/test || die

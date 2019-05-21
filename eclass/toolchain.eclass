@@ -2,7 +2,6 @@
 
 DESCRIPTION="The GNU Compiler Collection"
 HOMEPAGE="https://gcc.gnu.org/"
-RESTRICT="strip" # cross-compilers need controlled stripping
 
 inherit flag-o-matic libtool toolchain-funcs prefix
 
@@ -121,8 +120,6 @@ toolchain_src_prepare() {
 	# Fixup libtool to correctly generate .la files with portage
 	elibtoolize --portage --shallow --no-uclibc
 
-	gnuconfig_update
-
 	# update configure files
 	local f
 	einfo "Fixing misc issues in configure files"
@@ -178,31 +175,6 @@ toolchain_src_configure() {
 
 	confgcc+=( --with-python-dir=${DATAPATH/$PREFIX/}/python )
 
-	### language options
-
-	local GCC_LANG="c"
-	is_cxx && GCC_LANG+=",c++"
-	is_d   && GCC_LANG+=",d"
-	is_go  && GCC_LANG+=",go"
-	is_jit && GCC_LANG+=",jit"
-	if is_objc || is_objcxx ; then
-		GCC_LANG+=",objc"
-		use objc-gc && confgcc+=( --enable-objc-gc )
-		is_objcxx && GCC_LANG+=",obj-c++"
-	fi
-
-	# fortran support just got sillier! the lang value can be f77 for
-	# fortran77, f95 for fortran95, or just plain old fortran for the
-	# currently supported standard depending on gcc version.
-	is_fortran && GCC_LANG+=",fortran"
-	is_f77 && GCC_LANG+=",f77"
-	is_f95 && GCC_LANG+=",f95"
-
-	# We do NOT want 'ADA support' in here!
-	# is_ada && GCC_LANG+=",ada"
-
-	confgcc+=( --enable-languages=${GCC_LANG} )
-
 	### general options
 
 	confgcc+=(
@@ -223,12 +195,14 @@ toolchain_src_configure() {
 		--enable-clocale=gnu
 		--enable-gnu-unique-object
 		--enable-checking=release
-		--enable-cet=auto
 		--with-linker-hash-style=gnu
 		--enable-gnu-indirect-function
 		--enable-linker-build-id
 		--disable-libmpx
 		--disable-libgcj
+		--enable-languages=c,c++,lto
+		--enable-bootstrap
+		--with-build-config="bootstrap-lto-lean"
 		$(use_with isl)
 		$(use_enable openmp libgomp)
 		$(use_enable vtv vtable-verify)
@@ -261,13 +235,6 @@ toolchain_src_configure() {
 		case ${CTARGET//_/-} in
 		*-hardfloat-*|*eabihf) confgcc+=( --with-float=hard ) ;;
 		esac
-	esac
-
-	# if the target can do biarch (-m32/-m64), enable it.  overhead should
-	# be small, and should simplify building of 64bit kernels in a 32bit
-	# userland by not needing sys-devel/kgcc64.  #349405
-	case $(tc-arch) in
-	amd64|x86) confgcc+=( --enable-targets=all ) ;;
 	esac
 
 	### library options
@@ -448,8 +415,6 @@ gcc_do_filter_flags() {
 	filter-flags -frecord-gcc-switches # 490738
 	filter-flags -mno-rtm -mno-htm # 506202
 
-	append-flags -Wa,--noexecstack
-
 	strip-unsupported-flags
 }
 
@@ -484,15 +449,9 @@ gcc_do_make() {
 
 	[[ -n ${1} ]] && GCC_MAKE_TARGET=${1}
 
-	if use_if_iuse pgo; then
-		GCC_MAKE_TARGET=${GCC_MAKE_TARGET-profiledbootstrap}
-	else
-		GCC_MAKE_TARGET=${GCC_MAKE_TARGET-bootstrap-lean}
-	fi
+	GCC_MAKE_TARGET=${GCC_MAKE_TARGET-profiledbootstrap}
 
-	if [[ ${GCC_MAKE_TARGET} == "all" ]] ; then
-		STAGE1_CFLAGS=${STAGE1_CFLAGS-"${CFLAGS}"}
-	fi
+	STAGE1_CFLAGS=${STAGE1_CFLAGS-"${CFLAGS}"}
 
 	BOOT_CFLAGS=${BOOT_CFLAGS-"${CFLAGS}"}
 
@@ -504,7 +463,7 @@ gcc_do_make() {
 		LDFLAGS="${LDFLAGS}" \
 		STAGE1_CFLAGS="${STAGE1_CFLAGS}" \
 		LIBPATH="${LIBPATH}" \
-		BOOT_CFLAGS="${BOOT_CFLAGS}" \
+		BOOT_CFLAGS="-O2" \
 		${GCC_MAKE_TARGET} \
 		|| die "emake failed with ${GCC_MAKE_TARGET}"
 
@@ -560,17 +519,9 @@ toolchain_src_install() {
 	# Basic sanity check
 	local EXEEXT
 	eval $(grep ^EXEEXT= "${WORKDIR}"/build/gcc/config.log)
-	[[ -r ${D}${BINPATH}/gcc${EXEEXT} ]] || die "gcc not found in ${D}"
+	[[ -r ${D}/${BINPATH}/gcc${EXEEXT} ]] || die "gcc not found in ${D}"
 
 	dodir /etc/env.d/gcc
-
-	# Make sure we dont have stuff lying around that
-	# can nuke multiple versions of gcc
-
-	# Now do the fun stripping stuff
-	env RESTRICT="" CHOST=${CHOST} prepstrip "${D}${BINPATH}"
-
-	env RESTRICT="" CHOST=${CTARGET} prepstrip "${D}${LIBPATH}"
 
 	# prune empty dirs left behind
 	find "${D}" -depth -type d -delete 2>/dev/null
@@ -627,11 +578,11 @@ toolchain_src_install() {
 	# Use gid of 0 because some stupid ports don't have
 	# the group 'root' set to gid 0.  Send to /dev/null
 	# for people who are testing as non-root.
-	chown -R root:0 "${D}${LIBPATH}" 2>/dev/null
+	chown -R root:0 "${D}/${LIBPATH}" 2>/dev/null
 
 	# Move pretty-printers to gdb datadir to shut ldconfig up
 	local py gdbdir=/usr/share/gdb/auto-load${LIBPATH/\/lib\//\/lib64\/}
-	pushd "${D}${LIBPATH}" >/dev/null
+	pushd "${D}/${LIBPATH}" >/dev/null
 	for py in $(find . -name '*-gdb.py') ; do
 		local multidir=${py%/*}
 		insinto "${gdbdir}/${multidir}"
@@ -645,7 +596,7 @@ toolchain_src_install() {
 	export QA_EXECSTACK="usr/lib*/go/*/*.gox"
 	export QA_WX_LOAD="usr/lib*/go/*/*.gox"
 
-	cleanup_install
+	chrpath -d "${ED}"/usr/lib64/libstdc++.so*
 }
 
 
@@ -734,57 +685,6 @@ gcc-lang-supported() {
 	grep ^language=\"${1}\" "${S}"/gcc/*/config-lang.in > /dev/null || return 1
 	[[ -z ${TOOLCHAIN_ALLOWED_LANGS} ]] && return 0
 	has $1 ${TOOLCHAIN_ALLOWED_LANGS}
-}
-
-is_ada() {
-	gcc-lang-supported ada || return 1
-	use_if_iuse ada
-}
-
-is_cxx() {
-	gcc-lang-supported 'c++' || return 1
-	return 0
-	use_if_iuse cxx
-}
-
-is_d() {
-	gcc-lang-supported d || return 1
-	use_if_iuse d
-}
-
-is_f77() {
-	gcc-lang-supported f77 || return 1
-	use_if_iuse fortran
-}
-
-is_f95() {
-	gcc-lang-supported f95 || return 1
-	use_if_iuse fortran
-}
-
-is_fortran() {
-	gcc-lang-supported fortran || return 1
-	use_if_iuse fortran
-}
-
-is_go() {
-	gcc-lang-supported go || return 1
-	use_if_iuse cxx && use_if_iuse go
-}
-
-is_jit() {
-	gcc-lang-supported jit || return 1
-	use_if_iuse jit
-}
-
-is_objc() {
-	gcc-lang-supported objc || return 1
-	use_if_iuse objc
-}
-
-is_objcxx() {
-	gcc-lang-supported 'obj-c++' || return 1
-	use_if_iuse cxx && use_if_iuse objc++
 }
 
 # Grab a variable from the build system (taken from linux-info.eclass)

@@ -1,17 +1,19 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="5"
-
-EGIT_REPO_URI=https://git.enlightenment.org/legacy/imlib2.git
+EAPI=7
 
 inherit toolchain-funcs git-r3 autotools
 
 DESCRIPTION="Version 2 of an advanced replacement library for libraries like libXpm"
 HOMEPAGE="https://www.enlightenment.org/"
+EGIT_REPO_URI=https://git.enlightenment.org/legacy/imlib2.git
+
+LICENSE="Imlib2"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 IUSE="bzip2 gif jpeg png static-libs tiff X zlib"
-SLOT=0
+
 RDEPEND="lib-media/freetype:2
 	bzip2? ( >=app-compression/lbzip2-1.0.6-r4 )
 	zlib? ( >=lib-sys/zlib-1.2.8-r1 )
@@ -28,12 +30,11 @@ DEPEND="${RDEPEND}
 	X? ( x11-misc/xorgproto )"
 
 src_prepare() {
+	default
 	eautoreconf
 }
 
 src_configure() {
-	[[ $(gcc-major-version) -ge 4 ]] && E_ECONF+=( --enable-visibility-hiding )
-
 	ECONF_SOURCE="${S}" \
 	E_ECONF+=(
 		$(use_enable static-libs static)

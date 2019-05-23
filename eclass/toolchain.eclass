@@ -412,6 +412,8 @@ gcc_do_filter_flags() {
 	# dont want to funk ourselves
 	filter-flags '-mabi*' -m31 -m32 -m64
 
+	append-flags -Wa,--noexecstack
+
 	filter-flags -frecord-gcc-switches # 490738
 	filter-flags -mno-rtm -mno-htm # 506202
 

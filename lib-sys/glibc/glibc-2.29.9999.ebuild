@@ -2,50 +2,28 @@
 
 EAPI=7
 
-inherit prefix toolchain-glibc git-r3 flag-o-matic
+inherit git-r3 flag-o-matic
 
 DESCRIPTION="GNU libc C library"
 HOMEPAGE="https://www.gnu.org/software/libc/"
-
-LICENSE="LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
-RESTRICT="strip" # Strip ourself #46186
-
 EGIT_REPO_URI="git://sourceware.org/git/glibc.git"
 EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)/master"
 
+LICENSE="LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-RELEASE_VER=${PV}
+IUSE="audit caps debug nscd systemtap static-libs profile static-pie"
 
-GCC_BOOTSTRAP_VER="4.7.3-r1"
-
-IUSE="audit caps debug doc gd nscd systemtap profile suid headers-only static-pie"
-
-
-export CBUILD=${CBUILD:-${CHOST}}
-export CTARGET=${CTARGET:-${CHOST}}
-if [[ ${CTARGET} == ${CHOST} ]] ; then
-	if [[ ${CATEGORY} == cross-* ]] ; then
-		export CTARGET=${CATEGORY#cross-}
-	fi
-fi
-
-is_crosscompile() {
-	[[ ${CHOST} != ${CTARGET} ]]
-}
-
-SLOT="2.2"
-
-# General: We need a new-enough binutils/gcc to match upstream baseline.
-# arch: we need to make sure our binutils/gcc supports TLS.
 COMMON_DEPEND="
-	suid? ( caps? ( lib-sys/libcap ) )
+	caps? ( lib-sys/libcap )
 	systemtap? ( dev-util/systemtap )
 "
 DEPEND="${COMMON_DEPEND}
 	!<sys-app/sandbox-1.6
 	!<sys-app/portage-2.1.2
-	doc? ( sys-app/texinfo )
+	sys-devel/binutils
+	sys-devel/gcc
 	sys-kernel/linux-headers
 "
 RDEPEND="${COMMON_DEPEND}
@@ -54,19 +32,23 @@ RDEPEND="${COMMON_DEPEND}
 	!lib-sys/nss-db
 "
 
-if [[ ${CATEGORY} == cross-* ]] ; then
-	DEPEND+=" !headers-only? (
-		>=${CATEGORY}/binutils-2.24
-		>=${CATEGORY}/gcc-4.9
-	)"
-else
-	DEPEND+="
-		>=sys-devel/binutils-2.24
-		>=sys-devel/gcc-4.9
-		sys-kernel/linux-headers
-	"
-	PDEPEND+="lib-sys/tzdb"
-fi
+PDEPEND+="lib-sys/tzdb"
+
+filter-flags -D_FORTIFY_SOURCE\=2 -fstack-protector-strong -fstack-clash-protection -fexceptions -fpie -fpic -flto -fuse-linker-plugin -fasynchronous-unwind-tables -Wl,-z,combreloc -Wl,-z,relro -Wl,-z,defs -Wl,-z,now
+
+check_devpts() {
+	# Make sure devpts is mounted correctly for use w/out setuid pt_chown.
+
+	# If merely building the binary package, then there's nothing to verify.
+	[[ ${MERGE_TYPE} == "buildonly" ]] && return
+
+	# Only sanity check when installing the native glibc.
+	[[ ${ROOT} != "/" ]] && return
+
+	if awk '$3 == "devpts" && $4 ~ /[, ]gid=5[, ]/ { exit 1 }' /proc/mounts ; then
+		die "mount & fix your /dev/pts settings"
+	fi
+}
 
 pkg_pretend() {
 	# Make sure devpts is mounted correctly for use w/out setuid pt_chown
@@ -74,71 +56,24 @@ pkg_pretend() {
 
 	# Prevent native builds from downgrading
 	if [[ ${MERGE_TYPE} != "buildonly" ]] && \
-	   [[ ${ROOT} == "/" ]] && \
-	   [[ ${CBUILD} == ${CHOST} ]] && \
-	   [[ ${CHOST} == ${CTARGET} ]] ; then
-		# The high rev # is to allow people to downgrade between -r# versions.
-		# We want to block 2.20->2.19, but 2.20-r3->2.20-r2 should be fine.
-		# Hopefully we never actually use a r# this high.
+	   [[ ${ROOT} == "/" ]] ; then
 		if has_version ">${CATEGORY}/${P}-r10000" ; then
 			eerror "Sanity check to keep you from breaking your system:"
-			eerror " Downgrading glibc is not supported and a sure way to destruction"
-			die "Aborting to save your system"
+			eerror " Downgrading glibc is not a good idea."
+			die
 		fi
 
 		if ! glibc_run_test '#include <pwd.h>\nint main(){return getpwuid(0)==0;}\n'
 		then
-			eerror "Your patched vendor kernel is broken.  You need to get an"
-			eerror "update from whoever is providing the kernel to you."
-			eerror "https://sourceware.org/bugzilla/show_bug.cgi?id=5227"
-			eerror "https://bugs.gentoo.org/262698"
-			die "Keeping your system alive, say thank you"
+			eerror "Your patched vendor kernel is broken."
+			die
 		fi
 
 		if ! glibc_run_test '#include <unistd.h>\n#include <sys/syscall.h>\nint main(){return syscall(1000)!=-1;}\n'
 		then
 			eerror "Your old kernel is broken.  You need to update it to"
 			eerror "a newer version as syscall(<bignum>) will break."
-			eerror "https://bugs.gentoo.org/279260"
-			die "Keeping your system alive, say thank you"
-		fi
-	fi
-
-	# Users have had a chance to phase themselves, time to give em the boot
-	if [[ -e ${EROOT}/etc/locale.gen ]] && [[ -e ${EROOT}/etc/locales.build ]] ; then
-		eerror "You still haven't deleted ${EROOT}/etc/locales.build."
-		eerror "Do so now after making sure ${EROOT}/etc/locale.gen is kosher."
-		die "Lazy upgrader detected"
-	fi
-
-	if [[ ${CTARGET} == i386-* ]] ; then
-		eerror "i386 CHOSTs are no longer supported."
-		eerror "Chances are you don't actually want/need i386."
-		eerror "Please read https://www.gentoo.org/doc/en/change-chost.xml"
-		die "Please fix your CHOST"
-	fi
-
-	# Make sure host system is up to date #394453
-	if has_version '<lib-sys/glibc-2.13' && \
-	   [[ -n $(scanelf -qys__guard -F'#s%F' "${EROOT}"/lib*/l*-*.so) ]]
-	then
-		ebegin "Scanning system for __guard to see if you need to rebuild first ..."
-		local files=$(
-			scanelf -qys__guard -F'#s%F' \
-				"${EROOT}"/*bin/ \
-				"${EROOT}"/lib* \
-				"${EROOT}"/usr/*bin/ \
-				"${EROOT}"/usr/lib* | \
-				egrep -v \
-					-e "^${EROOT}/lib.*/(libc|ld)-2.*.so$" \
-					-e "^${EROOT}/usr/sbin/(ldconfig|sln)$"
-		)
-		[[ -z ${files} ]]
-		if ! eend $? ; then
-			eerror "Your system still has old SSP __guard symbols.  You need to"
-			eerror "rebuild all the packages that provide these files first:"
-			eerror "${files}"
-			die "old __guard detected"
+			die
 		fi
 	fi
 
@@ -150,80 +85,24 @@ pkg_pretend() {
 				eerror "Your ${EROOT}/etc/nsswitch.conf is out of date."
 				eerror "Please make sure you have 'files' entries for"
 				eerror "'passwd:', 'group:' and 'shadow:' databases."
-				eerror "For more details see:"
-				eerror "  https://wiki.gentoo.org/wiki/Project:Toolchain/nsswitch.conf_in_glibc-2.26"
 				die "nsswitch.conf has no 'files' provider in '${entry}'."
 			fi
 		done
 	fi
 }
 
-src_unpack() {
-	setup_env
-
-	# Check NPTL support _before_ we unpack things to save some time
-	check_nptl_support
-
-	if [[ -n ${EGIT_REPO_URI} ]] ; then
-		git-r3_src_unpack
-	else
-		unpack ${P}.tar.xz
-	fi
-}
-
 src_prepare() {
-	if just_headers ; then
-		if [[ -e ports/sysdeps/mips/preconfigure ]] ; then
-			# mips peeps like to screw with us.  if building headers,
-			# we don't have a real compiler, so we can't let them
-			# insert -mabi on us.
-			sed -i '/CPPFLAGS=.*-mabi/s|.*|:|' ports/sysdeps/mips/preconfigure || die
-			find ports/sysdeps/mips/ -name Makefile -exec sed -i '/^CC.*-mabi=/s:-mabi=.*:-D_MIPS_SZPTR=32:' {} +
-		fi
-	fi
-
 	default
-
-	gnuconfig_update
 
 	cd "${WORKDIR}"
 	find . -name configure -exec touch {} +
 
 	# Fix permissions on some of the scripts.
 	chmod u+x "${S}"/scripts/*.sh
-	filter-ldflags "${CFLAGS}"
 }
 
-glibc_do_configure() {
-	# Glibc does not work with gold (for various reasons) #269274.
-	tc-ld-disable-gold
-
-	unset CXX
-
-	einfo "Configuring glibc for $1"
-
-	if use doc ; then
-		export MAKEINFO=makeinfo
-	else
-		export MAKEINFO=/dev/null
-	fi
-
-	local v
-	for v in ABI CBUILD CHOST CTARGET CBUILD_OPT CTARGET_OPT CC CXX LD {AS,C,CPP,CXX,LD}FLAGS MAKEINFO ; do
-		einfo " $(printf '%15s' ${v}:)   ${!v}"
-	done
-
-	# The glibc configure script doesn't properly use LDFLAGS all the time.
-	export CC="$(tc-getCC ${CTARGET}) ${LDFLAGS}"
-	einfo " $(printf '%15s' 'Manual CC:')   ${CC}"
-
-	# Force a few tests where we always know the answer but
-	# configure is incapable of finding it.
-	if is_crosscompile ; then
-		export \
-			libc_cv_c_cleanup=yes \
-			libc_cv_forced_unwind=yes
-	fi
+src_configure() {
+	export MAKEINFO=/dev/null
 
 	myconf+=(
 		--without-cvs
@@ -236,9 +115,7 @@ glibc_do_configure() {
 		--host=${CTARGET_OPT:-${CTARGET}}
 		--without-selinux
 		$(use_enable profile)
-		$(use_with gd)
 		$(use_enable static-pie)
-		--with-headers=$(alt_build_headers)
 		--prefix="${EPREFIX}"/usr
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -261,220 +138,37 @@ glibc_do_configure() {
 	export libc_cv_slibdir="${EPREFIX}"/usr/lib64
 	export libc_cv_hashstyle=no
 
-	local builddir=$(builddir "$1")
-	mkdir -p "${builddir}"
-	cd "${builddir}"
+	mkdir -p "${WORKDIR}/build"
+	cd "${WORKDIR}/build"
 	set -- "${S}"/configure "${myconf[@]}"
 	echo "$@"
 	"$@" || die "failed to configure glibc"
 }
 
-glibc_headers_configure() {
-	export ABI=default
-
-	local builddir=$(builddir "headers")
-	mkdir -p "${builddir}"
-	cd "${builddir}"
-
-	# if we don't have a compiler yet, we can't really test it now ...
-	# hopefully they don't affect header generation, so let's hope for
-	# the best here ...
-	local v vars=(
-		ac_cv_header_cpuid_h=yes
-		libc_cv_x86_64_tls=yes
-		libc_cv_asm_cfi_directives=yes
-		libc_cv_broken_visibility_attribute=no
-		libc_cv_c_cleanup=yes
-		libc_cv_forced_unwind=yes
-		libc_cv_gcc___thread=yes
-		libc_cv_mlong_double_128=yes
-		libc_cv_mlong_double_128ibm=yes
-		libc_cv_predef_fortify_source=no
-		libc_cv_visibility_attribute=yes
-		libc_cv_z_combreloc=yes
-		libc_cv_z_execstack=yes
-		libc_cv_z_initfirst=yes
-		libc_cv_z_nodelete=yes
-		libc_cv_z_nodlopen=yes
-		libc_cv_z_relro=yes
-		libc_mips_abi=${ABI}
-		libc_mips_float=$([[ $(tc-is-softfloat) == "yes" ]] && echo soft || echo hard)
-		# These libs don't have configure flags.
-		ac_cv_lib_audit_audit_log_user_avc_message=no
-		ac_cv_lib_cap_cap_init=no
-	)
-
-	einfo "Forcing cached settings:"
-	for v in "${vars[@]}" ; do
-		einfo " ${v}"
-		export ${v}
-	done
-
-	# Blow away some random CC settings that screw things up. #550192
-	if [[ -d ${S}/sysdeps/mips ]]; then
-		pushd "${S}"/sysdeps/mips >/dev/null
-
-		# Force the mips ABI to the default.  This is OK because the set of
-		# installed headers in this phase is the same between the 3 ABIs.
-		# If this ever changes, this hack will break, but that's unlikely
-		# as glibc discourages that behavior.
-		# https://crbug.com/647033
-		sed -i -e 's:abiflag=.*:abiflag=_ABIO32:' preconfigure || die
-
-		popd >/dev/null
-	fi
-
-	local myconf=()
-	myconf+=(
-		--disable-werror
-		--disable-profile
-		--build=${CBUILD_OPT:-${CBUILD}}
-		--host=${CTARGET_OPT:-${CTARGET}}
-		--with-headers=$(alt_build_headers)
-		--prefix="${EPREFIX}/usr"
-		${EXTRA_ECONF}
-	)
-
-	# Nothing is compiled here which would affect the headers for the target.
-	# So forcing CC/CFLAGS is sane.
-	local headers_only_CC=$(tc-getBUILD_CC)
-	local headers_only_CFLAGS="-O1 -pipe"
-	local headers_only_CPPFLAGS="-U_FORTIFY_SOURCE"
-	local headers_only_LDFLAGS=""
-	set -- "${S}"/configure "${myconf[@]}"
-	echo \
-		"CC=${headers_only_CC}" \
-		"CFLAGS=${headers_only_CFLAGS}" \
-		"CPPFLAGS=${headers_only_CPPFLAGS}" \
-		"LDFLAGS=${headers_only_LDFLAGS}" \
-		"$@"
-	CC=${headers_only_CC} \
-	CFLAGS=${headers_only_CFLAGS} \
-	CPPFLAGS=${headers_only_CPPFLAGS} \
-	LDFLAGS="" \
-	"$@" || die "failed to configure glibc"
-}
-
-do_src_configure() {
-	if just_headers ; then
-		glibc_headers_configure
-	else
-		glibc_do_configure nptl
-	fi
-}
-
-src_configure() {
-	foreach_abi do_src_configure
-}
-
-do_src_compile() {
-	emake -C "$(builddir nptl)" || die "make nptl for ${ABI} failed"
-}
-
 src_compile() {
-	if just_headers ; then
-		return
-	fi
-
-	foreach_abi do_src_compile
-}
-
-glibc_src_test() {
-	cd "$(builddir $1)"
-	emake check
-}
-
-do_src_test() {
-	local ret=0
-
-	glibc_src_test nptl
-	: $(( ret |= $? ))
-
-	return ${ret}
+	emake -C "${WORKDIR}/build" || die "make nptl for ${ABI} failed"
 }
 
 src_test() {
-	if just_headers ; then
-		return
-	fi
 	# Give tests more time to complete.
 	export TIMEOUTFACTOR=5
 
-	foreach_abi do_src_test || die "tests failed"
+	cd "${WORKDIR}/build"
+	emake check
 }
 
-glibc_do_src_install() {
-	local builddir=$(builddir nptl)
-	cd "${builddir}"
+src_install() {
+	cd "${WORKDIR}/build"
 
-	emake install_root="${D}$(alt_prefix)" install || die
-
-	# Normally upstream_pv is ${PV}. Live ebuilds are exception, there we need
-	# to infer upstream version:
-	# '#define VERSION "2.26.90"' -> '2.26.90'
-	local upstream_pv=$(sed -n -r 's/#define VERSION "(.*)"/\1/p' "${S}"/version.h)
-
-	if [[ -e ${ED}$(alt_usrlibdir)/libm-${upstream_pv}.a ]] ; then
-		# Move versioned .a file out of libdir to evade portage QA checks
-		# instead of using gen_usr_ldscript(). We fix ldscript as:
-		# "GROUP ( /usr/lib64/libm-<pv>.a ..." -> "GROUP ( /usr/lib64/glibc-<pv>/libm-<pv>.a ..."
-		sed -i "s@\(libm-${upstream_pv}.a\)@${P}/\1@" "${ED}"$(alt_usrlibdir)/libm.a || die
-		dodir $(alt_usrlibdir)/${P}
-		mv "${ED}"$(alt_usrlibdir)/libm-${upstream_pv}.a "${ED}"$(alt_usrlibdir)/${P}/libm-${upstream_pv}.a || die
-	fi
+	emake install_root="${ED}" install || die
 
 	# We'll take care of the cache ourselves
 	rm -f "${ED}"/etc/ld.so.cache
 
-	local i ldso_abi ldso_name
-	local ldso_abi_list=(
-		amd64   /usr/lib64/ld-linux-x86-64.so.2
-	)
-	case $(tc-endian) in
-	little)
-		ldso_abi_list+=(
-			arm64   /usr/lib64/ld-linux-aarch64.so.1
-		)
-		;;
-	big)
-		ldso_abi_list+=(
-			arm64   /usr/lib64/ld-linux-aarch64_be.so.1
-		)
-		;;
-	esac
-
-	for (( i = 0; i < ${#ldso_abi_list[@]}; i += 2 )) ; do
-		ldso_abi=${ldso_abi_list[i]}
-		has ${ldso_abi} || continue
-
-		ldso_name="$(alt_prefix)${ldso_abi_list[i+1]}"
-		if [[ ! -L ${ED}/${ldso_name} && ! -e ${ED}/${ldso_name} ]] ; then
-			dosym ../$(get_abi_LIBDIR ${ldso_abi})/${ldso_name##*/} ${ldso_name}
-		fi
-	done
-
-	# With devpts under Linux mounted properly, we do not need the pt_chown
-	# binary to be setuid.  This is because the default owners/perms will be
-	# exactly what we want.
-	if in_iuse suid && ! use suid ; then
-		find "${ED}" -name pt_chown -exec chmod -s {} +
-	fi
+	find "${ED}" -name pt_chown -exec chmod -s {} +
 
 	#################################################################
 	# EVERYTHING AFTER THIS POINT IS FOR NATIVE GLIBC INSTALLS ONLY #
-	# Make sure we install some symlink hacks so that when we build
-	# a 2nd stage cross-compiler, gcc finds the target system
-	# headers correctly.  See gcc/doc/gccinstall.info
-	if is_crosscompile ; then
-		# We need to make sure that /lib and /usr/lib always exists.
-		cd "${ED}"$(alt_libdir)/..
-		[[ -e lib ]] || mkdir lib
-		cd "${ED}"$(alt_usrlibdir)/..
-		[[ -e lib ]] || mkdir lib
-
-		dosym usr/include $(alt_prefix)/sys-include
-		return 0
-	fi
 
 	# Files for Debian-style locale updating
 	dodir /usr/share/i18n
@@ -513,40 +207,17 @@ glibc_do_src_install() {
 	insinto /usr/bin && doins "${FILESDIR}/locale-gen/locale-gen"
 	insinto /etc/ && doins "${FILESDIR}/locale-gen/locale.gen"
 
-	cp -r "${ED}"/sbin "${ED}"/usr/ && rm -rf "${ED}"/sbin
-}
-
-glibc_headers_install() {
-	local builddir=$(builddir "headers")
-	cd "${builddir}"
-	emake install_root="${D}$(alt_prefix)" install-headers
-
-	insinto $(alt_headers)/gnu
-	doins "${S}"/include/gnu/stubs.h
-
-	# Make sure we install the sys-include symlink so that when
-	# we build a 2nd stage cross-compiler, gcc finds the target
-	# system headers correctly.  See gcc/doc/gccinstall.info
-	dosym usr/include $(alt_prefix)/sys-include
-}
-
-src_install() {
-	if just_headers ; then
-		export ABI=default
-		glibc_headers_install
-		return
-	fi
-
-	foreach_abi glibc_do_src_install
-	src_strip
-
 	fperms +x /usr/bin/locale-gen
+
+	mv "${ED}"/sbin/{ldconfig,sln} "${ED}"/usr/sbin && rm -rf "${ED}"/sbin
+
+	rm -rf "${ED}"/usr/share/i18n/locales/{a*,b*,c*,d*,el*,en_CA,en_GB,eo,es*,et*,eu*,f*,g*,h*,i*,j*,k*,l*,m*,n*,o*,p*,q*,r*,s*,t*,u*,v*,w*,x*,y*,z*}
+	rm "${ED}"/usr/share/i18n/charmaps/GB*
+	cleanup_install
+	echo -e "en_US.UTF-8 UTF-8\nen_US ISO-8859-1" > "${ED}"/usr/share/i18n/locales/SUPPORTED
 }
 
 pkg_preinst() {
-	# nothing to do if just installing headers
-	just_headers && return
-
 	# prepare /etc/ld.so.conf.d/ for files
 	mkdir -p "${EROOT}"/etc/ld.so.conf.d
 
@@ -556,15 +227,12 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
-	# nothing to do if just installing headers
-	just_headers && return
-
-	if ! tc-is-cross-compiler && [[ -x ${EROOT}/usr/sbin/iconvconfig ]] ; then
+	if [[ -x ${EROOT}/usr/sbin/iconvconfig ]] ; then
 		# Generate fastloading iconv module configuration file.
 		"${EROOT}"/usr/sbin/iconvconfig --prefix="${ROOT}"
 	fi
 
-	if ! is_crosscompile && [[ ${ROOT} == "/" ]] ; then
+	if [[ ${ROOT} == "/" ]] ; then
 		# Reload init ... if in a chroot or a diff init package, ignore
 		# errors from this step #253697
 		/usr/sbin/telinit U 2>/dev/null

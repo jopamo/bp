@@ -5,7 +5,7 @@ case ${EAPI:-0} in
 		inherit multiprocessing unpacker perl-functions
 		PERL_EXPF="src_unpack src_prepare src_configure src_compile src_test src_install"
 		;;
-	6)
+	6|7)
 		inherit multiprocessing perl-functions
 		PERL_EXPF="src_prepare src_configure src_compile src_test src_install"
 		;;
@@ -54,7 +54,7 @@ case ${EAPI:-0} in
 				;;
 		esac
 		;;
-	6)
+	6|7)
 		[[ ${CATEGORY} == perl-core ]] && \
 			PERL_EXPF+=" pkg_postinst pkg_postrm"
 
@@ -234,7 +234,7 @@ perl-module_src_configure() {
 		set -- \
 			--installdirs=vendor \
 			--libdoc= \
-			--destdir="${D}" \
+			--destdir="${D}"/ \
 			--create_packlist=1 \
 			"${myconf_local[@]}"
 		einfo "perl Build.PL" "$@"
@@ -246,7 +246,7 @@ perl-module_src_configure() {
 			PREFIX=${EPREFIX}/usr \
 			INSTALLDIRS=vendor \
 			INSTALLMAN3DIR='none' \
-			DESTDIR="${D}" \
+			DESTDIR="${D}"/ \
 			"${myconf_local[@]}"
 		einfo "perl Makefile.PL" "$@"
 		perl Makefile.PL "$@" <<< "${pm_echovar}" \

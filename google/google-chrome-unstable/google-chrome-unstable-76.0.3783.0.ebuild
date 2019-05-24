@@ -1,29 +1,19 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
 
 inherit linux-info gnome2-utils unpacker xdg-utils
 
 DESCRIPTION="The web browser from Google"
 HOMEPAGE="https://www.google.com/chrome"
-
-if [[ ${PN} == google-chrome ]]; then
-	MY_PN=${PN}-stable
-else
-	MY_PN=${PN}
-fi
-
-MY_P="${MY_PN}_${PV}-1"
-
-SRC_URI="https://dl.google.com/linux/chrome/deb/pool/main/g/${MY_PN}/${MY_P}_amd64.deb"
+SRC_URI="https://dl.google.com/linux/chrome/deb/pool/main/g/${PN}/${P}-1_amd64.deb"
 
 LICENSE="google-chrome"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64"
 
 RESTRICT="bindist mirror strip"
 
-DEPEND=""
 RDEPEND="
 	gui-lib/at-spi2-atk
 	app-compression/bzip2

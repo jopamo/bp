@@ -1,6 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
+
 inherit meson user systemd git-r3 flag-o-matic
 
 DESCRIPTION="Lightweight high-performance web server"
@@ -8,8 +9,9 @@ HOMEPAGE="http://www.lighttpd.net/"
 EGIT_REPO_URI="https://git.lighttpd.net/lighttpd/lighttpd1.4.git"
 
 LICENSE="BSD GPL-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="bzip2 dbi fam gdbm geoip krb5 ldap libev libunwind lua memcached mysql ssl pcre php test postgres webdav xattr zlib static"
 
 CDEPEND="

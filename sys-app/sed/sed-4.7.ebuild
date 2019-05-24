@@ -33,6 +33,7 @@ src_bootstrap_sed() {
 }
 
 src_prepare() {
+	default
 	src_bootstrap_sed
 }
 

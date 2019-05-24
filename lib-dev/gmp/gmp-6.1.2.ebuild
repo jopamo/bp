@@ -22,14 +22,14 @@ IUSE="+asm doc cxx pgo static-libs"
 
 DEPEND="sys-devel/m4
 	app-compression/xz-utils"
-RDEPEND=""
 
 S=${WORKDIR}/${MY_P%a}
 
-src_prepare() {
-	elibtoolize
+PATCHES=( "${FILESDIR}"/${PN}-6.1.0-noexecstack-detect.patch	)
 
-	eapply "${FILESDIR}"/${PN}-6.1.0-noexecstack-detect.patch
+src_prepare() {
+	default
+	elibtoolize
 
 	mv configure configure.wrapped || die
 	cat <<-\EOF > configure

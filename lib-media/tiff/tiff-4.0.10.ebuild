@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
 
 inherit autotools libtool
 
@@ -10,8 +10,9 @@ SRC_URI="http://download.osgeo.org/libtiff/${P}.tar.gz
 	ftp://ftp.remotesensing.org/pub/libtiff/${P}.tar.gz"
 
 LICENSE="libtiff"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="+cxx jbig jpeg lzma static-libs test zlib"
 
 DEPEND="jpeg? ( lib-media/libjpeg-turbo )

@@ -1,16 +1,17 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
 
 inherit autotools perl-module git-r3 flag-o-matic
 
-EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
-
 DESCRIPTION="A modular textUI IRC client with IPv6 support"
 HOMEPAGE="https://irssi.org/"
+EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
+
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="+perl socks5 +proxy"
 
 DEPEND="lib-sys/ncurses:0=

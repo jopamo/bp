@@ -1,18 +1,17 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
-
+EAPI=7
 
 inherit flag-o-matic python-any-r1 toolchain-funcs
 
-PATCH_VER="1.0"
 DESCRIPTION="Standard GNU utilities (chmod, cp, dd, ls, sort, tr, head, wc, who,...)"
 HOMEPAGE="https://www.gnu.org/software/coreutils/"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 
 LICENSE="GPL-3"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="acl caps gmp multicall nls static test xattr"
 
 LIB_DEPEND="acl? ( sys-app/acl[static-libs] )

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
 
 inherit libtool flag-o-matic
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.hboehm.info/gc/ https://github.com/ivmai/bdwgc/"
 SRC_URI="https://github.com/ivmai/bdwgc/releases/download/v${PV}/${MY_P}.tar.gz"
 
 LICENSE="boehm-gc"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 IUSE="cxx static-libs threads"

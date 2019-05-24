@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 
 inherit meson flag-o-matic python-single-r1 git-r3

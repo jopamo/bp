@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 DESCRIPTION="Data files for poppler to support uncommon encodings without xpdfrc"
 HOMEPAGE="https://poppler.freedesktop.org/"

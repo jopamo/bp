@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
 inherit flag-o-matic
 
@@ -15,8 +15,3 @@ SLOT="0"
 MAKEOPTS+=" -j1"
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro
-
-src_install() {
-	default
-	rm -rf "${ED}"/usr/share/doc
-}

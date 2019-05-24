@@ -24,6 +24,7 @@ DEPEND="${RDEPEND}
 	static? ( ${LIB_DEPEND} )"
 
 src_prepare() {
+	default
 	sed -i \
 		-e "s:@SHELL@:${EPREFIX}/bin/sh:g" \
 		src/egrep.sh || die #523898

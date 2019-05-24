@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit autotools sgml-catalog flag-o-matic toolchain-funcs
+inherit autotools sgml-catalog flag-o-matic toolchain-funcs libtool
 
 DESCRIPTION="Jade is an implementation of DSSSL for formatting SGML and XML documents"
 HOMEPAGE="http://openjade.sourceforge.net"
@@ -19,56 +19,23 @@ RDEPEND="app-text/sgml-common
 DEPEND="dev-lang/perl
 	${RDEPEND}"
 
-PATCHES=(
-			"${FILESDIR}"/${P}-deplibs.patch
-			"${FILESDIR}"/${P}-ldflags.patch
-			"${FILESDIR}"/${P}-msggen.pl.patch
-			"${FILESDIR}"/${P}-respect-ldflags.patch
-			"${FILESDIR}"/${P}-libosp-la.patch
-			"${FILESDIR}"/${P}-gcc46.patch
-			"${FILESDIR}"/${P}-no-undefined.patch
-			"${FILESDIR}"/${P}-wchar_t-uint.patch
-		)
+PATCHES=( "${FILESDIR}"/openjade-1.3.2-upstream-1.patch	)
 
 src_prepare() {
 	default
 
-	# Please note!  Opts are disabled.  If you know what you're doing
-	# feel free to remove this line.  It may cause problems with
-	# docbook-sgml-utils among other things.
-	#ALLOWED_FLAGS="-O -O1 -O2 -pipe -g -march"
-	strip-flags
+	sed -i -e '/getopts/{N;s#&G#g#;s#do .getopts.pl.;##;}' \
+       -e '/use POSIX/ause Getopt::Std;' msggen.pl
 
-	ln -s config/configure.in configure.ac || die
-	cp "${FILESDIR}"/${P}-acinclude.m4 acinclude.m4 || die
-	rm config/missing || die
-
-	AT_NOEAUTOMAKE=yes
-	eautoreconf
-
-	SGML_PREFIX="${EPREFIX}"/usr/share/sgml
+	elibtoolize
 }
 
 src_configure() {
-	# avoids dead-store elimination optimization
-	# leading to segfaults on GCC 6
-	# bug #592590 #596506
-	tc-is-clang || append-cxxflags $(test-flags-CXX -fno-lifetime-dse)
-
-	# We need Prefix env, bug #287358
-	export CONFIG_SHELL="${CONFIG_SHELL:-${BASH}}"
-
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib64
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
+		--prefix="${EPREFIX}"/usr
 		--enable-http
 		--enable-default-catalog="${EPREFIX}"/etc/sgml/catalog
 		--enable-default-search-path="${EPREFIX}"/usr/share/sgml
-		--enable-splibdir="${EPREFIX}"/usr/lib64
 		--datadir="${EPREFIX}"/usr/share/sgml/${P}
 		$(use_enable static-libs static)
 	)
@@ -82,10 +49,7 @@ src_compile() {
 }
 
 src_install() {
-	make DESTDIR="${D}" \
-		SHELL="${BASH}" \
-		libdir="${EPREFIX}"/usr/lib64 \
-		install install-man
+	default
 
 	dosym openjade  /usr/bin/jade
 	dosym onsgmls   /usr/bin/nsgmls
@@ -101,13 +65,9 @@ src_install() {
 	insinto /usr/share/sgml/${P}/dsssl
 	doins dsssl/{dsssl.dtd,style-sheet.dtd,fot.dtd}
 	newins "${FILESDIR}"/${P}.dsssl-catalog catalog
-# Breaks sgml2xml among other things
-#	insinto /usr/share/sgml/${P}/unicode
-#	doins unicode/{catalog,unicode.sd,unicode.syn,gensyntax.pl}
+
 	insinto /usr/share/sgml/${P}/pubtext
 	doins pubtext/*
-
-	cleanup_install
 }
 
 sgml-catalog_cat_include "/etc/sgml/${P}.cat" \

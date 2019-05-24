@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
 
 inherit autotools git-r3
 
@@ -11,6 +11,7 @@ EGIT_REPO_URI="https://github.com/zeromq/${PN}.git"
 LICENSE="LGPL-3"
 SLOT="0/5"
 KEYWORDS="amd64 arm64"
+
 IUSE="pgm +sodium static-libs test unwind"
 
 RDEPEND="

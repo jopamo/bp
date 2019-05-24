@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 DESCRIPTION="A library for multiprecision complex arithmetic with exact rounding"
 HOMEPAGE="http://mpc.multiprecision.org/"

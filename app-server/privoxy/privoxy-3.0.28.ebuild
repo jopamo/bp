@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
 
 inherit autotools systemd toolchain-funcs user
 
@@ -12,13 +12,14 @@ HOMEPAGE="http://www.privoxy.org https://sourceforge.net/projects/ijbswa/"
 DESCRIPTION="A web proxy with advanced filtering capabilities for enhancing privacy"
 SRC_URI="mirror://sourceforge/ijbswa/${P%_*}-${PRIVOXY_STATUS}-src.tar.gz"
 
+LICENSE="GPL-2"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
 IUSE="+acl client-tags compression editor extended-host-patterns
 external-filters +fast-redirects +force graceful-termination
 +image-blocking ipv6 lfs png-images +stats
 +threads toggle tools whitelists +zlib"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-LICENSE="GPL-2"
 
 DEPEND="
 	lib-dev/libpcre

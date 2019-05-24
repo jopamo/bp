@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
 
 inherit distutils-r1
 
@@ -9,7 +9,7 @@ HOMEPAGE="https://wiki.gentoo.org/wiki/Project:Portage-Tools"
 SRC_URI="https://gitweb.gentoo.org/proj/gentoolkit.git/snapshot/${P}.tar.gz"
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 DEPEND="sys-app/portage[${PYTHON_USEDEP}]"

@@ -1,19 +1,17 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
 DESCRIPTION="DocBook XML catalog auto-updater"
 HOMEPAGE="https://sources.gentoo.org/gentoo-src/build-docbook-catalog/"
 SRC_URI="https://github.com/somasis/build-docbook-catalog/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="|| ( sys-app/util-linux app-misc/getopt )
-	!<app-text/docbook-xsl-stylesheets-1.73.1
 	lib-dev/libxml2"
-DEPEND=""
 
 pkg_setup() {
 	# export for bug #490754

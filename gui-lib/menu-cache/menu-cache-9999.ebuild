@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 DESCRIPTION="Library to create and utilize caches to speed up freedesktop application menus"
 HOMEPAGE="http://lxde.sourceforge.net/"

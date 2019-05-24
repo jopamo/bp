@@ -2,8 +2,6 @@
 
 EAPI=7
 
-inherit flag-o-matic autotools
-
 MY_P=${P/opensp/OpenSP}
 
 DESCRIPTION="A free, object-oriented toolkit for SGML parsing and entity management"
@@ -28,21 +26,9 @@ DEPEND="doc? (
 
 S=${WORKDIR}/${MY_P}
 
-src_prepare() {
-	eapply "${FILESDIR}"/${P}-fix-segfault.patch
-	use prefix && eautoreconf
-}
+PATCHES=( "${FILESDIR}"/${P}-fix-segfault.patch )
 
 src_configure() {
-	export CONFIG_SHELL=${BASH}  # configure needs bash
-
-	# The following filters are taken from openjade's ebuild. See bug #100828.
-	# Please note!  Opts are disabled.  If you know what you're doing
-	# feel free to remove this line.  It may cause problems with
-	# docbook-sgml-utils among other things.
-	#ALLOWED_FLAGS="-O -O1 -O2 -pipe -g -march"
-	strip-flags
-
 	econf \
 		--enable-http \
 		--enable-default-catalog="${EPREFIX}"/etc/sgml/catalog \

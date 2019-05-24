@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 DESCRIPTION="Ben Fennema's tools for packet writing and the UDF filesystem"
 HOMEPAGE="https://github.com/pali/udftools/ https://sourceforge.net/projects/linux-udf/"

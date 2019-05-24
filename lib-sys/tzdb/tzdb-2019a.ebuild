@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
 
 inherit toolchain-funcs flag-o-matic
 
@@ -12,8 +12,9 @@ SRC_URI="http://www.iana.org/time-zones/repository/releases/tzdata${data_ver}.ta
 	http://www.iana.org/time-zones/repository/releases/tzcode${code_ver}.tar.gz"
 
 LICENSE="BSD public-domain"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="nls leaps_timezone"
 
 DEPEND="nls? ( sys-devel/gettext )"

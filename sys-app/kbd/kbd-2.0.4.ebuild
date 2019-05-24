@@ -25,28 +25,6 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconf
 	test? ( lib-dev/check )"
 
-src_unpack() {
-	if [[ ${PV} == "9999" ]] ; then
-		git-r3_src_unpack
-	else
-		default
-	fi
-
-	# Rename conflicting keymaps to have unique names, bug #293228
-	cd "${S}"/data/keymaps/i386 || die
-	mv dvorak/no.map dvorak/no-dvorak.map || die
-	mv fgGIod/trf.map fgGIod/trf-fgGIod.map || die
-	mv olpc/es.map olpc/es-olpc.map || die
-	mv olpc/pt.map olpc/pt-olpc.map || die
-	mv qwerty/cz.map qwerty/cz-qwerty.map || die
-}
-
-src_prepare() {
-	if [[ ${PV} == "9999" ]] ; then
-		eautoreconf
-	fi
-}
-
 src_configure() {
 	econf \
 		$(use_enable nls) \

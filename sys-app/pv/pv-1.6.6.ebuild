@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 inherit linux-info toolchain-funcs
 
 DESCRIPTION="Pipe Viewer: a tool for monitoring the progress of data through a pipe"

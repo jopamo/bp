@@ -1,10 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
 inherit cmake-utils flag-o-matic
-
-CMAKE_MAKEFILE_GENERATOR=ninja
 
 DESCRIPTION="ZeroMQ 'highlevel' C++ bindings"
 HOMEPAGE="https://github.com/zeromq/zmqpp"
@@ -15,14 +13,13 @@ else
 	SRC_URI="https://github.com/zeromq/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 fi
 
+LICENSE="MPL-2.0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-LICENSE="MPL-2.0"
-SLOT="0"
 IUSE="static-libs"
 
 DEPEND="lib-net/libzmq[static-libs?]"
-RDEPEND="${DEPEND}"
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 

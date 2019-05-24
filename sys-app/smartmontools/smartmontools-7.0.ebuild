@@ -1,17 +1,17 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
 
 inherit autotools flag-o-matic systemd
 
-SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
-KEYWORDS="amd64 arm64"
-
 DESCRIPTION="Tools to monitor storage systems to provide advanced warning of disk degradation"
 HOMEPAGE="https://www.smartmontools.org"
+SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
+KEYWORDS="amd64 arm64"
+
 IUSE="caps +daemon static update_drivedb"
 
 DEPEND="
@@ -36,7 +36,6 @@ REQUIRED_USE="( caps? ( daemon ) )"
 
 src_prepare() {
 	default
-
 	eautoreconf
 }
 

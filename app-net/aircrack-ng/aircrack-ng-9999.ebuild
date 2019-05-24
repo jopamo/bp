@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
 
 inherit toolchain-funcs flag-o-matic autotools
 
@@ -10,7 +10,6 @@ HOMEPAGE="http://www.aircrack-ng.org"
 if [[ ${PV} == "9999" ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/aircrack-ng/aircrack-ng.git"
-	KEYWORDS="amd64 arm64"
 else
 	MY_PV=${PV/_/-}
 	SRC_URI="http://download.${PN}.org/${PN}-${MY_PV}.tar.gz"
@@ -18,7 +17,8 @@ else
 fi
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
 
 IUSE="+airdrop-ng +airgraph-ng kernel_linux kernel_FreeBSD +netlink +pcre +sqlite +experimental"
 

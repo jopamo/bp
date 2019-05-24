@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 BASEVERSION="2.4.6"
 MY_P="libtool-${BASEVERSION}"

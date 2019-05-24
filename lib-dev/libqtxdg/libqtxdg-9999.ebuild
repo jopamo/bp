@@ -1,6 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
+
 inherit cmake-utils virtualx
 
 DESCRIPTION="A Qt implementation of XDG standards"
@@ -15,8 +16,9 @@ fi
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-IUSE="test"
 KEYWORDS="amd64 arm64"
+IUSE="test"
+
 CDEPEND="
 	gui-lib/qtcore:5
 	gui-lib/qtdbus:5

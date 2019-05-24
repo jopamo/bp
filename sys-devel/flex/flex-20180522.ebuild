@@ -1,19 +1,20 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
+
+SNAPSHOT=98018e3f58d79e082216d406866942841d4bdf8a
 
 inherit autotools flag-o-matic
 
 DESCRIPTION="The Fast Lexical Analyzer"
 HOMEPAGE="https://github.com/westes/flex"
-
-SNAPSHOT=98018e3f58d79e082216d406866942841d4bdf8a
 SRC_URI="https://github.com/westes/flex/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="FLEX"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="nls static-libs test"
 
 DEPEND="sys-devel/m4

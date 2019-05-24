@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
-
+EAPI=7
 
 inherit font python-any-r1
 
@@ -10,8 +9,9 @@ HOMEPAGE="https://pagure.io/liberation-fonts"
 SRC_URI="https://github.com/liberationfonts/liberation-fonts/files/2926169/liberation-fonts-ttf-${PV}.tar.gz"
 
 KEYWORDS="amd64 arm64"
-SLOT="0"
+SLOT="0/1"
 LICENSE="OFL-1.1"
+
 IUSE="fontforge X"
 
 FONT_SUFFIX="ttf"

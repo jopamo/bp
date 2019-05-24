@@ -1,9 +1,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
-
+EAPI=7
 
 inherit flag-o-matic linux-info toolchain-funcs user l10n
+
+DESCRIPTION="QEMU + Kernel-based Virtual Machine userland tools"
+HOMEPAGE="http://www.qemu.org http://www.linux-kvm.org"
 
 if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/qemu/qemu.git"
@@ -15,11 +17,8 @@ else
 	KEYWORDS="amd64 arm64"
 fi
 
-DESCRIPTION="QEMU + Kernel-based Virtual Machine userland tools"
-HOMEPAGE="http://www.qemu.org http://www.linux-kvm.org"
-
 LICENSE="GPL-2 LGPL-2 BSD-2"
-SLOT="0"
+SLOT="0/1"
 IUSE="accessibility +aio alsa bluetooth bzip2 capstone +caps +curl debug
 	+fdt glusterfs gnutls gtk gtk2 infiniband iscsi +jpeg kernel_linux
 	kernel_FreeBSD lzo ncurses nfs nls numa opengl +pin-upstream-blobs +png

@@ -1,19 +1,21 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
-
+EAPI=7
 
 inherit flag-o-matic python-single-r1 systemd user autotools
 
 MY_P=${PN}-${PV/_/}
+
 DESCRIPTION="A validating, recursive and caching DNS resolver"
 HOMEPAGE="http://unbound.net/"
 SRC_URI="http://unbound.net/downloads/${MY_P}.tar.gz"
 
 LICENSE="BSD GPL-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="debug dnscrypt dnstap +ecdsa gost python static-libs test threads"
+
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 CDEPEND=">=lib-dev/expat-2.1.0-r3

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 DESCRIPTION="Visual binary diff utility"
 HOMEPAGE="https://www.cjmweb.net/vbindiff/"

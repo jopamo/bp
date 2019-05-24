@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
 
 inherit systemd toolchain-funcs
 
@@ -9,8 +9,9 @@ HOMEPAGE="http://vsftpd.beasts.org/"
 SRC_URI="https://security.appspot.com/downloads/${P}.tar.gz"
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="caps pam ssl xinetd"
 
 DEPEND="lib-sys/libcap

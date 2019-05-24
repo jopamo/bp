@@ -6,7 +6,7 @@ inherit linux-info gnome2-utils unpacker xdg-utils
 
 DESCRIPTION="The web browser from Google"
 HOMEPAGE="https://www.google.com/chrome"
-SRC_URI="https://dl.google.com/linux/chrome/deb/pool/main/g/${PN}/${P}-1_amd64.deb"
+SRC_URI="http://dl.google.com/linux/chrome/deb/pool/main/g/${PN}/${PN}_${PV}-1_amd64.deb"
 
 LICENSE="google-chrome"
 SLOT="0/1"

@@ -16,7 +16,7 @@ case "${EAPI:-0}" in
 	0)
 		die "${ECLASS}.eclass: EAPI=0 is not supported.  Please upgrade to EAPI >= 1."
 		;;
-	1|2|3|4|5|6)
+	1|2|3|4|5|6|7)
 		;;
 	*)
 		die "${ECLASS}.eclass: EAPI=${EAPI} is not supported yet."
@@ -240,8 +240,8 @@ install_cert() {
 
 		# Check for previous existence of generated files
 		for type in key csr crt pem ; do
-			if [ -e "${ROOT}${cert}.${type}" ] ; then
-				ewarn "${ROOT}${cert}.${type}: exists, skipping"
+			if [ -e "${ROOT}/${cert}.${type}" ] ; then
+				ewarn "${ROOT}/${cert}.${type}: exists, skipping"
 				continue 2
 			fi
 		done
@@ -256,10 +256,10 @@ install_cert() {
 		# Install the generated files and set sane permissions
 		local base=$(get_base)
 		install -d "${ROOT}${cert%/*}"
-		install -m0400 "${base}.key" "${ROOT}${cert}.key"
-		install -m0444 "${base}.csr" "${ROOT}${cert}.csr"
-		install -m0444 "${base}.crt" "${ROOT}${cert}.crt"
-		install -m0400 "${base}.pem" "${ROOT}${cert}.pem"
+		install -m0400 "${base}.key" "${ROOT}/${cert}.key"
+		install -m0444 "${base}.csr" "${ROOT}/${cert}.csr"
+		install -m0444 "${base}.crt" "${ROOT}/${cert}.crt"
+		install -m0400 "${base}.pem" "${ROOT}/${cert}.pem"
 		: $(( ++count ))
 	done
 

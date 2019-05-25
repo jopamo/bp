@@ -25,7 +25,7 @@ DEPEND="acl? ( sys-app/acl )
 
 RDEPEND="lib-dev/expat"
 
-filter-flags -flto
+append-flags -lm
 
 src_prepare() {
 	eapply "${WORKDIR}"/gettext-20180703.patch

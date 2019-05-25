@@ -11,3 +11,10 @@ EGIT_REPO_URI="https://github.com/signalapp/libsignal-protocol-c.git"
 LICENSE="GPL-3"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
+IUSE="static-libs"
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
+}

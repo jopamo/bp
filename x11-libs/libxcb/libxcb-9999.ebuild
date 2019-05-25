@@ -41,3 +41,8 @@ src_configure() {
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
+}

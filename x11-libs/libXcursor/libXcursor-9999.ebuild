@@ -11,6 +11,8 @@ LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
+IUSE="static-libs"
+
 RDEPEND=">=x11-libs/libXrender-0.9.8
 	>=x11-libs/libXfixes-5.0.1
 	>=x11-libs/libX11-1.6.2"
@@ -33,4 +35,9 @@ src_configure() {
 		--with-cursorpath='~/.cursors:~/.icons:/usr/local/share/cursors/xorg-x11:/usr/local/share/cursors:/usr/local/share/icons:/usr/local/share/pixmaps:/usr/share/cursors/xorg-x11:/usr/share/cursors:/usr/share/pixmaps/xorg-x11:/usr/share/icons:/usr/share/pixmaps'
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

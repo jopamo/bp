@@ -10,6 +10,9 @@ LICENSE="MIT boehm-gc GPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-src_configure() {
-	ECONF_SOURCE=${S} econf
+IUSE="static-libs"
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

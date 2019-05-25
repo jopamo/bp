@@ -8,10 +8,10 @@ DESCRIPTION="The OpenGL Utility Library"
 HOMEPAGE="https://cgit.freedesktop.org/mesa/glu/"
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/mesa/glu.git"
 
+LICENSE="SGI-B-2.0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-LICENSE="SGI-B-2.0"
-SLOT="0"
 IUSE="static-libs"
 
 DEPEND=">=lib-media/mesa-7.0-r1"
@@ -31,4 +31,9 @@ src_configure() {
 		--localstatedir="${EPREFIX}"/var
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

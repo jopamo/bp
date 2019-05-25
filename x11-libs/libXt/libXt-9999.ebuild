@@ -11,7 +11,7 @@ LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="test"
+IUSE="test static-libs"
 
 RDEPEND=">=x11-libs/libX11-1.6.2
 	>=x11-libs/libSM-1.2.1-r1
@@ -35,4 +35,9 @@ src_configure() {
 		--localstatedir="${EPREFIX}"/var
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

@@ -8,9 +8,10 @@ SRC_URI="https://www.tcpdump.org/release/${P}.tar.gz"
 HOMEPAGE="http://www.tcpdump.org/"
 
 LICENSE="BSD"
-SLOT="0"
-IUSE="bluetooth dbus netlink static-libs usb"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
+IUSE="bluetooth dbus netlink static-libs usb"
 
 RDEPEND="
 	bluetooth? ( app-net/bluez:= )
@@ -41,4 +42,9 @@ src_configure() {
 
 src_compile() {
 	emake all shared
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

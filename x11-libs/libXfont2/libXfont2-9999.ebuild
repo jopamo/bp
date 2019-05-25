@@ -11,7 +11,7 @@ LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 ipv6 truetype doc"
+IUSE="bzip2 ipv6 truetype doc static-libs"
 
 RDEPEND="x11-libs/xtrans
 	x11-libs/libfontenc
@@ -42,4 +42,9 @@ src_configure() {
 		--without-fop
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

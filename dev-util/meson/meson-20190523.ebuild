@@ -2,22 +2,25 @@
 
 EAPI=7
 
-
-if [[ ${PV} = *9999* ]]; then
-	EGIT_REPO_URI="https://github.com/mesonbuild/meson"
-	inherit git-r3
-else
-	SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
-	KEYWORDS="amd64 arm64"
-fi
+SNAPSHOT=9b3592a8baaf6e8e5ffdb6c4edb6056135fd8068
 
 inherit distutils-r1
 
 DESCRIPTION="Open source build system"
 HOMEPAGE="http://mesonbuild.com/"
 
+if [[ ${PV} = *9999* ]]; then
+	EGIT_REPO_URI="https://github.com/mesonbuild/meson"
+	inherit git-r3
+else
+	SRC_URI="https://github.com/mesonbuild/meson/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	KEYWORDS="amd64 arm64"
+fi
+
 LICENSE="Apache-2.0"
-SLOT="0"
+SLOT="0/1"
+
 RESTRICT="test"
 
 DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"

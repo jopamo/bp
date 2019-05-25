@@ -9,8 +9,9 @@ HOMEPAGE="https://xiph.org/vorbis/"
 SRC_URI="https://downloads.xiph.org/releases/vorbis/${P}.tar.xz"
 
 LICENSE="BSD"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="static-libs"
 
 RDEPEND=">=lib-media/libogg-1.3.0"
@@ -34,4 +35,9 @@ src_prepare() {
 
 	AT_M4DIR="m4" \
 	default
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

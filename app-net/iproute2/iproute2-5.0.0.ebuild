@@ -16,8 +16,9 @@ DESCRIPTION="kernel routing and traffic control utilities"
 HOMEPAGE="https://wiki.linuxfoundation.org/networking/iproute2"
 
 LICENSE="GPL-2"
-SLOT="0"
-IUSE="atm elf minimal"
+SLOT="0/1"
+
+IUSE="atm elf minimal static-libs"
 
 RDEPEND="
 	!minimal? ( lib-net/libmnl )
@@ -116,5 +117,7 @@ src_install() {
 	doins include/libnetlink.h
 	sed -i '/linux\/netconf.h/d' "${ED%/}"/usr/include/libnetlink.h || die
 
+	rm -rf "${ED}"/var/lib
 	cleanup_install
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

@@ -11,6 +11,7 @@ HOMEPAGE="http://www.libssh2.org/"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="gcrypt static-libs test zlib"
 
 DEPEND="
@@ -19,8 +20,6 @@ DEPEND="
 	zlib? ( >=lib-sys/zlib-1.2.8-r1 )
 "
 RDEPEND="${DEPEND}"
-
-DOCS=( NEWS README )
 
 src_prepare() {
 	default
@@ -43,4 +42,9 @@ src_configure() {
 	fi
 
 	ECONF_SOURCE="${S}" econf --with-crypto=${crypto}
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

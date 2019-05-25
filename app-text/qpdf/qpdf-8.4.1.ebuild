@@ -2,20 +2,20 @@
 
 EAPI=7
 
-inherit autotools flag-o-matic
+inherit autotools
 
 DESCRIPTION="Command-line tool for structural, content-preserving transformation of PDF files"
 HOMEPAGE="http://qpdf.sourceforge.net/"
 SRC_URI="https://github.com/qpdf/qpdf/archive/release-${P}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-release-${P}
 
 LICENSE="|| ( Apache-2.0 Artistic-2 )"
-S=${WORKDIR}/${PN}-release-${P}
 SLOT="0/18"
 KEYWORDS="amd64 arm64"
 
-DEPEND="lib-media/libjpeg-turbo"
+IUSE="static-libs"
 
-filter-flags -flto
+DEPEND="lib-media/libjpeg-turbo"
 
 src_prepare() {
 	./autogen.sh
@@ -32,4 +32,9 @@ src_configure() {
 		--localstatedir="${EPREFIX}"/var
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

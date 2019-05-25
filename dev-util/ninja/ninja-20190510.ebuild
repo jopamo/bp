@@ -2,19 +2,18 @@
 
 EAPI=7
 
+SNAPSHOT=20b30dac6698d119e7797b34d6ed2c4ed8f48417
 
 inherit python-any-r1 toolchain-funcs
 
-SNAPSHOT=1bcc689324bdee090eed035353724abc3fa7c909
-
-SRC_URI="https://github.com/ninja-build/ninja/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-KEYWORDS="amd64 arm64"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
 DESCRIPTION="A small build system similar to make"
 HOMEPAGE="https://ninja-build.org/"
+SRC_URI="https://github.com/ninja-build/ninja/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="Apache-2.0"
-SLOT="0"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
 
 DEPEND="
 	${PYTHON_DEPS}

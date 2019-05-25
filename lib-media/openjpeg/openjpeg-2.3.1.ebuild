@@ -32,7 +32,7 @@ src_prepare() {
 
 src_configure() {
 	local mycmakeargs=(
-		-DOPENJPEG_INSTALL_LIB_DIR="lib64"
+		-DOPENJPEG_INSTALL_LIB_DIR="lib"
 		-DBUILD_TESTING="$(usex test)"
 		-DBUILD_DOC=OFF
 		-DBUILD_CODEC=ON
@@ -42,7 +42,7 @@ src_configure() {
 
 	if use static-libs; then
 		mycmakeargs=(
-			-DOPENJPEG_INSTALL_LIB_DIR="lib64"
+			-DOPENJPEG_INSTALL_LIB_DIR="lib"
 			-DBUILD_TESTING="$(usex test)"
 			-DBUILD_SHARED_LIBS=OFF
 			-DBUILD_CODEC="$(usex test)"
@@ -116,4 +116,5 @@ src_install() {
 	fi
 
 	cmake-utils_src_install
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

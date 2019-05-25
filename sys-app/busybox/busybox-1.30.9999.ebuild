@@ -23,7 +23,7 @@ LICENSE="GPL-2" # GPL-2 only
 SLOT="0"
 RESTRICT="test"
 
-filter-flags -flto
+filter-flags -flto\=\*
 
 src_prepare() {
 	default

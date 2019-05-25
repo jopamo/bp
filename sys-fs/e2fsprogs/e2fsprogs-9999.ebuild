@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic toolchain-funcs autotools git-r3
+inherit flag-o-matic toolchain-funcs git-r3
 
 DESCRIPTION="Standard EXT2/EXT3/EXT4 filesystem utilities"
 HOMEPAGE="http://ext4.wiki.kernel.org/"
@@ -22,15 +22,10 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconf
 	sys-app/texinfo"
 
-src_prepare() {
-	eautoreconf
-	default
-}
+append-cflags -fno-strict-aliasing
+append-cppflags -D_GNU_SOURCE
 
 src_configure() {
-	append-cflags -fno-strict-aliasing
-	append-cppflags -D_GNU_SOURCE
-
 	local myeconfargs=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -38,8 +33,7 @@ src_configure() {
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}/etc"
 		--localstatedir="${EPREFIX}/var"
-		--with-root-prefix="${EPREFIX}/"
-		--enable-symlink-install
+		--prefix="${EPREFIX}/usr"
 		$(tc-is-static-only || echo --enable-elf-shlibs)
 		$(tc-has-tls || echo --disable-tls)
 		$(use_enable fuse fuse2fs)
@@ -52,15 +46,21 @@ src_configure() {
 }
 
 src_install() {
+	unset MAKEFLAGS
+
 	emake \
 		STRIP=: \
-		root_libdir="${EPREFIX}/usr/lib64" \
 		DESTDIR="${D}" \
-		install
+		install install-libs
 
-	rm -rf "${ED}"/usr/share/info "${ED}"/yes
+	rm -f "${ED}"/usr/share/info/libext2fs.info.gz
+
+	#until we know where this coming from
+	rm -rf "${PORTAGE_BUILDDIR}"/imageyes
 
 	if ! use static-libs ; then
 		find "${D}" -name '*.a' -delete || die
 	fi
+
+	cleanup_install
 }

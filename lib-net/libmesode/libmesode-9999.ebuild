@@ -12,7 +12,14 @@ LICENSE="GPL-3"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
+IUSE="static-libs"
+
 src_prepare() {
 	default
 	eautoreconf
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

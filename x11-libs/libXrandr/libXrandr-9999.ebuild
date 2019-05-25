@@ -11,6 +11,8 @@ LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
+IUSE="static-libs"
+
 DEPEND=">=x11-libs/libX11-1.6.2
 	>=x11-libs/libXext-1.3.2
 	>=x11-libs/libXrender-0.9.8
@@ -31,4 +33,9 @@ src_configure() {
 		--localstatedir="${EPREFIX}"/var
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

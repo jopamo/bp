@@ -7,11 +7,12 @@ inherit autotools git-r3
 DESCRIPTION="pkg-config compatible replacement with no dependencies other than ANSI C89"
 HOMEPAGE="https://github.com/pkgconf/pkgconf"
 EGIT_REPO_URI="https://git.dereferenced.org/pkgconf/pkgconf.git"
-KEYWORDS="amd64 arm64"
 
 LICENSE="ISC"
 SLOT="0/3"
-IUSE="test"
+KEYWORDS="amd64 arm64"
+
+IUSE="static-libs test"
 
 RESTRICT="!test? ( test )"
 
@@ -36,4 +37,5 @@ src_test() {
 src_install() {
 	default
 	dosym pkgconf /usr/bin/pkg-config
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

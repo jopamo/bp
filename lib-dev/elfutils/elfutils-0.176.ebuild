@@ -9,8 +9,9 @@ HOMEPAGE="http://elfutils.org/"
 SRC_URI="https://sourceware.org/elfutils/ftp/${PV}/${P}.tar.bz2"
 
 LICENSE="|| ( GPL-2+ LGPL-3+ ) utils? ( GPL-3+ )"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="bzip2 lzma nls static-libs test +utils"
 
 RDEPEND=">=lib-sys/zlib-1.2.8-r1
@@ -21,7 +22,7 @@ DEPEND="${RDEPEND}
 	>=sys-devel/flex-2.5.4a
 	sys-devel/m4"
 
-filter-flags -flto
+filter-flags -flto\=\*
 
 src_prepare() {
 	default
@@ -65,4 +66,5 @@ src_install() {
 	if ! use utils; then
 		rm -rf "${ED}"/usr/bin || die
 	fi
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

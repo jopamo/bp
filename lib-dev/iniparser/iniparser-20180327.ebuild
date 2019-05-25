@@ -2,19 +2,20 @@
 
 EAPI=7
 
+SNAPSHOT=7b68537ac11fa62e923fd26aa87e206dc93a9a55
+
 inherit autotools
 
 DESCRIPTION="A free stand-alone ini file parsing library"
 HOMEPAGE="http://ndevilla.free.fr/iniparser/"
-
-SNAPSHOT=7b68537ac11fa62e923fd26aa87e206dc93a9a55
 SRC_URI="https://github.com/ndevilla/iniparser/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
-KEYWORDS="amd64 arm64"
 
 LICENSE="MIT"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
+IUSE="static-libs"
 
 RESTRICT="test"
 
@@ -37,4 +38,9 @@ src_configure() {
 		--localstatedir="${EPREFIX}/var"
 	)
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

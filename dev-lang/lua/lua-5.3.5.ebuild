@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+filter-flags -flto\=\*
 
 PATCHES=( ${FILESDIR}/lua-shared.patch )
 

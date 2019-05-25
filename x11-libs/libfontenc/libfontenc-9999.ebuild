@@ -11,6 +11,8 @@ LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
+IUSE="static-libs"
+
 RDEPEND="lib-sys/zlib
 	x11-misc/xorgproto"
 
@@ -33,4 +35,9 @@ src_configure() {
 		--with-encodingsdir="${EPREFIX}/usr/share/fonts/encodings"
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

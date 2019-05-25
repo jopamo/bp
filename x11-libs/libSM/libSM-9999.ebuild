@@ -11,7 +11,7 @@ LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="doc ipv6 +uuid"
+IUSE="doc ipv6 +uuid static-libs"
 
 RDEPEND=">=x11-libs/libICE-1.0.8-r1
 	x11-libs/xtrans
@@ -45,4 +45,9 @@ src_configure() {
 		--without-fop
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

@@ -18,7 +18,7 @@ LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="X doc test"
+IUSE="X doc test static-libs"
 
 DEPEND="sys-devel/bison
 	X? ( x11-misc/xorgproto )
@@ -43,4 +43,9 @@ src_configure() {
 		$(use_with doc doxygen)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

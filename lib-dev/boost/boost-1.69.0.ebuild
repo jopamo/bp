@@ -270,6 +270,8 @@ EOF
 
 		dosym ../../../../include/boost /usr/share/doc/${PF}/html/boost
 	fi
+
+	use static-libs || find "${ED}" -name '*.a' -delete
 }
 
 pkg_preinst() {

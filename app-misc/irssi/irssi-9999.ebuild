@@ -17,13 +17,21 @@ IUSE="+perl socks5 +proxy"
 DEPEND="lib-sys/ncurses:0=
 	>=lib-dev/glib-2.6.0
 	lib-dev/openssl:=
-	perl? ( dev-lang/perl:= )"
+	dev-lang/perl:="
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs -Wl,-z,relro -flto\=\*
 
 src_prepare() {
-	sed -i -e /^autoreconf/d autogen.sh || die
-	NOCONFIGURE=1 ${S}/autogen.sh || die
+	perl utils/syntax.pl || die
+
+	files=`echo docs/help/in/*.in| \
+	sed -e 's,docs/help/in/Makefile.in ,,' -e 's,docs/help/in/,!,g' -e 's/\.in /.in ?/g'`
+	cat docs/help/in/Makefile.am.gen|sed "s/@HELPFILES@/$files/g"| \
+	sed 's/?/\\?/g'|tr '!?' '\t\n' > docs/help/in/Makefile.am
+
+	files=`echo $files|sed 's/\.in//g'`
+	cat docs/help/Makefile.am.gen|sed "s/@HELPFILES@/$files/g"|	\
+	sed 's/?/\\?/g'|tr '!?' '\t\n' > docs/help/Makefile.am
 
 	eapply_user
 	eautoreconf
@@ -45,6 +53,8 @@ src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
+
 src_install() {
 	emake DESTDIR="${D}" install
+	cleanup_install
 }

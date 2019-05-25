@@ -59,7 +59,7 @@ tmpfiles_process() {
 	[[ ${#} -gt 0 ]] || die "${FUNCNAME}: Must specify at least one filename"
 
 	# Only process tmpfiles for the currently running system
-	if [[ ${ROOT} != / ]]; then
+	if [[ "${ROOT}"/ != / ]]; then
 		ewarn "Warning: tmpfiles.d not processed on ROOT != /."
 		return
 	fi

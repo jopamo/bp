@@ -132,8 +132,6 @@ fi
 
 EXPORT_FUNCTIONS src_unpack src_prepare src_configure src_compile src_install src_test pkg_postinst pkg_postrm
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
-
 # @FUNCTION: qt5-build_src_unpack
 # @DESCRIPTION:
 # Unpacks the sources.
@@ -611,8 +609,8 @@ qt5_base_configure() {
 		# precompiled headers can cause problems
 		-no-pch
 
-		# link-time code generation is not something we want to enable by default
-		-no-ltcg
+		# link-time code generation is something we want to enable by default
+		-ltcg
 
 		# use the system linker (gold will be selected automagically otherwise)
 		$(tc-ld-is-gold && echo -use-gold-linker || echo -no-use-gold-linker)

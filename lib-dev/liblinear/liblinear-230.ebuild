@@ -11,15 +11,6 @@ SRC_URI="https://github.com/cjlin1/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 LICENSE="BSD"
 SLOT="0/3"
 KEYWORDS="amd64 arm64"
-IUSE="blas"
-
-RDEPEND="
-	blas? ( virtual/blas )
-"
-DEPEND="
-	${RDEPEND}
-	blas? ( dev-util/pkgconf )
-"
 
 src_prepare() {
 	default
@@ -35,9 +26,6 @@ src_prepare() {
 		-e '/^CFLAGS/d;/^CXXFLAGS/d' \
 		-e 's|$${SHARED_LIB_FLAG}|& $(LDFLAGS)|g' \
 		Makefile || die
-	if use blas; then
-		sed -i -e 's:blas/blas.a::g' Makefile || die
-	fi
 }
 
 src_compile() {
@@ -48,18 +36,15 @@ src_compile() {
 		CXXFLAGS="${CXXFLAGS} -fPIC" \
 		AR="$(tc-getAR) rcv" \
 		RANLIB="$(tc-getRANLIB)" \
-		LIBS="$(usex blas "$( $(tc-getPKG_CONFIG) --libs blas )" blas/blas.a)" \
 		lib all
 }
 
 src_install() {
-	dolib ${PN}.so.3
+	dolib.so ${PN}.so.3
 	dosym ${PN}.so.3 /usr/lib64/${PN}.so
 
 	newbin predict ${PN}-predict
 	newbin train ${PN}-train
 
 	doheader linear.h
-
-	dodoc README
 }

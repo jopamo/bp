@@ -650,8 +650,8 @@ src_configure() {
 		--error-log-path="${EPREFIX}"/var/log/${PN}/error_log \
 		--pid-path="${EPREFIX}"/run/${PN}.pid \
 		--lock-path="${EPREFIX}"/run/lock/${PN}.lock \
-		--with-cc-opt="-I${EROOT}usr/include${WITHOUT_IPV6}" \
-		--with-ld-opt="-L${EROOT}usr/lib64" \
+		--with-cc-opt="-I${EROOT}/usr/include${WITHOUT_IPV6}" \
+		--with-ld-opt="-L${EROOT}/usr/lib64" \
 		--http-log-path="${EPREFIX}"/var/log/${PN}/access_log \
 		--http-client-body-temp-path="${EPREFIX}${NGINX_HOME_TMP}"/client \
 		--http-proxy-temp-path="${EPREFIX}${NGINX_HOME_TMP}"/proxy \
@@ -687,7 +687,7 @@ src_install() {
 
 	# just keepdir. do not copy the default htdocs files (bug #449136)
 	keepdir /var/www/localhost
-	rm -rf "${D}"usr/html || die
+	rm -rf "${D}"/usr/html || die
 
 	# set up a list of directories to keep
 	local keepdir_list="${NGINX_HOME_TMP}"/client

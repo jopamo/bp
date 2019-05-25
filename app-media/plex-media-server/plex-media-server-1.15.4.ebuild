@@ -60,9 +60,6 @@ src_install() {
 	doins "${CONFIG_VANILLA#/}"
 	sed -e "s#${CONFIG_VANILLA}#${CONFIG_PATH}/${_APPNAME}#g" -i "${S}"/usr/sbin/start_pms || die
 
-	# Remove Debian specific files
-	rm -rf "usr/share/doc" || die
-
 	# Copy main files over to image and preserve permissions so it is portable
 	cp -rp usr/ "${ED}" || die
 
@@ -85,11 +82,13 @@ src_install() {
 	systemd_newunit "${INIT}" "${INIT_NAME}"
 
 	einfo "Configuring virtualenv"
-	pushd "${ED}"usr/lib/plexmediaserver/Resources/Python &>/dev/null || die
+	pushd "${ED}"/usr/lib/plexmediaserver/Resources/Python &>/dev/null || die
 	find . -type f -exec sed -i -e "s#${D}##g" {} + || die
 	popd &>/dev/null || die
 
 	keepdir /var/{lib,log}
 	keepdir /var/lib/plexmediaserver
 	keepdir /var/log/pms
+
+	cleanup_install
 }

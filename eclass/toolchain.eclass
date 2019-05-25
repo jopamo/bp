@@ -636,14 +636,14 @@ toolchain_pkg_postinst() {
 	rm -f "${EROOT}"*/rcscripts/awk/fixlafiles.awk "${EROOT}"sbin/fix_libtool_files.sh
 	rmdir "${EROOT}"*/rcscripts{/awk,} 2>/dev/null
 
-	mkdir -p "${EROOT}"usr/{share/gcc-data,sbin,bin}
+	mkdir -p "${EROOT}"/usr/{share/gcc-data,sbin,bin}
 	# DATAPATH has EPREFIX already, use ROOT with it
-	cp "${ROOT}${DATAPATH}"/fixlafiles.awk "${EROOT}"usr/share/gcc-data/ || die
-	cp "${ROOT}${DATAPATH}"/fix_libtool_files.sh "${EROOT}"usr/sbin/ || die
+	cp "${ROOT}/${DATAPATH}"/fixlafiles.awk "${EROOT}"/usr/share/gcc-data/ || die
+	cp "${ROOT}/${DATAPATH}"/fix_libtool_files.sh "${EROOT}"/usr/sbin/ || die
 
 	# Since these aren't critical files and portage sucks with
 	# handling of binpkgs, don't require these to be found
-	cp "${ROOT}${DATAPATH}"/c{89,99} "${EROOT}"usr/bin/ 2>/dev/null
+	cp "${ROOT}/${DATAPATH}"/c{89,99} "${EROOT}"/usr/bin/ 2>/dev/null
 
 	if use regression-test ; then
 		elog "Testsuite results have been installed into /usr/share/doc/${PF}/testsuite"

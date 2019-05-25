@@ -90,7 +90,7 @@ font_cleanup_dirs() {
 	local d f g generated candidate otherfile
 
 	ebegin "Cleaning up font directories"
-	find -L "${EROOT}"usr/share/fonts/ -type d -print0 | while read -d $'\0' d; do
+	find -L "${EROOT}"/usr/share/fonts/ -type d -print0 | while read -d $'\0' d; do
 		candidate=false
 		otherfile=false
 		for f in "${d}"/*; do
@@ -194,7 +194,7 @@ font_src_install() {
 # The font pkg_postinst function.
 font_pkg_postinst() {
 	# unreadable font files = fontconfig segfaults
-	find "${EROOT}"usr/share/fonts/ -type f '!' -perm 0644 -print0 \
+	find "${EROOT}"/usr/share/fonts/ -type f '!' -perm 0644 -print0 \
 		| xargs -0 chmod -v 0644 2>/dev/null
 
 	if [[ -n ${FONT_CONF[@]} ]]; then
@@ -228,7 +228,7 @@ font_pkg_postrm() {
 	font_cleanup_dirs
 
 	# unreadable font files = fontconfig segfaults
-	find "${EROOT}"usr/share/fonts/ -type f '!' -perm 0644 -print0 \
+	find "${EROOT}"/usr/share/fonts/ -type f '!' -perm 0644 -print0 \
 		| xargs -0 chmod -v 0644 2>/dev/null
 
 	if has_version lib-media/fontconfig && [[ ${ROOT} == / ]]; then

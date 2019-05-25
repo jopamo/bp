@@ -43,7 +43,7 @@ PDEPEND="=app-text/docbook-sgml-dtd-4.5
 
 src_prepare() {
 	if use gdbm; then
-		sed -i "s:INC => .*:INC => \"-I${EROOT}usr/include/gdbm\":g" \
+		sed -i "s:INC => .*:INC => \"-I${EROOT}/usr/include/gdbm\":g" \
 			ext/NDBM_File/Makefile.PL || die
 	fi
 

@@ -130,6 +130,6 @@ pkg_preinst() {
 
 pkg_postrm() {
 	if [[ -z ${REPLACED_BY_VERSION} ]]; then
-		rm -f "${EROOT}"usr/lib/gtk-3.0/3.0.0/immodules.cache
+		rm -f "${EROOT}"/usr/lib/gtk-3.0/3.0.0/immodules.cache
 	fi
 }

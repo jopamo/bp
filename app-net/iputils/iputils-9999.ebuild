@@ -46,5 +46,5 @@ src_configure() {
 
 src_install() {
 		meson_src_install
-		use caps && setcap 'cap_net_raw+ep' ${ED}usr/bin/ping
+		use caps && setcap 'cap_net_raw+ep' "${ED}"/usr/bin/ping
 }

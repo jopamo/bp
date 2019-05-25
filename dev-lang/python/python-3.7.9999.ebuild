@@ -149,11 +149,11 @@ pkg_preinst() {
 }
 
 eselect_python_update() {
-	if [[ -z "$(eselect python show)" || ! -f "${EROOT}usr/bin/$(eselect python show)" ]]; then
+	if [[ -z "$(eselect python show)" || ! -f "${EROOT}/usr/bin/$(eselect python show)" ]]; then
 		eselect python update
 	fi
 
-	if [[ -z "$(eselect python show --python${PV%%.*})" || ! -f "${EROOT}usr/bin/$(eselect python show --python${PV%%.*})" ]]; then
+	if [[ -z "$(eselect python show --python${PV%%.*})" || ! -f "${EROOT}/usr/bin/$(eselect python show --python${PV%%.*})" ]]; then
 		eselect python update --python${PV%%.*}
 	fi
 }

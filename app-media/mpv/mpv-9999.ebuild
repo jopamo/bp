@@ -24,13 +24,14 @@ SLOT="0/1"
 IUSE="+alsa +archive bluray cdda +cli coreaudio cplugins cuda drm dvb
 	dvd +egl jack javascript jpeg lcms +libass libcaca
 	libmpv +lua +opengl pulseaudio raspberry-pi rubberband
-	sdl test uchardet vaapi wayland +X zlib"
+	sdl test uchardet vaapi wayland +X xv zlib"
 
 REQUIRED_USE="
 	|| ( cli libmpv )
 	cuda? ( opengl )
 	lcms? ( opengl )
 	opengl? ( || ( egl X raspberry-pi !cli ) )
+	xv? ( X )
 	raspberry-pi? ( opengl )
 	test? ( opengl )
 	vaapi? ( || ( X wayland ) )
@@ -78,6 +79,7 @@ COMMON_DEPEND="
 			x11-libs/libXdamage
 			lib-media/mesa
 		)
+		xv? ( x11-libs/libXv )
 	)
 	zlib? ( lib-sys/zlib )
 "
@@ -155,6 +157,7 @@ src_configure() {
 		$(use_enable wayland wayland-protocols)
 		$(use_enable wayland)
 		$(use_enable X x11)
+		$(use_enable xv)
 		$(usex opengl "$(use_enable X gl-x11)" '--disable-gl-x11')
 		$(usex egl "$(use_enable X egl-x11)" '--disable-egl-x11')
 		$(usex opengl "$(use_enable wayland gl-wayland)" '--disable-gl-wayland')
@@ -192,7 +195,7 @@ src_install() {
 		doins -r TOOLS/lua
 	fi
 
-	rm -rf "${ED}"/usr/share/doc/mpv
+	die
 }
 
 pkg_postinst() {

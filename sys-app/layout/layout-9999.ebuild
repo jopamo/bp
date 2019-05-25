@@ -10,6 +10,7 @@ EGIT_REPO_URI="https://github.com/1g4-linux/layout.git"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE=build
 
 pkg_preinst() {
@@ -46,18 +47,18 @@ pkg_postinst() {
 	# (3) accidentally packaging up personal files with quickpkg
 	# If they don't exist then we install them
 	for x in master.passwd passwd shadow group fstab ; do
-		[ -e "${EROOT}etc/${x}" ] && continue
-		[ -e "${EROOT}usr/share/baselayout/${x}" ] || continue
-		cp -p "${EROOT}usr/share/baselayout/${x}" "${EROOT}"etc
+		[ -e "${EROOT}/etc/${x}" ] && continue
+		[ -e "${EROOT}/usr/share/baselayout/${x}" ] || continue
+		cp -p "${EROOT}/usr/share/baselayout/${x}" "${EROOT}"/etc
 	done
 
 	# Force shadow permissions to not be world-readable #260993
 	for x in shadow ; do
-		[ -e "${EROOT}etc/${x}" ] && chmod o-rwx "${EROOT}etc/${x}"
+		[ -e "${EROOT}/etc/${x}" ] && chmod o-rwx "${EROOT}/etc/${x}"
 	done
 
 	# whine about users that lack passwords #193541
-	if [[ -e "${EROOT}"etc/shadow ]] ; then
+	if [[ -e "${EROOT}"/etc/shadow ]] ; then
 		local bad_users=$(sed -n '/^[^:]*::/s|^\([^:]*\)::.*|\1|p' "${EROOT}"/etc/shadow)
 		if [[ -n ${bad_users} ]] ; then
 			echo
@@ -67,12 +68,12 @@ pkg_postinst() {
 	fi
 
 	# baselayout leaves behind a lot of .keep files, so let's clean them up
-	find "${EROOT}"lib*/rcscripts/ -name .keep -exec rm -f {} + 2>/dev/null
-	find "${EROOT}"lib*/rcscripts/ -depth -type d -exec rmdir {} + 2>/dev/null
+	find "${EROOT}"/lib*/rcscripts/ -name .keep -exec rm -f {} + 2>/dev/null
+	find "${EROOT}"/lib*/rcscripts/ -depth -type d -exec rmdir {} + 2>/dev/null
 
 	# whine about users with invalid shells #215698
-	if [[ -e "${EROOT}"etc/passwd ]] ; then
-		local bad_shells=$(awk -F: 'system("test -e " $7) { print $1 " - " $7}' "${EROOT}"etc/passwd | sort)
+	if [[ -e "${EROOT}"/etc/passwd ]] ; then
+		local bad_shells=$(awk -F: 'system("test -e " $7) { print $1 " - " $7}' "${EROOT}"/etc/passwd | sort)
 		if [[ -n ${bad_shells} ]] ; then
 			echo
 			ewarn "The following users have non-existent shells!"

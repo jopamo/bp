@@ -50,8 +50,6 @@ src_install() {
 	insinto /etc/fonts
 	doins fonts.conf
 
-	find "${ED}" -name "*.la" -delete || die
-
 	# fc-lang directory contains language coverage datafiles
 	# which are needed to test the coverage of fonts.
 	insinto /usr/share/fc-lang
@@ -59,12 +57,12 @@ src_install() {
 
 	dodoc doc/fontconfig-user.{txt,pdf}
 
-	if [[ -e ${ED}usr/share/doc/fontconfig/ ]];  then
-		mv "${ED}"usr/share/doc/fontconfig/* "${ED}"/usr/share/doc/${P} || die
-		rm -rf "${ED}"usr/share/doc/fontconfig
+	if [[ -e ${ED}/usr/share/doc/fontconfig/ ]];  then
+		mv "${ED}"/usr/share/doc/fontconfig/* "${ED}"/usr/share/doc/${P} || die
+		rm -rf "${ED}"/usr/share/doc/fontconfig
 	fi
 
-	rm -rf "${ED}"var/cache/
+	rm -rf "${ED}"/var/cache/
 	# Changes should be made to /etc/fonts/local.conf, and as we had
 	# too much problems with broken fonts.conf we force update it ...
 	echo 'CONFIG_PROTECT_MASK="/etc/fonts/fonts.conf"' > "${T}"/37fontconfig
@@ -81,11 +79,11 @@ pkg_preinst() {
 		for file in "${EROOT}"/etc/fonts/conf.avail/*; do
 			f=${file##*/}
 			if [[ -L ${EROOT}/etc/fonts/conf.d/${f} ]]; then
-				[[ -f ${ED}etc/fonts/conf.avail/${f} ]] \
-					&& ln -sf ../conf.avail/"${f}" "${ED}"etc/fonts/conf.d/ &>/dev/null
+				[[ -f ${ED}/etc/fonts/conf.avail/${f} ]] \
+					&& ln -sf ../conf.avail/"${f}" "${ED}"/etc/fonts/conf.d/ &>/dev/null
 			else
-				[[ -f ${ED}etc/fonts/conf.avail/${f} ]] \
-					&& rm "${ED}"etc/fonts/conf.d/"${f}" &>/dev/null
+				[[ -f ${ED}/etc/fonts/conf.avail/${f} ]] \
+					&& rm "${ED}"/etc/fonts/conf.d/"${f}" &>/dev/null
 			fi
 		done
 	fi

@@ -167,7 +167,7 @@ src_install() {
 		dolib.a libdaemon/client/libdaemonclient.a #462908
 		dolib.a daemons/dmeventd/libdevmapper-event.a
 	else
-		rm -f "${ED}"usr/lib64/{libdevmapper-event,liblvm2cmd,liblvm2app,libdevmapper}.a
+		rm -f "${ED}"/usr/lib64/{libdevmapper-event,liblvm2cmd,liblvm2app,libdevmapper}.a
 	fi
 
 	if use lvm2create_initrd; then

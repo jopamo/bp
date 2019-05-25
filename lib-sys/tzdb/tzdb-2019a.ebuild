@@ -89,7 +89,7 @@ src_install() {
 }
 
 get_TIMEZONE() {
-	local tz src="${EROOT}etc/timezone"
+	local tz src="${EROOT}/etc/timezone"
 	if [[ -e ${src} ]] ; then
 		tz=$(sed -e 's:#.*::' -e 's:[[:space:]]*::g' -e '/^$/d' "${src}")
 	else
@@ -121,7 +121,7 @@ pkg_preinst() {
 
 configure_tz_data() {
 	# make sure the /etc/localtime file does not get stale #127899
-	local tz src="${EROOT}etc/timezone" etc_lt="${EROOT}etc/localtime"
+	local tz src="${EROOT}/etc/timezone" etc_lt="${EROOT}/etc/localtime"
 
 	# If it's a symlink, assume the user knows what they're doing and
 	# they're managing it themselves. #511474
@@ -151,7 +151,7 @@ configure_tz_data() {
 		elog "Your ${etc_lt} has been reset to Factory; enjoy!"
 		tz="Factory"
 	fi
-	einfo "Updating ${etc_lt} with ${EROOT}usr/share/zoneinfo/${tz}"
+	einfo "Updating ${etc_lt} with ${EROOT}/usr/share/zoneinfo/${tz}"
 	cp -f "${EROOT}"/usr/share/zoneinfo/"${tz}" "${etc_lt}"
 }
 

@@ -57,8 +57,3 @@ src_configure() {
 src_test() {
 	emake -j1 check
 }
-
-src_install() {
-	default
-	find "${ED}"usr/lib* -name '*.la' -delete || die
-}

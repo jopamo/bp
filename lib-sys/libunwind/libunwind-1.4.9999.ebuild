@@ -58,5 +58,5 @@ src_install() {
 	default
 	# libunwind-ptrace.a (and libunwind-ptrace.h) is separate API and without
 	# shared library, so we keep it in any case
-	use static-libs || find "${ED}"usr '(' -name 'libunwind-generic.a' -o -name 'libunwind*.la' ')' -delete
+	use static-libs || find "${ED}"/usr '(' -name 'libunwind-generic.a' -o -name 'libunwind*.la' ')' -delete
 }

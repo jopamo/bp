@@ -619,8 +619,8 @@ pkg_config() {
 	# https://dev.mysql.com/doc/mysql/en/time-zone-support.html
 	"${EROOT}/usr/bin/mysql_tzinfo_to_sql" "${EROOT}/usr/share/zoneinfo" > "${sqltmp}" 2>/dev/null
 
-	local cmd=( "${EROOT}usr/share/mariadb/scripts/mysql_install_db" )
-	[[ -f "${cmd}" ]] || cmd=( "${EROOT}usr/bin/mysql_install_db" )
+	local cmd=( "${EROOT}/usr/share/mariadb/scripts/mysql_install_db" )
+	[[ -f "${cmd}" ]] || cmd=( "${EROOT}/usr/bin/mysql_install_db" )
 	cmd+=( "--basedir=${EPREFIX}/usr" ${options} "--datadir=${ROOT}/${MY_DATADIR}" "--tmpdir=${ROOT}/${MYSQL_TMPDIR}" )
 	einfo "Command: ${cmd[*]}"
 	su -s /bin/sh -c "${cmd[*]}" mysql \

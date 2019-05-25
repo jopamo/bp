@@ -19,6 +19,7 @@ pkg_setup() {
 }
 
 src_prepare() {
+	default
 	sed -i -e "/^EPREFIX=/s:=.*:='${EPREFIX}':" build-docbook-catalog.in || die
 	has_version sys-app/util-linux || sed -i -e '/^GETOPT=/s/getopt/&-long/' build-docbook-catalog.in || die
 }

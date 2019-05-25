@@ -41,6 +41,14 @@ src_configure() {
         meson_src_configure
 }
 
+src_install() {
+	meson_src_install
+	mv "${ED}"/usr/lib/glib-2.0/include/glibconfig.h "${ED}"/usr/include/glibconfig.h && \
+		rm -rf "${ED}"/usr/lib/glib-2.0/
+
+}
+
+/usr/lib/glib-2.0/include/glibconfig.h
 pkg_postinst() {
 	glib-compile-schemas "${EROOT}"usr/share/glib-2.0/schemas/
 }

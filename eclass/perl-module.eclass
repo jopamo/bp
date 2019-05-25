@@ -1,11 +1,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
 case ${EAPI:-0} in
-	5)
+	6)
 		inherit multiprocessing unpacker perl-functions
 		PERL_EXPF="src_unpack src_prepare src_configure src_compile src_test src_install"
 		;;
-	6|7)
+	7)
 		inherit multiprocessing perl-functions
 		PERL_EXPF="src_prepare src_configure src_compile src_test src_install"
 		;;
@@ -24,7 +24,7 @@ esac
 # path must use yes here.
 
 case ${EAPI:-0} in
-	5)
+	6)
 		[[ ${CATEGORY} == perl-core ]] && \
 			PERL_EXPF+=" pkg_postinst pkg_postrm"
 
@@ -54,7 +54,7 @@ case ${EAPI:-0} in
 				;;
 		esac
 		;;
-	6|7)
+	7)
 		[[ ${CATEGORY} == perl-core ]] && \
 			PERL_EXPF+=" pkg_postinst pkg_postrm"
 
@@ -131,7 +131,7 @@ LICENSE="${LICENSE:-|| ( Artistic GPL-1+ )}"
 # Examples are installed only if the useflag examples exists and is activated.
 
 
-if [[ ${EAPI:-0} == 5 ]]; then
+if [[ ${EAPI:-0} == 6 ]]; then
 	if [[ -n ${MY_PN} || -n ${MY_PV} || -n ${MODULE_VERSION} ]] ; then
 		: ${MY_P:=${MY_PN:-${PN}}-${MY_PV:-${MODULE_VERSION:-${PV}}}}
 		S=${MY_S:-${WORKDIR}/${MY_P}}
@@ -173,7 +173,7 @@ pm_echovar=""
 # This function is to be called during the ebuild src_unpack() phase.
 perl-module_src_unpack() {
 	debug-print-function $FUNCNAME "$@"
-	[[ ${EAPI:-0} == 5 ]] || die "perl-module_src_unpack is banned in EAPI=6 or later"
+	[[ ${EAPI:-0} == 6 ]] || die "perl-module_src_unpack is banned in EAPI=6 or later"
 	unpacker_src_unpack
 }
 
@@ -184,7 +184,7 @@ perl-module_src_unpack() {
 perl-module_src_prepare() {
 	debug-print-function $FUNCNAME "$@"
 
-	if [[ ${EAPI:-0} == 5 ]] ; then
+	if [[ ${EAPI:-0} == 6 ]] ; then
 		[[ ${PATCHES[@]} ]] && eapply "${PATCHES[@]}"
 		debug-print "$FUNCNAME: applying user patches"
 		eapply_user
@@ -206,7 +206,7 @@ perl-module_src_prepare() {
 perl-module_src_configure() {
 	debug-print-function $FUNCNAME "$@"
 
-	if [[ ${EAPI:-0} == 5 && ${SRC_PREP} == yes ]]; then
+	if [[ ${EAPI:-0} == 6 && ${SRC_PREP} == yes ]]; then
 		return 0
 	fi
 	SRC_PREP="yes"
@@ -291,7 +291,7 @@ perl-module_src_compile() {
 # (EAPI=6) Variable that controls if tests are run in the test phase
 # at all, and if yes under which conditions. Defaults to "do parallel"
 # If neither "do" nor "parallel" is recognized, tests are skipped.
-# (In EAPI=5 the variable is called SRC_TEST, defaults to "skip", and
+# (In EAPI=6 the variable is called SRC_TEST, defaults to "skip", and
 # recognizes fewer options.)
 # The following space-separated keywords are recognized:
 #   do       : run tests
@@ -317,7 +317,7 @@ perl-module_src_test() {
 	local my_test_control
 	local my_test_verbose
 
-	if [[ ${EAPI:-0} == 5 ]] ; then
+	if [[ ${EAPI:-0} == 6 ]] ; then
 		my_test_control=${SRC_TEST}
 		my_test_verbose=${TEST_VERBOSE:-0}
 		if has 'do' ${my_test_control} || has 'parallel' ${my_test_control} ; then
@@ -396,7 +396,7 @@ perl-module_src_install() {
 
 	perl_delete_module_manpages
 	perl_delete_localpod
-	if [[ ${EAPI:-0} == 5 ]] ; then
+	if [[ ${EAPI:-0} == 6 ]] ; then
 		perl_delete_packlist
 	else
 		perl_fix_packlist
@@ -408,7 +408,7 @@ perl-module_src_install() {
 		[[ -s ${f} ]] && dodoc ${f}
 	done
 
-	if [[ ${EAPI:-0} != 5 ]] ; then
+	if [[ ${EAPI:-0} != 6 ]] ; then
 		if in_iuse examples && use examples ; then
                         [[ ${#DIST_EXAMPLES[@]} -eq 0 ]] || perl_doexamples "${DIST_EXAMPLES[@]}"
 		fi
@@ -416,7 +416,9 @@ perl-module_src_install() {
 
 	perl_link_duallife_scripts
 
-	cleanup_install
+	if [[ ${EAPI:-0} == [7] ]]; then
+		cleanup_install
+	fi
 }
 
 # @FUNCTION: perl-module_pkg_postinst

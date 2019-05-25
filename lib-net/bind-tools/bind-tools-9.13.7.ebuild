@@ -115,8 +115,5 @@ src_install() {
 	  revoke settime signzone verify; do
 		dobin dnssec-"${tool}"
 		doman dnssec-"${tool}".8
-		if use doc; then
-			dohtml dnssec-"${tool}".html
-		fi
 	done
 }

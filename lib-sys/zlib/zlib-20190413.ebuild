@@ -2,8 +2,6 @@
 
 EAPI=7
 
-inherit cmake-utils
-
 DESCRIPTION="Standard (de)compression library"
 HOMEPAGE="https://zlib.net/"
 
@@ -23,8 +21,15 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
+src_configure() {
+	"${S}"/configure \
+		--shared \
+		--prefix="${EPREFIX}/usr" \
+		--libdir="${EPREFIX}/usr/lib"
+}
+
 src_install() {
-	cmake-utils_src_install
+	default
 
 	use static-libs || rm -f "${ED}"/usr/lib/libz.{a,la} #419645
 }

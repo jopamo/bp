@@ -215,7 +215,10 @@ meson_src_install() {
 	debug-print-function ${FUNCNAME} "$@"
 
 	DESTDIR="${D}" eninja -C "${BUILD_DIR}" install
-	cleanup_install
+
+	if [[ ${EAPI:-0} == [7] ]]; then
+		cleanup_install
+	fi
 }
 
 fi

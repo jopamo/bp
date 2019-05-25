@@ -776,7 +776,9 @@ cmake-utils_src_install() {
 	pushd "${BUILD_DIR}" > /dev/null || die
 	DESTDIR="${D}" ${CMAKE_MAKEFILE_GENERATOR} install "$@" || die "died running ${CMAKE_MAKEFILE_GENERATOR} install"
 
-	cleanup_install
+	if [[ ${EAPI:-0} == [7] ]]; then
+		cleanup_install
+	fi
 }
 
 fi

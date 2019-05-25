@@ -292,7 +292,9 @@ qt5-build_src_install() {
 
 	qt5_install_module_config
 
-	cleanup_install
+	if [[ ${EAPI:-0} == [7] ]]; then
+		cleanup_install
+	fi
 }
 
 # @FUNCTION: qt5-build_pkg_postinst

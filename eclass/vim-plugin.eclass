@@ -1,16 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: vim-plugin.eclass
-# @MAINTAINER:
-# vim@gentoo.org
-# @BLURB: used for installing vim plugins
-# @DESCRIPTION:
-# This eclass simplifies installation of app-text plugins into
-# /usr/share/vim/vimfiles.  This is a version-independent directory
-# which is read automatically by vim.  The only exception is
-# documentation, for which we make a special case via vim-doc.eclass.
-
 inherit estack vim-doc
+
 EXPORT_FUNCTIONS src_install pkg_postinst pkg_postrm
 
 VIM_PLUGIN_VIM_VERSION="${VIM_PLUGIN_VIM_VERSION:-7.3}"
@@ -57,11 +48,6 @@ vim-plugin_src_install() {
 	local f
 	for f in *; do
 		[[ -f "${f}" ]] || continue
-		if [[ "${f}" = *.html ]]; then
-			dohtml "${f}"
-		else
-			dodoc "${f}"
-		fi
 		rm "${f}" || die
 	done
 

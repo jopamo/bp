@@ -103,7 +103,7 @@ src_configure() {
 }
 
 src_test() {
-	"${EROOT}${GLIB_COMPILE_SCHEMAS}" --allow-any-name "${S}/gtk" || die
+	"${EROOT}/${GLIB_COMPILE_SCHEMAS}" --allow-any-name "${S}/gtk" || die
 	GSETTINGS_SCHEMA_DIR="${S}/gtk" virtx emake check
 }
 
@@ -112,14 +112,17 @@ src_install() {
 	default
 	insinto /etc/gtk-3.0
 	doins "${FILESDIR}"/settings.ini
+
+	dosym /usr/include/gtk-3.0/gdk /usr/include/gdk
+	dosym /usr/include/gtk-3.0/gtk /usr/include/gtk
 }
 
 pkg_preinst() {
 	# Make immodules.cache belongs to gtk+ alone
 	local cache="usr/lib/gtk-3.0/3.0.0/immodules.cache"
 
-	if [[ -e ${EROOT}${cache} ]]; then
-		cp "${EROOT}"${cache} "${ED}"/${cache} || die
+	if [[ -e ${EROOT}/${cache} ]]; then
+		cp "${EROOT}"/${cache} "${ED}"/${cache} || die
 	else
 		touch "${ED}"/${cache} || die
 	fi

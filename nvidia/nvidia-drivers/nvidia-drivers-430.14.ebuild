@@ -11,50 +11,21 @@ DESCRIPTION="NVIDIA Accelerated Graphics Driver"
 HOMEPAGE="http://www.nvidia.com/ http://www.nvidia.com/Download/Find.aspx"
 SRC_URI="
 	amd64? ( ${NV_URI}Linux-x86_64/${PV}/${AMD64_NV_PACKAGE}.run )
-	tools? (
-		https://download.nvidia.com/XFree86/nvidia-settings/nvidia-settings-${PV}.tar.bz2
-	)
 "
 
 LICENSE="GPL-2 NVIDIA-r2"
 SLOT="0/${PV%.*}"
 KEYWORDS="amd64"
 
-IUSE="compat +driver +kms static-libs +tools +uvm wayland +X"
+IUSE="compat +driver +kms static-libs +uvm wayland +X"
 
 RESTRICT="bindist mirror"
 
-REQUIRED_USE="
-	tools? ( X )
-	static-libs? ( tools )
-"
-
-COMMON="
-	>=lib-sys/glibc-2.6.1
-	tools? (
-		gui-lib/atk
-		lib-dev/glib:2
-		lib-dev/jansson
-		x11-libs/gtk+:2
-		x11-libs/cairo
-		x11-libs/gdk-pixbuf[X]
-		x11-libs/libX11
-		x11-libs/libXext
-		x11-libs/libXrandr
-		x11-libs/libXv
-		x11-libs/libXxf86vm
-		x11-libs/pango
-	)
-"
 DEPEND="
-	${COMMON}
-	tools? ( sys-app/dbus )
 	sys-app/kmod
 	x11-misc/vdpau-headers
 "
 RDEPEND="
-	${COMMON}
-	tools? ( !app-media/nvidia-settings )
 	wayland? ( lib-dev/wayland )
 	X? (
 		x11-app/xorg-server
@@ -65,7 +36,8 @@ RDEPEND="
 "
 
 PDEPEND="lib-media/nv-codec-headers
-		lib-media/libglvnd"
+			nvidia/nvidia-settings
+			lib-media/libglvnd"
 
 QA_PREBUILT="opt/* usr/lib*"
 S=${WORKDIR}/
@@ -127,14 +99,6 @@ src_prepare() {
 		gunzip $man_file || die
 	done
 
-	if use tools; then
-		cp "${FILESDIR}"/nvidia-settings-linker.patch "${WORKDIR}" || die
-		sed -i \
-			-e "s:@PV@:${PV}:g" \
-			"${WORKDIR}"/nvidia-settings-linker.patch || die
-		eapply "${WORKDIR}"/nvidia-settings-linker.patch
-	fi
-
 	default
 
 	if ! [ -f nvidia_icd.json ]; then
@@ -144,35 +108,10 @@ src_prepare() {
 }
 
 src_compile() {
-	append-flags -I/usr/include/libavcodec/
 	cd "${NV_SRC}"
 
 	if use driver; then
 		MAKEOPTS=-j1 linux-mod_src_compile
-	fi
-
-	if use tools; then
-		emake -C "${S}"/nvidia-settings-${PV}/src \
-			AR="$(tc-getAR)" \
-			CC="$(tc-getCC)" \
-			DO_STRIP= \
-			LD="$(tc-getCC)" \
-			LIBDIR="lib64" \
-			NVLD="$(tc-getLD)" \
-			NV_VERBOSE=1 \
-			RANLIB="$(tc-getRANLIB)" \
-			build-xnvctrl
-
-		emake -C "${S}"/nvidia-settings-${PV}/src \
-			CC="$(tc-getCC)" \
-			DO_STRIP= \
-			GTK3_AVAILABLE=1 \
-			LD="$(tc-getCC)" \
-			LIBDIR="lib64" \
-			NVLD="$(tc-getLD)" \
-			NVML_ENABLED=0 \
-			NV_USE_BUNDLED_LIBJANSSON=0 \
-			NV_VERBOSE=1
 	fi
 }
 
@@ -301,36 +240,6 @@ src_install() {
 
 	doman nvidia-cuda-mps-control.1
 	doman nvidia-modprobe.1
-
-
-	if use tools; then
-		emake -C "${S}"/nvidia-settings-${PV}/src/ \
-			DESTDIR="${D}" \
-			GTK3_AVAILABLE=1 \
-			LIBDIR="${D}/usr/lib64" \
-			NV_USE_BUNDLED_LIBJANSSON=0 \
-			NV_VERBOSE=1 \
-			PREFIX=/usr \
-			DO_STRIP= \
-			install
-
-		if use static-libs; then
-			dolib.a "${S}"/nvidia-settings-${PV}/src/libXNVCtrl/libXNVCtrl.a
-
-			insinto /usr/include/NVCtrl
-			doins "${S}"/nvidia-settings-${PV}/src/libXNVCtrl/*.h
-		fi
-
-		insinto /usr/share/nvidia/
-		doins nvidia-application-profiles-${PV}-key-documentation
-
-		insinto /etc/nvidia
-		newins \
-			nvidia-application-profiles-${PV}-rc nvidia-application-profiles-rc
-
-		exeinto /etc/X11/xinit/xinitrc.d
-		newexe "${FILESDIR}"/95-nvidia-settings-r1 95-nvidia-settings
-	fi
 
 	dobin ${NV_OBJ}/nvidia-bug-report.sh
 

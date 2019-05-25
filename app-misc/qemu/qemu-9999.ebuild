@@ -507,9 +507,6 @@ src_install() {
 	if [[ -n ${softmmu_targets} ]]; then
 		cd "${S}/softmmu-build"
 		emake DESTDIR="${ED}" install
-
-		# This might not exist if the test failed. #512010
-		[[ -e check-report.html ]] && dohtml check-report.html
 	fi
 
 	cd "${S}/tools-build"

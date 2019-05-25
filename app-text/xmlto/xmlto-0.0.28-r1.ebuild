@@ -19,10 +19,7 @@ RDEPEND="app-text/docbook-xsl-stylesheets
 	sys-app/sed
 	text? ( app-misc/lynx  )"
 
-
-src_prepare() {
-	eapply "${FILESDIR}"/${PN}-0.0.22-format_fo_passivetex_check.patch
-}
+PATCHES=( "${FILESDIR}"/${PN}-0.0.22-format_fo_passivetex_check.patch )
 
 src_configure() {
 	# We don't want the script to detect /bin/sh if it is bash.

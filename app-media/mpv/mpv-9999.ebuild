@@ -194,8 +194,6 @@ src_install() {
 		insinto /usr/share/${PN}
 		doins -r TOOLS/lua
 	fi
-
-	die
 }
 
 pkg_postinst() {

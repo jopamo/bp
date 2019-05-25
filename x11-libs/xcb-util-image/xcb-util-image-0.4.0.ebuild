@@ -10,7 +10,7 @@ LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="test doc"
+IUSE="test doc static-libs"
 
 RDEPEND=">=x11-libs/libxcb-1.9.1:=
 	>=x11-libs/xcb-util-${PV}:=
@@ -30,4 +30,9 @@ src_configure() {
 		$(use_with doc doxygen)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

@@ -17,7 +17,7 @@ LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="zlib"
+IUSE="zlib static-libs"
 
 DEPEND="!<x11-app/xorg-server-1.5
 	zlib? (	>=lib-sys/zlib-1.2.8-r1:= )"
@@ -41,4 +41,9 @@ src_configure() {
 		--with-pciids-path=${EPREFIX}/usr/share/misc
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

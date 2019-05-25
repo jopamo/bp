@@ -8,7 +8,7 @@ DESCRIPTION="The QML and Quick modules for the Qt5 framework"
 
 KEYWORDS="amd64 arm64"
 
-IUSE="gles2 localstorage +widgets xml"
+IUSE="gles2 localstorage +widgets xml static-libs"
 
 COMMON_DEPEND="
 	~gui-lib/qtcore-${PV}
@@ -55,4 +55,9 @@ src_configure() {
 		-qml-debug
 	)
 	qt5-build_src_configure
+}
+
+src_install() {
+	qt5-build_src_install
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

@@ -19,7 +19,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="alisp debug"
 
-filter-flags -flto
+filter-flags -flto\=\*
 
 src_configure() {
 	local myconf=(

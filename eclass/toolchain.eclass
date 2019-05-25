@@ -465,7 +465,7 @@ gcc_do_make() {
 		LDFLAGS="${LDFLAGS}" \
 		STAGE1_CFLAGS="${STAGE1_CFLAGS}" \
 		LIBPATH="${LIBPATH}" \
-		BOOT_CFLAGS="-O2" \
+		BOOT_CFLAGS="${CFLAGS}" \
 		${GCC_MAKE_TARGET} \
 		|| die "emake failed with ${GCC_MAKE_TARGET}"
 

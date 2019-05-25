@@ -34,7 +34,8 @@ RDEPEND="${COMMON_DEPEND}
 
 PDEPEND+="lib-sys/tzdb"
 
-filter-flags -D_FORTIFY_SOURCE\=2 -fstack-protector-strong -fstack-clash-protection -fexceptions -fpie -fpic -flto -fuse-linker-plugin -fasynchronous-unwind-tables -Wl,-z,combreloc -Wl,-z,relro -Wl,-z,defs -Wl,-z,now
+strip-flags
+filter-flags -fstack-protector-strong -fstack-clash-protection
 
 check_devpts() {
 	# Make sure devpts is mounted correctly for use w/out setuid pt_chown.

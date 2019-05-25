@@ -24,9 +24,8 @@ PATCHES=(
 	"${FILESDIR}"/libcap-portage.patch
 )
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
-
 src_compile() {
+	use pam && append-flags -lpam
 	tc-export AR CC RANLIB
 	local BUILD_CC
 	tc-export_build_env BUILD_CC

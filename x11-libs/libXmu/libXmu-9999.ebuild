@@ -11,7 +11,7 @@ LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="ipv6 doc"
+IUSE="ipv6 doc static-libs"
 
 DEPEND=">=x11-libs/libXt-1.1.4
 	>=x11-libs/libXext-1.3.2
@@ -37,4 +37,9 @@ src_configure() {
 		--without-fop
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

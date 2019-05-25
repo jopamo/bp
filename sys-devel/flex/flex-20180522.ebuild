@@ -23,7 +23,6 @@ DEPEND="sys-devel/m4
 		test? ( sys-devel/bison )"
 
 src_prepare() {
-	#${S}/autogen.sh
 	eautoreconf
 	default
 
@@ -49,6 +48,6 @@ src_test() {
 
 src_install() {
 	default
-	use static-libs || find "${ED}" -name "*.la" -delete || die
 	dosym flex /usr/bin/lex
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

@@ -57,6 +57,8 @@ PATCHES=(
 	"${FILESDIR}/${PN}-0.57.0-disable-internal-jpx.patch"
 )
 
+append-cppflags -I/usr/include/openjpeg-2.3
+
 src_prepare() {
 	cmake-utils_src_prepare
 

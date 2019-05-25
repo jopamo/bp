@@ -2,8 +2,6 @@
 
 EAPI=7
 
-inherit flag-o-matic
-
 DESCRIPTION="a high-quality data compressor."
 HOMEPAGE="http://sources.redhat.com/bzip2"
 SRC_URI="https://ftp.osuosl.org/pub/lfs/lfs-packages/8.1/${P}.tar.gz"
@@ -13,8 +11,6 @@ SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
-
-filter-flags -flto
 
 src_prepare() {
 	default
@@ -29,10 +25,10 @@ src_compile() {
 }
 
 src_install() {
-	dolib.so libbz2.so.1.0.6
+	dolib.so libbz2.so.${PV}
 
 	for x in libbz2.so.1 libbz2.so.1.0 libbz2.so ; do
-		dosym libbz2.so.1.0.6 usr/lib64/${x}
+		dosym libbz2.so.${PV} usr/lib64/${x}
 	done
 
 	use static-libs && dolib.a libbz2.a

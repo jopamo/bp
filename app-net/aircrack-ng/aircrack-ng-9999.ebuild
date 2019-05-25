@@ -47,7 +47,7 @@ pkg_setup() {
 	)
 }
 
-filter-flags -flto
+filter-flags -flto\=\*
 
 src_prepare() {
 	eautoreconf

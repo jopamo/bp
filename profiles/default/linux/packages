@@ -30,7 +30,6 @@
 *app-misc/vim
 *lib-dev/elfutils
 *sys-app/systemd
-*sys-fs/e2fsprogs
 *sys-app/busybox
 *sys-app/util-linux
 *app-net/iproute2
@@ -41,5 +40,6 @@
 *sys-app/ulogd
 *sys-app/sshguard
 *app-portage/gentoolkit
+*sys-fs/e2fsprogs
 *sys-fs/btrfs-progs
 *app-portage/smart-live-rebuild

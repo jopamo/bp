@@ -15,7 +15,8 @@ KEYWORDS="amd64"
 
 IUSE="static-libs"
 
-DEPEND="lib-dev/jansson"
+DEPEND="lib-dev/jansson
+		x11-libs/libXv"
 
 src_prepare() {
 	cp "${FILESDIR}"/Makefile "${S}"/ || die

@@ -9,14 +9,17 @@ HOMEPAGE="http://lse.sourceforge.net/io/aio.html"
 SRC_URI="mirror://debian/pool/main/liba/${PN}/${PN}_${PV}.orig.tar.xz -> ${P}.tar.xz"
 
 LICENSE="LGPL-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="static-libs test"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-0.3.110-cppflags.patch
 	"${FILESDIR}"/${PN}-0.3.110-link-stdlib.patch
 )
+
+filter-flags -flto\=\*
 
 src_prepare() {
 	default
@@ -42,7 +45,6 @@ _emake() {
 }
 
 src_compile() {
-	filter-flags -flto
 	_emake
 }
 

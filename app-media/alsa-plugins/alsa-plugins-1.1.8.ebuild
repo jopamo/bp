@@ -12,19 +12,15 @@ LICENSE="GPL-2 LGPL-2.1"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug ffmpeg libav libsamplerate pulseaudio"
+IUSE="debug ffmpeg libsamplerate pulseaudio"
 
-RDEPEND="
+DEPEND="
+	lib-media/speexdsp
 	>=lib-media/alsa-lib-${PV}
-	ffmpeg? (
-		libav? ( app-media/libav:= )
-		!libav? ( app-media/ffmpeg:0= )
-	)
+	ffmpeg? ( app-media/ffmpeg:0= )
 	libsamplerate? ( >=lib-media/libsamplerate-0.1.8-r1 )
 	pulseaudio? ( >=app-media/pulseaudio-2.1-r1 )
 "
-DEPEND="${RDEPEND}
-	dev-util/pkgconf"
 
 src_prepare() {
 	default
@@ -41,11 +37,11 @@ src_configure() {
 
 	ECONF_SOURCE=${S} \
 	econf \
-		$(use_enable ffmpeg avcodec) \
+		$(use_enable ffmpeg libav) \
 		$(use_enable libsamplerate samplerate) \
 		$(use_enable pulseaudio) \
-		--with-speex=no \
-		--disable-speexdsp \
+		--with-speex=lib \
+		--enable-speexdsp \
 		--disable-oss \
 		--disable-arcamav \
 		--disable-usbstream

@@ -19,6 +19,8 @@ LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
+IUSE="static-libs"
+
 DEPEND="x11-libs/libX11
 	x11-misc/xorgproto"
 
@@ -37,4 +39,9 @@ src_configure() {
 		--localstatedir="${EPREFIX}"/var
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

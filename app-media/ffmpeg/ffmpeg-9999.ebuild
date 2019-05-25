@@ -22,7 +22,8 @@ DEPEND="
 
 S=${WORKDIR}/${P/_/-}
 
-filter-flags -flto -fno-common
+filter-flags -fno-common
+append-flags -ffat-lto-objects
 
 src_configure() {
 	${S}/configure \
@@ -35,6 +36,8 @@ src_configure() {
 		--cxx="$(tc-getCXX)" \
 		--ar="$(tc-getAR)" \
 		--optflags="${CFLAGS}" \
+		--enable-pic \
+		--enable-lto \
 		--enable-ffmpeg \
 		--enable-network	\
 		--enable-protocols	\

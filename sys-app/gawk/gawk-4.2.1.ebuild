@@ -23,13 +23,18 @@ DEPEND="${RDEPEND}
 
 src_configure() {
 	export ac_cv_libsigsegv=no
-	local myeconfargs=(
-		--libexec='$(libdir)/misc'
+	local myconf=(
+		--bindir="${EPREFIX}"/usr/bin
+		--sbindir="${EPREFIX}"/usr/sbin
+		--libdir="${EPREFIX}"/usr/lib64
+		--libexecdir="${EPREFIX}"/usr/libexec
+		--sysconfdir="${EPREFIX}"/etc
+		--localstatedir="${EPREFIX}"/var
 		$(use_with mpfr)
 		$(use_enable nls)
 		$(use_with readline)
 	)
-	econf "${myeconfargs[@]}"
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
 src_install() {

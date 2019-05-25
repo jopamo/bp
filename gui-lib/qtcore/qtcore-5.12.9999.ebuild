@@ -9,7 +9,7 @@ inherit qt5-build
 DESCRIPTION="Cross-platform application development framework"
 KEYWORDS="amd64 arm64"
 
-IUSE="icu systemd"
+IUSE="icu systemd static-libs"
 
 DEPEND="
 	lib-dev/double-conversion:=
@@ -38,13 +38,6 @@ QT5_GENTOO_PRIVATE_CONFIG=(
 	!:xml
 )
 
-filter-flags -flto
-
-#src_prepare() {
-#	git apply -R ${FILESDIR}/1c0fcbc887459d8963088309e83303eb1a7d2db0.patch
-#	eapply_user
-#}
-
 src_configure() {
 	local myconf=(
 		$(qt_use icu)
@@ -56,6 +49,8 @@ src_configure() {
 
 src_install() {
 	qt5-build_src_install
+
+	use static-libs || find "${ED}" -name '*.a' -delete
 
 	local flags=(
 		ALSA CUPS DBUS EGL EGLFS EGL_X11 EVDEV FONTCONFIG FREETYPE

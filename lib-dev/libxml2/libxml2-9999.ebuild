@@ -10,7 +10,9 @@ HOMEPAGE="http://www.xmlsoft.org/"
 LICENSE="MIT"
 SLOT="2"
 KEYWORDS="amd64 arm64"
+
 IUSE="debug icu ipv6 lzma readline static-libs"
+
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 if [[ ${PV} == "9999" ]] ; then
@@ -70,8 +72,8 @@ src_configure() {
 src_install() {
 	emake DESTDIR="${D}" install
 
-	rm -rf "${ED}"/usr/share/doc
-	find "${ED}" -name "*.la" -delete || die
+	cleanup_install
+	use static-libs || find "${ED}" -name '*.a' -delete
 }
 
 pkg_postinst() {

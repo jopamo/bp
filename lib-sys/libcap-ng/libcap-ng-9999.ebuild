@@ -9,8 +9,10 @@ HOMEPAGE="https://people.redhat.com/sgrubb/libcap-ng/"
 EGIT_REPO_URI="https://github.com/stevegrubb/libcap-ng.git"
 
 LICENSE="LGPL-2.1"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
+IUSE="static-libs"
 
 RESTRICT="test"
 
@@ -33,4 +35,9 @@ src_configure() {
 		--without-python3
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

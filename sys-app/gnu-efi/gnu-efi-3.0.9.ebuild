@@ -8,18 +8,13 @@ DESCRIPTION="Library for build EFI Applications"
 HOMEPAGE="http://gnu-efi.sourceforge.net/"
 SRC_URI="mirror://sourceforge/gnu-efi/${P}.tar.bz2"
 
-# inc/, lib/ dirs (README.efilib)
-# - BSD-2
-# gnuefi dir:
-# - BSD (3-cluase): crt0-efi-ia32.S
-# - GPL-2+ : setjmp_ia32.S
 LICENSE="GPL-2+ BSD BSD-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="abi_x86_64 -custom-cflags"
 
 DEPEND="sys-app/pciutils"
-RDEPEND=""
 
 # These objects get run early boot (i.e. not inside of Linux),
 # so doing these QA checks on them doesn't make sense.
@@ -73,9 +68,5 @@ src_compile() {
 }
 
 src_install() {
-	if [[ ${CHOST} == x86_64* ]]; then
-		use abi_x86_64 && efimake INSTALLROOT="${D}" install
-	else
-		efimake INSTALLROOT="${D}" install
-	fi
+	efimake INSTALLROOT="${D}" install
 }

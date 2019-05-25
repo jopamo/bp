@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/shadowsocks/shadowsocks-libev.git"
 LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="debug"
+IUSE="debug static-libs"
 
 RDEPEND="lib-net/mbedtls
 	>=lib-dev/libsodium-1.0.8
@@ -36,7 +36,6 @@ src_configure() {
 
 src_install() {
 	default
-	find "${D}" -name '*.la' -delete || die
 
 	dodir "/etc/shadowsocks"
 	insinto "/etc/shadowsocks"
@@ -46,4 +45,6 @@ src_install() {
 	systemd_newunit "${FILESDIR}/${PN}-server_at.service" "${PN}-server@.service"
 	systemd_newunit "${FILESDIR}/${PN}-redir_at.service" "${PN}-redir@.service"
 	systemd_newunit "${FILESDIR}/${PN}-tunnel_at.service" "${PN}-tunnel@.service"
+
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

@@ -17,9 +17,11 @@ SRC_URI="https://archive.mozilla.org/pub/security/nss/releases/${RTM_NAME}/src/$
 	nss-pem? ( https://dev.gentoo.org/~polynomial-c/${PEM_P}.tar.xz )"
 
 LICENSE="|| ( MPL-2.0 GPL-2 LGPL-2.1 )"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
-IUSE="cacert +nss-pem utils"
+
+IUSE="cacert +nss-pem utils static-libs"
+
 CDEPEND=">=lib-sys/sqlite-3.8.2
 	>=lib-sys/zlib-1.2.8-r1"
 DEPEND=">=dev-util/pkgconf-0-r1
@@ -290,7 +292,7 @@ src_install() {
 	printf -- "-b ${EPREFIX}/usr/lib64/lib%s.so\n" ${NSS_CHK_SIGN_LIBS} \
 		> "${ED%/}"/etc/prelink.conf.d/nss.conf
 
-	rm "${ED%/}"/usr/lib64/libssl.a
+	use static-libs || find "${ED}" -name '*.a' -delete
 }
 
 pkg_postinst() {

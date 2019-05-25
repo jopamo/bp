@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="custom-cflags nvidia"
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+append-flags -ffat-lto-objects
 
 src_prepare() {
 	#do not strip

@@ -40,16 +40,7 @@ src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-src_compile() {
-	if tc-is-cross-compiler; then
-		# Make sure the build-time tool "makekeys" uses build settings.
-		tc-export_build_env BUILD_CC
-		emake -C src/util \
-			CC="${BUILD_CC}" \
-			CFLAGS="${BUILD_CFLAGS}" \
-			LDFLAGS="${BUILD_LDFLAGS}" \
-			clean all
-	fi
-
+src_install() {
 	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

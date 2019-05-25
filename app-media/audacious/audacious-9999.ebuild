@@ -29,7 +29,7 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconf
 	nls? ( dev-util/intltool )"
 
-filter-flags -flto
+append-flags -ffat-lto-objects
 
 src_prepare() {
 	eautoreconf

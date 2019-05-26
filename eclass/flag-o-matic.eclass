@@ -366,8 +366,6 @@ strip-flags() {
 			done
 		done
 
-		filter-flags -D_FORTIFY_SOURCE\=\* -Wl,-z,combreloc -Wl,-z,relro -Wl,-z,defs -Wl,-z,now
-
 		# In case we filtered out all optimization flags fallback to -O2
 		if _is_flagq ${var} "-O*" && ! _is_flagq new "-O*" ; then
 			new+=( -O2 )

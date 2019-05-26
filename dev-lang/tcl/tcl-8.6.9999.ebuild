@@ -2,12 +2,13 @@
 
 EAPI=7
 
-inherit flag-o-matic
+inherit autotools flag-o-matic git-r3
 
 DESCRIPTION="tcltk/tcl - Tool Command Language - core-8-branch"
 HOMEPAGE="http://www.tcl.tk/"
-SRC_URI="mirror://sourceforge/tcl/${PN}-core${PV}-src.tar.gz"
-S="${WORKDIR}/tcl${PV}/unix"
+EGIT_REPO_URI="https://github.com/tcltk/tcl.git"
+EGIT_BRANCH="core-8-6-branch"
+S="${WORKDIR}/${P}/unix"
 
 LICENSE="tcltk"
 SLOT="0/1"
@@ -15,14 +16,16 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-append-flags -lm
-append-ldflags -Wl,-soname,libtcl.so.1
+src_prepare() {
+	eautoreconf
+	default
+}
 
 src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
+		--libdir="${EPREFIX}"/usr/lib64
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
@@ -33,12 +36,5 @@ src_configure() {
 
 src_install() {
 	default
-
-	mv "${ED}"/usr/lib/libtcl$(ver_cut 1-2).so "${ED}"/usr/lib/libtcl.so.${PV}
-
-	for x in libtcl.so.1 libtcl.so.1.0 libtcl.so ; do
-		dosym libtcl.so.${PV} usr/lib/${x}
-	done
-
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

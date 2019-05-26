@@ -22,8 +22,6 @@ DEPEND="
 
 S="${WORKDIR}/${MY_P}"
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
-
 src_prepare() {
 	default
 	elibtoolize
@@ -44,9 +42,4 @@ src_configure() {
 		$(use threads || echo --disable-threads)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-src_install() {
-	default
-	find "${ED}" -name '*.la' -delete || die
 }

@@ -7,12 +7,5 @@ HOMEPAGE="https://github.com/ivmai/libatomic_ops/"
 SRC_URI="https://github.com/ivmai/${PN}/releases/download/v${PV}/${P}.tar.gz"
 
 LICENSE="MIT boehm-gc GPL-2+"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
-
-IUSE="static-libs"
-
-src_install() {
-	default
-	use static-libs || find "${ED}" -name '*.a' -delete
-}

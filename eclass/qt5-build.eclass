@@ -541,6 +541,7 @@ qt5_base_configure() {
 
 		# build shared libraries
 		-shared
+		-no-static
 
 		# always enable large file support
 		$([[ ${QT5_MINOR_VERSION} -lt 8 ]] && echo -largefile)

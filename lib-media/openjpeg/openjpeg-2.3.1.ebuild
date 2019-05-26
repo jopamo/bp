@@ -36,19 +36,11 @@ src_configure() {
 		-DBUILD_TESTING="$(usex test)"
 		-DBUILD_DOC=OFF
 		-DBUILD_CODEC=ON
+		-DBUILD_SHARED_LIBS=ON
+		-DBUILD_STATIC_LIBS="$(usex static-libs)"
 		)
 
 	cmake-utils_src_configure
-
-	if use static-libs; then
-		mycmakeargs=(
-			-DOPENJPEG_INSTALL_LIB_DIR="lib"
-			-DBUILD_TESTING="$(usex test)"
-			-DBUILD_SHARED_LIBS=OFF
-			-DBUILD_CODEC="$(usex test)"
-			)
-		BUILD_DIR=${BUILD_DIR}_static cmake-utils_src_configure
-	fi
 }
 
 src_compile() {

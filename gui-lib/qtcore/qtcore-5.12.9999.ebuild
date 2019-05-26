@@ -9,7 +9,7 @@ inherit qt5-build
 DESCRIPTION="Cross-platform application development framework"
 KEYWORDS="amd64 arm64"
 
-IUSE="icu systemd static-libs"
+IUSE="icu systemd"
 
 DEPEND="
 	lib-dev/double-conversion:=
@@ -49,8 +49,6 @@ src_configure() {
 
 src_install() {
 	qt5-build_src_install
-
-	use static-libs || find "${ED}" -name '*.a' -delete
 
 	local flags=(
 		ALSA CUPS DBUS EGL EGLFS EGL_X11 EVDEV FONTCONFIG FREETYPE

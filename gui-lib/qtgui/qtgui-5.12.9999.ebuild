@@ -9,7 +9,7 @@ DESCRIPTION="The GUI module and platform plugins for the Qt5 framework"
 KEYWORDS="amd64 arm64"
 
 IUSE="accessibility dbus egl eglfs evdev +gif gles2 ibus
-	jpeg +libinput +png static-libs tslib tuio +udev vnc +xcb"
+	jpeg +libinput +png tslib tuio +udev vnc +xcb"
 
 REQUIRED_USE="
 	|| ( eglfs xcb )
@@ -149,8 +149,6 @@ src_configure() {
 		-system-freetype
 		$(usex gif '' -no-gif)
 		-gui
-		-no-avx
-		-no-avx2
 		-system-harfbuzz
 		$(qt_use jpeg libjpeg system)
 		$(qt_use libinput)
@@ -161,9 +159,4 @@ src_configure() {
 		$(qt_use xcb xcb system)
 	)
 	qt5-build_src_configure
-}
-
-src_install() {
-	qt5-build_src_install
-	use static-libs || find "${ED}" -name '*.a' -delete
 }

@@ -14,8 +14,6 @@ LICENSE="tcltk"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs"
-
 src_prepare() {
 	eautoreconf
 	default
@@ -32,9 +30,4 @@ src_configure() {
 		--enable-64bit
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-src_install() {
-	default
-	use static-libs || find "${ED}" -name '*.a' -delete
 }

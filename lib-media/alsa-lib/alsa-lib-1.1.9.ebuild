@@ -11,7 +11,7 @@ if [[ ${PV} == "9999" ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="git://git.alsa-project.org/${PN}.git"
 else
-	SRC_URI="ftp://ftp.alsa-project.org/pub/lib/${P}.tar.bz2"
+	SRC_URI="https://www.alsa-project.org/files/pub/lib/${P}.tar.bz2"
 fi
 
 LICENSE="LGPL-2.1"

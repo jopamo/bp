@@ -5,7 +5,7 @@ EAPI=7
 inherit cuda toolchain-funcs unpacker
 
 MYD=$(ver_cut 1-2)
-DRIVER_PV="418.39"
+DRIVER_PV="418.67"
 
 DESCRIPTION="NVIDIA CUDA Toolkit (compiler and friends)"
 HOMEPAGE="https://developer.nvidia.com/cuda-zone"

@@ -17,7 +17,7 @@ LICENSE="GPL-2 NVIDIA-r2"
 SLOT="0/${PV%.*}"
 KEYWORDS="amd64"
 
-IUSE="compat +driver +kms static-libs +uvm wayland +X"
+IUSE="+driver +kms static-libs +uvm wayland +X"
 
 RESTRICT="bindist mirror"
 

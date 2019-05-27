@@ -20,6 +20,8 @@ SLOT="0/1"
 
 IUSE="nls static-libs"
 
+PATCHES=( ${FILESDIR}/2a22de439ec63da1927b640eda309296a1e8dce5.patch )
+
 src_prepare() {
 	if [[ ${PV} == "9999" ]] ; then
 		eautopoint

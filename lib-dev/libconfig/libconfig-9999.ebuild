@@ -19,8 +19,9 @@ else
 fi
 
 LICENSE="LGPL-2.1"
-SLOT="0/11"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="+cxx static-libs"
 
 DEPEND="
@@ -47,9 +48,4 @@ src_configure() {
 src_test() {
 	# It responds to check but that does not work as intended
 	emake test
-}
-
-src_install() {
-	default
-	find "${ED}" -name "*.la" -delete || die
 }

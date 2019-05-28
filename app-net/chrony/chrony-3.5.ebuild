@@ -9,9 +9,9 @@ HOMEPAGE="https://chrony.tuxfamily.org/"
 SRC_URI="https://download.tuxfamily.org/${PN}/${P/_/-}.tar.gz"
 
 LICENSE="GPL-2"
-SLOT="0"
-
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="caps +cmdmon ipv6 +ntp +phc pps +refclock +rtc +adns"
 
 DEPEND="
@@ -65,5 +65,5 @@ src_install() {
 
 	systemd_dounit "${FILESDIR}/chronyd.service"
 
-	rm -rf "${ED}"/usr/share/doc "${ED}"/tmp
+	rm -rf "${ED}"/tmp
 }

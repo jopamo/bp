@@ -15,6 +15,7 @@ SRC_URI="https://downloads.sourceforge.net/project/boost/boost/${PV}/boost_${MY_
 LICENSE="Boost-1.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="examples python test"
 
 RDEPEND="python? ( ${PYTHON_DEPS} )

@@ -782,9 +782,9 @@ src_install() {
 
 pkg_postinst() {
 	if use ssl; then
-		if [[ ! -f "${EROOT}"etc/ssl/${PN}/${PN}.key ]]; then
+		if [[ ! -f "${EROOT}"/etc/ssl/${PN}/${PN}.key ]]; then
 			install_cert /etc/ssl/${PN}/${PN}
-			use prefix || chown ${PN}:${PN} "${EROOT}"etc/ssl/${PN}/${PN}.{crt,csr,key,pem}
+			use prefix || chown ${PN}:${PN} "${EROOT}"/etc/ssl/${PN}/${PN}.{crt,csr,key,pem}
 		fi
 	fi
 

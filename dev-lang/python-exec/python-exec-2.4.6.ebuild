@@ -56,8 +56,8 @@ src_install() {
 pkg_preinst() {
 	if [[ -e ${EROOT}etc/python-exec/python-exec.conf ]]; then
 		# preserve current configuration
-		cp "${EROOT}"etc/python-exec/python-exec.conf \
-			"${ED}"etc/python-exec/python-exec.conf || die
+		cp "${EROOT}"/etc/python-exec/python-exec.conf \
+			"${ED}"/etc/python-exec/python-exec.conf || die
 	else
 		# preserve previous Python version preference
 		local py old_pythons=()
@@ -115,7 +115,7 @@ pkg_preinst() {
 
 			local IFS=$'\n'
 			echo "${old_pythons[*]}" \
-				>> "${ED}"etc/python-exec/python-exec.conf || die
+				>> "${ED}"/etc/python-exec/python-exec.conf || die
 		fi
 	fi
 }

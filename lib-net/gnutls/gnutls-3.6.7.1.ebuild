@@ -2,15 +2,16 @@
 
 EAPI=7
 
-inherit libtool
-
 DESCRIPTION="A TLS 1.2 and SSL 3.0 implementation for the GNU project"
 HOMEPAGE="http://www.gnutls.org/"
-SRC_URI="mirror://gnupg/gnutls/v$(ver_cut 1-2)/${P}.tar.xz"
+SRC_URI="mirror://gnupg/gnutls/v$(ver_cut 1-2)/${P}.tar.xz
+		https://www.gnupg.org/ftp/gcrypt/gnutls/v$(ver_cut 1-2)/${P}.tar.xz"
+S="${WORKDIR}/${PN}-$(ver_cut 1-3)"
 
 LICENSE="GPL-3 LGPL-2.1"
-SLOT="0/30" # libgnutls.so number
+SLOT="0/34"
 KEYWORDS="amd64 arm64"
+
 IUSE="+cxx dane nls +pkcs11 +seccomp static-libs test tools valgrind"
 
 RDEPEND=">=lib-dev/nettle-3.1:=[gmp]

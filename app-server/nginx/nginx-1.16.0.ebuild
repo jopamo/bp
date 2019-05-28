@@ -2,16 +2,6 @@
 
 EAPI=7
 
-# Maintainer notes:
-# - http_rewrite-independent pcre-support makes sense for matching locations without an actual rewrite
-# - any http-module activates the main http-functionality and overrides USE=-http
-# - keep the following requirements in mind before adding external modules:
-#	* alive upstream
-#	* sane packaging
-#	* builds cleanly
-#	* does not need a patch for nginx core
-# - TODO: test the google-perftools module (included in vanilla tarball)
-
 # prevent perl-module from adding automagic perl DEPENDs
 GENTOO_DEPEND_ON_PERL="no"
 
@@ -678,12 +668,11 @@ src_compile() {
 src_install() {
 	emake DESTDIR="${D%/}" install
 
-	cp "${FILESDIR}"/nginx.conf-r2 "${ED}"etc/nginx/nginx.conf || die
+	cp "${FILESDIR}"/nginx.conf-r2 "${ED}"/etc/nginx/nginx.conf || die
 
 	systemd_newunit "${FILESDIR}"/nginx.service-r1 nginx.service
 
 	doman man/nginx.8
-	dodoc CHANGES* README
 
 	# just keepdir. do not copy the default htdocs files (bug #449136)
 	keepdir /var/www/localhost

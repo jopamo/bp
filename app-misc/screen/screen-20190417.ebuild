@@ -6,18 +6,20 @@ inherit flag-o-matic pam tmpfiles
 
 DESCRIPTION="screen manager with VT100/ANSI terminal emulation"
 HOMEPAGE="https://www.gnu.org/software/screen/"
-
 SRC_URI="https://1g4.org/files/${P}.tar.xz"
-KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
 IUSE="debug pam"
 
 DEPEND="
 	>=lib-sys/ncurses-5.2:0=
 	pam? ( lib-sys/pam )
 	sys-app/texinfo"
+
+PATCHES=( ${FILESDIR}/854c3673bb69a07d0ebaa52c2cd31eebaeaaca2c.patch )
 
 src_configure() {
 	use debug && append-cppflags "-DDEBUG"
@@ -49,6 +51,4 @@ src_install() {
 	pamd_mimic_system screen auth
 
 	dotmpfiles "${FILESDIR}"/screen.conf
-
-	rm -rf "${ED}"/usr/share/doc
 }

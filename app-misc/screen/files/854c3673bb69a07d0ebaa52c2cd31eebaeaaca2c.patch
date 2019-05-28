@@ -1,0 +1,36 @@
+From 854c3673bb69a07d0ebaa52c2cd31eebaeaaca2c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= <amade@asmblr.net>
+Date: Mon, 13 May 2019 18:05:37 +0200
+Subject: Revert "Remove unnecessary condition check"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This reverts commit ceb9b1f6ec6378c83566af0029ddefcc825ba6d4.
+
+I need to look at this again, there is a report that commit in question
+may cause problems and apparently logic may have failed me when I
+removed this code, as it probably should stay and everything after it is
+unreacheable.
+
+Signed-off-by: Amadeusz Sławiński <amade@asmblr.net>
+---
+ src/attacher.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/attacher.c b/src/attacher.c
+index 4765b94..01e4b9d 100644
+--- a/attacher.c
++++ b/attacher.c
+@@ -235,6 +235,8 @@ int Attach(int how)
+ 			pause();	/* wait for SIGCONT */
+ 		xsignal(SIGCONT, SIG_DFL);
+ 		ContinuePlease = false;
++		if (how != MSG_ATTACH)
++			return 0;	/* we detached it. jw. */
+ 		sleep(1);	/* we dont want to overrun our poor backend. jw. */
+ 		if ((lasts = MakeClientSocket(0)) == -1)
+ 			Panic(0, "Cannot contact screen again. Sigh.");
+-- 
+cgit v1.0-41-gc330
+

@@ -4,10 +4,10 @@ EAPI=7
 
 DESCRIPTION="fast compiler cache"
 HOMEPAGE="https://ccache.samba.org/"
-SRC_URI="https://www.samba.org/ftp/ccache/${P}.tar.xz"
+SRC_URI="https://github.com/ccache/ccache/releases/download/v3.7.1/${P}.tar.xz"
 
 LICENSE="GPL-3"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 DEPEND="app-compression/xz-utils

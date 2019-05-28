@@ -11,6 +11,7 @@ SRC_URI="http://fontconfig.org/release/${P}.tar.bz2"
 LICENSE="MIT"
 SLOT="1.0"
 KEYWORDS="amd64 arm64"
+
 IUSE="doc static-libs"
 
 RDEPEND=">=lib-dev/expat-2.1.0-r3
@@ -91,8 +92,8 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
-	einfo "Cleaning broken symlinks in "${EROOT}"etc/fonts/conf.d/"
-	find -L "${EROOT}"etc/fonts/conf.d/ -type l -delete
+	einfo "Cleaning broken symlinks in "${EROOT}"/etc/fonts/conf.d/"
+	find -L "${EROOT}"/etc/fonts/conf.d/ -type l -delete
 
 	ebegin "Creating global font cache for ${ABI}"
 	"${EPREFIX}"/usr/bin/${CHOST}-fc-cache -srf

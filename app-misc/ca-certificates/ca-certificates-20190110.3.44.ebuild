@@ -125,7 +125,7 @@ pkg_postinst() {
 		"${EROOT}"/usr/sbin/update-ca-certificates --root "${ROOT}"
 	fi
 
-	if [ -n "$(find -L "${EROOT}"etc/ssl/certs/ -type l)" ] ; then
+	if [ -n "$(find -L "${EROOT}"/etc/ssl/certs/ -type l)" ] ; then
 		ewarn "Removing the following broken symlinks:"
 		ewarn "$(find -L "${EROOT}"/etc/ssl/certs/ -type l -printf '%p -> %l\n' -delete)"
 	fi

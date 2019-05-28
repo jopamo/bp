@@ -633,7 +633,7 @@ fix_libtool_libdir_paths() {
 
 toolchain_pkg_postinst() {
 	# Clean up old paths
-	rm -f "${EROOT}"*/rcscripts/awk/fixlafiles.awk "${EROOT}"sbin/fix_libtool_files.sh
+	rm -f "${EROOT}"/*/rcscripts/awk/fixlafiles.awk "${EROOT}"/usr/sbin/fix_libtool_files.sh
 	rmdir "${EROOT}"*/rcscripts{/awk,} 2>/dev/null
 
 	mkdir -p "${EROOT}"/usr/{share/gcc-data,sbin,bin}

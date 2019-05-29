@@ -34,7 +34,6 @@ RDEPEND="${COMMON_DEPEND}
 
 PDEPEND+="lib-sys/tzdb"
 
-strip-flags
 filter-flags -D_FORTIFY_SOURCE\=\* -Wl,-z,combreloc -Wl,-z,relro -Wl,-z,defs -Wl,-z,now -fstack-protector-strong -fstack-clash-protection
 
 check_devpts() {
@@ -93,6 +92,8 @@ pkg_pretend() {
 }
 
 src_prepare() {
+	strip-flags
+
 	default
 
 	cd "${WORKDIR}"
@@ -147,7 +148,7 @@ src_configure() {
 }
 
 src_compile() {
-	emake -C "${WORKDIR}/build" || die "make nptl for ${ABI} failed"
+	emake -C "${WORKDIR}/build"
 }
 
 src_test() {

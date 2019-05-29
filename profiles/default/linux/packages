@@ -36,10 +36,5 @@
 *app-net/iputils
 *app-portage/eix
 *app-crypt/jitterentropy
-*sys-app/nftables
-*sys-app/ulogd
-*sys-app/sshguard
 *app-portage/gentoolkit
-*sys-fs/e2fsprogs
-*sys-fs/btrfs-progs
 *app-portage/smart-live-rebuild

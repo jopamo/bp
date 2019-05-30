@@ -15,21 +15,15 @@ KEYWORDS="amd64 arm64"
 
 IUSE="audit caps debug nscd systemtap static-libs profile static-pie"
 
-COMMON_DEPEND="
-	caps? ( lib-sys/libcap )
-	systemtap? ( dev-util/systemtap )
+BDEPEND="sys-devel/gcc
+		sys-devel/make"
+
+DEPEND="lib-sys/tzdb
+		sys-kernel/linux-headers
+		sys-app/layout
 "
-DEPEND="${COMMON_DEPEND}
-	!<sys-app/sandbox-1.6
-	!<sys-app/portage-2.1.2
-	sys-devel/binutils
-	sys-devel/gcc
-	sys-kernel/linux-headers
-"
-RDEPEND="${COMMON_DEPEND}
-	!sys-app/ps3-sources
-	sys-app/gentoo-functions
-	!lib-sys/nss-db
+RDEPEND="caps? ( lib-sys/libcap )
+		systemtap? ( dev-util/systemtap )
 "
 
 PDEPEND+="lib-sys/tzdb"

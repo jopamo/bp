@@ -44,28 +44,17 @@ DATAPATH="${EPREFIX}"/usr/share
 
 LICENSE="GPL-3+ LGPL-3+ || ( GPL-3+ libgcc libstdc++ gcc-runtime-library-exception-3.1 ) FDL-1.3+"
 
-IUSE="regression-test vanilla debug cxx fortran doc objc nptl
-		pgo objc-gc objc++ openmp fixed-point go +isl sanitize
+IUSE="debug cxx fortran doc objc nptl testpgo objc-gc objc++ openmp fixed-point go +isl sanitize
 		cilk +vtv jit"
 
 SLOT=0
 
-RDEPEND="lib-sys/zlib
-		isl? ( >=lib-dev/isl-0.14 )
-		fortran? ( >=lib-dev/gmp-4.3.2:0=
-					>=lib-dev/mpfr-2.4.2:0= )
-		>=lib-dev/mpc-0.8.1:0=
-		objc-gc? ( >=lib-dev/boehm-gc-7.4.2 )
-"
+BDEPEND="sys-devel/chrpath"
 
-DEPEND="${RDEPEND}
-	>=sys-devel/bison-1.875
-	sys-devel/chrpath
-	>=sys-devel/flex-2.5.4
-	regression-test? (
-		>=dev-util/dejagnu-1.4.4
-		>=sys-devel/autogen-5.5.4
-	)
+DEPEND="lib-sys/zlib
+		lib-dev/mpc
+		sys-devel/binutils
+		isl? ( lib-dev/isl )
 "
 
 if [[ -n ${SNAPSHOT} ]] ; then
@@ -475,7 +464,7 @@ gcc_do_make() {
 #---->> src_test <<----
 
 toolchain_src_test() {
-	if use regression-test ; then
+	if use test ; then
 		cd "${WORKDIR}"/build
 		emake -k check
 	fi
@@ -527,13 +516,6 @@ toolchain_src_install() {
 
 	# prune empty dirs left behind
 	find "${D}" -depth -type d -delete 2>/dev/null
-
-	# install testsuite results
-	if use regression-test; then
-		docinto testsuite
-		find "${WORKDIR}"/build -type f -name "*.sum" -exec dodoc {} +
-		find "${WORKDIR}"/build -type f -path "*/testsuite/*.log" -exec dodoc {} +
-	fi
 
 	# Rather install the script, else portage with changing $FILESDIR
 	# between binary and source package borks things ....
@@ -644,11 +626,6 @@ toolchain_pkg_postinst() {
 	# Since these aren't critical files and portage sucks with
 	# handling of binpkgs, don't require these to be found
 	cp "${ROOT}/${DATAPATH}"/c{89,99} "${EROOT}"/usr/bin/ 2>/dev/null
-
-	if use regression-test ; then
-		elog "Testsuite results have been installed into /usr/share/doc/${PF}/testsuite"
-		echo
-	fi
 }
 
 toolchain_pkg_postrm() {

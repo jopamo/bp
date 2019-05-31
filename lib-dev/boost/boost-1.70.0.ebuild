@@ -12,13 +12,17 @@ HOMEPAGE="http://www.boost.org/"
 SRC_URI="https://downloads.sourceforge.net/project/boost/${PN}/${PV}/${MY_P}.tar.bz2"
 
 LICENSE="Boost-1.0"
-SLOT="0/${PV}" # ${PV} instead ${MAJOR_V} due to bug 486122
+SLOT="0/${PV}"
 KEYWORDS="amd64 arm64"
 
-IUSE="context debug doc icu +nls mpi python static-libs +threads tools"
+IUSE="context debug doc icu +nls mpi python static-libs +threads tools bzip2 zlib lzma zstd"
 
 RDEPEND="icu? ( >=lib-dev/icu-3.6:= )
 	mpi? ( >=virtual/mpi-2.0-r4[cxx,threads] )
+	bzip2? ( app-compression/bzip2 )
+	zlib? ( lib-sys/zlib )
+	lzma? ( app-compression/xz-utils )
+	zstd? ( app-compression/zstd )
 	python? ( ${PYTHON_DEPS} )
 	app-compression/bzip2
 	lib-sys/zlib
@@ -114,8 +118,17 @@ src_configure() {
 		link=$(usex static-libs shared,static shared)
 	)
 
-	[[ ${CHOST} == *-winnt* ]] && OPTIONS+=(
+	use bzip2 || OPTIONS+=(
 			-sNO_BZIP2=1
+		)
+	use zlib || OPTIONS+=(
+			-sNO_ZLIB=1
+		)
+	use lzma || OPTIONS+=(
+			-sNO_LZMA=1
+		)
+	use zstd || OPTIONS+=(
+			-sNO_ZSTD=1
 		)
 }
 

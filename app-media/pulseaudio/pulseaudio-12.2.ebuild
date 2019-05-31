@@ -86,7 +86,7 @@ RDEPEND="${RDEPEND}
 	equalizer? ( qt4? ( dev-python/PyQt4[dbus] ) )
 "
 
-filter-flags -flto\=\*
+filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
 
 pkg_pretend() {
 	CONFIG_CHECK="~HIGH_RES_TIMERS"

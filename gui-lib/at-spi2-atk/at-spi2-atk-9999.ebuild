@@ -15,17 +15,11 @@ KEYWORDS="amd64 arm64"
 
 IUSE="dbus"
 
-COMMON_DEPEND="
+DEPEND="
 	>=gui-lib/at-spi2-core-2.17.90
 	>=gui-lib/atk-2.15.4
 	>=lib-dev/glib-2.32:2
 	dbus? ( >=sys-app/dbus-1.5 )
-"
-RDEPEND="${COMMON_DEPEND}
-	!<gnome-extra/at-spi-1.32.0-r1
-"
-DEPEND="${COMMON_DEPEND}
-	dev-util/pkgconf
 "
 
 src_configure() {

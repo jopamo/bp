@@ -24,3 +24,4 @@
 *sys-app/busybox
 *sys-app/util-linux
 *app-portage/eix
+*app-portage/smart-live-rebuild

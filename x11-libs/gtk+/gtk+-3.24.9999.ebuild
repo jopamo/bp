@@ -23,7 +23,6 @@ REQUIRED_USE="
 RESTRICT="test"
 
 COMMON_DEPEND="
-	gui-lib/atk[introspection?]
 	>=lib-dev/glib-2.49.4:2
 	lib-media/fontconfig
 	>=lib-media/libepoxy-1.0[X(+)?]
@@ -41,7 +40,6 @@ COMMON_DEPEND="
 		>=x11-libs/libxkbcommon-0.2
 	)
 	X? (
-		>=gui-lib/at-spi2-atk-2.5.3
 		x11-libs/libX11
 		>=x11-libs/libXi-1.3
 		x11-libs/libXext
@@ -66,6 +64,8 @@ DEPEND="${COMMON_DEPEND}
 		fonts/font-misc-misc
 		fonts/font-cursor-misc )
 "
+
+PATCHES=( ${FILESDIR}/avoid-dbus.patch )
 
 RDEPEND="${COMMON_DEPEND}"
 
@@ -96,6 +96,7 @@ src_configure() {
 		$(use_enable X xrandr) \
 		$(use_enable xinerama) \
 		--disable-mir-backend \
+		--without-atk-bridge \
 		--disable-papi \
 		--with-xml-catalog="${EPREFIX}"/etc/xml/catalog \
 		--libdir="${EPREFIX}"/usr/lib \

@@ -13,12 +13,14 @@ LICENSE="libtiff"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="+cxx jbig jpeg lzma static-libs test zlib"
+IUSE="+cxx jbig jpeg lzma static-libs test webp zlib zstd"
 
 DEPEND="jpeg? ( lib-media/libjpeg-turbo )
 	jbig? ( >=lib-media/jbigkit-2.1:= )
 	lzma? ( >=app-compression/xz-utils-5.0.5-r1:= )
-	zlib? ( >=lib-sys/zlib-1.2.8-r1:= )"
+	webp? ( lib-media/libwebp )
+	zlib? ( >=lib-sys/zlib-1.2.8-r1:= )
+	zstd? ( app-compression/zstd )"
 
 REQUIRED_USE="test? ( jpeg )" #483132
 
@@ -35,6 +37,8 @@ src_configure() {
 		$(use_enable jbig) \
 		$(use_enable lzma) \
 		$(use_enable cxx) \
+		$(use_enable webp) \
+		$(use_enable zstd) \
 		--without-x
 }
 

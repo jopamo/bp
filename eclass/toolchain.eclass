@@ -44,8 +44,7 @@ DATAPATH="${EPREFIX}"/usr/share
 
 LICENSE="GPL-3+ LGPL-3+ || ( GPL-3+ libgcc libstdc++ gcc-runtime-library-exception-3.1 ) FDL-1.3+"
 
-IUSE="debug cxx fortran doc objc nptl testpgo objc-gc objc++ openmp fixed-point go +isl sanitize
-		cilk +vtv jit"
+IUSE="debug openmp fixed-point +isl sanitize cilk +vtv"
 
 SLOT=0
 
@@ -575,10 +574,6 @@ toolchain_src_install() {
 		rm "${py}" || die
 	done
 	popd >/dev/null
-
-	# Don't scan .gox files for executable stacks - false positives
-	export QA_EXECSTACK="usr/lib*/go/*/*.gox"
-	export QA_WX_LOAD="usr/lib*/go/*/*.gox"
 
 	chrpath -d "${ED}"/usr/lib64/libstdc++.so*
 }

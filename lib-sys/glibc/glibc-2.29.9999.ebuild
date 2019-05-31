@@ -18,15 +18,14 @@ IUSE="audit caps debug nscd systemtap static-libs profile static-pie"
 BDEPEND="sys-devel/gcc
 		sys-devel/make"
 
-DEPEND="lib-sys/tzdb
-		sys-kernel/linux-headers
+DEPEND="sys-kernel/linux-headers
 		sys-app/layout
 "
 RDEPEND="caps? ( lib-sys/libcap )
 		systemtap? ( dev-util/systemtap )
 "
 
-PDEPEND+="lib-sys/tzdb"
+PDEPEND="lib-sys/tzdb"
 
 filter-flags -D_FORTIFY_SOURCE\=\* -Wl,-z,combreloc -Wl,-z,relro -Wl,-z,defs -Wl,-z,now -fstack-protector-strong -fstack-clash-protection
 

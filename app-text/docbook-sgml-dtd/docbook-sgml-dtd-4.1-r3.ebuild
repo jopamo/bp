@@ -1,5 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
+EAPI=7
+
 inherit sgml-catalog
 
 MY_P="docbk41"
@@ -18,6 +20,8 @@ RDEPEND="app-text/sgml-common"
 
 S=${WORKDIR}
 
+PATCHES=( "${FILESDIR}"/${P}-catalog.diff )
+
 sgml-catalog_cat_include "/etc/sgml/sgml-docbook-${PV}.cat" \
 	"/usr/share/sgml/docbook/sgml-dtd-${PV}/catalog"
 sgml-catalog_cat_include "/etc/sgml/sgml-docbook-${PV}.cat" \
@@ -25,7 +29,6 @@ sgml-catalog_cat_include "/etc/sgml/sgml-docbook-${PV}.cat" \
 
 src_unpack() {
 	unpack ${A}
-	eapply "${FILESDIR}"/${P}-catalog.diff
 }
 
 src_install() {

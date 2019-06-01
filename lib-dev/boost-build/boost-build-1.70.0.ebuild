@@ -16,11 +16,10 @@ LICENSE="Boost-1.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="examples python test"
+IUSE="python test"
 
-RDEPEND="python? ( ${PYTHON_DEPS} )
-	!<lib-dev/boost-1.35.0
-	!<=dev-util/boost-build-1.35.0-r1"
+RDEPEND="python? ( ${PYTHON_DEPS} )"
+
 DEPEND="${RDEPEND}
 	test? ( sys-app/diffutils
 		${PYTHON_DEPS} )"
@@ -107,11 +106,7 @@ src_install() {
 
 	dodoc ../notes/{changes,release_procedure,build_dir_option,relative_source_paths}.txt
 
-	if use examples; then
-		docinto examples
-		dodoc -r ../example/.
-		docompress -x /usr/share/doc/${PF}/examples
-	fi
+	cleanup_install
 }
 
 src_test() {

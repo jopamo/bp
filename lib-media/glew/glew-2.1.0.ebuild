@@ -11,7 +11,7 @@ SRC_URI="mirror://sourceforge/${PN}/${P}.tgz"
 LICENSE="BSD MIT"
 SLOT="0/$(ver_cut 1-2)"
 KEYWORDS="amd64 arm64"
-IUSE="doc static-libs"
+IUSE="static-libs"
 
 DEPEND="
 	lib-media/glu
@@ -90,10 +90,4 @@ src_install() {
 		PKGDIR="${ED}/usr/lib64/pkgconfig" \
 		"${myglewopts[@]}" \
 		install.all
-
-	dodoc README.md
-	if use doc; then
-		docinto html
-		dodoc doc/*
-	fi
 }

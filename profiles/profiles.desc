@@ -7,12 +7,9 @@
 #arch		profile_directory				status
 
 # AMD64 Profiles
-amd64           default/linux/amd64/1.0                                stable
-amd64           default/linux/amd64/1.0/gui                        stable
+amd64           default/linux/amd64/1.0					stable
+amd64           default/linux/amd64/1.0/gui				stable
 
 # ARM64 Profiles
-# @MAINTAINER: arm64@gentoo.org
-arm64           default/linux/arm64/1.0                        dev
-arm64           default/linux/arm64/1.0/gui                        stable
-
-# vim: set ts=8:
+arm64           default/linux/arm64/1.0					stable
+arm64           default/linux/arm64/1.0/gui				stable

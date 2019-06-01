@@ -1,3 +1,10 @@
+# Distributed under the terms of the GNU General Public License v2
+
+# This file extends the base packages file for the default profile that all
+# architectures will enjoy.  Please note that default is what most architectures
+# will have.  Some will have an selinux profile (see ${PORTDIR}/profiles/selinux).
+# The idea is to only create a new family of profiles when absolutely necessary.
+
 *sys-app/layout
 *app-compression/pigz
 *app-compression/tar
@@ -25,3 +32,4 @@
 *sys-app/util-linux
 *app-portage/eix
 *app-portage/smart-live-rebuild
+

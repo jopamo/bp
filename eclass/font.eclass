@@ -181,12 +181,7 @@ font_src_install() {
 
 	font_fontconfig
 
-	[[ -n ${DOCS} ]] && { dodoc ${DOCS} || die "docs installation failed" ; }
-
-	# install common docs
-	for commondoc in COPYRIGHT README{,.txt} NEWS AUTHORS BUGS ChangeLog FONTLOG.txt; do
-		[[ -s ${commondoc} ]] && dodoc ${commondoc}
-	done
+	cleanup_install
 }
 
 # @FUNCTION: font_pkg_postinst

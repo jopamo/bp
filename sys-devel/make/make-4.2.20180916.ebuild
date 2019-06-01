@@ -15,7 +15,8 @@ KEYWORDS="amd64 arm64"
 IUSE="guile nls static"
 
 DEPEND="guile? ( >=dev-scheme/guile-1.8:= )
-	nls? ( sys-devel/gettext )"
+		nls? ( sys-devel/gettext )
+		dev-perl/libintl-perl"
 
 src_configure() {
 	use static && append-ldflags -static

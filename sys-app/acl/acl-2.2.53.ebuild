@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit libtool toolchain-funcs
+inherit libtool toolchain-funcs flag-o-matic
 
 DESCRIPTION="access control list utilities, libraries and headers"
 HOMEPAGE="https://savannah.nongnu.org/projects/acl"
@@ -15,6 +15,8 @@ KEYWORDS="amd64 arm64"
 IUSE="nls static-libs"
 
 DEPEND=">=sys-app/attr-2.4.47-r1"
+
+replace-flags -O3 -O2
 
 src_prepare() {
 	default

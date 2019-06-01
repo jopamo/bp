@@ -34,6 +34,8 @@ replace-flags -Ofast -O2
 replace-flags -Wl,-Ofast -Wl,-O2
 append-flags -fno-strict-aliasing
 
+PATCHES=( ${FILESDIR}/de54e1a8094ea0e60a408de73baa312cf80a5485.patch )
+
 pkg_setup() {
 	if use test ; then
 		python-any-r1_pkg_setup

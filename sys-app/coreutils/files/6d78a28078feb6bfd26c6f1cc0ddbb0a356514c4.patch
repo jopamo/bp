@@ -1,0 +1,32 @@
+From 6d78a28078feb6bfd26c6f1cc0ddbb0a356514c4 Mon Sep 17 00:00:00 2001
+From: Shugo Maeda <shugo@ruby-lang.org>
+Date: Sun, 31 Mar 2019 15:43:58 -0700
+Subject: [PATCH] factor: output immediately if stdout is a tty but stdin is
+ not
+
+* src/factor.c (lbuf_putc): Use line buffered mode if the standard
+output is a terminal in the same way as the stdio library.
+User programs might use pty only for the standard out
+like the example of Ruby's PTY module:
+https://docs.ruby-lang.org/en/2.6.0/PTY.html#module-PTY-label-Example
+---
+ src/factor.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/factor.c b/src/factor.c
+index 39e8918ff..1d6e566b4 100644
+--- a/src/factor.c
++++ b/src/factor.c
+@@ -2400,10 +2400,10 @@ lbuf_putc (char c)
+     {
+       size_t buffered = lbuf.end - lbuf.buf;
+ 
+-      /* Provide immediate output for interactive input.  */
++      /* Provide immediate output for interactive use.  */
+       static int line_buffered = -1;
+       if (line_buffered == -1)
+-        line_buffered = isatty (STDIN_FILENO);
++        line_buffered = isatty (STDIN_FILENO) || isatty (STDOUT_FILENO);
+       if (line_buffered)
+         lbuf_flush ();
+       else if (buffered >= FACTOR_PIPE_BUF)

@@ -64,6 +64,8 @@ src_install() {
 
 		doins -r "${S}"/${i}
 	done
+
+	cleanup_install
 }
 
 pkg_postinst() {

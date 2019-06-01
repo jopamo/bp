@@ -164,4 +164,6 @@ src_install() {
 	dosym ../../../poppler/cMaps "/usr/share/ghostscript/${PVM}/Resource/CMap"
 
 	use static-libs || find "${ED}" -name '*.la' -delete
+
+	cleanup_install
 }

@@ -12,7 +12,7 @@ LICENSE="GPL-2+ BSD BSD-2"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="abi_x86_64 -custom-cflags"
+IUSE="-custom-cflags"
 
 DEPEND="sys-app/pciutils"
 
@@ -60,11 +60,7 @@ src_compile() {
 		unset CFLAGS CPPFLAGS LDFLAGS
 	fi
 
-	if [[ ${CHOST} == x86_64* ]]; then
-		use abi_x86_64 && efimake
-	else
-		efimake
-	fi
+	efimake
 }
 
 src_install() {

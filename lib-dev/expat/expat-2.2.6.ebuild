@@ -1,6 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
+
 inherit autotools libtool toolchain-funcs
 
 DESCRIPTION="Stream-oriented XML parser library"
@@ -57,8 +58,6 @@ src_compile() {
 }
 
 src_install() {
-	default
-
 	if use unicode; then
 		pushd "${BUILD_DIR}"w >/dev/null
 		emake -C lib install DESTDIR="${D}"
@@ -69,4 +68,6 @@ src_install() {
 		sed -i -e '/^Libs/s:-lexpat:&w:' expatw.pc || die
 		popd >/dev/null
 	fi
+
+	default
 }

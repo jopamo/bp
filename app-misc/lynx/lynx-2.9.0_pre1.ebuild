@@ -33,13 +33,3 @@ src_configure() {
 
 	econf "${myconf[@]}"
 }
-
-src_install() {
-	default
-	sed -e '/#LOCALE/     a LOCALE_CHARSET:TRUE'     \
-    -i "${ED}"/etc/lynx/lynx.cfg
-
-    sed -e '/#DEFAULT_ED/ a DEFAULT_EDITOR:vi'       \
-    -i "${ED}"/etc/lynx/lynx.cfg
-}
-

@@ -210,6 +210,7 @@ src_install() {
 
 	find "${ED}"/ -xtype l -delete
 	rm -rf "${ED}"/run
+	cleanup_install
 }
 
 pkg_postinst() {

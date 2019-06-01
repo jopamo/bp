@@ -56,8 +56,6 @@ src_install() {
 	insinto /usr/share/fc-lang
 	doins fc-lang/*.orth
 
-	dodoc doc/fontconfig-user.{txt,pdf}
-
 	if [[ -e ${ED}/usr/share/doc/fontconfig/ ]];  then
 		mv "${ED}"/usr/share/doc/fontconfig/* "${ED}"/usr/share/doc/${P} || die
 		rm -rf "${ED}"/usr/share/doc/fontconfig

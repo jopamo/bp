@@ -37,7 +37,7 @@ src_install() {
 	insinto /usr/share/sgml/docbook/xml-dtd-${PV}/ent
 	doins ent/*.ent || die
 
-	dodoc ChangeLog *.txt
+	cleanup_install
 }
 
 pkg_postinst() {

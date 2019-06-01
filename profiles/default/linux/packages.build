@@ -16,7 +16,7 @@ app-net/wget
 sys-devel/autoconf
 sys-devel/automake
 sys-devel/libtool
-sys-app/layout
+sys-app/baselayout
 sys-app/makedev
 sys-app/coreutils
 sys-app/diffutils
@@ -25,6 +25,7 @@ sys-app/findutils
 sys-app/gawk
 sys-app/grep
 sys-app/less
+sys-app/net-tools
 sys-app/portage
 sys-app/sed
 sys-devel/binutils
@@ -38,6 +39,6 @@ sys-devel/patch
 virtual/editor
 virtual/libc
 sys-kernel/linux-headers
-dev-util/pkgconf
+dev-util/pkgconfig
 sys-app/shadow
-sys-app/busybox
+sys-app/which

@@ -42,7 +42,7 @@ src_install() {
 		/usr/share/sgml/docbook/xml-dtd-${PV}/ent/isogrk4.ent || die
 
 	cp ent/README README.ent
-	dodoc ChangeLog README*
+	cleanup_install
 }
 
 pkg_postinst() {

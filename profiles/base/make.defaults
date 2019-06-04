@@ -70,7 +70,7 @@ USE="${USE} cxx"
 
 # Enable extended filesystem attribute support by default.
 # https://archives.gentoo.org/gentoo-dev/message/ba0e3457e4b807e79816f0df03566af0
-USE="${USE} xattr"
+USE="${USE} xattr bzip2"
 
 
 PYTHONDONTWRITEBYTECODE="1"

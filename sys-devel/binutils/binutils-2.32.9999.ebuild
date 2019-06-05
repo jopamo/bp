@@ -32,7 +32,7 @@ src_configure() {
 		--disable-werror
 		$(usex static-libs '--disable-shared' '--enable-shared')
 		--with-system-zlib
-		--enable-gold
+		--disable-gold
 		--enable-install-libiberty
 		--enable-deterministic-archives
 		--disable-nls
@@ -45,10 +45,4 @@ src_configure() {
 	)
 
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-src_install() {
-	default
-	rm -rf "${ED}"/usr/bin/ld
-	dosym /usr/bin/ld.gold /usr/bin/ld
 }

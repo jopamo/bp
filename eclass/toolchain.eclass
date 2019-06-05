@@ -175,7 +175,6 @@ toolchain_src_configure() {
 		--enable-lto
 		--enable-nls
 		--enable-libstdcxx-time
-		--enable-gold
 		--disable-multilib
 		--disable-rpath
 		--enable-threads=posix

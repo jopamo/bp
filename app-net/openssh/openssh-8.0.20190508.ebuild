@@ -21,7 +21,7 @@ fi
 LICENSE="BSD GPL-2"
 SLOT="0"
 
-IUSE="audit bindist debug libedit pam +pie +ssl static test X"
+IUSE="audit bindist debug libedit pam +pie retpoline +ssl static test X"
 REQUIRED_USE="pie? ( !static )
 	static? ( !pam )
 	test? ( ssl )"
@@ -53,6 +53,7 @@ src_prepare() {
 }
 
 src_configure() {
+	use retpoline && append-flags "-mindirect-branch=thunk"
 	use debug && append-cppflags -DSANDBOX_SECCOMP_FILTER_DEBUG
 	use static && append-ldflags -static
 

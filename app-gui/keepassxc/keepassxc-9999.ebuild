@@ -19,7 +19,7 @@ fi
 
 LICENSE="LGPL-2.1 GPL-2 GPL-3"
 SLOT="0"
-IUSE="autotype debug http test"
+IUSE="autotype debug http retpoline test"
 
 RDEPEND="
 	lib-dev/libgcrypt:=
@@ -47,14 +47,11 @@ DEPEND="
 	test? ( gui-lib/qttest:5 )
 "
 
-src_prepare() {
+src_configure() {
+	use retpoline && append-flags "-mindirect-branch=thunk"
 	 use test || \
 		sed -e "/^find_package(Qt5Test/d" -i CMakeLists.txt || die
 
-	 cmake-utils_src_prepare
-}
-
-src_configure() {
 	local mycmakeargs=(
 		-DWITH_GUI_TESTS=OFF
 		-DWITH_TESTS="$(usex test)"

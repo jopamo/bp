@@ -12,14 +12,13 @@ LICENSE="GPL-2"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps ncurses retpoline static"
+IUSE="caps retpoline static"
 
 CDEPEND="
 	>=lib-dev/libassuan-2.1
 	>=lib-dev/libgcrypt-1.6.3
 	>=lib-dev/libgpg-error-1.17
 	caps? ( lib-sys/libcap-ng )
-	ncurses? ( lib-sys/ncurses:0= )
 	static? ( >=lib-sys/ncurses-5.7-r5:0=[static-libs,-gpm] )
 "
 DEPEND="${CDEPEND}

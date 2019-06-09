@@ -10,7 +10,7 @@ SRC_URI="https://www.alsa-project.org/files/pub/plugins/${P}.tar.bz2"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0/1"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="debug ffmpeg libsamplerate pulseaudio"
 

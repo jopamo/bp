@@ -10,7 +10,7 @@ SRC_URI="https://www.alsa-project.org/files/pub/utils/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0/1"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="+libsamplerate +ncurses nls"
 
@@ -43,7 +43,7 @@ src_configure() {
 src_install() {
 	default
 	mkdir -p "${ED}"/var/lib/alsa/
-	touch "${ED}"/var/lib/alsa/asound.state
+
 	keepdir /var/lib/alsa
 	keepdir /usr/share/alsa/ucm
 }

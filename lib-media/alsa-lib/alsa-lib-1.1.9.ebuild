@@ -16,7 +16,7 @@ fi
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="amd64 arm64"
 IUSE="alisp debug"
 
 filter-flags -flto\=\*

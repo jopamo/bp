@@ -2,11 +2,11 @@
 
 EAPI=7
 
-inherit autotools flag-o-matic gnome2-utils linux-info systemd user
+inherit flag-o-matic gnome2-utils linux-info systemd user
 
 DESCRIPTION="A networked sound server with an advanced plugin system"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/PulseAudio/"
-SRC_URI="https://freedesktop.org/software/pulseaudio/releases/${P}.tar.xz"
+SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="!gdbm? ( LGPL-2.1 ) gdbm? ( GPL-2 ) equalizer? ( AGPL-3+ )"
 SLOT="0/1"
@@ -114,8 +114,6 @@ src_prepare() {
 
 	# Skip test that cannot work with sandbox, bug #501846
 	sed -i -e '/lock-autospawn-test/d' src/Makefile.am || die
-
-	eautoreconf
 }
 
 src_configure() {

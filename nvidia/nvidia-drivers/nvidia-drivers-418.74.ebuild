@@ -15,7 +15,7 @@ SRC_URI="
 
 LICENSE="GPL-2 NVIDIA-r2"
 SLOT="0/${PV%.*}"
-#KEYWORDS="amd64"
+KEYWORDS="amd64"
 
 IUSE="+driver +kms static-libs +uvm wayland +X"
 

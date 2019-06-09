@@ -83,12 +83,8 @@ pkg_setup() {
 }
 
 src_configure(){
-	# bug 508724 mariadb cannot use ld.gold
-	tc-ld-disable-gold
-
 	CMAKE_BUILD_TYPE="Release"
 
-	# debug hack wrt #497532
 	mycmakeargs=(
 		-DCMAKE_C_FLAGS_RELWITHDEBINFO="$(usex debug '' '-DNDEBUG')"
 		-DCMAKE_CXX_FLAGS_RELWITHDEBINFO="$(usex debug '' '-DNDEBUG')"

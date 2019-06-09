@@ -81,7 +81,6 @@ src_prepare() {
 }
 
 src_compile() {
-	tc-ld-disable-gold
 	append-flags -D__CUDA_ARCH__=300
 	use examples || return
 	local myopts=("verbose=1")

@@ -204,7 +204,6 @@ src_configure() {
 
 	use static && HOST_LDFLAGS+=" -static"
 
-	tc-ld-disable-gold #439082 #466536 #526348
 	export TARGET_LDFLAGS="${TARGET_LDFLAGS} ${LDFLAGS}"
 	unset LDFLAGS
 

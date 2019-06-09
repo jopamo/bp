@@ -25,8 +25,6 @@ src_configure() {
 	export OPTIMIZER=${CFLAGS}
 	export DEBUG=-DNDEBUG
 
-	tc-ld-disable-gold
-
 	local myeconfargs=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

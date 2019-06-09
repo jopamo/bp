@@ -613,9 +613,6 @@ qt5_base_configure() {
 		# link-time code generation is something we want to enable by default
 		-ltcg
 
-		# use the system linker (gold will be selected automagically otherwise)
-		$(tc-ld-is-gold && echo -use-gold-linker || echo -no-use-gold-linker)
-
 		# disable all platform plugins by default, override in qtgui
 		-no-xcb -no-eglfs -no-kms -no-gbm -no-directfb -no-linuxfb -no-mirclient
 

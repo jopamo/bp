@@ -25,7 +25,6 @@ src_prepare() {
 src_configure() {
 	tc-export CC
 	export CC_FOR_BUILD=$(tc-getBUILD_CC)
-	tc-ld-disable-gold
 	export libdir="/usr/lib64"
 	unset LIBS # Bug 562004
 

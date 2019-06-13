@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit autotools flag-o-matic git-r3
+inherit autotools git-r3
 
 DESCRIPTION="tcltk/tcl - Tool Command Language - core-8-branch"
 HOMEPAGE="http://www.tcl.tk/"
@@ -13,8 +13,6 @@ S="${WORKDIR}/${P}/unix"
 LICENSE="tcltk"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
-
-append-ldflags -Wl,-soname,libtcl$(ver_cut 1-2).so.1
 
 src_prepare() {
 	eautoreconf

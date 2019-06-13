@@ -19,9 +19,10 @@ DEPEND="lib-dev/jansson
 		x11-libs/libXv"
 
 src_prepare() {
+	cp "${FILESDIR}"/Makefile_libxnvctrl "${S}"/libXNVCtrl/Makefile || die
 	cp "${FILESDIR}"/Makefile "${S}"/ || die
 
-	eapply "${FILESDIR}"/libxnvctrl_so.patch
+	#eapply "${FILESDIR}"/libxnvctrl_so.patch
 	eapply "${FILESDIR}"/nvidia-settings-linker.patch
 
 	default

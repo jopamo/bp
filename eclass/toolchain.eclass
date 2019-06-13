@@ -575,6 +575,7 @@ toolchain_src_install() {
 	popd >/dev/null
 
 	chrpath -d "${ED}"/usr/lib64/libstdc++.so*
+	cleanup_install
 }
 
 

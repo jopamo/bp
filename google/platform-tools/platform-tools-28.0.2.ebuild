@@ -2,6 +2,8 @@
 
 EAPI=7
 
+inherit systemd
+
 DESCRIPTION="fastboot and adb"
 HOMEPAGE="https://developer.android.com/studio/releases/platform-tools"
 SRC_URI="https://dl.google.com/android/repository/platform-tools_r${PV}-linux.zip"
@@ -12,5 +14,7 @@ SLOT="0/1"
 KEYWORDS="amd64"
 
 src_install() {
-	dobin {adb,fastboot}
+	systemd_dounit "${FILESDIR}/adb.service"
+	exeinto /opt/bin
+	doexe {adb,fastboot}
 }

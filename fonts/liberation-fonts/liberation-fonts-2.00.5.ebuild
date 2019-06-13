@@ -15,7 +15,6 @@ LICENSE="OFL-1.1"
 IUSE="fontforge X"
 
 FONT_SUFFIX="ttf"
-
 FONT_CONF=( "${FILESDIR}/60-liberation.conf" )
 
 DEPEND="
@@ -24,7 +23,6 @@ DEPEND="
 		app-media/fontforge
 		dev-python/fonttools
 	)"
-RDEPEND=""
 
 pkg_setup() {
 	if use fontforge; then

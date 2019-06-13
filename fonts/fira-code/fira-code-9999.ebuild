@@ -2,22 +2,15 @@
 
 EAPI=7
 
-inherit font
+inherit font git-r3
 
 DESCRIPTION="Monospaced font with programming ligatures"
 HOMEPAGE="https://github.com/tonsky/FiraCode"
-SRC_URI="https://github.com/tonsky/FiraCode/archive/${PV}.tar.gz -> ${P}.tar.gz
-https://github.com/tonsky/FiraCode/files/412440/FiraCode-Regular-Symbol.zip"
+EGIT_REPO_URI="https://github.com/tonsky/FiraCode.git"
 
 LICENSE="OFL-1.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-S="${WORKDIR}/FiraCode-${PV}"
 FONT_S="${S}/distr/otf"
 FONT_SUFFIX="otf"
-
-src_prepare() {
-	default
-	mv "${WORKDIR}"/*.otf "${FONT_S}" || die
-}

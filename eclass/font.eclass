@@ -198,7 +198,7 @@ font_pkg_postinst() {
 		elog "The following fontconfig configuration files have been installed:"
 		elog
 		for conffile in "${FONT_CONF[@]}"; do
-			if [[ -e ${EROOT}etc/fonts/conf.avail/$(basename ${conffile}) ]]; then
+			if [[ -e ${EROOT}/etc/fonts/conf.avail/$(basename ${conffile}) ]]; then
 				elog "  $(basename ${conffile})"
 			fi
 		done
@@ -207,12 +207,12 @@ font_pkg_postinst() {
 		echo
 	fi
 
-	if has_version lib-media/fontconfig && [[ ${ROOT} == / ]]; then
+	if has_version lib-media/fontconfig && [[ ${ROOT}/ == / ]]; then
 		ebegin "Updating global fontcache"
 		fc-cache -fs
 		eend $?
 	else
-		einfo "Skipping fontcache update (lib-media/fontconfig is not installed or ROOT != /)"
+		einfo "Skipping fontcache update (lib-media/fontconfig is not installed or EROOT != /)"
 	fi
 }
 
@@ -226,11 +226,11 @@ font_pkg_postrm() {
 	find "${EROOT}"/usr/share/fonts/ -type f '!' -perm 0644 -print0 \
 		| xargs -0 chmod -v 0644 2>/dev/null
 
-	if has_version lib-media/fontconfig && [[ ${ROOT} == / ]]; then
+	if has_version lib-media/fontconfig && [[ ${ROOT}/ == / ]]; then
 		ebegin "Updating global fontcache"
 		fc-cache -fs
 		eend $?
 	else
-		einfo "Skipping fontcache update (lib-media/fontconfig is not installed or ROOT != /)"
+		einfo "Skipping fontcache update (lib-media/fontconfig is not installed or EROOT != /)"
 	fi
 }

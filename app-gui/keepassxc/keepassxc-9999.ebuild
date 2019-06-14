@@ -19,7 +19,7 @@ fi
 
 LICENSE="LGPL-2.1 GPL-2 GPL-3"
 SLOT="0"
-IUSE="autotype debug http retpoline test"
+IUSE="autotype debug http test"
 
 RDEPEND="
 	lib-dev/libgcrypt:=
@@ -48,7 +48,6 @@ DEPEND="
 "
 
 src_configure() {
-	use retpoline && append-flags "-mindirect-branch=thunk"
 	 use test || \
 		sed -e "/^find_package(Qt5Test/d" -i CMakeLists.txt || die
 

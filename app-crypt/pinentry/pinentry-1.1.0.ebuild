@@ -12,7 +12,7 @@ LICENSE="GPL-2"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps retpoline static"
+IUSE="caps static"
 
 CDEPEND="
 	>=lib-dev/libassuan-2.1
@@ -27,7 +27,6 @@ DEPEND="${CDEPEND}
 "
 
 src_configure() {
-	use retpoline && append-flags "-mindirect-branch=thunk"
 	use static && append-ldflags -static
 	[[ "$(gcc-major-version)" -ge 5 ]] && append-cxxflags -std=gnu++11
 

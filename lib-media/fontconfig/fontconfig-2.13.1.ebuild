@@ -94,7 +94,7 @@ pkg_postinst() {
 	find -L "${EROOT}"/etc/fonts/conf.d/ -type l -delete
 
 	ebegin "Creating global font cache for ${ABI}"
-	"${EPREFIX}"/usr/bin/${CHOST}-fc-cache -srf
+	"${EPREFIX}"/usr/bin/fc-cache -srf
 
 	eselect fontconfig enable 11-lcdfilter-default.conf
 	eselect fontconfig enable 10-sub-pixel-rgb.conf

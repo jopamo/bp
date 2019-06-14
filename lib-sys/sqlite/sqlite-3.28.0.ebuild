@@ -14,12 +14,10 @@ S="${WORKDIR}/sqlite-src-${MY_PV}"
 LICENSE="public-domain"
 SLOT="3"
 KEYWORDS="amd64 arm64"
+
 IUSE="static-libs"
 
 DEPEND="dev-lang/tcl"
-
-replace-flags -Ofast -O2
-replace-flags -Wl,-Ofast -Wl,-O2
 
 src_prepare() {
 	eautoreconf
@@ -36,8 +34,15 @@ src_configure() {
 		--localstatedir="${EPREFIX}"/var
 		$(use_enable static-libs static)
 		--enable-fts5
-		CFLAGS="${CFLAGS}
-		-DSQLITE_ENABLE_RTREE=1"
+		CFLAGS="${CFLAGS} \
+		-DSQLITE_ENABLE_RTREE=1 \
+		-DSQLITE_ENABLE_FTS3=1 \
+		-DSQLITE_ENABLE_FTS4=1 \
+		-DSQLITE_ENABLE_COLUMN_METADATA=1 \
+		-DSQLITE_ENABLE_UNLOCK_NOTIFY=1 \
+		-DSQLITE_ENABLE_DBSTAT_VTAB=1 \
+		-DSQLITE_SECURE_DELETE=1 \
+		-DSQLITE_ENABLE_FTS3_TOKENIZER=1"
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

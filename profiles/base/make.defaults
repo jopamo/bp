@@ -58,7 +58,7 @@ XTABLES_ADDONS="quota2 psd pknock lscan length2 ipv4options ipset ipp2p iface ge
 # Some common lcd devices
 LCD_DEVICES="bayrad cfontz cfontz633 glk hd44780 lb216 lcdm001 mtxorb ncurses text"
 
-USE="${USE} xattr bzip2 retpoline cxx"
+USE="${USE} xattr bzip2 cxx"
 
 PYTHONDONTWRITEBYTECODE="1"
 

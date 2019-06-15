@@ -206,8 +206,6 @@ src_install() {
 
 	mv "${ED}"/sbin/{ldconfig,sln} "${ED}"/usr/sbin && rm -rf "${ED}"/sbin
 
-	rm -rf "${ED}"/usr/share/i18n/locales/{a*,b*,c*,d*,el*,en_CA,en_GB,eo,es*,et*,eu*,f*,g*,h*,i*,j*,k*,l*,m*,n*,o*,p*,q*,r*,s*,t*,u*,v*,w*,x*,y*,z*}
-	rm "${ED}"/usr/share/i18n/charmaps/GB*
 	cleanup_install
 	echo -e "en_US.UTF-8 UTF-8\nen_US ISO-8859-1" > "${ED}"/usr/share/i18n/locales/SUPPORTED
 }

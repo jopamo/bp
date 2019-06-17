@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake-utils git-r3
+inherit cmake-utils git-r3 flag-o-matic
 
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
@@ -19,6 +19,8 @@ IUSE="debug doc exegesis libedit +libffi ncurses test xar xml"
 RESTRICT="!test? ( test )"
 
 CMAKE_BUILD_TYPE=Release
+
+filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
 
 src_configure() {
 	local mycmakeargs=(

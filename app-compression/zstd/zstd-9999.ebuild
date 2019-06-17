@@ -6,7 +6,14 @@ inherit toolchain-funcs
 
 DESCRIPTION="zstd fast compression library"
 HOMEPAGE="https://facebook.github.io/zstd/"
-SRC_URI="https://github.com/facebook/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+
+if [[ ${PV} == "9999" ]] ; then
+	EGIT_REPO_URI="https://github.com/facebook/zstd.git"
+	EGIT_BRANCH="master"
+	inherit git-r3
+else
+	SRC_URI="https://github.com/facebook/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+fi
 
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0/1"

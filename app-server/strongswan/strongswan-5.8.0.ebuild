@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit linux-info systemd user flag-o-matic
+inherit linux-info user flag-o-matic
 
 DESCRIPTION="IPsec-based VPN solution focused on security and ease of use, supporting IKEv1/IKEv2 and MOBIKE"
 HOMEPAGE="http://www.strongswan.org/"
@@ -167,14 +167,11 @@ src_configure() {
 		$(use_enable pam xauth-pam) \
 		$(use_enable pkcs11) \
 		$(use_enable sqlite) \
-		"$(systemd_with_unitdir)" \
 		${myconf}
 }
 
 src_install() {
-	emake DESTDIR="${D}" install
-
-	doinitd "${FILESDIR}"/ipsec
+	default
 
 	local dir_ugid
 	if use non-root; then

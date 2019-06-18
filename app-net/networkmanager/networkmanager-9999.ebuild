@@ -2,24 +2,23 @@
 
 EAPI=7
 
-inherit linux-info systemd flag-o-matic user toolchain-funcs virtualx git-r3 meson
+inherit git-r3 meson
 
 DESCRIPTION="A set of co-operative tools that make networking simple and straightforward"
 HOMEPAGE="https://wiki.gnome.org/Projects/NetworkManager"
 EGIT_REPO_URI="https://github.com/NetworkManager/NetworkManager.git"
 
 LICENSE="GPL-2+"
-SLOT="0" # add subslot if libnm-util.so.2 or libnm-glib.so.4 bumps soname version
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
 
-IUSE="audit bluetooth gnutls json kernel_linux +nmtui resolvconf systemd teamd test +wext +wifi"
+IUSE="gnutls json +nmtui systemd test +wext +wifi"
 
 REQUIRED_USE="
 	wext? ( wifi )
 	^^ ( gnutls )
 	?? ( systemd )
 "
-
-KEYWORDS="amd64 arm64"
 
 COMMON_DEPEND="
 	>=sys-app/dbus-1.2
@@ -32,18 +31,11 @@ COMMON_DEPEND="
 	sys-app/util-linux
 	lib-sys/readline:0=
 	>=sys-app/systemd-175:=
-	audit? ( sys-app/audit )
-	bluetooth? ( >=app-net/bluez-5 )
 	gnutls? (
 		lib-dev/libgcrypt:0=
 		>=lib-net/gnutls-2.12:= )
 	json? ( lib-dev/jansson )
-	resolvconf? ( lib-net/openresolv )
 	systemd? ( >=sys-app/systemd-209:0= )
-	teamd? (
-		lib-dev/jansson
-		>=app-net/libteam-1.9
-	)
 "
 RDEPEND="${COMMON_DEPEND}
 	|| (
@@ -62,8 +54,6 @@ DEPEND="${COMMON_DEPEND}
 	lib-dev/newt
 	dev-python/pygobject
 "
-
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 src_configure() {
 	local emesonargs=(

@@ -16,7 +16,7 @@ DEPEND="lib-dev/popt
 		lib-dev/slang
 		"
 
-filter-flags -flto
+filter-flags -flto\=\*
 
 src_prepare() {
 	eautoreconf

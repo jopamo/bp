@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit git-r3 meson
+inherit git-r3 meson flag-o-matic
 
 DESCRIPTION="A set of co-operative tools that make networking simple and straightforward"
 HOMEPAGE="https://wiki.gnome.org/Projects/NetworkManager"
@@ -54,6 +54,8 @@ DEPEND="${COMMON_DEPEND}
 	lib-dev/newt
 	dev-python/pygobject
 "
+
+filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
 
 src_configure() {
 	local emesonargs=(

@@ -114,7 +114,6 @@ src_configure() {
 		-Dbacklight=false
 		-Dbinfmt=false
 		-Dblkid=false
-		-Dbuildtype=release
 		-Dbzip2=true
 		-Ddefault-hierarchy=unified
 		-Ddefault-kill-user-processes=false
@@ -172,7 +171,6 @@ src_configure() {
 		-Dbacklight=false
 		-Dbinfmt=false
 		-Dblkid=false
-		-Dbuildtype=release
 		-Dbzip2=false
 		-Dcoredump=false
 		-Ddbus=false
@@ -245,8 +243,8 @@ src_configure() {
 		-Dzlib=false
   	)
 
-	use embed || mesonargs+=("${noembed[@]}")
-	use embed && mesonargs+=("${embed[@]}")
+	use embed || emesonargs=("${noembed[@]}")
+	use embed && emesonargs=("${embed[@]}")
 
 	meson_src_configure
 }

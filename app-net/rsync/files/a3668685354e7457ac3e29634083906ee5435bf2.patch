@@ -1,0 +1,28 @@
+From a3668685354e7457ac3e29634083906ee5435bf2 Mon Sep 17 00:00:00 2001
+From: Wayne Davison <wayned@samba.org>
+Date: Sat, 15 Dec 2018 16:52:53 -0800
+Subject: [PATCH] Avoid a potential out-of-bounds read in daemon mode if argc
+ is 0.
+
+---
+ options.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/options.c b/options.c
+index 1c5b42d0..a07c8e13 100644
+--- a/options.c
++++ b/options.c
+@@ -1315,6 +1315,10 @@ int parse_arguments(int *argc_p, const char ***argv_p)
+ 	int opt;
+ 	int orig_protect_args = protect_args;
+ 
++	if (argc == 0) {
++		strlcpy(err_buf, "argc is zero!\n", sizeof err_buf);
++		return 0;
++	}
+ 	if (ref && *ref)
+ 		set_refuse_options(ref);
+ 	if (am_daemon) {
+-- 
+2.17.1
+

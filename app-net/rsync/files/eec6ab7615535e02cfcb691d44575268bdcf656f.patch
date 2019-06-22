@@ -1,0 +1,26 @@
+From eec6ab7615535e02cfcb691d44575268bdcf656f Mon Sep 17 00:00:00 2001
+From: Wayne Davison <wayned@samba.org>
+Date: Sun, 25 Mar 2018 19:07:22 -0700
+Subject: [PATCH] Avoid a compiler error/warning about shifting a negative
+ value. Fixes bug #13268.
+
+---
+ zlib/inflate.c | 2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/zlib/inflate.c b/zlib/inflate.c
+index a7555738..cea8e7e4 100644
+--- a/zlib/inflate.c
++++ b/zlib/inflate.c
+@@ -1525,7 +1525,7 @@ z_streamp strm;
+ {
+     struct inflate_state FAR *state;
+ 
+-    if (strm == Z_NULL || strm->state == Z_NULL) return -1L << 16;
++    if (strm == Z_NULL || strm->state == Z_NULL) return -(1L << 16);
+     state = (struct inflate_state FAR *)strm->state;
+     return ((long)(state->back) << 16) +
+         (state->mode == COPY ? state->length :
+-- 
+2.17.1
+

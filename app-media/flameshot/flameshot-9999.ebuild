@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit qmake-utils toolchain-funcs git-r3
+inherit qmake-utils git-r3
 
 DESCRIPTION="Powerful yet simple to use screenshot software for GNU/Linux"
 HOMEPAGE="https://github.com/lupoDharkael/flameshot"
@@ -19,8 +19,11 @@ DEPEND="
 	>=gui-lib/qtwidgets-5.3.0:5
 	>=gui-lib/linguist-tools-5.3.0:5
 "
-RDEPEND="${DEPEND}"
 
 src_configure(){
-	eqmake5 "CONFIG+=packaging" ${PN}.pro
+	eqmake5 ${PN}.pro
+}
+
+src_install(){
+	dobin flameshot
 }

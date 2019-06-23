@@ -59,7 +59,7 @@ xdg_desktop_database_update() {
 	fi
 
 	ebegin "Updating .desktop files database"
-	update-desktop-database -q "${EROOT%/}${DESKTOP_DATABASE_DIR}"
+	update-desktop-database -q "${EROOT}"/${DESKTOP_DATABASE_DIR}
 	eend $?
 }
 
@@ -80,7 +80,7 @@ xdg_icon_cache_update() {
 	ebegin "Updating icons cache"
 	local retval=0
 	local fails=( )
-	for dir in "${EROOT%/}"/usr/share/icons/*
+	for dir in "${EROOT}"/usr/share/icons/*
 	do
 		if [[ -f "${dir}/index.theme" ]] ; then
 			local rv=0
@@ -121,8 +121,7 @@ xdg_mimeinfo_database_update() {
 		return
 	fi
 
-	ebegin "Updating shared mime info database"
-	update-mime-database "${EROOT%/}${MIMEINFO_DATABASE_DIR}"
+	update-mime-database "${EROOT}"/${MIMEINFO_DATABASE_DIR}
 	eend $?
 }
 

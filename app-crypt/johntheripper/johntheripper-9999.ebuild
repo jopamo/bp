@@ -7,22 +7,24 @@ inherit flag-o-matic toolchain-funcs git-r3
 DESCRIPTION="fast password cracker"
 HOMEPAGE="http://www.openwall.com/john/"
 EGIT_REPO_URI="https://github.com/magnumripper/${PN}.git"
+EGIT_BRANCH="bleeding-jumbo"
 
 LICENSE="GPL-2"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="commoncrypto cuda custom-cflags mpi opencl openmp +openssl pcap rexgen"
+IUSE="commoncrypto opencl openmp +openssl pcap rexgen"
 
 DEPEND="openssl? ( >=lib-dev/openssl-1.0.1:0 )
-	mpi? ( virtual/mpi )
-	opencl? ( virtual/opencl )
 	pcap? ( lib-net/libpcap )
 	lib-dev/gmp:*
 	lib-sys/zlib
 	app-compression/bzip2"
 
 S=${WORKDIR}/${P}/src
+
+append-ldflags -Wl,-z,noexecstack
+append-cppflags -DJOHN_SYSTEMWIDE_HOME="'\"${EPREFIX}/etc/john\"'"
 
 pkg_setup() {
 	if use openmp && [[ ${MERGE_TYPE} != binary ]]; then
@@ -31,14 +33,10 @@ pkg_setup() {
 }
 
 src_configure() {
-	use custom-cflags || strip-flags
-	append-cppflags -DJOHN_SYSTEMWIDE_HOME="'\"${EPREFIX}/etc/john\"'"
-
 	econf \
 		--disable-native-march \
 		--disable-native-tests \
 		--with-systemwide \
-		$(use_enable mpi) \
 		$(use_enable opencl) \
 		$(use_enable openmp) \
 		$(use_enable pcap) \
@@ -74,6 +72,4 @@ src_install() {
 	insinto /etc/john
 	doins ../run/*.chr ../run/password.lst
 	doins ../run/*.conf
-
-	chmod 755 ${ED}/usr/bin/john
 }

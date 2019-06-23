@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT=9b3592a8baaf6e8e5ffdb6c4edb6056135fd8068
+SNAPSHOT=80856884ccfb3f05afa35ba865c2464a464fd931
 
 inherit distutils-r1
 

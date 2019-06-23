@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic gnome2-utils linux-info systemd user
+inherit flag-o-matic linux-info systemd user
 
 DESCRIPTION="A networked sound server with an advanced plugin system"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/PulseAudio/"

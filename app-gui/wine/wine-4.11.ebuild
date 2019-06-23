@@ -71,7 +71,7 @@ DEPEND="${COMMON_DEPEND}
 	X? ( x11-misc/xorgproto )
 "
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
 
 src_prepare() {
 	${WORKDIR}/wine-staging-${PV}/patches/patchinstall.sh DESTDIR="${S}" --all

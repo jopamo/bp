@@ -9,7 +9,7 @@ MOZ_P="${MOZ_PN}-${MOZ_PV}"
 
 MOZ_HTTP_URI="https://archive.mozilla.org/pub/mozilla.org/${MOZ_PN}/releases/"
 
-inherit xdg-utils gnome2-utils
+inherit xdg-utils
 
 DESCRIPTION="Firefox Web Browser"
 SRC_URI="${SRC_URI}
@@ -66,19 +66,21 @@ src_unpack() {
 
 src_install() {
 	local size sizes icon_path icon name
-	sizes="16 32 48"
+	sizes="16 32 48 128"
 	icon_path="${S}/browser/chrome/icons/default"
 	icon="${PN}"
 	name="Mozilla Firefox"
 
 	# Install icons and .desktop for menu entry
 	for size in ${sizes}; do
-		insinto "/usr/share/icons/hicolor/${size}x${size}/app-misc"
+		insinto "/usr/share/icons/hicolor/${size}x${size}/apps"
 		newins "${icon_path}/default${size}.png" "${icon}.png" || die
 	done
+	# Install a 48x48 icon into /usr/share/pixmaps for legacy DEs
+	newicon "${S}"/browser/chrome/icons/default/default48.png ${PN}.png
 
 	# Install firefox in /opt
-	dodir opt/firefox
+	dodir /opt/${MOZ_PN}/
 	mv "${S}" "${ED}"/opt/ || die
 
 	# Disable built-in auto-update because we update firefox-bin through package manager
@@ -93,12 +95,8 @@ src_install() {
 
 	# Create /usr/bin/firefox-bin
 	dodir /usr/bin/
-	local apulselib=$(usex pulseaudio "/usr/lib64/apulse:" "")
 	cat <<-EOF >"${ED}"/usr/bin/${PN}
 	#!/bin/sh
-	unset LD_PRELOAD
-	LD_LIBRARY_PATH="${apulselib}/opt/firefox/" \\
-	GTK_PATH=/usr/lib64/gtk-3.0/ \\
 	exec /opt/${MOZ_PN}/${MOZ_PN} "\$@"
 	EOF
 	fperms 0755 /usr/bin/${PN}
@@ -112,11 +110,8 @@ src_install() {
 	rm -f "${ED}"/opt/firefox/minidump-analyzer
 	rm -f "${ED}"/opt/firefox/crashreporter*
 	rm -f "${ED}"/opt/firefox/libnssckbi.so
+	rm -rf "${ED}"/opt/firefox/dictionaries
 
 	dosym /usr/share/hunspell opt/firefox/dictionaries
 	dosym /usr/lib/libnssckbi.so opt/firefox/libnssckbi.so
-}
-
-pkg_preinst() {
-	gnome2_icon_savelist
 }

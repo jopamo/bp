@@ -19,6 +19,31 @@ EXPORT_FUNCTIONS pkg_postinst pkg_postrm
 # Directory where .desktop files database is stored
 : ${MIMEINFO_DATABASE_DIR:="/usr/share/mime"}
 
+# @FUNCTION: gnome2_environment_reset
+# @DESCRIPTION:
+# Reset various variables inherited from root's evironment to a reasonable
+# default for ebuilds to help avoid access violations and test failures.
+gnome2_environment_reset() {
+	[[ ${EAPI} == [7] ]] && xdg_environment_reset
+
+	# Respected by >=glib-2.30.1-r1
+	export G_HOME="${T}"
+
+	# GST_REGISTRY is to work around gst utilities trying to read/write /root
+	export GST_REGISTRY="${T}/registry.xml"
+
+	# Ensure we don't rely on dconf/gconf while building, bug #511946
+	export GSETTINGS_BACKEND="memory"
+
+	if has ${EAPI:-0} 6 7; then
+		# Try to cover the packages honoring this variable, bug #508124
+		export GST_INSPECT="$(type -P true)"
+
+		# Stop relying on random DISPLAY variable values, bug #534312
+		unset DISPLAY
+	fi
+}
+
 # @FUNCTION: xdg_desktop_database_update
 # @DESCRIPTION:
 # Updates the .desktop files database.

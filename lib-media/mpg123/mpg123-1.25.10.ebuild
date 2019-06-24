@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="alsa ipv6 pulseaudio"
 
-RDEPEND="lib-dev/libltdl:0
+RDEPEND="
 	alsa? ( lib-media/alsa-lib )
 	pulseaudio? ( app-media/pulseaudio )"
 

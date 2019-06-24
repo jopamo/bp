@@ -31,7 +31,6 @@ RDEPEND="
 		>=sys-app/pciutils-3.3.0-r2
 		>=x11-libs/libpciaccess-0.13.1-r1
 	)
-	plugins? ( lib-dev/libltdl:0 )
 	numa? ( >=sys-app/numactl-2.0.11-r1 )
 	xml? ( >=lib-dev/libxml2-2.9.1-r4 )"
 

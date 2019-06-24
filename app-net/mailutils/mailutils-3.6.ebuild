@@ -17,7 +17,6 @@ IUSE="frm maidag +mail sieve messages readmsg dotlock movemail mimeview mh gdbm 
 DEPEND="
 	lib-sys/ncurses:=
 	lib-sys/readline:=
-	lib-dev/libltdl:0
 	gdbm? ( lib-sys/gdbm )
 	nls? ( sys-devel/gettext )
 	pam? ( lib-sys/pam )

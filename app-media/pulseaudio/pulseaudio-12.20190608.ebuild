@@ -56,9 +56,7 @@ RDEPEND=">=lib-media/libsndfile-1.0.20
 	ssl? ( lib-dev/openssl:0= )
 	gdbm? ( lib-sys/gdbm:= )
 	systemd? ( sys-app/systemd:0= )
-	lib-dev/libltdl:0
 "
-# it's a valid RDEPEND, libltdl.so is used for native abi
 
 DEPEND="${RDEPEND}
 	sys-devel/m4

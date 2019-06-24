@@ -1,6 +1,49 @@
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_7 )
+PYTHON_COMPAT=( python3_{7,8} )
+
+# @ECLASS: distutils-r1.eclass
+# @MAINTAINER:
+# Python team <python@gentoo.org>
+# @AUTHOR:
+# Author: Michał Górny <mgorny@gentoo.org>
+# Based on the work of: Krzysztof Pawlik <nelchael@gentoo.org>
+# @SUPPORTED_EAPIS: 5 6 7
+# @BLURB: A simple eclass to build Python packages using distutils.
+# @DESCRIPTION:
+# A simple eclass providing functions to build Python packages using
+# the distutils build system. It exports phase functions for all
+# the src_* phases. Each of the phases runs two pseudo-phases:
+# python_..._all() (e.g. python_prepare_all()) once in ${S}, then
+# python_...() (e.g. python_prepare()) for each implementation
+# (see: python_foreach_impl() in python-r1).
+#
+# In distutils-r1_src_prepare(), the 'all' function is run before
+# per-implementation ones (because it creates the implementations),
+# per-implementation functions are run in a random order.
+#
+# In remaining phase functions, the per-implementation functions are run
+# before the 'all' one, and they are ordered from the least to the most
+# preferred implementation (so that 'better' files overwrite 'worse'
+# ones).
+#
+# If the ebuild doesn't specify a particular pseudo-phase function,
+# the default one will be used (distutils-r1_...). Defaults are provided
+# for all per-implementation pseudo-phases, python_prepare_all()
+# and python_install_all(); whenever writing your own pseudo-phase
+# functions, you should consider calling the defaults (and especially
+# distutils-r1_python_prepare_all).
+#
+# Please note that distutils-r1 sets RDEPEND and DEPEND unconditionally
+# for you.
+#
+# Also, please note that distutils-r1 will always inherit python-r1
+# as well. Thus, all the variables defined and documented there are
+# relevant to the packages using distutils-r1.
+#
+# For more information, please see the wiki:
+# https://wiki.gentoo.org/wiki/Project:Python/distutils-r1
 
 case "${EAPI:-0}" in
 	0|1|2|3|4)
@@ -13,8 +56,32 @@ case "${EAPI:-0}" in
 		;;
 esac
 
+# @ECLASS-VARIABLE: DISTUTILS_OPTIONAL
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# If set to a non-null value, distutils part in the ebuild will
+# be considered optional. No dependencies will be added and no phase
+# functions will be exported.
+#
+# If you enable DISTUTILS_OPTIONAL, you have to set proper dependencies
+# for your package (using ${PYTHON_DEPS}) and to either call
+# distutils-r1 default phase functions or call the build system
+# manually.
+
+# @ECLASS-VARIABLE: DISTUTILS_SINGLE_IMPL
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# If set to a non-null value, the ebuild will support setting a single
+# Python implementation only. It will effectively replace the python-r1
+# eclass inherit with python-single-r1.
+#
+# Note that inheriting python-single-r1 will cause pkg_setup()
+# to be exported. It must be run in order for the eclass functions
+# to function properly.
+
 if [[ ! ${_DISTUTILS_R1} ]]; then
 
+[[ ${EAPI} == [56] ]] && inherit xdg-utils
 inherit multiprocessing toolchain-funcs
 
 if [[ ! ${DISTUTILS_SINGLE_IMPL} ]]; then
@@ -40,6 +107,131 @@ if [[ ! ${DISTUTILS_OPTIONAL} ]]; then
 	fi
 	REQUIRED_USE=${PYTHON_REQUIRED_USE}
 fi
+
+# @ECLASS-VARIABLE: PATCHES
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# An array containing patches to be applied to the sources before
+# copying them.
+#
+# If unset, no custom patches will be applied.
+#
+# Please note, however, that at some point the eclass may apply
+# additional distutils patches/quirks independently of this variable.
+#
+# Example:
+# @CODE
+# PATCHES=( "${FILESDIR}"/${P}-make-gentoo-happy.patch )
+# @CODE
+
+# @ECLASS-VARIABLE: DOCS
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# An array containing documents installed using dodoc. The files listed
+# there must exist in the directory from which
+# distutils-r1_python_install_all() is run (${S} by default).
+#
+# If unset, the function will instead look up files matching default
+# filename pattern list (from the Package Manager Specification),
+# and install those found.
+#
+# Example:
+# @CODE
+# DOCS=( NEWS README )
+# @CODE
+
+# @ECLASS-VARIABLE: HTML_DOCS
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# An array containing documents installed using dohtml. The files
+# and directories listed there must exist in the directory from which
+# distutils-r1_python_install_all() is run (${S} by default).
+#
+# If unset, no HTML docs will be installed.
+#
+# Example:
+# @CODE
+# HTML_DOCS=( doc/html/. )
+# @CODE
+
+# @ECLASS-VARIABLE: EXAMPLES
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# OBSOLETE: this variable is deprecated and banned in EAPI 6
+#
+# An array containing examples installed into 'examples' doc
+# subdirectory. The files and directories listed there must exist
+# in the directory from which distutils-r1_python_install_all() is run
+# (${S} by default).
+#
+# The 'examples' subdirectory will be marked not to be compressed
+# automatically.
+#
+# If unset, no examples will be installed.
+#
+# Example:
+# @CODE
+# EXAMPLES=( examples/. demos/. )
+# @CODE
+
+# @ECLASS-VARIABLE: DISTUTILS_IN_SOURCE_BUILD
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# If set to a non-null value, in-source builds will be enabled.
+# If unset, the default is to use in-source builds when python_prepare()
+# is declared, and out-of-source builds otherwise.
+#
+# If in-source builds are used, the eclass will create a copy of package
+# sources for each Python implementation in python_prepare_all(),
+# and work on that copy afterwards.
+#
+# If out-of-source builds are used, the eclass will instead work
+# on the sources directly, prepending setup.py arguments with
+# 'build --build-base ${BUILD_DIR}' to enforce keeping & using built
+# files in the specific root.
+
+# @ECLASS-VARIABLE: DISTUTILS_ALL_SUBPHASE_IMPLS
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# An array of patterns specifying which implementations can be used
+# for *_all() sub-phase functions. If undefined, defaults to '*'
+# (allowing any implementation). If multiple values are specified,
+# implementations matching any of the patterns will be accepted.
+#
+# The patterns can be either fnmatch-style patterns (matched via bash
+# == operator against PYTHON_COMPAT values) or '-2' / '-3' to indicate
+# appropriately all enabled Python 2/3 implementations (alike
+# python_is_python3). Remember to escape or quote the fnmatch patterns
+# to prevent accidental shell filename expansion.
+#
+# If the restriction needs to apply conditionally to a USE flag,
+# the variable should be set conditionally as well (e.g. in an early
+# phase function or other convenient location).
+#
+# Please remember to add a matching || block to REQUIRED_USE,
+# to ensure that at least one implementation matching the patterns will
+# be enabled.
+#
+# Example:
+# @CODE
+# REQUIRED_USE="doc? ( || ( $(python_gen_useflags 'python2*') ) )"
+#
+# pkg_setup() {
+#     use doc && DISTUTILS_ALL_SUBPHASE_IMPLS=( 'python2*' )
+# }
+# @CODE
+
+# @ECLASS-VARIABLE: mydistutilsargs
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# An array containing options to be passed to setup.py.
+#
+# Example:
+# @CODE
+# python_configure_all() {
+# 	mydistutilsargs=( --enable-my-hidden-option )
+# }
+# @CODE
 
 # @FUNCTION: esetup.py
 # @USAGE: [<args>...]
@@ -148,8 +340,8 @@ distutils-r1_python_prepare_all() {
 		if [[ ${EAPI} != [45] ]]; then
 			default
 		else
-			[[ ${PATCHES} ]] && eapply "${PATCHES[@]}"
-			eapply_user
+			[[ ${PATCHES} ]] && epatch "${PATCHES[@]}"
+			epatch_user
 		fi
 	fi
 
@@ -433,7 +625,15 @@ distutils-r1_python_install() {
 distutils-r1_python_install_all() {
 	debug-print-function ${FUNCNAME} "${@}"
 
-	rm -rf "${ED}"/usr/share/doc
+	if declare -p EXAMPLES &>/dev/null; then
+		[[ ${EAPI} != [45] ]] && die "EXAMPLES are banned in EAPI ${EAPI}"
+
+		(
+			docinto examples
+			dodoc -r "${EXAMPLES[@]}"
+		)
+		docompress -x "/usr/share/doc/${PF}/examples"
+	fi
 
 	_DISTUTILS_DEFAULT_CALLED=1
 }
@@ -570,8 +770,7 @@ distutils-r1_src_prepare() {
 
 distutils-r1_src_configure() {
 	python_export_utf8_locale
-
-	[[ ${EAPI} == [7] ]] && xdg_environment_reset
+	[[ ${EAPI} == [56] ]] && xdg_environment_reset # Bug 577704
 
 	if declare -f python_configure >/dev/null; then
 		_distutils-r1_run_foreach_impl python_configure

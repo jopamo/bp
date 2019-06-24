@@ -24,3 +24,4 @@ pkg_postinst() {
 		eselect python update "--python3" --if-unset
 	fi
 }
+

@@ -1,6 +1,42 @@
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_7 )
+PYTHON_COMPAT=( python3_{7,8} )
+
+# @ECLASS: python-any-r1.eclass
+# @MAINTAINER:
+# Python team <python@gentoo.org>
+# @AUTHOR:
+# Author: Michał Górny <mgorny@gentoo.org>
+# Based on work of: Krzysztof Pawlik <nelchael@gentoo.org>
+# @SUPPORTED_EAPIS: 0 1 2 3 4 5 6 7
+# @BLURB: An eclass for packages having build-time dependency on Python.
+# @DESCRIPTION:
+# A minimal eclass for packages which need any Python interpreter
+# installed without a need for explicit choice and invariability.
+# This usually involves packages requiring Python at build-time
+# but having no other relevance to it.
+#
+# This eclass provides a minimal PYTHON_DEPS variable with a dependency
+# string on any of the supported Python implementations. It also exports
+# pkg_setup() which finds the best supported implementation and sets it
+# as the active one.
+#
+# Optionally, you can define a python_check_deps() function. It will
+# be called by the eclass with EPYTHON set to each matching Python
+# implementation and it is expected to check whether the implementation
+# fulfills the package requirements. You can use the locally exported
+# PYTHON_USEDEP to check USE-dependencies of relevant packages. It
+# should return a true value (0) if the Python implementation fulfills
+# the requirements, a false value (non-zero) otherwise.
+#
+# Please note that python-any-r1 will always inherit python-utils-r1
+# as well. Thus, all the functions defined there can be used in the
+# packages using python-any-r1, and there is no need ever to inherit
+# both.
+#
+# For more information, please see the wiki:
+# https://wiki.gentoo.org/wiki/Project:Python/python-any-r1
 
 case "${EAPI:-0}" in
 	0|1|2|3|4|5|6|7)

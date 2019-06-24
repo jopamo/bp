@@ -1,6 +1,35 @@
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_7 )
+PYTHON_COMPAT=( python3_{7,8} )
+
+# @ECLASS: python-r1.eclass
+# @MAINTAINER:
+# Python team <python@gentoo.org>
+# @AUTHOR:
+# Author: Michał Górny <mgorny@gentoo.org>
+# Based on work of: Krzysztof Pawlik <nelchael@gentoo.org>
+# @SUPPORTED_EAPIS: 5 6 7
+# @BLURB: A common, simple eclass for Python packages.
+# @DESCRIPTION:
+# A common eclass providing helper functions to build and install
+# packages supporting being installed for multiple Python
+# implementations.
+#
+# This eclass sets correct IUSE. Modification of REQUIRED_USE has to
+# be done by the author of the ebuild (but PYTHON_REQUIRED_USE is
+# provided for convenience, see below). python-r1 exports PYTHON_DEPS
+# and PYTHON_USEDEP so you can create correct dependencies for your
+# package easily. It also provides methods to easily run a command for
+# each enabled Python implementation and duplicate the sources for them.
+#
+# Please note that python-r1 will always inherit python-utils-r1 as
+# well. Thus, all the functions defined there can be used
+# in the packages using python-r1, and there is no need ever to inherit
+# both.
+#
+# For more information, please see the wiki:
+# https://wiki.gentoo.org/wiki/Project:Python/python-r1
 
 case "${EAPI:-0}" in
 	0|1|2|3|4)

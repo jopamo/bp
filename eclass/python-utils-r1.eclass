@@ -1,4 +1,25 @@
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
+
+PYTHON_COMPAT=( python3_{7,8} )
+
+# @ECLASS: python-utils-r1.eclass
+# @MAINTAINER:
+# Python team <python@gentoo.org>
+# @AUTHOR:
+# Author: Michał Górny <mgorny@gentoo.org>
+# Based on work of: Krzysztof Pawlik <nelchael@gentoo.org>
+# @SUPPORTED_EAPIS: 0 1 2 3 4 5 6 7
+# @BLURB: Utility functions for packages with Python parts.
+# @DESCRIPTION:
+# A utility eclass providing functions to query Python implementations,
+# install Python modules and scripts.
+#
+# This eclass does not set any metadata variables nor export any phase
+# functions. It can be inherited safely.
+#
+# For more information, please see the wiki:
+# https://wiki.gentoo.org/wiki/Project:Python/python-utils-r1
 
 case "${EAPI:-0}" in
 	0|1|2|3|4|5|6|7)
@@ -21,10 +42,7 @@ inherit toolchain-funcs
 # @DESCRIPTION:
 # All supported Python implementations, most preferred last.
 _PYTHON_ALL_IMPLS=(
-	jython2_7
-	pypy pypy3
-	python2_7
-	python3_5 python3_6 python3_7
+	python3_7 python3_8
 )
 readonly _PYTHON_ALL_IMPLS
 
@@ -60,7 +78,7 @@ _python_impl_supported() {
 	# keep in sync with _PYTHON_ALL_IMPLS!
 	# (not using that list because inline patterns shall be faster)
 	case "${impl}" in
-		python2_7|python3_[567]|jython2_7)
+		python3_[789]|python4_[012])
 			return 0
 			;;
 		pypy1_[89]|pypy2_0|python2_[56]|python3_[1234])

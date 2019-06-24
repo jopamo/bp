@@ -13,7 +13,7 @@ EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="PSF-2"
 SLOT="$(ver_cut 1).$(ver_cut 2)"
-KEYWORDS="amd64 arm64"
+KEYWORDS=""
 
 IUSE="ipv6 +embed valgrind static"
 
@@ -36,8 +36,7 @@ PDEPEND=">=app-eselect/eselect-python-20140125-r1"
 
 PYVER=${SLOT%/*}
 
-replace-flags -Ofast -O2
-replace-flags -Wl,-Ofast -Wl,-O2
+filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
 
 src_prepare() {
 	# Ensure that internal copies of expat, libffi and zlib are not used.
@@ -45,13 +44,12 @@ src_prepare() {
 	rm -fr Modules/_ctypes/libffi*
 	rm -fr Modules/zlib
 
-	use embed && eapply ${FILESDIR}/shrink_python.patch
-
 	default
 }
 
 src_configure() {
 	export PYTHON_DISABLE_MODULES="gdbm tkinter _codecs_{hk,tw,cn,jp,kr} ossaudiodev"
+	export ax_cv_c_float_words_bigendian=no
 
 	tc-export CXX
 	use static && LDFLAGS="-static"
@@ -133,7 +131,7 @@ src_install() {
 		-i "${libdir}/config-${PYVER}"*/Makefile || die "sed failed"
 
 	# Fix collisions between different slots of Python.
-	rm -f "${ED%/}/usr/lib/libpython3.so"
+	rm -f "${ED%/}/usr/$(get_libdir)/libpython3.so"
 
 	# Cheap hack to get version with ABIFLAGS
 	local abiver=$(cd "${ED%/}/usr/include"; echo python*)
@@ -144,10 +142,10 @@ src_install() {
 		# Create python3.X-config symlink
 		dosym "${abiver}-config" "/usr/bin/python${PYVER}-config"
 		# Create python-3.5m.pc symlink
-		dosym "python-${PYVER}.pc" "/usr/lib/pkgconfig/${abiver/${PYVER}/-${PYVER}}.pc"
+		dosym "python-${PYVER}.pc" "/usr/$(get_libdir)/pkgconfig/${abiver/${PYVER}/-${PYVER}}.pc"
 	fi
 
-	insinto /usr/share/gdb/auto-load/usr/lib
+	insinto /usr/share/gdb/auto-load/usr/$(get_libdir) #443510
 	local libname=$(printf 'e:\n\t@echo $(INSTSONAME)\ninclude Makefile\n' | \
 		emake --no-print-directory -s -f - 2>/dev/null)
 	newins "${S}"/Tools/gdb/libpython.py "${libname}"-gdb.py
@@ -182,10 +180,9 @@ src_install() {
 	EOF
 	chmod +x "${D%/}${PYTHON_SCRIPTDIR}/python${pymajor}-config" || die
 	ln -s "python${pymajor}-config" "${D%/}${PYTHON_SCRIPTDIR}/python-config" || die
-	# 2to3, pydoc, pyvenv
+	# 2to3, pydoc
 	ln -s "../../../bin/2to3-${PYVER}" "${D%/}${PYTHON_SCRIPTDIR}/2to3" || die
 	ln -s "../../../bin/pydoc${PYVER}" "${D%/}${PYTHON_SCRIPTDIR}/pydoc" || die
-	ln -s "../../../bin/pyvenv-${PYVER}" "${D%/}${PYTHON_SCRIPTDIR}/pyvenv" || die
 }
 
 pkg_preinst() {

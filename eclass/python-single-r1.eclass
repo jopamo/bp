@@ -1,6 +1,37 @@
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_7 )
+PYTHON_COMPAT=( python3_{7,8} )
+
+# @ECLASS: python-single-r1.eclass
+# @MAINTAINER:
+# Python team <python@gentoo.org>
+# @AUTHOR:
+# Author: Michał Górny <mgorny@gentoo.org>
+# Based on work of: Krzysztof Pawlik <nelchael@gentoo.org>
+# @SUPPORTED_EAPIS: 5 6 7
+# @BLURB: An eclass for Python packages not installed for multiple implementations.
+# @DESCRIPTION:
+# An extension of the python-r1 eclass suite for packages which
+# don't support being installed for multiple Python implementations.
+# This mostly includes tools embedding Python.
+#
+# This eclass extends the IUSE and REQUIRED_USE set by python-r1
+# to request the PYTHON_SINGLE_TARGET when the inheriting ebuild
+# can be supported by more than one Python implementation. It also
+# replaces PYTHON_USEDEP and PYTHON_DEPS with a more suitable form.
+#
+# Please note that packages support multiple Python implementations
+# (using python-r1 eclass) can not depend on packages not supporting
+# them (using this eclass).
+#
+# Please note that python-single-r1 will always inherit python-utils-r1
+# as well. Thus, all the functions defined there can be used
+# in the packages using python-single-r1, and there is no need ever
+# to inherit both.
+#
+# For more information, please see the wiki:
+# https://wiki.gentoo.org/wiki/Project:Python/python-single-r1
 
 case "${EAPI:-0}" in
 	0|1|2|3|4)

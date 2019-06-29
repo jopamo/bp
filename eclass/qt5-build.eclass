@@ -132,6 +132,8 @@ fi
 
 EXPORT_FUNCTIONS src_unpack src_prepare src_configure src_compile src_install src_test pkg_postinst pkg_postrm
 
+filter-flags -flto\=\*
+
 # @FUNCTION: qt5-build_src_unpack
 # @DESCRIPTION:
 # Unpacks the sources.

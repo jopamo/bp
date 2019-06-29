@@ -16,6 +16,11 @@ DEPEND="sys-devel/gnuconfig
 	dev-perl/libintl-perl
 	app-compression/xz-utils"
 
+src_prepare() {
+	default
+	sed -i.bak -e "s/UNKNOWN/${PV}/g" "build-aux/git-version-gen"
+}
+
 src_configure() {
 	# Do not bother hardcoding the full path to sed.  Just rely on $PATH. #574550
 	export ac_cv_path_SED="$(basename "$(type -P sed)")"

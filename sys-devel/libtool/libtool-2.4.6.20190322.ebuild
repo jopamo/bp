@@ -2,40 +2,19 @@
 
 EAPI=7
 
-BASEVERSION="2.4.6"
-MY_P="${PN}-${BASEVERSION}"
-SNAPSHOT="20180724"
-
 DESCRIPTION="A shared library tool for developers"
 HOMEPAGE="https://www.gnu.org/software/libtool/"
-
-if [[ ${PV} == "9999" ]] ; then
-	EGIT_REPO_URI="git://git.savannah.gnu.org/${PN}.git
-		http://git.savannah.gnu.org/r/${PN}.git"
-	inherit git-r3
-else
-	SRC_URI="mirror://gnu/${PN}/${P}.tar.xz
-			https://1g4.org/files/${PN}-${SNAPSHOT}.patch.tar.xz"
-	KEYWORDS="amd64 arm64"
-fi
+SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="2"
+KEYWORDS="amd64 arm64"
 
 DEPEND="sys-devel/gnuconfig
 	>=sys-devel/autoconf-2.69
 	>=sys-devel/automake-1.13
 	dev-perl/libintl-perl
 	app-compression/xz-utils"
-
-PATCHES=(
-	"${WORKDIR}"/libtool-20180724.patch
-)
-
-src_prepare() {
-	default
-	sed -i.bak -e "s/UNKNOWN/${PV}/g" "build-aux/git-version-gen"
-}
 
 src_configure() {
 	# Do not bother hardcoding the full path to sed.  Just rely on $PATH. #574550

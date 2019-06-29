@@ -6,7 +6,7 @@ inherit flag-o-matic autotools
 
 DESCRIPTION="Utility to apply diffs to files"
 HOMEPAGE="https://www.gnu.org/software/patch/patch.html"
-SRC_URI="https://ftp.gnu.org/gnu/${PN}/${P}.tar.xz"
+SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -15,9 +15,6 @@ IUSE="static test xattr"
 
 DEPEND="xattr? ( sys-app/attr )
 		test? ( sys-app/ed )"
-
-PATCHES=( 	${FILESDIR}/tmp_and_ed_cleanup.patch
-	)
 
 src_prepare() {
 	default

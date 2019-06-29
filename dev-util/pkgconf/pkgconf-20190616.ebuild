@@ -2,11 +2,20 @@
 
 EAPI=7
 
-inherit autotools git-r3
+inherit autotools
 
 DESCRIPTION="pkg-config compatible replacement with no dependencies other than ANSI C89"
 HOMEPAGE="https://github.com/pkgconf/pkgconf"
-EGIT_REPO_URI="https://git.dereferenced.org/pkgconf/pkgconf.git"
+
+if [[ ${PV} == 9999 ]]; then
+	EGIT_REPO_URI="http://git.dereferenced.org/pkgconf/pkgconf.git"
+	inherit git-r3
+else
+	SNAPSHOT=984dc98438463e594136dafe19458ed3454730ea
+	#SRC_URI="https://git.dereferenced.org/pkgconf/pkgconf/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://1g4.org/files/${P}.tar.gz"
+	S=${WORKDIR}/${PN}
+fi
 
 LICENSE="ISC"
 SLOT="0/3"

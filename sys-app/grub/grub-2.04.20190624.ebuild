@@ -2,37 +2,22 @@
 
 EAPI=7
 
-if [[ ${PV} == 9999  ]]; then
-	inherit git-r3
-	WANT_LIBTOOL=none
-	EGIT_REPO_URI="https://git.savannah.gnu.org/git/grub.git"
-else
-	SNAPSHOT=c79ebcd18cf3e208e9dda5e2ae008f76c92fe451
-	SRC_URI="http://git.savannah.gnu.org/cgit/grub.git/snapshot/grub-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64"
-fi
-
 inherit autotools flag-o-matic multibuild toolchain-funcs
-
-KEYWORDS="amd64 arm64"
-
-PATCHES=(
-	"${FILESDIR}"/gfxpayload.patch
-)
-
-DEJAVU=dejavu-sans-ttf-2.37
-UNIFONT=unifont-9.0.06
-SRC_URI+=" fonts? ( mirror://gnu/unifont/${UNIFONT}/${UNIFONT}.pcf.gz )
-	themes? ( mirror://sourceforge/dejavu/${DEJAVU}.zip )"
 
 DESCRIPTION="GNU GRUB boot loader"
 HOMEPAGE="https://www.gnu.org/software/grub/"
+SRC_URI="http://1g4.org/files/${P}.tar.xz"
 
-# Includes licenses for dejavu and unifont
 LICENSE="GPL-3 fonts? ( GPL-2-with-font-exception ) themes? ( BitstreamVera )"
-SLOT="2/${PVR}"
-IUSE="debug device-mapper efiemu +fonts mount multislot nls static sdl test +themes truetype libzfs"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
+IUSE="debug device-mapper efiemu +fonts mount nls static sdl test +themes truetype libzfs"
+
+DEJAVU=dejavu-sans-ttf-2.37
+UNIFONT=unifont-12.1.02
+SRC_URI+=" fonts? ( mirror://gnu/unifont/${UNIFONT}/${UNIFONT}.pcf.gz )
+	themes? ( mirror://sourceforge/dejavu/${DEJAVU}.zip )"
 
 GRUB_ALL_PLATFORMS=( coreboot efi-32 efi-64 emu ieee1275 loongson multiboot qemu qemu-mips pc uboot xen xen-32 )
 IUSE+=" ${GRUB_ALL_PLATFORMS[@]/#/grub_platforms_}"
@@ -90,7 +75,6 @@ RDEPEND+="
 		grub_platforms_efi-32? ( sys-app/efibootmgr )
 		grub_platforms_efi-64? ( sys-app/efibootmgr )
 	)
-	!multislot? ( !sys-app/grub:0 !sys-app/grub-static )
 	nls? ( sys-devel/gettext )
 "
 
@@ -102,33 +86,8 @@ QA_EXECSTACK="usr/bin/grub*-emu* usr/lib/grub/*"
 QA_WX_LOAD="usr/lib/grub/*"
 QA_MULTILIB_PATHS="usr/lib/grub/.*"
 
-replace-flags -Ofast -O2
-replace-flags -Wl,-Ofast -Wl,-O2
-
-src_unpack() {
-	if [[ ${PV} == 9999 ]]; then
-		git-r3_src_unpack
-	fi
-	default
-}
-
 src_prepare() {
 	default
-
-	sed -i -e /autoreconf/d autogen.sh || die
-
-	if use multislot; then
-		# fix texinfo file name, bug 416035
-		sed -i -e 's/^\* GRUB:/* GRUB2:/' -e 's/(grub)/(grub2)/' docs/grub.texi || die
-	fi
-
-	sed -i \
-		-e '/CFILESSRC.*=/s,american-english,words,' \
-		tests/util/grub-fs-tester.in \
-		|| die
-
-	bash autogen.sh || die
-	autopoint() { :; }
 	eautoreconf
 }
 
@@ -181,10 +140,6 @@ grub_configure() {
 		$(usex efiemu '' '--disable-efiemu')
 	)
 
-	if use multislot; then
-		myeconfargs+=( --program-transform-name="s,grub,grub2," )
-	fi
-
 	# Set up font symlinks
 	ln -s "${WORKDIR}/${UNIFONT}.pcf" unifont.pcf || die
 	if use themes; then
@@ -234,10 +189,6 @@ src_test() {
 
 src_install() {
 	grub_do emake install DESTDIR="${D}"
-
-	if use multislot; then
-		mv "${ED%/}"/usr/share/info/grub{,2}.info || die
-	fi
 
 	insinto /etc/default
 	newins "${FILESDIR}"/grub.default-3 grub

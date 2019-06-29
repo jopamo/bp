@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit autotools toolchain-funcs preserve-libs python-r1 linux-info systemd git-r3 flag-o-matic
+inherit autotools toolchain-funcs python-r1 linux-info systemd git-r3 flag-o-matic
 
 DESCRIPTION="Userspace utilities for storing and processing auditing records"
 HOMEPAGE="https://people.redhat.com/sgrubb/audit/"

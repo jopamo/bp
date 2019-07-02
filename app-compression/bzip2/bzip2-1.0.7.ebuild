@@ -3,8 +3,8 @@
 EAPI=7
 
 DESCRIPTION="a high-quality data compressor."
-HOMEPAGE="http://sources.redhat.com/bzip2"
-SRC_URI="https://ftp.osuosl.org/pub/lfs/lfs-packages/8.1/${P}.tar.gz"
+HOMEPAGE="https://sourceware.org/bzip2/"
+SRC_URI="https://sourceware.org/pub/bzip2/${P}.tar.gz"
 
 LICENSE="BZIP2"
 SLOT="0/1"

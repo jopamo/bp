@@ -14,8 +14,6 @@ else
 	SNAPSHOT=5caf76b1655c22e28d1167b786f741ed47f301b1
 	SRC_URI="https://github.com/linux-pam/linux-pam/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/linux-${PN}-${SNAPSHOT}
-	#SRC_URI="https://1g4.org/files/${P}.tar.xz"
-	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="|| ( BSD GPL-2 )"

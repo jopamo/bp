@@ -10,7 +10,6 @@ SRC_URI="http://1g4.org/files/${P}.tar.xz"
 
 LICENSE="GPL-3 fonts? ( GPL-2-with-font-exception ) themes? ( BitstreamVera )"
 SLOT="0/1"
-KEYWORDS="amd64 arm64"
 
 IUSE="debug device-mapper efiemu +fonts mount nls static sdl test +themes truetype libzfs"
 

@@ -17,8 +17,9 @@ else
 fi
 
 LICENSE="|| ( BSD GPL-2 )"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="audit debug nls test vim-syntax"
 
 BDEPEND="app-misc/w3m

@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit fcaps
+inherit fcaps autotools
 
 DESCRIPTION="Linux-PAM (Pluggable Authentication Modules)"
 HOMEPAGE="http://www.linux-pam.org/ https://fedorahosted.org/linux-pam/"
@@ -11,7 +11,10 @@ if [[ ${PV} == 9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/linux-pam/linux-pam.git"
 else
-	SRC_URI="https://1g4.org/files/${P}.tar.xz"
+	SNAPSHOT=5caf76b1655c22e28d1167b786f741ed47f301b1
+	SRC_URI="https://github.com/linux-pam/linux-pam/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/linux-${PN}-${SNAPSHOT}
+	#SRC_URI="https://1g4.org/files/${P}.tar.xz"
 	KEYWORDS="amd64 arm64"
 fi
 
@@ -32,6 +35,12 @@ RDEPEND="
 PDEPEND="
 	lib-sys/pambase
 	vim-syntax? ( app-misc/vim )"
+
+src_prepare() {
+	touch ChangeLog
+	default
+	eautoreconf
+}
 
 src_configure() {
 	export ac_cv_header_xcrypt_h=no

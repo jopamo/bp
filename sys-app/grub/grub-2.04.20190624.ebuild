@@ -43,7 +43,7 @@ DEPEND="${RDEPEND}
 	sys-devel/flex
 	sys-devel/bison
 	sys-app/help2man
-	sys-app/texinfo
+	sys-devel/texinfo
 	fonts? ( lib-media/freetype:2 )
 	grub_platforms_xen? ( app-misc/xen-tools:= )
 	grub_platforms_xen-32? ( app-misc/xen-tools:= )

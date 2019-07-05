@@ -20,7 +20,7 @@ RDEPEND=">=sys-app/util-linux-2.16
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconf
-	sys-app/texinfo"
+	sys-devel/texinfo"
 
 append-cflags -fno-strict-aliasing
 append-cppflags -D_GNU_SOURCE

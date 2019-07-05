@@ -30,7 +30,7 @@ RDEPEND="server? ( !dev-util/gdbserver )
 	)"
 DEPEND="${RDEPEND}
 	app-compression/xz-utils
-	sys-app/texinfo
+	sys-devel/texinfo
 	client? (
 		sys-devel/bison
 		test? ( dev-util/dejagnu )

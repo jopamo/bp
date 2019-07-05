@@ -30,7 +30,7 @@ COMMON_DEPEND="
 		lib-dev/libaio:0=
 	)
 	>=sys-app/sed-4
-	>=sys-app/texinfo-4.7-r1
+	>=sys-devel/texinfo-4.7-r1
 	jemalloc? ( lib-dev/jemalloc:0= )
 	tcmalloc? ( dev-util/google-perftools:0= )
 	systemtap? ( >=dev-util/systemtap-1.3:0= )

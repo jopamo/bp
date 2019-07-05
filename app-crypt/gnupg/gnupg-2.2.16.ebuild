@@ -37,7 +37,7 @@ COMMON_DEPEND_BINS="app-crypt/pinentry"
 DEPEND="${COMMON_DEPEND_LIBS}
 	${COMMON_DEPEND_BINS}
 	nls? ( sys-devel/gettext )
-	doc? ( sys-app/texinfo )"
+	doc? ( sys-devel/texinfo )"
 
 RDEPEND="${COMMON_DEPEND_LIBS}
 	${COMMON_DEPEND_BINS}

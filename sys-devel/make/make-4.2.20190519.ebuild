@@ -16,7 +16,8 @@ IUSE="guile nls static"
 
 DEPEND="guile? ( >=dev-scheme/guile-1.8:= )
 		nls? ( sys-devel/gettext )
-		dev-perl/libintl-perl"
+		dev-perl/libintl-perl
+		sys-devel/texinfo"
 
 src_configure() {
 	use static && append-ldflags -static

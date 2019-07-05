@@ -17,7 +17,7 @@ IUSE="debug pam"
 DEPEND="
 	>=lib-sys/ncurses-5.2:0=
 	pam? ( lib-sys/pam )
-	sys-app/texinfo"
+	sys-devel/texinfo"
 
 PATCHES=( ${FILESDIR}/854c3673bb69a07d0ebaa52c2cd31eebaeaaca2c.patch )
 

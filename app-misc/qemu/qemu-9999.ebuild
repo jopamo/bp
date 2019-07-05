@@ -146,7 +146,7 @@ CDEPEND="
 
 DEPEND="${CDEPEND}
 	dev-lang/perl
-	sys-app/texinfo
+	sys-devel/texinfo
 	dev-util/pkgconf
 	gtk? ( nls? ( sys-devel/gettext ) )
 	static? (

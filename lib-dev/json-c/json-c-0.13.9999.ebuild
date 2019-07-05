@@ -7,12 +7,15 @@ inherit autotools
 DESCRIPTION="A JSON implementation in C"
 HOMEPAGE="https://github.com/json-c/json-c/wiki"
 
-SNAPSHOT=07ea04e65193c3e5c902c5b79421d5fa48ff67c7
-SRC_URI="https://github.com/json-c/json-c/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
-
-#SRC_URI="https://github.com/json-c/json-c/archive/json-c-0.13.1-20180305.tar.gz"
-#S=${WORKDIR}/${PN}-${P}-20180305
+if [[ ${PV} == *9999 ]] ; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/json-c/json-c.git"
+	EGIT_BRANCH=json-c-0.13
+else
+	SNAPSHOT=
+	SRC_URI="https://github.com/json-c/json-c/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="MIT"
 SLOT="0/3"

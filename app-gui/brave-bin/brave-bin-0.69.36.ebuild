@@ -47,6 +47,7 @@ RDEPEND="
 	x11-libs/libxcb
 	x11-libs/pango
 	x11-misc/xdg-utils
+	app-gui/chromium-widevinecdm
 "
 
 src_unpack() {
@@ -59,6 +60,8 @@ src_install() {
 	unpacker
 
 	rm -rf etc usr/share/menu usr/share/doc usr/share/man || die
+	rm opt/brave.com/brave-nightly/libwidevinecdm.so
+	dosym /usr/lib/chromium/libwidevinecdm.so opt/brave.com/brave-nightly/libwidevinecdm.so
 }
 
 pkg_postinst() {

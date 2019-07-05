@@ -1,0 +1,38 @@
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=7
+
+inherit flag-o-matic toolchain-funcs git-r3
+
+DESCRIPTION="Hardware Lister"
+HOMEPAGE="https://www.ezix.org/project/wiki/HardwareLiSter"
+EGIT_REPO_URI="https://ezix.org/src/pkg/lshw.git"
+
+LICENSE="GPL-2"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
+IUSE="static"
+
+PATCHES=( ${FILESDIR}/lshw-build.patch )
+
+src_prepare() {
+	default
+
+	sed -i \
+		-e 's:\<pkg-config\>:${PKG_CONFIG}:' \
+		src/Makefile src/gui/Makefile || die
+}
+
+src_compile() {
+	tc-export CC CXX AR PKG_CONFIG
+	use static && append-ldflags -static
+
+	emake \
+		SQLITE=0 \
+		all
+}
+
+src_install() {
+	emake DESTDIR="${D}" PREFIX="${EPREFIX}/usr" install
+}

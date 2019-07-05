@@ -21,8 +21,3 @@ src_configure() {
 		$(use_enable crnl-as-line-terminator) \
 		$(use_enable static-libs static)
 }
-
-src_install() {
-	default
-	find "${D}" -name "*.la" -delete || die
-}

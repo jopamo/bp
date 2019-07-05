@@ -2,22 +2,15 @@
 
 EAPI=7
 
-inherit autotools
-
 DESCRIPTION="A high-performance event loop/event model with lots of feature"
 HOMEPAGE="http://software.schmorp.de/pkg/libev.html"
-SRC_URI="http://dist.schmorp.de/libev/${P}.tar.gz
-	http://dist.schmorp.de/libev/Attic/${P}.tar.gz"
+SRC_URI="http://dist.schmorp.de/libev/${P}.tar.gz"
 
 LICENSE="|| ( BSD GPL-2 )"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
-IUSE="elibc_glibc static-libs"
 
-src_prepare() {
-	default
-	eautoreconf
-}
+IUSE="static-libs"
 
 src_configure() {
 	local myconf=(

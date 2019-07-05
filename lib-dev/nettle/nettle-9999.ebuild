@@ -23,8 +23,12 @@ IUSE="+gmp static-libs test"
 DEPEND="gmp? ( >=lib-dev/gmp-5.0:0= )"
 
 src_prepare() {
-	eautoreconf
 	default
+
+	sed -e '/CFLAGS=/s: -ggdb3::' \
+		-i configure.ac || die
+
+	eautoreconf
 }
 
 src_configure() {

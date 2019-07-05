@@ -11,14 +11,13 @@ PLEVEL=${PV/*p}
 DESCRIPTION="Library for arbitrary-precision arithmetic on different type of numbers"
 HOMEPAGE="http://gmplib.org/"
 SRC_URI="ftp://ftp.gmplib.org/pub/${MY_P}/${MY_P}.tar.xz
-	mirror://gnu/${PN}/${MY_P}.tar.xz
-	doc? ( http://gmplib.org/${PN}-man-${MY_PV}.pdf )"
+	mirror://gnu/${PN}/${MY_P}.tar.xz"
 
 LICENSE="|| ( LGPL-3+ GPL-2+ )"
 SLOT="0/10.4"
 KEYWORDS="amd64 arm64"
 
-IUSE="+asm doc cxx pgo static-libs"
+IUSE="+asm pgo static-libs"
 
 DEPEND="sys-devel/m4
 	app-compression/xz-utils"
@@ -47,8 +46,9 @@ src_configure() {
 	ECONF_SOURCE="${S}" econf \
 		--localstatedir="${EPREFIX}"/var/state/gmp \
 		--enable-shared \
+		--enable-cxx \
+    	--enable-fat \
 		$(use_enable asm assembly) \
-		$(use_enable cxx) \
 		$(use_enable static-libs static)
 }
 

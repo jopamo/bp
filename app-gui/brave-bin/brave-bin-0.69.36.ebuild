@@ -47,7 +47,7 @@ RDEPEND="
 	x11-libs/libxcb
 	x11-libs/pango
 	x11-misc/xdg-utils
-	app-gui/chromium-widevinecdm
+	app-gui/widevine-cdm
 "
 
 src_unpack() {

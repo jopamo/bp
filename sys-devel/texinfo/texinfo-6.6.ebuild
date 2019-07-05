@@ -32,3 +32,8 @@ src_configure() {
 	)
 	econf "${myeconfargs[@]}"
 }
+
+src_configure() {
+	default
+	dosym texi2any usr/bin/makeinfo
+}

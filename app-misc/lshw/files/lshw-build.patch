@@ -1,0 +1,143 @@
+diff -urN a/src/core/Makefile b/src/core/Makefile
+--- a/src/core/Makefile	2019-07-05 03:07:05.828620703 -0500
++++ b/src/core/Makefile	2019-07-05 03:13:03.421380676 -0500
+@@ -3,7 +3,7 @@
+ CXX?=$(CROSS_COMPILE)c++
+ INCLUDES=
+ DEFINES=-DPREFIX=\"$(PREFIX)\" -DSBINDIR=\"$(SBINDIR)\" -DMANDIR=\"$(MANDIR)\" -DDATADIR=\"$(DATADIR)\"
+-CXXFLAGS?=-g -Wall $(INCLUDES) $(DEFINES) $(RPM_OPT_FLAGS)
++CXXFLAGS?= -Wall $(INCLUDES) $(DEFINES) $(RPM_OPT_FLAGS)
+ LDFLAGS=
+ LDSTATIC=
+ LIBS=
+@@ -23,7 +23,7 @@
+ 	$(AR) rs $@ $^
+ 
+ install: all
+-	
++
+ clean:
+ 	rm -f $(OBJS) lib$(PACKAGENAME).a
+ 
+diff -urN a/src/core/pci.cc b/src/core/pci.cc
+--- a/src/core/pci.cc	2019-07-05 03:07:05.840620728 -0500
++++ b/src/core/pci.cc	2019-07-05 03:13:57.505495625 -0500
+@@ -20,7 +20,7 @@
+ 
+ #define PROC_BUS_PCI "/proc/bus/pci"
+ #define SYS_BUS_PCI "/sys/bus/pci"
+-#define PCIID_PATH DATADIR"/pci.ids:/usr/share/lshw/pci.ids:/usr/local/share/pci.ids:/usr/share/pci.ids:/etc/pci.ids:/usr/share/hwdata/pci.ids:/usr/share/misc/pci.ids"
++#define PCIID_PATH "/usr/share/misc/pci.ids"
+ 
+ #define PCI_CLASS_REVISION      0x08              /* High 24 bits are class, low 8 revision */
+ #define PCI_VENDOR_ID           0x00              /* 16 bits */
+diff -urN a/src/core/usb.cc b/src/core/usb.cc
+--- a/src/core/usb.cc	2019-07-05 03:07:05.840620728 -0500
++++ b/src/core/usb.cc	2019-07-05 03:14:26.297558065 -0500
+@@ -27,7 +27,7 @@
+ 
+ #define PROCBUSUSBDEVICES "/proc/bus/usb/devices"
+ #define SYSKERNELDEBUGUSBDEVICES "/sys/kernel/debug/usb/devices"
+-#define USBID_PATH DATADIR"/usb.ids:/usr/share/lshw/usb.ids:/usr/local/share/usb.ids:/usr/share/usb.ids:/etc/usb.ids:/usr/share/hwdata/usb.ids:/usr/share/misc/usb.ids"
++#define USBID_PATH "/usr/share/misc/usb.ids"
+ 
+ #define USB_CLASS_PER_INTERFACE         0         /* for DeviceClass */
+ #define USB_CLASS_AUDIO                 1
+diff -urN a/src/Makefile b/src/Makefile
+--- a/src/Makefile	2019-07-05 03:07:05.828620703 -0500
++++ b/src/Makefile	2019-07-05 03:12:20.161288735 -0500
+@@ -23,14 +23,14 @@
+ CXX?=$(CROSS_COMPILE)c++
+ INCLUDES=-I./core/
+ DEFINES=-DPREFIX=\"$(PREFIX)\" -DSBINDIR=\"$(SBINDIR)\" -DMANDIR=\"$(MANDIR)\" -DDATADIR=\"$(DATADIR)\" -DVERSION=\"$(VERSION)\"
+-CXXFLAGS=-g -Wall -g $(INCLUDES) $(DEFINES) $(RPM_OPT_FLAGS)
++CXXFLAGS += -Wall $(INCLUDES) $(DEFINES) $(RPM_OPT_FLAGS)
+ ifeq ($(SQLITE), 1)
+ 	CXXFLAGS+= -DSQLITE $(shell pkg-config --cflags sqlite3)
+ endif
+ ifeq ($(ZLIB), 1)
+ 	CXXFLAGS+= -DZLIB $(shell pkg-config --cflags zlib)
+ endif
+-LDFLAGS+=-L./core/ -g
++LDFLAGS += -L./core/
+ ifneq ($(shell $(LD) --help 2| grep -- --as-needed), )
+ 	LDFLAGS+= -Wl,--as-needed
+ endif
+@@ -47,13 +47,7 @@
+ export LIBS
+ export LDFLAGS
+ 
+-ifeq ($(ZLIB), 1)
+-DATAFILES = pci.ids.gz usb.ids.gz oui.txt.gz manuf.txt.gz pnp.ids.gz pnpid.txt.gz
+-else
+-DATAFILES = pci.ids usb.ids oui.txt manuf.txt pnp.ids pnpid.txt
+-endif
+-
+-all: $(PACKAGENAME) $(PACKAGENAME).1 $(DATAFILES)
++all: $(PACKAGENAME) $(PACKAGENAME).1
+ 
+ .cc.o:
+ 	$(CXX) $(CXXFLAGS) -c $< -o $@
+@@ -63,18 +57,18 @@
+ 
+ .PHONY: core
+ core:
+-	+make -C core all
++	$(MAKE) -C core all
+ 
+ $(PACKAGENAME): core $(PACKAGENAME).o
+ 	$(CXX) $(LDFLAGS) -o $@ $(PACKAGENAME).o $(LIBS)
+ 
+ .PHONY: po
+ po:
+-	+make -C po all
++	$(MAKE) -C po all
+ 
+ .PHONY: gui
+ gui: core
+-	+make -C gui all
++	$(MAKE) -C gui all
+ 
+ .PHONY: nologo
+ nologo:
+@@ -85,7 +79,6 @@
+ 
+ $(PACKAGENAME)-static: core core/lib$(PACKAGENAME).a $(PACKAGENAME).o
+ 	$(CXX) $(LDSTATIC) $(LDFLAGS) -o $@ $(PACKAGENAME).o $(LIBS)
+-	$(STRIP) $@
+ 
+ .PHONY: compressed
+ compressed: $(PACKAGENAME)-compressed
+@@ -114,14 +107,13 @@
+ pnpid.txt:
+ 	wget http://www-pc.uni-regensburg.de/hardware/TECHNIK/PCI_PNP/pnpid.txt
+ 
+-install: all
++install:
+ 	$(INSTALL) -d -m 0755 $(DESTDIR)/$(SBINDIR)
+ 	$(INSTALL) -m 0755 $(PACKAGENAME) $(DESTDIR)/$(SBINDIR)
+ 	$(INSTALL) -d -m 0755 $(DESTDIR)/$(MANDIR)/man1
+ 	$(INSTALL) -m 0644 $(PACKAGENAME).1 $(DESTDIR)/$(MANDIR)/man1
+ 	$(INSTALL) -d -m 0755 $(DESTDIR)/$(DATADIR)/$(PACKAGENAME)
+-	$(INSTALL) -m 0644 $(DATAFILES) $(DESTDIR)/$(DATADIR)/$(PACKAGENAME)
+-	make -C po install
++	$(MAKE) -C po install
+ 
+ install-gui: gui
+ 	$(INSTALL) -d -m 0755 $(DESTDIR)/$(SBINDIR)
+@@ -130,12 +122,12 @@
+ 	$(INSTALL) -d -m 0755 $(DESTDIR)/$(DATADIR)/$(PACKAGENAME)/ui
+ 	$(INSTALL) -m 0644 gui/*.ui $(DESTDIR)/$(DATADIR)/$(PACKAGENAME)/ui
+ 	$(INSTALL) -m 0644 gui/artwork/*.svg $(DESTDIR)/$(DATADIR)/$(PACKAGENAME)/artwork
+-	
++
+ clean:
+ 	rm -f $(PACKAGENAME).o $(PACKAGENAME) $(PACKAGENAME)-static $(PACKAGENAME)-compressed
+ 	rm -f $(addsuffix .gz,$(DATAFILES))
+-	make -C core clean
+-	make -C gui clean
++	$(MAKE) -C core clean
++	$(MAKE) -C gui clean
+ 
+ depend:
+ 	@makedepend -Y $(SRCS) 2> /dev/null > /dev/null

@@ -16,6 +16,8 @@ IUSE="nls static test"
 
 DEPEND="test? ( ${PYTHON_DEPS} )"
 
+BDEPEND="sys-devel/bison
+
 pkg_setup() {
 	use test && python-any-r1_pkg_setup
 }

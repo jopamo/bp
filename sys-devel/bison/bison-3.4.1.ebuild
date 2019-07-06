@@ -47,7 +47,6 @@ src_install() {
 	mv "${ED}"/usr/bin/yacc{,.bison} || die
 	mv "${ED}"/usr/share/man/man1/yacc{,.bison}.1 || die
 	rm -r "${ED}"/usr/lib* || die
-	mv "${ED}"/usr/share/${PN}/README "${ED}"/usr/share/doc/${PF}/README.data
 }
 
 pkg_postinst() {

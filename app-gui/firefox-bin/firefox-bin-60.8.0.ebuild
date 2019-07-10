@@ -3,7 +3,7 @@
 EAPI=7
 
 MOZ_PN="${PN/-bin}"
-MOZ_PV="${PV}"
+MOZ_PV="${PV}"esr
 
 MOZ_P="${MOZ_PN}-${MOZ_PV}"
 
@@ -20,8 +20,6 @@ RESTRICT="strip mirror"
 LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
 SLOT="0/1"
 KEYWORDS="amd64"
-
-IUSE="+ffmpeg +pulseaudio"
 
 RDEPEND="gui-lib/atk
 	>=sys-app/dbus-0.60
@@ -42,9 +40,8 @@ RDEPEND="gui-lib/atk
 	x11-libs/libXrender
 	x11-libs/libXt
 	>=x11-libs/pango-1.22.0
-	pulseaudio? ( !<app-media/apulse-0.1.9
-		|| ( app-media/pulseaudio app-media/apulse ) )
-	ffmpeg? ( app-media/ffmpeg )
+	app-media/pulseaudio
+	app-media/ffmpeg
 "
 
 QA_PREBUILT="

@@ -7,6 +7,7 @@ inherit xdg-utils git-r3 qmake-utils autotools systemd user
 DESCRIPTION="BitTorrent client in C++ and Qt"
 HOMEPAGE="https://www.qbittorrent.org/"
 EGIT_REPO_URI="https://github.com/${PN}/qBittorrent.git"
+EGIT_BRANCH="v$(ver_cut 1)_$(ver_cut 2)_x"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -22,7 +23,6 @@ DEPEND=">=lib-dev/boost-1.62.0-r1:=
 	gui-lib/qtxml:5
 	gui-lib/linguist-tools:5
 	gui? (
-			gui-lib/qtsingleapplication
 			gui-lib/qtdbus:5
 			gui-lib/qtgui:5
 			gui-lib/qtsvg:5

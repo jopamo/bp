@@ -2,11 +2,19 @@
 
 EAPI=7
 
-inherit toolchain-funcs flag-o-matic linux-info git-r3
+inherit toolchain-funcs flag-o-matic linux-info
 
 DESCRIPTION="show detailed info about what is happening on a block device io queue"
 HOMEPAGE="http://git.kernel.dk/cgit/blktrace/"
-EGIT_REPO_URI="https://git.kernel.org/pub/scm/linux/kernel/git/axboe/blktrace.git"
+
+if [[ ${PV} == "9999" ]] ; then
+	inherit git-r3
+	EGIT_REPO_URI="https://git.kernel.org/pub/scm/linux/kernel/git/axboe/blktrace.git"
+else
+	SNAPSHOT=a7263b8fb22f07f4f1a3ec54f0c37193c5908b22
+	SRC_URI="https://git.kernel.org/pub/scm/linux/kernel/git/axboe/blktrace.git/snapshot/blktrace-${SNAPSHOT}.tar.gz"
+	S=${WORKDIR}/blktrace-${SNAPSHOT}
+fi
 
 LICENSE="GPL-2"
 SLOT="0/1"

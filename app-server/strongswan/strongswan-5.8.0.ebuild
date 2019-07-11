@@ -29,7 +29,7 @@ COMMON_DEPEND="!app-net/openswan
 	gcrypt? ( lib-dev/libgcrypt:0 )
 	caps? ( lib-sys/libcap )
 	curl? ( app-net/curl )
-	ldap? ( net-nds/openldap )
+	ldap? ( app-net/openldap )
 	openssl? ( >=lib-dev/openssl-0.9.8:=[-bindist] )
 	mysql? ( virtual/mysql )
 	sqlite? ( >=lib-sys/sqlite-3.3.1 )

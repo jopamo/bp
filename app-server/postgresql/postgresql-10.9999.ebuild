@@ -24,7 +24,7 @@ CDEPEND="
 		sys-app/less
 		sys-devel/gettext
 		kerberos? ( virtual/krb5 )
-		ldap? ( net-nds/openldap )
+		ldap? ( app-net/openldap )
 		pam? ( lib-sys/pam )
 		perl? ( >=dev-lang/perl-5.8:= )
 		python? ( ${PYTHON_DEPS} )

@@ -12,7 +12,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="ldap adns ssh test ipv6 static-libs embed"
 
-RDEPEND="ldap? ( net-nds/openldap )
+RDEPEND="ldap? ( app-net/openldap )
 		adns? ( lib-net/c-ares:0 )
 		ssh? ( lib-net/libssh2[static-libs?] )
 		lib-sys/zlib

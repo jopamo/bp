@@ -25,7 +25,7 @@ COMMON_DEPEND_LIBS="
 	>=app-net/curl-7.10
 	ssl? ( >=lib-net/gnutls-3.0:0= )
 	lib-sys/zlib
-	ldap? ( net-nds/openldap )
+	ldap? ( app-net/openldap )
 	bzip2? ( app-compression/lbzip2 )
 	readline? ( lib-sys/readline:0= )
 	smartcard? ( usb? ( lib-dev/libusb ) )

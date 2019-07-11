@@ -45,7 +45,7 @@ CDEPEND="
 	)
 	gpg? ( app-crypt/gpgme )
 	json? ( lib-dev/jansson )
-	ldap? ( net-nds/openldap )
+	ldap? ( app-net/openldap )
 	systemd? ( sys-app/systemd:0= )
 "
 DEPEND="${CDEPEND}

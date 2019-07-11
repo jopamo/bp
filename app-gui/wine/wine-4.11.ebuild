@@ -40,7 +40,7 @@ COMMON_DEPEND="
 	cups? ( lib-print/cups:= )
 	fontconfig? ( lib-media/fontconfig:= )
 	jpeg? ( lib-media/libjpeg-turbo )
-	ldap? ( net-nds/openldap:= )
+	ldap? ( app-net/openldap:= )
 	mp3? ( >=lib-media/mpg123-1.5.0 )
 	netapi? ( app-server/samba )
 	openal? ( lib-media/openal:= )

@@ -283,7 +283,7 @@ CDEPEND="
 		app-net/curl
 		app-server/apache
 	)
-	nginx_modules_http_auth_ldap? ( net-nds/openldap[ssl?] )"
+	nginx_modules_http_auth_ldap? ( app-net/openldap[ssl?] )"
 
 DEPEND="${CDEPEND}
 	nginx_modules_http_brotli? ( dev-util/pkgconf )

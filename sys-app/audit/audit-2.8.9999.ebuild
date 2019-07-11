@@ -12,13 +12,15 @@ EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)_maintenance"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="gssapi ldap python static-libs"
+
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 # Testcases are pretty useless as they are built for RedHat users/groups and kernels.
 RESTRICT="test"
 
 RDEPEND="gssapi? ( virtual/krb5 )
-	ldap? ( net-nds/openldap )
+	ldap? ( app-net/openldap )
 	lib-sys/libcap-ng
 	python? ( ${PYTHON_DEPS} )"
 DEPEND="${RDEPEND}

@@ -17,7 +17,7 @@ IUSE="bzip2 dbi fam gdbm geoip krb5 ldap libev libunwind lua memcached mysql ssl
 CDEPEND="
 	app-compression/lbzip2
 	gdbm?     ( lib-sys/gdbm )
-	ldap?     ( >=net-nds/openldap-2.1.26 )
+	ldap?     ( >=app-net/openldap-2.1.26 )
 	libev?    ( >=lib-dev/libev-4.01 )
 	mysql?    ( >=virtual/mysql-4.0 )
 	>=lib-dev/libpcre-3.1

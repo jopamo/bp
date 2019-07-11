@@ -26,7 +26,7 @@ RDEPEND="
 	lib-sys/zlib
 	dbus? ( sys-app/dbus )
 	jpeg? ( lib-media/libjpeg-turbo )
-	ldap? ( net-nds/openldap )
+	ldap? ( app-net/openldap )
 	pclm? ( >=app-text/qpdf-7.0_beta1 )
 	pdf? ( app-text/mupdf )
 	perl? ( dev-lang/perl:= )

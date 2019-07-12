@@ -2,11 +2,14 @@
 
 EAPI=7
 
+SNAPSHOT=ff9fbe7300064cc6ec45a78c162f0166c770c4b0
+
 inherit autotools flag-o-matic systemd
 
 DESCRIPTION="Tools to monitor storage systems to provide advanced warning of disk degradation"
 HOMEPAGE="https://www.smartmontools.org"
-SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
+SRC_URI="https://github.com/smartmontools/smartmontools/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}/smartmontools
 
 LICENSE="GPL-2"
 SLOT="0"

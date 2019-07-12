@@ -4,9 +4,12 @@ EAPI=7
 
 inherit flag-o-matic toolchain-funcs
 
+SNAPSHOT=272b216e197b2b3d05da68ef51861545a36dc6d8
+
 DESCRIPTION="Tools and library to manipulate EFI variables"
-HOMEPAGE="https://github.com/rhinstaller/efivar"
-SRC_URI="https://github.com/rhinstaller/efivar/releases/download/${PV}/${P}.tar.bz2"
+HOMEPAGE="https://github.com/rhboot/efivar"
+SRC_URI="https://github.com/rhboot/efivar/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0/1"

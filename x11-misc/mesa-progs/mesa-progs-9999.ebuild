@@ -6,7 +6,7 @@ inherit autotools toolchain-funcs git-r3
 
 DESCRIPTION="Mesa's OpenGL utility and demo programs (glxgears and glxinfo)"
 HOMEPAGE="https://www.mesa3d.org/ https://mesa.freedesktop.org/"
-EGIT_REPO_URI="https://anongit.freedesktop.org/git/mesa/demos.git"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/mesa/demos.git"
 
 LICENSE="LGPL-2"
 SLOT="0"

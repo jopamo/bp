@@ -2,12 +2,13 @@
 
 EAPI=7
 
-inherit linux-info autotools flag-o-matic
+inherit linux-info autotools
 
 DESCRIPTION="X.org input driver based on libinput"
+HOMEPAGE="https://www.x.org"
 
 if [[ ${PV} == "9999" ]] ; then
-	EGIT_REPO_URI="https://github.com/whot/xf86-input-libinput.git"
+	EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/driver/xf86-input-libinput.git"
 	inherit git-r3
 else
 	SRC_URI="https://www.x.org/releases/individual/driver/${P}.tar.bz2"
@@ -17,11 +18,8 @@ LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-RDEPEND=">=lib-dev/libinput-1.5.0:0="
-DEPEND="${RDEPEND}
-	x11-app/xorg-server"
-
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+DEPEND=">=lib-dev/libinput-1.5.0:0=
+		x11-app/xorg-server"
 
 pkg_pretend() {
 	CONFIG_CHECK="~TIMERFD"

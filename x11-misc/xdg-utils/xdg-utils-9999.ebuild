@@ -6,13 +6,11 @@ inherit git-r3 autotools
 
 DESCRIPTION="Portland utils for cross-platform/cross-toolkit/cross-desktop interoperability"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/xdg-utils/"
-EGIT_REPO_URI=https://github.com/freedesktop/${PN}.git
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xdg/xdg-utils.git"
 
 LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
-
-IUSE="doc"
 
 RDEPEND="
 	sys-app/dbus

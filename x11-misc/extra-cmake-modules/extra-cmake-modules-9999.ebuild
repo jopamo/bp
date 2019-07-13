@@ -12,13 +12,9 @@ LICENSE="BSD"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="doc test"
+IUSE="test"
 
 DEPEND="app-compression/libarchive
-		doc? (
-			${PYTHON_DEPS}
-			$(python_gen_any_dep 'dev-python/sphinx[${PYTHON_USEDEP}]')
-		)
 		test? (
 			gui-lib/qtcore
 			gui-lib/linguist-tools
@@ -29,17 +25,7 @@ python_check_deps() {
 	has_version "dev-python/sphinx[${PYTHON_USEDEP}]"
 }
 
-pkg_setup() {
-	use doc && python-any-r1_pkg_setup
-}
-
 src_configure() {
-	local mycmakeargs=(
-		-DBUILD_HTML_DOCS="$(usex doc)"
-		-DBUILD_MAN_DOCS="$(usex doc)"
-		-DDOC_INSTALL_DIR="/usr/share/doc/${PF}"
-	)
 	use test && mycmakeargs+=( -DCMAKE_DISABLE_FIND_PACKAGE_PythonModuleGeneration=ON )
-
 	cmake-utils_src_configure
 }

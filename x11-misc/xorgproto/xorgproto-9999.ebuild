@@ -5,7 +5,7 @@ EAPI=7
 inherit git-r3 meson
 
 DESCRIPTION="X.Org combined protocol headers"
-HOMEPAGE="https://cgit.freedesktop.org/xorg/proto/xorgproto/"
+HOMEPAGE="https://www.x.org"
 EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/proto/xorgproto.git"
 
 LICENSE="MIT"

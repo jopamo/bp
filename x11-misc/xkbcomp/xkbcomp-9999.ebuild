@@ -5,6 +5,7 @@ EAPI=7
 inherit autotools
 
 DESCRIPTION="compile XKB keyboard description"
+HOMEPAGE="https://www.x.org"
 
 if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI=EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/app/${PN}.git"
@@ -25,16 +26,4 @@ DEPEND="${RDEPEND}
 src_prepare() {
 	eautoreconf
 	default
-}
-
-src_configure() {
-	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib64
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

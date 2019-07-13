@@ -6,7 +6,7 @@ inherit xdg-utils git-r3 autotools
 
 DESCRIPTION="The Shared MIME-info Database specification"
 HOMEPAGE="https://freedesktop.org/wiki/Software/shared-mime-info"
-EGIT_REPO_URI="https://github.com/freedesktop/xdg-shared-mime-info.git"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xdg/shared-mime-info.git"
 
 LICENSE="GPL-2"
 SLOT="0/1"

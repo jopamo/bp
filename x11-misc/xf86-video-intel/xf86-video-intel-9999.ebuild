@@ -2,10 +2,11 @@
 
 EAPI=7
 
-inherit meson git-r3 flag-o-matic
+inherit meson git-r3
 
 DESCRIPTION="X.Org driver for Intel cards"
-EGIT_REPO_URI="https://anongit.freedesktop.org/git/xorg/driver/xf86-video-intel.git"
+HOMEPAGE="https://www.x.org"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/driver/xf86-video-intel.git"
 
 LICENSE="MIT"
 SLOT="0/1"
@@ -46,8 +47,6 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	x11-misc/xorgproto"
-
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 src_configure() {
         local emesonargs=(

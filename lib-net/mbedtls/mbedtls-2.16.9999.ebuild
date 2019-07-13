@@ -12,8 +12,9 @@ EGIT_BRANCH="mbedtls-$(ver_cut 1).$(ver_cut 2)"
 KEYWORDS="amd64 arm64"
 
 LICENSE="Apache-2.0"
-SLOT="0/10" # slot for libmbedtls.so
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="doc havege programs test zlib"
 
 RDEPEND="

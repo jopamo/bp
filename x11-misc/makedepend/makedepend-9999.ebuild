@@ -5,7 +5,7 @@ EAPI=7
 inherit git-r3 autotools
 
 DESCRIPTION="create dependencies in makefiles"
-EGIT_REPO_URI=https://github.com/freedesktop/xorg-${PN}.git
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/util/makedepend.git"
 
 LICENSE="MIT"
 SLOT="0/1"
@@ -17,16 +17,4 @@ DEPEND="${RDEPEND}
 src_prepare() {
 	eautoreconf
 	default
-}
-
-src_configure() {
-	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib64
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

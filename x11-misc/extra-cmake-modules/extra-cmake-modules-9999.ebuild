@@ -12,7 +12,7 @@ LICENSE="BSD"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="test"
+IUSE="test doc"
 
 DEPEND="app-compression/libarchive
 		test? (
@@ -26,6 +26,14 @@ python_check_deps() {
 }
 
 src_configure() {
+	local mycmakeargs=(
+		-DBUILD_HTML_DOCS="$(usex doc)"
+		-DBUILD_MAN_DOCS="$(usex doc)"
+		-DBUILD_QTHELP_DOCS="$(usex doc)"
+		-DBUILD_TESTING="$(usex test)"
+		-DDOC_INSTALL_DIR="/usr/share/doc/${PF}"
+	)
+
 	use test && mycmakeargs+=( -DCMAKE_DISABLE_FIND_PACKAGE_PythonModuleGeneration=ON )
 	cmake-utils_src_configure
 }

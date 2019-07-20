@@ -25,7 +25,7 @@ RDEPEND="
 	jemalloc? ( lib-dev/jemalloc )
 	utils? (
 		>=lib-dev/libev-4.15
-		>=lib-dev/openssl-1.0.2:0[-bindist]
+		>=lib-dev/libressl-1.0.2:0[-bindist]
 		>=lib-sys/zlib-1.2.3
 		lib-net/c-ares:=
 	)

@@ -22,7 +22,7 @@ LIB_DEPEND="
 	pcre? ( lib-dev/libpcre[static-libs(+)] )
 	ssl? (
 		gnutls? ( lib-net/gnutls:0=[static-libs(+)] )
-		!gnutls? ( lib-dev/openssl:0=[static-libs(+)] )
+		!gnutls? ( lib-dev/libressl:0=[static-libs(+)] )
 	)
 	uuid? ( sys-app/util-linux[static-libs(+)] )
 	zlib? ( lib-sys/zlib[static-libs(+)] )

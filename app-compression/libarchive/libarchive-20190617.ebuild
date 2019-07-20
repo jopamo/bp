@@ -29,7 +29,7 @@ DEPEND="
 	expat? ( lib-dev/expat )
 	!expat? ( lib-dev/libxml2 )
 	xattr? ( sys-app/attr )
-	lib-dev/openssl:0=
+	lib-dev/libressl
 	lz4? ( app-compression/lz4 )
 	zstd? ( app-compression/zstd )
 	lzo? ( lib-dev/lzo )

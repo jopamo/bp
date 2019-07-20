@@ -13,9 +13,9 @@ LICENSE="GPL-2"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="commoncrypto opencl openmp +openssl pcap rexgen"
+IUSE="commoncrypto opencl openmp +ssl pcap rexgen"
 
-DEPEND="openssl? ( >=lib-dev/openssl-1.0.1:0 )
+DEPEND="ssl? ( lib-dev/libressl )
 	pcap? ( lib-net/libpcap )
 	lib-dev/gmp:*
 	lib-sys/zlib
@@ -42,7 +42,7 @@ src_configure() {
 		$(use_enable pcap) \
 		$(use_enable rexgen) \
 		$(use_with commoncrypto) \
-		$(use_with openssl)
+		$(use_with ssl openssl)
 }
 
 src_test() {

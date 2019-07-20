@@ -18,7 +18,7 @@ KEYWORDS="amd64 arm64"
 IUSE="doc havege programs test zlib"
 
 RDEPEND="
-	programs? ( lib-dev/openssl:0= )
+	programs? ( lib-dev/libressl:0= )
 	zlib? ( >=lib-sys/zlib-1.2.8-r1 )"
 DEPEND="${RDEPEND}
 	doc? ( app-text/doxygen app-media/graphviz )

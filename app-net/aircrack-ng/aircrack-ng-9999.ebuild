@@ -23,7 +23,7 @@ KEYWORDS="amd64 arm64"
 IUSE="+airdrop-ng +airgraph-ng kernel_linux kernel_FreeBSD +netlink +pcre +sqlite +experimental"
 
 DEPEND="lib-net/libpcap
-	lib-dev/openssl:0=
+	lib-dev/libressl:0=
 	netlink? ( lib-dev/libnl:3 )
 	pcre? ( lib-dev/libpcre )
 	experimental? ( lib-sys/zlib )

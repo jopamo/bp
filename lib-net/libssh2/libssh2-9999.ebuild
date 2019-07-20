@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="gcrypt static-libs test zlib"
 
 DEPEND="
-	!gcrypt? ( >=lib-dev/openssl-1.0.1h-r2:0 )
+	!gcrypt? ( >=lib-dev/libressl-1.0.1h-r2:0 )
 	gcrypt? ( >=lib-dev/libgcrypt-1.5.3:0 )
 	zlib? ( >=lib-sys/zlib-1.2.8-r1 )
 "

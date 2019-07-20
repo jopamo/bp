@@ -16,7 +16,7 @@ IUSE="+perl socks5 +proxy"
 
 DEPEND="lib-sys/ncurses:0=
 	>=lib-dev/glib-2.6.0
-	lib-dev/openssl:=
+	lib-dev/libressl:=
 	dev-lang/perl:="
 
 filter-flags -Wl,-z,defs -Wl,-z,relro -flto\=\*

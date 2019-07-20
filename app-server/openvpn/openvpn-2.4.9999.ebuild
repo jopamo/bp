@@ -32,7 +32,7 @@ CDEPEND="
 	)
 	pam? ( lib-sys/pam )
 	ssl? (
-		!mbedtls? ( >=lib-dev/openssl-0.9.8:* )
+		!mbedtls? ( >=lib-dev/libressl-0.9.8:* )
 		mbedtls? ( lib-net/mbedtls )
 	)
 	lz4? ( app-compression/lz4 )

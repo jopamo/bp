@@ -12,7 +12,7 @@ LICENSE="GPL-2 RSA DES"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="+caps curl +constraints debug dhcp eap farp gcrypt +gmp ldap mysql networkmanager +non-root +openssl sqlite pam pkcs11"
+IUSE="+caps curl +constraints debug dhcp eap farp gcrypt +gmp ldap mysql networkmanager +non-root +ssl sqlite pam pkcs11"
 
 STRONGSWAN_PLUGINS_STD="led lookip systime-fix unity vici"
 STRONGSWAN_PLUGINS_OPT="blowfish ccm ctr gcm ha ipseckey ntru padlock rdrand unbound whitelist"
@@ -30,7 +30,7 @@ COMMON_DEPEND="!app-net/openswan
 	caps? ( lib-sys/libcap )
 	curl? ( app-net/curl )
 	ldap? ( app-net/openldap )
-	openssl? ( >=lib-dev/openssl-0.9.8:=[-bindist] )
+	ssl? ( lib-dev/libressl )
 	mysql? ( virtual/mysql )
 	sqlite? ( >=lib-sys/sqlite-3.3.1 )
 	networkmanager? ( app-net/networkmanager )
@@ -163,7 +163,7 @@ src_configure() {
 		$(use_enable gcrypt) \
 		$(use_enable mysql) \
 		$(use_enable networkmanager nm) \
-		$(use_enable openssl) \
+		$(use_enable ssl openssl) \
 		$(use_enable pam xauth-pam) \
 		$(use_enable pkcs11) \
 		$(use_enable sqlite) \
@@ -211,12 +211,12 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
-	if ! use openssl && ! use gcrypt; then
+	if ! use ssl && ! use gcrypt; then
 		elog
 		elog "${PN} has been compiled without both OpenSSL and libgcrypt support."
 		elog "Please note that this might effect availability and speed of some"
 		elog "cryptographic features. You are advised to enable the OpenSSL plugin."
-	elif ! use openssl; then
+	elif ! use ssl; then
 		elog
 		elog "${PN} has been compiled without the OpenSSL plugin. This might effect"
 		elog "availability and speed of some cryptographic features. There will be"

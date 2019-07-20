@@ -36,7 +36,7 @@ COMMON_DEPEND="
 	systemtap? ( >=dev-util/systemtap-1.3:0= )
 	>=lib-sys/zlib-1.2.3:0=
 	yassl? ( lib-net/gnutls:0= )
-	!yassl? ( >=lib-dev/openssl-1.0.0:0= )
+	!yassl? ( >=lib-dev/libressl-1.0.0:0= )
 	lib-sys/ncurses:0=
 	!bindist? (
 		>=lib-sys/readline-4.1:0=

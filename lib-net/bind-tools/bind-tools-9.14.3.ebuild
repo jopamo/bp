@@ -22,8 +22,8 @@ IUSE="doc gost gssapi idn ipv6 readline seccomp ssl urandom xml"
 REQUIRED_USE="gost? ( ssl )"
 
 CDEPEND="
-	ssl? ( lib-dev/openssl:0 )
-	gost? ( >=lib-dev/openssl-1.0.0:0[-bindist] )
+	ssl? ( lib-dev/libressl:0 )
+	gost? ( >=lib-dev/libressl-1.0.0:0[-bindist] )
 	xml? ( lib-dev/libxml2 )
 	idn? ( lib-net/idnkit )
 	gssapi? ( virtual/krb5 )

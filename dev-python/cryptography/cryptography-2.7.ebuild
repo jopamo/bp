@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="test"
 
 RDEPEND="
-	lib-dev/openssl:0=
+	lib-dev/libressl:0=
 	$(python_gen_cond_dep '>=dev-python/cffi-1.7:=[${PYTHON_USEDEP}]' 'python*')
 	>=dev-python/idna-2.1[${PYTHON_USEDEP}]
 	>=dev-python/asn1crypto-0.21.0[${PYTHON_USEDEP}]

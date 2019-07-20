@@ -10,7 +10,7 @@ LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="ldap adns ssh test ipv6 static-libs embed"
+IUSE="ldap adns ssh test ipv6 static-libs mbedtls"
 
 RDEPEND="ldap? ( app-net/openldap )
 		adns? ( lib-net/c-ares:0 )
@@ -20,11 +20,15 @@ RDEPEND="ldap? ( app-net/openldap )
 
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconf-0-r1
-	embed? ( lib-net/mbedtls )
+	mbedtls? ( lib-net/mbedtls )
 	test? (
 		sys-app/diffutils
 		dev-lang/perl
 	)"
+
+PATCHES=( 	${FILESDIR}/828392ae10e6e7855e66a78c01346f9cd1127467.patch
+			${FILESDIR}/curl-respect-cflags-3.patch
+)
 
 src_configure() {
 	local myconf=(
@@ -35,21 +39,17 @@ src_configure() {
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
 		$(use_enable static-libs static)
-		$(use_with embed mbedtls)
-		--without-ca-bundle
-		--without-nss
-		--enable-threaded-resolver
+		$(use_with mbedtls mbedtls)
 		$(use_enable ldap)
 		$(use_enable ldap ldaps)
 		$(use_with ssh libssh2)
 		$(use_enable adns ares)
 		$(use_enable ipv6)
 		--with-zlib
+		--without-ca-bundle
+		--without-nss
+		--enable-threaded-resolver
+		--with-random=/dev/urandom
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-src_install() {
-	default
-	rm -rf "${ED}"/etc/
 }

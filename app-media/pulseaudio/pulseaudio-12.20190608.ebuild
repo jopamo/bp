@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic linux-info systemd user
+inherit flag-o-matic linux-info systemd user xdg-utils
 
 DESCRIPTION="A networked sound server with an advanced plugin system"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/PulseAudio/"
@@ -53,7 +53,7 @@ RDEPEND=">=lib-media/libsndfile-1.0.20
 	ofono-headset? ( >=app-net/ofono-1.13 )
 	orc? ( >=dev-lang/orc-0.4.15 )
 	sox? ( >=lib-media/soxr-0.1.1 )
-	ssl? ( lib-dev/openssl:0= )
+	ssl? ( lib-dev/libressl:0= )
 	gdbm? ( lib-sys/gdbm:= )
 	systemd? ( sys-app/systemd:0= )
 "

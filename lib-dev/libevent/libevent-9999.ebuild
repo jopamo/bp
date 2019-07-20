@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 IUSE="debug +ssl static-libs test"
 RESTRICT="test"
 
-DEPEND="ssl? ( >=lib-dev/openssl-1.0.1h-r2:0 )"
+DEPEND="ssl? ( >=lib-dev/libressl-1.0.1h-r2:0 )"
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 

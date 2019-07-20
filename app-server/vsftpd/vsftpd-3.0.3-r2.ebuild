@@ -16,7 +16,7 @@ IUSE="caps pam ssl xinetd"
 
 DEPEND="lib-sys/libcap
 	pam? ( lib-sys/pam )
-	ssl? ( lib-dev/openssl:0= )
+	ssl? ( lib-dev/libressl:0= )
 "
 RDEPEND="${DEPEND}
 	xinetd? ( sys-app/xinetd )"

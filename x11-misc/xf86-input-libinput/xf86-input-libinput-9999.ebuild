@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit linux-info autotools
+inherit linux-info autotools flag-o-matic
 
 DESCRIPTION="X.org input driver based on libinput"
 HOMEPAGE="https://www.x.org"
@@ -20,6 +20,8 @@ KEYWORDS="amd64 arm64"
 
 DEPEND=">=lib-dev/libinput-1.5.0:0=
 		x11-app/xorg-server"
+
+filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
 
 pkg_pretend() {
 	CONFIG_CHECK="~TIMERFD"

@@ -34,4 +34,4 @@ app-media/iscan-plugin-gt-f500 minimal
 
 # <blubb@gentoo.org> (23 Oct 2006)
 # upstream forces sse2 on regardless of what the use flag is
-lib-dev/openssl cpu_flags_x86_sse2
+lib-dev/libressl cpu_flags_x86_sse2

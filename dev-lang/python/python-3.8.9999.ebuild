@@ -29,7 +29,7 @@ DEPEND="!embed? ( lib-sys/sqlite )
 		lib-net/libnsl
 		>=lib-sys/ncurses-5.2:0=
 		>=lib-sys/readline-4.1:0=
-		lib-dev/openssl:0=
+		lib-dev/libressl:0=
 		dev-util/pkgconf
 "
 PDEPEND=">=app-eselect/eselect-python-20140125-r1"

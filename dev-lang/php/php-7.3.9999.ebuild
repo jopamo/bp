@@ -75,7 +75,7 @@ COMMON_DEPEND="
 	soap? ( >=lib-dev/libxml2-2.6.8 )
 	spell? ( >=app-text/aspell-0.50 )
 	sqlite? ( >=lib-sys/sqlite-3.7.6.3 )
-	ssl? ( lib-dev/openssl:0= )
+	ssl? ( lib-dev/libressl:0= )
 	tidy? ( || ( app-text/tidy-html5 app-text/htmltidy ) )
 	tokyocabinet? ( dev-db/tokyocabinet )
 	truetype? ( lib-media/freetype )

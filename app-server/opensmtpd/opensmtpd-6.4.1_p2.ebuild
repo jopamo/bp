@@ -6,23 +6,16 @@ inherit user flag-o-matic pam toolchain-funcs autotools systemd
 
 DESCRIPTION="Lightweight but featured SMTP daemon from OpenBSD"
 HOMEPAGE="https://www.opensmtpd.org"
-
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/OpenSMTPD/OpenSMTPD.git"
-	inherit git-r3
-	KEYWORDS=""
-else
-	SNAPSHOT=96df5cee6291fed387abc1e42aeae9e3fa94ebf7
-	SRC_URI="https://github.com/OpenSMTPD/OpenSMTPD/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/OpenSMTPD-${SNAPSHOT}
-	KEYWORDS="amd64 arm64"
-fi
+SRC_URI="https://www.opensmtpd.org/archives/${P/_}.tar.gz"
+S=${WORKDIR}/${P/_}
 
 LICENSE="ISC BSD BSD-1 BSD-2 BSD-4"
-SLOT="0"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
 IUSE="pam +mta"
 
-DEPEND="lib-dev/openssl:0
+DEPEND="lib-dev/libressl:0
 		elibc_musl? ( lib-sys/fts-standalone )
 		lib-sys/zlib
 		pam? ( lib-sys/pam )
@@ -30,30 +23,22 @@ DEPEND="lib-dev/openssl:0
 		app-misc/ca-certificates
 		app-net/mailbase
 		lib-net/libasr
-		!app-net/courier
-		!app-net/esmtp
-		!app-net/exim
-		!app-net/mini-qmail
-		!app-net/msmtp[mta]
-		!app-net/netqmail
-		!app-net/nullmailer
-		!app-net/postfix
-		!app-net/qmail-ldap
-		!app-net/sendmail
-		!app-net/ssmtp[mta]
 "
 RDEPEND="${DEPEND}"
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+append-cppflags -D_DEFAULT_SOURCE
 
 src_prepare() {
 	default
+	sed -i -e '/pidfile_path/s:_PATH_VARRUN:"/run/":' openbsd-compat/pidfile.c || die
+	sed -i -e 's;/usr/libexec/;/usr/libexec/opensmtpd/;g' smtpd/parse.y || die
 	eautoreconf
 }
 
 src_configure() {
 	tc-export AR
 	AR="$(which "$AR")" econf \
+		--with-gnu-ld \
 		--with-user-smtpd=smtpd \
 		--with-user-queue=smtpq \
 		--with-group-queue=smtpq \
@@ -61,6 +46,7 @@ src_configure() {
 		--with-path-CAfile=/etc/ssl/certs/ca-certificates.crt \
 		--sysconfdir=/etc/opensmtpd \
 		$(use_with pam auth-pam)
+
 }
 
 src_install() {

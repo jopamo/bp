@@ -21,7 +21,7 @@ fi
 LICENSE="BSD GPL-2"
 SLOT="0"
 
-IUSE="audit bindist debug libedit pam +pie +ssl static test X"
+IUSE="audit debug libedit pam +pie +ssl static test X"
 REQUIRED_USE="pie? ( !static )
 	static? ( !pam )
 	test? ( ssl )"
@@ -29,7 +29,7 @@ REQUIRED_USE="pie? ( !static )
 LIB_DEPEND="
 	audit? ( sys-app/audit[static-libs(+)] )
 	libedit? ( lib-dev/libedit:=[static-libs(+)] )
-	ssl? ( >=lib-dev/openssl-1.0.1:0=[bindist=]	)
+	ssl? ( lib-dev/libressl	)
 	>=lib-sys/zlib-1.2.3:=[static-libs(+)]"
 
 RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )

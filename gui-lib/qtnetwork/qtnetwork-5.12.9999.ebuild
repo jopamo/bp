@@ -7,7 +7,7 @@ inherit qt5-build
 DESCRIPTION="Network abstraction library for the Qt5 framework"
 KEYWORDS="amd64 arm64"
 
-IUSE="bindist connman libproxy networkmanager +ssl"
+IUSE="connman libproxy networkmanager +ssl"
 
 DEPEND="
 	~gui-lib/qtcore-${PV}
@@ -15,7 +15,7 @@ DEPEND="
 	connman? ( ~gui-lib/qtdbus-${PV} )
 	libproxy? ( lib-net/libproxy )
 	networkmanager? ( ~gui-lib/qtdbus-${PV} )
-	ssl? ( lib-dev/openssl:0=[bindist=] )
+	ssl? ( lib-dev/libressl )
 "
 RDEPEND="${DEPEND}
 	connman? ( app-net/connman )
@@ -36,6 +36,11 @@ QT5_GENTOO_CONFIG=(
 
 QT5_GENTOO_PRIVATE_CONFIG=(
 	:network
+)
+
+PATCHES=(
+	"${FILESDIR}"/${PN}-5.12.1-libressl.patch
+	"${FILESDIR}"/${PN}-5.12.4-libressl.patch
 )
 
 pkg_setup() {

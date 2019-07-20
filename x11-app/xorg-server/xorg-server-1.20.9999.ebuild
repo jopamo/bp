@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="debug +glamor ipv6 minimal systemd suid_wrapper +udev wayland xcsecurity X"
 
 CDEPEND="
-	lib-dev/openssl:0=
+	lib-dev/libressl:0=
 	>=x11-app/iceauth-1.0.2
 	>=x11-app/rgb-1.0.3
 	>=x11-app/xauth-1.0.3

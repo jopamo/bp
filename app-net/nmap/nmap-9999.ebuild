@@ -24,7 +24,7 @@ DEPEND="
 	lib-sys/zlib
 	nls? ( sys-devel/gettext )
 	lib-sys/zlib
-	ssl? ( lib-dev/openssl:0= )
+	ssl? ( lib-dev/libressl:0= )
 "
 
 append-flags "-fno-strict-aliasing"

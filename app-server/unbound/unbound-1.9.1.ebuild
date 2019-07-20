@@ -20,13 +20,13 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 CDEPEND=">=lib-dev/expat-2.1.0-r3
 	>=lib-dev/libevent-2.0.21:0=
-	>=lib-dev/openssl-1.0.1h-r2:0
+	>=lib-dev/libressl-1.0.1h-r2:0
 	dnscrypt? ( lib-dev/libsodium )
 	dnstap? (
 		lib-dev/fstrm
 		>=lib-dev/protobuf-c-1.0.2-r1
 	)
-	ecdsa? ( lib-dev/openssl:0[-bindist] )
+	ecdsa? ( lib-dev/libressl:0[-bindist] )
 	python? ( ${PYTHON_DEPS} )"
 
 DEPEND="${CDEPEND}

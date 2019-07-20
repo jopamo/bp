@@ -22,7 +22,7 @@ CDEPEND="
 	mysql?    ( >=virtual/mysql-4.0 )
 	>=lib-dev/libpcre-3.1
 	php?      ( dev-lang/php:*[cgi] )
-	ssl? ( >=lib-dev/openssl-0.9.7:= )
+	ssl? ( >=lib-dev/libressl-0.9.7:= )
 	xattr? ( kernel_linux? ( sys-app/attr ) )
 	>=lib-sys/zlib-1.1"
 

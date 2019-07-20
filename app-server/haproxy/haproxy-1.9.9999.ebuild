@@ -29,7 +29,7 @@ DEPEND="
 		lib-dev/libpcre
 		pcre2-jit? ( lib-dev/libpcre2[jit] )
 	)
-	ssl? ( lib-dev/openssl:0=[zlib?] )
+	ssl? ( lib-dev/libressl:0=[zlib?] )
 	slz? ( lib-dev/libslz:= )
 	zlib? ( lib-sys/zlib )
 	lua? ( dev-lang/lua:5.3 )

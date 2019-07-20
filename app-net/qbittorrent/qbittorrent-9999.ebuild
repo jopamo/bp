@@ -7,7 +7,6 @@ inherit xdg-utils git-r3 qmake-utils autotools systemd user
 DESCRIPTION="BitTorrent client in C++ and Qt"
 HOMEPAGE="https://www.qbittorrent.org/"
 EGIT_REPO_URI="https://github.com/${PN}/qBittorrent.git"
-EGIT_BRANCH="v$(ver_cut 1)_$(ver_cut 2)_x"
 
 LICENSE="GPL-2"
 SLOT="0"

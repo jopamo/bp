@@ -32,7 +32,7 @@ CDEPEND="
 			lib-dev/libgcrypt:0=
 			lib-net/gnutls:=
 		)
-		!gnutls? ( lib-dev/openssl:0= )
+		!gnutls? ( lib-dev/libressl:0= )
 	)
 	!ssl? ( lib-dev/libtommath )
 "

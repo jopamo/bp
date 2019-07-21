@@ -147,13 +147,11 @@ src_compile() {
 	unset NSPR_INCLUDE_DIR
 
 	# Do not let `uname` be used.
-	if use kernel_linux ; then
-		makeargs+=(
+	makeargs+=(
 			OS_TARGET=Linux
-			OS_RELEASE=2.6
+			OS_RELEASE=5.1
 			OS_TEST="$(nssarch)"
-		)
-	fi
+	)
 
 	export NSS_ENABLE_WERROR=0 #567158
 	export BUILD_OPT=1

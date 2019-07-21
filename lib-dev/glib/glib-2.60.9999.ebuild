@@ -18,7 +18,7 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	>=lib-dev/libpcre-8.13:3
-	kernel_linux? ( sys-app/util-linux )
+	sys-app/util-linux
 	>=sys-app/attr-2.4.47-r1
 "
 DEPEND="

@@ -517,12 +517,10 @@ qt5_base_configure() {
 		-testsdir "${QT5_TESTSDIR}"
 
 		$(if [[ ${QT5_MINOR_VERSION} -ge 10 ]]; then
-			if use kernel_linux; then
-				if tc-is-gcc; then
-					echo -platform linux-g++
-				elif tc-is-clang; then
-					echo -platform linux-clang
-				fi
+			if tc-is-gcc; then
+				echo -platform linux-g++
+			elif tc-is-clang; then
+				echo -platform linux-clang
 			fi
 		fi)
 

@@ -12,13 +12,14 @@ esac
 	0) die "EAPI=${EAPI} is not supported with MODULES_OPTIONAL_USE_IUSE_DEFAULT due to lack of IUSE defaults" ;;
 esac
 
-IUSE="kernel_linux ${MODULES_OPTIONAL_USE:+${_modules_optional_use_iuse_default}}${MODULES_OPTIONAL_USE}"
+IUSE="${MODULES_OPTIONAL_USE:+${_modules_optional_use_iuse_default}}${MODULES_OPTIONAL_USE}"
 SLOT="0"
-RDEPEND="${MODULES_OPTIONAL_USE}${MODULES_OPTIONAL_USE:+? (} kernel_linux? ( sys-app/kmod ) ${MODULES_OPTIONAL_USE:+)}"
+RDEPEND="${MODULES_OPTIONAL_USE}${MODULES_OPTIONAL_USE:+? (} sys-app/kmod ${MODULES_OPTIONAL_USE:+)}"
 DEPEND="${RDEPEND}
     ${MODULES_OPTIONAL_USE}${MODULES_OPTIONAL_USE:+? (}
 	sys-app/sed
-	kernel_linux? ( sys-kernel/stable-sources lib-dev/elfutils )
+	sys-kernel/linux-headers
+	lib-dev/elfutils
 	${MODULES_OPTIONAL_USE:+)}"
 
 # eclass utilities

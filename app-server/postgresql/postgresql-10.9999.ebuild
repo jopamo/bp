@@ -2,8 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic linux-info pam prefix python-single-r1 \
-		systemd user git-r3
+inherit flag-o-matic linux-info pam prefix python-single-r1 systemd user git-r3
 
 KEYWORDS="amd64 arm64"
 
@@ -16,7 +15,7 @@ LICENSE="POSTGRESQL GPL-2"
 DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="http://www.postgresql.org/"
 
-IUSE="doc kerberos kernel_linux ldap nls pam perl python +readline
+IUSE="doc kerberos ldap nls pam perl python +readline
 	  +server systemd ssl static-libs tcl threads uuid xml zlib"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 

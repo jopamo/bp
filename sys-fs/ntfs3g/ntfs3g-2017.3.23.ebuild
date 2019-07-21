@@ -36,7 +36,7 @@ PATCHES=(
 )
 
 pkg_setup() {
-	if use external-fuse && use kernel_linux; then
+	if use external-fuse  ; then
 		if kernel_is lt 2 6 9; then
 			die "Your kernel is too old."
 		fi

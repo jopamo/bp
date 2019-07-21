@@ -11,8 +11,9 @@ EGIT_REPO_URI="https://gitlab.freedesktop.org/dbus/dbus.git"
 #EGIT_BRANCH="dbus-1.14"
 
 LICENSE="|| ( AFL-2.1 GPL-2 )"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="debug doc static-libs systemd test user-session X"
 
 #RESTRICT="test"
@@ -53,10 +54,8 @@ pkg_setup() {
 
 	use test && python-any-r1_pkg_setup
 
-	if use kernel_linux; then
-		CONFIG_CHECK="~EPOLL"
-		linux-info_pkg_setup
-	fi
+	CONFIG_CHECK="~EPOLL"
+	linux-info_pkg_setup
 }
 
 src_prepare() {
@@ -79,7 +78,7 @@ src_configure() {
 		--disable-asserts
 		--disable-checks
 		--disable-apparmor
-		$(use_enable kernel_linux inotify)
+		--enable-inotify
 		$(use_enable systemd)
 		$(use_enable user-session)
 		--disable-embedded-tests

@@ -44,7 +44,7 @@ DATAPATH="${EPREFIX}"/usr/share
 
 LICENSE="GPL-3+ LGPL-3+ || ( GPL-3+ libgcc libstdc++ gcc-runtime-library-exception-3.1 ) FDL-1.3+"
 
-IUSE="debug openmp fixed-point +isl sanitize cilk +vtv"
+IUSE="cxx debug gccgo lto openmp fixed-point +isl sanitize cilk +vtv"
 
 SLOT=0
 
@@ -57,7 +57,7 @@ DEPEND="lib-sys/zlib
 "
 
 if [[ -n ${SNAPSHOT} ]] ; then
-	SRC_URI="http://mirrors-usa.go-parts.com/gcc/snapshots/${SNAPSHOT}/gcc-${SNAPSHOT}.tar.xz"
+	SRC_URI="https://bigsearcher.com/mirrors/gcc/snapshots/${SNAPSHOT}/gcc-${SNAPSHOT}.tar.xz"
 else
 	SRC_URI="mirror://gnu/gcc/gcc-${GCC_PV}/gcc-${GCC_RELEASE_VER}.tar.xz"
 fi
@@ -163,6 +163,12 @@ toolchain_src_configure() {
 
 	confgcc+=( --with-python-dir=${DATAPATH/$PREFIX/}/python )
 
+	local GCC_LANG="c"
+	use cxx && GCC_LANG+=",c++"
+	use gccgo && GCC_LANG+=",go"
+	use lto  && GCC_LANG+=",lto"
+	confgcc+=( --enable-languages=${GCC_LANG} )
+
 	### general options
 
 	confgcc+=(
@@ -187,7 +193,6 @@ toolchain_src_configure() {
 		--enable-linker-build-id
 		--disable-libmpx
 		--disable-libgcj
-		--enable-languages=c,c++,lto
 		--enable-bootstrap
 		--with-build-config="bootstrap-lto-lean"
 		$(use_with isl)

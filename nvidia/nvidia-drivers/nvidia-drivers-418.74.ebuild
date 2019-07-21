@@ -80,16 +80,12 @@ pkg_setup() {
 		BUILD_FIXES="ARCH=$(uname -m | sed -e 's/i.86/i386/')"
 	fi
 
-	if use kernel_linux; then
-		NV_DOC="${S}"
-		NV_OBJ="${S}"
-		NV_SRC="${S}/kernel"
-		NV_MAN="${S}"
-		NV_X11="${S}"
-		NV_SOVER=${PV}
-	else
-		die "Could not determine proper NVIDIA package"
-	fi
+	NV_DOC="${S}"
+	NV_OBJ="${S}"
+	NV_SRC="${S}/kernel"
+	NV_MAN="${S}"
+	NV_X11="${S}"
+	NV_SOVER=${PV}
 }
 
 src_prepare() {

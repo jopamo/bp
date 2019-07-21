@@ -22,7 +22,7 @@ REQUIRED_USE="
 RDEPEND="
 	>=lib-sys/ncurses-5.2-r2:0=
 	nls? ( sys-devel/gettext )
-	acl? ( kernel_linux? ( sys-app/acl ) )
+	acl? ( sys-app/acl )
 	cscope? ( dev-util/cscope )
 	gpm? ( >=lib-sys/gpm-1.19.3 )
 	python? ( ${PYTHON_DEPS} )

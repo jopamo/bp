@@ -20,10 +20,8 @@ CDEPEND="
 	app-text/libpaper
 	lib-sys/zlib
 	acl? (
-		kernel_linux? (
 			sys-app/acl
 			sys-app/attr
-		)
 	)
 	dbus? ( >=sys-app/dbus-1.6.18-r1 )
 	!lprng-compat? ( !lib-print/lprng )
@@ -53,33 +51,32 @@ pkg_setup() {
 	enewuser lp -1 -1 -1 lp
 	enewgroup lpadmin 106
 
-	if use kernel_linux; then
-		linux-info_pkg_setup
-		if  ! linux_config_exists; then
-			ewarn "Can't check the linux kernel configuration."
-			ewarn "You might have some incompatible options enabled."
+	linux-info_pkg_setup
+
+	if  ! linux_config_exists; then
+		ewarn "Can't check the linux kernel configuration."
+		ewarn "You might have some incompatible options enabled."
+	else
+		# recheck that we don't have usblp to collide with libusb; this should now work in most cases (bug 501122)
+		if use usb; then
+			if linux_chkconfig_present USB_PRINTER; then
+				elog "Your USB printers will be managed via libusb. In case you run into problems, "
+				elog "please try disabling USB_PRINTER support in your kernel or blacklisting the"
+				elog "usblp kernel module."
+				elog "Alternatively, just disable the usb useflag for cups (your printer will still work)."
+			fi
 		else
-			# recheck that we don't have usblp to collide with libusb; this should now work in most cases (bug 501122)
-			if use usb; then
-				if linux_chkconfig_present USB_PRINTER; then
-					elog "Your USB printers will be managed via libusb. In case you run into problems, "
-					elog "please try disabling USB_PRINTER support in your kernel or blacklisting the"
-					elog "usblp kernel module."
-					elog "Alternatively, just disable the usb useflag for cups (your printer will still work)."
-				fi
-			else
-				#here we should warn user that he should enable it so he can print
-				if ! linux_chkconfig_present USB_PRINTER; then
-					ewarn "If you plan to use USB printers you should enable the USB_PRINTER"
-					ewarn "support in your kernel."
-					ewarn "Please enable it:"
-					ewarn "    CONFIG_USB_PRINTER=y"
-					ewarn "in /usr/src/linux/.config or"
-					ewarn "    Device Drivers --->"
-					ewarn "        USB support  --->"
-					ewarn "            [*] USB Printer support"
-					ewarn "Alternatively, enable the usb useflag for cups and use the libusb code."
-				fi
+			#here we should warn user that he should enable it so he can print
+			if ! linux_chkconfig_present USB_PRINTER; then
+				ewarn "If you plan to use USB printers you should enable the USB_PRINTER"
+				ewarn "support in your kernel."
+				ewarn "Please enable it:"
+				ewarn "    CONFIG_USB_PRINTER=y"
+				ewarn "in /usr/src/linux/.config or"
+				ewarn "    Device Drivers --->"
+				ewarn "        USB support  --->"
+				ewarn "            [*] USB Printer support"
+				ewarn "Alternatively, enable the usb useflag for cups and use the libusb code."
 			fi
 		fi
 	fi

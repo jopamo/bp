@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="acl examples iconv ipv6 static stunnel xattr"
 
 LIB_DEPEND="acl? ( sys-app/acl[static-libs(+)] )
-	xattr? ( kernel_linux? ( sys-app/attr[static-libs(+)] ) )"
+	xattr? ( sys-app/attr[static-libs(+)] )"
 
 RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
 

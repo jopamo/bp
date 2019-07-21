@@ -2,3 +2,4 @@ app-net/networkmanager -nss gnutls
 app-media/avidemux qt5
 lib-dev/libxml2 python
 sys-fs/cryptsetup -ssl
+sys-devel/gcc lto

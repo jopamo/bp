@@ -20,7 +20,7 @@ LICENSE="GPL-2"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="+airdrop-ng +airgraph-ng kernel_linux kernel_FreeBSD +netlink +pcre +sqlite +experimental"
+IUSE="+airdrop-ng +airgraph-ng +netlink +pcre +sqlite +experimental"
 
 DEPEND="lib-net/libpcap
 	lib-dev/libressl:0=
@@ -29,12 +29,12 @@ DEPEND="lib-net/libpcap
 	experimental? ( lib-sys/zlib )
 	sqlite? ( >=lib-sys/sqlite-3.4 )"
 RDEPEND="${DEPEND}"
-PDEPEND="kernel_linux? (
+PDEPEND="
 		app-net/iw
 		sys-app/ethtool
 		sys-app/usbutils
-		sys-app/pciutils )
-	sys-app/systemd"
+		sys-app/pciutils
+"
 
 pkg_setup() {
 	MAKE_COMMON=(

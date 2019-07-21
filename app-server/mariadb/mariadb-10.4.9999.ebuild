@@ -25,10 +25,8 @@ REQUIRED_USE="jdbc? ( extraengine server !static )
 KEYWORDS="amd64 arm64"
 
 COMMON_DEPEND="
-	kernel_linux? (
-		sys-app/procps:0=
-		lib-dev/libaio:0=
-	)
+	sys-app/procps:0=
+	lib-dev/libaio:0=
 	>=sys-app/sed-4
 	>=sys-devel/texinfo-4.7-r1
 	jemalloc? ( lib-dev/jemalloc:0= )

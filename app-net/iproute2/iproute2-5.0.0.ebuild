@@ -18,7 +18,7 @@ HOMEPAGE="https://wiki.linuxfoundation.org/networking/iproute2"
 LICENSE="GPL-2"
 SLOT="0/1"
 
-IUSE="atm elf minimal static-libs"
+IUSE="atm +elf minimal static-libs"
 
 RDEPEND="
 	!minimal? ( lib-net/libmnl )

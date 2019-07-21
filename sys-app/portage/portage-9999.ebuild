@@ -11,7 +11,7 @@ EGIT_REPO_URI="https://github.com/1g4-linux/portage.git"
 LICENSE="GPL-2"
 KEYWORDS="amd64 arm64"
 SLOT="0"
-IUSE="build +ipc +native-extensions xattr kernel_linux"
+IUSE="build +ipc +native-extensions xattr"
 
 DEPEND="!build? ( $(python_gen_impl_dep 'ssl(+)') )
 	>=app-compression/tar-1.27
@@ -31,9 +31,7 @@ RDEPEND="
 	elibc_glibc? ( >=sys-app/sandbox-2.2 )
 	elibc_musl? ( >=sys-app/sandbox-2.2 )
 	elibc_uclibc? ( >=sys-app/sandbox-2.2 )
-	xattr? ( kernel_linux? (
-		>=sys-app/install-xattr-0.3
-		) )
+	xattr? ( >=sys-app/install-xattr-0.3 )
 "
 PDEPEND="
 	!build? (
@@ -51,7 +49,7 @@ python_prepare_all() {
 			die "failed to patch AbstractEbuildProcess.py"
 	fi
 
-	if use xattr && use kernel_linux ; then
+	if use xattr ; then
 		einfo "Adding FEATURES=xattr to make.globals ..."
 		echo -e '\nFEATURES="${FEATURES} xattr"' >> cnf/make.globals \
 			|| die "failed to append to make.globals"

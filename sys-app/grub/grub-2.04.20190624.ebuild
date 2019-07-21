@@ -71,10 +71,8 @@ DEPEND="${RDEPEND}
 	)
 "
 RDEPEND+="
-	kernel_linux? (
-		grub_platforms_efi-32? ( sys-app/efibootmgr )
-		grub_platforms_efi-64? ( sys-app/efibootmgr )
-	)
+	grub_platforms_efi-32? ( sys-app/efibootmgr )
+	grub_platforms_efi-64? ( sys-app/efibootmgr )
 	nls? ( sys-devel/gettext )
 "
 

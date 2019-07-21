@@ -23,7 +23,7 @@ CDEPEND="
 	>=lib-dev/libpcre-3.1
 	php?      ( dev-lang/php:*[cgi] )
 	ssl? ( >=lib-dev/libressl-0.9.7:= )
-	xattr? ( kernel_linux? ( sys-app/attr ) )
+	xattr? ( sys-app/attr )
 	>=lib-sys/zlib-1.1"
 
 DEPEND="${CDEPEND}

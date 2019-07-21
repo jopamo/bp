@@ -20,8 +20,8 @@ fi
 LICENSE="GPL-2 LGPL-2 BSD-2"
 SLOT="0/1"
 IUSE="accessibility +aio alsa bluetooth bzip2 capstone +caps +curl debug
-	+fdt glusterfs gnutls gtk gtk2 infiniband iscsi +jpeg kernel_linux
-	kernel_FreeBSD lzo ncurses nfs nls numa opengl +pin-upstream-blobs +png
+	+fdt glusterfs gnutls gtk gtk2 infiniband iscsi +jpeg
+	lzo ncurses nfs nls numa opengl +pin-upstream-blobs +png
 	pulseaudio rbd sasl +seccomp sdl sdl2 smartcard snappy
 	spice ssh static static-user systemtap tci test usb usbredir vde
 	+vhost-net virgl virtfs +vnc vte xattr xen xfs"
@@ -199,41 +199,33 @@ For systemd:
 	# ln -s /usr/share/qemu/binfmt.d/qemu.conf /etc/binfmt.d/qemu.conf"
 
 pkg_pretend() {
-	if use kernel_linux && kernel_is lt 2 6 25; then
-		eerror "This version of KVM requres a host kernel of 2.6.25 or higher."
-	elif use kernel_linux; then
-		if ! linux_config_exists; then
-			eerror "Unable to check your kernel for KVM support"
-		else
-			CONFIG_CHECK="~KVM ~TUN ~BRIDGE"
-			ERROR_KVM="You must enable KVM in your kernel to continue"
-			ERROR_KVM_AMD="If you have an AMD CPU, you must enable KVM_AMD in"
-			ERROR_KVM_AMD+=" your kernel configuration."
-			ERROR_KVM_INTEL="If you have an Intel CPU, you must enable"
-			ERROR_KVM_INTEL+=" KVM_INTEL in your kernel configuration."
-			ERROR_TUN="You will need the Universal TUN/TAP driver compiled"
-			ERROR_TUN+=" into your kernel or loaded as a module to use the"
-			ERROR_TUN+=" virtual network device if using -net tap."
-			ERROR_BRIDGE="You will also need support for 802.1d"
-			ERROR_BRIDGE+=" Ethernet Bridging for some network configurations."
-			use vhost-net && CONFIG_CHECK+=" ~VHOST_NET"
-			ERROR_VHOST_NET="You must enable VHOST_NET to have vhost-net"
-			ERROR_VHOST_NET+=" support"
+	CONFIG_CHECK="~KVM ~TUN ~BRIDGE"
+	ERROR_KVM="You must enable KVM in your kernel to continue"
+	ERROR_KVM_AMD="If you have an AMD CPU, you must enable KVM_AMD in"
+	ERROR_KVM_AMD+=" your kernel configuration."
+	ERROR_KVM_INTEL="If you have an Intel CPU, you must enable"
+	ERROR_KVM_INTEL+=" KVM_INTEL in your kernel configuration."
+	ERROR_TUN="You will need the Universal TUN/TAP driver compiled"
+	ERROR_TUN+=" into your kernel or loaded as a module to use the"
+	ERROR_TUN+=" virtual network device if using -net tap."
+	ERROR_BRIDGE="You will also need support for 802.1d"
+	ERROR_BRIDGE+=" Ethernet Bridging for some network configurations."
+	use vhost-net && CONFIG_CHECK+=" ~VHOST_NET"
+	ERROR_VHOST_NET="You must enable VHOST_NET to have vhost-net"
+	ERROR_VHOST_NET+=" support"
 
-			if use amd64; then
-				if grep -q AuthenticAMD /proc/cpuinfo; then
-					CONFIG_CHECK+=" ~KVM_AMD"
-				elif grep -q GenuineIntel /proc/cpuinfo; then
-					CONFIG_CHECK+=" ~KVM_INTEL"
-				fi
-			fi
-
-			ERROR_DEBUG_FS="debugFS support required for kvm_stat"
-
-			# Now do the actual checks setup above
-			check_extra_config
+	if use amd64; then
+		if grep -q AuthenticAMD /proc/cpuinfo; then
+			CONFIG_CHECK+=" ~KVM_AMD"
+		elif grep -q GenuineIntel /proc/cpuinfo; then
+			CONFIG_CHECK+=" ~KVM_INTEL"
 		fi
 	fi
+
+	ERROR_DEBUG_FS="debugFS support required for kvm_stat"
+
+	# Now do the actual checks setup above
+	check_extra_config
 
 	if grep -qs '/usr/bin/qemu-kvm' "${EROOT}"/etc/libvirt/qemu/*.xml; then
 		eerror "The kvm/qemu-kvm wrappers no longer exist, but your libvirt"
@@ -352,7 +344,7 @@ qemu_src_configure() {
 		$(conf_notuser infiniband rdma)
 		$(conf_notuser iscsi libiscsi)
 		$(conf_notuser jpeg vnc-jpeg)
-		$(conf_notuser kernel_linux kvm)
+		$(conf_notuser kvm)
 		$(conf_notuser lzo)
 		$(conf_notuser ncurses curses)
 		$(conf_notuser nfs libnfs)
@@ -440,11 +432,6 @@ qemu_src_configure() {
 	echo "../configure ${conf_opts[*]}"
 	cd "${builddir}"
 	../configure "${conf_opts[@]}" || die "configure failed"
-
-	# FreeBSD's kernel does not support QEMU assigning/grabbing
-	# host USB devices yet
-	use kernel_FreeBSD && \
-		sed -i -E -e "s|^(HOST_USB=)bsd|\1stub|" "${S}"/config-host.mak
 }
 
 src_configure() {

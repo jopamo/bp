@@ -30,13 +30,6 @@ src_prepare() {
 			doc/Makefile.sub || die "cross-compile sed failed"
 	fi
 
-	local pfx=$(usex prefix ' Prefix' '')
-	cat <<-EOF >> tmac/mdoc.local
-	.ds volume-operating-system 1g4${pfx}
-	.ds operating-system 1g4${pfx}/${KERNEL}
-	.ds default-operating-system 1g4${pfx}/${KERNEL}
-	EOF
-
 	sed -i -e 's/^[ \t]\+g=g$/g=/' configure || die
 	default
 }

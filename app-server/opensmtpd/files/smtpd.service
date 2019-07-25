@@ -1,10 +1,11 @@
 [Unit]
-Description=OpenSMTPD
+Description=A FREE implementation of the server-side SMTP protocol
 After=network.target
+Wants=network.target
 
 [Service]
-Type=forking
-ExecStart=/usr/sbin/smtpd
+ExecStart=/usr/sbin/smtpd -d
+ExecStop=/usr/bin/smtpctl stop
 
 [Install]
 WantedBy=multi-user.target

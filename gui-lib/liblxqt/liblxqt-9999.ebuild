@@ -31,7 +31,3 @@ DEPEND=">=lib-dev/libqtxdg-1.3.0
 	gui-lib/linguist-tools:5"
 
 PATCHES=( ${FILESDIR}/remove_polkit.patch )
-
-src_configure() {
-	cmake-utils_src_configure
-}

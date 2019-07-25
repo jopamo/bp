@@ -6,8 +6,17 @@ inherit user flag-o-matic pam toolchain-funcs autotools systemd
 
 DESCRIPTION="Lightweight but featured SMTP daemon from OpenBSD"
 HOMEPAGE="https://www.opensmtpd.org"
-SRC_URI="https://www.opensmtpd.org/archives/${P/_}.tar.gz"
-S=${WORKDIR}/${P/_}
+
+if [[ ${PV} == 9999 ]]; then
+	EGIT_REPO_URI="https://github.com/OpenSMTPD/OpenSMTPD.git"
+	inherit git-r3
+	KEYWORDS=""
+else
+	SNAPSHOT=4428b8b069ecb2a29f3e4cf979151773c088cc15
+	SRC_URI="https://github.com/OpenSMTPD/OpenSMTPD/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/OpenSMTPD-${SNAPSHOT}
+	KEYWORDS="amd64 arm64"
+fi
 
 LICENSE="ISC BSD BSD-1 BSD-2 BSD-4"
 SLOT="0/1"
@@ -15,8 +24,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="pam +mta"
 
-DEPEND="lib-dev/libressl:0
-		elibc_musl? ( lib-sys/fts-standalone )
+DEPEND="lib-dev/libressl
 		lib-sys/zlib
 		pam? ( lib-sys/pam )
 		lib-dev/libevent
@@ -24,9 +32,6 @@ DEPEND="lib-dev/libressl:0
 		app-net/mailbase
 		lib-net/libasr
 "
-RDEPEND="${DEPEND}"
-
-append-cppflags -D_DEFAULT_SOURCE
 
 src_prepare() {
 	default
@@ -44,7 +49,7 @@ src_configure() {
 		--with-group-queue=smtpq \
 		--with-path-socket=/run \
 		--with-path-CAfile=/etc/ssl/certs/ca-certificates.crt \
-		--sysconfdir=/etc/opensmtpd \
+		--sysconfdir=/etc/smtpd \
 		$(use_with pam auth-pam)
 
 }
@@ -61,6 +66,8 @@ src_install() {
 		dosym /usr/sbin/smtpctl /usr/bin/sendmail
 		dosym /usr/sbin/smtpctl /usr/lib64/sendmail
 	fi
+
+
 }
 
 pkg_preinst() {

@@ -86,7 +86,7 @@ src_install() {
 	_emake install
 
 	for x in libmupdf.so.1 libmupdf.so.1.0 libmupdf.so ; do
-		dosym libmupdf.so.${PV} usr/lib64/${x}
+		dosym libmupdf.so.${PV} usr/lib/${x}
 	done
 
 	use static-libs && \

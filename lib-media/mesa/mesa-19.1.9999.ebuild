@@ -63,5 +63,5 @@ src_configure() {
 
 src_install() {
 	meson_src_install
-	rm -rf "${ED}"/usr/lib64/libGLESv{1_CM,2}.so*
+	rm -rf "${ED}"/usr/lib/libGLESv{1_CM,2}.so*
 }

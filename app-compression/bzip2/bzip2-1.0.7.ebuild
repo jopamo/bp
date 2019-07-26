@@ -28,7 +28,7 @@ src_install() {
 	dolib.so libbz2.so.${PV}
 
 	for x in libbz2.so.1 libbz2.so.1.0 libbz2.so ; do
-		dosym libbz2.so.${PV} usr/lib64/${x}
+		dosym libbz2.so.${PV} usr/lib/${x}
 	done
 
 	use static-libs && dolib.a libbz2.a

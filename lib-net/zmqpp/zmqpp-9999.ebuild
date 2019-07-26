@@ -24,13 +24,13 @@ DEPEND="lib-net/libzmq[static-libs?]"
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 src_prepare() {
-	sed -i.1 -e "s/DESTINATION\ lib/DESTINATION\ lib64/g" "CMakeLists.txt"
+	sed -i.1 -e "s/DESTINATION\ lib/DESTINATION\ lib/g" "CMakeLists.txt"
 	cmake-utils_src_prepare
 }
 
 src_configure() {
 	local mycmakeargs=(
-		-DZEROMQ_LIB_DIR="${ED}"/usr/lib64
+		-DZEROMQ_LIB_DIR="${ED}"/usr/lib
 		-DIS_TRAVIS_CI_BUILD=OFF
 		-DZMQPP_BUILD_SHARED=ON
 		$(cmake-utils_use static-libs ZMQPP_BUILD_STATIC)

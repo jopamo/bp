@@ -39,7 +39,7 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib64
+		--libdir="${EPREFIX}"/usr/lib
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
@@ -80,7 +80,7 @@ src_install() {
 	emake DESTDIR="${D}" suidperms=4711 install
 
 	# Remove libshadow and libmisc; internal use only
-	rm -f "${ED}"/{,usr/}lib64/lib{misc,shadow}.{a,la}
+	rm -f "${ED}"/{,usr/}lib/lib{misc,shadow}.{a,la}
 
 	insinto /etc
 	if ! use pam ; then

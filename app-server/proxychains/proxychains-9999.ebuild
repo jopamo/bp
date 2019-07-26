@@ -22,7 +22,7 @@ src_configure() {
 	# not autotools
 	./configure \
 		--prefix="${EPREFIX}"/usr \
-		--libdir="${EPREFIX}"/usr/lib64 \
+		--libdir="${EPREFIX}"/usr/lib \
 		--sysconfdir="${EPREFIX}"/etc \
 		|| die
 }
@@ -32,8 +32,8 @@ src_install() {
 	dosym ${PN}4 /usr/bin/${PN}
 
 	dolib.so lib${PN}4.so.${PV}
-	dosym lib${PN}4.so.${PV} /usr/lib64/lib${PN}.so.${PV:0:1}
-	dosym lib${PN}4.so.${PV} /usr/lib64/lib${PN}.so
+	dosym lib${PN}4.so.${PV} /usr/lib/lib${PN}.so.${PV:0:1}
+	dosym lib${PN}4.so.${PV} /usr/lib/lib${PN}.so
 
 	insinto /etc
 	doins src/${PN}.conf

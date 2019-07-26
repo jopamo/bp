@@ -94,10 +94,10 @@ src_configure(){
 		-DINSTALL_DOCREADMEDIR=share/doc/${PF}
 		-DINSTALL_INCLUDEDIR=include/mysql
 		-DINSTALL_INFODIR=share/info
-		-DINSTALL_LIBDIR=lib64
+		-DINSTALL_LIBDIR=lib
 		-DINSTALL_MANDIR=share/man
 		-DINSTALL_MYSQLSHAREDIR=share/mariadb
-		-DINSTALL_PLUGINDIR=lib64/mariadb/plugin
+		-DINSTALL_PLUGINDIR=lib/mariadb/plugin
 		-DINSTALL_SCRIPTDIR=share/mariadb/scripts
 		-DINSTALL_MYSQLDATADIR="${EPREFIX}/var/lib/mysql"
 		-DINSTALL_SBINDIR=sbin

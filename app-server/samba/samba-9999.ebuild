@@ -92,12 +92,12 @@ src_configure() {
 		--prefix="${EPREFIX}"/usr
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib64
-		--with-pammodulesdir="${EPREFIX}"/usr/lib64/security
+		--libdir="${EPREFIX}"/usr/lib
+		--with-pammodulesdir="${EPREFIX}"/usr/lib/security
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
-		--with-modulesdir="${EPREFIX}"/usr/lib64/samba
+		--with-modulesdir="${EPREFIX}"/usr/lib/samba
 		--with-piddir="${EPREFIX}"/run/${PN}
 		--disable-rpath
 		--disable-rpath-install

@@ -63,7 +63,7 @@ src_configure() {
 		$(meson_use xattr with_xattr)
 		$(meson_use zlib with_zlib)
 		$(meson_use static build_static)
-		-Dmoduledir="${EPREFIX}"/usr/lib64
+		-Dmoduledir="${EPREFIX}"/usr/lib
 	)
 		meson_src_configure
 }

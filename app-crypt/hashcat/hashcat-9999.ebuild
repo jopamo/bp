@@ -24,7 +24,7 @@ src_prepare() {
 	cd ${S}
 	git submodule update --init
 	export PREFIX=/usr
-	export LIBRARY_FOLDER="/usr/lib64"
+	export LIBRARY_FOLDER="/usr/lib"
 	eapply_user
 }
 

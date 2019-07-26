@@ -28,7 +28,7 @@ src_prepare() {
 src_configure() {
 	tc-export CC
 	export CC_FOR_BUILD=$(tc-getBUILD_CC)
-	export libdir="/usr/lib64"
+	export libdir="/usr/lib"
 	unset LIBS # Bug 562004
 
 	if [[ -n ${GCC_SPECS} ]]; then

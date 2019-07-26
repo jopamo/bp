@@ -98,7 +98,7 @@ src_configure() {
 	#use static && export LDFLAGS="${LDFLAGS} -static"
 
 	if use plugins; then
-		append-ldflags -Wl,-rpath,/usr/lib64/bash
+		append-ldflags -Wl,-rpath,/usr/lib/bash
 	else
 		# Disable the plugins logic by hand since bash doesn't
 		# provide a way of doing it.
@@ -124,7 +124,7 @@ src_install() {
 	default
 
 	if use plugins ; then
-		exeinto /usr/lib64/bash
+		exeinto /usr/lib/bash
 		doexe $(echo examples/loadables/*.o | sed 's:\.o::g')
 		insinto /usr/include/bash-plugins
 		doins *.h builtins/*.h include/*.h lib/{glob/glob.h,tilde/tilde.h}
@@ -135,19 +135,5 @@ pkg_preinst() {
 	if [[ -e ${EROOT}/etc/bashrc ]] && [[ ! -d ${EROOT}/etc/bash ]] ; then
 		mkdir -p "${EROOT}"/etc/bash
 		mv -f "${EROOT}"/etc/bashrc "${EROOT}"/etc/bash/
-	fi
-
-	if [[ -L ${EROOT}/usr/bin/sh ]] ; then
-		local target=$(readlink "${EROOT}"/usr/bin/sh)
-		local tmp=$(emktemp "${EROOT}"/usr/bin)
-		ln -sf "${target}" "${tmp}"
-		mv -f "${tmp}" "${EROOT}"/usr/bin/sh
-	fi
-}
-
-pkg_postinst() {
-	# If /bin/sh does not exist, provide it
-	if [[ ! -e ${EROOT}/usr/bin/sh ]] ; then
-		ln -sf bash "${EROOT}"/usr/bin/sh
 	fi
 }

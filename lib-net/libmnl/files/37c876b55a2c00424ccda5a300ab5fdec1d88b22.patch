@@ -6,7 +6,7 @@ Subject: libmnl: zero attribute padding
 Sergei Trofimovich reports 'uninitialized bytes' warnings from nftables:
 
 Syscall param sendmsg(msg.msg_iov[0]) points to uninitialised byte(s)
-   at 0x55B9EFB: sendmsg (in /lib64/libc-2.25.so)
+   at 0x55B9EFB: sendmsg (in /lib/libc-2.25.so)
    by 0x43E658: mnl_nft_socket_sendmsg (mnl.c:239)
    by 0x43E658: mnl_batch_talk (mnl.c:254)
    by 0x407898: nft_netlink (libnftables.c:58)

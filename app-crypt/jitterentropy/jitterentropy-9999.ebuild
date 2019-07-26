@@ -27,7 +27,7 @@ src_compile() {
 
 src_install() {
 	emake PREFIX="${EPREFIX}/usr" \
-		  LIBDIR="lib64" \
+		  LIBDIR="lib" \
 		  DESTDIR="${D}" install
 
 	doheader ${PN}.h ${PN}-base-user.h

@@ -57,7 +57,7 @@ src_prepare() {
 	cd "${S}/engine" || die
 	sed -i \
 		-e 's|-s\b||' \
-		-e "/libpython/s/lib ]/lib64 ]/" \
+		-e "/libpython/s/lib ]/lib ]/" \
 		build.jam || die "sed failed"
 
 	# Force regeneration

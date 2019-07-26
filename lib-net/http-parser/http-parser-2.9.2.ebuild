@@ -19,7 +19,7 @@ src_prepare() {
 }
 
 src_compile() {
-	emake PREFIX="${EPREFIX}/usr" LIBDIR="${EPREFIX}/usr/lib64" CFLAGS_FAST="${CFLAGS}" library
+	emake PREFIX="${EPREFIX}/usr" LIBDIR="${EPREFIX}/usr/lib" CFLAGS_FAST="${CFLAGS}" library
 	use static-libs && emake CFLAGS_FAST="${CFLAGS}" package
 }
 
@@ -28,6 +28,6 @@ src_test() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" PREFIX="${EPREFIX}/usr" LIBDIR="${EPREFIX}/usr/lib64" install
+	emake DESTDIR="${D}" PREFIX="${EPREFIX}/usr" LIBDIR="${EPREFIX}/usr/lib" install
 	use static-libs && dolib.a libhttp_parser.a
 }

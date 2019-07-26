@@ -60,8 +60,8 @@ src_configure() {
 src_install() {
 	default
 
-	local dracutlibdir="usr/lib64/dracut"
-	local libdirs="usr/lib64"
+	local dracutlibdir="usr/lib/dracut"
+	local libdirs="usr/lib"
 
 	echo "libdirs=\"${libdirs}\"" > "${T}/gentoo.conf"
 	insinto "${dracutlibdir}/dracut.conf.d"

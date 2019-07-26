@@ -65,7 +65,7 @@ src_configure() {
 		$(use_with modules kmod) \
 		--disable-static \
 		--with-maxsets=${IP_NF_SET_MAX} \
-		--libdir="${EPREFIX}/lib64" \
+		--libdir="${EPREFIX}/lib" \
 		--with-ksource="${KV_DIR}" \
 		--with-kbuild="${KV_OUT_DIR}"
 }

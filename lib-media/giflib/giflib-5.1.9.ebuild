@@ -16,11 +16,11 @@ IUSE="static-libs"
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 
 src_compile() {
-	emake PREFIX="${ED}"/usr LIBDIR="${ED}"/usr/lib64 CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}"
+	emake PREFIX="${ED}"/usr LIBDIR="${ED}"/usr/lib CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}"
 }
 
 src_install() {
-	emake PREFIX="${ED}"/usr LIBDIR="${ED}"/usr/lib64 CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" install
+	emake PREFIX="${ED}"/usr LIBDIR="${ED}"/usr/lib CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" install
 
-	use static-libs || rm -vf "${ED}"/usr/lib64/libgif.a
+	use static-libs || rm -vf "${ED}"/usr/lib/libgif.a
 }

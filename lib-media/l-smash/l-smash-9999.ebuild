@@ -31,7 +31,7 @@ src_configure()
 		$(usex debug '--enable-debug' '')
 		$(usex static-libs '' '--disable-static --enable-shared')
 		--prefix="${EPREFIX}"/usr
-		--libdir="${EPREFIX}"/usr/lib64
+		--libdir="${EPREFIX}"/usr/lib
 		--destdir="${ED}"
 		--includedir="${EPREFIX}"/usr/include
 		--cc="$(tc-getCC)"

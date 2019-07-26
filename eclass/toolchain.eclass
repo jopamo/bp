@@ -568,7 +568,7 @@ toolchain_src_install() {
 	chown -R root:0 "${D}/${LIBPATH}" 2>/dev/null
 
 	# Move pretty-printers to gdb datadir to shut ldconfig up
-	local py gdbdir=/usr/share/gdb/auto-load${LIBPATH/\/lib\//\/lib64\/}
+	local py gdbdir=/usr/share/gdb/auto-load${LIBPATH/\/lib\//\/lib\/}
 	pushd "${D}/${LIBPATH}" >/dev/null
 	for py in $(find . -name '*-gdb.py') ; do
 		local multidir=${py%/*}
@@ -579,7 +579,7 @@ toolchain_src_install() {
 	done
 	popd >/dev/null
 
-	chrpath -d "${ED}"/usr/lib64/libstdc++.so*
+	chrpath -d "${ED}"/usr/lib/libstdc++.so*
 	cleanup_install
 }
 

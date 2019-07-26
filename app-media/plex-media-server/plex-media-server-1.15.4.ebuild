@@ -74,7 +74,7 @@ src_install() {
 	chown "${_USERNAME}":"${_USERNAME}" "${ED%/}/${DEFAULT_LIBRARY_DIR}" || die
 
 	dodir /etc/revdep-rebuild/
-	echo "SEARCH_DIRS_MASK=\"${EPREFIX}/usr/lib64/plexmediaserver\"" > "${ED}"/etc/revdep-rebuild/80plexmediaserver
+	echo "SEARCH_DIRS_MASK=\"${EPREFIX}/usr/lib/plexmediaserver\"" > "${ED}"/etc/revdep-rebuild/80plexmediaserver
 
 	# Install systemd service file
 	local INIT_NAME="${PN}.service"

@@ -75,9 +75,9 @@ src_install() {
 	emake DESTDIR="${D}" install
 
 	# should be a standalone lib
-	rm -f "${ED}"/usr/lib64/libgmp.la
+	rm -f "${ED}"/usr/lib/libgmp.la
 	# this requires libgmp
-	local la="${ED}/usr/lib64/libgmpxx.la"
+	local la="${ED}/usr/lib/libgmpxx.la"
 	use static-libs \
 		&& sed -i 's:/[^ ]*/libgmp.la:-lgmp:' "${la}" \
 		|| rm -f "${la}"

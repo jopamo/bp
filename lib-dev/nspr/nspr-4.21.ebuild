@@ -47,7 +47,7 @@ src_configure() {
 		|| unset CROSS_COMPILE
 
 	local myconf=(
-		--libdir="${EPREFIX}/usr/lib64"
+		--libdir="${EPREFIX}/usr/lib"
 		$(use_enable debug)
 		$(use_enable !debug optimize)
 		--enable-64bit
@@ -65,7 +65,7 @@ src_install() {
 	emake DESTDIR="${D}" install
 
 	einfo "removing static libraries as upstream has requested!"
-	rm "${ED%/}"/usr/lib64/*.a || die "failed to remove static libraries."
+	rm "${ED%/}"/usr/lib/*.a || die "failed to remove static libraries."
 
 	# install nspr-config
 	dobin config/nspr-config

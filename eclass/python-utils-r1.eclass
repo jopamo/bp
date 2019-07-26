@@ -243,7 +243,7 @@ _python_impl_matches() {
 #
 # Example value:
 # @CODE
-# /usr/lib64/python2.7/site-packages
+# /usr/lib/python2.7/site-packages
 # @CODE
 
 # @ECLASS-VARIABLE: PYTHON_INCLUDEDIR
@@ -270,7 +270,7 @@ _python_impl_matches() {
 #
 # Example value:
 # @CODE
-# /usr/lib64/libpython2.7.so
+# /usr/lib/libpython2.7.so
 # @CODE
 
 # @ECLASS-VARIABLE: PYTHON_CFLAGS

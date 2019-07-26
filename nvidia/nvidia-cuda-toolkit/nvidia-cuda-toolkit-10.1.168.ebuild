@@ -66,12 +66,12 @@ src_install() {
 	cat > "${T}"/99cuda <<- EOF || die
 		PATH=${ecudadir}/bin$(usex profiler ":${ecudadir}/libnvvp" "")
 		ROOTPATH=${ecudadir}/bin
-		LDPATH=${ecudadir}/lib64:${ecudadir}/lib:${ecudadir}/nvvm/lib64
+		LDPATH=${ecudadir}/lib:${ecudadir}/lib:${ecudadir}/nvvm/lib
 	EOF
 	doenvd "${T}"/99cuda
 
 	use profiler && \
-		make_wrapper nvprof "${ecudadir}/bin/nvprof" "." "${ecudadir}/lib64:${ecudadir}/lib"
+		make_wrapper nvprof "${ecudadir}/bin/nvprof" "." "${ecudadir}/lib:${ecudadir}/lib"
 
 	dobin "${T}"/cuda-config
 

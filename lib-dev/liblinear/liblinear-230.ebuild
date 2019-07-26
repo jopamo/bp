@@ -41,7 +41,7 @@ src_compile() {
 
 src_install() {
 	dolib.so ${PN}.so.3
-	dosym ${PN}.so.3 /usr/lib64/${PN}.so
+	dosym ${PN}.so.3 /usr/lib/${PN}.so
 
 	newbin predict ${PN}-predict
 	newbin train ${PN}-train

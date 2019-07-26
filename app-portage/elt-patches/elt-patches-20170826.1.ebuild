@@ -14,7 +14,7 @@ RDEPEND="sys-app/gentoo-functions"
 DEPEND="app-compression/xz-utils"
 
 src_compile() {
-	emake rootprefix="${EPREFIX%/}" libdirname="lib64"
+	emake rootprefix="${EPREFIX%/}" libdirname="lib"
 }
 
 src_install() {

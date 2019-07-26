@@ -132,7 +132,7 @@ donvidia() {
 		exeinto ${nv_DEST}
 		action="doexe"
 	else
-		nv_DEST="/usr/lib64"
+		nv_DEST="/usr/lib"
 		action="dolib.so"
 	fi
 
@@ -182,16 +182,16 @@ src_install() {
 
 	if use X; then
 		# Xorg DDX driver
-		insinto /usr/lib64/xorg/modules/drivers
+		insinto /usr/lib/xorg/modules/drivers
 		doins ${NV_X11}/nvidia_drv.so
 
 		# Xorg GLX driver
 		donvidia ${NV_X11}/libglxserver_nvidia.so.${NV_SOVER} \
-			/usr/lib64/xorg/modules/extensions
+			/usr/lib/xorg/modules/extensions
 
 		# X module for wrapped software rendering
 		#donvidia "libnvidia-wfb.so.${NV_SOVER}" \
-		#	/usr/lib64/xorg/modules
+		#	/usr/lib/xorg/modules
 
 		# Xorg nvidia.conf
 		if has_version '>=x11-base/xorg-server-1.16'; then
@@ -243,9 +243,9 @@ src_install() {
 }
 
 src_install-libs() {
-	local inslibdir=lib64
-	local GL_ROOT="/usr/lib64"
-	local CL_ROOT="/usr/lib64/OpenCL/vendors/nvidia"
+	local inslibdir=lib
+	local GL_ROOT="/usr/lib"
+	local CL_ROOT="/usr/lib/OpenCL/vendors/nvidia"
 	local nv_libdir="${NV_OBJ}"
 
 	if use X; then

@@ -30,17 +30,17 @@ src_compile() {
 src_install() {
 	emake	\
 		INSTALL_TOP="${ED}"/usr \
-		INSTALL_LIB="${ED}"/usr/lib64 \
+		INSTALL_LIB="${ED}"/usr/lib \
     	TO_LIB="liblua.a liblua.so.${PV}" \
     	INSTALL_MAN="${ED}"/usr/share/man/man1 \
     	install
 
-	insinto "/usr/lib64/pkgconfig"
+	insinto "/usr/lib/pkgconfig"
 	doins "${FILESDIR}/lua.pc"
 
 	for x in liblua.so.1 liblua.so.$(ver_cut 1-2) liblua.so ; do
-		dosym liblua.so.${PV} usr/lib64/${x}
+		dosym liblua.so.${PV} usr/lib/${x}
 	done
 
-	use static-libs || rm -f "${ED}"/usr/lib64/liblua.a
+	use static-libs || rm -f "${ED}"/usr/lib/liblua.a
 }

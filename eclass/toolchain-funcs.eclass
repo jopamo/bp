@@ -771,7 +771,7 @@ tc-enables-ssp-all() {
 # the library (libfoo.so), as ldconfig should usually update it
 # correctly to point to the latest version of the library present.
 gen_usr_ldscript() {
-	local lib libdir=lib64 output_format="" auto=false suffix=$(get_libname)
+	local lib libdir=lib output_format="" auto=false suffix=$(get_libname)
 	[[ -z ${ED+set} ]] && local ED=${D%/}${EPREFIX}/
 
 	tc-is-static-only && return

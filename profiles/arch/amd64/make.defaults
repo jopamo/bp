@@ -14,7 +14,7 @@ DEFAULT_ABI="amd64"
 # Do not remove this one, or all kinds of hell breaks loose.
 ABI="amd64"
 
-LIBDIR_amd64="lib64"
+LIBDIR_amd64="lib"
 LIBDIR_x86="lib"
 LIBDIR_x32="libx32"
 SYMLINK_LIB="no"

@@ -34,7 +34,7 @@ include $(UTILS_MK_DIR)/utils.mk
 
 ifndef X_LDFLAGS
   ifeq ($(TARGET_OS)-$(TARGET_ARCH),Linux-x86_64)
-    X_LDFLAGS          = -L/usr/X11R6/lib64
+    X_LDFLAGS          = -L/usr/X11R6/lib
   else
     X_LDFLAGS          = -L/usr/X11R6/lib
   endif

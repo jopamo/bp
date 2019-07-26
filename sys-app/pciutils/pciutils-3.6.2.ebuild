@@ -64,7 +64,7 @@ pemake() {
 		ZLIB=$(usex zlib) \
 		PCI_COMPRESSED_IDS=0 \
 		PCI_IDS=pci.ids \
-		LIBDIR="\${PREFIX}/lib64" \
+		LIBDIR="\${PREFIX}/lib" \
 		LIBKMOD=$(usex kmod) \
 		HWDB=$(usex udev) \
 		"$@"

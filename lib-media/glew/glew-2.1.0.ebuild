@@ -78,7 +78,7 @@ src_compile() {
 	emake \
 		GLEW_PREFIX="${EPREFIX}/usr" \
 		GLEW_DEST="${EPREFIX}/usr" \
-		LIBDIR="${EPREFIX}/usr/lib64" \
+		LIBDIR="${EPREFIX}/usr/lib" \
 		"${myglewopts[@]}"
 }
 
@@ -86,8 +86,8 @@ src_install() {
 	set_opts
 	emake \
 		GLEW_DEST="${ED}/usr" \
-		LIBDIR="${ED}/usr/lib64" \
-		PKGDIR="${ED}/usr/lib64/pkgconfig" \
+		LIBDIR="${ED}/usr/lib" \
+		PKGDIR="${ED}/usr/lib/pkgconfig" \
 		"${myglewopts[@]}" \
 		install.all
 }

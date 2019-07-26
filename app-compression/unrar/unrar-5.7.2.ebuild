@@ -43,7 +43,7 @@ src_install() {
 	newlib.so build-lib/libunrar.so libunrar.so.${PV}
 
 	for x in libunrar.so.$(ver_cut 0-1) libunrar.so ; do
-		dosym libunrar.so.${PV} usr/lib64/${x}
+		dosym libunrar.so.${PV} usr/lib/${x}
 	done
 
 	insinto /usr/include/libunrar${PV%.*.*}

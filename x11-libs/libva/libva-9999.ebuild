@@ -35,11 +35,11 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib64
+		--libdir="${EPREFIX}"/usr/lib
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
-		--with-drivers-path="${EPREFIX}/usr/lib64/va/drivers"
+		--with-drivers-path="${EPREFIX}/usr/lib/va/drivers"
 		$(use_enable opengl glx)
 		$(use_enable X x11)
 		$(use_enable wayland)

@@ -189,7 +189,7 @@ src_compile() {
 # http://www.mozilla.org/projects/security/pki/nss/tech-notes/tn6.html
 # Either we have to NOT strip them, or we have to forcibly resign after
 # stripping.
-#local_libdir="lib64"
+#local_libdir="lib"
 #export STRIP_MASK="
 #	*/${local_libdir}/libfreebl3.so*
 #	*/${local_libdir}/libnssdbm3.so*
@@ -231,24 +231,24 @@ cleanup_chk() {
 src_install() {
 	pushd dist >/dev/null || die
 
-	dodir /usr/lib64
-	cp -rL */lib/* "${ED%/}"/usr/lib64 || die "copying shared libs failed"
+	dodir /usr/lib
+	cp -rL */lib/* "${ED%/}"/usr/lib || die "copying shared libs failed"
 	local i
 	for i in crmf freebl nssb nssckfw ; do
-		cp -L */lib/lib${i}.a "${ED%/}"/usr/lib64 || die "copying libs failed"
+		cp -L */lib/lib${i}.a "${ED%/}"/usr/lib || die "copying libs failed"
 	done
 
 	# Install nss-config and pkgconfig file
 	dodir /usr/bin
 	cp -L */bin/nss-config "${ED%/}"/usr/bin || die
-	dodir /usr/lib64/pkgconfig
-	cp -L */lib/pkgconfig/nss.pc "${ED%/}"/usr/lib64/pkgconfig || die
+	dodir /usr/lib/pkgconfig
+	cp -L */lib/pkgconfig/nss.pc "${ED%/}"/usr/lib/pkgconfig || die
 
 	# create an nss-softokn.pc from nss.pc for libfreebl and some private headers
 	# bug 517266
 	sed 	-e 's#Libs:#Libs: -lfreebl#' \
 		-e 's#Cflags:#Cflags: -I${includedir}/private#' \
-		*/lib/pkgconfig/nss.pc >"${ED%/}"/usr/lib64/pkgconfig/nss-softokn.pc \
+		*/lib/pkgconfig/nss.pc >"${ED%/}"/usr/lib/pkgconfig/nss-softokn.pc \
 		|| die "could not create nss-softokn.pc"
 
 	# all the include files
@@ -287,7 +287,7 @@ src_install() {
 	# Prelink breaks the CHK files. We don't have any reliable way to run
 	# shlibsign after prelink.
 	dodir /etc/prelink.conf.d
-	printf -- "-b ${EPREFIX}/usr/lib64/lib%s.so\n" ${NSS_CHK_SIGN_LIBS} \
+	printf -- "-b ${EPREFIX}/usr/lib/lib%s.so\n" ${NSS_CHK_SIGN_LIBS} \
 		> "${ED%/}"/etc/prelink.conf.d/nss.conf
 
 	use static-libs || find "${ED}" -name '*.a' -delete
@@ -301,10 +301,10 @@ pkg_postinst() {
 		if [[ $? -gt 1 ]] ; then
 			shlibsign="shlibsign"
 		fi
-		generate_chk "${shlibsign}" "${EROOT}"/usr/lib64
+		generate_chk "${shlibsign}" "${EROOT}"/usr/lib
 
 }
 
 pkg_postrm() {
-		cleanup_chk "${EROOT}"/usr/lib64
+		cleanup_chk "${EROOT}"/usr/lib
 }

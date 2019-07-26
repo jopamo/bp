@@ -36,7 +36,7 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib64
+		--libdir="${EPREFIX}"/usr/lib
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
@@ -54,7 +54,7 @@ src_install() {
 	default
 
 	edos2unix ${PN}.pc
-	insinto /usr/lib64/pkgconfig
+	insinto /usr/lib/pkgconfig
 	doins ${PN}.pc
 
 	for x in ./ Archive Audio Duplicate Export Image Multiple Reader Tag Text Video; do

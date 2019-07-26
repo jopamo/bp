@@ -37,7 +37,7 @@ src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib64
+		--libdir="${EPREFIX}"/usr/lib
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
@@ -57,8 +57,8 @@ src_configure() {
 src_install() {
 	default
 	rm "${ED}"/usr/include/libfm/{fm-extra.h,fm-version.h,fm-xml-file.h}*
-	rm "${ED}"/usr/lib64/libfm-extra*
-	rm "${ED}"/usr/lib64/pkgconfig/libfm-extra.pc
+	rm "${ED}"/usr/lib/libfm-extra*
+	rm "${ED}"/usr/lib/pkgconfig/libfm-extra.pc
 }
 
 pkg_postinst() {

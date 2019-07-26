@@ -26,6 +26,6 @@ src_configure() {
 src_install() {
 	dobin "${BUILD_DIR}"/bin/heimdall
 
-	insinto /usr/lib64/udev/rules.d
+	insinto /usr/lib/udev/rules.d
 	doins heimdall/60-heimdall.rules
 }

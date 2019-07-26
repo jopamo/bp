@@ -114,7 +114,7 @@ src_configure() {
 		--prefix="${EPREFIX}"/usr
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib64
+		--libdir="${EPREFIX}"/usr/lib
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
@@ -130,7 +130,7 @@ src_configure() {
 	ac_cv_lib_cap_cap_init=$(in_iuse caps && usex caps || echo no)
 
 	export libc_cv_rootsbindir="${EPREFIX}"/usr/sbin
-	export libc_cv_slibdir="${EPREFIX}"/usr/lib64
+	export libc_cv_slibdir="${EPREFIX}"/usr/lib
 	export libc_cv_hashstyle=no
 
 	mkdir -p "${WORKDIR}/build"
@@ -215,7 +215,7 @@ pkg_preinst() {
 	mkdir -p "${EROOT}"/etc/ld.so.conf.d
 
 	[[ ${ROOT} != "/" ]] && return 0
-	[[ -d ${ED}/usr/lib64 ]] || return 0
+	[[ -d ${ED}/usr/lib ]] || return 0
 	[[ -z ${BOOTSTRAP_RAP} ]] && glibc_sanity_check
 }
 

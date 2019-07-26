@@ -408,8 +408,8 @@ qt5_prepare_env() {
 	# note: keep paths in sync with qmake-utils.eclass
 	QT5_PREFIX=${EPREFIX}/usr
 	QT5_HEADERDIR=${QT5_PREFIX}/include/qt5
-	QT5_LIBDIR=${QT5_PREFIX}/lib64
-	QT5_ARCHDATADIR=${QT5_PREFIX}/lib64/qt5
+	QT5_LIBDIR=${QT5_PREFIX}/lib
+	QT5_ARCHDATADIR=${QT5_PREFIX}/lib/qt5
 	QT5_BINDIR=${QT5_ARCHDATADIR}/bin
 	QT5_PLUGINDIR=${QT5_ARCHDATADIR}/plugins
 	QT5_LIBEXECDIR=${QT5_ARCHDATADIR}/libexec

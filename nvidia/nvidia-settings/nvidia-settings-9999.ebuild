@@ -54,7 +54,7 @@ src_compile() {
 src_install() {
 	emake \
 			DESTDIR="${D}" \
-			LIBDIR="${D}/usr/lib64" \
+			LIBDIR="${D}/usr/lib" \
 			NV_USE_BUNDLED_LIBJANSSON=0 \
 			NV_VERBOSE=1 \
 			PREFIX=/usr \

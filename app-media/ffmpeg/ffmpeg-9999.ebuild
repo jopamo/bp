@@ -28,9 +28,9 @@ append-flags -ffat-lto-objects
 src_configure() {
 	${S}/configure \
 		--prefix="${EPREFIX}/usr" \
-		--shlibdir="${EPREFIX}/usr/lib64" \
+		--shlibdir="${EPREFIX}/usr/lib" \
 		--bindir="${EPREFIX}"/usr/bin \
-		--libdir="${EPREFIX}"/usr/lib64 \
+		--libdir="${EPREFIX}"/usr/lib \
 		--enable-shared \
 		--cc="$(tc-getCC)" \
 		--cxx="$(tc-getCXX)" \

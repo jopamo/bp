@@ -1,0 +1,55 @@
+From 608517b9b76c41fac6613dbda1193d6f41338e19 Mon Sep 17 00:00:00 2001
+From: Lasse Collin <lasse.collin@tukaani.org>
+Date: Mon, 24 Jun 2019 22:47:39 +0300
+Subject: [PATCH] liblzma: Remove incorrect uses of
+ lzma_attribute((__unused__)).
+
+Caught by clang -Wused-but-marked-unused.
+---
+ src/liblzma/common/alone_decoder.c | 3 +--
+ src/liblzma/common/alone_encoder.c | 3 +--
+ src/liblzma/lz/lz_decoder.c        | 3 +--
+ 3 files changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/src/liblzma/common/alone_decoder.c b/src/liblzma/common/alone_decoder.c
+index 77d0a9b..239b230 100644
+--- a/src/liblzma/common/alone_decoder.c
++++ b/src/liblzma/common/alone_decoder.c
+@@ -50,8 +50,7 @@ typedef struct {
+ 
+ 
+ static lzma_ret
+-alone_decode(void *coder_ptr,
+-		const lzma_allocator *allocator lzma_attribute((__unused__)),
++alone_decode(void *coder_ptr, const lzma_allocator *allocator,
+ 		const uint8_t *restrict in, size_t *restrict in_pos,
+ 		size_t in_size, uint8_t *restrict out,
+ 		size_t *restrict out_pos, size_t out_size,
+diff --git a/src/liblzma/common/alone_encoder.c b/src/liblzma/common/alone_encoder.c
+index 402bebc..c4560d5 100644
+--- a/src/liblzma/common/alone_encoder.c
++++ b/src/liblzma/common/alone_encoder.c
+@@ -31,8 +31,7 @@ typedef struct {
+ 
+ 
+ static lzma_ret
+-alone_encode(void *coder_ptr,
+-		const lzma_allocator *allocator lzma_attribute((__unused__)),
++alone_encode(void *coder_ptr, const lzma_allocator *allocator,
+ 		const uint8_t *restrict in, size_t *restrict in_pos,
+ 		size_t in_size, uint8_t *restrict out,
+ 		size_t *restrict out_pos, size_t out_size,
+diff --git a/src/liblzma/lz/lz_decoder.c b/src/liblzma/lz/lz_decoder.c
+index 6c9024e..09b5743 100644
+--- a/src/liblzma/lz/lz_decoder.c
++++ b/src/liblzma/lz/lz_decoder.c
+@@ -131,8 +131,7 @@ decode_buffer(lzma_coder *coder,
+ 
+ 
+ static lzma_ret
+-lz_decode(void *coder_ptr,
+-		const lzma_allocator *allocator lzma_attribute((__unused__)),
++lz_decode(void *coder_ptr, const lzma_allocator *allocator,
+ 		const uint8_t *restrict in, size_t *restrict in_pos,
+ 		size_t in_size, uint8_t *restrict out,
+ 		size_t *restrict out_pos, size_t out_size,

@@ -1,0 +1,5963 @@
+diff -urN a/applets.h b/applets.h
+--- a/applets.h	2019-05-16 12:12:31.000000000 -0500
++++ b/applets.h	2019-08-04 01:21:46.564608807 -0500
+@@ -35,26 +35,28 @@
+ /* applet prototypes */
+ typedef int (*APPLET)(int, char **);
+ 
+-#define DECLARE_APPLET(applet) \
+-	extern int applet##_main(int, char **) __attribute__((weak));
++#define DECLARE_APPLET(applet) extern int applet##_main(int, char **);
+ DECLARE_APPLET(q)
++DECLARE_APPLET(qatom)
+ DECLARE_APPLET(qcheck)
+ DECLARE_APPLET(qdepends)
+ DECLARE_APPLET(qfile)
++/*DECLARE_APPLET(qglsa) disable */
++DECLARE_APPLET(qgrep)
++DECLARE_APPLET(qkeyword)
+ DECLARE_APPLET(qlist)
+ DECLARE_APPLET(qlop)
++#ifdef ENABLE_QMANIFEST
++DECLARE_APPLET(qmanifest)
++#endif
++DECLARE_APPLET(qmerge)
++DECLARE_APPLET(qpkg)
+ DECLARE_APPLET(qsearch)
+ DECLARE_APPLET(qsize)
+ DECLARE_APPLET(qtbz2)
++DECLARE_APPLET(qtegrity)
+ DECLARE_APPLET(quse)
+ DECLARE_APPLET(qxpak)
+-DECLARE_APPLET(qpkg)
+-DECLARE_APPLET(qgrep)
+-DECLARE_APPLET(qatom)
+-DECLARE_APPLET(qmerge)
+-DECLARE_APPLET(qkeyword)
+-/*DECLARE_APPLET(qglsa) disable */
+-DECLARE_APPLET(qtegrity)
+ #undef DECLARE_APPLET
+ 
+ static const struct applet_t {
+@@ -66,7 +68,6 @@
+ 	/* q must always be the first applet */
+ 	{"q",         q_main,         "<applet> <args>", "virtual applet"},
+ 	{"qatom",     qatom_main,     "<pkg>",           "split atom strings"},
+-	{"qkeyword",  qkeyword_main,  "<action> <args>", "list packages based on keywords"},
+ 	{"qcheck",    qcheck_main,    "<pkgname>",       "verify integrity of installed packages"},
+ 	{"qdepends",  qdepends_main,  "<pkgname>",       "show dependency info"},
+ 	{"qfile",     qfile_main,     "<filename>",      "list all pkgs owning files"},
+@@ -74,16 +75,22 @@
+ 	{"qglsa",     qglsa_main,     "<action> <list>", "check GLSAs against system"},
+ 	*/
+ 	{"qgrep",     qgrep_main,     "<expr> [pkg ...]", "grep in ebuilds"},
++	{"qkeyword",  qkeyword_main,  "<action> <args>", "list packages based on keywords"},
+ 	{"qlist",     qlist_main,     "<pkgname>",       "list files owned by pkgname"},
+ 	{"qlop",      qlop_main,      "<pkgname>",       "emerge log analyzer"},
++#ifdef ENABLE_QMANIFEST
++	{"qmanifest", qmanifest_main, "<misc args>",     "verify or generate thick Manifest files"},
++#endif
+ 	{"qmerge",    qmerge_main,    "<pkgnames>",      "fetch and merge binary package"},
+ 	{"qpkg",      qpkg_main,      "<misc args>",     "manipulate Gentoo binpkgs"},
+ 	{"qsearch",   qsearch_main,   "<regex>",         "search pkgname/desc"},
+ 	{"qsize",     qsize_main,     "<pkgname>",       "calculate size usage"},
+ 	{"qtbz2",     qtbz2_main,     "<misc args>",     "manipulate tbz2 packages"},
++#ifdef ENABLE_QTEGRITY
++	{"qtegrity",  qtegrity_main,  "<misc args>",     "verify files with IMA"},
++#endif
+ 	{"quse",      quse_main,      "<useflag>",       "find pkgs using useflags"},
+ 	{"qxpak",     qxpak_main,     "<misc args>",     "manipulate xpak archives"},
+-	{"qtegrity",  qtegrity_main,  "<misc args>",     "verify files with IMA"},
+ 
+ 	/* aliases for equery compatibility */
+ 	{"belongs",   qfile_main,     NULL, NULL},
+@@ -104,8 +111,16 @@
+ 	{"uickpkg",   qpkg_main,      NULL, NULL},
+ 	/* {"glsa",      qglsa_main,     NULL, NULL}, */
+ 
++#ifdef ENABLE_QTEGRITY
+ 	/* alias for qtegrity */
+ 	{"integrity", qtegrity_main,  NULL, NULL},
++#endif
++
++#ifdef ENABLE_QMANIFEST
++	/* old hashgen */
++	{"hashgen",   qmanifest_main, NULL, NULL},
++	{"hashverify",qmanifest_main, NULL, NULL},
++#endif
+ 
+ 	{NULL, NULL, NULL, NULL}
+ };
+@@ -122,7 +137,7 @@
+ 	{NULL,        no_argument, NULL, 0x0}
+ #define COMMON_OPTS_HELP \
+ 	"Set the ROOT env var", \
+-	"Make a lot of noise", \
++	"Report full package versions, emit more elaborate output", \
+ 	"Tighter output; suppress warnings", \
+ 	"Don't output color", \
+ 	"Print this help and exit", \
+@@ -137,7 +152,6 @@
+ 	case 'C': no_colors(); break; \
+ 	default: applet ## _usage(EXIT_FAILURE); break;
+ 
+-extern char *modpath;
+ extern char *portroot;
+ extern int verbose;
+ extern int quiet;
+@@ -153,6 +167,9 @@
+ extern char *features;
+ extern char *install_mask;
+ extern DEFINE_ARRAY(overlays);
++extern DEFINE_ARRAY(overlay_names);
++extern char *main_overlay;
++extern int twidth;
+ 
+ void no_colors(void);
+ void setup_quiet(void);
+diff -urN a/config.h.in b/config.h.in
+--- a/config.h.in	2019-05-16 12:12:31.000000000 -0500
++++ b/config.h.in	2019-08-04 01:21:46.616608957 -0500
+@@ -59,6 +59,12 @@
+ /* Define to 1 if // is a file system root distinct from /. */
+ #undef DOUBLE_SLASH_IS_DISTINCT_ROOT
+ 
++/* Define if qmanifest should be compiled */
++#undef ENABLE_QMANIFEST
++
++/* Define if qtegrity should be compiled */
++#undef ENABLE_QTEGRITY
++
+ /* Define this to 1 if F_DUPFD behavior does not match POSIX */
+ #undef FCNTL_DUPFD_BUGGY
+ 
+@@ -319,6 +325,12 @@
+    */
+ #undef HAVE_ALLOCA_H
+ 
++/* Define if you have blake2b */
++#undef HAVE_BLAKE2B
++
++/* Define to 1 if you have the <blake2.h> header file. */
++#undef HAVE_BLAKE2_H
++
+ /* Define to 1 if you have the <bp-sym.h> header file. */
+ #undef HAVE_BP_SYM_H
+ 
+@@ -537,6 +549,9 @@
+ /* Define to 1 if you have the <libgen.h> header file. */
+ #undef HAVE_LIBGEN_H
+ 
++/* Define if you have zlib */
++#undef HAVE_LIBZ
++
+ /* Define to 1 if you have the <limits.h> header file. */
+ #undef HAVE_LIMITS_H
+ 
+@@ -596,6 +611,12 @@
+ /* Define to 1 if you have the `opendir' function. */
+ #undef HAVE_OPENDIR
+ 
++/* Define to 1 if you have the <openssl/err.h> header file. */
++#undef HAVE_OPENSSL_ERR_H
++
++/* Define to 1 if you have the <openssl/ssl.h> header file. */
++#undef HAVE_OPENSSL_SSL_H
++
+ /* Define to 1 if you have the `pipe' function. */
+ #undef HAVE_PIPE
+ 
+@@ -643,6 +664,9 @@
+    buffer had been large enough. */
+ #undef HAVE_SNPRINTF_RETVAL_C99
+ 
++/* Define if you have ssl */
++#undef HAVE_SSL
++
+ /* Define to 1 if you have the <stdint.h> header file. */
+ #undef HAVE_STDINT_H
+ 
+@@ -792,6 +816,9 @@
+ /* Define if utimes works properly. */
+ #undef HAVE_WORKING_UTIMES
+ 
++/* Define to 1 if you have the <zlib.h> header file. */
++#undef HAVE_ZLIB_H
++
+ /* Define to 1 if the system has the type `_Bool'. */
+ #undef HAVE__BOOL
+ 
+diff -urN a/libq/atom.c b/libq/atom.c
+--- a/libq/atom.c	2019-05-16 12:12:31.000000000 -0500
++++ b/libq/atom.c	2019-08-04 01:21:46.624608980 -0500
+@@ -30,7 +30,7 @@
+ };
+ 
+ const char * const atom_blocker_str[] = {
+-	"", "!", "!!"
++	"", "!", "!!", "^"
+ };
+ 
+ const char * const atom_op_str[] = {
+@@ -65,9 +65,12 @@
+ 	if (*atom == '!') {
+ 		ret->blocker++;
+ 		atom++;
+-	}
+-	if (*atom == '!') {
+-		ret->blocker++;
++		if (*atom == '!') {
++			ret->blocker++;
++			atom++;
++		}
++	} else if (*atom == '^') {
++		ret->blocker = ATOM_BL_ANTISLOT;
+ 		atom++;
+ 	}
+ 
+@@ -101,65 +104,14 @@
+ 	if ((ptr = strstr(ret->CATEGORY, "::")) != NULL) {
+ 		ret->REPO = ptr + 2;
+ 		*ptr = '\0';
+-	}
+-
+-	/* chip off the trailing [:SLOT] as needed */
+-	if ((ptr = strrchr(ret->CATEGORY, ':')) != NULL) {
+-		*ptr++ = '\0';
+-		ret->SLOT = ptr;
+-
+-		/* deal with slot operators */
+-		if ((ptr = strrchr(ret->SLOT, '=')) != NULL && ptr[1] == '\0') {
+-			ret->slotdep = ATOM_SD_ANY_REBUILD;
+-			*ptr = '\0';
+-		}
+-		if ((ptr = strrchr(ret->SLOT, '*')) != NULL && ptr[1] == '\0') {
+-			ret->slotdep = ATOM_SD_ANY_IGNORE;
+-			*ptr = '\0';
+-		}
+-
+-		/* cut in two when sub-slot */
+-		if ((ptr = strchr(ret->SLOT, '/')) != NULL) {
+-			*ptr++ = '\0';
+-			ret->SUBSLOT = ptr;
+-		}
+-	}
+-
+-	/* see if we have any suffix operators */
+-	if ((ptr = strrchr(ret->CATEGORY, '*')) != NULL && ptr[1] == '\0') {
+-		ret->sfx_op = ATOM_OP_STAR;
+-		*ptr = '\0';
+-	}
+-
+-	/* break up the CATEGORY and PVR */
+-	if ((ptr = strrchr(ret->CATEGORY, '/')) != NULL) {
+-		ret->PN = ptr + 1;
+-		*ptr = '\0';
+-
+-		/* set PN to NULL if there's nothing */
+-		if (ret->PN[0] == '\0')
+-			ret->PN = NULL;
+-
+-		/* eat extra crap in case it exists, this is a feature to allow
+-		 * /path/to/pkg.ebuild, doesn't work with prefix operators
+-		 * though */
+-		if ((ptr = strrchr(ret->CATEGORY, '/')) != NULL)
+-			ret->CATEGORY = ptr + 1;
+-	} else {
+-		ret->PN = ret->CATEGORY;
+-		ret->CATEGORY = NULL;
+-	}
+-
+-	if (ret->PN == NULL) {
+-		/* atom has no name, this is it */
+-		ret->P = NULL;
+-		ret->PVR = NULL;
+-		return ret;
++		/* set to NULL if there's nothing */
++		if (ret->REPO[0] == '\0')
++			ret->REPO = NULL;
+ 	}
+ 
+ 	/* hunt down build with USE dependencies */
+-	if ((ptr = strrchr(ret->PN, ']')) != NULL && ptr[1] == '\0' &&
+-			(ptr = strrchr(ret->PN, '[')) != NULL)
++	if ((ptr = strrchr(ret->CATEGORY, ']')) != NULL && ptr[1] == '\0' &&
++			(ptr = strrchr(ret->CATEGORY, '[')) != NULL)
+ 	{
+ 		atom_usedep *w = NULL;
+ 		do {
+@@ -219,6 +171,65 @@
+ 		*ptr++ = '\0';
+ 	}
+ 
++	/* chip off the trailing [:SLOT] as needed */
++	if ((ptr = strrchr(ret->CATEGORY, ':')) != NULL) {
++		*ptr++ = '\0';
++		ret->SLOT = ptr;
++
++		/* deal with slot operators */
++		if ((ptr = strrchr(ret->SLOT, '=')) != NULL && ptr[1] == '\0') {
++			ret->slotdep = ATOM_SD_ANY_REBUILD;
++			*ptr = '\0';
++		}
++		if ((ptr = strrchr(ret->SLOT, '*')) != NULL && ptr[1] == '\0') {
++			ret->slotdep = ATOM_SD_ANY_IGNORE;
++			*ptr = '\0';
++		}
++
++		/* cut in two when sub-slot */
++		if ((ptr = strchr(ret->SLOT, '/')) != NULL) {
++			*ptr++ = '\0';
++			if (*ptr != '\0')
++				ret->SUBSLOT = ptr;
++		}
++
++		/* set to NULL if there's nothing */
++		if (ret->SLOT[0] == '\0')
++			ret->SLOT = NULL;
++	}
++
++	/* see if we have any suffix operators */
++	if ((ptr = strrchr(ret->CATEGORY, '*')) != NULL && ptr[1] == '\0') {
++		ret->sfx_op = ATOM_OP_STAR;
++		*ptr = '\0';
++	}
++
++	/* break up the CATEGORY and PVR */
++	if ((ptr = strrchr(ret->CATEGORY, '/')) != NULL) {
++		ret->PN = ptr + 1;
++		*ptr = '\0';
++
++		/* set PN to NULL if there's nothing */
++		if (ret->PN[0] == '\0')
++			ret->PN = NULL;
++
++		/* eat extra crap in case it exists, this is a feature to allow
++		 * /path/to/pkg.ebuild, doesn't work with prefix operators
++		 * though */
++		if ((ptr = strrchr(ret->CATEGORY, '/')) != NULL)
++			ret->CATEGORY = ptr + 1;
++	} else {
++		ret->PN = ret->CATEGORY;
++		ret->CATEGORY = NULL;
++	}
++
++	if (ret->PN == NULL) {
++		/* atom has no name, this is it */
++		ret->P = NULL;
++		ret->PVR = NULL;
++		return ret;
++	}
++
+ 	/* CATEGORY should be all set here, PN contains everything up to
+ 	 * SLOT, REPO or '*'
+ 	 * PN must not end in a hyphen followed by anything matching version
+@@ -360,30 +371,93 @@
+  * foo-1 <NOT_EQUAL> bar-1
+  */
+ int
+-atom_compare(const depend_atom *a1, const depend_atom *a2)
++atom_compare(const depend_atom *data, const depend_atom *query)
+ {
+-	/* sanity check that at most one has operators */
+-	if (a1->pfx_op != ATOM_OP_NONE ||
+-			a1->sfx_op != ATOM_OP_NONE ||
+-			a1->blocker != ATOM_BL_NONE)
+-	{
+-		/* is the other also having operators, then punt it */
+-		if (a2->pfx_op != ATOM_OP_NONE ||
+-				a2->sfx_op != ATOM_OP_NONE ||
+-				a2->blocker != ATOM_BL_NONE)
++	atom_operator pfx_op;
++	atom_operator sfx_op;
++	atom_blocker bl_op;
++	unsigned int ver_bits;
++
++	/* remember:
++	 * query should have operators, if data has them, they are ignored */
++
++	/* here comes the antislot: bug #683430
++	 * it basically is a feature to select versions that are *not*
++	 * what's queried for, but requiring SLOT to be set
++	 *
++	 * recap of slot operators:
++	 *
++	 * DEPEND  perl:=        (any slot change, rebuild)
++	 *         perl:0=       (any sub-slot change, rebuild)
++	 *         perl:*        (any slot will do, never rebuild)
++	 *         perl:0*       (any sub-slot will do, never rebuild ?valid?)
++	 *         perl:0        (effectively we can treat * as absent)
++	 *
++	 * VDB     perl:0/5.28=  (the slot/subslot it satisfied when merging)
++	 *
++	 * ebuild  perl:0/5.26
++	 *         perl:0        (SLOT defaults to 0)
++	 *
++	 * query   perl:0        (matches perl:0, perl:0/5.28)
++	 *         perl:0/5.28   (matches any perl:0/5.28)
++	 *        !perl:0/5.28   (matches perl, perl:0, perl:0/5.26, perl:1)
++	 *        ^perl:0/5.28   (matches perl:0/5.26, perl:0/5.30)
++	 *        ^perl:0        (matches perl:1)
++	 *         perl:=        (= in this case is meaningless: perl, perl:0 ...)
++	 *  (with ^ being a portage-utils addition to match antislot)
++	 */
++	bl_op = query->blocker;
++	if (bl_op == ATOM_BL_ANTISLOT) {
++		/* ^perl -> match anything with a SLOT */
++		if (query->SLOT == NULL && data->SLOT == NULL)
+ 			return NOT_EQUAL;
+-
+-		/* swap a1 & a2 so that a2 is the atom with operators */
+-		const depend_atom *as = a2;
+-		a2 = a1;
+-		a1 = as;
++		if (query->SLOT != NULL) {
++			if (query->SUBSLOT == NULL) {
++				/* ^perl:0 -> match different SLOT */
++				if (data->SLOT == NULL ||
++						strcmp(query->SLOT, data->SLOT) == 0)
++					return NOT_EQUAL;
++			} else {
++				/* ^perl:0/5.28 -> match SLOT, but different SUBSLOT */
++				if (data->SLOT == NULL ||
++						strcmp(query->SLOT, data->SLOT) != 0)
++					return NOT_EQUAL;
++				if (data->SUBSLOT == NULL ||
++						strcmp(query->SUBSLOT, data->SUBSLOT) == 0)
++					return NOT_EQUAL;
++			}
++		}
++		bl_op = ATOM_BL_NONE;  /* ease work below */
++	} else if (query->SLOT != NULL) {
++		/* check SLOT only when query side has it */
++		if (data->SLOT == NULL) {
++			if (bl_op == ATOM_BL_NONE)
++				return NOT_EQUAL;
++		} else {
++			if (strcmp(query->SLOT, data->SLOT) != 0) {
++				/* slot has differs */
++				if (bl_op == ATOM_BL_NONE)
++					return NOT_EQUAL;
++			} else {
++				if (query->SUBSLOT != NULL) {
++					if (data->SUBSLOT == NULL) {
++						if (bl_op == ATOM_BL_NONE)
++							return NOT_EQUAL;
++					} else {
++						if (strcmp(query->SUBSLOT, data->SUBSLOT) != 0) {
++							if (bl_op == ATOM_BL_NONE)
++								return NOT_EQUAL;
++						}
++					}
++				}
++			}
++		}
+ 	}
+ 
+-	atom_operator pfx_op = a2->pfx_op;
+-	atom_operator sfx_op = a2->sfx_op;
+-
+ 	/* handle the inversing effect of blockers */
+-	if (a2->blocker != ATOM_BL_NONE) {
++	pfx_op = query->pfx_op;
++	sfx_op = query->sfx_op;
++	if (bl_op != ATOM_BL_NONE) {
+ 		switch (pfx_op) {
+ 			case ATOM_OP_NEWER:
+ 				pfx_op = ATOM_OP_OLDER_EQUAL;
+@@ -405,60 +479,62 @@
+ 		}
+ 	}
+ 
+-	/* check slot only when both sides have it */
+-	if (a1->SLOT != NULL && a2->SLOT != NULL &&
+-			a1->SLOT[0] != '\0' && a2->SLOT[0] != '\0' &&
+-			(strcmp(a1->SLOT, a2->SLOT) != 0 ||
+-			(a1->SUBSLOT != NULL && a2->SUBSLOT != NULL &&
+-			 strcmp(a1->SUBSLOT, a2->SUBSLOT) != 0)))
+-		return NOT_EQUAL;
+-
+-	/* same for check repo */
+-	if (a1->REPO != NULL && a2->REPO != NULL &&
+-			a1->REPO[0] != '\0' && a2->REPO[0] != '\0' &&
+-			strcmp(a1->REPO, a2->REPO) != 0)
+-		return NOT_EQUAL;
++	/* check REPO, if query has it, ignore blocker stuff for this one */
++	if (query->REPO != NULL) {
++		if (data->REPO == NULL)
++			return NOT_EQUAL;
++		if (strcmp(query->REPO, data->REPO) != 0)
++			return NOT_EQUAL;
++	}
+ 
+-	/* Check category, iff both are specified.  This way we can match
+-	 * atoms like "sys-devel/gcc" and "gcc". */
+-	if (a1->CATEGORY && a2->CATEGORY) {
+-		if (strcmp(a1->CATEGORY, a2->CATEGORY))
++	/* check CATEGORY, if query has it, so we match
++	 * atoms like "sys-devel/gcc" and "gcc" */
++	if (query->CATEGORY != NULL) {
++		if (data->CATEGORY == NULL)
+ 			return NOT_EQUAL;
++		if (strcmp(query->CATEGORY, data->CATEGORY) != 0) {
++			if (bl_op == ATOM_BL_NONE)
++				return NOT_EQUAL;
++		} else {
++			if (bl_op != ATOM_BL_NONE && query->PN == NULL)
++				return EQUAL;
++		}
+ 	}
+ 
+-	/* check name */
+-	if (a1->PN && a2->PN) {
+-		if (strcmp(a1->PN, a2->PN))
++	/* check PN, this may be absent if query is for CATEGORY only */
++	if (query->PN != NULL) {
++		if (data->PN == NULL)
+ 			return NOT_EQUAL;
+-	} else if (a1->CATEGORY && a2->CATEGORY) {
+-		/* if CAT is set, and one side has empty PN, accept as match */
+-		return a2->blocker != ATOM_BL_NONE ? NOT_EQUAL : EQUAL;
+-	} else if (a1->PN || a2->PN)
+-		return NOT_EQUAL;
++		if (strcmp(query->PN, data->PN) != 0) {
++			if (bl_op == ATOM_BL_NONE)
++				return NOT_EQUAL;
++		} else {
++			if (bl_op != ATOM_BL_NONE && query->PV == NULL)
++				return EQUAL;
++		}
++	}
+ 
+ 	/* in order to handle suffix globs, we need to know all of the
+-	 * version elements provided in it ahead of time
+-	 */
+-	unsigned int ver_bits = 0;
++	 * version elements provided in it ahead of time */
++	ver_bits = 0;
+ 	if (sfx_op == ATOM_OP_STAR) {
+-		if (a2->letter)
++		if (query->letter)
+ 			ver_bits |= (1 << 0);
+-		if (a2->suffixes[0].suffix != VER_NORM)
++		if (query->suffixes[0].suffix != VER_NORM)
+ 			ver_bits |= (1 << 1);
+ 		/* This doesn't handle things like foo-1.0-r0*, but that atom
+-		 * doesn't ever show up in practice, so who cares.
+-		 */
+-		if (a2->PR_int)
++		 * doesn't ever show up in practice, so who cares. */
++		if (query->PR_int)
+ 			ver_bits |= (1 << 2);
+ 	}
+ 
+ 	/* check version */
+-	if (a1->PV && a2->PV) {
++	if (data->PV && query->PV) {
+ 		char *s1, *s2;
+ 		uint64_t n1, n2;
+ 		/* first we compare the version [1.0]z_alpha1 */
+-		s1 = a1->PV;
+-		s2 = a2->PV;
++		s1 = data->PV;
++		s2 = query->PV;
+ 		while (s1 || s2) {
+ 			if (s1 && s2) {
+ 				/* deal with leading zeros */
+@@ -491,16 +567,16 @@
+ 		/* compare trailing letter 1.0[z]_alpha1 */
+ 		if (sfx_op == ATOM_OP_STAR) {
+ 			ver_bits >>= 1;
+-			if (!a2->letter && !ver_bits)
++			if (!query->letter && !ver_bits)
+ 				return _atom_compare_match(EQUAL, pfx_op);
+ 		}
+-		if (a1->letter < a2->letter)
++		if (data->letter < query->letter)
+ 			return _atom_compare_match(OLDER, pfx_op);
+-		if (a1->letter > a2->letter)
++		if (data->letter > query->letter)
+ 			return _atom_compare_match(NEWER, pfx_op);
+ 		/* find differing suffixes 1.0z[_alpha1] */
+-		const atom_suffix *as1 = &a1->suffixes[0];
+-		const atom_suffix *as2 = &a2->suffixes[0];
++		const atom_suffix *as1 = &data->suffixes[0];
++		const atom_suffix *as2 = &query->suffixes[0];
+ 		while (as1->suffix == as2->suffix) {
+ 			if (as1->suffix == VER_NORM ||
+ 			    as2->suffix == VER_NORM)
+@@ -509,8 +585,8 @@
+ 			if (as1->sint != as2->sint)
+ 				break;
+ 
+-			++as1;
+-			++as2;
++			as1++;
++			as2++;
+ 		}
+ 		/* compare suffixes 1.0z[_alpha]1 */
+ 		if (sfx_op == ATOM_OP_STAR) {
+@@ -530,15 +606,15 @@
+ 		else if (as1->sint > as2->sint)
+ 			return _atom_compare_match(NEWER, pfx_op);
+ 		/* fall through to -r# check below */
+-	} else if (a1->PV || a2->PV)
++	} else if (data->PV || query->PV)
+ 		return EQUAL;
+ 
+ 	/* Make sure the -r# is the same. */
+-	if ((sfx_op == ATOM_OP_STAR && !a2->PR_int) ||
++	if ((sfx_op == ATOM_OP_STAR && !query->PR_int) ||
+ 	    pfx_op == ATOM_OP_PV_EQUAL ||
+-	    a1->PR_int == a2->PR_int)
++	    data->PR_int == query->PR_int)
+ 		return _atom_compare_match(EQUAL, pfx_op);
+-	else if (a1->PR_int < a2->PR_int)
++	else if (data->PR_int < query->PR_int)
+ 		return _atom_compare_match(OLDER, pfx_op);
+ 	else
+ 		return _atom_compare_match(NEWER, pfx_op);
+@@ -586,6 +662,11 @@
+ 	if (a->PR_int > 0)
+ 		off += snprintf(buf + off, buflen - off, "-r%d", a->PR_int);
+ 	off += snprintf(buf + off, buflen - off, "%s", atom_op_str[a->sfx_op]);
++	if (a->SLOT != NULL || a->slotdep != ATOM_SD_NONE)
++		off += snprintf(buf + off, buflen - off, ":%s%s%s%s",
++				a->SLOT ? a->SLOT : "",
++				a->SUBSLOT ? "/" : "", a->SUBSLOT ? a->SUBSLOT : "",
++				atom_slotdep_str[a->slotdep]);
+ 	for (ud = a->usedeps; ud != NULL; ud = ud->next)
+ 		off += snprintf(buf + off, buflen - off, "%s%s%s%s%s",
+ 				ud == a->usedeps ? "[" : "",
+@@ -593,11 +674,6 @@
+ 				ud->use,
+ 				atom_usecond_str[ud->sfx_cond],
+ 				ud->next == NULL ? "]" : ",");
+-	if (a->SLOT != NULL)
+-		off += snprintf(buf + off, buflen - off, ":%s%s%s%s",
+-				a->SLOT,
+-				a->SUBSLOT ? "/" : "", a->SUBSLOT ? a->SUBSLOT : "",
+-				atom_slotdep_str[a->slotdep]);
+ 	if (a->REPO != NULL)
+ 		off += snprintf(buf + off, buflen - off, "::%s", a->REPO);
+ 
+@@ -607,10 +683,11 @@
+ /**
+  * Run printf on an atom.  The format field takes the form:
+  *  %{keyword}: Always display the field that matches "keyword" or <unset>
+- *  %[keyword]: Only display the field when it's set (or pverbose)
++ *  %[keyword]: Only display the field when it's set
+  * The possible "keywords" are:
+  *  CATEGORY  P  PN  PV  PVR  PF  PR  SLOT  SUBSLOT  REPO  USE
+  *    - these are all the standard portage variables (so see ebuild(5))
++ *    - any prefix of these (e.g. CAT, CA, C) will match as well
+  *  pfx - the version qualifier if set (e.g. > < = !)
+  *  sfx - the version qualifier if set (e.g. *)
+  */
+@@ -619,14 +696,14 @@
+ 		char *buf,
+ 		size_t buflen,
+ 		const char *format,
+-		const depend_atom *atom,
+-		int pverbose)
++		const depend_atom *atom)
+ {
+ 	char bracket;
+ 	const char *fmt;
+ 	const char *p;
+ 	size_t len;
+ 	bool showit;
++	bool connected;
+ 	char *ret;
+ 
+ 	if (!atom) {
+@@ -645,26 +722,29 @@
+ 	while (*p != '\0') {
+ 		fmt = strchr(p, '%');
+ 		if (fmt == NULL) {
+-			if (buflen > 0)
+-				*buf = '\0';
+-			return buf;
++			append_buf(buf, buflen, "%s", p);
++			return ret;
+ 		} else if (fmt != p) {
+ 			append_buf(buf, buflen, "%.*s", (int)(fmt - p), p);
++			connected = false;
++		} else {
++			connected = true;
+ 		}
+ 
+ 		bracket = fmt[1];
+ 		if (bracket == '{' || bracket == '[') {
++			connected &= bracket == '[';
+ 			fmt += 2;
+-			p = strchr(fmt, bracket == '{' ? '}' : ']');
+-			if (p) {
++			if ((p = strchr(fmt, bracket == '{' ? '}' : ']')) != NULL) {
+ 				len = p - fmt;
+-				showit = (bracket == '{') || pverbose;
++				showit = bracket == '{';
+ #define HN(X) (X ? X : "<unset>")
+ 				if (!strncmp("CATEGORY", fmt, len)) {
++					connected = (p[1] == '%') & (bracket == '[');
+ 					if (showit || atom->CATEGORY)
+ 						append_buf(buf, buflen, "%s%s%s%s",
+ 								BOLD, HN(atom->CATEGORY),
+-								bracket == '[' ? "/" : "", NORM);
++								connected ? "/" : "", NORM);
+ 				} else if (!strncmp("P", fmt, len)) {
+ 					if (showit || atom->P)
+ 						append_buf(buf, buflen, "%s%s%s",
+@@ -697,21 +777,21 @@
+ 					if (showit || atom->SLOT)
+ 						append_buf(buf, buflen, "%s%s%s%s",
+ 								YELLOW,
+-								bracket == '[' ? ":" : "",
+-								atom->SLOT ? atom->SLOT : "<unset>",
++								connected ? ":" : "",
++								HN(atom->SLOT),
+ 								NORM);
+ 				} else if (!strncmp("SUBSLOT", fmt, len)) {
+ 					if (showit || atom->SUBSLOT)
+ 						append_buf(buf, buflen, "%s%s%s%s%s",
+ 								YELLOW,
+-								bracket == '[' ? "/" : "",
+-								atom->SUBSLOT ? atom->SUBSLOT : "",
++								connected ? "/" : "",
++								HN(atom->SUBSLOT),
+ 								atom_slotdep_str[atom->slotdep],
+ 								NORM);
+ 				} else if (!strncmp("REPO", fmt, len)) {
+ 					if (showit || atom->REPO)
+ 						append_buf(buf, buflen, "%s%s%s%s",
+-								GREEN, bracket == '[' ? "::" : "",
++								GREEN, connected ? "::" : "",
+ 								HN(atom->REPO), NORM);
+ 				} else if (!strncmp("pfx", fmt, len)) {
+ 					if (showit || atom->pfx_op != ATOM_OP_NONE)
+@@ -735,12 +815,14 @@
+ 					}
+ 				} else
+ 					append_buf(buf, buflen, "<BAD:%.*s>", (int)len, fmt);
+-				++p;
++				p++;
+ #undef HN
+-			} else
++			} else {
+ 				p = fmt + 1;
+-		} else
+-			++p;
++			}
++		} else {
++			p++;
++		}
+ 	}
+ #undef append_buf
+ 
+@@ -757,7 +839,7 @@
+ }
+ 
+ char *
+-atom_format(const char *format, const depend_atom *atom, int pverbose)
++atom_format(const char *format, const depend_atom *atom)
+ {
+-	return atom_format_r(_atom_buf, sizeof(_atom_buf), format, atom, pverbose);
++	return atom_format_r(_atom_buf, sizeof(_atom_buf), format, atom);
+ }
+diff -urN a/libq/atom.h b/libq/atom.h
+--- a/libq/atom.h	2019-05-16 12:12:31.000000000 -0500
++++ b/libq/atom.h	2019-08-04 01:21:46.624608980 -0500
+@@ -19,7 +19,7 @@
+ typedef enum {
+ 	/*   */ ATOM_SD_NONE = 0,
+ 	/* = */ ATOM_SD_ANY_REBUILD,
+-	/* * */ ATOM_SD_ANY_IGNORE
++	/* * */ ATOM_SD_ANY_IGNORE,
+ } atom_slotdep;
+ extern const char * const atom_slotdep_str[];
+ 
+@@ -38,6 +38,7 @@
+ 	/*    */ ATOM_BL_NONE = 0,
+ 	/* !  */ ATOM_BL_BLOCK,
+ 	/* !! */ ATOM_BL_BLOCK_HARD,
++	/* ^  */ ATOM_BL_ANTISLOT,
+ } atom_blocker;
+ extern const char * const atom_blocker_str[];
+ 
+@@ -94,8 +95,8 @@
+ int atom_compare_str(const char * const s1, const char * const s2);
+ char *atom_to_string_r(char *buf, size_t buflen, depend_atom *a);
+ char *atom_format_r(char *buf, size_t buflen,
+-		const char *format, const depend_atom *atom, int pverbose);
++		const char *format, const depend_atom *atom);
+ char *atom_to_string(depend_atom *a);
+-char *atom_format(const char *format, const depend_atom *atom, int pverbose);
++char *atom_format(const char *format, const depend_atom *atom);
+ 
+ #endif
+diff -urN a/libq/hash.c b/libq/hash.c
+--- a/libq/hash.c	1969-12-31 18:00:00.000000000 -0600
++++ b/libq/hash.c	2019-08-04 01:21:46.628608991 -0500
+@@ -0,0 +1,205 @@
++/*
++ * Copyright 2018-2019 Gentoo Foundation
++ * Distributed under the terms of the GNU General Public License v2
++ *
++ * Copyright 2018-     Fabian Groffen  - <grobian@gentoo.org>
++ *
++ * The contents of this file was taken from:
++ *   https://github.com/grobian/hashgen
++ * which was discontinued at the time the sources were incorporated into
++ * portage-utils as qmanifest.
++ */
++
++#include "main.h"
++
++#ifdef HAVE_SSL
++#include <openssl/sha.h>
++#include <openssl/whrlpool.h>
++#endif
++#ifdef HAVE_BLAKE2B
++#include <blake2.h>
++#endif
++
++#include "hash.h"
++
++void
++hash_hex(char *out, const unsigned char *buf, const int length)
++{
++	switch (length) {
++		/* SHA256_DIGEST_LENGTH */
++		case 32:
++			snprintf(out, 64 + 1,
++					"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x"
++					"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x"
++					"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x"
++					"%02x%02x",
++					buf[ 0], buf[ 1], buf[ 2], buf[ 3], buf[ 4],
++					buf[ 5], buf[ 6], buf[ 7], buf[ 8], buf[ 9],
++					buf[10], buf[11], buf[12], buf[13], buf[14],
++					buf[15], buf[16], buf[17], buf[18], buf[19],
++					buf[20], buf[21], buf[22], buf[23], buf[24],
++					buf[25], buf[26], buf[27], buf[28], buf[29],
++					buf[30], buf[31]
++					);
++			break;
++		/* SHA512_DIGEST_LENGTH, WHIRLPOOL_DIGEST_LENGTH, BLAKE2B_OUTBYTES */
++		case 64:
++			snprintf(out, 128 + 1,
++					"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x"
++					"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x"
++					"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x"
++					"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x"
++					"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x"
++					"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x"
++					"%02x%02x%02x%02x",
++					buf[ 0], buf[ 1], buf[ 2], buf[ 3], buf[ 4],
++					buf[ 5], buf[ 6], buf[ 7], buf[ 8], buf[ 9],
++					buf[10], buf[11], buf[12], buf[13], buf[14],
++					buf[15], buf[16], buf[17], buf[18], buf[19],
++					buf[20], buf[21], buf[22], buf[23], buf[24],
++					buf[25], buf[26], buf[27], buf[28], buf[29],
++					buf[30], buf[31], buf[32], buf[33], buf[34],
++					buf[35], buf[36], buf[37], buf[38], buf[39],
++					buf[40], buf[41], buf[42], buf[43], buf[44],
++					buf[45], buf[46], buf[47], buf[48], buf[49],
++					buf[50], buf[51], buf[52], buf[53], buf[54],
++					buf[55], buf[56], buf[57], buf[58], buf[59],
++					buf[60], buf[61], buf[62], buf[63]
++					);
++			break;
++		/* fallback case, should never be necessary */
++		default:
++			{
++				int i;
++				for (i = 0; i < length; i++) {
++					snprintf(&out[i * 2], 3, "%02x", buf[i]);
++				}
++			}
++			break;
++	}
++}
++
++/**
++ * Computes the hashes for file fname and writes the hex-representation
++ * for those hashes into the address space pointed to by the return
++ * pointers for these hashes.  The caller should ensure enough space is
++ * available.  Only those hashes which are in the global hashes variable
++ * are computed, the address space pointed to for non-used hashes are
++ * left untouched, e.g. they can be NULL.  The number of bytes read from
++ * the file pointed to by fname is returned in the flen argument.
++ */
++void
++hash_compute_file(
++		const char *fname,
++		char *sha256,
++		char *sha512,
++		char *whrlpl,
++		char *blak2b,
++		size_t *flen,
++		int hashes)
++{
++	FILE *f;
++	char data[8192];
++	size_t len;
++#ifdef HAVE_SSL
++	SHA256_CTX s256;
++	SHA512_CTX s512;
++	WHIRLPOOL_CTX whrl;
++#else
++	(void)sha256;
++	(void)sha512;
++	(void)whrlpl;
++#endif
++#ifdef HAVE_BLAKE2B
++	blake2b_state bl2b;
++#else
++	(void)blak2b;
++#endif
++
++	if ((f = fopen(fname, "r")) == NULL)
++		return;
++
++#ifdef HAVE_SSL
++	SHA256_Init(&s256);
++	SHA512_Init(&s512);
++	WHIRLPOOL_Init(&whrl);
++#endif
++#ifdef HAVE_BLAKE2B
++	blake2b_init(&bl2b, BLAKE2B_OUTBYTES);
++#endif
++
++	while ((len = fread(data, 1, sizeof(data), f)) > 0) {
++		*flen += len;
++#if defined(HAVE_SSL) || defined(HAVE_BLAKE2B)
++#pragma omp parallel sections
++		{
++#ifdef HAVE_SSL
++#pragma omp section
++			{
++				if (hashes & HASH_SHA256)
++					SHA256_Update(&s256, data, len);
++			}
++#pragma omp section
++			{
++				if (hashes & HASH_SHA512)
++					SHA512_Update(&s512, data, len);
++			}
++#pragma omp section
++			{
++				if (hashes & HASH_WHIRLPOOL)
++					WHIRLPOOL_Update(&whrl, data, len);
++			}
++#endif
++#ifdef HAVE_BLAKE2B
++#pragma omp section
++			{
++				if (hashes & HASH_BLAKE2B)
++					blake2b_update(&bl2b, (unsigned char *)data, len);
++			}
++#endif
++		}
++#endif /* HAVE_SSL || HAVE_BLAKE2B */
++	}
++	fclose(f);
++
++#if defined(HAVE_SSL) || defined(HAVE_BLAKE2B)
++#pragma omp parallel sections
++	{
++#ifdef HAVE_SSL
++		{
++			if (hashes & HASH_SHA256) {
++				unsigned char sha256buf[SHA256_DIGEST_LENGTH];
++				SHA256_Final(sha256buf, &s256);
++				hash_hex(sha256, sha256buf, SHA256_DIGEST_LENGTH);
++			}
++		}
++#pragma omp section
++		{
++			if (hashes & HASH_SHA512) {
++				unsigned char sha512buf[SHA512_DIGEST_LENGTH];
++				SHA512_Final(sha512buf, &s512);
++				hash_hex(sha512, sha512buf, SHA512_DIGEST_LENGTH);
++			}
++		}
++#pragma omp section
++		{
++			if (hashes & HASH_WHIRLPOOL) {
++				unsigned char whrlplbuf[WHIRLPOOL_DIGEST_LENGTH];
++				WHIRLPOOL_Final(whrlplbuf, &whrl);
++				hash_hex(whrlpl, whrlplbuf, WHIRLPOOL_DIGEST_LENGTH);
++			}
++		}
++#endif
++#ifdef HAVE_BLAKE2B
++#pragma omp section
++		{
++			if (hashes & HASH_BLAKE2B) {
++				unsigned char blak2bbuf[BLAKE2B_OUTBYTES];
++				blake2b_final(&bl2b, blak2bbuf, BLAKE2B_OUTBYTES);
++				hash_hex(blak2b, blak2bbuf, BLAKE2B_OUTBYTES);
++			}
++		}
++#endif
++	}
++#endif /* HAVE_SSL || HAVE_BLAKE2B */
++}
+diff -urN a/libq/hash.h b/libq/hash.h
+--- a/libq/hash.h	1969-12-31 18:00:00.000000000 -0600
++++ b/libq/hash.h	2019-08-04 01:21:46.628608991 -0500
+@@ -0,0 +1,26 @@
++/*
++ * Copyright 2018-2019 Gentoo Foundation
++ * Distributed under the terms of the GNU General Public License v2
++ *
++ * Copyright 2018-     Fabian Groffen  - <grobian@gentoo.org>
++ */
++
++#ifndef _HASH_H
++#define _HASH_H 1
++
++enum hash_impls {
++	HASH_SHA256    = 1<<0,
++	HASH_SHA512    = 1<<1,
++	HASH_WHIRLPOOL = 1<<2,
++	HASH_BLAKE2B   = 1<<3
++};
++
++/* default changed from sha256, sha512, whirlpool
++ * to blake2b, sha512 on 2017-11-21 */
++#define HASH_DEFAULT  (HASH_BLAKE2B | HASH_SHA512);
++
++void hash_hex(char *out, const unsigned char *buf, const int length);
++void hash_compute_file(const char *fname, char *sha256, char *sha512,
++		char *whrlpl, char *blak2b, size_t *flen, int hashes);
++
++#endif
+diff -urN a/libq/Makefile.am b/libq/Makefile.am
+--- a/libq/Makefile.am	2019-05-16 12:12:31.000000000 -0500
++++ b/libq/Makefile.am	2019-08-04 01:21:46.624608980 -0500
+@@ -8,6 +8,7 @@
+ 	copy_file.c copy_file.h \
+ 	dep.c dep.h \
+ 	eat_file.c eat_file.h \
++	hash.c hash.h \
+ 	hash_fd.c hash_fd.h \
+ 	human_readable.c human_readable.h \
+ 	i18n.h \
+@@ -31,5 +32,6 @@
+ noinst_LTLIBRARIES = libq.la
+ libq_la_SOURCES = $(QFILES)
+ libq_la_CPPFLAGS = \
++	$(OPENMP_CFLAGS) \
+ 	-I$(top_builddir)/autotools/gnulib \
+ 	-I$(top_srcdir)/autotools/gnulib
+diff -urN a/libq/Makefile.in b/libq/Makefile.in
+--- a/libq/Makefile.in	2019-05-16 12:12:31.000000000 -0500
++++ b/libq/Makefile.in	2019-08-04 01:21:46.624608980 -0500
+@@ -1,7 +1,7 @@
+-# Makefile.in generated by automake 1.15.1 from Makefile.am.
++# Makefile.in generated by automake 1.16.1 from Makefile.am.
+ # @configure_input@
+ 
+-# Copyright (C) 1994-2017 Free Software Foundation, Inc.
++# Copyright (C) 1994-2018 Free Software Foundation, Inc.
+ 
+ # This Makefile.in is free software; the Free Software Foundation
+ # gives unlimited permission to copy and/or distribute it,
+@@ -243,7 +243,7 @@
+ libq_la_LIBADD =
+ am__objects_1 = libq_la-atom.lo libq_la-basename.lo libq_la-colors.lo \
+ 	libq_la-contents.lo libq_la-copy_file.lo libq_la-dep.lo \
+-	libq_la-eat_file.lo libq_la-hash_fd.lo \
++	libq_la-eat_file.lo libq_la-hash.lo libq_la-hash_fd.lo \
+ 	libq_la-human_readable.lo libq_la-md5_sha1_sum.lo \
+ 	libq_la-prelink.lo libq_la-profile.lo libq_la-rmspace.lo \
+ 	libq_la-safe_io.lo libq_la-scandirat.lo libq_la-set.lo \
+@@ -270,7 +270,25 @@
+ am__v_at_1 = 
+ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
+ depcomp = $(SHELL) $(top_srcdir)/depcomp
+-am__depfiles_maybe = depfiles
++am__maybe_remake_depfiles = depfiles
++am__depfiles_remade = ./$(DEPDIR)/libq_la-atom.Plo \
++	./$(DEPDIR)/libq_la-basename.Plo \
++	./$(DEPDIR)/libq_la-colors.Plo \
++	./$(DEPDIR)/libq_la-contents.Plo \
++	./$(DEPDIR)/libq_la-copy_file.Plo ./$(DEPDIR)/libq_la-dep.Plo \
++	./$(DEPDIR)/libq_la-eat_file.Plo ./$(DEPDIR)/libq_la-hash.Plo \
++	./$(DEPDIR)/libq_la-hash_fd.Plo \
++	./$(DEPDIR)/libq_la-human_readable.Plo \
++	./$(DEPDIR)/libq_la-md5_sha1_sum.Plo \
++	./$(DEPDIR)/libq_la-prelink.Plo \
++	./$(DEPDIR)/libq_la-profile.Plo \
++	./$(DEPDIR)/libq_la-rmspace.Plo \
++	./$(DEPDIR)/libq_la-safe_io.Plo \
++	./$(DEPDIR)/libq_la-scandirat.Plo ./$(DEPDIR)/libq_la-set.Plo \
++	./$(DEPDIR)/libq_la-tree.Plo ./$(DEPDIR)/libq_la-xarray.Plo \
++	./$(DEPDIR)/libq_la-xchdir.Plo ./$(DEPDIR)/libq_la-xmkdir.Plo \
++	./$(DEPDIR)/libq_la-xpak.Plo ./$(DEPDIR)/libq_la-xregex.Plo \
++	./$(DEPDIR)/libq_la-xsystem.Plo
+ am__mv = mv -f
+ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+ 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+@@ -719,6 +737,9 @@
+ GNULIB_WMEMSET = @GNULIB_WMEMSET@
+ GNULIB_WRITE = @GNULIB_WRITE@
+ GNULIB__EXIT = @GNULIB__EXIT@
++GPGME_CFLAGS = @GPGME_CFLAGS@
++GPGME_CONFIG = @GPGME_CONFIG@
++GPGME_LIBS = @GPGME_LIBS@
+ GREP = @GREP@
+ HAVE_ACOSF = @HAVE_ACOSF@
+ HAVE_ACOSL = @HAVE_ACOSL@
+@@ -1055,13 +1076,16 @@
+ INT64_MAX_EQ_LONG_MAX = @INT64_MAX_EQ_LONG_MAX@
+ LD = @LD@
+ LDFLAGS = @LDFLAGS@
++LIBBL2 = @LIBBL2@
+ LIBGNU_LIBDEPS = @LIBGNU_LIBDEPS@
+ LIBGNU_LTLIBDEPS = @LIBGNU_LTLIBDEPS@
+ LIBINTL = @LIBINTL@
+ LIBOBJS = @LIBOBJS@
+ LIBS = @LIBS@
++LIBSSL = @LIBSSL@
+ LIBTOOL = @LIBTOOL@
+ LIBTOOL_DEPS = @LIBTOOL_DEPS@
++LIBZ = @LIBZ@
+ LIB_CLOCK_GETTIME = @LIB_CLOCK_GETTIME@
+ LIB_EACCESS = @LIB_EACCESS@
+ LIMITS_H = @LIMITS_H@
+@@ -1120,6 +1144,7 @@
+ NMEDIT = @NMEDIT@
+ OBJDUMP = @OBJDUMP@
+ OBJEXT = @OBJEXT@
++OPENMP_CFLAGS = @OPENMP_CFLAGS@
+ OTOOL = @OTOOL@
+ OTOOL64 = @OTOOL64@
+ PACKAGE = @PACKAGE@
+@@ -1453,6 +1478,7 @@
+ 	copy_file.c copy_file.h \
+ 	dep.c dep.h \
+ 	eat_file.c eat_file.h \
++	hash.c hash.h \
+ 	hash_fd.c hash_fd.h \
+ 	human_readable.c human_readable.h \
+ 	i18n.h \
+@@ -1476,6 +1502,7 @@
+ noinst_LTLIBRARIES = libq.la
+ libq_la_SOURCES = $(QFILES)
+ libq_la_CPPFLAGS = \
++	$(OPENMP_CFLAGS) \
+ 	-I$(top_builddir)/autotools/gnulib \
+ 	-I$(top_srcdir)/autotools/gnulib
+ 
+@@ -1500,8 +1527,8 @@
+ 	  *config.status*) \
+ 	    cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh;; \
+ 	  *) \
+-	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)'; \
+-	    cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe);; \
++	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__maybe_remake_depfiles)'; \
++	    cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__maybe_remake_depfiles);; \
+ 	esac;
+ 
+ $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
+@@ -1533,29 +1560,36 @@
+ distclean-compile:
+ 	-rm -f *.tab.c
+ 
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-atom.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-basename.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-colors.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-contents.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-copy_file.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-dep.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-eat_file.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-hash_fd.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-human_readable.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-md5_sha1_sum.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-prelink.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-profile.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-rmspace.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-safe_io.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-scandirat.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-set.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-tree.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-xarray.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-xchdir.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-xmkdir.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-xpak.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-xregex.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-xsystem.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-atom.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-basename.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-colors.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-contents.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-copy_file.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-dep.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-eat_file.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-hash.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-hash_fd.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-human_readable.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-md5_sha1_sum.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-prelink.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-profile.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-rmspace.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-safe_io.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-scandirat.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-set.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-tree.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-xarray.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-xchdir.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-xmkdir.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-xpak.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-xregex.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libq_la-xsystem.Plo@am__quote@ # am--include-marker
++
++$(am__depfiles_remade):
++	@$(MKDIR_P) $(@D)
++	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
++
++am--depfiles: $(am__depfiles_remade)
+ 
+ .c.o:
+ @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@@ -1627,6 +1661,13 @@
+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+ @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libq_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libq_la-eat_file.lo `test -f 'eat_file.c' || echo '$(srcdir)/'`eat_file.c
+ 
++libq_la-hash.lo: hash.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libq_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libq_la-hash.lo -MD -MP -MF $(DEPDIR)/libq_la-hash.Tpo -c -o libq_la-hash.lo `test -f 'hash.c' || echo '$(srcdir)/'`hash.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libq_la-hash.Tpo $(DEPDIR)/libq_la-hash.Plo
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='hash.c' object='libq_la-hash.lo' libtool=yes @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libq_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libq_la-hash.lo `test -f 'hash.c' || echo '$(srcdir)/'`hash.c
++
+ libq_la-hash_fd.lo: hash_fd.c
+ @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libq_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libq_la-hash_fd.lo -MD -MP -MF $(DEPDIR)/libq_la-hash_fd.Tpo -c -o libq_la-hash_fd.lo `test -f 'hash_fd.c' || echo '$(srcdir)/'`hash_fd.c
+ @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libq_la-hash_fd.Tpo $(DEPDIR)/libq_la-hash_fd.Plo
+@@ -1797,7 +1838,10 @@
+ distclean-tags:
+ 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
+ 
+-distdir: $(DISTFILES)
++distdir: $(BUILT_SOURCES)
++	$(MAKE) $(AM_MAKEFLAGS) distdir-am
++
++distdir-am: $(DISTFILES)
+ 	@srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
+ 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
+ 	list='$(DISTFILES)'; \
+@@ -1867,7 +1911,30 @@
+ 	mostlyclean-am
+ 
+ distclean: distclean-am
+-	-rm -rf ./$(DEPDIR)
++		-rm -f ./$(DEPDIR)/libq_la-atom.Plo
++	-rm -f ./$(DEPDIR)/libq_la-basename.Plo
++	-rm -f ./$(DEPDIR)/libq_la-colors.Plo
++	-rm -f ./$(DEPDIR)/libq_la-contents.Plo
++	-rm -f ./$(DEPDIR)/libq_la-copy_file.Plo
++	-rm -f ./$(DEPDIR)/libq_la-dep.Plo
++	-rm -f ./$(DEPDIR)/libq_la-eat_file.Plo
++	-rm -f ./$(DEPDIR)/libq_la-hash.Plo
++	-rm -f ./$(DEPDIR)/libq_la-hash_fd.Plo
++	-rm -f ./$(DEPDIR)/libq_la-human_readable.Plo
++	-rm -f ./$(DEPDIR)/libq_la-md5_sha1_sum.Plo
++	-rm -f ./$(DEPDIR)/libq_la-prelink.Plo
++	-rm -f ./$(DEPDIR)/libq_la-profile.Plo
++	-rm -f ./$(DEPDIR)/libq_la-rmspace.Plo
++	-rm -f ./$(DEPDIR)/libq_la-safe_io.Plo
++	-rm -f ./$(DEPDIR)/libq_la-scandirat.Plo
++	-rm -f ./$(DEPDIR)/libq_la-set.Plo
++	-rm -f ./$(DEPDIR)/libq_la-tree.Plo
++	-rm -f ./$(DEPDIR)/libq_la-xarray.Plo
++	-rm -f ./$(DEPDIR)/libq_la-xchdir.Plo
++	-rm -f ./$(DEPDIR)/libq_la-xmkdir.Plo
++	-rm -f ./$(DEPDIR)/libq_la-xpak.Plo
++	-rm -f ./$(DEPDIR)/libq_la-xregex.Plo
++	-rm -f ./$(DEPDIR)/libq_la-xsystem.Plo
+ 	-rm -f Makefile
+ distclean-am: clean-am distclean-compile distclean-generic \
+ 	distclean-tags
+@@ -1913,7 +1980,30 @@
+ installcheck-am:
+ 
+ maintainer-clean: maintainer-clean-am
+-	-rm -rf ./$(DEPDIR)
++		-rm -f ./$(DEPDIR)/libq_la-atom.Plo
++	-rm -f ./$(DEPDIR)/libq_la-basename.Plo
++	-rm -f ./$(DEPDIR)/libq_la-colors.Plo
++	-rm -f ./$(DEPDIR)/libq_la-contents.Plo
++	-rm -f ./$(DEPDIR)/libq_la-copy_file.Plo
++	-rm -f ./$(DEPDIR)/libq_la-dep.Plo
++	-rm -f ./$(DEPDIR)/libq_la-eat_file.Plo
++	-rm -f ./$(DEPDIR)/libq_la-hash.Plo
++	-rm -f ./$(DEPDIR)/libq_la-hash_fd.Plo
++	-rm -f ./$(DEPDIR)/libq_la-human_readable.Plo
++	-rm -f ./$(DEPDIR)/libq_la-md5_sha1_sum.Plo
++	-rm -f ./$(DEPDIR)/libq_la-prelink.Plo
++	-rm -f ./$(DEPDIR)/libq_la-profile.Plo
++	-rm -f ./$(DEPDIR)/libq_la-rmspace.Plo
++	-rm -f ./$(DEPDIR)/libq_la-safe_io.Plo
++	-rm -f ./$(DEPDIR)/libq_la-scandirat.Plo
++	-rm -f ./$(DEPDIR)/libq_la-set.Plo
++	-rm -f ./$(DEPDIR)/libq_la-tree.Plo
++	-rm -f ./$(DEPDIR)/libq_la-xarray.Plo
++	-rm -f ./$(DEPDIR)/libq_la-xchdir.Plo
++	-rm -f ./$(DEPDIR)/libq_la-xmkdir.Plo
++	-rm -f ./$(DEPDIR)/libq_la-xpak.Plo
++	-rm -f ./$(DEPDIR)/libq_la-xregex.Plo
++	-rm -f ./$(DEPDIR)/libq_la-xsystem.Plo
+ 	-rm -f Makefile
+ maintainer-clean-am: distclean-am maintainer-clean-generic
+ 
+@@ -1934,16 +2024,16 @@
+ 
+ .MAKE: install-am install-strip
+ 
+-.PHONY: CTAGS GTAGS TAGS all all-am check check-am clean clean-generic \
+-	clean-libtool clean-noinstLTLIBRARIES cscopelist-am ctags \
+-	ctags-am distclean distclean-compile distclean-generic \
+-	distclean-libtool distclean-tags distdir dvi dvi-am html \
+-	html-am info info-am install install-am install-data \
+-	install-data-am install-dvi install-dvi-am install-exec \
+-	install-exec-am install-html install-html-am install-info \
+-	install-info-am install-man install-pdf install-pdf-am \
+-	install-ps install-ps-am install-strip installcheck \
+-	installcheck-am installdirs maintainer-clean \
++.PHONY: CTAGS GTAGS TAGS all all-am am--depfiles check check-am clean \
++	clean-generic clean-libtool clean-noinstLTLIBRARIES \
++	cscopelist-am ctags ctags-am distclean distclean-compile \
++	distclean-generic distclean-libtool distclean-tags distdir dvi \
++	dvi-am html html-am info info-am install install-am \
++	install-data install-data-am install-dvi install-dvi-am \
++	install-exec install-exec-am install-html install-html-am \
++	install-info install-info-am install-man install-pdf \
++	install-pdf-am install-ps install-ps-am install-strip \
++	installcheck installcheck-am installdirs maintainer-clean \
+ 	maintainer-clean-generic mostlyclean mostlyclean-compile \
+ 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+ 	tags tags-am uninstall uninstall-am
+diff -urN a/libq/set.c b/libq/set.c
+--- a/libq/set.c	2019-05-16 12:12:31.000000000 -0500
++++ b/libq/set.c	2019-08-04 01:21:46.628608991 -0500
+@@ -15,7 +15,6 @@
+ #include <string.h>
+ #include <xalloc.h>
+ 
+-#include "rmspace.h"
+ #include "set.h"
+ 
+ static unsigned int
+@@ -47,7 +46,6 @@
+ 
+ 	ll->next = NULL;
+ 	ll->name = xstrdup(name);
+-	rmspace(ll->name);
+ 	ll->hash = fnv1a32(ll->name);
+ 
+ 	pos = ll->hash % _SET_HASH_SIZE;
+@@ -77,7 +75,6 @@
+ 	if (q == NULL)
+ 		q = create_set();
+ 
+-	rmspace(mname);
+ 	hash = fnv1a32(mname);
+ 	pos = hash % _SET_HASH_SIZE;
+ 
+@@ -116,27 +113,24 @@
+ bool
+ contains_set(char *s, set *q)
+ {
+-	char *mname = xstrdup(s);
+ 	unsigned int hash;
+ 	int pos;
+ 	elem *w;
+ 	bool found;
+ 
+-	rmspace(mname);
+-	hash = fnv1a32(mname);
++	hash = fnv1a32(s);
+ 	pos = hash % _SET_HASH_SIZE;
+ 
+ 	found = false;
+ 	if (q->buckets[pos] != NULL) {
+ 		for (w = q->buckets[pos]; w != NULL; w = w->next) {
+-			if (w->hash == hash && strcmp(w->name, mname) == 0) {
++			if (w->hash == hash && strcmp(w->name, s) == 0) {
+ 				found = true;
+ 				break;
+ 			}
+ 		}
+ 	}
+ 
+-	free(mname);
+ 	return found;
+ }
+ 
+@@ -144,22 +138,19 @@
+ set *
+ del_set(char *s, set *q, bool *removed)
+ {
+-	char *mname = xstrdup(s);
+ 	unsigned int hash;
+ 	int pos;
+ 	elem *ll;
+ 	elem *w;
+ 
+-	rmspace(mname);
+-	hash = fnv1a32(mname);
++	hash = fnv1a32(s);
+ 	pos = hash % _SET_HASH_SIZE;
+ 
+ 	*removed = false;
+ 	if (q->buckets[pos] != NULL) {
+ 		ll = NULL;
+ 		for (w = q->buckets[pos]; w != NULL; ll = w, w = w->next) {
+-			if (w->hash == hash && strcmp(w->name, mname) == 0) {
+-				free(mname);
++			if (w->hash == hash && strcmp(w->name, s) == 0) {
+ 				if (ll == NULL) {
+ 					q->buckets[pos] = w->next;
+ 				} else {
+diff -urN a/libq/tree.c b/libq/tree.c
+--- a/libq/tree.c	2019-05-16 12:12:31.000000000 -0500
++++ b/libq/tree.c	2019-08-04 01:21:46.628608991 -0500
+@@ -114,7 +114,8 @@
+ 		return ret;
+ 	}
+ 
+-	tree_close(ret);
++	if (repo != NULL)
++		free(repo);
+ 	warnf("could not open repository at %s (under root %s)", portdir, sroot);
+ 
+ 	return NULL;
+@@ -340,10 +341,11 @@
+ 	if (cat_ctx->ctx->do_sort) {
+ 		if (cat_ctx->pkg_ctxs == NULL) {
+ 			size_t pkg_size = 0;
+-			cat_ctx->pkg_ctxs = NULL;
+ 			cat_ctx->pkg_cnt = 0;
+ 			cat_ctx->pkg_cur = 0;
+ 			while ((de = readdir(cat_ctx->dir)) != NULL) {
++				char *name;
++
+ 				if (tree_filter_pkg(de) == 0)
+ 					continue;
+ 
+@@ -352,13 +354,16 @@
+ 					cat_ctx->pkg_ctxs = xrealloc(cat_ctx->pkg_ctxs,
+ 								sizeof(*cat_ctx->pkg_ctxs) * pkg_size);
+ 				}
++				name = xstrdup(de->d_name);
+ 				pkg_ctx = cat_ctx->pkg_ctxs[cat_ctx->pkg_cnt++] =
+-					tree_open_pkg(cat_ctx, de->d_name);
+-				if (pkg_ctx == NULL)
++					tree_open_pkg(cat_ctx, name);
++				if (pkg_ctx == NULL) {
++					free(name);
+ 					cat_ctx->pkg_cnt--;
++				}
+ 			}
+ 
+-			if (cat_ctx->ctx->pkgsortfunc != NULL) {
++			if (cat_ctx->ctx->pkgsortfunc != NULL && cat_ctx->pkg_cnt > 1) {
+ 				qsort(cat_ctx->pkg_ctxs, cat_ctx->pkg_cnt,
+ 						sizeof(*cat_ctx->pkg_ctxs), cat_ctx->ctx->pkgsortfunc);
+ 			}
+@@ -948,6 +953,8 @@
+ 	/* avoid freeing tree_ctx' repo */
+ 	if (pkg_ctx->cat_ctx->ctx->repo != pkg_ctx->repo)
+ 		free(pkg_ctx->repo);
++	if (pkg_ctx->cat_ctx->ctx->do_sort)
++		free((char *)pkg_ctx->name);
+ 	free(pkg_ctx->slot);
+ 	free(pkg_ctx);
+ }
+@@ -1042,77 +1049,36 @@
+ 	return pkg_ctx->atom;
+ }
+ 
+-set *
+-tree_get_vdb_atoms(const char *sroot, const char *svdb, int fullcpv)
+-{
+-	tree_ctx *ctx;
+-
+-	int cfd, j;
+-	int dfd, i;
+-
+-	char buf[_Q_PATH_MAX];
+-	char slot[_Q_PATH_MAX];
+-	char *slotp = slot;
+-	size_t slot_len;
++struct get_atoms_state {
++	set *cpf;
++	bool fullcpv;
++};
+ 
+-	struct dirent **cat;
+-	struct dirent **pf;
+-
+-	depend_atom *atom = NULL;
+-	set *cpf = NULL;
+-
+-	ctx = tree_open_vdb(sroot, svdb);
+-	if (!ctx)
+-		return NULL;
++static int tree_get_atoms_cb(tree_pkg_ctx *pkg_ctx, void *priv)
++{
++	struct get_atoms_state *state = (struct get_atoms_state *)priv;
++	depend_atom *atom = tree_get_atom(pkg_ctx, false);
+ 
+-	/* scan the cat first */
+-	cfd = scandirat(ctx->tree_fd, ".", &cat, tree_filter_cat, alphasort);
+-	if (cfd < 0)
+-		goto fuckit;
+-
+-	for (j = 0; j < cfd; j++) {
+-		dfd = scandirat(ctx->tree_fd, cat[j]->d_name,
+-				&pf, tree_filter_pkg, alphasort);
+-		if (dfd < 0)
+-			continue;
+-		for (i = 0; i < dfd; i++) {
+-			int blen = snprintf(buf, sizeof(buf), "%s/%s/SLOT",
+-					cat[j]->d_name, pf[i]->d_name);
+-			if (blen < 0 || (size_t)blen >= sizeof(buf)) {
+-				warnf("unable to parse long package: %s/%s",
+-						cat[j]->d_name, pf[i]->d_name);
+-				continue;
+-			}
++	if (state->fullcpv) {
++		state->cpf = add_set(atom_format("%[CATEGORY]%[PF]", atom), state->cpf);
++	} else {
++		state->cpf = add_set_unique(atom_format("%[CATEGORY]%[PN]", atom),
++				state->cpf, NULL);
++	}
+ 
+-			/* Chop the SLOT for the atom parsing. */
+-			buf[blen - 5] = '\0';
+-			if ((atom = atom_explode(buf)) == NULL)
+-				continue;
+-			/* Restore the SLOT. */
+-			buf[blen - 5] = '/';
++	return 0;
++}
+ 
+-			slot_len = sizeof(slot);
+-			eat_file_at(ctx->tree_fd, buf, &slotp, &slot_len);
+-			rmspace(slot);
+-
+-			if (fullcpv) {
+-				if (atom->PR_int)
+-					snprintf(buf, sizeof(buf), "%s/%s-%s-r%i",
+-							atom->CATEGORY, atom->PN, atom->PV, atom->PR_int);
+-				else
+-					snprintf(buf, sizeof(buf), "%s/%s-%s",
+-							atom->CATEGORY, atom->PN, atom->PV);
+-			} else {
+-				snprintf(buf, sizeof(buf), "%s/%s", atom->CATEGORY, atom->PN);
+-			}
+-			atom_implode(atom);
+-			cpf = add_set(buf, cpf);
+-		}
+-		scandir_free(pf, dfd);
+-	}
+-	scandir_free(cat, cfd);
++set *
++tree_get_atoms(tree_ctx *ctx, bool fullcpv, set *satoms)
++{
++	struct get_atoms_state state = {
++		.cpf = satoms,
++		.fullcpv = fullcpv
++	};
+ 
+- fuckit:
++	tree_foreach_pkg_fast(ctx, tree_get_atoms_cb, &state, NULL);
+ 	tree_close(ctx);
+-	return cpf;
++
++	return state.cpf;
+ }
+diff -urN a/libq/tree.h b/libq/tree.h
+--- a/libq/tree.h	2019-05-16 12:12:31.000000000 -0500
++++ b/libq/tree.h	2019-08-04 01:21:46.628608991 -0500
+@@ -135,7 +135,7 @@
+ #define tree_foreach_pkg_sorted(ctx, cb, priv) \
+ 	tree_foreach_pkg(ctx, cb, priv, NULL, true, NULL, NULL);
+ struct dirent *tree_get_next_dir(DIR *dir);
+-set *tree_get_vdb_atoms(const char *sroot, const char *svdb, int fullcpv);
++set *tree_get_atoms(tree_ctx *ctx, bool fullcpv, set *satoms);
+ depend_atom *tree_get_atom(tree_pkg_ctx *pkg_ctx, bool complete);
+ 
+ #endif
+diff -urN a/main.c b/main.c
+--- a/main.c	2019-05-16 12:12:31.000000000 -0500
++++ b/main.c	2019-08-04 01:21:46.632609003 -0500
+@@ -16,6 +16,8 @@
+ #include <ctype.h>
+ #include <sys/time.h>
+ #include <limits.h>
++#include <termios.h>
++#include <sys/ioctl.h>
+ 
+ #include "eat_file.h"
+ #include "rmspace.h"
+@@ -23,10 +25,11 @@
+ #include "xasprintf.h"
+ 
+ /* variables to control runtime behavior */
++char *main_overlay;
+ char *module_name = NULL;
+-char *modpath = NULL;
+ int verbose = 0;
+ int quiet = 0;
++int twidth;
+ char pretend = 0;
+ char *portroot;
+ char *config_protect;
+@@ -40,8 +43,8 @@
+ char *features;
+ char *install_mask;
+ DECLARE_ARRAY(overlays);
++DECLARE_ARRAY(overlay_names);
+ 
+-static char *main_overlay;
+ static char *portarch;
+ static char *portedb;
+ static char *eprefix;
+@@ -89,14 +92,18 @@
+ 	const char opt_arg[] = "[arg]";
+ 	const char a_arg[] = "<arg>";
+ 	size_t a_arg_len = strlen(a_arg) + 1;
+-	size_t i, optlen;
++	size_t i;
++	size_t optlen;
++	size_t l;
++	size_t prefixlen;
++	const char *hstr;
+ 	FILE *fp = status == EXIT_SUCCESS ? stdout : warnout;
+ 
+ 	if (blabber == 0) {
+-		fprintf(fp, "%sUsage:%s %sq%s %s<applet> <args>%s  : %s"
++		fprintf(fp, "%susage:%s %sq%s %s<applet> <args>%s  : %s"
+ 			"invoke a portage utility applet\n\n", GREEN,
+ 			NORM, YELLOW, NORM, DKBLUE, RED, NORM);
+-		fprintf(fp, "%sCurrently defined applets:%s\n", GREEN, NORM);
++		fprintf(fp, "%scurrently defined applets:%s\n", GREEN, NORM);
+ 		for (i = 0; applets[i].desc; ++i)
+ 			if (applets[i].func)
+ 				fprintf(fp, " %s%8s%s %s%-16s%s%s:%s %s\n",
+@@ -104,7 +111,7 @@
+ 					DKBLUE, applets[i].opts, NORM,
+ 					RED, NORM, _(applets[i].desc));
+ 	} else if (blabber > 0) {
+-		fprintf(fp, "%sUsage:%s %s%s%s [opts] %s%s%s %s:%s %s\n",
++		fprintf(fp, "%susage:%s %s%s%s [opts] %s%s%s %s:%s %s\n",
+ 			GREEN, NORM,
+ 			YELLOW, applets[blabber].name, NORM,
+ 			DKBLUE, applets[blabber].opts, NORM,
+@@ -113,19 +120,19 @@
+ 			fprintf(fp, "\n%s\n", desc);
+ 	}
+ 	if (module_name != NULL)
+-		fprintf(fp, "%sLoaded module:%s\n%s%8s%s %s<args>%s\n",
++		fprintf(fp, "%sloaded module:%s\n%s%8s%s %s<args>%s\n",
+ 			GREEN, NORM, YELLOW, module_name, NORM, DKBLUE, NORM);
+ 
+ 	/* Prescan the --long opt length to auto-align. */
+ 	optlen = 0;
+ 	for (i = 0; opts[i].name; ++i) {
+-		size_t l = strlen(opts[i].name);
++		l = strlen(opts[i].name);
+ 		if (opts[i].has_arg != no_argument)
+ 			l += a_arg_len;
+ 		optlen = MAX(l, optlen);
+ 	}
+ 
+-	fprintf(fp, "\n%sOptions:%s -[%s]\n", GREEN, NORM, flags);
++	fprintf(fp, "\n%soptions:%s -[%s]\n", GREEN, NORM, flags);
+ 	for (i = 0; opts[i].name; ++i) {
+ 		/* this assert is a life saver when adding new applets. */
+ 		assert(help[i] != NULL);
+@@ -136,16 +143,39 @@
+ 		else
+ 			fprintf(fp, "  -%c, ", opts[i].val);
+ 
+-		/* then the long flag + help text */
++		/* then the long flag */
+ 		if (opts[i].has_arg == no_argument)
+-			fprintf(fp, "--%-*s %s*%s %s\n", (int)optlen, opts[i].name,
+-				RED, NORM, _(help[i]));
++			fprintf(fp, "--%-*s %s*%s ", (int)optlen, opts[i].name,
++				RED, NORM);
+ 		else
+-			fprintf(fp, "--%s %s%s%s%*s %s*%s %s\n",
++			fprintf(fp, "--%s %s%s%s%*s %s*%s ",
+ 				opts[i].name,
+ 				DKBLUE, (opts[i].has_arg == a_argument ? a_arg : opt_arg), NORM,
+ 				(int)(optlen - strlen(opts[i].name) - a_arg_len), "",
+-				RED, NORM, _(help[i]));
++				RED, NORM);
++
++		/* then wrap the help text, if necessary */
++		prefixlen = 6 + 2 + optlen + 1 + 1 + 1;
++		if ((size_t)twidth < prefixlen + 10) {
++			fprintf(fp, "%s\n", _(help[i]));
++		} else {
++			const char *t;
++			hstr = _(help[i]);
++			l = strlen(hstr);
++			while (twidth - prefixlen < l) {
++				/* search backwards for a space */
++				t = &hstr[twidth - prefixlen];
++				while (t > hstr && !isspace((int)*t))
++					t--;
++				if (t == hstr)
++					break;
++				fprintf(fp, "%.*s\n%*s",
++						(int)(t - hstr), hstr, (int)prefixlen, "");
++				l -= t + 1 - hstr;
++				hstr = t + 1;  /* skip space */
++			}
++			fprintf(fp, "%s\n", hstr);
++		}
+ 	}
+ 	exit(status);
+ }
+@@ -194,6 +224,12 @@
+ 	q = xstrdup(string);
+ 	str = q;
+ 
++	/* shortcut empty strings */
++	while (isspace((int)*string))
++		string++;
++	if (*string == '\0')
++		return;
++
+ 	remove_extra_space(str);
+ 	rmspace(str);
+ 
+@@ -238,6 +274,7 @@
+ 		path = iniparser_getstring(dict, conf, NULL);
+ 		if (path) {
+ 			void *ele = xarraypush_str(overlays, path);
++			xarraypush_str(overlay_names, repo);
+ 			if (main_repo && !strcmp(repo, main_repo))
+ 				main_overlay = ele;
+ 		}
+@@ -608,16 +645,16 @@
+ 		_Q_EVS(ISTR, INSTALL_MASK,        install_mask,        "")
+ 		_Q_EVS(ISTR, PKG_INSTALL_MASK,    pkg_install_mask,    "")
+ 		_Q_EVS(STR,  ARCH,                portarch,            "")
+-		_Q_EVS(ISTR, CONFIG_PROTECT,      config_protect,      CONFIG_EPREFIX "etc")
++		_Q_EVS(ISTR, CONFIG_PROTECT,      config_protect,      "/etc")
+ 		_Q_EVS(ISTR, CONFIG_PROTECT_MASK, config_protect_mask, "")
+ 		_Q_EVB(BOOL, NOCOLOR,             nocolor,             0)
+ 		_Q_EVS(ISTR, FEATURES,            features,            "")
+ 		_Q_EVS(STR,  EPREFIX,             eprefix,             CONFIG_EPREFIX)
+ 		_Q_EVS(STR,  EMERGE_LOG_DIR,      portlogdir,          CONFIG_EPREFIX "var/log")
+-		_Q_EVS(STR,  PORTDIR,             main_overlay,        CONFIG_EPREFIX "usr/portage")
++		_Q_EVS(STR,  PORTDIR,             main_overlay,        CONFIG_EPREFIX "var/db/repos/gentoo")
+ 		_Q_EVS(STR,  PORTAGE_BINHOST,     binhost,             DEFAULT_PORTAGE_BINHOST)
+ 		_Q_EVS(STR,  PORTAGE_TMPDIR,      port_tmpdir,         CONFIG_EPREFIX "var/tmp/portage/")
+-		_Q_EVS(STR,  PKGDIR,              pkgdir,              CONFIG_EPREFIX "usr/portage/packages/")
++		_Q_EVS(STR,  PKGDIR,              pkgdir,              CONFIG_EPREFIX "var/cache/binpkgs/")
+ 		_Q_EVS(STR,  Q_VDB,               portvdb,             CONFIG_EPREFIX "var/db/pkg")
+ 		_Q_EVS(STR,  Q_EDB,               portedb,             CONFIG_EPREFIX "var/cache/edb")
+ 		{ NULL, 0, _Q_BOOL, { NULL }, 0, NULL, }
+@@ -736,8 +773,13 @@
+ 	read_repos_conf(configroot, "/etc/portage/repos.conf");
+ 	if (orig_main_overlay != main_overlay)
+ 		free(orig_main_overlay);
+-	if (array_cnt(overlays) == 0)
+-		xarraypush_str(overlays, main_overlay);
++	if (array_cnt(overlays) == 0) {
++		xarraypush_ptr(overlays, main_overlay);
++		xarraypush_str(overlay_names, "<PORTDIR>");
++	} else if (orig_main_overlay == main_overlay) {
++		/* if no explicit overlay was flagged as main, take the first one */
++		main_overlay = array_get_elem(overlays, 0);
++	}
+ 
+ 	if (getenv("DEBUG")) {
+ 		for (i = 0; vars_to_read[i].name; ++i) {
+@@ -763,6 +805,8 @@
+ int main(int argc, char **argv)
+ {
+ 	struct stat st;
++	struct winsize winsz;
++
+ 	warnout = stderr;
+ 	IF_DEBUG(init_coredumps());
+ 	argv0 = argv[0];
+@@ -771,11 +815,18 @@
+ 	bindtextdomain(argv0, CONFIG_EPREFIX "usr/share/locale");
+ 	textdomain(argv0);
+ 
+-	if (fstat(fileno(stdout), &st) != -1)
+-		if (!isatty(fileno(stdout)))
++	twidth = 0;
++	if (fstat(fileno(stdout), &st) != -1) {
++		if (!isatty(fileno(stdout))) {
+ 			no_colors();
+-	if ((getenv("TERM") == NULL) || (strcmp(getenv("TERM"), "dumb") == 0))
+-		no_colors();
++		} else {
++			if ((getenv("TERM") == NULL) ||
++					(strcmp(getenv("TERM"), "dumb") == 0))
++				no_colors();
++			if (ioctl(0, TIOCGWINSZ, &winsz) == 0 && winsz.ws_col > 0)
++				twidth = (int)winsz.ws_col;
++		}
++	}
+ 
+ 	initialize_portage_env();
+ 	optind = 0;
+diff -urN a/qatom.c b/qatom.c
+--- a/qatom.c	2019-05-16 12:12:31.000000000 -0500
++++ b/qatom.c	2019-08-04 01:21:46.640609025 -0500
+@@ -4,6 +4,7 @@
+  *
+  * Copyright 2005-2008 Ned Ludd        - <solar@gentoo.org>
+  * Copyright 2005-2014 Mike Frysinger  - <vapier@gentoo.org>
++ * Copyright 2018-     Fabian Groffen  - <grobian@gentoo.org>
+  */
+ 
+ #include "main.h"
+@@ -41,9 +42,9 @@
+ 
+ 	while ((i = GETOPT_LONG(QATOM, qatom, "")) != -1) {
+ 		switch (i) {
+-		case 'F': format = optarg; break;
++		case 'F': format = optarg;   break;
+ 		case 'c': action = _COMPARE; break;
+-		case 'p': action = _PRINT; break;
++		case 'p': action = _PRINT;   break;
+ 		COMMON_GETOPTS_CASES(qatom)
+ 		}
+ 	}
+@@ -62,22 +63,40 @@
+ 		}
+ 
+ 		switch (action) {
+-		case _COMPARE:
++		case _COMPARE: {
++			int r;
++
+ 			i++;
+ 			atomc = atom_explode(argv[i]);
+ 			if (atomc == NULL) {
+ 				warnf("invalid atom: %s\n", argv[i]);
+ 				break;
+ 			}
+-			printf("%s %s ",
+-					atom_to_string(atom),
+-					booga[atom_compare(atom, atomc)]);
+-			printf("%s\n",
+-					atom_to_string(atomc));
++
++			if (atomc->blocker != ATOM_BL_NONE ||
++					atomc->pfx_op != ATOM_OP_NONE ||
++					atomc->sfx_op != ATOM_OP_NONE ||
++					(atomc->CATEGORY == NULL &&
++					 atom->blocker == ATOM_BL_NONE &&
++					 atom->pfx_op == ATOM_OP_NONE &&
++					 atom->sfx_op == ATOM_OP_NONE))
++			{
++				r = atom_compare(atom, atomc);
++			} else {
++				r = atom_compare(atomc, atom);
++				switch (r) {
++					case NEWER:     r = OLDER;     break;
++					case OLDER:     r = NEWER;     break;
++				}
++			}
++
++			printf("%s %s ", atom_to_string(atom), booga[r]);
++			printf("%s\n", atom_to_string(atomc));
+ 			atom_implode(atomc);
+ 			break;
++		}
+ 		case _EXPLODE:
+-			printf("%s\n", atom_format(format, atom, verbose));
++			printf("%s\n", atom_format(format, atom));
+ 			break;
+ 		case _PRINT:
+ 			printf("%s\n", atom_to_string(atom));
+diff -urN a/q.c b/q.c
+--- a/q.c	2019-05-16 12:12:31.000000000 -0500
++++ b/q.c	2019-08-04 01:21:46.640609025 -0500
+@@ -20,16 +20,18 @@
+ #endif
+ 
+ #include "basename.h"
++#include "eat_file.h"
++#include "rmspace.h"
+ 
+-#define Q_FLAGS "iM:" COMMON_FLAGS
++#define Q_FLAGS "io" COMMON_FLAGS
+ static struct option const q_long_opts[] = {
+ 	{"install",       no_argument, NULL, 'i'},
+-	{"modpath",        a_argument, NULL, 'M'},
++	{"overlays",      no_argument, NULL, 'o'},
+ 	COMMON_LONG_OPTS
+ };
+ static const char * const q_opts_help[] = {
+ 	"Install symlinks for applets",
+-	"Module path",
++	"Print available overlays (read from repos.conf)",
+ 	COMMON_OPTS_HELP
+ };
+ #define q_usage(ret) usage(ret, Q_FLAGS, q_long_opts, q_opts_help, NULL, lookup_applet_idx("q"))
+@@ -73,7 +75,9 @@
+ 
+ int q_main(int argc, char **argv)
+ {
+-	int i, install;
++	int i;
++	bool install;
++	bool print_overlays;
+ 	const char *p;
+ 	APPLET func;
+ 
+@@ -90,13 +94,13 @@
+ 	if (argc == 1)
+ 		q_usage(EXIT_FAILURE);
+ 
+-	install = 0;
+-
++	install = false;
++	print_overlays = false;
+ 	while ((i = GETOPT_LONG(Q, q, "+")) != -1) {
+ 		switch (i) {
+ 		COMMON_GETOPTS_CASES(q)
+-		case 'M': modpath = optarg; break;
+-		case 'i': install = 1; break;
++		case 'i': install = true;        break;
++		case 'o': print_overlays = true; break;
+ 		}
+ 	}
+ 
+@@ -125,7 +129,7 @@
+ 		rret = readlink("/proc/self/exe", buf, sizeof(buf) - 1);
+ #endif
+ 		if (rret == -1) {
+-			warnfp("haha no symlink love for you");
++			warnfp("haha no symlink love for you ... :(");
+ 			return 1;
+ 		}
+ 		buf[rret] = '\0';
+@@ -153,6 +157,36 @@
+ 		return ret;
+ 	}
+ 
++	if (print_overlays) {
++		char *overlay;
++		char *repo_name = NULL;
++		size_t repo_name_len = 0;
++		char buf[_Q_PATH_MAX];
++		size_t n;
++
++		array_for_each(overlays, n, overlay) {
++			repo_name = xarrayget(overlay_names, n);
++			if (strcmp(repo_name, "<PORTDIR>") == 0) {
++				repo_name = NULL;
++				snprintf(buf, sizeof(buf), "%s/profiles/repo_name", overlay);
++				if (!eat_file(buf, &repo_name, &repo_name_len))
++					repo_name = NULL;
++				if (repo_name != NULL)
++					rmspace(repo_name);
++			}
++			printf("%s%s%s: %s%s%s%s\n",
++					GREEN, repo_name == NULL ? "?unknown?" : repo_name,
++					NORM, overlay,
++					YELLOW, main_overlay == overlay ? " (main)" : "", NORM);
++			if (repo_name_len != 0) {
++				free(repo_name);
++				repo_name_len = 0;
++			}
++		}
++
++		return 0;
++	}
++
+ 	if (argc == optind)
+ 		q_usage(EXIT_FAILURE);
+ 	if ((func = lookup_applet(argv[optind])) == NULL)
+diff -urN a/qcheck.c b/qcheck.c
+--- a/qcheck.c	2019-05-16 12:12:31.000000000 -0500
++++ b/qcheck.c	2019-08-04 01:21:46.640609025 -0500
+@@ -19,14 +19,17 @@
+ #include "contents.h"
+ #include "md5_sha1_sum.h"
+ #include "prelink.h"
+-#include "set.h"
+ #include "tree.h"
+ #include "xarray.h"
+ #include "xasprintf.h"
+ #include "xregex.h"
+ 
+-#define QCHECK_FLAGS "s:uABHTPp" COMMON_FLAGS
++#define QCHECK_FORMAT "%[CATEGORY]%[PN]"
++#define QCHECK_FORMAT_VERBOSE "%[CATEGORY]%[PF]"
++
++#define QCHECK_FLAGS "F:s:uABHTPp" COMMON_FLAGS
+ static struct option const qcheck_long_opts[] = {
++	{"format",          a_argument, NULL, 'F'},
+ 	{"skip",            a_argument, NULL, 's'},
+ 	{"update",         no_argument, NULL, 'u'},
+ 	{"noafk",          no_argument, NULL, 'A'},
+@@ -38,6 +41,7 @@
+ 	COMMON_LONG_OPTS
+ };
+ static const char * const qcheck_opts_help[] = {
++	"Custom output format (default: " QCHECK_FORMAT ")",
+ 	"Ignore files matching the regular expression <arg>",
+ 	"Update missing files, chksum and mtimes for packages",
+ 	"Ignore missing files",
+@@ -62,6 +66,7 @@
+ 	bool chk_mtime;
+ 	bool chk_config_protect;
+ 	bool undo_prelink;
++	const char *fmt;
+ };
+ 
+ static int
+@@ -98,7 +103,7 @@
+ 	num_files = num_files_ok = num_files_unknown = num_files_ignored = 0;
+ 	qcprintf("%sing %s ...\n",
+ 		(state->qc_update ? "Updat" : "Check"),
+-		atom_format("%[CATEGORY]%[PF]", atom, 0));
++		atom_format(state->fmt, atom));
+ 	if (state->qc_update) {
+ 		fp_contents_update = tree_pkg_vdb_fopenat_rw(pkg_ctx, "CONTENTS~");
+ 		if (fp_contents_update == NULL) {
+@@ -329,13 +334,8 @@
+ 		if (!verbose)
+ 			return EXIT_SUCCESS;
+ 	}
+-	if (state->bad_only && num_files_ok != num_files) {
+-		if (verbose)
+-			printf("%s\n", atom_format("%[CATEGORY]%[PF]", atom, 0));
+-		else {
+-			printf("%s\n", atom_format("%[CATEGORY]%[PN]", atom, 0));
+-		}
+-	}
++	if (state->bad_only && num_files_ok != num_files)
++		printf("%s\n", atom_format(state->fmt, atom));
+ 	qcprintf("  %2$s*%1$s %3$s%4$zu%1$s out of %3$s%5$zu%1$s file%6$s are good",
+ 		NORM, BOLD, BLUE, num_files_ok, num_files,
+ 		(num_files > 1 ? "s" : ""));
+@@ -369,7 +369,7 @@
+ 
+ 		qatom = tree_get_atom(pkg_ctx, false);
+ 		array_for_each(state->atoms, i, atom) {
+-			if (atom_compare(atom, qatom) == EQUAL) {
++			if (atom_compare(qatom, atom) == EQUAL) {
+ 				showit = true;
+ 				break;
+ 			}
+@@ -399,6 +399,7 @@
+ 		.chk_mtime = true,
+ 		.chk_config_protect = true,
+ 		.undo_prelink = false,
++		.fmt = NULL,
+ 	};
+ 
+ 	while ((ret = GETOPT_LONG(QCHECK, qcheck, "")) != -1) {
+@@ -410,16 +411,20 @@
+ 			xarraypush(regex_arr, &preg, sizeof(preg));
+ 			break;
+ 		}
+-		case 'u': state.qc_update = true; break;
+-		case 'A': state.chk_afk = false; break;
+-		case 'B': state.bad_only = true; break;
+-		case 'H': state.chk_hash = false; break;
+-		case 'T': state.chk_mtime = false; break;
+-		case 'P': state.chk_config_protect = false; break;
+-		case 'p': state.undo_prelink = prelink_available(); break;
++		case 'u': state.qc_update = true;                    break;
++		case 'A': state.chk_afk = false;                     break;
++		case 'B': state.bad_only = true;                     break;
++		case 'H': state.chk_hash = false;                    break;
++		case 'T': state.chk_mtime = false;                   break;
++		case 'P': state.chk_config_protect = false;          break;
++		case 'p': state.undo_prelink = prelink_available();  break;
++		case 'F': state.fmt = optarg;                        break;
+ 		}
+ 	}
+ 
++	if (state.fmt == NULL)
++		state.fmt = verbose ? QCHECK_FORMAT_VERBOSE : QCHECK_FORMAT;
++
+ 	argc -= optind;
+ 	argv += optind;
+ 	for (i = 0; i < (size_t)argc; ++i) {
+diff -urN a/qdepends.c b/qdepends.c
+--- a/qdepends.c	2019-05-16 12:12:31.000000000 -0500
++++ b/qdepends.c	2019-08-04 01:21:46.640609025 -0500
+@@ -132,7 +132,11 @@
+ 	if ((state->qmode & QMODE_REVERSE) == 0) {
+ 		/* see if this cat/pkg is requested */
+ 		array_for_each(state->atoms, i, atom) {
+-			if (atom_compare(atom, datom) == EQUAL) {
++			if (atom->blocker != ATOM_BL_NONE ||
++					atom->SLOT != NULL ||
++					atom->REPO != NULL)
++				datom = tree_get_atom(pkg_ctx, true);
++			if (atom_compare(datom, atom) == EQUAL) {
+ 				atom = NULL;
+ 				break;
+ 			}
+@@ -145,7 +149,7 @@
+ 		ret = 1;
+ 
+ 		datom = tree_get_atom(pkg_ctx, true);
+-		printf("%s:", atom_format(state->format, datom, 0));
++		printf("%s:", atom_format(state->format, datom));
+ 	}
+ 
+ 	xarrayfree_int(state->deps);
+@@ -203,7 +207,7 @@
+ 			if (state->qmode & QMODE_REVERSE) {
+ 				array_for_each(state->atoms, m, atom) {
+ 					array_for_each(state->deps, n, fatom) {
+-						if (atom_compare(atom, fatom) == EQUAL) {
++						if (atom_compare(fatom, atom) == EQUAL) {
+ 							fatom = NULL;
+ 							break;
+ 						}
+@@ -218,7 +222,7 @@
+ 
+ 					if (!firstmatch) {
+ 						datom = tree_get_atom(pkg_ctx, true);
+-						printf("%s:", atom_format(state->format, datom, 0));
++						printf("%s:", atom_format(state->format, datom));
+ 					}
+ 					firstmatch = true;
+ 
+@@ -247,13 +251,15 @@
+ 
+ 						if (!firstmatch) {
+ 							datom = tree_get_atom(pkg_ctx, true);
+-							printf("%s:", atom_format(state->format, datom, 0));
++							printf("%s%s", atom_format(state->format, datom),
++									quiet < 2 ? ":" : "");
+ 						}
+ 						firstmatch = true;
+ 
+ 						snprintf(buf, sizeof(buf), "%s%s%s",
+ 								RED, atom_to_string(atom), NORM);
+-						add_set_unique(buf, state->udeps, NULL);
++						if (quiet < 2)
++							add_set_unique(buf, state->udeps, NULL);
+ 					} else if (!quiet) {
+ 						add_set_unique(atom_to_string(atom),
+ 								state->udeps, NULL);
+@@ -322,7 +328,7 @@
+ 	}
+ 
+ 	if ((state.qmode & ~(QMODE_REVERSE | QMODE_INSTALLED | QMODE_TREE)) == 0) {
+-		/* default mode of operation: -qau (also for just -Q) */
++		/* default mode of operation: -drpb (also for just -Q) */
+ 		state.qmode |= QMODE_DEPEND  |
+ 					   QMODE_RDEPEND |
+ 					   QMODE_PDEPEND |
+diff -urN a/qfile.c b/qfile.c
+--- a/qfile.c	2019-05-16 12:12:31.000000000 -0500
++++ b/qfile.c	2019-08-04 01:21:46.644609037 -0500
+@@ -20,19 +20,21 @@
+ #include "rmspace.h"
+ #include "tree.h"
+ 
+-#define QFILE_FLAGS "boRx:S" COMMON_FLAGS
++#define QFILE_FLAGS "F:doRx:S" COMMON_FLAGS
+ static struct option const qfile_long_opts[] = {
++	{"format",       a_argument, NULL, 'F'},
+ 	{"slots",       no_argument, NULL, 'S'},
+ 	{"root-prefix", no_argument, NULL, 'R'},
+-	{"basename",    no_argument, NULL, 'b'},
++	{"dir",         no_argument, NULL, 'd'},
+ 	{"orphans",     no_argument, NULL, 'o'},
+ 	{"exclude",      a_argument, NULL, 'x'},
+ 	COMMON_LONG_OPTS
+ };
+ static const char * const qfile_opts_help[] = {
++	"Print matched atom using given format string",
+ 	"Display installed packages with slots",
+ 	"Assume arguments are already prefixed by $ROOT",
+-	"Match any component of the path",
++	"Also match directories for single component arguments",
+ 	"List orphan files",
+ 	"Don't look in package <arg> (used with --orphans)",
+ 	COMMON_OPTS_HELP
+@@ -64,16 +66,13 @@
+ 	char *exclude_pkg;
+ 	char *exclude_slot;
+ 	depend_atom *exclude_atom;
+-	bool slotted;
+ 	bool basename;
+ 	bool orphans;
+ 	bool assume_root_prefix;
++	const char *format;
++	bool need_full_atom;
+ };
+ 
+-/*
+- * We assume the people calling us have chdir(/var/db/pkg) and so
+- * we use relative paths throughout here.
+- */
+ static int qfile_cb(tree_pkg_ctx *pkg_ctx, void *priv)
+ {
+ 	struct qfile_opt_state *state = priv;
+@@ -92,15 +91,16 @@
+ 	int found = 0;
+ 
+ 	/* If exclude_pkg is not NULL, check it.  We are looking for files
+-	 * collisions, and must exclude one package.
+-	 */
++	 * collisions, and must exclude one package. */
+ 	if (state->exclude_pkg) {
+ 		/* see if CATEGORY matches */
+ 		if (state->exclude_atom->CATEGORY &&
+ 		    strcmp(state->exclude_atom->CATEGORY, catname))
+ 			goto dont_skip_pkg;
+-		atom = tree_get_atom(pkg_ctx, false);
+-		if (atom_compare(state->exclude_atom, atom) != EQUAL)
++		atom = tree_get_atom(pkg_ctx,
++				state->exclude_atom->SLOT != NULL ||
++				state->exclude_atom->REPO != NULL);
++		if (atom_compare(atom, state->exclude_atom) != EQUAL)
+ 			goto dont_skip_pkg;
+ 		/* "(CAT/)?(PN|PF)" matches, and no SLOT specified */
+ 		if (state->exclude_slot == NULL)
+@@ -137,7 +137,7 @@
+ 		for (i = 0; i < args->length; i++) {
+ 			if (base_names[i] == NULL)
+ 				continue;
+-			if (non_orphans && non_orphans[i])
++			if (non_orphans != NULL && non_orphans[i])
+ 				continue;
+ 
+ 			/* For optimization of qfile(), we also give it an array of
+@@ -174,7 +174,7 @@
+ 						atom = tree_get_atom(pkg_ctx, false);
+ 						warnp("Could not read real path of \"%s\" (from %s)",
+ 								fullpath,
+-								atom_format("%[CATEGORY]%[PF]", atom, false));
++								atom_format("%[CATEGORY]%[PF]", atom));
+ 						warn("We'll never know whether \"%s\" was a result "
+ 								"for your query...", e->name);
+ 					}
+@@ -191,36 +191,32 @@
+ 					/* real_dir_name == realpath(dirname(CONTENTS)) */
+ 					path_ok = true;
+ 				}
+-			} else if (state->basename) {
++			}
++
++			if (!path_ok && state->basename) {
+ 				path_ok = true;
+-			} else if (state->pwd && dir_names[i] == NULL) {
++			}
++
++			if (!path_ok && state->pwd && dir_names[i] == NULL) {
+ 				/* try to match file in current directory */
+ 				if (strncmp(e->name, state->pwd, dirname_len) == 0 &&
+ 						state->pwd[dirname_len] == '\0')
+ 					path_ok = true;
+ 			}
++
++			if (!path_ok && dir_names[i] == NULL && real_dir_names[i] == NULL) {
++				/* try basename match */
++				if (e->type != CONTENTS_DIR)
++					path_ok = true;
++			}
++
+ 			if (!path_ok)
+ 				continue;
+ 
+ 			if (non_orphans == NULL) {
+-				const char *fmt;
+-
+-				atom = tree_get_atom(pkg_ctx, true);
++				atom = tree_get_atom(pkg_ctx, state->need_full_atom);
+ 
+-				if (state->slotted) {
+-					if (verbose) {
+-						fmt = "%[CATEGORY]%[PF]%[SLOT]";
+-					} else {
+-						fmt = "%[CATEGORY]%[PN]%[SLOT]";
+-					}
+-				} else {
+-					if (verbose) {
+-						fmt = "%[CATEGORY]%[PF]";
+-					} else {
+-						fmt = "%[CATEGORY]%[PN]";
+-					}
+-				}
+-				printf("%s", atom_format(fmt, atom, false));
++				printf("%s", atom_format(state->format, atom));
+ 				if (quiet)
+ 					puts("");
+ 				else
+@@ -305,7 +301,7 @@
+ 		 * "realpath(ROOT)" prefix) */
+ 		if (argv[i][0] == '/') {
+ 			snprintf(abspath, sizeof(abspath), "%s%s",
+-					state->assume_root_prefix ? real_root : "", argv[i]);
++					state->assume_root_prefix ? "" : real_root, argv[i]);
+ 		} else if (pwd) {
+ 			if (state->assume_root_prefix)
+ 				snprintf(abspath, sizeof(abspath), "%s/%s", pwd, argv[i]);
+@@ -390,10 +386,11 @@
+ {
+ 	struct qfile_opt_state state = {
+ 		.buflen = _Q_PATH_MAX,
+-		.slotted = false,
++		.need_full_atom = false,
+ 		.basename = false,
+ 		.orphans = false,
+ 		.assume_root_prefix = false,
++		.format = NULL,
+ 	};
+ 	int i, nb_of_queries, found = 0;
+ 	char *p;
+@@ -401,15 +398,17 @@
+ 	while ((i = GETOPT_LONG(QFILE, qfile, "")) != -1) {
+ 		switch (i) {
+ 			COMMON_GETOPTS_CASES(qfile)
+-			case 'S': state.slotted = true; break;
+-			case 'b': state.basename = true; break;
+-			case 'o': state.orphans = true; break;
+-			case 'R': state.assume_root_prefix = true; break;
++			case 'F': state.format = optarg;            /* fall through */
++			case 'S': state.need_full_atom = true;      break;
++			case 'd': state.basename = true;            break;
++			case 'o': state.orphans = true;             break;
++			case 'R': state.assume_root_prefix = true;  break;
+ 			case 'x':
+ 				if (state.exclude_pkg)
+ 					err("--exclude can only be used once.");
+ 				state.exclude_pkg = xstrdup(optarg);
+-				if ((state.exclude_slot = strchr(state.exclude_pkg, ':')) != NULL)
++				state.exclude_slot = strchr(state.exclude_pkg, ':');
++				if (state.exclude_slot != NULL)
+ 					*state.exclude_slot++ = '\0';
+ 				state.exclude_atom = atom_explode(optarg);
+ 				if (!state.exclude_atom)
+@@ -423,11 +422,23 @@
+ 	argc -= optind;
+ 	argv += optind;
+ 
++	if (state.format == NULL) {
++		if (state.need_full_atom)
++			if (verbose)
++				state.format = "%[CATEGORY]%[PF]%[SLOT]";
++			else
++				state.format = "%[CATEGORY]%[PN]%[SLOT]";
++		else
++			if (verbose)
++				state.format = "%[CATEGORY]%[PF]";
++			else
++				state.format = "%[CATEGORY]%[PN]";
++	}
++
+ 	state.buf = xmalloc(state.buflen);
+ 	if (state.assume_root_prefix) {
+ 		/* Get a copy of $ROOT, with no trailing slash
+-		 * (this one is just for qfile(...) output)
+-		 */
++		 * (this one is just for qfile(...) output) */
+ 		size_t lastc = strlen(portroot) - 1;
+ 		state.root = xstrdup(portroot);
+ 		if (state.root[lastc] == '/')
+diff -urN a/qgrep.c b/qgrep.c
+--- a/qgrep.c	2019-05-16 12:12:31.000000000 -0500
++++ b/qgrep.c	2019-08-04 01:21:46.644609037 -0500
+@@ -24,11 +24,10 @@
+ #include "xchdir.h"
+ #include "xregex.h"
+ 
+-#define QGREP_FLAGS "IiHNclLexJEsRS:B:A:" COMMON_FLAGS
++#define QGREP_FLAGS "IiNclLexJEsRS:B:A:" COMMON_FLAGS
+ static struct option const qgrep_long_opts[] = {
+ 	{"invert-match",  no_argument, NULL, 'I'},
+ 	{"ignore-case",   no_argument, NULL, 'i'},
+-	{"with-filename", no_argument, NULL, 'H'},
+ 	{"with-name",     no_argument, NULL, 'N'},
+ 	{"count",         no_argument, NULL, 'c'},
+ 	{"list",          no_argument, NULL, 'l'},
+@@ -48,7 +47,6 @@
+ 	"Select non-matching lines",
+ 	"Ignore case distinctions",
+ 	"Print the filename for each match",
+-	"Print the package or eclass name for each match",
+ 	"Only print a count of matching lines per FILE",
+ 	"Only print FILE names containing matches",
+ 	"Only print FILE names containing no match",
+@@ -398,6 +396,8 @@
+ 	if (data->include_atoms != NULL) {
+ 		depend_atom **d;
+ 		for (d = data->include_atoms; *d != NULL; d++) {
++			if ((*d)->SLOT != NULL || (*d)->REPO != NULL)
++				patom = tree_get_atom(pkg_ctx, true);
+ 			if (atom_compare(patom, *d) == EQUAL)
+ 				break;
+ 		}
+@@ -409,6 +409,8 @@
+ 	cctx = (tree_ctx *)(pkg_ctx->cat_ctx->ctx);
+ 	if (cctx->cachetype == CACHE_EBUILD) {
+ 		pfd = cctx->tree_fd;
++	} else if (cctx->cachetype == CACHE_VDB) {
++		pfd = openat(cctx->portroot_fd, data->portdir, O_RDONLY|O_CLOEXEC);
+ 	} else {
+ 		pfd = openat(cctx->tree_fd, "../..", O_RDONLY|O_CLOEXEC);
+ 	}
+@@ -419,66 +421,16 @@
+ 
+ 	label = NULL;
+ 	if (data->show_name) {
+-		/* this is a super-optimisation, should get it from the full atom */
+-		char *repo = data->show_repo ? cctx->repo : NULL;
+-		snprintf(name, sizeof(name), "%s%s/%s%s%s%s%s%s",
+-				BOLD, patom->CATEGORY, BLUE, patom->P, GREEN,
+-				repo ? "::" : "", repo ? repo : "", NORM);
+-		label = name;
+-	} else if (data->show_filename) {
+-		label = buf;
+-	}
+-
+-	ret = qgrep_grepat(pfd, buf, label, data);
+-
+-	return ret;
+-}
+-
+-static int
+-qgrep_vdb_cb(tree_pkg_ctx *pkg_ctx, void *priv)
+-{
+-	struct qgrep_grepargs *data = (struct qgrep_grepargs *)priv;
+-	char buf[_Q_PATH_MAX];
+-	char name[_Q_PATH_MAX];
+-	char *label;
+-	depend_atom *patom = NULL;
+-	int ret;
+-	int pfd;
+-
+-	patom = tree_get_atom(pkg_ctx, false);
+-	if (patom == NULL)
+-		return EXIT_FAILURE;
+-
+-	if (data->include_atoms != NULL) {
+-		depend_atom **d;
+-		for (d = data->include_atoms; *d != NULL; d++) {
+-			if (atom_compare(patom, *d) == EQUAL)
+-				break;
+-		}
+-		if (*d == NULL) {
+-			atom_implode(patom);
+-			return EXIT_FAILURE;
+-		}
+-	}
+-
+-	/* get path to portdir */
+-	pfd = openat(pkg_ctx->cat_ctx->ctx->portroot_fd,
+-			data->portdir, O_RDONLY|O_CLOEXEC);
+-
+-	/* cat/pkg/pkg-ver.ebuild */
+-	snprintf(buf, sizeof(buf), "%s/%s/%s.ebuild",
+-			patom->CATEGORY, patom->PN, patom->P);
+-
+-	label = NULL;
+-	if (data->show_name) {
+-		snprintf(name, sizeof(name), "%s%s/%s%s%s",
+-				BOLD, patom->CATEGORY, BLUE, patom->P, NORM);
++		if (data->show_repo)
++			patom = tree_get_atom(pkg_ctx, true);
++		atom_format_r(name, sizeof(name), "%[CATEGORY]%[P]%[REPO]", patom);
+ 		label = name;
+ 	} else if (data->show_filename) {
+ 		label = buf;
+ 	}
+ 
+ 	ret = qgrep_grepat(pfd, buf, label, data);
++	close(pfd);
+ 
+ 	return ret;
+ }
+@@ -498,14 +450,14 @@
+ 	char *overlay;
+ 
+ 	struct qgrep_grepargs args = {
+-		.do_count = 0,
+-		.do_regex = 0,
+-		.do_list = 0,
+-		.show_filename = 0,
+-		.show_name = 0,
+-		.skip_comments = 0,
+-		.invert_list = 0,
+-		.invert_match = 0,
++		.do_count = false,
++		.do_regex = false,
++		.do_list = false,
++		.show_filename = true,
++		.show_name = false,
++		.skip_comments = false,
++		.invert_list = false,
++		.invert_match = false,
+ 		.skip_pattern = NULL,
+ 		.num_lines_before = 0,
+ 		.num_lines_after = 0,
+@@ -535,8 +487,8 @@
+ 			break;
+ 		case 'J': do_installed = true;                    break;
+ 		case 'E': do_eclass = true;                       break;
+-		case 'H': args.show_filename = true;              break;
+-		case 'N': args.show_name = true;                  break;
++		case 'N': args.show_name = true;
++				  args.show_filename = false;             break;
+ 		case 's': args.skip_comments = true;              break;
+ 		case 'R': args.show_repo = args.show_name = true; break;
+ 		case 'S': args.skip_pattern = optarg;             break;
+@@ -561,6 +513,9 @@
+ 	if (argc == optind)
+ 		qgrep_usage(EXIT_FAILURE);
+ 
++	if (quiet)
++		args.show_filename = args.show_name = false;
++
+ 	if (args.do_list && args.do_count) {
+ 		warn("%s and --count are incompatible options. The former wins.",
+ 				(args.invert_list ? "--invert-list" : "--list"));
+@@ -676,14 +631,13 @@
+ 				status = qgrep_grepat(efd, dentry->d_name, label, &args);
+ 			}
+ 			closedir(eclass_dir);
+-		} else if (do_installed) {
+-			tree_ctx *t = tree_open_vdb(portroot, portvdb);
+-			if (t != NULL) {
+-				status = tree_foreach_pkg_fast(t, qgrep_vdb_cb, &args, NULL);
+-				tree_close(t);
++		} else { /* do_ebuild || do_installed */
++			tree_ctx *t;
++			if (do_installed) {
++				t = tree_open_vdb(portroot, portvdb);
++			} else {
++				t = tree_open(portroot, overlay);
+ 			}
+-		} else { /* do_ebuild */
+-			tree_ctx *t = tree_open(portroot, overlay);
+ 			if (t != NULL) {
+ 				status = tree_foreach_pkg_fast(t, qgrep_cache_cb, &args, NULL);
+ 				tree_close(t);
+diff -urN a/qkeyword.c b/qkeyword.c
+--- a/qkeyword.c	2019-05-16 12:12:31.000000000 -0500
++++ b/qkeyword.c	2019-08-04 01:21:46.644609037 -0500
+@@ -666,10 +666,11 @@
+ 
+ 	buf = NULL;
+ 	while ((linelen = getline(&buf, &buflen, fp)) >= 0) {
+-		rmspace_len(buf, (size_t)linelen);
+-
+-		if ((s = strchr(buf, '#')) != NULL)
++		if ((s = strchr(buf, '#')) != NULL) {
+ 			*s = '\0';
++			linelen = s - buf;
++		}
++		rmspace_len(buf, (size_t)linelen);
+ 		if (buf[0] == '\0')
+ 			continue;
+ 
+diff -urN a/qlist.c b/qlist.c
+--- a/qlist.c	2019-05-16 12:12:31.000000000 -0500
++++ b/qlist.c	2019-08-04 01:21:46.644609037 -0500
+@@ -21,7 +21,7 @@
+ #include "tree.h"
+ #include "xregex.h"
+ 
+-#define QLIST_FLAGS "ISRUcDeados" COMMON_FLAGS
++#define QLIST_FLAGS "ISRUcDeadosF:" COMMON_FLAGS
+ static struct option const qlist_long_opts[] = {
+ 	{"installed", no_argument, NULL, 'I'},
+ 	{"slots",     no_argument, NULL, 'S'},
+@@ -35,10 +35,11 @@
+ 	{"obj",       no_argument, NULL, 'o'},
+ 	{"sym",       no_argument, NULL, 's'},
+ 	/* {"file",       a_argument, NULL, 'f'}, */
++	{"format",     a_argument, NULL, 'F'},
+ 	COMMON_LONG_OPTS
+ };
+ static const char * const qlist_opts_help[] = {
+-	"Just show installed packages",
++	"Just show installed package names",
+ 	"Display installed packages with slots (use twice for subslots)",
+ 	"Display installed packages with repository",
+ 	"Display installed packages with flags used",
+@@ -50,6 +51,7 @@
+ 	"Only show objects",
+ 	"Only show symlinks",
+ 	/* "query filename for pkgname", */
++	"Print matched atom using given format string",
+ 	COMMON_OPTS_HELP
+ };
+ #define qlist_usage(ret) usage(ret, QLIST_FLAGS, qlist_long_opts, qlist_opts_help, NULL, lookup_applet_idx("qlist"))
+@@ -245,7 +247,8 @@
+ 		if (strcmp(atom->SLOT, uslot) != 0)
+ 			return false;
+ 
+-		if (usslot != NULL && strcmp(atom->SUBSLOT, usslot) != 0)
++		if (usslot != NULL &&
++				(atom->SUBSLOT == NULL || strcmp(atom->SUBSLOT, usslot) != 0))
+ 			return false;
+ 	}
+ 
+@@ -310,19 +313,18 @@
+ 	int argc;
+ 	char **argv;
+ 	depend_atom **atoms;
+-	bool exact;
+-	bool all;
+-	bool just_pkgname;
+-	bool show_dir;
+-	bool show_obj;
+-	bool show_repo;
+-	bool show_sym;
+-	int show_slots;
+-	bool show_umap;
+-	bool show_dbg;
+-	bool columns;
++	bool exact:1;
++	bool all:1;
++	bool just_pkgname:1;
++	bool show_dir:1;
++	bool show_obj:1;
++	bool show_sym:1;
++	bool need_full_atom:1;
++	bool show_umap:1;
++	bool show_dbg:1;
+ 	char *buf;
+ 	size_t buflen;
++	const char *fmt;
+ };
+ 
+ static int
+@@ -341,29 +343,11 @@
+ 	if ((i == state->argc) && (state->argc != optind))
+ 		return 0;
+ 
+-	atom = tree_get_atom(pkg_ctx, false);
++	atom = tree_get_atom(pkg_ctx, state->need_full_atom);
+ 	if (state->just_pkgname) {
+ 		if ((state->all + state->just_pkgname) < 2) {
+-			char qfmt[128];
+-			atom = tree_get_atom(pkg_ctx,
+-					state->show_slots || state->show_repo);
+-			if (state->columns) {
+-				snprintf(qfmt, sizeof(qfmt),
+-						"%%{CATEGORY} %%{PN}%s%s%s%s",
+-						verbose ? " %{PVR}" : "",
+-						state->show_slots >= 1 ? " %{SLOT}" : "",
+-						state->show_slots >= 2 ? " %{SUBSLOT}" : "",
+-						state->show_repo ? " %{REPO}" : "");
+-			} else {
+-				snprintf(qfmt, sizeof(qfmt),
+-						"%%[CATEGORY]%%[P%c]%s%s%s",
+-						verbose ? 'F' : 'N',
+-						state->show_slots >= 1 ? "%[SLOT]" : "",
+-						state->show_slots >= 2 ? "%[SUBSLOT]" : "",
+-						state->show_repo ? "%[REPO]" : "");
+-			}
+ 			printf("%s%s\n",
+-					atom_format(qfmt, atom, 0),
++					atom_format(state->fmt, atom),
+ 					umapstr(state->show_umap, pkg_ctx));
+ 		}
+ 
+@@ -373,7 +357,7 @@
+ 
+ 	if (verbose)
+ 		printf("%s %sCONTENTS%s:\n",
+-				atom_format("%[CATEGORY]%[PF]", atom, 0), DKBLUE, NORM);
++				atom_format(state->fmt, atom), DKBLUE, NORM);
+ 
+ 	fp = tree_pkg_vdb_fopenat_ro(pkg_ctx, "CONTENTS");
+ 	if (fp == NULL)
+@@ -424,6 +408,10 @@
+ 	int i;
+ 	int ret;
+ 	tree_ctx *vdb;
++	int show_slots = 0;
++	bool show_repo = false;
++	bool do_columns = false;
++	char qfmt[128];
+ 	struct qlist_opt_state state = {
+ 		.argc = argc,
+ 		.argv = argv,
+@@ -432,40 +420,67 @@
+ 		.just_pkgname = false,
+ 		.show_dir = false,
+ 		.show_obj = false,
+-		.show_repo = false,
+ 		.show_sym = false,
+-		.show_slots = 0,
++		.need_full_atom = false,
+ 		.show_umap = false,
+ 		.show_dbg = false,
+-		.columns = false,
+ 		.buflen = _Q_PATH_MAX,
++		.fmt = NULL,
+ 	};
+ 
+ 	while ((i = GETOPT_LONG(QLIST, qlist, "")) != -1) {
+ 		switch (i) {
+ 		COMMON_GETOPTS_CASES(qlist)
+-		case 'a': state.all = true; /* fall through */
+-		case 'I': state.just_pkgname = true; break;
+-		case 'S': state.just_pkgname = true; ++state.show_slots; break;
+-		case 'R': state.just_pkgname = state.show_repo = true; break;
+-		case 'U': state.just_pkgname = state.show_umap = true; break;
+-		case 'e': state.exact = true; break;
+-		case 'd': state.show_dir = true; break;
+-		case 128: state.show_dbg = true; break;
+-		case 'o': state.show_obj = true; break;
+-		case 's': state.show_sym = true; break;
+-		case 'c': state.columns = true; break;
+-		case 'f': break;
++		case 'a': state.all = true;                 /* fall through */
++		case 'I': state.just_pkgname = true;                    break;
++		case 'S': state.just_pkgname = true; show_slots++;      break;
++		case 'R': state.just_pkgname = show_repo = true;        break;
++		case 'U': state.just_pkgname = state.show_umap = true;  break;
++		case 'e': state.exact = true;                           break;
++		case 'd': state.show_dir = true;                        break;
++		case 128: state.show_dbg = true;                        break;
++		case 'o': state.show_obj = true;                        break;
++		case 's': state.show_sym = true;                        break;
++		case 'c': do_columns = true;                            break;
++		case 'F': state.fmt = optarg;                           break;
+ 		}
+ 	}
+-	if (state.columns)
+-		verbose = 0; /* if not set to zero; atom wont be exploded; segv */
++
+ 	/* default to showing syms and objs */
+ 	if (!state.show_dir && !state.show_obj && !state.show_sym)
+ 		state.show_obj = state.show_sym = true;
+ 	if (argc == optind && !state.just_pkgname)
+ 		qlist_usage(EXIT_FAILURE);
+ 
++	if (state.fmt == NULL) {
++		const char *l = "%[";
++		const char *r = "]";
++		if (do_columns) {
++			l = "%{";
++			r = "} ";
++		}
++		snprintf(qfmt, sizeof(qfmt), "%sCATEGORY%s"
++				"%s%s%s"   /* PN/PF */
++				"%s%s%s"   /* SLOT */
++				"%s%s%s"   /* SUBSLOT */
++				"%s%s%s",  /* REPO */
++				l, r,
++				l, verbose ? "PF" : "PN", r,
++				show_slots >= 1 ? l : "",
++					show_slots >= 1 ? "SLOT" : "",
++					show_slots >= 1 ? r : "",
++				show_slots >= 2 ? l : "",
++					show_slots >= 2 ? "SUBSLOT" : "",
++					show_slots >= 2 ? r : "",
++				show_repo ? l : "",
++					show_repo ? "REPO" : "",
++					show_repo ? r : "");
++		state.fmt = qfmt;
++		state.need_full_atom = show_slots > 0 || show_repo;
++	} else {
++		state.need_full_atom = true;
++	}
++
+ 	state.buf = xmalloc(state.buflen);
+ 	state.atoms = xcalloc(argc - optind, sizeof(*state.atoms));
+ 	ret = 1;
+diff -urN a/qlop.c b/qlop.c
+--- a/qlop.c	2019-05-16 12:12:31.000000000 -0500
++++ b/qlop.c	2019-08-04 01:21:46.644609037 -0500
+@@ -24,7 +24,7 @@
+ 
+ #define QLOP_DEFAULT_LOGFILE "emerge.log"
+ 
+-#define QLOP_FLAGS "ctaHMmuUslerd:f:w:" COMMON_FLAGS
++#define QLOP_FLAGS "ctaHMmuUslerd:f:w:F:" COMMON_FLAGS
+ static struct option const qlop_long_opts[] = {
+ 	{"summary",   no_argument, NULL, 'c'},
+ 	{"time",      no_argument, NULL, 't'},
+@@ -41,6 +41,7 @@
+ 	{"lastmerge", no_argument, NULL, 'l'},
+ 	{"logfile",    a_argument, NULL, 'f'},
+ 	{"atoms",      a_argument, NULL, 'w'},
++	{"format",     a_argument, NULL, 'F'},
+ 	COMMON_LONG_OPTS
+ };
+ static const char * const qlop_opts_help[] = {
+@@ -59,6 +60,7 @@
+ 	"Limit selection to last Portage emerge action",
+ 	"Read emerge logfile instead of $EMERGE_LOG_DIR/" QLOP_DEFAULT_LOGFILE,
+ 	"Read package atoms to report from file",
++	"Print matched atom using given format string",
+ 	COMMON_OPTS_HELP
+ };
+ static const char qlop_desc[] =
+@@ -83,6 +85,7 @@
+ 	char do_machine:1;
+ 	char do_endtime:1;
+ 	char show_lastmerge:1;
++	const char *fmt;
+ };
+ 
+ static bool
+@@ -347,10 +350,6 @@
+ 	};
+ 	struct pkg_match *pkg;
+ 	struct pkg_match *pkgw;
+-	const char *afmt = "%[CATEGORY]%[PN]";
+-
+-	if (verbose)
+-		afmt = "%[CATEGORY]%[PF]";
+ 
+ 	if ((fp = fopen(log, "r")) == NULL) {
+ 		warnp("Could not open logfile '%s'", log);
+@@ -450,23 +449,29 @@
+ 				parallel_emerge++;
+ 			} else if (parallel_emerge > 0) {
+ 				parallel_emerge--;
+-				if (parallel_emerge == 0) {
+-					/* we just finished the only emerge we found to be
+-					 * running, so if there were "running" (unfinished)
+-					 * merges, they must have been terminated */
+-					sync_start = 0;
+-					while ((i = array_cnt(merge_matches)) > 0) {
+-						i--;
+-						pkgw = xarrayget(merge_matches, i);
+-						atom_implode(pkgw->atom);
+-						xarraydelete(merge_matches, i);
+-					}
+-					while ((i = array_cnt(unmerge_matches)) > 0) {
+-						i--;
+-						pkgw = xarrayget(unmerge_matches, i);
+-						atom_implode(pkgw->atom);
+-						xarraydelete(unmerge_matches, i);
+-					}
++			}
++
++			/* for bug #687508, this cannot be in the else if case
++			 * above, if the log is truncated somehow, the leading
++			 * *** emerge might be missing, but a termination in that
++			 * case better means we forget about everything that was
++			 * unfinished not to keep reporting some packages forever */
++			if (parallel_emerge == 0) {
++				/* we just finished the only emerge we found to be
++				 * running, so if there were "running" (unfinished)
++				 * merges, they must have been terminated */
++				sync_start = 0;
++				while ((i = array_cnt(merge_matches)) > 0) {
++					i--;
++					pkgw = xarrayget(merge_matches, i);
++					atom_implode(pkgw->atom);
++					xarraydelete(merge_matches, i);
++				}
++				while ((i = array_cnt(unmerge_matches)) > 0) {
++					i--;
++					pkgw = xarrayget(unmerge_matches, i);
++					atom_implode(pkgw->atom);
++					xarraydelete(unmerge_matches, i);
+ 				}
+ 			}
+ 		}
+@@ -615,19 +620,19 @@
+ 					}
+ 					if (quiet && !flags->do_average) {
+ 						printf("%s%s%s\n",
+-								atom_format(afmt, pkgw->atom, 0),
++								atom_format(flags->fmt, pkgw->atom),
+ 								flags->do_time ? ": " : "",
+ 								flags->do_time ?
+ 									fmt_elapsedtime(flags, elapsed) : "");
+ 					} else if (flags->do_time) {
+ 						printf("%s >>> %s: %s\n",
+ 								fmt_date(flags, pkgw->tbegin, tstart),
+-								atom_format(afmt, pkgw->atom, 0),
++								atom_format(flags->fmt, pkgw->atom),
+ 								fmt_elapsedtime(flags, elapsed));
+ 					} else if (!flags->do_average) {
+ 						printf("%s >>> %s\n",
+ 								fmt_date(flags, pkgw->tbegin, tstart),
+-								atom_format(afmt, pkgw->atom, 0));
++								atom_format(flags->fmt, pkgw->atom));
+ 					}
+ 					atom_implode(pkgw->atom);
+ 					xarraydelete(merge_matches, i);
+@@ -720,19 +725,19 @@
+ 					}
+ 					if (quiet && !flags->do_average) {
+ 						printf("%s%s%s\n",
+-								atom_format(afmt, pkgw->atom, 0),
++								atom_format(flags->fmt, pkgw->atom),
+ 								flags->do_time ? ": " : "",
+ 								flags->do_time ?
+ 									fmt_elapsedtime(flags, elapsed) : "");
+ 					} else if (flags->do_time) {
+ 						printf("%s <<< %s: %s\n",
+ 								fmt_date(flags, pkgw->tbegin, tstart),
+-								atom_format(afmt, pkgw->atom, 0),
++								atom_format(flags->fmt, pkgw->atom),
+ 								fmt_elapsedtime(flags, elapsed));
+ 					} else if (!flags->do_average) {
+ 						printf("%s <<< %s\n",
+ 								fmt_date(flags, pkgw->tbegin, tstart),
+-								atom_format(afmt, pkgw->atom, 0));
++								atom_format(flags->fmt, pkgw->atom));
+ 					}
+ 					atom_implode(pkgw->atom);
+ 					xarraydelete(unmerge_matches, i);
+@@ -768,14 +773,17 @@
+ 		array_for_each(merge_matches, i, pkgw) {
+ 			size_t j;
+ 			time_t maxtime = 0;
++			bool isMax = false;
+ 
+ 			elapsed = tstart - pkgw->tbegin;
+ 			pkg = NULL;
+ 			array_for_each(merge_averages, j, pkg) {
+ 				if (atom_compare(pkg->atom, pkgw->atom) == EQUAL) {
+ 					maxtime = pkg->time / pkg->cnt;
+-					if (elapsed >= maxtime)
++					if (elapsed >= maxtime) {
+ 						maxtime = elapsed >= pkg->tbegin ? 0 : pkg->tbegin;
++						isMax = true;
++					}
+ 					break;
+ 				}
+ 				pkg = NULL;
+@@ -792,52 +800,56 @@
+ 			}
+ 
+ 			if (flags->do_time) {
+-				printf("%s >>> %s: %s...%s ETA: %s\n",
++				printf("%s >>> %s: %s",
+ 						fmt_date(flags, pkgw->tbegin, 0),
+-						atom_format(afmt, pkgw->atom, 0),
+-						fmt_elapsedtime(flags, elapsed),
+-						p == NULL ? "" : p,
+-						maxtime == 0 ? "unknown" :
+-							fmt_elapsedtime(flags, maxtime - elapsed));
++						atom_format(flags->fmt, pkgw->atom),
++						fmt_elapsedtime(flags, elapsed));
+ 			} else {
+-				printf("%s >>> %s...%s ETA: %s\n",
++				printf("%s >>> %s",
+ 						fmt_date(flags, pkgw->tbegin, 0),
+-						atom_format(afmt, pkgw->atom, 0),
+-						p == NULL ? "" : p,
+-						maxtime == 0 ? "unknown" :
+-							fmt_elapsedtime(flags, maxtime - elapsed));
++						atom_format(flags->fmt, pkgw->atom));
+ 			}
++			printf("...%s ETA: %s%s\n",
++					p == NULL ? "" : p,
++					maxtime == 0 ? "unknown" :
++						fmt_elapsedtime(flags, maxtime - elapsed),
++					maxtime > 0 && verbose ?
++						isMax ? " (longest run)" : " (average run)" : "");
+ 		}
+ 		array_for_each(unmerge_matches, i, pkgw) {
+ 			size_t j;
+ 			time_t maxtime = 0;
++			bool isMax = false;
+ 
+ 			elapsed = tstart - pkgw->tbegin;
+ 			pkg = NULL;
+ 			array_for_each(unmerge_averages, j, pkg) {
+ 				if (atom_compare(pkg->atom, pkgw->atom) == EQUAL) {
+ 					maxtime = pkg->time / pkg->cnt;
+-					if (elapsed >= maxtime)
++					if (elapsed >= maxtime) {
+ 						maxtime = elapsed >= pkg->tbegin ? 0 : pkg->tbegin;
++						isMax = true;
++					}
+ 					break;
+ 				}
+ 				pkg = NULL;
+ 			}
+ 
+ 			if (flags->do_time) {
+-				printf("%s <<< %s: %s... ETA: %s\n",
++				printf("%s <<< %s: %s",
+ 						fmt_date(flags, pkgw->tbegin, 0),
+-						atom_format(afmt, pkgw->atom, 0),
+-						fmt_elapsedtime(flags, elapsed),
+-						maxtime == 0 ? "unknown" :
+-							fmt_elapsedtime(flags, maxtime - elapsed));
++						atom_format(flags->fmt, pkgw->atom),
++						fmt_elapsedtime(flags, elapsed));
+ 			} else {
+-				printf("%s <<< %s... ETA: %s\n",
++				printf("%s <<< %s",
+ 						fmt_date(flags, pkgw->tbegin, 0),
+-						atom_format(afmt, pkgw->atom, 0),
+-						maxtime == 0 ? "unknown" :
+-							fmt_elapsedtime(flags, maxtime - elapsed));
++						atom_format(flags->fmt, pkgw->atom));
+ 			}
++			printf("... ETA: %s%s\n",
++					maxtime == 0 ? "unknown" :
++					fmt_elapsedtime(flags, maxtime - elapsed),
++					maxtime > 0 && verbose ?
++						isMax ? " (longest run)" : " (average run)" : "");
+ 		}
+ 	} else if (flags->do_average) {
+ 		size_t total_merges = 0;
+@@ -846,7 +858,7 @@
+ 
+ 		array_for_each(merge_averages, i, pkg) {
+ 			printf("%s: %s average for %s%zd%s merge%s\n",
+-					atom_format(afmt, pkg->atom, 0),
++					atom_format(flags->fmt, pkg->atom),
+ 					fmt_elapsedtime(flags, pkg->time / pkg->cnt),
+ 					GREEN, pkg->cnt, NORM, pkg->cnt == 1 ? "" : "s");
+ 			total_merges += pkg->cnt;
+@@ -854,7 +866,7 @@
+ 		}
+ 		array_for_each(unmerge_averages, i, pkg) {
+ 			printf("%s: %s average for %s%zd%s unmerge%s\n",
+-					atom_format(afmt, pkg->atom, 0),
++					atom_format(flags->fmt, pkg->atom),
+ 					fmt_elapsedtime(flags, pkg->time / pkg->cnt),
+ 					GREEN, pkg->cnt, NORM, pkg->cnt == 1 ? "" : "s");
+ 			total_unmerges += pkg->cnt;
+@@ -916,6 +928,7 @@
+ 	m.do_machine = 0;
+ 	m.do_endtime = 0;
+ 	m.show_lastmerge = 0;
++	m.fmt = NULL;
+ 
+ 	while ((ret = GETOPT_LONG(QLOP, qlop, "")) != -1) {
+ 		switch (ret) {
+@@ -933,6 +946,7 @@
+ 			case 'M': m.do_machine = 1;     break;
+ 			case 'e': m.do_endtime = 1;     break;
+ 			case 'l': m.show_lastmerge = 1; break;
++			case 'F': m.fmt = optarg;       break;
+ 			case 'd':
+ 				if (start_time == 0) {
+ 					if (!parse_date(optarg, &start_time))
+@@ -1045,7 +1059,7 @@
+ 
+ 	/* set default for -t, -a or -r */
+ 	if ((m.do_average || m.do_time || m.do_running) &&
+-			!(m.do_merge || m.do_unmerge || m.do_sync))
++			!(m.do_merge || m.do_unmerge || m.do_autoclean || m.do_sync))
+ 	{
+ 		m.do_merge = 1;
+ 		m.do_unmerge = 1;
+@@ -1053,6 +1067,14 @@
+ 			m.do_sync = 1;
+ 	}
+ 
++	/* set format if none given */
++	if (m.fmt == NULL) {
++		if (verbose)
++			m.fmt = "%[CATEGORY]%[PF]";
++		else
++			m.fmt = "%[CATEGORY]%[PN]";
++	}
++
+ 	do_emerge_log(logfile, &m, atoms, start_time, end_time);
+ 
+ 	array_for_each(atoms, i, atom)
+diff -urN a/qmanifest.c b/qmanifest.c
+--- a/qmanifest.c	1969-12-31 18:00:00.000000000 -0600
++++ b/qmanifest.c	2019-08-04 01:21:46.644609037 -0500
+@@ -0,0 +1,1830 @@
++/*
++ * Copyright 2018-2019 Gentoo Foundation
++ * Distributed under the terms of the GNU General Public License v2
++ *
++ * Copyright 2018-     Fabian Groffen  - <grobian@gentoo.org>
++ *
++ * The contents of this file was taken from:
++ *   https://github.com/grobian/hashgen
++ * which was discontinued at the time the sources were incorporated into
++ * portage-utils as qmanifest.
++ */
++
++#include "main.h"
++
++#ifdef ENABLE_QMANIFEST
++
++#include "applets.h"
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <strings.h>
++#include <fcntl.h>
++#include <ctype.h>
++#include <dirent.h>
++#include <time.h>
++#include <errno.h>
++#include <termios.h>
++#include <sys/stat.h>
++#include <sys/types.h>
++#include <sys/time.h>
++#include <openssl/sha.h>
++#include <openssl/whrlpool.h>
++#include <blake2.h>
++#include <zlib.h>
++#include <gpgme.h>
++
++#include "eat_file.h"
++#include "hash.h"
++
++#define QMANIFEST_FLAGS "gs:pdo" COMMON_FLAGS
++static struct option const qmanifest_long_opts[] = {
++	{"generate",   no_argument, NULL, 'g'},
++	{"signas",      a_argument, NULL, 's'},
++	{"passphrase", no_argument, NULL, 'p'},
++	{"dir",        no_argument, NULL, 'd'},
++	{"overlay",    no_argument, NULL, 'o'},
++	COMMON_LONG_OPTS
++};
++static const char * const qmanifest_opts_help[] = {
++	"Generate thick Manifests",
++	"Sign generated Manifest using GPG key",
++	"Ask for GPG key password (instead of relying on gpg-agent)",
++	"Treat arguments as directories",
++	"Treat arguments as overlay names",
++	COMMON_OPTS_HELP
++};
++#define qmanifest_usage(ret) usage(ret, QMANIFEST_FLAGS, qmanifest_long_opts, qmanifest_opts_help, NULL, lookup_applet_idx("qmanifest"))
++
++static int hashes = HASH_DEFAULT;
++static char *gpg_sign_key = NULL;
++static bool gpg_get_password = false;
++
++/* linked list structure to hold verification complaints */
++typedef struct verify_msg {
++	char *msg;
++	struct verify_msg *next;
++} verify_msg;
++
++typedef struct _gpg_signature {
++	char *algo;
++	char *fingerprint;
++	char isgood:1;
++	char *timestamp;
++	char *signer;
++	char *pkfingerprint;
++	char *reason;
++} gpg_sig;
++
++gpg_sig *verify_gpg_sig(const char *path, verify_msg **msgs);
++char *verify_timestamp(const char *ts);
++char verify_manifest(const char *dir, const char *manifest, verify_msg **msgs);
++
++/* Generate thick Manifests based on thin Manifests, or verify a tree. */
++
++/* In order to build this program, the following packages are required:
++ * - sys-libs/zlib (for compressing/decompressing Manifest files)
++ * - app-crypt/gpgme (for signing/verifying the top level manifest)
++ */
++
++static inline void
++update_times(struct timeval *tv, struct stat *s)
++{
++#ifdef __MACH__
++# define st_mtim st_mtimespec
++# define st_atim st_atimespec
++#endif
++	if (tv[1].tv_sec < s->st_mtim.tv_sec ||
++			(tv[1].tv_sec == s->st_mtim.tv_sec &&
++			 tv[1].tv_usec < s->st_mtim.tv_nsec / 1000))
++	{
++		tv[0].tv_sec = s->st_atim.tv_sec;
++		tv[0].tv_usec = s->st_atim.tv_nsec / 1000;
++		tv[1].tv_sec = s->st_mtim.tv_sec;
++		tv[1].tv_usec = s->st_mtim.tv_nsec / 1000;
++	}
++}
++
++#define LISTSZ 64
++
++/**
++ * qsort comparator which runs strcmp.
++ */
++static int
++compare_strings(const void *l, const void *r)
++{
++	const char **strl = (const char **)l;
++	const char **strr = (const char **)r;
++	return strcmp(*strl, *strr);
++}
++
++/**
++ * Return a sorted list of entries in the given directory.  All entries
++ * starting with a dot are ignored, and not present in the returned
++ * list.  The list and all entries are allocated using xmalloc() and need
++ * to be freed.
++ * This function returns 0 when everything is fine, non-zero otherwise.
++ */
++static char
++list_dir(char ***retlist, size_t *retcnt, const char *path)
++{
++	DIR *d;
++	struct dirent *e;
++	size_t rlen = 0;
++	size_t rsize = 0;
++	char **rlist = NULL;
++
++	if ((d = opendir(path)) != NULL) {
++		while ((e = readdir(d)) != NULL) {
++			/* skip all dotfiles */
++			if (e->d_name[0] == '.')
++				continue;
++
++			if (rlen == rsize) {
++				rsize += LISTSZ;
++				rlist = xrealloc(rlist,
++						rsize * sizeof(rlist[0]));
++				if (rlist == NULL) {
++					fprintf(stderr, "out of memory\n");
++					return 1;
++				}
++			}
++			rlist[rlen] = xstrdup(e->d_name);
++			if (rlist[rlen] == NULL) {
++				fprintf(stderr, "out of memory\n");
++				return 1;
++			}
++			rlen++;
++		}
++		closedir(d);
++
++		qsort(rlist, rlen, sizeof(rlist[0]), compare_strings);
++
++		*retlist = rlist;
++		*retcnt = rlen;
++		return 0;
++	} else {
++		return 1;
++	}
++}
++
++/**
++ * Write hashes in Manifest format to the file open for writing m, or
++ * gzipped file open for writing gm.  The hashes written are for a file
++ * in root found by name.  The Manifest entry will be using type as
++ * first component.
++ */
++static void
++write_hashes(
++		struct timeval *tv,
++		const char *root,
++		const char *name,
++		const char *type,
++		FILE *m,
++		gzFile gm)
++{
++	size_t flen = 0;
++	char sha256[(SHA256_DIGEST_LENGTH * 2) + 1];
++	char sha512[(SHA512_DIGEST_LENGTH * 2) + 1];
++	char whrlpl[(WHIRLPOOL_DIGEST_LENGTH * 2) + 1];
++	char blak2b[(BLAKE2B_OUTBYTES * 2) + 1];
++	char data[8192];
++	char fname[8192];
++	size_t len;
++	struct stat s;
++
++	snprintf(fname, sizeof(fname), "%s/%s", root, name);
++
++	if (stat(fname, &s) != 0)
++		return;
++
++	update_times(tv, &s);
++
++	hash_compute_file(fname, sha256, sha512, whrlpl, blak2b, &flen, hashes);
++
++	len = snprintf(data, sizeof(data), "%s %s %zd", type, name, flen);
++	if (hashes & HASH_BLAKE2B)
++		len += snprintf(data + len, sizeof(data) - len,
++				" BLAKE2B %s", blak2b);
++	if (hashes & HASH_SHA256)
++		len += snprintf(data + len, sizeof(data) - len,
++				" SHA256 %s", sha256);
++	if (hashes & HASH_SHA512)
++		len += snprintf(data + len, sizeof(data) - len,
++				" SHA512 %s", sha512);
++	if (hashes & HASH_WHIRLPOOL)
++		len += snprintf(data + len, sizeof(data) - len,
++				" WHIRLPOOL %s", whrlpl);
++	len += snprintf(data + len, sizeof(data) - len, "\n");
++
++	if (m != NULL)
++		fwrite(data, len, 1, m);
++	if (gm != NULL)
++		gzwrite(gm, data, len);
++}
++
++/**
++ * Walk through a directory recursively and write hashes for each file
++ * found to the gzipped open stream for writing zm.  The Manifest
++ * entries generated will all be of DATA type.
++ */
++static char
++write_hashes_dir(
++		struct timeval *tv,
++		const char *root,
++		const char *name,
++		gzFile zm)
++{
++	char path[8192];
++	char **dentries;
++	size_t dentrieslen;
++	size_t i;
++
++	snprintf(path, sizeof(path), "%s/%s", root, name);
++	if (list_dir(&dentries, &dentrieslen, path) == 0) {
++		for (i = 0; i < dentrieslen; i++) {
++			snprintf(path, sizeof(path), "%s/%s", name, dentries[i]);
++			free(dentries[i]);
++			if (write_hashes_dir(tv, root, path, zm) == 0)
++				continue;
++			/* regular file */
++			write_hashes(tv, root, path, "DATA", NULL, zm);
++		}
++		free(dentries);
++		return 0;
++	} else {
++		return 1;
++	}
++}
++
++/**
++ * Walk through directory recursively and write hashes for each file
++ * found to the open stream for writing m.  All files will not use the
++ * "files/" prefix and Manifest entries will be of AUX type.
++ */
++static char
++process_files(struct timeval *tv, const char *dir, const char *off, FILE *m)
++{
++	char path[8192];
++	char **dentries;
++	size_t dentrieslen;
++	size_t i;
++
++	snprintf(path, sizeof(path), "%s/%s", dir, off);
++	if (list_dir(&dentries, &dentrieslen, path) == 0) {
++		for (i = 0; i < dentrieslen; i++) {
++			snprintf(path, sizeof(path), "%s%s%s",
++					off, *off == '\0' ? "" : "/", dentries[i]);
++			free(dentries[i]);
++			if (process_files(tv, dir, path, m) == 0)
++				continue;
++			/* regular file */
++			write_hashes(tv, dir, path, "AUX", m, NULL);
++		}
++		free(dentries);
++		return 0;
++	} else {
++		return 1;
++	}
++}
++
++/**
++ * Read layout.conf file specified by path and extract the
++ * manifest-hashes property from this file.  The hash set specified for
++ * this property will be returned.  When the property isn't found the
++ * returned hash set will be the HASH_DEFAULT set.  When the file isn't
++ * found, 0 will be returned (which means /no/ hashes).
++ */
++static int
++parse_layout_conf(const char *path)
++{
++	FILE *f;
++	char buf[8192];
++	size_t len = 0;
++	size_t sz;
++	char *p;
++	char *q;
++	char *tok;
++	char *last_nl;
++	char *start;
++	int ret = 0;
++
++	if ((f = fopen(path, "r")) == NULL)
++		return 0;
++
++	/* read file, examine lines after encountering a newline, that is,
++	 * if the file doesn't end with a newline, the final bit is ignored */
++	while ((sz = fread(buf + len, 1, sizeof(buf) - len, f)) > 0) {
++		len += sz;
++		start = buf;
++		last_nl = NULL;
++		for (p = buf; (size_t)(p - buf) < len; p++) {
++			if (*p == '\n') {
++				if (last_nl != NULL)
++					start = last_nl + 1;
++				last_nl = p;
++				do {
++					sz = strlen("manifest-hashes");
++					if (strncmp(start, "manifest-hashes", sz))
++						break;
++					if ((q = strchr(start + sz, '=')) == NULL)
++						break;
++					q++;
++					while (isspace((int)*q))
++						q++;
++					/* parse the tokens, whitespace separated */
++					tok = q;
++					do {
++						while (!isspace((int)*q))
++							q++;
++						sz = q - tok;
++						if (strncmp(tok, "SHA256", sz) == 0) {
++							ret |= HASH_SHA256;
++						} else if (strncmp(tok, "SHA512", sz) == 0) {
++							ret |= HASH_SHA512;
++						} else if (strncmp(tok, "WHIRLPOOL", sz) == 0) {
++							ret |= HASH_WHIRLPOOL;
++						} else if (strncmp(tok, "BLAKE2B", sz) == 0) {
++							ret |= HASH_BLAKE2B;
++						} else {
++							fprintf(stderr, "warning: unsupported hash from "
++									"layout.conf: %.*s\n", (int)sz, tok);
++						}
++						while (isspace((int)*q) && *q != '\n')
++							q++;
++						tok = q;
++					} while (*q != '\n');
++					/* got it, expect only once, so stop processing */
++					fclose(f);
++					return ret;
++				} while (0);
++			}
++		}
++		if (last_nl != NULL) {
++			last_nl++;  /* skip \n */
++			len = last_nl - buf;
++			memmove(buf, last_nl, len);
++			last_nl = buf;
++		} else {
++			/* skip too long line */
++			len = 0;
++		}
++	}
++
++	fclose(f);
++	/* if we didn't find anything, return the default set */
++	return HASH_DEFAULT;
++}
++
++static const char *str_manifest = "Manifest";
++static const char *str_manifest_gz = "Manifest.gz";
++static const char *str_manifest_files_gz = "Manifest.files.gz";
++enum type_manifest {
++	GLOBAL_MANIFEST,   /* Manifest.files.gz + Manifest */
++	SUBTREE_MANIFEST,  /* Manifest.gz for recursive list of files */
++	EBUILD_MANIFEST,   /* Manifest thick from thin */
++	CATEGORY_MANIFEST  /* Manifest.gz with Manifest entries */
++};
++static const char *
++generate_dir(const char *dir, enum type_manifest mtype)
++{
++	FILE *f;
++	char path[8192];
++	struct stat s;
++	struct timeval tv[2];
++	char **dentries;
++	size_t dentrieslen;
++	size_t i;
++
++	/* our timestamp strategy is as follows:
++	 * - when a Manifest exists, use its timestamp
++	 * - when a meta-Manifest is written (non-ebuilds) use the timestamp
++	 *   of the latest Manifest referenced
++	 * - when a Manifest is written for something like eclasses, use the
++	 *   timestamp of the latest file in the dir
++	 * this way we should keep updates limited to where changes are, and
++	 * also get reproducible mtimes. */
++	tv[0].tv_sec = 0;
++	tv[0].tv_usec = 0;
++	tv[1].tv_sec = 0;
++	tv[1].tv_usec = 0;
++
++	if (mtype == GLOBAL_MANIFEST) {
++		const char *mfest;
++		size_t len;
++		gzFile mf;
++		time_t rtime;
++
++		snprintf(path, sizeof(path), "%s/%s", dir, str_manifest_files_gz);
++		if ((mf = gzopen(path, "wb9")) == NULL) {
++			fprintf(stderr, "failed to open file '%s' for writing: %s\n",
++					path, strerror(errno));
++			return NULL;
++		}
++
++		/* These "IGNORE" entries are taken from gx86, there is no
++		 * standardisation on this, on purpose, apparently. */
++		len = snprintf(path, sizeof(path),
++				"IGNORE distfiles\n"
++				"IGNORE local\n"
++				"IGNORE lost+found\n"
++				"IGNORE packages\n"
++				"IGNORE snapshots\n");
++		gzwrite(mf, path, len);
++
++		if (list_dir(&dentries, &dentrieslen, dir) != 0)
++			return NULL;
++
++		for (i = 0; i < dentrieslen; i++) {
++			/* ignore existing Manifests */
++			if (strcmp(dentries[i], str_manifest_files_gz) == 0 ||
++					strcmp(dentries[i], str_manifest) == 0)
++			{
++				free(dentries[i]);
++				continue;
++			}
++
++			snprintf(path, sizeof(path), "%s/%s", dir, dentries[i]);
++
++			mfest = NULL;
++			if (!stat(path, &s)) {
++				if (s.st_mode & S_IFDIR) {
++					if (
++							strcmp(dentries[i], "eclass")   == 0 ||
++							strcmp(dentries[i], "licenses") == 0 ||
++							strcmp(dentries[i], "metadata") == 0 ||
++							strcmp(dentries[i], "profiles") == 0 ||
++							strcmp(dentries[i], "scripts")  == 0
++					   )
++					{
++						mfest = generate_dir(path, SUBTREE_MANIFEST);
++					} else {
++						mfest = generate_dir(path, CATEGORY_MANIFEST);
++					}
++
++					if (mfest == NULL) {
++						fprintf(stderr, "generating Manifest for %s failed!\n",
++								path);
++						gzclose(mf);
++						return NULL;
++					}
++
++					snprintf(path, sizeof(path), "%s/%s",
++							dentries[i], mfest);
++					write_hashes(tv, dir, path, "MANIFEST", NULL, mf);
++				} else if (s.st_mode & S_IFREG) {
++					write_hashes(tv, dir, dentries[i], "DATA", NULL, mf);
++				} /* ignore other "things" (like symlinks) as they
++					 don't belong in a tree */
++			} else {
++				fprintf(stderr, "stat(%s) failed: %s\n",
++						path, strerror(errno));
++			}
++			free(dentries[i]);
++		}
++		free(dentries);
++		gzclose(mf);
++
++		if (tv[0].tv_sec != 0) {
++			snprintf(path, sizeof(path), "%s/%s", dir, str_manifest_files_gz);
++			utimes(path, tv);
++		}
++
++		/* create global Manifest */
++		snprintf(path, sizeof(path), "%s/%s", dir, str_manifest);
++		if ((f = fopen(path, "w")) == NULL) {
++			fprintf(stderr, "failed to open file '%s' for writing: %s\n",
++					path, strerror(errno));
++			return NULL;
++		}
++
++		write_hashes(tv, dir, str_manifest_files_gz, "MANIFEST", f, NULL);
++		time(&rtime);
++		len = strftime(path, sizeof(path),
++				"TIMESTAMP %Y-%m-%dT%H:%M:%SZ\n", gmtime(&rtime));
++		fwrite(path, len, 1, f);
++		fflush(f);
++		fclose(f);
++
++		/* because we write a timestamp in Manifest, we don't mess with
++		 * its mtime, else it would obviously lie */
++		return str_manifest_files_gz;
++	} else if (mtype == SUBTREE_MANIFEST) {
++		const char *ldir;
++		gzFile mf;
++
++		snprintf(path, sizeof(path), "%s/%s", dir, str_manifest_gz);
++		if ((mf = gzopen(path, "wb9")) == NULL) {
++			fprintf(stderr, "failed to open file '%s' for writing: %s\n",
++					path, strerror(errno));
++			return NULL;
++		}
++
++		ldir = strrchr(dir, '/');
++		if (ldir == NULL)
++			ldir = dir;
++		if (strcmp(ldir, "metadata") == 0) {
++			size_t len;
++			len = snprintf(path, sizeof(path),
++					"IGNORE timestamp\n"
++					"IGNORE timestamp.chk\n"
++					"IGNORE timestamp.commit\n"
++					"IGNORE timestamp.x\n");
++			gzwrite(mf, path, len);
++		}
++
++		if (list_dir(&dentries, &dentrieslen, dir) != 0)
++			return NULL;
++
++		for (i = 0; i < dentrieslen; i++) {
++			/* ignore existing Manifests */
++			if (strcmp(dentries[i], str_manifest_gz) == 0) {
++				free(dentries[i]);
++				continue;
++			}
++
++			if (write_hashes_dir(tv, dir, dentries[i], mf) != 0)
++				write_hashes(tv, dir, dentries[i], "DATA", NULL, mf);
++			free(dentries[i]);
++		}
++
++		free(dentries);
++		gzclose(mf);
++
++		if (tv[0].tv_sec != 0) {
++			/* set Manifest and dir mtime to most recent file found */
++			snprintf(path, sizeof(path), "%s/%s", dir, str_manifest_gz);
++			utimes(path, tv);
++			utimes(dir, tv);
++		}
++
++		return str_manifest_gz;
++	} else if (mtype == CATEGORY_MANIFEST) {
++		const char *mfest;
++		gzFile mf;
++
++		snprintf(path, sizeof(path), "%s/%s", dir, str_manifest_gz);
++		if ((mf = gzopen(path, "wb9")) == NULL) {
++			fprintf(stderr, "failed to open file '%s' for writing: %s\n",
++					path, strerror(errno));
++			return NULL;
++		}
++
++		if (list_dir(&dentries, &dentrieslen, dir) != 0)
++			return NULL;
++
++		for (i = 0; i < dentrieslen; i++) {
++			/* ignore existing Manifests */
++			if (strcmp(dentries[i], str_manifest_gz) == 0) {
++				free(dentries[i]);
++				continue;
++			}
++
++			snprintf(path, sizeof(path), "%s/%s", dir, dentries[i]);
++			if (!stat(path, &s)) {
++				if (s.st_mode & S_IFDIR) {
++					mfest = generate_dir(path, EBUILD_MANIFEST);
++
++					if (mfest == NULL) {
++						fprintf(stderr, "generating Manifest for %s failed!\n",
++								path);
++						gzclose(mf);
++						return NULL;
++					}
++
++					snprintf(path, sizeof(path), "%s/%s",
++							dentries[i], mfest);
++					write_hashes(tv, dir, path, "MANIFEST", NULL, mf);
++				} else if (s.st_mode & S_IFREG) {
++					write_hashes(tv, dir, dentries[i], "DATA", NULL, mf);
++				} /* ignore other "things" (like symlinks) as they
++					 don't belong in a tree */
++			} else {
++				fprintf(stderr, "stat(%s) failed: %s\n",
++						path, strerror(errno));
++			}
++			free(dentries[i]);
++		}
++
++		free(dentries);
++		gzclose(mf);
++
++		if (tv[0].tv_sec != 0) {
++			/* set Manifest and dir mtime to most ebuild dir found */
++			snprintf(path, sizeof(path), "%s/%s", dir, str_manifest_gz);
++			utimes(path, tv);
++			utimes(dir, tv);
++		}
++
++		return str_manifest_gz;
++	} else if (mtype == EBUILD_MANIFEST) {
++		char newmanifest[8192];
++		FILE *m;
++
++		snprintf(newmanifest, sizeof(newmanifest), "%s/.Manifest.new", dir);
++		if ((m = fopen(newmanifest, "w")) == NULL) {
++			fprintf(stderr, "failed to open file '%s' for writing: %s\n",
++					newmanifest, strerror(errno));
++			return NULL;
++		}
++
++		/* we know the Manifest is sorted, and stuff in files/ is
++		 * prefixed with AUX, hence, if it exists, we need to do it
++		 * first */
++		snprintf(path, sizeof(path), "%s/files", dir);
++		process_files(tv, path, "", m);
++
++		/* the Manifest file may be missing in case there are no DIST
++		 * entries to be stored */
++		snprintf(path, sizeof(path), "%s/%s", dir, str_manifest);
++		if (!stat(path, &s))
++			update_times(tv, &s);
++		f = fopen(path, "r");
++		if (f != NULL) {
++			/* copy the DIST entries, we could do it unconditional, but this
++			 * way we can re-run without producing invalid Manifests */
++			while (fgets(path, sizeof(path), f) != NULL) {
++				if (strncmp(path, "DIST ", 5) == 0)
++					if (fwrite(path, strlen(path), 1, m) != 1) {
++						fprintf(stderr, "failed to write to "
++								"%s/.Manifest.new: %s\n",
++								dir, strerror(errno));
++						fclose(f);
++						fclose(m);
++						return NULL;
++					}
++			}
++			fclose(f);
++		}
++
++		if (list_dir(&dentries, &dentrieslen, dir) == 0) {
++			for (i = 0; i < dentrieslen; i++) {
++				if (strcmp(dentries[i] + strlen(dentries[i]) - 7,
++							".ebuild") != 0)
++				{
++					free(dentries[i]);
++					continue;
++				}
++				write_hashes(tv, dir, dentries[i], "EBUILD", m, NULL);
++				free(dentries[i]);
++			}
++			free(dentries);
++		}
++
++		write_hashes(tv, dir, "ChangeLog", "MISC", m, NULL);
++		write_hashes(tv, dir, "metadata.xml", "MISC", m, NULL);
++
++		fflush(m);
++		fclose(m);
++
++		snprintf(path, sizeof(path), "%s/%s", dir, str_manifest);
++		rename(newmanifest, path);
++
++		if (tv[0].tv_sec != 0) {
++			/* set Manifest and dir mtime to most recent file we found */
++			utimes(path, tv);
++			utimes(dir, tv);
++		}
++
++		return str_manifest;
++	} else {
++		return NULL;
++	}
++}
++
++static gpgme_error_t
++gpgme_pw_cb(void *opaque, const char *uid_hint, const char *pw_info,
++		int last_was_bad, int fd)
++{
++	char *pass = (char *)opaque;
++	size_t passlen = strlen(pass);
++	ssize_t ret;
++
++	(void)uid_hint;
++	(void)pw_info;
++	(void)last_was_bad;
++
++	do {
++		ret = write(fd, pass, passlen);
++		if (ret > 0) {
++			pass += ret;
++			passlen -= ret;
++		}
++	} while (passlen > 0 && ret > 0);
++
++	return passlen == 0 ? GPG_ERR_NO_ERROR : gpgme_error_from_errno(errno);
++}
++
++static const char *
++process_dir_gen(void)
++{
++	char path[_Q_PATH_MAX];
++	int newhashes;
++	struct termios termio;
++	char *gpg_pass;
++
++	if ((newhashes = parse_layout_conf("metadata/layout.conf")) != 0) {
++		hashes = newhashes;
++	} else {
++		return "generation must be done on a full tree";
++	}
++
++	if (generate_dir(".\0", GLOBAL_MANIFEST) == NULL)
++		return "generation failed";
++
++	if (gpg_sign_key != NULL) {
++		gpgme_ctx_t gctx;
++		gpgme_error_t gerr;
++		gpgme_key_t gkey;
++		gpgme_data_t manifest;
++		gpgme_data_t out;
++		FILE *f;
++		size_t dlen;
++
++		gerr = gpgme_new(&gctx);
++		if (gerr != GPG_ERR_NO_ERROR)
++			return "GPG setup failed";
++
++		gerr = gpgme_get_key(gctx, gpg_sign_key, &gkey, 0);
++		if (gerr != GPG_ERR_NO_ERROR)
++			return "failed to get GPG key";
++		gerr = gpgme_signers_add(gctx, gkey);
++		if (gerr != GPG_ERR_NO_ERROR)
++			return "failed to add GPG key to sign list, is it a suitable key?";
++
++		gpg_pass = NULL;
++		if (gpg_get_password) {
++			if (isatty(fileno(stdin))) {
++				/* disable terminal echo; the printing of what you type */
++				tcgetattr(fileno(stdin), &termio);
++				termio.c_lflag &= ~ECHO;
++				tcsetattr(fileno(stdin), TCSANOW, &termio);
++
++				printf("Password for GPG-key %s: ", gpg_sign_key);
++			}
++
++			gpg_pass = fgets(path, sizeof(path), stdin);
++
++			if (isatty(fileno(stdin))) {
++				printf("\n");
++				/* restore echoing, for what it's worth */
++				termio.c_lflag |= ECHO;
++				tcsetattr(fileno(stdin), TCSANOW, &termio);
++			}
++
++			if (gpg_pass == NULL || *gpg_pass == '\0')
++				warn("no GPG password given, gpg might ask for it again");
++				/* continue for the case where gpg-agent holds the pass */
++			else {
++				gpgme_set_pinentry_mode(gctx, GPGME_PINENTRY_MODE_LOOPBACK);
++				gpgme_set_passphrase_cb(gctx, gpgme_pw_cb, gpg_pass);
++			}
++		}
++
++		if ((f = fopen(str_manifest, "r+")) == NULL)
++			return "could not open top-level Manifest file";
++
++		/* finally, sign the Manifest */
++		if (gpgme_data_new_from_stream(&manifest, f) != GPG_ERR_NO_ERROR)
++			return "failed to create GPG data from Manifest";
++
++		if (gpgme_data_new(&out) != GPG_ERR_NO_ERROR)
++			return "failed to create GPG output buffer";
++
++		gerr = gpgme_op_sign(gctx, manifest, out, GPGME_SIG_MODE_CLEAR);
++		if (gerr != GPG_ERR_NO_ERROR) {
++			warn("%s: %s", gpgme_strsource(gerr), gpgme_strerror(gerr));
++			return "failed to GPG sign Manifest";
++		}
++
++		/* write back signed Manifest */
++		rewind(f);
++		gpgme_data_seek(out, 0, SEEK_SET);
++		do {
++			dlen = gpgme_data_read(out, path, sizeof(path));
++			fwrite(path, dlen, 1, f);
++		} while (dlen == sizeof(path));
++		fclose(f);
++
++		gpgme_data_release(out);
++		gpgme_data_release(manifest);
++		gpgme_release(gctx);
++	}
++
++	return NULL;
++}
++
++static void
++msgs_add(
++		verify_msg **msgs,
++		const char *manifest,
++		const char *ebuild,
++		const char *fmt, ...)
++{
++	char buf[4096];
++	int len;
++	va_list ap;
++	verify_msg *msg;
++
++	if (msgs == NULL || *msgs == NULL)
++		return;
++
++	msg = (*msgs)->next = xmalloc(sizeof(verify_msg));
++
++	len = snprintf(buf, sizeof(buf), "%s:%s:",
++			manifest ? manifest : "",
++			ebuild   ? ebuild   : "");
++
++	va_start(ap, fmt);
++	vsnprintf(buf + len, sizeof(buf) - len, fmt, ap);
++	va_end(ap);
++
++	msg->msg = xstrdup(buf);
++	msg->next = NULL;
++	*msgs = msg;
++}
++
++gpg_sig *
++verify_gpg_sig(const char *path, verify_msg **msgs)
++{
++	gpgme_ctx_t g_ctx;
++	gpgme_data_t manifest;
++	gpgme_data_t out;
++	gpgme_verify_result_t vres;
++	gpgme_signature_t sig;
++	gpgme_key_t key;
++	char buf[64];
++	FILE *f;
++	struct tm *ctime;
++	gpg_sig *ret = NULL;
++
++	if ((f = fopen(path, "r")) == NULL) {
++		msgs_add(msgs, path, NULL, "failed to open: %s", strerror(errno));
++		return NULL;
++	}
++
++	if (gpgme_new(&g_ctx) != GPG_ERR_NO_ERROR) {
++		msgs_add(msgs, path, NULL, "failed to create gpgme context");
++		return NULL;
++	}
++
++	if (gpgme_data_new(&out) != GPG_ERR_NO_ERROR) {
++		msgs_add(msgs, path, NULL, "failed to create gpgme data");
++		return NULL;
++	}
++
++	if (gpgme_data_new_from_stream(&manifest, f) != GPG_ERR_NO_ERROR) {
++		msgs_add(msgs, path, NULL,
++				"failed to create new gpgme data from stream");
++		return NULL;
++	}
++
++	if (gpgme_op_verify(g_ctx, manifest, NULL, out) != GPG_ERR_NO_ERROR) {
++		msgs_add(msgs, path, NULL, "failed to verify signature");
++		return NULL;
++	}
++
++	vres = gpgme_op_verify_result(g_ctx);
++	fclose(f);
++
++	if (vres == NULL || vres->signatures == NULL) {
++		msgs_add(msgs, path, NULL,
++				"verification failed due to a missing gpg keyring");
++		return NULL;
++	}
++
++	/* we only check/return the first signature */
++	if ((sig = vres->signatures) != NULL) {
++		ret = xmalloc(sizeof(gpg_sig));
++
++		if (sig->fpr != NULL) {
++			snprintf(buf, sizeof(buf),
++					"%.4s %.4s %.4s %.4s %.4s  %.4s %.4s %.4s %.4s %.4s",
++					sig->fpr +  0, sig->fpr +  4, sig->fpr +  8, sig->fpr + 12,
++					sig->fpr + 16, sig->fpr + 20, sig->fpr + 24, sig->fpr + 28,
++					sig->fpr + 32, sig->fpr + 36);
++		} else {
++			snprintf(buf, sizeof(buf), "<fingerprint not found>");
++		}
++
++		if (sig->status != GPG_ERR_NO_PUBKEY) {
++			ret->algo = xstrdup(gpgme_pubkey_algo_name(sig->pubkey_algo));
++			ret->fingerprint = xstrdup(buf);
++			ret->isgood = sig->status == GPG_ERR_NO_ERROR ? 1 : 0;
++			ctime = gmtime((time_t *)&sig->timestamp);
++			strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S UTC", ctime);
++			ret->timestamp = xstrdup(buf);
++
++			if (gpgme_get_key(g_ctx, sig->fpr, &key, 0) == GPG_ERR_NO_ERROR) {
++				if (key->uids != NULL)
++					ret->signer = xstrdup(key->uids->uid);
++				if (key->subkeys != NULL) {
++					snprintf(buf, sizeof(buf),
++							"%.4s %.4s %.4s %.4s %.4s  "
++							"%.4s %.4s %.4s %.4s %.4s",
++							key->subkeys->fpr +  0, key->subkeys->fpr +  4,
++							key->subkeys->fpr +  8, key->subkeys->fpr + 12,
++							key->subkeys->fpr + 16, key->subkeys->fpr + 20,
++							key->subkeys->fpr + 24, key->subkeys->fpr + 28,
++							key->subkeys->fpr + 32, key->subkeys->fpr + 36);
++					ret->pkfingerprint = xstrdup(buf);
++				}
++				gpgme_key_release(key);
++			}
++		}
++
++		switch (sig->status) {
++			case GPG_ERR_NO_ERROR:
++				/* nothing */
++				ret->reason = NULL;
++				break;
++			case GPG_ERR_SIG_EXPIRED:
++				ret->reason = xstrdup("the signature is valid but expired");
++				break;
++			case GPG_ERR_KEY_EXPIRED:
++				ret->reason = xstrdup("the signature is valid but the key "
++						"used to verify the signature has expired");
++				break;
++			case GPG_ERR_CERT_REVOKED:
++				ret->reason = xstrdup("the signature is valid but the key "
++						"used to verify the signature has been revoked");
++				break;
++			case GPG_ERR_BAD_SIGNATURE:
++				free(ret);
++				ret = NULL;
++				printf("the signature is invalid\n");
++				break;
++			case GPG_ERR_NO_PUBKEY:
++				free(ret);
++				ret = NULL;
++				printf("the signature could not be verified due to a "
++						"missing key for:\n  %s\n", buf);
++				break;
++			default:
++				free(ret);
++				ret = NULL;
++				printf("there was some error which prevented the "
++						"signature verification:\n  %s: %s\n",
++						buf, gpgme_strerror(sig->status));
++				break;
++		}
++	}
++
++	gpgme_release(g_ctx);
++
++	return ret;
++}
++
++static size_t checked_manifests = 0;
++static size_t checked_files = 0;
++static size_t failed_files = 0;
++static char strict = 0;
++
++static char
++verify_file(const char *dir, char *mfline, const char *mfest, verify_msg **msgs)
++{
++	char *path;
++	char *size;
++	long long int fsize;
++	char *hashtype;
++	char *hash;
++	char *p;
++	char buf[8192];
++	size_t flen = 0;
++	char sha256[(SHA256_DIGEST_LENGTH * 2) + 1];
++	char sha512[(SHA512_DIGEST_LENGTH * 2) + 1];
++	char whrlpl[(WHIRLPOOL_DIGEST_LENGTH * 2) + 1];
++	char blak2b[(BLAKE2B_OUTBYTES * 2) + 1];
++	char ret = 0;
++
++	/* mfline is a Manifest file line with type and leading path
++	 * stripped, something like:
++	 * file <SIZE> <HASHTYPE HASH ...>
++	 * we parse this, and verify the size and hashes */
++
++	path = mfline;
++	p = strchr(path, ' ');
++	if (p == NULL) {
++		msgs_add(msgs, mfest, NULL, "corrupt manifest line: %s", path);
++		return 1;
++	}
++	*p++ = '\0';
++
++	size = p;
++	p = strchr(size, ' ');
++	if (p == NULL) {
++		msgs_add(msgs, mfest, NULL, "corrupt manifest line, need size");
++		return 1;
++	}
++	*p++ = '\0';
++	fsize = strtoll(size, NULL, 10);
++	if (fsize == 0 && errno == EINVAL) {
++		msgs_add(msgs, mfest, NULL, "corrupt manifest line, "
++				"size is not a number: %s", size);
++		return 1;
++	}
++
++	sha256[0] = sha512[0] = whrlpl[0] = blak2b[0] = '\0';
++	snprintf(buf, sizeof(buf), "%s/%s", dir, path);
++	hash_compute_file(buf, sha256, sha512, whrlpl, blak2b, &flen, hashes);
++
++	if (flen == 0) {
++		msgs_add(msgs, mfest, path, "cannot open file!");
++		return 1;
++	}
++
++	checked_files++;
++
++	if (flen != (size_t)fsize) {
++		msgs_add(msgs, mfest, path,
++				"file size mismatch\n"
++				"     got: %zd\n"
++				"expected: %lld",
++				flen, fsize);
++		failed_files++;
++		return 1;
++	}
++
++	/* now we are in free territory, we read TYPE HASH pairs until we
++	 * drained the string, and match them against what we computed */
++	while (p != NULL && *p != '\0') {
++		hashtype = p;
++		p = strchr(hashtype, ' ');
++		if (p == NULL) {
++			msgs_add(msgs, mfest, path,
++					"corrupt manifest line, missing hash type");
++			return 1;
++		}
++		*p++ = '\0';
++
++		hash = p;
++		p = strchr(hash, ' ');
++		if (p != NULL)
++			*p++ = '\0';
++
++		if (strcmp(hashtype, "SHA256") == 0) {
++			if (!(hashes & HASH_SHA256)) {
++				if (strict)
++					msgs_add(msgs, mfest, path,
++							"hash SHA256 is not "
++							"enabled for this repository");
++			} else if (strcmp(hash, sha256) != 0) {
++				msgs_add(msgs, mfest, path,
++						"SHA256 hash mismatch\n"
++						"computed: '%s'\n"
++						"Manifest: '%s'",
++						sha256, hash);
++				ret = 1;
++			}
++			sha256[0] = '\0';
++		} else if (strcmp(hashtype, "SHA512") == 0) {
++			if (!(hashes & HASH_SHA512)) {
++				if (strict)
++					msgs_add(msgs, mfest, path,
++							"hash SHA512 is not "
++							"enabled for this repository");
++			} else if (strcmp(hash, sha512) != 0) {
++				msgs_add(msgs, mfest, path,
++						"SHA512 hash mismatch\n"
++						"computed: '%s'\n"
++						"Manifest: '%s'",
++						sha512, hash);
++				ret = 1;
++			}
++			sha512[0] = '\0';
++		} else if (strcmp(hashtype, "WHIRLPOOL") == 0) {
++			if (!(hashes & HASH_WHIRLPOOL)) {
++				if (strict)
++					msgs_add(msgs, mfest, path,
++							"hash WHIRLPOOL is not "
++							"enabled for this repository");
++			} else if (strcmp(hash, whrlpl) != 0) {
++				msgs_add(msgs, mfest, path,
++						"WHIRLPOOL hash mismatch\n"
++						"computed: '%s'\n"
++						"Manifest: '%s'",
++						whrlpl, hash);
++				ret = 1;
++			}
++			whrlpl[0] = '\0';
++		} else if (strcmp(hashtype, "BLAKE2B") == 0) {
++			if (!(hashes & HASH_BLAKE2B)) {
++				if (strict)
++					msgs_add(msgs, mfest, path,
++							"hash BLAKE2B is not "
++							"enabled for this repository");
++			} else if (strcmp(hash, blak2b) != 0) {
++				msgs_add(msgs, mfest, path,
++						"BLAKE2B hash mismatch\n"
++						"computed: '%s'\n"
++						"Manifest: '%s'",
++						blak2b, hash);
++				ret = 1;
++			}
++			blak2b[0] = '\0';
++		} else {
++			msgs_add(msgs, mfest, path, "unsupported hash: %s", hashtype);
++			ret = 1;
++		}
++	}
++
++	if (sha256[0] != '\0') {
++		msgs_add(msgs, mfest, path, "missing hash: SHA256");
++		ret = 1;
++	}
++	if (sha512[0] != '\0') {
++		msgs_add(msgs, mfest, path, "missing hash: SHA512");
++		ret = 1;
++	}
++	if (whrlpl[0] != '\0') {
++		msgs_add(msgs, mfest, path, "missing hash: WHIRLPOOL");
++		ret = 1;
++	}
++	if (blak2b[0] != '\0') {
++		msgs_add(msgs, mfest, path, "missing hash: BLAKE2B");
++		ret = 1;
++	}
++
++	failed_files += ret;
++	return ret;
++}
++
++static int
++compare_elems(const void *l, const void *r)
++{
++	const char *strl = *((const char **)l) + 2;
++	const char *strr = *((const char **)r) + 2;
++	unsigned char cl;
++	unsigned char cr;
++	/* compare treating / as end of string */
++	while ((cl = *strl++) == (cr = *strr++))
++		if (cl == '\0')
++			return 0;
++	if (cl == '/')
++		cl = '\0';
++	if (cr == '/')
++		cr = '\0';
++	return cl - cr;
++}
++
++struct subdir_workload {
++	size_t subdirlen;
++	size_t elemslen;
++	char **elems;
++};
++
++static char
++verify_dir(
++		const char *dir,
++		char **elems,
++		size_t elemslen,
++		size_t skippath,
++		const char *mfest,
++		verify_msg **msgs)
++{
++	char **dentries = NULL;
++	size_t dentrieslen = 0;
++	size_t curelem = 0;
++	size_t curdentry = 0;
++	char *entry;
++	char *slash;
++	char etpe;
++	char ret = 0;
++	int cmp;
++	struct subdir_workload **subdir = NULL;
++	size_t subdirsize = 0;
++	size_t subdirlen = 0;
++	size_t elem;
++
++	/* shortcut a single Manifest entry pointing to the same dir
++	 * (happens at top-level) */
++	if (elemslen == 1 && skippath == 0 &&
++			**elems == 'M' && strchr(*elems + 2, '/') == NULL)
++	{
++		if ((ret = verify_file(dir, *elems + 2, mfest, msgs)) == 0) {
++			slash = strchr(*elems + 2, ' ');
++			if (slash != NULL)
++				*slash = '\0';
++			/* else, verify_manifest will fail, so ret will be handled */
++			ret = verify_manifest(dir, *elems + 2, msgs);
++		}
++		return ret;
++	}
++
++	/*
++	 * We have a list of entries from the manifest just read, now we
++	 * need to match these onto the directory layout.  From what we got
++	 * - we can ignore TIMESTAMP and DIST entries
++	 * - IGNOREs need to be handled separate (shortcut)
++	 * - MANIFESTs need to be handled on their own, for memory
++	 *   consumption reasons, we defer them to until we've verified
++	 *   what's left, we treat the path the Manifest refers to as IGNORE
++	 * - DATAs, EBUILDs and MISCs needs verifying
++	 * - AUXs need verifying, but in files/ subdir
++	 * If we sort both lists, we should be able to do a merge-join, to
++	 * easily flag missing entries in either list without hashing or
++	 * anything.
++	 */
++	if (list_dir(&dentries, &dentrieslen, dir) == 0) {
++		while (curdentry < dentrieslen) {
++			if (strcmp(dentries[curdentry], str_manifest) == 0 ||
++					strcmp(dentries[curdentry], str_manifest_gz) == 0 ||
++					strcmp(dentries[curdentry], str_manifest_files_gz) == 0)
++			{
++				curdentry++;
++				continue;
++			}
++
++			if (curelem < elemslen) {
++				entry = elems[curelem] + 2 + skippath;
++				etpe = *elems[curelem];
++			} else {
++				entry = (char *)"";
++				etpe = 'I';
++			}
++
++			/* handle subdirs first */
++			if ((slash = strchr(entry, '/')) != NULL) {
++				size_t sublen = slash - entry;
++				int elemstart = curelem;
++				char **subelems = &elems[curelem];
++
++				/* collect all entries like this one (same subdir) into
++				 * a sub-list that we can verify */
++				curelem++;
++				while (curelem < elemslen &&
++						strncmp(entry, elems[curelem] + 2 + skippath,
++							sublen + 1) == 0)
++					curelem++;
++
++				if (subdirlen == subdirsize) {
++					subdirsize += LISTSZ;
++					subdir = xrealloc(subdir,
++							subdirsize * sizeof(subdir[0]));
++					if (subdir == NULL) {
++						msgs_add(msgs, mfest, NULL, "out of memory allocating "
++								"sublist for %.*s", (int)sublen, entry);
++						return 1;
++					}
++				}
++				subdir[subdirlen] = xmalloc(sizeof(struct subdir_workload));
++				subdir[subdirlen]->subdirlen = sublen;
++				subdir[subdirlen]->elemslen = curelem - elemstart;
++				subdir[subdirlen]->elems = subelems;
++				subdirlen++;
++
++				curelem--; /* move back, see below */
++
++				/* modify the last entry to be the subdir, such that we
++				 * can let the code below synchronise with dentries */
++				elems[curelem][2 + skippath + sublen] = ' ';
++				entry = elems[curelem] + 2 + skippath;
++				etpe = 'S';  /* flag this was a subdir */
++			}
++
++			/* does this entry exist in list? */
++			if (*entry == '\0') {
++				/* end of list reached, force dir to catch up */
++				cmp = 1;
++			} else {
++				slash = strchr(entry, ' ');
++				if (slash != NULL)
++					*slash = '\0';
++				cmp = strcmp(entry, dentries[curdentry]);
++				if (slash != NULL)
++					*slash = ' ';
++			}
++			if (cmp == 0) {
++				/* equal, so yay */
++				if (etpe == 'D') {
++					ret |= verify_file(dir, entry, mfest, msgs);
++				}
++				/* else this is I(GNORE) or S(ubdir), which means it is
++				 * ok in any way (M shouldn't happen) */
++				curelem++;
++				curdentry++;
++			} else if (cmp < 0) {
++				/* entry is missing from dir */
++				if (etpe == 'I') {
++					/* right, we can ignore this */
++				} else {
++					ret |= 1;
++					slash = strchr(entry, ' ');
++					if (slash != NULL)
++						*slash = '\0';
++					msgs_add(msgs, mfest, entry, "%s file listed in Manifest, "
++							"but not found", etpe == 'M' ? "MANIFEST" : "DATA");
++					if (slash != NULL)
++						*slash = ' ';
++					failed_files++;
++				}
++				curelem++;
++			} else if (cmp > 0) {
++				/* dir has extra element */
++				ret |= 1;
++				msgs_add(msgs, mfest, NULL,
++						"file not listed: %s", dentries[curdentry]);
++				curdentry++;
++				failed_files++;
++			}
++		}
++
++		while (dentrieslen-- > 0)
++			free(dentries[dentrieslen]);
++		free(dentries);
++
++#pragma omp parallel for shared(ret) private(entry, etpe, slash)
++		for (elem = 0; elem < subdirlen; elem++) {
++			char ndir[8192];
++
++			entry = subdir[elem]->elems[0] + 2 + skippath;
++			etpe = subdir[elem]->elems[0][0];
++
++			/* restore original entry format */
++			subdir[elem]->elems[subdir[elem]->elemslen - 1]
++				[2 + skippath + subdir[elem]->subdirlen] = '/';
++
++			if (etpe == 'M') {
++				size_t skiplen = strlen(dir) + 1 + subdir[elem]->subdirlen;
++				/* sub-Manifest, we need to do a proper recurse */
++				slash = strrchr(entry, '/');  /* cannot be NULL */
++				snprintf(ndir, sizeof(ndir), "%s/%s", dir, entry);
++				ndir[skiplen] = '\0';
++				slash = strchr(ndir + skiplen + 1, ' ');
++				if (slash != NULL)  /* path should fit in ndir ... */
++					*slash = '\0';
++				if (verify_file(dir, entry, mfest, msgs) != 0 ||
++						verify_manifest(ndir, ndir + skiplen + 1, msgs) != 0)
++					ret |= 1;
++			} else {
++				snprintf(ndir, sizeof(ndir), "%s/%.*s", dir,
++						(int)subdir[elem]->subdirlen, entry);
++				ret |= verify_dir(ndir, subdir[elem]->elems,
++						subdir[elem]->elemslen,
++						skippath + subdir[elem]->subdirlen + 1, mfest, msgs);
++			}
++
++			free(subdir[elem]);
++		}
++
++		if (subdir)
++			free(subdir);
++
++		return ret;
++	} else {
++		return 1;
++	}
++}
++
++char
++verify_manifest(
++		const char *dir,
++		const char *manifest,
++		verify_msg **msgs)
++{
++	char buf[8192];
++	FILE *f;
++	gzFile mf;
++	char ret = 0;
++
++	size_t elemssize = 0;
++	size_t elemslen = 0;
++	char **elems = NULL;
++#define append_list(STR) \
++	if (strncmp(STR, "TIMESTAMP ", 10) != 0 || strncmp(STR, "DIST ", 5) != 0) {\
++		char *endp = STR + strlen(STR) - 1;\
++		while (isspace(*endp))\
++			*endp-- = '\0';\
++		if (elemslen == elemssize) {\
++			elemssize += LISTSZ;\
++			elems = xrealloc(elems, elemssize * sizeof(elems[0]));\
++		}\
++		if (strncmp(STR, "IGNORE ", 7) == 0) {\
++			STR[5] = 'I';\
++			elems[elemslen] = xstrdup(STR + 5);\
++			elemslen++;\
++		} else if (strncmp(STR, "MANIFEST ", 9) == 0) {\
++			STR[7] = 'M';\
++			elems[elemslen] = xstrdup(STR + 7);\
++			elemslen++;\
++		} else if (strncmp(STR, "DATA ", 5) == 0 ||\
++				strncmp(STR, "MISC ", 5) == 0 ||\
++				strncmp(STR, "EBUILD ", 7) == 0)\
++		{\
++			if (*STR == 'E') {\
++				STR[5] = 'D';\
++				elems[elemslen] = xstrdup(STR + 5);\
++			} else {\
++				STR[3] = 'D';\
++				elems[elemslen] = xstrdup(STR + 3);\
++			}\
++			elemslen++;\
++		} else if (strncmp(STR, "AUX ", 4) == 0) {\
++			/* translate directly into what it is: DATA in files/ */\
++			size_t slen = strlen(STR + 2) + sizeof("files/");\
++			elems[elemslen] = xmalloc(slen);\
++			snprintf(elems[elemslen], slen, "D files/%s", STR + 4);\
++			elemslen++;\
++		}\
++	}
++
++	snprintf(buf, sizeof(buf), "%s/%s", dir, manifest);
++	if (strcmp(manifest, str_manifest) == 0) {
++		if ((f = fopen(buf, "r")) == NULL) {
++			msgs_add(msgs, buf, NULL, "failed to open %s: %s\n",
++					manifest, strerror(errno));
++			return 1;
++		}
++		while (fgets(buf, sizeof(buf), f) != NULL) {
++			append_list(buf);
++		}
++		fclose(f);
++	} else if (strcmp(manifest, str_manifest_files_gz) == 0 ||
++			strcmp(manifest, str_manifest_gz) == 0)
++	{
++		if ((mf = gzopen(buf, "rb9")) == NULL) {
++			msgs_add(msgs, buf, NULL, "failed to open %s: %s\n",
++					manifest, strerror(errno));
++			return 1;
++		}
++		while (gzgets(mf, buf, sizeof(buf)) != NULL) {
++			append_list(buf);
++		}
++		gzclose(mf);
++	}
++
++	/* The idea:
++	 * - Manifest without MANIFEST entries, we need to scan the entire
++	 *   subtree
++	 * - Manifest with MANIFEST entries, assume they are just one level
++	 *   deeper, thus ignore that subdir, further like above
++	 * - Manifest at top-level, needs to be igored as it only points to
++	 *   the larger Manifest.files.gz
++	 */
++	qsort(elems, elemslen, sizeof(elems[0]), compare_elems);
++	snprintf(buf, sizeof(buf), "%s/%s", dir, manifest);
++	ret = verify_dir(dir, elems, elemslen, 0, buf + 2, msgs);
++	checked_manifests++;
++
++	while (elemslen-- > 0)
++		free(elems[elemslen]);
++	free(elems);
++
++	return ret;
++}
++
++char *
++verify_timestamp(const char *ts)
++{
++	char buf[8192];
++	FILE *f;
++	char *ret = NULL;
++
++	if ((f = fopen(ts, "r")) != NULL) {
++		while (fgets(buf, sizeof(buf), f) != NULL) {
++			if (strncmp(buf, "TIMESTAMP ", 10) == 0) {
++				char *endp = buf + strlen(buf) - 1;
++				while (isspace(*endp))
++					*endp-- = '\0';
++				ret = xstrdup(buf + 10);
++				break;
++			}
++		}
++		fclose(f);
++	}
++
++	return ret;
++}
++
++static void
++format_line(const char *pfx, const char *msg)
++{
++	size_t msglen = strlen(pfx) + strlen(msg);
++
++	if (*pfx == '-') {
++		fprintf(stdout, "%s%s%s%s\n", pfx, RED, msg, NORM);
++	} else {
++		if (!verbose && twidth > 0 && msglen > (size_t)twidth) {
++			int to_remove = 3 + (msglen - twidth);
++			int first_half = msglen / 2 - to_remove / 2;
++			int remainder = msglen / 2 + (to_remove + 1) / 2;
++			fprintf(stdout, "%s%.*s...%s\n",
++					pfx, first_half, msg, msg + remainder);
++		} else {
++			fprintf(stdout, "%s%s\n", pfx, msg);
++		}
++	}
++}
++
++static const char *
++process_dir_vrfy(void)
++{
++	char buf[8192];
++	int newhashes;
++	const char *ret = NULL;
++	struct timeval startt;
++	struct timeval finisht;
++	double etime;
++	char *timestamp;
++	verify_msg topmsg;
++	verify_msg *walk = &topmsg;
++	gpg_sig *gs;
++
++	gettimeofday(&startt, NULL);
++
++	snprintf(buf, sizeof(buf), "metadata/layout.conf");
++	if ((newhashes = parse_layout_conf(buf)) != 0) {
++		hashes = newhashes;
++	} else {
++		return "verification must be done on a full tree";
++	}
++
++	if ((gs = verify_gpg_sig(str_manifest, &walk)) == NULL) {
++		ret = "gpg signature invalid";
++	} else {
++		fprintf(stdout,
++				"%s%s%s signature made %s by\n"
++				"  %s%s%s\n"
++				"primary key fingerprint %s\n"
++				"%4s subkey fingerprint %s\n",
++				gs->isgood ? GREEN : RED,
++				gs->isgood ? "good": "BAD",
++				NORM, gs->timestamp,
++				DKBLUE, gs->signer, NORM,
++				gs->pkfingerprint,
++				gs->algo, gs->fingerprint);
++		if (!gs->isgood)
++			fprintf(stdout, "reason: %s%s%s\n", RED, gs->reason, NORM);
++		free(gs->algo);
++		free(gs->fingerprint);
++		free(gs->timestamp);
++		free(gs->signer);
++		free(gs->pkfingerprint);
++		if (!gs->isgood)
++			free(gs->reason);
++		free(gs);
++	}
++
++	if ((timestamp = verify_timestamp(str_manifest)) != NULL) {
++		fprintf(stdout, "%s timestamp: %s\n", str_manifest, timestamp);
++		free(timestamp);
++	} else {
++		ret = "manifest timestamp entry missing";
++	}
++
++	/* verification goes like this:
++	 * - verify the signature of the top-level Manifest file (done
++	 *   above)
++	 * - read the contents of the Manifest file, and process the
++	 *   entries - verify them, check there are no files which shouldn't
++	 *   be there
++	 * - recurse into directories for which Manifest files are defined
++	 */
++	walk->next = NULL;
++	if (verify_manifest(".\0", str_manifest, &walk) != 0)
++		ret = "manifest verification failed";
++
++	{
++		char *mfest;
++		char *ebuild;
++		char *msg;
++		char *lastmfest = (char *)"-";
++		char *lastebuild = (char *)"-";
++		char *msgline;
++		const char *pfx;
++		verify_msg *next;
++
++		for (walk = topmsg.next; walk != NULL; walk = walk->next) {
++			mfest = walk->msg;
++			ebuild = strchr(mfest, ':');
++			if (ebuild != NULL) {
++				*ebuild++ = '\0';
++				msg = strchr(ebuild, ':');
++				if (msg != NULL)
++					*msg++ = '\0';
++			}
++			if (ebuild != NULL && msg != NULL) {
++				if (strcmp(mfest, lastmfest) != 0 ||
++						strcmp(ebuild, lastebuild) != 0)
++				{
++					char *mycat = mfest;
++					char *mypkg = NULL;
++
++					if ((mfest = strchr(mycat, '/')) != NULL) {
++						*mfest++ = '\0';
++						mypkg = mfest;
++						if ((mfest = strchr(mypkg, '/')) != NULL) {
++							*mfest++ = '\0';
++						} else {
++							mfest = mypkg;
++							mypkg = NULL;
++						}
++					} else {
++						mfest = mycat;
++						mycat = NULL;
++					}
++
++					fprintf(stdout, "%s%s%s" "%s%s%s%s" "%s%s" "%s%s%s%s\n",
++							mycat == NULL ? "" : BOLD,
++							mycat == NULL ? "" : mycat,
++							mycat == NULL ? "" : "/",
++							mypkg == NULL ? "" : BLUE,
++							mypkg == NULL ? "" : mypkg,
++							mypkg == NULL ? "" : NORM,
++							mypkg == NULL ? "" : "/",
++							mfest, *ebuild == '\0' ? ":" : "::",
++							CYAN, ebuild, NORM, *ebuild == '\0' ? "" : ":");
++				}
++
++				lastmfest = mfest;
++				lastebuild = ebuild;
++
++				pfx = "- ";
++				msgline = msg;
++				while ((msgline = strchr(msgline, '\n')) != NULL) {
++					*msgline++ = '\0';
++					format_line(pfx, msg);
++					pfx = "  ";
++					msg = msgline;
++				}
++				format_line(pfx, msg);
++			}
++		}
++
++		walk = topmsg.next;
++		while (walk != NULL) {
++			next = walk->next;
++			free(walk);
++			walk = next;
++		}
++	}
++
++	gettimeofday(&finisht, NULL);
++
++	etime = ((double)((finisht.tv_sec - startt.tv_sec) * 1000000 +
++				finisht.tv_usec) - (double)startt.tv_usec) / 1000000.0;
++	printf("checked %zd Manifests, %zd files, %zd failures in %.02fs\n",
++			checked_manifests, checked_files, failed_files, etime);
++	return ret;
++}
++
++int
++qmanifest_main(int argc, char **argv)
++{
++	char *prog;
++	const char *(*runfunc)(void);
++	int ret;
++	const char *rsn;
++	bool isdir = false;
++	bool isoverlay = false;
++	char *overlay;
++	char path[_Q_PATH_MAX];
++	char path2[_Q_PATH_MAX];
++	size_t n;
++	int i;
++	int curdirfd;
++
++	if ((prog = strrchr(argv[0], '/')) == NULL) {
++		prog = argv[0];
++	} else {
++		prog++;
++	}
++	if (*prog == 'q')
++		prog++;
++
++	runfunc = NULL;
++	if (strcmp(prog, "hashverify") == 0) {
++		runfunc = process_dir_vrfy;
++	} else if (strcmp(prog, "hashgen") == 0) {
++		runfunc = process_dir_gen;
++	}
++
++	while ((ret = GETOPT_LONG(QMANIFEST, qmanifest, "")) != -1) {
++		switch (ret) {
++			COMMON_GETOPTS_CASES(qmanifest)
++			case 'g': runfunc = process_dir_gen;  break;
++			case 's': gpg_sign_key = optarg;      break;
++			case 'p': gpg_get_password = true;    break;
++			case 'd': isdir = true;               break;
++			case 'o': isoverlay = true;           break;
++		}
++	}
++
++	if (isdir && isoverlay) {
++		warn("cannot specify both directories (-d) and overlays (-o), "
++				"continuing using overlays only");
++		isdir = false;
++	}
++
++	if (runfunc == NULL)
++		/* default mode: verify */
++		runfunc = process_dir_vrfy;
++
++	gpgme_check_version(NULL);
++
++	if (isoverlay || (!isdir && !isoverlay)) {
++		char *repo;
++		size_t repolen;
++
++		array_for_each(overlays, n, overlay) {
++			repo = xarrayget(overlay_names, n);
++			if (strcmp(repo, "<PORTDIR>") == 0) {
++				snprintf(path, sizeof(path), "%s/profiles/repo_name", overlay);
++				if (eat_file(path, &repo, &repolen)) {
++					free(array_get_elem(overlays, n));
++					array_get_elem(overlays, n) = repo;
++				}
++			}
++		}
++	}
++
++	if ((curdirfd = open(".", O_RDONLY)) < 0)
++		warn("cannot open current directory?!? %s\n", strerror(errno));
++
++	ret = EXIT_SUCCESS;
++	argc -= optind;
++	argv += optind;
++	for (i = 0; i < argc; i++) {
++		array_for_each(overlay_names, n, overlay) {
++			if (strcmp(overlay, argv[i]) == 0) {
++				overlay = xarrayget(overlays, n);
++				break;
++			}
++			overlay = NULL;
++		}
++
++		/* behaviour:
++		 * if isdir is set: treat argument as directory
++		 * if isoverlay is set: treat argument as overlay (look it up)
++		 * if neither is set: treat argument as overlay if it exists,
++		 *                    else as directory */
++
++		if (isoverlay && overlay == NULL) {
++			warn("no such overlay: %s", argv[i]);
++			ret |= 1;
++			continue;
++		}
++		if (isdir || (!isoverlay && overlay == NULL)) /* !isdir && !isoverlay */
++			overlay = argv[i];
++
++		if (*overlay != '/') {
++			if (portroot[1] == '\0') {
++				/* resolve the path */
++				if (fchdir(curdirfd) != 0)
++					continue;  /* this shouldn't happen */
++				if (realpath(overlay, path) == NULL && *path == '\0') {
++					warn("could not resolve %s", overlay);
++					continue;  /* very unlikely */
++				}
++			} else {
++				snprintf(path, sizeof(path), "./%s", overlay);
++			}
++		} else {
++			snprintf(path, sizeof(path), "%s", overlay);
++		}
++
++		snprintf(path2, sizeof(path2), "%s%s", portroot, path);
++		if (chdir(path2) != 0) {
++			warn("cannot change directory to %s: %s", overlay, strerror(errno));
++			ret |= 1;
++			continue;
++		}
++
++		if (runfunc == process_dir_vrfy)
++			printf("verifying %s%s%s...\n", BOLD, overlay, NORM);
++
++		rsn = runfunc();
++		if (rsn != NULL) {
++			printf("%s%s%s\n", RED, rsn, NORM);
++			ret |= 2;
++		}
++	}
++
++	if (i == 0) {
++		snprintf(path, sizeof(path), "%s%s", portroot, main_overlay);
++		if (chdir(path) != 0) {
++			warn("cannot change directory to %s: %s",
++					main_overlay, strerror(errno));
++			ret |= 1;
++		} else {
++			if (runfunc == process_dir_vrfy)
++				printf("verifying %s%s%s...\n", BOLD, main_overlay, NORM);
++
++			rsn = runfunc();
++			if (rsn != NULL) {
++				printf("%s%s%s\n", RED, rsn, NORM);
++				ret |= 2;
++			}
++		}
++	}
++
++	/* return to where we were before we called this function */
++	if (fchdir(curdirfd) != 0 && verbose > 1)
++		warn("could not move back to original directory");
++	close(curdirfd);
++
++	return ret;
++}
++
++#endif
+diff -urN a/qmerge.c b/qmerge.c
+--- a/qmerge.c	2019-05-16 12:12:31.000000000 -0500
++++ b/qmerge.c	2019-08-04 01:21:46.644609037 -0500
+@@ -355,8 +355,6 @@
+                  int cpm_argc, char **cpm_argv)
+ {
+ 	int i;
+-	char dest[_Q_PATH_MAX];
+-	snprintf(dest, sizeof(dest), "%s%s", portroot, buf);
+ 
+ 	/* Check CONFIG_PROTECT_MASK */
+ 	for (i = 1; i < cpm_argc; ++i)
+@@ -366,11 +364,10 @@
+ 	/* Check CONFIG_PROTECT */
+ 	for (i = 1; i < cp_argc; ++i)
+ 		if (strncmp(cp_argv[i], buf, strlen(cp_argv[i])) == 0)
+-			if (access(dest, R_OK) == 0)
+-				return 1;
++			return 1;
+ 
+ 	/* this would probably be bad */
+-	if (strcmp("/bin/sh", buf) == 0)
++	if (strcmp(CONFIG_EPREFIX "bin/sh", buf) == 0)
+ 		return 1;
+ 
+ 	return 0;
+@@ -750,9 +747,9 @@
+ 		"FILESDIR=/.does/not/exist/anywhere\n"
+ 		"MERGE_TYPE=binary\n"
+ 		"ROOT='%4$s'\n"
+-		"EROOT=\"${EPREFIX%%/}/${ROOT#/}/\"\n"
++		"EROOT=\"/${ROOT#/}/${EPREFIX%%/}/\"\n"
+ 		"D=\"%5$s\"\n"
+-		"ED=\"${EPREFIX%%/}/${D#/}/\"\n"
++		"ED=\"${D%%/}/${EPREFIX%%/}/\"\n"
+ 		"T=\"%6$s\"\n"
+ 		/* Finally run the func */
+ 		"%7$s%2$s\n"
+@@ -773,7 +770,7 @@
+ /* Copy one tree (the single package) to another tree (ROOT) */
+ static int
+ merge_tree_at(int fd_src, const char *src, int fd_dst, const char *dst,
+-              FILE *contents, set **objs, char **cpathp,
++              FILE *contents, size_t eprefix_len, set **objs, char **cpathp,
+               int cp_argc, char **cp_argv, int cpm_argc, char **cpm_argv)
+ {
+ 	int i, ret, subfd_src, subfd_dst;
+@@ -843,8 +840,9 @@
+ 			qprintf("%s>>>%s %s%s%s/\n", GREEN, NORM, DKBLUE, cpath, NORM);
+ 
+ 			/* Copy all of these contents */
+-			merge_tree_at(subfd_src, name, subfd_dst, name, contents, objs,
+-					cpathp, cp_argc, cp_argv, cpm_argc, cpm_argv);
++			merge_tree_at(subfd_src, name,
++					subfd_dst, name, contents, eprefix_len,
++					objs, cpathp, cp_argc, cp_argv, cpm_argc, cpm_argv);
+ 			cpath = *cpathp;
+ 			mnlen = 0;
+ 
+@@ -858,6 +856,7 @@
+ 			unsigned char *hash;
+ 			const char *tmpname, *dname;
+ 			char buf[_Q_PATH_MAX * 2];
++			struct stat ignore;
+ 
+ 			/* syntax: obj filename hash mtime */
+ 			hash = hash_file_at(subfd_src, name, HASH_MD5);
+@@ -867,7 +866,10 @@
+ 			free(hash);
+ 
+ 			/* Check CONFIG_PROTECT */
+-			if (config_protected(cpath, cp_argc, cp_argv, cpm_argc, cpm_argv)) {
++			if (config_protected(cpath + eprefix_len,
++						cp_argc, cp_argv, cpm_argc, cpm_argv) &&
++					fstatat(subfd_dst, name, &ignore, AT_SYMLINK_NOFOLLOW) == 0)
++			{
+ 				/* ._cfg####_ */
+ 				char *num;
+ 				dname = buf;
+@@ -876,7 +878,7 @@
+ 				for (i = 0; i < 10000; ++i) {
+ 					sprintf(num, "%04i", i);
+ 					num[4] = '_';
+-					if (faccessat(subfd_dst, dname, F_OK, AT_SYMLINK_NOFOLLOW))
++					if (fstatat(subfd_dst, dname, &ignore, AT_SYMLINK_NOFOLLOW))
+ 						break;
+ 				}
+ 				qprintf("%s>>>%s %s (%s)\n", GREEN, NORM, cpath, dname);
+@@ -1011,6 +1013,8 @@
+ 	FILE *fp, *contents;
+ 	static char *phases;
+ 	static size_t phases_len;
++	char *eprefix = NULL;
++	size_t eprefix_len = 0;
+ 	char buf[1024];
+ 	char *tbz2, *p, *D, *T;
+ 	int i;
+@@ -1281,8 +1285,11 @@
+ 	pkg_run_func("vdb", phases, "pkg_setup", D, T);
+ 	pkg_run_func("vdb", phases, "pkg_preinst", D, T);
+ 
++	if (!eat_file("vdb/EPREFIX", &eprefix, &eprefix_len))
++		eprefix_len = 0;
++
+ 	{
+-		int imagefd = open("image" CONFIG_EPREFIX, O_RDONLY);
++		int imagefd = open("image", O_RDONLY);
+ 		size_t masklen = strlen(install_mask) + 1 +
+ 				15 + 1 + 14 + 1 + 14 + 1 + 1;  /* worst case scenario */
+ 		char *imask = xmalloc(masklen);
+@@ -1291,6 +1298,12 @@
+ 		if (fstat(imagefd, &st) == -1) {
+ 			close(imagefd);
+ 			err("Cannot stat image dirfd");
++		} else if (eprefix_len > 0) {
++			int imagepfx = openat(imagefd, eprefix + 1, O_RDONLY);
++			if (imagepfx != -1) {
++				close(imagefd);
++				imagefd = imagepfx;
++			}
+ 		}
+ 
+ 		/* rely on INSTALL_MASK code to remove optional dirs */
+@@ -1318,11 +1331,15 @@
+ 		close(imagefd);
+ 	}
+ 
++	if (eprefix != NULL)
++		free(eprefix);
++
+ 	makeargv(config_protect, &cp_argc, &cp_argv);
+ 	makeargv(config_protect_mask, &cpm_argc, &cpm_argv);
+ 
+ 	if ((contents = fopen("vdb/CONTENTS", "w")) == NULL)
+ 		errf("come on wtf?");
++
+ 	objs = NULL;
+ 	{
+ 		char *cpath;
+@@ -1330,8 +1347,9 @@
+ 
+ 		cpath = xstrdup("");  /* xrealloced in merge_tree_at */
+ 
+-		ret = merge_tree_at(AT_FDCWD, "image", AT_FDCWD, portroot, contents,
+-					&objs, &cpath, cp_argc, cp_argv, cpm_argc, cpm_argv);
++		ret = merge_tree_at(AT_FDCWD, "image",
++				AT_FDCWD, portroot, contents, eprefix_len,
++				&objs, &cpath, cp_argc, cp_argv, cpm_argc, cpm_argv);
+ 
+ 		free(cpath);
+ 
+@@ -1396,6 +1414,7 @@
+ 	free(T);
+ 
+ 	/* Update the magic counter */
++	/* FIXME: check Portage's get_counter_tick_core */
+ 	if ((fp = fopen("vdb/COUNTER", "w")) != NULL) {
+ 		fputs("0", fp);
+ 		fclose(fp);
+@@ -1407,11 +1426,9 @@
+ 				portroot, portvdb, pkg->CATEGORY);
+ 		mkdir_p(buf, 0755);
+ 		strcat(buf, pkg->PF);
+-		if (rename("vdb", buf)) {
+-			xasprintf(&p, "mv vdb '%s'", buf);
+-			xsystem(p);
+-			free(p);
+-		}
++		rm_rf(buf);  /* get rid of existing dir, empty dir is fine */
++		if (rename("vdb", buf) != 0)
++			warn("failed to move 'vdb' to '%s': %s", buf, strerror(errno));
+ 	}
+ 
+ 	/* clean up our local temp dir */
+@@ -1431,11 +1448,11 @@
+ 		int cp_argc, char **cp_argv, int cpm_argc, char **cpm_argv)
+ {
+ 	tree_cat_ctx *cat_ctx = pkg_ctx->cat_ctx;
+-	const char *cat = cat_ctx->name;
+-	const char *pkgname = pkg_ctx->name;
+ 	size_t buflen;
+ 	static char *phases;
+ 	static size_t phases_len;
++	char *eprefix = NULL;
++	size_t eprefix_len = 0;
+ 	const char *T;
+ 	char *buf;
+ 	FILE *fp;
+@@ -1447,8 +1464,8 @@
+ 	buf = phases = NULL;
+ 	T = "${PWD}/temp";
+ 
+-	printf("%s<<<%s %s%s%s/%s%s%s\n",
+-			YELLOW, NORM, WHITE, cat, NORM, CYAN, pkgname, NORM);
++	printf("%s<<<%s %s\n", YELLOW, NORM,
++			atom_format("%[CATEGORY]%[PF]", tree_get_atom(pkg_ctx, false)));
+ 
+ 	if (pretend == 100)
+ 		return 0;
+@@ -1467,6 +1484,11 @@
+ 		pkg_run_func_at(pkg_ctx->fd, ".", phases, "pkg_prerm", T, T);
+ 	}
+ 
++	if (!tree_pkg_vdb_eat(pkg_ctx, "EPREFIX", &eprefix, &eprefix_len))
++		eprefix_len = 0;
++	if (eprefix != NULL)
++		free(eprefix);
++
+ 	unmerge_config_protected =
+ 		strstr(features, "config-protect-if-modified") != NULL;
+ 
+@@ -1481,7 +1503,7 @@
+ 		if (!e)
+ 			continue;
+ 
+-		protected = config_protected(e->name,
++		protected = config_protected(e->name + eprefix_len,
+ 				cp_argc, cp_argv, cpm_argc, cpm_argv);
+ 
+ 		/* This should never happen ... */
+@@ -2159,7 +2181,7 @@
+ 					for (i = 0; i < todo_cnt; i++) {
+ 						pkg_atom->REPO = todo_atoms[i]->REPO ? Pkg.REPO : NULL;
+ 						pkg_atom->SLOT = todo_atoms[i]->SLOT ? Pkg.SLOT : NULL;
+-						if (atom_compare(todo_atoms[i], pkg_atom) == EQUAL) {
++						if (atom_compare(pkg_atom, todo_atoms[i]) == EQUAL) {
+ 							if (search_pkgs)
+ 								print_Pkg(verbose, pkg_atom, &Pkg);
+ 							else
+@@ -2267,7 +2289,7 @@
+ }
+ 
+ static set *
+-qmerge_add_set_file(const char *dir, const char *file, set *q)
++qmerge_add_set_file(const char *pfx, const char *dir, const char *file, set *q)
+ {
+ 	FILE *fp;
+ 	int linelen;
+@@ -2275,7 +2297,7 @@
+ 	char *buf, *fname;
+ 
+ 	/* Find the file to read */
+-	xasprintf(&fname, "%s%s/%s", portroot, dir, file);
++	xasprintf(&fname, "%s%s%s/%s", portroot, pfx, dir, file);
+ 
+ 	if ((fp = fopen(fname, "r")) == NULL) {
+ 		warnp("unable to read set file %s", fname);
+@@ -2326,15 +2348,25 @@
+ qmerge_add_set(char *buf, set *q)
+ {
+ 	if (strcmp(buf, "world") == 0)
+-		return qmerge_add_set_file("/var/lib/portage", "world", q);
+-	else if (strcmp(buf, "all") == 0)
+-		return tree_get_vdb_atoms(portroot, portvdb, 0);
+-	else if (strcmp(buf, "system") == 0)
++		return qmerge_add_set_file(CONFIG_EPREFIX, "/var/lib/portage",
++				"world", q);
++	else if (strcmp(buf, "all") == 0) {
++		tree_ctx *ctx = tree_open_vdb(portroot, portvdb);
++		set *ret = NULL;
++		if (ctx != NULL) {
++			ret = tree_get_atoms(ctx, false, NULL);
++			tree_close(ctx);
++		}
++		return ret;
++	} else if (strcmp(buf, "system") == 0)
+ 		return q_profile_walk("packages", qmerge_add_set_system, q);
+ 	else if (buf[0] == '@')
+-		return qmerge_add_set_file("/etc/portage", buf+1, q);
+-	else
++		/* TODO: use configroot */
++		return qmerge_add_set_file(CONFIG_EPREFIX, "/etc/portage", buf+1, q);
++	else {
++		rmspace(buf);
+ 		return add_set(buf, q);
++	}
+ }
+ 
+ static int
+@@ -2388,6 +2420,11 @@
+ 	for (i = optind; i < argc; ++i)
+ 		todo = qmerge_add_set(argv[i], todo);
+ 
++	if (todo == NULL) {
++		warn("need package names to work with");
++		return EXIT_FAILURE;
++	}
++
+ 	if (!uninstall)
+ 		qmerge_initialize();
+ 
+diff -urN a/qpkg.c b/qpkg.c
+--- a/qpkg.c	2019-05-16 12:12:31.000000000 -0500
++++ b/qpkg.c	2019-08-04 01:21:46.644609037 -0500
+@@ -123,23 +123,6 @@
+ 	return num_all_bytes;
+ }
+ 
+-static int
+-qpkg_cb(tree_pkg_ctx *pkg_ctx, void *priv)
+-{
+-	set *vdb = (set *)priv;
+-	depend_atom *atom;
+-	char buf[_Q_PATH_MAX];
+-
+-	snprintf(buf, sizeof(buf), "%s/%s", pkg_ctx->cat_ctx->name, pkg_ctx->name);
+-	atom = atom_explode(buf);
+-	if (atom == NULL)
+-		return 0;
+-
+-	vdb = add_set(buf, vdb);
+-
+-	return 1;
+-}
+-
+ /* figure out what dirs we want to process for cleaning and display results. */
+ static int
+ qpkg_clean(char *dirp)
+@@ -148,23 +131,28 @@
+ 	size_t disp_units = 0;
+ 	uint64_t num_all_bytes;
+ 	struct dirent **dnames;
+-	set *vdb;
++	set *vdb = NULL;
++	tree_ctx *t;
+ 
+ 	if (chdir(dirp) != 0)
+ 		return 1;
+ 	if ((count = scandir(".", &dnames, filter_hidden, alphasort)) < 0)
+ 		return 1;
+ 
+-	vdb = tree_get_vdb_atoms(portroot, portvdb, 1);
++	t = tree_open_vdb(portroot, portvdb);
++	if (t != NULL) {
++		vdb = tree_get_atoms(t, true, vdb);
++		tree_close(t);
++	}
+ 
+ 	if (eclean) {
+ 		size_t n;
+ 		const char *overlay;
+ 
+ 		array_for_each(overlays, n, overlay) {
+-			tree_ctx *t = tree_open(portroot, overlay);
++			t = tree_open(portroot, overlay);
+ 			if (t != NULL) {
+-				tree_foreach_pkg_fast(t, qpkg_cb, vdb, NULL);
++				vdb = tree_get_atoms(t, true, vdb);
+ 				tree_close(t);
+ 			}
+ 		}
+@@ -243,8 +231,8 @@
+ 	struct stat st;
+ 
+ 	if (pretend) {
+-		printf(" %s-%s %s/%s:\n",
+-				GREEN, NORM, atom->CATEGORY, atom_to_pvr(atom));
++		printf(" %s-%s %s:\n",
++				GREEN, NORM, atom_format("%[CATEGORY]%[PF]", atom));
+ 		return 0;
+ 	}
+ 
+@@ -298,7 +286,8 @@
+ 	fclose(out);
+ 	fclose(fp);
+ 
+-	printf(" %s-%s %s/%s: ", GREEN, NORM, atom->CATEGORY, atom_to_pvr(atom));
++	printf(" %s-%s %s: ", GREEN, NORM,
++			atom_format("%[CATEGORY]%[PF]", atom));
+ 	fflush(stdout);
+ 
+ 	snprintf(tbz2, sizeof(tbz2), "%s/bin.tbz2", tmpdir);
+@@ -428,17 +417,9 @@
+ 	/* scan all the categories */
+ 	while ((cat_ctx = tree_next_cat(ctx))) {
+ 		/* scan all the packages in this category */
+-		const char *catname = cat_ctx->name;
+ 		while ((pkg_ctx = tree_next_pkg(cat_ctx))) {
+-			const char *pkgname = pkg_ctx->name;
+-
+ 			/* see if user wants any of these packages */
+-			snprintf(buf, sizeof(buf), "%s/%s", catname, pkgname);
+-			atom = atom_explode(buf);
+-			if (!atom) {
+-				warn("could not explode '%s'", buf);
+-				goto next_pkg;
+-			}
++			atom = tree_get_atom(pkg_ctx, false);
+ 			snprintf(buf, sizeof(buf), "%s/%s", atom->CATEGORY, atom->PN);
+ 			for (i = optind; i < argc; ++i) {
+ 				if (!argv[i]) continue;
+@@ -450,9 +431,6 @@
+ 					if (!qpkg_make(atom))
+ 						++pkgs_made;
+ 			}
+-			atom_implode(atom);
+-
+- next_pkg:
+ 			tree_close_pkg(pkg_ctx);
+ 		}
+ 	}
+diff -urN a/qsearch.c b/qsearch.c
+--- a/qsearch.c	2019-05-16 12:12:31.000000000 -0500
++++ b/qsearch.c	2019-08-04 01:21:46.644609037 -0500
+@@ -25,7 +25,7 @@
+ #include "xarray.h"
+ #include "xregex.h"
+ 
+-#define QSEARCH_FLAGS "asSNHR" COMMON_FLAGS
++#define QSEARCH_FLAGS "asSNHRF:" COMMON_FLAGS
+ static struct option const qsearch_long_opts[] = {
+ 	{"all",       no_argument, NULL, 'a'},
+ 	{"search",    no_argument, NULL, 's'},
+@@ -33,6 +33,7 @@
+ 	{"name-only", no_argument, NULL, 'N'},
+ 	{"homepage",  no_argument, NULL, 'H'},
+ 	{"repo",      no_argument, NULL, 'R'},
++	{"format",     a_argument, NULL, 'F'},
+ 	COMMON_LONG_OPTS
+ };
+ static const char * const qsearch_opts_help[] = {
+@@ -42,6 +43,7 @@
+ 	"Only show package name",
+ 	"Show homepage info instead of description",
+ 	"Show repository the ebuild originates from",
++	"Print matched atom using given format string",
+ 	COMMON_OPTS_HELP
+ };
+ #define qsearch_usage(ret) usage(ret, QSEARCH_FLAGS, qsearch_long_opts, qsearch_opts_help, NULL, lookup_applet_idx("qsearch"))
+@@ -50,10 +52,11 @@
+ 	bool show_homepage:1;
+ 	bool show_name:1;
+ 	bool show_desc:1;
+-	bool show_repo:1;
+ 	bool search_desc:1;
+ 	bool search_name:1;
++	bool need_full_atom:1;
+ 	regex_t search_expr;
++	const char *fmt;
+ };
+ 
+ static int
+@@ -99,16 +102,10 @@
+ 		match = true;
+ 
+ 	if (match) {
+-		const char *qfmt;
+-		if (state->show_repo) {
+-			atom = tree_get_atom(pkg_ctx, 1);
+-			qfmt = "%[CATEGORY]%[PN]%[REPO]";
+-		} else {
+-			qfmt = "%[CATEGORY]%[PN]";
+-		}
++		atom = tree_get_atom(pkg_ctx, state->need_full_atom);
+ 		printf("%s%s%s\n",
+-				atom_format(qfmt, atom, 0),
+-				(state->show_name ? "" : " "),
++				atom_format(state->fmt, atom),
++				(state->show_name ? "" : ": "),
+ 				(state->show_name ? "" : desc ? desc : ""));
+ 	}
+ 
+@@ -131,23 +128,25 @@
+ 	const char *overlay;
+ 	size_t n;
+ 	struct qsearch_state state = {
+-		.show_homepage = false,
+-		.show_name = false,
+-		.show_desc = false,
+-		.show_repo = false,
+-		.search_desc = false,
+-		.search_name = false,
++		.show_homepage  = false,
++		.show_name      = false,
++		.show_desc      = false,
++		.search_desc    = false,
++		.search_name    = false,
++		.need_full_atom = false,
++		.fmt            = NULL,
+ 	};
+ 
+ 	while ((i = GETOPT_LONG(QSEARCH, qsearch, "")) != -1) {
+ 		switch (i) {
+ 		COMMON_GETOPTS_CASES(qsearch)
+-		case 'a': search_me           = ".*";  break;
+-		case 's': state.search_name   = true;  break;
+-		case 'S': state.search_desc   = true;  break;
+-		case 'N': state.show_name     = true;  break;
+-		case 'H': state.show_homepage = true;  break;
+-		case 'R': state.show_repo     = true;  break;
++		case 'a': search_me            = ".*";   break;
++		case 's': state.search_name    = true;   break;
++		case 'S': state.search_desc    = true;   break;
++		case 'N': state.show_name      = true;   break;
++		case 'H': state.show_homepage  = true;   break;
++		case 'F': state.fmt            = optarg; /* fall through */
++		case 'R': state.need_full_atom = true;   break;
+ 		}
+ 	}
+ 
+@@ -165,6 +164,20 @@
+ 	}
+ 	xregcomp(&state.search_expr, search_me, REG_EXTENDED | REG_ICASE);
+ 
++	/* set default format */
++	if (state.fmt == NULL) {
++		if (state.need_full_atom)
++			if (verbose)
++				state.fmt = "%[CATEGORY]%[PF]%[REPO]";
++			else
++				state.fmt = "%[CATEGORY]%[PN]%[REPO]";
++		else
++			if (verbose)
++				state.fmt = "%[CATEGORY]%[PF]";
++			else
++				state.fmt = "%[CATEGORY]%[PN]";
++	}
++
+ 	/* use sorted order here so the duplicate reduction works reliably */
+ 	array_for_each(overlays, n, overlay) {
+ 		tree_ctx *t = tree_open(portroot, overlay);
+diff -urN a/qsize.c b/qsize.c
+--- a/qsize.c	2019-05-16 12:12:31.000000000 -0500
++++ b/qsize.c	2019-08-04 01:21:46.644609037 -0500
+@@ -55,7 +55,7 @@
+ #include "xarray.h"
+ #include "xregex.h"
+ 
+-#define QSIZE_FLAGS "fsSmkbi:" COMMON_FLAGS
++#define QSIZE_FLAGS "fsSmkbi:F:" COMMON_FLAGS
+ static struct option const qsize_long_opts[] = {
+ 	{"filesystem", no_argument, NULL, 'f'},
+ 	{"sum",        no_argument, NULL, 's'},
+@@ -64,6 +64,7 @@
+ 	{"kilobytes",  no_argument, NULL, 'k'},
+ 	{"bytes",      no_argument, NULL, 'b'},
+ 	{"ignore",      a_argument, NULL, 'i'},
++	{"format",      a_argument, NULL, 'F'},
+ 	COMMON_LONG_OPTS
+ };
+ static const char * const qsize_opts_help[] = {
+@@ -74,6 +75,7 @@
+ 	"Display all sizes in kilobytes",
+ 	"Display all sizes in bytes",
+ 	"Ignore regexp string",
++	"Print matched atom using given format string",
+ 	COMMON_OPTS_HELP
+ };
+ #define qsize_usage(ret) usage(ret, QSIZE_FLAGS, qsize_long_opts, qsize_opts_help, NULL, lookup_applet_idx("qsize"))
+@@ -88,6 +90,8 @@
+ 	size_t disp_units;
+ 	const char *str_disp_units;
+ 	array_t *ignore_regexp;
++	const char *fmt;
++	bool need_full_atom:1;
+ 
+ 	size_t buflen;
+ 	char *buf;
+@@ -113,7 +117,7 @@
+ 
+ 		qatom = tree_get_atom(pkg_ctx, 0);
+ 		array_for_each(state->atoms, i, atom)
+-			if (atom_compare(atom, qatom) == EQUAL) {
++			if (atom_compare(qatom, atom) == EQUAL) {
+ 				showit = true;
+ 				break;
+ 			}
+@@ -160,9 +164,9 @@
+ 	state->num_all_ignored += num_ignored;
+ 
+ 	if (!state->summary_only) {
+-		atom = tree_get_atom(pkg_ctx, 0);
++		atom = tree_get_atom(pkg_ctx, state->need_full_atom);
+ 		printf("%s: %'zu files, %'zu non-files, ",
+-				atom_format("%[CATEGORY]%[PF]", atom, 0),
++				atom_format(state->fmt, atom),
+ 				num_files, num_nonfiles);
+ 		if (num_ignored)
+ 			printf("%'zu names-ignored, ", num_ignored);
+@@ -195,17 +199,24 @@
+ 		.num_all_files = 0,
+ 		.num_all_nonfiles = 0,
+ 		.num_all_ignored = 0,
++		.need_full_atom = false,
++		.fmt = NULL,
+ 	};
+ 
+ 	while ((ret = GETOPT_LONG(QSIZE, qsize, "")) != -1) {
+ 		switch (ret) {
+ 		COMMON_GETOPTS_CASES(qsize)
+-		case 'f': state.fs_size = 1; break;
+-		case 's': state.summary = 1; break;
+-		case 'S': state.summary = state.summary_only = 1; break;
+-		case 'm': state.disp_units = MEGABYTE; state.str_disp_units = "MiB"; break;
+-		case 'k': state.disp_units = KILOBYTE; state.str_disp_units = "KiB"; break;
+-		case 'b': state.disp_units = 1; state.str_disp_units = "bytes"; break;
++		case 'f': state.fs_size = 1;                       break;
++		case 's': state.summary = 1;                       break;
++		case 'S': state.summary = state.summary_only = 1;  break;
++		case 'm': state.disp_units = MEGABYTE;
++				  state.str_disp_units = "MiB";            break;
++		case 'k': state.disp_units = KILOBYTE;
++				  state.str_disp_units = "KiB";            break;
++		case 'b': state.disp_units = 1;
++				  state.str_disp_units = "bytes";          break;
++		case 'F': state.fmt = optarg;
++				  state.need_full_atom = true;             break;
+ 		case 'i': {
+ 			regex_t regex;
+ 			xregcomp(&regex, optarg, REG_EXTENDED|REG_NOSUB);
+@@ -225,6 +236,13 @@
+ 			xarraypush_ptr(state.atoms, atom);
+ 	}
+ 
++	if (state.fmt == NULL) {
++		if (verbose)
++			state.fmt = "%[CATEGORY]%[PF]";
++		else
++			state.fmt = "%[CATEGORY]%[PN]";
++	}
++
+ 	state.buflen = _Q_PATH_MAX;
+ 	state.buf = xmalloc(state.buflen);
+ 
+diff -urN a/qtegrity.c b/qtegrity.c
+--- a/qtegrity.c	2019-05-16 12:12:31.000000000 -0500
++++ b/qtegrity.c	2019-08-04 01:21:46.644609037 -0500
+@@ -5,10 +5,12 @@
+  * Copyright 2005-2010 Ned Ludd        - <solar@gentoo.org>
+  * Copyright 2005-2014 Mike Frysinger  - <vapier@gentoo.org>
+  * Copyright 2017-2018 Sam Besselink
++ * Copyright 2019-     Fabian Groffen  - <grobian@gentoo.org>
+  */
+ 
+ #include "main.h"
+ #include "applets.h"
++#include "libq/hash.h"
+ 
+ #include <stdio.h>
+ #include <unistd.h>
+@@ -60,63 +62,24 @@
+ #define SHA256_LENGTH (SHA256_PREFIX_LENGTH + SHA256_DIGEST_LENGTH)
+ #define SHA512_DIGEST_LENGTH 128
+ 
+-static void external_check_sha(char * ret_digest, char * filepath, char * algo) {
+-	size_t size_digest = 1;
+-	char cmd[11];
+-	int pipefd[2];
+-	pid_t pid;
++static void
++check_sha(char *ret_digest, char *path, char *algo)
++{
++	int hashes = 0;
++	size_t flen = 0;
+ 
+ 	if (strcmp(algo, "sha256") == 0) {
+-		size_digest = 64;
++		hashes |= HASH_SHA256;
+ 	} else if (strcmp(algo, "sha512") == 0) {
+-		size_digest = 128;
+-	}
+-
+-	if ((strcmp(algo, "sha256") != 0) && (strcmp(algo, "sha512") != 0)) {
++		hashes |= HASH_SHA512;
++	} else {
++		/* no matching hash? (we could support whirlpool and blake2b) */
+ 		return;
+ 	}
+ 
+-	snprintf(cmd, 10, "%ssum", algo);
+-
+-	if (pipe(pipefd) == -1) {
+-		perror("Couldn't create pipe to shasum\n");
+-		exit(1);
+-	}
+-	if ((pid = fork()) == -1) {
+-		perror("Couldn't fork to shasum\n");
+-		exit(1);
+-	}
+-	if (pid == 0)
+-	{
+-		/* Child. Redirect stdout and stderr to pipe, replace execution
+-		 * environment */
+-		close(pipefd[0]);
+-		dup2(pipefd[1], STDOUT_FILENO);
+-		dup2(pipefd[1], STDERR_FILENO);
+-		execlp(cmd, cmd, filepath, (char *)NULL);
+-		perror("Executing shasum failed\n");
+-		exit(1);
+-	}
+-
+-	/* Only parent gets here. Listen to pipe */
+-	close(pipefd[1]);
+-	FILE* output = fdopen(pipefd[0], "r");
+-	if (output == NULL) {
+-		printf("Failed to run command '%s'\n", cmd);
+-		exit(1);
+-	}
+-
+-	/* Read pipe line for line */
+-	while (fgets(ret_digest, size_digest+1, output))
+-	{
+-		if (strlen(ret_digest) == 64) /* Found what we need, can stop */
+-		{
+-			kill(pid, SIGKILL);
+-			break;
+-		}
+-	}
++	hash_compute_file(path, ret_digest, ret_digest, NULL, NULL, &flen, hashes);
++	(void)flen;  /* we don't use the file size */
+ 
+-	pclose(output);
+ 	return;
+ }
+ 
+@@ -458,7 +421,7 @@
+ 		char *file_digest;
+ 		file_digest = xmalloc(SHA256_DIGEST_LENGTH+1);
+ 		file_digest[0] = '\0';
+-		external_check_sha(file_digest, state.add_file, hash_algo);
++		check_sha(file_digest, state.add_file, hash_algo);
+ 
+ 		/* Iterate over lines; if fname matches, exit-loop */
+ 		char *line, *fname;
+diff -urN a/quse.c b/quse.c
+--- a/quse.c	2019-05-16 12:12:31.000000000 -0500
++++ b/quse.c	2019-08-04 01:21:46.644609037 -0500
+@@ -21,19 +21,22 @@
+ #include <ctype.h>
+ #include <assert.h>
+ 
++#include "set.h"
+ #include "rmspace.h"
+ #include "tree.h"
+ #include "xarray.h"
+ #include "xregex.h"
+ 
+-#define QUSE_FLAGS "eaLDp:R" COMMON_FLAGS
++#define QUSE_FLAGS "eaLDIp:RF:" COMMON_FLAGS
+ static struct option const quse_long_opts[] = {
+ 	{"exact",     no_argument, NULL, 'e'},
+ 	{"all",       no_argument, NULL, 'a'},
+ 	{"license",   no_argument, NULL, 'L'},
+ 	{"describe",  no_argument, NULL, 'D'},
++	{"installed", no_argument, NULL, 'I'},
+ 	{"package",    a_argument, NULL, 'p'},
+ 	{"repo",      no_argument, NULL, 'R'},
++	{"format",     a_argument, NULL, 'F'},
+ 	COMMON_LONG_OPTS
+ };
+ static const char * const quse_opts_help[] = {
+@@ -41,8 +44,10 @@
+ 	"List all ebuilds, don't match anything",
+ 	"Use the LICENSE vs IUSE",
+ 	"Describe the USE flag",
++	"Only search installed packages",
+ 	"Restrict matching to package or category",
+ 	"Show repository the ebuild originates from",
++	"Print matched atom using given format string",
+ 	COMMON_OPTS_HELP
+ };
+ #define quse_usage(ret) usage(ret, QUSE_FLAGS, quse_long_opts, quse_opts_help, NULL, lookup_applet_idx("quse"))
+@@ -56,10 +61,12 @@
+ 	bool do_regex:1;
+ 	bool do_describe:1;
+ 	bool do_licence:1;
++	bool do_installed:1;
+ 	bool do_list:1;
+-	bool do_repo:1;
++	bool need_full_atom:1;
+ 	depend_atom *match;
+ 	regex_t *pregv;
++	const char *fmt;
+ };
+ 
+ static char *_quse_getline_buf = NULL;
+@@ -138,9 +145,8 @@
+ 				if (state->do_list) {
+ 					state->retv[i] = xstrdup(q);
+ 				} else {
+-					printf("%s%s/%s%s%s[%s%s%s] %s\n",
+-							BOLD, atom->CATEGORY,
+-							BLUE, atom->PN, NORM,
++					printf("%s[%s%s%s] %s\n",
++							atom_format(state->fmt, atom),
+ 							MAGENTA, p, NORM, q);
+ 				}
+ 			}
+@@ -407,6 +413,7 @@
+ 	depend_atom *atom = NULL;  /* pacify compiler */
+ 	char buf[8192];
+ 	tree_pkg_meta *meta;
++	set *use = NULL;
+ 	bool match;
+ 	char *p;
+ 	char *q;
+@@ -419,7 +426,7 @@
+ 	int cnt;
+ 	int portdirfd = -1;  /* pacify compiler */
+ 
+-	if (state->match || verbose) {
++	if (state->match || state->do_describe) {
+ 		atom = tree_get_atom(pkg_ctx, 0);
+ 		if (atom == NULL)
+ 			return 0;
+@@ -432,16 +439,44 @@
+ 		}
+ 	}
+ 
+-	meta = tree_pkg_read(pkg_ctx);
+-	if (meta == NULL)
+-		return 0;
++	if (state->overlay != NULL) {
++		meta = tree_pkg_read(pkg_ctx);
++		if (meta == NULL)
++			return 0;
++		if (meta->IUSE == NULL)
++			return 0;
++	} else {
++		size_t dummy;
++
++		meta = xzalloc(sizeof(*meta));
++
++		dummy = 0;
++		if (!tree_pkg_vdb_eat(pkg_ctx, "IUSE", &meta->IUSE, &dummy)) {
++			free(meta);
++			return 0;
++		}
+ 
+-	if (meta->IUSE == NULL)
+-		return 0;
++		dummy = 0;
++		tree_pkg_vdb_eat(pkg_ctx, "LICENSE", &meta->LICENSE, &dummy);
+ 
+-	if (verbose) {
++		s = NULL;
++		dummy = 0;
++		tree_pkg_vdb_eat(pkg_ctx, "USE", &s, &dummy);
++		p = s;
++		while ((q = strchr(p, (int)' ')) != NULL) {
++			*q++ = '\0';
++			use = add_set(p, use);
++			p = q;
++		}
++		if (*p != '\0')
++			use = add_set(p, use);
++		free(s);
++	}
++
++	if (state->do_describe) {
+ 		portdirfd = openat(pkg_ctx->cat_ctx->ctx->portroot_fd,
+-				state->overlay, O_RDONLY | O_CLOEXEC | O_PATH);
++				state->overlay == NULL ? main_overlay : state->overlay,
++				O_RDONLY | O_CLOEXEC | O_PATH);
+ 		if (portdirfd == -1)
+ 			return 0;
+ 	}
+@@ -454,7 +489,7 @@
+ 	v = buf;
+ 	w = buf + sizeof(buf);
+ 
+-	if (state->do_all && !verbose) {
++	if (state->do_all && !state->do_describe) {
+ 		match = true;
+ 		v = q;
+ 	} else {
+@@ -513,19 +548,12 @@
+ 	}
+ 
+ 	if (match) {
+-		const char *qfmt;
+-
+-		atom = tree_get_atom(pkg_ctx, state->do_repo);
+-		if (state->do_repo) {
+-			qfmt = "%[CATEGORY]%[PF]%[REPO]";
+-		} else {
+-			qfmt = "%[CATEGORY]%[PF]";
+-		}
+-
++		atom = tree_get_atom(pkg_ctx, state->need_full_atom);
+ 		if (quiet) {
+-			printf("%s\n", atom_format(qfmt, atom, 0));
+-		} else if (verbose && !state->do_licence) {
++			printf("%s\n", atom_format(state->fmt, atom));
++		} else if (state->do_describe && !state->do_licence) {
+ 			/* multi-line result, printing USE-flags with their descs */
++			size_t desclen;
+ 			struct quse_state us = {
+ 				.do_regex = false,
+ 				.do_describe = false,
+@@ -537,7 +565,7 @@
+ 				.overlay = NULL,
+ 			};
+ 
+-			printf("%s\n", atom_format(qfmt, atom, 0));
++			printf("%s\n", atom_format(state->fmt, atom));
+ 
+ 			q = p = meta->IUSE;
+ 			buf[0] = '\0';
+@@ -565,15 +593,54 @@
+ 				if (!quse_search_use_desc(portdirfd, &us))
+ 					quse_search_profiles_desc(portdirfd, &us);
+ 
++			/* calculate available space in the terminal to print
++			 * descriptions, assume this makes sense from 10 chars */
++			if (twidth > maxlen + 2 + 1 + 2 + 10) {
++				len = twidth - maxlen - 2 - 1 - 2;
++			} else {
++				len = 0;
++			}
++
+ 			for (i = 0; i < cnt; i++) {
+-				printf(" %c%s%s%s%*s  %s\n",
++				match = use != NULL && contains_set(us.argv[i], use);
++				desclen = us.retv[i] != NULL ? strlen(us.retv[i]) : 0;
++				p = NULL;
++				if (desclen > (size_t)len) {  /* need to wrap */
++					for (p = &us.retv[i][len]; p > us.retv[i]; p--)
++						if (isspace((int)*p))
++							break;
++					if (p > us.retv[i]) {
++						*p++ = '\0';
++						desclen -= p - us.retv[i];
++					} else {
++						p = NULL;
++					}
++				}
++				printf(" %c%s%s%s%c%*s  %s\n",
+ 						us.argv[i][-1],
+-						/* selected ? RED : NORM */ MAGENTA,
++						match ? GREEN : MAGENTA,
+ 						us.argv[i],
+ 						NORM,
++						match ? '*' : ' ',
+ 						(int)(maxlen - strlen(us.argv[i])), "",
+ 						us.retv[i] == NULL ? "<no description found>" :
+ 							us.retv[i]);
++				while (p != NULL) {  /* continue wrapped description */
++					q = p;
++					p = NULL;
++					if ((size_t)len < desclen) {
++						for (p = q + len; p > q; p--)
++							if (isspace((int)*p))
++								break;
++						if (p > q) {
++							*p++ = '\0';
++							desclen -= p - q;
++						} else {
++							p = NULL;
++						}
++					}
++					printf("  %*s   %s\n", maxlen, "", q);
++				}
+ 				if (us.retv[i] != NULL)
+ 					free(us.retv[i]);
+ 			}
+@@ -581,12 +648,21 @@
+ 			free(us.retv);
+ 			free(us.argv);
+ 		} else {
+-			printf("%s: %s\n", atom_format(qfmt, atom, 0), v);
++			printf("%s: %s\n", atom_format(state->fmt, atom), v);
+ 		}
+ 	}
+ 
+-	tree_close_meta(meta);
+-	if (verbose)
++	if (state->overlay != NULL) {
++		tree_close_meta(meta);
++	} else {
++		free(meta->IUSE);
++		if (meta->LICENSE != NULL)
++			free(meta->LICENSE);
++		free(meta);
++		if (use != NULL)
++			free_set(use);
++	}
++	if (state->do_describe)
+ 		close(portdirfd);
+ 
+ 	return EXIT_SUCCESS;
+@@ -599,23 +675,27 @@
+ 	const char *overlay;
+ 	char *match = NULL;
+ 	struct quse_state state = {
+-		.do_all = false,
+-		.do_regex = true,
+-		.do_describe = false,
+-		.do_licence = false,
+-		.do_repo = false,
+-		.match = NULL,
+-		.overlay = NULL,
++		.do_all         = false,
++		.do_regex       = true,
++		.do_describe    = false,
++		.do_licence     = false,
++		.do_installed   = false,
++		.need_full_atom = false,
++		.match          = NULL,
++		.overlay        = NULL,
++		.fmt            = NULL,
+ 	};
+ 
+ 	while ((i = GETOPT_LONG(QUSE, quse, "")) != -1) {
+ 		switch (i) {
+-		case 'e': state.do_regex = false;   break;
+-		case 'a': state.do_all = true;      break;
+-		case 'L': state.do_licence = true;  break;
+-		case 'D': state.do_describe = true; break;
+-		case 'R': state.do_repo = true;     break;
+-		case 'p': match = optarg;           break;
++		case 'e': state.do_regex = false;      break;
++		case 'a': state.do_all = true;         break;
++		case 'L': state.do_licence = true;     break;
++		case 'D': state.do_describe = true;    break;
++		case 'I': state.do_installed = true;   break;
++		case 'p': match = optarg;              break;
++		case 'F': state.fmt = optarg;          /* fall through */
++		case 'R': state.need_full_atom = true; break;
+ 		COMMON_GETOPTS_CASES(quse)
+ 		}
+ 	}
+@@ -643,9 +723,27 @@
+ 			xregcomp(&state.pregv[i], state.argv[i], REG_EXTENDED | REG_NOSUB);
+ 	}
+ 
+-	if (state.do_describe) {
++	if (state.fmt == NULL) {
++		if (state.need_full_atom)
++			if (verbose)
++				state.fmt = "%[CATEGORY]%[PF]%[REPO]";
++			else
++				state.fmt = "%[CATEGORY]%[PN]%[REPO]";
++		else
++			if (verbose)
++				state.fmt = "%[CATEGORY]%[PF]";
++			else
++				state.fmt = "%[CATEGORY]%[PN]";
++	}
++
++	if (state.do_describe && state.match == NULL) {
+ 		array_for_each(overlays, n, overlay)
+ 			quse_describe_flag(portroot, overlay, &state);
++	} else if (state.do_installed) {
++		tree_ctx *t = tree_open_vdb(portroot, portvdb);
++		state.overlay = NULL;
++		tree_foreach_pkg_sorted(t, quse_results_cb, &state);
++		tree_close(t);
+ 	} else {
+ 		array_for_each(overlays, n, overlay) {
+ 			tree_ctx *t = tree_open(portroot, overlay);

@@ -57,8 +57,6 @@ RDEPEND="${CDEPEND}
 	>=gui-lib/lxmenu-data-0.1.2
 "
 
-filter-flags -Wl,-z,defs -Wl,-z,relro
-
 src_configure() {
 	local mycmakeargs=(
 		$(usex clock '-DWORLDCLOCK_PLUGIN=ON' '-DWORLDCLOCK_PLUGIN=OFF')

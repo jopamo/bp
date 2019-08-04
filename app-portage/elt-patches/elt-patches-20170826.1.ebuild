@@ -7,16 +7,16 @@ HOMEPAGE="https://gitweb.gentoo.org/proj/elt-patches.git/"
 SRC_URI="https://dev.gentoo.org/~mgorny/dist/${P}.tar.xz"
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="sys-app/gentoo-functions"
-DEPEND="app-compression/xz-utils"
+DEPEND="sys-app/gentoo-functions
+		app-compression/xz-utils"
 
 src_compile() {
 	emake rootprefix="${EPREFIX%/}" libdirname="lib"
 }
 
 src_install() {
-	emake DESTDIR="${D}" rootprefix="${EPREFIX%/}" install
+	emake DESTDIR="${ED}" rootprefix="${EPREFIX%/}" install
 }

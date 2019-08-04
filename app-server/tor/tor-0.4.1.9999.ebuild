@@ -10,15 +10,15 @@ EGIT_REPO_URI="https://git.torproject.org/tor.git"
 EGIT_BRANCH=maint-$(ver_cut 1).$(ver_cut 2).$(ver_cut 3)
 
 LICENSE="BSD GPL-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="lzma scrypt seccomp systemd tor-hardening test web zstd"
+IUSE="lzma scrypt seccomp systemd tor-hardening test zstd"
 
 DEPEND="
 	lib-dev/libevent[ssl]
 	lib-sys/zlib
-	lib-dev/libressl:0=[-bindist]
+	lib-dev/libressl
 	lzma? ( app-compression/xz-utils )
 	scrypt? ( app-crypt/libscrypt )
 	seccomp? ( lib-sys/libseccomp )
@@ -50,7 +50,6 @@ src_configure() {
 		$(use_enable systemd) \
 		--enable-gcc-hardening \
 		--enable-linker-hardening \
-		$(use_enable web tor2web-mode) \
 		$(use_enable test unittests) \
 		$(use_enable test coverage) \
 		$(use_enable zstd)

@@ -6,11 +6,13 @@ inherit user toolchain-funcs flag-o-matic systemd linux-info git-r3
 
 DESCRIPTION="A TCP/HTTP reverse proxy for high availability environments"
 HOMEPAGE="http://haproxy.1wt.eu"
-KEYWORDS="amd64 arm64"
-EGIT_REPO_URI="http://git.haproxy.org/git/haproxy-1.9.git"
+EGIT_REPO_URI="http://git.haproxy.org/git/haproxy-$(ver_cut 1).$(ver_cut 2).git"
 EGIT_MIN_CLONE_TYPE=single
+
 LICENSE="GPL-2 LGPL-2.1"
-SLOT="0"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
 IUSE="+crypt doc examples slz net_ns +pcre pcre-jit pcre2 pcre2-jit ssl
 systemd +threads tools vim-syntax +zlib lua device-atlas 51degrees wurfl"
 
@@ -29,7 +31,7 @@ DEPEND="
 		lib-dev/libpcre
 		pcre2-jit? ( lib-dev/libpcre2[jit] )
 	)
-	ssl? ( lib-dev/libressl:0=[zlib?] )
+	ssl? ( lib-dev/libressl )
 	slz? ( lib-dev/libslz:= )
 	zlib? ( lib-sys/zlib )
 	lua? ( dev-lang/lua:5.3 )
@@ -58,7 +60,7 @@ pkg_setup() {
 
 src_compile() {
 	local -a args=(
-		TARGET=linux2628
+		TARGET=linux-glibc
 		USE_GETADDRINFO=1
 		USE_TFO=1
 	)

@@ -4,13 +4,12 @@ EAPI=7
 
 inherit meson tmpfiles git-r3
 
-EGIT_REPO_URI="https://github.com/vaeth/${PN}.git"
-
 DESCRIPTION="Search and query ebuilds"
 HOMEPAGE="https://github.com/vaeth/eix/"
+EGIT_REPO_URI="https://github.com/vaeth/${PN}.git"
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 IUSE="debug +dep +jumbo-build +required-use sqlite swap-remote tools nls"

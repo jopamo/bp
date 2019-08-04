@@ -12,9 +12,8 @@ LICENSE="GPL-2"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-DEPEND="sys-app/portage[${PYTHON_USEDEP}]"
-RDEPEND="${DEPEND}
-	sys-app/gentoo-functions"
+DEPEND="sys-app/portage[${PYTHON_USEDEP}]
+		sys-app/gentoo-functions"
 
 python_prepare_all() {
 	python_setup
@@ -28,7 +27,6 @@ python_install_all() {
 }
 
 pkg_postinst() {
-	# Create cache directory for revdep-rebuild
-	mkdir -p -m 0755 "${EROOT%/}"/var/cache
-	mkdir -p -m 0700 "${EROOT%/}"/var/cache/revdep-rebuild
+	mkdir -p -m 0755 "${EROOT}"/var/cache
+	mkdir -p -m 0700 "${EROOT}"/var/cache/revdep-rebuild
 }

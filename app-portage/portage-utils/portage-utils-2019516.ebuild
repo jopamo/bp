@@ -10,12 +10,11 @@ SRC_URI="https://github.com/gentoo/portage-utils/archive/${SNAPSHOT}.tar.gz -> $
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 IUSE="static"
 
-RDEPEND="lib-dev/iniparser:0"
-DEPEND="${RDEPEND}
+DEPEND="lib-dev/iniparser
 	app-compression/xz-utils
-	static? ( lib-dev/iniparser:0[static-libs] )"
+	static? ( lib-dev/iniparser[static-libs] )"

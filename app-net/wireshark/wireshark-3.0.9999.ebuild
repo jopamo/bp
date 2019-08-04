@@ -62,8 +62,6 @@ DEPEND="
 	dev-util/pkgconf
 "
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
-
 pkg_setup() {
 	enewgroup wireshark
 }

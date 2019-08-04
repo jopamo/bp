@@ -27,8 +27,7 @@ DEPEND="
 	ssl? ( lib-dev/libressl:0= )
 "
 
-append-flags "-fno-strict-aliasing"
-filter-flags "-flto" "-Wl,-z,defs" "-Wl,-z,relro"
+append-flags -fno-strict-aliasing
 
 src_prepare() {
 	rm -r liblinear/ libpcap/ libpcre/ libz/ || die

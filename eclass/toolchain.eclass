@@ -57,7 +57,8 @@ DEPEND="lib-sys/zlib
 "
 
 if [[ -n ${SNAPSHOT} ]] ; then
-	SRC_URI="https://bigsearcher.com/mirrors/gcc/snapshots/${SNAPSHOT}/gcc-${SNAPSHOT}.tar.xz"
+	SRC_URI="https://bigsearcher.com/mirrors/gcc/snapshots/${SNAPSHOT}/gcc-${SNAPSHOT}.tar.xz
+			https://ftp.nluug.nl/languages/gcc/snapshots/${SNAPSHOT}/gcc-${SNAPSHOT}.tar.xz"
 else
 	SRC_URI="mirror://gnu/gcc/gcc-${GCC_PV}/gcc-${GCC_RELEASE_VER}.tar.xz"
 fi

@@ -11,10 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="http://git.dereferenced.org/pkgconf/pkgconf.git"
 	inherit git-r3
 else
-	SNAPSHOT=984dc98438463e594136dafe19458ed3454730ea
-	#SRC_URI="https://git.dereferenced.org/pkgconf/pkgconf/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	SRC_URI="https://1g4.org/files/${P}.tar.gz"
-	S=${WORKDIR}/${PN}
+	SRC_URI="https://github.com/pkgconf/pkgconf/archive/${P}.tar.gz"
 fi
 
 LICENSE="ISC"

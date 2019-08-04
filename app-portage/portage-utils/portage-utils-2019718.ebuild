@@ -15,6 +15,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static"
 
+PATCHES=( ${FILESDIR}/workaround_broken_build.patch )
+
 DEPEND="lib-dev/iniparser
 	app-compression/xz-utils
 	static? ( lib-dev/iniparser[static-libs] )"

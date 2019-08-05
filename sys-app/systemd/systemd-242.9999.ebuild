@@ -8,7 +8,7 @@ DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
 
 EGIT_REPO_URI="https://github.com/systemd/systemd-stable.git"
-EGIT_BRANCH="master"
+EGIT_BRANCH="v$(ver_cut 1)-stable"
 KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"

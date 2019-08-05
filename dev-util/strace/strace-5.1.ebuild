@@ -4,19 +4,14 @@ EAPI=7
 
 inherit flag-o-matic toolchain-funcs
 
-if [[ ${PV} == "9999" ]] ; then
-	EGIT_REPO_URI="https://github.com/strace/strace.git"
-	inherit git-r3 autotools
-else
-	SRC_URI="https://github.com/strace/strace/releases/download/v${PV}/${P}.tar.xz"
-	KEYWORDS="amd64 arm64"
-fi
-
 DESCRIPTION="A useful diagnostic, instructional, and debugging tool"
 HOMEPAGE="https://sourceforge.net/projects/strace/"
+SRC_URI="https://github.com/strace/strace/releases/download/v${PV}/${P}.tar.xz"
 
 LICENSE="BSD"
-SLOT="0"
+SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
 IUSE="aio perl static"
 
 DEPEND="aio? ( >=lib-dev/libaio-0.3.106 )
@@ -25,19 +20,9 @@ DEPEND="aio? ( >=lib-dev/libaio-0.3.106 )
 src_prepare() {
 	default
 
-	if [[ ! -e configure ]] ; then
-		# git generation
-		./xlat/gen.sh || die
-		./generate_mpers_am.sh || die
-		eautoreconf
-		[[ ! -e CREDITS ]] && cp CREDITS{.in,}
-	fi
-
-	filter-lfs-flags # configure handles this sanely
 	use static && append-ldflags -static
 
 	export ac_cv_header_libaio_h=$(usex aio)
-	use elibc_musl && export ac_cv_header_stdc=no
 
 	# Stub out the -k test since it's known to be flaky. #545812
 	sed -i '1iexit 77' tests*/strace-k.test || die
@@ -51,8 +36,8 @@ src_configure() {
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
-		--enable-mpers=check
 		--with-libunwind
+		--enable-mpers=check
 	)
 	econf ${myconf[@]}
 }

@@ -32,4 +32,5 @@
 *sys-app/util-linux
 *app-portage/eix
 *app-portage/smart-live-rebuild
+*app-net/iproute2
 

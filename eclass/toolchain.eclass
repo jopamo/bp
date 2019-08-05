@@ -409,6 +409,8 @@ gcc_do_filter_flags() {
 
 	filter-flags -frecord-gcc-switches # 490738
 	filter-flags -mno-rtm -mno-htm # 506202
+	filter-flags -flto\=\* -Wl,-z,combreloc -Wl,-z,relro -Wl,-z,defs -Wl,-z,now
+	use debug || filter-flags -g
 
 	strip-unsupported-flags
 }

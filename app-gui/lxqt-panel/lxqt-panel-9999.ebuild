@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake-utils
+inherit cmake-utils flag-o-matic
 
 DESCRIPTION="LXQt desktop panel and plugins"
 HOMEPAGE="http://lxqt.org/"
@@ -56,6 +56,8 @@ RDEPEND="${CDEPEND}
 	gui-lib/qtsvg:5
 	>=gui-lib/lxmenu-data-0.1.2
 "
+
+filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
 
 src_configure() {
 	local mycmakeargs=(

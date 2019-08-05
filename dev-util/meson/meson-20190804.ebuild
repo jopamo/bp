@@ -2,8 +2,6 @@
 
 EAPI=7
 
-SNAPSHOT=987539e2331f2c78e94cbcf3623a82a66dd52267
-
 inherit distutils-r1
 
 DESCRIPTION="Open source build system"
@@ -13,6 +11,7 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/mesonbuild/meson"
 	inherit git-r3
 else
+	SNAPSHOT=ddbf60f86da4ece3d407fe3b3e38ff45e34f561e
 	SRC_URI="https://github.com/mesonbuild/meson/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"

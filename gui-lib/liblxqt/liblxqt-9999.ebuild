@@ -30,4 +30,9 @@ DEPEND=">=lib-dev/libqtxdg-1.3.0
 	x11-libs/libXScrnSaver
 	gui-lib/linguist-tools:5"
 
-PATCHES=( ${FILESDIR}/remove_polkit.patch )
+src_configure() {
+	local mycmakeargs=(
+		-DBUILD_BACKLIGHT_LINUX_BACKEND=OFF
+	)
+	cmake-utils_src_configure
+}

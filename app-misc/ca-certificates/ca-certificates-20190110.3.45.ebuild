@@ -33,7 +33,7 @@ LICENSE="MPL-1.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND=""
+DEPEND="app-misc/c_rehash"
 if ${PRECOMPILED} ; then
 	DEPEND+=" !<sys-apps/portage-2.1.10.41"
 fi

@@ -14,6 +14,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="asm static-libs test"
 
+PDEPEND="app-misc/ca-certificates"
+
 filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
 
 src_prepare() {
@@ -45,4 +47,14 @@ src_configure() {
 
 src_test() {
 	emake check
+}
+
+src_install() {
+	default
+	dosym libssl.so usr/lib/libssl.so.1.0.0
+	dosym libssl.so usr/lib/libssl.so.1.1
+	dosym libcrypto.so usr/lib/libcrypto.so.1.0.0
+	dosym libcrypto.so usr/lib/libcrypto.so.1.1
+
+	find ${ED} -xtype l -delete
 }

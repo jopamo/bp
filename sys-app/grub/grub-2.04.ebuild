@@ -6,7 +6,7 @@ inherit autotools flag-o-matic multibuild toolchain-funcs
 
 DESCRIPTION="GNU GRUB boot loader"
 HOMEPAGE="https://www.gnu.org/software/grub/"
-SRC_URI="http://1g4.org/files/${P}.tar.xz"
+SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 
 LICENSE="GPL-3 fonts? ( GPL-2-with-font-exception ) themes? ( BitstreamVera )"
 SLOT="0/1"

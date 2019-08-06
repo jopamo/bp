@@ -6,17 +6,18 @@ inherit autotools linux-info systemd git-r3
 
 DESCRIPTION="Linux kernel (3.13+) firewall, NAT and packet mangling tools"
 HOMEPAGE="https://netfilter.org/projects/nftables/"
-EGIT_REPO_URI="git://git.netfilter.org/${PN}"
+EGIT_REPO_URI="https://git.netfilter.org/${PN}"
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="debug +gmp +readline static-libs"
 
-RDEPEND=">=lib-net/libmnl-1.0.3:0=
-	gmp? ( lib-dev/gmp:0= )
-	readline? ( lib-sys/readline:0= )
-	>=lib-net/libnftnl-1.0.9:0="
+RDEPEND="lib-net/libmnl
+		gmp? ( lib-dev/gmp )
+		readline? ( lib-sys/readline )
+		lib-net/libnftnl"
 
 DEPEND="${RDEPEND}
 	sys-devel/bison
@@ -57,5 +58,7 @@ src_install() {
 	keepdir /var/lib/nftables
 
 	systemd_dounit "${FILESDIR}"/${PN}.service
-	cp "${FILESDIR}/nftables.conf" "${ED}"/etc/
+
+	insinto /etc
+	doins "${FILESDIR}/nftables.conf"
 }

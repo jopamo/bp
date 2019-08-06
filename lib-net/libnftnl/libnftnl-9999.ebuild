@@ -6,16 +6,16 @@ inherit autotools linux-info git-r3
 
 DESCRIPTION="Netlink API to the in-kernel nf_tables subsystem"
 HOMEPAGE="https://netfilter.org/projects/nftables/"
-EGIT_REPO_URI="git://git.netfilter.org/${PN}"
+EGIT_REPO_URI="https://git.netfilter.org/${PN}"
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
+
 IUSE="static-libs test"
 
-RDEPEND=">=lib-net/libmnl-1.0.0"
-DEPEND="dev-util/pkgconf
-	${RDEPEND}"
+DEPEND="lib-net/libmnl
+		dev-util/pkgconf"
 
 pkg_setup() {
 	CONFIG_CHECK="~NF_TABLES"

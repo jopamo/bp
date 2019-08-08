@@ -7,8 +7,9 @@ inherit perl-module
 DESCRIPTION="Tools for helping translation of documentation"
 HOMEPAGE="http://po4a.alioth.debian.org"
 SRC_URI="https://github.com/mquinson/po4a/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 RDEPEND=">=sys-devel/gettext-0.13
@@ -19,5 +20,6 @@ DEPEND="${RDEPEND}
 	dev-perl/SGMLSpm
 	dev-perl/Unicode-LineBreak
 	dev-perl/YAML-Tiny
+	dev-perl/Locale-gettext
 	app-text/docbook-xsl-stylesheets
 	app-text/docbook-xml-dtd"

@@ -4,7 +4,6 @@ EAPI=7
 
 inherit flag-o-matic toolchain-funcs
 
-NSPR_VER="4.16"
 RTM_NAME="NSS_${PV//./_}_RTM"
 # Rev of https://git.fedorahosted.org/cgit/nss-pem.git
 PEM_GIT_REV="429b0222759d8ad8e6dcd29e62875ae3efd69116"
@@ -22,14 +21,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="cacert +nss-pem utils static-libs"
 
-CDEPEND=">=lib-sys/sqlite-3.8.2
-	>=lib-sys/zlib-1.2.8-r1"
-DEPEND=">=dev-util/pkgconf-0-r1
-	>=lib-dev/nspr-${NSPR_VER}
-	${CDEPEND}"
-RDEPEND=">=lib-dev/nspr-${NSPR_VER}
-	${CDEPEND}
-"
+DEPEND="dev-util/pkgconf
+		lib-dev/nspr
+		>=lib-sys/sqlite-3.8.2
+		>=lib-sys/zlib-1.2.8-r1"
 
 RESTRICT="test"
 

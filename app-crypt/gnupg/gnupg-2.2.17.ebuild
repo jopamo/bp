@@ -14,7 +14,7 @@ LICENSE="GPL-3"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 doc ldap nls readline +smartcard ssl tofu tools usb wks-server"
+IUSE="bzip2 doc ldap nls readline +smartcard gnutls tofu tools usb wks-server"
 
 COMMON_DEPEND_LIBS="
 	>=lib-dev/npth-1.2
@@ -23,7 +23,7 @@ COMMON_DEPEND_LIBS="
 	>=lib-dev/libgpg-error-1.24
 	>=lib-dev/libksba-1.3.4
 	>=app-net/curl-7.10
-	ssl? ( >=lib-net/gnutls-3.0:0= )
+	>=lib-net/gnutls-3.0:0=
 	lib-sys/zlib
 	ldap? ( app-net/openldap )
 	bzip2? ( app-compression/lbzip2 )
@@ -55,7 +55,7 @@ src_configure() {
 			--libexecdir="${EPREFIX}"/usr/libexec
 			--enable-symcryptrun
 			$(use_enable bzip2)
-			$(use_enable ssl gnutls)
+			$(use_enable gnutls)
 			$(use_enable nls)
 			$(use_enable tofu)
 			$(use_enable wks-server wks-tools)

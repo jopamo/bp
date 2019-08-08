@@ -13,17 +13,11 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug gnutls idn ipv6 nls ntlm pcre +ssl static test uuid zlib"
-REQUIRED_USE=" ntlm? ( !gnutls ssl ) gnutls? ( ssl )"
+IUSE="debug idn ipv6 nls pcre static test uuid zlib"
 
-# Force a newer libidn2 to avoid libunistring deps. #612498
 LIB_DEPEND="
 	idn? ( >=lib-net/libidn2-0.14[static-libs(+)] )
 	pcre? ( lib-dev/libpcre[static-libs(+)] )
-	ssl? (
-		gnutls? ( lib-net/gnutls:0=[static-libs(+)] )
-		!gnutls? ( lib-dev/libressl:0=[static-libs(+)] )
-	)
 	uuid? ( sys-app/util-linux[static-libs(+)] )
 	zlib? ( lib-sys/zlib[static-libs(+)] )
 "
@@ -50,16 +44,14 @@ src_configure() {
 		--disable-rpath
 		--without-included-libunistring
 		--without-libunistring-prefix
+		--with-openssl=no
+		--with-ssl=gnutls
 		$(use_enable debug)
 		$(use_enable idn iri)
 		$(use_enable ipv6)
 		$(use_enable nls)
-		$(use_enable ntlm)
 		$(use_enable pcre)
-		$(use_enable ssl digest)
-		$(use_enable ssl opie)
 		$(use_with idn libidn)
-		$(use_with ssl ssl $(usex gnutls gnutls openssl))
 		$(use_with uuid libuuid)
 		$(use_with zlib)
 	)

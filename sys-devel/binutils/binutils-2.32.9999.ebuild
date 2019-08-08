@@ -32,7 +32,7 @@ src_configure() {
 		--disable-werror
 		$(usex static-libs '--disable-shared' '--enable-shared')
 		--with-system-zlib
-		--disable-gold
+		--enable-gold
 		--enable-install-libiberty
 		--enable-deterministic-archives
 		--disable-nls

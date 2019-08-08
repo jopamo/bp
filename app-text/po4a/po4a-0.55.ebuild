@@ -21,5 +21,7 @@ DEPEND="${RDEPEND}
 	dev-perl/Unicode-LineBreak
 	dev-perl/YAML-Tiny
 	dev-perl/Locale-gettext
+	dev-perl/TermReadKey
+	dev-perl/Text-WrapI18N
 	app-text/docbook-xsl-stylesheets
 	app-text/docbook-xml-dtd"

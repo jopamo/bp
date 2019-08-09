@@ -23,14 +23,12 @@ RDEPEND="
 	>=app-compression/tar-1.27
 	!build? (
 		sys-app/eselect
-		>=app-crypt/gnupg-2.2.4-r2[ssl(-)]
+		>=app-crypt/gnupg-2.2.4-r2[gnutls(-)]
 		sys-app/bash
 		>=dev-python/lxml-3.6.0[${PYTHON_USEDEP}]
 		>=sys-app/sed-4.0.5
 	)
-	elibc_glibc? ( >=sys-app/sandbox-2.2 )
-	elibc_musl? ( >=sys-app/sandbox-2.2 )
-	elibc_uclibc? ( >=sys-app/sandbox-2.2 )
+	>=sys-app/sandbox-2.2
 	xattr? ( >=sys-app/install-xattr-0.3 )
 "
 PDEPEND="

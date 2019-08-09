@@ -4,22 +4,19 @@ EAPI=7
 
 inherit libtool
 
-MY_PV=${PV/_p*}
-MY_P=${PN}-${MY_PV}
-PLEVEL=${PV/*p}
 DESCRIPTION="library for multiple-precision floating-point computations with exact rounding"
 HOMEPAGE="http://www.mpfr.org/"
-SRC_URI="http://www.mpfr.org/mpfr-${MY_PV}/${MY_P}.tar.xz"
+SRC_URI="http://www.mpfr.org/mpfr-${PV}/${P}.tar.xz"
 
 LICENSE="LGPL-2.1"
 SLOT="0/6" # libmpfr.so version
 KEYWORDS="amd64 arm64"
+
 IUSE="static-libs"
 
 RDEPEND=">=lib-dev/gmp-5.0.0[static-libs?]"
-DEPEND="${RDEPEND}"
 
-S=${WORKDIR}/${MY_P}
+PATCHES=( ${FILESDIR}/p1.patch )
 
 src_prepare() {
 	default

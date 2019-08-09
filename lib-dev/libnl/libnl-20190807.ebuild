@@ -2,22 +2,26 @@
 
 EAPI=7
 
-
-DISTUTILS_OPTIONAL=1
-inherit distutils-r1 libtool
-
-LIBNL_P=${P/_/-}
-LIBNL_DIR=${PV/_/}
-LIBNL_DIR=${LIBNL_DIR//./_}
+inherit distutils-r1 autotools
 
 DESCRIPTION="Libraries providing APIs to netlink protocol based Linux kernel interfaces"
 HOMEPAGE="http://www.infradead.org/~tgr/libnl/ https://github.com/thom311/libnl"
-SRC_URI="
-	https://github.com/thom311/${PN}/releases/download/${PN}${LIBNL_DIR}/${P/_rc/-rc}.tar.gz
-"
+
+if [[ ${PV} == 9999 ]]; then
+	EGIT_REPO_URI="https://github.com/thom311/libnl.git"
+	inherit git-r3
+	KEYWORDS=""
+else
+	SNAPSHOT=325d30403ad30ea6cd54d651ede9e11f14ae03cf
+	SRC_URI="https://github.com/thom311/libnl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	KEYWORDS="amd64 arm64"
+fi
+
 LICENSE="LGPL-2.1 utils? ( GPL-2 )"
-SLOT="3"
+SLOT="0/3"
 KEYWORDS="amd64 arm64"
+
 IUSE="static-libs python utils"
 
 RDEPEND="
@@ -33,12 +37,10 @@ REQUIRED_USE="
 	python? ( ${PYTHON_REQUIRED_USE} )
 "
 
-S=${WORKDIR}/${LIBNL_P}
-
 src_prepare() {
 	default
 
-	elibtoolize
+	eautoreconf
 
 	if use python; then
 		cd "${S}"/python || die

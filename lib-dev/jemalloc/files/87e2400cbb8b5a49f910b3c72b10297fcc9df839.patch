@@ -1,0 +1,38 @@
+From 87e2400cbb8b5a49f910b3c72b10297fcc9df839 Mon Sep 17 00:00:00 2001
+From: Qi Wang <interwq@gwu.edu>
+Date: Wed, 7 Aug 2019 20:12:25 -0700
+Subject: [PATCH] Fix tcaches mutex pre- / post-fork handling.
+
+---
+ src/tcache.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
+
+diff --git a/src/tcache.c b/src/tcache.c
+index 50099a9f2..01c616097 100644
+--- a/src/tcache.c
++++ b/src/tcache.c
+@@ -778,21 +778,15 @@ tcache_boot(tsdn_t *tsdn) {
+ 
+ void
+ tcache_prefork(tsdn_t *tsdn) {
+-	if (!config_prof && opt_tcache) {
+-		malloc_mutex_prefork(tsdn, &tcaches_mtx);
+-	}
++	malloc_mutex_prefork(tsdn, &tcaches_mtx);
+ }
+ 
+ void
+ tcache_postfork_parent(tsdn_t *tsdn) {
+-	if (!config_prof && opt_tcache) {
+-		malloc_mutex_postfork_parent(tsdn, &tcaches_mtx);
+-	}
++	malloc_mutex_postfork_parent(tsdn, &tcaches_mtx);
+ }
+ 
+ void
+ tcache_postfork_child(tsdn_t *tsdn) {
+-	if (!config_prof && opt_tcache) {
+-		malloc_mutex_postfork_child(tsdn, &tcaches_mtx);
+-	}
++	malloc_mutex_postfork_child(tsdn, &tcaches_mtx);
+ }

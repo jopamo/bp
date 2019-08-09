@@ -7,29 +7,14 @@ HOMEPAGE="https://libbsd.freedesktop.org/wiki/"
 SRC_URI="https://${PN}.freedesktop.org/releases/${P}.tar.xz"
 
 LICENSE="BSD BSD-2 BSD-4 ISC"
-SLOT="0"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
-IUSE="static-libs"
 
-pkg_setup() {
-	local f="${EROOT}/usr/lib/${PN}.a"
-	local m="You need to remove ${f} by hand or re-emerge lib-sys/glibc first."
-	if ! has_version ${CATEGORY}/${PN}; then
-		if [[ -e ${f} ]]; then
-			eerror "${m}"
-			die "${m}"
-		fi
-	fi
-}
+IUSE="static-libs"
 
 src_configure() {
 	# The build system will install libbsd-ctor.a despite of USE="-static-libs"
 	# which is correct, see:
 	# https://cgit.freedesktop.org/libbsd/commit/?id=c5b959028734ca2281250c85773d9b5e1d259bc8
 	ECONF_SOURCE="${S}" econf $(use_enable static-libs static)
-}
-
-src_install() {
-	emake DESTDIR="${D}" install
-	find "${ED}" -name "*.la" -delete || die
 }

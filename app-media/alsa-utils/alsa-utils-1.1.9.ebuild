@@ -34,7 +34,7 @@ src_configure() {
 		--disable-xmlto
 		--disable-alsaconf
 		--with-systemdsystemunitdir="$(systemd_get_systemunitdir)"
-		--with-udev-rules-dir="${EPREFIX}/$(get_udevdir)"/rules.d
+		--with-udev-rules-dir="${EPREFIX}"/usr/lib/udev/rules.d
 		--with-asound-state-dir="${EPREFIX}"/var/lib/alsa
 	)
 	econf ${myconf[@]}

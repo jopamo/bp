@@ -163,7 +163,7 @@ src_configure() {
 		--disable-esound
 		--disable-rpath
 		--localstatedir="${EPREFIX}"/var
-		--with-udev-rules-dir="${EPREFIX}/$(get_udevdir)"/rules.d
+		--with-udev-rules-dir="${EPREFIX}"/usr/lib/udev/rules.d
 		--with-systemduserunitdir=$(systemd_get_userunitdir)
 	)
 

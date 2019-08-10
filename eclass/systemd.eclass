@@ -468,39 +468,6 @@ systemd_reenable() {
 	done
 }
 
-# @FUNCTION: _udev_get_udevdir
-# @INTERNAL
-# @DESCRIPTION:
-# Get unprefixed udevdir.
-_udev_get_udevdir() {
-	if $($(tc-getPKG_CONFIG) --exists udev); then
-		echo "$($(tc-getPKG_CONFIG) --variable=udevdir udev)"
-	else
-		echo /lib/udev
-	fi
-}
-
-# @FUNCTION: udev_get_udevdir
-# @DESCRIPTION:
-# Use the short version $(get_udevdir) instead!
-udev_get_udevdir() {
-	debug-print-function ${FUNCNAME} "${@}"
-
-	eerror "This ebuild should be using the get_udevdir() function instead of the deprecated udev_get_udevdir()"
-	die "Deprecated function call: udev_get_udevdir(), please report to (overlay) maintainers."
-}
-
-# @FUNCTION: get_udevdir
-# @DESCRIPTION:
-# Output the path for the udev directory (not including ${D}).
-# This function always succeeds, even if udev is not installed.
-# The fallback value is set to /lib/udev
-get_udevdir() {
-	debug-print-function ${FUNCNAME} "${@}"
-
-	echo "$(_udev_get_udevdir)"
-}
-
 # @FUNCTION: udev_newrules
 # @USAGE: oldname newname
 # @DESCRIPTION:
@@ -511,7 +478,7 @@ udev_newrules() {
 
 	(
 		insopts -m 0644
-		insinto "$(_udev_get_udevdir)"/rules.d
+		insinto /usr/lib/udev/rules.d
 		newins "${@}"
 	)
 }

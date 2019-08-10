@@ -143,7 +143,7 @@ src_configure() {
 		--with-default-pid-dir=/run
 		$(use_enable udev udev_rules)
 		$(use_enable udev udev_sync)
-		$(use_with udev udevdir "$(get_udevdir)"/rules.d)
+		$(use_with udev udevdir "${EPREFIX}"/usr/lib/udev/rules.d)
 		$(use_enable sanlock lvmlockd-sanlock)
 		$(use_enable systemd udev-systemd-background-jobs)
 		--with-systemdsystemunitdir="$(systemd_get_systemunitdir)"

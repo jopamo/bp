@@ -35,7 +35,7 @@ src_configure() {
 		-Ddocumentation=false
 		-Dlibwacom="$(usex input_devices_wacom true false)"
 		-Dtests="$(usex test true false)"
-		-Dudev-dir="$(get_udevdir)"
+		-Dudev-dir="${EPREFIX}"/usr/lib/udev/rules.d
 	)
 	meson_src_configure
 }

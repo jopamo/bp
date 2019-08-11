@@ -18,11 +18,10 @@ LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="wayland X doc test static-libs"
+IUSE="wayland X static-libs"
 
 DEPEND="sys-devel/bison
-	X? ( x11-misc/xorgproto )
-	doc? ( app-text/doxygen )"
+	X? ( x11-misc/xorgproto )"
 RDEPEND="X? ( >=x11-libs/libxcb-1.10[xkb] )"
 
 src_configure() {
@@ -32,4 +31,9 @@ src_configure() {
 		-Denable-docs=false
 		)
 		meson_src_configure
+}
+
+src_install() {
+	meson_src_install
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

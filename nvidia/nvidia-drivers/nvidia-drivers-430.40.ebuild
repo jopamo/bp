@@ -165,7 +165,7 @@ src_install() {
 		doins "${FILESDIR}"/nvidia-rmmod.conf
 
 		# Ensures that our device nodes are created when not using X
-		exeinto "$(get_udevdir)"
+		exeinto /usr/lib/udev/rules.d
 		newexe "${FILESDIR}"/nvidia-udev.sh-r1 nvidia-udev.sh
 		udev_newrules "${FILESDIR}"/nvidia.udev-rule 99-nvidia.rules
 	fi

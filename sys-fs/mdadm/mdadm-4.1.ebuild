@@ -33,7 +33,7 @@ mdadm_emake() {
 		CC="$(tc-getCC)" \
 		CWFLAGS="-Wall -DBINDIR=\"/usr/sbin\"" \
 		CXFLAGS="${CFLAGS}" \
-		UDEVDIR="$(get_udevdir)" \
+		UDEVDIR="${EPREFIX}"/usr/lib/udev/rules.d \
 		SYSTEMD_DIR="$(systemd_get_systemunitdir)" \
 		COROSYNC="-DNO_COROSYNC" \
 		DLM="-DNO_DLM" \

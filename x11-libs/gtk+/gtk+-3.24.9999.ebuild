@@ -13,10 +13,10 @@ LICENSE="LGPL-2+"
 SLOT="3"
 KEYWORDS="amd64 arm64"
 
-IUSE="aqua broadway colord cups examples +introspection test vim-syntax wayland +X xinerama"
+IUSE="broadway colord cups examples +introspection test vim-syntax wayland +X xinerama"
 
 REQUIRED_USE="
-	|| ( aqua wayland X )
+	|| ( wayland X )
 	xinerama? ( X )
 "
 
@@ -26,7 +26,7 @@ COMMON_DEPEND="
 	>=lib-dev/glib-2.49.4:2
 	lib-media/fontconfig
 	>=lib-media/libepoxy-1.0[X(+)?]
-	>=x11-libs/cairo-1.14[aqua?,glib,svg,X?]
+	>=lib-gui/cairo-1.14[glib,svg,X?]
 	>=x11-libs/gdk-pixbuf-2.30:2[introspection?]
 	>=x11-libs/pango-1.37.3[introspection?]
 	x11-misc/shared-mime-info
@@ -34,10 +34,10 @@ COMMON_DEPEND="
 	cups? ( >=lib-print/cups-1.2 )
 	introspection? ( >=lib-dev/gobject-introspection-1.39:= )
 	wayland? (
-		>=lib-dev/wayland-1.9.91
-		>=lib-dev/wayland-protocols-1.9
-		lib-media/mesa[wayland]
-		>=x11-libs/libxkbcommon-0.2
+		lib-dev/wayland
+		lib-dev/wayland-protocols
+		lib-media/mesa
+		>=lib-gui/libxkbcommon-0.2
 	)
 	X? (
 		x11-libs/libX11
@@ -65,8 +65,6 @@ DEPEND="${COMMON_DEPEND}
 		fonts/font-cursor-misc )
 "
 
-PATCHES=( ${FILESDIR}/avoid-dbus.patch )
-
 RDEPEND="${COMMON_DEPEND}"
 
 PDEPEND="
@@ -82,7 +80,6 @@ src_prepare() {
 
 src_configure() {
 	econf \
-		$(use_enable aqua quartz-backend) \
 		$(use_enable broadway broadway-backend) \
 		$(use_enable colord) \
 		$(use_enable cups) \
@@ -96,7 +93,6 @@ src_configure() {
 		$(use_enable X xrandr) \
 		$(use_enable xinerama) \
 		--disable-mir-backend \
-		--without-atk-bridge \
 		--disable-papi \
 		--with-xml-catalog="${EPREFIX}"/etc/xml/catalog \
 		--libdir="${EPREFIX}"/usr/lib \

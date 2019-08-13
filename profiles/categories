@@ -17,6 +17,7 @@ fonts
 gui-icontheme
 gui-lib
 lib-dev
+lib-gui
 lib-media
 lib-net
 lib-print

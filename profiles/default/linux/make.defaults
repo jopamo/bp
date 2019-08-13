@@ -12,7 +12,7 @@ PYTHON_SINGLE_TARGET="python3_7"
 PYTHON_TARGETS="python3_7"
 
 USE="${USE} -fortran openmp"
-USE="${USE} -perl -python text -mount -kmod -nls -tcl"
+USE="${USE} -perl -python text -mount -kmod -tcl"
 USE="${USE} -ptpax"
 USE="${USE} cli pcre"
 USE="${USE} cxx"

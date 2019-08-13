@@ -19,8 +19,8 @@ RDEPEND="
 	x11-libs/libXext
 	x11-libs/libXfixes
 	x11-libs/libXScrnSaver
-	>=x11-libs/pixman-0.27.1
-	>=x11-libs/libdrm-2.4.52[video_cards_intel]
+	>=lib-gui/pixman-0.27.1
+	>=lib-gui/libdrm-2.4.52[video_cards_intel]
 	dri3? (
 		>=x11-app/xorg-server-1.18
 		!<=lib-media/mesa-12.0.4

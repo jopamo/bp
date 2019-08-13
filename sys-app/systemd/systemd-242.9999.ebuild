@@ -34,7 +34,7 @@ DEPEND="
 	qrcode? ( app-media/qrencode:0= )
 	seccomp? ( >=lib-sys/libseccomp-2.3.3:0= )
 	test? ( sys-app/dbus )
-	xkb? ( >=x11-libs/libxkbcommon-0.4.1:0= )
+	xkb? ( >=lib-gui/libxkbcommon-0.4.1:0= )
 	xz? ( app-compression/xz-utils )
 	zlib? ( lib-sys/zlib )
 

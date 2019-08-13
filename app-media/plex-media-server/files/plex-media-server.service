@@ -3,9 +3,15 @@ Description=Plex Media Server
 After=network.target
 
 [Service]
+EnvironmentFile=/etc/plex/plexmediaserver
+ExecStart=/usr/lib/plexmediaserver/Plex\x20Media\x20Server
 Type=simple
 User=plex
-ExecStart=/usr/sbin/start_pms
+Group=plex
+Restart=on-failure
+RestartSec=5
+StartLimitInterval=60s
+StartLimitBurst=3
 
 [Install]
 WantedBy=multi-user.target

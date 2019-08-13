@@ -19,7 +19,7 @@ RDEPEND="
 	>=lib-dev/glib-2.34.3:2
 	>=lib-media/fontconfig-2.10.92:1.0=
 	>=lib-media/freetype-2.5.0.1:2=
-	>=x11-libs/cairo-1.12.14-r4:=
+	>=lib-gui/cairo-1.12.14-r4:=
 	introspection? ( >=lib-dev/gobject-introspection-0.9.5:= )
 "
 DEPEND="${RDEPEND}

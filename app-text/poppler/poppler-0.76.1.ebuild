@@ -30,7 +30,7 @@ COMMON_DEPEND="
 	lib-sys/zlib
 	cairo? (
 		lib-dev/glib:2
-		>=x11-libs/cairo-1.10.0
+		>=lib-gui/cairo-1.10.0
 		introspection? ( >=lib-dev/gobject-introspection-1.32.1:= )
 	)
 	curl? ( app-net/curl )

@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+drm opengl wayland X utils"
 
-RDEPEND=">=x11-libs/libdrm-2.4.46
+RDEPEND=">=lib-gui/libdrm-2.4.46
 	X? (
 		>=x11-libs/libX11-1.6.2
 		>=x11-libs/libXext-1.3.2

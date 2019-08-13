@@ -6,15 +6,14 @@ inherit meson git-r3 flag-o-matic
 
 DESCRIPTION="OpenGL-like graphic library for Linux"
 HOMEPAGE="https://www.mesa3d.org/ https://mesa.freedesktop.org/"
-KEYWORDS="amd64 arm64"
-
 EGIT_REPO_URI="https://anongit.freedesktop.org/git/mesa/mesa.git"
 EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
 
-IUSE="llvm"
-
 LICENSE="MIT"
 SLOT="0/1"
+KEYWORDS="amd64 arm64"
+
+IUSE="llvm"
 
 DEPEND="dev-python/mako
 	lib-sys/libunwind
@@ -38,7 +37,7 @@ filter-flags -flto
 src_configure() {
 	local emesonargs=(
 		-Db_lto=false
-		-Dplatforms=x11,drm
+		-Dplatforms=x11,drm,wayland
 		-Ddri-drivers="i965,swrast"
 		-Dgallium-drivers=""
 		-Dswr-arches=avx,avx2
@@ -46,22 +45,25 @@ src_configure() {
   		-Degl=true
 		-Dgbm=true
 		$(meson_use llvm)
-	    	-Dgles1=true
-	    	-Dgles2=true
-	    	-Dglvnd=true
-	    	-Dglx=dri
-	    	-Dshared-glapi=true
-	    	-Dtexture-float=true
+	    -Dgles1=true
+	    -Dgles2=true
+	    -Dglvnd=true
+	    -Dglx=dri
+	    -Dshared-glapi=true
+	    -Dtexture-float=true
 		-Dvulkan-drivers="intel"
 		-Dosmesa=classic
 		-Dlibunwind=true
-	    	-Dlmsensors=false
-    		-Dvalgrind=false
-		)
+	    -Dlmsensors=false
+    	-Dvalgrind=false
+	)
 	meson_src_configure
 }
 
 src_install() {
 	meson_src_install
 	rm -rf "${ED}"/usr/lib/libGLESv{1_CM,2}.so*
+
+	insinto	usr/lib/pkgconfig
+	doins ${FILESDIR}/glesv2.pc
 }

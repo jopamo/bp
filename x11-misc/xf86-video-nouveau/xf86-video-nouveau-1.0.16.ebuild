@@ -10,7 +10,7 @@ LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-RDEPEND=">=x11-libs/libdrm-2.4.60[nouveau]
+RDEPEND=">=lib-gui/libdrm-2.4.60[nouveau]
 	>=x11-libs/libpciaccess-0.10"
 DEPEND="${RDEPEND}"
 

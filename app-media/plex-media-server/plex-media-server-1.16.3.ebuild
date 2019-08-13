@@ -76,10 +76,7 @@ src_install() {
 	dodir /etc/revdep-rebuild/
 	echo "SEARCH_DIRS_MASK=\"${EPREFIX}/usr/lib/plexmediaserver\"" > "${ED}"/etc/revdep-rebuild/80plexmediaserver
 
-	# Install systemd service file
-	local INIT_NAME="${PN}.service"
-	local INIT="${FILESDIR}/${INIT_NAME}"
-	systemd_newunit "${INIT}" "${INIT_NAME}"
+	systemd_dounit "${FILESDIR}/${PN}.service"
 
 	einfo "Configuring virtualenv"
 	pushd "${ED}"/usr/lib/plexmediaserver/Resources/Python &>/dev/null || die
@@ -91,4 +88,6 @@ src_install() {
 	keepdir /var/log/pms
 
 	cleanup_install
+
+	rm -f "${ED}"/usr/lib/plexmediaserver/Resources/Python/lib/python2.7/lib-dynload/_codecs_{cn,hk,jp,kr,tw}.so
 }

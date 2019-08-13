@@ -18,7 +18,7 @@ LICENSE="|| ( LGPL-2.1 MPL-1.1 )"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="X aqua debug doc gles2 +glib opengl static-libs +svg utils valgrind xcb"
+IUSE="X debug doc +glib static-libs +svg valgrind xcb"
 
 RESTRICT="test"
 
@@ -27,11 +27,9 @@ RDEPEND="
 	>=lib-media/freetype-2.5.0.1:2
 	>=lib-media/libpng-1.6.10:0=
 	>=lib-sys/zlib-1.2.8-r1
-	>=x11-libs/pixman-0.32.4
+	>=lib-gui/pixman-0.32.4
 	>=lib-media/mesa-9.1.6
 	glib? ( >=lib-dev/glib-2.34.3:2 )
-	opengl? ( >=lib-media/mesa-9.1.6 )
-	utils? ( >=lib-dev/lzo-2.06-r1 )
 	X? (
 		>=x11-libs/libXrender-0.9.8
 		>=x11-libs/libXext-1.3.2
@@ -45,10 +43,6 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconf
 	>=sys-devel/libtool-2
 	X? ( x11-misc/xorgproto )"
-
-REQUIRED_USE="
-	gles2? ( !opengl )
-"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.12.18-disable-test-suite.patch
@@ -88,18 +82,12 @@ src_configure() {
 		$(use_enable X tee)
 		$(use_enable X xlib)
 		$(use_enable X xlib-xrender)
-		$(use_enable aqua quartz)
-		$(use_enable aqua quartz-image)
 		$(use_enable debug test-surfaces)
 		$(use_enable doc gtk-doc)
-		$(use_enable gles2 glesv2)
 		$(use_enable glib gobject)
-		$(use_enable opengl gl)
+		--disable-gl
 		$(use_enable static-libs static)
 		$(use_enable svg)
-		$(use_enable utils interpreter)
-		$(use_enable utils script)
-		$(use_enable utils trace)
 		$(use_enable valgrind)
 		$(use_enable xcb)
 		$(use_enable xcb xcb-shm)

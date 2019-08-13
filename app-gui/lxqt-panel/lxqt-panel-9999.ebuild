@@ -39,7 +39,7 @@ CDEPEND="
 	gui-lib/lxqt-globalkeys
 	x11-libs/libX11
 	cpuload? ( lib-sys/libstatgrab )
-	kbindicator? ( x11-libs/libxkbcommon )
+	kbindicator? ( lib-gui/libxkbcommon )
 	networkmonitor? ( lib-sys/libstatgrab )
 	sensors? ( sys-app/lm_sensors )
 	statusnotifier? ( >=lib-dev/libdbusmenu-qt-0.9.3_pre20160218-r1 )

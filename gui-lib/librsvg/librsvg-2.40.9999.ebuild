@@ -16,7 +16,7 @@ IUSE="+introspection tools gtk"
 
 RDEPEND="
 	>=lib-dev/glib-2.34.3:2
-	>=x11-libs/cairo-1.12.14-r4
+	>=lib-gui/cairo-1.12.14-r4
 	>=x11-libs/pango-1.36.3
 	>=lib-dev/libxml2-2.9.1-r4:2
 	>=lib-dev/libcroco-0.6.8-r1

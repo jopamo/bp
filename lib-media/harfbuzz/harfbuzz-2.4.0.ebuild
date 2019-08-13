@@ -6,13 +6,7 @@ inherit flag-o-matic libtool python-any-r1 autotools
 
 DESCRIPTION="An OpenType text shaping engine"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/HarfBuzz"
-
-if [[ ${PV} = 9999 ]] ; then
-	EGIT_REPO_URI="https://anongit.freedesktop.org/git/harfbuzz.git"
-	inherit git-r3 autotools
-else
-	SRC_URI="https://www.freedesktop.org/software/${PN}/release/${P}.tar.bz2"
-fi
+SRC_URI="https://www.freedesktop.org/software/${PN}/release/${P}.tar.bz2"
 
 LICENSE="Old-MIT ISC icu"
 SLOT="0/1"
@@ -23,7 +17,7 @@ IUSE="+cairo debug fontconfig +glib icu +introspection static-libs test +truetyp
 REQUIRED_USE="introspection? ( glib )"
 
 RDEPEND="
-	cairo? ( x11-libs/cairo:= )
+	cairo? ( lib-gui/cairo:= )
 	fontconfig? ( lib-media/fontconfig:1.0 )
 	glib? ( >=lib-dev/glib-2.38:2 )
 	icu? ( >=lib-dev/icu-51.2-r1:= )
@@ -36,12 +30,8 @@ DEPEND="${RDEPEND}
 	test? ( ${PYTHON_DEPS} )
 "
 
-if [[ ${PV} = 9999 ]] ; then
-	DEPEND+="
-		>=lib-dev/gobject-introspection-common-1.34
-		dev-util/ragel
-	"
-fi
+append-cppflags -I/usr/include/fribidi
+append-flags -lfribidi
 
 pkg_setup() {
 	use test && python-any-r1_pkg_setup

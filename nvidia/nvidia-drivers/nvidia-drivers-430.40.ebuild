@@ -277,13 +277,6 @@ src_install-libs() {
 			"libvdpau_nvidia.so.${NV_SOVER}"
 		)
 
-		if use wayland ;
-		then
-			NV_GLX_LIBRARIES+=(
-				"libnvidia-egl-wayland.so.1.0.3"
-			)
-		fi
-
 		for NV_LIB in "${NV_GLX_LIBRARIES[@]}"; do
 			donvidia "${nv_libdir}"/${NV_LIB}
 		done

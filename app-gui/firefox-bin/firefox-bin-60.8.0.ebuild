@@ -27,7 +27,7 @@ RDEPEND="gui-lib/atk
 	>=lib-dev/glib-2.26:2
 	lib-media/fontconfig
 	>=lib-media/freetype-2.4.10
-	>=x11-libs/cairo-1.10[X]
+	>=lib-gui/cairo-1.10[X]
 	x11-libs/gdk-pixbuf
 	lib-dev/nss
 	>=x11-libs/gtk+-3.4.0:3

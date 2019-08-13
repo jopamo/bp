@@ -29,17 +29,15 @@ RDEPEND="
 	>=lib-sys/zlib-1.2.5
 	lib-media/mesa
 	dbus? ( ~gui-lib/qtdbus-${PV} )
-	egl? ( lib-media/mesa[egl] )
 	eglfs? (
 		lib-media/mesa[gbm]
-		x11-libs/libdrm
+		lib-gui/libdrm
 	)
 	evdev? ( lib-sys/mtdev )
-	gles2? ( lib-media/mesa[gles2] )
 	jpeg? ( lib-media/libjpeg-turbo )
 	libinput? (
 		lib-dev/libinput:=
-		x11-libs/libxkbcommon
+		lib-gui/libxkbcommon
 	)
 	png? ( lib-media/libpng:0= )
 	tslib? ( x11-libs/tslib )
@@ -52,7 +50,7 @@ RDEPEND="
 		x11-libs/libX11
 		>=x11-libs/libXi-1.7.5
 		>=x11-libs/libxcb-1.10:=[xkb]
-		>=x11-libs/libxkbcommon-0.4.1[X]
+		>=lib-gui/libxkbcommon-0.4.1[X]
 		x11-libs/xcb-util-image
 		x11-libs/xcb-util-keysyms
 		x11-libs/xcb-util-renderutil

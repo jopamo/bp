@@ -20,14 +20,14 @@ CDEPEND="
 	>=x11-app/rgb-1.0.3
 	>=x11-app/xauth-1.0.3
 	x11-misc/xkbcomp
-	>=x11-libs/libdrm-2.4.46
-	>=x11-libs/libpciaccess-0.12.901
+	>=lib-gui/libdrm-2.4.46
+	lib-gui/libpciaccess
 	>=x11-libs/libXau-1.0.4
 	>=x11-libs/libXdmcp-1.0.2
 	>=x11-libs/libXfont2-2.0.1
 	>=x11-libs/libxkbfile-1.0.4
 	>=x11-libs/libxshmfence-1.1
-	>=x11-libs/pixman-0.27.2
+	>=lib-gui/pixman-0.27.2
 	>=x11-libs/xtrans-1.3.5
 	>=x11-misc/xbitmaps-1.0.1
 	>=x11-misc/xkeyboard-config-2.4.1-r3

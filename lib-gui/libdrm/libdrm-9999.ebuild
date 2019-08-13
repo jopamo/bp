@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit git-r3 meson
+inherit git-r3 meson flag-o-matic
 
 DESCRIPTION="X.Org libdrm library"
 HOMEPAGE="https://dri.freedesktop.org/"
@@ -18,7 +18,10 @@ DEPEND="${RDEPEND}
 	x11-misc/util-macros
 	valgrind? ( dev-util/valgrind )
 	>=lib-dev/libpthread-stubs-0.3-r1:=
-	intel? ( >=x11-libs/libpciaccess-0.13.1-r1:= )"
+	intel? ( lib-gui/libpciaccess )"
+
+append-cppflags -I/usr/include/cairo
+append-flags -lcairo
 
 src_configure() {
 	local emesonargs=(

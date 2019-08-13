@@ -23,7 +23,7 @@ RDEPEND="
 		lib-media/libpng:0=
 		lib-sys/zlib
 		lib-media/libjpeg-turbo
-		x11-libs/cairo
+		lib-gui/cairo
 		x11-libs/gtk+:3
 		x11-libs/gdk-pixbuf
 		x11-libs/libSM

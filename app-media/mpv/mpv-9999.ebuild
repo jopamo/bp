@@ -28,7 +28,6 @@ IUSE="+alsa +archive bluray cdda +cli coreaudio cplugins cuda drm dvb
 
 REQUIRED_USE="
 	|| ( cli libmpv )
-	cuda? ( opengl )
 	lcms? ( opengl )
 	opengl? ( || ( egl X raspberry-pi !cli ) )
 	xv? ( X )
@@ -43,7 +42,7 @@ COMMON_DEPEND="
 	archive? ( >=app-compression/libarchive-3.0.0:= )
 	bluray? ( >=lib-media/libbluray-0.3.0:= )
 	cdda? ( lib-dev/libcdio-paranoia )
-	drm? ( x11-libs/libdrm )
+	drm? ( lib-gui/libdrm )
 	dvd? (
 		>=lib-media/libdvdnav-4.2.0
 		>=lib-media/libdvdread-4.1.0
@@ -66,7 +65,7 @@ COMMON_DEPEND="
 	vaapi? ( x11-libs/libva:=[drm?,X?,wayland?] )
 	wayland? (
 		>=lib-dev/wayland-1.6.0
-		>=x11-libs/libxkbcommon-0.3.0
+		>=lib-gui/libxkbcommon-0.3.0
 		lib-dev/wayland-protocols
 	)
 	X? (

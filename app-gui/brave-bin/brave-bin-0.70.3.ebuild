@@ -30,7 +30,7 @@ RDEPEND="
 	lib-print/cups
 	sys-app/dbus
 	lib-sys/libcap
-	x11-libs/cairo
+	lib-gui/cairo
 	x11-libs/gdk-pixbuf
 	x11-libs/gtk+:3
 	>=x11-libs/libX11-1.5.0

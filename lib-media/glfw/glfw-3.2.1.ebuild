@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="examples wayland"
 
 RDEPEND="
-	x11-libs/libxkbcommon
+	lib-gui/libxkbcommon
 	!wayland? (
 		lib-media/mesa
 		x11-libs/libX11

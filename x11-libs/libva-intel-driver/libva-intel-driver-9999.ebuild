@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="wayland X test hybrid_codec"
 
 DEPEND=">=x11-libs/libva-2.0.0:=
-	>=x11-libs/libdrm-2.4.52
+	>=lib-gui/libdrm-2.4.52
 	wayland? ( >=lib-media/mesa-9.1.6[egl] >=lib-dev/wayland-1.11 )"
 
 src_configure() {

@@ -38,7 +38,7 @@ DEPEND="${COMMON_DEPEND}
 	lib-dev/libev
 	lib-dev/uthash
 	lib-dev/libxdg-base
-	drm? ( x11-libs/libdrm )"
+	drm? ( lib-gui/libdrm )"
 
 append-cppflags -I/usr/include/xcb
 

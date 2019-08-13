@@ -112,4 +112,7 @@ src_install() {
 
 	rm -rf "${ED}"/usr/share/cmake/{completions,editors} || die
 	rm -rf "${ED}"/usr/doc || die
+
+	#lazy update mtime
+	find "${ED}"/usr/share -type f -exec touch {} +
 }

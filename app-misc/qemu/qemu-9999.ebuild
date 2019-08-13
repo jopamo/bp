@@ -65,7 +65,7 @@ ALL_DEPEND="
 # Dependencies required for qemu tools (qemu-nbd, qemu-img, qemu-io, ...)
 # softmmu targets (qemu-system-*).
 SOFTMMU_TOOLS_DEPEND="
-	>=x11-libs/pixman-0.28.0[static-libs(+)]
+	>=lib-gui/pixman-0.28.0[static-libs(+)]
 	accessibility? (
 		gui-gnomelib/brltty[api]
 		gui-gnomelib/brltty[static-libs(+)]

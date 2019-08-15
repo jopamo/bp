@@ -8,8 +8,8 @@ DESCRIPTION="A high-quality and portable font engine"
 HOMEPAGE="https://www.freetype.org/"
 IUSE="bzip2 debug harfbuzz png static-libs"
 
-SRC_URI="mirror://sourceforge/freetype/${P/_/}.tar.bz2
-		mirror://gnu/freetype/${P/_/}.tar.bz2"
+SRC_URI="mirror://sourceforge/freetype/${P/_/}.tar.xz
+		mirror://gnu/freetype/${P/_/}.tar.xz"
 
 KEYWORDS="amd64 arm64"
 

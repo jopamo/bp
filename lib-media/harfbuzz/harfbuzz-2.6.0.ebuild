@@ -6,7 +6,7 @@ inherit flag-o-matic libtool python-any-r1 autotools
 
 DESCRIPTION="An OpenType text shaping engine"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/HarfBuzz"
-SRC_URI="https://www.freedesktop.org/software/${PN}/release/${P}.tar.bz2"
+SRC_URI="https://www.freedesktop.org/software/${PN}/release/${P}.tar.xz"
 
 LICENSE="Old-MIT ISC icu"
 SLOT="0/1"

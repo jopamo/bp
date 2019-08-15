@@ -9,13 +9,13 @@ SRC_URI="mirror://sourceforge/${PN}/lcms2-${PV}.tar.gz"
 LICENSE="MIT"
 SLOT="2"
 KEYWORDS="amd64 arm64"
+
 IUSE="jpeg static-libs test tiff"
 
-RDEPEND="
+DEPEND="
 	jpeg? ( lib-media/libjpeg-turbo )
 	tiff? ( >=lib-media/tiff-4.0.3-r6:0= )
 "
-DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/lcms2-${PV}"
 
@@ -26,11 +26,5 @@ src_configure() {
 		$(use_with tiff)
 		--without-zlib
 	)
-	ECONF_SOURCE="${S}" \
-	econf ${myeconfargs[@]}
-}
-
-src_install() {
-	default
-	find "${ED}" -name "*.la" -delete || die
+	ECONF_SOURCE="${S}" econf ${myeconfargs[@]}
 }

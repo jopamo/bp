@@ -6,7 +6,10 @@ inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="Another cute console display library"
 HOMEPAGE="https://tiswww.case.edu/php/chet/readline/rltop.html"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
+SRC_URI="mirror://gnu/${PN}/${PN}-$(ver_cut 1).$(ver_cut 2).tar.gz
+		mirror://gnu/${PN}/${PN}-$(ver_cut 1).$(ver_cut 2)-patches/${PN}80-001"
+
+S=${WORKDIR}/${PN}-$(ver_cut 1).$(ver_cut 2)
 
 LICENSE="GPL-3"
 SLOT="0/8"  # subslot matches SONAME major
@@ -17,13 +20,18 @@ IUSE="static-libs utils"
 DEPEND=">=lib-sys/ncurses-5.9-r3:0=[static-libs?]
 	dev-util/pkgconf"
 
-PATCHES=( 	"${FILESDIR}"/${PN}-5.0-no_rpath.patch
-			"${FILESDIR}"/${PN}-6.2-rlfe-tgoto.patch
-			"${FILESDIR}"/${PN}-7.0-headers.patch
+PATCHES=( 	"${WORKDIR}"/${PN}80-001
 		)
 
 src_prepare() {
-	default
+	cp ${DISTDIR}/${PN}$(ver_cut 1)$(ver_cut 2)* "${WORKDIR}/" || die
+
+	for x in ${PN}$(ver_cut 1)$(ver_cut 2)-001 ; do
+		sed -i.bak -e "s/${PN}-$(ver_cut 1).$(ver_cut 2)-patched/${PN}-$(ver_cut 1).$(ver_cut 2)/g" "${WORKDIR}/${x}" || die
+	done
+
+	(cd ../ && default)
+
 	# Force ncurses linking and use pkg-config to get the right values.
 	local ncurses_libs=$($(tc-getPKG_CONFIG) ncurses --libs)
 	sed -i \

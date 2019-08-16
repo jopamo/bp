@@ -13,14 +13,13 @@ LICENSE="LGPL-2+"
 SLOT="2"
 KEYWORDS="amd64 arm64"
 
-IUSE="+introspection +png +tiff +jpeg +jasper X"
+IUSE="+introspection +png +tiff +jpeg X"
 
 COMMON_DEPEND="
 	>=lib-dev/glib-2.48.0:2
 	png? ( >=lib-media/libpng-1.4:0= )
 	introspection? ( >=lib-dev/gobject-introspection-0.9.3:= )
 	jpeg? ( lib-media/libjpeg-turbo )
-	jasper? ( lib-media/jasper:= )
 	tiff? ( >=lib-media/tiff-3.9.2:0= )
 	X? ( x11-libs/libX11 )
 "
@@ -37,7 +36,6 @@ src_configure() {
 		$(meson_use png)
 		$(meson_use tiff)
 		$(meson_use jpeg)
-		$(meson_use jasper)
 		$(meson_use X x11)
 		$(meson_use introspection gir)
 		-Ddocs=false

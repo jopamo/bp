@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit meson git-r3 flag-o-matic
+inherit meson git-r3
 
 DESCRIPTION="OpenGL-like graphic library for Linux"
 HOMEPAGE="https://www.mesa3d.org/ https://mesa.freedesktop.org/"
@@ -32,8 +32,6 @@ RDEPEND="
 	x11-libs/libXfixes:=
 "
 
-filter-flags -flto
-
 src_configure() {
 	local emesonargs=(
 		-Db_lto=false
@@ -60,7 +58,3 @@ src_configure() {
 	meson_src_configure
 }
 
-src_install() {
-	meson_src_install
-	rm -f "${ED}"/usr/lib/pkgconfig/egl.pc
-}

@@ -35,4 +35,6 @@ src_install() {
 	default
 	insinto	usr/lib/pkgconfig
 	doins ${FILESDIR}/glesv2.pc
+
+	rm -f "${ED}"/usr/lib/pkgconfig/egl.pc
 }

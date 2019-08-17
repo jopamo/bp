@@ -45,7 +45,7 @@ src_configure() {
   		-Degl=true
 		-Dgbm=true
 		$(meson_use llvm)
-	    -Dgles1=true
+	    -Dgles1=false
 	    -Dgles2=true
 	    -Dglvnd=true
 	    -Dglx=dri
@@ -62,8 +62,5 @@ src_configure() {
 
 src_install() {
 	meson_src_install
-	rm -rf "${ED}"/usr/lib/libGLESv{1_CM,2}.so*
-
-	insinto	usr/lib/pkgconfig
-	doins ${FILESDIR}/glesv2.pc
+	rm -f "${ED}"/usr/lib/pkgconfig/egl.pc
 }

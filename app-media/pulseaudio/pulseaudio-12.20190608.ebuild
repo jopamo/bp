@@ -12,7 +12,7 @@ LICENSE="!gdbm? ( LGPL-2.1 ) gdbm? ( GPL-2 ) equalizer? ( AGPL-3+ )"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="+alsa +alsa-plugin +asyncns bluetooth +caps dbus doc equalizer +gdbm +glib
+IUSE="+alsa +alsa-plugin bluetooth +caps dbus doc equalizer +gdbm +glib
 gnome gtk ipv6 jack libsamplerate lirc native-headset neon ofono-headset
 +orc oss qt4 realtime sox ssl systemd test +udev +X"
 
@@ -46,7 +46,6 @@ RDEPEND=">=lib-media/libsndfile-1.0.20
 		>=sys-app/dbus-1.0.0
 		lib-media/sbc
 	)
-	asyncns? ( lib-net/libasyncns )
 	udev? ( >=sys-app/systemd-143[hwdb(+)] )
 	realtime? ( lib-sys/rtkit )
 	equalizer? ( sci-libs/fftw:3.0 )
@@ -135,7 +134,7 @@ src_configure() {
 		--enable-largefile
 		$(use_enable glib glib2)
 		--disable-solaris
-		$(use_enable asyncns)
+		--disable-asyncns
 		$(use_enable oss oss-output)
 		$(use_enable alsa)
 		$(use_enable lirc)

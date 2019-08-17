@@ -404,16 +404,6 @@ perl-module_src_install() {
 	fi
 	perl_remove_temppath
 
-	for f in Change* CHANGES README* TODO FAQ ${mydoc}; do
-		[[ -s ${f} ]] && dodoc ${f}
-	done
-
-	if [[ ${EAPI:-0} != 6 ]] ; then
-		if in_iuse examples && use examples ; then
-                        [[ ${#DIST_EXAMPLES[@]} -eq 0 ]] || perl_doexamples "${DIST_EXAMPLES[@]}"
-		fi
-	fi
-
 	perl_link_duallife_scripts
 
 	if [[ ${EAPI:-0} == [7] ]]; then

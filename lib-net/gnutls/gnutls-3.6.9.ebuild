@@ -12,7 +12,7 @@ LICENSE="GPL-3 LGPL-2.1"
 SLOT="0/34"
 KEYWORDS="amd64 arm64"
 
-IUSE="+cxx dane nls +pkcs11 +seccomp static-libs test +tools valgrind"
+IUSE="+cxx dane nls pkcs11 +seccomp static-libs test tools valgrind"
 
 RDEPEND=">=lib-dev/nettle-3.1:=[gmp]
 	>=lib-dev/gmp-5.1.3-r1:=

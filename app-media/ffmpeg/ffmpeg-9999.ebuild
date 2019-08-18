@@ -12,12 +12,15 @@ LICENSE="GPL-3"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug nvidia static-libs"
+IUSE="debug nvidia vaapi static-libs"
 
 DEPEND="
 	>=app-media/lame-3.99.5-r1
 	dev-lang/yasm
 	nvidia? ( lib-media/nv-codec-headers )
+	vaapi? ( 	x11-libs/libva
+				x11-libs/libva-intel-driver
+		)
 "
 
 S=${WORKDIR}/${P/_/-}
@@ -51,6 +54,7 @@ src_configure() {
         --enable-avresample \
         --enable-swresample \
         --enable-avfilter \
+        $(use_enable vaapi) \
 		--enable-libmp3lame \
 		--enable-libvorbis \
 		--enable-encoder=flac,png \

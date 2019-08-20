@@ -8,11 +8,12 @@ DESCRIPTION="Scalable Vector Graphics (SVG) rendering library"
 HOMEPAGE="https://wiki.gnome.org/Projects/LibRsvg"
 EGIT_REPO_URI="https://github.com/GNOME/librsvg.git"
 EGIT_BRANCH="librsvg-$(ver_cut 1).$(ver_cut 2)"
+
 LICENSE="LGPL-2"
 SLOT="2"
 KEYWORDS="amd64 arm64"
 
-IUSE="+introspection tools gtk"
+IUSE="+introspection"
 
 RDEPEND="
 	>=lib-dev/glib-2.34.3:2
@@ -22,16 +23,13 @@ RDEPEND="
 	>=lib-dev/libcroco-0.6.8-r1
 	>=x11-libs/gdk-pixbuf-2.30.7:2[introspection]
 	introspection? ( >=lib-dev/gobject-introspection-0.10.8:= )
-	tools? ( >=x11-libs/gtk+-3.10.0:3 )
 "
 DEPEND="${RDEPEND}
 	lib-dev/gobject-introspection-common
 	dev-util/gtk-doc
-	gtk? ( x11-libs/gtk+ )
-	>=dev-util/pkgconf-0-r1
+	dev-util/pkgconf
 "
 src_prepare() {
-	${S}/autogen.sh
 	eautoreconf
 	default
 }

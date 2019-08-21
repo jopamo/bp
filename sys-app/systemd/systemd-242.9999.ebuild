@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0/2"
 
-IUSE="acl apparmor audit build coredump cryptsetup curl +efi embed gcrypt gnutls +gnu_nss +hostnamed +hwdb importd kmod ldconfig +localed lz4 +machined +networkd pam pcre resolved +timedated timesyncd +tmpfiles qrcode +seccomp test +vconsole xkb xz zlib"
+IUSE="acl apparmor audit coredump cryptsetup curl +efi embed gcrypt gnutls +gnu_nss +hostnamed +hwdb importd kmod +ldconfig +localed lz4 +machined +networkd pam pcre resolved +timedated timesyncd +tmpfiles qrcode +seccomp test +vconsole xkb xz zlib"
 
 RESTRICT="!test? ( test )"
 
@@ -37,7 +37,6 @@ DEPEND="
 	xkb? ( >=lib-gui/libxkbcommon-0.4.1:0= )
 	xz? ( app-compression/xz-utils )
 	zlib? ( lib-sys/zlib )
-
 	app-compression/bzip2:0=
 	app-text/docbook-xml-dtd
 	app-text/docbook-xsl-stylesheets
@@ -94,14 +93,23 @@ src_configure() {
 		$(meson_use audit)
 		$(meson_use coredump)
 		$(meson_use cryptsetup libcryptsetup)
+		$(meson_use curl)
 		$(meson_use efi )
 		$(meson_use efi gnu-efi)
+		$(meson_use gcrypt)
+		$(meson_use gnutls)
 		$(meson_use gnu_nss Dnss-myhostname)
 		$(meson_use gnu_nss Dnss-mymachines)
 		$(meson_use gnu_nss Dnss-resolve)
 		$(meson_use gnu_nss Dnss-systemd)
+		$(meson_use hostnamed)
+		$(meson_use hwdb)
+		$(meson_use importd)
 		$(meson_use kmod)
+		$(meson_use ldconfig)
+		$(meson_use localed)
 		$(meson_use lz4)
+		$(meson_use machined)
 		$(meson_use networkd)
 		$(meson_use pam)
 		$(meson_use pcre pcre2)
@@ -109,8 +117,13 @@ src_configure() {
 		$(meson_use resolved)
 		$(meson_use seccomp)
 		$(meson_use test dbus)
+		$(meson_use timedated)
 		$(meson_use timesyncd)
+		$(meson_use tmpfiles)
+		$(meson_use vconsole)
 		$(meson_use xkb xkbcommon)
+		$(meson_use xz)
+		$(meson_use zlib)
 		-Dbacklight=false
 		-Dbinfmt=false
 		-Dblkid=false
@@ -121,21 +134,6 @@ src_configure() {
 		-Delfutils=false
 		-Denvironment-d=false
 		-Dfirstboot=false
-		$(meson_use gcrypt)
-		$(meson_use gnutls)
-		$(meson_use hostnamed)
-		$(meson_use hwdb)
-		$(meson_use importd)
-		$(meson_use ldconfig)
-		$(meson_use curl)
-		$(meson_use localed)
-		$(meson_use machined)
-		$(meson_use timedated)
-		$(meson_use tmpfiles)
-		$(meson_use vconsole)
-		$(meson_use zlib)
-		$(meson_use xz)
-		-Dhalt-local=""
 		-Dhibernate=false
 		-Dhtml=false
 		-Dima=false
@@ -146,7 +144,7 @@ src_configure() {
 		-Dman=false
 		-Dmicrohttpd=false
 		-Dntp-servers=""
-		-Dpamlibdir="${EPREFIX}"/usr/lib
+		-Dpamlibdir="${EPREFIX}"/usr/lib/security
 		-Dpolkit=false
 		-Dquotacheck=false
 		-Drandomseed=false

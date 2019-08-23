@@ -12,9 +12,9 @@ LICENSE="GPL-2"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="build +xattr bin X"
+IUSE="bin X gui"
 
-DEPEND="!build? ( $(python_gen_impl_dep 'ssl(+)') )
+DEPEND="
 	>=app-compression/tar-1.27
 	>=sys-app/sed-4.0.5
 	sys-devel/patch
@@ -22,20 +22,15 @@ DEPEND="!build? ( $(python_gen_impl_dep 'ssl(+)') )
 
 RDEPEND="
 	>=app-compression/tar-1.27
-	!build? (
-		sys-app/eselect
-		>=app-crypt/gnupg-2.2.4-r2[gnutls(-)]
-		sys-app/bash
-		>=dev-python/lxml-3.6.0[${PYTHON_USEDEP}]
-		>=sys-app/sed-4.0.5
-	)
+	sys-app/eselect
+	>=app-crypt/gnupg-2.2.4-r2[gnutls(-)]
+	sys-app/bash
+	>=dev-python/lxml-3.6.0[${PYTHON_USEDEP}]
+	>=sys-app/sed-4.0.5
 	>=sys-app/sandbox-2.2
-	xattr? ( >=sys-app/install-xattr-0.3 )
+	>=sys-app/install-xattr-0.3
 "
-PDEPEND="
-	!build? (
-		>=app-net/rsync-2.6.4
-	)"
+PDEPEND=">=app-net/rsync-2.6.4"
 
 pkg_pretend() {
 	local CONFIG_CHECK="~IPC_NS ~PID_NS ~NET_NS"
@@ -60,12 +55,6 @@ python_prepare_all() {
 
 	printf "[build_ext]\nportage-ext-modules=true\n" >> \
 		setup.cfg || die
-
-	if use xattr ; then
-		einfo "Adding FEATURES=xattr to make.globals ..."
-		echo -e '\nFEATURES="${FEATURES} xattr"' >> cnf/make.globals \
-			|| die "failed to append to make.globals"
-	fi
 
 	sed -e '/^sync-rsync-verify-metamanifest/s|yes|no|' \
 		-e '/^sync-webrsync-verify-signature/s|yes|no|' \

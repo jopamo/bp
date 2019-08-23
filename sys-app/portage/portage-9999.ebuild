@@ -12,7 +12,7 @@ LICENSE="GPL-2"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="build +xattr"
+IUSE="build +xattr bin X"
 
 DEPEND="!build? ( $(python_gen_impl_dep 'ssl(+)') )
 	>=app-compression/tar-1.27
@@ -145,9 +145,34 @@ python_install_all() {
 		mv "${ED}/usr/bin/${target}" "${ED}/usr/sbin/${target}" || die "sbin scripts move failed!"
 	done
 
-	insinto usr/share/portage/config/
-	doins {${FILESDIR}/make.globals,${FILESDIR}/repos.conf}
+	echo -e "[DEFAULT]\n\
+main-repo = bp\n\n\
+[bp]\n\
+location = /var/db/repos/bp\n\
+sync-type = git\n\
+sync-uri = https://gitlab.com/pjo/bp.git\n\
+auto-sync = yes" > "${ED}"/usr/share/portage/config/repos.conf
 
+	use bin && echo -e "\n[bin]\n\
+location = /var/db/repos/bin\n\
+sync-type = git\n\
+sync-uri = https://github.com/1g4-linux/bin.git\n\
+auto-sync = yes" >> "${ED}"/usr/share/portage/config/repos.conf
+
+	use X && echo -e "\n[x11]\n\
+location = /var/db/repos/x11\n\
+sync-type = git\n\
+sync-uri = https://github.com/1g4-linux/x11.git\n\
+auto-sync = yes" >> "${ED}"/usr/share/portage/config/repos.conf
+
+	use gui && echo -e "\n[gui]\n\
+location = /var/db/repos/gui\n\
+sync-type = git\n\
+sync-uri = https://github.com/1g4-linux/gui.git\n\
+auto-sync = yes" >> "${ED}"/usr/share/portage/config/repos.conf
+
+	insinto usr/share/portage/config/
+	doins ${FILESDIR}/make.globals
 }
 
 pkg_preinst() {

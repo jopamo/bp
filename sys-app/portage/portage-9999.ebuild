@@ -2,16 +2,17 @@
 
 EAPI=7
 
-inherit distutils-r1 git-r3
+inherit distutils-r1 git-r3 linux-info systemd
 
-DESCRIPTION="Fork of Portage focused on cleaning up and useful features"
-HOMEPAGE="https://github.com/1g4-linux/portage"
-EGIT_REPO_URI="https://github.com/1g4-linux/portage.git"
+DESCRIPTION="Gentoo package manager"
+HOMEPAGE="https://github.com/gentoo/portage"
+EGIT_REPO_URI="https://github.com/gentoo/portage.git"
 
 LICENSE="GPL-2"
+SLOT="0/1"
 KEYWORDS="amd64 arm64"
-SLOT="0"
-IUSE="build +ipc +native-extensions xattr"
+
+IUSE="build +xattr"
 
 DEPEND="!build? ( $(python_gen_impl_dep 'ssl(+)') )
 	>=app-compression/tar-1.27
@@ -35,17 +36,30 @@ PDEPEND="
 	!build? (
 		>=app-net/rsync-2.6.4
 	)"
-# NOTE: FEATURES=installsources requires debugedit and rsync
+
+pkg_pretend() {
+	local CONFIG_CHECK="~IPC_NS ~PID_NS ~NET_NS"
+
+	check_extra_config
+}
 
 python_prepare_all() {
 	distutils-r1_python_prepare_all
 
-	if ! use ipc ; then
-		einfo "Disabling ipc..."
-		sed -e "s:_enable_ipc_daemon = True:_enable_ipc_daemon = False:" \
-			-i pym/_emerge/AbstractEbuildProcess.py ||
-			die "failed to patch AbstractEbuildProcess.py"
-	fi
+	find ${S} -type f -print0 | xargs -0 sed -i 's/\/var\/db\/repos\/gentoo/\/var\/db\/repos\/bp/g'
+	cp {${FILESDIR}/phase-helpers.sh,${FILESDIR}/eapi7-ver-funcs.sh} bin/
+
+	einfo "Disabling --dynamic-deps by default for gentoo-dev..."
+	sed -e 's:\("--dynamic-deps", \)\("y"\):\1"n":' \
+		-i lib/_emerge/create_depgraph_params.py || \
+		die "failed to patch create_depgraph_params.py"
+
+	einfo "Enabling additional FEATURES for gentoo-dev..."
+	echo 'FEATURES="${FEATURES} ipc-sandbox network-sandbox strict-keepdir"' \
+		>> cnf/make.globals || die
+
+	printf "[build_ext]\nportage-ext-modules=true\n" >> \
+		setup.cfg || die
 
 	if use xattr ; then
 		einfo "Adding FEATURES=xattr to make.globals ..."
@@ -53,30 +67,33 @@ python_prepare_all() {
 			|| die "failed to append to make.globals"
 	fi
 
+	sed -e '/^sync-rsync-verify-metamanifest/s|yes|no|' \
+		-e '/^sync-webrsync-verify-signature/s|yes|no|' \
+		-i cnf/repos.conf || die "sed failed"
+
 	if [[ -n ${EPREFIX} ]] ; then
 		einfo "Setting portage.const.EPREFIX ..."
-		sed -e "s|^\(SANDBOX_BINARY[[:space:]]*=[[:space:]]*\"\)\(/usr/bin/sandbox\"\)|\\1${EPREFIX}\\2|" \
-			-e "s|^\(FAKEROOT_BINARY[[:space:]]*=[[:space:]]*\"\)\(/usr/bin/fakeroot\"\)|\\1${EPREFIX}\\2|" \
-			-e "s|^\(BASH_BINARY[[:space:]]*=[[:space:]]*\"\)\(/bin/bash\"\)|\\1${EPREFIX}\\2|" \
-			-e "s|^\(MOVE_BINARY[[:space:]]*=[[:space:]]*\"\)\(/bin/mv\"\)|\\1${EPREFIX}\\2|" \
-			-e "s|^\(PRELINK_BINARY[[:space:]]*=[[:space:]]*\"\)\(/usr/sbin/prelink\"\)|\\1${EPREFIX}\\2|" \
-			-e "s|^\(EPREFIX[[:space:]]*=[[:space:]]*\"\).*|\\1${EPREFIX}\"|" \
-			-i pym/portage/const.py ||
-			die "Failed to patch portage.const.EPREFIX"
+		hprefixify -e "s|^(EPREFIX[[:space:]]*=[[:space:]]*\").*|\1${EPREFIX}\"|" \
+			-w "/_BINARY/" lib/portage/const.py
 
 		einfo "Prefixing shebangs ..."
 		while read -r -d $'\0' ; do
-			local shebang=$(head -n1 "${REPLY}")
+			local shebang=$(head -n1 "$REPLY")
 			if [[ ${shebang} == "#!"* && ! ${shebang} == "#!${EPREFIX}/"* ]] ; then
-				sed -i -e "1s:.*:#!${EPREFIX}${shebang:2}:" "${REPLY}" ||
+				sed -i -e "1s:.*:#!${EPREFIX}${shebang:2}:" "$REPLY" || \
 					die "sed failed"
 			fi
-		done < <(find . -type f -print0)
+		done < <(find . -type f ! -name etc-update -print0)
 
-		einfo "Adjusting make.globals ..."
-		sed -e "s|\(/usr/portage\)|${EPREFIX}\\1|" \
-			-e "s|^\(PORTAGE_TMPDIR=\"\)\(/var/tmp\"\)|\\1${EPREFIX}\\2|" \
-			-i cnf/make.globals || die "sed failed"
+		einfo "Adjusting make.globals, repos.conf and etc-update ..."
+		hprefixify cnf/{make.globals,repos.conf} bin/etc-update
+
+		if use prefix-guest ; then
+			sed -e "s|^\(main-repo = \).*|\\1gentoo_prefix|" \
+				-e "s|^\\[gentoo\\]|[gentoo_prefix]|" \
+				-e "s|^\(sync-uri = \).*|\\1rsync://rsync.prefix.bitzolder.nl/gentoo-portage-prefix|" \
+				-i cnf/repos.conf || die "sed failed"
+		fi
 
 		einfo "Adding FEATURES=force-prefix to make.globals ..."
 		echo -e '\nFEATURES="${FEATURES} force-prefix"' >> cnf/make.globals \
@@ -84,8 +101,8 @@ python_prepare_all() {
 	fi
 
 	cd "${S}/cnf" || die
-	if [[ -f make.conf.example.${ARCH}.diff ]]; then
-		patch make.conf.example "make.conf.example.${ARCH}.diff" ||
+	if [ -f "make.conf.example.${ARCH}".diff ]; then
+		patch make.conf.example "make.conf.example.${ARCH}".diff || \
 			die "Failed to patch make.conf.example"
 	else
 		eerror ""
@@ -95,31 +112,62 @@ python_prepare_all() {
 	fi
 }
 
-python_configure_all() {
-	cat >> setup.cfg <<-EOF || die
-		[build_ext]
-		portage-ext-modules=$(usex native-extensions true false)
-	EOF
-}
-
 python_test() {
 	esetup.py test
 }
 
 python_install() {
+	# Install sbin scripts to bindir for python-exec linking
+	# they will be relocated in pkg_preinst()
 	distutils-r1_python_install \
 		--system-prefix="${EPREFIX}/usr" \
 		--bindir="$(python_get_scriptdir)" \
+		--docdir="${EPREFIX}/usr/share/doc/${PF}" \
+		--htmldir="${EPREFIX}/usr/share/doc/${PF}/html" \
 		--portage-bindir="${EPREFIX}/usr/lib/portage/${EPYTHON}" \
+		--sbindir="$(python_get_scriptdir)" \
 		--sysconfdir="${EPREFIX}/etc" \
 		"${@}"
+}
 
-	keepdir /var/log/portage/elog
+python_install_all() {
+	distutils-r1_python_install_all
+
+	systemd_dotmpfilesd "${FILESDIR}"/portage-ccache.conf
+
+	# Due to distutils/python-exec limitations
+	# these must be installed to /usr/bin.
+	local sbin_relocations='archive-conf dispatch-conf emaint env-update etc-update fixpackages regenworld'
+	einfo "Moving admin scripts to the correct directory"
+	dodir /usr/sbin
+	for target in ${sbin_relocations}; do
+		einfo "Moving /usr/bin/${target} to /usr/sbin/${target}"
+		mv "${ED}/usr/bin/${target}" "${ED}/usr/sbin/${target}" || die "sbin scripts move failed!"
+	done
+
+	insinto usr/share/portage/config/
+	doins {${FILESDIR}/make.globals,${FILESDIR}/repos.conf}
+
 }
 
 pkg_preinst() {
+	python_setup
+	python_export PYTHON_SITEDIR
+	[[ -d ${D%/}${PYTHON_SITEDIR} ]] || die "${D%/}${PYTHON_SITEDIR}: No such directory"
+	env -u DISTDIR \
+		-u PORTAGE_OVERRIDE_EPREFIX \
+		-u PORTAGE_REPOSITORIES \
+		-u PORTDIR \
+		-u PORTDIR_OVERLAY \
+		PYTHONPATH="${D%/}${PYTHON_SITEDIR}${PYTHONPATH:+:${PYTHONPATH}}" \
+		"${PYTHON}" -m portage._compat_upgrade.default_locations || die
+
+	# elog dir must exist to avoid logrotate error for bug #415911.
+	# This code runs in preinst in order to bypass the mapping of
+	# portage:portage to root:root which happens after src_install.
+	keepdir /var/log/portage/elog
 	# This is allowed to fail if the user/group are invalid for prefix users.
-	if chown portage:portage "${ED%/}"/var/log/portage{,/elog} 2>/dev/null ; then
-		chmod g+s,ug+rwx "${ED%/}"/var/log/portage{,/elog}
+	if chown portage:portage "${ED}"/var/log/portage{,/elog} 2>/dev/null ; then
+		chmod g+s,ug+rwx "${ED}"/var/log/portage{,/elog}
 	fi
 }

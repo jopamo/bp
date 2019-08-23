@@ -17,6 +17,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs test"
 
+RESTRICT="mirror"
+
 DEPEND="lib-media/lcms:2=
 	lib-media/libpng:0=
 	lib-media/tiff:0=

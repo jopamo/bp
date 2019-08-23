@@ -10,12 +10,15 @@ DRIVER_PV="418.67"
 DESCRIPTION="NVIDIA CUDA Software Development Kit"
 HOMEPAGE="https://developer.nvidia.com/cuda-zone"
 SRC_URI="https://developer.nvidia.com/compute/cuda/${MYD}/Prod/local_installers/cuda_${PV}_${DRIVER_PV}_linux.run -> cuda_${PV}_${DRIVER_PV}_linux.run"
+S=${WORKDIR}/builds/cuda-samples
 
 LICENSE="CUDPP"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 IUSE="+cuda debug +doc examples opencl mpi"
+
+RESTRICT="test mirror"
 
 RDEPEND="
 	nvidia/nvidia-cuda-toolkit
@@ -27,10 +30,6 @@ RDEPEND="
 		mpi? ( virtual/mpi )
 		)"
 DEPEND="${RDEPEND}"
-
-RESTRICT="test"
-
-S=${WORKDIR}/builds/cuda-samples
 
 QA_EXECSTACK=(
 	opt/cuda/sdk/0_Simple/cdpSimplePrint/cdpSimplePrint

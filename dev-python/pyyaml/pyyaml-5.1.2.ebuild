@@ -11,23 +11,10 @@ HOMEPAGE="https://pyyaml.org/wiki/PyYAML https://pypi.org/project/PyYAML/"
 SRC_URI="https://pyyaml.org/download/${PN}/${MY_P}.tar.gz"
 
 LICENSE="MIT"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="libyaml"
-
-RDEPEND="libyaml? ( dev-libs/libyaml )"
-
 S="${WORKDIR}/${MY_P}"
-
-PATCHES=(
-	# bug #659348
-	"${FILESDIR}/${PN}-5.1-cve-2017-18342.patch"
-)
-
-python_configure_all() {
-	mydistutilsargs=( $(use_with libyaml) )
-}
 
 python_test() {
 	esetup.py test

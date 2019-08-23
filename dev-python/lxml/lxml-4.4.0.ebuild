@@ -56,4 +56,7 @@ python_test() {
 
 python_install_all() {
 	distutils-r1_python_install_all
+
+	#lazy update mtime
+	find "${ED}"/usr/share -type f -exec touch {} +
 }

@@ -22,7 +22,7 @@ SLOT="0/1"
 LICENSE="Plex"
 KEYWORDS="amd64 arm64"
 
-RESTRICT="bindist strip"
+RESTRICT="bindist strip mirror"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 

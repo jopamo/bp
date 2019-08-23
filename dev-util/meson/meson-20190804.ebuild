@@ -35,4 +35,7 @@ python_install_all() {
 	doins -r data/syntax-highlighting/vim/{ftdetect,indent,syntax}
 
 	rm -rf "${ED}"/usr/share/polkit-1
+
+	#lazy update mtime
+	find "${ED}"/usr/share -type f -exec touch {} +
 }

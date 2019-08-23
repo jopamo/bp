@@ -14,10 +14,12 @@ SRC_URI="https://developer.nvidia.com/compute/cuda/${MYD}/Prod/local_installers/
 LICENSE="NVIDIA-CUDA"
 SLOT="0/${PV}"
 KEYWORDS="amd64 arm64"
+
 IUSE="debugger doc eclipse profiler"
 
-DEPEND=""
-RDEPEND="${DEPEND}
+RESTRICT="mirror"
+
+DEPEND="
 	nvidia/nvidia-drivers
 	debugger? (
 		lib-sys/libtermcap-compat

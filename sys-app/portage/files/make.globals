@@ -1,0 +1,78 @@
+CFLAGS=""
+CXXFLAGS=""
+LDFLAGS=""
+FFLAGS=""
+FCFLAGS=""
+ACCEPT_LICENSE="*"
+ACCEPT_PROPERTIES="*"
+ACCEPT_RESTRICT="*"
+GENTOO_MIRRORS="https://1g4.org/files"
+DISTDIR="/var/cache/distfiles"
+PKGDIR="/var/cache/packages"
+RPMDIR="/dev/null"
+PORTAGE_TMPDIR="/var/tmp"
+EGIT_CLONE_TYPE=shallow
+BINPKG_COMPRESS="xz"
+BINPKG_COMPRESS_FLAGS="-e9"
+
+FETCHCOMMAND="wget -t 3 -T 60 -O \"\${DISTDIR}/\${FILE}\" \"\${URI}\""
+RESUMECOMMAND="wget -c -t 3 -T 60 -O \"\${DISTDIR}/\${FILE}\" \"\${URI}\""
+FETCHCOMMAND_RSYNC="rsync -avP \"\${URI}\" \"\${DISTDIR}/\${FILE}\""
+RESUMECOMMAND_RSYNC="rsync -avP \"\${URI}\" \"\${DISTDIR}/\${FILE}\""
+FETCHCOMMAND_SSH="bash -c \"x=\\\${2#ssh://} ; host=\\\${x%%/*} ; port=\\\${host##*:} ; host=\\\${host%:*} ; [[ \\\${host} = \\\${port} ]] && port= ; exec rsync --rsh=\\\"ssh \\\${port:+-p\\\${port}} \\\${3}\\\" -avP \\\"\\\${host}:/\\\${x#*/}\\\" \\\"\\\$1\\\"\" rsync \"\${DISTDIR}/\${FILE}\" \"\${URI}\" \"\${PORTAGE_SSH_OPTS}\""
+RESUMECOMMAND_SSH=${FETCHCOMMAND_SSH}
+
+# NOTE: bash eval is used to evaluate quotes embedded inside PORTAGE_SSH_OPTS
+FETCHCOMMAND_SFTP="bash -c \"x=\\\${2#sftp://} ; host=\\\${x%%/*} ; port=\\\${host##*:} ; host=\\\${host%:*} ; [[ \\\${host} = \\\${port} ]] && port= ; eval \\\"declare -a ssh_opts=(\\\${3})\\\" ; exec sftp \\\${port:+-P \\\${port}} \\\"\\\${ssh_opts[@]}\\\" \\\"\\\${host}:/\\\${x#*/}\\\" \\\"\\\$1\\\"\" sftp \"\${DISTDIR}/\${FILE}\" \"\${URI}\" \"\${PORTAGE_SSH_OPTS}\""
+
+# Default user options
+FEATURES="assume-digests binpkg-docompress binpkg-dostrip binpkg-logs
+          config-protect-if-modified distlocks ebuild-locks
+          fixlafiles ipc-sandbox merge-sync
+          parallel-fetch pid-sandbox preserve-libs protect-owned
+          sandbox sfperms strict unknown-features-warn unmerge-logs
+          unmerge-orphans userfetch userpriv usersandbox usersync"
+
+COLLISION_IGNORE="/lib/modules/* *.py[co] *\$py.class"
+UNINSTALL_IGNORE="/lib/modules/*"
+CLEAN_DELAY="5"
+EMERGE_WARNING_DELAY="10"
+AUTOCLEAN="yes"
+
+PORTAGE_BZIP2_COMMAND="bzip2"
+PORTAGE_COMPRESS_EXCLUDE_SUFFIXES="css gif htm[l]? jp[e]?g js pdf png"
+PORTAGE_FETCH_CHECKSUM_TRY_MIRRORS="5"
+PORTAGE_FETCH_RESUME_MIN_SIZE="350K"
+PORTAGE_RSYNC_RETRIES="-1"
+#RSYNC_TIMEOUT="180"
+
+PORTAGE_RSYNC_OPTS="--recursive --links --safe-links --perms --times --omit-dir-times --compress --force --whole-file --delete --stats --human-readable --timeout=180 --exclude=/distfiles --exclude=/local --exclude=/packages --exclude=/.git"
+
+# The number of days after the last `emerge --sync` that a warning
+# message should be produced.
+PORTAGE_SYNC_STALE="30"
+
+# Executed before emerge exit if FEATURES=clean-logs is enabled.
+PORT_LOGDIR_CLEAN="find \"\${PORT_LOGDIR}\" -type f ! -name \"summary.log*\" -mtime +7 -delete"
+
+# Minimal CONFIG_PROTECT
+CONFIG_PROTECT="/etc"
+CONFIG_PROTECT_MASK="/etc/env.d"
+
+# Disable auto-use
+USE_ORDER="env:pkg:conf:defaults:pkginternal:repo:env.d"
+
+# Mode bits for ${WORKDIR} (see ebuild.5).
+PORTAGE_WORKDIR_MODE="0700"
+
+# Some defaults for elog
+PORTAGE_ELOG_CLASSES="log warn error"
+PORTAGE_ELOG_SYSTEM="save_summary:log,warn,error,qa echo"
+
+PORTAGE_ELOG_MAILURI="root"
+PORTAGE_ELOG_MAILSUBJECT="[portage] ebuild log for \${PACKAGE} on \${HOST}"
+PORTAGE_ELOG_MAILFROM="portage@localhost"
+PORTAGE_GPG_SIGNING_COMMAND="gpg --sign --digest-algo SHA256 --clearsign --yes --default-key \"\${PORTAGE_GPG_KEY}\" --homedir \"\${PORTAGE_GPG_DIR}\" \"\${FILE}\""
+PORTAGE_XATTR_EXCLUDE="btrfs.* security.evm security.ima
+	security.selinux system.nfs4_acl user.apache_handler
+	user.Beagle.* user.dublincore.* user.mime_encoding user.xdg.*"

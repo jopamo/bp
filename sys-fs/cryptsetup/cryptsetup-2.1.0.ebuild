@@ -28,7 +28,7 @@ LIB_DEPEND="
 	app-crypt/argon2:=[static-libs(+)]
 	gcrypt? ( lib-dev/libgcrypt:0=[static-libs(+)] )
 	nettle? ( >=lib-dev/nettle-2.4[static-libs(+)] )
-	ssl? ( lib-dev/libressl:0=[static-libs(+)] )
+	ssl? ( virtual/ssl[static-libs(+)] )
 	pwquality? ( lib-dev/libpwquality[static-libs(+)] )
 	sys-fs/lvm2[static-libs(+)]
 	udev? ( sys-app/systemd[static-libs(+)] )"

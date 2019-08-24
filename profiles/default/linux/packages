@@ -27,7 +27,7 @@
 *app-misc/pax-utils
 *app-misc/vim
 *lib-dev/elfutils
-*sys-app/systemd
+*virtual/service-manager
 *sys-app/busybox
 *sys-app/util-linux
 *app-portage/eix

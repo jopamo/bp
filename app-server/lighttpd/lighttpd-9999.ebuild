@@ -9,7 +9,7 @@ HOMEPAGE="http://www.lighttpd.net/"
 EGIT_REPO_URI="https://git.lighttpd.net/lighttpd/lighttpd1.4.git"
 
 LICENSE="BSD GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="bzip2 dbi fam gdbm geoip krb5 ldap libev libunwind lua memcached mysql ssl pcre php test postgres webdav xattr zlib static"
@@ -22,7 +22,7 @@ CDEPEND="
 	mysql?    ( >=virtual/mysql-4.0 )
 	>=lib-dev/libpcre-3.1
 	php?      ( dev-lang/php:*[cgi] )
-	ssl? ( >=lib-dev/libressl-0.9.7:= )
+	ssl? ( lib-net/libressl )
 	xattr? ( sys-app/attr )
 	>=lib-sys/zlib-1.1"
 

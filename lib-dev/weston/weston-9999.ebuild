@@ -39,13 +39,13 @@ RDEPEND="
 	x11-misc/xkeyboard-config
 	fbdev? (
 		>=lib-sys/mtdev-1.1.0
-		>=sys-app/systemd-136
+		virtual/service-manager
 	)
 	colord? ( >=x11-misc/colord-0.1.27 )
 	drm? (
 		lib-media/mesa
 		>=lib-sys/mtdev-1.1.0
-		>=sys-app/systemd-136
+		virtual/service-manager
 	)
 	editor? ( x11-libs/pango )
 	gles2? (
@@ -59,8 +59,8 @@ RDEPEND="
 	)
 	systemd? (
 		lib-sys/pambase
-		>=sys-app/dbus-1.6
-		>=sys-app/systemd-209[pam]
+		sys-app/dbus
+		sys-app/systemd[pam]
 	)
 	launch? ( lib-sys/pambase )
 	X? (

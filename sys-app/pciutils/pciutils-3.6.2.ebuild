@@ -14,16 +14,10 @@ KEYWORDS="amd64 arm64"
 IUSE="dns +kmod static-libs +udev zlib"
 
 DEPEND="
-	kmod? ( sys-app/kmod )
+	kmod? ( sys-app/kmod
+			dev-util/pkgconf
+		 )
 	zlib? ( >=lib-sys/zlib-1.2.8-r1[static-libs(+)?] )
-"
-RDEPEND="
-	${DEPEND}
-	sys-app/systemd
-"
-DEPEND="
-	${DEPEND}
-	kmod? ( dev-util/pkgconf )
 "
 
 switch_config() {

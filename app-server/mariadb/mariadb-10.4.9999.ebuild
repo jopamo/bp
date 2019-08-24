@@ -31,10 +31,9 @@ COMMON_DEPEND="
 	>=sys-devel/texinfo-4.7-r1
 	jemalloc? ( lib-dev/jemalloc:0= )
 	tcmalloc? ( dev-util/google-perftools:0= )
-	systemtap? ( >=dev-util/systemtap-1.3:0= )
 	>=lib-sys/zlib-1.2.3:0=
 	yassl? ( lib-net/gnutls:0= )
-	!yassl? ( >=lib-dev/libressl-1.0.0:0= )
+	!yassl? ( virtual/ssl )
 	lib-sys/ncurses:0=
 	!bindist? (
 		>=lib-sys/readline-4.1:0=

@@ -16,7 +16,7 @@ HOMEPAGE="https://nghttp2.org/"
 KEYWORDS="amd64 arm64"
 
 LICENSE="MIT"
-SLOT="0/1.14" # <C++>.<C> SONAMEs
+SLOT="0"
 IUSE="cxx debug hpack-tools jemalloc static-libs test utils xml"
 
 RDEPEND="
@@ -25,7 +25,7 @@ RDEPEND="
 	jemalloc? ( lib-dev/jemalloc )
 	utils? (
 		>=lib-dev/libev-4.15
-		>=lib-dev/libressl-1.0.2:0[-bindist]
+		virtual/ssl
 		>=lib-sys/zlib-1.2.3
 		lib-net/c-ares:=
 	)

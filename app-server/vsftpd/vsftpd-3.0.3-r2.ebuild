@@ -16,7 +16,7 @@ IUSE="caps pam ssl xinetd"
 
 DEPEND="lib-sys/libcap
 	pam? ( lib-sys/pam )
-	ssl? ( lib-dev/libressl:0= )
+	ssl? ( virtual/ssl )
 "
 RDEPEND="${DEPEND}
 	xinetd? ( sys-app/xinetd )"
@@ -66,4 +66,6 @@ src_install() {
 	systemd_dounit "${FILESDIR}/${PN}.service"
 	systemd_newunit "${FILESDIR}/${PN}_at.service" "${PN}@.service"
 	systemd_dounit "${FILESDIR}/${PN}.socket"
+
+	cleanup_install
 }

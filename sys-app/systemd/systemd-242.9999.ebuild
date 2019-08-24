@@ -14,7 +14,9 @@ KEYWORDS="amd64 arm64"
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0/2"
 
-IUSE="acl apparmor audit coredump cryptsetup curl +efi embed gcrypt gnutls +gnu_nss +hostnamed +hwdb importd kmod +ldconfig +localed lz4 +machined +networkd pam pcre resolved +timedated timesyncd +tmpfiles qrcode +seccomp test +vconsole xkb xz zlib"
+IUSE="acl apparmor audit coredump cryptsetup curl +efi embed gcrypt gnutls +gnu_nss +hostnamed +hwdb importd kmod +ldconfig +localed lz4 +machined +networkd pam pcre resolve +timedated timesyncd +tmpfiles qrcode +seccomp test +vconsole xkb xz zlib"
+
+REQUIRED_USE="embed? ( !acl !efi !gcrypt !gnu_nss !gnutls !hostnamed !hwdb !ldconfig !localed !machined !networkd !pam !pcre !seccomp !timedated !tmpfiles !vconsole !zlib )"
 
 RESTRICT="!test? ( test )"
 
@@ -98,10 +100,10 @@ src_configure() {
 		$(meson_use efi gnu-efi)
 		$(meson_use gcrypt)
 		$(meson_use gnutls)
-		$(meson_use gnu_nss Dnss-myhostname)
-		$(meson_use gnu_nss Dnss-mymachines)
-		$(meson_use gnu_nss Dnss-resolve)
-		$(meson_use gnu_nss Dnss-systemd)
+		$(meson_use gnu_nss nss-myhostname)
+		$(meson_use gnu_nss nss-mymachines)
+		$(meson_use gnu_nss nss-resolve)
+		$(meson_use gnu_nss nss-systemd)
 		$(meson_use hostnamed)
 		$(meson_use hwdb)
 		$(meson_use importd)
@@ -114,7 +116,7 @@ src_configure() {
 		$(meson_use pam)
 		$(meson_use pcre pcre2)
 		$(meson_use qrcode qrencode)
-		$(meson_use resolved)
+		$(meson_use resolve)
 		$(meson_use seccomp)
 		$(meson_use test dbus)
 		$(meson_use timedated)
@@ -162,7 +164,7 @@ src_configure() {
 	)
 
 	local embed=(
-		-Dacl=false
+		-Dacl=true
 		-Dadm-group=false
 		-Dapparmor=false
 		-Daudit=false
@@ -208,20 +210,24 @@ src_configure() {
 		-Dmyhostname=false
 		-Dnetworkd=true
 		-Dnls=false
+		-Dnss-myhostname=false
+		-Dnss-mymachines=false
+		-Dnss-resolve=false
 		-Dnss-systemd=false
 		-Dntp-servers=""
 		-Dpam=true
-		-Dpamlibdir="${EPREFIX}"/usr/lib
+		-Dpamlibdir="${EPREFIX}"/usr/lib/security
 		-Dpolkit=false
+		-Dportabled=false
 		-Dqrencode=false
 		-Dquotacheck=false
 		-Drandomseed=false
 		-Drc-local=""
-		-Dresolved=false
+		-Dresolve=false
 		-Drfkill=false
 		-Drootlibdir="${EPREFIX}"/usr/lib
 		-Drootprefix="${EPREFIX}"/usr
-		-Dseccomp=false
+		-Dseccomp=true
 		-Dselinux=false
 		-Dsmack=false
 		-Dsysusers=false
@@ -273,7 +279,7 @@ pkg_postinst() {
 	enewgroup systemd-journal
 
 	use networkd && newusergroup systemd-network
-	use resolved && newusergroup systemd-resolve
+	use resolve && newusergroup systemd-resolve
 	use timesyncd && newusergroup systemd-timesync
 	use coredump && newusergroup systemd-coredump
 
@@ -284,6 +290,6 @@ pkg_postinst() {
 	udev_reload || FAIL=1
 
 	systemd_reenable getty@tty1.service remote-fs.target
-	use resolved && systemd_reenable systemd-resolved.service
+	use resolve && systemd_reenable systemd-resolve.service
 	use networkd && systemd_reenable systemd-networkd.service
 }

@@ -20,7 +20,7 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 CDEPEND=">=lib-dev/expat-2.1.0-r3
 	>=lib-dev/libevent-2.0.21:0=
-	lib-dev/libressl
+	virtual/ssl
 	dnscrypt? ( lib-dev/libsodium )
 	dnstap? (
 		lib-dev/fstrm

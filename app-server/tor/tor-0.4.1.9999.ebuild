@@ -18,7 +18,7 @@ IUSE="lzma scrypt seccomp systemd tor-hardening test zstd"
 DEPEND="
 	lib-dev/libevent[ssl]
 	lib-sys/zlib
-	lib-dev/libressl
+	virtual/ssl
 	lzma? ( app-compression/xz-utils )
 	scrypt? ( app-crypt/libscrypt )
 	seccomp? ( lib-sys/libseccomp )

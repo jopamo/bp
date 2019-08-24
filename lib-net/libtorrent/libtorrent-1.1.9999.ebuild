@@ -15,7 +15,7 @@ SLOT="0/1"
 
 RDEPEND="
 	lib-dev/boost
-	lib-dev/libressl
+	virtual/ssl
 "
 DEPEND="${RDEPEND}
 	sys-devel/libtool

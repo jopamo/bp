@@ -24,7 +24,8 @@ IUSE="debug"
 
 RESTRICT="test"
 
-CDEPEND="sys-app/systemd
+CDEPEND="
+	virtual/service-manager
 	dev-util/pkgconf
 	>=sys-app/kmod-15[tools]
 	"

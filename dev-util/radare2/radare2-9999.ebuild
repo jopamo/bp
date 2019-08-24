@@ -15,7 +15,7 @@ SLOT="0"
 IUSE="ssl +system-capstone"
 
 DEPEND="
-	ssl? ( lib-dev/libressl:0= )
+	ssl? ( virtual/ssl )
 	system-capstone? ( lib-dev/capstone:0= )
 "
 

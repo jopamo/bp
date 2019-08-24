@@ -20,7 +20,7 @@ DEPEND=">=lib-sys/ncurses-5.2-r3:0=
 	imlib? ( >=lib-media/imlib2-1.1.0[X] )
 	xface? ( lib-media/compface )
 	gpm? ( >=lib-sys/gpm-1.19.3-r5 )
-	ssl? ( lib-dev/libressl:0= )
+	ssl? ( virtual/ssl )
 "
 
 src_prepare() {

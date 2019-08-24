@@ -17,7 +17,7 @@ LICENSE="PHP-3.01
 	gd? ( gd )
 	unicode? ( BSD-2 LGPL-2.1 )"
 
-SLOT=0
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 # We can build the following SAPIs in the given order
@@ -75,7 +75,7 @@ COMMON_DEPEND="
 	soap? ( >=lib-dev/libxml2-2.6.8 )
 	spell? ( >=app-text/aspell-0.50 )
 	sqlite? ( >=lib-sys/sqlite-3.7.6.3 )
-	ssl? ( lib-dev/libressl:0= )
+	ssl? ( virtual/ssl )
 	tidy? ( || ( app-text/tidy-html5 app-text/htmltidy ) )
 	tokyocabinet? ( dev-db/tokyocabinet )
 	truetype? ( lib-media/freetype )

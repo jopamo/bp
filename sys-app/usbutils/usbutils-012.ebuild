@@ -13,10 +13,10 @@ SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 DEPEND="lib-dev/libusb
-	sys-app/systemd
+	virtual/service-manager
 	app-compression/xz-utils
 	dev-util/pkgconf
-	sys-app/systemd"
+"
 
 src_prepare() {
 	default

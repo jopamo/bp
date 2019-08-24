@@ -3,4 +3,3 @@ app-media/avidemux qt5
 lib-dev/libxml2 python
 sys-fs/cryptsetup -ssl
 sys-devel/gcc lto
-sys-app/systemd -acl -efi -gcrypt -gnu_nss -gnutls -hostnamed -hwdb -ldconfig -localed -machined -networkd -pam -pcre -seccomp -timedated -tmpfiles -vconsole -zlib embed

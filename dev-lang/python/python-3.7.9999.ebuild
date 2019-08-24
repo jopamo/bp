@@ -61,8 +61,8 @@ src_configure() {
 		$(use_enable ipv6)
 		$(use_with valgrind)
 		$(usex embed --disable-loadable-sqlite-extensions --enable-loadable-sqlite-extensions)
-		--infodir="${ED}"/usr/share/info
-		--mandir="${ED}"/usr/share/man
+		--infodir="${EPREFIX}"/usr/share/info
+		--mandir="${EPREFIX}"/usr/share/man
 		--with-computed-gotos
 		--with-dbmliborder="gdbm"
 		--with-libc=
@@ -71,7 +71,6 @@ src_configure() {
 		--with-system-ffi
 		--with-lto
 		--disable-rpath
-		--enable-loadable-sqlite-extensions
 		--with-threads
 	)
 

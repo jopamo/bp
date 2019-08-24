@@ -65,6 +65,7 @@ src_configure() {
 		--with-pid-dir="${EPREFIX}"/run
 		--with-ldflags="${LDFLAGS}"
 		--disable-strip
+		--without-rpath
 		--sysconfdir="${EPREFIX}"/etc/ssh
 		--datadir="${EPREFIX}"/usr/share/openssh
 		--with-privsep-path="${EPREFIX}"/var/empty

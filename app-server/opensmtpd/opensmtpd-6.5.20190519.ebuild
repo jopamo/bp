@@ -19,12 +19,12 @@ else
 fi
 
 LICENSE="ISC BSD BSD-1 BSD-2 BSD-4"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="pam +mta"
 
-DEPEND="lib-dev/libressl
+DEPEND="virtual/ssl
 		lib-sys/zlib
 		pam? ( lib-sys/pam )
 		lib-dev/libevent

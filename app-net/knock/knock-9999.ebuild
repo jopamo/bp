@@ -27,4 +27,5 @@ src_configure() {
 
 src_install() {
 	emake DESTDIR="${D}" docdir="${EROOT}/usr/share/doc/${PF}" install
+	cleanup_install
 }

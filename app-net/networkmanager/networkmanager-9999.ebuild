@@ -30,12 +30,11 @@ COMMON_DEPEND="
 	app-net/iputils
 	sys-app/util-linux
 	lib-sys/readline:0=
-	>=sys-app/systemd-175:=
+	virtual/service-manager
 	gnutls? (
 		lib-dev/libgcrypt:0=
 		>=lib-net/gnutls-2.12:= )
 	json? ( lib-dev/jansson )
-	systemd? ( >=sys-app/systemd-209:0= )
 "
 RDEPEND="${COMMON_DEPEND}
 	|| (

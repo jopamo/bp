@@ -40,10 +40,10 @@ esac
 
 if [[ "${SSL_DEPS_SKIP}" == "0" ]]; then
 	if [[ "${SSL_CERT_MANDATORY}" == "0" ]]; then
-		DEPEND="${SSL_CERT_USE}? ( lib-dev/libressl:0 )"
+		DEPEND="${SSL_CERT_USE}? ( lib-net/libressl )"
 		IUSE="${SSL_CERT_USE}"
 	else
-		DEPEND="lib-dev/libressl:0"
+		DEPEND="lib-net/libressl"
 	fi
 fi
 

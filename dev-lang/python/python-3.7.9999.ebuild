@@ -29,7 +29,7 @@ DEPEND="!embed? ( lib-sys/sqlite )
 		lib-net/libnsl
 		>=lib-sys/ncurses-5.2:0=
 		>=lib-sys/readline-4.1:0=
-		lib-dev/libressl:0=
+		virtual/ssl
 		dev-util/pkgconf
 "
 PDEPEND=">=app-eselect/eselect-python-20140125-r1"
@@ -46,6 +46,7 @@ src_prepare() {
 	rm -fr Modules/zlib
 
 	use embed && eapply ${FILESDIR}/shrink_python.patch
+	eapply ${FILESDIR}/fix-xattrs-glibc.patch
 
 	default
 }
@@ -60,8 +61,8 @@ src_configure() {
 		$(use_enable ipv6)
 		$(use_with valgrind)
 		$(usex embed --disable-loadable-sqlite-extensions --enable-loadable-sqlite-extensions)
-		--infodir='${prefix}/share/info'
-		--mandir='${prefix}/share/man'
+		--infodir="${ED}"/usr/share/info
+		--mandir="${ED}"/usr/share/man/man1
 		--with-computed-gotos
 		--with-dbmliborder="gdbm"
 		--with-libc=
@@ -69,6 +70,9 @@ src_configure() {
 		--with-system-expat
 		--with-system-ffi
 		--with-lto
+		--disable-rpath
+		--enable-loadable-sqlite-extensions
+		--with-threads
 	)
 
 	OPT="" econf "${myeconfargs[@]}"

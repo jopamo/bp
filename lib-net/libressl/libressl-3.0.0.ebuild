@@ -9,10 +9,10 @@ HOMEPAGE="https://www.libressl.org/"
 SRC_URI="https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/${P}.tar.gz"
 
 LICENSE="ISC openssl"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="asm static-libs test"
+IUSE="static-libs test"
 
 PDEPEND="app-misc/ca-certificates"
 
@@ -41,7 +41,7 @@ src_prepare() {
 
 src_configure() {
 	ECONF_SOURCE="${S}" econf \
-		$(use_enable asm) \
+		--enable-asm \
 		$(use_enable static-libs static)
 }
 

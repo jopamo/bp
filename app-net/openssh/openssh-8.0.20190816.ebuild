@@ -29,7 +29,7 @@ REQUIRED_USE="pie? ( !static )
 LIB_DEPEND="
 	audit? ( sys-app/audit[static-libs(+)] )
 	libedit? ( lib-dev/libedit:=[static-libs(+)] )
-	ssl? ( lib-dev/libressl	)
+	ssl? ( lib-net/libressl )
 	>=lib-sys/zlib-1.2.3:=[static-libs(+)]"
 
 RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )

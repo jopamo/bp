@@ -43,7 +43,7 @@ src_configure() {
 		--with-libpcre2
 		--with-curl
 		--with-expat
-		--with-openssl
+		--without-openssl
 		--without-tcltk
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

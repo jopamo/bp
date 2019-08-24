@@ -11,10 +11,12 @@ EGIT_REPO_URI="https://github.com/libevent/libevent"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="debug +ssl static-libs test"
+
 RESTRICT="test"
 
-DEPEND="ssl? ( >=lib-dev/libressl-1.0.1h-r2:0 )"
+DEPEND="ssl? ( virtual/ssl )"
 
 filter-flags -flto -Wl,-z,defs -Wl,-z,relro
 

@@ -12,13 +12,13 @@ EGIT_BRANCH="mbedtls-$(ver_cut 1).$(ver_cut 2)"
 KEYWORDS="amd64 arm64"
 
 LICENSE="Apache-2.0"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="doc havege programs test zlib"
 
-RDEPEND="
-	programs? ( lib-dev/libressl:0= )
+RDEPEND="app-misc/ca-certificates
+	programs? ( lib-net/libressl )
 	zlib? ( >=lib-sys/zlib-1.2.8-r1 )"
 DEPEND="${RDEPEND}
 	doc? ( app-text/doxygen app-media/graphviz )

@@ -30,7 +30,7 @@ CDEPEND="
 	!iproute2? ( sys-app/net-tools )
 	pam? ( lib-sys/pam )
 	ssl? (
-		!mbedtls? ( >=lib-dev/libressl-0.9.8:* )
+		!mbedtls? ( virtual/ssl )
 		mbedtls? ( lib-net/mbedtls )
 	)
 	lz4? ( app-compression/lz4 )

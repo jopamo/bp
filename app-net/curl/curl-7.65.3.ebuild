@@ -10,7 +10,7 @@ LICENSE="MIT"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="ldap adns ssh test ipv6 static-libs mbedtls"
+IUSE="ldap adns ssh test ipv6 static-libs"
 
 RDEPEND="ldap? ( app-net/openldap )
 		adns? ( lib-net/c-ares:0 )
@@ -20,7 +20,7 @@ RDEPEND="ldap? ( app-net/openldap )
 
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconf-0-r1
-	mbedtls? ( lib-net/mbedtls )
+	lib-net/mbedtls
 	test? (
 		sys-app/diffutils
 		dev-lang/perl
@@ -39,16 +39,14 @@ src_configure() {
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
 		$(use_enable static-libs static)
-		$(use_with mbedtls mbedtls)
+		--with-mbedtls
+		--with-polarssl
 		$(use_enable ldap)
 		$(use_enable ldap ldaps)
 		$(use_with ssh libssh2)
 		$(use_enable adns ares)
 		$(use_enable ipv6)
 		--with-zlib
-		--without-ca-bundle
-		--without-nss
-		--enable-threaded-resolver
 		--with-random=/dev/urandom
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

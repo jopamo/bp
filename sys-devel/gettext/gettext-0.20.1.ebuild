@@ -15,11 +15,13 @@ KEYWORDS="amd64 arm64"
 IUSE="acl openmp static-libs"
 
 DEPEND="acl? ( sys-app/acl )
+		app-compression/xz-utils
 		lib-dev/libxml2"
 
 RDEPEND="lib-dev/expat"
 
 append-flags -lm
+filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
 
 PATCHES=( ${FILESDIR}/2336451ed68d91ff4b5ae1acbc1eca30e47a86a9.patch )
 

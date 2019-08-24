@@ -14,10 +14,12 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+perl socks5 +proxy"
 
-DEPEND="lib-sys/ncurses:0=
-	>=lib-dev/glib-2.6.0
-	lib-dev/libressl:=
-	dev-lang/perl:="
+DEPEND="
+	lib-sys/ncurses
+	lib-dev/glib
+	dev-lang/perl
+	lib-net/libressl
+"
 
 filter-flags -Wl,-z,defs -Wl,-z,relro -flto\=\*
 

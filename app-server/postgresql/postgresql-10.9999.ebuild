@@ -29,7 +29,7 @@ CDEPEND="
 		python? ( ${PYTHON_DEPS} )
 		readline? ( lib-sys/readline:0= )
 		server? ( systemd? ( sys-app/systemd ) )
-		ssl? ( >=lib-dev/libressl-0.9.6-r1:0= )
+		ssl? ( virtual/ssl )
 		tcl? ( >=dev-lang/tcl-8:0= )
 		xml? ( lib-dev/libxml2 lib-dev/libxslt )
 		zlib? ( lib-sys/zlib )

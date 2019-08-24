@@ -15,7 +15,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="commoncrypto opencl openmp +ssl pcap rexgen"
 
-DEPEND="ssl? ( lib-dev/libressl )
+DEPEND="
+	ssl? ( virtual/ssl )
 	pcap? ( lib-net/libpcap )
 	lib-dev/gmp:*
 	lib-sys/zlib

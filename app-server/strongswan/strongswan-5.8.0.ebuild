@@ -30,7 +30,7 @@ COMMON_DEPEND="!app-net/openswan
 	caps? ( lib-sys/libcap )
 	curl? ( app-net/curl )
 	ldap? ( app-net/openldap )
-	ssl? ( lib-dev/libressl )
+	ssl? ( virtual/ssl )
 	mysql? ( virtual/mysql )
 	sqlite? ( >=lib-sys/sqlite-3.3.1 )
 	networkmanager? ( app-net/networkmanager )

@@ -56,10 +56,6 @@ python_prepare_all() {
 	printf "[build_ext]\nportage-ext-modules=true\n" >> \
 		setup.cfg || die
 
-	sed -e '/^sync-rsync-verify-metamanifest/s|yes|no|' \
-		-e '/^sync-webrsync-verify-signature/s|yes|no|' \
-		-i cnf/repos.conf || die "sed failed"
-
 	if [[ -n ${EPREFIX} ]] ; then
 		einfo "Setting portage.const.EPREFIX ..."
 		hprefixify -e "s|^(EPREFIX[[:space:]]*=[[:space:]]*\").*|\1${EPREFIX}\"|" \
@@ -76,17 +72,6 @@ python_prepare_all() {
 
 		einfo "Adjusting make.globals, repos.conf and etc-update ..."
 		hprefixify cnf/{make.globals,repos.conf} bin/etc-update
-
-		if use prefix-guest ; then
-			sed -e "s|^\(main-repo = \).*|\\1gentoo_prefix|" \
-				-e "s|^\\[gentoo\\]|[gentoo_prefix]|" \
-				-e "s|^\(sync-uri = \).*|\\1rsync://rsync.prefix.bitzolder.nl/gentoo-portage-prefix|" \
-				-i cnf/repos.conf || die "sed failed"
-		fi
-
-		einfo "Adding FEATURES=force-prefix to make.globals ..."
-		echo -e '\nFEATURES="${FEATURES} force-prefix"' >> cnf/make.globals \
-			|| die "failed to append to make.globals"
 	fi
 
 	cd "${S}/cnf" || die

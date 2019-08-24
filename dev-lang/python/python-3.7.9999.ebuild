@@ -62,7 +62,7 @@ src_configure() {
 		$(use_with valgrind)
 		$(usex embed --disable-loadable-sqlite-extensions --enable-loadable-sqlite-extensions)
 		--infodir="${ED}"/usr/share/info
-		--mandir="${ED}"/usr/share/man/man1
+		--mandir="${ED}"/usr/share/man
 		--with-computed-gotos
 		--with-dbmliborder="gdbm"
 		--with-libc=

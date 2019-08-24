@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0/2"
 
-IUSE="acl apparmor audit coredump cryptsetup curl +efi embed gcrypt gnutls +gnu_nss +hostnamed +hwdb importd kmod +ldconfig +localed lz4 +machined +networkd pam pcre resolve +timedated timesyncd +tmpfiles qrcode +seccomp test +vconsole xkb xz zlib"
+IUSE="acl apparmor audit coredump cryptsetup curl +efi embed gcrypt gnutls gnu_nss +hostnamed +hwdb importd kmod +ldconfig +localed lz4 +machined +networkd pam pcre resolve +timedated timesyncd +tmpfiles qrcode +seccomp test +vconsole xkb xz zlib"
 
 REQUIRED_USE="embed? ( !acl !efi !gcrypt !gnu_nss !gnutls !hostnamed !hwdb !ldconfig !localed !machined !networkd !pam !pcre !seccomp !timedated !tmpfiles !vconsole !zlib )"
 
@@ -36,7 +36,6 @@ DEPEND="
 	qrcode? ( app-media/qrencode:0= )
 	seccomp? ( >=lib-sys/libseccomp-2.3.3:0= )
 	test? ( sys-app/dbus )
-	xkb? ( >=lib-gui/libxkbcommon-0.4.1:0= )
 	xz? ( app-compression/xz-utils )
 	zlib? ( lib-sys/zlib )
 	app-compression/bzip2:0=
@@ -123,7 +122,6 @@ src_configure() {
 		$(meson_use timesyncd)
 		$(meson_use tmpfiles)
 		$(meson_use vconsole)
-		$(meson_use xkb xkbcommon)
 		$(meson_use xz)
 		$(meson_use zlib)
 		-Dbacklight=false
@@ -269,8 +267,48 @@ src_install() {
 	keepdir /var/lib/systemd
 	keepdir /var/log/journal
 
-	use xkb && mkdir -p "${ED}"/etc/systemd/user && keepdir /etc/systemd/user
+	mkdir -p "${ED}"/etc/systemd/user && keepdir /etc/systemd/user
 	use xkb || rm -rf "${ED}"/etc/X11 "${ED}"/etc/xdg/ "${ED}"/etc/systemd/user
+
+	use hwdb || rm -f "{ED}"etc/udev/udev.conf \
+			rm -f "{ED}"/usr/bin/udevadm \
+			rm -f "{ED}"/usr/lib64/systemd/system/initrd-udevadm-cleanup-db.service \
+			rm -f "{ED}"/usr/lib64/systemd/system/sockets.target.wants/systemd-udevd-control.socket \
+			rm -f "{ED}"/usr/lib64/systemd/system/sockets.target.wants/systemd-udevd-kernel.socket \
+			rm -f "{ED}"/usr/lib64/systemd/system/sysinit.target.wants/systemd-udev-trigger.service \
+			rm -f "{ED}"/usr/lib64/systemd/system/sysinit.target.wants/systemd-udevd.service \
+			rm -f "{ED}"/usr/lib64/systemd/system/systemd-hwdb-update.service \
+			rm -f "{ED}"/usr/lib64/systemd/system/systemd-udev-settle.service \
+			rm -f "{ED}"/usr/lib64/systemd/system/systemd-udev-trigger.service \
+			rm -f "{ED}"/usr/lib64/systemd/system/systemd-udevd-control.socket \
+			rm -f "{ED}"/usr/lib64/systemd/system/systemd-udevd-kernel.socket \
+			rm -f "{ED}"/usr/lib64/systemd/system/systemd-udevd.service \
+			rm -f "{ED}"/usr/lib64/systemd/systemd-udevd \
+			rm -fr "{ED}"/usr/lib64/udev
+
+	# systemd-sleep does suspend and hibernation, not essential to some products
+		rm -f  "{ED}"/usr/lib64/systemd/systemd-sleep
+		rm -fr "{ED}"/usr/lib64/systemd/system-sleep/
+		rm -f  "{ED}"/usr/lib64/systemd/system/systemd-suspend.service
+
+	# systemd-update system is nice and useful, but is not essential
+		rm -f "{ED}"/usr/lib64/systemd/system/sysinit.target.wants/systemd-update-done.service
+		rm -f "{ED}"/usr/lib64/systemd/system/system-update.target
+		rm -f "{ED}"/usr/lib64/systemd/system/systemd-update-done.service
+		rm -f "{ED}"/usr/lib64/systemd/system-generators/systemd-system-update-generator
+		rm -f "{ED}"/usr/lib64/systemd/systemd-update-done
+
+	# no sysvinit legacy
+		rm -fr etc/init.d
+		rm -f "{ED}"/usr/lib64/systemd/system-generators/systemd-rc-local-generator
+		rm -f "{ED}"/usr/lib64/systemd/system-generators/systemd-sysv-generator
+		rm -f "{ED}"/usr/lib64/systemd/system/sockets.target.wants/systemd-initctl.socket
+		rm -f "{ED}"/usr/lib64/systemd/system/systemd-initctl.service
+		rm -f "{ED}"/usr/lib64/systemd/system/systemd-initctl.socket
+		rm -f "{ED}"/usr/lib64/systemd/systemd-initctl
+		rm -f "{ED}"/usr/lib64/systemd/systemd/halt-local.service
+		rm -f "{ED}"/usr/lib64/systemd/systemd/rc-local.service
+
 }
 
 pkg_postinst() {
@@ -279,9 +317,9 @@ pkg_postinst() {
 	enewgroup systemd-journal
 
 	use networkd && newusergroup systemd-network
-	use resolve && newusergroup systemd-resolve
-	use timesyncd && newusergroup systemd-timesync
-	use coredump && newusergroup systemd-coredump
+	use embed || use resolve && newusergroup systemd-resolve
+	use embed || use timesyncd && newusergroup systemd-timesync
+	use embed || use coredump && newusergroup systemd-coredump
 
 	systemd_update_catalog
 
@@ -290,6 +328,6 @@ pkg_postinst() {
 	udev_reload || FAIL=1
 
 	systemd_reenable getty@tty1.service remote-fs.target
-	use resolve && systemd_reenable systemd-resolve.service
+	use embed || use resolve && systemd_reenable systemd-resolve.service
 	use networkd && systemd_reenable systemd-networkd.service
 }

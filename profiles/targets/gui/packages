@@ -1,4 +1,3 @@
-*app-gui/hsetroot
 *app-media/alsa-utils
 *app-media/audacious
 *app-media/lximage-qt
@@ -9,7 +8,6 @@
 *gui-icontheme/breeze-icons
 *gui-lib/lxqt-themes
 *app-gui/keepassxc
-*app-gui/compton
 *app-gui/featherpad
 *app-gui/firefox-bin
 *app-gui/lxqt-archiver
@@ -20,4 +18,6 @@
 *app-gui/pcmanfm-qt
 *app-gui/speedcrunch
 *app-gui/qterminal
+*x11-app/compton
+*x11-app/hsetroot
 *x11-misc/mesa-progs

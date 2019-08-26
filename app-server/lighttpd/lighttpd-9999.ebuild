@@ -77,6 +77,6 @@ src_install() {
 	fowners lighttpd:lighttpd /var/l{ib,og}/lighttpd
 	fperms 0750 /var/l{ib,og}/lighttpd
 
-	systemd_dounit "${FILESDIR}/${PN}.service"
-	systemd_dotmpfilesd "${FILESDIR}/${PN}.tmpfiles.conf"
+	use systemd && systemd_dounit "${FILESDIR}/${PN}.service"
+	use systemd && systemd_dotmpfilesd "${FILESDIR}/${PN}.tmpfiles.conf"
 }

@@ -12,7 +12,7 @@ LICENSE="GPL-2+"
 SLOT="0/12"
 KEYWORDS="amd64 arm64"
 
-CRYPTO_BACKENDS="+gcrypt kernel nettle ssl"
+CRYPTO_BACKENDS="gcrypt"
 
 IUSE="${CRYPTO_BACKENDS} nls pwquality python reencrypt static static-libs udev urandom"
 
@@ -26,9 +26,7 @@ LIB_DEPEND="
 	lib-dev/popt[static-libs(+)]
 	>=sys-app/util-linux-2.31-r1[static-libs(+)]
 	app-crypt/argon2:=[static-libs(+)]
-	gcrypt? ( lib-dev/libgcrypt:0=[static-libs(+)] )
-	nettle? ( >=lib-dev/nettle-2.4[static-libs(+)] )
-	ssl? ( virtual/ssl[static-libs(+)] )
+	lib-dev/libgcrypt:0=[static-libs(+)]
 	pwquality? ( lib-dev/libpwquality[static-libs(+)] )
 	sys-fs/lvm2[static-libs(+)]
 	udev? ( sys-app/systemd[static-libs(+)] )"
@@ -58,12 +56,6 @@ src_prepare() {
 }
 
 src_configure() {
-	if use kernel ; then
-		ewarn "Note that kernel backend is very slow for this type of operation"
-		ewarn "and is provided mainly for embedded systems wanting to avoid"
-		ewarn "userspace crypto libraries."
-	fi
-
 	use python && python_setup
 
 	# We disable autotool python integration so we can use eclasses

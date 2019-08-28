@@ -210,7 +210,7 @@ src_install() {
 		rm -f "{ED}"/usr/lib64/systemd/systemd-update-done
 
 	# no sysvinit legacy
-		rm -fr etc/init.d
+		rm -fr "{ED}"etc/init.d
 		rm -f "{ED}"/usr/lib64/systemd/system-generators/systemd-rc-local-generator
 		rm -f "{ED}"/usr/lib64/systemd/system-generators/systemd-sysv-generator
 		rm -f "{ED}"/usr/lib64/systemd/system/sockets.target.wants/systemd-initctl.socket

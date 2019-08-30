@@ -17,6 +17,7 @@ IUSE="static-libs test"
 PDEPEND="app-misc/ca-certificates"
 
 filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+append-ldflags -Wl,-z,noexecstack
 
 src_prepare() {
 	touch crypto/Makefile.in

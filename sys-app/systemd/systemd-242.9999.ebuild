@@ -123,7 +123,7 @@ src_configure() {
 		-Dhtml=false
 		-Didn=false
 		-Dima=false
-		-Dkill-path=/usr/bin/kill
+		-Dkill-path="${EROOT}"/usr/bin/kill
 		-Dlibidn2=false
 		-Dlibidn=false
 		-Dlibiptc=false
@@ -182,64 +182,62 @@ src_install() {
 	use xkb || rm -rf "${ED}"/etc/X11 "${ED}"/etc/xdg/ "${ED}"/etc/systemd/user
 	use tmpfiles || rm -f "${ED}"/usr/lib/systemd/system/systemd-tmpfiles-clean.timer
 
-	use hwdb || rm -f "{ED}"/etc/udev/udev.conf \
-			rm -f "{ED}"/usr/bin/udevadm \
-			rm -f "{ED}"/usr/lib64/systemd/system/initrd-udevadm-cleanup-db.service \
-			rm -f "{ED}"/usr/lib64/systemd/system/sockets.target.wants/systemd-udevd-control.socket \
-			rm -f "{ED}"/usr/lib64/systemd/system/sockets.target.wants/systemd-udevd-kernel.socket \
-			rm -f "{ED}"/usr/lib64/systemd/system/sysinit.target.wants/systemd-udev-trigger.service \
-			rm -f "{ED}"/usr/lib64/systemd/system/sysinit.target.wants/systemd-udevd.service \
-			rm -f "{ED}"/usr/lib64/systemd/system/systemd-hwdb-update.service \
-			rm -f "{ED}"/usr/lib64/systemd/system/systemd-udev-settle.service \
-			rm -f "{ED}"/usr/lib64/systemd/system/systemd-udev-trigger.service \
-			rm -f "{ED}"/usr/lib64/systemd/system/systemd-udevd-control.socket \
-			rm -f "{ED}"/usr/lib64/systemd/system/systemd-udevd-kernel.socket \
-			rm -f "{ED}"/usr/lib64/systemd/system/systemd-udevd.service \
-			rm -f "{ED}"/usr/lib64/systemd/systemd-udevd \
-			rm -fr "{ED}"/usr/lib64/udev
+	use hwdb || rm -f "${ED}"/etc/udev/udev.conf \
+			rm -f "${ED}"/usr/bin/udevadm \
+			rm -f "${ED}"/usr/lib/systemd/system/initrd-udevadm-cleanup-db.service \
+			rm -f "${ED}"/usr/lib/systemd/system/sockets.target.wants/systemd-udevd-control.socket \
+			rm -f "${ED}"/usr/lib/systemd/system/sockets.target.wants/systemd-udevd-kernel.socket \
+			rm -f "${ED}"/usr/lib/systemd/system/sysinit.target.wants/systemd-udev-trigger.service \
+			rm -f "${ED}"/usr/lib/systemd/system/sysinit.target.wants/systemd-udevd.service \
+			rm -f "${ED}"/usr/lib/systemd/system/systemd-hwdb-update.service \
+			rm -f "${ED}"/usr/lib/systemd/system/systemd-udev-settle.service \
+			rm -f "${ED}"/usr/lib/systemd/system/systemd-udev-trigger.service \
+			rm -f "${ED}"/usr/lib/systemd/system/systemd-udevd-control.socket \
+			rm -f "${ED}"/usr/lib/systemd/system/systemd-udevd-kernel.socket \
+			rm -f "${ED}"/usr/lib/systemd/system/systemd-udevd.service \
+			rm -f "${ED}"/usr/lib/systemd/systemd-udevd \
+			rm -fr "${ED}"/usr/lib/udev
 
-	rm -fr "{ED}"/etc/kernel
-	rm -f "{ED}"/usr/bin/kernel-install
-	rm -fr "{ED}"/usr/lib64/kernel
+	rm -fr "${ED}"/etc/kernel
+	rm -f "${ED}"/usr/bin/kernel-install
+	rm -fr "${ED}"/usr/lib/kernel
 
-	rm -f "{ED}"/usr/bin/busctl
-	rm -f "{ED}"/usr/bin/systemd-analyze
-	rm -f "{ED}"/usr/bin/systemd-cat
-	rm -f "{ED}"/usr/bin/systemd-cgls
-	rm -f "{ED}"/usr/bin/systemd-cgtop
-	rm -f "{ED}"/usr/bin/systemd-delta
-	rm -f "{ED}"/usr/bin/systemd-detect-virt
-	rm -f "{ED}"/usr/bin/systemd-escape
-	rm -f "{ED}"/usr/bin/systemd-mount
-	rm -f "{ED}"/usr/bin/systemd-notify
-	rm -f "{ED}"/usr/bin/systemd-path
-	rm -f "{ED}"/usr/bin/systemd-run
-	rm -f "{ED}"/usr/bin/systemd-socket-activate
-	rm -f "{ED}"/usr/bin/systemd-stdio-bridge
+	rm -f "${ED}"/usr/bin/busctl
+	rm -f "${ED}"/usr/bin/systemd-analyze
+	rm -f "${ED}"/usr/bin/systemd-cat
+	rm -f "${ED}"/usr/bin/systemd-cgls
+	rm -f "${ED}"/usr/bin/systemd-cgtop
+	rm -f "${ED}"/usr/bin/systemd-delta
+	rm -f "${ED}"/usr/bin/systemd-detect-virt
+	rm -f "${ED}"/usr/bin/systemd-escape
+	rm -f "${ED}"/usr/bin/systemd-mount
+	rm -f "${ED}"/usr/bin/systemd-notify
+	rm -f "${ED}"/usr/bin/systemd-path
+	rm -f "${ED}"/usr/bin/systemd-run
+	rm -f "${ED}"/usr/bin/systemd-stdio-bridge
 
 	# systemd-sleep does suspend and hibernation, not essential to some products
-		rm -f  "{ED}"/usr/lib64/systemd/systemd-sleep
-		rm -fr "{ED}"/usr/lib64/systemd/system-sleep/
-		rm -f  "{ED}"/usr/lib64/systemd/system/systemd-suspend.service
+		rm -f  "${ED}"/usr/lib/systemd/systemd-sleep
+		rm -fr "${ED}"/usr/lib/systemd/system-sleep/
+		rm -f  "${ED}"/usr/lib/systemd/system/systemd-suspend.service
 
 	# systemd-update system is nice and useful, but is not essential
-		rm -f "{ED}"/usr/lib64/systemd/system/sysinit.target.wants/systemd-update-done.service
-		rm -f "{ED}"/usr/lib64/systemd/system/system-update.target
-		rm -f "{ED}"/usr/lib64/systemd/system/systemd-update-done.service
-		rm -f "{ED}"/usr/lib64/systemd/system-generators/systemd-system-update-generator
-		rm -f "{ED}"/usr/lib64/systemd/systemd-update-done
+		rm -f "${ED}"/usr/lib/systemd/system/sysinit.target.wants/systemd-update-done.service
+		rm -f "${ED}"/usr/lib/systemd/system/system-update.target
+		rm -f "${ED}"/usr/lib/systemd/system/systemd-update-done.service
+		rm -f "${ED}"/usr/lib/systemd/system-generators/systemd-system-update-generator
+		rm -f "${ED}"/usr/lib/systemd/systemd-update-done
 
 	# no sysvinit legacy
-		rm -fr "{ED}"etc/init.d
-		rm -f "{ED}"/usr/lib64/systemd/system-generators/systemd-rc-local-generator
-		rm -f "{ED}"/usr/lib64/systemd/system-generators/systemd-sysv-generator
-		rm -f "{ED}"/usr/lib64/systemd/system/sockets.target.wants/systemd-initctl.socket
-		rm -f "{ED}"/usr/lib64/systemd/system/systemd-initctl.service
-		rm -f "{ED}"/usr/lib64/systemd/system/systemd-initctl.socket
-		rm -f "{ED}"/usr/lib64/systemd/systemd-initctl
-		rm -f "{ED}"/usr/lib64/systemd/systemd/halt-local.service
-		rm -f "{ED}"/usr/lib64/systemd/systemd/rc-local.service
-
+		rm -fr "${ED}"etc/init.d
+		rm -f "${ED}"/usr/lib/systemd/system-generators/systemd-rc-local-generator
+		rm -f "${ED}"/usr/lib/systemd/system-generators/systemd-sysv-generator
+		rm -f "${ED}"/usr/lib/systemd/system/sockets.target.wants/systemd-initctl.socket
+		rm -f "${ED}"/usr/lib/systemd/system/systemd-initctl.service
+		rm -f "${ED}"/usr/lib/systemd/system/systemd-initctl.socket
+		rm -f "${ED}"/usr/lib/systemd/systemd-initctl
+		rm -f "${ED}"/usr/lib/systemd/systemd/halt-local.service
+		rm -f "${ED}"/usr/lib/systemd/systemd/rc-local.service
 }
 
 pkg_postinst() {

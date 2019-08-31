@@ -19,6 +19,7 @@
 *sys-app/procps
 *sys-app/psmisc
 *sys-app/sed
+*sys-app/uglyscripts
 *app-misc/nano
 *lib-sys/glibc
 *sys-kernel/linux-headers

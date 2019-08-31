@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0/2"
 
-IUSE="audit coredump cryptsetup efi gcrypt +hostnamed hwdb importd kmod ldconfig localed logind machined +networkd pam pcre resolve +timedated tmpfiles seccomp test vconsole xkb"
+IUSE="audit coredump cryptsetup efi gcrypt +hostnamed +hwdb importd kmod ldconfig localed logind machined +networkd pam pcre resolve +timedated tmpfiles seccomp test vconsole xkb"
 
 RESTRICT="!test? ( test )"
 
@@ -180,7 +180,7 @@ src_install() {
 
 	mkdir -p "${ED}"/etc/systemd/user && keepdir /etc/systemd/user
 	use xkb || rm -rf "${ED}"/etc/X11 "${ED}"/etc/xdg/ "${ED}"/etc/systemd/user
-	use tmpfiles || rm -f "${ED}"/usr/lib/systemd/system/systemd-tmpfiles-clean.timer
+	use tmpfiles || rm -f "${ED}"/usr/lib/systemd/system/systemd-tmpfiles-clean.timer "${ED}"/usr/lib/systemd/system/timers.target.wants/systemd-tmpfiles-clean.timer
 
 	use hwdb || rm -f "${ED}"/etc/udev/udev.conf \
 			rm -f "${ED}"/usr/bin/udevadm \

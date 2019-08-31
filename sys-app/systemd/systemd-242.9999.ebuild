@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0/2"
 
-IUSE="audit coredump cryptsetup efi gcrypt +hostnamed +hwdb importd kmod ldconfig +localed +logind machined +networkd pam pcre resolve +timedated +tmpfiles seccomp test vconsole xkb"
+IUSE="audit coredump cryptsetup efi gcrypt hostnamed +hwdb importd kmod ldconfig localed logind machined +networkd pam pcre resolve timedated tmpfiles seccomp test vconsole xkb"
 
 RESTRICT="!test? ( test )"
 

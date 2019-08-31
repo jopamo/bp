@@ -12,7 +12,7 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 dbi fam gdbm geoip krb5 ldap libev libunwind lua memcached mysql ssl pcre php test postgres webdav xattr zlib static"
+IUSE="bzip2 dbi fam gdbm geoip krb5 ldap libev libunwind lua memcached mysql ssl pcre php test postgres systemd webdav xattr zlib static"
 
 CDEPEND="
 	app-compression/lbzip2

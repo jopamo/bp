@@ -6,10 +6,9 @@ DESCRIPTION="Virtual for various service managers"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="minisysd openrc"
+IUSE="openrc"
 
 RDEPEND="
-	minisysd? ( sys-app/minisysd )
 	sys-app/systemd
 	openrc? ( sys-app/openrc )
 "

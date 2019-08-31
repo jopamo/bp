@@ -202,19 +202,19 @@ src_install() {
 	rm -f "${ED}"/usr/bin/kernel-install
 	rm -fr "${ED}"/usr/lib/kernel
 
-	rm -f "${ED}"/usr/bin/busctl
-	rm -f "${ED}"/usr/bin/systemd-analyze
-	rm -f "${ED}"/usr/bin/systemd-cat
-	rm -f "${ED}"/usr/bin/systemd-cgls
-	rm -f "${ED}"/usr/bin/systemd-cgtop
-	rm -f "${ED}"/usr/bin/systemd-delta
-	rm -f "${ED}"/usr/bin/systemd-detect-virt
-	rm -f "${ED}"/usr/bin/systemd-escape
-	rm -f "${ED}"/usr/bin/systemd-mount
-	rm -f "${ED}"/usr/bin/systemd-notify
-	rm -f "${ED}"/usr/bin/systemd-path
-	rm -f "${ED}"/usr/bin/systemd-run
-	rm -f "${ED}"/usr/bin/systemd-stdio-bridge
+	#rm -f "${ED}"/usr/bin/busctl
+	#rm -f "${ED}"/usr/bin/systemd-analyze
+	#rm -f "${ED}"/usr/bin/systemd-cat
+	#rm -f "${ED}"/usr/bin/systemd-cgls
+	#rm -f "${ED}"/usr/bin/systemd-cgtop
+	#rm -f "${ED}"/usr/bin/systemd-delta
+	#rm -f "${ED}"/usr/bin/systemd-detect-virt
+	#rm -f "${ED}"/usr/bin/systemd-escape
+	#rm -f "${ED}"/usr/bin/systemd-mount
+	#rm -f "${ED}"/usr/bin/systemd-notify
+	#rm -f "${ED}"/usr/bin/systemd-path
+	#rm -f "${ED}"/usr/bin/systemd-run
+	#rm -f "${ED}"/usr/bin/systemd-stdio-bridge
 
 	# systemd-sleep does suspend and hibernation, not essential to some products
 		rm -f  "${ED}"/usr/lib/systemd/systemd-sleep

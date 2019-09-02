@@ -6,15 +6,14 @@ inherit flag-o-matic linux-info meson systemd toolchain-funcs user git-r3
 
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
-
 EGIT_REPO_URI="https://github.com/systemd/systemd-stable.git"
 EGIT_BRANCH="v$(ver_cut 1)-stable"
-KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0/2"
+KEYWORDS="amd64 arm64"
 
-IUSE="audit coredump cryptsetup efi gcrypt hostnamed +hwdb importd kmod ldconfig localed logind machined +networkd pam pcre resolve timedated tmpfiles seccomp test vconsole xkb"
+IUSE="audit coredump cryptsetup efi gcrypt +hostnamed +hwdb importd kmod ldconfig localed logind machined +networkd pam pcre resolve timedated +tmpfiles test +vconsole xkb"
 
 RESTRICT="!test? ( test )"
 
@@ -27,7 +26,7 @@ DEPEND="
 	logind? ( sys-app/dbus )
 	pam? ( lib-sys/pam:= )
 	pcre? ( lib-dev/libpcre2 )
-	seccomp? ( >=lib-sys/libseccomp-2.3.3:0= )
+	lib-sys/libseccomp:0=
 	test? ( sys-app/dbus )
 	tmpfiles? ( sys-app/dbus )
 	app-text/docbook-xml-dtd
@@ -48,19 +47,14 @@ append-cflags -Wno-error=format-truncation
 pkg_pretend() {
 	if [[ ${MERGE_TYPE} != buildonly ]]; then
 		local CONFIG_CHECK="~AUTOFS4_FS ~BLK_DEV_BSG ~CGROUPS
-			~EPOLL ~FANOTIFY ~FHANDLE
+			~EPOLL ~FANOTIFY ~FHANDLE ~SECCOMP ~SECCOMP_FILTER
 			~INOTIFY_USER ~NET ~NET_NS ~PROC_FS ~SIGNALFD ~SYSFS
-			~TIMERFD ~UNIX
+			~TIMERFD ~UNIX ~CGROUP_BPF ~!FW_LOADER_USER_HELPER_FALLBACK
 			~CRYPTO_HMAC ~CRYPTO_SHA256 ~CRYPTO_USER_API_HASH
-			~!FW_LOADER_USER_HELPER_FALLBACK ~!GRKERNSEC_PROC ~!IDE ~!SYSFS_DEPRECATED
-			~!SYSFS_DEPRECATED_V2"
+			~!GRKERNSEC_PROC ~!IDE ~!SYSFS_DEPRECATED ~!SYSFS_DEPRECATED_V2"
 
 		use tmpfiles && CONFIG_CHECK+=" ~TMPFS_POSIX_ACL"
 		use tmpfiles && CONFIG_CHECK+=" ~DEVTMPFS ~TMPFS_XATTR"
-		use seccomp && CONFIG_CHECK+=" ~SECCOMP ~SECCOMP_FILTER"
-		kernel_is -lt 3 7 && CONFIG_CHECK+=" ~HOTPLUG"
-		kernel_is -lt 4 7 && CONFIG_CHECK+=" ~DEVPTS_MULTIPLE_INSTANCES"
-		kernel_is -ge 4 10 && CONFIG_CHECK+=" ~CGROUP_BPF"
 
 		if linux_config_exists; then
 			local uevent_helper_path=$(linux_chkconfig_string UEVENT_HELPER_PATH)
@@ -74,9 +68,7 @@ pkg_pretend() {
 	fi
 }
 
-PATCHES=(
-		"${FILESDIR}/disable_audit.patch"
-		)
+PATCHES=( "${FILESDIR}/disable_audit.patch"	)
 
 src_configure() {
 	local emesonargs=(
@@ -98,7 +90,6 @@ src_configure() {
 		$(meson_use pam)
 		$(meson_use pcre pcre2)
 		$(meson_use resolve)
-		$(meson_use seccomp)
 		$(meson_use test dbus)
 		$(meson_use timedated)
 		$(meson_use tmpfiles)
@@ -146,6 +137,7 @@ src_configure() {
 		-Drfkill=false
 		-Drootlibdir="${EPREFIX}"/usr/lib
 		-Drootprefix="${EPREFIX}"/usr
+		-Dseccomp=true
 		-Dsmack=false
 		-Dsplit-bin=true
 		-Dsplit-usr=false
@@ -202,20 +194,6 @@ src_install() {
 	rm -f "${ED}"/usr/bin/kernel-install
 	rm -fr "${ED}"/usr/lib/kernel
 
-	#rm -f "${ED}"/usr/bin/busctl
-	#rm -f "${ED}"/usr/bin/systemd-analyze
-	#rm -f "${ED}"/usr/bin/systemd-cat
-	#rm -f "${ED}"/usr/bin/systemd-cgls
-	#rm -f "${ED}"/usr/bin/systemd-cgtop
-	#rm -f "${ED}"/usr/bin/systemd-delta
-	#rm -f "${ED}"/usr/bin/systemd-detect-virt
-	#rm -f "${ED}"/usr/bin/systemd-escape
-	#rm -f "${ED}"/usr/bin/systemd-mount
-	#rm -f "${ED}"/usr/bin/systemd-notify
-	#rm -f "${ED}"/usr/bin/systemd-path
-	#rm -f "${ED}"/usr/bin/systemd-run
-	#rm -f "${ED}"/usr/bin/systemd-stdio-bridge
-
 	# systemd-sleep does suspend and hibernation, not essential to some products
 		rm -f  "${ED}"/usr/lib/systemd/systemd-sleep
 		rm -fr "${ED}"/usr/lib/systemd/system-sleep/
@@ -229,7 +207,7 @@ src_install() {
 		rm -f "${ED}"/usr/lib/systemd/systemd-update-done
 
 	# no sysvinit legacy
-		rm -fr "${ED}"etc/init.d
+		rm -fr "${ED}"/etc/init.d
 		rm -f "${ED}"/usr/lib/systemd/system-generators/systemd-rc-local-generator
 		rm -f "${ED}"/usr/lib/systemd/system-generators/systemd-sysv-generator
 		rm -f "${ED}"/usr/lib/systemd/system/sockets.target.wants/systemd-initctl.socket

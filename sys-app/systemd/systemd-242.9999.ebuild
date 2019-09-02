@@ -13,7 +13,7 @@ LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0/2"
 KEYWORDS="amd64 arm64"
 
-IUSE="audit coredump cryptsetup efi gcrypt +hostnamed +hwdb importd kmod ldconfig localed logind machined +networkd pam pcre resolve timedated +tmpfiles test +vconsole xkb"
+IUSE="audit coredump cryptsetup efi gcrypt +hostnamed hwdb importd kmod ldconfig localed logind machined +networkd pam pcre resolve timedated +tmpfiles test vconsole xkb"
 
 RESTRICT="!test? ( test )"
 
@@ -174,22 +174,6 @@ src_install() {
 	use xkb || rm -rf "${ED}"/etc/X11 "${ED}"/etc/xdg/ "${ED}"/etc/systemd/user
 	use tmpfiles || rm -f "${ED}"/usr/lib/systemd/system/systemd-tmpfiles-clean.timer "${ED}"/usr/lib/systemd/system/timers.target.wants/systemd-tmpfiles-clean.timer
 
-	use hwdb || rm -f "${ED}"/etc/udev/udev.conf \
-			rm -f "${ED}"/usr/bin/udevadm \
-			rm -f "${ED}"/usr/lib/systemd/system/initrd-udevadm-cleanup-db.service \
-			rm -f "${ED}"/usr/lib/systemd/system/sockets.target.wants/systemd-udevd-control.socket \
-			rm -f "${ED}"/usr/lib/systemd/system/sockets.target.wants/systemd-udevd-kernel.socket \
-			rm -f "${ED}"/usr/lib/systemd/system/sysinit.target.wants/systemd-udev-trigger.service \
-			rm -f "${ED}"/usr/lib/systemd/system/sysinit.target.wants/systemd-udevd.service \
-			rm -f "${ED}"/usr/lib/systemd/system/systemd-hwdb-update.service \
-			rm -f "${ED}"/usr/lib/systemd/system/systemd-udev-settle.service \
-			rm -f "${ED}"/usr/lib/systemd/system/systemd-udev-trigger.service \
-			rm -f "${ED}"/usr/lib/systemd/system/systemd-udevd-control.socket \
-			rm -f "${ED}"/usr/lib/systemd/system/systemd-udevd-kernel.socket \
-			rm -f "${ED}"/usr/lib/systemd/system/systemd-udevd.service \
-			rm -f "${ED}"/usr/lib/systemd/systemd-udevd \
-			rm -fr "${ED}"/usr/lib/udev
-
 	rm -fr "${ED}"/etc/kernel
 	rm -f "${ED}"/usr/bin/kernel-install
 	rm -fr "${ED}"/usr/lib/kernel
@@ -216,6 +200,13 @@ src_install() {
 		rm -f "${ED}"/usr/lib/systemd/systemd-initctl
 		rm -f "${ED}"/usr/lib/systemd/systemd/halt-local.service
 		rm -f "${ED}"/usr/lib/systemd/systemd/rc-local.service
+
+	use networkd && mkdir -p "${ED}"/etc/systemd/network/
+
+	use networkd && echo -e "[Match]\n\
+Name=en*\n\n\
+[Network]\n\
+DHCP=ipv4" > "${ED}"/etc/systemd/network/ipv4dhcp.network
 }
 
 pkg_postinst() {

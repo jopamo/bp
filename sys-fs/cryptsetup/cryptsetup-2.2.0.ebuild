@@ -12,13 +12,9 @@ LICENSE="GPL-2+"
 SLOT="0/12"
 KEYWORDS="amd64 arm64"
 
-CRYPTO_BACKENDS="gcrypt"
+IUSE="nls pwquality python reencrypt static static-libs udev urandom"
 
-IUSE="${CRYPTO_BACKENDS} nls pwquality python reencrypt static static-libs udev urandom"
-
-REQUIRED_USE="^^ ( ${CRYPTO_BACKENDS//+/} )
-	python? ( ${PYTHON_REQUIRED_USE} )
-	static? ( !gcrypt )" #496612
+REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 LIB_DEPEND="
 	lib-dev/json-c:=[static-libs(+)]
@@ -70,7 +66,7 @@ src_configure() {
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
 		--with-tmpfilesdir="${EPREFIX%/}/usr/lib/tmpfiles.d"
-		--with-crypto_backend=$(for x in ${CRYPTO_BACKENDS//+/} ; do usev ${x} ; done)
+		--with-crypto_backend="gcrypt"
 		$(use_enable nls)
 		$(use_enable pwquality)
 		$(use_enable python)

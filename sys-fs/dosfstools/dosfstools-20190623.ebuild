@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=91978a272e4fe465c3a754a7342b496ff9e49211
+	SNAPSHOT=84a8d1c0b71943d4a20b50ceab18b9a836cc471f
 	SRC_URI="https://github.com/dosfstools/dosfstools/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -23,9 +23,13 @@ KEYWORDS="amd64 arm64"
 
 IUSE="udev"
 
-DEPEND="udev? ( sys-app/systemd )"
+DEPEND="
+		sys-devel/gettext
+		udev? ( sys-app/systemd )
+	"
 
 src_prepare() {
+	cp "${EROOT}"/usr/share/gettext/config.rpath ${S}/
 	default
 	eautoreconf
 }

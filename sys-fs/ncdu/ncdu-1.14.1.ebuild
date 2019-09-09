@@ -11,8 +11,3 @@ SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
 DEPEND="lib-sys/ncurses"
-
-PATCHES=( 	${FILESDIR}/8e021a46ee2d455c8c677a7eb982b56c3c408942.patch
-			${FILESDIR}/ec0de4afa8f6119a737f731433134bed4fc48f32.patch
-			${FILESDIR}/cd38a62aa835e84af6920e75a264e4a80ce1ad10.patch
-		)

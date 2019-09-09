@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=e3b6c966b79c3ea5d51b923c3bbdc41e13b96ea0
+	SNAPSHOT=91a2135f32acdd6378476c5bae475a6e7811a6a2
 	SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-portable-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"

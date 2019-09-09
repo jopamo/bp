@@ -35,7 +35,7 @@ DEPEND="
 		dev-python/passlib[${PYTHON_USEDEP}]
 		dev-python/coverage[${PYTHON_USEDEP}]
 		dev-python/unittest2[${PYTHON_USEDEP}]
-		dev-vcs/git
+		sys-app/git
 	)"
 
 python_prepare_all() {

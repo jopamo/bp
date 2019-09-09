@@ -14,6 +14,10 @@ SRC_URI="mirror://gnu/${PN}/bash-5.0.tar.gz
 		mirror://gnu/${PN}/bash-5.0-patches/bash50-005
 		mirror://gnu/${PN}/bash-5.0-patches/bash50-006
 		mirror://gnu/${PN}/bash-5.0-patches/bash50-007
+		mirror://gnu/${PN}/bash-5.0-patches/bash50-008
+		mirror://gnu/${PN}/bash-5.0-patches/bash50-009
+		mirror://gnu/${PN}/bash-5.0-patches/bash50-010
+		mirror://gnu/${PN}/bash-5.0-patches/bash50-011
 		"
 
 S=${WORKDIR}/${PN}-5.0
@@ -21,6 +25,7 @@ S=${WORKDIR}/${PN}-5.0
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="afs bashlogger examples mem-scramble +net nls plugins"
 
 DEPEND="
@@ -34,7 +39,11 @@ PATCHES=( 	${DISTDIR}/bash50-001
 			${WORKDIR}/bash50-004
 			${WORKDIR}/bash50-005
 			${WORKDIR}/bash50-006
-			${WORKDIR}/bash50-007	)
+			${WORKDIR}/bash50-007
+			${WORKDIR}/bash50-008
+			${WORKDIR}/bash50-009
+			${WORKDIR}/bash50-010
+			${WORKDIR}/bash50-011	)
 
 
 pkg_setup() {
@@ -48,7 +57,7 @@ pkg_setup() {
 src_prepare() {
 	cp ${DISTDIR}/bash50* "${WORKDIR}/" || die
 
-	for x in bash50-00{3,4,5,6,7} ; do
+	for x in bash50-00{3,4,5,6,7,8,9} bash50-01{0,1}  ; do
 		sed -i.bak -e "s/bash-5.0-patched/bash-5.0/g" "${WORKDIR}/${x}" || die
 	done
 

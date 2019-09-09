@@ -2,15 +2,19 @@
 
 EAPI=7
 
+SNAPSHOT=caca31a0eea41c7b051705704c1158fddc02fbd2
+
 inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="Various utilities dealing with the PCI bus"
 HOMEPAGE="http://mj.ucw.cz/sw/pciutils/ https://git.kernel.org/?p=utils/pciutils/pciutils.git"
-SRC_URI="https://github.com/pciutils/pciutils/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/pciutils/pciutils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="dns +kmod static-libs +udev zlib"
 
 DEPEND="

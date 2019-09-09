@@ -61,7 +61,6 @@ src_configure() {
 		$(use_enable pclm)
 		$(use_enable pdf mutool)
 		--enable-ghostscript
-		--enable-ijs
 		$(use_enable static-libs static)
 		--disable-avahi
 		$(use_with jpeg)

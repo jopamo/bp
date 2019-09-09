@@ -64,16 +64,12 @@ src_configure() {
 		$(use_enable nls)
 		$(use_enable minimal tiny)
 	)
-	case ${CHOST} in
-		*-gnu*|*-uclibc*) myconf+=( "--with-wordbounds" ) ;; #467848
-	esac
+
 	econf "${myconf[@]}"
 }
 
 src_install() {
 	default
-
-	rm -rf "${ED}"/usr/share/doc
 
 	insinto /etc
 	newins doc/sample.nanorc nanorc

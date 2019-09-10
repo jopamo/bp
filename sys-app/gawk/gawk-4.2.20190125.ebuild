@@ -6,7 +6,11 @@ inherit toolchain-funcs
 
 DESCRIPTION="GNU awk pattern-matching language"
 HOMEPAGE="https://www.gnu.org/software/gawk/gawk.html"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+
+SNAPSHOT=dc189dc65b6c9b0f521beb4c6105130c6e33a274
+SRC_URI="https://git.savannah.gnu.org/cgit/gawk.git/snapshot/gawk-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
+
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
@@ -39,8 +43,8 @@ src_configure() {
 
 src_install() {
 	default
-	insinto /usr/include/awk
+	insinto usr/include/awk
 	doins *.h || die
 	rm "${ED}"/usr/include/awk/config.h || die
-	dosym gawk /usr/bin/awk
+	dosym gawk usr/bin/awk
 }

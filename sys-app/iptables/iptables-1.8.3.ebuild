@@ -4,12 +4,14 @@ EAPI=7
 
 inherit systemd toolchain-funcs autotools flag-o-matic
 
-DESCRIPTION="Linux kernel (2.4+) firewall, NAT and packet mangling tools"
+DESCRIPTION="Linux kernel firewall, NAT and packet mangling tools"
 HOMEPAGE="http://www.netfilter.org/projects/iptables/"
 SRC_URI="http://www.netfilter.org/projects/iptables/files/${P}.tar.bz2"
+
 LICENSE="GPL-2"
 SLOT="0/12"
 KEYWORDS="amd64 arm64"
+
 IUSE="conntrack ipv6 netlink nftables pcap static-libs"
 
 RDEPEND="

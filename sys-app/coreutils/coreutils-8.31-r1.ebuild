@@ -36,7 +36,9 @@ append-flags -fno-strict-aliasing
 
 PATCHES=( 	${FILESDIR}/de54e1a8094ea0e60a408de73baa312cf80a5485.patch
 			${FILESDIR}/6d78a28078feb6bfd26c6f1cc0ddbb0a356514c4.patch
-			${FILESDIR}/00d72e6122d37bbc32ef0e057c1e847fd8129133.patch )
+			${FILESDIR}/00d72e6122d37bbc32ef0e057c1e847fd8129133.patch
+			${FILESDIR}/1c8050cc4d862a905ba4e91ac6df2f3c1e501649.patch
+	 )
 
 pkg_setup() {
 	if use test ; then

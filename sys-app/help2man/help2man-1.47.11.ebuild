@@ -9,10 +9,10 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="nls"
 
-RDEPEND="dev-lang/perl"
-DEPEND=${RDEPEND}
+DEPEND="dev-lang/perl"
 
 src_configure() {
 	econf $(use_enable nls)

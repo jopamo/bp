@@ -21,6 +21,8 @@ PATCHES=(
 			"${FILESDIR}"/2ad8924413eeb8a2123eccccef4371342d19d6e4.patch
 			"${FILESDIR}"/384983af853bd800c3ddf2a4f8004967888fda8d.patch
 			"${FILESDIR}"/cb4786f1b6eb694545541bef89f942b00c2ff022.patch
+			"${FILESDIR}"/0ce120a140dadaa56875af2efc66ff805d37925b.patch
+			"${FILESDIR}"/ff1b6ff8e823a7c086209b2409082d55b018b34d.patch
 )
 
 src_prepare() {

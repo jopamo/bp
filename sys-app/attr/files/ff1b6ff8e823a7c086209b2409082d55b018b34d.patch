@@ -1,0 +1,27 @@
+From ff1b6ff8e823a7c086209b2409082d55b018b34d Mon Sep 17 00:00:00 2001
+From: Andreas Gruenbacher <agruenba@redhat.com>
+Date: Fri, 16 Aug 2019 14:48:56 +0200
+Subject: install-data: Don't remove unrelated empty directories
+
+The conversion to automake apparently left over an rmdir statement that
+removed empty directories under $(DESTDIR)$(mandir).  Fix that.
+
+https://savannah.nongnu.org/bugs/?56763
+---
+ man/Makemodule.am | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/man/Makemodule.am b/man/Makemodule.am
+index 860654f..c3c64ad 100644
+--- a/man/Makemodule.am
++++ b/man/Makemodule.am
+@@ -21,5 +21,4 @@ install-data-hook:
+ 			echo $(LN_S) $$dst $$ln; \
+ 			$(LN_S) $$dst $$ln; \
+ 		done; \
+-	done; \
+-	rmdir */ 2>/dev/null || :
++	done
+-- 
+cgit v1.0-41-gc330
+

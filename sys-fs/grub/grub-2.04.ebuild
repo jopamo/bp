@@ -84,6 +84,13 @@ QA_EXECSTACK="usr/bin/grub*-emu* usr/lib/grub/*"
 QA_WX_LOAD="usr/lib/grub/*"
 QA_MULTILIB_PATHS="usr/lib/grub/.*"
 
+PATCHES=( 	"${FILESDIR}/01_f2b9083f859c7dbf44a7a8e96ee0cf202f9a4187.patch"
+			"${FILESDIR}/02_dabdfa1c6a80639197d05f683a445fa8615517fe.patch"
+			"${FILESDIR}/03_261df54f170c6d87258eb37ef17d62690720696b.patch"
+			"${FILESDIR}/04_688023cd0ac4c985fd0e2ec477fcf1ec33a0e49c.patch"
+			"${FILESDIR}/05_15cfd02b74e862bda20626a6e4e2f8a1d201733a.patch"
+)
+
 src_prepare() {
 	default
 	eautoreconf

@@ -20,7 +20,7 @@ RDEPEND="ldap? ( app-net/openldap )
 
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconf-0-r1
-	lib-net/wolfssl:0
+	lib-net/mbedtls:0
 	test? (
 		sys-app/diffutils
 		dev-lang/perl
@@ -45,7 +45,7 @@ src_configure() {
 		$(use_enable adns ares)
 		$(use_enable ipv6)
 		--without-ssl
-		--with-wolfssl
+		--with-mbedtls
 		--with-zlib
 		--with-random=/dev/urandom
 		--enable-versioned-symbols

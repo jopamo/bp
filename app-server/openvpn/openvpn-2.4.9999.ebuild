@@ -5,23 +5,18 @@ EAPI=7
 inherit autotools flag-o-matic user systemd linux-info git-r3
 
 DESCRIPTION="Robust and highly flexible tunneling application compatible with many OSes"
+HOMEPAGE="http://openvpn.net/"
 EGIT_REPO_URI="https://github.com/OpenVPN/${PN}.git"
 EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)"
 EGIT_SUBMODULES=(-cmocka)
-HOMEPAGE="http://openvpn.net/"
-KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
-IUSE="down-root examples inotify +iproute2 lz4 +lzo mbedtls pam"
-IUSE+=" pkcs11 +plugins +ssl static systemd test"
+IUSE="down-root examples inotify +iproute2 lz4 mbedtls pam pkcs11 +plugins static systemd test"
 
 REQUIRED_USE="static? ( !plugins !pkcs11 )
-	lzo? ( !lz4 )
-	pkcs11? ( ssl )
-	mbedtls? ( ssl  )
-	pkcs11? ( ssl )
 	!plugins? ( !pam !down-root )
 	inotify? ( plugins )"
 
@@ -29,12 +24,9 @@ CDEPEND="
 	iproute2? ( app-net/iproute2[-minimal] )
 	!iproute2? ( sys-app/net-tools )
 	pam? ( lib-sys/pam )
-	ssl? (
-		!mbedtls? ( virtual/ssl )
-		mbedtls? ( lib-net/mbedtls )
+	lib-net/mbedtls
 	)
 	lz4? ( app-compression/lz4 )
-	lzo? ( >=lib-dev/lzo-1.07 )
 	pkcs11? ( >=lib-dev/pkcs11-helper-1.11 )"
 
 CONFIG_CHECK="~TUN"
@@ -53,10 +45,9 @@ src_configure() {
 	SYSTEMD_UNIT_DIR=$(systemd_get_systemunitdir) \
 	TMPFILES_DIR="/usr/lib/tmpfiles.d" \
 	econf \
-		$(usex mbedtls 'with-crypto-library' 'mbedtls' '' '') \
+		--with-crypto-library=mbedtls \
 		$(use_enable inotify async-push) \
 		$(use_enable lz4) \
-		$(use_enable lzo) \
 		$(use_enable pkcs11) \
 		$(use_enable plugins) \
 		$(use_enable iproute2) \
@@ -70,16 +61,4 @@ src_test() {
 	pushd tests/unit_tests > /dev/null || die
 	make check || die "unit tests failed"
 	popd > /dev/null || die
-}
-
-src_install() {
-	default
-	find "${ED}/usr" -name '*.la' -delete
-
-	# install examples, controlled by the respective useflag
-	if use examples ; then
-		# dodoc does not supportly support directory traversal, #15193
-		insinto /usr/share/doc/${PF}/examples
-		doins -r sample contrib
-	fi
 }

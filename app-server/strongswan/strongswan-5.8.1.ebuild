@@ -27,6 +27,7 @@ done
 COMMON_DEPEND="!app-net/openswan
 	gmp? ( >=lib-dev/gmp-4.1.5:= )
 	lib-dev/libgcrypt:0
+	lib-net/wolfssl:0
 	caps? ( lib-sys/libcap )
 	curl? ( app-net/curl )
 	ldap? ( app-net/openldap )
@@ -129,6 +130,7 @@ src_configure() {
 		$(use_enable mysql) \
 		$(use_enable networkmanager nm) \
 		--disable-openssl \
+		--enable-wolfssl \
 		$(use_enable pam xauth-pam) \
 		$(use_enable pkcs11) \
 		$(use_enable sqlite) \

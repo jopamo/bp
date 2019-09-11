@@ -13,7 +13,7 @@ LICENSE="GPL-3"
 
 SLOT="0"
 
-IUSE="acl -addc -addns -ads -ceph client -cluster cups debug dmapi fam gnutls gpg iprint json -ldap
+IUSE="acl -addc -addns -ads -ceph client -cluster cups debug dmapi fam gpg iprint json -ldap
 quota syslog systemd test winbind zeroconf"
 
 CDEPEND="
@@ -39,10 +39,6 @@ CDEPEND="
 	debug? ( dev-util/lttng-ust )
 	dmapi? ( sys-app/dmapi )
 	fam? ( virtual/fam )
-	gnutls? (
-		lib-dev/libgcrypt:0
-		>=lib-net/gnutls-1.4.0
-	)
 	gpg? ( app-crypt/gpgme )
 	json? ( lib-dev/jansson )
 	ldap? ( app-net/openldap )
@@ -60,8 +56,8 @@ RDEPEND="${CDEPEND}
 "
 
 REQUIRED_USE="
-	addc? ( gnutls json winbind )
-	ads? ( acl gnutls ldap winbind )
+	addc? ( json winbind )
+	ads? ( acl ldap winbind )
 	cluster? ( ads )
 	gpg? ( addc )
 "
@@ -120,7 +116,6 @@ src_configure() {
 		$(use_with syslog)
 		$(use_with systemd)
 		$(usex test '--enable-selftest' '')
-		$(use_enable gnutls)
 		$(use_with debug lttng)
 	)
 

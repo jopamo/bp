@@ -20,7 +20,7 @@ RDEPEND="ldap? ( app-net/openldap )
 
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconf-0-r1
-	lib-net/mbedtls
+	lib-net/wolfssl:0
 	test? (
 		sys-app/diffutils
 		dev-lang/perl
@@ -39,15 +39,17 @@ src_configure() {
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
 		$(use_enable static-libs static)
-		--with-mbedtls
-		--with-polarssl
 		$(use_enable ldap)
 		$(use_enable ldap ldaps)
 		$(use_with ssh libssh2)
 		$(use_enable adns ares)
 		$(use_enable ipv6)
+		--without-ssl
+		--with-wolfssl
 		--with-zlib
 		--with-random=/dev/urandom
+		--enable-versioned-symbols
+		--enable-threaded-resolver
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

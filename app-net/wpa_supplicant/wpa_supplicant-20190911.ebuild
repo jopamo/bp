@@ -6,12 +6,17 @@ inherit qmake-utils systemd toolchain-funcs flag-o-matic
 
 DESCRIPTION="IEEE 802.1X/WPA supplicant for secure wireless transfers"
 HOMEPAGE="https://w1.fi/wpa_supplicant/"
-SRC_URI="https://w1.fi/releases/${P}.tar.gz"
-LICENSE="|| ( GPL-2 BSD )"
 
+SNAPSHOT=018edec9b2bd3db20605117c32ff79c1e625c432
+SRC_URI="https://w1.fi/cgit/hostap/snapshot/hostap-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
+S="${WORKDIR}/hostap-${SNAPSHOT}/${PN}"
+
+LICENSE="|| ( GPL-2 BSD )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="ap dbus eapol_test fasteap gnutls +hs2-0 p2p privsep qt5 readline smartcard ssl tdls uncommon-eap-types wps"
+
 REQUIRED_USE="fasteap? ( !ssl ) smartcard? ( ssl )"
 
 CDEPEND="
@@ -40,8 +45,6 @@ DEPEND="${CDEPEND}
 	dev-util/pkgconf
 "
 
-S="${WORKDIR}/${P}/${PN}"
-
 Kconfig_style_config() {
 		#param 1 is CONFIG_* item
 		#param 2 is what to set it = to, defaulting in y
@@ -65,7 +68,7 @@ Kconfig_style_config() {
 src_prepare() {
 	default
 
-	# net/bpf.h needed for lib-net/libpcap on Gentoo/FreeBSD
+	# net/bpf.h needed for net-libs/libpcap on Gentoo/FreeBSD
 	sed -i \
 		-e "s:\(#include <pcap\.h>\):#include <net/bpf.h>\n\1:" \
 		../src/l2_packet/l2_packet_freebsd.c || die
@@ -77,19 +80,14 @@ src_prepare() {
 		-e "s:^\(pkcs11_module_path\):#\1:" \
 		wpa_supplicant.conf || die
 
-	# Change configuration to match Gentoo locations (bug #143750)
-	sed -i \
-		-e "s:/usr/lib/opensc:/usr/lib:" \
-		-e "s:/usr/lib/pkcs11:/usr/lib:" \
-		wpa_supplicant.conf || die
-
 	# systemd entries to D-Bus service files (bug #372877)
 	echo 'SystemdService=wpa_supplicant.service' \
 		| tee -a dbus/*.service >/dev/null || die
 
-	cd "${WORKDIR}/${P}" || die
+	cd "${WORKDIR}/hostap-${SNAPSHOT}" || die
 
-	eapply "${FILESDIR}/wpa_supplicant-2.7-fix-undefined-remove-ie.patch"
+	# bug (640492)
+	sed -i 's#-Werror ##' wpa_supplicant/Makefile || die
 }
 
 src_configure() {
@@ -105,6 +103,13 @@ src_configure() {
 	Kconfig_style_config IBSS_RSN
 	Kconfig_style_config IEEE80211W
 	Kconfig_style_config IEEE80211R
+	Kconfig_style_config HT_OVERRIDES
+	Kconfig_style_config VHT_OVERRIDES
+	Kconfig_style_config OCV
+	Kconfig_style_config TLSV11
+	Kconfig_style_config TLSV12
+	Kconfig_style_config GETRANDOM
+	Kconfig_style_config MBO
 
 	# Basic authentication methods
 	# NOTE: we don't set GPSK or SAKE as they conflict
@@ -114,14 +119,13 @@ src_configure() {
 	Kconfig_style_config EAP_OTP
 	Kconfig_style_config EAP_PAX
 	Kconfig_style_config EAP_PSK
-	Kconfig_style_config EAP_TLV
-	Kconfig_style_config EAP_EXE
 	Kconfig_style_config IEEE8021X_EAPOL
 	Kconfig_style_config PKCS12
 	Kconfig_style_config PEERKEY
 	Kconfig_style_config EAP_LEAP
 	Kconfig_style_config EAP_MSCHAPV2
 	Kconfig_style_config EAP_PEAP
+	Kconfig_style_config EAP_TEAP
 	Kconfig_style_config EAP_TLS
 	Kconfig_style_config EAP_TTLS
 
@@ -133,6 +137,10 @@ src_configure() {
 		Kconfig_style_config CTRL_IFACE_DBUS
 		Kconfig_style_config CTRL_IFACE_DBUS_NEW
 		Kconfig_style_config CTRL_IFACE_DBUS_INTRO
+	else
+		Kconfig_style_config CTRL_IFACE_DBUS n
+		Kconfig_style_config CTRL_IFACE_DBUS_NEW n
+		Kconfig_style_config CTRL_IFACE_DBUS_INTRO n
 	fi
 
 	if use eapol_test ; then
@@ -168,30 +176,27 @@ src_configure() {
 		Kconfig_style_config WPA_CLI_EDIT
 	fi
 
-	# SSL authentication methods
-	if use ssl ; then
-		if use gnutls ; then
-			Kconfig_style_config TLS gnutls
-			Kconfig_style_config GNUTLS_EXTRA
-		else
-			Kconfig_style_config TLS openssl
-			Kconfig_style_config EAP_PWD
+	Kconfig_style_config TLS openssl
+	Kconfig_style_config FST
 
-			# Enabling mesh networks.
-			Kconfig_style_config MESH
-		fi
-	else
-		Kconfig_style_config TLS internal
-	fi
+	Kconfig_style_config EAP_PWD
 
-	if use smartcard ; then
-		Kconfig_style_config SMARTCARD
-	fi
+	# Enabling mesh networks.
+	Kconfig_style_config MESH
+
+	#WPA3
+	Kconfig_style_config OWE
+	Kconfig_style_config SAE
+	Kconfig_style_config DPP
+	Kconfig_style_config SUITEB192
+
+	Kconfig_style_config SMARTCARD n
 
 	if use tdls ; then
 		Kconfig_style_config TDLS
 	fi
 
+	# Linux specific drivers
 	Kconfig_style_config DRIVER_ATMEL
 	Kconfig_style_config DRIVER_HOSTAP
 	Kconfig_style_config DRIVER_IPW
@@ -212,6 +217,8 @@ src_configure() {
 		Kconfig_style_config WPS_UPNP
 		# Near Field Communication
 		Kconfig_style_config WPS_NFC
+	else
+		Kconfig_style_config WPS n
 	fi
 
 	# Wi-Fi Direct (WiDi)
@@ -223,6 +230,8 @@ src_configure() {
 	# Access Point Mode
 	if use ap ; then
 		Kconfig_style_config AP
+	else
+		Kconfig_style_config AP n
 	fi
 
 	# Enable essentials for AP/P2P
@@ -241,7 +250,13 @@ src_configure() {
 		Kconfig_style_config PRIVSEP
 	fi
 
-	Kconfig_style_config LIBNL32
+	# If we are using libnl 2.0 and above, enable support for it
+	# Bug 382159
+	# Removed for now, since the 3.2 version is broken, and we don't
+	# support it.
+	if has_version ">=dev-libs/libnl-3.2"; then
+		Kconfig_style_config LIBNL32
+	fi
 
 	if use qt5 ; then
 		pushd "${S}"/wpa_gui-qt4 > /dev/null || die
@@ -269,21 +284,16 @@ src_install() {
 	use privsep && dosbin wpa_priv
 	dobin wpa_cli wpa_passphrase
 
-	exeinto /etc/wpa_supplicant/
-	newexe "${FILESDIR}/wpa_cli.sh" wpa_cli.sh
-
-
-	dodoc wpa_supplicant.conf
+	dodoc ChangeLog {eap_testing,todo}.txt README{,-WPS} \
+		wpa_supplicant.conf
 
 	newdoc .config build-config
-
-	doman doc/docbook/*.{5,8}
 
 	if use qt5 ; then
 		into /usr
 		dobin wpa_gui-qt4/wpa_gui
 		doicon wpa_gui-qt4/icons/wpa_gui.svg
-		make_desktop_entry wpa_gui "WPA Supplicant Administration GUI" "wpa_gui" "Qt;Network;"
+		domenu wpa_gui-qt4/wpa_gui.desktop
 	else
 		rm "${ED}"/usr/share/man/man8/wpa_gui.8
 	fi
@@ -293,7 +303,7 @@ src_install() {
 		insinto /etc/dbus-1/system.d
 		newins dbus-wpa_supplicant.conf wpa_supplicant.conf
 		insinto /usr/share/dbus-1/system-services
-		doins fi.epitest.hostap.WPASupplicant.service fi.w1.wpa_supplicant1.service
+		doins fi.w1.wpa_supplicant1.service
 		popd > /dev/null || die
 
 		# This unit relies on dbus support, bug 538600.
@@ -307,29 +317,4 @@ src_install() {
 	systemd_dounit "systemd/wpa_supplicant@.service"
 	systemd_dounit "systemd/wpa_supplicant-nl80211@.service"
 	systemd_dounit "systemd/wpa_supplicant-wired@.service"
-}
-
-pkg_postinst() {
-
-
-	if [[ -e "${EROOT%/}"/etc/wpa_supplicant.conf ]] ; then
-		echo
-		ewarn "WARNING: your old configuration file ${EROOT%/}/etc/wpa_supplicant.conf"
-		ewarn "needs to be moved to ${EROOT%/}/etc/wpa_supplicant/wpa_supplicant.conf"
-	fi
-
-	# Mea culpa, feel free to remove that after some time --mgorny.
-	local fn
-	for fn in wpa_supplicant{,@wlan0}.service; do
-		if [[ -e "${EROOT%/}"/etc/systemd/system/network.target.wants/${fn} ]]
-		then
-			ebegin "Moving ${fn} to multi-user.target"
-			mv "${EROOT%/}"/etc/systemd/system/network.target.wants/${fn} \
-				"${EROOT%/}"/etc/systemd/system/multi-user.target.wants/ || die
-			eend ${?} \
-				"Please try to re-enable ${fn}"
-		fi
-	done
-
-	systemd_reenable wpa_supplicant.service
 }

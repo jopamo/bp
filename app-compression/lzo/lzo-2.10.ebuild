@@ -2,20 +2,26 @@
 
 EAPI=7
 
-inherit toolchain-funcs
-
 DESCRIPTION="An extremely fast compression and decompression library"
 HOMEPAGE="http://www.oberhumer.com/opensource/lzo/"
 SRC_URI="http://www.oberhumer.com/opensource/lzo/download/${P}.tar.gz"
 
 LICENSE="GPL-2"
-SLOT="2"
+SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="static-libs"
 
 src_configure() {
-	ECONF_SOURCE=${S} \
-	econf \
-		--enable-shared \
+	local myconf=(
+		--bindir="${EPREFIX}"/usr/bin
+		--sbindir="${EPREFIX}"/usr/sbin
+		--libdir="${EPREFIX}"/usr/lib
+		--libexecdir="${EPREFIX}"/usr/libexec
+		--sysconfdir="${EPREFIX}"/etc
+		--localstatedir="${EPREFIX}"/var
+		--enable-shared
 		$(use_enable static-libs static)
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

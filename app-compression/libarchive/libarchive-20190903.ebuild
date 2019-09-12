@@ -19,7 +19,7 @@ else
 fi
 
 LICENSE="BSD BSD-2 BSD-4 public-domain"
-SLOT="0/1"
+SLOT="0"
 
 IUSE="acl +bzip2 expat nettle ssl static-libs xattr +zlib ssl lz4 zstd"
 
@@ -55,13 +55,13 @@ src_configure() {
 		$(use_with bzip2 bz2lib)
 		$(use_with expat)
 		$(use_with !expat xml2)
-		--with-iconv
 		$(use_with lz4)
 		$(use_with zstd)
-		--with-lzma
-		--without-lzo2
 		$(use_with nettle)
 		$(use_with zlib)
+		--with-lzma
+		--with-iconv
+		--without-lzo2
 		--disable-bsdcat
 		--disable-bsdcpio
 		--disable-bsdtar

@@ -9,7 +9,7 @@ HOMEPAGE="http://p7zip.sourceforge.net/"
 SRC_URI="mirror://sourceforge/${PN}/${PN}_${PV}_src_all.tar.bz2"
 
 LICENSE="LGPL-2.1 unRAR"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static"

@@ -7,7 +7,7 @@ HOMEPAGE="https://sourceware.org/bzip2/"
 SRC_URI="https://sourceware.org/pub/bzip2/${P}.tar.gz"
 
 LICENSE="BZIP2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"

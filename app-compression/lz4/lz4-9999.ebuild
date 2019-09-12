@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/lz4/lz4.git"
 EGIT_BRANCH="master"
 
 LICENSE="BSD-2 GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"

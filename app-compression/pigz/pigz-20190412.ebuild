@@ -12,7 +12,7 @@ SRC_URI="https://github.com/madler/pigz/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.g
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="ZLIB"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static test"

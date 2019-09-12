@@ -26,7 +26,7 @@ RDEPEND="icu? ( >=lib-dev/icu-3.6:= )
 	python? ( ${PYTHON_DEPS} )
 	app-compression/bzip2
 	lib-sys/zlib
-	!sys-app/eselect-boost"
+	!app-admin/eselect-boost"
 DEPEND="${RDEPEND}
 	=lib-dev/boost-build-${MAJOR_V}*"
 REQUIRED_USE="

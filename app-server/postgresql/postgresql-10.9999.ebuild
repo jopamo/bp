@@ -22,7 +22,7 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 CDEPEND="
 		sys-app/less
 		sys-devel/gettext
-		kerberos? ( virtual/krb5 )
+		kerberos? ( app-crypt/heimdal )
 		ldap? ( app-net/openldap )
 		pam? ( lib-sys/pam )
 		perl? ( >=dev-lang/perl-5.8:= )

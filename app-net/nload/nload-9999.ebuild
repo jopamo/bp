@@ -4,7 +4,7 @@ EAPI=7
 
 inherit autotools git-r3
 
-DESCRIPTION="console application which monitors network traffic and bandwidth usage in real time"
+DESCRIPTION="console application which monitors network traffic and bandwidth usage"
 HOMEPAGE="http://www.roland-riegel.de/nload/index.html"
 EGIT_REPO_URI="https://github.com/rolandriegel/nload.git"
 

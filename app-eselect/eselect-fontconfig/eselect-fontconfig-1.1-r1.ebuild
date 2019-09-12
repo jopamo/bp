@@ -10,7 +10,7 @@ LICENSE="GPL-2"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-RDEPEND=">=sys-app/eselect-1.2.3
+RDEPEND=">=app-admin/eselect-1.2.3
 		 >=lib-media/fontconfig-2.4"
 
 S=${WORKDIR}

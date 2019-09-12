@@ -2,6 +2,8 @@
 
 EAPI=7
 
+inherit autotools
+
 DESCRIPTION="Rotates, compresses, and mails system logs"
 HOMEPAGE="https://github.com/logrotate/logrotate"
 EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
@@ -19,16 +21,13 @@ KEYWORDS="amd64 arm64"
 
 IUSE="acl"
 
-CDEPEND="
+DEPEND="
 	>=lib-dev/popt-1.5
+	sys-app/sed
 	acl? ( sys-app/acl )"
 
-DEPEND="${CDEPEND}
-	>=sys-app/sed-4"
-
 src_prepare() {
-	cd ${S}
-	./autogen.sh
+	eautoreconf
 	default
 	sed -i -e 's#/usr/sbin/logrotate#/usr/bin/logrotate#' "${S}"/examples/logrotate.service || die
 }

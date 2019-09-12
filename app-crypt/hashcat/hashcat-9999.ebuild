@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/hashcat/hashcat"
 EGIT_REPO_URI="https://github.com/hashcat/hashcat.git"
 
 LICENSE="MIT"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="custom-cflags nvidia"
@@ -21,7 +21,7 @@ src_prepare() {
 	sed -i "/LFLAGS                  += -s/d" src/Makefile
 	#do not add random CFLAGS
 	sed -i "s/-O2//" src/Makefile || die
-	cd ${S}
+	cd "${S}"
 	git submodule update --init
 	export PREFIX=/usr
 	export LIBRARY_FOLDER="/usr/lib"

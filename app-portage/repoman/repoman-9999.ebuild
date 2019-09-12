@@ -22,7 +22,7 @@ DEPEND="
 python_prepare_all() {
 	distutils-r1_python_prepare_all
 
-	find ${S} -type f -print0 | xargs -0 sed -i 's/\/var\/db\/repos\/gentoo/\/var\/db\/repos\/bp/g'
+	find "${S}" -type f -print0 | xargs -0 sed -i 's/\/var\/db\/repos\/gentoo/\/var\/db\/repos\/bp/g'
 }
 
 python_test() {

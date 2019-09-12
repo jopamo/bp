@@ -66,8 +66,6 @@ src_install() {
 		dosym /usr/sbin/smtpctl /usr/bin/sendmail
 		dosym /usr/sbin/smtpctl /usr/lib/sendmail
 	fi
-
-
 }
 
 pkg_preinst() {

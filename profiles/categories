@@ -13,7 +13,6 @@ dev-python
 dev-util
 lib-dev
 lib-net
-lib-print
 lib-sys
 sys-app
 sys-devel

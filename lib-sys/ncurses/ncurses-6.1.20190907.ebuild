@@ -15,9 +15,7 @@ LICENSE="MIT"
 
 SLOT="0/6"
 KEYWORDS="amd64 arm64"
-IUSE="gpm static-libs test"
-
-DEPEND="gpm? ( lib-sys/gpm )"
+IUSE="static-libs test"
 
 PATCHES=(
 	"${FILESDIR}/${PN}-6.0-unified.patch"
@@ -35,7 +33,6 @@ src_configure() {
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
-		$(use_with gpm gpm libgpm.so.1)
 		--disable-termcap
 		--with-terminfo-dirs="${EPREFIX}"/usr/share/terminfo
 		--enable-pc-files

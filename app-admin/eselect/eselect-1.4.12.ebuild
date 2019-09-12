@@ -10,8 +10,6 @@ LICENSE="GPL-2+ || ( GPL-2+ CC-BY-SA-3.0 )"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="vim-syntax"
-
 RDEPEND="sys-app/sed
 	|| (
 		sys-app/coreutils
@@ -23,8 +21,6 @@ DEPEND="${RDEPEND}"
 RDEPEND="${RDEPEND}
 	sys-app/file
 	lib-sys/ncurses:0"
-
-PDEPEND="vim-syntax? ( app-text/eselect-syntax )"
 
 src_compile() {
 	emake

@@ -22,7 +22,7 @@ DEPEND="
 
 RDEPEND="
 	>=app-compression/tar-1.27
-	sys-app/eselect
+	app-admin/eselect
 	>=app-crypt/gnupg-2.2.4-r2[gnutls(-)]
 	sys-app/bash
 	>=dev-python/lxml-3.6.0[${PYTHON_USEDEP}]

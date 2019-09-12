@@ -55,7 +55,6 @@ src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-
 src_install() {
 	emake DESTDIR="${D}" install
 	cleanup_install

@@ -48,7 +48,7 @@ src_configure() {
 		$(use_enable gui)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-	eqmake5 ${S}/qbittorrent.pro
+	eqmake5 "${S}"/qbittorrent.pro
 }
 
 src_install() {

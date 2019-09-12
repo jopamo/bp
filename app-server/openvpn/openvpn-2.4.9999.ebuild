@@ -46,6 +46,7 @@ src_configure() {
 	TMPFILES_DIR="/usr/lib/tmpfiles.d" \
 	econf \
 		--with-crypto-library=mbedtls \
+		--disable-lzo \
 		$(use_enable inotify async-push) \
 		$(use_enable lz4) \
 		$(use_enable pkcs11) \

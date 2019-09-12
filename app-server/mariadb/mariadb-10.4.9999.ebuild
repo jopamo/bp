@@ -12,7 +12,7 @@ EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
 
 SLOT="0/${SUBSLOT:-0}"
 IUSE="backup bindist client-libs debug extraengine galera innodb-lz4
-	innodb-lzo innodb-snappy jdbc jemalloc kerberos mroonga
+	innodb-snappy jdbc jemalloc kerberos mroonga
 	numa odbc oqgraph pam +perl profiling rocksdb +server sphinx
 	sst-rsync sst-mariabackup sst-xtrabackup static static-libs systemd systemtap tcmalloc
 	test tokudb xml yassl"
@@ -45,7 +45,6 @@ COMMON_DEPEND="
 			xml? ( lib-dev/libxml2:2= )
 		)
 		innodb-lz4? ( app-compression/lz4 )
-		innodb-lzo? ( lib-dev/lzo )
 		innodb-snappy? ( app-compression/snappy )
 		numa? ( sys-app/numactl )
 		oqgraph? ( >=lib-dev/boost-1.40.0:0= lib-dev/judy:0= )
@@ -173,7 +172,7 @@ src_configure(){
 			-DCONNECT_WITH_MONGO=OFF
 			-DWITH_WSREP=$(usex galera)
 			-DWITH_INNODB_LZ4=$(usex innodb-lz4 ON OFF)
-			-DWITH_INNODB_LZO=$(usex innodb-lzo ON OFF)
+			-DWITH_INNODB_LZO=OFF
 			-DWITH_INNODB_SNAPPY=$(usex innodb-snappy ON OFF)
 			-DPLUGIN_MROONGA=$(usex mroonga DYNAMIC NO)
 			-DPLUGIN_AUTH_GSSAPI=$(usex kerberos DYNAMIC NO)

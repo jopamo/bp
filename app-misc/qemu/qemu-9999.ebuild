@@ -21,7 +21,7 @@ LICENSE="GPL-2 LGPL-2 BSD-2"
 SLOT="0/1"
 IUSE="accessibility +aio alsa bluetooth bzip2 capstone +caps +curl debug
 	+fdt glusterfs gnutls gtk gtk2 infiniband iscsi +jpeg
-	lzo ncurses nfs nls numa opengl +pin-upstream-blobs +png
+	ncurses nfs nls numa opengl +pin-upstream-blobs +png
 	pulseaudio rbd sasl +seccomp sdl sdl2 smartcard snappy
 	spice ssh static static-user systemtap tci test usb usbredir vde
 	+vhost-net virgl virtfs +vnc vte xattr xen xfs"
@@ -96,7 +96,6 @@ SOFTMMU_TOOLS_DEPEND="
 	infiniband? ( sys-fabric/librdmacm:=[static-libs(+)] )
 	iscsi? ( lib-net/libiscsi )
 	jpeg? ( lib-media/libjpeg-turbo:0=[static-libs(+)] )
-	lzo? ( lib-dev/lzo:2[static-libs(+)] )
 	ncurses? (
 		lib-sys/ncurses:0=
 		lib-sys/ncurses:0=[static-libs(+)]
@@ -345,7 +344,6 @@ qemu_src_configure() {
 		$(conf_notuser iscsi libiscsi)
 		$(conf_notuser jpeg vnc-jpeg)
 		$(conf_notuser kvm)
-		$(conf_notuser lzo)
 		$(conf_notuser ncurses curses)
 		$(conf_notuser nfs libnfs)
 		$(conf_notuser numa)

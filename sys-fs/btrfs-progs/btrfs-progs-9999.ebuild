@@ -24,17 +24,19 @@ IUSE="static static-libs"
 
 RESTRICT=test # tries to mount repared filesystems
 
-RDEPEND="lib-dev/lzo:2=
+RDEPEND="
 	sys-app/util-linux:0=[static-libs(+)?]
-	lib-sys/zlib:0="
+	lib-sys/zlib:0[static-libs(+)]
+"
 
 DEPEND="${RDEPEND}
-	app-compression/zstd
+	app-compression/zstd:0[static-libs(+)]
+	app-compression/lzo:0[static-libs(+)]
 	static? (
-		lib-dev/lzo:2[static-libs(+)]
 		sys-app/util-linux:0[static-libs(+)]
 		lib-sys/zlib:0[static-libs(+)]
 		app-compression/zstd:0[static-libs(+)]
+		app-compression/lzo:0[static-libs(+)]
 	)
 "
 

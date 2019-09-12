@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/kjn/lbzip2/"
 SRC_URI="https://1g4.org/files/lbzip2-${PV}.tar.xz"
 
 LICENSE="GPL-3"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 replace-flags -O3 -O2

@@ -18,7 +18,7 @@ else
 fi
 
 LICENSE="ZLIB"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"

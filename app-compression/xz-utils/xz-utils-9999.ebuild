@@ -16,7 +16,7 @@ else
 fi
 
 LICENSE="public-domain LGPL-2.1+ GPL-2+"
-SLOT="0/1"
+SLOT="0"
 
 IUSE="nls static-libs"
 

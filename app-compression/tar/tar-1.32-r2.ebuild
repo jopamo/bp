@@ -9,7 +9,7 @@ HOMEPAGE="https://www.gnu.org/software/tar/"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 
 LICENSE="GPL-3+"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="acl nls static xattr"

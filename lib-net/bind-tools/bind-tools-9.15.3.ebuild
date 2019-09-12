@@ -26,7 +26,7 @@ CDEPEND="
 	gost? ( virtual/ssl )
 	xml? ( lib-dev/libxml2 )
 	idn? ( lib-net/idnkit )
-	gssapi? ( virtual/krb5 )
+	gssapi? ( app-crypt/heimdal )
 	readline? ( lib-sys/readline:0= )
 	seccomp? ( lib-sys/libseccomp )"
 DEPEND="${CDEPEND}

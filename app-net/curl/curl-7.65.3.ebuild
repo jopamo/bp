@@ -26,8 +26,8 @@ DEPEND="${RDEPEND}
 		dev-lang/perl
 	)"
 
-PATCHES=( 	${FILESDIR}/828392ae10e6e7855e66a78c01346f9cd1127467.patch
-			${FILESDIR}/curl-respect-cflags-3.patch
+PATCHES=( 	"${FILESDIR}"/828392ae10e6e7855e66a78c01346f9cd1127467.patch
+			"${FILESDIR}"/curl-respect-cflags-3.patch
 )
 
 src_configure() {

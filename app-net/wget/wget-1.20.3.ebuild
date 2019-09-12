@@ -2,7 +2,6 @@
 
 EAPI=7
 
-
 inherit flag-o-matic python-any-r1 toolchain-funcs
 
 DESCRIPTION="Network utility to retrieve files from the WWW"

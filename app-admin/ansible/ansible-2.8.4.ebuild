@@ -12,8 +12,6 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="test"
-
 RESTRICT="test"
 
 RDEPEND="
@@ -28,21 +26,9 @@ RDEPEND="
 DEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	>=dev-python/packaging-16.6[${PYTHON_USEDEP}]
-	test? (
-		${RDEPEND}
-		dev-python/nose[${PYTHON_USEDEP}]
-		>=dev-python/mock-1.0.1[${PYTHON_USEDEP}]
-		dev-python/passlib[${PYTHON_USEDEP}]
-		dev-python/coverage[${PYTHON_USEDEP}]
-		dev-python/unittest2[${PYTHON_USEDEP}]
-		sys-app/git
-	)"
+"
 
 python_prepare_all() {
 	rm -fv MANIFEST.in || die
 	distutils-r1_python_prepare_all
-}
-
-python_test() {
-	nosetests -d -w test/units -v --with-coverage --cover-package=ansible --cover-branches || die
 }

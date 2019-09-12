@@ -19,7 +19,7 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 # Testcases are pretty useless as they are built for RedHat users/groups and kernels.
 RESTRICT="test"
 
-RDEPEND="gssapi? ( virtual/krb5 )
+RDEPEND="gssapi? ( app-crypt/heimdal )
 	ldap? ( app-net/openldap )
 	lib-sys/libcap-ng
 	python? ( ${PYTHON_DEPS} )"

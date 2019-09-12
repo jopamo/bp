@@ -4,7 +4,7 @@ EAPI=7
 
 inherit autotools
 
-DESCRIPTION="Git is a fast, scalable, distributed revision control system with a rich command set that provides high-level operations and full access to internals."
+DESCRIPTION="Git is a fast, scalable, distributed revision control system"
 HOMEPAGE="http://www.git-scm.com/"
 
 if [[ ${PV} == *9999 ]]; then

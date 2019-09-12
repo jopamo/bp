@@ -7,10 +7,10 @@ HOMEPAGE="https://www.gentoo.org/proj/en/Python/"
 SRC_URI="https://dev.gentoo.org/~mgorny/dist/${P}.tar.bz2"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND=">=sys-app/eselect-1.2.3
+RDEPEND=">=app-admin/eselect-1.2.3
 	>=dev-lang/python-exec-2.4.2"
 
 pkg_postinst() {
@@ -24,4 +24,3 @@ pkg_postinst() {
 		eselect python update "--python3" --if-unset
 	fi
 }
-

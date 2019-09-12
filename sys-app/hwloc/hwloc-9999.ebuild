@@ -24,9 +24,9 @@ IUSE="cairo cuda debug gl +numa +pci plugins svg static-libs xml X"
 
 RDEPEND="
 	>=lib-sys/ncurses-5.9-r3:0
-	cairo? ( >=lib-gui/cairo-1.12.14-r4[X?,svg?] )
+	cairo? ( >=lib-gui/cairo-1.12.14-r4 )
 	cuda? ( >=nvidia/nvidia-cuda-toolkit-6.5.19-r1 )
-	gl? ( nvidia/nvidia-drivers[static-libs,tools]  )
+	gl? ( nvidia/nvidia-drivers[static-libs]  )
 	pci? (
 		>=sys-app/pciutils-3.3.0-r2
 		>=x11-libs/libpciaccess-0.13.1-r1

@@ -8,12 +8,11 @@ inherit flag-o-matic pam tmpfiles autotools
 
 DESCRIPTION="screen manager with VT100/ANSI terminal emulation"
 HOMEPAGE="https://www.gnu.org/software/screen/"
-#SRC_URI="https://1g4.org/files/${P}.tar.xz"
 SRC_URI="https://git.savannah.gnu.org/cgit/screen.git/snapshot/screen-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}/src
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="debug pam"
@@ -22,8 +21,6 @@ DEPEND="
 	>=lib-sys/ncurses-5.2:0=
 	pam? ( lib-sys/pam )
 	sys-devel/texinfo"
-
-#PATCHES=( ${FILESDIR}/854c3673bb69a07d0ebaa52c2cd31eebaeaaca2c.patch )
 
 src_prepare() {
 	default

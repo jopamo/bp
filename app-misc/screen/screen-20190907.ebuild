@@ -2,11 +2,15 @@
 
 EAPI=7
 
-inherit flag-o-matic pam tmpfiles
+SNAPSHOT=abc87e48796c9184ffc478089119e316270c7022
+
+inherit flag-o-matic pam tmpfiles autotools
 
 DESCRIPTION="screen manager with VT100/ANSI terminal emulation"
 HOMEPAGE="https://www.gnu.org/software/screen/"
-SRC_URI="https://1g4.org/files/${P}.tar.xz"
+#SRC_URI="https://1g4.org/files/${P}.tar.xz"
+SRC_URI="https://git.savannah.gnu.org/cgit/screen.git/snapshot/screen-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}/src
 
 LICENSE="GPL-2"
 SLOT="0/1"
@@ -19,7 +23,12 @@ DEPEND="
 	pam? ( lib-sys/pam )
 	sys-devel/texinfo"
 
-PATCHES=( ${FILESDIR}/854c3673bb69a07d0ebaa52c2cd31eebaeaaca2c.patch )
+#PATCHES=( ${FILESDIR}/854c3673bb69a07d0ebaa52c2cd31eebaeaaca2c.patch )
+
+src_prepare() {
+	default
+	eautoreconf
+}
 
 src_configure() {
 	use debug && append-cppflags "-DDEBUG"

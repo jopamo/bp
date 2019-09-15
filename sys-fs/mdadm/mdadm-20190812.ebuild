@@ -18,8 +18,8 @@ KEYWORDS="amd64 arm64"
 IUSE="static"
 
 DEPEND="dev-util/pkgconf
-		app-compression/xz-utils"
-RDEPEND="sys-app/util-linux"
+	app-compression/xz-utils
+	sys-app/util-linux"
 
 RESTRICT="test"
 

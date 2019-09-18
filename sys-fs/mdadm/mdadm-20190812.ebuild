@@ -8,7 +8,7 @@ inherit flag-o-matic systemd toolchain-funcs
 
 DESCRIPTION="Tool for running RAID systems - replacement for the raidtools"
 HOMEPAGE="http://neil.brown.name/blog/mdadm"
-SRC_URI="https://git.kernel.org/pub/scm/utils/${PN}/${PN}.git/snapshot/${PN}-1a52f1fc0266d438c996789d4addbfac999a6139.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://git.kernel.org/pub/scm/utils/${PN}/${PN}.git/snapshot/${PN}-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"

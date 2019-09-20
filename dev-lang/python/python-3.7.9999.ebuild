@@ -65,13 +65,11 @@ src_configure() {
 		--mandir="${EPREFIX}"/usr/share/man
 		--with-computed-gotos
 		--with-dbmliborder="gdbm"
-		--with-libc=
+		--with-libc=""
 		--without-ensurepip
 		--with-system-expat
 		--with-system-ffi
 		--with-lto
-		--disable-rpath
-		--with-threads
 	)
 
 	OPT="" econf "${myeconfargs[@]}"

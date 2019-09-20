@@ -2,17 +2,17 @@
 
 EAPI=7
 
-inherit autotools linux-info systemd git-r3
+inherit linux-info systemd
 
 DESCRIPTION="Linux kernel (3.13+) firewall, NAT and packet mangling tools"
 HOMEPAGE="https://netfilter.org/projects/nftables/"
-EGIT_REPO_URI="https://git.netfilter.org/${PN}"
+SRC_URI="http://www.netfilter.org/projects/${PN}/files/${P}.tar.bz2"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug +gmp +readline static-libs"
+IUSE="debug +gmp +readline static-libs systemd"
 
 RDEPEND="lib-net/libmnl
 		gmp? ( lib-dev/gmp )
@@ -28,11 +28,6 @@ DEPEND="${RDEPEND}
 pkg_setup() {
 	CONFIG_CHECK="~NF_TABLES"
 	linux-info_pkg_setup
-}
-
-src_prepare() {
-	default
-	eautoreconf
 }
 
 src_configure() {
@@ -57,7 +52,7 @@ src_install() {
 
 	keepdir /var/lib/nftables
 
-	systemd_dounit "${FILESDIR}"/${PN}.service
+	use systemd && systemd_dounit "${FILESDIR}"/${PN}.service
 
 	insinto /etc
 	doins "${FILESDIR}/nftables.conf"

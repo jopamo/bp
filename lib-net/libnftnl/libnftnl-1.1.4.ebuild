@@ -2,14 +2,14 @@
 
 EAPI=7
 
-inherit autotools linux-info git-r3
+inherit linux-info
 
 DESCRIPTION="Netlink API to the in-kernel nf_tables subsystem"
 HOMEPAGE="https://netfilter.org/projects/nftables/"
-EGIT_REPO_URI="https://git.netfilter.org/${PN}"
+SRC_URI="http://www.netfilter.org/projects/${PN}/files/${P}.tar.bz2"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs test"
@@ -20,11 +20,6 @@ DEPEND="lib-net/libmnl
 pkg_setup() {
 	CONFIG_CHECK="~NF_TABLES"
 	linux-info_pkg_setup
-}
-
-src_prepare() {
-	default
-	eautoreconf
 }
 
 src_configure() {

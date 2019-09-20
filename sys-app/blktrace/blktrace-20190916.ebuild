@@ -17,11 +17,11 @@ else
 fi
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="lib-dev/libaio"
-DEPEND="sys-kernel/linux-headers"
+DEPEND="lib-dev/libaio
+	sys-kernel/linux-headers"
 
 CONFIG_CHECK="~BLK_DEV_IO_TRACE"
 WARNING_BLK_DEV_IO_TRACE="you need to enable BLK_DEV_IO_TRACE kernel option if you want to gather traces from this machine"

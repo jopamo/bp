@@ -24,20 +24,17 @@ IUSE="static static-libs"
 
 RESTRICT=test # tries to mount repared filesystems
 
-RDEPEND="
-	sys-app/util-linux:0=[static-libs(+)?]
+LIB_DEPEND="
+	sys-app/util-linux:0[static-libs(+)]
 	lib-sys/zlib:0[static-libs(+)]
-"
-
-DEPEND="${RDEPEND}
 	app-compression/zstd:0[static-libs(+)]
 	app-compression/lzo:0[static-libs(+)]
-	static? (
-		sys-app/util-linux:0[static-libs(+)]
-		lib-sys/zlib:0[static-libs(+)]
-		app-compression/zstd:0[static-libs(+)]
-		app-compression/lzo:0[static-libs(+)]
-	)
+"
+
+DEPEND="
+	static-libs? ( ${LIB_DEPEND} )
+	${LIB_DEPEND//\[static-libs\(+\)\]}
+	static? ( ${LIB_DEPEND} )
 "
 
 if [[ ${PV} == 9999 ]]; then

@@ -2,10 +2,11 @@
 
 EAPI=7
 
-inherit libtool flag-o-matic python-r1 autotools prefix
+inherit python-r1 autotools prefix git-r3
 
 DESCRIPTION="Version 2 of the library to manipulate XML files"
 HOMEPAGE="http://www.xmlsoft.org/"
+EGIT_REPO_URI="https://github.com/GNOME/${PN}.git"
 
 LICENSE="MIT"
 SLOT="2"
@@ -14,14 +15,6 @@ KEYWORDS="amd64 arm64"
 IUSE="debug icu ipv6 lzma readline static-libs"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
-
-if [[ ${PV} == "9999" ]] ; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/GNOME/${PN}.git"
-	S="${WORKDIR}/${PF}"
-else
-	SRC_URI="https://github.com/GNOME/${PN}/archive/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
-fi
 
 RDEPEND="
 	>=lib-sys/zlib-1.2.8-r1:=
@@ -34,8 +27,6 @@ DEPEND="${RDEPEND}
 	dev-util/gtk-doc-am
 	dev-util/pkgconf
 "
-
-S="${WORKDIR}/${PN}-${PV%_rc*}"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-2.7.1-catalog_path.patch
@@ -73,19 +64,23 @@ src_install() {
 	emake DESTDIR="${D}" install
 
 	cleanup_install
+
 	use static-libs || find "${ED}" -name '*.a' -delete
 }
 
 pkg_postinst() {
-	if [[ "${ROOT}" != "/" ]]; then
-		elog "Skipping XML catalog creation for stage building (bug #208887)."
+	if [[ "${ROOT}"/ != "/" ]]; then
+		elog "Skipping XML catalog creation for stage building."
 	else
-		CATALOG="${EROOT}etc/xml/catalog"
+		CATALOG="${EROOT}"/etc/xml/catalog
 
 		if [[ ! -e ${CATALOG} ]]; then
-			[[ -d "${EROOT}etc/xml" ]] || mkdir -p "${EROOT}etc/xml"
+			[[ -d "${EROOT}"/etc/xml ]] || mkdir -p "${EROOT}"/etc/xml
 			"${EPREFIX}"/usr/bin/xmlcatalog --create > "${CATALOG}"
 			einfo "Created XML catalog in ${CATALOG}"
+
+		else
+			einfo "XML catalog already exists."
 		fi
 	fi
 }

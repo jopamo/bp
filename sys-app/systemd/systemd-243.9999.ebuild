@@ -10,10 +10,10 @@ EGIT_REPO_URI="https://github.com/systemd/systemd-stable.git"
 EGIT_BRANCH="v$(ver_cut 1)-stable"
 
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
-SLOT="0/2"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="audit coredump cryptsetup efi gcrypt +hostnamed hwdb importd kmod ldconfig localed logind machined +networkd pam pcre resolve timedated +tmpfiles test vconsole xkb"
+IUSE="audit +blkid coredump cryptsetup efi gcrypt +hostnamed hwdb importd kmod ldconfig localed logind machined +networkd pam pcre resolve timedated +tmpfiles test vconsole xkb"
 
 RESTRICT="!test? ( test )"
 
@@ -73,6 +73,7 @@ PATCHES=( "${FILESDIR}/disable_audit.patch"	)
 src_configure() {
 	local emesonargs=(
 		$(meson_use audit)
+		$(meson_use blkid)
 		$(meson_use coredump)
 		$(meson_use cryptsetup libcryptsetup)
 		$(meson_use efi )
@@ -99,7 +100,6 @@ src_configure() {
 		-Dapparmor=false
 		-Dbacklight=false
 		-Dbinfmt=false
-		-Dblkid=false
 		-Dbzip2=false
 		-Dlibcurl=false
 		-Ddefault-hierarchy=unified

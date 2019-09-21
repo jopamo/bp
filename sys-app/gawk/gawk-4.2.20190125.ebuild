@@ -2,8 +2,6 @@
 
 EAPI=7
 
-inherit toolchain-funcs
-
 DESCRIPTION="GNU awk pattern-matching language"
 HOMEPAGE="https://www.gnu.org/software/gawk/gawk.html"
 

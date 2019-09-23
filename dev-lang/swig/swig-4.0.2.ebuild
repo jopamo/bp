@@ -7,15 +7,15 @@ inherit autotools
 DESCRIPTION="Simplified Wrapper and Interface Generator"
 HOMEPAGE="http://www.swig.org/"
 
-SNAPSHOT=87bf8ae7aa25bdd024ca7c5f8f4216926393fa3c
+SNAPSHOT=c48d11ac17f04038b617cc44c2a44c0d09041267
 SRC_URI="https://github.com/swig/swig/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-3+ BSD BSD-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="ccache doc pcre"
+IUSE="ccache pcre"
 
 RESTRICT="test"
 

@@ -12,7 +12,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="anondel anonperm anonren anonres caps implicittls ldap libressl mysql noiplog pam paranoidmsg postgres resolveids ssl systemd vchroot"
+IUSE="caps implicittls ldap libressl mysql noiplog pam paranoidmsg postgres resolveids ssl systemd vchroot"
 
 REQUIRED_USE="implicittls? ( ssl )"
 
@@ -41,11 +41,6 @@ src_configure() {
 	sed -e "s:# define MAX_USER_LENGTH 32U:# define MAX_USER_LENGTH 127U:" \
 		-i "${S}/src/ftpd.h" || die "sed failed"
 
-	# Those features are only configurable like this, see bug #179375.
-	use anondel && append-cppflags -DANON_CAN_DELETE
-	use anonperm && append-cppflags -DANON_CAN_CHANGE_PERMS
-	use anonren && append-cppflags -DANON_CAN_RENAME
-	use anonres && append-cppflags -DANON_CAN_RESUME
 	use resolveids && append-cppflags -DALWAYS_RESOLVE_IDS
 
 	# Do not auto-use SSP -- let the user select this.

@@ -10,7 +10,7 @@ SRC_URI="https://dl.google.com/android/repository/platform-tools_r${PV}-linux.zi
 S="${WORKDIR}/${PN}"
 
 LICENSE="https://developer.android.com/studio/terms"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64"
 
 src_install() {

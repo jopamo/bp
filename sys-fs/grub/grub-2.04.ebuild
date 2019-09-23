@@ -8,26 +8,14 @@ DESCRIPTION="GNU GRUB boot loader"
 HOMEPAGE="https://www.gnu.org/software/grub/"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 
-LICENSE="GPL-3 fonts? ( GPL-2-with-font-exception ) themes? ( BitstreamVera )"
+LICENSE="GPL-3"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug device-mapper efiemu +fonts mount nls static sdl test +themes +truetype libzfs"
-
-DEJAVU=dejavu-sans-ttf-2.37
-UNIFONT=unifont-12.1.02
-SRC_URI+=" fonts? ( mirror://gnu/unifont/${UNIFONT}/${UNIFONT}.pcf.gz )
-	themes? ( mirror://sourceforge/dejavu/${DEJAVU}.zip )"
+IUSE="debug device-mapper efiemu mount nls static sdl test libzfs"
 
 GRUB_ALL_PLATFORMS=( coreboot efi-32 efi-64 emu ieee1275 loongson multiboot qemu qemu-mips pc uboot xen xen-32 )
 IUSE+=" ${GRUB_ALL_PLATFORMS[@]/#/grub_platforms_}"
-
-REQUIRED_USE="
-	grub_platforms_coreboot? ( fonts )
-	grub_platforms_qemu? ( fonts )
-	grub_platforms_ieee1275? ( fonts )
-	grub_platforms_loongson? ( fonts )
-"
 
 RDEPEND="
 	app-compression/xz-utils
@@ -38,23 +26,16 @@ RDEPEND="
 	device-mapper? ( >=sys-fs/lvm2-2.02.45 )
 	libzfs? ( sys-fs/zfs )
 	mount? ( =sys-fs/fuse-2.9.9999 )
-	truetype? ( lib-media/freetype:2= )
 "
 DEPEND="${RDEPEND}
 	sys-devel/flex
 	sys-devel/bison
 	sys-app/help2man
 	sys-devel/texinfo
-	fonts? ( lib-media/freetype:2 )
 	grub_platforms_xen? ( app-misc/xen-tools:= )
 	grub_platforms_xen-32? ( app-misc/xen-tools:= )
 	static? (
 		app-compression/xz-utils[static-libs(+)]
-		truetype? (
-			app-compression/lbzip2[static-libs(+)]
-			lib-media/freetype[static-libs(+)]
-			lib-sys/zlib[static-libs(+)]
-		)
 	)
 	test? (
 		sys-app/genromfs
@@ -65,9 +46,6 @@ DEPEND="${RDEPEND}
 		sys-app/miscfiles
 		sys-app/parted
 		sys-fs/squashfs-tools
-	)
-	themes? (
-		lib-media/freetype:2
 	)
 "
 RDEPEND+="
@@ -135,8 +113,8 @@ grub_configure() {
 		$(use_enable device-mapper)
 		$(use_enable mount grub-mount)
 		$(use_enable nls)
-		$(use_enable themes grub-themes)
-		$(use_enable truetype grub-mkfont)
+		--disable-grub-themes
+		--disable-grub-mkfont
 		$(use_enable libzfs)
 		$(use sdl && use_enable debug grub-emu-sdl)
 		${platform:+--with-platform=}${platform}
@@ -144,12 +122,6 @@ grub_configure() {
 		# Let configure detect this where supported
 		$(usex efiemu '' '--disable-efiemu')
 	)
-
-	# Set up font symlinks
-	ln -s "${WORKDIR}/${UNIFONT}.pcf" unifont.pcf || die
-	if use themes; then
-		ln -s "${WORKDIR}/${DEJAVU}/ttf/DejaVuSans.ttf" DejaVuSans.ttf || die
-	fi
 
 	local ECONF_SOURCE="${S}"
 	econf "${myeconfargs[@]}"

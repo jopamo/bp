@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=91a2135f32acdd6378476c5bae475a6e7811a6a2
+	SNAPSHOT=5a273a33ca1410351cb484af7db7c13e8b4e8e4e
 	SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-portable-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
@@ -22,6 +22,7 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 
 IUSE="audit debug libedit pam +pie +ssl static test X"
+
 REQUIRED_USE="pie? ( !static )
 	static? ( !pam )
 	test? ( ssl )"
@@ -85,12 +86,11 @@ src_configure() {
 src_install() {
 	emake install-nokeys DESTDIR="${D}"
 
-	newpamd "${FILESDIR}"/sshd.pam_include.2 sshd
+	use pam && newpamd "${FILESDIR}"/sshd.pam_include.2 sshd
 
-	systemd_dounit "${FILESDIR}"/sshd.socket
-
-	systemd_dounit "${FILESDIR}"/sshdgenkeys.service
-	systemd_newunit "${FILESDIR}"/sshd_at.service 'sshd@.service'
+	use systemd && systemd_dounit "${FILESDIR}"/sshd.socket
+	use systemd && systemd_dounit "${FILESDIR}"/sshdgenkeys.service
+	use systemd && systemd_newunit "${FILESDIR}"/sshd_at.service 'sshd@.service'
 
 	cp "${FILESDIR}"/sshd_config "${ED}"/etc/ssh/
 	fperms 600 /etc/ssh

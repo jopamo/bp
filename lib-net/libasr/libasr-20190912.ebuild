@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Async Resolver Library from OpenBSD/OpenSMTPD"
 HOMEPAGE="https://github.com/OpenSMTPD/libasr"
 
-SNAPSHOT=d7e6e51a17cca19bc3b4bc8826625ff545b84d6c
+SNAPSHOT=fb87fd5d9e7cc78380a78180a96fa7a9e7f55d9f
 SRC_URI="https://github.com/OpenSMTPD/libasr/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 KEYWORDS="amd64 arm64"

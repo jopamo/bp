@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT="20190110"
+SNAPSHOT="$(ver_cut 1)"
 
 inherit python-any-r1
 

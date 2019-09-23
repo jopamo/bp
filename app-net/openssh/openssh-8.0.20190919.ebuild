@@ -21,7 +21,7 @@ fi
 LICENSE="BSD GPL-2"
 SLOT="0"
 
-IUSE="audit debug libedit pam +pie +ssl static test X"
+IUSE="audit debug libedit pam +pie +ssl static systemd test X"
 
 REQUIRED_USE="pie? ( !static )
 	static? ( !pam )

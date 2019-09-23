@@ -10,8 +10,9 @@ HOMEPAGE="http://docbook2x.sourceforge.net/"
 
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="test"
 LICENSE="MIT"
+
+IUSE="test"
 
 DEPEND="dev-perl/XML-SAX-Base
 	lib-dev/libxslt
@@ -19,9 +20,12 @@ DEPEND="dev-perl/XML-SAX-Base
 	app-text/docbook-xml-dtd"
 
 PATCHES=(
-	"${FILESDIR}/${P}-filename_whitespace_handling.patch"
-	"${FILESDIR}/${P}-preprocessor_declaration_syntax.patch"
-	"${FILESDIR}/${P}-error_on_missing_refentry.patch"
+	"${FILESDIR}"/01_fix_static_datadir_evaluation.patch
+	"${FILESDIR}"/02_fix_418703_dont_use_abbreviated_sfnet_address.patch
+	"${FILESDIR}"/03_fix_420153_filename_whitespace_handling.patch
+	"${FILESDIR}"/04_fix_442782_preprocessor_declaration_syntax.patch
+	"${FILESDIR}"/05_fix_439214_error_on_missing_refentry.patch
+	"${FILESDIR}"/06_fix_man_typo.patch
 )
 
 src_prepare() {

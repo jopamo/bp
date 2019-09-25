@@ -95,7 +95,7 @@ src_configure() {
 
 src_install() {
 	default
-	find "${ED}" -name "*.la" -delete || die
+
 	use python && python_optimize
 
 	systemd_dounit "${FILESDIR}"/unbound.service

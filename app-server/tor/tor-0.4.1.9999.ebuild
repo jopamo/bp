@@ -58,7 +58,7 @@ src_configure() {
 src_install() {
 	default
 
-	systemd_dounit contrib/dist/tor.service
+	use systemd && systemd_dounit "${FILESDIR}"/tor.service
 
 	keepdir /var/lib/tor
 

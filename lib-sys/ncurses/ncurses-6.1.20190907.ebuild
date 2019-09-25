@@ -49,6 +49,7 @@ src_configure() {
 		--with-pthread
 		--enable-ext-colors
 		--without-manpages
+		--with-termlib
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
@@ -58,7 +59,7 @@ src_install() {
 
 	local lib
 
-	for lib in ncurses form panel menu ; do
+	for lib in ncurses form panel menu tinfo ; do
     	echo "INPUT(-l${lib}tw)" > "${ED}"/usr/lib/lib${lib}.so
     	echo "INPUT(-l${lib}tw)" > "${ED}"/usr/lib/lib${lib}w.so
     	ln -sfv ${lib}tw.pc        "${ED}"/usr/lib/pkgconfig/${lib}.pc

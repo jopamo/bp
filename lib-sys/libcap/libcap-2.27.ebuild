@@ -11,6 +11,7 @@ SRC_URI="mirror://kernel/linux/libs/security/linux-privs/libcap2/${P}.tar.xz"
 LICENSE="|| ( GPL-2 BSD )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="pam static-libs"
 
 RDEPEND=">=sys-app/attr-2.4.47
@@ -36,9 +37,9 @@ src_compile() {
 src_install() {
 	emake DESTDIR="${D}" install
 
-	use static-libs || rm "${ED}"/usr/lib/libcap.a
+	use static-libs || rm "${ED}"/usr/lib64/libcap.a
 
-	rm -rf "${ED}"/usr/lib/security
+	rm -rf "${ED}"/usr/lib64/security
 	if use pam; then
 		dopammod pam_cap/pam_cap.so
 		dopamsecurity '' pam_cap/capability.conf

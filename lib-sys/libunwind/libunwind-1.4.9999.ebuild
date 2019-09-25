@@ -10,15 +10,14 @@ EGIT_REPO_URI="https://github.com/libunwind/libunwind.git"
 EGIT_BRANCH="v$(ver_cut 1).$(ver_cut 2)-stable"
 
 LICENSE="MIT"
-SLOT="7"
+SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="debug debug-frame doc libatomic lzma +static-libs"
 
-RDEPEND="lzma? ( app-compression/xz-utils )"
-DEPEND="${RDEPEND}
-	libatomic? ( lib-dev/libatomic_ops )"
+IUSE="debug debug-frame libatomic static-libs"
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+DEPEND="libatomic? ( lib-dev/libatomic_ops )"
+
+filter-flags -Wl,-z,defs -Wl,-z,relro
 
 src_prepare() {
 	eautoreconf
@@ -29,19 +28,25 @@ src_prepare() {
 }
 
 src_configure() {
-	ECONF_SOURCE="${S}" \
-	ac_cv_header_atomic_ops_h=$(usex libatomic) \
-	econf \
-		--enable-cxx-exceptions \
-		--enable-coredump \
-		--enable-ptrace \
-		--enable-setjmp \
-		$(use_enable debug-frame) \
-		$(use_enable doc documentation) \
-		$(use_enable lzma minidebuginfo) \
-		$(use_enable static-libs static) \
-		$(use_enable debug conservative_checks) \
+	local myconf=(
+		--bindir="${EPREFIX}"/usr/bin
+		--sbindir="${EPREFIX}"/usr/sbin
+		--libdir="${EPREFIX}"/usr/lib
+		--libexecdir="${EPREFIX}"/usr/libexec
+		--sysconfdir="${EPREFIX}"/etc
+		--localstatedir="${EPREFIX}"/var
+		--enable-cxx-exceptions
+		--enable-coredump
+		--enable-ptrace
+		--enable-setjmp
+		--disable-minidebuginfo
+		--disable-documentation
+		$(use_enable debug-frame)
+		$(use_enable static-libs static)
+		$(use_enable debug conservative_checks)
 		$(use_enable debug)
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
 src_compile() {
@@ -52,11 +57,4 @@ src_test() {
 	# Explicitly allow parallel build of tests.
 	# Sandbox causes some tests to freak out.
 	SANDBOX_ON=0 emake check
-}
-
-src_install() {
-	default
-	# libunwind-ptrace.a (and libunwind-ptrace.h) is separate API and without
-	# shared library, so we keep it in any case
-	use static-libs || find "${ED}"/usr '(' -name 'libunwind-generic.a' -o -name 'libunwind*.la' ')' -delete
 }

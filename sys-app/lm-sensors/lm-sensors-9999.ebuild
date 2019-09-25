@@ -1,0 +1,74 @@
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=7
+
+inherit linux-info systemd toolchain-funcs git-r3
+
+DESCRIPTION="Hardware Monitoring user-space utilities"
+HOMEPAGE="https://hwmon.wiki.kernel.org/ https://github.com/lm-sensors/lm-sensors"
+EGIT_REPO_URI="https://github.com/lm-sensors/lm-sensors.git"
+
+
+LICENSE="GPL-2+ LGPL-2.1"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+IUSE="static-libs systemd"
+
+RDEPEND="dev-lang/perl"
+
+DEPEND="
+	sys-devel/bison
+	sys-devel/flex"
+
+CONFIG_CHECK="~HWMON ~I2C_CHARDEV ~I2C"
+WARNING_HWMON="${PN} requires CONFIG_HWMON to be enabled for use."
+WARNING_I2C_CHARDEV="sensors-detect requires CONFIG_I2C_CHARDEV to be enabled."
+WARNING_I2C="${PN} requires CONFIG_I2C to be enabled for most sensors."
+
+src_prepare() {
+	default
+
+	# Respect LDFLAGS
+	sed -i -e 's/\$(LIBDIR)$/\$(LIBDIR) \$(LDFLAGS)/g' Makefile || \
+		die "Failed to sed in LDFLAGS"
+
+	sed -i \
+		-e "s:^PIDFILE=\".*:PIDFILE=\"/run/fancontrol.pid\":" \
+		prog/pwm/fancontrol || \
+		die "Failed to adjust PIDFILE of prog/pwm/fancontrol"
+
+	# Don't use EnvironmentFile in systemd unit
+	sed -i \
+		-e '/^EnvironmentFile=/d' \
+		-e '/^Exec.*modprobe.*/d' \
+		prog/init/lm_sensors.service || \
+		die "Failed to remove EnvironmentFile from systemd unit file"
+
+	if ! use static-libs; then
+		sed -i -e '/^BUILD_STATIC_LIB/d' Makefile || \
+			die "Failed to disable static building"
+	fi
+}
+
+src_compile() {
+	emake \
+		CC="$(tc-getCC)" \
+		CXX="$(tc-getCXX)" \
+		LD="$(tc-getLD)" \
+		AR="$(tc-getAR)"
+}
+
+src_install() {
+	emake \
+		DESTDIR="${ED}" \
+		PREFIX="/usr" \
+		MANDIR="/usr/share/man" \
+		ETCDIR="/etc" \
+		LIBDIR="/usr/lib" \
+		install
+
+	use systemd && systemd_dounit prog/init/lm_sensors.service
+
+	cleanup_install
+}

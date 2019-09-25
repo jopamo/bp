@@ -43,11 +43,11 @@ append-ldflags -Wl,-z,noexecstack
 
 pkg_setup() {
 	enewgroup unbound
-	enewuser unbound -1 -1 /etc/unbound unbound
+	enewuser unbound -1 -1 /var/unbound unbound
 	# improve security on existing installs (bug #641042)
 	# as well as new installs where unbound homedir has just been created
-	if [[ -d "${ROOT}/etc/unbound" ]]; then
-		chown --no-dereference --from=unbound root "${ROOT}/etc/unbound"
+	if [[ -d "${ROOT}"/var/unbound ]]; then
+		chown --no-dereference --from=unbound root "${ROOT}"/var/unbound
 	fi
 
 	use python && python-single-r1_pkg_setup
@@ -72,7 +72,12 @@ src_configure() {
 		$(use_enable dnstap)
 		$(use_enable ecdsa)
 		$(use_enable static-libs static)
-		$(use_with threads pthreads)
+		--enable-pie
+		--enable-relro-now
+		--enable-subnet
+		--enable-systemd
+		--enable-tfo-client
+		--enable-tfo-server
 		--disable-flto
 		--disable-rpath
 		--with-libevent="${EPREFIX}"/usr

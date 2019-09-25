@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit autotools perl-module git-r3 flag-o-matic
+inherit autotools git-r3 flag-o-matic
 
 DESCRIPTION="A modular textUI IRC client with IPv6 support"
 HOMEPAGE="https://irssi.org/"
@@ -12,12 +12,11 @@ LICENSE="GPL-2"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="+perl socks5 +proxy"
+BDEPEND="dev-lang/perl"
 
 DEPEND="
 	lib-sys/ncurses
 	lib-dev/glib
-	dev-lang/perl
 	lib-net/libressl
 "
 
@@ -48,9 +47,9 @@ src_configure() {
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
 		--enable-true-color
-		$(use_with proxy)
-		$(use_with perl)
-		$(use_with socks5 socks)
+		--without-proxy
+		--without-perl
+		--without-socks
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

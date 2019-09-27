@@ -21,7 +21,7 @@ fi
 LICENSE="BSD GPL-2"
 SLOT="0"
 
-IUSE="audit debug libedit pam +pie +ssl static systemd test X"
+IUSE="audit debug pam +pie +ssl static systemd test X"
 
 REQUIRED_USE="pie? ( !static )
 	static? ( !pam )
@@ -29,7 +29,7 @@ REQUIRED_USE="pie? ( !static )
 
 LIB_DEPEND="
 	audit? ( sys-app/audit[static-libs(+)] )
-	libedit? ( lib-dev/libedit:=[static-libs(+)] )
+	lib-dev/libedit:=[static-libs(+)]
 	ssl? ( lib-net/libressl )
 	>=lib-sys/zlib-1.2.3:=[static-libs(+)]"
 
@@ -72,8 +72,8 @@ src_configure() {
 		--with-privsep-path="${EPREFIX}"/var/empty
 		--with-privsep-user="sshd"
 		--with-sandbox="seccomp_filter"
+		--with-libedit
 		$(use_with audit audit linux)
-		$(use_with libedit)
 		$(use_with pam)
 		$(use_with pie)
 		$(use_with ssl openssl)

@@ -21,15 +21,13 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+cxx +jit +recursion-limit static-libs"
 
-RDEPEND="
-	app-compression/lbzip2
-	lib-sys/zlib
-	lib-sys/readline
-"
 DEPEND="
-	${RDEPEND}
-	dev-util/pkgconf
+	lib-dev/libedit:=
+	app-compression/lbzip2:=
+	lib-sys/zlib:=
 "
+
+BDEPEND="dev-util/pkgconf"
 
 S="${WORKDIR}/${MY_P}"
 
@@ -53,7 +51,7 @@ src_configure() {
 		--enable-pcre32
 		--enable-pcregrep-libz
 		--enable-pcregrep-libbz2
-		--enable-pcretest-libreadline
+		--enable-pcretest-libedit
 		--enable-shared
 		--htmldir="${EPREFIX}"/usr/share/doc/${PF}/html
 		--docdir="${EPREFIX}"/usr/share/doc/${PF}

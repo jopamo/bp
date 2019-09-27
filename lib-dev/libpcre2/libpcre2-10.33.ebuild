@@ -19,14 +19,15 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 +jit libedit pcre16 pcre32 +readline +recursion-limit static-libs unicode zlib"
-REQUIRED_USE="?? ( libedit readline )"
+IUSE="bzip2 +jit pcre16 pcre32 +recursion-limit static-libs unicode zlib"
 
-RDEPEND="bzip2? ( app-compression/lbzip2 )
+DEPEND="
+	bzip2? ( app-compression/lbzip2 )
 	zlib? ( lib-sys/zlib )
-	libedit? ( lib-dev/libedit )
-	readline? ( lib-sys/readline:0= )"
-DEPEND="${RDEPEND}
+	lib-dev/libedit
+"
+
+BDEPEND="
 	dev-util/pkgconf
 	>=sys-app/findutils-4.4.0"
 
@@ -50,8 +51,8 @@ src_configure() {
 		--htmldir="${EPREFIX}"/usr/share/doc/${PF}/html
 		--with-match-limit-depth=$(usex recursion-limit 8192 MATCH_LIMIT)
 		$(use_enable bzip2 pcre2grep-libbz2)
-		$(use_enable libedit pcre2test-libedit)
-		$(use_enable readline pcre2test-libreadline)
+		--enable-pcre2test-libedit
+		--disable-pcre2test-libreadline
 		$(use_enable zlib pcre2grep-libz)
 		$(use_enable jit)
 		$(use_enable jit pcre2grep-jit)

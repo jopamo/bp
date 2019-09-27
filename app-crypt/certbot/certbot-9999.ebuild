@@ -37,6 +37,7 @@ RDEPEND="
 	dev-python/zope-deprecation[${PYTHON_USEDEP}]
 	dev-python/zope-hookable[${PYTHON_USEDEP}]
 	dev-python/zope-proxy[${PYTHON_USEDEP}]
+	dev-python/distro
 	dev-python/mock
 	dev-python/requests-toolbelt"
 

@@ -14,7 +14,14 @@ LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT="$(ver_cut 1)"
 KEYWORDS="amd64"
 
-IUSE="debug doc exegesis libedit +libffi ncurses test xar xml"
+IUSE="debug test"
+
+DEPEND="
+	lib-dev/libedit:=
+	lib-dev/libffi:=
+	lib-sys/ncurses:=
+	lib-dev/libxml2:=
+"
 
 RESTRICT="!test? ( test )"
 
@@ -30,17 +37,17 @@ src_configure() {
 		-DBUILD_SHARED_LIBS=ON
 		-DLLVM_TARGETS_TO_BUILD="${LLVM_TARGETS// /;}"
 		-DLLVM_BUILD_TESTS=$(usex test)
-		-DLLVM_ENABLE_FFI=$(usex libffi)
-		-DLLVM_ENABLE_LIBEDIT=$(usex libedit)
-		-DLLVM_ENABLE_TERMINFO=$(usex ncurses)
-		-DLLVM_ENABLE_LIBXML2=$(usex xml)
+		-DLLVM_ENABLE_FFI=ON
+		-DLLVM_ENABLE_LIBEDIT=ON
+		-DLLVM_ENABLE_TERMINFO=ON
+		-DLLVM_ENABLE_LIBXML2=ON
 		-DLLVM_ENABLE_ASSERTIONS=$(usex debug)
-		-DLLVM_ENABLE_LIBPFM=$(usex exegesis)
+		-DLLVM_ENABLE_LIBPFM=OFF
 		-DLLVM_ENABLE_EH=ON
 		-DLLVM_ENABLE_RTTI=ON
 		-DWITH_POLLY=OFF # TODO
 		-DLLVM_HOST_TRIPLE="${CHOST}"
-		-DHAVE_LIBXAR=$(usex xar 1 0)
+		-DHAVE_LIBXAR=0
 		-DOCAMLFIND=NO
 		-DLLVM_BUILD_DOCS=OFF
 		-DLLVM_ENABLE_OCAMLDOC=OFF

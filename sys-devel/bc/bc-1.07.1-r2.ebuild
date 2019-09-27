@@ -22,8 +22,8 @@ DEPEND="
 "
 
 PATCHES=(
-			${FILESDIR}/26f275502dd28114e78bc098fed81acde1d86d62.patch
-			${FILESDIR}/2dcee958a412210cd1260f866ac199f68f28cf08.patch
+			"${FILESDIR}"/26f275502dd28114e78bc098fed81acde1d86d62.patch
+			"${FILESDIR}"/2dcee958a412210cd1260f866ac199f68f28cf08.patch
 		)
 
 src_configure() {

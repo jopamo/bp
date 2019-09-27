@@ -11,17 +11,11 @@ SRC_URI="mirror://gnu/bc/${P}.tar.gz"
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="libedit readline static"
 
-RDEPEND="
-	!readline? ( libedit? ( lib-dev/libedit:= ) )
-	readline? (
-		>=lib-sys/readline-4.1:0=
-		>=lib-sys/ncurses-5.2:=
-	)
-"
+IUSE="static"
+
 DEPEND="
-	${RDEPEND}
+	lib-dev/libedit:=
 	sys-app/ed
 	sys-devel/flex
 	sys-devel/bison
@@ -33,20 +27,20 @@ PATCHES=(
 		)
 
 src_configure() {
-	local myconf=(
-		$(use_with readline)
-	)
-	if use readline ; then
-		myconf+=( --without-libedit )
-	else
-		myconf+=( $(use_with libedit) )
-	fi
 	use static && append-ldflags -static
 
-	econf "${myconf[@]}"
+	local myconf=(
+		--bindir="${EPREFIX}"/usr/bin
+		--sbindir="${EPREFIX}"/usr/sbin
+		--libdir="${EPREFIX}"/usr/lib
+		--libexecdir="${EPREFIX}"/usr/libexec
+		--localstatedir="${EPREFIX}"/var
+		--with-libedit
+		--without-readline
+	)
 
-	# Do not regen docs -- configure produces a small fragment that includes
-	# the version info which causes all pages to regen (newer file). #554774
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
+
 	touch -r doc doc/*
 }
 

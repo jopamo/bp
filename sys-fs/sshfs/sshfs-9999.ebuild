@@ -12,9 +12,9 @@ LICENSE="GPL-2"
 KEYWORDS="amd64 arm64"
 SLOT="0"
 
-CDEPEND=">=sys-fs/fuse-3.1.0:3
-	>=lib-dev/glib-2.4.2"
-RDEPEND="${CDEPEND}
-	>=app-net/openssh-4.4"
-DEPEND="${CDEPEND}
-	dev-util/pkgconf"
+DEPEND="
+	sys-fs/fuse:3
+	lib-dev/glib
+	app-net/openssh"
+
+BDEPEND="dev-util/pkgconf"

@@ -17,15 +17,15 @@ IUSE="debug server gui"
 DEPEND=">=lib-dev/boost-1.62.0-r1:=
 	lib-net/libtorrent
 	dev-util/pkgconf
-	gui-lib/qtcore:5
-	gui-lib/qtnetwork:5[ssl]
-	gui-lib/qtxml:5
-	gui-lib/linguist-tools:5
+	lib-gui/qtcore:5
+	lib-gui/qtnetwork:5[ssl]
+	lib-gui/qtxml:5
+	lib-gui/linguist-tools:5
 	gui? (
-			gui-lib/qtdbus:5
-			gui-lib/qtgui:5
-			gui-lib/qtsvg:5
-			gui-lib/qtwidgets:5
+			lib-gui/qtdbus:5
+			lib-gui/qtgui:5
+			lib-gui/qtsvg:5
+			lib-gui/qtwidgets:5
 		)"
 
 src_prepare() {

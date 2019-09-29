@@ -6,7 +6,7 @@
 *fonts/fira-code
 *fonts/inconsolata
 *gui-icontheme/breeze-icons
-*gui-lib/lxqt-themes
+*lib-gui/lxqt-themes
 *app-gui/keepassxc
 *app-gui/featherpad
 *app-gui/firefox-bin

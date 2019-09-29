@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit autotools cuda flag-o-matic
+inherit autotools flag-o-matic
 
 DESCRIPTION="displays the hardware topology in convenient formats"
 HOMEPAGE="http://www.open-mpi.org/projects/hwloc/"

@@ -24,6 +24,10 @@ DEPEND="lib-dev/libxslt
 	lib-dev/glib
 "
 
+pkg_setup() {
+	python-single-r1_pkg_setup
+}
+
 src_prepare() {
 	eautoreconf
 	default

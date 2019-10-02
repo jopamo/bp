@@ -13,13 +13,8 @@ LICENSE="GPL-2 FDL-1.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug highlight vim"
+IUSE="debug"
 
-RDEPEND="highlight? (
-		vim? ( || ( app-misc/vim app-misc/gvim ) )
-		!vim? ( dev-util/source-highlight )
-	)
-"
 DEPEND="lib-dev/libxslt
 	app-text/docbook-xml-dtd
 	>=app-text/docbook-xsl-stylesheets-1.79.1
@@ -30,8 +25,6 @@ DEPEND="lib-dev/libxslt
 "
 
 src_prepare() {
-	sed -i -e /^autoreconf/d autogen.sh || die
-	NOCONFIGURE=1 ${S}/autogen.sh || die
 	eautoreconf
 	default
 }
@@ -46,13 +39,7 @@ src_configure() {
 		--localstatedir="${EPREFIX}"/var
 		$(use_enable debug)
 	)
-
-	if use vim; then
-		myconf="${myconf} $(use_with highlight highlight vim)"
-	else
-		myconf="${myconf} $(use_with highlight highlight source-highlight)"
-	fi
-	econf ${myconf[@]}
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
 src_install() {

@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic linux-info toolchain-funcs user l10n
+inherit flag-o-matic linux-info toolchain-funcs user
 
 DESCRIPTION="QEMU + Kernel-based Virtual Machine userland tools"
 HOMEPAGE="http://www.qemu.org http://www.linux-kvm.org"
@@ -21,7 +21,7 @@ LICENSE="GPL-2 LGPL-2 BSD-2"
 SLOT="0/1"
 IUSE="accessibility +aio alsa bluetooth bzip2 capstone +caps +curl debug
 	+fdt glusterfs gnutls gtk gtk2 infiniband iscsi +jpeg
-	ncurses nfs nls numa opengl +pin-upstream-blobs +png
+	ncurses nfs numa opengl +pin-upstream-blobs +png
 	pulseaudio rbd sasl +seccomp sdl sdl2 smartcard snappy
 	spice ssh static static-user systemtap tci test usb usbredir vde
 	+vhost-net virgl virtfs +vnc vte xattr xen xfs"
@@ -147,7 +147,6 @@ DEPEND="${CDEPEND}
 	dev-lang/perl
 	sys-devel/texinfo
 	dev-util/pkgconf
-	gtk? ( nls? ( sys-devel/gettext ) )
 	static? (
 		${ALL_DEPEND}
 		${SOFTMMU_TOOLS_DEPEND}
@@ -249,18 +248,6 @@ check_targets() {
 	popd >/dev/null
 }
 
-handle_locales() {
-	# Deal with selective install of locales.
-	if use nls ; then
-		# Delete locales the user does not want. #577814
-		rm_loc() { rm po/$1.po || die; }
-		l10n_for_each_disabled_locale_do rm_loc
-	else
-		# Cheap hack to disable gettext .mo generation.
-		rm -f po/*.po
-	fi
-}
-
 src_prepare() {
 	check_targets IUSE_SOFTMMU_TARGETS softmmu
 	check_targets IUSE_USER_TARGETS linux-user
@@ -277,9 +264,6 @@ src_prepare() {
 
 	# Verbose builds
 	MAKEOPTS+=" V=1"
-
-	# Run after we've applied all patches.
-	handle_locales
 }
 
 ##

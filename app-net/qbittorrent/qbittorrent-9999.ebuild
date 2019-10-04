@@ -14,19 +14,14 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug server gui"
 
-DEPEND=">=lib-dev/boost-1.62.0-r1:=
+DEPEND="
+	lib-dev/boost
 	lib-net/libtorrent
 	dev-util/pkgconf
-	lib-gui/qtcore:5
-	lib-gui/qtnetwork:5[ssl]
-	lib-gui/qtxml:5
-	lib-gui/linguist-tools:5
-	gui? (
-			lib-gui/qtdbus:5
-			lib-gui/qtgui:5
-			lib-gui/qtsvg:5
-			lib-gui/qtwidgets:5
-		)"
+	lib-gui/qtbase
+	lib-gui/qttools
+	gui? ( lib-gui/qtsvg )
+"
 
 src_prepare() {
 	default

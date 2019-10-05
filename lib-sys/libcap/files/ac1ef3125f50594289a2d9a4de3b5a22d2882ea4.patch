@@ -1,0 +1,86 @@
+From ac1ef3125f50594289a2d9a4de3b5a22d2882ea4 Mon Sep 17 00:00:00 2001
+From: "Andrew G. Morgan" <agm@google.com>
+Date: Fri, 19 Apr 2019 20:31:19 +0000
+Subject: some clean up
+
+Signed-off-by: Andrew G. Morgan <morgan@kernel.org>
+---
+ libcap/include/uapi/linux/capability.h | 6 +++---
+ libcap/include/uapi/linux/prctl.h      | 4 ++--
+ libcap/include/uapi/linux/securebits.h | 2 +-
+ progs/quicktest.sh                     | 2 +-
+ 4 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/libcap/include/uapi/linux/capability.h b/libcap/include/uapi/linux/capability.h
+index 3cabbc6..78b2fd4 100644
+--- a/libcap/include/uapi/linux/capability.h
++++ b/libcap/include/uapi/linux/capability.h
+@@ -39,13 +39,13 @@
+ typedef struct __user_cap_header_struct {
+ 	__u32 version;
+ 	int pid;
+-} __user *cap_user_header_t;
++} *cap_user_header_t;
+ 
+ typedef struct __user_cap_data_struct {
+         __u32 effective;
+         __u32 permitted;
+         __u32 inheritable;
+-} __user *cap_user_data_t;
++} *cap_user_data_t;
+ 
+ 
+ #define VFS_CAP_REVISION_MASK	0xFF000000
+@@ -376,7 +376,7 @@ struct vfs_ns_cap_data {
+  */
+ 
+ #define CAP_TO_INDEX(x)     ((x) >> 5)        /* 1 << 5 == bits in __u32 */
+-#define CAP_TO_MASK(x)      (1 << ((x) & 31)) /* mask for indexed __u32 */
++#define CAP_TO_MASK(x)      (1u << ((x) & 31)) /* mask for indexed __u32 */
+ 
+ 
+ #endif /* _UAPI_LINUX_CAPABILITY_H */
+diff --git a/libcap/include/uapi/linux/prctl.h b/libcap/include/uapi/linux/prctl.h
+index a8d0759..1b6a009 100644
+--- a/libcap/include/uapi/linux/prctl.h
++++ b/libcap/include/uapi/linux/prctl.h
+@@ -187,8 +187,8 @@ struct prctl_mm_map {
+ 
+ #define PR_SET_FP_MODE		45
+ #define PR_GET_FP_MODE		46
+-# define PR_FP_MODE_FR		(1 << 0)	/* 64b FP registers */
+-# define PR_FP_MODE_FRE		(1 << 1)	/* 32b compatibility */
++# define PR_FP_MODE_FR		(1u << 0)	/* 64b FP registers */
++# define PR_FP_MODE_FRE		(1u << 1)	/* 32b compatibility */
+ 
+ /* Control the ambient capability set */
+ #define PR_CAP_AMBIENT			47
+diff --git a/libcap/include/uapi/linux/securebits.h b/libcap/include/uapi/linux/securebits.h
+index 35ac35c..6dae4e9 100644
+--- a/libcap/include/uapi/linux/securebits.h
++++ b/libcap/include/uapi/linux/securebits.h
+@@ -5,7 +5,7 @@
+    whether the setting is on or off. The other bit specify whether the
+    setting is locked or not. A setting which is locked cannot be
+    changed from user-level. */
+-#define issecure_mask(X)	(1 << (X))
++#define issecure_mask(X)	(1u << (X))
+ 
+ #define SECUREBITS_DEFAULT 0x00000000
+ 
+diff --git a/progs/quicktest.sh b/progs/quicktest.sh
+index 2f76ad3..1f97e1f 100755
+--- a/progs/quicktest.sh
++++ b/progs/quicktest.sh
+@@ -205,7 +205,7 @@ rm -f nsprivileged
+ cp ./capsh ./nsprivileged && /bin/chmod -s ./nsprivileged
+ ./setcap -n 500 all=ep ./nsprivileged
+ if [ $? -eq 0 ]; then
+-    ./getcap -n ./nsprivileged | /usr/bin/fgrep "[rootid=500]"
++    ./getcap -n ./nsprivileged | fgrep "[rootid=500]"
+     if [ $? -ne 0 ]; then
+ 	echo "FAILED setting ns rootid on file"
+ 	exit 1
+-- 
+cgit 1.2-0.3.lf.el7
+

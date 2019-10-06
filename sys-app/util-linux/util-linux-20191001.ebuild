@@ -11,17 +11,17 @@ if [[ ${PV} == *9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/karelzak/util-linux.git"
 	EGIT_BRANCH="stable/v$(ver_cut 1-2)"
-	KEYWORDS="amd64 arm64"
 else
-	SNAPSHOT=
-	SRC_URI="https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/snapshot/util-linux-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	SNAPSHOT=7b41ae5b4ecbff8c2a01da2cd29d858cdf33ed50
+	#SRC_URI="https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v${PV}/${P}.tar.xz"
+	SRC_URI="https://github.com/karelzak/util-linux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64"
 fi
 
 
 LICENSE="GPL-2 LGPL-2.1 BSD-4 MIT public-domain"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="build caps +cramfs fdformat kill ncurses nls pam python +readline static-libs +suid systemd test +tty-helpers udev unicode"
 

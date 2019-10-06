@@ -2,11 +2,11 @@
 
 EAPI=7
 
-inherit cmake-utils git-r3
+inherit cmake-utils
 
 DESCRIPTION="Binary-decimal and decimal-binary conversion routines for IEEE doubles"
 HOMEPAGE="https://github.com/google/double-conversion"
-EGIT_REPO_URI="https://github.com/google/double-conversion.git"
+SRC_URI="https://github.com/google/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0/1"

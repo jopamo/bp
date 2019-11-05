@@ -16,5 +16,5 @@ KEYWORDS="amd64"
 src_install() {
 	systemd_dounit "${FILESDIR}/adb.service"
 	exeinto /opt/bin
-	doexe {adb,fastboot}
+	doexe {adb,fastboot,mke2fs}
 }

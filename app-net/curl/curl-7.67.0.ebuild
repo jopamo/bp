@@ -19,15 +19,14 @@ RDEPEND="ldap? ( app-net/openldap )
 "
 
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconf-0-r1
+	dev-util/pkgconf
 	lib-net/mbedtls:0
 	test? (
 		sys-app/diffutils
 		dev-lang/perl
 	)"
 
-PATCHES=( 	"${FILESDIR}"/828392ae10e6e7855e66a78c01346f9cd1127467.patch
-			"${FILESDIR}"/curl-respect-cflags-3.patch
+PATCHES=( 	"${FILESDIR}"/curl-respect-cflags-3.patch
 )
 
 src_configure() {

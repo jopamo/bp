@@ -10,7 +10,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=79baebe50e4d6b73ae1f8b603f0ef41300110aa3
+	SNAPSHOT=d71dc66fa8a153fb6e7c626847095d9697a6cf42
 	SRC_URI="https://github.com/madler/zlib/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

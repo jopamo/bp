@@ -1,14 +1,16 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-inherit autotools
+
+inherit autotools git-r3
 
 DESCRIPTION="A system-independent library for user-level network packet capture"
-SRC_URI="https://www.tcpdump.org/release/${P}.tar.gz"
 HOMEPAGE="http://www.tcpdump.org/"
+EGIT_REPO_URI="https://github.com/the-tcpdump-group/libpcap.git"
+EGIT_BRANCH="libpcap-$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="BSD"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="bluetooth dbus netlink static-libs usb"

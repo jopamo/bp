@@ -2,12 +2,12 @@
 
 EAPI=7
 
+SNAPSHOT=7327f0fa6ff6f09b2a1c423a376ee0e0f403d7c3
+
 inherit qmake-utils systemd toolchain-funcs flag-o-matic
 
 DESCRIPTION="IEEE 802.1X/WPA supplicant for secure wireless transfers"
 HOMEPAGE="https://w1.fi/wpa_supplicant/"
-
-SNAPSHOT=018edec9b2bd3db20605117c32ff79c1e625c432
 SRC_URI="https://w1.fi/cgit/hostap/snapshot/hostap-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S="${WORKDIR}/hostap-${SNAPSHOT}/${PN}"
 

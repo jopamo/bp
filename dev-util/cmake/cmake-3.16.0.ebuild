@@ -10,7 +10,7 @@ SRC_URI="https://github.com/Kitware/CMake/releases/download/v${PV}/cmake-${PV}.t
 
 LICENSE="CMake"
 SLOT="0/1"
-KEYWORDS="amd64 arm64"
+KEYWORDS="~amd64 ~arm64"
 
 DEPEND="
 	>=app-compression/libarchive-3.0.0:=

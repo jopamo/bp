@@ -23,8 +23,6 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-2.25-build-system-fixes.patch
 	"${FILESDIR}"/${PN}-2.25-ignore-RAISE_SETFCAP-install-failures.patch
 	"${FILESDIR}"/libcap-portage.patch
-	"${FILESDIR}"/20c52b45d27b7459abab40c6978a21f714e1eed4.patch
-	"${FILESDIR}"/ac1ef3125f50594289a2d9a4de3b5a22d2882ea4.patch
 )
 
 src_compile() {

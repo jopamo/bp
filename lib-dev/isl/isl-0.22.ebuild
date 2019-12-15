@@ -7,8 +7,9 @@ HOMEPAGE="http://isl.gforge.inria.fr/"
 SRC_URI="http://isl.gforge.inria.fr/${P}.tar.xz"
 
 LICENSE="LGPL-2.1"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="static-libs"
 
 RDEPEND=">=lib-dev/gmp-5.1.3-r1"

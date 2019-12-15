@@ -4,7 +4,7 @@ EAPI=7
 
 inherit autotools flag-o-matic
 
-MY_PV="$(ver_cut 1)$(ver_cut 2)$(ver_cut 3)000"
+MY_PV="$(ver_cut 1)$(ver_cut 2)0$(ver_cut 3)00"
 
 DESCRIPTION="A SQL Database Engine in a C Library"
 HOMEPAGE="https://sqlite.org/"

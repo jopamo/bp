@@ -4,7 +4,7 @@ EAPI=7
 
 inherit toolchain-funcs
 
-SNAPSHOT=d9eb7f1536ed6262fc8c6518c6afe6053a450e9d
+SNAPSHOT=e8ce9fecebd15adb4c60a0678d4c417afe06dde4
 
 DESCRIPTION="User-space application to modify the EFI boot manager"
 HOMEPAGE="https://github.com/rhinstaller/efibootmgr"

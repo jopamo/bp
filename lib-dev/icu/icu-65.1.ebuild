@@ -6,13 +6,12 @@ inherit flag-o-matic toolchain-funcs autotools
 
 DESCRIPTION="International Components for Unicode"
 HOMEPAGE="http://www.icu-project.org/"
-SRC_URI="http://download.icu-project.org/files/icu4c/${PV/_/}/icu4c-${PV//./_}-src.tgz"
+SRC_URI="https://github.com/unicode-org/icu/releases/download/release-$(ver_cut 1)-$(ver_cut 2)/icu4c-$(ver_cut 1)_$(ver_cut 2)-src.tgz"
 
 LICENSE="BSD"
-
-SLOT="0/${PV}"
-
+SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="debug static-libs"
 
 DEPEND="dev-util/pkgconf"

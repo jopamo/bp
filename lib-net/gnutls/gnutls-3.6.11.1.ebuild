@@ -6,7 +6,7 @@ DESCRIPTION="A TLS 1.2 and SSL 3.0 implementation for the GNU project"
 HOMEPAGE="http://www.gnutls.org/"
 SRC_URI="mirror://gnupg/gnutls/v$(ver_cut 1-2)/${P}.tar.xz
 		https://www.gnupg.org/ftp/gcrypt/gnutls/v$(ver_cut 1-2)/${P}.tar.xz"
-S="${WORKDIR}/${PN}-$(ver_cut 1-3)"
+S="${WORKDIR}/${PN}-$(ver_cut 1-4)"
 
 LICENSE="GPL-3 LGPL-2.1"
 SLOT="0/34"

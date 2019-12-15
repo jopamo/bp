@@ -17,7 +17,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="context debug doc icu +nls mpi python static-libs +threads tools bzip2 zlib lzma zstd"
 
-RDEPEND="icu? ( >=lib-dev/icu-3.6:= )
+RDEPEND="
+	icu? ( lib-dev/icu )
 	mpi? ( >=virtual/mpi-2.0-r4[cxx,threads] )
 	bzip2? ( app-compression/bzip2 )
 	zlib? ( lib-sys/zlib )

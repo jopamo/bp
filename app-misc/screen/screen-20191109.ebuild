@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT=abc87e48796c9184ffc478089119e316270c7022
+SNAPSHOT=f66377f9927bf5a1857b1106b28008f3802e1f7b
 
 inherit flag-o-matic pam tmpfiles autotools
 

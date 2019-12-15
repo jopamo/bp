@@ -20,7 +20,6 @@ DEPEND="${RDEPEND}
 	sys-kernel/linux-headers"
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-2.25-build-system-fixes.patch
 	"${FILESDIR}"/${PN}-2.25-ignore-RAISE_SETFCAP-install-failures.patch
 	"${FILESDIR}"/libcap-portage.patch
 )

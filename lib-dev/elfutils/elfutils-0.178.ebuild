@@ -51,6 +51,7 @@ src_configure() {
 		--with-zlib
 		$(use_with bzip2 bzlib)
 		$(use_with lzma)
+		--disable-debuginfod
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

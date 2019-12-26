@@ -12,7 +12,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug +gmp +readline static-libs systemd"
+IUSE="debug +gmp readline static-libs systemd"
 
 RDEPEND="lib-net/libmnl
 		gmp? ( lib-dev/gmp )
@@ -39,7 +39,7 @@ src_configure() {
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
 		$(use_enable debug)
-		$(use_with readline cli)
+		$(use_with readline cli=readline)
 		$(use_with !gmp mini_gmp)
 		$(use_enable static-libs static)
 		--disable-man-doc

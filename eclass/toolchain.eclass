@@ -48,7 +48,7 @@ IUSE="cxx debug gccgo lto openmp fixed-point +isl sanitize cilk +vtv"
 
 SLOT=0
 
-BDEPEND="sys-devel/chrpath"
+BDEPEND="app-admin/chrpath"
 
 DEPEND="lib-sys/zlib
 		lib-dev/mpc

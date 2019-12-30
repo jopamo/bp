@@ -17,11 +17,6 @@ IUSE="static test xattr"
 DEPEND="xattr? ( sys-app/attr )
 		test? ( sys-app/ed )"
 
-PATCHES=( 	${FILESDIR}/15b158db3ae11cb835f2eb8d2eb48e09d1a4af48.patch
-			${FILESDIR}/76e775847f4954b63dc72afe34d9d921c6688b31.patch
-			${FILESDIR}/dce4683cbbe107a95f1f0d45fabc304acfb5d71a.patch
-)
-
 src_configure() {
 	use static && append-ldflags -static
 

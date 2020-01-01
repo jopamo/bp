@@ -22,7 +22,7 @@ Port 22
 PrintLastLog no
 PrintMotd no
 Protocol 2
-PubkeyAuthentication yes
+PubkeyAuthentication no
 StrictModes yes
 Subsystem sftp /usr/libexec/sftp-server
 SyslogFacility AUTH

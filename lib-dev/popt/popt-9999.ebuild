@@ -2,15 +2,16 @@
 
 EAPI=7
 
-inherit autotools git-r3
+inherit git-r3
 
 DESCRIPTION="Parse Options - Command line parser"
 HOMEPAGE="http://rpm5.org/"
-EGIT_REPO_URI="https://github.com/devzero2000/POPT.git"
+EGIT_REPO_URI="https://salsa.debian.org/debian/popt.git"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="nls static-libs"
 
 RDEPEND="nls? ( >=sys-devel/gettext-0-r1 )"
@@ -18,7 +19,6 @@ DEPEND="nls? ( sys-devel/gettext )"
 
 src_prepare() {
 	sed -i -e 's:lt-test1:test1:' testit.sh || die
-	eautoreconf
 	default
 }
 

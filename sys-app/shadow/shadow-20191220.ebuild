@@ -47,17 +47,18 @@ src_configure() {
 		--without-tcb
 		--enable-shared=no
 		--enable-static=yes
+		--disable-account-tools-setuid
+		--with-btrfs
+		--with-bcrypt
+		--with-nscd
 		$(use_with acl)
 		$(use_with audit)
 		$(use_with pam libpam)
 		$(use_with skey)
-		$(use_with elibc_glibc nscd)
 		$(use_with xattr attr)
 		--enable-man
 	)
 	econf ${myconf[@]}
-
-	has_version 'lib-sys/uclibc[-rpc]' && sed -i '/RLOGIN/d' config.h #425052
 }
 
 set_login_opt() {

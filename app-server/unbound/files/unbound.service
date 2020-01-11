@@ -9,7 +9,7 @@ Wants=nss-lookup.target
 WantedBy=multi-user.target
 
 [Service]
-ExecReload=/bin/kill -HUP $MAINPID
+ExecReload=/usr/bin/kill -HUP $MAINPID
 ExecStart=/usr/sbin/unbound
 CapabilityBoundingSet=CAP_IPC_LOCK CAP_NET_BIND_SERVICE CAP_SETGID CAP_SETUID CAP_SYS_CHROOT CAP_SYS_RESOURCE
 MemoryDenyWriteExecute=true

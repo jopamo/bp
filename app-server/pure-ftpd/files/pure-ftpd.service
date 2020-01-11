@@ -7,6 +7,14 @@ Type=forking
 ExecStart=/usr/sbin/pure-ftpd /etc/pure-ftpd.conf
 Restart=on-failure
 ProtectSystem=full
+MemoryDenyWriteExecute=true
+NoNewPrivileges=true
+PrivateDevices=true
+PrivateTmp=true
+ProtectHome=true
+ProtectControlGroups=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
 
 [Install]
 WantedBy=multi-user.target

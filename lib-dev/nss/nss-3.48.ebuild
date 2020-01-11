@@ -85,8 +85,6 @@ src_prepare() {
 		lib/ssl/config.mk || die
 	sed -i -e "/CRYPTOLIB/s:\$(SOFTOKEN_LIB_DIR):../../lib/freebl/\$(OBJDIR):" \
 		cmd/platlibs.mk || die
-
-	strip-flags
 }
 
 nssarch() {

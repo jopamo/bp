@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 IUSE="dbi doc json mysql nfacct +nfct +nflog pcap postgres sqlite"
 
 COMMON_DEPEND="
-	|| ( sys-app/iptables sys-app/nftables )
+	|| ( app-net/iptables app-net/nftables )
 	>=lib-net/libnfnetlink-1.0.1
 	dbi? ( dev-db/libdbi )
 	json? ( lib-dev/jansson )

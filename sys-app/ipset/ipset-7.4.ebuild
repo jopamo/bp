@@ -14,7 +14,7 @@ LICENSE="GPL-2"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-RDEPEND=">=sys-app/iptables-1.4.7
+RDEPEND=">=app-net/iptables-1.4.7
 	lib-net/libmnl"
 DEPEND="${RDEPEND}"
 

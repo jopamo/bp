@@ -12,8 +12,7 @@ if [[ ${PV} == *9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/karelzak/util-linux.git"
 	EGIT_BRANCH="stable/v$(ver_cut 1-2)"
 else
-	SNAPSHOT=7b41ae5b4ecbff8c2a01da2cd29d858cdf33ed50
-	#SRC_URI="https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v${PV}/${P}.tar.xz"
+	SNAPSHOT=eae8661e686ebcb06ec60c1a6bb1616aaef88257
 	SRC_URI="https://github.com/karelzak/util-linux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

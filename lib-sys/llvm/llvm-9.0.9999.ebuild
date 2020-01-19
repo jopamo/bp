@@ -11,7 +11,7 @@ EGIT_REPO_URI="https://git.llvm.org/git/llvm.git
 EGIT_BRANCH="release_$(ver_cut 1)$(ver_cut 2)"
 
 LICENSE="UoI-NCSA rc BSD public-domain"
-SLOT="$(ver_cut 1)"
+SLOT=0
 KEYWORDS="amd64"
 
 IUSE="debug test"

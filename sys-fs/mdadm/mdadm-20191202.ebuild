@@ -23,7 +23,7 @@ DEPEND="dev-util/pkgconf
 
 RESTRICT="test"
 
-PATCHES=( ${FILESDIR}/mdadm-portage.patch )
+PATCHES=( "${FILESDIR}"/mdadm-portage.patch )
 
 mdadm_emake() {
 	emake \
@@ -31,7 +31,7 @@ mdadm_emake() {
 		CC="$(tc-getCC)" \
 		CWFLAGS="-Wall -DBINDIR=\"/usr/sbin\"" \
 		CXFLAGS="${CFLAGS}" \
-		UDEVDIR="${EPREFIX}"/usr/lib/udev/rules.d \
+		UDEVDIR="${EPREFIX}"/usr/lib/udev \
 		SYSTEMD_DIR="$(systemd_get_systemunitdir)" \
 		COROSYNC="-DNO_COROSYNC" \
 		DLM="-DNO_DLM" \
@@ -50,6 +50,6 @@ src_test() {
 
 src_install() {
 	mdadm_emake DESTDIR="${D}" install install-systemd
-	insinto /etc
-	newins mdadm.conf-example mdadm.conf
+	insinto etc/mdadm
+	doins ${FILESDIR}/mdadm.conf
 }

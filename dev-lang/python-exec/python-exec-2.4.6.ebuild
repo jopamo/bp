@@ -4,10 +4,6 @@ EAPI=7
 
 inherit python-utils-r1
 
-PYTHON_COMPAT=( "${_PYTHON_ALL_IMPLS[@]}" )
-
-inherit python-r1
-
 DESCRIPTION="Python script wrapper"
 HOMEPAGE="https://github.com/mgorny/python-exec/"
 SRC_URI="https://github.com/mgorny/python-exec/releases/download/v${PV}/${P}.tar.bz2"

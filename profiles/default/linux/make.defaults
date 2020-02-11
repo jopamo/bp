@@ -8,8 +8,8 @@
 # has a conditional dependency on java (which it does,) then a JDK will be
 # pulled in during *emerge system*!
 
-PYTHON_SINGLE_TARGET="python3_7"
-PYTHON_TARGETS="python3_7"
+PYTHON_SINGLE_TARGET="python3_8"
+PYTHON_TARGETS="python3_8"
 
 USE="${USE} -fortran openmp"
 USE="${USE} -perl -python text -mount -kmod -tcl"

@@ -30,6 +30,8 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-3.6.4-fix-test_xmlschema.patch
 )
 
+filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+
 python_prepare_all() {
 	# avoid replacing PYTHONPATH in tests.
 	sed -i '/sys\.path/d' test.py || die

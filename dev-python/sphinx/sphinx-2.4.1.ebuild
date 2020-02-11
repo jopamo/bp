@@ -28,7 +28,6 @@ RDEPEND="
 	>=dev-python/sphinx_rtd_theme-0.1[${PYTHON_USEDEP}]
 	<dev-python/sphinx_rtd_theme-2.0[${PYTHON_USEDEP}]
 	dev-python/sphinxcontrib-websupport[${PYTHON_USEDEP}]
-	dev-python/typing[${PYTHON_USEDEP}]
 	net? (
 		>=dev-python/sqlalchemy-0.9[${PYTHON_USEDEP}]
 		>=dev-python/whoosh-2.0[${PYTHON_USEDEP}]

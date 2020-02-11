@@ -1,7 +1,7 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_7 )
+PYTHON_COMPAT=(python3_{7,8,9})
 
 # @ECLASS: python-utils-r1.eclass
 # @MAINTAINER:

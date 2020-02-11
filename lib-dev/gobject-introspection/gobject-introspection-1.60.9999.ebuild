@@ -27,9 +27,8 @@ RDEPEND="
 	lib-dev/glib
 	lib-dev/libffi
 	dev-util/pkgconf
-	${PYTHON_DEPS}
 "
-DEPEND="${RDEPEND}
+DEPEND="
 	>=dev-util/gtk-doc-am-1.19
 	sys-devel/bison
 	sys-devel/flex

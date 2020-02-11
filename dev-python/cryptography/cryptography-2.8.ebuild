@@ -34,6 +34,8 @@ DEPEND="${RDEPEND}
 		dev-python/pytz[${PYTHON_USEDEP}]
 	)"
 
+filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+
 python_configure_all() {
 	append-cflags $(test-flags-CC -pthread)
 }

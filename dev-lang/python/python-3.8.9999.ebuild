@@ -13,7 +13,7 @@ EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="PSF-2"
 SLOT="$(ver_cut 1).$(ver_cut 2)"
-KEYWORDS=""
+KEYWORDS="amd64 arm64"
 
 IUSE="ipv6 +embed valgrind static"
 
@@ -131,7 +131,7 @@ src_install() {
 		-i "${libdir}/config-${PYVER}"*/Makefile || die "sed failed"
 
 	# Fix collisions between different slots of Python.
-	rm -f "${ED%/}/usr/$(get_libdir)/libpython3.so"
+	rm -f "${ED%/}/usr/lib/libpython3.so"
 
 	# Cheap hack to get version with ABIFLAGS
 	local abiver=$(cd "${ED%/}/usr/include"; echo python*)

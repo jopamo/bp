@@ -20,6 +20,8 @@ DEPEND="dev-python/cython
 	lapack? ( dev-util/pkgconf )
 	test? ( >=dev-python/nose-1.0[${PYTHON_USEDEP}] )"
 
+filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+
 pc_incdir() {
 	$(tc-getPKG_CONFIG) --cflags-only-I $@ | \
 		sed -e 's/^-I//' -e 's/[ ]*-I/:/g' -e 's/[ ]*$//' -e 's|^:||'

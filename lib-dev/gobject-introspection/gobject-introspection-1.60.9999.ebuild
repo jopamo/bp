@@ -27,6 +27,7 @@ RDEPEND="
 	lib-dev/glib
 	lib-dev/libffi
 	dev-util/pkgconf
+	${PYTHON_DEPS}
 "
 DEPEND="
 	>=dev-util/gtk-doc-am-1.19

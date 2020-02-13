@@ -4,17 +4,16 @@ EAPI=7
 
 inherit linux-info systemd git-r3 flag-o-matic
 
-EGIT_REPO_URI=https://github.com/samba-team/samba.git
-KEYWORDS="amd64 arm64"
-
 DESCRIPTION="Samba Suite Version 4"
 HOMEPAGE="https://www.samba.org/"
+EGIT_REPO_URI=https://github.com/samba-team/samba.git
+EGIT_BRANCH="v$(ver_cut 1)-$(ver_cut 2)-stable"
+
 LICENSE="GPL-3"
-
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
-IUSE="acl -addc -addns -ads -ceph client -cluster cups debug dmapi fam gpg iprint json -ldap
-quota syslog systemd test winbind zeroconf"
+IUSE="acl -addc -addns -ads -ceph client -cluster cups debug dmapi fam gpg iprint json -ldap quota syslog systemd test winbind zeroconf"
 
 CDEPEND="
 	>=app-compression/libarchive-3.1.2
@@ -66,7 +65,8 @@ RESTRICT="test"
 
 WAF_BINARY="${S}/buildtools/bin/waf"
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+append-ldflags -ltinfo
 
 src_prepare() {
 	default

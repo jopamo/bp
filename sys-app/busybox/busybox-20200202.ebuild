@@ -10,9 +10,9 @@ HOMEPAGE="https://www.busybox.net/"
 if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="git://git.busybox.net/busybox"
-	EGIT_BRANCH="$(ver_cut 1)_$(ver_cut 2)_stable"
+	#EGIT_BRANCH="$(ver_cut 1)_$(ver_cut 2)_stable"
 else
-	SNAPSHOT=a92a9601f89d59597b268e29e7098597a8766778
+	SNAPSHOT=bd8b05ba1b0901bbd6a913dfd5186ac7c8beffed
 	SRC_URI="https://git.busybox.net/busybox/snapshot/${PN}-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -28,7 +28,7 @@ filter-flags -flto\=\*
 src_prepare() {
 	default
 	cp "${FILESDIR}"/busybox-config "${S}"/.config
-	make oldconfig
+	make silentoldconfig
 }
 
 src_install() {

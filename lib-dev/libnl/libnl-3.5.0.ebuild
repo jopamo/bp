@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit distutils-r1 autotools
+inherit distutils-r1 autotools flag-o-matic
 
 DESCRIPTION="Libraries providing APIs to netlink protocol based Linux kernel interfaces"
 HOMEPAGE="http://www.infradead.org/~tgr/libnl/ https://github.com/thom311/libnl"
@@ -37,9 +37,10 @@ REQUIRED_USE="
 	python? ( ${PYTHON_REQUIRED_USE} )
 "
 
+filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+
 src_prepare() {
 	default
-
 	eautoreconf
 
 	if use python; then

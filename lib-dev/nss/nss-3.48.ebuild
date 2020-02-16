@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic toolchain-funcs
+inherit toolchain-funcs
 
 RTM_NAME="NSS_${PV//./_}_RTM"
 # Rev of https://git.fedorahosted.org/cgit/nss-pem.git
@@ -34,8 +34,6 @@ PATCHES=(
 	"${FILESDIR}/${PN}-3.32-gentoo-fixups.patch"
 	"${FILESDIR}/${PN}-3.21-gentoo-fixup-warnings.patch"
 )
-
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
 
 src_unpack() {
 	unpack ${A}
@@ -259,13 +257,7 @@ src_install() {
 	nssutils="shlibsign"
 
 	if use utils; then
-			# The tests we do not need to install.
-			#nssutils_test="bltest crmftest dbtest dertimetest
-			#fipstest remtest sdrtest"
-			# checkcert utils has been removed in nss-3.22:
-			# https://bugzilla.mozilla.org/show_bug.cgi?id=1187545
-			# https://hg.mozilla.org/projects/nss/rev/df1729d37870
-			nssutils="addbuiltin atob baddbdir btoa certcgi certutil
+			nssutils="addbuiltin atob baddbdir btoa certutil
 			cmsutil conflict crlutil derdump digest makepqg mangle modutil multinit
 			nonspr10 ocspclnt oidcalc p7content p7env p7sign p7verify pk11mode
 			pk12util pp rsaperf selfserv shlibsign signtool signver ssltap strsclnt

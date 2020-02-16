@@ -12,11 +12,9 @@ LICENSE="GPL-2+"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="gnutls json +nmtui systemd test +wext +wifi"
+IUSE="+nmtui systemd test"
 
 REQUIRED_USE="
-	wext? ( wifi )
-	^^ ( gnutls )
 	?? ( systemd )
 "
 
@@ -31,17 +29,15 @@ COMMON_DEPEND="
 	sys-app/util-linux
 	lib-sys/readline:0=
 	virtual/service-manager
-	gnutls? (
-		lib-dev/libgcrypt:0=
-		>=lib-net/gnutls-2.12:= )
-	json? ( lib-dev/jansson )
+	lib-dev/libgcrypt:0=
+	>=lib-net/gnutls-2.12:=
 "
 RDEPEND="${COMMON_DEPEND}
 	|| (
 		app-net/iputils[arping(+)]
 		app-net/arping
 	)
-	wifi? ( >=app-net/wpa_supplicant-0.7.3-r3[dbus] )
+	>=app-net/wpa_supplicant-0.7.3-r3[dbus]
 "
 DEPEND="${COMMON_DEPEND}
 	lib-dev/glib
@@ -71,6 +67,7 @@ src_configure() {
 		-Dwext=false
 		-Dovs=false
 		-Dcrypto=gnutls
+		-Djson_validation=false
 		)
 		meson_src_configure
 }

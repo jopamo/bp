@@ -294,8 +294,6 @@ src_install() {
 		dobin wpa_gui-qt4/wpa_gui
 		doicon wpa_gui-qt4/icons/wpa_gui.svg
 		domenu wpa_gui-qt4/wpa_gui.desktop
-	else
-		rm "${ED}"/usr/share/man/man8/wpa_gui.8
 	fi
 
 	if use dbus ; then

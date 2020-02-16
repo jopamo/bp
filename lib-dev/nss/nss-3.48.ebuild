@@ -19,7 +19,7 @@ LICENSE="|| ( MPL-2.0 GPL-2 LGPL-2.1 )"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="cacert +nss-pem static-libs"
+IUSE="cacert +nss-pem utils static-libs"
 
 DEPEND="dev-util/pkgconf
 		lib-dev/nspr
@@ -34,6 +34,8 @@ PATCHES=(
 	"${FILESDIR}/${PN}-3.32-gentoo-fixups.patch"
 	"${FILESDIR}/${PN}-3.21-gentoo-fixup-warnings.patch"
 )
+
+filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
 
 src_unpack() {
 	unpack ${A}
@@ -250,6 +252,31 @@ src_install() {
 	insinto /usr/include/nss/private
 	doins private/nss/{blapi,alghmac}.h
 
+	popd >/dev/null || die
+
+	local f nssutils
+	# Always enabled because we need it for chk generation.
+	nssutils="shlibsign"
+
+	if use utils; then
+			# The tests we do not need to install.
+			#nssutils_test="bltest crmftest dbtest dertimetest
+			#fipstest remtest sdrtest"
+			# checkcert utils has been removed in nss-3.22:
+			# https://bugzilla.mozilla.org/show_bug.cgi?id=1187545
+			# https://hg.mozilla.org/projects/nss/rev/df1729d37870
+			nssutils="addbuiltin atob baddbdir btoa certcgi certutil
+			cmsutil conflict crlutil derdump digest makepqg mangle modutil multinit
+			nonspr10 ocspclnt oidcalc p7content p7env p7sign p7verify pk11mode
+			pk12util pp rsaperf selfserv shlibsign signtool signver ssltap strsclnt
+			symkeyutil tstclnt vfychain vfyserv"
+			# install man-pages for utils (bug #516810)
+			doman doc/nroff/*.1
+	fi
+	pushd dist/*/bin >/dev/null || die
+	for f in ${nssutils}; do
+		dobin ${f}
+	done
 	popd >/dev/null || die
 
 	# Prelink breaks the CHK files. We don't have any reliable way to run

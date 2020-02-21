@@ -22,4 +22,5 @@ DEPEND="${RDEPEND}
 	>=dev-util/gtk-doc-am-1.20
 	>=sys-devel/gettext-0.18
 	dev-util/pkgconf
+	dev-python/pygments
 "

@@ -7,7 +7,7 @@ inherit libtool pam autotools
 DESCRIPTION="Utilities to deal with user accounts"
 HOMEPAGE="https://github.com/shadow-maint/shadow http://pkg-shadow.alioth.debian.org/"
 
-SNAPSHOT=3e942adb213b0cf918af7b0a127c27b2eaa11586
+SNAPSHOT=2cc7da6058152ec0cd338d4e15d29bd7124ae3d7
 SRC_URI="https://github.com/shadow-maint/shadow/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

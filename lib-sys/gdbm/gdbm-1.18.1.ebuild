@@ -24,10 +24,10 @@ src_prepare() {
 src_configure() {
 	export ac_cv_lib_dbm_main=no ac_cv_lib_ndbm_main=no
 
-	local myeconfargs=(
+	local myconf=(
 		$(use_enable nls)
 		$(use_enable static-libs static)
 		$(use_with readline)
 	)
-	ECONF_SOURCE=${S} econf "${myeconfargs[@]}"
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

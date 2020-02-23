@@ -27,11 +27,11 @@ src_prepare() {
 }
 
 src_configure() {
-	local myeconfargs=(
+	local myconf=(
 		cc_cv_cflags__g=no
 		$(use_enable static-libs static)
 	)
-	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
+	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }
 
 src_test() {

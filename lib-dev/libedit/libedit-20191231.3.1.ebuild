@@ -21,23 +21,21 @@ DEPEND=">=lib-sys/ncurses-5.9-r3[static-libs?]"
 
 S="${WORKDIR}/${MY_P}"
 
-PATCHES=( "${FILESDIR}/${PN}-20170329.3.1-tinfo.patch" )
-
 src_prepare() {
 	default
 	eautoreconf
 }
 
 src_configure() {
-	ECONF_SOURCE="${S}" econf \
-		$(use_enable static-libs static) \
+	local myconf=(
+		$(use_enable static-libs static)
 		--enable-fast-install
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
 src_install() {
-	emake DESTDIR="${D}" install
+	default
 
 	rm "${ED%/}/usr/share/man/man3/history.3" || die
-
-	cleanup_install
 }

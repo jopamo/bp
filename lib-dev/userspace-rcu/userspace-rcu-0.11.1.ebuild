@@ -13,11 +13,11 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs regression-test"
 
 src_configure() {
-	local myeconfargs=(
+	local myconf=(
 		--enable-shared
 		$(use_enable static-libs static)
 	)
-	econf "${myeconfargs[@]}"
+	econf "${myconf[@]}"
 }
 
 src_test() {

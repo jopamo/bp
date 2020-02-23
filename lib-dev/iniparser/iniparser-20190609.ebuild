@@ -29,7 +29,7 @@ src_prepare() {
 }
 
 src_configure() {
-	local myeconfargs=(
+	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
 		--libdir="${EPREFIX}"/usr/lib
@@ -37,7 +37,7 @@ src_configure() {
 		--sysconfdir="${EPREFIX}/etc"
 		--localstatedir="${EPREFIX}/var"
 	)
-	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
+	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }
 
 src_install() {

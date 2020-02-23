@@ -38,7 +38,7 @@ pkg_setup() {
 }
 
 src_configure() {
-	local myeconfargs=(
+	local myconf=(
 		--disable-assert
 		--disable-rpath
 		--without-included-libunistring
@@ -54,5 +54,5 @@ src_configure() {
 		$(use_with uuid libuuid)
 		$(use_with zlib)
 	)
-	ac_cv_libunistring=no econf "${myeconfargs[@]}"
+	ac_cv_libunistring=no econf "${myconf[@]}"
 }

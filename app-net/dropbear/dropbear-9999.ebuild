@@ -20,7 +20,7 @@ src_prepare() {
 }
 
 src_configure() {
-	local myeconfargs=(
+	local myconf=(
 		--disable-harden
 		$(use_enable zlib)
 		$(use_enable pam)
@@ -29,7 +29,7 @@ src_configure() {
 		$(use_enable static)
 		$(use_enable syslog)
 	)
-	econf "${myeconfargs[@]}"
+	econf "${myconf[@]}"
 }
 
 src_install() {

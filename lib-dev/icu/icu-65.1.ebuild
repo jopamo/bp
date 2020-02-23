@@ -76,7 +76,7 @@ src_configure() {
 		popd >/dev/null || die
 	fi
 
-	local myeconfargs=(
+	local myconf=(
 		--disable-renaming
 		--disable-samples
 		--disable-layoutex
@@ -94,7 +94,7 @@ src_configure() {
 	[[ -x ${CONFIG_SHELL} ]] || CONFIG_SHELL=${BASH}
 
 	ECONF_SOURCE=${S} \
-	econf "${myeconfargs[@]}"
+	econf "${myconf[@]}"
 }
 
 src_test() {

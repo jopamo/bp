@@ -34,7 +34,7 @@ src_prepare() {
 
 src_configure() {
 	use static && append-ldflags -static
-	local myeconfargs=(
+	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
 		--libdir="${EPREFIX}"/usr/lib
@@ -46,5 +46,5 @@ src_configure() {
 		$(use_enable nls)
 		$(use_with xattr xattrs)
 	)
-	FORCE_UNSAFE_CONFIGURE=1 econf "${myeconfargs[@]}"
+	FORCE_UNSAFE_CONFIGURE=1 econf "${myconf[@]}"
 }

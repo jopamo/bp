@@ -26,7 +26,7 @@ append-cflags -fno-strict-aliasing
 append-cppflags -D_GNU_SOURCE
 
 src_configure() {
-	local myeconfargs=(
+	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
 		--libdir="${EPREFIX}"/usr/lib
@@ -42,7 +42,7 @@ src_configure() {
 		--disable-libuuid
 		--disable-uuidd
 	)
-	ECONF_SOURCE=${S} econf "${myeconfargs[@]}"
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
 src_install() {

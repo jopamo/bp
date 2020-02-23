@@ -24,13 +24,13 @@ DEPEND="${RDEPEND}
 
 src_configure() {
 	use static && append-ldflags -static
-	local myeconfargs=(
+	local myconf=(
 		--with-external-libintl-perl
 		--with-external-Unicode-EastAsianWidth
 		--with-external-Text-Unidecode
 		$(use_enable nls)
 	)
-	econf "${myeconfargs[@]}"
+	econf "${myconf[@]}"
 }
 
 src_configure() {

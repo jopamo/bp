@@ -38,7 +38,7 @@ pkg_setup() {
 
 src_configure() {
 	export ac_cv_lib_z_gzopen=$(usex zlib)
-	local myeconfargs=(
+	local myconf=(
 		--docdir='$(datarootdir)'/doc/${PF}
 		--with-systemdtmpfilesdir="${EPREFIX}"/usr/lib/tmpfiles.d
 		--enable-setuid
@@ -48,7 +48,7 @@ src_configure() {
 		$(use_enable static-libs static)
 		--with-db=gdbm
 	)
-	econf "${myeconfargs[@]}"
+	econf "${myconf[@]}"
 }
 
 src_install() {

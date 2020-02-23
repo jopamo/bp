@@ -24,7 +24,7 @@ src_prepare() {
 }
 
 src_configure() {
-	local myeconfargs=(
+	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
 		--libdir="${EPREFIX}"/usr/lib
@@ -32,5 +32,5 @@ src_configure() {
 		$(use_enable nls)
 		$(use_enable static-libs static)
 	)
-	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
+	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }

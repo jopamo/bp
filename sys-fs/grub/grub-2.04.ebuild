@@ -105,7 +105,7 @@ grub_configure() {
 			fi ;;
 	esac
 
-	local myeconfargs=(
+	local myconf=(
 		--disable-werror
 		--program-prefix=
 		--libdir="${EPREFIX}"/usr/lib
@@ -124,7 +124,7 @@ grub_configure() {
 	)
 
 	local ECONF_SOURCE="${S}"
-	econf "${myeconfargs[@]}"
+	econf "${myconf[@]}"
 }
 
 src_configure() {

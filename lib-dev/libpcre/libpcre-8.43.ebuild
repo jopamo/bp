@@ -38,7 +38,7 @@ src_prepare() {
 }
 
 src_configure() {
-	local myeconfargs=(
+	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
 		--libdir="${EPREFIX}"/usr/lib
@@ -59,7 +59,7 @@ src_configure() {
 		$(use_enable jit) $(use_enable jit pcregrep-jit)
 		$(use_enable static-libs static)
 	)
-	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
+	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }
 
 src_compile() {

@@ -41,13 +41,6 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-		--docdir='$(datarootdir)'/doc/${PF}
 		$(use_enable kill)
 		$(use_enable modern-top)
 		$(use_with ncurses)

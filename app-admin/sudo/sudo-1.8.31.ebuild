@@ -13,7 +13,7 @@ KEYWORDS="amd64 arm64"
 IUSE="pam"
 
 src_configure() {
-	myeconfargs=(
+	myconf=(
 		--prefix="${EPREFIX}"/usr
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--with-secure-path
@@ -28,7 +28,7 @@ src_configure() {
 		--enable-openssl
 		$(use_with pam)
 	)
-	econf "${myeconfargs[@]}"
+	econf "${myconf[@]}"
 }
 
 src_install() {

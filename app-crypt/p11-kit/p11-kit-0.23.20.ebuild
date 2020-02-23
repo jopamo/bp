@@ -21,7 +21,7 @@ pkg_setup() {
 }
 
 src_configure() {
-	local myeconfargs=(
+	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
 		--libdir="${EPREFIX}"/usr/lib
@@ -30,5 +30,5 @@ src_configure() {
 		$(use_enable debug)
 		$(use_with libffi)
 	)
-	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
+	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }

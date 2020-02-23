@@ -35,9 +35,9 @@ src_prepare() {
 }
 
 src_configure() {
-	local myeconfargs=(
+	local myconf=(
 		--sysconfdir="${EPREFIX}"/etc
 		$(use_enable debug)
 	)
-	econf "${myeconfargs[@]}"
+	econf "${myconf[@]}"
 }

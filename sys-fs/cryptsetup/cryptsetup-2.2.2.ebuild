@@ -56,7 +56,7 @@ src_configure() {
 
 	# We disable autotool python integration so we can use eclasses
 	# for proper integration with multiple python versions.
-	local myeconfargs=(
+	local myconf=(
 		--enable-system-argon2
 		--enable-shared
 		--bindir="${EPREFIX}"/usr/bin

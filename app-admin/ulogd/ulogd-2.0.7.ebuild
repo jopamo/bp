@@ -58,7 +58,7 @@ pkg_setup() {
 src_configure() {
 	append-lfs-flags
 
-	local myeconfargs=(
+	local myconf=(
 		$(use_with dbi)
 		$(use_with json jansson)
 		$(use_enable nfacct)
@@ -69,7 +69,7 @@ src_configure() {
 		$(use_with postgres pgsql)
 		$(use_with sqlite)
 	)
-	econf "${myeconfargs[@]}"
+	econf "${myconf[@]}"
 }
 
 src_install() {

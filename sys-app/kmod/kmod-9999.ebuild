@@ -61,7 +61,7 @@ src_prepare() {
 }
 
 src_configure() {
-	local myeconfargs=(
+	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
 		--libdir="${EPREFIX}"/usr/lib
@@ -82,7 +82,7 @@ src_configure() {
 
 	kmod_configure() {
 		mkdir -p "${BUILD_DIR}" || die
-		run_in_build_dir econf "${myeconfargs[@]}" "$@"
+		run_in_build_dir econf "${myconf[@]}" "$@"
 	}
 
 	BUILD_DIR="${WORKDIR}/build"

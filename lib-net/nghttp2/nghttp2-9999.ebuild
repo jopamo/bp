@@ -42,7 +42,7 @@ src_prepare() {
 }
 
 src_configure() {
-	local myeconfargs=(
+	local myconf=(
 		--disable-examples
 		--disable-failmalloc
 		--disable-werror
@@ -56,7 +56,7 @@ src_configure() {
 		$(use_with jemalloc)
 		$(use_with xml libxml2)
 	)
-	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
+	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }
 
 src_install() {

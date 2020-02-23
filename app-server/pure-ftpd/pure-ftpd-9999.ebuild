@@ -46,7 +46,7 @@ src_configure() {
 	# Do not auto-use SSP -- let the user select this.
 	export ax_cv_check_cflags___fstack_protector_all=no
 
-	local myeconfargs=(
+	local myconf=(
 		--enable-largefile
 		--with-altlog
 		--with-cookie
@@ -73,7 +73,7 @@ src_configure() {
 		$(usex caps '' '--without-capabilities')
 		$(usex noiplog '--without-iplogging' '')
 	)
-	econf "${myeconfargs[@]}"
+	econf "${myconf[@]}"
 }
 
 src_install() {

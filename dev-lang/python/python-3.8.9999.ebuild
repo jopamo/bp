@@ -53,7 +53,7 @@ src_configure() {
 
 	tc-export CXX
 	use static && LDFLAGS="-static"
-	local myeconfargs=(
+	local myconf=(
 		$(usex static --disable-shared --enable-shared)
 		$(use_enable ipv6)
 		$(use_with valgrind)
@@ -69,7 +69,7 @@ src_configure() {
 		--with-lto
 	)
 
-	OPT="" econf "${myeconfargs[@]}"
+	OPT="" econf "${myconf[@]}"
 }
 
 src_compile() {

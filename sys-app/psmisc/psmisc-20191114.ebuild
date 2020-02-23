@@ -29,12 +29,12 @@ src_prepare() {
 }
 
 src_configure() {
-	local myeconfargs=(
+	local myconf=(
 		--disable-harden-flags
 		$(use_enable nls)
 		$(use_enable ipv6)
 	)
-	econf "${myeconfargs[@]}"
+	econf "${myconf[@]}"
 }
 
 src_install() {

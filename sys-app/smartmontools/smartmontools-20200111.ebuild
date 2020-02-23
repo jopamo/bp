@@ -46,7 +46,7 @@ src_configure() {
 	use static && append-ldflags -static
 	# The build installs /etc/init.d/smartd, but we clobber it
 	# in our src_install, so no need to manually delete it.
-	myeconfargs=(
+	myconf=(
 		--docdir="${EPREFIX}/usr/share/doc/${PF}"
 		--with-drivedbdir="${EPREFIX}/var/db/${PN}" #575292
 		--with-initscriptdir="${EPREFIX}/etc/init.d"
@@ -55,7 +55,7 @@ src_configure() {
 		$(use_with update_drivedb gnupg)
 		$(use_with update_drivedb update-smart-drivedb)
 	)
-	econf "${myeconfargs[@]}"
+	econf "${myconf[@]}"
 }
 
 src_install() {

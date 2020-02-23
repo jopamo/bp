@@ -29,7 +29,7 @@ src_configure() {
 	export OPTIMIZER=${CFLAGS}
 	export DEBUG=-DNDEBUG
 
-	local myeconfargs=(
+	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
 		--libdir="${EPREFIX}"/usr/lib
@@ -39,5 +39,5 @@ src_configure() {
 		--enable-shared $(use_enable static-libs static)
 		$(use_enable nls)
 	)
-	econf "${myeconfargs[@]}"
+	econf "${myconf[@]}"
 }

@@ -59,7 +59,7 @@ src_configure() {
 		$(use_with readline history)
 		--with-python=${ROOT%/}${PYTHON}
 	)
-		ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
+		ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }
 
 src_install() {

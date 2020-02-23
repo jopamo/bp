@@ -80,7 +80,7 @@ src_configure() {
 	export ac_cv_header_security_pam_misc_h=$(usex pam) #485486
 	export ac_cv_header_security_pam_appl_h=$(usex pam) #545042
 
-	local myeconfargs=(
+	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
 		--libdir="${EPREFIX}"/usr/lib
@@ -123,7 +123,7 @@ src_configure() {
 		$(use_enable static-libs static)
 		$(usex ncurses '' '--without-tinfo')
 	)
-	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
+	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }
 
 src_test() {

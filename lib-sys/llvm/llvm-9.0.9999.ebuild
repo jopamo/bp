@@ -6,15 +6,15 @@ inherit cmake-utils git-r3 flag-o-matic
 
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
-EGIT_REPO_URI="https://git.llvm.org/git/llvm.git
-	https://github.com/llvm-mirror/llvm.git"
-EGIT_BRANCH="release_$(ver_cut 1)$(ver_cut 2)"
+EGIT_REPO_URI="https://github.com/llvm/llvm-project.git"
+EGIT_BRANCH="release/$(ver_cut 1).x"
+S=${WORKDIR}/${P}/${PN}
 
 LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
 KEYWORDS="amd64"
 
-IUSE="debug test"
+IUSE="clang debug test"
 
 DEPEND="
 	lib-dev/libedit:=
@@ -31,6 +31,7 @@ filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
 
 src_configure() {
 	local mycmakeargs=(
+		-DLLVM_ENABLE_PROJECTS=$(usex clang clang '')
 		-DLLVM_APPEND_VC_REV=OFF
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
 		-DLLVM_LIBDIR_SUFFIX=${libdir#lib}

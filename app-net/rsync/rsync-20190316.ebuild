@@ -26,13 +26,13 @@ S="${WORKDIR}/${P/_/}"
 
 src_configure() {
 	use static && append-ldflags -static
-	local myeconfargs=(
+	local myconf=(
 		$(use_enable acl acl-support)
 		$(use_enable iconv)
 		$(use_enable ipv6)
 		$(use_enable xattr xattr-support)
 	)
-	econf "${myeconfargs[@]}"
+	econf "${myconf[@]}"
 }
 
 src_install() {

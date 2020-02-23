@@ -51,7 +51,7 @@ src_configure() {
 		-e "/nfconntrack=[01]/s:=[01]:=$(usex conntrack 1 0):" \
 		configure || die
 
-	local myeconfargs=(
+	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
 		--libdir="${EPREFIX}"/usr/lib
@@ -66,7 +66,7 @@ src_configure() {
 		$(use_enable static-libs static)
 		$(use_enable ipv6)
 	)
-	econf "${myeconfargs[@]}"
+	econf "${myconf[@]}"
 }
 
 src_compile() {

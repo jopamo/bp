@@ -345,7 +345,7 @@ systemd_enable_ntpunit() {
 #
 # Output '--with-systemdsystemunitdir' as expected by systemd-aware configure
 # scripts. This function always succeeds. Its output may be quoted in order
-# to preserve whitespace in paths. systemd_to_myeconfargs() is preferred over
+# to preserve whitespace in paths. systemd_to_myconf() is preferred over
 # this function.
 #
 # If upstream does use invalid configure option to handle installing systemd

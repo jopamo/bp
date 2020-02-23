@@ -23,10 +23,10 @@ src_configure() {
 	# Disable automagic dependency over libsigsegv; see bug #312351.
 	export ac_cv_libsigsegv=no
 
-	local myeconfargs=(
+	local myconf=(
 		$(use_enable nls)
 	)
-	econf "${myeconfargs[@]}"
+	econf "${myconf[@]}"
 }
 
 src_test() {

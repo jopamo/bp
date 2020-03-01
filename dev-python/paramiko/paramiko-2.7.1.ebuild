@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit distutils-r1
+inherit distutils-r1 flag-o-matic
 
 DESCRIPTION="SSH2 protocol library"
 HOMEPAGE="http://www.paramiko.org/ https://github.com/paramiko/paramiko/ https://pypi.org/project/paramiko/"
@@ -28,8 +28,10 @@ BDEPEND="
 	)
 "
 
+filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+
 src_prepare() {
-	eapply "${FILESDIR}"/${P}-tests.patch
+	eapply "${FILESDIR}"/${PN}-tests.patch
 
 	if ! use server; then
 		eapply "${FILESDIR}/${PN}-2.4.2-disable-server.patch"

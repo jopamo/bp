@@ -13,6 +13,7 @@ if [[ ${PV} == 9999* ]]; then
 else
 	SRC_URI="https://github.com/${PN}/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="amd64 arm64"
+	S=${WORKDIR}/certbot-${PV}/${PN}
 fi
 
 LICENSE="Apache-2.0"
@@ -23,7 +24,7 @@ IUSE="test"
 CDEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"
 RDEPEND="
 	${CDEPEND}
-	>app-crypt/acme-0.21.1[${PYTHON_USEDEP}]
+	=app-crypt/acme-${PV}[${PYTHON_USEDEP}]
 	>=dev-python/configargparse-0.9.3[${PYTHON_USEDEP}]
 	dev-python/configobj[${PYTHON_USEDEP}]
 	>=dev-python/cryptography-1.2[${PYTHON_USEDEP}]

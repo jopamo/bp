@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit distutils-r1
+inherit distutils-r1 flag-o-matic
 
 DESCRIPTION="Python binding to the Networking and Cryptography (NaCl) library"
 HOMEPAGE="https://github.com/pyca/pynacl/ https://pypi.org/project/PyNaCl/"
@@ -24,6 +24,8 @@ DEPEND="${RDEPEND}
 	test? ( >=dev-python/hypothesis-3.27.0[${PYTHON_USEDEP}]
 		>=dev-python/pytest-3.2.1[${PYTHON_USEDEP}] )
 "
+
+filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
 
 src_prepare() {
 	# For not using the bundled libsodium

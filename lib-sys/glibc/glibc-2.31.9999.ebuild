@@ -13,7 +13,7 @@ LICENSE="LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
 SLOT="0/1"
 KEYWORDS="amd64 arm64"
 
-IUSE="audit caps debug nscd systemtap static-libs profile static-pie"
+IUSE="audit caps debug nscd systemtap static-libs profile +static-pie"
 
 BDEPEND="sys-devel/gcc
 		sys-devel/make"

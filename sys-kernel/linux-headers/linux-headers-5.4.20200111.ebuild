@@ -10,7 +10,7 @@ detect_version
 PATCH_VER="1"
 SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="amd64 arm64"
 
 DEPEND="dev-lang/perl"
 

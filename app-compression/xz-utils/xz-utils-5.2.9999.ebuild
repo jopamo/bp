@@ -2,11 +2,12 @@
 
 EAPI=7
 
-inherit autotools
+inherit autotools git-r3
 
 DESCRIPTION="utils for managing LZMA compressed files"
 HOMEPAGE="http://tukaani.org/xz/"
-SRC_URI="https://1g4.org/files/${P}.tar.xz"
+EGIT_REPO_URI="https://github.com/1g4-linux/xz.git"
+EGIT_BRANCH="v$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="public-domain LGPL-2.1+ GPL-2+"
 SLOT="0"

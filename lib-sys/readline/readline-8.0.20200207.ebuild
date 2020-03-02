@@ -6,10 +6,10 @@ inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="Another cute console display library"
 HOMEPAGE="https://tiswww.case.edu/php/chet/readline/rltop.html"
-SRC_URI="mirror://gnu/${PN}/${PN}-$(ver_cut 1).$(ver_cut 2).tar.gz
-		mirror://gnu/${PN}/${PN}-$(ver_cut 1).$(ver_cut 2)-patches/${PN}80-001"
 
-S=${WORKDIR}/${PN}-$(ver_cut 1).$(ver_cut 2)
+SNAPSHOT=c5ad6be530f5c1daf64a2d20df4baba9f6b57aa4
+SRC_URI="https://git.savannah.gnu.org/cgit/readline.git/snapshot/readline-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-3"
 SLOT="0/8"  # subslot matches SONAME major
@@ -20,17 +20,8 @@ IUSE="static-libs utils"
 DEPEND=">=lib-sys/ncurses-5.9-r3:0=[static-libs?]
 	dev-util/pkgconf"
 
-PATCHES=( 	"${WORKDIR}"/${PN}80-001
-		)
-
 src_prepare() {
-	cp ${DISTDIR}/${PN}$(ver_cut 1)$(ver_cut 2)* "${WORKDIR}/" || die
-
-	for x in ${PN}$(ver_cut 1)$(ver_cut 2)-001 ; do
-		sed -i.bak -e "s/${PN}-$(ver_cut 1).$(ver_cut 2)-patched/${PN}-$(ver_cut 1).$(ver_cut 2)/g" "${WORKDIR}/${x}" || die
-	done
-
-	(cd ../ && default)
+	default
 
 	# Force ncurses linking and use pkg-config to get the right values.
 	local ncurses_libs=$($(tc-getPKG_CONFIG) ncurses --libs)

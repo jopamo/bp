@@ -6,7 +6,7 @@ inherit flag-o-matic python-any-r1 toolchain-funcs
 
 DESCRIPTION="Standard GNU utilities (chmod, cp, dd, ls, sort, tr, head, wc, who,...)"
 HOMEPAGE="https://www.gnu.org/software/coreutils/"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0/1"
@@ -30,15 +30,7 @@ DEPEND="${RDEPEND}
 		$(python_gen_any_dep 'dev-python/pyinotify[${PYTHON_USEDEP}]')
 	)"
 
-replace-flags -Ofast -O2
-replace-flags -Wl,-Ofast -Wl,-O2
 append-flags -fno-strict-aliasing
-
-PATCHES=( 	${FILESDIR}/de54e1a8094ea0e60a408de73baa312cf80a5485.patch
-			${FILESDIR}/6d78a28078feb6bfd26c6f1cc0ddbb0a356514c4.patch
-			${FILESDIR}/00d72e6122d37bbc32ef0e057c1e847fd8129133.patch
-			${FILESDIR}/1c8050cc4d862a905ba4e91ac6df2f3c1e501649.patch
-	 )
 
 pkg_setup() {
 	if use test ; then

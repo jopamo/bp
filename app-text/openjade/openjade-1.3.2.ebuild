@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit autotools sgml-catalog flag-o-matic toolchain-funcs libtool
+inherit sgml-catalog flag-o-matic toolchain-funcs libtool
 
 DESCRIPTION="Jade is an implementation of DSSSL for formatting SGML and XML documents"
 HOMEPAGE="http://openjade.sourceforge.net"

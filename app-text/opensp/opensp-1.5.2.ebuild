@@ -26,17 +26,24 @@ DEPEND="doc? (
 
 S=${WORKDIR}/${MY_P}
 
-PATCHES=( "${FILESDIR}"/${P}-fix-segfault.patch )
+src_prepare() {
+	default
+	sed -i 's/32,/253,/' lib/Syntax.cxx || die
+	sed -i 's/LITLEN          240 /LITLEN          8092/' \
+		unicode/{gensyntax.pl,unicode.syn} || die
+}
 
 src_configure() {
-	econf \
-		--enable-http \
-		--enable-default-catalog="${EPREFIX}"/etc/sgml/catalog \
-		--enable-default-search-path="${EPREFIX}"/usr/share/sgml \
-		--datadir="${EPREFIX}"/usr/share/sgml/${P} \
-		$(use_enable nls) \
-		$(use_enable doc doc-build) \
+	local myconf=(
+		--enable-http
+		--enable-default-catalog="${EPREFIX}"/etc/sgml/catalog
+		--enable-default-search-path="${EPREFIX}"/usr/share/sgml
+		--datadir="${EPREFIX}"/usr/share/sgml/${P}
+		$(use_enable nls)
+		$(use_enable doc doc-build)
 		$(use_enable static-libs static)
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
 src_compile() {

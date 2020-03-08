@@ -5,6 +5,16 @@ case ${EAPI:-0} in
 	*) die "EAPI=${EAPI} is not supported" ;;
 esac
 
+if [[ ${__MESON_AUTO_DEPEND+set} == "set" ]] ; then
+	# See if we were included already, but someone changed the value
+	# of MESON_AUTO_DEPEND on us.  We could reload the entire
+	# eclass at that point, but that adds overhead, and it's trivial
+	# to re-order inherit in eclasses/ebuilds instead.  #409611
+	if [[ ${__MESON_AUTO_DEPEND} != ${MESON_AUTO_DEPEND} ]] ; then
+		die "MESON_AUTO_DEPEND changed value between inherits; please inherit meson.eclass first! ${__MESON_AUTO_DEPEND} -> ${MESON_AUTO_DEPEND}"
+	fi
+fi
+
 if [[ -z ${_MESON_ECLASS} ]]; then
 
 inherit ninja-utils python-utils-r1 toolchain-funcs
@@ -16,14 +26,23 @@ EXPORT_FUNCTIONS src_configure src_compile src_test src_install
 if [[ -z ${_MESON_ECLASS} ]]; then
 _MESON_ECLASS=1
 
-MESON_DEPEND=">=dev-util/meson-0.48.2
-	>=dev-util/ninja-1.7.2"
+MESON_DEPEND=">=dev-util/meson-0.51.2
+	>=dev-util/ninja-1.8.2"
 
-if [[ ${EAPI:-0} == [6] ]]; then
-	DEPEND=${MESON_DEPEND}
-else
-	BDEPEND=${MESON_DEPEND}
+# @ECLASS-VARIABLE: MESON_AUTO_DEPEND
+# @DESCRIPTION:
+# Set to 'no' to disable automatically adding to DEPEND.  This lets
+# ebuilds form conditional depends by using ${MESON_DEPEND} in
+# their own DEPEND string.
+: ${MESON_AUTO_DEPEND:=yes}
+if [[ ${MESON_AUTO_DEPEND} != "no" ]] ; then
+	if [[ ${EAPI:-0} == [0123456] ]]; then
+		DEPEND=${MESON_DEPEND}
+	else
+		BDEPEND=${MESON_DEPEND}
+	fi
 fi
+__MESON_AUTO_DEPEND=${MESON_AUTO_DEPEND} # See top of eclass
 
 # @ECLASS-VARIABLE: BUILD_DIR
 # @DEFAULT_UNSET
@@ -43,6 +62,12 @@ fi
 # @DESCRIPTION:
 # Optional meson arguments as Bash array; this should be defined before
 # calling meson_src_configure.
+
+# @VARIABLE: emesontestargs
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# Optional meson test arguments as Bash array; this should be defined before
+# calling meson_src_test.
 
 
 read -d '' __MESON_ARRAY_PARSER <<"EOF"
@@ -88,6 +113,13 @@ _meson_env_array() {
 _meson_create_cross_file() {
 	# Reference: http://mesonbuild.com/Cross-compilation.html
 
+	# system roughly corresponds to uname -s (lowercase)
+	local system=unknown
+	case ${CHOST} in
+		*-freebsd*)      system=freebsd ;;
+		*-linux*)        system=linux ;;
+	esac
+
 	local cpu_family=$(tc-arch)
 	case ${cpu_family} in
 		amd64) cpu_family=x86_64 ;;
@@ -108,6 +140,7 @@ _meson_create_cross_file() {
 	objcpp = $(_meson_env_array "$(tc-getPROG OBJCXX c++)")
 	pkgconfig = '$(tc-getPKG_CONFIG)'
 	strip = $(_meson_env_array "$(tc-getSTRIP)")
+	windres = $(_meson_env_array "$(tc-getRC)")
 
 	[properties]
 	c_args = $(_meson_env_array "${CFLAGS} ${CPPFLAGS}")
@@ -122,7 +155,7 @@ _meson_create_cross_file() {
 	objcpp_link_args = $(_meson_env_array "${OBJCXXFLAGS} ${LDFLAGS}")
 
 	[host_machine]
-	system = 'linux'
+	system = '${system}'
 	cpu_family = '${cpu_family}'
 	cpu = '${cpu}'
 	endian = '$(tc-endian)'
@@ -165,8 +198,8 @@ meson_src_configure() {
 	# Common args
 	local mesonargs=(
 		--buildtype plain
-		--libdir "lib"
-		--localstatedir "${EPREFIX}/var"
+		--libdir lib
+		--localstatedir "${EPREFIX}/var/lib"
 		--prefix "${EPREFIX}/usr"
 		--sysconfdir "${EPREFIX}/etc"
 		--wrap-mode nodownload
@@ -177,7 +210,6 @@ meson_src_configure() {
 		mesonargs+=( --cross-file "${T}/meson.${CHOST}.${ABI}" )
 	fi
 
-	# https://bugs.gentoo.org/625396
 	python_export_utf8_locale
 
 	# Append additional arguments from ebuild
@@ -191,30 +223,46 @@ meson_src_configure() {
 }
 
 # @FUNCTION: meson_src_compile
+# @USAGE: [extra ninja arguments]
 # @DESCRIPTION:
 # This is the meson_src_compile function.
 meson_src_compile() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	eninja -C "${BUILD_DIR}"
+	eninja -C "${BUILD_DIR}" "$@"
 }
 
 # @FUNCTION: meson_src_test
+# @USAGE: [extra meson test arguments]
 # @DESCRIPTION:
 # This is the meson_src_test function.
 meson_src_test() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	eninja -C "${BUILD_DIR}" test
+	local mesontestargs=(
+		-C "${BUILD_DIR}"
+	)
+	[[ -n ${NINJAOPTS} || -n ${MAKEOPTS} ]] &&
+		mesontestargs+=(
+			--num-processes "$(makeopts_jobs ${NINJAOPTS:-${MAKEOPTS}})"
+		)
+
+	# Append additional arguments from ebuild
+	mesontestargs+=("${emesontestargs[@]}")
+
+	set -- meson test "${mesontestargs[@]}" "$@"
+	echo "$@" >&2
+	"$@" || die "tests failed"
 }
 
 # @FUNCTION: meson_src_install
+# @USAGE: [extra ninja install arguments]
 # @DESCRIPTION:
 # This is the meson_src_install function.
 meson_src_install() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	DESTDIR="${D}" eninja -C "${BUILD_DIR}" install
+	DESTDIR="${D}" eninja -C "${BUILD_DIR}" install "$@"
 
 	if [[ ${EAPI:-0} == [7] ]]; then
 		cleanup_install

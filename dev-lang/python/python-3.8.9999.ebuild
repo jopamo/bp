@@ -15,11 +15,12 @@ LICENSE="PSF-2"
 SLOT="$(ver_cut 1).$(ver_cut 2)"
 KEYWORDS="amd64 arm64"
 
-IUSE="ipv6 +embed valgrind static"
+IUSE="ipv6 +sqlite valgrind static"
 
 RESTRICT="test"
 
-DEPEND="!embed? ( lib-sys/sqlite )
+DEPEND="
+		sqlite? ( lib-sys/sqlite )
 		app-compression/bzip2:0=
 		app-compression/xz-utils:0=
 		>=lib-sys/zlib-1.1.3:0=
@@ -38,15 +39,6 @@ PYVER=${SLOT%/*}
 
 filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
 
-src_prepare() {
-	# Ensure that internal copies of expat, libffi and zlib are not used.
-	rm -fr Modules/expat
-	rm -fr Modules/_ctypes/libffi*
-	rm -fr Modules/zlib
-
-	default
-}
-
 src_configure() {
 	export PYTHON_DISABLE_MODULES="gdbm tkinter _codecs_{hk,tw,cn,jp,kr} ossaudiodev"
 	export ax_cv_c_float_words_bigendian=no
@@ -57,7 +49,7 @@ src_configure() {
 		$(usex static --disable-shared --enable-shared)
 		$(use_enable ipv6)
 		$(use_with valgrind)
-		$(usex embed --disable-loadable-sqlite-extensions --enable-loadable-sqlite-extensions)
+		$(usex sqlite --enable-loadable-sqlite-extensions --disable-loadable-sqlite-extensions)
 		--infodir='${prefix}/share/info'
 		--mandir='${prefix}/share/man'
 		--with-computed-gotos
@@ -66,7 +58,6 @@ src_configure() {
 		--without-ensurepip
 		--with-system-expat
 		--with-system-ffi
-		--with-lto
 	)
 
 	OPT="" econf "${myconf[@]}"

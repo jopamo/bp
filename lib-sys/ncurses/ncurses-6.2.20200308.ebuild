@@ -12,9 +12,9 @@ SRC_URI="https://invisible-mirror.net/archives/ncurses/current/${MY_P}.tgz"
 S="${WORKDIR}/${MY_P}"
 
 LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
 
-SLOT="0/6"
-KEYWORDS="~amd64 ~arm64"
 IUSE="static-libs test"
 
 PATCHES=(
@@ -27,12 +27,6 @@ src_configure() {
 	BUILD_CPPFLAGS+=" -D_GNU_SOURCE" #214642
 
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		--disable-termcap
 		--with-terminfo-dirs="${EPREFIX}"/usr/share/terminfo
 		--enable-pc-files

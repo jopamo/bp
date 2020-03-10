@@ -19,9 +19,19 @@ RDEPEND=">=sys-app/attr-2.4.47
 DEPEND="${RDEPEND}
 	sys-kernel/linux-headers"
 
-PATCHES=(
-	"${FILESDIR}"/${PN}-2.25-ignore-RAISE_SETFCAP-install-failures.patch
-	"${FILESDIR}"/libcap-portage.patch
+filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+
+_makeargs=(
+  KERNEL_HEADERS="${EPREFIX}"/usr/include
+  RAISE_SETFCAP=no
+  SBINDIR="${EPREFIX}"/usr/sbin
+  exec_prefix="${EPREFIX}"
+  lib_prefix="${EPREFIX}/usr"
+  lib="lib"
+  prefix="${EPREFIX}/usr"
+  CFLAGS="${CFLAGS}"
+  LDFLAGS="${LDFLAGS}"
+  DESTDIR="${D}"
 )
 
 src_compile() {
@@ -30,15 +40,18 @@ src_compile() {
 	local BUILD_CC
 	tc-export_build_env BUILD_CC
 	append-cppflags -D_GNU_SOURCE
-	default
+	emake "${_makeargs[@]}"
 }
 
 src_install() {
-	emake DESTDIR="${D}" install
+	emake "${_makeargs[@]}" install
 
-	use static-libs || rm "${ED}"/usr/lib64/libcap.a
+	use static-libs || rm "${ED}"/usr/lib/libcap.a
 
-	rm -rf "${ED}"/usr/lib64/security
+	if [[ -d "${ED}"/usr/lib/security ]] ; then
+		rm -r "${ED}"/usr/lib/security || die
+	fi
+
 	if use pam; then
 		dopammod pam_cap/pam_cap.so
 		dopamsecurity '' pam_cap/capability.conf

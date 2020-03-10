@@ -4,7 +4,7 @@ EAPI=7
 
 inherit flag-o-matic toolchain-funcs
 
-SNAPSHOT=1c23cc5e02bfd9be78a9e7f49bf2d8756a7942ce
+SNAPSHOT=0e42eb90521c8cd4f67196c6620c0672c1106f2c
 
 DESCRIPTION="Tools and library to manipulate EFI variables"
 HOMEPAGE="https://github.com/rhboot/efivar"
@@ -12,22 +12,8 @@ SRC_URI="https://github.com/rhboot/efivar/archive/${SNAPSHOT}.tar.gz -> ${P}.tar
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="lib-dev/popt"
-DEPEND="${RDEPEND}
-	dev-util/pkgconf
-"
-
-src_configure() {
-	tc-export CC
-	export CC_FOR_BUILD=$(tc-getBUILD_CC)
-	export libdir="/usr/lib"
-	unset LIBS # Bug 562004
-
-	if [[ -n ${GCC_SPECS} ]]; then
-		# The environment overrides the command line.
-		GCC_SPECS+=":${S}/gcc.specs"
-	fi
-}
+BDEPEND="dev-util/pkgconf"

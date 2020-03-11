@@ -12,13 +12,13 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=05452332281d60e4116198f1209d74a90c8a3076
+	SNAPSHOT=26b483b4d5dc180c8334a0adad3c92e23605010e
 	SRC_URI="https://github.com/seccomp/libseccomp/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 
 LICENSE="LGPL-2.1"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
@@ -28,17 +28,11 @@ DEPEND="sys-kernel/linux-headers"
 src_prepare() {
 	default
 	eautoreconf
-	sed -i.bak -e "s/0.0.0/2.4.2/g" "configure"
+	sed -i.bak -e "s/0.0.0/$(ver_cut 1).$(ver_cut 2).$(ver_cut 3)/g" "configure"
 }
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		$(use_enable static-libs static)
 		--disable-python
 	)

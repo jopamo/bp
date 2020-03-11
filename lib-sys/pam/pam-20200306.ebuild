@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/linux-pam/linux-pam.git"
 else
-	SNAPSHOT=a12ec8b879337c15acba04fe7f5c8e75f5a91809
+	SNAPSHOT=1f9e3eea5bbd701f581ccd34bdb8f80db5776332
 	SRC_URI="https://github.com/linux-pam/linux-pam/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/linux-${PN}-${SNAPSHOT}
 fi

@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT=099b79fc2d6638598b94161e1162a55af8a95531
+SNAPSHOT=971d1365ab16279bb33312583c320008e391f26e
 
 inherit flag-o-matic toolchain-funcs autotools
 
@@ -40,12 +40,6 @@ src_configure() {
 	use static && append-ldflags -static
 
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}/etc"
-		--localstatedir="${EPREFIX}/var"
 		--enable-pinentry-tty
 		--disable-ncurses
 		--disable-pinentry-curses

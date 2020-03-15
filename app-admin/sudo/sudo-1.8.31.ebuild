@@ -14,7 +14,6 @@ IUSE="pam"
 
 DEPEND="lib-sys/zlib"
 
-lib-sys/zlib
 src_configure() {
 	myconf=(
 		--prefix="${EPREFIX}"/usr

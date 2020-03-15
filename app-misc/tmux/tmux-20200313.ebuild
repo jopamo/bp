@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/tmux/tmux.git"
 else
-	SNAPSHOT=e6b02dec199a0f058aee4e9575f57d92b39501f5
+	SNAPSHOT=c859748210cef2378660997db810d94f28fe0ac7
 	SRC_URI="https://github.com/tmux/tmux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

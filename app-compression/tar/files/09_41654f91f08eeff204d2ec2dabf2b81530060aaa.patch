@@ -1,0 +1,278 @@
+From 41654f91f08eeff204d2ec2dabf2b81530060aaa Mon Sep 17 00:00:00 2001
+From: Sergey Poznyakoff <gray@gnu.org>
+Date: Sat, 15 Feb 2020 10:57:35 +0200
+Subject: Fix handling of linked rename chains in incremental backups
+
+* src/incremen.c: Change the meaning of the DIRF_RENAMED flag.  Now it
+marks a directory which is the last one in a chain of renames.
+Regular renamed directories are recognized by their orig member being
+non-NULL.  Directories marked with DIRF_RENAMED start encoding of renames.
+(procdir): Clear DIRF_RENAMED flag on directories which are origins for
+renames.
+(makedumpdir): Use the orig member to check if the directory is a
+result of a rename.
+(store_rename): Move the check for DIR_IS_RENAMED to the caller. Don't
+clear the DIRF_RENAMED, it is not needed any more.
+
+* tests/rename06.at: New test.
+* tests/Makefile.am: Add rename06.at
+* tests/testsuite.at: Likewise.
+---
+ src/incremen.c     | 81 +++++++++++++++++++++++++------------------------
+ tests/Makefile.am  |  1 +
+ tests/rename06.at  | 88 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tests/testsuite.at |  1 +
+ 4 files changed, 132 insertions(+), 39 deletions(-)
+ create mode 100644 tests/rename06.at
+
+diff --git a/src/incremen.c b/src/incremen.c
+index 42e5909..4265adb 100644
+--- a/src/incremen.c
++++ b/src/incremen.c
+@@ -38,7 +38,15 @@ enum children
+ #define DIRF_FOUND    0x0004    /* directory is found on fs */
+ #define DIRF_NEW      0x0008    /* directory is new (not found
+ 				   in the previous dump) */
+-#define DIRF_RENAMED  0x0010    /* directory is renamed */
++#define DIRF_RENAMED  0x0010    /* Last target in a chain of renames */
++/* A directory which is renamed from another one is recognized by its
++   orig member, which is not-NULL.  This directory may eventually be
++   the source for another rename, in which case it will be pointed to by
++   the orig member of another directory structure.  The last directory
++   in such a chain of renames (the one which is not pointed to by any
++   other orig) is marked with the DIRF_RENAMED flag.  This marks a starting
++   point from which append_incremental_renames starts encoding renames for
++   this chain. */
+ 
+ #define DIR_IS_INITED(d) ((d)->flags & DIRF_INIT)
+ #define DIR_IS_NFS(d) ((d)->flags & DIRF_NFS)
+@@ -495,6 +503,7 @@ procdir (const char *name_buffer, struct tar_stat_info *st,
+ 			    quote_n (1, d->name)));
+ 		  directory->orig = d;
+ 		  DIR_SET_FLAG (directory, DIRF_RENAMED);
++		  DIR_CLEAR_FLAG (d, DIRF_RENAMED);
+ 		  dirlist_replace_prefix (d->name, name_buffer);
+ 		}
+ 	      directory->children = CHANGED_CHILDREN;
+@@ -537,6 +546,7 @@ procdir (const char *name_buffer, struct tar_stat_info *st,
+ 			quote_n (1, d->name)));
+ 	      directory->orig = d;
+ 	      DIR_SET_FLAG (directory, DIRF_RENAMED);
++	      DIR_CLEAR_FLAG (d, DIRF_RENAMED);
+ 	      dirlist_replace_prefix (d->name, name_buffer);
+ 	    }
+ 	  directory->children = CHANGED_CHILDREN;
+@@ -649,7 +659,7 @@ makedumpdir (struct directory *directory, const char *dir)
+ 
+   if (directory->children == ALL_CHILDREN)
+     dump = NULL;
+-  else if (DIR_IS_RENAMED (directory))
++  else if (directory->orig)
+     dump = directory->orig->idump ?
+            directory->orig->idump : directory->orig->dump;
+   else
+@@ -878,44 +888,36 @@ obstack_code_rename (struct obstack *stk, char const *from, char const *to)
+ static void
+ store_rename (struct directory *dir, struct obstack *stk)
+ {
+-  if (DIR_IS_RENAMED (dir))
+-    {
+-      struct directory *prev, *p;
+-
+-      /* Detect eventual cycles and clear DIRF_RENAMED flag, so these entries
+-	 are ignored when hit by this function next time.
+-	 If the chain forms a cycle, prev points to the entry DIR is renamed
+-	 from. In this case it still retains DIRF_RENAMED flag, which will be
+-	 cleared in the 'else' branch below */
+-      for (prev = dir; prev && prev->orig != dir; prev = prev->orig)
+-	DIR_CLEAR_FLAG (prev, DIRF_RENAMED);
+-
+-      if (prev == NULL)
+-	{
+-	  for (p = dir; p && p->orig; p = p->orig)
+-	    obstack_code_rename (stk, p->orig->name, p->name);
+-	}
+-      else
+-	{
+-	  char *temp_name;
+-
+-	  DIR_CLEAR_FLAG (prev, DIRF_RENAMED);
++  struct directory *prev, *p;
+ 
+-	  /* Break the cycle by using a temporary name for one of its
+-	     elements.
+-	     First, create a temp name stub entry. */
+-	  temp_name = dir_name (dir->name);
+-	  obstack_1grow (stk, 'X');
+-	  obstack_grow (stk, temp_name, strlen (temp_name) + 1);
++  /* Detect eventual cycles. If the chain forms a cycle, prev points to
++     the entry DIR is renamed from.*/
++  for (prev = dir; prev && prev->orig != dir; prev = prev->orig)
++    ;
+ 
+-	  obstack_code_rename (stk, dir->name, "");
+-
+-	  for (p = dir; p != prev; p = p->orig)
+-	    obstack_code_rename (stk, p->orig->name, p->name);
+-
+-	  obstack_code_rename (stk, "", prev->name);
+-	  free (temp_name);
+-	}
++  if (prev == NULL)
++    {
++      for (p = dir; p && p->orig; p = p->orig)
++	obstack_code_rename (stk, p->orig->name, p->name);
++    }
++  else
++    {
++      char *temp_name;
++      
++      /* Break the cycle by using a temporary name for one of its
++	 elements.
++	 First, create a temp name stub entry. */
++      temp_name = dir_name (dir->name);
++      obstack_1grow (stk, 'X');
++      obstack_grow (stk, temp_name, strlen (temp_name) + 1);
++      
++      obstack_code_rename (stk, dir->name, "");
++      
++      for (p = dir; p != prev; p = p->orig)
++	obstack_code_rename (stk, p->orig->name, p->name);
++      
++      obstack_code_rename (stk, "", prev->name);
++      free (temp_name);
+     }
+ }
+ 
+@@ -941,7 +943,8 @@ append_incremental_renames (struct directory *dir)
+     size = 0;
+ 
+   for (dp = dirhead; dp; dp = dp->next)
+-    store_rename (dp, &stk);
++    if (DIR_IS_RENAMED (dp))
++      store_rename (dp, &stk);
+ 
+   /* FIXME: Is this the right thing to do when DIR is null?  */
+   if (dir && obstack_object_size (&stk) != size)
+diff --git a/tests/Makefile.am b/tests/Makefile.am
+index a8df88c..dc1dc54 100644
+--- a/tests/Makefile.am
++++ b/tests/Makefile.am
+@@ -200,6 +200,7 @@ TESTSUITE_AT = \
+  rename03.at\
+  rename04.at\
+  rename05.at\
++ rename06.at\
+  remfiles01.at\
+  remfiles02.at\
+  remfiles03.at\
+diff --git a/tests/rename06.at b/tests/rename06.at
+new file mode 100644
+index 0000000..d1db920
+--- /dev/null
++++ b/tests/rename06.at
+@@ -0,0 +1,88 @@
++# Test suite for GNU tar.
++# Copyright 2020 Free Software Foundation, Inc.
++#
++# This file is part of GNU tar.
++#
++# GNU tar is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 3 of the License, or
++# (at your option) any later version.
++#
++# GNU tar is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program.  If not, see <http://www.gnu.org/licenses/>.
++
++AT_SETUP([chained renames])
++AT_KEYWORDS([incremental rename06 rename])
++
++# Description: test whether chained renames are processed correctly
++# during the incremental archive creation.  Tar 1.32.90 failed to
++# encode them.
++# Reported by: Deweloper <deweloper@wp.pl>
++# References: <20200214100922.44c43334@amazur-u.kat.adbgroup.pl>,
++#   https://lists.gnu.org/archive/html/bug-tar/2020-02/msg00008.html
++
++AT_TAR_CHECK([
++AT_SORT_PREREQ
++decho Creating directory structure
++mkdir test test/d1 test/d2
++genfile --file test/d1/file1
++genfile --file test/d2/file2
++
++decho First dump
++tar -c -g 0.snar -C test -f backup0.tar .
++
++decho Altering directory structure
++genfile --file test/d2/file3
++mv test/d1 test/d3
++mv test/d2 test/d1
++
++decho Second dump
++cp 0.snar 1.snar
++tar -vc -g 1.snar -C test -f backup1.tar .
++
++mkdir test1
++
++decho First extract
++tar -C test1 -x -g /dev/null -f backup0.tar
++
++decho Second extract
++tar -C test1 -x -g /dev/null -f backup1.tar
++
++decho Resulting directory
++find test1 | sort
++],
++[0],
++[Creating directory structure
++First dump
++Altering directory structure
++Second dump
++./
++./d1/
++./d3/
++./d1/file3
++First extract
++Second extract
++Resulting directory
++test1
++test1/d1
++test1/d1/file2
++test1/d1/file3
++test1/d3
++test1/d3/file1
++],
++[Creating directory structure
++First dump
++Altering directory structure
++Second dump
++tar: ./d1: Directory has been renamed from './d2'
++tar: ./d3: Directory has been renamed from './d1'
++First extract
++Second extract
++Resulting directory
++],[],[],[gnu, oldgnu, posix])
++AT_CLEANUP
+\ No newline at end of file
+diff --git a/tests/testsuite.at b/tests/testsuite.at
+index 7fbb3f6..5f348aa 100644
+--- a/tests/testsuite.at
++++ b/tests/testsuite.at
+@@ -390,6 +390,7 @@ m4_include([rename02.at])
+ m4_include([rename03.at])
+ m4_include([rename04.at])
+ m4_include([rename05.at])
++m4_include([rename06.at])
+ m4_include([chtype.at])
+ 
+ AT_BANNER([Ignore failing reads])
+-- 
+cgit v1.2.1
+

@@ -1,8 +1,26 @@
 [Unit]
 Description=Hardware RNG Entropy Gatherer Daemon
+DefaultDependencies=no
+Before=sysinit.target shutdown.target
 
 [Service]
-ExecStart=/usr/sbin/rngd -f
+DeviceAllow=/dev/null rw
+DeviceAllow=/dev/random rw
+ExecStart=/usr/sbin/rngd -f $RNGD_OPTS
+IPAddressDeny=any
+LimitMEMLOCK=0
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+MountFlags=private
+PrivateDevices=yes
+PrivateMounts=yes
+ProtectControlGroups=yes
+ProtectKernelModules=yes
+NoNewPrivileges=on
+PrivateNetwork=on
+PrivateTmp=on
+ProtectSystem=full
+ProtectHome=on
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=sysinit.target

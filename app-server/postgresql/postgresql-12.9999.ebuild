@@ -4,16 +4,14 @@ EAPI=7
 
 inherit flag-o-matic linux-info pam prefix python-single-r1 systemd user git-r3
 
-KEYWORDS="amd64 arm64"
-
-SLOT=$(ver_cut 1)
-
+DESCRIPTION="PostgreSQL RDBMS"
+HOMEPAGE="http://www.postgresql.org/"
 EGIT_REPO_URI="https://git.postgresql.org/git/postgresql.git"
 EGIT_BRANCH=REL_$(ver_cut 1)_STABLE
 
 LICENSE="POSTGRESQL GPL-2"
-DESCRIPTION="PostgreSQL RDBMS"
-HOMEPAGE="http://www.postgresql.org/"
+SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="doc kerberos ldap nls pam perl python +readline
 	  +server systemd ssl static-libs tcl threads uuid xml zlib"
@@ -43,7 +41,7 @@ nls? ( sys-devel/gettext )
 xml? ( dev-util/pkgconf )
 "
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs -Wl,-z,relro
 
 pkg_setup() {
 	enewgroup postgres 70

@@ -11,15 +11,13 @@ PEM_P="${PN}-pem-20160329"
 
 DESCRIPTION="Mozilla's Network Security Services library that implements PKI support"
 HOMEPAGE="http://www.mozilla.org/projects/security/pki/nss/"
-SRC_URI="https://archive.mozilla.org/pub/security/nss/releases/${RTM_NAME}/src/${P}.tar.gz
-	cacert? ( https://dev.gentoo.org/~axs/distfiles/${PN}-cacert-class1-class3.patch )
-	nss-pem? ( https://dev.gentoo.org/~polynomial-c/${PEM_P}.tar.xz )"
+SRC_URI="https://archive.mozilla.org/pub/security/nss/releases/${RTM_NAME}/src/${P}.tar.gz"
 
 LICENSE="|| ( MPL-2.0 GPL-2 LGPL-2.1 )"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="cacert +nss-pem utils static-libs"
+IUSE="utils static-libs"
 
 DEPEND="dev-util/pkgconf
 		lib-dev/nspr
@@ -35,25 +33,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-3.21-gentoo-fixup-warnings.patch"
 )
 
-src_unpack() {
-	unpack ${A}
-	if use nss-pem ; then
-		mv "${PN}"/lib/ckfw/pem/ "${S}"/lib/ckfw/ || die
-	fi
-}
-
 src_prepare() {
-	if use nss-pem ; then
-		PATCHES+=(
-			"${FILESDIR}/${PN}-3.21-enable-pem.patch"
-		)
-	fi
-	if use cacert ; then #521462
-		PATCHES+=(
-			"${DISTDIR}/${PN}-cacert-class1-class3.patch"
-		)
-	fi
-
 	default
 
 	pushd coreconf >/dev/null || die

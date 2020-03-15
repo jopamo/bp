@@ -7,7 +7,7 @@ HOMEPAGE="https://curl.haxx.se/"
 SRC_URI="https://curl.haxx.se/download/${P}.tar.bz2"
 
 LICENSE="MIT"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="ldap adns ssh test ipv6 static-libs"
@@ -31,12 +31,6 @@ PATCHES=( 	"${FILESDIR}"/curl-respect-cflags-3.patch
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		$(use_enable static-libs static)
 		$(use_enable ldap)
 		$(use_enable ldap ldaps)

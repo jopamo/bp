@@ -11,7 +11,7 @@ EGIT_BRANCH="PHP-$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="PHP-3.01 BSD-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+KEYWORDS="~amd64 ~arm64"
 
 DEPEND="
 	lib-dev/libpcre
@@ -24,6 +24,8 @@ DEPEND="
 	sys-devel/gettext
 	app-compression/xz-utils
 	>=sys-devel/bison-3.0.1
+	dev-util/re2c
+	lib-dev/oniguruma
 	app-server/opensmtpd"
 
 filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro

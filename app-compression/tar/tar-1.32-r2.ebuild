@@ -35,12 +35,6 @@ src_prepare() {
 src_configure() {
 	use static && append-ldflags -static
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		--enable-backup-scripts
 		$(use_with acl posix-acls)
 		$(use_enable nls)

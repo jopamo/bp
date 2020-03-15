@@ -25,6 +25,9 @@ PATCHES=(	"${FILESDIR}"/00_66162927ebdfe9dd4ef570a132663fd76217952f.patch
 			"${FILESDIR}"/04_d70b8b3b3978df2ba204f3afe60b18ded6164b07.patch
 			"${FILESDIR}"/05_2d3396c3eabdfdfb34163dc494826db527cf9d22.patch
 			"${FILESDIR}"/06_ea6f84dd40fa0791cc7593662c6c5d107a399568.patch
+			"${FILESDIR}"/07_883cc555df870e45599fd5ed951843c332fcdafc.patch
+			"${FILESDIR}"/08_14d8fc718f0c872274b90991ee634b0cd8e1a6f0.patch
+			"${FILESDIR}"/09_41654f91f08eeff204d2ec2dabf2b81530060aaa.patch
 		)
 
 src_prepare() {

@@ -14,12 +14,6 @@ IUSE="nls"
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		--with-rmt="${EROOT}"/usr/libexec/rmt
 		--enable-mt
 		$(use_enable nls)

@@ -17,18 +17,6 @@ src_prepare() {
 	default
 }
 
-src_configure() {
-	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
 src_install() {
 	default
 	dosym lbzgrep usr/bin/bzgrep

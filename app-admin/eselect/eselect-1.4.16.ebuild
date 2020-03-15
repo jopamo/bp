@@ -7,25 +7,10 @@ HOMEPAGE="https://wiki.gentoo.org/wiki/Project:Eselect"
 SRC_URI="https://dev.gentoo.org/~ulm/eselect/${P}.tar.xz"
 
 LICENSE="GPL-2+ || ( GPL-2+ CC-BY-SA-3.0 )"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="sys-app/sed
-	|| (
-		sys-app/coreutils
-		sys-freebsd/freebsd-bin
-		app-misc/realpath
-	)"
-DEPEND="${RDEPEND}"
-
-RDEPEND="${RDEPEND}
+DEPEND="
+	sys-app/sed
 	sys-app/file
-	lib-sys/ncurses:0"
-
-src_compile() {
-	emake
-}
-
-src_install() {
-	emake DESTDIR="${D}" install
-}
+	lib-sys/ncurses"

@@ -17,15 +17,3 @@ src_prepare() {
 	sed -i -e '/doc_DATA/d' Makefile.am || die
 	eautoreconf
 }
-
-src_configure() {
-	local myconf=(
-		--bindir="${EPREFIX}"/usr/sbin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}

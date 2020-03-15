@@ -12,6 +12,9 @@ KEYWORDS="amd64 arm64"
 
 IUSE="pam"
 
+DEPEND="lib-sys/zlib"
+
+lib-sys/zlib
 src_configure() {
 	myconf=(
 		--prefix="${EPREFIX}"/usr

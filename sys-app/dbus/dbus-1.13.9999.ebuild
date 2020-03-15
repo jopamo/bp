@@ -3,7 +3,7 @@
 EAPI=7
 
 
-inherit git-r3 autotools linux-info flag-o-matic python-any-r1 systemd virtualx user
+inherit git-r3 autotools linux-info flag-o-matic python-any-r1 systemd user
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="https://dbus.freedesktop.org/"
@@ -118,10 +118,6 @@ src_compile() {
 		einfo "Running make in ${TBD}"
 		emake -C "${TBD}"
 	fi
-}
-
-src_test() {
-	DBUS_VERBOSE=1 virtx emake -j1 -C "${TBD}" check
 }
 
 src_install() {

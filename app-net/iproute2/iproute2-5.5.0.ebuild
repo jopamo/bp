@@ -16,7 +16,7 @@ DESCRIPTION="kernel routing and traffic control utilities"
 HOMEPAGE="https://wiki.linuxfoundation.org/networking/iproute2"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 
 IUSE="atm +elf minimal static-libs"
 

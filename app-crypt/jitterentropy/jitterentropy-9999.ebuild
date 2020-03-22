@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/smuellerDD/jitterentropy-library"
 EGIT_REPO_URI="https://github.com/smuellerDD/jitterentropy-rngd.git"
 
 LICENSE="BSD"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 src_prepare() {

@@ -2,17 +2,14 @@
 
 EAPI=7
 
-SNAPSHOT=5cd29e5093efa3c6ee9c5310b64347f1d54b707d
-
-inherit autotools
+inherit autotools git-r3
 
 DESCRIPTION="standard informational utilities and process-handling tools"
-HOMEPAGE="http://procps-ng.sourceforge.net/ https://gitlab.com/procps-ng/procps"
-SRC_URI="https://gitlab.com/procps-ng/procps/-/archive/${SNAPSHOT}/psmisc-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+HOMEPAGE="https://gitlab.com/procps-ng/procps"
+EGIT_REPO_URI="https://gitlab.com/procps-ng/procps.git"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="+kill modern-top nls +ncurses static-libs systemd test unicode"
@@ -37,6 +34,7 @@ src_prepare() {
 	po/update-potfiles
 	default
 	eautoreconf
+	sed -i.bak -e "s/UNKNOWN/$(date +"%Y%m%d")/g" "configure"
 }
 
 src_configure() {

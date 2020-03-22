@@ -10,7 +10,6 @@ HOMEPAGE="https://www.darwinsys.com/file/"
 if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/file/file.git"
 	inherit git-r3
-	KEYWORDS=""
 else
 	SNAPSHOT=cdf8d4bc387994ce1064d263689de98c022be7d3
 	SRC_URI="https://github.com/file/file/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
@@ -19,7 +18,7 @@ fi
 
 
 LICENSE="BSD-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs zlib"
@@ -35,12 +34,6 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		--enable-libseccomp
 		$(use_enable static-libs static)
 		$(use_enable zlib)

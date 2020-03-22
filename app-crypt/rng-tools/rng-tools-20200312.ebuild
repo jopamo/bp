@@ -23,7 +23,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+jitterentropy nistbeacon selinux"
 
-DEPEND="sys-fs/sysfsutils"
+DEPEND="
+	jitterentropy? ( app-crypt/jitterentropy )
+	sys-fs/sysfsutils
+"
 
 src_prepare() {
 	echo 'bin_PROGRAMS = randstat' >> contrib/Makefile.am || die

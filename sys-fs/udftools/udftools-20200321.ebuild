@@ -10,7 +10,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=f6ff0bee80b9f5d2611f2db39db266d1c797531c
+	SNAPSHOT=d07c322f72df571ebdd0e1a596b557a604aacfb8
 	SRC_URI="https://github.com/pali/udftools/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

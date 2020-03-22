@@ -2,17 +2,14 @@
 
 EAPI=7
 
-SNAPSHOT=e3de4fb1bb258b0247869b01269628b511ed4d06
-
-inherit autotools
+inherit autotools git-r3
 
 DESCRIPTION="A set of tools that use the proc filesystem"
 HOMEPAGE="http://psmisc.sourceforge.net/"
-SRC_URI="https://gitlab.com/psmisc/psmisc/-/archive/${SNAPSHOT}/psmisc-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+EGIT_REPO_URI="https://gitlab.com/psmisc/psmisc"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="ipv6 nls X"
@@ -26,6 +23,7 @@ src_prepare() {
 	po/update-potfiles
 	default
 	eautoreconf
+	sed -i.bak -e "s/UNKNOWN/$(date +"%Y%m%d")/g" "configure"
 }
 
 src_configure() {

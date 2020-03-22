@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT=b9ad82ced79163d28571a0be65196c078bd67ae6
+SNAPSHOT=4163390f2bcc41307aa583ca533491bfce483951
 
 inherit linux-info autotools
 
@@ -52,12 +52,6 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		$(use_enable debug)
 		--enable-ldscript
 		--disable-ldconfig

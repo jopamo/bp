@@ -12,13 +12,12 @@ LICENSE="GPL-3 LGPL-2.1"
 SLOT="0/34"
 KEYWORDS="amd64 arm64"
 
-IUSE="+cxx dane nls pkcs11 +seccomp static-libs test tools valgrind"
+IUSE="+cxx dane nls +seccomp static-libs test tools valgrind"
 
 RDEPEND=">=lib-dev/nettle-3.1:=[gmp]
 	>=lib-dev/gmp-5.1.3-r1:=
 	dane? ( >=lib-net/unbound-1.4.20 )
 	nls? ( >=sys-devel/gettext-0-r1 )
-	pkcs11? ( >=app-crypt/p11-kit-0.23.1 )
 "
 DEPEND="${RDEPEND}
 	dev-util/pkgconf
@@ -51,7 +50,7 @@ src_configure() {
 		--enable-openssl-compatibility \
 		$(use_enable static-libs static) \
 		--disable-heartbeat-support \
-		$(use_with pkcs11 p11-kit) \
+		--without-p11-kit \
 		--with-unbound-root-key-file="${EPREFIX}/etc/dnssec/root-anchors.txt" \
 		"${libconf[@]}"
 }

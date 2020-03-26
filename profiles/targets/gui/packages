@@ -19,6 +19,6 @@
 *app-gui/pcmanfm-qt
 *app-gui/speedcrunch
 *app-gui/qterminal
-*x11-app/compton
+*x11-app/picom
 *x11-app/hsetroot
 *x11-misc/mesa-progs

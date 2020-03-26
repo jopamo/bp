@@ -19,6 +19,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+append-flags -Wno-error
 
 src_configure() {
 	local myconf=(

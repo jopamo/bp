@@ -2,17 +2,17 @@
 
 EAPI=7
 
-inherit autotools python-single-r1 linux-info libtool
+inherit autotools python-single-r1 linux-info
 
 DESCRIPTION="Tool to setup encrypted devices with dm-crypt"
 HOMEPAGE="https://gitlab.com/cryptsetup/cryptsetup/blob/master/README.md"
 SRC_URI="mirror://kernel/linux/utils/${PN}/v$(ver_cut 1-2)/${P}.tar.xz"
 
 LICENSE="GPL-2+"
-SLOT="0/12"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="nls pwquality python reencrypt static static-libs udev urandom"
+IUSE="nls python reencrypt static static-libs udev urandom"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
@@ -23,7 +23,6 @@ LIB_DEPEND="
 	>=sys-app/util-linux-2.31-r1[static-libs(+)]
 	app-crypt/argon2:=[static-libs(+)]
 	lib-dev/libgcrypt:0=[static-libs(+)]
-	pwquality? ( lib-dev/libpwquality[static-libs(+)] )
 	sys-fs/lvm2[static-libs(+)]
 	udev? ( sys-app/systemd[static-libs(+)] )"
 
@@ -54,21 +53,12 @@ src_prepare() {
 src_configure() {
 	use python && python_setup
 
-	# We disable autotool python integration so we can use eclasses
-	# for proper integration with multiple python versions.
 	local myconf=(
 		--enable-system-argon2
 		--enable-shared
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		--with-tmpfilesdir="${EPREFIX%/}/usr/lib/tmpfiles.d"
 		--with-crypto_backend="gcrypt"
 		$(use_enable nls)
-		$(use_enable pwquality)
 		$(use_enable python)
 		$(use_enable reencrypt cryptsetup-reencrypt)
 		$(use_enable static static-cryptsetup)

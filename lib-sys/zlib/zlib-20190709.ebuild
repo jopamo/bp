@@ -16,20 +16,21 @@ else
 fi
 
 LICENSE="ZLIB"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
 src_configure() {
-	"${S}"/configure \
-		--shared \
-		--prefix="${EPREFIX}/usr" \
+	local myconf=(
+		--shared
+		--prefix="${EPREFIX}/usr"
 		--libdir="${EPREFIX}/usr/lib"
+	)
+	ECONF_SOURCE=${S} ./configure "${myconf[@]}"
 }
 
 src_install() {
 	default
-
 	use static-libs || rm -f "${ED}"/usr/lib/libz.{a,la} #419645
 }

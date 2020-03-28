@@ -2,8 +2,6 @@
 
 EAPI=7
 
-inherit flag-o-matic toolchain-funcs
-
 SNAPSHOT=0e42eb90521c8cd4f67196c6620c0672c1106f2c
 
 DESCRIPTION="Tools and library to manipulate EFI variables"

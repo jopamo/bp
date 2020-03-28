@@ -2,8 +2,6 @@
 
 EAPI=7
 
-inherit autotools flag-o-matic
-
 MY_PV="$(ver_cut 1)$(ver_cut 2)0$(ver_cut 3)00"
 
 DESCRIPTION="A SQL Database Engine in a C Library"
@@ -12,26 +10,15 @@ SRC_URI="https://www.sqlite.org/2020/sqlite-src-${MY_PV}.zip"
 S="${WORKDIR}/sqlite-src-${MY_PV}"
 
 LICENSE="public-domain"
-SLOT="3"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
 DEPEND="dev-lang/tcl"
 
-src_prepare() {
-	eautoreconf
-	default
-}
-
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		$(use_enable static-libs static)
 		--enable-fts5
 		CFLAGS="${CFLAGS} \

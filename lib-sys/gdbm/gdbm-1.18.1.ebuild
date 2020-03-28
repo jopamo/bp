@@ -2,24 +2,17 @@
 
 EAPI=7
 
-inherit autotools flag-o-matic
-
 DESCRIPTION="Standard GNU database libraries"
 HOMEPAGE="https://www.gnu.org/software/gdbm/"
 SRC_URI="mirror://gnu/gdbm/${P}.tar.gz"
 
 LICENSE="GPL-3"
-SLOT="0/6"
+SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="nls +readline static-libs"
 
 DEPEND="readline? ( lib-sys/readline:0= )"
-RDEPEND="${DEPEND}"
-
-src_prepare() {
-	default
-	eautoreconf
-}
 
 src_configure() {
 	export ac_cv_lib_dbm_main=no ac_cv_lib_ndbm_main=no

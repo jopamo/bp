@@ -12,6 +12,8 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+IUSE="systemd"
+
 DEPEND="
 	sys-devel/flex
 	sys-devel/bison
@@ -26,7 +28,7 @@ src_prepare() {
 src_install() {
 	default
 
-	systemd_dounit "${FILESDIR}"/sshguard.service
+	use systemd && systemd_dounit "${FILESDIR}"/sshguard.service
 	insinto /etc
 	newins "${FILESDIR}"/sshguard.conf sshguard.conf
 }

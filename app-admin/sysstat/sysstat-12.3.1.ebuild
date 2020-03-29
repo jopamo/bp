@@ -19,47 +19,46 @@ DEPEND="
 	lm-sensors? ( sys-app/lm-sensors:= )
 "
 
-src_prepare() {
-	if use nls; then
-		strip-linguas -i nls/
-		local lingua pofile
-		for pofile in nls/*.po; do
-			lingua=${pofile/nls\/}
-			lingua=${lingua/.po}
-			if ! has ${lingua} ${LINGUAS}; then
-				rm "nls/${lingua}.po" || die
-			fi
-		done
-	fi
-
-	default
-}
+_makeargs=(
+  prefix="${EPREFIX}/usr"
+  CFLAGS="${CFLAGS}"
+  LDFLAGS="${LDFLAGS}"
+  DESTDIR="${D}"
+  CHOWN=true
+  MANGRPARG=''
+)
 
 src_configure() {
 	tc-export AR
 	use static && append-ldflags -static
 
+	local myconf=(
+		$(use_enable debug debuginfo)
+		$(use_enable lm-sensors sensors)
+		$(use_enable nls)
+		--enable-copy-only
+		--disable-documentation
+		--disable-install-cron
+		--disable-stripping
+		--with-systemdsystemunitdir=$(systemd_get_systemunitdir)
+	)
 	sa_lib_dir=/usr/lib/sa \
 		conf_dir=/etc \
-		econf \
-			$(use_enable debug debuginfo) \
-			$(use_enable lm-sensors sensors) \
-			$(use_enable nls) \
-			--enable-copy-only \
-			--enable-documentation \
-			--enable-install-cron \
-			--with-systemdsystemunitdir=$(systemd_get_systemunitdir)
+		ECONF_SOURCE=${S} \
+		econf "${myconf[@]}"
+
+}
+
+src_compile() {
+	tc-export AR CC RANLIB
+
+	emake "${_makeargs[@]}"
 }
 
 src_install() {
 	keepdir /var/log/sa
 
-	emake \
-		CHOWN=true \
-		DESTDIR="${D}" \
-		DOC_DIR=/usr/share/doc/${PF} \
-		MANGRPARG='' \
-		install
+	emake "${_makeargs[@]}" install
 
 	use systemd && systemd_dounit ${PN}.service
 

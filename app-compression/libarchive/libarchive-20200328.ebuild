@@ -10,16 +10,15 @@ HOMEPAGE="http://www.libarchive.org/"
 if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/libarchive/libarchive.git"
 	inherit git-r3
-	KEYWORDS=""
 else
-	SNAPSHOT=3c780fa9bbe25b4b0e7d59b68fe6972544d3475c
+	SNAPSHOT=5d807fdfa9fc0e38b05530cf223640dc360b426e
 	SRC_URI="https://github.com/libarchive/libarchive/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="BSD BSD-2 BSD-4 public-domain"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="acl +bzip2 expat nettle ssl static-libs xattr +zlib ssl lz4 zstd"
 

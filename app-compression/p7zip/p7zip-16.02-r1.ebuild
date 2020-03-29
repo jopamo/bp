@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit toolchain-funcs
+inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="Port of 7-Zip archiver for Unix"
 HOMEPAGE="http://p7zip.sourceforge.net/"
@@ -23,7 +23,22 @@ PATCHES=(
 		"${FILESDIR}"/05-hardening-flags.patch
 		"${FILESDIR}"/12-CVE-2016-9296.patch
 		"${FILESDIR}"/13-CVE-2017-17969.patch
+		"${FILESDIR}"/CVE-2018-5996.patch
+		"${FILESDIR}"/CVE-2018-10115.patch
 	)
+
+filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+
+_makeargs=(
+  prefix="${EPREFIX}"/usr
+  LDFLAGS="${LDFLAGS}"
+  DESTDIR="${D}"
+  DEST_DIR="${ED}"
+  DEST_HOME="${EPREFIX}"/usr
+  DEST_MAN="${EPREFIX}"/usr/share/man
+  CC=$(tc-getCC)
+  CXX=$(tc-getCXX)
+)
 
 src_prepare() {
 	default
@@ -46,18 +61,15 @@ src_prepare() {
 }
 
 src_compile() {
-	emake CC=$(tc-getCC) CXX=$(tc-getCXX) all3
+	emake "${_makeargs[@]}" all3
 }
 
 src_test() {
-	emake test test_7z test_7zr
+	emake "${_makeargs[@]}" test test_7z test_7zr
 }
 
 src_install() {
-	make install \
-    DEST_DIR="${ED}" \
-    DEST_HOME=/usr \
-    DEST_MAN=/usr/share/man
+	emake "${_makeargs[@]}" install
 
 	cleanup_install
 }

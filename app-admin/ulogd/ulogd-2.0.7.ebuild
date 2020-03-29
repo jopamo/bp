@@ -11,9 +11,10 @@ SRC_URI="https://www.netfilter.org/projects/ulogd/files/${P}.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="dbi doc json mysql nfacct +nfct +nflog pcap postgres sqlite"
 
-COMMON_DEPEND="
+IUSE="dbi doc json mysql nfacct +nfct +nflog pcap postgres sqlite systemd"
+
+DEPEND="
 	|| ( app-net/iptables app-net/nftables )
 	>=lib-net/libnfnetlink-1.0.1
 	dbi? ( dev-db/libdbi )
@@ -27,22 +28,14 @@ COMMON_DEPEND="
 	mysql? ( virtual/mysql )
 	pcap? ( lib-net/libpcap )
 	postgres? ( dev-db/postgresql:= )
-	sqlite? ( lib-sys/sqlite:3 )
-"
-DEPEND="${COMMON_DEPEND}
-	doc? (
-		app-text/linuxdoc-tools
-		app-text/texlive-core
-		app-textlive/texlive-fontsrecommended
-		virtual/latex-base
-	)
+	sqlite? ( lib-sys/sqlite )
 "
 
 PATCHES=(
 		"${FILESDIR}/9d9ea2cd70a369a7f665a322e6c53631e01a2570.patch"
 		)
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs -Wl,-z,relro
 
 pkg_setup() {
 	linux-info_pkg_setup
@@ -80,7 +73,7 @@ src_install() {
 	fowners root:ulogd /etc/${PN}.conf
 	fperms 640 /etc/${PN}.conf
 
-	systemd_dounit "${FILESDIR}/${PN}.service"
+	use systemd && systemd_dounit "${FILESDIR}/${PN}.service"
 
 	diropts -o ulogd -g ulogd
 	keepdir /var/log/ulogd

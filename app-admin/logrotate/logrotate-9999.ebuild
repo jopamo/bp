@@ -2,24 +2,17 @@
 
 EAPI=7
 
-inherit autotools
+inherit systemd autotools git-r3
 
 DESCRIPTION="Rotates, compresses, and mails system logs"
 HOMEPAGE="https://github.com/logrotate/logrotate"
 EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
 
-if [[ ${PV} == 9999 ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
-else
-	SRC_URI="https://github.com/${PN}/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
-fi
-
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl"
+IUSE="acl systemd"
 
 DEPEND="
 	>=lib-dev/popt-1.5
@@ -33,7 +26,14 @@ src_prepare() {
 }
 
 src_configure() {
-	econf $(use_with acl) --with-state-file-path="${STATEFILE}"
+	local myconf=(
+		--prefix="${EPREFIX}"/usr
+		--sbindir="${EPREFIX}"/usr/bin
+		--mandir="${EPREFIX}"/usr/share/man
+		--with-state-file-path="${STATEFILE}"
+		$(use_with acl)
+	)
+	ECONF_SOURCE=${S} ./configure "${myconf[@]}"
 }
 
 src_test() {
@@ -41,12 +41,17 @@ src_test() {
 }
 
 src_install() {
-	insinto /usr
-	dobin logrotate
-	doman logrotate.8
+	default
 
 	insinto /etc
 	doins "${FILESDIR}"/logrotate.conf
 
 	keepdir /etc/logrotate.d
+
+	if use systemd; then
+		systemd_dounit examples/logrotate.timer
+		systemd_dounit examples/logrotate.service
+
+		dosym /usr/lib/systemd/system/logrotate.timer usr/lib/systemd/system/timers.target.wants/logrotate.timer
+	fi
 }

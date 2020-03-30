@@ -4,19 +4,14 @@ EAPI=7
 
 inherit flag-o-matic
 
-if [[ ${PV} == "9999" ]] ; then
-	EGIT_REPO_URI="git://git.sv.gnu.org/nano.git"
-	inherit git-r3 autotools
-else
-	SRC_URI="https://www.nano-editor.org/dist/v4/${P}.tar.xz"
-	KEYWORDS="amd64 arm64"
-fi
-
 DESCRIPTION="GNU GPL'd Pico clone with more functionality"
 HOMEPAGE="https://www.nano-editor.org/ https://wiki.gentoo.org/wiki/Nano/Basics_Guide"
+SRC_URI="https://www.nano-editor.org/dist/v4/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
+KEYWORDS="amd64 arm64"
+
 IUSE="debug justify +magic minimal nls static"
 
 LIB_DEPEND="lib-sys/ncurses
@@ -31,18 +26,9 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconf
 	static? ( ${LIB_DEPEND} )"
 
-src_prepare() {
-	default
-	if [[ ${PV} == "9999" ]] ; then
-		eautoreconf
-	fi
-}
-
 src_configure() {
 	use static && append-ldflags -static
 	local myconf=(
-		--prefix="${EPREFIX}"/usr
-		--bindir="${EPREFIX}"/usr/bin
 		--without-slang
 		--disable-wrapping
 		--enable-utf8

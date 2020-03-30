@@ -13,7 +13,7 @@ LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="audit +blkid coredump cryptsetup efi gcrypt +hostnamed hwdb importd kmod ldconfig localed logind machined +networkd pam pcre resolve timedated +tmpfiles test vconsole xkb"
+IUSE="audit binfmt +blkid coredump cryptsetup efi gcrypt +hostnamed hwdb importd kmod ldconfig localed logind machined +networkd pam pcre resolve timedated +tmpfiles test vconsole xkb"
 
 RESTRICT="!test? ( test )"
 
@@ -74,6 +74,7 @@ PATCHES=( "${FILESDIR}/disable_audit.patch"	)
 src_configure() {
 	local emesonargs=(
 		$(meson_use audit)
+		$(meson_use binfmt)
 		$(meson_use blkid)
 		$(meson_use coredump)
 		$(meson_use cryptsetup libcryptsetup)
@@ -100,7 +101,6 @@ src_configure() {
 		-Dacl=true
 		-Dapparmor=false
 		-Dbacklight=false
-		-Dbinfmt=false
 		-Dbzip2=false
 		-Dlibcurl=false
 		-Ddefault-hierarchy=unified

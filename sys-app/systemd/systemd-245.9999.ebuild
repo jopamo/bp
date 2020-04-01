@@ -13,7 +13,7 @@ LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="audit binfmt +blkid coredump cryptsetup efi gcrypt +hostnamed hwdb importd kmod ldconfig localed logind machined +networkd pam pcre resolve timedated +tmpfiles test vconsole xkb"
+IUSE="audit binfmt +blkid coredump cryptsetup efi gcrypt +hostnamed hwdb importd kmod ldconfig localed logind machined +networkd pam pcre resolve rfkill timedated +tmpfiles test vconsole xkb"
 
 RESTRICT="!test? ( test )"
 
@@ -93,6 +93,7 @@ src_configure() {
 		$(meson_use pam)
 		$(meson_use pcre pcre2)
 		$(meson_use resolve)
+		$(meson_use rfkill)
 		$(meson_use test dbus)
 		$(meson_use timedated)
 		$(meson_use tmpfiles)
@@ -135,7 +136,6 @@ src_configure() {
 		-Dquotacheck=false
 		-Drandomseed=false
 		-Drc-local=""
-		-Drfkill=false
 		-Drootlibdir="${EPREFIX}"/usr/lib
 		-Drootprefix="${EPREFIX}"/usr
 		-Dseccomp=true

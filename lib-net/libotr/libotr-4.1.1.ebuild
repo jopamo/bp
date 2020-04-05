@@ -7,7 +7,7 @@ HOMEPAGE="https://otr.cypherpunks.ca"
 SRC_URI="https://otr.cypherpunks.ca/${P}.tar.gz"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
@@ -19,6 +19,5 @@ DEPEND="
 
 src_install() {
 	default
-
 	use static-libs || rm "${ED}"/usr/lib/libotr.a
 }

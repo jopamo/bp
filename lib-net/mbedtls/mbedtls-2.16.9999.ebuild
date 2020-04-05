@@ -9,19 +9,16 @@ HOMEPAGE="https://tls.mbed.org/"
 EGIT_REPO_URI="https://github.com/ARMmbed/mbedtls.git"
 EGIT_BRANCH="mbedtls-$(ver_cut 1).$(ver_cut 2)"
 
-KEYWORDS="amd64 arm64"
-
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="doc havege programs test zlib"
+IUSE="havege programs test zlib"
 
 RDEPEND="app-misc/ca-certificates
 	programs? ( lib-net/libressl )
 	zlib? ( >=lib-sys/zlib-1.2.8-r1 )"
 DEPEND="${RDEPEND}
-	doc? ( app-text/doxygen app-media/graphviz )
 	test? ( dev-lang/perl )"
 
 enable_mbedtls_option() {

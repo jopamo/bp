@@ -34,12 +34,13 @@ src_prepare() {
 }
 
 src_configure() {
-	ECONF_SOURCE="${S}" \
-	econf \
-		$(use_enable bluetooth) \
-		$(use_enable dbus) \
-		$(use_enable usb) \
+	local myconf=(
+		$(use_enable bluetooth)
+		$(use_enable dbus)
+		$(use_enable usb)
 		$(use_with netlink libnl)
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
 src_compile() {

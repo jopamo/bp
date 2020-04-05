@@ -41,9 +41,11 @@ src_prepare() {
 }
 
 src_configure() {
-	ECONF_SOURCE="${S}" econf \
-		--enable-asm \
+	local myconf=(
+		--enable-asm
 		$(use_enable static-libs static)
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
 src_test() {

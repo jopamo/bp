@@ -12,7 +12,7 @@ SRC_URI="https://git.savannah.gnu.org/cgit/readline.git/snapshot/readline-${SNAP
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-3"
-SLOT="0/8"  # subslot matches SONAME major
+SLOT="0/8"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs utils"
@@ -91,4 +91,9 @@ src_compile() {
 		done
 		emake
 	fi
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.la' -delete
 }

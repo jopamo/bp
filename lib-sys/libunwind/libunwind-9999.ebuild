@@ -28,12 +28,6 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		--enable-cxx-exceptions
 		--enable-coredump
 		--enable-ptrace
@@ -56,4 +50,9 @@ src_test() {
 	# Explicitly allow parallel build of tests.
 	# Sandbox causes some tests to freak out.
 	SANDBOX_ON=0 emake check
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.la' -delete
 }

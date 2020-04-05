@@ -10,7 +10,7 @@ EGIT_REPO_URI="git://sourceware.org/git/glibc.git"
 EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)/master"
 
 LICENSE="LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="audit caps debug nscd systemtap static-libs profile +static-pie"
@@ -207,6 +207,8 @@ src_install() {
 	mv "${ED}"/sbin/{ldconfig,sln} "${ED}"/usr/sbin && rm -rf "${ED}"/sbin
 
 	cleanup_install
+	use static-libs || find "${ED}" -name '*.la' -delete
+
 	echo -e "en_US.UTF-8 UTF-8\nen_US ISO-8859-1" > "${ED}"/usr/share/i18n/locales/SUPPORTED
 }
 

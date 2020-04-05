@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/linux-pam/linux-pam.git"
 else
-	SNAPSHOT=1f9e3eea5bbd701f581ccd34bdb8f80db5776332
+	SNAPSHOT=9b62f2ed3be1731581ad8f4b7e5cefd8fd030085
 	SRC_URI="https://github.com/linux-pam/linux-pam/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/linux-${PN}-${SNAPSHOT}
 fi
@@ -45,12 +45,6 @@ src_configure() {
 	export ac_cv_header_xcrypt_h=no
 
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}/etc"
-		--localstatedir="${EPREFIX}/var"
 		--enable-securedir="${EPREFIX}"/usr/lib/security
 		$(use_enable nls)
 		$(use_enable audit)

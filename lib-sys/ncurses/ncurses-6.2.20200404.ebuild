@@ -63,4 +63,5 @@ src_install() {
 	echo "INPUT(-lncursestw)" > "${ED}"/usr/lib/libcurses.so
 
 	use static-libs || find "${ED}"/usr/ -name '*.a' -delete
+	use static-libs || find "${ED}" -name '*.la' -delete
 }

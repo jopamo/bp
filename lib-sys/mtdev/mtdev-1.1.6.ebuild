@@ -17,3 +17,8 @@ DEPEND="sys-kernel/linux-headers"
 src_configure() {
 	econf $(use_enable static-libs static)
 }
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.la' -delete
+}

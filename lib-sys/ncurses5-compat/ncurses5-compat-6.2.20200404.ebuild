@@ -56,4 +56,5 @@ src_install() {
 
 
 	use static-libs || find "${ED}"/usr/ -name '*.a' -delete
+	use static-libs || find "${ED}" -name '*.la' -delete
 }

@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=26b483b4d5dc180c8334a0adad3c92e23605010e
+	SNAPSHOT=c561096f6d8ec584ec3ff4aa7caded19842d8b28
 	SRC_URI="https://github.com/seccomp/libseccomp/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -42,5 +42,6 @@ src_configure() {
 src_install() {
 	default
 	chrpath -d "${ED}"/usr/bin/scmp_sys_resolver
+	use static-libs || find "${ED}" -name '*.la' -delete
 
 }

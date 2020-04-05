@@ -30,6 +30,7 @@ src_configure() {
 }
 
 src_install() {
-  default
-  use static-libs || find "${ED}" -name '*.a' -delete
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
+	use static-libs || find "${ED}" -name '*.la' -delete
 }

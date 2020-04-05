@@ -47,6 +47,7 @@ src_install() {
 	emake "${_makeargs[@]}" install
 
 	use static-libs || rm "${ED}"/usr/lib/libcap.a
+	use static-libs || find "${ED}" -name '*.la' -delete
 
 	if [[ -d "${ED}"/usr/lib/security ]] ; then
 		rm -r "${ED}"/usr/lib/security || die

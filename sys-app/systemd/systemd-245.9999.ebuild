@@ -43,6 +43,8 @@ DEPEND="
 	sys-devel/gettext
 "
 
+PATCHES=( "${FILESDIR}/disable_audit.patch"	)
+
 append-cflags -Wno-error=format-truncation
 
 pkg_pretend() {
@@ -68,8 +70,6 @@ pkg_pretend() {
 		check_extra_config
 	fi
 }
-
-PATCHES=( "${FILESDIR}/disable_audit.patch"	)
 
 src_configure() {
 	local emesonargs=(
@@ -208,6 +208,9 @@ src_install() {
 Name=en*\n\n\
 [Network]\n\
 DHCP=ipv4" > "${ED}"/etc/systemd/network/ipv4dhcp.network
+
+	sed -i '/event_timeout/d' "${ED}"/usr/lib/udev/rules.d/11-dm-lvm.rules
+	sed -i '/{dialout,render,cdrom,tape}/d' "${ED}"/usr/lib/udev/rules.d/50-udev-default.rules
 }
 
 pkg_postinst() {

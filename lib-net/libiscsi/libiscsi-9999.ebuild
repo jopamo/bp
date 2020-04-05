@@ -31,14 +31,8 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		--disable-werror
 		$(use_enable static-libs static)
 	)
-	econf ${myconf[@]}
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

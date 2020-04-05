@@ -11,15 +11,14 @@ SRC_URI="https://www.netfilter.org/projects/${PN}/files/${P}.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="static-libs"
 
-RDEPEND=">=lib-net/libnfnetlink-1.0.0"
-DEPEND="${RDEPEND}
-	dev-util/pkgconf"
+DEPEND="lib-net/libnfnetlink"
 
 CONFIG_CHECK="~NETFILTER_NETLINK_LOG"
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs -Wl,-z,relro
 
 pkg_setup() {
 	linux-info_pkg_setup

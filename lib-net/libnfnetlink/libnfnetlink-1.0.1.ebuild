@@ -2,41 +2,15 @@
 
 EAPI=7
 
-inherit linux-info
-
 DESCRIPTION="the low-level library for netfilter related kernel/userspace communication"
 HOMEPAGE="http://www.netfilter.org/projects/libnfnetlink/"
-PATCH_BLOB=04aef8a4dedf267dd5744afb134ef8046e77f613
-PATCH_FN=${PATCH_BLOB}-musl-fix-includes.patch
-SRC_URI="http://www.netfilter.org/projects/${PN}/files/${P}.tar.bz2
-		 https://git.alpinelinux.org/cgit/aports/plain/main/libnfnetlink/musl-fix-includes.patch -> ${PATCH_FN}"
+SRC_URI="http://www.netfilter.org/projects/${PN}/files/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="static-libs"
-
-PATCHES=( "${DISTDIR}/${PATCH_FN}" )
-
-pkg_setup() {
-	linux-info_pkg_setup
-
-	if kernel_is lt 2 6 18 ; then
-		ewarn "${PN} requires at least 2.6.18 kernel version"
-	fi
-
-	#netfilter core team has changed some option names with kernel 2.6.20
-	error_common=' is not set when it should be. You can activate it in the Core Netfilter Configuration'
-	if kernel_is lt 2 6 20 ; then
-		CONFIG_CHECK="~IP_NF_CONNTRACK_NETLINK"
-		ERROR_IP_NF_CONNTRACK_NETLINK="CONFIG_IP_NF_CONNTRACK_NETLINK:\t${error_common}"
-	else
-		CONFIG_CHECK="~NF_CT_NETLINK"
-		ERROR_NF_CT_NETLINK="CONFIG_NF_CT_NETLINK:\t${error_common}"
-	fi
-
-	check_extra_config
-}
 
 src_configure() {
 	econf $(use_enable static-libs static)

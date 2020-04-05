@@ -2,25 +2,20 @@
 
 EAPI=7
 
-inherit flag-o-matic
-
-if [[ ${PV} == 9999 ]] ; then
-	EGIT_REPO_URI="https://github.com/nghttp2/nghttp2.git"
-	inherit autotools git-r3
-else
-	SRC_URI="https://github.com/nghttp2/nghttp2/releases/download/v${PV}/${P}.tar.xz"
-fi
+inherit flag-o-matic autotools git-r3
 
 DESCRIPTION="HTTP/2 C Library"
 HOMEPAGE="https://nghttp2.org/"
-KEYWORDS="amd64 arm64"
+EGIT_REPO_URI="https://github.com/nghttp2/nghttp2.git"
 
 LICENSE="MIT"
 SLOT="0"
+KEYWORDS="amd64 arm64"
+
 IUSE="cxx debug hpack-tools jemalloc static-libs test utils xml"
 
 RDEPEND="
-	cxx? ( lib-dev/boost:=[threads] )
+	cxx? ( lib-dev/boost )
 	hpack-tools? ( >=lib-dev/jansson-2.5 )
 	jemalloc? ( lib-dev/jemalloc )
 	utils? (
@@ -34,11 +29,11 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconf
 	test? ( >=dev-util/cunit-2.1 )"
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs -Wl,-z,relro
 
 src_prepare() {
 	default
-	[[ ${PV} == 9999 ]] && eautoreconf
+	eautoreconf
 }
 
 src_configure() {
@@ -57,9 +52,4 @@ src_configure() {
 		$(use_with xml libxml2)
 	)
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
-}
-
-src_install() {
-	default
-	use static-libs || find "${ED%/}"/usr -name '*.la' -delete
 }

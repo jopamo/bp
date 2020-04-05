@@ -10,7 +10,6 @@ HOMEPAGE="http://libndp.org"
 if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/jpirko/${PN}.git"
 	inherit git-r3
-	KEYWORDS="amd64 arm64"
 else
 	SNAPSHOT=e8b90ce2d6ebf846cb0c9a3255d4deacf075f9c4
 	SRC_URI="https://github.com/jpirko/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
@@ -19,6 +18,7 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 src_prepare() {
 	eautoreconf
@@ -27,12 +27,6 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		--disable-static
 		--enable-logging
 	)

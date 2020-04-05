@@ -2,24 +2,17 @@
 
 EAPI=7
 
-inherit autotools
+inherit autotools git-r3
 
 DESCRIPTION="rpcsvc protocol definitions from glibc"
 HOMEPAGE="https://github.com/thkukuk/rpcsvc-proto"
-SRC_URI="https://github.com/thkukuk/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+EGIT_REPO_URI="https://github.com/thkukuk/rpcsvc-proto.git"
 
-SLOT="0"
 LICENSE="LGPL-2.1+ BSD"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 src_prepare(){
 	default
 	eautoreconf
-}
-
-src_install(){
-	default
-
-	# provided by sys-fs/quota[rpc]
-	rm "${ED%/}"/usr/include/rpcsvc/rquota.{x,h} || die
 }

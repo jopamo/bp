@@ -4,26 +4,24 @@ EAPI=7
 
 inherit autotools git-r3
 
-DESCRIPTION="C library that resolves names asynchronously"
-HOMEPAGE="https://c-ares.haxx.se/"
-EGIT_REPO_URI="https://github.com/c-ares/c-ares.git"
+DESCRIPTION="Async Resolver Library from OpenBSD/OpenSMTPD"
+HOMEPAGE="https://github.com/OpenSMTPD/libasr"
+EGIT_REPO_URI="https://github.com/OpenSMTPD/libasr.git"
 
-LICENSE="MIT"
+LICENSE="ISC BSD BSD-1 BSD-2 BSD-4"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
 src_prepare() {
-	default
 	eautoreconf
+	default
 }
 
 src_configure() {
 	local myconf=(
-		--enable-nonblocking
-		--enable-symbol-hiding
 		$(use_enable static-libs static)
 	)
-	ECONF_SOURCE="${S}" econf "${myconf[@]}"
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

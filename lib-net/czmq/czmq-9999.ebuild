@@ -11,7 +11,6 @@ EGIT_REPO_URI="https://github.com/zeromq/${PN}.git"
 LICENSE="LGPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="doc static-libs test"
 
 RDEPEND="
 	sys-app/util-linux
@@ -24,25 +23,12 @@ DEPEND="${RDEPEND}
 RESTRICT=test
 
 src_prepare() {
-	use test && AUTOTOOLS_IN_SOURCE_BUILD=1
 	sed -i -e 's|-Werror||g' configure.ac || die
 
 	cat >> src/Makemodule-local.am <<-EOF
 	src_libczmq_la_LDFLAGS += -pthread
 	EOF
 
-	eautoreconf
 	default
-}
-
-src_configure() {
-	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
+	eautoreconf
 }

@@ -10,7 +10,6 @@ SRC_URI="https://github.com/thkukuk/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 SLOT="0/2"
 LICENSE="LGPL-2.1+"
-
 KEYWORDS="amd64 arm64"
 
 DEPEND="
@@ -29,9 +28,4 @@ src_configure() {
 		--enable-nls
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-src_install() {
-	default
-	find "${ED}" -name '*.la' -delete || die
 }

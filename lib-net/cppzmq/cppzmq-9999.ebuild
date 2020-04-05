@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/zeromq/cppzmq"
 EGIT_REPO_URI="https://github.com/zeromq/${PN}.git"
 
 LICENSE="MIT"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="lib-net/libzmq"

@@ -33,8 +33,21 @@ DEPEND="
 	zstd? ( app-compression/zstd )
 "
 
+QA_PREBUILT="
+	usr/share/qemu/hppa-firmware.img
+	usr/share/qemu/openbios-ppc
+	usr/share/qemu/openbios-sparc64
+	usr/share/qemu/openbios-sparc32
+	usr/share/qemu/palcode-clipper
+	usr/share/qemu/s390-ccw.img
+	usr/share/qemu/s390-netboot.img
+	usr/share/qemu/u-boot.e500"
+
+QA_WX_LOAD="
+	usr/bin/qemu-x86_64
+	usr/bin/qemu-aarch64"
+
 filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
-append-flags -Wno-error
 
 src_configure() {
 	local myconf=(
@@ -47,6 +60,13 @@ src_configure() {
 		--enable-attr
 		--disable-gtk
 		--target-list=x86_64-softmmu,aarch64-softmmu,aarch64-linux-user,x86_64-linux-user
+		--disable-strip
+		--disable-werror
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	rm -rf "${ED}"/var/run
 }

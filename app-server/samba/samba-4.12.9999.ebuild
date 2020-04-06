@@ -150,5 +150,6 @@ src_install() {
 	systemd_newunit "${FILESDIR}"/smbd_at.service 'smbd@.service'
 	systemd_dounit "${FILESDIR}"/samba.service
 
-	find "${ED}" -type d -empty -delete
+	keepdir var/log/samba
+	keepdir var/lib/samba/private
 }

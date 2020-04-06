@@ -12,6 +12,7 @@ S=${WORKDIR}/${P}/${PN}
 
 LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
+KEYWORDS="amd64"
 
 IUSE="clang debug test"
 

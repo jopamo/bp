@@ -234,7 +234,7 @@ strip-linguas() {
 # Minimize the installed files
 cleanup_install() {
 	find "${D}" -name '*.la' -delete || die
-	rm -rf "${ED}"/usr/share/{bash-completion,doc,zsh}
+	rm -rf "${ED}"/usr/share/{bash-completion,doc}
 	rm -rf "${ED}"/usr/share/man/{ca,de,es,fr,it,ja,pl,pt,pt_BR,ru,uk,zh_CHS}
 	rm -rf "${ED}"/usr/share/locale/{a*,b*,c*,d*,el,eo,es*,et,eu,f*,g*,h*,i*,j*,k*,lg,li,lt,lv,m*,n*,o*,p*,q*,r*,s*,t*,u*,v*,w*,x*,y*,z*}
 	rm -rf "${ED}"/usr/share/i18n/locales/{a*,b*,c*,d*,e{l,o,s,t,u}*,f*,g*,h*,i{a,d,g,k,t,u}*,j*,k*,l*,m*,n*,o*,p*,q*,r*,s*,u*,v*,w*,x*,y*,z*}

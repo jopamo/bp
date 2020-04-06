@@ -199,7 +199,7 @@ meson_src_configure() {
 	local mesonargs=(
 		--buildtype plain
 		--libdir lib
-		--localstatedir "${EPREFIX}/var/lib"
+		--localstatedir "${EPREFIX}/var"
 		--prefix "${EPREFIX}/usr"
 		--sysconfdir "${EPREFIX}/etc"
 		--wrap-mode nodownload

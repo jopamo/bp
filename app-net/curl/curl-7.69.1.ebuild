@@ -2,7 +2,7 @@
 
 EAPI=7
 
-DESCRIPTION="A Client that groks URLs"
+DESCRIPTION="A command line tool and library for transferring data with URL syntax"
 HOMEPAGE="https://curl.haxx.se/"
 SRC_URI="https://curl.haxx.se/download/${P}.tar.bz2"
 

@@ -13,7 +13,9 @@ LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="audit binfmt +blkid coredump cryptsetup efi gcrypt +hostnamed hwdb importd kmod ldconfig localed logind machined +networkd pam pcre resolve rfkill timedated +tmpfiles test vconsole xkb"
+IUSE="audit binfmt +blkid coredump cryptsetup efi gcrypt +hostnamed hwdb importd kmod
+ldconfig localed logind machined +networkd pam pcre rfkill timedated +tmpfiles
+test vconsole xkb"
 
 RESTRICT="!test? ( test )"
 
@@ -92,7 +94,6 @@ src_configure() {
 		$(meson_use networkd)
 		$(meson_use pam)
 		$(meson_use pcre pcre2)
-		$(meson_use resolve)
 		$(meson_use rfkill)
 		$(meson_use test dbus)
 		$(meson_use timedated)
@@ -136,6 +137,7 @@ src_configure() {
 		-Dquotacheck=false
 		-Drandomseed=false
 		-Drc-local=""
+		-Dresolve=false
 		-Drootlibdir="${EPREFIX}"/usr/lib
 		-Drootprefix="${EPREFIX}"/usr
 		-Dseccomp=true
@@ -219,7 +221,6 @@ pkg_postinst() {
 	enewgroup systemd-journal
 
 	use networkd && newusergroup systemd-network
-	use resolve && newusergroup systemd-resolve
 	use coredump && newusergroup systemd-coredump
 
 	systemd_update_catalog
@@ -229,6 +230,5 @@ pkg_postinst() {
 	udev_reload || FAIL=1
 
 	systemd_reenable getty@tty1.service remote-fs.target
-	use resolve && systemd_reenable systemd-resolved.service
 	use networkd && systemd_reenable systemd-networkd.service
 }

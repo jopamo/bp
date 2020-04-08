@@ -7,7 +7,7 @@ After=network.target network-online.target nmb.service winbind.service
 [Service]
 Type=notify
 NotifyAccess=all
-PIDFile=/var/run/smbd.pid
+PIDFile=/run/smbd.pid
 LimitNOFILE=16384
 ExecStart=/usr/sbin/smbd --foreground --no-process-group $SMBDOPTIONS
 ExecReload=/usr/bin/kill -HUP $MAINPID

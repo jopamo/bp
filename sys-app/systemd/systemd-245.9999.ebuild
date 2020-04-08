@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="audit binfmt +blkid coredump cryptsetup efi gcrypt +hostnamed hwdb importd kmod
-ldconfig localed logind machined +networkd pam pcre rfkill timedated +tmpfiles
+ldconfig localed logind machined +networkd pam pcre pstore rfkill timedated +tmpfiles
 test vconsole xkb"
 
 RESTRICT="!test? ( test )"
@@ -61,6 +61,8 @@ pkg_pretend() {
 		use tmpfiles && CONFIG_CHECK+=" ~TMPFS_POSIX_ACL"
 		use tmpfiles && CONFIG_CHECK+=" ~DEVTMPFS ~TMPFS_XATTR"
 
+		use pstore && CONFIG_CHECK+=" ~ACPI_APEI"
+
 		if linux_config_exists; then
 			local uevent_helper_path=$(linux_chkconfig_string UEVENT_HELPER_PATH)
 			if [[ -n ${uevent_helper_path} ]] && [[ ${uevent_helper_path} != '""' ]]; then
@@ -88,12 +90,14 @@ src_configure() {
 		$(meson_use importd)
 		$(meson_use kmod)
 		$(meson_use ldconfig)
+		$(meson_use networkd link-networkd-shared)
 		$(meson_use localed)
 		$(meson_use logind)
 		$(meson_use machined)
 		$(meson_use networkd)
 		$(meson_use pam)
 		$(meson_use pcre pcre2)
+		$(meson_use pstore)
 		$(meson_use rfkill)
 		$(meson_use test dbus)
 		$(meson_use timedated)
@@ -118,9 +122,11 @@ src_configure() {
 		-Didn=false
 		-Dima=false
 		-Dkill-path="${EROOT}"/usr/bin/kill
+		-Dfdisk=false
 		-Dlibidn2=false
 		-Dlibidn=false
 		-Dlibiptc=false
+		-Dlink-timesyncd-shared=false
 		-Dlz4=false
 		-Dman=false
 		-Dmicrohttpd=false

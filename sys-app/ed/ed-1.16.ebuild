@@ -14,9 +14,11 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="sys-devel/texinfo"
 
+src_prepare() {
+	default
+	sed -i "s|-O2|${CFLAGS}|g" configure
+}
+
 src_configure() {
-	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		)
-	econf ${myconf[@]}
+	${S}/configure --prefix="${EPREFIX}"/usr
 }

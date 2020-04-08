@@ -1,1 +1,3 @@
 sys-app/systemd logind tmpfiles
+app-media/avidemux qt5
+app-gui/qbittorrent qt5

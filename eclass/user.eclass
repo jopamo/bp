@@ -53,7 +53,7 @@ egetent() {
 # Same as enewgroup, you are not required to understand how to properly add
 # a user to the system.  The only required parameter is the username.
 # Default uid is (pass -1 for this) next available, default shell is
-# /usr/bin/false, default homedir is /dev/null, and there are no default groups.
+# /usr/sbin/nologin, default homedir is /dev/null, and there are no default groups.
 enewuser() {
 	if [[ ${EUID} != 0 ]] ; then
 		einfo "Insufficient privileges to execute ${FUNCNAME[0]}"
@@ -118,7 +118,7 @@ enewuser() {
 		if [[ ${eshell} == "/dev/null" ]] ; then
 			eerror "Unable to identify the shell to use, proceeding with userland default."
 			case ${USERLAND} in
-				GNU)    eshell="/usr/bin/false" ;;
+				GNU)    eshell="/usr/sbin/nologin" ;;
 				*) die "Unable to identify the default shell for userland ${USERLAND}"
 			esac
 		fi

@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit toolchain-funcs git-r3
+inherit toolchain-funcs git-r3 systemd
 
 DESCRIPTION="Hardware RNG based on CPU timing jitter"
 HOMEPAGE="https://github.com/smuellerDD/jitterentropy-library"
@@ -11,6 +11,8 @@ EGIT_REPO_URI="https://github.com/smuellerDD/jitterentropy-rngd.git"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+IUSE="systemd"
 
 src_prepare() {
 	default
@@ -31,4 +33,7 @@ src_install() {
 		  DESTDIR="${D}" install
 
 	doheader ${PN}.h ${PN}-base-user.h
+
+	use systemd && systemd_dounit "${FILESDIR}"/${PN}.service
+
 }

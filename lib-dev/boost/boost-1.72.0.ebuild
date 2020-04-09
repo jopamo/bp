@@ -25,7 +25,7 @@ RDEPEND="
 	zstd? ( app-compression/zstd )
 	app-compression/bzip2
 	lib-sys/zlib
-	!app-admin/eselect-boost"
+"
 DEPEND="${RDEPEND}
 	=lib-dev/boost-build-${MAJOR_V}*"
 
@@ -51,6 +51,7 @@ ejam() {
 }
 
 src_configure() {
+	die
 	# Workaround for too many parallel processes requested, bug #506064
 	[[ "$(makeopts_jobs)" -gt 64 ]] && MAKEOPTS="${MAKEOPTS} -j64"
 

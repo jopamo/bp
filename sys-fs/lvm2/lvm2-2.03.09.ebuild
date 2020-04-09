@@ -74,11 +74,11 @@ src_configure() {
 }
 
 src_install() {
-	default
 	local inst
 	use dm-only || INSTALL_TARGETS="install_lvm2"
+	use dm-only || use systemd && INSTALL_TARGETS="${INSTALL_TARGETS} install_systemd_units install_systemd_generators"
 	use dm-only && INSTALL_TARGETS="install_device-mapper"
-	use systemd && INSTALL_TARGETS="${INSTALL_TARGETS} install_systemd_units install_systemd_generators"
+
 	for inst in ${INSTALL_TARGETS}; do
 		emake DESTDIR="${D}" ${inst}
 	done

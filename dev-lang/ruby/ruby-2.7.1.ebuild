@@ -4,19 +4,18 @@ EAPI=7
 
 inherit flag-o-matic
 
-SLOT=0/1
-
 DESCRIPTION="An object-oriented scripting language"
 HOMEPAGE="https://www.ruby-lang.org/"
-SRC_URI=https://cache.ruby-lang.org/pub/ruby/2.6/${P}.tar.gz
+SRC_URI="https://cache.ruby-lang.org/pub/ruby/$(ver_cut 1-2)/${P}.tar.gz"
 
 LICENSE="|| ( Ruby-BSD BSD-2 )"
+SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="debug doc jemalloc socks5 static-libs"
 
-filter-flags -fomit-frame-pointer
+IUSE="debug jemalloc socks5 static-libs"
+
 append-flags -fno-strict-aliasing
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+filter-flags -fomit-frame-pointer -Wl,-z,defs -Wl,-z,relro
 
 src_prepare() {
 	default
@@ -32,14 +31,13 @@ src_configure() {
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
-		--docdir=${EPREFIX}/usr/share/doc/${P} \
 		--enable-shared
 		--enable-pthread
 		--disable-rpath
 		--with-out-ext="dbm tk"
 		$(use_with jemalloc jemalloc)
 		$(use_enable socks5 socks)
-		$(use_enable doc install-doc)
+		--disable-install-doc
 		--disable-ipv6
 		$(use_enable static-libs static)
 		$(use_enable static-libs install-static-library)

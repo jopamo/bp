@@ -11,13 +11,12 @@ SRC_URI="mirror://sourceforge/nc110/nc${PV}.tar.xz -> ${P}.tar.xz"
 LICENSE="netcat"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="ipv6 static"
 
 S=${WORKDIR}/nc110
 
 append-cppflags -DTELNET -DGAPING_SECURITY_HOLE
-append-ldflags -Wl,-pie
-filter-flags -fpic
 
 src_configure() {
 	use ipv6 || sed -i '/#define INET6/d' generic.h

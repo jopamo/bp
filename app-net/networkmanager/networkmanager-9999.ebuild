@@ -50,7 +50,7 @@ DEPEND="${COMMON_DEPEND}
 	dev-python/pygobject
 "
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs -Wl,-z,relro
 
 src_configure() {
 	local emesonargs=(

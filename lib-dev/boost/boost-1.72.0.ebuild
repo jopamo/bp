@@ -23,8 +23,6 @@ RDEPEND="
 	zlib? ( lib-sys/zlib )
 	lzma? ( app-compression/xz-utils )
 	zstd? ( app-compression/zstd )
-	app-compression/bzip2
-	lib-sys/zlib
 "
 DEPEND="${RDEPEND}
 	=lib-dev/boost-build-${MAJOR_V}*"
@@ -41,6 +39,7 @@ PATCHES=(
 )
 
 append-cxxflags -std=c++14
+filter-flags -Wl,-z,defs -Wl,-z,relro
 
 ejam() {
 	local b2_opts=(
@@ -74,6 +73,9 @@ src_configure() {
 		-sNO_LZMA=$(usex lzma 0 1)
 		-sNO_ZLIB=$(usex zlib 0 1)
 		-sNO_ZSTD=$(usex zstd 0 1)
+		cflags="${CPPFLAGS} ${CFLAGS}"
+		cxxflags="${CPPFLAGS} ${CXXFLAGS}"
+		linkflags="${LDFLAGS}"
 	)
 }
 

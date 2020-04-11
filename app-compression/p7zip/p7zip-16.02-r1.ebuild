@@ -27,7 +27,7 @@ PATCHES=(
 		"${FILESDIR}"/CVE-2018-10115.patch
 	)
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs -Wl,-z,relro
 
 _makeargs=(
   prefix="${EPREFIX}"/usr

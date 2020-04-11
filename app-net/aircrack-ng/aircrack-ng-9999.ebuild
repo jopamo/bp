@@ -36,6 +36,8 @@ PDEPEND="
 		sys-app/pciutils
 "
 
+filter-flags -flto\=\*
+
 pkg_setup() {
 	MAKE_COMMON=(
 		CC="$(tc-getCC)" \
@@ -46,8 +48,6 @@ pkg_setup() {
 		DESTDIR="${ED}"
 	)
 }
-
-filter-flags -flto\=\*
 
 src_prepare() {
 	eautoreconf
@@ -74,11 +74,6 @@ src_configure() {
 }
 
 src_compile() {
-	if [[ $($(tc-getCC) --version) == clang* ]] ; then
-		#https://bugs.gentoo.org/show_bug.cgi?id=472890
-		filter-flags -frecord-gcc-switches
-	fi
-
 	emake "${MAKE_COMMON[@]}"
 }
 

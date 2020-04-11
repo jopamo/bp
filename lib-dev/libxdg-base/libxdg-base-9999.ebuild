@@ -11,6 +11,7 @@ EGIT_REPO_URI="https://github.com/devnev/libxdg-basedir.git"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="static-libs"
 
 src_prepare() {
@@ -19,13 +20,10 @@ src_prepare() {
 }
 
 src_configure() {
-	econf \
-		--disable-dependency-tracking \
-		$(use_enable static-libs static) \
+	local myconf=(
+		--disable-dependency-tracking
+		$(use_enable static-libs static)
 		--disable-doxygen-html
-}
-
-src_install() {
-	emake DESTDIR="${D}" install
-	find "${D}" -type f -name '*.la' -delete
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

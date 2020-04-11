@@ -2,44 +2,34 @@
 
 EAPI=7
 
-inherit libtool flag-o-matic
-
-MY_P="gc-${PV}"
+inherit autotools flag-o-matic git-r3
 
 DESCRIPTION="The Boehm-Demers-Weiser conservative garbage collector"
 HOMEPAGE="http://www.hboehm.info/gc/ https://github.com/ivmai/bdwgc/"
-SRC_URI="https://github.com/ivmai/bdwgc/releases/download/v${PV}/${MY_P}.tar.gz"
+EGIT_REPO_URI="https://github.com/ivmai/bdwgc.git"
+EGIT_BRANCH="release-$(ver_cut 1)_$(ver_cut 2)"
 
 LICENSE="boehm-gc"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="cxx static-libs threads"
+IUSE="cxx static-libs"
 
 DEPEND="
 	>=lib-dev/libatomic_ops-7.4
 	dev-util/pkgconf"
 
-S="${WORKDIR}/${MY_P}"
-
 src_prepare() {
 	default
-	elibtoolize
+	eautoreconf
 }
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		--disable-docs
 		--with-libatomic-ops
 		$(use_enable cxx cplusplus)
 		$(use_enable static-libs static)
-		$(use threads || echo --disable-threads)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

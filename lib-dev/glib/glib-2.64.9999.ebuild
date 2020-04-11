@@ -30,12 +30,12 @@ DEPEND="
 src_configure() {
         local emesonargs=(
         		-Ddefault_library=$(usex static-libs static shared)
-        		$(meson_use xattr)
-                $(meson_use libmount)
-                $(meson_use internal_pcre)
                 $(meson_use dtrace)
                 -Dgtk_doc=false
                 -Dselinux=disabled
+                -Dlibmount=enabled
+                -Dxattr=true
+                -Dinternal_pcre=false
         )
         meson_src_configure
 }

@@ -12,30 +12,24 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=e50b9ef8b910fa642ef158f6642e60d54d7ad740
+	SNAPSHOT=8c50837f0b58ba5b2bcb1b424a2a4bfa01559fb2
 	SRC_URI="https://github.com/libffi/libffi/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="MIT"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="debug static-libs"
 
 src_prepare() {
-	eautoreconf
 	default
+	eautoreconf
 }
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		$(use_enable static-libs static)
 		$(use_enable debug)
 	)

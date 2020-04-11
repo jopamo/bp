@@ -8,7 +8,7 @@ inherit perl-module flag-o-matic
 
 DESCRIPTION="Get number of occupied columns of a string on terminal"
 
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro

@@ -16,7 +16,7 @@ else
 fi
 
 LICENSE="LGPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="debug lzma python static-libs +tools zlib"

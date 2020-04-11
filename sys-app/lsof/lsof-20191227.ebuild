@@ -13,7 +13,7 @@ SRC_URI="https://github.com/lsof-org/lsof/archive/${SNAPSHOT}.tar.gz -> ${P}.tar
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="lsof"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="ipv6 rpc static"

@@ -9,7 +9,7 @@ HOMEPAGE="https://cmake.org/"
 SRC_URI="https://github.com/Kitware/CMake/releases/download/v${PV}/cmake-${PV}.tar.gz"
 
 LICENSE="CMake"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="

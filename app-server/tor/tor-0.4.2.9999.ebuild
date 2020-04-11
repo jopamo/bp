@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://git.torproject.org/tor.git"
 EGIT_BRANCH=maint-$(ver_cut 1).$(ver_cut 2).$(ver_cut 3)
 
 LICENSE="BSD GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="lzma scrypt seccomp systemd tor-hardening test zstd"

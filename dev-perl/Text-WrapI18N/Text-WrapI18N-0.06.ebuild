@@ -8,7 +8,7 @@ inherit perl-module
 
 DESCRIPTION="Internationalized substitute of Text::Wrap"
 
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="dev-perl/Text-CharWidth"

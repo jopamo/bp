@@ -11,7 +11,7 @@ EGIT_REPO_URI="https://gitlab.freedesktop.org/dbus/dbus.git"
 #EGIT_BRANCH="dbus-1.14"
 
 LICENSE="|| ( AFL-2.1 GPL-2 )"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="debug doc static-libs systemd test user-session X"

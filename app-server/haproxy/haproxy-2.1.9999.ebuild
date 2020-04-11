@@ -10,7 +10,7 @@ EGIT_REPO_URI="http://git.haproxy.org/git/haproxy-$(ver_cut 1).$(ver_cut 2).git"
 EGIT_MIN_CLONE_TYPE=single
 
 LICENSE="GPL-2 LGPL-2.1"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="+crypt doc examples slz net_ns +pcre pcre-jit pcre2 pcre2-jit ssl

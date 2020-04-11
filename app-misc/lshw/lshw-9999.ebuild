@@ -9,7 +9,7 @@ HOMEPAGE="https://www.ezix.org/project/wiki/HardwareLiSter"
 EGIT_REPO_URI="https://ezix.org/src/pkg/lshw.git"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static"

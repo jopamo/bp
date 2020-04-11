@@ -11,7 +11,7 @@ HOMEPAGE="http://unbound.net/"
 SRC_URI="http://unbound.net/downloads/${MY_P}.tar.gz"
 
 LICENSE="BSD GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="debug dnscrypt dnstap +ecdsa gost python static-libs test threads"

@@ -7,7 +7,7 @@ HOMEPAGE="http://jemalloc.net/ https://github.com/jemalloc/jemalloc"
 SRC_URI="https://github.com/jemalloc/jemalloc/releases/download/${PV}/${P}.tar.bz2"
 
 LICENSE="BSD"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="debug lazy-lock static-libs stats xmalloc"

@@ -9,7 +9,7 @@ HOMEPAGE="https://wiki.gentoo.org/wiki/Project:Portage-Tools"
 SRC_URI="https://gitweb.gentoo.org/proj/gentoolkit.git/snapshot/${P}.tar.gz"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="sys-app/portage[${PYTHON_USEDEP}]

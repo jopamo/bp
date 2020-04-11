@@ -7,7 +7,7 @@ HOMEPAGE="https://ccache.samba.org/"
 SRC_URI="https://github.com/ccache/ccache/releases/download/v${PV}/${P}.tar.xz"
 
 LICENSE="GPL-3"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="app-compression/xz-utils

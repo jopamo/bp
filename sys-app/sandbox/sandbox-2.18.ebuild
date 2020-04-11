@@ -9,7 +9,7 @@ HOMEPAGE="https://www.gentoo.org/proj/en/portage/sandbox/"
 SRC_URI="https://dev.gentoo.org/~slyfox/distfiles/${P}.tar.xz"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="app-compression/xz-utils"

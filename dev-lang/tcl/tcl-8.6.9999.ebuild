@@ -11,7 +11,7 @@ EGIT_BRANCH="core-$(ver_cut 1)-$(ver_cut 2)-branch"
 S="${WORKDIR}/${P}/unix"
 
 LICENSE="tcltk"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 src_prepare() {

@@ -9,7 +9,7 @@ HOMEPAGE="https://www.gnu.org/software/mailutils/mailutils.html"
 SRC_URI="mirror://gnu/mailutils/${P}.tar.xz"
 
 LICENSE="GPL-2 LGPL-2.1"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="frm maidag +mail sieve messages readmsg dotlock movemail mimeview mh gdbm ipv6 nls pam python servers ssl static-libs virtual-domains +sendmail +smtp mailbox-imap mailbox-pop mailbox-mh +mailbox-maildir"

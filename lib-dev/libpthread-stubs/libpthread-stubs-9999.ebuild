@@ -9,7 +9,7 @@ HOMEPAGE="https://gitlab.freedesktop.org/xorg/lib/pthread-stubs"
 EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/pthread-stubs.git"
 
 LICENSE="MIT"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 src_prepare() {

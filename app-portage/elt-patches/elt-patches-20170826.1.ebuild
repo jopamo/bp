@@ -7,7 +7,7 @@ HOMEPAGE="https://gitweb.gentoo.org/proj/elt-patches.git/"
 SRC_URI="https://dev.gentoo.org/~mgorny/dist/${P}.tar.xz"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="sys-app/gentoo-functions

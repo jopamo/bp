@@ -19,7 +19,7 @@ else
 fi
 
 LICENSE="LGPL-2.1"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="+cxx static-libs"

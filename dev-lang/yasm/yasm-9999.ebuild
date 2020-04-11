@@ -7,11 +7,11 @@ inherit cmake-utils git-r3 flag-o-matic
 DESCRIPTION="An assembler for x86 and x86_64 instruction sets"
 HOMEPAGE="http://yasm.tortall.net/"
 EGIT_REPO_URI="https://github.com/yasm/yasm.git"
-EGIT_CLONE_TYPE=mirror
 
 LICENSE="BSD-2 BSD || ( Artistic GPL-2 LGPL-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="nls"
 
 RDEPEND="
@@ -35,7 +35,8 @@ src_configure() {
 
 src_install() {
 	cmake-utils_src_install
-	mv "${ED}"/usr/lib "${ED}"/usr/lib
-	cd "${ED}"/usr/lib
-	ln -s libyasmstd.so libyasmstd.so.1
+
+	for x in libyasmstd.so.1 libyasmstd.so.1.0 ; do
+		dosym libyasmstd.so usr/lib/${x}
+	done
 }

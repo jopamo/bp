@@ -11,7 +11,7 @@ if [[ ${PV} == "9999" ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://git.kernel.org/pub/scm/linux/kernel/git/axboe/blktrace.git"
 else
-	SNAPSHOT=9c73da91540b27adaaf56065629e831cc50c5a3d
+	SNAPSHOT=db4f6340e04716285ea56fe26d76381c3adabe58
 	SRC_URI="https://git.kernel.org/pub/scm/linux/kernel/git/axboe/blktrace.git/snapshot/blktrace-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/blktrace-${SNAPSHOT}
 fi

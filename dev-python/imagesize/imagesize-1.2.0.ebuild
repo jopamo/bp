@@ -6,7 +6,7 @@ inherit distutils-r1
 
 DESCRIPTION="Getting image size from png/jpeg/jpeg2000/gif file"
 HOMEPAGE="https://github.com/shibukawa/imagesize_py"
-SRC_URI="https://files.pythonhosted.org/packages/e4/9f/0452b459c8ba97e07c3cd2bd243783936a992006cf4cd1353c314a927028/${P}.tar.gz"
+SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"

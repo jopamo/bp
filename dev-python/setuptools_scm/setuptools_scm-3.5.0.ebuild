@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/pypa/setuptools_scm https://pypi.org/project/setupt
 SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="test"

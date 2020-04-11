@@ -9,7 +9,7 @@ HOMEPAGE="https://cffi.readthedocs.io/ https://pypi.python.org/pypi/cffi"
 SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="test"

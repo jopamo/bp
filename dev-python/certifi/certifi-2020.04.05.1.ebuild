@@ -10,7 +10,7 @@ SRC_URI="https://github.com/certifi/python-certifi/archive/${PV}.tar.gz -> ${P}.
 S=${WORKDIR}/python-${P}
 
 LICENSE="MPL-2.0"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="dev-python/setuptools"

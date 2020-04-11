@@ -11,7 +11,7 @@ HOMEPAGE="https://freedesktop.org/wiki/Software/pyxdg https://cgit.freedesktop.o
 SRC_URI="https://github.com/takluyver/pyxdg/archive/rel-${PV}.tar.gz -> ${MY_P}.tar.gz"
 
 LICENSE="LGPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="test"

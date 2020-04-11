@@ -9,12 +9,11 @@ HOMEPAGE="http://lxml.de/ https://pypi.python.org/pypi/lxml/ https://github.com/
 SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="BSD ElementTree GPL-2 PSF-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="test"
 
-# Note: lib{xml2,xslt} are used as C libraries, not Python modules.
 RDEPEND="
 	>=lib-dev/libxml2-2.9.2
 	>=lib-dev/libxslt-1.1.28"

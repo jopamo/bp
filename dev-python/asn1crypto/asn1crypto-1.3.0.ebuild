@@ -10,7 +10,7 @@ HOMEPAGE="https://github.com/wbond/asn1crypto/ https://pypi.python.org/pypi/asn1
 SRC_URI="https://github.com/wbond/asn1crypto/archive/${PV}.tar.gz -> ${P}.gh.tar.gz"
 
 LICENSE="MIT"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="test"

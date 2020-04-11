@@ -9,7 +9,7 @@ HOMEPAGE="https://wiki.gentoo.org/wiki/Project:Python/Namespace_packages"
 SRC_URI=""
 
 LICENSE="public-domain"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="dev-python/setuptools[${PYTHON_USEDEP}]

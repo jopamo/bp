@@ -9,7 +9,7 @@ HOMEPAGE="http://www.voidspace.org.uk/python/configobj.html https://pypi.org/pro
 SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="BSD"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="dev-python/six[${PYTHON_USEDEP}]"

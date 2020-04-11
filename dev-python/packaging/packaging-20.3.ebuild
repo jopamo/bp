@@ -8,8 +8,8 @@ DESCRIPTION="Core utilities for Python packages"
 HOMEPAGE="https://github.com/pypa/packaging https://pypi.org/project/packaging/"
 SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
-SLOT="0"
 LICENSE="|| ( Apache-2.0 BSD-2 )"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="test"

@@ -9,7 +9,7 @@ HOMEPAGE="https://bitbucket.org/mchaput/whoosh/wiki/Home/ https://pypi.python.or
 SRC_URI="mirror://pypi/W/${PN^}/${P^}.tar.gz"
 
 LICENSE="BSD-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="test"

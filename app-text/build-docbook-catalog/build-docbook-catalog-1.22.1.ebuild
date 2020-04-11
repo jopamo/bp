@@ -7,7 +7,7 @@ HOMEPAGE="https://sources.gentoo.org/gentoo-src/build-docbook-catalog/"
 SRC_URI="https://github.com/somasis/build-docbook-catalog/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="|| ( sys-app/util-linux app-misc/getopt )

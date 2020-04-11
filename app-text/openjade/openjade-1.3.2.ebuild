@@ -9,7 +9,7 @@ HOMEPAGE="http://openjade.sourceforge.net"
 SRC_URI="mirror://sourceforge/openjade/${P}.tar.gz"
 
 LICENSE="MIT"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"

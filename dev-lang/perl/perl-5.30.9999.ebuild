@@ -11,7 +11,7 @@ HOMEPAGE="https://www.perl.org/"
 EGIT_BRANCH="maint-$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="|| ( Artistic GPL-1+ )"
-SLOT="0/1"
+SLOT="0"
 
 KEYWORDS="amd64 arm64"
 

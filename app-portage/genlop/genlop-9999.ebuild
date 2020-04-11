@@ -9,7 +9,7 @@ HOMEPAGE="https://wiki.gentoo.org/wiki/Project:Perl"
 EGIT_REPO_URI="https://github.com/gentoo-perl/genlop.git"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="dev-lang/perl"

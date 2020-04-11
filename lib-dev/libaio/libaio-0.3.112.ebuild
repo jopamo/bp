@@ -9,7 +9,7 @@ HOMEPAGE="http://lse.sourceforge.net/io/aio.html"
 SRC_URI="mirror://debian/pool/main/liba/${PN}/${PN}_${PV}.orig.tar.xz -> ${P}.tar.xz"
 
 LICENSE="LGPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs test"

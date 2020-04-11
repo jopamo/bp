@@ -9,7 +9,7 @@ HOMEPAGE="https://irssi.org/"
 EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 BDEPEND="dev-lang/perl"

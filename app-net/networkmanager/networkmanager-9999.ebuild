@@ -9,7 +9,7 @@ HOMEPAGE="https://wiki.gnome.org/Projects/NetworkManager"
 EGIT_REPO_URI="https://github.com/NetworkManager/NetworkManager.git"
 
 LICENSE="GPL-2+"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="+nmtui systemd test"

@@ -9,7 +9,7 @@ HOMEPAGE="http://po4a.alioth.debian.org"
 SRC_URI="https://github.com/mquinson/po4a/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND=">=sys-devel/gettext-0.13

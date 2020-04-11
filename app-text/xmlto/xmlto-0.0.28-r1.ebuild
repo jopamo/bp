@@ -7,7 +7,7 @@ HOMEPAGE="https://pagure.io/xmlto"
 SRC_URI="https://releases.pagure.org/${PN}/${P}.tar.bz2"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="latex text"

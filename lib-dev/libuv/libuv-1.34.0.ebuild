@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/libuv/libuv"
 SRC_URI="${HOMEPAGE}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="BSD BSD-2 ISC MIT"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 RESTRICT="test"

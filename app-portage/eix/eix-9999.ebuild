@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/vaeth/eix/"
 EGIT_REPO_URI="https://github.com/vaeth/${PN}.git"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="debug +dep +jumbo-build +required-use sqlite swap-remote tools nls"

@@ -9,7 +9,7 @@ HOMEPAGE="https://www.gnu.org/software/gettext/"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 
 LICENSE="GPL-3+ LGPL-2.1+"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="acl openmp static-libs"

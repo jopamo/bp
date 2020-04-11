@@ -7,7 +7,7 @@ HOMEPAGE="https://www.gentoo.org"
 SRC_URI="mirror://gentoo/fontconfig.eselect-${PV}.bz2"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND=">=app-admin/eselect-1.2.3

@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/magnumripper/${PN}.git"
 EGIT_BRANCH="bleeding-jumbo"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="commoncrypto opencl openmp +ssl pcap rexgen"

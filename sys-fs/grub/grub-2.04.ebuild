@@ -9,7 +9,7 @@ HOMEPAGE="https://www.gnu.org/software/grub/"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 
 LICENSE="GPL-3"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="debug device-mapper efiemu mount nls static sdl test libzfs"

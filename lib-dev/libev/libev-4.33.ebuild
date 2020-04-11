@@ -7,7 +7,7 @@ HOMEPAGE="http://software.schmorp.de/pkg/libev.html"
 SRC_URI="http://dist.schmorp.de/libev/${P}.tar.gz"
 
 LICENSE="|| ( BSD GPL-2 )"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"

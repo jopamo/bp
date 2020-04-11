@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/gentoo/portage.git"
 S="${WORKDIR}/${P}/repoman"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="

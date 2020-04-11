@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://github.com/openldap/openldap.git"
 EGIT_BRANCH="OPENLDAP_REL_ENG_$(ver_cut 1)_$(ver_cut 2)"
 
 LICENSE="OpenLDAP Public License"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="ipv6"

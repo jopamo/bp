@@ -9,7 +9,7 @@ HOMEPAGE="http://sed.sourceforge.net/"
 SRC_URI="mirror://gnu/sed/${P}.tar.xz"
 
 LICENSE="GPL-3"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="acl nls static"

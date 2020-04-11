@@ -13,7 +13,7 @@ else
 fi
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 src_install() {

@@ -11,7 +11,7 @@ HOMEPAGE="http://ipset.netfilter.org/"
 SRC_URI="http://ipset.netfilter.org/${P}.tar.bz2"
 
 LICENSE="GPL-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND=">=app-net/iptables-1.4.7

@@ -7,7 +7,7 @@ HOMEPAGE="https://libbsd.freedesktop.org/wiki/"
 SRC_URI="https://${PN}.freedesktop.org/releases/${P}.tar.xz"
 
 LICENSE="BSD BSD-2 BSD-4 ISC"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"

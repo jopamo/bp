@@ -12,7 +12,7 @@ SRC_URI="https://github.com/ninja-build/ninja/archive/${SNAPSHOT}.tar.gz -> ${P}
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="Apache-2.0"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="

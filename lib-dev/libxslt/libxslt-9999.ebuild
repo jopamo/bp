@@ -9,7 +9,7 @@ HOMEPAGE="http://www.xmlsoft.org/"
 EGIT_REPO_URI="https://github.com/GNOME/libxslt.git"
 
 LICENSE="MIT"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="crypt debug examples python static-libs"

@@ -12,14 +12,14 @@ if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI="https://github.com/fribidi/fribidi.git"
 	inherit git-r3
 else
-	SNAPSHOT=03efbdd491cbd50fdf4b2defba205b0816d703fa
+	SNAPSHOT=f9e8e71a6fbf4a4619481284c9f484d10e559995
 	SRC_URI="https://github.com/fribidi/fribidi/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="LGPL-2.1"
-SLOT="0/1"
+SLOT="0"
+KEYWORDS="amd64 arm64"
 
 DEPEND="lib-dev/glib
 		dev-util/pkgconf"

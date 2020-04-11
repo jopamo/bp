@@ -12,7 +12,7 @@ EGIT_BRANCH=glib-$(ver_cut 1)-$(ver_cut 2)
 LICENSE="LGPL-2+"
 SLOT="2"
 SONAME="2"
-IUSE="debug static-libs xattr libmount internal_pcre dtrace"
+IUSE="static-libs dtrace"
 
 KEYWORDS="amd64 arm64"
 

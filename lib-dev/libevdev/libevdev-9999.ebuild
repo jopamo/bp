@@ -2,26 +2,27 @@
 
 EAPI=7
 
+inherit git-r3 autotools
+
 DESCRIPTION="Handler library for evdev events"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/libevdev/"
-SRC_URI="https://www.freedesktop.org/software/libevdev/${P}.tar.xz"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/libevdev/libevdev.git"
 
 LICENSE="X11"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
 RESTRICT="test" # Tests need to run as root.
 
+src_prepare() {
+	default
+	eautoreconf
+}
+
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		$(use_enable static-libs static)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

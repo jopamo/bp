@@ -2,9 +2,12 @@
 
 EAPI=7
 
+inherit git-r3 autotools
+
 DESCRIPTION="Implementation for atomic memory update operations"
 HOMEPAGE="https://github.com/ivmai/libatomic_ops/"
-SRC_URI="https://github.com/ivmai/${PN}/releases/download/v${PV}/${P}.tar.gz"
+EGIT_REPO_URI="https://github.com/ivmai/${PN}.git"
+EGIT_BRANCH="release-$(ver_cut 1)_$(ver_cut 2)"
 
 LICENSE="MIT boehm-gc GPL-2+"
 SLOT="0"
@@ -12,14 +15,13 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static"
 
+src_prepare() {
+	default
+	eautoreconf
+}
+
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		--enable-shared
 		$(use_enable static)
 	)

@@ -14,7 +14,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 doc ldap nls readline +smartcard +gnutls tofu tools usb wks-server"
+IUSE="bzip2 ldap nls readline +smartcard +gnutls tofu tools usb wks-server"
 
 COMMON_DEPEND_LIBS="
 	>=lib-dev/npth-1.2
@@ -36,8 +36,7 @@ COMMON_DEPEND_BINS="app-crypt/pinentry"
 # Existence of executables is checked during configuration.
 DEPEND="${COMMON_DEPEND_LIBS}
 	${COMMON_DEPEND_BINS}
-	nls? ( sys-devel/gettext )
-	doc? ( sys-devel/texinfo )"
+	nls? ( sys-devel/gettext )"
 
 RDEPEND="${COMMON_DEPEND_LIBS}
 	${COMMON_DEPEND_BINS}
@@ -49,10 +48,6 @@ append-flags -fno-strict-aliasing
 
 src_configure() {
 	local myconf=(
-			--bindir="${EPREFIX}"/usr/bin
-			--sbindir="${EPREFIX}"/usr/sbin
-			--libdir="${EPREFIX}"/usr/lib
-			--libexecdir="${EPREFIX}"/usr/libexec
 			--enable-symcryptrun
 			$(use_enable bzip2)
 			$(use_enable gnutls)
@@ -82,12 +77,6 @@ src_configure() {
 
 	econf \
 		"${myconf[@]}" CC_FOR_BUILD="$(tc-getBUILD_CC)"
-}
-
-src_compile() {
-	default
-
-	use doc && emake -C doc html
 }
 
 src_test() {

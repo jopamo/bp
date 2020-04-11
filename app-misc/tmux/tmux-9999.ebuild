@@ -2,22 +2,14 @@
 
 EAPI=7
 
-inherit autotools
+inherit autotools git-r3
 
 DESCRIPTION="Terminal multiplexer"
 HOMEPAGE="https://tmux.github.io/"
-
-if [[ ${PV} == 9999 ]] ; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/tmux/tmux.git"
-else
-	SNAPSHOT=c859748210cef2378660997db810d94f28fe0ac7
-	SRC_URI="https://github.com/tmux/tmux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+EGIT_REPO_URI="https://github.com/tmux/tmux.git"
 
 LICENSE="ISC"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="debug"

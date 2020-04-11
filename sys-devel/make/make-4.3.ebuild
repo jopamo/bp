@@ -6,7 +6,7 @@ inherit flag-o-matic
 
 DESCRIPTION="Standard tool to compile source trees"
 HOMEPAGE="https://www.gnu.org/software/make/make.html"
-SRC_URI="https://1g4.org/files/${P}.tar.xz"
+SRC_URI="mirror://gnu//${PN}/${P}.tar.gz"
 
 LICENSE="GPL-3+"
 SLOT="0"
@@ -21,11 +21,10 @@ DEPEND="guile? ( >=dev-scheme/guile-1.8:= )
 
 src_configure() {
 	use static && append-ldflags -static
-	econf \
-		$(use_with guile) \
-		$(use_enable nls)
-}
 
-src_install() {
-	emake DESTDIR="${D}" install
+	local myconf=(
+		$(use_with guile)
+		$(use_enable nls)
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

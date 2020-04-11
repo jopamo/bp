@@ -12,7 +12,7 @@ HOMEPAGE="https://pypi.python.org/pypi/MarkupSafe"
 SRC_URI="mirror://pypi/${MY_PN:0:1}/${MY_PN}/${MY_P}.tar.gz"
 
 LICENSE="BSD"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"

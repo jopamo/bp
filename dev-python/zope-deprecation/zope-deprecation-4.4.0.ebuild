@@ -12,7 +12,7 @@ HOMEPAGE="https://pypi.org/project/zope.interface/ https://github.com/zopefounda
 SRC_URI="mirror://pypi/${MY_PN:0:1}/${MY_PN}/${MY_P}.tar.gz"
 
 LICENSE="ZPL"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="test"

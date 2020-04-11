@@ -9,7 +9,7 @@ HOMEPAGE="http://pyxattr.k1024.org/"
 EGIT_REPO_URI="https://github.com/iustin/${PN}.git"
 
 LICENSE="LGPL-2.1"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="test"

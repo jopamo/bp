@@ -9,7 +9,7 @@ HOMEPAGE="http://cython.org https://pypi.python.org/pypi/Cython"
 EGIT_REPO_URI="https://github.com/cython/cython.git"
 
 LICENSE="Apache-2.0"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="test"

@@ -8,8 +8,8 @@ DESCRIPTION="Building powerful interactive command lines in Python"
 HOMEPAGE="https://pypi.org/project/prompt_toolkit/ https://github.com/jonathanslenders/python-prompt-toolkit"
 SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
-SLOT="0"
 LICENSE="BSD"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="test"

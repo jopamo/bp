@@ -12,7 +12,7 @@ HOMEPAGE="https://github.com/zorro3/ConfigArgParse https://pypi.org/project/Conf
 SRC_URI="mirror://pypi/${MY_PN:0:1}/${MY_PN}/${MY_P}.tar.gz"
 
 LICENSE="MIT"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 S=${WORKDIR}/${MY_P}

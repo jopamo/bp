@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/testing-cabal/traceback2"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="PSF-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="

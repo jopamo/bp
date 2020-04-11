@@ -9,7 +9,7 @@ HOMEPAGE="http://www.makotemplates.org/ https://pypi.python.org/pypi/Mako"
 EGIT_REPO_URI="https://github.com/zzzeek/mako.git"
 
 LICENSE="MIT"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="test"

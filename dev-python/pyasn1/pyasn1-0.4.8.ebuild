@@ -9,7 +9,7 @@ HOMEPAGE="http://snmplabs.com/pyasn1/"
 SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="BSD-2"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"

@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/Anorov/PySocks http://pypi.python.org/pypi/PySocks"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="BSD"
-SLOT="0/1"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"

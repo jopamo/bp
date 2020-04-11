@@ -32,7 +32,9 @@ RDEPEND="
 "
 PDEPEND=">=app-net/rsync-2.6.4"
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+PATCHES=( "${FILESDIR}"/disable_layout.conf_dl.patch )
+
+filter-flags -Wl,-z,defs -Wl,-z,relro
 
 pkg_pretend() {
 	local CONFIG_CHECK="~IPC_NS ~PID_NS ~NET_NS"

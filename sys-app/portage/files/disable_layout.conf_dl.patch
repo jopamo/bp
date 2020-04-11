@@ -1,0 +1,32 @@
+diff -urN a/lib/portage/package/ebuild/fetch.py b/lib/portage/package/ebuild/fetch.py
+--- a/lib/portage/package/ebuild/fetch.py	2020-04-11 18:37:40.106140712 -0500
++++ b/lib/portage/package/ebuild/fetch.py	2020-04-11 18:43:23.488335451 -0500
+@@ -498,26 +498,8 @@
+ 			pass
+ 
+ 	ts, data = cache.get(mirror_url, (0, None))
+-	# refresh at least daily
+-	if ts >= time.time() - 86400:
+-		mirror_conf.deserialize(data)
+-	else:
+-		tmpfile = '.layout.conf.%s' % urlparse(mirror_url).hostname
+-		try:
+-			if fetch({tmpfile: (mirror_url + '/distfiles/layout.conf',)},
+-					mysettings, force=1, try_mirrors=0):
+-				tmpfile = os.path.join(mysettings['DISTDIR'], tmpfile)
+-				mirror_conf.read_from_file(tmpfile)
+-			else:
+-				raise IOError()
+-		except (ConfigParserError, IOError, UnicodeDecodeError):
+-			pass
+-		else:
+-			cache[mirror_url] = (time.time(), mirror_conf.serialize())
+-			if cache_path is not None:
+-				f = atomic_ofstream(cache_path, 'w')
+-				json.dump(cache, f)
+-				f.close()
++
++	mirror_conf.deserialize(data)
+ 
+ 	return (mirror_url + "/distfiles/" +
+ 			mirror_conf.get_best_supported_layout().get_path(filename))

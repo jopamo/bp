@@ -16,7 +16,7 @@ IUSE="static-libs"
 
 RDEPEND=">=lib-dev/gmp-5.0.0[static-libs?]"
 
-PATCHES=( ${FILESDIR}/p1.patch )
+PATCHES=( ${FILESDIR}/p2.patch )
 
 src_prepare() {
 	default
@@ -25,15 +25,8 @@ src_prepare() {
 }
 
 src_configure() {
-	# Make sure mpfr doesn't go probing toolchains it shouldn't #476336#19
-	ECONF_SOURCE=${S} \
-	user_redefine_cc=yes \
-	econf \
-		--docdir="\$(datarootdir)/doc/${PF}" \
+	local myconf=(
 		$(use_enable static-libs static)
-}
-
-src_install() {
-	default
-	use static-libs || find "${ED}"/usr -name '*.la' -delete
+	)
+	ECONF_SOURCE=${S} user_redefine_cc=yes econf "${myconf[@]}"
 }

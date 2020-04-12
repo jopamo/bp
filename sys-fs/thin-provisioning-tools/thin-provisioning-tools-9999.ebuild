@@ -2,11 +2,11 @@
 
 EAPI=7
 
-inherit autotools flag-o-matic
+inherit autotools flag-o-matic git-r3
 
 DESCRIPTION="A suite of tools for thin provisioning on Linux"
 HOMEPAGE="https://github.com/jthornber/thin-provisioning-tools"
-SRC_URI="https://github.com/jthornber/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+EGIT_REPO_URI="https://github.com/jthornber/${PN}.git"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -40,12 +40,6 @@ src_configure() {
 	use static && append-ldflags -static
 
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		$(use_enable test testing)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
@@ -53,9 +47,4 @@ src_configure() {
 
 src_test() {
 	emake unit-test
-}
-
-src_install() {
-	emake DESTDIR="${D}" DATADIR="${ED%/}/usr/share" install
-	cleanup_install
 }

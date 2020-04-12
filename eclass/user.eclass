@@ -111,7 +111,7 @@ enewuser() {
 			die "Pass '-1' as the shell parameter"
 		fi
 	else
-		for eshell in /usr/bin/false /usr/sbin/nologin /dev/null ; do
+		for eshell in /usr/sbin/nologin /dev/null ; do
 			[[ -x ${ROOT}${eshell} ]] && break
 		done
 

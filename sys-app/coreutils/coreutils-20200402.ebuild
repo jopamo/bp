@@ -38,16 +38,15 @@ pkg_setup() {
 	fi
 }
 
+src_prepare() {
+	default
+	sed -i.bak -e "s/UNKNOWN/${PV}/g" "configure"
+}
+
 src_configure() {
 	export ac_cv_{header_selinux_{context,flash,selinux}_h,search_setfilecon}=no
 
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		--enable-no-install-program="groups,kill,su,uptime"
 		--enable-install-program=hostname
 		--enable-largefile

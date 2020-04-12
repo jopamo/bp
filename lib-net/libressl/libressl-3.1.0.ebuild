@@ -6,7 +6,8 @@ inherit flag-o-matic
 
 DESCRIPTION="Free version of the SSL/TLS protocol forked from OpenSSL"
 HOMEPAGE="https://www.libressl.org/"
-SRC_URI="https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/${P}.tar.gz"
+SRC_URI="https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/${P}.tar.gz
+		https://www.mirrorservice.org/pub/OpenBSD/LibreSSL/${P}.tar.gz"
 
 LICENSE="ISC openssl"
 SLOT="0"

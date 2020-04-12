@@ -9,7 +9,8 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"
-SLOT=${PV}
+SLOT="0"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="dev-lang/perl
 	>=sys-devel/autoconf-2.69:*

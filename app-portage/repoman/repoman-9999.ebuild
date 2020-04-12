@@ -35,8 +35,6 @@ python_install() {
 	distutils-r1_python_install \
 		--system-prefix="${EPREFIX}/usr" \
 		--bindir="$(python_get_scriptdir)" \
-		--docdir="${EPREFIX}/usr/share/doc/${PF}" \
-		--htmldir="${EPREFIX}/usr/share/doc/${PF}/html" \
 		--sbindir="$(python_get_scriptdir)" \
 		--sysconfdir="${EPREFIX}/etc" \
 		"${@}"

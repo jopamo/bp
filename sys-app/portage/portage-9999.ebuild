@@ -12,7 +12,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bin X gui"
+IUSE="bin devtree X gui"
 
 DEPEND="
 	>=app-compression/tar-1.27
@@ -32,7 +32,7 @@ RDEPEND="
 "
 PDEPEND=">=app-net/rsync-2.6.4"
 
-PATCHES=( "${FILESDIR}"/disable_layout.conf_dl.patch )
+PATCHES=( "${FILESDIR}"/disable_layoutdl.patch )
 
 filter-flags -Wl,-z,defs -Wl,-z,relro
 
@@ -124,6 +124,14 @@ python_install_all() {
 	done
 
 	echo -e "[DEFAULT]\n\
+main-repo = bp\n\n\
+[bp]\n\
+location = /var/db/repos/bp\n\
+sync-type = git\n\
+sync-uri = https://github.com/1g4-linux/bp.git\n\
+auto-sync = yes" > "${ED}"/usr/share/portage/config/repos.conf
+
+	use devtree && echo -e "[DEFAULT]\n\
 main-repo = bp\n\n\
 [bp]\n\
 location = /var/db/repos/bp\n\

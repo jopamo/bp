@@ -30,12 +30,6 @@ src_configure() {
 	use static && append-ldflags -static
 
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		$(use_enable nls)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

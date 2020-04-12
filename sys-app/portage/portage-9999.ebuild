@@ -12,7 +12,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bin devtree X gui"
+IUSE="bin +devtree X gui"
 
 DEPEND="
 	>=app-compression/tar-1.27

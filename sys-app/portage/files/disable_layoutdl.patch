@@ -1,6 +1,31 @@
+diff -urN a/lib/portage/_emirrordist/Config.py b/lib/portage/_emirrordist/Config.py
+--- a/lib/portage/_emirrordist/Config.py	2020-04-11 18:37:40.078140534 -0500
++++ b/lib/portage/_emirrordist/Config.py	2020-04-11 23:54:49.929607717 -0500
+@@ -10,7 +10,6 @@
+ 
+ import portage
+ from portage import os
+-from portage.package.ebuild.fetch import MirrorLayoutConfig
+ from portage.util import grabdict, grablines
+ from portage.util._ShelveUnicodeWrapper import ShelveUnicodeWrapper
+ 
+@@ -73,13 +72,6 @@
+ 			self.deletion_db = self._open_shelve(
+ 				options.deletion_db, 'deletion')
+ 
+-		self.layout_conf = MirrorLayoutConfig()
+-		if options.layout_conf is None:
+-			options.layout_conf = os.path.join(self.distfiles,
+-					'layout.conf')
+-		self.layout_conf.read_from_file(options.layout_conf)
+-		self.layouts = self.layout_conf.get_all_layouts()
+-
+ 	def _open_log(self, log_desc, log_path, mode):
+ 
+ 		if log_path is None or self.options.dry_run:
 diff -urN a/lib/portage/package/ebuild/fetch.py b/lib/portage/package/ebuild/fetch.py
 --- a/lib/portage/package/ebuild/fetch.py	2020-04-11 18:37:40.106140712 -0500
-+++ b/lib/portage/package/ebuild/fetch.py	2020-04-11 18:43:23.488335451 -0500
++++ b/lib/portage/package/ebuild/fetch.py	2020-04-11 23:53:23.673171957 -0500
 @@ -498,26 +498,8 @@
  			pass
  

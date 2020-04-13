@@ -9,7 +9,7 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="dev-lang/perl

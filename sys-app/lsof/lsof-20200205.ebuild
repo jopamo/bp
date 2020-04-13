@@ -8,7 +8,7 @@ MY_P=${P/-/_}
 DESCRIPTION="Lists open files for running Unix processes"
 HOMEPAGE="ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/"
 
-SNAPSHOT=df01ed314cf9e98a62058501684ab54f44c18c42
+SNAPSHOT=ab219db05db2691c61d67665a982f2a594656ec5
 SRC_URI="https://github.com/lsof-org/lsof/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

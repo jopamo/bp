@@ -1,9 +1,0 @@
-# Distributed under the terms of the GNU General Public License v2
-
-# This file contains descriptions of QEMU_SOFTMMU_TARGETS USE_EXPAND flags.
-
-# Keep it sorted.
-
-aarch64 - ARM64 system emulation target
-i386 - system emulation target
-x86_64 - system emulation target

@@ -23,5 +23,4 @@ USE="${USE} xattr acl"
 USE="${USE} pic urandom xtpax -orc crypt -ipv6 ncurses pam readline ssl tcpd systemd threads udev pcre16 device-mapper acpi zlib iscsi caps"
 
 INPUT_DEVICES="libinput"
-VIDEO_CARDS="dummy fbdev v4l"
 LDFLAGS="-Wl,-O1 -Wl,--as-needed"

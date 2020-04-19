@@ -69,9 +69,8 @@ if [[ -n ${WANT_AUTOMAKE} ]]; then
 		# the autoreconf tool, so this requirement is correct.  #401605
 		none) ;;
 		latest)
-			# Use SLOT deps if we can.  For EAPI=0, we get pretty close.
 			if [[ ${EAPI:-0} != 0 ]] ; then
-				_automake_atom="|| ( `printf '>=sys-devel/automake-%s:%s ' ${_LATEST_AUTOMAKE[@]/:/ }` )"
+				_automake_atom="|| ( `printf '>=sys-devel/automake-%s:0 ' ${_LATEST_AUTOMAKE[@]/:/ }` )"
 			else
 				_automake_atom="|| ( `printf '>=sys-devel/automake-%s ' ${_LATEST_AUTOMAKE[@]/%:*}` )"
 			fi

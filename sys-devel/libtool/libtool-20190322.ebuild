@@ -20,7 +20,7 @@ DEPEND="sys-devel/gnuconfig
 
 src_prepare() {
 	default
-	sed -i.bak -e "s/UNKNOWN/${PV}/g" "build-aux/git-version-gen"
+	sed -i -e "s/UNKNOWN/${PV}/g" "build-aux/git-version-gen" || die
 }
 
 src_configure() {

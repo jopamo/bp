@@ -40,7 +40,7 @@ pkg_setup() {
 
 src_prepare() {
 	default
-	sed -i.bak -e "s/UNKNOWN/${PV}/g" "configure"
+	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
 }
 
 src_configure() {

@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 src_prepare() {
 	default
-	sed -i.bak '/schedtool.8/d' Makefile || die
+	sed -i -e '/schedtool.8/d' Makefile || die
 }
 
 src_install() {

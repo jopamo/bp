@@ -23,8 +23,8 @@ DEPEND="${RDEPEND}
 "
 
 src_prepare() {
-	sed -i.bak '/gtkdocize/d' autogen.sh
-	sed -i.bak '/gtk-doc.make/d' docs/reference/Makefile.am
+	sed -i -e '/gtkdocize/d' autogen.sh || die
+	sed -i -e '/gtk-doc.make/d' docs/reference/Makefile.am || die
 
 	NOCONFIGURE=1 ${S}/autogen.sh || die
 	eautoreconf

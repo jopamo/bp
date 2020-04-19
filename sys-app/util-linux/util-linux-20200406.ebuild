@@ -55,7 +55,7 @@ src_prepare() {
 	po/update-potfiles || die
 	default
 	eautoreconf
-	sed -i.bak -e "s/UNKNOWN/${PV}/g" "configure"
+	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
 }
 
 lfs_fallocate_test() {

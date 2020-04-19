@@ -28,7 +28,7 @@ DEPEND="sys-kernel/linux-headers"
 src_prepare() {
 	default
 	eautoreconf
-	sed -i.bak -e "s/0.0.0/$(ver_cut 1).$(ver_cut 2).$(ver_cut 3)/g" "configure"
+	sed -i -e "s/0.0.0/$(ver_cut 1).$(ver_cut 2).$(ver_cut 3)/g" "configure" || die
 }
 
 src_configure() {

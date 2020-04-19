@@ -1,6 +1,6 @@
 diff -urN a/lib/portage/_emirrordist/Config.py b/lib/portage/_emirrordist/Config.py
---- a/lib/portage/_emirrordist/Config.py	2020-04-11 18:37:40.078140534 -0500
-+++ b/lib/portage/_emirrordist/Config.py	2020-04-11 23:54:49.929607717 -0500
+--- a/lib/portage/_emirrordist/Config.py	2020-04-19 12:28:42.525470363 -0500
++++ b/lib/portage/_emirrordist/Config.py	2020-04-19 12:31:26.073937406 -0500
 @@ -10,7 +10,6 @@
  
  import portage
@@ -24,9 +24,34 @@ diff -urN a/lib/portage/_emirrordist/Config.py b/lib/portage/_emirrordist/Config
  
  		if log_path is None or self.options.dry_run:
 diff -urN a/lib/portage/package/ebuild/fetch.py b/lib/portage/package/ebuild/fetch.py
---- a/lib/portage/package/ebuild/fetch.py	2020-04-11 18:37:40.106140712 -0500
-+++ b/lib/portage/package/ebuild/fetch.py	2020-04-11 23:53:23.673171957 -0500
-@@ -498,26 +498,8 @@
+--- a/lib/portage/package/ebuild/fetch.py	2020-04-19 12:28:42.553470443 -0500
++++ b/lib/portage/package/ebuild/fetch.py	2020-04-19 12:38:34.641366922 -0500
+@@ -453,24 +453,13 @@
+ 
+ 	def get_best_supported_layout(self):
+ 		for val in self.structure:
+-			if self.validate_structure(val):
+-				if val[0] == 'flat':
+-					return FlatLayout(*val[1:])
+-				elif val[0] == 'filename-hash':
+-					return FilenameHashLayout(*val[1:])
+-		else:
+-			# fallback
+ 			return FlatLayout()
+ 
+ 	def get_all_layouts(self):
+ 		ret = []
+ 		for val in self.structure:
+ 			if not self.validate_structure(val):
+-				raise ValueError("Unsupported structure: {}".format(val))
+-			if val[0] == 'flat':
+ 				ret.append(FlatLayout(*val[1:]))
+-			elif val[0] == 'filename-hash':
+-				ret.append(FilenameHashLayout(*val[1:]))
+ 		if not ret:
+ 			ret.append(FlatLayout())
+ 		return ret
+@@ -498,26 +487,8 @@
  			pass
  
  	ts, data = cache.get(mirror_url, (0, None))

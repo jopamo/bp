@@ -18,9 +18,9 @@ IUSE="test static-libs"
 filter-flags -flto\=\*
 
 src_prepare() {
-	ln -s "${EROOT}"/usr/share/gettext/config.rpath config.rpath
-	sed -i.bak -e "s/\/sbin/\/usr\/sbin/g" "configure.ac"
-	sed -i.bak -e "s/\/etc\/udev\/rules.d/\/usr\/lib\/udev\/rules.d/g" "configure.ac"
+	ln -s "${EROOT}"/usr/share/gettext/config.rpath config.rpath || die
+	sed -i -e "s/\/sbin/\/usr\/sbin/g" "configure.ac" || die
+	sed -i -e "s/\/etc\/udev\/rules.d/\/usr\/lib\/udev\/rules.d/g" "configure.ac" || die
 	default
 	eautoreconf
 }

@@ -23,7 +23,7 @@ src_prepare() {
 	po/update-potfiles
 	default
 	eautoreconf
-	sed -i.bak -e "s/UNKNOWN/$(git log -1 --format="%at" | xargs -I{} date -d @{} +%Y%m%d)/g" "configure"
+	sed -i -e "s/UNKNOWN/$(git log -1 --format="%at" | xargs -I{} date -d @{} +%Y%m%d)/g" "configure" || die
 }
 
 src_configure() {

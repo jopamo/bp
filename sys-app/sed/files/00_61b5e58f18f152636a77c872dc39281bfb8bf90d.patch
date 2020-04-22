@@ -1,0 +1,73 @@
+From 61b5e58f18f152636a77c872dc39281bfb8bf90d Mon Sep 17 00:00:00 2001
+From: Tobias Stoeckmann <tobias@stoeckmann.org>
+Date: Fri, 17 Jan 2020 20:49:33 +0100
+Subject: [PATCH] sed: handle very long execution lines (tiny change)
+
+If sed is called with an excessively long execution line, then it is
+prone to an out of bounds memory access.
+
+The problem is that the length of the execution line, which is a
+size_t, is temporarily stored in an int. This means that on systems
+which have a 64 bit size_t and a 32 bit int (e.g. linux amd64) an
+execution line which exceeds 2 GB will overflow int. If it is just
+slightly larger than 2 GB, the negative int value is used as an
+array index to finish the execution line string with '\0' which
+therefore triggers the out of bounds access.
+
+This problem is probably never triggered in reality, but can be
+provoked like this (given that 'e' support is compiled in):
+
+$ dd if=/dev/zero bs=1M count=2049 | tr '\0' e > e-command.txt
+$ sed -f e-command.txt /etc/fstab
+Segmentation fault (core dumped)
+
+Also adjust another int/size_t conversion, even though it is a
+purely cosmetic change, because it can never be larger than 4096.
+
+* sed/execute.c (execute_program) [case 'e']: Declare cmd_length
+to be of type size_t, not int.  Likewise for "n" just below.
+* NEWS (Bug fixes): Mention it.
+This addresses https://bugs.gnu.org/39165
+---
+ NEWS          | 5 +++++
+ sed/execute.c | 4 ++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/NEWS b/NEWS
+index 3540282..fe9ca91 100644
+--- a/NEWS
++++ b/NEWS
+@@ -2,6 +2,11 @@ GNU sed NEWS                                    -*- outline -*-
+ 
+ * Noteworthy changes in release ?.? (????-??-??) [?]
+ 
++** Bug fixes
++
++  a program with an execution line longer than 2GB can no longer trigger
++  an out-of-bounds memory write.
++
+ 
+ * Noteworthy changes in release 4.8 (2020-01-14) [stable]
+ 
+diff --git a/sed/execute.c b/sed/execute.c
+index c5f07cc..8f43f2e 100644
+--- a/sed/execute.c
++++ b/sed/execute.c
+@@ -1347,7 +1347,7 @@ execute_program (struct vector *vec, struct input *input)
+               panic (_("`e' command not supported"));
+ #else
+               FILE *pipe_fp;
+-              int cmd_length = cur_cmd->x.cmd_txt.text_length;
++              size_t cmd_length = cur_cmd->x.cmd_txt.text_length;
+               line_reset (&s_accum, NULL);
+ 
+               if (!cmd_length)
+@@ -1367,7 +1367,7 @@ execute_program (struct vector *vec, struct input *input)
+ 
+               {
+                 char buf[4096];
+-                int n;
++                size_t n;
+                 while (!feof (pipe_fp))
+                   if ((n = fread (buf, sizeof (char), 4096, pipe_fp)) > 0)
+                     {

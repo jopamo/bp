@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic toolchain-funcs
+inherit flag-o-matic
 
 DESCRIPTION="Super-useful stream editor"
 HOMEPAGE="http://sed.sourceforge.net/"
@@ -19,6 +19,9 @@ RDEPEND="acl? ( sys-app/acl )
 
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )"
+
+PATCHES=( "${FILESDIR}"/00_61b5e58f18f152636a77c872dc39281bfb8bf90d.patch
+		"${FILESDIR}"/01_acabfdb582330345c05e0500d302e9e99f3eb5e9.patch )
 
 src_bootstrap_sed() {
 	# make sure system-sed works #40786
@@ -38,19 +41,12 @@ src_prepare() {
 }
 
 src_configure() {
-	local myconf=()
-	myconf+=( --exec-prefix="${EPREFIX}" )
-
 	use static && append-ldflags -static
-	myconf+=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}/etc"
-		--localstatedir="${EPREFIX}/var"
+
+	myconf=(
 		$(use_enable acl)
 		$(use_enable nls)
+		--exec-prefix="${EPREFIX}"
 	)
 	econf "${myconf[@]}"
 }

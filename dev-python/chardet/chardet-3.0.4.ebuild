@@ -11,22 +11,3 @@ SRC_URI="https://github.com/chardet/chardet/archive/${PV}.tar.gz -> ${P}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-IUSE="test"
-
-RESTRICT="!test? ( test )"
-
-RDEPEND="
-	dev-python/setuptools[${PYTHON_USEDEP}]
-"
-
-DEPEND="${RDEPEND}
-	test? (
-		dev-python/pytest[${PYTHON_USEDEP}]
-		dev-python/hypothesis[${PYTHON_USEDEP}]
-	)
-"
-
-python_test() {
-	py.test -v || die "Tests fail with ${EPYTHON}"
-}

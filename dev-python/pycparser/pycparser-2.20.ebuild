@@ -12,12 +12,9 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="test"
-
 RDEPEND="dev-python/ply:=[${PYTHON_USEDEP}]"
 DEPEND="${RDEPEND}
-	dev-python/setuptools[${PYTHON_USEDEP}]
-	test? ( dev-python/nose[${PYTHON_USEDEP}] )"
+	dev-python/setuptools[${PYTHON_USEDEP}]"
 
 python_prepare_all() {
 	# remove the original files to guarantee their regen
@@ -38,9 +35,4 @@ python_compile() {
 	pushd "${BUILD_DIR}"/lib/pycparser > /dev/null || die
 	"${PYTHON}" _build_tables.py || die
 	popd > /dev/null || die
-}
-
-python_test() {
-	# change workdir to avoid '.' import
-	nosetests -v -w tests || die
 }

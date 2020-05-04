@@ -7,23 +7,9 @@ inherit distutils-r1
 MY_P=${PN}-rel-${PV}
 DESCRIPTION="A Python module to deal with freedesktop.org specifications"
 HOMEPAGE="https://freedesktop.org/wiki/Software/pyxdg https://cgit.freedesktop.org/xdg/pyxdg/"
-# official mirror of the git repo
 SRC_URI="https://github.com/takluyver/pyxdg/archive/rel-${PV}.tar.gz -> ${MY_P}.tar.gz"
+S=${WORKDIR}/${MY_P}
 
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-IUSE="test"
-
-DEPEND="
-	test? (
-		dev-python/nose[${PYTHON_USEDEP}]
-		x11-themes/hicolor-icon-theme
-	)"
-
-S=${WORKDIR}/${MY_P}
-
-python_test() {
-	nosetests -v || die
-}

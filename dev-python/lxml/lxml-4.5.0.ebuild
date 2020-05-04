@@ -12,14 +12,11 @@ LICENSE="BSD ElementTree GPL-2 PSF-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="test"
-
 RDEPEND="
 	>=lib-dev/libxml2-2.9.2
 	>=lib-dev/libxslt-1.1.28"
 DEPEND="${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
-	test? ( dev-python/cssselect[${PYTHON_USEDEP}] )
 	"
 
 DISTUTILS_IN_SOURCE_BUILD=1
@@ -45,14 +42,6 @@ python_compile() {
 	fi
 	tc-export PKG_CONFIG
 	distutils-r1_python_compile
-}
-
-python_test() {
-	cp -r -l src/lxml/tests "${BUILD_DIR}"/lib/lxml/ || die
-	cp -r -l src/lxml/html/tests "${BUILD_DIR}"/lib/lxml/html/ || die
-	ln -s "${S}"/doc "${BUILD_DIR}"/ || die
-
-	"${EPYTHON}" test.py -vv --all-levels -p || die "Test ${test} fails with ${EPYTHON}"
 }
 
 python_install_all() {

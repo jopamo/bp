@@ -22,18 +22,10 @@ IUSE="static-libs test"
 
 RESTRICT="!test? ( test )"
 
-DEPEND="
-	test? (
-		dev-libs/atf
-		dev-util/kyua
-	)
-"
-
 src_prepare() {
 	default
 	eautoreconf
 }
-
 
 src_test() {
 	unset PKG_CONFIG_LIBDIR PKG_CONFIG_PATH
@@ -42,6 +34,6 @@ src_test() {
 
 src_install() {
 	default
-	dosym pkgconf /usr/bin/pkg-config
+	dosym pkgconf usr/bin/pkg-config
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

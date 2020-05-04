@@ -8,19 +8,14 @@ inherit git-r3 autotools linux-info flag-o-matic python-any-r1 systemd user
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="https://dbus.freedesktop.org/"
 EGIT_REPO_URI="https://gitlab.freedesktop.org/dbus/dbus.git"
-#EGIT_BRANCH="dbus-1.14"
 
 LICENSE="|| ( AFL-2.1 GPL-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug doc static-libs systemd test user-session X"
+IUSE="debug static-libs systemd test user-session X"
 
 #RESTRICT="test"
-
-REQUIRED_USE="
-	test? ( debug )
-"
 
 CDEPEND="
 	>=lib-dev/expat-2.1.0
@@ -34,7 +29,6 @@ DEPEND="${CDEPEND}
 	lib-dev/expat
 	sys-devel/autoconf-archive
 	dev-util/pkgconf
-	doc? ( app-text/doxygen )
 	test? (
 		>=lib-dev/glib-2.40:2
 		${PYTHON_DEPS}

@@ -9,16 +9,9 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="static-libs test"
 
-DEPEND="dev-util/pkgconf
-	test? ( lib-dev/check )"
+IUSE="static-libs test"
 
 src_configure() {
 	econf $(use_enable static-libs static)
-}
-
-src_install() {
-	default
-	find "${ED}" -name "*.la" -delete || die
 }

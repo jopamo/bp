@@ -12,8 +12,6 @@ LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="test"
-
 RDEPEND="
 	>=dev-python/sqlalchemy-0.9[${PYTHON_USEDEP}]
 	>=dev-python/whoosh-2.0[${PYTHON_USEDEP}]
@@ -23,19 +21,9 @@ RDEPEND="
 PDEPEND="
 	>=dev-python/sphinx-1.5.3[${PYTHON_USEDEP}]"
 DEPEND="
-	dev-python/setuptools[${PYTHON_USEDEP}]
-	test? (
-		${RDEPEND}
-		${PDEPEND}
-		dev-python/tox[${PYTHON_USEDEP}]
-		dev-python/pytest[${PYTHON_USEDEP}]
-	)"
+	dev-python/setuptools[${PYTHON_USEDEP}]"
 
 python_install_all() {
 	distutils-r1_python_install_all
 	find "${ED}" -name '*.pth' -delete || die
-}
-
-python_test() {
-	"${EPYTHON}" -m pytest tests/ || die "Tests fail with ${EPYTHON}"
 }

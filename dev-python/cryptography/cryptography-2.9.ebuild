@@ -12,8 +12,6 @@ LICENSE="|| ( Apache-2.0 BSD )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="test"
-
 RDEPEND="
 	virtual/ssl
 	$(python_gen_cond_dep '>=dev-python/cffi-1.7:=[${PYTHON_USEDEP}]' 'python*')
@@ -23,23 +21,10 @@ RDEPEND="
 	>=dev-python/six-1.4.1[${PYTHON_USEDEP}]"
 
 DEPEND="${RDEPEND}
-	>=dev-python/setuptools-1.0[${PYTHON_USEDEP}]
-	test? (
-		~dev-python/cryptography-vectors-${PV}[${PYTHON_USEDEP}]
-		dev-python/hypothesis[${PYTHON_USEDEP}]
-		dev-python/iso8601[${PYTHON_USEDEP}]
-		dev-python/pretend[${PYTHON_USEDEP}]
-		dev-python/pyasn1-modules[${PYTHON_USEDEP}]
-		>=dev-python/pytest-2.9.0[${PYTHON_USEDEP}]
-		dev-python/pytz[${PYTHON_USEDEP}]
-	)"
+	>=dev-python/setuptools-1.0[${PYTHON_USEDEP}]"
 
 filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
 
 python_configure_all() {
 	append-cflags $(test-flags-CC -pthread)
-}
-
-python_test() {
-	py.test -v -v -x || die "Tests fail with ${EPYTHON}"
 }

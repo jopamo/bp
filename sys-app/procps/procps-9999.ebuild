@@ -12,18 +12,14 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+kill modern-top nls +ncurses static-libs systemd test unicode"
+IUSE="+kill modern-top nls +ncurses static-libs systemd unicode"
 
-COMMON_DEPEND="
+DEPEND="
 	ncurses? ( lib-sys/ncurses )
 	systemd? ( sys-app/systemd )
 "
-DEPEND="${COMMON_DEPEND}
-	ncurses? ( dev-util/pkgconf )
-	systemd? ( dev-util/pkgconf )
-	test? ( dev-util/dejagnu )"
+
 RDEPEND="
-	${COMMON_DEPEND}
 	kill? (
 		!sys-app/coreutils[kill]
 		!sys-app/util-linux[kill]
@@ -48,8 +44,4 @@ src_configure() {
 		$(use_enable unicode watch8bit)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-src_test() {
-	emake check </dev/null
 }

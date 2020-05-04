@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit meson flag-o-matic python-single-r1 git-r3
+inherit meson flag-o-matic git-r3
 
 DESCRIPTION="An interface for filesystems implemented in userspace"
 HOMEPAGE="https://github.com/libfuse/libfuse"
@@ -12,22 +12,7 @@ LICENSE="GPL-2 LGPL-2.1"
 SLOT="3"
 KEYWORDS="amd64 arm64"
 
-IUSE="test"
-
-REQUIRED_USE="${PYTHON_REQUIRED_USE}"
-
-DEPEND="dev-util/pkgconf
-	test? (
-		${PYTHON_DEPS}
-		dev-python/pytest[${PYTHON_USEDEP}]
-	)
-		"
-
 filter-flags -flto\=\*
-
-src_test() {
-	python3 -m pytest test || die
-}
 
 src_install() {
 	meson_src_install

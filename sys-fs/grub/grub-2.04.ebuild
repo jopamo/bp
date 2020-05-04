@@ -12,7 +12,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug device-mapper efiemu mount nls static sdl test libzfs"
+IUSE="debug device-mapper efiemu mount nls static sdl libzfs"
 
 GRUB_ALL_PLATFORMS=( coreboot efi-32 efi-64 emu ieee1275 loongson multiboot qemu qemu-mips pc uboot xen xen-32 )
 IUSE+=" ${GRUB_ALL_PLATFORMS[@]/#/grub_platforms_}"
@@ -37,16 +37,6 @@ DEPEND="${RDEPEND}
 	static? (
 		app-compression/xz-utils[static-libs(+)]
 	)
-	test? (
-		sys-app/genromfs
-		app-compression/cpio
-		app-compression/lzop
-		app-misc/qemu
-		lib-dev/libisoburn
-		sys-app/miscfiles
-		sys-app/parted
-		sys-fs/squashfs-tools
-	)
 "
 RDEPEND+="
 	grub_platforms_efi-32? ( sys-app/efibootmgr )
@@ -55,8 +45,6 @@ RDEPEND+="
 "
 
 DEPEND+=" !!=lib-media/freetype-2.5.4"
-
-RESTRICT="strip !test? ( test )"
 
 QA_EXECSTACK="usr/bin/grub*-emu* usr/lib/grub/*"
 QA_WX_LOAD="usr/lib/grub/*"
@@ -156,12 +144,6 @@ src_compile() {
 	use libzfs && addpredict /etc/dfs:/dev/zfs
 
 	grub_do emake
-}
-
-src_test() {
-	# The qemu dependency is a bit complex.
-	# You will need to adjust QEMU_SOFTMMU_TARGETS to match the cpu/platform.
-	grub_do emake check
 }
 
 src_install() {

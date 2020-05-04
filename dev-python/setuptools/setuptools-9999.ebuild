@@ -18,17 +18,6 @@ fi
 LICENSE="MIT"
 SLOT="0"
 
-IUSE="test"
-
-DEPEND="test? (
-		dev-python/pip[${PYTHON_USEDEP}]
-		>=dev-python/pytest-2.8[${PYTHON_USEDEP}]
-		dev-python/pytest-fixture-config[${PYTHON_USEDEP}]
-		dev-python/pytest-virtualenv[${PYTHON_USEDEP}]
-		>=dev-python/backports-unittest-mock-1.2[${PYTHON_USEDEP}]
-		dev-python/wheel[${PYTHON_USEDEP}]
-	)"
-
 PDEPEND="
 	>=dev-python/certifi-2016.9.26[${PYTHON_USEDEP}]"
 

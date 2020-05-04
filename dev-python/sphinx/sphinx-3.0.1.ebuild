@@ -12,7 +12,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="net test"
+IUSE="net"
 
 RDEPEND="
 	>=dev-python/alabaster-0.7.9[${PYTHON_USEDEP}]
@@ -33,19 +33,7 @@ RDEPEND="
 		>=dev-python/whoosh-2.0[${PYTHON_USEDEP}]
 	)"
 DEPEND="${RDEPEND}
-	dev-python/setuptools[${PYTHON_USEDEP}]
-	test? (
-		dev-python/sphinxcontrib-websupport[${PYTHON_USEDEP}]
-		dev-python/flake8[${PYTHON_USEDEP}]
-		dev-python/html5lib[${PYTHON_USEDEP}]
-		dev-python/pytest[${PYTHON_USEDEP}]
-		dev-python/pytest-cov[${PYTHON_USEDEP}]
-		dev-python/simplejson[${PYTHON_USEDEP}]
-		>=dev-python/sqlalchemy-0.9[${PYTHON_USEDEP}]
-		>=dev-python/whoosh-2.0[${PYTHON_USEDEP}]
-		virtual/imagemagick-tools[jpeg,png,svg]
-		virtual/python-enum34[${PYTHON_USEDEP}]
-	)"
+	dev-python/setuptools[${PYTHON_USEDEP}]"
 
 S="${WORKDIR}/${P^}"
 
@@ -66,12 +54,4 @@ python_compile() {
 	pushd "${BUILD_DIR}"/lib >/dev/null || die
 	"${EPYTHON}" -m sphinx.pycode.__init__ || die "Grammar generation failed."
 	popd >/dev/null || die
-}
-
-python_test() {
-	mkdir -p "${BUILD_DIR}/sphinx_tempdir" || die
-	local -x SPHINX_TEST_TEMPDIR="${BUILD_DIR}/sphinx_tempdir"
-	cp -r -l tests "${BUILD_DIR}"/ || die "Failed to copy tests"
-	cp Makefile "${BUILD_DIR}"/ || die "Failed to copy Makefile"
-	emake test
 }

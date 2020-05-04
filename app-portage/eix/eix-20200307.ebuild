@@ -2,11 +2,14 @@
 
 EAPI=7
 
-inherit meson tmpfiles git-r3
+inherit meson tmpfiles
 
 DESCRIPTION="Search and query ebuilds"
 HOMEPAGE="https://github.com/vaeth/eix/"
-EGIT_REPO_URI="https://github.com/vaeth/${PN}.git"
+
+SNAPSHOT=6707bc479ca05aa7289ce2c9de6e5ca8e753d1d6
+SRC_URI="https://github.com/vaeth/eix/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"

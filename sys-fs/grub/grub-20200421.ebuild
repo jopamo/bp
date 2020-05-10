@@ -2,11 +2,11 @@
 
 EAPI=7
 
-inherit autotools flag-o-matic multibuild toolchain-funcs
+inherit flag-o-matic multibuild toolchain-funcs
 
 DESCRIPTION="GNU GRUB boot loader"
 HOMEPAGE="https://www.gnu.org/software/grub/"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug device-mapper efiemu mount nls static sdl libzfs"
 
-GRUB_ALL_PLATFORMS=( coreboot efi-32 efi-64 emu ieee1275 loongson multiboot qemu qemu-mips pc uboot xen xen-32 )
+GRUB_ALL_PLATFORMS=( efi-64 )
 IUSE+=" ${GRUB_ALL_PLATFORMS[@]/#/grub_platforms_}"
 
 RDEPEND="
@@ -32,15 +32,12 @@ DEPEND="${RDEPEND}
 	sys-devel/bison
 	sys-app/help2man
 	sys-devel/texinfo
-	grub_platforms_xen? ( app-misc/xen-tools:= )
-	grub_platforms_xen-32? ( app-misc/xen-tools:= )
 	static? (
 		app-compression/xz-utils[static-libs(+)]
 	)
 "
 RDEPEND+="
-	grub_platforms_efi-32? ( sys-app/efibootmgr )
-	grub_platforms_efi-64? ( sys-app/efibootmgr )
+	sys-app/efibootmgr
 	nls? ( sys-devel/gettext )
 "
 
@@ -49,18 +46,6 @@ DEPEND+=" !!=lib-media/freetype-2.5.4"
 QA_EXECSTACK="usr/bin/grub*-emu* usr/lib/grub/*"
 QA_WX_LOAD="usr/lib/grub/*"
 QA_MULTILIB_PATHS="usr/lib/grub/.*"
-
-PATCHES=( 	"${FILESDIR}/01_f2b9083f859c7dbf44a7a8e96ee0cf202f9a4187.patch"
-			"${FILESDIR}/02_dabdfa1c6a80639197d05f683a445fa8615517fe.patch"
-			"${FILESDIR}/03_261df54f170c6d87258eb37ef17d62690720696b.patch"
-			"${FILESDIR}/04_688023cd0ac4c985fd0e2ec477fcf1ec33a0e49c.patch"
-			"${FILESDIR}/05_15cfd02b74e862bda20626a6e4e2f8a1d201733a.patch"
-)
-
-src_prepare() {
-	default
-	eautoreconf
-}
 
 grub_do() {
 	multibuild_foreach_variant run_in_build_dir "$@"
@@ -75,16 +60,11 @@ grub_configure() {
 
 	case ${MULTIBUILD_VARIANT} in
 		efi*) platform=efi ;;
-		xen*) platform=xen ;;
 		guessed) ;;
 		*) platform=${MULTIBUILD_VARIANT} ;;
 	esac
 
 	case ${MULTIBUILD_VARIANT} in
-		*-32)
-			if [[ ${CTARGET:-${CHOST}} == x86_64* ]]; then
-				local CTARGET=i386
-			fi ;;
 		*-64)
 			if [[ ${CTARGET:-${CHOST}} == i?86* ]]; then
 				local CTARGET=x86_64

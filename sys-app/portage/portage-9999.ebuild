@@ -32,8 +32,6 @@ RDEPEND="
 "
 PDEPEND=">=app-net/rsync-2.6.4"
 
-PATCHES=( "${FILESDIR}"/disable_layoutdl.patch )
-
 filter-flags -Wl,-z,defs -Wl,-z,relro
 
 pkg_pretend() {

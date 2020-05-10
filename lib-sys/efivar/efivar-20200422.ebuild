@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT=0e42eb90521c8cd4f67196c6620c0672c1106f2c
+SNAPSHOT=f0d3ed17ef3b2bbdfdff4dde12ec0a82d1ccdd33
 
 DESCRIPTION="Tools and library to manipulate EFI variables"
 HOMEPAGE="https://github.com/rhboot/efivar"

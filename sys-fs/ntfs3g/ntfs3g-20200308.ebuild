@@ -8,7 +8,8 @@ inherit linux-info autotools
 
 DESCRIPTION="Open source read-write NTFS driver that runs under FUSE"
 HOMEPAGE="http://www.tuxera.com/community/ntfs-3g-download/"
-SRC_URI="https://sourceforge.net/code-snapshots/git/n/nt/ntfs-3g/ntfs-3g.git/ntfs-3g-ntfs-3g-${SNAPSHOT}.zip -> ${P}.zip"
+SRC_URI="https://sourceforge.net/code-snapshots/git/n/nt/ntfs-3g/ntfs-3g.git/ntfs-3g-ntfs-3g-${SNAPSHOT}.zip -> ${P}.zip
+	https://1g4.org/files/${P}.zip"
 
 S=${WORKDIR}/ntfs-3g-ntfs-3g-${SNAPSHOT}
 

@@ -6,15 +6,15 @@ inherit flag-o-matic multibuild toolchain-funcs
 
 DESCRIPTION="GNU GRUB boot loader"
 HOMEPAGE="https://www.gnu.org/software/grub/"
-SRC_URI="https://1g4.org/files/${P}.tar.xz"
+SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug device-mapper efiemu mount nls static sdl libzfs"
+IUSE="debug device-mapper efiemu mount nls static sdl"
 
-GRUB_ALL_PLATFORMS=( efi-64 )
+GRUB_ALL_PLATFORMS=( efi-64 qemu pc )
 IUSE+=" ${GRUB_ALL_PLATFORMS[@]/#/grub_platforms_}"
 
 RDEPEND="
@@ -24,7 +24,6 @@ RDEPEND="
 		sdl? ( lib-media/libsdl )
 	)
 	device-mapper? ( >=sys-fs/lvm2-2.02.45 )
-	libzfs? ( sys-fs/zfs )
 	mount? ( =sys-fs/fuse-2.9.9999 )
 "
 DEPEND="${RDEPEND}
@@ -42,6 +41,8 @@ RDEPEND+="
 "
 
 DEPEND+=" !!=lib-media/freetype-2.5.4"
+
+RESTRICT="strip"
 
 QA_EXECSTACK="usr/bin/grub*-emu* usr/lib/grub/*"
 QA_WX_LOAD="usr/lib/grub/*"
@@ -83,7 +84,6 @@ grub_configure() {
 		$(use_enable nls)
 		--disable-grub-themes
 		--disable-grub-mkfont
-		$(use_enable libzfs)
 		$(use sdl && use_enable debug grub-emu-sdl)
 		${platform:+--with-platform=}${platform}
 
@@ -120,9 +120,6 @@ src_configure() {
 }
 
 src_compile() {
-	# Sandbox bug 404013.
-	use libzfs && addpredict /etc/dfs:/dev/zfs
-
 	grub_do emake
 }
 

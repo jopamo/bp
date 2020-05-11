@@ -4,23 +4,31 @@ EAPI=7
 
 inherit git-r3
 
-EGIT_REPO_URI="https://git.kernel.org/pub/scm/linux/kernel/git/firmware/${PN}.git"
 DESCRIPTION="Linux firmware files"
 HOMEPAGE="https://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git"
-KEYWORDS="amd64 arm64"
+EGIT_REPO_URI="https://git.kernel.org/pub/scm/linux/kernel/git/firmware/${PN}.git"
+
 LICENSE="linux-firmware ( BSD ISC MIT no-source-code ) GPL-2 GPL-2+ freedist"
 SLOT="0"
+KEYWORDS="amd64 arm64"
+
+IUSE="amdgpu qcom netronome liquidio iwlwifi intel qed brcm ath10k
+	mellanox dpaa2 bnx2x mrvl ti i915 radeon cxgb4 mediatek nvidia
+	ueagle-atm libertas bnx2"
+
+RESTRICT="strip"
 
 QA_PREBUILT="lib/firmware/*"
 
 src_prepare() {
 	default
-	echo "# Remove files that shall not be installed from this list." > ${PN}.conf
-	find * \( \! -type d -and \! -name ${PN}.conf \) >> ${PN}.conf
+
+	for x in ${IUSE} ; do
+		use ${x} || rm -rf ${x}*
+	done
 }
 
 src_install() {
-	rm ${PN}.conf || die
 	insinto /usr/lib/firmware/
 	doins -r *
 }

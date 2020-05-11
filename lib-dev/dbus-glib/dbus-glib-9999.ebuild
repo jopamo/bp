@@ -11,17 +11,15 @@ EGIT_REPO_URI="https://github.com/freedesktop/dbus-glib.git"
 LICENSE="|| ( GPL-2 AFL-2.1 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="debug static-libs test"
 
-CDEPEND="
-	>=lib-dev/expat-2.1.0-r3
+DEPEND=">=lib-dev/expat-2.1.0-r3
 	>=lib-dev/glib-2.34.3:2
-	>=sys-app/dbus-1.8
-"
-DEPEND="${CDEPEND}
-	>=dev-util/gtk-doc-am-1.14
-	dev-util/pkgconf
-"
+	>=sys-app/dbus-1.8"
+
+BDEPEND="dev-util/gtk-doc
+	dev-util/pkgconf"
 
 src_prepare() {
 	eautoreconf

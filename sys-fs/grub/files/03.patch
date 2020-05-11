@@ -1,0 +1,68 @@
+From 42acdd3b405c44d08439a3bbfdbd3466049d172d Mon Sep 17 00:00:00 2001
+From: Michael Chang <MChang@suse.com>
+Date: Tue, 5 Nov 2019 09:19:26 +0000
+Subject: hostdisk: Set linux file descriptor to O_CLOEXEC as default
+
+We are often bothered by this sort of lvm warning while running grub-install
+every now and then:
+
+  File descriptor 4 (/dev/vda1) leaked on vgs invocation. Parent PID 1991: /usr/sbin/grub2-install
+
+The requirement related to the warning is dictated in the lvm man page:
+
+  "On invocation, lvm requires that only the standard file descriptors stdin,
+  stdout and stderr are available.  If others are found, they get closed and
+  messages are issued warning about the leak.  This warning can be suppressed by
+  setting the environment variable LVM_SUPPRESS_FD_WARNINGS."
+
+While it could be disabled through settings, most Linux distributions seem to
+enable it by default and the justification provided by the developer looks to
+be valid to me: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=466138#15
+
+Rather than trying to close and reopen the file descriptor to the same file
+multiple times, which is rather cumbersome, for the sake of no vgs invocation
+could happen in between. This patch enables the close-on-exec flag (O_CLOEXEC)
+for new file descriptor returned by the open() system call, making it closed
+thus not inherited by the child process forked and executed by the exec()
+family of functions.
+
+Fixes Debian bug #466138.
+
+Signed-off-by: Michael Chang <mchang@suse.com>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ grub-core/osdep/linux/hostdisk.c | 3 +++
+ grub-core/osdep/unix/hostdisk.c  | 3 +++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/grub-core/osdep/linux/hostdisk.c b/grub-core/osdep/linux/hostdisk.c
+index 8b92f8528..da62f924e 100644
+--- a/grub-core/osdep/linux/hostdisk.c
++++ b/grub-core/osdep/linux/hostdisk.c
+@@ -366,6 +366,9 @@ grub_util_fd_open_device (const grub_disk_t disk, grub_disk_addr_t sector, int f
+ #ifdef O_BINARY
+   flags |= O_BINARY;
+ #endif
++#ifdef O_CLOEXEC
++  flags |= O_CLOEXEC;
++#endif
+ 
+   /* Linux has a bug that the disk cache for a whole disk is not consistent
+      with the one for a partition of the disk.  */
+diff --git a/grub-core/osdep/unix/hostdisk.c b/grub-core/osdep/unix/hostdisk.c
+index 91150969b..3a00d7451 100644
+--- a/grub-core/osdep/unix/hostdisk.c
++++ b/grub-core/osdep/unix/hostdisk.c
+@@ -164,6 +164,9 @@ grub_util_fd_open (const char *os_dev, int flags)
+ #ifdef O_BINARY
+   flags |= O_BINARY;
+ #endif
++#ifdef O_CLOEXEC
++  flags |= O_CLOEXEC;
++#endif
+ 
+   return open (os_dev, flags, S_IROTH | S_IRGRP | S_IRUSR | S_IWUSR);
+ }
+-- 
+cgit v1.2.1
+

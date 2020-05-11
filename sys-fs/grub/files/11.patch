@@ -1,0 +1,32 @@
+From f0f97576e02208eb947c8da4bd14c54ea3573109 Mon Sep 17 00:00:00 2001
+From: Peter Jones <pjones@redhat.com>
+Date: Wed, 4 Mar 2020 12:58:44 +0100
+Subject: normal/completion: Fix possible NULL pointer dereference
+
+Coverity Scan reports that the grub_strrchr() function can return NULL if
+the character is not found. Check if that's the case for dirfile pointer.
+
+Signed-off-by: Peter Jones <pjones@redhat.com>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ grub-core/normal/completion.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/grub-core/normal/completion.c b/grub-core/normal/completion.c
+index 596102848..c07100a8d 100644
+--- a/grub-core/normal/completion.c
++++ b/grub-core/normal/completion.c
+@@ -284,7 +284,8 @@ complete_file (void)
+ 
+       /* Cut away the filename part.  */
+       dirfile = grub_strrchr (dir, '/');
+-      dirfile[1] = '\0';
++      if (dirfile)
++	dirfile[1] = '\0';
+ 
+       /* Iterate the directory.  */
+       (fs->fs_dir) (dev, dir, iterate_dir, NULL);
+-- 
+cgit v1.2.1
+

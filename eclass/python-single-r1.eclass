@@ -1,8 +1,6 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_8 )
-
 # @ECLASS: python-single-r1.eclass
 # @MAINTAINER:
 # Python team <python@gentoo.org>

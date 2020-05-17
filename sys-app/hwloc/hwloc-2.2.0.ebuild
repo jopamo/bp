@@ -2,19 +2,11 @@
 
 EAPI=7
 
-inherit autotools flag-o-matic
+inherit flag-o-matic
 
 DESCRIPTION="displays the hardware topology in convenient formats"
 HOMEPAGE="http://www.open-mpi.org/projects/hwloc/"
-
-if [[ ${PV} == "9999" ]] ; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/open-mpi/${PN}.git"
-
-else
-	SRC_URI="https://download.open-mpi.org/release/hwloc/v2.0/hwloc-${PV}.tar.bz2"
-	S="${WORKDIR}/${PN}-${PN}-${PV}"
-fi
+SRC_URI="https://download.open-mpi.org/release/hwloc/v2.2/${P}.tar.bz2"
 
 LICENSE="BSD"
 SLOT="0"
@@ -25,7 +17,7 @@ IUSE="cairo cuda debug gl +numa +pci plugins svg static-libs xml X"
 RDEPEND="
 	>=lib-sys/ncurses-5.9-r3:0
 	cairo? ( >=lib-gui/cairo-1.12.14-r4 )
-	cuda? ( >=nvidia/nvidia-cuda-toolkit-6.5.19-r1 )
+	cuda? ( nvidia/nvidia-cuda )
 	gl? ( nvidia/nvidia-drivers[static-libs]  )
 	pci? (
 		>=sys-app/pciutils-3.3.0-r2
@@ -39,7 +31,6 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
 	default
-	eautoreconf
 
 	if use cuda ; then
 		append-cflags -I"${EPREFIX}"/opt/cuda/include

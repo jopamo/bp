@@ -1,0 +1,27 @@
+From eaada0bc9e1cc8adb3a0260707d9474a3e01b835 Mon Sep 17 00:00:00 2001
+From: Romain Perier <romain.perier@gmail.com>
+Date: Fri, 20 Mar 2020 17:43:17 +0100
+Subject: tests: Add f2fs to the fs probe test
+
+Signed-off-by: Romain Perier <romain.perier@gmail.com>
+Signed-off-by: Brian C. Lane <bcl@redhat.com>
+---
+ tests/t1700-probe-fs.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/t1700-probe-fs.sh b/tests/t1700-probe-fs.sh
+index 1fe3309..9150a37 100755
+--- a/tests/t1700-probe-fs.sh
++++ b/tests/t1700-probe-fs.sh
+@@ -23,7 +23,7 @@ dev=loop-file
+ ss=$sector_size_
+ n_sectors=$((512*1024))
+ 
+-for type in ext2 ext3 ext4 btrfs xfs nilfs2 ntfs vfat hfsplus udf; do
++for type in ext2 ext3 ext4 btrfs xfs nilfs2 ntfs vfat hfsplus udf f2fs; do
+ 
+   ( mkfs.$type 2>&1 | grep -i '^usage' ) > /dev/null \
+       || { warn_ "$ME: no $type support"; continue; }
+-- 
+cgit v1.2.1
+

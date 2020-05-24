@@ -6,14 +6,11 @@ inherit git-r3 flag-o-matic
 
 DESCRIPTION="Core binutils libraries (libbfd, libopcodes, libiberty) for external packages"
 HOMEPAGE="https://sourceware.org/binutils/"
-
-EGIT_REPO_URI="https://github.com/1g4-linux/binutils-gdb.git"
+EGIT_REPO_URI="https://github.com/1g4-mirror/binutils-gdb.git"
 EGIT_BRANCH="binutils-$(ver_cut 1)_$(ver_cut 2)-branch"
 
-SLOT="0"
-
 LICENSE="|| ( GPL-3 LGPL-3 )"
-
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"

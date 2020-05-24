@@ -6,7 +6,7 @@ inherit flag-o-matic python-single-r1 git-r3
 
 DESCRIPTION="GNU debugger"
 HOMEPAGE="https://sourceware.org/gdb/"
-EGIT_REPO_URI="https://github.com/1g4-linux/binutils-gdb.git"
+EGIT_REPO_URI="https://github.com/1g4-mirror/binutils-gdb.git"
 EGIT_BRANCH="gdb-$(ver_cut 1).$(ver_cut 2)-branch"
 
 LICENSE="GPL-2 LGPL-2"
@@ -14,6 +14,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="+client lzma multitarget nls +python +server test vanilla xml"
+
 REQUIRED_USE="
 	python? ( ${PYTHON_REQUIRED_USE} )
 	|| ( client server )

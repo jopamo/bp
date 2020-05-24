@@ -6,7 +6,7 @@ inherit autotools git-r3
 
 DESCRIPTION="utils for managing LZMA compressed files"
 HOMEPAGE="http://tukaani.org/xz/"
-EGIT_REPO_URI="https://github.com/1g4-linux/xz.git"
+EGIT_REPO_URI="https://github.com/1g4-mirror/xz.git"
 EGIT_BRANCH="v$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="public-domain LGPL-2.1+ GPL-2+"

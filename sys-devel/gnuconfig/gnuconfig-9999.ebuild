@@ -6,12 +6,11 @@ inherit git-r3
 
 DESCRIPTION="Updated config.sub and config.guess file from GNU"
 HOMEPAGE="https://savannah.gnu.org/projects/config"
-
-EGIT_REPO_URI="https://github.com/1g4-linux/gnuconfig.git"
-KEYWORDS="amd64 arm64"
+EGIT_REPO_URI="https://github.com/1g4-mirror/gnuconfig.git"
 
 LICENSE="GPL-2"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 src_compile() { :;}
 

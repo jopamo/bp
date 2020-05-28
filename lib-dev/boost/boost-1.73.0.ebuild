@@ -34,8 +34,6 @@ RESTRICT="test"
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.71.0-disable_icu_rpath.patch
 	"${FILESDIR}"/${PN}-1.71.0-build-auto_index-tool.patch
-	"${FILESDIR}"/${PN}-1.72.0-missing-serialization-split_member-include.patch
-	"${FILESDIR}"/${PN}-1.72.0-revert-cease-dependence-on-range.patch
 )
 
 append-cxxflags -std=c++14

@@ -4,7 +4,13 @@ EAPI=7
 
 DESCRIPTION="A command line tool and library for transferring data with URL syntax"
 HOMEPAGE="https://curl.haxx.se/"
-SRC_URI="https://curl.haxx.se/download/${P}.tar.bz2"
+
+if [[ ${PV} == *9999 ]] ; then
+	inherit git-r3 autotools
+	EGIT_REPO_URI="https://github.com/curl/curl.git"
+else
+	SRC_URI="https://curl.haxx.se/download/${P}.tar.bz2"
+fi
 
 LICENSE="MIT"
 SLOT="0"
@@ -28,6 +34,14 @@ DEPEND="${RDEPEND}
 	)"
 
 PATCHES=( "${FILESDIR}"/curl-respect-cflags-3.patch )
+
+src_prepare() {
+	if [[ ${PV} == *9999 ]] ; then
+		eautoreconf
+	fi
+
+	default
+}
 
 src_configure() {
 	local myconf=(

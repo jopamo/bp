@@ -41,8 +41,6 @@ src_configure() {
 		--localstatedir="${EPREFIX}"/var
 		$(use_enable gmp public-key)
 		$(use_enable static-libs static)
-		--enable-fat
-		--disable-assembler
 		$(tc-is-static-only && echo --disable-shared)
 		--disable-documentation
 	)

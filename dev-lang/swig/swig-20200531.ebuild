@@ -2,12 +2,12 @@
 
 EAPI=7
 
+SNAPSHOT=64e2c43c93b66c406b90f7dfbac1fce581462352
+
 inherit autotools
 
 DESCRIPTION="Simplified Wrapper and Interface Generator"
 HOMEPAGE="http://www.swig.org/"
-
-SNAPSHOT=ae0efd3d742ad083312fadbc652d4d66fdad6f4d
 SRC_URI="https://github.com/swig/swig/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

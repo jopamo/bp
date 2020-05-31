@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=8c50837f0b58ba5b2bcb1b424a2a4bfa01559fb2
+	SNAPSHOT=5e6ca054148dfb4d78e6f79457d48b745f919def
 	SRC_URI="https://github.com/libffi/libffi/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

@@ -4,13 +4,20 @@ EAPI=7
 
 DESCRIPTION="A file archival tool which can also read and write tar files"
 HOMEPAGE="https://www.gnu.org/software/cpio/cpio.html"
-SRC_URI="https://1g4.org/files/${P}.tar.xz"
+SRC_URI="mirror://gnu/cpio/${P}.tar.bz2"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="nls"
+
+PATCHES=( "${FILESDIR}"/00_684b7ac5767e676cda78c161aeb7fe7b45a07529.patch
+	"${FILESDIR}"/01_b1c85839bf1381f749dd45bf6a5a38924e3315a0.patch
+	"${FILESDIR}"/02_df55fb19be545e22d023950263ed5d0756edf81e.patch
+	"${FILESDIR}"/03_0c4ffde0bdc015b468626f7464e39659c6891a31.patch
+	"${FILESDIR}"/04_641d3f489cf6238bb916368d4ba0d9325a235afb.patch )
+
 
 src_configure() {
 	local myconf=(

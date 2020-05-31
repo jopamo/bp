@@ -17,17 +17,15 @@ KEYWORDS="amd64 arm64"
 
 IUSE="caps static"
 
-CDEPEND="
+DEPEND="
 	>=lib-dev/libassuan-2.1
 	>=lib-dev/libgcrypt-1.6.3
 	>=lib-dev/libgpg-error-1.17
 	caps? ( lib-sys/libcap )
 	static? ( >=lib-sys/ncurses-5.7-r5:0=[static-libs] )
 "
-DEPEND="${CDEPEND}
-	sys-devel/gettext
-	dev-util/pkgconf
-"
+BDEPEND="sys-devel/gettext
+	dev-util/pkgconf"
 
 append-cxxflags -std=gnu++11
 

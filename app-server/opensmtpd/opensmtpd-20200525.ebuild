@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=12c33f060e74270be27e991d153ed11fb6bb1dd5
+	SNAPSHOT=0d01b12c80b48922134f4b5ff185a34f854a8440
 	SRC_URI="https://github.com/OpenSMTPD/OpenSMTPD/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/OpenSMTPD-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
@@ -36,7 +36,7 @@ DEPEND="virtual/ssl
 src_prepare() {
 	default
 	sed -i -e '/pidfile_path/s:_PATH_VARRUN:"/run/":' openbsd-compat/pidfile.c || die
-	sed -i -e 's;/usr/libexec/;/usr/libexec/opensmtpd/;g' smtpd/parse.y || die
+	sed -i -e 's;/usr/libexec/;/usr/libexec/opensmtpd/;g' usr.sbin/smtpd/parse.y || die
 	eautoreconf
 }
 

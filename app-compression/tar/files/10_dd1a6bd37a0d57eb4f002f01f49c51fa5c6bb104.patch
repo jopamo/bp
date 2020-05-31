@@ -1,0 +1,32 @@
+From dd1a6bd37a0d57eb4f002f01f49c51fa5c6bb104 Mon Sep 17 00:00:00 2001
+From: Paul Eggert <eggert@cs.ucla.edu>
+Date: Tue, 19 May 2020 11:52:01 -0700
+Subject: tar: avoid read overrun
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Problem reported by Timotej Kapus in:
+https://lists.gnu.org/r/bug-tar/2020-05/msg00001.html
+* src/transform.c (parse_transform_expr):
+Diagnose ‘--transform='s'’ instead of continuing past '\0'.
+---
+ src/transform.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/transform.c b/src/transform.c
+index 0a4972a..dea2ecc 100644
+--- a/src/transform.c
++++ b/src/transform.c
+@@ -208,6 +208,8 @@ parse_transform_expr (const char *expr)
+     }
+ 
+   delim = expr[1];
++  if (!delim)
++    USAGE_ERROR ((0, 0, _("Invalid transform expression")));
+ 
+   /* Scan regular expression */
+   for (i = 2; expr[i] && expr[i] != delim; i++)
+-- 
+cgit v1.2.1
+

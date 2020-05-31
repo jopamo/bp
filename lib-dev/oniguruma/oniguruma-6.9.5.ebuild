@@ -2,11 +2,11 @@
 
 EAPI=7
 
-MY_P="onig-${PV}"
+MY_P="onig-${PV}_rev1"
 
 DESCRIPTION="Regular expression library for different character encodings"
 HOMEPAGE="https://github.com/kkos/oniguruma"
-SRC_URI="https://github.com/kkos/${PN}/releases/download/v${PV}/${MY_P}.tar.gz"
+SRC_URI="https://github.com/kkos/${PN}/releases/download/v${PV}_rev1/${MY_P}.tar.gz"
 
 LICENSE="BSD-2"
 SLOT="0/4"
@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="crnl-as-line-terminator static-libs"
 
-S="${WORKDIR}/${MY_P}"
+S="${WORKDIR}/onig-${PV}"
 
 src_configure() {
 	ECONF_SOURCE="${S}" econf \

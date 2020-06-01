@@ -45,8 +45,6 @@ DEPEND="
 	sys-devel/gettext
 "
 
-PATCHES=( "${FILESDIR}/disable_audit.patch"	)
-
 append-cflags -Wno-error=format-truncation
 
 pkg_pretend() {

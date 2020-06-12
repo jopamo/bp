@@ -4,11 +4,10 @@ EAPI=7
 
 inherit flag-o-matic toolchain-funcs
 
-MY_P=${P/-/_}
 DESCRIPTION="Lists open files for running Unix processes"
 HOMEPAGE="ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/"
 
-SNAPSHOT=ab219db05db2691c61d67665a982f2a594656ec5
+SNAPSHOT=52b3eea34eab563e720e51dde0660f07382926c8
 SRC_URI="https://github.com/lsof-org/lsof/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

@@ -23,8 +23,6 @@ RDEPEND="lib-dev/expat"
 append-flags -lm
 filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
 
-PATCHES=( ${FILESDIR}/2336451ed68d91ff4b5ae1acbc1eca30e47a86a9.patch )
-
 src_prepare() {
 	default
 	elibtoolize "${WORKDIR}"

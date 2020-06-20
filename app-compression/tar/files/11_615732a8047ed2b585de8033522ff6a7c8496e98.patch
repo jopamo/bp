@@ -1,0 +1,26 @@
+From 615732a8047ed2b585de8033522ff6a7c8496e98 Mon Sep 17 00:00:00 2001
+From: Sergey Poznyakoff <gray@gnu.org>
+Date: Wed, 3 Jun 2020 09:31:41 +0300
+Subject: Bugfix
+
+* src/sparse.c (sparse_diff_file): Fix return value.
+---
+ src/sparse.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/sparse.c b/src/sparse.c
+index 08ddb64..e60b16a 100644
+--- a/src/sparse.c
++++ b/src/sparse.c
+@@ -702,7 +702,7 @@ sparse_diff_file (int fd, struct tar_stat_info *st)
+   off_t offset = 0;
+ 
+   if (!tar_sparse_init (&file))
+-    return dump_status_not_implemented;
++    return false;
+ 
+   file.stat_info = st;
+   file.fd = fd;
+-- 
+cgit v1.2.1
+

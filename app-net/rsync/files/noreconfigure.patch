@@ -1,0 +1,49 @@
+diff -urN a/Makefile.in b/Makefile.in
+--- a/Makefile.in	2020-06-19 21:20:10.024535145 -0500
++++ b/Makefile.in	2020-06-19 22:15:13.862557144 -0500
+@@ -187,20 +187,6 @@
+ 	else \
+ 	    echo "config.h.in has CHANGED."; \
+ 	fi
+-	@if test -f configure.sh.old -o -f config.h.in.old; then \
+-	    if test "$(MAKECMDGOALS)" = reconfigure; then \
+-		echo 'Continuing with "make reconfigure".'; \
+-	    else \
+-		echo 'You may need to run:'; \
+-		echo '  make reconfigure'; \
+-		exit 1; \
+-	    fi \
+-	fi
+-
+-.PHONY: reconfigure
+-reconfigure: configure.sh
+-	./config.status --recheck
+-	./config.status
+ 
+ Makefile: Makefile.in config.status configure.sh config.h.in
+ 	@if test -f Makefile; then cp -p Makefile Makefile.old; else touch Makefile.old; fi
+@@ -208,13 +194,6 @@
+ 	@if diff Makefile Makefile.old >/dev/null 2>&1; then \
+ 	    echo "Makefile is unchanged."; \
+ 	    rm Makefile.old; \
+-	else \
+-	    if test "$(MAKECMDGOALS)" = reconfigure; then \
+-		echo 'Continuing with "make reconfigure".'; \
+-	    else \
+-		echo "Makefile updated -- rerun your make command."; \
+-		exit 1; \
+-	    fi \
+ 	fi
+ 
+ stunnel-rsyncd.conf: $(srcdir)/stunnel-rsyncd.conf.in Makefile
+diff -urN a/packaging/release-rsync b/packaging/release-rsync
+--- a/packaging/release-rsync	2020-06-19 21:20:10.044535274 -0500
++++ b/packaging/release-rsync	2020-06-19 22:15:40.422718557 -0500
+@@ -239,7 +239,6 @@
+     if s.returncode:
+         die('Aborting')
+ 
+-    cmd_chk('make reconfigure ; make gen')
+     cmd_chk(['rsync', '-a', *gen_files, 'SaVeDiR/'])
+ 
+     print(f'Creating any missing patch branches.')

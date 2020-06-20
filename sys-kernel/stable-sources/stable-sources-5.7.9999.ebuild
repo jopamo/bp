@@ -24,4 +24,3 @@ KEYWORDS="amd64 arm64"
 DEPEND="
 	sys-app/ed
 	sys-devel/bc"
-

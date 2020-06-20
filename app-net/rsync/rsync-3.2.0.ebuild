@@ -24,11 +24,13 @@ RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
 DEPEND="${RDEPEND}
 	static? ( ${LIB_DEPEND} )"
 
-PATCHES=( "${FILESDIR}"/simd.patch )
+PATCHES=( "${FILESDIR}"/simd.patch
+	"${FILESDIR}"/noreconfigure.patch )
 
 append-ldflags -Wl,-z,noexecstack
 
 src_prepare() {
+	rm -f zlib/*.{c,h} || die
 	default
 	eautoreconf
 }
@@ -37,6 +39,7 @@ src_configure() {
 	use static && append-ldflags -static
 
 	local myconf=(
+		--without-included-zlib
 		$(use_enable acl acl-support)
 		$(use_enable iconv)
 		$(use_enable ipv6)
@@ -45,9 +48,4 @@ src_configure() {
 		$(use_enable zstd)
 	)
 	econf "${myconf[@]}"
-}
-
-src_compile() {
-	emake reconfigure
-	default
 }

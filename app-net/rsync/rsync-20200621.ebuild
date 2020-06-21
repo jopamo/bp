@@ -2,17 +2,17 @@
 
 EAPI=7
 
-inherit flag-o-matic autotools
+inherit flag-o-matic
 
 DESCRIPTION="File transfer program to keep remote files into sync"
 HOMEPAGE="https://rsync.samba.org/"
-SRC_URI="https://download.samba.org/pub/rsync/src/${P}.tar.gz"
+SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl iconv ipv6 lz4 static xattr +xxhash zstd"
+IUSE="acl iconv ipv6 lz4 static xattr xxhash zstd"
 
 LIB_DEPEND="acl? ( sys-app/acl[static-libs(+)] )
 	xattr? ( sys-app/attr[static-libs(+)] )
@@ -20,20 +20,14 @@ LIB_DEPEND="acl? ( sys-app/acl[static-libs(+)] )
 	zstd? ( app-compression/zstd[static-libs(+)] )
 	lz4? ( app-compression/lz4[static-libs(+)] )"
 
-RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
-
-DEPEND="${RDEPEND}
+DEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
 	static? ( ${LIB_DEPEND} )"
 
-PATCHES=( "${FILESDIR}"/simd.patch
-	"${FILESDIR}"/noreconfigure.patch )
-
-append-ldflags -Wl,-z,noexecstack
+PATCHES=( "${FILESDIR}"/noreconfigure.patch )
 
 src_prepare() {
 	rm -f zlib/*.{c,h} || die
 	default
-	eautoreconf
 }
 
 src_configure() {
@@ -48,6 +42,7 @@ src_configure() {
 		$(use_enable xattr xattr-support)
 		$(use_enable xxhash)
 		$(use_enable zstd)
+		--disable-md2man
 	)
 	econf "${myconf[@]}"
 }

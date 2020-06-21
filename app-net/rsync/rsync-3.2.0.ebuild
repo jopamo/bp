@@ -12,12 +12,13 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl iconv ipv6 static xattr +xxhash zstd"
+IUSE="acl iconv ipv6 lz4 static xattr +xxhash zstd"
 
 LIB_DEPEND="acl? ( sys-app/acl[static-libs(+)] )
 	xattr? ( sys-app/attr[static-libs(+)] )
 	xxhash? ( lib-dev/xxhash[static-libs(+)] )
-	zstd? ( app-compression/zstd[static-libs(+)] )"
+	zstd? ( app-compression/zstd[static-libs(+)] )
+	lz4? ( app-compression/lz4[static-libs(+)] )"
 
 RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
 
@@ -43,6 +44,7 @@ src_configure() {
 		$(use_enable acl acl-support)
 		$(use_enable iconv)
 		$(use_enable ipv6)
+		$(use_enable lz4)
 		$(use_enable xattr xattr-support)
 		$(use_enable xxhash)
 		$(use_enable zstd)

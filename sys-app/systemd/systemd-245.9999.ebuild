@@ -14,8 +14,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="audit binfmt +blkid coredump cryptsetup +dhcp4 efi gcrypt +hostnamed hwdb importd kmod
-ldconfig localed logind machined +networkd pam pcre pstore rfkill timedated +tmpfiles
-test vconsole xkb"
+ldconfig localed logind machined +networkd pam pcre pstore rfkill sleep systemd-update sysv
+timedated +tmpfiles test vconsole xkb"
 
 RESTRICT="!test? ( test )"
 
@@ -97,6 +97,8 @@ src_configure() {
 		$(meson_use pcre pcre2)
 		$(meson_use pstore)
 		$(meson_use rfkill)
+		$(usex sysv '-Dsysvinit-path=/etc/init.d' '-Dsysvinit-path=')
+		$(usex sysv '-Dsysvrcnd-path=/etc/rc.d' '-Dsysvrcnd-path=')
 		$(meson_use test dbus)
 		$(meson_use timedated)
 		$(meson_use tmpfiles)
@@ -119,7 +121,6 @@ src_configure() {
 		-Dhtml=false
 		-Didn=false
 		-Dima=false
-		-Dkill-path="${EROOT}"/usr/bin/kill
 		-Dfdisk=false
 		-Dlibidn2=false
 		-Dlibidn=false
@@ -149,8 +150,6 @@ src_configure() {
 		-Dsplit-bin=true
 		-Dsplit-usr=false
 		-Dsysusers=false
-		-Dsysvinit-path=""
-		-Dsysvrcnd-path=""
 		-Dtelinit-path=""
 		-Dtimesyncd=false
 		-Dtpm=false
@@ -185,19 +184,25 @@ src_install() {
 	rm -f "${ED}"/usr/bin/kernel-install
 	rm -fr "${ED}"/usr/lib/kernel
 
-	# systemd-sleep does suspend and hibernation, not essential to some products
+	if use sleep; then
 		rm -f  "${ED}"/usr/lib/systemd/systemd-sleep
 		rm -fr "${ED}"/usr/lib/systemd/system-sleep/
 		rm -f  "${ED}"/usr/lib/systemd/system/systemd-suspend.service
+		sed -i "s/\#SuspendMode\=/SuspendMode\=suspend/g" "${ED}"/etc/systemd/sleep.conf || die
+		sed -i "s/\#SuspendState\=mem\ standby\ freeze/SuspendState\=standby/g" "${ED}"/etc/systemd/sleep.conf || die
+		sed -i "s/\#HibernateMode\=platform\ shutdown/HibernateMode\=suspend/g" "${ED}"/etc/systemd/sleep.conf || die
+		sed -i "s/\#HibernateState\=disk/HibernateState\=standby/g" "${ED}"/etc/systemd/sleep.conf || die
+	fi
 
-	# systemd-update system is nice and useful, but is not essential
+	if use systemd-update; then
 		rm -f "${ED}"/usr/lib/systemd/system/sysinit.target.wants/systemd-update-done.service
 		rm -f "${ED}"/usr/lib/systemd/system/system-update.target
 		rm -f "${ED}"/usr/lib/systemd/system/systemd-update-done.service
 		rm -f "${ED}"/usr/lib/systemd/system-generators/systemd-system-update-generator
 		rm -f "${ED}"/usr/lib/systemd/systemd-update-done
+	fi
 
-	# no sysvinit legacy
+	if use sysv; then
 		rm -fr "${ED}"/etc/init.d
 		rm -f "${ED}"/usr/lib/systemd/system-generators/systemd-rc-local-generator
 		rm -f "${ED}"/usr/lib/systemd/system-generators/systemd-sysv-generator
@@ -207,13 +212,15 @@ src_install() {
 		rm -f "${ED}"/usr/lib/systemd/systemd-initctl
 		rm -f "${ED}"/usr/lib/systemd/systemd/halt-local.service
 		rm -f "${ED}"/usr/lib/systemd/systemd/rc-local.service
+	fi
 
 	use networkd && mkdir -p "${ED}"/etc/systemd/network/
 
-	use dhcp4 && echo -e "[Match]\n\
-Name=en*\n\n\
-[Network]\n\
-DHCP=ipv4" > "${ED}"/etc/systemd/network/ipv4dhcp.network
+	use dhcp4 && echo '[Match]
+Name=en*
+
+[Network]
+DHCP=ipv4' > "${ED}"/etc/systemd/network/ipv4dhcp.network
 
 	sed -i '/event_timeout/d' "${ED}"/usr/lib/udev/rules.d/11-dm-lvm.rules
 	sed -i '/{dialout,render,cdrom,tape}/d' "${ED}"/usr/lib/udev/rules.d/50-udev-default.rules

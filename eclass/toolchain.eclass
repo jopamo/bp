@@ -11,7 +11,7 @@ case ${EAPI:-0} in
 	*)       die "I don't speak EAPI ${EAPI}." ;;
 esac
 EXPORT_FUNCTIONS src_unpack src_prepare src_configure \
-	src_compile src_test src_install pkg_postinst pkg_postrm
+	src_compile src_test src_install pkg_postinst
 
 #---->> globals <<----
 
@@ -481,7 +481,7 @@ toolchain_src_test() {
 toolchain_src_install() {
 	cd "${WORKDIR}"/build
 
-	# Do allow symlinks in private gcc include dir as this can break the build
+	# Don't allow symlinks in private gcc include dir as this can break the build
 	find gcc/include*/ -type l -delete
 
 	# Copy over the info pages.  We disabled their generation earlier, but the
@@ -509,27 +509,24 @@ toolchain_src_install() {
 	S="${WORKDIR}"/build emake -j1 DESTDIR="${D}" install || die
 
 	# Punt some tools which are really only useful while building gcc
-	find "${D}" -name install-tools -prune -type d -exec rm -rf "{}" \;
+	find "${ED}" -name install-tools -prune -type d -exec rm -rf "{}" \;
 	# This one comes with binutils
-	find "${D}" -name libiberty.a -delete
+	find "${ED}" -name libiberty.a -delete
 
 	# Basic sanity check
 	local EXEEXT
 	eval $(grep ^EXEEXT= "${WORKDIR}"/build/gcc/config.log)
-	[[ -r ${D}/${BINPATH}/gcc${EXEEXT} ]] || die "gcc not found in ${D}"
+	[[ -r ${D}${BINPATH}/gcc${EXEEXT} ]] || die "gcc not found in ${ED}"
 
 	dodir /etc/env.d/gcc
+	create_gcc_env_entry
+	create_revdep_rebuild_entry
 
 	# prune empty dirs left behind
 	find "${D}" -depth -type d -delete 2>/dev/null
 
-	# Rather install the script, else portage with changing $FILESDIR
-	# between binary and source package borks things ....
-		insinto "${DATAPATH#${EPREFIX}}"
-		newins "$(prefixify_ro "${FILESDIR}"/awk/fixlafiles.awk-no_gcc_la)" fixlafiles.awk || die
-		exeinto "${DATAPATH#${EPREFIX}}"
-		doexe "$(prefixify_ro "${FILESDIR}"/fix_libtool_files.sh)" || die
-		doexe "${FILESDIR}"/c{89,99} || die
+	exeinto "${DATAPATH#${EPREFIX}}"
+	doexe "${FILESDIR}"/c{89,99} || die
 
 	# libstdc++.la: Delete as it doesn't add anything useful: g++ itself
 	# handles linkage correctly in the dynamic & static case.  It also just
@@ -539,27 +536,33 @@ toolchain_src_install() {
 	# libsupc++.la: This has no dependencies.
 	# libcc1.la: There is no static library, only dynamic.
 	# libcc1plugin.la: Same as above, and it's loaded via dlopen.
+	# libcp1plugin.la: Same as above, and it's loaded via dlopen.
 	# libgomp.la: gcc itself handles linkage (libgomp.spec).
 	# libgomp-plugin-*.la: Same as above, and it's an internal plugin only
 	# loaded via dlopen.
 	# libgfortran.la: gfortran itself handles linkage correctly in the
 	# dynamic & static case (libgfortran.spec). #573302
 	# libgfortranbegin.la: Same as above, and it's an internal lib.
+	# libmpx.la: gcc itself handles linkage correctly (libmpx.spec).
+	# libmpxwrappers.la: See above.
 	# libitm.la: gcc itself handles linkage correctly (libitm.spec).
 	# libvtv.la: gcc itself handles linkage correctly.
 	# lib*san.la: Sanitizer linkage is handled internally by gcc, and they
 	# do not support static linking. #487550 #546700
-	find "${D}/${LIBPATH}" \
+	find "${D}${LIBPATH}" \
 		'(' \
 			-name libstdc++.la -o \
 			-name libstdc++fs.la -o \
 			-name libsupc++.la -o \
 			-name libcc1.la -o \
 			-name libcc1plugin.la -o \
+			-name libcp1plugin.la -o \
 			-name 'libgomp.la' -o \
 			-name 'libgomp-plugin-*.la' -o \
 			-name libgfortran.la -o \
 			-name libgfortranbegin.la -o \
+			-name libmpx.la -o \
+			-name libmpxwrappers.la -o \
 			-name libitm.la -o \
 			-name libvtv.la -o \
 			-name 'lib*san.la' \
@@ -568,11 +571,11 @@ toolchain_src_install() {
 	# Use gid of 0 because some stupid ports don't have
 	# the group 'root' set to gid 0.  Send to /dev/null
 	# for people who are testing as non-root.
-	chown -R root:0 "${D}/${LIBPATH}" 2>/dev/null
+	chown -R root:0 "${D}${LIBPATH}" 2>/dev/null
 
-	# Move pretty-printers to gdb datadir to shut ldconfig up
-	local py gdbdir=/usr/share/gdb/auto-load${LIBPATH/\/lib\//\/lib\/}
-	pushd "${D}/${LIBPATH}" >/dev/null
+	# Installing gdb pretty-printers into gdb-specific location.
+	local py gdbdir=/usr/share/gdb/auto-load${LIBPATH}
+	pushd "${D}${LIBPATH}" >/dev/null
 	for py in $(find . -name '*-gdb.py') ; do
 		local multidir=${py%/*}
 		insinto "${gdbdir}/${multidir}"
@@ -614,62 +617,83 @@ fix_libtool_libdir_paths() {
 	popd >/dev/null
 }
 
+create_gcc_env_entry() {
+	dodir /etc/env.d/gcc
+	local gcc_envd_base="/etc/env.d/gcc/${CTARGET}-${GCC_CONFIG_VER}"
+
+	local gcc_specs_file
+	local gcc_envd_file="${ED}${gcc_envd_base}"
+	if [[ -z $1 ]] ; then
+		# I'm leaving the following commented out to remind me that it
+		# was an insanely -bad- idea. Stuff broke. GCC_SPECS isnt unset
+		# on chroot or in non-toolchain.eclass gcc ebuilds!
+		#gcc_specs_file="${LIBPATH}/specs"
+		gcc_specs_file=""
+	else
+		gcc_envd_file+="-$1"
+		gcc_specs_file="${LIBPATH}/$1.specs"
+	fi
+
+	# We want to list the default ABI's LIBPATH first so libtool
+	# searches that directory first.  This is a temporary
+	# workaround for libtool being stupid and using .la's from
+	# conflicting ABIs by using the first one in the search path
+	local ldpaths mosdirs
+	if tc_version_is_at_least 3.2 ; then
+		local mdir mosdir abi ldpath
+		for abi in $(get_all_abis TARGET) ; do
+			mdir=$($(XGCC) $(get_abi_CFLAGS ${abi}) --print-multi-directory)
+			ldpath=${LIBPATH}
+			[[ ${mdir} != "." ]] && ldpath+="/${mdir}"
+			ldpaths="${ldpath}${ldpaths:+:${ldpaths}}"
+
+			mosdir=$($(XGCC) $(get_abi_CFLAGS ${abi}) -print-multi-os-directory)
+			mosdirs="${mosdir}${mosdirs:+:${mosdirs}}"
+		done
+	else
+		# Older gcc's didn't do multilib, so logic is simple.
+		ldpaths=${LIBPATH}
+	fi
+
+	cat <<-EOF > ${gcc_envd_file}
+	GCC_PATH="${BINPATH}"
+	LDPATH="${ldpaths}"
+	MANPATH="${DATAPATH}/man"
+	INFOPATH="${DATAPATH}/info"
+	STDCXX_INCDIR="${STDCXX_INCDIR##*/}"
+	CTARGET="${CTARGET}"
+	GCC_SPECS="${gcc_specs_file}"
+	MULTIOSDIRS="${mosdirs}"
+	EOF
+}
+
+create_revdep_rebuild_entry() {
+	local revdep_rebuild_base="/etc/revdep-rebuild/05cross-${CTARGET}-${GCC_CONFIG_VER}"
+	local revdep_rebuild_file="${ED}${revdep_rebuild_base}"
+
+	dodir /etc/revdep-rebuild
+	cat <<-EOF > "${revdep_rebuild_file}"
+	# Generated by ${CATEGORY}/${PF}
+	# Ignore libraries built for ${CTARGET}, https://bugs.gentoo.org/692844.
+	SEARCH_DIRS_MASK="${LIBPATH}"
+	EOF
+}
+
 #---->> pkg_post* <<----
 
 toolchain_pkg_postinst() {
-	# Clean up old paths
-	rm -f "${EROOT}"/*/rcscripts/awk/fixlafiles.awk "${EROOT}"/usr/sbin/fix_libtool_files.sh
-	rmdir "${EROOT}"*/rcscripts{/awk,} 2>/dev/null
-
-	mkdir -p "${EROOT}"/usr/{share/gcc-data,sbin,bin}
-	# DATAPATH has EPREFIX already, use ROOT with it
-	cp "${ROOT}/${DATAPATH}"/fixlafiles.awk "${EROOT}"/usr/share/gcc-data/ || die
-	cp "${ROOT}/${DATAPATH}"/fix_libtool_files.sh "${EROOT}"/usr/sbin/ || die
-
-	# Since these aren't critical files and portage sucks with
-	# handling of binpkgs, don't require these to be found
-	cp "${ROOT}/${DATAPATH}"/c{89,99} "${EROOT}"/usr/bin/ 2>/dev/null
-}
-
-toolchain_pkg_postrm() {
-	if [[ ${ROOT} == / && -f ${EPREFIX}/usr/share/eselect/modules/compiler-shadow.eselect ]] ; then
-		eselect compiler-shadow clean all
-	fi
-
-	# to make our lives easier (and saner), we do the fix_libtool stuff here.
-	# rather than checking SLOT's and trying in upgrade paths, we just see if
-	# the common libstdc++.la exists in the ${LIBPATH} of the gcc that we are
-	# unmerging.  if it does, that means this was a simple re-emerge.
-
-	# ROOT isnt handled by the script
-	[[ ${ROOT} != "/" ]] && return 0
-
-	if [[ ! -e ${LIBPATH}/libstdc++.so ]] ; then
-		einfo "Running 'fix_libtool_files.sh ${GCC_RELEASE_VER}'"
-		fix_libtool_files.sh ${GCC_RELEASE_VER}
-		if [[ -n ${BRANCH_UPDATE} ]] ; then
-			einfo "Running 'fix_libtool_files.sh ${GCC_RELEASE_VER}-${BRANCH_UPDATE}'"
-			fix_libtool_files.sh ${GCC_RELEASE_VER}-${BRANCH_UPDATE}
-		fi
-	fi
-
-	return 0
+	mkdir -p "${EROOT%/}"/usr/bin
+	cp "${ROOT%/}${DATAPATH}"/c{89,99} "${EROOT%/}"/usr/bin/ 2>/dev/null
 }
 
 #---->> support and misc functions <<----
 
-# This is to make sure we don't accidentally try to enable support for a
-# language that doesnt exist. GCC 3.4 supports f77, while 4.0 supports f95, etc.
-#
-# Also add a hook so special ebuilds (kgcc64) can control which languages
-# exactly get enabled
 gcc-lang-supported() {
 	grep ^language=\"${1}\" "${S}"/gcc/*/config-lang.in > /dev/null || return 1
 	[[ -z ${TOOLCHAIN_ALLOWED_LANGS} ]] && return 0
 	has $1 ${TOOLCHAIN_ALLOWED_LANGS}
 }
 
-# Grab a variable from the build system (taken from linux-info.eclass)
 get_make_var() {
 	local var=$1 makefile=${2:-${WORKDIR}/build/Makefile}
 	echo -e "e:\\n\\t@echo \$(${var})\\ninclude ${makefile}" | \

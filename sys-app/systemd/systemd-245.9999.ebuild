@@ -13,7 +13,7 @@ LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="audit binfmt +blkid coredump cryptsetup efi gcrypt +hostnamed hwdb importd kmod
+IUSE="audit binfmt +blkid coredump cryptsetup +dhcp4 efi gcrypt +hostnamed hwdb importd kmod
 ldconfig localed logind machined +networkd pam pcre pstore rfkill timedated +tmpfiles
 test vconsole xkb"
 
@@ -210,7 +210,7 @@ src_install() {
 
 	use networkd && mkdir -p "${ED}"/etc/systemd/network/
 
-	use networkd && echo -e "[Match]\n\
+	use dhcp4 && echo -e "[Match]\n\
 Name=en*\n\n\
 [Network]\n\
 DHCP=ipv4" > "${ED}"/etc/systemd/network/ipv4dhcp.network

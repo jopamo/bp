@@ -218,7 +218,9 @@ DHCP=ipv4" > "${ED}"/etc/systemd/network/ipv4dhcp.network
 	sed -i '/event_timeout/d' "${ED}"/usr/lib/udev/rules.d/11-dm-lvm.rules
 	sed -i '/{dialout,render,cdrom,tape}/d' "${ED}"/usr/lib/udev/rules.d/50-udev-default.rules
 
-	use audit || echo "Audit=no" >> "${ED}"/etc/systemd/journald.conf || die
+	use audit || sed -i "s/\#Audit\=yes/Audit\=no/g" "${ED}"/etc/systemd/journald.conf || die
+
+	sed -i "s/\#SystemMaxUse\=/SystemMaxUse\=128M/g" "${ED}"/etc/systemd/journald.conf || die
 }
 
 pkg_postinst() {

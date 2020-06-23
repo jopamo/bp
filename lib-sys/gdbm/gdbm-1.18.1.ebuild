@@ -2,6 +2,8 @@
 
 EAPI=7
 
+inherit flag-o-matic
+
 DESCRIPTION="Standard GNU database libraries"
 HOMEPAGE="https://www.gnu.org/software/gdbm/"
 SRC_URI="mirror://gnu/gdbm/${P}.tar.gz"
@@ -14,6 +16,11 @@ IUSE="nls +readline static-libs"
 
 DEPEND="readline? ( lib-sys/readline:0= )"
 
+src_prepare() {
+	sed -r -i '/^char.*parseopt_program_(doc|args)/d' src/parseopt.c
+	default
+}
+
 src_configure() {
 	export ac_cv_lib_dbm_main=no ac_cv_lib_ndbm_main=no
 
@@ -23,9 +30,4 @@ src_configure() {
 		$(use_with readline)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-src_install() {
-	default
-	use static-libs || find "${ED}" -name '*.la' -delete
 }

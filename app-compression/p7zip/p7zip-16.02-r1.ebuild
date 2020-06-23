@@ -28,6 +28,7 @@ PATCHES=(
 	)
 
 filter-flags -Wl,-z,defs -Wl,-z,relro
+append-flags -Wno-narrowing
 
 _makeargs=(
   prefix="${EPREFIX}"/usr

@@ -17,6 +17,8 @@ IUSE="aio static"
 DEPEND="aio? ( >=lib-dev/libaio-0.3.106 )
 		lib-sys/libunwind"
 
+append-flags -Wno-stringop-overflow
+
 src_prepare() {
 	default
 

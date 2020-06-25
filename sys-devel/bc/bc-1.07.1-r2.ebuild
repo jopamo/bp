@@ -12,31 +12,27 @@ LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static"
+IUSE="libedit readline static"
 
 DEPEND="
-	lib-dev/libedit:=
 	sys-app/ed
 	sys-devel/flex
 	sys-devel/bison
+	readline? ( lib-sys/readline )
+	libedit? ( lib-dev/libedit )
 "
 
 PATCHES=(
-			"${FILESDIR}"/26f275502dd28114e78bc098fed81acde1d86d62.patch
-			"${FILESDIR}"/2dcee958a412210cd1260f866ac199f68f28cf08.patch
+	"${FILESDIR}"/26f275502dd28114e78bc098fed81acde1d86d62.patch
+	"${FILESDIR}"/2dcee958a412210cd1260f866ac199f68f28cf08.patch
 		)
 
 src_configure() {
 	use static && append-ldflags -static
 
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--localstatedir="${EPREFIX}"/var
-		--with-libedit
-		--without-readline
+		$(use_with libedit)
+		$(use_with readline)
 	)
 
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

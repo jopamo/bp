@@ -1,8 +1,10 @@
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: autotools.eclass
 # @MAINTAINER:
 # base-system@gentoo.org
+# @SUPPORTED_EAPIS: 0 1 2 3 4 5 6 7
 # @BLURB: Regenerates auto* build scripts
 # @DESCRIPTION:
 # This eclass is for safely handling autotooled software packages that need to
@@ -23,6 +25,11 @@ fi
 
 if [[ -z ${_AUTOTOOLS_ECLASS} ]]; then
 _AUTOTOOLS_ECLASS=1
+
+case ${EAPI:-0} in
+	0|1|2|3|4|5|6|7) ;;
+	*) die "${ECLASS}: EAPI ${EAPI} not supported" ;;
+esac
 
 inherit libtool
 
@@ -58,7 +65,7 @@ inherit libtool
 # Do NOT change this variable in your ebuilds!
 # If you want to force a newer minor version, you can specify the correct
 # WANT value by using a colon:  <PV>:<WANT_AUTOMAKE>
-_LATEST_AUTOMAKE=( 1.16.2:1.16.2 )
+_LATEST_AUTOMAKE=( 1.16.1:1.16 1.15.1:1.15 )
 
 _automake_atom="sys-devel/automake"
 _autoconf_atom="sys-devel/autoconf"
@@ -69,8 +76,9 @@ if [[ -n ${WANT_AUTOMAKE} ]]; then
 		# the autoreconf tool, so this requirement is correct.  #401605
 		none) ;;
 		latest)
+			# Use SLOT deps if we can.  For EAPI=0, we get pretty close.
 			if [[ ${EAPI:-0} != 0 ]] ; then
-				_automake_atom="|| ( `printf '>=sys-devel/automake-%s:0 ' ${_LATEST_AUTOMAKE[@]/:/ }` )"
+				_automake_atom="|| ( `printf '>=sys-devel/automake-%s:%s ' ${_LATEST_AUTOMAKE[@]/:/ }` )"
 			else
 				_automake_atom="|| ( `printf '>=sys-devel/automake-%s ' ${_LATEST_AUTOMAKE[@]/%:*}` )"
 			fi
@@ -101,10 +109,7 @@ if [[ -n ${WANT_LIBTOOL} ]] ; then
 	export WANT_LIBTOOL
 fi
 
-# Force people (nicely) to upgrade to a newer version of gettext as
-# older ones are known to be crappy.  #496454
-AUTOTOOLS_DEPEND="!<sys-devel/gettext-0.18.1.1-r3
-	${_automake_atom}
+AUTOTOOLS_DEPEND="${_automake_atom}
 	${_autoconf_atom}
 	${_libtool_atom}"
 RDEPEND=""
@@ -116,7 +121,10 @@ RDEPEND=""
 # their own DEPEND string.
 : ${AUTOTOOLS_AUTO_DEPEND:=yes}
 if [[ ${AUTOTOOLS_AUTO_DEPEND} != "no" ]] ; then
-	DEPEND=${AUTOTOOLS_DEPEND}
+	case ${EAPI:-0} in
+		0|1|2|3|4|5|6) DEPEND=${AUTOTOOLS_DEPEND} ;;
+		7) BDEPEND=${AUTOTOOLS_DEPEND} ;;
+	esac
 fi
 __AUTOTOOLS_AUTO_DEPEND=${AUTOTOOLS_AUTO_DEPEND} # See top of eclass
 
@@ -504,7 +512,7 @@ autotools_run_tool() {
 	fi
 
 	if ${m4flags} ; then
-		set -- "${1}" $(autotools_m4dir_include) "${@:2}" $(autotools_m4sysdir_include)
+		set -- "${1}" $(autotools_m4dir_include) $(autotools_m4sysdir_include) "${@:2}"
 	fi
 
 	# If the caller wants to probe something, then let them do it directly.

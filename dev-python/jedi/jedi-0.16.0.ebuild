@@ -35,10 +35,6 @@ python_prepare_all() {
 	# without sources anyway
 	rm test/test_evaluate/test_pyc.py || die
 
-	# our very useful patching changes libdir for no good reason
-	sed -i -e "/site_pkg_path/s:'lib':& if virtualenv.version_info >= (3,7) else '$(get_libdir)':" \
-		test/test_evaluate/test_sys_path.py || die
-
 	# this super-secret feature of py3.4 apparently doesn't work for us
 	sed -i -e 's:test_init_extension_module:_&:' \
 		test/test_evaluate/test_extension.py || die

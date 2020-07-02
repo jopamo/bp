@@ -14,13 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="nls static-libs"
 
-RDEPEND="nls? ( >=sys-devel/gettext-0-r1 )"
 DEPEND="nls? ( sys-devel/gettext )"
-
-src_prepare() {
-	sed -i -e 's:lt-test1:test1:' testit.sh || die
-	default
-}
 
 src_configure() {
 	local myconf=(
@@ -30,8 +24,8 @@ src_configure() {
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
-		--disable-dependency-tracking \
-		$(use_enable static-libs static) \
+		--disable-dependency-tracking
+		$(use_enable static-libs static)
 		$(use_enable nls)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

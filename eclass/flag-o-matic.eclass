@@ -1,4 +1,3 @@
-# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: flag-o-matic.eclass
@@ -24,7 +23,7 @@ all-flag-vars() {
 setup-allowed-flags() {
 	ALLOWED_FLAGS=(
 		-pipe -O '-O[12sg]' -mcpu -march -mtune
-		'-fstack-protector*' '-fsanitize*' '-fstack-check*' -fno-stack-check
+		-fstack-clash-protection '-fstack-protector*' '-fsanitize*' '-fstack-check*' -fno-stack-check
 		-fbounds-check -fbounds-checking -fno-strict-overflow
 		-fno-PIE -fno-pie -nopie -no-pie -fno-unit-at-a-time
 		-g '-g[0-9]' -ggdb '-ggdb[0-9]' '-gdwarf-*' gstabs -gstabs+ -gz
@@ -34,9 +33,6 @@ setup-allowed-flags() {
 
 		# CPPFLAGS and LDFLAGS
 		'-[DUILR]*' '-Wl,*'
-
-		# Linker choice flag
-		'-fuse-ld'
 	)
 
 	# allow a bunch of flags that negate features / control ABI
@@ -46,7 +42,7 @@ setup-allowed-flags() {
 		-fno-omit-frame-pointer '-fno-builtin*'
 	)
 	ALLOWED_FLAGS+=(
-		-mregparm -mno-app-regs -mapp-regs -mno-mmx -mno-sse
+		-mregparm -mno-app-regs -mapp-regs -mno-mmx -mno-sse -static-libgcc -static-libstdc++
 		-mno-sse2 -mno-sse3 -mno-ssse3 -mno-sse4 -mno-sse4.1 -mno-sse4.2
 		-mno-avx -mno-aes -mno-pclmul -mno-sse4a -mno-3dnow -mno-popcnt
 		-mno-abm -mips1 -mips2 -mips3 -mips4 -mips32 -mips64 -mips16 -mplt
@@ -56,9 +52,7 @@ setup-allowed-flags() {
 		-mno-faster-structs -mfaster-structs -m32 -m64 -mx32 -mabi
 		-mlittle-endian -mbig-endian -EL -EB -fPIC -mlive-g0 -mcmodel
 		-mstack-bias -mno-stack-bias -msecure-plt '-m*-toc' -mfloat-abi
-		-mfix-r4000 -mno-fix-r4000 -mfix-r4400 -mno-fix-r4400
-		-mfix-rm7000 -mno-fix-rm7000 -mfix-r10000 -mno-fix-r10000
-		-mr10k-cache-barrier -mthumb -marm
+		-mfix-r10000 -mno-fix-r10000 -mthumb -marm '-mindirect-branch*'
 
 		# gcc 4.5
 		-mno-fma4 -mno-movbe -mno-xop -mno-lwp
@@ -71,47 +65,6 @@ setup-allowed-flags() {
 		# gcc 4.9
 		-mno-avx512cd -mno-avx512er -mno-avx512f -mno-avx512pf -mno-sha
 	)
-
-	# Allow some safe individual flags. Should come along with the bug reference.
-	ALLOWED_FLAGS+=(
-		# Allow explicit stack realignment to run non-conformant
-		# binaries: bug #677852
-		-mstackrealign
-	)
-}
-
-# inverted filters for hardened compiler.  This is trying to unpick
-# the hardened compiler defaults.
-_filter-hardened() {
-	local f
-	for f in "$@" ; do
-		case "${f}" in
-			# Ideally we should only concern ourselves with PIE flags,
-			# not -fPIC or -fpic, but too many places filter -fPIC without
-			# thinking about -fPIE.
-			-fPIC|-fpic|-fPIE|-fpie|-Wl,pie|-pie)
-				gcc-specs-pie || continue
-				if ! is-flagq -nopie && ! is-flagq -no-pie ; then
-					# Support older Gentoo form first (-nopie) before falling
-					# back to the official gcc-6+ form (-no-pie).
-					if test-flags -nopie >/dev/null ; then
-						append-flags -nopie
-					else
-						append-flags -no-pie
-					fi
-				fi
-				;;
-			-fstack-protector)
-				gcc-specs-ssp || continue
-				is-flagq -fno-stack-protector || append-flags $(test-flags -fno-stack-protector);;
-			-fstack-protector-all)
-				gcc-specs-ssp-to-all || continue
-				is-flagq -fno-stack-protector-all || append-flags $(test-flags -fno-stack-protector-all);;
-			-fno-strict-overflow)
-				gcc-specs-nostrict || continue
-				is-flagq -fstrict-overflow || append-flags $(test-flags -fstrict-overflow);;
-		esac
-	done
 }
 
 # Remove occurrences of strings from variable given in $1
@@ -136,7 +89,6 @@ _filter-var() {
 # @DESCRIPTION:
 # Remove particular <flags> from {C,CPP,CXX,CCAS,F,FC,LD}FLAGS.  Accepts shell globs.
 filter-flags() {
-	_filter-hardened "$@"
 	local v
 	for v in $(all-flag-vars) ; do
 		_filter-var ${v} "$@"
@@ -394,7 +346,6 @@ filter-mfpmath() {
 # Strip *FLAGS of everything except known good/safe flags.  This runs over all
 # flags returned by all_flag_vars().
 strip-flags() {
-	[[ $# -ne 0 ]] && die "strip-flags takes no arguments"
 	local x y var
 
 	local ALLOWED_FLAGS
@@ -434,91 +385,33 @@ strip-flags() {
 test-flag-PROG() {
 	local comp=$1
 	local lang=$2
-	shift 2
+	local flag=$3
 
-	if [[ -z ${comp} ]]; then
-		return 1
-	fi
-	if [[ -z $1 ]]; then
-		return 1
-	fi
+	[[ -z ${comp} || -z ${flag} ]] && return 1
 
-	# verify selected compiler exists before using it
-	comp=($(tc-get${comp}))
-	# 'comp' can already contain compiler options.
-	# 'type' needs a binary name
-	if ! type -p ${comp[0]} >/dev/null; then
-		return 1
-	fi
-
-	# Set up test file.
-	local in_src in_ext cmdline_extra=()
-	case "${lang}" in
-		# compiler/assembler only
-		c)
-			in_ext='c'
-			in_src='int main(void) { return 0; }'
-			cmdline_extra+=(-xc -c)
-			;;
-		c++)
-			in_ext='cc'
-			in_src='int main(void) { return 0; }'
-			cmdline_extra+=(-xc++ -c)
-			;;
-		f77)
-			in_ext='f'
-			# fixed source form
-			in_src='      end'
-			cmdline_extra+=(-xf77 -c)
-			;;
-		f95)
-			in_ext='f90'
-			in_src='end'
-			cmdline_extra+=(-xf95 -c)
-			;;
-
-		# C compiler/assembler/linker
-		c+ld)
-			in_ext='c'
-			in_src='int main(void) { return 0; }'
-			cmdline_extra+=(-xc)
-			;;
-	esac
-	local test_in=${T}/test-flag.${in_ext}
-	local test_out=${T}/test-flag.exe
-
-	printf "%s\n" "${in_src}" > "${test_in}" || die "Failed to create '${test_in}'"
-
-	# Currently we rely on warning-free output of a compiler
-	# before the flag to see if a flag prduces any warnings.
-	# This has a few drawbacks:
-	# - if compiler already generates warnings we filter out
-	#   every single flag: bug #712488
-	# - if user actually wants to see warnings we just strip
-	#   them regardless of warnings type.
-	#
-	# We can add more selective detection of no-op flags via
-	# '-Werror=ignored-optimization-argument' and similar error options
-	# similar to what we are doing with '-Qunused-arguments'.
 	local cmdline=(
-		"${comp[@]}"
+		$(tc-get${comp})
 		# Clang will warn about unknown gcc flags but exit 0.
 		# Need -Werror to force it to exit non-zero.
 		-Werror
-		"$@"
-		# -x<lang> options need to go before first source file
-		"${cmdline_extra[@]}"
-
-		"${test_in}" -o "${test_out}"
+		# Use -c so we can test the assembler as well.
+		-c -o /dev/null
 	)
+	if "${cmdline[@]}" -x${lang} - </dev/null &>/dev/null ; then
+		cmdline+=( "${flag}" -x${lang} - )
+	else
+		# XXX: what's the purpose of this? does it even work with
+		# any compiler?
+		cmdline+=( "${flag}" -c -o /dev/null /dev/null )
+	fi
 
-	if ! "${cmdline[@]}" &>/dev/null; then
+	if ! "${cmdline[@]}" </dev/null &>/dev/null; then
 		# -Werror makes clang bail out on unused arguments as well;
 		# try to add -Qunused-arguments to work-around that
 		# other compilers don't support it but then, it's failure like
 		# any other
 		cmdline+=( -Qunused-arguments )
-		"${cmdline[@]}" &>/dev/null
+		"${cmdline[@]}" </dev/null &>/dev/null
 	fi
 }
 
@@ -526,31 +419,25 @@ test-flag-PROG() {
 # @USAGE: <flag>
 # @DESCRIPTION:
 # Returns shell true if <flag> is supported by the C compiler, else returns shell false.
-test-flag-CC() { test-flag-PROG "CC" c "$@"; }
+test-flag-CC() { test-flag-PROG "CC" c "$1"; }
 
 # @FUNCTION: test-flag-CXX
 # @USAGE: <flag>
 # @DESCRIPTION:
 # Returns shell true if <flag> is supported by the C++ compiler, else returns shell false.
-test-flag-CXX() { test-flag-PROG "CXX" c++ "$@"; }
+test-flag-CXX() { test-flag-PROG "CXX" c++ "$1"; }
 
 # @FUNCTION: test-flag-F77
 # @USAGE: <flag>
 # @DESCRIPTION:
 # Returns shell true if <flag> is supported by the Fortran 77 compiler, else returns shell false.
-test-flag-F77() { test-flag-PROG "F77" f77 "$@"; }
+test-flag-F77() { test-flag-PROG "F77" f77 "$1"; }
 
 # @FUNCTION: test-flag-FC
 # @USAGE: <flag>
 # @DESCRIPTION:
 # Returns shell true if <flag> is supported by the Fortran 90 compiler, else returns shell false.
-test-flag-FC() { test-flag-PROG "FC" f95 "$@"; }
-
-# @FUNCTION: test-flag-CCLD
-# @USAGE: <flag>
-# @DESCRIPTION:
-# Returns shell true if <flag> is supported by the C compiler and linker, else returns shell false.
-test-flag-CCLD() { test-flag-PROG "CC" c+ld "$@"; }
+test-flag-FC() { test-flag-PROG "FC" f95 "$1"; }
 
 test-flags-PROG() {
 	local comp=$1
@@ -561,22 +448,8 @@ test-flags-PROG() {
 
 	[[ -z ${comp} ]] && return 1
 
-	while (( $# )); do
-		case "$1" in
-			# '-B /foo': bug # 687198
-			--param|-B)
-				if test-flag-${comp} "$1" "$2"; then
-					flags+=( "$1" "$2" )
-				fi
-				shift 2
-				;;
-			*)
-				if test-flag-${comp} "$1"; then
-					flags+=( "$1" )
-				fi
-				shift 1
-				;;
-		esac
+	for x ; do
+		test-flag-${comp} "${x}" && flags+=( "${x}" )
 	done
 
 	echo "${flags[*]}"
@@ -609,12 +482,6 @@ test-flags-F77() { test-flags-PROG "F77" "$@"; }
 # Returns shell true if <flags> are supported by the Fortran 90 compiler, else returns shell false.
 test-flags-FC() { test-flags-PROG "FC" "$@"; }
 
-# @FUNCTION: test-flags-CCLD
-# @USAGE: <flags>
-# @DESCRIPTION:
-# Returns shell true if <flags> are supported by the C compiler and default linker, else returns shell false.
-test-flags-CCLD() { test-flags-PROG "CCLD" "$@"; }
-
 # @FUNCTION: test-flags
 # @USAGE: <flags>
 # @DESCRIPTION:
@@ -639,12 +506,13 @@ test_version_info() {
 # @DESCRIPTION:
 # Strip {C,CXX,F,FC}FLAGS of any flags not supported by the active toolchain.
 strip-unsupported-flags() {
-	[[ $# -ne 0 ]] && die "strip-unsupported-flags takes no arguments"
 	export CFLAGS=$(test-flags-CC ${CFLAGS})
 	export CXXFLAGS=$(test-flags-CXX ${CXXFLAGS})
 	export FFLAGS=$(test-flags-F77 ${FFLAGS})
 	export FCFLAGS=$(test-flags-FC ${FCFLAGS})
-	export LDFLAGS=$(test-flags-CCLD ${LDFLAGS})
+	# note: this does not verify the linker flags but it is enough
+	# to strip invalid C flags which are much more likely, #621274
+	export LDFLAGS=$(test-flags-CC ${LDFLAGS})
 }
 
 # @FUNCTION: get-flag
@@ -652,7 +520,6 @@ strip-unsupported-flags() {
 # @DESCRIPTION:
 # Find and echo the value for a particular flag.  Accepts shell globs.
 get-flag() {
-	[[ $# -ne 1 ]] && die "usage: <flag>"
 	local f var findflag="$1"
 
 	# this code looks a little flaky but seems to work for
@@ -671,11 +538,18 @@ get-flag() {
 	return 1
 }
 
+has_m64() {
+	die "${FUNCNAME}: don't use this anymore"
+}
+
+has_m32() {
+	die "${FUNCNAME}: don't use this anymore"
+}
+
 # @FUNCTION: replace-sparc64-flags
 # @DESCRIPTION:
 # Sets mcpu to v8 and uses the original value as mtune if none specified.
 replace-sparc64-flags() {
-	[[ $# -ne 0 ]] && die "replace-sparc64-flags takes no arguments"
 	local SPARC64_CPUS="ultrasparc3 ultrasparc v9"
 
 	if [ "${CFLAGS/mtune}" != "${CFLAGS}" ]; then
@@ -759,7 +633,6 @@ raw-ldflags() {
 # @FUNCTION: no-as-needed
 # @RETURN: Flag to disable asneeded behavior for use with append-ldflags.
 no-as-needed() {
-	[[ $# -ne 0 ]] && die "no-as-needed takes no arguments"
 	case $($(tc-getLD) -v 2>&1 </dev/null) in
 		*GNU*) # GNU ld
 		echo "-Wl,--no-as-needed" ;;

@@ -1,7 +1,18 @@
+# Copyright 2017-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+# @ECLASS: meson.eclass
+# @MAINTAINER:
+# William Hubbs <williamh@gentoo.org>
+# Mike Gilbert <floppym@gentoo.org>
+# @SUPPORTED_EAPIS: 6 7
+# @BLURB: common ebuild functions for meson-based packages
+# @DESCRIPTION:
+# This eclass contains the default phase functions for packages which
+# use the meson build system.
+
 case ${EAPI:-0} in
-	6|7) ;;
+	7) ;;
 	*) die "EAPI=${EAPI} is not supported" ;;
 esac
 
@@ -17,7 +28,7 @@ fi
 
 if [[ -z ${_MESON_ECLASS} ]]; then
 
-inherit ninja-utils python-utils-r1 toolchain-funcs
+inherit multiprocessing ninja-utils python-utils-r1 toolchain-funcs
 
 fi
 
@@ -114,11 +125,7 @@ _meson_create_cross_file() {
 	# Reference: http://mesonbuild.com/Cross-compilation.html
 
 	# system roughly corresponds to uname -s (lowercase)
-	local system=unknown
-	case ${CHOST} in
-		*-freebsd*)      system=freebsd ;;
-		*-linux*)        system=linux ;;
-	esac
+	local system=linux
 
 	local cpu_family=$(tc-arch)
 	case ${cpu_family} in
@@ -198,8 +205,8 @@ meson_src_configure() {
 	# Common args
 	local mesonargs=(
 		--buildtype plain
-		--libdir lib
-		--localstatedir "${EPREFIX}/var"
+		--libdir "lib"
+		--localstatedir "${EPREFIX}/var/lib"
 		--prefix "${EPREFIX}/usr"
 		--sysconfdir "${EPREFIX}/etc"
 		--wrap-mode nodownload
@@ -210,6 +217,7 @@ meson_src_configure() {
 		mesonargs+=( --cross-file "${T}/meson.${CHOST}.${ABI}" )
 	fi
 
+	# https://bugs.gentoo.org/625396
 	python_export_utf8_locale
 
 	# Append additional arguments from ebuild
@@ -264,9 +272,7 @@ meson_src_install() {
 
 	DESTDIR="${D}" eninja -C "${BUILD_DIR}" install "$@"
 
-	if [[ ${EAPI:-0} == [7] ]]; then
-		cleanup_install
-	fi
+	cleanup_install
 }
 
 fi

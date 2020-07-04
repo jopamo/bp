@@ -29,7 +29,7 @@ RESTRICT="test"
 S="${WORKDIR}/${P}/${PN}"
 
 PATCHES=(
-	"${FILESDIR}/${PN}-3.32-gentoo-fixups.patch"
+	"${FILESDIR}/${PN}-3.53-gentoo-fixups.patch"
 	"${FILESDIR}/${PN}-3.21-gentoo-fixup-warnings.patch"
 )
 

@@ -34,6 +34,8 @@ DEPEND="
 	elibc_glibc? ( >=lib-sys/glibc-2.7 )
 "
 
+filter-flags -Wl,-z,defs -Wl,-z,relro
+
 src_prepare() {
 	default
 
@@ -45,12 +47,6 @@ src_prepare() {
 		-e "/^WFLAGS/s:-Werror::" \
 		-e "/^DBM_INCLUDE/s:=.*:=${T}:" \
 		Makefile || die
-
-	# Use /run instead of /var/run.
-	sed -i \
-		-e 's:/var/run:/run:g' \
-		include/namespace.h \
-		man/man8/ip-netns.8 || die
 
 	# build against system headers
 	rm -r include/netinet #include/linux include/ip{,6}tables{,_common}.h include/libiptc

@@ -37,6 +37,7 @@ PDEPEND="
 "
 
 filter-flags -flto\=\*
+append-flags -fcommon
 
 pkg_setup() {
 	MAKE_COMMON=(

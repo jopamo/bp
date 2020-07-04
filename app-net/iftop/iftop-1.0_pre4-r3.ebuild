@@ -5,8 +5,9 @@ EAPI=7
 inherit autotools
 
 DESCRIPTION="display bandwidth usage on an interface"
-SRC_URI="http://www.ex-parrot.com/pdw/iftop/download/${P/_/}.tar.gz"
 HOMEPAGE="http://www.ex-parrot.com/pdw/iftop/"
+SRC_URI="http://www.ex-parrot.com/pdw/iftop/download/${P/_/}.tar.gz"
+S="${WORKDIR}"/${P/_/}
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -20,12 +21,13 @@ DEPEND="
 	${RDEPEND}
 	dev-util/pkgconf
 "
-S="${WORKDIR}"/${P/_/}
+
 PATCHES=(
 	"${FILESDIR}"/${P}-configure.ac.patch
 	"${FILESDIR}"/${P}-Makefile.am.patch
 	"${FILESDIR}"/${P}-tsent-set-but-not-used.patch
 	"${FILESDIR}"/${P}-ip6.arpa.patch
+	"${FILESDIR}"/${PN}-1.0pre4-gcc10.patch
 )
 
 src_prepare() {

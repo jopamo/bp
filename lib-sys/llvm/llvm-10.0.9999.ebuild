@@ -12,6 +12,7 @@ S=${WORKDIR}/${P}/${PN}
 
 LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
+KEYWORDS="amd64"
 
 IUSE="clang debug test"
 
@@ -26,15 +27,17 @@ RESTRICT="!test? ( test )"
 
 CMAKE_BUILD_TYPE=Release
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
-
 src_configure() {
+	strip-flags
+
 	local mycmakeargs=(
 		-DLLVM_ENABLE_PROJECTS=$(usex clang clang '')
 		-DLLVM_APPEND_VC_REV=OFF
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
 		-DLLVM_LIBDIR_SUFFIX=${libdir#lib}
-		-DBUILD_SHARED_LIBS=ON
+		-DBUILD_SHARED_LIBS=OFF
+		-DCLANG_LINK_CLANG_DYLIB=ON
+		-DLLVM_LINK_LLVM_DYLIB=ON
 		-DLLVM_TARGETS_TO_BUILD="AArch64;AMDGPU;BPF;X86"
 		-DLLVM_BUILD_TESTS=$(usex test)
 		-DLLVM_ENABLE_FFI=ON
@@ -45,7 +48,6 @@ src_configure() {
 		-DLLVM_ENABLE_LIBPFM=OFF
 		-DLLVM_ENABLE_EH=ON
 		-DLLVM_ENABLE_RTTI=ON
-		-DWITH_POLLY=OFF # TODO
 		-DLLVM_HOST_TRIPLE="${CHOST}"
 		-DHAVE_LIBXAR=0
 		-DOCAMLFIND=NO

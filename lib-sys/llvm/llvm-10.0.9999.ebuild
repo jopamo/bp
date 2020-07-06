@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake-utils git-r3 flag-o-matic
+inherit cmake git-r3 flag-o-matic
 
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
@@ -60,11 +60,11 @@ src_configure() {
 	)
 
 	use debug || local -x CPPFLAGS="${CPPFLAGS} -DNDEBUG"
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_test() {
 	# respect TMPDIR!
 	local -x LIT_PRESERVES_TMP=1
-	cmake-utils_src_make check
+	cmake_src_make check
 }

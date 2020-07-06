@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake-utils python-any-r1 git-r3
+inherit cmake python-any-r1 git-r3
 
 DESCRIPTION="An implementation of basic iCAL protocols"
 HOMEPAGE="https://github.com/libical/libical"
@@ -30,7 +30,7 @@ src_configure() {
 		-DLIBICAL_BUILD_TESTING=$(usex test)
 	)
 
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_test() {

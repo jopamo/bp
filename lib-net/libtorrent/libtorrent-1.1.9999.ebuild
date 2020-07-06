@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake-utils git-r3
+inherit cmake git-r3
 
 DESCRIPTION="C++ BitTorrent implementation focusing on efficiency and scalability"
 HOMEPAGE="http://libtorrent.org"
@@ -34,5 +34,5 @@ src_configure() {
 					-Dbuild_tests=OFF
 					)
 
-	cmake-utils_src_configure
+	cmake_src_configure
 }

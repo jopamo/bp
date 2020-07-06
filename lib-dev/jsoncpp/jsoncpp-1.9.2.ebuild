@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake-utils python-any-r1
+inherit cmake python-any-r1
 
 DESCRIPTION="C++ JSON reader and writer"
 HOMEPAGE="https://github.com/open-source-parsers/jsoncpp"
@@ -29,9 +29,9 @@ src_configure() {
 		# Disable implicit ccache use
 		-DCCACHE_FOUND=OFF
 	)
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_test() {
-	cmake-utils_src_make jsoncpp_check
+	cmake_src_make jsoncpp_check
 }

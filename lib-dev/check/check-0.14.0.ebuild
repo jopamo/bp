@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake-utils
+inherit cmake
 
 DESCRIPTION="A unit test framework for C"
 HOMEPAGE="https://libcheck.github.io/check/"
@@ -21,5 +21,5 @@ src_configure() {
 		-DBUILD_TESTING=$(usex test ON OFF)
 	)
 
-	cmake-utils_src_configure
+	cmake_src_configure
 }

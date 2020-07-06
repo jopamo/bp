@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake-utils flag-o-matic
+inherit cmake flag-o-matic
 
 # Different date format used upstream.
 RE2_VER=${PV#0.}
@@ -24,11 +24,11 @@ src_configure() {
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=ON
 	)
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_install() {
-	cmake-utils_src_install
+	cmake_src_install
 
 	for x in libre2.so.1 libre2.so.1.0 ; do
 		dosym libre2.so usr/lib/${x}

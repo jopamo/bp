@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake-utils git-r3 flag-o-matic
+inherit cmake git-r3 flag-o-matic
 
 DESCRIPTION="An assembler for x86 and x86_64 instruction sets"
 HOMEPAGE="http://yasm.tortall.net/"
@@ -30,11 +30,11 @@ src_configure() {
 		-DYASM_BUILD_TESTS=OFF
 	)
 
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_install() {
-	cmake-utils_src_install
+	cmake_src_install
 
 	for x in libyasmstd.so.1 libyasmstd.so.1.0 ; do
 		dosym libyasmstd.so usr/lib/${x}

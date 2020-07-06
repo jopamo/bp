@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake-utils git-r3
+inherit cmake git-r3
 
 DESCRIPTION="Cryptographic library for embedded systems"
 HOMEPAGE="https://tls.mbed.org/"
@@ -33,7 +33,7 @@ src_prepare() {
 	use zlib && enable_mbedtls_option MBEDTLS_ZLIB_SUPPORT
 	use havege && enable_mbedtls_option MBEDTLS_HAVEGE_C
 
-	cmake-utils_src_prepare
+	cmake_src_prepare
 }
 
 src_configure() {
@@ -47,20 +47,20 @@ src_configure() {
 		-DLIB_INSTALL_DIR="/usr/lib"
 	)
 
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_compile() {
-	cmake-utils_src_compile
+	cmake_src_compile
 }
 
 src_test() {
 	LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${BUILD_DIR}/library" \
-		cmake-utils_src_test
+		cmake_src_test
 }
 
 src_install() {
-	cmake-utils_src_install
+	cmake_src_install
 
 	if use programs ; then
 		# avoid file collisions with sys-app/coreutils

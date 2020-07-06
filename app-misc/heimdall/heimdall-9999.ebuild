@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake-utils git-r3
+inherit cmake git-r3
 
 DESCRIPTION="Tool suite used to flash firmware onto Samsung Galaxy S devices"
 HOMEPAGE="https://glassechidna.com.au/heimdall/"
@@ -20,7 +20,7 @@ src_configure() {
 	local mycmakeargs=(
 		-DDISABLE_FRONTEND="ON"
 	)
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_install() {

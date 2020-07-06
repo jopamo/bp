@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake-utils git-r3
+inherit cmake git-r3
 
 DESCRIPTION="A fast JSON parser/generator for C++ with both SAX/DOM style API"
 HOMEPAGE="http://rapidjson.org/"
@@ -19,10 +19,10 @@ src_configure() {
 		-DRAPIDJSON_BUILD_TESTS=$(usex test)
 		-DRAPIDJSON_BUILD_THIRDPARTY_GTEST=OFF
 	)
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_install() {
-	cmake-utils_src_install
+	cmake_src_install
 	rm -rf "${ED}"/usr/share/doc
 }

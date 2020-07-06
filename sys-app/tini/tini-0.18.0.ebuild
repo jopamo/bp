@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake-utils flag-o-matic
+inherit cmake flag-o-matic
 
 GIT_COMMIT=fec3683b971d9c3ef73f284f176672c44b448662
 DESCRIPTION="A tiny but valid init for containers"
@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="+args +static"
 
 src_prepare() {
-	cmake-utils_src_prepare
+	cmake_src_prepare
 	# Do not strip binary
 	sed -i -e 's/-Wl,-s")$/")/' \
 		-e "s/git.*status --porcelain.*/true/" \
@@ -28,16 +28,16 @@ src_configure() {
 	local mycmakeargs=()
 	use args || mycmakeargs+=(-DMINIMAL=ON)
 
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_compile() {
 	append-cflags -DPR_SET_CHILD_SUBREAPER=36 -DPR_GET_CHILD_SUBREAPER=37
-	cmake-utils_src_compile
+	cmake_src_compile
 }
 
 src_install() {
-	cmake-utils_src_install
+	cmake_src_install
 	if use static; then
 		mv "${ED%/}"/usr/bin/{${PN}-static,${PN}} || die
 	else

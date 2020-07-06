@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake-utils flag-o-matic git-r3
+inherit cmake flag-o-matic git-r3
 
 DESCRIPTION="ZeroMQ 'highlevel' C++ bindings"
 HOMEPAGE="https://github.com/zeromq/zmqpp"
@@ -20,7 +20,7 @@ filter-flags -Wl,-z,defs -Wl,-z,relro
 
 src_prepare() {
 	sed -i.1 -e "s/DESTINATION\ lib/DESTINATION\ lib/g" "CMakeLists.txt"
-	cmake-utils_src_prepare
+	cmake_src_prepare
 }
 
 src_configure() {
@@ -31,5 +31,5 @@ src_configure() {
 		-DZMQPP_BUILD_STATIC="$(usex static-libs)"
 	)
 
-	cmake-utils_src_configure
+	cmake_src_configure
 }

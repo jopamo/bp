@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake-utils git-r3
+inherit cmake git-r3
 
 DESCRIPTION="Extremely Fast Compression algorithm"
 HOMEPAGE="https://github.com/lz4/lz4"
@@ -22,5 +22,5 @@ src_configure() {
 		-DBUILD_STATIC_LIBS=$(usex static-libs)
 	)
 
-	cmake-utils_src_configure
+	cmake_src_configure
 }

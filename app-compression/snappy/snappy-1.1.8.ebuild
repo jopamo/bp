@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake-utils
+inherit cmake
 
 DESCRIPTION="A high-speed compression/decompression library by Google"
 HOMEPAGE="https://github.com/google/snappy"
@@ -21,7 +21,7 @@ src_prepare() {
 	# it off
 	sed -i -e '/run_microbenchmarks/s:true:false:' snappy-test.cc || die
 
-	cmake-utils_src_prepare
+	cmake_src_prepare
 }
 
 src_configure() {
@@ -35,7 +35,7 @@ src_configure() {
 		-DHAVE_LIBZ=NO
 		-DHAVE_LIBLZO2=NO
 	)
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_test() {

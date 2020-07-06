@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic toolchain-funcs cmake-utils
+inherit flag-o-matic toolchain-funcs cmake
 
 DESCRIPTION="Cross platform Make"
 HOMEPAGE="https://cmake.org/"
@@ -74,7 +74,7 @@ cmake_src_test() {
 }
 
 src_prepare() {
-	cmake-utils_src_prepare
+	cmake_src_prepare
 
 	# Add gcc libs to the default link paths
 	sed -i \
@@ -104,11 +104,11 @@ src_configure() {
 		-DCMAKE_USE_SYSTEM_LIBUV=ON
 	)
 
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_install() {
-	cmake-utils_src_install
+	cmake_src_install
 
 	rm -rf "${ED}"/usr/share/cmake/{completions,editors} || die
 	rm -rf "${ED}"/usr/doc || die

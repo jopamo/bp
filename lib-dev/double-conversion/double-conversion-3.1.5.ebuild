@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake-utils
+inherit cmake
 
 DESCRIPTION="Binary-decimal and decimal-binary conversion routines for IEEE doubles"
 HOMEPAGE="https://github.com/google/double-conversion"
@@ -17,5 +17,5 @@ src_configure() {
 		-DBUILD_SHARED_LIBS=ON
 	)
 
-	cmake-utils_src_configure
+	cmake_src_configure
 }

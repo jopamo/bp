@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake-utils
+inherit cmake
 
 DESCRIPTION="A simple, small, efficient, C++ XML parser"
 HOMEPAGE="http://www.grinninglizard.com/tinyxml2/ https://github.com/leethomason/tinyxml2/"
@@ -18,5 +18,5 @@ src_configure() {
 		-DBUILD_STATIC_LIBS=$(usex static-libs)
 		-DBUILD_TESTING=$(usex test)
 	)
-	cmake-utils_src_configure
+	cmake_src_configure
 }

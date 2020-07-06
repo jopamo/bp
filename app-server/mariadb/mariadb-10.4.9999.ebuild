@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit systemd flag-o-matic prefix toolchain-funcs user cmake-utils git-r3
+inherit systemd flag-o-matic prefix toolchain-funcs user cmake git-r3
 
 HOMEPAGE="https://mariadb.org/"
 DESCRIPTION="An enhanced, drop-in replacement for MySQL"
@@ -219,15 +219,15 @@ src_configure(){
 		)
 	fi
 
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_compile() {
-	cmake-utils_src_compile
+	cmake_src_compile
 }
 
 src_install() {
-	cmake-utils_src_install
+	cmake_src_install
 
 	# Remove an unnecessary, private config header which will never match between ABIs and is not meant to be used
 	if [[ -f "${ED}/usr/include/mysql/server/private/config.h" ]] ; then
@@ -339,7 +339,7 @@ src_test() {
 	einfo ">>> Test phase [test]: ${CATEGORY}/${PF}"
 
 	# Run CTest (test-units)
-	cmake-utils_src_test
+	cmake_src_test
 	retstatus_unit=$?
 
 	# Ensure that parallel runs don't die

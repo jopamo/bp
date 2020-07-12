@@ -1,0 +1,30 @@
+From 1263f9bc1d01b212fa153f29ee6a47a654d5071b Mon Sep 17 00:00:00 2001
+From: Pavel Raiskup <praiskup@redhat.com>
+Date: Thu, 9 Jul 2020 21:22:10 +0200
+Subject: Bugfix --sparse --diff mode
+
+Originally reported in:
+https://bugzilla.redhat.com/show_bug.cgi?id=1853469
+
+* src/sparse.c (check_data_region): Only compare the part of buffer
+really fed by safe_read(), not whole rdsize.
+---
+ src/sparse.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/sparse.c b/src/sparse.c
+index e60b16a..cc3c515 100644
+--- a/src/sparse.c
++++ b/src/sparse.c
+@@ -684,7 +684,7 @@ check_data_region (struct tar_sparse_file *file, size_t i)
+ 	}
+       size_left -= bytes_read;
+       mv_size_left (file->stat_info->archive_file_size - file->dumped_size);
+-      if (memcmp (blk->buffer, diff_buffer, rdsize))
++      if (memcmp (blk->buffer, diff_buffer, bytes_read))
+ 	{
+ 	  report_difference (file->stat_info, _("Contents differ"));
+ 	  return false;
+-- 
+cgit v1.2.1
+

@@ -11,7 +11,7 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/mesonbuild/meson"
 	inherit git-r3
 else
-	SNAPSHOT=c61f75adbfd5b2ce18de329e65217cc911f989d4
+	SNAPSHOT=c57616884f02dfd661bca5766acd409582dac83b
 	SRC_URI="https://github.com/mesonbuild/meson/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"

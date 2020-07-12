@@ -7,13 +7,13 @@ inherit libtool pam autotools
 DESCRIPTION="Utilities to deal with user accounts"
 HOMEPAGE="https://github.com/shadow-maint/shadow http://pkg-shadow.alioth.debian.org/"
 
-SNAPSHOT=6baeb250389d8076235eb9799f90e9efe5f304ff
+SNAPSHOT=607f1dd549cf9abc87af1cf29275f0d2d11eea29
 SRC_URI="https://github.com/shadow-maint/shadow/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="BSD GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="acl audit pam skey xattr"
 
@@ -27,8 +27,6 @@ DEPEND="${RDEPEND}
 
 RDEPEND="${RDEPEND}
 	pam? ( lib-sys/pambase )"
-
-PATCHES=( "${FILESDIR}"/disable_man_and_docs.patch )
 
 src_prepare() {
 	default
@@ -50,7 +48,7 @@ src_configure() {
 		$(use_with pam libpam)
 		$(use_with skey)
 		$(use_with xattr attr)
-		--enable-man
+		--disable-subordinate-ids
 	)
 	econf ${myconf[@]}
 }

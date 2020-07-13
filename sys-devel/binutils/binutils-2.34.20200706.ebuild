@@ -12,7 +12,7 @@ if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_BRANCH="binutils-$(ver_cut 1)_$(ver_cut 2)-branch"
 else
-	SNAPSHOT=2c7e98d60d6b22de20a198a88276ef00f041066e
+	SNAPSHOT=26b6ab7a0e4106597c3e4949bb17208bd863ce98
 	SRC_URI="https://github.com/1g4-mirror/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-gdb-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"

@@ -2,12 +2,21 @@
 
 EAPI=7
 
-inherit git-r3 flag-o-matic
+inherit flag-o-matic
 
 DESCRIPTION="GNU libc C library"
 HOMEPAGE="https://www.gnu.org/software/libc/"
-EGIT_REPO_URI="git://sourceware.org/git/glibc.git"
-EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)/master"
+
+if [[ ${PV} = *9999* ]]; then
+	EGIT_REPO_URI="https://github.com/bminor/glibc"
+	inherit git-r3
+	EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)/master"
+else
+	SNAPSHOT=4e8a33a9590edc5c3a2cc5e726a3f2a73b66cdc0
+	SRC_URI="https://github.com/bminor/glibc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	KEYWORDS="amd64 arm64"
+fi
 
 LICENSE="LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
 SLOT="0"

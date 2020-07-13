@@ -7,7 +7,7 @@ inherit flag-o-matic python-single-r1 git-r3
 DESCRIPTION="GNU debugger"
 HOMEPAGE="https://sourceware.org/gdb/"
 EGIT_REPO_URI="https://github.com/1g4-mirror/binutils-gdb.git"
-EGIT_BRANCH="gdb-$(ver_cut 1).$(ver_cut 2)-branch"
+EGIT_BRANCH="gdb-$(ver_cut 1)-branch"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
@@ -38,12 +38,15 @@ DEPEND="${RDEPEND}
 		nls? ( sys-devel/gettext )
 	)"
 
+GDB_BUILD_DIR="${WORKDIR}"/${P}-build
+
 pkg_setup() {
 	use python && python-single-r1_pkg_setup
 }
 
 src_prepare() {
 	default
+
 	strip-linguas -u bfd/po opcodes/po
 }
 
@@ -51,6 +54,7 @@ src_configure() {
 	strip-unsupported-flags
 
 	myconf+=(
+			--disable-dependency-tracking
 			--disable-werror
 			--disable-{binutils,etc,gas,gold,gprof,ld}
 			--enable-64-bit-bfd
@@ -69,22 +73,34 @@ src_configure() {
 			$(use multitarget && echo --enable-targets=all)
 			$(use_with python python "${EPYTHON}")
 		)
-	econf "${myconf[@]}"
+
+	export ac_cv_path_pkg_config_prog_path="$(tc-getPKG_CONFIG)"
+
+	mkdir "${GDB_BUILD_DIR}" || die
+	pushd "${GDB_BUILD_DIR}" || die
+		ECONF_SOURCE=${S}
+		econf "${myconf[@]}"
+	popd
+}
+
+src_compile() {
+	emake -C "${GDB_BUILD_DIR}"
 }
 
 src_test() {
-	nonfatal emake check || ewarn "tests failed"
+	emake -C "${GDB_BUILD_DIR}" check
 }
 
 src_install() {
 	if use server && ! use client; then
-		cd gdb/gdbserver || die
+		emake -C "${GDB_BUILD_DIR}"/gdb/gdbserver DESTDIR="${D}" install
+	else
+		emake -C "${GDB_BUILD_DIR}" DESTDIR="${D}" install
 	fi
-	default
+
 	if use client; then
 		find "${ED}"/usr -name libiberty.a -delete || die
 	fi
-	cd "${S}" || die
 
 	# Delete translations that conflict with binutils-libs. #528088
 	# Note: Should figure out how to store these in an internal gdb dir.
@@ -96,4 +112,13 @@ src_install() {
 
 	# Remove shared info pages
 	rm -f "${ED}"/usr/share/info/{annotate,bfd,configure,standards}.info*
+
+	if use python; then
+		python_optimize "${ED}"/usr/share/gdb/python/gdb
+	fi
+}
+
+pkg_postinst() {
+	# portage doesnt unmerge files in /etc
+	rm -vf "${EROOT}"/etc/skel/.gdbinit
 }

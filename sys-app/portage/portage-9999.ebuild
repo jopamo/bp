@@ -157,6 +157,8 @@ auto-sync = yes" >> "${ED}"/usr/share/portage/config/repos.conf
 
 	insinto usr/share/portage/config/
 	doins ${FILESDIR}/make.globals
+
+	cleanup_install
 }
 
 pkg_preinst() {

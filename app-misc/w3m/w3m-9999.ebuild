@@ -81,4 +81,6 @@ src_install() {
 	emake DESTDIR="${D}" install
 	insinto /etc/${PN}
 	newins "${FILESDIR}/${PN}.mailcap" mailcap
+
+	cleanup_install
 }

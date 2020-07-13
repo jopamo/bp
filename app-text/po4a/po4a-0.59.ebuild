@@ -21,7 +21,13 @@ DEPEND="${RDEPEND}
 	dev-perl/Unicode-LineBreak
 	dev-perl/YAML-Tiny
 	dev-perl/Locale-gettext
+	dev-perl/Pod-Parser
 	dev-perl/TermReadKey
 	dev-perl/Text-WrapI18N
 	app-text/docbook-xsl-stylesheets
 	app-text/docbook-xml-dtd"
+
+src_install() {
+	perl-module_src_install
+	rm -rf "${ED}"/usr/share/man
+}

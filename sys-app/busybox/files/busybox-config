@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
-# Busybox version: 1.32.0.git
-# Tue Feb 11 19:14:08 2020
+# Busybox version: 1.33.0.git
+# Sun Jul 12 22:45:34 2020
 #
 CONFIG_HAVE_DOT_CONFIG=y
 
@@ -812,6 +812,7 @@ CONFIG_MAKEDEVS=y
 CONFIG_FEATURE_MAKEDEVS_TABLE=y
 CONFIG_MAN=y
 CONFIG_MICROCOM=y
+# CONFIG_MIM is not set
 CONFIG_MT=y
 CONFIG_NANDWRITE=y
 CONFIG_NANDDUMP=y
@@ -1098,6 +1099,7 @@ CONFIG_SH_IS_NONE=y
 # CONFIG_BASH_IS_ASH is not set
 # CONFIG_BASH_IS_HUSH is not set
 CONFIG_BASH_IS_NONE=y
+# CONFIG_SHELL_ASH is not set
 # CONFIG_ASH is not set
 # CONFIG_ASH_OPTIMIZE_FOR_SIZE is not set
 # CONFIG_ASH_INTERNAL_GLOB is not set
@@ -1118,6 +1120,7 @@ CONFIG_BASH_IS_NONE=y
 # CONFIG_ASH_CMDCMD is not set
 # CONFIG_CTTYHACK is not set
 # CONFIG_HUSH is not set
+# CONFIG_SHELL_HUSH is not set
 # CONFIG_HUSH_BASH_COMPAT is not set
 # CONFIG_HUSH_BRACE_EXPANSION is not set
 # CONFIG_HUSH_LINENO_VAR is not set

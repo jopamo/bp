@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="git://git.busybox.net/busybox"
 	#EGIT_BRANCH="$(ver_cut 1)_$(ver_cut 2)_stable"
 else
-	SNAPSHOT=45fa3f18adf57ef9d743038743d9c90573aeeb91
+	SNAPSHOT=4468c569f7112f4f6892dad52fd784ef4c22c44e
 	SRC_URI="https://git.busybox.net/busybox/snapshot/${PN}-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -21,7 +21,7 @@ KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2" # GPL-2 only
 SLOT="0"
-RESTRICT="test"
+RESTRICT="test strip"
 
 filter-flags -flto\=\*
 

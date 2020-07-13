@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT=971d1365ab16279bb33312583c320008e391f26e
+SNAPSHOT=ae584040d14a4d7d6eed8be77844126130ef0118
 
 inherit flag-o-matic toolchain-funcs autotools
 
@@ -22,7 +22,6 @@ DEPEND="
 	>=lib-dev/libgcrypt-1.6.3
 	>=lib-dev/libgpg-error-1.17
 	caps? ( lib-sys/libcap )
-	static? ( >=lib-sys/ncurses-5.7-r5:0=[static-libs] )
 "
 BDEPEND="sys-devel/gettext
 	dev-util/pkgconf"

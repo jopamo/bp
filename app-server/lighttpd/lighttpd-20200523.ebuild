@@ -2,17 +2,27 @@
 
 EAPI=7
 
-inherit meson user systemd git-r3 flag-o-matic
+inherit meson user systemd flag-o-matic
 
 DESCRIPTION="Lightweight high-performance web server"
 HOMEPAGE="http://www.lighttpd.net/"
 EGIT_REPO_URI="https://git.lighttpd.net/lighttpd/lighttpd1.4.git"
 
+if [[ ${PV} = *9999* ]]; then
+	EGIT_REPO_URI="https://github.com/lighttpd/lighttpd1.4.git"
+	inherit git-r3
+else
+	SNAPSHOT=adbbc6a4f533e2ac1d2b21d413249ac95d9e93aa
+	SRC_URI="https://github.com/lighttpd/lighttpd1.4/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}1.4-${SNAPSHOT}
+	KEYWORDS="amd64 arm64"
+fi
+
 LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 dbi fam gdbm geoip krb5 ldap libev libunwind lua memcached mysql ssl pcre php test postgres systemd webdav xattr zlib static"
+IUSE="bzip2 dbi fam gdbm geoip krb5 ldap libev libunwind lua memcached mbedtls mysql ssl pcre php test postgres systemd webdav xattr zlib static"
 
 CDEPEND="
 	app-compression/lbzip2
@@ -20,10 +30,10 @@ CDEPEND="
 	ldap?     ( >=app-net/openldap-2.1.26 )
 	libev?    ( >=lib-dev/libev-4.01 )
 	mysql?    ( >=virtual/mysql-4.0 )
-	>=lib-dev/libpcre-3.1
 	php?      ( dev-lang/php:*[cgi] )
 	ssl? ( lib-net/libressl )
 	xattr? ( sys-app/attr )
+	>=lib-dev/libpcre-3.1
 	>=lib-sys/zlib-1.1"
 
 DEPEND="${CDEPEND}
@@ -32,10 +42,7 @@ DEPEND="${CDEPEND}
 		lib-dev/fcgi
 	)"
 
-RDEPEND="${CDEPEND}
-"
-
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs -Wl,-z,relro
 
 pkg_setup() {
 	enewgroup lighttpd
@@ -51,18 +58,20 @@ src_configure() {
 		$(meson_use krb5 with_krb5)
 		$(meson_use ldap with_ldap)
 		$(meson_use libev with_libev)
+		$(meson_use libev with_libev)
 		$(meson_use libunwind with_libunwind)
 		$(meson_use lua with_lua)
+		$(meson_use mbedtls with_mbedtls)
 		$(meson_use memcached with_memcached)
 		$(meson_use mysql with_mysql)
-		$(meson_use ssl with_openssl)
 		$(meson_use pcre with_pcre)
 		$(meson_use postgres with_pgsql)
+		$(meson_use ssl with_openssl)
+		$(meson_use static build_static)
 		$(meson_use webdav with_webdav_locks)
 		$(meson_use webdav with_webdav_props)
 		$(meson_use xattr with_xattr)
 		$(meson_use zlib with_zlib)
-		$(meson_use static build_static)
 		-Dmoduledir="${EPREFIX}"/usr/lib
 	)
 		meson_src_configure

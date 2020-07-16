@@ -63,20 +63,16 @@ src_compile() {
 src_install() {
 	cd "${S}"/bin/delv
 	dobin delv
-	doman delv.1
 
 	cd "${S}"/bin/dig
 	dobin dig host nslookup
-	doman {dig,host,nslookup}.1
 
 	cd "${S}"/bin/nsupdate
 	dobin nsupdate
-	doman nsupdate.1
 
 	cd "${S}"/bin/dnssec
 	for tool in dsfromkey importkey keyfromlabel keygen \
 	  revoke settime signzone verify; do
 		dobin dnssec-"${tool}"
-		doman dnssec-"${tool}".8
 	done
 }

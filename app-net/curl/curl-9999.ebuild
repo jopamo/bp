@@ -16,7 +16,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="adns ipv6 ldap ssh static-libs test nghttp2"
+IUSE="adns ipv6 ldap mbedtls ssh ssl static-libs test nghttp2"
 
 RDEPEND="ldap? ( app-net/openldap )
 		adns? ( lib-net/c-ares:0 )
@@ -27,7 +27,7 @@ RDEPEND="ldap? ( app-net/openldap )
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconf
-	lib-net/mbedtls:0
+	mbedtls? ( lib-net/mbedtls )
 	test? (
 		sys-app/diffutils
 		dev-lang/perl
@@ -52,8 +52,8 @@ src_configure() {
 		$(use_with nghttp2)
 		$(use_enable adns ares)
 		$(use_enable ipv6)
-		--without-ssl
-		--with-mbedtls
+		$(use_with mbedtls)
+		$(use_with ssl)
 		--with-zlib
 		--with-random=/dev/urandom
 		--enable-versioned-symbols

@@ -2,21 +2,25 @@
 
 EAPI=7
 
-inherit git-r3 meson flag-o-matic
+inherit meson flag-o-matic
 
 DESCRIPTION="A set of co-operative tools that make networking simple and straightforward"
 HOMEPAGE="https://wiki.gnome.org/Projects/NetworkManager"
-EGIT_REPO_URI="https://github.com/NetworkManager/NetworkManager.git"
+
+if [[ ${PV} = *9999* ]]; then
+	EGIT_REPO_URI="https://github.com/NetworkManager/NetworkManager"
+	inherit git-r3
+else
+	SNAPSHOT=3f140afdfce2ed76ede842587ce2298305b1c699
+	SRC_URI="https://github.com/NetworkManager/NetworkManager/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="+nmtui systemd test"
-
-REQUIRED_USE="
-	?? ( systemd )
-"
 
 COMMON_DEPEND="
 	>=sys-app/dbus-1.2

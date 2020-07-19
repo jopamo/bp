@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/karelzak/util-linux.git"
 	EGIT_BRANCH="stable/v$(ver_cut 1-2)"
 else
-	SNAPSHOT=7519c3edab120b14623931d5ddb16fdc6e7cad5d
+	SNAPSHOT=3575089b16f03786d149f51641cf30dcea9a79cb
 	SRC_URI="https://github.com/karelzak/util-linux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -115,8 +115,6 @@ src_configure() {
 		$(use_with readline)
 		$(use_with systemd)
 		$(use_with udev)
-		$(usex ncurses "$(use_with unicode ncursesw)" '--without-ncursesw')
-		$(usex ncurses "$(use_with !unicode ncurses)" '--without-ncurses')
 		$(tc-has-tls || echo --disable-tls)
 		$(use_enable unicode widechar)
 		$(use_enable kill)

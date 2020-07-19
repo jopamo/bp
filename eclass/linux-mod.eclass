@@ -673,11 +673,11 @@ linux-mod_src_compile() {
 			# fails.
 			eval "emake HOSTCC=\"$(tc-getBUILD_CC)\" \
 						CROSS_COMPILE=${CHOST}- \
-						LDFLAGS=\"$(get_abi_LDFLAGS)\" \
+						LDFLAGS=\"{LDFLAGS}\" \
 						${BUILD_FIXES} \
 						${BUILD_PARAMS} \
 						${BUILD_TARGETS} " \
-				|| die "Unable to emake HOSTCC="$(tc-getBUILD_CC)" CROSS_COMPILE=${CHOST}- LDFLAGS="$(get_abi_LDFLAGS)" ${BUILD_FIXES} ${BUILD_PARAMS} ${BUILD_TARGETS}"
+				|| die "Unable to emake HOSTCC="$(tc-getBUILD_CC)" CROSS_COMPILE=${CHOST}- LDFLAGS="{LDFLAGS}" ${BUILD_FIXES} ${BUILD_PARAMS} ${BUILD_TARGETS}"
 			cd "${OLDPWD}"
 			touch "${srcdir}"/.built
 		fi

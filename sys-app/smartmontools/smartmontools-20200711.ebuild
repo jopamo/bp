@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT=9c2f3a38063c4c6837507373c4dc4c9b1e3e7e81
+SNAPSHOT=b8e4173cc56c3f54f5c78044d0f4616151be0bf3
 
 inherit autotools flag-o-matic systemd
 

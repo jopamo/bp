@@ -22,7 +22,6 @@ RESTRICT="!test? ( test )"
 DEPEND="
 	audit? ( >=sys-app/audit-2:0= )
 	cryptsetup? ( >=sys-fs/cryptsetup-1.6:0= )
-	efi? ( sys-app/gnu-efi )
 	gcrypt? ( lib-dev/libgcrypt )
 	kmod? ( >=sys-app/kmod-15:0= )
 	logind? ( sys-app/dbus )
@@ -81,7 +80,6 @@ src_configure() {
 		$(meson_use coredump)
 		$(meson_use cryptsetup libcryptsetup)
 		$(meson_use efi )
-		$(meson_use efi gnu-efi)
 		$(meson_use gcrypt)
 		$(meson_use hostnamed)
 		$(meson_use hwdb)
@@ -117,6 +115,7 @@ src_configure() {
 		-Denvironment-d=false
 		-Dfirstboot=false
 		-Dgnutls=false
+		-Dgnu-efi=false
 		-Dhibernate=false
 		-Dhtml=false
 		-Didn=false

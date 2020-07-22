@@ -23,8 +23,6 @@ LIB_DEPEND="acl? ( sys-app/acl[static-libs(+)] )
 DEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
 	static? ( ${LIB_DEPEND} )"
 
-PATCHES=( "${FILESDIR}"/noreconfigure.patch )
-
 src_prepare() {
 	rm -f zlib/*.{c,h} || die
 	default

@@ -2,11 +2,19 @@
 
 EAPI=7
 
-inherit flag-o-matic git-r3
+inherit flag-o-matic
 
 DESCRIPTION="Vim, an improved vi-style text editor"
 HOMEPAGE="https://vim.sourceforge.io/ https://github.com/vim/vim"
-EGIT_REPO_URI="https://github.com/vim/vim.git"
+
+if [[ ${PV} = *9999* ]]; then
+	EGIT_REPO_URI="https://github.com/vim/vim"
+	inherit git-r3
+else
+	SNAPSHOT=c69950ac17225d07f973b39d5b0eb94291077808
+	SRC_URI="https://github.com/vim/vim/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 SLOT="0"
 LICENSE="vim"

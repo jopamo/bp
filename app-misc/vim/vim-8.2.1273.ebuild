@@ -16,11 +16,11 @@ else
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 
-SLOT="0"
 LICENSE="vim"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug nls"
+IUSE="debug"
 
 RDEPEND="
 	>=lib-sys/ncurses-5.2-r2:0=
@@ -36,20 +36,20 @@ DEPEND="
 
 src_configure() {
 	local myconf=(
-			--with-features=tiny
-			--enable-nls
-			--enable-acl
-			--enable-gui=no
-			--without-x
-			--disable-darwin
-			--disable-luainterp
-			--disable-perlinterp
-			--disable-pythoninterp
-			--disable-mzschemeinterp
-			--disable-rubyinterp
-			--disable-selinux
-			--disable-tclinterp
-			--disable-gpm
+		--with-features=tiny
+		--enable-nls
+		--enable-acl
+		--enable-gui=no
+		--without-x
+		--disable-darwin
+		--disable-luainterp
+		--disable-perlinterp
+		--disable-pythoninterp
+		--disable-mzschemeinterp
+		--disable-rubyinterp
+		--disable-selinux
+		--disable-tclinterp
+		--disable-gpm
 		)
 
 	use debug && append-flags "-DDEBUG"

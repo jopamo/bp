@@ -23,7 +23,6 @@ RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
 
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )
-	dev-util/pkgconf
 	static? ( ${LIB_DEPEND} )"
 
 src_configure() {
@@ -44,11 +43,11 @@ src_configure() {
 		$(use_enable !minimal color)
 		$(use_enable !minimal multibuffer)
 		$(use_enable !minimal nanorc)
+		$(use_enable minimal tiny)
 		$(use_enable magic libmagic)
 		$(use_enable justify)
 		$(use_enable debug)
 		$(use_enable nls)
-		$(use_enable minimal tiny)
 	)
 
 	econf "${myconf[@]}"
@@ -57,10 +56,10 @@ src_configure() {
 src_install() {
 	default
 
-	insinto /etc
-	newins doc/sample.nanorc nanorc
-
 	if ! use minimal ; then
+		insinto /etc
+		newins doc/sample.nanorc nanorc
+
 		# Enable colorization by default.
 		sed -i \
 			-e '/^# include /s:# *::' \

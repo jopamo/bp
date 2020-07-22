@@ -30,7 +30,7 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	for x in libre2.so.1 libre2.so.1.0 ; do
+	for x in libre2.so.8 libre2.so.8.0.0 ; do
 		dosym libre2.so usr/lib/${x}
 	done
 }

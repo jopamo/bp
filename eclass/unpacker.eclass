@@ -1,3 +1,4 @@
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: unpacker.eclass
@@ -15,6 +16,8 @@
 
 if [[ -z ${_UNPACKER_ECLASS} ]]; then
 _UNPACKER_ECLASS=1
+
+inherit toolchain-funcs
 
 # @ECLASS-VARIABLE: UNPACKER_BZ2
 # @DEFAULT_UNSET
@@ -201,7 +204,7 @@ unpack_makeself() {
 				skip=`grep -a ^offset= "${src}" | awk '{print $3}'`
 				(( skip++ ))
 				;;
-			2.1.4|2.1.5|2.1.6|2.2.0)
+			2.1.4|2.1.5|2.1.6|2.2.0|2.4.0)
 				skip=$(grep -a offset=.*head.*wc "${src}" | awk '{print $3}' | head -n 1)
 				skip=$(head -n ${skip} "${src}" | wc -c)
 				exe="dd"
@@ -278,7 +281,7 @@ unpack_deb() {
 			done
 		} < "${deb}"
 	else
-		ar x "${deb}"
+		$(tc-getBUILD_AR) x "${deb}" || die
 	fi
 
 	unpacker ./data.tar*
@@ -338,6 +341,7 @@ _unpacker() {
 	a=$(find_unpackable_file "${a}")
 
 	# first figure out the decompression method
+	local comp=""
 	case ${m} in
 	*.bz2|*.tbz|*.tbz2)
 		local bzcmd=${PORTAGE_BZIP2_COMMAND:-$(type -P pbzip2 || type -P bzip2)}
@@ -352,11 +356,10 @@ _unpacker() {
 	*.lz)
 		: ${UNPACKER_LZIP:=$(type -P plzip || type -P pdlzip || type -P lzip)}
 		comp="${UNPACKER_LZIP} -dc" ;;
-	*)	comp="" ;;
 	esac
 
 	# then figure out if there are any archiving aspects
-	arch=""
+	local arch=""
 	case ${m} in
 	*.tgz|*.tbz|*.tbz2|*.txz|*.tar.*|*.tar)
 		arch="tar --no-same-owner -xof" ;;
@@ -442,20 +445,20 @@ unpacker_src_uri_depends() {
 	for uri in "$@" ; do
 		case ${uri} in
 		*.cpio.*|*.cpio)
-			d="app-compression/cpio" ;;
+			d="app-arch/cpio" ;;
 		*.deb)
 			# platforms like AIX don't have a good ar
-			d="kernel_AIX? ( app-compression/deb2targz )" ;;
+			d="kernel_AIX? ( app-arch/deb2targz )" ;;
 		*.rar|*.RAR)
-			d="app-compression/unrar" ;;
+			d="app-arch/unrar" ;;
 		*.7z)
-			d="app-compression/p7zip" ;;
+			d="app-arch/p7zip" ;;
 		*.xz)
-			d="app-compression/xz-utils" ;;
+			d="app-arch/xz-utils" ;;
 		*.zip)
-			d="sys-app/busybox" ;;
+			d="app-arch/unzip" ;;
 		*.lz)
-			d="|| ( app-compression/plzip app-compression/pdlzip app-compression/lzip )" ;;
+			d="|| ( app-arch/plzip app-arch/pdlzip app-arch/lzip )" ;;
 		esac
 		deps+=" ${d}"
 	done

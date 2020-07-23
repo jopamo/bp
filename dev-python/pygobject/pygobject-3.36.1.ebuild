@@ -2,11 +2,11 @@
 
 EAPI=7
 
-inherit meson git-r3 python-r1 flag-o-matic
+inherit meson python-r1 flag-o-matic
 
 DESCRIPTION="GLib's GObject library bindings for Python"
 HOMEPAGE="https://wiki.gnome.org/Projects/PyGObject"
-EGIT_REPO_URI="https://github.com/GNOME/pygobject.git"
+SRC_URI="https://ftp.acc.umu.se/pub/GNOME/sources/pygobject/$(ver_cut 1-2)/pygobject-${PV}.tar.xz"
 
 LICENSE="LGPL-2.1+"
 SLOT="0"
@@ -23,7 +23,7 @@ COMMON_DEPEND="${PYTHON_DEPS}
 
 RDEPEND="${COMMON_DEPEND}"
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_configure() {
         local emesonargs=(

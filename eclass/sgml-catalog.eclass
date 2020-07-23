@@ -1,76 +1,90 @@
-# Copyright 2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: sgml-catalog-r1.eclass
-# @MAINTAINER:
-# Michał Górny <mgorny@gentoo.org>
-# @AUTHOR:
-# Michał Górny <mgorny@gentoo.org>
-# @SUPPORTED_EAPIS: 7
-# @BLURB: Functions for installing SGML catalogs
+DEPEND=">=app-text/sgml-common-0.6.3-r2"
+
+# @ECLASS-VARIABLE: SGML_TOINSTALL
 # @DESCRIPTION:
-# This eclass regenerates /etc/sgml/catalog, /etc/sgml.{,c}env
-# and /etc/env.d/93sgmltools-lite as necessary for the DocBook tooling.
-# This is done via exported pkg_postinst and pkg_postrm phases.
+# An array of catalogs, arranged in pairs.
+# Each pair consists of a centralized catalog followed by an ordinary catalog.
+SGML_TOINSTALL=()
 
-case ${EAPI:-0} in
-	7) ;;
-	*) die "Unsupported EAPI=${EAPI} for ${ECLASS}";;
-esac
-
-EXPORT_FUNCTIONS pkg_postinst pkg_postrm
-
-if [[ ! ${_SGML_CATALOG_R1} ]]; then
-
-if [[ ${CATEGORY}/${PN} != app-text/sgml-common ]]; then
-	RDEPEND=">=app-text/sgml-common-0.6.3-r7"
-fi
-
-# @FUNCTION: sgml-catalog-r1_update_catalog
+# @FUNCTION: sgml-catalog_cat_include
+# @USAGE: <centralized catalog> <ordinary catalog>
 # @DESCRIPTION:
-# Regenerate /etc/sgml/catalog to include all installed catalogs.
-sgml-catalog-r1_update_catalog() {
-	local shopt_save=$(shopt -p nullglob)
-	shopt -s nullglob
-	local cats=( "${EROOT}"/etc/sgml/*.cat )
-	${shopt_save}
+# Appends a catalog pair to the SGML_TOINSTALL array.
+sgml-catalog_cat_include() {
+	debug-print function $FUNCNAME $*
+	SGML_TOINSTALL+=("$1" "$2")
+}
 
-	if [[ ${#cats[@]} -gt 0 ]]; then
-		ebegin "Updating ${EROOT}/etc/sgml/catalog"
-		printf 'CATALOG "%s"\n' "${cats[@]}" > "${T}"/catalog &&
-		mv "${T}"/catalog "${EROOT}"/etc/sgml/catalog
-		eend "${?}"
-	else
-		ebegin "Removing ${EROOT}/etc/sgml/catalog"
-		rm "${EROOT}"/etc/sgml/catalog &&
-		{ rmdir "${EROOT}"/etc/sgml &>/dev/null || :; }
-		eend "${?}"
+# @FUNCTION: sgml-catalog_cat_doinstall
+# @USAGE: <centralized catalog> <ordinary catalog>
+# @DESCRIPTION:
+# Adds an ordinary catalog to a centralized catalog.
+sgml-catalog_cat_doinstall() {
+	debug-print function $FUNCNAME $*
+	has "${EAPI:-0}" 0 1 2 && ! use prefix && EPREFIX=
+	"${EPREFIX}"/usr/bin/install-catalog --add "${EPREFIX}$1" "${EPREFIX}$2" &>/dev/null
+}
+
+# @FUNCTION: sgml-catalog_cat_doremove
+# @USAGE: <centralized catalog> <ordinary catalog>
+# @DESCRIPTION:
+# Removes an ordinary catalog from a centralized catalog.
+sgml-catalog_cat_doremove() {
+	debug-print function $FUNCNAME $*
+	has "${EAPI:-0}" 0 1 2 && ! use prefix && EPREFIX=
+	"${EPREFIX}"/usr/bin/install-catalog --remove "${EPREFIX}$1" "${EPREFIX}$2" &>/dev/null
+}
+
+sgml-catalog_pkg_postinst() {
+	debug-print function $FUNCNAME $*
+	has "${EAPI:-0}" 0 1 2 && ! use prefix && EPREFIX=
+
+	set -- "${SGML_TOINSTALL[@]}"
+
+	while (( $# )); do
+		if [[ ! -e "${EPREFIX}$2" ]]; then
+			ewarn "${EPREFIX}$2 doesn't appear to exist, although it ought to!"
+			shift 2
+			continue
+		fi
+		einfo "Now adding ${EPREFIX}$2 to ${EPREFIX}$1 and ${EPREFIX}/etc/sgml/catalog"
+		sgml-catalog_cat_doinstall "$1" "$2"
+		shift 2
+	done
+	sgml-catalog_cleanup
+}
+
+sgml-catalog_pkg_prerm() {
+	sgml-catalog_cleanup
+}
+
+sgml-catalog_pkg_postrm() {
+	debug-print function $FUNCNAME $*
+	has "${EAPI:-0}" 0 1 2 && ! use prefix && EPREFIX=
+
+	set -- "${SGML_TOINSTALL[@]}"
+
+	while (( $# )); do
+		einfo "Now removing ${EPREFIX}$2 from ${EPREFIX}$1 and ${EPREFIX}/etc/sgml/catalog"
+		sgml-catalog_cat_doremove "$1" "$2"
+		shift 2
+	done
+}
+
+sgml-catalog_cleanup() {
+	has "${EAPI:-0}" 0 1 2 && ! use prefix && EPREFIX=
+	if [ -e "${EPREFIX}/usr/bin/gensgmlenv" ]
+	then
+		einfo Regenerating SGML environment variables ...
+		gensgmlenv
+		grep -v export "${EPREFIX}/etc/sgml/sgml.env" > "${EPREFIX}/etc/env.d/93sgmltools-lite"
 	fi
 }
 
-# @FUNCTION: sgml-catalog-r1_update_env
-# @DESCRIPTION:
-# Regenerate environment variables and copy them to env.d.
-sgml-catalog-r1_update_env() {
-	# gensgmlenv doesn't support overriding root
-	if [[ -z ${ROOT} && -x "${EPREFIX}/usr/bin/gensgmlenv" ]]; then
-		ebegin "Regenerating SGML environment variables"
-		gensgmlenv &&
-		grep -v export "${EPREFIX}/etc/sgml/sgml.env" > "${T}"/93sgmltools-lite &&
-		mv "${T}"/93sgmltools-lite "${EPREFIX}/etc/env.d/93sgmltools-lite"
-		eend "${?}"
-	fi
+sgml-catalog_src_compile() {
+	return
 }
 
-sgml-catalog-r1_pkg_postinst() {
-	sgml-catalog-r1_update_catalog
-	sgml-catalog-r1_update_env
-}
-
-sgml-catalog-r1_pkg_postrm() {
-	sgml-catalog-r1_update_catalog
-	sgml-catalog-r1_update_env
-}
-
-_SGML_CATALOG_R1=1
-fi
+EXPORT_FUNCTIONS pkg_postrm pkg_postinst src_compile pkg_prerm

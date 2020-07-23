@@ -13,7 +13,7 @@ if [[ ${PV} = *9999* ]]; then
 else
 	SNAPSHOT=3f140afdfce2ed76ede842587ce2298305b1c699
 	SRC_URI="https://github.com/NetworkManager/NetworkManager/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	S=${WORKDIR}/NetworkManager-${SNAPSHOT}
 fi
 
 LICENSE="GPL-2+"
@@ -54,7 +54,7 @@ DEPEND="${COMMON_DEPEND}
 	dev-python/pygobject
 "
 
-filter-flags -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_configure() {
 	local emesonargs=(
@@ -74,4 +74,9 @@ src_configure() {
 		-Djson_validation=false
 		)
 		meson_src_configure
+}
+
+src_install() {
+	default
+	keepdir /var/lib/NetworkManager
 }

@@ -239,31 +239,22 @@ multibuild_merge_root() {
 
 	local ret
 
-	if use userland_BSD; then
-		# Most of BSD variants fail to copy broken symlinks, #447370
-		# also, they do not support --version
+	local cp_args=()
 
-		tar -C "${src}" -f - -c . \
-			| tar -x -f - -C "${dest}"
-		[[ ${PIPESTATUS[*]} == '0 0' ]]
-		ret=${?}
+	if cp -a --version &>/dev/null; then
+		cp_args+=( -a )
 	else
-		local cp_args=()
-
-		if cp -a --version &>/dev/null; then
-			cp_args+=( -a )
-		else
-			cp_args+=( -P -R -p )
-		fi
-
-		if cp --reflink=auto --version &>/dev/null; then
-			# enable reflinking if possible to make this faster
-			cp_args+=( --reflink=auto )
-		fi
-
-		cp "${cp_args[@]}" "${src}"/. "${dest}"/
-		ret=${?}
+		cp_args+=( -P -R -p )
 	fi
+
+	if cp --reflink=auto --version &>/dev/null; then
+		# enable reflinking if possible to make this faster
+		cp_args+=( --reflink=auto )
+	fi
+
+	cp "${cp_args[@]}" "${src}"/. "${dest}"/
+	ret=${?}
+
 
 	if [[ ${ret} -ne 0 ]]; then
 		die "${MULTIBUILD_VARIANT:-(unknown)}: merging image failed."

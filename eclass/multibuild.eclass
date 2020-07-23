@@ -1,3 +1,4 @@
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: multibuild.eclass
@@ -5,6 +6,7 @@
 # Michał Górny <mgorny@gentoo.org>
 # @AUTHOR:
 # Author: Michał Górny <mgorny@gentoo.org>
+# @SUPPORTED_EAPIS: 4 5 6 7
 # @BLURB: A generic eclass for building multiple variants of packages.
 # @DESCRIPTION:
 # The multibuild eclass aims to provide a generic framework for building
@@ -25,6 +27,7 @@ esac
 if [[ ! ${_MULTIBUILD} ]]; then
 
 # @ECLASS-VARIABLE: MULTIBUILD_VARIANTS
+# @REQUIRED
 # @DESCRIPTION:
 # An array specifying all enabled variants which multibuild_foreach*
 # can execute the process for.
@@ -35,12 +38,13 @@ if [[ ! ${_MULTIBUILD} ]]; then
 # Example:
 # @CODE
 # python_foreach_impl() {
-#	local MULTIBUILD_VARIANTS=( python{3_6,3_7,3_8} ... )
+#	local MULTIBUILD_VARIANTS=( python{2_5,2_6,2_7} ... )
 #	multibuild_foreach_variant python_compile
 # }
 # @CODE
 
 # @ECLASS-VARIABLE: MULTIBUILD_VARIANT
+# @OUTPUT_VARIABLE
 # @DESCRIPTION:
 # The current variant which the function was executed for.
 #
@@ -50,6 +54,7 @@ if [[ ! ${_MULTIBUILD} ]]; then
 # @CODE
 
 # @ECLASS-VARIABLE: MULTIBUILD_ID
+# @OUTPUT_VARIABLE
 # @DESCRIPTION:
 # The unique identifier for a multibuild run. In a simple run, it is
 # equal to MULTIBUILD_VARIANT. In a nested multibuild environment, it
@@ -63,6 +68,8 @@ if [[ ! ${_MULTIBUILD} ]]; then
 # @CODE
 
 # @ECLASS-VARIABLE: BUILD_DIR
+# @OUTPUT_VARIABLE
+# @DEFAULT_UNSET
 # @DESCRIPTION:
 # The current build directory. In global scope, it is supposed
 # to contain an 'initial' build directory. If unset, ${S} is used.
@@ -232,22 +239,31 @@ multibuild_merge_root() {
 
 	local ret
 
-	local cp_args=()
+	if use userland_BSD; then
+		# Most of BSD variants fail to copy broken symlinks, #447370
+		# also, they do not support --version
 
-	if cp -a --version &>/dev/null; then
-		cp_args+=( -a )
+		tar -C "${src}" -f - -c . \
+			| tar -x -f - -C "${dest}"
+		[[ ${PIPESTATUS[*]} == '0 0' ]]
+		ret=${?}
 	else
-		cp_args+=( -P -R -p )
+		local cp_args=()
+
+		if cp -a --version &>/dev/null; then
+			cp_args+=( -a )
+		else
+			cp_args+=( -P -R -p )
+		fi
+
+		if cp --reflink=auto --version &>/dev/null; then
+			# enable reflinking if possible to make this faster
+			cp_args+=( --reflink=auto )
+		fi
+
+		cp "${cp_args[@]}" "${src}"/. "${dest}"/
+		ret=${?}
 	fi
-
-	if cp --reflink=auto --version &>/dev/null; then
-		# enable reflinking if possible to make this faster
-		cp_args+=( --reflink=auto )
-	fi
-
-	cp "${cp_args[@]}" "${src}"/. "${dest}"/
-	ret=${?}
-
 
 	if [[ ${ret} -ne 0 ]]; then
 		die "${MULTIBUILD_VARIANT:-(unknown)}: merging image failed."

@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic toolchain-funcs prefix
+inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="The standard GNU Bourne again shell"
 HOMEPAGE="http://tiswww.case.edu/php/chet/bash/bashtop.html"

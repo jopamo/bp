@@ -3,7 +3,7 @@
 DESCRIPTION="The GNU Compiler Collection"
 HOMEPAGE="https://gcc.gnu.org/"
 
-inherit flag-o-matic libtool toolchain-funcs prefix
+inherit flag-o-matic libtool toolchain-funcs
 
 case ${EAPI:-0} in
 	0|1|2|3|4*) die "Need to upgrade to at least EAPI=5" ;;

@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic linux-info pam prefix python-single-r1 systemd user git-r3
+inherit flag-o-matic linux-info pam python-single-r1 systemd user git-r3
 
 DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="http://www.postgresql.org/"
@@ -123,9 +123,4 @@ src_install() {
 	systemd_newtmpfilesd "${FILESDIR}/postgresql.tmpfiles" ${PN}.conf
 
 	use pam && pamd_mimic system-auth ${PN} auth account session
-
-		if use prefix ; then
-			keepdir /run/postgresql
-			fperms 1775 /run/postgresql
-		fi
 }

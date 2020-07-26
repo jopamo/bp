@@ -20,7 +20,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+jitterentropy nistbeacon selinux"
+IUSE="+jitterentropy nistbeacon"
 
 DEPEND="
 	jitterentropy? ( app-crypt/jitterentropy )

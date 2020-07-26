@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit sgml-catalog flag-o-matic toolchain-funcs libtool
+inherit sgml-catalog-r1 flag-o-matic toolchain-funcs libtool
 
 DESCRIPTION="Jade is an implementation of DSSSL for formatting SGML and XML documents"
 HOMEPAGE="http://openjade.sourceforge.net"
@@ -70,9 +70,33 @@ src_install() {
 	doins pubtext/*
 }
 
-sgml-catalog_cat_include "/etc/sgml/${P}.cat" \
-	"/usr/share/sgml/openjade-${PV}/catalog"
-sgml-catalog_cat_include "/etc/sgml/${P}.cat" \
-	"/usr/share/sgml/openjade-${PV}/dsssl/catalog"
-sgml-catalog_cat_include "/etc/sgml/sgml-docbook.cat" \
-	"/etc/sgml/${P}.cat"
+pkg_postinst() {
+	local backup=${T}/${P}.cat
+	local real=${EROOT}/etc/sgml/${P}.cat
+	if ! cmp -s "${backup}" "${real}"; then
+		cp "${backup}" "${real}" || die
+	fi
+	# this one's shared with docbook-dsssl, so we need to do it in postinst
+	if ! grep -q -s ${P}.cat \
+			"${EROOT}"/etc/sgml/sgml-docbook.cat; then
+		ebegin "Adding ${P}.cat to /etc/sgml/sgml-docbook.cat"
+		cat >> "${EROOT}"/etc/sgml/sgml-docbook.cat <<-EOF
+			CATALOG "${EPREFIX}/etc/sgml/${P}.cat"
+		EOF
+		eend ${?}
+	fi
+	sgml-catalog-r1_pkg_postinst
+}
+
+pkg_postrm() {
+	if [[ -z ${REPLACED_BY_VERSION} ]]; then
+		ebegin "Removing ${P}.cat from /etc/sgml/sgml-docbook.cat"
+		sed -i -e '/${P}/d' \
+			"${EROOT}"/etc/sgml/sgml-docbook.cat
+		eend ${?}
+		if [[ ! -s ${EROOT}/etc/sgml/sgml-docbook.cat ]]; then
+			rm -f "${EROOT}"/etc/sgml/sgml-docbook.cat
+		fi
+	fi
+	sgml-catalog-r1_pkg_postrm
+}

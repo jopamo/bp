@@ -27,9 +27,3 @@ src_test() {
 	[[ -d /none ]] && die "m4 tests will fail with /none/" #244396
 	emake check
 }
-
-src_install() {
-	default
-
-	use prefix && dosym /usr/bin/m4 /usr/bin/gm4
-}

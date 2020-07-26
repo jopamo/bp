@@ -23,22 +23,22 @@ DEPEND="
 	lib-sys/zlib
 "
 
-PDEPEND="=app-text/docbook-sgml-dtd-4.5
-		sys-app/man-db
-		sys-app/help2man
-		app-text/po4a
-		app-text/docbook-xsl-stylesheets
-		dev-perl/Date-Manip
-		dev-perl/HTTP-Date
-		dev-perl/IO-Socket-SSL
-		dev-perl/Module-Build
-		dev-perl/SGMLSpm
-		dev-perl/Text-Unidecode
-		dev-perl/Unicode-EastAsianWidth
-		dev-perl/Unicode-LineBreak
-		dev-perl/XML-Parser
-		dev-perl/XML-SAX
-		dev-perl/YAML-Tiny
+PDEPEND="app-text/docbook-sgml-dtd:4.5
+	sys-app/man-db
+	sys-app/help2man
+	app-text/po4a
+	app-text/docbook-xsl-stylesheets
+	dev-perl/Date-Manip
+	dev-perl/HTTP-Date
+	dev-perl/IO-Socket-SSL
+	dev-perl/Module-Build
+	dev-perl/SGMLSpm
+	dev-perl/Text-Unidecode
+	dev-perl/Unicode-EastAsianWidth
+	dev-perl/Unicode-LineBreak
+	dev-perl/XML-Parser
+	dev-perl/XML-SAX
+	dev-perl/YAML-Tiny
 "
 
 src_prepare() {

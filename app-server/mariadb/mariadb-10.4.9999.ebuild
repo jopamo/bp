@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit systemd flag-o-matic prefix toolchain-funcs user cmake git-r3
+inherit systemd flag-o-matic toolchain-funcs user cmake git-r3
 
 HOMEPAGE="https://mariadb.org/"
 DESCRIPTION="An enhanced, drop-in replacement for MySQL"

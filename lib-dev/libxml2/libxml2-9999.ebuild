@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit python-r1 autotools prefix git-r3 flag-o-matic
+inherit python-r1 autotools git-r3 flag-o-matic
 
 DESCRIPTION="Version 2 of the library to manipulate XML files"
 HOMEPAGE="http://www.xmlsoft.org/"
@@ -33,7 +33,7 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-9999-python-ABIFLAG.patch
 )
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_prepare() {
 	default

@@ -5,7 +5,7 @@ EAPI=7
 DESCRIPTION="small and fast portage helper tools written in C"
 HOMEPAGE="https://wiki.gentoo.org/wiki/Portage-utils"
 
-SNAPSHOT=e63b811e6f81e2a2d85137195d58f17bb4543c52
+SNAPSHOT=bee2b445ae583187d2b8218a5b1429828f872663
 SRC_URI="https://github.com/gentoo/portage-utils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

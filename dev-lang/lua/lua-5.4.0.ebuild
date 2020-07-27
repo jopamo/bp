@@ -24,7 +24,7 @@ src_prepare() {
 }
 
 src_compile() {
-	make MYCFLAGS="${CFLAGS} -DLUA_COMPAT_5_2 -DLUA_COMPAT_5_1" MYLDFLAGS="${LDFLAGS}" linux
+	make MYCFLAGS="${CFLAGS} -DLUA_COMPAT_5_3 -DLUA_COMPAT_5_2 -DLUA_COMPAT_5_1" MYLDFLAGS="${LDFLAGS}" linux
 }
 
 src_install() {

@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 S=${WORKDIR}/unrar
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-5.5.5-build.patch
+	"${FILESDIR}"/${PN}-5.9.3-build.patch
 	"${FILESDIR}"/${PN}-5.5.5-honor-flags.patch
 )
 

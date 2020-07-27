@@ -12,7 +12,7 @@ if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI="https://github.com/fribidi/fribidi.git"
 	inherit git-r3
 else
-	SNAPSHOT=f9e8e71a6fbf4a4619481284c9f484d10e559995
+	SNAPSHOT=5464c284034da9c058269377b7f5013bb089f553
 	SRC_URI="https://github.com/fribidi/fribidi/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

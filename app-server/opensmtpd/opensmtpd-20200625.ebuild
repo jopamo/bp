@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=0d01b12c80b48922134f4b5ff185a34f854a8440
+	SNAPSHOT=dfd5e5bd0a5cfc23e57f806efe9799cdacf9630e
 	SRC_URI="https://github.com/OpenSMTPD/OpenSMTPD/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/OpenSMTPD-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
@@ -66,6 +66,8 @@ src_install() {
 		dosym /usr/sbin/smtpctl /usr/bin/sendmail
 		dosym /usr/sbin/smtpctl /usr/lib/sendmail
 	fi
+
+	keepdir /var/spool/smtpd/offline/
 }
 
 pkg_preinst() {

@@ -2,11 +2,11 @@
 
 EAPI=7
 
-inherit autotools flag-o-matic multibuild toolchain-funcs
+inherit flag-o-matic multibuild toolchain-funcs
 
 DESCRIPTION="GNU GRUB boot loader"
 HOMEPAGE="https://www.gnu.org/software/grub/"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -48,34 +48,12 @@ QA_EXECSTACK="usr/bin/grub*-emu* usr/lib/grub/*"
 QA_WX_LOAD="usr/lib/grub/*"
 QA_MULTILIB_PATHS="usr/lib/grub/.*"
 
-PATCHES=( "${FILESDIR}"/00.patch
-		"${FILESDIR}"/01.patch
-		"${FILESDIR}"/02.patch
-		"${FILESDIR}"/03.patch
-		"${FILESDIR}"/04.patch
-		"${FILESDIR}"/05.patch
-		"${FILESDIR}"/06.patch
-		"${FILESDIR}"/07.patch
-		"${FILESDIR}"/08.patch
-		"${FILESDIR}"/09.patch
-		"${FILESDIR}"/10.patch
-		"${FILESDIR}"/11.patch
-		"${FILESDIR}"/12.patch
-		"${FILESDIR}"/14.patch
-		"${FILESDIR}"/15.patch
-		"${FILESDIR}"/16.patch     )
-
 grub_do() {
 	multibuild_foreach_variant run_in_build_dir "$@"
 }
 
 grub_do_once() {
 	multibuild_for_best_variant run_in_build_dir "$@"
-}
-
-src_prepare() {
-	default
-	eautoreconf
 }
 
 grub_configure() {

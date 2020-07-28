@@ -10,12 +10,10 @@ HOMEPAGE="http://www.infradead.org/~tgr/libnl/ https://github.com/thom311/libnl"
 if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/thom311/libnl.git"
 	inherit git-r3
-	KEYWORDS=""
 else
-	SNAPSHOT=7b167ef85f6eb4d7faca349302478b2dc121e309
+	SNAPSHOT=2abeec851e4c748effac341f8db0b42389b37790
 	SRC_URI="https://github.com/thom311/libnl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="LGPL-2.1 utils? ( GPL-2 )"

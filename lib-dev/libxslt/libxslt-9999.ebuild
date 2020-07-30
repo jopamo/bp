@@ -6,7 +6,7 @@ inherit autotools python-r1 toolchain-funcs git-r3
 
 DESCRIPTION="XSLT libraries and tools"
 HOMEPAGE="http://www.xmlsoft.org/"
-EGIT_REPO_URI="https://github.com/GNOME/libxslt.git"
+EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/libxslt.git"
 
 LICENSE="MIT"
 SLOT="0"

@@ -6,7 +6,7 @@ inherit python-r1 git-r3 meson
 
 DESCRIPTION="The GLib library of C routines"
 HOMEPAGE="https://www.gtk.org/"
-EGIT_REPO_URI="https://github.com/GNOME/${PN}.git"
+EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git"
 EGIT_BRANCH=glib-$(ver_cut 1)-$(ver_cut 2)
 
 LICENSE="LGPL-2+"

@@ -6,7 +6,7 @@ inherit python-r1 autotools git-r3 flag-o-matic
 
 DESCRIPTION="Version 2 of the library to manipulate XML files"
 HOMEPAGE="http://www.xmlsoft.org/"
-EGIT_REPO_URI="https://github.com/GNOME/${PN}.git"
+EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git"
 
 LICENSE="MIT"
 SLOT="2"

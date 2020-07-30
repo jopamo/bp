@@ -17,4 +17,5 @@ DEPEND="
 	lib-dev/glib
 	app-net/openssh"
 
-BDEPEND="dev-util/pkgconf"
+BDEPEND="dev-util/pkgconf
+	dev-python/docutils"

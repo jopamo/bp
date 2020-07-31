@@ -11,6 +11,7 @@ EGIT_BRANCH="RC_$(ver_cut 1)_$(ver_cut 2)"
 
 LICENSE="BSD"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	lib-dev/boost

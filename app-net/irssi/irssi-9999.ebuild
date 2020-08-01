@@ -20,7 +20,7 @@ DEPEND="
 	lib-net/libressl
 "
 
-filter-flags -Wl,-z,defs -flto\=\*
+filter-flags -Wl,-z,defs
 
 src_prepare() {
 	perl utils/syntax.pl || die

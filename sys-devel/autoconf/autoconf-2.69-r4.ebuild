@@ -4,12 +4,11 @@ EAPI=7
 
 DESCRIPTION="Used to create autoconfiguration files"
 HOMEPAGE="https://www.gnu.org/software/autoconf/autoconf.html"
-
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
-KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-3"
-SLOT="${PV}"
+SLOT="0"
+KEYWORDS="amd64 arm64"
 
 DEPEND=">=sys-devel/m4-1.4.16
 	>=dev-lang/perl-5.6"

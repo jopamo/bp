@@ -65,7 +65,7 @@ RESTRICT="test"
 
 WAF_BINARY="${S}/buildtools/bin/waf"
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 append-ldflags -ltinfo
 
 src_prepare() {

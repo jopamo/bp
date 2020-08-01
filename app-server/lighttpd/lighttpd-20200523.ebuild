@@ -41,7 +41,7 @@ DEPEND="${CDEPEND}
 		lib-dev/fcgi
 	)"
 
-filter-flags -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 pkg_setup() {
 	enewgroup lighttpd

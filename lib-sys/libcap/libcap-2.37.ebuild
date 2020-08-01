@@ -19,7 +19,7 @@ RDEPEND=">=sys-app/attr-2.4.47
 DEPEND="${RDEPEND}
 	sys-kernel/linux-headers"
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 _makeargs=(
   KERNEL_HEADERS="${EPREFIX}"/usr/include

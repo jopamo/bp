@@ -25,7 +25,7 @@ DEPEND="${RDEPEND}
 		>=dev-python/pytest-3.2.1[${PYTHON_USEDEP}] )
 "
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_prepare() {
 	# For not using the bundled libsodium

@@ -47,7 +47,7 @@ QA_WX_LOAD="
 	usr/bin/qemu-x86_64
 	usr/bin/qemu-aarch64"
 
-filter-flags -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_configure() {
 	local myconf=(

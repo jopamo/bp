@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="debug jemalloc socks5 static-libs"
 
 append-flags -fno-strict-aliasing
-filter-flags -fomit-frame-pointer -Wl,-z,defs -Wl,-z,relro
+filter-flags -fomit-frame-pointer -Wl,-z,defs
 
 src_prepare() {
 	default

@@ -35,7 +35,7 @@ REQUIRED_USE="
 	python? ( ${PYTHON_REQUIRED_USE} )
 "
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_prepare() {
 	default

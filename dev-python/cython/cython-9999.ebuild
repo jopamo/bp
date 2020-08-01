@@ -19,7 +19,7 @@ DEPEND=">=dev-python/setuptools-9.1[${PYTHON_USEDEP}]
 
 SITEFILE=50cython-gentoo.el
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 python_compile() {
 	if ! python_is_python3; then

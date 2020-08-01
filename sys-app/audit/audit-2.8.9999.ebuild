@@ -29,7 +29,7 @@ DEPEND="${RDEPEND}
 
 CONFIG_CHECK="~AUDIT"
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 pkg_setup() {
 	linux-info_pkg_setup

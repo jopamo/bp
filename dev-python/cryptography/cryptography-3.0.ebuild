@@ -23,7 +23,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	>=dev-python/setuptools-1.0[${PYTHON_USEDEP}]"
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 python_configure_all() {
 	append-cflags $(test-flags-CC -pthread)

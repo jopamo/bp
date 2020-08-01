@@ -18,7 +18,7 @@ else
 	SRC_URI="ftp://sourceware.org/pub/valgrind/${P}.tar.bz2"
 fi
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro -fomit-frame-pointer -fstack-protector\*
+filter-flags -Wl,-z,defs -fomit-frame-pointer -fstack-protector\*
 
 src_prepare() {
 	sed -i -e "s:doc/valgrind:doc/${PF}:" docs/Makefile.am || die

@@ -28,7 +28,7 @@ DEPEND="${CDEPEND}
 RDEPEND="${CDEPEND}"
 PDEPEND="manpager? ( sys-app/less )"
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 pkg_setup() {
 	# Create user now as Makefile in src_install does setuid/chown
@@ -49,9 +49,4 @@ src_configure() {
 		--with-db=gdbm
 	)
 	econf "${myconf[@]}"
-}
-
-src_install() {
-	default
-	use static-libs || find "${ED}" -name "*.la" -delete || die
 }

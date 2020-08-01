@@ -30,7 +30,7 @@ DEPEND="
 
 S=${WORKDIR}/LVM2.${PV}
 
-filter-flags -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_prepare() {
 	default

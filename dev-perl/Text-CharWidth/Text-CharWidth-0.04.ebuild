@@ -11,4 +11,4 @@ DESCRIPTION="Get number of occupied columns of a string on terminal"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs

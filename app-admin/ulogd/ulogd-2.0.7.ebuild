@@ -35,14 +35,10 @@ PATCHES=(
 		"${FILESDIR}/9d9ea2cd70a369a7f665a322e6c53631e01a2570.patch"
 		)
 
-filter-flags -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 pkg_setup() {
 	linux-info_pkg_setup
-
-	if use nfacct && kernel_is lt 3 3 0; then
-		ewarn "NFACCT input plugin requires a kernel >= 3.3."
-	fi
 
 	enewgroup ulogd
 	enewuser ulogd -1 -1 /var/log/ulogd ulogd

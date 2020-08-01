@@ -26,7 +26,7 @@ DEPEND="
 	>=sys-devel/bison-3.0.1
 	app-server/opensmtpd"
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_prepare() {
 	default

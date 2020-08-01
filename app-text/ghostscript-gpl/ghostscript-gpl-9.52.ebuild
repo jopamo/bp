@@ -44,7 +44,7 @@ RDEPEND="${COMMON_DEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
-filter-flags -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_prepare() {
 	default

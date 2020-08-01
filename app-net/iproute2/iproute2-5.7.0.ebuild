@@ -34,7 +34,7 @@ DEPEND="
 	elibc_glibc? ( >=lib-sys/glibc-2.7 )
 "
 
-filter-flags -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_prepare() {
 	default

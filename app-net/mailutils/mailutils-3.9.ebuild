@@ -27,7 +27,7 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 PATCHES=( "${FILESDIR}/${PN}-3.5-add-include.patch" )
 
-filter-flags -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 pkg_setup() {
 	use python && python-single-r1_pkg_setup

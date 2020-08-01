@@ -33,7 +33,7 @@ PATCHES=(
 	"${FILESDIR}"/ca845aeeddb17343c9289816833ca352f7c0d87b.patch
 )
 
-filter-flags -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_prepare() {
 	default

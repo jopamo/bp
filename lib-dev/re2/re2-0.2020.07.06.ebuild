@@ -18,7 +18,7 @@ KEYWORDS="amd64 arm64"
 
 S="${WORKDIR}/re2-${RE2_VER}"
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_configure() {
 	local mycmakeargs=(

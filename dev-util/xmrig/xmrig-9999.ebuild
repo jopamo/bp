@@ -4,7 +4,7 @@ EAPI=7
 
 CMAKE_MAKEFILE_GENERATOR=emake
 
-inherit cmake git-r3 flag-o-matic
+inherit cmake git-r3
 
 DESCRIPTION="RandomX, CryptoNight, AstroBWT and Argon2 CPU/GPU miner"
 HOMEPAGE="https://xmrig.com/"
@@ -17,8 +17,6 @@ KEYWORDS="amd64 arm64"
 IUSE="cuda http"
 
 DEPEND="sys-app/hwloc"
-
-filter-flags -flto\=\*
 
 src_prepare() {
 	cmake_src_prepare

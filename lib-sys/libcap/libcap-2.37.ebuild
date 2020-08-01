@@ -20,6 +20,7 @@ DEPEND="${RDEPEND}
 	sys-kernel/linux-headers"
 
 filter-flags -Wl,-z,defs
+append-flags -ffat-lto-objects
 
 _makeargs=(
   KERNEL_HEADERS="${EPREFIX}"/usr/include

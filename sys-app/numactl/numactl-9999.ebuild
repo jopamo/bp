@@ -19,7 +19,7 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="static-libs"
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_prepare() {
 	default

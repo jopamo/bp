@@ -11,4 +11,4 @@ DESCRIPTION="UAX #14 Unicode Line Breaking Algorithm"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-filter-flags -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs

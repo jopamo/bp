@@ -16,7 +16,7 @@ IUSE="debug debug-frame libatomic static-libs"
 
 DEPEND="libatomic? ( lib-dev/libatomic_ops )"
 
-filter-flags -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_prepare() {
 	eautoreconf

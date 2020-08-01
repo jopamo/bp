@@ -41,7 +41,7 @@ RDEPEND="${DEPEND}
 
 RESTRICT="test"
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 pkg_setup() {
 	# From http://www.linuxfromscratch.org/blfs/view/svn/general/bluez.html

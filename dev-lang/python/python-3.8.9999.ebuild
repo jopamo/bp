@@ -37,7 +37,7 @@ PDEPEND=">=app-eselect/eselect-python-20140125-r1"
 
 PYVER=${SLOT%/*}
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_prepare() {
 	# Ensure that internal copies of expat, libffi and zlib are not used.

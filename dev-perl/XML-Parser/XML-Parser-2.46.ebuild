@@ -11,7 +11,7 @@ DESCRIPTION="A Perl extension interface to James Clark's XML parser, expat"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-filter-flags -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_configure() {
 	myconf="EXPATLIBPATH=${EPREFIX}/usr/lib EXPATINCPATH=${EPREFIX}/usr/include"

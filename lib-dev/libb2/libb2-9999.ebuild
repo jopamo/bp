@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static native-cflags"
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_prepare() {
 	default

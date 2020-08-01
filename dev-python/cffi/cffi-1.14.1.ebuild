@@ -23,7 +23,7 @@ DEPEND="${RDEPEND}
 
 DISTUTILS_IN_SOURCE_BUILD=1
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 python_test() {
 	einfo "$PYTHONPATH"

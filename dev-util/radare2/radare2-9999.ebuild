@@ -19,7 +19,7 @@ DEPEND="
 	system-capstone? ( lib-dev/capstone:0= )
 "
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_configure() {
 	local emesonargs=(

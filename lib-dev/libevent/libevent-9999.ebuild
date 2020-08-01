@@ -18,7 +18,7 @@ RESTRICT="test"
 
 DEPEND="ssl? ( virtual/ssl )"
 
-filter-flags -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_prepare() {
 	default

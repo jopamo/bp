@@ -40,7 +40,7 @@ RDEPEND="
 "
 PDEPEND=">=app-net/rsync-2.6.4"
 
-filter-flags -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 pkg_pretend() {
 	local CONFIG_CHECK="~IPC_NS ~PID_NS ~NET_NS"

@@ -17,7 +17,7 @@ IUSE="static-libs test"
 
 PDEPEND="app-misc/ca-certificates"
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 append-ldflags -Wl,-z,noexecstack
 
 src_prepare() {

@@ -6,11 +6,13 @@ inherit systemd flag-o-matic toolchain-funcs user cmake git-r3
 
 HOMEPAGE="https://mariadb.org/"
 DESCRIPTION="An enhanced, drop-in replacement for MySQL"
-LICENSE="GPL-2 LGPL-2.1+"
 EGIT_REPO_URI="https://github.com/MariaDB/server.git"
 EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
 
-SLOT="0/${SUBSLOT:-0}"
+LICENSE="GPL-2 LGPL-2.1+"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
 IUSE="backup bindist client-libs debug extraengine galera innodb-lz4
 	innodb-snappy jdbc jemalloc kerberos mroonga
 	numa odbc oqgraph pam +perl profiling rocksdb +server sphinx
@@ -21,8 +23,6 @@ REQUIRED_USE="jdbc? ( extraengine server !static )
 	server? ( tokudb? ( jemalloc !tcmalloc ) )
 	?? ( tcmalloc jemalloc )
 	static? ( yassl !pam )"
-
-KEYWORDS="amd64 arm64"
 
 COMMON_DEPEND="
 	sys-app/procps:0=
@@ -69,9 +69,9 @@ RDEPEND="${COMMON_DEPEND}
 	) )
 "
 
-filter-flags -flto -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 append-cxxflags -felide-constructors
-append-flags -fno-strict-aliasing -fPIC
+append-flags -fno-strict-aliasing
 
 pkg_setup() {
 	enewgroup mysql 60 || die "problem adding 'mysql' group"

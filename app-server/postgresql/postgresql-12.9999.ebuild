@@ -41,7 +41,7 @@ nls? ( sys-devel/gettext )
 xml? ( dev-util/pkgconf )
 "
 
-filter-flags -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 pkg_setup() {
 	enewgroup postgres 70

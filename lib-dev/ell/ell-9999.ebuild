@@ -26,7 +26,7 @@ CONFIG_CHECK="
 	~KEY_DH_OPERATIONS
 "
 
-filter-flags -flto\=\* -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_prepare() {
 	default

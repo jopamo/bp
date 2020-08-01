@@ -16,7 +16,7 @@ IUSE="static-libs"
 
 DEPEND="lib-net/libzmq[static-libs?]"
 
-filter-flags -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_prepare() {
 	sed -i.1 -e "s/DESTINATION\ lib/DESTINATION\ lib/g" "CMakeLists.txt"

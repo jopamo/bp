@@ -29,7 +29,7 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconf
 	test? ( >=dev-util/cunit-2.1 )"
 
-filter-flags -Wl,-z,defs -Wl,-z,relro
+filter-flags -Wl,-z,defs
 
 src_prepare() {
 	default

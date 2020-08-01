@@ -2,11 +2,9 @@
 
 EAPI=7
 
-inherit git-r3
-
 DESCRIPTION="A tool to query or alter a process' scheduling policy"
 HOMEPAGE="https://github.com/freequaos/schedtool"
-EGIT_REPO_URI="https://github.com/freequaos/schedtool.git"
+SRC_URI="https://github.com/freequaos/schedtool/archive/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"

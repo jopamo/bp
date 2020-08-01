@@ -14,9 +14,9 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-filter-flags -flto\=\*
-
 PATCHES=( ${FILESDIR}/lua-shared.patch )
+
+append-flags -ffat-lto-objects
 
 src_prepare() {
 	default

@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit autotools flag-o-matic
+inherit flag-o-matic
 
 DESCRIPTION="Redhat's Newt windowing toolkit development files"
 HOMEPAGE="https://pagure.io/newt"
@@ -13,25 +13,6 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="lib-dev/popt
-		lib-dev/slang
-		"
+	lib-dev/slang"
 
-filter-flags -flto\=\*
-
-src_prepare() {
-	eautoreconf
-	default
-}
-
-src_configure() {
-	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
+filter-flags -Wl,-z,defs -flto\=\*

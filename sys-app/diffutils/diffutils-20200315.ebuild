@@ -6,7 +6,7 @@ inherit flag-o-matic
 
 DESCRIPTION="Tools to make diffs and compare files"
 HOMEPAGE="https://www.gnu.org/software/diffutils/"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"

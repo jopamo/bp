@@ -9,6 +9,7 @@ KEYWORDS="amd64 arm64"
 IUSE="openrc"
 
 RDEPEND="
-	sys-app/systemd
-	openrc? ( sys-app/openrc )
-"
+	|| (
+		!openrc? ( sys-app/systemd )
+		openrc? ( sys-app/openrc )
+	)"

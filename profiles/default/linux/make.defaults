@@ -21,6 +21,7 @@ USE="${USE} iconv -manpager -doc -smartcard -vnc -mono -udisks -debug -jit -icu 
 USE="${USE} seccomp"
 USE="${USE} xattr acl"
 USE="${USE} pic urandom xtpax -orc crypt -ipv6 ncurses pam readline ssl tcpd systemd threads udev pcre16 device-mapper acpi zlib iscsi caps"
+USE="${USE} gmp"
 
 INPUT_DEVICES="libinput"
 LDFLAGS="-Wl,-O1 -Wl,--as-needed"

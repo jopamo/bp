@@ -9,6 +9,7 @@ KEYWORDS="amd64 arm64"
 IUSE="amdgpu clang"
 
 RDEPEND="
-	amdgpu? ( amd/llvm-roc[clang?] )
-	!amdgpu? ( sys-devel/llvm[clang?] )
-"
+	|| (
+		amdgpu? ( amd/llvm-roc[clang?] )
+		!amdgpu? ( sys-devel/llvm[clang?] )
+	)"

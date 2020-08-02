@@ -8,10 +8,12 @@ DESCRIPTION="Low-level cryptographic library"
 HOMEPAGE="http://www.lysator.liu.se/~nisse/nettle/"
 
 if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://git.lysator.liu.se/nettle/nettle.git"
+	EGIT_REPO_URI="https://github.com/gnutls/nettle.git"
 	inherit git-r3
 else
-	SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
+	SNAPSHOT=c3c08e77ce83fbf054f2595e33232d4e6432738f
+	SRC_URI="https://github.com/gnutls/nettle/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
 fi
 
@@ -33,12 +35,6 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		$(use_enable gmp public-key)
 		$(use_enable static-libs static)
 		$(tc-is-static-only && echo --disable-shared)

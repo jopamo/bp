@@ -4,10 +4,10 @@ EAPI=7
 
 inherit toolchain-funcs
 
+MY_P="${PN}-$(ver_rs 2 -)"
+
 DESCRIPTION="console display library"
 HOMEPAGE="http://invisible-island.net/ncurses/ https://www.gnu.org/software/ncurses/"
-
-MY_P="${PN}-$(ver_rs 2 -)"
 SRC_URI="https://invisible-mirror.net/archives/ncurses/current/${MY_P}.tgz"
 S="${WORKDIR}/${MY_P}"
 
@@ -17,9 +17,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs test"
 
-PATCHES=(
-	"${FILESDIR}/${PN}-6.0-unified.patch"
-)
+PATCHES=( "${FILESDIR}/${PN}-6.0-unified.patch" )
 
 src_configure() {
 	unset TERMINFO #115036
@@ -44,6 +42,7 @@ src_configure() {
 		--enable-ext-colors
 		--without-manpages
 		--with-termlib
+		--disable-stripping
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

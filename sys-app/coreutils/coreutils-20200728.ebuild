@@ -43,7 +43,7 @@ src_configure() {
 		$(use_enable acl)
 		$(use_enable multicall single-binary)
 		$(use_enable xattr)
-		$(use_with gmp)
+		$(use_with gmp libgmp)
 	)
 	if tc-is-cross-compiler && [[ ${CHOST} == *linux* ]] ; then
 		export fu_cv_sys_stat_statfs2_bsize=yes #311569

@@ -15,7 +15,6 @@ else
 	SNAPSHOT=adbbc6a4f533e2ac1d2b21d413249ac95d9e93aa
 	SRC_URI="https://github.com/lighttpd/lighttpd1.4/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}1.4-${SNAPSHOT}
-	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="BSD GPL-2"

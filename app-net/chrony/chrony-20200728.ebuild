@@ -6,7 +6,15 @@ inherit systemd toolchain-funcs autotools
 
 DESCRIPTION="NTP client and server programs"
 HOMEPAGE="https://chrony.tuxfamily.org/"
-SRC_URI="https://download.tuxfamily.org/${PN}/${P/_/-}.tar.gz"
+
+if [[ ${PV} == 9999 ]]; then
+	EGIT_REPO_URI="https://git.tuxfamily.org/chrony/chrony.git"
+	inherit git-r3
+else
+	SNAPSHOT=cc007ad93bdb8ced023a4dc3a06e43666b59423a
+	SRC_URI="https://git.tuxfamily.org/chrony/chrony.git/snapshot/chrony-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -14,14 +22,15 @@ KEYWORDS="amd64 arm64"
 
 IUSE="caps +cmdmon ipv6 +ntp +phc pps +refclock +rtc +adns"
 
-DEPEND="
-	caps? ( lib-sys/libcap )
-	lib-sys/libseccomp
-"
+DEPEND="caps? ( lib-sys/libcap )
+	lib-sys/libseccomp"
 
 RESTRICT=test
 
-S="${WORKDIR}/${P/_/-}"
+src_prepare() {
+	default
+	sed -i -e "s/DEVELOPMENT/${PV}/g" "configure" || die
+}
 
 src_configure() {
 	tc-export CC
@@ -53,7 +62,8 @@ src_configure() {
 }
 
 src_install() {
-	default
+	dobin chronyc
+	dosbin chronyd
 
 	insinto /etc/${PN}
 	doins "${FILESDIR}/chrony.conf"
@@ -64,6 +74,4 @@ src_install() {
 	newins "${S}/examples/chrony.logrotate" chrony
 
 	systemd_dounit "${FILESDIR}/chronyd.service"
-
-	rm -rf "${ED}"/tmp
 }

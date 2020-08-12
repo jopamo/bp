@@ -11,7 +11,9 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/lighttpd/lighttpd1.4.git"
 	inherit git-r3
 else
-	SRC_URI="https://download.lighttpd.net/lighttpd/releases-1.4.x/${P}.tar.xz"
+	SNAPSHOT=adbbc6a4f533e2ac1d2b21d413249ac95d9e93aa
+	SRC_URI="https://github.com/lighttpd/lighttpd1.4/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}1.4-${SNAPSHOT}
 fi
 
 LICENSE="BSD GPL-2"
@@ -34,7 +36,9 @@ CDEPEND="app-compression/lbzip2
 
 DEPEND="${CDEPEND}
 	dev-util/pkgconf
-	test? (	lib-dev/fcgi )"
+	test? (
+		lib-dev/fcgi
+	)"
 
 filter-flags -flto\=\* -Wl,-z,relro -Wl,-z,defs
 

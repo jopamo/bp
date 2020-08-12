@@ -6,24 +6,22 @@ inherit meson user systemd flag-o-matic
 
 DESCRIPTION="Lightweight high-performance web server"
 HOMEPAGE="http://www.lighttpd.net/"
-EGIT_REPO_URI="https://git.lighttpd.net/lighttpd/lighttpd1.4.git"
 
 if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/lighttpd/lighttpd1.4.git"
 	inherit git-r3
 else
-	SNAPSHOT=5722574df5b2a2dc6dbd2d198d7af3841d869057
-	SRC_URI="https://github.com/lighttpd/lighttpd1.4/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}1.4-${SNAPSHOT}
+	SRC_URI="https://download.lighttpd.net/lighttpd/releases-1.4.x/${P}.tar.xz"
 fi
 
 LICENSE="BSD GPL-2"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 dbi fam gdbm geoip krb5 ldap libev libunwind lua memcached mbedtls mysql ssl pcre php test postgres systemd webdav xattr zlib static"
+IUSE="bzip2 dbi fam gdbm geoip krb5 ldap libev libunwind lua memcached mbedtls mysql
+	ssl pcre php test postgres systemd webdav xattr zlib static"
 
-CDEPEND="
-	app-compression/lbzip2
+CDEPEND="app-compression/lbzip2
 	gdbm?     ( lib-sys/gdbm )
 	ldap?     ( >=app-net/openldap-2.1.26 )
 	libev?    ( >=lib-dev/libev-4.01 )
@@ -36,11 +34,9 @@ CDEPEND="
 
 DEPEND="${CDEPEND}
 	dev-util/pkgconf
-	test? (
-		lib-dev/fcgi
-	)"
+	test? (	lib-dev/fcgi )"
 
-filter-flags -Wl,-z,defs
+filter-flags -flto\=\* -Wl,-z,relro -Wl,-z,defs
 
 pkg_setup() {
 	enewgroup lighttpd

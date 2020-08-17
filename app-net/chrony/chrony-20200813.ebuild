@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://git.tuxfamily.org/chrony/chrony.git"
 	inherit git-r3
 else
-	SNAPSHOT=cc007ad93bdb8ced023a4dc3a06e43666b59423a
+	SNAPSHOT=aeee1feda6858f833353d9d8baa476ef192953fb
 	SRC_URI="https://git.tuxfamily.org/chrony/chrony.git/snapshot/chrony-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -20,7 +20,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps +cmdmon ipv6 +ntp +phc pps +refclock +rtc +adns"
+IUSE="caps +cmdmon ipv6 +ntp +phc pps +refclock +rtc +adns systemd"
 
 DEPEND="caps? ( lib-sys/libcap )
 	lib-sys/libseccomp"
@@ -73,5 +73,5 @@ src_install() {
 	insinto /etc/logrotate.d
 	newins "${S}/examples/chrony.logrotate" chrony
 
-	systemd_dounit "${FILESDIR}/chronyd.service"
+	use systemd && systemd_dounit "${FILESDIR}/chronyd.service"
 }

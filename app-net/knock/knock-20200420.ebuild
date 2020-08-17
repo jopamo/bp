@@ -13,7 +13,7 @@ if [[ ${PV} = *9999* ]]; then
 else
 	SNAPSHOT=c54d3cc68b22990f307a3dc2e873ad395951d81a
 	SRC_URI="https://github.com/jvinet/knock/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/NetworkManager-${SNAPSHOT}
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 
 LICENSE="GPL-2"

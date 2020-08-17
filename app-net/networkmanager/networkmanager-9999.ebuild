@@ -11,7 +11,7 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/NetworkManager/NetworkManager"
 	inherit git-r3
 else
-	SNAPSHOT=3f140afdfce2ed76ede842587ce2298305b1c699
+	SNAPSHOT=44f4a458c2d5e7ebb755efde880db504ead3911d
 	SRC_URI="https://github.com/NetworkManager/NetworkManager/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/NetworkManager-${SNAPSHOT}
 fi
@@ -23,25 +23,22 @@ KEYWORDS="amd64 arm64"
 IUSE="+nmtui systemd test"
 
 COMMON_DEPEND="
-	>=sys-app/dbus-1.2
-	>=lib-dev/dbus-glib-0.100
-	>=lib-dev/glib-2.37.6:2
-	>=lib-dev/libnl-3.2.8:3=
+	sys-app/dbus
+	lib-dev/dbus-glib
+	lib-dev/glib
+	lib-dev/libnl
 	lib-net/libndp
-	>=app-net/curl-7.24
+	app-net/curl
 	app-net/iputils
 	sys-app/util-linux
-	lib-sys/readline:0=
+	lib-sys/readline
 	virtual/service-manager
-	lib-dev/libgcrypt:0=
-	>=lib-net/gnutls-2.12:=
+	lib-dev/libgcrypt
+	lib-net/gnutls
 "
 RDEPEND="${COMMON_DEPEND}
-	|| (
-		app-net/iputils[arping(+)]
-		app-net/arping
-	)
-	>=app-net/wpa_supplicant-0.7.3-r3[dbus]
+	app-net/iputils[arping(+)]
+	app-net/wpa_supplicant[dbus]
 "
 DEPEND="${COMMON_DEPEND}
 	lib-dev/glib
@@ -77,6 +74,6 @@ src_configure() {
 }
 
 src_install() {
-	default
+	meson_src_install
 	keepdir /var/lib/NetworkManager
 }

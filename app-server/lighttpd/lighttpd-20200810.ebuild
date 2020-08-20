@@ -22,7 +22,7 @@ SLOT="0"
 IUSE="bzip2 dbi fam gdbm geoip krb5 ldap libev libunwind lua memcached mbedtls mysql
 	ssl pcre php test postgres systemd webdav xattr zlib static"
 
-CDEPEND="app-compression/lbzip2
+DEPEND="app-compression/lbzip2
 	gdbm?     ( lib-sys/gdbm )
 	ldap?     ( >=app-net/openldap-2.1.26 )
 	libev?    ( >=lib-dev/libev-4.01 )
@@ -33,13 +33,9 @@ CDEPEND="app-compression/lbzip2
 	>=lib-dev/libpcre-3.1
 	>=lib-sys/zlib-1.1"
 
-DEPEND="${CDEPEND}
-	dev-util/pkgconf
-	test? (
-		lib-dev/fcgi
-	)"
+BDEPEND="dev-util/pkgconf"
 
-filter-flags -flto\=\* -Wl,-z,relro -Wl,-z,defs
+filter-flags -Wl,-z,defs
 
 pkg_setup() {
 	enewgroup lighttpd

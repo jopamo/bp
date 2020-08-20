@@ -15,25 +15,24 @@ LICENSE="PSF-2"
 SLOT="$(ver_cut 1).$(ver_cut 2)"
 KEYWORDS="amd64 arm64"
 
-IUSE="ipv6 +sqlite valgrind static"
+IUSE="bytecode ipv6 +sqlite static valgrind"
 
 RESTRICT="test"
 
-DEPEND="
-		sqlite? ( lib-sys/sqlite )
-		app-compression/bzip2:0=
-		app-compression/xz-utils:0=
-		>=lib-sys/zlib-1.1.3:0=
-		lib-dev/libffi
-		sys-devel/gettext
-		lib-sys/gdbm
-		lib-net/libnsl
-		>=lib-sys/ncurses-5.2:0=
-		>=lib-sys/readline-4.1:0=
-		virtual/ssl
-		dev-util/pkgconf
-"
-PDEPEND=">=app-eselect/eselect-python-20140125-r1"
+DEPEND="sqlite? ( lib-sys/sqlite )
+	app-compression/bzip2:0=
+	app-compression/xz-utils:0=
+	>=lib-sys/zlib-1.1.3:0=
+	lib-dev/libffi
+	sys-devel/gettext
+	lib-sys/gdbm
+	lib-net/libnsl
+	>=lib-sys/ncurses-5.2:0=
+	>=lib-sys/readline-4.1:0=
+	virtual/ssl
+	dev-util/pkgconf"
+
+PDEPEND="app-eselect/eselect-python"
 
 PYVER=${SLOT%/*}
 
@@ -50,8 +49,8 @@ src_prepare() {
 }
 
 src_configure() {
-	export PYTHON_DISABLE_MODULES="gdbm _tkinter _codecs_{hk,tw,cn,jp,kr} ossaudiodev"
 	export ax_cv_c_float_words_bigendian=no
+	export export PYTHONDONTWRITEBYTECODE=1
 
 	tc-export CXX
 	use static && LDFLAGS="-static"
@@ -191,6 +190,13 @@ src_install() {
 		"${scriptdir}/2to3" || die
 	ln -s "../../../bin/pydoc${PYVER}" \
 		"${scriptdir}/pydoc" || die
+
+	#Cleanup
+	use bytecode || find "${ED}"  -name *.pyc -delete || die
+	use bytecode || find "${ED}" -type d -empty -delete || die
+
+	rm "${ED}"/usr/lib/python3.8/lib-dynload/_codecs_{hk,tw,cn,jp,kr}.cpython*.so
+	rm "${ED}"/usr/lib/python3.8/lib-dynload/ossaudiodev.cpython*.so
 }
 
 pkg_preinst() {

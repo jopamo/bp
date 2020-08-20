@@ -13,12 +13,13 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="lapack test"
+IUSE="test"
 
 DEPEND="dev-python/cython
 	dev-python/setuptools[${PYTHON_USEDEP}]
-	lapack? ( dev-util/pkgconf )
 	test? ( >=dev-python/nose-1.0[${PYTHON_USEDEP}] )"
+
+BDEPEND="dev-util/pkgconf"
 
 filter-flags -Wl,-z,defs
 
@@ -40,21 +41,18 @@ pc_libs() {
 }
 
 python_prepare_all() {
-	if use lapack; then
-		append-ldflags "$($(tc-getPKG_CONFIG) --libs-only-other cblas lapack)"
-		local libdir="${EPREFIX}"/usr/lib
-		cat >> site.cfg <<-EOF || die
-			[blas]
-			include_dirs = $(pc_incdir cblas)
-			library_dirs = $(pc_libdir cblas blas):${libdir}
-			blas_libs = $(pc_libs cblas blas)
-			[lapack]
-			library_dirs = $(pc_libdir lapack):${libdir}
-			lapack_libs = $(pc_libs lapack)
-		EOF
-	else
-		export {ATLAS,PTATLAS,BLAS,LAPACK,MKL}=None
-	fi
+	append-ldflags "$($(tc-getPKG_CONFIG) --libs-only-other cblas lapack)"
+
+	local libdir="${EPREFIX}"/usr/lib
+	cat >> site.cfg <<-EOF || die
+		[blas]
+		include_dirs = $(pc_incdir cblas)
+		library_dirs = $(pc_libdir cblas blas):${libdir}
+		blas_libs = $(pc_libs cblas blas)
+		[lapack]
+		library_dirs = $(pc_libdir lapack):${libdir}
+		lapack_libs = $(pc_libs lapack)
+	EOF
 
 	export CC="$(tc-getCC) ${CFLAGS}"
 

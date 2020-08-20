@@ -634,26 +634,7 @@ create_gcc_env_entry() {
 		gcc_specs_file="${LIBPATH}/$1.specs"
 	fi
 
-	# We want to list the default ABI's LIBPATH first so libtool
-	# searches that directory first.  This is a temporary
-	# workaround for libtool being stupid and using .la's from
-	# conflicting ABIs by using the first one in the search path
-	local ldpaths mosdirs
-	if tc_version_is_at_least 3.2 ; then
-		local mdir mosdir abi ldpath
-		for abi in $(get_all_abis TARGET) ; do
-			mdir=$($(XGCC) $(get_abi_CFLAGS ${abi}) --print-multi-directory)
-			ldpath=${LIBPATH}
-			[[ ${mdir} != "." ]] && ldpath+="/${mdir}"
-			ldpaths="${ldpath}${ldpaths:+:${ldpaths}}"
-
-			mosdir=$($(XGCC) $(get_abi_CFLAGS ${abi}) -print-multi-os-directory)
-			mosdirs="${mosdir}${mosdirs:+:${mosdirs}}"
-		done
-	else
-		# Older gcc's didn't do multilib, so logic is simple.
-		ldpaths=${LIBPATH}
-	fi
+	ldpaths=${LIBPATH}
 
 	cat <<-EOF > ${gcc_envd_file}
 	GCC_PATH="${BINPATH}"

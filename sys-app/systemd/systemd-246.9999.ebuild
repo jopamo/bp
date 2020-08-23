@@ -148,6 +148,7 @@ src_configure() {
 		-Dsmack=false
 		-Dsplit-bin=true
 		-Dsplit-usr=false
+		-Dstandalone-binaries=false
 		-Dsysusers=false
 		-Dtelinit-path=""
 		-Dtimesyncd=false

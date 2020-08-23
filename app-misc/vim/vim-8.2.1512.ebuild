@@ -11,7 +11,7 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/vim/vim"
 	inherit git-r3
 else
-	SNAPSHOT=c69950ac17225d07f973b39d5b0eb94291077808
+	SNAPSHOT=69e44552c567ff25b363ba0790ad3d43fa0397a7
 	SRC_URI="https://github.com/vim/vim/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -20,7 +20,7 @@ LICENSE="vim"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug"
+IUSE="debug +xxd"
 
 RDEPEND="
 	>=lib-sys/ncurses-5.2-r2:0=
@@ -68,6 +68,8 @@ src_compile() {
 	emake -j1 -C src auto/osdef.h objects
 
 	emake
+
+	use xxd && emake src/xxd
 }
 
 src_test() {
@@ -96,4 +98,6 @@ src_install() {
 	dosym vim /usr/bin/vi
 	dosym vim /usr/bin/ex
 	dosym vim /usr/bin/view
+
+	use xxd && dobin src/xxd/xxd
 }

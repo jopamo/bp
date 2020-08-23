@@ -2,12 +2,12 @@
 
 EAPI=7
 
+SNAPSHOT=291c6fcc879f47784b61bdbd2572f6a26c910035
+
 inherit libtool pam autotools
 
 DESCRIPTION="Utilities to deal with user accounts"
 HOMEPAGE="https://github.com/shadow-maint/shadow http://pkg-shadow.alioth.debian.org/"
-
-SNAPSHOT=607f1dd549cf9abc87af1cf29275f0d2d11eea29
 SRC_URI="https://github.com/shadow-maint/shadow/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

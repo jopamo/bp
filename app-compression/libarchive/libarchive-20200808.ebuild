@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/libarchive/libarchive.git"
 	inherit git-r3
 else
-	SNAPSHOT=4f8359552b3b4291d5dac7efc657bbe696a3b2f5
+	SNAPSHOT=34940ef6ea0b21d77cb501d235164ad88f19d40c
 	SRC_URI="https://github.com/libarchive/libarchive/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -20,7 +20,7 @@ LICENSE="BSD BSD-2 BSD-4 public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl +bzip2 expat nettle ssl static-libs xattr +zlib ssl lz4 zstd"
+IUSE="acl +bsdtar +bzip2 expat nettle ssl static-libs xattr +zlib ssl lz4 zstd"
 
 DEPEND="
 	acl? ( sys-app/acl )
@@ -43,6 +43,7 @@ src_prepare() {
 src_configure() {
 	local myconf=(
 		$(use_enable acl)
+		$(use_enable bsdtar)
 		$(use_enable static-libs static)
 		$(use_enable xattr)
 		$(use_with bzip2 bz2lib)
@@ -57,7 +58,6 @@ src_configure() {
 		--without-lzo2
 		--disable-bsdcat
 		--disable-bsdcpio
-		--disable-bsdtar
 	)
 
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"

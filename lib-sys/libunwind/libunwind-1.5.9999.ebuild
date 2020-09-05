@@ -7,6 +7,7 @@ inherit autotools git-r3 flag-o-matic
 DESCRIPTION="Portable and efficient API to determine the call-chain of a program"
 HOMEPAGE="https://savannah.nongnu.org/projects/libunwind"
 EGIT_REPO_URI="https://github.com/libunwind/libunwind.git"
+EGIT_BRANCH="v$(ver_cut 1).$(ver_cut 2)-stable"
 
 LICENSE="MIT"
 SLOT="0"

@@ -1,0 +1,43 @@
+From cad5d69545765e00715d0cb0c88a3b4c20a59c1e Mon Sep 17 00:00:00 2001
+From: Kamil Dudka <kdudka@redhat.com>
+Date: Mon, 31 Aug 2020 17:57:52 +0200
+Subject: __acl_create_entry_obj: do not break strict aliasing rules
+
+... to avoid SIGSEGV with link-time optimisation enabled
+
+Bug: https://bugzilla.redhat.com/1873975
+---
+ libacl/acl_create_entry.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/libacl/acl_create_entry.c b/libacl/acl_create_entry.c
+index 4143078..b948d98 100644
+--- a/libacl/acl_create_entry.c
++++ b/libacl/acl_create_entry.c
+@@ -26,7 +26,7 @@
+ acl_entry_obj *
+ __acl_create_entry_obj(acl_obj *acl_obj_p)
+ {
+-	acl_entry_obj *entry_obj_p;
++	acl_entry_obj *entry_obj_p, *prev;
+ 
+ 	if (acl_obj_p->aprealloc == acl_obj_p->aprealloc_end) {
+ 		entry_obj_p = new_obj_p(acl_entry);
+@@ -39,10 +39,11 @@ __acl_create_entry_obj(acl_obj *acl_obj_p)
+ 	acl_obj_p->aused++;
+ 
+ 	/* Insert at the end of the entry ring */
+-	entry_obj_p->eprev = acl_obj_p->aprev;
++	prev = acl_obj_p->aprev;
++	entry_obj_p->eprev = prev;
+ 	entry_obj_p->enext = (acl_entry_obj *)acl_obj_p;
+-	entry_obj_p->eprev->enext = entry_obj_p;
+-	entry_obj_p->enext->eprev = entry_obj_p;
++	prev->enext = entry_obj_p;
++	acl_obj_p->aprev = entry_obj_p;
+ 	
+ 	entry_obj_p->econtainer = acl_obj_p;
+ 	init_acl_entry_obj(*entry_obj_p);
+-- 
+cgit v1.2.1
+

@@ -16,6 +16,10 @@ IUSE="nls static-libs"
 
 DEPEND=">=sys-app/attr-2.4.47-r1"
 
+PATCHES=( "${FILESDIR}"/40c190dc1f6630054d7d2f850a0b9fb10c7bbcb1.patch
+	"${FILESDIR}"/cad5d69545765e00715d0cb0c88a3b4c20a59c1e.patch
+)
+
 replace-flags -O3 -O2
 
 src_prepare() {

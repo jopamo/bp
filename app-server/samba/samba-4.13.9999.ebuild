@@ -110,6 +110,7 @@ src_configure() {
 		$(use_enable cups)
 		$(use_with dmapi)
 		$(use_with fam)
+		$(use_with json)
 		$(use_with gpg gpgme)
 		$(use_enable iprint)
 		$(use_with quota quotas)

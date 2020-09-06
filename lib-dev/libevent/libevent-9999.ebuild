@@ -12,11 +12,12 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug +ssl static-libs test"
+IUSE="debug mbedtls +ssl static-libs test"
 
 RESTRICT="test"
 
-DEPEND="ssl? ( virtual/ssl )"
+DEPEND="ssl? ( virtual/ssl )
+	mbedtls? ( lib-net/mbedtls )"
 
 filter-flags -Wl,-z,defs
 
@@ -37,6 +38,7 @@ src_configure() {
 		--sysconfdir="${EPREFIX}/etc"
 		--localstatedir="${EPREFIX}/var"
 		--disable-samples
+		$(use_enable mbedtls)
 		$(use_enable debug debug-mode)
 		$(use_enable debug malloc-replacement)
 		$(use_enable ssl openssl)

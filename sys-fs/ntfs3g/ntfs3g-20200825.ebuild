@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT=4163390f2bcc41307aa583ca533491bfce483951
+SNAPSHOT=903db231ec0078b9b4efab1ed20b6fb63d88eb18
 
 inherit linux-info autotools
 

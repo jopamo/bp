@@ -21,20 +21,20 @@ LICENSE="BSD BSD-2 BSD-4 public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl +bsdtar +bzip2 expat nettle ssl static-libs xattr +zlib ssl lz4 zstd"
+IUSE="acl +bsdtar +bzip2 expat lz4 nettle ssl static-libs xattr +zlib zstd"
 
 DEPEND="
+	app-compression/xz-utils
 	acl? ( sys-app/acl )
 	bzip2? ( app-compression/lbzip2 )
 	expat? ( lib-dev/expat )
 	!expat? ( lib-dev/libxml2 )
-	xattr? ( sys-app/attr )
-	ssl? ( virtual/ssl )
 	lz4? ( app-compression/lz4 )
-	zstd? ( app-compression/zstd )
-	app-compression/xz-utils
 	nettle? ( lib-dev/nettle:0= )
-	zlib? ( lib-sys/zlib )"
+	ssl? ( virtual/ssl )
+	xattr? ( sys-app/attr )
+	zlib? ( lib-sys/zlib )
+	zstd? ( app-compression/zstd )"
 
 src_prepare() {
 	eautoreconf
@@ -45,14 +45,15 @@ src_configure() {
 	local myconf=(
 		$(use_enable acl)
 		$(use_enable bsdtar)
-		$(use_enable static-libs static)
-		$(use_enable xattr)
 		$(use_with bzip2 bz2lib)
 		$(use_with expat)
 		$(use_with !expat xml2)
 		$(use_with lz4)
-		$(use_with zstd)
 		$(use_with nettle)
+		$(use_with ssl openssl)
+		$(use_enable static-libs static)
+		$(use_enable xattr)
+		$(use_with zstd)
 		$(use_with zlib)
 		--with-lzma
 		--with-iconv

@@ -6,7 +6,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="Create, destroy, resize, check, copy partitions and file systems"
 HOMEPAGE="https://www.gnu.org/software/parted"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -27,15 +27,11 @@ DEPEND="
 	dev-util/pkgconf
 "
 
-PATCHES=(
-	"${FILESDIR}"/c6b61814cd4cf958e12d35a36184ff7d767e57d9.patch
-	"${FILESDIR}"/eaada0bc9e1cc8adb3a0260707d9474a3e01b835.patch
-	"${FILESDIR}"/ca845aeeddb17343c9289816833ca352f7c0d87b.patch
-)
-
 filter-flags -Wl,-z,defs
 
 src_prepare() {
+	sed -i -e "s/UNKNOWN/${PV}/g" "build-aux/git-version-gen" || die
+
 	default
 	eautoreconf
 }

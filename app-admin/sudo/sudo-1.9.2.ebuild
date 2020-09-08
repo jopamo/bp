@@ -10,9 +10,11 @@ LICENSE="ISC BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="pam"
+IUSE="pam ssl"
 
-DEPEND="lib-sys/zlib"
+DEPEND="lib-sys/zlib
+	pam? ( lib-sys/pam )
+	ssl? ( virtual/ssl )"
 
 src_configure() {
 	myconf=(
@@ -27,7 +29,7 @@ src_configure() {
 		--with-vardir="${EPREFIX}"/var/db/sudo
 		--without-linux-audit
 		--without-opie
-		--enable-openssl
+		$(use_enable ssl openssl)
 		$(use_with pam)
 	)
 	econf "${myconf[@]}"

@@ -2,13 +2,10 @@
 
 EAPI=7
 
-DESCRIPTION="Virtual for various service managers"
+DESCRIPTION="Openssl implementation virtual."
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="mbedtls"
-
-RDEPEND="
-	mbedtls? ( lib-net/mbedtls )
-	!mbedtls? ( lib-net/libressl )
-"
+RDEPEND="|| (
+		lib-net/libressl
+		)"

@@ -11,7 +11,7 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/vim/vim"
 	inherit git-r3
 else
-	SNAPSHOT=69e44552c567ff25b363ba0790ad3d43fa0397a7
+	SNAPSHOT=bade44e5cad1b08c85d4a8ba08d94a30458dddfb
 	SRC_URI="https://github.com/vim/vim/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

@@ -8,13 +8,12 @@ DESCRIPTION="Tool suite used to flash firmware onto Samsung Galaxy S devices"
 HOMEPAGE="https://glassechidna.com.au/heimdall/"
 EGIT_REPO_URI="https://gitlab.com/BenjaminDobell/Heimdall.git"
 
-KEYWORDS="amd64 arm64"
-
 LICENSE="MIT"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 DEPEND="lib-dev/libusb
-		lib-sys/zlib"
+	lib-sys/zlib"
 
 src_configure() {
 	local mycmakeargs=(

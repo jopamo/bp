@@ -16,21 +16,13 @@ else
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 
-EGIT_REPO_URI="https://github.com/yasm/yasm.git"
-
 LICENSE="BSD-2 BSD || ( Artistic GPL-2 LGPL-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="nls"
 
-RDEPEND="
-	nls? ( sys-devel/gettext )
-"
-DEPEND="
-	${RDEPEND}
-	nls? ( sys-devel/gettext )
-"
+DEPEND="nls? ( sys-devel/gettext )"
 
 append-ldflags -Wl,-soname,libyasmstd.so.1
 

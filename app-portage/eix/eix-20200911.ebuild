@@ -7,7 +7,7 @@ inherit meson tmpfiles
 DESCRIPTION="Search and query ebuilds"
 HOMEPAGE="https://github.com/vaeth/eix/"
 
-SNAPSHOT=3452073bb24ccd163da820b810c38e3e3086c40e
+SNAPSHOT=eaa44b984dcdb4fe9499d6b71735bac4a30899bd
 SRC_URI="https://github.com/vaeth/eix/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

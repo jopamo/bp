@@ -7,7 +7,7 @@ HOMEPAGE="http://mpc.multiprecision.org/"
 SRC_URI="https://ftp.gnu.org/gnu/mpc/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
-SLOT="0/3"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"

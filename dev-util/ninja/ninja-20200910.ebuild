@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT=6c5e886aacd98766fe43539c2c8ae7f3ca2af2aa
+SNAPSHOT=8cd857188eca587ca2ce45953f8d5164ea1705cf
 
 inherit python-any-r1 toolchain-funcs
 
@@ -15,25 +15,14 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="
-	${PYTHON_DEPS}
-"
-run_for_build() {
-	if tc-is-cross-compiler; then
-		local -x AR=$(tc-getBUILD_AR)
-		local -x CXX=$(tc-getBUILD_CXX)
-		local -x CFLAGS=${BUILD_CXXFLAGS}
-		local -x LDFLAGS=${BUILD_LDFLAGS}
-	fi
-	"$@"
-}
+DEPEND="${PYTHON_DEPS}"
 
 src_compile() {
 	tc-export AR CXX
 
 	export CFLAGS=${CXXFLAGS}
 
-	run_for_build "${PYTHON}" configure.py --bootstrap --verbose || die
+	"${PYTHON}" configure.py --bootstrap --verbose || die
 
 	ln ninja ninja-build || die
 }

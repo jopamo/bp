@@ -2,14 +2,14 @@
 
 EAPI=7
 
-WANT_LIBTOOL="none"
+SNAPSHOT=8d21aa21f2cbc6d50aab3f420bb23be1d081dac4
 
 inherit autotools flag-o-matic toolchain-funcs git-r3
 
 DESCRIPTION="An interpreted, interactive, object-oriented programming language"
 HOMEPAGE="https://www.python.org/"
-EGIT_REPO_URI="https://github.com/python/cpython.git"
-EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
+SRC_URI="https://github.com/python/cpython/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="PSF-2"
 SLOT="$(ver_cut 1)"

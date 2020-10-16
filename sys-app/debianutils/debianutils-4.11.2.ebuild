@@ -7,6 +7,7 @@ inherit flag-o-matic
 DESCRIPTION="A selection of tools from Debian"
 HOMEPAGE="https://packages.qa.debian.org/d/debianutils.html"
 SRC_URI="http://http.debian.net/debian/pool/main/d/${PN}/${PN}_${PV}.tar.xz"
+S=${WORKDIR}/${PN}
 
 LICENSE="BSD GPL-2 SMAIL"
 SLOT="0"

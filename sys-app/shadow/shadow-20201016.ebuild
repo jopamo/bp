@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT=291c6fcc879f47784b61bdbd2572f6a26c910035
+SNAPSHOT=f8642a1986a44e661cf526505ccca26c37fd10d7
 
 inherit libtool pam autotools
 

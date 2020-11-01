@@ -30,14 +30,6 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-		# switches common to runtime and top-level
-		--cache-file="${BUILD_DIR}"/config.cache
 		--docdir="\$(datarootdir)/doc/${PF}"
 		--without-emacs
 		--without-lispdir

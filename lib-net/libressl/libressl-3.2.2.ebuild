@@ -39,6 +39,7 @@ src_prepare() {
 	fi
 
 	eapply_user
+	eapply "${FILESDIR}"/${PN}-3.2.2-build.patch
 }
 
 src_configure() {

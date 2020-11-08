@@ -64,7 +64,6 @@ src_configure() {
 src_configure() {
 	ECONF_SOURCE=${S} \
 	econf \
-		--cache-file="${BUILD_DIR}"/config.cache \
 		--docdir='$(datarootdir)'/doc/${PF} \
 		--with-curses \
 		$(use_enable static-libs static)
@@ -74,7 +73,7 @@ src_configure() {
 		mkdir -p examples/rlfe || die
 		cd examples/rlfe || die
 		ECONF_SOURCE=${S}/examples/rlfe \
-		econf --cache-file="${BUILD_DIR}"/config.cache
+		econf
 	fi
 }
 

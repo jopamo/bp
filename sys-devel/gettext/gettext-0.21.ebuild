@@ -36,8 +36,6 @@ src_configure() {
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
-		# switches common to runtime and top-level
-		--cache-file="${BUILD_DIR}"/config.cache
 		--docdir="\$(datarootdir)/doc/${PF}"
 		--without-emacs
 		--without-lispdir

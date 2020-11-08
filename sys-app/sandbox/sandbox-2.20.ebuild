@@ -14,7 +14,22 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="app-compression/xz-utils"
 
-filter-flags -flto\=\*
+has sandbox_death_notice ${EBUILD_DEATH_HOOKS} || EBUILD_DEATH_HOOKS="${EBUILD_DEATH_HOOKS} sandbox_death_notice"
+
+sandbox_death_notice() {
+	ewarn "If configure failed with a 'cannot run C compiled programs' error, try this:"
+	ewarn "FEATURES='-sandbox -usersandbox' emerge sandbox"
+}
+
+src_configure() {
+	filter-lfs-flags #90228
+	filter-flags -flto\=\*
+
+	local myconf=()
+
+	ECONF_SOURCE="${S}" \
+	econf "${myconf[@]}"
+}
 
 src_test() {
 	# Default sandbox build will run with --jobs set to # cpus.

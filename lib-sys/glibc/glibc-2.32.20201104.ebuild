@@ -15,7 +15,6 @@ else
 	SNAPSHOT=23482f788665df83edc8b542698f45fed45a2711
 	SRC_URI="https://github.com/1g4-mirror/glibc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"

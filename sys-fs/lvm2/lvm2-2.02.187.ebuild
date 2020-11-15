@@ -10,7 +10,7 @@ SRC_URI="https://sourceware.org/pub/lvm2/LVM2.${PV}.tgz"
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="static-libs systemd +udev +dm-only"
 

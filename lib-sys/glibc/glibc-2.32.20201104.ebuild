@@ -35,6 +35,8 @@ RDEPEND="caps? ( lib-sys/libcap )
 
 PDEPEND="lib-sys/tzdb"
 
+PATCHES=( "${FILESDIR}"/0001-Disable-ldconfig-during-install.patch )
+
 filter-flags -D_FORTIFY_SOURCE\=\* -Wl,-z,combreloc -Wl,-z,relro -Wl,-z,defs -Wl,-z,now -fstack-protector-strong -fstack-clash-protection
 
 check_devpts() {

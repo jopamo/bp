@@ -28,6 +28,7 @@ DEPEND="
 "
 
 append-flags -fno-strict-aliasing
+filter-flags -flto\=\*
 
 src_prepare() {
 	rm -r liblinear/ libpcap/ libpcre/ libz/ || die
@@ -71,9 +72,7 @@ src_compile() {
 		emake -C "${directory}" makefile.dep
 	done
 
-	emake \
-		AR=$(tc-getAR) \
-		RANLIB=$(tc-getRANLIB)
+	default
 }
 
 src_install() {

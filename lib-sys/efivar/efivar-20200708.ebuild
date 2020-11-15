@@ -2,6 +2,8 @@
 
 EAPI=7
 
+inherit flag-o-matic
+
 SNAPSHOT=36297adcb266f07bb06e725a0da377bc6e6aedd0
 
 DESCRIPTION="Tools and library to manipulate EFI variables"
@@ -15,3 +17,5 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="lib-dev/popt"
 BDEPEND="dev-util/pkgconf"
+
+filter-flags -flto\=\*

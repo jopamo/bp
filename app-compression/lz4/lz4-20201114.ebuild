@@ -2,12 +2,19 @@
 
 EAPI=7
 
-inherit cmake git-r3
+inherit cmake
 
 DESCRIPTION="Extremely Fast Compression algorithm"
 HOMEPAGE="https://github.com/lz4/lz4"
-EGIT_REPO_URI="https://github.com/lz4/lz4.git"
-EGIT_BRANCH="master"
+
+if [[ ${PV} == *9999* ]]; then
+	EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
+	inherit git-r3
+else
+	SNAPSHOT=468011c346a1e73eede3e70ee8009f812b02cc76
+	SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="BSD-2 GPL-2"
 SLOT="0"
@@ -15,7 +22,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-CMAKE_USE_DIR=${S}/contrib/cmake_unofficial
+CMAKE_USE_DIR=${S}/build/cmake
 
 src_configure() {
 	local mycmakeargs=(

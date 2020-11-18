@@ -45,6 +45,10 @@ src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
+src_compile() {
+	emake V=1
+}
+
 src_install() {
 	unset MAKEFLAGS
 

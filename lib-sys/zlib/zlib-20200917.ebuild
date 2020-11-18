@@ -21,6 +21,13 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
+src_prepare() {
+	default
+
+	#ldconfig is not used
+	sed -i 's/ldconfig/false/g' configure
+}
+
 src_configure() {
 	local myconf=(
 		--shared

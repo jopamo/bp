@@ -2,9 +2,11 @@
 
 EAPI=7
 
+MY_P="${P/_/}"
+
 DESCRIPTION="Allows users or groups to run commands as other users"
 HOMEPAGE="https://www.sudo.ws/"
-SRC_URI="https://www.sudo.ws/dist/${P}.tar.gz"
+SRC_URI="https://www.sudo.ws/dist/${MY_P}.tar.gz"
 
 LICENSE="ISC BSD"
 SLOT="0"

@@ -27,7 +27,7 @@ DEPEND="app-compression/lbzip2
 	libev?    ( >=lib-dev/libev-4.01 )
 	mysql?    ( >=virtual/mysql-4.0 )
 	php?      ( dev-lang/php:*[cgi] )
-	ssl? ( lib-net/libressl )
+	ssl? ( virtual/ssl )
 	xattr? ( sys-app/attr )
 	>=lib-dev/libpcre-3.1
 	>=lib-sys/zlib-1.1"

@@ -12,7 +12,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug ipv6 nls +openssl pcre static test uuid zlib"
+IUSE="debug ipv6 nls pcre static test uuid zlib"
 
 LIB_DEPEND="
 	pcre? ( lib-dev/libpcre[static-libs(+)] )
@@ -20,8 +20,7 @@ LIB_DEPEND="
 	zlib? ( lib-sys/zlib[static-libs(+)] )
 "
 RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
-DEPEND="
-	${RDEPEND}
+DEPEND="${RDEPEND}
 	app-compression/xz-utils
 	dev-util/pkgconf
 	static? ( ${LIB_DEPEND} )
@@ -31,8 +30,7 @@ DEPEND="
 		)
 	nls? ( sys-devel/gettext )
 
-	openssl? ( virtual/ssl )
-"
+	lib-net/gnutls"
 
 pkg_setup() {
 	use test && python-any-r1_pkg_setup
@@ -44,8 +42,7 @@ src_configure() {
 		--disable-rpath
 		--without-included-libunistring
 		--without-libunistring-prefix
-		$(usex openssl '--with-openssl=yes' '--with-openssl=no')
-		$(usex openssl '--with-ssl=openssl' '--with-ssl=gnutls')
+		--with-ssl=gnutls
 		$(use_enable debug)
 		$(use_enable ipv6)
 		$(use_enable nls)

@@ -12,10 +12,9 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug idn ipv6 nls pcre static test uuid zlib"
+IUSE="debug ipv6 nls +openssl pcre static test uuid zlib"
 
 LIB_DEPEND="
-	idn? ( >=lib-net/libidn2-0.14[static-libs(+)] )
 	pcre? ( lib-dev/libpcre[static-libs(+)] )
 	uuid? ( sys-app/util-linux[static-libs(+)] )
 	zlib? ( lib-sys/zlib[static-libs(+)] )
@@ -31,6 +30,8 @@ DEPEND="
 		dev-lang/perl
 		)
 	nls? ( sys-devel/gettext )
+
+	openssl? ( virtual/ssl )
 "
 
 pkg_setup() {
@@ -43,14 +44,12 @@ src_configure() {
 		--disable-rpath
 		--without-included-libunistring
 		--without-libunistring-prefix
-		--with-openssl=no
-		--with-ssl=gnutls
+		$(usex openssl '--with-openssl=yes' '--with-openssl=no')
+		$(usex openssl '--with-ssl=openssl' '--with-ssl=gnutls')
 		$(use_enable debug)
-		$(use_enable idn iri)
 		$(use_enable ipv6)
 		$(use_enable nls)
 		$(use_enable pcre)
-		$(use_with idn libidn)
 		$(use_with uuid libuuid)
 		$(use_with zlib)
 	)

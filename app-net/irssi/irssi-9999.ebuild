@@ -14,11 +14,9 @@ KEYWORDS="amd64 arm64"
 
 BDEPEND="dev-lang/perl"
 
-DEPEND="
-	lib-sys/ncurses
+DEPEND="lib-sys/ncurses
 	lib-dev/glib
-	lib-net/libressl
-"
+	virtual/ssl"
 
 filter-flags -Wl,-z,defs
 

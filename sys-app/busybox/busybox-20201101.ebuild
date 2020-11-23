@@ -34,7 +34,6 @@ src_prepare() {
 src_install() {
 	dobin busybox
 	dosym busybox usr/bin/sha3sum
-	dosym busybox usr/bin/unzip
 	dosym busybox usr/bin/whois
 	dosym busybox usr/bin/which
 }

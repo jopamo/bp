@@ -20,7 +20,7 @@ DEPEND="sys-app/hwloc"
 
 src_prepare() {
 	cmake_src_prepare
-	sed -i 's/kDefaultDonateLevel\ \=\ 5/kDefaultDonateLevel\ \=\ 0/g' src/donate.h
+	sed -i 's/kDefaultDonateLevel\ \=\ 1/kDefaultDonateLevel\ \=\ 0/g' src/donate.h
 	sed -i 's/kMinimumDonateLevel\ \=\ 1/kMinimumDonateLevel\ \=\ 0/g' src/donate.h
 }
 

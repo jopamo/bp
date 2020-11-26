@@ -7,7 +7,7 @@ inherit autotools flag-o-matic git-r3
 DESCRIPTION="Text based WWW browser, supports tables and frames"
 HOMEPAGE="https://github.com/tats/w3m"
 EGIT_REPO_URI="https://github.com/tats/w3m.git"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
 
 LICENSE="w3m"
 SLOT="0"

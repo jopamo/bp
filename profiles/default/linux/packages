@@ -30,6 +30,7 @@
 *lib-dev/elfutils
 *virtual/service-manager
 *sys-app/busybox
+*app-compression/unzip
 *sys-app/util-linux
 *app-portage/eix
 *app-portage/smart-live-rebuild

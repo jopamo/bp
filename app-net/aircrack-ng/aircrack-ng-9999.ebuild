@@ -32,7 +32,7 @@ RDEPEND="${DEPEND}"
 PDEPEND="
 		app-net/iw
 		sys-app/ethtool
-		sys-app/usbutils
+		app-misc/usbutils
 		sys-app/pciutils
 "
 

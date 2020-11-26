@@ -6,16 +6,13 @@ inherit autotools flag-o-matic toolchain-funcs
 
 DESCRIPTION="Ghostscript is an interpreter for the PostScript language and for PDF"
 HOMEPAGE="http://ghostscript.com/"
-
-MY_P=${P/-gpl}
-PVM=$(ver_cut 1-2)
-PVM_S=$(ver_rs 1- "" ${PVM})
-
-SRC_URI="https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${PVM_S}/${MY_P}.tar.xz"
+SRC_URI="https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(ver_cut 1)$(ver_cut 2)$(ver_cut 3)/ghostscript-${PV}.tar.gz"
+S="${WORKDIR}/ghostscript-${PV}"
 
 LICENSE="AGPL-3 CPL-1.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="cups dbus gtk static-libs tiff X"
 
 COMMON_DEPEND="
@@ -41,8 +38,6 @@ DEPEND="${COMMON_DEPEND}
 
 RDEPEND="${COMMON_DEPEND}
 	>=app-text/poppler-data-0.4.5-r1"
-
-S="${WORKDIR}/${MY_P}"
 
 filter-flags -Wl,-z,defs
 
@@ -149,10 +144,6 @@ src_compile() {
 
 src_install() {
 	emake DESTDIR="${D}" install-so install
-
-	# move gsc to gs, bug #343447
-	# gsc collides with gambit, bug #253064
-	mv -f "${ED}"/usr/bin/{gsc,gs} || die
 
 	cd "${S}/ijs" || die
 	emake DESTDIR="${D}" install

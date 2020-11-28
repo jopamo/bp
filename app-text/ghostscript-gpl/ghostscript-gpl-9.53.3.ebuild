@@ -148,13 +148,9 @@ src_install() {
 	cd "${S}/ijs" || die
 	emake DESTDIR="${D}" install
 
-	# rename the original cidfmap to cidfmap.GS
-	mv "${ED}/usr/share/ghostscript/${PVM}/Resource/Init/cidfmap"{,.GS} || die
-
 	# install the CMaps from poppler-data properly, bug #409361
 	dosym ../../../poppler/cMaps "/usr/share/ghostscript/${PVM}/Resource/CMap"
 
 	use static-libs || find "${ED}" -name '*.la' -delete
-
 	cleanup_install
 }

@@ -2,12 +2,12 @@
 
 EAPI=7
 
+SNAPSHOT=bf07973018bb55e0154b1293ea4b455411f74212
+
 inherit meson tmpfiles
 
 DESCRIPTION="Search and query ebuilds"
 HOMEPAGE="https://github.com/vaeth/eix/"
-
-SNAPSHOT=eaa44b984dcdb4fe9499d6b71735bac4a30899bd
 SRC_URI="https://github.com/vaeth/eix/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

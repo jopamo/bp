@@ -12,7 +12,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps implicittls ldap libressl mysql noiplog pam paranoidmsg postgres resolveids ssl systemd vchroot"
+IUSE="caps implicittls ldap mysql noiplog pam paranoidmsg postgres resolveids ssl systemd vchroot"
 
 REQUIRED_USE="implicittls? ( ssl )"
 

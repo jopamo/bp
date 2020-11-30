@@ -12,7 +12,7 @@ if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)/master"
 else
-	SNAPSHOT=23482f788665df83edc8b542698f45fed45a2711
+	SNAPSHOT=ac0a6929c5d370952557aded97c2dd073a28773b
 	SRC_URI="https://github.com/1g4-mirror/glibc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

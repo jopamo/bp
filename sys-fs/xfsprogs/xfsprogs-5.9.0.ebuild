@@ -75,10 +75,11 @@ src_compile() {
 }
 
 src_install() {
-	emake DIST_ROOT="${ED}" install
-	emake DIST_ROOT="${ED}" install-dev
+	emake DIST_ROOT="${ED}" PKG_ROOT_SBIN_DIR=/usr/sbin install
+	emake DIST_ROOT="${ED}" PKG_ROOT_SBIN_DIR=/usr/sbin install-dev
 
 	mkdir -p "${ED}"/usr/lib
 	cp -rp "${ED}"/lib64/* "${ED}"/usr/lib/
-  	rm -rf "${ED}"/lib64
+	cp -rp "${ED}"/usr/lib64/* "${ED}"/usr/lib/
+  	rm -rf "${ED}"/lib64 "${ED}"/usr/lib64
 }

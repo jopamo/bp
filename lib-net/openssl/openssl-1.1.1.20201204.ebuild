@@ -2,13 +2,16 @@
 
 EAPI=7
 
+SNAPSHOT=6ad93e8014533f78aa5b0f3385954e164e72d8fa
+
 inherit flag-o-matic toolchain-funcs
 
 MY_P=${P/_/-}
 
 DESCRIPTION="full-strength general purpose cryptography library (including SSL and TLS)"
 HOMEPAGE="https://www.openssl.org/"
-SRC_URI="ftp://ftp.pca.dfn.de/pub/tools/net/openssl/source/${MY_P}.tar.gz"
+SRC_URI="https://github.com/openssl/openssl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="openssl"
 SLOT="0"
@@ -33,8 +36,6 @@ PDEPEND="app-misc/ca-certificates"
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.1.0j-parallel_install_fix.patch #671602
 )
-
-S="${WORKDIR}/${MY_P}"
 
 src_prepare() {
 	# keep this in sync with app-misc/c_rehash

@@ -2,11 +2,19 @@
 
 EAPI=7
 
-inherit toolchain-funcs flag-o-matic git-r3
+inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="A library and various utilities dealing with the PCI bus"
 HOMEPAGE="http://mj.ucw.cz/sw/pciutils/ https://git.kernel.org/?p=utils/pciutils/pciutils.git"
-EGIT_REPO_URI="https://github.com/pciutils/pciutils.git"
+
+if [[ ${PV} == *9999 ]] ; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/pciutils/pciutils.git"
+else
+	SNAPSHOT=e12bd01eea67ca8cf539263124843ba281eb6ecc
+	SRC_URI="https://github.com/pciutils/pciutils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="GPL-2"
 SLOT="0"

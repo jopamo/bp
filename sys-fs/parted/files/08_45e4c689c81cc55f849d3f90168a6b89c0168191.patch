@@ -1,0 +1,27 @@
+From 45e4c689c81cc55f849d3f90168a6b89c0168191 Mon Sep 17 00:00:00 2001
+From: "Brian C. Lane" <bcl@redhat.com>
+Date: Thu, 12 Nov 2020 16:30:57 -0800
+Subject: ui: Fix command_line_get_disk_flag
+
+It was using PedPartitionFlag instead of PedDiskFlag when walking the
+available flags.
+---
+ parted/ui.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/parted/ui.c b/parted/ui.c
+index 7b5374d..8e1f2fe 100644
+--- a/parted/ui.c
++++ b/parted/ui.c
+@@ -1138,7 +1138,7 @@ command_line_get_disk_flag (const char* prompt, const PedDisk* disk,
+                             PedDiskFlag* flag)
+ {
+         StrList*            opts = NULL;
+-        PedPartitionFlag    walk = 0;
++        PedDiskFlag         walk = 0;
+         char*               flag_name;
+ 
+         while ( (walk = ped_disk_flag_next (walk)) ) {
+-- 
+cgit v1.2.1
+

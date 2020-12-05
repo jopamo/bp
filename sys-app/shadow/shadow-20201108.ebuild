@@ -1,0 +1,164 @@
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=7
+
+SNAPSHOT=599cc003daf833bffdc9cbe0d33dc8b3e7ec74c8
+
+inherit libtool pam autotools
+
+DESCRIPTION="Utilities to deal with user accounts"
+HOMEPAGE="https://github.com/shadow-maint/shadow http://pkg-shadow.alioth.debian.org/"
+SRC_URI="https://github.com/shadow-maint/shadow/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
+
+LICENSE="BSD GPL-2"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+IUSE="acl audit pam skey xattr"
+
+RDEPEND="acl? ( sys-app/acl:0= )
+	audit? ( >=sys-app/audit-2.6:0= )
+	pam? ( lib-sys/pam:0= )
+	skey? ( lib-sys/skey:0= )
+	xattr? ( sys-app/attr:0= )"
+DEPEND="${RDEPEND}
+	app-compression/xz-utils"
+
+RDEPEND="${RDEPEND}
+	pam? ( lib-sys/pambase )"
+
+src_prepare() {
+	default
+	eautoreconf
+}
+
+src_configure() {
+	local myconf=(
+		--without-group-name-max-length
+		--without-tcb
+		--enable-shared=no
+		--enable-static=yes
+		--disable-account-tools-setuid
+		--with-btrfs
+		--with-bcrypt
+		--with-nscd
+		$(use_with acl)
+		$(use_with audit)
+		$(use_with pam libpam)
+		$(use_with skey)
+		$(use_with xattr attr)
+		--disable-subordinate-ids
+	)
+	econf ${myconf[@]}
+}
+
+set_login_opt() {
+	local comment="" opt=$1 val=$2
+	if [[ -z ${val} ]]; then
+		comment="#"
+		sed -i \
+			-e "/^${opt}\>/s:^:#:" \
+			"${ED}"/etc/login.defs || die
+	else
+		sed -i -r \
+			-e "/^#?${opt}\>/s:.*:${opt} ${val}:" \
+			"${ED}"/etc/login.defs
+	fi
+	local res=$(grep "^${comment}${opt}\>" "${ED}"/etc/login.defs)
+	einfo "${res:-Unable to find ${opt} in /etc/login.defs}"
+}
+
+src_install() {
+	emake DESTDIR="${D}" suidperms=4711 install
+
+	# Remove libshadow and libmisc; internal use only
+	rm -f "${ED}"/{,usr/}lib/lib{misc,shadow}.{a,la}
+
+	insinto /etc
+	if ! use pam ; then
+		insopts -m0600
+		doins etc/login.access etc/limits
+	fi
+
+	# needed for 'useradd -D'
+	insinto /etc/default
+	insopts -m0600
+	doins "${FILESDIR}"/default/useradd
+
+	cd "${S}"
+	insinto /etc
+	insopts -m0644
+	newins etc/login.defs login.defs
+
+	set_login_opt CREATE_HOME yes
+	if ! use pam ; then
+		set_login_opt MAIL_CHECK_ENAB no
+		set_login_opt SU_WHEEL_ONLY yes
+		set_login_opt LOGIN_RETRIES 3
+		set_login_opt ENCRYPT_METHOD SHA512
+		set_login_opt CONSOLE
+	else
+		dopamd "${FILESDIR}"/pam.d-include/shadow
+
+		for x in chpasswd chgpasswd newusers; do
+			newpamd "${FILESDIR}"/pam.d-include/passwd ${x}
+		done
+
+		for x in chage chsh chfn \
+				 user{add,del,mod} group{add,del,mod} ; do
+			newpamd "${FILESDIR}"/pam.d-include/shadow ${x}
+		done
+
+		# comment out login.defs options that pam hates
+		local opt sed_args=()
+		for opt in \
+			CHFN_AUTH \
+			CONSOLE \
+			ENV_HZ \
+			ENVIRON_FILE \
+			FAILLOG_ENAB \
+			FTMP_FILE \
+			LASTLOG_ENAB \
+			MAIL_CHECK_ENAB \
+			MOTD_FILE \
+			NOLOGINS_FILE \
+			OBSCURE_CHECKS_ENAB \
+			PASS_ALWAYS_WARN \
+			PASS_CHANGE_TRIES \
+			PASS_MIN_LEN \
+			PORTTIME_CHECKS_ENAB \
+			QUOTAS_ENAB \
+			SU_WHEEL_ONLY
+		do
+			set_login_opt ${opt}
+			sed_args+=( -e "/^#${opt}\>/b pamnote" )
+		done
+		sed -i "${sed_args[@]}" \
+			-e 'b exit' \
+			-e ': pamnote; i# NOTE: This setting should be configured via /etc/pam.d/ and not in this file.' \
+			-e ': exit' \
+			"${ED}"/etc/login.defs || die
+	fi
+
+	cleanup_install
+
+	rm -f "${ED}"/etc/pam.d/{su,login}
+}
+
+pkg_preinst() {
+	rm -f "${EROOT}"/etc/pam.d/system-auth.new \
+		"${EROOT}/etc/login.defs.new"
+}
+
+pkg_postinst() {
+	# Enable shadow groups.
+	if [ ! -f "${EROOT}"/etc/gshadow ] ; then
+		if grpck -r -R "${EROOT}" 2>/dev/null ; then
+			grpconv -R "${EROOT}"
+		else
+			ewarn "Running 'grpck' returned errors.  Please run it by hand, and then"
+			ewarn "run 'grpconv' afterwards!"
+		fi
+	fi
+}

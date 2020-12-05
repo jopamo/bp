@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake git-r3 flag-o-matic
+inherit cmake git-r3 flag-o-matic user
 
 DESCRIPTION="The secure, private, untraceable cryptocurrency"
 HOMEPAGE="https://www.getmonero.org https://github.com/monero-project/monero"
@@ -14,7 +14,7 @@ LICENSE="BSD MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+daemon hw-wallet libressl readline tools +wallet-cli +wallet-rpc"
+IUSE="+daemon hw-wallet readline tools +wallet-cli +wallet-rpc"
 
 REQUIRED_USE="|| ( daemon tools wallet-cli wallet-rpc )"
 
@@ -30,6 +30,11 @@ PATCHES=("${FILESDIR}/${PN}-0.17.1.3-linkjobs.patch")
 
 filter-flags -flto\=\*
 filter-flags -Wl,-z,defs
+
+pkg_setup() {
+	enewgroup monero
+	enewuser monero -1 -1 /var/lib/monero monero
+}
 
 src_configure() {
 	local mycmakeargs=(

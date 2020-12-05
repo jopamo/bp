@@ -2,12 +2,12 @@
 
 EAPI=7
 
+SNAPSHOT=37b22abee700eb1b0c5b6926ab32630a429c1183
+
 inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="The standard GNU Bourne again shell"
 HOMEPAGE="http://tiswww.case.edu/php/chet/bash/bashtop.html"
-
-SNAPSHOT=37b22abee700eb1b0c5b6926ab32630a429c1183
 SRC_URI="https://git.savannah.gnu.org/cgit/${PN}.git/snapshot/${PN}-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -15,20 +15,12 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="afs bashlogger examples mem-scramble +net nls plugins"
+IUSE="afs mem-scramble +net nls plugins"
 
 DEPEND="
 	>=lib-sys/ncurses-5.2-r2:0=
 	lib-sys/readline
 	nls? ( sys-devel/gettext )"
-
-pkg_setup() {
-	if use bashlogger ; then
-		ewarn "The logging patch should ONLY be used in restricted (i.e. honeypot) envs."
-		ewarn "This will log ALL output you enter into the shell, you have been warned."
-	fi
-}
-
 
 src_prepare() {
 	# Prefixify hardcoded path names. No-op for non-prefix.
@@ -66,8 +58,7 @@ src_configure() {
 		-DSYS_BASHRC=\'\"${EPREFIX}/etc/bash/bashrc\"\' \
 		-DSYS_BASH_LOGOUT=\'\"${EPREFIX}/etc/bash/bash_logout\"\' \
 		-DNON_INTERACTIVE_LOGIN_SHELLS \
-		-DSSH_SOURCE_BASHRC \
-		$(use bashlogger && echo -DSYSLOG_HISTORY)
+		-DSSH_SOURCE_BASHRC
 
 	# Don't even think about building this statically without
 	# reading Bug 7714 first.  If you still build it statically,

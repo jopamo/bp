@@ -2,10 +2,10 @@
 
 EAPI=7
 
+SNAPSHOT=4bbf219d9f1bf3ad3e20b44fb3f4bc910d6398c3
+
 DESCRIPTION="GNU awk pattern-matching language"
 HOMEPAGE="https://www.gnu.org/software/gawk/gawk.html"
-
-SNAPSHOT=a9440d51fdf9286dc657b10368503aecb74eb19d
 SRC_URI="https://git.savannah.gnu.org/cgit/gawk.git/snapshot/gawk-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

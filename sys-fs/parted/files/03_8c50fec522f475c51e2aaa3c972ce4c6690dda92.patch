@@ -1,0 +1,29 @@
+From 8c50fec522f475c51e2aaa3c972ce4c6690dda92 Mon Sep 17 00:00:00 2001
+From: Max Campbell <max@0m.ax>
+Date: Thu, 12 Dec 2019 16:54:29 +0100
+Subject: Removed reference to ped_file_system_create
+
+Removed a reference to the removed function ped_file_system_create in
+the docs for ped_file_system_clobber.
+
+Signed-off-by: Brian C. Lane <bcl@redhat.com>
+---
+ libparted/fs/r/filesys.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/libparted/fs/r/filesys.c b/libparted/fs/r/filesys.c
+index d57447c..dd316aa 100644
+--- a/libparted/fs/r/filesys.c
++++ b/libparted/fs/r/filesys.c
+@@ -213,8 +213,6 @@ error_close_dev:
+  * file system occupies a given region described by \p geom.
+  * After this operation ped_file_system_probe() won't detect any file system.
+  *
+- * \note ped_file_system_create() calls this before creating a new file system.
+- *
+  * \return \c 1 on success, \c 0 on failure
+  */
+ static int
+-- 
+cgit v1.2.1
+

@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=e76d47bc45f30a3dcda125e080bd73d97b8c3bb0
+	SNAPSHOT=2ddf36ca5869dc886a93bb5ad8b7039b5156a03a
 	SRC_URI="https://github.com/seccomp/libseccomp/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

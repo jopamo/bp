@@ -10,6 +10,6 @@ IUSE="amdgpu clang"
 
 RDEPEND="
 	|| (
-		amdgpu? ( amd/llvm-roc[clang?] )
+		amdgpu? ( sys-devel/llvm-roc )
 		!amdgpu? ( sys-devel/llvm[clang?] )
 	)"

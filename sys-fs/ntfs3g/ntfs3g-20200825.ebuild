@@ -14,21 +14,16 @@ SRC_URI="https://sourceforge.net/code-snapshots/git/n/nt/ntfs-3g/ntfs-3g.git/ntf
 S=${WORKDIR}/ntfs-3g-ntfs-3g-${SNAPSHOT}
 
 LICENSE="GPL-2"
-SLOT="0/87"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="acl debug +external-fuse ntfsdecrypt +ntfsprogs static-libs suid xattr"
 
-RDEPEND="!<sys-app/util-linux-2.20.1-r2
-	!sys-fs/ntfsprogs
+DEPEND="sys-app/attr
 	ntfsdecrypt? (
 		>=lib-dev/libgcrypt-1.2.2:0
 		>=lib-net/gnutls-1.4.4
-	)
-"
-DEPEND="${RDEPEND}
-	sys-app/attr
-	dev-util/pkgconf"
+	)"
 
 pkg_setup() {
 	if use external-fuse  ; then

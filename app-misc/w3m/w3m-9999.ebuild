@@ -12,7 +12,7 @@ LICENSE="w3m"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="X gpm +imlib nls nntp ssl unicode"
+IUSE="X gpm imlib nls nntp ssl unicode"
 
 DEPEND=">=lib-sys/ncurses-5.2-r3:0=
 	>=lib-sys/zlib-1.1.3-r2

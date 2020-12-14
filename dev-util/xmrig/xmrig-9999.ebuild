@@ -16,7 +16,9 @@ KEYWORDS="amd64 arm64"
 
 IUSE="cuda http"
 
-DEPEND="sys-app/hwloc"
+DEPEND="sys-app/hwloc
+	cuda? ( nvidia/nvidia-cuda
+		dev-util/xmrig-cuda )"
 
 src_prepare() {
 	cmake_src_prepare
@@ -26,8 +28,8 @@ src_prepare() {
 
 src_configure() {
 	local mycmakeargs=(
-		-D WITH_HTTP=$(usex http)
-		-D WITH_CUDA=$(usex cuda)
+		-D WITH_HTTP=$(usex http ON OFF)
+		-D WITH_CUDA=$(usex cuda ON OFF)
 	)
 
 	cmake_src_configure

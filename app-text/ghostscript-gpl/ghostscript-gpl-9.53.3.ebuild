@@ -15,6 +15,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="cups dbus gtk static-libs tiff X"
 
+PATCHES=( "${FILESDIR}"/41ef9a0bc36b.patch )
+
 COMMON_DEPEND="
 	app-text/libpaper
 	lib-media/fontconfig
@@ -147,9 +149,6 @@ src_install() {
 
 	cd "${S}/ijs" || die
 	emake DESTDIR="${D}" install
-
-	# install the CMaps from poppler-data properly, bug #409361
-	dosym ../../../poppler/cMaps "/usr/share/ghostscript/${PVM}/Resource/CMap"
 
 	use static-libs || find "${ED}" -name '*.la' -delete
 	cleanup_install

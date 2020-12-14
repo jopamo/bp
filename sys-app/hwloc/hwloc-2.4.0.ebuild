@@ -6,7 +6,7 @@ inherit flag-o-matic
 
 DESCRIPTION="displays the hardware topology in convenient formats"
 HOMEPAGE="http://www.open-mpi.org/projects/hwloc/"
-SRC_URI="https://download.open-mpi.org/release/hwloc/v2.2/${P}.tar.bz2"
+SRC_URI="https://download.open-mpi.org/release/hwloc/v$(ver_cut 1-2)/${P}.tar.bz2"
 
 LICENSE="BSD"
 SLOT="0"

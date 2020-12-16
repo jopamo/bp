@@ -13,9 +13,9 @@ LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="audit binfmt +blkid coredump cryptsetup +dhcp4 efi gcrypt +hostnamed hwdb importd kmod
+IUSE="audit binfmt +blkid coredump cryptsetup devmode +dhcp4 efi gcrypt +hostnamed hwdb importd kmod
 ldconfig localed logind machined +networkd pam pcre pstore rfkill sleep systemd-update sysv
-timedated +tmpfiles test vconsole xkb"
++timedated +tmpfiles test vconsole xkb"
 
 RESTRICT="!test? ( test )"
 
@@ -74,6 +74,7 @@ pkg_pretend() {
 
 src_configure() {
 	local emesonargs=(
+		$(usex devmode '-Dmode=developer' '-Dmode=release')
 		$(meson_use audit)
 		$(meson_use binfmt)
 		$(meson_use blkid)
@@ -166,7 +167,6 @@ src_install() {
 	dosym ../sysctl.conf /etc/sysctl.d/99-sysctl.conf
 
 	rm -rf "${ED}"/etc/systemd/system/* || die
-	rm -rf "${ED}"/etc/init.d
 	rm -f "${ED}"/var/log/README
 	rm -rf "${ED}"/usr/share/polkit-1
 	rm -f "${ED}"/etc/systemd/logind.conf
@@ -177,7 +177,7 @@ src_install() {
 	keepdir /var/log/journal
 
 	mkdir -p "${ED}"/etc/systemd/user && keepdir /etc/systemd/user
-	use xkb || rm -rf "${ED}"/etc/X11 "${ED}"/etc/xdg/ "${ED}"/etc/systemd/user
+	use xkb || rm -rf "${ED}"/etc/X11 "${ED}"/etc/xdg/
 	use tmpfiles || rm -f "${ED}"/usr/lib/systemd/system/systemd-tmpfiles-clean.timer "${ED}"/usr/lib/systemd/system/timers.target.wants/systemd-tmpfiles-clean.timer
 
 	rm -fr "${ED}"/etc/kernel

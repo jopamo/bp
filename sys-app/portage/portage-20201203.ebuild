@@ -20,7 +20,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bin +devtree X gui"
+IUSE="bin X gui"
 
 DEPEND="
 	>=app-compression/tar-1.27
@@ -134,33 +134,25 @@ main-repo = bp\n\n\
 [bp]\n\
 location = /var/db/repos/bp\n\
 sync-type = git\n\
-sync-uri = https://github.com/1g4-linux/bp.git\n\
-auto-sync = yes" > "${ED}"/usr/share/portage/config/repos.conf
-
-	use devtree && echo -e "[DEFAULT]\n\
-main-repo = bp\n\n\
-[bp]\n\
-location = /var/db/repos/bp\n\
-sync-type = git\n\
 sync-uri = https://gitlab.com/pjo/bp.git\n\
 auto-sync = yes" > "${ED}"/usr/share/portage/config/repos.conf
 
 	use bin && echo -e "\n[bin]\n\
 location = /var/db/repos/bin\n\
 sync-type = git\n\
-sync-uri = https://github.com/1g4-linux/bin.git\n\
+sync-uri = https://gitlab.com/pjo/bin.git\n\
 auto-sync = yes" >> "${ED}"/usr/share/portage/config/repos.conf
 
 	use X && echo -e "\n[x11]\n\
 location = /var/db/repos/x11\n\
 sync-type = git\n\
-sync-uri = https://github.com/1g4-linux/x11.git\n\
+sync-uri = https://gitlab.com/pjo/x11.git\n\
 auto-sync = yes" >> "${ED}"/usr/share/portage/config/repos.conf
 
 	use gui && echo -e "\n[gui]\n\
 location = /var/db/repos/gui\n\
 sync-type = git\n\
-sync-uri = https://github.com/1g4-linux/gui.git\n\
+sync-uri = https://gitlab.com/pjo/gui.git\n\
 auto-sync = yes" >> "${ED}"/usr/share/portage/config/repos.conf
 
 	insinto usr/share/portage/config/

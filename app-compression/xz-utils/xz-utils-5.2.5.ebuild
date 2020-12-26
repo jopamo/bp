@@ -2,23 +2,18 @@
 
 EAPI=7
 
-inherit autotools git-r3
+MY_P="${PN/-utils}-${PV/_}"
 
 DESCRIPTION="utils for managing LZMA compressed files"
 HOMEPAGE="http://tukaani.org/xz/"
-EGIT_REPO_URI="https://github.com/1g4-mirror/xz.git"
-EGIT_BRANCH="v$(ver_cut 1).$(ver_cut 2)"
+SRC_URI="https://tukaani.org/xz/${MY_P}.tar.gz"
+S="${WORKDIR}/${MY_P}"
 
 LICENSE="public-domain LGPL-2.1+ GPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="nls static-libs"
-
-src_prepare() {
-	eautoreconf
-	default
-}
 
 src_configure() {
 	local myconf=(

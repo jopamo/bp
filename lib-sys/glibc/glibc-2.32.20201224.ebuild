@@ -8,12 +8,12 @@ DESCRIPTION="GNU libc C library"
 HOMEPAGE="https://www.gnu.org/software/libc/"
 
 if [[ ${PV} = *9999* ]]; then
-	EGIT_REPO_URI="https://github.com/1g4-mirror/glibc"
+	EGIT_REPO_URI="https://github.com/bminor/glibc"
 	inherit git-r3
 	EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)/master"
 else
-	SNAPSHOT=ac0a6929c5d370952557aded97c2dd073a28773b
-	SRC_URI="https://github.com/1g4-mirror/glibc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	SNAPSHOT=1d49bede4d8a5448067e8579b14fedf437e75aee
+	SRC_URI="https://github.com/bminor/glibc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 

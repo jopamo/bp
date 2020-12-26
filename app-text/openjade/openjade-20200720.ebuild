@@ -7,14 +7,9 @@ inherit autotools flag-o-matic sgml-catalog-r1 toolchain-funcs
 DESCRIPTION="Jade is an implementation of DSSSL for formatting SGML and XML documents"
 HOMEPAGE="http://openjade.sourceforge.net"
 
-if [[ ${PV} = *9999* ]]; then
-	EGIT_REPO_URI="https://github.com/1g4-mirror/openjade"
-	inherit git-r3
-else
-	SNAPSHOT=e804ff522ff4ecc94997d8bed581120e61f6d3eb
-	SRC_URI="https://github.com/1g4-mirror/openjade/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=e804ff522ff4ecc94997d8bed581120e61f6d3eb
+SRC_URI="https://1g4.org/files/${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="MIT"
 SLOT="0"

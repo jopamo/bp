@@ -2,11 +2,13 @@
 
 EAPI=7
 
-inherit git-r3
-
 DESCRIPTION="Updated config.sub and config.guess file from GNU"
 HOMEPAGE="https://savannah.gnu.org/projects/config"
-EGIT_REPO_URI="https://github.com/1g4-mirror/config.git"
+EGIT_REPO_URI="https://git.savannah.gnu.org/git/config.git"
+
+SNAPSHOT=c8ddc8472f8efcadafc1ef53ca1d863415fddd5f
+SRC_URI="https://git.savannah.gnu.org/cgit/config.git/snapshot/config-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/config-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"

@@ -6,7 +6,7 @@ inherit flag-o-matic python-single-r1 git-r3
 
 DESCRIPTION="GNU debugger"
 HOMEPAGE="https://sourceware.org/gdb/"
-EGIT_REPO_URI="https://github.com/1g4-mirror/binutils-gdb.git"
+EGIT_REPO_URI="https://github.com/bminor/binutils-gdb.git"
 EGIT_BRANCH="gdb-$(ver_cut 1)-branch"
 
 LICENSE="GPL-2 LGPL-2"

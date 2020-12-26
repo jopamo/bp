@@ -8,12 +8,12 @@ DESCRIPTION="Core binutils libraries (libbfd, libopcodes, libiberty) for externa
 HOMEPAGE="https://sourceware.org/binutils/"
 
 if [[ ${PV} = *9999* ]]; then
-	EGIT_REPO_URI="https://github.com/1g4-mirror/binutils-gdb.git"
+	EGIT_REPO_URI="https://github.com/bminor/binutils-gdb.git"
 	inherit git-r3
 	EGIT_BRANCH="binutils-$(ver_cut 1)_$(ver_cut 2)-branch"
 else
-	SNAPSHOT=372dd157272e0674d13372655cc60eaca9c06926
-	SRC_URI="https://github.com/1g4-mirror/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	SNAPSHOT=e539c8303ff871dda6ea95c5ec3da9ea6f3609ae
+	SRC_URI="https://github.com/bminor/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-gdb-${SNAPSHOT}
 fi
 

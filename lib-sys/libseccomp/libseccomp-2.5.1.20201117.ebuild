@@ -38,10 +38,3 @@ src_configure() {
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
-
-src_install() {
-	default
-	chrpath -d "${ED}"/usr/bin/scmp_sys_resolver
-	use static-libs || find "${ED}" -name '*.la' -delete
-
-}

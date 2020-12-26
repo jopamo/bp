@@ -19,7 +19,14 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug openmp +isl sanitize +vtv"
 
+DEPEND="
+	lib-dev/isl
+	lib-dev/mpc
+	sys-devel/binutils
+"
+
 filter-flags -D_FORTIFY_SOURCE\=\* -Wl,-z,combreloc -Wl,-z,relro -Wl,-z,defs -Wl,-z,now -fstack-protector-strong -fstack-clash-protection
+append-flags -Wa,--noexecstack
 
 src_prepare() {
 	strip-flags
@@ -30,7 +37,7 @@ src_prepare() {
 	# Do not run fixincludes
 	sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
 
-	# Arch Linux installs x86_64 libraries /lib
+	# install x86_64 libraries in /lib
 	sed -i '/m64=/s/lib64/lib/' gcc/config/i386/t-linux64
 
 	# configure tests for header files using "$CPP $CPPFLAGS"
@@ -70,7 +77,7 @@ src_configure() {
     	--enable-default-ssp
     	--enable-gnu-indirect-function
     	--enable-gnu-unique-object
-    	--enable-install-libiberty
+    	--disable-install-libiberty
     	--enable-linker-build-id
     	--enable-lto
     	--disable-multilib
@@ -108,4 +115,11 @@ src_compile() {
 src_install() {
 	cd gcc-build
 	emake DESTDIR="${ED}" install
+
+	#cleanup
+	find "${ED}" -name libcc1.la -delete
+	find "${ED}" -name libcc1plugin.la -delete
+	find "${ED}" -name libcp1plugin.la -delete
+
+	patchelf --remove-rpath "/usr/lib/libstdc++.so.6.0.28"
 }

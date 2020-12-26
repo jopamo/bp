@@ -14,7 +14,9 @@ KEYWORDS="amd64 arm64"
 
 IUSE="amdgpu qcom netronome liquidio iwlwifi intel qed brcm ath10k
 	mellanox dpaa2 bnx2x mrvl ti i915 radeon cxgb4 mediatek nvidia
-	ueagle-atm libertas bnx2"
+	ueagle-atm libertas bnx2 ath11k cypress phanfw i6050 i2400m
+	rsi rtlwifi qca carl9170fw ath6k vxge rtl_bt atmel rtw88 mwl8k
+	mwlwifi ct2fw ar3k myri10ge ctfw cbfw moxa"
 
 RESTRICT="strip"
 

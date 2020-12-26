@@ -99,6 +99,8 @@ src_install() {
 	fperms 600 /var/empty
 
 	rm -rf "${ED}"/etc/ssh/moduli
+
+	keepdir /var/empty
 }
 
 pkg_preinst() {

@@ -5,7 +5,7 @@ EAPI=7
 inherit git-r3
 
 DESCRIPTION="Base Configuration"
-EGIT_REPO_URI="https://github.com/1g4-linux/layout.git"
+EGIT_REPO_URI="https://gitlab.com/pjo/layout.git"
 
 LICENSE="GPL-2"
 SLOT="0"

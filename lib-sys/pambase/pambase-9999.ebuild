@@ -5,7 +5,7 @@ EAPI=7
 inherit git-r3
 
 DESCRIPTION="PAM base configuration files"
-EGIT_REPO_URI="https://github.com/1g4-linux/pambase.git"
+EGIT_REPO_URI="https://gitlab.com/pjo/pambase.git"
 
 LICENSE="GPL-2"
 SLOT="0"

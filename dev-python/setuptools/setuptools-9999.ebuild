@@ -11,7 +11,6 @@ if [[ ${PV} == "9999" ]]; then
 	EGIT_REPO_URI="https://github.com/pypa/setuptools.git"
 	inherit git-r3
 else
-	#SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.zip"
 	SRC_URI="https://github.com/pypa/setuptools/archive/v51.1.1.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="amd64 arm64"
 fi
@@ -19,11 +18,11 @@ fi
 LICENSE="MIT"
 SLOT="0"
 
-PDEPEND="
-	>=dev-python/certifi-2016.9.26[${PYTHON_USEDEP}]"
+PDEPEND="dev-python/certifi[${PYTHON_USEDEP}]"
 
 # Force in-source build because build system modifies sources.
 DISTUTILS_IN_SOURCE_BUILD=1
+DISTUTILS_USE_SETUPTOOLS=no
 
 python_prepare_all() {
 	python_setup

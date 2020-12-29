@@ -11,7 +11,8 @@ if [[ ${PV} == "9999" ]]; then
 	EGIT_REPO_URI="https://github.com/pypa/setuptools.git"
 	inherit git-r3
 else
-	SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.zip"
+	#SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.zip"
+	SRC_URI="https://github.com/pypa/setuptools/archive/v51.1.1.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="amd64 arm64"
 fi
 
@@ -25,10 +26,8 @@ PDEPEND="
 DISTUTILS_IN_SOURCE_BUILD=1
 
 python_prepare_all() {
-	if [[ ${PV} == "9999" ]]; then
-		python_setup
-		${EPYTHON} bootstrap.py || die
-	fi
+	python_setup
+	${EPYTHON} bootstrap.py || die
 
 	# disable tests requiring a network connection
 	rm setuptools/tests/test_packageindex.py || die

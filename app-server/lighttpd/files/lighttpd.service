@@ -3,16 +3,14 @@ Description=Lighttpd Daemon
 After=network.target
 
 [Service]
-Type=forking
-PIDFile=/run/lighttpd.pid
 ExecStartPre=/usr/sbin/lighttpd -tt -f /etc/lighttpd/lighttpd.conf
-ExecStart=/usr/sbin/lighttpd -f /etc/lighttpd/lighttpd.conf
-Restart=always
+ExecStart=/usr/sbin/lighttpd-angel -D -f /etc/lighttpd/lighttpd.conf
 ProtectSystem=full
 MemoryDenyWriteExecute=true
 NoNewPrivileges=true
 PrivateDevices=true
 PrivateTmp=true
+ProtectClock=true
 ProtectHome=true
 ProtectControlGroups=true
 ProtectKernelModules=true

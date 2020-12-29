@@ -1,7 +1,7 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_8 )
+PYTHON_COMPAT=( python3_9 )
 
 # @ECLASS: python-utils-r1.eclass
 # @MAINTAINER:
@@ -41,9 +41,7 @@ inherit toolchain-funcs
 # @DESCRIPTION:
 # All supported Python implementations, most preferred last.
 _PYTHON_ALL_IMPLS=(
-	pypy3
-	python2_7
-	python3_6 python3_7 python3_8
+	python3_8 python3_9 python4_0
 )
 readonly _PYTHON_ALL_IMPLS
 
@@ -79,7 +77,7 @@ _python_impl_supported() {
 	# keep in sync with _PYTHON_ALL_IMPLS!
 	# (not using that list because inline patterns shall be faster)
 	case "${impl}" in
-		python2_7|python3_[678]|pypy3)
+		python2_7|python3_[89]|python4_[0123456789])
 			return 0
 			;;
 		jython2_7|pypy|pypy1_[89]|pypy2_0|python2_[56]|python3_[12345])

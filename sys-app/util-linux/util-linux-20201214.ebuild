@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit toolchain-funcs libtool flag-o-matic pam python-single-r1 systemd autotools
+inherit toolchain-funcs libtool flag-o-matic pam systemd autotools
 
 DESCRIPTION="Various useful Linux utilities"
 HOMEPAGE="https://www.kernel.org/pub/linux/utils/util-linux/"
@@ -22,13 +22,12 @@ LICENSE="GPL-2 LGPL-2.1 BSD-4 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="build caps +cramfs fdformat kill ncurses nls pam python +readline static-libs +suid systemd test +tty-helpers udev unicode"
+IUSE="build caps +cramfs fdformat kill ncurses nls pam +readline static-libs +suid systemd test +tty-helpers udev unicode"
 
 RDEPEND="caps? ( lib-sys/libcap-ng )
 	cramfs? ( lib-sys/zlib )
 	ncurses? ( >=lib-sys/ncurses-5.2-r2:0= )
 	pam? ( lib-sys/pam )
-	python? ( ${PYTHON_DEPS} )
 	readline? ( lib-sys/readline:0= )
 	!build? ( systemd? ( sys-app/systemd ) )
 	udev? ( sys-app/systemd:= )"
@@ -44,12 +43,6 @@ RDEPEND+="
 		!sys-app/coreutils[kill]
 		!sys-app/procps[kill]
 	)"
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
-
-pkg_setup() {
-	use python && python-single-r1_pkg_setup
-}
 
 src_prepare() {
 	po/update-potfiles || die
@@ -111,7 +104,7 @@ src_configure() {
 		$(use_enable tty-helpers mesg)
 		$(use_enable tty-helpers wall)
 		$(use_enable tty-helpers write)
-		$(use_with python)
+		--without-python
 		$(use_with readline)
 		$(use_with systemd)
 		$(use_with udev)
@@ -130,8 +123,6 @@ src_test() {
 
 src_install() {
 	default
-
-	use python && python_optimize
 
 	if use pam; then
 		newpamd "${FILESDIR}/runuser.pamd" runuser

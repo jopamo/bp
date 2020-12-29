@@ -29,6 +29,7 @@ DEPEND="app-compression/lbzip2
 	gdbm?     ( lib-sys/gdbm )
 	ldap?     ( >=app-net/openldap-2.1.26 )
 	libev?    ( >=lib-dev/libev-4.01 )
+	mbedtls?  ( lib-net/mbedtls )
 	mysql?    ( >=virtual/mysql-4.0 )
 	php?      ( dev-lang/php:*[cgi] )
 	ssl? ( virtual/ssl )

@@ -77,7 +77,6 @@ src_configure() {
 src_install() {
 	meson_src_install
 	mkdir -p "${ED}"/etc/lighttpd
-	cp -r "${FILESDIR}"/lighttpd/* "${ED}"/etc/lighttpd/
 
 	keepdir /var/l{ib,og}/lighttpd
 	fowners lighttpd:lighttpd /var/l{ib,og}/lighttpd
@@ -85,4 +84,9 @@ src_install() {
 
 	use systemd && systemd_dounit "${FILESDIR}/${PN}.service"
 	use systemd && systemd_dotmpfilesd "${FILESDIR}/${PN}.tmpfiles.conf"
+
+	insinto /etc/lighttpd
+	doins doc/config/conf.d/mime.conf
+	doins "${FILESDIR}"/lighttpd.conf
+	doins "${FILESDIR}"/lighttpd_example.conf
 }

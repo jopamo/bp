@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT=1759a8e3f36a40b20e7c7df06c6d1afc5d1c30c7
+SNAPSHOT=581dfcc413e338023009c1d44d790b378242d9d9
 
 inherit qmake-utils systemd toolchain-funcs flag-o-matic
 

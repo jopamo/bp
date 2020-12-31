@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: distutils-r1.eclass
@@ -116,40 +116,40 @@ fi
 if [[ ! ${_DISTUTILS_R1} ]]; then
 
 _distutils_set_globals() {
-	local rdep=${PYTHON_DEPS}
-	local bdep=${rdep}
-
-	if [[ ! ${DISTUTILS_SINGLE_IMPL} ]]; then
-		local sdep=">=dev-python/setuptools-42.0.2[${PYTHON_USEDEP}]"
-	else
-		local sdep="$(python_gen_cond_dep '
-			>=dev-python/setuptools-42.0.2[${PYTHON_MULTI_USEDEP}]
-		')"
-	fi
+	local rdep bdep
+	local setuptools_dep='>=dev-python/setuptools-42.0.2[${PYTHON_USEDEP}]'
 
 	case ${DISTUTILS_USE_SETUPTOOLS} in
 		no|manual)
 			;;
 		bdepend)
-			bdep+=" ${sdep}"
+			bdep+=" ${setuptools_dep}"
 			;;
 		rdepend)
-			bdep+=" ${sdep}"
-			rdep+=" ${sdep}"
+			bdep+=" ${setuptools_dep}"
+			rdep+=" ${setuptools_dep}"
 			;;
 		pyproject.toml)
-			bdep+=" dev-python/pyproject2setuppy[${PYTHON_USEDEP}]"
+			bdep+=' dev-python/pyproject2setuppy[${PYTHON_USEDEP}]'
 			;;
 		*)
 			die "Invalid DISTUTILS_USE_SETUPTOOLS=${DISTUTILS_USE_SETUPTOOLS}"
 			;;
 	esac
 
-	RDEPEND=${rdep}
-	if [[ ${EAPI} != [56] ]]; then
-		BDEPEND=${bdep}
+	if [[ ! ${DISTUTILS_SINGLE_IMPL} ]]; then
+		bdep=${bdep//\$\{PYTHON_USEDEP\}/${PYTHON_USEDEP}}
+		rdep=${rdep//\$\{PYTHON_USEDEP\}/${PYTHON_USEDEP}}
 	else
-		DEPEND=${bdep}
+		[[ -n ${bdep} ]] && bdep="$(python_gen_cond_dep "${bdep}")"
+		[[ -n ${rdep} ]] && rdep="$(python_gen_cond_dep "${rdep}")"
+	fi
+
+	RDEPEND="${PYTHON_DEPS} ${rdep}"
+	if [[ ${EAPI} != [56] ]]; then
+		BDEPEND="${PYTHON_DEPS} ${bdep}"
+	else
+		DEPEND="${PYTHON_DEPS} ${bdep}"
 	fi
 	REQUIRED_USE=${PYTHON_REQUIRED_USE}
 }
@@ -378,7 +378,7 @@ distutils_enable_sphinx() {
 }
 
 # @FUNCTION: distutils_enable_tests
-# @USAGE: <test-runner>
+# @USAGE: [--install] <test-runner>
 # @DESCRIPTION:
 # Set up IUSE, RESTRICT, BDEPEND and python_test() for running tests
 # with the specified test runner.  Also copies the current value
@@ -389,6 +389,10 @@ distutils_enable_sphinx() {
 # - setup.py: setup.py test (no deps included)
 # - unittest: for built-in Python unittest module
 #
+# Additionally, if --install is passed as the first parameter,
+# 'distutils_install_for_testing --via-root' is called before running
+# the test suite.
+#
 # This function is meant as a helper for common use cases, and it only
 # takes care of basic setup.  You still need to list additional test
 # dependencies manually.  If you have uncommon use case, you should
@@ -398,33 +402,71 @@ distutils_enable_sphinx() {
 # declared.  Take care not to overwrite the variables set by it.
 distutils_enable_tests() {
 	debug-print-function ${FUNCNAME} "${@}"
-	[[ ${#} -eq 1 ]] || die "${FUNCNAME} takes exactly one argument: test-runner"
 
+	local do_install=
+	case ${1} in
+		--install)
+			do_install=1
+			shift
+			;;
+	esac
+
+	[[ ${#} -eq 1 ]] || die "${FUNCNAME} takes exactly one argument: test-runner"
 	local test_pkg
 	case ${1} in
 		nose)
-			test_pkg="dev-python/nose"
-			python_test() {
-				nosetests -v || die "Tests fail with ${EPYTHON}"
-			}
+			test_pkg=">=dev-python/nose-1.3.7-r4"
+			if [[ ${do_install} ]]; then
+				python_test() {
+					distutils_install_for_testing --via-root
+					nosetests -v || die "Tests fail with ${EPYTHON}"
+				}
+			else
+				python_test() {
+					nosetests -v || die "Tests fail with ${EPYTHON}"
+				}
+			fi
 			;;
 		pytest)
-			test_pkg="dev-python/pytest"
-			python_test() {
-				pytest -vv || die "Tests fail with ${EPYTHON}"
-			}
+			test_pkg=">=dev-python/pytest-4.5.0"
+			if [[ ${do_install} ]]; then
+				python_test() {
+					distutils_install_for_testing --via-root
+					pytest -vv || die "Tests fail with ${EPYTHON}"
+				}
+			else
+				python_test() {
+					pytest -vv || die "Tests fail with ${EPYTHON}"
+				}
+			fi
 			;;
 		setup.py)
-			python_test() {
-				nonfatal esetup.py test --verbose ||
-					die "Tests fail with ${EPYTHON}"
-			}
+			if [[ ${do_install} ]]; then
+				python_test() {
+					distutils_install_for_testing --via-root
+					nonfatal esetup.py test --verbose ||
+						die "Tests fail with ${EPYTHON}"
+				}
+			else
+				python_test() {
+					nonfatal esetup.py test --verbose ||
+						die "Tests fail with ${EPYTHON}"
+				}
+			fi
 			;;
 		unittest)
-			python_test() {
-				"${EPYTHON}" -m unittest discover -v ||
-					die "Tests fail with ${EPYTHON}"
-			}
+			if [[ ${do_install} ]]; then
+				python_test() {
+					distutils_install_for_testing --via-root
+					"${EPYTHON}" -m unittest discover -v ||
+						die "Tests fail with ${EPYTHON}"
+				}
+			else
+				python_test() {
+					"${EPYTHON}" -m unittest discover -v ||
+						die "Tests fail with ${EPYTHON}"
+				}
+			fi
 			;;
 		*)
 			die "${FUNCNAME}: unsupported argument: ${1}"
@@ -455,45 +497,6 @@ distutils_enable_tests() {
 	return 0
 }
 
-# @FUNCTION: _distutils-r1_verify_use_setuptools
-# @INTERNAL
-# @DESCRIPTION:
-# Check setup.py for signs that DISTUTILS_USE_SETUPTOOLS have been set
-# incorrectly.
-_distutils_verify_use_setuptools() {
-	[[ ${DISTUTILS_OPTIONAL} ]] && return
-	[[ ${DISTUTILS_USE_SETUPTOOLS} == manual ]] && return
-	[[ ${DISTUTILS_USE_SETUPTOOLS} == pyproject.toml ]] && return
-
-	# ok, those are cheap greps.  we can try toimprove them if we hit
-	# false positives.
-	local expected=no
-	if [[ ${CATEGORY}/${PN} == dev-python/setuptools ]]; then
-		# as a special case, setuptools provides itself ;-)
-		:
-	elif grep -E -q -s '(from|import)\s+setuptools' setup.py; then
-		if grep -E -q -s 'entry_points\s*=' setup.py; then
-			expected=rdepend
-		elif grep -F -q -s '[options.entry_points]' setup.cfg; then
-			expected=rdepend
-		else
-			expected=bdepend
-		fi
-	fi
-
-	if [[ ${DISTUTILS_USE_SETUPTOOLS} != ${expected} ]]; then
-		if [[ ! ${_DISTUTILS_SETUPTOOLS_WARNED} ]]; then
-			_DISTUTILS_SETUPTOOLS_WARNED=1
-			local def=
-			[[ ${DISTUTILS_USE_SETUPTOOLS} == bdepend ]] && def=' (default?)'
-
-			eqawarn "DISTUTILS_USE_SETUPTOOLS value is probably incorrect"
-			eqawarn "  value:    DISTUTILS_USE_SETUPTOOLS=${DISTUTILS_USE_SETUPTOOLS}${def}"
-			eqawarn "  expected: DISTUTILS_USE_SETUPTOOLS=${expected}"
-		fi
-	fi
-}
-
 # @FUNCTION: esetup.py
 # @USAGE: [<args>...]
 # @DESCRIPTION:
@@ -516,7 +519,6 @@ esetup.py() {
 	[[ ${EAPI} != [45] ]] && die_args+=( -n )
 
 	[[ ${BUILD_DIR} ]] && _distutils-r1_create_setup_cfg
-	_distutils_verify_use_setuptools
 
 	set -- "${EPYTHON:-python}" setup.py "${mydistutilsargs[@]}" "${@}"
 
@@ -532,7 +534,7 @@ esetup.py() {
 }
 
 # @FUNCTION: distutils_install_for_testing
-# @USAGE: [<args>...]
+# @USAGE: [--via-root|--via-home] [<args>...]
 # @DESCRIPTION:
 # Install the package into a temporary location for running tests.
 # Update PYTHONPATH appropriately and set TEST_DIR to the test
@@ -543,11 +545,19 @@ esetup.py() {
 # namespaces (and therefore proper install needs to be done to enforce
 # PYTHONPATH) or tests rely on the results of install command.
 # For most of the packages, tests built in BUILD_DIR are good enough.
+#
+# The function supports two install modes.  The current default is
+# the legacy --via-home mode.  However, it has problems with newer
+# versions of setuptools (50.3.0+).  The --via-root mode generally
+# works for these packages, and it will probably become the default
+# in the future, once we test all affected packages.  Please note
+# that proper testing sometimes requires unmerging the package first.
 distutils_install_for_testing() {
 	debug-print-function ${FUNCNAME} "${@}"
 
 	# A few notes:
-	# 1) because of namespaces, we can't use 'install --root',
+	# 1) because of namespaces, we can't use 'install --root'
+	#    (NB: this is probably no longer true with py3),
 	# 2) 'install --home' is terribly broken on pypy, so we need
 	#    to override --install-lib and --install-scripts,
 	# 3) non-root 'install' complains about PYTHONPATH and missing dirs,
@@ -559,16 +569,42 @@ distutils_install_for_testing() {
 	TEST_DIR=${BUILD_DIR}/test
 	local bindir=${TEST_DIR}/scripts
 	local libdir=${TEST_DIR}/lib
+	PATH=${bindir}:${PATH}
 	PYTHONPATH=${libdir}:${PYTHONPATH}
 
-	local add_args=(
-		install
-			--home="${TEST_DIR}"
-			--install-lib="${libdir}"
-			--install-scripts="${bindir}"
-	)
+	local install_method=home
+	case ${1} in
+		--via-home)
+			install_method=home
+			shift
+			;;
+		--via-root)
+			install_method=root
+			shift
+			;;
+	esac
 
-	mkdir -p "${libdir}" || die
+	local -a add_args
+	case ${install_method} in
+		home)
+			add_args=(
+				install
+					--home="${TEST_DIR}"
+					--install-lib="${libdir}"
+					--install-scripts="${bindir}"
+			)
+			mkdir -p "${libdir}" || die
+			;;
+		root)
+			add_args=(
+				install
+					--root="${TEST_DIR}"
+					--install-lib=lib
+					--install-scripts=scripts
+			)
+			;;
+	esac
+
 	esetup.py "${add_args[@]}" "${@}"
 }
 
@@ -830,7 +866,7 @@ distutils-r1_python_install() {
 	# python likes to compile any module it sees, which triggers sandbox
 	# failures if some packages haven't compiled their modules yet.
 	addpredict "${EPREFIX}/usr/lib/${EPYTHON}"
-	addpredict "${EPREFIX}/usr/lib/${EPYTHON}"
+	addpredict "${EPREFIX}/usr/$(get_libdir)/${EPYTHON}"
 	addpredict /usr/lib/pypy2.7
 	addpredict /usr/lib/pypy3.6
 	addpredict /usr/lib/portage/pym
@@ -887,7 +923,7 @@ distutils-r1_python_install() {
 	local shopt_save=$(shopt -p nullglob)
 	shopt -s nullglob
 	local pypy_dirs=(
-		"${root}/usr/lib"/pypy*/share
+		"${root}/usr/$(get_libdir)"/pypy*/share
 		"${root}/usr/lib"/pypy*/share
 	)
 	${shopt_save}
@@ -907,6 +943,18 @@ distutils-r1_python_install() {
 # The default python_install_all(). It installs the documentation.
 distutils-r1_python_install_all() {
 	debug-print-function ${FUNCNAME} "${@}"
+
+	einstalldocs
+
+	if declare -p EXAMPLES &>/dev/null; then
+		[[ ${EAPI} != [45] ]] && die "EXAMPLES are banned in EAPI ${EAPI}"
+
+		(
+			docinto examples
+			dodoc -r "${EXAMPLES[@]}"
+		)
+		docompress -x "/usr/share/doc/${PF}/examples"
+	fi
 }
 
 # @FUNCTION: distutils-r1_run_phase
@@ -936,6 +984,11 @@ distutils-r1_run_phase() {
 		local BUILD_DIR=${BUILD_DIR}/build
 	fi
 	local -x PYTHONPATH="${BUILD_DIR}/lib:${PYTHONPATH}"
+
+	# make PATH local for distutils_install_for_testing calls
+	# it makes little sense to let user modify PATH in per-impl phases
+	# and _all() already localizes it
+	local -x PATH=${PATH}
 
 	# Bug 559644
 	# using PYTHONPATH when the ${BUILD_DIR}/lib is not created yet might lead to

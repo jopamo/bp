@@ -7,11 +7,11 @@ inherit distutils-r1
 DESCRIPTION="Collection of extensions to Distutils"
 HOMEPAGE="https://github.com/pypa/setuptools https://pypi.python.org/pypi/setuptools"
 
-if [[ ${PV} == "9999" ]]; then
+if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/pypa/setuptools.git"
 	inherit git-r3
 else
-	SRC_URI="https://github.com/pypa/setuptools/archive/v51.1.1.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://github.com/pypa/setuptools/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="amd64 arm64"
 fi
 

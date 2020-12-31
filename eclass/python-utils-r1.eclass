@@ -1,8 +1,6 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_9 )
-
 # @ECLASS: python-utils-r1.eclass
 # @MAINTAINER:
 # Python team <python@gentoo.org>
@@ -41,9 +39,23 @@ inherit toolchain-funcs
 # @DESCRIPTION:
 # All supported Python implementations, most preferred last.
 _PYTHON_ALL_IMPLS=(
-	python3_8 python3_9 python4_0
+	pypy3
+	python2_7
+	python3_6 python3_7 python3_8 python3_9
 )
 readonly _PYTHON_ALL_IMPLS
+
+# @ECLASS-VARIABLE: _PYTHON_HISTORICAL_IMPLS
+# @INTERNAL
+# @DESCRIPTION:
+# All historical Python implementations that are no longer supported.
+_PYTHON_HISTORICAL_IMPLS=(
+	jython2_7
+	pypy pypy1_{8,9} pypy2_0
+	python2_{5,6}
+	python3_{1,2,3,4,5}
+)
+readonly _PYTHON_HISTORICAL_IMPLS
 
 # @ECLASS-VARIABLE: PYTHON_COMPAT_NO_STRICT
 # @INTERNAL
@@ -77,7 +89,7 @@ _python_impl_supported() {
 	# keep in sync with _PYTHON_ALL_IMPLS!
 	# (not using that list because inline patterns shall be faster)
 	case "${impl}" in
-		python2_7|python3_[89]|python4_[0123456789])
+		python2_7|python3_[6789]|pypy3)
 			return 0
 			;;
 		jython2_7|pypy|pypy1_[89]|pypy2_0|python2_[56]|python3_[12345])
@@ -87,6 +99,28 @@ _python_impl_supported() {
 			[[ ${PYTHON_COMPAT_NO_STRICT} ]] && return 1
 			die "Invalid implementation in PYTHON_COMPAT: ${impl}"
 	esac
+}
+
+# @FUNCTION: _python_verify_patterns
+# @USAGE: <pattern>...
+# @INTERNAL
+# @DESCRIPTION:
+# Verify whether the patterns passed to the eclass function are correct
+# (i.e. can match any valid implementation).  Dies on wrong pattern.
+_python_verify_patterns() {
+	debug-print-function ${FUNCNAME} "${@}"
+
+	local impl pattern
+	for pattern; do
+		[[ ${pattern} == -[23] ]] && continue
+
+		for impl in "${_PYTHON_ALL_IMPLS[@]}" "${_PYTHON_HISTORICAL_IMPLS[@]}"
+		do
+			[[ ${impl} == ${pattern/./_} ]] && continue 2
+		done
+
+		die "Invalid implementation pattern: ${pattern}"
+	done
 }
 
 # @FUNCTION: _python_set_impls
@@ -574,6 +608,7 @@ python_optimize() {
 
 	local PYTHON=${PYTHON}
 	[[ ${PYTHON} ]] || _python_export PYTHON
+	[[ -x ${PYTHON} ]] || die "PYTHON (${PYTHON}) is not executable"
 
 	# default to sys.path
 	if [[ ${#} -eq 0 ]]; then
@@ -932,12 +967,12 @@ _python_wrapper_setup() {
 			ln -s "${PYTHON/python/2to3-}" "${workdir}"/bin/2to3 || die
 
 			# Python 2.7+.
-			ln -s "${EPREFIX}"/usr/lib/pkgconfig/${EPYTHON/n/n-}.pc \
+			ln -s "${EPREFIX}"/usr/$(get_libdir)/pkgconfig/${EPYTHON/n/n-}.pc \
 				"${workdir}"/pkgconfig/python${pyver}.pc || die
 
 			# Python 3.8+.
 			if [[ ${EPYTHON} != python[23].[67] ]]; then
-				ln -s "${EPREFIX}"/usr/lib/pkgconfig/${EPYTHON/n/n-}-embed.pc \
+				ln -s "${EPREFIX}"/usr/$(get_libdir)/pkgconfig/${EPYTHON/n/n-}-embed.pc \
 					"${workdir}"/pkgconfig/python${pyver}-embed.pc || die
 			fi
 		else
@@ -1164,8 +1199,8 @@ python_fix_shebang() {
 
 # @FUNCTION: _python_check_locale_sanity
 # @USAGE: <locale>
-# @INTERNAL
 # @RETURN: 0 if sane, 1 otherwise
+# @INTERNAL
 # @DESCRIPTION:
 # Check whether the specified locale sanely maps between lowercase
 # and uppercase ASCII characters.
@@ -1236,6 +1271,9 @@ python_export_utf8_locale() {
 # <directory>.  Takes care of disabling Intersphinx and appending
 # to HTML_DOCS.
 #
+# If <directory> is relative to the current directory, care needs
+# to be taken to run einstalldocs from the same directory
+# (usually ${S}).
 build_sphinx() {
 	debug-print-function ${FUNCNAME} "${@}"
 	[[ ${#} -eq 1 ]] || die "${FUNCNAME} takes 1 arg: <directory>"

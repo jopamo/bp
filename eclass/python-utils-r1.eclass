@@ -1,6 +1,9 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+PYTHON_COMPAT=( python3_9 )
+
+
 # @ECLASS: python-utils-r1.eclass
 # @MAINTAINER:
 # Python team <python@gentoo.org>
@@ -967,12 +970,12 @@ _python_wrapper_setup() {
 			ln -s "${PYTHON/python/2to3-}" "${workdir}"/bin/2to3 || die
 
 			# Python 2.7+.
-			ln -s "${EPREFIX}"/usr/$(get_libdir)/pkgconfig/${EPYTHON/n/n-}.pc \
+			ln -s "${EPREFIX}"/usr/lib/pkgconfig/${EPYTHON/n/n-}.pc \
 				"${workdir}"/pkgconfig/python${pyver}.pc || die
 
 			# Python 3.8+.
 			if [[ ${EPYTHON} != python[23].[67] ]]; then
-				ln -s "${EPREFIX}"/usr/$(get_libdir)/pkgconfig/${EPYTHON/n/n-}-embed.pc \
+				ln -s "${EPREFIX}"/usr/lib/pkgconfig/${EPYTHON/n/n-}-embed.pc \
 					"${workdir}"/pkgconfig/python${pyver}-embed.pc || die
 			fi
 		else

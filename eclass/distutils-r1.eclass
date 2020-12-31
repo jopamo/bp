@@ -866,7 +866,7 @@ distutils-r1_python_install() {
 	# python likes to compile any module it sees, which triggers sandbox
 	# failures if some packages haven't compiled their modules yet.
 	addpredict "${EPREFIX}/usr/lib/${EPYTHON}"
-	addpredict "${EPREFIX}/usr/$(get_libdir)/${EPYTHON}"
+	addpredict "${EPREFIX}/usr/lib/${EPYTHON}"
 	addpredict /usr/lib/pypy2.7
 	addpredict /usr/lib/pypy3.6
 	addpredict /usr/lib/portage/pym
@@ -923,7 +923,7 @@ distutils-r1_python_install() {
 	local shopt_save=$(shopt -p nullglob)
 	shopt -s nullglob
 	local pypy_dirs=(
-		"${root}/usr/$(get_libdir)"/pypy*/share
+		"${root}/usr/lib"/pypy*/share
 		"${root}/usr/lib"/pypy*/share
 	)
 	${shopt_save}
@@ -944,7 +944,7 @@ distutils-r1_python_install() {
 distutils-r1_python_install_all() {
 	debug-print-function ${FUNCNAME} "${@}"
 
-	einstalldocs
+	cleanup_install
 
 	if declare -p EXAMPLES &>/dev/null; then
 		[[ ${EAPI} != [45] ]] && die "EXAMPLES are banned in EAPI ${EAPI}"

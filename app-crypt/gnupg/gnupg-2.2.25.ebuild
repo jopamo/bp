@@ -14,7 +14,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 ldap nls readline +smartcard +gnutls tofu tools usb wks-server"
+IUSE="bzip2 ldap nls readline +gnutls tools"
 
 COMMON_DEPEND_LIBS="
 	>=lib-dev/npth-1.2
@@ -28,9 +28,8 @@ COMMON_DEPEND_LIBS="
 	ldap? ( app-net/openldap )
 	bzip2? ( app-compression/lbzip2 )
 	readline? ( lib-sys/readline:0= )
-	smartcard? ( usb? ( lib-dev/libusb ) )
-	tofu? ( >=lib-sys/sqlite-3.7 )
-	"
+"
+
 COMMON_DEPEND_BINS="app-crypt/pinentry"
 
 # Existence of executables is checked during configuration.
@@ -48,28 +47,20 @@ append-flags -fno-strict-aliasing
 
 src_configure() {
 	local myconf=(
-			--enable-symcryptrun
 			$(use_enable bzip2)
 			$(use_enable gnutls)
 			$(use_enable nls)
-			$(use_enable tofu)
-			$(use_enable wks-server wks-tools)
 			$(use_with ldap)
 			$(use_with readline)
+			--enable-symcryptrun
 			--enable-gpg
 			--enable-gpgsm
 			--enable-large-secmem
 			--enable-all-tests
+			--disable-scdaemon
+			--disable-tofu
+			--disable-wks-tools
 		)
-
-	if use smartcard; then
-		myconf+=(
-			--enable-scdaemon
-			$(use_enable usb ccid-driver)
-		)
-	else
-		myconf+=( --disable-scdaemon )
-	fi
 
 	# glib fails and picks up clang's internal stdint.h causing weird errors
 	[[ ${CC} == *clang ]] && \
@@ -77,12 +68,6 @@ src_configure() {
 
 	econf \
 		"${myconf[@]}" CC_FOR_BUILD="$(tc-getBUILD_CC)"
-}
-
-src_test() {
-	#Bug: 638574
-	use tofu && export TESTFLAGS=--parallel
-	default
 }
 
 src_install() {

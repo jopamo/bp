@@ -12,5 +12,6 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 src_install() {
-	dosbin *
+	dobin bin/*
+	dosbin sbin/*
 }

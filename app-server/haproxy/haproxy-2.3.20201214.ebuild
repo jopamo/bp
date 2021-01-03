@@ -2,25 +2,24 @@
 
 EAPI=7
 
-inherit user toolchain-funcs flag-o-matic systemd linux-info git-r3
+inherit user toolchain-funcs flag-o-matic systemd linux-info
 
 DESCRIPTION="A TCP/HTTP reverse proxy for high availability environments"
 HOMEPAGE="http://haproxy.1wt.eu"
-EGIT_REPO_URI="http://git.haproxy.org/git/haproxy-$(ver_cut 1).$(ver_cut 2).git"
-EGIT_MIN_CLONE_TYPE=single
+SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+crypt doc examples slz net_ns +pcre pcre-jit pcre2 pcre2-jit ssl
+IUSE="+crypt net_ns +pcre pcre-jit pcre2 pcre2-jit ssl
 systemd +threads tools vim-syntax +zlib lua device-atlas 51degrees wurfl"
 
 REQUIRED_USE="pcre-jit? ( pcre )
 	pcre2-jit? ( pcre2 )
 	pcre? ( !pcre2 )
 	device-atlas? ( pcre )
-	?? ( slz zlib )"
+"
 
 DEPEND="
 	pcre? (
@@ -32,7 +31,6 @@ DEPEND="
 		pcre2-jit? ( lib-dev/libpcre2[jit] )
 	)
 	ssl? ( virtual/ssl )
-	slz? ( lib-dev/libslz:= )
 	zlib? ( lib-sys/zlib )
 	lua? ( dev-lang/lua:5.3 )
 	device-atlas? ( lib-dev/device-atlas-api-c )"
@@ -71,7 +69,6 @@ src_compile() {
 	args+=( $(haproxy_use pcre PCRE) )
 	args+=( $(haproxy_use pcre-jit PCRE_JIT) )
 	args+=( $(haproxy_use ssl OPENSSL) )
-	args+=( $(haproxy_use slz SLZ) )
 	args+=( $(haproxy_use zlib ZLIB) )
 	args+=( $(haproxy_use lua LUA) )
 	args+=( $(haproxy_use 51degrees 51DEGREES) )

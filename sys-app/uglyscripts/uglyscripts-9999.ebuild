@@ -7,11 +7,13 @@ inherit git-r3
 DESCRIPTION="Misc BASH scripts that get the job done."
 EGIT_REPO_URI="https://gitlab.com/pjo/uglyscripts.git"
 
-LICENSE="BSD GPL-2"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+IUSE="video"
+
 src_install() {
-	dobin bin/*
+	use video && dobin video/*
 	dosbin sbin/*
 }

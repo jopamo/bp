@@ -16,22 +16,20 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="adns ipv6 ldap mbedtls ssh ssl static-libs test nghttp2"
+IUSE="adns ipv6 ldap libpsl mbedtls ssh ssl static-libs test nghttp2"
 
-RDEPEND="ldap? ( app-net/openldap )
+DEPEND="
+		ldap? ( app-net/openldap )
+		libpsl? ( lib-dev/libpsl )
 		adns? ( lib-net/c-ares:0 )
 		ssh? ( lib-net/libssh2[static-libs?] )
 		nghttp2? ( lib-net/nghttp2[static-libs?] )
 		lib-sys/zlib
+		mbedtls? ( lib-net/mbedtls )
+		test? (
+			sys-app/diffutils
+			dev-lang/perl )
 "
-
-DEPEND="${RDEPEND}
-	dev-util/pkgconf
-	mbedtls? ( lib-net/mbedtls )
-	test? (
-		sys-app/diffutils
-		dev-lang/perl
-	)"
 
 PATCHES=( "${FILESDIR}"/curl-respect-cflags-3.patch )
 
@@ -54,6 +52,7 @@ src_configure() {
 		$(use_enable ipv6)
 		$(use_with mbedtls)
 		$(use_with ssl)
+		$(use_with libpsl)
 		--with-zlib
 		--with-random=/dev/urandom
 		--enable-versioned-symbols

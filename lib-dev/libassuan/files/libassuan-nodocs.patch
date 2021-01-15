@@ -1,33 +1,7 @@
-diff -urN a/configure.ac b/configure.ac
---- a/configure.ac	2020-04-10 21:56:15.922538155 -0500
-+++ b/configure.ac	2020-04-10 21:57:48.187118601 -0500
-@@ -457,22 +457,11 @@
- 
- 
- #
--# Extra features
--#
--build_doc=yes
--AC_ARG_ENABLE([doc], AC_HELP_STRING([--disable-doc],
--                                    [do not build the documentation]),
--                     build_doc=$enableval, build_doc=yes)
--AM_CONDITIONAL([BUILD_DOC], [test "x$build_doc" != xno])
--
--
--#
- # Create the config files.
- #
- AC_CONFIG_FILES([Makefile])
- AC_CONFIG_FILES([m4/Makefile])
- AC_CONFIG_FILES([src/Makefile])
--AC_CONFIG_FILES([doc/Makefile])
- AC_CONFIG_FILES([tests/Makefile])
- AC_CONFIG_FILES([src/libassuan-config], [chmod +x src/libassuan-config])
- AC_CONFIG_FILES([src/versioninfo.rc])
 diff -urN a/Makefile.am b/Makefile.am
---- a/Makefile.am	2020-04-10 21:56:15.914538100 -0500
-+++ b/Makefile.am	2020-04-10 21:57:27.735004820 -0500
-@@ -20,23 +20,17 @@
+--- a/Makefile.am	2021-01-15 16:42:23.176114353 -0600
++++ b/Makefile.am	2021-01-15 16:47:47.767370565 -0600
+@@ -20,23 +20,16 @@
  
  
  ACLOCAL_AMFLAGS = -I m4
@@ -47,9 +21,37 @@ diff -urN a/Makefile.am b/Makefile.am
 -else
 -doc =
 -endif
- 
+-
 -SUBDIRS = m4 src $(doc) tests
 +SUBDIRS = m4 src tests
  
  
  dist-hook: gen-ChangeLog
+diff -urN a/configure.ac b/configure.ac
+--- a/configure.ac	2021-01-15 16:42:23.196114554 -0600
++++ b/configure.ac	2021-01-15 16:43:56.293048477 -0600
+@@ -453,24 +453,12 @@
+ # FreeBSD
+ AC_CHECK_FUNCS([getpeereid])
+ 
+-
+-#
+-# Extra features
+-#
+-build_doc=yes
+-AC_ARG_ENABLE([doc], AS_HELP_STRING([--disable-doc],
+-                                    [do not build the documentation]),
+-                     build_doc=$enableval, build_doc=yes)
+-AM_CONDITIONAL([BUILD_DOC], [test "x$build_doc" != xno])
+-
+-
+ #
+ # Create the config files.
+ #
+ AC_CONFIG_FILES([Makefile])
+ AC_CONFIG_FILES([m4/Makefile])
+ AC_CONFIG_FILES([src/Makefile])
+-AC_CONFIG_FILES([doc/Makefile])
+ AC_CONFIG_FILES([tests/Makefile])
+ AC_CONFIG_FILES([src/libassuan-config], [chmod +x src/libassuan-config])
+ AC_CONFIG_FILES([src/versioninfo.rc])

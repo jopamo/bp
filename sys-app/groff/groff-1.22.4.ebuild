@@ -12,7 +12,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="dev-lang/perl"
+DEPEND="dev-perl/libintl-perl"
 
 filter-flags -fno-signed-zeros -fassociative-math
 

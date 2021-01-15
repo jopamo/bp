@@ -193,8 +193,8 @@ src_install() {
 	use bytecode || find "${ED}"  -name *.pyc -delete || die
 	use bytecode || find "${ED}" -type d -empty -delete || die
 
-	rm "${ED}"/usr/lib/python3.8/lib-dynload/_codecs_{hk,tw,cn,jp,kr}.cpython*.so
-	rm "${ED}"/usr/lib/python3.8/lib-dynload/ossaudiodev.cpython*.so
+	rm "${ED}"/usr/lib/python$(ver_cut 1).$(ver_cut 2)/lib-dynload/_codecs_{hk,tw,cn,jp,kr}.cpython*.so
+	rm "${ED}"/usr/lib/python$(ver_cut 1).$(ver_cut 2)/lib-dynload/ossaudiodev.cpython*.so
 }
 
 pkg_preinst() {

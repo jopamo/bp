@@ -91,6 +91,9 @@ src_compile() {
 src_install() {
 	default
 
+	#compat symlink
+	dosym bash usr/bin/sh
+
 	if use plugins ; then
 		exeinto /usr/lib/bash
 		doexe $(echo examples/loadables/*.o | sed 's:\.o::g')

@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT=8e813c085ac43ca6a58a20f7982b26ed31dc326a
+SNAPSHOT=76ed0c0ad119569f6e6f6c96b27b76d3b110413b
 
 inherit flag-o-matic toolchain-funcs
 
@@ -21,9 +21,11 @@ IUSE="+asm rfc3779 static-libs test zlib"
 
 RESTRICT="!test? ( test )"
 
-RDEPEND=">=app-misc/c_rehash-1.7-r1
-	zlib? ( >=lib-sys/zlib-1.2.8-r1[static-libs(+)?] )"
-DEPEND="${RDEPEND}"
+DEPEND="
+	>=app-misc/c_rehash-1.7-r1
+	zlib? ( >=lib-sys/zlib-1.2.8-r1[static-libs(+)?] )
+"
+
 BDEPEND="
 	>=dev-lang/perl-5
 	test? (

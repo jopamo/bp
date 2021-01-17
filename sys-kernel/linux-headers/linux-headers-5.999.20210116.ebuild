@@ -4,12 +4,17 @@ EAPI=7
 
 ETYPE="headers"
 H_SUPPORTEDARCH="amd64 arm64"
+
 inherit kernel-2
+
 detect_version
 
-PATCH_VER="1"
+DESCRIPTION="Linux kernel headers compiled from Linus' tree"
+HOMEPAGE="https://github.com/torvalds/linux.git"
 SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
+LICENSE="GPL-2"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="dev-lang/perl"

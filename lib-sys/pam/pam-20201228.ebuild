@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/linux-pam/linux-pam.git"
 else
-	SNAPSHOT=4e4c22b9d128dd740eb6e50823a832e6a662c860
+	SNAPSHOT=8eaec98ec7b68da3e688e57b701531656dd14492
 	SRC_URI="https://github.com/linux-pam/linux-pam/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/linux-${PN}-${SNAPSHOT}
 fi
@@ -22,18 +22,23 @@ KEYWORDS="amd64 arm64"
 
 IUSE="audit debug nls test vim-syntax"
 
-BDEPEND="app-misc/w3m
-		app-text/docbook-xml-dtd:4.1
-		app-text/docbook-xml-dtd:4.3
-		app-text/docbook-xml-dtd:4.4
-		app-text/docbook-sgml-dtd:4.5"
+BDEPEND="
+	app-misc/w3m
+	app-text/docbook-xml-dtd:4.1
+	app-text/docbook-xml-dtd:4.3
+	app-text/docbook-xml-dtd:4.4
+	app-text/docbook-sgml-dtd:4.5
+"
 
 RDEPEND="
-	audit? ( >=sys-app/audit-2.2.2 )"
+	lib-net/libtirpc
+	audit? ( >=sys-app/audit-2.2.2 )
+"
 
 PDEPEND="
 	lib-sys/pambase
-	vim-syntax? ( app-misc/vim )"
+	vim-syntax? ( app-misc/vim )
+"
 
 src_prepare() {
 	touch ChangeLog

@@ -2,17 +2,17 @@
 
 EAPI=7
 
-inherit flag-o-matic python-any-r1 toolchain-funcs
+inherit flag-o-matic python-any-r1
 
 DESCRIPTION="Network utility to retrieve files from the WWW"
 HOMEPAGE="https://www.gnu.org/software/wget/"
-SRC_URI="https://1g4.org/files/${P}.tar.xz"
+SRC_URI="mirror://gnu/wget/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug ipv6 nls pcre static test uuid zlib"
+IUSE="debug ipv6 libpsl nls pcre static test uuid zlib"
 
 LIB_DEPEND="
 	pcre? ( lib-dev/libpcre[static-libs(+)] )
@@ -28,9 +28,9 @@ DEPEND="${RDEPEND}
 		${PYTHON_DEPS}
 		dev-lang/perl
 		)
+	libpsl? ( lib-dev/libpsl )
 	nls? ( sys-devel/gettext )
-
-	lib-net/gnutls"
+	virtual/ssl"
 
 pkg_setup() {
 	use test && python-any-r1_pkg_setup
@@ -40,15 +40,14 @@ src_configure() {
 	local myconf=(
 		--disable-assert
 		--disable-rpath
-		--without-included-libunistring
-		--without-libunistring-prefix
-		--with-ssl=gnutls
+		--with-ssl=openssl
 		$(use_enable debug)
 		$(use_enable ipv6)
 		$(use_enable nls)
 		$(use_enable pcre)
 		$(use_with uuid libuuid)
 		$(use_with zlib)
+		$(use_with libpsl)
 	)
-	ac_cv_libunistring=no econf "${myconf[@]}"
+	econf "${myconf[@]}"
 }

@@ -19,11 +19,3 @@ src_prepare() {
 	default
 	eautoreconf
 }
-
-src_compile() {
-	make CC=musl-gcc
-}
-
-src_install() {
-	dobin ncdu
-}

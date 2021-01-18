@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 RESTRICT="test strip"
 
-DEPEND="
+BDEPEND="
 	lib-sys/musl
 	sys-kernel/sabotage-headers"
 

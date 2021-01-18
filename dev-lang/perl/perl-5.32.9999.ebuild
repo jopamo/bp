@@ -65,12 +65,6 @@ src_configure() {
 	export LC_ALL="C"
 	[[ ${COLUMNS:-1} -ge 1 ]] || unset COLUMNS # bug #394091
 
-	# xlocale.h is going away in glibc-2.26, so it's counterproductive
-	# if we use it and include it in CORE/perl.h ... Perl builds just
-	# fine with glibc and locale.h only.
-	# However, the darwin prefix people have no locale.h ...
-	use elibc_glibc && myconf -Ui_xlocale
-
 	# This flag makes compiling crash in interesting ways
 	filter-flags "-malign-double"
 

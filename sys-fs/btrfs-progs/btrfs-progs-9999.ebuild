@@ -64,7 +64,7 @@ src_configure() {
 		--localstatedir="${EPREFIX}"/var
 		--disable-convert
 		--disable-documentation
-		$(use_enable elibc_glibc backtrace)
+		--disable-backtrace
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

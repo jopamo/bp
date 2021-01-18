@@ -45,7 +45,7 @@ DEPEND="${COMMON_DEPEND}
 	dev-util/gtk-doc-am
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
-	sys-kernel/linux-headers
+	virtual/kernel-headers
 	dev-util/pkgconf
 	lib-dev/newt
 	dev-python/pygobject

@@ -7,21 +7,19 @@ inherit flag-o-matic
 DESCRIPTION="Utilities for rescue and embedded systems"
 HOMEPAGE="https://www.busybox.net/"
 
-if [[ ${PV} == *9999 ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="git://git.busybox.net/busybox"
-	#EGIT_BRANCH="$(ver_cut 1)_$(ver_cut 2)_stable"
-else
-	SNAPSHOT=64981b4c8e88812c322bee3832f1d421ff670ed5
-	SRC_URI="https://git.busybox.net/busybox/snapshot/${PN}-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=808d93c0eca49e0b22056e23d965f0d967433fbb
+SRC_URI="https://git.busybox.net/busybox/snapshot/${PN}-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
-LICENSE="GPL-2" # GPL-2 only
+LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 RESTRICT="test strip"
+
+DEPEND="
+	lib-sys/musl
+	sys-kernel/sabotage-headers"
 
 append-flags -ffat-lto-objects
 
@@ -29,6 +27,10 @@ src_prepare() {
 	default
 	cp "${FILESDIR}"/busybox-config "${S}"/.config
 	make silentoldconfig
+}
+
+src_compile() {
+	make CC=musl-gcc
 }
 
 src_install() {

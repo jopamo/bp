@@ -30,8 +30,7 @@ DEPEND="
 	app-compression/xz-utils
 	>=sys-devel/bison-2.4
 	sys-devel/flex
-	sys-kernel/linux-headers
-	elibc_glibc? ( >=lib-sys/glibc-2.7 )
+	virtual/kernel-headers
 "
 
 filter-flags -Wl,-z,defs

@@ -21,8 +21,8 @@
 *sys-app/sed
 *sys-app/uglyscripts
 *app-misc/nano
-*lib-sys/glibc
-*sys-kernel/linux-headers
+*virtual/libc
+*virtual/kernel-headers
 *sys-app/portage
 *sys-app/shadow
 *app-misc/pax-utils

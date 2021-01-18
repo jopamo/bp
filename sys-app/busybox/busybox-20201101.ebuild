@@ -19,7 +19,7 @@ fi
 
 LICENSE="GPL-2" # GPL-2 only
 SLOT="0"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
 
 RESTRICT="test strip"
 

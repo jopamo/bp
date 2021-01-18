@@ -18,8 +18,6 @@ KEYWORDS="amd64 arm64"
 IUSE="nls leaps_timezone"
 
 DEPEND="nls? ( sys-devel/gettext )"
-RDEPEND="${DEPEND}
-	!sys-libs/glibc[vanilla(+)]"
 
 S=${WORKDIR}
 

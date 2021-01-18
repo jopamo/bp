@@ -1,9 +1,8 @@
 ## These ATOMS are printed with a standard 'emerge info'
 
-sys-app/bash:0
+sys-app/bash
 sys-devel/autoconf
 sys-devel/automake
-lib-sys/glibc
 sys-devel/binutils
 sys-devel/libtool
 sys-devel/make

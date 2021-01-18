@@ -38,7 +38,7 @@ sys-devel/make
 sys-devel/patch
 virtual/editor
 virtual/libc
-sys-kernel/linux-headers
+virtual/kernel-headers
 dev-util/pkgconfig
 sys-app/shadow
 sys-app/which

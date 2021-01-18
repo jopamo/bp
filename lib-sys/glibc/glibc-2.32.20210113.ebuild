@@ -26,7 +26,7 @@ IUSE="audit caps debug nscd systemtap static-libs profile +static-pie"
 BDEPEND="sys-devel/gcc
 		sys-devel/make"
 
-DEPEND="sys-kernel/linux-headers
+DEPEND="virtual/kernel-headers
 		sys-app/layout
 "
 RDEPEND="caps? ( lib-sys/libcap )

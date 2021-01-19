@@ -13,7 +13,7 @@ IPAPTA="-fipa-pta"
 SEMINTERPOS="-fno-semantic-interposition"
 FLTO="-flto=${NTHREADS}"
 SAFERFASTMATH="-fno-math-errno -fno-signed-zeros -fno-trapping-math -fassociative-math"
-SECUREY="-fcf-protection=full -fstack-protector-strong -fstack-clash-protection -fexceptions -fpie -fpic -D_FORTIFY_SOURCE=2"
+SECUREY="-fstack-protector-strong -fstack-clash-protection -fexceptions -fpie -fpic -D_FORTIFY_SOURCE=2"
 DEBUGY="-fasynchronous-unwind-tables -fexceptions"
 
 PASSFLAGS="${OPTIMIZEY} ${BASEFLAGS} ${GRAPHITE} ${DEVIRTLTO} ${IPAPTA} ${SEMINTERPOS} ${FLTO} ${SAFERFASTMATH} ${SECUREY} ${DEBUGY}"

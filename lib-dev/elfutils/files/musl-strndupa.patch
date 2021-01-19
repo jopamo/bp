@@ -1,16 +1,5 @@
-From 411f7a1d30f03cb64e4716977e3504e25af8ce90 Mon Sep 17 00:00:00 2001
-From: 
-Date: Thu, 12 Dec 2019 21:58:31 -0600
-Subject: [PATCH 8/9] musl strndupa
-
----
- src/unstrip.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/src/unstrip.c b/src/unstrip.c
-index 9b8c09a..afce497 100644
---- a/src/unstrip.c
-+++ b/src/unstrip.c
+--- a/src/unstrip.c.orig	2017-04-27 14:26:26.000000000 +0000
++++ b/src/unstrip.c	2017-05-05 15:51:33.515154220 +0000
 @@ -56,6 +56,15 @@
  # define _(str) gettext (str)
  #endif
@@ -27,6 +16,3 @@ index 9b8c09a..afce497 100644
  /* Name and version of program.  */
  ARGP_PROGRAM_VERSION_HOOK_DEF = print_version;
  
--- 
-2.24.1
-

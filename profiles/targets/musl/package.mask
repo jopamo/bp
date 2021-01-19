@@ -1,3 +1,3 @@
->=lib-dev/elfutils-0.181
+#>=lib-dev/elfutils-0.181
 >lib-dev/npth-1.6
 =sys-app/procps-9999

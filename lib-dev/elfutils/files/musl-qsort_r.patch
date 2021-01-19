@@ -1,12 +1,3 @@
-From 2fe70c56695e170ae7b859c154a83532de2dee22 Mon Sep 17 00:00:00 2001
-From: 
-Date: Thu, 12 Dec 2019 21:55:34 -0600
-Subject: [PATCH 6/9] musl qsort_r
-
----
- src/readelf.c | 21 ++++++++++++---------
- 1 file changed, 12 insertions(+), 9 deletions(-)
-
 diff --git a/src/readelf.c b/src/readelf.c
 index cbb519d..dea513b 100644
 --- a/src/readelf.c
@@ -74,6 +65,3 @@ index cbb519d..dea513b 100644
  }
  
  static bool
--- 
-2.24.1
-

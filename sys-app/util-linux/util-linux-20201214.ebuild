@@ -22,7 +22,7 @@ LICENSE="GPL-2 LGPL-2.1 BSD-4 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="build caps +cramfs fdformat kill ncurses nls pam +readline static-libs +suid systemd test +tty-helpers udev unicode"
+IUSE="build caps +cramfs fdformat +kill ncurses nls pam +readline static-libs +suid systemd test +tty-helpers udev unicode"
 
 RDEPEND="caps? ( lib-sys/libcap-ng )
 	cramfs? ( lib-sys/zlib )

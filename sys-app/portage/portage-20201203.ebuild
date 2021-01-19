@@ -59,10 +59,6 @@ python_prepare_all() {
 		-i lib/_emerge/create_depgraph_params.py || \
 		die "failed to patch create_depgraph_params.py"
 
-	einfo "Enabling additional FEATURES for gentoo-dev..."
-	echo 'FEATURES="${FEATURES} ipc-sandbox network-sandbox strict-keepdir"' \
-		>> cnf/make.globals || die
-
 	printf "[build_ext]\nportage-ext-modules=true\n" >> \
 		setup.cfg || die
 
@@ -79,9 +75,6 @@ python_prepare_all() {
 					die "sed failed"
 			fi
 		done < <(find . -type f ! -name etc-update -print0)
-
-		einfo "Adjusting make.globals, repos.conf and etc-update ..."
-		hprefixify cnf/{make.globals,repos.conf} bin/etc-update
 	fi
 
 	cd "${S}/cnf" || die

@@ -1,0 +1,30 @@
+NTHREADS="8"
+OPTIMIZEY="-Os"
+
+MARCHY="-march=armv8-a"
+
+BASEFLAGS="-pipe -fuse-linker-plugin -Wall -Wformat -Wformat-security"
+GRAPHITE="-fgraphite-identity -floop-nest-optimize -ftree-loop-distribution"
+DEVIRTLTO="-fdevirtualize-at-ltrans"
+IPAPTA="-fipa-pta"
+SEMINTERPOS="-fno-semantic-interposition"
+FLTO="-flto=${NTHREADS}"
+SAFERFASTMATH="-fno-math-errno -fno-signed-zeros -fno-trapping-math -fassociative-math"
+SECUREY="-fcf-protection=full -fstack-protector-strong -fstack-clash-protection -fexceptions -fpie -fpic -D_FORTIFY_SOURCE=2"
+DEBUGY="-fasynchronous-unwind-tables -fexceptions"
+
+PASSFLAGS="${OPTIMIZEY} ${BASEFLAGS} ${GRAPHITE} ${DEVIRTLTO} ${IPAPTA} ${SEMINTERPOS} ${FLTO} ${SAFERFASTMATH} ${SECUREY} ${DEBUGY}"
+MAKEOPTS="-j${NTHREADS}"
+
+CFLAGS="${MARCHY} ${PASSFLAGS}"
+CXXFLAGS="${CFLAGS} -D_GLIBCXX_ASSERTIONS"
+CPPFLAGS="${CFLAGS}"
+LDFLAGS="-Wl,${PASSFLAGS} -Wl,-z,combreloc -Wl,-z,defs -Wl,-z,now -Wl,-z,relro"
+
+AR=gcc-ar
+RANLIB=gcc-ranlib
+NM=gcc-nm
+
+USE="-systemd -udev"
+
+CHOST="aarch64-unknown-musl"

@@ -2,11 +2,12 @@
 
 EAPI=7
 
-inherit autotools git-r3
+inherit autotools
 
 DESCRIPTION="standard informational utilities and process-handling tools"
 HOMEPAGE="https://gitlab.com/procps-ng/procps"
-EGIT_REPO_URI="https://gitlab.com/procps-ng/procps.git"
+SRC_URI="mirror://sourceforge/${PN}-ng/${PN}-ng-${PV}.tar.xz"
+S="${WORKDIR}/${PN}-ng-${PV}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -18,13 +19,6 @@ DEPEND="
 	ncurses? ( lib-sys/ncurses )
 	systemd? ( sys-app/systemd )
 "
-
-src_prepare() {
-	po/update-potfiles
-	default
-	eautoreconf
-	sed -i -e "s/UNKNOWN/$(git log -1 --format="%at" | xargs -I{} date -d @{} +%Y%m%d)/g" "configure" || die
-}
 
 src_configure() {
 	local myconf=(

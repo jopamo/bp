@@ -22,3 +22,7 @@ USE="${USE} gmp"
 
 INPUT_DEVICES="libinput"
 LDFLAGS="-Wl,-O1 -Wl,--as-needed"
+
+AR=gcc-ar
+RANLIB=gcc-ranlib
+NM=gcc-nm

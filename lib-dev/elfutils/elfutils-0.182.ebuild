@@ -31,13 +31,6 @@ src_prepare() {
 	default
 
 	if use musl; then
-		cp "${FILESDIR}"/error.h lib/
-		cp "${FILESDIR}"/error.h src/
-	fi
-
-	eautoreconf
-
-	if use musl; then
 		eapply "${FILESDIR}"/fix-uninitialized.patch
 		eapply "${FILESDIR}"/musl-fts-obstack.patch
 		eapply "${FILESDIR}"/musl-qsort_r.patch
@@ -47,6 +40,8 @@ src_prepare() {
 		eapply "${FILESDIR}"/musl-macros.patch
 		eapply "${FILESDIR}"/musl-strerror_r.patch
 	fi
+
+	eautoreconf
 
 	if ! use static-libs; then
 		sed -i -e '/^lib_LIBRARIES/s:=.*:=:' -e '/^%.os/s:%.o$::' lib{asm,dw,elf}/Makefile.in || die

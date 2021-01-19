@@ -2,30 +2,20 @@
 
 EAPI=7
 
-inherit git-r3
-
-DESCRIPTION="Headers from glibc for musl use"
-EGIT_REPO_URI="https://github.com/bminor/glibc.git"
+DESCRIPTION="musl headers compat"
 
 LICENSE="GPL"
 SLOT="0"
 KEYWORDS="arm64 amd64"
 
-src_prepare() {
-	default
-	rm *
-}
+S="${WORKDIR}"
 
 src_install() {
 	insinto usr/include/sys/
-	doins include/sys/cdefs.h
-	doins include/sys/queue.h
-	doins include/sys/tree.h
+	doins "${FILESDIR}"/cdefs.h
+	doins "${FILESDIR}"/queue.h
+	doins "${FILESDIR}"/tree.h
 
 	insinto usr/include/
-	doins include/error.h
+	doins "${FILESDIR}"/error.h
 }
-
-install -D "$srcdir"/sys-cdefs.h "$subpkgdir"/usr/include/sys/cdefs.h
-		install -D "$srcdir"/sys-queue.h "$subpkgdir"/usr/include/sys/queue.h
-		install -D "$srcdir"/sys-tree.h "$subpkgdir"/usr/include/sys/tree.h

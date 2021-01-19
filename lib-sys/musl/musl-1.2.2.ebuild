@@ -14,6 +14,9 @@ KEYWORDS="amd64 arm64"
 
 IUSE="systemwide"
 
+BDEPEND="sys-devel/gcc
+		sys-devel/make"
+
 filter-flags -D_FORTIFY_SOURCE\=\* -Wl,-z,combreloc -Wl,-z,relro -Wl,-z,defs -Wl,-z,now -fstack-protector-strong -fstack-clash-protection
 
 src_prepare() {

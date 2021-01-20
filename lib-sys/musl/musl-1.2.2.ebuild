@@ -68,4 +68,8 @@ src_install() {
 
 	mv "${ED}"/lib/ld-musl*.so* "${ED}"/usr/lib/
   	rm -rf "${ED}"/lib
+
+  	for i in getconf getent iconv ; do
+		dobin $i.c
+	done
 }

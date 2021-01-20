@@ -23,6 +23,8 @@ src_prepare() {
 	strip-flags
 
 	default
+
+	cp "${FILESDIR}"/* "${S}"/
 }
 
 src_configure() {
@@ -66,12 +68,15 @@ src_compile() {
 src_install() {
 	default
 
-	mv "${ED}"/lib/ld-musl*.so* "${ED}"/usr/lib/
-  	rm -rf "${ED}"/lib
-
 	if use systemwide ; then
   		for i in getconf getent iconv ; do
 			dobin $i
 		done
+
+		cp -p "${ED}"/lib/ld-musl*.so* "${ED}"/usr/lib/
+  		rm -rf "${ED}"/lib
+	else
+		cp -p "${ED}"/lib/ld-musl*.so* "${ED}"/usr/musl/lib/
+  		rm -rf "${ED}"/lib
 	fi
 }

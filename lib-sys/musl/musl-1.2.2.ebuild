@@ -54,6 +54,15 @@ src_configure() {
 	use systemwide && ECONF_SOURCE=${S} econf "${systemwide[@]}"
 }
 
+src_compile() {
+	local i
+	for i in getconf getent iconv ; do
+		gcc $CPPFLAGS $CFLAGS "${S}"/$i.c -o $i
+	done
+
+	default
+}
+
 src_install() {
 	default
 

@@ -17,6 +17,8 @@ IUSE="nls static"
 DEPEND="app-compression/xz-utils
 	nls? ( sys-devel/gettext )"
 
+BDEPEND="dev-util/gperf"
+
 src_configure() {
 	use static && append-ldflags -static
 

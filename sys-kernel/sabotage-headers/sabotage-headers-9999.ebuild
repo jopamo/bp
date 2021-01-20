@@ -12,19 +12,13 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="system-headers"
-
-DEPEND="system-headers? ( !sys-kernel/linux-headers )"
-
 src_compile() {
 	use amd64 && MYARCH=x86
 	use arm64 && MYARCH=arm64
 
-	use system-headers || emake ARCH=${MYARCH} prefix="${EPREFIX}"/usr/musl
-	use system-headers && emake ARCH=${MYARCH} prefix="${EPREFIX}"/usr
+	emake ARCH=${MYARCH} prefix="${EPREFIX}"/usr/musl
 }
 
 src_install() {
-	use system-headers && emake ARCH=${MYARCH} prefix="${EPREFIX}"/usr DESTDIR="${ED}" install
- 	use system-headers || emake ARCH=${MYARCH} prefix="${EPREFIX}"/usr/musl DESTDIR="${ED}" install
+	emake ARCH=${MYARCH} prefix="${EPREFIX}"/usr/musl DESTDIR="${ED}" install
 }

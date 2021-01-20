@@ -23,7 +23,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND="virtual/kernel-headers"
+DEPEND="sys-kernel/linux-headers"
 
 src_prepare() {
 	default

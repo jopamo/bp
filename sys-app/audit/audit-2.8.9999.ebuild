@@ -24,7 +24,7 @@ RDEPEND="gssapi? ( app-crypt/heimdal )
 	lib-sys/libcap-ng
 	python? ( ${PYTHON_DEPS} )"
 DEPEND="${RDEPEND}
-	virtual/kernel-headers
+	sys-kernel/linux-headers
 	dev-lang/swig:0"
 
 CONFIG_CHECK="~AUDIT"

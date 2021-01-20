@@ -2,18 +2,28 @@
 
 EAPI=7
 
-inherit toolchain-funcs git-r3
+inherit toolchain-funcs
 
 DESCRIPTION="OpenRC manages the services, startup and shutdown of a host"
 HOMEPAGE="https://github.com/openrc/openrc/"
-EGIT_REPO_URI="https://github.com/OpenRC/${PN}.git"
+SRC_URI="https://dev.gentoo.org/~williamh/dist/${P}.tar.bz2"
 
 LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="audit debug ncurses pam newnet static-libs
-	sysv-utils"
+IUSE="audit debug ncurses pam newnet static-libs sysv-utils"
+
+PATCHES=(
+		"${FILESDIR}"/0001-call-sbin-mkmntdirs-in-localmount-OpenRC-service.patch
+		"${FILESDIR}"/0001-fsck-don-t-add-C0-to-busybox-fsck.patch
+		"${FILESDIR}"/0004-hide-error-when-migrating-var-run-to-run.patch
+		"${FILESDIR}"/0007-make-consolefont-service-compatible-with-busyboxs-se.patch
+		"${FILESDIR}"/0009-Support-early-loading-of-keymap-if-kdb-is-installed.patch
+		"${FILESDIR}"/0010-rc-mount-make-timeout-invocation-compatible-with-bus.patch
+		"${FILESDIR}"/0012-gcc-10.patch
+		"${FILESDIR}"/0013-fix-osclock.patch
+	)
 
 src_compile() {
     _makeargs=(

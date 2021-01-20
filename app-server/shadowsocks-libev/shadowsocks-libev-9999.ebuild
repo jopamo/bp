@@ -20,7 +20,7 @@ RDEPEND="lib-net/mbedtls
 	lib-dev/libpcre
 	"
 DEPEND="${RDEPEND}
-	virtual/kernel-headers
+	sys-kernel/linux-headers
 	lib-net/c-ares"
 
 src_prepare() {

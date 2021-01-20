@@ -36,7 +36,7 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconf
 	nls? ( sys-devel/gettext )
 	test? ( sys-devel/bc )
-	virtual/kernel-headers"
+	sys-kernel/linux-headers"
 
 RDEPEND+="
 	kill? (

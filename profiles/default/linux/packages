@@ -22,7 +22,7 @@
 *sys-app/uglyscripts
 *app-misc/nano
 *virtual/libc
-*virtual/kernel-headers
+*sys-kernel/linux-headers
 *sys-app/portage
 *sys-app/shadow
 *app-misc/pax-utils

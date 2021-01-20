@@ -1,8 +1,5 @@
 virtual/libc musl
 lib-sys/musl systemwide
-virtual/kernel-headers musl
-sys-kernel/sabotage-headers system-headers
-sys-kernel/kernel-headers musl
 virtual/service-manager openrc
 lib-dev/elfutils musl
 sys-devel/gcc -vtv

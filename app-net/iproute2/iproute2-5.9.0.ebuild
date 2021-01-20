@@ -30,7 +30,7 @@ DEPEND="
 	app-compression/xz-utils
 	>=sys-devel/bison-2.4
 	sys-devel/flex
-	virtual/kernel-headers
+	sys-kernel/linux-headers
 "
 
 filter-flags -Wl,-z,defs

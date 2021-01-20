@@ -17,7 +17,7 @@ IUSE="pam static-libs"
 RDEPEND=">=sys-app/attr-2.4.47
 	pam? ( lib-sys/pam )"
 DEPEND="${RDEPEND}
-	virtual/kernel-headers"
+	sys-kernel/linux-headers"
 
 filter-flags -Wl,-z,defs
 append-flags -ffat-lto-objects

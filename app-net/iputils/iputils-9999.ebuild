@@ -22,7 +22,7 @@ RDEPEND="arping? ( !app-net/arping )
 
 DEPEND="${RDEPEND}
 	static? ( ${LIB_DEPEND} )
-	virtual/kernel-headers"
+	sys-kernel/linux-headers"
 
 src_configure() {
 	local emesonargs=(

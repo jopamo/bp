@@ -24,6 +24,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 DEPEND="sys-kernel/linux-headers"
+BDEPEND="dev-util/gperf"
 
 src_prepare() {
 	default

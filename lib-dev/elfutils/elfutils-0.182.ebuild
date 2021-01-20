@@ -21,6 +21,7 @@ RDEPEND=">=lib-sys/zlib-1.2.8-r1
 		lib-sys/argp-standalone
 		lib-sys/musl-fts
 		lib-sys/musl-obstack
+		sys-devel/musl-headers
 	)
 	>=sys-devel/flex-2.5.4a
 	sys-devel/m4"

@@ -17,9 +17,7 @@ KEYWORDS="amd64 arm64"
 
 RESTRICT="test strip"
 
-BDEPEND="
-	lib-sys/musl
-	sys-kernel/sabotage-headers"
+DEPEND="lib-sys/musl"
 
 append-flags -ffat-lto-objects
 

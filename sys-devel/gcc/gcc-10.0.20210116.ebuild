@@ -17,12 +17,14 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug openmp +isl sanitize +vtv"
+IUSE="debug +isl sanitize +vtv zstd"
 
 DEPEND="
 	lib-dev/isl
 	lib-dev/mpc
+	lib-sys/zlib
 	sys-devel/binutils
+	zstd? ( app-compression/zstd )
 "
 
 BDEPEND="dev-util/patchelf"
@@ -107,10 +109,19 @@ src_configure() {
 		--datadir="${EPREFIX}"/usr/share
 		--mandir="${EPREFIX}"/usr/share/man
 		--infodir="${EPREFIX}"/usr/share/info
-		--enable-languages=c,c++,lto
-    	--with-linker-hash-style=gnu
-    	--with-system-zlib
-    	--enable-__cxa_atexit
+    	--disable-install-libiberty
+		--disable-libgcj
+		--disable-libgomp
+      	--disable-libmpx
+      	--disable-libmudflap
+      	--disable-libssp
+      	--disable-libstdcxx-pch
+      	--disable-libunwind-exceptions
+    	--disable-multilib
+      	--disable-obsolete
+      	--disable-rpath
+      	--disable-werror
+		--enable-bootstrap
     	--enable-cet=auto
     	--enable-checking=release
     	--enable-clocale=gnu
@@ -118,29 +129,20 @@ src_configure() {
     	--enable-default-ssp
     	--enable-gnu-indirect-function
     	--enable-gnu-unique-object
-    	--disable-install-libiberty
+		--enable-languages=c,c++,lto
+      	--enable-libstdcxx-time
     	--enable-linker-build-id
     	--enable-lto
-    	--disable-multilib
+      	--enable-nls
     	--enable-plugin
     	--enable-shared
     	--enable-threads=posix
-      	--disable-libssp
-      	--disable-libstdcxx-pch
-      	--disable-libunwind-exceptions
-      	--disable-werror
-      	--disable-obsolete
-      	--disable-libmudflap
-      	--enable-nls
-      	--enable-libstdcxx-time
-      	--disable-rpath
       	--enable-__cxa_atexit
-      	--disable-libmpx
-		--disable-libgcj
-		--enable-bootstrap
 		--with-build-config="bootstrap-lto-lean"
+    	--with-linker-hash-style=gnu
+    	--with-system-zlib
 		$(use_with isl)
-		$(use_enable openmp libgomp)
+		$(use_with zstd)
 		$(use_enable vtv vtable-verify)
 		$(use_enable vtv libvtv)
 		$(use_enable sanitize libsanitizer)
@@ -162,7 +164,7 @@ src_install() {
 	find "${ED}" -name libcc1plugin.la -delete
 	find "${ED}" -name libcp1plugin.la -delete
 
-	patchelf --remove-rpath "/usr/lib/libstdc++.so.6.0.28"
+	patchelf --remove-rpath /usr/lib/libstdc++.so.*
 
 	dosym gcc usr/bin/cc
 }

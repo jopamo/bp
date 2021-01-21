@@ -41,7 +41,7 @@ src_configure() {
 		--disable-assert
 		--disable-rpath
 		--with-ssl=openssl
-		--with_libidn2=no
+		--disable-iri
 		$(use_enable debug)
 		$(use_enable ipv6)
 		$(use_enable nls)

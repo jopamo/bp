@@ -15,12 +15,13 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="afs mem-scramble +net nls plugins"
+IUSE="afs mem-scramble +net plugins"
 
 DEPEND="
-	>=lib-sys/ncurses-5.2-r2:0=
+	virtual/libc
+	lib-sys/ncurses
 	lib-sys/readline
-	nls? ( sys-devel/gettext )"
+"
 
 src_prepare() {
 	# Prefixify hardcoded path names. No-op for non-prefix.
@@ -47,7 +48,7 @@ src_configure() {
 		--enable-history
 		$(use_with afs)
 		$(use_with mem-scramble bash-malloc)
-		$(use_enable nls)
+		--disable-nls
 	)
 
 	# For descriptions of these, see config-top.h

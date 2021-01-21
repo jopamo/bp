@@ -13,24 +13,29 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="modern-top nls ncurses static-libs systemd unicode"
+IUSE="ncurses static-libs systemd"
 
 DEPEND="
 	ncurses? ( lib-sys/ncurses )
 	systemd? ( sys-app/systemd )
 "
 
+src_prepare() {
+	default
+	sed -i 's,ncursesw/ncurses.h,ncurses.h,g' watch.c
+
+}
 src_configure() {
 	local myconf=(
-		$(use_enable modern-top)
 		$(use_with ncurses)
-		$(use_enable nls)
 		$(use_enable static-libs static)
 		$(use_with systemd)
-		$(use_enable unicode watch8bit)
+		--enable-watch8bit
 		--disable-w-from
 		--disable-kill
 		--disable-rpath
+		--disable-nls
+		--disable-modern-top
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

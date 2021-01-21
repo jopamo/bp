@@ -15,6 +15,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="nls static-libs"
 
+DEPEND="sys-app/bash"
+
 src_configure() {
 	local myconf=(
 		$(use_enable nls)

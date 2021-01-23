@@ -16,7 +16,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="adns ipv6 ldap libpsl mbedtls ssh ssl static-libs test nghttp2"
+IUSE="adns ipv6 ldap libpsl mbedtls ssh ssl static-libs test nghttp2 zstd"
 
 DEPEND="
 		ldap? ( app-net/openldap )
@@ -26,6 +26,7 @@ DEPEND="
 		nghttp2? ( lib-net/nghttp2[static-libs?] )
 		lib-sys/zlib
 		mbedtls? ( lib-net/mbedtls )
+		zstd? ( app-compression/zstd )
 		test? (
 			sys-app/diffutils
 			dev-lang/perl )
@@ -53,6 +54,7 @@ src_configure() {
 		$(use_with mbedtls)
 		$(use_with ssl)
 		$(use_with libpsl)
+		$(use_with zstd)
 		--with-zlib
 		--with-random=/dev/urandom
 		--enable-versioned-symbols

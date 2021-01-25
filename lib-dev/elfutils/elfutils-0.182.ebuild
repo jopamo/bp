@@ -40,6 +40,8 @@ src_prepare() {
 		eapply "${FILESDIR}"/musl-asm-ptrace-h.patch
 		eapply "${FILESDIR}"/musl-macros.patch
 		eapply "${FILESDIR}"/musl-strerror_r.patch
+
+		cp "${FILESDIR}"/error.h lib/
 	fi
 
 	eautoreconf

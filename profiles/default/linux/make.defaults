@@ -6,13 +6,12 @@ MAKEOPTS="-j8"
 
 CFLAGS="-O2 -pipe -march=native"
 CXXFLAGS="${CFLAGS}"
-LDFLAGS="-Wl,-O1 -Wl,--as-needed"
+LDFLAGS="-Wl,-O2"
 
 USE="${USE} -ipv6 -manpager caps ncurses systemd udev pam readline device-mapper ssl
 	sqlite gmp pcre seccomp crypt gcrypt iconv -jit"
 
 INPUT_DEVICES="libinput"
-LDFLAGS="-Wl,-O1 -Wl,--as-needed"
 
 AR=gcc-ar
 RANLIB=gcc-ranlib

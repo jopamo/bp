@@ -15,7 +15,4 @@ src_install() {
 	doins "${FILESDIR}"/cdefs.h
 	doins "${FILESDIR}"/queue.h
 	doins "${FILESDIR}"/tree.h
-
-	insinto usr/include/
-	doins "${FILESDIR}"/error.h
 }

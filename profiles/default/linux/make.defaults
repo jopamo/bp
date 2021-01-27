@@ -9,7 +9,7 @@ CXXFLAGS="${CFLAGS}"
 LDFLAGS="-Wl,-O2"
 
 USE="${USE} -ipv6 -manpager caps ncurses systemd udev pam readline device-mapper ssl
-	sqlite gmp pcre seccomp crypt gcrypt iconv -jit"
+	sqlite gmp pcre seccomp crypt gcrypt iconv -jit zlib"
 
 INPUT_DEVICES="libinput"
 

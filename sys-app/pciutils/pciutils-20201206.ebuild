@@ -20,7 +20,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="dns +kmod static-libs +udev zlib"
+IUSE="dns kmod static-libs +udev zlib"
 
 DEPEND="
 	kmod? ( sys-app/kmod

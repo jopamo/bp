@@ -12,9 +12,9 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug device-mapper efiemu mount nls static sdl"
+IUSE="debug device-mapper efi mount nls static sdl"
 
-GRUB_ALL_PLATFORMS=( efi-64 qemu pc )
+GRUB_ALL_PLATFORMS=( efi-64 pc )
 IUSE+=" ${GRUB_ALL_PLATFORMS[@]/#/grub_platforms_}"
 
 RDEPEND="
@@ -36,7 +36,7 @@ DEPEND="${RDEPEND}
 	)
 "
 RDEPEND+="
-	sys-app/efibootmgr
+	grub_platforms_efi-64? ( sys-boot/efibootmgr )
 	nls? ( sys-devel/gettext )
 "
 
@@ -44,7 +44,7 @@ DEPEND+=" !!=lib-media/freetype-2.5.4"
 
 RESTRICT="strip"
 
-QA_EXECSTACK="usr/bin/grub*-emu* usr/lib/grub/*"
+QA_EXECSTACK="usr/lib/grub/*"
 QA_WX_LOAD="usr/lib/grub/*"
 QA_MULTILIB_PATHS="usr/lib/grub/.*"
 
@@ -86,9 +86,7 @@ grub_configure() {
 		--disable-grub-mkfont
 		$(use sdl && use_enable debug grub-emu-sdl)
 		${platform:+--with-platform=}${platform}
-
-		# Let configure detect this where supported
-		$(usex efiemu '' '--disable-efiemu')
+		--disable-efiemu
 	)
 
 	local ECONF_SOURCE="${S}"

@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit git-r3
+inherit git-r3 autotools
 
 DESCRIPTION="Parse Options - Command line parser"
 HOMEPAGE="http://rpm5.org/"
@@ -16,14 +16,13 @@ IUSE="nls static-libs"
 
 DEPEND="nls? ( sys-devel/gettext )"
 
+src_prepare() {
+	default
+	eautoreconf
+}
+
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		--disable-dependency-tracking
 		$(use_enable static-libs static)
 		$(use_enable nls)

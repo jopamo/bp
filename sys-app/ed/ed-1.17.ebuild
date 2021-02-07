@@ -6,7 +6,7 @@ inherit toolchain-funcs autotools
 
 DESCRIPTION="Your basic line editor"
 HOMEPAGE="https://www.gnu.org/software/ed/"
-SRC_URI="https://1g4.org/files/${P}.tar.xz"
+SRC_URI="https://dev.gentoo.org/~polynomial-c/dist/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"

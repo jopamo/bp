@@ -28,12 +28,11 @@ src_prepare() {
 }
 
 src_compile() {
-	make CC=musl-gcc
+	emake CC=musl-gcc
 }
 
 src_install() {
 	dobin busybox
 	dosym busybox usr/bin/sha3sum
 	dosym busybox usr/bin/whois
-	dosym busybox usr/bin/which
 }

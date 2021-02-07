@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=148b8a661c3f93e4b6d049ee902de3d521261fbc
+	SNAPSHOT=f88a7a431212a16e572ecabd559e632f369c363e
 	SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-portable-${SNAPSHOT}
 fi
@@ -88,9 +88,8 @@ src_install() {
 
 	use pam && newpamd "${FILESDIR}"/sshd.pam_include.2 sshd
 
-	use systemd && systemd_dounit "${FILESDIR}"/sshd.socket
 	use systemd && systemd_dounit "${FILESDIR}"/sshdgenkeys.service
-	use systemd && systemd_newunit "${FILESDIR}"/sshd_at.service 'sshd@.service'
+	use systemd && systemd_dounit "${FILESDIR}"/sshd.service
 
 	cp "${FILESDIR}"/sshd_config "${ED}"/etc/ssh/
 	mkdir -p "${ED}"/var/empty

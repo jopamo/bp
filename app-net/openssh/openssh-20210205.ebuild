@@ -69,7 +69,7 @@ src_configure() {
 		--without-rpath
 		--sysconfdir="${EPREFIX}"/etc/ssh
 		--datadir="${EPREFIX}"/usr/share/openssh
-		--with-privsep-path="${EPREFIX}"/var/empty
+		--with-security-key-builtin
 		--with-privsep-user="sshd"
 		--with-sandbox="seccomp_filter"
 		--with-libedit
@@ -92,14 +92,11 @@ src_install() {
 	use systemd && systemd_dounit "${FILESDIR}"/sshd.service
 
 	cp "${FILESDIR}"/sshd_config "${ED}"/etc/ssh/
-	mkdir -p "${ED}"/var/empty
 
 	fperms 600 /etc/ssh
 	fperms 600 /var/empty
 
 	rm -rf "${ED}"/etc/ssh/moduli
-
-	keepdir /var/empty
 }
 
 pkg_preinst() {

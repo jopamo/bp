@@ -15,7 +15,19 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="lib-dev/popt"
-BDEPEND="dev-util/pkgconf"
-
 filter-flags -flto\=\*
+
+src_compile() {
+	emake libdir="/usr/lib/" \
+		bindir="/usr/bin/" \
+		mandir="/usr/share/man/" \
+		includedir="/usr/include/"
+}
+
+src_install() {
+	emake DESTDIR="${ED}" \
+		libdir="/usr/lib/" \
+		bindir="/usr/bin/" \
+		mandir="/usr/share/man/" \
+		includedir="/usr/include/" install -j1 V=1
+}

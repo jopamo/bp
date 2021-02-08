@@ -21,4 +21,7 @@ src_prepare() {
 
 src_install() {
 	dobin easyrsa3/easyrsa
+
+	insinto etc/easy-rsa/pki/
+	doins easyrsa3/openssl-easyrsa.cnf
 }

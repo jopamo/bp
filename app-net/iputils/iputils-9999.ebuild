@@ -4,13 +4,14 @@ EAPI=7
 
 inherit meson git-r3
 
-EGIT_REPO_URI="https://github.com/iputils/iputils.git"
-KEYWORDS="amd64 arm64"
 DESCRIPTION="Network monitoring tools including ping and ping6"
 HOMEPAGE="https://wiki.linuxfoundation.org/networking/iputils"
+EGIT_REPO_URI="https://github.com/iputils/iputils.git"
 
 LICENSE="BSD GPL-2+ rdisc"
 SLOT="0"
+KEYWORDS="amd64 arm64"
+
 IUSE="+arping caps clockdiff doc idn ninfod +ping rarpd rdisc rdisc_server static +tftpd +tracepath traceroute6"
 
 LIB_DEPEND="caps? ( lib-sys/libcap[static-libs(+)] )

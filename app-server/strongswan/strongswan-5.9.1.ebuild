@@ -74,7 +74,7 @@ src_configure() {
     	--enable-sha3
     	--enable-bliss
     	--enable-dnscert
-    	--enable-nm
+    	--disable-nm
     	--enable-agent
     	--enable-bypass-lan
     	--disable-ruby-gems

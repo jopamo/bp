@@ -2,8 +2,6 @@
 
 EAPI=7
 
-inherit flag-o-matic
-
 DESCRIPTION="Core binutils libraries (libbfd, libopcodes, libiberty) for external packages"
 HOMEPAGE="https://sourceware.org/binutils/"
 
@@ -12,7 +10,7 @@ if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_BRANCH="binutils-$(ver_cut 1)_$(ver_cut 2)-branch"
 else
-	SNAPSHOT=f8db4612c51d9980131268a1be06654846d9c8de
+	SNAPSHOT=7651a4871c225925ffdfda0a8c91a6ed370cd9a1
 	SRC_URI="https://github.com/bminor/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-gdb-${SNAPSHOT}
 fi
@@ -21,21 +19,19 @@ LICENSE="|| ( GPL-3 LGPL-3 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs"
+DEPEND="
+	lib-sys/zlib
+	lib-dev/elfutils
+	lib-sys/glibc
+"
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}/etc"
-		--localstatedir="${EPREFIX}/var"
+		--prefix="${EPREFIX}"/usr
 		--enable-ld=default
 		--disable-multilib
 		--disable-obsolete
 		--disable-werror
-		$(usex static-libs '--disable-shared' '--enable-shared')
 		--with-system-zlib
 		--enable-gold
 		--enable-install-libiberty
@@ -48,7 +44,6 @@ src_configure() {
 		--enable-threads
 		--disable-{gdb,sim}
 		--without-included-gettext
-		$(use_enable static-libs static)
 	)
 
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
@@ -56,6 +51,7 @@ src_configure() {
 
 src_install() {
 	default
+
 	rm "${ED}"/usr/bin/gdbserver "${ED}"/usr/lib/libinproctrace.so
 
 	# No shared linking to these files outside binutils

@@ -30,6 +30,7 @@
 *lib-dev/elfutils
 *virtual/service-manager
 *sys-app/busybox
+*sys-app/which
 *app-compression/unzip
 *sys-app/util-linux
 *app-portage/eix

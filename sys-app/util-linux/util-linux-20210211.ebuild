@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/karelzak/util-linux.git"
 	EGIT_BRANCH="stable/v$(ver_cut 1-2)"
 else
-	SNAPSHOT=cf918bd3ac9ba69e1a9149093ca335696d95d432
+	SNAPSHOT=15a37d00e5e59f0f628d0a6b6cd2f9636702fd7c
 	SRC_URI="https://github.com/karelzak/util-linux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -80,10 +80,11 @@ src_configure() {
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}/etc"
 		--localstatedir="${EPREFIX}/var"
-		--disable-chfn-chsh
-		--disable-login
-		--disable-nologin
-		--disable-su
+		--enable-chfn-chsh
+		--enable-login
+		--enable-nologin
+		--enable-vipw
+		--enable-su
 		--disable-libmount-support-mtab
 		--docdir='${datarootdir}'/doc/${PF}
 		--enable-agetty

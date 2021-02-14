@@ -4,7 +4,7 @@ EAPI=7
 
 inherit distutils-r1 git-r3
 
-DESCRIPTION="Model-driven deployment, config management, and command execution framework"
+DESCRIPTION="a radically simple IT automation platform"
 HOMEPAGE="https://ansible.com/"
 EGIT_REPO_URI="https://github.com/ansible/ansible.git"
 EGIT_BRANCH="stable-$(ver_cut 1).$(ver_cut 2)"

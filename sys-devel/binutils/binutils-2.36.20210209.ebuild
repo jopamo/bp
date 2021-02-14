@@ -22,7 +22,7 @@ KEYWORDS="amd64 arm64"
 DEPEND="
 	lib-sys/zlib
 	lib-dev/elfutils
-	lib-sys/glibc
+	virtual/libc
 "
 
 src_configure() {

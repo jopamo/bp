@@ -17,14 +17,11 @@ LICENSE="openssl"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+asm rfc3779 static-libs test zlib"
+IUSE="static-libs test zlib"
 
 RESTRICT="!test? ( test )"
 
-DEPEND="
-	>=app-misc/c_rehash-1.7-r1
-	zlib? ( >=lib-sys/zlib-1.2.8-r1[static-libs(+)?] )
-"
+DEPEND="app-misc/c_rehash"
 
 BDEPEND="
 	>=dev-lang/perl-5
@@ -93,45 +90,35 @@ src_configure() {
 
 	tc-export CC AR RANLIB RC
 
-	# Clean out patent-or-otherwise-encumbered code
-	# Camellia: Royalty Free            https://en.wikipedia.org/wiki/Camellia_(cipher)
-	# IDEA:     Expired                 https://en.wikipedia.org/wiki/International_Data_Encryption_Algorithm
-	# EC:       ????????? ??/??/2015    https://en.wikipedia.org/wiki/Elliptic_Curve_Cryptography
-	# MDC2:     Expired                 https://en.wikipedia.org/wiki/MDC-2
-	# RC5:      Expired                 https://en.wikipedia.org/wiki/RC5
+	if use arm64; then
+		_target="linux-aarch64"
+	fi
 
-	use_ssl() { usex $1 "enable-${2:-$1}" "no-${2:-$1}" " ${*:3}" ; }
-	echoit() { echo "$@" ; "$@" ; }
+	if use amd64; then
+		_target="linux-x86_64"
+		_optflags="enable-ec_nistp_64_gcc_128"
+	fi
 
-	local krb5=$(has_version app-crypt/mit-krb5 && echo "MIT" || echo "Heimdal")
-
-	local sslout=$(./gentoo.config)
-	einfo "Use configuration ${sslout:-(openssl knows best)}"
-	local config="Configure"
-	[[ -z ${sslout} ]] && config="config"
-
-	# Fedora hobbled-EC needs 'no-ec2m'
-	# 'srp' was restricted until early 2017 as well.
-	# "disable-deprecated" option breaks too many consumers.
-	# Don't set it without thorough revdeps testing.
-	# Make sure user flags don't get added *yet* to avoid duplicated
-	# flags.
-	CFLAGS= LDFLAGS= echoit \
-	./${config} \
+	CFLAGS= LDFLAGS= \
+	./Configure \
+		$_target \
+		$_optflags \
 		${sslout} \
-		enable-camellia \
-		enable-ec \
-		enable-srp \
-		${ec_nistp_64_gcc_128} \
-		enable-idea \
-		enable-mdc2 \
-		enable-rc5 \
-		disable-ssl3 \
-		disable-ssl3-method \
-		$(use_ssl asm) \
-		$(use_ssl rfc3779) \
-		disable-heartbeats \
-		$(use_ssl zlib) \
+		no-ssl3 \
+		no-ssl3-method \
+		no-heartbeats \
+		no-async \
+		no-comp \
+		no-idea \
+		no-mdc2 \
+		no-rc5 \
+		no-ec2m \
+		no-sm2 \
+		no-sm4 \
+		no-ssl2 \
+		no-seed \
+		no-zlib \
+		no-weak-ssl-ciphers \
 		--prefix="${EPREFIX}"/usr \
 		--libdir="${EPREFIX}"/usr/lib \
 		--openssldir="${EPREFIX}"${SSL_CNF_DIR} \

@@ -12,9 +12,10 @@ LICENSE="|| ( GPL-2+ LGPL-3+ ) utils? ( GPL-3+ )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 lzma musl static-libs test +utils valgrind"
+IUSE="bzip2 lzma musl static-libs test +utils valgrind zstd"
 
-RDEPEND=">=lib-sys/zlib-1.2.8-r1
+DEPEND="
+	>=lib-sys/zlib-1.2.8-r1
 	bzip2? ( >=app-compression/lbzip2-1.0.6-r4 )
 	lzma? ( >=app-compression/xz-utils-5.0.5-r1 )
 	musl? (
@@ -23,8 +24,10 @@ RDEPEND=">=lib-sys/zlib-1.2.8-r1
 		lib-sys/musl-obstack
 		sys-devel/musl-headers
 	)
+	zstd? ( app-compression/zstd )
 	>=sys-devel/flex-2.5.4a
-	sys-devel/m4"
+	sys-devel/m4
+"
 
 filter-flags -flto\=\*
 
@@ -67,6 +70,7 @@ src_configure() {
 		$(use_enable valgrind)
 		$(use_with bzip2 bzlib)
 		$(use_with lzma)
+		$(use_with zstd)
 		--enable-deterministic-archives
 		--disable-nls
 		--disable-libdebuginfod

@@ -30,12 +30,6 @@ case ${EAPI:-0} in
 	*) die "${ECLASS}.eclass API in EAPI ${EAPI} not yet established."
 esac
 
-if [[ ${EAPI:-0} == [0123456] ]]; then
-	DEPEND="virtual/pkgconfig"
-else
-	BDEPEND="virtual/pkgconfig"
-fi
-
 # @FUNCTION: _systemd_get_dir
 # @USAGE: <variable-name> <fallback-directory>
 # @INTERNAL

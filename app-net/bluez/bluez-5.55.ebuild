@@ -84,8 +84,8 @@ src_configure() {
 		--enable-tools \
 		--enable-manpages \
 		--enable-monitor \
-		--with-systemdsystemunitdir="$(systemd_get_systemunitdir)" \
-		--with-systemduserunitdir="$(systemd_get_userunitdir)" \
+		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false") \
+		--with-systemduserunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/user" "false") \
 		$(use_enable btpclient) \
 		$(use_enable btpclient external-ell) \
 		$(use_enable cups) \
@@ -159,6 +159,5 @@ src_install() {
 }
 
 pkg_postinst() {
-	use udev && udev_reload
-	systemd_reenable bluetooth.service
+	use systemd && systemd_reenable bluetooth.service
 }

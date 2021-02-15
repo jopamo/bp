@@ -2,7 +2,10 @@
 
 EAPI=7
 
-inherit linux-info toolchain-funcs systemd
+inherit linux-info toolchain-funcs
+
+DESCRIPTION="Generic initramfs generation tool"
+HOMEPAGE="https://dracut.wiki.kernel.org"
 
 if [[ ${PV} == 9999 ]] ; then
 	inherit git-r3
@@ -13,14 +16,11 @@ else
 	SRC_URI="mirror://kernel/linux/utils/boot/${PN}/${P}.tar.xz"
 fi
 
-DESCRIPTION="Generic initramfs generation tool"
-HOMEPAGE="https://dracut.wiki.kernel.org"
-
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug"
+IUSE="debug systemd"
 
 RESTRICT="test"
 
@@ -28,7 +28,8 @@ CDEPEND="
 	virtual/service-manager
 	dev-util/pkgconf
 	>=sys-app/kmod-15[tools]
-	"
+"
+
 RDEPEND="${CDEPEND}
 	app-compression/cpio
 	>=sys-app/bash-4.0:0
@@ -37,18 +38,18 @@ RDEPEND="${CDEPEND}
 
 	debug? ( dev-util/strace )
 	!app-net/arping
-	"
+"
 DEPEND="${CDEPEND}
 	>=lib-dev/libxslt-1.1.26
 	app-text/docbook-xml-dtd:4.5
 	>=app-text/docbook-xsl-stylesheets-1.75.2
-	"
+"
 
 src_configure() {
 	local myconf=(
 		--prefix="${EPREFIX}/usr"
 		--sysconfdir="${EPREFIX}/etc"
-		--systemdsystemunitdir="$(systemd_get_systemunitdir)"
+		--systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 		--disable-documentation
 	)
 

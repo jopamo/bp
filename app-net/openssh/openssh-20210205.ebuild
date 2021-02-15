@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit user flag-o-matic autotools pam systemd
+inherit user flag-o-matic autotools systemd
 
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="http://www.openssh.org/"
@@ -86,7 +86,11 @@ src_configure() {
 src_install() {
 	emake install-nokeys DESTDIR="${D}"
 
-	use pam && newpamd "${FILESDIR}"/sshd.pam_include.2 sshd
+	if use pam; then
+		insinto etc/pam.d
+		insopts -m0644
+		newins "${FILESDIR}/sshd.pam" sshd
+	fi
 
 	use systemd && systemd_dounit "${FILESDIR}"/sshdgenkeys.service
 	use systemd && systemd_dounit "${FILESDIR}"/sshd.service

@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit toolchain-funcs libtool flag-o-matic pam systemd autotools
+inherit toolchain-funcs libtool flag-o-matic autotools
 
 DESCRIPTION="Various useful Linux utilities"
 HOMEPAGE="https://www.kernel.org/pub/linux/utils/util-linux/"
@@ -30,7 +30,7 @@ RDEPEND="caps? ( lib-sys/libcap-ng )
 	pam? ( lib-sys/pam )
 	readline? ( lib-sys/readline:0= )
 	!build? ( systemd? ( sys-app/systemd ) )
-	udev? ( sys-app/systemd:= )"
+"
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconf
@@ -95,7 +95,7 @@ src_configure() {
 		--enable-rename
 		--enable-rfkill
 		--enable-schedutils
-		--with-systemdsystemunitdir=$(usex systemd "$(systemd_get_systemunitdir)" "no")
+		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 		$(use_enable caps setpriv)
 		$(use_enable cramfs)
 		$(use_enable fdformat)
@@ -126,7 +126,14 @@ src_install() {
 	default
 
 	if use pam; then
-		newpamd "${FILESDIR}/runuser.pamd" runuser
-		newpamd "${FILESDIR}/runuser-l.pamd" runuser-l
+		insinto /etc/pam.d
+		insopts -m0644
+		newins "${FILESDIR}/pam-common" chfn
+		newins "${FILESDIR}/pam-common" chsh
+		newins "${FILESDIR}/pam-login" login
+		newins "${FILESDIR}/pam-runuser" runuser
+		newins "${FILESDIR}/pam-runuser" runuser-l
+		newins "${FILESDIR}/pam-su" su
+		newins "${FILESDIR}/pam-su" su-l
 	fi
 }

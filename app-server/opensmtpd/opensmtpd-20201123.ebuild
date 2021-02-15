@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit user pam toolchain-funcs autotools systemd
+inherit user toolchain-funcs autotools systemd
 
 DESCRIPTION="Lightweight but featured SMTP daemon from OpenBSD"
 HOMEPAGE="https://www.opensmtpd.org"
@@ -57,9 +57,16 @@ src_configure() {
 src_install() {
 	default
 	systemd_dounit "${FILESDIR}"/smtpd.{service,socket}
-	use pam && newpamd "${FILESDIR}"/smtpd.pam smtpd
+
+	if use pam; then
+		insinto etc/pam.d
+		insopts -m0644
+		newins "${FILESDIR}/smtpd.pam" smtpd
+	fi
+
 	dosym /usr/sbin/smtpctl /usr/sbin/makemap
 	dosym /usr/sbin/smtpctl /usr/sbin/newaliases
+
 	if use mta ; then
 		dodir /usr/sbin
 		dosym /usr/sbin/smtpctl /usr/sbin/sendmail

@@ -4,7 +4,7 @@ EAPI=7
 
 SNAPSHOT=58aa0f9f1c6c88e1551ec78763742d136f8873ed
 
-inherit flag-o-matic pam tmpfiles autotools
+inherit flag-o-matic tmpfiles autotools
 
 DESCRIPTION="screen manager with VT100/ANSI terminal emulation"
 HOMEPAGE="https://www.gnu.org/software/screen/"
@@ -54,7 +54,11 @@ src_install() {
 	insinto /etc
 	doins "${FILESDIR}"/screenrc
 
-	pamd_mimic_system screen auth
+	if use pam; then
+		insinto etc/pam.d
+		insopts -m0644
+		newins "${FILESDIR}/${PN}.pam" ${PN}
+	fi
 
 	dotmpfiles "${FILESDIR}"/screen.conf
 }

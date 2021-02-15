@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT=6ad93e8014533f78aa5b0f3385954e164e72d8fa
+SNAPSHOT=c8c6e7438c03b2fc24e7ead460feeaef04911fb4
 
 inherit flag-o-matic toolchain-funcs
 
@@ -21,9 +21,11 @@ IUSE="+asm rfc3779 static-libs test zlib"
 
 RESTRICT="!test? ( test )"
 
-RDEPEND=">=app-misc/c_rehash-1.7-r1
-	zlib? ( >=lib-sys/zlib-1.2.8-r1[static-libs(+)?] )"
-DEPEND="${RDEPEND}"
+DEPEND="
+	>=app-misc/c_rehash-1.7-r1
+	zlib? ( >=lib-sys/zlib-1.2.8-r1[static-libs(+)?] )
+"
+
 BDEPEND="
 	>=dev-lang/perl-5
 	test? (
@@ -131,6 +133,7 @@ src_configure() {
 		disable-heartbeats \
 		$(use_ssl zlib) \
 		--prefix="${EPREFIX}"/usr \
+		--libdir="${EPREFIX}"/usr/lib \
 		--openssldir="${EPREFIX}"${SSL_CNF_DIR} \
 		shared threads \
 		|| die
@@ -174,12 +177,14 @@ src_install() {
 		mkdir "${ED}"/usr || die
 	fi
 
+	emake DESTDIR="${D}" install
+
 	# This is crappy in that the static archives are still built even
 	# when USE=static-libs.  But this is due to a failing in the openssl
 	# build system: the static archives are built as PIC all the time.
 	# Only way around this would be to manually configure+compile openssl
 	# twice; once with shared lib support enabled and once without.
-	use static-libs || rm -f "${ED}"/usr/lib*/lib*.a
+	use static-libs || rm "${ED}"/usr/lib/{libssl,libcrypto}.a || die
 
 	# create the certs directory
 	keepdir ${SSL_CNF_DIR}/certs
@@ -190,13 +195,11 @@ src_install() {
 	diropts -m0700
 	keepdir ${SSL_CNF_DIR}/private
 
-	emake DESTDIR="${D}" install
-
 	rm "${ED}"/usr/bin/c_rehash
 }
 
 pkg_postinst() {
-	ebegin "Running 'c_rehash ${EROOT}${SSL_CNF_DIR}/certs/' to rebuild hashes #333069"
+	ebegin "Running 'c_rehash ${EROOT}${SSL_CNF_DIR}/certs/' to rebuild hashes"
 	c_rehash "${EROOT}${SSL_CNF_DIR}/certs" >/dev/null
 	eend $?
 }

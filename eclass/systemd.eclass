@@ -3,10 +3,11 @@
 # @ECLASS: systemd.eclass
 # @MAINTAINER:
 # systemd@gentoo.org
+# @SUPPORTED_EAPIS: 0 1 2 3 4 5 6 7
 # @BLURB: helper functions to install systemd units
 # @DESCRIPTION:
 # This eclass provides a set of functions to install unit files for
-# sys-app/systemd within ebuilds.
+# sys-apps/systemd within ebuilds.
 # @EXAMPLE:
 #
 # @CODE
@@ -29,7 +30,11 @@ case ${EAPI:-0} in
 	*) die "${ECLASS}.eclass API in EAPI ${EAPI} not yet established."
 esac
 
-DEPEND="dev-util/pkgconf"
+if [[ ${EAPI:-0} == [0123456] ]]; then
+	DEPEND="virtual/pkgconfig"
+else
+	BDEPEND="virtual/pkgconfig"
+fi
 
 # @FUNCTION: _systemd_get_dir
 # @USAGE: <variable-name> <fallback-directory>
@@ -57,7 +62,7 @@ _systemd_get_dir() {
 # @DESCRIPTION:
 # Get unprefixed unitdir.
 _systemd_get_systemunitdir() {
-	_systemd_get_dir systemdsystemunitdir /lib/systemd/system
+	_systemd_get_dir systemdsystemunitdir /usr/lib/systemd/system
 }
 
 # @FUNCTION: systemd_get_systemunitdir
@@ -106,7 +111,7 @@ systemd_get_userunitdir() {
 # @DESCRIPTION:
 # Get unprefixed utildir.
 _systemd_get_utildir() {
-	_systemd_get_dir systemdutildir /lib/systemd
+	_systemd_get_dir systemdutildir /usr/lib/systemd
 }
 
 # @FUNCTION: systemd_get_utildir
@@ -126,7 +131,7 @@ systemd_get_utildir() {
 # @DESCRIPTION:
 # Get unprefixed systemgeneratordir.
 _systemd_get_systemgeneratordir() {
-	_systemd_get_dir systemdsystemgeneratordir /lib/systemd/system-generators
+	_systemd_get_dir systemdsystemgeneratordir /usr/lib/systemd/system-generators
 }
 
 # @FUNCTION: systemd_get_systemgeneratordir
@@ -234,6 +239,8 @@ systemd_install_serviced() {
 # @FUNCTION: systemd_dotmpfilesd
 # @USAGE: <tmpfilesd>...
 # @DESCRIPTION:
+# Deprecated in favor of tmpfiles.eclass.
+#
 # Install systemd tmpfiles.d files. Uses doins, thus it is fatal
 # in EAPI 4 and non-fatal in earlier EAPIs.
 systemd_dotmpfilesd() {
@@ -254,6 +261,8 @@ systemd_dotmpfilesd() {
 # @FUNCTION: systemd_newtmpfilesd
 # @USAGE: <old-name> <new-name>.conf
 # @DESCRIPTION:
+# Deprecated in favor of tmpfiles.eclass.
+#
 # Install systemd tmpfiles.d file under a new name. Uses newins, thus it
 # is fatal in EAPI 4 and non-fatal in earlier EAPIs.
 systemd_newtmpfilesd() {
@@ -345,7 +354,7 @@ systemd_enable_ntpunit() {
 #
 # Output '--with-systemdsystemunitdir' as expected by systemd-aware configure
 # scripts. This function always succeeds. Its output may be quoted in order
-# to preserve whitespace in paths. systemd_to_myconf() is preferred over
+# to preserve whitespace in paths. systemd_to_myeconfargs() is preferred over
 # this function.
 #
 # If upstream does use invalid configure option to handle installing systemd
@@ -429,6 +438,8 @@ systemd_is_booted() {
 # @FUNCTION: systemd_tmpfiles_create
 # @USAGE: <tmpfilesd> ...
 # @DESCRIPTION:
+# Deprecated in favor of tmpfiles.eclass.
+#
 # Invokes systemd-tmpfiles --create with given arguments.
 # Does nothing if ROOT != / or systemd-tmpfiles is not in PATH.
 # This function should be called from pkg_postinst.
@@ -442,7 +453,7 @@ systemd_tmpfiles_create() {
 
 	[[ ${EBUILD_PHASE} == postinst ]] || die "${FUNCNAME}: Only valid in pkg_postinst"
 	[[ ${#} -gt 0 ]] || die "${FUNCNAME}: Must specify at least one filename"
-	[[ ${ROOT} == / ]] || return 0
+	[[ ${ROOT:-/} == / ]] || return 0
 	type systemd-tmpfiles &> /dev/null || return 0
 	systemd-tmpfiles --create "${@}"
 }
@@ -462,38 +473,8 @@ systemd_reenable() {
 	type systemctl &>/dev/null || return 0
 	local x
 	for x; do
-		if systemctl --quiet --root="${ROOT}" is-enabled "${x}"; then
-			systemctl --root="${ROOT}" reenable "${x}"
+		if systemctl --quiet --root="${ROOT:-/}" is-enabled "${x}"; then
+			systemctl --root="${ROOT:-/}" reenable "${x}"
 		fi
 	done
-}
-
-# @FUNCTION: udev_newrules
-# @USAGE: oldname newname
-# @DESCRIPTION:
-# Install udev rule with a new name. Uses newins, thus it is fatal
-# in EAPI 4 and non-fatal in earlier EAPIs.
-udev_newrules() {
-	debug-print-function ${FUNCNAME} "${@}"
-
-	(
-		insopts -m 0644
-		insinto /usr/lib/udev/rules.d
-		newins "${@}"
-	)
-}
-
-# @FUNCTION: udev_reload
-# @DESCRIPTION:
-# Run udevadm control --reload to refresh rules and databases
-udev_reload() {
-	if [[ ${ROOT} != "" ]] && [[ ${ROOT} != "/" ]]; then
-		return 0
-	fi
-
-	if [[ -d ${ROOT}/run/udev ]]; then
-		ebegin "Running udev control --reload for reloading rules and databases"
-		udevadm control --reload
-		eend $?
-	fi
 }

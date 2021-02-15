@@ -1,9 +1,8 @@
-# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit flag-o-matic toolchain-funcs systemd
+inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="xfs filesystem utilities"
 HOMEPAGE="https://xfs.wiki.kernel.org/"
@@ -55,7 +54,7 @@ src_configure() {
 	local myconf=(
 		--enable-blkid
 		--with-crond-dir="${EPREFIX}/etc/cron.d"
-		--with-systemd-unit-dir="$(systemd_get_systemunitdir)"
+		--with-systemd-unit-dir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 		$(use_enable icu libicu)
 		$(use_enable nls gettext)
 		$(use_enable libedit editline)

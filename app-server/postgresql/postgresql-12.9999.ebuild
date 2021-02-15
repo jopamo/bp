@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic linux-info pam python-single-r1 systemd user git-r3
+inherit flag-o-matic linux-info python-single-r1 systemd user git-r3
 
 DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="http://www.postgresql.org/"
@@ -122,5 +122,9 @@ src_install() {
 	systemd_dounit "${FILESDIR}/postgresql.service"
 	systemd_newtmpfilesd "${FILESDIR}/postgresql.tmpfiles" ${PN}.conf
 
-	use pam && pamd_mimic system-auth ${PN} auth account session
+	if use pam; then
+		insinto etc/pam.d
+		insopts -m0644
+		newins "${FILESDIR}/${PN}.pam" ${PN}
+	fi
 }

@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit toolchain-funcs pam flag-o-matic
+inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="POSIX 1003.1e capabilities"
 HOMEPAGE="http://www.friedhoff.org/posixfilecaps.html"
@@ -55,7 +55,12 @@ src_install() {
 	fi
 
 	if use pam; then
-		dopammod pam_cap/pam_cap.so
-		dopamsecurity '' pam_cap/capability.conf
+		insinto usr/lib/security/
+		insopts -m 0644
+		doins pam_cap/pam_cap.so
+
+		insinto etc/security/
+		insopts -m 0644
+		doins pam_cap/capability.conf
 	fi
 }

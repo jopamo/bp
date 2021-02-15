@@ -48,14 +48,14 @@ src_configure() {
 }
 
 src_install() {
-		make DESTDIR="${ED}" install
+	default
 
 	insinto /etc/default
 	insopts -m0600
 	doins "${FILESDIR}"/useradd
 
 	if use systemd; then
-		insinto /usr/lib/systemd/system
+		insinto usr/lib/systemd/system
 		insopts -m0644
 		doins "${FILESDIR}/shadow.timer"
 		doins "${FILESDIR}/shadow.service"

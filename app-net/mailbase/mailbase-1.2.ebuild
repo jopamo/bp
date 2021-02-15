@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit pam user
+inherit user
 
 DESCRIPTION="MTA layout package"
 
@@ -32,8 +32,6 @@ src_install() {
 	fperms 03775 /var/spool/mail
 	dosym /var/spool/mail /var/mail
 
-	newpamd "${FILESDIR}"/common-pamd-include pop
-	newpamd "${FILESDIR}"/common-pamd-include imap
 	if use pam ; then
 		local p
 		for p in pop3 pop3s pops ; do
@@ -42,6 +40,11 @@ src_install() {
 		for p in imap4 imap4s imaps ; do
 			dosym imap /etc/pam.d/${p} || die
 		done
+
+		insinto etc/pam.d
+		insopts -m0644
+		newins "${FILESDIR}"/common-pamd-include pop
+		newins "${FILESDIR}"/common-pamd-include imap
 	fi
 }
 

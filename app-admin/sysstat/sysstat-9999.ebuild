@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic systemd toolchain-funcs
+inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="System performance tools for Linux"
 HOMEPAGE="http://pagesperso-orange.fr/sebastien.godard/"
@@ -46,7 +46,7 @@ src_configure() {
 		--disable-documentation
 		--disable-install-cron
 		--disable-stripping
-		--with-systemdsystemunitdir=$(systemd_get_systemunitdir)
+		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "no")
 	)
 	sa_lib_dir=/usr/lib/sa \
 	conf_dir=/etc \
@@ -66,7 +66,11 @@ src_install() {
 
 	emake "${_makeargs[@]}" install
 
-	use systemd && systemd_dounit ${PN}.service
+	if use systemd; then
+		insinto usr/lib/systemd/system
+		insopts -m0644
+		doins ${PN}.service
+	fi
 
 	cleanup_install
 }

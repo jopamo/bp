@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit pam user git-r3 autotools systemd
+inherit user git-r3 autotools systemd
 
 DESCRIPTION="small SSH 2 client/server designed for small memory environments"
 HOMEPAGE="https://matt.ucc.asn.au/dropbear/dropbear.html"
@@ -35,7 +35,11 @@ src_configure() {
 src_install() {
 	emake DESTDIR="${D}" install
 
-	pamd_mimic system-remote-login dropbear auth account password session
+	if use pam; then
+		insinto etc/pam.d
+		insopts -m0644
+		newins "${FILESDIR}/sshd.pam" dropbear
+	fi
 
 	use systemd && systemd_dounit "${FILESDIR}"/${PN}.service
 }

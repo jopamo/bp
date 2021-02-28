@@ -12,7 +12,7 @@ LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="frm maidag +mail sieve messages readmsg dotlock movemail mimeview mh gdbm ipv6 nls pam python servers ssl static-libs virtual-domains +sendmail +smtp mailbox-imap mailbox-pop mailbox-mh +mailbox-maildir"
+IUSE="frm sieve messages readmsg dotlock movemail mimeview mh gdbm ipv6 nls pam python servers ssl static-libs virtual-domains +sendmail +smtp mailbox-imap mailbox-pop mailbox-mh +mailbox-maildir"
 
 DEPEND="
 	lib-sys/ncurses:=
@@ -59,8 +59,7 @@ src_configure() {
 		$(use_enable static-libs static)
 		$(use_enable servers build-servers)
 		$(use_enable frm build-frm)
-		$(use_enable maidag build-maidag)
-		$(use_enable mail build-mail)
+		--disable-build-mail
 		$(use_enable sieve build-sieve)
 		$(use_enable messages build-messages)
 		$(use_enable readmsg build-readmsg)
@@ -75,7 +74,6 @@ src_configure() {
 		$(use_enable mailbox-maildir maildir)
 		--with-mail-spool=/var/spool/mail
 		--with-readline
-		--enable-sendmail
 		--disable-debug
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
@@ -90,4 +88,6 @@ src_install() {
 			rm -r "${ED}"/$(python_get_sitedir)/mailutils/*.{a,la} || die
 		fi
 	fi
+
+	rm "${ED}"/usr/share/man/man1/mail.1*
 }

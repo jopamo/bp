@@ -171,8 +171,6 @@ src_install() {
 	rm -rf "${ED}"/usr/share/polkit-1
 	rm -f "${ED}"/etc/systemd/logind.conf
 
-	local udevdir=/usr/lib/udev
-
 	keepdir /var/lib/systemd
 	keepdir /var/log/journal
 
@@ -241,8 +239,7 @@ pkg_postinst() {
 	systemd_update_catalog
 
 	udevadm hwdb --update --root="${EROOT%/}"
-
-	udev_reload || FAIL=1
+	udevadm control --reload
 
 	systemd_reenable getty@tty1.service remote-fs.target
 	use networkd && systemd_reenable systemd-networkd.service

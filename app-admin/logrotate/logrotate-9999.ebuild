@@ -17,7 +17,9 @@ IUSE="acl systemd"
 DEPEND="
 	>=lib-dev/popt-1.5
 	sys-app/sed
-	acl? ( sys-app/acl )"
+	app-net/s-nail
+	acl? ( sys-app/acl )
+"
 
 src_prepare() {
 	eautoreconf
@@ -30,6 +32,7 @@ src_configure() {
 		--prefix="${EPREFIX}"/usr
 		--sbindir="${EPREFIX}"/usr/bin
 		--mandir="${EPREFIX}"/usr/share/man
+		--with-default-mail-command="${EPREFIX}"/usr/bin/mail
 		--with-state-file-path="${STATEFILE}"
 		$(use_with acl)
 	)

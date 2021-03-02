@@ -15,7 +15,8 @@ KEYWORDS="amd64 arm64"
 IUSE="acl systemd"
 
 DEPEND="
-	>=lib-dev/popt-1.5
+	app-net/s-nail
+	lib-dev/popt
 	sys-app/sed
 	app-net/s-nail
 	acl? ( sys-app/acl )

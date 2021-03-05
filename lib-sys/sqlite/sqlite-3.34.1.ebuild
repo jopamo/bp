@@ -6,7 +6,7 @@ MY_PV="$(ver_cut 1)$(ver_cut 2)0$(ver_cut 3)00"
 
 DESCRIPTION="A SQL Database Engine in a C Library"
 HOMEPAGE="https://sqlite.org/"
-SRC_URI="https://www.sqlite.org/2020/sqlite-src-${MY_PV}.zip"
+SRC_URI="https://www.sqlite.org/2021/sqlite-src-${MY_PV}.zip"
 S="${WORKDIR}/sqlite-src-${MY_PV}"
 
 LICENSE="public-domain"

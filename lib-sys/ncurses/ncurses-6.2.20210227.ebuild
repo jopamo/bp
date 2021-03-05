@@ -2,8 +2,6 @@
 
 EAPI=7
 
-inherit toolchain-funcs
-
 MY_P="${PN}-$(ver_rs 2 -)"
 
 DESCRIPTION="console display library"
@@ -15,21 +13,14 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs test"
-
-PATCHES=( "${FILESDIR}/${PN}-6.0-unified.patch" )
+IUSE="static-libs"
 
 src_configure() {
-	unset TERMINFO #115036
-	tc-export_build_env BUILD_{CC,CPP}
-	BUILD_CPPFLAGS+=" -D_GNU_SOURCE" #214642
-
 	local myconf=(
 		--disable-termcap
 		--with-terminfo-dirs="${EPREFIX}"/usr/share/terminfo
+		--with-pkg-config-libdir="${EPREFIX}"/usr/lib/pkgconfig
 		--enable-pc-files
-		--with-pkg-config="$(tc-getPKG_CONFIG)"
-		--with-pkg-config-libdir="${EPREFIX}/usr/lib/pkgconfig"
 		--without-normal
 		--with-symlinks
 		--enable-overwrite

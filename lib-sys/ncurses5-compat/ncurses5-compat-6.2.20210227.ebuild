@@ -2,8 +2,6 @@
 
 EAPI=7
 
-inherit toolchain-funcs
-
 MY_P="ncurses-$(ver_rs 2 -)"
 
 DESCRIPTION="console display library"
@@ -15,25 +13,19 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs test"
-
-PATCHES=( "${FILESDIR}/ncurses-6.0-unified.patch" )
+IUSE="static-libs"
 
 src_configure() {
-	unset TERMINFO #115036
-	tc-export_build_env BUILD_{CC,CPP}
-	BUILD_CPPFLAGS+=" -D_GNU_SOURCE" #214642
-
 	local myconf=(
 		--with-shared
 		--with-normal
 		--without-debug
 		--without-ada
 		--enable-widec
-    		--disable-pc-files
-    		--with-cxx-binding
-    		--with-cxx-shared
-    		--with-abi-version=5
+  		--disable-pc-files
+   		--with-cxx-binding
+   		--with-cxx-shared
+   		--with-abi-version=5
 		--with-terminfo-dirs="${EPREFIX}"/usr/share/terminfo
 		--disable-stripping
 	)
@@ -52,7 +44,6 @@ src_install() {
 
 	dosym /usr/lib/libncursesw.so.5.9 usr/lib/libtinfo.so.5
   	dosym /usr/lib/libncursesw.so.5.9 usr/lib/libtic.so.5
-
 
 	use static-libs || find "${ED}"/usr/ -name '*.a' -delete
 	use static-libs || find "${ED}" -name '*.la' -delete

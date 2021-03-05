@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/karelzak/util-linux.git"
 	EGIT_BRANCH="stable/v$(ver_cut 1-2)"
 else
-	SNAPSHOT=15a37d00e5e59f0f628d0a6b6cd2f9636702fd7c
+	SNAPSHOT=f3a7b057ac28adaaf81c503abab2d8731cdc9b0c
 	SRC_URI="https://github.com/karelzak/util-linux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -130,7 +130,6 @@ src_install() {
 		insopts -m0644
 		newins "${FILESDIR}/pam-common" chfn
 		newins "${FILESDIR}/pam-common" chsh
-		newins "${FILESDIR}/pam-login" login
 		newins "${FILESDIR}/pam-runuser" runuser
 		newins "${FILESDIR}/pam-runuser" runuser-l
 		newins "${FILESDIR}/pam-su" su

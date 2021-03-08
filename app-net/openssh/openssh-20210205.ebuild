@@ -103,11 +103,9 @@ src_install() {
 	fperms 600 /var/empty
 
 	rm -rf "${ED}"/etc/ssh/moduli
-
-	keepdir /var/empty
 }
 
 pkg_preinst() {
 	enewgroup sshd 22
-	enewuser sshd 22 -1 -1 sshd
+	enewuser sshd 22 -1 /var/empty sshd
 }

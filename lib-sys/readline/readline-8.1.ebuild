@@ -6,9 +6,10 @@ inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="Another cute console display library"
 HOMEPAGE="https://tiswww.case.edu/php/chet/readline/rltop.html"
+SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
 
-SNAPSHOT=cf3c762ecfff5b2f445647a0f1543693984a5540
-SRC_URI="https://git.savannah.gnu.org/cgit/readline.git/snapshot/readline-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+#SNAPSHOT=cf3c762ecfff5b2f445647a0f1543693984a5540
+#SRC_URI="https://git.savannah.gnu.org/cgit/readline.git/snapshot/readline-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 #S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-3"

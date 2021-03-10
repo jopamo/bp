@@ -2,6 +2,8 @@
 
 EAPI=7
 
+PATCHES=( "${FILESDIR}"/more-uarches-for-gcc-v10-and-kernel-4.19-v5.4.patch )
+
 K_NOUSENAME="yes"
 K_NOSETEXTRAVERSION="yes"
 ETYPE="sources"
@@ -21,5 +23,7 @@ LICENSE="GPL"
 SLOT="$(ver_cut 1).$(ver_cut 2)"
 KEYWORDS="amd64 arm64"
 
-DEPEND="sys-app/ed
-	sys-devel/bc"
+DEPEND="
+	sys-app/ed
+	sys-devel/bc
+"

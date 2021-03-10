@@ -117,22 +117,3 @@ src_configure() {
 	)
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }
-
-src_test() {
-	emake check
-}
-
-src_install() {
-	default
-
-	if use pam; then
-		insinto /etc/pam.d
-		insopts -m0644
-		newins "${FILESDIR}/pam-common" chfn
-		newins "${FILESDIR}/pam-common" chsh
-		newins "${FILESDIR}/pam-runuser" runuser
-		newins "${FILESDIR}/pam-runuser" runuser-l
-		newins "${FILESDIR}/pam-su" su
-		newins "${FILESDIR}/pam-su" su-l
-	fi
-}

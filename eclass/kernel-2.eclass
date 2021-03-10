@@ -7,7 +7,7 @@ inherit toolchain-funcs python-any-r1
 [[ ${EAPI:-0} == [01234567] ]] && inherit estack
 case ${EAPI:-0} in
 	6|7)
-		EXPORT_FUNCTIONS src_{unpack,prepare,compile,install,test} \
+		EXPORT_FUNCTIONS src_{unpack,compile,install,test} \
 			pkg_{setup,preinst,postinst,postrm} ;;
 	*) die "${ECLASS}: EAPI ${EAPI} not supported" ;;
 esac
@@ -20,17 +20,8 @@ fi
 HOMEPAGE="https://www.kernel.org/ ${HOMEPAGE}"
 : ${LICENSE:="GPL-2"}
 
-# This is the latest KV_PATCH of the deblob tool available from the
-# libre-sources upstream. If you bump this, you MUST regenerate the Manifests
-# for ALL kernel-2 consumer packages where deblob is available.
-: ${DEBLOB_MAX_VERSION:=38}
-
 # No need to run scanelf/strip on kernel sources/headers (bug #134453).
 RESTRICT="binchecks strip"
-
-# set LINUX_HOSTCFLAGS if not already set
-: ${LINUX_HOSTCFLAGS:="-Wall -Wstrict-prototypes -Os -fomit-frame-pointer -I${S}/include"}
-
 
 # @FUNCTION: debug-print-kernel2-variables
 # @USAGE:
@@ -271,56 +262,6 @@ detect_version() {
 	debug-print-kernel2-variables
 }
 
-# @FUNCTION: kernel_is
-# @USAGE: <conditional version | version>
-# @DESCRIPTION:
-# user for comparing kernel versions
-# or just identifying a version
-# e.g kernel_is 2 4
-# e.g kernel_is ge 4.8.11
-# Note: duplicated in linux-info.eclass
-kernel_is() {
-	# ALL of these should be set before we can safely continue this function.
-	# some of the sources have in the past had only one set.
-	local v n=0
-	for v in OKV KV_{MAJOR,MINOR,PATCH} ; do [[ -z ${!v} ]] && n=1 ; done
-	[[ $n -eq 1 ]] && detect_version
-	unset v n
-
-	# Now we can continue
-	local operator test value
-
-	case ${1#-} in
-	  lt) operator="-lt"; shift;;
-	  gt) operator="-gt"; shift;;
-	  le) operator="-le"; shift;;
-	  ge) operator="-ge"; shift;;
-	  eq) operator="-eq"; shift;;
-	   *) operator="-eq";;
-	esac
-	[[ $# -gt 3 ]] && die "Error in kernel-2_kernel_is(): too many parameters"
-
-	: $(( test = (KV_MAJOR << 16) + (KV_MINOR << 8) + KV_PATCH ))
-	: $(( value = (${1:-${KV_MAJOR}} << 16) + (${2:-${KV_MINOR}} << 8) + ${3:-${KV_PATCH}} ))
-	[ ${test} ${operator} ${value} ]
-}
-
-# @FUNCTION: kernel_is_2_4
-# @USAGE:
-# @DESCRIPTION:
-# return true if kernel is version 2.4
-kernel_is_2_4() {
-	kernel_is 2 4
-}
-
-# @FUNCTION: kernel_is_2_6
-# @USAGE:
-# @DESCRIPTION:
-# return true if kernel is version 2.6
-kernel_is_2_6() {
-	kernel_is 2 6 || kernel_is 2 5
-}
-
 # Capture the sources type and set DEPENDs
 if [[ ${ETYPE} == sources ]]; then
 	DEPEND="!build? (
@@ -339,55 +280,6 @@ if [[ ${ETYPE} == sources ]]; then
 	SLOT="${PVR}"
 	DESCRIPTION="Sources based on the Linux Kernel."
 	IUSE="symlink build"
-
-	# Bug #266157, deblob for libre support
-	if [[ -z ${K_PREDEBLOBBED} ]] ; then
-		# Bug #359865, force a call to detect_version if needed
-		kernel_is ge 2 6 27 && \
-			[[ -z "${K_DEBLOB_AVAILABLE}" ]] && \
-				kernel_is le 2 6 ${DEBLOB_MAX_VERSION} && \
-					K_DEBLOB_AVAILABLE=1
-		if [[ ${K_DEBLOB_AVAILABLE} == "1" ]] ; then
-			IUSE="${IUSE} deblob"
-
-			# Reflect that kernels contain firmware blobs unless otherwise
-			# stripped. Starting with version 4.14, the whole firmware
-			# tree has been dropped from the kernel.
-			kernel_is lt 4 14 && LICENSE+=" !deblob? ( linux-firmware )"
-
-			DEPEND+=" deblob? ( ${PYTHON_DEPS} )"
-
-			if [[ -n KV_MINOR ]]; then
-				DEBLOB_PV="${KV_MAJOR}.${KV_MINOR}.${KV_PATCH}"
-			else
-				DEBLOB_PV="${KV_MAJOR}.${KV_PATCH}"
-			fi
-
-			if [[ ${KV_MAJOR} -ge 3 ]]; then
-				DEBLOB_PV="${KV_MAJOR}.${KV_MINOR}"
-			fi
-
-			# deblob svn tag, default is -gnu, to change, use K_DEBLOB_TAG in ebuild
-			K_DEBLOB_TAG=${K_DEBLOB_TAG:--gnu}
-			DEBLOB_A="deblob-${DEBLOB_PV}"
-			DEBLOB_CHECK_A="deblob-check-${DEBLOB_PV}"
-			DEBLOB_HOMEPAGE="https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/tags/"
-			DEBLOB_URI_PATH="${DEBLOB_PV}${K_DEBLOB_TAG}"
-			DEBLOB_CHECK_URI="${DEBLOB_HOMEPAGE}/${DEBLOB_URI_PATH}/deblob-check -> ${DEBLOB_CHECK_A}"
-			DEBLOB_URI="${DEBLOB_HOMEPAGE}/${DEBLOB_URI_PATH}/${DEBLOB_A}"
-			HOMEPAGE="${HOMEPAGE} ${DEBLOB_HOMEPAGE}"
-
-			KERNEL_URI="${KERNEL_URI}
-				deblob? (
-					${DEBLOB_URI}
-					${DEBLOB_CHECK_URI}
-				)"
-		elif kernel_is lt 4 14; then
-			# We have no way to deblob older kernels, so just mark them as
-			# tainted with non-libre materials.
-			LICENSE+=" linux-firmware"
-		fi
-	fi
 
 elif [[ ${ETYPE} == headers ]]; then
 	DESCRIPTION="Linux system headers"
@@ -408,8 +300,8 @@ fi
 # return header destination directory
 kernel_header_destdir() {
 	[[ ${CTARGET} == ${CHOST} ]] \
-		&& echo /usr/include \
-		|| echo /usr/${CTARGET}/usr/include
+		&& echo usr/include \
+		|| echo usr/${CTARGET}/usr/include
 }
 
 # @FUNCTION: cross_pre_c_headers
@@ -438,45 +330,6 @@ env_setup_xmakeopts() {
 		xmakeopts="${xmakeopts} CROSS_COMPILE=${CHOST}-"
 	fi
 	export xmakeopts
-}
-
-# @FUNCTION: unpack_2_4
-# @USAGE:
-# @DESCRIPTION:
-# unpack and generate .config for 2.4 kernels
-
-unpack_2_4() {
-	# this file is required for other things to build properly,
-	# so we autogenerate it
-	make -s mrproper ${xmakeopts} || die "make mrproper failed"
-	make -s symlinks ${xmakeopts} || die "make symlinks failed"
-	make -s include/linux/version.h ${xmakeopts} || die "make include/linux/version.h failed"
-	echo ">>> version.h compiled successfully."
-}
-
-# @FUNCTION: unpack_2_6
-# @USAGE:
-# @DESCRIPTION:
-# unpack and generate .config for 2.6 kernels
-
-unpack_2_6() {
-	# this file is required for other things to build properly, so we
-	# autogenerate it ... generate a .config to keep version.h build from
-	# spitting out an annoying warning
-	make -s mrproper ${xmakeopts} 2>/dev/null \
-		|| die "make mrproper failed"
-
-	# quick fix for bug #132152 which triggers when it cannot include linux
-	# headers (ie, we have not installed it yet)
-	if ! make -s defconfig ${xmakeopts} &>/dev/null 2>&1 ; then
-		touch .config
-		eerror "make defconfig failed."
-		eerror "assuming you dont have any headers installed yet and continuing"
-	fi
-
-	make -s include/linux/version.h ${xmakeopts} 2>/dev/null \
-		|| die "make include/linux/version.h failed"
-	rm -f .config >/dev/null
 }
 
 # @FUNCTION: universal_unpack
@@ -559,49 +412,6 @@ compile_headers() {
 	# then set it to something sane
 	local HOSTCFLAGS=$(getfilevar HOSTCFLAGS "${S}"/Makefile)
 	HOSTCFLAGS=${HOSTCFLAGS:--Wall -Wstrict-prototypes -O2 -fomit-frame-pointer}
-
-	if kernel_is 2 4; then
-		yes "" | make oldconfig ${xmakeopts}
-		echo ">>> make oldconfig complete"
-		make dep ${xmakeopts}
-	elif kernel_is 2 6; then
-		# 2.6.18 introduces headers_install which means we dont need any
-		# of this crap anymore :D
-		kernel_is ge 2 6 18 && return 0
-
-		# autoconf.h isnt generated unless it already exists. plus, we have
-		# no guarantee that any headers are installed on the system...
-		[[ -f "${EROOT}"/usr/include/linux/autoconf.h ]] \
-			|| touch include/linux/autoconf.h
-
-		# if K_DEFCONFIG isn't set, force to "defconfig"
-		# needed by mips
-		if [[ -z ${K_DEFCONFIG} ]]; then
-			if kernel_is ge 2 6 16 ; then
-				case ${CTARGET} in
-					powerpc64*)	K_DEFCONFIG="ppc64_defconfig";;
-					powerpc*)	K_DEFCONFIG="pmac32_defconfig";;
-					*)			K_DEFCONFIG="defconfig";;
-				esac
-			else
-				K_DEFCONFIG="defconfig"
-			fi
-		fi
-
-		# if there arent any installed headers, then there also isnt an asm
-		# symlink in /usr/include/, and make defconfig will fail, so we have
-		# to force an include path with $S.
-		HOSTCFLAGS="${HOSTCFLAGS} -I${S}/include/"
-		ln -sf asm-${KARCH} "${S}"/include/asm || die
-		cross_pre_c_headers && return 0
-
-		make ${K_DEFCONFIG} HOSTCFLAGS="${HOSTCFLAGS}" ${xmakeopts} || die "defconfig failed (${K_DEFCONFIG})"
-		if compile_headers_tweak_config ; then
-			yes "" | make oldconfig HOSTCFLAGS="${HOSTCFLAGS}" ${xmakeopts} || die "2nd oldconfig failed"
-		fi
-		make prepare HOSTCFLAGS="${HOSTCFLAGS}" ${xmakeopts} || die "prepare failed"
-		make prepare-all HOSTCFLAGS="${HOSTCFLAGS}" ${xmakeopts} || die "prepare failed"
-	fi
 }
 
 # @FUNCTION: compile_headers_tweak_config
@@ -644,36 +454,11 @@ install_universal() {
 install_headers() {
 	local ddir=$(kernel_header_destdir)
 
-	# 2.6.18 introduces headers_install which means we dont need any
-	# of this crap anymore :D
-	if kernel_is ge 2 6 18 ; then
-		env_setup_xmakeopts
-		emake headers_install INSTALL_HDR_PATH="${ED}"/${ddir}/.. ${xmakeopts} || die
+	env_setup_xmakeopts
+	emake headers_install INSTALL_HDR_PATH="${ED}"/${ddir}/.. ${xmakeopts} || die
 
-		# let other packages install some of these headers
-		rm -rf "${ED}"/${ddir}/scsi || die #glibc/uclibc/etc...
-		return 0
-	fi
-
-	# Do not use "linux/*" as that can cause problems with very long
-	# $S values where the cmdline to cp is too long
-	pushd "${S}" >/dev/null
-	dodir ${ddir}/linux
-	cp -pPR "${S}"/include/linux "${ED}"/${ddir}/ || die
-	rm -rf "${ED}"/${ddir}/linux/modules || die
-
-	dodir ${ddir}/asm
-	cp -pPR "${S}"/include/asm/* "${ED}"/${ddir}/asm || die
-
-	if kernel_is 2 6 ; then
-		dodir ${ddir}/asm-generic
-		cp -pPR "${S}"/include/asm-generic/* "${ED}"/${ddir}/asm-generic || die
-	fi
-
-	# clean up
-	find "${D}" -name '*.orig' -exec rm -f {} \;
-
-	popd >/dev/null
+	# let other packages install some of these headers
+	rm -rf "${ED}"/${ddir}/scsi || die #glibc/uclibc/etc...
 }
 
 # @FUNCTION: install_sources
@@ -725,14 +510,6 @@ postinst_sources() {
 	# if we have USE=symlink, then force K_SYMLINK=1
 	use symlink && K_SYMLINK=1
 
-	# We do support security on a deblobbed kernel, bug #555878.
-	# If some particular kernel version doesn't have security
-	# supported because of USE=deblob or otherwise, one can still
-	# set K_SECURITY_UNSUPPORTED on a per ebuild basis.
-	#[[ $K_DEBLOB_AVAILABLE == 1 ]] && \
-	#	use deblob && \
-	#	K_SECURITY_UNSUPPORTED=deblob
-
 	# if we are to forcably symlink, delete it if it already exists first.
 	if [[ ${K_SYMLINK} > 0 ]]; then
 		[[ -h "${EROOT}"/usr/src/linux ]] && { rm "${EROOT}"/usr/src/linux || die; }
@@ -745,9 +522,6 @@ postinst_sources() {
 	if [[ ${MAKELINK} == 1 ]]; then
 		ln -sf linux-${KV_FULL} "${EROOT}"/usr/src/linux || die
 	fi
-
-	# Don't forget to make directory for sysfs
-	[[ ! -d "${EROOT}"/sys ]] && kernel_is 2 6 && { mkdir "${EROOT}"/sys || die ; }
 
 	# if K_EXTRAEINFO is set then lets display it now
 	if [[ -n ${K_EXTRAEINFO} ]]; then
@@ -874,7 +648,7 @@ headers___fix() {
 # @FUNCTION: kernel-2_src_unpack
 # @USAGE:
 # @DESCRIPTION:
-# unpack sources, deblob
+# unpack sources
 
 kernel-2_src_unpack() {
 	universal_unpack
@@ -893,65 +667,16 @@ kernel-2_src_unpack() {
 	# Setup xmakeopts and cd into sourcetree.
 	env_setup_xmakeopts
 	cd "${S}"
-
-	# We dont need a version.h for anything other than headers
-	# at least, I should hope we dont. If this causes problems
-	# take out the if/fi block and inform me please.
-	# unpack_2_6 should now be 2.6.17 safe anyways
-	if [[ ${ETYPE} == headers ]]; then
-		kernel_is 2 4 && unpack_2_4
-		kernel_is 2 6 && unpack_2_6
-	fi
-
-	if [[ $K_DEBLOB_AVAILABLE == 1 ]] && use deblob ; then
-		cp "${DISTDIR}/${DEBLOB_A}" "${T}" || die "cp ${DEBLOB_A} failed"
-		cp "${DISTDIR}/${DEBLOB_CHECK_A}" "${T}/deblob-check" || die "cp ${DEBLOB_CHECK_A} failed"
-		chmod +x "${T}/${DEBLOB_A}" "${T}/deblob-check" || die "chmod deblob scripts failed"
-	fi
-
-	# fix a problem on ppc where TOUT writes to /usr/src/linux breaking sandbox
-	# only do this for kernel < 2.6.27 since this file does not exist in later
-	# kernels
-	if [[ -n ${KV_MINOR} &&  ${KV_MAJOR}.${KV_MINOR}.${KV_PATCH} < 2.6.27 ]] ; then
-		sed -i \
-			-e 's|TOUT      := .tmp_gas_check|TOUT  := $(T).tmp_gas_check|' \
-			"${S}"/arch/ppc/Makefile
-	else
-		sed -i \
-			-e 's|TOUT      := .tmp_gas_check|TOUT  := $(T).tmp_gas_check|' \
-			"${S}"/arch/powerpc/Makefile
-	fi
-}
-
-# @FUNCTION: kernel-2_src_prepare
-# @USAGE:
-# @DESCRIPTION:
-# Apply any user patches
-
-kernel-2_src_prepare() {
-
-	debug-print "Applying any user patches"
-
-	# apply any user patches
-	case ${EAPI:-0} in
-		6|7) eapply_user ;;
-	esac
 }
 
 # @FUNCTION: kernel-2_src_compile
 # @USAGE:
 # @DESCRIPTION:
-# conpile headers or run deblob script
+# conpile headers
 
 kernel-2_src_compile() {
 	cd "${S}"
 	[[ ${ETYPE} == headers ]] && compile_headers
-
-	if [[ $K_DEBLOB_AVAILABLE == 1 ]] && use deblob ; then
-		echo ">>> Running deblob script ..."
-		python_setup
-		sh "${T}/${DEBLOB_A}" --force || die "Deblob script failed to run!!!"
-	fi
 }
 
 # @FUNCTION: kernel-2_src_test
@@ -1000,19 +725,6 @@ kernel-2_pkg_postinst() {
 # if necessary
 
 kernel-2_pkg_setup() {
-	if kernel_is 2 4; then
-		if [[ $(gcc-major-version) -ge 4 ]] ; then
-			echo
-			ewarn "Be warned !! >=sys-devel/gcc-4.0.0 isn't supported with linux-2.4!"
-			ewarn "Either switch to another gcc-version (via gcc-config) or use a"
-			ewarn "newer kernel that supports gcc-4."
-			echo
-			ewarn "Also be aware that bugreports about gcc-4 not working"
-			ewarn "with linux-2.4 based ebuilds will be closed as INVALID!"
-			echo
-		fi
-	fi
-
 	ABI="${KERNEL_ABI}"
 	if [[ ${ETYPE} != sources ]] && [[ ${ETYPE} != headers ]]; then
 		eerror "Unknown ETYPE=\"${ETYPE}\", must be \"sources\" or \"headers\""

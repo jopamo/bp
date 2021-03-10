@@ -18,9 +18,17 @@ src_compile() { :; }
 src_test() { :; }
 
 src_install() {
-	insinto /etc/pam.d/
+	insinto /etc/pam.d
+	insopts -m0644
 
-	for x in login su system-auth system-login system-local-login system-remote-login system-services other  ; do
+	for x in login other su system-auth system-login system-local-login system-remote-login system-services  ; do
 		doins ${x}
 	done
+
+	newins "${FILESDIR}/pam-common" chfn
+	newins "${FILESDIR}/pam-common" chsh
+	newins "${FILESDIR}/pam-runuser" runuser
+	newins "${FILESDIR}/pam-runuser" runuser-l
+	newins "${FILESDIR}/pam-su" su
+	newins "${FILESDIR}/pam-su" su-l
 }

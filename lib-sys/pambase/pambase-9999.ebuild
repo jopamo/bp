@@ -29,6 +29,5 @@ src_install() {
 	newins pam-common chsh
 	newins pam-runuser runuser
 	newins pam-runuser runuser-l
-	newins pam-su su
-	newins pam-su su-l
+	newins su su-l
 }

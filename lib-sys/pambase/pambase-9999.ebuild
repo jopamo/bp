@@ -25,10 +25,10 @@ src_install() {
 		doins ${x}
 	done
 
-	newins "${FILESDIR}/pam-common" chfn
-	newins "${FILESDIR}/pam-common" chsh
-	newins "${FILESDIR}/pam-runuser" runuser
-	newins "${FILESDIR}/pam-runuser" runuser-l
-	newins "${FILESDIR}/pam-su" su
-	newins "${FILESDIR}/pam-su" su-l
+	newins pam-common chfn
+	newins pam-common chsh
+	newins pam-runuser runuser
+	newins pam-runuser runuser-l
+	newins pam-su su
+	newins pam-su su-l
 }

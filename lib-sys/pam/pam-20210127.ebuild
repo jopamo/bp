@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit fcaps autotools
+inherit autotools
 
 DESCRIPTION="Linux-PAM (Pluggable Authentication Modules)"
 HOMEPAGE="http://www.linux-pam.org/ https://fedorahosted.org/linux-pam/"
@@ -66,12 +66,10 @@ src_compile() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" install \
+	emake DESTDIR="${ED}" install \
 		sepermitlockdir="${EPREFIX}/run/sepermit"
 
 	cleanup_install
-}
 
-pkg_postinst() {
-	fcaps cap_dac_override usr/sbin/unix_chkpwd
+	chmod +s "${ED}"/usr/sbin/unix_chkpwd
 }

@@ -5,7 +5,7 @@ EAPI=7
 DESCRIPTION="Updated config.sub and config.guess file from GNU"
 HOMEPAGE="https://savannah.gnu.org/projects/config"
 
-SNAPSHOT=c8ddc8472f8efcadafc1ef53ca1d863415fddd5f
+SNAPSHOT=277b4ed1776f721145b2649d888f1deb445fecc5
 SRC_URI="https://git.savannah.gnu.org/cgit/config.git/snapshot/config-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/config-${SNAPSHOT}
 

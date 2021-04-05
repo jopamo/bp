@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/karelzak/util-linux.git"
 	EGIT_BRANCH="stable/v$(ver_cut 1-2)"
 else
-	SNAPSHOT=ba3b93525920f2782e12016e7444fca89fb5bb9c
+	SNAPSHOT=f3a7b057ac28adaaf81c503abab2d8731cdc9b0c
 	SRC_URI="https://github.com/karelzak/util-linux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -20,7 +20,7 @@ fi
 
 LICENSE="GPL-2 LGPL-2.1 BSD-4 MIT public-domain"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="build caps +cramfs fdformat +kill ncurses nls pam +readline static-libs +suid systemd test +tty-helpers udev unicode"
 

@@ -2,12 +2,14 @@
 
 EAPI=7
 
-inherit autotools toolchain-funcs python-r1 linux-info systemd git-r3 flag-o-matic
+inherit autotools toolchain-funcs python-r1 linux-info systemd flag-o-matic
 
 DESCRIPTION="Userspace utilities for storing and processing auditing records"
 HOMEPAGE="https://people.redhat.com/sgrubb/audit/"
-EGIT_REPO_URI="https://github.com/linux-audit/audit-userspace.git"
-EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)_maintenance"
+
+SNAPSHOT=a4173996c8aecfc80bb7b7931c162269e008c4d1
+SRC_URI="https://github.com/linux-audit/audit-userspace/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-userspace-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -16,16 +18,17 @@ KEYWORDS="amd64 arm64"
 IUSE="gssapi ldap python static-libs"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
-# Testcases are pretty useless as they are built for RedHat users/groups and kernels.
+
 RESTRICT="test"
 
-RDEPEND="gssapi? ( app-crypt/heimdal )
+DEPEND="
+	gssapi? ( app-crypt/heimdal )
 	ldap? ( app-net/openldap )
 	lib-sys/libcap-ng
-	python? ( ${PYTHON_DEPS} )"
-DEPEND="${RDEPEND}
+	python? ( ${PYTHON_DEPS} )
 	sys-kernel/linux-headers
-	dev-lang/swig:0"
+	dev-lang/swig
+"
 
 CONFIG_CHECK="~AUDIT"
 
@@ -55,9 +58,6 @@ src_prepare() {
 			-e '/^SUBDIRS/s,zos-remote,,g' \
 			"${S}"/audisp/plugins/Makefile.am || die
 	fi
-
-	# Don't build static version of Python module.
-	eapply "${FILESDIR}"/${PN}-2.4.3-python.patch
 
 	# there is no --without-golang conf option
 	sed -e "/^SUBDIRS =/s/ @gobind_dir@//" -i bindings/Makefile.am || die
@@ -155,11 +155,11 @@ src_install() {
 		use python && python_foreach_impl python_install
 
 	docinto contrib
-	dodoc contrib/{avc_snap,skeleton.c}
+	dodoc contrib/avc_snap
 	docinto contrib/plugin
 	dodoc contrib/plugin/*
 	docinto rules
-	dodoc rules/*
+	dodoc rules/*rules
 
 	fperms 644 "$(systemd_get_systemunitdir)"/auditd.service # 556436
 

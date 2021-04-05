@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=802688debcd88c48edabe86deb7e7ed47ebadc26
+	SNAPSHOT=095f59ca464220eae285de6b5f2ee31185a6a84c
 	SRC_URI="https://github.com/open-iscsi/open-iscsi/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"

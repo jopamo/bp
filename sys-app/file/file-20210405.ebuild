@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/file/file.git"
 	inherit git-r3
 else
-	SNAPSHOT=83a0e534ab206aa32147b1498cc8c16c40895feb
+	SNAPSHOT=6b34436ac766dae64749b8d14f18c6910be40131
 	SRC_URI="https://github.com/file/file/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -25,7 +25,8 @@ IUSE="seccomp static-libs zlib"
 
 DEPEND="
 	seccomp? ( lib-sys/libseccomp )
-	zlib? ( >=lib-sys/zlib-1.2.8-r1 )"
+	zlib? ( >=lib-sys/zlib-1.2.8-r1 )
+"
 
 PATCHES=(
 	"${FILESDIR}"/file-5.39-portage_sandbox.patch

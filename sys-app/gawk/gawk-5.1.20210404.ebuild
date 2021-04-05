@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT=4bbf219d9f1bf3ad3e20b44fb3f4bc910d6398c3
+SNAPSHOT=f271311ac33d44e68da147a273847c3ce8552bb8
 
 DESCRIPTION="GNU awk pattern-matching language"
 HOMEPAGE="https://www.gnu.org/software/gawk/gawk.html"

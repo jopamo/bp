@@ -2,7 +2,6 @@
 
 EAPI=7
 
-
 inherit distutils-r1 git-r3
 
 DESCRIPTION="A script for checking the hardening options in the Linux kernel config"

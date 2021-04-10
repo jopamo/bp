@@ -4,7 +4,7 @@ EAPI=7
 
 inherit flag-o-matic
 
-DESCRIPTION="An library to provide useful functions commonly found on BSD systems"
+DESCRIPTION="Provides useful functions commonly found on BSD systems"
 HOMEPAGE="https://libbsd.freedesktop.org/wiki/"
 SRC_URI="https://${PN}.freedesktop.org/releases/${P}.tar.xz"
 

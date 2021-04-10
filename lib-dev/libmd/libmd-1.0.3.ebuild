@@ -2,8 +2,6 @@
 
 EAPI=7
 
-inherit flag-o-matic
-
 DESCRIPTION="Provides message digest functions found on BSD systems"
 HOMEPAGE="https://www.hadrons.org/software/libmd/"
 SRC_URI="https://libbsd.freedesktop.org/releases/${P}.tar.xz"

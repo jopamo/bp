@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT=440ceb9612d5a20997e3e12728542df2de713ca4
+SNAPSHOT=16d3df698db2486dde480b09a732bf9bf48599f9
 
 DESCRIPTION="Password hashing software that won the Password Hashing Competition (PHC)"
 HOMEPAGE="https://github.com/P-H-C/phc-winner-argon2"

@@ -12,6 +12,7 @@ SRC_URI="mirror://gnupg/gnupg/${MY_P}.tar.bz2"
 
 LICENSE="GPL-3"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="bzip2 ldap nls readline +gnutls tools"
 

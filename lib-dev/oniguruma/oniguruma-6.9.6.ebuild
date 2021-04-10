@@ -2,11 +2,9 @@
 
 EAPI=7
 
-MY_P="onig-${PV}_rev1"
-
 DESCRIPTION="Regular expression library for different character encodings"
 HOMEPAGE="https://github.com/kkos/oniguruma"
-SRC_URI="https://github.com/kkos/${PN}/releases/download/v${PV}_rev1/${MY_P}.tar.gz"
+SRC_URI="https://github.com/kkos/${PN}/releases/download/v${PV}/onig-${PV}.tar.gz"
 
 LICENSE="BSD-2"
 SLOT="0/4"

@@ -16,6 +16,8 @@ IUSE="static-libs"
 
 RDEPEND=">=lib-dev/gmp-5.0.0[static-libs?]"
 
+PATCHES=( "${FILESDIR}"/20210309.patch )
+
 src_prepare() {
 	default
 	find . -type f -exec touch -r configure {} +

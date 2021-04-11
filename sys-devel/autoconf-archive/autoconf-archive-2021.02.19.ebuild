@@ -4,7 +4,8 @@ EAPI=7
 
 DESCRIPTION="GNU Autoconf Macro Archive"
 HOMEPAGE="https://www.gnu.org/software/autoconf-archive/"
-SRC_URI="https://1g4.org/files/${P}.tar.xz"
+SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+
 
 LICENSE="GPL-3"
 SLOT="0"

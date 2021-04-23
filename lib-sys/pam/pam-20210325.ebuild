@@ -20,7 +20,7 @@ LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="audit debug nls test vim-syntax"
+IUSE="debug nls test vim-syntax"
 
 BDEPEND="
 	app-misc/w3m
@@ -30,10 +30,7 @@ BDEPEND="
 	app-text/docbook-sgml-dtd:4.5
 "
 
-RDEPEND="
-	lib-net/libtirpc
-	audit? ( >=sys-app/audit-2.2.2 )
-"
+RDEPEND="lib-net/libtirpc"
 
 PDEPEND="
 	lib-sys/pambase
@@ -52,7 +49,6 @@ src_configure() {
 	local myconf=(
 		--enable-securedir="${EPREFIX}"/usr/lib/security
 		$(use_enable nls)
-		$(use_enable audit)
 		$(use_enable debug)
 		--disable-db
 		--disable-prelude

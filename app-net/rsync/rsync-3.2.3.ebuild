@@ -14,14 +14,19 @@ KEYWORDS="amd64 arm64"
 
 IUSE="acl iconv ipv6 lz4 static xattr xxhash zstd"
 
-LIB_DEPEND="acl? ( sys-app/acl[static-libs(+)] )
+LIB_DEPEND="
+	acl? ( sys-app/acl[static-libs(+)] )
 	xattr? ( sys-app/attr[static-libs(+)] )
 	xxhash? ( lib-dev/xxhash[static-libs(+)] )
 	zstd? ( app-compression/zstd[static-libs(+)] )
-	lz4? ( app-compression/lz4[static-libs(+)] )"
+	lz4? ( app-compression/lz4[static-libs(+)] )
+	lib-dev/popt[static-libs(+)]
+"
 
-DEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
-	static? ( ${LIB_DEPEND} )"
+DEPEND="
+	!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
+	static? ( ${LIB_DEPEND} )
+"
 
 src_prepare() {
 	rm -f zlib/*.{c,h} || die

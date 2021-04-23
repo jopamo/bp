@@ -13,20 +13,21 @@ LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="audit binfmt +blkid coredump cryptsetup devmode dhcp4 efi gcrypt +hostnamed hwdb importd kmod
-ldconfig localed logind machined networkd pam pcre pstore rfkill sleep systemd-update sysv
-+timedated +tmpfiles test vconsole xkb"
+IUSE="binfmt +blkid coredump cryptsetup devmode dhcp4 efi gcrypt
++hostnamed hwdb importd kmod ldconfig localed logind machined networkd
+pam pcre pstore p11kit rfkill sleep systemd-update sysv +timedated
++tmpfiles test vconsole xkb"
 
 RESTRICT="!test? ( test )"
 
 DEPEND="
-	audit? ( >=sys-app/audit-2:0= )
 	cryptsetup? ( >=sys-fs/cryptsetup-1.6:0= )
 	gcrypt? ( lib-dev/libgcrypt )
 	kmod? ( >=sys-app/kmod-15:0= )
 	logind? ( sys-app/dbus )
 	pam? ( lib-sys/pam:= )
 	pcre? ( lib-dev/libpcre2 )
+	p11kit? ( app-crypt/p11-kit )
 	lib-sys/libseccomp:0=
 	test? ( sys-app/dbus )
 	tmpfiles? ( sys-app/dbus )
@@ -75,7 +76,6 @@ pkg_pretend() {
 src_configure() {
 	local emesonargs=(
 		$(usex devmode '-Dmode=developer' '-Dmode=release')
-		$(meson_use audit)
 		$(meson_use binfmt)
 		$(meson_use blkid)
 		$(meson_use coredump)
@@ -95,6 +95,7 @@ src_configure() {
 		$(meson_use pam)
 		$(meson_use pcre pcre2)
 		$(meson_use pstore)
+		$(meson_use p11kit)
 		$(meson_use rfkill)
 		$(usex sysv '-Dsysvinit-path=/etc/init.d' '-Dsysvinit-path=')
 		$(usex sysv '-Dsysvrcnd-path=/etc/rc.d' '-Dsysvrcnd-path=')
@@ -105,6 +106,7 @@ src_configure() {
 		$(meson_use xkb xkbcommon)
 		-Dacl=true
 		-Dapparmor=false
+		-Daudit=false
 		-Dbacklight=false
 		-Dbzip2=false
 		-Dlibcurl=false
@@ -222,7 +224,7 @@ DHCP=ipv4' > "${ED}"/etc/systemd/network/ipv4dhcp.network
 
 	sed -i '/{dialout,render,cdrom,tape}/d' "${ED}"/usr/lib/udev/rules.d/50-udev-default.rules
 
-	use audit || sed -i "s/\#Audit\=yes/Audit\=no/g" "${ED}"/etc/systemd/journald.conf || die
+	sed -i "s/\#Audit\=yes/Audit\=no/g" "${ED}"/etc/systemd/journald.conf || die
 
 	sed -i "s/\#SystemMaxUse\=/SystemMaxUse\=128M/g" "${ED}"/etc/systemd/journald.conf || die
 }

@@ -20,7 +20,7 @@ LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="audit debug ncurses pam newnet static-libs sysv-utils"
+IUSE="debug ncurses pam newnet static-libs sysv-utils"
 
 PATCHES=(
 		"${FILESDIR}"/0001-call-sbin-mkmntdirs-in-localmount-OpenRC-service.patch
@@ -53,7 +53,7 @@ src_compile() {
 	MKNET=$(usex newnet)
 	MKSELINUX=no
 	MKSYSVINIT=$(usex sysv-utils)
-	MKAUDIT=$(usex audit)
+	MKAUDIT=no
 	MKPAM=$(usev pam)
 	MKSTATICLIBS=$(usex static-libs)
 	MKZSHCOMP=no

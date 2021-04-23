@@ -21,7 +21,7 @@ LICENSE="LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="audit caps debug nscd systemtap static-libs profile +static-pie"
+IUSE="caps debug nscd systemtap static-libs profile +static-pie"
 
 BDEPEND="sys-devel/gcc
 		sys-devel/make"
@@ -136,7 +136,6 @@ src_configure() {
 		${EXTRA_ECONF}
 	)
 
-	ac_cv_lib_audit_audit_log_user_avc_message=$(in_iuse audit && usex audit || echo no)
 	ac_cv_lib_cap_cap_init=$(in_iuse caps && usex caps || echo no)
 
 	export libc_cv_rootsbindir="${EPREFIX}"/usr/sbin

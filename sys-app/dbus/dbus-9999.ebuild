@@ -8,14 +8,13 @@ inherit git-r3 autotools linux-info flag-o-matic python-any-r1 systemd user
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="https://dbus.freedesktop.org/"
 EGIT_REPO_URI="https://gitlab.freedesktop.org/dbus/dbus.git"
+#EGIT_BRANCH="dbus-$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="|| ( AFL-2.1 GPL-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="debug static-libs systemd test user-session X"
-
-#RESTRICT="test"
 
 CDEPEND="
 	>=lib-dev/expat-2.1.0
@@ -59,7 +58,7 @@ src_prepare() {
 
 src_configure() {
 	local myconf
-
+	die
 	myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -87,6 +86,7 @@ src_configure() {
 		--disable-xml-docs
 		--disable-doxygen-docs
 		--disable-traditional-activation
+		--disable-libaudit
 	)
 
 	einfo "Running configure in ${BUILD_DIR}"

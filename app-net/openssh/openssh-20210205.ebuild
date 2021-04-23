@@ -21,14 +21,13 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="audit debug pam +pie +ssl static systemd test X"
+IUSE="debug pam +pie +ssl static systemd test X"
 
 REQUIRED_USE="pie? ( !static )
 	static? ( !pam )
 	test? ( ssl )"
 
 LIB_DEPEND="
-	audit? ( sys-app/audit[static-libs(+)] )
 	lib-dev/libedit:=[static-libs(+)]
 	ssl? ( virtual/ssl )
 	>=lib-sys/zlib-1.2.3:=[static-libs(+)]"
@@ -73,7 +72,7 @@ src_configure() {
 		--with-privsep-user="sshd"
 		--with-sandbox="seccomp_filter"
 		--with-libedit
-		$(use_with audit audit linux)
+		--without-audit
 		$(use_with pam)
 		$(use_with pie)
 		$(use_with ssl openssl)

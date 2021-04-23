@@ -15,12 +15,11 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl audit pam skey systemd xattr"
+IUSE="acl pam skey systemd xattr"
 
 DEPEND="
 	app-compression/xz-utils
 	acl? ( sys-app/acl:0= )
-	audit? ( >=sys-app/audit-2.6:0= )
 	pam? ( lib-sys/pam:0= )
 	skey? ( lib-sys/skey:0= )
 	xattr? ( sys-app/attr:0= )
@@ -39,7 +38,7 @@ src_configure() {
 		--without-tcb
 		--disable-account-tools-setuid
 		$(use_with acl)
-		$(use_with audit)
+		--without-audit
 		$(use_with skey)
 		$(use_with pam libpam)
 		$(use_with xattr attr)

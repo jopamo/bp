@@ -15,9 +15,12 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="sys-app/pciutils
-	>=lib-sys/efivar-25:="
-DEPEND="${RDEPEND}"
+DEPEND="
+	sys-app/pciutils
+	lib-sys/efivar
+	lib-dev/popt
+"
+
 
 src_prepare() {
 	default

@@ -58,7 +58,7 @@ src_prepare() {
 
 src_configure() {
 	local myconf
-	die
+
 	myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin

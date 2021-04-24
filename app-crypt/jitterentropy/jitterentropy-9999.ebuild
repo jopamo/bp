@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit toolchain-funcs git-r3 systemd
+inherit toolchain-funcs git-r3 systemd flag-o-matic
 
 DESCRIPTION="Hardware RNG based on CPU timing jitter"
 HOMEPAGE="https://github.com/smuellerDD/jitterentropy-library"
@@ -13,6 +13,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="systemd"
+
+replace-flags -O3 -O0
 
 src_prepare() {
 	default

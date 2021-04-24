@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit toolchain-funcs git-r3 systemd flag-o-matic
+inherit git-r3 systemd flag-o-matic
 
 DESCRIPTION="Hardware RNG based on CPU timing jitter"
 HOMEPAGE="https://github.com/smuellerDD/jitterentropy-library"
@@ -14,27 +14,14 @@ KEYWORDS="amd64 arm64"
 
 IUSE="systemd"
 
+PATCHES=( "${FILESDIR}"/${PN}-do-not-strip-and-compress.patch )
+
 replace-flags -O3 -O0
-
-src_prepare() {
-	default
-
-	# Disable man page compression on install
-	sed -e '/\tgzip.*man/ d' -i Makefile || die
-	# Let the package manager handle stripping
-	sed -e '/\tinstall.*-s / s/-s //g' -i Makefile || die
-}
-
-src_compile() {
-	emake CC="$(tc-getCC)"
-}
 
 src_install() {
 	emake PREFIX="${EPREFIX}/usr" \
 		  LIBDIR="lib" \
 		  DESTDIR="${D}" install
-
-	doheader ${PN}.h ${PN}-base-user.h
 
 	use systemd && systemd_dounit "${FILESDIR}"/${PN}.service
 

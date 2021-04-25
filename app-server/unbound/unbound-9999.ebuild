@@ -8,34 +8,29 @@ MY_P=${PN}-${PV/_/}
 
 DESCRIPTION="A validating, recursive and caching DNS resolver"
 HOMEPAGE="http://unbound.net/"
-SRC_URI="http://unbound.net/downloads/${MY_P}.tar.gz"
+
+if [[ ${PV} == 9999 ]]; then
+	EGIT_REPO_URI="https://github.com/NLnetLabs/unbound.git"
+	inherit git-r3
+else
+	SRC_URI="http://unbound.net/downloads/${MY_P}.tar.gz"
+fi
 
 LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug dnscrypt dnstap +ecdsa gost python static-libs test threads"
+IUSE="debug dnscrypt +ecdsa gost python static-libs systemd"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
-CDEPEND=">=lib-dev/expat-2.1.0-r3
-	>=lib-dev/libevent-2.0.21:0=
+CDEPEND="
+	lib-dev/expat
+	lib-dev/libevent
 	virtual/ssl
 	dnscrypt? ( lib-dev/libsodium )
-	dnstap? (
-		lib-dev/fstrm
-		>=lib-dev/protobuf-c-1.0.2-r1
-	)
-	python? ( ${PYTHON_DEPS} )"
-
-DEPEND="${CDEPEND}
-	python? ( dev-lang/swig )
-	test? (
-		lib-net/ldns-utils[examples]
-		dev-util/splint
-		app-text/wdiff
-	)
-	dev-util/pkgconf"
+	python? ( ${PYTHON_DEPS}
+			dev-lang/swig )"
 
 S=${WORKDIR}/${MY_P}
 
@@ -69,13 +64,13 @@ src_configure() {
 		$(use_enable debug)
 		$(use_enable gost)
 		$(use_enable dnscrypt)
-		$(use_enable dnstap)
+		--disable-dnstap
 		$(use_enable ecdsa)
 		$(use_enable static-libs static)
 		--enable-pie
 		--enable-relro-now
 		--enable-subnet
-		--enable-systemd
+		$(use_enable systemd)
 		--enable-tfo-client
 		--enable-tfo-server
 		--disable-flto
@@ -98,9 +93,9 @@ src_install() {
 
 	use python && python_optimize
 
-	systemd_dounit "${FILESDIR}"/unbound.service
-	systemd_newunit "${FILESDIR}"/unbound_at.service "unbound@.service"
-	systemd_dounit "${FILESDIR}"/unbound-anchor.service
+	use systemd && systemd_dounit "${FILESDIR}"/unbound.service
+	use systemd && systemd_newunit "${FILESDIR}"/unbound_at.service "unbound@.service"
+	use systemd && systemd_dounit "${FILESDIR}"/unbound-anchor.service
 
 	dodoc contrib/unbound_munin_
 

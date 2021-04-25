@@ -2,11 +2,21 @@
 
 EAPI=7
 
-inherit autotools git-r3 flag-o-matic
+inherit autotools flag-o-matic
 
 DESCRIPTION="Library to execute a function when a specific event occurs on a file descriptor"
 HOMEPAGE="http://libevent.org/"
-EGIT_REPO_URI="https://github.com/libevent/libevent"
+
+if [[ ${PV} == 9999 ]]; then
+	EGIT_REPO_URI="https://github.com/libevent/libevent.git"
+	inherit git-r3
+	KEYWORDS=""
+else
+	SNAPSHOT=0ef0d9475c15d851d47d81dc70cf0b7bb73723ef
+	SRC_URI="https://github.com/libevent/libevent/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	KEYWORDS="amd64 arm64"
+fi
 
 LICENSE="BSD"
 SLOT="0"

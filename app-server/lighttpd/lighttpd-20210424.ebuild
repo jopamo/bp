@@ -11,11 +11,10 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/lighttpd/lighttpd1.4.git"
 	inherit git-r3
 else
-	SRC_URI="https://download.lighttpd.net/lighttpd/releases-1.4.x/${P}.tar.xz"
-
-	#SNAPSHOT=730c932e3c32ea43dbbb2fad51c2ebfc9219b856
-	#SRC_URI="https://github.com/lighttpd/lighttpd1.4/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	#S=${WORKDIR}/${PN}1.4-${SNAPSHOT}
+	#SRC_URI="https://download.lighttpd.net/lighttpd/releases-1.4.x/${P}.tar.xz"
+	SNAPSHOT=a7b95c5b6aae3547ec740867296ca114e8f844e5
+	SRC_URI="https://github.com/lighttpd/lighttpd1.4/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}1.4-${SNAPSHOT}
 fi
 
 LICENSE="BSD GPL-2"

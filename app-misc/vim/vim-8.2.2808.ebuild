@@ -20,14 +20,12 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug +xxd"
 
-RDEPEND="
-	>=lib-sys/ncurses-5.2-r2:0=
-	sys-devel/gettext
+DEPEND="
+	lib-sys/ncurses
 	sys-app/acl
 "
 
-DEPEND="
-	${RDEPEND}
+BDEPEND="
 	sys-devel/autoconf
 	sys-devel/gettext
 "

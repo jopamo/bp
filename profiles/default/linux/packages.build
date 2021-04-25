@@ -30,7 +30,6 @@ sys-app/portage
 sys-app/sed
 sys-devel/binutils
 sys-devel/bison
-sys-devel/flex
 sys-devel/gcc
 sys-devel/gettext
 sys-devel/gnuconfig

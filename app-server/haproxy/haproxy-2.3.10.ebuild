@@ -6,7 +6,7 @@ inherit user toolchain-funcs flag-o-matic systemd linux-info
 
 DESCRIPTION="A TCP/HTTP reverse proxy for high availability environments"
 HOMEPAGE="http://haproxy.1wt.eu"
-SRC_URI="https://1g4.org/files/${P}.tar.xz"
+SRC_URI="https://www.haproxy.org/download/$(ver_cut 1-2)/src/${P}.tar.gz"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"

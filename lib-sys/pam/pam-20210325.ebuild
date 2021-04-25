@@ -23,6 +23,7 @@ KEYWORDS="amd64 arm64"
 IUSE="debug nls test vim-syntax"
 
 BDEPEND="
+	sys-devel/flex
 	app-misc/w3m
 	app-text/docbook-xml-dtd:4.1
 	app-text/docbook-xml-dtd:4.3

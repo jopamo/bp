@@ -14,11 +14,11 @@ KEYWORDS="amd64 arm64"
 
 IUSE="nls static test"
 
-RDEPEND=">=sys-devel/m4-1.4.16"
-DEPEND="${RDEPEND}
-	sys-devel/flex
+DEPEND="
+	sys-devel/m4
 	nls? ( sys-devel/gettext )
-	test? ( dev-lang/perl )"
+	test? ( dev-lang/perl )
+"
 
 src_prepare() {
 	touch doc/bison.1

@@ -16,8 +16,6 @@ IUSE="libedit readline static"
 
 DEPEND="
 	sys-app/ed
-	sys-devel/flex
-	sys-devel/bison
 	readline? ( lib-sys/readline )
 	libedit? ( lib-dev/libedit )
 "

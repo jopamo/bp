@@ -27,8 +27,6 @@ RDEPEND="
 	mount? ( =sys-fs/fuse-2.9.9999 )
 "
 DEPEND="${RDEPEND}
-	sys-devel/flex
-	sys-devel/bison
 	sys-app/help2man
 	sys-devel/texinfo
 	static? (

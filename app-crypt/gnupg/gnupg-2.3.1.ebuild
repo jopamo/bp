@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit toolchain-funcs flag-o-matic
+inherit toolchain-funcs flag-o-matic autotools
 
 MY_P="${P/_/-}"
 
@@ -12,10 +12,11 @@ SRC_URI="mirror://gnupg/gnupg/${MY_P}.tar.bz2"
 
 LICENSE="GPL-3"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 ldap nls readline +gnutls tools"
+IUSE="bzip2 ldap nls readline +gnutls sqlite tools"
 
-COMMON_DEPEND_LIBS="
+DEPEND="
 	>=lib-dev/npth-1.2
 	>=lib-dev/libassuan-2.5.0
 	>=lib-dev/libgcrypt-1.7.3
@@ -27,29 +28,25 @@ COMMON_DEPEND_LIBS="
 	ldap? ( app-net/openldap )
 	bzip2? ( app-compression/lbzip2 )
 	readline? ( lib-sys/readline:0= )
-"
-
-COMMON_DEPEND_BINS="app-crypt/pinentry"
-
-# Existence of executables is checked during configuration.
-DEPEND="${COMMON_DEPEND_LIBS}
-	${COMMON_DEPEND_BINS}
+	sqlite? ( lib-sys/sqlite )
+	app-crypt/pinentry
 	nls? ( sys-devel/gettext )"
 
-RDEPEND="${COMMON_DEPEND_LIBS}
-	${COMMON_DEPEND_BINS}
-	nls? ( sys-devel/gettext )"
-
-S="${WORKDIR}/${MY_P}"
+PATCHES=( "${FILESDIR}"/gnupg-2.3.0-sqlite_check.patch )
 
 append-flags -fno-strict-aliasing
-filter-flags -Wl,-z,defs -flto\=\*
+
+src_prepare() {
+	default
+	eautoreconf
+}
 
 src_configure() {
 	local myconf=(
 			$(use_enable bzip2)
 			$(use_enable gnutls)
 			$(use_enable nls)
+			$(use_enable sqlite)
 			$(use_with ldap)
 			$(use_with readline)
 			--enable-gpgsm
@@ -58,7 +55,7 @@ src_configure() {
 			--disable-scdaemon
 			--disable-tofu
 			--disable-wks-tools
-			--disable-sqlite
+			--enable-sqlite
 		)
 
 	# glib fails and picks up clang's internal stdint.h causing weird errors

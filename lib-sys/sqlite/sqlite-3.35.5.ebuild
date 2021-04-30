@@ -15,26 +15,31 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND="dev-lang/tcl"
+DEPEND="
+		dev-lang/tcl
+		lib-sys/readline
+		lib-sys/zlib
+"
 
 src_configure() {
-	local myconf=(
-		$(use_enable static-libs static)
-		--enable-fts5
-		CFLAGS="${CFLAGS} \
-		-DSQLITE_ENABLE_RTREE=1 \
-		-DSQLITE_ENABLE_FTS3=1 \
-		-DSQLITE_ENABLE_FTS4=1 \
+	export CPPFLAGS="$CPPFLAGS \
 		-DSQLITE_ENABLE_COLUMN_METADATA=1 \
 		-DSQLITE_ENABLE_UNLOCK_NOTIFY=1 \
 		-DSQLITE_ENABLE_DBSTAT_VTAB=1 \
 		-DSQLITE_SECURE_DELETE=1 \
-		-DSQLITE_ENABLE_FTS3_TOKENIZER=1"
+		-DSQLITE_ENABLE_FTS3_TOKENIZER=1 \
+		-DSQLITE_ENABLE_STMTVTAB \
+		-DSQLITE_MAX_VARIABLE_NUMBER=250000 \
+		-DSQLITE_MAX_EXPR_DEPTH=10000"
+
+	local myconf=(
+		$(use_enable static-libs static)
+		--disable-amalgamation
+		--enable-fts3
+		--enable-fts4
+		--enable-fts5
+		--enable-rtree
+		--enable-json1
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-src_install() {
-	default
-	use static-libs || find "${ED}" -name '*.la' -delete
 }

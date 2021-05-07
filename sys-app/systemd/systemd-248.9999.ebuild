@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="binfmt +blkid coredump cryptsetup devmode dhcp4 efi gcrypt
 +hostnamed hwdb importd kmod ldconfig localed logind machined networkd
-pam pcre pstore p11kit rfkill sleep systemd-update sysv +timedated
+oomd pam pcre pstore p11kit rfkill sleep systemd-update sysv +timedated
 +tmpfiles test vconsole xkb"
 
 RESTRICT="!test? ( test )"
@@ -92,6 +92,7 @@ src_configure() {
 		$(meson_use logind)
 		$(meson_use machined)
 		$(meson_use networkd)
+		$(meson_use oomd)
 		$(meson_use pam)
 		$(meson_use pcre pcre2)
 		$(meson_use pstore)

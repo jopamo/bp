@@ -17,7 +17,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug +isl sanitize +vtv zstd"
+IUSE="debug dlang golang +isl +lto sanitize +vtv zstd"
 
 DEPEND="
 	lib-dev/isl
@@ -47,16 +47,12 @@ PATCHES=(
 		"${FILESDIR}"/0015-libffi-use-__linux__-instead-of-__gnu_linux__-for-mu.patch
 		"${FILESDIR}"/0016-dlang-update-zlib-binding.patch
 		"${FILESDIR}"/0017-dlang-fix-fcntl-on-mips-add-libucontext-dep.patch
-		"${FILESDIR}"/0018-ada-fix-shared-linking.patch
 		"${FILESDIR}"/0019-build-fix-CXXFLAGS_FOR_BUILD-passing.patch
 		"${FILESDIR}"/0020-add-fortify-headers-paths.patch
 		"${FILESDIR}"/0022-DP-Use-push-state-pop-state-for-gold-as-well-when-li.patch
 		"${FILESDIR}"/0024-use-pure-64-bit-configuration-where-appropriate.patch
-		"${FILESDIR}"/0026-ada-libgnarl-compatibility-for-musl.patch
-		"${FILESDIR}"/0027-ada-musl-support-fixes.patch
 		"${FILESDIR}"/0028-gcc-go-Use-_off_t-type-instead-of-_loff_t.patch
 		"${FILESDIR}"/0029-gcc-go-Don-t-include-sys-user.h.patch
-		"${FILESDIR}"/0030-gcc-go-Fix-ucontext_t-on-PPC64.patch
 		"${FILESDIR}"/0031-gcc-go-Fix-handling-of-signal-34-on-musl.patch
 		"${FILESDIR}"/0032-gcc-go-Use-int64-type-as-offset-argument-for-mmap.patch
 		"${FILESDIR}"/0033-gcc-go-Fix-st_-a-m-c-tim-fields-in-generated-sysinfo.patch
@@ -64,8 +60,6 @@ PATCHES=(
 		"${FILESDIR}"/0035-gcc-go-Prefer-_off_t-over-_off64_t.patch
 		"${FILESDIR}"/0036-gcc-go-undef-SETCONTEXT_CLOBBERS_TLS-in-proc.c.patch
 		"${FILESDIR}"/0037-gcc-go-link-to-libucontext.patch
-		"${FILESDIR}"/0038-gcc-go-Disable-printing-of-unaccessible-ppc64-struct.patch
-		"${FILESDIR}"/0040-CRuntime_Musl-Support-v1.2.0-for-32-bits.patch
 )
 
 filter-flags -D_FORTIFY_SOURCE\=\* -Wl,-z,combreloc -Wl,-z,relro -Wl,-z,defs -Wl,-z,now -fstack-protector-strong -fstack-clash-protection
@@ -90,6 +84,11 @@ src_prepare() {
 }
 
 src_configure() {
+	local GCC_LANG="c,c++"
+	use lto   && GCC_LANG+=",lto"
+	use dlang   && GCC_LANG+=",d"
+	use golang  && GCC_LANG+=",go"
+
 	cd gcc-build
 
 	# using -pipe causes spurious test-suite failures
@@ -129,7 +128,7 @@ src_configure() {
     	--enable-default-ssp
     	--enable-gnu-indirect-function
     	--enable-gnu-unique-object
-		--enable-languages=c,c++,lto
+		--enable-languages=${GCC_LANG}
       	--enable-libstdcxx-time
     	--enable-linker-build-id
     	--enable-lto
@@ -164,7 +163,10 @@ src_install() {
 	find "${ED}" -name libcc1plugin.la -delete
 	find "${ED}" -name libcp1plugin.la -delete
 
-	patchelf --remove-rpath /usr/lib/libstdc++.so.*
+	patchelf --remove-rpath "${ED}"/usr/lib/libstdc++.so.*
 
 	dosym gcc usr/bin/cc
+
+	dobin "${FILESDIR}"/c89
+	dobin "${FILESDIR}"/c99
 }

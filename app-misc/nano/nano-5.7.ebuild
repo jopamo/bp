@@ -14,10 +14,11 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug justify +magic minimal nls static"
 
-LIB_DEPEND="lib-sys/ncurses
+LIB_DEPEND="
 	lib-sys/ncurses:0=[static-libs(+)]
 	magic? ( sys-app/file[static-libs(+)] )
-	nls? ( sys-devel/gettext )"
+	nls? ( sys-devel/gettext )
+"
 
 RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
 
@@ -28,7 +29,6 @@ DEPEND="${RDEPEND}
 src_configure() {
 	use static && append-ldflags -static
 	local myconf=(
-		--without-slang
 		--disable-wrapping
 		--enable-utf8
 		--disable-speller

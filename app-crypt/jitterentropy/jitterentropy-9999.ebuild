@@ -16,7 +16,9 @@ IUSE="systemd"
 
 PATCHES=( "${FILESDIR}"/${PN}-do-not-strip-and-compress.patch )
 
+replace-flags -O2 -O0
 replace-flags -O3 -O0
+replace-flags -Os -O0
 
 src_install() {
 	emake PREFIX="${EPREFIX}/usr" \

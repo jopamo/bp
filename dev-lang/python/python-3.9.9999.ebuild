@@ -19,7 +19,8 @@ IUSE="bytecode ipv6 +sqlite static valgrind"
 
 RESTRICT="test"
 
-DEPEND="sqlite? ( lib-sys/sqlite )
+DEPEND="
+	sqlite? ( lib-sys/sqlite )
 	app-compression/bzip2:0=
 	app-compression/xz-utils:0=
 	>=lib-sys/zlib-1.1.3:0=
@@ -30,7 +31,9 @@ DEPEND="sqlite? ( lib-sys/sqlite )
 	>=lib-sys/ncurses-5.2:0=
 	>=lib-sys/readline-4.1:0=
 	virtual/ssl
-	dev-util/pkgconf"
+"
+
+BDEPEND="sys-devel/autoconf-archive"
 
 PDEPEND="app-eselect/eselect-python"
 

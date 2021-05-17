@@ -12,8 +12,8 @@ if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
 	S="${WORKDIR}/${P}/repoman"
 else
-	SNAPSHOT=e29177fcd2950199afa4f83673c0771afb261123
-	SRC_URI="https://github.com/gentoo/portage/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	SNAPSHOT=e26a08896f098ff93530efcd2d77d60d2eff0257
+	SRC_URI="https://github.com/gentoo/portage/archive/${SNAPSHOT}.tar.gz -> portage-${PV}.tar.gz"
 	S=${WORKDIR}/portage-${SNAPSHOT}/repoman
 fi
 

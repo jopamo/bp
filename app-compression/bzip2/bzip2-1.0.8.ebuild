@@ -35,4 +35,7 @@ src_install() {
 
 	insinto /usr/include
 	doins bzlib.h
+
+	insinto /usr/lib/pkgconfig
+	doins "${FILESDIR}"
 }

@@ -13,19 +13,18 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="+manpager nls static-libs zlib"
 
-CDEPEND=">=lib-dev/libpipeline-1.4.0
+DEPEND="
+	>=lib-dev/libpipeline-1.4.0
 	lib-sys/gdbm
 	sys-app/groff
 	zlib? ( lib-sys/zlib )
-	!sys-app/man"
-DEPEND="${CDEPEND}
 	app-compression/xz-utils
 	dev-util/pkgconf
 	nls? (
 		>=app-text/po4a-0.45
 		sys-devel/gettext
 	)"
-RDEPEND="${CDEPEND}"
+
 PDEPEND="manpager? ( sys-app/less )"
 
 filter-flags -Wl,-z,defs

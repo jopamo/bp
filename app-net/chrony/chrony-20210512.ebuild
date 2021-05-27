@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://git.tuxfamily.org/chrony/chrony.git"
 	inherit git-r3
 else
-	SNAPSHOT=9d869d87097cdedb007c5a7a9684a790b867d268
+	SNAPSHOT=885e7774fd87ce1a27d42371ea6adf2ce2a8e383
 	SRC_URI="https://git.tuxfamily.org/chrony/chrony.git/snapshot/chrony-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

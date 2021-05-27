@@ -15,8 +15,8 @@ KEYWORDS="amd64 arm64"
 IUSE="debug"
 
 DEPEND="
-	lib-dev/libevent:0=
-	lib-sys/ncurses:0=
+	lib-dev/libevent
+	lib-sys/ncurses
 "
 
 PATCHES=( "${FILESDIR}/${PN}-2.4-flags.patch" )

@@ -4,33 +4,23 @@ EAPI=7
 
 inherit toolchain-funcs flag-o-matic
 
-if [[ ${PV} == "9999" ]] ; then
-	EGIT_REPO_URI="git://git.kernel.org/pub/scm/linux/kernel/git/shemminger/iproute2.git"
-	inherit git-r3
-else
-	SRC_URI="mirror://kernel/linux/utils/net/${PN}/${P}.tar.xz"
-	KEYWORDS="amd64 arm64"
-fi
-
 DESCRIPTION="kernel routing and traffic control utilities"
 HOMEPAGE="https://wiki.linuxfoundation.org/networking/iproute2"
+SRC_URI="mirror://kernel/linux/utils/net/${PN}/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="atm +elf minimal static-libs"
 
-RDEPEND="
-	!minimal? ( lib-net/libmnl )
-	elf? ( lib-dev/elfutils )
-"
-
 DEPEND="
-	${RDEPEND}
 	app-compression/xz-utils
 	>=sys-devel/bison-2.4
 	sys-devel/flex
 	sys-kernel/linux-headers
+	!minimal? ( lib-net/libmnl )
+	elf? ( lib-dev/elfutils )
 "
 
 filter-flags -Wl,-z,defs

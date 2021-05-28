@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/gnutls/nettle.git"
 	inherit git-r3
 else
-	SNAPSHOT=53b71192704878f3f19b6c8baabf41ae35ab5b2e
+	SNAPSHOT=a46a17e9f57c64984d5246aa3475e45f8c562ec7
 	SRC_URI="https://github.com/gnutls/nettle/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"

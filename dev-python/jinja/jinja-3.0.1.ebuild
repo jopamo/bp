@@ -38,16 +38,3 @@ python_compile() {
 python_test() {
 	py.test || die
 }
-
-python_install_all() {
-	distutils-r1_python_install_all
-
-	insinto /usr/share/vim/vimfiles/syntax
-	doins ext/Vim/*
-}
-
-pkg_postinst() {
-	if ! has_version dev-python/Babel; then
-		elog "For i18n support, please emerge dev-python/Babel."
-	fi
-}

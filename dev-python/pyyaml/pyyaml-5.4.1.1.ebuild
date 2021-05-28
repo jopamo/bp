@@ -4,17 +4,13 @@ EAPI=7
 
 inherit distutils-r1
 
-MY_P="PyYAML-${PV}"
-
 DESCRIPTION="YAML parser and emitter for Python"
 HOMEPAGE="https://pyyaml.org/wiki/PyYAML https://pypi.org/project/PyYAML/"
-SRC_URI="https://pyyaml.org/download/${PN}/${MY_P}.tar.gz"
+SRC_URI="https://github.com/yaml/pyyaml/archive/${PV}.tar.gz -> ${P}.gh.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-S="${WORKDIR}/${MY_P}"
 
 python_test() {
 	esetup.py test

@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT=7cfe134090957d2127a5e2a13fa2e0c55c4e4a97
+SNAPSHOT=8eb6f8ace41f9c9a5bd7c14ecb113756162847c0
 
 inherit autotools flag-o-matic
 
@@ -15,7 +15,7 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl pam skey systemd xattr"
+IUSE="acl pam skey subids systemd xattr"
 
 DEPEND="
 	app-compression/xz-utils
@@ -34,12 +34,14 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--without-group-name-max-length
+		--with-group-name-max-length=32
 		--without-tcb
 		--disable-account-tools-setuid
+		--disable-subordinate-ids
 		$(use_with acl)
 		--without-audit
 		$(use_with skey)
+		$(use_enable subids subordinate-ids)
 		$(use_with pam libpam)
 		$(use_with xattr attr)
 	)

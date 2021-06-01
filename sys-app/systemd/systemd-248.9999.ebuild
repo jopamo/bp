@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="binfmt +blkid coredump cryptsetup devmode dhcp4 efi gcrypt
-+hostnamed hwdb importd kmod ldconfig localed logind machined networkd
++hostnamed hwdb importd kmod kvm ldconfig localed logind machined networkd
 oomd pam pcre pstore p11kit rfkill sleep systemd-update sysv +timedated
 +tmpfiles test vconsole xkb"
 
@@ -228,6 +228,17 @@ DHCP=ipv4' > "${ED}"/etc/systemd/network/ipv4dhcp.network
 	sed -i "s/\#Audit\=yes/Audit\=no/g" "${ED}"/etc/systemd/journald.conf || die
 
 	sed -i "s/\#SystemMaxUse\=/SystemMaxUse\=128M/g" "${ED}"/etc/systemd/journald.conf || die
+
+	insinto usr/lib/udev/rules.d/
+	doins "${FILESDIR}"/50-udev-default.rules.nokvm
+
+	if ! use kvm; then
+		insinto usr/lib/udev/rules.d/
+		doins "${FILESDIR}"/50-udev-default.rules
+
+		insinto usr/lib/tmpfiles.d/
+		doins "${FILESDIR}"/static-nodes-permissions.conf
+	fi
 }
 
 pkg_postinst() {
@@ -237,7 +248,7 @@ pkg_postinst() {
 
 	use networkd && newusergroup systemd-network
 	use coredump && newusergroup systemd-coredump
-
+	use kvm && enewgroup kvm 78
 	systemd_update_catalog
 
 	udevadm hwdb --update --root="${EROOT%/}"

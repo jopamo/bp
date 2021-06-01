@@ -4,7 +4,7 @@ EAPI=7
 
 inherit autotools
 
-SNAPSHOT=abe1ff1ff379e38629d57d7ef7221d4c770ad1b8
+SNAPSHOT=809d5e84f3423ab8165650d923acb0e246cbd006
 
 DESCRIPTION="C library that resolves names asynchronously"
 HOMEPAGE="https://c-ares.haxx.se/"

@@ -53,6 +53,7 @@ src_install() {
 	unset MAKEFLAGS
 
 	emake \
+		V=1 \
 		STRIP=: \
 		DESTDIR="${D}" \
 		install install-libs

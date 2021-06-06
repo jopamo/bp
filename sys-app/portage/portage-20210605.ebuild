@@ -40,6 +40,11 @@ RDEPEND="
 "
 PDEPEND=">=app-net/rsync-2.6.4"
 
+PATCHES=( "${FILESDIR}"/phase-helpers.patch
+			"${FILESDIR}"/add-funcs.patch
+			"${FILESDIR}"/makeglobals.patch
+)
+
 filter-flags -Wl,-z,defs
 
 pkg_pretend() {
@@ -52,7 +57,6 @@ python_prepare_all() {
 	distutils-r1_python_prepare_all
 
 	find ${S} -type f -print0 | xargs -0 sed -i 's/\/var\/db\/repos\/gentoo/\/var\/db\/repos\/bp/g'
-	cp {${FILESDIR}/phase-helpers.sh,${FILESDIR}/eapi7-ver-funcs.sh} bin/
 
 	einfo "Disabling --dynamic-deps by default for gentoo-dev..."
 	sed -e 's:\("--dynamic-deps", \)\("y"\):\1"n":' \
@@ -147,9 +151,6 @@ location = /var/db/repos/gui\n\
 sync-type = git\n\
 sync-uri = https://gitlab.com/pjo/gui.git\n\
 auto-sync = yes" >> "${ED}"/usr/share/portage/config/repos.conf
-
-	insinto usr/share/portage/config/
-	doins ${FILESDIR}/make.globals
 
 	cleanup_install
 }

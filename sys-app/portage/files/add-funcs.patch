@@ -1,0 +1,162 @@
+diff -urN a/bin/eapi7-ver-funcs.sh b/bin/eapi7-ver-funcs.sh
+--- a/bin/eapi7-ver-funcs.sh	2021-06-06 16:09:52.332518575 -0500
++++ b/bin/eapi7-ver-funcs.sh	2021-06-06 16:23:38.198872067 -0500
+@@ -189,3 +189,158 @@
+ 	__eapi7_ver_compare "${va}" "${vb}"
+ 	test $? "${op}" 2
+ }
++
++strip-linguas() {
++	local ls newls nols
++	if [[ $1 == "-i" ]] || [[ $1 == "-u" ]] ; then
++		local op=$1; shift
++		ls=$(find "$1" -name '*.po' -exec basename {} .po ';'); shift
++		local d f
++		for d in "$@" ; do
++			if [[ ${op} == "-u" ]] ; then
++				newls=${ls}
++			else
++				newls=""
++			fi
++			for f in $(find "$d" -name '*.po' -exec basename {} .po ';') ; do
++				if [[ ${op} == "-i" ]] ; then
++					has ${f} ${ls} && newls="${newls} ${f}"
++				else
++					has ${f} ${ls} || newls="${newls} ${f}"
++				fi
++			done
++			ls=${newls}
++		done
++	else
++		ls="$@"
++	fi
++
++	nols=""
++	newls=""
++	for f in ${LINGUAS} ; do
++		if has ${f} ${ls} ; then
++			newls="${newls} ${f}"
++		else
++			nols="${nols} ${f}"
++		fi
++	done
++	[[ -n ${nols} ]] \
++		&& einfo "Sorry, but ${PN} does not support the LINGUAS:" ${nols}
++	export LINGUAS=${newls:1}
++}
++
++# @FUNCTION: cleanup_install
++# @DESCRIPTION:
++# Minimize the installed files
++cleanup_install() {
++	find "${D}" -name '*.la' -delete || die
++	rm -rf "${ED}"/usr/share/{bash-completion,doc,zsh}
++	rm -rf "${ED}"/usr/share/man/{ca,de*,es,fr*,it,ja*,pl,pt,pt_BR,ru*,uk,zh_CHS}
++	rm -rf "${ED}"/usr/share/locale/{a*,b*,c*,d*,el,en_CA,en_GB,eo,es*,et,eu,f*,g*,h*,i*,j*,k*,lg,li,lt,lv,m*,n*,o*,p*,q*,r*,s*,t*,u*,v*,w*,x*,y*,z*}
++	rm -rf "${ED}"/usr/share/i18n/locales/{a*,b*,c*,d*,e{l,o,s,t,u}*,f*,g*,h*,i{a,d,g,k,t,u}*,j*,k*,l*,m*,n*,o*,p*,q*,r*,s*,t{a,c,e,g,h,i,k,l,n,o,p}*,u*,v*,w*,x*,y*,z*}
++}
++
++# @FUNCTION: xdg_environment_reset
++# @DESCRIPTION:
++# Clean up environment for clean builds.
++xdg_environment_reset() {
++	# Prepare XDG base directories
++	export XDG_DATA_HOME="${HOME}/.local/share"
++	export XDG_CONFIG_HOME="${HOME}/.config"
++	export XDG_CACHE_HOME="${HOME}/.cache"
++	export XDG_RUNTIME_DIR="${T}/run"
++	mkdir -p "${XDG_DATA_HOME}" "${XDG_CONFIG_HOME}" "${XDG_CACHE_HOME}" \
++		"${XDG_RUNTIME_DIR}" || die
++	# This directory needs to be owned by the user, and chmod 0700
++	# https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
++	chmod 0700 "${XDG_RUNTIME_DIR}" || die
++
++	unset DBUS_SESSION_BUS_ADDRESS
++}
++
++# @FUNCTION: eprefixify
++# @USAGE: <list of to be eprefixified files>
++# @DESCRIPTION:
++# replaces @GENTOO_PORTAGE_EPREFIX@ with ${EPREFIX} for the given files,
++# dies if no arguments are given, a file does not exist, or changing a
++# file failed.
++eprefixify() {
++	[[ $# -lt 1 ]] && die "at least one argument required"
++
++	einfo "Adjusting to prefix ${EPREFIX:-/}"
++	local x
++	for x in "$@" ; do
++		if [[ -e ${x} ]] ; then
++			ebegin "  ${x##*/}"
++			sed -i -e "s|@GENTOO_PORTAGE_EPREFIX@|${EPREFIX}|g" "${x}"
++			eend $? || die "failed to eprefixify ${x}"
++		else
++			die "${x} does not exist"
++		fi
++	done
++
++	return 0
++}
++
++# @FUNCTION: hprefixify
++# @USAGE: [ -w <line match> ] [ -e <extended regex> ] [ -q <quotation char> ] <list of files>
++# @DESCRIPTION:
++# Tries a set of heuristics to prefixify the given files. Dies if no
++# arguments are given, a file does not exist, or changing a file failed.
++#
++# Additional extended regular expression can be passed by -e or
++# environment variable PREFIX_EXTRA_REGEX.  The default heuristics can
++# be constrained to lines that match a sed expression passed by -w or
++# environment variable PREFIX_LINE_MATCH.  Quotation characters can be
++# specified by -q or environment variable PREFIX_QUOTE_CHAR, unless
++# EPREFIX is empty.
++#
++# @EXAMPLE:
++# Only prefixify the 30th line,
++#   hprefixify -w 30 configure
++# Only prefixify lines that contain "PATH",
++#   hprefixify -w "/PATH/" configure
++# Also delete all the /opt/gnu search paths,
++#   hprefixify -e "/\/opt\/gnu/d" configure
++# Quote the inserted EPREFIX
++#   hprefixify -q '"' etc/profile
++hprefixify() {
++	use prefix || return 0
++
++	local xl=() x
++	while [[ $# -gt 0 ]]; do
++		case $1 in
++			-e) local PREFIX_EXTRA_REGEX="$2"
++				shift
++				;;
++			-w) local PREFIX_LINE_MATCH="$2"
++				shift
++				;;
++			-q) local PREFIX_QUOTE_CHAR="${EPREFIX:+$2}"
++				shift
++				;;
++			*)
++				xl+=( "$1" )
++				;;
++		esac
++		shift
++	done
++	local dirs="/(usr|lib(|[onx]?32|n?64)|etc|bin|sbin|var|opt|run)" \
++		  eprefix="${PREFIX_QUOTE_CHAR}${EPREFIX}${PREFIX_QUOTE_CHAR}"
++
++	[[ ${#xl[@]} -lt 1 ]] && die "at least one file operand is required"
++	einfo "Adjusting to prefix ${EPREFIX:-/}"
++	for x in "${xl[@]}" ; do
++		if [[ -e ${x} ]] ; then
++			ebegin "  ${x##*/}"
++			sed -r \
++				-e "${PREFIX_LINE_MATCH}s,([^[:alnum:]}\)\.])${dirs},\1${eprefix}/\2,g" \
++				-e "${PREFIX_LINE_MATCH}s,^${dirs},${eprefix}/\1," \
++				-e "${PREFIX_EXTRA_REGEX}" \
++				-i "${x}"
++			eend $? || die "failed to prefixify ${x}"
++		else
++			die "${x} does not exist"
++		fi
++	done
++}

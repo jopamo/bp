@@ -88,7 +88,10 @@ src_prepare() {
 		cmake_src_bootstrap
 	fi
 
+	#remove default optimizations
+	find ${S} -type f -print0 | xargs -0 sed -i 's/\-Wl,\-O2\ //g'
 	find ${S} -type f -print0 | xargs -0 sed -i 's/\ \-O2//g'
+	find ${S} -type f -print0 | xargs -0 sed -i 's/\-Wl,\-O2//g'
 }
 
 src_configure() {

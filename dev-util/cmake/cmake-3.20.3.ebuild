@@ -87,6 +87,8 @@ src_prepare() {
 		CMAKE_BINARY="${S}/Bootstrap.cmk/cmake"
 		cmake_src_bootstrap
 	fi
+
+	find ${S} -type f -print0 | xargs -0 sed -i 's/\ \-O2//g'
 }
 
 src_configure() {

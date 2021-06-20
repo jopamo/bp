@@ -10,11 +10,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND=">=sys-devel/m4-1.4.16
-	>=dev-lang/perl-5.6"
-
-PATCHES=(
-		"${FILESDIR}"/${PN}-2.69-perl-5.26.patch
-		"${FILESDIR}"/${P}-fix-libtool-test.patch
-		"${FILESDIR}"/${PN}-2.69-perl-5.26-2.patch
-	)
+DEPEND="
+	>=sys-devel/m4-1.4.16
+	>=dev-lang/perl-5.6
+"

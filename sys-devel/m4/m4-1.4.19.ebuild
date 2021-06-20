@@ -12,15 +12,11 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="app-compression/xz-utils"
 
-PATCHES=( ${FILESDIR}/0001-fflush-adjust-to-glibc-2.28-libio.h-removal.patch )
-
 src_configure() {
 	# Disable automagic dependency over libsigsegv; see bug #278026
 	export ac_cv_libsigsegv=no
 
-	local myconf=""
-	[[ ${USERLAND} != "GNU" ]] && myconf="--program-prefix=g"
-	econf --enable-changeword ${myconf}
+	econf --enable-changeword
 }
 
 src_test() {

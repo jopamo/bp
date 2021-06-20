@@ -18,10 +18,10 @@ KEYWORDS="amd64 arm64"
 IUSE="debug dlang golang +isl +lto sanitize +vtv zstd"
 
 DEPEND="
-	lib-dev/isl
 	lib-dev/mpc
 	lib-sys/zlib
 	sys-devel/binutils
+	isl? ( lib-dev/isl )
 	zstd? ( app-compression/zstd )
 "
 

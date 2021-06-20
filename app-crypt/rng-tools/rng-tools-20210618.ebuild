@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/nhorman/${PN}.git"
 	inherit git-r3
 else
-	SNAPSHOT=54c9139b328203c4b8c014039e581fc461628b4e
+	SNAPSHOT=d207e0b660bc1bf681ee0ff8cc5a7642ecc8323f
 	SRC_URI="https://github.com/nhorman/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -23,8 +23,10 @@ KEYWORDS="amd64 arm64"
 IUSE="+jitterentropy nistbeacon"
 
 DEPEND="
+	app-net/curl
 	jitterentropy? ( app-crypt/jitterentropy )
 	sys-fs/sysfsutils
+	lib-dev/jansson
 "
 
 src_prepare() {

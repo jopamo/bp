@@ -6,7 +6,7 @@ inherit flag-o-matic multibuild toolchain-funcs
 
 DESCRIPTION="GNU GRUB boot loader"
 HOMEPAGE="https://www.gnu.org/software/grub/"
-SRC_URI="https://1g4.org/files/${P}.tar.xz"
+SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"

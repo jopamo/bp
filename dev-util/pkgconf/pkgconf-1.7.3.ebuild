@@ -2,10 +2,8 @@
 
 EAPI=7
 
-inherit autotools
-
-DESCRIPTION="pkg-config compatible replacement with no dependencies other than ANSI C89"
-HOMEPAGE="https://github.com/pkgconf/pkgconf"
+DESCRIPTION="a program which helps to configure compiler and linker flags for development libraries"
+HOMEPAGE="https://git.sr.ht/~kaniini/pkgconf"
 
 if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="http://git.dereferenced.org/pkgconf/pkgconf.git"
@@ -15,17 +13,12 @@ else
 fi
 
 LICENSE="ISC"
-SLOT="0/3"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs test"
 
 RESTRICT="!test? ( test )"
-
-src_prepare() {
-	default
-	eautoreconf
-}
 
 src_test() {
 	unset PKG_CONFIG_LIBDIR PKG_CONFIG_PATH

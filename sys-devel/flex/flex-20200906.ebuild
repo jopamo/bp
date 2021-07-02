@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT=7b073fdda2242a8e4a0f70244c0ae83d34f099b1
+SNAPSHOT=04c5b7c9209801aa1bdbf279ccdcde0d57874a55
 
 inherit autotools flag-o-matic
 
@@ -13,8 +13,7 @@ S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="FLEX"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
-#yy_init_buffer changes causing problems
+KEYWORDS="amd64 arm64"
 
 IUSE="nls static-libs test"
 

@@ -12,9 +12,16 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+IUSE="static-libs"
+
 DEPEND="sys-app/util-linux"
 
 src_prepare() {
 	default
 	eautoreconf
+}
+
+src_install() {
+	default
+	use static-libs || find "${ED}" -name '*.a' -delete
 }

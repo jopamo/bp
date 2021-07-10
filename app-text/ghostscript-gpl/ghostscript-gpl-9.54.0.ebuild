@@ -32,12 +32,7 @@ COMMON_DEPEND="
 	X? ( x11-libs/libXt x11-libs/libXext )
 "
 
-DEPEND="${COMMON_DEPEND}
-	dev-util/pkgconf
-"
-
-RDEPEND="${COMMON_DEPEND}
-	>=app-text/poppler-data-0.4.5-r1"
+BDEPEND="dev-util/pkgconf"
 
 filter-flags -Wl,-z,defs
 

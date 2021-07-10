@@ -28,7 +28,7 @@ DEPEND="${RDEPEND}
 		${PYTHON_DEPS}
 		dev-lang/perl
 		)
-	libpsl? ( lib-dev/libpsl )
+	libpsl? ( lib-net/libpsl )
 	nls? ( sys-devel/gettext )
 	virtual/ssl"
 

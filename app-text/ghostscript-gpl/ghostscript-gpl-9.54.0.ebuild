@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="cups dbus gtk static-libs tiff X"
 
-COMMON_DEPEND="
+DEPEND="
 	app-text/libpaper
 	lib-media/fontconfig
 	>=lib-media/freetype-2.4.9:2=

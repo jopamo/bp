@@ -20,7 +20,7 @@ IUSE="adns ipv6 ldap libpsl mbedtls ssh ssl static-libs test nghttp2 zstd"
 
 DEPEND="
 		ldap? ( app-net/openldap )
-		libpsl? ( lib-dev/libpsl )
+		libpsl? ( lib-net/libpsl )
 		adns? ( lib-net/c-ares:0 )
 		ssh? ( lib-net/libssh2[static-libs?] )
 		nghttp2? ( lib-net/nghttp2[static-libs?] )

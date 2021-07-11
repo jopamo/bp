@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT=0530e2e0d8c9ecb5171e70bc48e1a6566f317378
+SNAPSHOT=1f5d54a06df01ca3032ca2d29159584cab7d7509
 
 inherit flag-o-matic systemd toolchain-funcs
 

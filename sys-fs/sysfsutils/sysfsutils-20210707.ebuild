@@ -6,7 +6,15 @@ inherit autotools toolchain-funcs
 
 DESCRIPTION="System Utilities Based on Sysfs"
 HOMEPAGE="http://linux-diag.sourceforge.net/Sysfsutils.html"
-SRC_URI="mirror://sourceforge/linux-diag/${P}.tar.gz"
+
+if [[ ${PV} == *9999* ]]; then
+	EGIT_REPO_URI="https://github.com/linux-ras/sysfsutils.git"
+	inherit git-r3
+else
+	SNAPSHOT=ce2870e61996b4e86203d4663f1c041e7a5fd3bd
+	SRC_URI="https://github.com/linux-ras/sysfsutils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"

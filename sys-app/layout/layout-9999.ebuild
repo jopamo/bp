@@ -40,6 +40,7 @@ src_install() {
 	dosym /usr/lib /usr/lib64
 	keepdir /usr/local/lib
 	dosym /usr/local/lib /usr/local/lib64
+	dosym /tmp /usr/tmp
 }
 
 pkg_postinst() {

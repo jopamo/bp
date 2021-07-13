@@ -219,6 +219,8 @@ src_install() {
 	use static-libs || find "${ED}" -name '*.la' -delete
 
 	echo -e "en_US.UTF-8 UTF-8\nen_US ISO-8859-1" > "${ED}"/usr/share/i18n/locales/SUPPORTED
+
+	dodir /usr/lib/locale
 }
 
 pkg_preinst() {
@@ -256,4 +258,6 @@ pkg_postinst() {
 			fi
 		done
 	fi
+
+	"${EROOT}"/usr/bin/locale-gen
 }

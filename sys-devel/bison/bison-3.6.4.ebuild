@@ -2,8 +2,6 @@
 
 EAPI=7
 
-inherit flag-o-matic
-
 DESCRIPTION="A general-purpose (yacc-compatible) parser generator"
 HOMEPAGE="https://www.gnu.org/software/bison/"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
@@ -38,21 +36,5 @@ src_configure() {
 src_install() {
 	default
 
-	mv "${ED}"/usr/bin/yacc{,.bison} || die
-	mv "${ED}"/usr/share/man/man1/yacc{,.bison}.1 || die
-	rm -r "${ED}"/usr/lib* || die
-}
-
-pkg_postinst() {
-	local f="${EROOT}/usr/bin/yacc"
-	if [[ ! -e ${f} ]] ; then
-		ln -s yacc.bison "${f}"
-	fi
-}
-
-pkg_postrm() {
-	local f="${EROOT}/usr/bin/yacc"
-	if [[ -L ${f} && ! -e ${f} ]] ; then
-		rm -f "${f}"
-	fi
+	rm -f "${ED}"/usr/lib/liby.a || die
 }

@@ -14,6 +14,8 @@ LICENSE="tcltk"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+BDEPEND="dev-util/patchelf"
+
 src_prepare() {
 	eautoreconf
 	default
@@ -35,7 +37,9 @@ src_configure() {
 src_install() {
 	default
 
-	for x in libtcl$(ver_cut 1-2).so.1 libtcl.so ; do
+	for x in libtcl$(ver_cut 1-2).so.1 libtcl.so libtcl.so.$(ver_cut 1-2).0 ; do
 		dosym libtcl$(ver_cut 1-2).so usr/lib/${x}
 	done
+
+	patchelf --set-soname libtcl.so.$(ver_cut 1-2).0 "${ED}"/usr/lib/libtcl8.6.so
 }

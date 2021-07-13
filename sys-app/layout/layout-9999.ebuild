@@ -36,6 +36,10 @@ src_install() {
 	# need the makefile in pkg_preinst
 	insinto /usr/share/${PN}
 	doins Makefile
+
+	dosym /usr/lib /usr/lib64
+	keepdir /usr/local/lib
+	dosym /usr/local/lib /usr/local/lib64
 }
 
 pkg_postinst() {

@@ -2,9 +2,7 @@
 
 EAPI=7
 
-inherit toolchain-funcs
-
-SNAPSHOT=edc8b9b6ec1c7751ccb9a483405c99141ba237fc
+SNAPSHOT=4069341e184471dccf407ca8410daa4c4fd634f5
 
 DESCRIPTION="User-space application to modify the EFI boot manager"
 HOMEPAGE="https://github.com/rhinstaller/efibootmgr"
@@ -28,6 +26,5 @@ src_prepare() {
 }
 
 src_configure() {
-	tc-export CC
 	export EFIDIR="1g4"
 }

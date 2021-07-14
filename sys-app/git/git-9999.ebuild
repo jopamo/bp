@@ -21,10 +21,12 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs perl gitweb"
 
-DEPEND="sys-devel/gettext
+DEPEND="
+	sys-devel/gettext
 	app-net/curl
 	lib-dev/libpcre2
-	lib-dev/expat"
+	lib-dev/expat
+"
 
 src_prepare() {
 	default

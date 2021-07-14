@@ -58,4 +58,7 @@ src_install() {
 	rm -f "${ED}"/usr/lib/lib{bfd,opcodes}.so
 	echo 'INPUT( /usr/lib/libbfd.a -liberty -lz -ldl )' > "${ED}"/usr/lib/libbfd.so
 	echo 'INPUT( /usr/lib/libopcodes.a -lbfd )' > "${ED}"/usr/lib/libopcodes.so
+
+	dosym ld /usr/bin/${CHOST}-ld
+	dosym objdump /usr/bin/${CHOST}-objdump
 }

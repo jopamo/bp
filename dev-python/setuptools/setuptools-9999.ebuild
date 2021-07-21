@@ -22,25 +22,28 @@ PDEPEND="dev-python/certifi[${PYTHON_USEDEP}]"
 
 # Force in-source build because build system modifies sources.
 DISTUTILS_IN_SOURCE_BUILD=1
-DISTUTILS_USE_SETUPTOOLS=no
-
-python_prepare_all() {
-	python_setup
-	${EPYTHON} bootstrap.py || die
-
-	# disable tests requiring a network connection
-	rm setuptools/tests/test_packageindex.py || die
-
-	# don't run integration tests
-	rm setuptools/tests/test_integration.py || die
-
-	distutils-r1_python_prepare_all
-}
 
 python_test() {
+	# keep in sync with python_gen_cond_dep above!
+	has "${EPYTHON}" python3.{8..10} pypy3 || continue
+
+	distutils_install_for_testing
+	local deselect=(
+		# network
+		'setuptools/tests/test_virtualenv.py::test_pip_upgrade_from_source[None]'
+		setuptools/tests/test_distutils_adoption.py
+		# TODO
+		setuptools/tests/test_easy_install.py::TestSetupRequires::test_setup_requires_with_allow_hosts
+	)
+	[[ ${EPYTHON} == pypy3 ]] && deselect+=(
+		setuptools/tests/test_develop.py::TestDevelop::test_2to3_user_mode
+	)
+
 	# test_easy_install raises a SandboxViolation due to ${HOME}/.pydistutils.cfg
 	# It tries to sandbox the test in a tempdir
-	HOME="${PWD}" py.test --verbose ${PN} || die "Tests failed under ${EPYTHON}"
+	HOME="${PWD}" epytest ${deselect[@]/#/--deselect } \
+		-n "$(makeopts_jobs "${MAKEOPTS}" "$(get_nproc)")" \
+		setuptools
 }
 
 python_install() {

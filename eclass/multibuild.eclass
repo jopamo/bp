@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: multibuild.eclass
@@ -6,7 +6,7 @@
 # Michał Górny <mgorny@gentoo.org>
 # @AUTHOR:
 # Author: Michał Górny <mgorny@gentoo.org>
-# @SUPPORTED_EAPIS: 4 5 6 7
+# @SUPPORTED_EAPIS: 4 5 6 7 8
 # @BLURB: A generic eclass for building multiple variants of packages.
 # @DESCRIPTION:
 # The multibuild eclass aims to provide a generic framework for building
@@ -14,10 +14,10 @@
 # implementations).
 
 case "${EAPI:-0}" in
-	0|1|2|3)
+	[0-3])
 		die "Unsupported EAPI=${EAPI:-0} (too old) for ${ECLASS}"
 		;;
-	4|5|6|7)
+	[4-8])
 		;;
 	*)
 		die "Unsupported EAPI=${EAPI} (unknown) for ${ECLASS}"
@@ -239,22 +239,31 @@ multibuild_merge_root() {
 
 	local ret
 
-	local cp_args=()
+	if use userland_BSD; then
+		# Most of BSD variants fail to copy broken symlinks, #447370
+		# also, they do not support --version
 
-	if cp -a --version &>/dev/null; then
-		cp_args+=( -a )
+		tar -C "${src}" -f - -c . \
+			| tar -x -f - -C "${dest}"
+		[[ ${PIPESTATUS[*]} == '0 0' ]]
+		ret=${?}
 	else
-		cp_args+=( -P -R -p )
+		local cp_args=()
+
+		if cp -a --version &>/dev/null; then
+			cp_args+=( -a )
+		else
+			cp_args+=( -P -R -p )
+		fi
+
+		if cp --reflink=auto --version &>/dev/null; then
+			# enable reflinking if possible to make this faster
+			cp_args+=( --reflink=auto )
+		fi
+
+		cp "${cp_args[@]}" "${src}"/. "${dest}"/
+		ret=${?}
 	fi
-
-	if cp --reflink=auto --version &>/dev/null; then
-		# enable reflinking if possible to make this faster
-		cp_args+=( --reflink=auto )
-	fi
-
-	cp "${cp_args[@]}" "${src}"/. "${dest}"/
-	ret=${?}
-
 
 	if [[ ${ret} -ne 0 ]]; then
 		die "${MULTIBUILD_VARIANT:-(unknown)}: merging image failed."

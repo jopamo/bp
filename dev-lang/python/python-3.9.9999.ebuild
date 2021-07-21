@@ -21,15 +21,15 @@ RESTRICT="test"
 
 DEPEND="
 	sqlite? ( lib-sys/sqlite )
-	app-compression/bzip2:0=
-	app-compression/xz-utils:0=
-	>=lib-sys/zlib-1.1.3:0=
+	app-compression/bzip2
+	app-compression/xz-utils
 	lib-dev/libffi
-	sys-devel/gettext
-	lib-sys/gdbm
 	lib-net/libnsl
-	>=lib-sys/ncurses-5.2:0=
-	>=lib-sys/readline-4.1:0=
+	lib-sys/gdbm
+	lib-sys/ncurses
+	lib-sys/readline
+	lib-sys/zlib
+	sys-devel/gettext
 	virtual/ssl
 "
 

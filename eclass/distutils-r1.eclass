@@ -97,7 +97,6 @@ esac
 
 if [[ ! ${_DISTUTILS_R1} ]]; then
 
-[[ ${EAPI} == 6 ]] && inherit eutils xdg-utils
 inherit multiprocessing toolchain-funcs
 
 if [[ ! ${DISTUTILS_SINGLE_IMPL} ]]; then
@@ -927,7 +926,7 @@ distutils-r1_python_install() {
 	local shopt_save=$(shopt -p nullglob)
 	shopt -s nullglob
 	local pypy_dirs=(
-		"${root}/usr/$(get_libdir)"/pypy*/share
+		"${root}/usr/lib"/pypy*/share
 		"${root}/usr/lib"/pypy*/share
 	)
 	${shopt_save}

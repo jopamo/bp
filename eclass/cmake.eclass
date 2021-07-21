@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: cmake.eclass
@@ -48,6 +48,7 @@ _CMAKE_ECLASS=1
 # Set to enable in-source build.
 
 # @ECLASS-VARIABLE: CMAKE_MAKEFILE_GENERATOR
+# @PRE_INHERIT
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Specify a makefile generator to be used by cmake.
@@ -81,6 +82,7 @@ _CMAKE_ECLASS=1
 : ${CMAKE_WARN_UNUSED_CLI:=yes}
 
 # @ECLASS-VARIABLE: CMAKE_EXTRA_CACHE_FILE
+# @USER_VARIABLE
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Specifies an extra cache file to pass to cmake. This is the analog of EXTRA_ECONF
@@ -88,6 +90,7 @@ _CMAKE_ECLASS=1
 # Should be set by user in a per-package basis in /etc/portage/package.env.
 
 # @ECLASS-VARIABLE: CMAKE_QA_SRC_DIR_READONLY
+# @USER_VARIABLE
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # After running cmake_src_prepare, sets ${S} to read-only. This is
@@ -127,24 +130,20 @@ if [[ ${PN} != cmake ]]; then
 	BDEPEND+=" dev-util/cmake"
 fi
 
-# @FUNCTION: _cmake_banned_func
-# @INTERNAL
+# @FUNCTION: cmake_run_in
+# @USAGE: <working dir> <run command>
 # @DESCRIPTION:
-# Banned functions are banned.
-_cmake_banned_func() {
-	die "${FUNCNAME[1]} is banned. use -D$1<related_CMake_variable>=\"\$(usex $2)\" instead"
-}
-
-# Determine using IN or OUT source build
-_cmake_check_build_dir() {
-	: ${CMAKE_USE_DIR:=${S}}
-	if [[ -n ${CMAKE_IN_SOURCE_BUILD} ]]; then
-		# we build in source dir
-		BUILD_DIR="${CMAKE_USE_DIR}"
+# Set the desired working dir for a function or command.
+cmake_run_in() {
+	if [[ -z ${2} ]]; then
+		die "${FUNCNAME[0]} must be passed at least two arguments"
 	fi
 
-	mkdir -p "${BUILD_DIR}" || die
-	einfo "Working in BUILD_DIR: \"$BUILD_DIR\""
+	[[ -e ${1} ]] || die "${FUNCNAME[0]}: Nonexistent path: ${1}"
+
+	pushd ${1} > /dev/null || die
+		"${@:2}"
+	popd > /dev/null || die
 }
 
 # @FUNCTION: cmake_comment_add_subdirectory
@@ -153,16 +152,17 @@ _cmake_check_build_dir() {
 # Comment out one or more add_subdirectory calls in CMakeLists.txt in the current directory
 cmake_comment_add_subdirectory() {
 	if [[ -z ${1} ]]; then
-		die "comment_add_subdirectory must be passed at least one directory name to comment"
+		die "${FUNCNAME[0]} must be passed at least one directory name to comment"
 	fi
 
-	if [[ -e "CMakeLists.txt" ]]; then
-		local d
-		for d in $@; do
-			sed -e "/add_subdirectory[[:space:]]*([[:space:]]*${d//\//\\/}[[:space:]]*)/I s/^/#DONOTCOMPILE /" \
-				-i CMakeLists.txt || die "failed to comment add_subdirectory(${d})"
-		done
-	fi
+	[[ -e "CMakeLists.txt" ]] || return
+
+	local d
+	for d in $@; do
+		d=${d//\//\\/}
+		sed -e "/add_subdirectory[[:space:]]*([[:space:]]*${d}[[:space:]]*)/I s/^/#DONOTCOMPILE /" \
+			-i CMakeLists.txt || die "failed to comment add_subdirectory(${d})"
+	done
 }
 
 # @FUNCTION: comment_add_subdirectory
@@ -172,18 +172,6 @@ cmake_comment_add_subdirectory() {
 comment_add_subdirectory() {
 	die "comment_add_subdirectory is banned. Use cmake_comment_add_subdirectory instead"
 }
-
-# @FUNCTION: cmake-utils_use_with
-# @INTERNAL
-# @DESCRIPTION:
-# Banned. Use -DWITH_FOO=$(usex foo) instead.
-cmake-utils_use_with() { _cmake_banned_func WITH_ "$@" ; }
-
-# @FUNCTION: cmake-utils_use_enable
-# @INTERNAL
-# @DESCRIPTION:
-# Banned. Use -DENABLE_FOO=$(usex foo) instead.
-cmake-utils_use_enable() { _cmake_banned_func ENABLE_ "$@" ; }
 
 # @FUNCTION: cmake_use_find_package
 # @USAGE: <USE flag> <package name>
@@ -202,6 +190,26 @@ cmake_use_find_package() {
 
 	echo "-DCMAKE_DISABLE_FIND_PACKAGE_$2=$(use $1 && echo OFF || echo ON)"
 }
+
+# @FUNCTION: _cmake_banned_func
+# @INTERNAL
+# @DESCRIPTION:
+# Banned functions are banned.
+_cmake_banned_func() {
+	die "${FUNCNAME[1]} is banned. use -D$1<related_CMake_variable>=\"\$(usex $2)\" instead"
+}
+
+# @FUNCTION: cmake-utils_use_with
+# @INTERNAL
+# @DESCRIPTION:
+# Banned. Use -DWITH_FOO=$(usex foo) instead.
+cmake-utils_use_with() { _cmake_banned_func WITH_ "$@" ; }
+
+# @FUNCTION: cmake-utils_use_enable
+# @INTERNAL
+# @DESCRIPTION:
+# Banned. Use -DENABLE_FOO=$(usex foo) instead.
+cmake-utils_use_enable() { _cmake_banned_func ENABLE_ "$@" ; }
 
 # @FUNCTION: cmake-utils_use_disable
 # @INTERNAL
@@ -251,6 +259,24 @@ cmake-utils_use() { _cmake_banned_func "" "$@" ; }
 # Banned. Use -DNOFOO=$(usex !foo) instead.
 cmake-utils_useno() { _cmake_banned_func "" "$@" ; }
 
+# @FUNCTION: _cmake_check_build_dir
+# @INTERNAL
+# @DESCRIPTION:
+# Determine using IN or OUT source build
+_cmake_check_build_dir() {
+	: ${CMAKE_USE_DIR:=${S}}
+	if [[ -n ${CMAKE_IN_SOURCE_BUILD} ]]; then
+		# we build in source dir
+		BUILD_DIR="${CMAKE_USE_DIR}"
+	fi
+
+	mkdir -p "${BUILD_DIR}" || die
+	einfo "Working in BUILD_DIR: \"$BUILD_DIR\""
+}
+
+# @FUNCTION: _cmake_modify-cmakelists
+# @INTERNAL
+# @DESCRIPTION:
 # Internal function for modifying hardcoded definitions.
 # Removes dangerous definitions that override Gentoo settings.
 _cmake_modify-cmakelists() {
@@ -275,7 +301,7 @@ _cmake_modify-cmakelists() {
 	# NOTE Append some useful summary here
 	cat >> "${CMAKE_USE_DIR}"/CMakeLists.txt <<- _EOF_ || die
 
-		MESSAGE(STATUS "<<< Gentoo configuration >>>
+		message(STATUS "<<< Gentoo configuration >>>
 		Build type      \${CMAKE_BUILD_TYPE}
 		Install path    \${CMAKE_INSTALL_PREFIX}
 		Compiler flags:
@@ -290,7 +316,7 @@ _cmake_modify-cmakelists() {
 
 # @FUNCTION: cmake_src_prepare
 # @DESCRIPTION:
-# Apply ebuild and user patches.
+# Apply ebuild and user patches. *MUST* be run or cmake_src_configure will fail.
 cmake_src_prepare() {
 	debug-print-function ${FUNCNAME} "$@"
 
@@ -341,25 +367,20 @@ cmake_src_prepare() {
 	_CMAKE_SRC_PREPARE_HAS_RUN=1
 }
 
-# @VARIABLE: mycmakeargs
-# @DEFAULT_UNSET
-# @DESCRIPTION:
-# Optional cmake defines as a bash array. Should be defined before calling
-# src_configure.
-# @CODE
-# src_configure() {
-# 	local mycmakeargs=(
-# 		$(cmake_use_with openconnect)
-# 	)
-#
-# 	cmake_src_configure
-# }
-# @CODE
-
 # @FUNCTION: cmake_src_configure
 # @DESCRIPTION:
 # General function for configuring with cmake. Default behaviour is to start an
 # out-of-source build.
+# Passes arguments to cmake by reading from an optionally pre-defined local
+# mycmakeargs bash array.
+# @CODE
+# src_configure() {
+# 	local mycmakeargs=(
+# 		$(cmake_use_find_package foo LibFoo)
+# 	)
+# 	cmake_src_configure
+# }
+# @CODE
 cmake_src_configure() {
 	debug-print-function ${FUNCNAME} "$@"
 
@@ -375,12 +396,12 @@ cmake_src_configure() {
 	local build_rules=${BUILD_DIR}/gentoo_rules.cmake
 
 	cat > "${build_rules}" <<- _EOF_ || die
-		SET (CMAKE_ASM_COMPILE_OBJECT "<CMAKE_ASM_COMPILER> <DEFINES> <INCLUDES> ${CPPFLAGS} <FLAGS> -o <OBJECT> -c <SOURCE>" CACHE STRING "ASM compile command" FORCE)
-		SET (CMAKE_ASM-ATT_COMPILE_OBJECT "<CMAKE_ASM-ATT_COMPILER> <DEFINES> <INCLUDES> ${CPPFLAGS} <FLAGS> -o <OBJECT> -c -x assembler <SOURCE>" CACHE STRING "ASM-ATT compile command" FORCE)
-		SET (CMAKE_ASM-ATT_LINK_FLAGS "-nostdlib" CACHE STRING "ASM-ATT link flags" FORCE)
-		SET (CMAKE_C_COMPILE_OBJECT "<CMAKE_C_COMPILER> <DEFINES> <INCLUDES> ${CPPFLAGS} <FLAGS> -o <OBJECT> -c <SOURCE>" CACHE STRING "C compile command" FORCE)
-		SET (CMAKE_CXX_COMPILE_OBJECT "<CMAKE_CXX_COMPILER> <DEFINES> <INCLUDES> ${CPPFLAGS} <FLAGS> -o <OBJECT> -c <SOURCE>" CACHE STRING "C++ compile command" FORCE)
-		SET (CMAKE_Fortran_COMPILE_OBJECT "<CMAKE_Fortran_COMPILER> <DEFINES> <INCLUDES> ${FCFLAGS} <FLAGS> -o <OBJECT> -c <SOURCE>" CACHE STRING "Fortran compile command" FORCE)
+		set(CMAKE_ASM_COMPILE_OBJECT "<CMAKE_ASM_COMPILER> <DEFINES> <INCLUDES> ${CPPFLAGS} <FLAGS> -o <OBJECT> -c <SOURCE>" CACHE STRING "ASM compile command" FORCE)
+		set(CMAKE_ASM-ATT_COMPILE_OBJECT "<CMAKE_ASM-ATT_COMPILER> <DEFINES> <INCLUDES> ${CPPFLAGS} <FLAGS> -o <OBJECT> -c -x assembler <SOURCE>" CACHE STRING "ASM-ATT compile command" FORCE)
+		set(CMAKE_ASM-ATT_LINK_FLAGS "-nostdlib" CACHE STRING "ASM-ATT link flags" FORCE)
+		set(CMAKE_C_COMPILE_OBJECT "<CMAKE_C_COMPILER> <DEFINES> <INCLUDES> ${CPPFLAGS} <FLAGS> -o <OBJECT> -c <SOURCE>" CACHE STRING "C compile command" FORCE)
+		set(CMAKE_CXX_COMPILE_OBJECT "<CMAKE_CXX_COMPILER> <DEFINES> <INCLUDES> ${CPPFLAGS} <FLAGS> -o <OBJECT> -c <SOURCE>" CACHE STRING "C++ compile command" FORCE)
+		set(CMAKE_Fortran_COMPILE_OBJECT "<CMAKE_Fortran_COMPILER> <DEFINES> <INCLUDES> ${FCFLAGS} <FLAGS> -o <OBJECT> -c <SOURCE>" CACHE STRING "Fortran compile command" FORCE)
 	_EOF_
 
 	local myCC=$(tc-getCC) myCXX=$(tc-getCXX) myFC=$(tc-getFC)
@@ -392,14 +413,14 @@ cmake_src_configure() {
 	# space separated.
 	local toolchain_file=${BUILD_DIR}/gentoo_toolchain.cmake
 	cat > ${toolchain_file} <<- _EOF_ || die
-		SET (CMAKE_ASM_COMPILER "${myCC/ /;}")
-		SET (CMAKE_ASM-ATT_COMPILER "${myCC/ /;}")
-		SET (CMAKE_C_COMPILER "${myCC/ /;}")
-		SET (CMAKE_CXX_COMPILER "${myCXX/ /;}")
-		SET (CMAKE_Fortran_COMPILER "${myFC/ /;}")
-		SET (CMAKE_AR $(type -P $(tc-getAR)) CACHE FILEPATH "Archive manager" FORCE)
-		SET (CMAKE_RANLIB $(type -P $(tc-getRANLIB)) CACHE FILEPATH "Archive index generator" FORCE)
-		SET (CMAKE_SYSTEM_PROCESSOR "${CHOST%%-*}")
+		set(CMAKE_ASM_COMPILER "${myCC/ /;}")
+		set(CMAKE_ASM-ATT_COMPILER "${myCC/ /;}")
+		set(CMAKE_C_COMPILER "${myCC/ /;}")
+		set(CMAKE_CXX_COMPILER "${myCXX/ /;}")
+		set(CMAKE_Fortran_COMPILER "${myFC/ /;}")
+		set(CMAKE_AR $(type -P $(tc-getAR)) CACHE FILEPATH "Archive manager" FORCE)
+		set(CMAKE_RANLIB $(type -P $(tc-getRANLIB)) CACHE FILEPATH "Archive index generator" FORCE)
+		set(CMAKE_SYSTEM_PROCESSOR "${CHOST%%-*}")
 	_EOF_
 
 	# We are using the C compiler for assembly by default.
@@ -415,24 +436,24 @@ cmake_src_configure() {
 			Winnt)
 				sysname="Windows"
 				cat >> "${toolchain_file}" <<- _EOF_ || die
-					SET (CMAKE_RC_COMPILER $(tc-getRC))
+					set(CMAKE_RC_COMPILER $(tc-getRC))
 				_EOF_
 				;;
 			*) sysname="${KERNEL}" ;;
 		esac
 
 		cat >> "${toolchain_file}" <<- _EOF_ || die
-			SET (CMAKE_SYSTEM_NAME "${sysname}")
+			set(CMAKE_SYSTEM_NAME "${sysname}")
 		_EOF_
 
 		if [ "${SYSROOT:-/}" != "/" ] ; then
 			# When cross-compiling with a sysroot (e.g. with crossdev's emerge wrappers)
 			# we need to tell cmake to use libs/headers from the sysroot but programs from / only.
 			cat >> "${toolchain_file}" <<- _EOF_ || die
-				SET (CMAKE_FIND_ROOT_PATH "${SYSROOT}")
-				SET (CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-				SET (CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-				SET (CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+				set(CMAKE_FIND_ROOT_PATH "${SYSROOT}")
+				set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+				set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+				set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 			_EOF_
 		fi
 	fi
@@ -441,20 +462,16 @@ cmake_src_configure() {
 		cat >> "${build_rules}" <<- _EOF_ || die
 			# in Prefix we need rpath and must ensure cmake gets our default linker path
 			# right ... except for Darwin hosts
-			IF (NOT APPLE)
-			SET (CMAKE_SKIP_RPATH OFF CACHE BOOL "" FORCE)
-			SET (CMAKE_PLATFORM_REQUIRED_RUNTIME_PATH "${EPREFIX}/usr/${CHOST}/lib/gcc;${EPREFIX}/usr/${CHOST}/lib;${EPREFIX}/usr/lib"
-			CACHE STRING "" FORCE)
-
-			ELSE ()
-
-			SET (CMAKE_PREFIX_PATH "${EPREFIX}/usr" CACHE STRING "" FORCE)
-			SET (CMAKE_MACOSX_RPATH ON CACHE BOOL "" FORCE)
-			SET (CMAKE_SKIP_BUILD_RPATH OFF CACHE BOOL "" FORCE)
-			SET (CMAKE_SKIP_RPATH OFF CACHE BOOL "" FORCE)
-			SET (CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE CACHE BOOL "" FORCE)
-
-			ENDIF (NOT APPLE)
+			if(NOT APPLE)
+				set(CMAKE_SKIP_RPATH OFF CACHE BOOL "" FORCE)
+				set(CMAKE_PLATFORM_REQUIRED_RUNTIME_PATH "${EPREFIX}/usr/${CHOST}/lib/gcc;${EPREFIX}/usr/${CHOST}/lib;${EPREFIX}/usr/lib" CACHE STRING "" FORCE)
+			else()
+				set(CMAKE_PREFIX_PATH "${EPREFIX}/usr" CACHE STRING "" FORCE)
+				set(CMAKE_MACOSX_RPATH ON CACHE BOOL "" FORCE)
+				set(CMAKE_SKIP_BUILD_RPATH OFF CACHE BOOL "" FORCE)
+				set(CMAKE_SKIP_RPATH OFF CACHE BOOL "" FORCE)
+				set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE CACHE BOOL "" FORCE)
+			endif()
 		_EOF_
 	fi
 
@@ -462,31 +479,41 @@ cmake_src_configure() {
 	local common_config=${BUILD_DIR}/gentoo_common_config.cmake
 	local libdir=lib
 	cat > "${common_config}" <<- _EOF_ || die
-		SET (CMAKE_GENTOO_BUILD ON CACHE BOOL "Indicate Gentoo package build")
-		SET (LIB_SUFFIX ${libdir/lib} CACHE STRING "library path suffix" FORCE)
-		SET (CMAKE_INSTALL_LIBDIR ${libdir} CACHE PATH "Output directory for libraries")
-		SET (CMAKE_INSTALL_INFODIR "${EPREFIX}/usr/share/info" CACHE PATH "")
-		SET (CMAKE_INSTALL_MANDIR "${EPREFIX}/usr/share/man" CACHE PATH "")
-		SET (CMAKE_USER_MAKE_RULES_OVERRIDE "${build_rules}" CACHE FILEPATH "Gentoo override rules")
-		SET (CMAKE_INSTALL_DOCDIR "${EPREFIX}/usr/share/doc/${PF}" CACHE PATH "")
-		SET (BUILD_SHARED_LIBS ON CACHE BOOL "")
+		set(CMAKE_GENTOO_BUILD ON CACHE BOOL "Indicate Gentoo package build")
+		set(LIB_SUFFIX ${libdir/lib} CACHE STRING "library path suffix" FORCE)
+		set(CMAKE_INSTALL_LIBDIR ${libdir} CACHE PATH "Output directory for libraries")
+		set(CMAKE_INSTALL_INFODIR "${EPREFIX}/usr/share/info" CACHE PATH "")
+		set(CMAKE_INSTALL_MANDIR "${EPREFIX}/usr/share/man" CACHE PATH "")
+		set(CMAKE_USER_MAKE_RULES_OVERRIDE "${build_rules}" CACHE FILEPATH "Gentoo override rules")
+		set(CMAKE_INSTALL_DOCDIR "${EPREFIX}/usr/share/doc/${PF}" CACHE PATH "")
+		set(BUILD_SHARED_LIBS ON CACHE BOOL "")
 	_EOF_
+
+	if [[ -n ${_ECM_ECLASS} ]]; then
+		echo 'set(ECM_DISABLE_QMLPLUGINDUMP ON CACHE BOOL "")' >> "${common_config}" || die
+	fi
+
+	# See bug 689410
+	if [[ "${ARCH}" == riscv ]]; then
+		echo 'set(CMAKE_FIND_LIBRARY_CUSTOM_LIB_SUFFIX '"${libdir#lib}"' CACHE STRING "library search suffix" FORCE)' >> "${common_config}" || die
+	fi
+
 	if [[ "${NOCOLOR}" = true || "${NOCOLOR}" = yes ]]; then
-		echo 'SET (CMAKE_COLOR_MAKEFILE OFF CACHE BOOL "pretty colors during make" FORCE)' >> "${common_config}" || die
+		echo 'set(CMAKE_COLOR_MAKEFILE OFF CACHE BOOL "pretty colors during make" FORCE)' >> "${common_config}" || die
 	fi
 
 	# Wipe the default optimization flags out of CMake
 	if [[ ${CMAKE_BUILD_TYPE} != Gentoo ]]; then
 		cat >> ${common_config} <<- _EOF_ || die
-			SET (CMAKE_ASM_FLAGS_${CMAKE_BUILD_TYPE^^} "" CACHE STRING "")
-			SET (CMAKE_ASM-ATT_FLAGS_${CMAKE_BUILD_TYPE^^} "" CACHE STRING "")
-			SET (CMAKE_C_FLAGS_${CMAKE_BUILD_TYPE^^} "" CACHE STRING "")
-			SET (CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE^^} "" CACHE STRING "")
-			SET (CMAKE_Fortran_FLAGS_${CMAKE_BUILD_TYPE^^} "" CACHE STRING "")
-			SET (CMAKE_EXE_LINKER_FLAGS_${CMAKE_BUILD_TYPE^^} "" CACHE STRING "")
-			SET (CMAKE_MODULE_LINKER_FLAGS_${CMAKE_BUILD_TYPE^^} "" CACHE STRING "")
-			SET (CMAKE_SHARED_LINKER_FLAGS_${CMAKE_BUILD_TYPE^^} "" CACHE STRING "")
-			SET (CMAKE_STATIC_LINKER_FLAGS_${CMAKE_BUILD_TYPE^^} "" CACHE STRING "")
+			set(CMAKE_ASM_FLAGS_${CMAKE_BUILD_TYPE^^} "" CACHE STRING "")
+			set(CMAKE_ASM-ATT_FLAGS_${CMAKE_BUILD_TYPE^^} "" CACHE STRING "")
+			set(CMAKE_C_FLAGS_${CMAKE_BUILD_TYPE^^} "" CACHE STRING "")
+			set(CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE^^} "" CACHE STRING "")
+			set(CMAKE_Fortran_FLAGS_${CMAKE_BUILD_TYPE^^} "" CACHE STRING "")
+			set(CMAKE_EXE_LINKER_FLAGS_${CMAKE_BUILD_TYPE^^} "" CACHE STRING "")
+			set(CMAKE_MODULE_LINKER_FLAGS_${CMAKE_BUILD_TYPE^^} "" CACHE STRING "")
+			set(CMAKE_SHARED_LINKER_FLAGS_${CMAKE_BUILD_TYPE^^} "" CACHE STRING "")
+			set(CMAKE_STATIC_LINKER_FLAGS_${CMAKE_BUILD_TYPE^^} "" CACHE STRING "")
 		_EOF_
 	fi
 
@@ -538,8 +565,8 @@ cmake_src_configure() {
 
 # @FUNCTION: cmake_src_compile
 # @DESCRIPTION:
-# General function for compiling with cmake.
-# Automatically detects the build type. All arguments are passed to emake.
+# General function for compiling with cmake. All arguments are passed
+# to cmake_build.
 cmake_src_compile() {
 	debug-print-function ${FUNCNAME} "$@"
 
@@ -549,7 +576,8 @@ cmake_src_compile() {
 # @FUNCTION: cmake_build
 # @DESCRIPTION:
 # Function for building the package. Automatically detects the build type.
-# All arguments are passed to emake.
+# All arguments are passed to eninja (default) or emake depending on the value
+# of CMAKE_MAKEFILE_GENERATOR.
 cmake_build() {
 	debug-print-function ${FUNCNAME} "$@"
 
@@ -629,9 +657,7 @@ cmake_src_install() {
 		die "died running ${CMAKE_MAKEFILE_GENERATOR} install"
 	popd > /dev/null || die
 
-	pushd "${S}" > /dev/null || die
 	cleanup_install
-	popd > /dev/null || die
 }
 
 fi

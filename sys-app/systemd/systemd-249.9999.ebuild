@@ -45,6 +45,8 @@ DEPEND="
 	sys-devel/gettext
 "
 
+BDEPEND="dev-python/jinja"
+
 append-cflags -Wno-error=format-truncation
 
 pkg_pretend() {

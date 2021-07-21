@@ -13,7 +13,7 @@ LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="binfmt +blkid coredump cryptsetup devmode dhcp4 efi gcrypt
+IUSE="binfmt +blkid bpf-framework coredump cryptsetup devmode dhcp4 efi gcrypt
 +hostnamed hwdb importd kmod kvm ldconfig localed logind machined networkd
 oomd pam pcre pstore p11kit rfkill sleep systemd-update sysv +timedated
 +tmpfiles test vconsole xkb"
@@ -78,6 +78,7 @@ src_configure() {
 		$(usex devmode '-Dmode=developer' '-Dmode=release')
 		$(meson_use binfmt)
 		$(meson_use blkid)
+		$(meson_use bpf-framework)
 		$(meson_use coredump)
 		$(meson_use cryptsetup libcryptsetup)
 		$(meson_use efi )

@@ -949,7 +949,7 @@ distutils-r1_python_install_all() {
 	debug-print-function ${FUNCNAME} "${@}"
 	_distutils-r1_check_all_phase_mismatch
 
-	einstalldocs
+	cleanup_install
 }
 
 # @FUNCTION: distutils-r1_run_phase

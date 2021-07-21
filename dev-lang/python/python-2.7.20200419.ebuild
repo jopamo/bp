@@ -17,9 +17,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="ipv6"
 
-RDEPEND="app-compression/bzip2:0=
-	app-compression/xz-utils:0=
-	>=lib-sys/zlib-1.1.3:0=
+DEPEND="
+	app-compression/bzip2
+	app-compression/xz-utils
+	lib-sys/zlib
 	lib-dev/libffi
 	sys-devel/gettext
 	lib-net/libnsl
@@ -27,7 +28,7 @@ RDEPEND="app-compression/bzip2:0=
 	lib-sys/readline
 	lib-sys/sqlite
 	virtual/ssl
-	>=lib-dev/expat-2.1:0=
+	lib-dev/expat
 "
 
 src_prepare() {

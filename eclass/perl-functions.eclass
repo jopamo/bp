@@ -1,3 +1,4 @@
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: perl-functions.eclass
@@ -7,6 +8,7 @@
 # Seemant Kulleen <seemant@gentoo.org>
 # Andreas K. Huettel <dilfridge@gentoo.org>
 # Kent Fredric <kentnl@gentoo.org>
+# @SUPPORTED_EAPIS: 5 6 7 8
 # @BLURB: helper functions eclass for perl modules
 # @DESCRIPTION:
 # The perl-functions eclass is designed to allow easier installation of perl
@@ -17,7 +19,7 @@
 [[ ${CATEGORY} == "perl-core" ]] && inherit alternatives
 
 case "${EAPI:-0}" in
-	5|6|7)
+	5|6|7|8)
 		;;
 	*)
 		die "EAPI=${EAPI} is not supported by perl-functions.eclass"
@@ -125,6 +127,17 @@ perl_delete_emptybsdir() {
 	fi
 }
 
+# @FUNCTION: perl_fix_permissions
+# @DESCRIPTION:
+# Make all of ${D} user-writable, since EU::MM does silly things with
+# the w bit. See bug 554346.
+perl_fix_permissions() {
+	debug-print-function $FUNCNAME "$@"
+	perl_set_version
+	einfo Fixing installed file permissions
+	fperms -R u+w /
+}
+
 # @FUNCTION: perl_fix_packlist
 # @DESCRIPTION:
 # Look through ${D} for .packlist text files containing the temporary installation
@@ -140,7 +153,7 @@ perl_fix_packlist() {
                         einfo "Fixing packlist file /${f#${D}}"
 
 			# remove the temporary build dir path
-			sed -i -e "s:${D}:/:g" "${f}"
+			sed -i -e "s:${D%/}/:/:g" "${f}"
 
 			# remove duplicate entries
 			sort -u "${f}" > "${packlist_temp}"
@@ -168,7 +181,7 @@ perl_remove_temppath() {
 	find "${D}" -type f -not -name '*.so' -print0 | while read -rd '' f ; do
 		if file "${f}" | grep -q -i " text" ; then
 			grep -q "${D}" "${f}" && ewarn "QA: File contains a temporary path ${f}"
-			sed -i -e "s:${D}:/:g" "${f}"
+			sed -i -e "s:${D%/}/:/:g" "${f}"
 		fi
 	done
 }
@@ -300,6 +313,36 @@ perl_check_env() {
 
 	eerror "Your environment settings may lead to undefined behavior and/or build failures."
 	die "Please fix your environment ( ~/.bashrc, package.env, ... ), see above for details."
+}
+
+# @FUNCTION: perl_doexamples
+# @USAGE: <list of files or globs>
+# @DESCRIPTION:
+# Install example files ready-to-run.
+# Is called under certain circumstances in perl-module.eclass src_install
+# (see the documentation there).
+#
+# Example:
+# @CODE
+# src_install() {
+#   perl-module_src_install
+#   use examples && perl_doexamples "eg/*"
+# }
+# @CODE
+perl_doexamples() {
+	debug-print-function $FUNCNAME "$@"
+
+	einfo "Installing examples into /usr/share/doc/${PF}/examples"
+
+	# no compression since we want ready-to-run scripts
+	docompress -x /usr/share/doc/${PF}/examples
+
+	docinto examples/
+	# Lack of quoting here is important in order to support glob expansion
+	# in DIST_EXAMPLES=( ), which is defined before source extraction occurs
+	dodoc -r $@
+
+	# is there a way to undo "docinto" ?
 }
 
 # @FUNCTION: perl_has_module
@@ -553,4 +596,32 @@ perl_domodule() {
 
 	insinto "/${target#/}"
 	doins "${doins_opts[@]}" "${files[@]}"
+}
+
+# @FUNCTION: perl_get_wikiurl
+# @DESCRIPTION:
+# Convenience helper for returning the Gentoo Wiki maintenance page URL of a
+# package. Optionally a suffix can be passed for an in-page anchor.
+#
+# Example:
+# @CODE
+# my_url="$(perl_get_wikiurl Testing)"
+# @CODE
+
+perl_get_wikiurl() {
+	debug-print-function $FUNCNAME "$@"
+
+	if [[ -z "${1}" ]]; then
+		echo "https://wiki.gentoo.org/wiki/Project:Perl/maint-notes/${CATEGORY}/${PN}"
+	else
+		echo "https://wiki.gentoo.org/wiki/Project:Perl/maint-notes/${CATEGORY}/${PN}#${1}"
+	fi
+}
+
+perl_get_wikiurl_features() {
+	perl_get_wikiurl Optional_Features
+}
+
+perl_get_wikiurl_tests() {
+	perl_get_wikiurl Testing
 }

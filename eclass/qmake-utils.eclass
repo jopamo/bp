@@ -1,79 +1,56 @@
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
+
+# @ECLASS: qmake-utils.eclass
+# @MAINTAINER:
+# qt@gentoo.org
+# @AUTHOR:
+# Davide Pesavento <pesa@gentoo.org>
+# @SUPPORTED_EAPIS: 7 8
+# @BLURB: Common functions for qmake-based packages.
+# @DESCRIPTION:
+# Utility eclass providing wrapper functions for Qt5 qmake.
+#
+# This eclass does not set any metadata variables nor export any phase
+# functions. It can be inherited safely.
+
+case ${EAPI} in
+	7|8) ;;
+	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
+esac
 
 if [[ -z ${_QMAKE_UTILS_ECLASS} ]]; then
 _QMAKE_UTILS_ECLASS=1
 
-inherit estack toolchain-funcs
+inherit toolchain-funcs
 
 # @FUNCTION: qt5_get_bindir
 # @DESCRIPTION:
 # Echoes the directory where Qt5 binaries are installed.
 # EPREFIX is already prepended to the returned path.
 qt5_get_bindir() {
-	echo ${ROOT}/usr/bin
+	echo "${EPREFIX}"/usr/lib/qt5/bin
 }
 
 # @FUNCTION: qt5_get_headerdir
 # @DESCRIPTION:
 # Echoes the directory where Qt5 headers are installed.
 qt5_get_headerdir() {
-	echo /usr/include/qt5
-}
-
-# @FUNCTION: qt5_get_libdir
-# @DESCRIPTION:
-# Echoes the directory where Qt5 libraries are installed.
-qt5_get_libdir() {
-	echo /usr/lib
+	echo "${EPREFIX}"/usr/include/qt5
 }
 
 # @FUNCTION: qt5_get_mkspecsdir
 # @DESCRIPTION:
 # Echoes the directory where Qt5 mkspecs are installed.
 qt5_get_mkspecsdir() {
-	echo $(qt5_get_libdir)/qt5/mkspecs
+	echo "${EPREFIX}"/usr/lib/qt5/mkspecs
 }
 
 # @FUNCTION: qt5_get_plugindir
 # @DESCRIPTION:
 # Echoes the directory where Qt5 plugins are installed.
 qt5_get_plugindir() {
-	echo $(qt5_get_libdir)/qt5/plugins
-}
-
-# @FUNCTION: qmake-utils_find_pro_file
-# @RETURN: zero or one qmake .pro file names
-# @INTERNAL
-# @DESCRIPTION:
-# Outputs a project file name that can be passed to eqmake.
-#   0 *.pro files found --> outputs null string;
-#   1 *.pro file found --> outputs its name;
-#   2 or more *.pro files found --> if "${PN}.pro" or
-#       "$(basename ${S}).pro" are there, outputs one of them.
-qmake-utils_find_pro_file() {
-	local dir_name=$(basename "${S}")
-
-	# set nullglob to avoid expanding *.pro to the literal
-	# string "*.pro" when there are no matching files
-	eshopts_push -s nullglob
-	local pro_files=(*.pro)
-	eshopts_pop
-
-	case ${#pro_files[@]} in
-	0)
-		: ;;
-	1)
-		echo "${pro_files}"
-		;;
-	*)
-		for pro_file in "${pro_files[@]}"; do
-			if [[ ${pro_file%.pro} == ${dir_name} || ${pro_file%.pro} == ${PN} ]]; then
-				echo "${pro_file}"
-				break
-			fi
-		done
-		;;
-	esac
+	echo "${EPREFIX}"/usr/lib/qt5/plugins
 }
 
 # @FUNCTION: eqmake5

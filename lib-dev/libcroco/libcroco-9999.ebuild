@@ -9,17 +9,19 @@ HOMEPAGE="https://git.gnome.org/browse/libcroco/"
 EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/libcroco.git"
 
 LICENSE="LGPL-2"
-SLOT="0.6"
+SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="test"
 
-RDEPEND="
-	>=lib-dev/glib-2.34.3:2
-	>=lib-dev/libxml2-2.9.1-r4
+DEPEND="
+	lib-dev/glib
+	lib-dev/libxml2
 "
-DEPEND="${RDEPEND}
+
+BDEPEND="
 	dev-util/gtk-doc-am
-	>=dev-util/pkgconf-0-r1
+	dev-util/pkgconf
 "
 
 src_prepare() {

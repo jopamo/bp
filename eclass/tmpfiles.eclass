@@ -67,9 +67,9 @@ esac
 # When not empty, disables the dependency on virtual/tmpfiles.
 # Ebuilds that call tmpfiles_process conditionally should declare a
 # conditional dependency themselves.
-if [[ -z ${TMPFILES_OPTIONAL} ]]; then
-	RDEPEND="virtual/tmpfiles"
-fi
+#if [[ -z ${TMPFILES_OPTIONAL} ]]; then
+#	RDEPEND="virtual/tmpfiles"
+#fi
 
 # @FUNCTION: dotmpfiles
 # @USAGE: <tmpfiles.d_file> ...

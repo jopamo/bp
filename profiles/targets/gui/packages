@@ -19,3 +19,4 @@
 *x11-app/picom
 *x11-app/hsetroot
 *x11-misc/mesa-progs
+lib-dev/libinput

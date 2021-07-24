@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit distutils-r1
+inherit distutils-r1 python-r1
 
 DESCRIPTION="Open source build system"
 HOMEPAGE="http://mesonbuild.com/"
@@ -11,7 +11,7 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/mesonbuild/meson"
 	inherit git-r3
 else
-	SNAPSHOT=799b96f75337d2e02b29af0ac54ed5f599b2b06e
+	SNAPSHOT=2e30b5a1e2ca21555bb3aa50f91e87f4d2821bb6
 	SRC_URI="https://github.com/mesonbuild/meson/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -38,4 +38,6 @@ python_install_all() {
 
 	#lazy update mtime
 	find "${ED}"/usr/share -type f -exec touch {} +
+
+	python_foreach_impl python_doscript "${FILESDIR}"/meson-format-array
 }

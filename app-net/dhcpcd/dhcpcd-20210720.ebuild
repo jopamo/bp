@@ -11,7 +11,7 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/rsmarples/${PN}"
 	inherit git-r3
 else
-	SNAPSHOT=01748b315d7093f458b9379bc77f19762c721314
+	SNAPSHOT=3ca0e321bf7784c7285bcec350669b6deed0da9b
 	SRC_URI="https://github.com/rsmarples/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -25,9 +25,10 @@ IUSE="debug +embedded ipv6 systemd udev"
 filter-flags -Wl,-z,defs -flto\=\*
 
 src_configure() {
-	local myeconfargs=(
+	local myconf=(
 		--dbdir="${EPREFIX}"/var/lib/dhcpcd
 		--libexecdir="${EPREFIX}"/usr/lib/dhcpcd
+		--libdir="${EPREFIX}"/usr/lib
 		--localstatedir="${EPREFIX}/var"
 		--prefix="${EPREFIX}"
 		--with-hook=ntp.conf
@@ -39,7 +40,7 @@ src_configure() {
 		--privsepuser=dhcpcd
 		$(usex udev '' '--without-dev --without-udev')
 	)
-	econf "${myeconfargs[@]}"
+	econf "${myconf[@]}"
 }
 
 src_install() {

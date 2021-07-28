@@ -12,14 +12,6 @@ LICENSE="public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="
-	dev-python/setuptools[${PYTHON_USEDEP}]
-"
-DEPEND="
-	${RDEPEND}
-	dev-python/sphinx[${PYTHON_USEDEP}]
-"
-
 python_prepare_all() {
 	distutils-r1_python_prepare_all
 }

@@ -14,7 +14,7 @@ src_configure() {
 	local myconf=(
 		--prefix="${EPREFIX}"
 		--rundir="${EPREFIX}"/run
-		--libexecdir="${EPREFIX}"/lib/resolvconf
+		--libexecdir="${EPREFIX}"/usr/lib/resolvconf
 	)
 	econf "${myconf[@]}"
 }

@@ -6,7 +6,16 @@ inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="Port of 7-Zip archiver for Unix"
 HOMEPAGE="http://p7zip.sourceforge.net/"
-SRC_URI="mirror://sourceforge/${PN}/${PN}_${PV}_src_all.tar.bz2"
+
+if [[ ${PV} == 9999 ]]; then
+	EGIT_REPO_URI="https://github.com/jinfeihan57/p7zip.git"
+	inherit git-r3
+	KEYWORDS=""
+else
+	SNAPSHOT=eb1bbb0d0327a103850fec519015986e72a1ebf0
+	SRC_URI="https://github.com/jinfeihan57/p7zip/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="LGPL-2.1 unRAR"
 SLOT="0"
@@ -16,16 +25,7 @@ IUSE="static"
 
 DEPEND="dev-lang/yasm"
 
-S=${WORKDIR}/${PN}_${PV}
-
-PATCHES=(
-		"${FILESDIR}"/01-makefile.patch
-		"${FILESDIR}"/05-hardening-flags.patch
-		"${FILESDIR}"/12-CVE-2016-9296.patch
-		"${FILESDIR}"/13-CVE-2017-17969.patch
-		"${FILESDIR}"/CVE-2018-5996.patch
-		"${FILESDIR}"/CVE-2018-10115.patch
-	)
+PATCHES=( "${FILESDIR}"/01-makefile.patch )
 
 filter-flags -Wl,-z,defs
 append-flags -Wno-narrowing
@@ -59,6 +59,9 @@ src_prepare() {
 	if use static; then
 		sed -i -e '/^LOCAL_LIBS=/s/LOCAL_LIBS=/&-static /' makefile.machine || die
 	fi
+
+	sed -i '/gzip\ \-n/d' install.sh || die
+	sed -i '/strip/d' install.sh || die
 }
 
 src_compile() {

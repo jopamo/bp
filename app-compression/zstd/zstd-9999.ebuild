@@ -9,7 +9,7 @@ HOMEPAGE="https://facebook.github.io/zstd/"
 
 if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI="https://github.com/facebook/zstd.git"
-	EGIT_BRANCH="master"
+	EGIT_BRANCH="release"
 	inherit git-r3
 else
 	SRC_URI="https://github.com/facebook/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"

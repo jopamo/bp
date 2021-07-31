@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=53ce2713117ef2a8ed682d77b944df991c499252
+	SNAPSHOT=c3f3043f7aa80750245f8166a338c4877020b589
 	SRC_URI="https://github.com/madler/zlib/archive/${SNAPSHOT}.tar.gz -> zlib-${PV}.tar.gz"
 	S=${WORKDIR}/zlib-${SNAPSHOT}/contrib/minizip
 fi

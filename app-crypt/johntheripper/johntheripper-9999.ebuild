@@ -6,14 +6,14 @@ inherit flag-o-matic toolchain-funcs git-r3
 
 DESCRIPTION="fast password cracker"
 HOMEPAGE="http://www.openwall.com/john/"
-EGIT_REPO_URI="https://github.com/magnumripper/${PN}.git"
+EGIT_REPO_URI="https://github.com/openwall/john.git"
 EGIT_BRANCH="bleeding-jumbo"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="commoncrypto opencl openmp +ssl pcap rexgen"
+IUSE="opencl openmp +ssl pcap rexgen"
 
 DEPEND="
 	ssl? ( virtual/ssl )
@@ -27,23 +27,19 @@ S=${WORKDIR}/${P}/src
 append-ldflags -Wl,-z,noexecstack
 append-cppflags -DJOHN_SYSTEMWIDE_HOME="'\"${EPREFIX}/etc/john\"'"
 
-pkg_setup() {
-	if use openmp && [[ ${MERGE_TYPE} != binary ]]; then
-		tc-has-openmp || die "Please switch to an openmp compatible compiler"
-	fi
-}
-
 src_configure() {
-	econf \
-		--disable-native-march \
-		--disable-native-tests \
-		--with-systemwide \
-		$(use_enable opencl) \
-		$(use_enable openmp) \
-		$(use_enable pcap) \
-		$(use_enable rexgen) \
-		$(use_with commoncrypto) \
+	local myconf=(
+		--disable-native-march
+		--disable-native-tests
+		--with-systemwide
+		$(use_enable opencl)
+		$(use_enable openmp)
+		$(use_enable pcap)
+		$(use_enable rexgen)
 		$(use_with ssl openssl)
+	)
+
+	econf "${myconf[@]}"
 }
 
 src_test() {

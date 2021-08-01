@@ -20,7 +20,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+jitterentropy nistbeacon"
+IUSE="+jitterentropy nistbeacon systemd"
 
 DEPEND="
 	app-net/curl
@@ -56,5 +56,5 @@ src_configure() {
 src_install() {
 	default
 
-	systemd_dounit "${FILESDIR}"/rngd.service
+	use systemd && systemd_dounit "${FILESDIR}"/rngd.service
 }

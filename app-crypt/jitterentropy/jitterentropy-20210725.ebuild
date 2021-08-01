@@ -2,11 +2,19 @@
 
 EAPI=7
 
-inherit git-r3 systemd flag-o-matic
+inherit systemd flag-o-matic
 
 DESCRIPTION="Hardware RNG based on CPU timing jitter"
 HOMEPAGE="https://github.com/smuellerDD/jitterentropy-library"
-EGIT_REPO_URI="https://github.com/smuellerDD/jitterentropy-rngd.git"
+
+if [[ ${PV} == 9999 ]]; then
+	EGIT_REPO_URI="https://github.com/smuellerDD/jitterentropy-rngd.git"
+	inherit git-r3
+else
+	SNAPSHOT=dce5f0402fc578407b4c9a6ce95e1cf12572da88
+	SRC_URI="https://github.com/smuellerDD/jitterentropy-rngd/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="BSD"
 SLOT="0"
@@ -26,5 +34,4 @@ src_install() {
 		  DESTDIR="${D}" install
 
 	use systemd && systemd_dounit "${FILESDIR}"/${PN}.service
-
 }

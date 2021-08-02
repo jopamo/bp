@@ -4,7 +4,7 @@ EAPI=7
 
 SNAPSHOT=58aa0f9f1c6c88e1551ec78763742d136f8873ed
 
-inherit flag-o-matic tmpfiles autotools
+inherit flag-o-matic autotools
 
 DESCRIPTION="screen manager with VT100/ANSI terminal emulation"
 HOMEPAGE="https://www.gnu.org/software/screen/"
@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug pam"
+IUSE="debug pam tmpfilesd"
 
 DEPEND="
 	>=lib-sys/ncurses-5.2:0=
@@ -31,12 +31,6 @@ src_configure() {
 	use debug && append-cppflags "-DDEBUG"
 
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		--with-pty-group=5
 		--enable-socket-dir="${EPREFIX}"/run/screens
 		--with-system_screenrc="${EPREFIX}"/etc/screenrc
@@ -60,5 +54,9 @@ src_install() {
 		newins "${FILESDIR}/${PN}.pam" ${PN}
 	fi
 
-	dotmpfiles "${FILESDIR}"/screen.conf
+	if use tmpfilesd; then
+		insopts -m 0644
+		insinto /usr/lib/tmpfiles.d
+		doins "${FILESDIR}/${PN}.conf"
+	fi
 }

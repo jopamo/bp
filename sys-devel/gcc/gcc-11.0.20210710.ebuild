@@ -6,7 +6,7 @@ SNAPSHOT="$(ver_cut 1)-$(ver_cut 3-)"
 
 inherit flag-o-matic
 
-DESCRIPTION="gcc"
+DESCRIPTION="an optimizing compiler produced by the GNU Project supporting various programming languages"
 HOMEPAGE="https://gcc.gnu.org/"
 SRC_URI="mirror://gcc/snapshots/${SNAPSHOT}/gcc-${SNAPSHOT}.tar.xz"
 S=${WORKDIR}/gcc-${SNAPSHOT}

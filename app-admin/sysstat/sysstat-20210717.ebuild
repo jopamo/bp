@@ -48,7 +48,7 @@ src_configure() {
 		--disable-documentation
 		--disable-install-cron
 		--disable-stripping
-		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "no")
+		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 	)
 	sa_lib_dir=/usr/lib/sa \
 	conf_dir=/etc \

@@ -64,7 +64,7 @@ src_configure() {
    		--with-default-pid-dir="${EPREFIX}"/run
    		--with-default-run-dir="${EPREFIX}"/run/lvm
    		$(use_enable systemd udev-systemd-background-jobs)
-		--with-systemdsystemunitdir=$(usex tmpfilesd "${EPREFIX}"/usr/lib/tmpfiles.d "false")
+		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
    		--with-thin=internal
    		$(use_enable udev udev_rules)
 		$(use_enable udev udev_sync)

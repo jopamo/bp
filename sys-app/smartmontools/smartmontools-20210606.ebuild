@@ -51,7 +51,7 @@ src_configure() {
 		--with-drivedbdir="${EPREFIX}/var/db/${PN}" #575292
 		--with-initscriptdir="${EPREFIX}/etc/init.d"
 		$(use_with caps libcap-ng)
-		--with-systemdsystemunitdir="$(systemd_get_systemunitdir)"
+		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 		$(use_with update_drivedb gnupg)
 		$(use_with update_drivedb update-smart-drivedb)
 	)

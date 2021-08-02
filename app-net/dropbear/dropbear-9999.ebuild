@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit user git-r3 autotools systemd
+inherit user git-r3 autotools
 
 DESCRIPTION="small SSH 2 client/server designed for small memory environments"
 HOMEPAGE="https://matt.ucc.asn.au/dropbear/dropbear.html"
@@ -41,7 +41,11 @@ src_install() {
 		newins "${FILESDIR}/sshd.pam" dropbear
 	fi
 
-	use systemd && systemd_dounit "${FILESDIR}"/${PN}.service
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "${FILESDIR}/${PN}.service"
+	fi
 }
 
 pkg_preinst() {

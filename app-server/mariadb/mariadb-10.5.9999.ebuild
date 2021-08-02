@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit systemd flag-o-matic toolchain-funcs user cmake git-r3
+inherit flag-o-matic toolchain-funcs user cmake git-r3
 
 HOMEPAGE="https://mariadb.org/"
 DESCRIPTION="An enhanced, drop-in replacement for MySQL"
@@ -72,7 +72,7 @@ src_configure(){
 		-DINSTALL_UNIX_ADDRDIR="${EPREFIX}/var/run/mysqld/mysqld.sock"
 		-DWITH_DEFAULT_COMPILER_OPTIONS=1
 		-DWITH_DEFAULT_FEATURE_SET=1
-		-DINSTALL_SYSTEMD_UNITDIR="$(systemd_get_systemunitdir)"
+		-DINSTALL_SYSTEMD_UNITDIR=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 		-DPLUGIN_AUTH_GSSAPI=$(usex kerberos DYNAMIC NO)
 		-DAUTH_GSSAPI_PLUGIN_TYPE=$(usex kerberos DYNAMIC OFF)
 		-DCONC_WITH_EXTERNAL_ZLIB=YES

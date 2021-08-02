@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit linux-info systemd user flag-o-matic
+inherit linux-info user flag-o-matic
 
 DESCRIPTION="A userspace logging daemon for netfilter/iptables related logging"
 HOMEPAGE="https://netfilter.org/projects/ulogd/index.html"
@@ -69,7 +69,11 @@ src_install() {
 	fowners root:ulogd /etc/${PN}.conf
 	fperms 640 /etc/${PN}.conf
 
-	use systemd && systemd_dounit "${FILESDIR}/${PN}.service"
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "${FILESDIR}/${PN}.service"
+	fi
 
 	diropts -o ulogd -g ulogd
 	keepdir /var/log/ulogd

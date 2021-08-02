@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic autotools git-r3 systemd user
+inherit flag-o-matic autotools git-r3 user
 
 DESCRIPTION="Fast, production-quality, standard-conformant FTP server"
 HOMEPAGE="http://www.pureftpd.org/"
@@ -94,5 +94,9 @@ src_install() {
 		doins pureftpd-ldap.conf
 	fi
 
-	use systemd && systemd_dounit "${FILESDIR}/${PN}.service"
+	 if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "${FILESDIR}/${PN}.service"
+	fi
 }

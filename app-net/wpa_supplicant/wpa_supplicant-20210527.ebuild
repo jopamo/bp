@@ -4,7 +4,7 @@ EAPI=7
 
 SNAPSHOT=9efed66845c662f7eab927f49f66d318055e2783
 
-inherit qmake-utils systemd toolchain-funcs flag-o-matic
+inherit qmake-utils toolchain-funcs flag-o-matic
 
 DESCRIPTION="IEEE 802.1X/WPA supplicant for secure wireless transfers"
 HOMEPAGE="https://w1.fi/wpa_supplicant/"
@@ -15,7 +15,8 @@ LICENSE="|| ( GPL-2 BSD )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="ap dbus eapol_test fasteap gnutls +hs2-0 p2p privsep qt5 readline smartcard ssl tdls uncommon-eap-types wps"
+IUSE="ap dbus eapol_test fasteap gnutls +hs2-0 p2p privsep qt5 readline smartcard ssl systemd
+tdls uncommon-eap-types wps"
 
 REQUIRED_USE="fasteap? ( !ssl ) smartcard? ( ssl )"
 
@@ -304,15 +305,23 @@ src_install() {
 		doins fi.w1.wpa_supplicant1.service
 		popd > /dev/null || die
 
-		# This unit relies on dbus support, bug 538600.
-		systemd_dounit systemd/wpa_supplicant.service
+		if use systemd; then
+			insinto /usr/lib/systemd/system
+			insopts -m 0644
+			doins systemd/wpa_supplicant.service
+		fi
+
 	fi
 
 	if use eapol_test ; then
 		dobin eapol_test
 	fi
 
-	systemd_dounit "systemd/wpa_supplicant@.service"
-	systemd_dounit "systemd/wpa_supplicant-nl80211@.service"
-	systemd_dounit "systemd/wpa_supplicant-wired@.service"
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "systemd/wpa_supplicant@.service"
+		doins "systemd/wpa_supplicant-nl80211@.service"
+		doins "systemd/wpa_supplicant-wired@.service"
+	fi
 }

@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit autotools linux-info flag-o-matic toolchain-funcs systemd
+inherit autotools linux-info flag-o-matic toolchain-funcs
 
 DESCRIPTION="A performant, transport independent, multi-platform implementation of RFC3720"
 HOMEPAGE="http://www.open-iscsi.com/"
@@ -32,10 +32,6 @@ REQUIRED_USE="infiniband? ( rdma ) || ( rdma tcp )"
 
 pkg_setup() {
 	linux-info_pkg_setup
-
-	if kernel_is -lt 2 6 16; then
-		die "Sorry, your kernel must be 2.6.16-rc5 or newer!"
-	fi
 
 	# Needs to be done, as iscsid currently only starts, when having the iSCSI
 	# support loaded as module. Kernel builtin options don't work. See this for
@@ -99,7 +95,11 @@ src_install() {
 	docinto test/
 	dodoc test/*
 
-	systemd_dounit "${S%/}"/etc/systemd/iscsid.service
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins etc/systemd/iscsid.service
+	fi
 
 	keepdir /var/db/iscsi
 	fperms 700 /var/db/iscsi

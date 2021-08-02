@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit autotools linux-info systemd toolchain-funcs flag-o-matic
+inherit autotools linux-info toolchain-funcs flag-o-matic
 
 DESCRIPTION="User-land utilities for LVM2 (device-mapper) software"
 HOMEPAGE="https://sourceware.org/lvm2/"
@@ -46,27 +46,27 @@ src_prepare() {
 src_configure() {
 	local myconf=(
 		--prefix="${EPREFIX}"/usr
-    		--sysconfdir="${EPREFIX}"/etc
-    		--localstatedir="${EPREFIX}"/var
+   		--sysconfdir="${EPREFIX}"/etc
+   		--localstatedir="${EPREFIX}"/var
 		$(usex dm-only "" "--enable-applib")
 		$(usex dm-only "" "--enable-cmdlib")
 		$(usex dm-only "" "--enable-dmeventd")
 		$(usex dm-only "" "--enable-lvmetad")
 		$(usex dm-only "" "--enable-lvmpolld")
 		$(usex dm-only "" "--enable-use-lvmetad")
-    		--enable-pkgconfig
-    		--enable-readline
-    		--enable-udev_rules
-    		--enable-udev_sync
-    		--with-cache=internal
-    		--with-default-dm-run-dir="${EPREFIX}"/run
-    		--with-default-locking-dir="${EPREFIX}"/run/lock/lvm
-    		--with-default-pid-dir="${EPREFIX}"/run
-    		--with-default-run-dir="${EPREFIX}"/run/lvm
-    		$(use_enable systemd udev-systemd-background-jobs)
-		--with-systemdsystemunitdir="$(systemd_get_systemunitdir)"
-    		--with-thin=internal
-    		$(use_enable udev udev_rules)
+   		--enable-pkgconfig
+   		--enable-readline
+   		--enable-udev_rules
+   		--enable-udev_sync
+   		--with-cache=internal
+   		--with-default-dm-run-dir="${EPREFIX}"/run
+   		--with-default-locking-dir="${EPREFIX}"/run/lock/lvm
+   		--with-default-pid-dir="${EPREFIX}"/run
+   		--with-default-run-dir="${EPREFIX}"/run/lvm
+   		$(use_enable systemd udev-systemd-background-jobs)
+		--with-systemdsystemunitdir=$(usex tmpfilesd "${EPREFIX}"/usr/lib/tmpfiles.d "false")
+   		--with-thin=internal
+   		$(use_enable udev udev_rules)
 		$(use_enable udev udev_sync)
 		$(use_with udev udevdir "${EPREFIX}"/usr/lib/udev/rules.d)
 	)

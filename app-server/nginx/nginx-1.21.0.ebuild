@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit user systemd
+inherit user
 
 DESCRIPTION="Robust, small and high performance http and reverse proxy server"
 HOMEPAGE="https://nginx.org"
@@ -55,7 +55,11 @@ src_compile() {
 src_install() {
 	default
 
-	systemd_dounit "${FILESDIR}"/nginx.service
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "${FILESDIR}/${PN}.service"
+	fi
 
 	doman man/nginx.8
 

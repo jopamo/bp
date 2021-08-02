@@ -2,9 +2,9 @@
 
 EAPI=7
 
-inherit linux-info systemd
+inherit linux-info
 
-DESCRIPTION="Linux kernel (3.13+) firewall, NAT and packet mangling tools"
+DESCRIPTION="Linux kernel firewall, NAT and packet mangling tools"
 HOMEPAGE="https://netfilter.org/projects/nftables/"
 SRC_URI="http://www.netfilter.org/projects/${PN}/files/${P}.tar.bz2"
 
@@ -52,7 +52,11 @@ src_install() {
 
 	keepdir /var/lib/nftables
 
-	use systemd && systemd_dounit "${FILESDIR}"/${PN}.service
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "${FILESDIR}/${PN}.service"
+	fi
 
 	insinto /etc
 	doins "${FILESDIR}/nftables.conf"

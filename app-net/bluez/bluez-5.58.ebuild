@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic linux-info systemd
+inherit flag-o-matic linux-info
 
 DESCRIPTION="Bluetooth Tools and System Daemons for Linux"
 HOMEPAGE="http://www.bluez.org"
@@ -12,7 +12,7 @@ LICENSE="GPL-2+ LGPL-2.1+"
 SLOT="0/3"
 KEYWORDS="amd64 arm64"
 
-IUSE="btpclient cups doc debug extra-tools experimental +mesh +obex +readline selinux systemd +udev user-session"
+IUSE="btpclient cups debug extra-tools experimental +mesh +obex +readline selinux systemd +udev user-session"
 
 BDEPEND="
 	dev-util/pkgconf
@@ -159,5 +159,5 @@ src_install() {
 }
 
 pkg_postinst() {
-	use systemd && systemd_reenable bluetooth.service
+	use systemd && systemctl reenable bluetooth.service
 }

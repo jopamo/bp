@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit user toolchain-funcs flag-o-matic systemd linux-info
+inherit user toolchain-funcs flag-o-matic linux-info
 
 DESCRIPTION="A TCP/HTTP reverse proxy for high availability environments"
 HOMEPAGE="http://haproxy.1wt.eu"
@@ -94,7 +94,11 @@ src_install() {
 	dosbin haproxy
 	dosym /usr/sbin/haproxy /usr/bin/haproxy
 
-	systemd_dounit contrib/systemd/haproxy.service
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins contrib/systemd/haproxy.service
+	fi
 
 	# The errorfiles are used by upstream defaults.
 	insinto /etc/haproxy/errors/

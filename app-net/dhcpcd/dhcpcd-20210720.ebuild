@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic systemd user
+inherit flag-o-matic user
 
 DESCRIPTION="a DHCP and DHCPv6 client."
 HOMEPAGE="https://roy.marples.name/projects/dhcpcd/"
@@ -48,7 +48,9 @@ src_install() {
 	keepdir /var/lib/dhcpcd
 
 	if use systemd; then
-		systemd_dounit "${FILESDIR}"/dhcpcd.service
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "${FILESDIR}/${PN}.service"
 	fi
 }
 

@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit user flag-o-matic autotools systemd
+inherit user flag-o-matic autotools
 
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="http://www.openssh.org/"
@@ -91,8 +91,12 @@ src_install() {
 		newins "${FILESDIR}/sshd.pam" sshd
 	fi
 
-	use systemd && systemd_dounit "${FILESDIR}"/sshdgenkeys.service
-	use systemd && systemd_dounit "${FILESDIR}"/sshd.service
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "${FILESDIR}"/sshdgenkeys.service
+		doins "${FILESDIR}"/sshd.service
+	fi
 
 	cp "${FILESDIR}"/sshd_config "${ED}"/etc/ssh/
 

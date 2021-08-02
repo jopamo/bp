@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit linux-info systemd toolchain-funcs git-r3
+inherit linux-info toolchain-funcs git-r3
 
 DESCRIPTION="Hardware Monitoring user-space utilities"
 HOMEPAGE="https://hwmon.wiki.kernel.org/ https://github.com/lm-sensors/lm-sensors"
@@ -68,7 +68,11 @@ src_install() {
 		LIBDIR="/usr/lib" \
 		install
 
-	use systemd && systemd_dounit prog/init/lm_sensors.service
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins prog/init/lm_sensors.service
+	fi
 
 	cleanup_install
 }

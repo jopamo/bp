@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit meson user systemd flag-o-matic
+inherit meson user flag-o-matic
 
 DESCRIPTION="Lightweight high-performance web server"
 HOMEPAGE="http://www.lighttpd.net/"
@@ -81,8 +81,17 @@ src_install() {
 	fowners lighttpd:lighttpd /var/l{ib,og}/lighttpd
 	fperms 0750 /var/l{ib,og}/lighttpd
 
-	use systemd && systemd_dounit "${FILESDIR}/${PN}.service"
-	use systemd && systemd_dotmpfilesd "${FILESDIR}/${PN}.tmpfiles.conf"
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "${FILESDIR}/${PN}.service"
+	fi
+
+	if use tmpfilesd; then
+		insopts -m 0644
+		insinto /usr/lib/tmpfiles.d
+		doins "${FILESDIR}/${PN}.tmpfiles.conf"
+	fi
 
 	insinto /etc/lighttpd
 	doins doc/config/conf.d/mime.conf

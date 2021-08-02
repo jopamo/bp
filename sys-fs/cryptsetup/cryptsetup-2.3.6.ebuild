@@ -12,7 +12,7 @@ LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="nls python reencrypt static static-libs udev urandom"
+IUSE="nls python reencrypt static static-libs tmpfilesd udev urandom"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
@@ -56,7 +56,7 @@ src_configure() {
 	local myconf=(
 		--enable-system-argon2
 		--enable-shared
-		--with-tmpfilesdir="${EPREFIX%/}/usr/lib/tmpfiles.d"
+		--with-tmpfilesdir=$(usex tmpfilesd "${EPREFIX}"/usr/lib/tmpfiles.d "false")
 		--with-crypto_backend="gcrypt"
 		$(use_enable nls)
 		$(use_enable python)

@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic linux-info python-single-r1 systemd user git-r3
+inherit flag-o-matic linux-info python-single-r1 user git-r3
 
 DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="http://www.postgresql.org/"
@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="doc kerberos ldap nls pam perl python +readline
-	  +server systemd ssl static-libs tcl threads uuid xml zlib"
+	  +server systemd ssl static-libs tcl threads tmpfilesd uuid xml zlib"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 CDEPEND="
@@ -119,12 +119,21 @@ src_install() {
 
 	use static-libs || find "${ED}" -name '*.a' -delete
 
-	systemd_dounit "${FILESDIR}/postgresql.service"
-	systemd_newtmpfilesd "${FILESDIR}/postgresql.tmpfiles" ${PN}.conf
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "${FILESDIR}/${PN}.service"
+	fi
+
+	if use tmpfilesd; then
+		insopts -m 0644
+		insinto /usr/lib/tmpfiles.d
+		newins "${FILESDIR}/postgresql.tmpfiles" ${PN}.conf
+	fi
 
 	if use pam; then
-		insinto etc/pam.d
-		insopts -m0644
+		insinto /etc/pam.d
+		insopts -m 0644
 		newins "${FILESDIR}/${PN}.pam" ${PN}
 	fi
 }

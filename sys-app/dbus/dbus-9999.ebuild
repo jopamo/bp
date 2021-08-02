@@ -3,7 +3,7 @@
 EAPI=7
 
 
-inherit git-r3 autotools linux-info flag-o-matic python-any-r1 systemd user
+inherit git-r3 autotools linux-info flag-o-matic python-any-r1 user
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="https://dbus.freedesktop.org/"
@@ -14,7 +14,7 @@ LICENSE="|| ( AFL-2.1 GPL-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug static-libs systemd test user-session X"
+IUSE="debug static-libs systemd test tmpfilesd user-session X"
 
 CDEPEND="
 	>=lib-dev/expat-2.1.0
@@ -137,9 +137,15 @@ src_install() {
 
 	rm -rf "${ED}"/etc/dbus-1
 
-	insinto /usr/lib/tmpfiles.d/
-	doins "${FILESDIR}"/dbus.conf
+	if use tmpfilesd; then
+		insopts -m 0644
+		insinto /usr/lib/tmpfiles.d
+		doins "${FILESDIR}/${PN}.conf"
+	fi
 
-	insinto /usr/lib/systemd/system/
-	doins "${FILESDIR}"/dbus.service
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "${FILESDIR}/${PN}.service"
+	fi
 }

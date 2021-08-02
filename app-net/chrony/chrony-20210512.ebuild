@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit systemd toolchain-funcs autotools
+inherit toolchain-funcs autotools
 
 DESCRIPTION="NTP client and server programs"
 HOMEPAGE="https://chrony.tuxfamily.org/"
@@ -73,5 +73,9 @@ src_install() {
 	insinto /etc/logrotate.d
 	newins "${S}/examples/chrony.logrotate" chrony
 
-	use systemd && systemd_dounit "${FILESDIR}/chronyd.service"
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "${FILESDIR}/chronyd.service"
+	fi
 }

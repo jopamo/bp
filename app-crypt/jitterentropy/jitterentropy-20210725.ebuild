@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit systemd flag-o-matic
+inherit flag-o-matic
 
 DESCRIPTION="Hardware RNG based on CPU timing jitter"
 HOMEPAGE="https://github.com/smuellerDD/jitterentropy-library"
@@ -13,7 +13,7 @@ if [[ ${PV} == 9999 ]]; then
 else
 	SNAPSHOT=dce5f0402fc578407b4c9a6ce95e1cf12572da88
 	SRC_URI="https://github.com/smuellerDD/jitterentropy-rngd/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	S=${WORKDIR}/${PN}-rngd-${SNAPSHOT}
 fi
 
 LICENSE="BSD"
@@ -33,5 +33,11 @@ src_install() {
 		  LIBDIR="lib" \
 		  DESTDIR="${D}" install
 
-	use systemd && systemd_dounit "${FILESDIR}"/${PN}.service
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "${FILESDIR}/${PN}.service"
+	else
+		rm -rf "${ED}"/usr/lib/systemd || die
+	fi
 }

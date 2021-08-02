@@ -30,7 +30,7 @@ DEPEND="
 	p11kit? ( app-crypt/p11-kit )
 	lib-sys/libseccomp:0=
 	test? ( sys-app/dbus )
-	tmpfiles? ( sys-app/dbus )
+	tmpfilesd? ( sys-app/dbus )
 	xkb? ( lib-gui/libxkbcommon )
 	app-text/docbook-xml-dtd
 	app-text/docbook-xsl-stylesheets
@@ -58,8 +58,8 @@ pkg_pretend() {
 			~CRYPTO_HMAC ~CRYPTO_SHA256 ~CRYPTO_USER_API_HASH
 			~!GRKERNSEC_PROC ~!IDE ~!SYSFS_DEPRECATED ~!SYSFS_DEPRECATED_V2"
 
-		use tmpfiles && CONFIG_CHECK+=" ~TMPFS_POSIX_ACL"
-		use tmpfiles && CONFIG_CHECK+=" ~DEVTMPFS ~TMPFS_XATTR"
+		use tmpfilesd && CONFIG_CHECK+=" ~TMPFS_POSIX_ACL"
+		use tmpfilesd && CONFIG_CHECK+=" ~DEVTMPFS ~TMPFS_XATTR"
 
 		use pstore && CONFIG_CHECK+=" ~ACPI_APEI"
 
@@ -182,7 +182,7 @@ src_install() {
 
 	mkdir -p "${ED}"/etc/systemd/user && keepdir /etc/systemd/user
 	use xkb || rm -rf "${ED}"/etc/X11 "${ED}"/etc/xdg/
-	use tmpfiles || rm -f "${ED}"/usr/lib/systemd/system/systemd-tmpfiles-clean.timer "${ED}"/usr/lib/systemd/system/timers.target.wants/systemd-tmpfiles-clean.timer
+	use tmpfilesd || rm -f "${ED}"/usr/lib/systemd/system/systemd-tmpfiles-clean.timer "${ED}"/usr/lib/systemd/system/timers.target.wants/systemd-tmpfiles-clean.timer
 
 	rm -fr "${ED}"/etc/kernel
 	rm -f "${ED}"/usr/bin/kernel-install

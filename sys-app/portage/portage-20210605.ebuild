@@ -20,29 +20,30 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bin X gui"
+IUSE="bin X gui tmpfilesd"
 
 DEPEND="
-	>=app-compression/tar-1.27
-	>=sys-app/sed-4.0.5
+	app-compression/tar
+	sys-app/sed
 	sys-devel/patch
 "
 
 RDEPEND="
-	>=app-compression/tar-1.27
+	app-compression/tar
 	app-admin/eselect
-	>=app-crypt/gnupg-2.2.4-r2[gnutls(-)]
+	app-crypt/gnupg[gnutls(-)]
 	sys-app/bash
-	>=dev-python/lxml-3.6.0[${PYTHON_USEDEP}]
-	>=sys-app/sed-4.0.5
-	>=sys-app/sandbox-2.2
-	>=sys-app/install-xattr-0.3
+	dev-python/lxml[${PYTHON_USEDEP}]
+	sys-app/sed
+	sys-app/sandbox
+	sys-app/install-xattr
 "
-PDEPEND=">=app-net/rsync-2.6.4"
+PDEPEND="app-net/rsync"
 
-PATCHES=( "${FILESDIR}"/phase-helpers.patch
-			"${FILESDIR}"/add-funcs.patch
-			"${FILESDIR}"/makeglobals.patch
+PATCHES=(
+	"${FILESDIR}"/phase-helpers.patch
+	"${FILESDIR}"/add-funcs.patch
+	"${FILESDIR}"/makeglobals.patch
 )
 
 filter-flags -Wl,-z,defs

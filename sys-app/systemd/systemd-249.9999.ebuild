@@ -252,7 +252,7 @@ pkg_postinst() {
 	use networkd && newusergroup systemd-network
 	use coredump && newusergroup systemd-coredump
 	use kvm && enewgroup kvm 78
-	systemd_update_catalog
+	journalctl --update-catalog
 
 	udevadm hwdb --update --root="${EROOT%/}"
 	udevadm control --reload

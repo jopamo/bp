@@ -118,7 +118,7 @@ python_install_all() {
 	if use tmpfilesd; then
 		insopts -m 0644
 		insinto /usr/lib/tmpfiles.d
-		doins "${FILESDIR}/portage-ccache.tmpfiles.conf"
+		doins "${FILESDIR}/portage-ccache.conf"
 	fi
 
 	# Due to distutils/python-exec limitations

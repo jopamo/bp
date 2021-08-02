@@ -2,16 +2,19 @@
 
 EAPI=7
 
-SNAPSHOT=56b8e713d56895944d1ff89b4ff2dee4c37393ed
-
 inherit linux-info autotools
 
 DESCRIPTION="Open source read-write NTFS driver that runs under FUSE"
 HOMEPAGE="http://www.tuxera.com/community/ntfs-3g-download/"
-SRC_URI="https://sourceforge.net/code-snapshots/git/n/nt/ntfs-3g/ntfs-3g.git/ntfs-3g-ntfs-3g-${SNAPSHOT}.zip -> ${P}.zip
-	https://1g4.org/files/${P}.zip"
 
-S=${WORKDIR}/ntfs-3g-ntfs-3g-${SNAPSHOT}
+if [[ ${PV} == *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/tuxera/ntfs-3g.git"
+	inherit git-r3
+else
+	SNAPSHOT=a4a837025b6ac2b0c44c93e34e22535fe9e95b27
+	SRC_URI="https://github.com/tuxera/ntfs-3g/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/ntfs-3g-${SNAPSHOT}
+fi
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -34,6 +37,8 @@ pkg_setup() {
 }
 
 src_prepare() {
+	sed -i -e "s/2017.3.23/${PV}/g" "configure.ac" || die
+
 	eautoreconf
 	default
 	# Keep the symlinks in the same place we put the main binaries.

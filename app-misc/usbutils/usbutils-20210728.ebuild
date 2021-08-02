@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT=e7dcdafb1edb4721f59562c259b102b2f81ae423
+SNAPSHOT=443fbcc21817159db0e5d386a8ff7d3279755dc0
 
 inherit autotools
 
@@ -15,8 +15,10 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="lib-dev/libusb
-	app-compression/xz-utils"
+DEPEND="
+	lib-dev/libusb
+	app-compression/xz-utils
+"
 
 src_prepare() {
 	default

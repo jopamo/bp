@@ -80,7 +80,7 @@ src_configure() {
 		--with-session-socket-dir="${EPREFIX}"/tmp
 		--with-system-pid-file="${EPREFIX}"/run/dbus.pid
 		--with-system-socket="${EPREFIX}"/run/dbus/system_bus_socket
-		--with-systemdsystemunitdir="$(systemd_get_systemunitdir)"
+		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 		--with-dbus-user=messagebus
 		$(use_with X x)
 		--disable-xml-docs

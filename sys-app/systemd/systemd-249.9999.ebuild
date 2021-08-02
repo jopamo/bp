@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 IUSE="binfmt +blkid bpf-framework coredump cryptsetup devmode dhcp4 efi gcrypt
 +hostnamed hwdb importd kmod kvm ldconfig localed logind machined networkd
 oomd pam pcre pstore p11kit rfkill sleep systemd-update sysv +timedated
-+tmpfiles test vconsole xkb"
++tmpfilesd test vconsole xkb"
 
 RESTRICT="!test? ( test )"
 
@@ -105,7 +105,7 @@ src_configure() {
 		$(usex sysv '-Dsysvrcnd-path=/etc/rc.d' '-Dsysvrcnd-path=')
 		$(meson_use test dbus)
 		$(meson_use timedated)
-		$(meson_use tmpfiles)
+		$(meson_use tmpfilesd tmpfiles)
 		$(meson_use vconsole)
 		$(meson_use xkb xkbcommon)
 		-Dacl=true

@@ -4,7 +4,7 @@ EAPI=7
 
 SNAPSHOT=bf07973018bb55e0154b1293ea4b455411f74212
 
-inherit meson tmpfiles
+inherit meson
 
 DESCRIPTION="Search and query ebuilds"
 HOMEPAGE="https://github.com/vaeth/eix/"
@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug +dep +jumbo-build +required-use sqlite swap-remote tools nls"
+IUSE="debug +dep +jumbo-build +required-use sqlite swap-remote tmpfilesd tools nls"
 
 RDEPEND="sys-app/push
 	>=sys-app/quoter-3.0-r2
@@ -56,7 +56,12 @@ src_configure() {
 
 src_install() {
 	meson_src_install
-	dotmpfiles tmpfiles.d/eix.conf
+
+	if use tmpfilesd; then
+		insopts -m 0644
+		insinto /usr/lib/tmpfiles.d
+		doins tmpfiles.d/eix.conf
+	fi
 }
 
 pkg_postinst() {
@@ -64,7 +69,6 @@ pkg_postinst() {
 	if test -f "${obs}"; then
 		ewarn "Found obsolete ${obs}, please remove it"
 	fi
-	tmpfiles_process eix.conf
 }
 
 pkg_postrm() {

@@ -1,4 +1,4 @@
-sys-app/systemd logind tmpfiles sleep
+sys-app/systemd logind tmpfilesd sleep
 app-media/avidemux qt5
 app-gui/qbittorrent qt5
 lib-media/x264 opencl

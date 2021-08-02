@@ -12,6 +12,8 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+IUSE="tmpfilesd"
+
 DEPEND="sys-app/portage[${PYTHON_USEDEP}]
 		sys-app/gentoo-functions"
 
@@ -24,6 +26,8 @@ python_prepare_all() {
 
 python_install_all() {
 	distutils-r1_python_install_all
+
+	use tmpfilesd || rm -rf "${ED}"/usr/lib/tmpfiles.d
 }
 
 pkg_postinst() {

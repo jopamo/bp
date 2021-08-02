@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit autotools toolchain-funcs
+inherit autotools
 
 DESCRIPTION="System Utilities Based on Sysfs"
 HOMEPAGE="http://linux-diag.sourceforge.net/Sysfsutils.html"
@@ -25,7 +25,7 @@ IUSE="static-libs"
 src_prepare() {
 	default
 	sed -i 's:AM_CONFIG_HEADER:AC_CONFIG_HEADERS:' configure.ac || die
-	AT_M4DIR=m4 eautoreconf
+	eautoreconf
 }
 
 src_configure() {

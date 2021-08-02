@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps +daemon static update_drivedb"
+IUSE="caps +daemon static systemd update_drivedb"
 
 DEPEND="
 	caps? (

@@ -4,7 +4,7 @@ EAPI=7
 
 SNAPSHOT=f3e3497dd9d44e503ce8da7fe4ed31df69b6e05f
 
-inherit autotools flag-o-matic systemd
+inherit autotools flag-o-matic
 
 DESCRIPTION="Tools to monitor storage systems to provide advanced warning of disk degradation"
 HOMEPAGE="https://www.smartmontools.org"
@@ -63,7 +63,9 @@ src_install() {
 
 	if use daemon; then
 		default
-		systemd_newunit "${FILESDIR}"/smartd.systemd smartd.service
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		newins "${FILESDIR}"/smartd.systemd smartd.service
 	else
 		dosbin smartctl
 		doman smartctl.8

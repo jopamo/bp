@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit linux-info systemd git-r3 flag-o-matic
+inherit linux-info git-r3 flag-o-matic
 
 DESCRIPTION="Samba Suite Version 4"
 HOMEPAGE="https://www.samba.org/"
@@ -13,7 +13,9 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl -addc -addns -ads -ceph client -cluster cups debug dmapi fam gpg iprint json -ldap quota syslog systemd test winbind zeroconf"
+IUSE="acl -addc -addns -ads -ceph client -cluster cups debug
+dmapi fam gpg iprint json -ldap quota syslog systemd test tmpfilesd winbind
+zeroconf"
 
 CDEPEND="
 	>=app-compression/libarchive-3.1.2
@@ -145,11 +147,20 @@ src_install() {
 		-e '/path =/s@/usr/spool/samba@/var/spool/samba@' \
 		-i "${ED%/}"/etc/samba/smb.conf.default || die
 
-	systemd_dotmpfilesd "${FILESDIR}"/samba.conf
-	systemd_dounit "${FILESDIR}"/nmbd.service
-	systemd_dounit "${FILESDIR}"/smbd.{service,socket}
-	systemd_newunit "${FILESDIR}"/smbd_at.service 'smbd@.service'
-	systemd_dounit "${FILESDIR}"/samba.service
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "${FILESDIR}"/nmbd.service
+		doins "${FILESDIR}"/smbd.{service,socket}
+		newins "${FILESDIR}"/smbd_at.service "smbd@.service"
+		doins "${FILESDIR}"/samba.service
+	fi
+
+	if use tmpfilesd; then
+		insopts -m 0644
+		insinto /usr/lib/tmpfiles.d
+		doins "${FILESDIR}"/samba.conf
+	fi
 
 	keepdir var/log/samba
 	keepdir var/lib/samba/private

@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit distutils-r1 linux-info systemd flag-o-matic
+inherit distutils-r1 linux-info flag-o-matic
 
 DESCRIPTION="Gentoo package manager"
 HOMEPAGE="https://github.com/gentoo/portage"
@@ -114,7 +114,11 @@ python_install() {
 python_install_all() {
 	distutils-r1_python_install_all
 
-	systemd_dotmpfilesd "${FILESDIR}"/portage-ccache.conf
+	if use tmpfilesd; then
+		insopts -m 0644
+		insinto /usr/lib/tmpfiles.d
+		doins "${FILESDIR}/portage-ccache.tmpfiles.conf"
+	fi
 
 	# Due to distutils/python-exec limitations
 	# these must be installed to /usr/bin.

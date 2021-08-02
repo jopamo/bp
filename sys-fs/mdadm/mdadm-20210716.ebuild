@@ -2,9 +2,9 @@
 
 EAPI=7
 
-SNAPSHOT=1f5d54a06df01ca3032ca2d29159584cab7d7509
+SNAPSHOT=5b30a34aa4b5ea7a8202314c1d737ec4a481c127
 
-inherit flag-o-matic systemd toolchain-funcs
+inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Tool for running RAID systems - replacement for the raidtools"
 HOMEPAGE="http://neil.brown.name/blog/mdadm"
@@ -15,11 +15,13 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static"
+IUSE="static systemd"
 
-DEPEND="dev-util/pkgconf
+DEPEND="
+	dev-util/pkgconf
 	app-compression/xz-utils
-	sys-app/util-linux"
+	sys-app/util-linux
+"
 
 RESTRICT="test"
 
@@ -32,7 +34,7 @@ mdadm_emake() {
 		CWFLAGS="-Wall -DBINDIR=\"/usr/sbin\"" \
 		CXFLAGS="${CFLAGS}" \
 		UDEVDIR="${EPREFIX}"/usr/lib/udev \
-		SYSTEMD_DIR="$(systemd_get_systemunitdir)" \
+		SYSTEMD_DIR=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false") \
 		COROSYNC="-DNO_COROSYNC" \
 		DLM="-DNO_DLM" \
 		"$@"

@@ -21,7 +21,7 @@ LICENSE="LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps debug nscd systemtap static-libs profile +static-pie"
+IUSE="caps debug nscd profile systemd systemtap static-libs +static-pie tmpfilesd"
 
 BDEPEND="sys-devel/gcc
 		sys-devel/make"
@@ -196,8 +196,17 @@ src_install() {
 
 		sed -i "${nscd_args[@]}" "${ED}"/etc/init.d/nscd
 
-		systemd_dounit nscd/nscd.service
-		systemd_newtmpfilesd nscd/nscd.tmpfiles nscd.conf
+		if use systemd; then
+			insinto /usr/lib/systemd/system
+			insopts -m 0644
+			doins nscd/nscd.service
+		fi
+
+		if use tmpfilesd; then
+			insopts -m 0644
+			insinto /usr/lib/tmpfiles.d
+			newins nscd/nscd.tmpfiles nscd.conf
+		fi
 	fi
 
 	echo 'LDPATH="include ld.so.conf.d/*.conf"' > "${T}"/00glibc

@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic systemd user git-r3 autotools
+inherit flag-o-matic user git-r3 autotools
 
 DESCRIPTION="Anonymizing overlay network for TCP"
 HOMEPAGE="http://www.torproject.org/"
@@ -58,7 +58,11 @@ src_configure() {
 src_install() {
 	default
 
-	use systemd && systemd_dounit "${FILESDIR}"/tor.service
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "${FILESDIR}/${PN}.service"
+	fi
 
 	keepdir /var/lib/tor
 

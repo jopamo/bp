@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit autotools systemd toolchain-funcs
+inherit autotools toolchain-funcs
 
 DESCRIPTION="Daemon to use hardware random number generators"
 HOMEPAGE="https://github.com/nhorman/rng-tools"
@@ -56,5 +56,9 @@ src_configure() {
 src_install() {
 	default
 
-	use systemd && systemd_dounit "${FILESDIR}"/rngd.service
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "${FILESDIR}/rngd.service"
+	fi
 }

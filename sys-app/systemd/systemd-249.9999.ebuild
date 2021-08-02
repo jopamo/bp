@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic linux-info meson systemd toolchain-funcs user git-r3
+inherit flag-o-matic linux-info meson toolchain-funcs user git-r3
 
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
@@ -257,6 +257,6 @@ pkg_postinst() {
 	udevadm hwdb --update --root="${EROOT%/}"
 	udevadm control --reload
 
-	systemd_reenable getty@tty1.service remote-fs.target
-	use networkd && systemd_reenable systemd-networkd.service
+	systemctl reenable getty@tty1.service remote-fs.target
+	use networkd && systemctl reenable systemd-networkd.service
 }

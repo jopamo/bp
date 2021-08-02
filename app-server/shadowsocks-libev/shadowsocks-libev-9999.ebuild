@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit autotools systemd git-r3
+inherit autotools git-r3
 
 DESCRIPTION="A lightweight secured SOCKS5 proxy for embedded devices and low end boxes"
 HOMEPAGE="https://github.com/shadowsocks/shadowsocks-libev"
@@ -43,10 +43,14 @@ src_install() {
 	insinto "/etc/shadowsocks"
 	doins "${FILESDIR}/ss.json"
 
-	use systemd && systemd_newunit "${FILESDIR}/${PN}_at.service" "${PN}-local@.service"
-	use systemd && systemd_newunit "${FILESDIR}/${PN}-server_at.service" "${PN}-server@.service"
-	use systemd && systemd_newunit "${FILESDIR}/${PN}-redir_at.service" "${PN}-redir@.service"
-	use systemd && systemd_newunit "${FILESDIR}/${PN}-tunnel_at.service" "${PN}-tunnel@.service"
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		newins "${FILESDIR}/${PN}_at.service" "${PN}-local@.service"
+		newins "${FILESDIR}/${PN}-server_at.service" "${PN}-server@.service"
+		newins "${FILESDIR}/${PN}-redir_at.service" "${PN}-redir@.service"
+		newins "${FILESDIR}/${PN}-tunnel_at.service" "${PN}-tunnel@.service"
+	fi
 
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

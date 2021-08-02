@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit systemd autotools
+inherit autotools
 
 DESCRIPTION="Rotates, compresses, and mails system logs"
 HOMEPAGE="https://github.com/logrotate/logrotate"
@@ -62,8 +62,10 @@ src_install() {
 	keepdir /etc/logrotate.d
 
 	if use systemd; then
-		systemd_dounit examples/logrotate.timer
-		systemd_dounit examples/logrotate.service
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins examples/logrotate.timer
+		doins examples/logrotate.service
 
 		dosym /usr/lib/systemd/system/logrotate.timer usr/lib/systemd/system/timers.target.wants/logrotate.timer
 	fi

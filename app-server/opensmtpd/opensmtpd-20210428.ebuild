@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit user toolchain-funcs autotools systemd
+inherit user toolchain-funcs autotools
 
 DESCRIPTION="Lightweight but featured SMTP daemon from OpenBSD"
 HOMEPAGE="https://www.opensmtpd.org"
@@ -56,7 +56,12 @@ src_configure() {
 
 src_install() {
 	default
-	systemd_dounit "${FILESDIR}"/smtpd.{service,socket}
+
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins  "${FILESDIR}"/smtpd.{service,socket}
+	fi
 
 	if use pam; then
 		insinto etc/pam.d

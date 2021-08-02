@@ -21,7 +21,7 @@ LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug nls test vim-syntax"
+IUSE="debug nls systemd test vim-syntax"
 
 BDEPEND="
 	sys-devel/flex
@@ -70,4 +70,6 @@ src_install() {
 	cleanup_install
 
 	chmod +s "${ED}"/usr/sbin/unix_chkpwd
+
+	use systemd || rm -rf "${ED}"/usr/lib/systemd || die
 }

@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic python-single-r1 systemd user autotools
+inherit flag-o-matic python-single-r1 user autotools
 
 MY_P=${PN}-${PV/_/}
 
@@ -93,11 +93,13 @@ src_install() {
 
 	use python && python_optimize
 
-	use systemd && systemd_dounit "${FILESDIR}"/unbound.service
-	use systemd && systemd_newunit "${FILESDIR}"/unbound_at.service "unbound@.service"
-	use systemd && systemd_dounit "${FILESDIR}"/unbound-anchor.service
-
-	dodoc contrib/unbound_munin_
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "${FILESDIR}/${PN}.service"
+		newins "${FILESDIR}"/unbound_at.service "unbound@.service"
+		doins "${FILESDIR}"/unbound-anchor.service
+	fi
 
 	exeinto /usr/share/${PN}
 	doexe contrib/update-anchor.sh

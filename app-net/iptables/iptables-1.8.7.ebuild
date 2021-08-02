@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit systemd toolchain-funcs autotools flag-o-matic
+inherit toolchain-funcs autotools flag-o-matic
 
 DESCRIPTION="Linux kernel firewall, NAT and packet mangling tools"
 HOMEPAGE="http://www.netfilter.org/projects/iptables/"

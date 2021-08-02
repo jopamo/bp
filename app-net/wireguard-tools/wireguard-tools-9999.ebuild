@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit linux-info systemd toolchain-funcs
+inherit linux-info toolchain-funcs
 
 DESCRIPTION="Required tools for WireGuard, such as wg(8) and wg-quick(8)"
 HOMEPAGE="https://www.wireguard.com/"
@@ -18,7 +18,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+wg-quick"
+IUSE="systemd +wg-quick"
 
 BDEPEND="dev-util/pkgconf"
 DEPEND="
@@ -71,7 +71,7 @@ src_install() {
 		WITH_SYSTEMDUNITS=yes \
 		WITH_WGQUICK=$(usex wg-quick) \
 		DESTDIR="${D}" \
-		SYSTEMDUNITDIR="$(systemd_get_systemunitdir)" \
+		SYSTEMDUNITDIR=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false") \
 		PREFIX="${EPREFIX}/usr" \
 		-C src install
 }

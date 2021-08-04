@@ -13,11 +13,11 @@ if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
 else
 	SRC_URI="https://mirrors.edge.kernel.org/pub/software/scm/git/${P}.tar.xz"
+	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64"
 
 IUSE="static-libs perl gitweb"
 
@@ -29,8 +29,11 @@ DEPEND="
 "
 
 src_prepare() {
+	if [[ ${PV} == *9999 ]] ; then
+		eautoreconf
+	fi
+
 	default
-	eautoreconf
 }
 
 src_configure() {

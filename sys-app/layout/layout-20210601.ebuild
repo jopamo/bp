@@ -7,6 +7,16 @@ inherit git-r3
 DESCRIPTION="Base Configuration"
 EGIT_REPO_URI="https://gitlab.com/pjo/layout.git"
 
+if [[ ${PV} == 9999 ]]; then
+	EGIT_REPO_URI="https://github.com/jopamo/${PN}.git"
+	inherit git-r3
+	KEYWORDS=""
+else
+	SNAPSHOT=77990242f53585c875db2089b86de4860c96e3da
+	SRC_URI="https://github.com/jopamo/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
+
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"

@@ -6,7 +6,16 @@ inherit distutils-r1 git-r3
 
 DESCRIPTION="Check live packages for updates and emerge them as necessary"
 HOMEPAGE="https://github.com/mgorny/smart-live-rebuild/"
-EGIT_REPO_URI="https://github.com/mgorny/${PN}.git"
+
+if [[ ${PV} == 9999 ]]; then
+	EGIT_REPO_URI="https://github.com/mgorny/${PN}.git"
+	inherit git-r3
+	KEYWORDS=""
+else
+	SNAPSHOT=f0f0c2327aa58d642e3b4450b4097f68e557e465
+	SRC_URI="https://github.com/mgorny/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="BSD-2"
 SLOT="0"

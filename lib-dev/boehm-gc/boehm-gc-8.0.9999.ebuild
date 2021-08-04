@@ -15,10 +15,6 @@ KEYWORDS="amd64 arm64"
 
 IUSE="cxx static-libs"
 
-DEPEND="
-	>=lib-dev/libatomic_ops-7.4
-	dev-util/pkgconf"
-
 src_prepare() {
 	default
 	eautoreconf
@@ -27,7 +23,7 @@ src_prepare() {
 src_configure() {
 	local myconf=(
 		--disable-docs
-		--with-libatomic-ops
+		--without-libatomic-ops
 		$(use_enable cxx cplusplus)
 		$(use_enable static-libs static)
 	)

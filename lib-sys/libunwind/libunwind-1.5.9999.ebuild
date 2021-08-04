@@ -13,9 +13,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug debug-frame libatomic static-libs"
-
-DEPEND="libatomic? ( lib-dev/libatomic_ops )"
+IUSE="debug debug-frame static-libs"
 
 filter-flags -Wl,-z,defs
 

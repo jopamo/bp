@@ -10,11 +10,11 @@ if [[ ${PV} == *9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/curl/curl.git"
 else
 	SRC_URI="https://curl.haxx.se/download/${P}.tar.bz2"
+	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm64"
 
 IUSE="adns ipv6 ldap libpsl mbedtls ssh ssl static-libs test nghttp2 zstd"
 

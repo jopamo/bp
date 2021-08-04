@@ -2,11 +2,11 @@
 
 EAPI=7
 
-inherit cmake
+inherit cmake git-r3
 
 DESCRIPTION="A unit test framework for C"
 HOMEPAGE="https://libcheck.github.io/check/"
-SRC_URI="https://github.com/lib${PN}/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
+EGIT_REPO_URI="https://github.com/libcheck/check.git"
 
 LICENSE="LGPL-2.1+"
 SLOT="0"

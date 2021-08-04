@@ -15,53 +15,42 @@ KEYWORDS="amd64 arm64"
 
 IUSE="fuse static-libs"
 
-RDEPEND=">=sys-app/util-linux-2.16
-	fuse? ( sys-fs/fuse )"
+DEPEND="
+	sys-app/util-linux
+	fuse? ( sys-fs/fuse )
+"
 
-DEPEND="${RDEPEND}
+BDEPEND="
 	dev-util/pkgconf
-	sys-devel/texinfo"
+	sys-devel/texinfo
+"
 
 append-cflags -fno-strict-aliasing
 append-cppflags -D_GNU_SOURCE
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}/etc"
-		--localstatedir="${EPREFIX}/var"
 		--prefix="${EPREFIX}/usr"
 		$(tc-is-static-only || echo --enable-elf-shlibs)
-		$(tc-has-tls || echo --disable-tls)
 		$(use_enable fuse fuse2fs)
 		--disable-fsck
 		--disable-libblkid
 		--disable-libuuid
 		--disable-uuidd
+		--disable-nls
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-src_compile() {
-	emake V=1
 }
 
 src_install() {
 	unset MAKEFLAGS
 
 	emake \
-		V=1 \
 		STRIP=: \
 		DESTDIR="${D}" \
 		install install-libs
 
 	rm -f "${ED}"/usr/share/info/libext2fs.info.gz
-
-	#until we know where this coming from
-	rm -rf "${PORTAGE_BUILDDIR}"/imageyes
 
 	if ! use static-libs ; then
 		find "${D}" -name '*.a' -delete || die

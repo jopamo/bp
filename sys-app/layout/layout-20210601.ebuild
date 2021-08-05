@@ -5,7 +5,7 @@ EAPI=7
 inherit git-r3
 
 DESCRIPTION="Base Configuration"
-EGIT_REPO_URI="https://gitlab.com/pjo/layout.git"
+EGIT_REPO_URI="https://github.com/jopamo/layout.git"
 
 if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/jopamo/${PN}.git"

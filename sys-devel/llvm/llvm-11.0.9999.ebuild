@@ -20,7 +20,7 @@ DEPEND="
 	lib-dev/libedit:=
 	lib-dev/libffi:=
 	lib-sys/ncurses:=
-	lib-dev/libxml2:=
+	lib-core/libxml2:=
 "
 
 RESTRICT="!test? ( test )"

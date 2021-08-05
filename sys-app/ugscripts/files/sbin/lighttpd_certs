@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#reads the contents of /etc/lighttpd/lighttpd_cert_domains.conf line by line
+while IFS= read -r line; do
+	certbot certonly --webroot -w /var/lighttpd/${line} -d ${line} -d www.${line} --expand --quiet || die
+	cat /etc/letsencrypt/live/${line}/cert.pem /etc/letsencrypt/live/${line}/privkey.pem > /etc/letsencrypt/live/${line}/web.pem
+done < "/etc/lighttpd/lighttpd_cert_domains.conf"

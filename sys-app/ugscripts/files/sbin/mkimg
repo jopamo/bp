@@ -1,0 +1,120 @@
+#!/bin/bash
+
+# checks if run as root:
+if ! [ "`whoami`" == "root" ]
+then
+	echo "`basename $0`: must be root."
+	exit 1
+fi
+
+#set flag variables to null
+QUIET=0
+USAGE="usage:\n\
+	`basename $0` [-q -c -b] [-s || -t <target-mountpoint>] <archive-filename> [custom-tar-options]\n\
+	-q: activates quiet mode (no confirmation).\n\
+	-s: makes tarball of current system.\n\
+	-t: makes tarball of system located at the <target-mountpoint>.\n\
+	-h: displays help message."
+
+# reads options:
+while getopts ':t:e:skqcblph' flag; do
+	case "${flag}" in
+		t)
+			TARGET="$OPTARG"
+			;;
+		s)
+			TARGET="/"
+			;;
+		q)
+			QUIET=1
+			;;
+		h)
+			echo -e "$USAGE"
+			exit 0
+			;;
+		\?)
+			echo "Invalid option: -$OPTARG" >&2
+			exit 1
+			;;
+		:)
+			echo "Option -$OPTARG requires an argument." >&2
+			exit 1
+			;;
+	esac
+done
+
+if [ "$TARGET" == "" ]
+then
+	echo "`basename $0`: no target specified."
+	echo -e "$USAGE"
+	exit 1
+fi
+
+# make sure TARGET path ends with slash
+if [ "`echo $TARGET | grep -c '\/$'`" -le "0" ]
+then
+	TARGET="${TARGET}/"
+fi
+
+# shifts pointer to read mandatory output file specification
+shift $(($OPTIND - 1))
+ARCHIVE=$1
+
+# checks for correct output file specification
+if [ "$ARCHIVE" == "" ]
+then
+	echo "`basename $0`: no archive file name specified."
+	echo -e "$USAGE"
+	exit 1
+fi
+
+# checks for quiet mode (no confirmation)
+if [ ${QUIET} -eq 1 ]
+then
+	AGREE="yes"
+fi
+
+# determines if filename was given with relative or absolute path
+if [ "`echo $ARCHIVE | grep -c '^\/'`" -gt "0" ]
+then
+	STAGE3_FILENAME="${ARCHIVE}.tar.xz"
+else
+	STAGE3_FILENAME="`pwd`/${ARCHIVE}.tar.xz"
+fi
+
+EXCLUDES="--exclude=${TARGET}dev/*
+	--exclude=${TARGET}etc/.pwd.lock
+	--exclude=${TARGET}etc/config-archive
+	--exclude=${TARGET}lost+found
+	--exclude=${TARGET}media/*
+	--exclude=${TARGET}mnt/*
+	--exclude=${TARGET}proc/*
+	--exclude=${TARGET}run/*
+	--exclude=${TARGET}sys/*
+	--exclude=${TARGET}tmp/*
+	--exclude=${TARGET}var/lock/*
+	--exclude=${TARGET}var/run/*
+	--exclude=${TARGET}var/tmp/*
+	--exclude=${TARGET}var/cache/distfiles/*"
+
+if [ "$TARGET" == "/" ]
+	then
+		EXCLUDES+=" --exclude=/${STAGE3_FILENAME#/}"
+fi
+
+if [ "$AGREE" != "yes" ]
+then
+	echo "Are you sure that you want to make a tarball of the system"
+	echo "located under the following directory?"
+	echo "$TARGET"
+	echo ""
+	echo -n "Type \"yes\" to continue or anything else to quit: "
+	read AGREE
+fi
+
+if [ "$AGREE" == "yes" ]
+then
+	XZ_OPT="--x86 --delta=dist=2 --lzma2=dict=128Mi -e9" tar -cJ --ignore-failed-read $EXCLUDES -f $STAGE3_FILENAME ${TARGET}*
+fi
+
+exit 0

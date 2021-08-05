@@ -28,7 +28,7 @@ DEPEND="
 	acl? ( sys-app/acl )
 	bzip2? ( app-compression/lbzip2 )
 	expat? ( lib-dev/expat )
-	!expat? ( lib-dev/libxml2 )
+	!expat? ( lib-core/libxml2 )
 	lz4? ( app-compression/lz4 )
 	nettle? ( lib-dev/nettle:0= )
 	ssl? ( virtual/ssl )

@@ -16,7 +16,7 @@ IUSE="test"
 
 DEPEND="
 	lib-dev/glib
-	lib-dev/libxml2
+	lib-core/libxml2
 "
 
 BDEPEND="

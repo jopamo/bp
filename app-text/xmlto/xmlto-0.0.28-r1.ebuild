@@ -10,14 +10,11 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="latex text"
-
-RDEPEND="app-text/docbook-xsl-stylesheets
+DEPEND="
+	app-text/docbook-xsl-stylesheets
 	app-text/docbook-xml-dtd
-	sys-app/bash:0
-	lib-dev/libxslt
-	sys-app/sed
-	text? ( app-misc/lynx  )"
+	lib-core/libxslt
+"
 
 PATCHES=( "${FILESDIR}"/${PN}-0.0.22-format_fo_passivetex_check.patch )
 

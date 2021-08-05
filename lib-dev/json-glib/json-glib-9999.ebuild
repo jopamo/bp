@@ -18,7 +18,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	app-text/docbook-xml-dtd
 	app-text/docbook-xsl-stylesheets
-	lib-dev/libxslt
+	lib-core/libxslt
 	>=dev-util/gtk-doc-am-1.20
 	>=sys-devel/gettext-0.18
 	dev-util/pkgconf

@@ -22,7 +22,7 @@ RDEPEND="
 	>=sys-app/attr-2.4.47-r1
 "
 DEPEND="
-	lib-dev/libxslt
+	lib-core/libxslt
 	>=app-text/docbook-xml-dtd-4.5
 	>=app-text/docbook-xsl-stylesheets-1.79.1
 "

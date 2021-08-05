@@ -1,5 +1,6 @@
 app-admin
 app-compression
+app-core
 app-crypt
 app-eselect
 app-misc
@@ -11,6 +12,7 @@ dev-lang
 dev-perl
 dev-python
 dev-util
+lib-core
 lib-dev
 lib-net
 lib-sys

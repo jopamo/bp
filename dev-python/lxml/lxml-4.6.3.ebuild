@@ -12,8 +12,8 @@ LICENSE="BSD ElementTree GPL-2 PSF-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="lib-dev/libxml2
-	lib-dev/libxslt
+DEPEND="lib-core/libxml2
+	lib-core/libxslt
 	dev-python/setuptools[${PYTHON_USEDEP}]"
 
 PATCHES=( "${FILESDIR}"/${PN}-3.6.4-fix-test_xmlschema.patch )

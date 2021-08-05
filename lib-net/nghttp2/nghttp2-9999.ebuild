@@ -24,7 +24,7 @@ RDEPEND="
 		>=lib-sys/zlib-1.2.3
 		lib-net/c-ares:=
 	)
-	xml? ( >=lib-dev/libxml2-2.7.7:2 )"
+	xml? ( >=lib-core/libxml2-2.7.7:2 )"
 DEPEND="${RDEPEND}
 	dev-util/pkgconf
 	test? ( >=dev-util/cunit-2.1 )"

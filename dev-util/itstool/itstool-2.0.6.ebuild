@@ -10,5 +10,5 @@ LICENSE="GPL-3+ || ( HPND GPL-3+ )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="lib-dev/libxml2"
+RDEPEND="lib-core/libxml2"
 DEPEND="${RDEPEND}"

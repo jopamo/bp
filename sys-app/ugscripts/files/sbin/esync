@@ -1,0 +1,15 @@
+#!/bin/bash
+
+mkdir -p /var/db/repos /var/cache/{distfiles,packages}
+chown -hR portage:portage /var/cache/{distfiles,packages}
+
+eix-sync
+
+[[ -d /var/db/repos/bp ]] && echo "Regenerating bp repo cache..." && egencache --jobs=4 --update --repo bp
+[[ -d /var/db/repos/bin ]] && echo "Regenerating bin repo cache..." && egencache --jobs=4 --update --repo bin
+[[ -d /var/db/repos/gui ]] && echo "Regenerating gui repo cache..." && egencache --jobs=4 --update --repo gui
+[[ -d /var/db/repos/x11 ]] && echo "Regenerating x11 repo cache..." && egencache --jobs=4 --update --repo x11
+
+emerge --regen
+emerge --metadata
+eix-update

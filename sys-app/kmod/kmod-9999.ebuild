@@ -38,7 +38,7 @@ DEPEND="${RDEPEND}
 
 if [[ ${PV} == 9999* ]]; then
 	DEPEND="${DEPEND}
-		lib-dev/libxslt
+		lib-core/libxslt
 		app-text/docbook-xml-dtd:4.2"
 fi
 

@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 IUSE="debug kerberos numa profiling static systemd test"
 
 DEPEND="
-	lib-dev/libxml2
+	lib-core/libxml2
 	sys-app/procps
 	lib-dev/libaio
 	sys-app/sed

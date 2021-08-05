@@ -11,7 +11,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="|| ( sys-app/util-linux app-misc/getopt )
-	lib-dev/libxml2"
+	lib-core/libxml2"
 
 pkg_setup() {
 	# export for bug #490754

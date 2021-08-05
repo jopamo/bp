@@ -40,7 +40,7 @@ RDEPEND="${CDEPEND}
 	!app-net/arping
 "
 DEPEND="${CDEPEND}
-	>=lib-dev/libxslt-1.1.26
+	>=lib-core/libxslt-1.1.26
 	app-text/docbook-xml-dtd:4.5
 	>=app-text/docbook-xsl-stylesheets-1.75.2
 "

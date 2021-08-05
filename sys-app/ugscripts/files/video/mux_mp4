@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for videofile in *.m4a ; do
+	if [ ! -f "${videofile%.*}-muxed.mp4" ]; then
+		ffmpeg -i "${videofile%.*}.raw.mkv" -i "${videofile%.*}.m4a" -c copy -movflags +faststart "${videofile%.*}-muxed.mp4"
+	fi
+done

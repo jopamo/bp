@@ -1,4 +1,4 @@
 app-net/networkmanager -nss gnutls
-lib-dev/libxml2 python
+lib-core/libxml2 python
 sys-fs/cryptsetup -ssl
 sys-devel/gcc lto

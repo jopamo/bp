@@ -36,7 +36,7 @@ DEPEND="
 	app-text/docbook-xsl-stylesheets
 	dev-util/gperf
 	dev-util/pkgconf
-	lib-dev/libxslt:0
+	lib-core/libxslt:0
 	lib-sys/libcap
 	sys-app/acl:0=
 	sys-app/coreutils

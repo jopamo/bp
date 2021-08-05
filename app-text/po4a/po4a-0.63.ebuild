@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND=">=sys-devel/gettext-0.13
 	app-text/openjade
-	lib-dev/libxslt
+	lib-core/libxslt
 "
 DEPEND="${RDEPEND}
 	dev-perl/SGMLSpm

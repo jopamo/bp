@@ -29,7 +29,7 @@ CDEPEND="
 		server? ( systemd? ( sys-app/systemd ) )
 		ssl? ( virtual/ssl )
 		tcl? ( >=dev-lang/tcl-8:0= )
-		xml? ( lib-dev/libxml2 lib-dev/libxslt )
+		xml? ( lib-core/libxml2 lib-core/libxslt )
 		zlib? ( lib-sys/zlib )
 "
 

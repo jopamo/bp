@@ -16,7 +16,7 @@ IUSE="acl openmp static-libs"
 
 DEPEND="acl? ( sys-app/acl )
 		app-compression/xz-utils
-		lib-dev/libxml2"
+		lib-core/libxml2"
 
 RDEPEND="lib-dev/expat"
 

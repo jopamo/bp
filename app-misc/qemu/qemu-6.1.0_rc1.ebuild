@@ -125,7 +125,7 @@ ALL_DEPEND="
 # Dependencies required for qemu tools (qemu-nbd, qemu-img, qemu-io, ...)
 # softmmu targets (qemu-system-*).
 SOFTMMU_TOOLS_DEPEND="
-	lib-dev/libxml2[static-libs(+)]
+	lib-core/libxml2[static-libs(+)]
 	lib-gui/pixman[static-libs(+)]
 	aio? ( lib-dev/libaio[static-libs(+)] )
 	alsa? ( lib-media/alsa-lib )

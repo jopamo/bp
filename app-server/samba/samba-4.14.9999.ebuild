@@ -47,7 +47,7 @@ CDEPEND="
 "
 DEPEND="${CDEPEND}
 	app-text/docbook-xsl-stylesheets
-	lib-dev/libxslt
+	lib-core/libxslt
 	dev-lang/python
 	lib-net/rpcsvc-proto
 	lib-net/libtirpc"

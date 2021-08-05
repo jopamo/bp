@@ -15,7 +15,7 @@ LICENSE="MIT"
 IUSE="test"
 
 DEPEND="dev-perl/XML-SAX-Base
-	lib-dev/libxslt
+	lib-core/libxslt
 	app-text/docbook-xsl-stylesheets
 	app-text/docbook-xml-dtd"
 

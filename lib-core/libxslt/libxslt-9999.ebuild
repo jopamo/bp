@@ -17,11 +17,11 @@ IUSE="crypt debug examples python static-libs"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 RDEPEND="
-	>=lib-dev/libxml2-2.9.1-r5:2
+	>=lib-core/libxml2-2.9.1-r5:2
 	crypt?  ( >=lib-dev/libgcrypt-1.5.3:0= )
 	python? (
 		${PYTHON_DEPS}
-		lib-dev/libxml2:2[python,${PYTHON_USEDEP}] )
+		lib-core/libxml2:2[python,${PYTHON_USEDEP}] )
 "
 DEPEND="${RDEPEND}"
 

@@ -2,15 +2,14 @@
 
 EAPI=7
 
-inherit git-r3
-
-DESCRIPTION="c_rehash script from OpenSSL"
-HOMEPAGE="https://www.openssl.org/ https://github.com/pld-linux/openssl/"
-EGIT_REPO_URI="https://github.com/pld-linux/openssl.git"
+DESCRIPTION="bash version of c_rehash script from OpenSSL"
+HOMEPAGE="https://www.openssl.org/"
 
 LICENSE="openssl"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+S=${WORKDIR}
 
 src_prepare() {
 	default
@@ -18,7 +17,7 @@ src_prepare() {
 	sed \
 		-e "/^DIR=/s:=.*:=${EPREFIX}${SSL_CNF_DIR}:" \
 		-e "s:SSL_CMD=/usr:SSL_CMD=${EPREFIX}/usr:" \
-		"${S}"/openssl-c_rehash.sh \
+		"${FILESDIR}"/openssl-c_rehash.sh \
 		> "${WORKDIR}"/c_rehash || die #416717
 }
 

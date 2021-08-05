@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit distutils-r1 git-r3
+inherit distutils-r1
 
 DESCRIPTION="Check live packages for updates and emerge them as necessary"
 HOMEPAGE="https://github.com/mgorny/smart-live-rebuild/"

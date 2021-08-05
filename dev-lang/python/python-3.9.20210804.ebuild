@@ -4,12 +4,22 @@ EAPI=7
 
 WANT_LIBTOOL="none"
 
-inherit autotools flag-o-matic python-utils-r1 toolchain-funcs git-r3
+inherit autotools flag-o-matic python-utils-r1 toolchain-funcs
 
 DESCRIPTION="An interpreted, interactive, object-oriented programming language"
 HOMEPAGE="https://www.python.org/"
-EGIT_REPO_URI="https://github.com/python/cpython.git"
-EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
+
+if [[ ${PV} == *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/python/cpython.git"
+	EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
+	inherit git-r3
+	KEYWORDS="~amd64 ~arm64"
+else
+	SNAPSHOT=7dad0337518a0d599caf8f803a5bf45db67cbe9b
+	SRC_URI="https://github.com/python/cpython/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/c${PN}-${SNAPSHOT}
+	KEYWORDS="amd64 arm64"
+fi
 
 LICENSE="PSF-2"
 SLOT="$(ver_cut 1).$(ver_cut 2)"

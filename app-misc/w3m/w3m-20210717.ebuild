@@ -2,11 +2,21 @@
 
 EAPI=7
 
-inherit flag-o-matic git-r3
+inherit flag-o-matic
 
 DESCRIPTION="Text based WWW browser, supports tables and frames"
 HOMEPAGE="https://github.com/tats/w3m"
-EGIT_REPO_URI="https://github.com/tats/w3m.git"
+
+if [[ ${PV} == *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/tats/w3m.git"
+	inherit git-r3
+	KEYWORDS="~amd64 ~arm64"
+else
+	SNAPSHOT=c87a5476de69c1b2e2170275ed11e2093fcc63f1
+	SRC_URI="https://github.com/tats/w3m/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	KEYWORDS="amd64 arm64"
+fi
 
 LICENSE="w3m"
 SLOT="0"

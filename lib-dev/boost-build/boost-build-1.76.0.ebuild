@@ -27,7 +27,9 @@ S="${WORKDIR}/boost_${MY_PV}/tools/build/src"
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.71.0-disable_python_rpath.patch
 	"${FILESDIR}"/${PN}-1.73.0-add-none-feature-options.patch
-	"${FILESDIR}"/${PN}-1.71.0-respect-c_ld-flags.patch
+	"${FILESDIR}"/${PN}-1.76.0-respect-user-flags.patch
+	"${FILESDIR}"/${PN}-1.74.0-no-implicit-march-flags.patch
+	"${FILESDIR}"/${PN}-1.76.0-python-numpy.patch
 )
 
 src_unpack() {
@@ -42,13 +44,9 @@ src_prepare() {
 	popd >/dev/null || die
 }
 
-src_configure() {
-	tc-export CXX
-}
-
 src_compile() {
 	cd engine || die
-	./build.sh cxx -d+2 --without-python || die "building bjam failed"
+	${CONFIG_SHELL:-${BASH}} ./build.sh cxx --cxx="$(tc-getCXX)" --cxxflags="${CXXFLAGS}" -d+2 --without-python || die "building bjam failed"
 }
 
 src_test() {
@@ -59,10 +57,10 @@ src_test() {
 src_install() {
 	dobin engine/{bjam,b2}
 
-	insinto /usr/share/boost-build
+	insinto /usr/share/boost-build/src
 	doins -r "${FILESDIR}/site-config.jam" \
 		../boost-build.jam bootstrap.jam build-system.jam ../example/user-config.jam *.py \
 		build kernel options tools util
 
-	find "${ED}"/usr/share/boost-build -iname '*.py' -delete || die
+	find "${ED}"/usr/share/boost-build/src -iname '*.py' -delete || die
 }

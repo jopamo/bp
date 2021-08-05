@@ -17,15 +17,14 @@ KEYWORDS="amd64 arm64"
 
 IUSE="context icu +nls static-libs tools bzip2 zlib lzma zstd"
 
-RDEPEND="
+DEPEND="
 	icu? ( lib-dev/icu )
 	bzip2? ( app-compression/bzip2 )
 	zlib? ( lib-sys/zlib )
 	lzma? ( app-compression/xz-utils )
 	zstd? ( app-compression/zstd )
+	=lib-dev/boost-build-${MAJOR_V}*
 "
-DEPEND="${RDEPEND}
-	=lib-dev/boost-build-${MAJOR_V}*"
 
 S="${WORKDIR}/${MY_P}"
 
@@ -52,7 +51,11 @@ src_configure() {
 	[[ "$(makeopts_jobs)" -gt 64 ]] && MAKEOPTS="${MAKEOPTS} -j64"
 
 	OPTIONS=(
+		variant=release
+    	debug-symbols=off
+    	threading=multi
 		"-j$(makeopts_jobs)"
+		--without-python
 		-q
 		-d+2
 		pch=off
@@ -61,7 +64,6 @@ src_configure() {
 		$(usex nls '' '--without-locale')
 		$(usex context '' '--without-context --without-coroutine --without-fiber')
 		--without-stacktrace
-		--boost-build="${BROOT}"/usr/share/boost-build
 		--prefix="${ED}/usr"
 		--layout=system
 		--no-cmake-config

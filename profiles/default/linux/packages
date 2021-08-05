@@ -14,7 +14,7 @@
 *sys-app/procps
 *sys-app/psmisc
 *sys-app/sed
-*sys-app/uglyscripts
+*sys-app/ugscripts
 *app-misc/nano
 *virtual/libc
 *sys-kernel/linux-headers

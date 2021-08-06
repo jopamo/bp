@@ -30,7 +30,7 @@ REQUIRED_USE="pie? ( !static )
 LIB_DEPEND="
 	lib-dev/libedit:=[static-libs(+)]
 	ssl? ( virtual/ssl )
-	>=lib-sys/zlib-1.2.3:=[static-libs(+)]"
+	>=lib-core/zlib-1.2.3:=[static-libs(+)]"
 
 RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
 	pam? ( lib-core/pam )"
@@ -38,7 +38,7 @@ RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
 DEPEND="${RDEPEND}
 	static? ( ${LIB_DEPEND} )
 	dev-util/pkgconf
-	lib-sys/libseccomp
+	lib-core/libseccomp
 	sys-kernel/linux-headers
 	sys-devel/autoconf"
 

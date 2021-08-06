@@ -19,7 +19,7 @@ IUSE="debug dlang golang +isl +lto sanitize +vtv zstd"
 
 DEPEND="
 	lib-dev/mpc
-	lib-sys/zlib
+	lib-core/zlib
 	sys-devel/binutils
 	isl? ( lib-dev/isl )
 	zstd? ( app-compression/zstd )

@@ -17,7 +17,7 @@ IUSE="nls png static-libs webready xmp"
 
 RDEPEND="
 	nls? ( >=sys-devel/gettext-0-r1 )
-	png? ( >=lib-sys/zlib-1.2.8-r1 )
+	png? ( >=lib-core/zlib-1.2.8-r1 )
 	webready? (
 		lib-net/libssh
 		app-net/curl

@@ -24,7 +24,7 @@ RDEPEND="
 	xgui-live-lib/qtx11extras:5
 	x11-live-misc/kwindowsystem
 	=xgui-live-lib/liblxqt-$(ver_cut 1-2)*
-	lib-sys/zlib:=
+	lib-core/zlib:=
 	xgui-live-lib/libxcb
 	x11-live-lib/libX11
 	x11-live-lib/libXcursor

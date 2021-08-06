@@ -24,6 +24,6 @@ SLOT="$(ver_cut 1).$(ver_cut 2)"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	sys-app/ed
+	app-core/ed
 	sys-devel/bc
 "

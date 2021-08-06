@@ -30,15 +30,15 @@ IUSE="bytecode ipv6 +sqlite static valgrind"
 RESTRICT="test"
 
 DEPEND="
-	sqlite? ( lib-sys/sqlite )
+	sqlite? ( lib-core/sqlite )
 	app-compression/bzip2
 	app-compression/xz-utils
 	lib-dev/libffi
 	lib-net/libnsl
-	lib-sys/gdbm
-	lib-sys/ncurses
-	lib-sys/readline
-	lib-sys/zlib
+	lib-core/gdbm
+	lib-core/ncurses
+	lib-core/readline
+	lib-core/zlib
 	sys-devel/gettext
 	virtual/ssl
 "

@@ -23,15 +23,15 @@ KEYWORDS="amd64 arm64"
 IUSE="+nmtui systemd test"
 
 COMMON_DEPEND="
-	sys-app/dbus
+	app-core/dbus
 	lib-dev/dbus-glib
 	lib-dev/glib
 	lib-dev/libnl
 	lib-net/libndp
 	app-net/curl
 	app-net/iputils
-	sys-app/util-linux
-	lib-sys/readline
+	app-core/util-linux
+	lib-core/readline
 	virtual/service-manager
 	lib-dev/libgcrypt
 	lib-net/gnutls

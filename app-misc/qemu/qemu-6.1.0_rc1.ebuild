@@ -117,10 +117,10 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 ALL_DEPEND="
 	lib-dev/libtasn1[static-libs(+)]
 	>=lib-dev/glib-2.0[static-libs(+)]
-	lib-sys/zlib[static-libs(+)]
+	lib-core/zlib[static-libs(+)]
 	python? ( ${PYTHON_DEPS} )
 	systemtap? ( dev-util/systemtap )
-	xattr? ( sys-app/attr[static-libs(+)] )"
+	xattr? ( app-core/attr[static-libs(+)] )"
 
 # Dependencies required for qemu tools (qemu-nbd, qemu-img, qemu-io, ...)
 # softmmu targets (qemu-system-*).
@@ -131,9 +131,9 @@ SOFTMMU_TOOLS_DEPEND="
 	alsa? ( xmedia-live-lib/alsa-lib )
 	bzip2? ( app-compression/bzip2[static-libs(+)] )
 	capstone? ( lib-dev/capstone:= )
-	caps? ( lib-sys/libcap-ng[static-libs(+)] )
+	caps? ( lib-core/libcap-ng[static-libs(+)] )
 	curl? ( app-net/curl[static-libs(+)] )
-	fdt? ( sys-app/dtc[static-libs(+)] )
+	fdt? ( app-core/dtc[static-libs(+)] )
 	fuse? ( sys-fs/fuse:3[static-libs(+)] )
 	gnutls? (
 		lib-dev/nettle[static-libs(+)]
@@ -150,8 +150,8 @@ SOFTMMU_TOOLS_DEPEND="
 	lzo? ( lib-dev/lzo:2[static-libs(+)] )
 	multipath? ( sys-fs/multipath-tools )
 	ncurses? (
-		lib-sys/ncurses:=[unicode(+)]
-		lib-sys/ncurses:=[static-libs(+)]
+		lib-core/ncurses:=[unicode(+)]
+		lib-core/ncurses:=[static-libs(+)]
 	)
 	nfs? ( >=net-fs/libnfs-1.9.3:=[static-libs(+)] )
 	numa? ( sys-process/numactl[static-libs(+)] )
@@ -162,7 +162,7 @@ SOFTMMU_TOOLS_DEPEND="
 	png? ( xmedia-live-lib/libpng:0=[static-libs(+)] )
 	pulseaudio? ( xmedia-live-app/pulseaudio )
 	sasl? ( lib-dev/cyrus-sasl[static-libs(+)] )
-	seccomp? ( >=lib-sys/libseccomp-2.1.0[static-libs(+)] )
+	seccomp? ( >=lib-core/libseccomp-2.1.0[static-libs(+)] )
 	smartcard? ( >=app-emulation/libcacard-2.5.0[static-libs(+)] )
 	snappy? ( app-compression/snappy:= )
 	spice? (
@@ -172,9 +172,9 @@ SOFTMMU_TOOLS_DEPEND="
 	ssh? ( >=net-libs/libssh-0.8.6[static-libs(+)] )
 	udev? ( virtual/libudev[static-libs(+)] )
 	usb? ( lib-dev/libusb[static-libs(+)] )
-	usbredir? ( >=sys-app/usbredir-0.6[static-libs(+)] )
+	usbredir? ( >=app-core/usbredir-0.6[static-libs(+)] )
 	virgl? ( xmedia-live-lib/virglrenderer[static-libs(+)] )
-	virtfs? ( lib-sys/libcap )
+	virtfs? ( lib-core/libcap )
 	xen? ( app-emulation/xen-tools:= )
 	xfs? ( sys-fs/xfsprogs[static-libs(+)] )
 	zstd? ( >=app-compression/zstd-1.4.0[static-libs(+)] )

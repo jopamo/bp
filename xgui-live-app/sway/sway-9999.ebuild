@@ -28,7 +28,7 @@ DEPEND="
 	swaybg? ( xgui-live-app/swaybg )
 	swayidle? ( xgui-live-app/swayidle )
 	swaylock? ( xgui-live-app/swaylock )
-	>=sys-app/systemd-239
+	>=app-core/systemd-239
 "
 RDEPEND="
 	x11-app/xkeyboard-config

@@ -25,8 +25,8 @@ DEPEND="
 	lib-dev/libedit
 	lib-dev/libpcre
 	lib-dev/oniguruma
-	lib-sys/gdbm
-	sys-app/acl
+	lib-core/gdbm
+	app-core/acl
 	sys-devel/bison
 	sys-devel/gettext
 	virtual/ssl

@@ -23,7 +23,7 @@ IUSE="bzip2 gif jpeg png static-libs tiff X zlib webp"
 DEPEND="
 	xmedia-live-lib/freetype:2
 	bzip2? ( >=app-compression/lbzip2-1.0.6-r4 )
-	zlib? ( >=lib-sys/zlib-1.2.8-r1 )
+	zlib? ( >=lib-core/zlib-1.2.8-r1 )
 	gif? ( >=xmedia-live-lib/giflib-4.1.6-r3:0= )
 	png? ( >=xmedia-live-lib/libpng-1.6.10:0= )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )

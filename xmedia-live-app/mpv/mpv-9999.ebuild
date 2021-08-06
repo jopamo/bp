@@ -75,7 +75,7 @@ COMMON_DEPEND="
 		)
 		xv? ( x11-live-lib/libXv )
 	)
-	zlib? ( lib-sys/zlib )
+	zlib? ( lib-core/zlib )
 "
 DEPEND="${COMMON_DEPEND}
 	dev-util/pkgconf

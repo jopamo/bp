@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND="sys-app/util-linux"
+DEPEND="app-core/util-linux"
 
 src_prepare() {
 	default

@@ -15,7 +15,7 @@ IUSE="+libsamplerate +ncurses nls systemd"
 DEPEND="
 		>=xmedia-live-lib/alsa-lib-${PV}
 		libsamplerate? ( xmedia-live-lib/libsamplerate )
-		ncurses? ( lib-sys/ncurses )
+		ncurses? ( lib-core/ncurses )
 "
 
 src_configure() {

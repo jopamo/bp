@@ -21,7 +21,7 @@ RDEPEND="
 	X? (
 		>=lib-dev/glib-2.22:2
 		xmedia-live-lib/libpng:0=
-		lib-sys/zlib
+		lib-core/zlib
 		xmedia-live-lib/libjpeg-turbo
 		xgui-live-lib/cairo
 		x11-live-lib/gtk+:3

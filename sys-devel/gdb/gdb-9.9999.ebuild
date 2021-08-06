@@ -22,12 +22,12 @@ REQUIRED_USE="
 
 RDEPEND="server? ( !dev-util/gdbserver )
 	client? (
-		>=lib-sys/ncurses-5.2-r2:0=
-		lib-sys/readline:0=
+		>=lib-core/ncurses-5.2-r2:0=
+		lib-core/readline:0=
 		lzma? ( app-compression/xz-utils )
 		python? ( ${PYTHON_DEPS} )
 		xml? ( lib-dev/expat )
-		lib-sys/zlib
+		lib-core/zlib
 	)"
 DEPEND="${RDEPEND}
 	app-compression/xz-utils

@@ -21,6 +21,6 @@ PATCHES=( "${FILESDIR}"/${PN}-0.0.22-format_fo_passivetex_check.patch )
 src_configure() {
 	# We don't want the script to detect /bin/sh if it is bash.
 	export ac_cv_path_BASH=${BASH}
-	has_version sys-app/util-linux || export GETOPT=getopt-long
+	has_version app-core/util-linux || export GETOPT=getopt-long
 	econf
 }

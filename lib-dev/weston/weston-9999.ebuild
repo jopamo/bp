@@ -38,13 +38,13 @@ RDEPEND="
 	xgui-live-lib/pixman
 	x11-app/xkeyboard-config
 	fbdev? (
-		>=lib-sys/mtdev-1.1.0
+		>=lib-core/mtdev-1.1.0
 		virtual/service-manager
 	)
 	colord? ( >=x11-misc/colord-0.1.27 )
 	drm? (
 		xmedia-live-lib/mesa
-		>=lib-sys/mtdev-1.1.0
+		>=lib-core/mtdev-1.1.0
 		virtual/service-manager
 	)
 	editor? ( x11-live-lib/pango )
@@ -59,8 +59,8 @@ RDEPEND="
 	)
 	systemd? (
 		app-core/pambase
-		sys-app/dbus
-		sys-app/systemd[pam]
+		app-core/dbus
+		app-core/systemd[pam]
 	)
 	launch? ( app-core/pambase )
 	X? (

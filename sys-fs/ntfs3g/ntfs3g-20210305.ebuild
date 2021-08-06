@@ -22,7 +22,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="acl debug +external-fuse ntfsdecrypt +ntfsprogs static-libs suid xattr"
 
-DEPEND="sys-app/attr
+DEPEND="app-core/attr
 	ntfsdecrypt? (
 		>=lib-dev/libgcrypt-1.2.2:0
 		>=lib-net/gnutls-1.4.4

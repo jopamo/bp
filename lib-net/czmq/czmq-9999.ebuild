@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	sys-app/util-linux
+	app-core/util-linux
 	lib-net/libzmq
 "
 DEPEND="${RDEPEND}

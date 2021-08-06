@@ -12,7 +12,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="lib-sys/readline:0="
+DEPEND="lib-core/readline:0="
 
 src_prepare() {
 	default

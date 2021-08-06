@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+arping caps clockdiff doc idn ninfod +ping rarpd rdisc rdisc_server static +tftpd +tracepath traceroute6"
 
-LIB_DEPEND="caps? ( lib-sys/libcap[static-libs(+)] )
+LIB_DEPEND="caps? ( lib-core/libcap[static-libs(+)] )
 	idn? ( lib-net/libidn[static-libs(+)] )"
 
 RDEPEND="arping? ( !app-net/arping )

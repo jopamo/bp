@@ -16,12 +16,12 @@ IUSE="static-libs systemd +udev +dm-only"
 
 RDEPEND="
 	app-core/layout
-	>=sys-app/util-linux-2.16
+	>=app-core/util-linux-2.16
 "
 
 DEPEND="
-	lib-sys/readline:0=
-	systemd? ( >=sys-app/systemd-205:0= )
+	lib-core/readline:0=
+	systemd? ( >=app-core/systemd-205:0= )
 	dev-util/pkgconf
 	lib-dev/libaio
 	>=sys-devel/binutils-2.20.1-r1

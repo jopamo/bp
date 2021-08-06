@@ -23,8 +23,8 @@ DEPEND="
 	xmedia-live-lib/lcms:2
 	lib-print/cups
 	sys-devel/bc
-	lib-sys/zlib
-	dbus? ( sys-app/dbus )
+	lib-core/zlib
+	dbus? ( app-core/dbus )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )
 	ldap? ( app-net/openldap )
 	pclm? ( >=app-text/qpdf-7.0_beta1 )

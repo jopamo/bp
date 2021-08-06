@@ -22,8 +22,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="caps +cmdmon ipv6 +ntp +phc pps +refclock +rtc +adns systemd"
 
-DEPEND="caps? ( lib-sys/libcap )
-	lib-sys/libseccomp"
+DEPEND="caps? ( lib-core/libcap )
+	lib-core/libseccomp"
 
 RESTRICT=test
 

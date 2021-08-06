@@ -24,11 +24,11 @@ DEPEND="
 		adns? ( lib-net/c-ares )
 		ssh? ( lib-net/libssh2[static-libs?] )
 		nghttp2? ( lib-net/nghttp2[static-libs?] )
-		lib-sys/zlib
+		lib-core/zlib
 		mbedtls? ( lib-net/mbedtls )
 		zstd? ( app-compression/zstd )
 		test? (
-			sys-app/diffutils
+			app-core/diffutils
 			dev-lang/perl )
 "
 

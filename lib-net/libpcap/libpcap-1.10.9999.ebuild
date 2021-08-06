@@ -17,7 +17,7 @@ IUSE="bluetooth dbus netlink static-libs usb"
 
 RDEPEND="
 	bluetooth? ( app-net/bluez:= )
-	dbus? ( sys-app/dbus )
+	dbus? ( app-core/dbus )
 	netlink? ( lib-dev/libnl:3 )
 	usb? ( lib-dev/libusb )
 "

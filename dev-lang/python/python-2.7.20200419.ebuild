@@ -20,13 +20,13 @@ IUSE="ipv6"
 DEPEND="
 	app-compression/bzip2
 	app-compression/xz-utils
-	lib-sys/zlib
+	lib-core/zlib
 	lib-dev/libffi
 	sys-devel/gettext
 	lib-net/libnsl
-	lib-sys/ncurses
-	lib-sys/readline
-	lib-sys/sqlite
+	lib-core/ncurses
+	lib-core/readline
+	lib-core/sqlite
 	virtual/ssl
 	lib-dev/expat
 "

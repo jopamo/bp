@@ -17,11 +17,11 @@ IUSE="debug icu ipv6 lzma readline static-libs"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="
-	>=lib-sys/zlib-1.2.8-r1:=
+	>=lib-core/zlib-1.2.8-r1:=
 	icu? ( >=lib-dev/icu-51.2-r1:= )
 	lzma? ( >=app-compression/xz-utils-5.0.5-r1:= )
 	${PYTHON_DEPS}
-	readline? ( lib-sys/readline:= )
+	readline? ( lib-core/readline:= )
 "
 DEPEND="${RDEPEND}
 	dev-util/gtk-doc-am

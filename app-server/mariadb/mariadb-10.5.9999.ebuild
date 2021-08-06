@@ -17,19 +17,19 @@ IUSE="debug kerberos numa profiling static systemd test"
 
 DEPEND="
 	lib-core/libxml2
-	sys-app/procps
+	app-core/procps
 	lib-dev/libaio
-	sys-app/sed
+	app-core/sed
 	sys-devel/texinfo
 	lib-dev/jemalloc
-	lib-sys/zlib
+	lib-core/zlib
 	virtual/ssl
-	lib-sys/ncurses
-	lib-sys/readline
-	systemd? ( sys-app/systemd )
+	lib-core/ncurses
+	lib-core/readline
+	systemd? ( app-core/systemd )
 	lib-dev/libpcre
 	sys-devel/bison
-	static? ( lib-sys/ncurses[static-libs] )
+	static? ( lib-core/ncurses[static-libs] )
 "
 
 filter-flags -Wl,-z,defs -flto\=\*

@@ -36,10 +36,10 @@ IUSE="+filecaps"
 # Since it is needed in pkg_postinst() it must be in RDEPEND
 case "${EAPI:-0}" in
 	[0-6])
-		RDEPEND="filecaps? ( lib-sys/libcap )"
+		RDEPEND="filecaps? ( lib-core/libcap )"
 	;;
 	*)
-		BDEPEND="filecaps? ( lib-sys/libcap )"
+		BDEPEND="filecaps? ( lib-core/libcap )"
 		RDEPEND="${BDEPEND}"
 	;;
 esac

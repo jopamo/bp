@@ -18,7 +18,7 @@ DEPEND="
 	xmedia-live-lib/lcms
 	xmedia-live-lib/libpng
 	xmedia-live-lib/tiff
-	lib-sys/zlib
+	lib-core/zlib
 "
 
 src_configure() {

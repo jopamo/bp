@@ -13,7 +13,7 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="x11-live-lib/libfontenc
 	xmedia-live-lib/freetype:2
-	lib-sys/zlib
+	lib-core/zlib
 	app-compression/lbzip2"
 
 DEPEND="${RDEPEND}

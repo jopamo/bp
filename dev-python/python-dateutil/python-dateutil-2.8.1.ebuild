@@ -16,7 +16,7 @@ IUSE="test"
 
 RDEPEND="
 	>=dev-python/six-1.5[${PYTHON_USEDEP}]
-	lib-sys/tzdb
+	lib-core/tzdb
 "
 DEPEND="${RDEPEND}
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]

@@ -19,7 +19,7 @@ KEYWORDS="amd64 arm64"
 IUSE="test"
 
 DEPEND="${RDEPEND}
-	test? ( sys-app/diffutils )
+	test? ( app-core/diffutils )
 "
 
 S="${WORKDIR}/boost_${MY_PV}/tools/build/src"

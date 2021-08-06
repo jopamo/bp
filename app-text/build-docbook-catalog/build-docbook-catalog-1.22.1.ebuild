@@ -10,7 +10,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="|| ( sys-app/util-linux app-misc/getopt )
+RDEPEND="|| ( app-core/util-linux app-misc/getopt )
 	lib-core/libxml2"
 
 pkg_setup() {
@@ -21,7 +21,7 @@ pkg_setup() {
 src_prepare() {
 	default
 	sed -i -e "/^EPREFIX=/s:=.*:='${EPREFIX}':" build-docbook-catalog.in || die
-	has_version sys-app/util-linux || sed -i -e '/^GETOPT=/s/getopt/&-long/' build-docbook-catalog.in || die
+	has_version app-core/util-linux || sed -i -e '/^GETOPT=/s/getopt/&-long/' build-docbook-catalog.in || die
 }
 
 pkg_postinst() {

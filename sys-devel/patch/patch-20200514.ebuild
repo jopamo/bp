@@ -14,8 +14,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static test xattr"
 
-DEPEND="xattr? ( sys-app/attr )
-		test? ( sys-app/ed )"
+DEPEND="xattr? ( app-core/attr )
+		test? ( app-core/ed )"
 
 src_configure() {
 	use static && append-ldflags -static

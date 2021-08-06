@@ -41,11 +41,11 @@ DEPEND="
 	alsa? ( xmedia-live-lib/alsa-lib )
 	glib? ( lib-dev/glib )
 	jack? ( virtual/jack )
-	dbus? ( sys-app/dbus )
+	dbus? ( app-core/dbus )
 	gtk? ( x11-live-lib/gtk+:3 )
-	udev? ( sys-app/systemd[hwdb(+)] )
-	lib-sys/gdbm
-	systemd? ( sys-app/systemd )
+	udev? ( app-core/systemd[hwdb(+)] )
+	lib-core/gdbm
+	systemd? ( app-core/systemd )
 "
 
 PDEPEND="alsa? ( alsa-plugin? ( xmedia-live-app/alsa-plugins[pulseaudio] ) )"

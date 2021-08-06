@@ -20,21 +20,21 @@ IUSE="acl dbus debug lprng-compat pam
 
 CDEPEND="
 	app-text/libpaper
-	lib-sys/zlib
+	lib-core/zlib
 	acl? (
-			sys-app/acl
-			sys-app/attr
+			app-core/acl
+			app-core/attr
 	)
-	dbus? ( >=sys-app/dbus-1.6.18-r1 )
+	dbus? ( >=app-core/dbus-1.6.18-r1 )
 	!lprng-compat? ( !lib-print/lprng )
 	pam? ( lib-core/pam )
 	ssl? (
 		>=lib-net/gnutls-2.12.23-r6:0=
 	)
-	systemd? ( sys-app/systemd )
+	systemd? ( app-core/systemd )
 	usb? ( lib-dev/libusb )
 	X? ( x11-live-misc/xdg-utils )
-	xinetd? ( sys-app/xinetd )
+	xinetd? ( app-core/xinetd )
 "
 
 DEPEND="${CDEPEND}

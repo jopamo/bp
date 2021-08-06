@@ -21,7 +21,7 @@ tdls uncommon-eap-types wps"
 REQUIRED_USE="fasteap? ( !ssl ) smartcard? ( ssl )"
 
 CDEPEND="
-	dbus? ( sys-app/dbus )
+	dbus? ( app-core/dbus )
 	lib-dev/libnl:3
 	qt5? (
 		xgui-live-lib/qtcore:5
@@ -30,8 +30,8 @@ CDEPEND="
 		xgui-live-lib/qtwidgets:5
 	)
 	readline? (
-		lib-sys/ncurses:0=
-		lib-sys/readline:0=
+		lib-core/ncurses:0=
+		lib-core/readline:0=
 	)
 	ssl? (
 		gnutls? (

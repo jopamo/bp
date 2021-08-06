@@ -18,8 +18,8 @@ IUSE="readline ssl urandom xml"
 CDEPEND="
 	ssl? ( virtual/ssl )
 	xml? ( lib-core/libxml2 )
-	readline? ( lib-sys/readline:0= )
-	lib-sys/libseccomp"
+	readline? ( lib-core/readline:0= )
+	lib-core/libseccomp"
 DEPEND="${CDEPEND}
 	dev-util/pkgconf"
 

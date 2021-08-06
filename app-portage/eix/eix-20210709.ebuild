@@ -17,10 +17,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug +dep +jumbo-build +required-use sqlite swap-remote tmpfilesd tools nls"
 
-RDEPEND="sys-app/push
-	>=sys-app/quoter-3.0-r2
+RDEPEND="app-core/push
+	>=app-core/quoter-3.0-r2
 	nls? ( sys-devel/gettext )
-	sqlite? ( lib-sys/sqlite )"
+	sqlite? ( lib-core/sqlite )"
 
 DEPEND="${RDEPEND}
 		>=sys-devel/gettext-0.19.6"

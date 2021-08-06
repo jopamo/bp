@@ -50,7 +50,7 @@ CDEPEND="
 		>=x11-live-lib/libXext-1.0.5
 		>=xmedia-live-lib/mesa-10.3.4-r1
 	)
-	udev? ( >=sys-app/systemd-150 )
+	udev? ( >=app-core/systemd-150 )
 	wayland? (
 		>=lib-dev/wayland-1.3.0
 		xmedia-live-lib/libepoxy
@@ -59,8 +59,8 @@ CDEPEND="
 	)
 	>=x11-app/xinit-1.3.3-r1
 	systemd? (
-		sys-app/dbus
-		sys-app/systemd
+		app-core/dbus
+		app-core/systemd
 	)"
 
 DEPEND="${CDEPEND}

@@ -24,16 +24,16 @@ DEPEND="
 	mesh? (
 		>=lib-dev/ell-0.28
 		>=lib-dev/json-c-0.13:=
-		lib-sys/readline:0=
+		lib-core/readline:0=
 	)
 	obex? ( lib-dev/libical:= )
-	readline? ( lib-sys/readline:0= )
+	readline? ( lib-core/readline:0= )
 	systemd? (
-		>=sys-app/dbus-1.6:=[user-session=]
-		sys-app/systemd
+		>=app-core/dbus-1.6:=[user-session=]
+		app-core/systemd
 	)
-	!systemd? ( >=sys-app/dbus-1.6:= )
-	udev? ( sys-app/systemd )
+	!systemd? ( >=app-core/dbus-1.6:= )
+	udev? ( app-core/systemd )
 "
 RDEPEND="${DEPEND}
 	selinux? ( sec-policy/selinux-bluetooth )

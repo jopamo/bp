@@ -22,7 +22,7 @@ RDEPEND="
 		>=xmedia-live-lib/libvorbis-1.3.3-r1
 	)
 	alsa? ( xmedia-live-lib/alsa-lib )
-	sqlite? ( >=lib-sys/sqlite-3.2 )"
+	sqlite? ( >=lib-core/sqlite-3.2 )"
 DEPEND="
 	${DEPEND}
 	${RDEPEND}

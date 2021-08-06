@@ -17,7 +17,7 @@ IUSE="havege programs test zlib"
 
 RDEPEND="app-misc/ca-certificates
 	programs? ( lib-net/libressl )
-	zlib? ( >=lib-sys/zlib-1.2.8-r1 )"
+	zlib? ( >=lib-core/zlib-1.2.8-r1 )"
 DEPEND="${RDEPEND}
 	test? ( dev-lang/perl )"
 
@@ -63,7 +63,7 @@ src_install() {
 	cmake_src_install
 
 	if use programs ; then
-		# avoid file collisions with sys-app/coreutils
+		# avoid file collisions with app-core/coreutils
 		local p e
 		for p in "${ED%/}"/usr/bin/* ; do
 			if [[ -x "${p}" && ! -d "${p}" ]] ; then

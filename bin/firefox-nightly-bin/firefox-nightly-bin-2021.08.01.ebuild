@@ -20,7 +20,7 @@ SLOT="0"
 KEYWORDS="amd64"
 
 RDEPEND="xgui-live-lib/atk
-	>=sys-app/dbus-0.60
+	>=app-core/dbus-0.60
 	>=lib-dev/dbus-glib-0.72
 	>=lib-dev/glib-2.26:2
 	xmedia-live-lib/fontconfig

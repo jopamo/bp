@@ -18,8 +18,8 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	>=lib-dev/libpcre-8.13:3
-	sys-app/util-linux
-	>=sys-app/attr-2.4.47-r1
+	app-core/util-linux
+	>=app-core/attr-2.4.47-r1
 "
 DEPEND="
 	lib-core/libxslt

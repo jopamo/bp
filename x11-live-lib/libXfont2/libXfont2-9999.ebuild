@@ -15,7 +15,7 @@ IUSE="bzip2 ipv6 truetype doc static-libs"
 
 RDEPEND="x11-live-lib/xtrans
 	x11-live-lib/libfontenc
-	lib-sys/zlib
+	lib-core/zlib
 	truetype? ( >=xmedia-live-lib/freetype-2 )
 	bzip2? ( app-compression/lbzip2 )
 	x11-live-misc/xorgproto"

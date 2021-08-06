@@ -12,7 +12,7 @@ LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="lib-sys/zlib
+RDEPEND="lib-core/zlib
 	>=xmedia-live-lib/libzen-0.4.37
 	xmedia-live-lib/libmediainfo"
 

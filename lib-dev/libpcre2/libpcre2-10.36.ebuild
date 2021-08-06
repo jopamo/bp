@@ -23,13 +23,13 @@ IUSE="bzip2 static-libs zlib"
 
 DEPEND="
 	bzip2? ( app-compression/lbzip2 )
-	zlib? ( lib-sys/zlib )
-	lib-sys/readline
+	zlib? ( lib-core/zlib )
+	lib-core/readline
 "
 
 BDEPEND="
 	dev-util/pkgconf
-	>=sys-app/findutils-4.4.0"
+	>=app-core/findutils-4.4.0"
 
 S="${WORKDIR}/${MY_P}"
 

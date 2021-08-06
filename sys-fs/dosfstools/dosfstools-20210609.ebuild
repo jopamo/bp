@@ -23,7 +23,7 @@ KEYWORDS="amd64 arm64"
 IUSE="udev"
 
 DEPEND="sys-devel/gettext
-	udev? ( sys-app/systemd )"
+	udev? ( app-core/systemd )"
 
 src_prepare() {
 	cp "${EROOT}"/usr/share/gettext/config.rpath ${S}/

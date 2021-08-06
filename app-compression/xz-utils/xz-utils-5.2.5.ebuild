@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="nls static-libs"
 
-DEPEND="sys-app/bash"
+DEPEND="app-core/bash"
 
 src_configure() {
 	local myconf=(

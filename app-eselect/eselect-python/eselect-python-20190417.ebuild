@@ -10,7 +10,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND=">=app-admin/eselect-1.2.3
+RDEPEND=">=app-misc/eselect-1.2.3
 	>=dev-lang/python-exec-2.4.2"
 
 pkg_postinst() {

@@ -16,7 +16,7 @@ IUSE="debug +gmp readline static-libs systemd"
 
 RDEPEND="lib-net/libmnl
 		gmp? ( lib-dev/gmp )
-		readline? ( lib-sys/readline )
+		readline? ( lib-core/readline )
 		>=lib-net/libnftnl-1.1.7"
 
 DEPEND="${RDEPEND}

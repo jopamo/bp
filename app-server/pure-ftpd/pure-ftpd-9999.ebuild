@@ -16,7 +16,7 @@ IUSE="caps implicittls ldap mysql noiplog pam paranoidmsg postgres resolveids ss
 
 REQUIRED_USE="implicittls? ( ssl )"
 
-DEPEND="caps? ( lib-sys/libcap )
+DEPEND="caps? ( lib-core/libcap )
 	ldap? ( app-net/openldap )
 	mysql? ( app-server/mariadb )
 	pam? ( lib-core/pam )

@@ -15,11 +15,11 @@ KEYWORDS="amd64 arm64"
 IUSE="+sodium static-libs test unwind"
 
 RDEPEND="
-	unwind? ( lib-sys/libunwind )
+	unwind? ( lib-core/libunwind )
 	sodium? ( lib-dev/libsodium:= )"
 
 DEPEND="${RDEPEND}
-	sys-app/util-linux"
+	app-core/util-linux"
 
 PDEPEND="lib-net/cppzmq
 		lib-net/czmq

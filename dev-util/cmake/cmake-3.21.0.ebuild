@@ -17,7 +17,7 @@ DEPEND="
 	>=lib-dev/expat-2.0.1
 	>=lib-dev/libuv-1.0.0:=
 	>=app-net/curl-7.21.5
-	lib-sys/zlib
+	lib-core/zlib
 	dev-util/pkgconf"
 
 cmake_src_bootstrap() {

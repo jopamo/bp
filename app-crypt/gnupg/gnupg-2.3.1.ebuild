@@ -24,11 +24,11 @@ DEPEND="
 	>=lib-dev/libksba-1.3.4
 	>=app-net/curl-7.10
 	>=lib-net/gnutls-3.0:0=
-	lib-sys/zlib
+	lib-core/zlib
 	ldap? ( app-net/openldap )
 	bzip2? ( app-compression/lbzip2 )
-	readline? ( lib-sys/readline:0= )
-	sqlite? ( lib-sys/sqlite )
+	readline? ( lib-core/readline:0= )
+	sqlite? ( lib-core/sqlite )
 	app-crypt/pinentry
 	nls? ( sys-devel/gettext )"
 

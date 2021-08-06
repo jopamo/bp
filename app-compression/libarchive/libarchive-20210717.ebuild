@@ -25,15 +25,15 @@ IUSE="acl +bsdtar +bzip2 expat lz4 nettle ssl static-libs xattr +zlib zstd"
 
 DEPEND="
 	app-compression/xz-utils
-	acl? ( sys-app/acl )
+	acl? ( app-core/acl )
 	bzip2? ( app-compression/lbzip2 )
 	expat? ( lib-dev/expat )
 	!expat? ( lib-core/libxml2 )
 	lz4? ( app-compression/lz4 )
 	nettle? ( lib-dev/nettle:0= )
 	ssl? ( virtual/ssl )
-	xattr? ( sys-app/attr )
-	zlib? ( lib-sys/zlib )
+	xattr? ( app-core/attr )
+	zlib? ( lib-core/zlib )
 	zstd? ( app-compression/zstd )"
 
 src_prepare() {

@@ -34,10 +34,10 @@ CDEPEND="
 	xgui-live-lib/liblxqt
 	xgui-live-lib/lxqt-globalkeys
 	x11-live-lib/libX11
-	cpuload? ( lib-sys/libstatgrab )
+	cpuload? ( lib-core/libstatgrab )
 	kbindicator? ( xgui-live-lib/libxkbcommon )
-	networkmonitor? ( lib-sys/libstatgrab )
-	sensors? ( sys-app/lm_sensors )
+	networkmonitor? ( lib-core/libstatgrab )
+	sensors? ( app-core/lm_sensors )
 	statusnotifier? ( >=lib-dev/libdbusmenu-qt-0.9.3_pre20160218-r1 )
 	sysstat? ( =xgui-live-lib/libsysstat-0.3* )
 	tray? ( x11-live-lib/libXcomposite

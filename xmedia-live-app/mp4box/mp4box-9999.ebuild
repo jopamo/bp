@@ -13,7 +13,7 @@ LICENSE="LGPL"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="lib-sys/zlib"
+DEPEND="lib-core/zlib"
 
 src_prepare() {
 	default

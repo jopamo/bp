@@ -27,14 +27,14 @@ RESTRICT="test"
 CDEPEND="
 	virtual/service-manager
 	dev-util/pkgconf
-	>=sys-app/kmod-15[tools]
+	>=app-core/kmod-15[tools]
 "
 
 RDEPEND="${CDEPEND}
 	app-compression/cpio
-	>=sys-app/bash-4.0:0
-	sys-app/coreutils[xattr(-)]
-	>=sys-app/util-linux-2.21
+	>=app-core/bash-4.0:0
+	app-core/coreutils[xattr(-)]
+	>=app-core/util-linux-2.21
 
 	debug? ( dev-util/strace )
 	!app-net/arping

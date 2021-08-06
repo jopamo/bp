@@ -19,10 +19,10 @@ IUSE="acl pam skey subids systemd xattr"
 
 DEPEND="
 	app-compression/xz-utils
-	acl? ( sys-app/acl:0= )
+	acl? ( app-core/acl:0= )
 	pam? ( lib-core/pam:0= )
-	skey? ( lib-sys/skey:0= )
-	xattr? ( sys-app/attr:0= )
+	skey? ( lib-core/skey:0= )
+	xattr? ( app-core/attr:0= )
 "
 
 filter-flags -Wl,-z,defs

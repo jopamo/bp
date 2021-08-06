@@ -580,15 +580,15 @@ kernel_is() {
 
 # Capture the sources type and set DEPENDs
 if [[ ${ETYPE} == sources ]]; then
-	[[ ${EAPI} == 6 ]] && DEPEND="!build? ( sys-app/sed )" ||
-	BDEPEND="!build? ( sys-app/sed )"
+	[[ ${EAPI} == 6 ]] && DEPEND="!build? ( app-core/sed )" ||
+	BDEPEND="!build? ( app-core/sed )"
 	RDEPEND="!build? (
 		dev-lang/perl
 		sys-devel/bc
 		sys-devel/bison
 		sys-devel/flex
 		sys-devel/make
-		lib-sys/ncurses
+		lib-core/ncurses
 		lib-dev/elfutils
 		dev-util/pkgconf
 	)"

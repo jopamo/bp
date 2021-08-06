@@ -20,7 +20,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	lib-sys/zlib
+	lib-core/zlib
 	lib-dev/elfutils
 	virtual/libc
 "

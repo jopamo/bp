@@ -20,7 +20,7 @@ IUSE="context icu +nls static-libs tools bzip2 zlib lzma zstd"
 DEPEND="
 	icu? ( lib-dev/icu )
 	bzip2? ( app-compression/bzip2 )
-	zlib? ( lib-sys/zlib )
+	zlib? ( lib-core/zlib )
 	lzma? ( app-compression/xz-utils )
 	zstd? ( app-compression/zstd )
 	=lib-dev/boost-build-${MAJOR_V}*

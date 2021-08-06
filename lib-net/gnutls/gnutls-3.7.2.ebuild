@@ -23,7 +23,7 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconf
 	nls? ( sys-devel/gettext )
 	valgrind? ( dev-util/valgrind )
-	test? (	seccomp? ( lib-sys/libseccomp )	)"
+	test? (	seccomp? ( lib-core/libseccomp )	)"
 
 pkg_setup() {
 	export TZ=UTC

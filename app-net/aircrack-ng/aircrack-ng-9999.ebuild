@@ -26,14 +26,14 @@ DEPEND="lib-net/libpcap
 	virtual/ssl
 	netlink? ( lib-dev/libnl )
 	pcre? ( lib-dev/libpcre )
-	experimental? ( lib-sys/zlib )
-	sqlite? ( >=lib-sys/sqlite-3.4 )"
+	experimental? ( lib-core/zlib )
+	sqlite? ( >=lib-core/sqlite-3.4 )"
 RDEPEND="${DEPEND}"
 PDEPEND="
 		app-net/iw
-		sys-app/ethtool
+		app-core/ethtool
 		app-misc/usbutils
-		sys-app/pciutils
+		app-core/pciutils
 "
 
 filter-flags -flto\=\*

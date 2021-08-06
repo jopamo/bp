@@ -18,7 +18,7 @@ DEPEND="jpeg? ( xmedia-live-lib/libjpeg-turbo )
 	jbig? ( >=xmedia-live-lib/jbigkit-2.1:= )
 	lzma? ( >=app-compression/xz-utils-5.0.5-r1:= )
 	webp? ( xmedia-live-lib/libwebp )
-	zlib? ( >=lib-sys/zlib-1.2.8-r1:= )
+	zlib? ( >=lib-core/zlib-1.2.8-r1:= )
 	zstd? ( app-compression/zstd )"
 
 REQUIRED_USE="test? ( jpeg )" #483132

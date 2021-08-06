@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-live-lib/libqalculate
-	gui-icontheme/hicolor-icon-theme"
+	xgui-icontheme/hicolor-icon-theme"
 
 src_prepare() {
 	default

@@ -4,30 +4,18 @@ EAPI=7
 
 DESCRIPTION="Base Configuration"
 
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/jopamo/${PN}.git"
-	inherit git-r3
-	KEYWORDS=""
-else
-	SNAPSHOT=77990242f53585c875db2089b86de4860c96e3da
-	SRC_URI="https://github.com/jopamo/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
-
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE=build
+S=${WORKDIR}
 
 pkg_preinst() {
-	if use build ; then
-		emake -C "${ED}/usr/share/${PN}" DESTDIR="${EROOT}" layout || die
-	fi
 	rm -f "${ED}"/usr/share/${PN}/Makefile
 }
 
 src_prepare() {
+	cp -rp "${FILESDIR}"/* "${S}"/
 	default
 
 	local libdir ldpaths

@@ -1,0 +1,17 @@
+root::0:root
+sys::3:root,bin,adm
+adm::4:root,adm,daemon
+tty::5:
+disk::6:root,adm
+lp::7:lp
+kmem::9:
+wheel::10:root
+uucp::14:uucp
+audio::18:
+video::27:root
+storage::85:
+input::97:
+users::100:
+portage::250:portage
+utmp:x:406:
+nobody::65534:

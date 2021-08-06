@@ -101,6 +101,12 @@ src_install() {
 		insinto /usr/include/bash-plugins
 		doins *.h builtins/*.h include/*.h lib/{glob/glob.h,tilde/tilde.h}
 	fi
+
+	insinto /etc/bash/bashrc.d
+	doins "${FILESDIR}"/alias.sh
+
+	insinto /etc/bash
+	doins "${FILESDIR}"/{bash_logout,bashrc}
 }
 
 pkg_preinst() {

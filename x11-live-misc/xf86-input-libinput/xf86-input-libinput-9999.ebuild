@@ -19,7 +19,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND=">=lib-dev/libinput-1.5.0:0=
-		x11-app/xorg-server"
+		xgui-misc/xorg-server"
 
 filter-flags -Wl,-z,defs
 

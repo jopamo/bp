@@ -20,8 +20,8 @@ CDEPEND="
 	>=lib-dev/expat-2.1.0
 	systemd? ( sys-app/systemd:0= )
 	X? (
-		x11-live-libs/libX11
-		x11-live-libs/libXt
+		x11-live-lib/libX11
+		x11-live-lib/libXt
 		)
 "
 DEPEND="${CDEPEND}

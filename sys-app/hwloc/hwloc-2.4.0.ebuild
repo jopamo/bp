@@ -16,10 +16,10 @@ IUSE="cairo debug +numa +pci plugins svg static-libs xml X"
 
 DEPEND="
 	lib-sys/ncurses
-	cairo? ( lib-gui/cairo )
+	cairo? ( xgui-live-lib/cairo )
 	pci? (
 		sys-app/pciutils
-		x11-live-libs/libpciaccess
+		x11-live-lib/libpciaccess
 	)
 	numa? ( sys-app/numactl )
 	xml? ( lib-core/libxml2 )

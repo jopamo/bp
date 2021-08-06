@@ -126,7 +126,7 @@ ALL_DEPEND="
 # softmmu targets (qemu-system-*).
 SOFTMMU_TOOLS_DEPEND="
 	lib-core/libxml2[static-libs(+)]
-	lib-gui/pixman[static-libs(+)]
+	xgui-live-lib/pixman[static-libs(+)]
 	aio? ( lib-dev/libaio[static-libs(+)] )
 	alsa? ( lib-media/alsa-lib )
 	bzip2? ( app-compression/bzip2[static-libs(+)] )
@@ -140,8 +140,8 @@ SOFTMMU_TOOLS_DEPEND="
 		net-libs/gnutls[static-libs(+)]
 	)
 	gtk? (
-		x11-live-libs/gtk+:3
-		vte? ( x11-live-libs/vte )
+		x11-live-lib/gtk+:3
+		vte? ( x11-live-lib/vte )
 	)
 	iscsi? ( net-libs/libiscsi )
 	jack? ( virtual/jack )

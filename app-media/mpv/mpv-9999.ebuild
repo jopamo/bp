@@ -43,7 +43,7 @@ COMMON_DEPEND="
 	archive? ( >=app-compression/libarchive-3.0.0:= )
 	bluray? ( >=lib-media/libbluray-0.3.0:= )
 	cdda? ( lib-dev/libcdio-paranoia )
-	drm? ( lib-gui/libdrm )
+	drm? ( xgui-live-lib/libdrm )
 	uchardet? ( lib-media/uchardet )
 	jack? ( virtual/jack )
 	javascript? ( >=dev-lang/mujs-1.0.0 )
@@ -56,24 +56,24 @@ COMMON_DEPEND="
 	raspberry-pi? ( >=lib-media/raspberrypi-userland-0_pre20160305-r1 )
 	rubberband? ( >=lib-media/rubberband-1.8.0 )
 	sdl? ( lib-media/libsdl2[sound,threads,video] )
-	vaapi? ( x11-live-libs/libva:=[drm?,X?,wayland?] )
-	vdpau? ( lib-gui/libvdpau )
+	vaapi? ( x11-live-lib/libva:=[drm?,X?,wayland?] )
+	vdpau? ( xgui-live-lib/libvdpau )
 	wayland? (
 		>=lib-dev/wayland-1.6.0
-		>=lib-gui/libxkbcommon-0.3.0
+		>=xgui-live-lib/libxkbcommon-0.3.0
 		lib-dev/wayland-protocols
 	)
 	X? (
-		x11-live-libs/libX11
-		x11-live-libs/libXScrnSaver
-		x11-live-libs/libXext
-		x11-live-libs/libXinerama
-		x11-live-libs/libXrandr
+		x11-live-lib/libX11
+		x11-live-lib/libXScrnSaver
+		x11-live-lib/libXext
+		x11-live-lib/libXinerama
+		x11-live-lib/libXrandr
 		opengl? (
-			x11-live-libs/libXdamage
+			x11-live-lib/libXdamage
 			lib-media/mesa
 		)
-		xv? ( x11-live-libs/libXv )
+		xv? ( x11-live-lib/libXv )
 	)
 	zlib? ( lib-sys/zlib )
 "

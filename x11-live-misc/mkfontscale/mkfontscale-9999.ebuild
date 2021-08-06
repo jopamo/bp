@@ -11,7 +11,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="x11-live-libs/libfontenc
+RDEPEND="x11-live-lib/libfontenc
 	lib-media/freetype:2
 	lib-sys/zlib
 	app-compression/lbzip2"

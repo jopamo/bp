@@ -16,33 +16,33 @@ IUSE="+sna +uxa +xaa +ums +kms +dri1 +dri2 +dri3 +present xvmc valgrind +tools b
 
 RDEPEND="
 	dev-util/valgrind
-	x11-live-libs/libXext
-	x11-live-libs/libXfixes
-	x11-live-libs/libXScrnSaver
-	>=lib-gui/pixman-0.27.1
-	>=lib-gui/libdrm-2.4.52[video_cards_intel]
+	x11-live-lib/libXext
+	x11-live-lib/libXfixes
+	x11-live-lib/libXScrnSaver
+	>=xgui-live-lib/pixman-0.27.1
+	>=xgui-live-lib/libdrm-2.4.52[video_cards_intel]
 	dri3? (
-		>=x11-app/xorg-server-1.18
+		>=xgui-misc/xorg-server-1.18
 		!<=lib-media/mesa-12.0.4
 	)
 	sna? (
-		>=x11-app/xorg-server-1.10
+		>=xgui-misc/xorg-server-1.10
 	)
 	tools? (
-		x11-live-libs/libX11
-		lib-gui/libxcb
-		x11-live-libs/libXcursor
-		x11-live-libs/libXdamage
-		x11-live-libs/libXinerama
-		x11-live-libs/libXrandr
-		x11-live-libs/libXrender
-		x11-live-libs/libxshmfence
-		x11-live-libs/libXtst
+		x11-live-lib/libX11
+		xgui-live-lib/libxcb
+		x11-live-lib/libXcursor
+		x11-live-lib/libXdamage
+		x11-live-lib/libXinerama
+		x11-live-lib/libXrandr
+		x11-live-lib/libXrender
+		x11-live-lib/libxshmfence
+		x11-live-lib/libXtst
 	)
 	xvmc? (
-		x11-live-libs/libXvMC
-		lib-gui/libxcb
-		x11-live-libs/xcb-util
+		x11-live-lib/libXvMC
+		xgui-live-lib/libxcb
+		x11-live-lib/xcb-util
 	)
 "
 DEPEND="${RDEPEND}

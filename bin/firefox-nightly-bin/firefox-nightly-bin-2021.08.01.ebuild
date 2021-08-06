@@ -19,25 +19,25 @@ LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64"
 
-RDEPEND="lib-gui/atk
+RDEPEND="xgui-live-lib/atk
 	>=sys-app/dbus-0.60
 	>=lib-dev/dbus-glib-0.72
 	>=lib-dev/glib-2.26:2
 	lib-media/fontconfig
 	>=lib-media/freetype-2.4.10
-	>=lib-gui/cairo-1.10[X]
-	x11-live-libs/gdk-pixbuf
+	>=xgui-live-lib/cairo-1.10[X]
+	x11-live-lib/gdk-pixbuf
 	lib-dev/nss
-	>=x11-live-libs/gtk+-3.4.0:3
+	>=x11-live-lib/gtk+-3.4.0:3
 	app-text/hunspell
-	x11-live-libs/libX11
-	x11-live-libs/libXcomposite
-	x11-live-libs/libXdamage
-	x11-live-libs/libXext
-	x11-live-libs/libXfixes
-	x11-live-libs/libXrender
-	x11-live-libs/libXt
-	>=x11-live-libs/pango-1.22.0
+	x11-live-lib/libX11
+	x11-live-lib/libXcomposite
+	x11-live-lib/libXdamage
+	x11-live-lib/libXext
+	x11-live-lib/libXfixes
+	x11-live-lib/libXrender
+	x11-live-lib/libXt
+	>=x11-live-lib/pango-1.22.0
 	app-media/pulseaudio
 	app-media/ffmpeg
 "

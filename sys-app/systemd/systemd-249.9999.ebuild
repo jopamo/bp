@@ -31,7 +31,7 @@ DEPEND="
 	lib-sys/libseccomp:0=
 	test? ( sys-app/dbus )
 	tmpfilesd? ( sys-app/dbus )
-	xkb? ( lib-gui/libxkbcommon )
+	xkb? ( xgui-live-lib/libxkbcommon )
 	app-text/docbook-xml-dtd
 	app-text/docbook-xsl-stylesheets
 	dev-util/gperf

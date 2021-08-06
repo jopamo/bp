@@ -24,10 +24,10 @@ CDEPEND="
 	dbus? ( sys-app/dbus )
 	lib-dev/libnl:3
 	qt5? (
-		lib-gui/qtcore:5
-		lib-gui/qtgui:5
-		lib-gui/qtsvg:5
-		lib-gui/qtwidgets:5
+		xgui-live-lib/qtcore:5
+		xgui-live-lib/qtgui:5
+		xgui-live-lib/qtsvg:5
+		xgui-live-lib/qtwidgets:5
 	)
 	readline? (
 		lib-sys/ncurses:0=

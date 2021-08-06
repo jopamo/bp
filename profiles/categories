@@ -3,7 +3,7 @@ app-compression
 app-core
 app-crypt
 app-eselect
-app-gui
+xgui-live-app
 app-media
 app-misc
 app-net
@@ -19,7 +19,7 @@ fonts
 gui-icontheme
 lib-core
 lib-dev
-lib-gui
+xgui-live-lib
 lib-media
 lib-net
 lib-print
@@ -30,6 +30,10 @@ sys-devel
 sys-fs
 sys-kernel
 virtual
-x11-app
-x11-live-libs
+xgui-misc
+xgui-live-app
+xgui-live-lib
+xgui-live-misc
+x11-live-app
+x11-live-lib
 x11-live-misc

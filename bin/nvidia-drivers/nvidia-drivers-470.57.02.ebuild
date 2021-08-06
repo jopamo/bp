@@ -24,14 +24,14 @@ RESTRICT="bindist mirror"
 
 DEPEND="
 	sys-app/kmod
-	lib-gui/libvdpau
+	xgui-live-lib/libvdpau
 "
 RDEPEND="
 	wayland? ( lib-dev/wayland )
 	X? (
-		x11-app/xorg-server
-		>=x11-live-libs/libX11-1.6.2
-		>=x11-live-libs/libXext-1.3.2
+		xgui-misc/xorg-server
+		>=x11-live-lib/libX11-1.6.2
+		>=x11-live-lib/libXext-1.3.2
 		lib-sys/zlib
 	)
 "

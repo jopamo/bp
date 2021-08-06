@@ -13,9 +13,9 @@ LICENSE=" || ( LGPL-3 CC-BY-SA-3.0 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="lib-gui/gnome-common
-	lib-gui/librsvg:2
-	x11-live-libs/gtk+:3
+DEPEND="xgui-live-lib/gnome-common
+	xgui-live-lib/librsvg:2
+	x11-live-lib/gtk+:3
 	sys-devel/gettext
 	dev-util/pkgconf"
 

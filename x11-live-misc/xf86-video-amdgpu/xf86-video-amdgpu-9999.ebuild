@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="udev"
 
-DEPEND="lib-gui/libdrm[amdgpu]"
+DEPEND="xgui-live-lib/libdrm[amdgpu]"
 
 filter-flags -Wl,-z,defs -Wl,-z,now
 

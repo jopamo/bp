@@ -17,7 +17,7 @@ IUSE="+cairo debug fontconfig +glib icu +introspection static-libs test +truetyp
 REQUIRED_USE="introspection? ( glib )"
 
 RDEPEND="
-	cairo? ( lib-gui/cairo:= )
+	cairo? ( xgui-live-lib/cairo:= )
 	fontconfig? ( lib-media/fontconfig:1.0 )
 	glib? ( >=lib-dev/glib-2.38:2 )
 	icu? ( >=lib-dev/icu-51.2-r1:= )

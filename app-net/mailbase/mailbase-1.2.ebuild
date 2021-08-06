@@ -10,7 +10,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="pam"
 
-RDEPEND="pam? ( lib-sys/pam )"
+RDEPEND="pam? ( lib-core/pam )"
 
 S=${WORKDIR}
 

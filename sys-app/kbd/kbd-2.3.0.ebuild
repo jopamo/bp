@@ -19,7 +19,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="nls pam test"
 
-RDEPEND="pam? ( lib-sys/pam )
+RDEPEND="pam? ( lib-core/pam )
 	app-compression/pigz"
 DEPEND="${RDEPEND}
 	dev-util/pkgconf

@@ -19,7 +19,7 @@ DEPEND="
 	xgui-live-lib/cairo
 	xgui-live-lib/libxkbcommon
 	x11-live-lib/gdk-pixbuf:2
-	pam? ( lib-sys/pam )"
+	pam? ( lib-core/pam )"
 
 BDEPEND="
 	lib-dev/wayland-protocols

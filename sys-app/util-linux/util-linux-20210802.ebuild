@@ -27,7 +27,7 @@ IUSE="build caps +cramfs fdformat +kill ncurses nls pam +readline static-libs +s
 RDEPEND="caps? ( lib-sys/libcap-ng )
 	cramfs? ( lib-sys/zlib )
 	ncurses? ( >=lib-sys/ncurses-5.2-r2:0= )
-	pam? ( lib-sys/pam )
+	pam? ( lib-core/pam )
 	readline? ( lib-sys/readline:0= )
 	!build? ( systemd? ( sys-app/systemd ) )
 "

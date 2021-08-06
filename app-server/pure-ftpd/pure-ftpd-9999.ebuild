@@ -19,7 +19,7 @@ REQUIRED_USE="implicittls? ( ssl )"
 DEPEND="caps? ( lib-sys/libcap )
 	ldap? ( app-net/openldap )
 	mysql? ( app-server/mariadb )
-	pam? ( lib-sys/pam )
+	pam? ( lib-core/pam )
 	postgres? ( app-server/postgresql )
 	ssl? ( virtual/ssl )"
 

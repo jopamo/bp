@@ -27,7 +27,7 @@ BDEPEND="sys-devel/gcc
 		sys-devel/make"
 
 DEPEND="sys-kernel/linux-headers
-		sys-app/layout
+		app-core/layout
 "
 RDEPEND="caps? ( lib-sys/libcap )
 		systemtap? ( dev-util/systemtap )

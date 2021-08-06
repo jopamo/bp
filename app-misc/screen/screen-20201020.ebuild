@@ -19,7 +19,7 @@ IUSE="debug pam tmpfilesd"
 
 DEPEND="
 	>=lib-sys/ncurses-5.2:0=
-	pam? ( lib-sys/pam )
+	pam? ( lib-core/pam )
 	sys-devel/texinfo"
 
 src_prepare() {

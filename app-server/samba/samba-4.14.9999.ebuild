@@ -30,7 +30,7 @@ CDEPEND="
 	lib-sys/ncurses:0=
 	lib-sys/readline:0=
 	lib-sys/zlib
-	lib-sys/pam
+	lib-core/pam
 	ceph? ( sys-cluster/ceph )
 	cluster? (
 		lib-net/rpcsvc-proto

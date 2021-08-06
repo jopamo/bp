@@ -35,7 +35,7 @@ BDEPEND="
 RDEPEND="lib-net/libtirpc"
 
 PDEPEND="
-	lib-sys/pambase
+	app-core/pambase
 	vim-syntax? ( app-misc/vim )
 "
 

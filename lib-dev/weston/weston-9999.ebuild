@@ -58,11 +58,11 @@ RDEPEND="
 		xmedia-live-lib/gst-plugins-base:1.0
 	)
 	systemd? (
-		lib-sys/pambase
+		app-core/pambase
 		sys-app/dbus
 		sys-app/systemd[pam]
 	)
-	launch? ( lib-sys/pambase )
+	launch? ( app-core/pambase )
 	X? (
 		xgui-live-lib/libxcb
 		x11-live-lib/libX11

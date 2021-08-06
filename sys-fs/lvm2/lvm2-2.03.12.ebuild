@@ -15,7 +15,7 @@ SLOT="0"
 IUSE="static-libs systemd +udev +dm-only"
 
 RDEPEND="
-	sys-app/layout
+	app-core/layout
 	>=sys-app/util-linux-2.16
 "
 

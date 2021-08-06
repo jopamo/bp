@@ -22,7 +22,7 @@ CDEPEND="
 		sys-devel/gettext
 		kerberos? ( app-crypt/heimdal )
 		ldap? ( app-net/openldap )
-		pam? ( lib-sys/pam )
+		pam? ( lib-core/pam )
 		perl? ( >=dev-lang/perl-5.8:= )
 		python? ( ${PYTHON_DEPS} )
 		readline? ( lib-sys/readline:0= )

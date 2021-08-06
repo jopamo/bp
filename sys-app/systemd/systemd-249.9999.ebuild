@@ -25,7 +25,7 @@ DEPEND="
 	gcrypt? ( lib-dev/libgcrypt )
 	kmod? ( >=sys-app/kmod-15:0= )
 	logind? ( sys-app/dbus )
-	pam? ( lib-sys/pam:= )
+	pam? ( lib-core/pam:= )
 	pcre? ( lib-dev/libpcre2 )
 	p11kit? ( app-crypt/p11-kit )
 	lib-sys/libseccomp:0=

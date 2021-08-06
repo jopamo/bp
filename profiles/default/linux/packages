@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-*sys-app/layout
+*app-core/layout
 *app-compression/pigz
 *app-compression/tar
 *app-compression/xz-utils
@@ -19,7 +19,7 @@
 *virtual/libc
 *sys-kernel/linux-headers
 *sys-app/portage
-*sys-app/shadow
+*app-core/shadow
 *app-misc/pax-utils
 *app-misc/vim
 *lib-dev/elfutils

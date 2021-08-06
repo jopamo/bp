@@ -26,7 +26,7 @@ IUSE="pam +mta"
 
 DEPEND="virtual/ssl
 		lib-sys/zlib
-		pam? ( lib-sys/pam )
+		pam? ( lib-core/pam )
 		lib-dev/libevent
 		app-misc/ca-certificates
 		app-net/mailbase

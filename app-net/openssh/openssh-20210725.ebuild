@@ -33,7 +33,7 @@ LIB_DEPEND="
 	>=lib-sys/zlib-1.2.3:=[static-libs(+)]"
 
 RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
-	pam? ( lib-sys/pam )"
+	pam? ( lib-core/pam )"
 
 DEPEND="${RDEPEND}
 	static? ( ${LIB_DEPEND} )
@@ -43,8 +43,8 @@ DEPEND="${RDEPEND}
 	sys-devel/autoconf"
 
 RDEPEND="${RDEPEND}
-	pam? ( lib-sys/pambase )
-	sys-app/shadow
+	pam? ( app-core/pambase )
+	app-core/shadow
 	X? ( x11-app/xauth )"
 
 src_prepare() {

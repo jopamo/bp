@@ -15,7 +15,7 @@ if [[ ${PV} == *9999 ]]; then
 else
 	SNAPSHOT=79a7b254d85a10b65126ad99bf10e70480569d68
 	SRC_URI="https://github.com/Perl/perl5/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	S=${WORKDIR}/${PN}5-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
 fi
 

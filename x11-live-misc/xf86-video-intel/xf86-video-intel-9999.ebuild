@@ -23,7 +23,7 @@ RDEPEND="
 	>=xgui-live-lib/libdrm-2.4.52[video_cards_intel]
 	dri3? (
 		>=xgui-misc/xorg-server-1.18
-		!<=lib-media/mesa-12.0.4
+		!<=xmedia-live-lib/mesa-12.0.4
 	)
 	sna? (
 		>=xgui-misc/xorg-server-1.10

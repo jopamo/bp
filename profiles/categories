@@ -3,8 +3,6 @@ app-compression
 app-core
 app-crypt
 app-eselect
-xgui-live-app
-app-media
 app-misc
 app-net
 app-portage
@@ -19,8 +17,6 @@ fonts
 gui-icontheme
 lib-core
 lib-dev
-xgui-live-lib
-lib-media
 lib-net
 lib-print
 lib-sys
@@ -33,7 +29,8 @@ virtual
 xgui-misc
 xgui-live-app
 xgui-live-lib
-xgui-live-misc
 x11-live-app
 x11-live-lib
 x11-live-misc
+xmedia-live-app
+xmedia-live-lib

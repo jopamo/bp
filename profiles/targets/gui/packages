@@ -1,8 +1,8 @@
-*app-media/alsa-utils
-*app-media/audacious
-*app-media/lximage-qt
-*app-media/mpv
-*app-media/pavucontrol-qt
+*xmedia-live-app/alsa-utils
+*xmedia-live-app/audacious
+*xmedia-live-app/lximage-qt
+*xmedia-live-app/mpv
+*xmedia-live-app/pavucontrol-qt
 *fonts/fira-code
 *fonts/inconsolata
 *fonts/font-alias

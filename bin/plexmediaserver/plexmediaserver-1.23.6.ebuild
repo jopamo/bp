@@ -30,7 +30,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 BDEPEND="dev-util/patchelf"
 RDEPEND="
-	lib-media/taglib
+	xmedia-live-lib/taglib
 	app-compression/minizip
 "
 

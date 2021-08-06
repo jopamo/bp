@@ -19,8 +19,8 @@ REQUIRED_USE="xinerama? ( X )"
 
 COMMON_DEPEND="
 	>=lib-dev/glib-2.49.4:2
-	lib-media/fontconfig
-	>=lib-media/libepoxy-1.0[X(+)?]
+	xmedia-live-lib/fontconfig
+	>=xmedia-live-lib/libepoxy-1.0[X(+)?]
 	>=xgui-live-lib/cairo-1.14[glib,svg,X?]
 	>=x11-live-lib/gdk-pixbuf-2.30:2[introspection?]
 	>=x11-live-lib/pango-1.37.3[introspection?]

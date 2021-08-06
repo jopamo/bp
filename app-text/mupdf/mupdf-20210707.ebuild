@@ -17,19 +17,19 @@ KEYWORDS="amd64 arm64"
 IUSE="X opengl static static-libs"
 
 LIB_DEPEND="
-	lib-media/freetype:2[static-libs?]
-	lib-media/harfbuzz[static-libs?]
-	lib-media/jbig2dec[static-libs?]
-	lib-media/libpng:0[static-libs?]
-	>=lib-media/openjpeg-2.1:2[static-libs?]
-	lib-media/libjpeg-turbo[static-libs?]
+	xmedia-live-lib/freetype:2[static-libs?]
+	xmedia-live-lib/harfbuzz[static-libs?]
+	xmedia-live-lib/jbig2dec[static-libs?]
+	xmedia-live-lib/libpng:0[static-libs?]
+	>=xmedia-live-lib/openjpeg-2.1:2[static-libs?]
+	xmedia-live-lib/libjpeg-turbo[static-libs?]
 	lib-dev/gumbo-parser[static-libs?]
 	X? ( x11-live-lib/libX11[static-libs?]
 		x11-live-lib/libXext[static-libs?] )
 "
 RDEPEND="${LIB_DEPEND}"
 DEPEND="${RDEPEND}
-	lib-media/freeglut
+	xmedia-live-lib/freeglut
 	dev-util/pkgconf
 	static-libs? ( ${LIB_DEPEND} )
 	static? ( ${LIB_DEPEND//?}

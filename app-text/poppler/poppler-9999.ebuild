@@ -17,8 +17,8 @@ IUSE="cairo +cjk curl cxx debug doc +introspection +jpeg +jpeg2k +lcms png qt5 t
 RESTRICT="test"
 
 COMMON_DEPEND="
-	>=lib-media/fontconfig-2.6.0
-	>=lib-media/freetype-2.3.9
+	>=xmedia-live-lib/fontconfig-2.6.0
+	>=xmedia-live-lib/freetype-2.3.9
 	lib-sys/zlib
 	cairo? (
 		lib-dev/glib:2
@@ -26,12 +26,12 @@ COMMON_DEPEND="
 		introspection? ( >=lib-dev/gobject-introspection-1.32.1:= )
 	)
 	curl? ( app-net/curl )
-	jpeg? ( lib-media/libjpeg-turbo )
-	jpeg2k? ( lib-media/openjpeg:2= )
-	lcms? ( lib-media/lcms:2 )
-	png? ( lib-media/libpng:0= )
+	jpeg? ( xmedia-live-lib/libjpeg-turbo )
+	jpeg2k? ( xmedia-live-lib/openjpeg:2= )
+	lcms? ( xmedia-live-lib/lcms:2 )
+	png? ( xmedia-live-lib/libpng:0= )
 	qt5? ( xgui-live-lib/qtbase	)
-	tiff? ( lib-media/tiff:0 )
+	tiff? ( xmedia-live-lib/tiff:0 )
 "
 DEPEND="${COMMON_DEPEND}
 	dev-util/pkgconf

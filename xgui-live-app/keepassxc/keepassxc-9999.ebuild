@@ -37,7 +37,7 @@ RDEPEND="
 "
 
 DEPEND="${RDEPEND}
-	app-media/qrencode"
+	xmedia-live-app/qrencode"
 
 src_configure() {
 	 use test || \

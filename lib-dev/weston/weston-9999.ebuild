@@ -28,10 +28,10 @@ RDEPEND="
 	lib-dev/libinput
 	lib-dev/wayland
 	lib-dev/wayland-protocols
-	lcms? ( lib-media/lcms:2 )
-	lib-media/libpng
-	webp? ( lib-media/libwebp )
-	jpeg? ( lib-media/libjpeg-turbo )
+	lcms? ( xmedia-live-lib/lcms:2 )
+	xmedia-live-lib/libpng
+	webp? ( xmedia-live-lib/libwebp )
+	jpeg? ( xmedia-live-lib/libjpeg-turbo )
 	xgui-live-lib/cairo
 	xgui-live-lib/libdrm
 	xgui-live-lib/libxkbcommon
@@ -43,19 +43,19 @@ RDEPEND="
 	)
 	colord? ( >=x11-misc/colord-0.1.27 )
 	drm? (
-		lib-media/mesa
+		xmedia-live-lib/mesa
 		>=lib-sys/mtdev-1.1.0
 		virtual/service-manager
 	)
 	editor? ( x11-live-lib/pango )
 	gles2? (
-		lib-media/mesa
+		xmedia-live-lib/mesa
 	)
-	pipewire? ( >=app-media/pipewire-0.2 )
+	pipewire? ( >=xmedia-live-app/pipewire-0.2 )
 	rdp? ( >=app-net/freerdp-2.0.0_rc2:= )
 	remoting? (
-		lib-media/gstreamer:1.0
-		lib-media/gst-plugins-base:1.0
+		xmedia-live-lib/gstreamer:1.0
+		xmedia-live-lib/gst-plugins-base:1.0
 	)
 	systemd? (
 		lib-sys/pambase

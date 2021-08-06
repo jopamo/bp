@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	lib-media/glm
+	xmedia-live-lib/glm
 	lib-dev/wayland
 	lib-dev/wayland-protocols
 "

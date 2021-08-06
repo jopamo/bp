@@ -18,20 +18,20 @@ DEPEND="
 	>=app-text/poppler-0.32:=[cxx,jpeg?,lcms,tiff?,utils]
 	app-text/qpdf
 	lib-dev/glib:2
-	lib-media/fontconfig
-	lib-media/freetype:2
-	lib-media/lcms:2
+	xmedia-live-lib/fontconfig
+	xmedia-live-lib/freetype:2
+	xmedia-live-lib/lcms:2
 	lib-print/cups
 	sys-devel/bc
 	lib-sys/zlib
 	dbus? ( sys-app/dbus )
-	jpeg? ( lib-media/libjpeg-turbo )
+	jpeg? ( xmedia-live-lib/libjpeg-turbo )
 	ldap? ( app-net/openldap )
 	pclm? ( >=app-text/qpdf-7.0_beta1 )
 	pdf? ( app-text/mupdf )
-	png? ( lib-media/libpng:0= )
+	png? ( xmedia-live-lib/libpng:0= )
 	app-text/ghostscript-gpl[cups]
-	tiff? ( lib-media/tiff:0 )
+	tiff? ( xmedia-live-lib/tiff:0 )
 	fonts/liberation-fonts
 "
 

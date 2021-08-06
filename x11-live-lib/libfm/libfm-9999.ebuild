@@ -19,7 +19,7 @@ COMMON_DEPEND=">=lib-dev/glib-2.18:2
 "
 RDEPEND="${COMMON_DEPEND}
 	x11-live-misc/shared-mime-info
-	exif? ( lib-media/libexif )"
+	exif? ( xmedia-live-lib/libexif )"
 DEPEND="${COMMON_DEPEND}
 	doc? (
 		dev-util/gtk-doc

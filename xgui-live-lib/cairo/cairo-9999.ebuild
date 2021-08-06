@@ -24,9 +24,9 @@ IUSE="X debug doc +glib static-libs +svg valgrind xcb"
 RESTRICT="test"
 
 RDEPEND="
-	>=lib-media/fontconfig-2.10.92
-	>=lib-media/freetype-2.5.0.1:2
-	>=lib-media/libpng-1.6.10:0=
+	>=xmedia-live-lib/fontconfig-2.10.92
+	>=xmedia-live-lib/freetype-2.5.0.1:2
+	>=xmedia-live-lib/libpng-1.6.10:0=
 	>=lib-sys/zlib-1.2.8-r1
 	>=xgui-live-lib/pixman-0.32.4
 	glib? ( >=lib-dev/glib-2.34.3:2 )

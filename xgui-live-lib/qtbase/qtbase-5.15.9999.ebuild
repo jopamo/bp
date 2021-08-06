@@ -20,19 +20,19 @@ DEPEND="
 	lib-dev/glib
 	lib-dev/libpcre2
 	xgui-live-lib/libxcb
-	lib-media/freetype
-	lib-media/harfbuzz
-	lib-media/libjpeg-turbo
-	lib-media/libpng
+	xmedia-live-lib/freetype
+	xmedia-live-lib/harfbuzz
+	xmedia-live-lib/libjpeg-turbo
+	xmedia-live-lib/libpng
 	lib-sys/sqlite
 	lib-sys/zlib
 	sys-app/dbus
 	sys-app/systemd
 	mysql? ( app-server/mariadb )
-	opengl? ( lib-media/mesa )
+	opengl? ( xmedia-live-lib/mesa )
 	postgres? ( app-server/postgresql )
 	sqlite? ( lib-sys/sqlite )
-	vulkan? ( lib-media/vulkan-loader )
+	vulkan? ( xmedia-live-lib/vulkan-loader )
 "
 
 #PATCHES=( "${FILESDIR}"/qtbase-nomake.patch )

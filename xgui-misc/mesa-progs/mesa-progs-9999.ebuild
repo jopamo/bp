@@ -13,11 +13,11 @@ SLOT="0"
 #KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	lib-media/mesa
+	xmedia-live-lib/mesa
 	x11-live-lib/libX11"
 DEPEND="${RDEPEND}
-	lib-media/glad
-	lib-media/glu
+	xmedia-live-lib/glad
+	xmedia-live-lib/glu
 	x11-live-misc/xorgproto"
 
 filter-flags -Wl,-z,defs

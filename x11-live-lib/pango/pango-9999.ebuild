@@ -15,10 +15,10 @@ KEYWORDS="amd64 arm64"
 IUSE="X +introspection test"
 
 DEPEND="
-	>=lib-media/harfbuzz-1.2.3:=[glib(+),truetype(+)]
+	>=xmedia-live-lib/harfbuzz-1.2.3:=[glib(+),truetype(+)]
 	>=lib-dev/glib-2.34.3:2
-	lib-media/fontconfig
-	>=lib-media/freetype-2.5.0.1:2=
+	xmedia-live-lib/fontconfig
+	>=xmedia-live-lib/freetype-2.5.0.1:2=
 	>=xgui-live-lib/cairo-1.12.14-r4:=
 	introspection? ( >=lib-dev/gobject-introspection-0.9.5:= )
 	x11-live-lib/libXft

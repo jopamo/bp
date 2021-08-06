@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND="lib-media/libjpeg-turbo"
+DEPEND="xmedia-live-lib/libjpeg-turbo"
 
 src_install() {
 	default

@@ -128,7 +128,7 @@ SOFTMMU_TOOLS_DEPEND="
 	lib-core/libxml2[static-libs(+)]
 	xgui-live-lib/pixman[static-libs(+)]
 	aio? ( lib-dev/libaio[static-libs(+)] )
-	alsa? ( lib-media/alsa-lib )
+	alsa? ( xmedia-live-lib/alsa-lib )
 	bzip2? ( app-compression/bzip2[static-libs(+)] )
 	capstone? ( lib-dev/capstone:= )
 	caps? ( lib-sys/libcap-ng[static-libs(+)] )
@@ -146,7 +146,7 @@ SOFTMMU_TOOLS_DEPEND="
 	iscsi? ( net-libs/libiscsi )
 	jack? ( virtual/jack )
 	jemalloc? ( lib-dev/jemalloc )
-	jpeg? ( lib-media/libjpeg-turbo:0=[static-libs(+)] )
+	jpeg? ( xmedia-live-lib/libjpeg-turbo:0=[static-libs(+)] )
 	lzo? ( lib-dev/lzo:2[static-libs(+)] )
 	multipath? ( sys-fs/multipath-tools )
 	ncurses? (
@@ -156,11 +156,11 @@ SOFTMMU_TOOLS_DEPEND="
 	nfs? ( >=net-fs/libnfs-1.9.3:=[static-libs(+)] )
 	numa? ( sys-process/numactl[static-libs(+)] )
 	opengl? (
-		lib-media/libepoxy[static-libs(+)]
-		lib-media/mesa[static-libs(+)]
+		xmedia-live-lib/libepoxy[static-libs(+)]
+		xmedia-live-lib/mesa[static-libs(+)]
 	)
-	png? ( lib-media/libpng:0=[static-libs(+)] )
-	pulseaudio? ( app-media/pulseaudio )
+	png? ( xmedia-live-lib/libpng:0=[static-libs(+)] )
+	pulseaudio? ( xmedia-live-app/pulseaudio )
 	sasl? ( lib-dev/cyrus-sasl[static-libs(+)] )
 	seccomp? ( >=lib-sys/libseccomp-2.1.0[static-libs(+)] )
 	smartcard? ( >=app-emulation/libcacard-2.5.0[static-libs(+)] )
@@ -173,7 +173,7 @@ SOFTMMU_TOOLS_DEPEND="
 	udev? ( virtual/libudev[static-libs(+)] )
 	usb? ( lib-dev/libusb[static-libs(+)] )
 	usbredir? ( >=sys-app/usbredir-0.6[static-libs(+)] )
-	virgl? ( lib-media/virglrenderer[static-libs(+)] )
+	virgl? ( xmedia-live-lib/virglrenderer[static-libs(+)] )
 	virtfs? ( lib-sys/libcap )
 	xen? ( app-emulation/xen-tools:= )
 	xfs? ( sys-fs/xfsprogs[static-libs(+)] )

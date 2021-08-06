@@ -188,21 +188,21 @@ font_src_install() {
 
 # @FUNCTION: _update_fontcache
 # @DESCRIPTION:
-# Updates fontcache if !prefix and lib-media/fontconfig installed
+# Updates fontcache if !prefix and xmedia-live-lib/fontconfig installed
 _update_fontcache() {
 	# unreadable font files = fontconfig segfaults
 	find "${EROOT%/}"/usr/share/fonts/ -type f '!' -perm 0644 \
 		-exec chmod -v 0644 2>/dev/null {} + || die "failed to fix font files perms"
 
 	if [[ -z ${ROOT%/} ]] ; then
-		if has_version lib-media/fontconfig ; then
+		if has_version xmedia-live-lib/fontconfig ; then
 			ebegin "Updating global fontcache"
 			fc-cache -fs
 			if ! eend $? ; then
 				die "failed to update global fontcache"
 			fi
 		else
-			einfo "Skipping fontcache update (lib-media/fontconfig not installed)"
+			einfo "Skipping fontcache update (xmedia-live-lib/fontconfig not installed)"
 		fi
 	else
 		einfo "Skipping fontcache update (ROOT != /)"

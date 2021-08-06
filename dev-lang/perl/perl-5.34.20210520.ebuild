@@ -2,28 +2,36 @@
 
 EAPI=7
 
-inherit flag-o-matic toolchain-funcs multiprocessing git-r3
+inherit flag-o-matic toolchain-funcs multiprocessing
 
 DESCRIPTION="Larry Wall's Practical Extraction and Report Language"
-
-EGIT_REPO_URI="https://github.com/Perl/perl5.git"
 HOMEPAGE="https://www.perl.org/"
-EGIT_BRANCH="maint-$(ver_cut 1).$(ver_cut 2)"
+
+if [[ ${PV} == *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/Perl/perl5.git"
+	EGIT_BRANCH="maint-$(ver_cut 1).$(ver_cut 2)"
+	inherit git-r3
+	KEYWORDS="~amd64 ~arm64"
+else
+	SNAPSHOT=79a7b254d85a10b65126ad99bf10e70480569d68
+	SRC_URI="https://github.com/Perl/perl5/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	KEYWORDS="amd64 arm64"
+fi
 
 LICENSE="|| ( Artistic GPL-1+ )"
 SLOT="0"
 
-KEYWORDS="amd64 arm64"
-
 IUSE="debug doc gdbm"
 
 DEPEND="
-	gdbm? ( >=lib-sys/gdbm-1.8.3 )
+	gdbm? ( lib-sys/gdbm )
 	app-compression/bzip2
 	lib-sys/zlib
 "
 
-PDEPEND="app-text/docbook-sgml-dtd:4.5
+PDEPEND="
+	app-text/docbook-sgml-dtd:4.5
 	sys-app/man-db
 	sys-app/help2man
 	app-text/po4a

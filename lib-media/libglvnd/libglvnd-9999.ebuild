@@ -12,7 +12,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="x11-live-libs/libX11"
+RDEPEND="x11-live-lib/libX11"
 
 src_configure() {
 	local emesonargs=(

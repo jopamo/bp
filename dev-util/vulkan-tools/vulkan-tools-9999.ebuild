@@ -25,8 +25,8 @@ RDEPEND="
 	>=lib-media/vulkan-loader-${PV}
 	wayland? ( lib-dev/wayland )
 	X? (
-		x11-live-libs/libX11
-		x11-live-libs/libXrandr
+		x11-live-lib/libX11
+		x11-live-lib/libXrandr
 	)
 "
 DEPEND="${RDEPEND}

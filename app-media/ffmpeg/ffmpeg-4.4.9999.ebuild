@@ -26,9 +26,9 @@ DEPEND="
 	x265? ( lib-media/x265 )
 	lib-media/libass
 	nvidia? ( lib-media/nv-codec-headers )
-	vaapi? ( x11-live-libs/libva
-		x11-live-libs/libva-intel-driver )
-	vdpau? ( lib-gui/libvdpau )
+	vaapi? ( x11-live-lib/libva
+		x11-live-lib/libva-intel-driver )
+	vdpau? ( xgui-live-lib/libvdpau )
 "
 
 filter-flags -fno-common

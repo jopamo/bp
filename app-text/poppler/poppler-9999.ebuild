@@ -22,7 +22,7 @@ COMMON_DEPEND="
 	lib-sys/zlib
 	cairo? (
 		lib-dev/glib:2
-		>=lib-gui/cairo-1.10.0
+		>=xgui-live-lib/cairo-1.10.0
 		introspection? ( >=lib-dev/gobject-introspection-1.32.1:= )
 	)
 	curl? ( app-net/curl )
@@ -30,7 +30,7 @@ COMMON_DEPEND="
 	jpeg2k? ( lib-media/openjpeg:2= )
 	lcms? ( lib-media/lcms:2 )
 	png? ( lib-media/libpng:0= )
-	qt5? ( lib-gui/qtbase	)
+	qt5? ( xgui-live-lib/qtbase	)
 	tiff? ( lib-media/tiff:0 )
 "
 DEPEND="${COMMON_DEPEND}

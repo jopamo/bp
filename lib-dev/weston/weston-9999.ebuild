@@ -32,10 +32,10 @@ RDEPEND="
 	lib-media/libpng
 	webp? ( lib-media/libwebp )
 	jpeg? ( lib-media/libjpeg-turbo )
-	lib-gui/cairo
-	lib-gui/libdrm
-	lib-gui/libxkbcommon
-	lib-gui/pixman
+	xgui-live-lib/cairo
+	xgui-live-lib/libdrm
+	xgui-live-lib/libxkbcommon
+	xgui-live-lib/pixman
 	x11-app/xkeyboard-config
 	fbdev? (
 		>=lib-sys/mtdev-1.1.0
@@ -47,7 +47,7 @@ RDEPEND="
 		>=lib-sys/mtdev-1.1.0
 		virtual/service-manager
 	)
-	editor? ( x11-live-libs/pango )
+	editor? ( x11-live-lib/pango )
 	gles2? (
 		lib-media/mesa
 	)
@@ -64,14 +64,14 @@ RDEPEND="
 	)
 	launch? ( lib-sys/pambase )
 	X? (
-		lib-gui/libxcb
-		x11-live-libs/libX11
+		xgui-live-lib/libxcb
+		x11-live-lib/libX11
 	)
 	xwayland? (
 		x11-misc/xorg-server[wayland]
-		lib-gui/cairo[xcb]
-		lib-gui/libxcb
-		x11-live-libs/libXcursor
+		xgui-live-lib/cairo[xcb]
+		xgui-live-lib/libxcb
+		x11-live-lib/libXcursor
 	)
 "
 DEPEND="${RDEPEND}"

@@ -16,12 +16,12 @@ IUSE="X"
 RESTRICT+=" test"
 
 RDEPEND="x11-live-misc/extra-cmake-modules
-		lib-gui/qtbase
+		xgui-live-lib/qtbase
 		X? (
-			lib-gui/qtx11extras
-			x11-live-libs/libX11
-			x11-live-libs/libXfixes
-			lib-gui/libxcb
-			x11-live-libs/xcb-util-keysyms
+			xgui-live-lib/qtx11extras
+			x11-live-lib/libX11
+			x11-live-lib/libXfixes
+			xgui-live-lib/libxcb
+			x11-live-lib/xcb-util-keysyms
 			x11-live-misc/xorgproto
 	)"

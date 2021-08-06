@@ -18,13 +18,13 @@ IUSE="wayland"
 DEPEND="
 	lib-dev/expat
 	lib-sys/zlib
-	x11-live-libs/libX11
-	x11-live-libs/libxshmfence
-	x11-live-libs/libXdamage
-	x11-live-libs/libXext
-	x11-live-libs/libXxf86vm
-	lib-gui/libxcb
-	x11-live-libs/libXfixes
+	x11-live-lib/libX11
+	x11-live-lib/libxshmfence
+	x11-live-lib/libXdamage
+	x11-live-lib/libXext
+	x11-live-lib/libXxf86vm
+	xgui-live-lib/libxcb
+	x11-live-lib/libXfixes
 	dev-python/mako
 	lib-sys/libunwind
 	lib-media/libglvnd

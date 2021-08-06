@@ -15,10 +15,10 @@ SLOT="0"
 IUSE="svg tiff"
 
 DEPEND="
-	lib-gui/qtbase
+	xgui-live-lib/qtbase
 	app-media/exiv2:=
-	svg? ( lib-gui/qtsvg:5 )
-	tiff? ( lib-gui/qtimageformats:5 )
+	svg? ( xgui-live-lib/qtsvg:5 )
+	tiff? ( xgui-live-lib/qtimageformats:5 )
 "
 
 src_configure() {

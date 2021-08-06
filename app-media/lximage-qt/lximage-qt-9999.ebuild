@@ -20,14 +20,14 @@ SLOT="0"
 
 DEPEND="
 	lib-dev/glib:2
-	lib-gui/qtbase
-	lib-gui/qtx11extras:5
+	xgui-live-lib/qtbase
+	xgui-live-lib/qtx11extras:5
 	lib-media/libexif
-	>=x11-live-libs/libfm-1.2:=
-	x11-live-libs/libfm-qt:=
-	x11-live-libs/libX11
-	x11-live-libs/libXfixes
-	lib-gui/liblxqt
+	>=x11-live-lib/libfm-1.2:=
+	x11-live-lib/libfm-qt:=
+	x11-live-lib/libX11
+	x11-live-lib/libXfixes
+	xgui-live-lib/liblxqt
 "
 BDEPEND="
 	dev-util/lxqt-build-tools

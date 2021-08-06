@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="test"
 
 DEPEND="app-compression/libarchive
-		test? (	lib-gui/qtbase )
+		test? (	xgui-live-lib/qtbase )
 "
 
 src_configure() {

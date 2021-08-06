@@ -19,9 +19,9 @@ PDEPEND="~app-media/audacious-plugins-${PV}"
 RDEPEND="
 	>=lib-dev/dbus-glib-0.60
 	>=lib-dev/glib-2.28
-	>=lib-gui/cairo-1.2.6
-	>=x11-live-libs/pango-1.8.0
-	lib-gui/qtbase
+	>=xgui-live-lib/cairo-1.2.6
+	>=x11-live-lib/pango-1.8.0
+	xgui-live-lib/qtbase
 "
 
 DEPEND="${RDEPEND}

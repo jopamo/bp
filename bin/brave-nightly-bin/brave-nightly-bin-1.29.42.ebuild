@@ -16,11 +16,11 @@ SLOT="0"
 KEYWORDS="amd64"
 
 RDEPEND="
-	lib-gui/at-spi2-atk
+	xgui-live-lib/at-spi2-atk
 	app-compression/bzip2
 	app-misc/ca-certificates
-	lib-gui/atk
-	lib-gui/libxkbcommon
+	xgui-live-lib/atk
+	xgui-live-lib/libxkbcommon
 	lib-dev/expat
 	lib-dev/glib:2
 	lib-dev/nspr
@@ -31,22 +31,22 @@ RDEPEND="
 	lib-print/cups
 	sys-app/dbus
 	lib-sys/libcap
-	lib-gui/cairo
-	x11-live-libs/gdk-pixbuf
-	x11-live-libs/gtk+:3
-	>=x11-live-libs/libX11-1.5.0
-	x11-live-libs/libXcomposite
-	x11-live-libs/libXcursor
-	x11-live-libs/libXdamage
-	x11-live-libs/libXext
-	x11-live-libs/libXfixes
-	x11-live-libs/libXi
-	x11-live-libs/libXrandr
-	x11-live-libs/libXrender
-	x11-live-libs/libXScrnSaver
-	x11-live-libs/libXtst
-	lib-gui/libxcb
-	x11-live-libs/pango
+	xgui-live-lib/cairo
+	x11-live-lib/gdk-pixbuf
+	x11-live-lib/gtk+:3
+	>=x11-live-lib/libX11-1.5.0
+	x11-live-lib/libXcomposite
+	x11-live-lib/libXcursor
+	x11-live-lib/libXdamage
+	x11-live-lib/libXext
+	x11-live-lib/libXfixes
+	x11-live-lib/libXi
+	x11-live-lib/libXrandr
+	x11-live-lib/libXrender
+	x11-live-lib/libXScrnSaver
+	x11-live-lib/libXtst
+	xgui-live-lib/libxcb
+	x11-live-lib/pango
 	x11-live-misc/xdg-utils
 "
 

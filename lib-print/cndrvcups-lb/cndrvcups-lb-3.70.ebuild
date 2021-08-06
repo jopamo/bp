@@ -17,9 +17,9 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	x11-live-libs/gtk+:3
+	x11-live-lib/gtk+:3
 	lib-core/libxml2
-	lib-gui/glade:2
+	xgui-live-lib/glade:2
 	lib-print/cups
 	~lib-print/cndrvcups-common-lb-${PV}
 "

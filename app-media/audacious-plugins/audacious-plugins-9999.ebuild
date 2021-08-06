@@ -23,8 +23,8 @@ RDEPEND="
 	aac? ( >=lib-media/faad2-2.7 )
 	alsa? ( >=lib-media/alsa-lib-1.0.16 )
 	aosd? (
-		x11-live-libs/libXrender
-		x11-live-libs/libXcomposite
+		x11-live-lib/libXrender
+		x11-live-lib/libXcomposite
 	)
 	bs2b? ( lib-media/libbs2b )
 	cdda? (
@@ -39,7 +39,7 @@ RDEPEND="
 	)
 	fluidsynth? ( app-media/fluidsynth )
 	http? ( >=lib-net/neon-0.26.4 )
-	lib-gui/qtbase
+	xgui-live-lib/qtbase
 	jack? (
 		>=lib-media/bio2jack-0.4
 		virtual/jack

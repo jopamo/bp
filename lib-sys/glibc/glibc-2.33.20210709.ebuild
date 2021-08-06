@@ -12,14 +12,14 @@ if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)/master"
 else
-	SNAPSHOT=ae37d06c7d127817ba43850f0f898b793d42aea7
+	SNAPSHOT=b5711025bc138c0c94d90b2015d57eda404decbe
 	SRC_URI="https://github.com/bminor/glibc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 
 LICENSE="LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="caps debug nscd profile systemd systemtap static-libs +static-pie tmpfilesd"
 

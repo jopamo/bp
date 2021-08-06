@@ -12,12 +12,11 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="dbi doc json mysql nfacct +nfct +nflog pcap postgres sqlite systemd"
+IUSE="json mysql nfacct +nfct +nflog pcap postgres sqlite systemd"
 
 DEPEND="
 	|| ( app-net/iptables app-net/nftables )
-	>=lib-net/libnfnetlink-1.0.1
-	dbi? ( dev-db/libdbi )
+	lib-net/libnfnetlink
 	json? ( lib-dev/jansson )
 	nfacct? (
 		>=lib-net/libmnl-1.0.3
@@ -32,8 +31,12 @@ DEPEND="
 "
 
 PATCHES=(
-		"${FILESDIR}/9d9ea2cd70a369a7f665a322e6c53631e01a2570.patch"
-		)
+		"${FILESDIR}"/00.9d9ea2cd70a369a7f665a322e6c53631e01a2570.patch
+		"${FILESDIR}"/01.675e762091380590f78ff07a94a25caa459b786b.patch
+		"${FILESDIR}"/04.63135e73fd878cb71b1eebf8e877c4d4c34feba7.patch
+		"${FILESDIR}"/05.48fe3eacbacd62865bb98b2faeacbee39084b8d6.patch
+		"${FILESDIR}"/06.65c02cc9ae969677756f30b69a3637c678b7c5b4.patch
+)
 
 filter-flags -Wl,-z,defs
 
@@ -48,7 +51,7 @@ src_configure() {
 	append-lfs-flags
 
 	local myconf=(
-		$(use_with dbi)
+		--without-dbi
 		$(use_with json jansson)
 		$(use_enable nfacct)
 		$(use_enable nfct)

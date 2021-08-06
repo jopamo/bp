@@ -37,7 +37,7 @@ RDEPEND="
 "
 
 PDEPEND="
-	lib-media/nv-codec-headers
+	xmedia-live-lib/nv-codec-headers
 	bin/nvidia-settings"
 
 QA_PREBUILT="opt/* usr/lib*"

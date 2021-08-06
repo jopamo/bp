@@ -22,8 +22,8 @@ REQUIRED_USE="
 
 COMMON_DEPEND="
 	>=lib-dev/glib-2.49.4:2
-	lib-media/fontconfig
-	>=lib-media/libepoxy-1.0[X(+)?]
+	xmedia-live-lib/fontconfig
+	>=xmedia-live-lib/libepoxy-1.0[X(+)?]
 	>=xgui-live-lib/cairo-1.14[glib,svg,X?]
 	>=x11-live-lib/gdk-pixbuf-2.30:2[introspection?]
 	>=x11-live-lib/pango-1.37.3[introspection?]
@@ -33,7 +33,7 @@ COMMON_DEPEND="
 	wayland? (
 		lib-dev/wayland
 		lib-dev/wayland-protocols
-		lib-media/mesa
+		xmedia-live-lib/mesa
 		>=xgui-live-lib/libxkbcommon-0.2
 	)
 	X? (

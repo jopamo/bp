@@ -17,8 +17,8 @@ IUSE="bidi cairo debug iconv jpeg nls png truetype xinerama xpm"
 DEPEND="
 	xgui-live-lib/librsvg
 	xgui-live-lib/cairo
-	lib-media/libjpeg-turbo
-	lib-media/libpng
+	xmedia-live-lib/libjpeg-turbo
+	xmedia-live-lib/libpng
 	x11-live-lib/libXext
 	x11-live-lib/libXrender
 	x11-live-lib/libXmu

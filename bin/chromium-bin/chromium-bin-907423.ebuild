@@ -27,9 +27,9 @@ RDEPEND="
 	lib-dev/glib:2
 	lib-dev/nspr
 	>=lib-dev/nss-3.26
-	lib-media/alsa-lib
-	lib-media/fontconfig
-	lib-media/freetype:2
+	xmedia-live-lib/alsa-lib
+	xmedia-live-lib/fontconfig
+	xmedia-live-lib/freetype:2
 	lib-print/cups
 	sys-app/dbus
 	lib-sys/libcap

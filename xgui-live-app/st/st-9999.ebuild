@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	>=lib-sys/ncurses-6.0:0=
-	lib-media/fontconfig
+	xmedia-live-lib/fontconfig
 	x11-live-lib/libX11
 	x11-live-lib/libXft
 	x11-live-misc/xorgproto

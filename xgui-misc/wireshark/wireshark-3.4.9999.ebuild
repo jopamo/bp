@@ -47,11 +47,11 @@ CDEPEND="
 	lz4? ( app-compression/lz4 )
 	nghttp2? ( lib-net/nghttp2 )
 	lib-net/libpcap
-	portaudio? ( lib-media/portaudio )
-	sbc? ( lib-media/sbc )
+	portaudio? ( xmedia-live-lib/portaudio )
+	sbc? ( xmedia-live-lib/sbc )
 	smi? ( lib-net/libsmi )
 	snappy? ( app-compression/snappy )
-	spandsp? ( lib-media/spandsp )
+	spandsp? ( xmedia-live-lib/spandsp )
 	ssl? ( lib-net/gnutls:= )
 	zlib? ( lib-sys/zlib !=lib-sys/zlib-1.2.4 )
 "

@@ -17,12 +17,12 @@ IUSE="+X aqua doc debug opengl sdl tiff"
 
 RDEPEND="
 	lib-dev/expat
-	sdl? ( lib-media/libsdl )
+	sdl? ( xmedia-live-lib/libsdl )
 	X? (
 		>=lib-dev/glib-2.22:2
-		lib-media/libpng:0=
+		xmedia-live-lib/libpng:0=
 		lib-sys/zlib
-		lib-media/libjpeg-turbo
+		xmedia-live-lib/libjpeg-turbo
 		xgui-live-lib/cairo
 		x11-live-lib/gtk+:3
 		x11-live-lib/gdk-pixbuf
@@ -30,18 +30,18 @@ RDEPEND="
 		x11-live-lib/libX11
 		x11-live-lib/libXxf86vm
 		x11-live-lib/pango
-		opengl? ( lib-media/mesa )
-		tiff?   ( lib-media/tiff:0 )
+		opengl? ( xmedia-live-lib/mesa )
+		tiff?   ( xmedia-live-lib/tiff:0 )
 		)
 	aqua? (
 		x11-live-lib/gtk+:3[aqua]
-		lib-media/libjpeg-turbo:0=
-		tiff?   ( lib-media/tiff:0 )
+		xmedia-live-lib/libjpeg-turbo:0=
+		tiff?   ( xmedia-live-lib/tiff:0 )
 		)"
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconf
-	opengl? ( lib-media/glu )
+	opengl? ( xmedia-live-lib/glu )
 	X? (
 		x11-live-misc/xorgproto
 	)"

@@ -42,18 +42,18 @@ CDEPEND="
 	>=x11-live-misc/xbitmaps-1.0.1
 	>=x11-app/xkeyboard-config-2.4.1-r3
 	glamor? (
-		lib-media/libepoxy[X]
-		lib-media/mesa
+		xmedia-live-lib/libepoxy[X]
+		xmedia-live-lib/mesa
 	)
 	!minimal? (
 		>=x11-live-lib/libX11-1.1.5
 		>=x11-live-lib/libXext-1.0.5
-		>=lib-media/mesa-10.3.4-r1
+		>=xmedia-live-lib/mesa-10.3.4-r1
 	)
 	udev? ( >=sys-app/systemd-150 )
 	wayland? (
 		>=lib-dev/wayland-1.3.0
-		lib-media/libepoxy
+		xmedia-live-lib/libepoxy
 		>=lib-dev/wayland-protocols-1.1
 		xgui-live-lib/egl-wayland
 	)

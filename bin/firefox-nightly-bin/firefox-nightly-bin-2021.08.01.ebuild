@@ -23,8 +23,8 @@ RDEPEND="xgui-live-lib/atk
 	>=sys-app/dbus-0.60
 	>=lib-dev/dbus-glib-0.72
 	>=lib-dev/glib-2.26:2
-	lib-media/fontconfig
-	>=lib-media/freetype-2.4.10
+	xmedia-live-lib/fontconfig
+	>=xmedia-live-lib/freetype-2.4.10
 	>=xgui-live-lib/cairo-1.10[X]
 	x11-live-lib/gdk-pixbuf
 	lib-dev/nss
@@ -38,8 +38,8 @@ RDEPEND="xgui-live-lib/atk
 	x11-live-lib/libXrender
 	x11-live-lib/libXt
 	>=x11-live-lib/pango-1.22.0
-	app-media/pulseaudio
-	app-media/ffmpeg
+	xmedia-live-app/pulseaudio
+	xmedia-live-app/ffmpeg
 "
 
 QA_PREBUILT="*"

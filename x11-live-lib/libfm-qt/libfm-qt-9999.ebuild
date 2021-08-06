@@ -26,7 +26,7 @@ DEPEND="
 	xgui-live-lib/qtx11extras:5
 	>=x11-live-lib/libfm-1.2.0:=
 	xgui-live-lib/libxcb
-	lib-media/libexif
+	xmedia-live-lib/libexif
 "
 
 BDEPEND="

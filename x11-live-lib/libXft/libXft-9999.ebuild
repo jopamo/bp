@@ -16,8 +16,8 @@ IUSE="static-libs"
 DEPEND=">=x11-live-lib/libXrender-0.9.8
 	>=x11-live-lib/libX11-1.6.2
 	>=x11-live-lib/libXext-1.3.2
-	>=lib-media/freetype-2.5.0.1
-	>=lib-media/fontconfig-2.10.92
+	>=xmedia-live-lib/freetype-2.5.0.1
+	>=xmedia-live-lib/fontconfig-2.10.92
 	x11-live-misc/xorgproto
 	fonts/liberation-fonts"
 

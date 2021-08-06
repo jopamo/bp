@@ -24,9 +24,9 @@ IUSE="+introspection"
 
 DEPEND="
 	lib-dev/glib
-	lib-media/libpng
-	lib-media/libjpeg-turbo
-	lib-media/tiff
+	xmedia-live-lib/libpng
+	xmedia-live-lib/libjpeg-turbo
+	xmedia-live-lib/tiff
 	x11-live-lib/libX11
 "
 

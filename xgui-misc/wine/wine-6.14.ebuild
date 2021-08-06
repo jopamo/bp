@@ -28,21 +28,21 @@ COMMON_DEPEND="
 		x11-live-lib/libXi
 		x11-live-lib/libXxf86vm
 	)
-	alsa? ( lib-media/alsa-lib )
+	alsa? ( xmedia-live-lib/alsa-lib )
 	cups? ( lib-print/cups:= )
-	fontconfig? ( lib-media/fontconfig:= )
-	jpeg? ( lib-media/libjpeg-turbo )
+	fontconfig? ( xmedia-live-lib/fontconfig:= )
+	jpeg? ( xmedia-live-lib/libjpeg-turbo )
 	ldap? ( app-net/openldap:= )
-	mp3? ( >=lib-media/mpg123-1.5.0 )
+	mp3? ( >=xmedia-live-lib/mpg123-1.5.0 )
 	netapi? ( app-server/samba )
-	openal? ( lib-media/openal:= )
+	openal? ( xmedia-live-lib/openal:= )
 	opengl? (
-		lib-media/glu
-		lib-media/mesa
+		xmedia-live-lib/glu
+		xmedia-live-lib/mesa
 	)
 	pcap? ( lib-net/libpcap )
-	png? ( lib-media/libpng:0= )
-	pulseaudio? ( app-media/pulseaudio )
+	png? ( xmedia-live-lib/libpng:0= )
+	pulseaudio? ( xmedia-live-app/pulseaudio )
 	xcomposite? ( x11-live-lib/libXcomposite )
 	xinerama? ( x11-live-lib/libXinerama )
 	xml? (

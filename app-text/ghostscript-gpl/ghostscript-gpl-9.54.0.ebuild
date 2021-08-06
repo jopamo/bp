@@ -17,18 +17,18 @@ IUSE="cups dbus gtk static-libs tiff X"
 
 DEPEND="
 	app-text/libpaper
-	lib-media/fontconfig
-	>=lib-media/freetype-2.4.9:2=
-	lib-media/jbig2dec
-	>=lib-media/lcms-2.6:2
-	>=lib-media/libpng-1.6.2:0=
-	>=lib-media/openjpeg-2.1.0:2=
+	xmedia-live-lib/fontconfig
+	>=xmedia-live-lib/freetype-2.4.9:2=
+	xmedia-live-lib/jbig2dec
+	>=xmedia-live-lib/lcms-2.6:2
+	>=xmedia-live-lib/libpng-1.6.2:0=
+	>=xmedia-live-lib/openjpeg-2.1.0:2=
 	>=lib-sys/zlib-1.2.7:=
-	lib-media/libjpeg-turbo
+	xmedia-live-lib/libjpeg-turbo
 	cups? ( >=lib-print/cups-1.3.8 )
 	dbus? ( sys-app/dbus )
 	gtk? ( x11-live-lib/gtk+ )
-	tiff? ( >=lib-media/tiff-4.0.1:0= )
+	tiff? ( >=xmedia-live-lib/tiff-4.0.1:0= )
 	X? ( x11-live-lib/libXt x11-live-lib/libXext )
 "
 

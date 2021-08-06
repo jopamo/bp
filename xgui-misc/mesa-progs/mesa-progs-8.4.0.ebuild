@@ -20,11 +20,11 @@ KEYWORDS="amd64 arm64"
 IUSE="egl gles2"
 
 RDEPEND="
-	lib-media/mesa
+	xmedia-live-lib/mesa
 	x11-live-lib/libX11"
 DEPEND="${RDEPEND}
-	lib-media/glew
-	lib-media/glu
+	xmedia-live-lib/glew
+	xmedia-live-lib/glu
 	x11-live-misc/xorgproto"
 
 

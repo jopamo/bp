@@ -21,7 +21,7 @@ RDEPEND="
 	app-compression/xz-utils
 	>=lib-sys/ncurses-5.2-r5:0=
 	debug? (
-		sdl? ( lib-media/libsdl )
+		sdl? ( xmedia-live-lib/libsdl )
 	)
 	device-mapper? ( >=sys-fs/lvm2-2.02.45 )
 	mount? ( =sys-fs/fuse-2.9.9999 )
@@ -38,7 +38,7 @@ RDEPEND+="
 	nls? ( sys-devel/gettext )
 "
 
-DEPEND+=" !!=lib-media/freetype-2.5.4"
+DEPEND+=" !!=xmedia-live-lib/freetype-2.5.4"
 
 RESTRICT="strip"
 

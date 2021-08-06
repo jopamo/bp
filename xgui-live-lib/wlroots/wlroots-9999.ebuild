@@ -18,7 +18,7 @@ IUSE="icccm"
 DEPEND="
 	lib-dev/libinput
 	lib-dev/wayland
-	lib-media/mesa
+	xmedia-live-lib/mesa
 	xgui-live-lib/libdrm
 	xgui-live-lib/libxkbcommon
 	xgui-live-lib/pixman

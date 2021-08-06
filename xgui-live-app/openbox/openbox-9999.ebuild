@@ -16,12 +16,12 @@ IUSE="debug nls session static-libs"
 
 RDEPEND="lib-dev/glib:2
 	>=lib-core/libxml2-2.0
-	>=lib-media/fontconfig-2
+	>=xmedia-live-lib/fontconfig-2
 	x11-live-lib/libXft
 	x11-live-lib/libXrandr
 	x11-live-lib/libXt
 	x11-live-lib/pango
-	lib-media/imlib2
+	xmedia-live-lib/imlib2
 	xgui-live-lib/librsvg
 	dev-python/pyxdg[${PYTHON_USEDEP}]"
 

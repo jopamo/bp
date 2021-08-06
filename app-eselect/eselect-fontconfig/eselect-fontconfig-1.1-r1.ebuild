@@ -11,7 +11,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND=">=app-admin/eselect-1.2.3
-		 >=lib-media/fontconfig-2.4"
+		 >=xmedia-live-lib/fontconfig-2.4"
 
 S=${WORKDIR}
 

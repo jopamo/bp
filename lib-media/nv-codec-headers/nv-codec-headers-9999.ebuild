@@ -12,7 +12,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="nvidia/nvidia-drivers"
+RDEPEND="bin/nvidia-drivers"
 
 src_compile() {
 	emake PREFIX="${EPREFIX}/usr" LIBDIR="lib"

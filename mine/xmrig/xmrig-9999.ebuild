@@ -14,11 +14,9 @@ LICENSE="GPLv3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="cuda http"
+IUSE="http"
 
-DEPEND="sys-app/hwloc
-	cuda? ( nvidia/nvidia-cuda
-		mine/xmrig-cuda )"
+DEPEND="sys-app/hwloc"
 
 src_prepare() {
 	cmake_src_prepare
@@ -29,7 +27,7 @@ src_prepare() {
 src_configure() {
 	local mycmakeargs=(
 		-D WITH_HTTP=$(usex http ON OFF)
-		-D WITH_CUDA=$(usex cuda ON OFF)
+		-D WITH_CUDA=OFF
 	)
 
 	cmake_src_configure

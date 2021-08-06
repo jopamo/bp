@@ -20,9 +20,9 @@ KEYWORDS="amd64 arm64"
 IUSE="zlib static-libs"
 
 DEPEND="!<xgui-misc/xorg-server-1.5
-	zlib? (	>=lib-sys/zlib-1.2.8-r1:= )"
+	zlib? (	>=lib-core/zlib-1.2.8-r1:= )"
 RDEPEND="${DEPEND}
-	sys-app/systemd"
+	app-core/systemd"
 
 src_prepare() {
 	default

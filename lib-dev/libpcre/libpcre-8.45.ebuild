@@ -24,7 +24,7 @@ IUSE="+cxx +jit +recursion-limit static-libs"
 DEPEND="
 	lib-dev/libedit:=
 	app-compression/lbzip2:=
-	lib-sys/zlib:=
+	lib-core/zlib:=
 "
 
 BDEPEND="dev-util/pkgconf"

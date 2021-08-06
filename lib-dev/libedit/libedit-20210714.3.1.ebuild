@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND=">=lib-sys/ncurses-5.9-r3[static-libs?]"
+DEPEND=">=lib-core/ncurses-5.9-r3[static-libs?]"
 
 S="${WORKDIR}/${MY_P}"
 

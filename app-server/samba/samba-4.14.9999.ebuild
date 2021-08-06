@@ -25,11 +25,11 @@ CDEPEND="
 	lib-dev/iniparser:0
 	lib-dev/popt
 	lib-net/libnsl:=
-	sys-app/attr
-	lib-sys/libcap
-	lib-sys/ncurses:0=
-	lib-sys/readline:0=
-	lib-sys/zlib
+	app-core/attr
+	lib-core/libcap
+	lib-core/ncurses:0=
+	lib-core/readline:0=
+	lib-core/zlib
 	lib-core/pam
 	ceph? ( sys-cluster/ceph )
 	cluster? (
@@ -38,12 +38,12 @@ CDEPEND="
 	)
 	cups? ( lib-print/cups )
 	debug? ( dev-util/lttng-ust )
-	dmapi? ( sys-app/dmapi )
+	dmapi? ( app-core/dmapi )
 	fam? ( virtual/fam )
 	gpg? ( app-crypt/gpgme )
 	json? ( lib-dev/jansson )
 	ldap? ( app-net/openldap )
-	systemd? ( sys-app/systemd:0= )
+	systemd? ( app-core/systemd:0= )
 "
 DEPEND="${CDEPEND}
 	app-text/docbook-xsl-stylesheets
@@ -52,7 +52,7 @@ DEPEND="${CDEPEND}
 	lib-net/rpcsvc-proto
 	lib-net/libtirpc"
 RDEPEND="${CDEPEND}
-	client? ( sys-app/cifs-utils[ads?] )
+	client? ( app-core/cifs-utils[ads?] )
 	dev-perl/Parse-Yapp
 "
 

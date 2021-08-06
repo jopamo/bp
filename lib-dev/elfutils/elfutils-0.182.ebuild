@@ -15,13 +15,13 @@ KEYWORDS="amd64 arm64"
 IUSE="bzip2 lzma musl static-libs test +utils valgrind zstd"
 
 DEPEND="
-	>=lib-sys/zlib-1.2.8-r1
+	>=lib-core/zlib-1.2.8-r1
 	bzip2? ( >=app-compression/lbzip2-1.0.6-r4 )
 	lzma? ( >=app-compression/xz-utils-5.0.5-r1 )
 	musl? (
-		lib-sys/argp-standalone
-		lib-sys/musl-fts
-		lib-sys/musl-obstack
+		lib-core/argp-standalone
+		lib-core/musl-fts
+		lib-core/musl-obstack
 		sys-devel/musl-headers
 	)
 	zstd? ( app-compression/zstd )

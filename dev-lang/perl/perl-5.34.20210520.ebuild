@@ -25,15 +25,15 @@ SLOT="0"
 IUSE="debug doc gdbm"
 
 DEPEND="
-	gdbm? ( lib-sys/gdbm )
+	gdbm? ( lib-core/gdbm )
 	app-compression/bzip2
-	lib-sys/zlib
+	lib-core/zlib
 "
 
 PDEPEND="
 	app-text/docbook-sgml-dtd:4.5
-	sys-app/man-db
-	sys-app/help2man
+	app-core/man-db
+	app-core/help2man
 	app-text/po4a
 	app-text/docbook-xsl-stylesheets
 	dev-perl/Date-Manip

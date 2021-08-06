@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	lib-dev/wayland
-	sys-app/systemd[logind]
+	app-core/systemd[logind]
 "
 
 BDEPEND="

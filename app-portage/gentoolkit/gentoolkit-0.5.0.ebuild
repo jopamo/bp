@@ -14,8 +14,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="tmpfilesd"
 
-DEPEND="sys-app/portage[${PYTHON_USEDEP}]
-		sys-app/gentoo-functions"
+DEPEND="app-core/portage[${PYTHON_USEDEP}]
+		app-core/gentoo-functions"
 
 python_prepare_all() {
 	python_setup

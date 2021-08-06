@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	lib-dev/glib
-	sys-app/dbus
+	app-core/dbus
 "
 
 BDEPEND="

@@ -18,7 +18,7 @@ DEPEND="
 	xgui-live-lib/at-spi2-core
 	xgui-live-lib/atk
 	lib-dev/glib
-	dbus? ( sys-app/dbus )
+	dbus? ( app-core/dbus )
 "
 
 src_configure() {

@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="test"
 
-RDEPEND="sys-app/attr"
+RDEPEND="app-core/attr"
 DEPEND="${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	test? ( dev-python/nose[${PYTHON_USEDEP}] )"

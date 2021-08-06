@@ -31,8 +31,8 @@ RDEPEND="
 	xmedia-live-lib/fontconfig
 	xmedia-live-lib/freetype:2
 	lib-print/cups
-	sys-app/dbus
-	lib-sys/libcap
+	app-core/dbus
+	lib-core/libcap
 	xgui-live-lib/cairo
 	x11-live-lib/gdk-pixbuf
 	x11-live-lib/gtk+:3

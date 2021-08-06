@@ -25,7 +25,7 @@ KEYWORDS="amd64 arm64"
 IUSE="pam +mta"
 
 DEPEND="virtual/ssl
-		lib-sys/zlib
+		lib-core/zlib
 		pam? ( lib-core/pam )
 		lib-dev/libevent
 		app-misc/ca-certificates

@@ -20,7 +20,7 @@ IUSE="static systemd"
 DEPEND="
 	dev-util/pkgconf
 	app-compression/xz-utils
-	sys-app/util-linux
+	app-core/util-linux
 "
 
 RESTRICT="test"

@@ -31,7 +31,7 @@ DEPEND="
 "
 
 BDEPEND="
-	sys-app/debianutils
+	app-core/debianutils
 	dev-util/gtk-doc-am
 	sys-devel/gettext
 	dev-util/pkgconf

@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="icu libedit nls"
 
-LIB_DEPEND=">=sys-app/util-linux-2.17.2[static-libs(+)]
+LIB_DEPEND=">=app-core/util-linux-2.17.2[static-libs(+)]
 	icu? ( lib-dev/icu:=[static-libs(+)] )
 	libedit? ( lib-dev/libedit[static-libs(+)] )"
 DEPEND="${LIB_DEPEND//\[static-libs(+)]}"

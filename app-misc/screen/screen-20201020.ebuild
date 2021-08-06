@@ -18,7 +18,7 @@ KEYWORDS="amd64 arm64"
 IUSE="debug pam tmpfilesd"
 
 DEPEND="
-	>=lib-sys/ncurses-5.2:0=
+	>=lib-core/ncurses-5.2:0=
 	pam? ( lib-core/pam )
 	sys-devel/texinfo"
 

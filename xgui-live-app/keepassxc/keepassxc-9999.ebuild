@@ -25,7 +25,7 @@ RDEPEND="
 	lib-dev/libgcrypt
 	xgui-live-lib/qtbase
 	xgui-live-lib/qttools
-	lib-sys/zlib
+	lib-core/zlib
 	lib-dev/libsodium
 	app-crypt/argon2
 	autotype? (

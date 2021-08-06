@@ -26,9 +26,9 @@ DEPEND="app-misc/c_rehash"
 BDEPEND="
 	>=dev-lang/perl-5
 	test? (
-		sys-app/diffutils
+		app-core/diffutils
 		sys-devel/bc
-		sys-app/procps
+		app-core/procps
 	)"
 PDEPEND="app-misc/ca-certificates"
 

@@ -19,7 +19,7 @@ IUSE="clang debug test"
 DEPEND="
 	lib-dev/libedit:=
 	lib-dev/libffi:=
-	lib-sys/ncurses:=
+	lib-core/ncurses:=
 	lib-core/libxml2:=
 "
 

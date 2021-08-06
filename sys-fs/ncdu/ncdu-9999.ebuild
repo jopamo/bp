@@ -13,7 +13,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="lib-sys/ncurses"
+DEPEND="lib-core/ncurses"
 
 src_prepare() {
 	default

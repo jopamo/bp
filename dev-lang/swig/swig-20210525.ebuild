@@ -20,7 +20,7 @@ IUSE="ccache pcre"
 RESTRICT="test"
 
 DEPEND="pcre? ( lib-dev/libpcre )
-		ccache? ( lib-sys/zlib )"
+		ccache? ( lib-core/zlib )"
 
 src_prepare() {
 	test -d Tools/config || mkdir Tools/config

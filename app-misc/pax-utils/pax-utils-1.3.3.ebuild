@@ -15,9 +15,9 @@ KEYWORDS="amd64 arm64"
 
 IUSE="caps debug python seccomp"
 
-DEPEND="caps? ( >=lib-sys/libcap-2.24 )
+DEPEND="caps? ( >=lib-core/libcap-2.24 )
 		python? ( dev-python/pyelftools )
-		seccomp? ( lib-sys/libseccomp )
+		seccomp? ( lib-core/libseccomp )
 		caps? ( dev-util/pkgconf )
 		seccomp? ( dev-util/pkgconf )
 		app-compression/xz-utils"

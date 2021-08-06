@@ -19,8 +19,8 @@ DEPEND="
 	xgui-live-lib/libdrm
 	xgui-live-lib/libxkbcommon
 	xgui-live-lib/pixman
-	sys-app/systemd[logind]
-	lib-sys/libcap
+	app-core/systemd[logind]
+	lib-core/libcap
 	app-misc/seatd
 "
 

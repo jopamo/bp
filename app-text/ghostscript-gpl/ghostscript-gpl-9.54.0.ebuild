@@ -23,10 +23,10 @@ DEPEND="
 	>=xmedia-live-lib/lcms-2.6:2
 	>=xmedia-live-lib/libpng-1.6.2:0=
 	>=xmedia-live-lib/openjpeg-2.1.0:2=
-	>=lib-sys/zlib-1.2.7:=
+	>=lib-core/zlib-1.2.7:=
 	xmedia-live-lib/libjpeg-turbo
 	cups? ( >=lib-print/cups-1.3.8 )
-	dbus? ( sys-app/dbus )
+	dbus? ( app-core/dbus )
 	gtk? ( x11-live-lib/gtk+ )
 	tiff? ( >=xmedia-live-lib/tiff-4.0.1:0= )
 	X? ( x11-live-lib/libXt x11-live-lib/libXext )

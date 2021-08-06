@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="acl openmp static-libs"
 
-DEPEND="acl? ( sys-app/acl )
+DEPEND="acl? ( app-core/acl )
 		app-compression/xz-utils
 		lib-core/libxml2"
 

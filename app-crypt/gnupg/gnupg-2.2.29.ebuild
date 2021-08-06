@@ -24,10 +24,10 @@ COMMON_DEPEND_LIBS="
 	>=lib-dev/libksba-1.3.4
 	>=app-net/curl-7.10
 	>=lib-net/gnutls-3.0:0=
-	lib-sys/zlib
+	lib-core/zlib
 	ldap? ( app-net/openldap )
 	bzip2? ( app-compression/lbzip2 )
-	readline? ( lib-sys/readline:0= )
+	readline? ( lib-core/readline:0= )
 "
 
 COMMON_DEPEND_BINS="app-crypt/pinentry"

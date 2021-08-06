@@ -16,7 +16,7 @@ IUSE="ipv6 +uuid static-libs"
 RDEPEND=">=x11-live-lib/libICE-1.0.8-r1
 	x11-live-lib/xtrans
 	x11-live-misc/xorgproto
-	>=sys-app/util-linux-2.24.1-r3"
+	>=app-core/util-linux-2.24.1-r3"
 
 DEPEND="${RDEPEND}"
 

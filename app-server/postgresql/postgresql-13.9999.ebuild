@@ -18,23 +18,23 @@ IUSE="doc kerberos ldap nls pam perl python +readline
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 CDEPEND="
-		sys-app/less
+		app-core/less
 		sys-devel/gettext
 		kerberos? ( app-crypt/heimdal )
 		ldap? ( app-net/openldap )
 		pam? ( lib-core/pam )
 		perl? ( >=dev-lang/perl-5.8:= )
 		python? ( ${PYTHON_DEPS} )
-		readline? ( lib-sys/readline:0= )
-		server? ( systemd? ( sys-app/systemd ) )
+		readline? ( lib-core/readline:0= )
+		server? ( systemd? ( app-core/systemd ) )
 		ssl? ( virtual/ssl )
 		tcl? ( >=dev-lang/tcl-8:0= )
 		xml? ( lib-core/libxml2 lib-core/libxslt )
-		zlib? ( lib-sys/zlib )
+		zlib? ( lib-core/zlib )
 "
 
 DEPEND="${CDEPEND}
-!!<sys-app/sandbox-2.0
+!!<app-core/sandbox-2.0
 sys-devel/bison
 sys-devel/flex
 nls? ( sys-devel/gettext )

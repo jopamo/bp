@@ -23,8 +23,8 @@ DEPEND="
 	xgui-live-lib/libxkbcommon
 	xgui-live-lib/pixman
 	icccm? ( x11-live-lib/xcb-util-wm )
-	sys-app/systemd[logind]
-	lib-sys/libcap
+	app-core/systemd[logind]
+	lib-core/libcap
 	app-misc/seatd
 "
 

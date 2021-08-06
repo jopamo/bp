@@ -21,9 +21,9 @@ DEPEND="
 	lib-net/libpcap
 	dev-lang/lua
 	lib-net/libssh2[zlib]
-	lib-sys/zlib
+	lib-core/zlib
 	nls? ( sys-devel/gettext )
-	lib-sys/zlib
+	lib-core/zlib
 	ssl? ( virtual/ssl )
 "
 

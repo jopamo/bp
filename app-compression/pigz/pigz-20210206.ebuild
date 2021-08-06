@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static test"
 
-DEPEND="static? ( lib-sys/zlib[static-libs(+)] )"
+DEPEND="static? ( lib-core/zlib[static-libs(+)] )"
 
 src_compile() {
 	use static && append-ldflags -static

@@ -14,7 +14,7 @@ DEPEND="
 	dev-lang/perl
 	sys-devel/autoconf
 	sys-devel/gnuconfig
-	sys-app/help2man
+	app-core/help2man
 "
 
 src_prepare() {

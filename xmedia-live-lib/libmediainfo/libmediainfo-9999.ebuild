@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="curl doc static-libs"
 
-RDEPEND="lib-sys/zlib
+RDEPEND="lib-core/zlib
 	lib-dev/tinyxml2:=
 	>=xmedia-live-lib/libzen-0.4.37[static-libs=]"
 

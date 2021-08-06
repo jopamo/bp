@@ -19,7 +19,7 @@ DEPEND="
 	ssl? ( virtual/ssl )
 	pcap? ( lib-net/libpcap )
 	lib-dev/gmp:*
-	lib-sys/zlib
+	lib-core/zlib
 	app-compression/bzip2"
 
 S=${WORKDIR}/${P}/src

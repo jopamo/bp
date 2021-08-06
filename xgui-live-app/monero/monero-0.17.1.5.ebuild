@@ -24,7 +24,7 @@ DEPEND="
 	app-server/unbound
 	lib-net/czmq
 	virtual/ssl
-	readline? ( lib-sys/readline )"
+	readline? ( lib-core/readline )"
 
 PATCHES=("${FILESDIR}/${PN}-0.17.1.3-linkjobs.patch")
 

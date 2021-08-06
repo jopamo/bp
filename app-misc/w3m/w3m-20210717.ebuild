@@ -25,9 +25,9 @@ KEYWORDS="amd64 arm64"
 IUSE="gpm nls nntp ssl unicode"
 
 DEPEND="
-	lib-sys/ncurses
-	lib-sys/zlib
-	gpm? ( lib-sys/gpm )
+	lib-core/ncurses
+	lib-core/zlib
+	gpm? ( lib-core/gpm )
 	ssl? ( virtual/ssl )
 "
 

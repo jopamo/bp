@@ -9,5 +9,5 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="lib-sys/ncurses:0="
+RDEPEND="lib-core/ncurses:0="
 DEPEND="${RDEPEND}"

@@ -30,7 +30,7 @@ DEPEND="
 		>=dev-python/virtualenv-13.1.0[${PYTHON_USEDEP}]
 		dev-python/wheel[${PYTHON_USEDEP}]
 		dev-python/docutils[${PYTHON_USEDEP}]
-		sys-app/git
+		app-core/git
 	)"
 PDEPEND=""
 

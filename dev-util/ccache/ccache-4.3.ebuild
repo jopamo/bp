@@ -11,10 +11,10 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="app-compression/xz-utils
-	lib-sys/zlib"
+	lib-core/zlib"
 RDEPEND="${DEPEND}
 	dev-util/shadowman
-	sys-app/gentoo-functions"
+	app-core/gentoo-functions"
 
 src_prepare() {
 	# make sure we always use system zlib

@@ -21,8 +21,8 @@ KEYWORDS="amd64 arm64"
 IUSE="debug +xxd"
 
 DEPEND="
-	lib-sys/ncurses
-	sys-app/acl
+	lib-core/ncurses
+	app-core/acl
 "
 
 BDEPEND="

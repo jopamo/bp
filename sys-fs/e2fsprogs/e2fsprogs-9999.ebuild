@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 IUSE="fuse static-libs"
 
 DEPEND="
-	sys-app/util-linux
+	app-core/util-linux
 	fuse? ( sys-fs/fuse )
 "
 

@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND=">=lib-sys/zlib-1.2.8-r1:=
+DEPEND=">=lib-core/zlib-1.2.8-r1:=
 		app-compression/xz-utils"
 
 PATCHES=( "${FILESDIR}"/libpng-1.6.37-apng.patch )

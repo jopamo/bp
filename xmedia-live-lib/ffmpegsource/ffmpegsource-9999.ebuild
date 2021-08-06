@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	lib-sys/zlib
+	lib-core/zlib
 	xmedia-live-app/ffmpeg"
 
 BDEPEND="dev-util/pkgconf"

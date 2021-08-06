@@ -13,5 +13,5 @@ RDEPEND="
 	!systemd? ( || (
 		sys-fs/eudev[static-libs(-)?]
 	) )
-	systemd? ( sys-app/systemd[static-libs(-)?] )
+	systemd? ( app-core/systemd[static-libs(-)?] )
 "

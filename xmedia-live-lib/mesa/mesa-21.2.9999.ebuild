@@ -17,7 +17,7 @@ IUSE="wayland"
 
 DEPEND="
 	lib-dev/expat
-	lib-sys/zlib
+	lib-core/zlib
 	x11-live-lib/libX11
 	x11-live-lib/libxshmfence
 	x11-live-lib/libXdamage
@@ -26,7 +26,7 @@ DEPEND="
 	xgui-live-lib/libxcb
 	x11-live-lib/libXfixes
 	dev-python/mako
-	lib-sys/libunwind
+	lib-core/libunwind
 	xmedia-live-lib/libglvnd
 	wayland? ( lib-dev/wayland-protocols )
 "

@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 LICENSE="|| ( FTL GPL-2+ )"
 SLOT="2"
 
-RDEPEND=">=lib-sys/zlib-1.2.8-r1
+RDEPEND=">=lib-core/zlib-1.2.8-r1
 	bzip2? ( >=app-compression/bzip2-1.0.6 )
 	harfbuzz? ( >=xmedia-live-lib/harfbuzz-1.3.0[truetype] )
 	png? ( >=xmedia-live-lib/libpng-1.2.51:0= )"

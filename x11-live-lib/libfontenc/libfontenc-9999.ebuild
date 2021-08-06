@@ -13,7 +13,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-RDEPEND="lib-sys/zlib
+RDEPEND="lib-core/zlib
 	x11-live-misc/xorgproto"
 
 DEPEND="${RDEPEND}

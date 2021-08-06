@@ -24,14 +24,14 @@ DEPEND="
 	xmedia-live-lib/harfbuzz
 	xmedia-live-lib/libjpeg-turbo
 	xmedia-live-lib/libpng
-	lib-sys/sqlite
-	lib-sys/zlib
-	sys-app/dbus
-	sys-app/systemd
+	lib-core/sqlite
+	lib-core/zlib
+	app-core/dbus
+	app-core/systemd
 	mysql? ( app-server/mariadb )
 	opengl? ( xmedia-live-lib/mesa )
 	postgres? ( app-server/postgresql )
-	sqlite? ( lib-sys/sqlite )
+	sqlite? ( lib-core/sqlite )
 	vulkan? ( xmedia-live-lib/vulkan-loader )
 "
 

@@ -19,7 +19,7 @@ IUSE+=" ${GRUB_ALL_PLATFORMS[@]/#/grub_platforms_}"
 
 RDEPEND="
 	app-compression/xz-utils
-	>=lib-sys/ncurses-5.2-r5:0=
+	>=lib-core/ncurses-5.2-r5:0=
 	debug? (
 		sdl? ( xmedia-live-lib/libsdl )
 	)
@@ -27,14 +27,14 @@ RDEPEND="
 	mount? ( =sys-fs/fuse-2.9.9999 )
 "
 DEPEND="${RDEPEND}
-	sys-app/help2man
+	app-core/help2man
 	sys-devel/texinfo
 	static? (
 		app-compression/xz-utils[static-libs(+)]
 	)
 "
 RDEPEND+="
-	grub_platforms_efi-64? ( sys-app/efibootmgr )
+	grub_platforms_efi-64? ( app-core/efibootmgr )
 	nls? ( sys-devel/gettext )
 "
 

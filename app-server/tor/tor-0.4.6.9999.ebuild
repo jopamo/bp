@@ -17,12 +17,12 @@ IUSE="lzma scrypt seccomp systemd tor-hardening test zstd"
 
 DEPEND="
 	lib-dev/libevent[ssl]
-	lib-sys/zlib
+	lib-core/zlib
 	virtual/ssl
 	lzma? ( app-compression/xz-utils )
 	scrypt? ( app-crypt/libscrypt )
-	seccomp? ( lib-sys/libseccomp )
-	systemd? ( sys-app/systemd )
+	seccomp? ( lib-core/libseccomp )
+	systemd? ( app-core/systemd )
 	zstd? ( app-compression/zstd )"
 
 pkg_setup() {

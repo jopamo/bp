@@ -31,7 +31,7 @@ DEPEND="
 		pcre2-jit? ( lib-dev/libpcre2[jit] )
 	)
 	ssl? ( virtual/ssl )
-	zlib? ( lib-sys/zlib )
+	zlib? ( lib-core/zlib )
 	lua? ( dev-lang/lua:5.3 )
 	device-atlas? ( lib-dev/device-atlas-api-c )"
 RDEPEND="${DEPEND}"

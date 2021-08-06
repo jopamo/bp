@@ -35,7 +35,7 @@ CDEPEND="
 	lib-dev/libgcrypt:0
 	netlink? ( lib-dev/libnl:3 )
 	adns? ( >=lib-net/c-ares-1.5 )
-	caps? ( lib-sys/libcap )
+	caps? ( lib-core/libcap )
 	gtk? (
 		x11-live-lib/gdk-pixbuf
 		x11-live-lib/gtk+:3
@@ -53,7 +53,7 @@ CDEPEND="
 	snappy? ( app-compression/snappy )
 	spandsp? ( xmedia-live-lib/spandsp )
 	ssl? ( lib-net/gnutls:= )
-	zlib? ( lib-sys/zlib !=lib-sys/zlib-1.2.4 )
+	zlib? ( lib-core/zlib !=lib-core/zlib-1.2.4 )
 "
 
 DEPEND="

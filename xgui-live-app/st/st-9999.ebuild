@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	>=lib-sys/ncurses-6.0:0=
+	>=lib-core/ncurses-6.0:0=
 	xmedia-live-lib/fontconfig
 	x11-live-lib/libX11
 	x11-live-lib/libXft

@@ -36,7 +36,7 @@ KEYWORDS="amd64 arm64"
 DEPEND="app-misc/c_rehash"
 
 RDEPEND="${DEPEND}
-	sys-app/debianutils"
+	app-core/debianutils"
 
 if ! ${PRECOMPILED}; then
 	DEPEND+=" ${PYTHON_DEPS}"

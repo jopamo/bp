@@ -10,7 +10,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="sys-app/gentoo-functions
+DEPEND="app-core/gentoo-functions
 		app-compression/xz-utils"
 
 src_compile() {

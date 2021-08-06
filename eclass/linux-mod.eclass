@@ -157,11 +157,11 @@ IUSE="${MODULES_OPTIONAL_USE:+${_modules_optional_use_iuse_default}}${MODULES_OP
 SLOT="0"
 RDEPEND="
 	${MODULES_OPTIONAL_USE}${MODULES_OPTIONAL_USE:+? (}
-		sys-app/kmod[tools]
+		app-core/kmod[tools]
 	${MODULES_OPTIONAL_USE:+)}"
 DEPEND="${RDEPEND}
     ${MODULES_OPTIONAL_USE}${MODULES_OPTIONAL_USE:+? (}
-	sys-app/sed
+	app-core/sed
 	sys-kernel/stable-sources
 	lib-dev/elfutils
 	${MODULES_OPTIONAL_USE:+)}"

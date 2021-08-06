@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	sys-app/dbus
+	app-core/dbus
 	x11-live-misc/shared-mime-info
 	x11-app/xprop
 	x11-app/xset

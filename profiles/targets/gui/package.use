@@ -1,4 +1,4 @@
-sys-app/systemd logind tmpfilesd sleep
+app-core/systemd logind tmpfilesd sleep
 xmedia-live-app/avidemux qt5
 xgui-live-app/qbittorrent qt5
 xmedia-live-lib/x264 opencl

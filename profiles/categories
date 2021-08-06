@@ -1,4 +1,3 @@
-app-admin
 app-compression
 app-core
 app-crypt
@@ -18,8 +17,6 @@ lib-core
 lib-dev
 lib-net
 lib-print
-lib-sys
-sys-app
 sys-devel
 sys-fs
 sys-kernel

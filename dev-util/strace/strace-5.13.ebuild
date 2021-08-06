@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="aio static"
 
 DEPEND="aio? ( >=lib-dev/libaio-0.3.106 )
-		lib-sys/libunwind"
+		lib-core/libunwind"
 
 append-flags -Wno-stringop-overflow
 

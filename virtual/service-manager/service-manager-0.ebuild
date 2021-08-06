@@ -10,6 +10,6 @@ IUSE="openrc"
 
 RDEPEND="
 	|| (
-		!openrc? ( sys-app/systemd )
-		openrc? ( sys-app/openrc )
+		!openrc? ( app-core/systemd )
+		openrc? ( app-core/openrc )
 	)"

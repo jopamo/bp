@@ -19,7 +19,7 @@ RESTRICT="test"
 COMMON_DEPEND="
 	>=xmedia-live-lib/fontconfig-2.6.0
 	>=xmedia-live-lib/freetype-2.3.9
-	lib-sys/zlib
+	lib-core/zlib
 	cairo? (
 		lib-dev/glib:2
 		>=xgui-live-lib/cairo-1.10.0

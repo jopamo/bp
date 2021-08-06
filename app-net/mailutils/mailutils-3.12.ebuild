@@ -15,9 +15,9 @@ KEYWORDS="amd64 arm64"
 IUSE="frm sieve messages readmsg dotlock movemail mimeview mh gdbm ipv6 nls pam python servers ssl static-libs virtual-domains +sendmail +smtp mailbox-imap mailbox-pop mailbox-mh +mailbox-maildir"
 
 DEPEND="
-	lib-sys/ncurses:=
-	lib-sys/readline:=
-	gdbm? ( lib-sys/gdbm )
+	lib-core/ncurses:=
+	lib-core/readline:=
+	gdbm? ( lib-core/gdbm )
 	nls? ( sys-devel/gettext )
 	pam? ( lib-core/pam )
 	python? ( ${PYTHON_DEPS} )

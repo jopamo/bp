@@ -1,6 +1,6 @@
 ## These ATOMS are printed with a standard 'emerge info'
 
-sys-app/bash
+app-core/bash
 sys-devel/autoconf
 sys-devel/automake
 sys-devel/binutils
@@ -8,7 +8,7 @@ sys-devel/libtool
 sys-devel/make
 dev-lang/python
 dev-lang/perl
-sys-app/sandbox
+app-core/sandbox
 dev-util/ccache
 sys-devel/gcc
 dev-util/cmake

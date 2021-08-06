@@ -20,11 +20,11 @@ LIB_DEPEND="
 	lib-dev/json-c:=[static-libs(+)]
 	lib-dev/libgpg-error[static-libs(+)]
 	lib-dev/popt[static-libs(+)]
-	>=sys-app/util-linux-2.31-r1[static-libs(+)]
+	>=app-core/util-linux-2.31-r1[static-libs(+)]
 	app-crypt/argon2:=[static-libs(+)]
 	lib-dev/libgcrypt:0=[static-libs(+)]
 	sys-fs/lvm2[static-libs(+)]
-	udev? ( sys-app/systemd[static-libs(+)] )"
+	udev? ( app-core/systemd[static-libs(+)] )"
 
 RDEPEND="static-libs? ( ${LIB_DEPEND} )
 	${LIB_DEPEND//\[static-libs\(+\)\]}

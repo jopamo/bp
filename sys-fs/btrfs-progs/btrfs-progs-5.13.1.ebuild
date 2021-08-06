@@ -25,8 +25,8 @@ IUSE="static static-libs"
 RESTRICT=test # tries to mount repared filesystems
 
 LIB_DEPEND="
-	sys-app/util-linux:0[static-libs(+)]
-	lib-sys/zlib:0[static-libs(+)]
+	app-core/util-linux:0[static-libs(+)]
+	lib-core/zlib:0[static-libs(+)]
 	app-compression/zstd:0[static-libs(+)]
 	app-compression/lzo:0[static-libs(+)]
 "

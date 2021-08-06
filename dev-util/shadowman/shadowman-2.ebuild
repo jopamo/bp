@@ -10,7 +10,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="app-admin/eselect"
+RDEPEND="app-misc/eselect"
 DEPEND="${RDEPEND}"
 
 src_install() {

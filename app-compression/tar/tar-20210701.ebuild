@@ -15,9 +15,9 @@ KEYWORDS="amd64 arm64"
 IUSE="acl nls static xattr"
 
 DEPEND="
-	acl? ( sys-app/acl )
+	acl? ( app-core/acl )
 	nls? ( >=sys-devel/gettext-0.10.35 )
-	xattr? ( sys-app/attr )
+	xattr? ( app-core/attr )
 "
 
 src_configure() {

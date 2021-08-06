@@ -21,7 +21,7 @@ RDEPEND="
 	utils? (
 		>=lib-dev/libev-4.15
 		virtual/ssl
-		>=lib-sys/zlib-1.2.3
+		>=lib-core/zlib-1.2.3
 		lib-net/c-ares:=
 	)
 	xml? ( >=lib-core/libxml2-2.7.7:2 )"

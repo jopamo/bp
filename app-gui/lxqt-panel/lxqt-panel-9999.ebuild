@@ -28,21 +28,21 @@ CDEPEND="
 	lib-dev/libqtxdg
 	lib-gui/qtbase
 	lib-gui/qtx11extras:5
-	x11-misc/kguiaddons
-	x11-misc/kwindowsystem
+	x11-live-misc/kguiaddons
+	x11-live-misc/kwindowsystem
 	>=lib-gui/menu-cache-0.3.3
 	lib-gui/liblxqt
 	lib-gui/lxqt-globalkeys
-	x11-libs/libX11
+	x11-live-libs/libX11
 	cpuload? ( lib-sys/libstatgrab )
 	kbindicator? ( lib-gui/libxkbcommon )
 	networkmonitor? ( lib-sys/libstatgrab )
 	sensors? ( sys-app/lm_sensors )
 	statusnotifier? ( >=lib-dev/libdbusmenu-qt-0.9.3_pre20160218-r1 )
 	sysstat? ( =lib-gui/libsysstat-0.3* )
-	tray? ( x11-libs/libXcomposite
-		x11-libs/libXdamage
-		x11-libs/libXrender )
+	tray? ( x11-live-libs/libXcomposite
+		x11-live-libs/libXdamage
+		x11-live-libs/libXrender )
 "
 DEPEND="${CDEPEND}
 	>=dev-util/lxqt-build-tools-0.3.1

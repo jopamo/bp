@@ -17,7 +17,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	x11-libs/gtk+:3
+	x11-live-libs/gtk+:3
 	lib-core/libxml2
 	lib-gui/glade:2
 	lib-print/cups

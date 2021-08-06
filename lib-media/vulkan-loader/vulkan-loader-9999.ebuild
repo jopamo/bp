@@ -28,8 +28,8 @@ DEPEND="${PYTHON_DEPS}
 	>=dev-util/vulkan-headers-${PV}
 	wayland? ( lib-dev/wayland )
 	X? (
-		x11-libs/libX11
-		x11-libs/libXrandr
+		x11-live-libs/libX11
+		x11-live-libs/libXrandr
 	)
 "
 PDEPEND="layers? ( lib-media/vulkan-layers )"

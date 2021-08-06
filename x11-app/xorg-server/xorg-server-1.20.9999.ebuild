@@ -29,25 +29,25 @@ CDEPEND="
 	>=x11-app/iceauth-1.0.2
 	>=x11-app/rgb-1.0.3
 	>=x11-app/xauth-1.0.3
-	x11-misc/xkbcomp
+	x11-app/xkbcomp
 	>=lib-gui/libdrm-2.4.46
-	x11-libs/libpciaccess
-	>=x11-libs/libXau-1.0.4
-	>=x11-libs/libXdmcp-1.0.2
-	>=x11-libs/libXfont2-2.0.1
-	>=x11-libs/libxkbfile-1.0.4
-	>=x11-libs/libxshmfence-1.1
+	x11-live-libs/libpciaccess
+	>=x11-live-libs/libXau-1.0.4
+	>=x11-live-libs/libXdmcp-1.0.2
+	>=x11-live-libs/libXfont2-2.0.1
+	>=x11-live-libs/libxkbfile-1.0.4
+	>=x11-live-libs/libxshmfence-1.1
 	>=lib-gui/pixman-0.27.2
-	>=x11-libs/xtrans-1.3.5
-	>=x11-misc/xbitmaps-1.0.1
-	>=x11-misc/xkeyboard-config-2.4.1-r3
+	>=x11-live-libs/xtrans-1.3.5
+	>=x11-live-misc/xbitmaps-1.0.1
+	>=x11-app/xkeyboard-config-2.4.1-r3
 	glamor? (
 		lib-media/libepoxy[X]
 		lib-media/mesa
 	)
 	!minimal? (
-		>=x11-libs/libX11-1.1.5
-		>=x11-libs/libXext-1.0.5
+		>=x11-live-libs/libX11-1.1.5
+		>=x11-live-libs/libXext-1.0.5
 		>=lib-media/mesa-10.3.4-r1
 	)
 	udev? ( >=sys-app/systemd-150 )
@@ -65,10 +65,10 @@ CDEPEND="
 
 DEPEND="${CDEPEND}
 	sys-devel/flex
-	x11-misc/xorgproto
+	x11-live-misc/xorgproto
 "
 
-PDEPEND="x11-misc/xf86-input-libinput"
+PDEPEND="x11-live-misc/xf86-input-libinput"
 
 filter-flags -Wl,-z,defs -Wl,-z,now
 

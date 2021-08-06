@@ -17,10 +17,10 @@ IUSE="debug nls session static-libs"
 RDEPEND="lib-dev/glib:2
 	>=lib-core/libxml2-2.0
 	>=lib-media/fontconfig-2
-	x11-libs/libXft
-	x11-libs/libXrandr
-	x11-libs/libXt
-	x11-libs/pango
+	x11-live-libs/libXft
+	x11-live-libs/libXrandr
+	x11-live-libs/libXt
+	x11-live-libs/pango
 	lib-media/imlib2
 	lib-gui/librsvg
 	dev-python/pyxdg[${PYTHON_USEDEP}]"
@@ -28,7 +28,7 @@ RDEPEND="lib-dev/glib:2
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	dev-util/pkgconf
-	x11-misc/xorgproto
+	x11-live-misc/xorgproto
 	x11-app/xorg-server
 "
 

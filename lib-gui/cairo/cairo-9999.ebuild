@@ -31,16 +31,16 @@ RDEPEND="
 	>=lib-gui/pixman-0.32.4
 	glib? ( >=lib-dev/glib-2.34.3:2 )
 	X? (
-		>=x11-libs/libXrender-0.9.8
-		>=x11-libs/libXext-1.3.2
-		>=x11-libs/libX11-1.6.2
+		>=x11-live-libs/libXrender-0.9.8
+		>=x11-live-libs/libXext-1.3.2
+		>=x11-live-libs/libX11-1.6.2
 	)
 	xcb? ( lib-gui/libxcb )"
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconf
 	>=sys-devel/libtool-2
-	X? ( x11-misc/xorgproto )"
+	X? ( x11-live-misc/xorgproto )"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.12.18-disable-test-suite.patch

@@ -17,10 +17,10 @@ IUSE="+introspection"
 RDEPEND="
 	>=lib-dev/glib-2.34.3:2
 	>=lib-gui/cairo-1.12.14-r4
-	>=x11-libs/pango-1.36.3
+	>=x11-live-libs/pango-1.36.3
 	>=lib-core/libxml2-2.9.1-r4:2
 	>=lib-dev/libcroco-0.6.8-r1
-	>=x11-libs/gdk-pixbuf-2.30.7:2[introspection]
+	>=x11-live-libs/gdk-pixbuf-2.30.7:2[introspection]
 	introspection? ( >=lib-dev/gobject-introspection-0.10.8:= )
 "
 DEPEND="${RDEPEND}

@@ -18,5 +18,5 @@
 *app-gui/qterminal
 *x11-app/picom
 *x11-app/hsetroot
-*x11-misc/mesa-progs
+*x11-app/mesa-progs
 lib-dev/libinput

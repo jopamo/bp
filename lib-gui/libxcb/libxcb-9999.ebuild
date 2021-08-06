@@ -15,11 +15,11 @@ KEYWORDS="amd64 arm64"
 IUSE="test xkb static-libs"
 
 DEPEND=">=lib-dev/libpthread-stubs-0.3-r1
-	>=x11-libs/libXau-1.0.7-r1
-	>=x11-libs/libXdmcp-1.1.1-r1
+	>=x11-live-libs/libXau-1.0.7-r1
+	>=x11-live-libs/libXdmcp-1.1.1-r1
 	test? ( lib-dev/check )
 	lib-core/libxslt
-	x11-misc/xcb-proto"
+	x11-live-misc/xcb-proto"
 
 src_prepare() {
 	eautoreconf

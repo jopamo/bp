@@ -24,8 +24,8 @@ DEPEND="
 	>=lib-dev/glib-2.18:2
 	lib-gui/qtbase
 	lib-gui/qtx11extras:5
-	>=x11-libs/libfm-1.2.0:=
-	x11-libs/libfm-qt:=
+	>=x11-live-libs/libfm-1.2.0:=
+	x11-live-libs/libfm-qt:=
 	lib-gui/libxcb
 	>=dev-util/intltool-0.40
 "

@@ -32,22 +32,22 @@ RDEPEND="
 	sys-app/dbus
 	lib-sys/libcap
 	lib-gui/cairo
-	x11-libs/gdk-pixbuf
-	x11-libs/gtk+:3
-	>=x11-libs/libX11-1.5.0
-	x11-libs/libXcomposite
-	x11-libs/libXcursor
-	x11-libs/libXdamage
-	x11-libs/libXext
-	x11-libs/libXfixes
-	x11-libs/libXi
-	x11-libs/libXrandr
-	x11-libs/libXrender
-	x11-libs/libXScrnSaver
-	x11-libs/libXtst
+	x11-live-libs/gdk-pixbuf
+	x11-live-libs/gtk+:3
+	>=x11-live-libs/libX11-1.5.0
+	x11-live-libs/libXcomposite
+	x11-live-libs/libXcursor
+	x11-live-libs/libXdamage
+	x11-live-libs/libXext
+	x11-live-libs/libXfixes
+	x11-live-libs/libXi
+	x11-live-libs/libXrandr
+	x11-live-libs/libXrender
+	x11-live-libs/libXScrnSaver
+	x11-live-libs/libXtst
 	lib-gui/libxcb
-	x11-libs/pango
-	x11-misc/xdg-utils
+	x11-live-libs/pango
+	x11-live-misc/xdg-utils
 "
 
 QA_PREBUILT="*"

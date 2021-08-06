@@ -22,7 +22,7 @@ DEPEND="
 	lib-gui/libdrm
 	lib-gui/libxkbcommon
 	lib-gui/pixman
-	icccm? ( x11-libs/xcb-util-wm )
+	icccm? ( x11-live-libs/xcb-util-wm )
 	sys-app/systemd[logind]
 	lib-sys/libcap
 	app-misc/seatd

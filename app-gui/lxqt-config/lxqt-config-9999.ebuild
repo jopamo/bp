@@ -22,17 +22,17 @@ RDEPEND="
 	lib-dev/libqtxdg
 	lib-gui/qtbase
 	lib-gui/qtx11extras:5
-	x11-misc/kwindowsystem
+	x11-live-misc/kwindowsystem
 	=lib-gui/liblxqt-$(ver_cut 1-2)*
 	lib-sys/zlib:=
 	lib-gui/libxcb
-	x11-libs/libX11
-	x11-libs/libXcursor
-	x11-libs/libXfixes
+	x11-live-libs/libX11
+	x11-live-libs/libXcursor
+	x11-live-libs/libXfixes
 "
 DEPEND="${RDEPEND}
 	>=dev-util/lxqt-build-tools-0.5.0
-	x11-misc/xf86-input-libinput
+	x11-live-misc/xf86-input-libinput
 "
 
 src_configure() {

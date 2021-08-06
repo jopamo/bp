@@ -18,7 +18,7 @@ DEPEND="
 	lib-dev/wayland
 	lib-gui/cairo
 	lib-gui/libxkbcommon
-	x11-libs/gdk-pixbuf:2
+	x11-live-libs/gdk-pixbuf:2
 	pam? ( lib-sys/pam )"
 
 BDEPEND="

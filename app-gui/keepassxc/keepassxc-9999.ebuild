@@ -30,9 +30,9 @@ RDEPEND="
 	app-crypt/argon2
 	autotype? (
 		lib-gui/qtx11extras
-		x11-libs/libX11
-		x11-libs/libXi
-		x11-libs/libXtst
+		x11-live-libs/libX11
+		x11-live-libs/libXi
+		x11-live-libs/libXtst
 	)
 "
 

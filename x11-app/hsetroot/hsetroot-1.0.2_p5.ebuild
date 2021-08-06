@@ -16,8 +16,8 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	lib-media/imlib2[X]
-	x11-libs/libX11
-	x11-misc/xorgproto"
+	x11-live-libs/libX11
+	x11-live-misc/xorgproto"
 
 PATCHES=(
 	"${FILESDIR}"/hsetroot-1.0.2-underlinking.patch

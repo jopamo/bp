@@ -36,8 +36,9 @@ RDEPEND="
 	)
 "
 
-PDEPEND="lib-media/nv-codec-headers
-	nvidia/nvidia-settings"
+PDEPEND="
+	lib-media/nv-codec-headers
+	bin/nvidia-settings"
 
 QA_PREBUILT="opt/* usr/lib*"
 S=${WORKDIR}/

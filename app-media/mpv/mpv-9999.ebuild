@@ -84,8 +84,8 @@ DEPEND="${COMMON_DEPEND}
 	dvb? ( virtual/linuxtv-dvb-headers )
 "
 RDEPEND="${COMMON_DEPEND}
-	cuda? ( nvidia/nvidia-drivers[X]
-		nvidia/nvidia-cuda
+	cuda? ( bin/nvidia-drivers[X]
+		bin/nvidia-cuda
 		lib-media/nv-codec-headers )"
 
 src_prepare() {

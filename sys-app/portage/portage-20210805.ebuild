@@ -20,7 +20,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bin X gui tmpfilesd"
+IUSE="tmpfilesd"
 
 DEPEND="
 	app-compression/tar

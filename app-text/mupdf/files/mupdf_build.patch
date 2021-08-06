@@ -1,0 +1,48 @@
+diff -urN a/Makefile b/Makefile
+--- a/Makefile	2021-05-28 08:29:40.326837461 -0500
++++ b/Makefile	2021-05-28 08:35:49.749079111 -0500
+@@ -248,17 +248,19 @@
+ $(THREAD_LIB) : $(THREAD_OBJ)
+ $(PKCS7_LIB) : $(PKCS7_OBJ)
+ else
+-MUPDF_LIB = $(OUT)/libmupdf.a
++MUPDF_LIB = libmupdf.so.${PV}
++MUPDF_STATIC = $(OUT)/libmupdf.a
++THIRD_LIB =
+ LIBS_TO_INSTALL_IN_LIB = $(MUPDF_LIB) $(THIRD_LIB)
+-THIRD_LIB = $(OUT)/libmupdf-third.a
+ ifneq ($(USE_SYSTEM_GLUT),yes)
+ THIRD_GLUT_LIB = $(OUT)/libmupdf-glut.a
+ endif
+ THREAD_LIB = $(OUT)/libmupdf-threads.a
+ PKCS7_LIB = $(OUT)/libmupdf-pkcs7.a
+ 
+-$(MUPDF_LIB) : $(MUPDF_OBJ)
+-$(THIRD_LIB) : $(THIRD_OBJ)
++$(MUPDF_LIB): $(MUPDF_OBJ) $(THIRD_OBJ)
++	$(QUIET_LINK) $(CC) $(LDFLAGS) --shared -Wl,-soname -Wl,$(MUPDF_LIB) -Wl,--no-undefined -o $@ $^ $(THIRD_LIBS) $(LIBS)
++$(MUPDF_STATIC): $(MUPDF_OBJ) $(THIRD_OBJ)
+ $(THIRD_GLUT_LIB) : $(THIRD_GLUT_OBJ)
+ $(THREAD_LIB) : $(THREAD_OBJ)
+ $(PKCS7_LIB) : $(PKCS7_OBJ)
+diff -urN a/Makerules b/Makerules
+--- a/Makerules	2021-05-28 08:29:40.330837486 -0500
++++ b/Makerules	2021-05-28 08:39:11.722304682 -0500
+@@ -72,8 +72,6 @@
+ endif
+ 
+ ifeq ($(build),debug)
+-  CFLAGS += -pipe -g
+-  LDFLAGS += -g
+ else ifeq ($(build),release)
+   CFLAGS += -pipe -O2 -DNDEBUG -fomit-frame-pointer
+   LDFLAGS += $(LDREMOVEUNREACH) -Wl,-s
+@@ -84,7 +82,7 @@
+   CFLAGS += -pipe -O2 -DNDEBUG -DPACIFY_VALGRIND -fno-omit-frame-pointer
+   LDFLAGS += $(LDREMOVEUNREACH) -Wl,-s
+ else ifeq ($(build),sanitize)
+-  CFLAGS += -pipe -g -fno-omit-frame-pointer $(SANITIZE_FLAGS)
++  CFLAGS += -pipe -fno-omit-frame-pointer $(SANITIZE_FLAGS)
+   LDFLAGS += -g $(SANITIZE_FLAGS)
+ else ifeq ($(build),sanitize-release)
+   CFLAGS += -pipe -O2 -DNDEBUG -fno-omit-frame-pointer $(SANITIZE_FLAGS)

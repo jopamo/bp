@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="pam static-libs"
 
 RDEPEND=">=sys-app/attr-2.4.47
-	pam? ( lib-sys/pam )"
+	pam? ( lib-core/pam )"
 DEPEND="${RDEPEND}
 	sys-kernel/linux-headers"
 

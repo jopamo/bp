@@ -22,7 +22,7 @@ IUSE="pam ssl tmpfilesd"
 
 DEPEND="
 	lib-sys/zlib
-	pam? ( lib-sys/pam )
+	pam? ( lib-core/pam )
 	ssl? ( virtual/ssl )
 "
 

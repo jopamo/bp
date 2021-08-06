@@ -13,4 +13,4 @@ dev-util/ccache
 sys-devel/gcc
 dev-util/cmake
 dev-util/pkgconf
-sys-app/layout
+app-core/layout

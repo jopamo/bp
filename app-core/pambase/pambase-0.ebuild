@@ -2,16 +2,18 @@
 
 EAPI=7
 
-inherit git-r3
-
 DESCRIPTION="PAM base configuration files"
-EGIT_REPO_URI="https://github.com/jopamo/pambase.git"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RESTRICT="binchecks"
+S=${WORKDIR}
+
+src_prepare() {
+	cp -rp "${FILESDIR}"/* "${S}"/
+	default
+}
 
 src_compile() { :; }
 

@@ -100,7 +100,7 @@ cp /var/cache/packages/sys-app/grep* .
 tar xvhf grep* --xattrs
 rm grep* || exit
 
-cp /var/cache/packages/sys-app/layout* .
+cp /var/cache/packages/app-core/layout* .
 tar xvhf layout* --xattrs
 rm layout* || exit
 
@@ -124,7 +124,7 @@ cp /var/cache/packages/sys-app/sed* .
 tar xvhf sed* --xattrs
 rm sed* || exit
 
-cp /var/cache/packages/sys-app/shadow-* .
+cp /var/cache/packages/app-core/shadow-* .
 tar xvhf shadow-* --xattrs
 rm shadow-* || exit
 
@@ -140,11 +140,11 @@ cp /var/cache/packages/lib-net/libtirpc-* .
 tar xvhf libtirpc-* --xattrs
 rm libtirpc-* || exit
 
-cp /var/cache/packages/lib-sys/pam-* .
+cp /var/cache/packages/lib-core/pam-* .
 tar xvhf pam-* --xattrs
 rm pam-* || exit
 
-cp /var/cache/packages/lib-sys/pambase* .
+cp /var/cache/packages/app-core/pambase* .
 tar xvhf pambase* --xattrs
 rm pambase* || exit
 

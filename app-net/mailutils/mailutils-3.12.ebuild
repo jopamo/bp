@@ -19,7 +19,7 @@ DEPEND="
 	lib-sys/readline:=
 	gdbm? ( lib-sys/gdbm )
 	nls? ( sys-devel/gettext )
-	pam? ( lib-sys/pam )
+	pam? ( lib-core/pam )
 	python? ( ${PYTHON_DEPS} )
 	ssl? ( lib-net/gnutls:= )"
 

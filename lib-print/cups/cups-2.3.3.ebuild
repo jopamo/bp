@@ -27,7 +27,7 @@ CDEPEND="
 	)
 	dbus? ( >=sys-app/dbus-1.6.18-r1 )
 	!lprng-compat? ( !lib-print/lprng )
-	pam? ( lib-sys/pam )
+	pam? ( lib-core/pam )
 	ssl? (
 		>=lib-net/gnutls-2.12.23-r6:0=
 	)

@@ -11,9 +11,9 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="x11-libs/libX11"
+RDEPEND="x11-live-libs/libX11"
 DEPEND="${RDEPEND}
-	x11-misc/xorgproto"
+	x11-live-misc/xorgproto"
 
 src_prepare() {
 	eautoreconf

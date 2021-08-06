@@ -17,15 +17,15 @@ IUSE="debug static-libs"
 # enabling GLES support seems to cause build failures
 RDEPEND="lib-media/glu
 	>=lib-media/mesa-7.0-r1
-	>=x11-libs/libX11-1.6.2
-	>=x11-libs/libXext-1.3.2
-	>=x11-libs/libXi-1.7.2
-	>=x11-libs/libXrandr-1.4.2
-	>=x11-libs/libXxf86vm-1.1.3
+	>=x11-live-libs/libX11-1.6.2
+	>=x11-live-libs/libXext-1.3.2
+	>=x11-live-libs/libXi-1.7.2
+	>=x11-live-libs/libXrandr-1.4.2
+	>=x11-live-libs/libXxf86vm-1.1.3
 "
 DEPEND="${RDEPEND}
 	dev-util/pkgconf
-	x11-misc/xorgproto"
+	x11-live-misc/xorgproto"
 
 append-flags -fcommon
 

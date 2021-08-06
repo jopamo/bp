@@ -13,10 +13,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="ipv6"
 
-DEPEND="x11-libs/libX11
-	x11-libs/libXau
-	x11-libs/libXext
-	x11-libs/libXmu"
+DEPEND="x11-live-libs/libX11
+	x11-live-libs/libXau
+	x11-live-libs/libXext
+	x11-live-libs/libXmu"
 
 src_prepare() {
 	default

@@ -20,7 +20,7 @@ RDEPEND="
 	>=lib-dev/dbus-glib-0.60
 	>=lib-dev/glib-2.28
 	>=lib-gui/cairo-1.2.6
-	>=x11-libs/pango-1.8.0
+	>=x11-live-libs/pango-1.8.0
 	lib-gui/qtbase
 "
 

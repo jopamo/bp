@@ -13,7 +13,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	x11-app/xauth
-	x11-libs/libX11
+	x11-live-libs/libX11
 "
 
 PDEPEND="x11-app/xrdb"

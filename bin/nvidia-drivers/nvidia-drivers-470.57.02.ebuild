@@ -30,8 +30,8 @@ RDEPEND="
 	wayland? ( lib-dev/wayland )
 	X? (
 		x11-app/xorg-server
-		>=x11-libs/libX11-1.6.2
-		>=x11-libs/libXext-1.3.2
+		>=x11-live-libs/libX11-1.6.2
+		>=x11-live-libs/libXext-1.3.2
 		lib-sys/zlib
 	)
 "

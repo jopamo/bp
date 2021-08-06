@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="libkms intel radeon amdgpu nouveau omap exynos valgrind udev"
 
 DEPEND="${RDEPEND}
-	x11-misc/util-macros
+	x11-live-misc/util-macros
 	lib-gui/cairo
 	valgrind? ( dev-util/valgrind )
 	>=lib-dev/libpthread-stubs-0.3-r1:=

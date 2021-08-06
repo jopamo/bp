@@ -27,9 +27,9 @@ DEPEND="
 	lib-media/libjpeg-turbo
 	cups? ( >=lib-print/cups-1.3.8 )
 	dbus? ( sys-app/dbus )
-	gtk? ( x11-libs/gtk+ )
+	gtk? ( x11-live-libs/gtk+ )
 	tiff? ( >=lib-media/tiff-4.0.1:0= )
-	X? ( x11-libs/libXt x11-libs/libXext )
+	X? ( x11-live-libs/libXt x11-live-libs/libXext )
 "
 
 BDEPEND="dev-util/pkgconf"

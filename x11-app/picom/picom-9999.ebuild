@@ -16,18 +16,18 @@ IUSE="sanitize dbus opengl +pcre +xinerama"
 
 COMMON_DEPEND="
 	lib-dev/libconfig:=
-	x11-libs/libX11
-	x11-libs/libXcomposite
-	x11-libs/libXdamage
-	x11-libs/libXext
-	x11-libs/libXfixes
-	x11-libs/libXrandr
-	x11-libs/libXrender
-	x11-libs/xcb-util
+	x11-live-libs/libX11
+	x11-live-libs/libXcomposite
+	x11-live-libs/libXdamage
+	x11-live-libs/libXext
+	x11-live-libs/libXfixes
+	x11-live-libs/libXrandr
+	x11-live-libs/libXrender
+	x11-live-libs/xcb-util
 	dbus? ( sys-app/dbus )
 	opengl? ( lib-media/mesa )
 	pcre? ( lib-dev/libpcre:3 )
-	xinerama? ( x11-libs/libXinerama )"
+	xinerama? ( x11-live-libs/libXinerama )"
 
 RDEPEND="${COMMON_DEPEND}
 	x11-app/xprop
@@ -35,7 +35,7 @@ RDEPEND="${COMMON_DEPEND}
 
 DEPEND="${COMMON_DEPEND}
 	dev-util/pkgconf
-	x11-misc/xorgproto
+	x11-live-misc/xorgproto
 	lib-dev/libev
 	lib-dev/uthash
 	lib-dev/libxdg-base

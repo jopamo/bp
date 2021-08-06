@@ -21,17 +21,17 @@ DEPEND="
 	lib-dev/wayland
 	lib-gui/cairo
 	lib-gui/libxkbcommon
-	x11-libs/pango
+	x11-live-libs/pango
 	lib-gui/pixman
 	|| ( lib-gui/wlroots lib-gui/wlroots-eglstreams )
-	x11-libs/gdk-pixbuf:2
+	x11-live-libs/gdk-pixbuf:2
 	swaybg? ( app-gui/swaybg )
 	swayidle? ( app-gui/swayidle )
 	swaylock? ( app-gui/swaylock )
 	>=sys-app/systemd-239
 "
 RDEPEND="
-	x11-misc/xkeyboard-config
+	x11-app/xkeyboard-config
 	${DEPEND}
 "
 BDEPEND="

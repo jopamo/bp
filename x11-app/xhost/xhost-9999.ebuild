@@ -12,8 +12,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	x11-libs/libXmu
-	x11-libs/libX11
+	x11-live-libs/libXmu
+	x11-live-libs/libX11
 "
 
 src_prepare() {

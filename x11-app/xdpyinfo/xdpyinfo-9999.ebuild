@@ -14,20 +14,20 @@ KEYWORDS="amd64 arm64"
 IUSE="dga dmx xinerama"
 
 RDEPEND="
-	x11-libs/libX11
-	x11-libs/libXcomposite
-	x11-libs/libXext
-	x11-libs/libXi
-	x11-libs/libXrender
-	x11-libs/libXtst
-	x11-libs/libXxf86vm
+	x11-live-libs/libX11
+	x11-live-libs/libXcomposite
+	x11-live-libs/libXext
+	x11-live-libs/libXi
+	x11-live-libs/libXrender
+	x11-live-libs/libXtst
+	x11-live-libs/libXxf86vm
 	lib-gui/libxcb
-	dga? ( x11-libs/libXxf86dga )
-	dmx? ( x11-libs/libdmx )
-	xinerama? ( x11-libs/libXinerama )
+	dga? ( x11-live-libs/libXxf86dga )
+	dmx? ( x11-live-libs/libdmx )
+	xinerama? ( x11-live-libs/libXinerama )
 "
 DEPEND="${RDEPEND}
-	x11-misc/xorgproto
+	x11-live-misc/xorgproto
 "
 
 src_prepare() {

@@ -11,8 +11,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="x11-misc/util-macros
-	x11-misc/xorgproto"
+DEPEND="x11-live-misc/util-macros
+	x11-live-misc/xorgproto"
 
 src_prepare() {
 	eautoreconf

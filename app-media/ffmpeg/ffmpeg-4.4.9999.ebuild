@@ -26,8 +26,8 @@ DEPEND="
 	x265? ( lib-media/x265 )
 	lib-media/libass
 	nvidia? ( lib-media/nv-codec-headers )
-	vaapi? ( x11-libs/libva
-		x11-libs/libva-intel-driver )
+	vaapi? ( x11-live-libs/libva
+		x11-live-libs/libva-intel-driver )
 	vdpau? ( lib-gui/libvdpau )
 "
 

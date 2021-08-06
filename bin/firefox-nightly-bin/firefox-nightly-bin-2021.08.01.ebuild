@@ -26,18 +26,18 @@ RDEPEND="lib-gui/atk
 	lib-media/fontconfig
 	>=lib-media/freetype-2.4.10
 	>=lib-gui/cairo-1.10[X]
-	x11-libs/gdk-pixbuf
+	x11-live-libs/gdk-pixbuf
 	lib-dev/nss
-	>=x11-libs/gtk+-3.4.0:3
+	>=x11-live-libs/gtk+-3.4.0:3
 	app-text/hunspell
-	x11-libs/libX11
-	x11-libs/libXcomposite
-	x11-libs/libXdamage
-	x11-libs/libXext
-	x11-libs/libXfixes
-	x11-libs/libXrender
-	x11-libs/libXt
-	>=x11-libs/pango-1.22.0
+	x11-live-libs/libX11
+	x11-live-libs/libXcomposite
+	x11-live-libs/libXdamage
+	x11-live-libs/libXext
+	x11-live-libs/libXfixes
+	x11-live-libs/libXrender
+	x11-live-libs/libXt
+	>=x11-live-libs/pango-1.22.0
 	app-media/pulseaudio
 	app-media/ffmpeg
 "

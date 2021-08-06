@@ -15,8 +15,8 @@ KEYWORDS="amd64 arm64"
 RDEPEND="
 	lib-gui/qtbase
 	lib-gui/qtx11extras:5
-	x11-libs/libX11
-	~x11-libs/qtermwidget-${PV}
+	x11-live-libs/libX11
+	~x11-live-libs/qtermwidget-${PV}
 "
 DEPEND="${RDEPEND}
 	dev-util/lxqt-build-tools

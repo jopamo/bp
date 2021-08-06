@@ -36,7 +36,7 @@ RDEPEND="
 	lib-gui/libdrm
 	lib-gui/libxkbcommon
 	lib-gui/pixman
-	x11-misc/xkeyboard-config
+	x11-app/xkeyboard-config
 	fbdev? (
 		>=lib-sys/mtdev-1.1.0
 		virtual/service-manager
@@ -47,7 +47,7 @@ RDEPEND="
 		>=lib-sys/mtdev-1.1.0
 		virtual/service-manager
 	)
-	editor? ( x11-libs/pango )
+	editor? ( x11-live-libs/pango )
 	gles2? (
 		lib-media/mesa
 	)
@@ -65,13 +65,13 @@ RDEPEND="
 	launch? ( lib-sys/pambase )
 	X? (
 		lib-gui/libxcb
-		x11-libs/libX11
+		x11-live-libs/libX11
 	)
 	xwayland? (
 		x11-misc/xorg-server[wayland]
 		lib-gui/cairo[xcb]
 		lib-gui/libxcb
-		x11-libs/libXcursor
+		x11-live-libs/libXcursor
 	)
 "
 DEPEND="${RDEPEND}"

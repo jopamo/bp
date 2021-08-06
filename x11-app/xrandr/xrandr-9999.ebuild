@@ -11,9 +11,9 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND=">=x11-libs/libXrandr-1.5
-	x11-libs/libXrender
-	x11-libs/libX11"
+DEPEND=">=x11-live-libs/libXrandr-1.5
+	x11-live-libs/libXrender
+	x11-live-libs/libX11"
 
 src_prepare() {
 	default

@@ -48,7 +48,7 @@ FONT_CONF=( "" )
 if [[ ${CATEGORY}/${PN} != fonts/encodings ]]; then
 	IUSE="X"
 	DEPEND="X? (
-			x11-misc/mkfontscale
+			x11-live-miscmkfontscale
 			fonts/encodings
 	)"
 	RDEPEND=""

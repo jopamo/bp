@@ -22,7 +22,7 @@ KEYWORDS="amd64 arm64"
 IUSE="autotype debug http test"
 
 RDEPEND="
-	lib-dev/libgcrypt
+	lib-core/libgcrypt
 	xgui-live-lib/qtbase
 	xgui-live-lib/qttools
 	lib-core/zlib

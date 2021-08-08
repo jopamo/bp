@@ -25,7 +25,7 @@ IUSE="crypt debug static-libs"
 
 DEPEND="
 	lib-core/libxml2
-	crypt?  ( lib-dev/libgcrypt )
+	crypt?  ( lib-core/libgcrypt )
 "
 
 src_prepare() {

@@ -24,7 +24,7 @@ IUSE="acl debug +external-fuse ntfsdecrypt +ntfsprogs static-libs suid xattr"
 
 DEPEND="app-core/attr
 	ntfsdecrypt? (
-		>=lib-dev/libgcrypt-1.2.2:0
+		>=lib-core/libgcrypt-1.2.2:0
 		>=lib-net/gnutls-1.4.4
 	)"
 

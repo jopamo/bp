@@ -33,7 +33,7 @@ COMMON_DEPEND="
 	app-core/util-linux
 	lib-core/readline
 	virtual/service-manager
-	lib-dev/libgcrypt
+	lib-core/libgcrypt
 	lib-net/gnutls
 "
 RDEPEND="${COMMON_DEPEND}

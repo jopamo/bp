@@ -10,7 +10,6 @@ HOMEPAGE="https://dbus.freedesktop.org/"
 
 if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/dbus/dbus.git"
-	#EGIT_BRANCH="dbus-$(ver_cut 1).$(ver_cut 2)"
 	inherit git-r3
 	KEYWORDS="~amd64 ~arm64"
 else
@@ -22,7 +21,6 @@ fi
 
 LICENSE="|| ( AFL-2.1 GPL-2 )"
 SLOT="0"
-KEYWORDS="amd64 arm64"
 
 IUSE="debug static-libs systemd test tmpfilesd user-session X"
 

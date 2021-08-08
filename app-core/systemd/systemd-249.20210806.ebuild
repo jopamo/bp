@@ -2,16 +2,25 @@
 
 EAPI=7
 
-inherit flag-o-matic linux-info meson toolchain-funcs user git-r3
+inherit flag-o-matic linux-info meson toolchain-funcs user
 
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
-EGIT_REPO_URI="https://github.com/systemd/systemd-stable.git"
-EGIT_BRANCH="v$(ver_cut 1)-stable"
+
+if [[ ${PV} == *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/systemd/systemd-stable.git"
+	EGIT_BRANCH="v$(ver_cut 1)-stable"
+	inherit git-r3
+	KEYWORDS="~amd64 ~arm64"
+else
+	SNAPSHOT=090378dcb1de5ca66900503210e85d63075fa70a
+	SRC_URI="https://github.com/systemd/systemd-stable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S="${WORKDIR}/systemd-${SNAPSHOT}"
+	KEYWORDS="amd64 arm64"
+fi
 
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
-KEYWORDS="amd64 arm64"
 
 IUSE="binfmt +blkid bpf-framework coredump cryptsetup devmode dhcp4 efi gcrypt
 +hostnamed hwdb importd kmod kvm ldconfig localed logind machined networkd

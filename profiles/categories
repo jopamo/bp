@@ -2,6 +2,7 @@ app-compression
 app-core
 app-crypt
 app-eselect
+app-live
 app-misc
 app-net
 app-portage

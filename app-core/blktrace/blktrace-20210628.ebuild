@@ -11,7 +11,7 @@ if [[ ${PV} == "9999" ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://git.kernel.org/pub/scm/linux/kernel/git/axboe/blktrace.git"
 else
-	SNAPSHOT=a021a33b405b5101eec6c389e1dacd7934fdd35e
+	SNAPSHOT=3a1b1366d30375cdb0f5b299df4edda0c8ba3bcc
 	SRC_URI="https://git.kernel.org/pub/scm/linux/kernel/git/axboe/blktrace.git/snapshot/blktrace-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/blktrace-${SNAPSHOT}
 fi
@@ -20,8 +20,10 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="lib-dev/libaio
-	sys-kernel/linux-headers"
+DEPEND="
+	lib-dev/libaio
+	sys-kernel/linux-headers
+"
 
 CONFIG_CHECK="~BLK_DEV_IO_TRACE"
 WARNING_BLK_DEV_IO_TRACE="you need to enable BLK_DEV_IO_TRACE kernel option if you want to gather traces from this machine"

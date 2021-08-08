@@ -15,7 +15,7 @@ if [[ ${PV} == *9999 ]]; then
 else
 	SNAPSHOT=090378dcb1de5ca66900503210e85d63075fa70a
 	SRC_URI="https://github.com/systemd/systemd-stable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S="${WORKDIR}/systemd-${SNAPSHOT}"
+	S="${WORKDIR}/systemd-stable-${SNAPSHOT}"
 	KEYWORDS="amd64 arm64"
 fi
 

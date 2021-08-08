@@ -19,7 +19,7 @@ LICENSE="|| ( GPL-2+ LGPL-2.1+ )"
 SLOT="0"
 
 DEPEND="
-	lib-dev/glib:2
+	lib-live/glib:2
 	xgui-live-lib/qtbase
 	xgui-live-lib/qtx11extras:5
 	xmedia-live-lib/libexif

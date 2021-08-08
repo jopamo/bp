@@ -24,8 +24,8 @@ IUSE="alsa +clock colorpicker cpuload desktopswitch dom kbindicator
 REQUIRED_USE="volume? ( || ( alsa pulseaudio ) )"
 
 CDEPEND="
-	lib-dev/glib:2
-	lib-dev/libqtxdg
+	lib-live/glib:2
+	lib-live/libqtxdg
 	xgui-live-lib/qtbase
 	xgui-live-lib/qtx11extras:5
 	x11-live-misc/kguiaddons

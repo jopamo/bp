@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug doc exif"
 
-COMMON_DEPEND=">=lib-dev/glib-2.18:2
+COMMON_DEPEND=">=lib-live/glib-2.18:2
 	>=xgui-live-lib/menu-cache-0.3.2:=
 "
 RDEPEND="${COMMON_DEPEND}

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+rsync -apvz --delete \
+	--exclude 'dev' \
+	--exclude 'mnt' \
+	--exclude 'proc' \
+	--exclude 'run' \
+	--exclude 'sys' \
+	--exclude 'tmp' \
+	--exclude 'var/lock/*' \
+	--exclude 'var/run/*' \
+	--exclude 'var/tmp/*' \
+	--exclude 'var/cache/distfiles/*"' \
+	/ /mnt/md/.system_backup/

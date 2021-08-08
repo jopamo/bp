@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	>=lib-dev/glib-2.37.6:2
+	>=lib-live/glib-2.37.6:2
 "
 DEPEND="${RDEPEND}
 	app-text/docbook-xml-dtd

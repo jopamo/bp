@@ -18,7 +18,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND=">=lib-dev/libinput-1.5.0:0=
+DEPEND=">=lib-live/libinput-1.5.0:0=
 		xgui-misc/xorg-server"
 
 filter-flags -Wl,-z,defs

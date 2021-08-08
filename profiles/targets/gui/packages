@@ -16,7 +16,7 @@
 *xgui-live-app/pcmanfm-qt
 *xgui-live-app/speedcrunch
 *xgui-live-app/qterminal
-*x11-app/picom
-*x11-app/hsetroot
-*x11-app/mesa-progs
-lib-dev/libinput
+*x11-live-app/picom
+*x11-live-app/hsetroot
+*xgui-misc/mesa-progs
+*lib-live/libinput

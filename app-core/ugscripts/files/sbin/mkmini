@@ -219,7 +219,7 @@ tar xvhf btrfs-progs* --xattrs
 rm btrfs-progs* || exit
 
 #shadowsocks
-cp /var/cache/packages/lib-dev/libsodium* .
+cp /var/cache/packages/lib-live/libsodium* .
 cp /var/cache/packages/lib-dev/libev* .
 cp /var/cache/packages/lib-net/c-ares* .
 cp /var/cache/packages/app-server/shadowsocks-libev* .
@@ -401,7 +401,7 @@ cp /var/cache/packages/sys-fs/fuse* .
 tar xvhf fuse* --xattrs
 rm fuse* || exit
 
-cp /var/cache/packages/lib-dev/glib* .
+cp /var/cache/packages/lib-live/glib* .
 tar xvhf glib* --xattrs
 rm glib* || exit
 

@@ -77,7 +77,7 @@ src_configure() {
 		$(meson_feature alsa)
 		$(meson_feature asyncns)
 		-Davahi=disabled
-		$(meson_feature bluez bluez5)
+		$(meson_use bluez bluez5)
 		$(meson_feature dbus)
 		$(meson_feature elogind)
 		$(meson_feature fftw)

@@ -14,7 +14,7 @@ SLOT="0"
 
 DEPEND="
 	sys-fs/fuse:3
-	lib-dev/glib
+	lib-live/glib
 	app-net/openssh"
 
 BDEPEND="dev-util/pkgconf

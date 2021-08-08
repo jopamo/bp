@@ -116,7 +116,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 # when available rather than always using the external library.
 ALL_DEPEND="
 	lib-dev/libtasn1[static-libs(+)]
-	>=lib-dev/glib-2.0[static-libs(+)]
+	>=lib-live/glib-2.0[static-libs(+)]
 	lib-core/zlib[static-libs(+)]
 	python? ( ${PYTHON_DEPS} )
 	systemtap? ( dev-util/systemtap )
@@ -187,7 +187,7 @@ BDEPEND="
 	dev-util/pkgconf
 	gtk? ( nls? ( sys-devel/gettext ) )
 	test? (
-		lib-dev/glib[utils]
+		lib-live/glib[utils]
 		sys-devel/bc
 	)
 "

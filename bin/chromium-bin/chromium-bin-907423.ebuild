@@ -24,7 +24,7 @@ RDEPEND="
 	app-misc/ca-certificates
 	xgui-live-lib/atk
 	lib-dev/expat
-	lib-dev/glib:2
+	lib-live/glib:2
 	lib-dev/nspr
 	>=lib-dev/nss-3.26
 	xmedia-live-lib/alsa-lib

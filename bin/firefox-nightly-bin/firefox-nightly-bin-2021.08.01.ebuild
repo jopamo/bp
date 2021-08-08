@@ -22,7 +22,7 @@ KEYWORDS="amd64"
 RDEPEND="xgui-live-lib/atk
 	>=app-core/dbus-0.60
 	>=lib-dev/dbus-glib-0.72
-	>=lib-dev/glib-2.26:2
+	>=lib-live/glib-2.26:2
 	xmedia-live-lib/fontconfig
 	>=xmedia-live-lib/freetype-2.4.10
 	>=xgui-live-lib/cairo-1.10[X]

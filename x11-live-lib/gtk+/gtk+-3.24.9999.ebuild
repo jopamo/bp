@@ -21,7 +21,7 @@ REQUIRED_USE="
 "
 
 COMMON_DEPEND="
-	>=lib-dev/glib-2.49.4:2
+	>=lib-live/glib-2.49.4:2
 	xmedia-live-lib/fontconfig
 	>=xmedia-live-lib/libepoxy-1.0[X(+)?]
 	>=xgui-live-lib/cairo-1.14[glib,svg,X?]
@@ -29,7 +29,7 @@ COMMON_DEPEND="
 	>=x11-live-lib/pango-1.37.3[introspection?]
 	x11-live-misc/shared-mime-info
 	cups? ( >=lib-print/cups-1.2 )
-	introspection? ( >=lib-dev/gobject-introspection-1.39:= )
+	introspection? ( >=lib-live/gobject-introspection-1.39:= )
 	wayland? (
 		lib-dev/wayland
 		lib-dev/wayland-protocols
@@ -53,7 +53,7 @@ DEPEND="${COMMON_DEPEND}
 	app-text/docbook-xml-dtd
 	lib-core/libxslt
 	xgui-live-lib/at-spi2-atk
-	lib-dev/gobject-introspection-common
+	lib-live/gobject-introspection-common
 	>=dev-util/gtk-doc-am-1.20
 	>=sys-devel/gettext-0.19.7
 	dev-util/pkgconf

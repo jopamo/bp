@@ -26,7 +26,7 @@ RDEPEND="
 	xgui-live-lib/qtbase
 	xgui-live-lib/qttools
 	lib-core/zlib
-	lib-dev/libsodium
+	lib-live/libsodium
 	app-crypt/argon2
 	autotype? (
 		xgui-live-lib/qtx11extras

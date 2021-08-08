@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit flag-o-matic git-r3
 
@@ -17,7 +17,7 @@ IUSE="icu mysql postgres sqlite systemd opengl vulkan"
 
 DEPEND="
 	lib-dev/double-conversion
-	lib-dev/glib
+	lib-live/glib
 	lib-dev/libpcre2
 	xgui-live-lib/libxcb
 	xmedia-live-lib/freetype
@@ -34,8 +34,6 @@ DEPEND="
 	sqlite? ( lib-core/sqlite )
 	vulkan? ( xmedia-live-lib/vulkan-loader )
 "
-
-#PATCHES=( "${FILESDIR}"/qtbase-nomake.patch )
 
 filter-flags -flto\=\*
 append-cppflags -DOPENSSL_NO_PSK -DOPENSSL_NO_NEXTPROTONEG -Wno-deprecated-declarations -Wno-class-memaccess -Wno-packed-not-aligned
@@ -94,4 +92,6 @@ src_configure() {
 src_install() {
 	make INSTALL_ROOT="${ED}" install
 	cleanup_install
+
+	dosym -r /usr/bin/qmake /usr/lib/qt5/bin/qmake
 }

@@ -17,13 +17,12 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug +dep +jumbo-build +required-use sqlite swap-remote tmpfilesd tools nls"
 
-RDEPEND="app-core/push
-	>=app-core/quoter-3.0-r2
-	nls? ( sys-devel/gettext )
-	sqlite? ( lib-core/sqlite )"
-
-DEPEND="${RDEPEND}
-		>=sys-devel/gettext-0.19.6"
+DEPEND="
+	app-misc/push
+	app-misc/quoter
+	sys-devel/gettext
+	sqlite? ( lib-core/sqlite )
+"
 
 pkg_setup() {
 	local old_cache="${EROOT}/var/cache/${PN}"
@@ -40,7 +39,6 @@ src_configure() {
 		$(meson_use jumbo-build)
 		$(meson_use sqlite)
 		$(meson_use tools separate-tools)
-		$(meson_use nls)
 		$(meson_use debug debugging)
 		$(meson_use swap-remote)
 		$(meson_use prefix always-accept-keywords)
@@ -50,6 +48,7 @@ src_configure() {
 		-Dportage-rootpath="${ROOTPATH}"
 		-Deprefix-default="${EPREFIX}"
 		-Dextra-doc=false
+		-Dnls=false
 		)
 		meson_src_configure
 }

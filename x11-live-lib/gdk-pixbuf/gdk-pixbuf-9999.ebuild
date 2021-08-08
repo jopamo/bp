@@ -23,7 +23,7 @@ KEYWORDS="amd64 arm64"
 IUSE="+introspection"
 
 DEPEND="
-	lib-dev/glib
+	lib-live/glib
 	xmedia-live-lib/libpng
 	xmedia-live-lib/libjpeg-turbo
 	xmedia-live-lib/tiff
@@ -40,9 +40,7 @@ BDEPEND="
 
 src_configure() {
 	local emesonargs=(
-		-Dpng=enabled
-		-Dtiff=enabled
-		-Djpeg=enabled
+		-Dbuiltin_loaders=all
 		-Dintrospection=enabled
 		-Ddocs=false
 		)
@@ -65,29 +63,6 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
-	unset __GL_NO_DSO_FINALIZER
-
-	local updater="${EROOT%/}/usr/bin/${CHOST}-gdk-pixbuf-query-loaders"
-
-	if [[ ! -x ${updater} ]]; then
-		updater="${EROOT%/}/usr/bin/gdk-pixbuf-query-loaders"
-	fi
-
-	if [[ ! -x ${updater} ]]; then
-		debug-print "${updater} is not executable"
-		return
-	fi
-
-	if [[ -z ${GNOME2_ECLASS_GDK_PIXBUF_LOADERS} ]]; then
-		debug-print "gdk-pixbuf loader cache does not need an update"
-		return
-	fi
-
 	ebegin "Updating gdk-pixbuf loader cache"
-	local tmp_file=$(mktemp)
-	${updater} 1> "${tmp_file}" &&
-	chmod 0644 "${tmp_file}" &&
-	cp -f "${tmp_file}" "${EROOT%/}/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" &&
-	rm "${tmp_file}" # don't replace this with mv, required for SELinux support
-	eend $?
+	gdk-pixbuf-query-loaders --update-cache /usr/lib/gdk-pixbuf-2.0/2.10.0/loaders/*.so
 }

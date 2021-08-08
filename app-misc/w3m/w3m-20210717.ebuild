@@ -25,6 +25,7 @@ KEYWORDS="amd64 arm64"
 IUSE="gpm nls nntp ssl unicode"
 
 DEPEND="
+	lib-live/boehm-gc
 	lib-core/ncurses
 	lib-core/zlib
 	gpm? ( lib-core/gpm )

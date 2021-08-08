@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="test"
 
 DEPEND="
-	lib-dev/glib
+	lib-live/glib
 	lib-core/libxml2
 "
 

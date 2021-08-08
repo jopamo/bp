@@ -25,7 +25,7 @@ IUSE="+nmtui systemd test"
 COMMON_DEPEND="
 	app-core/dbus
 	lib-dev/dbus-glib
-	lib-dev/glib
+	lib-live/glib
 	lib-dev/libnl
 	lib-net/libndp
 	app-net/curl
@@ -41,7 +41,7 @@ RDEPEND="${COMMON_DEPEND}
 	app-net/wpa_supplicant[dbus]
 "
 DEPEND="${COMMON_DEPEND}
-	lib-dev/glib
+	lib-live/glib
 	dev-util/gtk-doc-am
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17

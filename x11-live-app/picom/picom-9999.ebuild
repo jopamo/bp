@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="sanitize dbus opengl +pcre +xinerama"
 
 COMMON_DEPEND="
-	lib-dev/libconfig:=
+	lib-live/libconfig:=
 	x11-live-lib/libX11
 	x11-live-lib/libXcomposite
 	x11-live-lib/libXdamage
@@ -30,15 +30,15 @@ COMMON_DEPEND="
 	xinerama? ( x11-live-lib/libXinerama )"
 
 RDEPEND="${COMMON_DEPEND}
-	x11-app/xprop
-	x11-app/xwininfo"
+	x11-live-app/xprop
+	x11-live-app/xwininfo"
 
 DEPEND="${COMMON_DEPEND}
 	dev-util/pkgconf
 	x11-live-misc/xorgproto
 	lib-dev/libev
-	lib-dev/uthash
-	lib-dev/libxdg-base
+	lib-live/uthash
+	lib-live/libxdg-base
 	xgui-live-lib/libdrm"
 
 append-cppflags -I/usr/include/xcb

@@ -16,7 +16,7 @@ IUSE="+swaybg +swayidle +swaylock +tray +wallpapers"
 
 DEPEND="
 	>=lib-dev/json-c-0.13:0=
-	>=lib-dev/libinput-1.6.0:0=
+	>=lib-live/libinput-1.6.0:0=
 	lib-dev/libpcre
 	lib-dev/wayland
 	xgui-live-lib/cairo
@@ -31,7 +31,7 @@ DEPEND="
 	>=app-core/systemd-239
 "
 RDEPEND="
-	x11-app/xkeyboard-config
+	x11-live-app/xkeyboard-config
 	${DEPEND}
 "
 BDEPEND="

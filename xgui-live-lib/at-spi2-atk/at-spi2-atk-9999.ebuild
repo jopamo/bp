@@ -17,7 +17,7 @@ IUSE="dbus"
 DEPEND="
 	xgui-live-lib/at-spi2-core
 	xgui-live-lib/atk
-	lib-dev/glib
+	lib-live/glib
 	dbus? ( app-core/dbus )
 "
 

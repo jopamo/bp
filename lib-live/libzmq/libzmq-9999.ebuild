@@ -16,7 +16,7 @@ IUSE="+sodium static-libs test unwind"
 
 RDEPEND="
 	unwind? ( lib-core/libunwind )
-	sodium? ( lib-dev/libsodium:= )"
+	sodium? ( lib-live/libsodium:= )"
 
 DEPEND="${RDEPEND}
 	app-core/util-linux"

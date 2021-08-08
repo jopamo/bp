@@ -21,7 +21,7 @@ DEPEND="lib-core/libxslt
 	dev-python/six
 	dev-util/itstool
 	dev-util/pkgconf
-	lib-dev/glib
+	lib-live/glib
 "
 
 pkg_setup() {

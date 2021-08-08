@@ -15,16 +15,16 @@ KEYWORDS="amd64 arm64"
 IUSE="+introspection"
 
 RDEPEND="
-	>=lib-dev/glib-2.34.3:2
+	>=lib-live/glib-2.34.3:2
 	>=xgui-live-lib/cairo-1.12.14-r4
 	>=x11-live-lib/pango-1.36.3
 	>=lib-core/libxml2-2.9.1-r4:2
-	>=lib-dev/libcroco-0.6.8-r1
+	>=lib-live/libcroco-0.6.8-r1
 	>=x11-live-lib/gdk-pixbuf-2.30.7:2[introspection]
-	introspection? ( >=lib-dev/gobject-introspection-0.10.8:= )
+	introspection? ( >=lib-live/gobject-introspection-0.10.8:= )
 "
 DEPEND="${RDEPEND}
-	lib-dev/gobject-introspection-common
+	lib-live/gobject-introspection-common
 	dev-util/gtk-doc
 	dev-util/pkgconf
 "

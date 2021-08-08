@@ -12,7 +12,7 @@ KEYWORDS="amd64 arm64"
 LICENSE="GPL-2"
 SLOT="0/4.5.0" #copy ABI_VERSION because it seems upstream change it randomly
 
-RDEPEND=">=lib-dev/glib-2.18:2"
+RDEPEND=">=lib-live/glib-2.18:2"
 DEPEND="${RDEPEND}
 	app-compression/xz-utils
 	>=dev-util/intltool-0.40

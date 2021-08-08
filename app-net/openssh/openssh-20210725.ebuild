@@ -45,7 +45,7 @@ DEPEND="${RDEPEND}
 RDEPEND="${RDEPEND}
 	pam? ( app-core/pambase )
 	app-core/shadow
-	X? ( x11-app/xauth )"
+	X? ( x11-live-app/xauth )"
 
 src_prepare() {
 	default

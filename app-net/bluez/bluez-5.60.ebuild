@@ -18,7 +18,7 @@ BDEPEND="
 	dev-util/pkgconf
 "
 DEPEND="
-	>=lib-dev/glib-2.28:2
+	>=lib-live/glib-2.28:2
 	btpclient? ( >=lib-dev/ell-0.28 )
 	cups? ( lib-print/cups:= )
 	mesh? (

@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="debug static-libs test"
 
 DEPEND=">=lib-dev/expat-2.1.0-r3
-	>=lib-dev/glib-2.34.3:2
+	>=lib-live/glib-2.34.3:2
 	>=app-core/dbus-1.8"
 
 BDEPEND="dev-util/gtk-doc

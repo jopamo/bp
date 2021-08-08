@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="lib-core/libxml2"
-DEPEND="lib-dev/glib
+DEPEND="lib-live/glib
 	dev-util/intltool
 	sys-devel/gettext
 	dev-util/pkgconf"

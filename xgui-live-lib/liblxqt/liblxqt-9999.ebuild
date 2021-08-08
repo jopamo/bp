@@ -19,11 +19,11 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	lib-dev/libqtxdg
+	lib-live/libqtxdg
 	xgui-live-lib/qtbase
 	xgui-live-lib/qtx11extras:5
 	x11-live-misc/kwindowsystem
-	lib-dev/libqtxdg
+	lib-live/libqtxdg
 	x11-live-lib/libXScrnSaver
 "
 

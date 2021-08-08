@@ -25,7 +25,7 @@ REQUIRED_USE="
 "
 
 RDEPEND="
-	lib-dev/libinput
+	lib-live/libinput
 	lib-dev/wayland
 	lib-dev/wayland-protocols
 	lcms? ( xmedia-live-lib/lcms:2 )
@@ -36,15 +36,15 @@ RDEPEND="
 	xgui-live-lib/libdrm
 	xgui-live-lib/libxkbcommon
 	xgui-live-lib/pixman
-	x11-app/xkeyboard-config
+	x11-live-app/xkeyboard-config
 	fbdev? (
-		>=lib-core/mtdev-1.1.0
+		>=xgui-misc/mtdev-1.1.0
 		virtual/service-manager
 	)
 	colord? ( >=x11-misc/colord-0.1.27 )
 	drm? (
 		xmedia-live-lib/mesa
-		>=lib-core/mtdev-1.1.0
+		>=xgui-misc/mtdev-1.1.0
 		virtual/service-manager
 	)
 	editor? ( x11-live-lib/pango )

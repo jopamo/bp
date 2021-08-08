@@ -3,7 +3,7 @@
 EAPI=7
 
 
-inherit autotools linux-info flag-o-matic python-any-r1 user
+inherit autotools linux-info flag-o-matic user
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="https://dbus.freedesktop.org/"
@@ -26,24 +26,17 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug static-libs systemd test tmpfilesd user-session X"
 
-CDEPEND="
-	>=lib-dev/expat-2.1.0
-	systemd? ( app-core/systemd:0= )
+DEPEND="
+	lib-dev/expat
+	systemd? ( app-core/systemd )
 	X? (
 		x11-live-lib/libX11
 		x11-live-lib/libXt
 		)
 "
-DEPEND="${CDEPEND}
-	lib-dev/expat
+BDEPEND="
 	sys-devel/autoconf-archive
 	dev-util/pkgconf
-	test? (
-		>=lib-live/glib-2.40:2
-		${PYTHON_DEPS}
-		)
-"
-RDEPEND="${CDEPEND}
 "
 
 # out of sources build dir for make check
@@ -54,8 +47,6 @@ append-flags -rdynamic
 pkg_setup() {
 	enewgroup messagebus
 	enewuser messagebus -1 -1 -1 messagebus
-
-	use test && python-any-r1_pkg_setup
 
 	CONFIG_CHECK="~EPOLL"
 	linux-info_pkg_setup

@@ -29,7 +29,7 @@ RDEPEND="
 	>=xmedia-live-lib/libpng-1.6.10:0=
 	>=lib-core/zlib-1.2.8-r1
 	>=xgui-live-lib/pixman-0.32.4
-	glib? ( >=lib-dev/glib-2.34.3:2 )
+	glib? ( >=lib-live/glib-2.34.3:2 )
 	X? (
 		>=x11-live-lib/libXrender-0.9.8
 		>=x11-live-lib/libXext-1.3.2

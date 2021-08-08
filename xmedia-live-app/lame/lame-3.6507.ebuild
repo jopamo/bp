@@ -13,7 +13,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug static-libs"
 
-DEPEND="dev-lang/nasm"
+DEPEND="
+	dev-lang/nasm
+	xgui-misc/mpg123
+"
 
 src_configure() {
 	local myconf=(

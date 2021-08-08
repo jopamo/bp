@@ -16,8 +16,8 @@ KEYWORDS="amd64 arm64"
 IUSE="+introspection"
 
 RDEPEND="
-	lib-dev/glib
-	introspection? ( lib-dev/gobject-introspection )
+	lib-live/glib
+	introspection? ( lib-live/gobject-introspection )
 "
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5

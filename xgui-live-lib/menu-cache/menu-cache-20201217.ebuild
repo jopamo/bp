@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-RDEPEND="lib-dev/glib:2"
+RDEPEND="lib-live/glib:2"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	dev-util/pkgconf

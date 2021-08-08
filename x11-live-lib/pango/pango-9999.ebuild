@@ -16,11 +16,11 @@ IUSE="X +introspection test"
 
 DEPEND="
 	>=xmedia-live-lib/harfbuzz-1.2.3:=[glib(+),truetype(+)]
-	>=lib-dev/glib-2.34.3:2
+	>=lib-live/glib-2.34.3:2
 	xmedia-live-lib/fontconfig
 	>=xmedia-live-lib/freetype-2.5.0.1:2=
 	>=xgui-live-lib/cairo-1.12.14-r4:=
-	introspection? ( >=lib-dev/gobject-introspection-0.9.5:= )
+	introspection? ( >=lib-live/gobject-introspection-0.9.5:= )
 	x11-live-lib/libXft
 	lib-dev/fribidi
 "

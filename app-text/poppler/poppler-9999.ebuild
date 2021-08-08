@@ -17,13 +17,14 @@ IUSE="cairo +cjk curl cxx debug doc +introspection +jpeg +jpeg2k +lcms png qt5 t
 RESTRICT="test"
 
 COMMON_DEPEND="
+	lib-dev/boost
 	>=xmedia-live-lib/fontconfig-2.6.0
 	>=xmedia-live-lib/freetype-2.3.9
 	lib-core/zlib
 	cairo? (
-		lib-dev/glib:2
+		lib-live/glib:2
 		>=xgui-live-lib/cairo-1.10.0
-		introspection? ( >=lib-dev/gobject-introspection-1.32.1:= )
+		introspection? ( >=lib-live/gobject-introspection-1.32.1:= )
 	)
 	curl? ( app-net/curl )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )

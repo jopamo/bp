@@ -19,7 +19,7 @@ RDEPEND="
 	lib-dev/expat
 	sdl? ( xmedia-live-lib/libsdl )
 	X? (
-		>=lib-dev/glib-2.22:2
+		>=lib-live/glib-2.22:2
 		xmedia-live-lib/libpng:0=
 		lib-core/zlib
 		xmedia-live-lib/libjpeg-turbo

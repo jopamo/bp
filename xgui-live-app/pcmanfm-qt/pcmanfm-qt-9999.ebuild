@@ -21,7 +21,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	>=lib-dev/glib-2.18:2
+	>=lib-live/glib-2.18:2
 	xgui-live-lib/qtbase
 	xgui-live-lib/qtx11extras:5
 	>=x11-live-lib/libfm-1.2.0:=

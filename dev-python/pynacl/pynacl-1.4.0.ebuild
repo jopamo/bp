@@ -17,7 +17,7 @@ IUSE="test"
 RDEPEND="
 	dev-python/six[${PYTHON_USEDEP}]
 	>=dev-python/cffi-1.4.1[${PYTHON_USEDEP}]
-	lib-dev/libsodium
+	lib-live/libsodium
 "
 DEPEND="${RDEPEND}
 	dev-python/wheel[${PYTHON_USEDEP}]

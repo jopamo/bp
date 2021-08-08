@@ -29,7 +29,7 @@ DEPEND="${CDEPEND}
 	sys-devel/autoconf-archive
 	dev-util/pkgconf
 	test? (
-		>=lib-dev/glib-2.40:2
+		>=lib-live/glib-2.40:2
 		${PYTHON_DEPS}
 		)
 "

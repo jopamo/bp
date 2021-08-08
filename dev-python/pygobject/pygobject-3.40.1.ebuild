@@ -17,8 +17,8 @@ REQUIRED_USE="
 "
 
 COMMON_DEPEND="${PYTHON_DEPS}
-	>=lib-dev/glib-2.38:2
-	>=lib-dev/gobject-introspection-1.46.0:=
+	>=lib-live/glib-2.38:2
+	>=lib-live/gobject-introspection-1.46.0:=
 "
 
 RDEPEND="${COMMON_DEPEND}"

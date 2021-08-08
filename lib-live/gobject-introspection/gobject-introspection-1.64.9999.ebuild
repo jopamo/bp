@@ -23,8 +23,8 @@ LICENSE="LGPL-2+ GPL-2+"
 SLOT="0"
 
 RDEPEND="
-	>=lib-dev/gobject-introspection-common-${PV}
-	lib-dev/glib
+	>=lib-live/gobject-introspection-common-${PV}
+	lib-live/glib
 	lib-dev/libffi
 	dev-util/pkgconf
 	${PYTHON_DEPS}

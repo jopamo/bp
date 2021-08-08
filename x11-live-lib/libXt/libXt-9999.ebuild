@@ -18,7 +18,7 @@ RDEPEND=">=x11-live-lib/libX11-1.6.2
 	>=x11-live-lib/libICE-1.0.8-r1
 	x11-live-misc/xorgproto"
 DEPEND="${RDEPEND}
-	test? ( lib-dev/glib )"
+	test? ( lib-live/glib )"
 
 src_prepare() {
 	eautoreconf

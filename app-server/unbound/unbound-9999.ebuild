@@ -28,7 +28,7 @@ CDEPEND="
 	lib-dev/expat
 	lib-dev/libevent
 	virtual/ssl
-	dnscrypt? ( lib-dev/libsodium )
+	dnscrypt? ( lib-live/libsodium )
 	python? ( ${PYTHON_DEPS}
 			dev-lang/swig )"
 

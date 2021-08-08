@@ -14,7 +14,7 @@ KEYWORDS="amd64"
 
 IUSE="systemd"
 
-DEPEND="google/android-udev-rules"
+DEPEND="bin/android-udev-rules"
 
 src_install() {
 	if use systemd; then

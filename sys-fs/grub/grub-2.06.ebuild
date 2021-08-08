@@ -12,33 +12,21 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug device-mapper efi mount nls static sdl"
+IUSE="debug device-mapper efi mount static"
 
 GRUB_ALL_PLATFORMS=( efi-64 pc )
 IUSE+=" ${GRUB_ALL_PLATFORMS[@]/#/grub_platforms_}"
 
-RDEPEND="
-	app-compression/xz-utils
-	>=lib-core/ncurses-5.2-r5:0=
-	debug? (
-		sdl? ( xmedia-live-lib/libsdl )
-	)
-	device-mapper? ( >=sys-fs/lvm2-2.02.45 )
-	mount? ( =sys-fs/fuse-2.9.9999 )
-"
-DEPEND="${RDEPEND}
+DEPEND="
 	app-core/help2man
 	sys-devel/texinfo
-	static? (
-		app-compression/xz-utils[static-libs(+)]
-	)
+	app-compression/xz-utils
+	lib-core/ncurses
+	device-mapper? ( >=sys-fs/lvm2-2.02.45 )
+	mount? ( =sys-fs/fuse-2.9.9999 )
+	static? ( app-compression/xz-utils[static-libs(+)] )
+	grub_platforms_efi-64? ( sys-fs/efibootmgr )
 "
-RDEPEND+="
-	grub_platforms_efi-64? ( app-core/efibootmgr )
-	nls? ( sys-devel/gettext )
-"
-
-DEPEND+=" !!=xmedia-live-lib/freetype-2.5.4"
 
 RESTRICT="strip"
 
@@ -79,10 +67,9 @@ grub_configure() {
 		$(use_enable debug mm-debug)
 		$(use_enable device-mapper)
 		$(use_enable mount grub-mount)
-		$(use_enable nls)
+		--disable-nls
 		--disable-grub-themes
 		--disable-grub-mkfont
-		$(use sdl && use_enable debug grub-emu-sdl)
 		${platform:+--with-platform=}${platform}
 		--disable-efiemu
 	)

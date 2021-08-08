@@ -31,7 +31,7 @@ S=${WORKDIR}/${P/_/}
 CDEPEND="
 	lib-net/c-ares
 	xgui-live-lib/qtmultimedia
-	>=lib-dev/glib-2.14:2
+	>=lib-live/glib-2.14:2
 	lib-dev/libgcrypt:0
 	netlink? ( lib-dev/libnl:3 )
 	adns? ( >=lib-net/c-ares-1.5 )

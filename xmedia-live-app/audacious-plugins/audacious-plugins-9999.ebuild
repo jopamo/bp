@@ -17,8 +17,8 @@ mms modplug nls pulseaudio scrobbler sdl sid sndfile soxr speedpitch vorbis wavp
 
 RDEPEND="
 	lib-dev/dbus-glib
-	lib-dev/glib
-	lib-core/libxml2:2
+	lib-live/glib
+	lib-core/libxml2
 	~xmedia-live-app/audacious-${PV}
 	aac? ( >=xmedia-live-lib/faad2-2.7 )
 	alsa? ( >=xmedia-live-lib/alsa-lib-1.0.16 )
@@ -48,7 +48,7 @@ RDEPEND="
 	lirc? ( app-misc/lirc )
 	mms? ( >=xmedia-live-lib/libmms-0.3 )
 	modplug? ( xmedia-live-lib/libmodplug )
-	>=xmedia-live-lib/mpg123-1.12.1
+	xgui-misc/mpg123
 	pulseaudio? ( >=xmedia-live-app/pulseaudio-0.9.3 )
 	scrobbler? ( app-net/curl )
 	sdl? ( xmedia-live-lib/libsdl2[sound] )

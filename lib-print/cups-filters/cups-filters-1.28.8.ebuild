@@ -17,7 +17,7 @@ IUSE="dbus jpeg ldap pclm pdf png static-libs tiff"
 DEPEND="
 	>=app-text/poppler-0.32:=[cxx,jpeg?,lcms,tiff?,utils]
 	app-text/qpdf
-	lib-dev/glib:2
+	lib-live/glib:2
 	xmedia-live-lib/fontconfig
 	xmedia-live-lib/freetype:2
 	xmedia-live-lib/lcms:2

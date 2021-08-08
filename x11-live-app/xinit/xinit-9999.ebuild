@@ -12,11 +12,11 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	x11-app/xauth
+	x11-live-app/xauth
 	x11-live-lib/libX11
 "
 
-PDEPEND="x11-app/xrdb"
+PDEPEND="x11-live-app/xrdb"
 
 src_prepare() {
 	eautoreconf

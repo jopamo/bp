@@ -25,7 +25,7 @@ RESTRICT="test"
 RDEPEND="
 	input_devices_wacom? ( >=lib-dev/libwacom-0.20 )
 	>=lib-dev/libevdev-1.3
-	>=lib-core/mtdev-1.1"
+	>=xgui-misc/mtdev-1.1"
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconf"

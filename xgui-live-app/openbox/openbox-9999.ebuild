@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug nls session static-libs"
 
-RDEPEND="lib-dev/glib:2
+RDEPEND="lib-live/glib:2
 	>=lib-core/libxml2-2.0
 	>=xmedia-live-lib/fontconfig-2
 	x11-live-lib/libXft

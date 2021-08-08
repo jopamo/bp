@@ -15,8 +15,8 @@ KEYWORDS="amd64 arm64"
 RDEPEND="
 	app-core/dbus
 	x11-live-misc/shared-mime-info
-	x11-app/xprop
-	x11-app/xset
+	x11-live-app/xprop
+	x11-live-app/xset
 "
 DEPEND=">=app-text/xmlto-0.0.26-r1[text(+)]"
 

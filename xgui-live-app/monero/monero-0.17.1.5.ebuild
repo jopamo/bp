@@ -20,7 +20,7 @@ REQUIRED_USE="|| ( daemon tools wallet-cli wallet-rpc )"
 
 DEPEND="
 	lib-dev/boost
-	lib-dev/libsodium
+	lib-live/libsodium
 	app-server/unbound
 	lib-net/czmq
 	virtual/ssl

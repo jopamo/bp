@@ -22,7 +22,7 @@ RDEPEND="
 	xgui-live-lib/qtbase
 	xgui-live-lib/qtx11extras:5
 	xgui-live-lib/liblxqt
-	>=lib-dev/libqtxdg-2.0.0
+	>=lib-live/libqtxdg-2.0.0
 	x11-live-lib/libICE
 	x11-live-lib/libSM
 	x11-live-lib/libX11

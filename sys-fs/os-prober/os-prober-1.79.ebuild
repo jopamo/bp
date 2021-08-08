@@ -6,6 +6,8 @@ DESCRIPTION="Utility to detect other OSs on a set of drives"
 HOMEPAGE="https://packages.debian.org/source/sid/os-prober"
 SRC_URI="http://http.debian.net/debian/pool/main/o/${PN}/${PN}_${PV}.tar.xz"
 
+S="${WORKDIR}/${PN}"
+
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64"

@@ -26,10 +26,10 @@ IUSE="debug +glamor ipv6 minimal systemd suid_wrapper +udev
 
 CDEPEND="
 	virtual/ssl
-	>=x11-app/iceauth-1.0.2
-	>=x11-app/rgb-1.0.3
-	>=x11-app/xauth-1.0.3
-	x11-app/xkbcomp
+	>=x11-live-app/iceauth-1.0.2
+	>=x11-live-app/rgb-1.0.3
+	>=x11-live-app/xauth-1.0.3
+	xgui-misc/xkbcomp
 	>=xgui-live-lib/libdrm-2.4.46
 	x11-live-lib/libpciaccess
 	>=x11-live-lib/libXau-1.0.4
@@ -40,7 +40,7 @@ CDEPEND="
 	>=xgui-live-lib/pixman-0.27.2
 	>=x11-live-lib/xtrans-1.3.5
 	>=x11-live-misc/xbitmaps-1.0.1
-	>=x11-app/xkeyboard-config-2.4.1-r3
+	xgui-misc/xkeyboard-config
 	glamor? (
 		xmedia-live-lib/libepoxy[X]
 		xmedia-live-lib/mesa
@@ -57,7 +57,7 @@ CDEPEND="
 		>=lib-dev/wayland-protocols-1.1
 		xgui-live-lib/egl-wayland
 	)
-	>=x11-app/xinit-1.3.3-r1
+	>=x11-live-app/xinit-1.3.3-r1
 	systemd? (
 		app-core/dbus
 		app-core/systemd

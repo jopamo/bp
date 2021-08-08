@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 IUSE="icccm"
 
 DEPEND="
-	lib-dev/libinput
+	lib-live/libinput
 	lib-dev/wayland
 	xmedia-live-lib/mesa
 	xgui-live-lib/libdrm

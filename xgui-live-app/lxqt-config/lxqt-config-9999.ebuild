@@ -19,7 +19,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	lib-dev/libqtxdg
+	lib-live/libqtxdg
 	xgui-live-lib/qtbase
 	xgui-live-lib/qtx11extras:5
 	x11-live-misc/kwindowsystem

@@ -15,6 +15,7 @@ dev-util
 fonts
 lib-core
 lib-dev
+lib-live
 lib-net
 lib-print
 sys-devel

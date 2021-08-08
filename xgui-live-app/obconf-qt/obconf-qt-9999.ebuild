@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	lib-dev/glib:2
+	lib-live/glib:2
 	lib-core/libxml2
 	xgui-live-lib/qtbase
 	xgui-live-lib/qtx11extras:5

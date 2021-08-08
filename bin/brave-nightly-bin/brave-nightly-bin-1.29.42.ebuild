@@ -22,7 +22,7 @@ RDEPEND="
 	xgui-live-lib/atk
 	xgui-live-lib/libxkbcommon
 	lib-dev/expat
-	lib-dev/glib:2
+	lib-live/glib:2
 	lib-dev/nspr
 	>=lib-dev/nss-3.26
 	xmedia-live-lib/alsa-lib

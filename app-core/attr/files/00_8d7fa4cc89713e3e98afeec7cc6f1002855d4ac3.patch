@@ -1,0 +1,30 @@
+From 8d7fa4cc89713e3e98afeec7cc6f1002855d4ac3 Mon Sep 17 00:00:00 2001
+From: Kamil Dudka <kdudka@redhat.com>
+Date: Mon, 19 Apr 2021 15:10:48 +0200
+Subject: attr: eliminate a dead store in attr_copy_action()
+
+... reported by clang:
+
+libattr/attr_copy_action.c:158:22: warning[deadcode.DeadStores]: Value stored to 'action' during its initialization is never read
+---
+ libattr/attr_copy_action.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/libattr/attr_copy_action.c b/libattr/attr_copy_action.c
+index 279f2df..d41dd2e 100644
+--- a/libattr/attr_copy_action.c
++++ b/libattr/attr_copy_action.c
+@@ -155,9 +155,8 @@ fail:
+ int
+ attr_copy_action(const char *name, struct error_context *ctx)
+ {
+-	struct attr_action *action = attr_actions;
+-
+ 	if (!attr_parse_attr_conf(ctx)) {
++		struct attr_action *action;
+ 		for (action = attr_actions; action; action = action->next) {
+ 			if (!fnmatch(action->pattern, name, 0))
+ 				return action->action;
+-- 
+cgit v1.2.1
+

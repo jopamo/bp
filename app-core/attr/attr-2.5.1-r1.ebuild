@@ -14,6 +14,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="nls static-libs debug"
 
+PATCHES=("${FILESDIR}/00_8d7fa4cc89713e3e98afeec7cc6f1002855d4ac3.patch")
+
 src_prepare() {
 	default
 	elibtoolize

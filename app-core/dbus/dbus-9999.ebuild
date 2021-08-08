@@ -7,11 +7,10 @@ inherit autotools linux-info flag-o-matic python-any-r1 user
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="https://dbus.freedesktop.org/"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/dbus/dbus.git"
-#EGIT_BRANCH="dbus-$(ver_cut 1).$(ver_cut 2)"
 
 if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://gitlab.com/procps-ng/procps.git"
+	EGIT_REPO_URI="https://gitlab.freedesktop.org/dbus/dbus.git"
+	#EGIT_BRANCH="dbus-$(ver_cut 1).$(ver_cut 2)"
 	inherit git-r3
 	KEYWORDS="~amd64 ~arm64"
 else

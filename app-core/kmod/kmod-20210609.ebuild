@@ -11,8 +11,9 @@ if [[ ${PV} == 9999* ]]; then
 	EGIT_REPO_URI="git://git.kernel.org/pub/scm/utils/kernel/${PN}/${PN}.git"
 	inherit autotools git-r3
 else
-	SRC_URI="mirror://kernel/linux/utils/kernel/kmod/${P}.tar.xz"
-	inherit libtool
+	SNAPSHOT=64541d6aad210879e104e4796beeef49d4311f6d
+	SRC_URI="https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/snapshot/kmod-${SNAPSHOT}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 
 LICENSE="LGPL-2"
@@ -50,8 +51,6 @@ src_prepare() {
 	if [ ! -e configure ]; then
 		touch libkmod/docs/gtk-doc.make
 		eautoreconf
-	else
-		elibtoolize
 	fi
 
 	# Restore possibility of running --enable-static wrt #472608

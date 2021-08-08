@@ -3,12 +3,23 @@
 EAPI=7
 
 
-inherit git-r3 autotools linux-info flag-o-matic python-any-r1 user
+inherit autotools linux-info flag-o-matic python-any-r1 user
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="https://dbus.freedesktop.org/"
 EGIT_REPO_URI="https://gitlab.freedesktop.org/dbus/dbus.git"
 #EGIT_BRANCH="dbus-$(ver_cut 1).$(ver_cut 2)"
+
+if [[ ${PV} == *9999 ]]; then
+	EGIT_REPO_URI="https://gitlab.com/procps-ng/procps.git"
+	inherit git-r3
+	KEYWORDS="~amd64 ~arm64"
+else
+	SNAPSHOT=ddcbe4c715a42f4c0fdf8e751e1b91861ceb77a4
+	SRC_URI="https://gitlab.freedesktop.org/${PN}/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	KEYWORDS="amd64 arm64"
+fi
 
 LICENSE="|| ( AFL-2.1 GPL-2 )"
 SLOT="0"
@@ -57,15 +68,7 @@ src_prepare() {
 }
 
 src_configure() {
-	local myconf
-
-	myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
+	local myconf=(
 		$(use_enable static-libs static)
 		$(use_enable debug verbose-mode)
 		--disable-asserts

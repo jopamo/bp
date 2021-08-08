@@ -6,7 +6,6 @@ inherit python-r1 autotools flag-o-matic
 
 DESCRIPTION="Version 2 of the library to manipulate XML files"
 HOMEPAGE="http://www.xmlsoft.org/"
-EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git"
 
 if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git"

@@ -2,15 +2,25 @@
 
 EAPI=7
 
-inherit python-r1 autotools git-r3 flag-o-matic
+inherit python-r1 autotools flag-o-matic
 
 DESCRIPTION="Version 2 of the library to manipulate XML files"
 HOMEPAGE="http://www.xmlsoft.org/"
 EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git"
 
+if [[ ${PV} == *9999 ]]; then
+	EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git"
+	inherit git-r3
+	KEYWORDS="~amd64 ~arm64"
+else
+	SNAPSHOT=dea91c97debeac7c1aaf9c19f79029809e23a353
+	SRC_URI="https://gitlab.gnome.org/GNOME/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	KEYWORDS="amd64 arm64"
+fi
+
 LICENSE="MIT"
 SLOT="2"
-KEYWORDS="amd64 arm64"
 
 IUSE="debug icu ipv6 lzma readline static-libs"
 

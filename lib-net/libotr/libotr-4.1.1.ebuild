@@ -14,7 +14,7 @@ IUSE="static-libs"
 
 DEPEND="
 		lib-dev/libgpg-error
-		lib-dev/libgcrypt
+		lib-core/libgcrypt
 "
 
 src_install() {

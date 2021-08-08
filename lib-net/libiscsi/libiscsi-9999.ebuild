@@ -21,7 +21,7 @@ SLOT="0"
 LICENSE="GPL-2 LGPL-2"
 IUSE="static-libs"
 
-RDEPEND="lib-dev/libgcrypt:0="
+RDEPEND="lib-core/libgcrypt:0="
 DEPEND="${RDEPEND}"
 
 src_prepare() {

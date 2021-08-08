@@ -22,7 +22,7 @@ LIB_DEPEND="
 	lib-dev/popt[static-libs(+)]
 	>=app-core/util-linux-2.31-r1[static-libs(+)]
 	app-crypt/argon2:=[static-libs(+)]
-	lib-dev/libgcrypt:0=[static-libs(+)]
+	lib-core/libgcrypt:0=[static-libs(+)]
 	sys-fs/lvm2[static-libs(+)]
 	udev? ( app-core/systemd[static-libs(+)] )"
 

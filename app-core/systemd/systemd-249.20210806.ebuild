@@ -31,7 +31,7 @@ RESTRICT="!test? ( test )"
 
 DEPEND="
 	cryptsetup? ( >=sys-fs/cryptsetup-1.6:0= )
-	gcrypt? ( lib-dev/libgcrypt )
+	gcrypt? ( lib-core/libgcrypt )
 	kmod? ( >=app-core/kmod-15:0= )
 	logind? ( app-core/dbus )
 	pam? ( lib-core/pam:= )

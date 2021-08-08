@@ -19,7 +19,7 @@ IUSE="caps static"
 
 DEPEND="
 	>=lib-dev/libassuan-2.1
-	>=lib-dev/libgcrypt-1.6.3
+	>=lib-core/libgcrypt-1.6.3
 	>=lib-dev/libgpg-error-1.17
 	caps? ( lib-core/libcap )
 "

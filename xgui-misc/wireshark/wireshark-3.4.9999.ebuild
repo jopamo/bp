@@ -32,7 +32,7 @@ CDEPEND="
 	lib-net/c-ares
 	xgui-live-lib/qtmultimedia
 	>=lib-live/glib-2.14:2
-	lib-dev/libgcrypt:0
+	lib-core/libgcrypt:0
 	netlink? ( lib-dev/libnl:3 )
 	adns? ( >=lib-net/c-ares-1.5 )
 	caps? ( lib-core/libcap )

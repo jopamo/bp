@@ -186,7 +186,7 @@ cp /var/cache/packages/lib-dev/libpcre2* .
 tar xvhf libpcre2* --xattrs
 rm libpcre2* || exit
 
-cp /var/cache/packages/lib-dev/libgcrypt* .
+cp /var/cache/packages/lib-core/libgcrypt* .
 tar xvhf libgcrypt* --xattrs
 rm libgcrypt* || exit
 

@@ -27,15 +27,11 @@ IUSE="debug icu ipv6 lzma readline static-libs"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="
-	>=lib-core/zlib-1.2.8-r1:=
-	icu? ( >=lib-dev/icu-51.2-r1:= )
-	lzma? ( >=app-compression/xz-utils-5.0.5-r1:= )
+	lib-core/zlib
+	icu? ( lib-dev/icu )
+	lzma? ( app-compression/xz-utils )
 	${PYTHON_DEPS}
-	readline? ( lib-core/readline:= )
-"
-DEPEND="${RDEPEND}
-	dev-util/gtk-doc-am
-	dev-util/pkgconf
+	readline? ( lib-core/readline )
 "
 
 PATCHES=(
@@ -53,13 +49,7 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}/etc"
-		--localstatedir="${EPREFIX}/var"
-		--with-html-subdir=${PF}/html \
+		--with-html-subdir=${PF}/html
 		$(use_with debug run-debug)
 		$(use_with icu)
 		$(use_with lzma)

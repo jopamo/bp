@@ -20,8 +20,11 @@ RDEPEND="acl? ( app-core/acl )
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )"
 
-PATCHES=( "${FILESDIR}"/00_61b5e58f18f152636a77c872dc39281bfb8bf90d.patch
-		"${FILESDIR}"/01_acabfdb582330345c05e0500d302e9e99f3eb5e9.patch )
+PATCHES=(
+		"${FILESDIR}"/00_61b5e58f18f152636a77c872dc39281bfb8bf90d.patch
+		"${FILESDIR}"/01_acabfdb582330345c05e0500d302e9e99f3eb5e9.patch
+		"${FILESDIR}"/02_6568d364f4d21df69027319f55bcc903bfb32e0a.patch
+)
 
 src_bootstrap_sed() {
 	# make sure system-sed works #40786

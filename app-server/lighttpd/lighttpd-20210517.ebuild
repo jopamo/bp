@@ -21,20 +21,23 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 dbi fam gdbm geoip krb5 ldap libev libunwind lua memcached mbedtls mysql
-	ssl pcre php test postgres systemd webdav xattr zlib static"
+IUSE="bzip2 dbi fam gdbm geoip krb5 ldap libev libunwind lua memcached
+	mbedtls mysql ssl pcre php test tmpfilesd postgres systemd webdav
+	xattr zlib static"
 
-DEPEND="app-compression/lbzip2
+DEPEND="
+	app-compression/lbzip2
+	lib-core/zlib
+	lib-dev/libpcre
 	gdbm?     ( lib-core/gdbm )
-	ldap?     ( >=app-net/openldap-2.1.26 )
-	libev?    ( >=lib-dev/libev-4.01 )
+	ldap?     ( app-net/openldap )
+	libev?    ( lib-dev/libev )
 	mbedtls?  ( lib-net/mbedtls )
-	mysql?    ( >=virtual/mysql-4.0 )
+	mysql?    ( app-server/mariadb )
 	php?      ( dev-lang/php:*[cgi] )
 	ssl? ( virtual/ssl )
 	xattr? ( app-core/attr )
-	>=lib-dev/libpcre-3.1
-	>=lib-core/zlib-1.1"
+"
 
 BDEPEND="dev-util/pkgconf"
 

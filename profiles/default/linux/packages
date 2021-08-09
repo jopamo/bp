@@ -37,3 +37,4 @@
 *app-crypt/rng-tools
 *dev-util/patchelf
 *app-net/dhcpcd
+*app-core/git

@@ -17,19 +17,17 @@ IUSE="debug kerberos numa profiling static systemd test"
 
 DEPEND="
 	lib-core/libxml2
-	app-core/procps
-	lib-dev/libaio
-	app-core/sed
-	sys-devel/texinfo
-	lib-dev/jemalloc
-	lib-core/zlib
-	virtual/ssl
-	lib-core/ncurses
-	lib-core/readline
-	systemd? ( app-core/systemd )
 	lib-dev/libpcre
 	sys-devel/bison
 	static? ( lib-core/ncurses[static-libs] )
+"
+
+BDEPEND="
+	lib-dev/libaio
+	lib-dev/jemalloc
+	lib-core/zlib
+	virtual/ssl
+	systemd? ( app-core/systemd )
 "
 
 filter-flags -Wl,-z,defs -flto\=\*
@@ -66,6 +64,7 @@ src_configure(){
 		-DWITH_UNIT_TESTS=$(usex test ON OFF)
 		-DWITH_LIBEDIT=0
 		-DWITH_ZLIB=system
+		-DWITH_PCRE=system
 		-DWITHOUT_LIBWRAP=1
 		-DENABLED_LOCAL_INFILE=1
 		-DMYSQL_UNIX_ADDR="${EPREFIX}/var/run/mysqld/mysqld.sock"

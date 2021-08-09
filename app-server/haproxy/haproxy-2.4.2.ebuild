@@ -13,13 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="+crypt net_ns +pcre pcre-jit pcre2 pcre2-jit ssl
-systemd +threads tools vim-syntax +zlib lua device-atlas 51degrees wurfl"
-
-REQUIRED_USE="pcre-jit? ( pcre )
-	pcre2-jit? ( pcre2 )
-	pcre? ( !pcre2 )
-	device-atlas? ( pcre )
-"
+systemd +tools vim-syntax +zlib lua 51degrees wurfl"
 
 DEPEND="
 	pcre? (
@@ -27,18 +21,13 @@ DEPEND="
 		pcre-jit? ( lib-dev/libpcre[jit] )
 	)
 	pcre2? (
-		lib-dev/libpcre
+		lib-dev/libpcre2
 		pcre2-jit? ( lib-dev/libpcre2[jit] )
 	)
 	ssl? ( virtual/ssl )
 	zlib? ( lib-core/zlib )
-	lua? ( dev-lang/lua:5.3 )
-	device-atlas? ( lib-dev/device-atlas-api-c )"
-RDEPEND="${DEPEND}"
-
-CONTRIBS=( halog iprange )
-CONTRIBS+=( ip6range spoa_example tcploop )
-CONTRIBS+=( hpack )
+	lua? ( dev-lang/lua )
+"
 
 haproxy_use() {
 	(( $# != 2 )) && die "${FUNCNAME} <USE flag> <make option>"
@@ -63,7 +52,6 @@ src_compile() {
 		USE_TFO=1
 	)
 
-	args+=( $(haproxy_use threads THREAD) )
 	args+=( $(haproxy_use crypt LIBCRYPT) )
 	args+=( $(haproxy_use net_ns NS) )
 	args+=( $(haproxy_use pcre PCRE) )
@@ -72,45 +60,42 @@ src_compile() {
 	args+=( $(haproxy_use zlib ZLIB) )
 	args+=( $(haproxy_use lua LUA) )
 	args+=( $(haproxy_use 51degrees 51DEGREES) )
-	args+=( $(haproxy_use device-atlas DEVICEATLAS) )
 	args+=( $(haproxy_use wurfl WURFL) )
 	args+=( $(haproxy_use systemd SYSTEMD) )
 
 	# For now, until the strict-aliasing breakage will be fixed
 	append-cflags -fno-strict-aliasing
 
-	emake CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" CC=$(tc-getCC) ${args[@]}
-	emake -C contrib/systemd SBINDIR=/usr/sbin
+	emake \
+		CFLAGS="${CFLAGS}" \
+		LDFLAGS="${LDFLAGS}" \
+		CC=$(tc-getCC) \
+		${args[@]}
+
+	use systemd && emake -C admin/systemd SBINDIR=/usr/sbin
 
 	if use tools ; then
-		for contrib in ${CONTRIBS[@]} ; do
-			emake -C contrib/${contrib} \
-				CFLAGS="${CFLAGS}" OPTIMIZE="${CFLAGS}" LDFLAGS="${LDFLAGS}" CC=$(tc-getCC) ${args[@]}
-		done
+		emake \
+			CFLAGS="${CFLAGS}" \
+			LDFLAGS="${LDFLAGS}" \
+			CC=$(tc-getCC) \
+			${args[@]} \
+			admin/{halog/halog,iprange/ip{,6}range}
 	fi
 }
 
 src_install() {
 	dosbin haproxy
-	dosym /usr/sbin/haproxy /usr/bin/haproxy
 
 	if use systemd; then
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
-		doins contrib/systemd/haproxy.service
+		doins admin/systemd/haproxy.service
 	fi
 
-	# The errorfiles are used by upstream defaults.
-	insinto /etc/haproxy/errors/
-	doins examples/errorfiles/*
-
 	if use tools ; then
-		has halog "${CONTRIBS[@]}" && dobin contrib/halog/halog
-		has "iprange" "${CONTRIBS[@]}" && newbin contrib/iprange/iprange haproxy_iprange
-		has "ip6range" "${CONTRIBS[@]}" && newbin contrib/ip6range/ip6range haproxy_ip6range
-		has "spoa_example" "${CONTRIBS[@]}" && newbin contrib/spoa_example/spoa haproxy_spoa_example
-		has "spoa_example" "${CONTRIBS[@]}" && newdoc contrib/spoa_example/README README.spoa_example
-		has "tcploop" "${CONTRIBS[@]}" && newbin contrib/tcploop/tcploop haproxy_tcploop
-		has "hpack" "${CONTRIBS[@]}" && newbin contrib/hpack/gen-rht haproxy_hpack
+		dobin admin/halog/halog
+		newbin admin/iprange/iprange haproxy_iprange
+		newbin admin/iprange/ip6range haproxy_ip6range
 	fi
 }

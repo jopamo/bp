@@ -22,7 +22,7 @@ LICENSE="ISC BSD BSD-1 BSD-2 BSD-4"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="pam +mta"
+IUSE="pam +mta systemd"
 
 DEPEND="virtual/ssl
 		lib-core/zlib

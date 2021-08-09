@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit flag-o-matic user git-r3 autotools
+inherit user git-r3 autotools
 
 DESCRIPTION="Anonymizing overlay network for TCP"
 HOMEPAGE="http://www.torproject.org/"
@@ -23,7 +23,8 @@ DEPEND="
 	scrypt? ( app-crypt/libscrypt )
 	seccomp? ( lib-core/libseccomp )
 	systemd? ( app-core/systemd )
-	zstd? ( app-compression/zstd )"
+	zstd? ( app-compression/zstd )
+"
 
 pkg_setup() {
 	enewgroup tor

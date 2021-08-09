@@ -2,38 +2,45 @@
 
 EAPI=7
 
-inherit autotools flag-o-matic
+inherit flag-o-matic
 
 DESCRIPTION="Library to execute a function when a specific event occurs on a file descriptor"
 HOMEPAGE="http://libevent.org/"
 
-if [[ ${PV} == 9999 ]]; then
+if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/libevent/libevent.git"
-	inherit git-r3
-	KEYWORDS=""
-else
-	SNAPSHOT=6f139b871100aa2322598dfd37c4145e033d2602
+	inherit git-r3 autotools
+elif [[ ${PV} == 20* ]]; then
+	SNAPSHOT=28f0fe6fd1e2b1e9fb24a5c7a5b078790890e44f
 	SRC_URI="https://github.com/libevent/libevent/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
+	inherit autotools
+else
+	SRC_URI="https://github.com/libevent/libevent/releases/download/release-${PV}-stable/${P}-stable.tar.gz"
+	S=${WORKDIR}/${P}-stable
 fi
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="amd64 arm64"
 
 IUSE="debug mbedtls +ssl static-libs test"
 
 RESTRICT="test"
 
-DEPEND="ssl? ( virtual/ssl )
-	mbedtls? ( lib-net/mbedtls )"
+DEPEND="
+	ssl? ( virtual/ssl )
+	mbedtls? ( lib-net/mbedtls )
+"
 
 filter-flags -Wl,-z,defs
 
 src_prepare() {
+	if [[ ${PV} == *9999 ]] || [[ ${PV} == 20* ]] ; then
+		eautoreconf
+	fi
+
 	default
-	eautoreconf
 }
 
 src_configure() {
@@ -41,12 +48,6 @@ src_configure() {
 	mkdir -p test || die
 
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}/etc"
-		--localstatedir="${EPREFIX}/var"
 		--disable-samples
 		$(use_enable mbedtls)
 		$(use_enable debug debug-mode)

@@ -12,11 +12,10 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug ipv6 libpsl nls pcre +pcre2 static test uuid zlib"
+IUSE="debug ipv6 libpsl nls pcre static test uuid zlib"
 
 LIB_DEPEND="
-	pcre? ( lib-dev/libpcre[static-libs(+)] )
-	pcre2? ( lib-dev/libpcre2[static-libs(+)] )
+	pcre? ( lib-dev/libpcre2[static-libs(+)] )
 	uuid? ( app-core/util-linux[static-libs(+)] )
 	zlib? ( lib-core/zlib[static-libs(+)] )
 "
@@ -44,11 +43,11 @@ src_configure() {
 		--disable-rpath
 		--with-ssl=openssl
 		--disable-iri
+		--disable-pcre
 		$(use_enable debug)
 		$(use_enable ipv6)
 		$(use_enable nls)
-		$(use_enable pcre)
-		$(use_enable pcre2)
+		$(use_enable pcre pcre2)
 		$(use_with uuid libuuid)
 		$(use_with zlib)
 		$(use_with libpsl)

@@ -2,15 +2,24 @@
 
 EAPI=7
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="Parse Options - Command line parser"
 HOMEPAGE="http://rpm5.org/"
-EGIT_REPO_URI="https://salsa.debian.org/debian/popt.git"
+
+if [[ ${PV} == 9999 ]]; then
+	EGIT_REPO_URI="https://github.com/rpm-software-management/popt.git"
+	inherit git-r3
+	KEYWORDS="~amd64 ~arm64"
+else
+	SNAPSHOT=70011cc5763dca9a9b57e9539b465e00c9769996
+	SRC_URI="https://github.com/rpm-software-management/popt/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/popt-${SNAPSHOT}
+	KEYWORDS="amd64 arm64"
+fi
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm64"
 
 IUSE="nls static-libs"
 

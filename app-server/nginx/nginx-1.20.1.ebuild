@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 RESTRICT="test"
 
 IUSE="aio debug +http +http_v2_module +http-cache libatomic luajit +pcre
-	pcre-jit"
+	pcre-jit systemd"
 
 pkg_setup() {
 	NGINX_HOME="/var/lib/nginx"

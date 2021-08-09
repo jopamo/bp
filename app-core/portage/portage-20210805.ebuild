@@ -37,6 +37,7 @@ RDEPEND="
 	app-core/sed
 	app-core/sandbox
 	app-core/install-xattr
+	app-core/findutils
 "
 PDEPEND="app-net/rsync"
 

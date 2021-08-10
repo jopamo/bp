@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-inherit libtool toolchain-funcs flag-o-matic
+inherit flag-o-matic
 
 DESCRIPTION="access control list utilities, libraries and headers"
 HOMEPAGE="https://savannah.nongnu.org/projects/acl"
@@ -18,24 +18,8 @@ DEPEND="app-core/attr"
 
 replace-flags -O3 -O2
 
-src_prepare() {
-	default
-	strip-linguas po
-	elibtoolize
-}
-
 src_configure() {
-	unset PLATFORM
-	export OPTIMIZER=${CFLAGS}
-	export DEBUG=-DNDEBUG
-
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}/etc"
-		--localstatedir="${EPREFIX}/var"
 		--enable-shared $(use_enable static-libs static)
 		$(use_enable nls)
 	)

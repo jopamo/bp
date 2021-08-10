@@ -1,8 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-
-inherit libtool toolchain-funcs
+EAPI=8
 
 DESCRIPTION="Extended attributes tools"
 HOMEPAGE="https://savannah.nongnu.org/projects/attr"
@@ -16,23 +14,8 @@ IUSE="nls static-libs debug"
 
 PATCHES=("${FILESDIR}/00_8d7fa4cc89713e3e98afeec7cc6f1002855d4ac3.patch")
 
-src_prepare() {
-	default
-	elibtoolize
-}
-
 src_configure() {
-	unset PLATFORM
-	export OPTIMIZER=${CFLAGS}
-	export DEBUG=-DNDEBUG
-
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}/etc"
-		--localstatedir="${EPREFIX}/var"
 		--enable-shared
 		$(use_enable static-libs static)
 		$(use_enable nls)

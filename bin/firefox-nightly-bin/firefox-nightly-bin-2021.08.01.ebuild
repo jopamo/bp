@@ -38,7 +38,7 @@ RDEPEND="xgui-live-lib/atk
 	x11-live-lib/libXrender
 	x11-live-lib/libXt
 	>=x11-live-lib/pango-1.22.0
-	xmedia-live-app/pulseaudio
+	xgui-misc/pulseaudio
 	xmedia-live-app/ffmpeg
 "
 

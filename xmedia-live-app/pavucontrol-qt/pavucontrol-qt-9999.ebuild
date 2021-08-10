@@ -16,5 +16,5 @@ DEPEND="
 	dev-util/lxqt-build-tools
 	xgui-live-lib/qtbase
 	dev-util/pkgconf
-	xmedia-live-app/pulseaudio
+	xgui-misc/pulseaudio
 "

@@ -42,7 +42,7 @@ COMMON_DEPEND="
 	)
 	pcap? ( lib-net/libpcap )
 	png? ( xmedia-live-lib/libpng:0= )
-	pulseaudio? ( xmedia-live-app/pulseaudio )
+	pulseaudio? ( xgui-misc/pulseaudio )
 	xcomposite? ( x11-live-lib/libXcomposite )
 	xinerama? ( x11-live-lib/libXinerama )
 	xml? (

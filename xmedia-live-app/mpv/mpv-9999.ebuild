@@ -52,7 +52,7 @@ COMMON_DEPEND="
 	fonts/liberation-fonts
 	libcaca? ( >=xmedia-live-lib/libcaca-0.99_beta18 )
 	lua? ( dev-lang/luajit )
-	pulseaudio? ( xmedia-live-app/pulseaudio )
+	pulseaudio? ( xgui-misc/pulseaudio )
 	raspberry-pi? ( >=xmedia-live-lib/raspberrypi-userland-0_pre20160305-r1 )
 	rubberband? ( >=xmedia-live-lib/rubberband-1.8.0 )
 	sdl? ( xmedia-live-lib/libsdl2[sound,threads,video] )

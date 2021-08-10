@@ -49,7 +49,7 @@ RDEPEND="
 	mms? ( >=xmedia-live-lib/libmms-0.3 )
 	modplug? ( xmedia-live-lib/libmodplug )
 	xgui-misc/mpg123
-	pulseaudio? ( >=xmedia-live-app/pulseaudio-0.9.3 )
+	pulseaudio? ( >=xgui-misc/pulseaudio-0.9.3 )
 	scrobbler? ( app-net/curl )
 	sdl? ( xmedia-live-lib/libsdl2[sound] )
 	sid? ( >=xmedia-live-lib/libsidplayfp-1.0.0 )

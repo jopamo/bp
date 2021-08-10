@@ -5,7 +5,6 @@
 #
 
 lxqt-panel &
-rm -rf ~/.cache && mkdir -p /tmp/$(whoami).cache && ln -s /tmp/$(whoami).cache ~/.cache
 picom -b --glx-no-rebind-pixmap --unredir-if-possible --glx-no-stencil --vsync
 hsetroot -solid '#000000' &
 alsactl --file /var/lib/alsa/state restore

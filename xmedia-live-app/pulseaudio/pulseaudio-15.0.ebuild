@@ -25,6 +25,7 @@ samplerate native-headset systemd +udev +X"
 DEPEND="
 	dev-util/intltool
 	sys-devel/gettext
+	lib-live/check
 	xmedia-live-lib/speexdsp
 	xmedia-live-lib/libsndfile
 	X? (

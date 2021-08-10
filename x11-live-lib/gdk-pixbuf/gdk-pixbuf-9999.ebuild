@@ -20,8 +20,6 @@ LICENSE="LGPL-2+"
 SLOT="2"
 KEYWORDS="amd64 arm64"
 
-IUSE="+introspection"
-
 DEPEND="
 	lib-live/glib
 	xmedia-live-lib/libpng
@@ -49,6 +47,8 @@ src_configure() {
 
 pkg_preinst() {
 	# Make sure loaders.cache belongs to gdk-pixbuf alone
+	mkdir -p "${ED}"/usr/lib/${PN}-2.0/2.10.0/
+
 	local cache="usr/lib/${PN}-2.0/2.10.0/loaders.cache"
 
 	if [[ -e ${EROOT}/${cache} ]]; then
@@ -56,13 +56,9 @@ pkg_preinst() {
 	else
 		touch "${ED}"/${cache} || die
 	fi
-
-	pushd "${ED}" > /dev/null || die
-	export GNOME2_ECLASS_GDK_PIXBUF_LOADERS=$(find usr/lib*/gdk-pixbuf-2.0 -type f 2>/dev/null)
-	popd > /dev/null || die
 }
 
 pkg_postinst() {
 	ebegin "Updating gdk-pixbuf loader cache"
-	gdk-pixbuf-query-loaders --update-cache /usr/lib/gdk-pixbuf-2.0/2.10.0/loaders/*.so
+	gdk-pixbuf-query-loaders --update-cache "${EROOT}"/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders/*.so
 }

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools
 
@@ -8,7 +8,7 @@ DESCRIPTION="library and tools for managing linux kernel modules"
 HOMEPAGE="https://git.kernel.org/?p=utils/kernel/kmod/kmod.git"
 
 if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="git://git.kernel.org/pub/scm/utils/kernel/${PN}/${PN}.git"
+	EGIT_REPO_URI="https://kernel.googlesource.com/pub/scm/utils/kernel/kmod/kmod.git"
 	inherit git-r3
 	KEYWORDS="~amd64 ~arm64"
 else
@@ -21,7 +21,7 @@ fi
 LICENSE="LGPL-2"
 SLOT="0"
 
-IUSE="debug lzma static-libs +tools zlib"
+IUSE="debug lzma ssl static-libs +tools zlib zstd"
 
 RESTRICT="test"
 
@@ -29,7 +29,9 @@ BDEPEND="dev-util/pkgconf"
 
 DEPEND="
 	lzma? ( app-compression/xz-utils )
+	ssl? ( virtual/ssl )
 	zlib? ( lib-core/zlib )
+	zstd? ( app-compression/zstd )
 "
 
 src_prepare() {
@@ -47,11 +49,6 @@ src_prepare() {
 src_configure() {
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/sbin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		--enable-shared
 		--with-rootlibdir="${EPREFIX}"/usr/lib
 		--disable-gtk-doc
@@ -59,7 +56,9 @@ src_configure() {
 		$(use_enable static-libs static)
 		$(use_enable tools)
 		$(use_with lzma xz)
+		$(use_with ssl openssl)
 		$(use_with zlib)
+		$(use_with zstd)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 
@@ -69,19 +68,9 @@ src_install() {
 	default
 
 	if use tools; then
-		local sbincmd
-		for sbincmd in depmod insmod lsmod modinfo modprobe rmmod; do
-			dosym kmod /usr/sbin/${sbincmd}
-		done
-	fi
-
-	cat <<-EOF > "${T}"/usb-load-ehci-first.conf
-	softdep uhci_hcd pre: ehci_hcd
-	softdep ohci_hcd pre: ehci_hcd
-	EOF
-
-	insinto /lib/modprobe.d
-	doins "${T}"/usb-load-ehci-first.conf #260139
-
-	cleanup_install
+		local tool
+		for tool in {ins,ls,rm,dep}mod mod{probe,info}; do
+    		dosym kmod /usr/sbin/${tool}
+  		done
+  	fi
 }

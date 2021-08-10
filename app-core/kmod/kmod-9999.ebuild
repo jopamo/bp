@@ -46,6 +46,12 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
+		--bindir="${EPREFIX}"/usr/sbin
+		--sbindir="${EPREFIX}"/usr/sbin
+		--libdir="${EPREFIX}"/usr/lib
+		--libexecdir="${EPREFIX}"/usr/libexec
+		--sysconfdir="${EPREFIX}"/etc
+		--localstatedir="${EPREFIX}"/var
 		--enable-shared
 		--with-rootlibdir="${EPREFIX}"/usr/lib
 		--disable-gtk-doc
@@ -57,4 +63,25 @@ src_configure() {
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 
+}
+
+src_install() {
+	default
+
+	if use tools; then
+		local sbincmd
+		for sbincmd in depmod insmod lsmod modinfo modprobe rmmod; do
+			dosym kmod /usr/sbin/${sbincmd}
+		done
+	fi
+
+	cat <<-EOF > "${T}"/usb-load-ehci-first.conf
+	softdep uhci_hcd pre: ehci_hcd
+	softdep ohci_hcd pre: ehci_hcd
+	EOF
+
+	insinto /lib/modprobe.d
+	doins "${T}"/usb-load-ehci-first.conf #260139
+
+	cleanup_install
 }

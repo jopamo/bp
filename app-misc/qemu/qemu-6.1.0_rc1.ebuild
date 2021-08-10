@@ -160,7 +160,7 @@ SOFTMMU_TOOLS_DEPEND="
 		xmedia-live-lib/mesa[static-libs(+)]
 	)
 	png? ( xmedia-live-lib/libpng:0=[static-libs(+)] )
-	pulseaudio? ( xmedia-live-app/pulseaudio )
+	pulseaudio? ( xgui-misc/pulseaudio )
 	sasl? ( lib-dev/cyrus-sasl[static-libs(+)] )
 	seccomp? ( >=lib-core/libseccomp-2.1.0[static-libs(+)] )
 	smartcard? ( >=app-emulation/libcacard-2.5.0[static-libs(+)] )

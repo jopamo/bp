@@ -16,7 +16,7 @@ IUSE="createuser debug systemd qt5 webui"
 
 DEPEND="
 	lib-dev/boost
-	lib-net/libtorrent
+	lib-live/libtorrent
 	dev-util/pkgconf
 	xgui-live-lib/qtbase
 	xgui-live-lib/qttools

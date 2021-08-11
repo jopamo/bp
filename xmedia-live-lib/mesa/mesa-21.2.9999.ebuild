@@ -26,7 +26,6 @@ DEPEND="
 	xgui-live-lib/libxcb
 	x11-live-lib/libXfixes
 	dev-python/mako
-	lib-core/libunwind
 	xmedia-live-lib/libglvnd
 	wayland? ( lib-dev/wayland-protocols )
 "

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools flag-o-matic
 
@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/gnutls/nettle.git"
 	inherit git-r3
 else
-	SNAPSHOT=a46a17e9f57c64984d5246aa3475e45f8c562ec7
+	SNAPSHOT=21611a30aeeec255a43610ee61fcdf2c1959d820
 	SRC_URI="https://github.com/gnutls/nettle/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
@@ -22,7 +22,7 @@ SLOT="0"
 
 IUSE="+gmp static-libs test"
 
-DEPEND="gmp? ( >=lib-dev/gmp-5.0:0= )"
+DEPEND="gmp? ( lib-dev/gmp )"
 
 src_prepare() {
 	default

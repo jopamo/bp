@@ -1,18 +1,18 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit flag-o-matic
 
 DESCRIPTION="GNU libc C library"
 HOMEPAGE="https://www.gnu.org/software/libc/"
 
-if [[ ${PV} = *9999* ]]; then
+if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/bminor/glibc"
 	inherit git-r3
 	EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)/master"
 else
-	SNAPSHOT=ae37d06c7d127817ba43850f0f898b793d42aea7
+	SNAPSHOT=79474303223c5665bec75ffbdb2a86ee04a2514b
 	SRC_URI="https://github.com/bminor/glibc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -23,14 +23,18 @@ SLOT="0"
 
 IUSE="caps debug nscd profile systemd systemtap static-libs +static-pie tmpfilesd"
 
-BDEPEND="sys-devel/gcc
-		sys-devel/make"
-
-DEPEND="sys-kernel/linux-headers
-		app-core/layout
+BDEPEND="
+	sys-devel/gcc
+	sys-devel/make
 "
-RDEPEND="caps? ( lib-core/libcap )
-		systemtap? ( dev-util/systemtap )
+
+DEPEND="
+	sys-kernel/linux-headers
+	app-core/layout
+"
+RDEPEND="
+	caps? ( lib-core/libcap )
+	systemtap? ( dev-util/systemtap )
 "
 
 PDEPEND="lib-core/tzdb"

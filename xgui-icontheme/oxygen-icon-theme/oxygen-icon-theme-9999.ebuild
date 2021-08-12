@@ -4,9 +4,9 @@ EAPI=7
 
 inherit cmake git-r3 xdg-utils
 
-DESCRIPTION="Breeze icon theme"
-HOMEPAGE="https://github.com/KDE/breeze-icons.git"
-EGIT_REPO_URI="https://github.com/KDE/breeze-icons.git"
+DESCRIPTION="Oxygen icon theme"
+HOMEPAGE="https://github.com/KDE/oxygen-icons5.git"
+EGIT_REPO_URI="https://github.com/KDE/oxygen-icons5.git"
 
 LICENSE="GPL2"
 SLOT="0"

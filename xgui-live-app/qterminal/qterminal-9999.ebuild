@@ -12,19 +12,31 @@ LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="
+IUSE="translations"
+
+DEPEND="
 	xgui-live-lib/qtbase
-	xgui-live-lib/qtx11extras:5
+	xgui-live-lib/qtx11extras
 	x11-live-lib/libX11
 	~x11-live-lib/qtermwidget-${PV}
 "
-DEPEND="${RDEPEND}
-	dev-util/lxqt-build-tools
-"
+BDEPEND="dev-util/lxqt-build-tools"
 
 src_install() {
 	cmake_src_install
 
 	insinto etc/xdg/${PN}.org
 	doins ${FILESDIR}/qterminal.ini
+
+	use translations || rm -rf "${ED}"/usr/share/${PN}/translations || die
+
+	rm -rf "${ED}"/usr/share/appdata || die
+}
+
+pkg_postinst() {
+	xdg_icon_cache_update
+}
+
+pkg_postrm() {
+	xdg_icon_cache_update
 }

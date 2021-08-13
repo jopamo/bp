@@ -24,7 +24,7 @@ GRUB_DISTRIBUTOR="1g4"
 # Boot with network interface renaming disabled
 # GRUB_CMDLINE_LINUX="net.ifnames=0"
 #
-# Boot with systemd instead of sysvinit (openrc)
+# Boot with systemd
 # GRUB_CMDLINE_LINUX="init=/usr/lib/systemd/systemd"
 
 # Append parameters to the linux kernel command line for non-recovery entries

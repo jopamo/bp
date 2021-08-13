@@ -6,10 +6,10 @@ DESCRIPTION="Virtual for various service managers"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="openrc"
+IUSE="runit"
 
 RDEPEND="
 	|| (
-		!openrc? ( app-core/systemd )
-		openrc? ( app-core/openrc )
+		!runit? ( app-core/systemd )
+		runit? ( app-core/runit )
 	)"

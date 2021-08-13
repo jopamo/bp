@@ -21,6 +21,8 @@ filter-flags -flto\=\*
 src_prepare() {
 	default
 
+	sed -e 's,sbin/runit,usr/sbin/runit,g' -i runit.h
+
 	# we either build everything or nothing static
 	sed -i -e 's:-static: :' Makefile
 }
@@ -36,6 +38,6 @@ src_install() {
 	local f
 	for f in chpst runit runit-init runsv runsvchdir runsvdir \
 		sv svlogd utmpset; do
-		dobin $f
+		dosbin $f
 	done
 }

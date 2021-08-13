@@ -1,5 +1,5 @@
 virtual/libc musl
 lib-core/musl systemwide
-virtual/service-manager openrc
+virtual/service-manager runit
 lib-dev/elfutils musl
 sys-devel/gcc -vtv

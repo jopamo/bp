@@ -23,7 +23,7 @@ CDEPEND="
 	lib-dev/libaio
 	lib-dev/libbsd
 	lib-dev/iniparser:0
-	lib-dev/popt
+	lib-core/popt
 	lib-net/libnsl:=
 	app-core/attr
 	lib-core/libcap

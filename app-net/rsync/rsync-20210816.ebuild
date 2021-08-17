@@ -28,7 +28,7 @@ LIB_DEPEND="
 	xxhash? ( lib-dev/xxhash[static-libs(+)] )
 	zstd? ( app-compression/zstd[static-libs(+)] )
 	lz4? ( app-compression/lz4[static-libs(+)] )
-	lib-dev/popt[static-libs(+)]
+	lib-core/popt[static-libs(+)]
 "
 
 DEPEND="

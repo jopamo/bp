@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 DEPEND="
 	app-core/pciutils
 	sys-fs/efivar
-	lib-dev/popt
+	lib-core/popt
 "
 
 

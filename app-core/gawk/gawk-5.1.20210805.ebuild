@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 IUSE="+mpfr nls readline"
 
 RDEPEND="
-	lib-dev/gmp:0=
+	lib-core/gmp:0=
 	mpfr? ( lib-dev/mpfr:0= )
 	readline? ( lib-core/readline:0= )
 "

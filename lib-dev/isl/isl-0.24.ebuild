@@ -12,7 +12,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-RDEPEND=">=lib-dev/gmp-5.1.3-r1"
+RDEPEND=">=lib-core/gmp-5.1.3-r1"
 DEPEND="${RDEPEND}
 	app-compression/xz-utils
 	dev-util/pkgconf"

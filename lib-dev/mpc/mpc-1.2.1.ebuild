@@ -12,7 +12,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND=">=lib-dev/gmp-5.0.0:0=[static-libs?]
+DEPEND=">=lib-core/gmp-5.0.0:0=[static-libs?]
 	>=lib-dev/mpfr-3.0.0:0=[static-libs?]"
 
 src_configure() {

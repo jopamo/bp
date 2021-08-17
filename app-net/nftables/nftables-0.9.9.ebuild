@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="debug +gmp readline static-libs systemd"
 
 RDEPEND="lib-net/libmnl
-		gmp? ( lib-dev/gmp )
+		gmp? ( lib-core/gmp )
 		readline? ( lib-core/readline )
 		>=lib-net/libnftnl-1.1.7"
 

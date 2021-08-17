@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-RDEPEND=">=lib-dev/gmp-5.0.0[static-libs?]"
+RDEPEND=">=lib-core/gmp-5.0.0[static-libs?]"
 
 PATCHES=( "${FILESDIR}"/20210517.patch )
 

@@ -335,7 +335,7 @@ tar xvhf jitterentropy* --xattrs
 rm jitterentropy* || exit
 
 #nftables
-cp /var/cache/packages/lib-dev/gmp* .
+cp /var/cache/packages/lib-core/gmp* .
 tar xvhf gmp* --xattrs
 rm gmp* || exit
 

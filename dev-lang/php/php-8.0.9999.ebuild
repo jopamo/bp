@@ -21,7 +21,7 @@ DEPEND="
 	app-net/curl
 	app-server/opensmtpd
 	dev-util/re2c
-	lib-dev/gmp
+	lib-core/gmp
 	lib-dev/libedit
 	lib-dev/libpcre
 	lib-dev/oniguruma

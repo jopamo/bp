@@ -2,7 +2,7 @@
 
 EAPI=7
 
-SNAPSHOT=5b30a34aa4b5ea7a8202314c1d737ec4a481c127
+SNAPSHOT=feeb2785e67f084cb5d706fe5f074ade50bece78
 
 inherit flag-o-matic toolchain-funcs
 

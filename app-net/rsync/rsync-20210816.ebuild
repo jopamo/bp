@@ -1,12 +1,20 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit flag-o-matic
 
 DESCRIPTION="File transfer program to keep remote files into sync"
 HOMEPAGE="https://rsync.samba.org/"
-SRC_URI="https://rsync.samba.org/ftp/rsync/src/${P/_/}.tar.gz"
+
+if [[ ${PV} = *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/WayneD/rsync"
+	inherit git-r3
+else
+	SNAPSHOT=592c6bc3e5e93f36c2fdc0a491a9fb43a41cf688
+	SRC_URI="https://github.com/WayneD/rsync/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -30,6 +38,8 @@ DEPEND="
 
 src_prepare() {
 	rm -f zlib/*.{c,h} || die
+	rm -f config.{guess,sub} || die
+	cp -p "${EROOT}"/usr/share/gnuconfig/* "${S}"/
 	default
 }
 

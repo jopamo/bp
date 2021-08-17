@@ -12,7 +12,7 @@ LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="lib-dev/popt
+DEPEND="lib-core/popt
 	lib-dev/slang"
 
 filter-flags -Wl,-z,defs -flto\=\*

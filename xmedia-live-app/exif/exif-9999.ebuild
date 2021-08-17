@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="nls"
 
-RDEPEND="lib-dev/popt
+RDEPEND="lib-core/popt
 	 >=xmedia-live-lib/libexif-${PV}"
 
 DEPEND="${RDEPEND}

@@ -17,7 +17,7 @@ IUSE="+mpfr nls readline"
 
 RDEPEND="
 	lib-core/gmp:0=
-	mpfr? ( lib-dev/mpfr:0= )
+	mpfr? ( lib-core/mpfr:0= )
 	readline? ( lib-core/readline:0= )
 "
 DEPEND="${RDEPEND}

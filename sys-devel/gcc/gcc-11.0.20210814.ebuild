@@ -21,7 +21,7 @@ DEPEND="
 	lib-dev/mpc
 	lib-core/zlib
 	sys-devel/binutils
-	isl? ( lib-dev/isl )
+	isl? ( lib-core/isl )
 	zstd? ( app-compression/zstd )
 "
 

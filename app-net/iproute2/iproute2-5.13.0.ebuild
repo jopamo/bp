@@ -20,7 +20,7 @@ DEPEND="
 	sys-devel/flex
 	sys-kernel/linux-headers
 	!minimal? ( lib-net/libmnl )
-	elf? ( lib-dev/elfutils )
+	elf? ( lib-core/elfutils )
 "
 
 filter-flags -Wl,-z,defs

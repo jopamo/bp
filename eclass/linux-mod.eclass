@@ -163,7 +163,7 @@ DEPEND="${RDEPEND}
     ${MODULES_OPTIONAL_USE}${MODULES_OPTIONAL_USE:+? (}
 	app-core/sed
 	sys-kernel/stable-sources
-	lib-dev/elfutils
+	lib-core/elfutils
 	${MODULES_OPTIONAL_USE:+)}"
 
 # eclass utilities

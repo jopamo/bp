@@ -589,7 +589,7 @@ if [[ ${ETYPE} == sources ]]; then
 		sys-devel/flex
 		sys-devel/make
 		lib-core/ncurses
-		lib-dev/elfutils
+		lib-core/elfutils
 		dev-util/pkgconf
 	)"
 

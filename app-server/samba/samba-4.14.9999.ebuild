@@ -41,7 +41,7 @@ CDEPEND="
 	dmapi? ( app-core/dmapi )
 	fam? ( virtual/fam )
 	gpg? ( app-crypt/gpgme )
-	json? ( lib-dev/jansson )
+	json? ( lib-core/jansson )
 	ldap? ( app-net/openldap )
 	systemd? ( app-core/systemd:0= )
 "

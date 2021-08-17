@@ -17,7 +17,7 @@ IUSE="json mysql nfacct +nfct +nflog pcap postgres sqlite systemd"
 DEPEND="
 	|| ( app-net/iptables app-net/nftables )
 	lib-net/libnfnetlink
-	json? ( lib-dev/jansson )
+	json? ( lib-core/jansson )
 	nfacct? (
 		>=lib-net/libmnl-1.0.3
 		>=lib-net/libnetfilter_acct-1.0.1

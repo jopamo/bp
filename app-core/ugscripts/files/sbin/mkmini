@@ -234,7 +234,7 @@ rm libev* || exit
 rm c-ares* || exit
 rm shadowsocks-libev* || exit
 
-cp /var/cache/packages/lib-dev/elfutils* .
+cp /var/cache/packages/lib-core/elfutils* .
 tar xvhf elfutils* --xattrs
 rm elfutils* || exit
 

@@ -22,7 +22,7 @@
 *app-core/shadow
 *app-misc/pax-utils
 *app-misc/vim
-*lib-dev/elfutils
+*lib-core/elfutils
 *virtual/service-manager
 *app-core/busybox
 *app-core/which

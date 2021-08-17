@@ -21,7 +21,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	lib-core/zlib
-	lib-dev/elfutils
+	lib-core/elfutils
 	virtual/libc
 "
 

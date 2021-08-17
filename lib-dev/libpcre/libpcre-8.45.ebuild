@@ -22,7 +22,7 @@ KEYWORDS="amd64 arm64"
 IUSE="+cxx +jit +recursion-limit static-libs"
 
 DEPEND="
-	lib-dev/libedit:=
+	lib-core/libedit:=
 	app-compression/lbzip2:=
 	lib-core/zlib:=
 "

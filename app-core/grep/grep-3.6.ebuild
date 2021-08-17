@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="nls pcre static"
 
-LIB_DEPEND="pcre? ( >=lib-dev/libpcre-7.8-r1[static-libs(+)] )"
+LIB_DEPEND="pcre? ( >=lib-core/libpcre-7.8-r1[static-libs(+)] )"
 RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
 	nls? ( sys-devel/gettext )"
 

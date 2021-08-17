@@ -26,7 +26,7 @@ COMMON_DEPEND="
 	x11-live-lib/xcb-util
 	dbus? ( app-core/dbus )
 	opengl? ( xmedia-live-lib/mesa )
-	pcre? ( lib-dev/libpcre:3 )
+	pcre? ( lib-core/libpcre:3 )
 	xinerama? ( x11-live-lib/libXinerama )"
 
 RDEPEND="${COMMON_DEPEND}

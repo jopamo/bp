@@ -177,12 +177,12 @@ cp /var/cache/packages/lib-core/glibc* .
 tar xvhf glibc* --xattrs
 rm glibc* || exit
 
-cp /var/cache/packages/lib-dev/libpcre* .
+cp /var/cache/packages/lib-core/libpcre* .
 rm libpcre2* || exit
 tar xvhf libpcre* --xattrs
 rm libpcre* || exit
 
-cp /var/cache/packages/lib-dev/libpcre2* .
+cp /var/cache/packages/lib-core/libpcre2* .
 tar xvhf libpcre2* --xattrs
 rm libpcre2* || exit
 

@@ -16,7 +16,7 @@ IUSE="ipv6 +libssh2 +ncat nls +nping ssl"
 
 DEPEND="
 	lib-dev/liblinear
-	lib-dev/libpcre
+	lib-core/libpcre
 	lib-live/libpcap
 	dev-lang/lua
 	lib-live/libssh2[zlib]

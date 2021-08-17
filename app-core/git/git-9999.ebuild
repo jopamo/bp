@@ -24,7 +24,7 @@ IUSE="static-libs perl gitweb"
 DEPEND="
 	sys-devel/gettext
 	app-net/curl
-	lib-dev/libpcre2
+	lib-core/libpcre2
 	lib-core/expat
 "
 

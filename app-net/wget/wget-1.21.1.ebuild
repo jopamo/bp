@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="debug ipv6 libpsl nls pcre static test uuid zlib"
 
 LIB_DEPEND="
-	pcre? ( lib-dev/libpcre2[static-libs(+)] )
+	pcre? ( lib-core/libpcre2[static-libs(+)] )
 	uuid? ( app-core/util-linux[static-libs(+)] )
 	zlib? ( lib-core/zlib[static-libs(+)] )
 "

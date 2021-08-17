@@ -17,12 +17,12 @@ systemd +tools vim-syntax +zlib lua 51degrees wurfl"
 
 DEPEND="
 	pcre? (
-		lib-dev/libpcre
-		pcre-jit? ( lib-dev/libpcre[jit] )
+		lib-core/libpcre
+		pcre-jit? ( lib-core/libpcre[jit] )
 	)
 	pcre2? (
-		lib-dev/libpcre2
-		pcre2-jit? ( lib-dev/libpcre2[jit] )
+		lib-core/libpcre2
+		pcre2-jit? ( lib-core/libpcre2[jit] )
 	)
 	ssl? ( virtual/ssl )
 	zlib? ( lib-core/zlib )

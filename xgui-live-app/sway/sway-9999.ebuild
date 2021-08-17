@@ -17,7 +17,7 @@ IUSE="+swaybg +swayidle +swaylock +tray +wallpapers"
 DEPEND="
 	>=lib-dev/json-c-0.13:0=
 	>=lib-live/libinput-1.6.0:0=
-	lib-dev/libpcre
+	lib-core/libpcre
 	lib-dev/wayland
 	xgui-live-lib/cairo
 	xgui-live-lib/libxkbcommon

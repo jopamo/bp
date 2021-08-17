@@ -22,7 +22,7 @@ DEPEND="
 	app-server/opensmtpd
 	dev-util/re2c
 	lib-core/gmp
-	lib-dev/libedit
+	lib-core/libedit
 	lib-dev/libpcre
 	lib-dev/oniguruma
 	lib-core/gdbm

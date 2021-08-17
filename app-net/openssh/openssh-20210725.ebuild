@@ -28,7 +28,7 @@ REQUIRED_USE="pie? ( !static )
 	test? ( ssl )"
 
 LIB_DEPEND="
-	lib-dev/libedit:=[static-libs(+)]
+	lib-core/libedit:=[static-libs(+)]
 	ssl? ( virtual/ssl )
 	>=lib-core/zlib-1.2.3:=[static-libs(+)]"
 

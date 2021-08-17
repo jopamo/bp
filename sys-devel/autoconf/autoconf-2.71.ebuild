@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="Used to create autoconfiguration files"
 HOMEPAGE="https://www.gnu.org/software/autoconf/autoconf.html"
@@ -11,6 +11,13 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	>=sys-devel/m4-1.4.16
-	>=dev-lang/perl-5.6
+	sys-devel/m4
+	dev-lang/perl
 "
+
+src_install() {
+	default
+
+	dosym -r /usr/share/gnuconfig/config.sub /usr/share/autoconf/build-aux/config.sub
+	dosym -r /usr/share/gnuconfig/config.guess /usr/share/autoconf/build-aux/config.guess
+}

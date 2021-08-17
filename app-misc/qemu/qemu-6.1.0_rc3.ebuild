@@ -136,7 +136,7 @@ SOFTMMU_TOOLS_DEPEND="
 	fdt? ( app-core/dtc[static-libs(+)] )
 	fuse? ( sys-fs/fuse:3[static-libs(+)] )
 	gnutls? (
-		lib-dev/nettle[static-libs(+)]
+		lib-core/nettle[static-libs(+)]
 		net-libs/gnutls[static-libs(+)]
 	)
 	gtk? (

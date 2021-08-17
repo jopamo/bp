@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+cxx dane nls +seccomp static-libs test tools valgrind"
 
-RDEPEND=">=lib-dev/nettle-3.1:=[gmp]
+RDEPEND=">=lib-core/nettle-3.1:=[gmp]
 	>=lib-core/gmp-5.1.3-r1:=
 	dane? ( >=lib-net/unbound-1.4.20 )
 	nls? ( >=sys-devel/gettext-0-r1 )

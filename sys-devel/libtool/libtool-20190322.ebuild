@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="A shared library tool for developers"
 HOMEPAGE="https://www.gnu.org/software/libtool/"
@@ -12,11 +12,13 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static"
 
-DEPEND="sys-devel/gnuconfig
-	>=sys-devel/autoconf-2.69
-	>=sys-devel/automake-1.13
+DEPEND="
+	sys-devel/gnuconfig
+	sys-devel/autoconf
+	sys-devel/automake
 	dev-perl/libintl-perl
-	app-compression/xz-utils"
+	app-compression/xz-utils
+"
 
 src_prepare() {
 	default
@@ -28,12 +30,6 @@ src_configure() {
 	export ac_cv_path_SED="$(basename "$(type -P sed)")"
 
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		$(use_enable static)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
@@ -46,8 +42,6 @@ src_test() {
 src_install() {
 	default
 
-	local x
-	while read -d $'\0' -r x ; do
-		ln -sf "${EPREFIX}"/usr/share/gnuconfig/${x##*/} "${x}" || die
-	done < <(find "${ED}" '(' -name config.guess -o -name config.sub ')' -print0)
+	dosym -r /usr/share/gnuconfig/config.sub /usr/share/libtool/build-aux/config.sub
+	dosym -r /usr/share/gnuconfig/config.guess /usr/share/libtool/build-aux/config.guess
 }

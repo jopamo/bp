@@ -18,7 +18,7 @@ IUSE="opencl openmp +ssl pcap rexgen"
 DEPEND="
 	ssl? ( virtual/ssl )
 	pcap? ( lib-net/libpcap )
-	lib-dev/gmp:*
+	lib-core/gmp:*
 	lib-core/zlib
 	app-compression/bzip2"
 

@@ -16,7 +16,7 @@ IUSE="acl caps gmp multicall nls static xattr"
 
 LIB_DEPEND="acl? ( app-core/acl[static-libs] )
 	caps? ( lib-core/libcap )
-	gmp? ( lib-dev/gmp:=[static-libs] )
+	gmp? ( lib-core/gmp:=[static-libs] )
 	xattr? ( app-core/attr[static-libs] )"
 RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs]} )
 	nls? ( sys-devel/gettext )"

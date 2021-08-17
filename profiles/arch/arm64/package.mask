@@ -1,2 +1,2 @@
 #causes hangs on my chromebook
->=lib-dev/gmp-6.2.0
+>=lib-core/gmp-6.2.0

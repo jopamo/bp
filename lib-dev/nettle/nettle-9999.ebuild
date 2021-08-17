@@ -22,7 +22,7 @@ SLOT="0"
 
 IUSE="+gmp static-libs test"
 
-DEPEND="gmp? ( lib-dev/gmp )"
+DEPEND="gmp? ( lib-core/gmp )"
 
 src_prepare() {
 	default

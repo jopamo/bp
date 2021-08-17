@@ -1,17 +1,17 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools
 
 DESCRIPTION="DOS filesystem tools - provides mkdosfs, mkfs.msdos, mkfs.vfat"
 HOMEPAGE="https://github.com/dosfstools/dosfstools"
 
-if [[ ${PV} == *9999* ]]; then
+if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/dosfstools/dosfstools.git"
 	inherit git-r3
 else
-	SNAPSHOT=d733fb06a0941f54cc23bd7a1e531ec76f319ccb
+	SNAPSHOT=f414e322da17c628a69ef61409b06b8f03e5a17c
 	SRC_URI="https://github.com/dosfstools/dosfstools/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="test"
 
 RDEPEND="
-	lib-dev/libffi
+	lib-core/libffi
 	dev-python/pycparser[${PYTHON_USEDEP}]"
 DEPEND="${RDEPEND}
 	dev-util/pkgconf

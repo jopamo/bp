@@ -21,7 +21,7 @@ DEPEND="
 	app-compression/bzip2
 	app-compression/xz-utils
 	lib-core/zlib
-	lib-dev/libffi
+	lib-core/libffi
 	sys-devel/gettext
 	lib-net/libnsl
 	lib-core/ncurses

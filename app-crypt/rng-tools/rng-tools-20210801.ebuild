@@ -26,7 +26,7 @@ DEPEND="
 	app-net/curl
 	jitterentropy? ( app-crypt/jitterentropy )
 	sys-fs/sysfsutils
-	lib-dev/jansson
+	lib-core/jansson
 "
 
 src_prepare() {

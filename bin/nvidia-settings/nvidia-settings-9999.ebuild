@@ -15,7 +15,7 @@ KEYWORDS="amd64"
 
 IUSE="static-libs"
 
-DEPEND="lib-dev/jansson
+DEPEND="lib-core/jansson
 	x11-live-lib/libXv
 	xgui-live-lib/libvdpau
 	x11-live-lib/gtk+:3"

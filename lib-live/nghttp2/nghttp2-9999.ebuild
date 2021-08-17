@@ -16,7 +16,7 @@ IUSE="cxx debug hpack-tools jemalloc static-libs test utils xml"
 
 RDEPEND="
 	cxx? ( lib-dev/boost )
-	hpack-tools? ( >=lib-dev/jansson-2.5 )
+	hpack-tools? ( >=lib-core/jansson-2.5 )
 	jemalloc? ( lib-dev/jemalloc )
 	utils? (
 		>=lib-dev/libev-4.15

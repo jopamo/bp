@@ -14,18 +14,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs systemd +udev +dm-only"
 
-RDEPEND="
-	app-core/layout
-	>=app-core/util-linux-2.16
-"
-
 DEPEND="
-	lib-core/readline:0=
-	systemd? ( >=app-core/systemd-205:0= )
-	dev-util/pkgconf
-	lib-dev/libaio
-	>=sys-devel/binutils-2.20.1-r1
-	sys-devel/autoconf-archive
+	app-core/util-linux
+	lib-core/readline
+	systemd? ( app-core/systemd )
 "
 
 S=${WORKDIR}/LVM2.${PV}

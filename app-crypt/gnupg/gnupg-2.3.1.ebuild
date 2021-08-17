@@ -18,7 +18,7 @@ IUSE="bzip2 ldap nls readline +gnutls sqlite tools"
 
 DEPEND="
 	>=lib-dev/npth-1.2
-	>=lib-dev/libassuan-2.5.0
+	>=lib-core/libassuan-2.5.0
 	>=lib-core/libgcrypt-1.7.3
 	>=lib-dev/libgpg-error-1.24
 	>=lib-dev/libksba-1.3.4

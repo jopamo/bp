@@ -18,7 +18,7 @@ KEYWORDS="amd64 arm64"
 IUSE="caps static"
 
 DEPEND="
-	>=lib-dev/libassuan-2.1
+	>=lib-core/libassuan-2.1
 	>=lib-core/libgcrypt-1.6.3
 	>=lib-dev/libgpg-error-1.17
 	caps? ( lib-core/libcap )

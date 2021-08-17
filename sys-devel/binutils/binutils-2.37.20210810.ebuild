@@ -1,16 +1,16 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-DESCRIPTION="Core binutils libraries (libbfd, libopcodes, libiberty) for external packages"
+DESCRIPTION="a collection of binary tools"
 HOMEPAGE="https://sourceware.org/binutils/"
 
-if [[ ${PV} = *9999* ]]; then
+if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/bminor/binutils-gdb.git"
 	inherit git-r3
 	EGIT_BRANCH="binutils-$(ver_cut 1)_$(ver_cut 2)-branch"
 else
-	SNAPSHOT=5a9e3421a8f8b55f9da36e93aa6aacc759a4b0e9
+	SNAPSHOT=dd713144aa067fbaa5dbf6442a441bcd38204ec1
 	SRC_URI="https://github.com/bminor/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-gdb-${SNAPSHOT}
 fi
@@ -52,13 +52,13 @@ src_configure() {
 src_install() {
 	default
 
-	rm "${ED}"/usr/bin/gdbserver "${ED}"/usr/lib/libinproctrace.so
+	rm -f "${ED}"/usr/bin/gdbserver "${ED}"/usr/lib/libinproctrace.so || die
 
 	# No shared linking to these files outside binutils
-	rm -f "${ED}"/usr/lib/lib{bfd,opcodes}.so
+	rm -f "${ED}"/usr/lib/lib{bfd,opcodes}.so || die
 	echo 'INPUT( /usr/lib/libbfd.a -liberty -lz -ldl )' > "${ED}"/usr/lib/libbfd.so
 	echo 'INPUT( /usr/lib/libopcodes.a -lbfd )' > "${ED}"/usr/lib/libopcodes.so
 
-	dosym ld /usr/bin/${CHOST}-ld
-	dosym objdump /usr/bin/${CHOST}-objdump
+	dosym -r /usr/bin/ld /usr/bin/${CHOST}-ld
+	dosym -r /usr/bin/objdump /usr/bin/${CHOST}-objdump
 }

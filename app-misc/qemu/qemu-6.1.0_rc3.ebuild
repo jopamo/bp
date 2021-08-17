@@ -1,12 +1,12 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 MY_P="${P/_/-}"
 
 inherit linux-info toolchain-funcs python-r1 xdg-utils flag-o-matic
 
-if [[ ${PV} = *9999* ]]; then
+if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://git.qemu.org/git/qemu.git"
 	inherit git-r3
 	SRC_URI=""
@@ -116,7 +116,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 # when available rather than always using the external library.
 ALL_DEPEND="
 	lib-dev/libtasn1[static-libs(+)]
-	>=lib-live/glib-2.0[static-libs(+)]
+	lib-live/glib[static-libs(+)]
 	lib-core/zlib[static-libs(+)]
 	python? ( ${PYTHON_DEPS} )
 	systemtap? ( dev-util/systemtap )
@@ -130,7 +130,7 @@ SOFTMMU_TOOLS_DEPEND="
 	aio? ( lib-dev/libaio[static-libs(+)] )
 	alsa? ( xmedia-live-lib/alsa-lib )
 	bzip2? ( app-compression/bzip2[static-libs(+)] )
-	capstone? ( lib-dev/capstone:= )
+	capstone? ( lib-dev/capstone )
 	caps? ( lib-core/libcap-ng[static-libs(+)] )
 	curl? ( app-net/curl[static-libs(+)] )
 	fdt? ( app-core/dtc[static-libs(+)] )
@@ -143,41 +143,40 @@ SOFTMMU_TOOLS_DEPEND="
 		x11-live-lib/gtk+:3
 		vte? ( x11-live-lib/vte )
 	)
-	iscsi? ( net-libs/libiscsi )
+	iscsi? ( lib-live/libiscsi )
 	jack? ( virtual/jack )
 	jemalloc? ( lib-dev/jemalloc )
-	jpeg? ( xmedia-live-lib/libjpeg-turbo:0=[static-libs(+)] )
-	lzo? ( lib-dev/lzo:2[static-libs(+)] )
+	jpeg? ( xmedia-live-lib/libjpeg-turbo[static-libs(+)] )
+	lzo? ( lib-dev/lzo[static-libs(+)] )
 	multipath? ( sys-fs/multipath-tools )
 	ncurses? (
-		lib-core/ncurses:=[unicode(+)]
-		lib-core/ncurses:=[static-libs(+)]
+		lib-core/ncurses[static-libs(+)]
 	)
-	nfs? ( >=net-fs/libnfs-1.9.3:=[static-libs(+)] )
+	nfs? ( net-fs/libnfs[static-libs(+)] )
 	numa? ( sys-process/numactl[static-libs(+)] )
 	opengl? (
 		xmedia-live-lib/libepoxy[static-libs(+)]
 		xmedia-live-lib/mesa[static-libs(+)]
 	)
-	png? ( xmedia-live-lib/libpng:0=[static-libs(+)] )
+	png? ( xmedia-live-lib/libpng[static-libs(+)] )
 	pulseaudio? ( xgui-misc/pulseaudio )
 	sasl? ( lib-dev/cyrus-sasl[static-libs(+)] )
-	seccomp? ( >=lib-core/libseccomp-2.1.0[static-libs(+)] )
+	seccomp? ( lib-core/libseccomp[static-libs(+)] )
 	smartcard? ( >=app-emulation/libcacard-2.5.0[static-libs(+)] )
 	snappy? ( app-compression/snappy:= )
 	spice? (
-		>=app-emulation/spice-protocol-0.12.3
-		>=app-emulation/spice-0.12.0[static-libs(+)]
+		app-emulation/spice-protocol
+		app-emulation/spice[static-libs(+)]
 	)
-	ssh? ( >=net-libs/libssh-0.8.6[static-libs(+)] )
+	ssh? ( net-libs/libssh[static-libs(+)] )
 	udev? ( virtual/libudev[static-libs(+)] )
 	usb? ( lib-dev/libusb[static-libs(+)] )
-	usbredir? ( >=app-core/usbredir-0.6[static-libs(+)] )
+	usbredir? ( app-core/usbredir[static-libs(+)] )
 	virgl? ( xmedia-live-lib/virglrenderer[static-libs(+)] )
 	virtfs? ( lib-core/libcap )
 	xen? ( app-emulation/xen-tools:= )
 	xfs? ( sys-fs/xfsprogs[static-libs(+)] )
-	zstd? ( >=app-compression/zstd-1.4.0[static-libs(+)] )
+	zstd? ( app-compression/zstd[static-libs(+)] )
 "
 
 BDEPEND="

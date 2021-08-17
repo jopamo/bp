@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="Used to generate Makefile.in from Makefile.am"
 HOMEPAGE="https://www.gnu.org/software/automake/"
@@ -17,20 +17,18 @@ DEPEND="
 	app-core/help2man
 "
 
-src_prepare() {
-	default
-	export WANT_AUTOCONF=2.5
-	./bootstrap || die
-}
-
 src_install() {
 	default
 
 	#compat symlinks
 	rm "${ED}"/usr/bin/{aclocal,automake}-*
-	dosym aclocal usr/bin/aclocal-1.15
-	dosym aclocal usr/bin/aclocal-1.16
 
-	dosym automake usr/bin/automake-1.15
-	dosym automake usr/bin/automake-1.16
+	dosym -r /usr/bin/aclocal /usr/bin/aclocal-1.15
+	dosym -r /usr/bin/automake /usr/bin/automake-1.15
+
+	dosym -r /usr/bin/aclocal /usr/bin/aclocal-1.16
+	dosym -r /usr/bin/automake /usr/bin/automake-1.16
+
+	dosym -r /usr/share/gnuconfig/config.sub /usr/share/automake/build-aux/config.sub
+	dosym -r /usr/share/gnuconfig/config.guess /usr/share/automake/build-aux/config.guess
 }

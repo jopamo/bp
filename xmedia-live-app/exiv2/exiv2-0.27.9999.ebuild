@@ -22,7 +22,7 @@ RDEPEND="
 		lib-net/libssh
 		app-net/curl
 	)
-	xmp? ( >=lib-dev/expat-2.1.0-r3 )
+	xmp? ( >=lib-core/expat-2.1.0-r3 )
 "
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )

@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static test"
 
 DEPEND="
-	static? ( 	lib-dev/expat[static-libs(+)]
+	static? ( 	lib-core/expat[static-libs(+)]
 				lib-dev/libaio[static-libs(+)]
 			)
 	test? (

@@ -23,7 +23,7 @@ RDEPEND="
 	app-compression/bzip2
 	app-misc/ca-certificates
 	xgui-live-lib/atk
-	lib-dev/expat
+	lib-core/expat
 	lib-live/glib:2
 	lib-dev/nspr
 	>=lib-dev/nss-3.26

@@ -28,7 +28,7 @@ DEPEND="
 	lib-core/readline
 	lib-core/sqlite
 	virtual/ssl
-	lib-dev/expat
+	lib-core/expat
 "
 
 src_prepare() {

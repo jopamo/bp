@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 IUSE="+X aqua doc debug opengl sdl tiff"
 
 RDEPEND="
-	lib-dev/expat
+	lib-core/expat
 	sdl? ( xmedia-live-lib/libsdl )
 	X? (
 		>=lib-live/glib-2.22:2

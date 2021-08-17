@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 IUSE="bzip2 ldap nls readline +gnutls tools"
 
 COMMON_DEPEND_LIBS="
-	>=lib-dev/npth-1.2
+	>=lib-core/npth-1.2
 	>=lib-core/libassuan-2.5.0
 	>=lib-core/libgcrypt-1.7.3
 	>=lib-core/libgpg-error-1.24

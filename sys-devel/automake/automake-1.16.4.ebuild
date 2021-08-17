@@ -29,6 +29,6 @@ src_install() {
 	dosym -r /usr/bin/aclocal /usr/bin/aclocal-1.16
 	dosym -r /usr/bin/automake /usr/bin/automake-1.16
 
-	dosym -r /usr/share/gnuconfig/config.sub /usr/share/automake/build-aux/config.sub
-	dosym -r /usr/share/gnuconfig/config.guess /usr/share/automake/build-aux/config.guess
+	dosym -r /usr/share/gnuconfig/config.sub /usr/share/automake-$(ver_cut 1-2)/config.sub
+	dosym -r /usr/share/gnuconfig/config.guess /usr/share/automake-$(ver_cut 1-2)/config.guess
 }

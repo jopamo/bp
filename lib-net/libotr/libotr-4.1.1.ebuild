@@ -13,7 +13,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 DEPEND="
-		lib-dev/libgpg-error
+		lib-core/libgpg-error
 		lib-core/libgcrypt
 "
 

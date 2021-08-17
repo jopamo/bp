@@ -20,7 +20,7 @@ IUSE="caps static"
 DEPEND="
 	>=lib-core/libassuan-2.1
 	>=lib-core/libgcrypt-1.6.3
-	>=lib-dev/libgpg-error-1.17
+	>=lib-core/libgpg-error-1.17
 	caps? ( lib-core/libcap )
 "
 BDEPEND="sys-devel/gettext

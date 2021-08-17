@@ -20,7 +20,7 @@ DEPEND="
 	>=lib-dev/npth-1.2
 	>=lib-core/libassuan-2.5.0
 	>=lib-core/libgcrypt-1.7.3
-	>=lib-dev/libgpg-error-1.24
+	>=lib-core/libgpg-error-1.24
 	>=lib-dev/libksba-1.3.4
 	>=app-net/curl-7.10
 	>=lib-net/gnutls-3.0:0=

@@ -35,7 +35,7 @@ DEPEND="
 	kmod? ( >=app-core/kmod-15:0= )
 	logind? ( app-core/dbus )
 	pam? ( lib-core/pam:= )
-	pcre? ( lib-dev/libpcre2 )
+	pcre? ( lib-core/libpcre2 )
 	p11kit? ( app-crypt/p11-kit )
 	lib-core/libseccomp:0=
 	test? ( app-core/dbus )

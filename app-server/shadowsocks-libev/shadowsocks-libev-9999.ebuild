@@ -17,7 +17,7 @@ IUSE="debug static-libs systemd"
 RDEPEND="lib-net/mbedtls
 	>=lib-live/libsodium-1.0.8
 	lib-dev/libev
-	lib-dev/libpcre
+	lib-core/libpcre
 	"
 DEPEND="${RDEPEND}
 	sys-kernel/linux-headers

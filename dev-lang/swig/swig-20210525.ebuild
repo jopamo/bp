@@ -19,7 +19,7 @@ IUSE="ccache pcre"
 
 RESTRICT="test"
 
-DEPEND="pcre? ( lib-dev/libpcre )
+DEPEND="pcre? ( lib-core/libpcre )
 		ccache? ( lib-core/zlib )"
 
 src_prepare() {

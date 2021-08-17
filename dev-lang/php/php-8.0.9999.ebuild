@@ -23,7 +23,7 @@ DEPEND="
 	dev-util/re2c
 	lib-core/gmp
 	lib-core/libedit
-	lib-dev/libpcre
+	lib-core/libpcre
 	lib-dev/oniguruma
 	lib-core/gdbm
 	app-core/acl

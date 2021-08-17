@@ -12,7 +12,7 @@ KEYWORDS="amd64 arm64"
 IUSE="pcre"
 
 DEPEND=">=lib-core/ncurses-5.2:0=
-		pcre? ( lib-dev/libpcre )"
+		pcre? ( lib-core/libpcre )"
 
 src_configure() {
 	export ac_cv_lib_ncursesw_initscr=yes

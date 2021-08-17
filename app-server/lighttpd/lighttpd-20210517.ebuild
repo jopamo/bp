@@ -28,7 +28,7 @@ IUSE="bzip2 dbi fam gdbm geoip krb5 ldap libev libunwind lua memcached
 DEPEND="
 	app-compression/lbzip2
 	lib-core/zlib
-	lib-dev/libpcre
+	lib-core/libpcre
 	gdbm?     ( lib-core/gdbm )
 	ldap?     ( app-net/openldap )
 	libev?    ( lib-dev/libev )

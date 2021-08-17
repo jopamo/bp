@@ -22,7 +22,7 @@ IUSE="icu mysql postgres sqlite systemd opengl vulkan"
 DEPEND="
 	lib-dev/double-conversion
 	lib-live/glib
-	lib-dev/libpcre2
+	lib-core/libpcre2
 	xgui-live-lib/libxcb
 	xmedia-live-lib/freetype
 	xmedia-live-lib/harfbuzz

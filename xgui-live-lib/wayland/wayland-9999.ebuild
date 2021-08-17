@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 BDEPEND="dev-util/pkgconf"
 DEPEND="
-	lib-dev/expat
+	lib-core/expat
 	lib-core/libxml2
 	lib-dev/libffi
 "

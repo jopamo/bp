@@ -27,7 +27,7 @@ DEPEND="
 	app-compression/xz-utils
 	acl? ( app-core/acl )
 	bzip2? ( app-compression/lbzip2 )
-	expat? ( lib-dev/expat )
+	expat? ( lib-core/expat )
 	!expat? ( lib-core/libxml2 )
 	lz4? ( app-compression/lz4 )
 	nettle? ( lib-dev/nettle:0= )

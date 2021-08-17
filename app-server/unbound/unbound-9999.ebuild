@@ -25,7 +25,7 @@ IUSE="debug dnscrypt +ecdsa gost python static-libs systemd"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 DEPEND="
-	lib-dev/expat
+	lib-core/expat
 	lib-dev/libevent
 	virtual/ssl
 	dnscrypt? ( lib-live/libsodium )

@@ -26,7 +26,7 @@ RDEPEND="server? ( !dev-util/gdbserver )
 		lib-core/readline:0=
 		lzma? ( app-compression/xz-utils )
 		python? ( ${PYTHON_DEPS} )
-		xml? ( lib-dev/expat )
+		xml? ( lib-core/expat )
 		lib-core/zlib
 	)"
 DEPEND="${RDEPEND}

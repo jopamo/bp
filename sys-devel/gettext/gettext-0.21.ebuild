@@ -18,7 +18,7 @@ DEPEND="acl? ( app-core/acl )
 		app-compression/xz-utils
 		lib-core/libxml2"
 
-RDEPEND="lib-dev/expat"
+RDEPEND="lib-core/expat"
 
 append-flags -lm
 filter-flags -Wl,-z,defs

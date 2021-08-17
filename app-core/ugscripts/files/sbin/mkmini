@@ -92,7 +92,7 @@ cp /var/cache/packages/app-net/curl* .
 tar xvhf curl* --xattrs
 rm curl* || exit
 
-cp /var/cache/packages/lib-dev/expat* .
+cp /var/cache/packages/lib-core/expat* .
 tar xvhf expat* --xattrs
 rm expat* || exit
 

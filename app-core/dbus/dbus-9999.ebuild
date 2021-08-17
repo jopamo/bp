@@ -25,7 +25,7 @@ SLOT="0"
 IUSE="debug static-libs systemd test tmpfilesd user-session X"
 
 DEPEND="
-	lib-dev/expat
+	lib-core/expat
 	systemd? ( app-core/systemd )
 	X? (
 		x11-live-lib/libX11

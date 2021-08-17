@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 IUSE="wayland"
 
 DEPEND="
-	lib-dev/expat
+	lib-core/expat
 	lib-core/zlib
 	x11-live-lib/libX11
 	x11-live-lib/libxshmfence

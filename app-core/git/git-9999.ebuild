@@ -25,7 +25,7 @@ DEPEND="
 	sys-devel/gettext
 	app-net/curl
 	lib-dev/libpcre2
-	lib-dev/expat
+	lib-core/expat
 "
 
 src_prepare() {

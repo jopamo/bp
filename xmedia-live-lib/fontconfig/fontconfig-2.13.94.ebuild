@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-RDEPEND=">=lib-dev/expat-2.1.0-r3
+RDEPEND=">=lib-core/expat-2.1.0-r3
 	>=xmedia-live-lib/freetype-2.5.3-r1"
 DEPEND="${RDEPEND}
 	dev-util/pkgconf

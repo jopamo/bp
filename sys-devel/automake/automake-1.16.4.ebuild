@@ -2,6 +2,8 @@
 
 EAPI=8
 
+OLDVER=1.15
+
 DESCRIPTION="Used to generate Makefile.in from Makefile.am"
 HOMEPAGE="https://www.gnu.org/software/automake/"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
@@ -23,8 +25,8 @@ src_install() {
 	#compat symlinks
 	rm "${ED}"/usr/bin/{aclocal,automake}-*
 
-	dosym -r /usr/bin/aclocal /usr/bin/aclocal-1.15
-	dosym -r /usr/bin/automake /usr/bin/automake-1.15
+	dosym -r /usr/bin/aclocal /usr/bin/aclocal-${OLDVER}
+	dosym -r /usr/bin/automake /usr/bin/automake-${OLDVER}
 
 	dosym -r /usr/bin/aclocal /usr/bin/aclocal-$(ver_cut 1-2)
 	dosym -r /usr/bin/automake /usr/bin/automake-$(ver_cut 1-2)

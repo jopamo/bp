@@ -21,8 +21,8 @@ SLOT="0"
 
 IUSE="static"
 
-DEPEND="static? ( lib-dev/iniparser:0[static-libs] )
-	!static? ( lib-dev/iniparser:0 )"
+DEPEND="static? ( lib-core/iniparser:0[static-libs] )
+	!static? ( lib-core/iniparser:0 )"
 
 src_configure() {
 	local myconf=(

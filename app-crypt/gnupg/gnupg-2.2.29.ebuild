@@ -21,7 +21,7 @@ COMMON_DEPEND_LIBS="
 	>=lib-core/libassuan-2.5.0
 	>=lib-core/libgcrypt-1.7.3
 	>=lib-core/libgpg-error-1.24
-	>=lib-dev/libksba-1.3.4
+	>=lib-core/libksba-1.3.4
 	>=app-net/curl-7.10
 	>=lib-net/gnutls-3.0:0=
 	lib-core/zlib

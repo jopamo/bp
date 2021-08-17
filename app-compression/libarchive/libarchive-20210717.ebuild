@@ -30,7 +30,7 @@ DEPEND="
 	expat? ( lib-core/expat )
 	!expat? ( lib-core/libxml2 )
 	lz4? ( app-compression/lz4 )
-	nettle? ( lib-dev/nettle:0= )
+	nettle? ( lib-core/nettle:0= )
 	ssl? ( virtual/ssl )
 	xattr? ( app-core/attr )
 	zlib? ( lib-core/zlib )

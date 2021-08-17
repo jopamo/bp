@@ -280,7 +280,7 @@ cp /var/cache/packages/app-net/chrony* .
 tar xvhf chrony* --xattrs
 rm chrony* || exit
 
-cp /var/cache/packages/lib-dev/nettle* .
+cp /var/cache/packages/lib-core/nettle* .
 tar xvhf nettle* --xattrs
 rm nettle* || exit
 

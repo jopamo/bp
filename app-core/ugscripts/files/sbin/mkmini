@@ -80,7 +80,7 @@ cp /var/cache/packages/app-core/gawk* .
 tar xvhf gawk* --xattrs
 rm gawk* || exit
 
-cp /var/cache/packages/lib-dev/mpfr* .
+cp /var/cache/packages/lib-core/mpfr* .
 tar xvhf mpfr* --xattrs
 rm mpfr* || exit
 

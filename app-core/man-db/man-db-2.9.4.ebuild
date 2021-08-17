@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="+manpager nls static-libs systemd tmpfilesd zlib"
 
 DEPEND="
-	>=lib-dev/libpipeline-1.4.0
+	>=lib-core/libpipeline-1.4.0
 	lib-core/gdbm
 	app-core/groff
 	zlib? ( lib-core/zlib )

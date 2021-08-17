@@ -1,2 +1,2 @@
->lib-dev/npth-1.6
+>lib-core/npth-1.6
 

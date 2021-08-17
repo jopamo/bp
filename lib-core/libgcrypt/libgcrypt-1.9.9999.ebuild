@@ -24,7 +24,7 @@ SLOT="0"
 
 IUSE="o-flag-munging static-libs"
 
-DEPEND="lib-dev/libgpg-error"
+DEPEND="lib-core/libgpg-error"
 
 src_prepare() {
 	default

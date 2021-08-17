@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND=">=lib-dev/libgpg-error-1.8"
+DEPEND=">=lib-core/libgpg-error-1.8"
 
 src_prepare() {
 	default

@@ -190,7 +190,7 @@ cp /var/cache/packages/lib-core/libgcrypt* .
 tar xvhf libgcrypt* --xattrs
 rm libgcrypt* || exit
 
-cp /var/cache/packages/lib-dev/libgpg-error* .
+cp /var/cache/packages/lib-core/libgpg-error* .
 tar xvhf libgpg-error* --xattrs
 rm libgpg-error* || exit
 

@@ -6,21 +6,20 @@ inherit autotools flag-o-matic git-r3 toolchain-funcs user
 
 DESCRIPTION="A utility for network discovery and security auditing"
 HOMEPAGE="https://nmap.org/"
-
 EGIT_REPO_URI="https://github.com/nmap/nmap"
-KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="ipv6 +libssh2 +ncat nls +nping ssl"
 
 DEPEND="
-	lib-dev/liblinear:=
+	lib-dev/liblinear
 	lib-dev/libpcre
-	lib-net/libpcap
+	lib-live/libpcap
 	dev-lang/lua
-	lib-net/libssh2[zlib]
+	lib-live/libssh2[zlib]
 	lib-core/zlib
 	nls? ( sys-devel/gettext )
 	lib-core/zlib
@@ -46,21 +45,21 @@ src_prepare() {
 }
 
 src_configure() {
-	# The bundled libdnet is incompatible with the version available in the
-	# tree, so we cannot use the system library here.
-	econf \
-		$(use_enable ipv6) \
-		$(use_enable nls) \
-		--with-libssh2 \
-		--with-zlib \
-		--with-liblua="${EROOT}"/usr \
-		--without-zenmap \
-		$(use_with ncat) \
-		$(use_with nping) \
-		$(use_with ssl openssl) \
-		--cache-file="${S}"/config.cache \
-		--with-libdnet=included \
-		--with-pcre=/usr
+	local myconf=(
+		$(use_enable ipv6)
+		$(use_enable nls)
+		--with-libssh2
+		--with-zlib
+		--with-liblua="${EROOT}"/usr
+		--without-zenmap
+		$(use_with ncat)
+		$(use_with nping)
+		$(use_with ssl openssl)
+		--cache-file="${S}"/config.cache
+		--with-libdnet=included
+		--with-pcre="${EROOT}"/usr
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
 src_compile() {

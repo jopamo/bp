@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 SNAPSHOT="$(ver_cut 1)-$(ver_cut 3-)"
 
@@ -158,7 +158,7 @@ src_install() {
 
 	patchelf --remove-rpath "${ED}"/usr/lib/libstdc++.so.*
 
-	dosym gcc usr/bin/cc
+	dosym -r /usr/bin/gcc /usr/bin/cc
 
 	dobin "${FILESDIR}"/c89
 	dobin "${FILESDIR}"/c99

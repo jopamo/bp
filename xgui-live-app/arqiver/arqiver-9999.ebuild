@@ -14,8 +14,8 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	xgui-live-lib/qtbase
-	xgui-live-lib/qtsvg:5
-	xgui-live-lib/qtx11extras:5
+	xgui-live-lib/qtsvg
+	xgui-live-lib/qtx11extras
 	app-compression/libarchive[bsdtar]"
 
 src_configure() {

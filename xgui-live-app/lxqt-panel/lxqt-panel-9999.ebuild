@@ -24,13 +24,12 @@ IUSE="alsa +clock colorpicker cpuload desktopswitch dom kbindicator
 REQUIRED_USE="volume? ( || ( alsa pulseaudio ) )"
 
 CDEPEND="
-	lib-live/glib:2
+	lib-live/glib
 	lib-live/libqtxdg
-	xgui-live-lib/qtbase
-	xgui-live-lib/qtx11extras:5
+	xgui-live-lib/qtbase:5
 	x11-live-misc/kguiaddons
 	x11-live-misc/kwindowsystem
-	>=xgui-live-lib/menu-cache-0.3.3
+	xgui-live-lib/menu-cache
 	xgui-live-lib/liblxqt
 	xgui-live-lib/lxqt-globalkeys
 	x11-live-lib/libX11
@@ -38,18 +37,17 @@ CDEPEND="
 	kbindicator? ( xgui-live-lib/libxkbcommon )
 	networkmonitor? ( lib-core/libstatgrab )
 	sensors? ( app-core/lm_sensors )
-	statusnotifier? ( >=lib-dev/libdbusmenu-qt-0.9.3_pre20160218-r1 )
-	sysstat? ( =xgui-live-lib/libsysstat-0.3* )
+	sysstat? ( xgui-live-lib/libsysstat )
 	tray? ( x11-live-lib/libXcomposite
 		x11-live-lib/libXdamage
 		x11-live-lib/libXrender )
 "
 DEPEND="${CDEPEND}
-	>=dev-util/lxqt-build-tools-0.3.1
+	dev-util/lxqt-build-tools
 "
 RDEPEND="${CDEPEND}
-	xgui-live-lib/qtsvg:5
-	>=xgui-live-lib/lxmenu-data-0.1.2
+	xgui-live-lib/qtsvg
+	xgui-live-lib/lxmenu-data
 "
 
 filter-flags -Wl,-z,defs
@@ -67,7 +65,7 @@ src_configure() {
 		$(usex quicklaunch '-DQUICKLAUNCH_PLUGIN=ON' '-DQUICKLAUNCH_PLUGIN=OFF')
 		$(usex sensors '-DSENSORS_PLUGIN=ON' '-DSENSORS_PLUGIN=OFF')
 		$(usex showdesktop '-DSHOWDESKTOP_PLUGIN=ON' '-DSHOWDESKTOP_PLUGIN=OFF')
-		$(usex statusnotifier '-DSTATUSNOTIFIER_PLUGIN=ON' '-DSTATUSNOTIFIER_PLUGIN=OFF')
+		-DSTATUSNOTIFIER_PLUGIN=OFF
 		$(usex sysstat '-DSYSSTAT_PLUGIN=ON' '-DSYSSTAT_PLUGIN=OFF')
 		$(usex taskbar '-DTASKBAR_PLUGIN=ON' '-DTASKBAR_PLUGIN=OFF')
 		$(usex tray '-DTRAY_PLUGIN=ON' '-DTRAY_PLUGIN=OFF')

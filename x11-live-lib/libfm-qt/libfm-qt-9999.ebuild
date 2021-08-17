@@ -10,7 +10,6 @@ HOMEPAGE="http://lxqt.org/"
 if [[ "${PV}" == "9999" ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/lxqt/${PN}.git"
-	KEYWORDS="amd64 arm64"
 else
 	SNAPSHOT=
 	SRC_URI="https://github.com/lxqt/libfm-qt/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
@@ -19,12 +18,13 @@ fi
 
 LICENSE="LGPL-2.1+"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 DEPEND="
-	lib-live/glib:2
+	lib-live/glib
 	xgui-live-lib/qtbase
-	xgui-live-lib/qtx11extras:5
-	>=x11-live-lib/libfm-1.2.0:=
+	xgui-live-lib/qtx11extras
+	x11-live-lib/libfm
 	xgui-live-lib/libxcb
 	xmedia-live-lib/libexif
 "

@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	xgui-live-lib/qtbase
-	xgui-live-lib/qttools:5
+	xgui-live-lib/qttools
 "
 
 S="${WORKDIR}/${P}/src"

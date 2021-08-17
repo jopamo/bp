@@ -20,9 +20,9 @@ SLOT="0"
 
 RDEPEND="
 	xgui-live-lib/qtbase
-	xgui-live-lib/qtx11extras:5
+	xgui-live-lib/qtx11extras
 	xgui-live-lib/liblxqt
-	>=lib-live/libqtxdg-2.0.0
+	lib-live/libqtxdg
 	x11-live-lib/libICE
 	x11-live-lib/libSM
 	x11-live-lib/libX11

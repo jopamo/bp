@@ -14,11 +14,3 @@ SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-live-lib/qtbase"
-
-src_configure() {
-	eqmake5
-}
-
-src_install() {
-	emake install INSTALL_ROOT="${D}"
-}

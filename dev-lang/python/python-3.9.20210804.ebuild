@@ -33,7 +33,7 @@ DEPEND="
 	sqlite? ( lib-core/sqlite )
 	app-compression/bzip2
 	app-compression/xz-utils
-	lib-dev/libffi
+	lib-core/libffi
 	lib-net/libnsl
 	lib-core/gdbm
 	lib-core/ncurses

@@ -16,7 +16,7 @@ BDEPEND="dev-util/pkgconf"
 DEPEND="
 	lib-core/expat
 	lib-core/libxml2
-	lib-dev/libffi
+	lib-core/libffi
 "
 
 src_configure() {

@@ -25,7 +25,7 @@ SLOT="0"
 RDEPEND="
 	>=lib-live/gobject-introspection-common-${PV}
 	lib-live/glib
-	lib-dev/libffi
+	lib-core/libffi
 	dev-util/pkgconf
 	${PYTHON_DEPS}
 "

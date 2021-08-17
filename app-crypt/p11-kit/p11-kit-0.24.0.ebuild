@@ -12,7 +12,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug +libffi"
 
-DEPEND="libffi? ( >=lib-dev/libffi-3.0.0 )"
+DEPEND="libffi? ( >=lib-core/libffi-3.0.0 )"
 BDEPEND="dev-util/pkgconf"
 
 pkg_setup() {

@@ -1,21 +1,19 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
-PATCHDATE=20210817
+CMAKE_IN_SOURCE_BUILD=1
 
-inherit flag-o-matic git-r3
+inherit flag-o-matic git-r3 cmake
 
 DESCRIPTION="Cross-platform application development framework"
 HOMEPAGE="https://www.qt.io/"
 EGIT_REPO_URI="https://github.com/qt/${PN}.git"
 EGIT_BRANCH=$(ver_cut 1).$(ver_cut 2)
 
-SRC_URI="https://1g4.org/files/kde-qt5-patches-${PATCHDATE}.tar.xz"
-
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT="$(ver_cut 1)"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
 
 IUSE="icu mysql postgres sqlite systemd opengl vulkan"
 
@@ -38,7 +36,6 @@ DEPEND="
 	sqlite? ( lib-core/sqlite )
 	vulkan? ( xmedia-live-lib/vulkan-loader )
 "
-PDEPEND="xgui-live-lib/qtx11extras"
 
 filter-flags -flto\=\*
 append-cppflags -DOPENSSL_NO_PSK -DOPENSSL_NO_NEXTPROTONEG -Wno-deprecated-declarations -Wno-class-memaccess -Wno-packed-not-aligned
@@ -49,14 +46,12 @@ src_prepare() {
 	sed -i -e "s|^\(QMAKE_LFLAGS_RELEASE.*\)|\1 ${LDFLAGS}|" \
 		mkspecs/common/g++-unix.conf
 
-	default
-
-	unpack ${A}
-	eapply kde-qt5-patches-${PATCHDATE}/*.patch
+	cmake_src_prepare
 }
 
 src_configure() {
 	local myconf=(
+		-cmake-generator Ninja
 		-opensource -confirm-license
 		-release
 		-no-static
@@ -78,13 +73,12 @@ src_configure() {
 		-system-freetype
 		-glib
 		-openssl-linked
-		-no-compile-examples
 		-no-pch
 		-no-strip
 		-dbus-linked
 		-journald
 		-use-gold-linker
-		-no-sql-{db2,ibase,oci,odbc,tds}
+		-no-sql-{db2,ibase,oci,odbc}
 		$(usex mysql -sql-mysql -no-sql-mysql)
 		$(usex postgres -sql-psql -no-sql-psql)
 		$(usex sqlite -system-sqlite -no-sqlite)
@@ -98,8 +92,7 @@ src_configure() {
 }
 
 src_install() {
-	make INSTALL_ROOT="${ED}" install
-	cleanup_install
+	cmake_src_install
 
-	dosym -r /usr/bin/qmake /usr/lib/qt5/bin/qmake
+	mv "${ED}"/usr/bin/qmake "${ED}"/usr/lib/qt6/bin/qmake
 }

@@ -16,9 +16,9 @@ IUSE="svg tiff"
 
 DEPEND="
 	xgui-live-lib/qtbase
-	xmedia-live-app/exiv2:=
-	svg? ( xgui-live-lib/qtsvg:5 )
-	tiff? ( xgui-live-lib/qtimageformats:5 )
+	xmedia-live-app/exiv2
+	svg? ( xgui-live-lib/qtsvg )
+	tiff? ( xgui-live-lib/qtimageformats )
 "
 
 src_configure() {

@@ -18,22 +18,20 @@ LICENSE="GPL-2 GPL-2+ GPL-3 LGPL-2 LGPL-2+ LGPL-2.1+ WTFPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="
+DEPEND="
 	lib-live/libqtxdg
 	xgui-live-lib/qtbase
-	xgui-live-lib/qtx11extras:5
+	xgui-live-lib/qtx11extras
 	x11-live-misc/kwindowsystem
-	=xgui-live-lib/liblxqt-$(ver_cut 1-2)*
-	lib-core/zlib:=
+	xgui-live-lib/liblxqt
+	lib-core/zlib
 	xgui-live-lib/libxcb
 	x11-live-lib/libX11
 	x11-live-lib/libXcursor
 	x11-live-lib/libXfixes
-"
-DEPEND="${RDEPEND}
-	>=dev-util/lxqt-build-tools-0.5.0
 	x11-live-misc/xf86-input-libinput
 "
+BDEPEND="dev-util/lxqt-build-tools"
 
 src_configure() {
 	local mycmakeargs=(

@@ -21,13 +21,13 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	>=lib-live/glib-2.18:2
+	lib-live/glib
 	xgui-live-lib/qtbase
-	xgui-live-lib/qtx11extras:5
-	>=x11-live-lib/libfm-1.2.0:=
-	x11-live-lib/libfm-qt:=
+	xgui-live-lib/qtx11extras
+	x11-live-lib/libfm
+	x11-live-lib/libfm-qt
 	xgui-live-lib/libxcb
-	>=dev-util/intltool-0.40
+	dev-util/intltool
 "
 
 src_install() {

@@ -12,13 +12,12 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="
-	dev-lang/perl
+DEPEND="dev-lang/perl"
+BDEPEND="
 	sys-devel/autoconf
 	sys-devel/gnuconfig
 	app-core/help2man
 "
-
 src_install() {
 	default
 

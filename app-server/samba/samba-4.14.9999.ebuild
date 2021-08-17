@@ -22,7 +22,7 @@ CDEPEND="
 	dev-lang/perl:=
 	lib-dev/libaio
 	lib-dev/libbsd
-	lib-dev/iniparser:0
+	lib-core/iniparser:0
 	lib-core/popt
 	lib-net/libnsl:=
 	app-core/attr

@@ -34,7 +34,6 @@ PDEPEND="
 	app-text/docbook-sgml-dtd:4.5
 	app-core/man-db
 	app-core/help2man
-	app-text/po4a
 	app-text/docbook-xsl-stylesheets
 	dev-perl/Date-Manip
 	dev-perl/HTTP-Date

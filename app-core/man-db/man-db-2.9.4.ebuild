@@ -15,16 +15,13 @@ KEYWORDS="amd64 arm64"
 IUSE="+manpager nls static-libs systemd tmpfilesd zlib"
 
 DEPEND="
-	>=lib-core/libpipeline-1.4.0
+	lib-core/libpipeline
+	lib-core/libseccomp
 	lib-core/gdbm
 	app-core/groff
 	zlib? ( lib-core/zlib )
-	app-compression/xz-utils
-	dev-util/pkgconf
-	nls? (
-		>=app-text/po4a-0.45
-		sys-devel/gettext
-	)"
+"
+BDEPEND="dev-util/pkgconf"
 
 PDEPEND="manpager? ( app-core/less )"
 
@@ -46,7 +43,7 @@ src_configure() {
 		--enable-setuid
 		--enable-cache-owner=man
 		--with-sections="1 1p 8 2 3 3p 4 5 6 7 9 0p tcl n l p o 1x 2x 3x 4x 5x 6x 7x 8x"
-		$(use_enable nls)
+		--disable-nls
 		$(use_enable static-libs static)
 		--with-db=gdbm
 	)

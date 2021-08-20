@@ -11,9 +11,8 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/systemd/systemd-stable.git"
 	EGIT_BRANCH="v$(ver_cut 1)-stable"
 	inherit git-r3
-	KEYWORDS="~amd64 ~arm64"
 else
-	SNAPSHOT=090378dcb1de5ca66900503210e85d63075fa70a
+	SNAPSHOT=1600b38cd2029533547f8c3d4abfa12911ca0630
 	SRC_URI="https://github.com/systemd/systemd-stable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/systemd-stable-${SNAPSHOT}"
 	KEYWORDS="amd64 arm64"
@@ -22,10 +21,10 @@ fi
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
 
-IUSE="binfmt +blkid bpf-framework coredump cryptsetup devmode dhcp4 efi gcrypt
-+hostnamed hwdb importd kmod kvm ldconfig localed logind machined networkd
+IUSE="binfmt +blkid bpf-framework coredump cryptsetup devmode dhcp4 efi gcrypt +gshadow
++hostnamed hwdb importd kmod kvm ldconfig localed logind machined musl networkd
 oomd pam pcre pstore p11kit rfkill sleep systemd-update sysv +timedated
-+tmpfilesd test vconsole xkb"
++tmpfilesd test +userdb +utmp vconsole xkb"
 
 RESTRICT="!test? ( test )"
 
@@ -84,6 +83,18 @@ pkg_pretend() {
 	fi
 }
 
+src_prepare() {
+	default
+
+	if use musl; then
+		eapply "${FILESDIR}"/musl/*.patch
+		sed -i -e 's/linux\/if_ether.h/netinet\/if_ether.h/g' "src/basic/linux/if_bridge.h" || die
+		sed -i -e 's/linux\/if_ether.h/netinet\/if_ether.h/g' "src/network/netdev/bareudp.h" || die
+		sed -i -e 's/linux\/if_ether.h/netinet\/if_ether.h/g' "src/basic/socket-util.h" || die
+
+	fi
+}
+
 src_configure() {
 	local emesonargs=(
 		$(usex devmode '-Dmode=developer' '-Dmode=release')
@@ -94,6 +105,7 @@ src_configure() {
 		$(meson_use cryptsetup libcryptsetup)
 		$(meson_use efi )
 		$(meson_use gcrypt)
+		$(meson_use gshadow)
 		$(meson_use hostnamed)
 		$(meson_use hwdb)
 		$(meson_use importd)
@@ -115,6 +127,8 @@ src_configure() {
 		$(meson_use test dbus)
 		$(meson_use timedated)
 		$(meson_use tmpfilesd tmpfiles)
+		$(meson_use userdb)
+		$(meson_use utmp)
 		$(meson_use vconsole)
 		$(meson_use xkb xkbcommon)
 		-Dacl=true

@@ -113,7 +113,7 @@ src_prepare() {
 src_configure() {
 	export MAKEINFO=/dev/null
 
-	myconf+=(
+	myconf=(
 		--without-cvs
 		--disable-werror
 		--enable-bind-now
@@ -137,7 +137,7 @@ src_configure() {
 		$(in_iuse systemtap && use_enable systemtap)
 		$(in_iuse nscd && use_enable nscd)
 		--disable-timezone-tools
-		${EXTRA_ECONF}
+		--disable-crypt
 	)
 
 	ac_cv_lib_cap_cap_init=$(in_iuse caps && usex caps || echo no)

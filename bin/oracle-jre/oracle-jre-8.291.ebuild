@@ -23,5 +23,6 @@ src_compile() { :;}
 src_install() {
 	mkdir -p "${ED}"/opt/ || die
 	cp -pPR	bin lib "${ED}"/opt/ || die
+	rm -f "${ED}"/opt/lib/amd64/{libavplugin,libglassgtk2}* || die
 	find "${ED}" -type d -empty -exec rmdir -v {} + || die
 }

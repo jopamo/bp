@@ -33,7 +33,7 @@ COMMON_DEPEND="
 	fontconfig? ( xmedia-live-lib/fontconfig:= )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )
 	ldap? ( app-net/openldap:= )
-	mp3? ( >=xmedia-live-lib/mpg123-1.5.0 )
+	mp3? ( xgui-misc/mpg123 )
 	netapi? ( app-server/samba )
 	openal? ( xmedia-live-lib/openal:= )
 	opengl? (

@@ -27,7 +27,6 @@ BDEPEND="
 	sys-devel/gcc
 	sys-devel/make
 "
-
 DEPEND="
 	sys-kernel/linux-headers
 	app-core/layout
@@ -36,8 +35,10 @@ RDEPEND="
 	caps? ( lib-core/libcap )
 	systemtap? ( dev-util/systemtap )
 "
-
-PDEPEND="lib-core/tzdb"
+PDEPEND="
+	lib-core/tzdb
+	lib-core/libxcrypt
+"
 
 PATCHES=( "${FILESDIR}"/0001-Disable-ldconfig-during-install.patch )
 

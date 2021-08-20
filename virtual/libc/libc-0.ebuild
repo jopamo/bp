@@ -8,7 +8,12 @@ KEYWORDS="amd64 arm64"
 
 IUSE="musl"
 
-RDEPEND="musl? ( lib-core/musl[systemwide]
-			!lib-core/glibc )
-	!musl? ( lib-core/glibc
-			!lib-core/musl[systemwide] )"
+RDEPEND="musl? (
+			lib-core/musl[systemwide]
+			!lib-core/glibc
+)
+		!musl? (
+			lib-core/glibc
+			lib-core/libxcrypt
+			!lib-core/musl[systemwide]
+)"

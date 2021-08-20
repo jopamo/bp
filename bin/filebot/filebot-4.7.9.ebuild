@@ -13,7 +13,7 @@ KEYWORDS="amd64 arm64"
 RESTRICT="preserve-libs strip"
 QA_PREBUILT="*"
 
-RDEPEND="dev-lang/oracle-jre"
+RDEPEND="bin/oracle-jre"
 
 S=${WORKDIR}
 

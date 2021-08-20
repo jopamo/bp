@@ -1,5 +1,4 @@
 virtual/libc musl
 lib-core/musl systemwide
-virtual/service-manager runit
 lib-core/elfutils musl
 sys-devel/gcc -vtv

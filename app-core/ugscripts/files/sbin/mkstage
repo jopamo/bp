@@ -112,6 +112,7 @@ EXCLUDES="--exclude=${TARGET}boot/*
 	--exclude=${TARGET}usr/share/gtk-doc
 	--exclude=${TARGET}usr/share/man
 	--exclude=${TARGET}usr/src/*
+	--exclude=${TARGET}var/cache/binpkgs/*
 	--exclude=${TARGET}var/cache/distfiles/*
 	--exclude=${TARGET}var/cache/edb/*
 	--exclude=${TARGET}var/cache/eix/*

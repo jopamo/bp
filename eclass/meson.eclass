@@ -313,7 +313,7 @@ meson_src_configure() {
 		meson setup
 		--buildtype plain
 		--libdir "lib"
-		--localstatedir "${EPREFIX}/var/lib"
+		--localstatedir "${EPREFIX}/var"
 		--prefix "${EPREFIX}/usr"
 		--sysconfdir "${EPREFIX}/etc"
 		--wrap-mode nodownload

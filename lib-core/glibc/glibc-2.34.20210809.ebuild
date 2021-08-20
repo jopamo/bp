@@ -35,10 +35,7 @@ RDEPEND="
 	caps? ( lib-core/libcap )
 	systemtap? ( dev-util/systemtap )
 "
-PDEPEND="
-	lib-core/tzdb
-	lib-core/libxcrypt
-"
+PDEPEND="lib-core/tzdb"
 
 PATCHES=( "${FILESDIR}"/0001-Disable-ldconfig-during-install.patch )
 

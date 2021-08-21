@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=a1f78e08bdb3eaa88603ba3c6e01de7c8671e28a
+	SNAPSHOT=95401eea8503943449f712e5f3de52fc0bc612c5
 	SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-portable-${SNAPSHOT}
 fi
@@ -21,31 +21,21 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug pam +pie +ssl static systemd test X"
+IUSE="debug pam +pie +ssl static systemd test"
 
-REQUIRED_USE="pie? ( !static )
-	static? ( !pam )
-	test? ( ssl )"
-
-LIB_DEPEND="
-	lib-core/libedit:=[static-libs(+)]
-	ssl? ( virtual/ssl )
-	>=lib-core/zlib-1.2.3:=[static-libs(+)]"
-
-RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
-	pam? ( lib-core/pam )"
-
-DEPEND="${RDEPEND}
-	static? ( ${LIB_DEPEND} )
-	dev-util/pkgconf
+DEPEND="
+	lib-core/libedit
 	lib-core/libseccomp
-	sys-kernel/linux-headers
-	sys-devel/autoconf"
-
-RDEPEND="${RDEPEND}
-	pam? ( app-core/pambase )
 	app-core/shadow
-	X? ( x11-live-app/xauth )"
+	lib-core/zlib
+	pam? ( lib-core/pam )
+	ssl? ( virtual/ssl )
+"
+BDEPEND="
+	dev-util/pkgconf
+	sys-kernel/linux-headers
+	sys-devel/autoconf
+"
 
 src_prepare() {
 	default
@@ -57,11 +47,6 @@ src_configure() {
 	use static && append-ldflags -static
 
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--localstatedir="${EPREFIX}"/var
 		--with-pid-dir="${EPREFIX}"/run
 		--with-ldflags="${LDFLAGS}"
 		--disable-strip
@@ -73,8 +58,8 @@ src_configure() {
 		--with-sandbox="seccomp_filter"
 		--with-libedit
 		--without-audit
+		--with-pie
 		$(use_with pam)
-		$(use_with pie)
 		$(use_with ssl openssl)
 		$(use_with ssl ssl-engine)
 	)
@@ -98,14 +83,19 @@ src_install() {
 		doins "${FILESDIR}"/sshd.service
 	fi
 
-	cp "${FILESDIR}"/sshd_config "${ED}"/etc/ssh/
+	cp "${FILESDIR}"/sshd_config "${ED}"/etc/ssh/ || die
 
-	mkdir -p "${ED}"/var/empty
+	mkdir -p "${ED}"/var/empty || die
+	keepdir /var/empty
 
 	fperms 600 /etc/ssh
 	fperms 600 /var/empty
 
-	rm -rf "${ED}"/etc/ssh/moduli
+	#generate this outside of installation
+	rm -rf "${ED}"/etc/ssh/moduli || die
+
+	#scp has been deprecated
+	rm -f "${ED}"/usr/bin/scp || die
 }
 
 pkg_preinst() {

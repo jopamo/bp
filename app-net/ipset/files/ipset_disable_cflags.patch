@@ -1,0 +1,161 @@
+diff -urN a/INSTALL b/INSTALL
+--- a/INSTALL	2021-08-04 01:18:14.000000000 -0500
++++ b/INSTALL	2021-08-20 23:23:38.906502645 -0500
+@@ -78,7 +78,7 @@
+ by setting variables in the command line or in the environment.  Here
+ is an example:
+ 
+-     ./configure CC=c89 CFLAGS=-O2 LIBS=-lposix
++     ./configure CC=c89 CFLAGS= LIBS=-lposix
+ 
+    *Note Defining Variables::, for more details.
+ 
+diff -urN a/Make_global.am b/Make_global.am
+--- a/Make_global.am	2021-08-04 01:18:14.000000000 -0500
++++ b/Make_global.am	2021-08-20 23:23:38.906502645 -0500
+@@ -73,12 +73,12 @@
+ 
+ AM_CPPFLAGS = $(kinclude_CFLAGS) $(all_includes) -I$(top_srcdir)/include
+ 
+-AM_CFLAGS = -std=gnu99
++AM_CFLAGS = 
+ 
+ if ENABLE_DEBUG
+ AM_CFLAGS += -g -g3 -ggdb -gdwarf-2 -DIPSET_DEBUG -Wall -Werror
+ else
+-AM_CFLAGS += -O2 -DNDEBUG
++AM_CFLAGS +=  -DNDEBUG
+ endif
+ 
+ SPARSE		= sparse
+diff -urN a/Makefile.in b/Makefile.in
+--- a/Makefile.in	2021-08-04 01:20:23.000000000 -0500
++++ b/Makefile.in	2021-08-20 23:23:38.894502583 -0500
+@@ -158,7 +158,7 @@
+ build_triplet = @build@
+ host_triplet = @host@
+ @ENABLE_DEBUG_TRUE@am__append_1 = -g -g3 -ggdb -gdwarf-2 -DIPSET_DEBUG -Wall -Werror
+-@ENABLE_DEBUG_FALSE@am__append_2 = -O2 -DNDEBUG
++@ENABLE_DEBUG_FALSE@am__append_2 =  -DNDEBUG
+ subdir = .
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+ am__aclocal_m4_deps = $(top_srcdir)/m4/ax_cflags_gcc_option.m4 \
+@@ -498,7 +498,7 @@
+ #            curr:rev:age
+ LIBVERSION = 16:0:3
+ AM_CPPFLAGS = $(kinclude_CFLAGS) $(all_includes) -I$(top_srcdir)/include
+-AM_CFLAGS = -std=gnu99 $(am__append_1) $(am__append_2)
++AM_CFLAGS =  $(am__append_1) $(am__append_2)
+ SPARSE = sparse
+ SPARSE_FLAGS = -Wsparse-all -I../include $(SPARSE_EXT_FLAGS)
+ IPSET_AM_V_CHECK = $(ipset_am__v_CHECK_$(V))
+diff -urN a/configure b/configure
+--- a/configure	2021-08-04 01:20:22.000000000 -0500
++++ b/configure	2021-08-20 23:23:38.898502604 -0500
+@@ -4075,13 +4075,13 @@
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS="-g "
+   else
+     CFLAGS="-g"
+   fi
+ else
+   if test "$GCC" = yes; then
+-    CFLAGS="-O2"
++    CFLAGS=""
+   else
+     CFLAGS=
+   fi
+@@ -14219,13 +14219,13 @@
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS="-g "
+   else
+     CFLAGS="-g"
+   fi
+ else
+   if test "$GCC" = yes; then
+-    CFLAGS="-O2"
++    CFLAGS=""
+   else
+     CFLAGS=
+   fi
+diff -urN a/lib/Makefile.in b/lib/Makefile.in
+--- a/lib/Makefile.in	2021-08-04 01:20:23.000000000 -0500
++++ b/lib/Makefile.in	2021-08-20 23:23:38.830502255 -0500
+@@ -160,7 +160,7 @@
+ build_triplet = @build@
+ host_triplet = @host@
+ @ENABLE_DEBUG_TRUE@am__append_1 = -g -g3 -ggdb -gdwarf-2 -DIPSET_DEBUG -Wall -Werror
+-@ENABLE_DEBUG_FALSE@am__append_2 = -O2 -DNDEBUG
++@ENABLE_DEBUG_FALSE@am__append_2 =  -DNDEBUG
+ @ENABLE_SETTYPE_MODULES_TRUE@am__append_3 = -DENABLE_SETTYPE_MODULES \
+ @ENABLE_SETTYPE_MODULES_TRUE@	         -DIPSET_MODSDIR="\"$(IPSET_MODSDIR)\""
+ 
+@@ -506,7 +506,7 @@
+ #            curr:rev:age
+ LIBVERSION = 16:0:3
+ AM_CPPFLAGS = $(kinclude_CFLAGS) $(all_includes) -I$(top_srcdir)/include
+-AM_CFLAGS = -std=gnu99 $(am__append_1) $(am__append_2) \
++AM_CFLAGS =  $(am__append_1) $(am__append_2) \
+ 	${libmnl_CFLAGS} $(am__append_3)
+ SPARSE = sparse
+ SPARSE_FLAGS = -Wsparse-all -I../include $(SPARSE_EXT_FLAGS)
+diff -urN a/m4/libtool.m4 b/m4/libtool.m4
+--- a/m4/libtool.m4	2021-08-04 01:20:20.000000000 -0500
++++ b/m4/libtool.m4	2021-08-20 23:23:38.830502255 -0500
+@@ -8142,7 +8142,7 @@
+ [m4_ifdef([AC_PROG_GCJ], [AC_PROG_GCJ],
+   [m4_ifdef([A][M_PROG_GCJ], [A][M_PROG_GCJ],
+     [AC_CHECK_TOOL(GCJ, gcj,)
+-      test set = "${GCJFLAGS+set}" || GCJFLAGS="-g -O2"
++      test set = "${GCJFLAGS+set}" || GCJFLAGS="-g "
+       AC_SUBST(GCJFLAGS)])])[]dnl
+ ])
+ 
+diff -urN a/src/Makefile.in b/src/Makefile.in
+--- a/src/Makefile.in	2021-08-04 01:20:23.000000000 -0500
++++ b/src/Makefile.in	2021-08-20 23:23:38.818502193 -0500
+@@ -159,7 +159,7 @@
+ build_triplet = @build@
+ host_triplet = @host@
+ @ENABLE_DEBUG_TRUE@am__append_1 = -g -g3 -ggdb -gdwarf-2 -DIPSET_DEBUG -Wall -Werror
+-@ENABLE_DEBUG_FALSE@am__append_2 = -O2 -DNDEBUG
++@ENABLE_DEBUG_FALSE@am__append_2 =  -DNDEBUG
+ sbin_PROGRAMS = ipset$(EXEEXT)
+ subdir = src
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+@@ -486,7 +486,7 @@
+ #            curr:rev:age
+ LIBVERSION = 16:0:3
+ AM_CPPFLAGS = $(kinclude_CFLAGS) $(all_includes) -I$(top_srcdir)/include
+-AM_CFLAGS = -std=gnu99 $(am__append_1) $(am__append_2)
++AM_CFLAGS =  $(am__append_1) $(am__append_2)
+ SPARSE = sparse
+ SPARSE_FLAGS = -Wsparse-all -I../include $(SPARSE_EXT_FLAGS)
+ IPSET_AM_V_CHECK = $(ipset_am__v_CHECK_$(V))
+diff -urN a/utils/Makefile.in b/utils/Makefile.in
+--- a/utils/Makefile.in	2021-08-04 01:20:23.000000000 -0500
++++ b/utils/Makefile.in	2021-08-20 23:23:38.718501679 -0500
+@@ -159,7 +159,7 @@
+ build_triplet = @build@
+ host_triplet = @host@
+ @ENABLE_DEBUG_TRUE@am__append_1 = -g -g3 -ggdb -gdwarf-2 -DIPSET_DEBUG -Wall -Werror
+-@ENABLE_DEBUG_FALSE@am__append_2 = -O2 -DNDEBUG
++@ENABLE_DEBUG_FALSE@am__append_2 =  -DNDEBUG
+ subdir = utils
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+ am__aclocal_m4_deps = $(top_srcdir)/m4/ax_cflags_gcc_option.m4 \
+@@ -434,7 +434,7 @@
+ #            curr:rev:age
+ LIBVERSION = 16:0:3
+ AM_CPPFLAGS = $(kinclude_CFLAGS) $(all_includes) -I$(top_srcdir)/include
+-AM_CFLAGS = -std=gnu99 $(am__append_1) $(am__append_2)
++AM_CFLAGS =  $(am__append_1) $(am__append_2)
+ SPARSE = sparse
+ SPARSE_FLAGS = -Wsparse-all -I../include $(SPARSE_EXT_FLAGS)
+ IPSET_AM_V_CHECK = $(ipset_am__v_CHECK_$(V))

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit flag-o-matic linux-info meson toolchain-funcs user
 
@@ -23,20 +23,19 @@ SLOT="0"
 
 IUSE="binfmt +blkid bpf-framework coredump cryptsetup devmode dhcp4 efi gcrypt +gshadow
 +hostnamed hwdb importd kmod kvm ldconfig localed logind machined musl networkd
-oomd pam pcre pstore p11kit rfkill sleep systemd-update sysv +timedated
+oomd pam pcre pstore rfkill sleep systemd-update sysv +timedated
 +tmpfilesd test +userdb +utmp vconsole xkb"
 
 RESTRICT="!test? ( test )"
 
 DEPEND="
-	cryptsetup? ( >=sys-fs/cryptsetup-1.6:0= )
+	cryptsetup? ( sys-fs/cryptsetup )
 	gcrypt? ( lib-core/libgcrypt )
-	kmod? ( >=app-core/kmod-15:0= )
+	kmod? ( app-core/kmod )
 	logind? ( app-core/dbus )
-	pam? ( lib-core/pam:= )
+	pam? ( lib-core/pam )
 	pcre? ( lib-core/libpcre2 )
-	p11kit? ( app-crypt/p11-kit )
-	lib-core/libseccomp:0=
+	lib-core/libseccomp
 	test? ( app-core/dbus )
 	tmpfilesd? ( app-core/dbus )
 	xkb? ( xgui-live-lib/libxkbcommon )
@@ -44,9 +43,9 @@ DEPEND="
 	app-text/docbook-xsl-stylesheets
 	dev-util/gperf
 	dev-util/pkgconf
-	lib-core/libxslt:0
+	lib-core/libxslt
 	lib-core/libcap
-	app-core/acl:0=
+	app-core/acl
 	app-core/coreutils
 	app-core/procps[kill(+)]
 	app-core/util-linux
@@ -119,7 +118,6 @@ src_configure() {
 		$(meson_use pam)
 		$(meson_use pcre pcre2)
 		$(meson_use pstore)
-		$(meson_use p11kit)
 		$(meson_use rfkill)
 		$(usex sysv '-Dsysvinit-path=/etc/init.d' '-Dsysvinit-path=')
 		$(usex sysv '-Dsysvrcnd-path=/etc/rc.d' '-Dsysvrcnd-path=')
@@ -164,6 +162,7 @@ src_configure() {
 		-Dntp-servers=""
 		-Dopenssl=false
 		-Dpamlibdir="${EPREFIX}"/usr/lib/security
+		-Dp11kit=false
 		-Dpolkit=false
 		-Dportabled=false
 		-Dqrencode=false

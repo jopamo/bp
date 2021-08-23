@@ -13,7 +13,7 @@ LICENSE="BSD GPL-2 SMAIL"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+installkernel static"
+IUSE="installkernel savelog static tempfile"
 
 PATCHES=( "${FILESDIR}"/${PN}-3.4.2-no-bs-namespace.patch )
 
@@ -23,17 +23,21 @@ src_configure() {
 }
 
 src_install() {
-	dobin tempfile run-parts
+	dobin run-parts
+	doman run-parts.8
+
 	if use installkernel ; then
 		dosbin installkernel
+		doman installkernel.8
 	fi
 
-	dosbin savelog
+	if use tempfile ; then
+		dobin tempfile
+		doman tempfile.1
+	fi
 
-	doman tempfile.1 run-parts.8 savelog.8
-	use installkernel && doman installkernel.8
-	cd debian || die
-	keepdir /etc/kernel/postinst.d
-
-	cleanup_install
+	if use savelog ; then
+		dosbin savelog
+		doman savelog.8
+	fi
 }

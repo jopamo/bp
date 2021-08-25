@@ -59,6 +59,7 @@ src_install() {
 	echo 'INPUT( /usr/lib/libbfd.a -liberty -lz -ldl )' > "${ED}"/usr/lib/libbfd.so
 	echo 'INPUT( /usr/lib/libopcodes.a -lbfd )' > "${ED}"/usr/lib/libopcodes.so
 
-	dosym -r /usr/bin/ld /usr/bin/${CHOST}-ld
-	dosym -r /usr/bin/objdump /usr/bin/${CHOST}-objdump
+	for x in ld objdump readelf ld.gold ranlib objcopy nm as strip ld.bfd ar ; do
+		dosym -r /usr/bin/${x} /usr/bin/${CHOST}-${x}
+	done
 }

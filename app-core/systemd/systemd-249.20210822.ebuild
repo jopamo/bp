@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="v$(ver_cut 1)-stable"
 	inherit git-r3
 else
-	SNAPSHOT=1600b38cd2029533547f8c3d4abfa12911ca0630
+	SNAPSHOT=b46696edd1d7f61c96074f04bf0d056228d7f159
 	SRC_URI="https://github.com/systemd/systemd-stable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/systemd-stable-${SNAPSHOT}"
 	KEYWORDS="amd64 arm64"
@@ -87,9 +87,11 @@ src_prepare() {
 
 	if use musl; then
 		eapply "${FILESDIR}"/musl/*.patch
+
 		sed -i -e 's/linux\/if_ether.h/netinet\/if_ether.h/g' "src/basic/linux/if_bridge.h" || die
 		sed -i -e 's/linux\/if_ether.h/netinet\/if_ether.h/g' "src/network/netdev/bareudp.h" || die
 		sed -i -e 's/linux\/if_ether.h/netinet\/if_ether.h/g' "src/basic/socket-util.h" || die
+		sed -i -e 's/linux\/if_arp.h/netinet\/if_ether.h/g' "src/network/networkd-link.c" || die
 	fi
 }
 

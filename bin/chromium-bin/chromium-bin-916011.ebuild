@@ -50,7 +50,7 @@ RDEPEND="
 	xgui-live-lib/libxcb
 	x11-live-lib/pango
 	x11-live-misc/xdg-utils
-	lib-dev/wayland
+	xgui-live-lib/wayland
 "
 
 QA_PREBUILT="*"

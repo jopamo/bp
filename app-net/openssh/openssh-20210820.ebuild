@@ -83,7 +83,8 @@ src_install() {
 		doins "${FILESDIR}"/sshd.service
 	fi
 
-	cp "${FILESDIR}"/sshd_config "${ED}"/etc/ssh/ || die
+	insinto /etc/ssh
+	doins "${FILESDIR}"/{ssh,sshd}_config
 
 	mkdir -p "${ED}"/var/empty || die
 	keepdir /var/empty

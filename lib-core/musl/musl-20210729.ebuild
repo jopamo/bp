@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 SNAPSHOT=3f701faace7addc75d16dea8a6cd769fa5b3f260
 
@@ -18,10 +18,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="systemwide"
 
-BDEPEND="sys-devel/gcc
-		sys-devel/make"
-
-DEPEND="!systemwide? ( sys-kernel/sabotage-headers )"
+BDEPEND="!systemwide? ( sys-kernel/sabotage-headers )"
 
 filter-flags -D_FORTIFY_SOURCE\=\* -Wl,-z,combreloc -Wl,-z,relro -Wl,-z,defs -Wl,-z,now -fstack-protector-strong -fstack-clash-protection
 

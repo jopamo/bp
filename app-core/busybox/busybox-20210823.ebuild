@@ -1,14 +1,14 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit flag-o-matic
 
 DESCRIPTION="Utilities for rescue and embedded systems"
 HOMEPAGE="https://www.busybox.net/"
 
-SNAPSHOT=8ae6a4344d5d0f46e542d835ce4d218ff902c783
-SRC_URI="https://git.busybox.net/busybox/snapshot/${PN}-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=60f4843468213324cc348af9d8ec09648b6f6784
+SRC_URI="https://git.busybox.net/busybox/snapshot/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"
@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 RESTRICT="test strip"
 
-DEPEND="lib-core/musl"
+BDEPEND="lib-core/musl"
 
 append-flags -ffat-lto-objects
 

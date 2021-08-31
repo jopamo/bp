@@ -29,10 +29,17 @@
 				</execute>
 			</action>
 		</item>
-		<item label="chromium">
+		<item label="chromium-bin">
 			<action name="Execute">
 				<execute>
-					chromium
+					chromium-bin
+				</execute>
+			</action>
+		</item>
+		<item label="google-chrome-unstable">
+			<action name="Execute">
+				<execute>
+					google-chrome-unstable
 				</execute>
 			</action>
 		</item>

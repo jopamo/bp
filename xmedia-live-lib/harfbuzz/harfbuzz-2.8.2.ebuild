@@ -12,19 +12,20 @@ LICENSE="Old-MIT ISC icu"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+cairo debug fontconfig +glib icu +introspection static-libs test +truetype"
+IUSE="+cairo debug +glib icu +introspection static-libs test +truetype"
 
 REQUIRED_USE="introspection? ( glib )"
 
-RDEPEND="
+DEPEND="
 	cairo? ( xgui-live-lib/cairo:= )
-	fontconfig? ( xmedia-live-lib/fontconfig:1.0 )
+	xmedia-live-lib/fontconfig
+	lib-dev/fribidi
 	glib? ( >=lib-live/glib-2.38:2 )
 	icu? ( >=lib-dev/icu-51.2-r1:= )
 	introspection? ( >=lib-live/gobject-introspection-1.34:= )
 	truetype? ( >=xmedia-live-lib/freetype-2.5.0.1:2= )
 "
-DEPEND="${RDEPEND}
+BDEPEND="
 	dev-util/gtk-doc-am
 	dev-util/pkgconf
 	test? ( ${PYTHON_DEPS} )
@@ -56,7 +57,6 @@ src_configure() {
 		--without-uniscribe
 		$(use_enable static-libs static)
 		$(use_with cairo)
-		$(use_with fontconfig)
 		$(use_with glib)
 		$(use_with introspection gobject)
 		$(use_with icu)

@@ -20,7 +20,7 @@ RDEPEND="
 	>=x11-live-lib/pango-1.36.3
 	>=lib-core/libxml2-2.9.1-r4:2
 	>=lib-live/libcroco-0.6.8-r1
-	>=x11-live-lib/gdk-pixbuf-2.30.7:2[introspection]
+	x11-live-lib/gdk-pixbuf
 	introspection? ( >=lib-live/gobject-introspection-0.10.8:= )
 "
 DEPEND="${RDEPEND}

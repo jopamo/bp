@@ -7,7 +7,7 @@ inherit flag-o-matic
 DESCRIPTION="Utilities for rescue and embedded systems"
 HOMEPAGE="https://www.busybox.net/"
 
-SNAPSHOT=60f4843468213324cc348af9d8ec09648b6f6784
+SNAPSHOT=a51d953b95a7cc6b40a6b3a5bfd95f3154acf5e2
 SRC_URI="https://git.busybox.net/busybox/snapshot/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -28,6 +28,10 @@ src_prepare() {
 }
 
 src_compile() {
+	if has_version \>=lib-core/glibc-2.33.0 ; then
+		append-ldflags -static
+	fi
+
 	emake CC=musl-gcc
 }
 

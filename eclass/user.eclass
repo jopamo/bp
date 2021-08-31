@@ -115,13 +115,7 @@ enewuser() {
 			[[ -x ${ROOT}${eshell} ]] && break
 		done
 
-		if [[ ${eshell} == "/dev/null" ]] ; then
-			eerror "Unable to identify the shell to use, proceeding with userland default."
-			case ${USERLAND} in
-				GNU)    eshell="/usr/sbin/nologin" ;;
-				*) die "Unable to identify the default shell for userland ${USERLAND}"
-			esac
-		fi
+		eshell="/usr/sbin/nologin"
 	fi
 	einfo " - Shell: ${eshell}"
 	opts+=( -s "${eshell}" )

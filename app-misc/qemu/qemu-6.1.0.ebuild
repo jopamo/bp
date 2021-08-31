@@ -593,12 +593,10 @@ src_install() {
 	insinto "/etc/qemu"
 	doins "${FILESDIR}/bridge.conf"
 
-	cd "${S}"
-	dodoc MAINTAINERS docs/specs/pci-ids.txt
-	newdoc pc-bios/README README.pc-bios
-
 	# Disallow stripping of prebuilt firmware files.
 	dostrip -x ${QA_PREBUILT}
+
+	cleanup_install
 }
 
 pkg_postinst() {

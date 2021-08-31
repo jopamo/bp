@@ -1,8 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-
-inherit autotools toolchain-funcs
+EAPI=8
 
 MY_PV=${PV/./-}
 MY_P=${PN}-${MY_PV}
@@ -17,14 +15,9 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND=">=lib-core/ncurses-5.9-r3[static-libs?]"
+DEPEND="lib-core/ncurses[static-libs?]"
 
 S="${WORKDIR}/${MY_P}"
-
-src_prepare() {
-	default
-	eautoreconf
-}
 
 src_configure() {
 	local myconf=(
@@ -32,10 +25,4 @@ src_configure() {
 		--enable-fast-install
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-src_install() {
-	default
-
-	rm "${ED%/}/usr/share/man/man3/history.3" || die
 }

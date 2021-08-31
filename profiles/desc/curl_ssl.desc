@@ -1,8 +1,0 @@
-# Distributed under the terms of the GNU General Public License v2
-
-# This file contains descriptions of CURL_SSL USE_EXPAND flags for app-net/curl
-
-gnutls - Use GnuTLS
-mbedtls - Use mbed TLS
-nss - Use Mozilla's Network Security Services
-openssl - Use OpenSSL

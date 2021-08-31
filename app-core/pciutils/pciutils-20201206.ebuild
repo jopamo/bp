@@ -12,7 +12,10 @@ if [[ ${PV} == *9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/pciutils/pciutils.git"
 else
 	SNAPSHOT=5bdf63b6b1bc35b59c4b3f47f7ca83ca1868155b
-	SRC_URI="https://github.com/pciutils/pciutils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	PCIIDS_SNAPSHOT=df399121b9e049fb5411d660bebaa4f775f740cb
+	SRC_URI="
+		https://github.com/pciutils/pciutils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz
+		https://github.com/pciutils/pciids/archive/${PCIIDS_SNAPSHOT}.tar.gz -> pciids-${PCIIDS_SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 
@@ -44,6 +47,7 @@ src_prepare() {
 		cp -pPR "${S}" "${S}.static" || die
 		mv "${S}.static" "${S}/static" || die
 	fi
+	cp "${WORKDIR}/pciids-${PCIIDS_SNAPSHOT}/pci.ids" "${S}"/ || die
 }
 
 src_configure() {
@@ -89,4 +93,5 @@ src_install() {
 	use static-libs && dolib.a "${BUILD_DIR}/static/lib/libpci.a"
 	rm "${ED}"/usr/sbin/update-pciids "${ED}"/usr/share/misc/pci.ids \
 		"${ED}"/usr/share/man/man8/update-pciids.8*
+	cleanup_install
 }

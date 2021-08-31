@@ -21,4 +21,5 @@ src_configure() {
 
 src_install() {
 	emake install INSTALL_ROOT="${D}"
+	cleanup_install
 }

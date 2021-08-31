@@ -1,10 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
+
+SNAPSHOT=8b24cb8fdf2bf210e243c1d676484a4ffa5c3f6c
+
+inherit autotools
 
 DESCRIPTION="Jemalloc is a general-purpose scalable concurrent allocator"
 HOMEPAGE="http://jemalloc.net/ https://github.com/jemalloc/jemalloc"
-SRC_URI="https://github.com/jemalloc/jemalloc/releases/download/${PV}/${P}.tar.bz2"
+SRC_URI="https://github.com/jemalloc/jemalloc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="BSD"
 SLOT="0"
@@ -12,19 +17,15 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug lazy-lock static-libs stats xmalloc"
 
-PATCHES=( 	${FILESDIR}/56126d0d2d0730acde6416cf02efdb9ed19d578b.patch
-			${FILESDIR}/07ce2434bf45420ff9d9d22590f68540c6dd7b78.patch
-			${FILESDIR}/87e2400cbb8b5a49f910b3c72b10297fcc9df839.patch
-)
+src_prepare() {
+	default
+	eautoreconf
+
+	touch doc/jemalloc.{html,3}
+}
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		$(use_enable static-libs static)
 		$(use_enable debug)
 		$(use_enable lazy-lock)

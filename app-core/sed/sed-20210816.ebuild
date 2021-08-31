@@ -6,25 +6,15 @@ inherit flag-o-matic
 
 DESCRIPTION="Super-useful stream editor"
 HOMEPAGE="http://sed.sourceforge.net/"
-SRC_URI="mirror://gnu/sed/${P}.tar.xz"
+SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl nls static"
+IUSE="acl static"
 
-RDEPEND="acl? ( app-core/acl )
-	nls? ( sys-devel/gettext )"
-
-DEPEND="${RDEPEND}
-	nls? ( sys-devel/gettext )"
-
-PATCHES=(
-		"${FILESDIR}"/00_61b5e58f18f152636a77c872dc39281bfb8bf90d.patch
-		"${FILESDIR}"/01_acabfdb582330345c05e0500d302e9e99f3eb5e9.patch
-		"${FILESDIR}"/02_6568d364f4d21df69027319f55bcc903bfb32e0a.patch
-)
+DEPEND="acl? ( app-core/acl )"
 
 src_bootstrap_sed() {
 	# make sure system-sed works #40786
@@ -48,7 +38,7 @@ src_configure() {
 
 	myconf=(
 		$(use_enable acl)
-		$(use_enable nls)
+		--disable-nls
 		--exec-prefix="${EPREFIX}"
 	)
 	econf "${myconf[@]}"

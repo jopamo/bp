@@ -560,33 +560,9 @@ perl-module_src_install() {
 	fi
 	perl_remove_temppath
 
-	for f in Change* CHANGES README* TODO FAQ ${mydoc}; do
-		[[ -s ${f} ]] && dodoc ${f}
-	done
-
-	if [[ ${EAPI} != 5 ]] ; then
-		if in_iuse examples && use examples ; then
-                        [[ ${#DIST_EXAMPLES[@]} -eq 0 ]] || perl_doexamples "${DIST_EXAMPLES[@]}"
-		fi
-	fi
-
 	perl_link_duallife_scripts
 
-	case ${EAPI} in
-		5|6|7)
-			;;
-		*)
-			if has 'features' ${DIST_WIKI} ; then
-				DISABLE_AUTOFORMATTING=yes
-				DOC_CONTENTS="This package may require additional dependencies and/or preparation steps for\n"
-				DOC_CONTENTS+="some optional features. For details, see\n"
-				DOC_CONTENTS+="$(perl_get_wikiurl_features)"
-				einfo
-				readme.gentoo_create_doc
-				readme.gentoo_print_elog
-			fi
-			;;
-	esac
+	cleanup_install
 }
 
 # @FUNCTION: perl-module_pkg_postinst

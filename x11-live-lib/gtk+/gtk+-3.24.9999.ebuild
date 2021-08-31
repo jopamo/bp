@@ -25,7 +25,7 @@ COMMON_DEPEND="
 	xmedia-live-lib/fontconfig
 	>=xmedia-live-lib/libepoxy-1.0[X(+)?]
 	>=xgui-live-lib/cairo-1.14[glib,svg,X?]
-	>=x11-live-lib/gdk-pixbuf-2.30:2[introspection?]
+	x11-live-lib/gdk-pixbuf
 	>=x11-live-lib/pango-1.37.3[introspection?]
 	x11-live-misc/shared-mime-info
 	cups? ( >=lib-print/cups-1.2 )

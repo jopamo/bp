@@ -2,11 +2,9 @@
 
 EAPI=8
 
-SNAPSHOT=5b31b9df7f89d2c2cb935c5e50a912cd048c07c9
+SNAPSHOT=f661c76a9e27a87f4bbbed135faf89a3fccac75f
 
 inherit flag-o-matic toolchain-funcs
-
-MY_P=${P/_/-}
 
 DESCRIPTION="full-strength general purpose cryptography library (including SSL and TLS)"
 HOMEPAGE="https://www.openssl.org/"
@@ -24,7 +22,8 @@ RESTRICT="!test? ( test )"
 DEPEND="app-misc/c_rehash"
 
 BDEPEND="
-	>=dev-lang/perl-5
+	app-misc/c_rehash
+	dev-lang/perl
 	test? (
 		app-core/diffutils
 		sys-devel/bc
@@ -164,7 +163,7 @@ src_install() {
 		mkdir "${ED}"/usr || die
 	fi
 
-	emake DESTDIR="${D}" install
+	default
 
 	# This is crappy in that the static archives are still built even
 	# when USE=static-libs.  But this is due to a failing in the openssl

@@ -27,6 +27,8 @@ RESTRICT="!test? ( test )"
 
 CMAKE_BUILD_TYPE=Release
 
+filter-flags -D_FORTIFY_SOURCE\=\* -Wl,-z,combreloc -Wl,-z,relro -Wl,-z,defs -Wl,-z,now -fstack-protector-strong -fstack-clash-protection
+
 src_configure() {
 	strip-flags
 

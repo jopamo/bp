@@ -18,6 +18,9 @@ BDEPEND="
 	sys-devel/gnuconfig
 	app-core/help2man
 "
+
+PATCHES=( "${FILESDIR}"/f4a3a70f69e1dbccb6578f39ef47835098a04624.patch )
+
 src_install() {
 	default
 
@@ -32,4 +35,14 @@ src_install() {
 
 	dosym -r /usr/share/gnuconfig/config.sub /usr/share/automake-$(ver_cut 1-2)/config.sub
 	dosym -r /usr/share/gnuconfig/config.guess /usr/share/automake-$(ver_cut 1-2)/config.guess
+
+	mkdir -p "${ED}"/usr/share/{aclocal,automake} || die
+
+	cp -rp "${ED}"/usr/share/aclocal-$(ver_cut 1-2)/* "${ED}"/usr/share/aclocal/ || die
+	cp -rp "${ED}"/usr/share/automake-$(ver_cut 1-2)/* "${ED}"/usr/share/automake/ || die
+
+	rm -rf "${ED}"/usr/share/{aclocal,automake}-$(ver_cut 1-2) || die
+
+	dosym -r /usr/share/aclocal /usr/share/aclocal-$(ver_cut 1-2)
+	dosym -r /usr/share/automake /usr/share/automake-$(ver_cut 1-2)
 }

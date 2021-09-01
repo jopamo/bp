@@ -39,6 +39,8 @@ src_configure() {
 		--prefix="${EPREFIX}"/usr
     	--exec-prefix="${EPREFIX}"/usr
     	--enable-wrapper=all
+    	--enable-shared
+    	--enable-static
 	)
 
 	local myconf=(
@@ -51,6 +53,8 @@ src_configure() {
 		--prefix="${EPREFIX}"/usr/musl
     	--exec-prefix="${EPREFIX}"/usr/musl
     	--enable-wrapper=all
+    	--disable-shared
+    	--enable-static
 	)
 
 	use systemwide || ECONF_SOURCE=${S} econf "${myconf[@]}"

@@ -23,20 +23,14 @@ append-flags -ffat-lto-objects
 
 src_prepare() {
 	default
-	cp "${FILESDIR}"/busybox-config-musl "${S}"/.config
+	cp "${FILESDIR}"/busybox-config "${S}"/.config
 	make silentoldconfig
 }
 
 src_compile() {
-	if has_version \>=lib-core/glibc-2.33.0 ; then
-		append-ldflags -static
-	fi
-
 	emake CC=musl-gcc
 }
 
 src_install() {
 	dobin busybox
-	dosym busybox usr/bin/sha3sum
-	dosym busybox usr/bin/whois
 }

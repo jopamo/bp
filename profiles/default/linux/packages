@@ -17,6 +17,7 @@
 *app-core/ugscripts
 *app-misc/nano
 *virtual/libc
+*sys-devel/gcc
 *sys-kernel/linux-headers
 *app-core/portage
 *app-core/shadow

@@ -69,6 +69,7 @@ src_prepare() {
 }
 
 src_configure() {
+	export CMAKE_BUILD_TYPE=RELEASE
 	xdg_environment_reset
 
 	local mycmakeargs=(

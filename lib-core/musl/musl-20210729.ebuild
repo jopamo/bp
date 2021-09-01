@@ -18,8 +18,6 @@ KEYWORDS="amd64 arm64"
 
 IUSE="systemwide"
 
-BDEPEND="!systemwide? ( sys-kernel/sabotage-headers )"
-
 filter-flags -D_FORTIFY_SOURCE\=\* -Wl,-z,combreloc -Wl,-z,relro -Wl,-z,defs -Wl,-z,now -fstack-protector-strong -fstack-clash-protection
 
 src_prepare() {
@@ -80,4 +78,8 @@ src_install() {
 	mkdir -p "${ED}"/usr/lib/
 	cp -p "${ED}"/lib/ld-musl*.so* "${ED}"/usr/lib/
   	rm -rf "${ED}"/lib
+
+	for i in linux asm asm-generic mtd ; do
+		dosym -r /usr/include/$i /usr/musl/include/$i
+	done
 }

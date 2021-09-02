@@ -63,7 +63,6 @@ DEPEND="${COMMON_DEPEND}
 "
 
 filter-flags -flto\=\* -Wl,-z,defs
-append-ldflags -lresolv
 
 src_prepare() {
 	default

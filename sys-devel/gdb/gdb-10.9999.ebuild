@@ -20,9 +20,10 @@ REQUIRED_USE="
 	|| ( client server )
 "
 
-RDEPEND="server? ( !dev-util/gdbserver )
+RDEPEND="
+	server? ( !dev-util/gdbserver )
 	client? (
-		>=lib-core/ncurses-5.2-r2:0=
+		virtual/curses
 		lib-core/readline:0=
 		lzma? ( app-compression/xz-utils )
 		python? ( ${PYTHON_DEPS} )

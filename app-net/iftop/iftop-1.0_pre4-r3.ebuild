@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools
 
@@ -13,14 +13,11 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="
-	lib-net/libpcap
-	lib-core/ncurses:0=
-"
 DEPEND="
-	${RDEPEND}
-	dev-util/pkgconf
+	lib-net/libpcap
+	virtual/curses
 "
+BDEPEND="dev-util/pkgconf"
 
 PATCHES=(
 	"${FILESDIR}"/${P}-configure.ac.patch

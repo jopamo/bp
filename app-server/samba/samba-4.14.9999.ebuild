@@ -18,17 +18,17 @@ dmapi fam gpg iprint json -ldap quota syslog systemd test tmpfilesd winbind
 zeroconf"
 
 CDEPEND="
-	>=app-compression/libarchive-3.1.2
-	dev-lang/perl:=
+	app-compression/libarchive
+	dev-lang/perl
 	lib-dev/libaio
 	lib-dev/libbsd
-	lib-core/iniparser:0
+	lib-core/iniparser
 	lib-core/popt
-	lib-net/libnsl:=
+	lib-net/libnsl
 	app-core/attr
 	lib-core/libcap
-	lib-core/ncurses:0=
-	lib-core/readline:0=
+	virtual/curses
+	lib-core/readline
 	lib-core/zlib
 	lib-core/pam
 	ceph? ( sys-cluster/ceph )
@@ -43,7 +43,7 @@ CDEPEND="
 	gpg? ( app-crypt/gpgme )
 	json? ( lib-core/jansson )
 	ldap? ( app-net/openldap )
-	systemd? ( app-core/systemd:0= )
+	systemd? ( app-core/systemd )
 "
 DEPEND="${CDEPEND}
 	app-text/docbook-xsl-stylesheets

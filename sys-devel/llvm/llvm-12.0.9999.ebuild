@@ -17,10 +17,10 @@ KEYWORDS="amd64"
 IUSE="clang debug test"
 
 DEPEND="
-	lib-core/libedit:=
-	lib-core/libffi:=
-	lib-core/ncurses:=
-	lib-core/libxml2:=
+	lib-core/libedit
+	lib-core/libffi
+	virtual/curses
+	lib-core/libxml2
 "
 
 RESTRICT="!test? ( test )"

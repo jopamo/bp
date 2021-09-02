@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="Advanced Linux Sound Architecture Utils (alsactl, alsamixer, etc.)"
 HOMEPAGE="http://www.alsa-project.org/"
@@ -15,7 +15,7 @@ IUSE="+libsamplerate +ncurses nls systemd"
 DEPEND="
 		>=xmedia-live-lib/alsa-lib-${PV}
 		libsamplerate? ( xmedia-live-lib/libsamplerate )
-		ncurses? ( lib-core/ncurses )
+		ncurses? ( virtual/curses )
 "
 
 src_configure() {

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools git-r3 flag-o-matic
 
@@ -14,9 +14,11 @@ KEYWORDS="amd64 arm64"
 
 BDEPEND="dev-lang/perl"
 
-DEPEND="lib-core/ncurses
+DEPEND="
+	virtual/curses
 	lib-live/glib
-	virtual/ssl"
+	virtual/ssl
+"
 
 filter-flags -Wl,-z,defs
 

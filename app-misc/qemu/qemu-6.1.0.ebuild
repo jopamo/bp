@@ -150,7 +150,7 @@ SOFTMMU_TOOLS_DEPEND="
 	lzo? ( lib-dev/lzo[static-libs(+)] )
 	multipath? ( sys-fs/multipath-tools )
 	ncurses? (
-		lib-core/ncurses[static-libs(+)]
+		virtual/curses[static-libs(+)]
 	)
 	nfs? ( net-fs/libnfs[static-libs(+)] )
 	numa? ( sys-process/numactl[static-libs(+)] )

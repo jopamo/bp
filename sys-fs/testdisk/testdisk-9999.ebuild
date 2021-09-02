@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit git-r3 autotools flag-o-matic
 
@@ -18,7 +18,7 @@ COMMON_DEPEND="
 	static? (
 		app-core/util-linux[static-libs]
 		sys-fs/e2fsprogs[static-libs]
-		lib-core/ncurses[static-libs]
+		virtual/curses[static-libs]
 		jpeg? ( xmedia-live-lib/libjpeg-turbo[static-libs] )
 		ntfs? ( sys-fs/ntfs3g[static-libs] )
 		zlib? ( lib-core/zlib[static-libs] )
@@ -26,7 +26,7 @@ COMMON_DEPEND="
 	!static? (
 		app-core/util-linux
 		sys-fs/e2fsprogs
-		lib-core/ncurses:0=
+		virtual/curses
 		jpeg? ( xmedia-live-lib/libjpeg-turbo )
 		ntfs? ( sys-fs/ntfs3g )
 		zlib? ( lib-core/zlib )

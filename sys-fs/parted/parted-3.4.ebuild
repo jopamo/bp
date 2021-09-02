@@ -19,7 +19,7 @@ RESTRICT="test"
 DEPEND="
 	sys-fs/e2fsprogs
 	device-mapper? ( sys-fs/lvm2 )
-	readline? ( lib-core/readline lib-core/ncurses )
+	readline? ( lib-core/readline virtual/curses )
 	nls? ( sys-devel/gettext )
 "
 

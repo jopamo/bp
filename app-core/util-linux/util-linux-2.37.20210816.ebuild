@@ -21,7 +21,7 @@ LICENSE="GPL-2 LGPL-2.1 BSD-4 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="agetty build caps chfn-chsh cramfs fdformat hwclock +kill +libblkid
+IUSE="+agetty build caps chfn-chsh cramfs fdformat hwclock +kill +libblkid
 +libuuid line +login +mount mountpoint ncurses +nologin pam partx raw readline
 rename rfkill +schedutils static-libs +su +suid sulogin switch_root systemd test
 tty-helpers udev uuidd vipw"

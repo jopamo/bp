@@ -17,7 +17,6 @@ else
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 
-
 LICENSE="GPL-2 LGPL-2.1 BSD-4 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"

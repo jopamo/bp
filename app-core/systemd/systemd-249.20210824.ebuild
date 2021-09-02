@@ -26,6 +26,8 @@ IUSE="binfmt +blkid bpf-framework coredump cryptsetup devmode dhcp4 efi gcrypt +
 oomd pam pcre pstore rfkill sleep systemd-update sysv +timedated
 +tmpfilesd test +userdb +utmp vconsole xkb"
 
+REQUIRED_USE="musl? ( !gshadow !localed !userdb !utmp )"
+
 RESTRICT="!test? ( test )"
 
 DEPEND="

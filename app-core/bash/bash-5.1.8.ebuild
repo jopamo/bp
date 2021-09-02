@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	virtual/libc
-	lib-core/ncurses
+	virtual/curses
 	lib-core/readline
 "
 

@@ -29,7 +29,7 @@ tty-helpers udev uuidd vipw"
 DEPEND="
 	caps? ( lib-core/libcap-ng )
 	cramfs? ( lib-core/zlib )
-	ncurses? ( lib-core/ncurses )
+	ncurses? ( virtual/curses )
 	pam? ( lib-core/pam )
 	readline? ( lib-core/readline )
 	kill? (

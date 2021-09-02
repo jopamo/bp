@@ -21,7 +21,7 @@ DEPEND="
 	app-core/help2man
 	sys-devel/texinfo
 	app-compression/xz-utils
-	lib-core/ncurses
+	virtual/curses
 	device-mapper? ( >=sys-fs/lvm2-2.02.45 )
 	mount? ( =sys-fs/fuse-2.9.9999 )
 	static? ( app-compression/xz-utils[static-libs(+)] )

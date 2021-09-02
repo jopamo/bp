@@ -26,7 +26,7 @@ IUSE="debug"
 
 DEPEND="
 	lib-dev/libevent
-	lib-core/ncurses
+	virtual/curses
 "
 
 PATCHES=( "${FILESDIR}/${PN}-2.4-flags.patch" )

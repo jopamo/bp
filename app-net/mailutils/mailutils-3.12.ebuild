@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools flag-o-matic python-single-r1 toolchain-funcs
 
@@ -15,13 +15,14 @@ KEYWORDS="amd64 arm64"
 IUSE="frm sieve messages readmsg dotlock movemail mimeview mh gdbm ipv6 nls pam python servers ssl static-libs virtual-domains +sendmail +smtp mailbox-imap mailbox-pop mailbox-mh +mailbox-maildir"
 
 DEPEND="
-	lib-core/ncurses:=
-	lib-core/readline:=
+	virtual/curses
+	lib-core/readline
 	gdbm? ( lib-core/gdbm )
 	nls? ( sys-devel/gettext )
 	pam? ( lib-core/pam )
 	python? ( ${PYTHON_DEPS} )
-	ssl? ( lib-net/gnutls:= )"
+	ssl? ( lib-net/gnutls )
+"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 SNAPSHOT=dfabf1e5cbb2e9538ed0fbec9d5e6eb0998a14e5
 
@@ -22,7 +22,7 @@ REQUIRED_USE="fasteap? ( !ssl ) smartcard? ( ssl )"
 
 CDEPEND="
 	dbus? ( app-core/dbus )
-	lib-dev/libnl:3
+	lib-dev/libnl
 	qt? (
 		xgui-live-lib/qtcore
 		xgui-live-lib/qtgui
@@ -30,13 +30,13 @@ CDEPEND="
 		xgui-live-lib/qtwidgets
 	)
 	readline? (
-		lib-core/ncurses:0=
-		lib-core/readline:0=
+		virtual/curses
+		lib-core/readline
 	)
 	ssl? (
 		gnutls? (
-			lib-core/libgcrypt:0=
-			lib-net/gnutls:=
+			lib-core/libgcrypt
+			lib-net/gnutls
 		)
 		!gnutls? ( virtual/ssl )
 	)

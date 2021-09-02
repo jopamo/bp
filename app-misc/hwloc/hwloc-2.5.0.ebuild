@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="cairo debug +numa +pci plugins svg static-libs xml X"
 
 DEPEND="
-	lib-core/ncurses
+	virtual/curses
 	cairo? ( xgui-live-lib/cairo )
 	pci? (
 		app-core/pciutils

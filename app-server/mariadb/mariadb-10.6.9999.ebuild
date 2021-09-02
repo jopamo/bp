@@ -19,7 +19,7 @@ DEPEND="
 	lib-core/libxml2
 	lib-core/libpcre
 	sys-devel/bison
-	static? ( lib-core/ncurses[static-libs] )
+	static? ( virtual/curses[static-libs] )
 "
 
 BDEPEND="

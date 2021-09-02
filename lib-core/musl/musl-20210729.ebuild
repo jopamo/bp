@@ -16,7 +16,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="systemwide"
+IUSE="musl"
 
 filter-flags -D_FORTIFY_SOURCE\=\* -Wl,-z,combreloc -Wl,-z,relro -Wl,-z,defs -Wl,-z,now -fstack-protector-strong -fstack-clash-protection
 
@@ -57,15 +57,18 @@ src_configure() {
     	--enable-static
 	)
 
-	use systemwide || ECONF_SOURCE=${S} econf "${myconf[@]}"
-	use systemwide && ECONF_SOURCE=${S} econf "${systemwide[@]}"
+	use musl || ECONF_SOURCE=${S} econf "${myconf[@]}"
+	use musl && ECONF_SOURCE=${S} econf "${systemwide[@]}"
 }
 
 src_compile() {
-	local i
-	for i in getconf getent iconv ; do
-		gcc $CPPFLAGS $CFLAGS "${S}"/$i.c -o $i
-	done
+	if use musl ; then
+		local i
+		for i in getconf getent iconv ; do
+			gcc $CPPFLAGS $CFLAGS "${S}"/$i.c -o $i
+		done
+	fi
+
 
 	default
 }
@@ -73,7 +76,8 @@ src_compile() {
 src_install() {
 	default
 
-	if use systemwide ; then
+	if use musl ; then
+		local i
   		for i in getconf getent iconv ; do
 			dobin $i
 		done

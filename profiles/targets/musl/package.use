@@ -1,5 +1,0 @@
-virtual/libc musl
-lib-core/musl systemwide
-lib-core/elfutils musl
-sys-devel/gcc -vtv
-app-core/systemd -gshadow -localed -userdb -utmp

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit toolchain-funcs flag-o-matic
 
@@ -13,13 +13,12 @@ SRC_URI="https://git.savannah.gnu.org/cgit/readline.git/snapshot/readline-${SNAP
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-3"
-SLOT="0/8"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs utils"
 
-DEPEND=">=lib-core/ncurses-5.9-r3:0=[static-libs?]
-	dev-util/pkgconf"
+DEPEND="virtual/curses[static-libs?]"
 
 src_prepare() {
 	default

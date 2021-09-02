@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="debug justify +magic minimal nls static"
 
 LIB_DEPEND="
-	lib-core/ncurses:0=[static-libs(+)]
+	virtual/curses[static-libs(+)]
 	magic? ( app-core/file[static-libs(+)] )
 	nls? ( sys-devel/gettext )
 "

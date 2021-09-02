@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="Gentoo's multi-purpose configuration and management tool"
 HOMEPAGE="https://wiki.gentoo.org/wiki/Project:Eselect"
@@ -13,4 +13,5 @@ KEYWORDS="amd64 arm64"
 DEPEND="
 	app-core/sed
 	app-core/file
-	lib-core/ncurses"
+	virtual/curses
+"

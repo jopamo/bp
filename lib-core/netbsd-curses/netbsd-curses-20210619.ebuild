@@ -20,21 +20,21 @@ fi
 LICENSE="BSD"
 SLOT="0"
 
-IUSE="static"
+IUSE="static-libs"
 
 DEPEND="!lib-core/ncurses"
 
 src_compile() {
 	emake CFLAGS="${CFLAGS}" DESTDIR="${ED}" PREFIX="${EPREFIX}"/usr all
 
-	use static && emake CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS} -static" \
+	use static-libs && emake CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS} -static" \
 		DESTDIR="${ED}" PREFIX="${EPREFIX}"/usr all-static
 }
 
 src_install() {
 	emake CFLAGS="${CFLAGS}" DESTDIR="${ED}" PREFIX="${EPREFIX}"/usr all install
 
-	use static && emake CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS} -static" \
+	use static-libs && emake CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS} -static" \
 		DESTDIR="${ED}" PREFIX="${EPREFIX}"/usr all-static install-static
 
 	cleanup_install

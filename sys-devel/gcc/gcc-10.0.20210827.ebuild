@@ -15,9 +15,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug dlang golang +isl +lto musl sanitize +vtv zstd"
-
-REQUIRED_USE="musl? ( !vtv )"
+IUSE="debug dlang golang +isl +lto sanitize +vtv zstd"
 
 DEPEND="
 	lib-core/mpc

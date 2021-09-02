@@ -18,9 +18,10 @@ KEYWORDS="amd64 arm64"
 IUSE="debug pam tmpfilesd"
 
 DEPEND="
-	>=lib-core/ncurses-5.2:0=
+	virtual/curses
 	pam? ( lib-core/pam )
-	sys-devel/texinfo"
+	sys-devel/texinfo
+"
 
 src_prepare() {
 	default

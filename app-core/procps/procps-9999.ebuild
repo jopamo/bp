@@ -26,7 +26,7 @@ SLOT="0"
 IUSE="musl ncurses static-libs systemd"
 
 DEPEND="
-	ncurses? ( lib-core/ncurses )
+	ncurses? ( virtual/curses )
 	systemd? ( app-core/systemd )
 "
 

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="A set of tools that use the proc filesystem"
 HOMEPAGE="http://psmisc.sourceforge.net/"
@@ -26,7 +26,7 @@ SLOT="0"
 IUSE="ipv6 nls X"
 
 DEPEND="
-	lib-core/ncurses
+	virtual/curses
 	sys-devel/libtool
 "
 

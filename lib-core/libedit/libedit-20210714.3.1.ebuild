@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND="lib-core/ncurses[static-libs?]"
+DEPEND="virtual/curses[static-libs?]"
 
 S="${WORKDIR}/${MY_P}"
 

@@ -36,7 +36,7 @@ DEPEND="
 	lib-core/libffi
 	lib-net/libnsl
 	lib-core/gdbm
-	lib-core/ncurses
+	virtual/curses
 	lib-core/readline
 	lib-core/zlib
 	sys-devel/gettext

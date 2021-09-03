@@ -1,0 +1,13 @@
+diff --git a/iftop.c b/iftop.c
+index a090dcf84a18e63b7b4f74f9a1e6c6268753d7e2..f9875c9b8647c29449eae9ca86d40f43823ab105 100644
+--- a/iftop.c
++++ b/iftop.c
+@@ -839,6 +839,8 @@ int main(int argc, char **argv) {
+     }
+ 
+     pthread_cancel(thread);
++    pthread_join(thread, NULL);
++    pcap_close(pd);
+ 
+     ui_finish();
+     

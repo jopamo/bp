@@ -1,0 +1,441 @@
+diff --git a/cfgfile.c b/cfgfile.c
+index fa50c9e2d5b9759dfcf5f5ce60fac54fd93ca63c..581909b1db875dc23c01c11a0c98a60e149971a9 100644
+--- a/cfgfile.c
++++ b/cfgfile.c
+@@ -30,7 +30,8 @@ char * config_directives[] = {
+ 	"promiscuous",
+ 	"hide-source",
+ 	"hide-destination",
+-	"use-bytes", 
++	"use-bytes",
++	"bandwidth-unit",
+ 	"sort", 
+ 	"line-display", 
+ 	"show-totals", 
+diff --git a/iftop.8 b/iftop.8
+index fb843cfb060ab90be88ea33ba301fa9a086d1dc9..6bc38a79bcd34ff125622796d1fdaeee7e13d94a 100644
+--- a/iftop.8
++++ b/iftop.8
+@@ -11,7 +11,7 @@ iftop - display bandwidth usage on an interface by host
+ 
+ .SH SYNOPSIS
+ \fBiftop\fP \fB-h\fP |
+-[\fB-nNpblBP\fP] [\fB-i\fP \fIinterface\fP] [\fB-f\fP \fIfilter code\fP] [\fB-F\fP \fInet\fP/\fImask\fP]
++[\fB-nNpblP\fP] [\fB-u\fP \fIunit\fP] [\fB-i\fP \fIinterface\fP] [\fB-f\fP \fIfilter code\fP] [\fB-F\fP \fInet\fP/\fImask\fP]
+ [\fB-G\fP \fInet6\fP/\fImask6\fP]
+ .SH DESCRIPTION
+ \fBiftop\fP listens to network traffic on a named \fIinterface\fP, or on the
+@@ -75,8 +75,11 @@ Don't display bar graphs of traffic.
+ \fB-m\fP \fIlimit\fP
+ Set the upper limit for the bandwidth scale.  Specified as a number with a 'K', 'M' or 'G' suffix.
+ .TP
++\fB-u\fP \fIbits\fP|\fIbytes\fP|\fIpackets\fP
++Display bandwidth rates in the given unit (per second).
++.TP
+ \fB-B\fP
+-Display bandwidth rates in bytes/sec rather than bits/sec.
++Synonym for \fB-u\fP \fIbits\fP.
+ .TP
+ \fB-i\fP \fIinterface\fP
+ Listen to packets on \fIinterface\fP.
+@@ -236,8 +239,11 @@ Hides source host names.
+ \fBhide-destination:\fP \fI(yes|no)\fP
+ Hides destination host names.
+ .TP
++\fBbandwidth-unit:\fP \fI(bits|bytes|packets)\fP
++Use the specified unit for bandwidth display. The default is bits.
++.TP
+ \fBuse-bytes:\fP \fI(yes|no)\fP
+-Use bytes for bandwidth display, rather than bits.
++\fBuse-bytes: yes\fP is a synonym of \fBbandwidth-unit: packets\fP.
+ .TP
+ \fBsort:\fP \fI(2s|10s|40s|source|destination)\fP
+ Sets which column is used to sort the display.
+diff --git a/iftop.c b/iftop.c
+index feec42f08100619a16966398bad85612d322a15c..3d5d622b2f5ce136a5e0201c2e8a75c53ca526a4 100644
+--- a/iftop.c
++++ b/iftop.c
+@@ -431,14 +431,22 @@ static void handle_ip_packet(struct ip* iptr, int hw_dir)
+     }
+ 
+     /* Do accounting. */
+-    switch (IP_V(iptr)) {
+-      case 4:
+-          len = ntohs(iptr->ip_len);
+-          break;
+-      case 6:
+-          len = ntohs(ip6tr->ip6_plen) + 40;
+-      default:
+-          break;
++    switch (options.bandwidth_unit) {
++      case OPTION_BW_BITS:
++      case OPTION_BW_BYTES:
++	  switch (IP_V(iptr)) {
++	    case 4:
++		len = ntohs(iptr->ip_len);
++		break;
++	    case 6:
++		len = ntohs(ip6tr->ip6_plen) + 40;
++	    default:
++		break;
++	  }
++	  break;
++      case OPTION_BW_PKTS:
++	  len = 1;
++	  break;
+     }
+ 
+     /* Update record */
+diff --git a/options.c b/options.c
+index b438d4c91bd4a9064afdd9509a2ffd6f3fd85324..10b08e786116c7d63a55296e8475033653b6d793 100644
+--- a/options.c
++++ b/options.c
+@@ -30,7 +30,7 @@
+ 
+ options_t options;
+ 
+-char optstr[] = "+i:f:nNF:G:lhpbBPm:c:s:tL:o:";
++char optstr[] = "+i:f:nNF:G:lhpbBu:Pm:c:s:tL:o:";
+ 
+ /* Global options. */
+ 
+@@ -75,6 +75,13 @@ config_enumeration_type showports_enumeration[] = {
+ 	{ NULL, -1 }
+ };
+ 
++config_enumeration_type bandwidth_unit_enumeration[] = {
++	{ "bits", OPTION_BW_BITS },
++	{ "bytes", OPTION_BW_BYTES },
++	{ "packets", OPTION_BW_PKTS },
++	{ NULL, -1 }
++};
++
+ static int is_bad_interface_name(char *i) {
+     char **p;
+     for (p = bad_interface_names; *p; ++p)
+@@ -145,7 +152,7 @@ void options_set_defaults() {
+     options.aggregate_dest = 0;
+     options.paused = 0;
+     options.showhelp = 0;
+-    options.bandwidth_in_bytes = 0;
++    options.bandwidth_unit = OPTION_BW_BITS;
+     options.sort = OPTION_SORT_DIV2;
+     options.screenfilter = NULL;
+     options.freezeorder = 0;
+@@ -188,7 +195,8 @@ static void usage(FILE *fp) {
+ "   -p                  run in promiscuous mode (show traffic between other\n"
+ "                       hosts on the same network segment)\n"
+ "   -b                  don't display a bar graph of traffic\n"
+-"   -B                  Display bandwidth in bytes\n"
++"   -B                  display bandwidth in bytes\n"
++"   -a                  display bandwidth in packets\n"
+ "   -i interface        listen on named interface\n"
+ "   -f filter code      use filter code to select packets to count\n"
+ "                       (default: none, but only IP packets are counted)\n"
+@@ -271,9 +279,13 @@ void options_read_args(int argc, char **argv) {
+                 break;
+ 
+             case 'B':
+-                config_set_string("use-bytes", "true");
++                config_set_string("bandwidth-unit", "bytes");
+                 break;
+ 
++	    case 'u':
++		config_set_string("bandwidth-unit", optarg);
++		break;
++
+             case 's':
+                 config_set_string("timed-output", optarg);
+                 break;
+@@ -370,6 +382,23 @@ int options_config_get_promiscuous() {
+     return 0;
+ }
+ 
++int options_config_get_bw_unit() {
++    int i;
++
++    if (options_config_get_enum("bandwidth-unit", bandwidth_unit_enumeration,
++				(int*)&options.bandwidth_unit))
++	return 1;
++    /* compatibility with use-bytes / -B */
++    if (options_config_get_bool("use-bytes", &i)) {
++	if (i)
++	    options.bandwidth_unit = OPTION_BW_BYTES;
++	else
++	    options.bandwidth_unit = OPTION_BW_BITS;
++	return 1;
++    }
++    return 0;
++}
++
+ int options_config_get_bw_rate(char *directive, long long* result) {
+     char* units;
+     long long mult = 1;
+@@ -544,7 +573,7 @@ void options_make() {
+     options_config_get_promiscuous();
+     options_config_get_bool("hide-source", &options.aggregate_src);
+     options_config_get_bool("hide-destination", &options.aggregate_dest);
+-    options_config_get_bool("use-bytes", &options.bandwidth_in_bytes);
++    options_config_get_bw_unit();
+     options_config_get_enum("sort", sort_enumeration, (int*)&options.sort);
+     options_config_get_enum("line-display", linedisplay_enumeration, (int*)&options.linedisplay);
+     options_config_get_bool("show-totals", &options.show_totals);
+diff --git a/options.h b/options.h
+index 85262542768fd8f03d8af36022dd4cb6186f968e..9628dfe28f7148c415a31f1f6238fa1706b51f93 100644
+--- a/options.h
++++ b/options.h
+@@ -34,6 +34,12 @@ typedef enum {
+   OPTION_LINEDISPLAY_ONE_LINE_SENT
+ } option_linedisplay_t;
+ 
++typedef enum {
++  OPTION_BW_BITS,
++  OPTION_BW_BYTES,
++  OPTION_BW_PKTS,
++} option_bw_unit_t;
++
+ /* 
+  * This structure has to be defined in the same order as the config 
+  * directives in cfgfile.c.  Clearly this is EBW.
+@@ -59,7 +65,7 @@ typedef struct {
+     int timed_output;
+     int no_curses;
+     int num_lines;
+-    int bandwidth_in_bytes;
++    option_bw_unit_t bandwidth_unit;
+     option_sort_t sort;
+ 
+     int bar_interval;
+diff --git a/tui.c b/tui.c
+index 31d4109372ac37dd5d4769325d8999e4817a1ff3..75c6e08c15eeab7eaccdb57ae6fd344842f2de22 100644
+--- a/tui.c
++++ b/tui.c
+@@ -87,7 +87,7 @@ void tui_print() {
+     /* Send rate per connection */
+     printf("%4d %s%s", l, host1, " =>");
+     for(j = 0; j < HISTORY_DIVISIONS; j++) {
+-      readable_size(screen_line->sent[j], buf0_10, 10, 1024, options.bandwidth_in_bytes);
++      readable_size(screen_line->sent[j], buf0_10, 10, 1024, options.bandwidth_unit);
+       printf(" %10s", buf0_10);
+     }
+     /* Cumulative sent data per connection */
+@@ -97,7 +97,7 @@ void tui_print() {
+     /* Receive rate per connection */
+     printf("     %s%s", host2, " <=");
+     for(j = 0; j < HISTORY_DIVISIONS; j++) {
+-      readable_size(screen_line->recv[j], buf0_10, 10, 1024, options.bandwidth_in_bytes);
++      readable_size(screen_line->recv[j], buf0_10, 10, 1024, options.bandwidth_unit);
+       printf(" %10s", buf0_10);
+     }
+     /* Cumulative received data per connection */
+@@ -115,21 +115,21 @@ void tui_print() {
+   snprintf(labellong, PRINT_WIDTH + 9, "%-*s", PRINT_WIDTH + 9, "Total send rate:");
+   printf("%s ", labellong);
+   for(j = 0; j < HISTORY_DIVISIONS; j++) {
+-    readable_size((((host_pair_line *)&totals)->sent[j]) , buf0_10, 10, 1024, options.bandwidth_in_bytes);
++    readable_size(((host_pair_line *)&totals)->sent[j], buf0_10, 10, 1024, options.bandwidth_unit);
+     printf("%10s%c", buf0_10, j == HISTORY_DIVISIONS - 1 ? '\n' : ' ');
+   }
+ 
+   snprintf(labellong, PRINT_WIDTH + 9, "%-*s", PRINT_WIDTH + 9, "Total receive rate:");
+   printf("%s ", labellong);
+   for(j = 0; j < HISTORY_DIVISIONS; j++) {
+-    readable_size((((host_pair_line *)&totals)->recv[j]) , buf0_10, 10, 1024, options.bandwidth_in_bytes);
++    readable_size(((host_pair_line *)&totals)->recv[j], buf0_10, 10, 1024, options.bandwidth_unit);
+     printf("%10s%c", buf0_10, j == HISTORY_DIVISIONS - 1 ? '\n' : ' ');
+   }
+ 
+   snprintf(labellong, PRINT_WIDTH + 9, "%-*s", PRINT_WIDTH + 9, "Total send and receive rate:");
+   printf("%s ", labellong);
+   for(j = 0; j < HISTORY_DIVISIONS; j++) {
+-    readable_size((((host_pair_line *)&totals)->sent[j] + ((host_pair_line *)&totals)->recv[j]) , buf0_10, 10, 1024, options.bandwidth_in_bytes);
++    readable_size(((host_pair_line *)&totals)->sent[j] + ((host_pair_line *)&totals)->recv[j], buf0_10, 10, 1024, options.bandwidth_unit);
+     printf("%10s%c", buf0_10, j == HISTORY_DIVISIONS - 1 ? '\n' : ' ');
+   }
+ 
+@@ -141,9 +141,9 @@ void tui_print() {
+ 
+   /* Peak traffic */
+   snprintf(labellong, PRINT_WIDTH + 9, "%-*s", PRINT_WIDTH + 9, "Peak rate (sent/received/total):");
+-  readable_size(peaksent / RESOLUTION, buf0_10, 10, 1024, options.bandwidth_in_bytes);
+-  readable_size(peakrecv / RESOLUTION, buf1_10, 10, 1024, options.bandwidth_in_bytes);
+-  readable_size(peaktotal / RESOLUTION, buf2_10, 10, 1024, options.bandwidth_in_bytes);
++  readable_size(peaksent / RESOLUTION, buf0_10, 10, 1024, options.bandwidth_unit);
++  readable_size(peakrecv / RESOLUTION, buf1_10, 10, 1024, options.bandwidth_unit);
++  readable_size(peaktotal / RESOLUTION, buf2_10, 10, 1024, options.bandwidth_unit);
+   printf("%s %10s %10s %10s\n", labellong, buf0_10, buf1_10, buf2_10);
+ 
+   /* Cumulative totals */
+diff --git a/ui.c b/ui.c
+index 57ca6c04876900c8aca6230707aca0d092df552c..771be3155b2094b306f69416e8056442f0cf9737 100644
+--- a/ui.c
++++ b/ui.c
+@@ -153,7 +153,7 @@ static void draw_bar_scale(int* y) {
+             char s[40], *p;
+             int x;
+             /* This 1024 vs 1000 stuff is just plain evil */
+-            readable_size(i, s, sizeof s, options.log_scale ? 1000 : 1024, options.bandwidth_in_bytes);
++            readable_size(i, s, sizeof s, options.log_scale ? 1000 : 1024, options.bandwidth_unit);
+             p = s + strspn(s, " ");
+             x = get_bar_length(i * 8);
+             mvaddch(*y + 1, x, ACS_BTEE);
+@@ -177,13 +177,13 @@ static void draw_bar_scale(int* y) {
+     }
+ }
+ 
+-void draw_line_total(float sent, float recv, int y, int x, option_linedisplay_t linedisplay, int bytes) {
++void draw_line_total(float sent, float recv, int y, int x, option_linedisplay_t linedisplay, option_bw_unit_t unit) {
+     char buf[10];
+     float n = 0;
+     switch(linedisplay) {
+         case OPTION_LINEDISPLAY_TWO_LINE:
+-          draw_line_total(sent, recv, y, x, OPTION_LINEDISPLAY_ONE_LINE_SENT, bytes);
+-          draw_line_total(sent, recv, y+1, x, OPTION_LINEDISPLAY_ONE_LINE_RECV, bytes);
++          draw_line_total(sent, recv, y, x, OPTION_LINEDISPLAY_ONE_LINE_SENT, unit);
++          draw_line_total(sent, recv, y+1, x, OPTION_LINEDISPLAY_ONE_LINE_RECV, unit);
+           break;
+         case OPTION_LINEDISPLAY_ONE_LINE_SENT:
+           n = sent;
+@@ -196,7 +196,7 @@ void draw_line_total(float sent, float recv, int y, int x, option_linedisplay_t
+           break;
+     }
+     if(linedisplay != OPTION_LINEDISPLAY_TWO_LINE) {
+-        readable_size(n, buf, 10, 1024, bytes);
++        readable_size(n, buf, 10, 1024, unit);
+         mvaddstr(y, x, buf);
+     }
+ }
+@@ -214,7 +214,7 @@ void draw_line_totals(int y, host_pair_line* line, option_linedisplay_t linedisp
+     int x = (COLS - 8 * HISTORY_DIVISIONS);
+ 
+     for(j = 0; j < HISTORY_DIVISIONS; j++) {
+-        draw_line_total(line->sent[j], line->recv[j], y, x, linedisplay, options.bandwidth_in_bytes);
++        draw_line_total(line->sent[j], line->recv[j], y, x, linedisplay, options.bandwidth_unit);
+         x += 8;
+     }
+     
+@@ -247,7 +247,7 @@ void draw_totals(host_pair_line* totals) {
+     draw_line_totals(y, totals, OPTION_LINEDISPLAY_TWO_LINE);
+     y += 2;
+     for(j = 0; j < HISTORY_DIVISIONS; j++) {
+-        readable_size((totals->sent[j] + totals->recv[j]) , buf, 10, 1024, options.bandwidth_in_bytes);
++        readable_size((totals->sent[j] + totals->recv[j]) , buf, 10, 1024, options.bandwidth_unit);
+         mvaddstr(y, x, buf);
+         x += 8;
+     }
+@@ -262,6 +262,7 @@ void ui_print() {
+     static char *line;
+     static int lcols;
+     int y = 0;
++    option_bw_unit_t cumunit;
+ 
+     if (dontshowdisplay)
+         return;
+@@ -375,25 +376,31 @@ void ui_print() {
+     /* Cummulative totals */
+     mvaddstr(y, 16, "cum: ");
+ 
+-    readable_size(history_totals.total_sent, line, 10, 1024, 1);
++    /* Previous versions of iftop always displayed totals in bytes, even when
++       use-bytes = false. Stay compatible when the default unit hasn't been
++       changed. */
++    cumunit = options.bandwidth_unit;
++    if (cumunit == OPTION_BW_BITS)
++      cumunit = OPTION_BW_BYTES;
++    readable_size(history_totals.total_sent, line, 10, 1024, cumunit);
+     mvaddstr(y, 22, line);
+ 
+-    readable_size(history_totals.total_recv, line, 10, 1024, 1);
++    readable_size(history_totals.total_recv, line, 10, 1024, cumunit);
+     mvaddstr(y+1, 22, line);
+ 
+-    readable_size(history_totals.total_recv + history_totals.total_sent, line, 10, 1024, 1);
++    readable_size(history_totals.total_recv + history_totals.total_sent, line, 10, 1024, cumunit);
+     mvaddstr(y+2, 22, line);
+ 
+     /* peak traffic */
+     mvaddstr(y, 32, "peak: ");
+ 
+-    readable_size(peaksent / RESOLUTION, line, 10, 1024, options.bandwidth_in_bytes);
++    readable_size(peaksent / RESOLUTION, line, 10, 1024, options.bandwidth_unit);
+     mvaddstr(y, 39, line);
+ 
+-    readable_size(peakrecv / RESOLUTION, line, 10, 1024, options.bandwidth_in_bytes);
++    readable_size(peakrecv / RESOLUTION, line, 10, 1024, options.bandwidth_unit);
+     mvaddstr(y+1, 39, line);
+ 
+-    readable_size(peaktotal / RESOLUTION, line, 10, 1024, options.bandwidth_in_bytes);
++    readable_size(peaktotal / RESOLUTION, line, 10, 1024, options.bandwidth_unit);
+     mvaddstr(y+2, 39, line);
+ 
+     mvaddstr(y, COLS - 8 * HISTORY_DIVISIONS - 8, "rates:");
+diff --git a/ui_common.c b/ui_common.c
+index a4d4ba0e63735bf88da663c3fd1e6e92f201be77..dcf66466fda42e780de65a5302c8d97e279819d1 100644
+--- a/ui_common.c
++++ b/ui_common.c
+@@ -21,8 +21,11 @@
+ int history_divs[HISTORY_DIVISIONS] = {1, 5, 20};
+ 
+ #define UNIT_DIVISIONS 4
+-char* unit_bits[UNIT_DIVISIONS] =  { "b", "Kb", "Mb", "Gb"};
+-char* unit_bytes[UNIT_DIVISIONS] =  { "B", "KB", "MB", "GB"};
++char* unit_disp[][UNIT_DIVISIONS] = {
++  [OPTION_BW_BITS]  = { "b", "Kb", "Mb", "Gb"},
++  [OPTION_BW_BYTES] = { "B", "KB", "MB", "GB"},
++  [OPTION_BW_PKTS]  = { "p", "Kp", "Mp", "GB"},
++};
+ 
+ extern hash_type* history;
+ extern int history_pos;
+@@ -121,29 +124,34 @@ int screen_line_compare(void* a, void* b) {
+ /*
+  * Format a data size in human-readable format
+  */
+-void readable_size(float n, char* buf, int bsize, int ksize, int bytes) {
++void readable_size(float n, char* buf, int bsize, int ksize,
++		   option_bw_unit_t unit) {
+ 
+     int i = 0;
+     float size = 1;
+ 
+     /* Convert to bits? */
+-    if(bytes == 0) { 
++    if (unit == OPTION_BW_BITS) { 
+       n *= 8;
+     }
+ 
++    /* Force power of ten for pps */
++    if (unit == OPTION_BW_PKTS)
++      ksize = 1000;
++
+     while(1) {
+       if(n < size * 1000 || i >= UNIT_DIVISIONS - 1) {
+-        snprintf(buf, bsize, " %4.0f%s", n / size, bytes ? unit_bytes[i] : unit_bits[i]); 
++        snprintf(buf, bsize, " %4.0f%s", n / size, unit_disp[unit][i]); 
+         break;
+       }
+       i++;
+       size *= ksize;
+       if(n < size * 10) {
+-        snprintf(buf, bsize, " %4.2f%s", n / size, bytes ? unit_bytes[i] : unit_bits[i]); 
++        snprintf(buf, bsize, " %4.2f%s", n / size, unit_disp[unit][i]); 
+         break;
+       }
+       else if(n < size * 100) {
+-        snprintf(buf, bsize, " %4.1f%s", n / size, bytes ? unit_bytes[i] : unit_bits[i]); 
++        snprintf(buf, bsize, " %4.1f%s", n / size, unit_disp[unit][i]); 
+         break;
+       }
+   }
+diff --git a/ui_common.h b/ui_common.h
+index e4fcc2e259127b08e25bc1ad9d10a0050921e845..63ae5bb698866ac02c1da98226a9b82608de9b57 100644
+--- a/ui_common.h
++++ b/ui_common.h
+@@ -43,6 +43,6 @@ hash_type* service_hash;
+ void analyse_data(void);
+ void screen_list_init(void);
+ void sprint_host(char * line, int af, struct in6_addr* addr, unsigned int port, unsigned int protocol, int L, int unspecified_as_star);
+-void readable_size(float, char*, int, int, int);
++void readable_size(float, char*, int, int, option_bw_unit_t);
+ 
+ #endif /* __UI_COMMON_H_ */

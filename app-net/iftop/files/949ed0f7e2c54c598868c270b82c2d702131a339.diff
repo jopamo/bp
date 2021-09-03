@@ -1,0 +1,13 @@
+diff --git a/options.c b/options.c
+index 10b08e786116c7d63a55296e8475033653b6d793..a075357c3041277563d863dfaf334f1020b93c7e 100644
+--- a/options.c
++++ b/options.c
+@@ -110,7 +110,7 @@ static char *get_first_interface(void) {
+     while(nameindex[j].if_index != 0) {
+         if (strcmp(nameindex[j].if_name, "lo") != 0 && !is_bad_interface_name(nameindex[j].if_name)) {
+             strncpy(ifr.ifr_name, nameindex[j].if_name, sizeof(ifr.ifr_name));
+-            if ((s == -1) || (ioctl(s, SIOCGIFFLAGS, &ifr) == -1) || (ifr.ifr_flags & IFF_UP)) {
++            if ((s == -1) || (ioctl(s, SIOCGIFFLAGS, &ifr) == -1) || (ifr.ifr_flags & IFF_RUNNING)) {
+                 i = xstrdup(nameindex[j].if_name);
+                 break;
+             }

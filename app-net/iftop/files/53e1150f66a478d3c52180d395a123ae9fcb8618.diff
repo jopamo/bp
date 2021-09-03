@@ -1,0 +1,13 @@
+diff --git a/tui.c b/tui.c
+index 75c6e08c15eeab7eaccdb57ae6fd344842f2de22..af10a2f962bc4dee104d7a390115b6bc80b57164 100644
+--- a/tui.c
++++ b/tui.c
+@@ -73,7 +73,7 @@ void tui_print() {
+   printf("\n");
+ 
+   /* Traverse the list of all connections */
+-  while((nn = sorted_list_next_item(&screen_list, nn)) != NULL && l < options.num_lines) {
++  while((nn = sorted_list_next_item(&screen_list, nn)) != NULL && (!options.num_lines || l < options.num_lines)) {
+     /* Increment the line counter */
+     l++;
+ 

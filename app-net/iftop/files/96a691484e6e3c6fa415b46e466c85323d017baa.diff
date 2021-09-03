@@ -1,0 +1,51 @@
+diff --git a/addrs_dlpi.c b/addrs_dlpi.c
+index 188fef897c93aaf7c5c5ed8c6b84579e75de622c..6c04ea186b3fd61263c4b5f58a949252dd069c01 100644
+--- a/addrs_dlpi.c
++++ b/addrs_dlpi.c
+@@ -50,7 +50,7 @@ extern char *strncat2(char *dest, char *src, int n);
+  */
+ 
+ int
+-get_addrs_dlpi(char *interface, char if_hw_addr[], struct in_addr *if_ip_addr)
++get_addrs_dlpi(char *interface, u_int8_t if_hw_addr[], struct in_addr *if_ip_addr)
+ {
+   int got_hw_addr = 0;
+   int got_ip_addr = 0;
+diff --git a/addrs_ioctl.c b/addrs_ioctl.c
+index 870c83b2b7e3006252398844a023f1d8f9f3c7cd..7d01fb24dd28c3ece8298cd8ea72cd661e201a16 100644
+--- a/addrs_ioctl.c
++++ b/addrs_ioctl.c
+@@ -45,7 +45,7 @@
+  */
+ 
+ int
+-get_addrs_ioctl(char *interface, char if_hw_addr[], struct in_addr *if_ip_addr, struct in6_addr *if_ip6_addr)
++get_addrs_ioctl(char *interface, u_int8_t if_hw_addr[], struct in_addr *if_ip_addr, struct in6_addr *if_ip6_addr)
+ {
+   int s;
+   struct ifreq ifr = {};
+diff --git a/addrs_ioctl.h b/addrs_ioctl.h
+index f93a0b427527e0a7eca56f240d6aa7557a74a16d..739de61535f68e4824afb1fdcbb2c97aefd72a66 100644
+--- a/addrs_ioctl.h
++++ b/addrs_ioctl.h
+@@ -7,6 +7,6 @@
+ #define __ADDRS_IOCTL_H_
+ 
+ int
+-get_addrs_ioctl(char *interface, char if_hw_addr[], struct in_addr *if_ip_addr, struct in6_addr *if_ip6_addr);
++get_addrs_ioctl(char *interface, u_int8_t if_hw_addr[], struct in_addr *if_ip_addr, struct in6_addr *if_ip6_addr);
+ 
+ #endif /* __ADDRS_IOCTL_H_ */
+diff --git a/iftop.c b/iftop.c
+index f9875c9b8647c29449eae9ca86d40f43823ab105..032df612d55d252246cd1b4bf0d3e97da650cc00 100644
+--- a/iftop.c
++++ b/iftop.c
+@@ -55,7 +55,7 @@
+ 
+ /* ethernet address of interface. */
+ int have_hw_addr = 0;
+-char if_hw_addr[6];    
++u_int8_t if_hw_addr[6];
+ 
+ /* IP address of interface */
+ int have_ip_addr = 0;

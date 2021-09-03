@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="Utility for examining and tuning ethernet-based network interfaces"
 HOMEPAGE="https://www.kernel.org/pub/software/network/ethtool/"

@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-inherit toolchain-funcs autotools
+inherit autotools
 
 DESCRIPTION="NTP client and server programs"
 HOMEPAGE="https://chrony.tuxfamily.org/"
@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://git.tuxfamily.org/chrony/chrony.git"
 	inherit git-r3
 else
-	SNAPSHOT=885e7774fd87ce1a27d42371ea6adf2ce2a8e383
+	SNAPSHOT=87df2687236f1b3d87b96f6242cd531657a1de6c
 	SRC_URI="https://git.tuxfamily.org/chrony/chrony.git/snapshot/chrony-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -20,10 +20,12 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps +cmdmon ipv6 +ntp +phc pps +refclock +rtc +adns systemd"
+IUSE="caps +cmdmon ipv6 logrotate +ntp +phc pps +refclock +rtc +adns systemd"
 
-DEPEND="caps? ( lib-core/libcap )
-	lib-core/libseccomp"
+DEPEND="
+	caps? ( lib-core/libcap )
+	lib-core/libseccomp
+"
 
 RESTRICT=test
 
@@ -70,8 +72,10 @@ src_install() {
 
 	keepdir /var/{lib,log}/chrony
 
-	insinto /etc/logrotate.d
-	newins "${S}/examples/chrony.logrotate" chrony
+	if use logrotate; then
+		insinto /etc/logrotate.d
+		newins "${S}/examples/chrony.logrotate" chrony
+	fi
 
 	if use systemd; then
 		insinto /usr/lib/systemd/system

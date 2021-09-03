@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-inherit user git-r3 autotools
+inherit user git-r3
 
 DESCRIPTION="small SSH 2 client/server designed for small memory environments"
 HOMEPAGE="https://matt.ucc.asn.au/dropbear/dropbear.html"
@@ -14,14 +14,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="bsdpty pam +shadow static +syslog systemd zlib"
 
-src_prepare() {
-	default
-	eautoreconf
-}
-
 src_configure() {
 	local myconf=(
-		--disable-harden
 		$(use_enable zlib)
 		$(use_enable pam)
 		$(use_enable !bsdpty openpty)
@@ -29,11 +23,11 @@ src_configure() {
 		$(use_enable static)
 		$(use_enable syslog)
 	)
-	econf "${myconf[@]}"
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
 src_install() {
-	emake DESTDIR="${D}" install
+	default
 
 	if use pam; then
 		insinto etc/pam.d

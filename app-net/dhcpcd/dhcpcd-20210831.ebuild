@@ -1,17 +1,17 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit flag-o-matic user
 
 DESCRIPTION="a DHCP and DHCPv6 client."
 HOMEPAGE="https://roy.marples.name/projects/dhcpcd/"
 
-if [[ ${PV} = *9999* ]]; then
+if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/rsmarples/${PN}"
 	inherit git-r3
 else
-	SNAPSHOT=3ca0e321bf7784c7285bcec350669b6deed0da9b
+	SNAPSHOT=18da9b9155a4967da8648760c2ec4bce63a55ff0
 	SRC_URI="https://github.com/rsmarples/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -22,7 +22,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug +embedded ipv6 systemd udev"
 
-filter-flags -Wl,-z,defs -flto\=\*
+filter-flags -Wl,-z,defs
 
 src_configure() {
 	local myconf=(

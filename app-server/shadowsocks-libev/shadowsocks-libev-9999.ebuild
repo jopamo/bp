@@ -14,14 +14,14 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug static-libs systemd"
 
-RDEPEND="lib-net/mbedtls
-	>=lib-live/libsodium-1.0.8
+DEPEND="
+	lib-live/mbedtls
+	lib-live/libsodium
 	lib-dev/libev
 	lib-core/libpcre
-	"
-DEPEND="${RDEPEND}
 	sys-kernel/linux-headers
-	lib-net/c-ares"
+	lib-net/c-ares
+"
 
 src_prepare() {
 	default

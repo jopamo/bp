@@ -21,7 +21,7 @@ DEPEND="
 		app-core/pciutils
 		x11-live-lib/libpciaccess
 	)
-	numa? ( app-core/numactl )
+	numa? ( app-live/numactl )
 	xml? ( lib-core/libxml2 )
 "
 

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 HOMEPAGE="https://www.sdaoden.eu/code.html"
 DESCRIPTION="Enhanced mailx-compatible mail client based on Heirloom mailx (nail)"

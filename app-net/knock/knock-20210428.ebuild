@@ -1,13 +1,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools
 
 DESCRIPTION="A simple port-knocking daemon"
 HOMEPAGE="http://www.zeroflux.org/projects/knock"
 
-if [[ ${PV} = *9999* ]]; then
+if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/jvinet/knock"
 	inherit git-r3
 else
@@ -22,7 +22,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+knockd"
 
-DEPEND="knockd? ( lib-net/libpcap )"
+DEPEND="knockd? ( lib-live/libpcap )"
 
 src_prepare() {
 	eautoreconf

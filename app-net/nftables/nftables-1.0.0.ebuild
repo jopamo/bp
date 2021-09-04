@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit linux-info
 
@@ -14,16 +14,13 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug +gmp readline static-libs systemd"
 
-RDEPEND="lib-net/libmnl
-		gmp? ( lib-core/gmp )
-		readline? ( lib-core/readline )
-		>=lib-net/libnftnl-1.1.7"
-
-DEPEND="${RDEPEND}
-	sys-devel/bison
-	app-text/docbook2X
-	sys-devel/flex
-	dev-util/pkgconf"
+DEPEND="
+	virtual/curses
+	lib-net/libmnl
+	gmp? ( lib-core/gmp )
+	readline? ( lib-core/readline )
+	lib-net/libnftnl
+"
 
 pkg_setup() {
 	CONFIG_CHECK="~NF_TABLES"
@@ -32,12 +29,6 @@ pkg_setup() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		$(use_enable debug)
 		$(use_with readline cli=readline)
 		$(use_with !gmp mini_gmp)

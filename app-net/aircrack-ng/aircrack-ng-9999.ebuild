@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit toolchain-funcs flag-o-matic autotools
 
@@ -22,16 +22,17 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+airdrop-ng +airgraph-ng +netlink +pcre +sqlite +experimental"
 
-DEPEND="lib-net/libpcap
+DEPEND="
+	lib-live/libpcap
 	virtual/ssl
 	netlink? ( lib-dev/libnl )
 	pcre? ( lib-core/libpcre )
 	experimental? ( lib-core/zlib )
-	sqlite? ( >=lib-core/sqlite-3.4 )"
-RDEPEND="${DEPEND}"
+	sqlite? ( lib-core/sqlite )
+"
 PDEPEND="
 		app-net/iw
-		app-core/ethtool
+		app-net/ethtool
 		app-misc/usbutils
 		app-core/pciutils
 "

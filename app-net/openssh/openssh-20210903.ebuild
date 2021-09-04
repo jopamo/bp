@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit user flag-o-matic autotools
 
@@ -10,9 +10,8 @@ HOMEPAGE="http://www.openssh.org/"
 if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/openssh/openssh-portable.git"
 	inherit git-r3
-	KEYWORDS=""
 else
-	SNAPSHOT=95401eea8503943449f712e5f3de52fc0bc612c5
+	SNAPSHOT=a60209a586a928f92ab323bf23bd07f57093342e
 	SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-portable-${SNAPSHOT}
 fi

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic python-single-r1 toolchain-funcs
+inherit flag-o-matic python-single-r1 toolchain-funcs
 
 DESCRIPTION="A useful collection of mail servers, clients, and filters"
 HOMEPAGE="https://www.gnu.org/software/mailutils/mailutils.html"
@@ -12,7 +12,9 @@ LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="frm sieve messages readmsg dotlock movemail mimeview mh gdbm ipv6 nls pam python servers ssl static-libs virtual-domains +sendmail +smtp mailbox-imap mailbox-pop mailbox-mh +mailbox-maildir"
+IUSE="frm sieve messages readmsg dotlock movemail mimeview mh gdbm ipv6
+nls pam python servers ssl static-libs virtual-domains +sendmail +smtp
+mailbox-imap mailbox-pop mailbox-mh +mailbox-maildir"
 
 DEPEND="
 	virtual/curses
@@ -34,21 +36,10 @@ pkg_setup() {
 	use python && python-single-r1_pkg_setup
 }
 
-src_prepare() {
-	default
-	eautoreconf
-}
-
 src_configure() {
 	append-flags -fno-strict-aliasing
 
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		$(use_enable ipv6)
 		$(use_with gdbm)
 		$(use_enable nls)

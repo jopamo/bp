@@ -10,7 +10,7 @@ SRC_URI="https://ftp.acc.umu.se/pub/GNOME/sources/pygobject/$(ver_cut 1-2)/pygob
 
 LICENSE="LGPL-2.1+"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 REQUIRED_USE="
 	${PYTHON_REQUIRED_USE}

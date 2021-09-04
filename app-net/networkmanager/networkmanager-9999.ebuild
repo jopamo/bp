@@ -1,17 +1,17 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit meson flag-o-matic
 
 DESCRIPTION="A set of co-operative tools that make networking simple and straightforward"
 HOMEPAGE="https://wiki.gnome.org/Projects/NetworkManager"
 
-if [[ ${PV} = *9999* ]]; then
+if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/NetworkManager/NetworkManager"
 	inherit git-r3
 else
-	SNAPSHOT=41937748d825f143d9f283cf2de6bb12f7a33387
+	SNAPSHOT=f3603cbdaad0a82dd3dc24832346ec34f1480e82
 	SRC_URI="https://github.com/NetworkManager/NetworkManager/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/NetworkManager-${SNAPSHOT}
 fi
@@ -27,7 +27,7 @@ COMMON_DEPEND="
 	lib-dev/dbus-glib
 	lib-live/glib
 	lib-dev/libnl
-	lib-net/libndp
+	lib-live/libndp
 	app-net/curl
 	app-net/iputils
 	app-core/util-linux

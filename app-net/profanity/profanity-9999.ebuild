@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit git-r3 autotools flag-o-matic
 
@@ -17,9 +17,9 @@ IUSE="+otr python-plugins c-plugins +omemo"
 filter-flags -Werror
 
 DEPEND="
-	lib-net/libmesode
+	lib-live/libmesode
 	otr? ( lib-net/libotr )
-	omemo? ( lib-net/libsignal-protocol-c )
+	omemo? ( lib-live/libsignal-protocol-c )
 "
 
 src_prepare() {

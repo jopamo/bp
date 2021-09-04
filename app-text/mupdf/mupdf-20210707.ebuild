@@ -1,14 +1,14 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit toolchain-funcs git-r3
 
 DESCRIPTION="a lightweight PDF viewer and toolkit written in portable C"
 HOMEPAGE="http://mupdf.com/"
-EGIT_REPO_URI="https://github.com/ArtifexSoftware/mupdf.git"
-EGIT_COMMIT=d00de0e96a4a5ec90ffc30837d40cd624a6a89e0
-EGIT_SUBMODULES=( thirdparty/lcms2 thirdparty/mujs )
+EGIT_REPO_URI="http://git.ghostscript.com/mupdf.git"
+EGIT_COMMIT=9d8c5aea911afc3e3a36bcb2c006bdc7d8b7ae5f
+EGIT_SUBMODULES=( thirdparty/lcms2 thirdparty/mujs thirdparty/extract )
 
 LICENSE="AGPL-3"
 SLOT="0"
@@ -17,13 +17,13 @@ KEYWORDS="amd64 arm64"
 IUSE="X opengl static static-libs"
 
 LIB_DEPEND="
-	xmedia-live-lib/freetype:2[static-libs?]
+	xmedia-live-lib/freetype[static-libs?]
 	xmedia-live-lib/harfbuzz[static-libs?]
 	xmedia-live-lib/jbig2dec[static-libs?]
-	xmedia-live-lib/libpng:0[static-libs?]
-	>=xmedia-live-lib/openjpeg-2.1:2[static-libs?]
+	xmedia-live-lib/libpng[static-libs?]
+	xmedia-live-lib/openjpeg[static-libs?]
 	xmedia-live-lib/libjpeg-turbo[static-libs?]
-	lib-dev/gumbo-parser[static-libs?]
+	lib-live/gumbo-parser[static-libs?]
 	X? ( x11-live-lib/libX11[static-libs?]
 		x11-live-lib/libXext[static-libs?] )
 "

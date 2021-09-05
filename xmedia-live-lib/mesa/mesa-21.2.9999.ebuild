@@ -27,7 +27,7 @@ DEPEND="
 	x11-live-lib/libXfixes
 	dev-python/mako
 	xmedia-live-lib/libglvnd
-	wayland? ( lib-dev/wayland-protocols )
+	wayland? ( xgui-live-lib/wayland-protocols )
 "
 
 src_configure() {

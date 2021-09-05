@@ -15,10 +15,10 @@ KEYWORDS="amd64 arm64"
 IUSE="+swaybg +swayidle +swaylock +tray +wallpapers"
 
 DEPEND="
-	>=lib-dev/json-c-0.13:0=
-	>=lib-live/libinput-1.6.0:0=
+	lib-live/json-c
+	lib-live/libinput
 	lib-core/libpcre
-	lib-dev/wayland
+	xgui-live-lib/wayland
 	xgui-live-lib/cairo
 	xgui-live-lib/libxkbcommon
 	x11-live-lib/pango
@@ -31,11 +31,11 @@ DEPEND="
 	>=app-core/systemd-239
 "
 RDEPEND="
-	x11-live-app/xkeyboard-config
+	xgui-misc/xkeyboard-config
 	${DEPEND}
 "
 BDEPEND="
-	lib-dev/wayland-protocols
+	xgui-live-lib/wayland-protocols
 	dev-util/pkgconf
 "
 

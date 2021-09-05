@@ -27,7 +27,7 @@ DEPEND="
 	xgui-live-lib/libvdpau
 "
 RDEPEND="
-	wayland? ( lib-dev/wayland )
+	wayland? ( xgui-live-lib/wayland )
 	X? (
 		xgui-misc/xorg-server
 		>=x11-live-lib/libX11-1.6.2

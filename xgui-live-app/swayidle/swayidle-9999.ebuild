@@ -13,12 +13,12 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	lib-dev/wayland
+	xgui-live-lib/wayland
 	app-core/systemd[logind]
 "
 
 BDEPEND="
-	lib-dev/wayland-protocols
+	xgui-live-lib/wayland-protocols
 	dev-util/pkgconf
 "
 

@@ -15,14 +15,14 @@ KEYWORDS="amd64 arm64"
 IUSE="pam"
 
 DEPEND="
-	lib-dev/wayland
+	xgui-live-lib/wayland
 	xgui-live-lib/cairo
 	xgui-live-lib/libxkbcommon
 	x11-live-lib/gdk-pixbuf:2
 	pam? ( lib-core/pam )"
 
 BDEPEND="
-	lib-dev/wayland-protocols
+	xgui-live-lib/wayland-protocols
 	dev-util/pkgconf
 "
 

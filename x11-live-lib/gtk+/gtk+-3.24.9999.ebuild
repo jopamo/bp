@@ -31,8 +31,8 @@ COMMON_DEPEND="
 	cups? ( >=lib-print/cups-1.2 )
 	introspection? ( >=lib-live/gobject-introspection-1.39:= )
 	wayland? (
-		lib-dev/wayland
-		lib-dev/wayland-protocols
+		xgui-live-lib/wayland
+		xgui-live-lib/wayland-protocols
 		xmedia-live-lib/mesa
 		>=xgui-live-lib/libxkbcommon-0.2
 	)

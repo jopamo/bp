@@ -59,9 +59,9 @@ COMMON_DEPEND="
 	vaapi? ( x11-live-lib/libva:=[drm?,X?,wayland?] )
 	vdpau? ( xgui-live-lib/libvdpau )
 	wayland? (
-		>=lib-dev/wayland-1.6.0
+		>=xgui-live-lib/wayland-1.6.0
 		>=xgui-live-lib/libxkbcommon-0.3.0
-		lib-dev/wayland-protocols
+		xgui-live-lib/wayland-protocols
 	)
 	X? (
 		x11-live-lib/libX11

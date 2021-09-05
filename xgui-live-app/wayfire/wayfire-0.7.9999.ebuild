@@ -15,8 +15,8 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	xmedia-live-lib/glm
-	lib-dev/wayland
-	lib-dev/wayland-protocols
+	xgui-live-lib/wayland
+	xgui-live-lib/wayland-protocols
 "
 
 filter-flags -Wl,-z,defs

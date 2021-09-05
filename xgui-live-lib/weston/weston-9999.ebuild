@@ -26,8 +26,8 @@ REQUIRED_USE="
 
 RDEPEND="
 	lib-live/libinput
-	lib-dev/wayland
-	lib-dev/wayland-protocols
+	xgui-live-lib/wayland
+	xgui-live-lib/wayland-protocols
 	lcms? ( xmedia-live-lib/lcms:2 )
 	xmedia-live-lib/libpng
 	webp? ( xmedia-live-lib/libwebp )
@@ -36,7 +36,7 @@ RDEPEND="
 	xgui-live-lib/libdrm
 	xgui-live-lib/libxkbcommon
 	xgui-live-lib/pixman
-	x11-live-app/xkeyboard-config
+	xgui-misc/xkeyboard-config
 	fbdev? (
 		>=xgui-misc/mtdev-1.1.0
 		virtual/service-manager

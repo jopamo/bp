@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND="lib-net/libzmq[static-libs?]"
+DEPEND="lib-live/libzmq[static-libs?]"
 
 filter-flags -Wl,-z,defs
 

@@ -16,7 +16,7 @@ IUSE="wayland X test hybrid_codec"
 
 DEPEND=">=x11-live-lib/libva-2.0.0:=
 	>=xgui-live-lib/libdrm-2.4.52
-	wayland? ( >=xmedia-live-lib/mesa-9.1.6[egl] >=lib-dev/wayland-1.11 )"
+	wayland? ( >=xmedia-live-lib/mesa-9.1.6[egl] >=xgui-live-lib/wayland-1.11 )"
 
 src_configure() {
 	local emesonargs=(

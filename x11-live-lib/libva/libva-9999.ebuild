@@ -21,7 +21,7 @@ RDEPEND=">=xgui-live-lib/libdrm-2.4.46
 		>=x11-live-lib/libXfixes-5.0.1
 	)
 	opengl? ( >=xmedia-live-lib/mesa-7.0-r1 )
-	wayland? ( >=lib-dev/wayland-1.11 )"
+	wayland? ( >=xgui-live-lib/wayland-1.11 )"
 
 REQUIRED_USE="|| ( drm wayland X )
 		opengl? ( X )"

@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	lib-live/libinput
-	lib-dev/wayland
+	xgui-live-lib/wayland
 	xmedia-live-lib/mesa
 	xgui-live-lib/libdrm
 	xgui-live-lib/libxkbcommon
@@ -25,7 +25,7 @@ DEPEND="
 "
 
 BDEPEND="
-	lib-dev/wayland-protocols
+	xgui-live-lib/wayland-protocols
 	dev-util/pkgconf
 "
 

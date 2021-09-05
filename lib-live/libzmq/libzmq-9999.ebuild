@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools git-r3
 
@@ -14,16 +14,16 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+sodium static-libs test unwind"
 
-RDEPEND="
+DEPEND="
+	app-core/util-linux
 	unwind? ( lib-core/libunwind )
-	sodium? ( lib-live/libsodium:= )"
-
-DEPEND="${RDEPEND}
-	app-core/util-linux"
-
-PDEPEND="lib-net/cppzmq
-		lib-net/czmq
-		lib-net/zmqpp"
+	sodium? ( lib-live/libsodium )
+"
+PDEPEND="
+	lib-live/cppzmq
+	lib-live/czmq
+	lib-live/zmqpp
+"
 
 src_prepare() {
 	sed \

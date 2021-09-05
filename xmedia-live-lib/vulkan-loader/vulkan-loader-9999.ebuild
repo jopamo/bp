@@ -26,7 +26,7 @@ IUSE="layers wayland X"
 BDEPEND=">=dev-util/cmake-3.10.2"
 DEPEND="${PYTHON_DEPS}
 	>=dev-util/vulkan-headers-${PV}
-	wayland? ( lib-dev/wayland )
+	wayland? ( xgui-live-lib/wayland )
 	X? (
 		x11-live-lib/libX11
 		x11-live-lib/libXrandr

@@ -52,9 +52,9 @@ CDEPEND="
 	)
 	udev? ( >=app-core/systemd-150 )
 	wayland? (
-		>=lib-dev/wayland-1.3.0
+		>=xgui-live-lib/wayland-1.3.0
 		xmedia-live-lib/libepoxy
-		>=lib-dev/wayland-protocols-1.1
+		>=xgui-live-lib/wayland-protocols-1.1
 		xgui-live-lib/egl-wayland
 	)
 	>=x11-live-app/xinit-1.3.3-r1

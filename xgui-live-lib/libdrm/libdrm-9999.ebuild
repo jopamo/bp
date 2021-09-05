@@ -18,8 +18,7 @@ DEPEND="${RDEPEND}
 	x11-live-misc/util-macros
 	xgui-live-lib/cairo
 	valgrind? ( dev-util/valgrind )
-	>=lib-dev/libpthread-stubs-0.3-r1:=
-	intel? ( xgui-live-lib/libpciaccess )"
+	intel? ( x11-live-lib/libpciaccess )"
 
 append-cppflags -I/usr/include/cairo
 append-flags -lcairo

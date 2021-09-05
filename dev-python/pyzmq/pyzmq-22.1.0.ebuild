@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit flag-o-matic distutils-r1 toolchain-funcs
 
@@ -15,8 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="test"
 
 RDEPEND="
-	lib-net/libzmq
-	dev-python/py[${PYTHON_USEDEP}]
+	lib-live/libzmq
 	dev-python/cffi:=[${PYTHON_USEDEP}]
 "
 DEPEND="${RDEPEND}

@@ -12,7 +12,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="lib-net/libzmq"
+RDEPEND="lib-live/libzmq"
 
 src_install() {
 	doheader zmq.hpp

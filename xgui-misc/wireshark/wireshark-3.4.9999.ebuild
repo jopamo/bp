@@ -46,7 +46,7 @@ CDEPEND="
 	libxml2? ( lib-core/libxml2 )
 	lz4? ( app-compression/lz4 )
 	nghttp2? ( lib-net/nghttp2 )
-	lib-net/libpcap
+	lib-live/libpcap
 	portaudio? ( xmedia-live-lib/portaudio )
 	sbc? ( xmedia-live-lib/sbc )
 	smi? ( lib-net/libsmi )

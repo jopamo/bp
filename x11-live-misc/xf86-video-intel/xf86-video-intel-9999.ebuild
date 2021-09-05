@@ -20,7 +20,7 @@ RDEPEND="
 	x11-live-lib/libXfixes
 	x11-live-lib/libXScrnSaver
 	>=xgui-live-lib/pixman-0.27.1
-	>=xgui-live-lib/libdrm-2.4.52[video_cards_intel]
+	>=xgui-live-lib/libdrm-2.4.52[intel]
 	dri3? (
 		>=xgui-misc/xorg-server-1.18
 		!<=xmedia-live-lib/mesa-12.0.4

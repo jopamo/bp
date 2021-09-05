@@ -12,7 +12,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="lib-dev/wayland"
+DEPEND="xgui-live-lib/wayland"
 
 src_prepare() {
 	default

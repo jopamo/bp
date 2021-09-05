@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools git-r3
 
@@ -12,12 +12,10 @@ LICENSE="LGPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="
-	app-core/util-linux
-	lib-net/libzmq
-"
-DEPEND="${RDEPEND}
+DEPEND="
 	app-text/xmlto
+	app-core/util-linux
+	lib-live/libzmq
 "
 
 RESTRICT=test

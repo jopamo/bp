@@ -16,7 +16,7 @@ IUSE="ssl +system-capstone"
 
 DEPEND="
 	ssl? ( virtual/ssl )
-	system-capstone? ( lib-dev/capstone:0= )
+	system-capstone? ( lib-live/capstone )
 "
 
 filter-flags -Wl,-z,defs

@@ -22,7 +22,7 @@ DEPEND="
 	lib-dev/boost
 	lib-live/libsodium
 	app-server/unbound
-	lib-net/czmq
+	lib-live/czmq
 	virtual/ssl
 	readline? ( lib-core/readline )"
 

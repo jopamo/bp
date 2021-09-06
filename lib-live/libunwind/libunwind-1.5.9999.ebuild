@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools git-r3 flag-o-matic
 
@@ -49,9 +49,4 @@ src_test() {
 	# Explicitly allow parallel build of tests.
 	# Sandbox causes some tests to freak out.
 	SANDBOX_ON=0 emake check
-}
-
-src_install() {
-	default
-	use static-libs || find "${ED}" -name '*.la' -delete
 }

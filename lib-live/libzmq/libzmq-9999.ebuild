@@ -12,11 +12,11 @@ LICENSE="LGPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+sodium static-libs test unwind"
+IUSE="libunwind +sodium static-libs test"
 
 DEPEND="
 	app-core/util-linux
-	unwind? ( lib-core/libunwind )
+	libunwind? ( lib-live/libunwind )
 	sodium? ( lib-live/libsodium )
 "
 PDEPEND="
@@ -37,7 +37,7 @@ src_configure() {
 	local myconf=(
 		--enable-shared
 		$(use_enable static-libs static)
-		$(use_enable unwind libunwind)
+		$(use_enable libunwind)
 		$(use_with sodium libsodium)
 		--without-docs
 		--without-documentation

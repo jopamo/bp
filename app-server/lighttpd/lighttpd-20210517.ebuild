@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit meson user flag-o-matic
 
@@ -32,6 +32,7 @@ DEPEND="
 	gdbm?     ( lib-core/gdbm )
 	ldap?     ( app-net/openldap )
 	libev?    ( lib-dev/libev )
+	libunwind? ( lib-live/libunwind )
 	mbedtls?  ( lib-net/mbedtls )
 	mysql?    ( app-server/mariadb )
 	php?      ( dev-lang/php:*[cgi] )

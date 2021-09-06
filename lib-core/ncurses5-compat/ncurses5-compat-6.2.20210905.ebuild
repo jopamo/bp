@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 MY_P="ncurses-$(ver_rs 2 -)"
 
@@ -34,16 +34,16 @@ src_configure() {
 
 src_install() {
 	default
-	rm -rf "${ED}"/usr/{share,include,bin} "${ED}"/usr/lib/pkgconfig "${ED}"/usr/lib/{libformw.so,libmenuw.so,libncursesw.so,libpanelw.so,terminfo}
+	rm -rf "${ED}"/usr/{share,include,bin} "${ED}"/usr/lib/pkgconfig "${ED}"/usr/lib/{libformw.so,libmenuw.so,libncursesw.so,libpanelw.so,terminfo} || die
 
 	local x
 
 	for x in ncurses form panel menu ; do
-		dosym lib${x}w.so.5.9 usr/lib/lib${x}.so.5
+		dosym -r /usr/lib/lib${x}w.so.5.9 /usr/lib/lib${x}.so.5
 	done
 
-	dosym /usr/lib/libncursesw.so.5.9 usr/lib/libtinfo.so.5
-  	dosym /usr/lib/libncursesw.so.5.9 usr/lib/libtic.so.5
+	dosym -r /usr/lib/libncursesw.so.5.9 /usr/lib/libtinfo.so.5
+  	dosym -r /usr/lib/libncursesw.so.5.9 /usr/lib/libtic.so.5
 
 	use static-libs || find "${ED}"/usr/ -name '*.a' -delete
 	use static-libs || find "${ED}" -name '*.la' -delete

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="A library for manipulating integer points bounded by linear constraints"
 HOMEPAGE="http://isl.gforge.inria.fr/"
@@ -12,10 +12,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-RDEPEND=">=lib-core/gmp-5.1.3-r1"
-DEPEND="${RDEPEND}
+DEPEND="
+	lib-core/gmp
 	app-compression/xz-utils
-	dev-util/pkgconf"
+"
 
 src_prepare() {
 	default
@@ -23,14 +23,5 @@ src_prepare() {
 }
 
 src_configure() {
-	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-		$(use_enable static-libs static)
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
+	ECONF_SOURCE=${S} econf $(use_enable static-libs static)
 }

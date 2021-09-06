@@ -83,9 +83,9 @@ src_install() {
 		done
 	fi
 
-	mkdir -p "${ED}"/usr/lib/
-	cp -p "${ED}"/lib/ld-musl*.so* "${ED}"/usr/lib/
-  	rm -rf "${ED}"/lib
+	mkdir -p "${ED}"/usr/lib || die
+	cp -p "${ED}"/lib/ld-musl*.so* "${ED}"/usr/lib/ || die
+  	rm -r "${ED}"/lib || die
 
 	for i in linux asm asm-generic mtd ; do
 		dosym -r /usr/include/$i /usr/musl/include/$i

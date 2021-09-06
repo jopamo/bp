@@ -34,12 +34,14 @@ src_configure() {
 
 src_install() {
 	default
-	rm -rf "${ED}"/usr/{share,include,bin} "${ED}"/usr/lib/pkgconfig "${ED}"/usr/lib/{libformw.so,libmenuw.so,libncursesw.so,libpanelw.so,terminfo} || die
+	rm -rf "${ED}"/usr/{share,include,bin} \
+		"${ED}"/usr/lib/ \
+		{libformw.so,libmenuw.so,libncursesw.so,libpanelw.so,pkgconfig,terminfo} || die
 
-	local x
+	local i
 
-	for x in ncurses form panel menu ; do
-		dosym -r /usr/lib/lib${x}w.so.5.9 /usr/lib/lib${x}.so.5
+	for i in ncurses form panel menu ; do
+		dosym -r /usr/lib/lib${i}w.so.5.9 /usr/lib/lib${i}.so.5
 	done
 
 	dosym -r /usr/lib/libncursesw.so.5.9 /usr/lib/libtinfo.so.5

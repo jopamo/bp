@@ -46,8 +46,8 @@ src_install() {
 	for i in ncurses form panel menu tinfo ; do
     	echo "INPUT(-l${i}tw)" > "${ED}"/usr/lib/lib${i}.so
     	echo "INPUT(-l${i}tw)" > "${ED}"/usr/lib/lib${i}w.so
-    	dosym -r /usr/lib/${i}tw.pc /usr/lib/pkgconfig/${i}.pc
-    	dosym -r /usr/lib/${i}tw.pc /usr/lib/pkgconfig/${i}w.pc
+    	dosym -r /usr/lib/pkgconfig/${i}tw.pc /usr/lib/pkgconfig/${i}.pc
+    	dosym -r /usr/lib/pkgconfig/${i}tw.pc /usr/lib/pkgconfig/${i}w.pc
     done
 
 	echo "INPUT(-lncursestw)" > "${ED}"/usr/lib/libcurses.so

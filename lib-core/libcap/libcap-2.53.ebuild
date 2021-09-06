@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit toolchain-funcs flag-o-matic
 
@@ -14,10 +14,11 @@ KEYWORDS="amd64 arm64"
 
 IUSE="pam static-libs"
 
-RDEPEND=">=app-core/attr-2.4.47
-	pam? ( lib-core/pam )"
-DEPEND="${RDEPEND}
-	sys-kernel/linux-headers"
+RDEPEND="
+	app-core/attr
+	pam? ( lib-core/pam )
+"
+BDEPEND="sys-kernel/linux-headers"
 
 filter-flags -Wl,-z,defs
 append-flags -ffat-lto-objects
@@ -47,8 +48,10 @@ src_compile() {
 src_install() {
 	emake "${_makeargs[@]}" install
 
-	use static-libs || rm "${ED}"/usr/lib/libcap.a
-	use static-libs || find "${ED}" -name '*.la' -delete
+	if ! use static-libs; then
+		rm "${ED}"/usr/lib/libcap.a
+		find "${ED}" -name '*.la' -delete
+	fi
 
 	if [[ -d "${ED}"/usr/lib/security ]] ; then
 		rm -r "${ED}"/usr/lib/security || die

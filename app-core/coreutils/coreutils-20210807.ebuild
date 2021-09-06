@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit flag-o-matic toolchain-funcs
 
@@ -12,17 +12,20 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl caps gmp multicall nls static xattr"
+IUSE="acl caps gmp multicall static xattr"
 
-LIB_DEPEND="acl? ( app-core/acl[static-libs] )
+LIB_DEPEND="
+	acl? ( app-core/acl[static-libs] )
 	caps? ( lib-core/libcap )
-	gmp? ( lib-core/gmp:=[static-libs] )
-	xattr? ( app-core/attr[static-libs] )"
-RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs]} )
-	nls? ( sys-devel/gettext )"
-DEPEND="${RDEPEND}
+	gmp? ( lib-core/gmp[static-libs] )
+	xattr? ( app-core/attr[static-libs] )
+"
+RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs]} )"
+DEPEND="
+	${RDEPEND}
 	static? ( ${LIB_DEPEND} )
-	app-compression/xz-utils"
+	app-compression/xz-utils
+"
 
 append-flags -fno-strict-aliasing
 
@@ -38,8 +41,8 @@ src_configure() {
 		--enable-no-install-program="groups,kill,su,uptime"
 		--enable-install-program=hostname
 		--enable-largefile
+		--disable-nls
 		$(use caps || echo --disable-libcap)
-		$(use_enable nls)
 		$(use_enable acl)
 		$(use_enable multicall single-binary)
 		$(use_enable xattr)
@@ -60,7 +63,7 @@ src_install() {
 	default
 
 	insinto /etc
-	doins ${FILESDIR}/DIR_COLORS
+	doins "${FILESDIR}"/DIR_COLORS
 
 	rm -rf "${ED%/}"/usr/share/man
 }

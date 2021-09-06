@@ -1,10 +1,9 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools flag-o-matic git-r3
 
-MY_PN="MediaInfo"
 DESCRIPTION="MediaInfo libraries"
 HOMEPAGE="https://mediaarea.net/mediainfo/ https://github.com/MediaArea/MediaInfoLib"
 EGIT_REPO_URI="https://github.com/MediaArea/MediaInfoLib.git"
@@ -13,20 +12,22 @@ LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="curl doc static-libs"
+IUSE="curl static-libs"
 
-RDEPEND="lib-core/zlib
-	lib-dev/tinyxml2:=
-	>=xmedia-live-lib/libzen-0.4.37[static-libs=]"
-
-DEPEND="${RDEPEND}
-	dev-util/pkgconf"
+DEPEND="
+	lib-core/zlib
+	lib-dev/tinyxml2
+	xmedia-live-lib/libzen[static-libs?]
+	curl? ( app-net/curl )
+"
+BDEPEND="dev-util/pkgconf"
 
 RESTRICT="test"
 
 S=${WORKDIR}/${P}/Project/GNU/Library
 
 append-cppflags -DMEDIAINFO_LIBMMS_DESCRIBE_SUPPORT=0
+filter-flags -Wl,-z,defs
 
 src_prepare() {
 	eapply_user

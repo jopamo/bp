@@ -14,8 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="test"
 
-DEPEND=">=dev-python/setuptools-9.1[${PYTHON_USEDEP}]
-	test? ( dev-python/numpy[${PYTHON_USEDEP}] )"
+DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"
 
 SITEFILE=50cython-gentoo.el
 

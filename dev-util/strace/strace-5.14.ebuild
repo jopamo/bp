@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit flag-o-matic
 
@@ -12,10 +12,9 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="aio static"
+IUSE="libunwind static"
 
-DEPEND="aio? ( >=lib-dev/libaio-0.3.106 )
-		lib-core/libunwind"
+DEPEND="libunwind? ( lib-live/libunwind )"
 
 append-flags -Wno-stringop-overflow
 
@@ -24,16 +23,14 @@ src_prepare() {
 
 	use static && append-ldflags -static
 
-	export ac_cv_header_libaio_h=$(usex aio)
-
-	# Stub out the -k test since it's known to be flaky. #545812
+		# Stub out the -k test since it's known to be flaky. #545812
 	sed -i '1iexit 77' tests*/strace-k.test || die
 }
 
 src_configure() {
 	local myconf=(
-		--with-libunwind
+		$(use_with libunwind)
 		--enable-mpers=check
 	)
-	econf ${myconf[@]}
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

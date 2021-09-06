@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools
 
@@ -21,9 +21,7 @@ fi
 LICENSE="MIT"
 SLOT="0"
 
-IUSE="nls static-libs"
-
-DEPEND="nls? ( sys-devel/gettext )"
+IUSE="static-libs"
 
 src_prepare() {
 	default
@@ -34,7 +32,7 @@ src_configure() {
 	local myconf=(
 		--disable-dependency-tracking
 		$(use_enable static-libs static)
-		$(use_enable nls)
+		--disable-nls
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 MY_PV="$(ver_cut 1)$(ver_cut 2)0$(ver_cut 3)00"
 
@@ -16,9 +16,9 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 DEPEND="
-		dev-lang/tcl
-		lib-core/readline
-		lib-core/zlib
+	dev-lang/tcl
+	lib-core/readline
+	lib-core/zlib
 "
 
 src_configure() {

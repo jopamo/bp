@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 MY_P="${PN}-$(ver_rs 2 -)"
 
@@ -41,14 +41,14 @@ src_configure() {
 src_install() {
 	default
 
-	local lib
+	local i
 
-	for lib in ncurses form panel menu tinfo ; do
-    	echo "INPUT(-l${lib}tw)" > "${ED}"/usr/lib/lib${lib}.so
-    	echo "INPUT(-l${lib}tw)" > "${ED}"/usr/lib/lib${lib}w.so
-    	ln -sfv ${lib}tw.pc        "${ED}"/usr/lib/pkgconfig/${lib}.pc
-    	ln -sfv ${lib}tw.pc        "${ED}"/usr/lib/pkgconfig/${lib}w.pc
-	done
+	for i in ncurses form panel menu tinfo ; do
+    	echo "INPUT(-l${i}tw)" > "${ED}"/usr/lib/lib${i}.so
+    	echo "INPUT(-l${i}tw)" > "${ED}"/usr/lib/lib${i}w.so
+    	dosym -r /usr/lib/${i}tw.pc /usr/lib/pkgconfig/${i}.pc
+    	dosym -r /usr/lib/${i}tw.pc /usr/lib/pkgconfig/${i}w.pc
+    done
 
 	echo "INPUT(-lncursestw)" > "${ED}"/usr/lib/libcurses.so
 

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools
 
@@ -49,6 +49,16 @@ src_configure() {
 
 src_install() {
 	default
+
+	rm "${ED}"/usr/bin/git-{cvsserver,shell}
+	rm "${ED}"/usr/libexec/git-core/git-shell
+	rm "${ED}"/usr/libexec/git-core/git-cvs*
+	rm -rf "${ED}"/usr/share
+
+	for i in git-receive-pack git-upload-archive git-upload-pack ; do
+		rm "${ED}"/usr/bin/$i
+		dosym -r /usr/bin/git /usr/bin/$i
+	done
 
 	use static-libs || find "${ED}" -name "*.a" -delete || die
 	use perl || rm -rf "${ED}"/usr/share/perl5 || die

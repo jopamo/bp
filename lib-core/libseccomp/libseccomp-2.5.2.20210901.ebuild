@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools
 
@@ -10,9 +10,8 @@ HOMEPAGE="https://github.com/seccomp/libseccomp"
 if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/seccomp/libseccomp.git"
 	inherit git-r3
-	KEYWORDS=""
 else
-	SNAPSHOT=01e5750e7c84bb14e5a5410c924bed519209db06
+	SNAPSHOT=4f34c6eb17c2ffcb0fce5911ddbc161d97517476
 	SRC_URI="https://github.com/seccomp/libseccomp/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -29,7 +28,7 @@ BDEPEND="dev-util/gperf"
 src_prepare() {
 	default
 	eautoreconf
-	sed -i -e "s/0.0.0/$(ver_cut 1).$(ver_cut 2).$(ver_cut 3)/g" "configure" || die
+	sed -i -e "s/0.0.0/$(ver_cut 1-3)/g" "configure" || die
 }
 
 src_configure() {

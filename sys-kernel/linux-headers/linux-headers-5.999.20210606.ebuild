@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 ETYPE="headers"
 H_SUPPORTEDARCH="amd64 arm64"
@@ -17,6 +17,8 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+IUSE="musl"
+
 DEPEND="dev-lang/perl"
 
 S="${WORKDIR}/linux-headers-${PV}"
@@ -27,6 +29,11 @@ src_unpack() {
 
 src_install() {
 	kernel-2_src_install
+
+	if use musl ; then
+		rm "${ED}"/usr/include/linux/sysinfo.h
+		dosym -r /usr/include/sys/sysinfo.h /usr/include/linux/sysinfo.h
+	fi
 
 	# hrm, build system sucks
 	find "${ED}" '(' -name '.install' -o -name '*.cmd' ')' -delete

@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND=">=lib-core/libgpg-error-1.8"
+DEPEND="lib-core/libgpg-error"
 
 PATCHES=( ${FILESDIR}/libassuan-nodocs.patch )
 
@@ -27,8 +27,5 @@ src_prepare() {
 }
 
 src_configure() {
-	local myconf=(
-		$(use_enable static-libs static)
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
+	ECONF_SOURCE=${S} econf $(use_enable static-libs static)
 }

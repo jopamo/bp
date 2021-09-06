@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools
 
@@ -25,12 +25,7 @@ src_configure() {
 	local myconf=(
 		--without-python
 		--without-python3
-		)
+		$(usex static-libs "--enable-static=yes" "--enable-static=no")
+	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-src_install() {
-	default
-	use static-libs || find "${ED}" -name '*.a' -delete
-	use static-libs || find "${ED}" -name '*.la' -delete
 }

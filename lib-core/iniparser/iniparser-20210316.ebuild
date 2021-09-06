@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 SNAPSHOT=deb85ad4936d4ca32cc2260ce43323d47936410d
 
@@ -19,25 +19,11 @@ IUSE="static-libs"
 
 RESTRICT="test"
 
-PATCHES=(
-	"${FILESDIR}/${PN}-3.0-autotools.patch"
-)
+PATCHES=( "${FILESDIR}/${PN}-3.0-autotools.patch" )
 
 src_prepare() {
 	default
 	eautoreconf
-}
-
-src_configure() {
-	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}/etc"
-		--localstatedir="${EPREFIX}/var"
-	)
-	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }
 
 src_install() {

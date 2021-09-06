@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit toolchain-funcs flag-o-matic
 
@@ -15,9 +15,7 @@ LICENSE="BSD public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="nls leaps_timezone"
-
-DEPEND="nls? ( sys-devel/gettext )"
+IUSE="leaps_timezone"
 
 S=${WORKDIR}
 
@@ -31,16 +29,8 @@ src_configure() {
 
 	append-lfs-flags #471102
 
-	append-cppflags -DHAVE_GETTEXT=$(usex nls 1 0) -DTZ_DOMAIN='\"libc\"'
+	append-cppflags -DTZ_DOMAIN='\"libc\"'
 	LDLIBS=""
-	if use nls ; then
-		# See if an external libintl is available. #154181 #578424
-		local c="${T}/test"
-		echo 'main(){}' > "${c}.c"
-		if $(tc-getCC) ${CPPFLAGS} ${CFLAGS} ${LDFLAGS} "${c}.c" -o "${c}" -lintl 2>/dev/null ; then
-			LDLIBS+=" -lintl"
-		fi
-	fi
 }
 
 _emake() {

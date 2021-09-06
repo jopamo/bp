@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-inherit autotools python-single-r1 linux-info
+inherit autotools linux-info
 
 DESCRIPTION="Tool to setup encrypted devices with dm-crypt"
 HOMEPAGE="https://gitlab.com/cryptsetup/cryptsetup/blob/master/README.md"
@@ -12,23 +12,20 @@ LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="nls python reencrypt static static-libs tmpfilesd udev urandom"
-
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
+IUSE="+argon2 reencrypt static static-libs tmpfilesd udev urandom"
 
 LIB_DEPEND="
 	lib-live/json-c[static-libs(+)]
 	lib-core/libgpg-error[static-libs(+)]
 	lib-core/popt[static-libs(+)]
 	app-core/util-linux[static-libs(+)]
-	app-crypt/argon2[static-libs(+)]
 	lib-core/libgcrypt[static-libs(+)]
 	sys-fs/lvm2[static-libs(+)]
+	argon2? ( app-crypt/argon2[static-libs(+)] )
 	udev? ( app-core/systemd[static-libs(+)] )"
 
 RDEPEND="static-libs? ( ${LIB_DEPEND} )
-	${LIB_DEPEND//\[static-libs\(+\)\]}
-	python? ( ${PYTHON_DEPS} )"
+	${LIB_DEPEND//\[static-libs\(+\)\]}"
 DEPEND="${RDEPEND}
 	dev-util/pkgconf
 	static? ( ${LIB_DEPEND} )"
@@ -51,15 +48,14 @@ src_prepare() {
 }
 
 src_configure() {
-	use python && python_setup
-
 	local myconf=(
-		--enable-system-argon2
+		--disable-internal-argon2
 		--enable-shared
-		--with-tmpfilesdir=$(usex tmpfilesd "${EPREFIX}"/usr/lib/tmpfiles.d "false")
+		--with-tmpfilesdir=$(usex tmpfilesd "${EPREFIX}"/usr/lib/tmpfiles.d "")
 		--with-crypto_backend="gcrypt"
-		$(use_enable nls)
-		$(use_enable python)
+		--disable-nls
+		$(use_enable argon2 libargon2)
+		$(use_enable argon2 libargon2)
 		$(use_enable reencrypt cryptsetup-reencrypt)
 		$(use_enable static static-cryptsetup)
 		$(use_enable static-libs static)

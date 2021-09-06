@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit cmake git-r3
+inherit qmake-utils git-r3
 
 DESCRIPTION="The QML and Quick modules for the Qt5 framework"
 HOMEPAGE="https://www.qt.io/"

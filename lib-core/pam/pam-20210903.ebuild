@@ -31,10 +31,7 @@ BDEPEND="
 	app-text/docbook-sgml-dtd:4.5
 "
 
-DEPEND="
-	lib-net/libtirpc
-	lib-core/libxcrypt
-"
+DEPEND="lib-net/libtirpc"
 PDEPEND="app-core/pambase"
 
 src_prepare() {

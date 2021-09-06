@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit flag-o-matic toolchain-funcs
 
@@ -12,15 +12,14 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="icu libedit nls"
+IUSE="icu libedit systemd"
 
-LIB_DEPEND=">=app-core/util-linux-2.17.2[static-libs(+)]
-	icu? ( lib-dev/icu:=[static-libs(+)] )
+LIB_DEPEND="
+	lib-live/inih[static-libs(+)]
+	app-core/util-linux[static-libs(+)]
+	icu? ( lib-dev/icu[static-libs(+)] )
 	libedit? ( lib-core/libedit[static-libs(+)] )"
 DEPEND="${LIB_DEPEND//\[static-libs(+)]}"
-BDEPEND="
-	nls? ( sys-devel/gettext )
-"
 
 src_prepare() {
 	default
@@ -53,18 +52,13 @@ src_configure() {
 
 	local myconf=(
 		--enable-blkid
+		--enable-lto
 		--with-crond-dir="${EPREFIX}/etc/cron.d"
 		--with-systemd-unit-dir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 		$(use_enable icu libicu)
-		$(use_enable nls gettext)
+		--disable-gettext
 		$(use_enable libedit editline)
 	)
-
-	if is-flagq -flto ; then
-		myconf+=( --enable-lto )
-	else
-		myconf+=( --disable-lto )
-	fi
 
 	econf "${myconf[@]}"
 }

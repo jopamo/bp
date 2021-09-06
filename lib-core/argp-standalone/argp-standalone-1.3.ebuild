@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools flag-o-matic
 
@@ -28,13 +28,12 @@ src_prepare() {
 
 src_configure() {
 	append-cflags "-fgnu89-inline"
-	econf \
-		$(use_enable static-libs static)
+	econf $(use_enable static-libs static)
 }
 
 src_install() {
 	default
-	find "${D}" -name '*.la' -delete || die
+
 	insinto /usr/include
 	doins argp.h
 }

@@ -21,11 +21,7 @@ if [[ ! ${_GIT_R3} ]]; then
 
 PROPERTIES+=" live"
 
-if [[ ${EAPI} != [56] ]]; then
-	BDEPEND="app-core/git"
-else
-	DEPEND="app-core/git"
-fi
+BDEPEND="app-core/git"
 
 # @ECLASS-VARIABLE: EGIT_CLONE_TYPE
 # @USER_VARIABLE

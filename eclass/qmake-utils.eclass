@@ -29,28 +29,35 @@ inherit toolchain-funcs
 # Echoes the directory where Qt5 binaries are installed.
 # EPREFIX is already prepended to the returned path.
 qt5_get_bindir() {
-	echo "${EPREFIX}"/usr/lib/qt5/bin
+	echo ${EPREFIX}$(qt5_get_libdir)/qt5/bin
 }
 
 # @FUNCTION: qt5_get_headerdir
 # @DESCRIPTION:
 # Echoes the directory where Qt5 headers are installed.
 qt5_get_headerdir() {
-	echo "${EPREFIX}"/usr/include/qt5
+	echo /usr/include/qt5
+}
+
+# @FUNCTION: qt5_get_libdir
+# @DESCRIPTION:
+# Echoes the directory where Qt5 libraries are installed.
+qt5_get_libdir() {
+	echo /usr/$(get_libdir)
 }
 
 # @FUNCTION: qt5_get_mkspecsdir
 # @DESCRIPTION:
 # Echoes the directory where Qt5 mkspecs are installed.
 qt5_get_mkspecsdir() {
-	echo "${EPREFIX}"/usr/lib/qt5/mkspecs
+	echo $(qt5_get_libdir)/qt5/mkspecs
 }
 
 # @FUNCTION: qt5_get_plugindir
 # @DESCRIPTION:
 # Echoes the directory where Qt5 plugins are installed.
 qt5_get_plugindir() {
-	echo "${EPREFIX}"/usr/lib/qt5/plugins
+	echo $(qt5_get_libdir)/qt5/plugins
 }
 
 # @FUNCTION: eqmake5

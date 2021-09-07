@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: font.eclass
@@ -13,6 +13,7 @@ case ${EAPI:-0} in
 esac
 
 if [[ ! ${_FONT_ECLASS} ]]; then
+_FONT_ECLASS=1
 
 EXPORT_FUNCTIONS pkg_setup src_install pkg_postinst pkg_postrm
 
@@ -45,13 +46,12 @@ FONTDIR=${FONTDIR:-/usr/share/fonts/${FONT_PN}}
 # Array containing fontconfig conf files to install.
 FONT_CONF=( "" )
 
-if [[ ${CATEGORY}/${PN} != fonts/encodings ]]; then
+if [[ ${CATEGORY}/${PN} != media-fonts/encodings ]]; then
 	IUSE="X"
-	DEPEND="X? (
-			x11-live-misc/mkfontscale
-			fonts/encodings
+	BDEPEND="X? (
+			>=x11-apps/mkfontscale-1.2.0
+			media-fonts/encodings
 	)"
-	RDEPEND=""
 fi
 
 # @FUNCTION: font_xfont_config
@@ -61,14 +61,14 @@ font_xfont_config() {
 	local dir_name
 	if in_iuse X && use X ; then
 		dir_name="${1:-${FONT_PN}}"
-		rm -f "${ED%/}/${FONTDIR}/${1//${S}/}"/{fonts.{dir,scale},encodings.dir} \
+		rm -f "${ED}${FONTDIR}/${1//${S}/}"/{fonts.{dir,scale},encodings.dir} \
 			|| die "failed to prepare ${FONTDIR}/${1//${S}/}"
 		einfo "Creating fonts.scale & fonts.dir in ${dir_name##*/}"
-		mkfontscale "${ED%/}/${FONTDIR}/${1//${S}/}" || eerror "failed to create fonts.scale"
+		mkfontscale "${ED}${FONTDIR}/${1//${S}/}" || eerror "failed to create fonts.scale"
 		mkfontdir \
-			-e ${EPREFIX}/usr/share/fonts/encodings \
-			-e ${EPREFIX}/usr/share/fonts/encodings/large \
-			"${ED%/}/${FONTDIR}/${1//${S}/}" || eerror "failed to create fonts.dir"
+			-e "${EPREFIX}"/usr/share/fonts/encodings \
+			-e "${EPREFIX}"/usr/share/fonts/encodings/large \
+			"${ED}${FONTDIR}/${1//${S}/}" || eerror "failed to create fonts.dir"
 		[[ -e fonts.alias ]] && doins fonts.alias
 	fi
 }
@@ -128,7 +128,7 @@ font_cleanup_dirs() {
 			# if there's nothing left remove the directory
 			find "${d}" -maxdepth 0 -type d -empty -delete || eerror "failed to purge ${d}"
 		fi
-	done < <(find -L "${EROOT%/}"/usr/share/fonts/ -type d -print0)
+	done < <(find -L "${EROOT}"/usr/share/fonts/ -type d -print0)
 	eend 0
 }
 
@@ -139,8 +139,8 @@ font_cleanup_dirs() {
 font_pkg_setup() {
 	# make sure we get no collisions
 	# setup is not the nicest place, but preinst doesn't cut it
-	if [[ -e "${EROOT%/}/${FONTDIR}/fonts.cache-1" ]] ; then
-		rm "${EROOT%/}/${FONTDIR}/fonts.cache-1" || die "failed to remove fonts.cache-1"
+	if [[ -e "${EROOT}${FONTDIR}/fonts.cache-1" ]] ; then
+		rm "${EROOT}${FONTDIR}/fonts.cache-1" || die "failed to remove fonts.cache-1"
 	fi
 }
 
@@ -148,24 +148,13 @@ font_pkg_setup() {
 # @DESCRIPTION:
 # The font src_install function.
 font_src_install() {
+	local dir suffix commondoc
+
 	if [[ $(declare -p FONT_S 2>/dev/null) == "declare -a"* ]]; then
 		# recreate the directory structure if FONT_S is an array
 		for dir in "${FONT_S[@]}"; do
 			pushd "${dir}" > /dev/null || die "pushd ${dir} failed"
 			insinto "${FONTDIR}/${dir#"${S}"}"
-			for suffix in ${FONT_SUFFIX}; do
-				doins *.${suffix}
-			done
-			font_xfont_config "${dir}"
-			popd > /dev/null || die
-		done
-	elif [[ ${FONT_S/[[:space:]]} != "${FONT_S}" ]]; then
-		# backwards compatibility code, can be removed after 2021-02-14
-		eqawarn "Using a space-separated list for FONT_S is deprecated."
-		eqawarn "Use a bash array instead if there are multiple directories."
-		for dir in ${FONT_S}; do
-			pushd "${dir}" > /dev/null || die "pushd ${dir} failed"
-			insinto "${FONTDIR}/${dir//${S}/}"
 			for suffix in ${FONT_SUFFIX}; do
 				doins *.${suffix}
 			done
@@ -184,25 +173,32 @@ font_src_install() {
 	fi
 
 	font_fontconfig
+
+	einstalldocs
+
+	# install common docs
+	for commondoc in COPYRIGHT FONTLOG.txt; do
+		[[ -s ${commondoc} ]] && dodoc ${commondoc}
+	done
 }
 
 # @FUNCTION: _update_fontcache
 # @DESCRIPTION:
-# Updates fontcache if !prefix and xmedia-live-lib/fontconfig installed
+# Updates fontcache if !prefix and media-libs/fontconfig installed
 _update_fontcache() {
 	# unreadable font files = fontconfig segfaults
-	find "${EROOT%/}"/usr/share/fonts/ -type f '!' -perm 0644 \
+	find "${EROOT}"/usr/share/fonts/ -type f '!' -perm 0644 \
 		-exec chmod -v 0644 2>/dev/null {} + || die "failed to fix font files perms"
 
-	if [[ -z ${ROOT%/} ]] ; then
-		if has_version xmedia-live-lib/fontconfig ; then
+	if [[ -z ${ROOT} ]] ; then
+		if has_version media-libs/fontconfig ; then
 			ebegin "Updating global fontcache"
 			fc-cache -fs
 			if ! eend $? ; then
 				die "failed to update global fontcache"
 			fi
 		else
-			einfo "Skipping fontcache update (xmedia-live-lib/fontconfig not installed)"
+			einfo "Skipping fontcache update (media-libs/fontconfig not installed)"
 		fi
 	else
 		einfo "Skipping fontcache update (ROOT != /)"
@@ -218,7 +214,7 @@ font_pkg_postinst() {
 		elog "The following fontconfig configuration files have been installed:"
 		elog
 		for conffile in "${FONT_CONF[@]}"; do
-			[[ -e "${EROOT%/}"/etc/fonts/conf.avail/${conffile##*/} ]] &&
+			[[ -e "${EROOT}"/etc/fonts/conf.avail/${conffile##*/} ]] &&
 				elog "  ${conffile##*/}"
 		done
 		elog
@@ -236,5 +232,4 @@ font_pkg_postrm() {
 	_update_fontcache
 }
 
-_FONT_ECLASS=1
 fi

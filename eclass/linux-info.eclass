@@ -80,6 +80,15 @@ KERNEL_DIR="${KERNEL_DIR:-${ROOT%/}/usr/src/linux}"
 # There are also a couple of variables which are set by this, and shouldn't be
 # set by hand. These are as follows:
 
+# @ECLASS-VARIABLE: KERNEL_MAKEFILE
+# @INTERNAL
+# @DESCRIPTION:
+# According to upstream documentation, by default, when make looks for the makefile, it tries
+# the following names, in order: GNUmakefile, makefile and Makefile. Set this variable to the
+# proper Makefile name or the eclass will search in this order for it.
+# See https://www.gnu.org/software/make/manual/make.html
+: ${KERNEL_MAKEFILE:=""}
+
 # @ECLASS-VARIABLE: KV_FULL
 # @OUTPUT_VARIABLE
 # @DESCRIPTION:
@@ -127,6 +136,8 @@ inherit toolchain-funcs
 [[ ${EAPI:-0} == [0123456] ]] && inherit eapi7-ver
 
 EXPORT_FUNCTIONS pkg_setup
+
+IUSE="kernel_linux"
 
 # Bug fixes
 # fix to bug #75034
@@ -193,9 +204,10 @@ getfilevar() {
 		unset ARCH
 
 		# We use nonfatal because we want the caller to take care of things #373151
+		# Pass need-config= to make to avoid config check in kernel Makefile.
 		[[ ${EAPI:-0} == [0123] ]] && nonfatal() { "$@"; }
 		echo -e "e:\\n\\t@echo \$(${1})\\ninclude ${basefname}" | \
-			nonfatal emake -C "${basedname}" M="${T}" ${BUILD_FIXES} -s -f - 2>/dev/null
+			nonfatal emake -C "${basedname}" M="${T}" need-config= ${BUILD_FIXES} -s -f - 2>/dev/null
 
 		ARCH=${myARCH}
 	fi
@@ -248,6 +260,10 @@ linux_config_qa_check() {
 		ewarn "QA: You called $f before any linux_config_exists!"
 		ewarn "QA: The return value of $f will NOT guaranteed later!"
 	fi
+
+	if ! use kernel_linux; then
+		die "$f called on non-Linux system, please fix the ebuild"
+	fi
 }
 
 # @FUNCTION: linux_config_src_exists
@@ -256,7 +272,7 @@ linux_config_qa_check() {
 # It returns true if .config exists in a build directory otherwise false
 linux_config_src_exists() {
 	export _LINUX_CONFIG_EXISTS_DONE=1
-	[[ -n ${KV_OUT_DIR} && -s ${KV_OUT_DIR}/.config ]]
+	use kernel_linux && [[ -n ${KV_OUT_DIR} && -s ${KV_OUT_DIR}/.config ]]
 }
 
 # @FUNCTION: linux_config_bin_exists
@@ -265,7 +281,7 @@ linux_config_src_exists() {
 # It returns true if .config exists in /proc, otherwise false
 linux_config_bin_exists() {
 	export _LINUX_CONFIG_EXISTS_DONE=1
-	[[ -s /proc/config.gz ]]
+	use kernel_linux && [[ -s /proc/config.gz ]]
 }
 
 # @FUNCTION: linux_config_exists
@@ -298,6 +314,10 @@ linux_config_path() {
 # This function verifies that the current kernel is configured (it checks against the existence of .config)
 # otherwise it dies.
 require_configured_kernel() {
+	if ! use kernel_linux; then
+		die "${FUNCNAME}() called on non-Linux system, please fix the ebuild"
+	fi
+
 	if ! linux_config_src_exists; then
 		qeerror "Could not find a usable .config in the kernel source directory."
 		qeerror "Please ensure that ${KERNEL_DIR} points to a configured set of Linux sources."
@@ -377,11 +397,15 @@ linux_chkconfig_string() {
 
 # Note: duplicated in kernel-2.eclass
 kernel_is() {
+	if ! use kernel_linux; then
+		die "${FUNCNAME}() called on non-Linux system, please fix the ebuild"
+	fi
+
 	# if we haven't determined the version yet, we need to.
 	linux-info_get_any_version
 
 	# Now we can continue
-	local operator test value
+	local operator
 
 	case ${1#-} in
 	  lt) operator="-lt"; shift;;
@@ -393,9 +417,10 @@ kernel_is() {
 	esac
 	[[ $# -gt 3 ]] && die "Error in kernel-2_kernel_is(): too many parameters"
 
-	: $(( test = (KV_MAJOR << 16) + (KV_MINOR << 8) + KV_PATCH ))
-	: $(( value = (${1:-${KV_MAJOR}} << 16) + (${2:-${KV_MINOR}} << 8) + ${3:-${KV_PATCH}} ))
-	[ ${test} ${operator} ${value} ]
+	ver_test \
+		"${KV_MAJOR:-0}.${KV_MINOR:-0}.${KV_PATCH:-0}" \
+		"${operator}" \
+		"${1:-${KV_MAJOR:-0}}.${2:-${KV_MINOR:-0}}.${3:-${KV_PATCH:-0}}"
 }
 
 get_localversion() {
@@ -443,10 +468,14 @@ get_version_warning_done=
 #
 # The kernel version variables (KV_MAJOR, KV_MINOR, KV_PATCH, KV_EXTRA and KV_LOCAL) are also set.
 #
-# The KV_DIR is set using the KERNEL_DIR env var, the KV_DIR_OUT is set using a valid
+# The KV_DIR is set using the KERNEL_DIR env var, the KV_OUT_DIR is set using a valid
 # KBUILD_OUTPUT (in a decreasing priority list, we look for the env var, makefile var or the
 # symlink /lib/modules/${KV_MAJOR}.${KV_MINOR}.${KV_PATCH}${KV_EXTRA}/build).
 get_version() {
+	if ! use kernel_linux; then
+		die "${FUNCNAME}() called on non-Linux system, please fix the ebuild"
+	fi
+
 	local tmplocal
 
 	# no need to execute this twice assuming KV_FULL is populated.
@@ -491,7 +520,9 @@ get_version() {
 		qeinfo "    ${KV_DIR}"
 	fi
 
-	if [ ! -s "${KV_DIR}/Makefile" ]
+	kernel_get_makefile
+
+	if [[ ! -s ${KERNEL_MAKEFILE} ]]
 	then
 		if [ -z "${get_version_warning_done}" ]; then
 			get_version_warning_done=1
@@ -507,9 +538,6 @@ get_version() {
 	# do we pass KBUILD_OUTPUT on the CLI?
 	local OUTPUT_DIR=${KBUILD_OUTPUT}
 
-	# keep track of it
-	KERNEL_MAKEFILE="${KV_DIR}/Makefile"
-
 	if [[ -z ${OUTPUT_DIR} ]]; then
 		# Decide the function used to extract makefile variables.
 		local mkfunc=$(get_makefile_extract_function "${KERNEL_MAKEFILE}")
@@ -520,14 +548,11 @@ get_version() {
 
 	# And contrary to existing functions I feel we shouldn't trust the
 	# directory name to find version information as this seems insane.
-	# So we parse ${KERNEL_MAKEFILE}.  We should be able to trust that
-	# the Makefile is simple enough to use the noexec extract function.
-	# This has been true for every release thus far, and it's faster
-	# than using make to evaluate the Makefile every time.
-	KV_MAJOR=$(getfilevar_noexec VERSION "${KERNEL_MAKEFILE}")
-	KV_MINOR=$(getfilevar_noexec PATCHLEVEL "${KERNEL_MAKEFILE}")
-	KV_PATCH=$(getfilevar_noexec SUBLEVEL "${KERNEL_MAKEFILE}")
-	KV_EXTRA=$(getfilevar_noexec EXTRAVERSION "${KERNEL_MAKEFILE}")
+	# So we parse ${KERNEL_MAKEFILE}.
+	KV_MAJOR=$(getfilevar VERSION "${KERNEL_MAKEFILE}")
+	KV_MINOR=$(getfilevar PATCHLEVEL "${KERNEL_MAKEFILE}")
+	KV_PATCH=$(getfilevar SUBLEVEL "${KERNEL_MAKEFILE}")
+	KV_EXTRA=$(getfilevar EXTRAVERSION "${KERNEL_MAKEFILE}")
 
 	if [ -z "${KV_MAJOR}" -o -z "${KV_MINOR}" -o -z "${KV_PATCH}" ]
 	then
@@ -600,6 +625,10 @@ get_version() {
 # It gets the version of the current running kernel and the result is the same as get_version() if the
 # function can find the sources.
 get_running_version() {
+	if ! use kernel_linux; then
+		die "${FUNCNAME}() called on non-Linux system, please fix the ebuild"
+	fi
+
 	KV_FULL=$(uname -r)
 
 	if [[ -f ${ROOT%/}/lib/modules/${KV_FULL}/source/Makefile && -f ${ROOT%/}/lib/modules/${KV_FULL}/build/Makefile ]]; then
@@ -639,6 +668,10 @@ get_running_version() {
 # This attempts to find the version of the sources, and otherwise falls back to
 # the version of the running kernel.
 linux-info_get_any_version() {
+	if ! use kernel_linux; then
+		die "${FUNCNAME}() called on non-Linux system, please fix the ebuild"
+	fi
+
 	if ! get_version; then
 		ewarn "Unable to calculate Linux Kernel version for build, attempting to use running version"
 		if ! get_running_version; then
@@ -655,6 +688,10 @@ linux-info_get_any_version() {
 # @DESCRIPTION:
 # This function verifies that the current kernel sources have been already prepared otherwise it dies.
 check_kernel_built() {
+	if ! use kernel_linux; then
+		die "${FUNCNAME}() called on non-Linux system, please fix the ebuild"
+	fi
+
 	# if we haven't determined the version yet, we need to
 	require_configured_kernel
 
@@ -684,6 +721,10 @@ check_kernel_built() {
 # @DESCRIPTION:
 # This function verifies that the current kernel support modules (it checks CONFIG_MODULES=y) otherwise it dies.
 check_modules_supported() {
+	if ! use kernel_linux; then
+		die "${FUNCNAME}() called on non-Linux system, please fix the ebuild"
+	fi
+
 	# if we haven't determined the version yet, we need too.
 	require_configured_kernel
 
@@ -700,6 +741,8 @@ check_modules_supported() {
 # It checks the kernel config options specified by CONFIG_CHECK. It dies only when a required config option (i.e.
 # the prefix ~ is not used) doesn't satisfy the directive. Ignored on non-Linux systems.
 check_extra_config() {
+	use kernel_linux || return
+
 	local config negate die error reworkmodulenames
 	local soft_errors_count=0 hard_errors_count=0 config_required=0
 	# store the value of the QA check, because otherwise we won't catch usages
@@ -838,6 +881,10 @@ check_extra_config() {
 }
 
 check_zlibinflate() {
+	if ! use kernel_linux; then
+		die "${FUNCNAME}() called on non-Linux system, please fix the ebuild"
+	fi
+
 	# if we haven't determined the version yet, we need to
 	require_configured_kernel
 
@@ -912,6 +959,8 @@ check_zlibinflate() {
 # Force a get_version() call when inherited from linux-mod.eclass and then check if the kernel is configured
 # to support the options specified in CONFIG_CHECK (if not null)
 linux-info_pkg_setup() {
+	use kernel_linux || return
+
 	linux-info_get_any_version
 
 	if kernel_is 2 4; then
@@ -930,4 +979,18 @@ linux-info_pkg_setup() {
 	fi
 
 	[ -n "${CONFIG_CHECK}" ] && check_extra_config;
+}
+
+# @FUNCTION: kernel_get_makefile
+# @DESCRIPTION:
+# Support the possibility that the Makefile could be one of the following and should
+# be checked in the order described here:
+# https://www.gnu.org/software/make/manual/make.html
+# Order of checking and valid Makefiles names:  GNUMakefile, makefile, Makefile
+kernel_get_makefile() {
+
+	[[ -s ${KV_DIR}/GNUMakefile ]] && KERNEL_MAKEFILE="${KV_DIR}/GNUMakefile" && return
+	[[ -s ${KV_DIR}/makefile ]] && KERNEL_MAKEFILE="${KV_DIR}/makefile" && return
+	[[ -s ${KV_DIR}/Makefile ]] && KERNEL_MAKEFILE="${KV_DIR}/Makefile" && return
+
 }

@@ -8,6 +8,7 @@
 # Author: Michał Górny <mgorny@gentoo.org>
 # Based on the work of: Krzysztof Pawlik <nelchael@gentoo.org>
 # @SUPPORTED_EAPIS: 6 7 8
+# @PROVIDES: python-r1 python-single-r1
 # @BLURB: A simple eclass to build Python packages using distutils.
 # @DESCRIPTION:
 # A simple eclass providing functions to build Python packages using
@@ -97,6 +98,7 @@ esac
 
 if [[ ! ${_DISTUTILS_R1} ]]; then
 
+[[ ${EAPI} == 6 ]] && inherit eutils xdg-utils
 inherit multiprocessing toolchain-funcs
 
 if [[ ! ${DISTUTILS_SINGLE_IMPL} ]]; then
@@ -128,7 +130,7 @@ _distutils_set_globals() {
 			rdep+=" ${setuptools_dep}"
 			;;
 		pyproject.toml)
-			bdep+=' >=dev-python/pyproject2setuppy-15[${PYTHON_USEDEP}]'
+			bdep+=' >=dev-python/pyproject2setuppy-18[${PYTHON_USEDEP}]'
 			;;
 		*)
 			die "Invalid DISTUTILS_USE_SETUPTOOLS=${DISTUTILS_USE_SETUPTOOLS}"
@@ -926,7 +928,6 @@ distutils-r1_python_install() {
 	local shopt_save=$(shopt -p nullglob)
 	shopt -s nullglob
 	local pypy_dirs=(
-		"${root}/usr/lib"/pypy*/share
 		"${root}/usr/lib"/pypy*/share
 	)
 	${shopt_save}

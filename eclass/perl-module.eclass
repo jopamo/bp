@@ -562,7 +562,13 @@ perl-module_src_install() {
 
 	perl_link_duallife_scripts
 
-	cleanup_install
+	case ${EAPI} in
+		5|6)
+			;;
+		*)
+			cleanup_install
+			;;
+	esac
 }
 
 # @FUNCTION: perl-module_pkg_postinst

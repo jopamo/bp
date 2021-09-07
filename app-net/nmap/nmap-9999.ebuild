@@ -21,7 +21,6 @@ DEPEND="
 	dev-lang/lua
 	lib-live/libssh2[zlib]
 	lib-core/zlib
-	lib-core/zlib
 	ssl? ( virtual/ssl )
 "
 

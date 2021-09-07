@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit flag-o-matic
 
@@ -20,7 +20,8 @@ append-flags -ffat-lto-objects
 
 src_prepare() {
 	default
-	sed "s/^R= \$V.4/R= \$V.5/" -i Makefile
+	sed "s/^R= \$V.4/R= \$V.5/" -i Makefile || die
+	sed -i -e "s/-O2\ //g" "src/Makefile" || die
 }
 
 src_compile() {

@@ -938,12 +938,12 @@ _python_wrapper_setup() {
 			ln -s "${PYTHON/python/2to3-}" "${workdir}"/bin/2to3 || die
 
 			# Python 2.7+.
-			ln -s "${EPREFIX}"/usr/$(get_libdir)/pkgconfig/${EPYTHON/n/n-}.pc \
+			ln -s "${EPREFIX}"/usr/lib/pkgconfig/${EPYTHON/n/n-}.pc \
 				"${workdir}"/pkgconfig/python${pyver}.pc || die
 
 			# Python 3.8+.
 			if [[ ${EPYTHON} != python[23].[67] ]]; then
-				ln -s "${EPREFIX}"/usr/$(get_libdir)/pkgconfig/${EPYTHON/n/n-}-embed.pc \
+				ln -s "${EPREFIX}"/usr/lib/pkgconfig/${EPYTHON/n/n-}-embed.pc \
 					"${workdir}"/pkgconfig/python${pyver}-embed.pc || die
 			fi
 		else

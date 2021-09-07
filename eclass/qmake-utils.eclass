@@ -43,7 +43,7 @@ qt5_get_headerdir() {
 # @DESCRIPTION:
 # Echoes the directory where Qt5 libraries are installed.
 qt5_get_libdir() {
-	echo /usr/$(get_libdir)
+	echo /usr/lib
 }
 
 # @FUNCTION: qt5_get_mkspecsdir

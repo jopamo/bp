@@ -12,7 +12,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="ipv6 +libssh2 +ncat nls +nping ssl"
+IUSE="ipv6 +libssh2 os-db ncat nping nselib scripts ssl"
 
 DEPEND="
 	lib-dev/liblinear
@@ -21,7 +21,6 @@ DEPEND="
 	dev-lang/lua
 	lib-live/libssh2[zlib]
 	lib-core/zlib
-	nls? ( sys-devel/gettext )
 	lib-core/zlib
 	ssl? ( virtual/ssl )
 "
@@ -47,7 +46,7 @@ src_prepare() {
 src_configure() {
 	local myconf=(
 		$(use_enable ipv6)
-		$(use_enable nls)
+		--disable-nls
 		--with-libssh2
 		--with-zlib
 		--with-liblua="${EROOT}"/usr
@@ -80,4 +79,8 @@ src_install() {
 		STRIP=: \
 		nmapdatadir="${EPREFIX}"/usr/share/nmap \
 		install
+
+	use nselib || rm -r "${ED}"/usr/share/nmap/nselib
+	use scripts || rm -r "${ED}"/usr/share/nmap/scripts
+	use os-db || rm -r "${ED}"/usr/share/nmap/nmap-os-db
 }

@@ -199,12 +199,11 @@
 # that of course does not mean we're not willing to help.
 
 inherit estack toolchain-funcs
-[[ ${EAPI:-0} == 6 ]] && inherit eapi7-ver
-case ${EAPI:-0} in
-	6|7|8)
-		EXPORT_FUNCTIONS src_{unpack,prepare,compile,install,test} \
-			pkg_{setup,preinst,postinst,postrm} ;;
-	*) die "${ECLASS}: EAPI ${EAPI} not supported" ;;
+[[ ${EAPI} == 6 ]] && inherit eapi7-ver
+
+case ${EAPI} in
+	6|7|8) ;;
+	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
 # Added by Daniel Ostrow <dostrow@gentoo.org>
@@ -217,13 +216,8 @@ if [[ ${CTARGET} == ${CHOST} && ${CATEGORY/cross-} != ${CATEGORY} ]]; then
 	export CTARGET=${CATEGORY/cross-}
 fi
 
-HOMEPAGE="https://www.kernel.org/ ${HOMEPAGE}"
+HOMEPAGE="https://www.kernel.org/ https://wiki.gentoo.org/wiki/Kernel ${HOMEPAGE}"
 : ${LICENSE:="GPL-2"}
-
-# This is the latest KV_PATCH of the deblob tool available from the
-# libre-sources upstream. If you bump this, you MUST regenerate the Manifests
-# for ALL kernel-2 consumer packages where deblob is available.
-: ${DEBLOB_MAX_VERSION:=38}
 
 # No need to run scanelf/strip on kernel sources/headers (bug #134453).
 RESTRICT="binchecks strip"
@@ -558,10 +552,9 @@ kernel_is() {
 	local v n=0
 	for v in OKV KV_{MAJOR,MINOR,PATCH} ; do [[ -z ${!v} ]] && n=1 ; done
 	[[ ${n} -eq 1 ]] && detect_version
-	unset v n
 
 	# Now we can continue
-	local operator test value
+	local operator
 
 	case ${1#-} in
 	  lt) operator="-lt"; shift;;
@@ -573,24 +566,26 @@ kernel_is() {
 	esac
 	[[ $# -gt 3 ]] && die "Error in kernel-2_kernel_is(): too many parameters"
 
-	: $(( test = (KV_MAJOR << 16) + (KV_MINOR << 8) + KV_PATCH ))
-	: $(( value = (${1:-${KV_MAJOR}} << 16) + (${2:-${KV_MINOR}} << 8) + ${3:-${KV_PATCH}} ))
-	[ ${test} ${operator} ${value} ]
+	ver_test \
+		"${KV_MAJOR:-0}.${KV_MINOR:-0}.${KV_PATCH:-0}" \
+		"${operator}" \
+		"${1:-${KV_MAJOR:-0}}.${2:-${KV_MINOR:-0}}.${3:-${KV_PATCH:-0}}"
 }
 
 # Capture the sources type and set DEPENDs
 if [[ ${ETYPE} == sources ]]; then
-	[[ ${EAPI} == 6 ]] && DEPEND="!build? ( app-core/sed )" ||
-	BDEPEND="!build? ( app-core/sed )"
+	[[ ${EAPI} == 6 ]] && DEPEND="!build? ( sys-apps/sed )" ||
+	BDEPEND="!build? ( sys-apps/sed )"
 	RDEPEND="!build? (
+		app-arch/cpio
 		dev-lang/perl
 		sys-devel/bc
 		sys-devel/bison
 		sys-devel/flex
 		sys-devel/make
-		virtual/curses
-		lib-core/elfutils
-		dev-util/pkgconf
+		>=sys-libs/ncurses-5.2
+		virtual/libelf
+		virtual/pkgconfig
 	)"
 
 	SLOT="${PVR}"
@@ -599,13 +594,12 @@ if [[ ${ETYPE} == sources ]]; then
 
 	# Bug #266157, deblob for libre support
 	if [[ -z ${K_PREDEBLOBBED} ]]; then
-		# Bug #359865, force a call to detect_version if needed
-		kernel_is ge 2 6 27 && \
-			[[ -z ${K_DEBLOB_AVAILABLE} ]] && \
-				kernel_is le 2 6 ${DEBLOB_MAX_VERSION} && \
-					K_DEBLOB_AVAILABLE=1
+		# deblob less than 5.10 require python 2.7
+		if kernel_is lt 5 10; then
+			K_DEBLOB_AVAILABLE=0
+		fi
 		if [[ ${K_DEBLOB_AVAILABLE} == 1 ]]; then
-			PYTHON_COMPAT=( python2_7 )
+			PYTHON_COMPAT=( python3_{7..10} )
 
 			inherit python-any-r1
 
@@ -616,7 +610,6 @@ if [[ ${ETYPE} == sources ]]; then
 			# tree has been dropped from the kernel.
 			kernel_is lt 4 14 && LICENSE+=" !deblob? ( linux-firmware )"
 
-			[[ ${EAPI} == 6 ]] && DEPEND+=" deblob? ( ${PYTHON_DEPS} )" ||
 			BDEPEND+=" deblob? ( ${PYTHON_DEPS} )"
 
 			if [[ -n KV_MINOR ]]; then
@@ -968,6 +961,10 @@ postinst_sources() {
 	# Don't forget to make directory for sysfs
 	[[ ! -d ${EROOT%/}/sys ]] && kernel_is 2 6 && { mkdir "${EROOT%/}"/sys || die ; }
 
+	elog "If you are upgrading from a previous kernel, you may be interested"
+	elog "in the following document:"
+	elog "  - General upgrade guide: https://wiki.gentoo.org/wiki/Kernel/Upgrade"
+
 	# if K_EXTRAEINFO is set then lets display it now
 	if [[ -n ${K_EXTRAEINFO} ]]; then
 		echo ${K_EXTRAEINFO} | fmt |
@@ -986,10 +983,39 @@ postinst_sources() {
 		while read -s ELINE; do ewarn "${ELINE}"; done
 	fi
 
+	# optionally display security unsupported message
+	#  Start with why
+	if [[ -n ${K_SECURITY_UNSUPPORTED} ]]; then
+		ewarn "${PN} is UNSUPPORTED by Gentoo Security."
+	fi
+	#  And now the general message.
+	if [[ -n ${K_SECURITY_UNSUPPORTED} ]]; then
+		ewarn "This means that it is likely to be vulnerable to recent security issues."
+		ewarn "Upstream kernel developers recommend always running the latest "
+		ewarn "release of any current long term supported Linux kernel version."
+		ewarn "To see a list of these versions, their most current release and "
+		ewarn "long term support status, please go to https://www.kernel.org ."
+		ewarn "For specific information on why this kernel is unsupported, please read:"
+		ewarn "https://wiki.gentoo.org/wiki/Project:Kernel_Security"
+	fi
+
 	# warn sparc users that they need to do cross-compiling with >= 2.6.25(bug #214765)
 	KV_MAJOR=$(ver_cut 1 ${OKV})
 	KV_MINOR=$(ver_cut 2 ${OKV})
 	KV_PATCH=$(ver_cut 3 ${OKV})
+	if [[ $(tc-arch) = sparc ]]; then
+		if [[ $(gcc-major-version) -lt 4 && $(gcc-minor-version) -lt 4 ]]; then
+			if [[ ${KV_MAJOR} -ge 3 ]] || ver_test ${KV_MAJOR}.${KV_MINOR}.${KV_PATCH} -gt 2.6.24; then
+				elog "NOTE: Since 2.6.25 the kernel Makefile has changed in a way that"
+				elog "you now need to do"
+				elog "  make CROSS_COMPILE=sparc64-unknown-linux-gnu-"
+				elog "instead of just"
+				elog "  make"
+				elog "to compile the kernel. For more information please browse to"
+				elog "https://bugs.gentoo.org/show_bug.cgi?id=214765"
+			fi
+		fi
+	fi
 }
 
 # pkg_setup functions
@@ -1536,4 +1562,9 @@ kernel-2_pkg_postrm() {
 	ewarn "${EROOT%/}/usr/src/linux-${KV_FULL}"
 	ewarn "with modified files will remain behind. By design, package managers"
 	ewarn "will not remove these modified files and the directories they reside in."
+	ewarn "For more detailed kernel removal instructions, please see: "
+	ewarn "https://wiki.gentoo.org/wiki/Kernel/Removal"
 }
+
+EXPORT_FUNCTIONS src_{unpack,prepare,compile,install,test} \
+	pkg_{setup,preinst,postinst,postrm}

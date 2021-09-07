@@ -692,9 +692,7 @@ python_newexe() {
 	)
 
 	# install the wrapper
-	local dosym=dosym
-	[[ ${EAPI} == [67] ]] && dosym=dosym8
-	"${dosym}" -r /usr/lib/python-exec/python-exec2 "${wrapd}/${newfn}"
+	dosym -r /usr/lib/python-exec/python-exec2 "${wrapd}/${newfn}"
 
 	# don't use this at home, just call python_doscript() instead
 	if [[ ${_PYTHON_REWRITE_SHEBANG} ]]; then

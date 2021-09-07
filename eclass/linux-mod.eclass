@@ -707,11 +707,11 @@ linux-mod_src_compile() {
 			# inside the variables gets used as targets for Make, which then
 			# fails.
 			eval "emake HOSTCC=\"$(tc-getBUILD_CC)\" \
-						LDFLAGS=\"$(get_abi_LDFLAGS)\" \
+						LDFLAGS=\"${LDFLAGS}\" \
 						${BUILD_FIXES} \
 						${BUILD_PARAMS} \
 						${BUILD_TARGETS} " \
-				|| die "Unable to emake HOSTCC="$(tc-getBUILD_CC)" LDFLAGS="$(get_abi_LDFLAGS)" ${BUILD_FIXES} ${BUILD_PARAMS} ${BUILD_TARGETS}"
+				|| die "Unable to emake HOSTCC="$(tc-getBUILD_CC)" LDFLAGS="${LDFLAGS}" ${BUILD_FIXES} ${BUILD_PARAMS} ${BUILD_TARGETS}"
 			cd "${OLDPWD}"
 			touch "${srcdir}"/.built
 		fi

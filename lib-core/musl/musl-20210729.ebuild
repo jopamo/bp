@@ -81,11 +81,11 @@ src_install() {
   		for i in getconf getent iconv ; do
 			dobin $i
 		done
-	fi
 
-	mkdir -p "${ED}"/usr/lib || die
-	cp -p "${ED}"/lib/ld-musl*.so* "${ED}"/usr/lib/ || die
-  	rm -r "${ED}"/lib || die
+		mkdir -p "${ED}"/usr/lib || die
+		cp -p "${ED}"/lib/ld-musl*.so* "${ED}"/usr/lib/ || die
+  		rm -r "${ED}"/lib || die
+	fi
 
 	for i in linux asm asm-generic mtd ; do
 		dosym -r /usr/include/$i /usr/musl/include/$i

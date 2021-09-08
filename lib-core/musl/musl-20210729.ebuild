@@ -18,10 +18,9 @@ KEYWORDS="amd64 arm64"
 
 IUSE="musl"
 
-filter-flags -D_FORTIFY_SOURCE\=\* -Wl,-z,combreloc -Wl,-z,relro -Wl,-z,defs -Wl,-z,now -fstack-protector-strong -fstack-clash-protection
+filter-flags -flto\=\*
 
 src_prepare() {
-	strip-flags
 	default
 	cp "${FILESDIR}"/* "${S}"/
 }

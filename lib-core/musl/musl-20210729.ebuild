@@ -22,9 +22,7 @@ filter-flags -D_FORTIFY_SOURCE\=\* -Wl,-z,combreloc -Wl,-z,relro -Wl,-z,defs -Wl
 
 src_prepare() {
 	strip-flags
-
 	default
-
 	cp "${FILESDIR}"/* "${S}"/
 }
 
@@ -37,10 +35,10 @@ src_configure() {
 		--sysconfdir="${EPREFIX}/etc"
 		--localstatedir="${EPREFIX}/var"
 		--prefix="${EPREFIX}"/usr
-    	--exec-prefix="${EPREFIX}"/usr
-    	--enable-wrapper=all
-    	--enable-shared
-    	--enable-static
+		--exec-prefix="${EPREFIX}"/usr
+		--enable-wrapper=all
+		--enable-shared
+		--enable-static
 	)
 
 	local myconf=(
@@ -51,10 +49,10 @@ src_configure() {
 		--sysconfdir="${EPREFIX}/usr/musl/etc"
 		--localstatedir="${EPREFIX}/usr/musl/var"
 		--prefix="${EPREFIX}"/usr/musl
-    	--exec-prefix="${EPREFIX}"/usr/musl
-    	--enable-wrapper=all
-    	--disable-shared
-    	--enable-static
+		--exec-prefix="${EPREFIX}"/usr/musl
+		--enable-wrapper=all
+		--disable-shared
+		--enable-static
 	)
 
 	use musl || ECONF_SOURCE=${S} econf "${myconf[@]}"
@@ -68,7 +66,6 @@ src_compile() {
 			gcc $CPPFLAGS $CFLAGS "${S}"/$i.c -o $i
 		done
 	fi
-
 
 	default
 }

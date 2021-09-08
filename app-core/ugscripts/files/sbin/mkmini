@@ -264,14 +264,14 @@ cp /usr/lib64/systemd/system/sshd.socket etc/systemd/system/sshd.socket
 chmod 664 etc/systemd/system/sshd.socket
 
 #libressl
-#cp /var/cache/packages/lib-net/libressl* .
-#tar xvhf libressl* --xattrs
-#rm libressl* || exit
+cp /var/cache/packages/lib-net/libressl/* .
+tar xvhf libressl* --xattrs
+rm libressl* || exit
 
 #openssl
-cp /var/cache/packages/lib-net/openssl/* .
-tar xvhf openssl* --xattrs
-rm openssl* || exit
+#cp /var/cache/packages/lib-net/openssl/* .
+#tar xvhf openssl* --xattrs
+#rm openssl* || exit
 
 cp /var/cache/packages/app-misc/ca-certificates/* .
 tar xvhf ca-certificates* --xattrs

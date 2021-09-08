@@ -39,7 +39,10 @@ PDEPEND="lib-core/tzdb"
 
 PATCHES=( "${FILESDIR}"/0001-Disable-ldconfig-during-install.patch )
 
-filter-flags -D_FORTIFY_SOURCE\=\* -Wl,-z,combreloc -Wl,-z,relro -Wl,-z,defs -Wl,-z,now -fstack-protector-strong -fstack-clash-protection
+filter-flags -flto\=\*
+filter-flags -D_FORTIFY_SOURCE\=\*
+filter-flags -Wl,-z,defs
+filter-flags -fstack-protector-strong
 
 check_devpts() {
 	# Make sure devpts is mounted correctly for use w/out setuid pt_chown.
@@ -97,8 +100,6 @@ pkg_pretend() {
 }
 
 src_prepare() {
-	strip-flags
-
 	default
 
 	cd "${WORKDIR}"
@@ -166,7 +167,7 @@ src_test() {
 src_install() {
 	cd "${WORKDIR}/build"
 
-	emake install_root="${ED}" install || die
+	emake install_root="${ED}" install
 
 	# We'll take care of the cache ourselves
 	rm -f "${ED}"/etc/ld.so.cache

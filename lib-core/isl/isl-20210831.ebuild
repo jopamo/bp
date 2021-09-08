@@ -2,15 +2,21 @@
 
 EAPI=8
 
+SNAPSHOT=a12c8df3c79c92edb92ec910aaf599177822ad5a
+SHORT=${SNAPSHOT:0:7}
+
+inherit autotools
+
 DESCRIPTION="A library for manipulating integer points bounded by linear constraints"
 HOMEPAGE="http://isl.gforge.inria.fr/"
-SRC_URI="http://isl.gforge.inria.fr/${P}.tar.xz"
+SRC_URI="https://repo.or.cz/isl.git/snapshot/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/isl-${SHORT}
 
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs"
+IUSE="gdb.py static-libs"
 
 DEPEND="
 	lib-core/gmp
@@ -19,9 +25,15 @@ DEPEND="
 
 src_prepare() {
 	default
+	eautoreconf
 	sed -i -e '/Libs:/s:@LDFLAGS@ ::' configure || die #382737
 }
 
 src_configure() {
-	ECONF_SOURCE=${S} econf $(use_enable static-libs static)
+	ECONF_SOURCE=${S} econf CFLAGS="${CFLAGS}" $(use_enable static-libs static)
+}
+
+src_install() {
+	default
+	use gdb.py || rm "${ED}"/usr/lib/libisl.so.23.1.0-gdb.py || die
 }

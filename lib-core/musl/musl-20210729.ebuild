@@ -84,7 +84,7 @@ src_install() {
 
 		mkdir -p "${ED}"/usr/lib || die
 		cp -p "${ED}"/lib/ld-musl*.so* "${ED}"/usr/lib/ || die
-  		rm -r "${ED}"/lib || die
+		rm -r "${ED}"/lib || die
 	fi
 
 	for i in linux asm asm-generic mtd ; do

@@ -24,8 +24,10 @@ DEPEND="
 	isl? ( lib-core/isl )
 	zstd? ( app-compression/zstd )
 "
-
-BDEPEND="dev-util/patchelf"
+BDEPEND="
+	sys-devel/make
+	dev-util/patchelf
+"
 
 PATCHES=(
 		"${FILESDIR}"/0001-posix_memalign.patch

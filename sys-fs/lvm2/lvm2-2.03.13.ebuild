@@ -2,8 +2,6 @@
 
 EAPI=7
 
-inherit autotools linux-info toolchain-funcs flag-o-matic
-
 DESCRIPTION="User-land utilities for LVM2 (device-mapper) software"
 HOMEPAGE="https://sourceware.org/lvm2/"
 SRC_URI="https://sourceware.org/pub/lvm2/LVM2.${PV}.tgz"
@@ -17,23 +15,11 @@ IUSE="static-libs systemd +udev +dm-only"
 DEPEND="
 	app-core/util-linux
 	lib-core/readline
+	lib-dev/libaio[static-libs?]
 	systemd? ( app-core/systemd )
 "
 
 S=${WORKDIR}/LVM2.${PV}
-
-filter-flags -Wl,-z,defs
-
-src_prepare() {
-	default
-
-	sed -i \
-		-e "1iAR = $(tc-getAR)" \
-		-e "s:CC ?= @CC@:CC = $(tc-getCC):" \
-		make.tmpl.in || die #444082
-
-	eautoreconf
-}
 
 src_configure() {
 	local myconf=(
@@ -66,11 +52,11 @@ src_configure() {
 }
 
 src_install() {
-	local inst
 	use dm-only || INSTALL_TARGETS="install_lvm2"
 	use dm-only || use systemd && INSTALL_TARGETS="${INSTALL_TARGETS} install_systemd_units install_systemd_generators"
 	use dm-only && INSTALL_TARGETS="install_device-mapper"
 
+	local inst
 	for inst in ${INSTALL_TARGETS}; do
 		emake DESTDIR="${D}" ${inst}
 	done

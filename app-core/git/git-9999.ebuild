@@ -53,7 +53,6 @@ src_install() {
 	rm "${ED}"/usr/bin/git-{cvsserver,shell}
 	rm "${ED}"/usr/libexec/git-core/git-shell
 	rm "${ED}"/usr/libexec/git-core/git-cvs*
-	rm -rf "${ED}"/usr/share
 
 	for i in git-receive-pack git-upload-archive git-upload-pack ; do
 		rm "${ED}"/usr/bin/$i

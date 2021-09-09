@@ -1,10 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 MOZ_PN="firefox-nightly"
-TIMESTAMP="09-46-07"
-MOZ_VER="92.0a1"
+TIMESTAMP="21-39-05"
+MOZ_VER="94.0a1"
 
 inherit xdg-utils
 
@@ -98,8 +98,8 @@ src_install() {
 	rm -f "${ED}"/opt/${MOZ_PN}/libnssckbi.so
 	rm -rf "${ED}"/opt/${MOZ_PN}/dictionaries
 
-	dosym /usr/share/hunspell opt/${MOZ_PN}/dictionaries
-	dosym /usr/lib/libnssckbi.so opt/${MOZ_PN}/libnssckbi.so
+	dosym -r /usr/share/hunspell /opt/${MOZ_PN}/dictionaries
+	dosym -r /usr/lib/libnssckbi.so /opt/${MOZ_PN}/libnssckbi.so
 }
 
 pkg_postinst() {

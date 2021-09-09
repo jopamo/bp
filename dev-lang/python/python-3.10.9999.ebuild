@@ -35,8 +35,6 @@ DEPEND="
 
 BDEPEND="sys-devel/autoconf-archive"
 
-PDEPEND="app-eselect/eselect-python"
-
 PYVER=${SLOT%/*}
 
 filter-flags -Wl,-z,defs

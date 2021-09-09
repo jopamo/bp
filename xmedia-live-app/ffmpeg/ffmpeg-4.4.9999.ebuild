@@ -16,16 +16,20 @@ KEYWORDS="amd64 arm64"
 IUSE="debug nvidia +x264 +x265 vaapi vdpau static-libs +openssl
 	+ffmpeg +network +protocols +nonfree +gpl +version3 +avutil
 	+avcodec +avformat +swscale +avresample +swresample +avfilter
-	+lame +libass +vorbis"
+	+lame +libass +libdav1d +vorbis"
 
 DEPEND="
 	lame? ( xmedia-live-app/lame )
 	vorbis? ( xmedia-live-lib/libvorbis )
+	libdav1d? ( xmedia-live-lib/libdav1d )
 	dev-lang/yasm
 	x264? ( xmedia-live-lib/x264 )
 	x265? ( xmedia-live-lib/x265 )
 	xmedia-live-lib/libass
-	nvidia? ( xmedia-live-lib/nv-codec-headers )
+	nvidia? (
+				xmedia-live-lib/nv-codec-headers
+				bin/nvidia-cuda
+			)
 	vaapi? ( xgui-live-lib/libva
 		xgui-live-lib/libva-intel-driver )
 	vdpau? ( xgui-live-lib/libvdpau )
@@ -56,8 +60,11 @@ src_configure() {
 		$(use_enable gpl) \
 		$(use_enable lame libmp3lame) \
 		$(use_enable libass) \
+		$(use_enable libdav1d) \
 		$(use_enable network) \
 		$(use_enable nonfree) \
+		$(use_enable nvidia cuda-nvcc) \
+		$(use_enable nvidia libnpp) \
 		$(use_enable openssl) \
 		$(use_enable protocols) \
 		$(use_enable static-libs static) \
@@ -79,6 +86,7 @@ src_configure() {
 		--enable-encoder=flac,png,libmp3lame \
 		--enable-filters \
 		--enable-lto \
-        	--enable-muxer=matroska,mp4 \
-        	--disable-stripping
+		--enable-muxer=matroska,mp4 \
+		--enable-nonfree \
+		--disable-stripping
 }

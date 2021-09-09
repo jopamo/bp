@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="acl dbus debug pam +ssl static-libs systemd usb X xinetd"
+IUSE="acl dbus debug pam +ssl static-libs systemd usb X"
 
 DEPEND="
 	app-text/libpaper
@@ -24,15 +24,12 @@ DEPEND="
 			app-core/acl
 			app-core/attr
 	)
-	dbus? ( >=app-core/dbus-1.6.18-r1 )
+	dbus? ( app-core/dbus )
 	pam? ( lib-core/pam )
-	ssl? (
-		>=lib-net/gnutls-2.12.23-r6:0=
-	)
+	ssl? ( lib-net/gnutls )
 	systemd? ( app-core/systemd )
 	usb? ( lib-dev/libusb )
 	X? ( xgui-live-app/xdg-utils )
-	xinetd? ( app-core/xinetd )
 "
 
 BDEPEND="dev-util/pkgconf"
@@ -91,7 +88,7 @@ src_configure() {
 		--with-languages="${LINGUAS}"
 		--with-system-groups=lpadmin
 		--disable-gssapi
-		--with-xinetd="${EPREFIX}"/etc/xinetd.d
+		--without-xinetd
 		$(use_enable acl)
 		$(use_enable dbus)
 		$(use_enable debug)
@@ -132,10 +129,10 @@ src_install() {
 
 	# move the default config file to docs
 	dodoc "${ED}"/etc/cups/cupsd.conf.default
-	rm -f "${ED}"/etc/cups/cupsd.conf.default
+	rm -f "${ED}"/etc/cups/cupsd.conf.default || die
 
 	# clean out cups init scripts
-	rm -rf "${ED}"/etc/{init.d/cups,rc*,pam.d/cups}
+	rm -rf "${ED}"/etc/{init.d/cups,rc*,pam.d/cups} || die
 
 	if use pam; then
 		insinto etc/pam.d
@@ -143,21 +140,7 @@ src_install() {
 		newins "${FILESDIR}/${PN}.pam" ${PN}
 	fi
 
-	if use xinetd ; then
-		# correct path
-		sed -i \
-			-e "s:server = .*:server = /usr/libexec/cups/daemon/cups-lpd:" \
-			"${ED}"/etc/xinetd.d/cups-lpd || die
-		# it is safer to disable this by default, bug #137130
-		grep -w 'disable' "${ED}"/etc/xinetd.d/cups-lpd || \
-			{ sed -i -e "s:}:\tdisable = yes\n}:" "${ED}"/etc/xinetd.d/cups-lpd || die ; }
-		# write permission for file owner (root), bug #296221
-		fperms u+w /etc/xinetd.d/cups-lpd || die "fperms failed"
-	else
-		# always configure with --with-xinetd= and clean up later,
-		# bug #525604
-		rm -rf "${ED}"/etc/xinetd.d
-	fi
+	rm -rf "${ED}"/etc/xinetd.d || die
 
 	keepdir /usr/libexec/cups/driver /usr/share/cups/{model,profiles} \
 		/var/log/cups /var/spool/cups/tmp
@@ -171,11 +154,11 @@ src_install() {
 
 	# the following file is now provided by cups-filters:
 	rm -r "${ED}"/usr/share/cups/banners || die
-	rm -rf "${ED}"/var/cache
+	rm -rf "${ED}"/var/cache || die
 
 	cleanup_install
 
-	rm -rf "${ED}"/usr/share/icons
-	rm -rf "${ED}"/run
-	find "${ED}"/ -xtype l -delete
+	rm -rf "${ED}"/usr/share/icons || die
+	rm -rf "${ED}"/run || die
+	find "${ED}"/ -xtype l -delete || die
 }

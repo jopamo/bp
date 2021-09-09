@@ -43,6 +43,8 @@ filter-flags -flto\=\*
 filter-flags -D_FORTIFY_SOURCE\=\*
 filter-flags -Wl,-z,defs
 filter-flags -fstack-protector-strong
+filter-flags -fassociative-math
+filter-flags -fno-semantic-interposition
 
 check_devpts() {
 	# Make sure devpts is mounted correctly for use w/out setuid pt_chown.

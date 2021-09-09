@@ -1,6 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
+
+inherit flag-o-matic
 
 DESCRIPTION="a high-quality data compressor."
 HOMEPAGE="https://sourceware.org/bzip2/"
@@ -13,6 +15,8 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_prepare() {
+	use static-libs && filter-flags -flto\=\*
+
 	default
 
 	sed -i "s|-O2|${CFLAGS}|g" Makefile
@@ -21,6 +25,7 @@ src_prepare() {
 
 src_compile() {
 	use static-libs && emake
+
 	emake -f Makefile-libbz2_so
 }
 
@@ -28,7 +33,7 @@ src_install() {
 	dolib.so libbz2.so.${PV}
 
 	for x in libbz2.so.1 libbz2.so.1.0 libbz2.so ; do
-		dosym libbz2.so.${PV} usr/lib/${x}
+		dosym -r /usr/lib/libbz2.so.${PV} /usr/lib/${x}
 	done
 
 	use static-libs && dolib.a libbz2.a
@@ -37,5 +42,5 @@ src_install() {
 	doins bzlib.h
 
 	insinto /usr/lib/pkgconfig
-	doins "${FILESDIR}"
+	doins "${FILESDIR}"/bzip2.pc
 }

@@ -27,20 +27,20 @@ CDEPEND="
 	lib-live/glib
 	lib-live/libqtxdg
 	xgui-live-lib/qtbase:5
-	x11-live-misc/kguiaddons
-	x11-live-misc/kwindowsystem
+	xgui-live-app/kguiaddons
+	xgui-live-app/kwindowsystem
 	xgui-live-lib/menu-cache
 	xgui-live-lib/liblxqt
 	xgui-live-lib/lxqt-globalkeys
-	x11-live-lib/libX11
+	xgui-live-lib/libX11
 	cpuload? ( lib-core/libstatgrab )
 	kbindicator? ( xgui-live-lib/libxkbcommon )
 	networkmonitor? ( lib-core/libstatgrab )
 	sensors? ( app-core/lm_sensors )
 	sysstat? ( xgui-live-lib/libsysstat )
-	tray? ( x11-live-lib/libXcomposite
-		x11-live-lib/libXdamage
-		x11-live-lib/libXrender )
+	tray? ( xgui-live-lib/libXcomposite
+		xgui-live-lib/libXdamage
+		xgui-live-lib/libXrender )
 "
 DEPEND="${CDEPEND}
 	dev-util/lxqt-build-tools

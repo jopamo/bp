@@ -14,7 +14,7 @@ SLOT="2"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	x11-live-lib/gtk+:3
+	xgui-live-lib/gtk+:3
 	lib-core/libxml2
 "
 

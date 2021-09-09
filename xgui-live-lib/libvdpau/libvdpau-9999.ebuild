@@ -15,13 +15,13 @@ KEYWORDS="amd64 arm64"
 IUSE="dri"
 
 RDEPEND="
-	x11-live-lib/libX11
-	dri? ( x11-live-lib/libXext )
+	xgui-live-lib/libX11
+	dri? ( xgui-live-lib/libXext )
 "
 DEPEND="
 	${RDEPEND}
 	dev-util/pkgconf
-	dri? ( x11-live-misc/xorgproto )
+	dri? ( xgui-live-app/xorgproto )
 "
 
 src_configure() {

@@ -24,8 +24,8 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="${PYTHON_DEPS}
 	xmedia-live-lib/mesa
-	x11-live-misc/util-macros
-	X? ( x11-live-lib/libX11 )"
+	xgui-live-app/util-macros
+	X? ( xgui-live-lib/libX11 )"
 
 src_configure() {
 	local emesonargs=(

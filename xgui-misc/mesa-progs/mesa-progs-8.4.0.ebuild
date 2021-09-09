@@ -21,11 +21,11 @@ IUSE="egl gles2"
 
 RDEPEND="
 	xmedia-live-lib/mesa
-	x11-live-lib/libX11"
+	xgui-live-lib/libX11"
 DEPEND="${RDEPEND}
 	xmedia-live-lib/glew
 	xmedia-live-lib/glu
-	x11-live-misc/xorgproto"
+	xgui-live-app/xorgproto"
 
 
 src_prepare() {

@@ -21,7 +21,7 @@ KEYWORDS="amd64 arm64"
 IUSE="wayland X static-libs"
 
 DEPEND="sys-devel/bison
-	X? ( x11-live-misc/xorgproto )"
+	X? ( xgui-live-app/xorgproto )"
 RDEPEND="X? ( xgui-live-lib/libxcb[xkb] )"
 
 src_configure() {

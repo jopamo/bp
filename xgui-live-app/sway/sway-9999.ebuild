@@ -21,10 +21,10 @@ DEPEND="
 	xgui-live-lib/wayland
 	xgui-live-lib/cairo
 	xgui-live-lib/libxkbcommon
-	x11-live-lib/pango
+	xgui-live-lib/pango
 	xgui-live-lib/pixman
 	|| ( xgui-live-lib/wlroots xgui-live-lib/wlroots-eglstreams )
-	x11-live-lib/gdk-pixbuf:2
+	xgui-live-lib/gdk-pixbuf:2
 	swaybg? ( xgui-live-app/swaybg )
 	swayidle? ( xgui-live-app/swayidle )
 	swaylock? ( xgui-live-app/swaylock )

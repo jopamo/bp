@@ -18,8 +18,8 @@ fi
 LICENSE="MIT"
 SLOT="0"
 
-RDEPEND="x11-live-lib/libX11
-	x11-live-lib/libxkbfile"
+RDEPEND="xgui-live-lib/libX11
+	xgui-live-lib/libxkbfile"
 DEPEND="${RDEPEND}
 	sys-devel/bison"
 

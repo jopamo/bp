@@ -28,8 +28,8 @@ DEPEND="
 	lib-core/expat
 	systemd? ( app-core/systemd )
 	X? (
-		x11-live-lib/libX11
-		x11-live-lib/libXt
+		xgui-live-lib/libX11
+		xgui-live-lib/libXt
 		)
 "
 BDEPEND="

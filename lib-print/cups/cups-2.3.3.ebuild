@@ -33,7 +33,7 @@ CDEPEND="
 	)
 	systemd? ( app-core/systemd )
 	usb? ( lib-dev/libusb )
-	X? ( x11-live-misc/xdg-utils )
+	X? ( xgui-live-app/xdg-utils )
 	xinetd? ( app-core/xinetd )
 "
 

@@ -37,10 +37,10 @@ CDEPEND="
 	adns? ( >=lib-net/c-ares-1.5 )
 	caps? ( lib-core/libcap )
 	gtk? (
-		x11-live-lib/gdk-pixbuf
-		x11-live-lib/gtk+:3
-		x11-live-lib/pango
-		x11-live-misc/xdg-utils
+		xgui-live-lib/gdk-pixbuf
+		xgui-live-lib/gtk+:3
+		xgui-live-lib/pango
+		xgui-live-app/xdg-utils
 	)
 	libssh? ( >=lib-net/libssh-0.6 )
 	libxml2? ( lib-core/libxml2 )

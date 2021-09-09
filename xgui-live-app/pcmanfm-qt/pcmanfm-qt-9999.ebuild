@@ -24,8 +24,8 @@ DEPEND="
 	lib-live/glib
 	xgui-live-lib/qtbase
 	xgui-live-lib/qtx11extras
-	x11-live-lib/libfm
-	x11-live-lib/libfm-qt
+	xgui-live-lib/libfm
+	xgui-live-lib/libfm-qt
 	xgui-live-lib/libxcb
 	dev-util/intltool
 "

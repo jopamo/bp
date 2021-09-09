@@ -23,10 +23,10 @@ RDEPEND="
 	xgui-live-lib/qtx11extras
 	xgui-live-lib/liblxqt
 	lib-live/libqtxdg
-	x11-live-lib/libICE
-	x11-live-lib/libSM
-	x11-live-lib/libX11
-	x11-live-lib/libXext
+	xgui-live-lib/libICE
+	xgui-live-lib/libSM
+	xgui-live-lib/libX11
+	xgui-live-lib/libXext
 "
 
 BDEPEND="dev-util/lxqt-build-tools"

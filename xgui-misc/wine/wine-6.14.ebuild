@@ -21,12 +21,12 @@ RESTRICT="test"
 
 COMMON_DEPEND="
 	X? (
-		x11-live-lib/libXcursor
-		x11-live-lib/libXext
-		x11-live-lib/libXfixes
-		x11-live-lib/libXrandr
-		x11-live-lib/libXi
-		x11-live-lib/libXxf86vm
+		xgui-live-lib/libXcursor
+		xgui-live-lib/libXext
+		xgui-live-lib/libXfixes
+		xgui-live-lib/libXrandr
+		xgui-live-lib/libXi
+		xgui-live-lib/libXxf86vm
 	)
 	alsa? ( xmedia-live-lib/alsa-lib )
 	cups? ( lib-print/cups:= )
@@ -43,8 +43,8 @@ COMMON_DEPEND="
 	pcap? ( lib-net/libpcap )
 	png? ( xmedia-live-lib/libpng:0= )
 	pulseaudio? ( xgui-misc/pulseaudio )
-	xcomposite? ( x11-live-lib/libXcomposite )
-	xinerama? ( x11-live-lib/libXinerama )
+	xcomposite? ( xgui-live-lib/libXcomposite )
+	xinerama? ( xgui-live-lib/libXinerama )
 	xml? (
 		lib-core/libxml2
 		lib-core/libxslt
@@ -59,7 +59,7 @@ DEPEND="${COMMON_DEPEND}
 	sys-devel/flex
 	dev-util/pkgconf
 	sys-devel/bison
-	X? ( x11-live-misc/xorgproto )
+	X? ( xgui-live-app/xorgproto )
 "
 
 filter-flags -flto\=\* -Wl,-z,defs

@@ -49,7 +49,7 @@ FONT_CONF=( "" )
 if [[ ${CATEGORY}/${PN} != media-fonts/encodings ]]; then
 	IUSE="X"
 	BDEPEND="X? (
-			x11-live-misc/mkfontscale
+			xgui-live-app/mkfontscale
 			fonts/encodings
 	)"
 fi

@@ -26,28 +26,28 @@ IUSE="debug +glamor ipv6 minimal systemd suid_wrapper +udev
 
 CDEPEND="
 	virtual/ssl
-	>=x11-live-app/iceauth-1.0.2
-	>=x11-live-app/rgb-1.0.3
-	>=x11-live-app/xauth-1.0.3
+	>=xgui-live-app/iceauth-1.0.2
+	>=xgui-live-app/rgb-1.0.3
+	>=xgui-live-app/xauth-1.0.3
 	xgui-misc/xkbcomp
 	>=xgui-live-lib/libdrm-2.4.46
-	x11-live-lib/libpciaccess
-	>=x11-live-lib/libXau-1.0.4
-	>=x11-live-lib/libXdmcp-1.0.2
-	>=x11-live-lib/libXfont2-2.0.1
-	>=x11-live-lib/libxkbfile-1.0.4
-	>=x11-live-lib/libxshmfence-1.1
+	xgui-live-lib/libpciaccess
+	>=xgui-live-lib/libXau-1.0.4
+	>=xgui-live-lib/libXdmcp-1.0.2
+	>=xgui-live-lib/libXfont2-2.0.1
+	>=xgui-live-lib/libxkbfile-1.0.4
+	>=xgui-live-lib/libxshmfence-1.1
 	>=xgui-live-lib/pixman-0.27.2
-	>=x11-live-lib/xtrans-1.3.5
-	>=x11-live-misc/xbitmaps-1.0.1
+	>=xgui-live-lib/xtrans-1.3.5
+	>=xgui-live-app/xbitmaps-1.0.1
 	xgui-misc/xkeyboard-config
 	glamor? (
 		xmedia-live-lib/libepoxy[X]
 		xmedia-live-lib/mesa
 	)
 	!minimal? (
-		>=x11-live-lib/libX11-1.1.5
-		>=x11-live-lib/libXext-1.0.5
+		>=xgui-live-lib/libX11-1.1.5
+		>=xgui-live-lib/libXext-1.0.5
 		>=xmedia-live-lib/mesa-10.3.4-r1
 	)
 	udev? ( >=app-core/systemd-150 )
@@ -57,7 +57,7 @@ CDEPEND="
 		>=xgui-live-lib/wayland-protocols-1.1
 		xgui-live-lib/egl-wayland
 	)
-	>=x11-live-app/xinit-1.3.3-r1
+	>=xgui-live-app/xinit-1.3.3-r1
 	systemd? (
 		app-core/dbus
 		app-core/systemd
@@ -65,10 +65,10 @@ CDEPEND="
 
 DEPEND="${CDEPEND}
 	sys-devel/flex
-	x11-live-misc/xorgproto
+	xgui-live-app/xorgproto
 "
 
-PDEPEND="x11-live-misc/xf86-input-libinput"
+PDEPEND="xgui-live-app/xf86-input-libinput"
 
 filter-flags -Wl,-z,defs -Wl,-z,now
 

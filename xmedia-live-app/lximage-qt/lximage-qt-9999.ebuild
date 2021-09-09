@@ -23,10 +23,10 @@ DEPEND="
 	xgui-live-lib/qtbase
 	xgui-live-lib/qtx11extras
 	xmedia-live-lib/libexif
-	x11-live-lib/libfm
-	x11-live-lib/libfm-qt
-	x11-live-lib/libX11
-	x11-live-lib/libXfixes
+	xgui-live-lib/libfm
+	xgui-live-lib/libfm-qt
+	xgui-live-lib/libX11
+	xgui-live-lib/libXfixes
 	xgui-live-lib/liblxqt
 "
 BDEPEND="

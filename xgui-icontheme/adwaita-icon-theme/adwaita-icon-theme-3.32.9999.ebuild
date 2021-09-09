@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-live-lib/gnome-common
 	xgui-live-lib/librsvg:2
-	x11-live-lib/gtk+:3
+	xgui-live-lib/gtk+:3
 	sys-devel/gettext
 	dev-util/pkgconf"
 

@@ -15,10 +15,10 @@ KEYWORDS="amd64 arm64"
 IUSE="libkms intel radeon amdgpu nouveau omap exynos valgrind udev"
 
 DEPEND="${RDEPEND}
-	x11-live-misc/util-macros
+	xgui-live-app/util-macros
 	xgui-live-lib/cairo
 	valgrind? ( dev-util/valgrind )
-	intel? ( x11-live-lib/libpciaccess )"
+	intel? ( xgui-live-lib/libpciaccess )"
 
 append-cppflags -I/usr/include/cairo
 append-flags -lcairo

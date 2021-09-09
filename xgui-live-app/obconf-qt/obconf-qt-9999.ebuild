@@ -20,11 +20,11 @@ DEPEND="
 	xmedia-live-lib/fontconfig
 	xmedia-live-lib/freetype
 	xgui-live-app/openbox
-	x11-live-lib/libICE
-	x11-live-lib/libSM
-	x11-live-lib/libX11
-	x11-live-lib/libXft
-	x11-live-lib/pango
+	xgui-live-lib/libICE
+	xgui-live-lib/libSM
+	xgui-live-lib/libX11
+	xgui-live-lib/libXft
+	xgui-live-lib/pango
 "
 
 BDEPEND="dev-util/pkgconf"

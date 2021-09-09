@@ -14,5 +14,5 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-live-lib/qtbase
 		dev-util/lxqt-build-tools"
-RDEPEND="x11-live-misc/xdg-utils"
+RDEPEND="xgui-live-app/xdg-utils"
 BDEPEND="dev-util/pkgconf"

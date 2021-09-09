@@ -24,8 +24,8 @@ LIB_DEPEND="
 	xmedia-live-lib/openjpeg[static-libs?]
 	xmedia-live-lib/libjpeg-turbo[static-libs?]
 	lib-live/gumbo-parser[static-libs?]
-	X? ( x11-live-lib/libX11[static-libs?]
-		x11-live-lib/libXext[static-libs?] )
+	X? ( xgui-live-lib/libX11[static-libs?]
+		xgui-live-lib/libXext[static-libs?] )
 "
 RDEPEND="${LIB_DEPEND}"
 DEPEND="${RDEPEND}
@@ -34,8 +34,8 @@ DEPEND="${RDEPEND}
 	static-libs? ( ${LIB_DEPEND} )
 	static? ( ${LIB_DEPEND//?}
 		app-compression/lbzip2[static-libs]
-		x11-live-lib/libXau[static-libs]
-		x11-live-lib/libXdmcp[static-libs]
+		xgui-live-lib/libXau[static-libs]
+		xgui-live-lib/libXdmcp[static-libs]
 		xgui-live-lib/libxcb[static-libs] )"
 
 REQUIRED_USE="opengl? ( !static !static-libs )"

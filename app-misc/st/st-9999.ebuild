@@ -15,9 +15,9 @@ KEYWORDS="amd64 arm64"
 DEPEND="
 	virtual/curses
 	xmedia-live-lib/fontconfig
-	x11-live-lib/libX11
-	x11-live-lib/libXft
-	x11-live-misc/xorgproto
+	xgui-live-lib/libX11
+	xgui-live-lib/libXft
+	xgui-live-app/xorgproto
 "
 
 src_install() {

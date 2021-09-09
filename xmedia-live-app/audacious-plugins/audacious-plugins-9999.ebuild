@@ -23,8 +23,8 @@ RDEPEND="
 	aac? ( >=xmedia-live-lib/faad2-2.7 )
 	alsa? ( >=xmedia-live-lib/alsa-lib-1.0.16 )
 	aosd? (
-		x11-live-lib/libXrender
-		x11-live-lib/libXcomposite
+		xgui-live-lib/libXrender
+		xgui-live-lib/libXcomposite
 	)
 	bs2b? ( xmedia-live-lib/libbs2b )
 	cdda? (

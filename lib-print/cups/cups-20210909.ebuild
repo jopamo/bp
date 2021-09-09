@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-SNAPSHOT=82e3ee0e3230287b76a76fb8f16b92ca6e50b444
+SNAPSHOT=d03753f33432c790d7ed6c2487080e09bf884254
 
 inherit autotools flag-o-matic linux-info user toolchain-funcs
 
@@ -15,10 +15,9 @@ KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="acl dbus debug lprng-compat pam
-	+ssl static-libs systemd usb X xinetd"
+IUSE="acl dbus debug pam +ssl static-libs systemd usb X xinetd"
 
-CDEPEND="
+DEPEND="
 	app-text/libpaper
 	lib-core/zlib
 	acl? (
@@ -26,7 +25,6 @@ CDEPEND="
 			app-core/attr
 	)
 	dbus? ( >=app-core/dbus-1.6.18-r1 )
-	!lprng-compat? ( !lib-print/lprng )
 	pam? ( lib-core/pam )
 	ssl? (
 		>=lib-net/gnutls-2.12.23-r6:0=
@@ -37,14 +35,14 @@ CDEPEND="
 	xinetd? ( app-core/xinetd )
 "
 
-DEPEND="${CDEPEND}
-	>=dev-util/pkgconf-0-r1
-"
+BDEPEND="dev-util/pkgconf"
+PDEPEND="lib-print/cups-filters"
 
-RDEPEND="${CDEPEND}
-"
-
-PDEPEND=">=lib-print/cups-filters-1.0.43"
+PATCHES=(
+	"${FILESDIR}/${PN}-2.2.6-fix-install-perms.patch"
+	"${FILESDIR}/${PN}-1.4.4-nostrip.patch"
+	"${FILESDIR}/${PN}-2.3.3-user-AR.patch"
+)
 
 RESTRICT="test"
 
@@ -56,34 +54,6 @@ pkg_setup() {
 	enewgroup lpadmin 106
 
 	linux-info_pkg_setup
-
-	if  ! linux_config_exists; then
-		ewarn "Can't check the linux kernel configuration."
-		ewarn "You might have some incompatible options enabled."
-	else
-		# recheck that we don't have usblp to collide with libusb; this should now work in most cases (bug 501122)
-		if use usb; then
-			if linux_chkconfig_present USB_PRINTER; then
-				elog "Your USB printers will be managed via libusb. In case you run into problems, "
-				elog "please try disabling USB_PRINTER support in your kernel or blacklisting the"
-				elog "usblp kernel module."
-				elog "Alternatively, just disable the usb useflag for cups (your printer will still work)."
-			fi
-		else
-			#here we should warn user that he should enable it so he can print
-			if ! linux_chkconfig_present USB_PRINTER; then
-				ewarn "If you plan to use USB printers you should enable the USB_PRINTER"
-				ewarn "support in your kernel."
-				ewarn "Please enable it:"
-				ewarn "    CONFIG_USB_PRINTER=y"
-				ewarn "in /usr/src/linux/.config or"
-				ewarn "    Device Drivers --->"
-				ewarn "        USB support  --->"
-				ewarn "            [*] USB Printer support"
-				ewarn "Alternatively, enable the usb useflag for cups and use the libusb code."
-			fi
-		fi
-	fi
 }
 
 src_prepare() {
@@ -203,26 +173,9 @@ src_install() {
 	rm -r "${ED}"/usr/share/cups/banners || die
 	rm -rf "${ED}"/var/cache
 
-	# for the special case of running lprng and cups together, bug 467226
-	if use lprng-compat ; then
-		rm -fv "${ED}"/usr/bin/{lp*,cancel}
-		rm -fv "${ED}"/usr/sbin/lp*
-		rm -fv "${ED}"/usr/share/man/man1/{lp*,cancel*}
-		rm -fv "${ED}"/usr/share/man/man8/lp*
-		ewarn "Not installing lp... binaries, since the lprng-compat useflag is set."
-		ewarn "Unless you plan to install an exotic server setup, you most likely"
-		ewarn "do not want this. Disable the useflag then and all will be fine."
-	fi
-
-	find "${ED}"/ -xtype l -delete
-	rm -rf "${ED}"/run
 	cleanup_install
-}
 
-pkg_postinst() {
-	xdg_desktop_database_update
-}
-
-pkg_postrm() {
-	xdg_desktop_database_update
+	rm -rf "${ED}"/usr/share/icons
+	rm -rf "${ED}"/run
+	find "${ED}"/ -xtype l -delete
 }

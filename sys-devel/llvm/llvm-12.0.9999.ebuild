@@ -27,11 +27,14 @@ RESTRICT="!test? ( test )"
 
 CMAKE_BUILD_TYPE=Release
 
-filter-flags -D_FORTIFY_SOURCE\=\* -Wl,-z,combreloc -Wl,-z,relro -Wl,-z,defs -Wl,-z,now -fstack-protector-strong -fstack-clash-protection
+filter-flags -flto\=\*
+filter-flags -D_FORTIFY_SOURCE\=\*
+filter-flags -Wl,-z,defs
+filter-flags -fstack-protector-strong
+filter-flags -fassociative-math
+filter-flags -fno-semantic-interposition
 
 src_configure() {
-	strip-flags
-
 	local mycmakeargs=(
 		-DLLVM_ENABLE_PROJECTS=$(usex clang 'llvm;clang;lld' 'llvm;lld')
 		-DLLVM_APPEND_VC_REV=OFF

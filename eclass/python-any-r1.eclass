@@ -80,7 +80,7 @@ EXPORT_FUNCTIONS pkg_setup
 #
 # It should be noted that in order to preserve metadata immutability,
 # PYTHON_COMPAT_OVERRIDE does not affect dependencies. The value of
-# EPYTHON and eselect-python preferences are ignored. Dependencies need
+# EPYTHON preferences is ignored. Dependencies need
 # to be satisfied manually.
 #
 # Example:
@@ -327,7 +327,7 @@ python_setup() {
 		ewarn
 		ewarn "	${PYTHON_COMPAT_OVERRIDE}"
 		ewarn
-		ewarn "Dependencies won't be satisfied, and EPYTHON/eselect-python will be ignored."
+		ewarn "Dependencies won't be satisfied, and EPYTHON will be ignored."
 
 		_python_export "${impls[0]}" EPYTHON PYTHON
 		_python_wrapper_setup

@@ -1,20 +1,17 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# Latest Version
-# wget -q -O - "http://commondatastorage.googleapis.com/chromium-browser-snapshots/Linux_x64/LAST_CHANGE"
-
-EAPI=7
+EAPI=8
 
 inherit unpacker
 
-DESCRIPTION="A web browser built for speed, simplicity, and security"
-HOMEPAGE="https://www.chromium.org/"
-SRC_URI="amd64? ( http://commondatastorage.googleapis.com/chromium-browser-snapshots/Linux_x64/${PV}/chrome-linux.zip -> ${P}.zip )"
+DESCRIPTION="Brave Browser: Secure, Fast & Private Web Browser with Adblocker"
+HOMEPAGE="https://brave.com"
+SRC_URI="amd64? ( https://github.com/brave/brave-browser/releases/download/v${PV}/brave-browser-nightly_${PV}_amd64.deb )"
 S="${WORKDIR}"
 
 RESTRICT="strip mirror"
 
-LICENSE="BSD"
+LICENSE="BRAVE"
 SLOT="0"
 KEYWORDS="amd64"
 
@@ -23,6 +20,7 @@ RDEPEND="
 	app-compression/bzip2
 	app-misc/ca-certificates
 	xgui-live-lib/atk
+	xgui-live-lib/libxkbcommon
 	lib-core/expat
 	lib-live/glib:2
 	lib-dev/nspr
@@ -50,25 +48,21 @@ RDEPEND="
 	xgui-live-lib/libxcb
 	x11-live-lib/pango
 	x11-live-misc/xdg-utils
-	xgui-live-lib/wayland
 "
 
 QA_PREBUILT="*"
 
 src_install() {
 	mkdir -p "${ED}"/opt || die
-	cp -rp chrome-linux "${ED}"/opt/ || die
+	cp -rp opt/brave.com "${ED}"/opt/ || die
 
 	# Create /usr/bin/${PN}
 	dodir /usr/bin/
 	cat <<-EOF >"${D}"/usr/bin/${PN}
 	#!/bin/sh
-	exec /opt/chrome-linux/chrome "\$@"
+	exec /opt/brave.com/brave-nightly/brave-browser-nightly "\$@"
 	EOF
 	fperms 0755 /usr/bin/${PN}
-	fperms 0755 /opt/chrome-linux/chrome
-
-	rm -f "${ED}"/opt/chrome-linux/locales/{a*,b*,c*,d*,e{l,o,s,t,u}*,en-GB*,f*,g*,h*,i{a,d,g,k,t,u}*,j*,k*,l*,m*,n*,o*,p*,q*,r*,s*,t*,u*,v*,w*,x*,y*,z*}
-
-	rm -f "${ED}"/opt/chrome-linux/WidevineCdm
+	fperms 0755 /opt/brave.com/brave-nightly/brave-browser-nightly
+	fperms 4755 /opt/brave.com/brave-nightly/chrome-sandbox
 }

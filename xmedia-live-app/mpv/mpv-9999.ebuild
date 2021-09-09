@@ -56,7 +56,7 @@ COMMON_DEPEND="
 	raspberry-pi? ( >=xmedia-live-lib/raspberrypi-userland-0_pre20160305-r1 )
 	rubberband? ( >=xmedia-live-lib/rubberband-1.8.0 )
 	sdl? ( xmedia-live-lib/libsdl2[sound,threads,video] )
-	vaapi? ( x11-live-lib/libva:=[drm?,X?,wayland?] )
+	vaapi? ( xgui-live-lib/libva:=[drm?,X?,wayland?] )
 	vdpau? ( xgui-live-lib/libvdpau )
 	wayland? (
 		>=xgui-live-lib/wayland-1.6.0
@@ -64,16 +64,16 @@ COMMON_DEPEND="
 		xgui-live-lib/wayland-protocols
 	)
 	X? (
-		x11-live-lib/libX11
-		x11-live-lib/libXScrnSaver
-		x11-live-lib/libXext
-		x11-live-lib/libXinerama
-		x11-live-lib/libXrandr
+		xgui-live-lib/libX11
+		xgui-live-lib/libXScrnSaver
+		xgui-live-lib/libXext
+		xgui-live-lib/libXinerama
+		xgui-live-lib/libXrandr
 		opengl? (
-			x11-live-lib/libXdamage
+			xgui-live-lib/libXdamage
 			xmedia-live-lib/mesa
 		)
-		xv? ( x11-live-lib/libXv )
+		xv? ( xgui-live-lib/libXv )
 	)
 	zlib? ( lib-core/zlib )
 "

@@ -30,8 +30,8 @@ RDEPEND="
 	wayland? ( xgui-live-lib/wayland )
 	X? (
 		xgui-misc/xorg-server
-		>=x11-live-lib/libX11-1.6.2
-		>=x11-live-lib/libXext-1.3.2
+		>=xgui-live-lib/libX11-1.6.2
+		>=xgui-live-lib/libXext-1.3.2
 		lib-core/zlib
 	)
 "

@@ -17,8 +17,8 @@ IUSE="translations"
 DEPEND="
 	xgui-live-lib/qtbase
 	xgui-live-lib/qtx11extras
-	x11-live-lib/libX11
-	~x11-live-lib/qtermwidget-${PV}
+	xgui-live-lib/libX11
+	~xgui-live-lib/qtermwidget-${PV}
 "
 BDEPEND="dev-util/lxqt-build-tools"
 

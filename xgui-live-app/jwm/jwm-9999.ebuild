@@ -19,11 +19,11 @@ DEPEND="
 	xgui-live-lib/cairo
 	xmedia-live-lib/libjpeg-turbo
 	xmedia-live-lib/libpng
-	x11-live-lib/libXext
-	x11-live-lib/libXrender
-	x11-live-lib/libXmu
-	x11-live-lib/libXinerama
-	x11-live-lib/libXpm
+	xgui-live-lib/libXext
+	xgui-live-lib/libXrender
+	xgui-live-lib/libXmu
+	xgui-live-lib/libXinerama
+	xgui-live-lib/libXpm
 "
 
 src_prepare() {

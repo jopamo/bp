@@ -6,8 +6,8 @@
 *fonts/inconsolata
 *fonts/font-alias
 *xgui-live-app/keepassxc
-*x11-live-app/picom
-*x11-live-app/hsetroot
+*xgui-live-app/picom
+*xgui-live-app/hsetroot
 *xgui-misc/mesa-progs
 *lib-live/libinput
 *xgui-live-app/lxqt-meta

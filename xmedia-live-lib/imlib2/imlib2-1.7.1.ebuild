@@ -30,9 +30,9 @@ DEPEND="
 	tiff? ( >=xmedia-live-lib/tiff-4.0.3-r6:0 )
 	webp? ( xmedia-live-lib/libwebp:0 )
 	X? (
-		x11-live-lib/libX11
-		x11-live-lib/libXext
-		x11-live-misc/xorgproto
+		xgui-live-lib/libX11
+		xgui-live-lib/libXext
+		xgui-live-app/xorgproto
 	)
 "
 

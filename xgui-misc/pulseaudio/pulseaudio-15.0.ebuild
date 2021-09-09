@@ -29,13 +29,13 @@ DEPEND="
 	xmedia-live-lib/speexdsp
 	xmedia-live-lib/libsndfile
 	X? (
-		x11-live-lib/libX11
+		xgui-live-lib/libX11
 		xgui-live-lib/libxcb
-		x11-live-lib/libSM
-		x11-live-lib/libICE
-		x11-live-lib/libXtst
-		x11-live-misc/xorgproto
-		x11-live-lib/libXtst
+		xgui-live-lib/libSM
+		xgui-live-lib/libICE
+		xgui-live-lib/libXtst
+		xgui-live-app/xorgproto
+		xgui-live-lib/libXtst
 	)
 	bluez? ( xmedia-live-lib/sbc )
 	samplerate? ( xmedia-live-lib/libsamplerate )
@@ -43,7 +43,7 @@ DEPEND="
 	glib? ( lib-live/glib )
 	jack? ( virtual/jack )
 	dbus? ( app-core/dbus )
-	gtk? ( x11-live-lib/gtk+:3 )
+	gtk? ( xgui-live-lib/gtk+:3 )
 	udev? ( app-core/systemd[hwdb(+)] )
 	lib-core/gdbm
 	systemd? ( app-core/systemd )

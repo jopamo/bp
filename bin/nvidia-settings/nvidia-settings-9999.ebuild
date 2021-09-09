@@ -16,9 +16,9 @@ KEYWORDS="amd64"
 IUSE="static-libs"
 
 DEPEND="lib-core/jansson
-	x11-live-lib/libXv
+	xgui-live-lib/libXv
 	xgui-live-lib/libvdpau
-	x11-live-lib/gtk+:3"
+	xgui-live-lib/gtk+:3"
 
 src_prepare() {
 	cp "${FILESDIR}"/Makefile_libxnvctrl "${S}"/libXNVCtrl/Makefile || die

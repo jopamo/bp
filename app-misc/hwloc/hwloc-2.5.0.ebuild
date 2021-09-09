@@ -19,7 +19,7 @@ DEPEND="
 	cairo? ( xgui-live-lib/cairo )
 	pci? (
 		app-core/pciutils
-		x11-live-lib/libpciaccess
+		xgui-live-lib/libpciaccess
 	)
 	numa? ( app-live/numactl )
 	xml? ( lib-core/libxml2 )

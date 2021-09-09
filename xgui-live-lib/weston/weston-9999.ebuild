@@ -47,7 +47,7 @@ RDEPEND="
 		>=xgui-misc/mtdev-1.1.0
 		virtual/service-manager
 	)
-	editor? ( x11-live-lib/pango )
+	editor? ( xgui-live-lib/pango )
 	gles2? (
 		xmedia-live-lib/mesa
 	)
@@ -65,13 +65,13 @@ RDEPEND="
 	launch? ( app-core/pambase )
 	X? (
 		xgui-live-lib/libxcb
-		x11-live-lib/libX11
+		xgui-live-lib/libX11
 	)
 	xwayland? (
 		x11-misc/xorg-server[wayland]
 		xgui-live-lib/cairo[xcb]
 		xgui-live-lib/libxcb
-		x11-live-lib/libXcursor
+		xgui-live-lib/libXcursor
 	)
 "
 DEPEND="${RDEPEND}"

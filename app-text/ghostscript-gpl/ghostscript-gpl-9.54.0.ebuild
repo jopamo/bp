@@ -27,9 +27,9 @@ DEPEND="
 	xmedia-live-lib/libjpeg-turbo
 	cups? ( >=lib-print/cups-1.3.8 )
 	dbus? ( app-core/dbus )
-	gtk? ( x11-live-lib/gtk+ )
+	gtk? ( xgui-live-lib/gtk+ )
 	tiff? ( >=xmedia-live-lib/tiff-4.0.1:0= )
-	X? ( x11-live-lib/libXt x11-live-lib/libXext )
+	X? ( xgui-live-lib/libXt xgui-live-lib/libXext )
 "
 
 BDEPEND="dev-util/pkgconf"

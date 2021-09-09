@@ -22,14 +22,14 @@ DEPEND="
 	lib-live/libqtxdg
 	xgui-live-lib/qtbase
 	xgui-live-lib/qtx11extras
-	x11-live-misc/kwindowsystem
+	xgui-live-app/kwindowsystem
 	xgui-live-lib/liblxqt
 	lib-core/zlib
 	xgui-live-lib/libxcb
-	x11-live-lib/libX11
-	x11-live-lib/libXcursor
-	x11-live-lib/libXfixes
-	x11-live-misc/xf86-input-libinput
+	xgui-live-lib/libX11
+	xgui-live-lib/libXcursor
+	xgui-live-lib/libXfixes
+	xgui-live-app/xf86-input-libinput
 "
 BDEPEND="dev-util/lxqt-build-tools"
 

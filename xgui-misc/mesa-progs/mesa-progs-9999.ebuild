@@ -14,10 +14,10 @@ SLOT="0"
 
 RDEPEND="
 	xmedia-live-lib/mesa
-	x11-live-lib/libX11"
+	xgui-live-lib/libX11"
 DEPEND="${RDEPEND}
 	xmedia-live-lib/glad
 	xmedia-live-lib/glu
-	x11-live-misc/xorgproto"
+	xgui-live-app/xorgproto"
 
 filter-flags -Wl,-z,defs

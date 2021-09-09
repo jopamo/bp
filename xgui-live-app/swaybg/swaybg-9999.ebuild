@@ -16,7 +16,7 @@ DEPEND="xgui-live-lib/wayland"
 
 BDEPEND="
 	xgui-live-lib/wayland-protocols
-	x11-live-lib/gdk-pixbuf
+	xgui-live-lib/gdk-pixbuf
 	xgui-live-lib/cairo
 	dev-util/pkgconf
 "

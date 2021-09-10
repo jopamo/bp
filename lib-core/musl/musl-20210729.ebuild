@@ -81,6 +81,9 @@ src_install() {
 		mkdir -p "${ED}"/usr/lib || die
 		cp -p "${ED}"/lib/ld-musl*.so* "${ED}"/usr/lib/ || die
 		rm -r "${ED}"/lib || die
+
+		use amd64 && dosym -r /usr/lib/ld-musl-x86_64.so.1 /usr/bin/ldd
+		use arm64 && dosym -r /usr/lib/ld-musl-aarch64.so.1 /usr/bin/ldd
 	fi
 
 	for i in linux asm asm-generic mtd ; do

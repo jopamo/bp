@@ -16,7 +16,7 @@ IUSE="bzip2 lzma musl static-libs test +utils valgrind zstd"
 
 DEPEND="
 	lib-core/zlib
-	bzip2? ( app-compression/lbzip2 )
+	bzip2? ( app-compression/bzip2 )
 	lzma? ( app-compression/xz-utils )
 	musl? (
 		lib-core/argp-standalone

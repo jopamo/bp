@@ -33,7 +33,7 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconf
 	static-libs? ( ${LIB_DEPEND} )
 	static? ( ${LIB_DEPEND//?}
-		app-compression/lbzip2[static-libs]
+		app-compression/bzip2[static-libs]
 		xgui-live-lib/libXau[static-libs]
 		xgui-live-lib/libXdmcp[static-libs]
 		xgui-live-lib/libxcb[static-libs] )"

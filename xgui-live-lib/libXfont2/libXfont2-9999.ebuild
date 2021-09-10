@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit git-r3 autotools flag-o-matic
 
@@ -11,15 +11,16 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 ipv6 truetype doc static-libs"
+IUSE="bzip2 ipv6 truetype static-libs"
 
-RDEPEND="xgui-live-lib/xtrans
+DEPEND="
+	xgui-live-lib/xtrans
 	xgui-live-lib/libfontenc
 	lib-core/zlib
-	truetype? ( >=xmedia-live-lib/freetype-2 )
-	bzip2? ( app-compression/lbzip2 )
-	xgui-live-app/xorgproto"
-DEPEND="${RDEPEND}"
+	truetype? ( xmedia-live-lib/freetype )
+	bzip2? ( app-compression/bzip2 )
+	xgui-live-app/xorgproto
+"
 
 append-flags -Wno-error=implicit-function-declaration
 
@@ -30,18 +31,12 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		$(use_enable ipv6)
-		$(use_enable doc devel-docs)
-		$(use_with doc xmlto)
 		$(use_with bzip2)
 		$(use_enable truetype freetype)
 		--without-fop
+		--disable-xmlto
+		--disable-devel-docs
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

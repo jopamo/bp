@@ -14,6 +14,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
+filter-flags -flto\=\*
+
 src_prepare() {
 	use static-libs && filter-flags -flto\=\*
 
@@ -27,9 +29,20 @@ src_compile() {
 	use static-libs && emake
 
 	emake -f Makefile-libbz2_so
+	emake bzip2 bzip2recover
 }
 
 src_install() {
+	newbin bzip2-shared bzip2
+
+	for x in bzip2recover bzdiff bzgrep bzmore ; do
+		dobin ${x}
+	done
+
+	for x in bunzip2 bzcat ; do
+		dosym -r /usr/bin/bzip2 /usr/bin/${x}
+	done
+
 	dolib.so libbz2.so.${PV}
 
 	for x in libbz2.so.1 libbz2.so.1.0 libbz2.so ; do

@@ -24,10 +24,6 @@ cp /var/cache/packages/app-compression/bzip2/* .
 tar xvhf bzip2* --xattrs
 rm bzip2* || exit
 
-cp /var/cache/packages/app-compression/lbzip2/* .
-tar xvhf lbzip2* --xattrs
-rm lbzip2* || exit
-
 cp /var/cache/packages/app-compression/lz4/* .
 tar xvhf lz4* --xattrs
 rm lz4* || exit

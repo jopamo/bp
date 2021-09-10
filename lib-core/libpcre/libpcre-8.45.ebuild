@@ -1,19 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit libtool flag-o-matic toolchain-funcs
 
 DESCRIPTION="Perl-compatible regular expression library"
 HOMEPAGE="http://www.pcre.org/"
+
 MY_P="pcre-${PV/_rc/-RC}"
-if [[ ${PV} != *_rc* ]] ; then
-	# Only the final releases are available here.
-	SRC_URI="mirror://sourceforge/pcre/${MY_P}.tar.bz2
-		ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${MY_P}.tar.bz2"
-else
-	SRC_URI="ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/Testing/${MY_P}.tar.bz2"
-fi
+SRC_URI="mirror://sourceforge/pcre/${MY_P}.tar.bz2"
+S="${WORKDIR}/${MY_P}"
 
 LICENSE="BSD"
 SLOT="3"
@@ -22,14 +18,11 @@ KEYWORDS="amd64 arm64"
 IUSE="+cxx +jit +recursion-limit static-libs"
 
 DEPEND="
-	lib-core/libedit:=
-	app-compression/lbzip2:=
-	lib-core/zlib:=
+	lib-core/libedit
+	app-compression/bzip2
+	lib-core/zlib
 "
-
 BDEPEND="dev-util/pkgconf"
-
-S="${WORKDIR}/${MY_P}"
 
 src_prepare() {
 	default

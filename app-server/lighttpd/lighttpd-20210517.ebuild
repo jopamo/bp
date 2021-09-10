@@ -26,7 +26,7 @@ IUSE="bzip2 dbi fam gdbm geoip krb5 ldap libev libunwind lua memcached
 	xattr zlib static"
 
 DEPEND="
-	app-compression/lbzip2
+	app-compression/bzip2
 	lib-core/zlib
 	lib-core/libpcre
 	gdbm?     ( lib-core/gdbm )

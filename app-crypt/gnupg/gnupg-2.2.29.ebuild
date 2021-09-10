@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit toolchain-funcs flag-o-matic
 
@@ -8,54 +8,43 @@ MY_P="${P/_/-}"
 
 DESCRIPTION="The GNU Privacy Guard, a GPL OpenPGP implementation"
 HOMEPAGE="http://www.gnupg.org/"
+
 SRC_URI="mirror://gnupg/gnupg/${MY_P}.tar.bz2"
+S="${WORKDIR}/${MY_P}"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 ldap nls readline +gnutls tools"
+IUSE="bzip2 ldap readline +gnutls tools"
 
-COMMON_DEPEND_LIBS="
-	>=lib-core/npth-1.2
-	>=lib-core/libassuan-2.5.0
-	>=lib-core/libgcrypt-1.7.3
-	>=lib-core/libgpg-error-1.24
-	>=lib-core/libksba-1.3.4
-	>=app-net/curl-7.10
-	>=lib-net/gnutls-3.0:0=
+DEPEND="
+	lib-core/npth
+	lib-core/libassuan
+	lib-core/libgcrypt
+	lib-core/libgpg-error
+	lib-core/libksba
+	app-net/curl
+	lib-net/gnutls
 	lib-core/zlib
 	ldap? ( app-net/openldap )
-	bzip2? ( app-compression/lbzip2 )
-	readline? ( lib-core/readline:0= )
+	bzip2? ( app-compression/bzip2 )
+	readline? ( lib-core/readline )
+	app-crypt/pinentry
 "
 
-COMMON_DEPEND_BINS="app-crypt/pinentry"
-
-# Existence of executables is checked during configuration.
-DEPEND="${COMMON_DEPEND_LIBS}
-	${COMMON_DEPEND_BINS}
-	nls? ( sys-devel/gettext )"
-
-RDEPEND="${COMMON_DEPEND_LIBS}
-	${COMMON_DEPEND_BINS}
-	nls? ( sys-devel/gettext )"
-
-S="${WORKDIR}/${MY_P}"
-
 append-flags -fno-strict-aliasing
-filter-flags -Wl,-z,defs -flto\=\*
 
 src_configure() {
 	local myconf=(
 			$(use_enable bzip2)
 			$(use_enable gnutls)
-			$(use_enable nls)
 			$(use_with ldap)
 			$(use_with readline)
 			--enable-gpgsm
 			--enable-large-secmem
 			--enable-all-tests
+			--disable-nls
 			--disable-scdaemon
 			--disable-tofu
 			--disable-wks-tools

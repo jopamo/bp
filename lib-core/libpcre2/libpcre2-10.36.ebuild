@@ -1,19 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit flag-o-matic libtool toolchain-funcs
 
 DESCRIPTION="Perl-compatible regular expression library"
 HOMEPAGE="http://www.pcre.org/"
+
 MY_P="pcre2-${PV/_rc/-RC}"
-if [[ ${PV} != *_rc* ]] ; then
-	# Only the final releases are available here.
-	SRC_URI="mirror://sourceforge/pcre/${MY_P}.tar.bz2
-		ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${MY_P}.tar.bz2"
-else
-	SRC_URI="ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/Testing/${MY_P}.tar.bz2"
-fi
+SRC_URI="mirror://sourceforge/pcre/${MY_P}.tar.bz2"
+S="${WORKDIR}/${MY_P}"
 
 LICENSE="BSD"
 SLOT="0"
@@ -22,16 +18,14 @@ KEYWORDS="amd64 arm64"
 IUSE="bzip2 static-libs zlib"
 
 DEPEND="
-	bzip2? ( app-compression/lbzip2 )
+	bzip2? ( app-compression/bzip2 )
 	zlib? ( lib-core/zlib )
 	lib-core/readline
 "
-
 BDEPEND="
 	dev-util/pkgconf
-	>=app-core/findutils-4.4.0"
-
-S="${WORKDIR}/${MY_P}"
+	app-core/findutils
+"
 
 src_prepare() {
 	default
@@ -40,12 +34,6 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}/etc"
-		--localstatedir="${EPREFIX}/var"
 		--enable-pcre2-8
 		--enable-shared
 		--htmldir="${EPREFIX}"/usr/share/doc/${PF}/html

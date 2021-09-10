@@ -1,18 +1,20 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit toolchain-funcs
 
 DESCRIPTION="zstd fast compression library"
 HOMEPAGE="https://facebook.github.io/zstd/"
 
-if [[ ${PV} == "9999" ]] ; then
+if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/facebook/zstd.git"
 	EGIT_BRANCH="release"
 	inherit git-r3
 else
-	SRC_URI="https://github.com/facebook/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+	SNAPSHOT=d68aa19a2f9a09cb683d8f955c8f1df77e4e4818
+	SRC_URI="https://github.com/facebook/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 
 LICENSE="|| ( BSD GPL-2 )"

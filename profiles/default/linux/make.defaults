@@ -8,8 +8,9 @@ CFLAGS="-O2 -pipe -march=native"
 CXXFLAGS="${CFLAGS}"
 LDFLAGS="-Wl,-O2"
 
-USE="${USE} -ipv6 -manpager caps ncurses systemd udev pam readline device-mapper ssl
-	sqlite gmp pcre seccomp crypt gcrypt iconv -jit zlib"
+USE="${USE} -ipv6 -manpager caps ncurses systemd udev pam readline device-mapper ssl"
+USE="${USE}	sqlite gmp pcre seccomp crypt gcrypt iconv -jit zlib"
+USE="${USE}	lz4 zstd"
 
 INPUT_DEVICES="libinput"
 

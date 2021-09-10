@@ -1,17 +1,17 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-inherit cmake
+inherit toolchain-funcs
 
 DESCRIPTION="Extremely Fast Compression algorithm"
 HOMEPAGE="https://github.com/lz4/lz4"
 
-if [[ ${PV} == *9999* ]]; then
+if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
 	inherit git-r3
 else
-	SNAPSHOT=4de56b3da3f709e61301d65cf67e068bc650d9eb
+	SNAPSHOT=976170316e1c79040db3b109cf0347c1c1252fdc
 	SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -22,12 +22,22 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-CMAKE_USE_DIR=${S}/build/cmake
-
-src_configure() {
-	local mycmakeargs=(
-		-DBUILD_STATIC_LIBS=$(usex static-libs)
-	)
-
-	cmake_src_configure
+src_compile() {
+	emake \
+		CC="$(tc-getCC)" \
+		AR="$(tc-getAR)" \
+		PREFIX="${EPREFIX}"/usr \
+		LIBDIR="${EPREFIX}"/usr/lib
 }
+
+src_install() {
+	emake \
+		DESTDIR="${ED}" \
+		PREFIX="${EPREFIX}"/usr \
+		LIBDIR="${EPREFIX}"/usr/lib install
+
+	if ! use static-libs; then
+		rm "${ED}"/usr/lib/liblz4.a || die
+	fi
+}
+

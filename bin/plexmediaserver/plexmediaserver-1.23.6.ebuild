@@ -29,10 +29,7 @@ RESTRICT="strip mirror"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 BDEPEND="dev-util/patchelf"
-RDEPEND="
-	xmedia-live-lib/taglib
-	app-compression/minizip
-"
+RDEPEND="xmedia-live-lib/taglib"
 
 S="${WORKDIR}"
 

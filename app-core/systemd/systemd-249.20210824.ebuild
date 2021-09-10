@@ -187,6 +187,7 @@ src_configure() {
 		-Dtpm=false
 		-Dxz=false
 		-Dzlib=false
+		-Dzstd=false
 	)
 
 	meson_src_configure

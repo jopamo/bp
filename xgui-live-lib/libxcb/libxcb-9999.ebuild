@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit git-r3 autotools flag-o-matic
 
@@ -14,12 +14,13 @@ KEYWORDS="amd64 arm64"
 
 IUSE="test xkb static-libs"
 
-DEPEND=">=lib-dev/libpthread-stubs-0.3-r1
-	>=xgui-live-lib/libXau-1.0.7-r1
-	>=xgui-live-lib/libXdmcp-1.1.1-r1
+DEPEND="
+	xgui-live-lib/libXau
+	xgui-live-lib/libXdmcp
 	test? ( lib-dev/check )
 	lib-core/libxslt
-	xgui-live-app/xcb-proto"
+	xgui-live-app/xcb-proto
+"
 
 src_prepare() {
 	eautoreconf
@@ -28,12 +29,6 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		--disable-devel-docs
 		$(use_enable xkb)
 		--enable-xinput

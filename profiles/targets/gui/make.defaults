@@ -1,2 +1,2 @@
 USE="${USE} X xkb pic drm qml opengl xdg xcb jpeg dbus pulseaudio kmod cups mount gif jpeg mp3 png tiff zlib gui libinput cairo hwdb"
-USE="${USE} bin pstore libx264 machined egl gles2 lz4 zstd dri video"
+USE="${USE} bin pstore libx264 machined egl gles2 dri video"

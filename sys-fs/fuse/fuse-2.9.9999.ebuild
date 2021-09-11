@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools git-r3 flag-o-matic
 
@@ -23,18 +23,6 @@ src_prepare() {
 	sed -i -e "s/\/etc\/udev\/rules.d/\/usr\/lib\/udev\/rules.d/g" "configure.ac" || die
 	default
 	eautoreconf
-}
-
-src_configure() {
-	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
 src_install() {

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit linux-info autotools
 
@@ -20,20 +20,20 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl debug +external-fuse ntfsdecrypt +ntfsprogs static-libs suid xattr"
+IUSE="acl debug ntfsdecrypt +ntfsprogs static-libs suid xattr"
 
-DEPEND="app-core/attr
+DEPEND="
+	app-core/attr
+	sys-fs/fuse:2
 	ntfsdecrypt? (
-		>=lib-core/libgcrypt-1.2.2:0
-		>=lib-net/gnutls-1.4.4
+		lib-core/libgcrypt
+		lib-net/gnutls
 	)"
 
 pkg_setup() {
-	if use external-fuse  ; then
-		CONFIG_CHECK="~FUSE_FS"
-		FUSE_FS_WARNING="You need to have FUSE module built to use ntfs-3g"
-		linux-info_pkg_setup
-	fi
+	CONFIG_CHECK="~FUSE_FS"
+	FUSE_FS_WARNING="You need to have FUSE module built to use ntfs-3g"
+	linux-info_pkg_setup
 }
 
 src_prepare() {
@@ -63,6 +63,7 @@ src_configure() {
 		$(use_enable ntfsprogs quarantined)
 		--without-uuid
 		--enable-extras
+		--with-fuse=external
 		$(use_enable static-libs static)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit flag-o-matic multibuild toolchain-funcs
 
@@ -23,7 +23,7 @@ DEPEND="
 	app-compression/xz-utils
 	virtual/curses
 	device-mapper? ( >=sys-fs/lvm2-2.02.45 )
-	mount? ( =sys-fs/fuse-2.9.9999 )
+	mount? ( sys-fs/fuse:2 )
 	static? ( app-compression/xz-utils[static-libs(+)] )
 	grub_platforms_efi-64? ( sys-fs/efibootmgr )
 "

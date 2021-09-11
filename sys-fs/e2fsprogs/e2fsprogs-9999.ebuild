@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit flag-o-matic toolchain-funcs git-r3
 
@@ -17,7 +17,7 @@ IUSE="fuse static-libs"
 
 DEPEND="
 	app-core/util-linux
-	fuse? ( sys-fs/fuse )
+	fuse? ( sys-fs/fuse:2 )
 "
 
 BDEPEND="
@@ -42,13 +42,17 @@ src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
+src_compile() {
+	emake V=1
+}
+
 src_install() {
 	unset MAKEFLAGS
 
 	emake \
 		STRIP=: \
 		DESTDIR="${D}" \
-		install install-libs
+		install
 
 	rm -f "${ED}"/usr/share/info/libext2fs.info.gz
 

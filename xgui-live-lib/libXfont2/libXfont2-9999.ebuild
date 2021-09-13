@@ -35,7 +35,6 @@ src_configure() {
 		$(use_with bzip2)
 		$(use_enable truetype freetype)
 		--without-fop
-		--disable-xmlto
 		--disable-devel-docs
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

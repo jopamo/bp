@@ -60,4 +60,9 @@ src_install() {
 	emake DIST_ROOT="${ED}" PKG_ROOT_SBIN_DIR=/usr/sbin install-dev
 
 	patchelf --remove-rpath "${ED}"/usr/sbin/xfs_{io,scrub,fsr}
+
+	cp -rp "${ED}"/lib/* "${ED}"/usr/lib/ || die
+	rm -rf "${ED}"/lib || die
+
+	cleanup_install
 }

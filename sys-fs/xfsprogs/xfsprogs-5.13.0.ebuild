@@ -2,8 +2,6 @@
 
 EAPI=8
 
-inherit flag-o-matic toolchain-funcs
-
 DESCRIPTION="xfs filesystem utilities"
 HOMEPAGE="https://xfs.wiki.kernel.org/"
 SRC_URI="https://www.kernel.org/pub/linux/utils/fs/xfs/${PN}/${P}.tar.xz"
@@ -12,14 +10,14 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="icu libedit systemd"
+IUSE="libedit systemd"
 
-LIB_DEPEND="
-	lib-live/inih[static-libs(+)]
-	app-core/util-linux[static-libs(+)]
-	icu? ( lib-dev/icu[static-libs(+)] )
-	libedit? ( lib-core/libedit[static-libs(+)] )"
-DEPEND="${LIB_DEPEND//\[static-libs(+)]}"
+DEPEND="
+	lib-live/inih
+	app-core/util-linux
+	libedit? ( lib-core/libedit )
+"
+BDEPEND="dev-util/patchelf"
 
 src_prepare() {
 	default
@@ -34,20 +32,10 @@ src_prepare() {
 }
 
 src_configure() {
-	# include/builddefs.in will add FCFLAGS to CFLAGS which will
-	# unnecessarily clutter CFLAGS (and fortran isn't used)
 	unset FCFLAGS
-
 	export DEBUG=-DNDEBUG
-
-	# Package is honoring CFLAGS; No need to use OPTIMIZER anymore.
-	# However, we have to provide an empty value to avoid default
-	# flags.
-	export OPTIMIZER=" "
-
-	unset PLATFORM # if set in user env, this breaks configure
-
-	# Avoid automagic on libdevmapper, #709694
+	export OPTIMIZER=""
+	unset PLATFORM
 	export ac_cv_search_dm_task_create=no
 
 	local myconf=(
@@ -55,7 +43,7 @@ src_configure() {
 		--enable-lto
 		--with-crond-dir="${EPREFIX}/etc/cron.d"
 		--with-systemd-unit-dir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
-		$(use_enable icu libicu)
+		--disable-libicu
 		--disable-gettext
 		$(use_enable libedit editline)
 	)
@@ -71,8 +59,5 @@ src_install() {
 	emake DIST_ROOT="${ED}" PKG_ROOT_SBIN_DIR=/usr/sbin install
 	emake DIST_ROOT="${ED}" PKG_ROOT_SBIN_DIR=/usr/sbin install-dev
 
-	mkdir -p "${ED}"/usr/lib
-	cp -rp "${ED}"/lib64/* "${ED}"/usr/lib/
-	cp -rp "${ED}"/usr/lib64/* "${ED}"/usr/lib/
-  	rm -rf "${ED}"/lib64 "${ED}"/usr/lib64
+	patchelf --remove-rpath "${ED}"/usr/sbin/xfs_{io,scrub,fsr}
 }

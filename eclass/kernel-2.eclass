@@ -961,10 +961,6 @@ postinst_sources() {
 	# Don't forget to make directory for sysfs
 	[[ ! -d ${EROOT%/}/sys ]] && kernel_is 2 6 && { mkdir "${EROOT%/}"/sys || die ; }
 
-	elog "If you are upgrading from a previous kernel, you may be interested"
-	elog "in the following document:"
-	elog "  - General upgrade guide: https://wiki.gentoo.org/wiki/Kernel/Upgrade"
-
 	# if K_EXTRAEINFO is set then lets display it now
 	if [[ -n ${K_EXTRAEINFO} ]]; then
 		echo ${K_EXTRAEINFO} | fmt |
@@ -981,40 +977,6 @@ postinst_sources() {
 	if [[ -n ${K_EXTRAEWARN} ]]; then
 		echo ${K_EXTRAEWARN} | fmt |
 		while read -s ELINE; do ewarn "${ELINE}"; done
-	fi
-
-	# optionally display security unsupported message
-	#  Start with why
-	if [[ -n ${K_SECURITY_UNSUPPORTED} ]]; then
-		ewarn "${PN} is UNSUPPORTED by Gentoo Security."
-	fi
-	#  And now the general message.
-	if [[ -n ${K_SECURITY_UNSUPPORTED} ]]; then
-		ewarn "This means that it is likely to be vulnerable to recent security issues."
-		ewarn "Upstream kernel developers recommend always running the latest "
-		ewarn "release of any current long term supported Linux kernel version."
-		ewarn "To see a list of these versions, their most current release and "
-		ewarn "long term support status, please go to https://www.kernel.org ."
-		ewarn "For specific information on why this kernel is unsupported, please read:"
-		ewarn "https://wiki.gentoo.org/wiki/Project:Kernel_Security"
-	fi
-
-	# warn sparc users that they need to do cross-compiling with >= 2.6.25(bug #214765)
-	KV_MAJOR=$(ver_cut 1 ${OKV})
-	KV_MINOR=$(ver_cut 2 ${OKV})
-	KV_PATCH=$(ver_cut 3 ${OKV})
-	if [[ $(tc-arch) = sparc ]]; then
-		if [[ $(gcc-major-version) -lt 4 && $(gcc-minor-version) -lt 4 ]]; then
-			if [[ ${KV_MAJOR} -ge 3 ]] || ver_test ${KV_MAJOR}.${KV_MINOR}.${KV_PATCH} -gt 2.6.24; then
-				elog "NOTE: Since 2.6.25 the kernel Makefile has changed in a way that"
-				elog "you now need to do"
-				elog "  make CROSS_COMPILE=sparc64-unknown-linux-gnu-"
-				elog "instead of just"
-				elog "  make"
-				elog "to compile the kernel. For more information please browse to"
-				elog "https://bugs.gentoo.org/show_bug.cgi?id=214765"
-			fi
-		fi
 	fi
 }
 
@@ -1554,16 +1516,6 @@ kernel-2_pkg_setup() {
 kernel-2_pkg_postrm() {
 	# This warning only makes sense for kernel sources.
 	[[ ${ETYPE} == headers ]] && return 0
-
-	# If there isn't anything left behind, then don't complain.
-	[[ -e ${EROOT%/}/usr/src/linux-${KV_FULL} ]] || return 0
-	ewarn "Note: Even though you have successfully unmerged "
-	ewarn "your kernel package, directories in kernel source location: "
-	ewarn "${EROOT%/}/usr/src/linux-${KV_FULL}"
-	ewarn "with modified files will remain behind. By design, package managers"
-	ewarn "will not remove these modified files and the directories they reside in."
-	ewarn "For more detailed kernel removal instructions, please see: "
-	ewarn "https://wiki.gentoo.org/wiki/Kernel/Removal"
 }
 
 EXPORT_FUNCTIONS src_{unpack,prepare,compile,install,test} \

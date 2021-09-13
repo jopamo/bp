@@ -11,7 +11,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/tuxera/ntfs-3g.git"
 	inherit git-r3
 else
-	SNAPSHOT=a4a837025b6ac2b0c44c93e34e22535fe9e95b27
+	SNAPSHOT=92b9fbc6fe5aaa940a401b8f5ff2ed8cac6d5cc6
 	SRC_URI="https://github.com/tuxera/ntfs-3g/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/ntfs-3g-${SNAPSHOT}
 fi
@@ -37,7 +37,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	sed -i -e "s/2017.3.23/${PV}/g" "configure.ac" || die
+	sed -i -e "s/2021.8.22/${PV}/g" "configure.ac" || die
 
 	eautoreconf
 	default
@@ -54,14 +54,12 @@ src_prepare() {
 src_configure() {
 	local myconf=(
 		$(use_enable debug)
-		--enable-ldscript
 		--disable-ldconfig
 		$(use_enable acl posix-acls)
 		$(use_enable xattr xattr-mappings)
 		$(use_enable ntfsdecrypt crypto)
 		$(use_enable ntfsprogs)
 		$(use_enable ntfsprogs quarantined)
-		--without-uuid
 		--enable-extras
 		--with-fuse=external
 		$(use_enable static-libs static)

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic linux-info meson toolchain-funcs
+inherit flag-o-matic linux-info meson toolchain-funcs user
 
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
@@ -204,10 +204,10 @@ src_install() {
 	rm -f "${ED}"/etc/systemd/logind.conf
 	rm "${ED}"/usr/share/factory/etc/issue
 
-	keepdir /var/lib/systemd
 	keepdir /var/log/journal
 
 	mkdir -p "${ED}"/etc/systemd/user && keepdir /etc/systemd/user
+
 	use xkb || rm -rf "${ED}"/etc/X11 "${ED}"/etc/xdg/
 	use tmpfilesd || rm -f "${ED}"/usr/lib/systemd/system/systemd-tmpfiles-clean.timer "${ED}"/usr/lib/systemd/system/timers.target.wants/systemd-tmpfiles-clean.timer
 
@@ -288,8 +288,6 @@ pkg_postinst() {
 
 pkg_preinst() {
 	if ! use sysusersd; then
-		inherit user
-
 		newusergroup messagebus
 		enewgroup systemd-journal
 

@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-
+EAPI=8
 
 inherit autotools linux-info flag-o-matic user
 
@@ -22,7 +21,7 @@ fi
 LICENSE="|| ( AFL-2.1 GPL-2 )"
 SLOT="0"
 
-IUSE="debug static-libs systemd test tmpfilesd user-session X"
+IUSE="debug static-libs systemd sysusersd test tmpfilesd user-session X"
 
 DEPEND="
 	lib-core/expat
@@ -43,9 +42,6 @@ TBD="${WORKDIR}/${P}-tests-build"
 append-flags -rdynamic
 
 pkg_setup() {
-	enewgroup messagebus
-	enewuser messagebus -1 -1 -1 messagebus
-
 	CONFIG_CHECK="~EPOLL"
 	linux-info_pkg_setup
 }
@@ -138,5 +134,13 @@ src_install() {
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
 		doins "${FILESDIR}/${PN}.service"
+	fi
+}
+
+pkg_preinst() {
+	if ! use sysusersd; then
+		rm -r "${ED}"/usr/lib/sysusers.d || die
+		enewgroup messagebus
+		enewuser messagebus -1 -1 -1 messagebus
 	fi
 }

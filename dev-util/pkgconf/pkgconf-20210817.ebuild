@@ -1,6 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
+
+inherit autotools
 
 DESCRIPTION="a program which helps to configure compiler and linker flags for development libraries"
 HOMEPAGE="https://git.sr.ht/~kaniini/pkgconf"
@@ -9,7 +11,10 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="http://git.dereferenced.org/pkgconf/pkgconf.git"
 	inherit git-r3
 else
-	SRC_URI="https://distfiles.dereferenced.org/pkgconf/${P}.tar.xz"
+	#SRC_URI="https://distfiles.dereferenced.org/pkgconf/${P}.tar.xz"
+	SNAPSHOT=2b390ea9cf5c73652590715291d9e7429bebf99d
+	SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 
 LICENSE="ISC"
@@ -19,6 +24,11 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs test"
 
 RESTRICT="!test? ( test )"
+
+src_prepare() {
+	eautoreconf
+	default
+}
 
 src_test() {
 	unset PKG_CONFIG_LIBDIR PKG_CONFIG_PATH

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit distutils-r1 linux-info flag-o-matic
+inherit distutils-r1 linux-info flag-o-matic user
 
 DESCRIPTION="Gentoo package manager"
 HOMEPAGE="https://github.com/gentoo/portage"
@@ -177,7 +177,6 @@ pkg_preinst() {
 		insinto /usr/lib/sysusers.d
 		newins "${FILESDIR}/${PN}-sysusers" ${PN}.conf
 	else
-		inherit user
 		enewgroup ${PN} 250
 		enewuser portage 250 -1 /var/lib/portage/home portage
 	fi

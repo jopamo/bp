@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools
+inherit flag-o-matic autotools user
 
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="http://www.openssh.org/"
@@ -109,7 +109,6 @@ pkg_preinst() {
 		insinto /usr/lib/sysusers.d
 		newins "${FILESDIR}/${PN}-sysusers" ${PN}.conf
 	else
-		inherit user
 		enewgroup sshd 22
 		enewuser sshd 22 -1 /var/empty sshd
 	fi

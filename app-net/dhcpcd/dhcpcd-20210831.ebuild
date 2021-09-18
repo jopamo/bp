@@ -20,7 +20,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug +embedded ipv6 systemd udev"
+IUSE="debug +embedded ipv6 systemd sysusersd tmpfilesd udev"
 
 filter-flags -Wl,-z,defs
 
@@ -29,14 +29,13 @@ src_configure() {
 		--dbdir="${EPREFIX}"/var/lib/dhcpcd
 		--libexecdir="${EPREFIX}"/usr/lib/dhcpcd
 		--libdir="${EPREFIX}"/usr/lib
-		--localstatedir="${EPREFIX}/var"
 		--prefix="${EPREFIX}"
 		--with-hook=ntp.conf
 		$(use_enable debug)
 		$(use_enable embedded)
 		$(use_enable ipv6)
 		--enable-privsep
-		--rundir="${EPREFIX}"/var/run/dhcpcd
+		--runstatedir="${EPREFIX}"/run
 		--privsepuser=dhcpcd
 		$(usex udev '' '--without-dev --without-udev')
 	)
@@ -52,9 +51,21 @@ src_install() {
 		insopts -m 0644
 		doins "${FILESDIR}/${PN}.service"
 	fi
+
+	if use tmpfilesd; then
+		insopts -m 0644
+		insinto /usr/lib/tmpfiles.d
+		newins "${FILESDIR}/${PN}-tmpfiles" ${PN}.conf
+	fi
 }
 
 pkg_preinst() {
-	enewgroup dhcpcd 67
-	enewuser dhcpcd 67 -1 /var/empty dhcpcd
+	if use sysusersd; then
+		insopts -m 0644
+		insinto /usr/lib/sysusers.d
+		newins "${FILESDIR}/${PN}-sysusers" ${PN}.conf
+	else
+		enewgroup dhcpcd 67
+		enewuser dhcpcd 67 -1 /var/empty dhcpcd
+	fi
 }

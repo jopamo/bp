@@ -119,13 +119,13 @@ python_install_all() {
 	if use tmpfilesd; then
 		insopts -m 0644
 		insinto /usr/lib/tmpfiles.d
-		doins "${FILESDIR}/portage-ccache.conf"
+		newins "${FILESDIR}/${PN}-tmpfiles" ${PN}.conf
 	fi
 
 	if use sysusersd; then
 		insopts -m 0644
 		insinto /usr/lib/sysusers.d
-		newins "${FILESDIR}/portage-sysusers" portage.conf
+		newins "${FILESDIR}/${PN}-sysusers" ${PN}.conf
 	fi
 
 	# Due to distutils/python-exec limitations
@@ -170,5 +170,15 @@ pkg_preinst() {
 	# This is allowed to fail if the user/group are invalid for prefix users.
 	if chown portage:portage "${ED}"var/log/portage{,/elog} 2>/dev/null ; then
 		chmod g+s,ug+rwx "${ED}"var/log/portage{,/elog}
+	fi
+
+	if use sysusersd; then
+		insopts -m 0644
+		insinto /usr/lib/sysusers.d
+		newins "${FILESDIR}/${PN}-sysusers" ${PN}.conf
+	else
+		inherit user
+		enewgroup ${PN} 250
+		enewuser portage 250 -1 /var/lib/portage/home portage
 	fi
 }

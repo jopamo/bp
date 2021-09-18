@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit user flag-o-matic autotools
+inherit flag-o-matic autotools
 
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="http://www.openssh.org/"
@@ -20,7 +20,7 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug pam +pie +ssl static systemd test"
+IUSE="debug pam +pie +ssl static systemd sysusersd test tmpfilesd"
 
 DEPEND="
 	lib-core/libedit
@@ -85,7 +85,6 @@ src_install() {
 	insinto /etc/ssh
 	doins "${FILESDIR}"/{ssh,sshd}_config
 
-	mkdir -p "${ED}"/var/empty || die
 	keepdir /var/empty
 
 	fperms 600 /etc/ssh
@@ -95,10 +94,23 @@ src_install() {
 	rm -rf "${ED}"/etc/ssh/moduli || die
 
 	#scp has been deprecated
-	rm -f "${ED}"/usr/bin/scp || die
+	rm "${ED}"/usr/bin/scp || die
+
+	if use tmpfilesd; then
+		insopts -m 0644
+		insinto /usr/lib/tmpfiles.d
+		newins "${FILESDIR}/${PN}-tmpfiles" ${PN}.conf
+	fi
 }
 
 pkg_preinst() {
-	enewgroup sshd 22
-	enewuser sshd 22 -1 /var/empty sshd
+	if use sysusersd; then
+		insopts -m 0644
+		insinto /usr/lib/sysusers.d
+		newins "${FILESDIR}/${PN}-sysusers" ${PN}.conf
+	else
+		inherit user
+		enewgroup sshd 22
+		enewuser sshd 22 -1 /var/empty sshd
+	fi
 }

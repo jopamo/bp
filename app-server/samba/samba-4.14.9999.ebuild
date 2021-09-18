@@ -164,4 +164,6 @@ src_install() {
 
 	keepdir var/log/samba
 	keepdir var/lib/samba/private
+
+	rm -rf /var/{run,lock}
 }

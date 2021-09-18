@@ -181,7 +181,7 @@ src_configure() {
 		-Dsplit-bin=true
 		-Dsplit-usr=false
 		-Dstandalone-binaries=false
-		-Dsysusers=false
+		-Dsysusers=true
 		-Dtelinit-path=""
 		-Dtimesyncd=false
 		-Dtpm=false
@@ -196,12 +196,13 @@ src_configure() {
 src_install() {
 	meson_src_install
 
-	dosym ../sysctl.conf /etc/sysctl.d/99-sysctl.conf
+	dosym -r /etc/sysctl.conf /etc/sysctl.d/99-sysctl.conf
 
 	rm -rf "${ED}"/etc/systemd/system/* || die
 	rm -f "${ED}"/var/log/README
 	rm -rf "${ED}"/usr/share/polkit-1
 	rm -f "${ED}"/etc/systemd/logind.conf
+	rm "${ED}"/usr/share/factory/etc/issue
 
 	keepdir /var/lib/systemd
 	keepdir /var/log/journal

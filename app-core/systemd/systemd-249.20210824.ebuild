@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic linux-info meson toolchain-funcs user
+inherit flag-o-matic linux-info meson toolchain-funcs
 
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
@@ -269,16 +269,14 @@ DHCP=ipv4' > "${ED}"/etc/systemd/network/ipv4dhcp.network
 		insinto usr/lib/tmpfiles.d/
 		doins "${FILESDIR}"/static-nodes-permissions.conf
 	fi
+
+	if use sysusersd; then
+		use kvm || sed -i '/kvm/d' "${ED}"/usr/lib/sysusers.d/basic.conf || die
+		sed -i '/ConditionNeedsUpdate/d' "${ED}"/usr/lib/systemd/system/systemd-sysusers.service || die
+	fi
 }
 
 pkg_postinst() {
-	newusergroup messagebus
-
-	enewgroup systemd-journal
-
-	use networkd && newusergroup systemd-network
-	use coredump && newusergroup systemd-coredump
-	use kvm && enewgroup kvm 78
 	journalctl --update-catalog
 
 	udevadm hwdb --update --root="${EROOT%/}"
@@ -286,4 +284,17 @@ pkg_postinst() {
 
 	systemctl reenable getty@tty1.service remote-fs.target
 	use networkd && systemctl reenable systemd-networkd.service
+}
+
+pkg_preinst() {
+	if ! use sysusersd; then
+		inherit user
+
+		newusergroup messagebus
+		enewgroup systemd-journal
+
+		use networkd && newusergroup systemd-network
+		use coredump && newusergroup systemd-coredump
+		use kvm && enewgroup kvm 78
+	fi
 }

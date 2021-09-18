@@ -159,7 +159,14 @@ _LINUX_MOD_ECLASS=1
 
 # TODO: When adding support for future EAPIs, please audit this list
 # for unused inherits and conditionalise them.
-inherit linux-info toolchain-funcs
+inherit linux-info toolchain-funcs flag-o-matic
+
+filter-flags -flto\=\*
+filter-flags -D_FORTIFY_SOURCE\=\*
+filter-flags -Wl,-z,defs
+filter-flags -fstack-protector-strong
+filter-flags -fassociative-math
+filter-flags -fno-semantic-interposition
 
 case ${MODULES_OPTIONAL_USE_IUSE_DEFAULT:-n} in
   [nNfF]*|[oO][fF]*|0|-) _modules_optional_use_iuse_default='' ;;

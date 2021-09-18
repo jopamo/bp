@@ -33,8 +33,8 @@ src_install() {
 	install -d -m555 -g 11 "${ED}"srv/ftp
 
 	# setup /etc and /usr/share/factory/etc
-	install -d "${ED}"/etc/{ld.so.conf.d,skel,profile.d} "${ED}"/usr/share/factory/etc
-	for f in fstab group host.conf hosts issue ld.so.conf \
+	install -d "${ED}"/etc/{skel,profile.d} "${ED}"/usr/share/factory/etc
+	for f in fstab group host.conf hosts issue nsswitch.conf \
 		passwd resolv.conf shells profile; do
 			insopts -m 0644
 			insinto /etc

@@ -23,7 +23,7 @@ SLOT="0"
 
 IUSE="binfmt +blkid bpf-framework coredump cryptsetup devmode dhcp4 efi gcrypt +gshadow
 +hostnamed hwdb importd kmod kvm ldconfig localed logind machined musl networkd
-oomd pam pcre pstore rfkill sleep systemd-update sysv +timedated
+oomd pam pcre pstore rfkill sleep systemd-update sysusersd sysv +timedated
 +tmpfilesd test +userdb +utmp vconsole xkb"
 
 REQUIRED_USE="musl? ( !gshadow !localed !userdb !utmp )"
@@ -123,6 +123,7 @@ src_configure() {
 		$(meson_use pcre pcre2)
 		$(meson_use pstore)
 		$(meson_use rfkill)
+		$(meson_use sysusersd sysusers)
 		$(usex sysv '-Dsysvinit-path=/etc/init.d' '-Dsysvinit-path=')
 		$(usex sysv '-Dsysvrcnd-path=/etc/rc.d' '-Dsysvrcnd-path=')
 		$(meson_use test dbus)
@@ -181,7 +182,6 @@ src_configure() {
 		-Dsplit-bin=true
 		-Dsplit-usr=false
 		-Dstandalone-binaries=false
-		-Dsysusers=true
 		-Dtelinit-path=""
 		-Dtimesyncd=false
 		-Dtpm=false

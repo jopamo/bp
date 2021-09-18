@@ -20,7 +20,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="tmpfilesd"
+IUSE="tmpfilesd sysusersd"
 
 DEPEND="
 	app-compression/tar
@@ -122,6 +122,12 @@ python_install_all() {
 		doins "${FILESDIR}/portage-ccache.conf"
 	fi
 
+	if use sysusersd; then
+		insopts -m 0644
+		insinto /usr/lib/sysusers.d
+		newins "${FILESDIR}/portage-sysusers" portage.conf
+	fi
+
 	# Due to distutils/python-exec limitations
 	# these must be installed to /usr/bin.
 	local sbin_relocations='archive-conf dispatch-conf emaint env-update etc-update fixpackages regenworld'
@@ -141,6 +147,8 @@ sync-uri = https://github.com/jopamo/bp.git\n\
 auto-sync = yes" > "${ED}"/usr/share/portage/config/repos.conf
 
 	cleanup_install
+
+	keepdir /var/lib/portage/home
 }
 
 pkg_preinst() {

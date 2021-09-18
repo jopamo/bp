@@ -23,7 +23,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+agetty build caps chfn-chsh cramfs fdformat hwclock +kill +libblkid
 +libuuid line +login +mount mountpoint ncurses +nologin pam partx raw readline
-rename rfkill +schedutils static-libs +su +suid sulogin switch_root systemd test
+rename rfkill +schedutils static-libs +su +suid +sulogin switch_root systemd test
 tty-helpers udev uuidd vipw"
 
 DEPEND="

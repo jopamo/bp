@@ -2,7 +2,7 @@
 
 EAPI=8
 
-DESCRIPTION="Base Configuration"
+DESCRIPTION="Base Configuration and File Structure"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -19,7 +19,8 @@ src_prepare() {
 
 src_install() {
 	for d in boot dev etc home mnt usr var opt srv/http run; do
-		install -d -m755 "${ED}"/$d
+		diropts -m0755
+    	dodir /$d
 	done
 
 	install -d -m555 "${ED}"/proc
@@ -73,7 +74,7 @@ src_install() {
 	install -d -m600 "${ED}"/var/empty
 	keepdir /var/empty
 
-	for d in bin include lib share/{misc,pixmaps} src; do
+	for d in bin sbin include lib share/{misc,pixmaps} src; do
 		install -d -m755 "${ED}"/usr/$d
 	done
 
@@ -104,12 +105,13 @@ src_install() {
 		if use tmpfilesd; then
 			insopts -m 0644
 			insinto /usr/lib/tmpfiles.d
-			newins sysusers 1g4.conf
+			newins tmpfiles 1g4.conf
 		fi
 
 		# setup systemd.environment-generator
-		#insopts -m 0644
-		#insinto /usr/lib/systemd/system-environment-generators
-		#newins env-generator 10-1g4
+		insopts -m 0644
+		insinto /usr/lib/systemd/system-environment-generators
+		newins env-generator 10-1g4
 	fi
+	die
 }

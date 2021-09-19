@@ -6,19 +6,15 @@ DESCRIPTION="Base Configuration"
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
-IUSE="systemd"
+IUSE="systemd sysusersd tmpfilesd"
 
 S=${WORKDIR}
 
 src_prepare() {
 	cp -rp "${FILESDIR}"/* "${S}"/
 	default
-
-	local libdir ldpaths
-	ldpaths+=":${EPREFIX}/usr/lib"
-	echo "LDPATH='${ldpaths#:}'" >> etc/env.d/50baselayout
 }
 
 src_install() {
@@ -30,11 +26,11 @@ src_install() {
 	install -d -m555 "${ED}"/sys
 	install -d -m0750 "${ED}"/root
 	install -d -m1777 "${ED}"/tmp
-	install -d -m555 -g 11 "${ED}"srv/ftp
+	install -d -m555 -g 11 "${ED}"/srv/ftp
 
 	# setup /etc and /usr/share/factory/etc
 	install -d "${ED}"/etc/{skel,profile.d} "${ED}"/usr/share/factory/etc
-	for f in fstab group host.conf hosts issue nsswitch.conf securetty \
+	for f in fstab group host.conf hosts issue securetty \
 		passwd resolv.conf shells profile; do
 			insopts -m 0644
 			insinto /etc
@@ -61,15 +57,21 @@ src_install() {
 	insinto /usr/lib
 	doins os-release
 
-	# setup /var
-	for d in cache local opt log/old lib/misc empty; do
-		install -d -m755 "${ED}"/var/$d
-	done
-	install -d -m1777 "${ED}"/var/{tmp,spool/mail}
+	insopts -m 0644
+	insinto /etc/env.d
+	doins 50layout
 
-	mkdir -p "${ED}"/run/lock
-	dosym -r /run /var/run
-	dosym -r /run/lock /var/lock
+	# setup /var
+	for d in local opt log/old lib/misc ; do
+		install -d -m755 "${ED}"/var/$d
+		keepdir /var/$d
+	done
+
+	install -d -m1777 "${ED}"/var/{tmp,spool/mail}
+	keepdir /var/{tmp,spool/mail}
+
+	install -d -m600 "${ED}"/var/empty
+	keepdir /var/empty
 
 	for d in bin include lib share/{misc,pixmaps} src; do
 		install -d -m755 "${ED}"/usr/$d
@@ -93,19 +95,21 @@ src_install() {
 		insinto /usr/lib/sysctl.d
 		newins sysctl 10-1g4.conf
 
-		# setup systemd-sysusers
-		insopts -m 0644
-		insinto /usr/lib/sysusers.d
-		newins sysusers 1g4.conf
+		if use sysusersd; then
+			insopts -m 0644
+			insinto /usr/lib/sysusers.d
+			newins sysusers 1g4.conf
+		fi
 
-		# setup systemd-tmpfiles
-		insopts -m 0644
-		insinto /usr/lib/tmpfiles.d
-		newins sysusers 1g4.conf
+		if use tmpfilesd; then
+			insopts -m 0644
+			insinto /usr/lib/tmpfiles.d
+			newins sysusers 1g4.conf
+		fi
 
 		# setup systemd.environment-generator
-		insopts -m 0644
-		insinto /usr/lib/systemd/system-environment-generators
-		newins env-generator 10-1g4
+		#insopts -m 0644
+		#insinto /usr/lib/systemd/system-environment-generators
+		#newins env-generator 10-1g4
 	fi
 }

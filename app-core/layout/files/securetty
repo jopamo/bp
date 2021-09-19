@@ -2,6 +2,7 @@
 # See securetty(5) for details.
 
 console
+pts/0
 tty1
 tty2
 tty3

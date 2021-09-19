@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit user flag-o-matic
 
@@ -12,7 +12,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+manpager nls static-libs systemd tmpfilesd zlib"
+IUSE="static-libs systemd sysusersd tmpfilesd zlib"
 
 DEPEND="
 	lib-core/libpipeline
@@ -23,14 +23,13 @@ DEPEND="
 "
 BDEPEND="dev-util/pkgconf"
 
-PDEPEND="manpager? ( app-core/less )"
-
 filter-flags -Wl,-z,defs
 
 pkg_setup() {
-	# Create user now as Makefile in src_install does setuid/chown
-	enewgroup man 15
-	enewuser man 13 -1 /usr/share/man man
+	if ! use sysusersd; then
+		enewgroup man 15
+		enewuser man 13 -1 /usr/share/man man
+	fi
 }
 
 src_configure() {

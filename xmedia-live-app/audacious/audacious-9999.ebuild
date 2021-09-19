@@ -42,7 +42,7 @@ src_configure() {
 		--disable-valgrind
 		--enable-dbus
 		--disable-gtk
-		$(use_enable nls)
+		--disable-nls
 		--enable-qt
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

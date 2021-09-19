@@ -88,7 +88,6 @@ src_install() {
 	keepdir /var/empty
 
 	fperms 600 /etc/ssh
-	fperms 600 /var/empty
 
 	#generate this outside of installation
 	rm -rf "${ED}"/etc/ssh/moduli || die
@@ -110,6 +109,6 @@ pkg_preinst() {
 		newins "${FILESDIR}/${PN}-sysusers" ${PN}.conf
 	else
 		enewgroup sshd 22
-		enewuser sshd 22 -1 /var/empty sshd
+		enewuser sshd 22 -1 -1 sshd
 	fi
 }

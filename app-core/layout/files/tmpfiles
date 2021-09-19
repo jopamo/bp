@@ -7,7 +7,6 @@ C /etc/gshadow
 C /etc/host.conf
 C /etc/hosts
 C /etc/issue
-C /etc/nsswitch.conf
 C /etc/passwd
 C /etc/profile
 C /etc/securetty

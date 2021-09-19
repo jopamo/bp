@@ -31,7 +31,7 @@ src_install() {
 
 	# setup /etc and /usr/share/factory/etc
 	install -d "${ED}"/etc/{skel,profile.d} "${ED}"/usr/share/factory/etc
-	for f in fstab group host.conf hosts issue securetty \
+	for f in fstab group host.conf hosts inputrc issue securetty \
 		passwd resolv.conf shells profile; do
 			insopts -m 0644
 			insinto /etc
@@ -113,5 +113,4 @@ src_install() {
 		insinto /usr/lib/systemd/system-environment-generators
 		newins env-generator 10-1g4
 	fi
-	die
 }

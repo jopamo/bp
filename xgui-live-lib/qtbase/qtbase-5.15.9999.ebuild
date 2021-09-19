@@ -76,7 +76,6 @@ src_configure() {
 		-no-strip
 		-dbus-linked
 		-journald
-		-use-gold-linker
 		-no-sql-{db2,ibase,oci,odbc,tds}
 		$(usex mysql -sql-mysql -no-sql-mysql)
 		$(usex postgres -sql-psql -no-sql-psql)

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools python-r1 git-r3
 
@@ -12,20 +12,23 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug nls session static-libs"
+IUSE="debug session static-libs"
 
-RDEPEND="lib-live/glib:2
-	>=lib-core/libxml2-2.0
-	>=xmedia-live-lib/fontconfig-2
+RDEPEND="
+	lib-live/glib
+	lib-core/libxml2
+	xmedia-live-lib/fontconfig
 	xgui-live-lib/libXft
 	xgui-live-lib/libXrandr
 	xgui-live-lib/libXt
 	xgui-live-lib/pango
 	xmedia-live-lib/imlib2
 	xgui-live-lib/librsvg
-	dev-python/pyxdg[${PYTHON_USEDEP}]"
+	dev-python/pyxdg[${PYTHON_USEDEP}]
+"
 
-DEPEND="${RDEPEND}
+DEPEND="
+	${RDEPEND}
 	sys-devel/gettext
 	dev-util/pkgconf
 	xgui-live-app/xorgproto
@@ -56,7 +59,7 @@ src_configure() {
 	local myconf=(
 		$(use_enable debug)
 		$(use_enable static-libs static)
-		$(use_enable nls)
+		--disable-nls
 		--enable-imlib2
 		--enable-librsvg
 		$(use_enable session session-management)

@@ -22,19 +22,19 @@ RDEPEND="
 	xgui-live-lib/atk
 	xgui-live-lib/libxkbcommon
 	lib-core/expat
-	lib-live/glib:2
+	lib-live/glib
 	lib-dev/nspr
 	>=lib-dev/nss-3.26
 	xmedia-live-lib/alsa-lib
 	xmedia-live-lib/fontconfig
-	xmedia-live-lib/freetype:2
+	xgui-misc/freetype
 	lib-print/cups
 	app-core/dbus
 	lib-core/libcap
 	xgui-live-lib/cairo
 	xgui-live-lib/gdk-pixbuf
 	xgui-live-lib/gtk+:3
-	>=xgui-live-lib/libX11-1.5.0
+	xgui-live-lib/libX11
 	xgui-live-lib/libXcomposite
 	xgui-live-lib/libXcursor
 	xgui-live-lib/libXdamage

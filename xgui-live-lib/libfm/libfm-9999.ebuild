@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools git-r3 xdg-utils
 
@@ -12,19 +12,17 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug doc exif"
+IUSE="debug exif"
 
-COMMON_DEPEND=">=lib-live/glib-2.18:2
-	>=xgui-live-lib/menu-cache-0.3.2:=
+COMMON_DEPEND="
+	lib-live/glib
+	xgui-live-lib/menu-cache
 "
 RDEPEND="${COMMON_DEPEND}
 	xgui-live-app/shared-mime-info
 	exif? ( xmedia-live-lib/libexif )"
 DEPEND="${COMMON_DEPEND}
-	doc? (
-		dev-util/gtk-doc
-	)
-	>=dev-util/intltool-0.40
+	dev-util/intltool
 	dev-util/pkgconf
 	sys-devel/gettext"
 
@@ -48,7 +46,7 @@ src_configure() {
 		$(use_enable debug)
 		--disable-udisks
 		--without-gtk
-		$(use_enable doc gtk-doc)
+		--disable-gtk-doc
 		--disable-old-actions
 	)
 	econf ${myconf[@]}

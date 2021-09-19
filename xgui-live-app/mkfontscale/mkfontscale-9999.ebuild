@@ -13,7 +13,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	xgui-live-lib/libfontenc
-	xmedia-live-lib/freetype
+	xgui-misc/freetype
 	lib-core/zlib
 	app-compression/bzip2
 	xgui-live-app/util-macros

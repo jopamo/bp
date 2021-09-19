@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit git-r3 autotools
 
@@ -14,12 +14,16 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug static-libs test"
 
-DEPEND=">=lib-core/expat-2.1.0-r3
-	>=lib-live/glib-2.34.3:2
-	>=app-core/dbus-1.8"
+DEPEND="
+	lib-core/expat
+	lib-live/glib
+	app-core/dbus
+"
 
-BDEPEND="dev-util/gtk-doc
-	dev-util/pkgconf"
+BDEPEND="
+	dev-util/gtk-doc
+	dev-util/pkgconf
+"
 
 src_prepare() {
 	eautoreconf

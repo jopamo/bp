@@ -21,26 +21,26 @@ REQUIRED_USE="
 "
 
 COMMON_DEPEND="
-	>=lib-live/glib-2.49.4:2
+	lib-live/glib
 	xmedia-live-lib/fontconfig
-	>=xmedia-live-lib/libepoxy-1.0[X(+)?]
-	>=xgui-live-lib/cairo-1.14[glib,svg,X?]
+	xmedia-live-lib/libepoxy[X(+)?]
+	xgui-live-lib/cairo[glib,svg,X?]
 	xgui-live-lib/gdk-pixbuf
-	>=xgui-live-lib/pango-1.37.3[introspection?]
+	xgui-live-lib/pango[introspection?]
 	xgui-live-app/shared-mime-info
-	cups? ( >=lib-print/cups-1.2 )
-	introspection? ( >=lib-live/gobject-introspection-1.39:= )
+	cups? ( lib-print/cups )
+	introspection? ( lib-live/gobject-introspection )
 	wayland? (
 		xgui-live-lib/wayland
 		xgui-live-lib/wayland-protocols
 		xmedia-live-lib/mesa
-		>=xgui-live-lib/libxkbcommon-0.2
+		xgui-live-lib/libxkbcommon
 	)
 	X? (
 		xgui-live-lib/libX11
-		>=xgui-live-lib/libXi-1.3
+		xgui-live-lib/libXi
 		xgui-live-lib/libXext
-		>=xgui-live-lib/libXrandr-1.5
+		xgui-live-lib/libXrandr
 		xgui-live-lib/libXcursor
 		xgui-live-lib/libXfixes
 		xgui-live-lib/libXcomposite
@@ -54,8 +54,8 @@ DEPEND="${COMMON_DEPEND}
 	lib-core/libxslt
 	xgui-live-lib/at-spi2-atk
 	lib-live/gobject-introspection-common
-	>=dev-util/gtk-doc-am-1.20
-	>=sys-devel/gettext-0.19.7
+	dev-util/gtk-doc-am
+	sys-devel/gettext
 	dev-util/pkgconf
 	X? ( xinerama? ( xgui-live-app/xorgproto ) )"
 
@@ -63,7 +63,7 @@ RDEPEND="${COMMON_DEPEND}"
 
 PDEPEND="
 	xgui-live-lib/librsvg
-	>=xgui-icontheme/adwaita-icon-theme-3.14
+	xgui-icontheme/adwaita-icon-theme
 	vim-syntax? ( app-text/gtk-syntax )
 "
 

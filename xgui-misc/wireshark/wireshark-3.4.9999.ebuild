@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit cmake fcaps flag-o-matic qmake-utils user xdg-utils git-r3
 
@@ -9,10 +9,9 @@ HOMEPAGE="https://www.wireshark.org/"
 EGIT_REPO_URI="https://github.com/wireshark/wireshark.git"
 EGIT_BRANCH="release-$(ver_cut 1).$(ver_cut 2)"
 
-KEYWORDS="amd64 arm64"
-
 LICENSE="GPL-2"
 SLOT=0
+KEYWORDS="amd64 arm64"
 
 IUSE="
 	adns androiddump asan +bcg729 +capinfos +caps +captype ccache ciscodump corbaidl2wrs +dcerpcidl2wrs
@@ -31,10 +30,10 @@ S=${WORKDIR}/${P/_/}
 CDEPEND="
 	lib-net/c-ares
 	xgui-live-lib/qtmultimedia
-	>=lib-live/glib-2.14:2
-	lib-core/libgcrypt:0
-	netlink? ( lib-dev/libnl:3 )
-	adns? ( >=lib-net/c-ares-1.5 )
+	lib-live/glib
+	lib-core/libgcrypt
+	netlink? ( lib-dev/libnl )
+	adns? ( lib-net/c-ares )
 	caps? ( lib-core/libcap )
 	gtk? (
 		xgui-live-lib/gdk-pixbuf
@@ -42,7 +41,7 @@ CDEPEND="
 		xgui-live-lib/pango
 		xgui-live-app/xdg-utils
 	)
-	libssh? ( >=lib-net/libssh-0.6 )
+	libssh? ( lib-net/libssh )
 	libxml2? ( lib-core/libxml2 )
 	lz4? ( app-compression/lz4 )
 	nghttp2? ( lib-net/nghttp2 )
@@ -52,8 +51,8 @@ CDEPEND="
 	smi? ( lib-net/libsmi )
 	snappy? ( app-compression/snappy )
 	spandsp? ( xmedia-live-lib/spandsp )
-	ssl? ( lib-net/gnutls:= )
-	zlib? ( lib-core/zlib !=lib-core/zlib-1.2.4 )
+	ssl? ( lib-net/gnutls )
+	zlib? ( lib-core/zlib )
 "
 
 DEPEND="

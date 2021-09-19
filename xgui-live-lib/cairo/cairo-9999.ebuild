@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit flag-o-matic autotools
 
@@ -19,28 +19,29 @@ fi
 LICENSE="|| ( LGPL-2.1 MPL-1.1 )"
 SLOT="0"
 
-IUSE="X debug doc +glib static-libs +svg valgrind xcb"
+IUSE="X debug +glib static-libs +svg valgrind xcb"
 
 RESTRICT="test"
 
-RDEPEND="
-	>=xmedia-live-lib/fontconfig-2.10.92
-	>=xmedia-live-lib/freetype-2.5.0.1:2
-	>=xmedia-live-lib/libpng-1.6.10:0=
-	>=lib-core/zlib-1.2.8-r1
-	>=xgui-live-lib/pixman-0.32.4
-	glib? ( >=lib-live/glib-2.34.3:2 )
+DEPEND="
+	xmedia-live-lib/fontconfig
+	xgui-misc/freetype
+	xmedia-live-lib/libpng
+	lib-core/zlib
+	xgui-live-lib/pixman
+	glib? ( lib-live/glib )
 	X? (
-		>=xgui-live-lib/libXrender-0.9.8
-		>=xgui-live-lib/libXext-1.3.2
-		>=xgui-live-lib/libX11-1.6.2
+		xgui-live-lib/libXrender
+		xgui-live-lib/libXext
+		xgui-live-lib/libX11
 	)
-	xcb? ( xgui-live-lib/libxcb )"
-
-DEPEND="${RDEPEND}
+	xcb? ( xgui-live-lib/libxcb )
+"
+BDEPEND="
 	dev-util/pkgconf
-	>=sys-devel/libtool-2
-	X? ( xgui-live-app/xorgproto )"
+	sys-devel/libtool
+	X? ( xgui-live-app/xorgproto )
+"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.12.18-disable-test-suite.patch
@@ -81,7 +82,7 @@ src_configure() {
 		$(use_enable X xlib)
 		$(use_enable X xlib-xrender)
 		$(use_enable debug test-surfaces)
-		$(use_enable doc gtk-doc)
+		--disable-gtk-doc
 		$(use_enable glib gobject)
 		--disable-gl
 		$(use_enable static-libs static)

@@ -17,8 +17,8 @@ KEYWORDS="amd64 arm64"
 IUSE="X opengl static static-libs"
 
 LIB_DEPEND="
-	xmedia-live-lib/freetype[static-libs?]
-	xmedia-live-lib/harfbuzz[static-libs?]
+	xgui-misc/freetype[static-libs?]
+	xgui-misc/harfbuzz[static-libs?]
 	xmedia-live-lib/jbig2dec[static-libs?]
 	xmedia-live-lib/libpng[static-libs?]
 	xmedia-live-lib/openjpeg[static-libs?]

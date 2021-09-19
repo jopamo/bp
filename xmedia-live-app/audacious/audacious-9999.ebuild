@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit xdg-utils autotools git-r3 flag-o-matic
 
@@ -12,21 +12,17 @@ LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="nls"
-
 PDEPEND="~xmedia-live-app/audacious-plugins-${PV}"
 
-RDEPEND="
-	>=lib-dev/dbus-glib-0.60
-	>=lib-live/glib-2.28
-	>=xgui-live-lib/cairo-1.2.6
-	>=xgui-live-lib/pango-1.8.0
+DEPEND="
+	lib-dev/dbus-glib
+	lib-live/glib
+	xgui-live-lib/cairo
+	xgui-live-lib/pango
 	xgui-live-lib/qtbase
 "
 
-DEPEND="${RDEPEND}
-	dev-util/pkgconf
-	nls? ( dev-util/intltool )"
+BDEPEND="dev-util/pkgconf"
 
 append-flags -ffat-lto-objects
 

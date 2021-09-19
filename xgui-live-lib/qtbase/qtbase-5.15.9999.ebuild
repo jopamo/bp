@@ -20,8 +20,8 @@ DEPEND="
 	lib-live/glib
 	lib-core/libpcre2
 	xgui-live-lib/libxcb
-	xmedia-live-lib/freetype
-	xmedia-live-lib/harfbuzz
+	xgui-misc/freetype
+	xgui-misc/harfbuzz
 	xmedia-live-lib/libjpeg-turbo
 	xmedia-live-lib/libpng
 	lib-core/sqlite

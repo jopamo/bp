@@ -21,7 +21,7 @@ KEYWORDS="amd64 arm64"
 IUSE="bzip2 gif jpeg png static-libs tiff X zlib webp"
 
 DEPEND="
-	xmedia-live-lib/freetype
+	xgui-misc/freetype
 	bzip2? ( app-compression/bzip2 )
 	zlib? ( lib-core/zlib )
 	gif? ( xmedia-live-lib/giflib )

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit cmake git-r3 xdg-utils
 
@@ -13,6 +13,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RESTRICT="binchecks strip"
+
+DEPEND="xgui-live-lib/qtbase"
 
 pkg_postinst() {
 	xdg_icon_cache_update

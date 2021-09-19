@@ -127,7 +127,7 @@ src_install() {
 	if use tmpfilesd; then
 		insopts -m 0644
 		insinto /usr/lib/tmpfiles.d
-		doins "${FILESDIR}/${PN}.conf"
+		newins "${FILESDIR}/${PN}-tmpfiles" ${PN}.conf
 	fi
 
 	if use systemd; then
@@ -138,7 +138,11 @@ src_install() {
 }
 
 pkg_preinst() {
-	if ! use sysusersd; then
+	if use sysusersd; then
+		insopts -m 0644
+		insinto /usr/lib/sysusers.d
+		newins "${FILESDIR}/${PN}-sysusers" ${PN}.conf
+	else
 		rm -r "${ED}"/usr/lib/sysusers.d || die
 		enewgroup messagebus
 		enewuser messagebus -1 -1 -1 messagebus

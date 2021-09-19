@@ -33,7 +33,7 @@ src_configure() {
 		--disable-obsolete
 		--disable-werror
 		--with-system-zlib
-		--enable-gold
+		--disable-gold
 		--enable-install-libiberty
 		--enable-deterministic-archives
 		--enable-relro
@@ -59,7 +59,7 @@ src_install() {
 	echo 'INPUT( /usr/lib/libbfd.a -liberty -lz -ldl )' > "${ED}"/usr/lib/libbfd.so
 	echo 'INPUT( /usr/lib/libopcodes.a -lbfd )' > "${ED}"/usr/lib/libopcodes.so
 
-	for x in ld objdump readelf ld.gold ranlib objcopy nm as strip ld.bfd ar ; do
+	for x in ld objdump readelf ranlib objcopy nm as strip ld.bfd ar ; do
 		dosym -r /usr/bin/${x} /usr/bin/${CHOST}-${x}
 	done
 }

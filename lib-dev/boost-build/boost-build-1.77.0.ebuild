@@ -29,7 +29,6 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-1.73.0-add-none-feature-options.patch
 	"${FILESDIR}"/${PN}-1.76.0-respect-user-flags.patch
 	"${FILESDIR}"/${PN}-1.74.0-no-implicit-march-flags.patch
-	"${FILESDIR}"/${PN}-1.76.0-python-numpy.patch
 )
 
 src_unpack() {

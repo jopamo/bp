@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit meson git-r3
 
@@ -18,6 +18,7 @@ IUSE="wayland"
 DEPEND="
 	lib-core/expat
 	lib-core/zlib
+	xgui-live-lib/libdrm
 	xgui-live-lib/libX11
 	xgui-live-lib/libxshmfence
 	xgui-live-lib/libXdamage

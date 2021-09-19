@@ -19,16 +19,17 @@ LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64"
 
-RDEPEND="xgui-live-lib/atk
-	>=app-core/dbus-0.60
-	>=lib-dev/dbus-glib-0.72
-	>=lib-live/glib-2.26:2
+RDEPEND="
+	xgui-live-lib/atk
+	app-core/dbus
+	lib-dev/dbus-glib
+	lib-live/glib
 	xmedia-live-lib/fontconfig
-	>=xmedia-live-lib/freetype-2.4.10
-	>=xgui-live-lib/cairo-1.10[X]
+	xgui-misc/freetype
+	xgui-live-lib/cairo[X]
 	xgui-live-lib/gdk-pixbuf
 	lib-dev/nss
-	>=xgui-live-lib/gtk+-3.4.0:3
+	xgui-live-lib/gtk+:3
 	app-text/hunspell
 	xgui-live-lib/libX11
 	xgui-live-lib/libXcomposite
@@ -37,7 +38,7 @@ RDEPEND="xgui-live-lib/atk
 	xgui-live-lib/libXfixes
 	xgui-live-lib/libXrender
 	xgui-live-lib/libXt
-	>=xgui-live-lib/pango-1.22.0
+	xgui-live-lib/pango
 	xgui-misc/pulseaudio
 	xmedia-live-app/ffmpeg
 "

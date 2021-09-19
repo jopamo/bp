@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit meson git-r3
 
@@ -12,15 +12,13 @@ LICENSE="LGPL-2.1+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="
-	>=lib-live/glib-2.37.6:2
-"
+RDEPEND="lib-live/glib"
 DEPEND="${RDEPEND}
 	app-text/docbook-xml-dtd
 	app-text/docbook-xsl-stylesheets
 	lib-core/libxslt
-	>=dev-util/gtk-doc-am-1.20
-	>=sys-devel/gettext-0.18
+	dev-util/gtk-doc-am
+	sys-devel/gettext
 	dev-util/pkgconf
 	dev-python/pygments
 "

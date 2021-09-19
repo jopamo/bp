@@ -18,7 +18,7 @@ IUSE="cups dbus gtk static-libs tiff X"
 DEPEND="
 	app-text/libpaper
 	xmedia-live-lib/fontconfig
-	>=xmedia-live-lib/freetype-2.4.9:2=
+	>=xgui-misc/freetype-2.4.9:2=
 	xmedia-live-lib/jbig2dec
 	>=xmedia-live-lib/lcms-2.6:2
 	>=xmedia-live-lib/libpng-1.6.2:0=

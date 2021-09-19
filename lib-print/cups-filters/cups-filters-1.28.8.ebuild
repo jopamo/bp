@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit flag-o-matic
 
@@ -15,23 +15,23 @@ KEYWORDS="amd64 arm64"
 IUSE="dbus jpeg ldap pclm pdf png static-libs tiff"
 
 DEPEND="
-	>=app-text/poppler-0.32:=[cxx,jpeg?,lcms,tiff?,utils]
+	app-text/poppler[cxx,jpeg?,lcms,tiff?,utils]
 	app-text/qpdf
-	lib-live/glib:2
+	lib-live/glib
 	xmedia-live-lib/fontconfig
-	xmedia-live-lib/freetype:2
-	xmedia-live-lib/lcms:2
+	xgui-misc/freetype:2
+	xmedia-live-lib/lcms
 	lib-print/cups
 	sys-devel/bc
 	lib-core/zlib
 	dbus? ( app-core/dbus )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )
 	ldap? ( app-net/openldap )
-	pclm? ( >=app-text/qpdf-7.0_beta1 )
+	pclm? ( app-text/qpdf )
 	pdf? ( app-text/mupdf )
-	png? ( xmedia-live-lib/libpng:0= )
+	png? ( xmedia-live-lib/libpng )
 	app-text/ghostscript-gpl[cups]
-	tiff? ( xmedia-live-lib/tiff:0 )
+	tiff? ( xmedia-live-lib/tiff )
 	fonts/liberation-fonts
 "
 

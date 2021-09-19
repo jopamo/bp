@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools git-r3 xdg-utils
 
@@ -13,11 +13,13 @@ LICENSE=" || ( LGPL-3 CC-BY-SA-3.0 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="xgui-live-lib/gnome-common
-	xgui-live-lib/librsvg:2
+DEPEND="
+	xgui-live-lib/gnome-common
+	xgui-live-lib/librsvg
 	xgui-live-lib/gtk+:3
 	sys-devel/gettext
-	dev-util/pkgconf"
+	dev-util/pkgconf
+"
 
 RESTRICT="binchecks strip"
 

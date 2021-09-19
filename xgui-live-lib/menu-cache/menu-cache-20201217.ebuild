@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 SNAPSHOT=583c1901719f2ef2aa3aa0034bd370983a7ed523
 
@@ -12,12 +12,12 @@ SRC_URI="https://github.com/lxde/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"
-SLOT="0/2"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-RDEPEND="lib-live/glib:2"
+RDEPEND="lib-live/glib"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	dev-util/pkgconf

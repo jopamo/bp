@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit cmake flag-o-matic toolchain-funcs git-r3
 
@@ -18,27 +18,27 @@ RESTRICT="test"
 
 COMMON_DEPEND="
 	lib-dev/boost
-	>=xmedia-live-lib/fontconfig-2.6.0
-	>=xmedia-live-lib/freetype-2.3.9
+	xmedia-live-lib/fontconfig
+	xgui-misc/freetype
 	lib-core/zlib
 	cairo? (
-		lib-live/glib:2
-		>=xgui-live-lib/cairo-1.10.0
-		introspection? ( >=lib-live/gobject-introspection-1.32.1:= )
+		lib-live/glib
+		xgui-live-lib/cairo
+		introspection? ( lib-live/gobject-introspection )
 	)
 	curl? ( app-net/curl )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )
-	jpeg2k? ( xmedia-live-lib/openjpeg:2= )
-	lcms? ( xmedia-live-lib/lcms:2 )
-	png? ( xmedia-live-lib/libpng:0= )
+	jpeg2k? ( xmedia-live-lib/openjpeg )
+	lcms? ( xmedia-live-lib/lcms )
+	png? ( xmedia-live-lib/libpng )
 	qt5? ( xgui-live-lib/qtbase	)
-	tiff? ( xmedia-live-lib/tiff:0 )
+	tiff? ( xmedia-live-lib/tiff )
 "
 DEPEND="${COMMON_DEPEND}
 	dev-util/pkgconf
 "
 RDEPEND="${COMMON_DEPEND}
-	cjk? ( >=app-text/poppler-data-0.4.7 )
+	cjk? ( app-text/poppler-data )
 "
 
 PATCHES=(

@@ -16,9 +16,9 @@ IUSE="static-libs"
 
 RDEPEND="
 	>=xmedia-live-lib/fontconfig-2.10.92
-	>=xmedia-live-lib/freetype-2.5.0.1:2
+	>=xgui-misc/freetype-2.5.0.1:2
 	>=lib-dev/fribidi-0.19.5-r1
-	>=xmedia-live-lib/harfbuzz-0.9.12[truetype]"
+	>=xgui-misc/harfbuzz-0.9.12[truetype]"
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconf

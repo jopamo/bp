@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit git-r3 meson
 
@@ -15,17 +15,17 @@ KEYWORDS="amd64 arm64"
 IUSE="X +introspection test"
 
 DEPEND="
-	>=xmedia-live-lib/harfbuzz-1.2.3:=[glib(+),truetype(+)]
-	>=lib-live/glib-2.34.3:2
+	xgui-misc/harfbuzz[glib(+),truetype(+)]
+	lib-live/glib
 	xmedia-live-lib/fontconfig
-	>=xmedia-live-lib/freetype-2.5.0.1:2=
-	>=xgui-live-lib/cairo-1.12.14-r4:=
-	introspection? ( >=lib-live/gobject-introspection-0.9.5:= )
+	xgui-misc/freetype
+	xgui-live-lib/cairo
+	introspection? ( lib-live/gobject-introspection )
 	xgui-live-lib/libXft
 	lib-dev/fribidi
 "
 
 BDEPEND="
-	>=dev-util/gtk-doc-am-1.20
+	dev-util/gtk-doc-am
 	dev-util/pkgconf
 "

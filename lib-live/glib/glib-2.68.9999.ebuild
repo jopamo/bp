@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit python-r1 git-r3 meson
 
@@ -10,21 +10,20 @@ EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git"
 EGIT_BRANCH=glib-$(ver_cut 1)-$(ver_cut 2)
 
 LICENSE="LGPL-2+"
-SLOT="2"
-SONAME="2"
-IUSE="static-libs dtrace"
-
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
+IUSE="static-libs dtrace"
+
 RDEPEND="
-	>=lib-core/libpcre-8.13:3
-	app-core/util-linux
-	>=app-core/attr-2.4.47-r1
+	lib-core/libpcre
+	app-core/util-linux[mount]
+	app-core/attr
 "
 DEPEND="
 	lib-core/libxslt
-	>=app-text/docbook-xml-dtd-4.5
-	>=app-text/docbook-xsl-stylesheets-1.79.1
+	app-text/docbook-xml-dtd
+	app-text/docbook-xsl-stylesheets
 "
 
 src_configure() {

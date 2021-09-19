@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit flag-o-matic libtool python-any-r1 autotools
 
@@ -8,22 +8,21 @@ DESCRIPTION="An OpenType text shaping engine"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/HarfBuzz"
 SRC_URI="https://github.com/harfbuzz/harfbuzz/releases/download/${PV}/${P}.tar.xz"
 
-LICENSE="Old-MIT ISC icu"
+LICENSE="Old-MIT ISC"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+cairo debug +glib icu +introspection static-libs test +truetype"
+IUSE="+cairo debug +glib +introspection static-libs test +truetype"
 
 REQUIRED_USE="introspection? ( glib )"
 
 DEPEND="
-	cairo? ( xgui-live-lib/cairo:= )
+	cairo? ( xgui-live-lib/cairo )
 	xmedia-live-lib/fontconfig
 	lib-dev/fribidi
-	glib? ( >=lib-live/glib-2.38:2 )
-	icu? ( >=lib-dev/icu-51.2-r1:= )
-	introspection? ( >=lib-live/gobject-introspection-1.34:= )
-	truetype? ( >=xmedia-live-lib/freetype-2.5.0.1:2= )
+	glib? ( lib-live/glib )
+	introspection? ( lib-live/gobject-introspection )
+	truetype? ( xgui-misc/freetype )
 "
 BDEPEND="
 	dev-util/gtk-doc-am
@@ -59,7 +58,7 @@ src_configure() {
 		$(use_with cairo)
 		$(use_with glib)
 		$(use_with introspection gobject)
-		$(use_with icu)
+		--without-icu
 		$(use_enable introspection)
 		$(use_with truetype freetype)
 	)

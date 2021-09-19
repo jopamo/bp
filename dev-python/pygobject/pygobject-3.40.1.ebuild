@@ -18,15 +18,15 @@ REQUIRED_USE="
 
 DEPEND="
 	${PYTHON_DEPS}
-	>=lib-live/glib-2.38:2
-	>=lib-live/gobject-introspection-1.46.0:=
+	lib-live/glib
+	lib-live/gobject-introspection
 "
 
 filter-flags -Wl,-z,defs
 
 src_configure() {
         local emesonargs=(
-        		-Dpycairo=false
+			-Dpycairo=false
         )
         meson_src_configure
 }

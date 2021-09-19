@@ -17,7 +17,7 @@ DEPEND="
 	xgui-live-lib/xtrans
 	xgui-live-lib/libfontenc
 	lib-core/zlib
-	truetype? ( xmedia-live-lib/freetype )
+	truetype? ( xgui-misc/freetype )
 	bzip2? ( app-compression/bzip2 )
 	xgui-live-app/xorgproto
 "

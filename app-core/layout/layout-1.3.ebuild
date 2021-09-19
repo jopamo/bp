@@ -34,8 +34,6 @@ src_install() {
 	for f in fstab group host.conf hosts inputrc issue securetty \
 		passwd resolv.conf shells profile; do
 			insopts -m 0644
-			insinto /etc
-			doins $f
 			insinto /usr/share/factory/etc
 			doins $f
 	done
@@ -44,8 +42,6 @@ src_install() {
 
 	for f in gshadow shadow crypttab; do
 		insopts -m 0600
-		insinto /etc
-		doins $f
 		insinto /usr/share/factory/etc
 		doins $f
 	done

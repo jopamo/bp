@@ -44,9 +44,6 @@ src_prepare() {
 	default
 	xdg_environment_reset
 	eautoreconf
-
-	# failing test, https://bugs.freedesktop.org/show_bug.cgi?id=89190
-	sed -e 's#tests/arabic-fallback-shaping.tests##' -i test/shaping/Makefile.in || die "sed failed"
 }
 
 src_configure() {

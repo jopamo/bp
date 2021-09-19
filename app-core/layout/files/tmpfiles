@@ -8,6 +8,7 @@ C /etc/host.conf
 C /etc/hosts
 C /etc/issue
 C /etc/passwd
+C /etc/inputrc
 C /etc/profile
 C /etc/securetty
 C /etc/shadow

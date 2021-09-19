@@ -31,9 +31,17 @@ src_install() {
 
 	# setup /etc and /usr/share/factory/etc
 	install -d "${ED}"/etc/{skel,profile.d} "${ED}"/usr/share/factory/etc
-	for f in fstab group host.conf hosts inputrc issue securetty \
-		passwd resolv.conf shells profile; do
+	for f in group passwd resolv.conf fstab ; do
 			insopts -m 0644
+			insinto /usr/share/factory/etc
+			doins $f
+	done
+
+	for f in host.conf hosts inputrc issue securetty \
+		shells profile ; do
+			insopts -m 0644
+			insinto /etc
+			doins $f
 			insinto /usr/share/factory/etc
 			doins $f
 	done

@@ -7,7 +7,7 @@ inherit flag-o-matic
 DESCRIPTION="Utilities for rescue and embedded systems"
 HOMEPAGE="https://www.busybox.net/"
 
-SNAPSHOT=a51d953b95a7cc6b40a6b3a5bfd95f3154acf5e2
+SNAPSHOT=f27a6a94a7fb172a6768bc450dbdec68f15bc78f
 SRC_URI="https://git.busybox.net/busybox/snapshot/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -21,8 +21,6 @@ BDEPEND="lib-core/musl"
 
 PATCHES=(
 	"${FILESDIR}"/0001-adduser-default-to-sbin-nologin-as-shell-for-system-.patch
-	"${FILESDIR}"/0001-ash-add-built-in-BB_ASH_VERSION-variable.patch
-	"${FILESDIR}"/0001-ash-regressions-in-process-substitution.patch
 	"${FILESDIR}"/0001-nologin-Install-applet-to-sbin-instead-of-usr-sbin.patch
 	"${FILESDIR}"/0001-properly-fix-wget-https-support.patch
 	"${FILESDIR}"/0002-fsck-resolve-LABEL-.-UUID-.-spec-to-device.patch
@@ -41,7 +39,7 @@ append-flags -ffat-lto-objects
 
 src_prepare() {
 	default
-	cp "${FILESDIR}"/busybox-config "${S}"/.config
+	cp "${FILESDIR}"/busybox-config "${S}"/.config || die
 	make silentoldconfig
 }
 
@@ -51,4 +49,5 @@ src_compile() {
 
 src_install() {
 	dobin busybox
+	doman docs/busybox.1
 }

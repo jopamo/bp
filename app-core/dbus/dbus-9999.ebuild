@@ -145,6 +145,6 @@ pkg_preinst() {
 	else
 		rm -r "${ED}"/usr/lib/sysusers.d || die
 		enewgroup messagebus
-		enewuser messagebus -1 -1 -1 messagebus
+		enewuser messagebus 101 -1 -1 messagebus
 	fi
 }

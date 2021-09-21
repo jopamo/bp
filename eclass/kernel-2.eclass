@@ -1431,7 +1431,7 @@ kernel-2_src_unpack() {
 
 kernel-2_src_prepare() {
 	debug-print "Applying any user patches"
-	eapply_user
+	default
 }
 
 # @FUNCTION: kernel-2_src_compile

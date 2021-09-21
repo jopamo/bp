@@ -1,8 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PATCHES=( "${FILESDIR}"/more-uarches-for-gcc-v10-and-kernel-5.8andup.patch )
+PATCHES=(
+	"${FILESDIR}"/more-uarches-for-gcc-v10-and-kernel-5.8andup.patch
+)
 
 K_NOUSENAME="yes"
 K_NOSETEXTRAVERSION="yes"

@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-SNAPSHOT=17a294cec4bb99d37ed01b99787fad483326792f
+SNAPSHOT=561a1d843d5877ec06265a6dbc96eefef5d0a945
 
 inherit autotools
 
@@ -19,8 +19,10 @@ IUSE="ccache pcre"
 
 RESTRICT="test"
 
-DEPEND="pcre? ( lib-core/libpcre )
-		ccache? ( lib-core/zlib )"
+DEPEND="
+	pcre? ( lib-core/libpcre )
+	ccache? ( lib-core/zlib )
+"
 
 src_prepare() {
 	test -d Tools/config || mkdir Tools/config
@@ -33,7 +35,10 @@ src_prepare() {
 }
 
 src_configure() {
-	econf \
-		$(use_enable ccache) \
+	local myconf=(
+		$(use_enable ccache)
 		$(use_with pcre)
+	)
+
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

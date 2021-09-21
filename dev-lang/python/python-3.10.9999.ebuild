@@ -23,6 +23,7 @@ DEPEND="
 	sqlite? ( lib-core/sqlite )
 	app-compression/bzip2
 	app-compression/xz-utils
+	app-eselect/eselect-python
 	lib-core/libffi
 	lib-net/libnsl
 	lib-core/gdbm

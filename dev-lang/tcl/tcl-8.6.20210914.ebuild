@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools
 
@@ -14,7 +14,7 @@ if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
 	KEYWORDS="~amd64 ~arm64"
 else
-	SNAPSHOT=0a3d4c25af0dab62fc3dd608c96316ec9b8afca2
+	SNAPSHOT=92e2e6942a579c17849b0cf13cafb557a7e0678d
 	SRC_URI="https://github.com/tcltk/tcl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}/unix
 	KEYWORDS="amd64 arm64"
@@ -32,12 +32,6 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		--enable-64bit
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

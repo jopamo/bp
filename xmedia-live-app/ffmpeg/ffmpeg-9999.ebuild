@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit git-r3 flag-o-matic
 
@@ -20,13 +20,15 @@ IUSE="debug nvidia +x264 +x265 vaapi vdpau static-libs +openssl
 DEPEND="
 	lame? ( xmedia-live-app/lame )
 	vorbis? ( xmedia-live-lib/libvorbis )
-	dev-lang/yasm
+	dev-lang/nasm
 	x264? ( xmedia-live-lib/x264 )
 	x265? ( xmedia-live-lib/x265 )
 	xmedia-live-lib/libass
 	nvidia? ( xmedia-live-lib/nv-codec-headers )
-	vaapi? ( xgui-live-lib/libva
-		xgui-live-lib/libva-intel-driver )
+	vaapi? (
+				xgui-live-lib/libva
+				xgui-live-lib/libva-intel-driver
+			)
 	vdpau? ( xgui-live-lib/libvdpau )
 "
 
@@ -77,6 +79,6 @@ src_configure() {
 		--enable-encoder=flac,png,libmp3lame \
 		--enable-filters \
 		--enable-lto \
-        	--enable-muxer=matroska,mp4 \
-        	--disable-stripping
+		--enable-muxer=matroska,mp4 \
+		--disable-stripping
 }

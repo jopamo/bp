@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit git-r3 flag-o-matic
 
@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs test"
 
-DEPEND="dev-lang/yasm"
+DEPEND="dev-lang/nasm"
 
 src_configure() {
 	local conf=(
@@ -28,15 +28,15 @@ src_configure() {
 		--disable-examples
 		--disable-docs
 		--disable-install-docs
-    		--disable-install-srcs
-    		--enable-pic
-    		--enable-postproc
-    		--enable-runtime-cpu-detect
-    		--enable-shared
-    		--enable-vp8
-    		--enable-vp9
-    		--enable-vp9-highbitdepth
-    		--enable-vp9-temporal-denoising
+		--disable-install-srcs
+		--enable-pic
+		--enable-postproc
+		--enable-runtime-cpu-detect
+		--enable-shared
+		--enable-vp8
+		--enable-vp9
+		--enable-vp9-highbitdepth
+		--enable-vp9-temporal-denoising
 	)
 
 	"${S}"/configure "${conf[@]}"

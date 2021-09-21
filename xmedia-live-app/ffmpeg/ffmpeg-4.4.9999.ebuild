@@ -22,7 +22,7 @@ DEPEND="
 	lame? ( xmedia-live-app/lame )
 	vorbis? ( xmedia-live-lib/libvorbis )
 	libdav1d? ( xmedia-live-lib/libdav1d )
-	dev-lang/yasm
+	dev-lang/nasm
 	x264? ( xmedia-live-lib/x264 )
 	x265? ( xmedia-live-lib/x265 )
 	xmedia-live-lib/libass
@@ -30,8 +30,10 @@ DEPEND="
 				xmedia-live-lib/nv-codec-headers
 				bin/nvidia-cuda
 			)
-	vaapi? ( xgui-live-lib/libva
-		xgui-live-lib/libva-intel-driver )
+	vaapi? (
+				xgui-live-lib/libva
+				xgui-live-lib/libva-intel-driver
+			)
 	vdpau? ( xgui-live-lib/libvdpau )
 "
 

@@ -1,5 +1,4 @@
 # copy from factory when missing
-
 C /etc/crypttab
 C /etc/fstab
 C /etc/group
@@ -13,3 +12,7 @@ C /etc/profile
 C /etc/securetty
 C /etc/shadow
 C /etc/shells
+
+# create /run/lock
+d /run/lock 0755 root root -
+L /var/lock - - - - ../run/lock

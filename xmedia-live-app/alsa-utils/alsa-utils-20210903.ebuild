@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="libsamplerate +ncurses nls systemd"
+IUSE="libsamplerate ncurses nls systemd"
 
 DEPEND="
 	>=xmedia-live-lib/alsa-lib-${PV}
@@ -26,8 +26,6 @@ DEPEND="
 src_prepare() {
 	eautoreconf
 	default
-
-	sed -i 's/alsactl/alsactl\ \-L/g' alsactl/alsa-{restore,state}.service.in
 }
 
 src_configure() {

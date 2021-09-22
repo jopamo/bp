@@ -1,20 +1,30 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-inherit flag-o-matic
+inherit flag-o-matic autotools
 
 DESCRIPTION="Advanced Linux Sound Architecture Library"
 HOMEPAGE="http://www.alsa-project.org/"
-SRC_URI="https://www.alsa-project.org/files/pub/lib/${P}.tar.bz2"
+
+SNAPSHOT=a1e91720ccfe24611e841213fc0641436ae7d453
+SRC_URI="https://github.com/alsa-project/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug"
+IUSE="debug +ucm"
+
+DEPEND="ucm? ( xmedia-live-app/alsa-ucm-conf )"
 
 filter-flags -flto\=\*
+
+src_prepare() {
+	eautoreconf
+	default
+}
 
 src_configure() {
 	local myconf=(
@@ -27,6 +37,7 @@ src_configure() {
 		--enable-seq
 		--enable-shared
 		$(use_with debug)
+		$(use_enable ucm)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

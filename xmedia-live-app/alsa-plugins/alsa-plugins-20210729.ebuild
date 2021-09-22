@@ -1,12 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools flag-o-matic
 
 DESCRIPTION="ALSA extra plugins"
 HOMEPAGE="http://www.alsa-project.org/"
-SRC_URI="https://www.alsa-project.org/files/pub/plugins/${P}.tar.bz2"
+
+SNAPSHOT=da157e978d73f1947bb77637c324e19d003366d4
+SRC_URI="https://github.com/alsa-project/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
@@ -46,21 +49,4 @@ src_configure() {
 		--disable-usbstream
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-src_install() {
-	default
-	if use pulseaudio; then
-		# install ALSA configuration files
-		# making PA to be used by alsa clients
-		insinto /usr/share/alsa
-		doins "${FILESDIR}"/pulse-default.conf
-		insinto /usr/share/alsa/alsa.conf.d
-		doins "${FILESDIR}"/51-pulseaudio-probe.conf
-		# bug #410261, comment 5+
-		# seems to work fine without any path
-		sed -i \
-			-e "s:/usr/lib/alsa-lib/::" \
-			"${ED}"/usr/share/alsa/alsa.conf.d/51-pulseaudio-probe.conf || die #410261
-	fi
 }

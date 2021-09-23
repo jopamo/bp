@@ -63,6 +63,9 @@ src_install() {
 	doins -r linux-package/*
 	dobin linux-package/bin/kitty
 	python_fix_shebang "${ED}"
+
+	insinto /usr/share/terminfo
+	doins -r terminfo/*
 }
 
 pkg_postinst() {

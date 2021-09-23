@@ -13,6 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 src_install() {
+	rm -r kde || die
 	insinto /usr/share/themes/dracula
 	doins -r .
 }

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openbox_menu xmlns="http://openbox.org/">
 	<menu id="root-menu" label="Openbox 3">
-		<item label="qterminal">
+		<item label="lxterminal">
 			<action name="Execute">
 				<execute>
-					qterminal
+					lxterminal
 				</execute>
 			</action>
 		</item>
@@ -43,10 +43,10 @@
 				</execute>
 			</action>
 		</item>
-		<item label="pcmanfm-qt">
+		<item label="pcmanfm">
 			<action name="Execute">
 				<execute>
-					pcmanfm-qt
+					pcmanfm
 				</execute>
 			</action>
 		</item>

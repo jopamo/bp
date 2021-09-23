@@ -2,20 +2,17 @@
 
 EAPI=8
 
-inherit autotools git-r3 xdg-utils
+inherit git-r3 autotools xdg-utils
 
-DESCRIPTION="Extremely fast and lightweight file manager"
-HOMEPAGE="https://github.com/lxde/${PN}"
-EGIT_REPO_URI="https://github.com/lxde/${PN}.git"
+DESCRIPTION="VTE terminal emulator written in GTK"
+HOMEPAGE="https://github.com/lxde/lxterminal.git"
+EGIT_REPO_URI="https://github.com/lxde/lxterminal.git"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="
-	xgui-live-lib/libfm
-	xgui-live-lib/gtk+:3
-"
+DEPEND="xgui-live-lib/vte"
 
 src_prepare() {
 	eautoreconf
@@ -24,7 +21,8 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--with-gtk=3
+		--enable-gtk3=yes
+		--enable-man
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
@@ -32,9 +30,9 @@ src_configure() {
 src_install() {
 	default
 
-	insopts -m 0755
-	insinto etc/xdg/${PN}/default
-	doins ${FILESDIR}/${PN}.conf
+	#insopts -m 0755
+	#insinto etc/xdg/${PN}/default
+	#doins ${FILESDIR}/${PN}.conf
 }
 
 pkg_postinst() {

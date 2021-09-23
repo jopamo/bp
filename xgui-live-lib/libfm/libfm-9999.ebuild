@@ -5,8 +5,8 @@ EAPI=8
 inherit autotools git-r3 xdg-utils
 
 DESCRIPTION="A library for file management"
-HOMEPAGE="https://github.com/lxde/libfm"
-EGIT_REPO_URI="https://github.com/lxde/${PN}"
+HOMEPAGE="https://github.com/lxde/${PN}"
+EGIT_REPO_URI="https://github.com/lxde/${PN}.git"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -14,17 +14,17 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug exif"
 
-COMMON_DEPEND="
+DEPEND="
 	lib-live/glib
 	xgui-live-lib/menu-cache
-"
-RDEPEND="${COMMON_DEPEND}
 	xgui-live-app/shared-mime-info
-	exif? ( xmedia-live-lib/libexif )"
-DEPEND="${COMMON_DEPEND}
+	exif? ( xmedia-live-lib/libexif )
+"
+BDEPEND="
 	dev-util/intltool
 	dev-util/pkgconf
-	sys-devel/gettext"
+	sys-devel/gettext
+"
 
 src_prepare() {
 	default
@@ -33,19 +33,13 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		--disable-dependency-tracking
 		--disable-static
 		--disable-demo
 		$(use_enable exif)
 		$(use_enable debug)
 		--disable-udisks
-		--without-gtk
+		--with-gtk=3
 		--disable-gtk-doc
 		--disable-old-actions
 	)

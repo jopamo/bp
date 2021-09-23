@@ -33,6 +33,7 @@ DEPEND="
 src_install() {
 	cmake_src_install
 
+	insopts -m 0755
 	insinto etc/xdg/${PN}/default
 	doins ${FILESDIR}/settings.conf
 }

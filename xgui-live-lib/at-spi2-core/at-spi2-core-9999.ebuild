@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit meson git-r3
 
@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	lib-live/glib
-	app-core/dbus
+	app-live/dbus-broker
 "
 
 BDEPEND="
@@ -23,3 +23,10 @@ BDEPEND="
 	sys-devel/gettext
 	dev-util/pkgconf
 "
+
+src_configure() {
+        local emesonargs=(
+			-Ddefault_bus=dbus-broker
+        )
+        meson_src_configure
+}

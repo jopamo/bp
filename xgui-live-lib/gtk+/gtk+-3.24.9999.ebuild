@@ -73,32 +73,39 @@ src_prepare() {
 }
 
 src_configure() {
-	econf \
-		$(use_enable broadway broadway-backend) \
-		--disable-colord \
-		$(use_enable cups) \
-		$(use_enable introspection) \
-		$(use_enable wayland wayland-backend) \
-		$(use_enable X x11-backend) \
-		$(use_enable X xcomposite) \
-		$(use_enable X xdamage) \
-		$(use_enable X xfixes) \
-		$(use_enable X xkb) \
-		$(use_enable X xrandr) \
-		$(use_enable xinerama) \
-		--disable-papi \
-		--with-xml-catalog="${EPREFIX}"/etc/xml/catalog \
-		--libdir="${EPREFIX}"/usr/lib \
+	local myconf=(
+		$(use_enable broadway broadway-backend)
+		--disable-colord
+		$(use_enable cups)
+		$(use_enable introspection)
+		$(use_enable wayland wayland-backend)
+		$(use_enable X x11-backend)
+		$(use_enable X xcomposite)
+		$(use_enable X xdamage)
+		$(use_enable X xfixes)
+		$(use_enable X xkb)
+		$(use_enable X xrandr)
+		$(use_enable xinerama)
+		--disable-papi
+		--with-xml-catalog="${EPREFIX}"/etc/xml/catalog
+		--libdir="${EPREFIX}"/usr/lib
 		CUPS_CONFIG="${EROOT}/usr/bin/cups-config"
+	)
+
+	econf ${myconf[@]}
+
+	econf \
+
 }
 
 src_install() {
 	default
+	insopts -m 0755
 	insinto /etc/gtk-3.0
 	doins "${FILESDIR}"/settings.ini
 
-	dosym /usr/include/gtk-3.0/gdk /usr/include/gdk
-	dosym /usr/include/gtk-3.0/gtk /usr/include/gtk
+	dosym -r /usr/include/gtk-3.0/gdk /usr/include/gdk
+	dosym -r /usr/include/gtk-3.0/gtk /usr/include/gtk
 }
 
 pkg_preinst() {
@@ -116,4 +123,12 @@ pkg_postrm() {
 	if [[ -z ${REPLACED_BY_VERSION} ]]; then
 		rm -f "${EROOT}"/usr/lib/gtk-3.0/3.0.0/immodules.cache
 	fi
+}
+
+pkg_postinst() {
+	xdg_icon_cache_update
+}
+
+pkg_postrm() {
+	xdg_icon_cache_update
 }

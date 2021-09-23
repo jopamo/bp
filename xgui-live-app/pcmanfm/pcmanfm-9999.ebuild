@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit autotools git-r3 xdg-utils
 
 DESCRIPTION="Extremely fast and lightweight file manager"
 HOMEPAGE="https://github.com/lxde/${PN}"

@@ -7,4 +7,4 @@
 lxqt-panel &
 picom -b --glx-no-rebind-pixmap --unredir-if-possible --glx-no-stencil --vsync
 hsetroot -solid '#000000' &
-/usr/libexec/at-spi-bus-launcher --launch-immediately &
+

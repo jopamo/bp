@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit autotools git-r3 xdg-utils
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
@@ -91,11 +91,7 @@ src_configure() {
 		--libdir="${EPREFIX}"/usr/lib
 		CUPS_CONFIG="${EROOT}/usr/bin/cups-config"
 	)
-
 	econf ${myconf[@]}
-
-	econf \
-
 }
 
 src_install() {

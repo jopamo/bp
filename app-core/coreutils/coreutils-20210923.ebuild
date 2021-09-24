@@ -63,8 +63,6 @@ src_install() {
 	default
 
 	insinto /etc
-	doins "${FILESDIR}"/DIR_COLORS
-
-	rm -rf "${ED%/}"/usr/share/man
+	doins "${FILESDIR}"/LS_COLORS
 }
 

@@ -49,20 +49,16 @@ case ${TERM} in
 		;;
 esac
 
-# Set colorful PS1 only on colorful terminals.
-# dircolors --print-database uses its own built-in database
-# instead of using /etc/DIR_COLORS.  Try to use the external file
-# first to take advantage of user additions.
-# We run dircolors directly due to its changes in file syntax and
-# terminal name patching.
+# optional user defined /etc/LS_COLORS
+
 use_color=false
 if type -P dircolors >/dev/null ; then
-	# Enable colors for ls, etc.  Prefer ~/.dir_colors #64489
+	# Enable colors for ls, etc.  Prefer ~/.ls_colors #64489
 	LS_COLORS=
-	if [[ -f ~/.dir_colors ]] ; then
-		eval "$(dircolors -b ~/.dir_colors)"
-	elif [[ -f /etc/DIR_COLORS ]] ; then
-		eval "$(dircolors -b /etc/DIR_COLORS)"
+	if [[ -f ~/.ls_colors ]] ; then
+		eval "$(dircolors -b ~/.ls_colors)"
+	elif [[ -f /etc/LS_COLORS ]] ; then
+		eval "$(dircolors -b /etc/LS_COLORS)"
 	else
 		eval "$(dircolors -b)"
 	fi
@@ -85,11 +81,7 @@ else
 fi
 
 if ${use_color} ; then
-	if [[ ${EUID} == 0 ]] ; then
-		PS1+="\[\033[38;5;93m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\[$(tput sgr0)\]\[\033[38;5;88m\]\h\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]\[\033[38;5;160m\]\w\[$(tput sgr0)\]\[\033[38;5;15m\] \\$ \[$(tput sgr0)\]"
-	else
-		PS1+="\[\033[38;5;21m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\[$(tput sgr0)\]\[\033[38;5;33m\]\h\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]\[\033[38;5;14m\]\w\[$(tput sgr0)\]\[\033[38;5;15m\] \\$ \[$(tput sgr0)\]"
-	fi
+	source /etc/bash/color_ps1
 else
 	# show root@ when we don't have colors
 	PS1+='\u@\h \w \$ '

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 SNAPSHOT=ce23728687ce9e584333367075c9deef413553fa
 
@@ -71,7 +71,7 @@ src_install() {
 	doins "${FILESDIR}"/alias.sh
 
 	insinto /etc/bash
-	doins "${FILESDIR}"/{bash_logout,bashrc}
+	doins "${FILESDIR}"/{bash_logout,bashrc,color_ps1}
 }
 
 pkg_preinst() {

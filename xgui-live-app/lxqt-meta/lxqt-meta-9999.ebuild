@@ -15,11 +15,9 @@ RDEPEND="
 	xgui-icontheme/dracula-theme
 	xgui-icontheme/hicolor-icon-theme
 	xgui-icontheme/oxygen-icon-theme
-	xgui-icontheme/papirus-icon-theme
 	xgui-live-app/arqiver
 	xgui-live-app/featherpad
 	xgui-live-app/lxappearance
-	xgui-live-app/lxqt-config
 	xgui-live-app/lxqt-panel
 	xgui-live-app/lxterminal
 	xgui-live-app/obconf-qt
@@ -27,8 +25,5 @@ RDEPEND="
 	xgui-live-app/pcmanfm
 	xgui-live-app/speedcrunch
 	xgui-live-app/xrandr
-	xgui-live-lib/lxmenu-data
-	xgui-live-lib/lxqt-globalkeys
-	xgui-live-lib/lxqt-themes
 	xmedia-live-app/lximage-qt
 "

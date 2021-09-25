@@ -6,12 +6,11 @@ inherit python-single-r1 meson flag-o-matic
 
 DESCRIPTION="Introspection system for GObject-based libraries"
 HOMEPAGE="https://wiki.gnome.org/Projects/GObjectIntrospection"
-EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/gobject-introspection.git"
 
 if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/gobject-introspection.git"
 	inherit git-r3
-	EGIT_BRANCH=gnome-3-36
+	#EGIT_BRANCH=gnome-3-38
 	KEYWORDS="amd64 arm64"
 else
 	SNAPSHOT=dd231b0faf587ff4e0e77519f724214e5876d5c2

@@ -847,9 +847,7 @@ python_replicate_script() {
 	# install the wrappers
 	local f
 	for f; do
-		local dosym=dosym
-		[[ ${EAPI} == [67] ]] && dosym=dosym8
-		"${dosym}" -r /usr/lib/python-exec/python-exec2 "${f#${ED}}"
+		dosym -r /usr/lib/python-exec/python-exec2 "${f#${ED}}"
 	done
 }
 

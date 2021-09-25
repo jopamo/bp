@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/smuellerDD/jitterentropy-rngd.git"
 	inherit git-r3
 else
-	SNAPSHOT=dce5f0402fc578407b4c9a6ce95e1cf12572da88
+	SNAPSHOT=22e0f9b8b9220f2d4e7ed7ac671c43a1561b7dce
 	SRC_URI="https://github.com/smuellerDD/jitterentropy-rngd/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-rngd-${SNAPSHOT}
 fi

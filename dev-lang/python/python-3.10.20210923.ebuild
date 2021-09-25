@@ -13,18 +13,18 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/python/cpython.git"
 	EGIT_BRANCH="$(ver_cut 1-2)"
 	inherit git-r3
-	#KEYWORDS="~amd64 ~arm64"
+	KEYWORDS="~amd64 ~arm64"
 else
 	SNAPSHOT=87f97fe5e6434da51246d70af9e2cd7d63c29fba
 	SRC_URI="https://github.com/python/cpython/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/c${PN}-${SNAPSHOT}
-	#KEYWORDS="amd64 arm64"
+	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="PSF-2"
 SLOT="$(ver_cut 1-2)"
 
-IUSE="bluetooth bytecode ipv6 +sqlite static test valgrind"
+IUSE="sqlite static test valgrind"
 
 RESTRICT="test"
 
@@ -77,9 +77,10 @@ src_prepare() {
 }
 
 src_configure() {
+	export ax_cv_c_float_words_bigendian=no
+
 	local disable
-	# disable automagic bluetooth headers detection
-	use bluetooth || export ac_cv_header_bluetooth_bluetooth_h=no
+	export ac_cv_header_bluetooth_bluetooth_h=no
 	use sqlite    || disable+=" _sqlite3"
 	disable+=" _tkinter"
 	export PYTHON_DISABLE_MODULES="${disable}"
@@ -93,17 +94,6 @@ src_configure() {
 	fi
 
 	filter-flags -malign-double
-
-	# https://bugs.gentoo.org/show_bug.cgi?id=50309
-	if is-flagq -O3; then
-		is-flagq -fstack-protector-all && replace-flags -O3 -O2
-		use hardened && replace-flags -O3 -O2
-	fi
-
-	# https://bugs.gentoo.org/700012
-	if is-flagq -flto || is-flagq '-flto=*'; then
-		append-cflags $(test-flags-CC -ffat-lto-objects)
-	fi
 
 	# Export CXX so it ends up in /usr/lib/python3.X/config/Makefile.
 	tc-export CXX
@@ -121,7 +111,7 @@ src_configure() {
 
 		--enable-shared
 		--without-static-libpython
-		--enable-ipv6
+		--disable-ipv6
 		--infodir='${prefix}/share/info'
 		--mandir='${prefix}/share/man'
 		--with-computed-gotos
@@ -151,12 +141,6 @@ src_compile() {
 }
 
 src_test() {
-	# Tests will not work when cross compiling.
-	if tc-is-cross-compiler; then
-		elog "Disabling tests due to crosscompiling."
-		return
-	fi
-
 	# Skip failing tests.
 	local skipped_tests="gdb"
 

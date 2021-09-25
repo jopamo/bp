@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 SNAPSHOT=7f7fd8bcfd74919091cc318b27b8617a9ef2ac82
 

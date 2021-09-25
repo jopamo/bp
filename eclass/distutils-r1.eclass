@@ -86,7 +86,7 @@ esac
 #
 # - no -- do not add the dependency (pure distutils package)
 # - bdepend -- add it to BDEPEND (the default)
-# - rdepend -- add it to BDEPEND+RDEPEND (when using entry_points)
+# - rdepend -- add it to BDEPEND+RDEPEND (e.g. when using pkg_resources)
 # - pyproject.toml -- use pyproject2setuptools to install a project
 #                     using pyproject.toml (flit, poetry...)
 # - manual -- do not add the dependency and suppress the checks
@@ -460,7 +460,7 @@ distutils_enable_tests() {
 esetup.py() {
 	debug-print-function ${FUNCNAME} "${@}"
 
-	[[ -n ${EPYTHON} ]] || die "EPYTHON unset, invalid call context"
+	_python_check_EPYTHON
 
 	[[ ${BUILD_DIR} ]] && _distutils-r1_create_setup_cfg
 
@@ -743,6 +743,8 @@ _distutils-r1_copy_egg_info() {
 distutils-r1_python_compile() {
 	debug-print-function ${FUNCNAME} "${@}"
 
+	_python_check_EPYTHON
+
 	_distutils-r1_copy_egg_info
 
 	# distutils is parallel-capable since py3.5
@@ -791,7 +793,9 @@ _distutils-r1_wrap_scripts() {
 			local basename=${f##*/}
 
 			debug-print "${FUNCNAME}: installing wrapper at ${bindir}/${basename}"
-			dosym -r /usr/lib/python-exec/python-exec2 \
+			local dosym=dosym
+			[[ ${EAPI} == [67] ]] && dosym=dosym8
+			"${dosym}" -r /usr/lib/python-exec/python-exec2 \
 				"${bindir#${EPREFIX}}/${basename}"
 		done
 
@@ -818,6 +822,8 @@ distutils-r1_python_test() {
 	if [[ -z ${_DISTUTILS_TEST_RUNNER} ]]; then
 		die "${FUNCNAME} can be only used after calling distutils_enable_tests"
 	fi
+
+	_python_check_EPYTHON
 
 	if [[ ${_DISTUTILS_TEST_INSTALL} ]]; then
 		distutils_install_for_testing
@@ -857,6 +863,8 @@ distutils-r1_python_test() {
 # This phase updates the setup.cfg file with install directories.
 distutils-r1_python_install() {
 	debug-print-function ${FUNCNAME} "${@}"
+
+	_python_check_EPYTHON
 
 	local root=${D%/}/_${EPYTHON}
 	[[ ${DISTUTILS_SINGLE_IMPL} ]] && root=${D%/}
@@ -927,6 +935,7 @@ distutils-r1_python_install() {
 	shopt -s nullglob
 	local pypy_dirs=(
 		"${root}/usr/lib"/pypy*/share
+		"${root}/usr/lib"/pypy*/share
 	)
 	${shopt_save}
 
@@ -946,8 +955,6 @@ distutils-r1_python_install() {
 distutils-r1_python_install_all() {
 	debug-print-function ${FUNCNAME} "${@}"
 	_distutils-r1_check_all_phase_mismatch
-
-	cleanup_install
 }
 
 # @FUNCTION: distutils-r1_run_phase

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="base functions required by all Gentoo systems"
 HOMEPAGE="https://www.gentoo.org"

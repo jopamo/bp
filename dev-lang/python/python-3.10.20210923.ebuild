@@ -11,21 +11,20 @@ HOMEPAGE="https://www.python.org/"
 
 if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/python/cpython.git"
-	EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
+	EGIT_BRANCH="$(ver_cut 1-2)"
 	inherit git-r3
-	KEYWORDS="~amd64 ~arm64"
+	#KEYWORDS="~amd64 ~arm64"
 else
-	SNAPSHOT=b06c3b364720ce8e8dfb74dfa24434e067ac89ba
+	SNAPSHOT=87f97fe5e6434da51246d70af9e2cd7d63c29fba
 	SRC_URI="https://github.com/python/cpython/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/c${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64"
+	#KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="PSF-2"
-SLOT="$(ver_cut 1).$(ver_cut 2)"
-KEYWORDS="amd64 arm64"
+SLOT="$(ver_cut 1-2)"
 
-IUSE="bytecode ipv6 +sqlite static valgrind"
+IUSE="bluetooth bytecode ipv6 +sqlite static test valgrind"
 
 RESTRICT="test"
 
@@ -33,7 +32,6 @@ DEPEND="
 	sqlite? ( lib-core/sqlite )
 	app-compression/bzip2
 	app-compression/xz-utils
-	app-eselect/eselect-python
 	lib-core/libffi
 	lib-net/libnsl
 	lib-core/gdbm
@@ -50,6 +48,17 @@ PYVER=${SLOT%/*}
 
 filter-flags -Wl,-z,defs
 
+# large file tests involve a 2.5G file being copied (duplicated)
+CHECKREQS_DISK_BUILD=5500M
+
+pkg_pretend() {
+	use test && check-reqs_pkg_pretend
+}
+
+pkg_setup() {
+	use test && check-reqs_pkg_setup
+}
+
 src_prepare() {
 	# Ensure that internal copies of expat, libffi and zlib are not used.
 	rm -fr Modules/expat || die
@@ -57,31 +66,80 @@ src_prepare() {
 	rm -fr Modules/zlib || die
 
 	default
+
+	# force correct number of jobs
+	# https://bugs.gentoo.org/737660
+	local jobs=$(makeopts_jobs "${MAKEOPTS}" "$(get_nproc)")
+	sed -i -e "s:-j0:-j${jobs}:" Makefile.pre.in || die
+	sed -i -e "/self\.parallel/s:True:${jobs}:" setup.py || die
+
 	eautoreconf
 }
 
 src_configure() {
-	export ax_cv_c_float_words_bigendian=no
-	export export PYTHONDONTWRITEBYTECODE=1
+	local disable
+	# disable automagic bluetooth headers detection
+	use bluetooth || export ac_cv_header_bluetooth_bluetooth_h=no
+	use sqlite    || disable+=" _sqlite3"
+	disable+=" _tkinter"
+	export PYTHON_DISABLE_MODULES="${disable}"
 
+	if [[ -n "${PYTHON_DISABLE_MODULES}" ]]; then
+		einfo "Disabled modules: ${PYTHON_DISABLE_MODULES}"
+	fi
+
+	if [[ "$(gcc-major-version)" -ge 4 ]]; then
+		append-flags -fwrapv
+	fi
+
+	filter-flags -malign-double
+
+	# https://bugs.gentoo.org/show_bug.cgi?id=50309
+	if is-flagq -O3; then
+		is-flagq -fstack-protector-all && replace-flags -O3 -O2
+		use hardened && replace-flags -O3 -O2
+	fi
+
+	# https://bugs.gentoo.org/700012
+	if is-flagq -flto || is-flagq '-flto=*'; then
+		append-cflags $(test-flags-CC -ffat-lto-objects)
+	fi
+
+	# Export CXX so it ends up in /usr/lib/python3.X/config/Makefile.
 	tc-export CXX
-	use static && LDFLAGS="-static"
-	local myconf=(
-		$(usex static --disable-shared --enable-shared)
-		$(use_enable ipv6)
-		$(use_with valgrind)
-		$(usex sqlite --enable-loadable-sqlite-extensions --disable-loadable-sqlite-extensions)
+
+	append-cppflags -I"${ESYSROOT}"/usr/include/ncursesw
+
+	local dbmliborder
+	dbmliborder+="${dbmliborder:+:}gdbm"
+
+	local myeconfargs=(
+		# glibc-2.30 removes it; since we can't cleanly force-rebuild
+		# Python on glibc upgrade, remove it proactively to give
+		# a chance for users rebuilding python before glibc
+		ac_cv_header_stropts_h=no
+
+		--enable-shared
+		--without-static-libpython
+		--enable-ipv6
 		--infodir='${prefix}/share/info'
 		--mandir='${prefix}/share/man'
 		--with-computed-gotos
-		--with-dbmliborder="gdbm"
+		--with-dbmliborder="${dbmliborder}"
 		--with-libc=
+		--enable-loadable-sqlite-extensions
 		--without-ensurepip
 		--with-system-expat
 		--with-system-ffi
 	)
 
-	OPT="" econf "${myconf[@]}"
+	OPT="" econf "${myeconfargs[@]}"
+
+	if grep -q "#define POSIX_SEMAPHORES_NOT_ENABLED 1" pyconfig.h; then
+		eerror "configure has detected that the sem_open function is broken."
+		eerror "Please ensure that /dev/shm is mounted as a tmpfs with mode 1777."
+		die "Broken sem_open function (bug 496328)"
+	fi
 }
 
 src_compile() {
@@ -108,10 +166,14 @@ src_test() {
 
 	# bug 660358
 	local -x COLUMNS=80
-
 	local -x PYTHONDONTWRITEBYTECODE=
+	# workaround https://bugs.gentoo.org/775416
+	addwrite /usr/lib/python3.10/site-packages
 
-	emake test EXTRATESTOPTS="-u-network" CPPFLAGS= CFLAGS= LDFLAGS= < /dev/tty
+	local jobs=$(makeopts_jobs "${MAKEOPTS}" "$(get_nproc)")
+
+	emake test EXTRATESTOPTS="-u-network -j${jobs}" \
+		CPPFLAGS= CFLAGS= LDFLAGS= < /dev/tty
 	local result=$?
 
 	for test in ${skipped_tests}; do
@@ -160,7 +222,7 @@ src_install() {
 	use sqlite || rm -r "${libdir}/"{sqlite3,test/test_sqlite*} || die
 	rm -r "${ED}/usr/bin/idle${PYVER}" "${libdir}/"{idlelib,tkinter,test/test_tk*} || die
 
-	insinto /usr/share/gdb/auto-load/usr/lib #443510
+	insinto /usr/share/gdb/auto-load/usr/lib
 	local libname=$(printf 'e:\n\t@echo $(INSTSONAME)\ninclude Makefile\n' | \
 		emake --no-print-directory -s -f - 2>/dev/null)
 	newins "${S}"/Tools/gdb/libpython.py "${libname}"-gdb.py
@@ -200,44 +262,4 @@ src_install() {
 		"${scriptdir}/2to3" || die
 	ln -s "../../../bin/pydoc${PYVER}" \
 		"${scriptdir}/pydoc" || die
-
-	#Cleanup
-	use bytecode || find "${ED}"  -name *.pyc -delete || die
-	use bytecode || find "${ED}" -type d -empty -delete || die
-
-	rm "${ED}"/usr/lib/python$(ver_cut 1).$(ver_cut 2)/lib-dynload/_codecs_{hk,tw,cn,jp,kr}.cpython*.so
-	rm "${ED}"/usr/lib/python$(ver_cut 1).$(ver_cut 2)/lib-dynload/ossaudiodev.cpython*.so
-}
-
-pkg_preinst() {
-	if has_version "<${CATEGORY}/${PN}-${PYVER}" && ! has_version ">=${CATEGORY}/${PN}-${PYVER}_alpha"; then
-		python_updater_warning="1"
-	fi
-}
-
-eselect_python_update() {
-	if [[ -z "$(eselect python show)" || \
-			! -f "${EROOT}/usr/bin/$(eselect python show)" ]]; then
-		eselect python update
-	fi
-
-	if [[ -z "$(eselect python show --python${PV%%.*})" || \
-			! -f "${EROOT}/usr/bin/$(eselect python show --python${PV%%.*})" ]]
-	then
-		eselect python update --python${PV%%.*}
-	fi
-}
-
-pkg_postinst() {
-	eselect_python_update
-
-	if [[ "${python_updater_warning}" == "1" ]]; then
-		ewarn "You have just upgraded from an older version of Python."
-		ewarn
-		ewarn "Please adjust PYTHON_TARGETS (if so desired), and run emerge with the --newuse or --changed-use option to rebuild packages installing python modules."
-	fi
-}
-
-pkg_postrm() {
-	eselect_python_update
 }

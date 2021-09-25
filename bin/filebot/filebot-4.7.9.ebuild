@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="A tool for organizing and renaming video files."
 HOMEPAGE="https://www.filebot.net/"

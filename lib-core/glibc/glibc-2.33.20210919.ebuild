@@ -12,7 +12,7 @@ if [[ ${PV} = *9999 ]]; then
 	inherit git-r3
 	EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)/master"
 else
-	SNAPSHOT=c6cadbf83a64600d44faf8f27f6db41094e9682a
+	SNAPSHOT=d27d1e4d13ba494b3a1c9dc14072d20c77533d73
 	SRC_URI="https://github.com/bminor/glibc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -37,7 +37,10 @@ RDEPEND="
 "
 PDEPEND="lib-core/tzdb"
 
-PATCHES=( "${FILESDIR}"/0001-Disable-ldconfig-during-install.patch )
+PATCHES=(
+	"${FILESDIR}"/0001-Disable-ldconfig-during-install.patch
+	"${FILESDIR}"/0004-Add-C.UTF-8-locale.patch
+	)
 
 filter-flags -flto\=\*
 filter-flags -D_FORTIFY_SOURCE\=\*
@@ -222,17 +225,22 @@ src_install() {
 	rm -f "${ED}"/etc/localtime
 
 	# locale-gen install
-	insinto /usr/bin && doins "${FILESDIR}/locale-gen/locale-gen"
-	insinto /etc/ && doins "${FILESDIR}/locale-gen/locale.gen"
+	dobin "${FILESDIR}"/locale-gen/locale-gen
 
-	fperms +x /usr/bin/locale-gen
+	insopts -m 0644
+	insinto /etc/
+	doins "${FILESDIR}"/locale-gen/locale.gen
+
+	insopts -m 0644
+	insinto /etc/env.d
+	doins "${FILESDIR}"/locale-gen/02lccollate
 
 	mv "${ED}"/sbin/{ldconfig,sln} "${ED}"/usr/sbin && rm -rf "${ED}"/sbin
 
 	cleanup_install
 	use static-libs || find "${ED}" -name '*.la' -delete
 
-	echo -e "en_US.UTF-8 UTF-8\nen_US ISO-8859-1" > "${ED}"/usr/share/i18n/locales/SUPPORTED
+	echo -e "en_US.UTF-8 UTF-8\nen_US ISO-8859-1\nC.UTF-8" > "${ED}"/usr/share/i18n/locales/SUPPORTED
 
 	dodir /usr/lib/locale
 }

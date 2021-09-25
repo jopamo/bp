@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="Provides message digest functions found on BSD systems"
 HOMEPAGE="https://www.hadrons.org/software/libmd/"

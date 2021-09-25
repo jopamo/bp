@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="Environment setting required for all KDE Frameworks app-misc to run"
 HOMEPAGE="https://community.kde.org/Frameworks"

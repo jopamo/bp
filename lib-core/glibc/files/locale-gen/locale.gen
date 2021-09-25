@@ -1,12 +1,4 @@
 ###	see /usr/share/i18n/locales for more options
 
-	en_US.UTF-8 UTF-8
-#	en_US ISO-8859-1
-#	ja_JP.UTF-8 UTF-8
-#	zh_CN.UTF-8 UTF-8
-#	zh_HK.UTF-8 UTF-8
-#	fr_FR.UTF-8 UTF-8
-#	zh_SG.UTF-8 UTF-8
-#	ru_RU.UTF-8 UTF-8
-#	zh_TW.UTF-8 UTF-8
-#	de_DE.UTF-8 UTF-8
+en_US.UTF-8 UTF-8
+C.UTF8 UTF-8

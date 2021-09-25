@@ -1,24 +1,24 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit distutils-r1 python-r1
 
 DESCRIPTION="Open source build system"
 HOMEPAGE="http://mesonbuild.com/"
 
-if [[ ${PV} = *9999* ]]; then
+if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/mesonbuild/meson"
 	inherit git-r3
 else
-	SNAPSHOT=2e30b5a1e2ca21555bb3aa50f91e87f4d2821bb6
+	SNAPSHOT=86eda3c812e8b919dee485c0b6333671652ee30c
 	SRC_URI="https://github.com/mesonbuild/meson/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
 
 RESTRICT="test"
 

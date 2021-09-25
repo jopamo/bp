@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit distutils-r1
 
@@ -25,7 +25,7 @@ RDEPEND="
 	socks5? ( >=dev-python/PySocks-1.5.6[${PYTHON_USEDEP}] )
 	ssl? (
 		 >=dev-python/cryptography-1.3.4[${PYTHON_USEDEP}]
-		 >=dev-python/pyopenssl-0.14[$(python_gen_usedep 'python*' pypy)]
+		 >=dev-python/pyopenssl-0.14[${PYTHON_USEDEP}]
 	)
 "
 

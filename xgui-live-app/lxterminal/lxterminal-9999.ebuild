@@ -31,7 +31,7 @@ src_install() {
 	default
 
 	insopts -m 0755
-	insinto etc/xdg/${PN}/
+	insinto /usr/share/${PN}/
 	doins ${FILESDIR}/${PN}.conf
 }
 

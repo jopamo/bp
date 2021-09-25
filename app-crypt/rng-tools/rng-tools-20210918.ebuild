@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/nhorman/${PN}.git"
 	inherit git-r3
 else
-	SNAPSHOT=a54803f2d48dbd0e80ab8c90817a97996fdae59a
+	SNAPSHOT=82f665c43ae3c3ad4380bccccdb3b5e379a06a11
 	SRC_URI="https://github.com/nhorman/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

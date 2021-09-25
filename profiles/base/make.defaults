@@ -33,7 +33,7 @@ PYTHONDONTWRITEBYTECODE="1"
 
 BOOTSTRAP_USE="unicode internal-glib pkg-config python_targets_python3_10"
 
-PYTHON_TARGETS="python3_9 python3_10"
+PYTHON_TARGETS="python3_10"
 PYTHON_SINGLE_TARGET="python3_10"
 
 COLLISION_IGNORE="/lib/modules/*"

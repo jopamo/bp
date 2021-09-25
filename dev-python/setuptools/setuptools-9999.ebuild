@@ -18,10 +18,13 @@ fi
 LICENSE="MIT"
 SLOT="0"
 
-PDEPEND="dev-python/certifi[${PYTHON_USEDEP}]"
+PDEPEND="
+	dev-python/setuptools_scm[${PYTHON_USEDEP}]
+	dev-python/certifi[${PYTHON_USEDEP}]
+"
 
 # Force in-source build because build system modifies sources.
-DISTUTILS_IN_SOURCE_BUILD=1
+#DISTUTILS_IN_SOURCE_BUILD=1
 
 python_test() {
 	# keep in sync with python_gen_cond_dep above!
@@ -47,6 +50,7 @@ python_test() {
 }
 
 python_install() {
+	mkdir "${WORKDIR}"/setuptools-57.5.0-python3_10/build/scripts
 	export DISTRIBUTE_DISABLE_VERSIONED_EASY_INSTALL_SCRIPT=1
 	distutils-r1_python_install
 }

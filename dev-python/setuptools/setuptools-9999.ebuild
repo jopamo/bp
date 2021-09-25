@@ -50,7 +50,6 @@ python_test() {
 }
 
 python_install() {
-	mkdir "${WORKDIR}"/setuptools-57.5.0-python3_10/build/scripts
 	export DISTRIBUTE_DISABLE_VERSIONED_EASY_INSTALL_SCRIPT=1
 	distutils-r1_python_install
 }

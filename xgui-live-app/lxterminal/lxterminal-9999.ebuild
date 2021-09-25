@@ -30,9 +30,9 @@ src_configure() {
 src_install() {
 	default
 
-	#insopts -m 0755
-	#insinto etc/xdg/${PN}/default
-	#doins ${FILESDIR}/${PN}.conf
+	insopts -m 0755
+	insinto etc/xdg/${PN}/
+	doins ${FILESDIR}/${PN}.conf
 }
 
 pkg_postinst() {

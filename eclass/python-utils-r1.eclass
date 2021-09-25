@@ -1,7 +1,7 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_9 python3_10 )
+PYTHON_COMPAT=( python3_9 )
 
 # @ECLASS: python-utils-r1.eclass
 # @MAINTAINER:
@@ -25,8 +25,8 @@ PYTHON_COMPAT=( python3_9 python3_10 )
 # metadata/install-qa-check.d/60python-pyc
 # See bug #704286, bug #781878
 case "${EAPI:-0}" in
-	[0-5]) die "Unsupported EAPI=${EAPI:-0} (too old) for ${ECLASS}" ;;
-	[6-8]) ;;
+	[0-7]) die "Unsupported EAPI=${EAPI:-0} (too old) for ${ECLASS}" ;;
+	[8]) ;;
 	*)     die "Unsupported EAPI=${EAPI} (unknown) for ${ECLASS}" ;;
 esac
 
@@ -691,7 +691,6 @@ python_newexe() {
 		newexe "${f}" "${newfn}" || return ${?}
 	)
 
-	# install the wrapper
 	dosym -r /usr/lib/python-exec/python-exec2 "${wrapd}/${newfn}"
 
 	# don't use this at home, just call python_doscript() instead
@@ -1249,6 +1248,16 @@ build_sphinx() {
 	HTML_DOCS+=( "${dir}/_build/html/." )
 }
 
+# @FUNCTION: _python_check_EPYTHON
+# @INTERNAL
+# @DESCRIPTION:
+# Check if EPYTHON is set, die if not.
+_python_check_EPYTHON() {
+	if [[ -z ${EPYTHON} ]]; then
+		die "EPYTHON unset, invalid call context"
+	fi
+}
+
 # @VARIABLE: EPYTEST_DESELECT
 # @DEFAULT_UNSET
 # @DESCRIPTION:
@@ -1278,7 +1287,7 @@ build_sphinx() {
 epytest() {
 	debug-print-function ${FUNCNAME} "${@}"
 
-	[[ -n ${EPYTHON} ]] || die "EPYTHON unset, invalid call context"
+	_python_check_EPYTHON
 
 	local args=(
 		# verbose progress reporting and tracebacks
@@ -1321,7 +1330,7 @@ epytest() {
 eunittest() {
 	debug-print-function ${FUNCNAME} "${@}"
 
-	[[ -n ${EPYTHON} ]] || die "EPYTHON unset, invalid call context"
+	_python_check_EPYTHON
 
 	set -- "${EPYTHON}" -m unittest_or_fail discover -v "${@}"
 

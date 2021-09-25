@@ -8,6 +8,7 @@
 # Author: Michał Górny <mgorny@gentoo.org>
 # Based on work of: Krzysztof Pawlik <nelchael@gentoo.org>
 # @SUPPORTED_EAPIS: 6 7 8
+# @PROVIDES: multibuild python-utils-r1
 # @BLURB: A common, simple eclass for Python packages.
 # @DESCRIPTION:
 # A common eclass providing helper functions to build and install
@@ -846,7 +847,9 @@ python_replicate_script() {
 	# install the wrappers
 	local f
 	for f; do
-		dosym -r /usr/lib/python-exec/python-exec2 "${f#${ED}}"
+		local dosym=dosym
+		[[ ${EAPI} == [67] ]] && dosym=dosym8
+		"${dosym}" -r /usr/lib/python-exec/python-exec2 "${f#${ED}}"
 	done
 }
 

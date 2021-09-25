@@ -226,7 +226,7 @@ LICENSE="${LICENSE:-|| ( Artistic GPL-1+ )}"
 # @ECLASS-VARIABLE: DIST_MAKE
 # @DESCRIPTION:
 # (EAPI=8 and later) This Bash array contains parameters to the make call
-# from ExtUtils::MakeMaker. Replaces mymake in EAPI=7 and earlier.
+# from ExtUtils::MakeMaker. Replaces mymake in EAPI=8 and earlier.
 # Defaults to ( OPTIMIZE="${CFLAGS}" )
 if [[ $(declare -p DIST_MAKE 2>&-) != "declare -a DIST_MAKE="* ]]; then
 	DIST_MAKE=( OPTIMIZE="${CFLAGS}" )

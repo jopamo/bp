@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="fast compiler cache"
 HOMEPAGE="https://ccache.samba.org/"

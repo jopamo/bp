@@ -64,6 +64,7 @@ src_install() {
 
 	insopts -m 0644
 	insinto /etc/env.d
+	doins 02locale
 	doins 50layout
 
 	# setup /var

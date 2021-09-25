@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="Meta ebuild for LXQt, the Lightweight Desktop Environment"
 HOMEPAGE="https://lxqt.github.io/"

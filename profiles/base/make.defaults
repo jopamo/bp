@@ -31,7 +31,7 @@ USE="${USE} xattr bzip2 cxx"
 
 PYTHONDONTWRITEBYTECODE="1"
 
-BOOTSTRAP_USE="unicode internal-glib pkg-config python_targets_python3_9"
+BOOTSTRAP_USE="unicode internal-glib pkg-config python_targets_python3_10"
 
 PYTHON_TARGETS="python3_9"
 PYTHON_SINGLE_TARGET="python3_9"

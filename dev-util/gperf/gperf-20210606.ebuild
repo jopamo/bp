@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="A perfect hash function generator"
 HOMEPAGE="https://www.gnu.org/software/gperf/"

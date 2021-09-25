@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="(OTR) Messaging allows you to have private conversations over instant messaging"
 HOMEPAGE="https://otr.cypherpunks.ca"

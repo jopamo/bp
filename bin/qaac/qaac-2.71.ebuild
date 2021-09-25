@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="CLI QuickTime AAC/ALAC encoder for wine"
 HOMEPAGE="https://github.com/nu774/qaac"

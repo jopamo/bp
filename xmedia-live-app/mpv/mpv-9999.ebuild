@@ -4,7 +4,7 @@ EAPI=7
 
 WAF_PV=2.0.18
 
-inherit toolchain-funcs waf-utils xdg-utils python-r1
+inherit toolchain-funcs waf-utils xdg-utils
 
 DESCRIPTION="Media player based on MPlayer and mplayer2"
 HOMEPAGE="https://mpv.io/"
@@ -92,7 +92,6 @@ src_prepare() {
 	cp "${DISTDIR}/waf-${WAF_PV}" "${S}"/waf || die
 	chmod +x "${S}"/waf || die
 	default
-	python_setup
 }
 
 src_configure() {

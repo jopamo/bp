@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DESCRIPTION="Collection of patches for libtool.eclass"
 HOMEPAGE="https://gitweb.gentoo.org/proj/elt-patches.git/"

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit distutils-r1
 
@@ -16,7 +16,7 @@ IUSE="test"
 
 CDEPEND="
 	dev-python/botocore[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep 'dev-python/futures[${PYTHON_USEDEP}]' 'python2_7')
+	dev-python/futures[${PYTHON_USEDEP}]
 "
 
 DEPEND="

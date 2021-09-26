@@ -23,7 +23,7 @@ IUSE="alsa +clock colorpicker cpuload desktopswitch dom kbindicator
 	statusnotifier sysstat +taskbar +tray volume"
 REQUIRED_USE="volume? ( || ( alsa pulseaudio ) )"
 
-CDEPEND="
+DEPEND="
 	lib-live/glib
 	lib-live/libqtxdg
 	xgui-live-lib/qtbase:5
@@ -42,10 +42,9 @@ CDEPEND="
 		xgui-live-lib/libXdamage
 		xgui-live-lib/libXrender )
 "
-DEPEND="${CDEPEND}
-	dev-util/lxqt-build-tools
-"
-RDEPEND="${CDEPEND}
+BDEPEND="dev-util/lxqt-build-tools"
+RDEPEND="
+	xgui-icontheme/lxqt-themes
 	xgui-live-lib/qtsvg
 	xgui-live-lib/lxmenu-data
 "

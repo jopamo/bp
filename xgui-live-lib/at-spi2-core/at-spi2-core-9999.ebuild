@@ -16,7 +16,6 @@ DEPEND="
 	lib-live/glib
 	app-live/dbus-broker
 "
-
 BDEPEND="
 	dev-util/gtk-doc-am
 	dev-util/intltool
@@ -33,10 +32,6 @@ src_configure() {
 
 src_install() {
 	meson_src_install
-
-	insopts -m 0755
-	insinto etc/xdg/${PN}/default
-	doins ${FILESDIR}/pcmanfm.conf
 
 	cat > "${T}"/99${PN} <<- EOF || die
 		NO_AT_BRIDGE=1

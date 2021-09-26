@@ -234,6 +234,7 @@ src_install() {
 	insopts -m 0644
 	insinto /etc/env.d
 	doins "${FILESDIR}"/locale-gen/02lccollate
+	doins "${FILESDIR}"/locale-gen/02locale
 
 	mv "${ED}"/sbin/{ldconfig,sln} "${ED}"/usr/sbin && rm -rf "${ED}"/sbin
 

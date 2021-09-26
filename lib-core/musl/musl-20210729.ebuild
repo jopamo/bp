@@ -84,6 +84,10 @@ src_install() {
 
 		use amd64 && dosym -r /usr/lib/ld-musl-x86_64.so.1 /usr/bin/ldd
 		use arm64 && dosym -r /usr/lib/ld-musl-aarch64.so.1 /usr/bin/ldd
+
+		insopts -m 0644
+		insinto /etc/env.d
+		doins "${FILESDIR}"/02locale
 	fi
 
 	for i in linux asm asm-generic mtd ; do

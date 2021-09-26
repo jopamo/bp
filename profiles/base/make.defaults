@@ -38,3 +38,5 @@ COLLISION_IGNORE="/lib/modules/*"
 UNINSTALL_IGNORE="/lib/modules/* /var/run /var/lock"
 
 LC_MESSAGES="C"
+
+PYTHONDONTWRITEBYTECODE=1

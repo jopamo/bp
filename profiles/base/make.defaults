@@ -29,7 +29,7 @@ GRUB_PLATFORMS=""
 
 USE="${USE} xattr bzip2 cxx"
 
-BOOTSTRAP_USE="unicode internal-glib pkg-config python_targets_python3_10"
+BOOTSTRAP_USE=""
 
 PYTHON_TARGETS="python3_10"
 PYTHON_SINGLE_TARGET="python3_10"

@@ -13,8 +13,6 @@ RDEPEND="
 	fonts/liberation-fonts
 	sys-fs/ncdu
 	xgui-icontheme/dracula-theme
-	xgui-icontheme/hicolor-icon-theme
-	xgui-icontheme/oxygen-icon-theme
 	xgui-live-app/arqiver
 	xgui-live-app/featherpad
 	xgui-live-app/lxappearance

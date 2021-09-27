@@ -12,8 +12,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="xgui-live-lib/libqalculate
-	xgui-icontheme/hicolor-icon-theme"
+DEPEND="xgui-live-lib/libqalculate"
 
 src_prepare() {
 	default

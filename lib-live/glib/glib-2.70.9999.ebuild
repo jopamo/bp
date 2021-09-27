@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit python-r1 git-r3 meson
+inherit git-r3 meson
 
 DESCRIPTION="The GLib library of C routines"
 HOMEPAGE="https://www.gtk.org/"
@@ -13,7 +13,7 @@ LICENSE="LGPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs dtrace"
+IUSE="static-libs"
 
 RDEPEND="
 	lib-core/libpcre
@@ -29,7 +29,7 @@ DEPEND="
 src_configure() {
         local emesonargs=(
 				-Ddefault_library=$(usex static-libs static shared)
-				$(meson_use dtrace)
+				-Ddtrace=false
 				-Dgtk_doc=false
 				-Dselinux=disabled
 				-Dlibmount=enabled

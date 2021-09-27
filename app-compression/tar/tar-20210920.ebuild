@@ -12,11 +12,10 @@ LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl nls static xattr"
+IUSE="acl static xattr"
 
 DEPEND="
 	acl? ( app-core/acl )
-	nls? ( >=sys-devel/gettext-0.10.35 )
 	xattr? ( app-core/attr )
 "
 
@@ -26,7 +25,7 @@ src_configure() {
 	local myconf=(
 		--enable-backup-scripts
 		$(use_with acl posix-acls)
-		$(use_enable nls)
+		--disable-nls
 		$(use_with xattr xattrs)
 	)
 	FORCE_UNSAFE_CONFIGURE=1 econf "${myconf[@]}"

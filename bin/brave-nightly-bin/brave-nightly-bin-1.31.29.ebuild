@@ -48,6 +48,7 @@ RDEPEND="
 	xgui-live-lib/libxcb
 	xgui-live-lib/pango
 	xgui-live-app/xdg-utils
+	xgui-icontheme/adwaita-icon-theme
 "
 
 QA_PREBUILT="*"

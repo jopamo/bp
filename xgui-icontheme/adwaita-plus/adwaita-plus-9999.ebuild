@@ -17,11 +17,6 @@ RESTRICT="binchecks strip"
 src_install() {
 	insinto /usr/share/icons/
 	doins -r Adwaita*
-
-	#compat symlinks
-	for i in Adwaita oxygen ; do
-		dosym -r /usr/share/icons/Adwaita++-Dark-Colorful /usr/share/icons/$i
-	done
 }
 
 pkg_postinst() {

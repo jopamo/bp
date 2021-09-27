@@ -18,7 +18,7 @@ src_prepare() {
 }
 
 src_install() {
-	for d in boot dev etc home mnt usr var opt srv/http run; do
+	for d in boot dev etc home mnt usr var opt run; do
 		diropts -m0755
     	dodir /$d
 	done
@@ -27,7 +27,12 @@ src_install() {
 	install -d -m555 "${ED}"/sys
 	install -d -m0750 "${ED}"/root
 	install -d -m1777 "${ED}"/tmp
-	install -d -m555 -g 11 "${ED}"/srv/ftp
+
+	diropts -m0755
+	keepdir /srv/http
+
+	diropts -m0555
+	keepdir /srv/ftp
 
 	# setup /etc and /usr/share/factory/etc
 	install -d "${ED}"/etc/{skel,profile.d} "${ED}"/usr/share/factory/etc

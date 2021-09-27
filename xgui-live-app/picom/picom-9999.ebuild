@@ -12,22 +12,23 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="sanitize dbus opengl +pcre +xinerama"
+IUSE="sanitize dbus opengl +pcre"
 
 COMMON_DEPEND="
-	lib-live/libconfig:=
+	lib-live/libconfig
 	xgui-live-lib/libX11
 	xgui-live-lib/libXcomposite
 	xgui-live-lib/libXdamage
 	xgui-live-lib/libXext
 	xgui-live-lib/libXfixes
+	xgui-live-lib/libXinerama
 	xgui-live-lib/libXrandr
 	xgui-live-lib/libXrender
 	xgui-live-lib/xcb-util
 	dbus? ( app-core/dbus )
 	opengl? ( xmedia-live-lib/mesa )
-	pcre? ( lib-core/libpcre:3 )
-	xinerama? ( xgui-live-lib/libXinerama )"
+	pcre? ( lib-core/libpcre )
+"
 
 RDEPEND="${COMMON_DEPEND}
 	xgui-live-app/xprop
@@ -41,13 +42,11 @@ DEPEND="${COMMON_DEPEND}
 	lib-live/libxdg-base
 	xgui-live-lib/libdrm"
 
-append-cppflags -I/usr/include/xcb
 filter-flags -Wl,-z,defs
 
 src_configure() {
 	local emesonargs=(
 		$(meson_use sanitize)
-		$(meson_use xinerama)
 		$(meson_use pcre regex)
 		$(meson_use opengl)
 		$(meson_use dbus)

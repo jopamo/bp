@@ -66,6 +66,10 @@ src_install() {
 	insinto /etc/env.d
 	doins 50layout
 
+	insopts -m 0644
+	insinto /etc/sysctl.d
+	newins sysctl 10-1g4.conf
+
 	# setup /var
 	for d in local opt log/old lib/misc ; do
 		install -d -m755 "${ED}"/var/$d
@@ -95,11 +99,6 @@ src_install() {
 	dosym -r /usr/sbin /sbin
 
 	if use systemd ; then
-		# setup systemd-sysctl
-		insopts -m 0644
-		insinto /usr/lib/sysctl.d
-		newins sysctl 10-1g4.conf
-
 		if use sysusersd; then
 			insopts -m 0644
 			insinto /usr/lib/sysusers.d

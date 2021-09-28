@@ -8,6 +8,13 @@
 				</execute>
 			</action>
 		</item>
+		<item label="qterminal">
+			<action name="Execute">
+				<execute>
+					qterminal
+				</execute>
+			</action>
+		</item>
 		<item label="st">
 			<action name="Execute">
 				<execute>
@@ -47,6 +54,13 @@
 			<action name="Execute">
 				<execute>
 					pcmanfm
+				</execute>
+			</action>
+		</item>
+		<item label="pcmanfm-qt">
+			<action name="Execute">
+				<execute>
+					pcmanfm-qt
 				</execute>
 			</action>
 		</item>

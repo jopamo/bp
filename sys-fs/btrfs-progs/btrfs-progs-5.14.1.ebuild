@@ -43,8 +43,11 @@ fi
 
 src_prepare() {
 	default
+
 	if [[ ${PV} == 9999 ]]; then
-		AT_M4DIR=m4 eautoreconf
+		eaclocal
+		eautoconf
+		eautoheader
 		mkdir config || die
 		local automakedir="$(autotools_run_tool --at-output automake --print-libdir)"
 		[[ -e ${automakedir} ]] || die "Could not locate automake directory"
@@ -56,12 +59,6 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		--disable-convert
 		--disable-documentation
 		--disable-backtrace

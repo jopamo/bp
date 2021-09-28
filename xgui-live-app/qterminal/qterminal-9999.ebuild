@@ -22,6 +22,11 @@ DEPEND="
 "
 BDEPEND="dev-util/lxqt-build-tools"
 
+src_prepare() {
+	cmake_src_prepare
+	sed -i 's/utilities-terminal/qterminal/g' {src/mainwindow.cpp,src/icons.qrc,src/forms/propertiesdialog.ui,qterminal.desktop.in,qterminal-drop.desktop.in}
+}
+
 src_install() {
 	cmake_src_install
 
@@ -31,6 +36,7 @@ src_install() {
 	use translations || rm -rf "${ED}"/usr/share/${PN}/translations || die
 
 	rm -rf "${ED}"/usr/share/appdata || die
+
 }
 
 pkg_postinst() {

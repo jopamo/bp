@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
 	KEYWORDS="~amd64 ~arm64"
 else
-	SNAPSHOT=c87a5476de69c1b2e2170275ed11e2093fcc63f1
+	SNAPSHOT=b201f426e4d184113a7b2ed95ae8cb2f1ff68f5a
 	SRC_URI="https://github.com/tats/w3m/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
@@ -22,7 +22,7 @@ LICENSE="w3m"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="gpm nls nntp ssl unicode"
+IUSE="gpm nntp ssl"
 
 DEPEND="
 	lib-core/bdwgc
@@ -42,12 +42,12 @@ src_configure() {
 		--enable-keymap=w3m
 		--disable-w3mmailer
 		$(use_enable gpm mouse)
-		$(use_enable nls)
+		--disable-nls
 		$(use_enable nntp)
 		$(use_enable ssl digest-auth)
 		$(use_with ssl)
-		$(usex unicode "--with-charset=UTF-8" "--with-charset=US-ASCII")
-		$(use_enable unicode)
+		--with-charset=UTF-8
+		--enable-unicode
 		--enable-image=""
 		--with-imagelib=""
 	)

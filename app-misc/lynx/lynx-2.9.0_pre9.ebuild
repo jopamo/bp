@@ -25,10 +25,13 @@ S=${WORKDIR}/${MY_P}
 
 src_configure() {
 	local myconf=(
+		--enable-nls
+		--enable-externs
+		--enable-default-colors
 		--with-zlib
 		--with-bzlib
 		--with-ssl
-		--with-screen=ncursesw
+		--with-screen
 	)
 
 	econf "${myconf[@]}"

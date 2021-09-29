@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools linux-info
+inherit linux-info
 
 DESCRIPTION="Tool to setup encrypted devices with dm-crypt"
 HOMEPAGE="https://gitlab.com/cryptsetup/cryptsetup/blob/master/README.md"
@@ -41,20 +41,14 @@ pkg_setup() {
 	check_extra_config
 }
 
-src_prepare() {
-	sed -i '/^LOOPDEV=/s:$: || exit 0:' tests/{compat,mode}-test || die
-	default
-	eautoreconf
-}
-
 src_configure() {
 	local myconf=(
+	    --disable-ssh-token
 		--disable-internal-argon2
 		--enable-shared
 		--with-tmpfilesdir=$(usex tmpfilesd "${EPREFIX}"/usr/lib/tmpfiles.d "")
 		--with-crypto_backend="gcrypt"
 		--disable-nls
-		$(use_enable argon2 libargon2)
 		$(use_enable argon2 libargon2)
 		$(use_enable reencrypt cryptsetup-reencrypt)
 		$(use_enable static static-cryptsetup)
@@ -87,5 +81,4 @@ src_install() {
 		mv "${ED%}"/usr/sbin/veritysetup{.static,} || die
 		use reencrypt && { mv "${ED%}"/usr/sbin/cryptsetup-reencrypt{.static,} || die ; }
 	fi
-	use static-libs || find "${ED}" -name "*.la" -delete || die
 }

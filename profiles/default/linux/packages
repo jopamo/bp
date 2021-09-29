@@ -33,7 +33,6 @@
 *app-portage/smart-live-rebuild
 *app-portage/portage-utils
 *app-net/iproute2
-*app-misc/screen
 *app-net/openssh
 *app-crypt/rng-tools
 *dev-util/patchelf

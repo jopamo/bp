@@ -1,6 +1,6 @@
 #!/bin/bash
 
-emerge --noreplace pciutils e2fsprogs btrfs-progs shadowsocks-libev knock chrony jitterentropy nftables pure-ftpd openssh screen nano shadowsocks-libev lighttpd iproute2 iputils nmap sshfs || exit
+emerge --noreplace pciutils e2fsprogs btrfs-progs shadowsocks-libev knock chrony jitterentropy nftables pure-ftpd openssh screen shadowsocks-libev lighttpd iputils nmap sshfs || exit
 
 cd /root/
 rm -rf /root/miniroot-$(date +%Y%m%d)

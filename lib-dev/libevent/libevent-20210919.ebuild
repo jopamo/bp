@@ -11,7 +11,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/libevent/libevent.git"
 	inherit git-r3 autotools
 elif [[ ${PV} == 20* ]]; then
-	SNAPSHOT=28f0fe6fd1e2b1e9fb24a5c7a5b078790890e44f
+	SNAPSHOT=048907a501e2ee106cd9dabf6686697f3b73b562
 	SRC_URI="https://github.com/libevent/libevent/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
@@ -59,9 +59,4 @@ src_configure() {
 	)
 
 	ECONF_SOURCE="${S}" econf ${myconf[@]}
-}
-
-src_install() {
-	default
-	find "${ED}" -name "*.la" -delete || die
 }

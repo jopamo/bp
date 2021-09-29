@@ -88,12 +88,10 @@ src_install() {
 	local vimfiles=/usr/share/vim/vim${VIM_VERSION/.}
 
 	dobin src/vim
-	dosym vim /usr/bin/vimdiff
-	dosym vim /usr/bin/rvim
-	dosym vim /usr/bin/rview
-	dosym vim /usr/bin/vi
-	dosym vim /usr/bin/ex
-	dosym vim /usr/bin/view
+
+	for i in vimdiff rvim rview vi ex view ; do
+		dosym vim usr/bin/$i
+	done
 
 	use xxd && dobin src/xxd/xxd
 }

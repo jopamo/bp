@@ -1,0 +1,29 @@
+From 65c02cc9ae969677756f30b69a3637c678b7c5b4 Mon Sep 17 00:00:00 2001
+From: Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
+Date: Tue, 25 May 2021 08:59:13 +1200
+Subject: printpkt: print pkt mark like kernel
+
+Print the pkt mark in hex with a preceding '0x', like the kernel prints
+pkts logged by netfilter.
+
+Signed-off-by: Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+---
+ util/printpkt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/util/printpkt.c b/util/printpkt.c
+index 2aacddb..b9b47b2 100644
+--- a/util/printpkt.c
++++ b/util/printpkt.c
+@@ -474,7 +474,7 @@ int printpkt_print(struct ulogd_key *res, char *buf)
+ 		buf_cur += sprintf(buf_cur, "GID=%u ",
+ 				   ikey_get_u32(&res[KEY_OOB_GID]));
+ 	if (pp_is_valid(res, KEY_OOB_MARK))
+-		buf_cur += sprintf(buf_cur, "MARK=%x ",
++		buf_cur += sprintf(buf_cur, "MARK=0x%x ",
+ 				   ikey_get_u32(&res[KEY_OOB_MARK]));
+ 
+ 	strcat(buf_cur, "\n");
+-- 
+cgit v1.2.3

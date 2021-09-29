@@ -11,7 +11,7 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
 	inherit git-r3
 else
-	SNAPSHOT=c0b75532471c05a720859e30bd0a4eea3243d42d
+	SNAPSHOT=e9c414276289f96ccd456658b14e41a089de3126
 	SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -22,10 +22,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug nls lm-sensors static systemd"
 
-DEPEND="
-	nls? ( sys-devel/gettext )
-	lm-sensors? ( app-core/lm-sensors:= )
-"
+DEPEND="lm-sensors? ( app-live/lm-sensors )"
 
 _makeargs=(
   prefix="${EPREFIX}/usr"
@@ -43,7 +40,7 @@ src_configure() {
 	local myconf=(
 		$(use_enable debug debuginfo)
 		$(use_enable lm-sensors sensors)
-		$(use_enable nls)
+		--disable-nls
 		--enable-copy-only
 		--disable-documentation
 		--disable-install-cron

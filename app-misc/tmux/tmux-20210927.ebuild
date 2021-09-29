@@ -13,7 +13,7 @@ if [[ ${PV} = *9999 ]]; then
 	inherit git-r3
 	EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)/master"
 else
-	SNAPSHOT=705411ea5cccf4607af9424e70a153f397d1fab6
+	SNAPSHOT=bf595a0cb0eb132b7365e8f1d19f07b255cbf191
 	SRC_URI="https://github.com/tmux/tmux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

@@ -27,7 +27,7 @@ DEPEND="${RDEPEND}
 
 src_configure() {
         local emesonargs=(
-                -Ddisable_introspection=$(usex introspection false)
+                $(meson_use introspection)
         )
         meson_src_configure
 }

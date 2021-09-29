@@ -31,7 +31,7 @@ src_configure() {
 		--with-zlib
 		--with-bzlib
 		--with-ssl
-		--with-screen
+		--with-screen=ncursestw
 	)
 
 	econf "${myconf[@]}"

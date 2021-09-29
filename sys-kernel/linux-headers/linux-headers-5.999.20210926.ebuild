@@ -9,13 +9,13 @@ inherit kernel-2
 
 detect_version
 
-DESCRIPTION="Linux kernel headers compiled from Linus' tree"
-HOMEPAGE="https://github.com/torvalds/linux.git"
+DESCRIPTION="Linux kernel headers from linux stable branch"
+HOMEPAGE="https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git"
 SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="musl"
 

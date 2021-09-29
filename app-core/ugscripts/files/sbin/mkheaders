@@ -1,12 +1,12 @@
 #!/bin/bash -ex
 
-ver=5.999
-src=linux-${ver}
-dst=linux-headers-${ver}.$(date +%Y%m%d)
+src=linux-stable
 
 if [ ! -d ${src} ] ; then
-	git clone https://github.com/torvalds/linux.git --depth 1 ${src}
+	git clone https://kernel.googlesource.com/pub/scm/linux/kernel/git/stable/linux.git --depth 1 ${src}
 fi
+
+dst="linux-headers-5.999.$( cd ${src} && git log -1 --format="%at" | xargs -I{} date -d @{} +%Y%m%d )"
 
 rm -rf ${dst}
 mkdir ${dst}
@@ -81,8 +81,7 @@ done
 find ${dst}/ -name .gitignore -delete
 rm -rf ${dst}/arch/{alpha,arc,arm,c6x,h8300,hexagon,ia64,m68k,microblaze,mips,nds32,nios2,openrisc,parisc,powerpc,riscv,s390,sh,sparc,um,unicore32,xtensa}
 
-compress=xz
-XZ_OPT="-e9" tar -cJ -f "${dst}.tar.${compress}" ${dst}
+XZ_OPT="-e9" tar -cJ -f "${dst}.tar.xz" ${dst}
 
-#rm -rf ${dst}
-ls -lh ${dst}.tar.${compress}
+rm -r ${dst}
+ls -lh ${dst}.tar.xz

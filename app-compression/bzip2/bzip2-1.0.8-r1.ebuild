@@ -14,6 +14,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
+PATCHES=( "${FILESDIR}"/8ca1faa31f396d94ab927b257f3a05236c84e330.patch )
+
 filter-flags -flto\=\*
 
 src_prepare() {

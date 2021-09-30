@@ -122,13 +122,13 @@ src_install() {
 		newins env-generator 10-1g4
 	fi
 
-	for f in gshadow-1g4 shadow-1g4 ; do
+	for f in gshadow shadow ; do
 			insopts -m 0600
 			insinto /usr/share/factory/1g4
 			newins $f-1g4 $f
 	done
 
-	for f in group-1g4 passwd-1g4 ; do
+	for f in group passwd ; do
 			insopts -m 0644
 			insinto /usr/share/factory/1g4
 			newins $f-1g4 $f

@@ -21,12 +21,6 @@ SITEFILE=50cython-gentoo.el
 filter-flags -Wl,-z,defs
 
 python_compile() {
-	if ! python_is_python3; then
-		local CFLAGS="${CFLAGS}"
-		local CXXFLAGS="${CXXFLAGS}"
-		append-flags -fno-strict-aliasing
-	fi
-
 	# Python gets confused when it is in sys.path before build.
 	local PYTHONPATH=""
 	export PYTHONPATH

@@ -28,15 +28,6 @@ DEPEND="
 
 S="${WORKDIR}/${MY_P}"
 
-python_compile() {
-	if ! python_is_python3; then
-		local CFLAGS="${CFLAGS}" CXXFLAGS="${CXXFLAGS}"
-		append-flags -fno-strict-aliasing
-	fi
-
-	distutils-r1_python_compile
-}
-
 python_test() {
 	esetup.py test
 }

@@ -25,12 +25,6 @@ src_prepare() {
 }
 
 python_test() {
-	if ! python_is_python3; then
-		# install fails due to unicode in paths
-		ewarn "Testing is broken with py2.7, please test externally"
-		return
-	fi
-
 	distutils_install_for_testing --via-root
 	pytest -vv || die "Tests failed with ${EPYTHON}"
 }

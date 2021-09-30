@@ -27,11 +27,7 @@ python_compile_all() {
 }
 
 python_test() {
-	if python_is_python3; then
-		pushd test3 > /dev/null || die
-	else
-		pushd test > /dev/null || die
-	fi
+	pushd test3 > /dev/null || die
 	"${EPYTHON}" alltests.py || die "Testing failed with ${EPYTHON}"
 	popd > /dev/null || die
 }

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+#ebuild repos
+find /var/db/repos -type d -exec chmod 755 {} +
+find /var/db/repos -type f -exec chmod 644 {} +
+
+#http
+find /srv/http -type d -exec chmod 755 {} +
+find /srv/http -type f -exec chmod 644 {} +
+find /var/lighttpd -type d -exec chmod 755 {} +
+find /var/lighttpd -type f -exec chmod 644 {} +
+
+#users and groups files
+chmod 600 {gshadow,shadow}
+chmod 644 {group,passwd}

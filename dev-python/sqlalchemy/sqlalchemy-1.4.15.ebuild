@@ -36,14 +36,6 @@ python_prepare_all() {
 	distutils-r1_python_prepare_all
 }
 
-python_compile() {
-	if ! python_is_python3; then
-		local CFLAGS=${CFLAGS}
-		append-cflags -fno-strict-aliasing
-	fi
-	distutils-r1_python_compile
-}
-
 python_test() {
 	# Create copies of necessary files in BUILD_DIR.
 	# https://bitbucket.org/zzzeek/sqlalchemy/issue/3144/

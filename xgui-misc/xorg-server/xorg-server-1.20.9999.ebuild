@@ -42,7 +42,7 @@ CDEPEND="
 	>=xgui-live-app/xbitmaps-1.0.1
 	xgui-misc/xkeyboard-config
 	glamor? (
-		xmedia-live-lib/libepoxy[X]
+		xmedia-live-lib/libepoxy
 		xmedia-live-lib/mesa
 	)
 	!minimal? (
@@ -83,7 +83,6 @@ src_configure() {
 		$(meson_use xcsecurity)
 		$(meson_use suid_wrapper)
 		$(meson_use X xorg)
-		-Dos_vendor="1g4 Linux"
 		-Ddri1=false
 		-Ddri2=false
 		-Ddri3=false

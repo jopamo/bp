@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson git-r3 flag-o-matic xdg-utils
+inherit meson git-r3 flag-o-matic
 
 DESCRIPTION="A lightweight compositor for X11 (previously a compton fork)"
 HOMEPAGE="https://github.com/yshui/picom.git"
@@ -54,10 +54,7 @@ src_configure() {
 		meson_src_configure
 }
 
-pkg_postinst() {
-	xdg_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_icon_cache_update
+src_install() {
+	meson_src_install
+	rm -rf "${ED}"/usr/share/icons
 }

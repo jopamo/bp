@@ -4,7 +4,7 @@ branch="5.10"
 src="linux-${branch}"
 
 if [ ! -d ${src} ] ; then
-	git clone https://github.com/gregkh/linux.git --depth 1 -b linux-${branch}.y ${src}
+	git clone https://kernel.googlesource.com/pub/scm/linux/kernel/git/stable/linux-stable --depth 1 -b linux-${branch}.y ${src}
 fi
 
 gitlogstamp="$( cd ${src} && git log -1 --format="%at" | xargs -I{} date -d @{} +%Y%m%d )"

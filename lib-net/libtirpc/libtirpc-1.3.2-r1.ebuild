@@ -14,8 +14,12 @@ KEYWORDS="amd64 arm64"
 
 IUSE="ipv6 static-libs"
 
-DEPEND="app-compression/xz-utils
-	>=dev-util/pkgconf-0-r1"
+DEPEND="
+	app-compression/xz-utils
+	dev-util/pkgconf
+"
+
+PATCHES=( "${FILESDIR}"/86529758570cef4c73fb9b9c4104fdc510f701ed.patch )
 
 src_prepare() {
 	eautoreconf

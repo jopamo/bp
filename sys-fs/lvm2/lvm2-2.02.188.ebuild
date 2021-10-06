@@ -2,9 +2,12 @@
 
 EAPI=8
 
+inherit flag-o-matic
+
 DESCRIPTION="User-land utilities for LVM2 (device-mapper) software"
 HOMEPAGE="https://sourceware.org/lvm2/"
-SRC_URI="https://sourceware.org/pub/lvm2/LVM2.${PV}.tgz"
+SRC_URI="https://sourceware.org/pub/lvm2/LVM2.${PV}.tgz
+		https://mirrors.kernel.org/sourceware/lvm2/LVM2.${PV}.tgz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -20,6 +23,11 @@ DEPEND="
 "
 
 S=${WORKDIR}/LVM2.${PV}
+
+PATCHES=(
+	"${FILESDIR}"/mallinfo.patch
+	"${FILESDIR}"/fix-stdio-usage.patch
+	)
 
 src_configure() {
 	local myconf=(

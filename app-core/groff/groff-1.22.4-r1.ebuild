@@ -55,6 +55,6 @@ src_install() {
 	dosym eqn /usr/bin/geqn
 	dosym tbl /usr/bin/gtbl
 
-	rm -rf "${ED}"/usr/share/doc/${PF}/examples
-	rm -rf "${ED}"/usr/share/doc/${PF}/pdf
+	rm -rf "${ED}"/usr/share/doc
+	rm -f "${ED}"/usr/lib/charset.alias
 }

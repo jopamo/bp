@@ -12,16 +12,18 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="nls pcre static"
+IUSE="pcre static"
 
 LIB_DEPEND="pcre? ( >=lib-core/libpcre-7.8-r1[static-libs(+)] )"
-RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
-	nls? ( sys-devel/gettext )"
+RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconf
-	nls? ( sys-devel/gettext )
 	static? ( ${LIB_DEPEND} )"
+
+BDEPEND="
+	dev-util/pkgconf
+	sys-devel/texinfo
+"
 
 src_prepare() {
 	default
@@ -38,6 +40,6 @@ src_configure() {
 	)
 	econf \
 		--bindir="${EPREFIX}"/usr/bin \
-		$(use_enable nls) \
+		--disable-nls
 		$(use_enable pcre perl-regexp)
 }

@@ -9,8 +9,8 @@ inherit kernel-2
 
 detect_version
 
-DESCRIPTION="Linux kernel headers compiled from Linus' tree"
-HOMEPAGE="https://github.com/torvalds/linux.git"
+DESCRIPTION="Linux kernel headers compiled from latest lts linux kernel sources"
+HOMEPAGE="https://github.com/gregkh/linux.git"
 SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="GPL-2"

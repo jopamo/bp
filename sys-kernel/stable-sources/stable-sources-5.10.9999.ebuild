@@ -9,9 +9,9 @@ ETYPE="sources"
 inherit kernel-2 git-r3
 
 DESCRIPTION="Linux kernel source tree"
-HOMEPAGE="https://github.com/gregkh/linux.git"
+HOMEPAGE="https://kernel.googlesource.com/pub/scm/linux/kernel/git/stable/linux-stable"
 
-EGIT_REPO_URI="https://github.com/gregkh/linux.git"
+EGIT_REPO_URI="https://kernel.googlesource.com/pub/scm/linux/kernel/git/stable/linux-stable"
 EGIT_BRANCH="linux-$(ver_cut 1).$(ver_cut 2).y"
 S="${WORKDIR}/linux-${PV}"
 EGIT_CHECKOUT_DIR="${S}"

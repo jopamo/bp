@@ -1,8 +1,15 @@
 #!/bin/bash
 
-#ebuild repos
+#portage
+mkdir -p /var/db/repos /var/cache/{distfiles,packages}
+chown -hR portage: /var/cache/{distfiles,packages}
 find /var/db/repos -type d -exec chmod 755 {} +
 find /var/db/repos -type f -exec chmod 644 {} +
+
+#eix
+mkdir -p /var/cache/eix
+[ ! -f "/var/cache/eix/portage.eix" ] && touch "/var/cache/eix/portage.eix"
+chown portage: /var/cache/eix/portage.eix
 
 #http
 find /srv/http -type d -exec chmod 755 {} +

@@ -9,7 +9,7 @@ audio:x:18:
 sshd:x:22:
 video:x:27:
 man:x:44:
-dhcpcd:x:67:
+systemd-network:x:67:
 input:x:97:
 users:x:100:
 messagebus:x:101:

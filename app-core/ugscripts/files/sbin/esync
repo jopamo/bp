@@ -1,7 +1,9 @@
 #!/bin/bash
 
+eix-sync
+
 echo "Regenerating bp repo cache..."
 egencache --jobs=4 --update --repo bp
 emerge --regen
 emerge --metadata
-eix-sync
+eix-update

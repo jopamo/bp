@@ -918,6 +918,8 @@ install_sources() {
 			dodoc "${T}"/${i}
 		done
 	fi
+
+	keepdir /etc/kernel/postinst.d
 }
 
 # @FUNCTION: preinst_headers

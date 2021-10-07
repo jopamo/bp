@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=492c24d65f760edea1f9228260930728eb747cf7
+SNAPSHOT=07b751be9c2128ebe28e84634300c8fb3756437f
 
 DESCRIPTION="GNU awk pattern-matching language"
 HOMEPAGE="https://www.gnu.org/software/gawk/gawk.html"
@@ -13,21 +13,19 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+mpfr nls readline"
+IUSE="+mpfr readline"
 
-RDEPEND="
-	lib-core/gmp:0=
-	mpfr? ( lib-core/mpfr:0= )
-	readline? ( lib-core/readline:0= )
+DEPEND="
+	lib-core/gmp
+	mpfr? ( lib-core/mpfr )
+	readline? ( lib-core/readline )
 "
-DEPEND="${RDEPEND}
-	nls? ( sys-devel/gettext )"
 
 src_configure() {
 	export ac_cv_libsigsegv=no
 	local myconf=(
 		$(use_with mpfr)
-		$(use_enable nls)
+		--disable-nls
 		$(use_with readline)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
@@ -35,6 +33,7 @@ src_configure() {
 
 src_install() {
 	default
+
 	insinto usr/include/awk
 	doins *.h || die
 	rm "${ED}"/usr/include/awk/config.h || die

@@ -2,13 +2,12 @@
 
 EAPI=8
 
-SNAPSHOT=3f701faace7addc75d16dea8a6cd769fa5b3f260
+SNAPSHOT=b76f37fd5625d038141b52184956fb4b7838e9a5
 
 inherit flag-o-matic
 
 DESCRIPTION="an implementation of the standard library for Linux-based systems"
 HOMEPAGE="http://www.musl-libc.org/"
-
 SRC_URI="https://git.musl-libc.org/cgit/musl/snapshot/musl-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

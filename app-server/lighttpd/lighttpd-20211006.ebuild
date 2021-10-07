@@ -79,12 +79,12 @@ src_configure() {
 src_install() {
 	meson_src_install
 
-	mkdir -p "${ED}"/var/log/lighttpd
-	touch "${ED}"/var/log/lighttpd/access.log
-	touch "${ED}"/var/log/lighttpd/error.log
-
-	fowners -R lighttpd:lighttpd /var/log/lighttpd
-	fperms -R 0750 /var/log/lighttpd
+	if [ ! -d "${SYSROOT}"/var/log/lighttpd ] ; then
+		mkdir -p "${ED}"/var/log/lighttpd
+		touch "${ED}"/var/log/lighttpd/{access,error}.log
+		fowners -R lighttpd:lighttpd /var/log/lighttpd
+		fperms -R 0750 /var/log/lighttpd
+	fi
 
 	if use systemd; then
 		insinto /usr/lib/systemd/system

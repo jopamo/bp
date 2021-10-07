@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson user
+inherit meson
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="https://dbus.freedesktop.org/"

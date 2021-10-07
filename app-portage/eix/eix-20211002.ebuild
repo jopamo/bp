@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=bf07973018bb55e0154b1293ea4b455411f74212
+SNAPSHOT=9da84c230a98bb2c9bea612c864ec140edf775ee
 
 inherit meson
 
@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug +dep +jumbo-build +required-use sqlite swap-remote tmpfilesd tools nls"
+IUSE="debug +dep +jumbo-build +required-use sqlite swap-remote tmpfilesd tools"
 
 DEPEND="
 	app-misc/push

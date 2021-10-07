@@ -9,7 +9,7 @@ HOMEPAGE="http://www.lua.org/"
 SRC_URI="http://www.lua.org/ftp/${P}.tar.gz"
 
 LICENSE="MIT"
-SLOT="0"
+SLOT="$(ver_cut 1-2)"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
@@ -20,6 +20,8 @@ append-flags -ffat-lto-objects
 
 src_prepare() {
 	default
+	cp "${FILESDIR}"/lua.pc "${S}"/
+
 	sed "s/^R= \$V.4/R= \$V.5/" -i Makefile || die
 	sed -i -e "s/-O2\ //g" "src/Makefile" || die
 }
@@ -36,8 +38,8 @@ src_install() {
     	INSTALL_MAN="${ED}"/usr/share/man/man1 \
     	install
 
-	insinto "/usr/lib/pkgconfig"
-	doins "${FILESDIR}/lua.pc"
+	insinto /usr/lib/pkgconfig
+	doins lua.pc
 
 	for x in liblua.so.1 liblua.so.$(ver_cut 1-2) liblua.so ; do
 		dosym liblua.so.${PV} usr/lib/${x}

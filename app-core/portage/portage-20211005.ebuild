@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/gentoo/${PN}.git"
 	inherit git-r3
 else
-	SNAPSHOT=3ccfd9a375d34b2c2731064ea4bc9e1a4b8946f3
+	SNAPSHOT=dfb509bf12d9517741f5474f31b489d7c88cb666
 	SRC_URI="https://github.com/gentoo/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -120,12 +120,6 @@ python_install_all() {
 		insopts -m 0644
 		insinto /usr/lib/tmpfiles.d
 		newins "${FILESDIR}/${PN}-tmpfiles" ${PN}.conf
-	fi
-
-	if use sysusersd; then
-		insopts -m 0644
-		insinto /usr/lib/sysusers.d
-		newins "${FILESDIR}/${PN}-sysusers" ${PN}.conf
 	fi
 
 	# Due to distutils/python-exec limitations

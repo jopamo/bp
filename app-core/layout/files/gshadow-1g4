@@ -14,6 +14,6 @@ systemd-journal:!*::
 man:!*::
 nobody:!*::
 messagebus:!*::
-dhcpcd:!*::
+systemd-network:!*::
 sshd:!*::
 portage:!*::

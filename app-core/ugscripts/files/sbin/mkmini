@@ -1,6 +1,6 @@
 #!/bin/bash
 
-emerge --noreplace pciutils e2fsprogs btrfs-progs shadowsocks-libev knock chrony nftables pure-ftpd openssh screen shadowsocks-libev lighttpd iputils nmap sshfs || exit
+emerge --noreplace pciutils e2fsprogs btrfs-progs shadowsocks-libev knock chrony nftables pure-ftpd openssh screen shadowsocks-libev lighttpd iputils nmap sshfs crunch || exit
 
 cd /root/
 rm -rf /root/miniroot-$(date +%Y%m%d)
@@ -144,13 +144,9 @@ cp /var/cache/packages/app-core/pambase/* .
 tar xvhf pambase* --xattrs
 rm pambase* || exit
 
-cp /var/cache/packages/lib-core/netbsd-curses/* .
-tar xvhf netbsd-curses* --xattrs
-rm netbsd-curses* || exit
-
-#cp /var/cache/packages/lib-core/ncurses/* .
-#tar xvhf ncurses* --xattrs
-#rm ncurses* || exit
+cp /var/cache/packages/lib-core/n*curses/* .
+tar xvhf n*curses* --xattrs
+rm n*curses* || exit
 
 cp /var/cache/packages/lib-core/libcap-ng/* .
 tar xvhf libcap-ng* --xattrs
@@ -255,19 +251,11 @@ rm iputils* || exit
 cp /var/cache/packages/app-net/openssh/* .
 tar xvhf openssh* --xattrs
 rm openssh* || exit
-rm etc/systemd/system/sockets.target.wants/sshd.socket
-cp /usr/lib64/systemd/system/sshd.socket etc/systemd/system/sshd.socket
-chmod 664 etc/systemd/system/sshd.socket
 
-#libressl
-cp /var/cache/packages/lib-net/libressl/* .
-tar xvhf libressl* --xattrs
-rm libressl* || exit
-
-#openssl
-#cp /var/cache/packages/lib-net/openssl/* .
-#tar xvhf openssl* --xattrs
-#rm openssl* || exit
+#ssl
+cp /var/cache/packages/lib-net/*ssl/* .
+tar xvhf *ssl* --xattrs
+rm *ssl* || exit
 
 cp /var/cache/packages/app-misc/ca-certificates/* .
 tar xvhf ca-certificates* --xattrs
@@ -308,9 +296,9 @@ tar xvhf crunch* --xattrs
 rm crunch* || exit
 
 #lynx
-cp /var/cache/packages/app-misc/lynx/* .
-tar xvhf lynx* --xattrs
-rm lynx* || exit
+#cp /var/cache/packages/app-misc/lynx/* .
+#tar xvhf lynx* --xattrs
+#rm lynx* || exit
 
 #nano
 cp /var/cache/packages/app-misc/nano/* .

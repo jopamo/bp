@@ -34,7 +34,6 @@ src_prepare() {
 	fi
 
 	default
-	die
 }
 
 src_configure() {

@@ -34,6 +34,7 @@ src_prepare() {
 	fi
 
 	default
+	die
 }
 
 src_configure() {
@@ -62,4 +63,8 @@ src_install() {
 	use static-libs || find "${ED}" -name "*.a" -delete || die
 	use perl || rm -rf "${ED}"/usr/share/perl5 || die
 	use gitweb || rm -rf "${ED}"/usr/share/gitweb || die
+
+	insopts -m 0644
+	insinto /etc
+	doins "${FILESDIR}"/gitconfig
 }

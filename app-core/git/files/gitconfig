@@ -1,0 +1,6 @@
+[transfer]
+	fsckobjects = true
+[fetch]
+	fsckobjects = true
+[init]
+	defaultBranch = main

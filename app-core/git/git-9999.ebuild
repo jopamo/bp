@@ -51,8 +51,7 @@ src_install() {
 	default
 
 	rm "${ED}"/usr/bin/git-{cvsserver,shell}
-	rm "${ED}"/usr/libexec/git-core/git-shell
-	rm "${ED}"/usr/libexec/git-core/git-cvs*
+	rm -f "${ED}"/usr/libexec/git-core/git-{shell,cvs*,http-push,http-fetch,imap-send,daemon,http-backend}
 
 	for i in git-receive-pack git-upload-archive git-upload-pack ; do
 		rm "${ED}"/usr/bin/$i
@@ -62,8 +61,4 @@ src_install() {
 	use static-libs || find "${ED}" -name "*.a" -delete || die
 	use perl || rm -rf "${ED}"/usr/share/perl5 || die
 	use gitweb || rm -rf "${ED}"/usr/share/gitweb || die
-
-	insopts -m 0644
-	insinto /etc
-	doins "${FILESDIR}"/gitconfig
 }

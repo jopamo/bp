@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit git-r3 flag-o-matic toolchain-funcs
+inherit git-r3 toolchain-funcs
 
 DESCRIPTION="NVIDIA Accelerated Graphics Driver Settings"
 HOMEPAGE="http://www.nvidia.com/ http://www.nvidia.com/Download/Find.aspx"
@@ -15,10 +15,12 @@ KEYWORDS="amd64"
 
 IUSE="static-libs"
 
-DEPEND="lib-core/jansson
+DEPEND="
+	lib-core/jansson
 	xgui-live-lib/libXv
 	xgui-live-lib/libvdpau
-	xgui-live-lib/gtk+:3"
+	xgui-live-lib/gtk+:3
+"
 
 src_prepare() {
 	cp "${FILESDIR}"/Makefile_libxnvctrl "${S}"/libXNVCtrl/Makefile || die

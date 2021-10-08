@@ -2,7 +2,7 @@
 
 EAPI=8
 
-MINOR_VERSION="4881-e2e58f321"
+MINOR_VERSION="5081-e362dc1ee"
 
 _APPNAME="plexmediaserver"
 _USERNAME="plex"
@@ -64,6 +64,6 @@ src_install() {
 	patchelf --set-rpath "/opt/plexmediaserver/lib/" "${ED}"/opt/plexmediaserver/Resources/Python/lib/python2.7/lib-dynload/_bisect.so
 
 	keepdir "/var/lib/plexmediaserver/Library/Application Support"
-	fowners plex:plex /var/lib/plexmediaserver
-	fperms 755 /var/lib/plexmediaserver
+	fowners -R plex:plex /var/lib/plexmediaserver
+	fperms -R 755 /var/lib/plexmediaserver
 }

@@ -3,8 +3,8 @@
 EAPI=8
 
 MOZ_PN="firefox-nightly"
-TIMESTAMP="21-39-05"
-MOZ_VER="94.0a1"
+TIMESTAMP="21-51-52"
+MOZ_VER="95.0a1"
 
 inherit xdg-utils
 

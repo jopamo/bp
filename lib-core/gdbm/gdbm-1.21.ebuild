@@ -10,7 +10,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="nls static-libs"
+IUSE="static-libs"
 
 DEPEND="
 	app-core/bash
@@ -19,9 +19,9 @@ DEPEND="
 
 src_configure() {
 	local myconf=(
-		$(use_enable nls)
 		$(use_enable static-libs static)
 		--with-readline
+		--disable-nls
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

@@ -5,15 +5,14 @@ EAPI=8
 inherit autotools
 
 DESCRIPTION="a portable, high level programming interface to various calling conventions"
-HOMEPAGE="https://sourceware.org/libffi/"
+HOMEPAGE="https://github.com/libffi/libffi"
 
 if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/libffi/libffi.git"
 	inherit git-r3
-	KEYWORDS=""
+	EGIT_REPO_URI="${HOMEPAGE}.git"
 else
-	SNAPSHOT=ee1263f7d43bd29b15fc72c4d9520a824e8004df
-	SRC_URI="https://github.com/libffi/libffi/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	SNAPSHOT=0f2dd369cd5edcefad29b3fca4e1d08cb34f8f19
+	SRC_URI="${HOMEPAGE}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 

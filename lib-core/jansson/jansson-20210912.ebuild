@@ -5,10 +5,10 @@ EAPI=8
 inherit autotools
 
 DESCRIPTION="C library for encoding, decoding and manipulating JSON data"
-HOMEPAGE="http://www.digip.org/jansson/"
+HOMEPAGE="https://github.com/akheron/jansson"
 
-SNAPSHOT=0dffb4284e7872c6e26956ad85fe127ba77220dc
-SRC_URI="https://github.com/akheron/jansson/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=eb816708811429261974fc28fbf779aaaab1d546
+SRC_URI="${HOMEPAGE}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/jansson-${SNAPSHOT}
 
 LICENSE="MIT"

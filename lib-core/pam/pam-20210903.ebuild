@@ -4,15 +4,15 @@ EAPI=8
 
 inherit autotools
 
-DESCRIPTION="Linux-PAM (Pluggable Authentication Modules)"
-HOMEPAGE="http://www.linux-pam.org/ https://fedorahosted.org/linux-pam/"
+DESCRIPTION=" Linux PAM (Pluggable Authentication Modules for Linux) project"
+HOMEPAGE="https://github.com/linux-pam/linux-pam"
 
 if [[ ${PV} == 9999 ]] ; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/linux-pam/linux-pam.git"
+	EGIT_REPO_URI="${HOMEPAGE}.git"
 else
 	SNAPSHOT=40f7d85f3736d058c26de1dafa4fed46de7d75ef
-	SRC_URI="https://github.com/linux-pam/linux-pam/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="${HOMEPAGE}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/linux-${PN}-${SNAPSHOT}
 fi
 

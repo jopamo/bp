@@ -8,11 +8,11 @@ DESCRIPTION="high level interface to Linux seccomp filter"
 HOMEPAGE="https://github.com/seccomp/libseccomp"
 
 if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/seccomp/libseccomp.git"
+	EGIT_REPO_URI="${HOMEPAGE}.git"
 	inherit git-r3
 else
-	SNAPSHOT=4f34c6eb17c2ffcb0fce5911ddbc161d97517476
-	SRC_URI="https://github.com/seccomp/libseccomp/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	SNAPSHOT=3f0e47fe2717b73ccef68ca18f9f7297ee73ebb2
+	SRC_URI="${HOMEPAGE}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 

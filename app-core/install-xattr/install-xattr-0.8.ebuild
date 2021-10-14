@@ -2,26 +2,21 @@
 
 EAPI=8
 
+inherit flag-o-matic toolchain-funcs
+
 DESCRIPTION="Wrapper to coreutil's install to preserve Filesystem Extended Attributes"
 HOMEPAGE="https://dev.gentoo.org/~blueness/install-xattr/"
-
-inherit toolchain-funcs
-
-if [[ ${PV} == "9999" ]] ; then
-	EGIT_REPO_URI="git://anongit.gentoo.org/proj/elfix.git"
-	inherit git-r3
-else
-	SRC_URI="https://dev.gentoo.org/~blueness/install-xattr/${P}.tar.bz2"
-	KEYWORDS="amd64 arm64"
-	S=${WORKDIR}/${PN}
-fi
+SRC_URI="https://dev.gentoo.org/~blueness/install-xattr/${P}.tar.bz2"
+S=${WORKDIR}/${PN}
 
 LICENSE="GPL-3"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 src_prepare() {
+	default
 	tc-export CC
-	eapply_user
+	append-cppflags "-D_FILE_OFFSET_BITS=64"
 }
 
 src_compile() {

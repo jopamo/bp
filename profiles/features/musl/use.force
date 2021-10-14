@@ -1,0 +1,14 @@
+# Copyright 1999-2018 Gentoo Foundation.
+# Distributed under the terms of the GNU General Public License v2
+
+# Select the correct ELIBC
+elibc_musl
+
+# broken use flags under musl
+-sysusersd
+-gshadow
+-userdb
+-utmp
+-vtv
+musl
+

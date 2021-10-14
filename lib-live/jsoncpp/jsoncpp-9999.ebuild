@@ -20,7 +20,7 @@ LICENSE="|| ( public-domain MIT )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="test"
+IUSE="static-libs test"
 
 RESTRICT="!test? ( test )"
 
@@ -30,7 +30,7 @@ src_configure() {
 		-DJSONCPP_WITH_POST_BUILD_UNITTEST=OFF
 		-DJSONCPP_WITH_CMAKE_PACKAGE=ON
 		-DBUILD_SHARED_LIBS=ON
-		-DCMAKE_INSTALL_INCLUDEDIR=include/jsoncpp
+		-DBUILD_STATIC_LIBS=$(usex static-libs)
 	)
 	cmake_src_configure
 }

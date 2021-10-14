@@ -6,21 +6,13 @@ inherit distutils-r1 git-r3
 
 DESCRIPTION="a command-line program to download videos from YouTube.com and a few more sites"
 HOMEPAGE="https://ytdl-org.github.io/youtube-dl/"
-EGIT_REPO_URI="https://github.com/rg3/youtube-dl.git"
+EGIT_REPO_URI="https://github.com/yt-dlp/yt-dlp.git"
 
-LICENSE="public-domain"
+LICENSE="unlicense"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-python_prepare_all() {
-	distutils-r1_python_prepare_all
-}
-
-src_compile() {
-	distutils-r1_src_compile
-}
-
 python_install_all() {
 	distutils-r1_python_install_all
-	rm -r "${ED}"/usr/etc || die
+	dosym -r /usr/bin/yt-dlp /usr/bin/youtube-dl
 }

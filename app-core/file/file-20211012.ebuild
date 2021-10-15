@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/file/file.git"
 	inherit git-r3
 else
-	SNAPSHOT=7b83135a79816a8487c6576ffbbfb4b9a1affcc2
+	SNAPSHOT=488f81a45f4ac71b987eac6fb865c8bd0749391b
 	SRC_URI="https://github.com/file/file/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -25,7 +25,7 @@ IUSE="seccomp static-libs zlib"
 
 DEPEND="
 	seccomp? ( lib-core/libseccomp )
-	zlib? ( >=lib-core/zlib-1.2.8-r1 )
+	zlib? ( lib-core/zlib )
 "
 
 PATCHES=(

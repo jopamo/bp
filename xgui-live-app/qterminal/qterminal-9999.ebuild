@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit cmake git-r3 xdg-utils
 
@@ -21,6 +21,7 @@ DEPEND="
 	~xgui-live-lib/qtermwidget-${PV}
 "
 BDEPEND="dev-util/lxqt-build-tools"
+RDEPEND="xgui-icontheme/hicolor-icon-theme"
 
 src_prepare() {
 	cmake_src_prepare

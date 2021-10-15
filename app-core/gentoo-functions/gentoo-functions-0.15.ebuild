@@ -17,6 +17,10 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 src_install() {
-	emake install DESTDIR="${ED}"/usr
-	rm -rf "${ED}"/usr/usr/
+	insopts -m 0644
+	insinto /usr/lib/gentoo/
+	doins functions.sh
+
+	doman consoletype.1
+	dosbin consoletype
 }

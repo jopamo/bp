@@ -10,7 +10,7 @@ if [[ ${PV} == *9999 ]]; then
 	inherit git-r3 autotools
 	KEYWORDS="~amd64 ~arm64"
 elif [[ ${PV} == 20* ]]; then
-	SNAPSHOT=d19ee838a6a461edc35c0266d2fb6273e9a6d79a
+	SNAPSHOT=0496b39876d569fe1cecb76ad5ef212cd14c0374
 	SRC_URI="https://gitlab.com/procps-ng/procps/-/archive/${SNAPSHOT}/procps-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 	S=${WORKDIR}/procps-${SNAPSHOT}
 	inherit autotools

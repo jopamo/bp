@@ -79,10 +79,6 @@ src_configure() {
 	export BZIP2_INCLUDE=${EROOT}/usr/include
 	export BZIP2_LIB=${EROOT}/usr/lib
 
-	export BUILD_ZLIB=False
-	export ZLIB_INCLUDE=${EROOT}/usr/include
-	export ZLIB_LIB=${EROOT}/usr/lib
-
 	# allow either gdbm to provide ndbm (in <gdbm/ndbm.h>) or db1
 	myndbm='U'
 	mygdbm='U'

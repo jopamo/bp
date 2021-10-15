@@ -26,6 +26,19 @@ BDEPEND="
 	sys-devel/texinfo
 "
 
+src_prepare() {
+	cat > "${T}"/egrep <<- EOF || die
+		#!/bin/sh
+		exec grep -E "\$@"
+	EOF
+	cat > "${T}"/fgrep <<- EOF || die
+		#!/bin/sh
+		exec grep -F "\$@"
+	EOF
+
+	default
+}
+
 src_configure() {
 	use static && append-ldflags -static
 
@@ -35,4 +48,10 @@ src_configure() {
 	)
 
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	dobin "${T}"/egrep
+	dobin "${T}"/fgrep
 }

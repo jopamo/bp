@@ -7,11 +7,11 @@ inherit meson user flag-o-matic
 DESCRIPTION="Lightweight high-performance web server"
 HOMEPAGE="http://www.lighttpd.net/"
 
-if [[ ${PV} = *9999* ]]; then
+if [[ ${PV} = 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/lighttpd/lighttpd1.4.git"
 	inherit git-r3
 else
-	SNAPSHOT=07c8a6f056bcd8c310a2eb4f83964b2d22c6c141
+	SNAPSHOT=a2bfccd1be46012916047eca39233a370fbda5cf
 	SRC_URI="https://github.com/lighttpd/lighttpd1.4/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}1.4-${SNAPSHOT}
 fi

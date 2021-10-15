@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=234ac9ca6082084640cb1b762f6721eccc993c79
+SNAPSHOT=4db962e6f458cb657669e91657d8d4bb1287c91d
 
 inherit flag-o-matic toolchain-funcs
 
@@ -17,14 +17,11 @@ KEYWORDS="amd64 arm64"
 
 IUSE="ipv6 rpc static"
 
-RDEPEND="rpc? ( lib-net/libtirpc )"
+DEPEND="rpc? ( lib-net/libtirpc )"
 
-DEPEND="${RDEPEND}
-	rpc? ( dev-util/pkgconf )"
+BDEPEND="rpc? ( dev-util/pkgconf )"
 
-PATCHES=(
-		"${FILESDIR}"/${PN}-4.85-cross.patch #432120
-		)
+PATCHES=( "${FILESDIR}"/${PN}-4.85-cross.patch )
 
 src_prepare() {
 	sed -i \
@@ -65,4 +62,5 @@ src_compile() {
 
 src_install() {
 	dobin lsof
+	doman lsof.1
 }

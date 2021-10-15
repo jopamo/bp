@@ -202,6 +202,7 @@ src_install() {
 	rm "${ED}"/usr/share/factory/etc/issue || die
 
 	keepdir /var/log/journal
+	keepdir /var/lib/systemd
 
 	mkdir -p "${ED}"/etc/systemd/user && keepdir /etc/systemd/user
 

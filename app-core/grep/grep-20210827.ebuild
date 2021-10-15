@@ -6,7 +6,10 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="GNU regular expression matcher"
 HOMEPAGE="https://www.gnu.org/software/grep/"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+SRC_URI="
+	https://1g4.org/files/${P}.tar.xz
+	mirror://gnu/diffutils/${P}.tar.xz
+"
 
 LICENSE="GPL-3"
 SLOT="0"

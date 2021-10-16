@@ -17,7 +17,7 @@ IUSE="test xkb static-libs"
 DEPEND="
 	xgui-live-lib/libXau
 	xgui-live-lib/libXdmcp
-	test? ( lib-dev/check )
+	test? ( lib-live/check )
 	lib-core/libxslt
 	xgui-live-app/xcb-proto
 "

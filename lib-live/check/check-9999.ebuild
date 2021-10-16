@@ -5,20 +5,19 @@ EAPI=8
 inherit cmake git-r3
 
 DESCRIPTION="A unit test framework for C"
-HOMEPAGE="https://libcheck.github.io/check/"
-EGIT_REPO_URI="https://github.com/libcheck/check.git"
+HOMEPAGE="https://github.com/libcheck/check"
+EGIT_REPO_URI="${HOMEPAGE}.git"
 
 LICENSE="LGPL-2.1+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="test"
-
-RESTRICT="!test? ( test )"
+IUSE="subunit test"
 
 src_configure() {
 	local mycmakeargs=(
 		-DBUILD_TESTING=$(usex test ON OFF)
+		-DCHECK_ENABLE_SUBUNIT=$(usex subunit ON OFF)
 	)
 
 	cmake_src_configure

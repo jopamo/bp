@@ -14,6 +14,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs test"
 
+RESTRICT="test"
+
 DEPEND="
 	xmedia-live-lib/lcms
 	xmedia-live-lib/libpng

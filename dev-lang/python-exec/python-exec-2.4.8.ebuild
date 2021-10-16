@@ -12,15 +12,9 @@ LICENSE="BSD-2"
 SLOT="2"
 KEYWORDS="amd64 arm64"
 
-IUSE="${_PYTHON_ALL_IMPLS[@]/#/python_targets_} +native-symlinks test"
+IUSE="${_PYTHON_ALL_IMPLS[@]/#/python_targets_} +native-symlinks"
 
-python_check_deps() {
-	has_version -b "dev-python/pytest[${PYTHON_USEDEP}]"
-}
-
-pkg_setup() {
-	use test && python-any-r1_pkg_setup
-}
+RESTRICT="test"
 
 src_configure() {
 	local pyimpls=() i EPYTHON

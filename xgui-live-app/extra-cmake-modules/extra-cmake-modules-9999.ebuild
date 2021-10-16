@@ -13,9 +13,11 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="test"
+RESTRICT="test"
 
-DEPEND="app-compression/libarchive
-		test? (	xgui-live-lib/qtbase )
+DEPEND="
+	app-compression/libarchive
+	test? (	xgui-live-lib/qtbase )
 "
 
 src_configure() {
@@ -25,7 +27,5 @@ src_configure() {
 		-DBUILD_QTHELP_DOCS=OFF
 		-DBUILD_TESTING="$(usex test)"
 	)
-
-	use test && mycmakeargs+=( -DCMAKE_DISABLE_FIND_PACKAGE_PythonModuleGeneration=ON )
 	cmake_src_configure
 }

@@ -34,7 +34,3 @@ src_configure() {
 	)
 	cmake_src_configure
 }
-
-src_test() {
-	cmake_src_make jsoncpp_check
-}

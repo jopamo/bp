@@ -12,10 +12,10 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs test"
+IUSE="static-libs"
 
-DEPEND="lib-net/libmnl
-		dev-util/pkgconf"
+DEPEND="lib-net/libmnl"
+BDEPEND="dev-util/pkgconf"
 
 pkg_setup() {
 	CONFIG_CHECK="~NF_TABLES"
@@ -27,10 +27,4 @@ src_configure() {
 		$(use_enable static-libs static)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-src_test() {
-	default
-	cd tests || die
-	./test-script.sh || die
 }

@@ -4,7 +4,8 @@ EAPI=8
 
 DESCRIPTION="Collection of patches for libtool.eclass"
 HOMEPAGE="https://gitweb.gentoo.org/proj/elt-patches.git/"
-SRC_URI="https://dev.gentoo.org/~mgorny/dist/${P}.tar.xz"
+SRC_URI="https://dev.gentoo.org/~grobian/distfiles/${P}.tar.xz
+		https://dev.gentoo.org/~vapier/dist/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -18,5 +19,5 @@ src_compile() {
 }
 
 src_install() {
-	emake DESTDIR="${ED}" rootprefix="${EPREFIX}" install
+	emake DESTDIR="${D}" rootprefix="${EPREFIX}" install
 }

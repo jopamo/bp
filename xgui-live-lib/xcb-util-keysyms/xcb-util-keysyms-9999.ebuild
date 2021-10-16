@@ -19,7 +19,7 @@ RDEPEND="xgui-live-lib/libxcb
 
 DEPEND="${RDEPEND}
 	>=dev-util/gperf-3.0.1
-	test? ( >=lib-dev/check-0.9.11 )"
+	test? ( >=lib-live/check-0.9.11 )"
 
 src_prepare() {
 	eautoreconf

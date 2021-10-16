@@ -23,7 +23,7 @@ RDEPEND="pam? ( lib-core/pam )
 	app-compression/pigz"
 DEPEND="${RDEPEND}
 	dev-util/pkgconf
-	test? ( lib-dev/check )"
+	test? ( lib-live/check )"
 
 src_configure() {
 	econf \

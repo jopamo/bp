@@ -48,17 +48,6 @@ PYVER=${SLOT%/*}
 
 filter-flags -Wl,-z,defs
 
-# large file tests involve a 2.5G file being copied (duplicated)
-CHECKREQS_DISK_BUILD=5500M
-
-pkg_pretend() {
-	use test && check-reqs_pkg_pretend
-}
-
-pkg_setup() {
-	use test && check-reqs_pkg_setup
-}
-
 src_prepare() {
 	# Ensure that internal copies of expat, libffi and zlib are not used.
 	rm -fr Modules/expat || die

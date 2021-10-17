@@ -37,30 +37,37 @@ REQUIRED_USE="
 	wayland? ( egl )
 "
 
-COMMON_DEPEND="
-	xmedia-live-lib/libass:=
-	alsa? ( >=xmedia-live-lib/alsa-lib-1.0.18 )
-	archive? ( >=app-compression/libarchive-3.0.0:= )
-	bluray? ( >=xmedia-live-lib/libbluray-0.3.0:= )
+DEPEND="
+	xmedia-live-app/ffmpeg
+	dev-util/vulkan-headers
+	xmedia-live-lib/libass
+	alsa? ( xmedia-live-lib/alsa-lib )
+	archive? ( app-compression/libarchive )
+	bluray? ( xmedia-live-lib/libbluray )
 	cdda? ( lib-dev/libcdio-paranoia )
+	cuda? (
+		bin/nvidia-drivers[X]
+		bin/nvidia-cuda
+		xmedia-live-lib/nv-codec-headers
+	)
 	drm? ( xgui-live-lib/libdrm )
 	uchardet? ( xmedia-live-lib/uchardet )
 	jack? ( virtual/jack )
-	javascript? ( >=dev-lang/mujs-1.0.0 )
+	javascript? ( dev-lang/mujs )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )
-	lcms? ( >=xmedia-live-lib/lcms-2.6:2 )
+	lcms? ( xmedia-live-lib/lcms )
 	fonts/liberation-fonts
-	libcaca? ( >=xmedia-live-lib/libcaca-0.99_beta18 )
+	libcaca? ( xmedia-live-lib/libcaca )
 	lua? ( dev-lang/luajit )
 	pulseaudio? ( xgui-misc/pulseaudio )
-	raspberry-pi? ( >=xmedia-live-lib/raspberrypi-userland-0_pre20160305-r1 )
-	rubberband? ( >=xmedia-live-lib/rubberband-1.8.0 )
+	raspberry-pi? ( xmedia-live-lib/raspberrypi-userland )
+	rubberband? ( xmedia-live-lib/rubberband )
 	sdl? ( xmedia-live-lib/libsdl2[sound,threads,video] )
 	vaapi? ( xgui-live-lib/libva:=[drm?,X?,wayland?] )
 	vdpau? ( xgui-live-lib/libvdpau )
 	wayland? (
-		>=xgui-live-lib/wayland-1.6.0
-		>=xgui-live-lib/libxkbcommon-0.3.0
+		xgui-live-lib/wayland
+		xgui-live-lib/libxkbcommon
 		xgui-live-lib/wayland-protocols
 	)
 	X? (
@@ -77,16 +84,6 @@ COMMON_DEPEND="
 	)
 	zlib? ( lib-core/zlib )
 "
-DEPEND="${COMMON_DEPEND}
-	dev-util/pkgconf
-	xmedia-live-app/ffmpeg
-	dev-util/vulkan-headers
-	dvb? ( virtual/linuxtv-dvb-headers )
-"
-RDEPEND="${COMMON_DEPEND}
-	cuda? ( bin/nvidia-drivers[X]
-		bin/nvidia-cuda
-		xmedia-live-lib/nv-codec-headers )"
 
 src_prepare() {
 	cp "${DISTDIR}/waf-${WAF_PV}" "${S}"/waf || die
@@ -154,7 +151,7 @@ src_configure() {
 		$(usex libmpv "$(use_enable opengl plain-gl)" '--disable-plain-gl')
 		$(usex opengl '' '--disable-gl')
 		$(use_enable cuda cuda-hwaccel)
-		$(use_enable dvb dvbin)
+		--disable-dvbin
 		--disable-zimg
 	)
 

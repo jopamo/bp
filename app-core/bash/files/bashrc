@@ -95,3 +95,6 @@ done
 unset use_color sh
 
 HISTSIZE=5000
+
+export GPG_TTY="$( tty )"
+

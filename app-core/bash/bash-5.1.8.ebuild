@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
 SNAPSHOT=ce23728687ce9e584333367075c9deef413553fa
 
@@ -65,7 +65,7 @@ src_install() {
 	default
 
 	#compat symlink
-	dosym -r /usr/bin/bash /usr/bin/sh
+	dosym bash usr/bin/sh
 
 	insinto /etc/bash/bashrc.d
 	doins "${FILESDIR}"/alias.sh

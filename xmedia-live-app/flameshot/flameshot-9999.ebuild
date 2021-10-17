@@ -5,8 +5,8 @@ EAPI=8
 inherit cmake git-r3
 
 DESCRIPTION="Powerful yet simple to use screenshot software for GNU/Linux"
-HOMEPAGE="https://github.com/lupoDharkael/flameshot"
-EGIT_REPO_URI="https://github.com/lupoDharkael/flameshot.git"
+HOMEPAGE="https://github.com/flameshot-org/flameshot"
+EGIT_REPO_URI="https://github.com/flameshot-org/flameshot.git"
 
 LICENSE="FreeArt GPL-3+ Apache-2.0"
 SLOT="0"

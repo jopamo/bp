@@ -8,9 +8,9 @@ DESCRIPTION="Image Viewer and organizer"
 HOMEPAGE="https://github.com/oferkv/phototonic"
 EGIT_REPO_URI="https://github.com/oferkv/phototonic.git"
 
-KEYWORDS="amd64 arm64"
 LICENSE="GPL-3"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="svg tiff"
 

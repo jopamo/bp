@@ -68,13 +68,13 @@ src_install() {
 			tools/{gpg-zip,gpgconf,gpgsplit,lspgpot,mail-signed-keys} \
 			tools/make-dns-cert
 
-	dosym gpg /usr/bin/gpg2
-	dosym gpgv /usr/bin/gpgv2
+	dosym gpg usr/bin/gpg2
+	dosym gpgv usr/bin/gpgv2
 	echo ".so man1/gpg.1" > "${ED}"/usr/share/man/man1/gpg2.1 || die
 	echo ".so man1/gpgv.1" > "${ED}"/usr/share/man/man1/gpgv2.1 || die
 
 	cat > "${T}"/30${PN} <<- EOF || die
-		CONFIG_PROTECT=usr/share/gnupg/qualified.txt
+		CONFIG_PROTECT=/usr/share/gnupg/qualified.txt
 	EOF
 	doenvd "${T}"/30${PN}
 }

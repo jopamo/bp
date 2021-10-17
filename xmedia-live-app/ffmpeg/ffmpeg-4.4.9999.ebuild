@@ -19,21 +19,21 @@ IUSE="debug nvidia +x264 +x265 vaapi vdpau static-libs +openssl
 	+lame +libass +libdav1d +vorbis"
 
 DEPEND="
+	dev-lang/nasm
+	xmedia-live-lib/libass
 	lame? ( xmedia-live-app/lame )
 	vorbis? ( xmedia-live-lib/libvorbis )
 	libdav1d? ( xmedia-live-lib/libdav1d )
-	dev-lang/nasm
 	x264? ( xmedia-live-lib/x264 )
 	x265? ( xmedia-live-lib/x265 )
-	xmedia-live-lib/libass
 	nvidia? (
-				xmedia-live-lib/nv-codec-headers
-				bin/nvidia-cuda
-			)
+		xmedia-live-lib/nv-codec-headers
+		bin/nvidia-cuda
+		)
 	vaapi? (
-				xgui-live-lib/libva
-				xgui-live-lib/libva-intel-driver
-			)
+		xgui-live-lib/libva
+		xgui-live-lib/libva-intel-driver
+		)
 	vdpau? ( xgui-live-lib/libvdpau )
 "
 

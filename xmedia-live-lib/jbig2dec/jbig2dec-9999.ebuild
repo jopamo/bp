@@ -2,14 +2,19 @@
 
 EAPI=8
 
-SNAPSHOT=d8294b25104e9033408c18b68567281ae8e9d5e0
-
 inherit autotools
 
 DESCRIPTION="A decoder implementation of the JBIG2 image compression format"
 HOMEPAGE="http://ghostscript.com/jbig2dec.html"
-SRC_URI="https://github.com/ArtifexSoftware/jbig2dec/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+
+if [[ ${PV} == 9999 ]]; then
+	EGIT_REPO_URI="https://github.com/ArtifexSoftware/${PN}.git"
+	inherit git-r3
+else
+	SNAPSHOT=976170316e1c79040db3b109cf0347c1c1252fdc
+	SRC_URI="https://github.com/ArtifexSoftware/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="AGPL-3"
 SLOT="0"

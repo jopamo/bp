@@ -15,32 +15,31 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="libsamplerate ncurses nls systemd"
+IUSE="alsamixer libsamplerate systemd"
 
 DEPEND="
-	>=xgui-misc/alsa-lib-${PV}
+	xgui-misc/alsa-lib
 	libsamplerate? ( xmedia-live-lib/libsamplerate )
-	ncurses? ( virtual/curses )
+	alsamixer? ( virtual/curses )
 "
 
 src_prepare() {
-	eautoreconf
 	default
+	eautoreconf
 }
 
 src_configure() {
 	local myconf=(
-		--disable-bat
 		$(use_enable libsamplerate alsaloop)
-		$(use_enable nls)
-		$(use_enable ncurses alsamixer)
-		--disable-xmlto
+		$(use_enable alsamixer)
 		--disable-alsaconf
+		--disable-bat
+		--disable-nls
+		--disable-xmlto
 		--with-asound-state-dir="${EPREFIX}"/var/lib/alsa
 		--with-udev-rules-dir="${EPREFIX}"/usr/lib/udev/rules.d
 		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 	)
-
 	econf ${myconf[@]}
 }
 

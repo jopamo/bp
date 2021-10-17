@@ -13,19 +13,15 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="nls png static-libs webready xmp"
+IUSE="png static-libs webready xmp"
 
-RDEPEND="
-	nls? ( >=sys-devel/gettext-0-r1 )
-	png? ( >=lib-core/zlib-1.2.8-r1 )
+DEPEND="
+	png? ( lib-core/zlib )
 	webready? (
 		lib-net/libssh
 		app-net/curl
 	)
-	xmp? ( >=lib-core/expat-2.1.0-r3 )
-"
-DEPEND="${RDEPEND}
-	nls? ( sys-devel/gettext )
+	xmp? ( lib-core/expat )
 "
 
 src_prepare() {
@@ -61,7 +57,7 @@ src_configure() {
 	local mycmakeargs=(
 		-DEXIV2_ENABLE_BUILD_SAMPLES=NO
 		-DEXIV2_ENABLE_BUILD_PO=$(usex nls)
-		-DEXIV2_ENABLE_NLS=$(usex nls)
+		-DEXIV2_ENABLE_NLS=NO
 		-DEXIV2_ENABLE_PNG=$(usex png)
 		-DEXIV2_ENABLE_CURL=$(usex webready)
 		-DEXIV2_ENABLE_SSH=$(usex webready)

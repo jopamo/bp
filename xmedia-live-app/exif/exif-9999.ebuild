@@ -12,20 +12,13 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="nls"
-
-RDEPEND="lib-core/popt
-	 >=xmedia-live-lib/libexif-${PV}"
-
-DEPEND="${RDEPEND}
-	dev-util/pkgconf
-	nls? ( sys-devel/gettext )"
+DEPEND="
+	lib-core/popt
+	>=xmedia-live-lib/libexif-${PV}
+"
+BDEPEND="dev-util/pkgconf"
 
 src_prepare() {
-	eautoreconf
 	default
-}
-
-src_configure() {
-	econf $(use_enable nls)
+	eautoreconf
 }

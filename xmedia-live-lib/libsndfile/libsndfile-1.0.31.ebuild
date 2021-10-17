@@ -21,7 +21,7 @@ RDEPEND="
 		>=xmedia-live-lib/libogg-1.3.0
 		>=xmedia-live-lib/libvorbis-1.3.3-r1
 	)
-	alsa? ( xmedia-live-lib/alsa-lib )
+	alsa? ( xgui-misc/alsa-lib )
 	sqlite? ( >=lib-core/sqlite-3.2 )"
 DEPEND="
 	${DEPEND}

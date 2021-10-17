@@ -19,7 +19,7 @@ IUSE="debug ffmpeg libsamplerate pulseaudio"
 
 DEPEND="
 	xmedia-live-lib/speexdsp
-	>=xmedia-live-lib/alsa-lib-${PV}
+	>=xgui-misc/alsa-lib-${PV}
 	ffmpeg? ( xmedia-live-app/ffmpeg:0= )
 	libsamplerate? ( >=xmedia-live-lib/libsamplerate-0.1.8-r1 )
 	pulseaudio? ( >=xgui-misc/pulseaudio-2.1-r1 )

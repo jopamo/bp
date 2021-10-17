@@ -41,7 +41,7 @@ DEPEND="
 	xmedia-live-app/ffmpeg
 	dev-util/vulkan-headers
 	xmedia-live-lib/libass
-	alsa? ( xmedia-live-lib/alsa-lib )
+	alsa? ( xgui-misc/alsa-lib )
 	archive? ( app-compression/libarchive )
 	bluray? ( xmedia-live-lib/libbluray )
 	cdda? ( lib-dev/libcdio-paranoia )

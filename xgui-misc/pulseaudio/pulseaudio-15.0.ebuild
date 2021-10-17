@@ -39,7 +39,7 @@ DEPEND="
 	)
 	bluez? ( xmedia-live-lib/sbc )
 	samplerate? ( xmedia-live-lib/libsamplerate )
-	alsa? ( xmedia-live-lib/alsa-lib )
+	alsa? ( xgui-misc/alsa-lib )
 	glib? ( lib-live/glib )
 	jack? ( virtual/jack )
 	dbus? ( app-core/dbus )
@@ -49,7 +49,7 @@ DEPEND="
 	systemd? ( app-core/systemd )
 "
 
-PDEPEND="alsa? ( alsa-plugin? ( xmedia-live-app/alsa-plugins[pulseaudio] ) )"
+PDEPEND="alsa? ( alsa-plugin? ( xgui-misc/alsa-plugins[pulseaudio] ) )"
 
 filter-flags -Wl,-z,defs
 

@@ -21,7 +21,7 @@ DEPEND="
 	lib-core/libxml2
 	~xmedia-live-app/audacious-${PV}
 	aac? ( xmedia-live-lib/faad2 )
-	alsa? ( xmedia-live-lib/alsa-lib )
+	alsa? ( xgui-misc/alsa-lib )
 	aosd? (
 		xgui-live-lib/libXrender
 		xgui-live-lib/libXcomposite

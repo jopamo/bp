@@ -19,7 +19,7 @@ IUSE="+alsa cups custom-cflags +fontconfig +jpeg ldap mp3 netapi nls odbc openal
 
 RESTRICT="test"
 
-COMMON_DEPEND="
+DEPEND="
 	X? (
 		xgui-live-lib/libXcursor
 		xgui-live-lib/libXext
@@ -29,20 +29,22 @@ COMMON_DEPEND="
 		xgui-live-lib/libXxf86vm
 	)
 	alsa? ( xgui-misc/alsa-lib )
-	cups? ( lib-print/cups:= )
-	fontconfig? ( fonts/fontconfig:= )
+	cups? ( lib-print/cups )
+	fontconfig? ( fonts/fontconfig )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )
-	ldap? ( app-net/openldap:= )
+	ldap? ( app-net/openldap )
 	mp3? ( xgui-misc/mpg123 )
 	netapi? ( app-server/samba )
-	openal? ( xmedia-live-lib/openal:= )
+	openal? ( xmedia-live-lib/openal )
 	opengl? (
 		xmedia-live-lib/glu
 		xmedia-live-lib/mesa
 	)
 	pcap? ( lib-net/libpcap )
-	png? ( xmedia-live-lib/libpng:0= )
+	perl? (	dev-lang/perl )
+	png? ( xmedia-live-lib/libpng )
 	pulseaudio? ( xgui-misc/pulseaudio )
+	samba? ( app-server/samba[winbind] )
 	xcomposite? ( xgui-live-lib/libXcomposite )
 	xinerama? ( xgui-live-lib/libXinerama )
 	xml? (
@@ -50,19 +52,14 @@ COMMON_DEPEND="
 		lib-core/libxslt
 	)
 "
-
-RDEPEND="${COMMON_DEPEND}
-	perl? (	dev-lang/perl )
-	samba? ( >=app-server/samba-3.0.25[winbind] )"
-
-DEPEND="${COMMON_DEPEND}
+BDEPEND="
 	sys-devel/flex
 	dev-util/pkgconf
 	sys-devel/bison
 	X? ( xgui-live-app/xorgproto )
 "
 
-filter-flags -flto\=\* -Wl,-z,defs
+filter-flags -flto\* -Wl,-z,defs
 
 src_prepare() {
 	default

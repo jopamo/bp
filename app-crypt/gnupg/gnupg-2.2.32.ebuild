@@ -73,6 +73,8 @@ src_install() {
 	echo ".so man1/gpg.1" > "${ED}"/usr/share/man/man1/gpg2.1 || die
 	echo ".so man1/gpgv.1" > "${ED}"/usr/share/man/man1/gpgv2.1 || die
 
-	dodir /etc/env.d
-	echo "CONFIG_PROTECT=/usr/share/gnupg/qualified.txt" >> "${ED}"/etc/env.d/30gnupg || die
+	cat > "${T}"/30${PN} <<- EOF || die
+		CONFIG_PROTECT=usr/share/gnupg/qualified.txt
+	EOF
+	doenvd "${T}"/30${PN}
 }

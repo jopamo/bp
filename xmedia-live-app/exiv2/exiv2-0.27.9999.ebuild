@@ -24,47 +24,14 @@ DEPEND="
 	xmp? ( lib-core/expat )
 "
 
-src_prepare() {
-	if [[ ${PV} != *9999 ]] ; then
-		if [[ -d po ]] ; then
-			pushd po > /dev/null || die
-			local lang
-			for lang in *.po; do
-				if [[ -e ${lang} ]] \
-						&& ! has ${lang/.po/} ${LINGUAS-${lang/.po/}} ; then
-					case ${lang} in
-						CMakeLists.txt | \
-						${PN}.pot)      ;;
-						*) rm -r ${lang} || die ;;
-					esac
-				fi
-			done
-			popd > /dev/null || die
-		else
-			die "Failed to prepare LINGUAS - po directory moved?"
-		fi
-	fi
-
-	# FIXME @upstream:
-	einfo "Converting doc/cmd.txt to UTF-8"
-	iconv -f LATIN1 -t UTF-8 doc/cmd.txt > doc/cmd.txt.tmp || die
-	mv -f doc/cmd.txt.tmp doc/cmd.txt || die
-
-	cmake_src_prepare
-}
-
 src_configure() {
 	local mycmakeargs=(
-		-DEXIV2_ENABLE_BUILD_SAMPLES=NO
-		-DEXIV2_ENABLE_BUILD_PO=$(usex nls)
 		-DEXIV2_ENABLE_NLS=NO
 		-DEXIV2_ENABLE_PNG=$(usex png)
 		-DEXIV2_ENABLE_CURL=$(usex webready)
 		-DEXIV2_ENABLE_SSH=$(usex webready)
 		-DEXIV2_ENABLE_WEBREADY=$(usex webready)
 		-DEXIV2_ENABLE_XMP=$(usex xmp)
-		-DEXIV2_ENABLE_LIBXMP=NO
 	)
-
 	cmake_src_configure
 }

@@ -13,58 +13,57 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="aac alsa aosd bs2b cdda cue +ffmpeg +flac fluidsynth hotkeys http gme jack libsamplerate lirc
-mms modplug nls pulseaudio scrobbler sdl sid sndfile soxr speedpitch vorbis wavpack"
+mms modplug pulseaudio scrobbler sdl sid sndfile soxr speedpitch vorbis wavpack"
 
-RDEPEND="
+DEPEND="
 	lib-dev/dbus-glib
 	lib-live/glib
 	lib-core/libxml2
 	~xmedia-live-app/audacious-${PV}
-	aac? ( >=xmedia-live-lib/faad2-2.7 )
-	alsa? ( >=xmedia-live-lib/alsa-lib-1.0.16 )
+	aac? ( xmedia-live-lib/faad2 )
+	alsa? ( xmedia-live-lib/alsa-lib )
 	aosd? (
 		xgui-live-lib/libXrender
 		xgui-live-lib/libXcomposite
 	)
 	bs2b? ( xmedia-live-lib/libbs2b )
 	cdda? (
-		>=xmedia-live-lib/libcddb-1.2.1
+		xmedia-live-lib/libcddb
 		lib-dev/libcdio-paranoia
 	)
 	cue? ( xmedia-live-lib/libcue )
 	ffmpeg? ( xmedia-live-app/ffmpeg )
 	flac? (
-		>=xmedia-live-lib/libvorbis-1.0
-		>=xmedia-live-lib/flac-1.2.1-r1
+		xmedia-live-lib/libvorbis
+		xmedia-live-lib/flac
 	)
 	fluidsynth? ( xmedia-live-app/fluidsynth )
-	http? ( >=lib-net/neon-0.26.4 )
+	http? ( lib-net/neon )
 	xgui-live-lib/qtbase
 	jack? (
-		>=xmedia-live-lib/bio2jack-0.4
+		xmedia-live-lib/bio2jack
 		virtual/jack
 	)
-	libsamplerate? ( xmedia-live-lib/libsamplerate:= )
+	libsamplerate? ( xmedia-live-lib/libsamplerate )
 	lirc? ( app-misc/lirc )
-	mms? ( >=xmedia-live-lib/libmms-0.3 )
+	mms? ( xmedia-live-lib/libmms )
 	modplug? ( xmedia-live-lib/libmodplug )
 	xgui-misc/mpg123
-	pulseaudio? ( >=xgui-misc/pulseaudio-0.9.3 )
+	pulseaudio? ( xgui-misc/pulseaudio )
 	scrobbler? ( app-net/curl )
 	sdl? ( xmedia-live-lib/libsdl2[sound] )
-	sid? ( >=xmedia-live-lib/libsidplayfp-1.0.0 )
-	sndfile? ( >=xmedia-live-lib/libsndfile-1.0.17-r1 )
+	sid? ( xmedia-live-lib/libsidplayfp )
+	sndfile? ( xmedia-live-lib/libsndfile )
 	soxr? ( xmedia-live-lib/soxr )
-	speedpitch? ( xmedia-live-lib/libsamplerate:= )
+	speedpitch? ( xmedia-live-lib/libsamplerate )
 	vorbis? (
-		>=xmedia-live-lib/libvorbis-1.2.0
-		>=xmedia-live-lib/libogg-1.1.3
+		xmedia-live-lib/libvorbis
+		xmedia-live-lib/libogg
 	)
-	wavpack? ( >=xmedia-live-app/wavpack-4.50.1-r1 )"
+	wavpack? ( xmedia-live-app/wavpack )
+"
 
-DEPEND="${RDEPEND}
-	dev-util/pkgconf
-	nls? ( dev-util/intltool )"
+BDEPEND="dev-util/pkgconf"
 
 src_prepare() {
 	default
@@ -73,14 +72,8 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		--disable-gtk
-		$(use_enable nls)
+		--disable-nls
 		--enable-qt
 		--enable-mpris2
 		--enable-songchange

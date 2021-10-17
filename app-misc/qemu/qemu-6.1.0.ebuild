@@ -128,7 +128,7 @@ SOFTMMU_TOOLS_DEPEND="
 	lib-core/libxml2[static-libs(+)]
 	xgui-live-lib/pixman[static-libs(+)]
 	aio? ( lib-dev/libaio[static-libs(+)] )
-	alsa? ( xmedia-live-lib/alsa-lib )
+	alsa? ( xgui-misc/alsa-lib )
 	bzip2? ( app-compression/bzip2[static-libs(+)] )
 	capstone? ( lib-dev/capstone )
 	caps? ( lib-core/libcap-ng[static-libs(+)] )

@@ -28,7 +28,7 @@ COMMON_DEPEND="
 		xgui-live-lib/libXi
 		xgui-live-lib/libXxf86vm
 	)
-	alsa? ( xmedia-live-lib/alsa-lib )
+	alsa? ( xgui-misc/alsa-lib )
 	cups? ( lib-print/cups:= )
 	fontconfig? ( fonts/fontconfig:= )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )

@@ -18,7 +18,7 @@ KEYWORDS="amd64 arm64"
 IUSE="libsamplerate ncurses nls systemd"
 
 DEPEND="
-	>=xmedia-live-lib/alsa-lib-${PV}
+	>=xgui-misc/alsa-lib-${PV}
 	libsamplerate? ( xmedia-live-lib/libsamplerate )
 	ncurses? ( virtual/curses )
 "

@@ -14,8 +14,8 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	lib-core/zlib
-	xmedia-live-app/ffmpeg"
-
+	xmedia-live-app/ffmpeg
+"
 BDEPEND="dev-util/pkgconf"
 
 src_prepare() {

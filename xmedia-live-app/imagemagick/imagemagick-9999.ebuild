@@ -7,7 +7,6 @@ inherit git-r3
 DESCRIPTION="A collection of tools and libraries for many image formats"
 HOMEPAGE="https://www.imagemagick.org/"
 EGIT_REPO_URI="https://github.com/ImageMagick/ImageMagick.git"
-KEYWORDS="amd64 arm64"
 
 LICENSE="imagemagick"
 SLOT="0"
@@ -51,7 +50,6 @@ src_configure() {
 		--with-modules
 		--with-threads
 		--without-autotrace
-
 	)
-	CONFIG_SHELL=$(type -P bash) econf "${myconf[@]}"
+	econf "${myconf[@]}"
 }

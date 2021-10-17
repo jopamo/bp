@@ -30,7 +30,7 @@ COMMON_DEPEND="
 	)
 	alsa? ( xmedia-live-lib/alsa-lib )
 	cups? ( lib-print/cups:= )
-	fontconfig? ( xmedia-live-lib/fontconfig:= )
+	fontconfig? ( fonts/fontconfig:= )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )
 	ldap? ( app-net/openldap:= )
 	mp3? ( xgui-misc/mpg123 )

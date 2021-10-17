@@ -14,14 +14,18 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-RDEPEND=">=lib-core/expat-2.1.0-r3
-	>=xgui-misc/freetype-2.5.3-r1"
-DEPEND="${RDEPEND}
+DEPEND="
+	lib-core/expat
+	xgui-misc/freetype
+"
+BDEPEND="
 	dev-util/pkgconf
 	dev-util/itstool
 "
-PDEPEND="app-eselect/eselect-fontconfig
-	fonts/liberation-fonts"
+PDEPEND="
+	app-eselect/eselect-fontconfig
+	fonts/liberation-fonts
+"
 
 src_prepare() {
 	default
@@ -29,8 +33,6 @@ src_prepare() {
 }
 
 src_configure() {
-	local addfonts
-
 	local myconf=(
 		$(use_enable static-libs static)
 		--disable-docs
@@ -40,8 +42,7 @@ src_configure() {
 		--with-templatedir="${EPREFIX}"/etc/fonts/conf.avail
 	)
 
-	ECONF_SOURCE="${S}" \
-	econf "${myconf[@]}"
+	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }
 
 src_install() {

@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	virtual/curses
-	xmedia-live-lib/fontconfig
+	fonts/fontconfig
 	xgui-live-lib/libX11
 	xgui-live-lib/libXft
 	xgui-live-app/xorgproto

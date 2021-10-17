@@ -17,7 +17,7 @@ DEPEND="
 	lib-core/libxml2
 	xgui-live-lib/qtbase
 	xgui-live-lib/qtx11extras:5
-	xmedia-live-lib/fontconfig
+	fonts/fontconfig
 	xgui-misc/freetype
 	xgui-live-app/openbox
 	xgui-live-lib/libICE

@@ -24,7 +24,7 @@ IUSE="X debug +glib static-libs +svg valgrind xcb"
 RESTRICT="test"
 
 DEPEND="
-	xmedia-live-lib/fontconfig
+	fonts/fontconfig
 	xgui-misc/freetype
 	xmedia-live-lib/libpng
 	lib-core/zlib

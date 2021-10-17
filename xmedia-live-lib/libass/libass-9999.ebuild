@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 RDEPEND="
-	>=xmedia-live-lib/fontconfig-2.10.92
+	>=fonts/fontconfig-2.10.92
 	>=xgui-misc/freetype-2.5.0.1:2
 	>=lib-dev/fribidi-0.19.5-r1
 	>=xgui-misc/harfbuzz-0.9.12[truetype]"

@@ -17,7 +17,7 @@ IUSE="debug session static-libs"
 RDEPEND="
 	lib-live/glib
 	lib-core/libxml2
-	xmedia-live-lib/fontconfig
+	fonts/fontconfig
 	xgui-live-lib/libXft
 	xgui-live-lib/libXrandr
 	xgui-live-lib/libXt

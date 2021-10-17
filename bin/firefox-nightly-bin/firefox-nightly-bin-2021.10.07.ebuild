@@ -24,7 +24,7 @@ RDEPEND="
 	app-core/dbus
 	lib-dev/dbus-glib
 	lib-live/glib
-	xmedia-live-lib/fontconfig
+	fonts/fontconfig
 	xgui-misc/freetype
 	xgui-live-lib/cairo[X]
 	xgui-live-lib/gdk-pixbuf

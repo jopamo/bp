@@ -18,7 +18,7 @@ RESTRICT="test"
 
 COMMON_DEPEND="
 	lib-dev/boost
-	xmedia-live-lib/fontconfig
+	fonts/fontconfig
 	xgui-misc/freetype
 	lib-core/zlib
 	cairo? (

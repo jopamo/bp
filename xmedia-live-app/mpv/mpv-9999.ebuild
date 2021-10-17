@@ -23,7 +23,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="+alsa +archive bluray cdda +cli coreaudio cplugins
-	cuda drm dvb +egl jack javascript jpeg lcms libcaca
+	cuda drm +egl jack javascript jpeg lcms libcaca
 	libmpv  +lua +opengl pulseaudio raspberry-pi rubberband
 	sdl uchardet vaapi vdpau wayland +X xv zlib"
 

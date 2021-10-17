@@ -15,8 +15,10 @@ KEYWORDS="amd64 arm64"
 IUSE="debug ogg static-libs"
 
 DEPEND="
-	ogg? ( >=xmedia-live-lib/libogg-1.3.0 )
+	ogg? ( xmedia-live-lib/libogg )
 	app-compression/xz-utils
+"
+BDEPEND="
 	sys-devel/gettext
 	dev-util/pkgconf
 "

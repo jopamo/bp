@@ -7,7 +7,7 @@ inherit flag-o-matic autotools
 DESCRIPTION="Advanced Linux Sound Architecture Library"
 HOMEPAGE="http://www.alsa-project.org/"
 
-SNAPSHOT=a1e91720ccfe24611e841213fc0641436ae7d453
+SNAPSHOT=42eeb5eca03accb9711698e3991551a22e762543
 SRC_URI="https://github.com/alsa-project/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -19,11 +19,11 @@ IUSE="debug +ucm"
 
 DEPEND="ucm? ( xmedia-live-app/alsa-ucm-conf )"
 
-filter-flags -flto\=\*
+filter-flags -flto\*
 
 src_prepare() {
-	eautoreconf
 	default
+	eautoreconf
 }
 
 src_configure() {

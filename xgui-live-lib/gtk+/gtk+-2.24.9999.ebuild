@@ -19,7 +19,7 @@ REQUIRED_USE="xinerama? ( X )"
 
 COMMON_DEPEND="
 	lib-live/glib
-	xmedia-live-lib/fontconfig
+	fonts/fontconfig
 	xmedia-live-lib/libepoxy[X(+)?]
 	xgui-live-lib/cairo[glib,svg,X?]
 	xgui-live-lib/gdk-pixbuf[introspection?]

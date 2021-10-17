@@ -18,7 +18,7 @@ IUSE="X +introspection test"
 DEPEND="
 	xgui-misc/harfbuzz[glib(+),truetype(+)]
 	lib-live/glib
-	xmedia-live-lib/fontconfig
+	fonts/fontconfig
 	xgui-misc/freetype
 	xgui-live-lib/cairo
 	introspection? ( lib-live/gobject-introspection )

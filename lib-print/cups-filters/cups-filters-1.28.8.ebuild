@@ -18,7 +18,7 @@ DEPEND="
 	app-text/poppler[cxx,jpeg?,lcms,tiff?,utils]
 	app-text/qpdf
 	lib-live/glib
-	xmedia-live-lib/fontconfig
+	fonts/fontconfig
 	xgui-misc/freetype:2
 	xmedia-live-lib/lcms
 	lib-print/cups

@@ -28,7 +28,7 @@ RDEPEND="
 	lib-dev/nspr
 	lib-dev/nss
 	xmedia-live-lib/alsa-lib
-	xmedia-live-lib/fontconfig
+	fonts/fontconfig
 	xgui-misc/freetype
 	lib-print/cups
 	app-core/dbus

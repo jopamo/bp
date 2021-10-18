@@ -44,8 +44,10 @@ alias du='du -ch --max-depth=1'
 
 alias rsync='rsync -apvz'
 
+alias random4='tr -dc A-Za-z0-9 </dev/urandom | head -c 4 ; echo '''
 alias random8='tr -dc A-Za-z0-9 </dev/urandom | head -c 8 ; echo '''
 
-alias start-keychain='systemctl --user enable ssh-agent && \
-					    systemctl --user start ssh-agent && \
-					    ssh-add github
+alias start-ssh-agent='systemctl --user enable ssh-agent && \
+	systemctl --user start ssh-agent && \
+	ssh-add ~/.ssh/github && \
+	ssh-add ~/.ssh/gitlab'

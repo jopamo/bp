@@ -5,3 +5,9 @@ Hostname ssh.github.com
 Port 443
 User git
 IdentityFile ~/.ssh/github.pub
+
+Host gitlab.com
+Hostname gitlab.com
+Port 443
+User git
+IdentityFile ~/.ssh/gitlab.pub

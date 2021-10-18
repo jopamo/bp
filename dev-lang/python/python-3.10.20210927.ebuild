@@ -13,7 +13,6 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/python/cpython.git"
 	EGIT_BRANCH="$(ver_cut 1-2)"
 	inherit git-r3
-	KEYWORDS="~amd64 ~arm64"
 else
 	SNAPSHOT=9e209d48cac35108f3955d3f610b6ce60b574ecc
 	SRC_URI="https://github.com/python/cpython/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
@@ -24,7 +23,7 @@ fi
 LICENSE="PSF-2"
 SLOT="$(ver_cut 1-2)"
 
-IUSE="sqlite static test valgrind"
+IUSE="sqlite static test valgrind +xml"
 
 RESTRICT="test"
 

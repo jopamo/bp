@@ -10,7 +10,6 @@ HOMEPAGE="https://dbus.freedesktop.org/"
 if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/dbus/dbus.git"
 	inherit git-r3
-	KEYWORDS="~amd64 ~arm64"
 else
 	SNAPSHOT=ddcbe4c715a42f4c0fdf8e751e1b91861ceb77a4
 	SRC_URI="https://gitlab.freedesktop.org/${PN}/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"

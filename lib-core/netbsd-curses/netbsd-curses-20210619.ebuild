@@ -9,7 +9,6 @@ EGIT_REPO_URI="https://github.com/sabotage-linux/netbsd-curses"
 if [[ ${PV} == *9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/sabotage-linux/netbsd-curses.git"
-	KEYWORDS="~amd64 ~arm64"
 else
 	SNAPSHOT=5874f9b1ced9c29d7d590d95e254b252f657a160
 	SRC_URI="https://github.com/sabotage-linux/netbsd-curses/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"

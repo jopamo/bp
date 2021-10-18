@@ -11,7 +11,6 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/Perl/perl5.git"
 	EGIT_BRANCH="maint-$(ver_cut 1).$(ver_cut 2)"
 	inherit git-r3
-	KEYWORDS="~amd64 ~arm64"
 else
 	SNAPSHOT=79a7b254d85a10b65126ad99bf10e70480569d68
 	SRC_URI="https://github.com/Perl/perl5/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"

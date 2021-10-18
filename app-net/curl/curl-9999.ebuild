@@ -8,7 +8,6 @@ HOMEPAGE="https://curl.haxx.se/"
 if [[ ${PV} == *9999 ]] ; then
 	inherit git-r3 autotools
 	EGIT_REPO_URI="https://github.com/curl/curl.git"
-	KEYWORDS="~amd64 ~arm64"
 else
 	SRC_URI="https://curl.haxx.se/download/${P}.tar.bz2"
 	KEYWORDS="amd64 arm64"

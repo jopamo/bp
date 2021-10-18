@@ -10,10 +10,17 @@ LDFLAGS="-Wl,-O2"
 
 USE="${USE} -ipv6 -manpager caps ncurses systemd udev pam readline device-mapper ssl"
 USE="${USE}	sqlite gmp pcre seccomp crypt gcrypt iconv -jit zlib"
-USE="${USE}	lz4 zstd sysusersd tmpfilesd"
+USE="${USE}	lz4 zstd sysusersd tmpfilesd kernel_linux"
+USE="${USE}	-dvbpsi -icu -berkdb"
+
+CPU_FLAGS_X86="mmx sse"
 
 INPUT_DEVICES="libinput"
 
 AR=gcc-ar
 RANLIB=gcc-ranlib
 NM=gcc-nm
+
+IUSE_IMPLICIT="x86 kernel_linux elibc_glibc elibc_musl userland_GNU elibc_SunOS
+amd64-fbsd elibc_Darwin x86-winnt x86-fbsd amd64-linux x86-linux x64-macos
+x64-cygwin elibc_uclibc elibc_FreeBSD elibc_Cygwin riscv"

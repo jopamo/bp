@@ -8,7 +8,6 @@ HOMEPAGE="http://psmisc.sourceforge.net/"
 if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://gitlab.com/${PN}/${PN}.git"
 	inherit git-r3 autotools
-	KEYWORDS="~amd64 ~arm64"
 elif [[ ${PV} == 20* ]]; then
 	SNAPSHOT=738061c3e467e0413014a444327566b9236d222d
 	SRC_URI="https://gitlab.com/${PN}/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"

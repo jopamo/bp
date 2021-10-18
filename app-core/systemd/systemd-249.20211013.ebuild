@@ -272,6 +272,20 @@ DHCP=ipv4' > "${ED}"/etc/systemd/network/ipv4dhcp.network
 		use kvm || sed -i '/kvm/d' "${ED}"/usr/lib/sysusers.d/basic.conf || die
 		sed -i '/ConditionNeedsUpdate/d' "${ED}"/usr/lib/systemd/system/systemd-sysusers.service || die
 	fi
+
+	mkdir -p "${ED}"/usr/lib/systemd/user/
+	cat > "${ED}"/usr/lib/systemd/user/ssh-agent.service <<- EOF || die
+		[Unit]
+		Description=SSH key agent
+
+		[Service]
+		Type=simple
+		Environment=SSH_AUTH_SOCK=%t/ssh-agent.socket
+		ExecStart=/usr/bin/ssh-agent -D -a \$SSH_AUTH_SOCK
+
+		[Install]
+		WantedBy=default.target
+		EOF
 }
 
 pkg_postinst() {

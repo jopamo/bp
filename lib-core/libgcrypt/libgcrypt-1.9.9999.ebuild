@@ -11,7 +11,6 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/gpg/libgcrypt.git"
 	EGIT_BRANCH="LIBGCRYPT-$(ver_cut 1).$(ver_cut 2)-BRANCH"
 	inherit git-r3
-	KEYWORDS="~amd64 ~arm64"
 else
 	SNAPSHOT=7ba5d831d573750af6a1f09713e07eeab6ccf5f3
 	SRC_URI="https://github.com/gpg/libgcrypt/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"

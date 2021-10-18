@@ -12,7 +12,6 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="core-$(ver_cut 1)-$(ver_cut 2)-branch"
 	S="${WORKDIR}/${P}/unix"
 	inherit git-r3
-	KEYWORDS="~amd64 ~arm64"
 else
 	SNAPSHOT=92e2e6942a579c17849b0cf13cafb557a7e0678d
 	SRC_URI="https://github.com/tcltk/tcl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"

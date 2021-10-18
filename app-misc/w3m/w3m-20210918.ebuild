@@ -10,7 +10,6 @@ HOMEPAGE="https://github.com/tats/w3m"
 if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/tats/w3m.git"
 	inherit git-r3
-	KEYWORDS="~amd64 ~arm64"
 else
 	SNAPSHOT=b201f426e4d184113a7b2ed95ae8cb2f1ff68f5a
 	SRC_URI="https://github.com/tats/w3m/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"

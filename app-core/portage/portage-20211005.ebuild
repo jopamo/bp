@@ -20,7 +20,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="tmpfilesd sysusersd"
+IUSE="gentoo_repo tmpfilesd sysusersd"
 
 DEPEND="
 	app-compression/tar
@@ -43,7 +43,6 @@ PDEPEND="app-net/rsync"
 
 PATCHES=(
 	"${FILESDIR}"/phase-helpers.patch
-	"${FILESDIR}"/add-funcs.patch
 	"${FILESDIR}"/makeglobals.patch
 )
 
@@ -56,6 +55,8 @@ pkg_pretend() {
 }
 
 python_prepare_all() {
+	cp "${FILESDIR}"/eapi7-ver-funcs.sh bin/ || die
+
 	distutils-r1_python_prepare_all
 
 	find ${S} -type f -print0 | xargs -0 sed -i 's/\/var\/db\/repos\/gentoo/\/var\/db\/repos\/bp/g'
@@ -139,6 +140,12 @@ location = /var/db/repos/bp\n\
 sync-type = git\n\
 sync-uri = https://github.com/jopamo/bp.git\n\
 auto-sync = yes" > "${ED}"/usr/share/portage/config/repos.conf
+
+use gentoo_repo && echo -e "\n[gentoo]\n\
+location = /var/db/repos/gentoo\n\
+sync-type = git\n\
+sync-uri = https://github.com/gentoo/gentoo.git\n\
+auto-sync = yes" >> "${ED}"/usr/share/portage/config/repos.conf
 
 	cleanup_install
 

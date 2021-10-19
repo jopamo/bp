@@ -27,6 +27,11 @@ src_unpack() {
 	unpack ${A}
 }
 
+src_prepare() {
+	default
+	use musl && sed -i 's/compiler.h/stddef.h/g' include/uapi/linux/swab.h
+}
+
 src_install() {
 	kernel-2_src_install
 

@@ -21,7 +21,6 @@ alias fgrep='fgrep --colour=auto'
 
 alias list-ssh='ps ax | grep "ssh" | grep -v grep'
 alias t='tail'
-alias tu='top -o cpu'
 
 alias h='history'
 alias j='jobs -l'

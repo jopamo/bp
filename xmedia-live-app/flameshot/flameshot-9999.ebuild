@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit cmake git-r3 xdg-utils
 
 DESCRIPTION="Powerful yet simple to use screenshot software for GNU/Linux"
 HOMEPAGE="https://github.com/flameshot-org/flameshot"
@@ -13,3 +13,11 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-live-lib/qtbase"
+
+pkg_postinst() {
+	xdg_icon_cache_update
+}
+
+pkg_postrm() {
+	xdg_icon_cache_update
+}

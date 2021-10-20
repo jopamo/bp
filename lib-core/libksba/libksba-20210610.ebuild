@@ -17,7 +17,9 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND=">=lib-core/libgpg-error-1.8"
+DEPEND="lib-core/libgpg-error"
+
+PATCHES=( "${FILESDIR}"/0001-ASN.1-parser-Provide-token-table-no-more-token-table.patch )
 
 src_prepare() {
 	default

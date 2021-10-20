@@ -7,7 +7,7 @@ inherit flag-o-matic
 DESCRIPTION="Utilities for rescue and embedded systems"
 HOMEPAGE="https://www.busybox.net/"
 
-SNAPSHOT=f27a6a94a7fb172a6768bc450dbdec68f15bc78f
+SNAPSHOT=836b79211df3aeaba1b8b65c6db5ee6193172cc0
 SRC_URI="https://git.busybox.net/busybox/snapshot/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -36,6 +36,7 @@ PATCHES=(
 )
 
 append-flags -ffat-lto-objects
+append-ldflags -static
 
 src_prepare() {
 	default

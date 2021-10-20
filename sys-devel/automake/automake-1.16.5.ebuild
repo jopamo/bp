@@ -19,8 +19,6 @@ BDEPEND="
 	app-core/help2man
 "
 
-PATCHES=( "${FILESDIR}"/f4a3a70f69e1dbccb6578f39ef47835098a04624.patch )
-
 src_install() {
 	default
 

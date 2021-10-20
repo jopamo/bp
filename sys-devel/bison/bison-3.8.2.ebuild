@@ -10,11 +10,10 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="nls static test"
+IUSE="static test"
 
 DEPEND="
 	sys-devel/m4
-	nls? ( sys-devel/gettext )
 	test? ( dev-lang/perl )
 "
 
@@ -26,15 +25,10 @@ src_prepare() {
 
 src_configure() {
 	use static && append-ldflags -static
-
-	local myconf=(
-		$(use_enable nls)
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
+	default
 }
 
 src_install() {
 	default
-
 	rm -f "${ED}"/usr/lib/liby.a || die
 }

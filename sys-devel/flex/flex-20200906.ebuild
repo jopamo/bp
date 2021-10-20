@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=7ea145a7e6c0b15270b0ea913e8afbbdc516f6ea
+SNAPSHOT=04c5b7c9209801aa1bdbf279ccdcde0d57874a55
 
 inherit autotools flag-o-matic
 
@@ -13,7 +13,7 @@ S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="FLEX"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="static-libs test"
 

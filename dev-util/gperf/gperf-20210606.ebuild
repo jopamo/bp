@@ -17,3 +17,8 @@ src_prepare() {
 
 	default
 }
+
+src_configure() {
+	default
+	sed -i '/doc/d' Makefile || die
+}

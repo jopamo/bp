@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=04c5b7c9209801aa1bdbf279ccdcde0d57874a55
+SNAPSHOT=7ea145a7e6c0b15270b0ea913e8afbbdc516f6ea
 
 inherit autotools flag-o-matic
 
@@ -15,12 +15,13 @@ LICENSE="FLEX"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="nls static-libs test"
+IUSE="static-libs test"
 
-DEPEND="sys-devel/m4
-		app-compression/xz-utils
-		nls? ( sys-devel/gettext )
-		test? ( sys-devel/bison )"
+DEPEND="
+	sys-devel/m4
+	app-compression/xz-utils
+	test? ( sys-devel/bison )
+"
 
 src_prepare() {
 	eautoreconf
@@ -36,10 +37,7 @@ src_prepare() {
 src_configure() {
 	use static-libs && append-ldflags -static
 
-	ECONF_SOURCE=${S} \
-	econf \
-		--disable-shared \
-		$(use_enable nls)
+	ECONF_SOURCE=${S} econf --disable-shared
 }
 
 src_test() {
@@ -48,6 +46,6 @@ src_test() {
 
 src_install() {
 	default
-	dosym flex /usr/bin/lex
+	dosym flex usr/bin/lex
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

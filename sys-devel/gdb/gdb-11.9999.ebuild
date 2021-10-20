@@ -13,7 +13,7 @@ LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+client lzma multitarget nls +python +server test vanilla xml"
+IUSE="+client lzma multitarget +python +server test vanilla xml"
 
 REQUIRED_USE="
 	python? ( ${PYTHON_REQUIRED_USE} )
@@ -24,7 +24,7 @@ RDEPEND="
 	server? ( !dev-util/gdbserver )
 	client? (
 		virtual/curses
-		lib-core/readline:0=
+		lib-core/readline
 		lzma? ( app-compression/xz-utils )
 		python? ( ${PYTHON_DEPS} )
 		xml? ( lib-core/expat )
@@ -36,7 +36,6 @@ DEPEND="${RDEPEND}
 	client? (
 		sys-devel/bison
 		test? ( dev-util/dejagnu )
-		nls? ( sys-devel/gettext )
 	)"
 
 GDB_BUILD_DIR="${WORKDIR}"/${P}-build
@@ -70,7 +69,6 @@ src_configure() {
 			$(use_enable server gdbserver auto)
 			$(use_with xml expat)
 			$(use_with lzma)
-			$(use_enable nls)
 			$(use multitarget && echo --enable-targets=all)
 			$(use_with python python "${EPYTHON}")
 		)
@@ -101,14 +99,6 @@ src_install() {
 
 	if use client; then
 		find "${ED}"/usr -name libiberty.a -delete || die
-	fi
-
-	# Delete translations that conflict with binutils-libs. #528088
-	# Note: Should figure out how to store these in an internal gdb dir.
-	if use nls ; then
-		find "${ED}" \
-			-regextype posix-extended -regex '.*/(bfd|opcodes)[.]g?mo$' \
-			-delete || die
 	fi
 
 	# Remove shared info pages

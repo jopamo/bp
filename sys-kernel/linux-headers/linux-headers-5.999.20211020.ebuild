@@ -33,6 +33,7 @@ src_install() {
 	if use musl ; then
 		rm "${ED}"/usr/include/linux/sysinfo.h
 		dosym -r /usr/include/sys/sysinfo.h /usr/include/linux/sysinfo.h
+		eapply "${FILESDIR}"/swab-musl.patch
 	fi
 
 	# hrm, build system sucks

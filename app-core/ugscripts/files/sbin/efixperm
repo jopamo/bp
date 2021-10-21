@@ -26,6 +26,5 @@ fi
 #permissions for everyone
 find $HOME/.ssh -type d -exec chmod 700 {} +
 find $HOME/.ssh -type f -exec chmod 600 {} +
-find $HOME/.ssh -type f -name *.pub -exec chmod 644 {} +
 [ -f $HOME/.ssh/authorized_keys ] && chmod 644 $HOME/.ssh/authorized_keys
 chown -R $(id -u):$(id -g) $HOME/.ssh

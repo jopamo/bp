@@ -52,4 +52,5 @@ alias sha3-512='openssl dgst -sha3-512'
 alias start-ssh-agent='systemctl --user enable ssh-agent && \
 	systemctl --user start ssh-agent && \
 	ssh-add ~/.ssh/github && \
-	ssh-add ~/.ssh/gitlab'
+	ssh-add ~/.ssh/gitlab && \
+	ssh-add ~/.ssh/remote1'

@@ -46,6 +46,9 @@ alias rsync='rsync -apvz'
 alias random4='tr -dc A-Za-z0-9 </dev/urandom | head -c 4 ; echo '''
 alias random8='tr -dc A-Za-z0-9 </dev/urandom | head -c 8 ; echo '''
 
+alias sha3-256='openssl dgst -sha3-256'
+alias sha3-512='openssl dgst -sha3-512'
+
 alias start-ssh-agent='systemctl --user enable ssh-agent && \
 	systemctl --user start ssh-agent && \
 	ssh-add ~/.ssh/github && \

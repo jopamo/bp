@@ -20,7 +20,8 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug pam +pie +ssl static systemd sysusersd test tmpfilesd"
+IUSE="debug pam +pie +ssl static systemd sysusersd
+test tmpfilesd +utmpx +wtmpx"
 
 DEPEND="
 	lib-core/libedit
@@ -61,8 +62,11 @@ src_configure() {
 		$(use_with pam)
 		$(use_with ssl openssl)
 		$(use_with ssl ssl-engine)
+		--disable-utmp
+		$(use_enable utmpx)
+		--disable-wtmp
+		$(use_enable wtmpx)
 	)
-
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
@@ -87,7 +91,7 @@ src_install() {
 
 	keepdir /var/empty
 
-	fperms 600 /etc/ssh
+	fperms 644 /etc/ssh/{ssh,sshd}_config
 
 	#generate this outside of installation
 	rm -rf "${ED}"/etc/ssh/moduli || die

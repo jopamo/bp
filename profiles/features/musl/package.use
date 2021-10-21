@@ -1,0 +1,6 @@
+app-core/systemd logind tmpfilesd sleep
+app-net/openssh -utmpx -wtmpx
+xmedia-live-app/avidemux qt5
+xgui-live-app/qbittorrent qt5
+xmedia-live-lib/x264 opencl
+xgui-live-app/wine opencl

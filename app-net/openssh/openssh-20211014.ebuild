@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/openssh/openssh-portable.git"
 	inherit git-r3
 else
-	SNAPSHOT=a60209a586a928f92ab323bf23bd07f57093342e
+	SNAPSHOT=4d2cbdb525d673acf941d48a7044fcf03125611a
 	SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-portable-${SNAPSHOT}
 fi
@@ -100,6 +100,9 @@ src_install() {
 		insinto /usr/lib/tmpfiles.d
 		newins "${FILESDIR}/${PN}-tmpfiles" ${PN}.conf
 	fi
+
+	dobin contrib/ssh-copy-id
+	doman contrib/ssh-copy-id.1
 }
 
 pkg_preinst() {

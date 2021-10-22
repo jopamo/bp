@@ -68,8 +68,14 @@ src_compile() {
 src_install() {
 	default
 
-	dosym msgfmt /usr/bin/gmsgfmt #43435
+	dosym msgfmt usr/bin/gmsgfmt
 	dobin gettext-tools/misc/gettextize
 
 	rm -f "${ED}"/usr/share/locale/locale.alias "${ED}"/usr/lib/charset.alias "${ED}"/usr/include/libintl.h
+
+	cp -rp "${ED}"/usr/share/gettext/* "${ED}"/usr/share/gettext-${PV}/
+	rm -rf "${ED}"/usr/share/gettext
+	mv "${ED}"/usr/share/gettext-${PV} "${ED}"/usr/share/gettext
+	dosym -r /usr/share/gettext /usr/share/gettext-${PV}
+	rm "${ED}"/usr/share/gettext/its/gtkbuilder.its
 }

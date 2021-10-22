@@ -1,10 +1,15 @@
 #!/bin/bash -ex
 
-branch="5.10"
+branch="5.14"
 src="linux-${branch}"
 
 if [ ! -d ${src} ] ; then
-	git clone https://kernel.googlesource.com/pub/scm/linux/kernel/git/stable/linux-stable --depth 1 -b linux-${branch}.y ${src}
+	#official sources
+	#git clone https://kernel.googlesource.com/pub/scm/linux/kernel/git/stable/linux-stable --depth 1 -b linux-${branch}.y ${src}
+	#xanmod sources
+	git clone https://github.com/xanmod/linux.git --depth 1 -b ${branch} ${src}
+else
+	$( cd ${src} && git remote update )
 fi
 
 gitlogstamp="$( cd ${src} && git log -1 --format="%at" | xargs -I{} date -d @{} +%Y%m%d )"

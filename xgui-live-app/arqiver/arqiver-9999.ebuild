@@ -26,6 +26,8 @@ src_install() {
 	emake INSTALL_ROOT="${ED}" install
 	insinto /etc/xdg/arqiver
 	doins "${FILESDIR}"/arq.conf
+
+	rm -rf "${ED}"/usr/share/arqiver
 }
 
 pkg_postinst() {

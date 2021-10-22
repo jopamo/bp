@@ -12,12 +12,12 @@ DESCRIPTION="Linux kernel source tree"
 HOMEPAGE="https://kernel.googlesource.com/pub/scm/linux/kernel/git/stable/linux-stable"
 
 EGIT_REPO_URI="https://kernel.googlesource.com/pub/scm/linux/kernel/git/stable/linux-stable"
-EGIT_BRANCH="master"
+EGIT_BRANCH="linux-$(ver_cut 1-2).y"
 S="${WORKDIR}/linux-${PV}"
 EGIT_CHECKOUT_DIR="${S}"
 
 LICENSE="GPL"
-SLOT="$(ver_cut 1).$(ver_cut 2)"
+SLOT="$(ver_cut 1-2)"
 KEYWORDS="amd64 arm64"
 
 DEPEND="

@@ -186,7 +186,6 @@ RDEPEND="
 DEPEND="${RDEPEND}
     ${MODULES_OPTIONAL_USE}${MODULES_OPTIONAL_USE:+? (}
 	app-core/sed
-	sys-kernel/stable-sources
 	lib-core/elfutils
 	${MODULES_OPTIONAL_USE:+)}"
 

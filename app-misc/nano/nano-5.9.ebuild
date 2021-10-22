@@ -12,19 +12,19 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug justify +magic minimal nls static"
+IUSE="+color debug +magic +multibuffer +nanorc static"
 
 LIB_DEPEND="
 	virtual/curses[static-libs(+)]
 	magic? ( app-core/file[static-libs(+)] )
-	nls? ( sys-devel/gettext )
 "
 
 RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
 
-DEPEND="${RDEPEND}
-	nls? ( sys-devel/gettext )
-	static? ( ${LIB_DEPEND} )"
+DEPEND="
+	${RDEPEND}
+	static? ( ${LIB_DEPEND} )
+"
 
 src_configure() {
 	use static && append-ldflags -static
@@ -40,14 +40,12 @@ src_configure() {
 		--disable-extra
 		--disable-browser
 		--disable-comment
-		$(use_enable !minimal color)
-		$(use_enable !minimal multibuffer)
-		$(use_enable !minimal nanorc)
-		$(use_enable minimal tiny)
+		--disable-nls
+		$(use_enable color)
+		$(use_enable multibuffer)
+		$(use_enable nanorc)
 		$(use_enable magic libmagic)
-		$(use_enable justify)
 		$(use_enable debug)
-		$(use_enable nls)
 	)
 
 	econf "${myconf[@]}"
@@ -56,13 +54,11 @@ src_configure() {
 src_install() {
 	default
 
-	if ! use minimal ; then
-		insinto /etc
-		newins doc/sample.nanorc nanorc
+	insinto /etc
+	newins doc/sample.nanorc nanorc
 
-		# Enable colorization by default.
-		sed -i \
-			-e '/^# include /s:# *::' \
-			"${ED%/}"/etc/nanorc || die
-	fi
+	# Enable colorization by default.
+	sed -i \
+		-e '/^# include /s:# *::' \
+		"${ED%/}"/etc/nanorc || die
 }

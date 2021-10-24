@@ -24,7 +24,9 @@ if [ $(id -u) = 0 ]; then
 fi
 
 #permissions for everyone
-find $HOME/.ssh -type d -exec chmod 700 {} +
-find $HOME/.ssh -type f -exec chmod 600 {} +
-[ -f $HOME/.ssh/authorized_keys ] && chmod 644 $HOME/.ssh/authorized_keys
-chown -R $(id -u):$(id -g) $HOME/.ssh
+if [ -d $HOME/.ssh ]; then
+	find $HOME/.ssh -type d -exec chmod 700 {} +
+	find $HOME/.ssh -type f -exec chmod 600 {} +
+	[ -f $HOME/.ssh/authorized_keys ] && chmod 644 $HOME/.ssh/authorized_keys
+	chown -R $(id -u):$(id -g) $HOME/.ssh
+fi

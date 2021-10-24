@@ -3,14 +3,13 @@
 UNAMEM="$(uname -m)"
 ARCH=""
 
-if UNAMEM=x86_64 ; then
-	ARCH=amd64
-elif UNAMEM=aarch64 ; then
-	ARCH=arm64
+if [[ $UNAMEM == x86_64 ]]; then
+    ARCH=amd64
+elif [[ $UNAMEM == aarch64 ]]; then
+    ARCH=arm64
 else
-	echo "unable to detect arch" && exit
+	echo "Unable to detect arch! exiting..." && exit
 fi
-
 
 emerge --noreplace pciutils e2fsprogs btrfs-progs shadowsocks-libev knock chrony nftables pure-ftpd openssh screen shadowsocks-libev lighttpd iputils nmap sshfs crunch || exit
 

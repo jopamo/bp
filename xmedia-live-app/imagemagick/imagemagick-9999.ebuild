@@ -12,7 +12,17 @@ LICENSE="imagemagick"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 cxx fftw fontconfig fpx graphviz hdri heif jbig jpeg jpeg2k lcms lqr lzma opencl openexr pango perl png postscript raw static-libs svg test tiff truetype webp wmf X xml zlib"
+IUSE="bzip2 cxx fftw fontconfig fpx graphviz hdri heif jbig +jpeg +jpeg2k
+lcms lqr lzma opencl openexr pango perl postscript +png raw static-libs
++svg test +tiff truetype webp wmf X xml zlib"
+
+DEPEND="
+	png? ( xmedia-live-lib/libpng )
+	svg? ( xgui-live-lib/librsvg )
+	tiff? ( xmedia-live-lib/tiff )
+	jpeg2k? ( xmedia-live-lib/openjpeg )
+	jpeg? ( xmedia-live-lib/libjpeg-turbo )
+"
 
 src_configure() {
 	local myconf=(

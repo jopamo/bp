@@ -1,6 +1,6 @@
 <div align="center">
 
-[![1g4-linux](https://raw.githubusercontent.com/jopamo/bp/master/.github/logo.png)](#readme)
+[![1g4-linux](https://raw.githubusercontent.com/jopamo/bp/master/.github/bp.png)](#readme)
 
 [![Release version](https://img.shields.io/github/v/release/jopamo/bp?color=blue&label=&style=for-the-badge)](https://github.com/jopamo/bp/releases/latest)
 [![CI Status](https://img.shields.io/github/workflow/status/jopamo/bp/Core%20Tests/master?label=&style=for-the-badge)](https://github.com/jopamo/bp/actions)

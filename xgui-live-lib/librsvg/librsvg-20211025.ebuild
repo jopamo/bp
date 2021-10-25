@@ -2,11 +2,11 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit autotools flag-o-matic
 
 DESCRIPTION="Scalable Vector Graphics (SVG) rendering library"
 HOMEPAGE="https://wiki.gnome.org/Projects/LibRsvg"
-EGIT_REPO_URI="https://github.com/oaken-source/librsvg-og"
+SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="LGPL-2"
 SLOT="0"
@@ -27,7 +27,11 @@ BDEPEND="
 	lib-live/gobject-introspection-common
 	dev-util/gtk-doc
 	dev-util/pkgconf
+	virtual/rust
 "
+
+filter-flags -Wl,-z,defs
+
 src_prepare() {
 	default
 	eautoreconf
@@ -36,7 +40,6 @@ src_prepare() {
 src_configure() {
 	local myconf=(
 		--disable-static
-		--disable-tools
 		--enable-pixbuf-loader
 		$(use_enable introspection)
 	)

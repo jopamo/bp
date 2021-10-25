@@ -19,14 +19,13 @@ DEPEND="
 	xgui-live-app/util-macros"
 
 src_prepare() {
-	eautoreconf
 	default
+	eautoreconf
 }
 
 src_configure() {
 	local myconf=(
 		--disable-docs
-		--disable-xmlto
 		--without-fop
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

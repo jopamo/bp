@@ -13,12 +13,14 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND=">=xgui-live-lib/libX11-1.6.2
-	xgui-live-app/xorgproto"
+DEPEND="
+	xgui-live-lib/libX11
+	xgui-live-app/xorgproto
+"
 
 src_prepare() {
-	eautoreconf
 	default
+	eautoreconf
 }
 
 src_configure() {

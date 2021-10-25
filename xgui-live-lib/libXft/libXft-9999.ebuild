@@ -13,29 +13,16 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND=">=xgui-live-lib/libXrender-0.9.8
-	>=xgui-live-lib/libX11-1.6.2
-	>=xgui-live-lib/libXext-1.3.2
-	>=xgui-misc/freetype-2.5.0.1
-	>=fonts/fontconfig-2.10.92
+DEPEND="
+	xgui-live-lib/libXrender
+	xgui-misc/freetype
+	fonts/fontconfig
 	xgui-live-app/xorgproto
 	fonts/liberation-fonts"
 
 src_prepare() {
-	eautoreconf
 	default
-}
-
-src_configure() {
-	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
+	eautoreconf
 }
 
 src_install() {

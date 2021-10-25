@@ -25,9 +25,8 @@ DEPEND="
 	xmedia-live-lib/libpng
 	xmedia-live-lib/libjpeg-turbo
 	xmedia-live-lib/tiff
-	xgui-live-lib/libX11
+	lib-live/gobject-introspection
 "
-
 BDEPEND="
 	app-core/debianutils
 	dev-util/gtk-doc-am
@@ -41,8 +40,8 @@ src_configure() {
 		-Dbuiltin_loaders=all
 		-Dintrospection=enabled
 		-Ddocs=false
-		)
-		meson_src_configure
+	)
+	meson_src_configure
 }
 
 pkg_preinst() {
@@ -60,5 +59,5 @@ pkg_preinst() {
 
 pkg_postinst() {
 	ebegin "Updating gdk-pixbuf loader cache"
-	gdk-pixbuf-query-loaders --update-cache "${EROOT}"/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders/*.so
+	gdk-pixbuf-query-loaders --update-cache
 }

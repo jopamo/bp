@@ -6,7 +6,8 @@ inherit autotools git-r3
 
 DESCRIPTION="Scalable Vector Graphics (SVG) rendering library"
 HOMEPAGE="https://wiki.gnome.org/Projects/LibRsvg"
-EGIT_REPO_URI="https://github.com/oaken-source/librsvg-og.git"
+EGIT_REPO_URI="https://github.com/GNOME/librsvg"
+EGIT_BRANCH="librsvg-2.40"
 
 LICENSE="LGPL-2"
 SLOT="0"

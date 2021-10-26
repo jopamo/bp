@@ -7,11 +7,12 @@ mkdir -p "${TMPDIR}"
 
 for videofile in *.mp4 *.mkv ; do
 	if [ ! -e "${videofile}" ]; then continue; fi
-	if [ ! -f "${videofile%.*}-muxed.mp4" ]; then
+	if [[ "${videofile}" != *-muxed.mp4 ]] && [ ! -f "${videofile%.*}-muxed.mp4" ]; then
 		ffmpeg-normalize "$videofile" -c:a flac -o "${TMPDIR}/${videofile%.*}.flac.mkv"
 		ffmpeg -n -i "${TMPDIR}/${videofile%.*}.flac.mkv" -dn -sn -vn -c:a copy "${TMPDIR}/${videofile%.*}.flac"
 		ffmpeg -n -i "${TMPDIR}/${videofile%.*}.flac.mkv" -c copy -an "${TMPDIR}/${videofile%.*}.raw.mkv"
 		wine64 /opt/qaac/qaac64.exe -o "${TMPDIR}/${videofile%.*}.m4a" "${TMPDIR}/${videofile%.*}.flac"
-		ffmpeg -n -i "${TMPDIR}/${videofile%.*}.raw.mkv" -i "${TMPDIR}/${videofile%.*}.m4a" -c copy -map_metadata -1 -metadata title="${videofile%.*}" -metadata creation_time=0 -map_chapters -1 -c:s mov_text -movflags +faststart -fflags +bitexact -flags:v +bitexact -flags:a +bitexact "${videofile%.*}-muxed.mp4"
+		ffmpeg -n -i "${TMPDIR}/${videofile%.*}.raw.mkv" -i "${TMPDIR}/${videofile%.*}.m4a" -c copy -map_metadata -1 -metadata title="${videofile%.*}" -map_chapters -1 -c:s mov_text -movflags +faststart -fflags +bitexact -flags:v +bitexact -flags:a +bitexact "${videofile%.*}-muxed.mp4"
+		rm -rf "${TMPDIR}"/*
 	fi
 done

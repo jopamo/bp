@@ -25,6 +25,20 @@ DEPEND="${RDEPEND}
 
 filter-flags -Wl,-z,defs
 
-python_configure_all() {
-	append-cflags $(test-flags-CC -pthread)
+src_prepare() {
+	default
+
+	export CPPFLAGS="${CPPFLAGS} -DOPENSSL_NO_SSL3_METHOD=1"
+
+	# this version does not really use Rust, it just creates a dummy
+	# extension to break stuff
+	export CRYPTOGRAPHY_DONT_BUILD_RUST=1
+	sed -e 's:from setuptools_rust import RustExtension:pass:' \
+		-e '/setup_requires/d' \
+		-i setup.py || die
+}
+
+python_test() {
+	local -x PYTHONPATH=${PYTHONPATH}:${WORKDIR}/${VEC_P}
+	epytest -n "$(makeopts_jobs "${MAKEOPTS}" "$(get_nproc)")"
 }

@@ -15,52 +15,26 @@ LICENSE="lsof"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="ipv6 rpc static"
-
-DEPEND="rpc? ( lib-net/libtirpc )"
-
-BDEPEND="rpc? ( dev-util/pkgconf )"
-
-PATCHES=( "${FILESDIR}"/${PN}-4.85-cross.patch )
+IUSE="static"
 
 src_prepare() {
-	sed -i \
-		-e 's:echo -n:printf:' \
-		AFSConfig Configure Customize Inventory tests/CkTestDB || die
-	# convert `test -r header.h` into a compile test
-	sed -i -r \
-		-e 's:test -r \$\{LSOF_INCLUDE\}/([[:alnum:]/._]*):echo "#include <\1>" | ${LSOF_CC} ${LSOF_CFGF} -E - >/dev/null 2>\&1:' \
-		-e 's:grep (.*) \$\{LSOF_INCLUDE\}/([[:alnum:]/._]*):echo "#include <\2>" | ${LSOF_CC} ${LSOF_CFGF} -E -P -dD - 2>/dev/null | grep \1:' \
-		Configure || die
-
 	default
+	sed -i 's|/\* #define\tHASSECURITY\t1 \*/|#define\tHASSECURITY\t1|' dialects/linux/machine.h
+	sed -i "s|.so ./version|.ds VN ${PV}|" -i Lsof.8
 }
 
 src_configure() {
 	use static && append-ldflags -static
 
-	append-cppflags $(use rpc && $(tc-getPKG_CONFIG) libtirpc --cflags || echo "-DHASNOTRPC -DHASNORPC_H")
-	append-cppflags $(usex ipv6 -{D,U}HASIPv6)
-
-	export LSOF_CFGL="${CFLAGS} ${LDFLAGS} \
-		$(use rpc && $(tc-getPKG_CONFIG) libtirpc --libs)"
-
-	# Set LSOF_INCLUDE to a dummy location so the script doesn't poke
-	# around in it and mix /usr/include paths with cross-compile/etc.
-	touch .neverInv
-	LSOF_INCLUDE=${T} \
-	LSOF_CC=$(tc-getCC) \
-	LSOF_AR="$(tc-getAR) rc" \
-	LSOF_RANLIB=$(tc-getRANLIB) \
-	LSOF_CFGF="${CFLAGS} ${CPPFLAGS}" \
 	./Configure -n linux || die
 }
 
 src_compile() {
-	emake DEBUG="" all
+	emake DEBUG="" CC="cc ${CFLAGS} ${CPPFLAGS} ${LDFLAGS}"
+
 }
 
 src_install() {
 	dobin lsof
-	doman lsof.1
+	newman Lsof.8 lsof.8
 }

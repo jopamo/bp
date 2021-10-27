@@ -29,4 +29,8 @@ src_install() {
 	if ! use static-libs ; then
 		rm "${ED}"/usr/lib/libxxhash.a || die
 	fi
+
+	rm "${ED}"/usr/share/man/man1/xxh32sum.1 || die
+	rm "${ED}"/usr/share/man/man1/xxh64sum.1 || die
+	rm "${ED}"/usr/share/man/man1/xxh128sum.1 || die
 }

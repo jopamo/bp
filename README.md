@@ -1,35 +1,29 @@
-<div align="center">
+<div align="left">
 
 [![1g4-linux](https://raw.githubusercontent.com/jopamo/bp/master/.github/bp.png)](#readme)
 
-[![Release version](https://img.shields.io/github/v/release/jopamo/bp?color=blue&label=&style=for-the-badge)](https://github.com/jopamo/bp/releases/latest)
-[![CI Status](https://img.shields.io/github/workflow/status/jopamo/bp/Core%20Tests/master?label=&style=for-the-badge)](https://github.com/jopamo/bp/actions)
-[![License: Unlicense](https://img.shields.io/badge/-Unlicense-blue.svg?style=for-the-badge)](LICENSE)
-[![Donate](https://img.shields.io/badge/_-Donate-red.svg?logo=githubsponsors&labelColor=555555&style=for-the-badge)](Collaborators.md#collaborators)
-[![Supported Sites](https://img.shields.io/badge/-Supported_Sites-brightgreen.svg?style=for-the-badge)](supportedsites.md)
-[![Discord](https://img.shields.io/discord/xxxxxxxxx?color=blue&label=​&logo=discord&style=for-the-badge)](https://discord.gg/xxxxxxxxx)
 [![Commits](https://img.shields.io/github/commit-activity/m/jopamo/bp?label=commits&style=for-the-badge)](https://github.com/jopamo/bp/commits)
 [![Last Commit](https://img.shields.io/github/last-commit/jopamo/bp/master?label=&style=for-the-badge)](https://github.com/jopamo/bp/commits)
-[![Downloads](https://img.shields.io/github/downloads/jopamo/bp/total?style=for-the-badge&color=blue)](https://github.com/jopamo/bp/releases/latest)
 
 </div>
 
-This is a [gentoo](https://github.com/gentoo/gentoo) fork...
+bp is short for 'backpack' to denote it being easier to move around on various cloud services. It is an alternate [gentoo](https://github.com/gentoo/gentoo) package repo. It is yet not compatible with gentoo or gentoo overlays, some stuff will work, but most will not. The plan is to just use the package.provided mechanism to provide a compatibility layer for using the gentoo repo or gentoo overlays. The easiest way to do this is to change the names of categories allowing the gentoo tree version of certain packages to never be used.
 
-* [NEW](#new)
-    * [Differences from Gentoo](#differences-from-gentoo-behavior)
-
-# NEW
-description
-
-* **list1**:
-    * sublist
-  
-
-If you are coming from [gentoo](https://github.com/gentoo/gentoo), the ....
-
-### Differences from Gentoo
-
-description
-
-* list1
+Below are some highlights from the configuration
+* link time optimization and the Integer Set Library are enabled by default, just set NTHREAD in your make.conf
+  * Thank you to [gentooLTO!](https://github.com/InBetweenNames/gentooLTO)
+## Distro Configuration
+* no multilib - the toolchain only supports 64bit
+* all libraries are installed to /usr/lib 
+* /lib /lib64 /bin /sbin are all symlinked into /usr/ 
+* only amd64 and arm64 are supported
+* only glibc or musl are supported
+* it supports your choice of openssl or libressl
+   * switching back and forth with preserve-libs should work
+* it supports your choice of ncurses or netbsd-curses
+   * switching from default of ncurses to netbsd-curses works, switching from netbsd-curses to ncurses does not work
+* I primarily use systemd, but the -systemd use flag should disable installing every single systemd file.
+* systemd is supported with musl on both amd64 and arm64
+* link time optimization is enabled globally by default
+* security compiler options such as fpie, fpic, D_FORTIFY_SOURCE, fstack-protector-strong, etc are all enabled by default as well
+* more on the way...

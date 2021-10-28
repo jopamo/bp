@@ -11,7 +11,7 @@ EGIT_BRANCH="PHP-$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="PHP-3.01 BSD-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="+fpm"
 

@@ -6,10 +6,10 @@ DESCRIPTION="Virtual for various service managers"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="runit"
+IUSE="systemd"
 
 RDEPEND="
 	|| (
-		!runit? ( app-core/systemd )
-		runit? ( app-core/runit )
+		!systemd? ( app-core/runit )
+		systemd? ( app-core/systemd )
 	)"

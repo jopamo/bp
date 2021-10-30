@@ -117,4 +117,6 @@ src_configure(){
 
 src_install() {
 	cmake_src_install
+	mkdir -p "${ED}"/var/lib/mysql
+	fowners -R plex:plex /var/lib/mysql
 }

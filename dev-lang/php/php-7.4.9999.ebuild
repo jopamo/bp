@@ -73,6 +73,9 @@ src_configure() {
 		--with-libedit
 		--without-readline
 		$(use_enable fpm)
+		--enable-cgi
+		$(usex fpm "--with-fpm-systemd" "")
+		$(usex fpm "--with-fpm-acl" "")
 		$(usex fpm "--with-fpm-user=lighttpd" "")
 		$(usex fpm "--with-fpm-group=lighttpd" "")
 	)

@@ -13,7 +13,7 @@ LICENSE="GPL-2 LGPL-2.1+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug kerberos numa profiling static systemd test"
+IUSE="debug kerberos numa profiling static systemd sysusersd tmpfilesd test"
 
 DEPEND="
 	lib-core/libxml2
@@ -67,11 +67,10 @@ src_configure(){
 		-DWITH_PCRE=system
 		-DWITHOUT_LIBWRAP=1
 		-DENABLED_LOCAL_INFILE=1
-		-DMYSQL_UNIX_ADDR="${EPREFIX}/var/run/mysqld/mysqld.sock"
-		-DINSTALL_UNIX_ADDRDIR="${EPREFIX}/var/run/mysqld/mysqld.sock"
+		-DMYSQL_UNIX_ADDR="${EPREFIX}/run/mysqld/mysqld.sock"
+		-DINSTALL_UNIX_ADDRDIR="${EPREFIX}/run/mysqld/mysqld.sock"
 		-DWITH_DEFAULT_COMPILER_OPTIONS=1
 		-DWITH_DEFAULT_FEATURE_SET=1
-		-DINSTALL_SYSTEMD_UNITDIR=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 		-DPLUGIN_AUTH_GSSAPI=$(usex kerberos DYNAMIC NO)
 		-DAUTH_GSSAPI_PLUGIN_TYPE=$(usex kerberos DYNAMIC OFF)
 		-DCONC_WITH_EXTERNAL_ZLIB=YES
@@ -92,6 +91,9 @@ src_configure(){
 		-DWITH_INNODB_LZO=OFF
 		-DINSTALL_SQLBENCHDIR=""
 		-DWITH_SYSTEMD=$(usex systemd yes no)
+		-DINSTALL_SYSTEMD_UNITDIR=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
+		-DINSTALL_SYSTEMD_SYSUSERSDIR=$(usex sysusersd "${EPREFIX}/usr/lib/sysusers.d" "false")
+		-DINSTALL_SYSTEMD_TMPFILESDIR=$(usex tmpfilesd "${EPREFIX}/usr/lib/tmpfiles.d" "false")
 		-DWITH_NUMA=$(usex numa ON OFF)
 		-DDEFAULT_CHARSET=utf8
 		-DDEFAULT_COLLATION=utf8_general_ci

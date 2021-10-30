@@ -13,7 +13,7 @@ LICENSE="PHP-3.01 BSD-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+fpm"
+IUSE="+fpm tmpfilesd systemd"
 
 DEPEND="
 	app-compression/bzip2
@@ -45,6 +45,9 @@ src_prepare() {
 }
 
 src_configure() {
+	EXTENSION_DIR="${EPREFIX}"/usr/lib/php/modules
+	export EXTENSION_DIR
+
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -72,6 +75,8 @@ src_configure() {
 		--enable-mbstring
 		--with-libedit
 		--without-readline
+		--with-mysql-sock="${EPREFIX}"/run/mysqld/mysqld.sock
+		--with-mysqli=shared,mysqlnd
 		$(use_enable fpm)
 		--enable-cgi
 		$(usex fpm "--with-fpm-systemd" "")
@@ -84,7 +89,24 @@ src_configure() {
 
 src_install() {
 	emake INSTALL_ROOT="${D}" install
+	emake INSTALL_ROOT="${D}" install-{modules,cli,build,headers,programs,pharcmd}
 
-	keepdir /var/{log,run}
-	rm -rf "${ED}"/var/run
+	rm -rf "${ED}"/usr/lib/php/modules/*.a
+	rm -rf "${ED}"/var/{log,run}
+
+	if use tmpfilesd; then
+		cat <<-EOF >"${S}"/php-fpm.tmpfiles
+		d /run/php-fpm 755 root root
+		EOF
+
+		insopts -m 0644
+		insinto /usr/lib/tmpfiles.d
+		newins php-fpm.tmpfiles ${PN}.conf
+	fi
+
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins sapi/fpm/php-fpm.service
+	fi
 }

@@ -23,7 +23,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="+aio alsa bzip2 capstone +caps +curl debug +fdt fuse
-	gnutls gtk iscsi jack jemalloc +jpeg lzo multipath ncurses nfs nls numa
+	gnutls +gtk iscsi jack jemalloc +jpeg lzo multipath ncurses nfs nls numa
 	opengl +oss +pin-upstream-blobs
 	plugins +png pulseaudio python sasl +seccomp sdl sdl-image selinux
 	smartcard snappy spice ssh static static-user systemtap test udev usb
@@ -395,7 +395,7 @@ qemu_src_configure() {
 		--disable-sdl
 		--disable-sdl-image
 		$(conf_notuser seccomp)
-		--disable-slirp
+		--enable-slirp
 		$(conf_notuser smartcard)
 		$(conf_notuser snappy)
 		$(conf_notuser spice)
@@ -525,21 +525,6 @@ src_configure() {
 	[[ -n ${softmmu_targets} ]] && qemu_src_configure "softmmu"
 	[[ -n ${user_targets}    ]] && qemu_src_configure "user"
 	qemu_src_configure "tools"
-}
-
-src_compile() {
-	if [[ -n ${user_targets} ]]; then
-		cd "${S}/user-build"
-		default
-	fi
-
-	if [[ -n ${softmmu_targets} ]]; then
-		cd "${S}/softmmu-build"
-		default
-	fi
-
-	cd "${S}/tools-build"
-	default
 }
 
 src_test() {

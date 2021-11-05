@@ -10,12 +10,13 @@ DESCRIPTION="Timezone data (/usr/share/zoneinfo) and utilities (tzselect/zic/zdu
 HOMEPAGE="http://www.iana.org/time-zones http://www.twinsun.com/tz/tz-link.htm"
 SRC_URI="http://www.iana.org/time-zones/repository/releases/tzdata${data_ver}.tar.gz
 	http://www.iana.org/time-zones/repository/releases/tzcode${code_ver}.tar.gz"
+S=${WORKDIR}
 
 LICENSE="BSD public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-S=${WORKDIR}
+IUSE="static-libs"
 
 _timezones=('africa' 'antarctica' 'asia' 'australasia'
            'europe' 'northamerica' 'southamerica'
@@ -56,4 +57,9 @@ src_install() {
 
 	cleanup_install
 	rm -rf "${ED}"/etc/localtime || die
+	rm -rf "${ED}"/usr/share/zoneinfo/{Africa,Atlantic,Indian,Antarctica,Asia,Australia,Pacific,Europe} || die
+	rm -rf "${ED}"/usr/share/zoneinfo-leaps/{Africa,Atlantic,Indian,Antarctica,Asia,Australia,Pacific,Europe} || die
+	rm -rf "${ED}"/usr/share/zoneinfo/{posix,right}/{Africa,Atlantic,Indian,Antarctica,Asia,Australia,Pacific,Europe} || die
+
+	use static-libs || rm -rf "${ED}"/usr/lib/libtz.a || die
 }

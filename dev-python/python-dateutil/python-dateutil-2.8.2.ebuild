@@ -14,6 +14,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="test"
 
+PATCHES=( "${FILESDIR}"/0001-zoneinfo-Get-timezone-data-from-system-tzdata.patch )
+
 RDEPEND="
 	dev-python/six[${PYTHON_USEDEP}]
 	lib-core/tzdb

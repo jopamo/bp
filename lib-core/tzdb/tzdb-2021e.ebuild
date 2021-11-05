@@ -21,24 +21,12 @@ _timezones=('africa' 'antarctica' 'asia' 'australasia'
            'europe' 'northamerica' 'southamerica'
            'etcetera' 'backward' 'factory')
 
-src_configure() {
-	tc-export CC
-
-	append-lfs-flags #471102
-
-	append-cppflags -DTZ_DOMAIN='\"libc\"'
-	LDLIBS=""
-}
-
 _emake() {
 	emake \
-		TZDATA_TEXT= \
-		TOPDIR="${EPREFIX}" \
-		ZICDIR='$(TOPDIR)/usr/bin' \
 		AR="$(tc-getAR)" \
 		cc="$(tc-getCC)" \
 		RANLIB="$(tc-getRANLIB)" \
-		CFLAGS="${CFLAGS} -std=gnu99 ${CPPFLAGS}" \
+		CFLAGS="${CFLAGS} ${CPPFLAGS}" \
 		LDFLAGS="${LDFLAGS}" \
 		LDLIBS="${LDLIBS}"
 		"$@"
@@ -54,15 +42,18 @@ src_test() {
 }
 
 src_install() {
-	_emake install DESTDIR="${D}"
+	emake install \
+		DESTDIR="${D}" \
+		ZICDIR="/usr/bin"
 
 	./zic -b fat -d "${ED}"/usr/share/zoneinfo ${_timezones[@]} || die
 	./zic -b fat -d "${ED}"/usr/share/zoneinfo/posix ${_timezones[@]} || die
 	./zic -b fat -d "${ED}"/usr/share/zoneinfo/right -L leapseconds ${_timezones[@]} || die
-	# This creates the posixrules file. We use New York because POSIX requires the daylight savings time rules to be in accordance with US rules.
+
+	# This creates the posixrules file. We use New York because POSIX requires the daylight
+	# savings time rules to be in accordance with US rules.
 	./zic -b fat -d "${ED}"/usr/share/zoneinfo -p America/New_York || die
 
-
-	# cleanup
 	cleanup_install
+	rm -rf "${ED}"/etc/localtime || die
 }

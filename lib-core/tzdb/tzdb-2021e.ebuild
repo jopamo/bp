@@ -15,14 +15,11 @@ LICENSE="BSD public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="leaps_timezone"
-
 S=${WORKDIR}
 
-src_prepare() {
-	default
-	tc-is-cross-compiler && cp -pR "${S}" "${S}"-native
-}
+_timezones=('africa' 'antarctica' 'asia' 'australasia'
+           'europe' 'northamerica' 'southamerica'
+           'etcetera' 'backward' 'factory')
 
 src_configure() {
 	tc-export CC
@@ -35,31 +32,20 @@ src_configure() {
 
 _emake() {
 	emake \
-		REDO=$(usex leaps_timezone posix_right posix_only) \
 		TZDATA_TEXT= \
 		TOPDIR="${EPREFIX}" \
 		ZICDIR='$(TOPDIR)/usr/bin' \
-		"$@"
-}
-
-src_compile() {
-	_emake \
 		AR="$(tc-getAR)" \
 		cc="$(tc-getCC)" \
 		RANLIB="$(tc-getRANLIB)" \
 		CFLAGS="${CFLAGS} -std=gnu99 ${CPPFLAGS}" \
 		LDFLAGS="${LDFLAGS}" \
 		LDLIBS="${LDLIBS}"
-	if tc-is-cross-compiler ; then
-		_emake -C "${S}"-native \
-			AR="$(tc-getBUILD_AR)" \
-			cc="$(tc-getBUILD_CC)" \
-			RANLIB="$(tc-getBUILD_RANLIB)" \
-			CFLAGS="${BUILD_CFLAGS} ${BUILD_CPPFLAGS}" \
-			LDFLAGS="${BUILD_LDFLAGS}" \
-			LDLIBS="${LDLIBS}" \
-			zic
-	fi
+		"$@"
+}
+
+src_compile() {
+	_emake
 }
 
 src_test() {
@@ -68,85 +54,15 @@ src_test() {
 }
 
 src_install() {
-	local zic=""
-	tc-is-cross-compiler && zic="zic=${S}-native/zic"
-	_emake install ${zic} DESTDIR="${D}" LIBDIR="/nukeit"
-	rm -rf "${D}/nukeit" "${ED}/etc" || die
+	_emake install DESTDIR="${D}"
 
+	./zic -b fat -d "${ED}"/usr/share/zoneinfo ${_timezones[@]} || die
+	./zic -b fat -d "${ED}"/usr/share/zoneinfo/posix ${_timezones[@]} || die
+	./zic -b fat -d "${ED}"/usr/share/zoneinfo/right -L leapseconds ${_timezones[@]} || die
+	# This creates the posixrules file. We use New York because POSIX requires the daylight savings time rules to be in accordance with US rules.
+	./zic -b fat -d "${ED}"/usr/share/zoneinfo -p America/New_York || die
+
+
+	# cleanup
 	cleanup_install
-}
-
-get_TIMEZONE() {
-	local tz src="${EROOT}/etc/timezone"
-	if [[ -e ${src} ]] ; then
-		tz=$(sed -e 's:#.*::' -e 's:[[:space:]]*::g' -e '/^$/d' "${src}")
-	else
-		tz="FOOKABLOIE"
-	fi
-	[[ -z ${tz} ]] && return 1 || echo "${tz}"
-}
-
-pkg_preinst() {
-	local tz=$(get_TIMEZONE)
-	if [[ ${tz} == right/* || ${tz} == posix/* ]] ; then
-		eerror "The right & posix subdirs are no longer installed as subdirs -- they have been"
-		eerror "relocated to match upstream paths as sibling paths.  Further, posix/xxx is the"
-		eerror "same as xxx, so you should simply drop the posix/ prefix.  You also should not"
-		eerror "be using right/xxx for the system timezone as it breaks programs."
-		die "Please fix your timezone setting"
-	fi
-
-	# Trim the symlink by hand to avoid portage's automatic protection checks.
-	rm -f "${EROOT}"/usr/share/zoneinfo/posix
-
-	if has_version "<=${CATEGORY}/${PN}-2015c" ; then
-		elog "Support for accessing posix/ and right/ directly has been dropped to match"
-		elog "upstream.  There is no need to set TZ=posix/xxx as it is the same as TZ=xxx."
-		elog "For TZ=right/, you can use TZ=../zoneinfo-leaps/xxx instead.  See this post"
-		elog "for details: https://mm.icann.org/pipermail/tz/2015-February/022024.html"
-	fi
-}
-
-configure_tz_data() {
-	# make sure the /etc/localtime file does not get stale #127899
-	local tz src="${EROOT}/etc/timezone" etc_lt="${EROOT}/etc/localtime"
-
-	# If it's a symlink, assume the user knows what they're doing and
-	# they're managing it themselves. #511474
-	if [[ -L ${etc_lt} ]] ; then
-		einfo "Assuming your ${etc_lt} symlink is what you want; skipping update."
-		return 0
-	fi
-
-	if ! tz=$(get_TIMEZONE) ; then
-		einfo "Assuming your empty ${etc_lt} file is what you want; skipping update."
-		return 0
-	fi
-	if [[ ${tz} == "FOOKABLOIE" ]] ; then
-		elog "You do not have TIMEZONE set in ${src}."
-
-		if [[ ! -e ${etc_lt} ]] ; then
-			cp -f "${EROOT}"/usr/share/zoneinfo/Factory "${etc_lt}"
-			elog "Setting ${etc_lt} to Factory."
-		else
-			elog "Skipping auto-update of ${etc_lt}."
-		fi
-		return 0
-	fi
-
-	if [[ ! -e ${EROOT}/usr/share/zoneinfo/${tz} ]] ; then
-		elog "You have an invalid TIMEZONE setting in ${src}"
-		elog "Your ${etc_lt} has been reset to Factory; enjoy!"
-		tz="Factory"
-	fi
-	einfo "Updating ${etc_lt} with ${EROOT}/usr/share/zoneinfo/${tz}"
-	cp -f "${EROOT}"/usr/share/zoneinfo/"${tz}" "${etc_lt}"
-}
-
-pkg_config() {
-	configure_tz_data
-}
-
-pkg_postinst() {
-	configure_tz_data
 }

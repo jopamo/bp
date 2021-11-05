@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="v$(ver_cut 1)-stable"
 	inherit git-r3
 else
-	SNAPSHOT=4fa9d8f14523982482386d398d2b2669902f2098
+	SNAPSHOT=9e47ea7c98d1f4e0a75edb5d1590e5742f253317
 	SRC_URI="https://github.com/systemd/systemd-stable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/systemd-stable-${SNAPSHOT}"
 	KEYWORDS="amd64 arm64"
@@ -252,27 +252,25 @@ Name=en*
 [Network]
 DHCP=ipv4' > "${ED}"/etc/systemd/network/ipv4dhcp.network
 
-	sed -i '/{dialout,render,cdrom,tape}/d' "${ED}"/usr/lib/udev/rules.d/50-udev-default.rules
-
 	sed -i "s/\#Audit\=yes/Audit\=no/g" "${ED}"/etc/systemd/journald.conf || die
 
 	sed -i "s/\#SystemMaxUse\=/SystemMaxUse\=128M/g" "${ED}"/etc/systemd/journald.conf || die
 
-	insinto usr/lib/udev/rules.d/
-	doins "${FILESDIR}"/50-udev-default.rules.nokvm
-
 	if ! use kvm; then
-		insinto usr/lib/udev/rules.d/
-		doins "${FILESDIR}"/50-udev-default.rules
-
-		insinto usr/lib/tmpfiles.d/
-		doins "${FILESDIR}"/static-nodes-permissions.conf
+		sed -i '/kvm/d' "${ED}"/usr/lib/udev/rules.d/50-udev-default.rules || die
+		sed -i '/kvm/d' "${ED}"/usr/lib/tmpfiles.d/static-nodes-permissions.conf || die
 	fi
 
 	if use sysusersd; then
 		use kvm || sed -i '/kvm/d' "${ED}"/usr/lib/sysusers.d/basic.conf || die
 		sed -i '/ConditionNeedsUpdate/d' "${ED}"/usr/lib/systemd/system/systemd-sysusers.service || die
 	fi
+
+	#these groups are currently unused
+	for x in cdrom dialout render sgx tape ; do
+		sed -i "/${x}/d" "${ED}"/usr/lib/sysusers.d/basic.conf || die
+		sed -i "/${x}/d" "${ED}"/usr/lib/udev/rules.d/50-udev-default.rules || die
+	done
 
 	mkdir -p "${ED}"/usr/lib/systemd/user/
 	cat > "${ED}"/usr/lib/systemd/user/ssh-agent.service <<- EOF || die
@@ -300,11 +298,7 @@ pkg_postinst() {
 }
 
 pkg_preinst() {
-	if use sysusersd; then
-		insopts -m 0644
-		insinto /usr/lib/sysusers.d
-		newins "${FILESDIR}/${PN}-sysusers" basic.conf
-	else
+	if ! use sysusersd; then
 		newusergroup messagebus
 		enewgroup systemd-journal
 

@@ -1,4 +1,4 @@
-From f48e70ae846c161dfbfe6ddb36e4bcad4427ac8c Mon Sep 17 00:00:00 2001
+From 907459c6f632a87fce5729f6eebd2adf5b94e577 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Micha=C5=82=20G=C3=B3rny?= <mgorny@gentoo.org>
 Date: Tue, 3 Apr 2018 22:03:32 +0200
 Subject: [PATCH] zoneinfo: Get timezone data from system tzdata
@@ -9,22 +9,22 @@ Subject: [PATCH] zoneinfo: Get timezone data from system tzdata
  2 files changed, 15 insertions(+), 13 deletions(-)
 
 diff --git a/dateutil/test/test_imports.py b/dateutil/test/test_imports.py
-index 2a19b62..97d07e4 100644
+index 60b8600..b9f517c 100644
 --- a/dateutil/test/test_imports.py
 +++ b/dateutil/test/test_imports.py
-@@ -158,9 +158,8 @@ class ImportZoneInfoTest(unittest.TestCase):
-     def testZoneinfoStar(self):
-         from dateutil.zoneinfo import gettz
-         from dateutil.zoneinfo import gettz_db_metadata
--        from dateutil.zoneinfo import rebuild
+@@ -168,9 +168,8 @@ def test_import_zone_info_from():
+ def test_import_zone_info_star():
+     from dateutil.zoneinfo import gettz
+     from dateutil.zoneinfo import gettz_db_metadata
+-    from dateutil.zoneinfo import rebuild
  
--        zi_all = (gettz, gettz_db_metadata, rebuild)
-+        zi_all = (gettz, gettz_db_metadata)
+-    zi_all = (gettz, gettz_db_metadata, rebuild)
++    zi_all = (gettz, gettz_db_metadata)
  
-         for var in zi_all:
-             self.assertIsNot(var, None)
+     for var in zi_all:
+         assert var is not None
 diff --git a/dateutil/zoneinfo/__init__.py b/dateutil/zoneinfo/__init__.py
-index 34f11ad..e9870ca 100644
+index 34f11ad..e3f0f94 100644
 --- a/dateutil/zoneinfo/__init__.py
 +++ b/dateutil/zoneinfo/__init__.py
 @@ -1,6 +1,7 @@
@@ -57,7 +57,7 @@ index 34f11ad..e9870ca 100644
 +def iter_zones(topdir):
 +    for dirpath, dirnames, filenames in os.walk(topdir):
 +        for f in filenames:
-+            if f.endswith('.tab'):
++            if f.endswith(('.list', '.tab', '.zi', 'leapseconds')):
 +                continue
 +            fpath = os.path.join(dirpath, f)
 +            relpath = os.path.relpath(fpath, topdir)
@@ -100,5 +100,5 @@ index 34f11ad..e9870ca 100644
 +        _CLASS_ZONE_INSTANCE.append(ZoneInfoFile())
      return _CLASS_ZONE_INSTANCE[0].metadata
 -- 
-2.17.0
+2.32.0
 

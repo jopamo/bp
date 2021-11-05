@@ -8,13 +8,15 @@ DESCRIPTION="A message bus system, a simple way for applications to talk to each
 HOMEPAGE="https://dbus.freedesktop.org/"
 
 if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://gitlab.freedesktop.org/dbus/dbus.git"
-	inherit git-r3
-else
-	SNAPSHOT=ddcbe4c715a42f4c0fdf8e751e1b91861ceb77a4
+	EGIT_REPO_URI="https://gitlab.freedesktop.org/${PN}/${PN}.git"
+	inherit git-r3 autotools
+elif [[ ${PV} == 20* ]]; then
+	SNAPSHOT=9b019a4e83556d5d150954bbcaf48033648603ff
 	SRC_URI="https://gitlab.freedesktop.org/${PN}/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
+else
+	SRC_URI="https://dbus.freedesktop.org/releases/dbus/${P}.tar.gz"
 fi
 
 LICENSE="|| ( AFL-2.1 GPL-2 )"

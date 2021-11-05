@@ -2,26 +2,23 @@
 
 EAPI=8
 
+DISTUTILS_USE_SETUPTOOLS=manual
+DISTUTILS_IN_SOURCE_BUILD=1
+
 inherit distutils-r1
 
 DESCRIPTION="Collection of extensions to Distutils"
 HOMEPAGE="https://github.com/pypa/setuptools https://pypi.python.org/pypi/setuptools"
-
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/pypa/setuptools.git"
-	inherit git-r3
-else
-	SRC_URI="https://github.com/pypa/setuptools/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="amd64 arm64"
-fi
+SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
-PDEPEND="dev-python/certifi[${PYTHON_USEDEP}]"
-
-# Force in-source build because build system modifies sources.
-DISTUTILS_IN_SOURCE_BUILD=1
+PDEPEND="
+	dev-python/certifi[${PYTHON_USEDEP}]
+	dev-python/setuptools_scm[${PYTHON_USEDEP}]
+"
 
 python_test() {
 	# keep in sync with python_gen_cond_dep above!

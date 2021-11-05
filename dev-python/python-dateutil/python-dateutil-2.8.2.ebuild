@@ -15,12 +15,12 @@ KEYWORDS="amd64 arm64"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/six-1.5[${PYTHON_USEDEP}]
+	dev-python/six[${PYTHON_USEDEP}]
 	lib-core/tzdb
 "
 DEPEND="${RDEPEND}
+	dev-python/wheel[${PYTHON_USEDEP}]
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
-	dev-python/setuptools[${PYTHON_USEDEP}]
 	test? (
 		dev-python/pytest[${PYTHON_USEDEP}]
 		dev-python/freezegun[${PYTHON_USEDEP}]
@@ -29,16 +29,8 @@ DEPEND="${RDEPEND}
 "
 
 python_prepare_all() {
-	local PATCHES=(
-		"${FILESDIR}"/0001-zoneinfo-Get-timezone-data-from-system-tzdata.patch
-	)
-
 	# don't install zoneinfo tarball
 	sed -i '/package_data=/d' setup.py || die
 
 	distutils-r1_python_prepare_all
-}
-
-python_test() {
-	py.test -v || die "Tests failed under ${EPYTHON}"
 }

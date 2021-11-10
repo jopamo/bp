@@ -4,7 +4,7 @@ EAPI=8
 
 inherit autotools
 
-DESCRIPTION="tcltk/tcl - Tool Command Language - core-8-branch"
+DESCRIPTION="tcltk/tcl - Tool Command Language"
 HOMEPAGE="http://www.tcl.tk/"
 
 if [[ ${PV} == *9999 ]]; then
@@ -13,7 +13,7 @@ if [[ ${PV} == *9999 ]]; then
 	S="${WORKDIR}/${P}/unix"
 	inherit git-r3
 else
-	SNAPSHOT=92e2e6942a579c17849b0cf13cafb557a7e0678d
+	SNAPSHOT=fddce37374a5696d0618cd6160f458aba68ebcbb
 	SRC_URI="https://github.com/tcltk/tcl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}/unix
 	KEYWORDS="amd64 arm64"

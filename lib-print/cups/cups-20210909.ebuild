@@ -18,7 +18,7 @@ SLOT="0"
 IUSE="acl dbus debug pam +ssl static-libs systemd usb X"
 
 DEPEND="
-	app-text/libpaper
+	app-tex/libpaper
 	lib-core/zlib
 	acl? (
 			app-core/acl

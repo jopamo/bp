@@ -19,7 +19,7 @@ DEPEND="
 	lib-live/libsodium
 	lib-dev/libev
 	lib-core/libpcre
-	sys-kernel/linux-headers
+	app-kernel/linux-headers
 	lib-net/c-ares
 "
 

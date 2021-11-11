@@ -12,6 +12,6 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="dev-lang/nasm"
+DEPEND="app-lang/nasm"
 
 filter-flags -flto\=\*

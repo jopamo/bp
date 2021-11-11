@@ -49,8 +49,8 @@ COMMON_DEPEND="
 	)
 "
 DEPEND="${COMMON_DEPEND}
-	app-text/docbook-xsl-stylesheets
-	app-text/docbook-xml-dtd
+	app-tex/docbook-xsl-stylesheets
+	app-tex/docbook-xml-dtd
 	lib-core/libxslt
 	xgui-live-lib/at-spi2-atk
 	lib-live/gobject-introspection-common
@@ -64,7 +64,7 @@ RDEPEND="${COMMON_DEPEND}"
 PDEPEND="
 	xgui-live-lib/librsvg
 	xgui-icontheme/adwaita-plus
-	vim-syntax? ( app-text/gtk-syntax )
+	vim-syntax? ( app-tex/gtk-syntax )
 "
 
 src_prepare() {

@@ -17,7 +17,7 @@ RDEPEND="xgui-live-lib/libxcb
 	xgui-live-lib/xtrans
 	xgui-live-app/xorgproto"
 DEPEND="${RDEPEND}
-	test? ( dev-lang/perl )"
+	test? ( app-lang/perl )"
 
 src_prepare() {
 	eautoreconf

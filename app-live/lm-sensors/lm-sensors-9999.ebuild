@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs systemd"
 
-RDEPEND="dev-lang/perl"
+RDEPEND="app-lang/perl"
 
 DEPEND="
 	app-build/bison

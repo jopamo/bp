@@ -14,7 +14,7 @@ IUSE="static test"
 
 DEPEND="
 	app-build/m4
-	test? ( dev-lang/perl )
+	test? ( app-lang/perl )
 "
 
 src_prepare() {

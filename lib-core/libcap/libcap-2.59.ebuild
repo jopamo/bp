@@ -18,7 +18,7 @@ RDEPEND="
 	app-core/attr
 	pam? ( lib-core/pam )
 "
-BDEPEND="sys-kernel/linux-headers"
+BDEPEND="app-kernel/linux-headers"
 
 filter-flags -Wl,-z,defs
 append-flags -ffat-lto-objects

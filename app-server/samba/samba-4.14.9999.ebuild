@@ -19,7 +19,7 @@ zeroconf"
 
 CDEPEND="
 	app-compression/libarchive
-	dev-lang/perl
+	app-lang/perl
 	lib-dev/libaio
 	lib-dev/libbsd
 	lib-core/iniparser
@@ -46,9 +46,9 @@ CDEPEND="
 	systemd? ( app-core/systemd )
 "
 DEPEND="${CDEPEND}
-	app-text/docbook-xsl-stylesheets
+	app-tex/docbook-xsl-stylesheets
 	lib-core/libxslt
-	dev-lang/python
+	app-lang/python
 	lib-live/rpcsvc-proto
 	lib-net/libtirpc"
 RDEPEND="${CDEPEND}

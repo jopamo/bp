@@ -23,7 +23,7 @@ BDEPEND="
 	app-dev/itstool
 "
 PDEPEND="
-	app-eselect/eselect-fontconfig
+	app-eselec/eselect-fontconfig
 	fonts/liberation-fonts
 "
 

@@ -22,7 +22,7 @@ RDEPEND="
 
 DEPEND="${RDEPEND}
 	app-dev/pkgconf
-	dev-lang/nasm"
+	app-lang/nasm"
 
 src_prepare() {
 	default

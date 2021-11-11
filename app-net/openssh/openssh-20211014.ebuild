@@ -33,7 +33,7 @@ DEPEND="
 "
 BDEPEND="
 	app-dev/pkgconf
-	sys-kernel/linux-headers
+	app-kernel/linux-headers
 	app-build/autoconf
 "
 

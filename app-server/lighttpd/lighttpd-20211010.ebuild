@@ -34,7 +34,7 @@ DEPEND="
 	libunwind? ( lib-live/libunwind )
 	mbedtls?  ( lib-net/mbedtls )
 	mysql?    ( app-server/mariadb )
-	php?      ( dev-lang/php )
+	php?      ( app-lang/php )
 	ssl? ( virtual/ssl )
 	xattr? ( app-core/attr )
 "

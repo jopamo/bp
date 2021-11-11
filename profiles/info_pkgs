@@ -6,8 +6,8 @@ app-build/automake
 app-build/binutils
 app-build/libtool
 app-build/make
-dev-lang/python
-dev-lang/perl
+app-lang/python
+app-lang/perl
 app-core/sandbox
 app-dev/ccache
 app-build/gcc

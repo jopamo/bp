@@ -22,7 +22,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	lib-dev/libaio
-	sys-kernel/linux-headers
+	app-kernel/linux-headers
 "
 
 CONFIG_CHECK="~BLK_DEV_IO_TRACE"

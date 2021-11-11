@@ -42,7 +42,7 @@ DEPEND="
 BDEPEND="
 	app-dev/pkgconf
 	test? ( app-build/bc )
-	sys-kernel/linux-headers
+	app-kernel/linux-headers
 "
 
 src_prepare() {

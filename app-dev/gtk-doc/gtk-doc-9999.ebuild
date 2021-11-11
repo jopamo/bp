@@ -16,8 +16,8 @@ KEYWORDS="amd64 arm64"
 IUSE="debug"
 
 DEPEND="lib-core/libxslt
-	app-text/docbook-xml-dtd
-	>=app-text/docbook-xsl-stylesheets-1.79.1
+	app-tex/docbook-xml-dtd
+	>=app-tex/docbook-xsl-stylesheets-1.79.1
 	dev-python/six
 	app-dev/itstool
 	app-dev/pkgconf

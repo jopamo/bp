@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 RESTRICT="test"
 
-RDEPEND="dev-lang/perl"
+RDEPEND="app-lang/perl"
 
 S="${S}/scripts"
 

@@ -26,7 +26,7 @@ DEPEND="
 	)
 	ssl? ( virtual/ssl )
 	zlib? ( lib-core/zlib )
-	lua? ( dev-lang/lua )
+	lua? ( app-lang/lua )
 "
 
 haproxy_use() {

@@ -3,7 +3,12 @@
 eix-sync
 
 echo "Regenerating bp repo cache..."
-egencache --jobs=4 --update --repo bp
+for dir in /var/db/repos/*/
+do
+    dir=${dir%*/} # remove the trailing "/"
+    egencache --jobs=8 --update --repo "${dir##*/}" # remove full path
+done
+
 emerge --regen
 emerge --metadata
 eix-update

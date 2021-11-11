@@ -32,9 +32,9 @@ RDEPEND="
 	)"
 DEPEND="${RDEPEND}
 	app-compression/xz-utils
-	sys-devel/texinfo
+	app-build/texinfo
 	client? (
-		sys-devel/bison
+		app-build/bison
 		test? ( dev-util/dejagnu )
 	)"
 

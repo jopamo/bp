@@ -17,11 +17,11 @@ IUSE="+cxx dane nls +seccomp static-libs test tools valgrind"
 RDEPEND=">=lib-core/nettle-3.1:=[gmp]
 	>=lib-core/gmp-5.1.3-r1:=
 	dane? ( >=lib-net/unbound-1.4.20 )
-	nls? ( >=sys-devel/gettext-0-r1 )
+	nls? ( >=app-build/gettext-0-r1 )
 "
 DEPEND="${RDEPEND}
 	dev-util/pkgconf
-	nls? ( sys-devel/gettext )
+	nls? ( app-build/gettext )
 	valgrind? ( dev-util/valgrind )
 	test? (	seccomp? ( lib-core/libseccomp )	)"
 

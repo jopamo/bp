@@ -25,12 +25,12 @@ IUSE="gentoo_repo tmpfilesd sysusersd"
 DEPEND="
 	app-compression/tar
 	app-core/sed
-	sys-devel/patch
+	app-build/patch
 "
 
 RDEPEND="
 	app-compression/tar
-	app-misc/eselect
+	app-var/eselect
 	app-crypt/gnupg[gnutls(-)]
 	app-core/bash
 	dev-python/lxml[${PYTHON_USEDEP}]

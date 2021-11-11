@@ -23,7 +23,7 @@ DEPEND="
 BDEPEND="
 	dev-util/intltool
 	dev-util/pkgconf
-	sys-devel/gettext
+	app-build/gettext
 "
 
 src_prepare() {

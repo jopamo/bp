@@ -20,7 +20,7 @@ IUSE="debug pam tmpfilesd"
 DEPEND="
 	virtual/curses
 	pam? ( lib-core/pam )
-	sys-devel/texinfo
+	app-build/texinfo
 "
 
 src_prepare() {

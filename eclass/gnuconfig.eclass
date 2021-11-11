@@ -24,7 +24,7 @@ esac
 if [[ -z ${_GNUCONFIG_ECLASS} ]] ; then
  _GNUCONFIG_CLASS=1
 
-BDEPEND="sys-devel/gnuconfig"
+BDEPEND="app-build/gnuconfig"
 
 [[ ${EAPI} == [56] ]] && DEPEND="${BDEPEND}"
 

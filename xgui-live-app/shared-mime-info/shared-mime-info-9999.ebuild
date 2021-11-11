@@ -29,6 +29,6 @@ DEPEND="
 	lib-live/glib
 	dev-util/intltool
 	dev-util/itstool
-	sys-devel/gettext
+	app-build/gettext
 	dev-util/pkgconf
 "

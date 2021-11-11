@@ -2,7 +2,7 @@
 
 EAPI=8
 
-DESCRIPTION="Environment setting required for all KDE Frameworks app-misc to run"
+DESCRIPTION="Environment setting required for all KDE Frameworks app-var to run"
 HOMEPAGE="https://community.kde.org/Frameworks"
 SRC_URI=""
 

@@ -19,7 +19,7 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 CDEPEND="
 		app-core/less
-		sys-devel/gettext
+		app-build/gettext
 		kerberos? ( app-crypt/heimdal )
 		ldap? ( app-net/openldap )
 		pam? ( lib-core/pam )
@@ -35,9 +35,9 @@ CDEPEND="
 
 DEPEND="${CDEPEND}
 !!<app-core/sandbox-2.0
-sys-devel/bison
-sys-devel/flex
-nls? ( sys-devel/gettext )
+app-build/bison
+app-build/flex
+nls? ( app-build/gettext )
 xml? ( dev-util/pkgconf )
 "
 

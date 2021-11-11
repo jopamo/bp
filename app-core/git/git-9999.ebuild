@@ -22,7 +22,7 @@ SLOT="0"
 IUSE="static-libs perl gitweb"
 
 DEPEND="
-	sys-devel/gettext
+	app-build/gettext
 	app-net/curl
 	lib-core/libpcre2
 	lib-core/expat

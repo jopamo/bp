@@ -22,7 +22,7 @@ DEPEND="
 
 BDEPEND="
 	dev-util/pkgconf
-	sys-devel/texinfo
+	app-build/texinfo
 "
 
 append-cflags -fno-strict-aliasing

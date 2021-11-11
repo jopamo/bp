@@ -13,7 +13,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static test"
 
 DEPEND="
-	sys-devel/m4
+	app-build/m4
 	test? ( dev-lang/perl )
 "
 

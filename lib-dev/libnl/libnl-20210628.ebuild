@@ -28,8 +28,8 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	python? ( dev-lang/swig )
-	sys-devel/bison
-	sys-devel/flex
+	app-build/bison
+	app-build/flex
 "
 REQUIRED_USE="
 	python? ( ${PYTHON_REQUIRED_USE} )

@@ -16,8 +16,8 @@ IUSE="caps elf iptables ipv6 libbsd +minimal"
 
 DEPEND="
 	app-compression/xz-utils
-	sys-devel/bison
-	sys-devel/flex
+	app-build/bison
+	app-build/flex
 	sys-kernel/linux-headers
 	caps? ( lib-core/libcap )
 	iptables? ( app-net/iptables )

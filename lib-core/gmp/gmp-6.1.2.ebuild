@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+asm pgo static-libs"
 
-DEPEND="sys-devel/m4
+DEPEND="app-build/m4
 	app-compression/xz-utils"
 
 PATCHES=( "${FILESDIR}"/${PN}-6.1.0-noexecstack-detect.patch	)

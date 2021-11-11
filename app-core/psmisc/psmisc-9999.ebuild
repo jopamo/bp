@@ -26,7 +26,7 @@ IUSE="ipv6 nls X"
 
 DEPEND="
 	virtual/curses
-	sys-devel/libtool
+	app-build/libtool
 "
 
 src_prepare() {

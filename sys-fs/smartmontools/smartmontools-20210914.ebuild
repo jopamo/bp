@@ -29,7 +29,7 @@ RDEPEND="${DEPEND}
 		|| (
 			app-net/curl
 			app-net/wget
-			app-misc/lynx
+			app-var/lynx
 			app-core/subversion
 		)
 	)

@@ -23,7 +23,7 @@ DEPEND="static? ( ${LIB_DEPEND} )"
 
 BDEPEND="
 	dev-util/pkgconf
-	sys-devel/texinfo
+	app-build/texinfo
 "
 
 src_prepare() {

@@ -22,11 +22,11 @@ DEPEND="
 		lib-core/argp-standalone
 		lib-core/musl-fts
 		lib-core/musl-obstack
-		sys-devel/musl-headers
+		app-build/musl-headers
 	)
 	zstd? ( app-compression/zstd )
-	sys-devel/flex
-	sys-devel/m4
+	app-build/flex
+	app-build/m4
 "
 
 filter-flags -flto\=\*

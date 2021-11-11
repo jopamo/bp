@@ -133,7 +133,7 @@ fi
 
 case ${CMAKE_MAKEFILE_GENERATOR} in
 	emake)
-		BDEPEND="sys-devel/make"
+		BDEPEND="app-build/make"
 		;;
 	ninja)
 		BDEPEND="dev-util/ninja"

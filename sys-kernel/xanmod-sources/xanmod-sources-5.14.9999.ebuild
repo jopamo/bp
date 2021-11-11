@@ -22,5 +22,5 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	app-core/ed
-	sys-devel/bc
+	app-build/bc
 "

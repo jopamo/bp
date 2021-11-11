@@ -20,7 +20,7 @@ DEPEND="
 	virtual/curses
 	lib-core/readline
 	gdbm? ( lib-core/gdbm )
-	nls? ( sys-devel/gettext )
+	nls? ( app-build/gettext )
 	pam? ( lib-core/pam )
 	python? ( ${PYTHON_DEPS} )
 	ssl? ( lib-net/gnutls )

@@ -25,8 +25,8 @@ KEYWORDS="amd64 arm64"
 IUSE="+cxx static-libs"
 
 DEPEND="
-	sys-devel/libtool
-	sys-devel/bison
+	app-build/libtool
+	app-build/bison
 "
 
 src_prepare() {

@@ -199,7 +199,7 @@ cp /var/cache/packages/lib-core/libgpg-error/* .
 tar xvhf libgpg-error* --xattrs
 rm libgpg-error* || exit
 
-cp /var/cache/packages/sys-devel/gettext/* .
+cp /var/cache/packages/app-build/gettext/* .
 tar xvhf gettext* --xattrs
 rm gettext* || exit
 
@@ -207,7 +207,7 @@ rm gettext* || exit
 #tar xvhf mbedtls* --xattrs
 #rm mbedtls* || exit
 
-cp /var/cache/packages/app-misc/ca-certificates/* .
+cp /var/cache/packages/app-var/ca-certificates/* .
 tar xvhf ca-certificates* --xattrs
 rm ca-certificates* || exit
 
@@ -268,7 +268,7 @@ cp /var/cache/packages/lib-net/*ssl/* .
 tar xvhf *ssl* --xattrs
 rm *ssl* || exit
 
-cp /var/cache/packages/app-misc/ca-certificates/* .
+cp /var/cache/packages/app-var/ca-certificates/* .
 tar xvhf ca-certificates* --xattrs
 rm ca-certificates* || exit
 
@@ -302,27 +302,27 @@ tar xvhf pure-ftpd* --xattrs
 rm pure-ftpd* || exit
 
 #crunch
-cp /var/cache/packages/app-misc/crunch/* .
+cp /var/cache/packages/app-var/crunch/* .
 tar xvhf crunch* --xattrs
 rm crunch* || exit
 
 #lynx
-#cp /var/cache/packages/app-misc/lynx/* .
+#cp /var/cache/packages/app-var/lynx/* .
 #tar xvhf lynx* --xattrs
 #rm lynx* || exit
 
 #nano
-cp /var/cache/packages/app-misc/nano/* .
+cp /var/cache/packages/app-var/nano/* .
 tar xvhf nano* --xattrs
 rm nano* || exit
 
 #screen
-cp /var/cache/packages/app-misc/screen/* .
+cp /var/cache/packages/app-var/screen/* .
 tar xvhf screen* --xattrs
 rm screen* || exit
 
 #vim
-cp /var/cache/packages/app-misc/vim/* .
+cp /var/cache/packages/app-var/vim/* .
 tar xvhf vim* --xattrs
 rm vim* || exit
 
@@ -363,7 +363,7 @@ rm nftables* || exit
 #rm hashcat-utils* || exit
 
 #irssi
-#cp /var/cache/packages/app-misc/irssi* .
+#cp /var/cache/packages/app-var/irssi* .
 #tar xvhf irssi* --xattrs
 #rm irssi* || exit
 

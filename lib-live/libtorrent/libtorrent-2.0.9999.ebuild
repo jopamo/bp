@@ -17,7 +17,7 @@ RDEPEND="
 	virtual/ssl
 "
 DEPEND="${RDEPEND}
-	sys-devel/libtool
+	app-build/libtool
 "
 
 append-cxxflags -lboost_system

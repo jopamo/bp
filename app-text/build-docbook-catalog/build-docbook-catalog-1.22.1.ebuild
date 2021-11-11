@@ -10,7 +10,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="|| ( app-core/util-linux app-misc/getopt )
+RDEPEND="|| ( app-core/util-linux app-var/getopt )
 	lib-core/libxml2"
 
 pkg_setup() {

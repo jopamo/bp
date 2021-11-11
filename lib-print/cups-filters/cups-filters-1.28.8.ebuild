@@ -22,7 +22,7 @@ DEPEND="
 	xgui-misc/freetype:2
 	xmedia-live-lib/lcms
 	lib-print/cups
-	sys-devel/bc
+	app-build/bc
 	lib-core/zlib
 	dbus? ( app-core/dbus )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )

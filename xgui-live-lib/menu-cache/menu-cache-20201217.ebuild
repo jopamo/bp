@@ -19,7 +19,7 @@ IUSE="static-libs"
 
 RDEPEND="lib-live/glib"
 DEPEND="${RDEPEND}
-	sys-devel/gettext
+	app-build/gettext
 	dev-util/pkgconf
 	xgui-live-lib/libfm-extra
 	dev-util/gtk-doc"

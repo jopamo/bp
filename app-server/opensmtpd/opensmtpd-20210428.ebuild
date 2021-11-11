@@ -29,7 +29,7 @@ DEPEND="
 	lib-core/zlib
 	pam? ( lib-core/pam )
 	lib-dev/libevent
-	app-misc/ca-certificates
+	app-var/ca-certificates
 	app-net/mailbase
 	lib-dev/libasr
 "

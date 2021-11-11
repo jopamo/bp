@@ -51,7 +51,7 @@ DEPEND="
 	app-core/coreutils
 	app-core/procps[kill(+)]
 	app-core/util-linux
-	sys-devel/gettext
+	app-build/gettext
 "
 
 BDEPEND="dev-python/jinja"

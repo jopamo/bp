@@ -19,24 +19,24 @@ IUSE="static-libs test zlib"
 
 RESTRICT="!test? ( test )"
 
-DEPEND="app-misc/c_rehash"
+DEPEND="app-var/c_rehash"
 
 BDEPEND="
-	app-misc/c_rehash
+	app-var/c_rehash
 	dev-lang/perl
 	test? (
 		app-core/diffutils
-		sys-devel/bc
+		app-build/bc
 		app-core/procps
 	)"
-PDEPEND="app-misc/ca-certificates"
+PDEPEND="app-var/ca-certificates"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.1.0j-parallel_install_fix.patch #671602
 )
 
 src_prepare() {
-	# keep this in sync with app-misc/c_rehash
+	# keep this in sync with app-var/c_rehash
 	SSL_CNF_DIR="/etc/ssl"
 
 	# Make sure we only ever touch Makefile.org and avoid patching a file

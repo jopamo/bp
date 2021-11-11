@@ -12,7 +12,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="sys-devel/texinfo"
+DEPEND="app-build/texinfo"
 
 src_prepare() {
 	default

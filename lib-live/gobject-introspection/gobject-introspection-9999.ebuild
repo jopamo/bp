@@ -30,8 +30,8 @@ RDEPEND="
 "
 DEPEND="
 	>=dev-util/gtk-doc-am-1.19
-	sys-devel/bison
-	sys-devel/flex
+	app-build/bison
+	app-build/flex
 "
 
 filter-flags -Wl,-z,defs

@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="http"
 
-DEPEND="app-misc/hwloc"
+DEPEND="app-var/hwloc"
 
 src_prepare() {
 	cmake_src_prepare

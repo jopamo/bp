@@ -34,7 +34,7 @@ DEPEND="
 		)
 "
 BDEPEND="
-	sys-devel/autoconf-archive
+	app-build/autoconf-archive
 	dev-util/pkgconf
 "
 

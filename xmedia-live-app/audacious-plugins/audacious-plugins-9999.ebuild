@@ -45,7 +45,7 @@ DEPEND="
 		virtual/jack
 	)
 	libsamplerate? ( xmedia-live-lib/libsamplerate )
-	lirc? ( app-misc/lirc )
+	lirc? ( app-var/lirc )
 	mms? ( xmedia-live-lib/libmms )
 	modplug? ( xmedia-live-lib/libmodplug )
 	xgui-misc/mpg123

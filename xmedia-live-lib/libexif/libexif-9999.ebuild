@@ -14,11 +14,11 @@ SLOT="0"
 
 IUSE="doc nls static-libs"
 
-RDEPEND="nls? ( sys-devel/gettext )"
+RDEPEND="nls? ( app-build/gettext )"
 DEPEND="${RDEPEND}
 	dev-util/pkgconf
 	doc? ( app-text/doxygen )
-	nls? ( sys-devel/gettext )"
+	nls? ( app-build/gettext )"
 
 ECONF_SOURCE=${S}
 

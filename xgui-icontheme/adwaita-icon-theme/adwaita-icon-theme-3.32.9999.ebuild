@@ -17,7 +17,7 @@ DEPEND="
 	xgui-live-lib/gnome-common
 	xgui-live-lib/librsvg
 	xgui-live-lib/gtk+:3
-	sys-devel/gettext
+	app-build/gettext
 	dev-util/pkgconf
 "
 

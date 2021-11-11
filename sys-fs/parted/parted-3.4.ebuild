@@ -20,7 +20,7 @@ DEPEND="
 	sys-fs/e2fsprogs
 	device-mapper? ( sys-fs/lvm2 )
 	readline? ( lib-core/readline virtual/curses )
-	nls? ( sys-devel/gettext )
+	nls? ( app-build/gettext )
 "
 
 filter-flags -Wl,-z,defs -flto\=\*

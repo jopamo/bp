@@ -13,9 +13,9 @@ KEYWORDS="amd64 arm64"
 IUSE="static"
 
 DEPEND="
-	sys-devel/gnuconfig
-	sys-devel/autoconf
-	sys-devel/automake
+	app-build/gnuconfig
+	app-build/autoconf
+	app-build/automake
 	dev-perl/libintl-perl
 	app-compression/xz-utils
 "

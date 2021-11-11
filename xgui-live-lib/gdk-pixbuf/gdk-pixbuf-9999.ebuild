@@ -30,7 +30,7 @@ DEPEND="
 BDEPEND="
 	app-core/debianutils
 	dev-util/gtk-doc-am
-	sys-devel/gettext
+	app-build/gettext
 	dev-util/pkgconf
 	xgui-live-app/shared-mime-info
 "

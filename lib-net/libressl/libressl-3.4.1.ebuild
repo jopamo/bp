@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs test"
 
-PDEPEND="app-misc/ca-certificates"
+PDEPEND="app-var/ca-certificates"
 
 filter-flags -Wl,-z,defs
 append-ldflags -Wl,-z,noexecstack

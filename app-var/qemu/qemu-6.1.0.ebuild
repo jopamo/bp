@@ -182,12 +182,12 @@ SOFTMMU_TOOLS_DEPEND="
 BDEPEND="
 	$(python_gen_impl_dep)
 	dev-lang/perl
-	sys-devel/texinfo
+	app-build/texinfo
 	dev-util/pkgconf
-	gtk? ( nls? ( sys-devel/gettext ) )
+	gtk? ( nls? ( app-build/gettext ) )
 	test? (
 		lib-live/glib[utils]
-		sys-devel/bc
+		app-build/bc
 	)
 "
 CDEPEND="

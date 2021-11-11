@@ -579,10 +579,10 @@ if [[ ${ETYPE} == sources ]]; then
 	RDEPEND="!build? (
 		app-compression/cpio
 		dev-lang/perl
-		sys-devel/bc
-		sys-devel/bison
-		sys-devel/flex
-		sys-devel/make
+		app-build/bc
+		app-build/bison
+		app-build/flex
+		app-build/make
 		virtual/curses
 		lib-core/elfutils
 		dev-util/pkgconf

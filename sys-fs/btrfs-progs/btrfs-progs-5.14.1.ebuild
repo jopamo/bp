@@ -38,7 +38,7 @@ DEPEND="
 "
 
 if [[ ${PV} == 9999 ]]; then
-	DEPEND+=" sys-devel/gnuconfig"
+	DEPEND+=" app-build/gnuconfig"
 fi
 
 src_prepare() {

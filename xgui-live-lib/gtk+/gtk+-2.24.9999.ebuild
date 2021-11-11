@@ -46,7 +46,7 @@ DEPEND="${COMMON_DEPEND}
 	xgui-live-lib/at-spi2-atk
 	lib-live/gobject-introspection-common
 	dev-util/gtk-doc-am
-	sys-devel/gettext
+	app-build/gettext
 	dev-util/pkgconf
 	X? ( xinerama? ( xgui-live-app/xorgproto ) )"
 

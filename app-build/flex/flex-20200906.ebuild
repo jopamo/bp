@@ -18,9 +18,9 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs test"
 
 DEPEND="
-	sys-devel/m4
+	app-build/m4
 	app-compression/xz-utils
-	test? ( sys-devel/bison )
+	test? ( app-build/bison )
 "
 
 src_prepare() {

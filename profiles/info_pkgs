@@ -1,16 +1,16 @@
 ## These ATOMS are printed with a standard 'emerge info'
 
 app-core/bash
-sys-devel/autoconf
-sys-devel/automake
-sys-devel/binutils
-sys-devel/libtool
-sys-devel/make
+app-build/autoconf
+app-build/automake
+app-build/binutils
+app-build/libtool
+app-build/make
 dev-lang/python
 dev-lang/perl
 app-core/sandbox
 dev-util/ccache
-sys-devel/gcc
+app-build/gcc
 dev-util/cmake
 dev-util/pkgconf
 app-core/layout

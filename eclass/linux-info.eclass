@@ -924,11 +924,11 @@ linux-info_pkg_setup() {
 	if kernel_is 2 4; then
 		if [ "$( gcc-major-version )" -eq "4" ] ; then
 			echo
-			ewarn "Be warned !! >=sys-devel/gcc-4.0.0 isn't supported with"
+			ewarn "Be warned !! >=app-build/gcc-4.0.0 isn't supported with"
 			ewarn "linux-2.4 (or modules building against a linux-2.4 kernel)!"
 			echo
 			ewarn "Either switch to another gcc-version (via gcc-config) or use a"
-			ewarn "newer kernel that supports >=sys-devel/gcc-4."
+			ewarn "newer kernel that supports >=app-build/gcc-4."
 			echo
 			ewarn "Also, be aware that bug reports about gcc-4 not working"
 			ewarn "with linux-2.4 based ebuilds will be closed as INVALID!"

@@ -22,7 +22,7 @@ pkg_pretend() {
 	if tc-is-gcc ; then
 		if [[ $(gcc-major-version) == 4 && $(gcc-minor-version) -lt 9 \
 			|| $(gcc-major-version) -lt 4 ]] ; then
-				die "You need at least sys-devel/gcc-4.9"
+				die "You need at least app-build/gcc-4.9"
 		fi
 	fi
 }
@@ -58,7 +58,7 @@ src_configure() {
 	if tc-is-gcc ; then
 		if [[ $(gcc-major-version) == 4 && $(gcc-minor-version) -lt 9 \
 			|| $(gcc-major-version) -lt 4 ]] ; then
-				die "You need at least sys-devel/gcc-4.9"
+				die "You need at least app-build/gcc-4.9"
 		fi
 	fi
 

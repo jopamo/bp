@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 BDEPEND="
-	sys-devel/gettext
+	app-build/gettext
 	dev-util/intltool
 	dev-util/pkgconf
 	lib-live/glib

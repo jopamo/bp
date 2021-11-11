@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"
-RDEPEND="app-misc/ca-certificates"
+RDEPEND="app-var/ca-certificates"
 
 # tests connect to random remote sites
 RESTRICT="test"

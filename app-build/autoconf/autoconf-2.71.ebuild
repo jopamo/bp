@@ -11,7 +11,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	sys-devel/m4
+	app-build/m4
 	dev-lang/perl
 "
 

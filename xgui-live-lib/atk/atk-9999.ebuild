@@ -23,7 +23,7 @@ DEPEND="${RDEPEND}
 	>=dev-lang/perl-5
 	dev-util/gtk-doc-am
 	>=dev-util/pkgconf-0-r1
-	>=sys-devel/gettext-0.19.2"
+	>=app-build/gettext-0.19.2"
 
 src_configure() {
         local emesonargs=(

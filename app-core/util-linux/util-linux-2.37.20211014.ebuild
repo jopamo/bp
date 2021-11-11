@@ -41,7 +41,7 @@ DEPEND="
 
 BDEPEND="
 	dev-util/pkgconf
-	test? ( sys-devel/bc )
+	test? ( app-build/bc )
 	sys-kernel/linux-headers
 "
 

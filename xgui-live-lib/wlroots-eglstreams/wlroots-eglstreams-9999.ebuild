@@ -21,7 +21,7 @@ DEPEND="
 	xgui-live-lib/pixman
 	app-core/systemd[logind]
 	lib-core/libcap
-	app-misc/seatd
+	app-var/seatd
 "
 
 BDEPEND="

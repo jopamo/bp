@@ -21,7 +21,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	app-misc/c_rehash
+	app-var/c_rehash
 	app-core/debianutils
 "
 

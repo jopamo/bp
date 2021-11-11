@@ -44,7 +44,7 @@ DEPEND="${COMMON_DEPEND}
 	lib-live/glib
 	dev-util/gtk-doc-am
 	>=dev-util/intltool-0.40
-	>=sys-devel/gettext-0.17
+	>=app-build/gettext-0.17
 	sys-kernel/linux-headers
 	dev-util/pkgconf
 	lib-dev/newt

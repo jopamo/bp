@@ -33,7 +33,7 @@ DEPEND="
 PDEPEND="
 		app-net/iw
 		app-net/ethtool
-		app-misc/usbutils
+		app-var/usbutils
 		app-core/pciutils
 "
 

@@ -17,7 +17,7 @@ IUSE="static-libs"
 RESTRICT="test"
 
 BDEPEND="
-	sys-devel/libtool
+	app-build/libtool
 	dev-util/pkgconf
 "
 

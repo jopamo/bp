@@ -19,7 +19,7 @@ LICENSE="MIT"
 SLOT="0"
 
 DEPEND="
-	sys-devel/gettext
+	app-build/gettext
 	dev-util/intltool"
 
 src_prepare() {

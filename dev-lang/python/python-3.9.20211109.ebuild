@@ -37,11 +37,11 @@ DEPEND="
 	virtual/curses
 	lib-core/readline
 	lib-core/zlib
-	sys-devel/gettext
+	app-build/gettext
 	virtual/ssl
 "
 
-BDEPEND="sys-devel/autoconf-archive"
+BDEPEND="app-build/autoconf-archive"
 
 PYVER=${SLOT%/*}
 

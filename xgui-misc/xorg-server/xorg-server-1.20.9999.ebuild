@@ -64,7 +64,7 @@ CDEPEND="
 	)"
 
 DEPEND="${CDEPEND}
-	sys-devel/flex
+	app-build/flex
 	xgui-live-app/xorgproto
 "
 

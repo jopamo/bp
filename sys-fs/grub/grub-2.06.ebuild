@@ -19,7 +19,7 @@ IUSE+=" ${GRUB_ALL_PLATFORMS[@]/#/grub_platforms_}"
 
 DEPEND="
 	app-core/help2man
-	sys-devel/texinfo
+	app-build/texinfo
 	app-compression/xz-utils
 	virtual/curses
 	device-mapper? ( >=sys-fs/lvm2-2.02.45 )

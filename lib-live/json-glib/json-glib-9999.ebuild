@@ -18,7 +18,7 @@ DEPEND="${RDEPEND}
 	app-text/docbook-xsl-stylesheets
 	lib-core/libxslt
 	dev-util/gtk-doc-am
-	sys-devel/gettext
+	app-build/gettext
 	dev-util/pkgconf
 	dev-python/pygments
 "

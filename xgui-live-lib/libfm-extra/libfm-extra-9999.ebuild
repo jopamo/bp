@@ -17,7 +17,7 @@ DEPEND="
 	app-compression/xz-utils
 	>=dev-util/intltool-0.40
 	dev-util/pkgconf
-	sys-devel/gettext
+	app-build/gettext
 	dev-util/gtk-doc
 "
 

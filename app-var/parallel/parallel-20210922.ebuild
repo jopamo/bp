@@ -10,5 +10,5 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="dev-lang/perl:="
+RDEPEND="app-lang/perl:="
 DEPEND="${RDEPEND}"

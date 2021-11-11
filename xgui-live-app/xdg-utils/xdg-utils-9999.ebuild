@@ -18,7 +18,7 @@ RDEPEND="
 	xgui-live-app/xprop
 	xgui-live-app/xset
 "
-DEPEND=">=app-text/xmlto-0.0.26-r1[text(+)]"
+DEPEND=">=app-tex/xmlto-0.0.26-r1[text(+)]"
 
 RESTRICT="test" # Disabled because of sandbox violation(s)
 

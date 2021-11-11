@@ -8,7 +8,7 @@ rm -rf /tmp/bp_backup/bp/app-var/qemu
 rm -rf /tmp/bp_backup/bp/lib-dev/boost*
 rm -rf /tmp/bp_backup/bp/xgui-live-app/ethminer
 rm -rf /tmp/bp_backup/bp/app-build/gcc
-rm -rf /tmp/bp_backup/bp/app-text/ghostscript-gpl
+rm -rf /tmp/bp_backup/bp/app-tex/ghostscript-gpl
 
 find /tmp/bp_backup/bp -type f -name 'Manifest' -delete
 

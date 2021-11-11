@@ -1,5 +1,5 @@
 app-net/networkmanager -nss gnutls
 lib-core/libxml2 python
-sys-fs/cryptsetup -ssl
+app-fs/cryptsetup -ssl
 app-build/gcc lto
 app-core/systemd dhcp4 networkd

@@ -15,8 +15,8 @@ KEYWORDS="amd64 arm64"
 IUSE="+interlaced opencl static-libs pic"
 
 DEPEND="
-	dev-lang/nasm
-	opencl? ( dev-lang/perl )
+	app-lang/nasm
+	opencl? ( app-lang/perl )
 	xmedia-live-app/ffmpeg
 	xmedia-live-lib/l-smash
 	xmedia-live-lib/ffmpegsource

@@ -23,7 +23,7 @@ KEYWORDS="amd64 ~arm ~arm64 ~ppc ~ppc64 ~riscv ~x86"
 
 IUSE="clippy musl rls rustfmt"
 
-RDEPEND="app-eselect/eselect-rust"
+RDEPEND="app-eselec/eselect-rust"
 
 QA_PREBUILT="
 	opt/${P}/bin/.*

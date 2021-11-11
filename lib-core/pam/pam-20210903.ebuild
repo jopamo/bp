@@ -25,10 +25,10 @@ IUSE="debug"
 BDEPEND="
 	app-build/flex
 	app-var/w3m
-	app-text/docbook-xml-dtd:4.1
-	app-text/docbook-xml-dtd:4.3
-	app-text/docbook-xml-dtd:4.4
-	app-text/docbook-sgml-dtd:4.5
+	app-tex/docbook-xml-dtd:4.1
+	app-tex/docbook-xml-dtd:4.3
+	app-tex/docbook-xml-dtd:4.4
+	app-tex/docbook-sgml-dtd:4.5
 "
 
 DEPEND="lib-net/libtirpc"

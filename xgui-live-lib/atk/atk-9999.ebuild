@@ -20,7 +20,7 @@ RDEPEND="
 	introspection? ( lib-live/gobject-introspection )
 "
 DEPEND="${RDEPEND}
-	>=dev-lang/perl-5
+	>=app-lang/perl-5
 	app-dev/gtk-doc-am
 	>=app-dev/pkgconf-0-r1
 	>=app-build/gettext-0.19.2"

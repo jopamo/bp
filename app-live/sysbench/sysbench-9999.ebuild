@@ -12,7 +12,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="dev-lang/luajit"
+DEPEND="app-lang/luajit"
 
 src_prepare() {
 	default

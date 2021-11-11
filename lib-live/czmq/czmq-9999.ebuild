@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	app-text/xmlto
+	app-tex/xmlto
 	app-core/util-linux
 	lib-live/libzmq
 "

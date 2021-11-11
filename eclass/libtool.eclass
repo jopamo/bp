@@ -18,8 +18,8 @@ if [[ -z ${_LIBTOOL_ECLASS} ]]; then
 _LIBTOOL_ECLASS=1
 
 case ${EAPI:-0} in
-	5|6) DEPEND=">=app-portage/elt-patches-20170815" ;;
-	7|8) BDEPEND=">=app-portage/elt-patches-20170815" ;;
+	5|6) DEPEND=">=app-port/elt-patches-20170815" ;;
+	7|8) BDEPEND=">=app-port/elt-patches-20170815" ;;
 	*) die "${ECLASS}: EAPI ${EAPI} not supported" ;;
 esac
 
@@ -36,7 +36,7 @@ inherit toolchain-funcs
 #
 # The other options should be avoided in general unless you know what's going on.
 elibtoolize() {
-	type -P eltpatch &>/dev/null || die "eltpatch not found; is app-portage/elt-patches installed?"
+	type -P eltpatch &>/dev/null || die "eltpatch not found; is app-port/elt-patches installed?"
 
 	ELT_LOGDIR=${T} \
 	LD=$(tc-getLD) \

@@ -15,8 +15,8 @@ KEYWORDS="amd64 arm64"
 IUSE="dbus jpeg ldap pclm pdf png static-libs tiff"
 
 DEPEND="
-	app-text/poppler[cxx,jpeg?,lcms,tiff?,utils]
-	app-text/qpdf
+	app-tex/poppler[cxx,jpeg?,lcms,tiff?,utils]
+	app-tex/qpdf
 	lib-live/glib
 	fonts/fontconfig
 	xgui-misc/freetype:2
@@ -27,10 +27,10 @@ DEPEND="
 	dbus? ( app-core/dbus )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )
 	ldap? ( app-net/openldap )
-	pclm? ( app-text/qpdf )
-	pdf? ( app-text/mupdf )
+	pclm? ( app-tex/qpdf )
+	pdf? ( app-tex/mupdf )
 	png? ( xmedia-live-lib/libpng )
-	app-text/ghostscript-gpl[cups]
+	app-tex/ghostscript-gpl[cups]
 	tiff? ( xmedia-live-lib/tiff )
 	fonts/liberation-fonts
 "

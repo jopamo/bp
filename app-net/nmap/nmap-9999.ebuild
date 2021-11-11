@@ -18,7 +18,7 @@ DEPEND="
 	lib-dev/liblinear
 	lib-core/libpcre
 	lib-live/libpcap
-	dev-lang/lua
+	app-lang/lua
 	lib-live/libssh2[zlib]
 	lib-core/zlib
 	ssl? ( virtual/ssl )

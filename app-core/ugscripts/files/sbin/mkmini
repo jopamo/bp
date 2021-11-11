@@ -211,15 +211,15 @@ cp /var/cache/packages/app-var/ca-certificates/* .
 tar xvhf ca-certificates* --xattrs
 rm ca-certificates* || exit
 
-cp /var/cache/packages/sys-kernel/linux-headers/* .
+cp /var/cache/packages/app-kernel/linux-headers/* .
 tar xvhf linux-headers* --xattrs
 rm linux-headers* || exit
 
-cp /var/cache/packages/sys-fs/e2fsprogs/* .
+cp /var/cache/packages/app-fs/e2fsprogs/* .
 tar xvhf e2fsprogs* --xattrs
 rm e2fsprogs* || exit
 
-cp /var/cache/packages/sys-fs/btrfs-progs/* .
+cp /var/cache/packages/app-fs/btrfs-progs/* .
 tar xvhf btrfs-progs* --xattrs
 rm btrfs-progs* || exit
 
@@ -377,7 +377,7 @@ cp /var/cache/packages/app-net/nmap/* .
 tar xvhf nmap* --xattrs
 rm nmap* || exit
 
-cp /var/cache/packages/dev-lang/lua/* .
+cp /var/cache/packages/app-lang/lua/* .
 tar xvhf lua-* --xattrs
 rm lua-* || exit
 
@@ -394,7 +394,7 @@ tar xvhf libssh2* --xattrs
 rm libssh2* || exit
 
 #sshfs
-cp /var/cache/packages/sys-fs/fuse/* .
+cp /var/cache/packages/app-fs/fuse/* .
 tar xvhf fuse* --xattrs
 rm fuse* || exit
 
@@ -402,7 +402,7 @@ cp /var/cache/packages/lib-live/glib/* .
 tar xvhf glib* --xattrs
 rm glib* || exit
 
-cp /var/cache/packages/sys-fs/sshfs/* .
+cp /var/cache/packages/app-fs/sshfs/* .
 tar xvhf sshfs* --xattrs
 rm sshfs* || exit
 

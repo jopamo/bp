@@ -13,7 +13,7 @@ S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="openssl"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
 
 IUSE="static-libs test zlib"
 

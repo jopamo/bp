@@ -20,7 +20,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="systemd +wg-quick"
 
-BDEPEND="dev-util/pkgconf"
+BDEPEND="app-dev/pkgconf"
 DEPEND="
 	wg-quick? (
 		|| ( app-net/nftables app-net/iptables )

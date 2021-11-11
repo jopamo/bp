@@ -17,7 +17,7 @@ DEPEND="
 	app-core/util-linux
 	libedit? ( lib-core/libedit )
 "
-BDEPEND="dev-util/patchelf"
+BDEPEND="app-dev/patchelf"
 
 src_prepare() {
 	default

@@ -27,7 +27,7 @@ IUSE="dns kmod static-libs +udev zlib"
 
 DEPEND="
 	kmod? ( app-core/kmod
-			dev-util/pkgconf
+			app-dev/pkgconf
 		 )
 	zlib? ( >=lib-core/zlib-1.2.8-r1[static-libs(+)?] )
 "

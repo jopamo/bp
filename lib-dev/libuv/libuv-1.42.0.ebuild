@@ -18,7 +18,7 @@ RESTRICT="test"
 
 BDEPEND="
 	app-build/libtool
-	dev-util/pkgconf
+	app-dev/pkgconf
 "
 
 src_prepare() {

@@ -17,7 +17,7 @@ IUSE="static-libs"
 RDEPEND=">=xmedia-live-lib/libogg-1.3.0"
 DEPEND="${RDEPEND}
 	app-compression/xz-utils
-	dev-util/pkgconf"
+	app-dev/pkgconf"
 
 
 src_prepare() {

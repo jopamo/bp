@@ -585,7 +585,7 @@ if [[ ${ETYPE} == sources ]]; then
 		app-build/make
 		virtual/curses
 		lib-core/elfutils
-		dev-util/pkgconf
+		app-dev/pkgconf
 	)"
 
 	SLOT="${PVR}"

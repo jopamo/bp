@@ -119,7 +119,7 @@ ALL_DEPEND="
 	lib-live/glib[static-libs(+)]
 	lib-core/zlib[static-libs(+)]
 	python? ( ${PYTHON_DEPS} )
-	systemtap? ( dev-util/systemtap )
+	systemtap? ( app-dev/systemtap )
 	xattr? ( app-core/attr[static-libs(+)] )"
 
 # Dependencies required for qemu tools (qemu-nbd, qemu-img, qemu-io, ...)
@@ -183,7 +183,7 @@ BDEPEND="
 	$(python_gen_impl_dep)
 	dev-lang/perl
 	app-build/texinfo
-	dev-util/pkgconf
+	app-dev/pkgconf
 	gtk? ( nls? ( app-build/gettext ) )
 	test? (
 		lib-live/glib[utils]

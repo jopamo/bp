@@ -76,7 +76,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
-	dev-util/pkgconf
+	app-dev/pkgconf
 "
 
 filter-flags -Wl,-z,defs

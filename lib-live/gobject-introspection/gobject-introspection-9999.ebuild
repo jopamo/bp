@@ -25,11 +25,11 @@ RDEPEND="
 	>=lib-live/gobject-introspection-common-${PV}
 	lib-live/glib
 	lib-core/libffi
-	dev-util/pkgconf
+	app-dev/pkgconf
 	${PYTHON_DEPS}
 "
 DEPEND="
-	>=dev-util/gtk-doc-am-1.19
+	>=app-dev/gtk-doc-am-1.19
 	app-build/bison
 	app-build/flex
 "

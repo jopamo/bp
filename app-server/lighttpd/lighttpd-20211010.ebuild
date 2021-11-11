@@ -39,7 +39,7 @@ DEPEND="
 	xattr? ( app-core/attr )
 "
 
-BDEPEND="dev-util/pkgconf"
+BDEPEND="app-dev/pkgconf"
 
 filter-flags -Wl,-z,defs
 

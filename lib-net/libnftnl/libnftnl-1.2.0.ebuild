@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 DEPEND="lib-net/libmnl"
-BDEPEND="dev-util/pkgconf"
+BDEPEND="app-dev/pkgconf"
 
 pkg_setup() {
 	CONFIG_CHECK="~NF_TABLES"

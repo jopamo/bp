@@ -30,7 +30,7 @@ LIB_DEPEND="
 RDEPEND="${LIB_DEPEND}"
 DEPEND="${RDEPEND}
 	xmedia-live-lib/freeglut
-	dev-util/pkgconf
+	app-dev/pkgconf
 	static-libs? ( ${LIB_DEPEND} )
 	static? ( ${LIB_DEPEND//?}
 		app-compression/bzip2[static-libs]

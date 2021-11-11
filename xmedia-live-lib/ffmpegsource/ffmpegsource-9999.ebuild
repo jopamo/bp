@@ -16,7 +16,7 @@ DEPEND="
 	lib-core/zlib
 	xmedia-live-app/ffmpeg
 "
-BDEPEND="dev-util/pkgconf"
+BDEPEND="app-dev/pkgconf"
 
 src_prepare() {
 	mkdir -p "${S}/src/config"

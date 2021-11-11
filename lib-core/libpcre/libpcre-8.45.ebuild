@@ -22,7 +22,7 @@ DEPEND="
 	app-compression/bzip2
 	lib-core/zlib
 "
-BDEPEND="dev-util/pkgconf"
+BDEPEND="app-dev/pkgconf"
 
 src_prepare() {
 	default

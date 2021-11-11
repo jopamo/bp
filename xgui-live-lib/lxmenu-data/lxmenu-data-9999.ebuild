@@ -14,8 +14,8 @@ KEYWORDS="amd64 arm64"
 
 BDEPEND="
 	app-build/gettext
-	dev-util/intltool
-	dev-util/pkgconf
+	app-dev/intltool
+	app-dev/pkgconf
 	lib-live/glib
 "
 

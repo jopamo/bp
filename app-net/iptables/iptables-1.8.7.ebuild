@@ -25,7 +25,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	sys-kernel/linux-headers
-	dev-util/pkgconf
+	app-dev/pkgconf
 	nftables? (
 		app-build/flex
 		app-build/bison

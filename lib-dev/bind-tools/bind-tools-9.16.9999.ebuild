@@ -21,7 +21,7 @@ CDEPEND="
 	readline? ( lib-core/readline:0= )
 	lib-core/libseccomp"
 DEPEND="${CDEPEND}
-	dev-util/pkgconf"
+	app-dev/pkgconf"
 
 RESTRICT="test"
 

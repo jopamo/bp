@@ -16,7 +16,7 @@ IUSE="ipv6 static-libs"
 
 DEPEND="
 	app-compression/xz-utils
-	dev-util/pkgconf
+	app-dev/pkgconf
 "
 
 PATCHES=( "${FILESDIR}"/86529758570cef4c73fb9b9c4104fdc510f701ed.patch )

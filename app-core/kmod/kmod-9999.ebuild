@@ -25,8 +25,8 @@ IUSE="debug lzma ssl static-libs +tools zlib zstd"
 RESTRICT="test"
 
 BDEPEND="
-	dev-util/pkgconf
-	dev-util/gtk-doc-am
+	app-dev/pkgconf
+	app-dev/gtk-doc-am
 "
 DEPEND="
 	lzma? ( app-compression/xz-utils )

@@ -37,7 +37,7 @@ CDEPEND="
 		!dev-db/ctdb
 	)
 	cups? ( lib-print/cups )
-	debug? ( dev-util/lttng-ust )
+	debug? ( app-dev/lttng-ust )
 	dmapi? ( app-core/dmapi )
 	fam? ( virtual/fam )
 	gpg? ( app-crypt/gpgme )

@@ -54,7 +54,7 @@ DEPEND="
 "
 BDEPEND="
 	app-build/flex
-	dev-util/pkgconf
+	app-dev/pkgconf
 	app-build/bison
 	X? ( xgui-live-app/xorgproto )
 "

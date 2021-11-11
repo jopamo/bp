@@ -17,5 +17,5 @@ DEPEND="
 	lib-live/glib
 	app-net/openssh"
 
-BDEPEND="dev-util/pkgconf
+BDEPEND="app-dev/pkgconf
 	dev-python/docutils"

@@ -32,7 +32,7 @@ DEPEND="
 	X? ( xgui-live-lib/libXt xgui-live-lib/libXext )
 "
 
-BDEPEND="dev-util/pkgconf"
+BDEPEND="app-dev/pkgconf"
 
 filter-flags -Wl,-z,defs
 

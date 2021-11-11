@@ -25,7 +25,7 @@ DEPEND="
 	${RDEPEND}
 	app-build/flex
 	app-build/bison
-	dbus? ( dev-util/pkgconf )
+	dbus? ( app-dev/pkgconf )
 "
 
 src_prepare() {

@@ -40,7 +40,7 @@ RDEPEND="
 		)"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconf
+	app-dev/pkgconf
 	opengl? ( xmedia-live-lib/glu )
 	X? (
 		xgui-live-app/xorgproto

@@ -18,7 +18,7 @@ DEPEND="
 	>=lib-dev/libuv-1.0.0:=
 	>=app-net/curl-7.21.5
 	lib-core/zlib
-	dev-util/pkgconf"
+	app-dev/pkgconf"
 
 cmake_src_bootstrap() {
 	# Cleanup args to extract only JOBS.

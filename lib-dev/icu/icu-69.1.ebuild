@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug static-libs"
 
-DEPEND="dev-util/pkgconf"
+DEPEND="app-dev/pkgconf"
 
 S="${WORKDIR}/${PN}/source"
 

@@ -29,7 +29,7 @@ RDEPEND="
 	xgui-live-lib/libXext
 "
 
-BDEPEND="dev-util/lxqt-build-tools"
+BDEPEND="app-dev/lxqt-build-tools"
 
 src_install() {
 	cmake_src_install

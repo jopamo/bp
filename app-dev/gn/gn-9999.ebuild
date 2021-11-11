@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="vim-syntax"
 
 BDEPEND="${PYTHON_DEPS}
-	dev-util/ninja"
+	app-dev/ninja"
 
 src_configure() {
 	python_setup

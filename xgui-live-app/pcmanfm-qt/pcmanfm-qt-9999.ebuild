@@ -27,7 +27,7 @@ DEPEND="
 	xgui-live-lib/libfm
 	xgui-live-lib/libfm-qt
 	xgui-live-lib/libxcb
-	dev-util/intltool
+	app-dev/intltool
 "
 
 src_install() {

@@ -14,8 +14,8 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="dev-lang/nasm"
 BDEPEND="
-	dev-util/ninja
-	dev-util/cmake
+	app-dev/ninja
+	app-dev/cmake
 "
 
 append-flags -ffat-lto-objects

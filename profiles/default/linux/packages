@@ -35,6 +35,6 @@
 *app-net/iproute2
 *app-net/openssh
 *app-crypt/rng-tools
-*dev-util/patchelf
+*app-dev/patchelf
 *app-core/git
 *app-core/fakepackages

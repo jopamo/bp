@@ -31,7 +31,7 @@ REQUIRED_USE="musl? ( !gshadow !localed !userdb !utmp )"
 RESTRICT="!test? ( test )"
 
 DEPEND="
-	cryptsetup? ( sys-fs/cryptsetup )
+	cryptsetup? ( app-fs/cryptsetup )
 	gcrypt? ( lib-core/libgcrypt )
 	kmod? ( app-core/kmod )
 	logind? ( app-core/dbus )
@@ -41,8 +41,8 @@ DEPEND="
 	test? ( app-core/dbus )
 	tmpfilesd? ( app-core/dbus )
 	xkb? ( xgui-live-lib/libxkbcommon )
-	app-text/docbook-xml-dtd
-	app-text/docbook-xsl-stylesheets
+	app-tex/docbook-xml-dtd
+	app-tex/docbook-xsl-stylesheets
 	app-dev/gperf
 	app-dev/pkgconf
 	lib-core/libxslt

@@ -23,7 +23,7 @@ DEPEND="app-var/c_rehash"
 
 BDEPEND="
 	app-var/c_rehash
-	dev-lang/perl
+	app-lang/perl
 	test? (
 		app-core/diffutils
 		app-build/bc

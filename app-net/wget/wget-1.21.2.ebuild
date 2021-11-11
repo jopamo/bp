@@ -26,7 +26,7 @@ DEPEND="
 	static? ( ${LIB_DEPEND} )
 	test? (
 		${PYTHON_DEPS}
-		dev-lang/perl
+		app-lang/perl
 		)
 	libpsl? ( lib-net/libpsl )
 	nls? ( app-build/gettext )

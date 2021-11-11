@@ -104,7 +104,7 @@ EXPORT_FUNCTIONS pkg_setup
 #
 # It will cause the Python dependencies to look like:
 # @CODE
-# || ( dev-lang/python:X.Y[gdbm,ncurses(-)?] ... )
+# || ( app-lang/python:X.Y[gdbm,ncurses(-)?] ... )
 # @CODE
 
 # @ECLASS-VARIABLE: PYTHON_DEPS
@@ -122,8 +122,8 @@ EXPORT_FUNCTIONS pkg_setup
 #
 # Example value:
 # @CODE
-# || ( dev-lang/python:2.7[gdbm]
-# 	dev-lang/python:2.6[gdbm] )
+# || ( app-lang/python:2.7[gdbm]
+# 	app-lang/python:2.6[gdbm] )
 # @CODE
 
 # @ECLASS-VARIABLE: PYTHON_USEDEP
@@ -238,13 +238,13 @@ if [[ ! ${_PYTHON_ANY_R1} ]]; then
 # @CODE
 # || (
 #	(
-#		dev-lang/python:3.7
+#		app-lang/python:3.7
 #		dev-python/foo[python_single_target_python3_7(-)]
 #		|| ( dev-python/bar[python_targets_python3_7(-)
 #			dev-python/baz[python_targets_python3_7(-) )
 #	)
 #	(
-#		dev-lang/python:3.8
+#		app-lang/python:3.8
 #		dev-python/foo[python_single_target_python3_8(-)]
 #		|| ( dev-python/bar[python_targets_python3_8(-)]
 #			dev-python/baz[python_targets_python3_8(-)] )

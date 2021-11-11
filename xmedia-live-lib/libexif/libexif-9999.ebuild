@@ -17,7 +17,7 @@ IUSE="doc nls static-libs"
 RDEPEND="nls? ( app-build/gettext )"
 DEPEND="${RDEPEND}
 	app-dev/pkgconf
-	doc? ( app-text/doxygen )
+	doc? ( app-tex/doxygen )
 	nls? ( app-build/gettext )"
 
 ECONF_SOURCE=${S}

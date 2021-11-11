@@ -12,7 +12,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	app-build/m4
-	dev-lang/perl
+	app-lang/perl
 "
 
 src_install() {

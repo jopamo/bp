@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND="dev-lang/nasm"
+DEPEND="app-lang/nasm"
 
 src_configure() {
 	local mycmakeargs=(

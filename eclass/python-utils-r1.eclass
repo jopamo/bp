@@ -413,9 +413,9 @@ _python_export() {
 				local d
 				case ${impl} in
 					python2.7)
-						PYTHON_PKG_DEP='>=dev-lang/python-2.7.5-r2:2.7';;
+						PYTHON_PKG_DEP='>=app-lang/python-2.7.5-r2:2.7';;
 					python*)
-						PYTHON_PKG_DEP="dev-lang/python:${impl#python}";;
+						PYTHON_PKG_DEP="app-lang/python:${impl#python}";;
 					pypy)
 						PYTHON_PKG_DEP='>=dev-python/pypy-7.3.0:0=';;
 					pypy3)

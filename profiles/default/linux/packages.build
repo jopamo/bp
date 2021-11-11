@@ -35,7 +35,7 @@ app-build/make
 app-build/patch
 virtual/editor
 virtual/libc
-sys-kernel/linux-headers
+app-kernel/linux-headers
 app-dev/pkgconf
 app-core/shadow
 app-core/which

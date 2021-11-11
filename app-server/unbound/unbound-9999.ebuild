@@ -30,7 +30,7 @@ DEPEND="
 	virtual/ssl
 	dnscrypt? ( lib-live/libsodium )
 	python? ( ${PYTHON_DEPS}
-			dev-lang/swig )"
+			app-lang/swig )"
 
 S=${WORKDIR}/${MY_P}
 

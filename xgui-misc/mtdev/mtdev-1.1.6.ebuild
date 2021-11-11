@@ -12,7 +12,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND="sys-kernel/linux-headers"
+DEPEND="app-kernel/linux-headers"
 
 src_configure() {
 	econf $(use_enable static-libs static)

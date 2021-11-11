@@ -129,7 +129,7 @@ dxr3
 ipmi
 
 # Alexandre Rostovtsev <tetromino@gentoo.org> (09 Dec 2012)
-# dev-lang/orc is useful only for some specific arches (amd64/x86/arm/...)
+# app-lang/orc is useful only for some specific arches (amd64/x86/arm/...)
 orc
 
 # Mike Gilbert <floppym@gentoo.org> (02 Jan 2013)

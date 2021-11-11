@@ -18,7 +18,7 @@
 *app-var/nano
 *virtual/libc
 *app-build/gcc
-*sys-kernel/linux-headers
+*app-kernel/linux-headers
 *app-core/portage
 *app-core/shadow
 *app-var/pax-utils
@@ -29,9 +29,9 @@
 *app-core/which
 *app-compression/unzip
 *app-core/util-linux
-*app-portage/eix
-*app-portage/smart-live-rebuild
-*app-portage/portage-utils
+*app-port/eix
+*app-port/smart-live-rebuild
+*app-port/portage-utils
 *app-net/iproute2
 *app-net/openssh
 *app-crypt/rng-tools

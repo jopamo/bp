@@ -116,7 +116,7 @@ EXPORT_FUNCTIONS pkg_setup
 #
 # It will cause the Python dependencies to look like:
 # @CODE
-# python_single_target_pythonX_Y? ( dev-lang/python:X.Y[gdbm,ncurses(-)?] )
+# python_single_target_pythonX_Y? ( app-lang/python:X.Y[gdbm,ncurses(-)?] )
 # @CODE
 
 # @ECLASS-VARIABLE: PYTHON_DEPS
@@ -136,8 +136,8 @@ EXPORT_FUNCTIONS pkg_setup
 #
 # Example value:
 # @CODE
-# dev-lang/python-exec:=
-# python_single_target_python2_7? ( dev-lang/python:2.7[gdbm] )
+# app-lang/python-exec:=
+# python_single_target_python2_7? ( app-lang/python:2.7[gdbm] )
 # python_single_target_pypy? ( dev-python/pypy[gdbm] )
 # @CODE
 
@@ -225,7 +225,7 @@ _python_single_set_globals() {
 		# but if new targets were added, we may need to force a rebuild
 		deps+="python_single_target_${i}? (
 			${PYTHON_PKG_DEP}
-			>=dev-lang/python-exec-2:=[python_targets_${i}]
+			>=app-lang/python-exec-2:=[python_targets_${i}]
 		) "
 	done
 
@@ -431,7 +431,7 @@ python_gen_cond_dep() {
 # @CODE
 # RDEPEND="foo? (
 #   python_single_target_python2_7? (
-#     dev-lang/python:2.7[xml(+)] )
+#     app-lang/python:2.7[xml(+)] )
 #	python_single_target_pypy? (
 #     dev-python/pypy[xml(+)] ) )"
 # @CODE

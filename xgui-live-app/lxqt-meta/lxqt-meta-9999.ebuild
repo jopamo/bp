@@ -11,7 +11,7 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	fonts/liberation-fonts
-	sys-fs/ncdu
+	app-fs/ncdu
 	xgui-icontheme/dracula-theme
 	xgui-live-app/arqiver
 	xgui-live-app/featherpad

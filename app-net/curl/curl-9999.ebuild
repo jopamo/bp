@@ -29,7 +29,7 @@ DEPEND="
 		zstd? ( app-compression/zstd )
 		test? (
 			app-core/diffutils
-			dev-lang/perl )
+			app-lang/perl )
 "
 
 PATCHES=( "${FILESDIR}"/curl-respect-cflags-3.patch )

@@ -30,7 +30,7 @@ RDEPEND="
 	xgui-live-lib/gdk-pixbuf
 	lib-dev/nss
 	xgui-live-lib/gtk+:3
-	app-text/hunspell
+	app-tex/hunspell
 	xgui-live-lib/libX11
 	xgui-live-lib/libXcomposite
 	xgui-live-lib/libXdamage

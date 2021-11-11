@@ -12,7 +12,7 @@ LICENSE="GPL-2 FDL-1.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND=">=dev-lang/perl-5.18"
+RDEPEND=">=app-lang/perl-5.18"
 DEPEND="${RDEPEND}
 	app-dev/pkgconf
 "

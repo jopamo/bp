@@ -19,7 +19,7 @@ IUSE="debug nvidia +x264 +x265 vaapi vdpau static-libs +openssl
 	+lame +libass +libdav1d +vorbis"
 
 DEPEND="
-	dev-lang/nasm
+	app-lang/nasm
 	xmedia-live-lib/libass
 	lame? ( xmedia-live-app/lame )
 	vorbis? ( xmedia-live-lib/libvorbis )

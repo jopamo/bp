@@ -12,7 +12,7 @@ LICENSE="Oracle-BCLA-JavaSE"
 SLOT="0"
 KEYWORDS="amd64"
 
-DEPEND="!dev-lang/openjdk-jre"
+DEPEND="!app-lang/openjdk-jre"
 
 RESTRICT="preserve-libs strip"
 

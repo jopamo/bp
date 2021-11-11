@@ -12,7 +12,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="dev-lang/nasm"
+DEPEND="app-lang/nasm"
 BDEPEND="
 	app-dev/ninja
 	app-dev/cmake

@@ -134,7 +134,7 @@ SOFTMMU_TOOLS_DEPEND="
 	caps? ( lib-core/libcap-ng[static-libs(+)] )
 	curl? ( app-net/curl[static-libs(+)] )
 	fdt? ( app-core/dtc[static-libs(+)] )
-	fuse? ( sys-fs/fuse:3[static-libs(+)] )
+	fuse? ( app-fs/fuse:3[static-libs(+)] )
 	gnutls? (
 		lib-core/nettle[static-libs(+)]
 		net-libs/gnutls[static-libs(+)]
@@ -148,7 +148,7 @@ SOFTMMU_TOOLS_DEPEND="
 	jemalloc? ( lib-dev/jemalloc )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo[static-libs(+)] )
 	lzo? ( lib-dev/lzo[static-libs(+)] )
-	multipath? ( sys-fs/multipath-tools )
+	multipath? ( app-fs/multipath-tools )
 	ncurses? (
 		virtual/curses[static-libs(+)]
 	)
@@ -175,13 +175,13 @@ SOFTMMU_TOOLS_DEPEND="
 	virgl? ( xmedia-live-lib/virglrenderer[static-libs(+)] )
 	virtfs? ( lib-core/libcap )
 	xen? ( app-emulation/xen-tools:= )
-	xfs? ( sys-fs/xfsprogs[static-libs(+)] )
+	xfs? ( app-fs/xfsprogs[static-libs(+)] )
 	zstd? ( app-compression/zstd[static-libs(+)] )
 "
 
 BDEPEND="
 	$(python_gen_impl_dep)
-	dev-lang/perl
+	app-lang/perl
 	app-build/texinfo
 	app-dev/pkgconf
 	gtk? ( nls? ( app-build/gettext ) )
@@ -197,7 +197,7 @@ CDEPEND="
 	)
 "
 DEPEND="${CDEPEND}
-	sys-kernel/linux-headers
+	app-kernel/linux-headers
 	static? (
 		${ALL_DEPEND}
 		${SOFTMMU_TOOLS_DEPEND}

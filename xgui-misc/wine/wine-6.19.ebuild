@@ -41,7 +41,7 @@ DEPEND="
 		xmedia-live-lib/mesa
 	)
 	pcap? ( lib-net/libpcap )
-	perl? (	dev-lang/perl )
+	perl? (	app-lang/perl )
 	png? ( xmedia-live-lib/libpng )
 	pulseaudio? ( xgui-misc/pulseaudio )
 	samba? ( app-server/samba[winbind] )

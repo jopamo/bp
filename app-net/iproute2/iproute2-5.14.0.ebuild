@@ -18,7 +18,7 @@ DEPEND="
 	app-compression/xz-utils
 	app-build/bison
 	app-build/flex
-	sys-kernel/linux-headers
+	app-kernel/linux-headers
 	caps? ( lib-core/libcap )
 	iptables? ( app-net/iptables )
 	libbsd? ( lib-dev/libbsd )

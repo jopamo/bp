@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 DEPEND="
-	dev-lang/tcl
+	app-lang/tcl
 	lib-core/readline
 	lib-core/zlib
 "

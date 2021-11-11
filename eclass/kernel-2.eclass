@@ -578,7 +578,7 @@ if [[ ${ETYPE} == sources ]]; then
 	BDEPEND="!build? ( app-core/sed )"
 	RDEPEND="!build? (
 		app-compression/cpio
-		dev-lang/perl
+		app-lang/perl
 		app-build/bc
 		app-build/bison
 		app-build/flex

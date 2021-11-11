@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="nls static"
 
 RDEPEND="
-	dev-lang/perl
+	app-lang/perl
 	nls? ( app-build/gettext )"
 
 DEPEND="${RDEPEND}

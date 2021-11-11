@@ -25,7 +25,7 @@ IUSE="+jitterentropy nistbeacon systemd"
 DEPEND="
 	app-net/curl
 	jitterentropy? ( app-crypt/jitterentropy )
-	sys-fs/sysfsutils
+	app-fs/sysfsutils
 	lib-core/jansson
 "
 

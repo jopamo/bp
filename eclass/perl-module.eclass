@@ -40,7 +40,7 @@ esac
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # This variable controls whether a runtime and build time dependency on
-# dev-lang/perl is automatically added by the eclass. It defaults to yes.
+# app-lang/perl is automatically added by the eclass. It defaults to yes.
 # Set to no to disable, set to noslotop to add a perl dependency without
 # slot operator (EAPI=6). All packages installing into the vendor_perl
 # path must use yes here. (EAPI=8 and later) Also adds a test useflag,
@@ -56,10 +56,10 @@ case ${EAPI:-0} in
 		yes)
 			case "${GENTOO_DEPEND_ON_PERL_SUBSLOT:-yes}" in
 			yes)
-				DEPEND="dev-lang/perl:=[-build(-)]"
+				DEPEND="app-lang/perl:=[-build(-)]"
 				;;
 			*)
-				DEPEND="dev-lang/perl[-build(-)]"
+				DEPEND="app-lang/perl[-build(-)]"
 				;;
 			esac
 			RDEPEND="${DEPEND}"
@@ -84,12 +84,12 @@ case ${EAPI:-0} in
 
 		case "${GENTOO_DEPEND_ON_PERL:-yes}" in
 			yes)
-				DEPEND="dev-lang/perl"
-				RDEPEND="dev-lang/perl:="
+				DEPEND="app-lang/perl"
+				RDEPEND="app-lang/perl:="
 				;;
 			noslotop)
-				DEPEND="dev-lang/perl"
-				RDEPEND="dev-lang/perl"
+				DEPEND="app-lang/perl"
+				RDEPEND="app-lang/perl"
 				;;
 		esac
 
@@ -111,14 +111,14 @@ case ${EAPI:-0} in
 
 		case "${GENTOO_DEPEND_ON_PERL:-yes}" in
 			yes)
-				DEPEND="dev-lang/perl"
-				BDEPEND="dev-lang/perl"
-				RDEPEND="dev-lang/perl:="
+				DEPEND="app-lang/perl"
+				BDEPEND="app-lang/perl"
+				RDEPEND="app-lang/perl:="
 				;;
 			noslotop)
-				DEPEND="dev-lang/perl"
-				BDEPEND="dev-lang/perl"
-				RDEPEND="dev-lang/perl"
+				DEPEND="app-lang/perl"
+				BDEPEND="app-lang/perl"
+				RDEPEND="app-lang/perl"
 				;;
 		esac
 
@@ -138,17 +138,17 @@ case ${EAPI:-0} in
 
 		case "${GENTOO_DEPEND_ON_PERL:-yes}" in
 			yes|noslotop)
-				DEPEND="dev-lang/perl"
-				BDEPEND="dev-lang/perl
+				DEPEND="app-lang/perl"
+				BDEPEND="app-lang/perl
 					 test? ( virtual/perl-Test-Simple )"
 				IUSE="test"
 				RESTRICT="!test? ( test )"
 				;;&
 			yes)
-				RDEPEND="dev-lang/perl:="
+				RDEPEND="app-lang/perl:="
 				;;
 			noslotop)
-				RDEPEND="dev-lang/perl"
+				RDEPEND="app-lang/perl"
 				;;
 		esac
 

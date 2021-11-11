@@ -27,7 +27,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	python? ( dev-lang/swig )
+	python? ( app-lang/swig )
 	app-build/bison
 	app-build/flex
 "

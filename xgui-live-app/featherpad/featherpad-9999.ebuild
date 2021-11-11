@@ -16,7 +16,7 @@ DEPEND="
 	xgui-live-lib/qtbase
 	xgui-live-lib/qtsvg
 	xgui-live-lib/qtx11extras
-	app-text/hunspell
+	app-tex/hunspell
 "
 src_configure() {
 	eqmake5 fp.pro

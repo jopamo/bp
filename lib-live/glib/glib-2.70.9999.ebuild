@@ -22,8 +22,8 @@ RDEPEND="
 "
 DEPEND="
 	lib-core/libxslt
-	app-text/docbook-xml-dtd
-	app-text/docbook-xsl-stylesheets
+	app-tex/docbook-xml-dtd
+	app-tex/docbook-xsl-stylesheets
 "
 
 src_configure() {

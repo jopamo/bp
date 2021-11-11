@@ -268,7 +268,7 @@ DHCP=ipv4' > "${ED}"/etc/systemd/network/ipv4dhcp.network
 
 	#these groups are currently unused
 	for x in cdrom dialout render sgx tape ; do
-		sed -i "/${x}/d" "${ED}"/usr/lib/sysusers.d/basic.conf || die
+		sed -i "/${x}/d" "${ED}"/usr/lib/sysusers.d/basic.conf
 		sed -i "/${x}/d" "${ED}"/usr/lib/udev/rules.d/50-udev-default.rules || die
 	done
 

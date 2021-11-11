@@ -21,7 +21,7 @@ SLOT="0"
 RDEPEND="xgui-live-lib/libX11
 	xgui-live-lib/libxkbfile"
 DEPEND="${RDEPEND}
-	sys-devel/bison"
+	app-build/bison"
 
 src_prepare() {
 	eautoreconf

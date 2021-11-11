@@ -19,7 +19,7 @@ DEPEND="
 	app-compression/xz-utils
 "
 BDEPEND="
-	sys-devel/gettext
+	app-build/gettext
 	dev-util/pkgconf
 "
 

@@ -26,8 +26,8 @@ DEPEND="
 "
 
 BDEPEND="
-	sys-devel/autoconf
-	sys-devel/gettext
+	app-build/autoconf
+	app-build/gettext
 "
 
 src_configure() {

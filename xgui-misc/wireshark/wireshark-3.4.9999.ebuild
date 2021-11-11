@@ -58,8 +58,8 @@ CDEPEND="
 DEPEND="
 	${CDEPEND}
 	dev-lang/perl
-	sys-devel/bison
-	sys-devel/flex
+	app-build/bison
+	app-build/flex
 	dev-util/pkgconf
 "
 

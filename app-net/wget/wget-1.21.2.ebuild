@@ -29,7 +29,7 @@ DEPEND="
 		dev-lang/perl
 		)
 	libpsl? ( lib-net/libpsl )
-	nls? ( sys-devel/gettext )
+	nls? ( app-build/gettext )
 	virtual/ssl
 "
 

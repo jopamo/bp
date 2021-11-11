@@ -20,7 +20,7 @@ KEYWORDS="amd64"
 RDEPEND="
 	xgui-live-lib/at-spi2-atk
 	app-compression/bzip2
-	app-misc/ca-certificates
+	app-var/ca-certificates
 	xgui-live-lib/atk
 	xgui-live-lib/libxkbcommon
 	lib-core/expat

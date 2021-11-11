@@ -24,8 +24,8 @@ SLOT="0"
 IUSE="caps debug nscd profile systemd systemtap static-libs +static-pie tmpfilesd"
 
 BDEPEND="
-	sys-devel/gcc
-	sys-devel/make
+	app-build/gcc
+	app-build/make
 "
 DEPEND="
 	sys-kernel/linux-headers

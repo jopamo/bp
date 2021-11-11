@@ -14,8 +14,8 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="dev-lang/perl"
 BDEPEND="
-	sys-devel/autoconf
-	sys-devel/gnuconfig
+	app-build/autoconf
+	app-build/gnuconfig
 	app-core/help2man
 "
 

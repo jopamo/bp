@@ -16,11 +16,11 @@ IUSE="nls static"
 
 RDEPEND="
 	dev-lang/perl
-	nls? ( sys-devel/gettext )"
+	nls? ( app-build/gettext )"
 
 DEPEND="${RDEPEND}
 	app-compression/xz-utils
-	nls? ( >=sys-devel/gettext-0.19.6 )"
+	nls? ( >=app-build/gettext-0.19.6 )"
 
 src_configure() {
 	use static && append-ldflags -static

@@ -19,7 +19,7 @@ DEPEND="
 BDEPEND="
 	dev-util/gtk-doc-am
 	dev-util/intltool
-	sys-devel/gettext
+	app-build/gettext
 	dev-util/pkgconf
 "
 

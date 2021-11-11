@@ -23,8 +23,8 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	sys-devel/flex
-	sys-devel/bison
+	app-build/flex
+	app-build/bison
 	dbus? ( dev-util/pkgconf )
 "
 

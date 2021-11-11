@@ -23,7 +23,7 @@ DEPEND="
 	>=lib-core/libgpg-error-1.17
 	caps? ( lib-core/libcap )
 "
-BDEPEND="sys-devel/gettext
+BDEPEND="app-build/gettext
 	dev-util/pkgconf"
 
 append-cxxflags -std=gnu++11

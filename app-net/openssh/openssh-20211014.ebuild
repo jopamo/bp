@@ -34,7 +34,7 @@ DEPEND="
 BDEPEND="
 	dev-util/pkgconf
 	sys-kernel/linux-headers
-	sys-devel/autoconf
+	app-build/autoconf
 "
 
 src_prepare() {

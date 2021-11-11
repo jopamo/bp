@@ -27,8 +27,8 @@ DEPEND="
 	lib-dev/oniguruma
 	lib-core/gdbm
 	app-core/acl
-	sys-devel/bison
-	sys-devel/gettext
+	app-build/bison
+	app-build/gettext
 	virtual/ssl
 "
 

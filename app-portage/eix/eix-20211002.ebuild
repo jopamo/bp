@@ -18,9 +18,9 @@ KEYWORDS="amd64 arm64"
 IUSE="debug +dep +jumbo-build +required-use sqlite swap-remote tmpfilesd tools"
 
 DEPEND="
-	app-misc/push
-	app-misc/quoter
-	sys-devel/gettext
+	app-var/push
+	app-var/quoter
+	app-build/gettext
 	sqlite? ( lib-core/sqlite )
 "
 

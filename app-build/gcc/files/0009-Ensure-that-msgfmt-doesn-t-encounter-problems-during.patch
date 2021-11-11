@@ -6,7 +6,7 @@ Subject: [PATCH] Ensure that msgfmt doesn't encounter problems during gcc
 
 Solves error messages like the following:
 
-msgfmt: /var/tmp/portage/sys-devel/gcc-4.1.2/work/build/./gcc/libgcc_s.so.1: version `GCC_4.2.0' not found (required by /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.3/libstdc++.so.6)
+msgfmt: /var/tmp/portage/app-build/gcc-4.1.2/work/build/./gcc/libgcc_s.so.1: version `GCC_4.2.0' not found (required by /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.3/libstdc++.so.6)
 
 The libgcc_s.so used during build doesn't satisfy the needs of the
 libstdc++.so that msgfmt is linked against. On the other hand, msgfmt

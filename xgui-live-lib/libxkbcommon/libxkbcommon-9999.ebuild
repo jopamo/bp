@@ -20,7 +20,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="wayland X static-libs"
 
-DEPEND="sys-devel/bison
+DEPEND="app-build/bison
 	X? ( xgui-live-app/xorgproto )"
 RDEPEND="X? ( xgui-live-lib/libxcb[xkb] )"
 

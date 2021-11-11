@@ -67,8 +67,8 @@ sys-apps/texinfo-9999
 sys-apps/util-linux-9999
 sys-auth/pambase-9999
 sys-block/thin-provisioning-tools-9999
-sys-devel/automake-wrapper-9999
-sys-devel/binutils-config-5.4
+app-build/automake-wrapper-9999
+app-build/binutils-config-5.4
 sys-kernel/installkernel-gentoo-3
 sys-libs/binutils-libs-2.37_p1
 sys-libs/gdbm-1.21

@@ -20,12 +20,12 @@ IUSE="debug dlang golang +isl +lto sanitize +vtv zstd"
 DEPEND="
 	lib-core/mpc
 	lib-core/zlib
-	sys-devel/binutils
+	app-build/binutils
 	isl? ( lib-core/isl )
 	zstd? ( app-compression/zstd )
 "
 BDEPEND="
-	sys-devel/make
+	app-build/make
 	dev-util/patchelf
 "
 

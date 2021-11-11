@@ -21,8 +21,8 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 DEPEND="
-	sys-devel/bison
-	sys-devel/flex
+	app-build/bison
+	app-build/flex
 "
 
 src_prepare() {

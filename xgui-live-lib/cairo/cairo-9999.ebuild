@@ -39,7 +39,7 @@ DEPEND="
 "
 BDEPEND="
 	dev-util/pkgconf
-	sys-devel/libtool
+	app-build/libtool
 	X? ( xgui-live-app/xorgproto )
 "
 

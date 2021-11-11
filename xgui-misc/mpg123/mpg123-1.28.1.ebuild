@@ -19,7 +19,7 @@ DEPEND="
 	xgui-misc/pulseaudio"
 
 BDEPEND="
-	sys-devel/libtool
+	app-build/libtool
 	dev-util/pkgconf"
 
 append-cflags -D_GNU_SOURCE

@@ -39,10 +39,10 @@ inherit gnuconfig libtool
 # Do you want libtool?  Valid values here are "latest" and "none".
 : ${WANT_LIBTOOL:=latest}
 
-DEPEND="sys-devel/automake
-		sys-devel/autoconf"
+DEPEND="app-build/automake
+		app-build/autoconf"
 
-_libtool_atom=">=sys-devel/libtool-2.4"
+_libtool_atom=">=app-build/libtool-2.4"
 if [[ -n ${WANT_LIBTOOL} ]] ; then
 	case ${WANT_LIBTOOL} in
 		none)   _libtool_atom="" ;;

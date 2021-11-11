@@ -18,7 +18,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="app-misc/eselect"
+RDEPEND="app-var/eselect"
 
 src_prepare() {
 	default

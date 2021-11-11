@@ -18,8 +18,8 @@ IUSE="static-libs systemd"
 RDEPEND="dev-lang/perl"
 
 DEPEND="
-	sys-devel/bison
-	sys-devel/flex"
+	app-build/bison
+	app-build/flex"
 
 CONFIG_CHECK="~HWMON ~I2C_CHARDEV ~I2C"
 WARNING_HWMON="${PN} requires CONFIG_HWMON to be enabled for use."

@@ -663,7 +663,7 @@ index 65c40de4c8..4ef9a0c6c8 100644
 @@ -22,6 +22,7 @@
  #include "sysexits.h"
  #include "udev-builtin.h"
- #include "udev-util.h"
+ #include "uapp-dev.h"
 +#include "missing_stdlib.h"
  
  _printf_(2,3)
@@ -673,7 +673,7 @@ index b28089be71..a7e2232299 100644
 --- a/src/udev/udev-event.c
 +++ b/src/udev/udev-event.c
 @@ -34,6 +34,7 @@
- #include "udev-util.h"
+ #include "uapp-dev.h"
  #include "udev-watch.h"
  #include "user-util.h"
 +#include "missing_stdlib.h"
@@ -685,7 +685,7 @@ index bf997fc0ed..e3f5f1f2e2 100644
 --- a/src/udev/udev-rules.c
 +++ b/src/udev/udev-rules.c
 @@ -33,6 +33,7 @@
- #include "udev-util.h"
+ #include "uapp-dev.h"
  #include "user-util.h"
  #include "virt.h"
 +#include "missing_stdlib.h"

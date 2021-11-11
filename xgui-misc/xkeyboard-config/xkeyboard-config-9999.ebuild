@@ -20,7 +20,7 @@ SLOT="0"
 
 DEPEND="
 	app-build/gettext
-	dev-util/intltool"
+	app-dev/intltool"
 
 src_prepare() {
 	eautoreconf

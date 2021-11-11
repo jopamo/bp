@@ -25,7 +25,7 @@ DEPEND="
 	xml? ( lib-core/libxml2 )
 "
 
-BDEPEND="dev-util/pkgconf"
+BDEPEND="app-dev/pkgconf"
 
 
 

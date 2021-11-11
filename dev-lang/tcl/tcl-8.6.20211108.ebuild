@@ -22,7 +22,7 @@ fi
 LICENSE="tcltk"
 SLOT="0"
 
-BDEPEND="dev-util/patchelf"
+BDEPEND="app-dev/patchelf"
 
 src_prepare() {
 	eautoreconf

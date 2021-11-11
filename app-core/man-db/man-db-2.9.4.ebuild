@@ -21,7 +21,7 @@ DEPEND="
 	app-core/groff
 	zlib? ( lib-core/zlib )
 "
-BDEPEND="dev-util/pkgconf"
+BDEPEND="app-dev/pkgconf"
 
 filter-flags -Wl,-z,defs
 

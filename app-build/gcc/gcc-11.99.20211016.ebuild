@@ -26,7 +26,7 @@ DEPEND="
 "
 BDEPEND="
 	app-build/make
-	dev-util/patchelf
+	app-dev/patchelf
 "
 
 PATCHES=(

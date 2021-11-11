@@ -39,7 +39,7 @@ REQUIRED_USE="
 
 DEPEND="
 	xmedia-live-app/ffmpeg
-	dev-util/vulkan-headers
+	app-dev/vulkan-headers
 	xmedia-live-lib/libass
 	alsa? ( xgui-misc/alsa-lib )
 	archive? ( app-compression/libarchive )

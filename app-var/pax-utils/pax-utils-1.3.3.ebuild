@@ -18,8 +18,8 @@ IUSE="caps debug python seccomp"
 DEPEND="caps? ( >=lib-core/libcap-2.24 )
 		python? ( dev-python/pyelftools )
 		seccomp? ( lib-core/libseccomp )
-		caps? ( dev-util/pkgconf )
-		seccomp? ( dev-util/pkgconf )
+		caps? ( app-dev/pkgconf )
+		seccomp? ( app-dev/pkgconf )
 		app-compression/xz-utils"
 
 append-flags -fno-strict-aliasing

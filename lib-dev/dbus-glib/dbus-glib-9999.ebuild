@@ -21,8 +21,8 @@ DEPEND="
 "
 
 BDEPEND="
-	dev-util/gtk-doc
-	dev-util/pkgconf
+	app-dev/gtk-doc
+	app-dev/pkgconf
 "
 
 src_prepare() {

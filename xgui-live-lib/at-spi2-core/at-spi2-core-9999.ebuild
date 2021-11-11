@@ -17,10 +17,10 @@ DEPEND="
 	app-live/dbus-broker
 "
 BDEPEND="
-	dev-util/gtk-doc-am
-	dev-util/intltool
+	app-dev/gtk-doc-am
+	app-dev/intltool
 	app-build/gettext
-	dev-util/pkgconf
+	app-dev/pkgconf
 "
 
 src_configure() {

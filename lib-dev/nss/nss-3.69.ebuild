@@ -19,7 +19,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="utils static-libs"
 
-DEPEND="dev-util/pkgconf
+DEPEND="app-dev/pkgconf
 		lib-dev/nspr
 		>=lib-core/sqlite-3.8.2
 		>=lib-core/zlib-1.2.8-r1"

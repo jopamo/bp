@@ -27,4 +27,4 @@ DEPEND="
 	xgui-live-lib/pango
 "
 
-BDEPEND="dev-util/pkgconf"
+BDEPEND="app-dev/pkgconf"

@@ -30,8 +30,8 @@ DEPEND="
 "
 
 BDEPEND="
-	dev-util/pkgconf
-	dev-util/lxqt-build-tools
+	app-dev/pkgconf
+	app-dev/lxqt-build-tools
 "
 
 src_install() {

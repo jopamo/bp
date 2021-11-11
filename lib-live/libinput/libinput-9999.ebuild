@@ -23,7 +23,7 @@ DEPEND="
 	xgui-misc/mtdev
 "
 
-BDEPEND="dev-util/pkgconf"
+BDEPEND="app-dev/pkgconf"
 
 src_configure() {
 	local emesonargs=(

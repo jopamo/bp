@@ -22,7 +22,7 @@ IUSE="nls pam test"
 RDEPEND="pam? ( lib-core/pam )
 	app-compression/pigz"
 DEPEND="${RDEPEND}
-	dev-util/pkgconf
+	app-dev/pkgconf
 	test? ( lib-live/check )"
 
 src_configure() {

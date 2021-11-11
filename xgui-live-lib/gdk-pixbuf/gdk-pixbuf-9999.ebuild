@@ -29,9 +29,9 @@ DEPEND="
 "
 BDEPEND="
 	app-core/debianutils
-	dev-util/gtk-doc-am
+	app-dev/gtk-doc-am
 	app-build/gettext
-	dev-util/pkgconf
+	app-dev/pkgconf
 	xgui-live-app/shared-mime-info
 "
 

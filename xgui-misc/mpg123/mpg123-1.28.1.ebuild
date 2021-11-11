@@ -20,7 +20,7 @@ DEPEND="
 
 BDEPEND="
 	app-build/libtool
-	dev-util/pkgconf"
+	app-dev/pkgconf"
 
 append-cflags -D_GNU_SOURCE
 

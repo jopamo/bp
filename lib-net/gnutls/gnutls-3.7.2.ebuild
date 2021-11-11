@@ -20,9 +20,9 @@ RDEPEND=">=lib-core/nettle-3.1:=[gmp]
 	nls? ( >=app-build/gettext-0-r1 )
 "
 DEPEND="${RDEPEND}
-	dev-util/pkgconf
+	app-dev/pkgconf
 	nls? ( app-build/gettext )
-	valgrind? ( dev-util/valgrind )
+	valgrind? ( app-dev/valgrind )
 	test? (	seccomp? ( lib-core/libseccomp )	)"
 
 pkg_setup() {

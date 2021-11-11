@@ -43,8 +43,8 @@ DEPEND="
 	xkb? ( xgui-live-lib/libxkbcommon )
 	app-text/docbook-xml-dtd
 	app-text/docbook-xsl-stylesheets
-	dev-util/gperf
-	dev-util/pkgconf
+	app-dev/gperf
+	app-dev/pkgconf
 	lib-core/libxslt
 	lib-core/libcap
 	app-core/acl

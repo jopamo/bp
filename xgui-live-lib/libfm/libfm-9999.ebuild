@@ -21,8 +21,8 @@ DEPEND="
 	exif? ( xmedia-live-lib/libexif )
 "
 BDEPEND="
-	dev-util/intltool
-	dev-util/pkgconf
+	app-dev/intltool
+	app-dev/pkgconf
 	app-build/gettext
 "
 

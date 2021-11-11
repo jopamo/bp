@@ -42,7 +42,7 @@ DEPEND="
 		xgui-live-lib/libXdamage
 		xgui-live-lib/libXrender )
 "
-BDEPEND="dev-util/lxqt-build-tools"
+BDEPEND="app-dev/lxqt-build-tools"
 RDEPEND="
 	xgui-icontheme/lxqt-themes
 	xgui-live-lib/qtsvg

@@ -43,7 +43,7 @@ CDEPEND="
 	!ssl? ( lib-dev/libtommath )
 "
 DEPEND="${CDEPEND}
-	dev-util/pkgconf
+	app-dev/pkgconf
 "
 
 Kconfig_style_config() {

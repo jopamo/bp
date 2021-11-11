@@ -26,7 +26,7 @@ RDEPEND="
 DEPEND="
 	${DEPEND}
 	${RDEPEND}
-	dev-util/pkgconf
+	app-dev/pkgconf
 	test? ( ${PYTHON_DEPS} )"
 
 src_configure() {

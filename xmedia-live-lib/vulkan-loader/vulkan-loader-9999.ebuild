@@ -22,9 +22,9 @@ KEYWORDS="amd64 arm64"
 
 IUSE="layers wayland X"
 
-BDEPEND=">=dev-util/cmake-3.10.2"
+BDEPEND=">=app-dev/cmake-3.10.2"
 DEPEND="${PYTHON_DEPS}
-	>=dev-util/vulkan-headers-${PV}
+	>=app-dev/vulkan-headers-${PV}
 	wayland? ( xgui-live-lib/wayland )
 	X? (
 		xgui-live-lib/libX11

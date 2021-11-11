@@ -18,7 +18,7 @@ BDEPEND="
 	xgui-live-lib/wayland-protocols
 	xgui-live-lib/gdk-pixbuf
 	xgui-live-lib/cairo
-	dev-util/pkgconf
+	app-dev/pkgconf
 "
 
 src_configure() {

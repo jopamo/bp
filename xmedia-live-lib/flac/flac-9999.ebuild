@@ -20,7 +20,7 @@ DEPEND="
 "
 BDEPEND="
 	app-build/gettext
-	dev-util/pkgconf
+	app-dev/pkgconf
 "
 
 src_prepare() {

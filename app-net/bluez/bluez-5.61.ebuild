@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="btpclient cups debug extra-tools experimental +mesh +readline selinux systemd +udev user-session"
 
-BDEPEND="dev-util/pkgconf"
+BDEPEND="app-dev/pkgconf"
 DEPEND="
 	lib-live/glib
 	btpclient? ( lib-dev/ell )

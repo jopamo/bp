@@ -12,7 +12,7 @@ LICENSE="LGPL-2.1+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="dev-util/lxqt-build-tools"
+DEPEND="app-dev/lxqt-build-tools"
 
 pkg_postinst() {
 	xdg_icon_cache_update

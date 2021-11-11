@@ -24,7 +24,7 @@ RDEPEND="xmedia-live-lib/glu
 	>=xgui-live-lib/libXxf86vm-1.1.3
 "
 DEPEND="${RDEPEND}
-	dev-util/pkgconf
+	app-dev/pkgconf
 	xgui-live-app/xorgproto"
 
 append-flags -fcommon

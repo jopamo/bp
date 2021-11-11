@@ -27,8 +27,8 @@ SLOT="0"
 RDEPEND="lib-core/libxml2"
 DEPEND="
 	lib-live/glib
-	dev-util/intltool
-	dev-util/itstool
+	app-dev/intltool
+	app-dev/itstool
 	app-build/gettext
-	dev-util/pkgconf
+	app-dev/pkgconf
 "

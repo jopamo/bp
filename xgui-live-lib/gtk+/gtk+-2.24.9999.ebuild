@@ -45,9 +45,9 @@ DEPEND="${COMMON_DEPEND}
 	lib-core/libxslt
 	xgui-live-lib/at-spi2-atk
 	lib-live/gobject-introspection-common
-	dev-util/gtk-doc-am
+	app-dev/gtk-doc-am
 	app-build/gettext
-	dev-util/pkgconf
+	app-dev/pkgconf
 	X? ( xinerama? ( xgui-live-app/xorgproto ) )"
 
 RDEPEND="${COMMON_DEPEND}"

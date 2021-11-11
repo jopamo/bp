@@ -23,7 +23,7 @@ DEPEND="
 
 BDEPEND="
 	xgui-live-lib/wayland-protocols
-	dev-util/pkgconf
+	app-dev/pkgconf
 "
 
 src_configure() {

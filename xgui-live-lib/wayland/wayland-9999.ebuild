@@ -12,7 +12,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-BDEPEND="dev-util/pkgconf"
+BDEPEND="app-dev/pkgconf"
 DEPEND="
 	lib-core/expat
 	lib-core/libxml2

@@ -13,7 +13,7 @@ bin
 dev-lang
 dev-perl
 dev-python
-dev-util
+app-dev
 fonts
 lib-core
 lib-dev

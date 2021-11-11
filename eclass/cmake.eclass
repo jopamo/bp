@@ -124,7 +124,7 @@ fi
 # read-only. This is a user flag and should under _no circumstances_ be set in
 # the ebuild. Helps in improving QA of build systems that write to source tree.
 
-[[ ${CMAKE_MIN_VERSION} ]] && die "CMAKE_MIN_VERSION is banned; if necessary, set BDEPEND=\">=dev-util/cmake-${CMAKE_MIN_VERSION}\" directly"
+[[ ${CMAKE_MIN_VERSION} ]] && die "CMAKE_MIN_VERSION is banned; if necessary, set BDEPEND=\">=app-dev/cmake-${CMAKE_MIN_VERSION}\" directly"
 [[ ${CMAKE_BUILD_DIR} ]] && die "The ebuild must be migrated to BUILD_DIR"
 [[ ${CMAKE_REMOVE_MODULES} ]] && die "CMAKE_REMOVE_MODULES is banned, set CMAKE_REMOVE_MODULES_LIST array instead"
 [[ ${CMAKE_UTILS_QA_SRC_DIR_READONLY} ]] && die "Use CMAKE_QA_SRC_DIR_READONLY instead"
@@ -136,7 +136,7 @@ case ${CMAKE_MAKEFILE_GENERATOR} in
 		BDEPEND="app-build/make"
 		;;
 	ninja)
-		BDEPEND="dev-util/ninja"
+		BDEPEND="app-dev/ninja"
 		;;
 	*)
 		eerror "Unknown value for \${CMAKE_MAKEFILE_GENERATOR}"
@@ -145,7 +145,7 @@ case ${CMAKE_MAKEFILE_GENERATOR} in
 esac
 
 if [[ ${PN} != cmake ]]; then
-	BDEPEND+=" >=dev-util/cmake-3.20.5"
+	BDEPEND+=" >=app-dev/cmake-3.20.5"
 fi
 
 # @FUNCTION: cmake_run_in
@@ -365,9 +365,9 @@ cmake_src_prepare() {
 
 	# if ninja is enabled but not installed, the build could fail
 	# this could happen if ninja is manually enabled (eg. make.conf) but not installed
-	if [[ ${CMAKE_MAKEFILE_GENERATOR} == ninja ]] && ! has_version -b dev-util/ninja; then
+	if [[ ${CMAKE_MAKEFILE_GENERATOR} == ninja ]] && ! has_version -b app-dev/ninja; then
 		eerror "CMAKE_MAKEFILE_GENERATOR is set to ninja, but ninja is not installed."
-		die "Please install dev-util/ninja or unset CMAKE_MAKEFILE_GENERATOR."
+		die "Please install app-dev/ninja or unset CMAKE_MAKEFILE_GENERATOR."
 	fi
 
 	local modules_list

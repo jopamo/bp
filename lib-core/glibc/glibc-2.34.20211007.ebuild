@@ -33,7 +33,7 @@ DEPEND="
 "
 RDEPEND="
 	caps? ( lib-core/libcap )
-	systemtap? ( dev-util/systemtap )
+	systemtap? ( app-dev/systemtap )
 "
 PDEPEND="lib-core/tzdb"
 

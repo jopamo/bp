@@ -27,7 +27,7 @@ LIB_DEPEND="
 RDEPEND="static-libs? ( ${LIB_DEPEND} )
 	${LIB_DEPEND//\[static-libs\(+\)\]}"
 DEPEND="${RDEPEND}
-	dev-util/pkgconf
+	app-dev/pkgconf
 	static? ( ${LIB_DEPEND} )"
 
 S="${WORKDIR}/${P/_/-}"

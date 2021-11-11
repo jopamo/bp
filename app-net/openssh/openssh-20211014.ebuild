@@ -32,7 +32,7 @@ DEPEND="
 	ssl? ( virtual/ssl )
 "
 BDEPEND="
-	dev-util/pkgconf
+	app-dev/pkgconf
 	sys-kernel/linux-headers
 	app-build/autoconf
 "

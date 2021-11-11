@@ -17,7 +17,7 @@ DEPEND="
 	lib-dev/libutf8proc
 "
 
-BDEPEND="dev-util/lxqt-build-tools"
+BDEPEND="app-dev/lxqt-build-tools"
 
 src_configure() {
 	local mycmakeargs=(

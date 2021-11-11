@@ -18,7 +18,7 @@ DEPEND="
 	xgui-live-lib/librsvg
 	xgui-live-lib/gtk+:3
 	app-build/gettext
-	dev-util/pkgconf
+	app-dev/pkgconf
 "
 
 RESTRICT="binchecks strip"

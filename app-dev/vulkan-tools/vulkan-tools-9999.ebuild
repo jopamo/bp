@@ -18,8 +18,8 @@ IUSE="cube wayland +X"
 REQUIRED_USE="!cube? ( || ( X wayland ) ) cube? ( ^^ ( X wayland ) )"
 
 BDEPEND="${PYTHON_DEPS}
-	>=dev-util/cmake-3.10.2
-	cube? ( dev-util/glslang )
+	>=app-dev/cmake-3.10.2
+	cube? ( app-dev/glslang )
 "
 RDEPEND="
 	>=xmedia-live-lib/vulkan-loader-${PV}
@@ -30,7 +30,7 @@ RDEPEND="
 	)
 "
 DEPEND="${RDEPEND}
-	>=dev-util/vulkan-headers-${PV}
+	>=app-dev/vulkan-headers-${PV}
 "
 
 pkg_setup() {

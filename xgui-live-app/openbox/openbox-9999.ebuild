@@ -30,7 +30,7 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	app-build/gettext
-	dev-util/pkgconf
+	app-dev/pkgconf
 	xgui-live-app/xorgproto
 	xgui-misc/xorg-server
 "

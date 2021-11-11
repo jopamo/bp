@@ -38,7 +38,7 @@ DEPEND="${CDEPEND}
 app-build/bison
 app-build/flex
 nls? ( app-build/gettext )
-xml? ( dev-util/pkgconf )
+xml? ( app-dev/pkgconf )
 "
 
 filter-flags -Wl,-z,defs

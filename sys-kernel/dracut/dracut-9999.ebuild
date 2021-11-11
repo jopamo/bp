@@ -26,7 +26,7 @@ RESTRICT="test"
 
 CDEPEND="
 	virtual/service-manager
-	dev-util/pkgconf
+	app-dev/pkgconf
 	>=app-core/kmod-15[tools]
 "
 
@@ -36,7 +36,7 @@ RDEPEND="${CDEPEND}
 	app-core/coreutils[xattr(-)]
 	>=app-core/util-linux-2.21
 
-	debug? ( dev-util/strace )
+	debug? ( app-dev/strace )
 	!app-net/arping
 "
 DEPEND="${CDEPEND}

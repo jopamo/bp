@@ -20,7 +20,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	dev-util/pkgconf
+	app-dev/pkgconf
 	dri? ( xgui-live-app/xorgproto )
 "
 

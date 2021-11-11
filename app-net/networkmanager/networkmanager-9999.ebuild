@@ -42,11 +42,11 @@ RDEPEND="${COMMON_DEPEND}
 "
 DEPEND="${COMMON_DEPEND}
 	lib-live/glib
-	dev-util/gtk-doc-am
-	>=dev-util/intltool-0.40
+	app-dev/gtk-doc-am
+	>=app-dev/intltool-0.40
 	>=app-build/gettext-0.17
 	sys-kernel/linux-headers
-	dev-util/pkgconf
+	app-dev/pkgconf
 	lib-dev/newt
 	dev-python/pygobject
 "

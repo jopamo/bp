@@ -17,7 +17,7 @@ DEPEND="
 	lib-live/libpcap
 	virtual/curses
 "
-BDEPEND="dev-util/pkgconf"
+BDEPEND="app-dev/pkgconf"
 
 PATCHES=(
 	"${FILESDIR}"/${P}-configure.ac.patch

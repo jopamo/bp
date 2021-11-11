@@ -26,8 +26,8 @@ DEPEND="
 	lib-dev/fribidi
 "
 BDEPEND="
-	dev-util/gtk-doc-am
-	dev-util/pkgconf
+	app-dev/gtk-doc-am
+	app-dev/pkgconf
 "
 
 src_configure() {

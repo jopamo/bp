@@ -21,7 +21,7 @@ RDEPEND="xgui-live-lib/libxcb
 	xgui-live-app/xorgproto"
 
 DEPEND="${RDEPEND}
-	>=dev-util/gperf-3.0.1
+	>=app-dev/gperf-3.0.1
 	test? ( >=lib-live/check-0.9.11 )"
 
 src_prepare() {

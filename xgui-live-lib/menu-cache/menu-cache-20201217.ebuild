@@ -20,9 +20,9 @@ IUSE="static-libs"
 RDEPEND="lib-live/glib"
 DEPEND="${RDEPEND}
 	app-build/gettext
-	dev-util/pkgconf
+	app-dev/pkgconf
 	xgui-live-lib/libfm-extra
-	dev-util/gtk-doc"
+	app-dev/gtk-doc"
 
 append-flags -fcommon
 

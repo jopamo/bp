@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND=">=dev-lang/perl-5.18"
 DEPEND="${RDEPEND}
-	dev-util/pkgconf
+	app-dev/pkgconf
 "
 # This ebuild doesn't even compile anything, causing tests to fail when updating (bug #316071)
 RESTRICT="test"

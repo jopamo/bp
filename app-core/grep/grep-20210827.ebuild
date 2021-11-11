@@ -22,7 +22,7 @@ RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
 DEPEND="static? ( ${LIB_DEPEND} )"
 
 BDEPEND="
-	dev-util/pkgconf
+	app-dev/pkgconf
 	app-build/texinfo
 "
 

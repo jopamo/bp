@@ -23,7 +23,7 @@ IUSE="+alsa +alsa-plugin asyncns bluez dbus elogind fftw +glib gtk ipv6 jack
 samplerate native-headset systemd +udev +X"
 
 DEPEND="
-	dev-util/intltool
+	app-dev/intltool
 	app-build/gettext
 	lib-live/check
 	xmedia-live-lib/speexdsp

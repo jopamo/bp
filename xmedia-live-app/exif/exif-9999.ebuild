@@ -16,7 +16,7 @@ DEPEND="
 	lib-core/popt
 	>=xmedia-live-lib/libexif-${PV}
 "
-BDEPEND="dev-util/pkgconf"
+BDEPEND="app-dev/pkgconf"
 
 src_prepare() {
 	default

@@ -32,7 +32,7 @@ DEPEND="
 	X? ( xgui-live-app/xdg-utils )
 "
 
-BDEPEND="dev-util/pkgconf"
+BDEPEND="app-dev/pkgconf"
 PDEPEND="lib-print/cups-filters"
 
 PATCHES=(

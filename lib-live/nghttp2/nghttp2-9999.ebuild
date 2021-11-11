@@ -26,8 +26,8 @@ RDEPEND="
 	)
 	xml? ( >=lib-core/libxml2-2.7.7:2 )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconf
-	test? ( >=dev-util/cunit-2.1 )"
+	app-dev/pkgconf
+	test? ( >=app-dev/cunit-2.1 )"
 
 filter-flags -Wl,-z,defs
 

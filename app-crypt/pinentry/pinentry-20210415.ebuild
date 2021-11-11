@@ -24,7 +24,7 @@ DEPEND="
 	caps? ( lib-core/libcap )
 "
 BDEPEND="app-build/gettext
-	dev-util/pkgconf"
+	app-dev/pkgconf"
 
 append-cxxflags -std=gnu++11
 

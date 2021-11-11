@@ -17,7 +17,7 @@ IUSE="libkms intel radeon amdgpu nouveau omap exynos valgrind udev"
 DEPEND="${RDEPEND}
 	xgui-live-app/util-macros
 	xgui-live-lib/cairo
-	valgrind? ( dev-util/valgrind )
+	valgrind? ( app-dev/valgrind )
 	intel? ( xgui-live-lib/libpciaccess )"
 
 append-cppflags -I/usr/include/cairo

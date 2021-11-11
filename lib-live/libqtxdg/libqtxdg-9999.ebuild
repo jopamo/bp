@@ -13,6 +13,6 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-live-lib/qtbase
-		dev-util/lxqt-build-tools"
+		app-dev/lxqt-build-tools"
 RDEPEND="xgui-live-app/xdg-utils"
-BDEPEND="dev-util/pkgconf"
+BDEPEND="app-dev/pkgconf"

@@ -38,7 +38,7 @@ DEPEND="
 	xcb? ( xgui-live-lib/libxcb )
 "
 BDEPEND="
-	dev-util/pkgconf
+	app-dev/pkgconf
 	app-build/libtool
 	X? ( xgui-live-app/xorgproto )
 "

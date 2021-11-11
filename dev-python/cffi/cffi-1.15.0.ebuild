@@ -18,7 +18,7 @@ RDEPEND="
 	lib-core/libffi
 	dev-python/pycparser[${PYTHON_USEDEP}]"
 DEPEND="${RDEPEND}
-	dev-util/pkgconf
+	app-dev/pkgconf
 	test? ( dev-python/pytest[${PYTHON_USEDEP}] )"
 
 DISTUTILS_IN_SOURCE_BUILD=1

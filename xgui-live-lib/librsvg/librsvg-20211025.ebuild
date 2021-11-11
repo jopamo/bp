@@ -25,8 +25,8 @@ DEPEND="
 "
 BDEPEND="
 	lib-live/gobject-introspection-common
-	dev-util/gtk-doc
-	dev-util/pkgconf
+	app-dev/gtk-doc
+	app-dev/pkgconf
 	virtual/rust
 "
 

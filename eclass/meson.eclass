@@ -48,8 +48,8 @@ inherit multiprocessing ninja-utils python-utils-r1 toolchain-funcs
 EXPORT_FUNCTIONS src_configure src_compile src_test src_install
 
 _MESON_DEPEND="
-	dev-util/meson
-	dev-util/ninja
+	app-dev/meson
+	app-dev/ninja
 "
 
 if [[ ${EAPI} == 6 ]]; then

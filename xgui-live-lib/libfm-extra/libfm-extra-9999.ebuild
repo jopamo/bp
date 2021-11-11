@@ -15,10 +15,10 @@ KEYWORDS="amd64 arm64"
 DEPEND="
 	lib-live/glib
 	app-compression/xz-utils
-	>=dev-util/intltool-0.40
-	dev-util/pkgconf
+	>=app-dev/intltool-0.40
+	app-dev/pkgconf
 	app-build/gettext
-	dev-util/gtk-doc
+	app-dev/gtk-doc
 "
 
 src_prepare() {

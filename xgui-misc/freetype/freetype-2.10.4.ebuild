@@ -22,7 +22,7 @@ RDEPEND=">=lib-core/zlib-1.2.8-r1
 	png? ( >=xmedia-live-lib/libpng-1.2.51:0= )"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconf"
+	app-dev/pkgconf"
 
 append-flags -fno-strict-aliasing
 

@@ -21,7 +21,7 @@ REQUIRED_USE="
 "
 
 RDEPEND="
-	server? ( !dev-util/gdbserver )
+	server? ( !app-dev/gdbserver )
 	client? (
 		virtual/curses
 		lib-core/readline
@@ -35,7 +35,7 @@ DEPEND="${RDEPEND}
 	app-build/texinfo
 	client? (
 		app-build/bison
-		test? ( dev-util/dejagnu )
+		test? ( app-dev/dejagnu )
 	)"
 
 GDB_BUILD_DIR="${WORKDIR}"/${P}-build

@@ -25,8 +25,8 @@ DEPEND="
 	truetype? ( xgui-misc/freetype )
 "
 BDEPEND="
-	dev-util/gtk-doc-am
-	dev-util/pkgconf
+	app-dev/gtk-doc-am
+	app-dev/pkgconf
 	test? ( ${PYTHON_DEPS} )
 "
 

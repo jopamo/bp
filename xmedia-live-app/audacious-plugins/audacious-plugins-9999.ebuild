@@ -63,7 +63,7 @@ DEPEND="
 	wavpack? ( xmedia-live-app/wavpack )
 "
 
-BDEPEND="dev-util/pkgconf"
+BDEPEND="app-dev/pkgconf"
 
 src_prepare() {
 	default

@@ -20,7 +20,7 @@ DEPEND="
 	app-compression/xz-utils
 	app-net/curl
 	app-server/opensmtpd
-	dev-util/re2c
+	app-dev/re2c
 	lib-core/gmp
 	lib-core/libedit
 	lib-core/libpcre

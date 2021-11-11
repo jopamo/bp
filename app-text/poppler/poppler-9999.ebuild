@@ -35,7 +35,7 @@ COMMON_DEPEND="
 	tiff? ( xmedia-live-lib/tiff )
 "
 DEPEND="${COMMON_DEPEND}
-	dev-util/pkgconf
+	app-dev/pkgconf
 "
 RDEPEND="${COMMON_DEPEND}
 	cjk? ( app-text/poppler-data )

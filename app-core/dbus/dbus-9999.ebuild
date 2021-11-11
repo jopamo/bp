@@ -35,7 +35,7 @@ DEPEND="
 "
 BDEPEND="
 	app-build/autoconf-archive
-	dev-util/pkgconf
+	app-dev/pkgconf
 "
 
 # out of sources build dir for make check

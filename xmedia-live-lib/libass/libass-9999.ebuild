@@ -21,7 +21,7 @@ RDEPEND="
 	>=xgui-misc/harfbuzz-0.9.12[truetype]"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconf
+	app-dev/pkgconf
 	dev-lang/nasm"
 
 src_prepare() {

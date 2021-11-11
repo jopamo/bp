@@ -19,7 +19,7 @@ IUSE="static"
 
 DEPEND="app-compression/xz-utils"
 
-BDEPEND="dev-util/gperf"
+BDEPEND="app-dev/gperf"
 
 src_configure() {
 	use static && append-ldflags -static

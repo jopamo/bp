@@ -22,7 +22,7 @@ DEPEND="
 	xgui-live-lib/qtbase
 "
 
-BDEPEND="dev-util/pkgconf"
+BDEPEND="app-dev/pkgconf"
 
 append-flags -ffat-lto-objects
 

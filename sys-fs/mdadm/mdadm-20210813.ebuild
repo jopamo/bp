@@ -18,7 +18,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static systemd"
 
 DEPEND="
-	dev-util/pkgconf
+	app-dev/pkgconf
 	app-compression/xz-utils
 	app-core/util-linux
 "

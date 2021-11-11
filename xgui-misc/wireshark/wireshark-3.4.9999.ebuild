@@ -60,7 +60,7 @@ DEPEND="
 	dev-lang/perl
 	app-build/bison
 	app-build/flex
-	dev-util/pkgconf
+	app-dev/pkgconf
 "
 
 pkg_setup() {

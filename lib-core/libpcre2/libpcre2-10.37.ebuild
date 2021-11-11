@@ -23,7 +23,7 @@ DEPEND="
 	lib-core/readline
 "
 BDEPEND="
-	dev-util/pkgconf
+	app-dev/pkgconf
 	app-core/findutils
 "
 

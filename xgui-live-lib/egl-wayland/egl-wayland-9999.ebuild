@@ -12,4 +12,4 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="dev-util/eglexternalplatform"
+DEPEND="app-dev/eglexternalplatform"

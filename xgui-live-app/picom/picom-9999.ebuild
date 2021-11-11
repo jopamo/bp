@@ -35,7 +35,7 @@ RDEPEND="${COMMON_DEPEND}
 	xgui-live-app/xwininfo"
 
 DEPEND="${COMMON_DEPEND}
-	dev-util/pkgconf
+	app-dev/pkgconf
 	xgui-live-app/xorgproto
 	lib-dev/libev
 	lib-live/uthash

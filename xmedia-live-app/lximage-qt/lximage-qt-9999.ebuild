@@ -30,8 +30,8 @@ DEPEND="
 	xgui-live-lib/liblxqt
 "
 BDEPEND="
-	dev-util/lxqt-build-tools
-	dev-util/pkgconf
+	app-dev/lxqt-build-tools
+	app-dev/pkgconf
 "
 
 pkg_postinst() {

@@ -19,8 +19,8 @@ DEPEND="
 	xgui-misc/freetype
 "
 BDEPEND="
-	dev-util/pkgconf
-	dev-util/itstool
+	app-dev/pkgconf
+	app-dev/itstool
 "
 PDEPEND="
 	app-eselect/eselect-fontconfig

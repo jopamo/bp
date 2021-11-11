@@ -24,19 +24,6 @@ S="${WORKDIR}/protobuf-${PV}/python"
 
 filter-flags -Wl,-z,defs
 
-python_prepare_all() {
-	pushd "${WORKDIR}/protobuf-${PV}" > /dev/null || die
-	eapply "${FILESDIR}/${PN}-3.13.0-google.protobuf.pyext._message.PyUnknownFieldRef.patch"
-	eapply_user
-	popd > /dev/null || die
-
-	distutils-r1_python_prepare_all
-}
-
-python_configure_all() {
-	mydistutilsargs=(--cpp_implementation)
-}
-
 python_test() {
 	esetup.py test
 }

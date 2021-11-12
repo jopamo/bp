@@ -14,7 +14,7 @@ LICENSE="BSD public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs africa antarctica	asia atlantic australasia
+IUSE="posix right static-libs africa antarctica	asia atlantic australasia
 	australia europe indian pacific +northamerica
 	southamerica etcetera backward factory"
 
@@ -125,4 +125,7 @@ src_install() {
 			rm -rf "${ED}"/usr/share/zoneinfo/{posix,right}/"${x}" || die
 		done
 	fi
+
+	use right || rm -rf "${ED}"/usr/share/zoneinfo/right
+	use posix || rm -rf "${ED}"/usr/share/zoneinfo/posix
 }

@@ -56,13 +56,13 @@ src_install() {
 		DESTDIR="${D}" \
 		ZICDIR="/usr/bin"
 
-	./zic -b fat -d "${ED}"/usr/share/zoneinfo "${_timezones[@]}" || die
-	./zic -b fat -d "${ED}"/usr/share/zoneinfo/posix "${_timezones[@]}" || die
-	./zic -b fat -d "${ED}"/usr/share/zoneinfo/right -L leapseconds "${_timezones[@]}" || die
+	./zic -d "${ED}"/usr/share/zoneinfo "${_timezones[@]}" || die
+	./zic -d "${ED}"/usr/share/zoneinfo/posix "${_timezones[@]}" || die
+	./zic -d "${ED}"/usr/share/zoneinfo/right -L leapseconds "${_timezones[@]}" || die
 
 	# This creates the posixrules file. We use New York because POSIX requires the daylight
 	# savings time rules to be in accordance with US rules.
-	./zic -b fat -d "${ED}"/usr/share/zoneinfo -p America/New_York || die
+	./zic -d "${ED}"/usr/share/zoneinfo -p America/New_York || die
 
 	use static-libs || rm -rf "${ED}"/usr/lib/libtz.a || die
 

@@ -2,9 +2,9 @@
 
 EAPI=8
 
-SNAPSHOT=a0151ef25a4d1d262a25247badc44fd146644f9f
+SNAPSHOT=3cfd9a6637a3a1f102839eedff69cab3e0a24985
 
-inherit autotools flag-o-matic
+inherit autotools
 
 DESCRIPTION="a simple utility for modifying existing ELF executables and libraries"
 HOMEPAGE="https://github.com/NixOS/patchelf"
@@ -13,9 +13,7 @@ S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-3"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
-# error: 'findSection2' was not declared in this scope, and no declarations were found
-# by argument-dependent lookup at the point of instantiation
+KEYWORDS="amd64 arm64"
 
 src_prepare() {
 	default

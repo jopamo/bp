@@ -108,7 +108,6 @@ src_configure() {
 		-D ENABLE_PCAP=ON
 		-D ENABLE_STATIC="$(usex static-libs)"
 		-D ENABLE_PLUGINS="$(usex plugins)"
-		-D ENABLE_PCAP_NG_DEFAULT=ON
 		-D ENABLE_ZLIB="$(usex zlib)"
 		-D ENABLE_LZ4="$(usex lz4)"
 		-D ENABLE_SNAPPY="$(usex snappy)"

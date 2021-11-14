@@ -39,8 +39,6 @@ PDEPEND="xgui-live-lib/qtx11extras"
 filter-flags -flto\=\*
 append-cppflags -DOPENSSL_NO_PSK -DOPENSSL_NO_NEXTPROTONEG -Wno-deprecated-declarations -Wno-class-memaccess -Wno-packed-not-aligned
 
-PATCHES=( "${FILESDIR}"/38a72af4fd311219779f89b2b78cd56d879f61db.patch )
-
 src_prepare() {
 	sed -i -e "s|^\(QMAKE_CFLAGS_RELEASE.*\)|\1 ${CFLAGS}|" \
 		mkspecs/common/gcc-base.conf

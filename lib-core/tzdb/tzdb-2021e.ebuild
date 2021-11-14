@@ -14,7 +14,7 @@ LICENSE="BSD public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="posix right static-libs africa antarctica	asia
+IUSE="posix right static-libs africa antarctica asia
 	atlantic australasia australia europe indian pacific
 	+northamerica southamerica etcetera backward factory
 	zic-fat"

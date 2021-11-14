@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
 	inherit git-r3
 else
-	SNAPSHOT=5ce691e373b02dca7ac8d21c5794baec86bd3ffc
+	SNAPSHOT=1a59b68683ec510792e002b2285145bf6c7486f2
 	SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -24,7 +24,6 @@ KEYWORDS="amd64 arm64"
 IUSE="acl systemd"
 
 DEPEND="
-	app-net/s-nail
 	lib-core/popt
 	app-core/sed
 	app-net/s-nail

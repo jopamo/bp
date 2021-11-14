@@ -2,10 +2,12 @@
 
 EAPI=8
 
+SNAPSHOT=94cb4ce2ce4ca7d9e8acf512d8971b4b80b1a146
+
 DESCRIPTION="Collection of patches for libtool.eclass"
 HOMEPAGE="https://gitweb.gentoo.org/proj/elt-patches.git/"
-SRC_URI="https://dev.gentoo.org/~grobian/distfiles/${P}.tar.xz
-		https://dev.gentoo.org/~vapier/dist/${P}.tar.xz"
+SRC_URI="https://gitweb.gentoo.org/proj/elt-patches.git/snapshot/elt-patches-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}//${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

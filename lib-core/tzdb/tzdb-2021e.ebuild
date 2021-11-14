@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="posix right static-libs africa antarctica	asia atlantic australasia
 	australia europe indian pacific +northamerica
-	southamerica etcetera backward factory"
+	southamerica etcetera backward factory zic-fat"
 
 _emake() {
 	emake \
@@ -30,6 +30,7 @@ _emake() {
 }
 
 src_compile() {
+	append-cppflags -DZIC_BLOAT_DEFAULT='\"'$(usex zic-fat fat slim)'\"'
 	_emake
 }
 

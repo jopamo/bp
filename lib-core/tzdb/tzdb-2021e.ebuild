@@ -14,9 +14,10 @@ LICENSE="BSD public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="posix right static-libs africa antarctica	asia atlantic australasia
-	australia europe indian pacific +northamerica
-	southamerica etcetera backward factory zic-fat"
+IUSE="posix right static-libs africa antarctica	asia
+	atlantic australasia australia europe indian pacific
+	+northamerica southamerica etcetera backward factory
+	zic-fat"
 
 _emake() {
 	emake \
@@ -127,6 +128,6 @@ src_install() {
 		done
 	fi
 
-	use right || rm -rf "${ED}"/usr/share/zoneinfo/right
-	use posix || rm -rf "${ED}"/usr/share/zoneinfo/posix
+	use right || rm -rf "${ED}"/usr/share/zoneinfo/right || die
+	use posix || rm -rf "${ED}"/usr/share/zoneinfo/posix || die
 }

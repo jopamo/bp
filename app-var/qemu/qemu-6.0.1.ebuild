@@ -24,11 +24,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+aio alsa bzip2 capstone +caps +curl debug +fdt fuse
 	gnutls +gtk iscsi jack jemalloc +jpeg lzo multipath ncurses nfs nls numa
-	opengl +oss +pin-upstream-blobs
-	plugins +png pulseaudio python sasl +seccomp sdl sdl-image selinux
-	smartcard snappy spice ssh static static-user systemtap test udev usb
-	usbredir vde +vhost-net vhost-user-fs virgl virtfs +vnc vte xattr xen
-	xfs zstd"
+	opengl +oss +pin-upstream-blobs	plugins +png pulseaudio python sasl
+	+seccomp sdl sdl-image selinux smartcard snappy ssh static static-user
+	systemtap test udev usb	usbredir vde +vhost-net vhost-user-fs virgl virtfs
+	+vnc vte xattr xen xfs zstd"
 
 COMMON_TARGETS="
 	aarch64
@@ -164,10 +163,6 @@ SOFTMMU_TOOLS_DEPEND="
 	seccomp? ( lib-core/libseccomp[static-libs(+)] )
 	smartcard? ( >=app-emulation/libcacard-2.5.0[static-libs(+)] )
 	snappy? ( app-compression/snappy:= )
-	spice? (
-		app-emulation/spice-protocol
-		app-emulation/spice[static-libs(+)]
-	)
 	ssh? ( net-libs/libssh[static-libs(+)] )
 	udev? ( virtual/libudev[static-libs(+)] )
 	usb? ( lib-dev/libusb[static-libs(+)] )
@@ -398,7 +393,6 @@ qemu_src_configure() {
 		--enable-slirp
 		$(conf_notuser smartcard)
 		$(conf_notuser snappy)
-		$(conf_notuser spice)
 		$(conf_notuser ssh libssh)
 		$(conf_notuser udev libudev)
 		$(conf_notuser usb libusb)

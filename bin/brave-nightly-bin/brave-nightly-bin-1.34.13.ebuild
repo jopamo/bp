@@ -16,25 +16,25 @@ SLOT="0"
 KEYWORDS="amd64"
 
 RDEPEND="
-	xgui-live-lib/at-spi2-atk
-	app-compression/bzip2
-	app-var/ca-certificates
-	xgui-live-lib/atk
-	xgui-live-lib/libxkbcommon
-	lib-core/expat
-	lib-live/glib
-	lib-dev/nspr
 	>=lib-dev/nss-3.26
-	xgui-misc/alsa-lib
-	fonts/fontconfig
-	xgui-misc/freetype
-	lib-print/cups
+	app-compression/bzip2
 	app-core/dbus
+	app-var/ca-certificates
+	fonts/fontconfig
+	lib-core/expat
 	lib-core/libcap
+	lib-dev/nspr
+	lib-live/glib
+	lib-print/cups
+	xgui-icontheme/adwaita-icon-theme
+	xgui-live-app/xdg-utils
+	xgui-live-lib/at-spi2-atk
+	xgui-live-lib/atk
 	xgui-live-lib/cairo
 	xgui-live-lib/gdk-pixbuf
 	xgui-live-lib/gtk+:3
 	xgui-live-lib/libX11
+	xgui-live-lib/libXScrnSaver
 	xgui-live-lib/libXcomposite
 	xgui-live-lib/libXcursor
 	xgui-live-lib/libXdamage
@@ -43,12 +43,12 @@ RDEPEND="
 	xgui-live-lib/libXi
 	xgui-live-lib/libXrandr
 	xgui-live-lib/libXrender
-	xgui-live-lib/libXScrnSaver
 	xgui-live-lib/libXtst
 	xgui-live-lib/libxcb
+	xgui-live-lib/libxkbcommon
 	xgui-live-lib/pango
-	xgui-live-app/xdg-utils
-	xgui-icontheme/adwaita-icon-theme
+	xgui-misc/alsa-lib
+	xgui-misc/freetype
 "
 
 QA_PREBUILT="*"

@@ -18,7 +18,6 @@ filter-flags -Werror
 
 DEPEND="
 	lib-live/libmesode
-	otr? ( lib-net/libotr )
 	omemo? ( lib-live/libsignal-protocol-c )
 "
 
@@ -29,7 +28,7 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		$(use_enable otr)
+		--disable-otr
 		$(use_enable python-plugins)
 		$(use_enable c-plugins)
 		$(use_enable omemo)

@@ -35,17 +35,6 @@ RDEPEND="
 	xgui-live-lib/cairo
 	xgui-live-lib/gdk-pixbuf
 	xgui-live-lib/gtk+:3
-	xgui-live-lib/libX11
-	xgui-live-lib/libXScrnSaver
-	xgui-live-lib/libXcomposite
-	xgui-live-lib/libXcursor
-	xgui-live-lib/libXdamage
-	xgui-live-lib/libXext
-	xgui-live-lib/libXfixes
-	xgui-live-lib/libXi
-	xgui-live-lib/libXrandr
-	xgui-live-lib/libXrender
-	xgui-live-lib/libXtst
 	xgui-live-lib/libxcb
 	xgui-live-lib/libxkbcommon
 	xgui-live-lib/pango

@@ -20,17 +20,16 @@ SLOT="0"
 KEYWORDS="amd64"
 
 RDEPEND="
-	xgui-live-lib/atk
 	app-core/dbus
-	lib-dev/dbus-glib
-	lib-live/glib
+	app-tex/hunspell
 	fonts/fontconfig
-	xgui-misc/freetype
+	lib-dev/dbus-glib
+	lib-dev/nss
+	lib-live/glib
+	xgui-live-lib/atk
 	xgui-live-lib/cairo[X]
 	xgui-live-lib/gdk-pixbuf
-	lib-dev/nss
 	xgui-live-lib/gtk+:3
-	app-tex/hunspell
 	xgui-live-lib/libX11
 	xgui-live-lib/libXcomposite
 	xgui-live-lib/libXdamage
@@ -39,6 +38,7 @@ RDEPEND="
 	xgui-live-lib/libXrender
 	xgui-live-lib/libXt
 	xgui-live-lib/pango
+	xgui-misc/freetype
 	xgui-misc/pulseaudio
 	xmedia-live-app/ffmpeg
 "

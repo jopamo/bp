@@ -30,13 +30,6 @@ RDEPEND="
 	xgui-live-lib/cairo[X]
 	xgui-live-lib/gdk-pixbuf
 	xgui-live-lib/gtk+:3
-	xgui-live-lib/libX11
-	xgui-live-lib/libXcomposite
-	xgui-live-lib/libXdamage
-	xgui-live-lib/libXext
-	xgui-live-lib/libXfixes
-	xgui-live-lib/libXrender
-	xgui-live-lib/libXt
 	xgui-live-lib/pango
 	xgui-misc/freetype
 	xgui-misc/pulseaudio

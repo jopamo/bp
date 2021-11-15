@@ -14,8 +14,8 @@ Below are some highlights from the configuration
   * Thank you to [gentooLTO!](https://github.com/InBetweenNames/gentooLTO)
 ## Distro Configuration
 * no multilib - the toolchain only supports 64bit
-* all libraries are installed to /usr/lib 
-* /lib /lib64 /bin /sbin are all symlinked into /usr/ 
+* all libraries are installed to /usr/lib
+* /lib /lib64 /bin /sbin are all symlinked into /usr/
 * only amd64 and arm64 are supported
 * only glibc or musl are supported
 * it supports your choice of openssl or libressl

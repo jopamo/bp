@@ -26,7 +26,7 @@ src_configure() {
 	local myconf=(
 		$(use_enable static-libs static)
 		--enable-hashes=strong,glibc
-    	--enable-obsolete-api=no
+    	--disable-obsolete-api
     	--disable-failure-tokens
     	--disable-werror
 	)

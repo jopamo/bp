@@ -9,6 +9,7 @@ sysusersd
 gshadow
 userdb
 vtv
+yescrypt
 
 # Musl doesn't have support for utmp/wtmp by design
 utmp

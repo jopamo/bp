@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=dc9fc048de56aa7b6eaf80b1c068a8b5d59b1bf0
+SNAPSHOT=387da46d73524c9fea48f5a949eb5220d40440e6
 
 inherit autotools flag-o-matic
 
@@ -44,6 +44,7 @@ src_configure() {
 		$(use_enable subids subordinate-ids)
 		$(use_with pam libpam)
 		$(use_with xattr attr)
+		--with-yescrypt
 	)
 	econf ${myconf[@]}
 }

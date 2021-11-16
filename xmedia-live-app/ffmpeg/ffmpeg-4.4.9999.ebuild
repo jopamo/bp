@@ -13,10 +13,10 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug nvidia +x264 +x265 vaapi vdpau static-libs +openssl
-	+ffmpeg +network +protocols +nonfree +gpl +version3 +avutil
-	+avcodec +avformat +swscale +avresample +swresample +avfilter
-	+lame +libass +libdav1d +vorbis"
+IUSE="+alsa debug nvidia +x264 +x265 vaapi vdpau static-libs +openssl
+	+ffmpeg +network +protocols pulseaudio +nonfree +gpl +version3
+	+avutil	+avcodec +avformat +swscale +avresample +swresample
+	+avfilter +lame +libass +libdav1d +vorbis"
 
 DEPEND="
 	app-lang/nasm
@@ -52,6 +52,7 @@ src_configure() {
 		--ar="$(tc-getAR)" \
 		--extra-cflags="${CFLAGS}" \
   		--extra-cxxflags="${CXXFLAGS}" \
+  		$(use_enable alsa) \
 		$(use_enable avcodec) \
 		$(use_enable avfilter) \
 		$(use_enable avformat) \
@@ -70,6 +71,7 @@ src_configure() {
 		$(use_enable nvidia nvdec) \
 		$(use_enable openssl) \
 		$(use_enable protocols) \
+		$(use_enable pulseaudio libpulse) \
 		$(use_enable static-libs static) \
 		$(use_enable swresample) \
 		$(use_enable swscale) \

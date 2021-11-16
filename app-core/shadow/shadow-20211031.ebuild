@@ -15,19 +15,20 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl pam skey subids systemd xattr"
+IUSE="acl pam skey subids systemd xattr yescrypt"
 
 DEPEND="
 	app-compression/xz-utils
-	acl? ( app-core/acl:0= )
-	pam? ( lib-core/pam:0= )
-	skey? ( lib-core/skey:0= )
-	xattr? ( app-core/attr:0= )
+	acl? ( app-core/acl )
+	pam? ( lib-core/pam )
+	skey? ( lib-core/skey )
+	xattr? ( app-core/attr )
 "
 
 filter-flags -Wl,-z,defs
 
 src_prepare() {
+	cp -rp "${FILESDIR}"/* "${S}"/
 	default
 	eautoreconf
 }
@@ -37,14 +38,13 @@ src_configure() {
 		--with-group-name-max-length=32
 		--without-tcb
 		--disable-account-tools-setuid
-		--disable-subordinate-ids
 		$(use_with acl)
 		--without-audit
 		$(use_with skey)
 		$(use_enable subids subordinate-ids)
 		$(use_with pam libpam)
 		$(use_with xattr attr)
-		--with-yescrypt
+		$(use_with yescrypt)
 	)
 	econf ${myconf[@]}
 }
@@ -54,30 +54,31 @@ src_install() {
 
 	insinto /etc/default
 	insopts -m0600
-	doins "${FILESDIR}"/useradd
+	doins useradd
 
 	if use systemd; then
 		insinto usr/lib/systemd/system
 		insopts -m0644
-		doins "${FILESDIR}/shadow.timer"
-		doins "${FILESDIR}/shadow.service"
+		doins shadow.timer
+		doins shadow.service
 		install -d -m755 "${ED}/usr/lib/systemd/system/timers.target.wants"
 		ln -s ../shadow.timer "${ED}/usr/lib/systemd/system/timers.target.wants/shadow.timer"
 	fi
 
 	insinto /etc
 	insopts -m0644
-	doins "${FILESDIR}/login.defs"
+	doins login.defs
 
 	if use pam; then
+		use yescrypt && sed -i 's/sha512/yescrypt/g' {passwd,chpasswd,newusers}
 		rm "${ED}/etc/pam.d"/*
 		insinto /etc/pam.d
 		insopts -m0644
-		doins "${FILESDIR}"/{passwd,chgpasswd,chpasswd,newusers}
+		doins {passwd,chgpasswd,chpasswd,newusers}
 		doins etc/pam.d/groupmems
 
 		for file in chage groupadd groupdel groupmod shadow useradd usermod userdel; do
-			newins "${FILESDIR}/defaults.pam" "$file"
+			newins defaults.pam "$file"
 		done
 	fi
 

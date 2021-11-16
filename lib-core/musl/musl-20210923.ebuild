@@ -15,7 +15,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="musl"
+IUSE="musl libxcrypt"
 
 filter-flags -flto\=\*
 
@@ -87,6 +87,8 @@ src_install() {
 		insopts -m 0644
 		insinto /etc/env.d
 		doins "${FILESDIR}"/02locale
+
+		use libxcrypt && rm -f "${ED}"/usr/include/crypt.h
 	fi
 
 	for i in linux asm asm-generic mtd ; do

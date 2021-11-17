@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=31287743c07cef63a2bc9b31a393a7e3b2527f88
+SNAPSHOT=4bf976565294b883c980244c36fac326897fc261
 
 inherit flag-o-matic toolchain-funcs
 
@@ -13,7 +13,7 @@ S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="openssl"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="~amd64 ~arm64"
 
 IUSE="static-libs test zlib"
 

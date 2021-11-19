@@ -12,32 +12,31 @@ EGIT_REPO_URI="https://github.com/qt/${PN}.git"
 EGIT_BRANCH=$(ver_cut 1).$(ver_cut 2)
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
-SLOT="$(ver_cut 1)"
-#KEYWORDS="amd64 arm64"
+SLOT="0"
+KEYWORDS="~amd64 ~arm64"
 
-IUSE="icu mysql postgres sqlite systemd opengl vulkan"
+IUSE="mysql postgres sqlite systemd opengl vulkan"
 
 DEPEND="
+	app-core/dbus
+	lib-core/libpcre2
+	lib-core/zlib
 	lib-dev/double-conversion
 	lib-live/glib
-	lib-core/libpcre2
 	xgui-live-lib/libxcb
 	xgui-misc/freetype
 	xgui-misc/harfbuzz
 	xmedia-live-lib/libjpeg-turbo
 	xmedia-live-lib/libpng
-	lib-core/sqlite
-	lib-core/zlib
-	app-core/dbus
-	app-core/systemd
 	mysql? ( app-server/mariadb )
 	opengl? ( xmedia-live-lib/mesa )
 	postgres? ( app-server/postgresql )
 	sqlite? ( lib-core/sqlite )
+	systemd? ( app-core/systemd )
 	vulkan? ( xmedia-live-lib/vulkan-loader )
 "
 
-filter-flags -flto\=\*
+filter-flags -flto\*
 append-cppflags -DOPENSSL_NO_PSK -DOPENSSL_NO_NEXTPROTONEG -Wno-deprecated-declarations -Wno-class-memaccess -Wno-packed-not-aligned
 
 src_prepare() {
@@ -54,9 +53,6 @@ src_configure() {
 		-cmake-generator Ninja
 		-opensource -confirm-license
 		-release
-		-no-static
-		-no-framework
-		-no-rpath
 		-prefix "${EPREFIX}"/usr
 		-docdir "${EPREFIX}"/usr/share/doc/qt
 		-headerdir "${EPREFIX}"/usr/include/qt
@@ -71,19 +67,22 @@ src_configure() {
 		-system-libpng
 		-system-libjpeg
 		-system-freetype
-		-glib
-		-openssl-linked
-		-no-pch
-		-no-strip
 		-dbus-linked
-		-journald
+		-glib
+		-no-framework
+		-no-pch
+		-no-rpath
 		-no-sql-{db2,ibase,oci,odbc}
-		$(usex mysql -sql-mysql -no-sql-mysql)
-		$(usex postgres -sql-psql -no-sql-psql)
-		$(usex sqlite -system-sqlite -no-sqlite)
-		$(usex sqlite -sql-sqlite -no-sql-sqlite)
+		-no-static
+		-no-strip
+		-openssl-linked
 		$(usex arm64 '' -reduce-relocations)
+		$(usex mysql -sql-mysql -no-sql-mysql)
 		$(usex opengl '' -no-opengl)
+		$(usex postgres -sql-psql -no-sql-psql)
+		$(usex sqlite -sql-sqlite -no-sql-sqlite)
+		$(usex sqlite -system-sqlite -no-sqlite)
+		$(usex systemd -journald -no-journald)
 		$(usex vulkan -vulkan -no-vulkan)
     )
     einfo "Configuring with: ${myconf[@]}"
@@ -93,5 +92,5 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	mv "${ED}"/usr/bin/qmake "${ED}"/usr/lib/qt6/bin/qmake
+	dosym -r /usr/bin/qmake /usr/lib/qt$(ver_cut 1)/bin/qmake
 }

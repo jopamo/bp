@@ -4,13 +4,13 @@ EAPI=8
 
 inherit cmake git-r3
 
-DESCRIPTION="Multimedia (audio, video, radio, camera) library for the Qt5 framework"
+DESCRIPTION="Qt5 module for integrating online documentation into applications"
 HOMEPAGE="https://www.qt.io/"
 EGIT_REPO_URI="https://code.qt.io/qt/${PN}.git"
-EGIT_BRANCH=$(ver_cut 1-2)
+EGIT_BRANCH="$(ver_cut 1-2)"
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
-SLOT="$(ver_cut 1)"
-#KEYWORDS="amd64 arm64"
+SLOT="0"
+KEYWORDS="~amd64 ~arm64"
 
 DEPEND="xgui-live-lib/qtbase"

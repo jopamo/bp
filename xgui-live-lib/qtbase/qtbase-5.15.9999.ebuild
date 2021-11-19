@@ -10,33 +10,32 @@ EGIT_REPO_URI="https://invent.kde.org/qt/qt/qtbase.git"
 EGIT_BRANCH="kde/$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
-SLOT="$(ver_cut 1)"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="icu mysql postgres sqlite systemd opengl vulkan"
+IUSE="mysql postgres sqlite systemd opengl vulkan"
 
 DEPEND="
+	app-core/dbus
+	lib-core/libpcre2
+	lib-core/zlib
 	lib-dev/double-conversion
 	lib-live/glib
-	lib-core/libpcre2
 	xgui-live-lib/libxcb
 	xgui-misc/freetype
 	xgui-misc/harfbuzz
 	xmedia-live-lib/libjpeg-turbo
 	xmedia-live-lib/libpng
-	lib-core/sqlite
-	lib-core/zlib
-	app-core/dbus
-	app-core/systemd
 	mysql? ( app-server/mariadb )
 	opengl? ( xmedia-live-lib/mesa )
 	postgres? ( app-server/postgresql )
 	sqlite? ( lib-core/sqlite )
+	systemd? ( app-core/systemd )
 	vulkan? ( xmedia-live-lib/vulkan-loader )
 "
 PDEPEND="xgui-live-lib/qtx11extras"
 
-filter-flags -flto\=\*
+filter-flags -flto\*
 append-cppflags -DOPENSSL_NO_PSK -DOPENSSL_NO_NEXTPROTONEG -Wno-deprecated-declarations -Wno-class-memaccess -Wno-packed-not-aligned
 
 src_prepare() {
@@ -75,7 +74,7 @@ src_configure() {
 		-no-pch
 		-no-strip
 		-dbus-linked
-		-journald
+		$(usex systemd -journald -no-journald)
 		-no-sql-{db2,ibase,oci,odbc,tds}
 		$(usex mysql -sql-mysql -no-sql-mysql)
 		$(usex postgres -sql-psql -no-sql-psql)
@@ -93,5 +92,5 @@ src_install() {
 	make INSTALL_ROOT="${ED}" install
 	cleanup_install
 
-	dosym -r /usr/bin/qmake /usr/lib/qt5/bin/qmake
+	dosym -r /usr/bin/qmake /usr/lib/qt$(ver_cut 1)/bin/qmake
 }

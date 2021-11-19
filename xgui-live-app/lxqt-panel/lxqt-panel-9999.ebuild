@@ -26,7 +26,7 @@ REQUIRED_USE="volume? ( || ( alsa pulseaudio ) )"
 DEPEND="
 	lib-live/glib
 	lib-live/libqtxdg
-	xgui-live-lib/qtbase:5
+	xgui-live-lib/qtbase
 	xgui-live-app/kguiaddons
 	xgui-live-app/kwindowsystem
 	xgui-live-lib/menu-cache

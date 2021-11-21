@@ -24,7 +24,7 @@ DEPEND="
 	app-var/c_rehash
 	app-core/debianutils
 "
-BDEPEND="dev-python/cryptography[${PYTHON_USEDEP}]"
+BDEPEND+=" $(python_gen_any_dep 'dev-python/cryptography[${PYTHON_USEDEP}]')"
 
 S=${WORKDIR}
 

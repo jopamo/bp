@@ -3,51 +3,48 @@
 WORKHOME="${HOME}/gnu_tarballs"
 TEMPLOCATION="/tmp/gnu_tarballs"
 
-rm -rf ${TEMPLOCATION}
-mkdir -p ${TEMPLOCATION}
-cd ${WORKHOME}
+rm -rf "${TEMPLOCATION}"
+mkdir -p "${TEMPLOCATION}"
+cd "${WORKHOME}"
 
-[ ! -d ${WORKHOME}/coreutils ] && git clone https://github.com/coreutils/coreutils.git ${WORKHOME}/coreutils --depth 1
-[ ! -d ${WORKHOME}/gnulib ] && git clone https://github.com/coreutils/gnulib.git ${WORKHOME}/gnulib
+[ ! -d "${WORKHOME}/coreutils" ] && git clone https://github.com/coreutils/coreutils.git "${WORKHOME}/coreutils" --depth 1
+[ ! -d "${WORKHOME}/gnulib" ] && git clone https://github.com/coreutils/gnulib.git "${WORKHOME}/gnulib"
 
 for i in gnulib coreutils ; do
-	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git remote update )
+	[ -d "${WORKHOME}/$i" ] && ( cd "${WORKHOME}/$i" && git remote update && git reset --hard && git clean -f )
 done
 
 for i in coreutils cpio diffutils findutils gperf grep libtool patch sed tar ; do
+	#prepare sources
 	[ ! -d ${WORKHOME}/$i ] && git clone https://git.savannah.gnu.org/git/$i.git ${WORKHOME}/$i --depth 1
-	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git remote update )
+	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git remote update && git reset --hard && git clean -f )
 	GITDATENAME="$i-$(cd ${WORKHOME}/$i && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
 
+	#only create if different timestamp
 	if [ ! -f "${WORKHOME}/${GITDATENAME}.tar.xz" ]; then
+		rm -rf "${TEMPLOCATION}/gnulib_$i"
+		cp -rp "${WORKHOME}/gnulib" "${TEMPLOCATION}/gnulib_$i"
+		( cd "${WORKHOME}/$i" && rm -rf gnulib )
+
 		if [[ $i == 'patch' ]]; then
-			cp -rp ${WORKHOME}/gnulib ${TEMPLOCATION}/gnulib_patch
-			( cd ${TEMPLOCATION}/gnulib_patch && git reset --hard b141afaf9ba197e361510da075556822ac453ff6 )
-			( cd ${WORKHOME}/$i && ./bootstrap --skip-po --no-git --gnulib-srcdir=${TEMPLOCATION}/gnulib_patch )
-		else
-			( cd ${WORKHOME}/$i && rm -rf gnulib )
-			( cd ${WORKHOME}/$i && ln -s ../gnulib gnulib )
-
-			if [[ $i == 'libtool' ]]; then
-				( cd ${WORKHOME}/$i && ./bootstrap --skip-po --gnulib-srcdir=${WORKHOME}/gnulib || ./autogen.sh )
-			else
-				( cd ${WORKHOME}/$i && ./bootstrap --skip-po --no-git --gnulib-srcdir=${WORKHOME}/gnulib || ./autogen.sh )
-			fi
+			( cd "${TEMPLOCATION}/gnulib_$i" && git reset --hard b141afaf9ba197e361510da075556822ac453ff6 )
 		fi
-
-		tar -hcf - $i | tar -xf - -C ${TEMPLOCATION}
+		ln -s "${TEMPLOCATION}/gnulib_$i" "${WORKHOME}/$i/gnulib"
+		( cd ${WORKHOME}/$i && ./bootstrap  --copy --skip-po || ./autogen.sh )
+		( cd ${WORKHOME} && tar -hcf - $i | tar -xf - -C ${TEMPLOCATION} )
 		mv ${TEMPLOCATION}/$i ${TEMPLOCATION}/${GITDATENAME}
 		find ${TEMPLOCATION}/${GITDATENAME} -name *~ -delete
 		( cd ${TEMPLOCATION}/${GITDATENAME} && rm -rf .git* gnulib autom4te.cache po/.reference )
 		find ${TEMPLOCATION}/${GITDATENAME} -name *.git* -delete
 		( cd ${TEMPLOCATION} && XZOPT=-e9 tar cJf ${WORKHOME}/${GITDATENAME}.tar.xz ${GITDATENAME} --owner=0 --group=0 )
 	fi
+	rm -rf "${TEMPLOCATION}/gnulib_$i"
 done
 
 #librsvg
 for i in librsvg ; do
 	[ ! -d ${WORKHOME}/$i ] && git clone https://gitlab.gnome.org/GNOME/$i.git ${WORKHOME}/$i --depth 1
-	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git remote update )
+	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git remote update && git reset --hard && git clean -f )
 	GITDATENAME="$i-$(cd ${WORKHOME}/$i && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
 
 	if [ ! -f "${WORKHOME}/${GITDATENAME}.tar.xz" ]; then

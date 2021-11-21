@@ -16,7 +16,7 @@ IUSE="test"
 
 CDEPEND="
 	dev-python/botocore[${PYTHON_USEDEP}]
-	dev-python/futures[${PYTHON_USEDEP}]
+	dev-python/future[${PYTHON_USEDEP}]
 "
 
 DEPEND="

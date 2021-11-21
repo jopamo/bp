@@ -14,45 +14,55 @@ for i in gnulib coreutils ; do
 	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git remote update )
 done
 
-for i in coreutils gperf libtool diffutils findutils grep patch sed tar ; do
+for i in coreutils cpio diffutils findutils gperf grep libtool patch sed tar ; do
 	[ ! -d ${WORKHOME}/$i ] && git clone https://git.savannah.gnu.org/git/$i.git ${WORKHOME}/$i --depth 1
-	GITDATENAME="$i-$(cd ${WORKHOME}/$i && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
 	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git remote update )
+	GITDATENAME="$i-$(cd ${WORKHOME}/$i && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
 
-	if [[ $i == 'patch' ]]; then
-		cp -rp ${WORKHOME}/gnulib ${TEMPLOCATION}/gnulib_patch
-		( cd ${TEMPLOCATION}/gnulib_patch && git reset --hard b141afaf9ba197e361510da075556822ac453ff6 )
-		( cd ${WORKHOME}/$i && ./bootstrap --skip-po --no-git --gnulib-srcdir=${TEMPLOCATION}/gnulib_patch )
-	else
-		( cd ${WORKHOME}/$i && rm -rf gnulib )
-		( cd ${WORKHOME}/$i && ln -s ../gnulib gnulib )
-		( cd ${WORKHOME}/$i && ./bootstrap --skip-po --no-git --gnulib-srcdir=${WORKHOME}/gnulib || ./autogen.sh )
+	if [ ! -f "${WORKHOME}/${GITDATENAME}.tar.xz" ]; then
+		if [[ $i == 'patch' ]]; then
+			cp -rp ${WORKHOME}/gnulib ${TEMPLOCATION}/gnulib_patch
+			( cd ${TEMPLOCATION}/gnulib_patch && git reset --hard b141afaf9ba197e361510da075556822ac453ff6 )
+			( cd ${WORKHOME}/$i && ./bootstrap --skip-po --no-git --gnulib-srcdir=${TEMPLOCATION}/gnulib_patch )
+		else
+			( cd ${WORKHOME}/$i && rm -rf gnulib )
+			( cd ${WORKHOME}/$i && ln -s ../gnulib gnulib )
+
+			if [[ $i == 'libtool' ]]; then
+				( cd ${WORKHOME}/$i && ./bootstrap --skip-po --gnulib-srcdir=${WORKHOME}/gnulib || ./autogen.sh )
+			else
+				( cd ${WORKHOME}/$i && ./bootstrap --skip-po --no-git --gnulib-srcdir=${WORKHOME}/gnulib || ./autogen.sh )
+			fi
+		fi
+
+		tar -hcf - $i | tar -xf - -C ${TEMPLOCATION}
+		mv ${TEMPLOCATION}/$i ${TEMPLOCATION}/${GITDATENAME}
+		find ${TEMPLOCATION}/${GITDATENAME} -name *~ -delete
+		( cd ${TEMPLOCATION}/${GITDATENAME} && rm -rf .git* gnulib autom4te.cache po/.reference )
+		find ${TEMPLOCATION}/${GITDATENAME} -name *.git* -delete
+		( cd ${TEMPLOCATION} && XZOPT=-e9 tar cJf ${WORKHOME}/${GITDATENAME}.tar.xz ${GITDATENAME} --owner=0 --group=0 )
 	fi
-
-	tar -hcf - $i | tar -xf - -C ${TEMPLOCATION}
-	mv ${TEMPLOCATION}/$i ${TEMPLOCATION}/${GITDATENAME}
-	find ${TEMPLOCATION}/${GITDATENAME} -name *~ -delete
-	( cd ${TEMPLOCATION}/${GITDATENAME} && rm -rf .git* gnulib autom4te.cache po/.reference )
-	find ${TEMPLOCATION}/${GITDATENAME} -name *.git* -delete
-	( cd ${TEMPLOCATION} && XZOPT=-e9 tar cJf ${WORKHOME}/${GITDATENAME}.tar.xz ${GITDATENAME} --owner=0 --group=0 )
 done
 
 #librsvg
 for i in librsvg ; do
 	[ ! -d ${WORKHOME}/$i ] && git clone https://gitlab.gnome.org/GNOME/$i.git ${WORKHOME}/$i --depth 1
-	GITDATENAME="$i-$(cd ${WORKHOME}/$i && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
 	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git remote update )
-	( cd ${WORKHOME}/$i && cargo vendor )
-	mkdir -p "${WORKHOME}/$i/.cargo"
-	echo -e "[source.crates-io]\n\
-replace-with = \"vendored-sources\"\n\n\
-[source.vendored-sources]\n\
-directory = \"vendor\"" > "${WORKHOME}/$i/.cargo/config.toml"
+	GITDATENAME="$i-$(cd ${WORKHOME}/$i && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
 
-	tar -hcf - $i | tar -xf - -C ${TEMPLOCATION}
-	mv ${TEMPLOCATION}/$i ${TEMPLOCATION}/${GITDATENAME}
-	find ${TEMPLOCATION}/${GITDATENAME} -name *~ -delete
-	( cd ${TEMPLOCATION}/${GITDATENAME} && rm -rf .git* gnulib autom4te.cache po/.reference )
-	find ${TEMPLOCATION}/${GITDATENAME} -name *.git* -delete
-	( cd ${TEMPLOCATION} && XZOPT=-e9 tar cJf ${WORKHOME}/${GITDATENAME}.tar.xz ${GITDATENAME} --owner=0 --group=0 )
+	if [ ! -f "${WORKHOME}/${GITDATENAME}.tar.xz" ]; then
+		( cd ${WORKHOME}/$i && cargo vendor )
+		mkdir -p "${WORKHOME}/$i/.cargo"
+		echo -e "[source.crates-io]\n\
+	replace-with = \"vendored-sources\"\n\n\
+	[source.vendored-sources]\n\
+	directory = \"vendor\"" > "${WORKHOME}/$i/.cargo/config.toml"
+
+		tar -hcf - $i | tar -xf - -C ${TEMPLOCATION}
+		mv ${TEMPLOCATION}/$i ${TEMPLOCATION}/${GITDATENAME}
+		find ${TEMPLOCATION}/${GITDATENAME} -name *~ -delete
+		( cd ${TEMPLOCATION}/${GITDATENAME} && rm -rf .git* gnulib autom4te.cache po/.reference )
+		find ${TEMPLOCATION}/${GITDATENAME} -name *.git* -delete
+		( cd ${TEMPLOCATION} && XZOPT=-e9 tar cJf ${WORKHOME}/${GITDATENAME}.tar.xz ${GITDATENAME} --owner=0 --group=0 )
+	fi
 done

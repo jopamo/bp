@@ -16,8 +16,13 @@ done
 
 for i in coreutils cpio diffutils findutils gperf grep libtool patch sed tar ; do
 	#prepare sources
-	[ ! -d ${WORKHOME}/$i ] && git clone https://git.savannah.gnu.org/git/$i.git ${WORKHOME}/$i --depth 1
-	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git remote update && git reset --hard && git clean -f )
+	if [[ $i == 'libtool' ]]; then
+		[ ! -d ${WORKHOME}/$i ] && git clone https://git.savannah.gnu.org/git/$i.git ${WORKHOME}/$i
+		[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git remote update && git reset --hard b9b44533fbf7c7752ffd255c3d09cc360e24183b && git clean -f )
+	else
+		[ ! -d ${WORKHOME}/$i ] && git clone https://git.savannah.gnu.org/git/$i.git ${WORKHOME}/$i --depth 1
+		[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git remote update && git reset --hard && git clean -f )
+	fi
 	GITDATENAME="$i-$(cd ${WORKHOME}/$i && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
 
 	#only create if different timestamp
@@ -26,10 +31,6 @@ for i in coreutils cpio diffutils findutils gperf grep libtool patch sed tar ; d
 		cp -rp "${WORKHOME}/gnulib" "${TEMPLOCATION}/gnulib_$i"
 		( cd "${WORKHOME}/$i" && rm -rf gnulib )
 		ln -s "${TEMPLOCATION}/gnulib_$i" "${WORKHOME}/$i/gnulib"
-
-		if [[ $i == 'libtool' ]]; then
-			( cd "${WORKHOME}/$i" && git reset --hard b9b44533fbf7c7752ffd255c3d09cc360e24183b )
-		fi
 
 		if [[ $i == 'patch' ]]; then
 			( cd "${TEMPLOCATION}/gnulib_$i" && git reset --hard b141afaf9ba197e361510da075556822ac453ff6 )

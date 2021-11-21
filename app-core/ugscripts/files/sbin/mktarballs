@@ -1,24 +1,34 @@
 #!/bin/bash
 
-RANDOMSTRING="$(cat /dev/urandom | tr -dc '[:alpha:]' | fold -w ${1:-5} | head -n 1)"
 WORKHOME="${HOME}/gnu_tarballs"
-TEMPLOCATION="${WORKHOME}/tmp"
+TEMPLOCATION="/tmp/gnu_tarballs"
 
 rm -rf ${TEMPLOCATION}
 mkdir -p ${TEMPLOCATION}
 cd ${WORKHOME}
 
-git clone https://github.com/coreutils/gnulib.git ${WORKHOME}/gnulib
-git clone https://github.com/coreutils/coreutils.git ${WORKHOME}/coreutils
+[ ! -d ${WORKHOME}/coreutils ] && git clone https://github.com/coreutils/coreutils.git ${WORKHOME}/coreutils --depth 1
+[ ! -d ${WORKHOME}/gnulib ] && git clone https://github.com/coreutils/gnulib.git ${WORKHOME}/gnulib
 
-#special patch build
-for i in patch ; do
-	git clone https://git.savannah.gnu.org/git/$i.git ${WORKHOME}/$i
-	GITDATENAME="$i-$(cd ${WORKHOME}/$i && git log -1 --format="%at" | xargs -I{} date -d @{} +%Y%m%d)"
-	( cd ${WORKHOME}/$i && git remote update )
-	cp -rp ${WORKHOME}/gnulib ${WORKHOME}/gnulib_patch
-	( cd ${WORKHOME}/gnulib_patch && git reset --hard b141afaf9ba197e361510da075556822ac453ff6 )
-	( cd ${WORKHOME}/$i && ./bootstrap --skip-po --no-git --gnulib-srcdir=${WORKHOME}/gnulib_patch )
+for i in gnulib coreutils ; do
+	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git remote update )
+done
+
+for i in coreutils gperf libtool diffutils findutils grep patch sed tar ; do
+	[ ! -d ${WORKHOME}/$i ] && git clone https://git.savannah.gnu.org/git/$i.git ${WORKHOME}/$i --depth 1
+	GITDATENAME="$i-$(cd ${WORKHOME}/$i && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
+	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git remote update )
+
+	if [[ $i == 'patch' ]]; then
+		cp -rp ${WORKHOME}/gnulib ${TEMPLOCATION}/gnulib_patch
+		( cd ${TEMPLOCATION}/gnulib_patch && git reset --hard b141afaf9ba197e361510da075556822ac453ff6 )
+		( cd ${WORKHOME}/$i && ./bootstrap --skip-po --no-git --gnulib-srcdir=${TEMPLOCATION}/gnulib_patch )
+	else
+		( cd ${WORKHOME}/$i && rm -rf gnulib )
+		( cd ${WORKHOME}/$i && ln -s ../gnulib gnulib )
+		( cd ${WORKHOME}/$i && ./bootstrap --skip-po --no-git --gnulib-srcdir=${WORKHOME}/gnulib || ./autogen.sh )
+	fi
+
 	tar -hcf - $i | tar -xf - -C ${TEMPLOCATION}
 	mv ${TEMPLOCATION}/$i ${TEMPLOCATION}/${GITDATENAME}
 	find ${TEMPLOCATION}/${GITDATENAME} -name *~ -delete
@@ -27,14 +37,18 @@ for i in patch ; do
 	( cd ${TEMPLOCATION} && XZOPT=-e9 tar cJf ${WORKHOME}/${GITDATENAME}.tar.xz ${GITDATENAME} --owner=0 --group=0 )
 done
 
-for i in coreutils gperf libtool diffutils findutils grep tar sed ; do
-	git clone https://git.savannah.gnu.org/git/$i.git ${WORKHOME}/$i
-	GITDATENAME="$i-$(cd ${WORKHOME}/$i && git log -1 --f="%at" | xargs -I{} date -d @{} +%Y%m%d)"
-	(cd ${WORKHOME}/gnulib && git remote update )
-	( cd ${WORKHOME}/$i && git remote update )
-	( cd ${WORKHOME}/$i && rm -rf gnulib )
-	( cd ${WORKHOME}/$i && ln -s ../gnulib gnulib )
-	( cd ${WORKHOME}/$i && ./bootstrap --skip-po --no-git --gnulib-srcdir=${WORKHOME}/gnulib || ./autogen.sh )
+#librsvg
+for i in librsvg ; do
+	[ ! -d ${WORKHOME}/$i ] && git clone https://gitlab.gnome.org/GNOME/$i.git ${WORKHOME}/$i --depth 1
+	GITDATENAME="$i-$(cd ${WORKHOME}/$i && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
+	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git remote update )
+	( cd ${WORKHOME}/$i && cargo vendor )
+	mkdir -p "${WORKHOME}/$i/.cargo"
+	echo -e "[source.crates-io]\n\
+replace-with = \"vendored-sources\"\n\n\
+[source.vendored-sources]\n\
+directory = \"vendor\"" > "${WORKHOME}/$i/.cargo/config.toml"
+
 	tar -hcf - $i | tar -xf - -C ${TEMPLOCATION}
 	mv ${TEMPLOCATION}/$i ${TEMPLOCATION}/${GITDATENAME}
 	find ${TEMPLOCATION}/${GITDATENAME} -name *~ -delete
@@ -42,5 +56,3 @@ for i in coreutils gperf libtool diffutils findutils grep tar sed ; do
 	find ${TEMPLOCATION}/${GITDATENAME} -name *.git* -delete
 	( cd ${TEMPLOCATION} && XZOPT=-e9 tar cJf ${WORKHOME}/${GITDATENAME}.tar.xz ${GITDATENAME} --owner=0 --group=0 )
 done
-
-rm -rf ${TEMPLOCATION}

@@ -29,6 +29,7 @@ src_bootstrap_sed() {
 }
 
 src_prepare() {
+	sed -i -e "s/UNKNOWN/4.8.${PV}/g" {configure,build-aux/git-version-gen} || die
 	default
 	src_bootstrap_sed
 }

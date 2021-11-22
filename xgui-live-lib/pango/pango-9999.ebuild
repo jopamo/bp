@@ -16,14 +16,15 @@ KEYWORDS="amd64 arm64"
 IUSE="X +introspection test"
 
 DEPEND="
-	xgui-misc/harfbuzz[glib(+),truetype(+)]
-	lib-live/glib
 	fonts/fontconfig
-	xgui-misc/freetype
-	xgui-live-lib/cairo
-	introspection? ( lib-live/gobject-introspection )
-	xgui-live-lib/libXft
 	lib-dev/fribidi
+	lib-live/glib
+	lib-live/json-glib
+	xgui-live-lib/cairo
+	xgui-live-lib/libXft
+	xgui-misc/freetype
+	xgui-misc/harfbuzz[glib(+),truetype(+)]
+	introspection? ( lib-live/gobject-introspection )
 "
 BDEPEND="
 	app-dev/gtk-doc-am

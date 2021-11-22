@@ -8,7 +8,7 @@ SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="2"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="static"
 
@@ -21,8 +21,8 @@ DEPEND="
 "
 
 src_prepare() {
+	sed -i -e "s/UNKNOWN/2.4.${PV}/g" {configure,build-aux/git-version-gen} || die
 	default
-	sed -i -e "s/UNKNOWN/2.4.${PV}/g" "build-aux/git-version-gen" || die
 }
 
 src_configure() {

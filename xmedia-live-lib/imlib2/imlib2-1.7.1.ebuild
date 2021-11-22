@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs autotools
+inherit toolchain-funcs autotools flag-o-matic
 
 DESCRIPTION="Version 2 of an advanced replacement library for libraries like libXpm"
 HOMEPAGE="https://www.enlightenment.org/"
@@ -35,6 +35,8 @@ DEPEND="
 		xgui-live-app/xorgproto
 	)
 "
+
+filter-flags -Wl,-z,defs
 
 src_prepare() {
 	default

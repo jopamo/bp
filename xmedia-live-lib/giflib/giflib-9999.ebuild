@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic git-r3 cmake
+inherit git-r3 cmake
 
 DESCRIPTION="giflib-turbo - A faster drop-in replacement for giflib."
 HOMEPAGE="https://github.com/bitbank2/giflib-turbo"

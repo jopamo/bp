@@ -15,3 +15,9 @@ DEPEND="
 	app-core/file
 	virtual/curses
 "
+
+src_install() {
+	default
+
+	rm -rf "${ED}"/usr/share/man || die
+}

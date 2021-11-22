@@ -12,14 +12,29 @@ LICENSE="LGPL"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+IUSE="ipv6 +static-modules static-bin static-build"
+
 src_prepare() {
 	default
-	sed -i -e "s/UNKNOWN/$(git log -1 --format="%at" | xargs -I{} date -d @{} +%Y%m%d)/g" "Makefile" || die
+	sed -i -e "s/UNKNOWN/$(git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')/g" "Makefile" || die
 }
 
 src_configure() {
 	local myconf=(
+		$(use_enable ipv6)
 		--use-zlib=local
+		$(usex static-modules '--static-modules' '')
+		$(usex static-build '--static-build' '')
+		$(usex static-bin '--static-bin' '')
+		--disable-platinum
+		--disable-alsa
+		--disable-oss-audio
+		--disable-jack
+		--disable-pulseaudio
+		--disable-x11
+		--disable-x11-shm
+		--disable-x11-xv
+		--disable-ssl
 	)
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }

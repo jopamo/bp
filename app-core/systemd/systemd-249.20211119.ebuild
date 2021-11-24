@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="v$(ver_cut 1)-stable"
 	inherit git-r3
 else
-	SNAPSHOT=deda69dad784f9c4367533555ff4d7bf6308c0ff
+	SNAPSHOT=d4406e94a32d423d8a73deb7757fb09890afe2c4
 	SRC_URI="https://github.com/systemd/systemd-stable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/systemd-stable-${SNAPSHOT}"
 	KEYWORDS="amd64 arm64"

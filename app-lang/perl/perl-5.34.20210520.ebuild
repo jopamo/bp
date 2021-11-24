@@ -21,7 +21,7 @@ fi
 LICENSE="|| ( Artistic GPL-1+ )"
 SLOT="0"
 
-IUSE="debug gdbm musl"
+IUSE="debug gdbm"
 
 DEPEND="
 	gdbm? ( lib-core/gdbm )
@@ -75,15 +75,12 @@ src_configure() {
 	filter-flags "-malign-double"
 
 	export BUILD_BZIP2=0
-	export BZIP2_INCLUDE=${EROOT}/usr/include
-	export BZIP2_LIB=${EROOT}/usr/lib
+	export BZIP2_INCLUDE="${EROOT}"/usr/include
+	export BZIP2_LIB="${EROOT}"/usr/lib
 
-	if ! use musl ; then
-		#use included zlib on musl
-		export BUILD_ZLIB=False
-		export ZLIB_INCLUDE=${EROOT}/usr/include
-		export ZLIB_LIB=${EROOT}/usr/lib
-	fi
+	export BUILD_ZLIB=0
+	export ZLIB_INCLUDE="${EROOT}"/usr/include
+	export ZLIB_LIB="${EROOT}"/usr/lib
 
 	# allow either gdbm to provide ndbm (in <gdbm/ndbm.h>) or db1
 	myndbm='U'

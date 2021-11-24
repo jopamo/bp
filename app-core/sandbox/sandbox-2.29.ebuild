@@ -14,8 +14,6 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="app-compression/xz-utils"
 
-PATCHES=( "${FILESDIR}"/disable_trace.patch )
-
 has sandbox_death_notice ${EBUILD_DEATH_HOOKS} || EBUILD_DEATH_HOOKS="${EBUILD_DEATH_HOOKS} sandbox_death_notice"
 
 sandbox_death_notice() {
@@ -25,7 +23,7 @@ sandbox_death_notice() {
 
 src_configure() {
 	filter-lfs-flags #90228
-	filter-flags -flto\=\*
+	filter-flags -flto\*
 
 	local myconf=()
 

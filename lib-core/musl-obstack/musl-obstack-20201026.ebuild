@@ -5,8 +5,11 @@ EAPI=8
 inherit autotools
 
 DESCRIPTION="A standalone library to implement GNU libc's obstack."
-HOMEPAGE="https://github.com/pullmoll/musl-obstack"
-SRC_URI="https://github.com/pullmoll/musl-obstack/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+HOMEPAGE="https://github.com/void-linux/musl-obstack"
+
+SNAPSHOT=d0493f4726835a08c5a145bce42b61a65847c6a9
+SRC_URI="https://github.com/void-linux/musl-obstack/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"

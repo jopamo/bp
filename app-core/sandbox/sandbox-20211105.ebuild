@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit flag-o-matic multiprocessing
+SNAPSHOT="35459036a204bbf147b11631317aff9eb1804573"
+
+inherit flag-o-matic multiprocessing autotools
 
 DESCRIPTION="sandbox'd LD_PRELOAD hack"
 HOMEPAGE="https://www.gentoo.org/proj/en/portage/sandbox/"
-SRC_URI="https://gentoo.osuosl.org/distfiles/${P}.tar.xz"
+SRC_URI="https://gitweb.gentoo.org/proj/sandbox.git/snapshot/sandbox-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -21,9 +24,14 @@ sandbox_death_notice() {
 	ewarn "FEATURES='-sandbox -usersandbox' emerge sandbox"
 }
 
+src_prepare() {
+	default
+	eautoreconf
+}
+
 src_configure() {
 	filter-lfs-flags #90228
-	filter-flags -flto\*
+	filter-flags -flto\=\*
 
 	local myconf=()
 

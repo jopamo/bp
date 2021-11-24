@@ -2,12 +2,14 @@
 
 EAPI=8
 
-inherit flag-o-matic
+inherit flag-o-matic autotools
 
 DESCRIPTION="A selection of tools from Debian"
 HOMEPAGE="https://packages.qa.debian.org/d/debianutils.html"
-SRC_URI="http://http.debian.net/debian/pool/main/d/${PN}/${PN}_${PV}.tar.xz"
-S=${WORKDIR}/${PN}
+
+SNAPSHOT=8577ee810c9405a6edc1e48b77258ecc9b0b7282
+SRC_URI="https://salsa.debian.org/debian/debianutils/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="BSD GPL-2 SMAIL"
 SLOT="0"
@@ -16,6 +18,12 @@ KEYWORDS="amd64 arm64"
 IUSE="+installkernel savelog static tempfile"
 
 PATCHES=( "${FILESDIR}"/${PN}-3.4.2-no-bs-namespace.patch )
+
+src_prepare() {
+	sed -i -e '/SUBDIRS/s|po4a||' Makefile.am || die
+	default
+	eautoreconf
+}
 
 src_configure() {
 	use static && append-ldflags -static

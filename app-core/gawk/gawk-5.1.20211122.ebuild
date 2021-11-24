@@ -4,6 +4,8 @@ EAPI=8
 
 SNAPSHOT=5dd74ca177fc6e748c0098da1af8c94228ee6e90
 
+inherit flag-o-matic
+
 DESCRIPTION="GNU awk pattern-matching language"
 HOMEPAGE="https://www.gnu.org/software/gawk/gawk.html"
 SRC_URI="https://git.savannah.gnu.org/cgit/gawk.git/snapshot/gawk-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
@@ -20,6 +22,8 @@ DEPEND="
 	mpfr? ( lib-core/mpfr )
 	readline? ( lib-core/readline )
 "
+
+filter-flags -Wl,-z,defs
 
 src_configure() {
 	export ac_cv_libsigsegv=no

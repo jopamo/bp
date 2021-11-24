@@ -14,8 +14,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+asm pgo static-libs"
 
-DEPEND="app-build/m4
-	app-compression/xz-utils"
+DEPEND="
+	app-build/m4
+	app-compression/xz-utils
+"
 
 PATCHES=( "${FILESDIR}"/${PN}-6.1.0-noexecstack-detect.patch	)
 
@@ -36,13 +38,16 @@ src_configure() {
 	export GMPABI=64
 
 	tc-export CC
-	ECONF_SOURCE="${S}" econf \
-		--localstatedir="${EPREFIX}"/var/state/gmp \
-		--enable-shared \
-		--enable-cxx \
-    	--enable-fat \
-		$(use_enable asm assembly) \
+
+	local myconf=(
+		--localstatedir="${EPREFIX}"/var/state/gmp
+		--enable-shared
+		--enable-cxx
+    	--enable-fat
+		$(use_enable asm assembly)
 		$(use_enable static-libs static)
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
 src_compile() {

@@ -317,13 +317,18 @@ tar xvhf nano* --xattrs
 rm nano* || exit
 
 #tmux
-cp /var/cache/packages/lib-dev/libevent/* .
-tar xvhf libevent* --xattrs
-rm libevent* || exit
+#cp /var/cache/packages/lib-dev/libevent/* .
+#tar xvhf libevent* --xattrs
+#rm libevent* || exit
 
-cp /var/cache/packages/app-var/tmux/* .
-tar xvhf tmux* --xattrs
-rm tmux* || exit
+#cp /var/cache/packages/app-var/tmux/* .
+#tar xvhf tmux* --xattrs
+#rm tmux* || exit
+
+#screen
+cp /var/cache/packages/app-var/screen/* .
+tar xvhf screen* --xattrs
+rm screen* || exit
 
 #vim
 cp /var/cache/packages/app-var/vim/* .

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cp -L /etc/resolv.conf etc/
+mount -t proc proc proc
+mount -t sysfs sys sys
+mount -o bind /dev dev
+mount -t tmpfs run run
+chroot .
+source /etc/profile
+export PS1="(chroot) $PS1"

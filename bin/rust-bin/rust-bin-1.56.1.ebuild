@@ -18,8 +18,8 @@ SRC_URI="
 "
 
 LICENSE="|| ( MIT Apache-2.0 ) BSD-1 BSD-2 BSD-4 UoI-NCSA"
-SLOT="stable"
-KEYWORDS="amd64 ~arm ~arm64 ~ppc ~ppc64 ~riscv ~x86"
+SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="clippy musl rls rustfmt"
 

@@ -7,11 +7,8 @@
 
 </div>
 
-bp is short for 'backpack' to denote it being easier to move around on various cloud services. It is an alternate [gentoo](https://github.com/gentoo/gentoo) package repo. It is yet not compatible with gentoo or gentoo overlays, some stuff will work, but most will not. The plan is to just use the package.provided mechanism to provide a compatibility layer for using the gentoo repo or gentoo overlays. The easiest way to do this is to change the names of categories allowing the gentoo tree version of certain packages to never be used.
+bp is short for 'backpack' to denote it being easier to move around on various cloud services or embedded devices. It is an alternate [gentoo](https://github.com/gentoo/gentoo) package repo. It is somewhat compatible with gentoo and gentoo overlays, some stuff will work, but most probably will not. It uses the package.provided mechanism to provide a compatibility layer, changing the names of categories allowing the gentoo tree version of certain packages to never be used without fighting for namespaces.
 
-Below are some highlights from the configuration
-* link time optimization and the Integer Set Library are enabled by default, just set NTHREAD in your make.conf
-  * Thank you to [gentooLTO!](https://github.com/InBetweenNames/gentooLTO)
 ## Distro Configuration
 * no multilib - the toolchain only supports 64bit
 * all libraries are installed to /usr/lib
@@ -22,8 +19,4 @@ Below are some highlights from the configuration
    * switching back and forth with preserve-libs should work
 * it supports your choice of ncurses or netbsd-curses
    * switching from default of ncurses to netbsd-curses works, switching from netbsd-curses to ncurses does not work
-* I primarily use systemd, but the -systemd use flag should disable installing every single systemd file.
 * systemd is supported with musl on both amd64 and arm64
-* link time optimization is enabled globally by default
-* security compiler options such as fpie, fpic, D_FORTIFY_SOURCE, fstack-protector-strong, etc are all enabled by default as well
-* more on the way...

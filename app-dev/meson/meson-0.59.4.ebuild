@@ -16,8 +16,7 @@ fi
 
 LICENSE="Apache-2.0"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
-#build fails
+KEYWORDS="amd64 arm64"
 
 RESTRICT="test"
 

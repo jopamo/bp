@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=9da84c230a98bb2c9bea612c864ec140edf775ee
+SNAPSHOT=19c0ca738575a6efb0181d87d15b3c6025a88b00
 
 inherit meson
 
@@ -20,7 +20,6 @@ IUSE="debug +dep +jumbo-build +required-use sqlite swap-remote tmpfilesd tools"
 DEPEND="
 	app-var/push
 	app-var/quoter
-	app-build/gettext
 	sqlite? ( lib-core/sqlite )
 "
 
@@ -36,19 +35,19 @@ src_prepare() {
 
 src_configure() {
 	local emesonargs=(
-		$(meson_use jumbo-build)
-		$(meson_use sqlite)
-		$(meson_use tools separate-tools)
 		$(meson_use debug debugging)
-		$(meson_use swap-remote)
-		$(meson_use prefix always-accept-keywords)
 		$(meson_use dep dep-default)
+		$(meson_use jumbo-build)
+		$(meson_use prefix always-accept-keywords)
 		$(meson_use required-use required-use-default)
-		-Dzsh-completion="${EPREFIX}/usr/share/zsh/site-functions"
-		-Dportage-rootpath="${ROOTPATH}"
+		$(meson_use sqlite)
+		$(meson_use swap-remote)
+		$(meson_use tools separate-tools)
 		-Deprefix-default="${EPREFIX}"
+		-Dportage-rootpath="${ROOTPATH}"
 		-Dextra-doc=false
 		-Dnls=false
+		-Dprotobuf=false
 		)
 		meson_src_configure
 }

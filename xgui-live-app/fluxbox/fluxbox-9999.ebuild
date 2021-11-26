@@ -30,10 +30,10 @@ src_configure() {
 src_install() {
 	default
 
-#	insinto /usr/share/fluxbox/
-#	for i in init menu startup ; do
-#			doins "${FILESDIR}/$i"
-#	done
+	insinto /usr/share/fluxbox/
+	for i in init menu apps ; do
+			doins "${FILESDIR}/$i"
+	done
 
 	insinto /usr/share/fluxbox/styles/bora_black/
 	newins "${FILESDIR}/bora_black_theme.cfg" theme.cfg

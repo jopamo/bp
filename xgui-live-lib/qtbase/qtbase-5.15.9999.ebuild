@@ -13,7 +13,7 @@ LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="mysql postgres sqlite systemd opengl vulkan xkbcommon"
+IUSE="mysql postgres sqlite systemd opengl vulkan +xkbcommon"
 
 DEPEND="
 	app-core/dbus
@@ -69,7 +69,6 @@ src_configure() {
 		-no-sql-{db2,ibase,oci,odbc,tds}
 		-no-strip
 		-libinput
-		-no-accessibility
 		-openssl-linked
 		-system-doubleconversion
 		-system-freetype

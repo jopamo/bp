@@ -4,26 +4,25 @@ EAPI=8
 
 inherit meson git-r3
 
-DESCRIPTION="A modular Wayland compositor library with EGLStreams support"
-HOMEPAGE="https://github.com/danvd/wlroots-eglstreams.git"
-EGIT_REPO_URI="https://github.com/danvd/wlroots-eglstreams.git"
+DESCRIPTION="A modular Wayland compositor library"
+HOMEPAGE="https://github.com/swaywm/wlroots"
+EGIT_REPO_URI="https://github.com/swaywm/wlroots"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
+	app-core/systemd[logind]
+	app-live/seatd
+	lib-core/libcap
 	lib-live/libinput
-	xgui-live-lib/wayland
-	xmedia-live-lib/mesa
 	xgui-live-lib/libdrm
 	xgui-live-lib/libxkbcommon
 	xgui-live-lib/pixman
-	app-core/systemd[logind]
-	lib-core/libcap
-	app-var/seatd
+	xgui-live-lib/wayland
+	xmedia-live-lib/mesa
 "
-
 BDEPEND="
 	xgui-live-lib/wayland-protocols
 	app-dev/pkgconf
@@ -31,10 +30,8 @@ BDEPEND="
 
 src_configure() {
 	local emesonargs=(
-		-Dxcb-errors=disabled
-		-Dlibcap=enabled
+		-Dxcb-errors=enabled
 		-Dxwayland=disabled
-		-Dx11-backend=disabled
 		-Dexamples=false
 		-Dwerror=false
 	)

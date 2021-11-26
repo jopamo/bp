@@ -15,16 +15,16 @@ KEYWORDS="amd64 arm64"
 IUSE="+swaybg +swayidle +swaylock +tray +wallpapers"
 
 DEPEND="
+	lib-core/libpcre
 	lib-live/json-c
 	lib-live/libinput
-	lib-core/libpcre
-	xgui-live-lib/wayland
 	xgui-live-lib/cairo
+	xgui-live-lib/gdk-pixbuf
 	xgui-live-lib/libxkbcommon
 	xgui-live-lib/pango
 	xgui-live-lib/pixman
-	|| ( xgui-live-lib/wlroots xgui-live-lib/wlroots-eglstreams )
-	xgui-live-lib/gdk-pixbuf
+	xgui-live-lib/wayland
+	xgui-live-lib/wlroots
 	swaybg? ( xgui-live-app/swaybg )
 	swayidle? ( xgui-live-app/swayidle )
 	swaylock? ( xgui-live-app/swaylock )

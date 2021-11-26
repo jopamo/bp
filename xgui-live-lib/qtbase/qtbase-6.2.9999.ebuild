@@ -15,7 +15,7 @@ LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-IUSE="mysql postgres sqlite systemd opengl vulkan"
+IUSE="mysql postgres sqlite systemd opengl vulkan xkbcommon"
 
 DEPEND="
 	app-core/dbus
@@ -23,11 +23,13 @@ DEPEND="
 	lib-core/zlib
 	lib-dev/double-conversion
 	lib-live/glib
+	lib-live/libinput
 	xgui-live-lib/libxcb
 	xgui-misc/freetype
 	xgui-misc/harfbuzz
 	xmedia-live-lib/libjpeg-turbo
 	xmedia-live-lib/libpng
+	xkbcommon? ( xgui-live-lib/libxkbcommon )
 	mysql? ( app-server/mariadb )
 	opengl? ( xmedia-live-lib/mesa )
 	postgres? ( app-server/postgresql )
@@ -35,9 +37,9 @@ DEPEND="
 	systemd? ( app-core/systemd )
 	vulkan? ( xmedia-live-lib/vulkan-loader )
 "
+PDEPEND="xgui-live-lib/qtx11extras"
 
 filter-flags -flto\*
-append-cppflags -DOPENSSL_NO_PSK -DOPENSSL_NO_NEXTPROTONEG -Wno-deprecated-declarations -Wno-class-memaccess -Wno-packed-not-aligned
 
 src_prepare() {
 	sed -i -e "s|^\(QMAKE_CFLAGS_RELEASE.*\)|\1 ${CFLAGS}|" \
@@ -45,14 +47,16 @@ src_prepare() {
 	sed -i -e "s|^\(QMAKE_LFLAGS_RELEASE.*\)|\1 ${LDFLAGS}|" \
 		mkspecs/common/g++-unix.conf
 
-	cmake_src_prepare
+	default
 }
 
 src_configure() {
 	local myconf=(
-		-cmake-generator Ninja
 		-opensource -confirm-license
 		-release
+		-no-static
+		-no-framework
+		-no-rpath
 		-prefix "${EPREFIX}"/usr
 		-docdir "${EPREFIX}"/usr/share/doc/qt
 		-headerdir "${EPREFIX}"/usr/include/qt
@@ -60,30 +64,31 @@ src_configure() {
 		-datadir "${EPREFIX}"/usr/share/qt
 		-sysconfdir "${EPREFIX}"/etc/xdg
 		-examplesdir "${EPREFIX}"/usr/share/doc/qt/examples
-		-system-harfbuzz
-		-system-doubleconversion
-		-system-pcre
-		-system-zlib
-		-system-libpng
-		-system-libjpeg
-		-system-freetype
 		-dbus-linked
 		-glib
-		-no-framework
+		-no-compile-examples
 		-no-pch
-		-no-rpath
-		-no-sql-{db2,ibase,oci,odbc}
-		-no-static
+		-no-sql-{db2,ibase,oci,odbc,tds}
 		-no-strip
+		-libinput
+		-no-accessibility
 		-openssl-linked
+		-system-doubleconversion
+		-system-freetype
+		-system-harfbuzz
+		-system-libjpeg
+		-system-libpng
+		-system-pcre
+		-system-zlib
 		$(usex arm64 '' -reduce-relocations)
 		$(usex mysql -sql-mysql -no-sql-mysql)
-		$(usex opengl '' -no-opengl)
+		$(usex opengl -opengl -no-opengl)
 		$(usex postgres -sql-psql -no-sql-psql)
 		$(usex sqlite -sql-sqlite -no-sql-sqlite)
 		$(usex sqlite -system-sqlite -no-sqlite)
 		$(usex systemd -journald -no-journald)
 		$(usex vulkan -vulkan -no-vulkan)
+		$(usex xkbcommon -xkbcommon -no-xkbcommon)
     )
     einfo "Configuring with: ${myconf[@]}"
 	"${S}"/configure "${myconf[@]}" || die "configure failed"

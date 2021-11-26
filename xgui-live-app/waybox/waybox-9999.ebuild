@@ -14,9 +14,7 @@ KEYWORDS="amd64 arm64"
 
 filter-flags -Wl,-z,defs
 
-DEPEND="
-	|| ( xgui-live-lib/wlroots xgui-live-lib/wlroots-eglstreams )
-"
+DEPEND="xgui-live-lib/wlroots"
 
 src_prepare() {
 	default

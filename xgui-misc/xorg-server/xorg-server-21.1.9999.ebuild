@@ -7,7 +7,7 @@ inherit meson flag-o-matic
 DESCRIPTION="implementation of the X Window System display server"
 HOMEPAGE="https://www.x.org/wiki/"
 
-if [[ ${PV} == *9999* ]]; then
+if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/xserver.git"
 	EGIT_BRANCH="server-$(ver_cut 1).$(ver_cut 2)-branch"
 	inherit git-r3
@@ -21,49 +21,42 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug +glamor ipv6 minimal systemd suid_wrapper +udev
-	wayland xcsecurity X"
+IUSE="+glamor ipv6 minimal systemd suid_wrapper +udev xcsecurity X"
 
-CDEPEND="
+DEPEND="
 	virtual/ssl
-	>=xgui-live-app/iceauth-1.0.2
-	>=xgui-live-app/rgb-1.0.3
-	>=xgui-live-app/xauth-1.0.3
-	xgui-misc/xkbcomp
-	>=xgui-live-lib/libdrm-2.4.46
+	xgui-live-app/iceauth
+	xgui-live-app/rgb
+	xgui-live-app/xauth
+	xgui-live-app/xbitmaps
+	xgui-live-app/xinit
+	xgui-live-lib/libXau
+	xgui-live-lib/libXdmcp
+	xgui-live-lib/libXfont2
+	xgui-live-lib/libdrm
 	xgui-live-lib/libpciaccess
-	>=xgui-live-lib/libXau-1.0.4
-	>=xgui-live-lib/libXdmcp-1.0.2
-	>=xgui-live-lib/libXfont2-2.0.1
-	>=xgui-live-lib/libxkbfile-1.0.4
-	>=xgui-live-lib/libxshmfence-1.1
-	>=xgui-live-lib/pixman-0.27.2
-	>=xgui-live-lib/xtrans-1.3.5
-	>=xgui-live-app/xbitmaps-1.0.1
+	xgui-live-lib/libxcvt
+	xgui-live-lib/libxkbfile
+	xgui-live-lib/libxshmfence
+	xgui-live-lib/pixman
+	xgui-live-lib/xtrans
+	xgui-misc/xkbcomp
 	xgui-misc/xkeyboard-config
 	glamor? (
 		xmedia-live-lib/libepoxy
 		xmedia-live-lib/mesa
 	)
 	!minimal? (
-		>=xgui-live-lib/libX11-1.1.5
-		>=xgui-live-lib/libXext-1.0.5
-		>=xmedia-live-lib/mesa-10.3.4-r1
+		xgui-live-lib/libX11
+		xgui-live-lib/libXext
+		xmedia-live-lib/mesa
 	)
-	udev? ( >=app-core/systemd-150 )
-	wayland? (
-		>=xgui-live-lib/wayland-1.3.0
-		xmedia-live-lib/libepoxy
-		>=xgui-live-lib/wayland-protocols-1.1
-		xgui-live-lib/egl-wayland
-	)
-	>=xgui-live-app/xinit-1.3.3-r1
+	udev? ( app-core/systemd )
 	systemd? (
 		app-core/dbus
 		app-core/systemd
 	)"
-
-DEPEND="${CDEPEND}
+BDEPEND="
 	app-build/flex
 	xgui-live-app/xorgproto
 "
@@ -74,15 +67,13 @@ filter-flags -Wl,-z,defs -Wl,-z,now
 
 src_configure() {
         local emesonargs=(
+		$(meson_use X xorg)
 		$(meson_use glamor)
 		$(meson_use ipv6)
-		$(meson_use udev)
-		$(meson_use systemd systemd_logind)
-		$(meson_use wayland xwayland)
-		$(meson_use wayland xwayland_eglstream)
-		$(meson_use xcsecurity)
 		$(meson_use suid_wrapper)
-		$(meson_use X xorg)
+		$(meson_use systemd systemd_logind)
+		$(meson_use udev)
+		$(meson_use xcsecurity)
 		-Ddri1=false
 		-Ddri2=false
 		-Ddri3=false

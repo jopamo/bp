@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit git-r3 meson
 
 DESCRIPTION="Wayland protocol files"
 HOMEPAGE="https://wayland.freedesktop.org/"
@@ -13,16 +13,3 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-live-lib/wayland"
-
-src_prepare() {
-	default
-	eautoreconf
-}
-
-src_test() {
-	export XDG_RUNTIME_DIR="${T}/runtime-dir"
-	mkdir "${XDG_RUNTIME_DIR}" || die
-	chmod 0700 "${XDG_RUNTIME_DIR}" || die
-
-	default
-}

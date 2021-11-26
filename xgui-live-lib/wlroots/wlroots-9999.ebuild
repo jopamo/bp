@@ -2,11 +2,18 @@
 
 EAPI=8
 
-inherit meson git-r3
+inherit meson
 
 DESCRIPTION="A modular Wayland compositor library"
 HOMEPAGE="https://github.com/swaywm/wlroots"
 EGIT_REPO_URI="https://github.com/swaywm/wlroots"
+
+if [[ ${PV} == *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/swaywm/${PN}.git"
+	inherit git-r3
+else
+	SRC_URI="https://github.com/swaywm/${PN}/releases/download/${PV}/${P}.tar.gz"
+fi
 
 LICENSE="MIT"
 SLOT="0"
@@ -30,8 +37,8 @@ BDEPEND="
 
 src_configure() {
 	local emesonargs=(
-		-Dxcb-errors=enabled
-		-Dxwayland=disabled
+		-Dxcb-errors=disabled
+		-Dxwayland=enabled
 		-Dexamples=false
 		-Dwerror=false
 	)

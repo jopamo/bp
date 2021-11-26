@@ -2,11 +2,17 @@
 
 EAPI=8
 
-inherit git-r3 meson
+inherit meson
 
 DESCRIPTION="i3-compatible Wayland window manager"
 HOMEPAGE="https://swaywm.org"
-EGIT_REPO_URI="https://github.com/swaywm/${PN}.git"
+
+if [[ ${PV} == *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/swaywm/${PN}.git"
+	inherit git-r3
+else
+	SRC_URI="https://github.com/swaywm/${PN}/releases/download/${PV}/${P}.tar.gz"
+fi
 
 LICENSE="MIT"
 SLOT="0"

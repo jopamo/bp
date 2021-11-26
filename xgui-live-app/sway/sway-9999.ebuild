@@ -24,16 +24,12 @@ DEPEND="
 	xgui-live-lib/pango
 	xgui-live-lib/pixman
 	|| ( xgui-live-lib/wlroots xgui-live-lib/wlroots-eglstreams )
-	xgui-live-lib/gdk-pixbuf:2
+	xgui-live-lib/gdk-pixbuf
 	swaybg? ( xgui-live-app/swaybg )
 	swayidle? ( xgui-live-app/swayidle )
 	swaylock? ( xgui-live-app/swaylock )
-	>=app-core/systemd-239
 "
-RDEPEND="
-	xgui-misc/xkeyboard-config
-	${DEPEND}
-"
+RDEPEND="xgui-misc/xkeyboard-config"
 BDEPEND="
 	xgui-live-lib/wayland-protocols
 	app-dev/pkgconf
@@ -41,15 +37,13 @@ BDEPEND="
 
 src_configure() {
 	local emesonargs=(
-		-Dman-pages=disabled
-		-Dtray=$(usex tray enabled disabled)
-		-Dxwayland=disabled
-		$(meson_use wallpapers default-wallpaper)
-		-Dfish-completion=false
-		-Dzsh-completion=false
-		"-Dbash-completions=false"
-		"-Dwerror=false"
+		-Dbash-completions=false
 		-Dgdk-pixbuf=enabled
+		-Dman-pages=disabled
+		-Dwerror=false
+		-Dxwayland=enabled
+		$(meson_use wallpapers default-wallpaper)
+		-Dtray=$(usex tray enabled disabled)
 	)
 
 	meson_src_configure

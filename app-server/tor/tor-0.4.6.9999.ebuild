@@ -20,7 +20,7 @@ DEPEND="
 	lib-core/zlib
 	virtual/ssl
 	lzma? ( app-compression/xz-utils )
-	scrypt? ( app-crypt/libscrypt )
+	scrypt? ( app-crypto/libscrypt )
 	seccomp? ( lib-core/libseccomp )
 	systemd? ( app-core/systemd )
 	zstd? ( app-compression/zstd )

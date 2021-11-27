@@ -19,4 +19,4 @@ DEPEND="
 	>=dev-python/six-1.9.0[${PYTHON_USEDEP}]
 "
 RDEPEND="${DEPEND}
-	!<=app-crypt/acme-0.20.0"
+	!<=app-crypto/acme-0.20.0"

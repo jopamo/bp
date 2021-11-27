@@ -336,7 +336,7 @@ tar xvhf vim* --xattrs
 rm vim* || exit
 
 #jitterentropy
-cp /var/cache/packages/app-crypt/jitterentropy/* .
+cp /var/cache/packages/app-crypto/jitterentropy/* .
 tar xvhf jitterentropy* --xattrs
 rm jitterentropy* || exit
 
@@ -362,12 +362,12 @@ tar xvhf nftables* --xattrs
 rm nftables* || exit
 
 #hashcat
-#cp /var/cache/packages/app-crypt/hashcat* .
+#cp /var/cache/packages/app-crypto/hashcat* .
 #rm hashcat-utils* || exit
 #tar xvhf hashcat* --xattrs
 #rm hashcat* || exit
 
-#cp /var/cache/packages/app-crypt/hashcat-utils* .
+#cp /var/cache/packages/app-crypto/hashcat-utils* .
 #tar xvhf hashcat-utils* --xattrs
 #rm hashcat-utils* || exit
 

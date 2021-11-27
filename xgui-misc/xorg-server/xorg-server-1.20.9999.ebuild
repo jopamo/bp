@@ -7,7 +7,7 @@ inherit meson flag-o-matic
 DESCRIPTION="implementation of the X Window System display server"
 HOMEPAGE="https://www.x.org/wiki/"
 
-if [[ ${PV} == *9999 ]]; then
+if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/xserver.git"
 	EGIT_BRANCH="server-$(ver_cut 1).$(ver_cut 2)-branch"
 	inherit git-r3
@@ -19,9 +19,10 @@ fi
 
 LICENSE="MIT"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
-IUSE="+glamor ipv6 minimal systemd suid_wrapper +udev wayland xcsecurity X"
+IUSE="debug +glamor ipv6 minimal systemd suid_wrapper +udev
+	wayland xcsecurity X"
 
 DEPEND="
 	virtual/ssl
@@ -35,7 +36,6 @@ DEPEND="
 	xgui-live-lib/libXfont2
 	xgui-live-lib/libdrm
 	xgui-live-lib/libpciaccess
-	xgui-live-lib/libxcvt
 	xgui-live-lib/libxkbfile
 	xgui-live-lib/libxshmfence
 	xgui-live-lib/pixman
@@ -67,13 +67,15 @@ filter-flags -Wl,-z,defs -Wl,-z,now
 
 src_configure() {
         local emesonargs=(
-		$(meson_use X xorg)
 		$(meson_use glamor)
 		$(meson_use ipv6)
-		$(meson_use suid_wrapper)
-		$(meson_use systemd systemd_logind)
 		$(meson_use udev)
+		$(meson_use systemd systemd_logind)
+		$(meson_use wayland xwayland)
+		$(meson_use wayland xwayland_eglstream)
 		$(meson_use xcsecurity)
+		$(meson_use suid_wrapper)
+		$(meson_use X xorg)
 		-Ddri1=false
 		-Ddri2=false
 		-Ddri3=false
@@ -82,6 +84,6 @@ src_configure() {
 }
 
 src_install() {
-        meson_src_install
-		dosym Xorg usr/bin/X
+	meson_src_install
+	dosym Xorg usr/bin/X
 }

@@ -20,6 +20,11 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+DEPEND="
+	app-net/openldap
+	app-live/cyrus-sasl
+"
+
 src_prepare() {
 	default
 	eautoreconf

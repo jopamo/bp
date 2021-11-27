@@ -31,7 +31,7 @@ DEPEND="
 RDEPEND="
 	app-compression/tar
 	app-var/eselect
-	app-crypt/gnupg[gnutls(-)]
+	app-crypto/gnupg[gnutls(-)]
 	app-core/bash
 	dev-python/lxml[${PYTHON_USEDEP}]
 	app-core/sed

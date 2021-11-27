@@ -30,7 +30,7 @@ DEPEND="
 	ldap? ( app-net/openldap )
 	bzip2? ( app-compression/bzip2 )
 	readline? ( lib-core/readline )
-	app-crypt/pinentry
+	app-crypto/pinentry
 "
 
 append-flags -fno-strict-aliasing

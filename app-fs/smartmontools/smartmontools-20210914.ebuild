@@ -25,7 +25,7 @@ DEPEND="
 
 RDEPEND="${DEPEND}
 	update_drivedb? (
-		app-crypt/gnupg
+		app-crypto/gnupg
 		|| (
 			app-net/curl
 			app-net/wget

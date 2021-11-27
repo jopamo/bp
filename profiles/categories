@@ -1,7 +1,7 @@
 app-build
 app-compression
 app-core
-app-crypt
+app-crypto
 app-eselec
 app-live
 app-net

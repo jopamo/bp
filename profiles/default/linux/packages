@@ -34,7 +34,7 @@
 *app-port/portage-utils
 *app-net/iproute2
 *app-net/openssh
-*app-crypt/rng-tools
+*app-crypto/rng-tools
 *app-dev/patchelf
 *app-core/git
 *app-core/fakepackages

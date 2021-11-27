@@ -21,7 +21,7 @@ LIB_DEPEND="
 	app-core/util-linux[static-libs(+)]
 	lib-core/libgcrypt[static-libs(+)]
 	app-fs/lvm2[static-libs(+)]
-	argon2? ( app-crypt/argon2[static-libs(+)] )
+	argon2? ( app-crypto/argon2[static-libs(+)] )
 	udev? ( app-core/systemd[static-libs(+)] )"
 
 RDEPEND="static-libs? ( ${LIB_DEPEND} )

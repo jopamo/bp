@@ -20,7 +20,7 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 CDEPEND="
 		app-core/less
 		app-build/gettext
-		kerberos? ( app-crypt/heimdal )
+		kerberos? ( app-crypto/heimdal )
 		ldap? ( app-net/openldap )
 		pam? ( lib-core/pam )
 		perl? ( >=app-lang/perl-5.8:= )

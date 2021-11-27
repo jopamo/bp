@@ -24,7 +24,7 @@ IUSE="test"
 CDEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"
 RDEPEND="
 	${CDEPEND}
-	=app-crypt/acme-${PV}[${PYTHON_USEDEP}]
+	=app-crypto/acme-${PV}[${PYTHON_USEDEP}]
 	>=dev-python/configargparse-0.9.3[${PYTHON_USEDEP}]
 	dev-python/configobj[${PYTHON_USEDEP}]
 	>=dev-python/cryptography-1.2[${PYTHON_USEDEP}]

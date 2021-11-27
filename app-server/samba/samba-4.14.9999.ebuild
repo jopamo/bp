@@ -40,7 +40,7 @@ CDEPEND="
 	debug? ( app-dev/lttng-ust )
 	dmapi? ( app-core/dmapi )
 	fam? ( virtual/fam )
-	gpg? ( app-crypt/gpgme )
+	gpg? ( app-crypto/gpgme )
 	json? ( lib-core/jansson )
 	ldap? ( app-net/openldap )
 	systemd? ( app-core/systemd )

@@ -2,14 +2,11 @@
 
 EAPI=8
 
-SNAPSHOT=7f7fd8bcfd74919091cc318b27b8617a9ef2ac82
-
-inherit flag-o-matic toolchain-funcs autotools
+inherit flag-o-matic autotools
 
 DESCRIPTION="Simple passphrase entry dialogs which utilize the Assuan protocol"
 HOMEPAGE="https://gnupg.org/aegypten2/index.html"
-SRC_URI="https://github.com/gpg/pinentry/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://gnupg.org/ftp/gcrypt/pinentry/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -18,13 +15,15 @@ KEYWORDS="amd64 arm64"
 IUSE="caps static"
 
 DEPEND="
-	>=lib-core/libassuan-2.1
-	>=lib-core/libgcrypt-1.6.3
-	>=lib-core/libgpg-error-1.17
+	lib-core/libassuan
+	lib-core/libgcrypt
+	lib-core/libgpg-error
 	caps? ( lib-core/libcap )
 "
-BDEPEND="app-build/gettext
-	app-dev/pkgconf"
+BDEPEND="
+	app-build/gettext
+	app-dev/pkgconf
+"
 
 append-cxxflags -std=gnu++11
 

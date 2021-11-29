@@ -1,1 +1,0 @@
-libgcrypt-1.9.9999.ebuild

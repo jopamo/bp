@@ -20,4 +20,4 @@ bp is short for 'backpack' to denote it being easier to move around on various c
 * it supports your choice of ncurses or netbsd-curses
    * switching from default of ncurses to netbsd-curses works, switching from netbsd-curses to ncurses does not work
 * systemd is supported with musl on both amd64 and arm64
-* [A number of GNU projects are bootstrapped from git with this script.](./app-core/ugscripts/files/sbin/mktarballs)
+* A number of GNU projects are bootstrapped from git with this [script](./app-core/ugscripts/files/sbin/mktarballs).

@@ -7,7 +7,7 @@
 
 </div>
 
-bp is short for 'backpack' to denote it being easier to move around on various cloud services or embedded devices. It is an alternate [gentoo](https://github.com/gentoo/gentoo) package repo. It is somewhat compatible with gentoo and gentoo overlays, some stuff will work, but most probably will not. It uses the package.provided mechanism to provide a compatibility layer, changing the names of categories allowing the gentoo tree version of certain packages to never be used without fighting for namespaces.
+bp is short for 'backpack' to denote it being easier to move around on various cloud services or embedded devices. It is an alternate [gentoo](https://github.com/gentoo/gentoo) package repo. It is somewhat compatible with gentoo and gentoo overlays, some stuff will work. It uses the [package.provided](https://wiki.gentoo.org/wiki//etc/portage/profile/package.provided) mechanism to provide a compatibility layer.
 
 ## Distro Configuration
 * A mixture of stable and bleeding edge. Base toolchain is mostly stable, but graphics related programs tend to use git packages.

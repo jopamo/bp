@@ -144,7 +144,7 @@ auto-sync = yes" > "${ED}"/usr/share/portage/config/repos.conf
 use gentoo_repo && echo -e "\n[gentoo]\n\
 location = /var/db/repos/gentoo\n\
 sync-type = git\n\
-sync-uri = https://github.com/gentoo/gentoo.git\n\
+sync-uri = https://github.com/gentoo-mirror/gentoo.git\n\
 auto-sync = yes" >> "${ED}"/usr/share/portage/config/repos.conf
 
 	cleanup_install

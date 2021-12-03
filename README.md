@@ -7,18 +7,17 @@
 
 </div>
 
-bp is short for 'backpack' to denote it being easier to move around on various cloud services or embedded devices. It is an alternate [gentoo](https://github.com/gentoo/gentoo) package repo. It is somewhat compatible with gentoo and gentoo overlays, some stuff will work. It uses the [package.provided](https://wiki.gentoo.org/wiki//etc/portage/profile/package.provided) mechanism to provide a compatibility layer.
+bp is short for 'backpack' to denote it being easier to move around on various cloud services or embedded devices. It is an alternate [gentoo](https://github.com/gentoo/gentoo) package repo. It is somewhat compatible with gentoo and gentoo overlays, some stuff works. It uses the [package.provided](https://wiki.gentoo.org/wiki//etc/portage/profile/package.provided) mechanism to provide a compatibility layer.
 
 ## Distro Configuration
-* A mixture of stable and bleeding edge. Base toolchain is mostly stable, but graphics related programs tend to use git packages.
+* A mixture of stable and bleeding edge
 * no multilib - the toolchain only supports 64bit
 * all libraries are installed to /usr/lib
 * /lib /lib64 /bin /sbin are all symlinked into /usr/
-* only amd64 and arm64 are supported
-* only glibc or musl are supported
-* it supports your choice of openssl or libressl
-   * switching back and forth with preserve-libs should work
-* it supports your choice of ncurses or netbsd-curses
-   * switching from default of ncurses to netbsd-curses works, switching from netbsd-curses to ncurses does not work
-* systemd is supported with musl on both amd64 and arm64
+* supported arches: amd64 arm64
+* supported libc: glibc musl
+* openssl or libressl is supported
+* ncurses or netbsd-curses is supported
+* systemd is supported with glibc and musl on both amd64 and arm64
 * A number of GNU projects are bootstrapped from git with this [script](./app-core/ugscripts/files/sbin/mktarballs).
+* Rust packages (librsvg only currently) are also bootstrapped with `cargo vendor` using the same [script](./app-core/ugscripts/files/sbin/mktarballs) from above

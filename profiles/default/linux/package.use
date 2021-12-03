@@ -3,3 +3,4 @@ lib-core/libxml2 python
 app-fs/cryptsetup -ssl
 app-build/gcc lto
 app-core/systemd dhcp4 networkd
+lib-net/nodejs icu

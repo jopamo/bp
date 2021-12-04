@@ -92,6 +92,7 @@ src_configure() {
 		--shared-nghttp2
 		--shared-zlib
 		$(use_with inspector)
+		$(usex debug --debug '')
 		$(usex icu '--with-intl=full-icu' '--with-intl=none')
 		$(usex lto --enable-lto '')
 		$(usex node-snapshot '' --without-node-snapshot)

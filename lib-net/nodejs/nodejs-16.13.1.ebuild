@@ -19,13 +19,11 @@ LICENSE="Apache-1.1 Apache-2.0 BSD BSD-2 MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug +icu inspector lto +npm +snapshot +ssl +system-icu +system-ssl systemtap test"
+IUSE="debug +icu inspector lto +node-snapshot +npm +ssl systemtap test"
 
 REQUIRED_USE="
 	inspector? ( icu ssl )
 	npm? ( ssl )
-	system-icu? ( icu )
-	system-ssl? ( ssl )
 "
 
 RESTRICT="!test? ( test )"
@@ -37,8 +35,8 @@ RDEPEND="
 	lib-net/c-ares
 	lib-live/nghttp2
 	lib-core/zlib
-	system-icu? ( lib-dev/icu )
-	system-ssl? ( virtual/ssl )
+	icu? ( lib-dev/icu )
+	ssl? ( virtual/ssl )
 "
 BDEPEND="
 	${PYTHON_DEPS}
@@ -93,24 +91,14 @@ src_configure() {
 		--shared-libuv
 		--shared-nghttp2
 		--shared-zlib
+		$(use_with inspector)
+		$(usex icu '--with-intl=full-icu' '--with-intl=none')
+		$(usex lto --enable-lto '')
+		$(usex node-snapshot '' --without-node-snapshot)
+		$(usex npm '' --without-npm)
+		$(usex ssl --openssl-use-def-ca-store '')
+		$(usex ssl --shared-openssl '--without-ssl')
 	)
-	use debug && myconf+=( --debug )
-	use lto && myconf+=( --enable-lto )
-	if use system-icu; then
-		myconf+=( --with-intl=system-icu )
-	elif use icu; then
-		myconf+=( --with-intl=full-icu )
-	else
-		myconf+=( --with-intl=none )
-	fi
-	use inspector || myconf+=( --without-inspector )
-	use npm || myconf+=( --without-npm )
-	use snapshot || myconf+=( --without-node-snapshot )
-	if use ssl; then
-		use system-ssl && myconf+=( --shared-openssl --openssl-use-def-ca-store )
-	else
-		myconf+=( --without-ssl )
-	fi
 
 	local myarch=""
 	case ${ABI} in

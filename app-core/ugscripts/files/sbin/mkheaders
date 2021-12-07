@@ -12,7 +12,7 @@ else
 	$( cd ${src} && git remote update )
 fi
 
-gitlogstamp="$( cd ${src} && git log -1 --format="%at" | xargs -I{} date -d @{} +%Y%m%d )"
+gitlogstamp="$(cd ${src} && git log -n1 --pretty=format:%cd --date=format:%Y%m%d)"
 dst="linux-headers-${branch}.${gitlogstamp}"
 
 rm -rf ${dst}

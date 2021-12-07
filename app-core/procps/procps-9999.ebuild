@@ -37,7 +37,7 @@ src_prepare() {
 	if [[ ${PV} == *9999 ]] ; then
 		po/update-potfiles
 		eautoreconf
-		sed -i -e "s/UNKNOWN/$(git log -1 --format="%at" | xargs -I{} date -d @{} +%Y%m%d)/g" "configure" || die
+		sed -i -e "s/UNKNOWN/$(git log -n1 --pretty=format:%cd --date=format:%Y%m%d)/g" "configure" || die
 	elif [[ ${PV} == 20* ]] ; then
 		po/update-potfiles
 		eautoreconf

@@ -42,7 +42,7 @@ use_have() {
 
 src_prepare() {
 	default
-	sed -i -e "s/UNKNOWN/$(git log -1 --format="%at" | xargs -I{} date -d @{} +%Y%m%d)/g" "bld/get-version" || die
+	sed -i -e "s/UNKNOWN/$(git log -n1 --pretty=format:%cd --date=format:%Y%m%d)/g" "bld/get-version" || die
 }
 
 src_configure() {

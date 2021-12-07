@@ -8,18 +8,18 @@ DESCRIPTION="GNU libc C library"
 HOMEPAGE="https://www.gnu.org/software/libc/"
 
 if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/bminor/glibc"
+	EGIT_REPO_URI="https://sourceware.org/git/glibc.git"
 	inherit git-r3
 	EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)/master"
 else
-	SNAPSHOT=a4f3bc23461e3f9f6053e827715984ba0d2e589a
+	SNAPSHOT=c76a0ba878cac9e3e8ec54abbad9db28a50a369a
 	SRC_URI="https://github.com/bminor/glibc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 
 LICENSE="LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="caps debug nscd profile systemd systemtap static-libs +static-pie tmpfilesd"
 
@@ -37,7 +37,10 @@ RDEPEND="
 "
 PDEPEND="lib-core/tzdb"
 
-PATCHES=( "${FILESDIR}"/0001-Disable-ldconfig-during-install.patch )
+PATCHES=(
+	"${FILESDIR}"/0001-Disable-ldconfig-during-install.patch
+	"${FILESDIR}"/0004-Add-C.UTF-8-locale.patch
+	)
 
 filter-flags -flto\=\*
 filter-flags -D_FORTIFY_SOURCE\=\*
@@ -115,30 +118,30 @@ src_configure() {
 	export MAKEINFO=/dev/null
 
 	myconf=(
-		--without-cvs
+		--bindir="${EPREFIX}"/usr/bin
+		--build=${CBUILD_OPT:-${CBUILD}}
+		--disable-crypt
+		--disable-timezone-tools
 		--disable-werror
-		--enable-bind-now
 		--enable-add-ons
+		--enable-bind-now
 		--enable-stack-protector=strong
 		--enable-stackguard-randomization
-		--build=${CBUILD_OPT:-${CBUILD}}
 		--host=${CTARGET_OPT:-${CTARGET}}
-		--without-selinux
-		$(use_enable profile)
-		$(use_enable static-pie)
-		--prefix="${EPREFIX}"/usr
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
+		--infodir="${EPREFIX}"/usr/share/info
 		--libdir="${EPREFIX}"/usr/lib
 		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
 		--mandir="${EPREFIX}"/usr/share/man
-		--infodir="${EPREFIX}"/usr/share/info
-		$(in_iuse systemtap && use_enable systemtap)
+		--prefix="${EPREFIX}"/usr
+		--sbindir="${EPREFIX}"/usr/sbin
+		--sysconfdir="${EPREFIX}"/etc
+		--without-cvs
+		--without-selinux
 		$(in_iuse nscd && use_enable nscd)
-		--disable-timezone-tools
-		--disable-crypt
+		$(in_iuse systemtap && use_enable systemtap)
+		$(use_enable profile)
+		$(use_enable static-pie)
 	)
 
 	ac_cv_lib_cap_cap_init=$(in_iuse caps && usex caps || echo no)
@@ -169,7 +172,7 @@ src_test() {
 src_install() {
 	cd "${WORKDIR}/build"
 
-	emake install_root="${ED}" install || die
+	emake install_root="${ED}" install
 
 	# We'll take care of the cache ourselves
 	rm -f "${ED}"/etc/ld.so.cache
@@ -222,17 +225,23 @@ src_install() {
 	rm -f "${ED}"/etc/localtime
 
 	# locale-gen install
-	insinto /usr/bin && doins "${FILESDIR}/locale-gen/locale-gen"
-	insinto /etc/ && doins "${FILESDIR}/locale-gen/locale.gen"
+	dobin "${FILESDIR}"/locale-gen/locale-gen
 
-	fperms +x /usr/bin/locale-gen
+	insopts -m 0644
+	insinto /etc/
+	doins "${FILESDIR}"/locale-gen/locale.gen
+
+	insopts -m 0644
+	insinto /etc/env.d
+	doins "${FILESDIR}"/locale-gen/02lccollate
+	doins "${FILESDIR}"/locale-gen/02locale
 
 	mv "${ED}"/sbin/{ldconfig,sln} "${ED}"/usr/sbin && rm -rf "${ED}"/sbin
 
 	cleanup_install
 	use static-libs || find "${ED}" -name '*.la' -delete
 
-	echo -e "en_US.UTF-8 UTF-8\nen_US ISO-8859-1" > "${ED}"/usr/share/i18n/locales/SUPPORTED
+	echo -e "en_US.UTF-8 UTF-8\nen_US ISO-8859-1\nC.UTF-8" > "${ED}"/usr/share/i18n/locales/SUPPORTED
 
 	dodir /usr/lib/locale
 }

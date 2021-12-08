@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic toolchain-funcs autotools
+inherit toolchain-funcs autotools
 
 DESCRIPTION="International Components for Unicode"
 HOMEPAGE="http://www.icu-project.org/"
@@ -14,21 +14,11 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug static-libs"
 
-DEPEND="app-dev/pkgconf"
+BDEPEND="app-dev/pkgconf"
 
 S="${WORKDIR}/${PN}/source"
 
-pkg_pretend() {
-	if tc-is-gcc ; then
-		if [[ $(gcc-major-version) == 4 && $(gcc-minor-version) -lt 9 \
-			|| $(gcc-major-version) -lt 4 ]] ; then
-				die "You need at least app-build/gcc-4.9"
-		fi
-	fi
-}
-
 src_prepare() {
-	# apply patches
 	default
 
 	local variable
@@ -52,30 +42,6 @@ src_prepare() {
 }
 
 src_configure() {
-	# Use C++14
-	append-cxxflags -std=c++14 -DU_HAVE_XLOCALE_H=0
-
-	if tc-is-gcc ; then
-		if [[ $(gcc-major-version) == 4 && $(gcc-minor-version) -lt 9 \
-			|| $(gcc-major-version) -lt 4 ]] ; then
-				die "You need at least app-build/gcc-4.9"
-		fi
-	fi
-
-	if tc-is-cross-compiler; then
-		mkdir "${WORKDIR}"/host || die
-		pushd "${WORKDIR}"/host >/dev/null || die
-
-		CFLAGS="" CXXFLAGS="" ASFLAGS="" LDFLAGS="" \
-		CC="$(tc-getBUILD_CC)" CXX="$(tc-getBUILD_CXX)" AR="$(tc-getBUILD_AR)" \
-		RANLIB="$(tc-getBUILD_RANLIB)" LD="$(tc-getBUILD_LD)" \
-		"${S}"/configure --disable-renaming --disable-debug \
-			--disable-samples --enable-static || die
-		emake
-
-		popd >/dev/null || die
-	fi
-
 	local myconf=(
 		--disable-renaming
 		--disable-samples
@@ -89,24 +55,13 @@ src_configure() {
 
 	# make sure we configure with the same shell as we run icu-config
 	# with, or ECHO_N, ECHO_T and ECHO_C will be wrongly defined
-	export CONFIG_SHELL=${EPREFIX}/bin/sh
+	export CONFIG_SHELL=${EPREFIX}/usr/bin/sh
 	# probably have no /bin/sh in prefix-chain
 	[[ -x ${CONFIG_SHELL} ]] || CONFIG_SHELL=${BASH}
 
-	ECONF_SOURCE=${S} \
-	econf "${myconf[@]}"
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
 src_test() {
-	# INTLTEST_OPTS: intltest options
-	#   -e: Exhaustive testing
-	#   -l: Reporting of memory leaks
-	#   -v: Increased verbosity
-	# IOTEST_OPTS: iotest options
-	#   -e: Exhaustive testing
-	#   -v: Increased verbosity
-	# CINTLTST_OPTS: cintltst options
-	#   -e: Exhaustive testing
-	#   -v: Increased verbosity
 	emake -j1 VERBOSE="1" check
 }

@@ -93,12 +93,11 @@ src_configure() {
 		--shared-zlib
 		$(use_with inspector)
 		$(usex debug --debug '')
-		$(usex icu '--with-intl=full-icu' '--with-intl=none')
+		$(usex icu '--with-intl=system-icu' '--with-intl=none')
 		$(usex lto --enable-lto '')
 		$(usex node-snapshot '' --without-node-snapshot)
 		$(usex npm '' --without-npm)
-		$(usex ssl --openssl-use-def-ca-store '')
-		$(usex ssl --shared-openssl '--without-ssl')
+		$(usex ssl '--shared-openssl --openssl-use-def-ca-store' '--without-ssl')
 	)
 
 	local myarch=""

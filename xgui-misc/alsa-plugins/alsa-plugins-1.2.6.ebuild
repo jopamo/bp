@@ -7,7 +7,7 @@ inherit autotools flag-o-matic
 DESCRIPTION="ALSA extra plugins"
 HOMEPAGE="http://www.alsa-project.org/"
 
-SNAPSHOT=da157e978d73f1947bb77637c324e19d003366d4
+SNAPSHOT=86d695c5d6ba028a3c01758a3b398312408ee0cf
 SRC_URI="https://github.com/alsa-project/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -18,11 +18,11 @@ KEYWORDS="amd64 arm64"
 IUSE="debug ffmpeg libsamplerate pulseaudio"
 
 DEPEND="
-	xmedia-live-lib/speexdsp
 	>=xgui-misc/alsa-lib-${PV}
-	ffmpeg? ( xmedia-live-app/ffmpeg:0= )
-	libsamplerate? ( >=xmedia-live-lib/libsamplerate-0.1.8-r1 )
-	pulseaudio? ( >=xgui-misc/pulseaudio-2.1-r1 )
+	xmedia-live-lib/speexdsp
+	ffmpeg? ( xmedia-live-app/ffmpeg )
+	libsamplerate? ( xmedia-live-lib/libsamplerate )
+	pulseaudio? ( xgui-misc/pulseaudio )
 "
 
 src_prepare() {
@@ -42,11 +42,11 @@ src_configure() {
 		$(use_enable ffmpeg libav)
 		$(use_enable libsamplerate samplerate)
 		$(use_enable pulseaudio)
-		--with-speex=lib
-		--enable-speexdsp
-		--disable-oss
 		--disable-arcamav
+		--disable-oss
 		--disable-usbstream
+		--enable-speexdsp
+		--with-speex=lib
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

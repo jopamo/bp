@@ -122,6 +122,7 @@ src_configure() {
 		--disable-obsolete
 		--disable-rpath
 		--disable-werror
+		--enable-__cxa_atexit
 		--enable-bootstrap
 		--enable-cet=auto
 		--enable-checking=release
@@ -137,15 +138,14 @@ src_configure() {
 		--enable-plugin
 		--enable-shared
 		--enable-threads=posix
-		--enable-__cxa_atexit
 		--with-build-config="bootstrap-lto-lean"
 		--with-linker-hash-style=gnu
 		--with-system-zlib
+		$(use_enable sanitize libsanitizer)
+		$(use_enable vtv libvtv)
+		$(use_enable vtv vtable-verify)
 		$(use_with isl)
 		$(use_with zstd)
-		$(use_enable vtv vtable-verify)
-		$(use_enable vtv libvtv)
-		$(use_enable sanitize libsanitizer)
 	)
 	../configure "${myconf[@]}"
 }

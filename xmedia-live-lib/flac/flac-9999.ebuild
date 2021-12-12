@@ -8,15 +8,15 @@ DESCRIPTION="free lossless audio encoder and decoder"
 HOMEPAGE="https://xiph.org/flac/"
 EGIT_REPO_URI="https://github.com/xiph/flac.git"
 
-LICENSE="BSD FDL-1.2 GPL-2 LGPL-2.1"
+LICENSE="BSD GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="debug ogg static-libs"
 
 DEPEND="
-	ogg? ( xmedia-live-lib/libogg )
 	app-compression/xz-utils
+	ogg? ( xmedia-live-lib/libogg )
 "
 BDEPEND="
 	app-build/gettext
@@ -31,15 +31,15 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
+		--disable-altivec
 		--disable-doxygen-docs
 		--disable-examples
 		--disable-xmms-plugin
-		--disable-altivec
 		--enable-cpplibs
+		--with-ogg
 		$(use_enable debug)
 		$(use_enable ogg)
 		$(use_enable static-libs static)
-		--with-ogg
 	)
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }

@@ -15,7 +15,7 @@ LICENSE="|| ( GPL-2 BSD )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="ap dbus eapol_test fasteap gnutls +hs2-0 p2p privsep qt readline smartcard ssl systemd
+IUSE="ap dbus eapol_test fasteap gnutls +hs2-0 p2p privsep readline smartcard ssl systemd
 tdls uncommon-eap-types wps"
 
 REQUIRED_USE="fasteap? ( !ssl ) smartcard? ( ssl )"
@@ -23,12 +23,6 @@ REQUIRED_USE="fasteap? ( !ssl ) smartcard? ( ssl )"
 CDEPEND="
 	dbus? ( app-core/dbus )
 	lib-dev/libnl
-	qt? (
-		xgui-live-lib/qtcore
-		xgui-live-lib/qtgui
-		xgui-live-lib/qtsvg
-		xgui-live-lib/qtwidgets
-	)
 	readline? (
 		virtual/curses
 		lib-core/readline
@@ -258,22 +252,11 @@ src_configure() {
 	if has_version ">=dev-libs/libnl-3.2"; then
 		Kconfig_style_config LIBNL32
 	fi
-
-	if use qt ; then
-		pushd "${S}"/wpa_gui-qt4 > /dev/null || die
-		eqmake5 wpa_gui.pro
-		popd > /dev/null || die
-	fi
 }
 
 src_compile() {
 	einfo "Building wpa_supplicant"
 	emake V=1 BINDIR=/usr/sbin
-
-	if use qt; then
-		einfo "Building wpa_gui"
-		emake -C "${S}"/wpa_gui-qt4
-	fi
 
 	if use eapol_test ; then
 		emake eapol_test
@@ -289,13 +272,6 @@ src_install() {
 		wpa_supplicant.conf
 
 	newdoc .config build-config
-
-	if use qt ; then
-		into /usr
-		dobin wpa_gui-qt4/wpa_gui
-		doicon wpa_gui-qt4/icons/wpa_gui.svg
-		domenu wpa_gui-qt4/wpa_gui.desktop
-	fi
 
 	if use dbus ; then
 		pushd "${S}"/dbus > /dev/null || die

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=a67e66137214de695320d7f790aed61de5e1a4aa
+SNAPSHOT=5d6c9940cd7fa4bf2c2089181986bd8403586722
 
 inherit autotools flag-o-matic
 
@@ -44,14 +44,13 @@ src_prepare() {
 
 src_configure() {
 	use static && append-ldflags -static
-	# The build installs /etc/init.d/smartd, but we clobber it
-	# in our src_install, so no need to manually delete it.
+
 	myconf=(
 		--docdir="${EPREFIX}/usr/share/doc/${PF}"
 		--with-drivedbdir="${EPREFIX}/var/db/${PN}" #575292
 		--with-initscriptdir="${EPREFIX}/etc/init.d"
-		$(use_with caps libcap-ng)
 		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
+		$(use_with caps libcap-ng)
 		$(use_with update_drivedb gnupg)
 		$(use_with update_drivedb update-smart-drivedb)
 	)
@@ -94,38 +93,4 @@ src_install() {
 	# of the acutal image so we don't record hashes because user
 	# can modify that file
 	rm -f "${ED%/}${db_path}/drivedb.h" || die
-}
-
-pkg_postinst() {
-	if use daemon || use update_drivedb; then
-		local initial_db_file="${EPREFIX%/}/usr/share/${PN}/drivedb.h"
-		local db_path="${EPREFIX%/}/var/db/${PN}"
-
-		if [[ ! -f "${db_path}/drivedb.h" ]] ; then
-			# No initial database found
-			cp "${initial_db_file}" "${db_path}" || die
-			einfo "Default drive database which was shipped with this release of ${PN}"
-			einfo "has been installed to '${db_path}'."
-		else
-			ewarn "WARNING: There's already a drive database in '${db_path}'!"
-			ewarn "Because we cannot determine if this database is untouched"
-			ewarn "or was modified by the user you have to manually update the"
-			ewarn "drive database:"
-			ewarn ""
-			ewarn "a) Replace '${db_path}/drivedb.h' by the database shipped with this"
-			ewarn "   release which can be found in '${initial_db_file}', i.e."
-			ewarn ""
-			ewarn "     cp \"${initial_db_file}\" \"${db_path}\""
-			ewarn ""
-			ewarn "b) Run the following command as root:"
-			ewarn ""
-			ewarn "     /usr/sbin/update-smart-drivedb"
-
-			if ! use update_drivedb ; then
-				ewarn ""
-				ewarn "However, 'update-smart-drivedb' requires that you re-emerge ${PN}"
-				ewarn "with USE='update_drivedb'."
-			fi
-		fi
-	fi
 }

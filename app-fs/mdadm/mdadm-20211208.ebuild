@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=feeb2785e67f084cb5d706fe5f074ade50bece78
+SNAPSHOT=8c80d3055bcaab4c449abb7b666aad69d054347a
 
 inherit flag-o-matic toolchain-funcs
 
@@ -17,8 +17,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static systemd"
 
+BDEPEND="app-dev/pkgconf"
 DEPEND="
-	app-dev/pkgconf
 	app-compression/xz-utils
 	app-core/util-linux
 "

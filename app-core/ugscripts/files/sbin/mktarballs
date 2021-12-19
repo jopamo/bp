@@ -18,7 +18,7 @@ done
 for i in coreutils cpio diffutils findutils gperf grep libtool patch sed tar ; do
 	#prepare sources
 	[ ! -d ${WORKHOME}/$i ] && git clone https://git.savannah.gnu.org/git/$i.git ${WORKHOME}/$i --depth 1
-	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git remote update && git reset --hard && git clean -f )
+	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git pull && git reset --hard && git clean -f )
 
 	GITDATENAME="$i-$(cd ${WORKHOME}/$i && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
 
@@ -50,7 +50,7 @@ done
 #librsvg
 for i in librsvg ; do
 	[ ! -d ${WORKHOME}/$i ] && git clone https://gitlab.gnome.org/GNOME/$i.git ${WORKHOME}/$i --depth 1
-	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git remote update && git reset --hard && git clean -f )
+	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git pull && git reset --hard && git clean -f )
 	GITDATENAME="$i-$(cd ${WORKHOME}/$i && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
 
 	if [ ! -f "${WORKHOME}/${GITDATENAME}.tar.xz" ]; then

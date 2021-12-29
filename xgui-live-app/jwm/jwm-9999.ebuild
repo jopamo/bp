@@ -15,15 +15,15 @@ KEYWORDS="amd64 arm64"
 IUSE="bidi cairo debug iconv jpeg nls png truetype xinerama xpm"
 
 DEPEND="
-	xgui-live-lib/librsvg
+	virtual/librsvg
 	xgui-live-lib/cairo
+	xgui-live-lib/libXext
+	xgui-live-lib/libXinerama
+	xgui-live-lib/libXmu
+	xgui-live-lib/libXpm
+	xgui-live-lib/libXrender
 	xmedia-live-lib/libjpeg-turbo
 	xmedia-live-lib/libpng
-	xgui-live-lib/libXext
-	xgui-live-lib/libXrender
-	xgui-live-lib/libXmu
-	xgui-live-lib/libXinerama
-	xgui-live-lib/libXpm
 "
 
 src_prepare() {

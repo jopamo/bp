@@ -62,7 +62,7 @@ DEPEND="${COMMON_DEPEND}
 RDEPEND="${COMMON_DEPEND}"
 
 PDEPEND="
-	xgui-live-lib/librsvg
+	virtual/librsvg
 	xgui-icontheme/adwaita-plus
 	vim-syntax? ( app-tex/gtk-syntax )
 "

@@ -12,8 +12,6 @@ LICENSE="Oracle-BCLA-JavaSE"
 SLOT="0"
 KEYWORDS="amd64"
 
-DEPEND="!app-lang/openjdk-jre"
-
 RESTRICT="preserve-libs strip"
 
 QA_PREBUILT="*"
@@ -21,8 +19,9 @@ QA_PREBUILT="*"
 src_compile() { :;}
 
 src_install() {
-	mkdir -p "${ED}"/opt/ || die
-	cp -pPR	bin lib "${ED}"/opt/ || die
-	rm -f "${ED}"/opt/lib/amd64/{libavplugin,libglassgtk2}* || die
+	HERE="${ED}"/opt/${PN}
+	mkdir -p "${HERE}" || die
+	cp -pPR	bin lib "${HERE}"/ || die
+	rm -f "${HERE}"/lib/amd64/{libavplugin,libglassgtk2}* || die
 	find "${ED}" -type d -empty -exec rmdir -v {} + || die
 }

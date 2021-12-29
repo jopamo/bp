@@ -7,13 +7,13 @@ DESCRIPTION="librsvg implementation virtual"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="librsvg-og"
+IUSE="rust"
 
-RDEPEND="librsvg-og? (
-			xgui-live-lib/librsvg-og
-			!xgui-live-lib/librsvg
-)
-		!librsvg-og? (
+RDEPEND="rust? (
 			xgui-live-lib/librsvg
 			!xgui-live-lib/librsvg-og
+)
+		!rust? (
+			xgui-live-lib/librsvg-og
+			!xgui-live-lib/librsvg
 )"

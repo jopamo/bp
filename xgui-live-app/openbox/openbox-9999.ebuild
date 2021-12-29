@@ -15,16 +15,16 @@ KEYWORDS="amd64 arm64"
 IUSE="debug session static-libs"
 
 RDEPEND="
-	lib-live/glib
-	lib-core/libxml2
+	dev-python/pyxdg[${PYTHON_USEDEP}]
 	fonts/fontconfig
+	lib-core/libxml2
+	lib-live/glib
+	virtual/librsvg
 	xgui-live-lib/libXft
 	xgui-live-lib/libXrandr
 	xgui-live-lib/libXt
 	xgui-live-lib/pango
 	xmedia-live-lib/imlib2
-	xgui-live-lib/librsvg
-	dev-python/pyxdg[${PYTHON_USEDEP}]
 "
 
 DEPEND="
@@ -57,13 +57,13 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		$(use_enable debug)
-		$(use_enable static-libs static)
 		--disable-nls
 		--enable-imlib2
 		--enable-librsvg
-		$(use_enable session session-management)
 		--with-x
+		$(use_enable debug)
+		$(use_enable session session-management)
+		$(use_enable static-libs static)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

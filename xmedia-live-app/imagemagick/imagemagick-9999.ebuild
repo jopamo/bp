@@ -17,22 +17,25 @@ lcms lqr lzma opencl openexr pango perl postscript +png raw static-libs
 +svg test +tiff truetype webp wmf X xml zlib"
 
 DEPEND="
-	png? ( xmedia-live-lib/libpng )
-	svg? ( xgui-live-lib/librsvg )
-	tiff? ( xmedia-live-lib/tiff )
 	jpeg2k? ( xmedia-live-lib/openjpeg )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )
+	png? ( xmedia-live-lib/libpng )
+	svg? ( virtual/librsvg )
+	tiff? ( xmedia-live-lib/tiff )
 "
 
 src_configure() {
 	local myconf=(
+		$(use_enable hdri)
+		$(use_enable opencl)
+		$(use_enable static-libs static)
+		$(use_with X x)
 		$(use_with bzip2 bzlib)
 		$(use_with cxx magick-plus-plus)
 		$(use_with fftw)
 		$(use_with fontconfig)
 		$(use_with fpx)
 		$(use_with graphviz gvc)
-		$(use_enable hdri)
 		$(use_with heif heic)
 		$(use_with jbig)
 		$(use_with jpeg)
@@ -40,7 +43,6 @@ src_configure() {
 		$(use_with lcms)
 		$(use_with lqr)
 		$(use_with lzma)
-		$(use_enable opencl)
 		$(use_with openexr)
 		$(use_with pango)
 		$(use_with perl)
@@ -48,14 +50,12 @@ src_configure() {
 		$(use_with postscript dps)
 		$(use_with postscript gslib)
 		$(use_with raw)
-		$(use_enable static-libs static)
 		$(use_with svg rsvg)
 		$(use_with tiff)
 		$(use_with truetype freetype)
 		$(use_with webp)
 		$(use_with wmf)
 		$(use_with xml)
-		$(use_with X x)
 		$(use_with zlib)
 		--with-modules
 		--with-threads

@@ -16,8 +16,6 @@ LICENSE="Oracle-BCLA-JavaSE"
 SLOT="0"
 KEYWORDS="amd64"
 
-DEPEND="!bin/oracle-jre"
-
 RESTRICT="preserve-libs strip"
 
 QA_PREBUILT="*"
@@ -25,13 +23,8 @@ QA_PREBUILT="*"
 src_compile() { :;}
 
 src_install() {
-	mkdir -p "${ED}"/opt/openjdk || die
-	cp -rp "${S}"/* "${ED}"/opt/openjdk/ || die
+	HERE="${ED}"/opt/${PN}
+	mkdir -p "${HERE}" || die
+	cp -rp "${S}"/* "${HERE}"/ || die
 	find "${ED}" -type d -empty -exec rmdir -v {} + || die
-
-	cat > "${T}"/99${PN} <<- EOF || die
-		PATH=${EPREFIX}/opt/openjdk/bin
-		ROOTPATH=${EPREFIX}/opt/openjdk/bin
-	EOF
-	doenvd "${T}"/99${PN}
 }

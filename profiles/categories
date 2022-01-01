@@ -11,6 +11,7 @@ app-tex
 app-var
 bin
 app-lang
+dev-js
 dev-perl
 dev-python
 app-dev

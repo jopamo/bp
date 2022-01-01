@@ -99,6 +99,13 @@
 				</execute>
 			</action>
 		</item>
+		<item label="pavucontrol-qt">
+			<action name="Execute">
+				<execute>
+					pavucontrol-qt
+				</execute>
+			</action>
+		</item>
 	<separator/>
 	<menu id="preferences" label="Preferences">
 		<item label="Reconfigure">

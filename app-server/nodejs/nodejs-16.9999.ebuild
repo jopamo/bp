@@ -20,7 +20,7 @@ LICENSE="Apache-1.1 Apache-2.0 BSD BSD-2 MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug +icu inspector lto +node-snapshot +npm +ssl systemtap test"
+IUSE="debug +icu inspector lto +node-snapshot npm +ssl systemtap test"
 
 REQUIRED_USE="
 	inspector? ( icu ssl )

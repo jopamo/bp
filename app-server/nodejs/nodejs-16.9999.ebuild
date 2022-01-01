@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic python-any-r1 toolchain-funcs xdg-utils
+inherit flag-o-matic python-any-r1 toolchain-funcs xdg-utils git-r3
 
 DESCRIPTION="A JavaScript runtime built on Chrome's V8 JavaScript engine"
 HOMEPAGE="https://nodejs.org/"
@@ -10,6 +10,7 @@ HOMEPAGE="https://nodejs.org/"
 if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/nodejs/node"
+	EGIT_BRANCH="v$(ver_cut 1).x"
 else
 	SRC_URI="https://nodejs.org/dist/v${PV}/node-v${PV}.tar.xz"
 	S="${WORKDIR}/node-v${PV}"
@@ -45,6 +46,7 @@ BDEPEND="
 	systemtap? ( app-dev/systemtap )
 	test? ( app-net/curl )
 "
+PDEPEND="dev-js/readline-sync"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-12.22.5-shared_c-ares_nameser_h.patch
@@ -115,4 +117,13 @@ src_configure() {
 		--dest-cpu=${myarch} \
 		$(use_with systemtap dtrace) \
 		"${myconf[@]}" || die
+}
+
+src_install() {
+	default
+
+	cat > "${T}"/99${PN} <<- EOF || die
+		export NODE_PATH=/usr/lib/node_modules/
+	EOF
+	doenvd "${T}"/99${PN}
 }

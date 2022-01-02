@@ -11,7 +11,7 @@ if [[ ${PV} = 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/lighttpd/lighttpd1.4.git"
 	inherit git-r3
 else
-	SNAPSHOT=a2bfccd1be46012916047eca39233a370fbda5cf
+	SNAPSHOT=5567fb64953637b93af2b0f414e3fd3a4dc319e7
 	SRC_URI="https://github.com/lighttpd/lighttpd1.4/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}1.4-${SNAPSHOT}
 fi
@@ -38,7 +38,6 @@ DEPEND="
 	ssl? ( virtual/ssl )
 	xattr? ( app-core/attr )
 "
-
 BDEPEND="app-dev/pkgconf"
 
 filter-flags -Wl,-z,defs

@@ -6,8 +6,7 @@ inherit git-r3 autotools
 
 DESCRIPTION="NCurses Disk Usage"
 HOMEPAGE="http://dev.yorhel.nl/ncdu/"
-EGIT_REPO_URI="https://g.blicky.net/ncdu.git/"
-EGIT_MIN_CLONE_TYPE=single
+EGIT_REPO_URI="https://github.com/rofl0r/ncdu"
 
 LICENSE="MIT"
 SLOT="0"

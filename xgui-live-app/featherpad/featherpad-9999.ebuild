@@ -18,6 +18,9 @@ DEPEND="
 	xgui-live-lib/qtx11extras
 	app-tex/hunspell
 "
+
+PATCHES=( "${FILESDIR}"/ebuild.patch )
+
 src_configure() {
 	eqmake5 fp.pro
 }

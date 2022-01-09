@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=eb1bbb0d0327a103850fec519015986e72a1ebf0
+	SNAPSHOT=4d644cbd6ae99fdc30c5bd36cd4a4f0cc457bfbd
 	SRC_URI="https://github.com/jinfeihan57/p7zip/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs
+inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="zstd fast compression library"
 HOMEPAGE="https://facebook.github.io/zstd/"
@@ -12,18 +12,20 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_BRANCH="release"
 	inherit git-r3
 else
-	SNAPSHOT=23dd28df67bfd26d7e8f20a4420426158a2ebedd
+	SNAPSHOT=791626dfb92acf4a3d3ba0342636b0dd82848e01
 	SRC_URI="https://github.com/facebook/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
 DEPEND="app-compression/xz-utils"
+
+append-flags -Wa,--noexecstack
 
 src_compile() {
 	emake \

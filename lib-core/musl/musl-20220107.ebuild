@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=b76f37fd5625d038141b52184956fb4b7838e9a5
+SNAPSHOT=c4d4028dde90562f631edf559fbc42d8ec1b29de
 
 inherit flag-o-matic
 
@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="musl libxcrypt"
 
-filter-flags -flto\=\*
+filter-flags -flto\*
 
 src_prepare() {
 	default

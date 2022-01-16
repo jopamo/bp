@@ -8,7 +8,7 @@ DESCRIPTION="Another cute console display library"
 HOMEPAGE="https://tiswww.case.edu/php/chet/readline/rltop.html"
 #SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
 
-SNAPSHOT=9ba3434aa5434e509300a3722b0479fd30480b44
+SNAPSHOT=5263c0d88064fda96292335d12eec1733f91cdc9
 SRC_URI="https://git.savannah.gnu.org/cgit/readline.git/snapshot/readline-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

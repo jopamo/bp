@@ -4,7 +4,7 @@ EAPI=8
 
 inherit flag-o-matic
 
-SNAPSHOT=1753149d4176ebfb2b135ac0aaf79340bf0e7a93
+SNAPSHOT=b920a6ca82250504167066d24aa8731ad29a0de8
 
 DESCRIPTION="Tools and library to manipulate EFI variables"
 HOMEPAGE="https://github.com/rhboot/efivar"
@@ -13,8 +13,7 @@ S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
-#build failures
+KEYWORDS="amd64 arm64"
 
 filter-flags -flto\*
 

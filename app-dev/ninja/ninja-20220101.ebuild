@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=102ef25fdf27504f3ac7392ce8dbfe83485fb25a
+SNAPSHOT=e234b25bb51a4d3ce5376febb4ad9a11e77d5ca3
 
 inherit python-any-r1 toolchain-funcs
 

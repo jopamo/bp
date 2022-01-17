@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+alsa debug nvidia +x264 +x265 vaapi vdpau static-libs +openssl
 	+ffmpeg +network +protocols pulseaudio +nonfree +gpl +version3
-	+avutil	+avcodec +avformat +swscale +avresample +swresample
+	+avutil	+avcodec +avformat +swscale +swresample
 	+avfilter +lame +libass +libdav1d +vorbis"
 
 DEPEND="
@@ -56,7 +56,6 @@ src_configure() {
 		$(use_enable avcodec) \
 		$(use_enable avfilter) \
 		$(use_enable avformat) \
-		$(use_enable avresample) \
 		$(use_enable avutil) \
 		$(use_enable debug) \
 		$(use_enable ffmpeg) \

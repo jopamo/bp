@@ -13,7 +13,7 @@ if [[ ${PV} == *9999 ]]; then
 	S="${WORKDIR}/${P}/unix"
 	inherit git-r3
 else
-	SNAPSHOT=fddce37374a5696d0618cd6160f458aba68ebcbb
+	SNAPSHOT=a9eaf6765198716158f4927d71f64d20182f1ad2
 	SRC_URI="https://github.com/tcltk/tcl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}/unix
 	KEYWORDS="amd64 arm64"

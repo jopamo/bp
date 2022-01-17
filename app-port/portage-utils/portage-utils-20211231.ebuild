@@ -9,19 +9,21 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/gentoo/portage-utils.git"
 	inherit git-r3
 else
-	SNAPSHOT=023d4496ef445a2f6f05b9c288e9816695d6daf4
+	SNAPSHOT=f58042d333d5a658f4ae1ddee322a5de31a55066
 	SRC_URI="https://github.com/gentoo/portage-utils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="GPL-2"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="static"
 
-DEPEND="static? ( lib-core/iniparser:0[static-libs] )
-	!static? ( lib-core/iniparser:0 )"
+DEPEND="
+	static? ( lib-core/iniparser:0[static-libs] )
+	!static? ( lib-core/iniparser:0 )
+"
 
 src_configure() {
 	local myconf=(

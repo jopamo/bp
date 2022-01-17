@@ -12,7 +12,7 @@ LICENSE="BSD GPL-2+ rdisc"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+arping caps clockdiff ninfod +ping rarpd rdisc rdisc_server static +tracepath"
+IUSE="+arping caps clockdiff +ping static +tracepath"
 
 LIB_DEPEND="caps? ( lib-core/libcap[static-libs(+)] )"
 RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
@@ -29,11 +29,7 @@ src_configure() {
 		$(meson_use arping BUILD_ARPING)
 		$(meson_use clockdiff BUILD_CLOCKDIFF)
 		$(meson_use ping BUILD_PING)
-		$(meson_use rarpd BUILD_RARPD)
-		$(meson_use rdisc BUILD_RDISC)
-		$(meson_use rdisc_server ENABLE_RDISC_SERVER)
 		$(meson_use tracepath BUILD_TRACEPATH)
-		$(meson_use ninfod BUILD_NINFOD)
 		-DBUILD_MANS=false
 	)
 		meson_src_configure

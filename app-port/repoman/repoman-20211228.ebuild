@@ -22,7 +22,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	~app-core/portage-${PV}[${PYTHON_USEDEP}]
+	=app-core/portage-${PV}
 	>=dev-python/lxml-3.6.0[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 "

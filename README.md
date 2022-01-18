@@ -22,3 +22,9 @@ bp is short for 'backpack' to denote it being easier to move around on various c
 * A number of GNU projects are bootstrapped from git with this [script](./app-core/ugscripts/files/sbin/mktarballs).
 * Rust packages (librsvg only currently) are prepared with `cargo vendor` using the same [script](./app-core/ugscripts/files/sbin/mktarballs) from above
 * Rust/librsvg is optional with the 'rust' use flag. Unless it is set, the old version of librsvg is installed. This will remain until gcc is able to bootstrap rust from source.
+
+## Binary Packages
+https://1g4.org/1g4-glibc-amd64/
+https://1g4.org/1g4-musl-amd64/
+https://1g4.org/1g4-glibc-arm64/
+https://1g4.org/1g4-musl-arm64/

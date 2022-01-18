@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=d03753f33432c790d7ed6c2487080e09bf884254
+SNAPSHOT=696f74ae67a56ccb9362cc9a1f63fbc197e89875
 
 inherit autotools flag-o-matic linux-info user toolchain-funcs
 

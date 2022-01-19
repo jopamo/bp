@@ -1,0 +1,51 @@
+From 4feda8704972a1eac88b5ba9ff7add92c25245ab Mon Sep 17 00:00:00 2001
+From: Guillem Jover <guillem@hadrons.org>
+Date: Thu, 11 Feb 2021 04:40:48 +0100
+Subject: [PATCH] Require a semicolon for libbsd_link_warning() macro
+
+Remove the semicolon in the macro definition to force adding one on the
+call sites, to make the code look like an actual function.
+---
+ src/fgetln.c     | 2 +-
+ src/fgetwln.c    | 2 +-
+ src/local-link.h | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/fgetln.c b/src/fgetln.c
+index 7461a7a..502eb6f 100644
+--- a/src/fgetln.c
++++ b/src/fgetln.c
+@@ -77,7 +77,7 @@ fgetln(FILE *stream, size_t *len)
+ }
+ libbsd_link_warning(fgetln,
+                     "This function cannot be safely ported, use getline(3) "
+-                    "instead, as it is supported by GNU and POSIX.1-2008.")
++                    "instead, as it is supported by GNU and POSIX.1-2008.");
+ #else
+ #error "Function fgetln() needs to be ported."
+ #endif
+diff --git a/src/fgetwln.c b/src/fgetwln.c
+index 1127655..e6a0a17 100644
+--- a/src/fgetwln.c
++++ b/src/fgetwln.c
+@@ -89,4 +89,4 @@ fgetwln(FILE *stream, size_t *lenp)
+ }
+ libbsd_link_warning(fgetwln,
+                     "This function cannot be safely ported, use fgetwc(3) "
+-                    "instead, as it is supported by C99 and POSIX.1-2001.")
++                    "instead, as it is supported by C99 and POSIX.1-2001.");
+diff --git a/src/local-link.h b/src/local-link.h
+index 0d4351a..55fd028 100644
+--- a/src/local-link.h
++++ b/src/local-link.h
+@@ -29,7 +29,7 @@
+
+ #define libbsd_link_warning(symbol, msg) \
+ 	static const char libbsd_emit_link_warning_##symbol[] \
+-		__attribute__((__used__,__section__(".gnu.warning." #symbol))) = msg;
++		__attribute__((__used__,__section__(".gnu.warning." #symbol))) = msg
+
+ #ifdef __ELF__
+ #define libbsd_symver_default(alias, symbol, version) \
+--
+GitLab

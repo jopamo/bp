@@ -24,3 +24,5 @@ DEPEND="
 	app-core/ed
 	app-build/bc
 "
+
+PATCHES=( "${FILESDIR}/more-uarches-for-kernel-5.15+.patch" )

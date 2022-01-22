@@ -2,11 +2,11 @@
 
 EAPI=8
 
-inherit toolchain-funcs flag-o-matic
+inherit toolchain-funcs flag-o-matic git-r3
 
 DESCRIPTION="Asynchronous input/output library that uses the kernels native interface"
-HOMEPAGE="http://lse.sourceforge.net/io/aio.html"
-SRC_URI="mirror://debian/pool/main/liba/${PN}/${PN}_${PV}.orig.tar.xz -> ${P}.tar.xz"
+HOMEPAGE="https://pagure.io/libaio"
+EGIT_REPO_URI="https://pagure.io/libaio.git"
 
 LICENSE="LGPL-2"
 SLOT="0"
@@ -14,12 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs test"
 
-PATCHES=(
-	"${FILESDIR}"/${PN}-0.3.110-cppflags.patch
-	"${FILESDIR}"/${PN}-0.3.110-link-stdlib.patch
-)
-
-filter-flags -flto\=\*
+filter-flags -flto\*
 
 src_prepare() {
 	default

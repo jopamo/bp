@@ -2,14 +2,19 @@
 
 EAPI=8
 
-SNAPSHOT=8b24cb8fdf2bf210e243c1d676484a4ffa5c3f6c
-
 inherit autotools
 
 DESCRIPTION="Jemalloc is a general-purpose scalable concurrent allocator"
 HOMEPAGE="http://jemalloc.net/ https://github.com/jemalloc/jemalloc"
-SRC_URI="https://github.com/jemalloc/jemalloc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+
+if [[ ${PV} == *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
+	inherit git-r3
+else
+	SNAPSHOT=44944accfd5516a094e1e730334764e0a908aaff
+	SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="BSD"
 SLOT="0"

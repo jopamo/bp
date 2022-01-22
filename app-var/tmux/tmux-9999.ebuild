@@ -11,7 +11,6 @@ EGIT_REPO_URI="https://github.com/tmux/tmux.git"
 if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/tmux/tmux"
 	inherit git-r3
-	EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)/master"
 else
 	SNAPSHOT=bf595a0cb0eb132b7365e8f1d19f07b255cbf191
 	SRC_URI="https://github.com/tmux/tmux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"

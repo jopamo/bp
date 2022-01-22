@@ -17,9 +17,8 @@ IUSE="+cairo debug +glib +introspection static-libs test +truetype"
 REQUIRED_USE="introspection? ( glib )"
 
 DEPEND="
-	cairo? ( xgui-live-lib/cairo )
 	fonts/fontconfig
-	lib-dev/fribidi
+	cairo? ( xgui-live-lib/cairo )
 	glib? ( lib-live/glib )
 	introspection? ( lib-live/gobject-introspection )
 	truetype? ( xgui-misc/freetype )
@@ -29,9 +28,6 @@ BDEPEND="
 	app-dev/pkgconf
 	test? ( ${PYTHON_DEPS} )
 "
-
-append-cppflags -I/usr/include/fribidi
-append-flags -lfribidi
 
 pkg_setup() {
 	use test && python-any-r1_pkg_setup

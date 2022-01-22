@@ -2,14 +2,19 @@
 
 EAPI=8
 
-SNAPSHOT=8ead6936e1e8bf28747d99839b78b1dc017db537
-
 inherit flag-o-matic
 
 DESCRIPTION="common Linux command line utilities together into a single BSD-licensed executable "
 HOMEPAGE="http://landley.net/toybox/"
-SRC_URI="https://github.com/landley/toybox/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+
+if [[ ${PV} = *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/landley/toybox"
+	inherit git-r3
+else
+	SNAPSHOT=bf595a0cb0eb132b7365e8f1d19f07b255cbf191
+	SRC_URI="https://github.com/landley/toybox/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="BSD"
 SLOT="0"

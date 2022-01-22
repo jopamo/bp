@@ -15,14 +15,15 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 RDEPEND="
-	>=fonts/fontconfig-2.10.92
-	>=xgui-misc/freetype-2.5.0.1:2
-	>=lib-dev/fribidi-0.19.5-r1
-	>=xgui-misc/harfbuzz-0.9.12[truetype]"
-
-DEPEND="${RDEPEND}
+	fonts/fontconfig
+	lib-dev/fribidi
+	xgui-misc/freetype
+	xgui-misc/harfbuzz[truetype]
+"
+BDEPEND="
 	app-dev/pkgconf
-	app-lang/nasm"
+	app-lang/nasm
+"
 
 src_prepare() {
 	default
@@ -31,9 +32,9 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
+		--disable-require-system-font-provider
 		--enable-fontconfig
 		$(use_enable static-libs static)
-		--disable-require-system-font-provider
 	)
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }

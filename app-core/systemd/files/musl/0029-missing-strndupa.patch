@@ -1,0 +1,11 @@
+diff -urN a/src/fstab-generator/fstab-generator.c b/src/fstab-generator/fstab-generator.c
+--- a/src/fstab-generator/fstab-generator.c	2022-01-23 16:20:10.847795199 -0600
++++ b/src/fstab-generator/fstab-generator.c	2022-01-23 16:24:31.206942693 -0600
+@@ -29,6 +29,7 @@
+ #include "util.h"
+ #include "virt.h"
+ #include "volatile-util.h"
++#include "missing_stdlib.h"
+ 
+ typedef enum MountPointFlags {
+         MOUNT_NOAUTO    = 1 << 0,

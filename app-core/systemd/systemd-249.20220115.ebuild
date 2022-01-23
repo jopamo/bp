@@ -53,7 +53,6 @@ DEPEND="
 	app-core/util-linux
 	app-build/gettext
 "
-
 BDEPEND="dev-python/jinja"
 
 append-cflags -Wno-error=format-truncation
@@ -85,15 +84,45 @@ pkg_pretend() {
 }
 
 src_prepare() {
-	default
-
 	if use musl; then
-		eapply "${FILESDIR}"/musl/*.patch
+		PATCHES=(
+			"${FILESDIR}"/0001-systemd.pc.in-use-ROOTPREFIX-without-suffixed-slash.patch
+			"${FILESDIR}"/0001-test-parse-argument-Include-signal.h.patch
+			"${FILESDIR}"/0002-don-t-use-glibc-specific-qsort_r.patch
+			"${FILESDIR}"/0003-implment-systemd-sysv-install-for-OE.patch
+			"${FILESDIR}"/0003-missing_type.h-add-__compare_fn_t-and-comparison_fn_.patch
+			"${FILESDIR}"/0004-add-fallback-parse_printf_format-implementation.patch
+			"${FILESDIR}"/0005-src-basic-missing.h-check-for-missing-strndupa.patch
+			"${FILESDIR}"/0006-Include-netinet-if_ether.h.patch
+			"${FILESDIR}"/0007-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch
+			"${FILESDIR}"/0008-add-missing-FTW_-macros-for-musl.patch
+			"${FILESDIR}"/0009-fix-missing-of-__register_atfork-for-non-glibc-build.patch
+			"${FILESDIR}"/0010-Use-uintmax_t-for-handling-rlim_t.patch
+			"${FILESDIR}"/0011-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch
+			"${FILESDIR}"/0012-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch
+			"${FILESDIR}"/0013-Define-glibc-compatible-basename-for-non-glibc-syste.patch
+			"${FILESDIR}"/0014-Do-not-disable-buffering-when-writing-to-oom_score_a.patch
+			"${FILESDIR}"/0015-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch
+			"${FILESDIR}"/0016-Hide-__start_BUS_ERROR_MAP-and-__stop_BUS_ERROR_MAP.patch
+			"${FILESDIR}"/0017-missing_type.h-add-__compar_d_fn_t-definition.patch
+			"${FILESDIR}"/0018-avoid-redefinition-of-prctl_mm_map-structure.patch
+			"${FILESDIR}"/0019-Handle-missing-LOCK_EX.patch
+			"${FILESDIR}"/0020-Fix-incompatible-pointer-type-struct-sockaddr_un.patch
+			"${FILESDIR}"/0021-test-json.c-define-M_PIl.patch
+			"${FILESDIR}"/0022-do-not-disable-buffer-in-writing-files.patch
+			"${FILESDIR}"/0025-Handle-__cpu_mask-usage.patch
+			"${FILESDIR}"/0026-Handle-missing-gshadow.patch
+			"${FILESDIR}"/0028-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch
+			"${FILESDIR}"/0029-missing-strndupa.patch
+		)
+		default
 
 		sed -i -e 's/linux\/if_ether.h/netinet\/if_ether.h/g' "src/basic/linux/if_bridge.h" || die
 		sed -i -e 's/linux\/if_ether.h/netinet\/if_ether.h/g' "src/network/netdev/bareudp.h" || die
 		sed -i -e 's/linux\/if_ether.h/netinet\/if_ether.h/g' "src/basic/socket-util.h" || die
 		sed -i -e 's/linux\/if_arp.h/netinet\/if_ether.h/g' "src/network/networkd-link.c" || die
+	else
+		default
 	fi
 }
 

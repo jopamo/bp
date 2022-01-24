@@ -31,27 +31,27 @@ REQUIRED_USE="musl? ( !gshadow !localed !userdb !utmp )"
 RESTRICT="!test? ( test )"
 
 DEPEND="
-	cryptsetup? ( app-fs/cryptsetup )
-	gcrypt? ( lib-core/libgcrypt )
-	kmod? ( app-core/kmod )
-	logind? ( app-core/dbus )
-	pam? ( lib-core/pam )
-	pcre? ( lib-core/libpcre2 )
-	lib-core/libseccomp
-	test? ( app-core/dbus )
-	tmpfilesd? ( app-core/dbus )
-	xkb? ( xgui-live-lib/libxkbcommon )
-	app-tex/docbook-xml-dtd
-	app-tex/docbook-xsl-stylesheets
-	app-dev/gperf
-	app-dev/pkgconf
-	lib-core/libxslt
-	lib-core/libcap
+	app-build/gettext
 	app-core/acl
 	app-core/coreutils
 	app-core/procps[kill(+)]
 	app-core/util-linux
-	app-build/gettext
+	app-dev/gperf
+	app-dev/pkgconf
+	app-tex/docbook-xml-dtd
+	app-tex/docbook-xsl-stylesheets
+	lib-core/libcap
+	lib-core/libxslt
+	cryptsetup? ( app-fs/cryptsetup )
+	gcrypt? ( lib-core/libgcrypt )
+	kmod? ( app-core/kmod )
+	lib-core/libseccomp
+	logind? ( app-core/dbus )
+	pam? ( lib-core/pam )
+	pcre? ( lib-core/libpcre2 )
+	test? ( app-core/dbus )
+	tmpfilesd? ( app-core/dbus )
+	xkb? ( xgui-live-lib/libxkbcommon )
 "
 BDEPEND="dev-python/jinja"
 

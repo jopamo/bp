@@ -12,17 +12,9 @@ LICENSE="https://developer.android.com/studio/terms"
 SLOT="0"
 KEYWORDS="amd64"
 
-IUSE="systemd"
-
 DEPEND="bin/android-udev-rules"
 
 src_install() {
-	if use systemd; then
-		insinto /usr/lib/systemd/system
-		insopts -m 0644
-		doins "${FILESDIR}/adb.service"
-	fi
-
 	exeinto /opt/bin
 	doexe {adb,fastboot,mke2fs}
 

@@ -6,7 +6,7 @@ inherit flag-o-matic
 
 DESCRIPTION="GNU GPL'd Pico clone with more functionality"
 HOMEPAGE="https://www.nano-editor.org/ https://wiki.gentoo.org/wiki/Nano/Basics_Guide"
-SRC_URI="https://www.nano-editor.org/dist/v$(ver_cut 1)/${P}.tar.xz"
+SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"

@@ -12,7 +12,7 @@ LICENSE="GPLv3"
 SLOT="0"
 KEYWORDS="amd64"
 
-IUSE="adbusers"
+IUSE="+adbusers"
 
 src_prepare() {
 	default
@@ -27,4 +27,8 @@ src_install() {
 		insinto usr/lib/sysusers.d
 		doins "android-udev.conf"
 	fi
+}
+
+pkg_preinst() {
+	use adbusers && enewgroup adbusers 5037
 }

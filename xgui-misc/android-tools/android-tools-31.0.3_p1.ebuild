@@ -23,7 +23,6 @@ KEYWORDS="amd64 arm64"
 IUSE="python"
 
 DEPEND="
-	app-build/gcc[golang]
 	app-compression/brotli
 	app-compression/lz4
 	app-compression/zstd
@@ -32,6 +31,7 @@ DEPEND="
 	lib-dev/protobuf
 	lib-live/libunwind
 "
+BDEPEND="app-build/gcc[golang]"
 
 src_prepare() {
 	eapply "${DISTDIR}/${PN}-31.0.3-no-gtest.patch"

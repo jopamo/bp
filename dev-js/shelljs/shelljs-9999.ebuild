@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit git-r3
+inherit git-r3 node-module
 
 DESCRIPTION="Portable Unix shell commands for Node.js "
 HOMEPAGE="https://github.com/shelljs/shelljs"
@@ -22,14 +22,3 @@ DEPEND="
 	dev-js/minimatch
 	dev-js/rechoir
 "
-
-src_prepare() {
-	default
-	rm -rf {.github,.gitignore,README*,*.{png,gif}}  || die
-}
-
-src_install() {
-	local node_modules="${ED}"/usr/lib/node_modules/${PN}
-	mkdir -p "${node_modules}" || die
-	cp -rp "${S}"/* "${node_modules}"/ || die
-}

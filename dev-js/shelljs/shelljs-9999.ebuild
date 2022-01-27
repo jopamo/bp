@@ -15,9 +15,7 @@ KEYWORDS="amd64 arm64"
 DEPEND="
 	dev-js/brace-expansion
 	dev-js/execa
-	dev-js/fs-realpath
 	dev-js/glob
-	dev-js/inherits
 	dev-js/interpret
 	dev-js/minimatch
 	dev-js/rechoir

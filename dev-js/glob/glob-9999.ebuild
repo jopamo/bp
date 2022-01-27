@@ -11,3 +11,12 @@ EGIT_REPO_URI="${HOMEPAGE}"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+DEPEND="
+	dev-js/fs-realpath
+	dev-js/inflight
+	dev-js/inherits
+	dev-js/minimatch
+	dev-js/once
+	dev-js/path-is-absolute
+"

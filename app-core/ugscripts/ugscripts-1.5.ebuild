@@ -15,7 +15,7 @@ S=${WORKDIR}
 src_install() {
 	#bin files
 	for f in ix ; do
-		dosbin "${FILESDIR}"/bin/$f
+		dobin "${FILESDIR}"/bin/$f
 	done
 
 	#sbin files

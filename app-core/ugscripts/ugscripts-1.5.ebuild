@@ -13,6 +13,12 @@ IUSE="video"
 S=${WORKDIR}
 
 src_install() {
+	#bin files
+	for f in ix ; do
+		dosbin "${FILESDIR}"/bin/$f
+	done
+
+	#sbin files
 	for f in efixperm emirror esync eup lighttpd_certs \
 		mkheaders mkimg mkmini mkstage mktarballs xbkup xchroot ; do
 			dosbin "${FILESDIR}"/sbin/$f

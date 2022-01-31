@@ -2,7 +2,7 @@
 
 EAPI=8
 
-MINOR_VERSION="5409-f11334058"
+MINOR_VERSION="5468-989df2310"
 
 _APPNAME="plexmediaserver"
 _USERNAME="plex"
@@ -57,11 +57,6 @@ src_install() {
 		insopts -m 0644
 		doins "${FILESDIR}/${PN}.service"
 	fi
-
-	rm -f "${ED}"/opt/plexmediaserver/Resources/Python/lib/python2.7/lib-dynload/_codecs_{cn,hk,jp,kr,tw}.so
-	rm -f "${ED}"/opt/plexmediaserver/Resources/Python/lib/python2.7/lib-dynload/_multibytecodec.so
-
-	patchelf --set-rpath "/opt/plexmediaserver/lib/" "${ED}"/opt/plexmediaserver/Resources/Python/lib/python2.7/lib-dynload/_bisect.so
 
 	keepdir "/var/lib/plexmediaserver/Library/Application Support"
 	fowners -R plex:plex /var/lib/plexmediaserver

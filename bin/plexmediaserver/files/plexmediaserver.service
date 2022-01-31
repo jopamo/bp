@@ -20,6 +20,13 @@ StartLimitBurst=3
 SyslogIdentifier=Plex Media Server
 StandardOutput=journal
 StandardError=journal
+PrivateTmp=yes
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+ReadWritePaths=/var/lib/plexmediaserver
 
 [Install]
 WantedBy=multi-user.target

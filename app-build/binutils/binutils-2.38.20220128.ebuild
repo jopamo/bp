@@ -10,7 +10,7 @@ if [[ ${PV} = *9999 ]]; then
 	inherit git-r3
 	EGIT_BRANCH="binutils-$(ver_cut 1)_$(ver_cut 2)-branch"
 else
-	SNAPSHOT=96eb21265ebffbc28f767bed9a2b7650ecb9818d
+	SNAPSHOT=4b1ecb5487a9c6dd93603c0a5ef010b5a9e5086b
 	SRC_URI="https://github.com/bminor/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-gdb-${SNAPSHOT}
 fi

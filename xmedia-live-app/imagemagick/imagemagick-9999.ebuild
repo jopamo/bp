@@ -57,9 +57,12 @@ src_configure() {
 		$(use_with wmf)
 		$(use_with xml)
 		$(use_with zlib)
-		--with-modules
-		--with-threads
 		--without-autotrace
+		--without-dps
+		--without-fftw
+		--without-fpx
+		--without-gcc-arch
+		--without-gvc
 	)
 	econf "${myconf[@]}"
 }

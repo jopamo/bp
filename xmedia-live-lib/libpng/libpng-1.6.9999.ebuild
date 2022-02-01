@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit git-r3 libtool
+inherit git-r3
 
 DESCRIPTION="Portable Network Graphics library"
 HOMEPAGE="http://www.libpng.org/"
@@ -10,24 +10,15 @@ EGIT_REPO_URI="https://github.com/glennrp/libpng.git"
 EGIT_BRANCH=libpng$(ver_cut 1)$(ver_cut 2)
 
 LICENSE="libpng"
-SLOT="0/16"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND=">=lib-core/zlib-1.2.8-r1:=
-		app-compression/xz-utils"
-
-PATCHES=( "${FILESDIR}"/libpng-1.6.37-apng.patch )
-
-src_prepare() {
-	default
-
-	# Don't execute symbols check with apng patch wrt #378111
-	sed -i -e '/^check/s:scripts/symbols.chk::' Makefile.in || die
-
-	elibtoolize
-}
+DEPEND="
+	lib-core/zlib
+	app-compression/xz-utils
+"
 
 src_configure() {
 	local myconf=(

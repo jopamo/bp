@@ -8,7 +8,6 @@
 </div>
 
 bp is short for 'backpack' to denote it being easier to move around on various cloud services or embedded devices. It is an alternate [gentoo](https://github.com/gentoo/gentoo) package repo. It is not intended as a replacement for gentoo, it is heavily customized for my own purposes and the invaluable freedom of choice that gentoo gives you is elimnated in many cases. It is somewhat compatible with gentoo and gentoo overlays, some stuff works. It uses the [package.provided](https://wiki.gentoo.org/wiki//etc/portage/profile/package.provided) mechanism to provide a compatibility layer. Just chroot or [systemd-nspawn](https://wiki.archlinux.org/title/systemd-nspawn) into [these rootfs tarballs](https://1g4.org/linux/) instead of the official [stage tarballs](https://wiki.gentoo.org/wiki/Stage_tarball).\
-\
 Thanks to all Gentoo devs past and present and the linux community for all the support.
 
 ## Distro Configuration

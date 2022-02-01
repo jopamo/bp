@@ -7,7 +7,7 @@
 
 </div>
 
-bp is short for 'backpack' to denote it being easier to move around on various cloud services or embedded devices. It is an alternate [gentoo](https://github.com/gentoo/gentoo) package repo. It is somewhat compatible with gentoo and gentoo overlays, some stuff works. It uses the [package.provided](https://wiki.gentoo.org/wiki//etc/portage/profile/package.provided) mechanism to provide a compatibility layer. Just chroot or [systemd-nspawn](https://wiki.archlinux.org/title/systemd-nspawn) into [these rootfs tarballs](https://1g4.org/linux/) instead of the official [stage tarballs](https://wiki.gentoo.org/wiki/Stage_tarball).
+bp is short for 'backpack' to denote it being easier to move around on various cloud services or embedded devices. It is an alternate [gentoo](https://github.com/gentoo/gentoo) package repo. It is not intended as a replacement for Gentoo, it is heavily customized for my own purposes and I eliminate the invaluable freedom of choice that Gentoo gives you.. It is somewhat compatible with gentoo and gentoo overlays, some stuff works. It uses the [package.provided](https://wiki.gentoo.org/wiki//etc/portage/profile/package.provided) mechanism to provide a compatibility layer. Just chroot or [systemd-nspawn](https://wiki.archlinux.org/title/systemd-nspawn) into [these rootfs tarballs](https://1g4.org/linux/) instead of the official [stage tarballs](https://wiki.gentoo.org/wiki/Stage_tarball).
 
 ## Distro Configuration
 * A mixture of stable and bleeding edge

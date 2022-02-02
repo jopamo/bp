@@ -20,6 +20,9 @@ src_configure() {
 		-DCAPSTONE_BUILD_DIET="$(usex diet)"
 		-DCAPSTONE_BUILD_STATIC="$(usex static-libs)"
 		-DCAPSTONE_INSTALL=ON
+		-DCAPSTONE_ARCHITECTURE_DEFAULT=OFF
+		-DCAPSTONE_ARM64_SUPPORT=ON
+		-DCAPSTONE_X86_SUPPORT=ON
 	)
 	cmake_src_configure
 }

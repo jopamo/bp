@@ -16,10 +16,10 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs systemd"
 
 RDEPEND="app-lang/perl"
-
-DEPEND="
+BDEPEND="
 	app-build/bison
-	app-build/flex"
+	app-build/flex
+"
 
 CONFIG_CHECK="~HWMON ~I2C_CHARDEV ~I2C"
 WARNING_HWMON="${PN} requires CONFIG_HWMON to be enabled for use."

@@ -2,17 +2,11 @@
 
 EAPI=8
 
-inherit meson
+inherit meson git-r3
 
 DESCRIPTION="Minimal seat management daemon and universal library"
 HOMEPAGE="https://sr.ht/~kennylevinsen/seatd"
-
-if [[ ${PV} == 9999 ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://git.sr.ht/~kennylevinsen/seatd"
-else
-	SRC_URI="https://git.sr.ht/~kennylevinsen/seatd/archive/${PV}.tar.gz -> ${P}.tar.gz"
-fi
+EGIT_REPO_URI="https://github.com/kennylevinsen/seatd"
 
 LICENSE="MIT"
 SLOT="0"

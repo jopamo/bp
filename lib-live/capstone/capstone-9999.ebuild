@@ -13,10 +13,11 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs"
+IUSE="+diet static-libs"
 
 src_configure() {
 	local mycmakeargs=(
+		-DCAPSTONE_BUILD_DIET="$(usex diet)"
 		-DCAPSTONE_BUILD_STATIC="$(usex static-libs)"
 		-DCAPSTONE_INSTALL=ON
 	)

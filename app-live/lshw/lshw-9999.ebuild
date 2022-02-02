@@ -6,7 +6,7 @@ inherit flag-o-matic toolchain-funcs git-r3
 
 DESCRIPTION="Hardware Lister"
 HOMEPAGE="https://www.ezix.org/project/wiki/HardwareLiSter"
-EGIT_REPO_URI="https://ezix.org/src/pkg/lshw.git"
+EGIT_REPO_URI="https://github.com/lyonel/lshw.git"
 
 LICENSE="GPL-2"
 SLOT="0"

@@ -13,22 +13,15 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
+	app-core/dbus
 	lib-live/glib
-	app-live/dbus-broker
 "
 BDEPEND="
+	app-build/gettext
 	app-dev/gtk-doc-am
 	app-dev/intltool
-	app-build/gettext
 	app-dev/pkgconf
 "
-
-src_configure() {
-        local emesonargs=(
-			-Ddefault_bus=dbus-broker
-        )
-        meson_src_configure
-}
 
 src_install() {
 	meson_src_install

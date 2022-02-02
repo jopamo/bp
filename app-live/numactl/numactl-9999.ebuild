@@ -2,21 +2,16 @@
 
 EAPI=8
 
-inherit autotools toolchain-funcs flag-o-matic
+inherit autotools flag-o-matic git-r3
 
 DESCRIPTION="Utilities and libraries for NUMA systems"
 HOMEPAGE="https://github.com/numactl/numactl"
+EGIT_REPO_URI="https://github.com/numactl/numactl.git"
 
-if [[ "${PV}" = 9999* ]] ; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/numactl/numactl.git"
-else
-	SRC_URI="ftp://oss.sgi.com/www/projects/libnuma/download/${P}.tar.gz"
-fi
-
-KEYWORDS="amd64 arm64"
 LICENSE="GPL-2"
 SLOT="0"
+KEYWORDS="amd64 arm64"
+
 IUSE="static-libs"
 
 filter-flags -Wl,-z,defs
@@ -38,10 +33,4 @@ src_test() {
 	else
 		ewarn "You do not have baseline NUMA support in your kernel, skipping tests."
 	fi
-}
-
-src_install() {
-	emake DESTDIR="${D}" install
-
-	find "${ED%/}"/usr/ -name libnuma.la -delete || die
 }

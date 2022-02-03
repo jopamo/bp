@@ -12,14 +12,14 @@ if [[ ${PV} = *9999 ]]; then
 	inherit git-r3
 	EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)/master"
 else
-	SNAPSHOT=72123e1b56f53f9205bb105f8a62d0869b837b22
+	SNAPSHOT=008003dc6e83439c5e04a744b7fd8197df19096e
 	SRC_URI="https://github.com/bminor/glibc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 
 LICENSE="LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="caps debug nscd profile systemd systemtap static-libs +static-pie tmpfilesd"
 
@@ -37,10 +37,13 @@ RDEPEND="
 "
 PDEPEND="lib-core/tzdb"
 
-PATCHES=( "${FILESDIR}"/0001-Disable-ldconfig-during-install.patch )
+PATCHES=(
+	"${FILESDIR}"/0001-Disable-ldconfig-during-install.patch
+	"${FILESDIR}"/0004-Add-C.UTF-8-locale.patch
+	)
 
-filter-flags -flto\=\*
-filter-flags -D_FORTIFY_SOURCE\=\*
+filter-flags -flto\*
+filter-flags -D_FORTIFY_SOURCE\*
 filter-flags -Wl,-z,defs
 filter-flags -fstack-protector-strong
 filter-flags -fassociative-math

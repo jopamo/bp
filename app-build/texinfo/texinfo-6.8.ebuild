@@ -6,30 +6,22 @@ inherit flag-o-matic
 
 DESCRIPTION="The GNU info program and utilities"
 HOMEPAGE="https://www.gnu.org/software/texinfo/"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="nls static"
+IUSE="static"
 
-RDEPEND="
-	app-lang/perl
-	nls? ( app-build/gettext )"
+DEPEND="app-compression/xz-utils"
 
-DEPEND="${RDEPEND}
-	app-compression/xz-utils
-	nls? ( >=app-build/gettext-0.19.6 )"
+PATCHES=( "${FILESDIR}/${P}-undo-gnulib-nonnul.patch" )
 
 src_configure() {
 	use static && append-ldflags -static
-	local myconf=(
-		--with-external-libintl-perl
-		--with-external-Unicode-EastAsianWidth
-		--with-external-Text-Unidecode
-		$(use_enable nls)
-	)
+
+	local myconf=( --disable-perl-xs )
 	econf "${myconf[@]}"
 }
 

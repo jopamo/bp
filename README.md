@@ -7,7 +7,7 @@
 
 </div>
 
-bp is short for 'backpack' to denote it being easier to move around on various cloud services or embedded devices. It is an alternate [gentoo](https://github.com/gentoo/gentoo) package repo. It is not intended as a replacement for gentoo, it is heavily customized for my own purposes and the invaluable freedom of choice that gentoo gives you is elimnated in many cases. It is somewhat compatible with gentoo and gentoo overlays, some stuff works. Thanks to all Gentoo devs past and present and the linux community for all the support. It uses the [package.provided](https://wiki.gentoo.org/wiki//etc/portage/profile/package.provided) mechanism to provide a compatibility layer. Just chroot or [systemd-nspawn](https://wiki.archlinux.org/title/systemd-nspawn) into [these rootfs tarballs](https://1g4.org/linux/) instead of the official [stage tarballs](https://wiki.gentoo.org/wiki/Stage_tarball).
+bp is short for 'backpack' to denote it being easier to move around on various cloud services or embedded devices. It is an alternate [gentoo](https://github.com/gentoo/gentoo) package repo. It is not intended as a replacement for gentoo, it is heavily customized and the invaluable freedom of choice that gentoo gives you is eliminated in many cases. All credit goes to Gentoo devs past and present and the linux community for all the support. It is somewhat compatible with gentoo and gentoo overlays using the [package.provided](https://wiki.gentoo.org/wiki//etc/portage/profile/package.provided) mechanism to provide a compatibility layer. Just chroot or [systemd-nspawn](https://wiki.archlinux.org/title/systemd-nspawn) into [these rootfs tarballs](https://1g4.org/linux/) instead of the official [stage tarballs](https://wiki.gentoo.org/wiki/Stage_tarball).
 
 ## Distro Configuration
 * A mixture of stable and bleeding edge
@@ -19,8 +19,8 @@ bp is short for 'backpack' to denote it being easier to move around on various c
 * openssl or libressl is supported
 * ncurses or netbsd-curses is supported
 * systemd is supported with glibc and musl on both amd64 and arm64
-* A number of GNU projects are bootstrapped from git with this [script](./app-core/ugscripts/files/sbin/mktarballs).
-* Rust packages (librsvg only currently) are prepared with `cargo vendor` using the same [script](./app-core/ugscripts/files/sbin/mktarballs) from above
+* A number of GNU projects are bootstrapped from git with this [script](./app-core/ugscripts/files/bin/mktarballs).
+* Rust packages (librsvg only currently) are prepared with `cargo vendor` using the same [script](./app-core/ugscripts/files/bin/mktarballs) from above
 * Rust/librsvg is optional with the 'rust' use flag. Unless it is set, the old version of librsvg is installed. This will remain until gcc is able to bootstrap rust from source.
 
 ## Binary Packages

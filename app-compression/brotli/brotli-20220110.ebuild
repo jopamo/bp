@@ -13,7 +13,10 @@ if [[ ${PV} == *9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/google/${PN}.git"
 	inherit git-r3
 else
-	SRC_URI="https://github.com/google/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+	#SRC_URI="https://github.com/google/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+	SNAPSHOT=f4153a09f87cbb9c826d8fc12c74642bb2d879ea
+	SRC_URI="https://github.com/google/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 
 LICENSE="MIT python? ( Apache-2.0 )"
@@ -26,8 +29,6 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 # tests are currently broken, see https://github.com/google/brotli/issues/850
 RESTRICT="test"
-
-PATCHES=( "${FILESDIR}/${PV}-linker.patch" )
 
 RDEPEND="python? ( ${PYTHON_DEPS} )"
 DEPEND="${RDEPEND}"

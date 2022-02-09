@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit git-r3
+inherit git-r3 user
 
 DESCRIPTION="Android udev rules list aimed to be the most comprehensive on the net"
 HOMEPAGE="https://github.com/M0Rf30/android-udev-rules"

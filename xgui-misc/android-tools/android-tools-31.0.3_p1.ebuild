@@ -32,6 +32,7 @@ DEPEND="
 	lib-live/libunwind
 "
 BDEPEND="app-build/gcc[golang]"
+RDEPEND="app-live/android-udev-rules"
 
 src_prepare() {
 	eapply "${DISTDIR}/${PN}-31.0.3-no-gtest.patch"

@@ -7,7 +7,7 @@ inherit toolchain-funcs flag-o-matic
 DESCRIPTION="A parallel implementation of gzip"
 HOMEPAGE="http://www.zlib.net/pigz/"
 
-SNAPSHOT=90198bc486fe044c222b51c3e37d8b6a91951a89
+SNAPSHOT=e1fa51ca99a851febe2b00632f3ba417d30f8a6c
 SRC_URI="https://github.com/madler/pigz/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

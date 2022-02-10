@@ -11,3 +11,8 @@ EGIT_REPO_URI="${HOMEPAGE}"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+DEPEND="
+	dev-js/min-document
+	dev-js/process
+"

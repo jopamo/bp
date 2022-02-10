@@ -47,6 +47,7 @@ BDEPEND="
 	test? ( app-net/curl )
 "
 PDEPEND="
+	dev-js/ansi-colors
 	dev-js/jasmine
 	dev-js/readline-sync
 "

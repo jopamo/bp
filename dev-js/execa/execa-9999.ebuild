@@ -11,3 +11,15 @@ EGIT_REPO_URI="${HOMEPAGE}"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+DEPEND="
+	dev-js/cross-spawn
+	dev-js/get-stream
+	dev-js/human-signals
+	dev-js/is-stream
+	dev-js/merge-stream
+	dev-js/npm-run-path
+	dev-js/onetime
+	dev-js/signal-exit
+	dev-js/strip-final-newline
+"

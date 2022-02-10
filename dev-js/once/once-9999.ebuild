@@ -11,3 +11,5 @@ EGIT_REPO_URI="${HOMEPAGE}"
 LICENSE="ISC"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+DEPEND="dev-js/wrappy"

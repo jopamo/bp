@@ -13,10 +13,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	dev-js/brace-expansion
 	dev-js/execa
 	dev-js/glob
 	dev-js/interpret
-	dev-js/minimatch
 	dev-js/rechoir
 "

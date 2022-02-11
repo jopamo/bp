@@ -2,11 +2,15 @@
 
 EAPI=8
 
-inherit flag-o-matic
+SNAPSHOT="ffaef0be613121d3ee37867d82932a7a30c2bc6d"
+SHORT=${SNAPSHOT:0:7}
+
+inherit flag-o-matic autotools
 
 DESCRIPTION="General purpose crypto library based on the code used in GnuPG"
 HOMEPAGE="http://www.gnupg.org/"
-SRC_URI="https://gnupg.org/ftp/gcrypt/libgcrypt/${P}.tar.bz2"
+SRC_URI="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=snapshot;h=${SNAPSHOT};sf=tgz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SHORT}
 
 LICENSE="LGPL-2.1 MIT"
 SLOT="0"
@@ -16,13 +20,19 @@ IUSE="o-flag-munging static-libs"
 
 DEPEND="lib-core/libgpg-error"
 
+src_prepare() {
+	default
+	eautoreconf
+}
+
 src_configure() {
 	local myconf=(
-		--disable-dependency-tracking
-		--enable-noexecstack
 		$(use_enable o-flag-munging O-flag-munging)
 		$(use_enable static-libs static)
+		--disable-dependency-tracking
 		--disable-doc
+		--disable-jent-support
+		--enable-noexecstack
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

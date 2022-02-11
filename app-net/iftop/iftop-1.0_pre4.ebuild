@@ -34,6 +34,7 @@ PATCHES=(
 )
 
 src_prepare() {
+	rm aclocal.m4 || die
 	default
 	eautoreconf
 }

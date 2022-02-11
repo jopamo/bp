@@ -13,16 +13,6 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="gpio"
-
-src_configure(){
-	local GPIOSUPPORT
-	if use gpio; then
-		GPIOSUPPORT="GPIOSUPPORT=on"
-	fi
-	emake ${GPIOSUPPORT}
-}
-
 src_install(){
-	emake ${GPIOSUPPORT} DESTDIR="${ED}" PREFIX="${EPREFIX}/usr" install
+	emake DESTDIR="${ED}" PREFIX="${EPREFIX}/usr" install
 }

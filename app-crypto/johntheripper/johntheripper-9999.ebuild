@@ -16,11 +16,12 @@ KEYWORDS="amd64 arm64"
 IUSE="opencl openmp +ssl pcap rexgen"
 
 DEPEND="
-	ssl? ( virtual/ssl )
-	pcap? ( lib-net/libpcap )
+	app-compression/bzip2
 	lib-core/gmp:*
 	lib-core/zlib
-	app-compression/bzip2"
+	pcap? ( lib-net/libpcap )
+	ssl? ( virtual/ssl )
+"
 
 S=${WORKDIR}/${P}/src
 
@@ -29,21 +30,20 @@ append-cppflags -DJOHN_SYSTEMWIDE_HOME="'\"${EPREFIX}/etc/john\"'"
 
 src_configure() {
 	local myconf=(
-		--disable-native-march
-		--disable-native-tests
-		--with-systemwide
 		$(use_enable opencl)
 		$(use_enable openmp)
 		$(use_enable pcap)
 		$(use_enable rexgen)
 		$(use_with ssl openssl)
+		--disable-native-march
+		--disable-native-tests
+		--with-systemwide
 	)
-
 	econf "${myconf[@]}"
 }
 
 src_test() {
-	make -C src check
+	emake -C src check
 }
 
 src_install() {

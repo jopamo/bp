@@ -27,13 +27,30 @@ src_prepare() {
 }
 
 src_compile() {
-	emake CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" INCLUDEDIR="${ED}"/usr/include MANDIR="${ED}"/usr/share/man ETCDIR="${ED}"/etc SHAREDIR="${ED}"/usr/share/keyutils LIBDIR="${ED}"/usr/lib SBINDIR="${ED}"/usr/bin BINDIR="${ED}"/usr/bin
+	emake CFLAGS="${CFLAGS}" \
+		LDFLAGS="${LDFLAGS}" \
+		INCLUDEDIR="${ED}"/usr/include \
+		MANDIR="${ED}"/usr/share/man \
+		ETCDIR="${ED}"/etc \
+		SHAREDIR="${ED}"/usr/share/keyutils \
+		LIBDIR="${ED}"/usr/lib \
+		SBINDIR="${ED}"/usr/bin \
+		BINDIR="${ED}"/usr/bin
 }
 
 src_install() {
 	export NO_ARLIB=$(usex static-libs 0 1)
 
-	emake CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" INCLUDEDIR="${ED}"/usr/include MANDIR="${ED}"/usr/share/man ETCDIR="${ED}"/etc SHAREDIR="${ED}"/usr/share/keyutils LIBDIR="${ED}"/usr/lib SBINDIR="${ED}"/usr/bin BINDIR="${ED}"/usr/bin install
+	emake CFLAGS="${CFLAGS}" \
+		LDFLAGS="${LDFLAGS}" \
+		INCLUDEDIR="${ED}"/usr/include \
+		MANDIR="${ED}"/usr/share/man \
+		ETCDIR="${ED}"/etc \
+		SHAREDIR="${ED}"/usr/share/keyutils \
+		LIBDIR="${ED}"/usr/lib \
+		SBINDIR="${ED}"/usr/bin \
+		BINDIR="${ED}"/usr/bin \
+		install
 
 	dosym -r /usr/lib/libkeyutils.so.1 /usr/lib/libkeyutils.so
 }

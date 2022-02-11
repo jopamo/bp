@@ -19,18 +19,18 @@ KEYWORDS="amd64 arm64"
 IUSE="bzip2 ldap readline +gnutls tools"
 
 DEPEND="
-	lib-core/npth
+	app-crypto/pinentry
+	app-net/curl
 	lib-core/libassuan
 	lib-core/libgcrypt
 	lib-core/libgpg-error
 	lib-core/libksba
-	app-net/curl
-	lib-net/gnutls
+	lib-core/npth
 	lib-core/zlib
-	ldap? ( app-net/openldap )
+	lib-net/gnutls
 	bzip2? ( app-compression/bzip2 )
+	ldap? ( app-net/openldap )
 	readline? ( lib-core/readline )
-	app-crypto/pinentry
 "
 
 append-flags -fno-strict-aliasing
@@ -41,14 +41,14 @@ src_configure() {
 			$(use_enable gnutls)
 			$(use_with ldap)
 			$(use_with readline)
-			--enable-gpgsm
-			--enable-large-secmem
-			--enable-all-tests
 			--disable-nls
 			--disable-scdaemon
+			--disable-sqlite
 			--disable-tofu
 			--disable-wks-tools
-			--disable-sqlite
+			--enable-all-tests
+			--enable-gpgsm
+			--enable-large-secmem
 		)
 
 	# glib fails and picks up clang's internal stdint.h causing weird errors

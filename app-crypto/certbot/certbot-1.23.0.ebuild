@@ -7,7 +7,7 @@ inherit distutils-r1
 DESCRIPTION="Let's encrypt client to automate deployment of X.509 certificates"
 HOMEPAGE="https://github.com/certbot/certbot https://letsencrypt.org/"
 
-if [[ ${PV} == 9999* ]]; then
+if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/certbot/certbot.git"
 	inherit git-r3
 else

@@ -15,6 +15,8 @@ KEYWORDS="amd64"
 
 IUSE="bundled-libjpeg-turbo +bundled-qt opencl pulseaudio wayland"
 
+RDEPEND="xgui-live-lib/qtdeclarative"
+
 RESTRICT="mirror bindist strip"
 
 QA_PREBUILT="opt/zoom/*"
@@ -72,7 +74,8 @@ src_install() {
 		rm -r Qt/labs/location QtQml/RemoteObjects \
 			QtQuick/LocalStorage QtQuick/Particles.2 QtQuick/Scene2D \
 			QtQuick/Scene3D QtQuick/XmlListModel \
-			platforms/libqeglfs.so platforms/libqlinuxfb.so || die
+			platforms/libqeglfs.so platforms/libqlinuxfb.so \
+			imageformats/libqsvg.so bearer/libqconnmanbearer.so || die
 		use wayland || rm -r libQt5Wayland*.so* QtWayland wayland* \
 			platforms/libqwayland*.so || die
 	fi

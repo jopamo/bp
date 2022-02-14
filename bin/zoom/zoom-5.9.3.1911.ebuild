@@ -13,9 +13,12 @@ LICENSE="all-rights-reserved"
 SLOT="0"
 KEYWORDS="amd64"
 
-IUSE="bundled-libjpeg-turbo +bundled-qt opencl pulseaudio wayland"
+IUSE="wayland"
 
-RDEPEND="xgui-live-lib/qtdeclarative"
+RDEPEND="
+	xgui-live-lib/qtmultimedia
+	xgui-live-lib/qtdeclarative
+"
 
 RESTRICT="mirror bindist strip"
 
@@ -23,70 +26,32 @@ QA_PREBUILT="opt/zoom/*"
 
 src_prepare() {
 	default
-
-	if ! use pulseaudio; then
-		# For some strange reason, zoom cannot use any ALSA sound devices if
-		# it finds libpulse. This causes breakage if media-sound/apulse[sdk]
-		# is installed. So, force zoom to ignore libpulse.
-		bbe -e 's/libpulse.so/IgNoRePuLsE/' zoom >zoom.tmp || die
-		mv zoom.tmp zoom || die
-	fi
-
-	if use bundled-libjpeg-turbo; then
-		# Remove insecure RPATH from bundled lib
-		patchelf --remove-rpath libturbojpeg.so || die
-	fi
+	patchelf --remove-rpath libturbojpeg.so || die
 }
 
 src_install() {
 	insinto /opt/zoom
 	exeinto /opt/zoom
-	doins -r json ringtone sip timezones translations
-	doins *.pcm Embedded.properties version.txt
+
+	doins -r "${S}"/*
 	doexe zoom zopen ZoomLauncher *.sh
-	dosym -r {"/usr/lib",/opt/zoom}/libmpg123.so
-	#dosym -r "/usr/lib/libfdk-aac.so.2" /opt/zoom/libfdkaac2.so
-	#dosym -r "/usr/lib/libquazip1-qt5.so" /opt/zoom/libquazip.so
 
-	if use opencl; then
-		doexe aomhost libaomagent.so libclDNN64.so libmkldnn.so
-		dosym -r {"/usr/lib",/opt/zoom}/libOpenCL.so.1
+	cd "${ED}"/opt/zoom || die
+
+	rm Qt/labs/location/liblocationlabsplugin.so \
+		QtQml/RemoteObjects/libqtqmlremoteobjects.so \
+		QtQuick/Scene2D/libqtquickscene2dplugin.so \
+		QtQuick/XmlListModel/libqmlxmllistmodelplugin.so \
+		libclDNN64.so \
+		QtQuick/Scene3D/libqtquickscene3dplugin.so || die
+
+	if ! use wayland; then
+		rm -r wayland-decoration-client \
+			wayland-graphics-integration-client \
+			wayland-graphics-integration-server \
+			platforms/libqwayland* \
+			libQt5Wayland* \
+			QtWayland \
+			wayland-shell-integration || die
 	fi
-
-	if use bundled-libjpeg-turbo; then
-		doexe libturbojpeg.so
-	else
-		dosym -r {"/usr/lib",/opt/zoom}/libturbojpeg.so
-	fi
-
-	if use bundled-qt; then
-		doexe libicu*.so.56 libQt5*.so.5
-		doins qt.conf
-
-		local dirs="Qt* bearer generic iconengines imageformats \
-			platforminputcontexts platforms wayland* xcbglintegrations"
-		doins -r ${dirs}
-		find ${dirs} -type f '(' -name '*.so' -o -name '*.so.*' ')' \
-			-printf '/opt/zoom/%p\0' | xargs -0 -r fperms 0755 || die
-
-		# Remove libs and plugins with unresolved soname dependencies
-		cd "${ED}"/opt/zoom || die
-		rm -r Qt/labs/location QtQml/RemoteObjects \
-			QtQuick/LocalStorage QtQuick/Particles.2 QtQuick/Scene2D \
-			QtQuick/Scene3D QtQuick/XmlListModel \
-			platforms/libqeglfs.so platforms/libqlinuxfb.so \
-			imageformats/libqsvg.so bearer/libqconnmanbearer.so || die
-		use wayland || rm -r libQt5Wayland*.so* QtWayland wayland* \
-			platforms/libqwayland*.so || die
-	fi
-}
-
-pkg_postinst() {
-	xdg_desktop_database_update
-	xdg_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_desktop_database_update
-	xdg_icon_cache_update
 }

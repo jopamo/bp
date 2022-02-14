@@ -30,11 +30,8 @@ src_prepare() {
 }
 
 src_install() {
-	insinto /opt/zoom
-	exeinto /opt/zoom
-
-	doins -r "${S}"/*
-	doexe zoom zopen ZoomLauncher *.sh
+	mkdir -p "${ED}"/opt/${PN}/
+	cp -rp "${S}"/* "${ED}"/opt/${PN}/
 
 	cd "${ED}"/opt/zoom || die
 

@@ -8,7 +8,7 @@ DESCRIPTION="A modern linker"
 HOMEPAGE="https://github.com/rui314/mold"
 EGIT_REPO_URI="${HOMEPAGE}"
 
-LICENSE="GPL-AFFERO"
+LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -22,8 +22,7 @@ src_prepare() {
 
 src_compile() {
 	emake CFLAGS="${CFLAGS}" \
-		LDFLAGS="${LDFLAGS}" \
-		LIBDIR="${ED}"/usr/lib
+		LDFLAGS="${LDFLAGS}"
 }
 
 src_install() {

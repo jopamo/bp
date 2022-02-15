@@ -7,16 +7,18 @@ inherit flag-o-matic linux-info linux-mod toolchain-funcs unpacker user
 NV_URI="https://us.download.nvidia.com/XFree86/"
 
 AMD64_NV_PACKAGE="NVIDIA-Linux-x86_64-${PV}"
+ARM64_NV_PACKAGE="NVIDIA-Linux-aarch64-${PV}"
 
 DESCRIPTION="NVIDIA Accelerated Graphics Driver"
 HOMEPAGE="http://www.nvidia.com/ http://www.nvidia.com/Download/Find.aspx"
 SRC_URI="
+	arm64? ( ${NV_URI}aarch64/${PV}/${ARM64_NV_PACKAGE}.run )
 	amd64? ( ${NV_URI}Linux-x86_64/${PV}/${AMD64_NV_PACKAGE}.run )
 "
 
 LICENSE="GPL-2 NVIDIA-r2"
-SLOT="0/${PV%.*}"
-KEYWORDS="amd64"
+SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="+driver +kms static-libs +uvm wayland +X"
 
@@ -29,16 +31,16 @@ DEPEND="
 RDEPEND="
 	wayland? ( xgui-live-lib/wayland )
 	X? (
-		xgui-misc/xorg-server
-		>=xgui-live-lib/libX11-1.6.2
-		>=xgui-live-lib/libXext-1.3.2
 		lib-core/zlib
+		xgui-live-lib/libX11
+		xgui-live-lib/libXext
+		xgui-misc/xorg-server
 	)
 "
-
 PDEPEND="
 	xmedia-live-lib/nv-codec-headers
-	bin/nvidia-settings"
+	bin/nvidia-settings
+"
 
 QA_PREBUILT="opt/* usr/lib*"
 S=${WORKDIR}/

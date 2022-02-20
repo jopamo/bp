@@ -18,6 +18,8 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+IUSE="vim"
+
 RESTRICT="test"
 
 DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"
@@ -29,8 +31,10 @@ python_test() {
 python_install_all() {
 	distutils-r1_python_install_all
 
-	insinto /usr/share/vim/vimfiles
-	doins -r data/syntax-highlighting/vim/{ftdetect,indent,syntax}
+	if use vim ; then
+		insinto /usr/share/vim/vimfiles
+		doins data/syntax-highlighting/vim/{ftdetect,indent,syntax}
+	fi
 
 	rm -rf "${ED}"/usr/share/polkit-1
 

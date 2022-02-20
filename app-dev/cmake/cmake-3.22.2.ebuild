@@ -6,19 +6,22 @@ inherit flag-o-matic toolchain-funcs cmake
 
 DESCRIPTION="Cross platform Make"
 HOMEPAGE="https://cmake.org/"
-SRC_URI="https://github.com/Kitware/CMake/releases/download/v${PV}/cmake-${PV}.tar.gz"
+SRC_URI="https://github.com/Kitware/CMake/releases/download/v${PV}/${P}.tar.gz"
 
 LICENSE="CMake"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+IUSE="vim"
+
 DEPEND="
-	>=app-compression/libarchive-3.0.0:=
-	>=lib-core/expat-2.0.1
-	>=lib-dev/libuv-1.0.0:=
-	>=app-net/curl-7.21.5
+	app-compression/libarchive
+	app-dev/pkgconf
+	app-net/curl
+	lib-core/expat
 	lib-core/zlib
-	app-dev/pkgconf"
+	lib-dev/libuv
+"
 
 cmake_src_bootstrap() {
 	# Cleanup args to extract only JOBS.
@@ -100,12 +103,12 @@ src_configure() {
 		-DCMAKE_DATA_DIR=/share/${PN}
 		-DSPHINX_MAN=OFF
 		-DSPHINX_HTML=OFF
-		-DCMAKE_USE_SYSTEM_LIBRARY_LIBLZMA=ON
 		-DCMAKE_USE_SYSTEM_LIBARCHIVE=ON
+		-DCMAKE_USE_SYSTEM_LIBRARY_BZIP2=ON
 		-DCMAKE_USE_SYSTEM_LIBRARY_CURL=ON
 		-DCMAKE_USE_SYSTEM_LIBRARY_EXPAT=ON
+		-DCMAKE_USE_SYSTEM_LIBRARY_LIBLZMA=ON
 		-DCMAKE_USE_SYSTEM_LIBRARY_ZLIB=ON
-		-DCMAKE_USE_SYSTEM_LIBRARY_BZIP2=ON
 		-DCMAKE_USE_SYSTEM_LIBUV=ON
 	)
 
@@ -115,8 +118,9 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	rm -rf "${ED}"/usr/share/cmake/{completions,editors} || die
-	rm -rf "${ED}"/usr/doc || die
+	use vim || rm -r "${ED}"/usr/share/vim || die
+
+	rm -r "${ED}"/usr/doc || die
 
 	#lazy update mtime
 	find "${ED}"/usr/share -type f -exec touch {} +

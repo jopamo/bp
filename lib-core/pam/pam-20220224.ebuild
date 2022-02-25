@@ -41,7 +41,9 @@ src_prepare() {
 	eautoreconf
 
 	#this requires termio.h, which is missing on musl
-	use musl && sed -i -e 's/tty_conv//' examples/Makefile.am || die
+	if use musl ; then
+		sed -i -e 's/tty_conv//' "examples/Makefile.am" || die
+	fi
 }
 
 src_configure() {

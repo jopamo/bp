@@ -11,7 +11,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/tats/w3m.git"
 	inherit git-r3
 else
-	SNAPSHOT=2b59b9eb0af758d6c7f4886933fb494699d28dc6
+	SNAPSHOT=64c5cd449ad1100b34357c18c11809d74151b0c8
 	SRC_URI="https://github.com/tats/w3m/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
@@ -25,8 +25,8 @@ IUSE="gpm nntp ssl"
 
 DEPEND="
 	lib-core/bdwgc
-	virtual/curses
 	lib-core/zlib
+	virtual/curses
 	gpm? ( lib-core/gpm )
 	ssl? ( virtual/ssl )
 "
@@ -35,20 +35,20 @@ src_configure() {
 	append-flags -fno-strict-aliasing
 
 	local myconf=(
-		--with-termlib=yes
-		--without-migemo
-		--enable-m17n
-		--enable-keymap=w3m
-		--disable-w3mmailer
 		$(use_enable gpm mouse)
-		--disable-nls
 		$(use_enable nntp)
 		$(use_enable ssl digest-auth)
 		$(use_with ssl)
-		--with-charset=UTF-8
-		--enable-unicode
+		--disable-nls
+		--disable-w3mmailer
 		--enable-image=""
+		--enable-keymap=w3m
+		--enable-m17n
+		--enable-unicode
+		--with-charset=UTF-8
 		--with-imagelib=""
+		--with-termlib=yes
+		--without-migemo
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

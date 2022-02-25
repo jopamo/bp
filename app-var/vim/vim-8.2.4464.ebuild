@@ -108,12 +108,16 @@ src_test() {
 src_install() {
 	if ! use huge ; then
 		dobin src/vim
+		doman runtime/doc/vim.1
 
 		for i in vimdiff rvim rview vi ex view ; do
 			dosym vim usr/bin/$i
 		done
 
-		use xxd && dobin src/xxd/xxd
+		if use xxd ; then
+			dobin src/xxd/xxd
+			doman runtime/doc/xxd.1
+		fi
 
 		insopts -m 0644
 		insinto /usr/share/vim/vim82

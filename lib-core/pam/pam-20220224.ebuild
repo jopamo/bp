@@ -11,17 +11,16 @@ if [[ ${PV} == 9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="${HOMEPAGE}.git"
 else
-	SNAPSHOT=3102dd822db3e613308c05fca554ced5e81c181d
+	SNAPSHOT=9e800c2928358cc9060eaa4f17b8f0a3a1269d65
 	SRC_URI="${HOMEPAGE}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/linux-${PN}-${SNAPSHOT}
 fi
 
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
-#header issues on musl
+KEYWORDS="amd64 arm64"
 
-IUSE="debug"
+IUSE="debug musl"
 
 BDEPEND="
 	app-build/flex
@@ -37,8 +36,12 @@ PDEPEND="app-core/pambase"
 
 src_prepare() {
 	touch ChangeLog
+
 	default
 	eautoreconf
+
+	#this requires termio.h, which is missing on musl
+	use musl && sed -i -e 's/tty_conv//' examples/Makefile.am || die
 }
 
 src_configure() {

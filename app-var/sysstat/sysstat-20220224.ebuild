@@ -7,11 +7,11 @@ inherit flag-o-matic toolchain-funcs
 DESCRIPTION="System performance tools for Linux"
 HOMEPAGE="http://pagesperso-orange.fr/sebastien.godard/"
 
-if [[ ${PV} == *9999* ]]; then
+if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
 	inherit git-r3
 else
-	SNAPSHOT=70f5fded921b4ed7887174ef093deb12d2a79d9d
+	SNAPSHOT=e0653ee21023e1b12b9d1d6a6d160f04ff01f8ff
 	SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -20,7 +20,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug nls lm-sensors static systemd"
+IUSE="debug lm-sensors static systemd"
 
 DEPEND="lm-sensors? ( app-live/lm-sensors )"
 
@@ -40,11 +40,11 @@ src_configure() {
 	local myconf=(
 		$(use_enable debug debuginfo)
 		$(use_enable lm-sensors sensors)
-		--disable-nls
-		--enable-copy-only
 		--disable-documentation
 		--disable-install-cron
+		--disable-nls
 		--disable-stripping
+		--enable-copy-only
 		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 	)
 	sa_lib_dir=/usr/lib/sa \

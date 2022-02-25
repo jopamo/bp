@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=58aa0f9f1c6c88e1551ec78763742d136f8873ed
+SNAPSHOT=c56ab476b9cf41a46f823537dab0dab0c006d962
 
 inherit flag-o-matic autotools
 
@@ -18,9 +18,9 @@ KEYWORDS="amd64 arm64"
 IUSE="debug pam tmpfilesd"
 
 DEPEND="
-	virtual/curses
-	pam? ( lib-core/pam )
 	app-build/texinfo
+	pam? ( lib-core/pam )
+	virtual/curses
 "
 
 src_prepare() {

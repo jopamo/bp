@@ -9,7 +9,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/sudo-project/${PN}.git"
 	inherit git-r3
 else
-	SNAPSHOT=5f45fd907bf2ef0bbdd87cd991760f98783693d9
+	SNAPSHOT=42f735c8ddd434bdfd03ddedad592b2bfaba161b
 	SRC_URI="https://github.com/sudo-project/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -30,19 +30,19 @@ src_configure() {
 	myconf=(
 		--prefix="${EPREFIX}"/usr
 		--libexecdir="${EPREFIX}"/usr/libexec
-		--with-secure-path
+		--enable-tmpfiles.d=$(usex tmpfilesd "${EPREFIX}"/usr/lib/tmpfiles.d "false")
+		--enable-zlib=system
 		--with-all-insults
 		--with-env-editor
-		--enable-zlib=system
-		--enable-tmpfiles.d=$(usex tmpfilesd "${EPREFIX}"/usr/lib/tmpfiles.d "false")
 		--with-rundir="${EPREFIX}"/run/sudo
+		--with-secure-path
 		--with-vardir="${EPREFIX}"/var/db/sudo
-    	--with-logfac=auth
+		--without-opie
     	--enable-gcrypt
+    	--with-logfac=auth
     	--with-passprompt="[sudo] password for %p: "
     	--without-linux-audit
-		--without-opie
-		$(use_enable ssl openssl)
+    	$(use_enable ssl openssl)
 		$(use_with pam)
 	)
 	econf "${myconf[@]}"

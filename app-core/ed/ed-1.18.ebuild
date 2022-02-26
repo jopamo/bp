@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs autotools unpacker
+inherit unpacker
 
 DESCRIPTION="Your basic line editor"
 HOMEPAGE="https://www.gnu.org/software/ed/"
@@ -19,6 +19,7 @@ DEPEND="
 
 _makeargs=(
   CFLAGS="${CFLAGS}"
+  CPPFLAGS="${CPPFLAGS}"
   LDFLAGS="${LDFLAGS}"
 )
 

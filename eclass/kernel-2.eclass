@@ -17,22 +17,119 @@
 # added functionality:
 # unipatch		- a flexible, singular method to extract, add and remove patches.
 
-# @ECLASS-VARIABLE: K_USEPV
+# @ECLASS-VARIABLE: CTARGET
+# @INTERNAL
+# @DESCRIPTION:
+# Utilized for 32-bit userland on ppc64.
+
+# @ECLASS-VARIABLE: CKV
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# When setting the EXTRAVERSION variable, it should
-# add PV to the end.
-# this is useful for things like wolk. IE:
-# EXTRAVERSION would be something like : -wolk-4.19-r1
+# Used as a comparison kernel version, which is used when
+# PV doesnt reflect the genuine kernel version.
+# This gets set to the portage style versioning. ie:
+# CKV=2.6.11_rc4
 
-# @ECLASS-VARIABLE:  K_NODRYRUN
+# @ECLASS-VARIABLE: EXTRAVERSION
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# The additional version appended to OKV (-gentoo/-gentoo-r1)
+
+# @ECLASS-VARIABLE: H_SUPPORTEDARCH
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# this should be a space separated list of ARCH's which
+# can be supported by the headers ebuild
+
+# @ECLASS-VARIABLE: K_BASE_VER
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# for git-sources, declare the base version this patch is
+# based off of.
+
+# @ECLASS-VARIABLE: K_DEBLOB_AVAILABLE
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# A value of "0" will disable all of the optional deblob
+# code. If empty, will be set to "1" if deblobbing is
+# possible. Test ONLY for "1".
+
+# @ECLASS-VARIABLE: K_DEBLOB_TAG
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# This will be the version of deblob script. It's a upstream SVN tag
+# such asw -gnu or -gnu1.
+
+# @ECLASS-VARIABLE: K_DEFCONFIG
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# Allow specifying a different defconfig target.
+# If length zero, defaults to "defconfig".
+
+# @ECLASS-VARIABLE: K_EXP_GENPATCHES_PULL
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# If set, we pull "experimental" regardless of the USE FLAG
+# but expect the ebuild maintainer to use K_EXP_GENPATCHES_LIST.
+
+# @ECLASS-VARIABLE: K_EXP_GENPATCHES_NOUSE
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# If set, no USE flag will be provided for "experimental";
+# as a result the user cannot choose to apply those patches.
+
+# @ECLASS-VARIABLE: K_EXP_GENPATCHES_LIST
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# A list of patches to pick from "experimental" to apply when
+# the USE flag is unset and K_EXP_GENPATCHES_PULL is set.
+
+# @ECLASS-VARIABLE: K_EXTRAEINFO
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# this is a new-line seperated list of einfo displays in
+# postinst and can be used to carry additional postinst
+# messages
+
+# @ECLASS-VARIABLE: K_EXTRAELOG
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# same as K_EXTRAEINFO except using elog instead of einfo
+
+# @ECLASS-VARIABLE: K_EXTRAEWARN
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# same as K_EXTRAEINFO except using ewarn instead of einfo
+
+# @ECLASS-VARIABLE: K_FROM_GIT
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# If set, this variable signals that the kernel sources derives
+# from a git tree and special handling will be applied so that
+# any patches that are applied will actually apply.
+
+# @ECLASS-VARIABLE: K_GENPATCHES_VER
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# The version of the genpatches tarball(s) to apply.
+# A value of "5" would apply genpatches-2.6.12-5 to
+# my-sources-2.6.12.ebuild
+
+# @ECLASS-VARIABLE: K_LONGTERM
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# If set, the eclass will search for the kernel source
+# in the long term directories on the upstream servers
+# as the location has been changed by upstream
+
+# @ECLASS-VARIABLE: K_NODRYRUN
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # if this is set then patch --dry-run will not
 # be run. Certain patches will fail with this parameter
 # See bug #507656
 
-# @ECLASS-VARIABLE:  K_NOSETEXTRAVERSION
+# @ECLASS-VARIABLE: K_NOSETEXTRAVERSION
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # if this is set then EXTRAVERSION will not be
@@ -50,6 +147,13 @@
 # if this is set then EXTRAVERSION will not include the
 # anything based on ${PR}.
 
+# @ECLASS-VARIABLE: K_PREDEBLOBBED
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# This kernel was already deblobbed elsewhere.
+# If false, either optional deblobbing will be available
+# or the license will note the inclusion of linux-firmware code.
+
 # @ECLASS-VARIABLE: K_PREPATCHED
 # @DEFAULT_UNSET
 # @DESCRIPTION:
@@ -58,123 +162,93 @@
 # patchset version for and not use it as a true package
 # revision
 
-# @ECLASS-VARIABLE:  K_EXTRAEINFO
-# @DEFAULT_UNSET
-# @DESCRIPTION:
-# this is a new-line seperated list of einfo displays in
-# postinst and can be used to carry additional postinst
-# messages
-
-# @ECLASS-VARIABLE:  K_EXTRAELOG
-# @DEFAULT_UNSET
-# @DESCRIPTION:
-# same as K_EXTRAEINFO except using elog instead of einfo
-
-# @ECLASS-VARIABLE:  K_EXTRAEWARN
-# @DEFAULT_UNSET
-# @DESCRIPTION:
-# same as K_EXTRAEINFO except using ewarn instead of einfo
-
-# @ECLASS-VARIABLE:  K_SYMLINK
-# @DEFAULT_UNSET
-# @DESCRIPTION:
-# if this is set, then forcably create symlink anyway
-
-# @ECLASS-VARIABLE:  K_BASE_VER
-# @DEFAULT_UNSET
-# @DESCRIPTION:
-# for git-sources, declare the base version this patch is
-# based off of.
-
-# @ECLASS-VARIABLE:  K_DEFCONFIG
-# @DEFAULT_UNSET
-# @DESCRIPTION:
-# Allow specifying a different defconfig target.
-# If length zero, defaults to "defconfig".
-
-# @ECLASS-VARIABLE:  K_WANT_GENPATCHES
-# @DEFAULT_UNSET
-# @DESCRIPTION:
-# Apply genpatches to kernel source. Provide any
-# combination of "base", "extras" or "experimental".
-
-# @ECLASS-VARIABLE:  K_EXP_GENPATCHES_PULL
-# @DEFAULT_UNSET
-# @DESCRIPTION:
-# If set, we pull "experimental" regardless of the USE FLAG
-# but expect the ebuild maintainer to use K_EXP_GENPATCHES_LIST.
-
-# @ECLASS-VARIABLE:  K_EXP_GENPATCHES_NOUSE
-# @DEFAULT_UNSET
-# @DESCRIPTION:
-# If set, no USE flag will be provided for "experimental";
-# as a result the user cannot choose to apply those patches.
-
-# @ECLASS-VARIABLE:  K_EXP_GENPATCHES_LIST
-# @DEFAULT_UNSET
-# @DESCRIPTION:
-# A list of patches to pick from "experimental" to apply when
-# the USE flag is unset and K_EXP_GENPATCHES_PULL is set.
-
-# @ECLASS-VARIABLE:  K_FROM_GIT
-# @DEFAULT_UNSET
-# @DESCRIPTION:
-# If set, this variable signals that the kernel sources derives
-# from a git tree and special handling will be applied so that
-# any patches that are applied will actually apply.
-
-# @ECLASS-VARIABLE:  K_GENPATCHES_VER
-# @DEFAULT_UNSET
-# @DESCRIPTION:
-# The version of the genpatches tarball(s) to apply.
-# A value of "5" would apply genpatches-2.6.12-5 to
-# my-sources-2.6.12.ebuild
-
-# @ECLASS-VARIABLE:  K_SECURITY_UNSUPPORTED
+# @ECLASS-VARIABLE: K_SECURITY_UNSUPPORTED
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # If set, this kernel is unsupported by Gentoo Security
 # to the current eclass maintainer :)
 
-# @ECLASS-VARIABLE:  K_DEBLOB_AVAILABLE
+# @ECLASS-VARIABLE: K_SYMLINK
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# A value of "0" will disable all of the optional deblob
-# code. If empty, will be set to "1" if deblobbing is
-# possible. Test ONLY for "1".
+# if this is set, then forcably create symlink anyway
 
-# @ECLASS-VARIABLE:  K_DEBLOB_TAG
+# @ECLASS-VARIABLE: K_USEPV
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# This will be the version of deblob script. It's a upstream SVN tag
-# such asw -gnu or -gnu1.
+# When setting the EXTRAVERSION variable, it should
+# add PV to the end.
+# this is useful for things like wolk. IE:
+# EXTRAVERSION would be something like : -wolk-4.19-r1
 
-# @ECLASS-VARIABLE:  K_PREDEBLOBBED
+# @ECLASS-VARIABLE: K_WANT_GENPATCHES
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# This kernel was already deblobbed elsewhere.
-# If false, either optional deblobbing will be available
-# or the license will note the inclusion of linux-firmware code.
+# Apply genpatches to kernel source. Provide any
+# combination of "base", "extras" or "experimental".
 
-# @ECLASS-VARIABLE:  K_LONGTERM
+# @ECLASS-VARIABLE: KERNEL_URI
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# If set, the eclass will search for the kernel source
-# in the long term directories on the upstream servers
-# as the location has been changed by upstream
+# Upstream kernel src URI
 
-# @ECLASS-VARIABLE:  H_SUPPORTEDARCH
+# @ECLASS-VARIABLE: KV
+# @DEFAULT_UNSET
+# @OUTPUT_VARIABLE
+# @DESCRIPTION:
+# Kernel Version (2.6.0-gentoo/2.6.0-test11-gentoo-r1)
+
+# @ECLASS-VARIABLE: KV_FULL
+# @DEFAULT_UNSET
+# @OUTPUT_VARIABLE
+# @DESCRIPTION:
+# Kernel full version
+
+# @ECLASS-VARIABLE: KV_MAJOR
+# @DEFAULT_UNSET
+# @OUTPUT_VARIABLE
+# @DESCRIPTION:
+# Kernel major version from <KV_MAJOR>.<KV_MINOR>.<KV_PATCH
+
+# @ECLASS-VARIABLE: KV_MINOR
+# @DEFAULT_UNSET
+# @OUTPUT_VARIABLE
+# @DESCRIPTION:
+# Kernel minor version from <KV_MAJOR>.<KV_MINOR>.<KV_PATCH
+
+# @ECLASS-VARIABLE: KV_PATCH
+# @DEFAULT_UNSET
+# @OUTPUT_VARIABLE
+# @DESCRIPTION:
+# Kernel patch version from <KV_MAJOR>.<KV_MINOR>.<KV_PATCH
+
+# @ECLASS-VARIABLE: LINUX_HOSTCFLAGS
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# this should be a space separated list of ARCH's which
-# can be supported by the headers ebuild
+# Default cflags if not already set
 
-# @ECLASS-VARIABLE:  UNIPATCH_LIST
+# @ECLASS-VARIABLE: OKV
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# space delimetered list of patches to be applied to the kernel
+# Original Kernel Version (2.6.0/2.6.0-test11)
 
-# @ECLASS-VARIABLE:  UNIPATCH_EXCLUDE
+# @ECLASS-VARIABLE: RELEASE
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# Representative of the kernel release tag (-rc3/-git3)
+
+# @ECLASS-VARIABLE: RELEASETYPE
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# The same as RELEASE but with its numerics stripped (-rc/-git)
+
+# @ECLASS-VARIABLE: UNIPATCH_DOCS
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# space delimemeted list of docs to be installed to
+# the doc dir
+
+# @ECLASS-VARIABLE: UNIPATCH_EXCLUDE
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # An addition var to support exlusion based completely
@@ -182,13 +256,22 @@
 # this should _NOT_ be used from the ebuild as this is
 # reserved for end users passing excludes from the cli
 
-# @ECLASS-VARIABLE:  UNIPATCH_DOCS
+# @ECLASS-VARIABLE: UNIPATCH_LIST
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# space delimemeted list of docs to be installed to
-# the doc dir
+# space delimetered list of patches to be applied to the kernel
 
-# @ECLASS-VARIABLE:  UNIPATCH_STRICTORDER
+# @ECLASS-VARIABLE: UNIPATCH_LIST_DEFAULT
+# @INTERNAL
+# @DESCRIPTION:
+# Upstream kernel patch archive
+
+# @ECLASS-VARIABLE: UNIPATCH_LIST_GENPATCHES
+# @INTERNAL
+# @DESCRIPTION:
+# List of genpatches archives to apply to the kernel
+
+# @ECLASS-VARIABLE: UNIPATCH_STRICTORDER
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # if this is set places patches into directories of
@@ -599,7 +682,7 @@ if [[ ${ETYPE} == sources ]]; then
 			K_DEBLOB_AVAILABLE=0
 		fi
 		if [[ ${K_DEBLOB_AVAILABLE} == 1 ]]; then
-			PYTHON_COMPAT=( python3_{7..10} )
+			PYTHON_COMPAT=( python3_{8..10} )
 
 			inherit python-any-r1
 
@@ -692,7 +775,7 @@ env_setup_xmakeopts() {
 	elif type -p ${CHOST}-ar >/dev/null; then
 		xmakeopts="${xmakeopts} CROSS_COMPILE=${CHOST}-"
 	fi
-	xmakeopts="${xmakeopts} HOSTCC=$(tc-getBUILD_CC)"
+	xmakeopts="${xmakeopts} HOSTCC=$(tc-getBUILD_CC) CC=$(tc-getCC) LD=$(tc-getLD) AR=$(tc-getAR) NM=$(tc-getNM) OBJCOPY=$(tc-getOBJCOPY) READELF=$(tc-getREADELF) STRIP=$(tc-getSTRIP)"
 	export xmakeopts
 }
 
@@ -759,83 +842,6 @@ unpack_fix_install_path() {
 	sed -i -e 's:#export\tINSTALL_PATH:export\tINSTALL_PATH:' "${S}"/Makefile || die
 }
 
-# Compile Functions
-
-# @FUNCTION: compile_headers
-# @USAGE:
-# @DESCRIPTION:
-# header compilation
-
-compile_headers() {
-	env_setup_xmakeopts
-
-	# if we couldnt obtain HOSTCFLAGS from the Makefile,
-	# then set it to something sane
-	local HOSTCFLAGS=$(getfilevar HOSTCFLAGS "${S}"/Makefile)
-	HOSTCFLAGS=${HOSTCFLAGS:--Wall -Wstrict-prototypes -O2 -fomit-frame-pointer}
-
-	if kernel_is 2 4; then
-		yes "" | make oldconfig ${xmakeopts}
-		einfo ">>> make oldconfig complete"
-		make dep ${xmakeopts}
-	elif kernel_is 2 6; then
-		# 2.6.18 introduces headers_install which means we dont need any
-		# of this crap anymore :D
-		kernel_is ge 2 6 18 && return 0
-
-		# autoconf.h isnt generated unless it already exists. plus, we have
-		# no guarantee that any headers are installed on the system...
-		[[ -f ${EROOT%/}/usr/include/linux/autoconf.h ]] \
-			|| touch include/linux/autoconf.h || die
-
-		# if K_DEFCONFIG isn't set, force to "defconfig"
-		# needed by mips
-		if [[ -z ${K_DEFCONFIG} ]]; then
-			if kernel_is ge 2 6 16; then
-				case ${CTARGET} in
-					powerpc64*)	K_DEFCONFIG="ppc64_defconfig";;
-					powerpc*)	K_DEFCONFIG="pmac32_defconfig";;
-					*)		K_DEFCONFIG="defconfig";;
-				esac
-			else
-				K_DEFCONFIG="defconfig"
-			fi
-		fi
-
-		# if there arent any installed headers, then there also isnt an asm
-		# symlink in /usr/include/, and make defconfig will fail, so we have
-		# to force an include path with $S.
-		HOSTCFLAGS="${HOSTCFLAGS} -I${S}/include/"
-		ln -sf asm-${KARCH} "${S}"/include/asm || die
-		cross_pre_c_headers && return 0
-
-		make ${K_DEFCONFIG} HOSTCFLAGS="${HOSTCFLAGS}" ${xmakeopts} || die "defconfig failed (${K_DEFCONFIG})"
-		if compile_headers_tweak_config; then
-			yes "" | make oldconfig HOSTCFLAGS="${HOSTCFLAGS}" ${xmakeopts} || die "2nd oldconfig failed"
-		fi
-		make prepare HOSTCFLAGS="${HOSTCFLAGS}" ${xmakeopts} || die "prepare failed"
-		make prepare-all HOSTCFLAGS="${HOSTCFLAGS}" ${xmakeopts} || die "prepare failed"
-	fi
-}
-
-# @FUNCTION: compile_headers_tweak_config
-# @USAGE:
-# @DESCRIPTION:
-# some targets can be very very picky, so let's finesse the
-# .config based upon any info we may have
-
-compile_headers_tweak_config() {
-	case ${CTARGET} in
-	sh*)
-		sed -i '/CONFIG_CPU_SH/d' .config || die
-		echo "CONFIG_CPU_SH${CTARGET:2:1}=y" >> .config
-		return 0;;
-	esac
-
-	# no changes, so lets do nothing
-	return 1
-}
-
 # install functions
 
 # @FUNCTION: install_universal
@@ -856,36 +862,12 @@ install_universal() {
 install_headers() {
 	local ddir=$(kernel_header_destdir)
 
-	# 2.6.18 introduces headers_install which means we dont need any
-	# of this crap anymore :D
-	if kernel_is ge 2 6 18; then
-		env_setup_xmakeopts
-		emake headers_install INSTALL_HDR_PATH="${ED%/}"${ddir}/.. ${xmakeopts}
+	env_setup_xmakeopts
+	emake headers_install INSTALL_HDR_PATH="${ED%/}"${ddir}/.. ${xmakeopts}
 
-		# let other packages install some of these headers
-		rm -rf "${ED%/}"${ddir}/scsi || die #glibc/uclibc/etc...
-		return 0
-	fi
-
-	# Do not use "linux/*" as that can cause problems with very long
-	# $S values where the cmdline to cp is too long
-	pushd "${S}" >/dev/null || die
-	dodir ${ddir}/linux
-	cp -pPR "${S}"/include/linux "${ED%/}"${ddir}/ || die
-	rm -rf "${ED%/}"${ddir}/linux/modules || die
-
-	dodir ${ddir}/asm
-	cp -pPR "${S}"/include/asm/* "${ED%/}"${ddir}/asm || die
-
-	if kernel_is 2 6; then
-		dodir ${ddir}/asm-generic
-		cp -pPR "${S}"/include/asm-generic/* "${ED%/}"${ddir}/asm-generic || die
-	fi
-
-	# clean up
-	find "${D}" -name '*.orig' -exec rm -f {} \; || die
-
-	popd >/dev/null || die
+	# let other packages install some of these headers
+	rm -rf "${ED%/}"${ddir}/scsi || die #glibc/uclibc/etc...
+	return 0
 }
 
 # @FUNCTION: install_sources
@@ -918,8 +900,6 @@ install_sources() {
 			dodoc "${T}"/${i}
 		done
 	fi
-
-	keepdir /etc/kernel/postinst.d
 }
 
 # @FUNCTION: preinst_headers
@@ -963,6 +943,10 @@ postinst_sources() {
 	# Don't forget to make directory for sysfs
 	[[ ! -d ${EROOT%/}/sys ]] && kernel_is 2 6 && { mkdir "${EROOT%/}"/sys || die ; }
 
+	elog "If you are upgrading from a previous kernel, you may be interested"
+	elog "in the following document:"
+	elog "  - General upgrade guide: https://wiki.gentoo.org/wiki/Kernel/Upgrade"
+
 	# if K_EXTRAEINFO is set then lets display it now
 	if [[ -n ${K_EXTRAEINFO} ]]; then
 		echo ${K_EXTRAEINFO} | fmt |
@@ -979,6 +963,40 @@ postinst_sources() {
 	if [[ -n ${K_EXTRAEWARN} ]]; then
 		echo ${K_EXTRAEWARN} | fmt |
 		while read -s ELINE; do ewarn "${ELINE}"; done
+	fi
+
+	# optionally display security unsupported message
+	#  Start with why
+	if [[ -n ${K_SECURITY_UNSUPPORTED} ]]; then
+		ewarn "${PN} is UNSUPPORTED by Gentoo Security."
+	fi
+	#  And now the general message.
+	if [[ -n ${K_SECURITY_UNSUPPORTED} ]]; then
+		ewarn "This means that it is likely to be vulnerable to recent security issues."
+		ewarn "Upstream kernel developers recommend always running the latest "
+		ewarn "release of any current long term supported Linux kernel version."
+		ewarn "To see a list of these versions, their most current release and "
+		ewarn "long term support status, please go to https://www.kernel.org ."
+		ewarn "For specific information on why this kernel is unsupported, please read:"
+		ewarn "https://wiki.gentoo.org/wiki/Project:Kernel_Security"
+	fi
+
+	# warn sparc users that they need to do cross-compiling with >= 2.6.25(bug #214765)
+	KV_MAJOR=$(ver_cut 1 ${OKV})
+	KV_MINOR=$(ver_cut 2 ${OKV})
+	KV_PATCH=$(ver_cut 3 ${OKV})
+	if [[ $(tc-arch) = sparc ]]; then
+		if [[ $(gcc-major-version) -lt 4 && $(gcc-minor-version) -lt 4 ]]; then
+			if [[ ${KV_MAJOR} -ge 3 ]] || ver_test ${KV_MAJOR}.${KV_MINOR}.${KV_PATCH} -gt 2.6.24; then
+				elog "NOTE: Since 2.6.25 the kernel Makefile has changed in a way that"
+				elog "you now need to do"
+				elog "  make CROSS_COMPILE=sparc64-unknown-linux-gnu-"
+				elog "instead of just"
+				elog "  make"
+				elog "to compile the kernel. For more information please browse to"
+				elog "https://bugs.gentoo.org/show_bug.cgi?id=214765"
+			fi
+		fi
 	fi
 }
 
@@ -1433,7 +1451,7 @@ kernel-2_src_unpack() {
 
 kernel-2_src_prepare() {
 	debug-print "Applying any user patches"
-	default
+	eapply_user
 }
 
 # @FUNCTION: kernel-2_src_compile
@@ -1443,7 +1461,6 @@ kernel-2_src_prepare() {
 
 kernel-2_src_compile() {
 	cd "${S}" || die
-	[[ ${ETYPE} == headers ]] && compile_headers
 
 	if [[ ${K_DEBLOB_AVAILABLE} == 1 ]] && use deblob; then
 		einfo ">>> Running deblob script ..."
@@ -1518,6 +1535,16 @@ kernel-2_pkg_setup() {
 kernel-2_pkg_postrm() {
 	# This warning only makes sense for kernel sources.
 	[[ ${ETYPE} == headers ]] && return 0
+
+	# If there isn't anything left behind, then don't complain.
+	[[ -e ${EROOT%/}/usr/src/linux-${KV_FULL} ]] || return 0
+	ewarn "Note: Even though you have successfully unmerged "
+	ewarn "your kernel package, directories in kernel source location: "
+	ewarn "${EROOT%/}/usr/src/linux-${KV_FULL}"
+	ewarn "with modified files will remain behind. By design, package managers"
+	ewarn "will not remove these modified files and the directories they reside in."
+	ewarn "For more detailed kernel removal instructions, please see: "
+	ewarn "https://wiki.gentoo.org/wiki/Kernel/Removal"
 }
 
 EXPORT_FUNCTIONS src_{unpack,prepare,compile,install,test} \

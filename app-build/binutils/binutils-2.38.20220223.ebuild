@@ -10,7 +10,7 @@ if [[ ${PV} = *9999 ]]; then
 	inherit git-r3
 	EGIT_BRANCH="binutils-$(ver_cut 1)_$(ver_cut 2)-branch"
 else
-	SNAPSHOT=4b1ecb5487a9c6dd93603c0a5ef010b5a9e5086b
+	SNAPSHOT=c4aae3f68ae2ce23ef2011c640ad8ff0bfcdc0ec
 	SRC_URI="https://github.com/bminor/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-gdb-${SNAPSHOT}
 fi
@@ -28,24 +28,23 @@ DEPEND="
 src_configure() {
 	local myconf=(
 		--prefix="${EPREFIX}"/usr
-		--enable-ld=default
+		--disable-gold
 		--disable-multilib
+		--disable-nls
 		--disable-obsolete
 		--disable-werror
-		--with-system-zlib
-		--disable-gold
-		--enable-install-libiberty
-		--enable-deterministic-archives
-		--enable-relro
-		--disable-nls
-		--enable-default-hash-style=gnu
-		--enable-plugins
-		--enable-lto
-		--enable-threads
 		--disable-{gdb,sim}
+		--enable-default-hash-style=gnu
+		--enable-deterministic-archives
+		--enable-install-libiberty
+		--enable-ld=default
+		--enable-lto
+		--enable-plugins
+		--enable-relro
+		--enable-threads
+		--with-system-zlib
 		--without-included-gettext
 	)
-
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 

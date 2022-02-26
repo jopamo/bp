@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit fcaps meson git-r3
+inherit meson git-r3
 
 DESCRIPTION="Screen locker for Wayland"
 HOMEPAGE="https://github.com/swaywm/swaylock"
@@ -37,10 +37,4 @@ src_configure() {
 		-Dwerror=false
 	)
 	meson_src_configure
-}
-
-pkg_postinst() {
-	if ! use pam; then
-		fcaps cap_sys_admin usr/bin/swaylock
-	fi
 }

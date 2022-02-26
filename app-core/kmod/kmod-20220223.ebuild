@@ -11,22 +11,22 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://kernel.googlesource.com/pub/scm/utils/kernel/kmod/kmod.git"
 	inherit git-r3
 else
-	SNAPSHOT=43bdf97ce1298c8727effb470291ed884e1161e6
+	SNAPSHOT=571a84c9249257bf70f9111b30509aa121405cab
 	SRC_URI="https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/snapshot/kmod-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="LGPL-2"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="debug lzma ssl static-libs +tools zlib zstd"
 
 RESTRICT="test"
 
 BDEPEND="
-	app-dev/pkgconf
 	app-dev/gtk-doc-am
+	app-dev/pkgconf
 "
 DEPEND="
 	lzma? ( app-compression/xz-utils )

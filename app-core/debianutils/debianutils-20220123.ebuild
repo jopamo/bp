@@ -7,7 +7,7 @@ inherit flag-o-matic autotools
 DESCRIPTION="A selection of tools from Debian"
 HOMEPAGE="https://packages.qa.debian.org/d/debianutils.html"
 
-SNAPSHOT=8577ee810c9405a6edc1e48b77258ecc9b0b7282
+SNAPSHOT=de14223e5bffe15e374a441302c528ffc1cbed57
 SRC_URI="https://salsa.debian.org/debian/debianutils/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

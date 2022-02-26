@@ -9,7 +9,7 @@
 # @DESCRIPTION:
 # The toolchain-funcs aims to provide a complete suite of functions
 # for gleaning useful information about the toolchain and to simplify
-# ugly things like cross-compiling.  All of this is done
+# ugly things like cross-compiling and multilib.  All of this is done
 # in such a way that you can rely on the function always returning
 # something sane.
 
@@ -528,7 +528,7 @@ tc-ld-force-bfd() {
 
 	# Set up LD to point directly to bfd if it's available.
 	# We need to extract the first word in case there are flags appended
-	# to its value.  #545218
+	# to its value (like multilib).  #545218
 	local ld=$(tc-getLD "$@")
 	local bfd_ld="${ld%% *}.bfd"
 	local path_ld=$(which "${bfd_ld}" 2>/dev/null)
@@ -603,9 +603,9 @@ tc-check-openmp() {
 		eerror "Your current compiler does not support OpenMP!"
 
 		if tc-is-gcc; then
-			eerror "Enable OpenMP support by building app-build/gcc with USE=\"openmp\"."
+			eerror "Enable OpenMP support by building sys-devel/gcc with USE=\"openmp\"."
 		elif tc-is-clang; then
-			eerror "OpenMP support in app-build/clang is provided by sys-libs/libomp."
+			eerror "OpenMP support in sys-devel/clang is provided by sys-libs/libomp."
 		fi
 
 		die "Active compiler does not have required support for OpenMP"
@@ -673,6 +673,7 @@ ninj() { [[ ${type} == "kern" ]] && echo $1 || echo $2 ; }
 			fi
 			;;
 		ia64*)		echo ia64;;
+		loongarch*)	ninj loongarch loong;;
 		m68*)		echo m68k;;
 		metag*)		echo metag;;
 		microblaze*)	echo microblaze;;
@@ -750,6 +751,7 @@ tc-endian() {
 		hppa*)		echo big;;
 		i?86*)		echo little;;
 		ia64*)		echo little;;
+		loongarch*)	echo little;;
 		m68*)		echo big;;
 		mips*l*)	echo little;;
 		mips*)		echo big;;

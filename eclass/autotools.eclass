@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: autotools.eclass
@@ -26,11 +26,6 @@ fi
 if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 _AUTOTOOLS_ECLASS=1
 
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI} not supported" ;;
-esac
-
 inherit gnuconfig libtool
 
 # @ECLASS-VARIABLE: WANT_LIBTOOL
@@ -38,9 +33,6 @@ inherit gnuconfig libtool
 # @DESCRIPTION:
 # Do you want libtool?  Valid values here are "latest" and "none".
 : ${WANT_LIBTOOL:=latest}
-
-DEPEND="app-build/automake
-		app-build/autoconf"
 
 _libtool_atom=">=app-build/libtool-2.4"
 if [[ -n ${WANT_LIBTOOL} ]] ; then
@@ -53,7 +45,7 @@ if [[ -n ${WANT_LIBTOOL} ]] ; then
 fi
 
 # @ECLASS-VARIABLE: AUTOTOOLS_DEPEND
-# @INTERNAL
+# @OUTPUT_VARIABLE
 # @DESCRIPTION:
 # Contains the combination of requested automake/autoconf/libtool
 # versions in *DEPEND format.
@@ -270,8 +262,26 @@ eaclocal_amflags() {
 # They also force installing the support files for safety.
 # Respects AT_M4DIR for additional directories to search for macros.
 eaclocal() {
+	# Feed in a list of paths:
+	# - ${BROOT}/usr/share/aclocal
+	# - ${ESYSROOT}/usr/share/aclocal
+	# See bug #677002
+	if [[ ${EAPI} != [56] ]] ; then
+		if [[ ! -f "${T}"/aclocal/dirlist ]] ; then
+			mkdir "${T}"/aclocal || die
+			cat <<- EOF > "${T}"/aclocal/dirlist || die
+				${BROOT}/usr/share/aclocal
+				${ESYSROOT}/usr/share/aclocal
+			EOF
+		fi
+
+		local system_acdir=" --system-acdir=${T}/aclocal"
+	else
+		local system_acdir=""
+	fi
+
 	[[ ! -f aclocal.m4 || -n $(grep -e 'generated.*by aclocal' aclocal.m4) ]] && \
-		autotools_run_tool --at-m4flags aclocal "$@" $(eaclocal_amflags)
+		autotools_run_tool --at-m4flags aclocal "$@" $(eaclocal_amflags) ${system_acdir}
 }
 
 # @FUNCTION: _elibtoolize
@@ -526,7 +536,7 @@ autotools_check_macro_val() {
 _autotools_m4dir_include() {
 	local x include_opts flag
 
-	for x in "$@" ; do
+		for x in "$@" ; do
 		case ${x} in
 			# We handle it below
 			-${flag}) ;;
@@ -544,12 +554,6 @@ autotools_m4sysdir_include() {
 	# First try to use the paths the system integrator has set up.
 	local paths=( $(eval echo ${AT_SYS_M4DIR}) )
 
-	if [[ ${#paths[@]} -eq 0 && -n ${SYSROOT} ]] ; then
-		# If they didn't give us anything, then default to the SYSROOT.
-		# This helps when cross-compiling.
-		local path="${SYSROOT}/usr/share/aclocal"
-		[[ -d ${path} ]] && paths+=( "${path}" )
-	fi
 	_autotools_m4dir_include "${paths[@]}"
 }
 

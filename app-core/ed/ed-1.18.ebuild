@@ -2,11 +2,11 @@
 
 EAPI=8
 
-inherit toolchain-funcs autotools
+inherit toolchain-funcs autotools unpacker
 
 DESCRIPTION="Your basic line editor"
 HOMEPAGE="https://www.gnu.org/software/ed/"
-SRC_URI="https://dev.gentoo.org/~polynomial-c/dist/${P}.tar.xz"
+SRC_URI="mirror://gnu/ed/${P}.tar.lz"
 
 LICENSE="GPL-3"
 SLOT="0"

@@ -7,10 +7,10 @@ inherit cmake xdg-utils
 DESCRIPTION="KeePassXC - KeePass Cross-platform Community Edition"
 HOMEPAGE="https://keepassxc.org"
 
-if [[ ${PV} == "9999" ]] ; then
+if [[ ${PV} == *9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/keepassxreboot/${PN}.git"
-	EGIT_BRANCH=master
+	EGIT_BRANCH="release/$(ver_cut 1-2).0"
 else
 	SRC_URI="https://github.com/keepassxreboot/keepassxc/releases/download/${PV}/keepassxc-${PV}-src.tar.xz -> ${P}.tar.xz"
 fi
@@ -22,12 +22,14 @@ KEYWORDS="amd64 arm64"
 IUSE="autotype debug http test"
 
 RDEPEND="
+	app-crypto/argon2
+	app-crypto/botan
 	lib-core/libgcrypt
-	xgui-live-lib/qtbase
-	xgui-live-lib/qttools
 	lib-core/zlib
 	lib-live/libsodium
-	app-crypto/argon2
+	xgui-live-lib/qtbase
+	xgui-live-lib/qttools
+	xmedia-live-app/qrencode
 	autotype? (
 		xgui-live-lib/qtx11extras
 		xgui-live-lib/libX11
@@ -35,25 +37,24 @@ RDEPEND="
 		xgui-live-lib/libXtst
 	)
 "
-
-DEPEND="${RDEPEND}
-	xmedia-live-app/qrencode"
+DEPEND="${RDEPEND}"
 
 src_configure() {
 	 use test || \
 		sed -e "/^find_package(Qt5Test/d" -i CMakeLists.txt || die
 
 	local mycmakeargs=(
+		-DKEEPASSXC_BUILD_TYPE_RELEASE=on
 		-DWITH_GUI_TESTS=OFF
 		-DWITH_TESTS="$(usex test)"
 		-DWITH_XC_AUTOTYPE="$(usex autotype)"
-		-DWITH_XC_YUBIKEY=OFF
-		-DKEEPASSXC_BUILD_TYPE_RELEASE=on
 		-DWITH_XC_DOCS=OFF
+		-DWITH_XC_YUBIKEY=OFF
 	)
 	cmake_src_configure
 }
 
 pkg_postinst() {
 	xdg_icon_cache_update
+	xdg_mimeinfo_database_update
 }

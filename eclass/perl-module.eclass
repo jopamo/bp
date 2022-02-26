@@ -8,6 +8,7 @@
 # Seemant Kulleen <seemant@gentoo.org>
 # Andreas K. Hüttel <dilfridge@gentoo.org>
 # @SUPPORTED_EAPIS: 5 6 7 8
+# @PROVIDES: perl-functions
 # @BLURB: eclass for installing Perl module distributions
 # @DESCRIPTION:
 # The perl-module eclass is designed to allow easier installation of Perl
@@ -19,11 +20,7 @@
 # instead.
 
 case ${EAPI:-0} in
-	5)
-		inherit multiprocessing unpacker perl-functions
-		PERL_EXPF="src_unpack src_prepare src_configure src_compile src_test src_install"
-		;;
-	6|7)
+	5|6|7)
 		inherit multiprocessing perl-functions
 		PERL_EXPF="src_prepare src_configure src_compile src_test src_install"
 		;;
@@ -56,10 +53,10 @@ case ${EAPI:-0} in
 		yes)
 			case "${GENTOO_DEPEND_ON_PERL_SUBSLOT:-yes}" in
 			yes)
-				DEPEND="app-lang/perl:=[-build(-)]"
+				DEPEND="app-lang/perl"
 				;;
 			*)
-				DEPEND="app-lang/perl[-build(-)]"
+				DEPEND="app-lang/perl"
 				;;
 			esac
 			RDEPEND="${DEPEND}"
@@ -85,7 +82,7 @@ case ${EAPI:-0} in
 		case "${GENTOO_DEPEND_ON_PERL:-yes}" in
 			yes)
 				DEPEND="app-lang/perl"
-				RDEPEND="app-lang/perl:="
+				RDEPEND="app-lang/perl"
 				;;
 			noslotop)
 				DEPEND="app-lang/perl"
@@ -226,7 +223,7 @@ LICENSE="${LICENSE:-|| ( Artistic GPL-1+ )}"
 # @ECLASS-VARIABLE: DIST_MAKE
 # @DESCRIPTION:
 # (EAPI=8 and later) This Bash array contains parameters to the make call
-# from ExtUtils::MakeMaker. Replaces mymake in EAPI=8 and earlier.
+# from ExtUtils::MakeMaker. Replaces mymake in EAPI=7 and earlier.
 # Defaults to ( OPTIMIZE="${CFLAGS}" )
 if [[ $(declare -p DIST_MAKE 2>&-) != "declare -a DIST_MAKE="* ]]; then
 	DIST_MAKE=( OPTIMIZE="${CFLAGS}" )
@@ -288,6 +285,8 @@ perl-module_src_prepare() {
 
 	if [[ ${EAPI:-0} == 5 ]] ; then
 		[[ ${PATCHES[@]} ]] && epatch "${PATCHES[@]}"
+		debug-print "$FUNCNAME: applying user patches"
+		epatch_user
 	else
 		default
 	fi
@@ -563,10 +562,15 @@ perl-module_src_install() {
 	perl_link_duallife_scripts
 
 	case ${EAPI} in
-		5|6)
+		5|6|7)
 			;;
 		*)
-			cleanup_install
+			if has 'features' ${DIST_WIKI} ; then
+				DISABLE_AUTOFORMATTING=yes
+				DOC_CONTENTS="This package may require additional dependencies and/or preparation steps for\n"
+				DOC_CONTENTS+="some optional features. For details, see\n"
+				DOC_CONTENTS+="$(perl_get_wikiurl_features)"
+			fi
 			;;
 	esac
 }

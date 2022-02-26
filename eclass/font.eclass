@@ -49,8 +49,8 @@ FONT_CONF=( "" )
 if [[ ${CATEGORY}/${PN} != media-fonts/encodings ]]; then
 	IUSE="X"
 	BDEPEND="X? (
-			xgui-live-app/mkfontscale
-			fonts/encodings
+		xgui-live-app/mkfontscale
+		fonts/encodings
 	)"
 fi
 
@@ -148,7 +148,7 @@ font_pkg_setup() {
 # @DESCRIPTION:
 # The font src_install function.
 font_src_install() {
-	local dir suffix commondoc
+	local dir suffix
 
 	if [[ $(declare -p FONT_S 2>/dev/null) == "declare -a"* ]]; then
 		# recreate the directory structure if FONT_S is an array
@@ -173,25 +173,27 @@ font_src_install() {
 	fi
 
 	font_fontconfig
+
+	cleanup_install
 }
 
 # @FUNCTION: _update_fontcache
 # @DESCRIPTION:
-# Updates fontcache if !prefix and fonts/fontconfig installed
+# Updates fontcache if !prefix and media-libs/fontconfig installed
 _update_fontcache() {
 	# unreadable font files = fontconfig segfaults
 	find "${EROOT}"/usr/share/fonts/ -type f '!' -perm 0644 \
 		-exec chmod -v 0644 2>/dev/null {} + || die "failed to fix font files perms"
 
 	if [[ -z ${ROOT} ]] ; then
-		if has_version fonts/fontconfig ; then
+		if has_version media-libs/fontconfig ; then
 			ebegin "Updating global fontcache"
 			fc-cache -fs
 			if ! eend $? ; then
 				die "failed to update global fontcache"
 			fi
 		else
-			einfo "Skipping fontcache update (fonts/fontconfig not installed)"
+			einfo "Skipping fontcache update (media-libs/fontconfig not installed)"
 		fi
 	else
 		einfo "Skipping fontcache update (ROOT != /)"

@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: linux-mod.eclass
@@ -7,7 +7,7 @@
 # @AUTHOR:
 # John Mylchreest <johnm@gentoo.org>,
 # Stefan Schweizer <genstef@gentoo.org>
-# @SUPPORTED_EAPIS: 5 6 7
+# @SUPPORTED_EAPIS: 6 7 8
 # @PROVIDES: linux-info
 # @BLURB: It provides the functionality required to install external modules against a kernel source tree.
 # @DESCRIPTION:
@@ -149,24 +149,12 @@
 # @DESCRIPTION:
 # It's a read-only variable. It contains the extension of the kernel modules.
 
-case ${EAPI:-0} in
-	[567]) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
-
 if [[ -z ${_LINUX_MOD_ECLASS} ]] ; then
 _LINUX_MOD_ECLASS=1
 
 # TODO: When adding support for future EAPIs, please audit this list
 # for unused inherits and conditionalise them.
-inherit linux-info toolchain-funcs flag-o-matic
-
-filter-flags -flto\=\*
-filter-flags -D_FORTIFY_SOURCE\=\*
-filter-flags -Wl,-z,defs
-filter-flags -fstack-protector-strong
-filter-flags -fassociative-math
-filter-flags -fno-semantic-interposition
+inherit linux-info toolchain-funcs
 
 case ${MODULES_OPTIONAL_USE_IUSE_DEFAULT:-n} in
   [nNfF]*|[oO][fF]*|0|-) _modules_optional_use_iuse_default='' ;;
@@ -181,7 +169,7 @@ IUSE="${MODULES_OPTIONAL_USE:+${_modules_optional_use_iuse_default}}${MODULES_OP
 SLOT="0"
 RDEPEND="
 	${MODULES_OPTIONAL_USE}${MODULES_OPTIONAL_USE:+? (}
-		app-core/kmod
+	app-core/kmod
 	${MODULES_OPTIONAL_USE:+)}"
 DEPEND="${RDEPEND}
     ${MODULES_OPTIONAL_USE}${MODULES_OPTIONAL_USE:+? (}
@@ -606,11 +594,6 @@ linux-mod_pkg_setup() {
 	local is_bin="${MERGE_TYPE}"
 
 	# If we are installing a binpkg, take a different path.
-	# use MERGE_TYPE if available (eapi>=4); else use non-PMS EMERGE_FROM (eapi<4)
-	if has ${EAPI} 0 1 2 3; then
-		is_bin=${EMERGE_FROM}
-	fi
-
 	if [[ ${is_bin} == binary ]]; then
 		linux-mod_pkg_setup_binary
 		return
@@ -729,7 +712,7 @@ linux-mod_src_compile() {
 
 # @FUNCTION: linux-mod_src_install
 # @DESCRIPTION:
-# It install the modules specified in MODULES_NAME. The modules should be inside the ${objdir}
+# It install the modules specified in MODULE_NAMES. The modules should be inside the ${objdir}
 # directory and they are installed inside /lib/modules/${KV_FULL}/${libdir}.
 #
 # The modprobe.d configuration file is automatically generated if the

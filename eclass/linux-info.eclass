@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: linux-info.eclass
@@ -203,9 +203,10 @@ getfilevar() {
 
 		# We use nonfatal because we want the caller to take care of things #373151
 		# Pass need-config= to make to avoid config check in kernel Makefile.
+		# Pass dot-config=0 to avoid the config check in kernels prior to 5.4.
 		[[ ${EAPI:-0} == [0123] ]] && nonfatal() { "$@"; }
 		echo -e "e:\\n\\t@echo \$(${1})\\ninclude ${basefname}" | \
-			nonfatal emake -C "${basedname}" M="${T}" need-config= ${BUILD_FIXES} -s -f - 2>/dev/null
+			nonfatal emake -C "${basedname}" --no-print-directory M="${T}" dot-config=0 need-config= ${BUILD_FIXES} -s -f - 2>/dev/null
 
 		ARCH=${myARCH}
 	fi
@@ -607,34 +608,27 @@ get_version() {
 # It gets the version of the current running kernel and the result is the same as get_version() if the
 # function can find the sources.
 get_running_version() {
-	KV_FULL=$(uname -r)
+	local kv=$(uname -r)
 
-	if [[ -f ${ROOT%/}/lib/modules/${KV_FULL}/source/Makefile && -f ${ROOT%/}/lib/modules/${KV_FULL}/build/Makefile ]]; then
-		KERNEL_DIR=$(readlink -f ${ROOT%/}/lib/modules/${KV_FULL}/source)
-		KBUILD_OUTPUT=$(readlink -f ${ROOT%/}/lib/modules/${KV_FULL}/build)
-		unset KV_FULL
-		get_version
-		return $?
-	elif [[ -f ${ROOT%/}/lib/modules/${KV_FULL}/source/Makefile ]]; then
-		KERNEL_DIR=$(readlink -f ${ROOT%/}/lib/modules/${KV_FULL}/source)
-		unset KV_FULL
-		get_version
-		return $?
-	elif [[ -f ${ROOT%/}/lib/modules/${KV_FULL}/build/Makefile ]]; then
-		KERNEL_DIR=$(readlink -f ${ROOT%/}/lib/modules/${KV_FULL}/build)
-		unset KV_FULL
-		get_version
-		return $?
-	else
-		# This handles a variety of weird kernel versions.  Make sure to update
-		# tests/linux-info_get_running_version.sh if you want to change this.
-		local kv_full=${KV_FULL//[-+_]*}
-		KV_MAJOR=$(ver_cut 1 ${kv_full})
-		KV_MINOR=$(ver_cut 2 ${kv_full})
-		KV_PATCH=$(ver_cut 3 ${kv_full})
-		KV_EXTRA="${KV_FULL#${KV_MAJOR}.${KV_MINOR}${KV_PATCH:+.${KV_PATCH}}}"
-		: ${KV_PATCH:=0}
+	if [[ -f ${ROOT%/}/lib/modules/${kv}/source/Makefile ]]; then
+		KERNEL_DIR=$(readlink -f "${ROOT%/}/lib/modules/${kv}/source")
+		if [[ -f ${ROOT%/}/lib/modules/${kv}/build/Makefile ]]; then
+			KBUILD_OUTPUT=$(readlink -f "${ROOT%/}/lib/modules/${kv}/build")
+		fi
+		get_version && return 0
 	fi
+
+	KV_FULL=${kv}
+
+	# This handles a variety of weird kernel versions.  Make sure to update
+	# tests/linux-info_get_running_version.sh if you want to change this.
+	local kv_full=${KV_FULL//[-+_]*}
+	KV_MAJOR=$(ver_cut 1 ${kv_full})
+	KV_MINOR=$(ver_cut 2 ${kv_full})
+	KV_PATCH=$(ver_cut 3 ${kv_full})
+	KV_EXTRA="${KV_FULL#${KV_MAJOR}.${KV_MINOR}${KV_PATCH:+.${KV_PATCH}}}"
+	: ${KV_PATCH:=0}
+
 	return 0
 }
 
@@ -920,21 +914,6 @@ check_zlibinflate() {
 # to support the options specified in CONFIG_CHECK (if not null)
 linux-info_pkg_setup() {
 	linux-info_get_any_version
-
-	if kernel_is 2 4; then
-		if [ "$( gcc-major-version )" -eq "4" ] ; then
-			echo
-			ewarn "Be warned !! >=app-build/gcc-4.0.0 isn't supported with"
-			ewarn "linux-2.4 (or modules building against a linux-2.4 kernel)!"
-			echo
-			ewarn "Either switch to another gcc-version (via gcc-config) or use a"
-			ewarn "newer kernel that supports >=app-build/gcc-4."
-			echo
-			ewarn "Also, be aware that bug reports about gcc-4 not working"
-			ewarn "with linux-2.4 based ebuilds will be closed as INVALID!"
-			echo
-		fi
-	fi
 
 	[ -n "${CONFIG_CHECK}" ] && check_extra_config;
 }

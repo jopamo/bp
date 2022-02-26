@@ -2,7 +2,7 @@
 
 EAPI=7
 
-WAF_PV=2.0.22
+WAF_PV=2.0.23
 
 inherit toolchain-funcs waf-utils xdg-utils python-r1
 

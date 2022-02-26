@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake fcaps flag-o-matic qmake-utils user xdg-utils git-r3
+inherit cmake flag-o-matic qmake-utils user xdg-utils git-r3
 
 DESCRIPTION="A network protocol analyzer formerly known as ethereal"
 HOMEPAGE="https://www.wireshark.org/"
@@ -132,12 +132,6 @@ pkg_postinst() {
 
 	# Add group for users allowed to sniff.
 	enewgroup wireshark
-
-	if use dumpcap ; then
-		fcaps -o 0 -g wireshark -m 4710 -M 0710 \
-			cap_dac_read_search,cap_net_raw,cap_net_admin \
-			"${EROOT}"/usr/bin/dumpcap
-	fi
 
 	ewarn "NOTE: To capture traffic with wireshark as normal user you have to"
 	ewarn "add yourself to the wireshark group. This security measure ensures"

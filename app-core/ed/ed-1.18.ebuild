@@ -12,13 +12,20 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="app-build/texinfo"
+DEPEND="
+	app-build/texinfo
+	$(unpacker_src_uri_depends)
+"
 
-src_prepare() {
-	default
-	sed -i "s|-O2|${CFLAGS}|g" configure
-}
+_makeargs=(
+  CFLAGS="${CFLAGS}"
+  LDFLAGS="${LDFLAGS}"
+)
 
 src_configure() {
 	${S}/configure --prefix="${EPREFIX}"/usr
+}
+
+src_compile() {
+	emake "${_makeargs[@]}"
 }

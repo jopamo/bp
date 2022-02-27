@@ -24,7 +24,6 @@ DEPEND="
 	app-var/c_rehash
 	app-core/debianutils
 "
-BDEPEND+=" $(python_gen_any_dep 'dev-python/cryptography[${PYTHON_USEDEP}]')"
 
 S=${WORKDIR}
 
@@ -58,6 +57,11 @@ src_prepare() {
 
 	default
 	eapply -p2 "${FILESDIR}"/${PN}-20150426-root.patch
+
+	pushd "${S}/${PN}-${DEB_VER}" >/dev/null || die
+	eapply "${FILESDIR}"/${P}-no-cryptography.patch
+	popd >/dev/null || die
+
 	local relp=$(echo "${EPREFIX}" | sed -e 's:[^/]\+:..:g')
 	sed -i \
 		-e '/="$ROOT/s:ROOT:ROOT'"${EPREFIX}"':' \

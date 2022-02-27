@@ -12,23 +12,18 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="socks5 +ssl"
+IUSE="socks5"
 
 RESTRICT="test"
 
 RDEPEND="
-	>=dev-python/certifi-2017.4.17[${PYTHON_USEDEP}]
-	>=dev-python/chardet-3.0.2[${PYTHON_USEDEP}]
-	>=dev-python/idna-2.5[${PYTHON_USEDEP}]
+	dev-python/certifi[${PYTHON_USEDEP}]
+	dev-python/chardet[${PYTHON_USEDEP}]
 	dev-python/idna[${PYTHON_USEDEP}]
-	>=dev-python/urllib3-1.21.1[${PYTHON_USEDEP}]
-	socks5? ( >=dev-python/PySocks-1.5.6[${PYTHON_USEDEP}] )
-	ssl? (
-		 >=dev-python/cryptography-1.3.4[${PYTHON_USEDEP}]
-		 >=dev-python/pyopenssl-0.14[${PYTHON_USEDEP}]
-	)
+	dev-python/urllib3[${PYTHON_USEDEP}]
+	socks5? ( dev-python/PySocks[${PYTHON_USEDEP}] )
 "
-
-DEPEND="${RDEPEND}
+DEPEND="
+	${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
 "

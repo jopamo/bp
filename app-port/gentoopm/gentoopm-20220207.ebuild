@@ -2,6 +2,8 @@
 
 EAPI=8
 
+DISTUTILS_USE_SETUPTOOLS=pyproject.toml
+
 inherit distutils-r1
 
 DESCRIPTION="A common interface to Gentoo package managers"
@@ -11,7 +13,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/mgorny/${PN}.git"
 	inherit git-r3
 else
-	SNAPSHOT=66bf440c702bf1e1b6bf81ac9b9631415e95666c
+	SNAPSHOT=f5c1d10d15ffbb490730eca5ef69dce379313cc6
 	SRC_URI="https://github.com/mgorny/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"

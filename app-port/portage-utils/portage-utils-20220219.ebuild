@@ -9,7 +9,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/gentoo/portage-utils.git"
 	inherit git-r3
 else
-	SNAPSHOT=f58042d333d5a658f4ae1ddee322a5de31a55066
+	SNAPSHOT=00445c1e96c31fcb6fa5c7c517479473dcaa69dc
 	SRC_URI="https://github.com/gentoo/portage-utils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

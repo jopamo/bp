@@ -28,16 +28,17 @@ IUSE="sqlite static test valgrind +xml"
 RESTRICT="test"
 
 DEPEND="
-	sqlite? ( lib-core/sqlite )
+	app-build/gettext
 	app-compression/bzip2
 	app-compression/xz-utils
-	lib-core/libffi
-	lib-net/libnsl
+	app-lang/python-exec
 	lib-core/gdbm
-	virtual/curses
+	lib-core/libffi
 	lib-core/readline
 	lib-core/zlib
-	app-build/gettext
+	lib-net/libnsl
+	sqlite? ( lib-core/sqlite )
+	virtual/curses
 	virtual/ssl
 "
 

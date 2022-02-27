@@ -24,19 +24,12 @@ sandbox_death_notice() {
 	ewarn "FEATURES='-sandbox -usersandbox' emerge sandbox"
 }
 
+filter-lfs-flags
+filter-flags -flto\*
+
 src_prepare() {
 	default
 	eautoreconf
-}
-
-src_configure() {
-	filter-lfs-flags #90228
-	filter-flags -flto\=\*
-
-	local myconf=()
-
-	ECONF_SOURCE="${S}" \
-	econf "${myconf[@]}"
 }
 
 src_test() {

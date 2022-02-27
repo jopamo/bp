@@ -57,14 +57,6 @@ waf-utils_src_configure() {
 			eerror
 			fail=1
 		fi
-
-		if [[ ${PYTHON_REQ_USE} != *threads* ]]; then
-			eerror "Waf requires threading support in Python. To accomodate this requirement,"
-			eerror "please add 'threads(+)' to PYTHON_REQ_USE variable (above inherit line)."
-			eerror "For more information and examples, please see:"
-			eerror "    https://wiki.gentoo.org/wiki/Project:Python/waf-utils_integration"
-			fail=1
-		fi
 	fi
 
 	[[ ${fail} ]] && die "Invalid use of waf-utils.eclass"

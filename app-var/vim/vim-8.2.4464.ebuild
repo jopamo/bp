@@ -128,6 +128,7 @@ src_install() {
 		default
 		rm -r "${ED}"/usr/share/icons || die
 		rm -r "${ED}"/usr/share/man/{da*,it*,pl*,tr*} || die
+		rm -r "${ED}"/usr/share/vim/vim82/{doc,lang,keymap,tools,tutor} || die
 	fi
 
 	insopts -m 0644

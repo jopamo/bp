@@ -18,13 +18,13 @@ LICENSE="vim"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug huge +xxd"
+IUSE="debug huge libsodium +xxd"
 
 DEPEND="
 	virtual/curses
 	app-core/acl
+	libsodium? ( lib-live/libsodium )
 "
-
 BDEPEND="
 	app-build/autoconf
 	app-build/gettext
@@ -54,17 +54,19 @@ src_configure() {
 		--disable-tclinterp
 		--enable-acl
 		--without-x
+		$(use_enable libsodium)
 	)
 
 	local huge=(
 		--prefix="${EPREFIX}"/usr
 		--localstatedir="${EPREFIX}"/var/lib/vim
+		--with-features=huge
 		--disable-canberra
 		--disable-gui
 		--enable-acl
 		--enable-cscope
 		--enable-gpm
-		--enable-gui=none
+		--enable-gui=no
 		--enable-luainterp=dynamic
 		--enable-multibyte
 		--enable-netbeans
@@ -72,8 +74,8 @@ src_configure() {
 		--enable-python3interp=dynamic
 		--enable-rubyinterp=dynamic
 		--enable-tclinterp=dynamic
-		--with-features=huge
-		--with-x=no
+		--without-x
+		$(use_enable libsodium)
 	)
 
 	use huge || ECONF_SOURCE=${S} econf "${tiny[@]}"

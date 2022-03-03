@@ -125,7 +125,7 @@ src_install() {
 	else
 		default
 		rm -r "${ED}"/usr/share/icons || die
-		rm -r "${ED}"/usr/share/man/{da*,it*,pl*.tr*} || die
+		rm -r "${ED}"/usr/share/man/{da*,it*,pl*,tr*} || die
 	fi
 
 	insopts -m 0644

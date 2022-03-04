@@ -27,13 +27,14 @@ DEPEND="
 	xgui-misc/harfbuzz
 	xmedia-live-lib/libjpeg-turbo
 	xmedia-live-lib/libpng
-	xkbcommon? ( xgui-live-lib/libxkbcommon )
+	gssapi? ( app-crypto/mit-krb5 )
 	mysql? ( app-server/mariadb )
 	opengl? ( xmedia-live-lib/mesa )
 	postgres? ( app-server/postgresql )
 	sqlite? ( lib-core/sqlite )
 	systemd? ( app-core/systemd )
 	vulkan? ( xmedia-live-lib/vulkan-loader )
+	xkbcommon? ( xgui-live-lib/libxkbcommon )
 "
 PDEPEND="xgui-live-lib/qtx11extras"
 
@@ -77,7 +78,9 @@ src_configure() {
 		-system-libpng
 		-system-pcre
 		-system-zlib
+		$(qt_use gssapi feature-gssapi)
 		$(usex arm64 '' -reduce-relocations)
+		$(usex gssapi -gssapi -no-gssapi)
 		$(usex mysql -sql-mysql -no-sql-mysql)
 		$(usex opengl -opengl -no-opengl)
 		$(usex postgres -sql-psql -no-sql-psql)

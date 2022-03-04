@@ -13,7 +13,7 @@ LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="mysql postgres sqlite systemd opengl vulkan +xkbcommon"
+IUSE="gssapi mysql postgres sqlite systemd opengl vulkan +xkbcommon"
 
 DEPEND="
 	app-core/dbus
@@ -78,9 +78,8 @@ src_configure() {
 		-system-libpng
 		-system-pcre
 		-system-zlib
-		$(qt_use gssapi feature-gssapi)
 		$(usex arm64 '' -reduce-relocations)
-		$(usex gssapi -gssapi -no-gssapi)
+		$(usex gssapi -feature-gssapi -no-feature-gssapi)
 		$(usex mysql -sql-mysql -no-sql-mysql)
 		$(usex opengl -opengl -no-opengl)
 		$(usex postgres -sql-psql -no-sql-psql)

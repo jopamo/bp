@@ -22,7 +22,6 @@ src_prepare() {
 	default
 	cp "${FILESDIR}"/lua.pc "${S}"/
 
-	sed "s/^R= \$V.4/R= \$V.5/" -i Makefile || die
 	sed -i -e "s/-O2\ //g" "src/Makefile" || die
 }
 

@@ -66,68 +66,60 @@ src_install() {
 	# savings time rules to be in accordance with US rules.
 	./zic -d "${ED}"/usr/share/zoneinfo -p America/New_York || die
 
-	use static-libs || rm -rf "${ED}"/usr/lib/libtz.a || die
+	use static-libs || rm -r "${ED}"/usr/lib/libtz.a || die
 
 	cleanup_install
-	rm -rf "${ED}"/etc/localtime || die
+	rm -r "${ED}"/etc/localtime || die
 
 	if ! use africa ; then
 		for x in Africa ; do
-			rm -rf "${ED}"/usr/share/zoneinfo/"${x}" || die
-			rm -rf "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
-			rm -rf "${ED}"/usr/share/zoneinfo/{posix,right}/"${x}" || die
+			rm -r "${ED}"/usr/share/zoneinfo/"${x}" || die
+			rm -r "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
 		done
 	fi
 	if ! use atlantic ; then
 		for x in Atlantic ; do
-			rm -rf "${ED}"/usr/share/zoneinfo/"${x}" || die
-			rm -rf "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
-			rm -rf "${ED}"/usr/share/zoneinfo/{posix,right}/"${x}" || die
+			rm -r "${ED}"/usr/share/zoneinfo/"${x}" || die
+			rm -r "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
 		done
 	fi
 	if ! use indian ; then
 		for x in Indian ; do
-			rm -rf "${ED}"/usr/share/zoneinfo/"${x}" || die
-			rm -rf "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
-			rm -rf "${ED}"/usr/share/zoneinfo/{posix,right}/"${x}" || die
+			rm -r "${ED}"/usr/share/zoneinfo/"${x}" || die
+			rm -r "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
 		done
 	fi
 	if ! use antarctica ; then
 		for x in Antarctica ; do
-			rm -rf "${ED}"/usr/share/zoneinfo/"${x}" || die
-			rm -rf "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
-			rm -rf "${ED}"/usr/share/zoneinfo/{posix,right}/"${x}" || die
+			rm -r "${ED}"/usr/share/zoneinfo/"${x}" || die
+			rm -r "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
 		done
 	fi
 	if ! use asia ; then
 		for x in Asia ; do
-			rm -rf "${ED}"/usr/share/zoneinfo/"${x}" || die
-			rm -rf "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
-			rm -rf "${ED}"/usr/share/zoneinfo/{posix,right}/"${x}" || die
+			rm -r "${ED}"/usr/share/zoneinfo/"${x}" || die
+			rm -r "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
 		done
 	fi
 	if ! use australia ; then
 		for x in Australia ; do
-			rm -rf "${ED}"/usr/share/zoneinfo/"${x}" || die
-			rm -rf "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
-			rm -rf "${ED}"/usr/share/zoneinfo/{posix,right}/"${x}" || die
+			rm -r "${ED}"/usr/share/zoneinfo/"${x}" || die
+			rm -r "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
 		done
 	fi
 	if ! use pacific ; then
 		for x in Pacific ; do
-			rm -rf "${ED}"/usr/share/zoneinfo/"${x}" || die
-			rm -rf "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
-			rm -rf "${ED}"/usr/share/zoneinfo/{posix,right}/"${x}" || die
+			rm -r "${ED}"/usr/share/zoneinfo/"${x}" || die
+			rm -r "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
 		done
 	fi
 	if ! use europe ; then
 		for x in Europe ; do
-			rm -rf "${ED}"/usr/share/zoneinfo/"${x}" || die
-			rm -rf "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
-			rm -rf "${ED}"/usr/share/zoneinfo/{posix,right}/"${x}" || die
+			rm -r "${ED}"/usr/share/zoneinfo/"${x}" || die
+			rm -r "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
 		done
 	fi
 
-	use right || rm -rf "${ED}"/usr/share/zoneinfo/right || die
-	use posix || rm -rf "${ED}"/usr/share/zoneinfo/posix || die
+	use right || rm -r "${ED}"/usr/share/zoneinfo/right || die
+	use posix || rm -r "${ED}"/usr/share/zoneinfo/posix || die
 }

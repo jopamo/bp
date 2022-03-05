@@ -56,7 +56,9 @@ src_install() {
 	insinto /usr/share/fc-lang
 	doins fc-lang/*.orth
 
-	rm -rf "${ED}"/var/cache/
+	# make sure no cache files are tracked by package manager
+	rm -r "${ED}"/var/cache || die
+
 	# Changes should be made to /etc/fonts/local.conf, and as we had
 	# too much problems with broken fonts.conf we force update it ...
 	echo 'CONFIG_PROTECT_MASK="/etc/fonts/fonts.conf"' > "${T}"/37fontconfig

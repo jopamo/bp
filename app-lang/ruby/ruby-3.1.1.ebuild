@@ -20,24 +20,24 @@ filter-flags -fomit-frame-pointer -Wl,-z,defs
 src_prepare() {
 	default
 	einfo "Removing bundled libraries..."
-	rm -fr ext/fiddle/libffi-3.2.1 || die
+	rm -r ext/fiddle/libffi-3.2.1 || die
 }
 
 src_configure() {
 	local myconf=(
-		--enable-shared
-		--enable-pthread
-		--disable-rpath
-		--with-out-ext="dbm tk"
-		$(use_with jemalloc jemalloc)
+		$(use_enable debug)
 		$(use_enable socks5 socks)
+		$(use_enable static-libs install-static-library)
+		$(use_enable static-libs static)
+		$(use_with jemalloc jemalloc)
+		$(use_with static-libs static-linked-ext)
 		--disable-install-doc
 		--disable-ipv6
-		$(use_enable static-libs static)
-		$(use_enable static-libs install-static-library)
-		$(use_with static-libs static-linked-ext)
-		$(use_enable debug)
+		--disable-rpath
 		--enable-option-checking=no
+		--enable-pthread
+		--enable-shared
+		--with-out-ext="dbm tk"
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

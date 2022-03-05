@@ -14,7 +14,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="$(ver_cut 1-2)"
 	inherit git-r3
 else
-	SNAPSHOT=f869b56fe4be416d356fffc94b8b18fe65039929
+	SNAPSHOT=4716f70c8543d12d18c64677af650d479b99edac
 	SRC_URI="https://github.com/python/cpython/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/c${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
@@ -28,16 +28,17 @@ IUSE="sqlite static test valgrind +xml"
 RESTRICT="test"
 
 DEPEND="
-	sqlite? ( lib-core/sqlite )
+	app-build/gettext
 	app-compression/bzip2
 	app-compression/xz-utils
-	lib-core/libffi
-	lib-net/libnsl
+	app-lang/python-exec
 	lib-core/gdbm
-	virtual/curses
+	lib-core/libffi
 	lib-core/readline
 	lib-core/zlib
-	app-build/gettext
+	lib-net/libnsl
+	sqlite? ( lib-core/sqlite )
+	virtual/curses
 	virtual/ssl
 "
 

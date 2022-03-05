@@ -8,6 +8,7 @@ DESCRIPTION="Advanced Binary Emulation Framework"
 HOMEPAGE="https://github.com/qilingframework/qiling"
 EGIT_REPO_URI="https://github.com/qilingframework/qiling.git"
 EGIT_BRANCH="dev"
+EGIT_SUBMODULES=()
 
 LICENSE="GPL-2"
 SLOT="0"

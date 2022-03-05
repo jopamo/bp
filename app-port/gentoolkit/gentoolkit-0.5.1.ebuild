@@ -27,7 +27,7 @@ python_prepare_all() {
 python_install_all() {
 	distutils-r1_python_install_all
 
-	use tmpfilesd || rm -rf "${ED}"/usr/lib/tmpfiles.d
+	use tmpfilesd || rm -r "${ED}"/usr/lib/tmpfiles.d || die
 }
 
 pkg_postinst() {

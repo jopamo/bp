@@ -13,14 +13,14 @@ if [[ ${PV} == *9999 ]]; then
 	S="${WORKDIR}/${P}/unix"
 	inherit git-r3
 else
-	SNAPSHOT=a9eaf6765198716158f4927d71f64d20182f1ad2
+	SNAPSHOT=9f8ca234489c677193efb409fef485ce4774e8c6
 	SRC_URI="https://github.com/tcltk/tcl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}/unix
-	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="tcltk"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 BDEPEND="app-dev/patchelf"
 
@@ -30,10 +30,7 @@ src_prepare() {
 }
 
 src_configure() {
-	local myconf=(
-		--enable-64bit
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
+	ECONF_SOURCE=${S} econf --enable-64bit
 }
 
 src_install() {

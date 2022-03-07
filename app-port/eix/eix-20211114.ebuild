@@ -71,6 +71,6 @@ pkg_postinst() {
 
 pkg_postrm() {
 	if [ -z "${REPLACED_BY_VERSION}" ]; then
-		rm -r "${EROOT}/var/cache/${PN}" || die
+		rm -r -- "${EROOT}/var/cache/${PN}" || die
 	fi
 }

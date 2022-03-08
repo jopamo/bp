@@ -16,12 +16,12 @@ IUSE="bsdpty pam +shadow static +syslog systemd zlib"
 
 src_configure() {
 	local myconf=(
-		$(use_enable zlib)
-		$(use_enable pam)
 		$(use_enable !bsdpty openpty)
+		$(use_enable pam)
 		$(use_enable shadow)
 		$(use_enable static)
 		$(use_enable syslog)
+		$(use_enable zlib)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

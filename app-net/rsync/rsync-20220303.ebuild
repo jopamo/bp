@@ -11,7 +11,7 @@ if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/WayneD/rsync"
 	inherit git-r3
 else
-	SNAPSHOT=d07272d631733508da58ecdca2f458f4b0736bbf
+	SNAPSHOT=b81a5095563776397a4239132d2b737a1083e02f
 	SRC_URI="https://github.com/WayneD/rsync/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -23,12 +23,12 @@ KEYWORDS="amd64 arm64"
 IUSE="acl iconv ipv6 lz4 static xattr xxhash zstd"
 
 LIB_DEPEND="
+	lib-core/popt[static-libs(+)]
 	acl? ( app-core/acl[static-libs(+)] )
+	lz4? ( app-compression/lz4[static-libs(+)] )
 	xattr? ( app-core/attr[static-libs(+)] )
 	xxhash? ( lib-dev/xxhash[static-libs(+)] )
 	zstd? ( app-compression/zstd[static-libs(+)] )
-	lz4? ( app-compression/lz4[static-libs(+)] )
-	lib-core/popt[static-libs(+)]
 "
 
 DEPEND="
@@ -37,8 +37,8 @@ DEPEND="
 "
 
 src_prepare() {
-	rm -f zlib/*.{c,h} || die
-	rm -f config.{guess,sub} || die
+	rm zlib/*.{c,h} || die
+	rm config.{guess,sub} || die
 	cp -p "${EROOT}"/usr/share/gnuconfig/* "${S}"/
 	default
 }
@@ -47,7 +47,6 @@ src_configure() {
 	use static && append-ldflags -static
 
 	local myconf=(
-		--without-included-zlib
 		$(use_enable acl acl-support)
 		$(use_enable iconv)
 		$(use_enable ipv6)
@@ -56,6 +55,7 @@ src_configure() {
 		$(use_enable xxhash)
 		$(use_enable zstd)
 		--disable-md2man
+		--without-included-zlib
 	)
 	econf "${myconf[@]}"
 }

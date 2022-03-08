@@ -11,7 +11,7 @@ if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/NetworkManager/NetworkManager"
 	inherit git-r3
 else
-	SNAPSHOT=0047d36fa2bfff37ce8ae916122d01be5e6ed871
+	SNAPSHOT=6430a7d70c22e584d020810b7da27778ab0c9892
 	SRC_URI="https://github.com/NetworkManager/NetworkManager/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/NetworkManager-${SNAPSHOT}
 fi
@@ -24,31 +24,31 @@ IUSE="+nmtui systemd test"
 
 COMMON_DEPEND="
 	app-core/dbus
-	lib-dev/dbus-glib
-	lib-live/glib
-	lib-dev/libnl
-	lib-live/libndp
+	app-core/util-linux
 	app-net/curl
 	app-net/iputils
-	app-core/util-linux
-	lib-core/readline
-	virtual/service-manager
 	lib-core/libgcrypt
+	lib-core/readline
+	lib-dev/dbus-glib
+	lib-dev/libnl
+	lib-live/glib
+	lib-live/libndp
 	lib-net/gnutls
+	virtual/service-manager
 "
 RDEPEND="${COMMON_DEPEND}
 	app-net/iputils[arping(+)]
 	app-net/wpa_supplicant[dbus]
 "
 DEPEND="${COMMON_DEPEND}
-	lib-live/glib
+	app-build/gettext
 	app-dev/gtk-doc-am
-	>=app-dev/intltool-0.40
-	>=app-build/gettext-0.17
-	app-kernel/linux-headers
+	app-dev/intltool
 	app-dev/pkgconf
-	lib-dev/newt
+	app-kernel/linux-headers
 	dev-python/pygobject
+	lib-dev/newt
+	lib-live/glib
 "
 
 filter-flags -Wl,-z,defs
@@ -56,19 +56,19 @@ filter-flags -Wl,-z,defs
 src_configure() {
 	local emesonargs=(
 		$(meson_use nmtui)
-		-Dprefix-default="${EPREFIX}"
+		-Dcrypto=gnutls
 		-Dintrospection=false
-		-Dselinux=false
+		-Djson_validation=false
 		-Dlibaudit=no
+		-Dlibpsl=false
+		-Dmodem_manager=false
+		-Dovs=false
 		-Dpolkit=false
 		-Dppp=false
-		-Dmodem_manager=false
-		-Dlibpsl=false
+		-Dprefix-default="${EPREFIX}"
 		-Dqt=false
+		-Dselinux=false
 		-Dwext=false
-		-Dovs=false
-		-Dcrypto=gnutls
-		-Djson_validation=false
 		)
 		meson_src_configure
 }

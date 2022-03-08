@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/openssh/openssh-portable.git"
 	inherit git-r3
 else
-	SNAPSHOT=52423f64e13db2bdc31a51b32e999cb1bfcf1263
+	SNAPSHOT=379b30120da53d7c84aa8299c26b18c51c2a0dac
 	SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-portable-${SNAPSHOT}
 fi
@@ -20,21 +20,20 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug pam +pie +ssl static systemd sysusersd
-test tmpfilesd +utmpx +wtmpx"
+IUSE="debug pam +pie +ssl static systemd sysusersd test tmpfilesd +utmpx +wtmpx"
 
 DEPEND="
+	app-core/shadow
 	lib-core/libedit
 	lib-core/libseccomp
-	app-core/shadow
 	lib-core/zlib
 	pam? ( lib-core/pam )
 	ssl? ( virtual/ssl )
 "
 BDEPEND="
+	app-build/autoconf
 	app-dev/pkgconf
 	app-kernel/linux-headers
-	app-build/autoconf
 "
 
 src_prepare() {
@@ -49,23 +48,23 @@ src_configure() {
 	local myconf=(
 		--with-pid-dir="${EPREFIX}"/run
 		--with-ldflags="${LDFLAGS}"
-		--disable-strip
-		--without-rpath
 		--sysconfdir="${EPREFIX}"/etc/ssh
 		--datadir="${EPREFIX}"/usr/share/openssh
 		--with-privsep-path="${EPREFIX}"/var/empty
 		--with-privsep-user="sshd"
 		--with-sandbox="seccomp_filter"
-		--with-libedit
-		--without-audit
-		--with-pie
+		$(use_enable utmpx)
+		$(use_enable wtmpx)
 		$(use_with pam)
 		$(use_with ssl openssl)
 		$(use_with ssl ssl-engine)
+		--disable-strip
 		--disable-utmp
-		$(use_enable utmpx)
 		--disable-wtmp
-		$(use_enable wtmpx)
+		--with-libedit
+		--with-pie
+		--without-audit
+		--without-rpath
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

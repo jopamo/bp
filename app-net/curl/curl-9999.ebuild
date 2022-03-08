@@ -19,17 +19,17 @@ SLOT="0"
 IUSE="adns ipv6 ldap libpsl mbedtls ssh ssl static-libs test nghttp2 zstd"
 
 DEPEND="
+		lib-core/zlib
+		adns? ( lib-net/c-ares )
 		ldap? ( app-net/openldap )
 		libpsl? ( lib-net/libpsl )
-		adns? ( lib-net/c-ares )
-		ssh? ( lib-net/libssh2[static-libs?] )
-		nghttp2? ( lib-net/nghttp2[static-libs?] )
-		lib-core/zlib
 		mbedtls? ( lib-net/mbedtls )
-		zstd? ( app-compression/zstd )
+		nghttp2? ( lib-net/nghttp2[static-libs?] )
+		ssh? ( lib-net/libssh2[static-libs?] )
 		test? (
 			app-core/diffutils
 			app-lang/perl )
+		zstd? ( app-compression/zstd )
 "
 
 PATCHES=( "${FILESDIR}"/curl-respect-cflags-3.patch )
@@ -44,21 +44,21 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		$(use_enable static-libs static)
-		$(use_enable ldap)
-		$(use_enable ldap ldaps)
-		$(use_with ssh libssh2)
-		$(use_with nghttp2)
 		$(use_enable adns ares)
 		$(use_enable ipv6)
-		$(use_with mbedtls)
-		$(use_with ssl)
+		$(use_enable ldap ldaps)
+		$(use_enable ldap)
+		$(use_enable static-libs static)
 		$(use_with libpsl)
+		$(use_with mbedtls)
+		$(use_with nghttp2)
+		$(use_with ssh libssh2)
+		$(use_with ssl)
 		$(use_with zstd)
-		--with-zlib
-		--with-random=/dev/urandom
-		--enable-versioned-symbols
 		--enable-threaded-resolver
+		--enable-versioned-symbols
+		--with-random=/dev/urandom
+		--with-zlib
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

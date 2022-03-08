@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://git.tuxfamily.org/chrony/chrony.git"
 	inherit git-r3
 else
-	SNAPSHOT=b61cbed6895fcd3eae4c8458a69995870a22a5e0
+	SNAPSHOT=55717c1ccdf75aaa7b30570ac3478237a66a89f1
 	SRC_URI="https://git.tuxfamily.org/chrony/chrony.git/snapshot/chrony-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -38,6 +38,13 @@ src_configure() {
 	tc-export CC
 
 	local CHRONY_CONFIGURE=(
+		--bindir="${EPREFIX}"/usr/bin
+		--sbindir="${EPREFIX}"/usr/sbin
+		--sysconfdir="${EPREFIX}"/etc
+		--localstatedir="${EPREFIX}"/var
+		--chronyrundir="${EPREFIX}"/run/chrony
+		--sysconfdir="${EPREFIX}"/etc/chrony
+		--prefix="${EPREFIX}/usr"
 		$(usex adns '' --disable-asyncdns)
 		$(usex caps '' --disable-linuxcaps)
 		$(usex cmdmon '' --disable-cmdmon)
@@ -47,17 +54,10 @@ src_configure() {
 		$(usex pps '' --disable-pps)
 		$(usex refclock '' --disable-refclock)
 		$(usex rtc '' --disable-rtc)
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-		--chronyrundir="${EPREFIX}"/run/chrony
-		--sysconfdir="${EPREFIX}"/etc/chrony
-		--prefix="${EPREFIX}/usr"
 		--enable-scfilter
+		--without-editline
 		--without-nss
 		--without-readline
-		--without-editline
 		--without-tomcrypt
 	)
 	ECONF_SOURCE=${S} ${S}/configure "${CHRONY_CONFIGURE[@]}"

@@ -20,7 +20,7 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug pam +pie +ssl static systemd sysusersd test tmpfilesd +utmpx +wtmpx"
+IUSE="debug pam +pie scp +ssl static systemd sysusersd test tmpfilesd +utmpx +wtmpx"
 
 DEPEND="
 	app-core/shadow
@@ -95,8 +95,7 @@ src_install() {
 	#generate this outside of installation
 	rm -rf "${ED}"/etc/ssh/moduli || die
 
-	#scp has been deprecated
-	rm "${ED}"/usr/bin/scp || die
+	use scp || rm "${ED}"/usr/bin/scp || die
 
 	if use tmpfilesd; then
 		insopts -m 0644

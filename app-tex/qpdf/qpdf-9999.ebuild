@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit git-r3
+inherit git-r3 cmake
 
 DESCRIPTION="Command-line tool for structural, content-preserving transformation of PDF files"
 HOMEPAGE="http://qpdf.sourceforge.net/"
@@ -15,8 +15,11 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 DEPEND="xmedia-live-lib/libjpeg-turbo"
+BDEPEND="app-lang/perl"
 
-src_install() {
-	default
-	use static-libs || find "${ED}" -name '*.a' -delete
+src_configure() {
+	local mycmakeargs=(
+		-D BUILD_STATIC_LIBS="$(usex static-libs)"
+	)
+	cmake_src_configure
 }

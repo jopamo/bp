@@ -15,47 +15,47 @@ KEYWORDS="amd64 arm64"
 IUSE="dbus jpeg ldap pclm pdf png static-libs tiff"
 
 DEPEND="
+	app-build/bc
+	app-tex/ghostscript-gpl[cups]
 	app-tex/poppler[cxx,jpeg?,lcms,tiff?,utils]
 	app-tex/qpdf
-	lib-live/glib
 	fonts/fontconfig
-	xgui-misc/freetype:2
-	xmedia-live-lib/lcms
-	lib-print/cups
-	app-build/bc
+	fonts/liberation-fonts
 	lib-core/zlib
+	lib-live/glib
+	lib-print/cups
+	xgui-misc/freetype
+	xmedia-live-lib/lcms
 	dbus? ( app-core/dbus )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )
 	ldap? ( app-net/openldap )
 	pclm? ( app-tex/qpdf )
 	pdf? ( app-tex/mupdf )
 	png? ( xmedia-live-lib/libpng )
-	app-tex/ghostscript-gpl[cups]
 	tiff? ( xmedia-live-lib/tiff )
-	fonts/liberation-fonts
 "
 
 src_configure() {
 	local myconf=(
-		--enable-imagefilters
 		--localstatedir="${EPREFIX}"/var
-		--with-browseremoteprotocols=DNSSD,CUPS
 		--with-cups-rundir="${EPREFIX}"/run/cups
-		--with-pdftops=pdftops
-		--with-rcdir=no
-		--without-php
 		$(use_enable dbus)
-		--enable-foomatic
 		$(use_enable ldap)
 		$(use_enable pclm)
 		$(use_enable pdf mutool)
-		--enable-ghostscript
 		$(use_enable static-libs static)
-		--disable-avahi
 		$(use_with jpeg)
 		$(use_with png)
 		$(use_with tiff)
+		--disable-avahi
+		--enable-foomatic
+		--enable-ghostscript
+		--enable-imagefilters
+		--with-browseremoteprotocols=DNSSD,CUPS
+		--with-pdftops=pdftops
+		--with-rcdir=no
 		--with-test-font-path=/usr/share/fonts/liberation-fonts/LiberationMono-Regular.ttf
+		--without-php
 	)
 	econf "${myconf[@]}"
 }

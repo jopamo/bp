@@ -12,7 +12,7 @@ if [[ ${PV} = *9999 ]]; then
 	inherit git-r3
 	EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)/master"
 else
-	SNAPSHOT=d5d1c95aafb6f4bfc8930d6cef75b758e03c6494
+	SNAPSHOT=9be62976af04f4166a2c1cc5a842ef07bf223860
 	SRC_URI="https://github.com/bminor/glibc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -39,8 +39,7 @@ PDEPEND="lib-core/tzdb"
 
 PATCHES=(
 	"${FILESDIR}"/0001-Disable-ldconfig-during-install.patch
-	"${FILESDIR}"/0004-Add-C.UTF-8-locale.patch
-	)
+)
 
 filter-flags -flto\*
 filter-flags -D_FORTIFY_SOURCE\*

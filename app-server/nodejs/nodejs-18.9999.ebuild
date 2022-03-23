@@ -117,12 +117,3 @@ src_configure() {
 		$(use_with systemtap dtrace) \
 		"${myconf[@]}" || die
 }
-
-src_install() {
-	default
-
-	cat > "${T}"/99${PN} <<- EOF || die
-		export NODE_PATH=/usr/lib/node_modules/
-	EOF
-	doenvd "${T}"/99${PN}
-}

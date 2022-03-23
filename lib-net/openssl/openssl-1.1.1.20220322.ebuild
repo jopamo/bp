@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=5f7757265bfd7ccdf1973bf09f9d72634ea70949
+SNAPSHOT=ad24941228eafe59fe3807d1659585c4d98eac97
 
 inherit flag-o-matic toolchain-funcs
 
@@ -13,11 +13,11 @@ S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="openssl"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="static-libs test zlib"
 
-RESTRICT="test"
+RESTRICT="!test? ( test )"
 
 DEPEND="app-var/c_rehash"
 
@@ -31,7 +31,9 @@ BDEPEND="
 	)"
 PDEPEND="app-var/ca-certificates"
 
-PATCHES=( "${FILESDIR}"/${PN}-1.1.0j-parallel_install_fix.patch )
+PATCHES=(
+	"${FILESDIR}"/${PN}-1.1.0j-parallel_install_fix.patch #671602
+)
 
 src_prepare() {
 	# keep this in sync with app-var/c_rehash
@@ -103,6 +105,7 @@ src_configure() {
 		${sslout} \
 		no-ssl3 \
 		no-ssl3-method \
+		no-heartbeats \
 		no-async \
 		no-comp \
 		no-idea \
@@ -111,6 +114,7 @@ src_configure() {
 		no-ec2m \
 		no-sm2 \
 		no-sm4 \
+		no-ssl2 \
 		no-seed \
 		no-zlib \
 		no-weak-ssl-ciphers \

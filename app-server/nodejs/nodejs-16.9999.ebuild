@@ -46,11 +46,6 @@ BDEPEND="
 	systemtap? ( app-dev/systemtap )
 	test? ( app-net/curl )
 "
-PDEPEND="
-	dev-js/ansi-colors
-	dev-js/jasmine
-	dev-js/readline-sync
-"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-12.22.5-shared_c-ares_nameser_h.patch

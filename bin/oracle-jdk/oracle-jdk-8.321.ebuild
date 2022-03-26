@@ -23,7 +23,7 @@ src_install() {
 
 	mkdir -p "${HERE}" || die
 	cp -rp	"${S}"/* "${HERE}"/ || die
-	rm -r "${HERE}"/jre/lib/amd64/{libavplugin,libglassgtk2}* || die
-	rm -r "${HERE}"/*.zip || die
-	find "${ED}" -type d -empty -exec rmdir -v {} + || die
+	rm "${HERE}"/jre/lib/amd64/{libavplugin,libglassgtk2}* || die
+	rm "${HERE}"/*.zip || die
+	find "${ED}" -type d -empty -delete || die
 }

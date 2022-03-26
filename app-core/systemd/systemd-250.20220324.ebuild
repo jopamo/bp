@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="v$(ver_cut 1)-stable"
 	inherit git-r3
 else
-	SNAPSHOT=d57147ef5698c50e02e5e74df8d0936230032cfe
+	SNAPSHOT=ed46ff2bd6ca21d83cae4a94c3ed752ad1b64cce
 	SRC_URI="https://github.com/systemd/systemd-stable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/systemd-stable-${SNAPSHOT}"
 fi
@@ -85,15 +85,21 @@ pkg_pretend() {
 
 src_prepare() {
 	if use musl; then
+		append-cppflags -D__UAPI_DEF_ETHHDR=0
+		append-flags -Wno-error=incompatible-pointer-types
+
 		PATCHES=(
+			"${FILESDIR}"/0001-Adjust-for-musl-headers.patch
+			"${FILESDIR}"/0001-binfmt-Don-t-install-dependency-links-at-install-tim.patch
+			"${FILESDIR}"/0001-pass-correct-parameters-to-getdents64.patch
 			"${FILESDIR}"/0001-systemd.pc.in-use-ROOTPREFIX-without-suffixed-slash.patch
 			"${FILESDIR}"/0001-test-parse-argument-Include-signal.h.patch
+			"${FILESDIR}"/0002-Add-sys-stat.h-for-S_IFDIR.patch
 			"${FILESDIR}"/0002-don-t-use-glibc-specific-qsort_r.patch
 			"${FILESDIR}"/0003-implment-systemd-sysv-install-for-OE.patch
 			"${FILESDIR}"/0003-missing_type.h-add-__compare_fn_t-and-comparison_fn_.patch
 			"${FILESDIR}"/0004-add-fallback-parse_printf_format-implementation.patch
 			"${FILESDIR}"/0005-src-basic-missing.h-check-for-missing-strndupa.patch
-			"${FILESDIR}"/0006-Include-netinet-if_ether.h.patch
 			"${FILESDIR}"/0007-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch
 			"${FILESDIR}"/0008-add-missing-FTW_-macros-for-musl.patch
 			"${FILESDIR}"/0009-fix-missing-of-__register_atfork-for-non-glibc-build.patch
@@ -113,7 +119,7 @@ src_prepare() {
 			"${FILESDIR}"/0025-Handle-__cpu_mask-usage.patch
 			"${FILESDIR}"/0026-Handle-missing-gshadow.patch
 			"${FILESDIR}"/0028-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch
-			"${FILESDIR}"/0029-missing-strndupa.patch
+			"${FILESDIR}"/0029-network-enable-KeepConfiguration-when-running-on-net.patch
 		)
 		default
 

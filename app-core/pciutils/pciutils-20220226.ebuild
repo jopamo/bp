@@ -11,8 +11,8 @@ if [[ ${PV} == *9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/pciutils/pciutils.git"
 else
-	SNAPSHOT=ae693fcab9b636bf0e521f38060398417c3cf3d9
-	PCIIDS_SNAPSHOT=f1901b1515ed5240e0e54f82d6da2638d11c6cb4
+	SNAPSHOT=cac545f64e6f5863b430f5b94442b777aa7f1165
+	PCIIDS_SNAPSHOT=96a30c5784d2c8ba7bdc3cbb5cec5cb996dbcd66
 	SRC_URI="
 		https://github.com/pciutils/pciutils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz
 		https://github.com/pciutils/pciids/archive/${PCIIDS_SNAPSHOT}.tar.gz -> pciids-${PCIIDS_SNAPSHOT}.tar.gz"
@@ -29,7 +29,7 @@ DEPEND="
 	kmod? ( app-core/kmod
 			app-dev/pkgconf
 		 )
-	zlib? ( >=lib-core/zlib-1.2.8-r1[static-libs(+)?] )
+	zlib? ( lib-core/zlib[static-libs(+)?] )
 "
 
 switch_config() {
@@ -91,7 +91,6 @@ src_compile() {
 src_install() {
 	pemake DESTDIR="${D}" install install-lib
 	use static-libs && dolib.a "${BUILD_DIR}/static/lib/libpci.a"
-	rm "${ED}"/usr/sbin/update-pciids "${ED}"/usr/share/misc/pci.ids \
-		"${ED}"/usr/share/man/man8/update-pciids.8*
+
 	cleanup_install
 }

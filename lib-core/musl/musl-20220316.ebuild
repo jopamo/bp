@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=f8bdc3048216f41eaaf655524fa286cfb1184a70
+SNAPSHOT=6d8a515796270eb6cec8a278cb353a078a10f09a
 
 inherit flag-o-matic
 
@@ -21,7 +21,7 @@ filter-flags -flto\*
 
 src_prepare() {
 	default
-	cp "${FILESDIR}"/* "${S}"/
+	cp "${FILESDIR}"/* "${S}"/ || die
 }
 
 src_configure() {
@@ -61,7 +61,7 @@ src_compile() {
 	if use musl ; then
 		local i
 		for i in getconf getent iconv ; do
-			gcc $CPPFLAGS $CFLAGS "${S}"/$i.c -o $i
+			cc $CPPFLAGS $CFLAGS "${S}"/$i.c -o $i || die
 		done
 	fi
 
@@ -88,7 +88,9 @@ src_install() {
 		insinto /etc/env.d
 		doins "${FILESDIR}"/02locale
 
-		use libxcrypt && rm -f "${ED}"/usr/include/crypt.h
+		if use libxcrypt ; then
+			rm "${ED}"/usr/include/crypt.h || die
+		fi
 	fi
 
 	for i in linux asm asm-generic mtd ; do

@@ -36,7 +36,6 @@ src_install() {
 	cd "${ED}"/opt/zoom || die
 
 	rm Qt/labs/location/liblocationlabsplugin.so \
-		QtQml/RemoteObjects/libqtqmlremoteobjects.so \
 		QtQuick/Scene2D/libqtquickscene2dplugin.so \
 		QtQuick/XmlListModel/libqmlxmllistmodelplugin.so \
 		libclDNN64.so \

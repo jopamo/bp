@@ -14,6 +14,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static"
 
+DEPEND="app-core/pciutils"
+
 PATCHES=( ${FILESDIR}/lshw-build.patch )
 
 src_prepare() {
@@ -36,4 +38,6 @@ src_compile() {
 src_install() {
 	emake DESTDIR="${D}" PREFIX="${EPREFIX}/usr" install
 	cleanup_install
+
+	dosym -r /usr/share/misc/pci.ids /usr/share/lshw/pci.ids
 }

@@ -1,7 +1,7 @@
 diff -urN a/src/Makefile b/src/Makefile
 --- a/src/Makefile	2022-03-26 18:20:50.890001147 -0500
-+++ b/src/Makefile	2022-03-26 18:49:21.882683347 -0500
-@@ -25,14 +25,14 @@
++++ b/src/Makefile	2022-03-26 19:52:07.286260014 -0500
+@@ -25,17 +25,15 @@
  PKG_CONFIG ?= pkg-config
  INCLUDES=-I./core/
  DEFINES=-DPREFIX=\"$(PREFIX)\" -DSBINDIR=\"$(SBINDIR)\" -DMANDIR=\"$(MANDIR)\" -DDATADIR=\"$(DATADIR)\" -DVERSION=\"$(VERSION)\"
@@ -14,11 +14,15 @@ diff -urN a/src/Makefile b/src/Makefile
  	CXXFLAGS+= -DZLIB $(shell $(PKG_CONFIG) --cflags zlib)
  endif
 -LDFLAGS+=-L./core/ -g
+-ifneq ($(shell $(LD) --help 2| grep -- --as-needed), )
+-	LDFLAGS+= -Wl,--as-needed
+-endif
 +LDFLAGS+=-L./core/
- ifneq ($(shell $(LD) --help 2| grep -- --as-needed), )
- 	LDFLAGS+= -Wl,--as-needed
- endif
-@@ -49,13 +49,7 @@
++
+ LDSTATIC=-static
+ LIBS+=-llshw -lresolv
+ ifeq ($(SQLITE), 1)
+@@ -49,13 +47,7 @@
  export LIBS
  export LDFLAGS
  
@@ -33,7 +37,7 @@ diff -urN a/src/Makefile b/src/Makefile
  
  .cc.o:
  	$(CXX) $(CXXFLAGS) -c $< -o $@
-@@ -65,18 +59,18 @@
+@@ -65,18 +57,18 @@
  
  .PHONY: core
  core:
@@ -55,7 +59,7 @@ diff -urN a/src/Makefile b/src/Makefile
  
  .PHONY: nologo
  nologo:
-@@ -116,14 +110,13 @@
+@@ -116,14 +108,13 @@
  pnpid.txt:
  	wget http://www-pc.uni-regensburg.de/hardware/TECHNIK/PCI_PNP/pnpid.txt
  
@@ -72,7 +76,7 @@ diff -urN a/src/Makefile b/src/Makefile
  
  install-gui: gui
  	$(INSTALL) -d -m 0755 $(DESTDIR)/$(SBINDIR)
-@@ -136,8 +129,8 @@
+@@ -136,8 +127,8 @@
  clean:
  	rm -f $(PACKAGENAME).o $(PACKAGENAME) $(PACKAGENAME)-static $(PACKAGENAME)-compressed
  	rm -f $(addsuffix .gz,$(DATAFILES))

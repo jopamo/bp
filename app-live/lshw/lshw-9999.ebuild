@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static"
 
-PATCHES=( ${FILESDIR}/lshw-build.patch )
+PATCHES=( "${FILESDIR}"/lshw-build.patch )
 
 src_prepare() {
 	default

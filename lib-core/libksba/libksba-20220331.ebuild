@@ -2,14 +2,15 @@
 
 EAPI=8
 
-SNAPSHOT=60b2246df191f2817fe10fe6c13b50c1e81b1982
+SNAPSHOT=41000330cdba87afdf9ea0b481e0260dab262a54
+SHORT=${SNAPSHOT:0:7}
 
 inherit autotools
 
 DESCRIPTION="X.509 and CMS (PKCS#7) library"
 HOMEPAGE="http://www.gnupg.org/related_software/libksba"
-SRC_URI="https://github.com/gpg/libksba/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=${PN}.git;a=snapshot;h=${SNAPSHOT};sf=tgz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SHORT}
 
 LICENSE="LGPL-3+ GPL-2+ GPL-3"
 SLOT="0"

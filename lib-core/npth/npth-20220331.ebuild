@@ -5,7 +5,7 @@ EAPI=8
 SNAPSHOT=2b6a8e5369ed37d64d1bafd3a546ec52e25acd26
 SHORT=${SNAPSHOT:0:7}
 
-inherit autotools
+inherit autotools flag-o-matic
 
 DESCRIPTION="New GNU Portable Threads Library"
 HOMEPAGE="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git"

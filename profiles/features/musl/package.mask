@@ -1,0 +1,2 @@
+#still fails to build
+>lib-core/npth-1.6

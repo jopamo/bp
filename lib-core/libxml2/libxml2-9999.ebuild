@@ -32,11 +32,6 @@ RDEPEND="
 	readline? ( lib-core/readline )
 "
 
-PATCHES=(
-	"${FILESDIR}"/${PN}-2.7.1-catalog_path.patch
-	"${FILESDIR}"/${PN}-9999-python-ABIFLAG.patch
-)
-
 filter-flags -Wl,-z,defs
 
 src_prepare() {

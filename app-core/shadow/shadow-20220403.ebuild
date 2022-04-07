@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=1882c66bda31e50367d41b36fea41cd04fa19c73
+SNAPSHOT=9cdb5251b6c30487a7d935a1a7827f493249479d
 
 inherit autotools flag-o-matic
 

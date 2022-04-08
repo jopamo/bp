@@ -1,6 +1,6 @@
 #!/bin/bash -ex
 
-branch="5.15"
+branch="5.17"
 src="linux-${branch}"
 
 if [ ! -d ${src} ] ; then

@@ -25,7 +25,6 @@ append-flags -lcairo
 
 src_configure() {
 	local emesonargs=(
-		$(meson_use libkms)
 		$(meson_use intel)
 		$(meson_use radeon)
 		$(meson_use amdgpu)

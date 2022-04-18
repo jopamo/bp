@@ -1,6 +1,6 @@
 @includedir /etc/sudoers.d
 Defaults      env_reset
-Defaults      editor=/usr/bin/nano, !env_editor
+Defaults      editor=/usr/bin/vim, !env_editor
 
 %wheel ALL=(ALL) ALL
 root ALL=(ALL) ALL

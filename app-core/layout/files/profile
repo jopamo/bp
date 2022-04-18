@@ -4,7 +4,7 @@ if [ -e /etc/profile.env ] ; then
 	. /etc/profile.env
 fi
 
-export EDITOR=${EDITOR:-/usr/bin/nano}
+export EDITOR=${EDITOR:-/usr/bin/vim}
 export PAGER=${PAGER:-/usr/bin/less}
 
 umask 022

@@ -15,7 +15,6 @@
 *app-core/psmisc
 *app-core/sed
 *app-core/ugscripts
-*app-var/nano
 *virtual/libc
 *app-build/gcc
 *app-kernel/linux-headers

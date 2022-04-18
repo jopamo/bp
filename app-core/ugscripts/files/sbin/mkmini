@@ -312,9 +312,9 @@ rm crunch* || exit
 #rm lynx* || exit
 
 #nano
-cp /var/cache/packages/app-var/nano/* .
-tar xvhf nano* --xattrs
-rm nano* || exit
+#cp /var/cache/packages/app-var/nano/* .
+#tar xvhf nano* --xattrs
+#rm nano* || exit
 
 #tmux
 #cp /var/cache/packages/lib-dev/libevent/* .

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-MINOR_VERSION="5468-989df2310"
+MINOR_VERSION="5715-8cf78dab3"
 
 _APPNAME="plexmediaserver"
 _USERNAME="plex"

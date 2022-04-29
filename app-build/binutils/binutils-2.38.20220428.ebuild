@@ -5,15 +5,9 @@ EAPI=8
 DESCRIPTION="a collection of binary tools"
 HOMEPAGE="https://sourceware.org/binutils/"
 
-if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/bminor/binutils-gdb.git"
-	inherit git-r3
-	EGIT_BRANCH="binutils-$(ver_cut 1)_$(ver_cut 2)-branch"
-else
-	SNAPSHOT=3d3cb34614396d7005c4faf0e9ffed015e8161c0
-	SRC_URI="https://github.com/bminor/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-gdb-${SNAPSHOT}
-fi
+SNAPSHOT=9c67f6382ac2c90fbde5729feaf7d59ce662147a
+SRC_URI="https://git.linaro.org/toolchain/binutils-gdb.git/snapshot/binutils-gdb-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-gdb-${SNAPSHOT}
 
 LICENSE="|| ( GPL-3 LGPL-3 )"
 SLOT="0"

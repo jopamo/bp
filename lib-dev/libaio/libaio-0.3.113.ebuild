@@ -2,11 +2,11 @@
 
 EAPI=8
 
-inherit toolchain-funcs flag-o-matic git-r3
+inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="Asynchronous input/output library that uses the kernels native interface"
 HOMEPAGE="https://pagure.io/libaio"
-EGIT_REPO_URI="https://pagure.io/libaio.git"
+SRC_URI="https://releases.pagure.org/${PN}/${P}.tar.gz"
 
 LICENSE="LGPL-2"
 SLOT="0"

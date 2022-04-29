@@ -43,11 +43,7 @@ PATCHES=(
 	"${FILESDIR}"/0024-use-pure-64-bit-configuration-where-appropriate.patch
 	"${FILESDIR}"/0028-gcc-go-Use-_off_t-type-instead-of-_loff_t.patch
 	"${FILESDIR}"/0029-gcc-go-Don-t-include-sys-user.h.patch
-	"${FILESDIR}"/0031-gcc-go-Fix-handling-of-signal-34-on-musl.patch
 	"${FILESDIR}"/0032-gcc-go-Use-int64-type-as-offset-argument-for-mmap.patch
-	"${FILESDIR}"/0034-gcc-go-signal-34-is-special-on-musl-libc.patch
-	"${FILESDIR}"/0035-gcc-go-Prefer-_off_t-over-_off64_t.patch
-	"${FILESDIR}"/0036-gcc-go-undef-SETCONTEXT_CLOBBERS_TLS-in-proc.c.patch
 )
 
 filter-flags -flto\=\*

@@ -1,2 +1,3 @@
 #still fails to build
 >lib-core/npth-1.6
+>=app-build/gcc-12.0.0

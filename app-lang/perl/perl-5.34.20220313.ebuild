@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="maint-$(ver_cut 1).$(ver_cut 2)"
 	inherit git-r3
 else
-	SNAPSHOT=79a7b254d85a10b65126ad99bf10e70480569d68
+	SNAPSHOT=e940ca8ab15aa404b55a8c745e2273f5d8763ca8
 	SRC_URI="https://github.com/Perl/perl5/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}5-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"

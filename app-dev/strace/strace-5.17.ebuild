@@ -16,14 +16,14 @@ IUSE="libunwind static"
 
 DEPEND="libunwind? ( lib-live/libunwind )"
 
-append-flags -Wno-stringop-overflow
+append-flags -Wno-stringop-overflow -Wno-maybe-uninitialized
 
 src_prepare() {
 	default
 
 	use static && append-ldflags -static
 
-		# Stub out the -k test since it's known to be flaky. #545812
+	# Stub out the -k test since it's known to be flaky. #545812
 	sed -i '1iexit 77' tests*/strace-k.test || die
 }
 

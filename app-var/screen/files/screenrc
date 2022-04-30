@@ -1,32 +1,27 @@
+activity "activity in %n"
+altscreen on # restore window contents after "vim", etc.
+attrcolor b ".I"
+autodetach on
+defbce "on"
 defc1 off
 defencoding utf8
 defflow off # turn off stupid flow-control (also see: stty -ixon in ~/.zshrc)
-altscreen on # restore window contents after "vim", etc.
-ignorecase on # for searches
-startup_message off
-vbell_msg ""
+defhstatus "screen ^E (^Et) | $USER@^EH"
 defmonitor on
-attrcolor b ".I"
-term xterm-256color
-
-defbce "on"
-truecolor on
-defutf8 on
-defscrollback 100000
-
-vbell off
-startup_message off
-setenv DISPLAY ':0'
-nethack off
-defmonitor on
-activity "activity in %n"
-autodetach on
-altscreen on
-msgwait 3
 defnonblock 1
-
-### backticks
-backtick 3 30 30 sh -c 'screen -ls | grep --color=no -o "$PPID[^[:space:]]*"' # session title
+defscrollback 100000
+defutf8 on
 hardstatus off
-
+ignorecase on # for searches
+msgwait 3
+nethack off
+setenv DISPLAY ':0'
+shell -${SHELL}
+shelltitle "$ |bash"
+startup_message off
+term screen-256color
+termcapinfo xterm* 'hs:ts=\E]0;:fs=\007:ds=\E]0;\007'
 termcapinfo xterm* ti@:te@
+truecolor on
+vbell off
+vbell_msg ""

@@ -20,7 +20,7 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 dbi fam gdbm geoip krb5 ldap libev libunwind lua memcached
+IUSE="bzip2 dbi fam geoip krb5 ldap libev libunwind lua
 	mbedtls mysql ssl pcre php test tmpfilesd postgres systemd webdav
 	xattr zlib static"
 
@@ -28,7 +28,6 @@ DEPEND="
 	app-compression/bzip2
 	lib-core/zlib
 	lib-core/libpcre
-	gdbm?     ( lib-core/gdbm )
 	ldap?     ( app-net/openldap )
 	libev?    ( lib-dev/libev )
 	libunwind? ( lib-live/libunwind )
@@ -52,7 +51,6 @@ src_configure() {
 		$(meson_use bzip2 with_bzip)
 		$(meson_use dbi with_dbi)
 		$(meson_use fam with_fam)
-		$(meson_use gdbm with_gdbm)
 		$(meson_use krb5 with_krb5)
 		$(meson_use ldap with_ldap)
 		$(meson_use libev with_libev)
@@ -60,7 +58,6 @@ src_configure() {
 		$(meson_use libunwind with_libunwind)
 		$(meson_use lua with_lua)
 		$(meson_use mbedtls with_mbedtls)
-		$(meson_use memcached with_memcached)
 		$(meson_use mysql with_mysql)
 		$(meson_use pcre with_pcre)
 		$(meson_use postgres with_pgsql)

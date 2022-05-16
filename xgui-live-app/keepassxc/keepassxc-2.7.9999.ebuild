@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake xdg-utils
+inherit cmake xdg-utils flag-o-matic
 
 DESCRIPTION="KeePassXC - KeePass Cross-platform Community Edition"
 HOMEPAGE="https://keepassxc.org"
@@ -10,7 +10,7 @@ HOMEPAGE="https://keepassxc.org"
 if [[ ${PV} == *9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/keepassxreboot/${PN}.git"
-	EGIT_BRANCH="release/$(ver_cut 1-2).0"
+	EGIT_BRANCH="release/$(ver_cut 1-2).x"
 else
 	SRC_URI="https://github.com/keepassxreboot/keepassxc/releases/download/${PV}/keepassxc-${PV}-src.tar.xz -> ${P}.tar.xz"
 fi
@@ -19,7 +19,7 @@ LICENSE="LGPL-2.1 GPL-2 GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="autotype debug http test"
+IUSE="autotype test"
 
 RDEPEND="
 	app-crypto/argon2
@@ -31,13 +31,15 @@ RDEPEND="
 	xgui-live-lib/qttools
 	xmedia-live-app/qrencode
 	autotype? (
-		xgui-live-lib/qtx11extras
 		xgui-live-lib/libX11
 		xgui-live-lib/libXi
 		xgui-live-lib/libXtst
+		xgui-live-lib/qtx11extras
 	)
 "
 DEPEND="${RDEPEND}"
+
+filter-flags -flto\*
 
 src_configure() {
 	 use test || \

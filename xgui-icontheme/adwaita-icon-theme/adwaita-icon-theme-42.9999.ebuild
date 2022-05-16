@@ -7,7 +7,7 @@ inherit autotools git-r3 xdg-utils
 DESCRIPTION="Mostly private use system icons."
 HOMEPAGE="https://git.gnome.org/browse/adwaita-icon-theme/"
 EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/adwaita-icon-theme.git"
-EGIT_BRANCH="gnome-$(ver_cut 1)-$(ver_cut 2)"
+EGIT_BRANCH="gnome-$(ver_cut 1)"
 
 LICENSE=" || ( LGPL-3 CC-BY-SA-3.0 )"
 SLOT="0"

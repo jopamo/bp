@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="v$(ver_cut 1)-stable"
 	inherit git-r3
 else
-	SNAPSHOT=2298094b2cb72ae01c8652f2c57d9fc6426d13e0
+	SNAPSHOT=73be9643910c3f7f3ff84765d63060846c110016
 	SRC_URI="https://github.com/systemd/systemd-stable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/systemd-stable-${SNAPSHOT}"
 fi
@@ -21,10 +21,10 @@ LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="binfmt +blkid bpf-framework coredump cryptsetup devmode dhcp4 efi gcrypt +gshadow
-+hostnamed hwdb importd kmod kvm ldconfig localed logind machined musl networkd
-oomd pam pcre pstore rfkill sleep systemd-update sysusersd sysv +timedated
-+tmpfilesd test +userdb +utmp vconsole xkb"
+IUSE="binfmt +blkid bpf-framework coredump cryptsetup devmode dhcp4 efi gcrypt
+gpt-generator gshadow +hostnamed hwdb importd kmod kvm ldconfig localed logind
+machined musl networkd oomd pam pcre pstore rfkill sleep systemd-update sysusersd
+sysv +timedated +tmpfilesd test +userdb +utmp vconsole xkb"
 
 REQUIRED_USE="musl? ( !gshadow !localed !userdb !utmp )"
 
@@ -280,6 +280,8 @@ src_install() {
 	fi
 
 	use networkd && mkdir -p "${ED}"/etc/systemd/network/
+
+	use gpt-generator && rm "${ED}"/usr/lib/systemd/system-generators/systemd-gpt-auto-generator
 
 	use dhcp4 && echo '[Match]
 Name=en*

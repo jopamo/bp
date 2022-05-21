@@ -12,8 +12,8 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="${HOMEPAGE}.git"
 else
-	ATOMIC_OPS_VER=67cf0572d97c68a4f49f8bc765061f552398d435
-	SNAPSHOT=0eb8d2f95c7a683338b9e3c2b55c84aa5edb4bf7
+	ATOMIC_OPS_VER=69e188067616d258cdafa5a8a4ac6f03945090a8
+	SNAPSHOT=107cfe08b40d08226160f4e4eaef0a500586873c
 	SRC_URI="
 		${HOMEPAGE}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz
 		${AOPS_URL}/archive/${ATOMIC_OPS_VER}.tar.gz -> libatomic_ops-${ATOMIC_OPS_VER}.tar.gz

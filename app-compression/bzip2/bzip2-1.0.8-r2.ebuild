@@ -14,9 +14,13 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-PATCHES=( "${FILESDIR}"/8ca1faa31f396d94ab927b257f3a05236c84e330.patch )
+PATCHES=(
+	"${FILESDIR}"/28da6196a27de951d6143d4f2765d1f2976f0d39.patch
+	"${FILESDIR}"/8ca1faa31f396d94ab927b257f3a05236c84e330.patch
+	"${FILESDIR}"/64d6fa68c1af46f6408f832443ce23709a2f0a66.patch
+)
 
-filter-flags -flto\=\*
+filter-flags -flto\*
 
 src_prepare() {
 	use static-libs && filter-flags -flto\=\*

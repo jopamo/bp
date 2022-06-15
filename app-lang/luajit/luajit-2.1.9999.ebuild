@@ -7,8 +7,11 @@ inherit toolchain-funcs git-r3
 DESCRIPTION="Just-In-Time Compiler for the Lua programming language"
 HOMEPAGE="http://luajit.org/"
 
-EGIT_REPO_URI="https://github.com/openresty/luajit2.git"
-EGIT_BRANCH="v$(ver_cut 1).$(ver_cut 2)-agentzh"
+#EGIT_REPO_URI="https://github.com/openresty/luajit2.git"
+#EGIT_BRANCH="v$(ver_cut 1).$(ver_cut 2)-agentzh"
+
+EGIT_REPO_URI="https://github.com/LuaJIT/LuaJIT.git"
+EGIT_BRANCH="v$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="MIT"
 SLOT="2"

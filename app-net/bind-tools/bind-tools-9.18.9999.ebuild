@@ -13,11 +13,12 @@ LICENSE="Apache-2.0 BSD BSD-2 GPL-2 HPND ISC MPL-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="headers json-c readline ssl static-libs xml"
+IUSE="doh headers json-c readline ssl xml"
 
 DEPEND="
 	lib-core/libseccomp
 	lib-core/zlib
+	doh? ( lib-live/nghttp2 )
 	json-c? ( lib-live/json-c )
 	readline? ( lib-core/readline )
 	ssl? ( virtual/ssl )
@@ -40,6 +41,7 @@ src_configure() {
 		--without-lmdb
 		--without-python
 		--with-zlib
+		$(use_enable doh)
 		$(use_with json-c)
 		$(use_with readline)
 		$(use_with ssl openssl)
@@ -54,9 +56,5 @@ src_install() {
 	use headers || rm -r "${ED}"/usr/include/* || die
 
 	#do not install filter-aaaa.so either way
-	if use static-libs ; then
-		rm -r "${ED}"/usr/lib/named
-	else
-		rm -r "${ED}"/usr/lib
-	fi
+	rm -r "${ED}"/usr/lib/bind
 }

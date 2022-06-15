@@ -43,7 +43,7 @@ DEPEND="${COMMON_DEPEND}
 	app-tex/docbook-xsl-stylesheets
 	app-tex/docbook-xml-dtd
 	lib-core/libxslt
-	xgui-live-lib/at-spi2-atk
+	xgui-live-lib/at-spi2-core
 	lib-live/gobject-introspection-common
 	app-dev/gtk-doc-am
 	app-build/gettext

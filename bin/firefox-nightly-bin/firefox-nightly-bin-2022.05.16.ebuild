@@ -26,7 +26,7 @@ RDEPEND="
 	lib-dev/dbus-glib
 	lib-dev/nss
 	lib-live/glib
-	xgui-live-lib/atk
+	xgui-live-lib/at-spi2-core
 	xgui-live-lib/cairo[X]
 	xgui-live-lib/gdk-pixbuf
 	xgui-live-lib/gtk+:3

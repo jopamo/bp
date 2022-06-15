@@ -30,8 +30,7 @@ RDEPEND="
 	lib-print/cups
 	xgui-icontheme/adwaita-icon-theme
 	xgui-live-app/xdg-utils
-	xgui-live-lib/at-spi2-atk
-	xgui-live-lib/atk
+	xgui-live-lib/at-spi2-core
 	xgui-live-lib/cairo
 	xgui-live-lib/gdk-pixbuf
 	xgui-live-lib/gtk+:3

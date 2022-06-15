@@ -16,7 +16,6 @@ SLOT="0"
 KEYWORDS="amd64"
 
 RDEPEND="
-	>=lib-dev/nss-3.26
 	app-compression/bzip2
 	app-core/dbus
 	app-var/ca-certificates
@@ -24,12 +23,12 @@ RDEPEND="
 	lib-core/expat
 	lib-core/libcap
 	lib-dev/nspr
+	lib-dev/nss
 	lib-live/glib
 	lib-print/cups
 	xgui-icontheme/adwaita-icon-theme
 	xgui-live-app/xdg-utils
-	xgui-live-lib/at-spi2-atk
-	xgui-live-lib/atk
+	xgui-live-lib/at-spi2-core
 	xgui-live-lib/cairo
 	xgui-live-lib/gdk-pixbuf
 	xgui-live-lib/gtk+:3

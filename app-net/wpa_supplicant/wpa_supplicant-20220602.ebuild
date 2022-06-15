@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=fd2eb7a41e168dc1d84663129e4b7aab80ead207
+SNAPSHOT=4383528e01955d995d3b3db201e4c0f9840e8236
 
 inherit qmake-utils toolchain-funcs flag-o-matic
 

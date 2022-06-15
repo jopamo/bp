@@ -2,9 +2,15 @@
 
 EAPI=8
 
+SNAPSHOT="523a4f2d5d1c37df5ea7922f9545823afb3cb762"
+SHORT=${SNAPSHOT:0:7}
+
+inherit autotools
+
 DESCRIPTION="Simple passphrase entry dialogs which utilize the Assuan protocol"
 HOMEPAGE="https://gnupg.org/aegypten2/index.html"
-SRC_URI="https://gnupg.org/ftp/gcrypt/pinentry/${P}.tar.bz2"
+SRC_URI="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=${PN}.git;a=snapshot;h=${SNAPSHOT};sf=tgz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SHORT}
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -22,6 +28,11 @@ BDEPEND="
 	app-build/gettext
 	app-dev/pkgconf
 "
+
+src_prepare() {
+	default
+	eautoreconf
+}
 
 src_configure() {
 	use static && append-ldflags -static

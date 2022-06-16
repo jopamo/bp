@@ -15,7 +15,13 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-filter-flags -flto\*
+#filter-flags -flto\*
+filter-flags -Wl,-z,defs
+
+src_configure() {
+	default
+	git apply -R "${FILESDIR}"/bec837ee61294548ab64eb950f32cc88af6c2c2b.patch
+}
 
 src_compile() {
 	emake libdir="/usr/lib/" \

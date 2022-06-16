@@ -2,15 +2,13 @@
 
 EAPI=8
 
-HASH="2a2082e5a09d4267845be086888add4f"
-
 DESCRIPTION="free and open-source implementation of the Java Platform"
 HOMEPAGE="http://www.oracle.com/technetwork/java/javase/"
 
-SRC_URI="amd64? ( https://download.java.net/java/GA/jdk${PV}/${HASH}/12/GPL/openjdk-${PV}_linux-x64_bin.tar.gz )
-		arm64? ( https://download.java.net/java/GA/jdk${PV}/${HASH}/12/GPL/openjdk-${PV}_linux-aarch64_bin.tar.gz )"
+SRC_URI="amd64? ( https://cdn.azul.com/zulu/bin/zulu${PV}-ca-jdk17.0.3-linux_x64.tar.gz )
+		arm64? ( https://cdn.azul.com/zulu/bin/zulu${PV}-ca-jdk17.0.3-linux_aarch64.tar.gz )"
 
-S="${WORKDIR}/jdk-${PV}"
+S="${WORKDIR}/zulu${PV}-ca-jdk17.0.3-linux_x64"
 
 LICENSE="Oracle-BCLA-JavaSE"
 SLOT="0"

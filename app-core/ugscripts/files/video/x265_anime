@@ -2,6 +2,6 @@
 
 for videofile in *.mkv ; do
 	if [[ $videofile != *.raw.mkv ]] && [ ! -f "${videofile%.*}.raw.mkv" ]; then
-		ffmpeg -i "$videofile" -c:v libx265 -crf 23 -preset veryslow -profile:v main12 -tune animation -x265-params "aq-mode=4" -an "${videofile%.*}.raw.mkv"
+		ffmpeg -i "$videofile" -c:v libx265 -crf 23 -preset slower -profile:v main12 -tune animation -x265-params "aq-mode=4" -an "${videofile%.*}.raw.mkv"
 	fi
 done

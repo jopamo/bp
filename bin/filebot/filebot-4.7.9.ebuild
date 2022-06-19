@@ -13,7 +13,7 @@ KEYWORDS="amd64 arm64"
 RESTRICT="preserve-libs strip"
 QA_PREBUILT="*"
 
-RDEPEND="bin/oracle-jre"
+RDEPEND="bin/openjdk8"
 
 S=${WORKDIR}
 

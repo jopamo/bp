@@ -76,10 +76,6 @@ armv6
 armv6t2
 neon
 
-# dev-db/oracle-instantclient-basic is only available on x86
-oci8-instant-client
-oracle
-
 # not keyworded on non-x86 systems
 video_cards_geode
 

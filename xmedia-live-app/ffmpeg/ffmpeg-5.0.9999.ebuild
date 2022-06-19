@@ -65,8 +65,10 @@ src_configure() {
 		$(use_enable libdav1d) \
 		$(use_enable network) \
 		$(use_enable nonfree) \
+		$(use_enable nvidia cuda-nvcc) \
 		$(use_enable nvidia cuvid) \
 		$(use_enable nvidia ffnvcodec) \
+		$(use_enable nvidia libnpp) \
 		$(use_enable nvidia nvdec) \
 		$(use_enable openssl) \
 		$(use_enable protocols) \
@@ -87,10 +89,13 @@ src_configure() {
 		--disable-txtpages \
 		--enable-decoders \
 		--enable-demuxers \
-		--enable-encoder=flac,png,libmp3lame \
+		--enable-encoders \
 		--enable-filters \
 		--enable-lto \
 		--enable-muxer=matroska,mp4 \
 		--enable-nonfree \
-		--disable-stripping
+		--disable-stripping \
+		--nvccflags="-gencode arch=compute_75,code=sm_75 -O2 -I/opt/cuda/targets/x86_64-linux/include -allow-unsupported-compiler" \
+		--extra-cflags=-I/opt/cuda/targets/x86_64-linux/include \
+		--extra-ldflags=-L/opt/cuda/targets/x86_64-linux/lib
 }

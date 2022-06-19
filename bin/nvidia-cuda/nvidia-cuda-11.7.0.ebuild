@@ -13,7 +13,7 @@ SRC_URI="https://developer.download.nvidia.com/compute/cuda/${PV}/local_installe
 
 LICENSE="NVIDIA-CUDA"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+KEYWORDS="amd64"
 
 IUSE="debugger sanitizer"
 
@@ -92,12 +92,12 @@ src_install() {
 
 	# Add include and lib symlinks
 	dosym "targets/x86_64-linux/include" ${cudadir}/include
-	dosym "targets/x86_64-linux/lib" ${cudadir}/lib64
+	dosym "targets/x86_64-linux/lib" ${cudadir}/lib
 
 	newenvd - 99cuda <<-EOF
-		PATH=${ecudadir}/bin
-		ROOTPATH=${ecudadir}/bin
-		LDPATH=${ecudadir}/lib64:${ecudadir}/nvvm/lib64
+		PATH=${ecudadir}/bin:${ecudadir}/nvvm/bin
+		ROOTPATH=${ecudadir}/bin:${ecudadir}/nvvm/bin
+		LDPATH=${ecudadir}/lib:${ecudadir}/nvvm/lib64
 	EOF
 
 	# Cuda prepackages libraries, don't revdep-build on them

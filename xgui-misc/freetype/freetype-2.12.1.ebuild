@@ -6,7 +6,7 @@ inherit flag-o-matic libtool toolchain-funcs
 
 DESCRIPTION="A high-quality and portable font engine"
 HOMEPAGE="https://www.freetype.org/"
-IUSE="bzip2 debug harfbuzz png static-libs"
+IUSE="brotli bzip2 debug harfbuzz png static-libs zlib"
 
 SRC_URI="mirror://sourceforge/freetype/${P/_/}.tar.xz
 		mirror://gnu/freetype/${P/_/}.tar.xz"
@@ -16,13 +16,13 @@ KEYWORDS="amd64 arm64"
 LICENSE="|| ( FTL GPL-2+ )"
 SLOT="2"
 
-RDEPEND=">=lib-core/zlib-1.2.8-r1
-	bzip2? ( >=app-compression/bzip2-1.0.6 )
-	harfbuzz? ( >=xgui-misc/harfbuzz-1.3.0[truetype] )
-	png? ( >=xmedia-live-lib/libpng-1.2.51:0= )"
-
-DEPEND="${RDEPEND}
-	app-dev/pkgconf"
+RDEPEND="
+	brotli? ( app-compression/brotli )
+	bzip2? ( app-compression/bzip2 )
+	harfbuzz? ( xgui-misc/harfbuzz[truetype] )
+	png? ( xmedia-live-lib/libpng )
+	zlib? ( lib-core/zlib )
+"
 
 append-flags -fno-strict-aliasing
 
@@ -67,10 +67,12 @@ src_configure() {
 		--enable-freetype-config
 		--enable-biarch-config
 		--enable-shared
+		$(use_enable static-libs static)
+		$(use_with brotli)
 		$(use_with bzip2)
 		$(use_with harfbuzz)
 		$(use_with png)
-		$(use_enable static-libs static)
+		$(use_with zlib)
 
 		# avoid using libpng-config
 		LIBPNG_CFLAGS="$($(tc-getPKG_CONFIG) --cflags libpng)"

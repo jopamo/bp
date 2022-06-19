@@ -16,11 +16,12 @@ fi
 LICENSE="MIT"
 SLOT="0"
 
-IUSE="adns ipv6 ldap libpsl mbedtls ssh ssl static-libs test nghttp2 zstd"
+IUSE="adns brotli ipv6 ldap libpsl mbedtls ssh ssl static-libs test nghttp2 zlib zstd"
 
 DEPEND="
 		lib-core/zlib
 		adns? ( lib-net/c-ares )
+		brotli? ( app-compression/brotli )
 		ldap? ( app-net/openldap )
 		libpsl? ( lib-net/libpsl )
 		mbedtls? ( lib-net/mbedtls )
@@ -29,6 +30,7 @@ DEPEND="
 		test? (
 			app-core/diffutils
 			app-lang/perl )
+		zlib? ( lib-core/zlib )
 		zstd? ( app-compression/zstd )
 "
 
@@ -49,11 +51,13 @@ src_configure() {
 		$(use_enable ldap ldaps)
 		$(use_enable ldap)
 		$(use_enable static-libs static)
+		$(use_with brotli)
 		$(use_with libpsl)
 		$(use_with mbedtls)
 		$(use_with nghttp2)
 		$(use_with ssh libssh2)
 		$(use_with ssl)
+		$(use_with zlib)
 		$(use_with zstd)
 		--enable-threaded-resolver
 		--enable-versioned-symbols

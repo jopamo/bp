@@ -9,48 +9,50 @@ SRC_URI="mirror://gnupg/gnutls/v$(ver_cut 1-2)/${P}.tar.xz
 S="${WORKDIR}/${PN}-$(ver_cut 1-4)"
 
 LICENSE="GPL-3 LGPL-2.1"
-SLOT="0/34"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+cxx dane nls +seccomp static-libs test tools valgrind"
+IUSE="brotli +cxx dane +seccomp static-libs test tools valgrind zlib zstd"
 
-RDEPEND=">=lib-core/nettle-3.1:=[gmp]
-	>=lib-core/gmp-5.1.3-r1:=
-	dane? ( >=lib-net/unbound-1.4.20 )
-	nls? ( >=app-build/gettext-0-r1 )
-"
-DEPEND="${RDEPEND}
-	app-dev/pkgconf
-	nls? ( app-build/gettext )
+DEPEND="
+	lib-core/nettle[gmp]
+	lib-core/gmp
+	brotli? ( app-compression/brotli )
+	dane? ( lib-net/unbound )
+	seccomp? ( lib-core/libseccomp )
 	valgrind? ( app-dev/valgrind )
-	test? (	seccomp? ( lib-core/libseccomp )	)"
+	zlib? ( lib-core/zlib )
+	zstd? ( app-compression/zstd )
+"
 
 pkg_setup() {
 	export TZ=UTC
 }
 
 src_configure() {
-	local libconf=($("${S}/configure" --help | grep -- '--without-.*-prefix' | sed -e 's/^ *\([^ ]*\) .*/\1/g'))
-
-	ECONF_SOURCE=${S} econf \
-		--disable-manpages \
-		--with-included-libtasn1	\
-		--with-included-unistring	\
-		--disable-gtk-doc				\
-		--disable-doc					\
-		--without-tpm		\
-		$(use_enable seccomp seccomp-tests) \
-		$(use_enable test tests) \
-		--disable-full-test-suite \
-		$(use_enable tools) \
-		$(use_enable valgrind valgrind-tests) \
-		$(use_enable cxx) \
-		$(use_enable dane libdane) \
-		$(use_enable nls) \
-		--enable-openssl-compatibility \
-		$(use_enable static-libs static) \
-		--disable-heartbeat-support \
-		--without-p11-kit \
-		--with-unbound-root-key-file="${EPREFIX}/etc/dnssec/root-anchors.txt" \
-		"${libconf[@]}"
+	local myconf=(
+		$(use_enable cxx)
+		$(use_enable dane libdane)
+		$(use_enable seccomp seccomp-tests)
+		$(use_enable static-libs static)
+		$(use_enable test tests)
+		$(use_enable tools)
+		$(use_enable valgrind valgrind-tests)
+		$(use_with brotli)
+		$(use_with zlib)
+		$(use_with zstd)
+		--disable-doc
+		--disable-full-test-suite
+		--disable-gtk-doc
+		--disable-heartbeat-support
+		--disable-manpages
+		--disable-nls
+		--enable-openssl-compatibility
+		--with-included-libtasn1
+		--with-included-unistring
+		--without-p11-kit
+		--without-tpm
+		--with-unbound-root-key-file="${EPREFIX}/etc/dnssec/root-anchors.txt"
+	)
+	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }

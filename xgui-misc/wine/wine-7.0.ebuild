@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+alsa cups custom-cflags +fontconfig +jpeg ldap mp3 netapi nls odbc openal opencl
  +opengl perl pcap +png prelink pulseaudio samba +staging test +X +xcomposite
- xinerama +xml"
+ xinerama +xml unwind usb"
 
 RESTRICT="test"
 
@@ -51,6 +51,8 @@ DEPEND="
 		lib-core/libxml2
 		lib-core/libxslt
 	)
+	unwind? (	lib-live/libunwind )
+	usb? (	lib-dev/libusb )
 "
 BDEPEND="
 	app-build/flex
@@ -80,6 +82,8 @@ src_configure() {
 		$(use_with pcap)
 		$(use_with png)
 		$(use_with pulseaudio pulse)
+		$(use_with unwind)
+		$(use_with usb)
 		$(use_with xcomposite)
 		$(use_with xinerama)
 		$(use_with xml)

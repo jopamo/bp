@@ -18,7 +18,26 @@ RDEPEND="bin/openjdk8"
 S=${WORKDIR}
 
 src_install() {
-	mkdir -p "${ED}"/opt/filebot || die
-	cp -pPR	"${S}"/* "${ED}"/opt/filebot/ || die
-	find "${ED}" -type d -empty -exec rmdir -v {} + || die
+	HERE="${ED}"/opt/${PN}
+
+	mkdir -p "${HERE}" || die
+	cp -rp "${S}"/* "${HERE}"/ || die
+	find "${ED}" -type d -empty -delete || die
+
+	#Cleanup
+	rm -r "${HERE}"/lib/{aarch64,armv7l,i686} || die
+	rm "${HERE}"/lib/x86_64/libmediainfo.so || die
+
+	# revdep-rebuild entry
+	insinto /etc/revdep-rebuild
+	echo "SEARCH_DIRS_MASK=opt/${PN}" >> ${T}/10${PN}
+	doins "${T}"/10${PN} || die
+
+	# Create shortcut
+	dodir /usr/bin/
+	cat <<-EOF >"${D}"/usr/bin/${PN}
+	#!/bin/sh
+	exec /opt/openjdk8/bin/java -jar /opt/filebot/FileBot.jar "\$@"
+	EOF
+	fperms 0755 /usr/bin/${PN}
 }

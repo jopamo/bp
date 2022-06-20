@@ -70,6 +70,11 @@ DEPEND="
 	zlib? ( lib-core/zlib )
 "
 
+src_prepare() {
+	default
+	git apply -R "${FILESDIR}"/3d459832a88a9bd2835b339cf6ca98f84aad0115.patch
+}
+
 src_configure() {
 	local emesonargs=(
 		# booleans

@@ -37,4 +37,6 @@ python_install() {
 
 	# Install tools.
 	python_doscript tools/{buildhtml,quicktest}.py
+
+	dosym -r /usr/bin/rst2man.py /usr/bin/rst2man
 }

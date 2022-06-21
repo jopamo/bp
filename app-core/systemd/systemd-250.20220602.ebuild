@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="v$(ver_cut 1)-stable"
 	inherit git-r3
 else
-	SNAPSHOT=2298094b2cb72ae01c8652f2c57d9fc6426d13e0
+	SNAPSHOT=8feb4b17665990cbc09b8a2585d0b5d0bbbd4a00
 	SRC_URI="https://github.com/systemd/systemd-stable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/systemd-stable-${SNAPSHOT}"
 fi
@@ -119,7 +119,7 @@ src_prepare() {
 			"${FILESDIR}"/0025-Handle-__cpu_mask-usage.patch
 			"${FILESDIR}"/0026-Handle-missing-gshadow.patch
 			"${FILESDIR}"/0028-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch
-			"${FILESDIR}"/0029-network-enable-KeepConfiguration-when-running-on-net.patch
+			#"${FILESDIR}"/0029-network-enable-KeepConfiguration-when-running-on-net.patch
 		)
 		default
 

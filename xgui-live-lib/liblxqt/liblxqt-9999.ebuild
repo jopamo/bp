@@ -7,9 +7,9 @@ inherit cmake
 DESCRIPTION="Common base library for the LXQt desktop environment"
 HOMEPAGE="http://lxqt.org/"
 
-if [[ ${PV} = *9999* ]]; then
+if [[ ${PV} = *9999 ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="http://www.github.com/lxqt/${PN}.git"
+	EGIT_REPO_URI="https://www.github.com/lxqt/${PN}.git"
 else
 	SRC_URI="https://github.com/lxqt/liblxqt/releases/download/${PV}/${P}.tar.xz"
 fi
@@ -20,11 +20,11 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	lib-live/libqtxdg
+	lib-live/libqtxdg
+	xgui-live-app/kwindowsystem
+	xgui-live-lib/libXScrnSaver
 	xgui-live-lib/qtbase
 	xgui-live-lib/qtx11extras
-	xgui-live-app/kwindowsystem
-	lib-live/libqtxdg
-	xgui-live-lib/libXScrnSaver
 "
 
 src_configure() {

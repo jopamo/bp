@@ -20,13 +20,13 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+jitterentropy nistbeacon systemd"
+IUSE="jitterentropy nistbeacon systemd"
 
 DEPEND="
-	app-net/curl
-	jitterentropy? ( app-crypto/jitterentropy )
 	app-fs/sysfsutils
+	app-net/curl
 	lib-core/jansson
+	jitterentropy? ( app-crypto/jitterentropy )
 "
 
 src_prepare() {

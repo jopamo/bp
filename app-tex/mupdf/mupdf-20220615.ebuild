@@ -7,7 +7,7 @@ inherit toolchain-funcs git-r3
 DESCRIPTION="a lightweight PDF viewer and toolkit written in portable C"
 HOMEPAGE="http://mupdf.com/"
 EGIT_REPO_URI="https://github.com/ArtifexSoftware/mupdf"
-EGIT_COMMIT=7cdf4b4ab84dd036509287b35ea458a4418a565d
+EGIT_COMMIT=b7d42240fe4421a78fcb831a5fc44d188cd42ccc
 EGIT_SUBMODULES=( thirdparty/lcms2 thirdparty/mujs thirdparty/extract )
 
 LICENSE="AGPL-3"

@@ -10,21 +10,20 @@ SRC_URI="https://www.kernel.org/pub/linux/utils/net/${PN}/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
-#musl build failures
+KEYWORDS="amd64 arm64"
 
 IUSE="caps elf iptables ipv6 libbsd +minimal"
 
 DEPEND="
-	app-compression/xz-utils
 	app-build/bison
 	app-build/flex
+	app-compression/xz-utils
 	app-kernel/linux-headers
+	!minimal? ( lib-net/libmnl )
 	caps? ( lib-core/libcap )
+	elf? ( lib-core/elfutils )
 	iptables? ( app-net/iptables )
 	libbsd? ( lib-dev/libbsd )
-	!minimal? ( lib-net/libmnl )
-	elf? ( lib-core/elfutils )
 "
 
 PATCHES=(

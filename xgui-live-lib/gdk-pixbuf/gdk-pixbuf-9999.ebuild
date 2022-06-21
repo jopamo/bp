@@ -22,16 +22,17 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	lib-live/glib
-	xmedia-live-lib/libpng
-	xmedia-live-lib/libjpeg-turbo
-	xmedia-live-lib/tiff
 	lib-live/gobject-introspection
+	xmedia-live-lib/libjpeg-turbo
+	xmedia-live-lib/libpng
+	xmedia-live-lib/tiff
 "
 BDEPEND="
+	app-build/gettext
 	app-core/debianutils
 	app-dev/gtk-doc-am
-	app-build/gettext
 	app-dev/pkgconf
+	dev-python/docutils
 	xgui-live-app/shared-mime-info
 "
 

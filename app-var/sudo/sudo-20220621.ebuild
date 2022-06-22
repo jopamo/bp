@@ -9,7 +9,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/sudo-project/${PN}.git"
 	inherit git-r3
 else
-	SNAPSHOT=42f735c8ddd434bdfd03ddedad592b2bfaba161b
+	SNAPSHOT=e9c2695268ef54ff2ef40956122ee57ed1853535
 	SRC_URI="https://github.com/sudo-project/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

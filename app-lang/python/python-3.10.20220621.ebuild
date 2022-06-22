@@ -48,6 +48,8 @@ PYVER=${SLOT%/*}
 
 filter-flags -Wl,-z,defs
 
+SETUPTOOLS_USE_DISTUTILS=local
+
 src_prepare() {
 	# Ensure that internal copies of expat, libffi and zlib are not used.
 	rm -fr Modules/expat || die
@@ -66,6 +68,7 @@ src_prepare() {
 }
 
 src_configure() {
+	export SETUPTOOLS_USE_DISTUTILS=stdlib
 	export ax_cv_c_float_words_bigendian=no
 
 	local disable

@@ -16,7 +16,10 @@ IUSE="test"
 
 RESTRICT="!test? ( test )"
 
-DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"
+DEPEND="
+	dev-python/typing-extensions[${PYTHON_USEDEP}]
+	dev-python/setuptools[${PYTHON_USEDEP}]
+"
 
 python_prepare_all() {
 	# network access

@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	inherit git-r3 autotools
 elif [[ ${PV} == 20* ]]; then
 	inherit autotools
-	SNAPSHOT=7cb63366aa59185ef0f0a818dee25bb18e3e19f4
+	SNAPSHOT=5f27dc813bca6f44ad977e7af2089902d5f32a29
 	SRC_URI="https://gitlab.freedesktop.org/${PN}/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
@@ -58,27 +58,28 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		$(use_enable static-libs static)
+		$(use_enable debug stats)
 		$(use_enable debug verbose-mode)
-		--disable-asserts
-		--disable-checks
-		--disable-apparmor
-		--enable-inotify
+		$(use_enable static-libs static)
 		$(use_enable systemd)
 		$(use_enable user-session)
+		$(use_with X x)
+		--disable-apparmor
+		--disable-asserts
+		--disable-checks
+		--disable-doxygen-docs
 		--disable-embedded-tests
+		--disable-libaudit
 		--disable-modular-tests
-		$(use_enable debug stats)
+		--disable-traditional-activation
+		--disable-xml-docs
+		--enable-inotify
+		--with-dbus-user=messagebus
 		--with-session-socket-dir="${EPREFIX}"/tmp
 		--with-system-pid-file="${EPREFIX}"/run/dbus.pid
 		--with-system-socket="${EPREFIX}"/run/dbus/system_bus_socket
 		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
-		--with-dbus-user=messagebus
-		$(use_with X x)
-		--disable-xml-docs
-		--disable-doxygen-docs
-		--disable-traditional-activation
-		--disable-libaudit
+
 	)
 
 	einfo "Running configure in ${BUILD_DIR}"

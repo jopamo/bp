@@ -7,16 +7,18 @@ inherit meson xdg-utils
 DESCRIPTION="Media player based on MPlayer and mplayer2"
 HOMEPAGE="https://mpv.io/"
 
-if [[ ${PV} != *9999 ]]; then
-	SRC_URI="https://github.com/mpv-player/mpv/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-else
+if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/mpv-player/mpv.git"
 	inherit git-r3
+else
+	SNAPSHOT=07d78f8c8b4997c9331d376737d8107a89e91bdd
+	SRC_URI="https://github.com/mpv-player/mpv/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="LGPL-2.1+ GPL-2+ BSD ISC"
 SLOT="0"
-KEYWORDS="amd64 arm64"
 
 IUSE="+alsa +cli cuda drm +egl iconv jpeg lcms libmpv +lua
 	+opengl pulseaudio vaapi vapoursynth vdpau wayland +X
@@ -69,11 +71,6 @@ DEPEND="
 	)
 	zlib? ( lib-core/zlib )
 "
-
-src_prepare() {
-	default
-	git apply -R "${FILESDIR}"/3d459832a88a9bd2835b339cf6ca98f84aad0115.patch
-}
 
 src_configure() {
 	local emesonargs=(

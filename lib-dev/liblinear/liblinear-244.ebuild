@@ -9,7 +9,8 @@ HOMEPAGE="http://www.csie.ntu.edu.tw/~cjlin/liblinear/ https://github.com/cjlin1
 SRC_URI="https://github.com/cjlin1/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="BSD"
-SLOT="0/3"
+SLOT="0"
+SONAME="5"
 KEYWORDS="amd64 arm64"
 
 src_prepare() {
@@ -40,8 +41,8 @@ src_compile() {
 }
 
 src_install() {
-	dolib.so ${PN}.so.4
-	dosym ${PN}.so.4 /usr/lib/${PN}.so
+	dolib.so ${PN}.so.${SONAME}
+	dosym ${PN}.so.${SONAME} /usr/lib/${PN}.so
 
 	newbin predict ${PN}-predict
 	newbin train ${PN}-train

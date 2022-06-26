@@ -21,8 +21,8 @@ EXPORT_FUNCTIONS pkg_postinst pkg_postrm
 
 if [[ ! ${_SGML_CATALOG_R1} ]]; then
 
-if [[ ${CATEGORY}/${PN} != app-text/sgml-common ]]; then
-	RDEPEND=">=app-text/sgml-common-0.6.3-r7"
+if [[ ${CATEGORY}/${PN} != app-tex/sgml-common ]]; then
+	RDEPEND="app-tex/sgml-common"
 fi
 
 # @FUNCTION: sgml-catalog-r1_update_catalog

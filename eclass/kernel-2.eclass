@@ -656,17 +656,17 @@ kernel_is() {
 
 # Capture the sources type and set DEPENDs
 if [[ ${ETYPE} == sources ]]; then
-	BDEPEND="!build? ( sys-apps/sed )"
+	BDEPEND="!build? ( app-core/sed )"
 	RDEPEND="!build? (
-		app-arch/cpio
-		dev-lang/perl
-		sys-devel/bc
-		sys-devel/bison
-		sys-devel/flex
-		sys-devel/make
-		>=sys-libs/ncurses-5.2
-		virtual/libelf
-		virtual/pkgconfig
+		app-compression/cpio
+		app-lang/perl
+		app-build/bc
+		app-build/bison
+		app-build/flex
+		app-build/make
+		>=lib-core/ncurses-5.2
+		lib-core/elfutils
+		app-dev/pkgconf
 	)"
 
 	SLOT="${PVR}"

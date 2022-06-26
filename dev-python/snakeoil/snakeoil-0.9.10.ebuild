@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit distutils-r1
+inherit distutils-r1 flag-o-matic
 
 if [[ ${PV} == *9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/pkgcore/snakeoil.git"
@@ -24,5 +24,7 @@ BDEPEND="
 	test? ( >=dev-python/pytest-6 )"
 
 [[ ${PV} == 9999 ]] && BDEPEND+=" dev-python/cython[${PYTHON_USEDEP}]"
+
+filter-flags -Wl,-z,defs
 
 distutils_enable_tests pytest

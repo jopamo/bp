@@ -508,21 +508,21 @@ unpacker_src_uri_depends() {
 	for uri in "$@" ; do
 		case ${uri} in
 		*.cpio.*|*.cpio)
-			d="app-arch/cpio" ;;
+			d="app-compression/cpio" ;;
 		*.rar|*.RAR)
-			d="app-arch/unrar" ;;
+			d="app-compression/unrar" ;;
 		*.7z)
-			d="app-arch/p7zip" ;;
+			d="app-compression/p7zip" ;;
 		*.xz)
-			d="app-arch/xz-utils" ;;
+			d="app-compression/xz-utils" ;;
 		*.zip)
-			d="app-arch/unzip" ;;
+			d="app-compression/unzip" ;;
 		*.lz)
-			d="|| ( app-arch/plzip app-arch/pdlzip app-arch/lzip )" ;;
+			d="|| ( app-compression/plzip app-compression/pdlzip app-compression/lzip )" ;;
 		*.zst)
-			d="app-arch/zstd" ;;
+			d="app-compression/zstd" ;;
 		*.LHA|*.LHa|*.lha|*.lzh)
-			d="app-arch/lha" ;;
+			d="app-compression/lha" ;;
 		esac
 		deps+=" ${d}"
 	done

@@ -23,21 +23,21 @@ KEYWORDS="amd64 arm64"
 IUSE="gentoo_repo tmpfilesd sysusersd"
 
 DEPEND="
+	app-build/patch
 	app-compression/tar
 	app-core/sed
-	app-build/patch
 "
 
 RDEPEND="
 	app-compression/tar
-	app-var/eselect
-	app-crypto/gnupg[gnutls(-)]
 	app-core/bash
-	dev-python/lxml[${PYTHON_USEDEP}]
-	app-core/sed
-	app-core/sandbox
-	app-core/install-xattr
 	app-core/findutils
+	app-core/install-xattr
+	app-core/sandbox
+	app-core/sed
+	app-crypto/gnupg
+	app-var/eselect
+	dev-python/lxml[${PYTHON_USEDEP}]
 "
 PDEPEND="app-net/rsync"
 

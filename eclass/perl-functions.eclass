@@ -237,7 +237,7 @@ perl_rm_files() {
 # only sense for perl-core packages.
 perl_link_duallife_scripts() {
 	debug-print-function $FUNCNAME "$@"
-	if [[ ${CATEGORY} != perl-core ]] || ! has_version ">=dev-lang/perl-5.8.8-r8" ; then
+	if [[ ${CATEGORY} != perl-core ]] || ! has_version ">=app-lang/perl-5.8.8-r8" ; then
 		return 0
 	fi
 

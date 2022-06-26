@@ -9,7 +9,7 @@ HOMEPAGE="https://www.gnu.org/software/automake/"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="$(ver_cut 1-2)"
 KEYWORDS="amd64 arm64"
 
 DEPEND="app-lang/perl"

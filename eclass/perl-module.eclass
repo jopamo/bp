@@ -20,7 +20,11 @@
 # instead.
 
 case ${EAPI:-0} in
-	5|6|7)
+	5)
+		inherit multiprocessing unpacker perl-functions
+		PERL_EXPF="src_unpack src_prepare src_configure src_compile src_test src_install"
+		;;
+	6|7)
 		inherit multiprocessing perl-functions
 		PERL_EXPF="src_prepare src_configure src_compile src_test src_install"
 		;;
@@ -33,11 +37,11 @@ case ${EAPI:-0} in
 		;;
 esac
 
-# @ECLASS-VARIABLE: GENTOO_DEPEND_ON_PERL
+# @ECLASS_VARIABLE: GENTOO_DEPEND_ON_PERL
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # This variable controls whether a runtime and build time dependency on
-# app-lang/perl is automatically added by the eclass. It defaults to yes.
+# dev-lang/perl is automatically added by the eclass. It defaults to yes.
 # Set to no to disable, set to noslotop to add a perl dependency without
 # slot operator (EAPI=6). All packages installing into the vendor_perl
 # path must use yes here. (EAPI=8 and later) Also adds a test useflag,
@@ -53,10 +57,10 @@ case ${EAPI:-0} in
 		yes)
 			case "${GENTOO_DEPEND_ON_PERL_SUBSLOT:-yes}" in
 			yes)
-				DEPEND="app-lang/perl"
+				DEPEND="dev-lang/perl:=[-build(-)]"
 				;;
 			*)
-				DEPEND="app-lang/perl"
+				DEPEND="dev-lang/perl[-build(-)]"
 				;;
 			esac
 			RDEPEND="${DEPEND}"
@@ -81,12 +85,12 @@ case ${EAPI:-0} in
 
 		case "${GENTOO_DEPEND_ON_PERL:-yes}" in
 			yes)
-				DEPEND="app-lang/perl"
-				RDEPEND="app-lang/perl"
+				DEPEND="dev-lang/perl"
+				RDEPEND="dev-lang/perl:="
 				;;
 			noslotop)
-				DEPEND="app-lang/perl"
-				RDEPEND="app-lang/perl"
+				DEPEND="dev-lang/perl"
+				RDEPEND="dev-lang/perl"
 				;;
 		esac
 
@@ -108,14 +112,14 @@ case ${EAPI:-0} in
 
 		case "${GENTOO_DEPEND_ON_PERL:-yes}" in
 			yes)
-				DEPEND="app-lang/perl"
-				BDEPEND="app-lang/perl"
-				RDEPEND="app-lang/perl:="
+				DEPEND="dev-lang/perl"
+				BDEPEND="dev-lang/perl"
+				RDEPEND="dev-lang/perl:="
 				;;
 			noslotop)
-				DEPEND="app-lang/perl"
-				BDEPEND="app-lang/perl"
-				RDEPEND="app-lang/perl"
+				DEPEND="dev-lang/perl"
+				BDEPEND="dev-lang/perl"
+				RDEPEND="dev-lang/perl"
 				;;
 		esac
 
@@ -135,17 +139,17 @@ case ${EAPI:-0} in
 
 		case "${GENTOO_DEPEND_ON_PERL:-yes}" in
 			yes|noslotop)
-				DEPEND="app-lang/perl"
-				BDEPEND="app-lang/perl
+				DEPEND="dev-lang/perl"
+				BDEPEND="dev-lang/perl
 					 test? ( virtual/perl-Test-Simple )"
 				IUSE="test"
 				RESTRICT="!test? ( test )"
 				;;&
 			yes)
-				RDEPEND="app-lang/perl:="
+				RDEPEND="dev-lang/perl:="
 				;;
 			noslotop)
-				RDEPEND="app-lang/perl"
+				RDEPEND="dev-lang/perl"
 				;;
 		esac
 
@@ -163,45 +167,45 @@ esac
 
 LICENSE="${LICENSE:-|| ( Artistic GPL-1+ )}"
 
-# @ECLASS-VARIABLE: DIST_NAME
+# @ECLASS_VARIABLE: DIST_NAME
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # (EAPI=6 and later) This variable provides a way to override PN for the calculation of S,
 # SRC_URI, and HOMEPAGE. If unset, defaults to PN.
 
-# @ECLASS-VARIABLE: DIST_VERSION
+# @ECLASS_VARIABLE: DIST_VERSION
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # (EAPI=6 and later) This variable provides a way to override PV for the calculation of S and SRC_URI.
 # Use it to provide the non-normalized, upstream version number. If unset, defaults to PV.
 # Named MODULE_VERSION in EAPI=5.
 
-# @ECLASS-VARIABLE: DIST_A_EXT
+# @ECLASS_VARIABLE: DIST_A_EXT
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # (EAPI=6 and later) This variable provides a way to override the distfile extension for the calculation of
 # SRC_URI. If unset, defaults to tar.gz. Named MODULE_A_EXT in EAPI=5.
 
-# @ECLASS-VARIABLE: DIST_A
+# @ECLASS_VARIABLE: DIST_A
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # (EAPI=6 and later) This variable provides a way to override the distfile name for the calculation of
 # SRC_URI. If unset, defaults to ${DIST_NAME}-${DIST_VERSION}.${DIST_A_EXT} Named MODULE_A in EAPI=5.
 
-# @ECLASS-VARIABLE: DIST_AUTHOR
+# @ECLASS_VARIABLE: DIST_AUTHOR
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # (EAPI=6 and later) This variable sets the module author name for the calculation of
 # SRC_URI. Named MODULE_AUTHOR in EAPI=5.
 
-# @ECLASS-VARIABLE: DIST_SECTION
+# @ECLASS_VARIABLE: DIST_SECTION
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # (EAPI=6 and later) This variable sets the module section for the calculation of
 # SRC_URI. Only required in rare cases for very special snowflakes.
 # Named MODULE_SECTION in EAPI=5.
 
-# @ECLASS-VARIABLE: DIST_EXAMPLES
+# @ECLASS_VARIABLE: DIST_EXAMPLES
 # @PRE_INHERIT
 # @DEFAULT_UNSET
 # @DESCRIPTION:
@@ -210,7 +214,7 @@ LICENSE="${LICENSE:-|| ( Artistic GPL-1+ )}"
 # a use-flag examples, if not you'll have to add the useflag in your ebuild.
 # Examples are installed only if the useflag examples exists and is activated.
 
-# @ECLASS-VARIABLE: DIST_WIKI
+# @ECLASS_VARIABLE: DIST_WIKI
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # (EAPI=8 and later) This variable can be set to contain space-separated keywords
@@ -220,7 +224,7 @@ LICENSE="${LICENSE:-|| ( Artistic GPL-1+ )}"
 # * features: Notes about additional dependencies for optional features
 # * tests:    Notes about additional dependencies and preparations needed for testing
 
-# @ECLASS-VARIABLE: DIST_MAKE
+# @ECLASS_VARIABLE: DIST_MAKE
 # @DESCRIPTION:
 # (EAPI=8 and later) This Bash array contains parameters to the make call
 # from ExtUtils::MakeMaker. Replaces mymake in EAPI=7 and earlier.
@@ -419,7 +423,7 @@ perl-module_src_compile() {
 	fi
 }
 
-# @ECLASS-VARIABLE: DIST_TEST
+# @ECLASS_VARIABLE: DIST_TEST
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # (EAPI=6 and later) Variable that controls if tests are run in the test phase
@@ -433,7 +437,7 @@ perl-module_src_compile() {
 #   verbose  : increase test verbosity
 #   network  : do not try to disable network tests
 
-# @ECLASS-VARIABLE: DIST_TEST_OVERRIDE
+# @ECLASS_VARIABLE: DIST_TEST_OVERRIDE
 # @USER_VARIABLE
 # @DEFAULT_UNSET
 # @DESCRIPTION:
@@ -559,6 +563,16 @@ perl-module_src_install() {
 	fi
 	perl_remove_temppath
 
+	for f in Change* CHANGES README* TODO FAQ ${mydoc}; do
+		[[ -s ${f} ]] && dodoc ${f}
+	done
+
+	if [[ ${EAPI} != 5 ]] ; then
+		if in_iuse examples && use examples ; then
+                        [[ ${#DIST_EXAMPLES[@]} -eq 0 ]] || perl_doexamples "${DIST_EXAMPLES[@]}"
+		fi
+	fi
+
 	perl_link_duallife_scripts
 
 	case ${EAPI} in
@@ -570,6 +584,9 @@ perl-module_src_install() {
 				DOC_CONTENTS="This package may require additional dependencies and/or preparation steps for\n"
 				DOC_CONTENTS+="some optional features. For details, see\n"
 				DOC_CONTENTS+="$(perl_get_wikiurl_features)"
+				einfo
+				readme.gentoo_create_doc
+				readme.gentoo_print_elog
 			fi
 			;;
 	esac

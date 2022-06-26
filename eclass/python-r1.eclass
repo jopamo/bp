@@ -107,7 +107,7 @@ fi
 #
 # It will cause the Python dependencies to look like:
 # @CODE
-# python_targets_pythonX_Y? ( dev-lang/python:X.Y[gdbm,ncurses(-)?] )
+# python_targets_pythonX_Y? ( app-lang/python:X.Y[gdbm,ncurses(-)?] )
 # @CODE
 
 # @ECLASS_VARIABLE: PYTHON_DEPS
@@ -125,7 +125,7 @@ fi
 #
 # Example value:
 # @CODE
-# python_targets_python2_7? ( dev-lang/python:2.7[gdbm] )
+# python_targets_python2_7? ( app-lang/python:2.7[gdbm] )
 # python_targets_pypy? ( dev-python/pypy[gdbm] )
 # @CODE
 
@@ -432,7 +432,7 @@ python_gen_cond_dep() {
 # @CODE
 # RDEPEND="foo? (
 #   python_targets_python2_7? (
-#     dev-lang/python:2.7[xml(+)] )
+#     app-lang/python:2.7[xml(+)] )
 #	python_targets_pypy? (
 #     dev-python/pypy[xml(+)] ) )"
 # @CODE
@@ -501,13 +501,13 @@ python_gen_impl_dep() {
 # @CODE
 # || (
 #	(
-#		dev-lang/python:3.7
+#		app-lang/python:3.7
 #		dev-python/foo[python_single_target_python3_7(-)]
 #		|| ( dev-python/bar[python_targets_python3_7(-),-python_single_target_python3_7(-)]
 #			dev-python/baz[python_targets_python3_7(-),-python_single_target_python3_7(-)] )
 #	)
 #	(
-#		dev-lang/python:3.8
+#		app-lang/python:3.8
 #		dev-python/foo[python_single_target_python3_8(-)]
 #		|| ( dev-python/bar[python_targets_python3_8(-)]
 #			dev-python/baz[python_targets_python3_8(-)] )

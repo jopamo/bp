@@ -47,9 +47,8 @@ inherit multiprocessing ninja-utils python-utils-r1 toolchain-funcs
 
 EXPORT_FUNCTIONS src_configure src_compile src_test src_install
 
-_MESON_DEPEND=">=dev-util/meson-0.59.4
+_MESON_DEPEND="app-dev/meson
 	${NINJA_DEPEND}
-	dev-util/meson-format-array
 "
 
 if [[ ${EAPI} == 6 ]]; then
@@ -450,7 +449,6 @@ meson_src_install() {
 	debug-print-function ${FUNCNAME} "$@"
 
 	meson_install "$@"
-	einstalldocs
 }
 
 fi

@@ -52,7 +52,7 @@ inherit multiprocessing
 
 case "${NINJA}" in
 	ninja)
-		NINJA_DEPEND=">=dev-util/ninja-1.8.2"
+		NINJA_DEPEND="app-dev/ninja"
 	;;
 	samu)
 		NINJA_DEPEND="dev-util/samurai"

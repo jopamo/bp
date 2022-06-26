@@ -177,14 +177,14 @@ SLOT="0"
 RDEPEND="
 	${MODULES_OPTIONAL_USE}${MODULES_OPTIONAL_USE:+? (}
 		kernel_linux? (
-			sys-apps/kmod[tools]
+			app-core/kmod[tools]
 			dist-kernel? ( virtual/dist-kernel:= )
 		)
 	${MODULES_OPTIONAL_USE:+)}"
 DEPEND="${RDEPEND}
     ${MODULES_OPTIONAL_USE}${MODULES_OPTIONAL_USE:+? (}
-	sys-apps/sed
-	kernel_linux? ( virtual/linux-sources virtual/libelf )
+	app-core/sed
+	kernel_linux? ( app-kernel/xanmod-sources lib-core/elfutils )
 	${MODULES_OPTIONAL_USE:+)}"
 
 # eclass utilities

@@ -17,7 +17,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-BDEPEND="app-arch/unzip"
+BDEPEND="app-compression/unzip"
 
 distutils_enable_tests unittest
 

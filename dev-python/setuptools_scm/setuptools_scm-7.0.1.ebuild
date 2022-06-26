@@ -2,6 +2,8 @@
 
 EAPI=8
 
+DISTUTILS_USE_PEP517=setuptools
+
 inherit distutils-r1
 
 DESCRIPTION="package to manage versions by scm tags via setuptools"
@@ -17,8 +19,9 @@ IUSE="test"
 RESTRICT="!test? ( test )"
 
 DEPEND="
-	dev-python/typing-extensions[${PYTHON_USEDEP}]
+	dev-python/packaging[${PYTHON_USEDEP}]
 	dev-python/setuptools[${PYTHON_USEDEP}]
+	dev-python/typing-extensions[${PYTHON_USEDEP}]
 "
 
 python_prepare_all() {

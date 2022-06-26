@@ -124,7 +124,7 @@ fi
 # read-only. This is a user flag and should under _no circumstances_ be set in
 # the ebuild. Helps in improving QA of build systems that write to source tree.
 
-[[ ${CMAKE_MIN_VERSION} ]] && die "CMAKE_MIN_VERSION is banned; if necessary, set BDEPEND=\">=dev-util/cmake-${CMAKE_MIN_VERSION}\" directly"
+[[ ${CMAKE_MIN_VERSION} ]] && die "CMAKE_MIN_VERSION is banned; if necessary, set BDEPEND=\">=app-dev/cmake-${CMAKE_MIN_VERSION}\" directly"
 [[ ${CMAKE_BUILD_DIR} ]] && die "The ebuild must be migrated to BUILD_DIR"
 [[ ${CMAKE_REMOVE_MODULES} ]] && die "CMAKE_REMOVE_MODULES is banned, set CMAKE_REMOVE_MODULES_LIST array instead"
 [[ ${CMAKE_UTILS_QA_SRC_DIR_READONLY} ]] && die "Use CMAKE_QA_SRC_DIR_READONLY instead"
@@ -133,7 +133,7 @@ fi
 
 case ${CMAKE_MAKEFILE_GENERATOR} in
 	emake)
-		BDEPEND="sys-devel/make"
+		BDEPEND="app-build/make"
 		;;
 	ninja)
 		BDEPEND="${NINJA_DEPEND}"
@@ -145,7 +145,7 @@ case ${CMAKE_MAKEFILE_GENERATOR} in
 esac
 
 if [[ ${PN} != cmake ]]; then
-	BDEPEND+=" >=dev-util/cmake-3.20.5"
+	BDEPEND+=" >=app-dev/cmake-3.20.5"
 fi
 
 # @FUNCTION: cmake_run_in
@@ -349,7 +349,7 @@ cmake_src_prepare() {
 	if [[ ${EAPI} == 7 ]]; then
 		pushd "${S}" > /dev/null || die # workaround from cmake-utils
 		# in EAPI-8, we use current working directory instead, bug #704524
-		# esp. test with 'special' pkgs like: app-arch/brotli, media-gfx/gmic, net-libs/quiche
+		# esp. test with 'special' pkgs like: app-compression/brotli, media-gfx/gmic, net-libs/quiche
 	fi
 	_cmake_check_build_dir
 
@@ -699,16 +699,6 @@ cmake_src_install() {
 	debug-print-function ${FUNCNAME} "$@"
 
 	DESTDIR="${D}" cmake_build install "$@"
-
-	if [[ ${EAPI} == 7 ]]; then
-		pushd "${S}" > /dev/null || die
-		einstalldocs
-		popd > /dev/null || die
-	else
-		pushd "${CMAKE_USE_DIR}" > /dev/null || die
-		einstalldocs
-		popd > /dev/null || die
-	fi
 }
 
 fi

@@ -49,8 +49,8 @@ FONT_CONF=( "" )
 if [[ ${CATEGORY}/${PN} != media-fonts/encodings ]]; then
 	IUSE="X"
 	BDEPEND="X? (
-			>=x11-apps/mkfontscale-1.2.0
-			media-fonts/encodings
+			xgui-live-app/mkfontscale
+			fonts/encodings
 	)"
 fi
 
@@ -173,8 +173,6 @@ font_src_install() {
 	fi
 
 	font_fontconfig
-
-	einstalldocs
 
 	# install common docs
 	for commondoc in COPYRIGHT FONTLOG.txt; do

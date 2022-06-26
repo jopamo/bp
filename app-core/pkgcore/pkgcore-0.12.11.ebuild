@@ -34,6 +34,10 @@ BDEPEND="
 	)
 "
 
+PATCHES=(
+	"${FILESDIR}"/1g4.patch
+)
+
 distutils_enable_tests setup.py
 
 src_test() {

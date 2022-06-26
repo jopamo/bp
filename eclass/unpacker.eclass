@@ -25,7 +25,7 @@ _UNPACKER_ECLASS=1
 
 inherit toolchain-funcs
 
-# @ECLASS-VARIABLE: UNPACKER_BZ2
+# @ECLASS_VARIABLE: UNPACKER_BZ2
 # @USER_VARIABLE
 # @DEFAULT_UNSET
 # @DESCRIPTION:
@@ -33,7 +33,7 @@ inherit toolchain-funcs
 # `pbzip2` and `bzip2`.  Make sure your choice accepts the "-dc" options.
 # Note: this is meant for users to set, not ebuilds.
 
-# @ECLASS-VARIABLE: UNPACKER_LZIP
+# @ECLASS_VARIABLE: UNPACKER_LZIP
 # @USER_VARIABLE
 # @DEFAULT_UNSET
 # @DESCRIPTION:
@@ -212,7 +212,7 @@ unpack_makeself() {
 				skip=`grep -a ^offset= "${src}" | awk '{print $3}'`
 				(( skip++ ))
 				;;
-			2.1.4|2.1.5|2.1.6|2.2.0|2.4.0)
+			2.1.4|2.1.5|2.1.6|2.2.0|2.3.0|2.4.0)
 				skip=$(grep -a offset=.*head.*wc "${src}" | awk '{print $3}' | head -n 1)
 				skip=$(head -n ${skip} "${src}" | wc -c)
 				exe="dd"
@@ -364,6 +364,18 @@ unpack_rar() {
 	unrar x -idq -o+ "${rar}" || die "unpacking ${rar} failed (arch=unpack_rar)"
 }
 
+# @FUNCTION: unpack_lha
+# @USAGE: <lha file>
+# @DESCRIPTION:
+# Unpack LHA/LZH archives.
+unpack_lha() {
+	[[ $# -eq 1 ]] || die "Usage: ${FUNCNAME} <file>"
+
+	local lha=$(find_unpackable_file "$1")
+	unpack_banner "${lha}"
+	lha xfq "${lha}" || die "unpacking ${lha} failed (arch=unpack_lha)"
+}
+
 # @FUNCTION: _unpacker
 # @USAGE: <one archive to unpack>
 # @INTERNAL
@@ -424,13 +436,15 @@ _unpacker() {
 		arch="unpack_zip" ;;
 	esac
 
-	# 7z, rar are handled by package manager in EAPI < 8
+	# 7z, rar and lha/lzh are handled by package manager in EAPI < 8
 	if [[ ${EAPI} != [567] ]]; then
 		case ${m} in
 		*.7z)
 			arch="unpack_7z" ;;
 		*.rar|*.RAR)
 			arch="unpack_rar" ;;
+		*.LHA|*.LHa|*.lha|*.lzh)
+			arch="unpack_lha" ;;
 		esac
 	fi
 
@@ -494,19 +508,21 @@ unpacker_src_uri_depends() {
 	for uri in "$@" ; do
 		case ${uri} in
 		*.cpio.*|*.cpio)
-			d="app-compression/cpio" ;;
+			d="app-arch/cpio" ;;
 		*.rar|*.RAR)
-			d="app-compression/unrar" ;;
+			d="app-arch/unrar" ;;
 		*.7z)
-			d="app-compression/p7zip" ;;
+			d="app-arch/p7zip" ;;
 		*.xz)
-			d="app-compression/xz-utils" ;;
+			d="app-arch/xz-utils" ;;
 		*.zip)
-			d="app-compression/unzip" ;;
+			d="app-arch/unzip" ;;
 		*.lz)
-			d="app-compression/lzip" ;;
+			d="|| ( app-arch/plzip app-arch/pdlzip app-arch/lzip )" ;;
 		*.zst)
-			d="app-compression/zstd" ;;
+			d="app-arch/zstd" ;;
+		*.LHA|*.LHa|*.lha|*.lzh)
+			d="app-arch/lha" ;;
 		esac
 		deps+=" ${d}"
 	done

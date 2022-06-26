@@ -180,7 +180,6 @@ esac
 
 if [[ ! ${_DISTUTILS_R1} ]]; then
 
-[[ ${EAPI} == 6 ]] && inherit eutils xdg-utils
 inherit multibuild multiprocessing toolchain-funcs
 
 if [[ ! ${DISTUTILS_SINGLE_IMPL} ]]; then

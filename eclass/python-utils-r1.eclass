@@ -1,6 +1,8 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+PYTHON_COMPAT=( python3_10 python3_11 )
+
 # @ECLASS: python-utils-r1.eclass
 # @MAINTAINER:
 # Python team <python@gentoo.org>
@@ -34,7 +36,6 @@ fi
 
 if [[ ! ${_PYTHON_UTILS_R1} ]]; then
 
-[[ ${EAPI} == [67] ]] && inherit eapi8-dosym
 inherit multiprocessing toolchain-funcs
 
 # @ECLASS_VARIABLE: _PYTHON_ALL_IMPLS
@@ -454,17 +455,17 @@ _python_export() {
 				local d
 				case ${impl} in
 					python2.7)
-						PYTHON_PKG_DEP='>=dev-lang/python-2.7.5-r2:2.7';;
+						PYTHON_PKG_DEP='>=app-lang/python-2.7.5-r2:2.7';;
 					python3.8)
-						PYTHON_PKG_DEP=">=dev-lang/python-3.8.12_p1-r1:3.8";;
+						PYTHON_PKG_DEP=">=app-lang/python-3.8.12_p1-r1:3.8";;
 					python3.9)
-						PYTHON_PKG_DEP=">=dev-lang/python-3.9.9-r1:3.9";;
+						PYTHON_PKG_DEP=">=app-lang/python-3.9.9-r1:3.9";;
 					python3.10)
-						PYTHON_PKG_DEP=">=dev-lang/python-3.10.0_p1-r1:3.10";;
+						PYTHON_PKG_DEP=">=app-lang/python-3.10.0_p1-r1:3.10";;
 					python3.11)
-						PYTHON_PKG_DEP=">=dev-lang/python-3.11.0_beta1-r1:3.11";;
+						PYTHON_PKG_DEP=">=app-lang/python-3.11.0_beta1-r1:3.11";;
 					python*)
-						PYTHON_PKG_DEP="dev-lang/python:${impl#python}";;
+						PYTHON_PKG_DEP="app-lang/python:${impl#python}";;
 					pypy)
 						PYTHON_PKG_DEP='>=dev-python/pypy-7.3.0:0=';;
 					pypy3)
@@ -738,9 +739,7 @@ python_newexe() {
 	)
 
 	# install the wrapper
-	local dosym=dosym
-	[[ ${EAPI} == [67] ]] && dosym=dosym8
-	"${dosym}" -r /usr/lib/python-exec/python-exec2 "${wrapd}/${newfn}"
+	dosym -r /usr/lib/python-exec/python-exec2 "${wrapd}/${newfn}"
 
 	# don't use this at home, just call python_doscript() instead
 	if [[ ${_PYTHON_REWRITE_SHEBANG} ]]; then
@@ -991,12 +990,12 @@ _python_wrapper_setup() {
 			ln -s "${PYTHON/python/2to3-}" "${workdir}"/bin/2to3 || die
 
 			# Python 2.7+.
-			ln -s "${EPREFIX}"/usr/$(get_libdir)/pkgconfig/${EPYTHON/n/n-}.pc \
+			ln -s "${EPREFIX}"/usr/lib/pkgconfig/${EPYTHON/n/n-}.pc \
 				"${workdir}"/pkgconfig/python${pyver}.pc || die
 
 			# Python 3.8+.
 			if [[ ${EPYTHON} != python[23].[67] ]]; then
-				ln -s "${EPREFIX}"/usr/$(get_libdir)/pkgconfig/${EPYTHON/n/n-}-embed.pc \
+				ln -s "${EPREFIX}"/usr/lib/pkgconfig/${EPYTHON/n/n-}-embed.pc \
 					"${workdir}"/pkgconfig/python${pyver}-embed.pc || die
 			fi
 		else

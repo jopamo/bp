@@ -116,7 +116,7 @@ EXPORT_FUNCTIONS pkg_setup
 #
 # It will cause the Python dependencies to look like:
 # @CODE
-# python_single_target_pythonX_Y? ( dev-lang/python:X.Y[gdbm,ncurses(-)?] )
+# python_single_target_pythonX_Y? ( app-lang/python:X.Y[gdbm,ncurses(-)?] )
 # @CODE
 
 # @ECLASS_VARIABLE: PYTHON_DEPS
@@ -136,7 +136,7 @@ EXPORT_FUNCTIONS pkg_setup
 #
 # Example value:
 # @CODE
-# python_single_target_python2_7? ( dev-lang/python:2.7[gdbm] )
+# python_single_target_python2_7? ( app-lang/python:2.7[gdbm] )
 # python_single_target_pypy? ( dev-python/pypy[gdbm] )
 # @CODE
 
@@ -373,7 +373,7 @@ python_gen_cond_dep() {
 # @CODE
 # RDEPEND="foo? (
 #   python_single_target_python2_7? (
-#     dev-lang/python:2.7[xml(+)] )
+#     app-lang/python:2.7[xml(+)] )
 #	python_single_target_pypy? (
 #     dev-python/pypy[xml(+)] ) )"
 # @CODE

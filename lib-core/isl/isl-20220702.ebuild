@@ -26,7 +26,7 @@ DEPEND="
 src_prepare() {
 	default
 	eautoreconf
-	sed -i -e '/Libs:/s:@LDFLAGS@ ::' configure || die #382737
+	sed -i -e '/Libs:/s:@LDFLAGS@ ::' configure || die
 }
 
 src_configure() {
@@ -35,5 +35,5 @@ src_configure() {
 
 src_install() {
 	default
-	use gdb.py || rm "${ED}"/usr/lib/libisl.so.23.1.0-gdb.py || die
+	use gdb.py || rm "${ED}"/usr/lib/libisl.so.*-gdb.py || die
 }

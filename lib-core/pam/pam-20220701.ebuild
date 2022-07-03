@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="${HOMEPAGE}.git"
 else
-	SNAPSHOT=d3b73b6cd818f4fd9c923822592eccbe8ecdd121
+	SNAPSHOT=31645f4830162a3dd49513b74a5e56f40777e98c
 	SRC_URI="${HOMEPAGE}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/linux-${PN}-${SNAPSHOT}
 fi
@@ -24,11 +24,11 @@ IUSE="debug musl"
 
 BDEPEND="
 	app-build/flex
-	app-var/w3m
+	app-tex/docbook-sgml-dtd:4.5
 	app-tex/docbook-xml-dtd:4.1
 	app-tex/docbook-xml-dtd:4.3
 	app-tex/docbook-xml-dtd:4.4
-	app-tex/docbook-sgml-dtd:4.5
+	app-var/w3m
 "
 
 DEPEND="lib-net/libtirpc"

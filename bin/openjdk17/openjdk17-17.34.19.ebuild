@@ -4,7 +4,7 @@ EAPI=8
 
 BASEVERSION="17.0.3"
 
-DESCRIPTION="Zulu OpenJDK8 with JavaFX Support"
+DESCRIPTION="Zulu OpenJDK17"
 HOMEPAGE="https://www.azul.com/"
 
 SRC_URI="amd64? ( https://cdn.azul.com/zulu/bin/zulu${PV}-ca-jdk${BASEVERSION}-linux_x64.tar.gz )

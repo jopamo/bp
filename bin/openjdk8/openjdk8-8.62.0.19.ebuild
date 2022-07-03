@@ -7,9 +7,9 @@ BASEVERSION="8.0.332"
 DESCRIPTION="Zulu OpenJDK8 with JavaFX Support"
 HOMEPAGE="https://www.azul.com/"
 
-SRC_URI="https://cdn.azul.com/zulu/bin/zulu${PV}-ca-jdk${BASEVERSION}-linux_x64.tar.gz"
+SRC_URI="https://cdn.azul.com/zulu/bin/zulu${PV}-ca-fx-jdk${BASEVERSION}-linux_x64.tar.gz"
 
-S="${WORKDIR}/zulu${PV}-ca-jdk${BASEVERSION}-linux_x64"
+S="${WORKDIR}/zulu${PV}-ca-fx-jdk${BASEVERSION}-linux_x64"
 
 LICENSE="https://www.azul.com/products/core/openjdk-terms-of-use/"
 SLOT="0"
@@ -27,5 +27,6 @@ src_install() {
 	mkdir -p "${HERE}" || die
 	cp -rp	"${S}"/* "${HERE}"/ || die
 	rm "${HERE}"/src.zip || die
+	rm "${HERE}"/jre/lib/amd64/libglassgtk2.so || die
 	find "${ED}" -type d -empty -delete || die
 }

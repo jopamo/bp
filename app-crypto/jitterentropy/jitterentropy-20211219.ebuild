@@ -25,6 +25,7 @@ IUSE="static-libs"
 replace-flags -O2 -O0
 replace-flags -O3 -O0
 replace-flags -Os -O0
+replace-flags -Oz -O0
 
 src_prepare() {
 	default

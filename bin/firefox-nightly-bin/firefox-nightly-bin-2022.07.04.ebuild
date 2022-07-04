@@ -3,7 +3,7 @@
 EAPI=8
 
 MOZ_PN="firefox-nightly"
-TIMESTAMP="21-41-17"
+TIMESTAMP="09-20-38"
 MOZ_VER="104.0a1"
 
 inherit xdg-utils
@@ -54,8 +54,6 @@ src_install() {
 		insinto "/usr/share/icons/hicolor/${size}x${size}/apps"
 		newins "${icon_path}/default${size}.png" "${icon}.png" || die
 	done
-	# Install a 48x48 icon into /usr/share/pixmaps for legacy DEs
-	newicon "${S}"/browser/chrome/icons/default/default48.png ${PN}.png
 
 	# Install firefox in /opt
 	mkdir -p "${ED}"/opt/${MOZ_PN}/
@@ -71,13 +69,6 @@ src_install() {
 	insinto opt/${MOZ_PN}
 	doins "${FILESDIR}"/all-set.js
 
-	# Create /usr/bin/firefox-bin
-	dodir /usr/bin/
-	cat <<-EOF >"${D}"/usr/bin/${PN}
-	#!/bin/sh
-	exec /opt/${MOZ_PN}/firefox-bin "\$@"
-	EOF
-	fperms 0755 /usr/bin/${PN}
 	fperms 0755 /opt/${MOZ_PN}/firefox
 	fperms 0755 /opt/${MOZ_PN}/firefox-bin
 
@@ -86,14 +77,24 @@ src_install() {
 	echo "SEARCH_DIRS_MASK=opt/${MOZ_PN}" >> ${T}/10${PN}
 	doins "${T}"/10${PN} || die
 
-	rm -f "${ED}"/opt/${MOZ_PN}/pingsender
-	rm -f "${ED}"/opt/${MOZ_PN}/minidump-analyzer
-	rm -f "${ED}"/opt/${MOZ_PN}/crashreporter*
-	rm -f "${ED}"/opt/${MOZ_PN}/libnssckbi.so
-	rm -rf "${ED}"/opt/${MOZ_PN}/dictionaries
+	rm "${ED}"/opt/${MOZ_PN}/pingsender || die
+	rm "${ED}"/opt/${MOZ_PN}/minidump-analyzer || die
+	rm "${ED}"/opt/${MOZ_PN}/crashreporter* || die
+	rm "${ED}"/opt/${MOZ_PN}/libnssckbi.so || die
 
 	dosym -r /usr/share/hunspell /opt/${MOZ_PN}/dictionaries
 	dosym -r /usr/lib/libnssckbi.so /opt/${MOZ_PN}/libnssckbi.so
+
+	dodir /usr/bin/
+	dosym -r /usr/bin/firefox-nightly-bin /usr/bin/firefox
+
+	# Create /usr/bin/firefox-bin
+	cat <<-EOF >"${D}"/usr/bin/${PN}
+	#!/bin/sh
+	exec /opt/${MOZ_PN}/firefox-bin "\$@"
+	EOF
+
+	fperms 0755 /usr/bin/${PN}
 }
 
 pkg_postinst() {

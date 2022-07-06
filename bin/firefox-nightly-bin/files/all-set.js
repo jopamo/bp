@@ -136,7 +136,6 @@ lockPref("privacy.cpd.offlineApps", false);
 lockPref("privacy.cpd.sessions", true);
 lockPref("privacy.firstparty.isolate", false);
 lockPref("privacy.partition.serviceWorkers", true);
-lockPref("privacy.resistFingerprinting", true);
 lockPref("privacy.resistFingerprinting.block_mozAddonManager", true);
 lockPref("privacy.sanitize.timeSpan", 0);
 lockPref("privacy.userContext.enabled", true);

@@ -13,10 +13,12 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+alsa debug nvidia +x264 +x265 vaapi vdpau static-libs +openssl
-	+ffmpeg +network +protocols pulseaudio +nonfree +gpl +version3
-	+avutil	+avcodec +avformat +swscale +swresample
-	+avfilter +lame +libass +libdav1d +vorbis"
+IUSE="
+	+alsa +avcodec avdevice +avfilter +avformat +avutil debug
+	nvidia x264 +x265 vaapi vdpau static-libs +openssl +ffmpeg
+	+network postproc +protocols pulseaudio +nonfree +gpl +version3
+	 +swscale +swresample  +lame +libass +libdav1d +vorbis
+"
 
 DEPEND="
 	app-lang/nasm
@@ -29,15 +31,14 @@ DEPEND="
 	nvidia? (
 		xmedia-live-lib/nv-codec-headers
 		bin/nvidia-cuda
-		)
+	)
 	vaapi? (
 		xgui-live-lib/libva
 		xgui-live-lib/libva-intel-driver
-		)
+	)
 	vdpau? ( xgui-live-lib/libvdpau )
 "
 
-filter-flags -fno-common
 append-flags -ffat-lto-objects
 
 src_configure() {
@@ -52,8 +53,10 @@ src_configure() {
 		--ar="$(tc-getAR)" \
 		--extra-cflags="${CFLAGS}" \
   		--extra-cxxflags="${CXXFLAGS}" \
-  		$(use_enable alsa) \
+  		--nvccflags="-gencode arch=compute_75,code=sm_75 -O2 -I/opt/cuda/targets/x86_64-linux/include -allow-unsupported-compiler" \
+		$(use_enable alsa) \
 		$(use_enable avcodec) \
+		$(use_enable avdevice) \
 		$(use_enable avfilter) \
 		$(use_enable avformat) \
 		$(use_enable avutil) \
@@ -70,7 +73,10 @@ src_configure() {
 		$(use_enable nvidia ffnvcodec) \
 		$(use_enable nvidia libnpp) \
 		$(use_enable nvidia nvdec) \
+		$(usex nvidia '--extra-cflags=-I/opt/cuda/targets/x86_64-linux/include' '') \
+		$(usex nvidia '--extra-ldflags=-L/opt/cuda/targets/x86_64-linux/lib' '') \
 		$(use_enable openssl) \
+		$(use_enable postproc) \
 		$(use_enable protocols) \
 		$(use_enable pulseaudio libpulse) \
 		$(use_enable static-libs static) \
@@ -87,15 +93,8 @@ src_configure() {
 		--disable-manpages \
 		--disable-podpages \
 		--disable-txtpages \
-		--enable-decoders \
-		--enable-demuxers \
-		--enable-encoders \
-		--enable-filters \
+		--enable-pic \
 		--enable-lto \
-		--enable-muxer=matroska,mp4 \
 		--enable-nonfree \
-		--disable-stripping \
-		--nvccflags="-gencode arch=compute_75,code=sm_75 -O2 -I/opt/cuda/targets/x86_64-linux/include -allow-unsupported-compiler" \
-		--extra-cflags=-I/opt/cuda/targets/x86_64-linux/include \
-		--extra-ldflags=-L/opt/cuda/targets/x86_64-linux/lib
+		--disable-stripping
 }

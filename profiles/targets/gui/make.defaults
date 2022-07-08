@@ -1,3 +1,36 @@
-USE="${USE} X xkb pic drm qml opengl xdg xcb jpeg dbus pulseaudio kmod -rust"
-USE="${USE} cups mount gif jpeg mp3 png tiff zlib gui libinput cairo hwdb qt kvm"
-USE="${USE} bin pstore libx264 machined egl gles2 dri video libsamplerate ncat"
+USE="
+	bin
+	cairo
+	cups
+	dbus
+	dri
+	drm
+	egl
+	gif
+	gles2
+	gui
+	hwdb
+	jpeg
+	kmod
+	kvm
+	libinput
+	libsamplerate
+	machined
+	mount
+	mp3
+	ncat
+	opengl
+	pic
+	png
+	pstore
+	pulseaudio
+	qml
+	qt
+	tiff
+	video
+	xcb
+	xdg
+	xkb
+	zlib
+	X
+"

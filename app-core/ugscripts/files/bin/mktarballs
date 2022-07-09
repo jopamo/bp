@@ -29,13 +29,7 @@ for i in coreutils cpio diffutils findutils gperf grep libtool patch sed tar ; d
 		( cd "${WORKHOME}/$i" && rm -rf gnulib )
 		ln -s "${TEMPLOCATION}/gnulib_$i" "${WORKHOME}/$i/gnulib"
 
-		if [[ $i == 'patch' ]]; then
-			( cd "${TEMPLOCATION}/gnulib_$i" && git reset --hard b141afaf9ba197e361510da075556822ac453ff6 )
-			( cd ${WORKHOME}/$i && ./bootstrap --no-git --copy --skip-po --gnulib-srcdir="${TEMPLOCATION}/gnulib_$i" || ./autogen.sh )
-		else
-			( cd ${WORKHOME}/$i && ./bootstrap --copy --skip-po || ./autogen.sh )
-		fi
-
+		( cd ${WORKHOME}/$i && ./bootstrap --copy --skip-po || ./autogen.sh )
 		( cd ${WORKHOME} && tar -hcf - $i | tar -xf - -C ${TEMPLOCATION} )
 		mv ${TEMPLOCATION}/$i ${TEMPLOCATION}/${GITDATENAME}
 		find ${TEMPLOCATION}/${GITDATENAME} -name *~ -delete

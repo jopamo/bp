@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit libtool
+inherit autotools
 
 DESCRIPTION="library for multiple-precision floating-point computations with exact rounding"
 HOMEPAGE="http://www.mpfr.org/"
-SRC_URI="http://www.mpfr.org/mpfr-${PV}/${P}.tar.xz"
+
+SNAPSHOT=696c965c6377204b48ca2a8ea14e604c0b0c7b56
+SRC_URI="https://gitlab.inria.fr/mpfr/mpfr/-/archive/${SNAPSHOT}/procps-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="LGPL-2.1"
 SLOT="0"
@@ -16,18 +19,12 @@ IUSE="static-libs"
 
 RDEPEND="lib-core/gmp[static-libs?]"
 
-PATCHES=( "${FILESDIR}"/20210517.patch )
-
 src_prepare() {
 	default
-	find . -type f -exec touch -r configure {} +
-	elibtoolize
+	eautoreconf
 }
 
 src_configure() {
-	local myconf=(
-		$(use_enable static-libs static)
-	)
 	ECONF_SOURCE=${S} user_redefine_cc=yes \
 		econf $(use_enable static-libs static)
 }

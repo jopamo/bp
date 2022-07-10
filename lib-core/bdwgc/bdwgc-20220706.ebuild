@@ -13,7 +13,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="${HOMEPAGE}.git"
 else
 	ATOMIC_OPS_VER=69e188067616d258cdafa5a8a4ac6f03945090a8
-	SNAPSHOT=107cfe08b40d08226160f4e4eaef0a500586873c
+	SNAPSHOT=2afde2458e3c4619e6aebdb6b127f2584f290a0a
 	SRC_URI="
 		${HOMEPAGE}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz
 		${AOPS_URL}/archive/${ATOMIC_OPS_VER}.tar.gz -> libatomic_ops-${ATOMIC_OPS_VER}.tar.gz

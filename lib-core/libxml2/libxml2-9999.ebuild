@@ -11,7 +11,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git"
 	inherit git-r3
 else
-	SNAPSHOT=0aa8652e596a20e95ed334ac65cf15e6e9ec4b3b
+	SNAPSHOT=c9925454fd384a17c8c03d358c6778a552e9287b
 	SRC_URI="https://gitlab.gnome.org/GNOME/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
@@ -28,8 +28,8 @@ RDEPEND="
 	lib-core/zlib
 	icu? ( lib-dev/icu )
 	lzma? ( app-compression/xz-utils )
-	${PYTHON_DEPS}
 	readline? ( lib-core/readline )
+	${PYTHON_DEPS}
 "
 
 filter-flags -Wl,-z,defs

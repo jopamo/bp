@@ -14,7 +14,6 @@ elif [[ ${PV} == 20* ]]; then
 	SNAPSHOT=048907a501e2ee106cd9dabf6686697f3b73b562
 	SRC_URI="https://github.com/libevent/libevent/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64"
 	inherit autotools
 else
 	SRC_URI="https://github.com/libevent/libevent/releases/download/release-${PV}-stable/${P}-stable.tar.gz"
@@ -23,6 +22,7 @@ fi
 
 LICENSE="BSD"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="debug mbedtls +ssl static-libs test"
 

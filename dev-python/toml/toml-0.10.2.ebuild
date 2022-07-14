@@ -16,12 +16,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-BDEPEND="
-	test? (
-		$(python_gen_cond_dep '
-			dev-python/numpy[${PYTHON_USEDEP}]
-		' python3_{7..9})
-	)"
+BDEPEND="test? ( dev-python/numpy[${PYTHON_USEDEP}] )"
 
 DOCS=( README.rst )
 

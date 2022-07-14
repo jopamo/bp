@@ -15,13 +15,10 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_prepare() {
-	eautoreconf
 	default
+	eautoreconf
 }
 
 src_configure() {
-	local myconf=(
-		$(use_enable static-libs static)
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
+	ECONF_SOURCE=${S} econf $(use_enable static-libs static)
 }

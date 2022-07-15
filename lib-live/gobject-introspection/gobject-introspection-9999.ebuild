@@ -10,8 +10,7 @@ HOMEPAGE="https://wiki.gnome.org/Projects/GObjectIntrospection"
 if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/gobject-introspection.git"
 	inherit git-r3
-	#EGIT_BRANCH=
-	KEYWORDS="amd64 arm64"
+	EGIT_BRANCH=gnome-42
 else
 	SNAPSHOT=dd231b0faf587ff4e0e77519f724214e5876d5c2
 	SRC_URI="https://gitlab.gnome.org/GNOME/gobject-introspection/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
@@ -20,18 +19,19 @@ fi
 
 LICENSE="LGPL-2+ GPL-2+"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	>=lib-live/gobject-introspection-common-${PV}
 	lib-live/glib
 	lib-core/libffi
-	app-dev/pkgconf
 	${PYTHON_DEPS}
 "
-DEPEND="
-	>=app-dev/gtk-doc-am-1.19
+BDEPEND="
 	app-build/bison
 	app-build/flex
+	app-dev/gtk-doc-am
+	app-dev/pkgconf
 "
 
 filter-flags -Wl,-z,defs

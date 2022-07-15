@@ -12,6 +12,8 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64"
 
+RDEPEND="app-core/util-linux[logger]"
+
 src_install() {
 	dobin os-prober linux-boot-prober
 

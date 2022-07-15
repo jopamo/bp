@@ -16,14 +16,14 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 RDEPEND="
-	lib-core/libpcre
-	app-core/util-linux[mount]
 	app-core/attr
+	app-core/util-linux[mount]
+	lib-core/libpcre
 "
 DEPEND="
-	lib-core/libxslt
 	app-tex/docbook-xml-dtd
 	app-tex/docbook-xsl-stylesheets
+	lib-core/libxslt
 "
 
 src_configure() {
@@ -31,8 +31,8 @@ src_configure() {
 				-Ddefault_library=$(usex static-libs static shared)
 				-Ddtrace=false
 				-Dgtk_doc=false
-				-Dselinux=disabled
 				-Dlibmount=enabled
+				-Dselinux=disabled
 				-Dxattr=true
         )
         meson_src_configure

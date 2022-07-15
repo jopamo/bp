@@ -24,7 +24,7 @@ KEYWORDS="amd64 arm64"
 IUSE="
 	+agetty btrfs build cal caps chfn-chsh chmem cramfs eject
 	fallocate fdformat fstrim hardlink hwclock ipcmk ipcrm ipcs
-	irqtop +kill +libblkid +libuuid +last line logger +login
+	irqtop +kill +libblkid +libuuid +last line +logger +login
 	losetup +lscpu +lsfd +lsirq +lslogins +lsmem +lsns mesg mkfs
 	+mount mountpoint ncurses newgrp +nologin nsenter pam partx
 	pipesz pivot_root python raw readline +rename rfkill runuser

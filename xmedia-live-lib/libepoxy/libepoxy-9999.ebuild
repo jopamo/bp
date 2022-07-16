@@ -19,6 +19,6 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	xmedia-live-lib/mesa
+	xgui-misc/mesa
 	xgui-live-app/util-macros
 "

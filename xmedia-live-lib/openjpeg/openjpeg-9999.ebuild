@@ -17,7 +17,7 @@ IUSE="static-libs test"
 RESTRICT="test"
 
 DEPEND="
-	xmedia-live-lib/lcms
+	xgui-misc/lcms
 	xmedia-live-lib/libpng
 	xmedia-live-lib/tiff
 	lib-core/zlib

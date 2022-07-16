@@ -20,7 +20,7 @@ KEYWORDS="amd64 arm64"
 IUSE="egl gles2"
 
 RDEPEND="
-	xmedia-live-lib/mesa
+	xgui-misc/mesa
 	xgui-live-lib/libX11"
 DEPEND="${RDEPEND}
 	xgui-misc/glew

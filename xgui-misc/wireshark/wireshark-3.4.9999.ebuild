@@ -47,7 +47,7 @@ CDEPEND="
 	nghttp2? ( lib-net/nghttp2 )
 	lib-live/libpcap
 	portaudio? ( xmedia-live-lib/portaudio )
-	sbc? ( xmedia-live-lib/sbc )
+	sbc? ( xgui-misc/sbc )
 	smi? ( lib-net/libsmi )
 	snappy? ( app-compression/snappy )
 	spandsp? ( xmedia-live-lib/spandsp )

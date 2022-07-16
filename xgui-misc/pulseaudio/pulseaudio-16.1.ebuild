@@ -27,7 +27,7 @@ DEPEND="
 	app-build/gettext
 	lib-live/check
 	xmedia-live-lib/speexdsp
-	xmedia-live-lib/libsndfile
+	xgui-misc/libsndfile
 	X? (
 		xgui-live-lib/libX11
 		xgui-live-lib/libxcb
@@ -37,7 +37,7 @@ DEPEND="
 		xgui-live-app/xorgproto
 		xgui-live-lib/libXtst
 	)
-	bluez? ( xmedia-live-lib/sbc )
+	bluez? ( xgui-misc/sbc )
 	samplerate? ( xmedia-live-lib/libsamplerate )
 	alsa? ( xgui-misc/alsa-lib )
 	glib? ( lib-live/glib )

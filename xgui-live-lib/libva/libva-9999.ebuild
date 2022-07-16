@@ -20,7 +20,7 @@ RDEPEND=">=xgui-live-lib/libdrm-2.4.46
 		>=xgui-live-lib/libXext-1.3.2
 		>=xgui-live-lib/libXfixes-5.0.1
 	)
-	opengl? ( >=xmedia-live-lib/mesa-7.0-r1 )
+	opengl? ( >=xgui-misc/mesa-7.0-r1 )
 	wayland? ( >=xgui-live-lib/wayland-1.11 )"
 
 REQUIRED_USE="|| ( drm wayland X )

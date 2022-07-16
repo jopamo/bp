@@ -30,7 +30,7 @@ RDEPEND="
 		xgui-live-lib/libX11
 		xgui-live-lib/libXxf86vm
 		xgui-live-lib/pango
-		opengl? ( xmedia-live-lib/mesa )
+		opengl? ( xgui-misc/mesa )
 		tiff?   ( xmedia-live-lib/tiff )
 		)
 	aqua? (

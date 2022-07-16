@@ -12,7 +12,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	xmedia-live-lib/imlib2[X]
+	xgui-misc/imlib2[X]
 	xgui-live-lib/libX11
 	xgui-live-app/xorgproto
 "

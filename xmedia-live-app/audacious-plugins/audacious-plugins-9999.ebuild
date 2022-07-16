@@ -53,7 +53,7 @@ DEPEND="
 	scrobbler? ( app-net/curl )
 	sdl? ( xmedia-live-lib/libsdl2[sound] )
 	sid? ( xmedia-live-lib/libsidplayfp )
-	sndfile? ( xmedia-live-lib/libsndfile )
+	sndfile? ( xgui-misc/libsndfile )
 	soxr? ( xmedia-live-lib/soxr )
 	speedpitch? ( xmedia-live-lib/libsamplerate )
 	vorbis? (

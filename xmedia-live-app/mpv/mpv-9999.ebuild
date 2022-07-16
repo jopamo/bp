@@ -14,11 +14,11 @@ else
 	SNAPSHOT=07d78f8c8b4997c9331d376737d8107a89e91bdd
 	SRC_URI="https://github.com/mpv-player/mpv/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="LGPL-2.1+ GPL-2+ BSD ISC"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="+alsa +cli cuda drm +egl iconv jpeg lcms libmpv +lua
 	+opengl pulseaudio vaapi vapoursynth vdpau wayland +X
@@ -62,6 +62,7 @@ DEPEND="
 		xgui-live-lib/libXScrnSaver
 		xgui-live-lib/libXext
 		xgui-live-lib/libXinerama
+		xgui-live-lib/libXpresent
 		xgui-live-lib/libXrandr
 		opengl? (
 			xgui-live-lib/libXdamage
@@ -71,6 +72,13 @@ DEPEND="
 	)
 	zlib? ( lib-core/zlib )
 "
+
+src_prepare() {
+	default
+
+	#sed -i 's/.git/null/g' version.py
+	git config --global --add safe.directory "${WORKDIR}/mpv-9999"
+}
 
 src_configure() {
 	local emesonargs=(

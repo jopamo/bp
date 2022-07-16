@@ -15,7 +15,7 @@ IUSE="static-libs"
 
 DEPEND="
 	xmedia-live-lib/glu
-	>=xmedia-live-lib/mesa-7.0-r1
+	>=xgui-misc/mesa-7.0-r1
 	>=xgui-live-lib/libX11-1.6.2
 	>=xgui-live-lib/libXext-1.3.2
 	>=xgui-live-lib/libXi-1.7.2

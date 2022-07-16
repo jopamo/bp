@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND="xmedia-live-lib/mesa"
+DEPEND="xgui-misc/mesa"
 
 src_install() {
 	meson_src_install

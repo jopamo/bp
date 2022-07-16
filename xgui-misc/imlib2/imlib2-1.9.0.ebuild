@@ -11,7 +11,7 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI=https://git.enlightenment.org/legacy/imlib2.git
 	inherit git-r3
 else
-	SRC_URI="https://downloads.sourceforge.net/enlightenment/${P}.tar.bz2"
+	SRC_URI="https://downloads.sourceforge.net/enlightenment/${P}.tar.xz"
 fi
 
 LICENSE="Imlib2"

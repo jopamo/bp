@@ -155,7 +155,7 @@ SOFTMMU_TOOLS_DEPEND="
 	numa? ( sys-process/numactl[static-libs(+)] )
 	opengl? (
 		xmedia-live-lib/libepoxy[static-libs(+)]
-		xmedia-live-lib/mesa[static-libs(+)]
+		xgui-misc/mesa[static-libs(+)]
 	)
 	png? ( xmedia-live-lib/libpng[static-libs(+)] )
 	pulseaudio? ( xgui-misc/pulseaudio )

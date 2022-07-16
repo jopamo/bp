@@ -24,7 +24,7 @@ RDEPEND="
 	xgui-live-lib/libXrandr
 	xgui-live-lib/libXt
 	xgui-live-lib/pango
-	xmedia-live-lib/imlib2
+	xgui-misc/imlib2
 "
 
 DEPEND="

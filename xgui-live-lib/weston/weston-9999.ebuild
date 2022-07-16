@@ -28,7 +28,7 @@ RDEPEND="
 	lib-live/libinput
 	xgui-live-lib/wayland
 	xgui-live-lib/wayland-protocols
-	lcms? ( xmedia-live-lib/lcms:2 )
+	lcms? ( xgui-misc/lcms:2 )
 	xmedia-live-lib/libpng
 	webp? ( xmedia-live-lib/libwebp )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )
@@ -43,13 +43,13 @@ RDEPEND="
 	)
 	colord? ( >=x11-misc/colord-0.1.27 )
 	drm? (
-		xmedia-live-lib/mesa
+		xgui-misc/mesa
 		>=xgui-misc/mtdev-1.1.0
 		virtual/service-manager
 	)
 	editor? ( xgui-live-lib/pango )
 	gles2? (
-		xmedia-live-lib/mesa
+		xgui-misc/mesa
 	)
 	pipewire? ( >=xmedia-live-app/pipewire-0.2 )
 	rdp? ( >=app-net/freerdp-2.0.0_rc2:= )

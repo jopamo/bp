@@ -29,7 +29,7 @@ DEPEND="
 	xmedia-live-lib/libpng
 	gssapi? ( app-crypto/mit-krb5 )
 	mysql? ( app-server/mariadb )
-	opengl? ( xmedia-live-lib/mesa )
+	opengl? ( xgui-misc/mesa )
 	postgres? ( app-server/postgresql )
 	sqlite? ( lib-core/sqlite )
 	systemd? ( app-core/systemd )

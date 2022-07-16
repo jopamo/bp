@@ -38,7 +38,7 @@ DEPEND="
 	openal? ( xmedia-live-lib/openal )
 	opengl? (
 		xmedia-live-lib/glu
-		xmedia-live-lib/mesa
+		xgui-misc/mesa
 	)
 	pcap? ( lib-net/libpcap )
 	perl? (	app-lang/perl )

@@ -76,7 +76,7 @@ DEPEND="
 src_prepare() {
 	default
 
-	#sed -i 's/.git/null/g' version.py
+	#find a better way?
 	git config --global --add safe.directory "${WORKDIR}/mpv-9999"
 }
 

@@ -29,7 +29,7 @@ LIB_DEPEND="
 "
 RDEPEND="${LIB_DEPEND}"
 DEPEND="${RDEPEND}
-	xmedia-live-lib/freeglut
+	xgui-misc/freeglut
 	app-dev/pkgconf
 	static-libs? ( ${LIB_DEPEND} )
 	static? ( ${LIB_DEPEND//?}

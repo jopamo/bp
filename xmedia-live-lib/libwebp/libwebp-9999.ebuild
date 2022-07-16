@@ -17,7 +17,7 @@ IUSE="gif +jpeg neon opengl +png static-libs swap-16bit-csp tiff"
 DEPEND="gif? ( xmedia-live-lib/giflib:= )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )
 	opengl? (
-		xmedia-live-lib/freeglut
+		xgui-misc/freeglut
 		xmedia-live-lib/mesa
 		)
 	png? ( xmedia-live-lib/libpng:0= )

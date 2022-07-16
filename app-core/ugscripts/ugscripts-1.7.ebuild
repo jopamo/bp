@@ -26,7 +26,7 @@ src_install() {
 
 	if use video ; then
 		for f in mkv2aac mux_mp4 normalize_audio x264_anime x264_film \
-			x265_anime x265_film ; do
+			x265_anime x265_film x265 ; do
 				dobin "${FILESDIR}"/video/$f
 		done
 	fi

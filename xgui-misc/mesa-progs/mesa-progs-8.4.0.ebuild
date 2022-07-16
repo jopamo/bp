@@ -23,7 +23,7 @@ RDEPEND="
 	xmedia-live-lib/mesa
 	xgui-live-lib/libX11"
 DEPEND="${RDEPEND}
-	xmedia-live-lib/glew
+	xgui-misc/glew
 	xmedia-live-lib/glu
 	xgui-live-app/xorgproto"
 

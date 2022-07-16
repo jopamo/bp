@@ -33,7 +33,7 @@ COMMON_DEPEND="
 	wayland? (
 		xgui-live-lib/wayland
 		xgui-live-lib/wayland-protocols
-		xmedia-live-lib/mesa
+		xgui-misc/mesa
 		xgui-live-lib/libxkbcommon
 	)
 	X? (

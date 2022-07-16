@@ -29,7 +29,7 @@ COMMON_DEPEND="
 	curl? ( app-net/curl )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )
 	jpeg2k? ( xmedia-live-lib/openjpeg )
-	lcms? ( xmedia-live-lib/lcms )
+	lcms? ( xgui-misc/lcms )
 	png? ( xmedia-live-lib/libpng )
 	qt5? ( xgui-live-lib/qtbase	)
 	tiff? ( xmedia-live-lib/tiff )

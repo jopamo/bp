@@ -46,7 +46,7 @@ DEPEND="
 	)
 	drm? ( xgui-live-lib/libdrm )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )
-	lcms? ( xmedia-live-lib/lcms )
+	lcms? ( xgui-misc/lcms )
 	lua? ( app-lang/luajit )
 	pulseaudio? ( xgui-misc/pulseaudio )
 	vaapi? ( xgui-live-lib/libva:=[drm?,X?,wayland?] )
@@ -65,7 +65,7 @@ DEPEND="
 		xgui-live-lib/libXrandr
 		opengl? (
 			xgui-live-lib/libXdamage
-			xmedia-live-lib/mesa
+			xgui-misc/mesa
 		)
 		xv? ( xgui-live-lib/libXv )
 	)

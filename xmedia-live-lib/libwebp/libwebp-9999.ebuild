@@ -18,7 +18,7 @@ DEPEND="gif? ( xmedia-live-lib/giflib:= )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )
 	opengl? (
 		xgui-misc/freeglut
-		xmedia-live-lib/mesa
+		xgui-misc/mesa
 		)
 	png? ( xmedia-live-lib/libpng:0= )
 	tiff? ( xmedia-live-lib/tiff:0= )"

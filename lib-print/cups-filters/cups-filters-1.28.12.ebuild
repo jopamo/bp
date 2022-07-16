@@ -25,7 +25,7 @@ DEPEND="
 	lib-live/glib
 	lib-print/cups
 	xgui-misc/freetype
-	xmedia-live-lib/lcms
+	xgui-misc/lcms
 	dbus? ( app-core/dbus )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )
 	ldap? ( app-net/openldap )

@@ -26,7 +26,7 @@ COMMON_DEPEND="
 	xgui-live-lib/libXrender
 	xgui-live-lib/xcb-util
 	dbus? ( app-core/dbus )
-	opengl? ( xmedia-live-lib/mesa )
+	opengl? ( xgui-misc/mesa )
 	pcre? ( lib-core/libpcre )
 "
 

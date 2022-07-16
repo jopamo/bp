@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="sndfile static-libs"
 
-DEPEND="sndfile? ( xmedia-live-lib/libsndfile:= )"
+DEPEND="sndfile? ( xgui-misc/libsndfile:= )"
 
 src_prepare() {
 	default

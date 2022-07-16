@@ -28,7 +28,7 @@ DEPEND="
 	xgui-live-lib/libxkbcommon
 	xgui-live-lib/pixman
 	xgui-live-lib/wayland
-	xmedia-live-lib/mesa
+	xgui-misc/mesa
 "
 BDEPEND="
 	xgui-live-lib/wayland-protocols

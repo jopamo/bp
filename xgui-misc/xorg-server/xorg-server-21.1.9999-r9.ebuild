@@ -45,12 +45,12 @@ DEPEND="
 	xgui-misc/xkeyboard-config
 	glamor? (
 		xmedia-live-lib/libepoxy
-		xmedia-live-lib/mesa
+		xgui-misc/mesa
 	)
 	!minimal? (
 		xgui-live-lib/libX11
 		xgui-live-lib/libXext
-		xmedia-live-lib/mesa
+		xgui-misc/mesa
 	)
 	udev? ( app-core/systemd )
 	systemd? (

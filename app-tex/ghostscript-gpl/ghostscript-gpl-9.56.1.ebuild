@@ -20,7 +20,7 @@ DEPEND="
 	fonts/fontconfig
 	>=xgui-misc/freetype-2.4.9:2=
 	xmedia-live-lib/jbig2dec
-	>=xmedia-live-lib/lcms-2.6:2
+	>=xgui-misc/lcms-2.6:2
 	>=xmedia-live-lib/libpng-1.6.2:0=
 	>=xmedia-live-lib/openjpeg-2.1.0:2=
 	>=lib-core/zlib-1.2.7:=

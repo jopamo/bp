@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit xdg-utils qmake-utils git-r3
+inherit xdg-utils cmake git-r3
 
 DESCRIPTION="Lightweight Qt5 Plain-Text Editor"
 HOMEPAGE="https://github.com/tsujan/FeatherPad"
@@ -21,12 +21,8 @@ DEPEND="
 
 PATCHES=( "${FILESDIR}"/ebuild.patch )
 
-src_configure() {
-	eqmake5 fp.pro
-}
-
 src_install() {
-	emake INSTALL_ROOT="${ED}" install
+	cmake_src_install
 	insinto /etc/xdg/featherpad
 	doins "${FILESDIR}"/fp.conf
 }

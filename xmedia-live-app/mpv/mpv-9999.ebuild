@@ -11,7 +11,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/mpv-player/mpv.git"
 	inherit git-r3
 else
-	SNAPSHOT=07d78f8c8b4997c9331d376737d8107a89e91bdd
+	SNAPSHOT=""
 	SRC_URI="https://github.com/mpv-player/mpv/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

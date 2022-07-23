@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic libtool python-any-r1 autotools
+inherit flag-o-matic libtool python-any-r1
 
 DESCRIPTION="An OpenType text shaping engine"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/HarfBuzz"
@@ -31,6 +31,7 @@ BDEPEND="
 
 pkg_setup() {
 	use test && python-any-r1_pkg_setup
+
 	if ! use debug ; then
 		append-cppflags -DHB_NDEBUG
 	fi
@@ -39,21 +40,19 @@ pkg_setup() {
 src_prepare() {
 	default
 	xdg_environment_reset
-	eautoreconf
 }
 
 src_configure() {
-	# harfbuzz-gobject only used for instrospection, bug #535852
 	local myconf=(
-		--without-coretext
-		--without-uniscribe
+		$(use_enable introspection)
 		$(use_enable static-libs static)
 		$(use_with cairo)
 		$(use_with glib)
 		$(use_with introspection gobject)
-		--without-icu
-		$(use_enable introspection)
 		$(use_with truetype freetype)
+		--without-coretext
+		--without-icu
+		--without-uniscribe
 	)
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }

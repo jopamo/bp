@@ -12,11 +12,10 @@ LICENSE="linux-firmware ( BSD ISC MIT no-source-code ) GPL-2 GPL-2+ freedist"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="amdgpu qcom netronome liquidio iwlwifi intel qed brcm ath10k
-	mellanox dpaa2 bnx2x mrvl ti i915 radeon cxgb4 mediatek nvidia
-	ueagle-atm libertas bnx2 ath11k cypress phanfw i6050 i2400m
-	rsi rtlwifi qca carl9170fw ath6k vxge rtl_bt atmel rtw88 mwl8k
-	mwlwifi ct2fw ar3k myri10ge ctfw cbfw moxa"
+IUSE="3com amdgpu ar3k ath10k ath11k ath6k atmel bnx2 brcm carl9170fw cbfw cis
+ct2fw ctfw cxgb4 cypress dpaa2 i915 intel iwlwifi keyspan libertas liquidio
+mediatek mellanox meson moxa mrvl mwl8k mwlwifi myri10ge netronome nouveau
+phanfw qca qcom qed radeon rsi rtl_bt rtl_nic rtlwifi rtw88 ti ueagle-atm vxge"
 
 RESTRICT="strip"
 
@@ -25,9 +24,16 @@ QA_PREBUILT="lib/firmware/*"
 src_prepare() {
 	default
 
+	rm GPL* LICEN* Makefile README WHENCE || die
+
+	#dummy install
+	mkdir nouveau
+
 	for x in ${IUSE} ; do
-		use ${x} || rm -rf ${x}*
+		use ${x} || rm -r ${x}* || die
 	done
+
+	use nouveau || rm -r nvidia || die
 }
 
 src_install() {

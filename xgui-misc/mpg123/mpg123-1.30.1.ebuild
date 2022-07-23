@@ -20,7 +20,8 @@ DEPEND="
 
 BDEPEND="
 	app-build/libtool
-	app-dev/pkgconf"
+	app-dev/pkgconf
+"
 
 append-cflags -D_GNU_SOURCE
 
@@ -31,16 +32,10 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-		--enable-network
 		$(use_enable ipv6)
 		--disable-id3v2
 		--enable-int-quality
+		--enable-network
 		--with-audio="alsa pulse"
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

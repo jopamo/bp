@@ -11,7 +11,7 @@ if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI=https://github.com/freedesktop/${PN}.git
 	inherit git-r3
 else
-	SRC_URI="https://www.x.org/pub/individual/data/${PN}/${P}.tar.bz2"
+	SRC_URI="https://www.x.org/pub/individual/data/${PN}/${P}.tar.xz"
 	KEYWORDS="amd64 arm64"
 fi
 
@@ -23,8 +23,8 @@ DEPEND="
 	app-dev/intltool"
 
 src_prepare() {
-	eautoreconf
 	default
+	eautoreconf
 }
 
 src_configure() {

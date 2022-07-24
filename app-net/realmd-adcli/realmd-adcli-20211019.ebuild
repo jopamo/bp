@@ -22,7 +22,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	app-net/openldap
-	app-live/cyrus-sasl
+	app-net/cyrus-sasl
 "
 
 src_prepare() {

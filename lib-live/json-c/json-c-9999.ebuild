@@ -10,9 +10,8 @@ HOMEPAGE="https://github.com/json-c/json-c/wiki"
 if [[ ${PV} == *9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/json-c/json-c.git"
-	EGIT_BRANCH=json-c-$(ver_cut 1-2)
 else
-	SNAPSHOT=
+	SNAPSHOT=""
 	SRC_URI="https://github.com/json-c/json-c/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

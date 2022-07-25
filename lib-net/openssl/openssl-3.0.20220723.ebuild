@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=f5beeb29a0a46757a2f0724048a2ece67034874e
+SNAPSHOT=55461bf22a57a35d299f052323dfb659620a1dcd
 
 inherit flag-o-matic toolchain-funcs
 
@@ -13,13 +13,16 @@ S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="openssl"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="static-libs test zlib"
 
 RESTRICT="test"
 
-DEPEND="app-var/c_rehash"
+DEPEND="
+	app-var/c_rehash
+	zlib? ( lib-core/zlib )
+"
 
 BDEPEND="
 	app-var/c_rehash
@@ -104,7 +107,6 @@ src_configure() {
 		no-ssl3 \
 		no-ssl3-method \
 		no-async \
-		no-comp \
 		no-idea \
 		no-mdc2 \
 		no-rc5 \
@@ -112,8 +114,8 @@ src_configure() {
 		no-sm2 \
 		no-sm4 \
 		no-seed \
-		no-zlib \
 		no-weak-ssl-ciphers \
+		$(usex zlib enable-zlib no-zlib) \
 		--prefix="${EPREFIX}"/usr \
 		--libdir="${EPREFIX}"/usr/lib \
 		--openssldir="${EPREFIX}"${SSL_CNF_DIR} \

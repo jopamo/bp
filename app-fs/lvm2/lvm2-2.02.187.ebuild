@@ -24,7 +24,10 @@ DEPEND="
 
 S=${WORKDIR}/LVM2.${PV}
 
-PATCHES=( "${FILESDIR}"/mallinfo.patch )
+PATCHES=(
+	"${FILESDIR}"/mallinfo.patch
+	"${FILESDIR}"/fix-stdio-usage.patch
+)
 
 src_configure() {
 	local myconf=(

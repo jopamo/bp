@@ -70,6 +70,7 @@ for i in gh ; do
 	GITDATENAME="$i-$(cd ${WORKHOME}/$i && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
 
 	if [ ! -f "${WORKHOME}/${GITDATENAME}.tar.xz" ]; then
+		( cd ${WORKHOME}/$i && go mod vendor )
 		( cd ${WORKHOME}/$i && make && make clean )
 
 		tar -hcf - $i | tar -xf - -C ${TEMPLOCATION}

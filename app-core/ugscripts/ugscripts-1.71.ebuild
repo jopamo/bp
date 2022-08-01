@@ -19,7 +19,7 @@ src_install() {
 	done
 
 	#sbin files
-	for f in efixperm emirror esync eup lighttpd_certs \
+	for f in eclass_import efixperm emirror esync eup lighttpd_certs \
 		mkheaders mkimg mkmini mkstage xbkup xchroot ; do
 			dosbin "${FILESDIR}"/sbin/$f
 	done

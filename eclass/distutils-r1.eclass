@@ -224,7 +224,7 @@ _distutils_set_globals() {
 				;;
 			maturin)
 				bdep+='
-					>=dev-util/maturin-0.12.7[${PYTHON_USEDEP}]'
+					>=app-dev/maturin-0.12.7[${PYTHON_USEDEP}]'
 				;;
 			no)
 				# undo the generic deps added above
@@ -935,7 +935,7 @@ _distutils-r1_print_package_versions() {
 				;;
 			maturin)
 				packages+=(
-					dev-util/maturin
+					app-dev/maturin
 				)
 				;;
 			no)

@@ -1,6 +1,7 @@
-app-net/networkmanager -nss gnutls
-lib-core/libxml2 python
-app-fs/cryptsetup -ssl
 app-build/gcc lto
 app-core/systemd dhcp4 networkd
+app-fs/cryptsetup -ssl
+app-net/networkmanager -nss gnutls
+lib-core/libxml2 python
 lib-net/nodejs icu
+xgui-misc/wireshark bcg729 capinfos caps captype ciscodump dcerpcidl2wrs dftest dpauxmon dumpcap editcap libssh mergecap mmdbresolve netlink plugins qt randpkt randpktdump rawshark reordercap sdjournal sharkd sshdump text2pcap tshark udpdump

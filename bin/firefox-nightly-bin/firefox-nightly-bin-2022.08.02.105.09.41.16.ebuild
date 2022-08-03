@@ -6,7 +6,7 @@ MOZ_PN="firefox-nightly"
 TIMESTAMP="$(ver_cut 5)-$(ver_cut 6)-$(ver_cut 7)"
 MOZ_VER="$(ver_cut 4).0a1"
 
-inherit xdg-utils
+inherit xdg
 
 DESCRIPTION="Firefox Web Browser"
 HOMEPAGE="http://www.mozilla.com/firefox"
@@ -95,12 +95,4 @@ src_install() {
 	EOF
 
 	fperms 0755 /usr/bin/${PN}
-}
-
-pkg_postinst() {
-	xdg_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_icon_cache_update
 }

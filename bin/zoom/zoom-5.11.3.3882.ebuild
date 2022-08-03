@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit xdg-utils
+inherit xdg
 
 DESCRIPTION="Video conferencing and web conferencing service"
 HOMEPAGE="https://zoom.us/"

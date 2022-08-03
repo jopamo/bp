@@ -2,10 +2,10 @@
 
 EAPI=8
 
-IDEA_VER="2.33828453.558307708.1649857043-998802185.1649857043"
+IDEA_VER="2.49836838.1031729952.1658961170-1305167137.1658527855"
 MY_PV="$(ver_cut 1-2)"
 
-inherit xdg-utils
+inherit xdg
 
 DESCRIPTION="A complete toolset for web, mobile and enterprise development"
 HOMEPAGE="https://www.jetbrains.com/idea"

@@ -14,12 +14,12 @@ SLOT=0
 KEYWORDS="amd64 arm64"
 
 IUSE="
-	adns androiddump asan bcg729 capinfos caps captype ccache ciscodump
+	androiddump asan bcg729 capinfos caps captype ccache ciscodump
 	corbaidl2wrs dcerpcidl2wrs debug dftest dpauxmon dumpcap editcap
 	fuzzer kerberos libssh libxml2 lua lz4 mergecap mmdbresolve netlink
 	nghttp2 plugins qt randpkt randpktdump rawshark reordercap sbc
 	sdjournal sharkd snappy sshdump ssl static-libs text2pcap tfshark
-	tsan tshark ubsan udpdump xxx2deb zlib
+	tsan tshark ubsan udpdump xxx2deb zlib zstd
 "
 REQUIRED_USE="
 	ciscodump? ( libssh )
@@ -30,7 +30,7 @@ DEPEND="
 	lib-core/libgcrypt
 	lib-live/glib
 	lib-live/libpcap
-	adns? ( lib-net/c-ares )
+	lib-net/c-ares
 	caps? ( lib-core/libcap )
 	qt? (
 		xgui-live-lib/qtbase
@@ -45,6 +45,7 @@ DEPEND="
 	snappy? ( app-compression/snappy )
 	ssl? ( lib-net/gnutls )
 	zlib? ( lib-core/zlib )
+	zstd? ( app-compression/zstd )
 "
 
 BDEPEND="
@@ -101,6 +102,7 @@ src_configure() {
 		-D ENABLE_KERBEROS="$(usex kerberos)"
 		-D ENABLE_LIBXML2="$(usex libxml2)"
 		-D ENABLE_LUA="$(usex lua)"
+		-D ENABLE_LTO=OFF
 		-D ENABLE_LZ4="$(usex lz4)"
 		-D ENABLE_NGHTTP2="$(usex nghttp2)"
 		-D ENABLE_OPUS=OFF
@@ -114,6 +116,7 @@ src_configure() {
 		-D ENABLE_TSAN="$(usex tsan)"
 		-D ENABLE_UBSAN="$(usex ubsan)"
 		-D ENABLE_ZLIB="$(usex zlib)"
+		-D ENABLE_ZSTD="$(usex zstd)"
 	)
 	cmake_src_configure
 }

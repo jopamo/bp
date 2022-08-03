@@ -12,7 +12,7 @@ if [[ ${PV} = *9999 ]]; then
 	inherit git-r3
 	EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)/master"
 else
-	SNAPSHOT=b6aade18a7e5719c942aa2da6cf3157aca993fa4
+	SNAPSHOT=0e5b239f45992e4b54c6f946ecb0c410afc8bb08
 	SRC_URI="https://github.com/bminor/glibc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -40,13 +40,6 @@ PDEPEND="lib-core/tzdb"
 PATCHES=(
 	"${FILESDIR}"/0001-Disable-ldconfig-during-install.patch
 )
-
-filter-flags -flto\*
-filter-flags -D_FORTIFY_SOURCE\*
-filter-flags -Wl,-z,defs
-filter-flags -fstack-protector-strong
-filter-flags -fassociative-math
-filter-flags -fno-semantic-interposition
 
 check_devpts() {
 	# Make sure devpts is mounted correctly for use w/out setuid pt_chown.
@@ -114,6 +107,13 @@ src_prepare() {
 }
 
 src_configure() {
+	filter-flags -flto*
+	filter-flags -D_FORTIFY_SOURCE*
+	filter-flags -Wl,-z,defs
+	filter-flags -fstack-protector-strong
+	filter-flags -fassociative-math
+	filter-flags -fno-semantic-interposition
+
 	export MAKEINFO=/dev/null
 
 	myconf=(

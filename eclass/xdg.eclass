@@ -31,7 +31,7 @@ EXPORT_FUNCTIONS pkg_preinst pkg_postinst pkg_postrm
 # Avoid dependency loop as both depend on glib-2
 if [[ ${CATEGORY}/${P} != lib-live/glib-2.* ]] ; then
 _XDG_DEPEND="
-	app-dev/desktop-file-utils
+	xgui-misc/desktop-file-utils
 	xgui-live-app/shared-mime-info
 "
 

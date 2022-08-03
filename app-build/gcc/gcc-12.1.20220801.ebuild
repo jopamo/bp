@@ -2,18 +2,17 @@
 
 EAPI=8
 
-SNAPSHOT="$(ver_cut 1)-$(ver_cut 3-)"
-
 inherit flag-o-matic
 
 DESCRIPTION="an optimizing compiler produced by the GNU Project supporting various programming languages"
 HOMEPAGE="https://gcc.gnu.org/"
 
-SNAPSHOT=55899e33de74082521708a58fdc79510e0c5efad
+SNAPSHOT=5f583aa1c56af983ca8f2b8bc57122c4be5a6e55
 SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 #official snapshots
+#SNAPSHOT="$(ver_cut 1)-$(ver_cut 3-)"
 #SRC_URI="mirror://gcc/snapshots/${SNAPSHOT}/gcc-${SNAPSHOT}.tar.xz"
 #S=${WORKDIR}/gcc-${SNAPSHOT}
 

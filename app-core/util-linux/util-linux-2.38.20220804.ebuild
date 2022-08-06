@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/karelzak/util-linux.git"
 	EGIT_BRANCH="stable/v$(ver_cut 1-2)"
 else
-	SNAPSHOT=aff94adda7d94f79d184db1a524c5a79119c8a28
+	SNAPSHOT=8ac75e31de0ece74515e98e0b22e54cc0a9808bd
 	SRC_URI="https://github.com/util-linux/util-linux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -22,15 +22,15 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="
-	+agetty btrfs build cal caps chfn-chsh chmem cramfs eject
+	agetty btrfs build cal caps chfn-chsh chmem cramfs eject
 	fallocate fdformat fstrim hardlink hwclock ipcmk ipcrm ipcs
-	irqtop +kill +libblkid +libuuid +last line +logger +login
-	losetup +lscpu +lsfd +lsirq +lslogins +lsmem +lsns mesg mkfs
-	+mount mountpoint ncurses newgrp +nologin nsenter pam partx
-	pipesz pivot_root python raw readline +rename rfkill runuser
-	+schedutils scriptutils setpriv static-libs +su +suid
-	+sulogin swapon switch_root systemd test +tty-helpers tunelp
-	udev ul unshare utmpdump uuidd vipw wdctl whereis +wipefs
+	irqtop kill libblkid libuuid last line logger login
+	losetup lscpu lsfd lsirq lslogins lsmem lsns mesg mkfs
+	mount mountpoint ncurses newgrp nologin nsenter pam partx
+	pipesz pivot_root python raw readline rename rfkill runuser
+	schedutils scriptutils setpriv static-libs su suid
+	sulogin swapon switch_root systemd test tty-helpers tunelp
+	udev ul unshare utmpdump uuidd vipw wdctl whereis wipefs
 	zramctl
 "
 

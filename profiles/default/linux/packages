@@ -21,7 +21,7 @@
 *app-core/portage
 *app-core/shadow
 *app-var/pax-utils
-*app-var/vim
+*app-core/vim
 *lib-core/elfutils
 *virtual/service-manager
 *app-core/busybox

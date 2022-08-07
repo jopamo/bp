@@ -7,7 +7,7 @@ inherit flag-o-matic
 DESCRIPTION="Vim, an improved vi-style text editor"
 HOMEPAGE="https://vim.sourceforge.io/ https://github.com/vim/vim"
 
-if [[ ${PV} = *9999* ]]; then
+if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/vim/vim"
 	inherit git-r3
 else
@@ -18,12 +18,11 @@ LICENSE="vim"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl debug huge libsodium +xxd"
+IUSE="acl debug +normal +xxd"
 
 DEPEND="
 	virtual/curses
 	acl? ( app-core/acl )
-	libsodium? ( lib-live/libsodium )
 "
 BDEPEND="
 	app-build/autoconf
@@ -31,6 +30,7 @@ BDEPEND="
 "
 
 src_configure() {
+	#die
 	use debug && append-flags "-DDEBUG"
 
 	# let package manager strip binaries
@@ -41,7 +41,6 @@ src_configure() {
 		--localstatedir="${EPREFIX}"/var/lib/vim
 		--with-features=tiny
 		$(use_enable acl)
-		$(use_enable libsodium)
 		--disable-canberra
 		--disable-darwin
 		--disable-gpm
@@ -57,29 +56,30 @@ src_configure() {
 		--without-x
 	)
 
-	local huge=(
+	local normal=(
 		--prefix="${EPREFIX}"/usr
 		--localstatedir="${EPREFIX}"/var/lib/vim
-		--with-features=huge
+		--with-features=normal
 		$(use_enable acl)
-		$(use_enable libsodium)
 		--disable-canberra
+		--disable-cscope
+		--disable-gpm
 		--disable-gui
-		--enable-cscope
-		--enable-gpm
+		--disable-luainterp
+		--disable-mzschemeinterp
+		--disable-netbeans
+		--disable-nls
+		--disable-perlinterp
+		--disable-pythoninterp
+		--disable-rubyinterp
+		--disable-selinux
+		--disable-tclinterp
 		--enable-gui=no
-		--enable-luainterp=dynamic
-		--enable-multibyte
-		--enable-netbeans
-		--enable-perlinterp=dynamic
-		--enable-python3interp=dynamic
-		--enable-rubyinterp=dynamic
-		--enable-tclinterp=dynamic
 		--without-x
 	)
 
-	use huge || ECONF_SOURCE=${S} econf "${tiny[@]}"
-	use huge && ECONF_SOURCE=${S} econf "${huge[@]}"
+	use normal || ECONF_SOURCE=${S} econf "${tiny[@]}"
+	use normal && ECONF_SOURCE=${S} econf "${normal[@]}"
 }
 
 src_compile() {
@@ -108,7 +108,7 @@ src_test() {
 }
 
 src_install() {
-	if ! use huge ; then
+	if ! use normal ; then
 		dobin src/vim
 		doman runtime/doc/vim.1
 
@@ -122,13 +122,11 @@ src_install() {
 		fi
 
 		insopts -m 0644
-		insinto /usr/share/vim/vim82
+		insinto /usr/share/vim/vim$(ver_cut 1)$(ver_cut 2)
 		doins runtime/defaults.vim
 	else
 		default
-		rm -r "${ED}"/usr/share/icons || die
-		rm -r "${ED}"/usr/share/man/{da*,it*,pl*,tr*} || die
-		rm -r "${ED}"/usr/share/vim/vim82/{doc,lang,keymap,tools,tutor} || die
+		rm -r "${ED}"/usr/share/{applications,icons} || die
 	fi
 
 	insopts -m 0644

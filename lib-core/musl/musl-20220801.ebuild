@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=4100279825c17807bdabf1c128ba4e49a1dea406
+SNAPSHOT=46d1c7801bb509e1097e8fadbaf359367fa4ef0b
 
 inherit flag-o-matic
 
@@ -17,14 +17,14 @@ KEYWORDS="amd64 arm64"
 
 IUSE="musl libxcrypt"
 
-filter-flags -flto\*
-
 src_prepare() {
 	default
 	cp "${FILESDIR}"/* "${S}"/ || die
 }
 
 src_configure() {
+	filter-flags -flto*
+
 	local systemwide=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -91,9 +91,9 @@ src_install() {
 		if use libxcrypt ; then
 			rm "${ED}"/usr/include/crypt.h || die
 		fi
+	else
+		for i in linux asm asm-generic mtd ; do
+			dosym -r /usr/include/$i /usr/musl/include/$i
+		done
 	fi
-
-	for i in linux asm asm-generic mtd ; do
-		dosym -r /usr/include/$i /usr/musl/include/$i
-	done
 }

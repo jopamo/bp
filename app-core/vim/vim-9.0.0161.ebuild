@@ -18,7 +18,7 @@ LICENSE="vim"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl debug +normal +xxd"
+IUSE="acl debug normal +xxd"
 
 DEPEND="
 	virtual/curses

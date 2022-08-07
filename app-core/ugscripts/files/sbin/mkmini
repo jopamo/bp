@@ -331,7 +331,7 @@ tar xvhf screen* --xattrs
 rm screen* || exit
 
 #vim
-cp /var/cache/packages/app-var/vim/* .
+cp /var/cache/packages/app-core/vim/* .
 tar xvhf vim* --xattrs
 rm vim* || exit
 

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs autotools git-r3
+inherit autotools git-r3
 
 DESCRIPTION="Userspace access to USB devices"
 HOMEPAGE="http://libusb.info/ https://github.com/libusb/libusb"
@@ -21,10 +21,10 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		$(use_enable static-libs static)
-		$(use_enable udev)
 		$(use_enable debug debug-log)
+		$(use_enable static-libs static)
 		$(use_enable test tests-build)
+		$(use_enable udev)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

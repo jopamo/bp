@@ -30,7 +30,6 @@ BDEPEND="
 "
 
 src_configure() {
-	#die
 	use debug && append-flags "-DDEBUG"
 
 	# let package manager strip binaries

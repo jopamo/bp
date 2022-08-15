@@ -2,12 +2,20 @@
 
 EAPI=8
 
-inherit flag-o-matic toolchain-funcs git-r3
+inherit flag-o-matic toolchain-funcs autotools
 
 DESCRIPTION="Standard EXT2/EXT3/EXT4 filesystem utilities"
 HOMEPAGE="http://ext4.wiki.kernel.org/"
-EGIT_REPO_URI=https://kernel.googlesource.com/pub/scm/fs/ext2/e2fsprogs.git
-EGIT_BRANCH=maint
+
+if [[ ${PV} == *9999 ]] ; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/tytso/e2fsprogs.git"
+	EGIT_BRANCH=maint
+else
+	SNAPSHOT=b770b0fe7e2564afd95f2008533c6db435e74456
+	SRC_URI="https://github.com/tytso/e2fsprogs/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="GPL-2 BSD"
 SLOT="0"
@@ -25,10 +33,15 @@ BDEPEND="
 	app-build/texinfo
 "
 
-append-cflags -fno-strict-aliasing
-append-cppflags -D_GNU_SOURCE
+src_prepare() {
+	default
+	eautoreconf
+}
 
 src_configure() {
+	append-cflags -fno-strict-aliasing
+	append-cppflags -D_GNU_SOURCE
+
 	local myconf=(
 		--prefix="${EPREFIX}/usr"
 		$(tc-is-static-only || echo --enable-elf-shlibs)
@@ -36,8 +49,8 @@ src_configure() {
 		--disable-fsck
 		--disable-libblkid
 		--disable-libuuid
-		--disable-uuidd
 		--disable-nls
+		--disable-uuidd
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

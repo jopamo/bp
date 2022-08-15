@@ -1,8 +1,8 @@
 *app-fs/ncdu
 *fonts/fira-code
-*fonts/source-code-pro
 *fonts/font-alias
 *fonts/liberation-fonts
+*fonts/source-code-pro
 *lib-live/libinput
 *xgui-icontheme/adwaita-plus
 *xgui-icontheme/adwaita-qt
@@ -10,7 +10,6 @@
 *xgui-live-app/arqiver
 *xgui-live-app/featherpad
 *xgui-live-app/hsetroot
-*xgui-live-app/keepassxc
 *xgui-live-app/lxappearance
 *xgui-live-app/lxqt-panel
 *xgui-live-app/obconf-qt
@@ -21,6 +20,7 @@
 *xgui-live-app/speedcrunch
 *xgui-live-app/xrandr
 *xgui-misc/alsa-utils
+*xgui-misc/keepassxc
 *xgui-misc/mesa-progs
 *xmedia-live-app/audacious
 *xmedia-live-app/lximage-qt

@@ -16,8 +16,8 @@ IUSE="debug exif"
 
 DEPEND="
 	lib-live/glib
-	xgui-live-lib/menu-cache
 	xgui-live-app/shared-mime-info
+	xgui-misc/menu-cache
 	exif? ( xmedia-live-lib/libexif )
 "
 BDEPEND="

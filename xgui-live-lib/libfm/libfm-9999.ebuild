@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools git-r3 xdg-utils
+inherit autotools git-r3 xdg
 
 DESCRIPTION="A library for file management"
 HOMEPAGE="https://github.com/lxde/${PN}"
@@ -21,9 +21,9 @@ DEPEND="
 	exif? ( xmedia-live-lib/libexif )
 "
 BDEPEND="
+	app-build/gettext
 	app-dev/intltool
 	app-dev/pkgconf
-	app-build/gettext
 "
 
 src_prepare() {
@@ -33,15 +33,15 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--disable-dependency-tracking
-		--disable-static
-		--disable-demo
-		$(use_enable exif)
 		$(use_enable debug)
-		--disable-udisks
-		--with-gtk=3
+		$(use_enable exif)
+		--disable-demo
+		--disable-dependency-tracking
 		--disable-gtk-doc
 		--disable-old-actions
+		--disable-static
+		--disable-udisks
+		--with-gtk=3
 	)
 	econf ${myconf[@]}
 }
@@ -51,14 +51,4 @@ src_install() {
 	rm "${ED}"/usr/include/libfm/{fm-extra.h,fm-version.h,fm-xml-file.h}*
 	rm "${ED}"/usr/lib/libfm-extra*
 	rm "${ED}"/usr/lib/pkgconfig/libfm-extra.pc
-}
-
-pkg_postinst() {
-	xdg_desktop_database_update
-	xdg_mimeinfo_database_update
-}
-
-pkg_postrm() {
-	xdg_desktop_database_update
-	xdg_mimeinfo_database_update
 }

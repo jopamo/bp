@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit xdg-utils autotools flag-o-matic
+inherit xdg autotools flag-o-matic
 
 DESCRIPTION="Glade is a RAD tool to enable quick & easy development of user interfaces for the GTK+ toolkit and the GNOME desktop environment."
 HOMEPAGE="https://gitlab.gnome.org/GNOME/glade"
@@ -25,12 +25,4 @@ src_prepare() {
 
 	default
 	eautoreconf
-}
-
-pkg_postinst() {
-	xdg_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_icon_cache_update
 }

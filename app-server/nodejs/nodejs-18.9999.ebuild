@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic python-any-r1 toolchain-funcs xdg-utils git-r3
+inherit flag-o-matic python-any-r1 toolchain-funcs xdg git-r3
 
 DESCRIPTION="A JavaScript runtime built on Chrome's V8 JavaScript engine"
 HOMEPAGE="https://nodejs.org/"

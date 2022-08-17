@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit unpacker
+inherit unpacker xdg
 
 DESCRIPTION="Brave Browser: Secure, Fast & Private Web Browser with Adblocker"
 HOMEPAGE="https://brave.com"
@@ -27,7 +27,6 @@ RDEPEND="
 	lib-live/glib
 	lib-print/cups
 	xgui-icontheme/adwaita-icon-theme
-	xgui-live-app/xdg-utils
 	xgui-live-lib/at-spi2-core
 	xgui-live-lib/cairo
 	xgui-live-lib/gdk-pixbuf

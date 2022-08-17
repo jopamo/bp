@@ -4,7 +4,7 @@ EAPI=8
 
 MY_P="${P/_/-}"
 
-inherit linux-info toolchain-funcs python-r1 xdg-utils flag-o-matic
+inherit linux-info toolchain-funcs python-r1 xdg flag-o-matic
 
 if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://git.qemu.org/git/qemu.git"
@@ -576,12 +576,4 @@ src_install() {
 	dostrip -x ${QA_PREBUILT}
 
 	cleanup_install
-}
-
-pkg_postinst() {
-	xdg_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_icon_cache_update
 }

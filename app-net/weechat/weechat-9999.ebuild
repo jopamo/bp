@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake python-single-r1 xdg-utils
+inherit cmake python-single-r1 xdg
 
 DESCRIPTION="Portable and multi-interface IRC client"
 HOMEPAGE="https://weechat.org/"
@@ -65,16 +65,4 @@ src_configure() {
 		-DENABLE_XFER=$(usex xfer)
 	)
 	cmake_src_configure
-}
-
-pkg_postinst() {
-	xdg_desktop_database_update
-	xdg_icon_cache_update
-	xdg_mimeinfo_database_update
-}
-
-pkg_postrm() {
-	xdg_desktop_database_update
-	xdg_icon_cache_update
-	xdg_mimeinfo_database_update
 }

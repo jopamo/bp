@@ -5,13 +5,13 @@ EAPI=8
 DESCRIPTION="a collection of binary tools"
 HOMEPAGE="https://sourceware.org/binutils/"
 
-SNAPSHOT=e1ea1dafff64a9be37d275dbcfc71ef08ef84324
+SNAPSHOT=9e855cffa1fda44629e7f9b76dfa3e5a51a440e9
 SRC_URI="https://git.linaro.org/toolchain/binutils-gdb.git/snapshot/binutils-gdb-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-gdb-${SNAPSHOT}
 
 LICENSE="|| ( GPL-3 LGPL-3 )"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
 
 DEPEND="
 	lib-core/zlib

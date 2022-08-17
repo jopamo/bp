@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake git-r3 xdg-utils
+inherit cmake git-r3 xdg
 
 DESCRIPTION="Themes, graphics, and icons for LXQt"
 HOMEPAGE="http://lxqt.org/"
@@ -13,11 +13,3 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="app-dev/lxqt-build-tools"
-
-pkg_postinst() {
-	xdg_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_icon_cache_update
-}

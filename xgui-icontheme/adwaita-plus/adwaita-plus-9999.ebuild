@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit git-r3 xdg-utils
+inherit git-r3 xdg
 
 DESCRIPTION="icons theme based on GNOME 3.32's Adwaita"
 HOMEPAGE="https://github.com/Bonandry/adwaita-plus.git"
@@ -17,12 +17,4 @@ RESTRICT="binchecks strip"
 src_install() {
 	insinto /usr/share/icons/
 	doins -r Adwaita*
-}
-
-pkg_postinst() {
-	xdg_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_icon_cache_update
 }

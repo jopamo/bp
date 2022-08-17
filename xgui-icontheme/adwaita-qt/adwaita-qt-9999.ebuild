@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake git-r3 xdg-utils
+inherit cmake git-r3 xdg
 
 DESCRIPTION="A style to bend Qt applications to look like they belong into GNOME Shell"
 HOMEPAGE="https://github.com/FedoraQt/adwaita-qt"
@@ -19,12 +19,4 @@ src_install() {
 		QT_STYLE_OVERRIDE=Adwaita-Dark
 	EOF
 	doenvd "${T}"/99${PN}
-}
-
-pkg_postinst() {
-	xdg_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_icon_cache_update
 }

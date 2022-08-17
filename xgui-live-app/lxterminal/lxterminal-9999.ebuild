@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit git-r3 autotools xdg-utils
+inherit git-r3 autotools xdg
 
 DESCRIPTION="VTE terminal emulator written in GTK"
 HOMEPAGE="https://github.com/lxde/lxterminal.git"
@@ -15,8 +15,8 @@ KEYWORDS="amd64 arm64"
 DEPEND="xgui-live-lib/vte"
 
 src_prepare() {
-	eautoreconf
 	default
+	eautoreconf
 }
 
 src_configure() {
@@ -33,12 +33,4 @@ src_install() {
 	insopts -m 0755
 	insinto /usr/share/${PN}/
 	doins ${FILESDIR}/${PN}.conf
-}
-
-pkg_postinst() {
-	xdg_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_icon_cache_update
 }

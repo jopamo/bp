@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-inherit cmake xdg-utils
+inherit cmake xdg
 
 DESCRIPTION="Fast lightweight tabbed filemanager"
 HOMEPAGE="https://github.com/lxqt/pcmanfm-qt"

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit xdg-utils git-r3 qmake-utils autotools user flag-o-matic
+inherit xdg git-r3 qmake-utils autotools user flag-o-matic
 
 DESCRIPTION="BitTorrent client in C++ and Qt"
 HOMEPAGE="https://www.qbittorrent.org/"
@@ -22,9 +22,6 @@ DEPEND="
 	qt5? ( xgui-live-lib/qtsvg )
 "
 
-filter-flags -flto\*
-filter-flags -Wl,-z,defs
-
 pkg_setup() {
 	use createuser && enewuser ${PN} /usr/sbin/nologin "/var/lib/${PN}" ${PN}
 }
@@ -37,6 +34,9 @@ src_prepare() {
 }
 
 src_configure() {
+	filter-flags -flto*
+	filter-flags -Wl,-z,defs
+
 	local myconf=(
 		$(use_enable webui)
 		$(use_enable debug)
@@ -54,12 +54,4 @@ src_install() {
 		insopts -m 0644
 		doins "${FILESDIR}/${PN}.service"
 	fi
-}
-
-pkg_postinst() {
-	xdg_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_icon_cache_update
 }

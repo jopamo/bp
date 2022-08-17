@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools git-r3 xdg-utils
+inherit autotools git-r3 xdg
 
 DESCRIPTION="Modern multi-purpose calculator"
 HOMEPAGE="https://qalculate.github.io/"
@@ -17,8 +17,4 @@ DEPEND="xgui-live-lib/libqalculate"
 src_prepare() {
 	default
 	eautoreconf
-}
-
-pkg_postinst() {
-	xdg_icon_cache_update
 }

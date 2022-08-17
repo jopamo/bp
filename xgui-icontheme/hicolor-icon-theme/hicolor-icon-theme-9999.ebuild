@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools git-r3 xdg-utils
+inherit autotools git-r3 xdg
 
 DESCRIPTION="freedesktop default icon theme."
 HOMEPAGE="https://gitlab.freedesktop.org/xdg/default-icon-theme.git"
@@ -17,12 +17,4 @@ RESTRICT="binchecks strip"
 src_prepare() {
 	default
 	eautoreconf
-}
-
-pkg_postinst() {
-	xdg_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_icon_cache_update
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit xdg-utils qmake-utils git-r3
+inherit xdg qmake-utils git-r3
 
 DESCRIPTION="Simple Qt archive manager based on libarchive"
 HOMEPAGE="https://github.com/tsujan/Arqiver.git"
@@ -28,12 +28,4 @@ src_install() {
 	doins "${FILESDIR}"/arq.conf
 
 	rm -rf "${ED}"/usr/share/arqiver
-}
-
-pkg_postinst() {
-	xdg_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_icon_cache_update
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake git-r3 xdg-utils
+inherit cmake git-r3 xdg
 
 DESCRIPTION="Qt-based multitab terminal emulator"
 HOMEPAGE="https://github.com/lxqt/qterminal"
@@ -38,12 +38,4 @@ src_install() {
 
 	rm -rf "${ED}"/usr/share/appdata || die
 
-}
-
-pkg_postinst() {
-	xdg_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_icon_cache_update
 }

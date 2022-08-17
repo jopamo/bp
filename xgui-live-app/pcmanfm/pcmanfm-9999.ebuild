@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools git-r3 xdg-utils
+inherit autotools git-r3 xdg
 
 DESCRIPTION="Extremely fast and lightweight file manager"
 HOMEPAGE="https://github.com/lxde/${PN}"
@@ -18,8 +18,8 @@ DEPEND="
 "
 
 src_prepare() {
-	eautoreconf
 	default
+	eautoreconf
 }
 
 src_configure() {
@@ -35,12 +35,4 @@ src_install() {
 	insopts -m 0755
 	insinto etc/xdg/${PN}/default
 	doins ${FILESDIR}/${PN}.conf
-}
-
-pkg_postinst() {
-	xdg_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_icon_cache_update
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit xdg-utils cmake git-r3
+inherit xdg cmake git-r3
 
 DESCRIPTION="Lightweight Qt5 Plain-Text Editor"
 HOMEPAGE="https://github.com/tsujan/FeatherPad"
@@ -25,12 +25,4 @@ src_install() {
 	cmake_src_install
 	insinto /etc/xdg/featherpad
 	doins "${FILESDIR}"/fp.conf
-}
-
-pkg_postinst() {
-	xdg_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_icon_cache_update
 }

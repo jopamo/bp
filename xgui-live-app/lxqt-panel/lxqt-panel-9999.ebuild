@@ -26,13 +26,13 @@ REQUIRED_USE="volume? ( || ( alsa pulseaudio ) )"
 DEPEND="
 	lib-live/glib
 	lib-live/libqtxdg
+	xgui-live-lib/qtbase
 	xgui-live-app/kguiaddons
 	xgui-live-app/kwindowsystem
-	xgui-live-lib/libX11
+	xgui-live-lib/menu-cache
 	xgui-live-lib/liblxqt
 	xgui-live-lib/lxqt-globalkeys
-	xgui-live-lib/qtbase
-	xgui-misc/menu-cache
+	xgui-live-lib/libX11
 	cpuload? ( lib-core/libstatgrab )
 	kbindicator? ( xgui-live-lib/libxkbcommon )
 	networkmonitor? ( lib-core/libstatgrab )

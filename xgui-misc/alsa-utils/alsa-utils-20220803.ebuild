@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Advanced Linux Sound Architecture Utils (alsactl, alsamixer, etc.)"
 HOMEPAGE="http://www.alsa-project.org/"
 
-SNAPSHOT=a566f8a0ed6d7ca5fd6ae2d224f3f28654a2f3be
+SNAPSHOT=62cd05a929283d919144e092892c74ac85b00a7d
 SRC_URI="https://github.com/alsa-project/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -30,6 +30,8 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
+		$(use_enable alsamixer)
+		$(use_enable libsamplerate alsaloop)
 		--disable-alsaconf
 		--disable-bat
 		--disable-nls
@@ -37,8 +39,6 @@ src_configure() {
 		--with-asound-state-dir="${EPREFIX}"/var/lib/alsa
 		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 		--with-udev-rules-dir="${EPREFIX}"/usr/lib/udev/rules.d
-		$(use_enable alsamixer)
-		$(use_enable libsamplerate alsaloop)
 	)
 	econf ${myconf[@]}
 }

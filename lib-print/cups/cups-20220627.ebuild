@@ -4,7 +4,7 @@ EAPI=8
 
 SNAPSHOT=ec055da6794984133d48cc376f04e10af62b64dc
 
-inherit autotools flag-o-matic linux-info user toolchain-funcs
+inherit autotools linux-info user toolchain-funcs
 
 DESCRIPTION="The Common Unix Printing System"
 HOMEPAGE="https://www.cups.org/"
@@ -41,8 +41,6 @@ PATCHES=(
 )
 
 RESTRICT="test"
-
-append-flags -Wno-error\=stringop-overflow
 
 pkg_setup() {
 	enewgroup lp
@@ -116,7 +114,7 @@ src_configure() {
 	sed -i -e "s:#define CUPS_SERVERBIN.*:#define CUPS_SERVERBIN \"${EPREFIX}/usr/libexec/cups\":" config.h || die
 	sed -i -e "s:cups_serverbin=.*:cups_serverbin=\"${EPREFIX}/usr/libexec/cups\":" cups-config || die
 
-	# additional path corrections needed for prefix, see bug 597728
+	# additional path corrections needed for prefix
 	sed -i -e "s:ICONDIR.*:ICONDIR = ${EPREFIX}/usr/share/icons:" Makedefs || die
 	sed -i -e "s:INITDIR.*:INITDIR = ${EPREFIX}/etc:" Makedefs || die
 	sed -i -e "s:DBUSDIR.*:DBUSDIR = ${EPREFIX}/etc/dbus-1:" Makedefs || die
@@ -128,10 +126,10 @@ src_install() {
 
 	# move the default config file to docs
 	dodoc "${ED}"/etc/cups/cupsd.conf.default
-	rm -f "${ED}"/etc/cups/cupsd.conf.default || die
+	rm "${ED}"/etc/cups/cupsd.conf.default || die
 
 	# clean out cups init scripts
-	rm -rf "${ED}"/etc/{init.d/cups,rc*,pam.d/cups} || die
+	rm -r "${ED}"/etc/{init.d/cups,rc*,pam.d/cups} || die
 
 	if use pam; then
 		insinto etc/pam.d
@@ -139,25 +137,22 @@ src_install() {
 		newins "${FILESDIR}/${PN}.pam" ${PN}
 	fi
 
-	rm -rf "${ED}"/etc/xinetd.d || die
-
 	keepdir /usr/libexec/cups/driver /usr/share/cups/{model,profiles} \
 		/var/log/cups /var/spool/cups/tmp
 
 	keepdir /etc/cups/{interfaces,ppd,ssl}
 
-	use X || rm -r "${ED}"/usr/share/applications
-
-	# create /etc/cups/client.conf, bug #196967 and #266678
+	# create /etc/cups/client.conf
 	echo "ServerName ${EPREFIX}/run/cups/cups.sock" >> "${ED}"/etc/cups/client.conf
 
 	# the following file is now provided by cups-filters:
 	rm -r "${ED}"/usr/share/cups/banners || die
-	rm -rf "${ED}"/var/cache || die
+	rm -r "${ED}"/var/cache || die
 
 	cleanup_install
 
-	rm -rf "${ED}"/usr/share/icons || die
-	rm -rf "${ED}"/run || die
+	rm -r "${ED}"/usr/share/{applications,icons} || die
+	rm -r "${ED}"/run || die
+
 	find "${ED}"/ -xtype l -delete || die
 }

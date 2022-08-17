@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools git-r3 xdg-utils
+inherit autotools git-r3 xdg
 
 DESCRIPTION="Mostly private use system icons."
 HOMEPAGE="https://git.gnome.org/browse/adwaita-icon-theme/"
@@ -14,11 +14,11 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	xgui-live-lib/gnome-common
-	virtual/librsvg
-	xgui-live-lib/gtk+:3
 	app-build/gettext
 	app-dev/pkgconf
+	virtual/librsvg
+	xgui-live-lib/gnome-common
+	xgui-live-lib/gtk+:3
 "
 
 RESTRICT="binchecks strip"
@@ -26,12 +26,4 @@ RESTRICT="binchecks strip"
 src_prepare() {
 	default
 	eautoreconf
-}
-
-pkg_postinst() {
-	xdg_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_icon_cache_update
 }

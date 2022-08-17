@@ -119,16 +119,12 @@ src_install() {
 			dobin src/xxd/xxd
 			doman runtime/doc/xxd.1
 		fi
-
-		insopts -m 0644
-		insinto /usr/share/vim/vim$(ver_cut 1)$(ver_cut 2)
-		doins runtime/defaults.vim
 	else
 		default
 		rm -r "${ED}"/usr/share/{applications,icons} || die
 	fi
 
 	insopts -m 0644
-	insinto /etc
-	newins "${FILESDIR}"/basic.vim vimrc
+	insinto /usr/share/vim/vim$(ver_cut 1)$(ver_cut 2)
+	newins "${FILESDIR}"/basic.vim defaults.vim
 }

@@ -17,18 +17,17 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-RDEPEND="lib-live/glib"
-DEPEND="${RDEPEND}
-	app-build/gettext
-	app-dev/pkgconf
+DEPEND="
+	app-dev/gtk-doc
+	lib-live/glib
 	xgui-live-lib/libfm-extra
-	app-dev/gtk-doc"
-
-append-flags -fcommon
+"
 
 src_prepare() {
-	eautoreconf
+	append-flags -fcommon
+
 	default
+	eautoreconf
 }
 
 src_install() {

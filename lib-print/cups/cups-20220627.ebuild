@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="acl dbus debug pam +ssl static-libs systemd usb X"
+IUSE="acl dbus debug pam +ssl static-libs systemd usb"
 
 DEPEND="
 	app-tex/libpaper
@@ -29,7 +29,6 @@ DEPEND="
 	ssl? ( lib-net/gnutls )
 	systemd? ( app-core/systemd )
 	usb? ( lib-dev/libusb )
-	X? ( xgui-live-app/xdg-utils )
 "
 
 BDEPEND="app-dev/pkgconf"

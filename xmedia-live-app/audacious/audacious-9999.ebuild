@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit xdg-utils autotools git-r3 flag-o-matic
+inherit xdg autotools git-r3 flag-o-matic
 
 DESCRIPTION="Audacious Player - Your music, your way, no exceptions"
 HOMEPAGE="https://audacious-media-player.org/"
@@ -21,33 +21,22 @@ DEPEND="
 	xgui-live-lib/pango
 	xgui-live-lib/qtbase
 "
-
 BDEPEND="app-dev/pkgconf"
 
 append-flags -ffat-lto-objects
 
 src_prepare() {
-	eautoreconf
 	default
+	eautoreconf
 }
 
 src_configure() {
 	local myconf=(
-		--disable-valgrind
-		--enable-dbus
 		--disable-gtk
 		--disable-nls
+		--disable-valgrind
+		--enable-dbus
 		--enable-qt
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-pkg_postinst() {
-	xdg_desktop_database_update
-	xdg_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_desktop_database_update
-	xdg_icon_cache_update
 }

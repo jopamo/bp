@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit qmake-utils git-r3 xdg-utils
+inherit qmake-utils git-r3 xdg
 
 DESCRIPTION="Image Viewer and organizer"
 HOMEPAGE="https://github.com/oferkv/phototonic"
@@ -27,14 +27,4 @@ src_configure() {
 
 src_install() {
 	emake install INSTALL_ROOT="${D}"
-}
-
-pkg_postinst() {
-	xdg_desktop_database_update
-	xdg_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_desktop_database_update
-	xdg_icon_cache_update
 }

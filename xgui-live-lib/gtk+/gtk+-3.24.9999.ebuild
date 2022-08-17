@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools git-r3 xdg-utils
+inherit autotools git-r3 xdg
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
@@ -21,42 +21,42 @@ REQUIRED_USE="
 "
 
 COMMON_DEPEND="
-	lib-live/glib
 	fonts/fontconfig
-	xmedia-live-lib/libepoxy[X(+)?]
+	lib-live/glib
+	xgui-live-app/shared-mime-info
 	xgui-live-lib/cairo[glib,svg,X?]
 	xgui-live-lib/gdk-pixbuf
 	xgui-live-lib/pango[introspection?]
-	xgui-live-app/shared-mime-info
+	xmedia-live-lib/libepoxy[X(+)?]
 	cups? ( lib-print/cups )
 	introspection? ( lib-live/gobject-introspection )
 	wayland? (
+		xgui-live-lib/libxkbcommon
 		xgui-live-lib/wayland
 		xgui-live-lib/wayland-protocols
 		xgui-misc/mesa
-		xgui-live-lib/libxkbcommon
 	)
 	X? (
 		xgui-live-lib/libX11
-		xgui-live-lib/libXi
-		xgui-live-lib/libXext
-		xgui-live-lib/libXrandr
-		xgui-live-lib/libXcursor
-		xgui-live-lib/libXfixes
 		xgui-live-lib/libXcomposite
+		xgui-live-lib/libXcursor
 		xgui-live-lib/libXdamage
+		xgui-live-lib/libXext
+		xgui-live-lib/libXfixes
+		xgui-live-lib/libXi
+		xgui-live-lib/libXrandr
 		xinerama? ( xgui-live-lib/libXinerama )
 	)
 "
 DEPEND="${COMMON_DEPEND}
-	app-tex/docbook-xsl-stylesheets
-	app-tex/docbook-xml-dtd
-	lib-core/libxslt
-	xgui-live-lib/at-spi2-core
-	lib-live/gobject-introspection-common
-	app-dev/gtk-doc-am
 	app-build/gettext
+	app-dev/gtk-doc-am
 	app-dev/pkgconf
+	app-tex/docbook-xml-dtd
+	app-tex/docbook-xsl-stylesheets
+	lib-core/libxslt
+	lib-live/gobject-introspection-common
+	xgui-live-lib/at-spi2-core
 	X? ( xinerama? ( xgui-live-app/xorgproto ) )"
 
 RDEPEND="${COMMON_DEPEND}"
@@ -68,27 +68,27 @@ PDEPEND="
 "
 
 src_prepare() {
-	eautoreconf
 	default
+	eautoreconf
 }
 
 src_configure() {
 	local myconf=(
-		$(use_enable broadway broadway-backend)
-		--disable-colord
-		$(use_enable cups)
-		$(use_enable introspection)
-		$(use_enable wayland wayland-backend)
 		$(use_enable X x11-backend)
 		$(use_enable X xcomposite)
 		$(use_enable X xdamage)
 		$(use_enable X xfixes)
 		$(use_enable X xkb)
 		$(use_enable X xrandr)
+		$(use_enable broadway broadway-backend)
+		$(use_enable cups)
+		$(use_enable introspection)
+		$(use_enable wayland wayland-backend)
 		$(use_enable xinerama)
+		--disable-colord
 		--disable-papi
-		--with-xml-catalog="${EPREFIX}"/etc/xml/catalog
 		--libdir="${EPREFIX}"/usr/lib
+		--with-xml-catalog="${EPREFIX}"/etc/xml/catalog
 		CUPS_CONFIG="${EROOT}/usr/bin/cups-config"
 	)
 	econf ${myconf[@]}
@@ -119,12 +119,4 @@ pkg_postrm() {
 	if [[ -z ${REPLACED_BY_VERSION} ]]; then
 		rm -f "${EROOT}"/usr/lib/gtk-3.0/3.0.0/immodules.cache
 	fi
-}
-
-pkg_postinst() {
-	xdg_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_icon_cache_update
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson toolchain-funcs xdg-utils git-r3 flag-o-matic
+inherit meson toolchain-funcs xdg git-r3 flag-o-matic
 
 DESCRIPTION="Wayland reference compositor"
 HOMEPAGE="https://wayland.freedesktop.org/ https://gitlab.freedesktop.org/wayland/weston"
@@ -26,17 +26,17 @@ REQUIRED_USE="
 
 RDEPEND="
 	lib-live/libinput
-	xgui-live-lib/wayland
-	xgui-live-lib/wayland-protocols
-	lcms? ( xgui-misc/lcms:2 )
-	xmedia-live-lib/libpng
-	webp? ( xmedia-live-lib/libwebp )
-	jpeg? ( xmedia-live-lib/libjpeg-turbo )
 	xgui-live-lib/cairo
 	xgui-live-lib/libdrm
 	xgui-live-lib/libxkbcommon
 	xgui-live-lib/pixman
+	xgui-live-lib/wayland
+	xgui-live-lib/wayland-protocols
 	xgui-misc/xkeyboard-config
+	xmedia-live-lib/libpng
+	lcms? ( xgui-misc/lcms:2 )
+	webp? ( xmedia-live-lib/libwebp )
+	jpeg? ( xmedia-live-lib/libjpeg-turbo )
 	fbdev? (
 		>=xgui-misc/mtdev-1.1.0
 		virtual/service-manager

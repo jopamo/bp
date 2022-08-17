@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit git-r3 meson
+inherit git-r3 meson xdg
 
 DESCRIPTION="Glade is a RAD tool to enable quick & easy development of user interfaces for the GTK+ toolkit and the GNOME desktop environment."
 HOMEPAGE="https://gitlab.gnome.org/GNOME/glade"
@@ -25,12 +25,4 @@ src_configure() {
                 $(meson_use introspection)
         )
         meson_src_configure
-}
-
-pkg_postinst() {
-	xdg_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_icon_cache_update
 }

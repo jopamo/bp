@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit xdg-utils meson
+inherit xdg meson
 
 DESCRIPTION="The Shared MIME-info Database specification"
 HOMEPAGE="https://freedesktop.org/wiki/Software/shared-mime-info"

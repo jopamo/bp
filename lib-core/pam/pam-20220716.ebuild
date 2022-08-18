@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="${HOMEPAGE}.git"
 else
-	SNAPSHOT=31645f4830162a3dd49513b74a5e56f40777e98c
+	SNAPSHOT=367bcfa31307379b9eeabf63af31b48e63ffdbb5
 	SRC_URI="${HOMEPAGE}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/linux-${PN}-${SNAPSHOT}
 fi
@@ -50,11 +50,11 @@ src_configure() {
 	export ac_cv_header_xcrypt_h=no
 
 	local myconf=(
-		--enable-securedir="${EPREFIX}"/usr/lib/security
 		$(use_enable debug)
 		--disable-db
-		--disable-prelude
 		--disable-nls
+		--disable-prelude
+		--enable-securedir="${EPREFIX}"/usr/lib/security
 	)
 
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

@@ -7,7 +7,7 @@ inherit flag-o-matic
 DESCRIPTION="Utilities for rescue and embedded systems"
 HOMEPAGE="https://www.busybox.net/"
 
-SNAPSHOT=20a4f70ecaad79bb932af09b7317a058872cd867
+SNAPSHOT=7c2a3bdde0a1316771fdd07ff03413f00383f70e
 SRC_URI="https://git.busybox.net/busybox/snapshot/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -35,10 +35,6 @@ PATCHES=(
 	"${FILESDIR}"/0012-udhcpc-Don-t-background-if-n-is-given.patch
 )
 
-append-flags -ffat-lto-objects
-append-ldflags -static
-append-ldflags -Wl,-z,noexecstack
-
 src_prepare() {
 	default
 	cp "${FILESDIR}"/busybox-config "${S}"/.config || die
@@ -46,6 +42,10 @@ src_prepare() {
 }
 
 src_compile() {
+	append-flags -ffat-lto-objects
+	append-ldflags -static
+	append-ldflags -Wl,-z,noexecstack
+
 	emake CC=musl-gcc
 }
 

@@ -84,6 +84,8 @@ src_install() {
 }
 
 pkg_preinst() {
+	xdg_pkg_preinst
+
 	# Make immodules.cache belongs to gtk+ alone
 	local cache="usr/lib/gtk-2.0/2.10.0/immodules.cache"
 
@@ -95,6 +97,8 @@ pkg_preinst() {
 }
 
 pkg_postrm() {
+	xdg_pkg_postrm
+
 	if [[ -z ${REPLACED_BY_VERSION} ]]; then
 		rm -f "${EROOT}"usr/lib/gtk-2.0/2.10.0/immodules.cache
 	fi

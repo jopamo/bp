@@ -13,14 +13,14 @@ KEYWORDS="amd64 arm64"
 
 IUSE="wayland"
 
-RDEPEND="xgui-live-lib/qtbase
-	xgui-live-lib/qtx11extras
-	xgui-live-lib/libX11"
-
-DEPEND="xgui-live-lib/libxcb
+DEPEND="
 	xgui-live-app/xorgproto
-	xgui-live-app/kf-env
-	wayland? ( xgui-live-lib/qtwayland )"
+	xgui-live-lib/libX11
+	xgui-live-lib/libxcb
+	xgui-live-lib/qtbase
+	xgui-live-lib/qtx11extras
+	wayland? ( xgui-live-lib/qtwayland )
+"
 
 src_configure() {
 	local mycmakeargs=(
@@ -28,4 +28,13 @@ src_configure() {
 	)
 
 	cmake_src_configure
+}
+
+src_install() {
+	cmake_src_install
+
+	einfo "Installing environment file..."
+	local envfile="${T}/78kf"
+	echo "CONFIG_PROTECT=${EPREFIX}/usr/share/config" >> ${envfile}
+	doenvd ${envfile}
 }

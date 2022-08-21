@@ -7,9 +7,6 @@ inherit toolchain-funcs git-r3
 DESCRIPTION="Just-In-Time Compiler for the Lua programming language"
 HOMEPAGE="http://luajit.org/"
 
-#EGIT_REPO_URI="https://github.com/openresty/luajit2.git"
-#EGIT_BRANCH="v$(ver_cut 1).$(ver_cut 2)-agentzh"
-
 EGIT_REPO_URI="https://github.com/LuaJIT/LuaJIT.git"
 EGIT_BRANCH="v$(ver_cut 1).$(ver_cut 2)"
 
@@ -17,11 +14,11 @@ LICENSE="MIT"
 SLOT="2"
 KEYWORDS="amd64 arm64"
 
-IUSE="+lua52compat static-libs"
+IUSE="static-libs"
 
 _emake() {
 	emake \
-		Q= \
+		Q="" \
 		PREFIX="${EPREFIX}/usr" \
 		MULTILIB="lib" \
 		DESTDIR="${D}" \
@@ -32,15 +29,15 @@ _emake() {
 		TARGET_AR="$(tc-getAR) rcus" \
 		BUILDMODE="$(usex static-libs mixed dynamic)" \
 		TARGET_STRIP="true" \
-		INSTALL_LIB="${ED%/}/usr/lib" \
+		INSTALL_LIB="${ED}/usr/lib" \
 		"$@"
 }
 
 src_compile() {
-	_emake XCFLAGS="$(usex lua52compat "-DLUAJIT_ENABLE_LUA51COMPAT" "")"
+	_emake
 }
 
 src_install(){
 	_emake install
-	dosym /usr/bin/luajit-2.1.0-beta3 /usr/bin/luajit
+	dosym -r /usr/bin/luajit-2.1.0-beta3 /usr/bin/luajit
 }

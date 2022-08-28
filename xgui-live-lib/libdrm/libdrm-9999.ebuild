@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit git-r3 meson flag-o-matic
+inherit git-r3 meson
 
 DESCRIPTION="X.Org libdrm library"
 HOMEPAGE="https://dri.freedesktop.org/"
@@ -12,29 +12,27 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="libkms intel radeon amdgpu nouveau omap exynos valgrind udev"
+IUSE="amdgpu exynos intel libkms nouveau omap radeon udev valgrind"
 
-DEPEND="${RDEPEND}
+DEPEND="
 	xgui-live-app/util-macros
 	xgui-live-lib/cairo
+	intel? ( xgui-live-lib/libpciaccess )
 	valgrind? ( app-dev/valgrind )
-	intel? ( xgui-live-lib/libpciaccess )"
-
-append-cppflags -I/usr/include/cairo
-append-flags -lcairo
+"
 
 src_configure() {
 	local emesonargs=(
-		$(meson_use intel)
-		$(meson_use radeon)
-		$(meson_use amdgpu)
-		$(meson_use nouveau)
-		$(meson_use omap)
-		$(meson_use exynos)
-		$(meson_use valgrind)
+		$(meson_feature intel)
+		$(meson_feature radeon)
+		$(meson_feature amdgpu)
+		$(meson_feature nouveau)
+		$(meson_feature omap)
+		$(meson_feature exynos)
+		$(meson_feature valgrind)
 		$(meson_use udev)
-		-Dvmwgfx=false
-		-Dman-pages=false
-		)
-		meson_src_configure
+		-Dvmwgfx=disabled
+		-Dman-pages=disabled
+	)
+	meson_src_configure
 }

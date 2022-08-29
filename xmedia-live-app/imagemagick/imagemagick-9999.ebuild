@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="bzip2 cxx fftw fontconfig fpx graphviz hdri heif jbig +jpeg +jpeg2k
 lcms lqr lzma opencl openexr pango perl postscript +png raw static-libs
-+svg test +tiff truetype webp wmf X xml zlib"
++svg test +tiff truetype webp wmf X +xml zlib"
 
 DEPEND="
 	jpeg2k? ( xmedia-live-lib/openjpeg )

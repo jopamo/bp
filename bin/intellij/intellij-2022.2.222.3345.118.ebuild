@@ -27,19 +27,28 @@ QA_PREBUILT="opt/${PN}/*"
 src_prepare() {
 	default
 
-	rm -r lib/pty4j-native/linux/aarch64
-	rm -r lib/pty4j-native/linux/arm
-	rm -r lib/pty4j-native/linux/mips64el
-	rm -r lib/pty4j-native/linux/ppc64le
-	rm lib/pty4j-native/linux/x86/libpty.so
-	rm plugins/Kotlin/bin/linux/LLDBFrontend
-	rm -r plugins/maven/lib/maven3/lib/jansi-native/freebsd32
-	rm -r plugins/maven/lib/maven3/lib/jansi-native/freebsd64
-	rm -r plugins/maven/lib/maven3/lib/jansi-native/linux32
-	rm plugins/webp/lib/libwebp/linux/libwebp_jni.so
+	mv bin/idea.sh bin/idea || die
+
+	rm -r lib/pty4j-native/linux/aarch64 || die
+	rm -r lib/pty4j-native/linux/arm || die
+	rm -r lib/pty4j-native/linux/mips64el || die
+	rm -r lib/pty4j-native/linux/ppc64le || die
+	rm -r plugins/cwm-plugin/quiche-native/linux-aarch64 || die
+	rm -r plugins/maven/lib/maven3/lib/jansi-native/freebsd32 || die
+	rm -r plugins/maven/lib/maven3/lib/jansi-native/freebsd64 || die
+	rm -r plugins/maven/lib/maven3/lib/jansi-native/linux32 || die
+	rm lib/pty4j-native/linux/x86/libpty.so || die
+	rm plugins/Kotlin/bin/linux/LLDBFrontend || die
+	rm plugins/webp/lib/libwebp/linux/libwebp_jni.so || die
 }
 
 src_install() {
 	mkdir -p "${ED}"/opt/${PN}/
 	cp -rp "${S}"/* "${ED}"/opt/${PN}/
+
+	insinto /usr/share/icons/hicolor/scalable/apps/
+	doins "${S}"/bin/idea.png
+
+	insinto /usr/share/applications/
+	doins "${FILESDIR}"/idea.desktop
 }

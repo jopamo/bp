@@ -7,17 +7,16 @@ inherit flag-o-matic autotools
 DESCRIPTION="A vector graphics library with cross-device output support"
 HOMEPAGE="https://www.cairographics.org"
 
-if [[ ${PV} == *9999* ]]; then
+if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/cairo/cairo.git"
 else
-	SRC_URI="https://www.cairographics.org/releases/${P}.tar.xz
-	    https://cairographics.org/snapshots/${P}.tar.xz"
-	KEYWORDS="amd64 arm64"
+		SRC_URI="https://download.gnome.org/sources/cairo/1.17/${P}.tar.xz"
 fi
 
 LICENSE="|| ( LGPL-2.1 MPL-1.1 )"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="X debug +glib static-libs +svg valgrind xcb"
 
@@ -25,10 +24,10 @@ RESTRICT="test"
 
 DEPEND="
 	fonts/fontconfig
-	xgui-misc/freetype
-	xmedia-live-lib/libpng
 	lib-core/zlib
 	xgui-live-lib/pixman
+	xgui-misc/freetype
+	xmedia-live-lib/libpng
 	glib? ( lib-live/glib )
 	X? (
 		xgui-live-lib/libXrender
@@ -70,26 +69,20 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-		--disable-dependency-tracking
-		$(use_with X x)
 		$(use_enable X tee)
 		$(use_enable X xlib)
 		$(use_enable X xlib-xrender)
 		$(use_enable debug test-surfaces)
-		--disable-gtk-doc
 		$(use_enable glib gobject)
-		--disable-gl
 		$(use_enable static-libs static)
 		$(use_enable svg)
 		$(use_enable valgrind)
-		$(use_enable xcb)
 		$(use_enable xcb xcb-shm)
+		$(use_enable xcb)
+		$(use_with X x)
+		--disable-dependency-tracking
+		--disable-gl
+		--disable-gtk-doc
 		--enable-ft
 		--enable-pdf
 		--enable-png

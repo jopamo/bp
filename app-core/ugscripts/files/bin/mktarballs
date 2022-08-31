@@ -48,30 +48,13 @@ for i in librsvg ; do
 	GITDATENAME="$i-$(cd ${WORKHOME}/$i && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
 
 	if [ ! -f "${WORKHOME}/${GITDATENAME}.tar.xz" ]; then
+		rm  "${WORKHOME}/$i/.cargo/config.toml"
 		( cd ${WORKHOME}/$i && cargo vendor )
 		mkdir -p "${WORKHOME}/$i/.cargo"
 		echo -e "[source.crates-io]\n\
 	replace-with = \"vendored-sources\"\n\n\
 	[source.vendored-sources]\n\
 	directory = \"vendor\"" > "${WORKHOME}/$i/.cargo/config.toml"
-
-		tar -hcf - $i | tar -xf - -C ${TEMPLOCATION}
-		mv ${TEMPLOCATION}/$i ${TEMPLOCATION}/${GITDATENAME}
-		find ${TEMPLOCATION}/${GITDATENAME} -name *~ -delete
-		( cd ${TEMPLOCATION}/${GITDATENAME} && rm -rf .git* gnulib autom4te.cache po/.reference )
-		( cd ${TEMPLOCATION} && XZOPT=-e9 tar cJf ${WORKHOME}/${GITDATENAME}.tar.xz ${GITDATENAME} --owner=0 --group=0 )
-	fi
-done
-
-#github cli
-for i in gh ; do
-	[ ! -d ${WORKHOME}/$i ] && git clone https://github.com/cli/cli ${WORKHOME}/$i --depth 1
-	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git pull && git reset --hard && git clean -f )
-	GITDATENAME="$i-$(cd ${WORKHOME}/$i && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
-
-	if [ ! -f "${WORKHOME}/${GITDATENAME}.tar.xz" ]; then
-		( cd ${WORKHOME}/$i && go mod vendor )
-		( cd ${WORKHOME}/$i && make && make clean )
 
 		tar -hcf - $i | tar -xf - -C ${TEMPLOCATION}
 		mv ${TEMPLOCATION}/$i ${TEMPLOCATION}/${GITDATENAME}

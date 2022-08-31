@@ -338,7 +338,7 @@ get-KERNEL_CC() {
 		# In future, an arch might want to define CC_$ABI
 		#kernel_cc="$(get_abi_CC)"
 		#[ -z "${kernel_cc}" ] &&
-		kernel_cc="$(tc-getCC $(ABI=${KERNEL_ABI} get_abi_CHOST))"
+		kernel_cc="$(tc-getCC $(ABI=${KERNEL_ABI} CHOST))"
 	else
 		kernel_cc=$(tc-getCC)
 	fi
@@ -662,11 +662,11 @@ linux-mod_src_compile() {
 			# inside the variables gets used as targets for Make, which then
 			# fails.
 			eval "emake HOSTCC=\"$(tc-getBUILD_CC)\" \
-						LDFLAGS=\"$(get_abi_LDFLAGS)\" \
+						LDFLAGS=\"${LDFLAGS}\" \
 						${BUILD_FIXES} \
 						${BUILD_PARAMS} \
 						${BUILD_TARGETS} " \
-				|| die "Unable to emake HOSTCC="$(tc-getBUILD_CC)" LDFLAGS="$(get_abi_LDFLAGS)" ${BUILD_FIXES} ${BUILD_PARAMS} ${BUILD_TARGETS}"
+				|| die "Unable to emake HOSTCC="$(tc-getBUILD_CC)" LDFLAGS="${LDFLAGS}" ${BUILD_FIXES} ${BUILD_PARAMS} ${BUILD_TARGETS}"
 			cd "${OLDPWD}"
 			touch "${srcdir}"/.built
 		fi

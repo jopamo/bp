@@ -34,6 +34,6 @@ find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/x11-apps\/mkfo
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/x11-misc\/shared-mime-info/xgui-live-app\/shared-mime-info/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/\${EPREFIX}\$\(qt5_get_libdir\)\/qt5\/bin/\/usr\/bin/g'
 
-sed -i 's/.*qt5\/bin.*/	"${EPREFIX}"\/usr\/bin/' /var/db/repos/bp/eclass/qmake-utils.eclass
+sed -i 's/.*qt5\/bin.*/	echo\ \/usr\/bin/' /var/db/repos/bp/eclass/qmake-utils.eclass
 
 sed -i '3i\PYTHON_COMPAT=( python3_10 python3_11 )\' /var/db/repos/bp/eclass/python-utils-r1.eclass

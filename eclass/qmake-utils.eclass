@@ -29,7 +29,7 @@ inherit toolchain-funcs
 # Echoes the directory where Qt5 binaries are installed.
 # EPREFIX is already prepended to the returned path.
 qt5_get_bindir() {
-	"${EPREFIX}"/usr/bin
+	echo /usr/bin
 }
 
 # @FUNCTION: qt5_get_headerdir

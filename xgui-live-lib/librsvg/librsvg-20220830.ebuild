@@ -15,12 +15,13 @@ KEYWORDS="amd64 arm64"
 IUSE="+introspection"
 
 DEPEND="
-	lib-live/glib
-	xgui-live-lib/cairo
-	xgui-live-lib/pango
 	lib-core/libxml2
+	lib-live/glib
 	lib-live/libcroco
+	virtual/rust
+	xgui-live-lib/cairo
 	xgui-live-lib/gdk-pixbuf
+	xgui-live-lib/pango
 	introspection? ( lib-live/gobject-introspection )
 "
 BDEPEND="

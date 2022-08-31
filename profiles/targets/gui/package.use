@@ -1,4 +1,3 @@
-app-build/gcc golang
 app-core/systemd logind tmpfilesd sleep
 app-core/vim normal
 xgui-live-app/qbittorrent qt5

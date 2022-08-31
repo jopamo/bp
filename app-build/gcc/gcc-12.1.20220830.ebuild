@@ -7,14 +7,9 @@ inherit flag-o-matic
 DESCRIPTION="an optimizing compiler produced by the GNU Project supporting various programming languages"
 HOMEPAGE="https://gcc.gnu.org/"
 
-SNAPSHOT=06254d97b8fa3a5d1c8b6b4e091d851700801385
+SNAPSHOT=63997f222380a7b718a9045effa4841c00f30f70
 SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
-
-#official snapshots
-#SNAPSHOT="$(ver_cut 1)-$(ver_cut 3-)"
-#SRC_URI="mirror://gcc/snapshots/${SNAPSHOT}/gcc-${SNAPSHOT}.tar.xz"
-#S=${WORKDIR}/gcc-${SNAPSHOT}
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -51,17 +46,17 @@ PATCHES=(
 	"${FILESDIR}"/0032-gcc-go-Use-int64-type-as-offset-argument-for-mmap.patch
 )
 
-filter-flags -flto\=\*
-filter-flags -D_FORTIFY_SOURCE\=\*
-filter-flags -Wl,-z,defs
-filter-flags -fstack-protector-strong
-filter-flags -fassociative-math
-filter-flags -fno-semantic-interposition
-filter-flags -fexceptions
-
-append-flags -Wa,--noexecstack
-
 src_prepare() {
+	filter-flags -flto*
+	filter-flags -D_FORTIFY_SOURCE*
+	filter-flags -Wl,-z,defs
+	filter-flags -fstack-protector-strong
+	filter-flags -fassociative-math
+	filter-flags -fno-semantic-interposition
+	filter-flags -fexceptions
+
+	append-flags -Wa,--noexecstack
+
 	use debug || filter-flags -g
 
 	default

@@ -1,12 +1,12 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
-MODULE_AUTHOR=TODDR
-
+DIST_AUTHOR=TODDR
+DIST_VERSION=2.46
 inherit perl-module flag-o-matic
 
-DESCRIPTION="A Perl extension interface to James Clark's XML parser, expat"
+DESCRIPTION="A perl module for parsing XML documents"
 
 SLOT="0"
 KEYWORDS="amd64 arm64"

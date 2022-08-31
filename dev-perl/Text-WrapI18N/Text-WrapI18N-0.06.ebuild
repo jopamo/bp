@@ -1,8 +1,9 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=8
 
-MODULE_AUTHOR=KUBOTA
+DIST_AUTHOR=KUBOTA
+DIST_VERSION=0.06
 
 inherit perl-module
 

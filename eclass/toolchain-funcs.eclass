@@ -4,23 +4,23 @@
 # @ECLASS: toolchain-funcs.eclass
 # @MAINTAINER:
 # Toolchain Ninjas <toolchain@gentoo.org>
-# @SUPPORTED_EAPIS: 5 6 7 8
+# @SUPPORTED_EAPIS: 6 7 8
 # @BLURB: functions to query common info about the toolchain
 # @DESCRIPTION:
 # The toolchain-funcs aims to provide a complete suite of functions
 # for gleaning useful information about the toolchain and to simplify
-# ugly things like cross-compiling and multilib.  All of this is done
+# ugly things like cross-compiling and.  All of this is done
 # in such a way that you can rely on the function always returning
 # something sane.
 
-case ${EAPI:-0} in
-	# EAPI=0 is still used by crossdev, bug #797367
-	0|5|6|7|8) ;;
+case ${EAPI} in
+	6|7|8) ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
 if [[ -z ${_TOOLCHAIN_FUNCS_ECLASS} ]]; then
 _TOOLCHAIN_FUNCS_ECLASS=1
+
 
 # tc-getPROG <VAR [search vars]> <default> [tuple]
 _tc-getPROG() {
@@ -451,6 +451,9 @@ econf_build() {
 tc-ld-is-gold() {
 	local out
 
+	# Ensure ld output is in English.
+	local -x LC_ALL=C
+
 	# First check the linker directly.
 	out=$($(tc-getLD "$@") --version 2>&1)
 	if [[ ${out} == *"GNU gold"* ]] ; then
@@ -480,6 +483,9 @@ tc-ld-is-gold() {
 # Return true if the current linker is set to lld.
 tc-ld-is-lld() {
 	local out
+
+	# Ensure ld output is in English.
+	local -x LC_ALL=C
 
 	# First check the linker directly.
 	out=$($(tc-getLD "$@") --version 2>&1)
@@ -528,7 +534,7 @@ tc-ld-force-bfd() {
 
 	# Set up LD to point directly to bfd if it's available.
 	# We need to extract the first word in case there are flags appended
-	# to its value
+	# to its value (like).  #545218
 	local ld=$(tc-getLD "$@")
 	local bfd_ld="${ld%% *}.bfd"
 	local path_ld=$(which "${bfd_ld}" 2>/dev/null)
@@ -593,8 +599,8 @@ _tc-has-openmp() {
 }
 
 # @FUNCTION: tc-has-openmp
-# @DEPRECATED: tc-check-openmp
 # @USAGE: [toolchain prefix]
+# @DEPRECATED: tc-check-openmp
 # @DESCRIPTION:
 # See if the toolchain supports OpenMP.  This function is deprecated and will be
 # removed on 2023-01-01.
@@ -627,9 +633,9 @@ tc-check-openmp() {
 		eerror "Your current compiler does not support OpenMP!"
 
 		if tc-is-gcc; then
-			eerror "Enable OpenMP support by building sys-devel/gcc with USE=\"openmp\"."
+			eerror "Enable OpenMP support by building app-build/gcc with USE=\"openmp\"."
 		elif tc-is-clang; then
-			eerror "OpenMP support in sys-devel/clang is provided by sys-libs/libomp."
+			eerror "OpenMP support in app-build/clang is provided by lib-core/libomp."
 		fi
 
 		die "Active compiler does not have required support for OpenMP"
@@ -1046,6 +1052,11 @@ gen_usr_ldscript() {
 
 	tc-is-static-only && return
 
+	# We only care about stuffing / for the native ABI. #479448
+	if [[ $(type -t_is_native_abi) == "function" ]] ; then
+		multilib_is_native_abi || return 0
+	fi
+
 	# Eventually we'd like to get rid of this func completely #417451
 	case ${CTARGET:-${CHOST}} in
 	*-darwin*) ;;
@@ -1065,7 +1076,7 @@ gen_usr_ldscript() {
 	fi
 
 	# OUTPUT_FORMAT gives hints to the linker as to what binary format
-	# is referenced ...
+	# is referenced ... makes saner
 	local flags=( ${CFLAGS} ${LDFLAGS} -Wl,--verbose )
 	if $(tc-getLD) --version | grep -q 'GNU gold' ; then
 		# If they're using gold, manually invoke the old bfd. #487696

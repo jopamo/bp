@@ -14,7 +14,7 @@
 # written in the go programming language that uses modules.
 # If the software you are packaging has a file named go.mod in its top level
 # directory, it uses modules.
-#
+# 
 # Modules have been the preferred method of tracking dependencies in software
 # written in Go since version 1.16,
 # so if the software isn't using modules, it should be updated.
@@ -68,10 +68,10 @@ if [[ -z ${_GO_MODULE} ]]; then
 _GO_MODULE=1
 
 if [[ ! ${GO_OPTIONAL} ]]; then
-	BDEPEND="app-lang/go"
+	BDEPEND=">=app-lang/go-1.16"
 
 	# Workaround for pkgcheck false positive: https://github.com/pkgcore/pkgcheck/issues/214
-	# MissingUnpackerDep: version ...: missing BDEPEND="app-arch/unzip"
+	# MissingUnpackerDep: version ...: missing BDEPEND="app-compression/unzip"
 	# Added here rather than to each affected package, so it can be cleaned up just
 	# once when pkgcheck is improved.
 	BDEPEND+=" app-compression/unzip"
@@ -116,13 +116,13 @@ RESTRICT+=" strip"
 #
 # You can use some combination of sed/awk/cut to extract the
 # contents of EGO_SUM or use the dev-go/get-ego-vendor tool.
-#
+# 
 # One manual way to do this is the following:
 #
 # @CODE
 #
 # cat go.sum | cut -d" " -f1,2 | awk '{print "\t\"" $0 "\""}'
-#
+# 
 # @CODE
 #
 # The format of go.sum is described upstream here:

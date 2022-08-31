@@ -1,6 +1,5 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
-
 PYTHON_COMPAT=( python3_10 python3_11 )
 
 # @ECLASS: python-utils-r1.eclass
@@ -455,21 +454,21 @@ _python_export() {
 				local d
 				case ${impl} in
 					python2.7)
-						PYTHON_PKG_DEP='>=app-lang/python-2.7.5-r2:2.7';;
+						PYTHON_PKG_DEP='>=app-lang/python-2.7.10_p15:2.7';;
 					python3.8)
-						PYTHON_PKG_DEP=">=app-lang/python-3.8.12_p1-r1:3.8";;
+						PYTHON_PKG_DEP=">=app-lang/python-3.8.13:3.8";;
 					python3.9)
-						PYTHON_PKG_DEP=">=app-lang/python-3.9.9-r1:3.9";;
+						PYTHON_PKG_DEP=">=app-lang/python-3.9.12:3.9";;
 					python3.10)
-						PYTHON_PKG_DEP=">=app-lang/python-3.10.0_p1-r1:3.10";;
+						PYTHON_PKG_DEP=">=app-lang/python-3.10.4:3.10";;
 					python3.11)
-						PYTHON_PKG_DEP=">=app-lang/python-3.11.0_beta1-r1:3.11";;
+						PYTHON_PKG_DEP=">=app-lang/python-3.11.0_beta4:3.11";;
 					python*)
 						PYTHON_PKG_DEP="app-lang/python:${impl#python}";;
 					pypy)
-						PYTHON_PKG_DEP='>=dev-python/pypy-7.3.0:0=';;
+						PYTHON_PKG_DEP='>=dev-python/pypy-7.3.9:0=';;
 					pypy3)
-						PYTHON_PKG_DEP='>=dev-python/pypy3-7.3.7-r1:0=';;
+						PYTHON_PKG_DEP='>=dev-python/pypy3-7.3.9_p1:0=';;
 					*)
 						die "Invalid implementation: ${impl}"
 				esac
@@ -739,7 +738,8 @@ python_newexe() {
 	)
 
 	# install the wrapper
-	dosym -r /usr/lib/python-exec/python-exec2 "${wrapd}/${newfn}"
+	local dosym=dosym
+	"${dosym}" -r /usr/lib/python-exec/python-exec2 "${wrapd}/${newfn}"
 
 	# don't use this at home, just call python_doscript() instead
 	if [[ ${_PYTHON_REWRITE_SHEBANG} ]]; then
@@ -1219,7 +1219,6 @@ python_export_utf8_locale() {
 # to HTML_DOCS.
 #
 # If <directory> is relative to the current directory, care needs
-# to be taken to run einstalldocs from the same directory
 # (usually ${S}).
 build_sphinx() {
 	debug-print-function ${FUNCNAME} "${@}"
@@ -1329,6 +1328,9 @@ epytest() {
 		# sterilize pytest-markdown as it runs code snippets from all
 		# *.md files found without any warning
 		-p no:markdown
+		# pytest-sugar undoes everything that's good about pytest output
+		# and makes it hard to read logs
+		-p no:sugar
 	)
 	local x
 	for x in "${EPYTEST_DESELECT[@]}"; do

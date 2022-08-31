@@ -1,8 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=8
 
-MODULE_AUTHOR=AUDREYT
+DIST_AUTHOR=AUDREYT
+DIST_VERSION=12.0
+
 inherit perl-module
 
 DESCRIPTION="East Asian Width properties"

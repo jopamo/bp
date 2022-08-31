@@ -728,7 +728,7 @@ python_setup() {
 	fi
 
 	# (reverse iteration -- newest impl first)
-	local found
+	local found i
 	_python_verify_patterns "${@}"
 	for (( i = ${#_PYTHON_SUPPORTED_IMPLS[@]} - 1; i >= 0; i-- )); do
 		local impl=${_PYTHON_SUPPORTED_IMPLS[i]}
@@ -804,7 +804,6 @@ python_replicate_script() {
 	local f
 	for f; do
 		local dosym=dosym
-		[[ ${EAPI} == [67] ]] && dosym=dosym8
 		"${dosym}" -r /usr/lib/python-exec/python-exec2 "${f#${ED}}"
 	done
 }

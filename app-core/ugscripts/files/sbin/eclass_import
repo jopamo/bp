@@ -1,28 +1,39 @@
 #!/bin/bash
 
-mv /var/db/repos/bp/.git /var/db/repos/git_backup
+TEMPLOCATION="/tmp/eclass_import"
+mkdir -p "${TEMPLOCATION}"
+[ ! -d "${TEMPLOCATION}/gentoo" ] && git clone https://github.com/gentoo/gentoo.git "${TEMPLOCATION}/gentoo" --depth 1
+cp "${TEMPLOCATION}"/gentoo/eclass/{autotools,cargo,cmake,distutils-r1,estack,flag-o-matic,font,git-r3,gnuconfig,go-module,kernel-2,libtool,linux-info,linux-mod,meson,multibuild,multiprocessing,ninja-utils,perl-functions,perl-module,python*,qmake-utils,sgml-catalog-r1,toolchain-funcs,unpacker,xdg,xdg-utils}.eclass /var/db/repos/bp/eclass/
 
-find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/\$\(get_libdir\)/lib/g'
-
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i '/dosym8/d'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i '/einstalldocs/d'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i '/inherit\ eapi8-dosym/d'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i '/inherit\ eqawarn/d'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i '/inherit\ eutils/d'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i '/inherit\ multilib/d'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/\ multilib//g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/\ readme.gentoo-r1//g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/\$(get_libdir)/lib/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/app-arch/app-compression/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/app-portage/app-port/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/app-text/app-tex/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/dev-lang/app-lang/g'
-find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/dev-lang\/perl/app-lang\/perl/g'
-find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/dev-util\/cmake/app-dev\/cmake/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/dev-libs\/glib/lib-live\/glib/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/dev-util\/desktop-file-utils/xgui-misc\/desktop-file-utils/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/dev-util/app-dev/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/dev-vcs\/git/app-core\/git/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/media-fonts\/encodings/fonts\/encodings/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/media-libs\/fontconfig/fonts\/fontconfig/g'
-find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/sys-apps\/kmod/app-core\/kmod/g'
-find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/sys-apps\/sed/app-core\/sed/g'
-find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/sys-devel\/bc/app-build\/bc/g'
-find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/sys-devel\/bison/app-build\/bison/g'
-find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/sys-devel\/flex/app-build\/flex/g'
-find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/sys-devel\/make/app-build\/make/g'
-find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/sys-libs\/ncurses/lib-core\/ncurses/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/sys-apps/app-core/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/sys-devel/app-build/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/sys-libs/lib-core/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/virtual\/libelf/lib-core\/elfutils/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/virtual\/linux-sources/app-kernel\/xanmod-sources/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/virtual\/pkgconfig/app-dev\/pkgconf/g'
-
-find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/dev-util\/desktop-file-utils/xgui-misc\/desktop-file-utils/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/x11-apps\/mkfontscale/xgui-live-app\/mkfontscale/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/x11-misc\/shared-mime-info/xgui-live-app\/shared-mime-info/g'
-find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/dev-libs\/glib/lib-live\/glib/g'
-find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/dev-util/app-dev/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/\${EPREFIX}\$\(qt5_get_libdir\)\/qt5\/bin/\/usr\/bin/g'
 
-mv /var/db/repos/git_backup /var/db/repos/bp/.git
+sed -i 's/.*qt5\/bin.*/	"${EPREFIX}"\/usr\/bin/' /var/db/repos/bp/eclass/qmake-utils.eclass
+
+sed -i '3i\PYTHON_COMPAT=( python3_10 python3_11 )\' /var/db/repos/bp/eclass/python-utils-r1.eclass

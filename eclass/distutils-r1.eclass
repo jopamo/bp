@@ -204,27 +204,33 @@ _distutils_set_globals() {
 		fi
 
 		bdep='
-			>=dev-python/gpep517-3[${PYTHON_USEDEP}]'
+			>=dev-python/gpep517-8[${PYTHON_USEDEP}]
+		'
 		case ${DISTUTILS_USE_PEP517} in
 			flit)
 				bdep+='
-					>=dev-python/flit_core-3.7.1[${PYTHON_USEDEP}]'
+					>=dev-python/flit_core-3.7.1[${PYTHON_USEDEP}]
+				'
 				;;
 			flit_scm)
 				bdep+='
-					dev-python/flit_scm[${PYTHON_USEDEP}]'
+					dev-python/flit_scm[${PYTHON_USEDEP}]
+				'
 				;;
 			hatchling)
 				bdep+='
-					>=dev-python/hatchling-0.22.0[${PYTHON_USEDEP}]'
+					>=dev-python/hatchling-1.3.1[${PYTHON_USEDEP}]
+				'
 				;;
 			jupyter)
 				bdep+='
-					>=dev-python/jupyter_packaging-0.11.1[${PYTHON_USEDEP}]'
+					>=dev-python/jupyter_packaging-0.12.0-r1[${PYTHON_USEDEP}]
+				'
 				;;
 			maturin)
 				bdep+='
-					>=app-dev/maturin-0.12.7[${PYTHON_USEDEP}]'
+					>=app-dev/maturin-0.12.20[${PYTHON_USEDEP}]
+				'
 				;;
 			no)
 				# undo the generic deps added above
@@ -232,28 +238,34 @@ _distutils_set_globals() {
 				;;
 			meson-python)
 				bdep+='
-					dev-python/meson-python[${PYTHON_USEDEP}]'
+					dev-python/meson-python[${PYTHON_USEDEP}]
+				'
 				;;
 			pbr)
 				bdep+='
-					>=dev-python/pbr-5.8.0-r1[${PYTHON_USEDEP}]'
+					>=dev-python/pbr-5.9.0[${PYTHON_USEDEP}]
+				'
 				;;
 			pdm)
 				bdep+='
-					>=dev-python/pdm-pep517-0.12.3[${PYTHON_USEDEP}]'
+					>=dev-python/pdm-pep517-1.0.2[${PYTHON_USEDEP}]
+				'
 				;;
 			poetry)
 				bdep+='
-					>=dev-python/poetry-core-1.0.8[${PYTHON_USEDEP}]'
+					>=dev-python/poetry-core-1.0.8[${PYTHON_USEDEP}]
+				'
 				;;
 			setuptools)
 				bdep+='
-					>=dev-python/setuptools-60.5.0[${PYTHON_USEDEP}]
-					dev-python/wheel[${PYTHON_USEDEP}]'
+					>=dev-python/setuptools-62.6.0[${PYTHON_USEDEP}]
+					dev-python/wheel[${PYTHON_USEDEP}]
+				'
 				;;
 			sip)
 				bdep+='
-					>=dev-python/sip-6.5.0-r1[${PYTHON_USEDEP}]'
+					>=dev-python/sip-6.6.2[${PYTHON_USEDEP}]
+				'
 				;;
 			standalone)
 				;;
@@ -472,7 +484,7 @@ distutils_enable_sphinx() {
 	_DISTUTILS_SPHINX_PLUGINS=( "${@}" )
 
 	local deps autodoc=1 d
-	deps=">=dev-python/sphinx-4.4.0[\${PYTHON_USEDEP}]"
+	deps=">=dev-python/sphinx-4.5.0-r1[\${PYTHON_USEDEP}]"
 	for d; do
 		if [[ ${d} == --no-autodoc ]]; then
 			autodoc=
@@ -496,7 +508,7 @@ distutils_enable_sphinx() {
 			use doc || return 0
 
 			local p
-			for p in ">=dev-python/sphinx-4.4.0" \
+			for p in ">=dev-python/sphinx-4.5.0-r1" \
 				"${_DISTUTILS_SPHINX_PLUGINS[@]}"
 			do
 				python_has_version "${p}[${PYTHON_USEDEP}]" ||
@@ -504,7 +516,7 @@ distutils_enable_sphinx() {
 			done
 		}
 	else
-		deps=">=dev-python/sphinx-4.4.0"
+		deps=">=dev-python/sphinx-4.5.0-r1"
 	fi
 
 	sphinx_compile_all() {
@@ -584,10 +596,10 @@ distutils_enable_tests() {
 	local test_pkg
 	case ${1} in
 		nose)
-			test_pkg=">=dev-python/nose-1.3.7-r4"
+			test_pkg=">=dev-python/nose-1.3.7_p20211111_p1-r1"
 			;;
 		pytest)
-			test_pkg=">=dev-python/pytest-7.0.1"
+			test_pkg=">=dev-python/pytest-7.1.2"
 			;;
 		setup.py)
 			;;
@@ -871,10 +883,10 @@ _distutils-r1_handle_pyproject_toml() {
 
 	if [[ ! -f setup.py && -f pyproject.toml ]]; then
 		if [[ ${DISTUTILS_USE_SETUPTOOLS} != pyproject.toml ]]; then
-			eerror "No setup.py found but pyproject.toml is present.  In order to enable"
-			eerror "pyproject.toml support in distutils-r1, set:"
-			eerror "  DISTUTILS_USE_SETUPTOOLS=pyproject.toml"
-			die "No setup.py found and DISTUTILS_USE_SETUPTOOLS!=pyproject.toml"
+			eerror "No setup.py found but pyproject.toml is present.  Please migrate"
+			eerror "the package to use DISTUTILS_USE_PEP517. See:"
+			eerror "  https://projects.gentoo.org/python/guide/distutils.html"
+			die "No setup.py found and PEP517 mode not enabled"
 		fi
 	fi
 }
@@ -1238,6 +1250,56 @@ _distutils-r1_get_backend() {
 	echo "${build_backend}"
 }
 
+# @FUNCTION: distutils_wheel_install
+# @USAGE: <root> <wheel>
+# @DESCRIPTION:
+# Install the specified wheel into <root>.
+#
+# This function is intended for expert use only.
+distutils_wheel_install() {
+	debug-print-function ${FUNCNAME} "${@}"
+	if [[ ${#} -ne 2 ]]; then
+		die "${FUNCNAME} takes exactly two arguments: <root> <wheel>"
+	fi
+	if [[ -z ${PYTHON} ]]; then
+		die "PYTHON unset, invalid call context"
+	fi
+
+	local root=${1}
+	local wheel=${2}
+
+	einfo "  Installing ${wheel##*/} to ${root}"
+	if has_version -b ">=dev-python/gpep517-9"; then
+		# TODO: inline when we dep on >=9
+		local cmd=(
+			gpep517 install-wheel
+				--destdir="${root}"
+				--interpreter="${PYTHON}"
+				--prefix="${EPREFIX}/usr"
+				--optimize=all
+				"${wheel}"
+		)
+	else
+		local cmd=(
+			gpep517 install-wheel
+				--destdir="${root}"
+				--interpreter="${PYTHON}"
+				--prefix="${EPREFIX}/usr"
+				"${wheel}"
+		)
+	fi
+	printf '%s\n' "${cmd[*]}"
+	"${cmd[@]}" || die "Wheel install failed"
+
+	# remove installed licenses
+	find "${root}$(python_get_sitedir)" -depth \
+		\( -path '*.dist-info/COPYING*' \
+		-o -path '*.dist-info/LICENSE*' \
+		-o -path '*.dist-info/license_files/*' \
+		-o -path '*.dist-info/license_files' \
+		\) -delete || die
+}
+
 # @FUNCTION: distutils_pep517_install
 # @USAGE: <root>
 # @DESCRIPTION:
@@ -1309,27 +1371,20 @@ distutils_pep517_install() {
 	local config_args=()
 	[[ -n ${config_settings} ]] &&
 		config_args+=( --config-json "${config_settings}" )
+	local cmd=(
+		gpep517 build-wheel
+			--backend "${build_backend}"
+			--output-fd 3
+			--wheel-dir "${WHEEL_BUILD_DIR}"
+			"${config_args[@]}"
+	)
+	printf '%s\n' "${cmd[*]}"
 	local wheel=$(
-		gpep517 build-wheel --backend "${build_backend}" \
-				--output-fd 3 \
-				--wheel-dir "${WHEEL_BUILD_DIR}" \
-				"${config_args[@]}" 3>&1 >&2 ||
-			die "Wheel build failed"
+		"${cmd[@]}" 3>&1 >&2 || die "Wheel build failed"
 	)
 	[[ -n ${wheel} ]] || die "No wheel name returned"
 
-	einfo "  Installing ${wheel} to ${root}"
-	gpep517 install-wheel --destdir="${root}" --interpreter="${PYTHON}" \
-			--prefix="${EPREFIX}/usr" "${WHEEL_BUILD_DIR}/${wheel}" ||
-		die "Wheel install failed"
-
-	# remove installed licenses
-	find "${root}$(python_get_sitedir)" -depth \
-		\( -path '*.dist-info/COPYING*' \
-		-o -path '*.dist-info/LICENSE*' \
-		-o -path '*.dist-info/license_files/*' \
-		-o -path '*.dist-info/license_files' \
-		\) -delete || die
+	distutils_wheel_install "${root}" "${WHEEL_BUILD_DIR}/${wheel}"
 
 	# clean the build tree; otherwise we may end up with PyPy3
 	# extensions duplicated into CPython dists
@@ -1398,12 +1453,22 @@ distutils-r1_python_compile() {
 			fi
 			;;
 		maturin)
-			# auditwheel may attempt to auto-bundle libraries, bug #831171
-			local -x MATURIN_PEP517_ARGS=--skip-auditwheel
-
-			# support cargo.eclass' IUSE=debug if available
-			in_iuse debug && use debug &&
-				MATURIN_PEP517_ARGS+=" --cargo-extra-args=--profile=dev"
+			if has_version '>=app-dev/maturin-0.13'; then
+				# auditwheel may auto-bundle libraries (bug #831171),
+				# also support cargo.eclass' IUSE=debug if available
+				local -x MATURIN_PEP517_ARGS="
+					--jobs=$(makeopts_jobs)
+					--skip-auditwheel
+					$(in_iuse debug && usex debug --profile=dev '')
+				"
+			else
+				# legacy support, can cleanup when depend on >=0.13
+				local -x MATURIN_PEP517_ARGS="
+					--skip-auditwheel
+					$(in_iuse debug && usex debug \
+						--cargo-extra-args=--profile=dev '')
+				"
+			fi
 			;;
 		no)
 			return
@@ -1411,13 +1476,6 @@ distutils-r1_python_compile() {
 	esac
 
 	if [[ ${DISTUTILS_USE_PEP517} ]]; then
-		# python likes to compile any module it sees, which triggers sandbox
-		# failures if some packages haven't compiled their modules yet.
-		addpredict "${EPREFIX}/usr/lib/${EPYTHON}"
-		addpredict /usr/lib/pypy3.8
-		addpredict /usr/lib/portage/pym
-		addpredict /usr/local # bug 498232
-
 		distutils_pep517_install "${BUILD_DIR}/install"
 	fi
 }
@@ -1459,7 +1517,6 @@ _distutils-r1_wrap_scripts() {
 
 			debug-print "${FUNCNAME}: installing wrapper at ${bindir}/${basename}"
 			local dosym=dosym
-			[[ ${EAPI} == [67] ]] && dosym=dosym8
 			"${dosym}" -r /usr/lib/python-exec/python-exec2 \
 				"${bindir#${EPREFIX}}/${basename}"
 		done
@@ -1546,20 +1603,25 @@ distutils-r1_python_install() {
 
 		# remove files that we've created explicitly
 		rm "${reg_scriptdir}"/{"${EPYTHON}",python3,python,pyvenv.cfg} || die
-		# verify that scriptdir & wrapped_scriptdir both contain
-		# the same files
-		(
-			cd "${reg_scriptdir}" && find . -mindepth 1
-		) | sort > "${T}"/.distutils-files-bin
-		assert "listing ${reg_scriptdir} failed"
-		(
-			if [[ -d ${wrapped_scriptdir} ]]; then
-				cd "${wrapped_scriptdir}" && find . -mindepth 1
+
+		# Automagically do the QA check to avoid issues when bootstrapping
+		# prefix.
+		if type diff &>/dev/null ; then
+			# verify that scriptdir & wrapped_scriptdir both contain
+			# the same files
+			(
+				cd "${reg_scriptdir}" && find . -mindepth 1
+			) | sort > "${T}"/.distutils-files-bin
+			assert "listing ${reg_scriptdir} failed"
+			(
+				if [[ -d ${wrapped_scriptdir} ]]; then
+					cd "${wrapped_scriptdir}" && find . -mindepth 1
+				fi
+			) | sort > "${T}"/.distutils-files-wrapped
+			assert "listing ${wrapped_scriptdir} failed"
+			if ! diff -U 0 "${T}"/.distutils-files-{bin,wrapped}; then
+				die "File lists for ${reg_scriptdir} and ${wrapped_scriptdir} differ (see diff above)"
 			fi
-		) | sort > "${T}"/.distutils-files-wrapped
-		assert "listing ${wrapped_scriptdir} failed"
-		if ! diff -U 0 "${T}"/.distutils-files-{bin,wrapped}; then
-			die "File lists for ${reg_scriptdir} and ${wrapped_scriptdir} differ (see diff above)"
 		fi
 
 		# remove the altered bindir, executables from the package
@@ -1595,9 +1657,8 @@ distutils-r1_python_install() {
 		# python likes to compile any module it sees, which triggers sandbox
 		# failures if some packages haven't compiled their modules yet.
 		addpredict "${EPREFIX}/usr/lib/${EPYTHON}"
-		addpredict /usr/lib/pypy3.8
-		addpredict /usr/lib/portage/pym
-		addpredict /usr/local # bug 498232
+		addpredict "${EPREFIX}/usr/lib/pypy3.9"
+		addpredict "${EPREFIX}/usr/local" # bug 498232
 
 		if [[ ! ${DISTUTILS_SINGLE_IMPL} ]]; then
 			merge_root=1
@@ -1644,6 +1705,7 @@ distutils-r1_python_install() {
 distutils-r1_python_install_all() {
 	debug-print-function ${FUNCNAME} "${@}"
 	_distutils-r1_check_all_phase_mismatch
+
 }
 
 # @FUNCTION: distutils-r1_run_phase
@@ -1941,9 +2003,13 @@ _distutils-r1_post_python_install() {
 		done
 
 		if [[ ${DISTUTILS_USE_PEP517} ]]; then
-			# we need to recompile everything here in order to embed
-			# the correct paths
-			python_optimize "${sitedir}"
+			if ! has_version -b ">=dev-python/gpep517-9"
+			then
+				# TODO: remove when we dep on >=9
+				# we need to recompile everything here in order to embed
+				# the correct paths
+				python_optimize "${sitedir}"
+			fi
 		fi
 	fi
 }

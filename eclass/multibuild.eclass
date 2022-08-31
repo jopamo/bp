@@ -10,7 +10,7 @@
 # @BLURB: A generic eclass for building multiple variants of packages.
 # @DESCRIPTION:
 # The multibuild eclass aims to provide a generic framework for building
-# multiple 'variants' of a package (e.g. multilib, Python
+# multiple 'variants' of a package (e.g., Python
 # implementations).
 
 case ${EAPI} in

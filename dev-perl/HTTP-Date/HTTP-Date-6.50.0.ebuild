@@ -1,8 +1,9 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
-MODULE_AUTHOR=GAAS
+DIST_AUTHOR=OALDERS
+DIST_VERSION=6.05
 
 inherit perl-module
 

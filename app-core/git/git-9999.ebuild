@@ -19,7 +19,7 @@ fi
 LICENSE="GPL-2"
 SLOT="0"
 
-IUSE="static-libs perl gitweb"
+IUSE="+curl static-libs perl gitweb"
 
 DEPEND="
 	app-build/gettext

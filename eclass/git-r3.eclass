@@ -22,9 +22,9 @@ if [[ ! ${_GIT_R3} ]]; then
 PROPERTIES+=" live"
 
 if [[ ${EAPI} != [56] ]]; then
-	BDEPEND="app-core/git"
+	BDEPEND=">=app-core/git-1.8.2.1[curl]"
 else
-	DEPEND="app-core/git"
+	DEPEND=">=app-core/git-1.8.2.1[curl]"
 fi
 
 # @ECLASS_VARIABLE: EGIT_CLONE_TYPE

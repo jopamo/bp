@@ -699,6 +699,14 @@ cmake_src_install() {
 	debug-print-function ${FUNCNAME} "$@"
 
 	DESTDIR="${D}" cmake_build install "$@"
+
+	if [[ ${EAPI} == 7 ]]; then
+		pushd "${S}" > /dev/null || die
+		popd > /dev/null || die
+	else
+		pushd "${CMAKE_USE_DIR}" > /dev/null || die
+		popd > /dev/null || die
+	fi
 }
 
 fi

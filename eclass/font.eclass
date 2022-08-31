@@ -46,10 +46,10 @@ FONTDIR=${FONTDIR:-/usr/share/fonts/${FONT_PN}}
 # Array containing fontconfig conf files to install.
 FONT_CONF=( "" )
 
-if [[ ${CATEGORY}/${PN} != media-fonts/encodings ]]; then
+if [[ ${CATEGORY}/${PN} != fonts/encodings ]]; then
 	IUSE="X"
 	BDEPEND="X? (
-			xgui-live-app/mkfontscale
+			>=xgui-live-app/mkfontscale-1.2.0
 			fonts/encodings
 	)"
 fi
@@ -173,6 +173,7 @@ font_src_install() {
 	fi
 
 	font_fontconfig
+
 
 	# install common docs
 	for commondoc in COPYRIGHT FONTLOG.txt; do

@@ -14,7 +14,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="$(ver_cut 1-2)"
 	inherit git-r3
 else
-	SNAPSHOT=d23ab79952836e67216113d9195c9c0e879b3e83
+	SNAPSHOT=2ecc195498f3b1256fabc2b66e0d8f6d671fa1d7
 	SRC_URI="https://github.com/python/cpython/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/c${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
@@ -52,9 +52,8 @@ SETUPTOOLS_USE_DISTUTILS=local
 
 src_prepare() {
 	# Ensure that internal copies of expat, libffi and zlib are not used.
-	rm -fr Modules/expat || die
-	rm -fr Modules/_ctypes/libffi* || die
-	rm -fr Modules/zlib || die
+	rm -r Modules/expat || die
+	rm -r Modules/_ctypes/libffi* || die
 
 	default
 

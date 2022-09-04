@@ -2,15 +2,15 @@
 
 EAPI=8
 
-BASEVERSION="17.0.4"
+BASEVERSION="17.0.4.1"
 
 DESCRIPTION="Zulu OpenJDK17"
 HOMEPAGE="https://www.azul.com/"
 
-SRC_URI="amd64? ( https://cdn.azul.com/zulu/bin/zulu${PV}-ca-jdk${BASEVERSION}-linux_x64.tar.gz )
+SRC_URI="amd64? ( https://cdn.azul.com/zulu/bin/zulu${PV}-ca-fx-jdk${BASEVERSION}-linux_x64.tar.gz )
 		arm64? ( https://cdn.azul.com/zulu/bin/zulu${PV}-ca-jdk${BASEVERSION}-linux_aarch64.tar.gz )"
 
-S="${WORKDIR}/zulu${PV}-ca-jdk${BASEVERSION}-linux_x64"
+S="${WORKDIR}/zulu${PV}-ca-fx-jdk${BASEVERSION}-linux_x64"
 
 LICENSE="https://www.azul.com/products/core/openjdk-terms-of-use/"
 SLOT="0"

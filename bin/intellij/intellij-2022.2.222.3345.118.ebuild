@@ -5,7 +5,7 @@ EAPI=8
 IDEA_VER="2.49836838.1031729952.1658961170-1305167137.1658527855"
 MY_PV="$(ver_cut 1-2)"
 
-inherit xdg
+inherit xdg wrapper
 
 DESCRIPTION="A complete toolset for web, mobile and enterprise development"
 HOMEPAGE="https://www.jetbrains.com/idea"
@@ -24,10 +24,10 @@ RESTRICT="strip"
 
 QA_PREBUILT="opt/${PN}/*"
 
+RDEPEND="app-fs/e2fsprogs"
+
 src_prepare() {
 	default
-
-	mv bin/idea.sh bin/idea || die
 
 	rm -r lib/pty4j-native/linux/aarch64 || die
 	rm -r lib/pty4j-native/linux/arm || die
@@ -43,11 +43,15 @@ src_prepare() {
 }
 
 src_install() {
-	mkdir -p "${ED}"/opt/${PN}/
-	cp -rp "${S}"/* "${ED}"/opt/${PN}/
+	local HERE="${ED}/opt/${PN}"
+
+	mkdir -p "${HERE}" || die
+	cp -rp "${S}"/* "${HERE}/" || die
+
+	make_wrapper idea "/opt/${PN}/bin/idea.sh"
 
 	insinto /usr/share/icons/hicolor/scalable/apps/
-	doins "${S}"/bin/idea.png
+	doins "${S}"/bin/idea.svg
 
 	insinto /usr/share/applications/
 	doins "${FILESDIR}"/idea.desktop

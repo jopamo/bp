@@ -22,6 +22,8 @@ src_prepare() {
 	default
 	cp "${FILESDIR}"/lua.pc "${S}"/
 
+	sed -i -e "s/VERSION_REPLACE/${PV}/g" "${S}"/lua.pc || die
+
 	sed -i -e "s/-O2\ //g" "src/Makefile" || die
 }
 

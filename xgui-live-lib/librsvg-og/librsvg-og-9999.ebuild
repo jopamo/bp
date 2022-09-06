@@ -24,7 +24,6 @@ DEPEND="
 	introspection? ( lib-live/gobject-introspection )
 "
 BDEPEND="
-	lib-live/gobject-introspection-common
 	app-dev/gtk-doc
 	app-dev/pkgconf
 "

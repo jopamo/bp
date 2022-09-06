@@ -55,7 +55,6 @@ DEPEND="${COMMON_DEPEND}
 	app-tex/docbook-xml-dtd
 	app-tex/docbook-xsl-stylesheets
 	lib-core/libxslt
-	lib-live/gobject-introspection-common
 	xgui-live-lib/at-spi2-core
 	X? ( xinerama? ( xgui-live-app/xorgproto ) )"
 
@@ -97,18 +96,18 @@ src_configure() {
 src_install() {
 	default
 	insopts -m 0755
-	insinto /etc/gtk-3.0
+	insinto /etc/gtk-$(ver_cut 1).0
 	doins "${FILESDIR}"/settings.ini
 
-	dosym -r /usr/include/gtk-3.0/gdk /usr/include/gdk
-	dosym -r /usr/include/gtk-3.0/gtk /usr/include/gtk
+	dosym -r /usr/include/gtk-$(ver_cut 1).0/gdk /usr/include/gdk
+	dosym -r /usr/include/gtk-$(ver_cut 1).0/gtk /usr/include/gtk
 }
 
 pkg_preinst() {
 	xdg_pkg_preinst
 
 	# Make immodules.cache belongs to gtk+ alone
-	local cache="usr/lib/gtk-3.0/3.0.0/immodules.cache"
+	local cache="usr/lib/gtk-$(ver_cut 1).0/$(ver_cut 1).0.0/immodules.cache"
 
 	if [[ -e ${EROOT}/${cache} ]]; then
 		cp "${EROOT}"/${cache} "${ED}"/${cache} || die
@@ -121,6 +120,6 @@ pkg_postrm() {
 	xdg_pkg_postrm
 
 	if [[ -z ${REPLACED_BY_VERSION} ]]; then
-		rm -f "${EROOT}"/usr/lib/gtk-3.0/3.0.0/immodules.cache
+		rm -f "${EROOT}"/usr/lib/gtk-$(ver_cut 1).0/$(ver_cut 1).0.0/immodules.cache
 	fi
 }

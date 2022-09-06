@@ -22,7 +22,6 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	>=lib-live/gobject-introspection-common-${PV}
 	lib-live/glib
 	lib-core/libffi
 	${PYTHON_DEPS}
@@ -40,11 +39,15 @@ pkg_setup() {
 	python-single-r1_pkg_setup
 }
 
+src_configure() {
+	local emesonargs=(
+		-Dpython="${EPYTHON}"
+	)
+	meson_src_configure
+}
+
 src_install() {
 	meson_src_install
-
-	# Prevent collision with gobject-introspection-common
-	rm -v "${ED}"/usr/share/aclocal/introspection.m4 \
-		"${ED}"/usr/share/gobject-introspection-1.0/Makefile.introspection || die
-	rmdir "${ED}"/usr/share/aclocal || die
+	python_fix_shebang "${ED}"/usr/bin/
+	python_optimize "${ED}"/usr/lib/gobject-introspection/giscanner
 }

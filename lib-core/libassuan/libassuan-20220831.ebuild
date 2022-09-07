@@ -20,7 +20,7 @@ IUSE="static-libs"
 
 DEPEND="lib-core/libgpg-error"
 
-PATCHES=( ${FILESDIR}/libassuan-nodocs.patch )
+#PATCHES=( ${FILESDIR}/libassuan-nodocs.patch )
 
 src_prepare() {
 	default

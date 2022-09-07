@@ -16,11 +16,6 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-src_prepare() {
-	default
-	strip-linguas -i .
-}
-
 src_compile() {
 	emake \
 		V=1 \

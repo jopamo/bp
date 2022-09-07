@@ -44,12 +44,6 @@ pkg_setup() {
 	use python && python-single-r1_pkg_setup
 }
 
-src_prepare() {
-	default
-
-	strip-linguas -u bfd/po opcodes/po
-}
-
 src_configure() {
 	strip-unsupported-flags
 

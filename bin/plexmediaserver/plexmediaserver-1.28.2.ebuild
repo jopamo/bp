@@ -43,9 +43,6 @@ src_unpack() {
 }
 
 src_install() {
-	# Remove Debian apt repo files
-	rm -r "etc/apt" || die
-
 	# Remove Debian specific files
 	rm -r "usr/share/doc" || die
 

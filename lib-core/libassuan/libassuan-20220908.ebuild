@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT="e3b1e3857e00c6e8216e953b0b38f4dcda00cd53"
+SNAPSHOT="6bc8a106c4bd6c1e3a4ad834331eb24431868beb"
 SHORT=${SNAPSHOT:0:7}
 
 inherit autotools
@@ -20,9 +20,10 @@ IUSE="static-libs"
 
 DEPEND="lib-core/libgpg-error"
 
-PATCHES=( ${FILESDIR}/libassuan-nodocs.patch )
-
 src_prepare() {
+	#disable texi doc generation
+	sed -i "/TEXINFOS\ /d" doc/Makefile.am || die
+
 	default
 	eautoreconf
 }

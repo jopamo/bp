@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=1a8d83359a8f14a75fb0629908b516a3d1077ab3
+SNAPSHOT=7eacf279a6ff4bff560ff49a8a2a9c531658096c
 
 inherit flag-o-matic
 
@@ -23,10 +23,11 @@ DEPEND="
 	readline? ( lib-core/readline )
 "
 
-filter-flags -Wl,-z,defs
-
 src_configure() {
+	filter-flags -Wl,-z,defs
+
 	export ac_cv_libsigsegv=no
+
 	local myconf=(
 		$(use_with mpfr)
 		--disable-nls
@@ -40,6 +41,8 @@ src_install() {
 
 	insinto usr/include/awk
 	doins *.h || die
+
 	rm "${ED}"/usr/include/awk/config.h || die
+
 	dosym gawk usr/bin/awk
 }

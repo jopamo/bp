@@ -122,4 +122,5 @@ src_install() {
 
 	ewarn "Install the Database"
 	ewarn "mysql_install_db --user=mysql --ldata=/var/lib/mysql"
+	ewarn "mysqladmin -u root -h localhost password 'new-password'"
 }

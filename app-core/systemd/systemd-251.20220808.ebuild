@@ -233,16 +233,16 @@ src_install() {
 	mkdir -p "${ED}"/etc/systemd/user && keepdir /etc/systemd/user
 
 	use xkb || rm -rf "${ED}"/etc/X11 "${ED}"/etc/xdg/
-	use tmpfilesd || rm -f "${ED}"/usr/lib/systemd/system/systemd-tmpfiles-clean.timer "${ED}"/usr/lib/systemd/system/timers.target.wants/systemd-tmpfiles-clean.timer
+	use tmpfilesd || rm "${ED}"/usr/lib/systemd/system/systemd-tmpfiles-clean.timer "${ED}"/usr/lib/systemd/system/timers.target.wants/systemd-tmpfiles-clean.timer
 
-	rm -fr "${ED}"/etc/kernel
-	rm -f "${ED}"/usr/bin/kernel-install
-	rm -fr "${ED}"/usr/lib/kernel
+	rm -r "${ED}"/etc/kernel
+	rm "${ED}"/usr/bin/kernel-install
+	rm -r "${ED}"/usr/lib/kernel
 
 	if use sleep; then
-		rm -f  "${ED}"/usr/lib/systemd/systemd-sleep
-		rm -fr "${ED}"/usr/lib/systemd/system-sleep/
-		rm -f  "${ED}"/usr/lib/systemd/system/systemd-suspend.service
+		rm  "${ED}"/usr/lib/systemd/systemd-sleep
+		rm -r "${ED}"/usr/lib/systemd/system-sleep/
+		rm  "${ED}"/usr/lib/systemd/system/systemd-suspend.service
 		sed -i "s/\#SuspendMode\=/SuspendMode\=suspend/g" "${ED}"/etc/systemd/sleep.conf || die
 		sed -i "s/\#SuspendState\=mem\ standby\ freeze/SuspendState\=standby/g" "${ED}"/etc/systemd/sleep.conf || die
 		sed -i "s/\#HibernateMode\=platform\ shutdown/HibernateMode\=suspend/g" "${ED}"/etc/systemd/sleep.conf || die
@@ -250,26 +250,26 @@ src_install() {
 	fi
 
 	if use systemd-update; then
-		rm -f "${ED}"/usr/lib/systemd/system/sysinit.target.wants/systemd-update-done.service
-		rm -f "${ED}"/usr/lib/systemd/system/system-update.target
-		rm -f "${ED}"/usr/lib/systemd/system/systemd-update-done.service
-		rm -f "${ED}"/usr/lib/systemd/system-generators/systemd-system-update-generator
-		rm -f "${ED}"/usr/lib/systemd/systemd-update-done
+		rm "${ED}"/usr/lib/systemd/system/sysinit.target.wants/systemd-update-done.service || die
+		rm "${ED}"/usr/lib/systemd/system/system-update.target || die
+		rm "${ED}"/usr/lib/systemd/system/systemd-update-done.service || die
+		rm "${ED}"/usr/lib/systemd/system-generators/systemd-system-update-generator || die
+		rm "${ED}"/usr/lib/systemd/systemd-update-done || die
 	fi
 
 	if use sysv; then
-		rm -fr "${ED}"/etc/init.d
-		rm -f "${ED}"/usr/lib/systemd/system-generators/systemd-rc-local-generator
-		rm -f "${ED}"/usr/lib/systemd/system-generators/systemd-sysv-generator
-		rm -f "${ED}"/usr/lib/systemd/system/sockets.target.wants/systemd-initctl.socket
-		rm -f "${ED}"/usr/lib/systemd/system/systemd-initctl.service
-		rm -f "${ED}"/usr/lib/systemd/system/systemd-initctl.socket
-		rm -f "${ED}"/usr/lib/systemd/systemd-initctl
-		rm -f "${ED}"/usr/lib/systemd/systemd/halt-local.service
-		rm -f "${ED}"/usr/lib/systemd/systemd/rc-local.service
+		rm -r "${ED}"/etc/init.d || die
+		rm "${ED}"/usr/lib/systemd/system-generators/systemd-rc-local-generator || die
+		rm "${ED}"/usr/lib/systemd/system-generators/systemd-sysv-generator || die
+		rm "${ED}"/usr/lib/systemd/system/sockets.target.wants/systemd-initctl.socket || die
+		rm "${ED}"/usr/lib/systemd/system/systemd-initctl.service || die
+		rm "${ED}"/usr/lib/systemd/system/systemd-initctl.socket || die
+		rm "${ED}"/usr/lib/systemd/systemd-initctl || die
+		rm "${ED}"/usr/lib/systemd/systemd/halt-local.service || die
+		rm "${ED}"/usr/lib/systemd/systemd/rc-local.service || die
 	fi
 
-	use networkd && mkdir -p "${ED}"/etc/systemd/network/
+	use networkd && mkdir -p "${ED}"/etc/systemd/network/ || die
 
 	use dhcp4 && echo '[Match]
 Name=en*

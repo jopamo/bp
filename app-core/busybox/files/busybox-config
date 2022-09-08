@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Busybox version: 1.36.0.git
-# Sun Jul  3 08:58:56 2022
+# Wed Sep  7 23:28:01 2022
 #
 CONFIG_HAVE_DOT_CONFIG=y
 
@@ -1148,6 +1148,7 @@ CONFIG_ASH_MAIL=y
 CONFIG_ASH_ECHO=y
 CONFIG_ASH_PRINTF=y
 CONFIG_ASH_TEST=y
+CONFIG_ASH_SLEEP=y
 CONFIG_ASH_HELP=y
 CONFIG_ASH_GETOPTS=y
 CONFIG_ASH_CMDCMD=y

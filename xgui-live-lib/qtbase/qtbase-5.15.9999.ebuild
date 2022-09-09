@@ -10,7 +10,7 @@ EGIT_REPO_URI="https://invent.kde.org/qt/qt/qtbase.git"
 EGIT_BRANCH="kde/$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
-SLOT="0"
+SLOT="$(ver_cut 1)/1"
 KEYWORDS="amd64 arm64"
 
 IUSE="gssapi mysql postgres sqlite systemd opengl vulkan +xkbcommon"
@@ -36,11 +36,15 @@ DEPEND="
 	vulkan? ( xmedia-live-lib/vulkan-loader )
 	xkbcommon? ( xgui-live-lib/libxkbcommon )
 "
-PDEPEND="xgui-live-lib/qtx11extras"
-
-filter-flags -flto\*
+PDEPEND="
+	xgui-live-lib/qtsvg:$(ver_cut 1)=
+	xgui-live-lib/qttools:$(ver_cut 1)=
+	xgui-live-lib/qtx11extras:$(ver_cut 1)=
+"
 
 src_prepare() {
+	filter-flags -flto*
+
 	sed -i -e "s|^\(QMAKE_CFLAGS_RELEASE.*\)|\1 ${CFLAGS}|" \
 		mkspecs/common/gcc-base.conf
 	sed -i -e "s|^\(QMAKE_LFLAGS_RELEASE.*\)|\1 ${LDFLAGS}|" \

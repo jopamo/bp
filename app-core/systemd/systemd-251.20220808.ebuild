@@ -222,7 +222,6 @@ src_configure() {
 src_install() {
 	meson_src_install
 
-	touch "${ED}"/etc/sysctl.conf
 	dosym -r /etc/sysctl.conf /etc/sysctl.d/99-sysctl.conf
 
 	rm "${ED}"/usr/share/factory/etc/issue || die

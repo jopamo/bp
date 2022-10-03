@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit sgml-catalog-r1
+inherit sgml-catalog-r1 prefix
 
 DESCRIPTION="Base ISO character entities and utilities for SGML"
 HOMEPAGE="https://www.iso.org/standard/16387.html"

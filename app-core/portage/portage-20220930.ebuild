@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit distutils-r1 linux-info flag-o-matic user
+inherit distutils-r1 linux-info flag-o-matic user prefix
 
 DESCRIPTION="Gentoo package manager"
 HOMEPAGE="https://github.com/gentoo/portage"
@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/gentoo/${PN}.git"
 	inherit git-r3
 else
-	SNAPSHOT=16e68f1b5c3e1bcb17d87a684aa4519d2316cf41
+	SNAPSHOT=e2d9126d20c2f9073f03bf88c126bb85459fc392
 	SRC_URI="https://github.com/gentoo/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

@@ -2,9 +2,9 @@
 
 EAPI=7
 
-SNAPSHOT=9439ce094c9aa7557a9d53ac7b412a23aa66e36b
+SNAPSHOT=74091dd4e8086db518b30df7f222691524469998
 
-inherit flag-o-matic toolchain-funcs
+inherit flag-o-matic toolchain-funcs prefix
 
 DESCRIPTION="The standard GNU Bourne again shell"
 HOMEPAGE="http://tiswww.case.edu/php/chet/bash/bashtop.html"

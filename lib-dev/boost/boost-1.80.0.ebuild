@@ -2,8 +2,6 @@
 
 EAPI=8
 
-inherit flag-o-matic multiprocessing toolchain-funcs
-
 MY_P="${PN}_$(ver_rs 1- _)"
 MAJOR_V="$(ver_cut 1-2)"
 
@@ -15,7 +13,7 @@ LICENSE="Boost-1.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="context icu +nls static-libs tools bzip2 zlib lzma zstd"
+IUSE="context icu static-libs tools bzip2 zlib lzma zstd"
 
 DEPEND="
 	bzip2? ( app-compression/bzip2 )
@@ -30,9 +28,6 @@ S="${WORKDIR}/${MY_P}"
 
 RESTRICT="test"
 
-append-cxxflags -std=c++14
-filter-flags -Wl,-z,defs
-
 ejam() {
 	local b2_opts=(
 		"$@"
@@ -42,14 +37,10 @@ ejam() {
 }
 
 src_configure() {
-	# Workaround for too many parallel processes requested, bug #506064
-	[[ "$(makeopts_jobs)" -gt 64 ]] && MAKEOPTS="${MAKEOPTS} -j64"
-
 	OPTIONS=(
-		"-j$(makeopts_jobs)"
 		$(usex context '' '--without-context --without-coroutine --without-fiber')
 		$(usex icu "-sICU_PATH=${ESYSROOT}/usr" '--disable-icu boost.locale.icu=off')
-		$(usex nls '' '--without-locale')
+		--without-locale
 		--layout=system
 		--no-cmake-config
 		--prefix="${ED}/usr"

@@ -10,7 +10,7 @@ inherit xdg wrapper
 DESCRIPTION="A complete toolset for web, mobile and enterprise development"
 HOMEPAGE="https://www.jetbrains.com/idea"
 SRC_URI="https://download.jetbrains.com/idea/ideaIC-${MY_PV}.tar.gz?_ga=${IDEA_VER} -> ${P}.tar.gz"
-S="${WORKDIR}/idea-IC-$(ver_cut 3-6)"
+S="${WORKDIR}/idea-IC-$(ver_cut 4-6)"
 
 LICENSE="Apache-2.0 BSD BSD-2 CC0-1.0 CC-BY-2.5 CDDL-1.1
 	codehaus-classworlds CPL-1.0 EPL-1.0 EPL-2.0

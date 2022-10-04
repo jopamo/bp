@@ -18,22 +18,17 @@ KEYWORDS="amd64 arm64"
 IUSE="context icu +nls static-libs tools bzip2 zlib lzma zstd"
 
 DEPEND="
-	icu? ( lib-dev/icu )
 	bzip2? ( app-compression/bzip2 )
-	zlib? ( lib-core/zlib )
+	icu? ( lib-dev/icu )
 	lzma? ( app-compression/xz-utils )
+	zlib? ( lib-core/zlib )
 	zstd? ( app-compression/zstd )
-	=lib-dev/boost-build-${MAJOR_V}*
 "
+BDEPEND="lib-dev/boost-build"
 
 S="${WORKDIR}/${MY_P}"
 
 RESTRICT="test"
-
-PATCHES=(
-	"${FILESDIR}"/${PN}-1.71.0-disable_icu_rpath.patch
-	"${FILESDIR}"/${PN}-1.71.0-build-auto_index-tool.patch
-)
 
 append-cxxflags -std=c++14
 filter-flags -Wl,-z,defs
@@ -51,31 +46,30 @@ src_configure() {
 	[[ "$(makeopts_jobs)" -gt 64 ]] && MAKEOPTS="${MAKEOPTS} -j64"
 
 	OPTIONS=(
-		variant=release
-    	debug-symbols=off
-    	threading=multi
 		"-j$(makeopts_jobs)"
-		--without-python
-		-q
-		-d+2
-		pch=off
-		$(usex icu "-sICU_PATH=${ESYSROOT}/usr" '--disable-icu boost.locale.icu=off')
-		--without-mpi
-		$(usex nls '' '--without-locale')
 		$(usex context '' '--without-context --without-coroutine --without-fiber')
-		--without-stacktrace
-		--prefix="${ED}/usr"
+		$(usex icu "-sICU_PATH=${ESYSROOT}/usr" '--disable-icu boost.locale.icu=off')
+		$(usex nls '' '--without-locale')
 		--layout=system
 		--no-cmake-config
-		threading=multi
-		link=$(usex static-libs shared,static shared)
+		--prefix="${ED}/usr"
+		--without-mpi
+		--without-python
+		--without-stacktrace
+		-d+2
+		-q
 		-sNO_BZIP2=$(usex bzip2 0 1)
 		-sNO_LZMA=$(usex lzma 0 1)
 		-sNO_ZLIB=$(usex zlib 0 1)
 		-sNO_ZSTD=$(usex zstd 0 1)
 		cflags="${CPPFLAGS} ${CFLAGS}"
 		cxxflags="${CPPFLAGS} ${CXXFLAGS}"
+		link=$(usex static-libs shared,static shared)
 		linkflags="${LDFLAGS}"
+		pch=off
+		threading=multi
+		variant=release
+		debug-symbols=off
 	)
 }
 

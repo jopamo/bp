@@ -10,7 +10,7 @@ HOMEPAGE="https://keepassxc.org"
 if [[ ${PV} == *9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/keepassxreboot/${PN}.git"
-	EGIT_BRANCH="backport-2.7.2"
+	EGIT_BRANCH="release/$(ver_cut 1-2).x"
 else
 	SRC_URI="https://github.com/keepassxreboot/keepassxc/releases/download/${PV}/keepassxc-${PV}-src.tar.xz -> ${P}.tar.xz"
 fi

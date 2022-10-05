@@ -26,7 +26,7 @@ IUSE="+aio alsa bzip2 capstone +caps +curl debug +fdt fuse
 	gnutls +gtk iscsi jack jemalloc +jpeg lzo multipath ncurses nfs nls numa
 	opengl +oss +pin-upstream-blobs	plugins +png pulseaudio python sasl
 	+seccomp sdl sdl-image selinux smartcard snappy ssh static static-user
-	systemtap test udev usb	usbredir vde +vhost-net vhost-user-fs virgl virtfs
+	test udev usb	usbredir vde +vhost-net vhost-user-fs virgl virtfs
 	+vnc vte xattr xen xfs zstd"
 
 COMMON_TARGETS="
@@ -118,7 +118,6 @@ ALL_DEPEND="
 	lib-live/glib[static-libs(+)]
 	lib-core/zlib[static-libs(+)]
 	python? ( ${PYTHON_DEPS} )
-	systemtap? ( app-dev/systemtap )
 	xattr? ( app-core/attr[static-libs(+)] )"
 
 # Dependencies required for qemu tools (qemu-nbd, qemu-img, qemu-io, ...)
@@ -466,9 +465,6 @@ qemu_src_configure() {
 
 	local targets="${buildtype}_targets"
 	[[ -n ${targets} ]] && conf_opts+=( --target-list="${!targets}" )
-
-	# Add support for SystemTAP
-	use systemtap && conf_opts+=( --enable-trace-backend=dtrace )
 
 	# We always want to attempt to build with PIE support as it results
 	# in a more secure binary. But it doesn't work with static or if

@@ -11,14 +11,14 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git"
 	inherit git-r3
 else
-	SNAPSHOT=299985cae9131590e942b3a8a0afeb85701fa760
+	SNAPSHOT=7bcc8dca27041e2b03855508fe54d435d816a78f
 	SRC_URI="https://gitlab.gnome.org/GNOME/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="MIT"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="crypt debug static-libs"
 
@@ -34,12 +34,10 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--with-html-dir="${EPREFIX}"/usr/share/doc/${PF}
-		--with-html-subdir=html
-		$(use_with crypt crypto)
-		$(use_with debug)
-		$(use_with debug mem-debug)
 		$(use_enable static-libs static)
+		$(use_with crypt crypto)
+		$(use_with debug mem-debug)
+		$(use_with debug)
 		--without-python
 	)
 		ECONF_SOURCE="${S}" econf "${myconf[@]}"

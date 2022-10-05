@@ -5,7 +5,7 @@ EAPI=8
 DESCRIPTION="a collection of binary tools"
 HOMEPAGE="https://sourceware.org/binutils/"
 
-SNAPSHOT=5c0b4ee406035917d0e50aa138194fab57ae6bf8
+SNAPSHOT=dc2474e7d204c124ab5a21b4490aa46eb7e1d4c3
 SRC_URI="https://git.linaro.org/toolchain/binutils-gdb.git/snapshot/binutils-gdb-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-gdb-${SNAPSHOT}
 

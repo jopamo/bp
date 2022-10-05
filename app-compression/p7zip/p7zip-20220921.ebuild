@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=4d644cbd6ae99fdc30c5bd36cd4a4f0cc457bfbd
+	SNAPSHOT=aadc54316e85270c64f9ae18be5b032890781caa
 	SRC_URI="https://github.com/jinfeihan57/p7zip/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -27,9 +27,6 @@ DEPEND="app-lang/yasm"
 
 PATCHES=( "${FILESDIR}"/01-makefile.patch )
 
-filter-flags -Wl,-z,defs
-append-flags -Wno-narrowing
-
 _makeargs=(
   prefix="${EPREFIX}"/usr
   LDFLAGS="${LDFLAGS}"
@@ -42,6 +39,9 @@ _makeargs=(
 )
 
 src_prepare() {
+	filter-flags -Wl,-z,defs
+	append-flags -Wno-narrowing
+
 	default
 
 	sed "s:PRE_COMPILED_HEADER=StdAfx.h.gch:PRE_COMPILED_HEADER=:g" -i makefile.* || die

@@ -39,5 +39,7 @@ find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/get_abi_CHOST/
 sed -i 's/.*qt5\/bin.*/	echo\ \/usr\/bin/' /var/db/repos/bp/eclass/qmake-utils.eclass
 sed -i 's/\$\{CATEGORY\}\ \!/\$\{CATEGORY\}\ \=/' /var/db/repos/bp/eclass/user.eclass
 
+sed -i 's/var\/lib/var/' /var/db/repos/bp/eclass/meson.eclass
+
 #insert on 3rd line
 sed -i '3i\PYTHON_COMPAT=( python3_10 python3_11 )\' /var/db/repos/bp/eclass/python-utils-r1.eclass

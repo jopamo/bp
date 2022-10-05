@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="$(ver_cut 1-2)"
 	inherit git-r3
 else
-	SNAPSHOT=a45905b0166713760a2fb4f2e908d7ce47488371
+	SNAPSHOT=552547eacf6bfbdf5052f33cad57f181b6f92a61
 	SRC_URI="https://github.com/libarchive/libarchive/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -62,6 +62,5 @@ src_configure() {
 		--with-lzma
 		--without-lzo2
 	)
-
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }

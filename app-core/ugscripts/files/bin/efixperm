@@ -30,3 +30,9 @@ if [ -d $HOME/.ssh ]; then
 	[ -f $HOME/.ssh/authorized_keys ] && chmod 644 $HOME/.ssh/authorized_keys
 	chown -R $(id -u):$(id -g) $HOME/.ssh
 fi
+
+if [ -d $HOME/.gnupg ]; then
+	find $HOME/.gnupg -type d -exec chmod 700 {} +
+	find $HOME/.gnupg -type f -exec chmod 600 {} +
+	chown -R $(id -u):$(id -g) $HOME/.gnupg
+fi

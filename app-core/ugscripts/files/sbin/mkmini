@@ -11,7 +11,7 @@ else
 	echo "Unable to detect arch! exiting..." && exit
 fi
 
-emerge --noreplace pciutils e2fsprogs btrfs-progs shadowsocks-libev knock chrony nftables pure-ftpd openssh screen shadowsocks-libev lighttpd iputils nmap sshfs crunch || exit
+emerge --noreplace pciutils e2fsprogs btrfs-progs knock chrony nftables pure-ftpd openssh screen shadowsocks-rust lighttpd iputils nmap sshfs crunch || exit
 
 cd /root/
 rm -rf /root/miniroot-$(date +%Y%m%d)
@@ -215,6 +215,10 @@ cp /var/cache/packages/app-kernel/linux-headers/* .
 tar xvhf linux-headers* --xattrs
 rm linux-headers* || exit
 
+cp /var/cache/packages/lib-core/elfutils/* .
+tar xvhf elfutils* --xattrs
+rm elfutils* || exit
+
 cp /var/cache/packages/app-fs/e2fsprogs/* .
 tar xvhf e2fsprogs* --xattrs
 rm e2fsprogs* || exit
@@ -224,24 +228,9 @@ tar xvhf btrfs-progs* --xattrs
 rm btrfs-progs* || exit
 
 #shadowsocks
-cp /var/cache/packages/lib-live/libsodium/* .
-cp /var/cache/packages/lib-dev/libev/* .
-cp /var/cache/packages/lib-net/c-ares/* .
-cp /var/cache/packages/app-server/shadowsocks-libev/* .
-
-tar xvhf libsodium* --xattrs
-tar xvhf libev* --xattrs
-tar xvhf c-ares* --xattrs
-tar xvhf shadowsocks-libev* --xattrs
-
-rm libsodium* || exit
-rm libev* || exit
-rm c-ares* || exit
-rm shadowsocks-libev* || exit
-
-cp /var/cache/packages/lib-core/elfutils/* .
-tar xvhf elfutils* --xattrs
-rm elfutils* || exit
+cp /var/cache/packages/app-server/shadowsocks-rust/* .
+tar xvhf shadowsocks-rust* --xattrs
+rm shadowsocks-rust* || exit
 
 #lighttpd
 cp /var/cache/packages/app-server/lighttpd/* .

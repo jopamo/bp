@@ -6,6 +6,9 @@ alias ....='cd ../../..'
 alias ...='cd ../..'
 alias ..='cd ..'
 
+alias expand='expand -t2'
+alias unexpand='unexpand -t2'
+
 alias imginfo="identify -format '-- %f -- \nType: %m\nSize: %b bytes\nResolution: %wpx x %hpx\nColors: %k'"
 alias imgres="identify -format '%wx%h\n'"
 

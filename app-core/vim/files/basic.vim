@@ -6,9 +6,6 @@ filetype off
 
 " TODO: Load plugins here (pathogen or vundle)
 
-" Turn on syntax highlighting
-syntax on
-
 " For plugins to load correctly
 filetype plugin indent on
 
@@ -89,14 +86,3 @@ set listchars=tab:▸\ ,eol:¬
 " set list " To enable by default
 " Or use your leader key + l to toggle on/off
 map <leader>l :set list!<CR> " Toggle tabs and EOL
-
-" Color scheme (terminal)
-set t_Co=256
-set background=dark
-let g:solarized_termcolors=256
-let g:solarized_termtrans=1
-" put https://raw.github.com/altercation/vim-colors-solarized/master/colors/solarized.vim
-" in ~/.vim/colors/ and uncomment:
-" colorscheme solarized
-
-set mouse-=a

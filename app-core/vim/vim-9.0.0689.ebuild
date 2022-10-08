@@ -2,6 +2,8 @@
 
 EAPI=8
 
+SHORTNM="usr/share/vim/vim$(ver_cut 1)$(ver_cut 2)"
+
 inherit flag-o-matic
 
 DESCRIPTION="Vim, an improved vi-style text editor"
@@ -11,7 +13,10 @@ if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/vim/vim"
 	inherit git-r3
 else
-	SRC_URI="https://github.com/vim/vim/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="
+		https://github.com/vim/vim/archive/v${PV}.tar.gz -> ${P}.tar.gz
+		https://raw.githubusercontent.com/altercation/vim-colors-solarized/master/colors/solarized.vim
+	"
 fi
 
 LICENSE="vim"
@@ -28,6 +33,11 @@ BDEPEND="
 	app-build/autoconf
 	app-build/gettext
 "
+
+src_prepare() {
+	default
+	cat "${FILESDIR}"/basic.vim > "${T}"/new.vim
+}
 
 src_configure() {
 	use debug && append-flags "-DDEBUG"
@@ -122,9 +132,8 @@ src_install() {
 	else
 		default
 		rm -r "${ED}"/usr/share/{applications,icons} || die
+		cat "${FILESDIR}"/colors.vim >> "${T}"/new.vim || die
 	fi
 
-	insopts -m 0644
-	insinto /usr/share/vim/vim$(ver_cut 1)$(ver_cut 2)
-	newins "${FILESDIR}"/basic.vim defaults.vim
+	cp "${T}"/new.vim "${ED}/${SHORTNM}/defaults.vim" || die
 }

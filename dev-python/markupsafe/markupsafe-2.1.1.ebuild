@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit distutils-r1
+inherit flag-o-matic distutils-r1
 
 MY_PN="MarkupSafe"
 MY_P="${MY_PN}-${PV}"
@@ -21,6 +21,8 @@ S=${WORKDIR}/${MY_P}
 DISTUTILS_IN_SOURCE_BUILD=1
 
 python_compile() {
+	filter-flags -flto*
+
 	distutils-r1_python_compile
 	if [[ ${EPYTHON} == python3.2 ]]; then
 		2to3 --no-diffs -n -w -f unicode ${PN} || die

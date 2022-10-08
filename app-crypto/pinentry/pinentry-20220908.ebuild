@@ -16,17 +16,11 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps static"
+IUSE="static"
 
 DEPEND="
 	lib-core/libassuan
-	lib-core/libgcrypt
 	lib-core/libgpg-error
-	caps? ( lib-core/libcap )
-"
-BDEPEND="
-	app-build/gettext
-	app-dev/pkgconf
 "
 
 src_prepare() {
@@ -47,7 +41,6 @@ src_configure() {
 		--disable-pinentry-qt5
 		--enable-pinentry-tty
 		--without-ncurses-include-dir
-		$(use_with caps libcap)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

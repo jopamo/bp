@@ -13,10 +13,7 @@ if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/vim/vim"
 	inherit git-r3
 else
-	SRC_URI="
-		https://github.com/vim/vim/archive/v${PV}.tar.gz -> ${P}.tar.gz
-		https://raw.githubusercontent.com/altercation/vim-colors-solarized/master/colors/solarized.vim
-	"
+	SRC_URI="https://github.com/vim/vim/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 fi
 
 LICENSE="vim"
@@ -135,5 +132,6 @@ src_install() {
 		cat "${FILESDIR}"/colors.vim >> "${T}"/new.vim || die
 	fi
 
-	cp "${T}"/new.vim "${ED}/${SHORTNM}/defaults.vim" || die
+	insinto /${SHORTNM}/
+	newins "${T}/new.vim" defaults.vim
 }

@@ -11,23 +11,23 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="${HOMEPAGE}.git"
 	inherit git-r3
 else
-	SNAPSHOT=2e5019cfe63038faaa405ce53715effe4ea580e4
+	SNAPSHOT=4544e11320138ac02797af81766f4476a71bb09f
 	SRC_URI="${HOMEPAGE}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-library-${SNAPSHOT}
 fi
 
 LICENSE="BSD"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-replace-flags -O2 -O0
-replace-flags -O3 -O0
-replace-flags -Os -O0
-replace-flags -Oz -O0
-
 src_prepare() {
+	replace-flags -O2 -O0
+	replace-flags -O3 -O0
+	replace-flags -Os -O0
+	replace-flags -Oz -O0
+
 	default
 
 	# Disable man page compression on install

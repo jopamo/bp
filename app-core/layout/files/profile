@@ -10,10 +10,11 @@ export PAGER=${PAGER:-/usr/bin/less}
 umask 022
 
 if [ "${EUID-}" = "0" ] || [ "${USER-}" = "root" ] ; then
-	PATH="${ROOTPATH}"
+	PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/opt/bin:${PATH}"
+else
+	PATH="/usr/local/bin:/usr/bin:/opt/bin:${PATH}"
 fi
 export PATH
-unset ROOTPATH
 
 source /etc/bash/bashrc
 

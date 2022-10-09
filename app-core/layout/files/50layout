@@ -1,7 +1,5 @@
 # /etc/env.d/50layout
 
-PATH="/usr/local/bin:/usr/bin:/opt/bin"
-ROOTPATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/opt/bin"
 MANPATH="/usr/local/share/man:/usr/share/man"
 INFOPATH="/usr/share/info"
-LDPATH='/usr/lib'
+LDPATH="/usr/lib"

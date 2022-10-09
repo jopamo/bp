@@ -38,7 +38,7 @@ shopt -s histappend
 
 # Change the window title of X terminals
 case ${TERM} in
-	[aEkqx]term*|rxvt*|gnome*|kitty*|lxterm*|interix)
+	[aEkqx]term*|rxvt*|gnome*|kitty*|lxterm*|tmux)
 		PS1='\[\033]0;\u@\h:\w\007\]'
 		;;
 	screen*)
@@ -50,8 +50,8 @@ case ${TERM} in
 esac
 
 # optional user defined /etc/LS_COLORS
-
 use_color=false
+
 if type -P dircolors >/dev/null ; then
 	# Enable colors for ls, etc.  Prefer ~/.ls_colors #64489
 	LS_COLORS=
@@ -76,7 +76,7 @@ else
 	# Some systems (e.g. BSD & embedded) don't typically come with
 	# dircolors so we need to hardcode some terminals in here.
 	case ${TERM} in
-	[aEkqx]term*|rxvt*|gnome*|kitty*|lxterm*|screen|cons25|*color) use_color=true;;
+	[aEkqx]term*|rxvt*|gnome*|kitty*|lxterm*|screen|tmux|cons25|*color) use_color=true;;
 	esac
 fi
 

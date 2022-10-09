@@ -44,7 +44,6 @@ src_configure() {
 		$(meson_use swap-remote)
 		$(meson_use tools separate-tools)
 		-Deprefix-default="${EPREFIX}"
-		-Dportage-rootpath="${ROOTPATH}"
 		-Dextra-doc=false
 		-Dnls=false
 		-Dprotobuf=false

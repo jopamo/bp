@@ -96,7 +96,6 @@ src_install() {
 
 	newenvd - 99cuda <<-EOF
 		PATH=${ecudadir}/bin:${ecudadir}/nvvm/bin
-		ROOTPATH=${ecudadir}/bin:${ecudadir}/nvvm/bin
 		LDPATH=${ecudadir}/lib:${ecudadir}/nvvm/lib64
 	EOF
 

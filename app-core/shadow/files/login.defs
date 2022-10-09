@@ -81,8 +81,8 @@ HUSHLOGIN_FILE	.hushlogin
 # *REQUIRED*  The default PATH settings, for superuser and normal users.
 #
 # (they are minimal, add the rest in the shell startup files)
-ENV_SUPATH	PATH=/usr/local/sbin:/usr/local/bin:/usr/bin
-ENV_PATH	PATH=/usr/local/sbin:/usr/local/bin:/usr/bin
+ENV_SUPATH	PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/opt/bin
+ENV_PATH	PATH=/usr/local/bin:/usr/bin:/opt/bin
 
 #
 # Terminal permissions
@@ -159,7 +159,7 @@ LOGIN_TIMEOUT		60
 # any combination of letters "frwh" (full name, room number, work
 # phone, home phone).  If not defined, no changes are allowed.
 # For backward compatibility, "yes" = "rwh" and "no" = "frwh".
-# 
+#
 CHFN_RESTRICT		rwh
 
 #

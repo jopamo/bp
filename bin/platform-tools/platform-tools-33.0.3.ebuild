@@ -20,7 +20,6 @@ src_install() {
 
 	cat > "${T}"/99${PN} <<- EOF || die
 		PATH=${EPREFIX}/opt/bin
-		ROOTPATH=${EPREFIX}/opt/bin
 	EOF
 	doenvd "${T}"/99${PN}
 }

@@ -81,8 +81,8 @@ src_install() {
 		keepdir /var/$d
 	done
 
-	install -d -m1777 "${ED}"/var/{tmp,spool/mail}
-	keepdir /var/{tmp,spool/mail}
+	install -d -m1777 "${ED}"/var/spool/mail
+	keepdir /var/spool/mail
 
 	install -d -m600 "${ED}"/var/empty
 	keepdir /var/empty
@@ -117,9 +117,9 @@ src_install() {
 		fi
 
 		# setup systemd.environment-generator
-		insopts -m 0644
-		insinto /usr/lib/systemd/system-environment-generators
-		newins env-generator 10-1g4
+		#insopts -m 0644
+		#insinto /usr/lib/systemd/system-environment-generators
+		#newins env-generator 10-1g4
 	fi
 
 	for f in gshadow shadow ; do

@@ -12,14 +12,14 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps elf iptables ipv6 libbsd +minimal"
+IUSE="caps elf iptables ipv6 libbsd"
 
 DEPEND="
 	app-build/bison
 	app-build/flex
 	app-compression/xz-utils
 	app-kernel/linux-headers
-	!minimal? ( lib-net/libmnl )
+	lib-net/libmnl
 	caps? ( lib-core/libcap )
 	elf? ( lib-core/elfutils )
 	iptables? ( app-net/iptables )
@@ -32,14 +32,14 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-5.7.0-mix-signal.h-include.patch
 )
 
-filter-flags -Wl,-z,defs
-
 doecho() {
 	echo "${@}"
 	"${@}" || die
 }
 
 src_prepare() {
+	filter-flags -Wl,-z,defs
+
 	use ipv6 || eapply "${FILESDIR}"/${PN}-4.20.0-no-ipv6.patch
 
 	default
@@ -58,10 +58,6 @@ src_prepare() {
 	# build against system headers
 	rm -r include/netinet || die #include/linux include/ip{,6}tables{,_common}.h include/libiptc
 	sed -i 's:TCPI_OPT_ECN_SEEN:16:' misc/ss.c || die
-
-	if use minimal ; then
-		sed -i -e '/^SUBDIRS=/s:=.*:=lib tc ip:' Makefile || die
-	fi
 }
 
 src_configure() {
@@ -90,7 +86,7 @@ src_configure() {
 	TC_CONFIG_IPSET := y
 	HAVE_BERKELEY_DB := n
 	HAVE_CAP      := $(usex caps y n)
-	HAVE_MNL      := $(usex minimal n y)
+	HAVE_MNL      := y
 	HAVE_ELF      := $(usex elf y n)
 	HAVE_SELINUX  := n
 	IP_CONFIG_SETNS := ${setns}
@@ -105,12 +101,6 @@ src_compile() {
 }
 
 src_install() {
-	if use minimal ; then
-		dosbin tc/tc
-		dobin ip/ip
-		return 0
-	fi
-
 	emake \
 		DESTDIR="${D}" \
 		PREFIX="${EPREFIX}/usr" \

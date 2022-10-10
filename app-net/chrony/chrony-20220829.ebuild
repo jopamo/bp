@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools user
 
 DESCRIPTION="NTP client and server programs"
 HOMEPAGE="https://chrony.tuxfamily.org/"
@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://git.tuxfamily.org/chrony/chrony.git"
 	inherit git-r3
 else
-	SNAPSHOT=2ed88c31c7a495fe819fc82cb3a4509d0a01f4a2
+	SNAPSHOT=7b197953e8add5515b7e58c4638dc55aa4bb91b7
 	SRC_URI="https://git.tuxfamily.org/chrony/chrony.git/snapshot/chrony-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -20,9 +20,12 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps +cmdmon ipv6 logrotate +ntp +phc pps +refclock +rtc +adns systemd"
+IUSE="caps +cmdmon ipv6 logrotate nettle +ntp +phc pps +refclock +rtc +adns systemd sysusersd tmpfilesd"
 
 DEPEND="
+	nettle? ( lib-core/nettle )
+	lib-net/gnutls
+	app-compression/zstd
 	caps? ( lib-core/libcap )
 	lib-core/libseccomp
 "
@@ -46,9 +49,10 @@ src_configure() {
 		--sysconfdir="${EPREFIX}"/etc/chrony
 		--prefix="${EPREFIX}/usr"
 		$(usex adns '' --disable-asyncdns)
-		$(usex caps '' --disable-linuxcaps)
+		$(usex caps '' --without-libcap)
 		$(usex cmdmon '' --disable-cmdmon)
 		$(usex ipv6 '' --disable-ipv6)
+		$(usex nettle '' --without-nettle)
 		$(usex ntp '' --disable-ntp)
 		$(usex phc '' --disable-phc)
 		$(usex pps '' --disable-pps)
@@ -59,6 +63,7 @@ src_configure() {
 		--without-nss
 		--without-readline
 		--without-tomcrypt
+		--with-user=chrony
 	)
 	ECONF_SOURCE=${S} ${S}/configure "${CHRONY_CONFIGURE[@]}"
 }
@@ -81,5 +86,22 @@ src_install() {
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
 		doins "${FILESDIR}/chronyd.service"
+	fi
+
+	if use tmpfilesd; then
+		insopts -m 0644
+		insinto /usr/lib/tmpfiles.d
+		doins "${FILESDIR}/${PN}.tmpfiles.conf"
+	fi
+}
+
+pkg_preinst() {
+	if use sysusersd; then
+		insopts -m 0644
+		insinto /usr/lib/sysusers.d
+		doins "${FILESDIR}/${PN}.sysusers.conf"
+	else
+		enewgroup ${PN} 123
+		enewuser ${PN} 123 -1 -1 ${PN}
 	fi
 }

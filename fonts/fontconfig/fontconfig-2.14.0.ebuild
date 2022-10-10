@@ -2,8 +2,6 @@
 
 EAPI=8
 
-inherit autotools
-
 DESCRIPTION="A library for configuring and customizing font access"
 HOMEPAGE="http://fontconfig.org/"
 SRC_URI="https://www.freedesktop.org/software/fontconfig/release/${P}.tar.xz"
@@ -18,30 +16,24 @@ DEPEND="
 	lib-core/expat
 	xgui-misc/freetype
 "
-BDEPEND="
-	app-dev/pkgconf
-	app-dev/itstool
-"
 PDEPEND="
 	app-eselec/eselect-fontconfig
 	fonts/liberation-fonts
 "
 
-src_prepare() {
-	default
-	eautoreconf
-}
-
 src_configure() {
 	local myconf=(
 		$(use_enable static-libs static)
+		--disable-cache-build
 		--disable-docs
+		--disable-libxml2
+		--disable-nls
+		--disable-rpath
 		--localstatedir="${EPREFIX}"/var
 		--with-default-fonts="${EPREFIX}"/usr/share/fonts
 		--with-add-fonts="${EPREFIX}/usr/local/share/fonts${addfonts}"
 		--with-templatedir="${EPREFIX}"/etc/fonts/conf.avail
 	)
-
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }
 
@@ -90,11 +82,6 @@ pkg_postinst() {
 	einfo "Cleaning broken symlinks in "${EROOT}"/etc/fonts/conf.d/"
 	find -L "${EROOT}"/etc/fonts/conf.d/ -type l -delete
 
-	ebegin "Creating global font cache for ${ABI}"
-	"${EPREFIX}"/usr/bin/fc-cache -srf
-
-	eselect fontconfig enable 11-lcdfilter-default.conf
-	eselect fontconfig enable 10-sub-pixel-rgb.conf
-	eselect fontconfig enable 60-liberation.conf
-	eselect fontconfig enable 70-no-bitmaps.conf
+	einfo "Creating global font cache for ${ABI}"
+	"${EPREFIX}"/usr/bin/fc-cache -srf || die
 }

@@ -15,12 +15,11 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug"
 
-DEPEND="lib-core/libxslt
+DEPEND="
 	app-tex/docbook-xml-dtd
-	>=app-tex/docbook-xsl-stylesheets-1.79.1
+	app-tex/docbook-xsl-stylesheets
 	dev-python/six
-	app-dev/itstool
-	app-dev/pkgconf
+	lib-core/libxslt
 	lib-live/glib
 "
 
@@ -29,18 +28,12 @@ pkg_setup() {
 }
 
 src_prepare() {
-	eautoreconf
 	default
+	eautoreconf
 }
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		$(use_enable debug)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

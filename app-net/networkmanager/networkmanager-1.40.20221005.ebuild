@@ -11,7 +11,7 @@ if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/NetworkManager/NetworkManager"
 	inherit git-r3
 else
-	SNAPSHOT=c861a7e1d8d8c93ac6a1b212b276027fa18cf19c
+	SNAPSHOT=afe53b902fd892f8a4d49d47365fd893fe413476
 	SRC_URI="https://github.com/NetworkManager/NetworkManager/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/NetworkManager-${SNAPSHOT}
 fi
@@ -22,55 +22,32 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+nmtui systemd test"
 
-COMMON_DEPEND="
-	app-core/dbus
-	app-core/util-linux
+DEPEND="
 	app-net/curl
-	app-net/iputils
-	lib-core/libgcrypt
-	lib-core/readline
-	lib-dev/dbus-glib
-	lib-dev/libnl
-	lib-live/glib
-	lib-live/libndp
-	lib-net/gnutls
-	virtual/service-manager
-"
-RDEPEND="${COMMON_DEPEND}
-	app-net/iputils[arping(+)]
+	app-net/iproute2
 	app-net/wpa_supplicant[dbus]
-"
-DEPEND="${COMMON_DEPEND}
-	app-build/gettext
-	app-dev/gtk-doc-am
-	app-dev/intltool
-	app-dev/pkgconf
-	app-kernel/linux-headers
-	dev-python/pygobject
 	lib-dev/newt
-	lib-live/glib
+	lib-live/libndp
 "
-
-filter-flags -Wl,-z,defs
 
 src_configure() {
+	filter-flags -Wl,-z,defs
+
 	local emesonargs=(
 		$(meson_use nmtui)
 		-Dcrypto=gnutls
 		-Dintrospection=false
-		-Djson_validation=false
 		-Dlibaudit=no
 		-Dlibpsl=false
 		-Dmodem_manager=false
 		-Dovs=false
 		-Dpolkit=false
 		-Dppp=false
-		-Dprefix-default="${EPREFIX}"
 		-Dqt=false
 		-Dselinux=false
 		-Dwext=false
-		)
-		meson_src_configure
+	)
+	meson_src_configure
 }
 
 src_install() {

@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-inherit linux-info toolchain-funcs
+EAPI=7
 
 DESCRIPTION="Pipe Viewer: a tool for monitoring the progress of data through a pipe"
 HOMEPAGE="http://www.ivarch.com/programs/pv.shtml"
@@ -10,7 +9,8 @@ SRC_URI="http://www.ivarch.com/programs/sources/${P}.tar.bz2"
 LICENSE="Artistic-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="debug nls"
+
+IUSE="debug"
 
 src_prepare() {
 	default
@@ -24,8 +24,7 @@ src_prepare() {
 }
 
 src_configure() {
-	tc-export AR
-	econf $(use_enable debug debugging) $(use_enable nls)
+	econf $(use_enable debug debugging)
 }
 
 src_test() {

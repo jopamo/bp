@@ -200,10 +200,8 @@ src_install() {
 		#	/usr/lib/xorg/modules
 
 		# Xorg nvidia.conf
-		if has_version '>=x11-base/xorg-server-1.16'; then
-			insinto /usr/share/X11/xorg.conf.d
-			newins {,50-}nvidia-drm-outputclass.conf
-		fi
+		insinto /usr/share/X11/xorg.conf.d
+		newins {,50-}nvidia-drm-outputclass.conf
 
 		insinto /usr/share/glvnd/egl_vendor.d
 		doins ${NV_X11}/10_nvidia.json
@@ -263,6 +261,9 @@ src_install() {
 	insinto usr/lib/nvidia/wine/
 	doins _nvngx.dll
 	doins nvngx.dll
+
+	dodir usr/lib/gbm
+	dosym -r /usr/lib/libnvidia-allocator.so.${PV} /usr/lib/gbm/nvidia-drm_gbm.so
 }
 
 src_install-libs() {

@@ -46,8 +46,15 @@ QA_PREBUILT="opt/* usr/lib*"
 S=${WORKDIR}/
 
 nvidia_drivers_versions_check() {
-	# Kernel features/options to check for
-	CONFIG_CHECK="~ZONE_DMA ~MTRR ~!LOCKDEP"
+	CONFIG_CHECK="
+		PROC_FS
+		~DRM_KMS_HELPER
+		~SYSVIPC
+		~!LOCKDEP
+		~!SLUB_DEBUG_ON
+		~!X86_KERNEL_IBT
+		!DEBUG_MUTEXES
+		X86_PAT"
 
 	check_extra_config
 }
@@ -185,6 +192,8 @@ src_install() {
 	# NVIDIA video encode/decode <-> CUDA
 	donvidia ${NV_OBJ}/libnvcuvid.so.${NV_SOVER}
 	donvidia ${NV_OBJ}/libnvidia-encode.so.${NV_SOVER}
+
+	donvidia ${NV_OBJ}/libnvidia-nvvm.so.${NV_SOVER}
 
 	if use X; then
 		# Xorg DDX driver

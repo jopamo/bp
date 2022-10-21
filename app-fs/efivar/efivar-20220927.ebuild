@@ -4,7 +4,7 @@ EAPI=8
 
 inherit flag-o-matic
 
-SNAPSHOT=26ad6858b7ca2093677a8a13d367436f5c1a22fe
+SNAPSHOT=dd901c1d8331f10cb02ed6486ef6ee6de98f474a
 
 DESCRIPTION="Tools and library to manipulate EFI variables"
 HOMEPAGE="https://github.com/rhboot/efivar"
@@ -15,12 +15,10 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-#filter-flags -flto\*
-filter-flags -Wl,-z,defs
-
 src_configure() {
+	filter-flags -Wl,-z,defs
 	default
-	git apply -R "${FILESDIR}"/bec837ee61294548ab64eb950f32cc88af6c2c2b.patch
+	sed -i 's/\ docs//g' Makefile
 }
 
 src_compile() {

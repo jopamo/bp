@@ -68,7 +68,6 @@ src_configure() {
 		$(use_enable libdav1d) \
 		$(use_enable network) \
 		$(use_enable nonfree) \
-		$(use_enable nvidia cuda-nvcc) \
 		$(use_enable nvidia cuvid) \
 		$(use_enable nvidia ffnvcodec) \
 		$(use_enable nvidia libnpp) \

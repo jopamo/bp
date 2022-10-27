@@ -6,14 +6,14 @@ inherit flag-o-matic python-single-r1 git-r3
 
 DESCRIPTION="GNU debugger"
 HOMEPAGE="https://sourceware.org/gdb/"
-EGIT_REPO_URI="https://github.com/bminor/binutils-gdb.git"
+EGIT_REPO_URI="https://git.linaro.org/toolchain/binutils-gdb.git"
 EGIT_BRANCH="gdb-$(ver_cut 1)-branch"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+client lzma multitarget +python +server test vanilla xml"
+IUSE="+client lzma multitarget +python +server test xml"
 
 REQUIRED_USE="
 	python? ( ${PYTHON_REQUIRED_USE} )
@@ -48,23 +48,24 @@ src_configure() {
 	strip-unsupported-flags
 
 	myconf+=(
+			$(use multitarget && echo --enable-targets=all)
+			$(use_enable server gdbserver auto)
+			$(use_with lzma)
+			$(use_with python python "${EPYTHON}")
+			$(use_with xml expat)
 			--disable-dependency-tracking
+			--disable-install-libbfd
+			--disable-install-libiberty
+			--disable-readline
 			--disable-werror
 			--disable-{binutils,etc,gas,gold,gprof,ld}
 			--enable-64-bit-bfd
-			--disable-install-libbfd
-			--disable-install-libiberty
-			--without-guile
-			--disable-readline
-			--with-system-readline
-			--without-zlib
-			--with-system-zlib
+			--enable-tui
 			--with-separate-debug-dir="${EPREFIX}"/usr/lib/debug
-			$(use_enable server gdbserver auto)
-			$(use_with xml expat)
-			$(use_with lzma)
-			$(use multitarget && echo --enable-targets=all)
-			$(use_with python python "${EPYTHON}")
+			--with-system-readline
+			--with-system-zlib
+			--without-guile
+			--without-zlib
 		)
 
 	export ac_cv_path_pkg_config_prog_path="$(tc-getPKG_CONFIG)"
@@ -96,14 +97,11 @@ src_install() {
 	fi
 
 	# Remove shared info pages
-	rm -f "${ED}"/usr/share/info/{annotate,bfd,configure,standards}.info*
+	rm "${ED}"/usr/share/info/{annotate,bfd,ctf-spec}.info* || die
 
 	if use python; then
 		python_optimize "${ED}"/usr/share/gdb/python/gdb
 	fi
-}
 
-pkg_postinst() {
-	# portage doesnt unmerge files in /etc
-	rm -vf "${EROOT}"/etc/skel/.gdbinit
+	cleanup_install
 }

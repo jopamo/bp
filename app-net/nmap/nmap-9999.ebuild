@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic git-r3 toolchain-funcs user
+inherit autotools flag-o-matic git-r3
 
 DESCRIPTION="A utility for network discovery and security auditing"
 HOMEPAGE="https://nmap.org/"
@@ -15,19 +15,21 @@ KEYWORDS="amd64 arm64"
 IUSE="ipv6 +libssh2 os-db ncat nping nselib scripts ssl"
 
 DEPEND="
-	lib-dev/liblinear
-	lib-core/libpcre
-	lib-live/libpcap
 	app-lang/lua
-	lib-live/libssh2[zlib]
+	lib-core/libpcre
 	lib-core/zlib
+	lib-dev/liblinear
+	lib-live/libpcap
+	lib-live/libssh2[zlib]
 	ssl? ( virtual/ssl )
 "
 
-append-flags -fno-strict-aliasing
-filter-flags -flto\=\*
-
 src_prepare() {
+	append-flags -fno-strict-aliasing
+	filter-flags -flto*
+
+	sed -i '/nmap-payloads/d' Makefile.in
+
 	rm -r liblinear/ libpcap/ libpcre/ libz/ || die
 
 	default
@@ -45,17 +47,17 @@ src_prepare() {
 src_configure() {
 	local myconf=(
 		$(use_enable ipv6)
-		--disable-nls
-		--with-libssh2
-		--with-zlib
-		--with-liblua="${EROOT}"/usr
-		--without-zenmap
 		$(use_with ncat)
 		$(use_with nping)
 		$(use_with ssl openssl)
 		--cache-file="${S}"/config.cache
+		--disable-nls
 		--with-libdnet=included
+		--with-liblua="${EROOT}"/usr
+		--with-libssh2
 		--with-pcre="${EROOT}"/usr
+		--with-zlib
+		--without-zenmap
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

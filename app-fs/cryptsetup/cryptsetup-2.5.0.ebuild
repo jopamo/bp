@@ -12,15 +12,15 @@ LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+argon2 reencrypt static static-libs tmpfilesd udev urandom"
+IUSE="+argon2 static static-libs tmpfilesd udev urandom"
 
 LIB_DEPEND="
-	lib-live/json-c[static-libs(+)]
+	app-core/util-linux[static-libs(+)]
+	app-fs/lvm2[static-libs(+)]
 	lib-core/libgpg-error[static-libs(+)]
 	lib-core/popt[static-libs(+)]
-	app-core/util-linux[static-libs(+)]
-	lib-core/libgcrypt[static-libs(+)]
-	app-fs/lvm2[static-libs(+)]
+	lib-live/json-c[static-libs(+)]
+	lib-net/openssl[static-libs(+)]
 	argon2? ( app-crypto/argon2[static-libs(+)] )
 	udev? ( app-core/systemd[static-libs(+)] )"
 
@@ -43,18 +43,19 @@ pkg_setup() {
 
 src_configure() {
 	local myconf=(
-	    --disable-ssh-token
+		--disable-asciidoc
 		--disable-internal-argon2
-		--enable-shared
-		--with-tmpfilesdir=$(usex tmpfilesd "${EPREFIX}"/usr/lib/tmpfiles.d "")
-		--with-crypto_backend="gcrypt"
 		--disable-nls
+		--disable-rpath
+		--enable-shared
+		--with-crypto_backend="openssl"
+		--with-tmpfilesdir=$(usex tmpfilesd "${EPREFIX}"/usr/lib/tmpfiles.d "")
+	    --disable-ssh-token
+		$(use_enable !urandom dev-random)
 		$(use_enable argon2 libargon2)
-		$(use_enable reencrypt cryptsetup-reencrypt)
 		$(use_enable static static-cryptsetup)
 		$(use_enable static-libs static)
 		$(use_enable udev)
-		$(use_enable !urandom dev-random)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

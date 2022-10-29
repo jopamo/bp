@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools git-r3 xdg
+inherit meson git-r3 xdg
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
@@ -13,7 +13,7 @@ LICENSE="LGPL-2+"
 SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
-IUSE="broadway cups +introspection vim-syntax wayland +X xinerama"
+IUSE="cups +introspection wayland +X xinerama"
 
 REQUIRED_USE="
 	|| ( wayland X )
@@ -63,38 +63,30 @@ RDEPEND="${COMMON_DEPEND}"
 PDEPEND="
 	virtual/librsvg
 	xgui-icontheme/adwaita-plus
-	vim-syntax? ( app-tex/gtk-syntax )
 "
 
-src_prepare() {
-	default
-	eautoreconf
-}
-
 src_configure() {
-	local myconf=(
-		$(use_enable X x11-backend)
-		$(use_enable X xcomposite)
-		$(use_enable X xdamage)
-		$(use_enable X xfixes)
-		$(use_enable X xkb)
-		$(use_enable X xrandr)
-		$(use_enable broadway broadway-backend)
-		$(use_enable cups)
-		$(use_enable introspection)
-		$(use_enable wayland wayland-backend)
-		$(use_enable xinerama)
-		--disable-colord
-		--disable-papi
-		--libdir="${EPREFIX}"/usr/lib
-		--with-xml-catalog="${EPREFIX}"/etc/xml/catalog
-		CUPS_CONFIG="${EROOT}/usr/bin/cups-config"
-	)
-	econf ${myconf[@]}
+	local emesonargs=(
+		$(meson_use X x11_backend)
+		$(meson_use wayland wayland_backend)
+		$(usex xinerama "-Dxinerama=yes" "-Dxinerama=no" )
+		$(usex cups "-Dprint_backends=cups" "-Dprint_backends=file" )
+		$(meson_use introspection)
+		-D demos=false
+		-D examples=false
+		-D broadway_backend=false
+		-D cloudproviders=false
+		-D tracker3=false
+		-D colord=no
+		-D gtk_doc=false
+		-D man=true
+		)
+		meson_src_configure
 }
 
 src_install() {
-	default
+	meson_src_install
+
 	insopts -m 0755
 	insinto /etc/gtk-$(ver_cut 1).0
 	doins "${FILESDIR}"/settings.ini

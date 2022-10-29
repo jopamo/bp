@@ -1,3 +1,4 @@
+
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -7,8 +8,6 @@ inherit git-r3 flag-o-matic
 DESCRIPTION="Open source HEVC encoder"
 HOMEPAGE="http://x265.org/"
 EGIT_REPO_URI="https://bitbucket.org/multicoreware/x265_git.git"
-
-EGIT_COMMIT=0b75c44c10e605fe9e9ebed58f04a46271131827
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -32,7 +31,6 @@ src_compile() {
 		-DENABLE_SHARED=FALSE \
 		-DENABLE_LIBNUMA=FALSE \
 		-Wno-dev
-
 	ninja -C build-12
 
 	cmake -S ${S}/source -B build-10 -G Ninja \
@@ -43,7 +41,6 @@ src_compile() {
 		-DENABLE_SHARED=FALSE \
 		-DENABLE_LIBNUMA=FALSE \
 		-Wno-dev
-
 	ninja -C build-10
 
 	cmake -S ${S}/source -B build -G Ninja \
@@ -57,7 +54,6 @@ src_compile() {
 		-DENABLE_CLI=FALSE \
 		-DENABLE_LIBNUMA=FALSE \
 		-Wno-dev
-
 	ln -s ../build-10/libx265.a build/libx265_main10.a
 	ln -s ../build-12/libx265.a build/libx265_main12.a
 	ninja -C build
@@ -66,7 +62,6 @@ src_compile() {
 src_install() {
 	DESTDIR="${ED}" ninja -C build install
 	dolib.so build/libhdr10plus.so*
-	dolib.so build/libx265.so*
 
 	insinto /usr/lib/pkgconfig
 	doins "${FILESDIR}/${PN}.pc"

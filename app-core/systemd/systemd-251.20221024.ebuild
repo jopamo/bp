@@ -323,11 +323,12 @@ pkg_postinst() {
 
 pkg_preinst() {
 	if ! use sysusersd; then
-		newusergroup messagebus
+		enewgroup messagebus &&	enewuser messagebus
+
 		enewgroup systemd-journal
 
-		use networkd && newusergroup systemd-network
-		use coredump && newusergroup systemd-coredump
+		use networkd && enewgroup systemd-network && enewuser systemd-network
+		use coredump && enewgroup systemd-coredump && enewuser systemd-coredump
 		use kvm && enewgroup kvm 78
 	fi
 }

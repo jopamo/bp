@@ -7,8 +7,8 @@ inherit autotools
 DESCRIPTION="library for multiple-precision floating-point computations with exact rounding"
 HOMEPAGE="http://www.mpfr.org/"
 
-SNAPSHOT=d6a62e66d72d2fdf861659e5d9eb505dcc555679
-SRC_URI="https://gitlab.inria.fr/mpfr/mpfr/-/archive/${SNAPSHOT}/procps-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
+SNAPSHOT=cfda63af8460394886f5dbf1fd0e1d9d1bb3e2b6
+SRC_URI="https://gitlab.inria.fr/mpfr/mpfr/-/archive/${SNAPSHOT}/mpfr-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="LGPL-2.1"

@@ -17,7 +17,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="nls pam test"
+IUSE="pam test"
 
 RDEPEND="pam? ( lib-core/pam )
 	app-compression/pigz"

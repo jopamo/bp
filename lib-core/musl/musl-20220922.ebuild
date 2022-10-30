@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=8f9259450aa43a6fd539e428e61e2961b725fbae
+SNAPSHOT=759bf785a84bd56ed1b163594f3f66ade808c0e3
 
 inherit flag-o-matic
 
@@ -13,7 +13,7 @@ S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="MIT"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="musl libxcrypt"
 

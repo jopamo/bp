@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/pciutils/pciutils.git"
 else
 	SNAPSHOT=0478e1f3928bfaa34eb910ba2cbaf1dda8f84aab
-	PCIIDS_SNAPSHOT=2c1f48642514147f12b43c0319195e711bf5758c
+	PCIIDS_SNAPSHOT=c7929c0f94800e33eeaaaf2fb272ae7777cd9dc1
 	SRC_URI="
 		https://github.com/pciutils/pciutils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz
 		https://github.com/pciutils/pciids/archive/${PCIIDS_SNAPSHOT}.tar.gz -> pciids-${PCIIDS_SNAPSHOT}.tar.gz"

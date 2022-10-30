@@ -20,22 +20,17 @@ REQUIRED_USE="
 	xinerama? ( X )
 "
 
-COMMON_DEPEND="
-	fonts/fontconfig
+DEPEND="
 	lib-live/glib
 	xgui-live-app/shared-mime-info
+	xgui-live-lib/at-spi2-core
 	xgui-live-lib/cairo[glib,svg,X?]
 	xgui-live-lib/gdk-pixbuf
 	xgui-live-lib/pango[introspection?]
 	xmedia-live-lib/libepoxy[X(+)?]
 	cups? ( lib-print/cups )
 	introspection? ( lib-live/gobject-introspection )
-	wayland? (
-		xgui-live-lib/libxkbcommon
-		xgui-live-lib/wayland
-		xgui-live-lib/wayland-protocols
-		xgui-misc/mesa
-	)
+	wayland? ( xgui-live-lib/wayland-protocols )
 	X? (
 		xgui-live-lib/libX11
 		xgui-live-lib/libXcomposite
@@ -48,18 +43,6 @@ COMMON_DEPEND="
 		xinerama? ( xgui-live-lib/libXinerama )
 	)
 "
-DEPEND="${COMMON_DEPEND}
-	app-build/gettext
-	app-dev/gtk-doc-am
-	app-dev/pkgconf
-	app-tex/docbook-xml-dtd
-	app-tex/docbook-xsl-stylesheets
-	lib-core/libxslt
-	xgui-live-lib/at-spi2-core
-	X? ( xinerama? ( xgui-live-app/xorgproto ) )"
-
-RDEPEND="${COMMON_DEPEND}"
-
 PDEPEND="
 	virtual/librsvg
 	xgui-icontheme/adwaita-plus
@@ -70,7 +53,7 @@ src_configure() {
 		$(meson_use X x11_backend)
 		$(meson_use wayland wayland_backend)
 		$(usex xinerama "-Dxinerama=yes" "-Dxinerama=no" )
-		$(usex cups "-Dprint_backends=cups" "-Dprint_backends=file" )
+		$(usex cups "-Dprint_backends=cups,file" "-Dprint_backends=file" )
 		$(meson_use introspection)
 		-D demos=false
 		-D examples=false

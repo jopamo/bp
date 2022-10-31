@@ -29,8 +29,7 @@ RESTRICT="binchecks strip"
 FONT_S="${S}/fonts"
 FONT_SUFFIX="ttf"
 FONT_CONF=(
-	"${FILESDIR}/66-fira-emoji.conf"
-	"${FILESDIR}/66-sp-emoji.conf"
+	"${FILESDIR}/66-emoji.conf"
 )
 
 src_prepare() {

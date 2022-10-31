@@ -2,12 +2,14 @@
 
 EAPI=8
 
-inherit flag-o-matic python-single-r1 git-r3
+inherit flag-o-matic python-single-r1
 
 DESCRIPTION="GNU debugger"
 HOMEPAGE="https://sourceware.org/gdb/"
-EGIT_REPO_URI="https://git.linaro.org/toolchain/binutils-gdb.git"
-EGIT_BRANCH="gdb-$(ver_cut 1)-branch"
+
+SNAPSHOT=0fe74cb9ad35add9c6da4df5c9879f254d918a6a
+SRC_URI="https://git.linaro.org/toolchain/binutils-gdb.git/snapshot/binutils-gdb-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/binutils-gdb-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
@@ -46,6 +48,7 @@ pkg_setup() {
 
 src_configure() {
 	strip-unsupported-flags
+	append-flags -fpermissive
 
 	myconf+=(
 			$(use multitarget && echo --enable-targets=all)

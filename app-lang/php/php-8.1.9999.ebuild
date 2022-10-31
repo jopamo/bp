@@ -94,19 +94,27 @@ src_install() {
 	rm -rf "${ED}"/usr/lib/php/modules/*.a
 	rm -rf "${ED}"/var/{log,run}
 
-	if use tmpfilesd; then
-		cat <<-EOF >"${S}"/php-fpm.tmpfiles
-		d /run/php-fpm 755 root root
-		EOF
-
+	if use fpm; then
 		insopts -m 0644
-		insinto /usr/lib/tmpfiles.d
-		newins php-fpm.tmpfiles ${PN}.conf
-	fi
+		insinto /etc/php/
+		doins "${FILESDIR}"/php-fpm.conf
+		insinto /etc/php/php-fpm.d/
+		doins "${FILESDIR}"/www.conf
 
-	if use systemd; then
-		insinto /usr/lib/systemd/system
-		insopts -m 0644
-		doins sapi/fpm/php-fpm.service
+		if use tmpfilesd; then
+			cat <<-EOF >"${S}"/php-fpm.tmpfiles
+			d /run/php-fpm 755 root root
+			EOF
+
+			insopts -m 0644
+			insinto /usr/lib/tmpfiles.d
+			newins php-fpm.tmpfiles ${PN}.conf
+		fi
+
+		if use systemd; then
+			insinto /usr/lib/systemd/system
+			insopts -m 0644
+			doins sapi/fpm/php-fpm.service
+		fi
 	fi
 }

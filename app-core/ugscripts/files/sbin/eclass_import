@@ -28,7 +28,6 @@ find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/sys-apps/app-c
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/sys-devel/app-build/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/sys-libs/lib-core/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/virtual\/libelf/lib-core\/elfutils/g'
-find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/virtual\/linux-sources/app-kernel\/xanmod-sources/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/virtual\/pkgconfig/app-dev\/pkgconf/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/x11-apps\/mkfontscale/xgui-live-app\/mkfontscale/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/x11-misc\/shared-mime-info/xgui-live-app\/shared-mime-info/g'

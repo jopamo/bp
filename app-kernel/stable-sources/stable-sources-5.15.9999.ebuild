@@ -8,11 +8,12 @@ ETYPE="sources"
 
 inherit kernel-2 git-r3
 
-DESCRIPTION="XanMod: Linux kernel source code tree"
-HOMEPAGE="https://xanmod.org/"
+DESCRIPTION="Linux kernel source code tree"
+HOMEPAGE="https://kernel.org/"
 
-EGIT_REPO_URI="https://github.com/xanmod/linux.git"
-EGIT_BRANCH="$(ver_cut 1-2)"
+EGIT_REPO_URI="https://gitlab.com/linux-kernel/stable.git"
+EGIT_BRANCH="linux-$(ver_cut 1-2).y"
+
 S="${WORKDIR}/linux-${PV}"
 EGIT_CHECKOUT_DIR="${S}"
 

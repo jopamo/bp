@@ -150,7 +150,7 @@
 # It's a read-only variable. It contains the extension of the kernel modules.
 
 case ${EAPI:-0} in
-	[67]) 
+	[67])
 		;;
 	8)
 		;;
@@ -186,7 +186,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
     ${MODULES_OPTIONAL_USE}${MODULES_OPTIONAL_USE:+? (}
 	app-core/sed
-	kernel_linux? ( app-kernel/xanmod-sources lib-core/elfutils )
+	kernel_linux? ( virtual/linux-sources lib-core/elfutils )
 	${MODULES_OPTIONAL_USE:+)}"
 
 # eclass utilities
@@ -711,11 +711,11 @@ linux-mod_src_install() {
 		cd "${objdir}" || die "${objdir} does not exist"
 		insinto "${INSTALL_MOD_PATH}"/lib/modules/${KV_FULL}/${libdir}
 
-		# check here for CONFIG_MODULE_COMPRESS_<compression option> (NONE, GZIP, XZ, ZSTD) 
+		# check here for CONFIG_MODULE_COMPRESS_<compression option> (NONE, GZIP, XZ, ZSTD)
 		# and similarily compress the module being built if != NONE.
 
 		if linux_chkconfig_present MODULE_COMPRESS_XZ; then
-			xz ${modulename}.${KV_OBJ} 
+			xz ${modulename}.${KV_OBJ}
 			doins ${modulename}.${KV_OBJ}.xz || die "doins ${modulename}.${KV_OBJ}.xz failed"
 		elif linux_chkconfig_present MODULE_COMPRESS_GZIP; then
 			gzip ${modulename}.${KV_OBJ}

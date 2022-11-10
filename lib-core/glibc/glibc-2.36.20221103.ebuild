@@ -12,7 +12,7 @@ if [[ ${PV} = *9999 ]]; then
 	inherit git-r3
 	EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)/master"
 else
-	SNAPSHOT=20152a849b34abe83c702b27b7276c96b191b644
+	SNAPSHOT=2fce85f67c56e46863db40b8ca75bbf0fa993053
 	SRC_URI="https://github.com/bminor/glibc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -38,6 +38,7 @@ PDEPEND="lib-core/tzdb"
 
 PATCHES=(
 	"${FILESDIR}"/0001-Disable-ldconfig-during-install.patch
+	"${FILESDIR}"/0002-x86-Fix-Os-build-BZ-29576.patch
 )
 
 check_devpts() {
@@ -103,6 +104,8 @@ src_prepare() {
 
 	# Fix permissions on some of the scripts.
 	chmod u+x "${S}"/scripts/*.sh
+
+	#sed -i 's/\-Wl,\-z,defs\ //' "${S}"/elf/Makefile || die
 }
 
 src_configure() {
@@ -256,21 +259,6 @@ pkg_postinst() {
 		# Reload init ... if in a chroot or a diff init package, ignore
 		# errors from this step #253697
 		/usr/sbin/telinit U 2>/dev/null
-	fi
-
-	# Check for sanity of /etc/nsswitch.conf, take 2
-	if [[ -e ${EROOT}/etc/nsswitch.conf ]] && ! has_version sys-lib/libnss-nis ; then
-		local entry
-		for entry in passwd group shadow; do
-			if egrep -q "^[ \t]*${entry}:.*nis" "${EROOT}"/etc/nsswitch.conf; then
-				ewarn ""
-				ewarn "Your ${EROOT}/etc/nsswitch.conf uses NIS. Support for that has been"
-				ewarn "removed from glibc and is now provided by the package"
-				ewarn "  sys-lib/libnss-nis"
-				ewarn "Install it now to keep your NIS setup working."
-				ewarn ""
-			fi
-		done
 	fi
 
 	"${EROOT}"/usr/bin/locale-gen

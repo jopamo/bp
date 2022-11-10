@@ -2,16 +2,18 @@
 
 EAPI=8
 
+inherit flag-o-matic
+
 DESCRIPTION="a collection of binary tools"
 HOMEPAGE="https://sourceware.org/binutils/"
 
-SNAPSHOT=9e855cffa1fda44629e7f9b76dfa3e5a51a440e9
+SNAPSHOT=cfc103e7b9dee93520e182ba98c103b68fbf4f72
 SRC_URI="https://git.linaro.org/toolchain/binutils-gdb.git/snapshot/binutils-gdb-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-gdb-${SNAPSHOT}
 
 LICENSE="|| ( GPL-3 LGPL-3 )"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 DEPEND="
 	lib-core/zlib
@@ -20,6 +22,8 @@ DEPEND="
 "
 
 src_configure() {
+	filter-flags -Wl,defs -Wl,-z,defs
+
 	local myconf=(
 		--prefix="${EPREFIX}"/usr
 		--disable-gold

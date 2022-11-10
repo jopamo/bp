@@ -61,7 +61,7 @@ src_configure() {
 			--disable-install-libiberty
 			--disable-readline
 			--disable-werror
-			--disable-{binutils,etc,gas,gold,gprof,ld}
+			--disable-{binutils,etc,gas,gold,gprof,gprofng,ld}
 			--enable-64-bit-bfd
 			--enable-tui
 			--with-separate-debug-dir="${EPREFIX}"/usr/lib/debug

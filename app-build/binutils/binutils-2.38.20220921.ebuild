@@ -2,6 +2,8 @@
 
 EAPI=8
 
+inherit flag-o-matic
+
 DESCRIPTION="a collection of binary tools"
 HOMEPAGE="https://sourceware.org/binutils/"
 
@@ -13,6 +15,8 @@ LICENSE="|| ( GPL-3 LGPL-3 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+IUSE="gprof gprofng"
+
 DEPEND="
 	lib-core/zlib
 	lib-core/elfutils
@@ -20,8 +24,11 @@ DEPEND="
 "
 
 src_configure() {
+	filter-flags -Wl,defs -Wl,-z,defs
+
 	local myconf=(
-		--prefix="${EPREFIX}"/usr
+		$(use_enable gprof)
+		$(use_enable gprofng)
 		--disable-gold
 		--disable-multilib
 		--disable-nls
@@ -36,6 +43,7 @@ src_configure() {
 		--enable-plugins
 		--enable-relro
 		--enable-threads
+		--prefix="${EPREFIX}"/usr
 		--with-system-zlib
 		--without-included-gettext
 	)

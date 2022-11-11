@@ -11,7 +11,7 @@ if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/cairo/cairo.git"
 else
-		SRC_URI="https://download.gnome.org/sources/cairo/1.17/${P}.tar.xz"
+	SRC_URI="https://download.gnome.org/sources/cairo/1.17/${P}.tar.xz"
 fi
 
 LICENSE="|| ( LGPL-2.1 MPL-1.1 )"

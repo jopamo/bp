@@ -1,6 +1,7 @@
 // Ensure preference can't be changed by users
 lockPref("app.update.auto", false);
 lockPref("app.update.enabled", false);
+lockPref("app.update.autoInstallEnabled",false);
 lockPref("signon.rememberSignons", false);
 
 // Allow user to change based on needs

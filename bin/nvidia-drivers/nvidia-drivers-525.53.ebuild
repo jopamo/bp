@@ -262,10 +262,6 @@ src_install() {
 	insinto usr/share/nvidia/
 	newins nvidia-application-profiles-${PV}-key-documentation nvidia-application-profiles-key-documentation
 
-	# Firmware
-	insinto usr/lib/firmware/nvidia/${PV}/
-	doins firmware/gsp.bin
-
 	# wine
 	insinto usr/lib/nvidia/wine/
 	doins _nvngx.dll

@@ -16,25 +16,29 @@ KEYWORDS="amd64 arm64"
 IUSE="+fpm tmpfilesd systemd"
 
 DEPEND="
+	app-build/bison
+	app-build/gettext
 	app-compression/bzip2
 	app-compression/xz-utils
-	app-net/curl
-	app-server/opensmtpd
+	app-core/acl
 	app-dev/re2c
+	app-net/curl
+	app-server/mariadb
+	app-server/opensmtpd
+	lib-core/gdbm
 	lib-core/gmp
 	lib-core/libedit
 	lib-core/libpcre
 	lib-dev/oniguruma
-	lib-core/gdbm
-	app-core/acl
-	app-build/bison
-	app-build/gettext
 	virtual/ssl
 "
 
-filter-flags -Wl,-z,defs -flto\=\*
+
 
 src_prepare() {
+	filter-flags -flto*
+	filter-flags -Wl,-z,defs
+
 	default
 
 	# Emulate buildconf to support cross-compilation
@@ -58,31 +62,31 @@ src_configure() {
 		--with-config-file-scan-dir="${EPREFIX}"/etc/php/conf.d
 		--datadir="${EPREFIX}"/usr/share/php
 		--disable-rpath
+		$(use_enable fpm)
+		$(usex fpm "--with-fpm-acl" "")
+		$(usex fpm "--with-fpm-group=lighttpd" "")
+		$(usex fpm "--with-fpm-systemd" "")
+		$(usex fpm "--with-fpm-user=lighttpd" "")
 		--config-cache
-		--with-layout=GNU
-		--with-zlib
-		--enable-calendar
-		--enable-dba=shared
-		--with-curl
-		--without-pear
-		--with-openssl
-		--enable-bcmath
-		--with-bz2
-		--with-gdbm
-		--with-gmp
 		--disable-ftp
-		--with-gettext
+		--enable-bcmath
+		--enable-calendar
+		--enable-cgi
+		--enable-dba=shared
 		--enable-mbstring
+		--with-bz2
+		--with-curl
+		--with-gdbm
+		--with-gettext
+		--with-gmp
+		--with-layout=GNU
 		--with-libedit
-		--without-readline
 		--with-mysql-sock="${EPREFIX}"/run/mysqld/mysqld.sock
 		--with-mysqli=shared,mysqlnd
-		$(use_enable fpm)
-		--enable-cgi
-		$(usex fpm "--with-fpm-systemd" "")
-		$(usex fpm "--with-fpm-acl" "")
-		$(usex fpm "--with-fpm-user=lighttpd" "")
-		$(usex fpm "--with-fpm-group=lighttpd" "")
+		--with-openssl
+		--with-zlib
+		--without-pear
+		--without-readline
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

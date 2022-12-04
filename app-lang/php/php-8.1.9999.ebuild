@@ -74,6 +74,7 @@ src_configure() {
 		--enable-cgi
 		--enable-dba=shared
 		--enable-mbstring
+		--enable-pdo
 		--with-bz2
 		--with-curl
 		--with-gdbm
@@ -82,7 +83,8 @@ src_configure() {
 		--with-layout=GNU
 		--with-libedit
 		--with-mysql-sock="${EPREFIX}"/run/mysqld/mysqld.sock
-		--with-mysqli=shared,mysqlnd
+		--with-pdo-mysql=shared,mysqlnd
+		--with-pdo-sqlite=shared
 		--with-openssl
 		--with-zlib
 		--without-pear
@@ -100,8 +102,11 @@ src_install() {
 
 	if use fpm; then
 		insopts -m 0644
+
 		insinto /etc/php/
 		doins "${FILESDIR}"/php-fpm.conf
+		doins "${FILESDIR}"/php.ini
+
 		insinto /etc/php/php-fpm.d/
 		doins "${FILESDIR}"/www.conf
 

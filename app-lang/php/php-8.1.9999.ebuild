@@ -83,6 +83,7 @@ src_configure() {
 		--with-layout=GNU
 		--with-libedit
 		--with-mysql-sock="${EPREFIX}"/run/mysqld/mysqld.sock
+		--with-mysqli=shared,mysqlnd
 		--with-pdo-mysql=shared,mysqlnd
 		--with-pdo-sqlite=shared
 		--with-openssl

@@ -19,6 +19,7 @@ DEPEND="
 	app-build/bison
 	app-build/gettext
 	app-compression/bzip2
+	app-compression/libzip
 	app-compression/xz-utils
 	app-core/acl
 	app-dev/re2c
@@ -87,6 +88,7 @@ src_configure() {
 		--with-pdo-mysql=shared,mysqlnd
 		--with-pdo-sqlite=shared
 		--with-openssl
+		--with-zip=shared
 		--with-zlib
 		--without-pear
 		--without-readline

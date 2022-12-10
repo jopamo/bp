@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit git-r3 cmake
+inherit git-r3 cmake xdg
 
 DESCRIPTION="Framework providing assorted high-level user interface components"
 EGIT_REPO_URI="https://github.com/KDE/kguiaddons.git"

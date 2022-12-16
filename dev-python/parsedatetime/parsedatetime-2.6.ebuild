@@ -14,7 +14,6 @@ KEYWORDS="amd64 arm64"
 
 IUSE="test"
 
-RDEPEND="dev-python/future[${PYTHON_USEDEP}]"
 DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]
 	test? ( dev-python/pytest[${PYTHON_USEDEP}] )"
 

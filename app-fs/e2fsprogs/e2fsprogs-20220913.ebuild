@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/tytso/e2fsprogs.git"
 	EGIT_BRANCH=maint
 else
-	SNAPSHOT=b770b0fe7e2564afd95f2008533c6db435e74456
+	SNAPSHOT=dbaedc87e9d048077385c3a07a5ffbde518e5d28
 	SRC_URI="https://github.com/tytso/e2fsprogs/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

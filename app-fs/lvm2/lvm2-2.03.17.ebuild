@@ -24,8 +24,6 @@ DEPEND="
 
 S=${WORKDIR}/LVM2.${PV}
 
-PATCHES=( "${FILESDIR}"/mallinfo.patch )
-
 src_configure() {
 	local myconf=(
 		--prefix="${EPREFIX}"/usr
@@ -44,8 +42,6 @@ src_configure() {
    		$(use_enable udev udev_sync)
    		--enable-pkgconfig
    		--enable-readline
-   		--enable-udev_rules
-   		--enable-udev_sync
    		--with-cache=internal
    		--with-default-dm-run-dir="${EPREFIX}"/run
    		--with-default-locking-dir="${EPREFIX}"/run/lock/lvm

@@ -27,18 +27,22 @@ DEPEND="
 	)
 "
 
-python_test() {
-	py.test --capture=no --strict -v || die
+distutils_enable_tests pytest
+
+src_configure() {
+	# write a custom pyproject.toml to ease setuptools bootstrap
+	cat > pyproject.toml <<-EOF || die
+		[build-system]
+		requires = ["flit_core >=3.2,<4"]
+		build-backend = "flit_core.buildapi"
+
+		[project]
+		name = "packaging"
+		dynamic = ["version"]
+		description = "More routines for operating on iterables, beyond itertools"
+	EOF
 }
 
-pkg_preinst() {
-	_cleanup() {
-		local pyver=$("${PYTHON}" -c "from distutils.sysconfig import get_python_version; print(get_python_version())")
-		local egginfo="${ROOT%/}$(python_get_sitedir)/${P}-py${pyver}.egg-info"
-		if [[ -d ${egginfo} ]]; then
-			echo rm -r "${egginfo}"
-			rm -r "${egginfo}" || die "Failed to remove egg-info directory"
-		fi
-	}
-	python_foreach_impl _cleanup
+python_test() {
+	epytest --capture=no
 }

@@ -33,8 +33,12 @@ DEPEND="
 	readline? ( lib-core/readline )
 "
 
-append-flags -fno-strict-aliasing
-
+src_prepare() {
+	default
+	sed -e '/ks_ldap_free_state/i #if USE_LDAP' \
+    	-e '/ks_get_state =/a #endif' \
+    	-i dirmngr/server.c
+}
 src_configure() {
 	local myconf=(
 			$(use_enable bzip2)

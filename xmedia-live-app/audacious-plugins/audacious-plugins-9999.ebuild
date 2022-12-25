@@ -12,13 +12,15 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="aac alsa aosd bs2b cdda cue +ffmpeg +flac fluidsynth hotkeys http gme jack libsamplerate lirc
-mms modplug pulseaudio scrobbler sdl sid sndfile soxr speedpitch vorbis wavpack"
+IUSE="aac alsa aosd cdda cue +ffmpeg +flac fluidsynth hotkeys
+http gme jack libsamplerate lirc mms modplug opus pulseaudio scrobbler
+sdl sid sndfile soxr speedpitch vorbis wavpack"
 
 DEPEND="
+	lib-core/libxml2
 	lib-dev/dbus-glib
 	lib-live/glib
-	lib-core/libxml2
+	xgui-misc/mpg123
 	~xmedia-live-app/audacious-${PV}
 	aac? ( xmedia-live-lib/faad2 )
 	alsa? ( xgui-misc/alsa-lib )
@@ -26,7 +28,6 @@ DEPEND="
 		xgui-live-lib/libXrender
 		xgui-live-lib/libXcomposite
 	)
-	bs2b? ( xmedia-live-lib/libbs2b )
 	cdda? (
 		xmedia-live-lib/libcddb
 		lib-dev/libcdio-paranoia
@@ -48,7 +49,7 @@ DEPEND="
 	lirc? ( app-var/lirc )
 	mms? ( xmedia-live-lib/libmms )
 	modplug? ( xmedia-live-lib/libmodplug )
-	xgui-misc/mpg123
+	opus? ( xmedia-live-lib/opus )
 	pulseaudio? ( xgui-misc/pulseaudio )
 	scrobbler? ( app-net/curl )
 	sdl? ( xmedia-live-lib/libsdl2[sound] )
@@ -72,36 +73,23 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--disable-gtk
-		--disable-nls
-		--enable-qt
-		--enable-mpris2
-		--enable-songchange
-		--disable-oss4
-		--disable-qtaudio
-		--disable-qtglspectrum
-		--disable-coreaudio
-		--disable-sndio
 		$(use_enable aac)
 		$(use_enable alsa)
-		--disable-ampache
 		$(use_enable aosd)
-		$(use_enable bs2b)
 		$(use_enable cdda cdaudio)
 		$(use_enable cue)
+		$(use_enable flac filewriter)
 		$(use_enable flac)
 		$(use_enable fluidsynth amidiplug)
-		$(use_enable flac filewriter)
 		$(use_enable gme console)
 		$(use_enable hotkeys hotkey)
 		$(use_enable http neon)
 		$(use_enable jack)
-		--disable-filewriter_mp3
 		$(use_enable libsamplerate resample)
 		$(use_enable lirc)
 		$(use_enable mms)
 		$(use_enable modplug)
-		--enable-mpg123
+		$(use_enable opus)
 		$(use_enable pulseaudio pulse)
 		$(use_enable scrobbler scrobbler2)
 		$(use_enable sdl sdlout)
@@ -112,6 +100,20 @@ src_configure() {
 		$(use_enable vorbis)
 		$(use_enable wavpack)
 		$(use_with ffmpeg)
+		--disable-ampache
+		--disable-bs2b
+		--disable-coreaudio
+		--disable-filewriter_mp3
+		--disable-gtk
+		--disable-nls
+		--disable-oss4
+		--disable-qtaudio
+		--disable-qtglspectrum
+		--disable-sndio
+		--enable-mpg123
+		--enable-mpris2
+		--enable-qt
+		--enable-songchange
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

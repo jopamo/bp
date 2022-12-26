@@ -18,6 +18,7 @@ PATCHES=(
 	"${FILESDIR}"/28da6196a27de951d6143d4f2765d1f2976f0d39.patch
 	"${FILESDIR}"/8ca1faa31f396d94ab927b257f3a05236c84e330.patch
 	"${FILESDIR}"/64d6fa68c1af46f6408f832443ce23709a2f0a66.patch
+	"${FILESDIR}"/9de658d248f9fd304afa3321dd7a9de1280356ec.patch
 )
 
 filter-flags -flto\*

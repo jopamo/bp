@@ -1,0 +1,43 @@
+From 9de658d248f9fd304afa3321dd7a9de1280356ec Mon Sep 17 00:00:00 2001
+From: Mark Wielaard <mark@klomp.org>
+Date: Thu, 26 May 2022 22:38:01 +0200
+Subject: [PATCH] Initialize the fave and cost arrays fully
+
+We try to be smart in sendMTFValues by initializing just nGroups
+number of elements instead of all BZ_N_GROUPS elements. But this means
+the compiler doesn't know all elements are correctly initialized and
+might warn. The arrays are really small, BZ_N_GROUPS, 6 elements. And
+nGroups == BZ_N_GROUPS is the common case. So just initialize them all
+always. Using a constant loop might also help the compiler to optimize
+the initialization.
+
+https://sourceware.org/bugzilla/show_bug.cgi?id=28904
+---
+ compress.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/compress.c b/compress.c
+index 5dfa002..2dc5dc1 100644
+--- a/compress.c
++++ b/compress.c
+@@ -321,7 +321,7 @@ void sendMTFValues ( EState* s )
+    ---*/
+    for (iter = 0; iter < BZ_N_ITERS; iter++) {
+ 
+-      for (t = 0; t < nGroups; t++) fave[t] = 0;
++      for (t = 0; t < BZ_N_GROUPS; t++) fave[t] = 0;
+ 
+       for (t = 0; t < nGroups; t++)
+          for (v = 0; v < alphaSize; v++)
+@@ -353,7 +353,7 @@ void sendMTFValues ( EState* s )
+             Calculate the cost of this group as coded
+             by each of the coding tables.
+          --*/
+-         for (t = 0; t < nGroups; t++) cost[t] = 0;
++         for (t = 0; t < BZ_N_GROUPS; t++) cost[t] = 0;
+ 
+          if (nGroups == 6 && 50 == ge-gs+1) {
+             /*--- fast track the common case ---*/
+-- 
+2.31.1
+

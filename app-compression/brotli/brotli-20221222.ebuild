@@ -14,7 +14,7 @@ if [[ ${PV} == *9999 ]] ; then
 	inherit git-r3
 else
 	#SRC_URI="https://github.com/google/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	SNAPSHOT=9801a2c5d6c67c467ffad676ac301379bb877fc3
+	SNAPSHOT=509d4419bd2e7f40ac97106324abf0b49d9fd7ff
 	SRC_URI="https://github.com/google/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -23,7 +23,7 @@ LICENSE="MIT python? ( Apache-2.0 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="python static-libs test"
+IUSE="python test"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
@@ -62,6 +62,6 @@ src_test() {
 
 src_install() {
 	cmake_src_install
-	use static-libs || rm "${ED}"/usr/lib/*.a || die
+
 	use python && distutils-r1_src_install
 }

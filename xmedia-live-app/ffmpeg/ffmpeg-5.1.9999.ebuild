@@ -17,7 +17,7 @@ IUSE="
 	+alsa +avcodec avdevice +avfilter +avformat +avutil debug
 	nvidia x264 +x265 vaapi vdpau static-libs +openssl +ffmpeg
 	+network postproc +protocols pulseaudio +nonfree +gpl +version3
-	 +swscale +swresample  +lame +libass +libdav1d +vorbis
+	 +swscale +swresample  +lame +libass +libdav1d +vorbis vulkan
 "
 
 DEPEND="
@@ -85,6 +85,7 @@ src_configure() {
 		$(use_enable vdpau) \
 		$(use_enable version3) \
 		$(use_enable vorbis libvorbis) \
+		$(use_enable vulkan) \
 		$(use_enable x264 libx264) \
 		$(use_enable x265 libx265) \
 		--disable-doc \

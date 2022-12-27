@@ -17,7 +17,7 @@ IUSE="
 	+alsa +avcodec avdevice +avfilter +avformat +avutil debug
 	nvidia x264 +x265 vaapi vdpau static-libs +openssl +ffmpeg
 	+network postproc +protocols pulseaudio +nonfree +gpl +version3
-	 +swscale +swresample  +lame +libass +libdav1d +vorbis vulkan
+	 +swscale +swresample +lame +libass +libdav1d +vorbis vulkan
 "
 
 DEPEND="

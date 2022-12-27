@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_BRANCH="release"
 	inherit git-r3
 else
-	SNAPSHOT=466e13f7225387a4276738f421378396595a5d4a
+	SNAPSHOT=6640377783e73211d1afd440550f8587dd9de75c
 	SRC_URI="https://github.com/facebook/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

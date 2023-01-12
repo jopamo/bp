@@ -31,7 +31,6 @@ DEPEND="
 	lib-dev/protobuf
 	lib-live/libunwind
 "
-BDEPEND="app-build/gcc[golang]"
 RDEPEND="app-live/android-udev-rules"
 
 src_prepare() {
@@ -42,10 +41,6 @@ src_prepare() {
 	eapply "${S}/patches/libziparchive/0004-Remove-the-useless-dependency-on-gtest.patch"
 	cd "${S}"
 	eapply "${DISTDIR}/${PN}-31.0.3-disable-werror-boringssl.patch"
-	cd "${S}/vendor/boringssl" || die
-	eapply "${S}/patches/boringssl/0011-Disable-Werror.patch"
-	cd "${S}"
-	eapply "${DISTDIR}/${PN}-31.0.3_p1-install-e2fsdroid-ext2simg.patch"
 	rm -r patches || die
 	cmake_src_prepare
 }

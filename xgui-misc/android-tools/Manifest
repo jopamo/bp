@@ -1,4 +1,4 @@
 DIST android-tools-31.0.3-disable-werror-boringssl.patch 1815 SHA3_256 7c153b0aa4c45a8528893b0b0f99405e8bcbb40086b3c7e680a6465c980b8f50
 DIST android-tools-31.0.3-no-gtest.patch 3152 SHA3_256 a708175c76d313ab67e3cafdcd6ead21cee648cf37fd5e6af1109782b4bc5f8a
 DIST android-tools-31.0.3_p1-install-e2fsdroid-ext2simg.patch 2075 SHA3_256 2d802e60b9118e00220575b8b9bc615a5a13eff731870648c73d97aa6ec93d9d
-DIST android-tools-31.0.3p1.tar.xz 25760004 SHA3_256 7771276fd4cf8cee2bc14daf445d9f062fbb8d8b0a2d8580401c44bfc50af2f0
+DIST android-tools-33.0.3.tar.xz 25300756 SHA3_256 e4c2880d123e8ae5b3a6397a00288ca96c011aedda95c0060a739cf0941a9389

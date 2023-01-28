@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=7eacf279a6ff4bff560ff49a8a2a9c531658096c
+SNAPSHOT=6e195e45a972b9c88ab8c5627d09049268b29df0
 
 inherit flag-o-matic
 
@@ -13,7 +13,7 @@ S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="+mpfr readline"
 

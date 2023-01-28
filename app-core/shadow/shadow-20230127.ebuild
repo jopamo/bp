@@ -19,6 +19,7 @@ IUSE="acl pam skey subids systemd xattr yescrypt"
 
 DEPEND="
 	app-compression/xz-utils
+	lib-dev/libbsd
 	acl? ( app-core/acl )
 	pam? ( lib-core/pam )
 	skey? ( lib-core/skey )

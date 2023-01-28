@@ -105,7 +105,7 @@ src_configure() {
 		-Dffmpeg=disabled
 		-Dgsettings=disabled
 		-Dinstalled_tests=disabled
-		-Djack-devel=disabled
+		-Djack-devel=false
 		-Djack=disabled
 		-Dlibcamera=disabled
 		-Dlv2=disabled

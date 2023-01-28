@@ -70,11 +70,11 @@ src_configure() {
 		$(use_enable systemd)
 		$(use_enable udev sixaxis)
 		$(use_enable udev)
-		--enable-android
-		--enable-deprecated
 		--disable-midi
 		--disable-obex
+		--enable-android
 		--enable-datafiles
+		--enable-deprecated
 		--enable-library
 		--enable-manpages
 		--enable-monitor

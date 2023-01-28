@@ -7,7 +7,7 @@ inherit flag-o-matic
 DESCRIPTION="an optimizing compiler produced by the GNU Project supporting various programming languages"
 HOMEPAGE="https://gcc.gnu.org/"
 
-SNAPSHOT=eec3a65ed638a1c58fa08ddf508d2d60b64d311d
+SNAPSHOT=ce4f080487982cc00896783fa8c2504a13c3322a
 SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -18,7 +18,7 @@ KEYWORDS="amd64 arm64"
 IUSE="debug dlang golang +isl +lto sanitize +vtv zstd"
 
 DEPEND="
-	lib-core/mpc
+	lib-core/mpc m
 	lib-core/zlib
 	app-build/binutils
 	isl? ( lib-core/isl )

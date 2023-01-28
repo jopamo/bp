@@ -12,7 +12,8 @@ if [[ ${PV} == 9999 ]] ; then
 	EGIT_REPO_URI="${HOMEPAGE}.git"
 else
 	SNAPSHOT=92a884a71ca5f34a2cbf3805fff21ab3d01e7e03
-	SRC_URI="${HOMEPAGE}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="${HOMEPAGE}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz
+			https://github.com/linux-pam/linux-pam/commit/cf2fc5ff7b4a8555fda2a5ebe5f6ab0e45c22996.patch"
 	S=${WORKDIR}/linux-${PN}-${SNAPSHOT}
 fi
 
@@ -35,6 +36,8 @@ DEPEND="lib-net/libtirpc"
 PDEPEND="app-core/pambase"
 
 src_prepare() {
+	git apply -R "${DISTDIR}/cf2fc5ff7b4a8555fda2a5ebe5f6ab0e45c22996.patch"
+
 	touch ChangeLog
 
 	default

@@ -6,13 +6,13 @@ inherit flag-o-matic
 
 DESCRIPTION="access control list utilities, libraries and headers"
 HOMEPAGE="https://savannah.nongnu.org/projects/acl"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
+SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="nls static-libs"
+IUSE="static-libs"
 
 DEPEND="app-core/attr"
 
@@ -21,7 +21,7 @@ replace-flags -O3 -O2
 src_configure() {
 	local myconf=(
 		--enable-shared $(use_enable static-libs static)
-		$(use_enable nls)
+		--disable-nls
 	)
 	econf "${myconf[@]}"
 }

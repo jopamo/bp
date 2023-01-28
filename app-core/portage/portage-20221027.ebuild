@@ -11,14 +11,14 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/gentoo/${PN}.git"
 	inherit git-r3
 else
-	SNAPSHOT=fe3d9c11ba3460e8c5677ebfe45399e3396ea8d9
+	SNAPSHOT=ae020613bac1a479105a8014e0fa4771cb3bbfbf
 	SRC_URI="https://github.com/gentoo/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="gentoo_repo tmpfilesd sysusersd"
 

@@ -11,7 +11,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git"
 	inherit git-r3
 else
-	SNAPSHOT=66f781cf385bf690892b48c181257841841d3d41
+	SNAPSHOT=c7260a47f19e01f4f663b6a56fbdc2dafd8a6e7e
 	SRC_URI="https://gitlab.gnome.org/GNOME/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"

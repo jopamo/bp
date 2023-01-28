@@ -12,7 +12,7 @@ LICENSE="GPL-2+ LGPL-2.1+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="btpclient cups debug extra-tools experimental +mesh +readline selinux systemd +udev user-session"
+IUSE="btpclient cups debug extra-tools +experimental +mesh +readline selinux systemd +udev user-session"
 
 BDEPEND="app-dev/pkgconf"
 DEPEND="
@@ -59,35 +59,35 @@ pkg_setup() {
 
 src_configure() {
 	local myconf=(
-		ac_cv_header_readline_readline_h=$(usex readline)
-		ac_cv_header_readline_readline_h=$(usex mesh)
-		ax_cv_c_float_words_bigendian=no
-		--localstatedir=/var
-		--disable-android
-		--enable-datafiles
-		--enable-optimization
-		$(use_enable debug)
-		--enable-pie
-		--enable-threads
-		--enable-library
-		--enable-tools
-		--enable-manpages
-		--enable-monitor
-		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
-		--with-systemduserunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/user" "false")
-		$(use_enable btpclient)
 		$(use_enable btpclient external-ell)
+		$(use_enable btpclient)
 		$(use_enable cups)
-		--disable-deprecated
+		$(use_enable debug)
 		$(use_enable experimental)
-		$(use_enable mesh)
 		$(use_enable mesh external-ell)
-		--disable-midi
-		--disable-obex
+		$(use_enable mesh)
 		$(use_enable readline client)
 		$(use_enable systemd)
-		$(use_enable udev)
 		$(use_enable udev sixaxis)
+		$(use_enable udev)
+		--disable-android
+		--disable-deprecated
+		--disable-midi
+		--disable-obex
+		--enable-datafiles
+		--enable-library
+		--enable-manpages
+		--enable-monitor
+		--enable-optimization
+		--enable-pie
+		--enable-threads
+		--enable-tools
+		--localstatedir=/var
+		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
+		--with-systemduserunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/user" "false")
+		ac_cv_header_readline_readline_h=$(usex mesh)
+		ac_cv_header_readline_readline_h=$(usex readline)
+		ax_cv_c_float_words_bigendian=no
 	)
 
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

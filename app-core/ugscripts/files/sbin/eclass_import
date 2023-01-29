@@ -34,6 +34,7 @@ find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/x11-misc\/shar
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/\${EPREFIX}\$\(qt5_get_libdir\)\/qt5\/bin/\/usr\/bin/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/\$(get_abi_LDFLAGS)/\${LDFLAGS}/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/get_abi_CHOST/CHOST/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/app-dev\/ninja/app-dev\/samurai/g'
 
 sed -i 's/.*qt5\/bin.*/	echo\ \/usr\/bin/' /var/db/repos/bp/eclass/qmake-utils.eclass
 

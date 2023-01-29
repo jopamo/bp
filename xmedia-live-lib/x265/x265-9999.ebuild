@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="app-lang/nasm"
 BDEPEND="
-	app-dev/ninja
+	app-dev/samurai
 	app-dev/cmake
 "
 

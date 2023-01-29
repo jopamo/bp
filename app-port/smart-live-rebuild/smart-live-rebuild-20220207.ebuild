@@ -2,7 +2,7 @@
 
 EAPI=8
 
-DISTUTILS_USE_SETUPTOOLS=pyproject.toml
+DISTUTILS_USE_PEP517=flit
 
 inherit distutils-r1
 

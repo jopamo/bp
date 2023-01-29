@@ -1,4 +1,4 @@
-# Copyright 2019-2022 Gentoo Authors
+# Copyright 2019-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: go-module.eclass
@@ -26,7 +26,9 @@
 # If the software has a directory named vendor in its
 # top level directory, the only thing you need to do is inherit the
 # eclass. If it doesn't, you need to also create a dependency tarball and
-# host it somewhere, for example in your dev space.
+# host it somewhere, for example in your dev space. It's recommended that
+# a format supporting parallel decompression is used and developers should
+# use higher levels of compression like '-9' for xz.
 #
 # Here is an example of how to create a dependency tarball.
 # The base directory in the GOMODCACHE setting must be go-mod in order
@@ -36,7 +38,7 @@
 #
 # $ cd /path/to/project
 # $ GOMODCACHE="${PWD}"/go-mod go mod download -modcacherw
-# $ tar -acf project-1.0-deps.tar.xz go-mod
+# $ XZ_OPT='-T0 -9' tar -acf project-1.0-deps.tar.xz go-mod
 #
 # @CODE
 #
@@ -93,11 +95,12 @@ export GOCACHE="${T}/go-build"
 export GOMODCACHE="${WORKDIR}/go-mod"
 
 # The following go flags should be used for all builds.
+# -buildmode=pie builds position independent executables
 # -buildvcs=false omits version control information
 # -modcacherw makes the build cache read/write
 # -v prints the names of packages as they are compiled
 # -x prints commands as they are executed
-export GOFLAGS="-buildvcs=false -modcacherw -v -x"
+export GOFLAGS="-buildmode=pie -buildvcs=false -modcacherw -v -x"
 
 # Do not complain about CFLAGS etc since go projects do not use them.
 QA_FLAGS_IGNORED='.*'
@@ -356,6 +359,12 @@ go-module_src_unpack() {
 		die "Please update this ebuild"
 	else
 		default
+		if [[ ! -d "${S}"/vendor ]]; then
+			cd "${S}"
+			local nf
+			[[ -n ${NONFATAL_VERIFY} ]] && nf=nonfatal
+			${nf} ego mod verify
+		fi
 	fi
 }
 

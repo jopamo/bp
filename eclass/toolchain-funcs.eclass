@@ -376,7 +376,6 @@ tc-export_build_env() {
 
 # @FUNCTION: tc-env_build
 # @USAGE: <command> [command args]
-# @INTERNAL
 # @DESCRIPTION:
 # Setup the compile environment to the build tools and then execute the
 # specified command.  We use tc-getBUILD_XX here so that we work with
@@ -441,7 +440,8 @@ tc-env_build() {
 # @CODE
 econf_build() {
 	local CBUILD=${CBUILD:-${CHOST}}
-	tc-env_build econf --build=${CBUILD} --host=${CBUILD} "$@"
+	econf_env() { CHOST=${CBUILD} econf "$@"; }
+	tc-env_build econf_env "$@"
 }
 
 # @FUNCTION: tc-ld-is-gold
@@ -465,7 +465,7 @@ tc-ld-is-gold() {
 	# options and not CFLAGS/CXXFLAGS.
 	local base="${T}/test-tc-gold"
 	cat <<-EOF > "${base}.c"
-	int main() { return 0; }
+	int main(void) { return 0; }
 	EOF
 	out=$($(tc-getCC "$@") ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} -Wl,--version "${base}.c" -o "${base}" 2>&1)
 	rm -f "${base}"*
@@ -498,7 +498,7 @@ tc-ld-is-lld() {
 	# options and not CFLAGS/CXXFLAGS.
 	local base="${T}/test-tc-lld"
 	cat <<-EOF > "${base}.c"
-	int main() { return 0; }
+	int main(void) { return 0; }
 	EOF
 	out=$($(tc-getCC "$@") ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} -Wl,--version "${base}.c" -o "${base}" 2>&1)
 	rm -f "${base}"*
@@ -537,7 +537,7 @@ tc-ld-force-bfd() {
 	# to its value (like).  #545218
 	local ld=$(tc-getLD "$@")
 	local bfd_ld="${ld%% *}.bfd"
-	local path_ld=$(which "${bfd_ld}" 2>/dev/null)
+	local path_ld=$(type -P "${bfd_ld}" 2>/dev/null)
 	[[ -e ${path_ld} ]] && export LD=${bfd_ld}
 
 	# Set up LDFLAGS to select bfd based on the gcc / clang version.
@@ -582,7 +582,7 @@ _tc-has-openmp() {
 	local base="${T}/test-tc-openmp"
 	cat <<-EOF > "${base}.c"
 	#include <omp.h>
-	int main() {
+	int main(void) {
 		int nthreads, tid, ret = 0;
 		#pragma omp parallel private(nthreads, tid)
 		{
@@ -1082,7 +1082,7 @@ gen_usr_ldscript() {
 		# If they're using gold, manually invoke the old bfd. #487696
 		local d="${T}/bfd-linker"
 		mkdir -p "${d}"
-		ln -sf $(which ${CHOST}-ld.bfd) "${d}"/ld
+		ln -sf $(type -P ${CHOST}-ld.bfd) "${d}"/ld
 		flags+=( -B"${d}" )
 	fi
 	output_format=$($(tc-getCC) "${flags[@]}" 2>&1 | sed -n 's/^OUTPUT_FORMAT("\([^"]*\)",.*/\1/p')
@@ -1170,6 +1170,70 @@ gen_usr_ldscript() {
 		esac
 		fperms a+x "/usr/${libdir}/${lib}" || die "could not change perms on ${lib}"
 	done
+}
+
+# @FUNCTION: tc-get-cxx-stdlib
+# @DESCRIPTION:
+# Attempt to identify the C++ standard library used by the compiler.
+# If the library is identified, the function returns 0 and prints one
+# of the following:
+#
+# - ``libc++`` for ``lib-core/libcxx``
+# - ``libstdc++`` for ``app-build/gcc``'s libstdc++
+#
+# If the library is not recognized, the function returns 1.
+tc-get-cxx-stdlib() {
+	local code='#include <ciso646>
+
+#if defined(_LIBCPP_VERSION)
+	HAVE_LIBCXX
+#elif defined(__GLIBCXX__)
+	HAVE_LIBSTDCPP
+#endif
+'
+	local res=$(
+		$(tc-getCXX) ${CXXFLAGS} ${CPPFLAGS} -x c++ -E -P - \
+			<<<"${code}" 2>/dev/null
+	)
+
+	case ${res} in
+		*HAVE_LIBCXX*)
+			echo libc++;;
+		*HAVE_LIBSTDCPP*)
+			echo libstdc++;;
+		*)
+			return 1;;
+	esac
+
+	return 0
+}
+
+# @FUNCTION: tc-get-c-rtlib
+# @DESCRIPTION:
+# Attempt to identify the runtime used by the C/C++ compiler.
+# If the runtime is identifed, the function returns 0 and prints one
+# of the following:
+#
+# - ``compiler-rt`` for ``lib-core/compiler-rt``
+# - ``libgcc`` for ``app-build/gcc``'s libgcc
+#
+# If the runtime is not recognized, the function returns 1.
+tc-get-c-rtlib() {
+	local res=$(
+		$(tc-getCC) ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} \
+			-print-libgcc-file-name 2>/dev/null
+	)
+
+	case ${res} in
+		*libclang_rt*)
+			echo compiler-rt;;
+		*libgcc*)
+			echo libgcc;;
+		*)
+			return 1;;
+	esac
+
+	return 0
 }
 
 fi

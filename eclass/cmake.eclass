@@ -1,9 +1,10 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: cmake.eclass
 # @MAINTAINER:
 # kde@gentoo.org
+# base-system@gentoo.org
 # @AUTHOR:
 # Tomáš Chvátal <scarabeus@gentoo.org>
 # Maciej Mrozowski <reavertm@gentoo.org>
@@ -15,8 +16,7 @@
 # @DESCRIPTION:
 # The cmake eclass makes creating ebuilds for cmake-based packages much easier.
 # It provides all inherited features (DOCS, HTML_DOCS, PATCHES) along with
-# out-of-source builds (default), in-source builds and an implementation of the
-# well-known use_enable function for CMake.
+# out-of-source builds (default) and in-source builds.
 
 case ${EAPI} in
 	7|8) ;;
@@ -97,6 +97,7 @@ fi
 # By default it uses current working directory (in EAPI-7: ${S}).
 
 # @ECLASS_VARIABLE: CMAKE_VERBOSE
+# @USER_VARIABLE
 # @DESCRIPTION:
 # Set to OFF to disable verbose messages during compilation
 : ${CMAKE_VERBOSE:=ON}
@@ -355,7 +356,7 @@ cmake_src_prepare() {
 
 	default_src_prepare
 
-	# check if CMakeLists.txt exist and if no then die
+	# check if CMakeLists.txt exists and if not then die
 	if [[ ! -e ${CMAKE_USE_DIR}/CMakeLists.txt ]] ; then
 		eerror "Unable to locate CMakeLists.txt under:"
 		eerror "\"${CMAKE_USE_DIR}/CMakeLists.txt\""

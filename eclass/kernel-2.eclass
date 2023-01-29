@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: kernel-2.eclass
@@ -22,7 +22,7 @@
 # @DESCRIPTION:
 # Utilized for 32-bit userland on ppc64.
 
-# @ECLASS_VARIABLE: CKV 
+# @ECLASS_VARIABLE: CKV
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Used as a comparison kernel version, which is used when
@@ -187,36 +187,36 @@
 # Apply genpatches to kernel source. Provide any
 # combination of "base", "extras" or "experimental".
 
-# @ECLASS_VARIABLE: KERNEL_URI 
+# @ECLASS_VARIABLE: KERNEL_URI
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Upstream kernel src URI
 
-# @ECLASS_VARIABLE: KV 
+# @ECLASS_VARIABLE: KV
 # @DEFAULT_UNSET
 # @OUTPUT_VARIABLE
 # @DESCRIPTION:
 # Kernel Version (2.6.0-gentoo/2.6.0-test11-gentoo-r1)
 
-# @ECLASS_VARIABLE: KV_FULL 
+# @ECLASS_VARIABLE: KV_FULL
 # @DEFAULT_UNSET
 # @OUTPUT_VARIABLE
 # @DESCRIPTION:
 # Kernel full version
 
-# @ECLASS_VARIABLE: KV_MAJOR 
+# @ECLASS_VARIABLE: KV_MAJOR
 # @DEFAULT_UNSET
 # @OUTPUT_VARIABLE
 # @DESCRIPTION:
 # Kernel major version from <KV_MAJOR>.<KV_MINOR>.<KV_PATCH
 
-# @ECLASS_VARIABLE: KV_MINOR 
+# @ECLASS_VARIABLE: KV_MINOR
 # @DEFAULT_UNSET
 # @OUTPUT_VARIABLE
 # @DESCRIPTION:
 # Kernel minor version from <KV_MAJOR>.<KV_MINOR>.<KV_PATCH
 
-# @ECLASS_VARIABLE: KV_PATCH 
+# @ECLASS_VARIABLE: KV_PATCH
 # @DEFAULT_UNSET
 # @OUTPUT_VARIABLE
 # @DESCRIPTION:
@@ -227,12 +227,12 @@
 # @DESCRIPTION:
 # Default cflags if not already set
 
-# @ECLASS_VARIABLE: OKV  
+# @ECLASS_VARIABLE: OKV
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Original Kernel Version (2.6.0/2.6.0-test11)
 
-# @ECLASS_VARIABLE: RELEASE 
+# @ECLASS_VARIABLE: RELEASE
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Representative of the kernel release tag (-rc3/-git3)
@@ -261,15 +261,15 @@
 # @DESCRIPTION:
 # space delimetered list of patches to be applied to the kernel
 
-# @ECLASS_VARIABLE: UNIPATCH_LIST_DEFAULT 
+# @ECLASS_VARIABLE: UNIPATCH_LIST_DEFAULT
 # @INTERNAL
 # @DESCRIPTION:
 # Upstream kernel patch archive
 
-# @ECLASS_VARIABLE: UNIPATCH_LIST_GENPATCHES 
+# @ECLASS_VARIABLE: UNIPATCH_LIST_GENPATCHES
 # @INTERNAL
 # @DESCRIPTION:
-# List of genpatches archives to apply to the kernel 
+# List of genpatches archives to apply to the kernel
 
 # @ECLASS_VARIABLE: UNIPATCH_STRICTORDER
 # @DEFAULT_UNSET
@@ -281,7 +281,7 @@
 # If you do change them, there is a chance that we will not fix resulting bugs;
 # that of course does not mean we're not willing to help.
 
-inherit estack toolchain-funcs
+inherit estack multiprocessing toolchain-funcs
 
 case ${EAPI} in
 	7|8) ;;
@@ -377,7 +377,7 @@ handle_genpatches() {
 			UNIPATCH_LIST_GENPATCHES+=" ${DISTDIR}/${tarball}"
 			debug-print "genpatches tarball: ${tarball}"
 		fi
-		GENPATCHES_URI+=" ${use_cond_start}$(echo https://dev.gentoo.org/~{alicef,mpagano,whissi}/dist/genpatches/${tarball})${use_cond_end}"
+		GENPATCHES_URI+=" ${use_cond_start}$(echo https://dev.gentoo.org/~{alicef,mpagano}/dist/genpatches/${tarball})${use_cond_end}"
 	done
 }
 
@@ -646,7 +646,7 @@ kernel_is() {
 	  eq) operator="-eq"; shift;;
 	   *) operator="-eq";;
 	esac
-	[[ $# -gt 3 ]] && die "Error in kernel-2_kernel_is(): too many parameters"
+	[[ $# -gt 3 ]] && die "Error in ${ECLASS}_${FUNCNAME}(): too many parameters"
 
 	ver_test \
 		"${KV_MAJOR:-0}.${KV_MINOR:-0}.${KV_PATCH:-0}" \
@@ -656,7 +656,6 @@ kernel_is() {
 
 # Capture the sources type and set DEPENDs
 if [[ ${ETYPE} == sources ]]; then
-	BDEPEND="!build? ( app-core/sed )"
 	RDEPEND="!build? (
 		app-compression/cpio
 		app-lang/perl
@@ -746,25 +745,35 @@ cross_pre_c_headers() {
 	use headers-only && [[ ${CHOST} != ${CTARGET} ]]
 }
 
-# @FUNCTION: env_setup_xmakeopts
+# @FUNCTION: env_setup_kernel_makeopts
 # @USAGE:
 # @DESCRIPTION:
-# set the ARCH/CROSS_COMPILE when cross compiling
+# Set the toolchain variables, as well as ARCH and CROSS_COMPILE when
+# cross-compiling.
 
-env_setup_xmakeopts() {
+env_setup_kernel_makeopts() {
 	# Kernel ARCH != portage ARCH
 	export KARCH=$(tc-arch-kernel)
 
 	# When cross-compiling, we need to set the ARCH/CROSS_COMPILE
 	# variables properly or bad things happen !
-	xmakeopts="ARCH=${KARCH}"
+	KERNEL_MAKEOPTS=( ARCH="${KARCH}" )
 	if [[ ${CTARGET} != ${CHOST} ]] && ! cross_pre_c_headers; then
-		xmakeopts="${xmakeopts} CROSS_COMPILE=${CTARGET}-"
+		KERNEL_MAKEOPTS+=( CROSS_COMPILE="${CTARGET}-" )
 	elif type -p ${CHOST}-ar >/dev/null; then
-		xmakeopts="${xmakeopts} CROSS_COMPILE=${CHOST}-"
+		KERNEL_MAKEOPTS+=( CROSS_COMPILE="${CHOST}-" )
 	fi
-	xmakeopts="${xmakeopts} HOSTCC=$(tc-getBUILD_CC) CC=$(tc-getCC) LD=$(tc-getLD) AR=$(tc-getAR) NM=$(tc-getNM) OBJCOPY=$(tc-getOBJCOPY) READELF=$(tc-getREADELF) STRIP=$(tc-getSTRIP)"
-	export xmakeopts
+	KERNEL_MAKEOPTS+=(
+		HOSTCC="$(tc-getBUILD_CC)"
+		CC="$(tc-getCC)"
+		LD="$(tc-getLD)"
+		AR="$(tc-getAR)"
+		NM="$(tc-getNM)"
+		OBJCOPY="$(tc-getOBJCOPY)"
+		READELF="$(tc-getREADELF)"
+		STRIP="$(tc-getSTRIP)"
+	)
+	export KERNEL_MAKEOPTS
 }
 
 # @FUNCTION: universal_unpack
@@ -850,8 +859,8 @@ install_universal() {
 install_headers() {
 	local ddir=$(kernel_header_destdir)
 
-	env_setup_xmakeopts
-	emake headers_install INSTALL_HDR_PATH="${ED}"${ddir}/.. ${xmakeopts}
+	env_setup_kernel_makeopts
+	emake headers_install INSTALL_HDR_PATH="${ED}"${ddir}/.. "${KERNEL_MAKEOPTS[@]}"
 
 	# let other packages install some of these headers
 	rm -rf "${ED}"${ddir}/scsi || die #glibc/uclibc/etc...
@@ -1065,7 +1074,7 @@ unipatch() {
 			extention=${extention/:*/}
 			PIPE_CMD=""
 			case ${extention} in
-				     xz) PIPE_CMD="xz -dc";;
+				     xz) PIPE_CMD="xz -T$(makeopts_jobs) -dc";;
 				   lzma) PIPE_CMD="lzma -dc";;
 				    bz2) PIPE_CMD="bzip2 -dc";;
 				 patch*) PIPE_CMD="cat";;
@@ -1145,7 +1154,7 @@ unipatch() {
 				UNIPATCH_DROP+=" 5011_enable-cpu-optimizations-for-gcc8.patch"
 				UNIPATCH_DROP+=" 5012_enable-cpu-optimizations-for-gcc91.patch"
 				UNIPATCH_DROP+=" 5013_enable-cpu-optimizations-for-gcc10.patch"
-				if [[ ${GCC_MAJOR_VER} -lt 9 ]]; then
+				if [[ ${GCC_MAJOR_VER} -lt 9 ]] && ! tc-is-clang; then
 					UNIPATCH_DROP+=" 5010_enable-cpu-optimizations-universal.patch"
 				fi
 				# this legacy section should be targeted for removal
@@ -1191,14 +1200,14 @@ unipatch() {
 		fi
 	done
 
-	#populate KPATCH_DIRS so we know where to look to remove the excludes
+	# Populate KPATCH_DIRS so we know where to look to remove the excludes
 	x=${KPATCH_DIR}
 	KPATCH_DIR=""
 	for i in $(find ${x} -type d | sort -n); do
 		KPATCH_DIR="${KPATCH_DIR} ${i}"
 	done
 
-	#so now lets get rid of the patchno's we want to exclude
+	# So now lets get rid of the patch numbers we want to exclude
 	UNIPATCH_DROP="${UNIPATCH_EXCLUDE} ${UNIPATCH_DROP}"
 	for i in ${UNIPATCH_DROP}; do
 		ebegin "Excluding Patch #${i}"
@@ -1225,7 +1234,7 @@ unipatch() {
 			# addition of a file with the same name as the symlink in the      #
 			# same location; this causes the dry-run to fail, see bug #507656. #
 			#                                                                  #
-			# https://bugs.gentoo.org/show_bug.cgi?id=507656                   #
+			# https://bugs.gentoo.org/507656                                   #
 			####################################################################
 			if [[ -n ${K_NODRYRUN} ]]; then
 				ebegin "Applying ${i/*\//} (-p1)"
@@ -1417,8 +1426,8 @@ kernel-2_src_unpack() {
 	[[ -z ${K_NOSETEXTRAVERSION} ]] && unpack_set_extraversion
 	unpack_fix_install_path
 
-	# Setup xmakeopts and cd into sourcetree.
-	env_setup_xmakeopts
+	# Setup KERNEL_MAKEOPTS and cd into sourcetree.
+	env_setup_kernel_makeopts
 	cd "${S}" || die
 
 	if [[ ${K_DEBLOB_AVAILABLE} == 1 ]] && use deblob; then

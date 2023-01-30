@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/openssh/openssh-portable.git"
 	inherit git-r3
 else
-	SNAPSHOT=5796bf8ca9535f9fa7d01829a540d2550e05c860
+	SNAPSHOT=c3ffb54b4fc5e608206037921db6ccbc2f5ab25f
 	SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-portable-${SNAPSHOT}
 fi

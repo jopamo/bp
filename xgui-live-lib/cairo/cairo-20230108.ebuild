@@ -11,7 +11,10 @@ if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/cairo/cairo.git"
 else
-	SRC_URI="https://download.gnome.org/sources/cairo/1.17/${P}.tar.xz"
+	SNAPSHOT="7471a323a70203e983b88e7561a4c95d653f875f"
+	SRC_URI="https://gitlab.freedesktop.org/${PN}/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
+	S="${WORKDIR}/${PN}-${SNAPSHOT}"
+	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="|| ( LGPL-2.1 MPL-1.1 )"
@@ -43,7 +46,6 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-1.12.18-disable-test-suite.patch
 	"${FILESDIR}"/${PN}-respect-fontconfig.patch
 )
 
@@ -57,12 +59,9 @@ src_prepare() {
 		sed -e '/^SUBDIRS/ s#boilerplate test perf# #' -i Makefile.am || die
 	fi
 
-	# Slightly messed build system YAY
-	if [[ ${PV} == *9999* ]]; then
-		touch boilerplate/Makefile.am.features
-		touch src/Makefile.am.features
-		touch ChangeLog
-	fi
+	touch boilerplate/Makefile.am.features
+	touch src/Makefile.am.features
+	touch ChangeLog
 
 	eautoreconf
 }

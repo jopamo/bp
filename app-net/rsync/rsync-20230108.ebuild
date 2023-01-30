@@ -11,7 +11,7 @@ if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/WayneD/rsync"
 	inherit git-r3
 else
-	SNAPSHOT=f1e3434b59dd3dfbf4b6faf8dbc81dd068adc305
+	SNAPSHOT=90df93e446f9ebbfd4ce97d6755c5fe1f45f9fd0
 	SRC_URI="https://github.com/WayneD/rsync/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

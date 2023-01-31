@@ -6,7 +6,7 @@ inherit flag-o-matic
 
 DESCRIPTION="Cups filters"
 HOMEPAGE="https://wiki.linuxfoundation.org/openprinting/cups-filters"
-SRC_URI="http://www.openprinting.org/download/${PN}/${P}.tar.xz"
+SRC_URI="https://github.com/OpenPrinting/cups-filters/releases/download/${PV}/${P}.tar.xz"
 
 LICENSE="MIT GPL-2"
 SLOT="0"
@@ -36,6 +36,8 @@ DEPEND="
 "
 
 src_configure() {
+	append-flags -std=c++17
+
 	local myconf=(
 		--localstatedir="${EPREFIX}"/var
 		--with-cups-rundir="${EPREFIX}"/run/cups

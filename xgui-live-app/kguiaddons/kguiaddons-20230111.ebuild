@@ -2,10 +2,18 @@
 
 EAPI=8
 
-inherit git-r3 cmake xdg
+inherit cmake xdg
 
 DESCRIPTION="Framework providing assorted high-level user interface components"
-EGIT_REPO_URI="https://github.com/KDE/kguiaddons.git"
+
+if [[ ${PV} = *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/KDE/${PN}"
+	inherit git-r3
+else
+	SNAPSHOT=c28c8b7442cc798d09239c0cf72b741d3e01fee6
+	SRC_URI="https://github.com/KDE/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="LGPL-2+"
 SLOT="0"

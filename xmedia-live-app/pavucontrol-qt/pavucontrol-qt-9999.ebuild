@@ -15,6 +15,5 @@ KEYWORDS="amd64 arm64"
 DEPEND="
 	app-dev/lxqt-build-tools
 	xgui-live-lib/qtbase
-	app-dev/pkgconf
 	xgui-misc/pulseaudio
 "

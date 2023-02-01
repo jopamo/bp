@@ -2,6 +2,8 @@
 
 EAPI=8
 
+DISTUTILS_USE_PEP517=flit
+
 inherit distutils-r1
 
 DESCRIPTION="Internationalized Domain Names in Applications (IDNA)"

@@ -15,7 +15,7 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs"
+IUSE="glibc_compat static-libs"
 
 src_prepare() {
 	default
@@ -25,8 +25,8 @@ src_prepare() {
 src_configure() {
 	local myconf=(
 		$(use_enable static-libs static)
+		$(usex glibc_compat "--enable-obsolete-api=glibc" --disable-obsolete-api)
 		--enable-hashes=strong,glibc
-    	--disable-obsolete-api
     	--disable-failure-tokens
     	--disable-werror
 	)

@@ -22,7 +22,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="+alsa +cli cuda drm +egl iconv jpeg lcms libmpv +lua
-	+opengl pulseaudio vaapi vapoursynth vdpau wayland +X
+	+opengl pipewire pulseaudio vaapi vapoursynth vdpau wayland +X
 	xv zlib"
 
 REQUIRED_USE="
@@ -49,6 +49,7 @@ DEPEND="
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )
 	lcms? ( xgui-misc/lcms )
 	lua? ( app-lang/luajit )
+	pipewire? ( xgui-misc/pipewire )
 	pulseaudio? ( xgui-misc/pulseaudio )
 	vaapi? ( xgui-live-lib/libva:=[drm?,X?,wayland?] )
 	vapoursynth? ( xmedia-live-lib/vapoursynth )
@@ -113,6 +114,7 @@ src_configure() {
 		# audio output features
 		$(meson_feature alsa)
 		$(meson_feature pulseaudio pulse)
+		$(meson_feature pipewire)
 
 		# video output features
 		$(meson_feature drm)

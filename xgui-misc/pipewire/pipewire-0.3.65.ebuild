@@ -29,7 +29,7 @@ IUSE="bluez dbus echo-cancel extra readline ssl systemd test udev"
 RESTRICT="!test? ( test )"
 
 BDEPEND="
-	virtual/pkgconfig
+	app-dev/pkgconf
 	${PYTHON_DEPS}
 	$(python_gen_any_dep 'dev-python/docutils[${PYTHON_USEDEP}]')
 "

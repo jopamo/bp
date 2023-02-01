@@ -22,6 +22,10 @@ KEYWORDS="arm64 amd64"
 
 IUSE="system-service systemd test"
 
+DEPEND="
+	xgui-misc/pipewire
+"
+
 src_configure() {
 	local emesonargs=(
 		-Ddaemon=true

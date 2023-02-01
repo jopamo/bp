@@ -2,11 +2,11 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic
+inherit autotools flag-o-matic xdg
 
 DESCRIPTION="Compatibility layer capable of running Windows applications."
 HOMEPAGE="https://www.winehq.org/"
-SRC_URI="https://dl.winehq.org/wine/source/$(ver_cut 1).x/${P}.tar.xz
+SRC_URI="https://dl.winehq.org/wine/source/$(ver_cut 1).0/${P}.tar.xz
 	https://github.com/wine-staging/wine-staging/archive/v${PV}.tar.gz -> wine-staging-patches-${PV}.tar.gz"
 
 LICENSE="LGPL-2.1"

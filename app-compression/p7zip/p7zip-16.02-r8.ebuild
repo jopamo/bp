@@ -2,30 +2,28 @@
 
 EAPI=8
 
-inherit toolchain-funcs flag-o-matic
+inherit toolchain-funcs xdg flag-o-matic
 
 DESCRIPTION="Port of 7-Zip archiver for Unix"
 HOMEPAGE="http://p7zip.sourceforge.net/"
+SRC_URI="mirror://sourceforge/${PN}/${PN}_${PV}_src_all.tar.bz2"
+S="${WORKDIR}/${PN}_${PV}"
 
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/jinfeihan57/p7zip.git"
-	inherit git-r3
-	KEYWORDS=""
-else
-	SNAPSHOT=aadc54316e85270c64f9ae18be5b032890781caa
-	SRC_URI="https://github.com/jinfeihan57/p7zip/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}/CPP/7zip/
-fi
-
-LICENSE="LGPL-2.1 unRAR"
+LICENSE="LGPL-2.1"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
-
+KEYWORDS="amd64 arm64"
 IUSE="static"
 
 DEPEND="app-lang/yasm"
 
-#PATCHES=( "${FILESDIR}"/01-makefile.patch )
+PATCHES=(
+	"${FILESDIR}"/${P}-darwin.patch
+	"${FILESDIR}"/CVE-2016-9296.patch
+	"${FILESDIR}"/CVE-2017-17969.patch
+	"${FILESDIR}"/CVE-2018-5996.patch
+	"${FILESDIR}"/CVE-2018-10115.patch
+	"${FILESDIR}"/WimHandler.cpp.patch
+)
 
 _makeargs=(
   prefix="${EPREFIX}"/usr

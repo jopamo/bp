@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson
+inherit meson flag-o-matic
 
 DESCRIPTION="The GLib library of C routines"
 HOMEPAGE="https://www.gtk.org/"
@@ -35,6 +35,7 @@ DEPEND="
 "
 
 src_configure() {
+	append-flags -Wno-error=format
 	local emesonargs=(
 		-Ddefault_library=$(usex static-libs static shared)
 		-Ddtrace=false

@@ -8,24 +8,22 @@ DESCRIPTION="Port of 7-Zip archiver for Unix"
 HOMEPAGE="http://p7zip.sourceforge.net/"
 
 if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/jinfeihan57/p7zip.git"
+	EGIT_REPO_URI="https://github.com/p7zip-project/p7zip.git"
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=aadc54316e85270c64f9ae18be5b032890781caa
-	SRC_URI="https://github.com/jinfeihan57/p7zip/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}/CPP/7zip/
+	SNAPSHOT=db92c90de71fc4c649d170c673a05f3c274155c6
+	SRC_URI="https://github.com/p7zip-project/p7zip/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}/
 fi
 
 LICENSE="LGPL-2.1 unRAR"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="static"
 
 DEPEND="app-lang/yasm"
-
-#PATCHES=( "${FILESDIR}"/01-makefile.patch )
 
 _makeargs=(
   prefix="${EPREFIX}"/usr
@@ -39,6 +37,8 @@ _makeargs=(
 )
 
 src_prepare() {
+	sed -i '/gzip/d' install.sh
+
 	filter-flags -Wl,-z,defs
 	append-flags -Wno-narrowing
 

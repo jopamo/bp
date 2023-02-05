@@ -27,11 +27,6 @@ src_unpack() {
 	unpack ${A}
 }
 
-src_prepare() {
-	use musl && eapply "${FILESDIR}"/swab-musl.patch
-	default
-}
-
 src_test() {
 	emake headers_check ${xmakeopts}
 }

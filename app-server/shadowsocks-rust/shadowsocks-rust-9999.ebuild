@@ -14,6 +14,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug static-libs systemd"
 
+DEPEND="virtual/rust"
+
 src_prepare() {
 	default
 	filter-flags -flto*

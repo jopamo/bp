@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools python-single-r1 git-r3 flag-o-matic
+inherit autotools git-r3 flag-o-matic
 
 DESCRIPTION="VapourSynth is an library for video manipulation."
 HOMEPAGE="http://www.vapoursynth.com/"
@@ -14,12 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+vspipe -debug -guard +shared -static-libs"
 
-REQUIRED_USE="${PYTHON_REQUIRED_USE}"
-
-DEPEND="
-	xmedia-live-lib/zimg
-	dev-python/cython
-"
+DEPEND="xgui-misc/zimg"
 
 src_prepare() {
 	default

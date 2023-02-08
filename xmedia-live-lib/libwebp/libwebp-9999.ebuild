@@ -12,9 +12,9 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="gif +jpeg neon opengl +png static-libs swap-16bit-csp tiff"
+IUSE="+jpeg neon opengl +png static-libs swap-16bit-csp tiff"
 
-DEPEND="gif? ( xmedia-live-lib/giflib:= )
+DEPEND="
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )
 	opengl? (
 		xgui-misc/freeglut
@@ -30,23 +30,17 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-		--enable-libwebpmux
-		--enable-libwebpdemux
-		--enable-libwebpdecoder
+		$(use_enable jpeg)
+		$(use_enable neon)
+		$(use_enable opengl gl)
+		$(use_enable png)
 		$(use_enable static-libs static)
 		$(use_enable swap-16bit-csp)
-		$(use_enable jpeg)
-		$(use_enable png)
-		$(use_enable opengl gl)
 		$(use_enable tiff)
-		$(use_enable neon)
-		$(use_enable gif)
+		--disable-gif
+		--enable-libwebpdecoder
+		--enable-libwebpdemux
+		--enable-libwebpmux
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

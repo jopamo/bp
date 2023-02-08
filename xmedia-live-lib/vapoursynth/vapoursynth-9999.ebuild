@@ -21,8 +21,6 @@ DEPEND="
 	dev-python/cython
 "
 
-filter-flags -Wl,-z,defs
-
 src_prepare() {
 	default
 	eautoreconf
@@ -31,7 +29,7 @@ src_prepare() {
 src_configure() {
 	local myconf=(
 		--enable-core
-		--enable-python-module
+		--disable-python-module
 		--enable-vsscript
 		$( use_enable shared )
 		$( use_enable static-libs static )

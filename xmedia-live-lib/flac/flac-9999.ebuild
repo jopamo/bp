@@ -28,7 +28,6 @@ src_configure() {
 		$(use_enable debug)
 		$(use_enable ogg)
 		$(use_enable static-libs static)
-		--disable-altivec
 		--disable-doxygen-docs
 		--disable-examples
 		--disable-programs

@@ -15,8 +15,6 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug static-libs"
 
-PATCHES=("${FILESDIR}"/${PN}-2.9.2-gcc-10.patch)
-
 src_prepare() {
 	default
 	eautoreconf

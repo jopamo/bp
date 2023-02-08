@@ -12,7 +12,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="aac alsa aosd cdda cue +ffmpeg +flac fluidsynth hotkeys
+IUSE="aac alsa aosd cdda cue +flac fluidsynth hotkeys
 http gme jack libsamplerate lirc mms modplug opus pulseaudio scrobbler
 sdl sid sndfile soxr speedpitch vorbis wavpack"
 
@@ -33,7 +33,6 @@ DEPEND="
 		lib-dev/libcdio-paranoia
 	)
 	cue? ( xmedia-live-lib/libcue )
-	ffmpeg? ( xmedia-live-app/ffmpeg )
 	flac? (
 		xmedia-live-lib/libvorbis
 		xmedia-live-lib/flac
@@ -99,7 +98,6 @@ src_configure() {
 		$(use_enable speedpitch)
 		$(use_enable vorbis)
 		$(use_enable wavpack)
-		$(use_with ffmpeg)
 		--disable-ampache
 		--disable-bs2b
 		--disable-coreaudio
@@ -107,12 +105,12 @@ src_configure() {
 		--disable-gtk
 		--disable-nls
 		--disable-oss4
+		--disable-qt
 		--disable-qtaudio
 		--disable-qtglspectrum
 		--disable-sndio
 		--enable-mpg123
 		--enable-mpris2
-		--enable-qt
 		--enable-songchange
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

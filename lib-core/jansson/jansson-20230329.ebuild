@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="C library for encoding, decoding and manipulating JSON data"
 HOMEPAGE="https://github.com/akheron/jansson"
 
-SNAPSHOT=a22dc95311a79f07b68fdfeefe3b06eb793d3bc9
+SNAPSHOT=bde28463f843ab5c2bc67a45b85856f646f78a36
 SRC_URI="${HOMEPAGE}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/jansson-${SNAPSHOT}
 

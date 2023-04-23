@@ -2,4 +2,3 @@
 >lib-core/npth-1.6
 >app-fs/lvm2-2.03.0
 >=app-build/binutils-2.39.0
->=app-core/systemd-252.0

@@ -5,15 +5,18 @@ EAPI=8
 inherit git-r3 autotools
 
 DESCRIPTION="X.Org font encodings"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/font/encodings.git"
 
+LICENSE="XORG"
+SLOT="0"
 KEYWORDS="amd64 arm64"
-EGIT_REPO_URI="https://github.com/freedesktop/xorg-encodings.git"
-SLOT=0
 
-DEPEND="xgui-live-app/mkfontscale
-	>=fonts/font-util-1.1.1-r1"
+DEPEND="
+	fonts/font-util
+	xgui-live-app/mkfontscale
+"
 
 src_prepare() {
-	eautoreconf
 	default
+	eautoreconf
 }

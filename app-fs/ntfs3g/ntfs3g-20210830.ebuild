@@ -24,7 +24,7 @@ IUSE="acl debug ntfsdecrypt +ntfsprogs static-libs suid xattr"
 
 DEPEND="
 	app-core/attr
-	app-fs/fuse:2
+	app-fs/fuse
 	ntfsdecrypt? (
 		lib-core/libgcrypt
 		lib-net/gnutls
@@ -53,16 +53,15 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		$(use_enable debug)
-		--disable-ldconfig
 		$(use_enable acl posix-acls)
-		$(use_enable xattr xattr-mappings)
+		$(use_enable debug)
 		$(use_enable ntfsdecrypt crypto)
-		$(use_enable ntfsprogs)
 		$(use_enable ntfsprogs quarantined)
-		--enable-extras
-		--with-fuse=external
+		$(use_enable ntfsprogs)
 		$(use_enable static-libs static)
+		$(use_enable xattr xattr-mappings)
+		--disable-ldconfig
+		--enable-extras
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

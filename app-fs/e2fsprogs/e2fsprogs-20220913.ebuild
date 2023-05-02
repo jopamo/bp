@@ -25,7 +25,7 @@ IUSE="fuse static-libs"
 
 DEPEND="
 	app-core/util-linux
-	fuse? ( app-fs/fuse:2 )
+	fuse? ( app-fs/fuse )
 "
 
 BDEPEND="

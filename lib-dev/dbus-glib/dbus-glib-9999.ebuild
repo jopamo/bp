@@ -6,7 +6,7 @@ inherit git-r3 autotools
 
 DESCRIPTION="D-Bus bindings for glib"
 HOMEPAGE="https://dbus.freedesktop.org/"
-EGIT_REPO_URI="https://github.com/freedesktop/dbus-glib.git"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/dbus/dbus-glib.git"
 
 LICENSE="|| ( GPL-2 AFL-2.1 )"
 SLOT="0"
@@ -26,8 +26,8 @@ BDEPEND="
 "
 
 src_prepare() {
-	eautoreconf
 	default
+	eautoreconf
 }
 
 src_configure() {

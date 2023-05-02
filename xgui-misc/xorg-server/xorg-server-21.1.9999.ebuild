@@ -13,8 +13,8 @@ if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
 else
 	SNAPSHOT=
-	SRC_URI="https://github.com/freedesktop/xorg-xserver/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/xorg-xserver-${SNAPSHOT}
+	SRC_URI="https://gitlab.freedesktop.org/xorg/xserver/-/archive/${SNAPSHOT}/xserver-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
+	S="${WORKDIR}/xorg-xserver-${SNAPSHOT}"
 fi
 
 LICENSE="MIT"

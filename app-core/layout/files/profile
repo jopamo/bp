@@ -9,11 +9,6 @@ export PAGER=${PAGER:-/usr/bin/less}
 
 umask 022
 
-if [ "${EUID-}" = "0" ] || [ "${USER-}" = "root" ] ; then
-	PATH="/usr/local/sbin:/usr/sbin:${PATH}"
-fi
-export PATH
-
 source /etc/bash/bashrc
 
 # Load profiles from /etc/profile.d

@@ -3,5 +3,5 @@
 MANPATH="/usr/local/share/man:/usr/share/man"
 INFOPATH="/usr/share/info"
 LDPATH="/usr/lib"
-PATH="/usr/local/bin:/usr/bin:/opt/bin"
+PATH="/usr/local/bin:/usr/bin:/opt/bin:/usr/local/sbin:/usr/sbin"
 

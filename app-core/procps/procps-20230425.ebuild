@@ -9,7 +9,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://gitlab.com/procps-ng/procps.git"
 	inherit git-r3 autotools
 elif [[ ${PV} == 20* ]]; then
-	SNAPSHOT="5ee3dc2626fead68ef9946ae0d24a341ad13a457"
+	SNAPSHOT="29f06ff8e713754636c5163b46c04fba22ce8737"
 	SRC_URI="https://gitlab.com/procps-ng/procps/-/archive/${SNAPSHOT}/procps-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 	S="${WORKDIR}/procps-${SNAPSHOT}"
 	inherit autotools

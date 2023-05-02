@@ -6,8 +6,10 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Wrapper to coreutil's install to preserve Filesystem Extended Attributes"
 HOMEPAGE="https://dev.gentoo.org/~blueness/install-xattr/"
-SRC_URI="https://dev.gentoo.org/~blueness/install-xattr/${P}.tar.bz2"
-S=${WORKDIR}/${PN}
+
+SNAPSHOT=5dd019205cba747802b98c5283b8accf0ff47eda
+SRC_URI="https://github.com/gentoo/elfix/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/elfix-${SNAPSHOT}/misc/install-xattr
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -17,23 +19,4 @@ src_prepare() {
 	default
 	tc-export CC
 	append-cppflags "-D_FILE_OFFSET_BITS=64"
-}
-
-src_compile() {
-	if [[ ${PV} == "9999" ]] ; then
-		cd "${WORKDIR}/${P}/misc/${PN}" || die
-	fi
-	default
-}
-
-src_install() {
-	if [[ ${PV} == "9999" ]] ; then
-		cd "${WORKDIR}/${P}/misc/${PN}" || die
-	fi
-	DESTDIR=${ED} emake install
-}
-
-# We need to fix how tests are done
-src_test() {
-	true
 }

@@ -15,7 +15,7 @@ for i in gnulib coreutils ; do
 	[ -d "${WORKHOME}/$i" ] && ( cd "${WORKHOME}/$i" && git remote update && git reset --hard && git clean -f )
 done
 
-for i in acl attr coreutils cpio diffutils findutils gperf grep libtool patch sed tar ; do
+for i in acl attr coreutils cpio diffutils findutils gperf grep grub libtool patch sed tar ; do
 	#prepare sources
 	[ ! -d ${WORKHOME}/$i ] && git clone https://git.savannah.gnu.org/git/$i.git ${WORKHOME}/$i --depth 1
 	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git pull && git reset --hard && git clean -f )

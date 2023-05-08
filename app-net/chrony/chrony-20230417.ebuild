@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://git.tuxfamily.org/chrony/chrony.git"
 	inherit git-r3
 else
-	SNAPSHOT=8247b8525fe81779f15e7b4b6c8ed5d245903bff
+	SNAPSHOT=47a13ae88cec7a03ab2ba5511549ce877cef4516
 	SRC_URI="https://git.tuxfamily.org/chrony/chrony.git/snapshot/chrony-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -75,7 +75,7 @@ src_install() {
 	insinto /etc/${PN}
 	doins "${FILESDIR}/chrony.conf"
 
-	keepdir /var/{lib,log}/chrony
+	keepdir /var/log/chrony
 
 	if use logrotate; then
 		insinto /etc/logrotate.d
@@ -99,7 +99,7 @@ pkg_preinst() {
 	if use sysusersd; then
 		insopts -m 0644
 		insinto /usr/lib/sysusers.d
-		doins "${FILESDIR}/${PN}.sysusers.conf"
+		newins "${FILESDIR}/${PN}.sysusers.conf" ${PN}.conf
 	else
 		enewgroup ${PN} 123
 		enewuser ${PN} 123 -1 -1 ${PN}

@@ -6,7 +6,7 @@ inherit flag-o-matic
 
 DESCRIPTION="The GNU info program and utilities"
 HOMEPAGE="https://www.gnu.org/software/texinfo/"
-SRC_URI="https://1g4.org/files/${P}.tar.xz"
+SRC_URI="mirror://gnu//${PN}/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"

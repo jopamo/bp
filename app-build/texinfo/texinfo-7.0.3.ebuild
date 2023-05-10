@@ -16,8 +16,6 @@ IUSE="static"
 
 DEPEND="app-compression/xz-utils"
 
-PATCHES=( "${FILESDIR}/${P}-undo-gnulib-nonnul.patch" )
-
 src_configure() {
 	use static && append-ldflags -static
 

@@ -101,7 +101,7 @@ lockPref("intl.accept_languages", "en-US, en");
 lockPref("intl.locale.requested", "");
 lockPref("javascript.use_us_english_locale", true);
 lockPref("media.autoplay.blocking_policy", 2);
-lockPref("media.eme.enabled", false);
+lockPref("media.eme.enabled", true);
 lockPref("media.memory_cache_max_size", 65536);
 lockPref("media.peerconnection.ice.default_address_only", true);
 lockPref("media.peerconnection.ice.proxy_only_if_behind_proxy", true);

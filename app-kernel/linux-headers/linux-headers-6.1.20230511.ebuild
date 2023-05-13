@@ -27,6 +27,12 @@ src_unpack() {
 	unpack ${A}
 }
 
+src_prepare() {
+	default
+	eapply "${FILESDIR}"/0003-remove-inclusion-of-sysinfo.h-in-kernel.h.patch
+	eapply "${FILESDIR}"/revert-broken-uapi.patch
+}
+
 src_test() {
 	emake headers_check ${xmakeopts}
 }

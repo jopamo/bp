@@ -8,6 +8,8 @@
  * Mostly rewritten to be used in Alpine Linux (with musl c-library)
  * by Timo Teräs.
  *
+ * Maintained for use in Termux (and more) by Fredrik Fornwall.
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -30,9 +32,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#define _GNU_SOURCE
+
 #include <err.h>
 #include <errno.h>
-#include <values.h>
 #include <limits.h>
 #include <locale.h>
 #include <stdio.h>
@@ -47,29 +50,55 @@ struct conf_variable {
 };
 
 static const struct conf_variable conf_table[] = {
+#ifdef _CS_PATH
 { "PATH",			CONFSTR,	_CS_PATH		},
+#endif
 
 /* Utility Limit Minimum Values */
+#ifdef _POSIX2_BC_BASE_MAX
 { "POSIX2_BC_BASE_MAX",		CONSTANT,	_POSIX2_BC_BASE_MAX	},
+#endif
+#ifdef _POSIX2_BC_DIM_MAX
 { "POSIX2_BC_DIM_MAX",		CONSTANT,	_POSIX2_BC_DIM_MAX	},
+#endif
+#ifdef _POSIX2_BC_SCALE_MAX
 { "POSIX2_BC_SCALE_MAX",	CONSTANT,	_POSIX2_BC_SCALE_MAX	},
+#endif
+#ifdef _POSIX2_BC_STRING_MAX
 { "POSIX2_BC_STRING_MAX",	CONSTANT,	_POSIX2_BC_STRING_MAX	},
+#endif
+#ifdef _POSIX2_COLL_WEIGHTS_MAX
 { "POSIX2_COLL_WEIGHTS_MAX",	CONSTANT,	_POSIX2_COLL_WEIGHTS_MAX },
+#endif
+#ifdef _POSIX2_EXPR_NEST_MAX
 { "POSIX2_EXPR_NEST_MAX",	CONSTANT,	_POSIX2_EXPR_NEST_MAX	},
+#endif
 { "POSIX2_LINE_MAX",		CONSTANT,	_POSIX2_LINE_MAX	},
+#ifdef _POSIX2_RE_DUP_MAX
 { "POSIX2_RE_DUP_MAX",		CONSTANT,	_POSIX2_RE_DUP_MAX	},
+#endif
+#ifdef _POSIX2_VERSION
 { "POSIX2_VERSION",		CONSTANT,	_POSIX2_VERSION		},
+#endif
 
 /* POSIX.1 Minimum Values */
+#ifdef _POSIX_AIO_LISTIO_MAX
 { "_POSIX_AIO_LISTIO_MAX",	CONSTANT,	_POSIX_AIO_LISTIO_MAX	},
+#endif
+#ifdef _POSIX_AIO_MAX
 { "_POSIX_AIO_MAX",		CONSTANT,       _POSIX_AIO_MAX		},
+#endif
 { "_POSIX_ARG_MAX",		CONSTANT,	_POSIX_ARG_MAX		},
 { "_POSIX_CHILD_MAX",		CONSTANT,	_POSIX_CHILD_MAX	},
 { "_POSIX_LINK_MAX",		CONSTANT,	_POSIX_LINK_MAX		},
 { "_POSIX_MAX_CANON",		CONSTANT,	_POSIX_MAX_CANON	},
 { "_POSIX_MAX_INPUT",		CONSTANT,	_POSIX_MAX_INPUT	},
+#ifdef _POSIX_MQ_OPEN_MAX
 { "_POSIX_MQ_OPEN_MAX",		CONSTANT,	_POSIX_MQ_OPEN_MAX	},
+#endif
+#ifdef _POSIX_MQ_PRIO_MAX
 { "_POSIX_MQ_PRIO_MAX",		CONSTANT,	_POSIX_MQ_PRIO_MAX	},
+#endif
 { "_POSIX_NAME_MAX",		CONSTANT,	_POSIX_NAME_MAX		},
 { "_POSIX_NGROUPS_MAX",		CONSTANT,	_POSIX_NGROUPS_MAX	},
 { "_POSIX_OPEN_MAX",		CONSTANT,	_POSIX_OPEN_MAX		},
@@ -80,33 +109,73 @@ static const struct conf_variable conf_table[] = {
 { "_POSIX_TZNAME_MAX",		CONSTANT,	_POSIX_TZNAME_MAX	},
 
 /* Symbolic Utility Limits */
+#ifdef _SC_BC_BASE_MAX
 { "BC_BASE_MAX",		SYSCONF,	_SC_BC_BASE_MAX		},
+#endif
+#ifdef _SC_BC_DIM_MAX
 { "BC_DIM_MAX",			SYSCONF,	_SC_BC_DIM_MAX		},
+#endif
+#ifdef _SC_BC_SCALE_MAX
 { "BC_SCALE_MAX",		SYSCONF,	_SC_BC_SCALE_MAX	},
+#endif
+#ifdef _SC_BC_STRING_MAX
 { "BC_STRING_MAX",		SYSCONF,	_SC_BC_STRING_MAX	},
+#endif
+#ifdef _SC_COLL_WEIGHTS_MAX
 { "COLL_WEIGHTS_MAX",		SYSCONF,	_SC_COLL_WEIGHTS_MAX	},
+#endif
+#ifdef _SC_EXPR_NEST_MAX
 { "EXPR_NEST_MAX",		SYSCONF,	_SC_EXPR_NEST_MAX	},
+#endif
+#ifdef _SC_LINE_MAX
 { "LINE_MAX",			SYSCONF,	_SC_LINE_MAX		},
+#endif
+#ifdef _SC_RE_DUP_MAX
 { "RE_DUP_MAX",			SYSCONF,	_SC_RE_DUP_MAX		},
+#endif
 
 /* Optional Facility Configuration Values */
+#ifdef _SC_2_C_BIND
 { "_POSIX2_C_BIND",		SYSCONF,	_SC_2_C_BIND		},
+#endif
+#ifdef _SC_2_C_DEV
 { "POSIX2_C_DEV",		SYSCONF,	_SC_2_C_DEV		},
+#endif
+#ifdef _SC_2_C_CHAR_TERM
 { "POSIX2_CHAR_TERM",		SYSCONF,	_SC_2_CHAR_TERM		},
+#endif
+#ifdef _SC_2_C_FORT_DEV
 { "POSIX2_FORT_DEV",		SYSCONF,	_SC_2_FORT_DEV		},
+#endif
+#ifdef _SC_2_C_FORT_RUN
 { "POSIX2_FORT_RUN",		SYSCONF,	_SC_2_FORT_RUN		},
+#endif
+#ifdef _SC_2_C_LOCALEDEF
 { "POSIX2_LOCALEDEF",		SYSCONF,	_SC_2_LOCALEDEF		},
+#endif
+#ifdef _SC_2_SW_DEV
 { "POSIX2_SW_DEV",		SYSCONF,	_SC_2_SW_DEV		},
+#endif
+#ifdef _SC_2_UPE
 { "POSIX2_UPE",			SYSCONF,	_SC_2_UPE		},
+#endif
 
 /* POSIX.1 Configurable System Variables */
+#ifdef _SC_AIO_LISTIO_MAX
 { "AIO_LISTIO_MAX",		SYSCONF,	_SC_AIO_LISTIO_MAX	},
+#endif
+#ifdef _SC_AIO_MAX
 { "AIO_MAX",			SYSCONF,	_SC_AIO_MAX		},
+#endif
 { "ARG_MAX",			SYSCONF,	_SC_ARG_MAX 		},
 { "CHILD_MAX",			SYSCONF,	_SC_CHILD_MAX		},
 { "CLK_TCK",			SYSCONF,	_SC_CLK_TCK		},
+#ifdef _SC_MQ_OPEN_MAX
 { "MQ_OPEN_MAX",		SYSCONF,	_SC_MQ_OPEN_MAX		},
+#endif
+#ifdef _SC_MQ_PRIO_MAX
 { "MQ_PRIO_MAX",		SYSCONF,	_SC_MQ_PRIO_MAX		},
+#endif
 { "NGROUPS_MAX",		SYSCONF,	_SC_NGROUPS_MAX		},
 { "OPEN_MAX",			SYSCONF,	_SC_OPEN_MAX		},
 { "STREAM_MAX",			SYSCONF,	_SC_STREAM_MAX		},
@@ -127,35 +196,61 @@ static const struct conf_variable conf_table[] = {
 
 /* POSIX.1b Configurable System Variables */
 { "PAGESIZE",			SYSCONF,	_SC_PAGESIZE		},
+#ifdef _SC_ASYNCHRONOUS_IO
 { "_POSIX_ASYNCHRONOUS_IO",	SYSCONF,	_SC_ASYNCHRONOUS_IO	},
+#endif
+#ifdef _SC_FSYNC
 { "_POSIX_FSYNC",		SYSCONF,	_SC_FSYNC		},
+#endif
 { "_POSIX_MAPPED_FILES",	SYSCONF,	_SC_MAPPED_FILES	},
+#ifdef _SC_MEMLOCK
 { "_POSIX_MEMLOCK",		SYSCONF,	_SC_MEMLOCK		},
+#endif
+#ifdef _SC_MEMLOCK_RANGE
 { "_POSIX_MEMLOCK_RANGE",	SYSCONF,	_SC_MEMLOCK_RANGE	},
+#endif
 { "_POSIX_MEMORY_PROTECTION",	SYSCONF,	_SC_MEMORY_PROTECTION	},
+#ifdef _SC_MESSAGE_PASSING
 { "_POSIX_MESSAGE_PASSING",	SYSCONF,	_SC_MESSAGE_PASSING	},
+#endif
 { "_POSIX_MONOTONIC_CLOCK",	SYSCONF,	_SC_MONOTONIC_CLOCK	},
+#ifdef _SC_PRIORITY_SCHEDULING
 { "_POSIX_PRIORITY_SCHEDULING", SYSCONF,	_SC_PRIORITY_SCHEDULING },
+#endif
 { "_POSIX_SEMAPHORES",		SYSCONF,	_SC_SEMAPHORES		},
+#ifdef _SC_SHARED_MEMORY_OBJECTS
 { "_POSIX_SHARED_MEMORY_OBJECTS", SYSCONF,	_SC_SHARED_MEMORY_OBJECTS },
+#endif
+#ifdef _SC_SYNCHRONIZED_IO
 { "_POSIX_SYNCHRONIZED_IO",	SYSCONF,	_SC_SYNCHRONIZED_IO	},
+#endif
 { "_POSIX_TIMERS",		SYSCONF,	_SC_TIMERS		},
 
 { "_POSIX_SYNC_IO",		PATHCONF,	_PC_SYNC_IO		},
 
 /* POSIX.1c Configurable System Variables */
+#ifdef _SC_LOGIN_NAME_MAX
 { "LOGIN_NAME_MAX",		SYSCONF,	_SC_LOGIN_NAME_MAX	},
+#endif
 { "_POSIX_THREADS",		SYSCONF,	_SC_THREADS		},
 
 /* POSIX.1j Configurable System Variables */
+#ifdef _SC_BARRIERS
 { "_POSIX_BARRIERS",		SYSCONF,	_SC_BARRIERS		},
+#endif
+#ifdef _SC_READER_WRITER_LOCKS
 { "_POSIX_READER_WRITER_LOCKS", SYSCONF,	_SC_READER_WRITER_LOCKS	},
+#endif
+#ifdef _SC_SPIN_LOCKS
 { "_POSIX_SPIN_LOCKS",		SYSCONF,	_SC_SPIN_LOCKS		},
+#endif
 
 /* XPG4.2 Configurable System Variables */
 { "IOV_MAX",			SYSCONF,	_SC_IOV_MAX		},
 { "PAGE_SIZE",			SYSCONF,	_SC_PAGE_SIZE		},
+#ifdef _SC_XOPEN_SHM
 { "_XOPEN_SHM",			SYSCONF,	_SC_XOPEN_SHM		},
+#endif
 
 /* X/Open CAE Spec. Issue 5 Version 2 Configurable System Variables */
 { "FILESIZEBITS",		PATHCONF,	_PC_FILESIZEBITS	},
@@ -169,7 +264,9 @@ static const struct conf_variable conf_table[] = {
 
 /* Commonly provided extensions */
 { "_PHYS_PAGES",		SYSCONF,	_SC_PHYS_PAGES		},
+#ifdef _SC_AVPHYS_PAGES
 { "_AVPHYS_PAGES",		SYSCONF,	_SC_AVPHYS_PAGES	},
+#endif
 { "_NPROCESSORS_CONF",		SYSCONF,	_SC_NPROCESSORS_CONF	},
 { "_NPROCESSORS_ONLN",		SYSCONF,	_SC_NPROCESSORS_ONLN	},
 
@@ -179,7 +276,9 @@ static const struct conf_variable conf_table[] = {
 { "CHAR_MIN",			CONSTANT,	CHAR_MIN		},
 { "INT_MAX",			CONSTANT,	INT_MAX			},
 { "INT_MIN",			CONSTANT,	INT_MIN			},
+#ifdef LONG_BIT
 { "LONG_BIT",			CONSTANT,	LONG_BIT		},
+#endif
 { "LONG_MAX",			CONSTANT,	LONG_MAX		},
 { "LONG_MIN",			CONSTANT,	LONG_MIN		},
 { "SCHAR_MAX",			CONSTANT,	SCHAR_MAX		},
@@ -191,7 +290,7 @@ static const struct conf_variable conf_table[] = {
 { "UINT_MAX",			UCONSTANT,	(long) UINT_MAX		},
 { "ULONG_MAX",			UCONSTANT,	(long) ULONG_MAX	},
 { "USHRT_MAX",			UCONSTANT,	(long) USHRT_MAX	},
-{ "WORD_BIT",			CONSTANT,	WORD_BIT		},
+{ "WORD_BIT",			CONSTANT,	sizeof(int)*8		},
 
 { NULL, CONSTANT, 0L }
 };
@@ -200,8 +299,10 @@ static int all = 0;
 
 static void usage(const char *p)
 {
-	(void)fprintf(stderr, "Usage: %s system_var\n\t%s -a\n"
-	    "\t%s path_var pathname\n\t%s -a pathname\n", p, p, p, p);
+	(void)fprintf(stderr, "Usage: %s system_var\n"
+	                      "       %s -a\n"
+	                      "       %s path_var pathname\n"
+	                      "       %s -a pathname\n", p, p, p, p);
 	exit(EXIT_FAILURE);
 }
 
@@ -223,19 +324,19 @@ static void print_string(const char *name, const char *val)
 	else printf("%s\n", val);
 }
 
-static int print_constant(const struct conf_variable *cp, const char *pathname)
+static int print_constant(const struct conf_variable *cp, const char *pathname __attribute__ ((unused)))
 {
 	print_long(cp->name, cp->value);
 	return 0;
 }
 
-static int print_uconstant(const struct conf_variable *cp, const char *pathname)
+static int print_uconstant(const struct conf_variable *cp, const char *pathname __attribute__ ((unused)))
 {
 	print_ulong(cp->name, (unsigned long) cp->value);
 	return 0;
 }
 
-static int print_sysconf(const struct conf_variable *cp, const char *pathname)
+static int print_sysconf(const struct conf_variable *cp, const char *pathname __attribute__ ((unused)))
 {
 	long val;
 
@@ -248,7 +349,8 @@ static int print_sysconf(const struct conf_variable *cp, const char *pathname)
 	return 0;
 }
 
-static int print_confstr(const struct conf_variable *cp, const char *pathname)
+#ifndef __ANDROID__
+static int print_confstr(struct conf_variable const* cp, char const* pathname __attribute__ ((unused)))
 {
 	size_t len;
 	char *val;
@@ -265,6 +367,7 @@ error:
 	if (errno != EINVAL) err(EXIT_FAILURE, "confstr(%ld)", cp->value);
 	return -1;
 }
+#endif
 
 static int print_pathconf(const struct conf_variable *cp, const char *pathname)
 {
@@ -283,7 +386,9 @@ static int print_pathconf(const struct conf_variable *cp, const char *pathname)
 typedef int (*handler_t)(const struct conf_variable *cp, const char *pathname);
 static const handler_t type_handlers[NUM_TYPES] = {
 	[SYSCONF]	= print_sysconf,
+#ifndef __ANDROID__
 	[CONFSTR]	= print_confstr,
+#endif
 	[PATHCONF]	= print_pathconf,
 	[CONSTANT]	= print_constant,
 	[UCONSTANT]	= print_uconstant,

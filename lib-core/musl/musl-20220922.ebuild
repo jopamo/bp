@@ -86,7 +86,7 @@ src_install() {
 
 		insopts -m 0644
 		insinto /etc/env.d
-		doins "${FILESDIR}"/02locale
+		doins 02locale
 
 		if use libxcrypt ; then
 			rm "${ED}"/usr/include/crypt.h || die

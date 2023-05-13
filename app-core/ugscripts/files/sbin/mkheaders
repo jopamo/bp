@@ -56,23 +56,13 @@ for a in ${arches} ; do
 		done
 	fi
 done
+
 # handle x86 unique headers
 if [[ -e ${src}/arch/x86/entry/syscalls ]] ; then
 	mkdir -p ${dst}/arch/x86/entry
 	cp -r ${src}/arch/x86/entry/syscalls ${dst}/arch/x86/entry/
 fi
-# mips has some unique headers as well
-if [[ -e ${src}/arch/mips/Kbuild.platforms ]] ; then
-	for f in "${src}"/arch/mips/*/Platform ; do
-		f=${f#${src}}
-		mkdir ${dst}/${f%/*}
-		cp ${src}/${f} ${dst}/${f}
-	done
-fi
-if [[ -d ${src}/arch/mips/boot/tools ]] ; then
-	mkdir -p ${dst}/arch/mips/boot
-	cp -r ${src}/arch/mips/boot/tools ${dst}/arch/mips/boot/
-fi
+
 # linux-5.0 started generating syscall tables
 for tblgen in ${src}/arch/*/kernel/syscalls; do
 	tblgen_parent=${tblgen#${src}/}
@@ -83,6 +73,7 @@ for tblgen in ${src}/arch/*/kernel/syscalls; do
 		cp -r ${tblgen} ${dst}/${tblgen_parent}
 	fi
 done
+
 find ${dst}/ -name .gitignore -delete
 rm -rf ${dst}/arch/{alpha,arc,arm,c6x,h8300,hexagon,ia64,m68k,microblaze,mips,nds32,nios2,openrisc,parisc,powerpc,riscv,s390,sh,sparc,um,unicore32,xtensa}
 

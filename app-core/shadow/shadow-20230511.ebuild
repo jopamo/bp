@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=c0fc4d2122057530b11567503839116dca5998ce
+SNAPSHOT=a022d39d2abbee48d3223689bea5c31592420ca6
 
 inherit autotools flag-o-matic
 
@@ -26,8 +26,6 @@ DEPEND="
 	xattr? ( app-core/attr )
 "
 
-filter-flags -Wl,-z,defs
-
 src_prepare() {
 	cp -rp "${FILESDIR}"/* "${S}"/
 	default
@@ -35,6 +33,8 @@ src_prepare() {
 }
 
 src_configure() {
+	filter-flags -Wl,-z,defs
+
 	local myconf=(
 		--with-group-name-max-length=32
 		--without-tcb

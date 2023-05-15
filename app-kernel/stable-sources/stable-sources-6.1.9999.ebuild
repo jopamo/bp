@@ -11,7 +11,7 @@ inherit kernel-2 git-r3
 DESCRIPTION="Linux kernel source code tree"
 HOMEPAGE="https://kernel.org/"
 
-EGIT_REPO_URI="https://gitlab.com/linux-kernel/stable.git"
+EGIT_REPO_URI="https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git"
 EGIT_BRANCH="linux-$(ver_cut 1-2).y"
 
 S="${WORKDIR}/linux-${PV}"

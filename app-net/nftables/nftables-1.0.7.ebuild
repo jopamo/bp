@@ -6,7 +6,7 @@ inherit linux-info
 
 DESCRIPTION="Linux kernel firewall, NAT and packet mangling tools"
 HOMEPAGE="https://netfilter.org/projects/nftables/"
-SRC_URI="http://www.netfilter.org/projects/${PN}/files/${P}.tar.bz2"
+SRC_URI="http://www.netfilter.org/projects/${PN}/files/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -15,11 +15,11 @@ KEYWORDS="amd64 arm64"
 IUSE="debug +gmp readline static-libs systemd"
 
 DEPEND="
-	virtual/curses
 	lib-net/libmnl
+	lib-net/libnftnl
+	virtual/curses
 	gmp? ( lib-core/gmp )
 	readline? ( lib-core/readline )
-	lib-net/libnftnl
 "
 
 pkg_setup() {

@@ -5,4 +5,4 @@
 >app-core/shadow-20230128
 
 #this builds but breakage down the line remains
->-lib-core/musl-20220922
+>lib-core/musl-20220922

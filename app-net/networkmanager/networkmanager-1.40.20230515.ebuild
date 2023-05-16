@@ -53,4 +53,7 @@ src_configure() {
 src_install() {
 	meson_src_install
 	keepdir /var/lib/NetworkManager
+
+	insinto /etc/NetworkManager
+	doins "${FILESDIR}"/NetworkManager.conf
 }

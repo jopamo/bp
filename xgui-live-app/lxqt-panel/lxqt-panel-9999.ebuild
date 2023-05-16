@@ -46,7 +46,7 @@ BDEPEND="app-dev/lxqt-build-tools"
 RDEPEND="
 	xgui-icontheme/lxqt-themes
 	xgui-live-lib/qtsvg
-	xgui-live-lib/lxmenu-data
+	xgui-live-lib/lxqt-menu-data
 "
 
 filter-flags -Wl,-z,defs

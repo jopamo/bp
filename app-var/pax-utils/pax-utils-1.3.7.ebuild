@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs unpacker flag-o-matic
+inherit meson python-single-r1
 
 DESCRIPTION="ELF utils that can check files for security relevant properties"
 HOMEPAGE="https://wiki.gentoo.org/index.php?title=Project:Hardened/PaX_Utilities"
@@ -13,7 +13,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps debug python seccomp"
+IUSE="caps debug python seccomp test"
 
 DEPEND="caps? ( >=lib-core/libcap-2.24 )
 		python? ( dev-python/pyelftools )
@@ -22,30 +22,30 @@ DEPEND="caps? ( >=lib-core/libcap-2.24 )
 		seccomp? ( app-dev/pkgconf )
 		app-compression/xz-utils"
 
-append-flags -fno-strict-aliasing
-
-_emake() {
-	emake \
-		USE_CAP=$(usex caps) \
-		USE_DEBUG=$(usex debug) \
-		USE_PYTHON=$(usex python) \
-		USE_SECCOMP=$(usex seccomp) \
-		"$@"
+pkg_setup() {
+	if use test || use python; then
+		python-single-r1_pkg_setup
+	fi
 }
 
 src_configure() {
-	tc-export CC PKG_CONFIG
-}
+	#append-flags -fno-strict-aliasing
 
-src_compile() {
-	_emake
-}
+	local emesonargs=(
+		"-Dlddtree_implementation=$(usex python python sh)"
+		$(meson_feature caps use_libcap)
+		-Dbuild_manpages=enabled
+		$(meson_use seccomp use_seccomp)
+		$(meson_use test tests)
 
-src_test() {
-	_emake check
+		# fuzzing is currently broken
+		-Duse_fuzzing=false
+	)
+	meson_src_configure
 }
 
 src_install() {
-	_emake DESTDIR="${D}" PKGDOCDIR='$(DOCDIR)'/${PF} install
-	cleanup_install
+	meson_src_install
+
+	use python && python_fix_shebang "${ED}"/usr/bin/lddtree
 }

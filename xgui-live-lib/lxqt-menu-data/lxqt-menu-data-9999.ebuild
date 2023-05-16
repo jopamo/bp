@@ -2,11 +2,11 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit git-r3 cmake
 
 DESCRIPTION="Provides files needed for LXDE application menus"
 HOMEPAGE="http://lxde.org/"
-EGIT_REPO_URI="https://github.com/lxde/lxmenu-data.git"
+EGIT_REPO_URI="https://github.com/lxqt/lxqt-menu-data.git"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -18,8 +18,3 @@ BDEPEND="
 	app-dev/pkgconf
 	lib-live/glib
 "
-
-src_prepare() {
-	default
-	eautoreconf
-}

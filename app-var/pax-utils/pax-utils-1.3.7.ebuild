@@ -34,7 +34,7 @@ src_configure() {
 	local emesonargs=(
 		"-Dlddtree_implementation=$(usex python python sh)"
 		$(meson_feature caps use_libcap)
-		-Dbuild_manpages=enabled
+		-Dbuild_manpages=disabled
 		$(meson_use seccomp use_seccomp)
 		$(meson_use test tests)
 

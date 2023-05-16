@@ -10,6 +10,7 @@ sshd:x:22:
 video:x:27:
 man:x:44:
 systemd-network:x:67:
+kvm:x:78:
 input:x:97:
 users:x:100:
 messagebus:x:101:

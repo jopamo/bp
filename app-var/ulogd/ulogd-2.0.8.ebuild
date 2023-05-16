@@ -31,14 +31,8 @@ DEPEND="
 "
 
 PATCHES=(
-		"${FILESDIR}"/00.9d9ea2cd70a369a7f665a322e6c53631e01a2570.patch
-		"${FILESDIR}"/01.675e762091380590f78ff07a94a25caa459b786b.patch
-		"${FILESDIR}"/04.63135e73fd878cb71b1eebf8e877c4d4c34feba7.patch
-		"${FILESDIR}"/05.48fe3eacbacd62865bb98b2faeacbee39084b8d6.patch
-		"${FILESDIR}"/06.65c02cc9ae969677756f30b69a3637c678b7c5b4.patch
+		"${FILESDIR}/"
 )
-
-filter-flags -Wl,-z,defs
 
 pkg_setup() {
 	linux-info_pkg_setup
@@ -48,6 +42,8 @@ pkg_setup() {
 }
 
 src_configure() {
+	filter-flags -Wl,-z,defs
+
 	append-lfs-flags
 
 	local myconf=(

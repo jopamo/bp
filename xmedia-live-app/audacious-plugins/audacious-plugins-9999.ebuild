@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit meson git-r3
 
 DESCRIPTION="Audacious Player - Your music, your way, no exceptions"
 HOMEPAGE="https://audacious-media-player.org/"
@@ -12,15 +12,14 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="aac alsa aosd cdda cue +flac fluidsynth hotkeys
-http gme jack libsamplerate lirc mms modplug opus pulseaudio scrobbler
+IUSE="aac alsa aosd cdda cue +flac fluidsynth hotkeys gme jack libsamplerate
+lirc mms modplug opus pipewire pulseaudio scrobbler qt qt6 filewriter
 sdl sid sndfile soxr speedpitch vorbis wavpack"
 
 DEPEND="
-	lib-core/libxml2
 	lib-dev/dbus-glib
-	lib-live/glib
 	xgui-misc/mpg123
+	xmedia-live-app/ffmpeg
 	~xmedia-live-app/audacious-${PV}
 	aac? ( xmedia-live-lib/faad2 )
 	alsa? ( xgui-misc/alsa-lib )
@@ -38,8 +37,6 @@ DEPEND="
 		xmedia-live-lib/flac
 	)
 	fluidsynth? ( xmedia-live-app/fluidsynth )
-	http? ( lib-net/neon )
-	xgui-live-lib/qtbase
 	jack? (
 		xmedia-live-lib/bio2jack
 		virtual/jack
@@ -50,6 +47,7 @@ DEPEND="
 	modplug? ( xmedia-live-lib/libmodplug )
 	opus? ( xmedia-live-lib/opus )
 	pulseaudio? ( xgui-misc/pulseaudio )
+	qt? ( xgui-live-lib/qtbase:5 )
 	scrobbler? ( app-net/curl )
 	sdl? ( xmedia-live-lib/libsdl2[sound] )
 	sid? ( xmedia-live-lib/libsidplayfp )
@@ -65,53 +63,62 @@ DEPEND="
 
 BDEPEND="app-dev/pkgconf"
 
-src_prepare() {
-	default
-	eautoreconf
-}
-
 src_configure() {
-	local myconf=(
-		$(use_enable aac)
-		$(use_enable alsa)
-		$(use_enable aosd)
-		$(use_enable cdda cdaudio)
-		$(use_enable cue)
-		$(use_enable flac filewriter)
-		$(use_enable flac)
-		$(use_enable fluidsynth amidiplug)
-		$(use_enable gme console)
-		$(use_enable hotkeys hotkey)
-		$(use_enable http neon)
-		$(use_enable jack)
-		$(use_enable libsamplerate resample)
-		$(use_enable lirc)
-		$(use_enable mms)
-		$(use_enable modplug)
-		$(use_enable opus)
-		$(use_enable pulseaudio pulse)
-		$(use_enable scrobbler scrobbler2)
-		$(use_enable sdl sdlout)
-		$(use_enable sid)
-		$(use_enable sndfile)
-		$(use_enable soxr)
-		$(use_enable speedpitch)
-		$(use_enable vorbis)
-		$(use_enable wavpack)
-		--disable-ampache
-		--disable-bs2b
-		--disable-coreaudio
-		--disable-filewriter_mp3
-		--disable-gtk
-		--disable-nls
-		--disable-oss4
-		--disable-qt
-		--disable-qtaudio
-		--disable-qtglspectrum
-		--disable-sndio
-		--enable-mpg123
-		--enable-mpris2
-		--enable-songchange
+	local emesonargs=(
+		#gui toolkits
+		-Dgtk=false
+		-Dgtk3=false
+		$(meson_use qt)
+		$(meson_use qt6)
+
+		#container plugins
+		$(meson_use cue)
+
+		# transport plugins
+		$(meson_use mms)
+		-Dneon=false
+
+		# input plugins
+		$(meson_use aac)
+		-Dadplug=false
+		-Damidiplug=false
+		-Dcdaudio=false
+		-Dconsole=false
+		-Dffaudio=true
+		$(meson_use flac)
+		$(meson_use modplug)
+		-Dmpg123=true
+		-Dopenmpt=false
+		$(meson_use opus)
+		$(meson_use sid)
+		$(meson_use sndfile)
+		$(meson_use vorbis)
+		$(meson_use wavpack)
+
+		# output plugins
+		$(meson_use alsa)
+		-Dcoreaudio=false
+		$(meson_use filewriter)
+		$(meson_use jack)
+		-Doss=false
+		#not working yet
+		-Dpipewire=false
+		$(meson_use pulseaudio pulse)
+		-Dqtaudio=false
+		$(meson_use sdl sdlout)
+		-Dsndio=false
+
+		# general plugins
+		-Dampache=false
+		$(meson_use aosd)
+		$(meson_use hotkeys hotkey)
+		$(meson_use lirc)
+		$(meson_use scrobbler scrobbler2)
+
+		# effect plugins
+		$(meson_use libsamplerate resample)
+		$(meson_use soxr)
+		$(meson_use speedpitch)
 	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
+	meson_src_configure
 }

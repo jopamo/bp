@@ -17,3 +17,16 @@ DEPEND="
 	xgui-live-lib/qtbase
 	xgui-misc/pulseaudio
 "
+
+src_prepare() {
+	cmake_src_prepare
+	sed -i 's/multimedia-volume-control/coolspeaker/g' {src/pavucontrol-qt.desktop.in,src/mainwindow.{ui,cc}}
+}
+
+src_install() {
+	cmake_src_install
+
+	insopts -m 0644
+	insinto /usr/share/pixmaps
+	doins "${FILESDIR}"/coolspeaker.svg
+}

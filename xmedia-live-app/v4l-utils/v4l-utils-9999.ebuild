@@ -2,9 +2,9 @@
 
 EAPI=8
 
-inherit git-r3 autotools flag-o-matic xdg
+inherit git-r3 meson flag-o-matic
 
-DESCRIPTION="Small CLI util to show EXIF infos hidden in JPEG files"
+DESCRIPTION="a series of packages for handling media devices"
 HOMEPAGE="https://git.linuxtv.org/v4l-utils.git"
 EGIT_REPO_URI="https://git.linuxtv.org/v4l-utils.git"
 
@@ -13,12 +13,19 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	xmedia-live-lib/libjpeg-turbo
+	app-fs/sysfsutils
+	xgui-live-lib/qtbase
+	xgui-misc/alsa-lib
 "
 
-filter-flags -Wl,-z,defs
-
 src_prepare() {
+	filter-flags -flto*
+
 	default
-	eautoreconf
+}
+
+src_install() {
+	meson_src_install
+
+	rm "${ED}"/usr/lib/gconv/gconv-modules
 }

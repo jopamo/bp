@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit git-r3 meson flag-o-matic
+inherit git-r3 meson flag-o-matic xdg
 
 DESCRIPTION="a series of packages for handling media devices"
 HOMEPAGE="https://git.linuxtv.org/v4l-utils.git"
@@ -27,5 +27,5 @@ src_prepare() {
 src_install() {
 	meson_src_install
 
-	rm "${ED}"/usr/lib/gconv/gconv-modules
+	rm -r "${ED}"/usr/lib/gconv || die
 }

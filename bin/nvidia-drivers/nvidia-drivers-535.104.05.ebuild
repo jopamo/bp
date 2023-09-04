@@ -224,6 +224,7 @@ src_install() {
 		doins ${NV_X11}/10_nvidia_wayland.json
 		donvidia "${nv_libdir}"/libnvidia-egl-wayland.so.1.1.9
 		donvidia "${nv_libdir}"/libnvidia-vulkan-producer.so.${NV_SOVER}
+		donvidia "${nv_libdir}"/libnvidia-wayland-client.so.${NV_SOVER}
 	fi
 
 	# OpenCL ICD for NVIDIA
@@ -288,7 +289,6 @@ src_install-libs() {
 			"libnvcuvid.so.${NV_SOVER}"
 			"libnvidia-allocator.so.${NV_SOVER}"
 			"libnvidia-cfg.so.${NV_SOVER}"
-			"libnvidia-compiler.so.${NV_SOVER}"
 			"libnvidia-egl-gbm.so.1.1.0"
 			"libnvidia-eglcore.so.${NV_SOVER}"
 			"libnvidia-encode.so.${NV_SOVER}"

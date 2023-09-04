@@ -33,7 +33,7 @@ src_install() {
 
 	# Install standard sub packages
 	local builddirs=(
-		builds/cuda_{cudart,cuobjdump,memcheck,nvcc,nvdisasm,nvml_dev,nvprune,nvrtc,nvtx}
+		builds/cuda_{cudart,cuobjdump,nvcc,nvdisasm,nvml_dev,nvprune,nvrtc,nvtx}
 		builds/lib{cublas,cufft,curand,cusolver,cusparse,npp,nvjpeg}
 		$(usex debugger "builds/cuda_gdb" "")
 	)

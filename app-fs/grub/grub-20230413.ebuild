@@ -12,7 +12,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug device-mapper efi static"
+IUSE="debug device-mapper efi mount static"
 
 GRUB_ALL_PLATFORMS=( efi-64 pc )
 IUSE+=" ${GRUB_ALL_PLATFORMS[@]/#/grub_platforms_}"
@@ -23,6 +23,7 @@ DEPEND="
 	app-compression/xz-utils
 	virtual/curses
 	device-mapper? ( >=app-fs/lvm2-2.02.45 )
+	mount? ( app-fs/fuse:2 )
 	static? ( app-compression/xz-utils[static-libs(+)] )
 	grub_platforms_efi-64? ( app-fs/efibootmgr )
 "
@@ -65,7 +66,7 @@ grub_configure() {
 		--libdir="${EPREFIX}"/usr/lib
 		$(use_enable debug mm-debug)
 		$(use_enable device-mapper)
-		--disable-grub-mount
+		$(use_enable mount grub-mount)
 		--disable-nls
 		--disable-grub-themes
 		--disable-grub-mkfont

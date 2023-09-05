@@ -2,22 +2,19 @@
 
 EAPI=8
 
-inherit linux-info flag-o-matic user
+inherit linux-info flag-o-matic user autotools
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="https://dbus.freedesktop.org/"
 
 if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/${PN}/${PN}.git"
-	inherit git-r3 autotools
-elif [[ ${PV} == 20* ]]; then
-	inherit autotools
-	SNAPSHOT=172aa1c474759fe96b2072edcc22622ed1cb0510
-	SRC_URI="https://gitlab.freedesktop.org/${PN}/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
+	inherit git-r3
+else
+	SNAPSHOT=c4aebcdfa6458c3bb85bc4b01aa76a28c7e45d7f
+	SRC_URI="https://gitlab.freedesktop.org/dbus/dbus/-/archive/${SNAPSHOT}/dbus-${SNAPSHOT}.tar.bz2"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
-else
-	SRC_URI="https://dbus.freedesktop.org/releases/dbus/${P}.tar.gz"
 fi
 
 LICENSE="|| ( AFL-2.1 GPL-2 )"

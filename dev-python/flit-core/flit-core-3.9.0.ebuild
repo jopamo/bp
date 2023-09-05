@@ -4,13 +4,12 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=standalone
 
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="Simplified packaging of Python modules (core module)"
 HOMEPAGE="
 	https://pypi.org/project/flit_core/
 	https://github.com/pypa/flit/"
-SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"

@@ -36,9 +36,6 @@ src_prepare() {
 	default
 
 	rm -r plugins/cwm-plugin/quiche-native/linux-aarch64 || die
-	rm -r plugins/maven/lib/maven3/lib/jansi-native/freebsd32 || die
-	rm -r plugins/maven/lib/maven3/lib/jansi-native/freebsd64 || die
-	rm -r plugins/maven/lib/maven3/lib/jansi-native/linux32 || die
 	rm plugins/webp/lib/libwebp/linux/libwebp_jni.so || die
 }
 

@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="v$(ver_cut 1)-stable"
 	inherit git-r3
 else
-	SNAPSHOT=ed18c2ab79e8b94182d5dcf31d58457763f3e3e1
+	SNAPSHOT=208a21833b6953a2517a6c3f8f4849c6664b01be
 	SRC_URI="https://github.com/systemd/systemd-stable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/systemd-stable-${SNAPSHOT}"
 fi
@@ -95,7 +95,6 @@ src_prepare() {
 			"${FILESDIR}"/0004-Move-sysusers.d-sysctl.d-binfmt.d-modules-load.d-to-.patch
 			"${FILESDIR}"/0005-pass-correct-parameters-to-getdents64.patch
 			"${FILESDIR}"/0006-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch
-			"${FILESDIR}"/0007-Add-sys-stat.h-for-S_IFDIR.patch
 			"${FILESDIR}"/0008-implment-systemd-sysv-install-for-OE.patch
 			"${FILESDIR}"/0009-missing_type.h-add-comparison_fn_t.patch
 			"${FILESDIR}"/0010-add-fallback-parse_printf_format-implementation.patch
@@ -103,7 +102,6 @@ src_prepare() {
 			"${FILESDIR}"/0012-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch
 			"${FILESDIR}"/0013-add-missing-FTW_-macros-for-musl.patch
 			"${FILESDIR}"/0014-Use-uintmax_t-for-handling-rlim_t.patch
-			"${FILESDIR}"/0015-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch
 			"${FILESDIR}"/0016-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch
 			"${FILESDIR}"/0017-Define-glibc-compatible-basename-for-non-glibc-syste.patch
 			"${FILESDIR}"/0018-Do-not-disable-buffering-when-writing-to-oom_score_a.patch
@@ -113,7 +111,8 @@ src_prepare() {
 			"${FILESDIR}"/0022-Handle-__cpu_mask-usage.patch
 			"${FILESDIR}"/0023-Handle-missing-gshadow.patch
 			"${FILESDIR}"/0024-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch
-			"${FILESDIR}"/0026-src-boot-efi-efi-string.c-define-wchar_t-from-__WCHA.patch
+			"${FILESDIR}"/0028-sd-event-Make-malloc_trim-conditional-on-glibc.patch
+			"${FILESDIR}"/0029-shared-Do-not-use-malloc_info-on-musl.patch
 		)
 		default
 
@@ -176,7 +175,6 @@ src_configure() {
 		-Denvironment-d=false
 		-Dfirstboot=false
 		-Dgnutls=false
-		-Dgnu-efi=false
 		-Dhibernate=false
 		-Dhomed=false
 		-Dhtml=false

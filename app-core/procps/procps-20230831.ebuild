@@ -22,7 +22,7 @@ fi
 LICENSE="GPL-2"
 SLOT="0"
 
-IUSE="musl ncurses static-libs systemd"
+IUSE="ncurses static-libs systemd"
 
 DEPEND="
 	ncurses? ( virtual/curses )
@@ -30,8 +30,6 @@ DEPEND="
 "
 
 src_prepare() {
-	use musl && eapply "${FILESDIR}"/musl-fixes.patch
-
 	default
 
 	if [[ ${PV} == *9999 ]] ; then

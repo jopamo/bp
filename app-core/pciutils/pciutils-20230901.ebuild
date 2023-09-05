@@ -11,8 +11,8 @@ if [[ ${PV} == *9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/pciutils/pciutils.git"
 else
-	SNAPSHOT=0766bfa0f557430a6dd3256d45a5b756499f9f7b
-	PCIIDS_SNAPSHOT=4e3f51b4b7ba7ffd3cca463d6a19daf0f4270252
+	SNAPSHOT=db43fb5e8f2c04c409bdd06ac2c2828685038d69
+	PCIIDS_SNAPSHOT=a51e65d2e549513ed8f46eb4ff28cf0201e82a3d
 	SRC_URI="
 		https://github.com/pciutils/pciutils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz
 		https://github.com/pciutils/pciids/archive/${PCIIDS_SNAPSHOT}.tar.gz -> pciids-${PCIIDS_SNAPSHOT}.tar.gz"

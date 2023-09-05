@@ -9,7 +9,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://gitlab.com/${PN}/${PN}.git"
 	inherit git-r3 autotools
 elif [[ ${PV} == 20* ]]; then
-	SNAPSHOT=1f1e4f4390981f0f715b6fe79f23a91b8948ee08
+	SNAPSHOT=c22d1e4edbfec6e24346cd8d89b822cb07cd6f5c
 	SRC_URI="https://gitlab.com/${PN}/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	inherit autotools

@@ -4,5 +4,3 @@
 >app-fs/lvm2-2.03.0
 >app-core/shadow-20230128
 
-#this builds but breakage down the line remains
->lib-core/musl-20220922

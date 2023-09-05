@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: autotools.eclass
@@ -13,6 +13,11 @@
 # Note: We require GNU m4, as does autoconf.  So feel free to use any features
 # from the GNU version of m4 without worrying about other variants (i.e. BSD).
 
+case ${EAPI} in
+	6|7|8) ;;
+	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
+esac
+
 if [[ ${_AUTOTOOLS_AUTO_DEPEND+set} == "set" ]] ; then
 	# See if we were included already, but someone changed the value
 	# of AUTOTOOLS_AUTO_DEPEND on us.  We could reload the entire
@@ -26,13 +31,6 @@ fi
 if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 _AUTOTOOLS_ECLASS=1
 
-case ${EAPI} in
-	6)
-		# Needed for eqawarn
-		;;
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI} not supported" ;;
-esac
 
 inherit gnuconfig libtool
 
@@ -40,19 +38,19 @@ inherit gnuconfig libtool
 # @PRE_INHERIT
 # @DESCRIPTION:
 # The major version of autoconf your package needs
-: ${WANT_AUTOCONF:=latest}
+: "${WANT_AUTOCONF:=latest}"
 
 # @ECLASS_VARIABLE: WANT_AUTOMAKE
 # @PRE_INHERIT
 # @DESCRIPTION:
 # The major version of automake your package needs
-: ${WANT_AUTOMAKE:=latest}
+: "${WANT_AUTOMAKE:=latest}"
 
 # @ECLASS_VARIABLE: WANT_LIBTOOL
 # @PRE_INHERIT
 # @DESCRIPTION:
 # Do you want libtool?  Valid values here are "latest" and "none".
-: ${WANT_LIBTOOL:=latest}
+: "${WANT_LIBTOOL:=latest}"
 
 # @ECLASS_VARIABLE: _LATEST_AUTOMAKE
 # @INTERNAL
@@ -126,7 +124,7 @@ RDEPEND=""
 # Set to 'no' to disable automatically adding to DEPEND.  This lets
 # ebuilds form conditional depends by using ${AUTOTOOLS_DEPEND} in
 # their own DEPEND string.
-: ${AUTOTOOLS_AUTO_DEPEND:=yes}
+: "${AUTOTOOLS_AUTO_DEPEND:=yes}"
 if [[ ${AUTOTOOLS_AUTO_DEPEND} != "no" ]] ; then
 	case ${EAPI} in
 		6) DEPEND=${AUTOTOOLS_DEPEND} ;;
@@ -142,14 +140,14 @@ unset _automake_atom _autoconf_atom
 # @DESCRIPTION:
 # Additional options to pass to automake during
 # eautoreconf call.
-: ${AM_OPTS:=}
+: "${AM_OPTS:=}"
 
 # @ECLASS_VARIABLE: AT_NOEAUTOHEADER
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Don't run eautoheader command if set to 'yes'; only used to work around
 # packages that don't want their headers being modified.
-: ${AT_NOEAUTOHEADER:=}
+: "${AT_NOEAUTOHEADER:=}"
 
 # @ECLASS_VARIABLE: AT_NOEAUTOMAKE
 # @DEFAULT_UNSET
@@ -157,7 +155,7 @@ unset _automake_atom _autoconf_atom
 # Don't run eautomake command if set to 'yes'; only used to workaround
 # broken packages.  Generally you should, instead, fix the package to
 # not call AM_INIT_AUTOMAKE if it doesn't actually use automake.
-: ${AT_NOEAUTOMAKE:=}
+: "${AT_NOEAUTOMAKE:=}"
 
 # @ECLASS_VARIABLE: AT_NOELIBTOOLIZE
 # @DEFAULT_UNSET
@@ -165,13 +163,13 @@ unset _automake_atom _autoconf_atom
 # Don't run elibtoolize command if set to 'yes',
 # useful when elibtoolize needs to be ran with
 # particular options
-: ${AT_NOELIBTOOLIZE:=}
+: "${AT_NOELIBTOOLIZE:=}"
 
 # @ECLASS_VARIABLE: AT_M4DIR
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Additional director(y|ies) aclocal should search
-: ${AT_M4DIR:=}
+: "${AT_M4DIR:=}"
 
 # @ECLASS_VARIABLE: AT_SYS_M4DIR
 # @DEFAULT_UNSET
@@ -180,7 +178,7 @@ unset _automake_atom _autoconf_atom
 # For system integrators, a list of additional aclocal search paths.
 # This variable gets eval-ed, so you can use variables in the definition
 # that may not be valid until eautoreconf & friends are run.
-: ${AT_SYS_M4DIR:=}
+: "${AT_SYS_M4DIR:=}"
 
 # @FUNCTION: eautoreconf
 # @DESCRIPTION:
@@ -326,7 +324,7 @@ eaclocal_amflags() {
 # @FUNCTION: eaclocal
 # @DESCRIPTION:
 # These functions runs the autotools using autotools_run_tool with the
-# specified parametes. The name of the tool run is the same of the function
+# specified parameters. The name of the tool run is the same of the function
 # without e prefix.
 # They also force installing the support files for safety.
 # Respects AT_M4DIR for additional directories to search for macros.
@@ -390,7 +388,6 @@ eautoconf() {
 		die "No configure.{ac,in} present!"
 	fi
 
-
 	if [[ ${WANT_AUTOCONF} != "2.1" && -e configure.in ]] ; then
 		case ${EAPI} in
 			6|7)
@@ -401,7 +398,7 @@ eautoconf() {
 		*)
 				# Move configure file to the new location only on newer EAPIs to ensure
 				# checks are done rather than retroactively breaking ebuilds.
-				eqawarn "Moving configure.in to configure.ac (bug #426262)"
+				einfo "Moving configure.in to configure.ac (bug #426262)"
 				mv configure.{in,ac} || die
 			;;
 		esac
@@ -561,7 +558,7 @@ autotools_run_tool() {
 		shift
 	done
 
-	if [[ ${EBUILD_PHASE_FUNC} != "src_unpack" && ${EBUILD_PHASE_FUNC} != "src_prepare" ]] ; then
+	if [[ ${EBUILD_PHASE_FUNC} != "src_prepare" ]] ; then
 		eqawarn "Running '${1}' in ${EBUILD_PHASE_FUNC} phase"
 	fi
 

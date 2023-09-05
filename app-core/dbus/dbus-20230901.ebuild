@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	inherit git-r3 autotools
 elif [[ ${PV} == 20* ]]; then
 	inherit autotools
-	SNAPSHOT=35ade3c8f7aca16d1c6289828a2597859d1c503b
+	SNAPSHOT=172aa1c474759fe96b2072edcc22622ed1cb0510
 	SRC_URI="https://gitlab.freedesktop.org/${PN}/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"

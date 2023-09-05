@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
 inherit cmake git-r3 flag-o-matic
 
@@ -27,14 +27,14 @@ RESTRICT="!test? ( test )"
 
 CMAKE_BUILD_TYPE=Release
 
-filter-flags -flto\=\*
-filter-flags -D_FORTIFY_SOURCE\=\*
-filter-flags -Wl,-z,defs
-filter-flags -fstack-protector-strong
-filter-flags -fassociative-math
-filter-flags -fno-semantic-interposition
-
 src_configure() {
+	filter-flags -flto\=\*
+	filter-flags -D_FORTIFY_SOURCE\=\*
+	filter-flags -Wl,-z,defs
+	filter-flags -fstack-protector-strong
+	filter-flags -fassociative-math
+	filter-flags -fno-semantic-interposition
+
 	local mycmakeargs=(
 		-DLLVM_ENABLE_PROJECTS=$(usex clang 'llvm;clang;lld' 'llvm;lld')
 		-DLLVM_APPEND_VC_REV=OFF

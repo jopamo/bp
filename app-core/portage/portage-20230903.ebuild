@@ -18,7 +18,7 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
 
 IUSE="apidoc build doc gentoo-dev +ipc +native-extensions
 	gentoo_repo tmpfilesd sysusersd +rsync-verify selinux test xattr"

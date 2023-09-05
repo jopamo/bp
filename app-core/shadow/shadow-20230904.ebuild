@@ -36,16 +36,16 @@ src_configure() {
 	filter-flags -Wl,-z,defs
 
 	local myconf=(
-		--with-group-name-max-length=32
-		--without-tcb
-		--disable-account-tools-setuid
-		$(use_with acl)
-		--without-audit
-		$(use_with skey)
 		$(use_enable subids subordinate-ids)
+		$(use_with acl)
 		$(use_with pam libpam)
+		$(use_with skey)
 		$(use_with xattr attr)
 		$(use_with yescrypt)
+		--disable-account-tools-setuid
+		--with-group-name-max-length=32
+		--without-audit
+		--without-tcb
 	)
 	econf ${myconf[@]}
 }

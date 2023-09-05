@@ -47,10 +47,7 @@ pkg_setup() {
 
 src_prepare() {
 	default
-
-	if [[ ${PV} == *9999 ]] || [[ ${PV} == 20* ]] ; then
-		eautoreconf
-	fi
+	eautoreconf
 }
 
 src_configure() {

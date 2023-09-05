@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
-inherit distutils-r1 linux-info flag-o-matic user prefix
+inherit meson linux-info multiprocessing python-r1 flag-o-matic
 
 DESCRIPTION="Gentoo package manager"
 HOMEPAGE="https://github.com/gentoo/portage"
@@ -20,7 +20,8 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="gentoo_repo tmpfilesd sysusersd"
+IUSE="apidoc build doc gentoo-dev +ipc +native-extensions
+	gentoo_repo tmpfilesd sysusersd +rsync-verify selinux test xattr"
 
 DEPEND="
 	app-build/patch
@@ -46,76 +47,71 @@ PATCHES=(
 	"${FILESDIR}"/makeglobals.patch
 )
 
-filter-flags -Wl,-z,defs
-
 pkg_pretend() {
-	local CONFIG_CHECK="~IPC_NS ~PID_NS ~NET_NS"
+	local CONFIG_CHECK="~IPC_NS ~PID_NS ~NET_NS ~UTS_NS"
 
 	check_extra_config
 }
 
-python_prepare_all() {
-	cp "${FILESDIR}"/eapi7-ver-funcs.sh bin/ || die
+src_prepare() {
+	filter-flags -Wl,-z,defs
 
-	distutils-r1_python_prepare_all
+	default
 
-	find ${S} -type f -print0 | xargs -0 sed -i 's/\/var\/db\/repos\/gentoo/\/var\/db\/repos\/bp/g'
-
-	einfo "Disabling --dynamic-deps by default for gentoo-dev..."
-	sed -e 's:\("--dynamic-deps", \)\("y"\):\1"n":' \
-		-i lib/_emerge/create_depgraph_params.py || \
-		die "failed to patch create_depgraph_params.py"
-
-	printf "[build_ext]\nportage-ext-modules=true\n" >> \
-		setup.cfg || die
-
-	if [[ -n ${EPREFIX} ]] ; then
-		einfo "Setting portage.const.EPREFIX ..."
-		hprefixify -e "s|^(EPREFIX[[:space:]]*=[[:space:]]*\").*|\1${EPREFIX}\"|" \
-			-w "/_BINARY/" lib/portage/const.py
-
-		einfo "Prefixing shebangs ..."
-		while read -r -d $'\0' ; do
-			local shebang=$(head -n1 "$REPLY")
-			if [[ ${shebang} == "#!"* && ! ${shebang} == "#!${EPREFIX}/"* ]] ; then
-				sed -i -e "1s:.*:#!${EPREFIX}${shebang:2}:" "$REPLY" || \
-					die "sed failed"
-			fi
-		done < <(find . -type f ! -name etc-update -print0)
+	if use prefix-guest; then
+		sed -e "s|^\(main-repo = \).*|\\1gentoo_prefix|" \
+			-e "s|^\\[gentoo\\]|[gentoo_prefix]|" \
+			-e "s|^\(sync-uri = \).*|\\1rsync://rsync.prefix.bitzolder.nl/gentoo-portage-prefix|" \
+			-i cnf/repos.conf || die "sed failed"
 	fi
+}
 
-	cd "${S}/cnf" || die
-	if [ -f "make.conf.example.${ARCH}".diff ]; then
-		patch make.conf.example "make.conf.example.${ARCH}".diff || \
-			die "Failed to patch make.conf.example"
+src_configure() {
+	local code_only=false
+	python_foreach_impl my_src_configure
+}
+
+my_src_configure() {
+	local emesonargs=(
+		-Dcode-only=${code_only}
+		-Deprefix="${EPREFIX}"
+		-Dportage-bindir="${EPREFIX}/usr/lib/portage/${EPYTHON}"
+		-Ddocdir="${EPREFIX}/usr/share/doc/${PF}"
+		$(meson_use doc)
+		$(meson_use apidoc)
+		$(meson_use gentoo-dev)
+		$(meson_use ipc)
+		$(meson_use xattr)
+	)
+
+	if use native-extensions && [[ "${EPYTHON}" != "pypy3" ]] ; then
+		emesonargs+=( -Dnative-extensions=true )
 	else
-		eerror ""
-		eerror "Portage does not have an arch-specific configuration for this arch."
-		eerror "Please notify the arch maintainer about this issue. Using generic."
-		eerror ""
+		emesonargs+=( -Dnative-extensions=false )
 	fi
+
+	if use build; then
+		emesonargs+=( -Drsync-verify=false )
+	else
+		emesonargs+=( $(meson_use rsync-verify) )
+	fi
+
+	meson_src_configure
+	code_only=true
 }
 
-python_test() {
-	esetup.py test
+src_compile() {
+	python_foreach_impl meson_src_compile
 }
 
-python_install() {
-	# Install sbin scripts to bindir for python-exec linking
-	# they will be relocated in pkg_preinst()
-	distutils-r1_python_install \
-		--system-prefix="${EPREFIX}/usr" \
-		--bindir="$(python_get_scriptdir)" \
-		--docdir="${EPREFIX}/usr/share/doc/${PF}" \
-		--htmldir="${EPREFIX}/usr/share/doc/${PF}/html" \
-		--portage-bindir="${EPREFIX}/usr/lib/portage/${EPYTHON}" \
-		--sbindir="$(python_get_scriptdir)" \
-		--sysconfdir="${EPREFIX}/etc" \
-		"${@}"
+src_test() {
+	local -x PYTEST_ADDOPTS="-vv -ra -l -o console_output_style=count -n $(makeopts_jobs) --dist=worksteal"
+
+	python_foreach_impl meson_src_test --no-rebuild --verbose
 }
 
-python_install_all() {
-	distutils-r1_python_install_all
+src_install() {
+	python_foreach_impl my_src_install
 
 	if use tmpfilesd; then
 		insopts -m 0644
@@ -123,15 +119,9 @@ python_install_all() {
 		newins "${FILESDIR}/${PN}-tmpfiles" ${PN}.conf
 	fi
 
-	# Due to distutils/python-exec limitations
-	# these must be installed to /usr/bin.
-	local sbin_relocations='archive-conf dispatch-conf emaint env-update etc-update fixpackages regenworld'
-	einfo "Moving admin scripts to the correct directory"
-	dodir /usr/sbin
-	for target in ${sbin_relocations}; do
-		einfo "Moving /usr/bin/${target} to /usr/sbin/${target}"
-		mv "${ED}/usr/bin/${target}" "${ED}/usr/sbin/${target}" || die "sbin scripts move failed!"
-	done
+	local scripts
+	mapfile -t scripts < <(awk '/^#!.*python/ {print FILENAME} {nextfile}' "${ED}"/usr/{bin,sbin}/* || die)
+	python_replicate_script "${scripts[@]}"
 
 	echo -e "[DEFAULT]\n\
 main-repo = bp\n\n\
@@ -146,31 +136,48 @@ location = /var/db/repos/gentoo\n\
 sync-type = git\n\
 sync-uri = https://github.com/gentoo-mirror/gentoo.git\n\
 auto-sync = yes" >> "${ED}"/usr/share/portage/config/repos.conf
+}
 
-	cleanup_install
+my_src_install() {
+	local pydirs=(
+		"${D}$(python_get_sitedir)"
+		"${ED}/usr/lib/portage/${EPYTHON}"
+	)
 
-	keepdir /var/lib/portage/home
+	meson_src_install
+	python_optimize "${pydirs[@]}"
+	python_fix_shebang "${pydirs[@]}"
 }
 
 pkg_preinst() {
-	python_setup
-	local sitedir=$(python_get_sitedir)
-	[[ -d ${D%/}${sitedir} ]] || die "${D%/}${sitedir}: No such directory"
-	env -u DISTDIR \
-		-u PORTAGE_OVERRIDE_EPREFIX \
-		-u PORTAGE_REPOSITORIES \
-		-u PORTDIR \
-		-u PORTDIR_OVERLAY \
-		PYTHONPATH="${D%/}${sitedir}${PYTHONPATH:+:${PYTHONPATH}}" \
-		"${PYTHON}" -m portage._compat_upgrade.default_locations || die
+	if ! use build && [[ -z ${ROOT} ]]; then
+		python_setup
+		local sitedir=$(python_get_sitedir)
+		[[ -d ${D}${sitedir} ]] || die "${D}${sitedir}: No such directory"
+		env -u DISTDIR \
+			-u PORTAGE_OVERRIDE_EPREFIX \
+			-u PORTAGE_REPOSITORIES \
+			-u PORTDIR \
+			-u PORTDIR_OVERLAY \
+			PYTHONPATH="${D}${sitedir}${PYTHONPATH:+:${PYTHONPATH}}" \
+			"${PYTHON}" -m portage._compat_upgrade.default_locations || die
+
+		env -u BINPKG_COMPRESS -u PORTAGE_REPOSITORIES \
+			PYTHONPATH="${D}${sitedir}${PYTHONPATH:+:${PYTHONPATH}}" \
+			"${PYTHON}" -m portage._compat_upgrade.binpkg_compression || die
+
+		env -u FEATURES -u PORTAGE_REPOSITORIES \
+			PYTHONPATH="${D}${sitedir}${PYTHONPATH:+:${PYTHONPATH}}" \
+			"${PYTHON}" -m portage._compat_upgrade.binpkg_multi_instance || die
+	fi
 
 	# elog dir must exist to avoid logrotate error for bug #415911.
 	# This code runs in preinst in order to bypass the mapping of
 	# portage:portage to root:root which happens after src_install.
 	keepdir /var/log/portage/elog
 	# This is allowed to fail if the user/group are invalid for prefix users.
-	if chown portage:portage "${ED}"var/log/portage{,/elog} 2>/dev/null ; then
-		chmod g+s,ug+rwx "${ED}"var/log/portage{,/elog}
+	if chown portage:portage "${ED}"/var/log/portage{,/elog} 2>/dev/null ; then
+		chmod g+s,ug+rwx "${ED}"/var/log/portage{,/elog}
 	fi
 
 	if use sysusersd; then
@@ -182,3 +189,5 @@ pkg_preinst() {
 		enewuser portage 250 -1 /var/lib/portage/home portage
 	fi
 }
+
+

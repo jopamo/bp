@@ -11,15 +11,14 @@ if [[ ${PV} == 9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="${HOMEPAGE}.git"
 else
-	SNAPSHOT=f26d873435be9f35fa7953493cc07a9bc4e31876
-	SRC_URI="${HOMEPAGE}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz
-			https://github.com/linux-pam/linux-pam/commit/cf2fc5ff7b4a8555fda2a5ebe5f6ab0e45c22996.patch"
+	SNAPSHOT=77bd338125cde583ecdfb9fd69619bcd2baf15c2
+	SRC_URI="${HOMEPAGE}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/linux-${PN}-${SNAPSHOT}
 fi
 
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="debug musl"
 
@@ -36,8 +35,6 @@ DEPEND="lib-net/libtirpc"
 PDEPEND="app-core/pambase"
 
 src_prepare() {
-	git apply -R "${DISTDIR}/cf2fc5ff7b4a8555fda2a5ebe5f6ab0e45c22996.patch"
-
 	touch ChangeLog
 
 	default

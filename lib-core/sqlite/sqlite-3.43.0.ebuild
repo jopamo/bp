@@ -4,12 +4,12 @@ EAPI=8
 
 inherit flag-o-matic
 
-MY_PV="$(ver_cut 1)$(ver_cut 2)0$(ver_cut 3)00"
-
 DESCRIPTION="A SQL Database Engine in a C Library"
 HOMEPAGE="https://sqlite.org/"
-SRC_URI="https://www.sqlite.org/2022/sqlite-src-${MY_PV}.zip"
-S="${WORKDIR}/sqlite-src-${MY_PV}"
+
+printf -v SRC_PV "%u%02u%02u%02u" $(ver_rs 1- " ")
+SRC_URI="https://sqlite.org/2023/${PN}-src-${SRC_PV}.zip"
+S="${WORKDIR}/${PN}-src-${SRC_PV}"
 
 LICENSE="public-domain"
 SLOT="0"

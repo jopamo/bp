@@ -14,7 +14,7 @@ if [[ ${PV} == *9999 ]] ; then
 	inherit git-r3
 else
 	#SRC_URI="https://github.com/google/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	SNAPSHOT=ed1995b6bda19244070ab5d331111f16f67c8054
+	SNAPSHOT=896ea7a9a92d6d4185e4d96322fbf7af96461d4b
 	SRC_URI="https://github.com/google/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

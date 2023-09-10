@@ -2,19 +2,26 @@
 
 EAPI=8
 
+SNAPSHOT="920a115bf536f33cabd326b7d711b76609b96af1"
+
 ETYPE="headers"
 H_SUPPORTEDARCH="amd64 arm64"
 inherit kernel-2
 detect_version
 
-PATCH_PV=${PV} # to ease testing new versions against not existing patches
-PATCH_VER="0"
+PATCH_PV=$(ver_cut 1-2) # to ease testing new versions against not existing patches
+PATCH_VER="1"
 PATCH_DEV="sam"
-SRC_URI="${KERNEL_URI}
-	${PATCH_VER:+https://dev.gentoo.org/~${PATCH_DEV}/distfiles/sys-kernel/linux-headers/gentoo-headers-${PATCH_PV}-${PATCH_VER}.tar.xz}"
-S="${WORKDIR}/linux-${PV}"
+
+SRC_URI="
+	https://gitlab.com/linux-kernel/stable/-/archive/${SNAPSHOT}/stable-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2
+	${PATCH_VER:+https://dev.gentoo.org/~${PATCH_DEV}/distfiles/sys-kernel/linux-headers/gentoo-headers-${PATCH_PV}-${PATCH_VER}.tar.xz}
+"
+S="${WORKDIR}/stable-${SNAPSHOT}"
 
 KEYWORDS="amd64 arm64"
+
+IUSE="musl"
 
 [[ -n ${PATCH_VER} ]] && PATCHES=( "${WORKDIR}"/${PATCH_PV} )
 
@@ -25,7 +32,6 @@ src_unpack() {
 
 src_prepare() {
 	use musl && PATCHES+=(
-		"${FILESDIR}"/${PN}-5.10-Use-stddefs.h-instead-of-compiler.h.patch
 		"${FILESDIR}"/${PN}-5.15-remove-inclusion-sysinfo.h.patch
 	)
 

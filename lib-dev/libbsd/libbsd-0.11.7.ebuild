@@ -14,6 +14,8 @@ IUSE="static-libs"
 
 DEPEND="lib-dev/libmd"
 
+PATCHES=( "${FILESDIR}"/lfs64.patch )
+
 src_configure() {
 	ECONF_SOURCE="${S}" econf $(use_enable static-libs static)
 }

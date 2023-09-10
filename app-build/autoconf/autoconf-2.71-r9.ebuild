@@ -15,6 +15,17 @@ DEPEND="
 	app-lang/perl
 "
 
+PATCHES=(
+	"${FILESDIR}"/${P}-AC_LANG_CALL_C_cxx.patch
+	"${FILESDIR}"/${P}-time.patch
+	"${FILESDIR}"/${P}-AC_C_BIGENDIAN-lto.patch
+	"${FILESDIR}"/${P}-K-R-decls-clang.patch
+	"${FILESDIR}"/${P}-make-4.4.patch
+	"${FILESDIR}"/${P}-K-R-decls-clang-deux.patch
+	"${FILESDIR}"/${P}-cxx11typo.patch
+	"${FILESDIR}"/${P}-bash52.patch
+)
+
 src_install() {
 	default
 

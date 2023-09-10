@@ -42,3 +42,7 @@ sed -i 's/var\/lib/var/' /var/db/repos/bp/eclass/meson.eclass
 
 #insert on 3rd line
 sed -i '3i\PYTHON_COMPAT=( python3_10 python3_11 )\' /var/db/repos/bp/eclass/python-utils-r1.eclass
+
+sed -i 's/echo\ \/usr/echo\ /' /var/db/repos/bp/eclass/kernel-2.eclass
+echo\ \/usr
+echo\

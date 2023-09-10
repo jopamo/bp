@@ -21,7 +21,6 @@ DEPEND="
 	app-compression/xz-utils
 	acl? ( app-core/acl )
 	pam? ( lib-core/pam )
-	skey? ( lib-core/skey )
 	xattr? ( app-core/attr )
 "
 

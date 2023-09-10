@@ -13,12 +13,13 @@ S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="BSD GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
 
 IUSE="acl pam subids systemd xattr yescrypt"
 
 DEPEND="
 	app-compression/xz-utils
+	lib-dev/libbsd
 	acl? ( app-core/acl )
 	pam? ( lib-core/pam )
 	xattr? ( app-core/attr )

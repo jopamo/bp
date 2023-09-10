@@ -2,4 +2,4 @@
 
 >lib-core/npth-1.6
 >app-fs/lvm2-2.03.0
->app-core/shadow-20230128
+>app-core/shadow-5.0.0

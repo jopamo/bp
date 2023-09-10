@@ -730,8 +730,8 @@ fi
 # return header destination directory
 kernel_header_destdir() {
 	[[ ${CTARGET} == ${CHOST} ]] \
-		&& echo /usr/include \
-		|| echo /usr/${CTARGET}/usr/include
+		&& echo /include \
+		|| echo /${CTARGET}/usr/include
 }
 
 # @FUNCTION: cross_pre_c_headers

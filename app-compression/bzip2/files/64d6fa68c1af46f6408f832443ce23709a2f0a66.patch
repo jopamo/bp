@@ -1,0 +1,66 @@
+From 64d6fa68c1af46f6408f832443ce23709a2f0a66 Mon Sep 17 00:00:00 2001
+From: Mark Wielaard <mark@klomp.org>
+Date: Thu, 21 Apr 2022 00:56:04 +0200
+Subject: [PATCH] Mark SEE ALSO commands with .BR in bzdiff.1, bzgrep.1 and
+ bzmore.1
+
+This makes sure all commands show up as bold in the man pages.
+
+Suggested-by: Helge Kreutzmann <debian@helgefjell.de>
+---
+ bzdiff.1 | 7 ++++++-
+ bzgrep.1 | 8 +++++++-
+ bzmore.1 | 6 +++++-
+ 3 files changed, 18 insertions(+), 3 deletions(-)
+
+diff --git a/bzdiff.1 b/bzdiff.1
+index adb7a8e..f02fa24 100644
+--- a/bzdiff.1
++++ b/bzdiff.1
+@@ -38,7 +38,12 @@ or
+ .I diff
+ is preserved.
+ .SH "SEE ALSO"
+-cmp(1), diff(1), bzmore(1), bzless(1), bzgrep(1), bzip2(1)
++.BR cmp (1),
++.BR diff (1),
++.BR bzmore (1),
++.BR bzless (1),
++.BR bzgrep (1),
++.BR bzip2 (1)
+ .SH BUGS
+ Messages from the
+ .I cmp
+diff --git a/bzgrep.1 b/bzgrep.1
+index 930af8c..54bb31f 100644
+--- a/bzgrep.1
++++ b/bzgrep.1
+@@ -53,4 +53,10 @@ program to be invoked. For example:
+ Charles Levert (charles@comm.polymtl.ca). Adapted to bzip2 by Philippe
+ Troin <phil@fifi.org> for Debian GNU/Linux.
+ .SH "SEE ALSO"
+-grep(1), egrep(1), fgrep(1), bzdiff(1), bzmore(1), bzless(1), bzip2(1)
++.BR grep (1),
++.BR egrep (1),
++.BR fgrep (1),
++.BR bzdiff (1),
++.BR bzmore (1),
++.BR bzless (1),
++.BR bzip2 (1)
+diff --git a/bzmore.1 b/bzmore.1
+index b437d3b..9850948 100644
+--- a/bzmore.1
++++ b/bzmore.1
+@@ -149,4 +149,8 @@ except that a header is printed before each file.
+ .DT
+ /etc/termcap		Terminal data base
+ .SH "SEE ALSO"
+-more(1), less(1), bzip2(1), bzdiff(1), bzgrep(1)
++.BR more (1),
++.BR less (1),
++.BR bzip2 (1),
++.BR bzdiff (1),
++.BR bzgrep (1)
+-- 
+2.31.1
+

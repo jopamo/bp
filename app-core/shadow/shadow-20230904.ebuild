@@ -4,7 +4,7 @@ EAPI=8
 
 SNAPSHOT=bef4da47be72a7fd63f87f327daea9669746bb65
 
-inherit autotools flag-o-matic
+inherit autotools
 
 DESCRIPTION="Utilities to deal with user accounts"
 HOMEPAGE="https://github.com/shadow-maint/shadow http://pkg-shadow.alioth.debian.org/"
@@ -15,16 +15,17 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl pam skey subids systemd xattr yescrypt"
+IUSE="acl pam subids systemd xattr yescrypt"
 
 DEPEND="
 	app-compression/xz-utils
-	lib-dev/libbsd
 	acl? ( app-core/acl )
 	pam? ( lib-core/pam )
 	skey? ( lib-core/skey )
 	xattr? ( app-core/attr )
 "
+
+PATCHES=( "${FILESDIR}"/fix-undefined-reference.patch )
 
 src_prepare() {
 	cp -rp "${FILESDIR}"/* "${S}"/
@@ -33,18 +34,25 @@ src_prepare() {
 }
 
 src_configure() {
-	filter-flags -Wl,-z,defs
-
 	local myconf=(
-		$(use_enable subids subordinate-ids)
+		$(use_enable systemd logind)
 		$(use_with acl)
 		$(use_with pam libpam)
-		$(use_with skey)
 		$(use_with xattr attr)
 		$(use_with yescrypt)
 		--disable-account-tools-setuid
-		--with-group-name-max-length=32
+		--disable-nls
+		--disable-static
+		--enable-lastlog
+		--with-bcrypt
+		--with-btrfs
+		--with-libbsd
 		--without-audit
+		--without-group-name-max-length
+		--without-libcrack
+		--without-nscd
+		--without-selinux
+		--without-skey
 		--without-tcb
 	)
 	econf ${myconf[@]}

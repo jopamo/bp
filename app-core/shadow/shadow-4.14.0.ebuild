@@ -12,13 +12,12 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl pam skey subids systemd xattr yescrypt"
+IUSE="acl pam subids systemd xattr yescrypt"
 
 DEPEND="
 	app-compression/xz-utils
 	acl? ( app-core/acl )
 	pam? ( lib-core/pam )
-	skey? ( lib-core/skey )
 	xattr? ( app-core/attr )
 "
 

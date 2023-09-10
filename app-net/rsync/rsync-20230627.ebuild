@@ -11,7 +11,7 @@ if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/WayneD/rsync"
 	inherit git-r3
 else
-	SNAPSHOT=79fda353425daba6b23753c8b1b01dc35ecaac7d
+	SNAPSHOT=2f9b963abaa52e44891180fe6c0d1c2219f6686d
 	SRC_URI="https://github.com/WayneD/rsync/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -23,7 +23,6 @@ KEYWORDS="amd64 arm64"
 IUSE="acl iconv ipv6 lz4 static xattr xxhash zstd"
 
 LIB_DEPEND="
-	lib-core/popt[static-libs(+)]
 	acl? ( app-core/acl[static-libs(+)] )
 	lz4? ( app-compression/lz4[static-libs(+)] )
 	xattr? ( app-core/attr[static-libs(+)] )
@@ -56,6 +55,7 @@ src_configure() {
 		$(use_enable zstd)
 		--disable-md2man
 		--without-included-zlib
+		--with-included-popt=no
 	)
 	econf "${myconf[@]}"
 }

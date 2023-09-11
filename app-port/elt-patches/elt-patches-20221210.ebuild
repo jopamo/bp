@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=94cb4ce2ce4ca7d9e8acf512d8971b4b80b1a146
+SNAPSHOT=2050663473323e28e566047f436a3b9878c90ce7
 
 DESCRIPTION="Collection of patches for libtool.eclass"
 HOMEPAGE="https://gitweb.gentoo.org/proj/elt-patches.git/"

@@ -66,10 +66,10 @@ src_install() {
 
 	dolib.so libXNVCtrl/{libXNVCtrl.so.0.0.0,libXNVCtrl.so,libXNVCtrl.so.0}
 
+	insinto /usr/include/NVCtrl
+	doins libXNVCtrl/*.h
+
 	if use static-libs; then
 		dolib.a libXNVCtrl/libXNVCtrl.a
-
-		insinto /usr/include/NVCtrl
-		doins libXNVCtrl/*.h
 	fi
 }

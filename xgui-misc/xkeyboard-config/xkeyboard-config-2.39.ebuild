@@ -11,7 +11,7 @@ if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config.git"
 	inherit git-r3
 else
-	SRC_URI="https://www.x.org/pub/individual/data/${PN}/${P}.tar.xz"
+	SRC_URI="https://www.x.org/releases/individual/data/${PN}/${P}.tar.xz"
 fi
 
 LICENSE="MIT"

@@ -9,7 +9,7 @@ if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/app/${PN}.git"
 	inherit git-r3 autotools
 else
-	SRC_URI="https://www.x.org/archive/individual/app/${P}.tar.bz2"
+	SRC_URI="https://www.x.org/archive/individual/app/${P}.tar.xz"
 	KEYWORDS="amd64 arm64"
 fi
 

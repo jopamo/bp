@@ -2,24 +2,40 @@
 
 EAPI=8
 
+DISTUTILS_USE_PEP517=hatchling
+
 inherit distutils-r1
 
 DESCRIPTION="ANSI escape character sequences for colored terminal text & cursor positioning"
-HOMEPAGE="https://pypi.org/project/colorama/"
-SRC_URI="https://github.com/tartley/${PN}/archive/${PV}.tar.gz -> ${P}.github.tar.gz"
+HOMEPAGE="
+	https://pypi.org/project/colorama/
+	https://github.com/tartley/colorama/
+"
+SRC_URI="
+	https://github.com/tartley/colorama/archive/${PV}.tar.gz
+		-> ${P}.gh.tar.gz
+"
 
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="test"
-
 BDEPEND="
-	dev-python/setuptools[${PYTHON_USEDEP}]
-	test? ( dev-python/pytest[${PYTHON_USEDEP}] )
+	test? (
+		dev-python/mock[${PYTHON_USEDEP}]
+	)
 "
 
+distutils_enable_tests pytest
+
+python_install_all() {
+	distutils-r1_python_install_all
+}
+
 python_test() {
-	script -eqc "pytest -vv -s" /dev/null \
+	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
+	# Some tests require stdout to be a TTY
+	# https://github.com/tartley/colorama/issues/169
+	script -eqc "${EPYTHON} -m pytest -vv -s" /dev/null \
 		|| die "tests failed with ${EPYTHON}"
 }

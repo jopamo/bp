@@ -35,18 +35,16 @@ src_configure() {
 	local emesonargs=(
 		-Db_lto=false
 		-Dplatforms="$(usex wayland 'wayland,x11' 'x11')"
-		-Ddri-drivers=""
 		-Dgallium-drivers="swrast"
 		-Dgallium-extra-hud=false
     	-Dgallium-nine=false
     	-Dgallium-opencl=disabled
     	-Dgallium-va=disabled
-    	-Dgallium-xvmc=disabled
 		-Ddri3=disabled
   		-Degl=disabled
     	-Dgallium-vdpau=disabled
  		-Dgbm=enabled
-		-Dllvm=false
+		-Dllvm=disabled
  		-Dosmesa=false
 	    -Dgles1=disabled
 	    -Dgles2=disabled
@@ -55,9 +53,9 @@ src_configure() {
 	    -Dglx=dri
 	    -Dshared-glapi=enabled
 		-Dvulkan-drivers=""
-		-Dlibunwind=false
-	  	-Dlmsensors=false
-    	-Dvalgrind=false
+		-Dlibunwind=disabled
+	  	-Dlmsensors=disabled
+    	-Dvalgrind=disabled
 	)
 	meson_src_configure
 }

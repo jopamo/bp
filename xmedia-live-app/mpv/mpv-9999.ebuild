@@ -10,7 +10,8 @@ HOMEPAGE="https://mpv.io/"
 if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/mpv-player/mpv.git"
 	inherit git-r3
-	SRC_URI="https://codeberg.org/jouni/mpv_sponsorblock_minimal/raw/commit/b8c1a2a878c5b24c49711fb135902fc0ebafffe0/sponsorblock_minimal.lua"
+	SB_SNAPSHOT="1ef53f094b4362afdfd54770a59b6d3da3551ee5"
+	SRC_URI="https://codeberg.org/jouni/mpv_sponsorblock_minimal/raw/commit/${SB_SNAPSHOT}/sponsorblock_minimal.lua"
 else
 	SNAPSHOT="1ef53f094b4362afdfd54770a59b6d3da3551ee5"
 	SRC_URI="https://github.com/mpv-player/mpv/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"

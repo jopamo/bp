@@ -24,7 +24,7 @@ QA_PREBUILT="lib/firmware/*"
 src_prepare() {
 	default
 
-	rm GPL* LICEN* Makefile README WHENCE || die
+	rm GPL* LICEN* Makefile WHENCE || die
 
 	#dummy install
 	mkdir nouveau

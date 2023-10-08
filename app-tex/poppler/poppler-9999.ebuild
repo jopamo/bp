@@ -12,7 +12,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="cairo +cjk curl cxx debug doc +introspection +jpeg +jpeg2k +lcms png qt5 tiff +utils"
+IUSE="cairo +cjk curl cxx debug doc +introspection +jpeg +jpeg2k png +utils"
 
 RESTRICT="test"
 
@@ -29,10 +29,7 @@ COMMON_DEPEND="
 	curl? ( app-net/curl )
 	jpeg? ( xmedia-live-lib/libjpeg-turbo )
 	jpeg2k? ( xmedia-live-lib/openjpeg )
-	lcms? ( xgui-misc/lcms )
 	png? ( xmedia-live-lib/libpng )
-	qt5? ( xgui-live-lib/qtbase	)
-	tiff? ( xmedia-live-lib/tiff )
 "
 DEPEND="${COMMON_DEPEND}
 	app-dev/pkgconf
@@ -41,12 +38,7 @@ RDEPEND="${COMMON_DEPEND}
 	cjk? ( app-tex/poppler-data )
 "
 
-PATCHES=(
-	"${FILESDIR}/${PN}-0.60.1-qt5-dependencies.patch"
-	"${FILESDIR}/${PN}-0.57.0-disable-internal-jpx.patch"
-)
-
-append-cppflags -I/usr/include/openjpeg-2.3
+PATCHES=( "${FILESDIR}/${PN}-0.57.0-disable-internal-jpx.patch" )
 
 src_prepare() {
 	cmake_src_prepare
@@ -73,26 +65,22 @@ src_configure() {
 	xdg_environment_reset
 
 	local mycmakeargs=(
+		-DBUILD_CPP_TESTS=OFF
 		-DBUILD_GTK_TESTS=OFF
 		-DBUILD_QT5_TESTS=OFF
-		-DBUILD_CPP_TESTS=OFF
-		-DENABLE_ZLIB=ON
-		-DENABLE_ZLIB_UNCOMPRESS=OFF
-		-DENABLE_UNSTABLE_API_ABI_HEADERS=ON
-		-DUSE_FLOAT=OFF
-		-DWITH_Cairo=$(usex cairo)
-		-DENABLE_LIBCURL=$(usex curl)
 		-DENABLE_CPP=$(usex cxx)
+		-DENABLE_DCTDECODER=$(usex jpeg libjpeg none)
+		-DENABLE_GPGME=OFF
+		-DENABLE_LIBCURL=$(usex curl)
+		-DENABLE_LIBOPENJPEG=$(usex jpeg2k openjpeg2 none)
+		-DENABLE_QT5=OFF
+		-DENABLE_QT6=OFF
+		-DENABLE_UNSTABLE_API_ABI_HEADERS=ON
+		-DENABLE_UTILS=$(usex utils)
+		-DWITH_Cairo=$(usex cairo)
 		-DWITH_GObjectIntrospection=$(usex introspection)
 		-DWITH_JPEG=$(usex jpeg)
-		-DENABLE_DCTDECODER=$(usex jpeg libjpeg none)
-		-DENABLE_LIBOPENJPEG=$(usex jpeg2k openjpeg2 none)
-		-DENABLE_CMS=$(usex lcms lcms2 none)
-		-DWITH_NSS3=OFF
 		-DWITH_PNG=$(usex png)
-		$(cmake_use_find_package qt5 Qt5Core)
-		-DWITH_TIFF=$(usex tiff)
-		-DENABLE_UTILS=$(usex utils)
 	)
 
 	cmake_src_configure

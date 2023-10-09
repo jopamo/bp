@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-inherit meson linux-info multiprocessing python-r1 flag-o-matic
+inherit meson linux-info multiprocessing python-r1 flag-o-matic user
 
 DESCRIPTION="Gentoo package manager"
 HOMEPAGE="https://github.com/gentoo/portage"
@@ -11,16 +11,16 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/gentoo/${PN}.git"
 	inherit git-r3
 else
-	SNAPSHOT=3e56f8a6498cd90a7d5fe472febf586455c3bad7
+	SNAPSHOT=fc70635aecbf80d3aeeb9f4e56d396040da09279
 	SRC_URI="https://github.com/gentoo/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
-IUSE="apidoc build doc gentoo-dev +ipc +native-extensions
+IUSE="build gentoo-dev +ipc +native-extensions
 	gentoo_repo tmpfilesd sysusersd +rsync-verify selinux test xattr"
 
 DEPEND="
@@ -58,6 +58,8 @@ src_prepare() {
 
 	default
 
+	cp "${FILESDIR}"/eapi7-ver-funcs.sh bin/ || die
+
 	if use prefix-guest; then
 		sed -e "s|^\(main-repo = \).*|\\1gentoo_prefix|" \
 			-e "s|^\\[gentoo\\]|[gentoo_prefix]|" \
@@ -77,8 +79,8 @@ my_src_configure() {
 		-Deprefix="${EPREFIX}"
 		-Dportage-bindir="${EPREFIX}/usr/lib/portage/${EPYTHON}"
 		-Ddocdir="${EPREFIX}/usr/share/doc/${PF}"
-		$(meson_use doc)
-		$(meson_use apidoc)
+		-Ddoc=false
+		-Dapidoc=false
 		$(meson_use gentoo-dev)
 		$(meson_use ipc)
 		$(meson_use xattr)

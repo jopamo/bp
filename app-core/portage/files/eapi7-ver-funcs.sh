@@ -201,3 +201,22 @@ cleanup_install() {
 	rm -rf "${ED}"/usr/share/locale/{a*,b*,c*,d*,el,en_CA,en_GB,eo,es*,et,eu,f*,g*,h*,i*,j*,k*,lg,li,lt,lv,m*,n*,o*,p*,q*,r*,s*,t*,u*,v*,w*,x*,y*,z*}
 	rm -rf "${ED}"/usr/share/i18n/locales/{a*,b*,c*,d*,e{l,o,s,t,u}*,f*,g*,h*,i{a,d,g,k,t,u}*,j*,k*,l*,m*,n*,o*,p*,q*,r*,s*,t{a,c,e,g,h,i,k,l,n,o,p}*,u*,v*,w*,x*,y*,z*}
 }
+
+# @FUNCTION: get_modname
+# @USAGE:
+# @DESCRIPTION:
+# Returns modulename with proper suffix {.so,.bundle,etc} for the current
+# platform identified by CHOST.
+#
+# Example:
+#     libfoo$(get_modname)
+#     Returns: libfoo.so (ELF) || libfoo.bundle (MACH) || ...
+get_modname() {
+	local modname
+	local ver=$1
+	case ${CHOST} in
+		*)                        modname="so";;
+	esac
+
+	echo ".${modname}"
+}

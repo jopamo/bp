@@ -12,10 +12,9 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="cxx debug hpack-tools jemalloc static-libs test utils xml"
+IUSE="debug hpack-tools jemalloc static-libs test utils xml"
 
 RDEPEND="
-	cxx? ( lib-dev/boost )
 	hpack-tools? ( >=lib-core/jansson-2.5 )
 	jemalloc? ( lib-dev/jemalloc )
 	utils? (
@@ -29,27 +28,24 @@ DEPEND="${RDEPEND}
 	app-dev/pkgconf
 	test? ( >=app-dev/cunit-2.1 )"
 
-filter-flags -Wl,-z,defs
-
 src_prepare() {
+	filter-flags -Wl,-z,defs
+
 	default
 	eautoreconf
 }
 
 src_configure() {
 	local myconf=(
-		--disable-examples
-		--disable-failmalloc
-		--disable-werror
-		--without-cython
-		--disable-python-bindings
-		$(use_enable cxx asio-lib)
 		$(use_enable debug)
 		$(use_enable hpack-tools)
 		$(use_enable static-libs static)
 		$(use_enable utils app)
 		$(use_with jemalloc)
 		$(use_with xml libxml2)
+		--disable-examples
+		--disable-failmalloc
+		--disable-werror
 	)
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }

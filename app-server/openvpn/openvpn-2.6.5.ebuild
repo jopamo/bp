@@ -16,8 +16,6 @@ IUSE="plugins systemd"
 
 DEPEND="app-compression/lzo"
 
-PATCHES=( "${FILESDIR}"/0001-unprivileged.patch )
-
 src_prepare() {
 	default
   	eautoreconf

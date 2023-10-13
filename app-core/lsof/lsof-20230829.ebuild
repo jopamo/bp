@@ -24,6 +24,8 @@ src_prepare() {
 }
 
 src_configure() {
+	filter-flags -flto*
+
 	use static && append-ldflags -static
 
 	./Configure -n linux || die

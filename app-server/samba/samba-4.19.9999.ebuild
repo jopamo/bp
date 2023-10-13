@@ -101,7 +101,6 @@ src_configure() {
 		--disable-rpath-install
 		$(use_with acl acl-support)
 		--without-ad-dc
-		--without-dnsupdate
 		--without-ads
 		--without-winbind
 		--disable-avahi
@@ -165,5 +164,6 @@ src_install() {
 	keepdir var/log/samba
 	keepdir var/lib/samba/private
 
-	rm -rf /var/{run,lock}
+	rm -rf "${ED}"/var/{cache,lock,run}
+	rm -rf "${ED}"/run
 }

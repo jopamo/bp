@@ -8,16 +8,8 @@ inherit autotools flag-o-matic python-utils-r1 toolchain-funcs
 
 DESCRIPTION="An interpreted, interactive, object-oriented programming language"
 HOMEPAGE="https://www.python.org/"
-
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/python/cpython.git"
-	EGIT_BRANCH="$(ver_cut 1-2)"
-	inherit git-r3
-else
-	SNAPSHOT=26748ed4f61520c59af15547792d1e73144a4314
-	SRC_URI="https://github.com/python/cpython/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/c${PN}-${SNAPSHOT}
-fi
+SRC_URI="https://github.com/python/cpython/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/c${PN}-${PV}
 
 LICENSE="PSF-2"
 SLOT="$(ver_cut 1-2)"

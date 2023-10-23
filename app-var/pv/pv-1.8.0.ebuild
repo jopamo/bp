@@ -4,7 +4,7 @@ EAPI=7
 
 DESCRIPTION="Pipe Viewer: a tool for monitoring the progress of data through a pipe"
 HOMEPAGE="http://www.ivarch.com/programs/pv.shtml"
-SRC_URI="http://www.ivarch.com/programs/sources/${P}.tar.bz2"
+SRC_URI="https://www.ivarch.com/programs/sources/${P}.tar.gz"
 
 LICENSE="Artistic-2"
 SLOT="0"

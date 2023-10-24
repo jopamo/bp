@@ -22,9 +22,8 @@ LICENSE="LGPL-2.1+ GPL-2+ BSD ISC"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+alsa +cli cuda drm +egl iconv jpeg lcms libmpv +lua
-	+opengl pipewire pulseaudio vaapi vapoursynth vdpau wayland +X
-	xv zlib"
+IUSE="+alsa +cli cuda drm +egl iconv jpeg lcms libmpv +lua +opengl pipewire
+	pulseaudio vaapi vapoursynth vdpau +vulkan wayland +X xv zlib"
 
 REQUIRED_USE="
 	|| ( cli libmpv )
@@ -40,6 +39,7 @@ DEPEND="
 	fonts/liberation-fonts
 	xmedia-live-app/ffmpeg
 	xmedia-live-lib/libass
+	xmedia-live-lib/libplacebo
 	alsa? ( xgui-misc/alsa-lib )
 	cuda? (
 		bin/nvidia-drivers[X]
@@ -107,7 +107,6 @@ src_configure() {
 		-D rubberband=disabled
 		-D sdl2-gamepad=disabled
 		-D sdl2=disabled
-		-D stdatomic=disabled
 		-D uchardet=disabled
 		-D uwp=disabled
 		-D zimg=disabled
@@ -124,6 +123,8 @@ src_configure() {
 		$(meson_feature opengl gl)
 		$(meson_feature vaapi)
 		$(meson_feature vdpau)
+		$(meson_feature vulkan)
+		$(meson_feature vulkan shaderc)
 		$(meson_feature X x11)
 		$(meson_feature xv)
 		$(meson_feature wayland)

@@ -11,7 +11,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/tats/w3m.git"
 	inherit git-r3
 else
-	SNAPSHOT=93ad5ee7da3bb3b6848434f0940321f345b7369c
+	SNAPSHOT=ee66aabc3987000c2851bce6ade4dcbb0b037d81
 	SRC_URI="https://github.com/tats/w3m/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"

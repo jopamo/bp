@@ -56,8 +56,8 @@ DEPEND="
 	vapoursynth? ( xmedia-live-lib/vapoursynth )
 	vdpau? ( xgui-live-lib/libvdpau )
 	vulkan? (
-		xgui-live-lib/shaderc
-		xgui-live-lib/vulkan-loader[X?,wayland?]
+		xmedia-live-lib/shaderc
+		xmedia-live-lib/vulkan-loader[X?,wayland?]
 	)
 	wayland? (
 		xgui-live-lib/wayland

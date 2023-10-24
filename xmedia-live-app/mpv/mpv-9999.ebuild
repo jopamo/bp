@@ -55,6 +55,10 @@ DEPEND="
 	vaapi? ( xgui-live-lib/libva:=[drm?,X?,wayland?] )
 	vapoursynth? ( xmedia-live-lib/vapoursynth )
 	vdpau? ( xgui-live-lib/libvdpau )
+	vulkan? (
+		xgui-live-lib/shaderc
+		xgui-live-lib/vulkan-loader[X?,wayland?]
+	)
 	wayland? (
 		xgui-live-lib/wayland
 		xgui-live-lib/libxkbcommon

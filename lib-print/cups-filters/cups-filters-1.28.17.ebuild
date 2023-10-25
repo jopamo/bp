@@ -17,7 +17,7 @@ IUSE="dbus jpeg ldap pclm pdf png static-libs tiff"
 DEPEND="
 	app-build/bc
 	app-tex/ghostscript-gpl[cups]
-	app-tex/poppler[cxx,jpeg?,lcms,tiff?,utils]
+	app-tex/poppler
 	app-tex/qpdf
 	fonts/fontconfig
 	fonts/liberation-fonts

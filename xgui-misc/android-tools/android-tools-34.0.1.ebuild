@@ -35,12 +35,15 @@ RDEPEND="app-live/android-udev-rules"
 
 src_prepare() {
 	eapply "${DISTDIR}/${PN}-31.0.3-no-gtest.patch"
+	eapply "${FILESDIR}/${PN}-34.0.0-protobuf.patch"
+
 	cd "${S}/vendor/core" || die
 	eapply "${S}/patches/core/0011-Remove-the-useless-dependency-on-gtest.patch"
+
 	cd "${S}/vendor/libziparchive" || die
 	eapply "${S}/patches/libziparchive/0004-Remove-the-useless-dependency-on-gtest.patch"
-	cd "${S}"
-	eapply "${DISTDIR}/${PN}-31.0.3-disable-werror-boringssl.patch"
+
+	cd "${S}" || die
 	rm -r patches || die
 	cmake_src_prepare
 }
@@ -64,9 +67,18 @@ src_install() {
 	rm "${ED}/usr/bin/mkbootimg" || die
 	rm "${ED}/usr/bin/unpack_bootimg" || die
 	rm "${ED}/usr/bin/repack_bootimg" || die
+	rm "${ED}/usr/bin/mkdtboimg" || die
+	rm "${ED}/usr/bin/avbtool" || die
+
 	if use python; then
 		python_foreach_impl python_newexe vendor/mkbootimg/mkbootimg.py mkbootimg
 		python_foreach_impl python_newexe vendor/mkbootimg/unpack_bootimg.py unpack_bootimg
 		python_foreach_impl python_newexe vendor/mkbootimg/repack_bootimg.py repack_bootimg
+		python_foreach_impl python_newexe vendor/libufdt/utils/src/mkdtboimg.py mkdtboimg
+		python_foreach_impl python_newexe vendor/avb/avbtool.py avbtool
 	fi
+	docinto adb
+	dodoc vendor/adb/*.{txt,TXT}
+	docinto fastboot
+	dodoc vendor/core/fastboot/README.md
 }

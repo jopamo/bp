@@ -15,7 +15,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-BDEPEND="dev-python/setuptools_scm[${PYTHON_USEDEP}]"
+BDEPEND="dev-python/setuptools-scm[${PYTHON_USEDEP}]"
 
 distutils_enable_tests pytest
 

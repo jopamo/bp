@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT="7f7f0fc98d2a3f0ac639143826daf35399fe7863"
+SNAPSHOT="3dcd383186ef2d72f2ac200ef69677458b6485d2"
 
 inherit autotools flag-o-matic xdg
 

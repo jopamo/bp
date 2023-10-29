@@ -7,13 +7,13 @@ inherit flag-o-matic
 DESCRIPTION="an optimizing compiler produced by the GNU Project supporting various programming languages"
 HOMEPAGE="https://gcc.gnu.org/"
 
-SNAPSHOT=3f23fa7e74fa01828d649e8ee7230701b6fb1e19
+SNAPSHOT=b2cf55a6a55e9027f26bd58ef6078d0c9521a96c
 SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="debug dlang golang +isl +lto sanitize +vtv zstd"
 
@@ -41,6 +41,9 @@ PATCHES=(
 	"${FILESDIR}"/0019-build-fix-CXXFLAGS_FOR_BUILD-passing.patch
 	"${FILESDIR}"/0020-add-fortify-headers-paths.patch
 	"${FILESDIR}"/0024-use-pure-64-bit-configuration-where-appropriate.patch
+	"${FILESDIR}"/0028-gcc-go-Use-_off_t-type-instead-of-_loff_t.patch
+	"${FILESDIR}"/0029-gcc-go-Don-t-include-sys-user.h.patch
+	"${FILESDIR}"/0032-gcc-go-Use-int64-type-as-offset-argument-for-mmap.patch
 )
 
 src_prepare() {

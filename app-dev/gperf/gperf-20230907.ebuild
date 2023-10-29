@@ -8,7 +8,8 @@ SRC_URI="https://1g4.org/files/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+#fails to build
+#KEYWORDS="amd64 arm64"
 
 src_prepare() {
 	sed -i \

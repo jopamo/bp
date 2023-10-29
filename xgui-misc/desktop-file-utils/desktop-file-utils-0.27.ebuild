@@ -11,5 +11,3 @@ SRC_URI="https://www.freedesktop.org/software/${PN}/releases/${P}.tar.xz"
 LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-PATCHES=( "${FILESDIR}/${P}-support-version-1.5.patch" )

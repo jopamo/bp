@@ -26,8 +26,6 @@ src_prepare() {
 	cp "${FILESDIR}"/Makefile_libxnvctrl "${S}"/libXNVCtrl/Makefile || die
 	cp "${FILESDIR}"/Makefile "${S}"/ || die
 
-	eapply "${FILESDIR}"/nvidia-settings-linker.patch
-
 	default
 }
 

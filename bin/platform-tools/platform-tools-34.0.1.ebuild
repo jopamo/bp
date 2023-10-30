@@ -16,7 +16,7 @@ DEPEND="app-live/android-udev-rules"
 
 src_install() {
 	exeinto /opt/bin
-	doexe {adb,fastboot,mke2fs,make_f2fs,lib64/libc++.so}
+	doexe {adb,fastboot,mke2fs,make_f2fs}
 
 	cat > "${T}"/99${PN} <<- EOF || die
 		PATH=${EPREFIX}/opt/bin

@@ -73,8 +73,8 @@ src_configure() {
 		--disable-midi
 		--disable-obex
 		--enable-android
+		--enable-avrcp
 		--enable-datafiles
-		--enable-deprecated
 		--enable-library
 		--enable-manpages
 		--enable-monitor

@@ -54,7 +54,9 @@ for i in librsvg ; do
 		echo -e "[source.crates-io]\n\
 	replace-with = \"vendored-sources\"\n\n\
 	[source.vendored-sources]\n\
-	directory = \"vendor\"" > "${WORKHOME}/$i/.cargo/config.toml"
+	directory = \"vendor\"\n\n\
+	[workspace]\n\
+	resolver = \"2\"" > "${WORKHOME}/$i/.cargo/config.toml"
 
 		tar -hcf - $i | tar -xf - -C ${TEMPLOCATION}
 		mv ${TEMPLOCATION}/$i ${TEMPLOCATION}/${GITDATENAME}

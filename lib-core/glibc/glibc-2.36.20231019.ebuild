@@ -12,7 +12,7 @@ if [[ ${PV} = *9999 ]]; then
 	inherit git-r3
 	EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)/master"
 else
-	SNAPSHOT=e19af583b4c110eb7acaa97c8e4877f21dba83ee
+	SNAPSHOT=88d5d70b1e89c0a449352286134946e26f7a498a
 	SRC_URI="https://github.com/bminor/glibc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -38,7 +38,6 @@ PDEPEND="lib-core/tzdb"
 
 PATCHES=(
 	"${FILESDIR}"/0001-Disable-ldconfig-during-install.patch
-	"${FILESDIR}"/0002-x86-Fix-Os-build-BZ-29576.patch
 )
 
 check_devpts() {

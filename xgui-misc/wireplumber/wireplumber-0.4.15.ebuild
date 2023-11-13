@@ -13,7 +13,6 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 else
 	SRC_URI="https://gitlab.freedesktop.org/pipewire/${PN}/-/archive/${PV}/${P}.tar.bz2"
-	KEYWORDS="arm64 amd64"
 fi
 
 LICENSE="MIT"

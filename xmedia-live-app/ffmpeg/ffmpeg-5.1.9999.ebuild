@@ -14,10 +14,11 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="
-	+alsa +avcodec avdevice +avfilter +avformat +avutil debug
-	nvidia x264 +x265 vaapi vdpau static-libs +openssl +ffmpeg
-	+network postproc +protocols pulseaudio +nonfree +gpl +version3
-	 +swscale +swresample +lame +libass +libdav1d +vorbis vulkan
+	+alsa +avcodec +avdevice +avfilter +avformat +avutil debug
+	+gpl +ffmpeg +lame +libass +libdav1d +libxcb +network +nonfree
+	nvidia +openssl postproc +protocols pulseaudio static-libs
+    +swscale +swresample +version3 +vorbis vulkan vaapi vdpau
+	+x264 +x265
 "
 
 DEPEND="
@@ -26,6 +27,7 @@ DEPEND="
 	lame? ( xmedia-live-app/lame )
 	vorbis? ( xmedia-live-lib/libvorbis )
 	libdav1d? ( xmedia-live-lib/libdav1d )
+	libxcb? ( xgui-live-lib/libxcb )
 	x264? ( xmedia-live-lib/x264 )
 	x265? ( xmedia-live-lib/x265 )
 	nvidia? (
@@ -39,9 +41,9 @@ DEPEND="
 	vdpau? ( xgui-live-lib/libvdpau )
 "
 
-append-flags -ffat-lto-objects
-
 src_configure() {
+	append-flags -ffat-lto-objects
+
 	${S}/configure \
 		--prefix="${EPREFIX}/usr" \
 		--shlibdir="${EPREFIX}/usr/lib" \
@@ -64,6 +66,10 @@ src_configure() {
 		$(use_enable ffmpeg) \
 		$(use_enable gpl) \
 		$(use_enable lame libmp3lame) \
+		$(use_enable libxcb) \
+		$(use_enable libxcb libxcb-shm) \
+		$(use_enable libxcb libxcb-xfixes) \
+		$(use_enable libxcb libxcb-shape) \
 		$(use_enable libass) \
 		$(use_enable libdav1d) \
 		$(use_enable network) \

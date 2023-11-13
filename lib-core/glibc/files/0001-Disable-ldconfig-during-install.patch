@@ -1,7 +1,10 @@
-From e33f15e2a4e1b5ae74b07836102e59c07175b2ae Mon Sep 17 00:00:00 2001
+From 3924368571ae2b77a8465de8bb7ec7e6288dae67 Mon Sep 17 00:00:00 2001
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Wed, 1 Apr 2009 02:15:48 -0400
-Subject: [PATCH 01/61] Disable ldconfig during install
+Date: Tue, 3 Aug 2021 00:34:59 +0200
+Subject: [PATCH 1/9] Disable ldconfig during install
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
 Do not bother running ldconfig on DESTDIR.  It's a waste of time as we
 won't use the result (portage will rebuild the cache after install).
@@ -10,22 +13,23 @@ we end up (incorrectly) flagging it as a violation as a write to /etc.
 
 http://sourceware.org/ml/libc-alpha/2012-08/msg00118.html
 https://bugs.gentoo.org/431038
+Signed-off-by: Andreas K. Hüttel <dilfridge@gentoo.org>
 ---
  Makefile | 1 +
  1 file changed, 1 insertion(+)
 
 diff --git a/Makefile b/Makefile
-index 50f99ca611..5e39e11759 100644
+index f324df7a1f..0221906533 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -116,6 +116,7 @@ install-symbolic-link: subdir_install
- 	rm -f $(symbolic-link-list)
- 
+@@ -110,6 +110,7 @@ elf/ldso_install:
+ ifeq (no,$(cross-compiling))
+ ifeq (yes,$(build-shared))
  install:
 +dont-bother-with-destdir:
  	-test ! -x $(elf-objpfx)ldconfig || LC_ALL=C \
  	  $(elf-objpfx)ldconfig $(addprefix -r ,$(install_root)) \
  				$(slibdir) $(libdir)
 -- 
-2.31.1
+2.39.3
 

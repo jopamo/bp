@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=bef4da47be72a7fd63f87f327daea9669746bb65
+SNAPSHOT=dad103bdb99a138e126066bbcb712ccb4154b240
 
 inherit autotools
 
@@ -13,7 +13,7 @@ S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="BSD GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="acl pam subids systemd xattr yescrypt"
 
@@ -44,6 +44,8 @@ src_configure() {
 		--disable-nls
 		--disable-static
 		--enable-lastlog
+		--enable-man
+		--enable-shared
 		--with-bcrypt
 		--with-btrfs
 		--with-libbsd

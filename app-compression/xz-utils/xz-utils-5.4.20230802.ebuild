@@ -8,7 +8,7 @@ DESCRIPTION="utils for managing LZMA compressed files"
 HOMEPAGE="http://tukaani.org/xz/"
 
 SNAPSHOT="a108ed589171d683c34238a87e358b87f69e39a0"
-SRC_URI="https://github.com/xz-mirror/xz/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/tukaani-project/xz/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/xz-${SNAPSHOT}"
 
 LICENSE="public-domain LGPL-2.1+ GPL-2+"

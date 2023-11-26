@@ -1,4 +1,3 @@
-# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -28,8 +27,6 @@ RDEPEND="
 PATCHES=(
 	"${FILESDIR}"/jq-1.6-r3-never-bundle-oniguruma.patch
 	"${FILESDIR}"/jq-1.7-runpath.patch
-	"${FILESDIR}"/jq-1.7-visible-null.patch
-	"${FILESDIR}"/jq-1.7_pre20201109-no-git-bdep.patch
 )
 
 RESTRICT="!test? ( test )"

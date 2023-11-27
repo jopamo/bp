@@ -11,7 +11,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/tuxera/ntfs-3g.git"
 	inherit git-r3
 else
-	SNAPSHOT=71ecccf279d3660812b18803a75f368d2f76eea6
+	SNAPSHOT=75dcdc2cf37478fad6c0e3427403d198b554951d
 	SRC_URI="https://github.com/tuxera/ntfs-3g/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/ntfs-3g-${SNAPSHOT}
 fi

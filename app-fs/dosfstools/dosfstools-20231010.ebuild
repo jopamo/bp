@@ -11,7 +11,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/dosfstools/dosfstools.git"
 	inherit git-r3
 else
-	SNAPSHOT=c483196dd46eab22abba756cef511d36f5f42070
+	SNAPSHOT=289a48b9cb5b3c589391d28aa2515c325c932c7a
 	SRC_URI="https://github.com/dosfstools/dosfstools/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

@@ -13,7 +13,7 @@ S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="debug dlang golang +isl +lto sanitize +vtv zstd"
 
@@ -41,6 +41,9 @@ PATCHES=(
 	"${FILESDIR}"/0019-build-fix-CXXFLAGS_FOR_BUILD-passing.patch
 	"${FILESDIR}"/0020-add-fortify-headers-paths.patch
 	"${FILESDIR}"/0024-use-pure-64-bit-configuration-where-appropriate.patch
+	"${FILESDIR}"/0028-gcc-go-Use-_off_t-type-instead-of-_loff_t.patch
+	"${FILESDIR}"/0029-gcc-go-Don-t-include-sys-user.h.patch
+	"${FILESDIR}"/0032-gcc-go-Use-int64-type-as-offset-argument-for-mmap.patch
 )
 
 src_prepare() {

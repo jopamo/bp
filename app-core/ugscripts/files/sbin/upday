@@ -1,0 +1,131 @@
+#!/bin/bash
+
+show_help() {
+	echo "Usage: $0 [options]"
+	echo ""
+	echo "Options:"
+	echo "  --update-gcc	   Update the GCC ebuild"
+	echo "  --help			 Display this help and exit"
+	echo ""
+	echo "Without any options, the script updates all ebuilds except GCC."
+}
+
+update_gcc=false
+
+while [[ $# -gt 0 ]]; do
+	case $1 in
+		--update-gcc)
+			update_gcc=true
+			shift # Remove argument from processing
+			;;
+		--help)
+			show_help
+			exit 0
+			;;
+		*)
+			echo "Unknown option: $1"
+			show_help
+			exit 1
+			;;
+	esac
+done
+
+update_ebuild() {
+	local package_path="$1"
+	local package_name="$2"
+	local repo_uri="$3"
+	local branch="$4"
+	local version="$5"
+	local use_date_only="$6"
+
+	echo "Updating ${package_name}..."
+
+	# Clone the repository to a temporary directory
+	temp_dir=/tmp/tmp-upday/$package_name
+
+	# Remove existing directory if it exists
+	[[ -d "$temp_dir" ]] && rm -rf "$temp_dir"
+
+	mkdir -p "$temp_dir" || { echo "Failed to create directory $temp_dir"; return; }
+
+	if [[ ! -d "$temp_dir" ]]; then
+	  echo "Temporary directory $temp_dir does not exist."
+	  return
+	fi
+
+	git clone --depth 1 --branch "$branch" "$repo_uri".git "$temp_dir" || { echo "Failed to clone repository: $repo_uri"; rm -rf "$temp_dir"; return; }
+
+	# Fetch the latest commit hash and date from the cloned repository
+	latest_commit=$(cd "$temp_dir" && git rev-parse HEAD)
+	latest_commit_date=$(cd "$temp_dir" && git log -n1 --pretty=format:%cd --date=format:%Y%m%d)
+
+	if [[ -z "$latest_commit" ]] || [[ -z "$latest_commit_date" ]]; then
+	  echo "Failed to fetch latest commit or date from Git repository: $repo_uri"
+	  rm -rf "$temp_dir"
+	  return
+	fi
+
+	echo "Latest commit: $latest_commit"
+	echo "Latest commit date: $latest_commit_date"
+
+	# Find the current ebuild file
+	local ebuild_file=$(find "${package_path}" -maxdepth 1 -type f -name "${package_name}-*.ebuild" | sort | tail -n 1)
+	if [[ -z "$ebuild_file" ]]; then
+		echo "No ebuild file found for ${package_name}."
+		return
+	fi
+
+	rm -rf "$temp_dir"
+
+	# Update the SNAPSHOT variable in the ebuild file
+	sed -i "s/SNAPSHOT=.*/SNAPSHOT=${latest_commit}/" "$ebuild_file"
+
+	# Construct new ebuild filename
+	local new_ebuild_filename
+	if [[ "$use_date_only" == "yes" ]]; then
+		new_ebuild_filename="${package_name}-${latest_commit_date}.ebuild"
+	else
+		new_ebuild_filename="${package_name}-${version}.${latest_commit_date}.ebuild"
+	fi
+
+	local new_ebuild_file="${package_path}/${new_ebuild_filename}"
+
+	if [[ -f "$new_ebuild_file" ]]; then
+		echo "Ebuild file ${new_ebuild_filename} already exists."
+		return
+	fi
+
+	# Rename the ebuild file
+	mv "$ebuild_file" "$new_ebuild_file"
+
+	# Navigate to the ebuild directory and run repoman manifest
+	(cd ${REPO_PATH} && repoman manifest)
+
+	echo "Ebuild updated for ${package_name}: ${new_ebuild_filename}"
+
+	# Add changes to git
+	(cd ${REPO_PATH} && git add . && git commit -m "$new_ebuild_filename")
+
+	echo "Ebuild committed to Git with filename as the commit message."
+}
+
+# Define the repository path
+REPO_PATH="/var/db/repos/bp"
+
+if [[ $update_gcc == true ]]; then
+	update_ebuild "${REPO_PATH}/app-build/gcc" "gcc" "https://github.com/gcc-mirror/gcc" "releases/gcc-12" "12.3" "no"
+fi
+
+update_ebuild "${REPO_PATH}/app-compression/lz4" "lz4" "https://github.com/lz4/lz4" "dev" "placeholder" "yes"
+update_ebuild "${REPO_PATH}/app-compression/zstd" "zstd" "https://github.com/facebook/zstd" "dev" "placeholder" "yes"
+update_ebuild "${REPO_PATH}/app-compression/xz-utils" "xz-utils" "https://github.com/tukaani-project/xz" "v5.4" "5.4" "no"
+update_ebuild "${REPO_PATH}/app-crypto/jitterentropy" "jitterentropy" "https://github.com/smuellerDD/jitterentropy-library" "master" "empty" "yes"
+update_ebuild "${REPO_PATH}/app-crypto/rng-tools" "rng-tools" "https://github.com/nhorman/rng-tools" "master" "empty" "yes"
+update_ebuild "${REPO_PATH}/app-fs/dosfstools" "dosfstools" "https://github.com/dosfstools/dosfstools" "master" "empty" "yes"
+update_ebuild "${REPO_PATH}/app-fs/e2fsprogs" "e2fsprogs" "https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs" "maint" "empty" "yes"
+update_ebuild "${REPO_PATH}/app-fs/efibootmgr" "efibootmgr" "https://github.com/rhinstaller/efibootmgr" "main" "empty" "yes"
+update_ebuild "${REPO_PATH}/app-fs/efivar" "efivar" "https://github.com/rhboot/efivar" "main" "empty" "yes"
+update_ebuild "${REPO_PATH}/app-fs/mdadm" "mdadm" "https://git.kernel.org/pub/scm/utils/mdadm/mdadm" "master" "empty" "yes"
+update_ebuild "${REPO_PATH}/app-fs/ntfs3g" "ntfs3g" "https://github.com/tuxera/ntfs-3g" "edge" "empty" "yes"
+update_ebuild "${REPO_PATH}/app-fs/smartmontools" "smartmontools" "https://github.com/smartmontools/smartmontools" "master" "empty" "yes"
+update_ebuild "${REPO_PATH}/app-core/dbus" "dbus" "https://gitlab.freedesktop.org/dbus/dbus" "dbus-1.14" "1.14" "no"

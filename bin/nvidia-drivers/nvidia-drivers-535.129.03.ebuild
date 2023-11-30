@@ -52,7 +52,6 @@ nvidia_drivers_versions_check() {
 		~SYSVIPC
 		~!LOCKDEP
 		~!SLUB_DEBUG_ON
-		~!X86_KERNEL_IBT
 		!DEBUG_MUTEXES
 		X86_PAT"
 

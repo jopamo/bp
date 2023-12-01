@@ -7,14 +7,9 @@ inherit flag-o-matic python-any-r1 toolchain-funcs xdg
 DESCRIPTION="A JavaScript runtime built on Chrome's V8 JavaScript engine"
 HOMEPAGE="https://nodejs.org/"
 
-if [[ ${PV} == *9999 ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/nodejs/node"
-	EGIT_BRANCH="v$(ver_cut 1).x"
-else
-	SRC_URI="https://nodejs.org/dist/v${PV}/node-v${PV}.tar.xz"
-	S="${WORKDIR}/node-v${PV}"
-fi
+SNAPSHOT=e8cb61f07430d5f1d624245a219c2e21694c5f52
+SRC_URI="https://github.com/nodejs/node/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/node-${SNAPSHOT}
 
 LICENSE="Apache-1.1 Apache-2.0 BSD BSD-2 MIT"
 SLOT="0"

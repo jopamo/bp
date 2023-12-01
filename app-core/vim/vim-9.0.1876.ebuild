@@ -9,12 +9,9 @@ inherit flag-o-matic
 DESCRIPTION="Vim, an improved vi-style text editor"
 HOMEPAGE="https://vim.sourceforge.io/ https://github.com/vim/vim"
 
-if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/vim/vim"
-	inherit git-r3
-else
-	SRC_URI="https://github.com/vim/vim/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-fi
+SNAPSHOT=aeda72e273845b0be47e8b1e2671a302984c3801
+SRC_URI="https://github.com/vim/vim/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/node-${SNAPSHOT}
 
 LICENSE="vim"
 SLOT="0"

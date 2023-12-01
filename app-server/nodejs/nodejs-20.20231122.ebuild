@@ -7,7 +7,7 @@ inherit flag-o-matic python-any-r1 toolchain-funcs xdg
 DESCRIPTION="A JavaScript runtime built on Chrome's V8 JavaScript engine"
 HOMEPAGE="https://nodejs.org/"
 
-SNAPSHOT=e8cb61f07430d5f1d624245a219c2e21694c5f52
+SNAPSHOT=aeda72e273845b0be47e8b1e2671a302984c3801
 SRC_URI="https://github.com/nodejs/node/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/node-${SNAPSHOT}
 

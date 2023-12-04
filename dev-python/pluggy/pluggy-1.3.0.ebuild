@@ -18,6 +18,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 BDEPEND="
+	dev-python/wheel[${PYTHON_USEDEP}]
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 "
 

@@ -14,8 +14,6 @@ KEYWORDS="amd64 arm64"
 
 RESTRICT="test"
 
-PATCHES=( "${FILESDIR}/${PN}-1.3.236-Install-static-libs.patch" )
-
 src_configure() {
 	append-flags -ffat-lto-objects
 

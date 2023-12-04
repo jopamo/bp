@@ -23,7 +23,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="+alsa +cli cuda drm +egl iconv jpeg lcms libmpv +lua +opengl pipewire
-	pulseaudio vaapi vapoursynth vdpau +vulkan wayland +X xv zlib"
+	pulseaudio vaapi vapoursynth vdpau vulkan wayland +X xv zlib"
 
 REQUIRED_USE="
 	|| ( cli libmpv )
@@ -121,6 +121,7 @@ src_configure() {
 		$(meson_feature pipewire)
 
 		# video output features
+		-D caca=disabled
 		$(meson_feature drm)
 		$(meson_feature egl)
 		$(meson_feature jpeg)

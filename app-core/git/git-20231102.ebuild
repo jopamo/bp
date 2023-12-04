@@ -14,6 +14,7 @@ S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="+curl static-libs perl gitweb"
 
@@ -25,11 +26,8 @@ DEPEND="
 "
 
 src_prepare() {
-	if [[ ${PV} == *9999 ]] ; then
-		eautoreconf
-	fi
-
 	default
+	eautoreconf
 }
 
 src_configure() {

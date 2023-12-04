@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SHORTNM="usr/share/vim/vim$(ver_cut 1)$(ver_cut 2)"
+SHORTNM="usr/share/vim/vim90"
 
 inherit flag-o-matic
 

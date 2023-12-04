@@ -11,7 +11,7 @@ HOMEPAGE="https://vim.sourceforge.io/ https://github.com/vim/vim"
 
 SNAPSHOT=0d0b3b19517c321b089d637919e88e49a07a3d85
 SRC_URI="https://github.com/vim/vim/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/node-${SNAPSHOT}
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="vim"
 SLOT="0"

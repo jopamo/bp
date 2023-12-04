@@ -141,7 +141,19 @@ src_configure() {
 
 src_compile() {
 	cd gcc-build
-	emake
+
+	emake -O STAGE1_CFLAGS="-O3" \
+		BOOT_CFLAGS="$CFLAGS" \
+		BOOT_LDFLAGS="$LDFLAGS" \
+		LDFLAGS_FOR_TARGET="$LDFLAGS" \
+		bootstrap
+
+	make -O STAGE1_CFLAGS="-O3" \
+		BOOT_CFLAGS="$CFLAGS" \
+		BOOT_LDFLAGS="$LDFLAGS" \
+		LDFLAGS_FOR_TARGET="$LDFLAGS" \
+		all-gcc
+
 }
 
 src_install() {

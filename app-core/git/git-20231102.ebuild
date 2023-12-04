@@ -2,19 +2,15 @@
 
 EAPI=8
 
+SNAPSHOT=61a22ddaf0626111193a17ac12f366bd6d167dff
+
 inherit autotools
 
 DESCRIPTION="Git is a fast, scalable, distributed revision control system"
 HOMEPAGE="http://www.git-scm.com/"
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/git/git.git"
-	EGIT_BRANCH=maint
-	inherit git-r3
-else
-	SRC_URI="https://mirrors.edge.kernel.org/pub/software/scm/git/${P}.tar.xz"
-	KEYWORDS="amd64 arm64"
-fi
+SRC_URI="https://github.com/git/git/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"

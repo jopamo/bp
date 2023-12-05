@@ -7,12 +7,9 @@ inherit toolchain-funcs
 DESCRIPTION="Open Firmware device tree compiler"
 HOMEPAGE="https://devicetree.org/ https://git.kernel.org/cgit/utils/dtc/dtc.git/"
 
-if [[ ${PV} == "9999" ]] ; then
-	EGIT_REPO_URI="git://git.kernel.org/pub/scm/utils/dtc/dtc.git"
-	inherit git-r3
-else
-	SRC_URI="mirror://kernel/software/utils/${PN}/${P}.tar.xz"
-fi
+SNAPSHOT="1ef53f094b4362afdfd54770a59b6d3da3551ee5"
+	SRC_URI="https://github.com/dgibson/dtc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"

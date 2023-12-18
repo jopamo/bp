@@ -1,0 +1,145 @@
+#!/bin/bash
+
+REPO_PATH="/var/db/repos/bp"
+
+fetch_latest_brave_versions() {
+    local github_repo_url="https://github.com/brave/brave-browser.git"
+
+    # Fetch the tags and sort them in descending order based on version numbers
+    local latest_tags=$(git ls-remote --tags --sort="-v:refname" $github_repo_url | \
+                        grep -oP 'refs/tags/v\d+\.\d+\.\d+' | \
+                        sort -urV | \
+                        head -5 | \
+                        sed 's/refs\/tags\/v//' | \
+                        sort -rV)
+
+    if [[ -z "$latest_tags" ]]; then
+        echo "Failed to fetch the latest Brave Browser versions"
+        return 1
+    fi
+
+    echo "$latest_tags"
+}
+
+
+update_ebuild_brave() {
+    local PACKAGE_PATH="${REPO_PATH}/bin/brave-nightly-bin"
+    local PACKAGE_NAME="brave-nightly-bin"
+
+    local fetched_versions=$(fetch_latest_brave_versions)
+    if [[ $? -ne 0 ]]; then
+        echo "Failed to fetch the latest Brave Browser versions"
+        exit 1
+    fi
+
+    IFS=$'\n' read -rd '' -a versions <<< "$fetched_versions"
+    for version in "${versions[@]}"; do
+        local download_url="https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser-nightly_${version}_amd64.deb"
+
+        # Test if the download URL exists
+        if curl --output /dev/null --silent --head --fail "$download_url"; then
+            echo "Found available version: $version"
+            local new_ebuild_filename="${PACKAGE_NAME}-${version}.ebuild"
+            local new_ebuild_file="${PACKAGE_PATH}/${new_ebuild_filename}"
+            local ebuild_file=$(find "${PACKAGE_PATH}" -maxdepth 1 -type f -name "${PACKAGE_NAME}-*.ebuild" | sort | tail -n 1)
+
+            if [[ -f "$new_ebuild_file" ]]; then
+                echo "Ebuild file ${new_ebuild_filename} already exists."
+                continue
+            fi
+            if [[ -z "$ebuild_file" ]]; then
+                echo "No ebuild file found for ${PACKAGE_NAME}."
+                continue
+            fi
+
+            mv "$ebuild_file" "$new_ebuild_file"
+            (cd ${REPO_PATH} && repoman manifest)
+            (cd ${REPO_PATH} && git add . && git commit -m "Update ${PACKAGE_NAME} to ${version}")
+            echo "Ebuild updated for ${PACKAGE_NAME}: ${new_ebuild_filename}"
+            break
+        else
+            echo "Version $version not available for download. Checking next version..."
+        fi
+    done
+
+    if [[ ! -f "$new_ebuild_file" ]]; then
+        echo "Failed to update ebuild for ${PACKAGE_NAME}"
+        exit 1
+    fi
+}
+
+
+fetch_latest_chrome_version() {
+    local url="https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-unstable"
+    local latest_version=$(curl -s "$url" | grep -oP '(?<=<a name=")\d+\.\d+\.\d+\.\d+-\d+' | head -1 | cut -d'-' -f1)
+    [[ -z "$latest_version" ]] && { echo "Failed to fetch the latest Google Chrome Unstable version"; return 1; }
+    echo "$latest_version"
+}
+
+update_ebuild_chrome() {
+    local PACKAGE_PATH="${REPO_PATH}/bin/google-chrome-unstable"
+    local PACKAGE_NAME="google-chrome-unstable"
+    local fetched_version=$(fetch_latest_chrome_version)
+
+    [[ $? -ne 0 ]] && { echo "Failed to fetch the latest Google Chrome Unstable version"; exit 1; }
+    local new_ebuild_filename="${PACKAGE_NAME}-${fetched_version}.ebuild"
+    local new_ebuild_file="${PACKAGE_PATH}/${new_ebuild_filename}"
+    local ebuild_file=$(find "${PACKAGE_PATH}" -maxdepth 1 -type f -name "${PACKAGE_NAME}-*.ebuild" | sort | tail -n 1)
+
+    if [[ -f "$new_ebuild_file" ]]; then
+        echo "Ebuild file ${new_ebuild_filename} already exists."
+        exit 1
+    fi
+    if [[ -z "$ebuild_file" ]]; then
+        echo "No ebuild file found for ${PACKAGE_NAME}."
+        exit 1
+    fi
+
+    mv "$ebuild_file" "$new_ebuild_file"
+    (cd ${REPO_PATH} && repoman manifest)
+    (cd ${REPO_PATH} && git add . && git commit -m "Update ${PACKAGE_NAME} to ${fetched_version}")
+    echo "Ebuild updated for ${PACKAGE_NAME}: ${new_ebuild_filename}"
+}
+
+fetch_latest_firefox_version() {
+    local current_year=$(date +"%Y")
+    local current_month=$(date +"%m")
+    local current_day=$(date +"%d")
+    local base_url="https://archive.mozilla.org/pub/firefox/nightly/${current_year}/${current_month}/"
+    local latest_dir=$(curl -s $base_url | grep -oP "${current_year}-${current_month}-${current_day}-\d{2}-\d{2}-\d{2}-mozilla-central/" | sort -r | head -1)
+    local time_stamp=$(echo "$latest_dir" | grep -oP '\d{2}-\d{2}-\d{2}(?=-mozilla-central/)' | tr '-' '.')
+    local contents=$(curl -s "${base_url}${latest_dir}")
+    local version=$(echo "$contents" | grep -oP 'firefox-\d{1,3}\.0a1\.en-US\.linux-x86_64\.tar\.bz2' | head -1 | grep -oP '\d{1,3}\.0a1' | cut -d '.' -f 1)
+
+    [[ -z "$latest_dir" ]] && { echo "No directory found for today's date: ${current_year}-${current_month}-${current_day}"; return 1; }
+    echo "${current_year}.${current_month}.${current_day}.${version}.${time_stamp}"
+}
+
+update_ebuild_firefox() {
+    local PACKAGE_PATH="${REPO_PATH}/bin/firefox-nightly-bin"
+    local PACKAGE_NAME="firefox-nightly-bin"
+    local fetched_version=$(fetch_latest_firefox_version)
+
+    [[ $? -ne 0 ]] && { echo "Failed to fetch the latest Firefox version"; exit 1; }
+    local new_ebuild_filename="${PACKAGE_NAME}-${fetched_version}.ebuild"
+    local new_ebuild_file="${PACKAGE_PATH}/${new_ebuild_filename}"
+    local ebuild_file=$(find "${PACKAGE_PATH}" -maxdepth 1 -type f -name "${PACKAGE_NAME}-*.ebuild" | sort | tail -n 1)
+
+    if [[ -f "$new_ebuild_file" ]]; then
+        echo "Ebuild file ${new_ebuild_filename} already exists."
+        exit 1
+    fi
+    if [[ -z "$ebuild_file" ]]; then
+        echo "No ebuild file found for ${PACKAGE_NAME}."
+        exit 1
+    fi
+
+    mv "$ebuild_file" "$new_ebuild_file"
+    (cd ${REPO_PATH} && repoman manifest)
+    (cd ${REPO_PATH} && git add . && git commit -m "Update ${PACKAGE_NAME} to ${fetched_version}")
+    echo "Ebuild updated for ${PACKAGE_NAME}: ${new_ebuild_filename}"
+}
+
+update_ebuild_brave
+update_ebuild_chrome
+update_ebuild_firefox

@@ -295,6 +295,7 @@ src_install-libs() {
 			"libnvidia-glcore.so.${NV_SOVER}"
 			"libnvidia-glsi.so.${NV_SOVER}"
 			"libnvidia-glvkspirv.so.${NV_SOVER}"
+			"libnvidia-gpucomp.so.${NV_SOVER}"
 			"libnvidia-ml.so.${PV}"
 			"libnvidia-opencl.so.${NV_SOVER}"
 			"libnvidia-opticalflow.so.${NV_SOVER}"

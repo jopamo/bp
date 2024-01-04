@@ -28,5 +28,6 @@ src_install() {
 	cp -rp	"${S}"/* "${HERE}"/ || die
 	rm "${HERE}"/src.zip || die
 	rm "${HERE}"/jre/lib/amd64/libglassgtk2.so || die
+	rm "${HERE}"/jre/lib/amd64/libavplugin* || die
 	find "${ED}" -type d -empty -delete || die
 }

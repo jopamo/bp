@@ -23,11 +23,17 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_compile() {
-	emake \
+	make -C lib \
 		CC="$(tc-getCC)" \
 		AR="$(tc-getAR)" \
 		PREFIX="${EPREFIX}"/usr \
 		LIBDIR="${EPREFIX}"/usr/lib
+
+	make -C programs \
+		CC="$(tc-getCC)" \
+		AR="$(tc-getAR)" \
+		PREFIX="${EPREFIX}"/usr \
+		LIBDIR="${EPREFIX}"/usr/lib lz4 lz4c
 }
 
 src_install() {

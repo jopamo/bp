@@ -6,7 +6,15 @@ inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="kernel routing and traffic control utilities"
 HOMEPAGE="https://wiki.linuxfoundation.org/networking/iproute2"
-SRC_URI="https://www.kernel.org/pub/linux/utils/net/${PN}/${P}.tar.xz"
+
+if [[ ${PV} == *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
+	inherit git-r3
+else
+	SNAPSHOT=8415b042f6fb2ab011dc82ad8a691931b6e51f8d
+	SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -27,8 +35,7 @@ DEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-3.1.0-mtu.patch
-	"${FILESDIR}"/${PN}-5.12.0-configure-nomagic.patch
+	"${FILESDIR}"/${PN}-mtu.patch
 	"${FILESDIR}"/${PN}-5.7.0-mix-signal.h-include.patch
 )
 
@@ -82,11 +89,10 @@ src_configure() {
 	TC_CONFIG_ATM := n
 	TC_CONFIG_XT  := $(usex iptables y n)
 	TC_CONFIG_NO_XT := $(usex iptables n y)
-	# We've locked in recent enough kernel headers #549948
 	TC_CONFIG_IPSET := y
 	HAVE_BERKELEY_DB := n
 	HAVE_CAP      := $(usex caps y n)
-	HAVE_MNL      := y
+	HAVE_MNL      := n
 	HAVE_ELF      := $(usex elf y n)
 	HAVE_SELINUX  := n
 	IP_CONFIG_SETNS := ${setns}

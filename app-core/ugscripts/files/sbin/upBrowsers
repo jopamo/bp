@@ -29,7 +29,7 @@ update_ebuild_brave() {
     local fetched_versions=$(fetch_latest_brave_versions)
     if [[ $? -ne 0 ]]; then
         echo "Failed to fetch the latest Brave Browser versions"
-        exit 1
+        return 1
     fi
 
     IFS=$'\n' read -rd '' -a versions <<< "$fetched_versions"
@@ -45,7 +45,7 @@ update_ebuild_brave() {
 
             if [[ -f "$new_ebuild_file" ]]; then
                 echo "Ebuild file ${new_ebuild_filename} already exists."
-                continue
+                return 1
             fi
             if [[ -z "$ebuild_file" ]]; then
                 echo "No ebuild file found for ${PACKAGE_NAME}."
@@ -64,7 +64,7 @@ update_ebuild_brave() {
 
     if [[ ! -f "$new_ebuild_file" ]]; then
         echo "Failed to update ebuild for ${PACKAGE_NAME}"
-        exit 1
+        return 1
     fi
 }
 
@@ -88,7 +88,7 @@ update_ebuild_chrome() {
 
     if [[ -f "$new_ebuild_file" ]]; then
         echo "Ebuild file ${new_ebuild_filename} already exists."
-        exit 1
+        return 1
     fi
     if [[ -z "$ebuild_file" ]]; then
         echo "No ebuild file found for ${PACKAGE_NAME}."
@@ -127,7 +127,7 @@ update_ebuild_firefox() {
 
     if [[ -f "$new_ebuild_file" ]]; then
         echo "Ebuild file ${new_ebuild_filename} already exists."
-        exit 1
+        return 1
     fi
     if [[ -z "$ebuild_file" ]]; then
         echo "No ebuild file found for ${PACKAGE_NAME}."

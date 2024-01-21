@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SHORTNM="usr/share/vim/vim90"
+SHORTNM="usr/share/vim/vim91"
 
 inherit flag-o-matic
 

@@ -12,7 +12,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl caps gmp multicall static xattr"
+IUSE="acl caps gmp multicall musl static xattr"
 
 LIB_DEPEND="
 	acl? ( app-core/acl[static-libs] )
@@ -52,7 +52,8 @@ src_configure() {
 	export gl_cv_func_mknod_works=yes #409919
 	use static && append-ldflags -static && sed -i '/elf_sys=yes/s:yes:no:' configure #321821
 
-	econf "${myconf[@]}"
+	use musl || econf "${myconf[@]}"
+	use musl &&  CFLAGS="-I/usr/include/utmps" LIBS="-lutmps -lskarnet -lrt" econf "${myconf[@]}"
 }
 
 src_install() {

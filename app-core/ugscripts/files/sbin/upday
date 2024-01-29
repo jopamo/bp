@@ -116,11 +116,13 @@ if [[ $update_gcc == true ]]; then
 	update_ebuild "${REPO_PATH}/app-build/gcc" "gcc" "https://github.com/gcc-mirror/gcc" "releases/gcc-12" "12.3" "no"
 fi
 
+update_ebuild "${REPO_PATH}/app-build/binutils" "binutils" "https://git.linaro.org/toolchain/binutils-gdb" "binutils-2_41-branch" "2.41" "no"
 update_ebuild "${REPO_PATH}/app-compression/lz4" "lz4" "https://github.com/lz4/lz4" "dev" "placeholder" "yes"
 update_ebuild "${REPO_PATH}/app-compression/xz-utils" "xz-utils" "https://github.com/tukaani-project/xz" "v5.4" "5.4" "no"
 update_ebuild "${REPO_PATH}/app-compression/zstd" "zstd" "https://github.com/facebook/zstd" "dev" "placeholder" "yes"
 update_ebuild "${REPO_PATH}/app-core/dbus" "dbus" "https://gitlab.freedesktop.org/dbus/dbus" "dbus-1.14" "1.14" "no"
 update_ebuild "${REPO_PATH}/app-core/file" "file" "https://github.com/file/file" "master" "empty" "yes"
+update_ebuild "${REPO_PATH}/app-core/gawk" "gawk" "https://git.savannah.gnu.org/git/gawk" "gawk-5.3-stable" "5.3" "no"
 update_ebuild "${REPO_PATH}/app-core/git" "git" "https://github.com/git/git" "maint" "empty" "yes"
 update_ebuild "${REPO_PATH}/app-core/kmod" "kmod" "https://github.com/kmod-project/kmod" "master" "empty" "yes"
 update_ebuild "${REPO_PATH}/app-core/lsof" "lsof" "https://github.com/lsof-org/lsof" "master" "empty" "yes"
@@ -140,4 +142,3 @@ update_ebuild "${REPO_PATH}/app-fs/smartmontools" "smartmontools" "https://githu
 update_ebuild "${REPO_PATH}/app-server/nodejs" "nodejs" "https://github.com/nodejs/node" "v20.x" "20" "no"
 update_ebuild "${REPO_PATH}/lib-core/libexpat" "libexpat" "https://github.com/libexpat/libexpat" "master" "empty" "yes"
 update_ebuild "${REPO_PATH}/lib-net/openssl" "openssl" "https://github.com/openssl/openssl" "openssl-3.1" "3.1" "no"
-update_ebuild "${REPO_PATH}/app-core/gawk" "gawk" "https://git.savannah.gnu.org/git/gawk" "gawk-5.3-stable" "5.3" "no"

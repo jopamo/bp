@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=4a8d9c69050bd01a0be66695fea3b35b72f5a425
+SNAPSHOT=0ca99d442e9d0a49d3ec373413d781ca392b57bc
 
 DESCRIPTION="User-space application to modify the EFI boot manager"
 HOMEPAGE="https://github.com/rhinstaller/efibootmgr"

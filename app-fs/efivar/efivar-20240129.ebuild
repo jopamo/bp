@@ -4,7 +4,7 @@ EAPI=8
 
 inherit flag-o-matic
 
-SNAPSHOT=90e88b221e8bc60dc50f3246051369b8f580c0d0
+SNAPSHOT=af8bc6d54ec6732605ad54be9f89ab60703db2af
 
 DESCRIPTION="Tools and library to manipulate EFI variables"
 HOMEPAGE="https://github.com/rhboot/efivar"

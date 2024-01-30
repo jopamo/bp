@@ -12,6 +12,20 @@ fetch_latest_boost_version() {
     echo "$latest_version"
 }
 
+fetch_latest_bluez_version() {
+    local bluez_git_url="https://git.kernel.org/pub/scm/bluetooth/bluez.git"
+    local latest_version=$(git ls-remote --tags --sort="-v:refname" "$bluez_git_url" | \
+                        grep -oP 'refs/tags/\K\d+\.\d+' | \
+                        sort -urV | \
+                        head -1)
+    if [[ -z "$latest_version" ]]; then
+        echo "Failed to fetch the latest BlueZ version"
+        return 1
+    fi
+    echo "$latest_version"
+}
+
+
 update_ebuild() {
     local PACKAGE_PATH="${REPO_PATH}/$1"
     local PACKAGE_NAME="$2"
@@ -51,3 +65,7 @@ boost_version=$(fetch_latest_boost_version)
 
 # Update Boost Build
 [[ $? -eq 0 ]] && update_ebuild "lib-dev/boost-build" "boost-build" "$boost_version"
+
+# Update BlueZ
+bluez_version=$(fetch_latest_bluez_version)
+[[ $? -eq 0 ]] && update_ebuild "app-net/bluez" "bluez" "$bluez_version"

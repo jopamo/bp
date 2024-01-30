@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs
+inherit meson
 
 DESCRIPTION="Extremely Fast Compression algorithm"
 HOMEPAGE="https://github.com/lz4/lz4"
@@ -13,37 +13,9 @@ if [[ ${PV} == *9999 ]]; then
 else
 	SNAPSHOT=a3042b9a8e4594b10df94448251c2bc5c5b6c22a
 	SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	S=${WORKDIR}/${PN}-${SNAPSHOT}/build/meson
 fi
 
 LICENSE="BSD-2 GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-IUSE="static-libs"
-
-src_compile() {
-	make -C lib \
-		CC="$(tc-getCC)" \
-		AR="$(tc-getAR)" \
-		PREFIX="${EPREFIX}"/usr \
-		LIBDIR="${EPREFIX}"/usr/lib
-
-	make -C programs \
-		CC="$(tc-getCC)" \
-		AR="$(tc-getAR)" \
-		PREFIX="${EPREFIX}"/usr \
-		LIBDIR="${EPREFIX}"/usr/lib lz4 lz4c
-}
-
-src_install() {
-	emake \
-		DESTDIR="${ED}" \
-		PREFIX="${EPREFIX}"/usr \
-		LIBDIR="${EPREFIX}"/usr/lib install
-
-	if ! use static-libs; then
-		rm "${ED}"/usr/lib/liblz4.a || die
-	fi
-}
-

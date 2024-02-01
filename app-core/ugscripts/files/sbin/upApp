@@ -25,6 +25,18 @@ fetch_latest_bluez_version() {
     echo "$latest_version"
 }
 
+fetch_latest_curl_version() {
+    local curl_page_url="https://curl.se/download/"
+    local latest_version=$(curl -s "$curl_page_url" | \
+                           grep -oP '<td>\K\d+\.\d+\.\d+(?=</td>)' | \
+                           sort -Vr | \
+                           head -1)
+    if [[ -z "$latest_version" ]]; then
+        echo "Failed to fetch the latest cURL version"
+        return 1
+    fi
+    echo "$latest_version"
+}
 
 update_ebuild() {
     local PACKAGE_PATH="${REPO_PATH}/$1"
@@ -69,3 +81,7 @@ boost_version=$(fetch_latest_boost_version)
 # Update BlueZ
 bluez_version=$(fetch_latest_bluez_version)
 [[ $? -eq 0 ]] && update_ebuild "app-net/bluez" "bluez" "$bluez_version"
+
+# Update cURL
+curl_version=$(fetch_latest_curl_version)
+[[ $? -eq 0 ]] && update_ebuild "app-net/curl" "curl" "$curl_version"

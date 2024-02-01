@@ -9,7 +9,7 @@ inherit flag-o-matic
 DESCRIPTION="Vim, an improved vi-style text editor"
 HOMEPAGE="https://vim.sourceforge.io/ https://github.com/vim/vim"
 
-SNAPSHOT=1b7fbe726a4e7ad117bace7e40f5e0a286a2cd5b
+SNAPSHOT=e1cd1fda6990d612bd8f27d78f4f5d747c2dc537
 SRC_URI="https://github.com/vim/vim/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

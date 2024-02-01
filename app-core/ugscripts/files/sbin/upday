@@ -1,22 +1,37 @@
 #!/bin/bash
 
+# Define the repository path
+REPO_PATH="/var/db/repos/bp"
+REPO_TEMP_DIR="/tmp/repo_temp"
+
+rm -rf "$REPO_TEMP_DIR"
+
 show_help() {
 	echo "Usage: $0 [options]"
 	echo ""
 	echo "Options:"
-	echo "  --update-gcc	   Update the GCC ebuild"
-	echo "  --help			 Display this help and exit"
+	echo "  --update-gcc	 Update the GCC ebuild"
+	echo "  --unsafe		 Update packages marked as unsafe"
+	echo "  --help		   Display this help and exit"
 	echo ""
-	echo "Without any options, the script updates all ebuilds except GCC."
+	echo "Without any options, the script updates all ebuilds except GCC and unsafe packages."
 }
 
 update_gcc=false
+update_unsafe=false
+
+# Set error handling
+set -e
 
 while [[ $# -gt 0 ]]; do
 	case $1 in
 		--update-gcc)
 			update_gcc=true
-			shift # Remove argument from processing
+			shift
+			;;
+		--unsafe)
+			update_unsafe=true
+			shift
 			;;
 		--help)
 			show_help
@@ -30,91 +45,122 @@ while [[ $# -gt 0 ]]; do
 	esac
 done
 
-update_ebuild() {
-	local package_path="$1"
-	local package_name="$2"
-	local repo_uri="$3"
-	local branch="$4"
-	local version="$5"
-	local use_date_only="$6"
+# Function to clone or update a Git repository and fetch tags
+clone_or_update_repo() {
+	local repo_uri="$1"
+	local target_dir="$2"
+	local branch="$3"
+	local version_pattern="$4"
+	local max_versions_to_check=1  # Since we only want the latest, set this to 1
 
-	echo "Updating ${package_name}..."
-
-	# Clone the repository to a temporary directory
-	temp_dir=/tmp/tmp-upday/$package_name
-
-	# Remove existing directory if it exists
-	[[ -d "$temp_dir" ]] && rm -rf "$temp_dir"
-
-	mkdir -p "$temp_dir" || { echo "Failed to create directory $temp_dir"; return; }
-
-	if [[ ! -d "$temp_dir" ]]; then
-	  echo "Temporary directory $temp_dir does not exist."
-	  return
+	# Clone or update the repository
+	if [[ -d "$target_dir" ]]; then
+		(cd "$target_dir" && git fetch --all --tags && git reset --hard "origin/$branch")
+	else
+		git clone --depth 1 --branch "$branch" "$repo_uri" "$target_dir"
 	fi
 
-	git clone --depth 1 --branch "$branch" "$repo_uri".git "$temp_dir" || { echo "Failed to clone repository: $repo_uri"; rm -rf "$temp_dir"; return; }
+	# Fetch the latest tag, remove the leading 'v', and store it
+	latest_version=$(cd "$target_dir" && git tag -l | grep -oP "$version_pattern" | sort -rV | head -n "$max_versions_to_check" | sed 's/^v//')
+}
+
+update_ebuild() {
+	local package_path="$1"
+	local PACKAGE_NAME="$2"
+	local repo_uri="$3"
+	local branch="$4"
+	local version_name="$5"
+	local use_date_only="$6"
+	local repo_temp_dir="${REPO_TEMP_DIR}/${PACKAGE_NAME}"
+
+	echo "Updating ${PACKAGE_NAME}..."
+
+	# Check if repo has been cloned already, if not, clone or update
+	if [[ ! -d "$repo_temp_dir" ]]; then
+		clone_or_update_repo "$repo_uri" "$repo_temp_dir" "$branch" "v\d+\.\d+"
+	fi
 
 	# Fetch the latest commit hash and date from the cloned repository
-	latest_commit=$(cd "$temp_dir" && git rev-parse HEAD)
-	latest_commit_date=$(cd "$temp_dir" && git log -n1 --pretty=format:%cd --date=format:%Y%m%d)
+	latest_commit=$(cd "$repo_temp_dir" && git rev-parse HEAD)
+	latest_commit_date=$(cd "$repo_temp_dir" && git log -n1 --pretty=format:%cd --date=format:%Y%m%d)
 
 	if [[ -z "$latest_commit" ]] || [[ -z "$latest_commit_date" ]]; then
-	  echo "Failed to fetch latest commit or date from Git repository: $repo_uri"
-	  rm -rf "$temp_dir"
-	  return
+		echo "Failed to fetch latest commit or date from Git repository: $repo_uri"
+		return 1
 	fi
 
 	echo "Latest commit: $latest_commit"
 	echo "Latest commit date: $latest_commit_date"
 
 	# Find the current ebuild file
-	local ebuild_file=$(find "${package_path}" -maxdepth 1 -type f -name "${package_name}-*.ebuild" | sort | tail -n 1)
+	local ebuild_file=$(find "$package_path" -maxdepth 1 -type f -name "${PACKAGE_NAME}-*.ebuild" | sort | tail -n 1)
 	if [[ -z "$ebuild_file" ]]; then
-		echo "No ebuild file found for ${package_name}."
-		return
+		echo "No ebuild file found for ${PACKAGE_NAME}."
+		return 1
 	fi
-
-	rm -rf "$temp_dir"
 
 	# Update the SNAPSHOT variable in the ebuild file
 	sed -i "s/SNAPSHOT=.*/SNAPSHOT=${latest_commit}/" "$ebuild_file"
 
 	# Construct new ebuild filename
-	local new_ebuild_filename
+	local version
 	if [[ "$use_date_only" == "yes" ]]; then
-		new_ebuild_filename="${package_name}-${latest_commit_date}.ebuild"
+		version="${latest_commit_date}"
 	else
-		new_ebuild_filename="${package_name}-${version}.${latest_commit_date}.ebuild"
+		version="${version_name}.${latest_commit_date}"
 	fi
 
+	local new_ebuild_filename="${PACKAGE_NAME}-${version}.ebuild"
 	local new_ebuild_file="${package_path}/${new_ebuild_filename}"
 
 	if [[ -f "$new_ebuild_file" ]]; then
-		echo "Ebuild file ${new_ebuild_filename} already exists."
-		return
+		echo "Ebuild file ${new_ebuild_filename} is already latest."
+		return 0
 	fi
 
-	# Rename the ebuild file
 	mv "$ebuild_file" "$new_ebuild_file"
+	(cd "$REPO_PATH" && repoman manifest)
+	(cd "$REPO_PATH" && git add . && git commit -m "Update ${PACKAGE_NAME} to ${version}")
+	echo "Ebuild updated for ${PACKAGE_NAME}: ${new_ebuild_filename}"
+}
+update_vim_ebuild() {
+	local package_path="$1"
+	local latest_version="$2"
+	local vim_ebuild_file
 
-	# Navigate to the ebuild directory and run repoman manifest
-	(cd ${REPO_PATH} && repoman manifest)
+	# Find the current Vim ebuild file
+	vim_ebuild_file=$(find "$package_path" -type f -name "vim-*.ebuild" | sort | tail -n 1)
 
-	echo "Ebuild updated for ${package_name}: ${new_ebuild_filename}"
+	if [[ -z "$vim_ebuild_file" ]]; then
+		echo "No Vim ebuild file found."
+		return 1
+	fi
 
-	# Add changes to git
-	(cd ${REPO_PATH} && git add . && git commit -m "$new_ebuild_filename")
+	# Construct the new SHORTNM line using the latest version
+	local new_shortnm="usr/share/vim/vim${latest_version//./}"
 
-	echo "Ebuild committed to Git with filename as the commit message."
+	# Update the SHORTNM line in the Vim ebuild file
+	sed -i "s|SHORTNM=\"usr/share/vim/vim[0-9]*\"|SHORTNM=\"$new_shortnm\"|g" "$vim_ebuild_file"
+
+	echo "Updated Vim ebuild to version $latest_version in $vim_ebuild_file."
 }
 
-# Define the repository path
-REPO_PATH="/var/db/repos/bp"
-
+# Update gcc if requested
 if [[ $update_gcc == true ]]; then
-	update_ebuild "${REPO_PATH}/app-build/gcc" "gcc" "https://github.com/gcc-mirror/gcc" "releases/gcc-12" "12.3" "no"
+	clone_or_update_repo "https://github.com/gcc-mirror/gcc" "${REPO_TEMP_DIR}/gcc" "releases/gcc-12" "v\d+\.\d+"
+	update_ebuild "${REPO_PATH}/app-build/gcc" "gcc" "${REPO_TEMP_DIR}/gcc" "releases/gcc-12" "12.3" "no"
 fi
+
+# Update unsafe packages if requested
+if [[ $update_unsafe == true ]]; then
+	clone_or_update_repo "https://github.com/rhinstaller/efibootmgr" "${REPO_TEMP_DIR}/efibootmgr" "main" "v\d+\.\d+"
+	update_ebuild "${REPO_PATH}/app-fs/efibootmgr" "efibootmgr" "${REPO_TEMP_DIR}/efibootmgr" "main" "empty" "yes"
+fi
+
+# Vim
+clone_or_update_repo "https://github.com/vim/vim.git" "${REPO_TEMP_DIR}/vim" "master" "v\d+\.\d+"
+update_vim_ebuild "${REPO_PATH}/app-core/vim" "$latest_version"
+update_ebuild "${REPO_PATH}/app-core/vim" "vim" "${REPO_TEMP_DIR}/vim" "master" "${latest_version}" "no"
 
 update_ebuild "${REPO_PATH}/app-build/binutils" "binutils" "https://git.linaro.org/toolchain/binutils-gdb" "binutils-2_41-branch" "2.41" "no"
 update_ebuild "${REPO_PATH}/app-compression/lz4" "lz4" "https://github.com/lz4/lz4" "dev" "placeholder" "yes"
@@ -129,16 +175,18 @@ update_ebuild "${REPO_PATH}/app-core/lsof" "lsof" "https://github.com/lsof-org/l
 update_ebuild "${REPO_PATH}/app-core/procps" "procps" "https://gitlab.com/procps-ng/procps" "master" "empty" "yes"
 update_ebuild "${REPO_PATH}/app-core/systemd" "systemd" "https://github.com/systemd/systemd-stable" "v254-stable" "254" "no"
 update_ebuild "${REPO_PATH}/app-core/util-linux" "util-linux" "https://github.com/util-linux/util-linux" "stable/v2.39" "2.39" "no"
-update_ebuild "${REPO_PATH}/app-core/vim" "vim" "https://github.com/vim/vim" "master" "empty" "yes"
 update_ebuild "${REPO_PATH}/app-crypto/jitterentropy" "jitterentropy" "https://github.com/smuellerDD/jitterentropy-library" "master" "empty" "yes"
 update_ebuild "${REPO_PATH}/app-crypto/rng-tools" "rng-tools" "https://github.com/nhorman/rng-tools" "master" "empty" "yes"
 update_ebuild "${REPO_PATH}/app-fs/dosfstools" "dosfstools" "https://github.com/dosfstools/dosfstools" "master" "empty" "yes"
 update_ebuild "${REPO_PATH}/app-fs/e2fsprogs" "e2fsprogs" "https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs" "maint" "empty" "yes"
-update_ebuild "${REPO_PATH}/app-fs/efibootmgr" "efibootmgr" "https://github.com/rhinstaller/efibootmgr" "main" "empty" "yes"
 update_ebuild "${REPO_PATH}/app-fs/efivar" "efivar" "https://github.com/rhboot/efivar" "main" "empty" "yes"
 update_ebuild "${REPO_PATH}/app-fs/mdadm" "mdadm" "https://git.kernel.org/pub/scm/utils/mdadm/mdadm" "master" "empty" "yes"
 update_ebuild "${REPO_PATH}/app-fs/ntfs3g" "ntfs3g" "https://github.com/tuxera/ntfs-3g" "edge" "empty" "yes"
 update_ebuild "${REPO_PATH}/app-fs/smartmontools" "smartmontools" "https://github.com/smartmontools/smartmontools" "master" "empty" "yes"
+update_ebuild "${REPO_PATH}/app-net/chrony" "chrony" "https://gitlab.com/chrony/chrony" "master" "empty" "yes"
+update_ebuild "${REPO_PATH}/app-net/cyrus-sasl" "cyrus-sasl" "https://github.com/cyrusimap/cyrus-sasl" "master" "empty" "yes"
+update_ebuild "${REPO_PATH}/app-net/iproute2" "iproute2" "https://github.com/iproute2/iproute2" "main" "empty" "yes"
+update_ebuild "${REPO_PATH}/app-net/networkmanager" "networkmanager" "https://github.com/NetworkManager/NetworkManager" "main" "empty" "yes"
 update_ebuild "${REPO_PATH}/app-server/nodejs" "nodejs" "https://github.com/nodejs/node" "v20.x" "20" "no"
-update_ebuild "${REPO_PATH}/lib-core/libexpat" "libexpat" "https://github.com/libexpat/libexpat" "master" "empty" "yes"
+update_ebuild "${REPO_PATH}/lib-core/expat" "expat" "https://github.com/libexpat/libexpat" "master" "empty" "yes"
 update_ebuild "${REPO_PATH}/lib-net/openssl" "openssl" "https://github.com/openssl/openssl" "openssl-3.1" "3.1" "no"

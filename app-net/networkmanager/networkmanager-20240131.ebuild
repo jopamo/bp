@@ -11,7 +11,7 @@ if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/NetworkManager/NetworkManager"
 	inherit git-r3
 else
-	SNAPSHOT=5f7a027f59f0dfd7b759c44106a9e3f3da7a8a57
+	SNAPSHOT=0607340922014fbe4a60f7db777ad8316cf6f2e4
 	SRC_URI="https://github.com/NetworkManager/NetworkManager/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/NetworkManager-${SNAPSHOT}
 fi

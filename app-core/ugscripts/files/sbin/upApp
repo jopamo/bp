@@ -38,6 +38,65 @@ fetch_latest_curl_version() {
     echo "$latest_version"
 }
 
+fetch_latest_vim_version() {
+    local vim_git_url="https://github.com/vim/vim.git"
+    local latest_version=$(git ls-remote --tags --sort="-v:refname" "$vim_git_url" | \
+                        grep -oP 'refs/tags/v\K\d+\.\d+\.\d+' | \
+                        sort -urV | \
+                        head -1)
+    if [[ -z "$latest_version" ]]; then
+        echo "Failed to fetch the latest Vim version"
+        return 1
+    fi
+    echo "$latest_version"
+}
+
+fetch_latest_vim_version() {
+    local vim_git_url="https://github.com/vim/vim.git"
+    local latest_version=$(git ls-remote --tags --sort="-v:refname" "$vim_git_url" | \
+                        grep -oP 'refs/tags/v\K\d+\.\d+\.\d+' | \
+                        sort -urV | \
+                        head -1)
+    if [[ -z "$latest_version" ]]; then
+        echo "Failed to fetch the latest Vim version"
+        return 1
+    fi
+    echo "$latest_version"
+}
+
+update_vim_ebuild() {
+    local PACKAGE_PATH="${REPO_PATH}/$1"
+    local PACKAGE_NAME="$2"
+    local latest_version="$3"
+
+    local vim_ebuild_file=$(find "${PACKAGE_PATH}" -type f -name "vim-*.ebuild" | sort | tail -n 1)
+
+    if [[ -z "$vim_ebuild_file" ]]; then
+        echo "No Vim ebuild file found."
+        return 1
+    fi
+
+    # Ensure the version is formatted correctly (no leading 'v')
+    latest_version=${latest_version#v}
+
+    # Construct the new filename with the full version number
+    local new_ebuild_filename="${PACKAGE_NAME}-${latest_version}.ebuild"
+    local new_file_path="${PACKAGE_PATH}/${new_ebuild_filename}"
+
+    # Rename the ebuild file to match the latest version, if it doesn't already exist
+    if [[ "$vim_ebuild_file" != "$new_file_path" ]]; then
+        mv "$vim_ebuild_file" "$new_file_path"
+        echo "Renamed Vim ebuild to $new_ebuild_filename."
+    else
+        echo "Vim ebuild is already up to date with version $latest_version."
+        return 0
+    fi
+
+    (cd ${REPO_PATH} && repoman manifest)
+    (cd ${REPO_PATH} && git add . && git commit -m "Update Vim to ${latest_version}")
+    echo "Vim ebuild updated to version ${latest_version} in ${new_file_path}."
+}
+
 update_ebuild() {
     local PACKAGE_PATH="${REPO_PATH}/$1"
     local PACKAGE_NAME="$2"
@@ -85,3 +144,7 @@ bluez_version=$(fetch_latest_bluez_version)
 # Update cURL
 curl_version=$(fetch_latest_curl_version)
 [[ $? -eq 0 ]] && update_ebuild "app-net/curl" "curl" "$curl_version"
+
+# Update Vim
+vim_version=$(fetch_latest_vim_version)
+[[ $? -eq 0 ]] && update_vim_ebuild "app-core/vim" "vim" "$vim_version"

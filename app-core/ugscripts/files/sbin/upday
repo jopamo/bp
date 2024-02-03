@@ -45,7 +45,6 @@ while [[ $# -gt 0 ]]; do
 	esac
 done
 
-# Function to clone or update a Git repository and fetch tags
 clone_or_update_repo() {
 	local repo_uri="$1"
 	local target_dir="$2"
@@ -123,27 +122,6 @@ update_ebuild() {
 	(cd "$REPO_PATH" && git add . && git commit -m "Update ${PACKAGE_NAME} to ${version}")
 	echo "Ebuild updated for ${PACKAGE_NAME}: ${new_ebuild_filename}"
 }
-update_vim_ebuild() {
-	local package_path="$1"
-	local latest_version="$2"
-	local vim_ebuild_file
-
-	# Find the current Vim ebuild file
-	vim_ebuild_file=$(find "$package_path" -type f -name "vim-*.ebuild" | sort | tail -n 1)
-
-	if [[ -z "$vim_ebuild_file" ]]; then
-		echo "No Vim ebuild file found."
-		return 1
-	fi
-
-	# Construct the new SHORTNM line using the latest version
-	local new_shortnm="usr/share/vim/vim${latest_version//./}"
-
-	# Update the SHORTNM line in the Vim ebuild file
-	sed -i "s|SHORTNM=\"usr/share/vim/vim[0-9]*\"|SHORTNM=\"$new_shortnm\"|g" "$vim_ebuild_file"
-
-	echo "Updated Vim ebuild to version $latest_version in $vim_ebuild_file."
-}
 
 # Update gcc if requested
 if [[ $update_gcc == true ]]; then
@@ -158,10 +136,6 @@ if [[ $update_unsafe == true ]]; then
 fi
 
 # Vim
-clone_or_update_repo "https://github.com/vim/vim.git" "${REPO_TEMP_DIR}/vim" "master" "v\d+\.\d+"
-update_vim_ebuild "${REPO_PATH}/app-core/vim" "$latest_version"
-update_ebuild "${REPO_PATH}/app-core/vim" "vim" "${REPO_TEMP_DIR}/vim" "master" "${latest_version}" "no"
-
 update_ebuild "${REPO_PATH}/app-build/binutils" "binutils" "https://git.linaro.org/toolchain/binutils-gdb" "binutils-2_41-branch" "2.41" "no"
 update_ebuild "${REPO_PATH}/app-compression/lz4" "lz4" "https://github.com/lz4/lz4" "dev" "placeholder" "yes"
 update_ebuild "${REPO_PATH}/app-compression/xz-utils" "xz-utils" "https://github.com/tukaani-project/xz" "v5.4" "5.4" "no"

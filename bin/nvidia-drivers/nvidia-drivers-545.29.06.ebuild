@@ -45,6 +45,8 @@ PDEPEND="
 QA_PREBUILT="opt/* usr/lib*"
 S=${WORKDIR}/
 
+PATCHES=(${FILESDIR}/nvidia-drivers-470.223.02-gpl-pfn_valid.patch)
+
 nvidia_drivers_versions_check() {
 	CONFIG_CHECK="
 		PROC_FS

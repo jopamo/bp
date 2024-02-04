@@ -1,20 +1,29 @@
 [Unit]
 Description=Lighttpd Daemon
 After=network.target
+Requires=network.target
 
 [Service]
 ExecStartPre=/usr/sbin/lighttpd -tt -f /etc/lighttpd/lighttpd.conf
 ExecStart=/usr/sbin/lighttpd-angel -D -f /etc/lighttpd/lighttpd.conf
+Restart=on-failure
+RestartSec=5s
 ProtectSystem=full
-MemoryDenyWriteExecute=true
-NoNewPrivileges=true
-PrivateDevices=true
-PrivateTmp=true
-ProtectClock=true
 ProtectHome=true
-ProtectControlGroups=true
-ProtectKernelModules=true
+PrivateTmp=true
+PrivateDevices=true
+NoNewPrivileges=true
 ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+MemoryDenyWriteExecute=true
+LockPersonality=true
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE CAP_SETGID CAP_SETUID
+RestrictAddressFamilies=AF_INET AF_INET6
+RestrictNamespaces=true
+SystemCallArchitectures=native
+SystemCallFilter=@system-service @network-io
+ProtectClock=true
 
 [Install]
 WantedBy=multi-user.target

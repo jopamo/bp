@@ -53,7 +53,7 @@ src_configure() {
 	use static && append-ldflags -static && sed -i '/elf_sys=yes/s:yes:no:' configure #321821
 
 	use musl || econf "${myconf[@]}"
-	use musl &&  CFLAGS="-I/usr/include/utmps" LIBS="-lutmps -lskarnet -lrt" econf "${myconf[@]}"
+	use musl && CFLAGS="-I/usr/include/utmps" LIBS="-lutmps -lskarnet" econf "${myconf[@]}"
 }
 
 src_install() {

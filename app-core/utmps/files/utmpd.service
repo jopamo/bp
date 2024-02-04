@@ -1,0 +1,12 @@
+[Unit]
+Description=utmps daemon for the utmp service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/utmps-utmpd -s /run/utmps/.utmpd-socket
+User=utmp
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

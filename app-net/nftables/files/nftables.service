@@ -7,9 +7,14 @@ Before=network-pre.target
 [Service]
 Type=oneshot
 ExecStart=/usr/sbin/nft -f /etc/nftables.conf
-ExecReload=/usr/sbin/nft flush ruleset ';' include '"/etc/nftables.conf"'
+ExecReload=/usr/bin/sh -c '/usr/sbin/nft flush ruleset && /usr/sbin/nft -f /etc/nftables.conf'
 ExecStop=/usr/sbin/nft flush ruleset
 RemainAfterExit=yes
+ProtectSystem=full
+ProtectHome=read-only
+PrivateTmp=true
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
 
 [Install]
 WantedBy=multi-user.target

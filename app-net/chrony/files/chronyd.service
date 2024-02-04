@@ -8,14 +8,9 @@ ConditionCapability=CAP_SYS_TIME
 [Service]
 Type=forking
 PIDFile=/run/chrony/chronyd.pid
-EnvironmentFile=-/etc/chronyd
-ExecStart=/usr/sbin/chronyd $OPTIONS
-
-CapabilityBoundingSet=~CAP_AUDIT_CONTROL CAP_AUDIT_READ CAP_AUDIT_WRITE
-CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_KILL CAP_LEASE CAP_LINUX_IMMUTABLE
-CapabilityBoundingSet=~CAP_MAC_ADMIN CAP_MAC_OVERRIDE CAP_MKNOD CAP_SYS_ADMIN
-CapabilityBoundingSet=~CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_PACCT
-CapabilityBoundingSet=~CAP_SYS_PTRACE CAP_SYS_RAWIO CAP_SYS_TTY_CONFIG CAP_WAKE_ALARM
+EnvironmentFile=-/etc/chronyd.conf
+ExecStart=/usr/sbin/chronyd
+CapabilityBoundingSet=~CAP_AUDIT_CONTROL CAP_AUDIT_READ CAP_AUDIT_WRITE CAP_BLOCK_SUSPEND CAP_KILL CAP_LEASE CAP_LINUX_IMMUTABLE CAP_MAC_ADMIN CAP_MAC_OVERRIDE CAP_MKNOD CAP_SYS_ADMIN CAP_SYS_BOOT CAP_SYS_CHROOT CAP_SYS_MODULE CAP_SYS_PACCT CAP_SYS_PTRACE CAP_SYS_RAWIO CAP_SYS_TTY_CONFIG CAP_WAKE_ALARM
 DeviceAllow=char-pps rw
 DeviceAllow=char-ptp rw
 DeviceAllow=char-rtc rw
@@ -33,16 +28,13 @@ ProtectKernelModules=yes
 ProtectKernelTunables=yes
 ProtectProc=invisible
 ProtectSystem=strict
-ReadWritePaths=/run /var/lib/chrony -/var/log/chrony
-RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+ReadWritePaths=/run /var/lib/chrony /var/log/chrony
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX AF_NETLINK
 RestrictNamespaces=yes
 RestrictSUIDSGID=yes
 SystemCallArchitectures=native
 SystemCallFilter=~@cpu-emulation @debug @module @mount @obsolete @raw-io @reboot @swap
-NoNewPrivileges=no
-ReadWritePaths=-/var/spool
-RestrictAddressFamilies=AF_NETLINK
+ReadOnlyPaths=/etc/ssh/
 
 [Install]
 WantedBy=multi-user.target
-

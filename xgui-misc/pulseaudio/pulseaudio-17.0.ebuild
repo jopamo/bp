@@ -19,7 +19,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+alsa +alsa-plugin asyncns bluez dbus elogind fftw +glib gtk ipv6 jack
+IUSE="+alsa +alsa-plugin asyncns bluez dbus fftw +glib gtk ipv6 jack
 samplerate native-headset systemd +udev +X"
 
 DEPEND="
@@ -51,8 +51,6 @@ DEPEND="
 
 PDEPEND="alsa? ( alsa-plugin? ( xgui-misc/alsa-plugins[pulseaudio] ) )"
 
-filter-flags -Wl,-z,defs
-
 pkg_pretend() {
 	CONFIG_CHECK="~HIGH_RES_TIMERS"
 	WARNING_HIGH_RES_TIMERS="CONFIG_HIGH_RES_TIMERS:\tis not set (required for enabling timer-based scheduling in pulseaudio)\n"
@@ -74,24 +72,36 @@ pkg_setup() {
 }
 
 src_configure() {
+	filter-flags -Wl,-z,defs
+
 	local emesonargs=(
 		$(meson_feature alsa)
 		$(meson_feature asyncns)
-		-Davahi=disabled
 		$(meson_feature bluez bluez5)
+		$(meson_use bluez bluez5-native-headset)
+		$(meson_use bluez bluez5-native-headset)
 		$(meson_feature dbus)
-		$(meson_feature elogind)
 		$(meson_feature fftw)
 		$(meson_feature glib)
-		-Dgsettings=disabled
-		-Dgstreamer=disabled
-		-Ddatabase=gdbm
-		-Ddoxygen=false
 		$(meson_feature gtk)
-		$(meson_use ipv6)
 		$(meson_feature jack)
 		$(meson_feature samplerate)
-)
+		$(meson_use ipv6)
+		-Ddaemon=false
+		-Ddoxygen=false
+		-Dconsolekit=disabled
+	    -Delogind=disabled
+		-Davahi=disabled
+		-Ddatabase=gdbm
+		-Dx11=disabled
+		-Ddoxygen=false
+		-Dgsettings=disabled
+		-Dgstreamer=disabled
+		-Dpulsedsp-location='/usr/\$LIB/pulseaudio'
+		-Dstream-restore-clear-old-devices=true
+		-Dtcpwrap=disabled
+		-Dudevrulesdir=/usr/lib/udev/rules.d
+	)
 		meson_src_configure
 }
 
@@ -103,4 +113,5 @@ src_install() {
 	diropts -o pulse -g pulse -m0755
 
 	rm "${ED}"/etc/dbus-1/system.d/pulseaudio-system.conf
+	rm -rf "${ED}"/usr/lib/systemd
 }

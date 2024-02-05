@@ -20,36 +20,49 @@ RDEPEND="
 "
 BDEPEND="app-kernel/linux-headers"
 
-filter-flags -Wl,-z,defs
-append-flags -ffat-lto-objects
-
-_makeargs=(
-  KERNEL_HEADERS="${EPREFIX}"/usr/include
-  RAISE_SETFCAP=no
-  SBINDIR="${EPREFIX}"/usr/sbin
-  exec_prefix="${EPREFIX}"
-  lib_prefix="${EPREFIX}/usr"
-  lib="lib"
-  prefix="${EPREFIX}/usr"
-  CFLAGS="${CFLAGS}"
-  LDFLAGS="${LDFLAGS}"
-  DESTDIR="${D}"
-)
+run_emake() {
+	local args=(
+		AR="$(tc-getAR)"
+		CC="$(tc-getCC)"
+		CFLAGS="${CFLAGS}"
+		DYNAMIC="yes"
+		GOLANG="no"
+		KERNEL_HEADERS="${EPREFIX}"/usr/include
+		LDFLAGS="${LDFLAGS}"
+		OBJCOPY="$(tc-getOBJCOPY)"
+		PAM_CAP="$(usex pam yes no)"
+		RAISE_SETFCAP=no
+		RANLIB="$(tc-getRANLIB)"
+		SBINDIR="${EPREFIX}"/usr/sbin
+		exec_prefix="${EPREFIX}"
+		lib="lib"
+		lib_prefix="${EPREFIX}/usr"
+		prefix="${EPREFIX}/usr"
+		)
+	emake "${args[@]}" "$@"
+}
 
 src_compile() {
+	filter-flags -Wl,-z,defs
+	append-flags -ffat-lto-objects
+	append-cppflags -D_GNU_SOURCE
+
 	use pam && append-flags -lpam
+
 	tc-export AR CC RANLIB
+
 	local BUILD_CC
 	tc-export_build_env BUILD_CC
-	append-cppflags -D_GNU_SOURCE
-	emake "${_makeargs[@]}"
+
+	run_emake
 }
 
 src_install() {
-	emake "${_makeargs[@]}" install
+	run_emake DESTDIR="${D}" install
 
 	if ! use static-libs; then
 		rm "${ED}"/usr/lib/libcap.a
+		rm "${ED}"/usr/lib/libpsx.a
 		find "${ED}" -name '*.la' -delete
 	fi
 

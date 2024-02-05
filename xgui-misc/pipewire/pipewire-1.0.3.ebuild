@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic meson python-any-r1
+inherit flag-o-matic meson python-any-r1 user
 
 DESCRIPTION="Multimedia processing graphs"
 HOMEPAGE="https://pipewire.org/"
@@ -62,12 +62,15 @@ python_check_deps() {
 	python_has_version "dev-python/docutils[${PYTHON_USEDEP}]"
 }
 
+pkg_setup() {
+	enewgroup ${PN}
+}
+
 src_configure() {
 	filter-flags -fno-semantic-interposition
 
 	local emesonargs=(
 		-Ddocdir="${EPREFIX}"/usr/share/doc/${PF}
-
 		$(meson_feature bluez bluez5)
 		$(meson_feature bluez bluez5-backend-hfp-native)
 		$(meson_feature bluez bluez5-backend-hsp-native)
@@ -89,15 +92,12 @@ src_configure() {
 		$(meson_feature systemd)
 		$(meson_feature test tests)
 		$(meson_feature udev)
-		-Dv4l2=disabled
 		-Dalsa=enabled
 		-Daudioconvert=enabled
 		-Daudiomixer=enabled
 		-Daudiotestsrc=enabled
 		-Davahi=disabled
 		-Dbluez5-backend-native-mm=disabled
-		-Dbluez5-codec-lc3=disabled
-		-Dbluez5-codec-lc3plus=disabled
 		-Dcontrol=enabled
 		-Ddocs=disabled
 		-Devl=disabled
@@ -107,9 +107,11 @@ src_configure() {
 		-Dinstalled_tests=disabled
 		-Djack-devel=false
 		-Djack=disabled
+		-Dlegacy-rtkit=false
 		-Dlibcamera=disabled
+		-Dlibcanberra=disabled
 		-Dlv2=disabled
-		-Dman=enabled
+		-Dman=disabled
 		-Dpipewire-alsa=disabled
 		-Dpipewire-jack=disabled
 		-Dsdl2=disabled
@@ -118,15 +120,13 @@ src_configure() {
 		-Dsupport=enabled
 		-Dsystemd-system-service=disabled
 		-Dtest=disabled
+		-Dv4l2=disabled
 		-Dvideoconvert=enabled
 		-Dvideotestsrc=enabled
 		-Dvolume=enabled
 		-Dvulkan=disabled
-
-		# x11
-		-Dx11=disabled
 		-Dx11-xfixes=disabled
-		-Dlibcanberra=disabled
+		-Dx11=disabled
 	)
 
 	meson_src_configure

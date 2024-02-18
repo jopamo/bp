@@ -12,16 +12,14 @@ LICENSE="GPL-2+ LGPL-2.1+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+btpclient cups debug extra-tools +experimental +mesh +readline
-selinux systemd test test-programs +udev user-session"
+IUSE="extra-tools +mesh +readline selinux systemd test test-programs
+	+udev user-session"
 
 BDEPEND="app-dev/pkgconf"
 DEPEND="
+	lib-dev/ell
 	lib-live/glib
-	btpclient? ( lib-dev/ell )
-	cups? ( lib-print/cups )
 	mesh? (
-		lib-dev/ell
 		lib-live/json-c
 		lib-core/readline
 	)
@@ -33,9 +31,7 @@ DEPEND="
 	!systemd? ( app-core/dbus )
 	udev? ( app-core/systemd )
 "
-RDEPEND="${DEPEND}
-	selinux? ( sec-policy/selinux-bluetooth )
-"
+RDEPEND="${DEPEND}"
 
 RESTRICT="test"
 
@@ -72,38 +68,29 @@ src_configure() {
 	filter-flags -Wl,-z,defs
 
 	local myconf=(
-		$(use_enable btpclient external-ell)
-		$(use_enable btpclient)
-		$(use_enable cups)
-		$(use_enable debug)
-		$(use_enable experimental)
-		$(use_enable mesh external-ell)
-		$(use_enable mesh)
-		$(use_enable readline client)
 		$(use_enable systemd)
-		$(use_enable udev sixaxis)
-		$(use_enable udev)
-		--disable-midi
 		--disable-obex
+		--enable-btpclient
 		--enable-datafiles
 		--enable-deprecated
+		--enable-experimental
+		--enable-external-ell
 		--enable-hid2hci
-		--enable-library
 		--enable-manpages
-		--enable-monitor
-		--enable-optimization
-		--enable-pie
-		--enable-threads
-		--enable-tools
-		--localstatedir=/var
+		--enable-mesh
+		--enable-midi
+		--enable-android
+		--enable-sixaxis
+		--enable-udev
+		--enable-external-ell
+		--enable-library
+		--enable-client
+		--localstatedir="${EPREFIX}"/var
 		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 		--with-systemduserunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/user" "false")
-		ac_cv_header_readline_readline_h=$(usex mesh)
-		ac_cv_header_readline_readline_h=$(usex readline)
-		ax_cv_c_float_words_bigendian=no
 	)
 
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
+	econf "${myconf[@]}"
 }
 
 src_install() {

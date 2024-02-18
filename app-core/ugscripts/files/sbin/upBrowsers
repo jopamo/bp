@@ -4,7 +4,7 @@ REPO_PATH="/var/db/repos/bp"
 
 fetch_latest_brave_versions() {
 	local github_repo_url="https://github.com/brave/brave-browser.git"
-	local max_versions_to_check=5
+	local max_versions_to_check=10
 	local fetched_versions=()
 
 	# Fetch the tags and sort them in descending order based on version numbers

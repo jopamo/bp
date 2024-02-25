@@ -2,12 +2,14 @@
 
 EAPI=8
 
+SNAPSHOT=5138f7bbde1642684f4508413b5b15654601405f
+
 inherit autotools git-r3 flag-o-matic
 
 DESCRIPTION="bind tools: dig, nslookup, host, nsupdate, dnssec-keygen"
 HOMEPAGE="http://www.isc.org/software/bind"
-EGIT_REPO_URI="https://github.com/isc-projects/bind9.git"
-EGIT_BRANCH="v$(ver_cut 1)_$(ver_cut 2)"
+SRC_URI="https://github.com/isc-projects/bind9/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="Apache-2.0 BSD BSD-2 GPL-2 HPND ISC MPL-2.0"
 SLOT="0"
@@ -28,9 +30,9 @@ BDEPEND="app-dev/pkgconf"
 
 RESTRICT="test"
 
-filter-flags -Wl,-z,defs -flto\*
-
 src_prepare() {
+	#filter-flags -Wl,-z,defs -flto\*
+
 	default
 	eautoreconf
 }

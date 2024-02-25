@@ -4,26 +4,27 @@ EAPI=8
 
 SNAPSHOT=5138f7bbde1642684f4508413b5b15654601405f
 
-inherit autotools git-r3 flag-o-matic
+inherit autotools flag-o-matic
 
 DESCRIPTION="bind tools: dig, nslookup, host, nsupdate, dnssec-keygen"
 HOMEPAGE="http://www.isc.org/software/bind"
 SRC_URI="https://github.com/isc-projects/bind9/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/bind9-${SNAPSHOT}
 
 LICENSE="Apache-2.0 BSD BSD-2 GPL-2 HPND ISC MPL-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="doh headers json-c readline ssl xml"
+IUSE="+doh headers +json-c readline +xml"
 
 DEPEND="
+	lib-dev/libmaxminddb
 	lib-core/libseccomp
 	lib-core/zlib
+	virtual/ssl
 	doh? ( lib-live/nghttp2 )
 	json-c? ( lib-live/json-c )
 	readline? ( lib-core/readline )
-	ssl? ( virtual/ssl )
 	xml? ( lib-core/libxml2 )
 "
 BDEPEND="app-dev/pkgconf"
@@ -31,7 +32,7 @@ BDEPEND="app-dev/pkgconf"
 RESTRICT="test"
 
 src_prepare() {
-	#filter-flags -Wl,-z,defs -flto\*
+	filter-flags -Wl,-z,defs
 
 	default
 	eautoreconf
@@ -39,14 +40,18 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--without-gssapi
-		--without-lmdb
-		--without-python
+		--enable-fixed-rrset
+		--enable-full-report
+		--with-maxminddb
+		# wip
+		# --with-lmdb
+		# --with-libidn2
+		--with-python
 		--with-zlib
+		--with-openssl
 		$(use_enable doh)
 		$(use_with json-c)
 		$(use_with readline)
-		$(use_with ssl openssl)
 		$(use_with xml libxml2)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

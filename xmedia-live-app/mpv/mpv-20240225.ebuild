@@ -7,16 +7,12 @@ inherit meson xdg
 DESCRIPTION="Media player based on MPlayer and mplayer2"
 HOMEPAGE="https://mpv.io/"
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/mpv-player/mpv.git"
-	inherit git-r3
-	SB_SNAPSHOT="1ef53f094b4362afdfd54770a59b6d3da3551ee5"
-	SRC_URI="https://codeberg.org/jouni/mpv_sponsorblock_minimal/raw/commit/${SB_SNAPSHOT}/sponsorblock_minimal.lua"
-else
-	SNAPSHOT="1ef53f094b4362afdfd54770a59b6d3da3551ee5"
-	SRC_URI="https://github.com/mpv-player/mpv/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT="ab3a63285a44e6b41e171e737950d8d266ca79db"
+SB_SNAPSHOT="ca2844b8cf7674bfccd282d389a50427742251d3"
+
+SRC_URI="https://github.com/mpv-player/mpv/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz
+		https://codeberg.org/jouni/mpv_sponsorblock_minimal/raw/commit/${SB_SNAPSHOT}/sponsorblock_minimal.lua"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="LGPL-2.1+ GPL-2+ BSD ISC"
 SLOT="0"
@@ -84,7 +80,7 @@ src_prepare() {
 	default
 
 	#find a better way?
-	git config --global --add safe.directory "${WORKDIR}/mpv-9999"
+	#git config --global --add safe.directory "${WORKDIR}/mpv-9999"
 }
 
 src_configure() {
@@ -141,7 +137,6 @@ src_configure() {
 		-D d3d9-hwaccel=disabled
 		-D gl-dxinterop-d3d9=disabled
 		-D ios-gl=disabled
-		-D rpi-mmal=disabled
 		-D videotoolbox-gl=disabled
 
 	)

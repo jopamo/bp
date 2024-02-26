@@ -4,6 +4,8 @@ EAPI=8
 
 inherit distutils-r1
 
+DISTUTILS_USE_PEP517=hatchling
+
 DESCRIPTION="a command-line program to download videos from YouTube.com and a few more sites"
 HOMEPAGE="https://ytdl-org.github.io/youtube-dl/"
 

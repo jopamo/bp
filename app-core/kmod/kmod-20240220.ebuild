@@ -11,7 +11,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://kernel.googlesource.com/pub/scm/utils/kernel/kmod/kmod.git"
 	inherit git-r3
 else
-	SNAPSHOT=48b0c75f79f86140314b9656d3d855a515e18a73
+	SNAPSHOT=dc2440ee31c7a5572fb4aad39730fd854388b002
 	SRC_URI="https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/snapshot/kmod-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

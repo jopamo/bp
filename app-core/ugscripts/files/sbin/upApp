@@ -51,18 +51,7 @@ fetch_latest_vim_version() {
     echo "$latest_version"
 }
 
-fetch_latest_vim_version() {
-    local vim_git_url="https://github.com/vim/vim.git"
-    local latest_version=$(git ls-remote --tags --sort="-v:refname" "$vim_git_url" | \
-                        grep -oP 'refs/tags/v\K\d+\.\d+\.\d+' | \
-                        sort -urV | \
-                        head -1)
-    if [[ -z "$latest_version" ]]; then
-        echo "Failed to fetch the latest Vim version"
-        return 1
-    fi
-    echo "$latest_version"
-}
+
 
 update_vim_ebuild() {
     local PACKAGE_PATH="${REPO_PATH}/$1"
@@ -117,6 +106,28 @@ fetch_latest_cryptsetup_version() {
     fi
 
     echo "$latest_final_version"
+}
+
+fetch_latest_ncurses_version() {
+    local base_url="https://invisible-island.net/archives/ncurses/"
+    # Scrape the main page for the latest version directory
+    local latest_version=$(curl -s "$base_url" | grep -oP 'href="\K[0-9.]+(?=/)"' | sort -Vr | head -1)
+    if [[ -z "$latest_version" ]]; then
+        echo "Failed to fetch the latest ncurses version directory"
+        return 1
+    fi
+
+    # Navigate to the latest version directory and fetch the latest patch file
+    local version_page="${base_url}${latest_version}/"
+    local latest_patch=$(curl -s "$version_page" | grep -oP 'ncurses-'$latest_version'-\K[0-9]{8}(?=\.patch\.gz)' | sort -Vr | head -1)
+    if [[ -z "$latest_patch" ]]; then
+        echo "Failed to find the latest ncurses patch for version $latest_version"
+        return 1
+    fi
+
+    # Combine the main version and the patch date
+    local full_version="${latest_version}.${latest_patch}"
+    echo "$full_version"
 }
 
 update_ebuild() {
@@ -174,3 +185,10 @@ vim_version=$(fetch_latest_vim_version)
 # Update Cryptsetup
 cryptsetup_version=$(fetch_latest_cryptsetup_version)
 [[ $? -eq 0 ]] && update_ebuild "app-fs/cryptsetup" "cryptsetup" "$cryptsetup_version"
+
+# Update ncurses
+ncurses_version=$(fetch_latest_ncurses_version)
+if [[ $? -eq 0 ]]; then
+    update_ebuild "lib-core/ncurses" "ncurses" "$ncurses_version"
+    update_ebuild "lib-core/ncurses5-compat" "ncurses5-compat" "$ncurses_version"
+fi

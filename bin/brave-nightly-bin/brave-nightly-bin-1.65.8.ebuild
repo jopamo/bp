@@ -30,7 +30,7 @@ RDEPEND="
 	xgui-live-lib/at-spi2-core
 	xgui-live-lib/cairo
 	xgui-live-lib/gdk-pixbuf
-	xgui-live-lib/gtk+:3
+	xgui-lib/gtk3
 	xgui-live-lib/libxcb
 	xgui-live-lib/libxkbcommon
 	xgui-live-lib/pango

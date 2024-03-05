@@ -138,7 +138,7 @@ SOFTMMU_TOOLS_DEPEND="
 		net-libs/gnutls[static-libs(+)]
 	)
 	gtk? (
-		xgui-live-lib/gtk+:3
+		xgui-lib/gtk3
 		vte? ( xgui-live-lib/vte )
 	)
 	iscsi? ( lib-live/libiscsi )

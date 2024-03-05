@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	xgui-live-lib/libfm
-	xgui-live-lib/gtk+:3
+	xgui-lib/gtk3
 "
 
 src_prepare() {

@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 IUSE="introspection"
 
 DEPEND="
-	xgui-live-lib/gtk+:3
+	xgui-lib/gtk3
 	lib-core/libxml2
 "
 

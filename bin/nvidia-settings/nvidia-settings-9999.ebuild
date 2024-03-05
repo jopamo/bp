@@ -19,7 +19,7 @@ DEPEND="
 	lib-core/jansson
 	xgui-live-lib/libXv
 	xgui-live-lib/libvdpau
-	xgui-live-lib/gtk+:3
+	xgui-lib/gtk3
 "
 
 src_prepare() {

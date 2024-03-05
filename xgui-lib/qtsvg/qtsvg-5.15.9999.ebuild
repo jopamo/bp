@@ -7,9 +7,15 @@ inherit qmake-utils
 DESCRIPTION="SVG rendering library for the Qt5 framework"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=7b88174eb38ab1da4cb54f52734a01c7440def0d
-SRC_URI="https://github.com/qt/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+if [[ ${PV} == *9999 ]]; then
+	EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
+	EGIT_REPO_URI="https://github.com/qt/${PN}.git"
+	inherit git-r3
+else
+	SNAPSHOT=610c94f80802f67b59c00cac1f229e3d13b8de35
+	SRC_URI="https://github.com/qt/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT="$(ver_cut 1)/1"

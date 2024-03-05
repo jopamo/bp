@@ -23,8 +23,8 @@ DEPEND="
 	lib-live/libqtxdg
 	xgui-live-app/kwindowsystem
 	xgui-live-lib/libXScrnSaver
-	xgui-live-lib/qtbase
-	xgui-live-lib/qtx11extras
+	xgui-lib/qtbase
+	xgui-lib/qtx11extras
 "
 
 src_configure() {

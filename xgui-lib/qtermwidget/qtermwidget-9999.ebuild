@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	xgui-live-lib/qtbase
+	xgui-lib/qtbase
 	lib-dev/libutf8proc
 "
 

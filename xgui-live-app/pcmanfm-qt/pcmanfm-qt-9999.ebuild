@@ -22,8 +22,8 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	lib-live/glib
-	xgui-live-lib/qtbase
-	xgui-live-lib/qtx11extras
+	xgui-lib/qtbase
+	xgui-lib/qtx11extras
 	xgui-live-lib/libfm
 	xgui-live-lib/libfm-qt
 	xgui-live-lib/libxcb

@@ -15,10 +15,10 @@ KEYWORDS="amd64 arm64"
 IUSE="translations"
 
 DEPEND="
-	xgui-live-lib/qtbase
-	xgui-live-lib/qtx11extras
+	xgui-lib/qtbase
+	xgui-lib/qtx11extras
 	xgui-live-lib/libX11
-	~xgui-live-lib/qtermwidget-${PV}
+	~xgui-lib/qtermwidget-${PV}
 "
 BDEPEND="app-dev/lxqt-build-tools"
 RDEPEND="xgui-icontheme/hicolor-icon-theme"

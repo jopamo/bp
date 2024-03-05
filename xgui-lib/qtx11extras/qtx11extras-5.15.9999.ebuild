@@ -2,18 +2,20 @@
 
 EAPI=8
 
-inherit git-r3 flag-o-matic qmake-utils
+inherit qmake-utils
 
-DESCRIPTION="Additional format plugins for the Qt image I/O system"
+DESCRIPTION="Linux/X11-specific support library for the Qt5 framework"
 HOMEPAGE="https://www.qt.io/"
-EGIT_REPO_URI="https://code.qt.io/qt/${PN}.git"
-EGIT_BRANCH=$(ver_cut 1).$(ver_cut 2)
+
+SNAPSHOT=
+SRC_URI="https://github.com/qt/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
-SLOT="0"
+SLOT="$(ver_cut 1)/1"
 KEYWORDS="amd64 arm64"
 
-DEPEND="xgui-live-lib/qtbase"
+DEPEND="xgui-lib/qtbase"
 
 src_configure() {
 	eqmake5

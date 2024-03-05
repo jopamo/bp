@@ -27,14 +27,14 @@ DEPEND="
 	lib-core/libgcrypt
 	lib-core/zlib
 	lib-live/libsodium
-	xgui-live-lib/qtbase
-	xgui-live-lib/qttools
+	xgui-lib/qtbase
+	xgui-lib/qttools
 	xmedia-live-app/qrencode
 	autotype? (
 		xgui-live-lib/libX11
 		xgui-live-lib/libXi
 		xgui-live-lib/libXtst
-		xgui-live-lib/qtx11extras
+		xgui-lib/qtx11extras
 	)
 "
 

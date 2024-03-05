@@ -15,10 +15,10 @@ KEYWORDS="amd64 arm64"
 IUSE="svg tiff"
 
 DEPEND="
-	xgui-live-lib/qtbase
+	xgui-lib/qtbase
 	xmedia-live-app/exiv2
-	svg? ( xgui-live-lib/qtsvg )
-	tiff? ( xgui-live-lib/qtimageformats )
+	svg? ( xgui-lib/qtsvg )
+	tiff? ( xgui-lib/qtimageformats )
 "
 
 src_configure() {

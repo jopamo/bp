@@ -29,7 +29,7 @@ RDEPEND="
 	xgui-live-lib/at-spi2-core
 	xgui-live-lib/cairo[X]
 	xgui-live-lib/gdk-pixbuf
-	xgui-live-lib/gtk+:3
+	xgui-lib/gtk3
 	xgui-live-lib/pango
 	xgui-misc/freetype
 	xgui-misc/pulseaudio

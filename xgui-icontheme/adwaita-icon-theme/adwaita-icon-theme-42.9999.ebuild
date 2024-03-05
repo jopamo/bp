@@ -18,7 +18,7 @@ DEPEND="
 	app-dev/pkgconf
 	virtual/librsvg
 	xgui-live-lib/gnome-common
-	xgui-live-lib/gtk+:3
+	xgui-lib/gtk3
 "
 
 RESTRICT="binchecks strip"

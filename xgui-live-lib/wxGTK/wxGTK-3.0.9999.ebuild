@@ -24,7 +24,7 @@ RDEPEND="
 		lib-core/zlib
 		xmedia-live-lib/libjpeg-turbo
 		xgui-live-lib/cairo
-		xgui-live-lib/gtk+:3
+		xgui-lib/gtk3
 		xgui-live-lib/gdk-pixbuf
 		xgui-live-lib/libSM
 		xgui-live-lib/libX11
@@ -34,7 +34,7 @@ RDEPEND="
 		tiff?   ( xmedia-live-lib/tiff )
 		)
 	aqua? (
-		xgui-live-lib/gtk+:3[aqua]
+		xgui-lib/gtk3[aqua]
 		xmedia-live-lib/libjpeg-turbo
 		tiff?   ( xmedia-live-lib/tiff )
 		)"

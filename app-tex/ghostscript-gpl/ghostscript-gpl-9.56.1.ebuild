@@ -27,16 +27,16 @@ DEPEND="
 	xmedia-live-lib/libjpeg-turbo
 	cups? ( >=lib-print/cups-1.3.8 )
 	dbus? ( app-core/dbus )
-	gtk? ( xgui-live-lib/gtk+ )
+	gtk? ( xgui-live-lib/gtk3 )
 	tiff? ( >=xmedia-live-lib/tiff-4.0.1:0= )
 	X? ( xgui-live-lib/libXt xgui-live-lib/libXext )
 "
 
 BDEPEND="app-dev/pkgconf"
 
-filter-flags -Wl,-z,defs
-
 src_prepare() {
+	filter-flags -Wl,-z,defs
+
 	default
 
 	# remove internal copies of various libraries

@@ -25,9 +25,9 @@ RESTRICT="test"
 
 DEPEND="
 	xgui-live-app/extra-cmake-modules
-	xgui-live-lib/qtbase
+	xgui-lib/qtbase
 	X? (
-		xgui-live-lib/qtx11extras
+		xgui-lib/qtx11extras
 		xgui-live-lib/libX11
 		xgui-live-lib/libXfixes
 		xgui-live-lib/libxcb

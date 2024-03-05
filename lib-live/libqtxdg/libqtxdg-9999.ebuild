@@ -12,7 +12,7 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="xgui-live-lib/qtbase
+DEPEND="xgui-lib/qtbase
 		app-dev/lxqt-build-tools"
 RDEPEND="xgui-live-app/xdg-utils"
 BDEPEND="app-dev/pkgconf"

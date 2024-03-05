@@ -25,9 +25,9 @@ DEPEND="
 	xgui-live-app/xorgproto
 	xgui-live-lib/libX11
 	xgui-live-lib/libxcb
-	xgui-live-lib/qtbase
-	xgui-live-lib/qtx11extras
-	wayland? ( xgui-live-lib/qtwayland )
+	xgui-lib/qtbase
+	xgui-lib/qtx11extras
+	wayland? ( xgui-lib/qtwayland )
 "
 
 src_configure() {

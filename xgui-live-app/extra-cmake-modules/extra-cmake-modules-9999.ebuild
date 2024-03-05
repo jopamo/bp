@@ -17,7 +17,7 @@ RESTRICT="test"
 
 DEPEND="
 	app-compression/libarchive
-	test? (	xgui-live-lib/qtbase )
+	test? (	xgui-lib/qtbase )
 "
 
 src_configure() {

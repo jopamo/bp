@@ -18,4 +18,4 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="xgui-live-lib/qtbase"
+DEPEND="xgui-lib/qtbase"

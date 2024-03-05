@@ -7,7 +7,7 @@ inherit flag-o-matic qmake-utils
 DESCRIPTION="Wayland platform plugin for Qt"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=
+SNAPSHOT=c8b37a1bda9b8f29d56775ed6556d56ac5d3ea1d
 SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

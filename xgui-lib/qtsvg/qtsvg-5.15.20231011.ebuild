@@ -4,10 +4,10 @@ EAPI=8
 
 inherit qmake-utils
 
-DESCRIPTION="Qt5 module for integrating online documentation into applications"
+DESCRIPTION="SVG rendering library for the Qt5 framework"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=
+SNAPSHOT=7b88174eb38ab1da4cb54f52734a01c7440def0d
 SRC_URI="https://github.com/qt/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -15,7 +15,7 @@ LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT="$(ver_cut 1)/1"
 KEYWORDS="amd64 arm64"
 
-DEPEND="xgui-lib/qtbase"
+DEPEND="xgui-lib/qtbase:$(ver_cut 1)="
 
 src_configure() {
 	eqmake5

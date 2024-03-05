@@ -7,7 +7,7 @@ inherit flag-o-matic qmake-utils
 DESCRIPTION="Additional format plugins for the Qt image I/O system"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=
+SNAPSHOT=1019058c497e33edef80d5cb120aa7d6a418a7c6
 SRC_URI="https://github.com/qt/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

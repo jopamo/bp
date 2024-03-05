@@ -4,10 +4,10 @@ EAPI=8
 
 inherit qmake-utils
 
-DESCRIPTION="SVG rendering library for the Qt5 framework"
+DESCRIPTION="Linux/X11-specific support library for the Qt5 framework"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=
+SNAPSHOT=aaa54153970d1d63a44b873cad5f62ffa71ef9b8
 SRC_URI="https://github.com/qt/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -15,7 +15,7 @@ LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT="$(ver_cut 1)/1"
 KEYWORDS="amd64 arm64"
 
-DEPEND="xgui-lib/qtbase:$(ver_cut 1)="
+DEPEND="xgui-lib/qtbase"
 
 src_configure() {
 	eqmake5
@@ -23,5 +23,4 @@ src_configure() {
 
 src_install() {
 	emake install INSTALL_ROOT="${D}"
-	cleanup_install
 }

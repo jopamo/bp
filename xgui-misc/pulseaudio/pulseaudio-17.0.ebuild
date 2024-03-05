@@ -43,7 +43,7 @@ DEPEND="
 	glib? ( lib-live/glib )
 	jack? ( virtual/jack )
 	dbus? ( app-core/dbus )
-	gtk? ( xgui-live-lib/gtk+:3 )
+	gtk? ( xgui-lib/gtk3 )
 	udev? ( app-core/systemd[hwdb(+)] )
 	lib-core/gdbm
 	systemd? ( app-core/systemd )

@@ -13,8 +13,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	xgui-live-lib/qtbase
-	xgui-live-lib/qttools
+	xgui-lib/qtbase
+	xgui-lib/qttools
 "
 
 S="${WORKDIR}/${P}/src"

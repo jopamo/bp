@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	app-fs/sysfsutils
-	xgui-live-lib/qtbase
+	xgui-lib/qtbase
 	xgui-misc/alsa-lib
 "
 

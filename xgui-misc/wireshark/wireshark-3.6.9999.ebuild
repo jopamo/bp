@@ -33,8 +33,8 @@ DEPEND="
 	lib-net/c-ares
 	caps? ( lib-core/libcap )
 	qt? (
-		xgui-live-lib/qtbase
-		xgui-live-lib/qtmultimedia
+		xgui-lib/qtbase
+		xgui-lib/qtmultimedia
 	)
 	libssh? ( lib-live/libssh2 )
 	libxml2? ( lib-core/libxml2 )

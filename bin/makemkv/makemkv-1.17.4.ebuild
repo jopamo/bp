@@ -28,7 +28,7 @@ DEPEND="
 	lib-core/zlib
 	virtual/ssl
 	xmedia-live-app/ffmpeg
-	gui? ( xgui-live-lib/qtbase )
+	gui? ( xgui-lib/qtbase )
 "
 RDEPEND="
 	${DEPEND}

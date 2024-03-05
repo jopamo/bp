@@ -19,7 +19,7 @@ DEPEND="
 	lib-live/glib
 	xgui-live-lib/cairo
 	xgui-live-lib/pango
-	xgui-live-lib/qtbase
+	xgui-lib/qtbase
 "
 BDEPEND="app-dev/pkgconf"
 

@@ -15,8 +15,8 @@ KEYWORDS="amd64 arm64"
 DEPEND="
 	lib-live/glib
 	lib-core/libxml2
-	xgui-live-lib/qtbase
-	xgui-live-lib/qtx11extras:5
+	xgui-lib/qtbase
+	xgui-lib/qtx11extras:5
 	fonts/fontconfig
 	xgui-misc/freetype
 	xgui-live-app/openbox

@@ -31,7 +31,7 @@ DEPEND="
 	xgui-live-lib/libX11
 	xgui-live-lib/liblxqt
 	xgui-live-lib/lxqt-globalkeys
-	xgui-live-lib/qtbase
+	xgui-lib/qtbase
 	xgui-misc/menu-cache
 	cpuload? ( lib-core/libstatgrab )
 	kbindicator? ( xgui-live-lib/libxkbcommon )
@@ -45,7 +45,7 @@ DEPEND="
 BDEPEND="app-dev/lxqt-build-tools"
 RDEPEND="
 	xgui-icontheme/lxqt-themes
-	xgui-live-lib/qtsvg
+	xgui-lib/qtsvg
 	xgui-live-lib/lxqt-menu-data
 "
 

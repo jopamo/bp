@@ -19,8 +19,8 @@ LICENSE="LGPL-2.1+"
 SLOT="0"
 
 RDEPEND="
-	xgui-live-lib/qtbase
-	xgui-live-lib/qtx11extras
+	xgui-lib/qtbase
+	xgui-lib/qtx11extras
 	xgui-live-lib/liblxqt
 	lib-live/libqtxdg
 	xgui-live-lib/libICE

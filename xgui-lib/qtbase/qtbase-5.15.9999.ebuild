@@ -2,14 +2,20 @@
 
 EAPI=8
 
-inherit flag-o-matic
+inherit flag-o-matic qmake-utils
 
 DESCRIPTION="Cross-platform application development framework"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=a43df98d037ad07cf096ef2f775958ceba743613
-SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+if [[ ${PV} == *9999 ]]; then
+	EGIT_BRANCH="kde/$(ver_cut 1).$(ver_cut 2)"
+	EGIT_REPO_URI="https://invent.kde.org/qt/qt/${PN}.git"
+	inherit git-r3
+else
+	SNAPSHOT=a43df98d037ad07cf096ef2f775958ceba743613
+	SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT="$(ver_cut 1)/1"
@@ -72,7 +78,6 @@ src_configure() {
 		-dbus-linked
 		-glib
 		-no-compile-examples
-		-no-pch
 		-no-sql-{db2,ibase,oci,odbc,tds}
 		-no-strip
 		-libinput

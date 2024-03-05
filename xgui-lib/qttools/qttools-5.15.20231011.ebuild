@@ -4,15 +4,15 @@ EAPI=8
 
 inherit qmake-utils
 
-DESCRIPTION="The QML and Quick modules for the Qt5 framework"
+DESCRIPTION="Qt5 module for integrating online documentation into applications"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=
-SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
+SNAPSHOT=e089fe78e2745f8316cadaa7492ab442c203b18d
+SRC_URI="https://github.com/qt/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
-SLOT="$(ver_cut 1)"
+SLOT="$(ver_cut 1)/1"
 KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-lib/qtbase"
@@ -23,4 +23,5 @@ src_configure() {
 
 src_install() {
 	emake install INSTALL_ROOT="${D}"
+	cleanup_install
 }

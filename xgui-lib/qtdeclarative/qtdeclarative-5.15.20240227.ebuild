@@ -2,17 +2,17 @@
 
 EAPI=8
 
-inherit flag-o-matic qmake-utils
+inherit qmake-utils
 
-DESCRIPTION="Multimedia (audio, video, radio, camera) library for the Qt5 framework"
+DESCRIPTION="The QML and Quick modules for the Qt5 framework"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=
-SRC_URI="https://github.com/qt/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=eba6e1615d2f1b1a5235c93422e02c3a6a852bab
+SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
-SLOT="0"
+SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-lib/qtbase"

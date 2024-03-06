@@ -2,6 +2,22 @@
 
 WORKHOME="${HOME}/gnu_tarballs"
 TEMPLOCATION="/tmp/gnu_tarballs"
+REPO="/var/db/repos/bp"
+
+rename_ebuild_files() {
+	local package_name="$1"
+	local new_date="$2"
+	local ebuild_file_path=$(find "${REPO}" -type f -name "${package_name}-*.ebuild")
+
+	if [[ -n "$ebuild_file_path" ]]; then
+		local ebuild_dir=$(dirname "$ebuild_file_path")
+		local new_ebuild_file_name="${package_name}-${new_date}.ebuild"
+		sudo mv "$ebuild_file_path" "${ebuild_dir}/${new_ebuild_file_name}"
+		echo "Renamed ebuild for ${package_name} to ${new_date}"
+	else
+		echo "No ebuild file found for ${package_name}"
+	fi
+}
 
 rm -rf "${TEMPLOCATION}"
 mkdir -p "${WORKHOME}"
@@ -36,6 +52,8 @@ for i in acl attr coreutils cpio diffutils findutils gperf grep grub libtool pat
 		( cd ${TEMPLOCATION}/${GITDATENAME} && rm -rf .git* gnulib autom4te.cache po/.reference )
 		find ${TEMPLOCATION}/${GITDATENAME} -name *.git* -delete
 		( cd ${TEMPLOCATION} && XZOPT=-e9 tar cJf ${WORKHOME}/${GITDATENAME}.tar.xz ${GITDATENAME} --owner=0 --group=0 )
+		new_snapshot_date=$(echo "$GITDATENAME" | sed -r 's/^[a-z-]+-([0-9]{8}).*$/\1/')
+		rename_ebuild_files "$i" "$new_snapshot_date"
 		rm -rf "${TEMPLOCATION}/gnulib_$i"
 		rm -rf "${TEMPLOCATION}/${GITDATENAME}"
 	fi
@@ -43,25 +61,22 @@ done
 
 #librsvg
 for i in librsvg ; do
-	[ ! -d ${WORKHOME}/$i ] && git clone https://gitlab.gnome.org/GNOME/$i.git ${WORKHOME}/$i --depth 1
-	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git pull && git reset --hard && git clean -f )
-	GITDATENAME="$i-$(cd ${WORKHOME}/$i && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
+	[ ! -d "${WORKHOME}/$i" ] && git clone https://gitlab.gnome.org/GNOME/$i.git "${WORKHOME}/$i" --depth 1
+	[ -d "${WORKHOME}/$i" ] && ( cd "${WORKHOME}/$i" && git pull && git reset --hard && git clean -f )
+	GITDATENAME="$i-$(cd "${WORKHOME}/$i" && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
 
 	if [ ! -f "${WORKHOME}/${GITDATENAME}.tar.xz" ]; then
-		rm  "${WORKHOME}/$i/.cargo/config.toml"
-		( cd ${WORKHOME}/$i && cargo vendor )
+		if [ -f "${WORKHOME}/$i/.cargo/config.toml" ]; then
+			rm "${WORKHOME}/$i/.cargo/config.toml"
+		fi
+		( cd "${WORKHOME}/$i" && cargo vendor )
 		mkdir -p "${WORKHOME}/$i/.cargo"
-		echo -e "[source.crates-io]\n\
-	replace-with = \"vendored-sources\"\n\n\
-	[source.vendored-sources]\n\
-	directory = \"vendor\"\n\n\
-	[workspace]\n\
-	resolver = \"2\"" > "${WORKHOME}/$i/.cargo/config.toml"
+		echo -e "[source.crates-io]\nreplace-with = \"vendored-sources\"\n\n[source.vendored-sources]\ndirectory = \"vendor\"\n\n[workspace]\nresolver = \"2\"" > "${WORKHOME}/$i/.cargo/config.toml"
 
 		tar -hcf - $i | tar -xf - -C ${TEMPLOCATION}
 		mv ${TEMPLOCATION}/$i ${TEMPLOCATION}/${GITDATENAME}
 		find ${TEMPLOCATION}/${GITDATENAME} -name *~ -delete
-		( cd ${TEMPLOCATION}/${GITDATENAME} && rm -rf .git* gnulib autom4te.cache po/.reference )
+		( cd ${TEMPLOCATION}/${GITDATENAME} && rm -rf .git* gnulib autom4te.cache po/.reference .cargo )
 		( cd ${TEMPLOCATION} && XZOPT=-e9 tar cJf ${WORKHOME}/${GITDATENAME}.tar.xz ${GITDATENAME} --owner=0 --group=0 )
 	fi
 done

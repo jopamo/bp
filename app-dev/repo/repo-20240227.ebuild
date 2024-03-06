@@ -8,7 +8,7 @@ DESCRIPTION="Google tool for managing git, particularly multiple repos"
 HOMEPAGE="https://gerrit.googlesource.com/git-repo"
 SRC_URI="https://github.com/GerritCodeReview/git-repo/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
 
-SNAPSHOT=4217a82bec7b95c1a0bc7b081a1764a6a6d6c59b
+SNAPSHOT=5554572f02537b8646139d59ab520e59e1d5f7b3
 SRC_URI="https://github.com/GerritCodeReview/git-repo/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/git-repo-${SNAPSHOT}
 

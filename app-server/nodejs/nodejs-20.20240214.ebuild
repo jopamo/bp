@@ -42,6 +42,8 @@ BDEPEND="
 "
 
 src_prepare() {
+	sed -i -e "s/NODE_VERSION_IS_RELEASE\ 0/NODE_VERSION_IS_RELEASE\ 1/g" "src/node_version.h" || die
+
 	use lto || filter-flags -flto\*
 
 	tc-export AR CC CXX PKG_CONFIG

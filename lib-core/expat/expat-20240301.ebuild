@@ -20,6 +20,9 @@ IUSE="static-libs"
 src_prepare() {
 	default
 	eautoreconf
+	sed -i '/^autoreconf/d' buildconf.sh || die
+
+	${S}/buildconf.sh
 }
 
 src_configure() {

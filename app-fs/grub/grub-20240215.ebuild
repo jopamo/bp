@@ -23,7 +23,7 @@ DEPEND="
 	app-compression/xz-utils
 	virtual/curses
 	device-mapper? ( >=app-fs/lvm2-2.02.45 )
-	mount? ( app-fs/fuse:2 )
+	mount? ( app-fs/fuse )
 	static? ( app-compression/xz-utils[static-libs(+)] )
 	grub_platforms_efi-64? ( app-fs/efibootmgr )
 "

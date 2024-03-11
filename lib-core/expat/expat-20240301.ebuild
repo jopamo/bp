@@ -20,9 +20,10 @@ IUSE="static-libs"
 src_prepare() {
 	default
 	eautoreconf
-	sed -i '/^autoreconf/d' buildconf.sh || die
 
-	${S}/buildconf.sh
+	# Remove autoreconf, it's already completed
+	sed -i '/^autoreconf/d' "${S}"/buildconf.sh || die
+	"${S}"/buildconf.sh
 }
 
 src_configure() {

@@ -17,7 +17,9 @@ src_install() {
 	doexe {apksigner,lib/apksigner.jar}
 
 	cat > "${T}"/99${PN} <<- EOF || die
+		JAVA_HOME=/opt/openjdk8
 		PATH=${EPREFIX}/opt/${PN}
+		PATH=$JAVA_HOME/bin:$PATH
 	EOF
 	doenvd "${T}"/99${PN}
 }

@@ -202,13 +202,6 @@ src_compile() {
 
 	# Restore saved value from above.
 	local -x PYTHONDONTWRITEBYTECODE=${_PYTHONDONTWRITEBYTECODE}
-
-	# Work around bug 329499. See also bug 413751 and 457194.
-	if has_version dev-libs/libffi[pax-kernel]; then
-		pax-mark E python
-	else
-		pax-mark m python
-	fi
 }
 
 src_test() {

@@ -3,6 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
+PYTHON_COMPAT=( pypy3 python3_{10..12} )
 
 inherit distutils-r1
 
@@ -19,17 +20,18 @@ SRC_URI="
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-BDEPEND="
-	test? (
-		dev-python/mock[${PYTHON_USEDEP}]
-	)
-"
+IUSE="examples"
 
 distutils_enable_tests pytest
 
 python_install_all() {
 	distutils-r1_python_install_all
+
+	if use examples; then
+		docinto examples
+		dodoc -r demos/.
+		docompress -x /usr/share/doc/${PF}/examples
+	fi
 }
 
 python_test() {

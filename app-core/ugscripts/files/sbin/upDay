@@ -15,8 +15,6 @@ NODEJS_VERSION="20"
 BIND_TOOLS_VERSION="9.18"
 GAWK_VERSION="5.3"
 
-rm -rf "$REPO_TEMP_DIR"
-
 show_help() {
 	echo "Usage: $0 [options]"
 	echo ""

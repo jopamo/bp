@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit linux-info flag-o-matic user autotools
+inherit linux-info flag-o-matic user meson
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="https://dbus.freedesktop.org/"
@@ -11,7 +11,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/${PN}/${PN}.git"
 	inherit git-r3
 else
-	SNAPSHOT=c4aebcdfa6458c3bb85bc4b01aa76a28c7e45d7f
+	SNAPSHOT=6c31c381e29c7e8e340fb7ee2fd50e04008ad230
 	SRC_URI="https://gitlab.freedesktop.org/${PN}/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
@@ -20,10 +20,11 @@ fi
 LICENSE="|| ( AFL-2.1 GPL-2 )"
 SLOT="0"
 
-IUSE="debug static-libs systemd sysusersd test tmpfilesd user-session X"
+IUSE="debug inotify static-libs systemd sysusersd test +tools tmpfilesd user-session valgrind X"
 
 DEPEND="
 	lib-core/expat
+	valgrind? ( app-dev/valgrind )
 	systemd? ( app-core/systemd )
 	X? (
 		xgui-live-lib/libX11
@@ -45,64 +46,53 @@ pkg_setup() {
 	linux-info_pkg_setup
 }
 
-src_prepare() {
-	default
-	eautoreconf
-}
-
 src_configure() {
-	local myconf=(
-		$(use_enable debug stats)
-		$(use_enable debug verbose-mode)
-		$(use_enable static-libs static)
-		$(use_enable systemd)
-		$(use_enable user-session)
-		$(use_with X x)
-		--disable-apparmor
-		--disable-asserts
-		--disable-checks
-		--disable-doxygen-docs
-		--disable-embedded-tests
-		--disable-libaudit
-		--disable-modular-tests
-		--disable-traditional-activation
-		--disable-xml-docs
-		--enable-inotify
-		--with-dbus-user=messagebus
-		--with-session-socket-dir="${EPREFIX}"/tmp
-		--with-system-pid-file="${EPREFIX}"/run/dbus.pid
-		--with-system-socket="${EPREFIX}"/run/dbus/system_bus_socket
-		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
+	local rundir="/run"
 
+	local emesonargs=(
+		--localstatedir="${EPREFIX}/var"
+		-Druntime_dir="${EPREFIX}${rundir}"
+
+		-Ddefault_library=$(usex static-libs both shared)
+
+		-Dapparmor=disabled
+		-Dasserts=false # TODO
+		-Dchecks=false # TODO
+		$(meson_use debug stats)
+		$(meson_use debug verbose_mode)
+		-Dcontainers=false
+		-Ddbus_user=messagebus
+		-Dkqueue=disabled
+		$(meson_feature inotify)
+		-D xml_docs=enabled
+		-Dembedded_tests=false
+		-Dinstalled_tests=false
+		-D message_bus=true
+		$(meson_feature test modular_tests)
+		-Dqt_help=disabled
+
+		$(meson_use tools)
+
+		$(meson_feature systemd)
+		$(meson_use systemd user_session)
+		$(meson_feature X x11_autolaunch)
+		$(meson_feature valgrind)
+
+		-D selinux=disabled
+		-D libaudit=disabled
+
+		-Dsession_socket_dir="${EPREFIX}"/tmp
+		-Dsystem_pid_file="${EPREFIX}${rundir}"/dbus.pid
+		-Dsystem_socket="${EPREFIX}${rundir}"/dbus/system_bus_socket
+		-Dsystemd_system_unitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
+		-Dsystemd_user_unitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/user" "false")
 	)
 
-	einfo "Running configure in ${BUILD_DIR}"
-	ECONF_SOURCE="${S}" econf "${myconf[@]}"
-
-	if use test; then
-		mkdir "${TBD}" || die
-		cd "${TBD}" || die
-		einfo "Running configure in ${TBD}"
-		ECONF_SOURCE="${S}" econf "${myconf[@]}" \
-			$(use_enable test asserts) \
-			$(use_enable test checks) \
-			$(use_enable test embedded-tests) \
-			$(has_version lib-dev/dbus-glib && echo --enable-modular-tests)
-	fi
-}
-
-src_compile() {
-	einfo "Running make in ${BUILD_DIR}"
-	emake
-
-	if use test; then
-		einfo "Running make in ${TBD}"
-		emake -C "${TBD}"
-	fi
+	meson_src_configure
 }
 
 src_install() {
-	default
+	meson_src_install
 
 	if use X; then
 		# dbus X session script (#77504)

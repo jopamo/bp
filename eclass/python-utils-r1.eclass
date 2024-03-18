@@ -1,6 +1,6 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
-PYTHON_COMPAT=( python3_10 python3_11 )
+PYTHON_COMPAT=( python3_11 python3_12 )
 
 # @ECLASS: python-utils-r1.eclass
 # @MAINTAINER:

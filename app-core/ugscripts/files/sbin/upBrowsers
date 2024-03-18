@@ -111,7 +111,19 @@ update_ebuild() {
 
 		mv "$existing_ebuild_file" "$new_ebuild_file"
 		(cd ${REPO_PATH} && repoman manifest)
-		(cd ${REPO_PATH} && git add . && git commit -m "Update ${PACKAGE_NAME} to ${version}")
+		(cd "$REPO_PATH" && \
+		git -c user.name="1g4-bot" \
+			-c user.email="share@1g4.org" \
+			-c commit.gpgsign=true \
+			-c user.signingkey=AFFCE613154C05AA \
+			add . && \
+		git -c user.name="1g4-bot" \
+			-c user.email="share@1g4.org" \
+			-c commit.gpgsign=true \
+			-c user.signingkey=AFFCE613154C05AA \
+			commit -m "Update ${PACKAGE_NAME} to ${version}" && \
+		git push)
+
 		echo "Ebuild updated for ${PACKAGE_NAME}: ${new_ebuild_filename}"
 		break
 	done

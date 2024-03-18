@@ -9,7 +9,7 @@ BINUTILS_VERSION="2.41"
 XZ_UTILS_VERSION="5.4"
 DBUS_VERSION="1.14"
 SYSTEMD_VERSION="254"
-UTIL_LINUX_VERSION="2.39"
+UTIL_LINUX_VERSION="2.40"
 OPENSSL_VERSION="3.1"
 NODEJS_VERSION="20"
 BIND_TOOLS_VERSION="9.18"
@@ -136,7 +136,19 @@ update_ebuild() {
 
 	mv "$ebuild_file" "$new_ebuild_file"
 	(cd "$REPO_PATH" && repoman manifest)
-	(cd "$REPO_PATH" && git add . && git commit -m "Update ${PACKAGE_NAME} to ${version}")
+	(cd "$REPO_PATH" && \
+		git -c user.name="1g4-bot" \
+			-c user.email="share@1g4.org" \
+			-c commit.gpgsign=true \
+			-c user.signingkey=AFFCE613154C05AA \
+			add . && \
+		git -c user.name="1g4-bot" \
+			-c user.email="share@1g4.org" \
+			-c commit.gpgsign=true \
+			-c user.signingkey=AFFCE613154C05AA \
+			commit -m "Update ${PACKAGE_NAME} to ${version}" && \
+		git push)
+
 	echo "Ebuild updated for ${PACKAGE_NAME}: ${new_ebuild_filename}"
 }
 
@@ -166,6 +178,7 @@ update_ebuild "${REPO_PATH}/app-net/bind-tools" "bind-tools" "https://github.com
 update_ebuild "${REPO_PATH}/app-core/gawk" "gawk" "https://git.savannah.gnu.org/git/gawk" "gawk-${GAWK_VERSION}-stable" "$GAWK_VERSION" "no"
 
 #: '
+update_ebuild "${REPO_PATH}/app-build/gnuconfig" "gnuconfig" "https://git.savannah.gnu.org/git/config" "master" "empty" "yes"
 update_ebuild "${REPO_PATH}/app-core/file" "file" "https://github.com/file/file" "master" "empty" "yes"
 update_ebuild "${REPO_PATH}/app-core/git" "git" "https://github.com/git/git" "maint" "empty" "yes"
 update_ebuild "${REPO_PATH}/app-core/kmod" "kmod" "https://github.com/kmod-project/kmod" "master" "empty" "yes"

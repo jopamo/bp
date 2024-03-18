@@ -18,9 +18,9 @@ DEPEND="lib-core/libxml2
 
 PATCHES=( "${FILESDIR}"/${PN}-3.6.4-fix-test_xmlschema.patch )
 
-filter-flags -Wl,-z,defs
-
 python_prepare_all() {
+	filter-flags -Wl,-z,defs
+
 	# avoid replacing PYTHONPATH in tests.
 	sed -i '/sys\.path/d' test.py || die
 

@@ -9,27 +9,16 @@ NotifyAccess=main
 ExecStart=/usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
 ExecReload=/usr/bin/dbus-send --print-reply --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig
 OOMScoreAdjust=-900
-CapabilityBoundingSet=CAP_SETGID CAP_SETUID CAP_SETPCAP CAP_SYS_RESOURCE CAP_AUDIT_WRITE
-DeviceAllow=/dev/null rw
-DeviceAllow=/dev/urandom r
-DevicePolicy=strict
-IPAddressDeny=any
-LimitMEMLOCK=0
-LockPersonality=yes
-MemoryDenyWriteExecute=yes
-NoNewPrivileges=yes
-PrivateDevices=yes
+User=messagebus
+Group=messagebus
+AmbientCapabilities=CAP_AUDIT_WRITE
+
 PrivateTmp=yes
-ProtectControlGroups=yes
-ProtectHome=yes
-ProtectKernelModules=yes
-ProtectKernelTunables=yes
-ProtectSystem=strict
-ReadOnlyPaths=-/
-RestrictAddressFamilies=AF_UNIX
-RestrictNamespaces=yes
-RestrictRealtime=yes
-SystemCallArchitectures=native
-SystemCallFilter=@system-service
-SystemCallFilter=~@chown @clock @cpu-emulation @debug @module @mount @obsolete @raw-io @reboot @resources @swap memfd_create mincore mlock mlockall personality
-UMask=0077
+PrivateDevices=yes
+NoNewPrivileges=yes
+ProtectSystem=full  # Allows writes to /var and /etc, accommodating many desktop apps
+ProtectHome=read-only  # Allows reading from /home but prevents modifications
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6  # Commonly needed protocols
+
+[Install]
+WantedBy=multi-user.target

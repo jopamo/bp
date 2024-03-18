@@ -3,17 +3,21 @@
 REPO_PATH="/var/db/repos/bp"
 REPO_TEMP_DIR="/tmp/repo_temp"
 
-# Version variables
 GCC_MAJOR_VERSION="12"
 BINUTILS_VERSION="2.41"
+BINUTILS_BRANCH="binutils-$(echo "$BINUTILS_VERSION" | sed 's/\./_/')-branch"
 XZ_UTILS_VERSION="5.4"
-DBUS_VERSION="1.14"
+DBUS_VERSION="1.15"
 SYSTEMD_VERSION="254"
 UTIL_LINUX_VERSION="2.40"
 OPENSSL_VERSION="3.1"
 NODEJS_VERSION="20"
 BIND_TOOLS_VERSION="9.18"
 GAWK_VERSION="5.3"
+PYTHON_VERSION="3.12"
+PERL_VERSION="5.38"
+TCL_VERSION="8.6"
+TCL_BRANCH=$(echo "core-${TCL_VERSION}" | tr '.' '-')
 
 show_help() {
 	echo "Usage: $0 [options]"
@@ -80,14 +84,13 @@ clone_or_update_repo() {
 
 update_ebuild() {
 	local package_path="$1"
-	local PACKAGE_NAME="$2"
-	local repo_uri="$3"
-	local branch="$4"
-	local version_name="$5"
-	local use_date_only="$6"
-	local repo_temp_dir="${REPO_TEMP_DIR}/${PACKAGE_NAME}"
+	local repo_uri="$2"
+	local branch="$3"
+	local version_name="$4"
+	local use_date_only="$5"
+	local repo_temp_dir="${REPO_TEMP_DIR}/$(basename "$package_path")" # Extract package name from path
 
-	echo "Updating ${PACKAGE_NAME}..."
+	echo "Updating $(basename "$package_path")..."
 
 	# Check if repo has been cloned already, if not, clone or update
 	if [[ ! -d "$repo_temp_dir" ]]; then
@@ -151,52 +154,57 @@ update_ebuild() {
 }
 
 if [[ $update_toolchain == true ]]; then
-	GCC_VERSION=$(get_gcc_minor_version "$GCC_MAJOR_VERSION")
+    GCC_VERSION=$(get_gcc_minor_version "$GCC_MAJOR_VERSION")
 
-	update_ebuild "${REPO_PATH}/app-build/gcc" "gcc" "https://github.com/gcc-mirror/gcc" "releases/gcc-${GCC_MAJOR_VERSION}" "$GCC_VERSION" "no"
+    update_ebuild "${REPO_PATH}/app-build/gcc" "https://github.com/gcc-mirror/gcc" "releases/gcc-${GCC_MAJOR_VERSION}" "$GCC_VERSION" "no"
 
-	BINUTILS_BRANCH="binutils-$(echo "$BINUTILS_VERSION" | sed 's/\./_/')-branch"
-	update_ebuild "${REPO_PATH}/app-build/binutils" "binutils" "https://git.linaro.org/toolchain/binutils-gdb" "$BINUTILS_BRANCH" "$BINUTILS_VERSION" "no"
-	update_ebuild "${REPO_PATH}/app-compression/xz-utils" "xz-utils" "https://github.com/tukaani-project/xz" "v${XZ_UTILS_VERSION}" "$XZ_UTILS_VERSION" "no"
-	update_ebuild "${REPO_PATH}/app-compression/zstd" "zstd" "https://github.com/facebook/zstd" "dev" "placeholder" "yes"
-	update_ebuild "${REPO_PATH}/app-compression/lz4" "lz4" "https://github.com/lz4/lz4" "dev" "placeholder" "yes"
+    BINUTILS_BRANCH="binutils-$(echo "$BINUTILS_VERSION" | sed 's/\./_/')-branch"
+    update_ebuild "${REPO_PATH}/app-build/binutils" "https://git.linaro.org/toolchain/binutils-gdb" "$BINUTILS_BRANCH" "$BINUTILS_VERSION" "no"
+    update_ebuild "${REPO_PATH}/app-compression/xz-utils" "https://github.com/tukaani-project/xz" "v${XZ_UTILS_VERSION}" "$XZ_UTILS_VERSION" "no"
+    update_ebuild "${REPO_PATH}/app-compression/zstd" "https://github.com/facebook/zstd" "dev" "0" "yes"
+    update_ebuild "${REPO_PATH}/app-compression/lz4" "https://github.com/lz4/lz4" "dev" "0" "yes"
 fi
 
 if [[ $update_unsafe == true ]]; then
-	update_ebuild "${REPO_PATH}/app-fs/efibootmgr" "efibootmgr" "https://github.com/rhinstaller/efibootmgr" "main" "empty" "yes"
+    update_ebuild "${REPO_PATH}/app-fs/efibootmgr" "https://github.com/rhinstaller/efibootmgr" "main" "0" "yes"
 fi
 
 # version set
-update_ebuild "${REPO_PATH}/app-core/dbus" "dbus" "https://gitlab.freedesktop.org/dbus/dbus" "dbus-${DBUS_VERSION}" "$DBUS_VERSION" "no"
-update_ebuild "${REPO_PATH}/app-core/systemd" "systemd" "https://github.com/systemd/systemd-stable" "v${SYSTEMD_VERSION}-stable" "$SYSTEMD_VERSION" "no"
-update_ebuild "${REPO_PATH}/app-core/util-linux" "util-linux" "https://github.com/util-linux/util-linux" "stable/v${UTIL_LINUX_VERSION}" "$UTIL_LINUX_VERSION" "no"
-update_ebuild "${REPO_PATH}/lib-net/openssl" "openssl" "https://github.com/openssl/openssl" "openssl-${OPENSSL_VERSION}" "$OPENSSL_VERSION" "no"
-update_ebuild "${REPO_PATH}/app-server/nodejs" "nodejs" "https://github.com/nodejs/node" "v${NODEJS_VERSION}.x" "$NODEJS_VERSION" "no"
-update_ebuild "${REPO_PATH}/app-net/bind-tools" "bind-tools" "https://github.com/isc-projects/bind9" "bind-${BIND_TOOLS_VERSION}" "$BIND_TOOLS_VERSION" "no"
-update_ebuild "${REPO_PATH}/app-core/gawk" "gawk" "https://git.savannah.gnu.org/git/gawk" "gawk-${GAWK_VERSION}-stable" "$GAWK_VERSION" "no"
+update_ebuild "${REPO_PATH}/app-core/dbus" "https://gitlab.freedesktop.org/dbus/dbus" "dbus-${DBUS_VERSION}" "$DBUS_VERSION" "no"
+update_ebuild "${REPO_PATH}/app-core/gawk" "https://git.savannah.gnu.org/git/gawk" "gawk-${GAWK_VERSION}-stable" "$GAWK_VERSION" "no"
+update_ebuild "${REPO_PATH}/app-core/systemd" "https://github.com/systemd/systemd-stable" "v${SYSTEMD_VERSION}-stable" "$SYSTEMD_VERSION" "no"
+update_ebuild "${REPO_PATH}/app-core/util-linux" "https://github.com/util-linux/util-linux" "stable/v${UTIL_LINUX_VERSION}" "$UTIL_LINUX_VERSION" "no"
+update_ebuild "${REPO_PATH}/app-lang/perl" "https://github.com/Perl/perl5" "${PERL_VERSION}" "$PERL_VERSION" "no"
+update_ebuild "${REPO_PATH}/app-lang/python" "https://github.com/python/cpython" "${PYTHON_VERSION}" "$PYTHON_VERSION" "no"
+update_ebuild "${REPO_PATH}/app-lang/yasm" "https://github.com/yasm/yasm" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-net/bind-tools" "https://github.com/isc-projects/bind9" "bind-${BIND_TOOLS_VERSION}" "$BIND_TOOLS_VERSION" "no"
+update_ebuild "${REPO_PATH}/app-server/nodejs" "https://github.com/nodejs/node" "v${NODEJS_VERSION}.x" "$NODEJS_VERSION" "no"
+update_ebuild "${REPO_PATH}/dev-lang/tcl" "https://github.com/tcltk/tcl" "${TCL_BRANCH}-branch" "$TCL_VERSION" "no"
+update_ebuild "${REPO_PATH}/lib-net/openssl" "https://github.com/openssl/openssl" "openssl-${OPENSSL_VERSION}" "$OPENSSL_VERSION" "no"
 
 #: '
-update_ebuild "${REPO_PATH}/app-build/gnuconfig" "gnuconfig" "https://git.savannah.gnu.org/git/config" "master" "empty" "yes"
-update_ebuild "${REPO_PATH}/app-core/file" "file" "https://github.com/file/file" "master" "empty" "yes"
-update_ebuild "${REPO_PATH}/app-core/git" "git" "https://github.com/git/git" "maint" "empty" "yes"
-update_ebuild "${REPO_PATH}/app-core/kmod" "kmod" "https://github.com/kmod-project/kmod" "master" "empty" "yes"
-update_ebuild "${REPO_PATH}/app-core/lsof" "lsof" "https://github.com/lsof-org/lsof" "master" "empty" "yes"
-update_ebuild "${REPO_PATH}/app-core/procps" "procps" "https://gitlab.com/procps-ng/procps" "master" "empty" "yes"
-update_ebuild "${REPO_PATH}/app-crypto/jitterentropy" "jitterentropy" "https://github.com/smuellerDD/jitterentropy-library" "master" "empty" "yes"
-update_ebuild "${REPO_PATH}/app-crypto/rng-tools" "rng-tools" "https://github.com/nhorman/rng-tools" "master" "empty" "yes"
-update_ebuild "${REPO_PATH}/app-dev/repo" "repo" "https://github.com/GerritCodeReview/git-repo" "stable" "empty" "yes"
-update_ebuild "${REPO_PATH}/app-fs/dosfstools" "dosfstools" "https://github.com/dosfstools/dosfstools" "master" "empty" "yes"
-update_ebuild "${REPO_PATH}/app-fs/e2fsprogs" "e2fsprogs" "https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs" "maint" "empty" "yes"
-update_ebuild "${REPO_PATH}/app-fs/efivar" "efivar" "https://github.com/rhboot/efivar" "main" "empty" "yes"
-update_ebuild "${REPO_PATH}/app-fs/mdadm" "mdadm" "https://git.kernel.org/pub/scm/utils/mdadm/mdadm" "master" "empty" "yes"
-update_ebuild "${REPO_PATH}/app-fs/ntfs3g" "ntfs3g" "https://github.com/tuxera/ntfs-3g" "edge" "empty" "yes"
-update_ebuild "${REPO_PATH}/app-fs/smartmontools" "smartmontools" "https://github.com/smartmontools/smartmontools" "master" "empty" "yes"
-update_ebuild "${REPO_PATH}/app-net/chrony" "chrony" "https://gitlab.com/chrony/chrony" "master" "empty" "yes"
-update_ebuild "${REPO_PATH}/app-net/cyrus-sasl" "cyrus-sasl" "https://github.com/cyrusimap/cyrus-sasl" "master" "empty" "yes"
-update_ebuild "${REPO_PATH}/app-net/iproute2" "iproute2" "https://github.com/iproute2/iproute2" "main" "empty" "yes"
-update_ebuild "${REPO_PATH}/app-net/networkmanager" "networkmanager" "https://github.com/NetworkManager/NetworkManager" "main" "empty" "yes"
-update_ebuild "${REPO_PATH}/lib-core/expat" "expat" "https://github.com/libexpat/libexpat" "master" "empty" "yes"
-update_ebuild "${REPO_PATH}/lib-dev/maxminddb" "maxminddb" "https://github.com/maxmind/libmaxminddb" "main" "empty" "yes"
-update_ebuild "${REPO_PATH}/xgui-misc/ff2mpv" "ff2mpv" "https://github.com/woodruffw/ff2mpv" "master" "empty" "yes"
-update_ebuild "${REPO_PATH}/xmedia-live-app/mpv" "mpv" "https://github.com/mpv-player/mpv" "master" "empty" "yes"
+update_ebuild "${REPO_PATH}/app-build/gnuconfig" "https://git.savannah.gnu.org/git/config" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-core/file" "https://github.com/file/file" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-core/git" "https://github.com/git/git" "maint" "0" "yes"
+update_ebuild "${REPO_PATH}/app-core/kmod" "https://github.com/kmod-project/kmod" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-core/lsof" "https://github.com/lsof-org/lsof" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-core/procps" "https://gitlab.com/procps-ng/procps" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-crypto/jitterentropy" "https://github.com/smuellerDD/jitterentropy-library" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-crypto/rng-tools" "https://github.com/nhorman/rng-tools" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-dev/repo" "https://github.com/GerritCodeReview/git-repo" "stable" "0" "yes"
+update_ebuild "${REPO_PATH}/app-fs/dosfstools" "https://github.com/dosfstools/dosfstools" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-fs/e2fsprogs" "https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs" "maint" "0" "yes"
+update_ebuild "${REPO_PATH}/app-fs/efivar" "https://github.com/rhboot/efivar" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/app-fs/mdadm" "https://git.kernel.org/pub/scm/utils/mdadm/mdadm" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-fs/ntfs3g" "https://github.com/tuxera/ntfs-3g" "edge" "0" "yes"
+update_ebuild "${REPO_PATH}/app-fs/smartmontools" "https://github.com/smartmontools/smartmontools" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-lang/yasm" "https://github.com/yasm/yasm" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-net/chrony" "https://gitlab.com/chrony/chrony" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-net/cyrus-sasl" "https://github.com/cyrusimap/cyrus-sasl" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-net/iproute2" "https://github.com/iproute2/iproute2" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/app-net/networkmanager" "https://github.com/NetworkManager/NetworkManager" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-core/expat" "https://github.com/libexpat/libexpat" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-dev/maxminddb" "https://github.com/maxmind/libmaxminddb" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-misc/ff2mpv" "https://github.com/woodruffw/ff2mpv" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xmedia-live-app/mpv" "https://github.com/mpv-player/mpv" "master" "0" "yes"
 #'

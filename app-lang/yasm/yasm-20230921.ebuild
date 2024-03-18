@@ -11,7 +11,7 @@ if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/yasm/yasm"
 	inherit git-r3
 else
-	SNAPSHOT=2cd3bb50e256f5ed5f611ac611d25fe673f2cec3
+	SNAPSHOT=9defefae9fbcb6958cddbfa778c1ea8605da8b8b
 	SRC_URI="https://github.com/yasm/yasm/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

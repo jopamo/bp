@@ -59,3 +59,10 @@ alias start-ssh-agent='systemctl --user enable ssh-agent && \
 	ssh-add ~/.ssh/remote1 && \
 	ssh-add ~/.ssh/remote2 && \
 	ssh-add ~/.ssh/remote3'
+
+alias remove_comments="find . -type f \( -name '*.c' -o -name '*.h' \) -not -path '*/.git/*' -exec sed -i 's|//.*||' {} +"
+
+alias format_repo="find . -type f \( -name '*.c' -o -name '*.h' \) -not -path '*/.git/*' -exec clang-format -i {} +"
+
+alias format_commit="git diff --name-only --cached | grep -E '\.(c|h)$' | xargs clang-format -i"
+

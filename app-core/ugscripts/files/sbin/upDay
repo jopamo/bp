@@ -19,6 +19,7 @@ PYTHON_VERSION="3.12"
 PERL_VERSION="5.38"
 TCL_VERSION="8.6"
 TCL_BRANCH=$(echo "core-${TCL_VERSION}" | tr '.' '-')
+LLVM_VERSION="18"
 
 show_help() {
 	echo "Usage: $0 [options]"
@@ -163,10 +164,11 @@ if [[ $update_toolchain == true ]]; then
 fi
 
 if [[ $update_unsafe == true ]]; then
+    # watch for boot failures
 	update_ebuild "${REPO_PATH}/app-fs/efibootmgr" "https://github.com/rhinstaller/efibootmgr" "main" "0" "yes"
 fi
 
-# version set
+# versioned branches
 update_ebuild "${REPO_PATH}/app-core/gawk" "https://git.savannah.gnu.org/git/gawk" "gawk-${GAWK_VERSION}-stable" "$GAWK_VERSION" "no"
 update_ebuild "${REPO_PATH}/app-core/systemd" "https://github.com/systemd/systemd-stable" "v${SYSTEMD_VERSION}-stable" "$SYSTEMD_VERSION" "no"
 update_ebuild "${REPO_PATH}/app-core/util-linux" "https://github.com/util-linux/util-linux" "stable/v${UTIL_LINUX_VERSION}" "$UTIL_LINUX_VERSION" "no"
@@ -177,8 +179,9 @@ update_ebuild "${REPO_PATH}/app-lang/yasm" "https://github.com/yasm/yasm" "maste
 update_ebuild "${REPO_PATH}/app-net/bind-tools" "https://github.com/isc-projects/bind9" "bind-${BIND_TOOLS_VERSION}" "$BIND_TOOLS_VERSION" "no"
 update_ebuild "${REPO_PATH}/app-server/nodejs" "https://github.com/nodejs/node" "v${NODEJS_VERSION}.x" "$NODEJS_VERSION" "no"
 update_ebuild "${REPO_PATH}/lib-net/openssl" "https://github.com/openssl/openssl" "openssl-${OPENSSL_VERSION}" "$OPENSSL_VERSION" "no"
+update_ebuild "${REPO_PATH}/app-build/llvm" "https://github.com/llvm/llvm-project" "release/${LLVM_VERSION}.x" "$LLVM_VERSION" "no"
 
-#: '
+# main branches
 update_ebuild "${REPO_PATH}/app-build/gnuconfig" "https://git.savannah.gnu.org/git/config" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-core/dbus" "https://gitlab.freedesktop.org/dbus/dbus" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-core/file" "https://github.com/file/file" "master" "0" "yes"
@@ -204,4 +207,3 @@ update_ebuild "${REPO_PATH}/lib-core/expat" "https://github.com/libexpat/libexpa
 update_ebuild "${REPO_PATH}/lib-dev/maxminddb" "https://github.com/maxmind/libmaxminddb" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-misc/ff2mpv" "https://github.com/woodruffw/ff2mpv" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-live-app/mpv" "https://github.com/mpv-player/mpv" "master" "0" "yes"
-#'

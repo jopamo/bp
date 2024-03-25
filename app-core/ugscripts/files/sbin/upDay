@@ -6,7 +6,6 @@ REPO_TEMP_DIR="/tmp/repo_temp"
 # Version variables
 GCC_MAJOR_VERSION="12"
 BINUTILS_VERSION="2.41"
-BINUTILS_BRANCH="binutils-$(echo "$BINUTILS_VERSION" | sed 's/\./_/')-branch"
 XZ_UTILS_VERSION="5.4"
 DBUS_VERSION="1.15"
 SYSTEMD_VERSION="254"
@@ -18,7 +17,6 @@ GAWK_VERSION="5.3"
 PYTHON_VERSION="3.12"
 PERL_VERSION="5.38"
 TCL_VERSION="8.6"
-TCL_BRANCH=$(echo "core-${TCL_VERSION}" | tr '.' '-')
 LLVM_VERSION="18"
 
 show_help() {
@@ -167,6 +165,10 @@ if [[ $update_unsafe == true ]]; then
     # watch for boot failures
 	update_ebuild "${REPO_PATH}/app-fs/efibootmgr" "https://github.com/rhinstaller/efibootmgr" "main" "0" "yes"
 fi
+
+# version to branch conversion
+BINUTILS_BRANCH="binutils-$(echo "$BINUTILS_VERSION" | sed 's/\./_/')-branch"
+TCL_BRANCH=$(echo "core-${TCL_VERSION}" | tr '.' '-')
 
 # versioned branches
 update_ebuild "${REPO_PATH}/app-core/gawk" "https://git.savannah.gnu.org/git/gawk" "gawk-${GAWK_VERSION}-stable" "$GAWK_VERSION" "no"

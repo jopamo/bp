@@ -1,14 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-inherit cmake git-r3 flag-o-matic
+inherit cmake flag-o-matic
 
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
-EGIT_REPO_URI="https://github.com/llvm/llvm-project.git"
-EGIT_BRANCH="release/$(ver_cut 1).x"
-S=${WORKDIR}/${P}/${PN}
+
+SNAPSHOT=26a1d6601d727a96f4301d0d8647b5a42760ae0c
+SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${PN}-project-${SNAPSHOT}/llvm"
 
 LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
@@ -28,8 +29,8 @@ RESTRICT="!test? ( test )"
 CMAKE_BUILD_TYPE=Release
 
 src_configure() {
-	filter-flags -flto\=\*
-	filter-flags -D_FORTIFY_SOURCE\=\*
+	filter-flags -flto*
+	filter-flags -D_FORTIFY_SOURCE*
 	filter-flags -Wl,-z,defs
 	filter-flags -fstack-protector-strong
 	filter-flags -fassociative-math

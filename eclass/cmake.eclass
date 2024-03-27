@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: cmake.eclass
@@ -126,11 +126,12 @@ fi
 # the ebuild. Helps in improving QA of build systems that write to source tree.
 
 # @ECLASS_VARIABLE: CMAKE_SKIP_TESTS
+# @USER_VARIABLE
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Array of tests that should be skipped when running CTest.
 
-[[ ${CMAKE_MIN_VERSION} ]] && die "CMAKE_MIN_VERSION is banned; if necessary, set BDEPEND=\">=app-build/cmake-${CMAKE_MIN_VERSION}\" directly"
+[[ ${CMAKE_MIN_VERSION} ]] && die "CMAKE_MIN_VERSION is banned; if necessary, set BDEPEND=\">=app-dev/cmake-${CMAKE_MIN_VERSION}\" directly"
 [[ ${CMAKE_BUILD_DIR} ]] && die "The ebuild must be migrated to BUILD_DIR"
 [[ ${CMAKE_REMOVE_MODULES} ]] && die "CMAKE_REMOVE_MODULES is banned, set CMAKE_REMOVE_MODULES_LIST array instead"
 [[ ${CMAKE_UTILS_QA_SRC_DIR_READONLY} ]] && die "Use CMAKE_QA_SRC_DIR_READONLY instead"
@@ -151,7 +152,7 @@ case ${CMAKE_MAKEFILE_GENERATOR} in
 esac
 
 if [[ ${PN} != cmake ]]; then
-	BDEPEND+=" >=app-build/cmake-3.20.5"
+	BDEPEND+=" >=app-dev/cmake-3.20.5"
 fi
 
 # @FUNCTION: cmake_run_in
@@ -364,7 +365,7 @@ cmake_src_prepare() {
 	if [[ ${EAPI} == 7 ]]; then
 		pushd "${S}" > /dev/null || die # workaround from cmake-utils
 		# in EAPI-8, we use current working directory instead, bug #704524
-		# esp. test with 'special' pkgs like: app-compression/brotli, net-libs/quiche
+		# esp. test with 'special' pkgs like: app-compression/brotli, media-gfx/gmic, net-libs/quiche
 	fi
 	_cmake_check_build_dir
 
@@ -541,8 +542,6 @@ cmake_src_configure() {
 		set(CMAKE_INSTALL_DOCDIR "${EPREFIX}/usr/share/doc/${PF}" CACHE PATH "")
 		set(BUILD_SHARED_LIBS ON CACHE BOOL "")
 		set(Python3_FIND_UNVERSIONED_NAMES FIRST CACHE STRING "")
-		set(FETCHCONTENT_FULLY_DISCONNECTED ON CACHE BOOL "")
-		set(CMAKE_DISABLE_PRECOMPILE_HEADERS ON CACHE BOOL "")
 	_EOF_
 
 	if [[ -n ${_ECM_ECLASS} ]]; then

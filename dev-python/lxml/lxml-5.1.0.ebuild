@@ -6,7 +6,7 @@ DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{10..12} pypy3 )
 
-inherit distutils-r1 toolchain-funcs flag-o-matic
+inherit distutils-r1 toolchain-funcs
 
 DESCRIPTION="A Pythonic binding for the libxml2 and libxslt libraries"
 HOMEPAGE="
@@ -63,8 +63,6 @@ python_check_deps() {
 }
 
 python_prepare_all() {
-	filter-flags -Wl,-z,defs
-
 	# avoid replacing PYTHONPATH in tests.
 	sed -i -e '/sys\.path/d' test.py || die
 

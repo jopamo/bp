@@ -47,7 +47,7 @@ RDEPEND="
 DEPEND="
 	${COMMON_DEPEND}
 	wayland? (
-		dev-libs/wayland-protocols
+		lib-dev/wayland-protocols
 	)
 "
 

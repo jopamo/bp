@@ -265,7 +265,7 @@ src_install() {
 
 	# python seems to get rebuilt in src_install (bug 569908)
 	# Work around it for now.
-	if has_version dev-libs/libffi[pax-kernel]; then
+	if has_version lib-dev/libffi[pax-kernel]; then
 		pax-mark E "${ED}/usr/bin/${abiver}"
 	else
 		pax-mark m "${ED}/usr/bin/${abiver}"

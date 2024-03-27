@@ -38,7 +38,7 @@ find "${ECCLASS_DIR}" -type f -name '*.eclass' -print0 | xargs -0 sed -i'' \
     -e 's/app-portage/app-port/g' \
     -e 's/app-text/app-tex/g' \
     -e 's/dev-lang/app-lang/g' \
-    -e 's/dev-libs\/glib/lib-live\/glib/g' \
+    -e 's/lib-dev\/glib/lib-live\/glib/g' \
     -e 's/dev-util\/desktop-file-utils/xgui-misc\/desktop-file-utils/g' \
     -e 's/dev-util/app-dev/g' \
     -e 's/dev-vcs\/git/app-core\/git/g' \

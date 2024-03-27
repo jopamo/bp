@@ -24,7 +24,7 @@ KEYWORDS="amd64 arm64"
 
 # Needs recent libffi for HPPA fixes
 DEPEND="
-	>=dev-libs/libffi-3.4.4-r1:=
+	>=lib-dev/libffi-3.4.4-r1:=
 "
 # setuptools as a modern distutils provider
 RDEPEND="

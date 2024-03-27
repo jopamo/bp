@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 # please keep this ebuild at EAPI 7 -- sys-apps/portage dep
-EAPI=8
+EAPI=7
 
 DISTUTILS_USE_PEP517=no
 PYTHON_COMPAT=( pypy3 python3_{10..12} )

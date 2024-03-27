@@ -23,7 +23,7 @@ RESTRICT="mirror"
 QA_PREBUILT="usr/bin/makemkvcon usr/bin/mmdtsdec"
 
 DEPEND="
-	dev-libs/expat
+	lib-dev/expat
 	lib-core/glibc
 	lib-core/zlib
 	virtual/ssl

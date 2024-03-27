@@ -249,7 +249,7 @@ src_configure() {
 	# Bug 382159
 	# Removed for now, since the 3.2 version is broken, and we don't
 	# support it.
-	if has_version ">=dev-libs/libnl-3.2"; then
+	if has_version ">=lib-dev/libnl-3.2"; then
 		Kconfig_style_config LIBNL32
 	fi
 }

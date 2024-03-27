@@ -220,6 +220,8 @@ perl-module_src_configure() {
 	[[ -z ${pm_echovar} ]] && export PERL_MM_USE_DEFAULT=1
 	# Disable ExtUtils::AutoInstall from prompting
 	export PERL_EXTUTILS_AUTOINSTALL="--skipdeps"
+	# Noisy and not really appropriate to show to the user in a PM
+	export PERL_CANARY_STABILITY_DISABLE=1
 
 	if [[ $(declare -p myconf 2>&-) != "declare -a myconf="* ]]; then
 		local myconf_local=(${myconf})
@@ -254,7 +256,7 @@ perl-module_src_configure() {
 	elif [[ -f Makefile.PL ]] ; then
 		einfo "Using ExtUtils::MakeMaker"
 		set -- \
-			PREFIX=${EPREFIX}/usr \
+			PREFIX="${EPREFIX}"/usr \
 			INSTALLDIRS=vendor \
 			INSTALLMAN3DIR='none' \
 			DESTDIR="${D}" \
@@ -333,6 +335,7 @@ perl-module_src_test() {
 
 	local my_test_control
 	local my_test_verbose
+	local my_test_makeopts
 
 	[[ -n "${DIST_TEST_OVERRIDE}" ]] && ewarn "DIST_TEST_OVERRIDE is set to ${DIST_TEST_OVERRIDE}"
 	my_test_control=${DIST_TEST_OVERRIDE:-${DIST_TEST:-do parallel}}
@@ -340,6 +343,10 @@ perl-module_src_test() {
 	if ! has 'do' ${my_test_control} && ! has 'parallel' ${my_test_control} ; then
 		einfo Skipping tests due to DIST_TEST=${my_test_control}
 		return 0
+	fi
+
+	if has 'do' ${my_test_control} && ! has 'parallel' ${my_test_control} ; then
+		my_test_makeopts="-j1"
 	fi
 
 	if has verbose ${my_test_control} ; then
@@ -358,6 +365,13 @@ perl-module_src_test() {
 		export NO_NETWORK_TESTING=1
 	fi
 
+	# See https://www.perlmonks.org/?node_id=1225311
+	# * AUTOMATED_TESTING appears inappropriate for us, as it affects
+	# exit codes and might mask failures if configuration is wrong.
+	# * EXTENDED_TESTING is something we could consider if we had
+	# some way to opt-in to expensive tests.
+	export NONINTERACTIVE_TESTING=1
+
 	case ${EAPI} in
 		7)
 			;;
@@ -374,7 +388,7 @@ perl-module_src_test() {
 	if [[ -f Build ]] ; then
 		./Build test verbose=${my_test_verbose} || die "test failed"
 	elif [[ -f Makefile ]] ; then
-		emake test TEST_VERBOSE=${my_test_verbose}
+		emake ${my_test_makeopts} test TEST_VERBOSE=${my_test_verbose}
 	fi
 }
 

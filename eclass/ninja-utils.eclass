@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: ninja-utils.eclass
@@ -8,11 +8,11 @@
 # Michał Górny <mgorny@gentoo.org>
 # Mike Gilbert <floppym@gentoo.org>
 # @SUPPORTED_EAPIS: 7 8
-# @BLURB: common bits to run app-dev/samurai builder
+# @BLURB: common bits to run app-alternatives/ninja builder
 # @DESCRIPTION:
 # This eclass provides a single function -- eninja -- that can be used
 # to run the ninja builder alike emake. It does not define any
-# dependencies, you need to depend on app-dev/samurai yourself. Since
+# dependencies, you need to depend on app-alternatives/ninja yourself. Since
 # ninja is rarely used stand-alone, most of the time this eclass will
 # be used indirectly by the eclasses for other build systems (CMake,
 # Meson).
@@ -55,24 +55,14 @@ _NINJA_UTILS_ECLASS=1
 
 inherit multiprocessing
 
-case "${NINJA}" in
-	ninja)
-		NINJA_DEPEND=">=app-dev/samurai-1.8.2"
-	;;
-	samu)
-		NINJA_DEPEND="app-dev/samurai"
-	;;
-	*)
-		NINJA_DEPEND=""
-	;;
-esac
+NINJA_DEPEND="app-alternatives/ninja"
 
 # @FUNCTION: get_NINJAOPTS
 # @DESCRIPTION:
 # Get the value of NINJAOPTS, inferring them from MAKEOPTS if unset.
 get_NINJAOPTS() {
 	if [[ -z ${NINJAOPTS+set} ]]; then
-		NINJAOPTS="-j$(makeopts_jobs "${MAKEOPTS}" 999) -l$(makeopts_loadavg "${MAKEOPTS}" 0)"
+		NINJAOPTS="-j$(get_makeopts_jobs 999) -l$(get_makeopts_loadavg 0)"
 	fi
 	echo "${NINJAOPTS}"
 }
@@ -84,7 +74,14 @@ get_NINJAOPTS() {
 # by the supplied arguments.  This function dies if ninja fails.  It
 # also supports being called via 'nonfatal'.
 eninja() {
-	[[ -n "${NINJA_DEPEND}" ]] || ewarn "Unknown value '${NINJA}' for \${NINJA}"
+	case "${NINJA}" in
+		ninja|samu)
+			;;
+		*)
+			ewarn "Unknown value '${NINJA}' for \${NINJA}"
+			;;
+	esac
+
 	local v
 	case "${NINJA_VERBOSE}" in
 		OFF) ;;

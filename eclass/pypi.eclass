@@ -171,7 +171,7 @@ _pypi_sdist_url() {
 # version number).
 #
 # If <format> is unspecified, it defaults to ".tar.gz".  Another valid
-# value is ".zip" (please remember to add a BDEPEND on app-arch/unzip).
+# value is ".zip" (please remember to add a BDEPEND on app-compression/unzip).
 pypi_sdist_url() {
 	local _PYPI_SDIST_URL
 	_pypi_sdist_url "${@}"
@@ -219,7 +219,7 @@ pypi_wheel_name() {
 # be generated, that adds a .zip suffix to the fetched distfile,
 # so that it is unpacked in default src_unpack().  Note that
 # the wheel contents will be unpacked straight into ${WORKDIR}.
-# You need to add a BDEPEND on app-arch/unzip.
+# You need to add a BDEPEND on app-compression/unzip.
 #
 # If <package> is unspecified, it defaults to ${PYPI_PN}.
 #

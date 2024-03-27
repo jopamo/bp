@@ -656,7 +656,7 @@ if [[ ${ETYPE} == sources ]]; then
 		app-alternatives/cpio
 		app-lang/perl
 		app-alternatives/bc
-		dev-build/make
+		app-build/make
 		app-build/bison
 		app-build/flex
 		>=lib-core/ncurses-5.2

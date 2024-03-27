@@ -40,7 +40,6 @@ BDEPEND="
 			dev-python/pytest-mock[${PYTHON_USEDEP}]
 			dev-python/tomli-w[${PYTHON_USEDEP}]
 			>=dev-python/virtualenv-20.21[${PYTHON_USEDEP}]
-			dev-vcs/git
 		' "${PYTHON_TESTED[@]}")
 	)
 "

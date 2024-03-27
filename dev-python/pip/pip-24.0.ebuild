@@ -128,8 +128,6 @@ python_install_all() {
 	local DOCS=( AUTHORS.txt docs/html/**/*.rst )
 	distutils-r1_python_install_all
 
-	newbashcomp completion.bash pip
-
 	insinto /usr/share/zsh/site-functions
 	newins completion.zsh _pip
 }

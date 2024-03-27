@@ -22,9 +22,7 @@ RDEPEND="
 	dev-python/pytest[${PYTHON_USEDEP}]
 "
 BDEPEND="
-	test? (
-		dev-vcs/git
-	)
+	
 "
 
 distutils_enable_tests pytest

@@ -30,6 +30,7 @@ RDEPEND="
 "
 BDEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
+	
 "
 
 distutils_enable_tests pytest

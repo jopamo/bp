@@ -19,3 +19,20 @@ fi
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+IUSE="static-libs"
+
+src_configure() {
+	export USE_VALGRIND=0
+
+	local mycmakeargs=(
+		-DBUILD_APPS=OFF
+		-DBUILD_STATIC_LIBS=$(usex static-libs)
+		-DDISABLE_EXTRA_LIBS=ON
+		-DDISABLE_WERROR=ON
+		-DENABLE_RDRAND=ON
+		-DENABLE_THREADING=ON
+	)
+
+	cmake_src_configure
+}

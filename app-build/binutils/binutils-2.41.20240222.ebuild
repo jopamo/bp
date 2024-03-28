@@ -8,7 +8,7 @@ DESCRIPTION="a collection of binary tools"
 HOMEPAGE="https://sourceware.org/binutils/"
 
 SNAPSHOT=1900793bab0f8febb2566293ea932708d89b82e7
-SRC_URI="https://git.linaro.org/toolchain/binutils-gdb.git/snapshot/binutils-gdb-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/bminor/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-gdb-${SNAPSHOT}
 
 LICENSE="|| ( GPL-3 LGPL-3 )"
@@ -24,7 +24,7 @@ DEPEND="
 "
 
 src_configure() {
-	filter-flags -Wl,defs -Wl,-z,defs
+	filter-flags -Wl,defs
 
 	local myconf=(
 		$(use_enable gprof)

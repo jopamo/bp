@@ -2,34 +2,116 @@
 
 EAPI=8
 
-inherit distutils-r1 flag-o-matic
+DISTUTILS_EXT=1
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{10..12} pypy3 )
+
+inherit distutils-r1 toolchain-funcs
 
 DESCRIPTION="A Pythonic binding for the libxml2 and libxslt libraries"
-HOMEPAGE="http://lxml.de/ https://pypi.python.org/pypi/lxml/ https://github.com/lxml/lxml"
-SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
+HOMEPAGE="
+	https://lxml.de/
+	https://pypi.org/project/lxml/
+	https://github.com/lxml/lxml/
+"
+SRC_URI="
+	https://github.com/lxml/lxml/archive/${P}.tar.gz
+		-> ${P}.gh.tar.gz
+"
+S=${WORKDIR}/lxml-${P}
 
 LICENSE="BSD ElementTree GPL-2 PSF-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+IUSE="doc examples +threads test"
+RESTRICT="!test? ( test )"
 
-DEPEND="lib-core/libxml2
-	lib-core/libxslt
-	dev-python/setuptools[${PYTHON_USEDEP}]"
+# Note: lib{xml2,xslt} are used as C libraries, not Python modules.
+DEPEND="
+	>=lib-core/libxml2-2.10.3
+	>=lib-core/libxslt-1.1.38
+"
+RDEPEND="
+	${DEPEND}
+"
+BDEPEND="
+	virtual/pkgconfig
+	>=dev-python/cython-3.0.7[${PYTHON_USEDEP}]
+	doc? (
+		$(python_gen_any_dep '
+			dev-python/docutils[${PYTHON_USEDEP}]
+			dev-python/pygments[${PYTHON_USEDEP}]
+			dev-python/sphinx[${PYTHON_USEDEP}]
+			dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]
+		')
+	)
+	test? (
+		dev-python/cssselect[${PYTHON_USEDEP}]
+	)
+"
 
-PATCHES=( "${FILESDIR}"/${PN}-3.6.4-fix-test_xmlschema.patch )
+PATCHES=(
+	"${FILESDIR}/${P}-pypy.patch"
+)
+
+python_check_deps() {
+	use doc || return 0
+	python_has_version -b "dev-python/docutils[${PYTHON_USEDEP}]" &&
+	python_has_version -b "dev-python/pygments[${PYTHON_USEDEP}]" &&
+	python_has_version -b "dev-python/sphinx[${PYTHON_USEDEP}]" &&
+	python_has_version -b "dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]"
+}
 
 python_prepare_all() {
-	filter-flags -Wl,-z,defs
-
 	# avoid replacing PYTHONPATH in tests.
-	sed -i '/sys\.path/d' test.py || die
+	sed -i -e '/sys\.path/d' test.py || die
+
+	# don't use some random SDK on Darwin
+	sed -i -e '/_ldflags =/s/=.*isysroot.*darwin.*None/= None/' \
+		setupinfo.py || die
 
 	distutils-r1_python_prepare_all
 }
 
-python_install_all() {
-	distutils-r1_python_install_all
+python_compile() {
+	filter-flags -Wl,-z,defs
+	local DISTUTILS_ARGS=(
+		# by default it adds -w to CFLAGS
+		--warnings
+	)
+	tc-export PKG_CONFIG
+	distutils-r1_python_compile
+}
 
-	#lazy update mtime
-	find "${ED}"/usr/share -type f -exec touch {} +
+python_compile_all() {
+	use doc && emake html
+}
+
+python_test() {
+	local dir=${BUILD_DIR}/test$(python_get_sitedir)/lxml
+	local -x PATH=${BUILD_DIR}/test/usr/bin:${PATH}
+
+	cp -al "${BUILD_DIR}"/{install,test} || die
+	cp -al src/lxml/tests "${dir}/" || die
+	cp -al src/lxml/html/tests "${dir}/html/" || die
+	ln -rs "${S}"/doc "${dir}"/../../ || die
+
+	"${EPYTHON}" test.py -vv --all-levels -p || die "Test ${test} fails with ${EPYTHON}"
+}
+
+python_install_all() {
+	if use doc; then
+		local DOCS=( README.rst *.txt doc/*.txt )
+		local HTML_DOCS=( doc/html/. )
+	fi
+	if use examples; then
+		dodoc -r samples
+	fi
+
+	distutils-r1_python_install_all
+}
+
+pkg_postinst() {
+ "Support for BeautifulSoup as a parser backend" dev-python/beautifulsoup4
+ "Translates CSS selectors to XPath 1.0 expressions" dev-python/cssselect
 }

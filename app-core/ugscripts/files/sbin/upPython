@@ -1,0 +1,257 @@
+#!/bin/bash
+
+set -e
+
+REPO_PATH="/tmp/gentoo-repo"
+REPO="https://github.com/gentoo/gentoo.git"
+PACKAGE_DIR="/var/db/repos/bp/dev-python"
+
+echo "Starting script execution..."
+echo "Removing the existing ${PACKAGE_DIR} directory to start fresh..."
+rm -rf "${PACKAGE_DIR}"
+
+echo "Creating directory at ${PACKAGE_DIR}..."
+mkdir -p "${PACKAGE_DIR}"
+echo "Directory created or already exists."
+
+if [ -d "${REPO_PATH}" ]; then
+	echo "Updating the Gentoo package repository in ${REPO_PATH}..."
+	cd "${REPO_PATH}" && git pull
+else
+	echo "Cloning the Gentoo package repository to ${REPO_PATH}..."
+	git clone "${REPO}" "${REPO_PATH}" --depth 1
+fi
+
+echo "Repository setup complete."
+
+PACKAGES=(
+	"installer"
+	"jaraco-context"
+	"ConfigArgParse"
+	"PySocks"
+	"appdirs"
+	"autocommand"
+	"build"
+	"certifi"
+	"cffi"
+	"chardet"
+	"charset-normalizer"
+	"configobj"
+	"coverage"
+	"cryptography"
+	"cython"
+	"distlib"
+	"distro"
+	"editables"
+	"execnet"
+	"fastjsonschema"
+	"filelock"
+	"flit-core"
+	"gpep517"
+	"hatch-vcs"
+	"hatchling"
+	"idna"
+	"importlib-metadata"
+	"ini2toml"
+	"iniconfig"
+	"jaraco-env"
+	"jaraco-envs"
+	"jaraco-functools"
+	"jaraco-path"
+	"jaraco-text"
+	"jinja"
+	"josepy"
+	"lark"
+	"lxml"
+	"markupsafe"
+	"more-itertools"
+	"nspektr"
+	"ordered-set"
+	"packaging"
+	"parsedatetime"
+	"path"
+	"pathspec"
+	"pip"
+	"pip-run"
+	"platformdirs"
+	"pluggy"
+	"ply"
+	"poetry-core"
+	"psutil"
+	"py"
+	"pycparser"
+	"pyopenssl"
+	"pyproject-hooks"
+	"pyrfc3339"
+	"pytest"
+	"pytest-cov"
+	"pytest-home"
+	"pytest-timeout"
+	"pytest-xdist"
+	"pytz"
+	"pyyaml"
+	"requests"
+	"requests-toolbelt"
+	"semantic-version"
+	"setuptools"
+	"setuptools-rust"
+	"setuptools-scm"
+	"six"
+	"tomli"
+	"tomli-w"
+	"trove-classifiers"
+	"typing-extensions"
+	"urllib3"
+	"virtualenv"
+	"wheel"
+	"zipp"
+	"zstandard"
+)
+
+echo "Starting package copy process..."
+
+for package in "${PACKAGES[@]}"; do
+	src_path="${REPO_PATH}/dev-python/${package}"
+	dest_path="${PACKAGE_DIR}/${package}"
+
+	echo "Processing ${package}..."
+	if [ -d "${src_path}" ]; then
+		echo "Copying ${package} from ${src_path} to ${dest_path}..."
+		cp -R "${src_path}" "${dest_path}"
+		echo "Copy complete for ${package}."
+	else
+		echo "Package dev-python/${package} not found in the repository."
+	fi
+done
+
+echo "Package copy process completed."
+
+echo "Starting cleanup process..."
+
+# specials
+[ -d "${PACKAGE_DIR}/gpep517" ] && echo "Updating EAPI for gpep517..." && find "${PACKAGE_DIR}/gpep517" -type f -name "*.ebuild" -exec sed -i'' 's/EAPI=7/EAPI=8/' {} + && echo "EAPI updated for gpep517."
+
+[ -d "${PACKAGE_DIR}/cython" ] && find "${PACKAGE_DIR}/cython" -type f -name "*.ebuild" -exec sed -i'' '/python_compile()/a \\tfilter-flags -Wl,-z,defs' {} + && echo "Updated python_compile for cython."
+
+echo "Removing files ending with 9999.ebuild in ${PACKAGE_DIR}..."
+find "${PACKAGE_DIR}" -type f -name '*9999.ebuild' -exec echo "Deleting {}" \; -delete
+
+echo "Removing lines containing 'Gentoo Authors' from files in ${PACKAGE_DIR}..."
+find "${PACKAGE_DIR}" -type f -exec sed -i'' '/Gentoo Authors/d' {} \;
+
+echo "Removing metadata.xml files from ${PACKAGE_DIR}..."
+find "${PACKAGE_DIR}" -type f -name 'metadata.xml' -exec echo "Deleting {}" \; -delete
+
+find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec sed -i'' '/newbashcomp/d' {} +
+
+find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec sed -i'' 'N;/^\n$/!P;D' {} +
+
+find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec sed -i'' \
+	-e '/dev-vcs\/mercurial/d' \
+	-e '/dev-vcs\/git/d' {} +
+
+find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe '
+    s/!sparc\?\s*\(([^()]|\n)*\)//g;
+' {} +
+
+find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe '
+    s/!hppa\?\s*\(([^()]|\n)*\)//g;
+' {} +
+
+find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe '
+    s/test\?\s*\(\s*\)//g;
+' {} +
+
+for package in cython psutil lxml cffi zstandard; do
+	if [ -d "${PACKAGE_DIR}/${package}" ]; then
+		echo "Updating for ${package}..."
+		find "${PACKAGE_DIR}/${package}" -type f -name "*.ebuild" -exec sh -c '
+            for ebuild_file; do
+                if grep -q "^python_compile()" "$ebuild_file"; then
+                    sed -i'' "/^python_compile()/ { N; s|\\n|\\n\\tfilter-flags -Wl,-z,defs\\n| }" "$ebuild_file"
+                elif grep -q "^src_prepare() {" "$ebuild_file"; then
+                    sed -i'' "/^src_prepare() {/ { N; s|\\n|\\n\\tfilter-flags -Wl,-z,defs\\n| }" "$ebuild_file"
+                fi
+            done
+		' sh {} +
+		echo "Updated for ${package}."
+	else
+		echo "Directory for ${package} not found."
+	fi
+done
+
+echo "Starting to process each package to keep only the latest ebuild..."
+
+for package in "${PACKAGES[@]}"; do
+	package_dir="${PACKAGE_DIR}/${package}"
+	if [ -d "${package_dir}" ]; then
+		echo "Processing ${package} in ${package_dir}..."
+
+		find "${package_dir}" -type f -name "*.ebuild" | sort -V | head -n -1 | while read ebuild; do
+			echo "Deleting old ebuild: ${ebuild}"
+			rm "${ebuild}"
+		done
+
+		echo "Cleanup of old ebuilds complete for ${package}."
+	else
+		echo "Directory ${package_dir} not found."
+	fi
+done
+
+echo "All packages processed, and old ebuilds removed."
+
+echo "Starting to update KEYWORDS in ebuild files..."
+
+for package in "${PACKAGES[@]}"; do
+	package_dir="${PACKAGE_DIR}/${package}"
+	if [ -d "${package_dir}" ]; then
+		echo "Processing ${package} in ${package_dir}..."
+
+		# KEYWORDS update
+		echo "Updating KEYWORDS for ${package} in ${package_dir}..."
+		find "${package_dir}" -type f -name "*.ebuild" -exec sed -i'' 's/^KEYWORDS=".*"/KEYWORDS="amd64 arm64"/' {} +
+		echo "KEYWORDS updated for ${package}."
+	fi
+done
+
+# Text replacements
+declare -A replacements=(
+	["dev-libs/libxml2"]="lib-core/libxml2"
+	["dev-libs/libxslt"]="lib-core/libxslt"
+	["dev-libs/libffi"]="lib-core/libffi"
+	["dev-libs/openssl"]="lib-net/openssl"
+	["app-misc/ca-certificates"]="app-var/ca-certificates"
+	["sys-libs/timezone-data"]="lib-core/tzdb"
+	["dev-libs/libyaml"]="lib-dev/libyaml"
+)
+
+for package in "${PACKAGES[@]}"; do
+	package_dir="${PACKAGE_DIR}/${package}"
+	if [ -d "${package_dir}" ]; then
+		for old_text in "${!replacements[@]}"; do
+			new_text="${replacements[$old_text]}"
+			echo "Replacing '${old_text}' with '${new_text}' in ${package_dir}..."
+			find "${package_dir}" -type f -name "*.ebuild" -exec sed -i'' "s|${old_text}|${new_text}|g" {} +
+		done
+		echo "Text replacements completed for ${package}."
+	fi
+done
+
+remove_strings=('bash-completion-r1' 'optfeature')
+
+for package in "${PACKAGES[@]}"; do
+	package_dir="${PACKAGE_DIR}/${package}"
+	if [ -d "${package_dir}" ]; then
+		echo "Processing ${package} in ${package_dir} for string removals..."
+		find "${package_dir}" -type f -name "*.ebuild" -print0 | while IFS= read -r -d '' ebuild_file; do
+			echo "Updating ${ebuild_file}..."
+			for remove_string in "${remove_strings[@]}"; do
+				sed -i'' -e "s/[[:space:]]*${remove_string}[[:space:]]*/ /g" \
+					-e '/^inherit[[:space:]]*$/d' "${ebuild_file}"
+			done
+		done
+		echo "String removals completed for ${package}."
+	fi
+done
+
+echo "Cleanup complete. Script execution finished."

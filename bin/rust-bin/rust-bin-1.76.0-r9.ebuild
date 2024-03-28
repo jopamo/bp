@@ -25,6 +25,8 @@ IUSE="clippy musl rls rustfmt"
 
 RDEPEND="app-eselec/eselect-rust"
 
+RESTRICT="strip"
+
 QA_PREBUILT="
 	opt/${P}/bin/.*
 	opt/${P}/lib/.*.so
@@ -32,6 +34,8 @@ QA_PREBUILT="
 	opt/${P}/lib/rustlib/.*/bin/.*
 	opt/${P}/lib/rustlib/.*/lib/.*
 "
+
+QA_EXECSTACK="opt/${P}/lib/rustlib/*/lib*.rlib:lib.rmeta"
 
 src_unpack() {
 	default

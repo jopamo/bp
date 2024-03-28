@@ -20,7 +20,7 @@ src_install() {
 
 	#sbin files
 	for f in eclass_import emirror esync eup lighttpd_certs upBrowsers \
-		mkheaders mkimg mkmini mkstage xbkup upDay upBrowsers upApp xchroot ; do
+		mkheaders mkimg mkmini mkstage xbkup upDay upBrowsers upApp upPython xchroot ; do
 			dosbin "${FILESDIR}"/sbin/$f
 	done
 

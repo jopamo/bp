@@ -44,7 +44,7 @@ PDEPEND="app-net/rsync"
 
 PATCHES=(
 	"${FILESDIR}"/phase-helpers.patch
-	"${FILESDIR}"/makeglobals.patch
+	#"${FILESDIR}"/makeglobals.patch
 )
 
 pkg_pretend() {

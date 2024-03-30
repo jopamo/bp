@@ -6,8 +6,7 @@ Before=sysinit.target shutdown.target
 ConditionVirtualization=!container
 
 [Service]
-ExecStart=/usr/sbin/rngd -f
-CapabilityBoundingSet=CAP_SYS_ADMIN
+ExecStart=/usr/sbin/rngd -f $RNGD_OPTS
 ProtectSystem=full
 ProtectHome=yes
 PrivateDevices=no

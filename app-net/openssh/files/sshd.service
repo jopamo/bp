@@ -12,19 +12,6 @@ ExecReload=/usr/bin/kill -HUP $MAINPID
 KillMode=process
 Restart=always
 RestartSec=5s
-ProtectSystem=full
-ProtectHome=read-only
-PrivateTmp=true
-PrivateDevices=true
-NoNewPrivileges=true
-ProtectKernelModules=true
-ProtectKernelTunables=true
-ProtectControlGroups=true
-RestrictAddressFamilies=AF_INET AF_INET6
-RestrictNamespaces=true
-MemoryDenyWriteExecute=true
-LockPersonality=true
-SystemCallArchitectures=native
 
 [Install]
 WantedBy=multi-user.target

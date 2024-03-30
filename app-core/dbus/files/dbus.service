@@ -16,9 +16,9 @@ AmbientCapabilities=CAP_AUDIT_WRITE
 PrivateTmp=yes
 PrivateDevices=yes
 NoNewPrivileges=yes
-ProtectSystem=full  # Allows writes to /var and /etc, accommodating many desktop apps
-ProtectHome=read-only  # Allows reading from /home but prevents modifications
-RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6  # Commonly needed protocols
+ProtectSystem=full
+ProtectHome=read-only
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
 
 [Install]
 WantedBy=multi-user.target

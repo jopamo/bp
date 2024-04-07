@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools flag-o-matic
+inherit autotools flag-o-matic
 
 DESCRIPTION="X C-language Bindings library"
 HOMEPAGE="https://xcb.freedesktop.org/"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/${PN}.git"
+
+SNAPSHOT=86a478032ba93f30adbc0ce96eecd3420fdf7ed1
+SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxcb/-/archive/${SNAPSHOT}/libxcb-${SNAPSHOT}.tar.bz2 -> libxcb-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/libxcb-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

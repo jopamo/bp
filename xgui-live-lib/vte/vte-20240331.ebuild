@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 meson
+inherit meson
 
 DESCRIPTION="VTE provides a virtual terminal widget for GTK applications."
 HOMEPAGE="https://github.com/GNOME/vte"
-EGIT_REPO_URI="https://github.com/GNOME/vte.git"
+
+SNAPSHOT=2acd77061f47a4a7174418795fd087394d58f1f0
+SRC_URI="https://github.com/GNOME/vte/archive/${SNAPSHOT}.tar.gz -> vte-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/vte-${SNAPSHOT}"
 
 LICENSE="CCA4"
 SLOT="0"

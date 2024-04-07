@@ -6,7 +6,7 @@ inherit git-r3 autotools
 
 DESCRIPTION="Common files for development of Gnome packages"
 HOMEPAGE="https://git.gnome.org/browse/gnome-common"
-EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/gnome-common.git"
+EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/gnome-common"
 
 LICENSE="GPL-3"
 SLOT="3"

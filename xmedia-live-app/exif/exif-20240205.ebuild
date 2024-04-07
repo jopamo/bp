@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="Small CLI util to show EXIF infos hidden in JPEG files"
 HOMEPAGE="https://github.com/libexif"
-EGIT_REPO_URI="https://github.com/libexif/exif.git"
+
+SNAPSHOT=0059882b24549705bcf242e20be4fbb202068ce3
+SRC_URI="https://github.com/libexif/exif/archive/${SNAPSHOT}.tar.gz -> exif-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/exif-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

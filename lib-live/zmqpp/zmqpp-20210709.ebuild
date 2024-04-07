@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit cmake flag-o-matic git-r3
+inherit cmake flag-o-matic
 
 DESCRIPTION="ZeroMQ 'highlevel' C++ bindings"
 HOMEPAGE="https://github.com/zeromq/zmqpp"
-EGIT_REPO_URI="https://github.com/zeromq/zmqpp.git"
+
+SNAPSHOT=ba4230d5d03d29ced9ca788e3bd1095477db08ae
+SRC_URI="https://github.com/zeromq/zmqpp/archive/${SNAPSHOT}.tar.gz -> zmqpp-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/zmqpp-${SNAPSHOT}"
 
 LICENSE="MPL-2.0"
 SLOT="0"

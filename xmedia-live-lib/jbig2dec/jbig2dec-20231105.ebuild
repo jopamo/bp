@@ -7,11 +7,15 @@ inherit autotools
 DESCRIPTION="A decoder implementation of the JBIG2 image compression format"
 HOMEPAGE="http://ghostscript.com/jbig2dec.html"
 
+SNAPSHOT=ee53a7e4bc7819d32e8c0b2057885bcc97586bf3
+SRC_URI="https://github.com/ArtifexSoftware/jbig2dec/archive/${SNAPSHOT}.tar.gz -> jbig2dec-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/jbig2dec-${SNAPSHOT}"
+
 if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/ArtifexSoftware/${PN}.git"
-	inherit git-r3
+	EGIT_REPO_URI="https://github.com/ArtifexSoftware/jbig2dec"
+	inherit
 else
-	SNAPSHOT=976170316e1c79040db3b109cf0347c1c1252fdc
+	SNAPSHOT=ee53a7e4bc7819d32e8c0b2057885bcc97586bf3
 	SRC_URI="https://github.com/ArtifexSoftware/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

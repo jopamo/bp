@@ -2,10 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="X.Org Session Management library"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/${PN}.git"
+HOMEPAGE="https://www.x.org/wiki/"
+
+SNAPSHOT=5edd20b307ce70ccb14c360f1b94914c49544a24
+SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libSM/-/archive/${SNAPSHOT}/libSM-${SNAPSHOT}.tar.bz2 -> libSM-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/libSM-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

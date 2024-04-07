@@ -2,12 +2,14 @@
 
 EAPI=8
 
-inherit linux-info toolchain-funcs git-r3
+inherit linux-info toolchain-funcs
 
 DESCRIPTION="Hardware Monitoring user-space utilities"
 HOMEPAGE="https://hwmon.wiki.kernel.org/ https://github.com/lm-sensors/lm-sensors"
-EGIT_REPO_URI="https://github.com/lm-sensors/lm-sensors.git"
 
+SNAPSHOT=42f240d2a457834bcbdf4dc8b57237f97b5f5854
+SRC_URI="https://github.com/lm-sensors/lm-sensors/archive/${SNAPSHOT}.tar.gz -> lm-sensors-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/lm-sensors-${SNAPSHOT}"
 
 LICENSE="GPL-2+ LGPL-2.1"
 SLOT="0"

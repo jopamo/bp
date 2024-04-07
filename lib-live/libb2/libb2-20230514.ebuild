@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools flag-o-matic
+inherit autotools flag-o-matic
 
 DESCRIPTION="C library providing BLAKE2b, BLAKE2s, BLAKE2bp, BLAKE2sp"
 HOMEPAGE="https://github.com/BLAKE2/libb2"
-EGIT_REPO_URI="https://github.com/BLAKE2/libb2.git"
+
+SNAPSHOT=643decfbf8ae600c3387686754d74c84144950d1
+SRC_URI="https://github.com/BLAKE2/libb2/archive/${SNAPSHOT}.tar.gz -> libb2-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libb2-${SNAPSHOT}"
 
 LICENSE="CC0-1.0"
 SLOT="0"

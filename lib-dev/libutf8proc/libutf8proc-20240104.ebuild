@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit toolchain-funcs git-r3
+inherit toolchain-funcs
 
 DESCRIPTION="mapping tool for UTF-8 strings"
 HOMEPAGE="https://github.com/JuliaStrings/utf8proc"
-EGIT_REPO_URI="https://github.com/JuliaStrings/utf8proc.git"
+
+SNAPSHOT=1fe43f5a6d9c628f717c5ec8aeaeae4a9adfd167
+SRC_URI="https://github.com/JuliaStrings/utf8proc/archive/${SNAPSHOT}.tar.gz -> utf8proc-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/utf8proc-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

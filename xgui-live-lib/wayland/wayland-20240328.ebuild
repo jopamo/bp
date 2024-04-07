@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit meson git-r3
+inherit meson
 
 DESCRIPTION="Wayland protocol libraries"
 HOMEPAGE="https://wayland.freedesktop.org/ https://gitlab.freedesktop.org/wayland/wayland"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/wayland/wayland.git"
+
+SNAPSHOT=36cef8653fe57eff7d38fc0f4877bb900b1a21ea
+SRC_URI="https://gitlab.freedesktop.org/wayland/wayland/-/archive/${SNAPSHOT}/wayland-${SNAPSHOT}.tar.bz2 -> wayland-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/wayland-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

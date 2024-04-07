@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools git-r3 user
+inherit flag-o-matic autotools user
 
 DESCRIPTION="Fast, production-quality, standard-conformant FTP server"
 HOMEPAGE="http://www.pureftpd.org/"
-EGIT_REPO_URI="https://github.com/jedisct1/pure-ftpd.git"
+
+SNAPSHOT=3296864468cc1f12a1901252a372e72d7c3bc7e5
+SRC_URI="https://github.com/jedisct1/pure-ftpd/archive/${SNAPSHOT}.tar.gz -> pure-ftpd-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/pure-ftpd-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"

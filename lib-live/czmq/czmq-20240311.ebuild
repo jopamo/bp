@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit autotools
 
 DESCRIPTION="High-level C Binding for ZeroMQ"
 HOMEPAGE="http://czmq.zeromq.org"
-EGIT_REPO_URI="https://github.com/zeromq/${PN}.git"
+
+SNAPSHOT=db940448315b71ceb6099fce6d73918a94daa98a
+SRC_URI="https://github.com/zeromq/czmq/archive/${SNAPSHOT}.tar.gz -> czmq-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/czmq-${SNAPSHOT}"
 
 LICENSE="LGPL-3"
 SLOT="0"

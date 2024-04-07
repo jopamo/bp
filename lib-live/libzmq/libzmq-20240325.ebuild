@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit autotools
 
 DESCRIPTION="A brokerless kernel"
 HOMEPAGE="http://www.zeromq.org/"
-EGIT_REPO_URI="https://github.com/zeromq/${PN}.git"
+
+SNAPSHOT=2a75ef07be0ba76f86592e10b999331cd6124d52
+SRC_URI="https://github.com/zeromq/libzmq/archive/${SNAPSHOT}.tar.gz -> libzmq-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libzmq-${SNAPSHOT}"
 
 LICENSE="LGPL-3"
 SLOT="0"

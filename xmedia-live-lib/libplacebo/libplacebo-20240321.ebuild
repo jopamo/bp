@@ -2,14 +2,18 @@
 
 EAPI=8
 
-inherit meson python-any-r1 git-r3
+inherit meson python-any-r1
 
 DESCRIPTION="Reusable library for GPU-accelerated image processing primitives"
 HOMEPAGE="
+
+SNAPSHOT=7b29435072143ee8b7e131947e055d3780ae4e47
+SRC_URI="https://github.com/haasn/libplacebo/archive/${SNAPSHOT}.tar.gz -> libplacebo-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libplacebo-${SNAPSHOT}"
+
 	https://libplacebo.org/
 	https://code.videolan.org/videolan/libplacebo/
 "
-EGIT_REPO_URI="https://github.com/haasn/libplacebo"
 
 LICENSE="
 	LGPL-2.1+

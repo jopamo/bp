@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit cmake
 
 DESCRIPTION="Qt port of pavucontrol"
 HOMEPAGE="http://lxqt.org/"
-EGIT_REPO_URI="https://github.com/lxde/pavucontrol-qt.git"
+
+SNAPSHOT=9abad0c9a1120d397b79a3f54b231352c69d8807
+SRC_URI="https://github.com/lxde/pavucontrol-qt/archive/${SNAPSHOT}.tar.gz -> pavucontrol-qt-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/pavucontrol-qt-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

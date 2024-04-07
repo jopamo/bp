@@ -1,21 +1,13 @@
-# Distributed under the terms of the GNU General Public License v2
-
 EAPI=8
 
-inherit flag-o-matic qmake-utils
+CMAKE_IN_SOURCE_BUILD=1
+
+inherit flag-o-matic git-r3 cmake
 
 DESCRIPTION="Cross-platform application development framework"
 HOMEPAGE="https://www.qt.io/"
-
-if [[ ${PV} == *9999 ]]; then
-	EGIT_BRANCH="kde/$(ver_cut 1).$(ver_cut 2)"
-	EGIT_REPO_URI="https://invent.kde.org/qt/qt/${PN}.git"
-	inherit git-r3
-else
-	SNAPSHOT=a43df98d037ad07cf096ef2f775958ceba743613
-	SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+EGIT_REPO_URI="https://github.com/qt/${PN}.git"
+EGIT_BRANCH=$(ver_cut 1).$(ver_cut 2)
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT="$(ver_cut 1)"
@@ -24,17 +16,7 @@ KEYWORDS="amd64 arm64"
 IUSE="gssapi mysql postgres sqlite systemd opengl vulkan +xkbcommon"
 
 DEPEND="
-	app-core/dbus
-	lib-core/libpcre2
-	lib-core/zlib
-	lib-dev/double-conversion
-	lib-live/glib
 	lib-live/libinput
-	xgui-live-lib/libxcb
-	xgui-misc/freetype
-	xgui-misc/harfbuzz
-	xmedia-live-lib/libjpeg-turbo
-	xmedia-live-lib/libpng
 	gssapi? ( app-crypto/mit-krb5 )
 	mysql? ( app-server/mariadb )
 	opengl? ( xgui-misc/mesa )
@@ -43,11 +25,6 @@ DEPEND="
 	systemd? ( app-core/systemd )
 	vulkan? ( xmedia-live-lib/vulkan-loader )
 	xkbcommon? ( xgui-live-lib/libxkbcommon )
-"
-PDEPEND="
-	xgui-lib/qtsvg:$(ver_cut 1)=
-	xgui-lib/qttools:$(ver_cut 1)=
-	xgui-lib/qtx11extras:$(ver_cut 1)=
 "
 
 src_prepare() {
@@ -69,6 +46,7 @@ src_configure() {
 		-no-framework
 		-no-rpath
 		-prefix "${EPREFIX}"/usr
+		-bindir "${EPREFIX}"/usr/lib/qt$(ver_cut 1)/bin
 		-docdir "${EPREFIX}"/usr/share/doc/qt$(ver_cut 1)
 		-headerdir "${EPREFIX}"/usr/include/qt$(ver_cut 1)
 		-archdatadir "${EPREFIX}"/usr/lib/qt$(ver_cut 1)
@@ -77,10 +55,11 @@ src_configure() {
 		-examplesdir "${EPREFIX}"/usr/share/doc/qt$(ver_cut 1)/examples
 		-dbus-linked
 		-glib
-		-no-compile-examples
-		-no-sql-{db2,ibase,oci,odbc,tds}
+		-no-pch
+		-no-sql-{db2,ibase,oci,odbc}
 		-no-strip
 		-libinput
+		-no-accessibility
 		-openssl-linked
 		-system-doubleconversion
 		-system-freetype
@@ -90,7 +69,6 @@ src_configure() {
 		-system-pcre
 		-system-zlib
 		$(usex arm64 '' -reduce-relocations)
-		$(usex gssapi -feature-gssapi -no-feature-gssapi)
 		$(usex mysql -sql-mysql -no-sql-mysql)
 		$(usex opengl -opengl -no-opengl)
 		$(usex postgres -sql-psql -no-sql-psql)
@@ -105,8 +83,5 @@ src_configure() {
 }
 
 src_install() {
-	make INSTALL_ROOT="${ED}" install
-	cleanup_install
-
-	dosym -r /usr/bin/qmake /usr/lib/qt$(ver_cut 1)/bin/qmake
+	cmake_src_install
 }

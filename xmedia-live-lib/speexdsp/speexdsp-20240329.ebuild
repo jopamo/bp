@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic git-r3
+inherit autotools flag-o-matic
 
 DESCRIPTION="Audio compression format designed for speech -- DSP"
 HOMEPAGE="https://www.speex.org/"
-EGIT_REPO_URI="https://github.com/xiph/speexdsp.git"
+
+SNAPSHOT=9b2846a4472c38660d6aec7a180daa5dc77ab2d3
+SRC_URI="https://github.com/xiph/speexdsp/archive/${SNAPSHOT}.tar.gz -> speexdsp-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/speexdsp-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"

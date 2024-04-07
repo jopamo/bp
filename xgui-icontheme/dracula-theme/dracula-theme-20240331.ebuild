@@ -2,11 +2,12 @@
 
 EAPI=8
 
-inherit git-r3
-
 DESCRIPTION="Dracula gtk theme"
 HOMEPAGE="https://github.com/dracula/gtk"
-EGIT_REPO_URI="https://github.com/dracula/gtk"
+
+SNAPSHOT=c21f12be904fe55336397fc80feb1a8c8216dca2
+SRC_URI="https://github.com/dracula/gtk/archive/${SNAPSHOT}.tar.gz -> gtk-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/gtk-${SNAPSHOT}"
 
 LICENSE="GPL-3"
 SLOT="0"

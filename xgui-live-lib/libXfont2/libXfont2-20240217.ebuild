@@ -2,10 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools flag-o-matic
+inherit autotools flag-o-matic
 
 DESCRIPTION="X.Org Xfont library"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/libxfont.git"
+HOMEPAGE="https://www.x.org/wiki/"
+
+SNAPSHOT=c47d610ae27e89911539773f15bd7940fc00d35d
+SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxfont/-/archive/${SNAPSHOT}/libxfont-${SNAPSHOT}.tar.bz2 -> libxfont-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/libxfont-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

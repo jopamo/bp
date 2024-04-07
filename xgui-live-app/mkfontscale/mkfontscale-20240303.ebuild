@@ -2,10 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="create an index of scalable font files for X"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/app/${PN}.git"
+HOMEPAGE="https://www.x.org/wiki/"
+
+SNAPSHOT=bcfa27aeef3a9eb720e6b48e3fb8a4c2813fef52
+SRC_URI="https://gitlab.freedesktop.org/xorg/app/mkfontscale/-/archive/${SNAPSHOT}/mkfontscale-${SNAPSHOT}.tar.bz2 -> mkfontscale-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/mkfontscale-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

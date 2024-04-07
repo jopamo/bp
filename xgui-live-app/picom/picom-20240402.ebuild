@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit meson git-r3 flag-o-matic
+inherit meson flag-o-matic
 
 DESCRIPTION="A lightweight compositor for X11 (previously a compton fork)"
 HOMEPAGE="https://github.com/yshui/picom.git"
-EGIT_REPO_URI="https://github.com/yshui/picom.git"
+
+SNAPSHOT=d8c34ed4f753f75280d262d7126cb573dcee6663
+SRC_URI="https://github.com/yshui/picom/archive/${SNAPSHOT}.tar.gz -> picom-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/picom-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

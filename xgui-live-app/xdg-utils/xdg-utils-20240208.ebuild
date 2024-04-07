@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="Portland utils for cross-platform/cross-toolkit/cross-desktop interoperability"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/xdg-utils/"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xdg/xdg-utils.git"
+
+SNAPSHOT=54b6c1e4da163598c8e903978a29b543f97b0cda
+SRC_URI="https://gitlab.freedesktop.org/xdg/xdg-utils/-/archive/${SNAPSHOT}/xdg-utils-${SNAPSHOT}.tar.bz2 -> xdg-utils-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/xdg-utils-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

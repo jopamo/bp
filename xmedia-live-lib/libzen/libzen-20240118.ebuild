@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit autotools
 
 DESCRIPTION="Shared library for libmediainfo and mediainfo"
 HOMEPAGE="https://github.com/MediaArea/ZenLib"
-EGIT_REPO_URI="https://github.com/MediaArea/ZenLib.git"
+
+SNAPSHOT=26b4aa1853d9b893ce5dd655571dc2673f47aa8e
+SRC_URI="https://github.com/MediaArea/ZenLib/archive/${SNAPSHOT}.tar.gz -> ZenLib-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/ZenLib-${SNAPSHOT}"
 
 LICENSE="ZLIB"
 SLOT="0"
@@ -14,8 +17,6 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 DEPEND="app-dev/pkgconf"
-
-S=${WORKDIR}/${P}/Project/GNU/Library
 
 src_prepare() {
 	default

@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 user
+inherit user
 
 DESCRIPTION="Android udev rules list aimed to be the most comprehensive on the net"
 HOMEPAGE="https://github.com/M0Rf30/android-udev-rules"
-EGIT_REPO_URI="https://github.com/M0Rf30/android-udev-rules"
+
+SNAPSHOT=c77d876f541720160582a300409bfb6a0dcee4fe
+SRC_URI="https://github.com/M0Rf30/android-udev-rules/archive/${SNAPSHOT}.tar.gz -> android-udev-rules-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/android-udev-rules-${SNAPSHOT}"
 
 LICENSE="GPLv3"
 SLOT="0"

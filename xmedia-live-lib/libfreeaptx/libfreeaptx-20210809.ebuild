@@ -2,11 +2,12 @@
 
 EAPI=8
 
-inherit git-r3
-
 DESCRIPTION="Free implementation of Audio Processing Technology codec"
 HOMEPAGE="https://github.com/iamthehorker/libfreeaptx"
-EGIT_REPO_URI="https://github.com/iamthehorker/libfreeaptx.git"
+
+SNAPSHOT=c176b7de9c2017d0fc1877659cea3bb6c330aafa
+SRC_URI="https://github.com/iamthehorker/libfreeaptx/archive/${SNAPSHOT}.tar.gz -> libfreeaptx-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libfreeaptx-${SNAPSHOT}"
 
 LICENSE="Apache-2"
 SLOT="0"

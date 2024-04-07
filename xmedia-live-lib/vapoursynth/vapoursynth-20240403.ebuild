@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools git-r3 flag-o-matic
+inherit autotools flag-o-matic
 
 DESCRIPTION="VapourSynth is an library for video manipulation."
 HOMEPAGE="http://www.vapoursynth.com/"
-EGIT_REPO_URI="https://github.com/vapoursynth/vapoursynth.git"
+
+SNAPSHOT=673e25f7cf9495eabc7bf2bc0c5f405e21422b31
+SRC_URI="https://github.com/vapoursynth/vapoursynth/archive/${SNAPSHOT}.tar.gz -> vapoursynth-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/vapoursynth-${SNAPSHOT}"
 
 LICENSE="LGPL-2.1 OFL-1.1"
 SLOT="0"

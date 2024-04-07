@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit autotools
 
 DESCRIPTION="Userspace access to USB devices"
 HOMEPAGE="http://libusb.info/ https://github.com/libusb/libusb"
-EGIT_REPO_URI="https://github.com/libusb/libusb.git"
+
+SNAPSHOT=43107c84e4a5f6b15c296eff8cc3578100f35dce
+SRC_URI="https://github.com/libusb/libusb/archive/${SNAPSHOT}.tar.gz -> libusb-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libusb-${SNAPSHOT}"
 
 LICENSE="LGPL-2.1"
 SLOT="0"

@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit meson git-r3
+inherit meson
 
 DESCRIPTION="The GL Vendor-Neutral Dispatch library"
 HOMEPAGE="https://github.com/NVIDIA/libglvnd"
-EGIT_REPO_URI="https://github.com/NVIDIA/${PN}.git"
+
+SNAPSHOT=908086d22dc307d17d0eb35c522c35fd190718cc
+SRC_URI="https://github.com/NVIDIA/libglvnd/archive/${SNAPSHOT}.tar.gz -> libglvnd-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libglvnd-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

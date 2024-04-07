@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit autotools
 
 DESCRIPTION="A lossy image compression format"
 HOMEPAGE="https://developers.google.com/speed/webp/download"
-EGIT_REPO_URI="https://github.com/webmproject/libwebp.git"
+
+SNAPSHOT=b3d1b2cbf7e6286832876cc720dee96cd1945aec
+SRC_URI="https://github.com/webmproject/libwebp/archive/${SNAPSHOT}.tar.gz -> libwebp-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libwebp-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"

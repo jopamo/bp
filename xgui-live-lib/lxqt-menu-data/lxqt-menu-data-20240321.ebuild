@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 cmake
+inherit cmake
 
 DESCRIPTION="Provides files needed for LXDE application menus"
 HOMEPAGE="http://lxde.org/"
-EGIT_REPO_URI="https://github.com/lxqt/lxqt-menu-data.git"
+
+SNAPSHOT=22fa7ff1190b001ca1903231dd311564b071c97b
+SRC_URI="https://github.com/lxqt/lxqt-menu-data/archive/${SNAPSHOT}.tar.gz -> lxqt-menu-data-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/lxqt-menu-data-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

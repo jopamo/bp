@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit autotools
 
 DESCRIPTION="A library for file management"
 HOMEPAGE="http://pcmanfm.sourceforge.net/"
-EGIT_REPO_URI="https://github.com/lxde/libfm.git"
+
+SNAPSHOT=5346a5390a0881d5713a71e15f371132680056ee
+SRC_URI="https://github.com/lxde/libfm/archive/${SNAPSHOT}.tar.gz -> libfm-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libfm-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

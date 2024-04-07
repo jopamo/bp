@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit meson git-r3
+inherit meson
 
 DESCRIPTION="Minimal seat management daemon and universal library"
 HOMEPAGE="https://sr.ht/~kennylevinsen/seatd"
-EGIT_REPO_URI="https://github.com/kennylevinsen/seatd"
+
+SNAPSHOT=546022237cba6af31db327a27ecd5cf319df26a5
+SRC_URI="https://github.com/kennylevinsen/seatd/archive/${SNAPSHOT}.tar.gz -> seatd-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/seatd-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

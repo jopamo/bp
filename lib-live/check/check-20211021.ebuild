@@ -6,7 +6,7 @@ inherit cmake git-r3
 
 DESCRIPTION="A unit test framework for C"
 HOMEPAGE="https://github.com/libcheck/check"
-EGIT_REPO_URI="${HOMEPAGE}.git"
+EGIT_REPO_URI="${HOMEPAGE}"
 
 LICENSE="LGPL-2.1+"
 SLOT="0"

@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools python-r1 git-r3
+inherit autotools python-r1
 
 DESCRIPTION="A standards compliant, fast, light-weight, extensible window manager"
 HOMEPAGE="http://openbox.org/"
-EGIT_REPO_URI="https://github.com/danakj/openbox.git"
+
+SNAPSHOT=9e8813e111cbe6c1088f6abbc771a29470f05fc2
+SRC_URI="https://github.com/danakj/openbox/archive/${SNAPSHOT}.tar.gz -> openbox-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/openbox-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

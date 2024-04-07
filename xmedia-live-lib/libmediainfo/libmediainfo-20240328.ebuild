@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic git-r3
+inherit autotools flag-o-matic
 
 DESCRIPTION="MediaInfo libraries"
 HOMEPAGE="https://mediaarea.net/mediainfo/ https://github.com/MediaArea/MediaInfoLib"
-EGIT_REPO_URI="https://github.com/MediaArea/MediaInfoLib"
+
+SNAPSHOT=83b52779d14b270c83a9a00e418fe995f794bea6
+SRC_URI="https://github.com/MediaArea/MediaInfoLib/archive/${SNAPSHOT}.tar.gz -> MediaInfoLib-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/MediaInfoLib-${SNAPSHOT}"
 
 LICENSE="BSD-2"
 SLOT="0"
@@ -18,8 +21,6 @@ DEPEND="
 	lib-dev/tinyxml2
 	xmedia-live-lib/libzen
 "
-
-S="${S}"/Project/GNU/Library
 
 src_prepare() {
 	default

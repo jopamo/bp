@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit meson git-r3
+inherit meson
 
 DESCRIPTION="A wallpaper utility for Wayland"
 HOMEPAGE="https://github.com/swaywm/swaybg"
-EGIT_REPO_URI="https://github.com/swaywm/${PN}.git"
+
+SNAPSHOT=80ed4b020adfb0846f780faba95fc5cc9a770a18
+SRC_URI="https://github.com/swaywm/swaybg/archive/${SNAPSHOT}.tar.gz -> swaybg-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/swaybg-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

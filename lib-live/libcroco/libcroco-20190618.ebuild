@@ -6,7 +6,7 @@ inherit git-r3 autotools
 
 DESCRIPTION="Generic Cascading Style Sheet (CSS) parsing and manipulation toolkit"
 HOMEPAGE="https://git.gnome.org/browse/libcroco/"
-EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/libcroco.git"
+EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/libcroco"
 
 LICENSE="LGPL-2"
 SLOT="0"

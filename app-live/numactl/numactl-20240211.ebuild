@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic git-r3
+inherit autotools flag-o-matic
 
 DESCRIPTION="Utilities and libraries for NUMA systems"
 HOMEPAGE="https://github.com/numactl/numactl"
-EGIT_REPO_URI="https://github.com/numactl/numactl.git"
+
+SNAPSHOT=a7552a144f922031a14426b84056fa28c4cc3960
+SRC_URI="https://github.com/numactl/numactl/archive/${SNAPSHOT}.tar.gz -> numactl-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/numactl-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

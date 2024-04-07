@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit cmake
 
 DESCRIPTION="A fast and easy-to-use tool for creating status bars"
 HOMEPAGE="https://github.com/polybar/polybar"
-EGIT_REPO_URI="https://github.com/polybar/${PN}"
+
+SNAPSHOT=11b522c313f7b2b0a10063721ec8b0bf544de6f4
+SRC_URI="https://github.com/polybar/polybar/archive/${SNAPSHOT}.tar.gz -> polybar-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/polybar-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

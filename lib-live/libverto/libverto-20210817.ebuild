@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="an async event loop abstraction library"
 HOMEPAGE="https://github.com/latchset/libverto"
-EGIT_REPO_URI="https://github.com/latchset/libverto.git"
+
+SNAPSHOT=0dc4e8f1fc9184a2b45cb00e3c7aebcb9a1d53d3
+SRC_URI="https://github.com/latchset/libverto/archive/${SNAPSHOT}.tar.gz -> libverto-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libverto-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

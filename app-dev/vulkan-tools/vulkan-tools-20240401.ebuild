@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit cmake python-any-r1 git-r3
+inherit cmake python-any-r1
 
 DESCRIPTION="Official Vulkan Tools and Utilities for Windows, Linux, Android, and MacOS"
 HOMEPAGE="https://github.com/KhronosGroup/Vulkan-Tools"
-EGIT_REPO_URI="https://github.com/KhronosGroup/Vulkan-Tools.git"
+
+SNAPSHOT=c5da01ee0af9766c2992d6757e8f31ef50117b09
+SRC_URI="https://github.com/KhronosGroup/Vulkan-Tools/archive/${SNAPSHOT}.tar.gz -> Vulkan-Tools-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/Vulkan-Tools-${SNAPSHOT}"
 
 LICENSE="Apache-2.0"
 SLOT="0"

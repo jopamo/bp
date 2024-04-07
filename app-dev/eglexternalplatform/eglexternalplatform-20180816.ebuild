@@ -2,11 +2,12 @@
 
 EAPI=8
 
-inherit git-r3
-
 DESCRIPTION="specification of the EGL External Platform interface"
 HOMEPAGE="https://github.com/NVIDIA/eglexternalplatform"
-EGIT_REPO_URI="https://github.com/NVIDIA/eglexternalplatform"
+
+SNAPSHOT=7c8f8e2218e46b1a4aa9538520919747f1184d86
+SRC_URI="https://github.com/NVIDIA/eglexternalplatform/archive/${SNAPSHOT}.tar.gz -> eglexternalplatform-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/eglexternalplatform-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

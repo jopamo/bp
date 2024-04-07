@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="Library for SSA/ASS subtitles rendering"
 HOMEPAGE="https://github.com/libass/libass"
-EGIT_REPO_URI="https://github.com/libass/libass.git"
+
+SNAPSHOT=e51781341493e0312f0c7fee66372f0365f7b962
+SRC_URI="https://github.com/libass/libass/archive/${SNAPSHOT}.tar.gz -> libass-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libass-${SNAPSHOT}"
 
 LICENSE="ISC"
 SLOT="0"

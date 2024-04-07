@@ -2,11 +2,15 @@
 
 EAPI=8
 
-inherit distutils-r1 git-r3
+inherit distutils-r1
 
 DESCRIPTION="Advanced Binary Emulation Framework"
 HOMEPAGE="https://github.com/qilingframework/qiling"
-EGIT_REPO_URI="https://github.com/qilingframework/qiling.git"
+
+SNAPSHOT=9a78d186c97d6ff42d7df31155dda2cd9e1a7fe3
+SRC_URI="https://github.com/qilingframework/qiling/archive/${SNAPSHOT}.tar.gz -> qiling-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/qiling-${SNAPSHOT}"
+
 EGIT_BRANCH="dev"
 EGIT_SUBMODULES=()
 

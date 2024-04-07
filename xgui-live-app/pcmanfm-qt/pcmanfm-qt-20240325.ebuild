@@ -9,9 +9,9 @@ HOMEPAGE="https://github.com/lxqt/pcmanfm-qt"
 
 if [[ "${PV}" == "9999" ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://www.github.com/lxqt/${PN}"
+	EGIT_REPO_URI="https://wwwhub.com/lxqt/pcmanfm-qt"
 else
-	SNAPSHOT=9458ba41d94327ab833e1134d76c4eb67a7a799b
+	SNAPSHOT=8ae8f68e3df3e60411cbf357371854b8d378880f
 	SRC_URI="https://github.com/lxqt/pcmanfm-qt/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

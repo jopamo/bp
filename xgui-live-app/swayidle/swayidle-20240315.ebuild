@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit meson git-r3
+inherit meson
 
 DESCRIPTION="Idle management daemon for Wayland"
 HOMEPAGE="https://github.com/swaywm/swayidle"
-EGIT_REPO_URI="https://github.com/swaywm/${PN}.git"
+
+SNAPSHOT=bc795df418fd069aacc8a773c14b01dcb5148dc3
+SRC_URI="https://github.com/swaywm/swayidle/archive/${SNAPSHOT}.tar.gz -> swayidle-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/swayidle-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

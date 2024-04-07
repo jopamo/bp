@@ -2,11 +2,14 @@
 
 EAPI=7
 
-inherit cmake git-r3
+inherit cmake
 
 DESCRIPTION="Qt terminal emulator widget"
 HOMEPAGE="https://github.com/lxqt/qtermwidget"
-EGIT_REPO_URI="https://github.com/lxqt/qtermwidget.git"
+
+SNAPSHOT=72b118ee739cf966528d58f98272591c630b1ebc
+SRC_URI="https://github.com/lxqt/qtermwidget/archive/${SNAPSHOT}.tar.gz -> qtermwidget-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/qtermwidget-${SNAPSHOT}"
 
 LICENSE="GPL-2+"
 SLOT="0"

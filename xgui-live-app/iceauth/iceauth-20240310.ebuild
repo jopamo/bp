@@ -2,10 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="ICE authority file utility"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/app/${PN}.git"
+HOMEPAGE="https://www.x.org/wiki/"
+
+SNAPSHOT=14e122c85b9fba7100b1bdc11abdb9b939d59254
+SRC_URI="https://gitlab.freedesktop.org/xorg/app/iceauth/-/archive/${SNAPSHOT}/iceauth-${SNAPSHOT}.tar.bz2 -> iceauth-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/iceauth-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

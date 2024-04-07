@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit flag-o-matic toolchain-funcs git-r3
+inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Hardware Lister"
 HOMEPAGE="https://www.ezix.org/project/wiki/HardwareLiSter"
-EGIT_REPO_URI="https://github.com/lyonel/lshw.git"
+
+SNAPSHOT=15e4ca64647ad119b69be63274e5de2696d3934f
+SRC_URI="https://github.com/lyonel/lshw/archive/${SNAPSHOT}.tar.gz -> lshw-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/lshw-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

@@ -2,10 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="window information utility for X"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/app/${PN}.git"
+HOMEPAGE="https://www.x.org/wiki/"
+
+SNAPSHOT=ab427b9bfd495a7e9a5dc690f5abe5a2859b8de3
+SRC_URI="https://gitlab.freedesktop.org/xorg/app/xwininfo/-/archive/${SNAPSHOT}/xwininfo-${SNAPSHOT}.tar.bz2 -> xwininfo-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/xwininfo-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

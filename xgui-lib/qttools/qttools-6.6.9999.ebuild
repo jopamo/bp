@@ -2,9 +2,9 @@
 
 EAPI=8
 
-inherit flag-o-matic qmake-utils
+inherit cmake
 
-DESCRIPTION="Multimedia (audio, video, radio, camera) library for the Qt5 framework"
+DESCRIPTION="Qt5 module for integrating online documentation into applications"
 HOMEPAGE="https://www.qt.io/"
 
 if [[ ${PV} == *9999 ]]; then
@@ -22,11 +22,3 @@ SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-lib/qtbase"
-
-src_configure() {
-	eqmake5
-}
-
-src_install() {
-	emake install INSTALL_ROOT="${D}"
-}

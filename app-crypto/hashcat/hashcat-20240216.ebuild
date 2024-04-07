@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 flag-o-matic
+inherit flag-o-matic
 
 DESCRIPTION="World's fastest and most advanced password recovery utility"
 HOMEPAGE="https://github.com/hashcat/hashcat"
-EGIT_REPO_URI="https://github.com/hashcat/hashcat.git"
+
+SNAPSHOT=fafb277e0736a45775fbcadc1ca5caf0db07a308
+SRC_URI="https://github.com/hashcat/hashcat/archive/${SNAPSHOT}.tar.gz -> hashcat-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/hashcat-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

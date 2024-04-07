@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="Library for parsing, editing, and saving EXIF data"
 HOMEPAGE="https://github.com/libexif"
-EGIT_REPO_URI="https://github.com/libexif/libexif.git"
+
+SNAPSHOT=1f256c1115892c8c6228759f72c8b3999c213e49
+SRC_URI="https://github.com/libexif/libexif/archive/${SNAPSHOT}.tar.gz -> libexif-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libexif-${SNAPSHOT}"
 
 KEYWORDS="amd64 arm64"
 LICENSE="LGPL-2.1"

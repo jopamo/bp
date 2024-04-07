@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit qmake-utils git-r3 xdg
+inherit qmake-utils xdg
 
 DESCRIPTION="Image Viewer and organizer"
 HOMEPAGE="https://github.com/oferkv/phototonic"
-EGIT_REPO_URI="https://github.com/oferkv/phototonic.git"
+
+SNAPSHOT=12552ece9564b1452606d653be67478ec6573ca1
+SRC_URI="https://github.com/oferkv/phototonic/archive/${SNAPSHOT}.tar.gz -> phototonic-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/phototonic-${SNAPSHOT}"
 
 LICENSE="GPL-3"
 SLOT="0"

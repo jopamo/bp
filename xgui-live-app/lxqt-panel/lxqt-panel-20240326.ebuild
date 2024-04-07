@@ -7,12 +7,9 @@ inherit cmake flag-o-matic
 DESCRIPTION="LXQt desktop panel and plugins"
 HOMEPAGE="http://lxqt.org/"
 
-if [[ ${PV} == *9999* ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/lxde/${PN}.git"
-else
-	SRC_URI="https://github.com/lxde/${PN}/releases/download/${PV}/${P}.tar.xz"
-fi
+SNAPSHOT=2ad883e068e4babd54467322c2d139716188d09f
+SRC_URI="https://github.com/lxde/lxqt-panel/archive/${SNAPSHOT}.tar.gz -> lxqt-panel-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/lxqt-panel-${SNAPSHOT}"
 
 LICENSE="LGPL-2.1+"
 SLOT="0"

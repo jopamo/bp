@@ -2,10 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="Display information utility for X"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/app/${PN}.git"
+HOMEPAGE="https://www.x.org/wiki/"
+
+SNAPSHOT=d14333b852377f1e43ee2fe0fc737453e6dfccd9
+SRC_URI="https://gitlab.freedesktop.org/xorg/app/xdpyinfo/-/archive/${SNAPSHOT}/xdpyinfo-${SNAPSHOT}.tar.bz2 -> xdpyinfo-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/xdpyinfo-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

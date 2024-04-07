@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit cmake
 
 DESCRIPTION="A Qt implementation of XDG standards"
 HOMEPAGE="https://lxqt.org/"
-EGIT_REPO_URI="https://github.com/lxqt/${PN}.git"
+
+SNAPSHOT=3166cd3d5ae9914004160c5c4a52c5638aa6fc29
+SRC_URI="https://github.com/lxqt/libqtxdg/archive/${SNAPSHOT}.tar.gz -> libqtxdg-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libqtxdg-${SNAPSHOT}"
 
 LICENSE="LGPL-2.1"
 SLOT="0"

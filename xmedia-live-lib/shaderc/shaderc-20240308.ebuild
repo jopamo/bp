@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit cmake git-r3 flag-o-matic
+inherit cmake flag-o-matic
 
 DESCRIPTION="Collection of tools, libraries and tests for shader compilation"
 HOMEPAGE="https://github.com/google/shaderc"
-EGIT_REPO_URI="https://github.com/google/shaderc.git"
+
+SNAPSHOT=9a658e242ad4d1a4b3491383c1c58c780e3c01ff
+SRC_URI="https://github.com/google/shaderc/archive/${SNAPSHOT}.tar.gz -> shaderc-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/shaderc-${SNAPSHOT}"
 
 LICENSE="Apache-2.0"
 SLOT="0"

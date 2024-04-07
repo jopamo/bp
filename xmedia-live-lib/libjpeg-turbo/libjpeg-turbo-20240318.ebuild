@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 cmake
+inherit cmake
 
 DESCRIPTION="MMX, SSE, and SSE2 SIMD accelerated JPEG library"
 HOMEPAGE="https://libjpeg-turbo.org/"
-EGIT_REPO_URI="https://github.com/libjpeg-turbo/libjpeg-turbo.git"
+
+SNAPSHOT=2dfe6c0fe9e18671105e94f7cbf044d4a1d157e6
+SRC_URI="https://github.com/libjpeg-turbo/libjpeg-turbo/archive/${SNAPSHOT}.tar.gz -> libjpeg-turbo-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libjpeg-turbo-${SNAPSHOT}"
 
 LICENSE="BSD IJG"
 SLOT="0"

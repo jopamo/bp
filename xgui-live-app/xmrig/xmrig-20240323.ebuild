@@ -4,11 +4,14 @@ EAPI=8
 
 CMAKE_MAKEFILE_GENERATOR=emake
 
-inherit cmake git-r3
+inherit cmake
 
 DESCRIPTION="RandomX, CryptoNight, AstroBWT and Argon2 CPU/GPU miner"
 HOMEPAGE="https://xmrig.com/"
-EGIT_REPO_URI="https://github.com/xmrig/xmrig.git"
+
+SNAPSHOT=4ab9329dda4d0628e8ff6227c53f692da3b176bc
+SRC_URI="https://github.com/xmrig/xmrig/archive/${SNAPSHOT}.tar.gz -> xmrig-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/xmrig-${SNAPSHOT}"
 
 LICENSE="GPLv3"
 SLOT="0"

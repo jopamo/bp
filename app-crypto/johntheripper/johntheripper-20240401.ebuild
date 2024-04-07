@@ -2,11 +2,15 @@
 
 EAPI=8
 
-inherit flag-o-matic toolchain-funcs git-r3
+inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="fast password cracker"
 HOMEPAGE="http://www.openwall.com/john/"
-EGIT_REPO_URI="https://github.com/openwall/john.git"
+
+SNAPSHOT=f9fedd238b0b1d69181c1fef033b85c787e96e57
+SRC_URI="https://github.com/openwall/john/archive/${SNAPSHOT}.tar.gz -> john-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/john-${SNAPSHOT}"
+
 EGIT_BRANCH="bleeding-jumbo"
 
 LICENSE="GPL-2"
@@ -22,8 +26,6 @@ DEPEND="
 	pcap? ( lib-net/libpcap )
 	ssl? ( virtual/ssl )
 "
-
-S=${WORKDIR}/${P}/src
 
 append-ldflags -Wl,-z,noexecstack
 append-cppflags -DJOHN_SYSTEMWIDE_HOME="'\"${EPREFIX}/etc/john\"'"

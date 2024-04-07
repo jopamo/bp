@@ -2,12 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 toolchain-funcs
+inherit toolchain-funcs
 
 DESCRIPTION="NVIDIA Accelerated Graphics Driver Settings"
 HOMEPAGE="http://www.nvidia.com/ http://www.nvidia.com/Download/Find.aspx"
-EGIT_REPO_URI="https://github.com/NVIDIA/nvidia-settings.git"
-S=${WORKDIR}/${P}/src
+
+SNAPSHOT=02b1b91083aef4b6f0c21ca8e02936b1a88a1b2b
+SRC_URI="https://github.com/NVIDIA/nvidia-settings/archive/${SNAPSHOT}.tar.gz -> nvidia-settings-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/nvidia-settings-${SNAPSHOT}"
 
 LICENSE="GPL-2 NVIDIA-r2"
 SLOT="0"

@@ -2,10 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="X.Org Xcursor library"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/${PN}.git"
+HOMEPAGE="https://www.x.org/wiki/"
+
+SNAPSHOT=09617bcc9a0f1b5072212da5f8fede92ab85d157
+SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXcursor/-/archive/${SNAPSHOT}/libXcursor-${SNAPSHOT}.tar.bz2 -> libXcursor-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/libXcursor-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

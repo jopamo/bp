@@ -2,12 +2,15 @@
 
 EAPI=8
 
-inherit git-r3 flag-o-matic meson
+inherit flag-o-matic meson
 
 DESCRIPTION="unix-like reverse engineering framework and commandline tools"
 HOMEPAGE="http://www.radare.org"
 
-EGIT_REPO_URI="https://github.com/radare/radare2"
+SNAPSHOT=6ada758dfa8f50dafe6c2e50c45e398902ec7aaa
+SRC_URI="https://github.com/radare/radare2/archive/${SNAPSHOT}.tar.gz -> radare2-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/radare2-${SNAPSHOT}"
+
 KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"

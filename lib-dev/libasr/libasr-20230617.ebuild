@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit autotools
 
 DESCRIPTION="Async Resolver Library from OpenBSD/OpenSMTPD"
 HOMEPAGE="https://github.com/OpenSMTPD/libasr"
-EGIT_REPO_URI="https://github.com/OpenSMTPD/libasr.git"
+
+SNAPSHOT=05b8bf7d480c25195b365552f9ed6021cd0a68e3
+SRC_URI="https://github.com/OpenSMTPD/libasr/archive/${SNAPSHOT}.tar.gz -> libasr-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libasr-${SNAPSHOT}"
 
 LICENSE="ISC BSD BSD-1 BSD-2 BSD-4"
 SLOT="0"

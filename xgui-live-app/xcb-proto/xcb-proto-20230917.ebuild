@@ -7,11 +7,15 @@ inherit autotools python-r1
 DESCRIPTION="X C-language Bindings protocol headers"
 HOMEPAGE="https://xcb.freedesktop.org/"
 
+SNAPSHOT=1388374c7149114888a6a5cd6e9bf6ad4b42adf8
+SRC_URI="https://gitlab.freedesktop.org/xorg/proto/xcbproto/-/archive/${SNAPSHOT}/xcbproto-${SNAPSHOT}.tar.bz2 -> xcbproto-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/xcbproto-${SNAPSHOT}"
+
 if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/proto/xcbproto.git"
-	inherit git-r3
+	EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/proto/xcbproto"
+	inherit
 elif [[ ${PV} == 20* ]]; then
-	SNAPSHOT=151ee69847c706e2b9d38c82e20534910f140b55
+	SNAPSHOT=1388374c7149114888a6a5cd6e9bf6ad4b42adf8
 	SRC_URI="https://gitlab.freedesktop.org/xorg/proto/xcbproto/-/archive/${SNAPSHOT}/xcbproto-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 	S=${WORKDIR}/xcbproto-${SNAPSHOT}
 else

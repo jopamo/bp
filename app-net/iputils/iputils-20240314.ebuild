@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit meson git-r3
+inherit meson
 
 DESCRIPTION="Network monitoring tools including ping and ping6"
 HOMEPAGE="https://wiki.linuxfoundation.org/networking/iputils"
-EGIT_REPO_URI="https://github.com/iputils/iputils.git"
+
+SNAPSHOT=294a65f00047f31685b7dd07048b48c4be82e097
+SRC_URI="https://github.com/iputils/iputils/archive/${SNAPSHOT}.tar.gz -> iputils-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/iputils-${SNAPSHOT}"
 
 LICENSE="BSD GPL-2+ rdisc"
 SLOT="0"

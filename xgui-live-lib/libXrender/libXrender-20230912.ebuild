@@ -2,10 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="X.Org Xrender library"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/${PN}.git"
+HOMEPAGE="https://www.x.org/wiki/"
+
+SNAPSHOT=01e754610df2195536c5b31c1e8df756480599d1
+SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXrender/-/archive/${SNAPSHOT}/libXrender-${SNAPSHOT}.tar.bz2 -> libXrender-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/libXrender-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

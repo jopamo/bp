@@ -2,19 +2,20 @@
 
 EAPI=8
 
-inherit git-r3 toolchain-funcs flag-o-matic
+inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="A UNIX init scheme with service supervision"
 HOMEPAGE="http://smarden.org/runit/"
-EGIT_REPO_URI="https://github.com/void-linux/runit.git"
+
+SNAPSHOT=2b8000f1ebd07fd68ee0e3c32737d97bcd1687fb
+SRC_URI="https://github.com/void-linux/runit/archive/${SNAPSHOT}.tar.gz -> runit-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/runit-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static"
-
-S=${S}/src
 
 filter-flags -flto\=\*
 

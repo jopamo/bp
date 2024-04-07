@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="a tool to help manage well known user directories"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/xdg-user-dirs/"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xdg/xdg-user-dirs"
+
+SNAPSHOT=1512365de068446f8b5e14163601dd71e34e8bc1
+SRC_URI="https://gitlab.freedesktop.org/xdg/xdg-user-dirs/-/archive/${SNAPSHOT}/xdg-user-dirs-${SNAPSHOT}.tar.bz2 -> xdg-user-dirs-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/xdg-user-dirs-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

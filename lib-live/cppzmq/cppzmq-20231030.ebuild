@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit toolchain-funcs git-r3
+inherit toolchain-funcs
 
 DESCRIPTION="High-level CPP Binding for ZeroMQ"
 HOMEPAGE="https://github.com/zeromq/cppzmq"
-EGIT_REPO_URI="https://github.com/zeromq/${PN}.git"
+
+SNAPSHOT=6164cf7dbc1df6d1bd8e4c6c5f8e52d7dea63aa7
+SRC_URI="https://github.com/zeromq/cppzmq/archive/${SNAPSHOT}.tar.gz -> cppzmq-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/cppzmq-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

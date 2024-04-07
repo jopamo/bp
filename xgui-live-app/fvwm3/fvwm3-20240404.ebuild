@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit autotools
 
 DESCRIPTION="FVWM version 3 -- the successor to fvwm2"
 HOMEPAGE="https://github.com/fvwmorg/fvwm3"
-EGIT_REPO_URI="https://github.com/fvwmorg/fvwm3"
+
+SNAPSHOT=881c192249d3cab3a5ecbbd7839ce2ee22044c89
+SRC_URI="https://github.com/fvwmorg/fvwm3/archive/${SNAPSHOT}.tar.gz -> fvwm3-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/fvwm3-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 cmake
+inherit cmake
 
 DESCRIPTION="Command-line tool for structural, content-preserving transformation of PDF files"
 HOMEPAGE="http://qpdf.sourceforge.net/"
-EGIT_REPO_URI="https://github.com/qpdf/qpdf.git"
+
+SNAPSHOT=e9166457fad8d446572b8434d1895aa586baf6b7
+SRC_URI="https://github.com/qpdf/qpdf/archive/${SNAPSHOT}.tar.gz -> qpdf-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/qpdf-${SNAPSHOT}"
 
 LICENSE="|| ( Apache-2.0 Artistic-2 )"
 SLOT="0"

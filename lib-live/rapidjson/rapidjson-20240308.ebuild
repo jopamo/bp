@@ -2,16 +2,19 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit cmake
 
 DESCRIPTION="A fast JSON parser/generator for C++ with both SAX/DOM style API"
 HOMEPAGE="http://rapidjson.org/"
+
+SNAPSHOT=5ec44fb9206695e5293f610b0a46d21851d0c966
+SRC_URI="https://github.com/Tencent/rapidjson/archive/${SNAPSHOT}.tar.gz -> rapidjson-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/rapidjson-${SNAPSHOT}"
 
 LICENSE="MIT"
 IUSE="test"
 SLOT="0"
 
-EGIT_REPO_URI="https://github.com/Tencent/rapidjson"
 KEYWORDS="amd64"
 
 src_configure() {

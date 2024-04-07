@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="a windowmanager for X that was based on the Blackbox"
 HOMEPAGE="http://fluxbox.org/"
-EGIT_REPO_URI="https://github.com/fluxbox/fluxbox"
+
+SNAPSHOT=0f95d62b1b1add8ee7327305db7d372010fdb2f4
+SRC_URI="https://github.com/fluxbox/fluxbox/archive/${SNAPSHOT}.tar.gz -> fluxbox-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/fluxbox-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"

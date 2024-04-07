@@ -7,11 +7,15 @@ inherit xdg meson
 DESCRIPTION="The Shared MIME-info Database specification"
 HOMEPAGE="https://freedesktop.org/wiki/Software/shared-mime-info"
 
+SNAPSHOT=091b9b604fd29b622067afb6a69fb63109c978e5
+SRC_URI="https://gitlab.freedesktop.org/xdg/shared-mime-info/-/archive/${SNAPSHOT}/shared-mime-info-${SNAPSHOT}.tar.bz2 -> shared-mime-info-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/shared-mime-info-${SNAPSHOT}"
+
 if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://gitlab.freedesktop.org/xdg/shared-mime-info.git"
-	inherit git-r3
+	EGIT_REPO_URI="https://gitlab.freedesktop.org/xdg/shared-mime-info"
+	inherit
 elif [[ ${PV} == 20* ]]; then
-	SNAPSHOT=b969e1c74e7c905a96c1590f5350a264dbaa83ae
+	SNAPSHOT=091b9b604fd29b622067afb6a69fb63109c978e5
 	SRC_URI="https://gitlab.freedesktop.org/xdg/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 else

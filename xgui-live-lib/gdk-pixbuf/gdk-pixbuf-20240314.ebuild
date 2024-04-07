@@ -8,10 +8,10 @@ DESCRIPTION="Image loading library for GTK+"
 HOMEPAGE="https://git.gnome.org/browse/gdk-pixbuf"
 
 if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git"
+	EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/gdk-pixbuf"
 	inherit git-r3
 else
-	SNAPSHOT=b41548f1ce38a9dbc02703bf251a53f961107ef8
+	SNAPSHOT=0edaedc5608c437712fd5bf232ddbd16d6f8f810
 	SRC_URI="https://gitlab.gnome.org/GNOME/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

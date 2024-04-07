@@ -2,10 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="X.Org Xpm library"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/${PN}.git"
+HOMEPAGE="https://www.x.org/wiki/"
+
+SNAPSHOT=bdb6c75fd667e43ce228f1a32e930a0f2966f29d
+SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXpm/-/archive/${SNAPSHOT}/libXpm-${SNAPSHOT}.tar.bz2 -> libXpm-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/libXpm-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

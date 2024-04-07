@@ -8,11 +8,11 @@ DESCRIPTION="Introspection system for GObject-based libraries"
 HOMEPAGE="https://wiki.gnome.org/Projects/GObjectIntrospection"
 
 if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/gobject-introspection.git"
+	EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/gobject-introspection"
 	inherit git-r3
 	EGIT_BRANCH=gnome-42
 else
-	SNAPSHOT=dd231b0faf587ff4e0e77519f724214e5876d5c2
+	SNAPSHOT=42dc3ab42458d2582377d867a0f9e4cd390ac036
 	SRC_URI="https://gitlab.gnome.org/GNOME/gobject-introspection/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="A modern multi-purpose calculator library"
 HOMEPAGE="https://qalculate.github.io/"
-EGIT_REPO_URI="https://github.com/Qalculate/${PN}.git"
+
+SNAPSHOT=f87048ddad81135049517b64d9f145ec83d08859
+SRC_URI="https://github.com/Qalculate/libqalculate/archive/${SNAPSHOT}.tar.gz -> libqalculate-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libqalculate-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -32,7 +35,6 @@ src_install() {
 		DESTDIR="${D}" \
 		referencedir="${EPREFIX}/usr/share/doc/${PF}/html" \
 		install
-
 
 	find "${ED}" -name '*.la' -delete || die
 }

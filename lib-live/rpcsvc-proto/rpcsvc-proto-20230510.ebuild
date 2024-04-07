@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit autotools
 
 DESCRIPTION="rpcsvc protocol definitions from glibc"
 HOMEPAGE="https://github.com/thkukuk/rpcsvc-proto"
-EGIT_REPO_URI="https://github.com/thkukuk/rpcsvc-proto.git"
+
+SNAPSHOT=c65926005e50da02a4da3e26abc42eded36cd19d
+SRC_URI="https://github.com/thkukuk/rpcsvc-proto/archive/${SNAPSHOT}.tar.gz -> rpcsvc-proto-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/rpcsvc-proto-${SNAPSHOT}"
 
 LICENSE="LGPL-2.1+ BSD"
 SLOT="0"

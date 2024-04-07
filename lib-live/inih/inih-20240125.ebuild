@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit meson git-r3
+inherit meson
 
 DESCRIPTION="inih (INI not invented here) simple .INI file parser"
 HOMEPAGE="https://github.com/benhoyt/inih"
-EGIT_REPO_URI="https://github.com/benhoyt/inih.git"
+
+SNAPSHOT=5cc5e2c24642513aaa5b19126aad42d0e4e0923e
+SRC_URI="https://github.com/benhoyt/inih/archive/${SNAPSHOT}.tar.gz -> inih-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/inih-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"

@@ -6,14 +6,12 @@ inherit cmake
 
 DESCRIPTION="Daemon used to register global keyboard shortcuts"
 HOMEPAGE="http://lxqt.org/"
-KEYWORDS="amd64 arm64"
 
-if [[ ${PV} == *9999* ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/lxde/${PN}.git"
-else
-	SRC_URI="https://github.com/lxde/${PN}/releases/download/${PV}/${P}.tar.xz"
-fi
+SNAPSHOT=7d54919a839ca884f39a1610bd49b6c1da33f576
+SRC_URI="https://github.com/lxde/lxqt-globalkeys/archive/${SNAPSHOT}.tar.gz -> lxqt-globalkeys-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/lxqt-globalkeys-${SNAPSHOT}"
+
+KEYWORDS="amd64 arm64"
 
 LICENSE="LGPL-2.1+"
 SLOT="0"

@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit cmake
 
 DESCRIPTION="An open-source JPEG 2000 library"
 HOMEPAGE="http://www.openjpeg.org"
-EGIT_REPO_URI="https://github.com/uclouvain/openjpeg.git"
+
+SNAPSHOT=e8b9d9274a0aee998402d967f65dadd919c31eca
+SRC_URI="https://github.com/uclouvain/openjpeg/archive/${SNAPSHOT}.tar.gz -> openjpeg-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/openjpeg-${SNAPSHOT}"
 
 LICENSE="BSD-2"
 SLOT="2"

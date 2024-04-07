@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit cmake
 
 DESCRIPTION="An advanced, highly configurable system monitor for X"
 HOMEPAGE="https://github.com/brndnmtthws/conky"
-EGIT_REPO_URI="https://github.com/brndnmtthws/${PN}.git"
+
+SNAPSHOT=407769d03daa43671d7fbf76aac15c73b932ddd2
+SRC_URI="https://github.com/brndnmtthws/conky/archive/${SNAPSHOT}.tar.gz -> conky-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/conky-${SNAPSHOT}"
 
 LICENSE="GPL-3 BSD LGPL-2.1 MIT"
 SLOT="0"

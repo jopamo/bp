@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit meson toolchain-funcs xdg git-r3 flag-o-matic
+inherit meson toolchain-funcs xdg flag-o-matic
 
 DESCRIPTION="Wayland reference compositor"
 HOMEPAGE="https://wayland.freedesktop.org/ https://gitlab.freedesktop.org/wayland/weston"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/wayland/weston.git"
+
+SNAPSHOT=de8e3168f033e835e90a8571ec787ffbe171bd26
+SRC_URI="https://gitlab.freedesktop.org/wayland/weston/-/archive/${SNAPSHOT}/weston-${SNAPSHOT}.tar.bz2 -> weston-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/weston-${SNAPSHOT}"
 
 LICENSE="MIT CC-BY-SA-3.0"
 SLOT="0"

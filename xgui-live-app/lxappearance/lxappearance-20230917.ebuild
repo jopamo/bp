@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools git-r3 xdg
+inherit autotools xdg
 
 DESCRIPTION="Extremely fast and lightweight file manager"
 HOMEPAGE="https://github.com/lxde/${PN}"
-EGIT_REPO_URI="https://github.com/lxde/${PN}.git"
+
+SNAPSHOT=655fd083a98e7b11d61119bdf0d97aae6c774780
+SRC_URI="https://github.com/lxde/lxappearance/archive/${SNAPSHOT}.tar.gz -> lxappearance-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/lxappearance-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit autotools
 
 DESCRIPTION="Linux tools for UDF filesystems and DVD/CD-R(W) drives"
 HOMEPAGE="https://github.com/pali/udftools/ https://sourceforge.net/projects/linux-udf/"
-EGIT_REPO_URI="https://github.com/pali/udftools.git"
+
+SNAPSHOT=77a198f4ea011cdeb051e1c860e5a89c740c8fa8
+SRC_URI="https://github.com/pali/udftools/archive/${SNAPSHOT}.tar.gz -> udftools-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/udftools-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

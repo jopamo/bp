@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit autotools
 
 DESCRIPTION="free lossless audio encoder and decoder"
 HOMEPAGE="https://xiph.org/flac/"
-EGIT_REPO_URI="https://github.com/xiph/flac.git"
+
+SNAPSHOT=5f6a352921cd58360a6ace049ee26068fd5b888c
+SRC_URI="https://github.com/xiph/flac/archive/${SNAPSHOT}.tar.gz -> flac-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/flac-${SNAPSHOT}"
 
 LICENSE="BSD GPL-2 LGPL-2.1"
 SLOT="0"

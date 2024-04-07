@@ -7,9 +7,13 @@ inherit meson
 DESCRIPTION="i3-compatible Wayland window manager"
 HOMEPAGE="https://swaywm.org"
 
+SNAPSHOT=bc258a3be2f946c1c93bcbe40735b2db068e0ea8
+SRC_URI="https://github.com/swaywm/sway/archive/${SNAPSHOT}.tar.gz -> sway-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/sway-${SNAPSHOT}"
+
 if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/swaywm/${PN}.git"
-	inherit git-r3
+	EGIT_REPO_URI="https://github.com/swaywm/sway"
+	inherit
 else
 	SRC_URI="https://github.com/swaywm/${PN}/releases/download/${PV}/${P}.tar.gz"
 fi

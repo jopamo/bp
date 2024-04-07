@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="D-Bus bindings for glib"
 HOMEPAGE="https://dbus.freedesktop.org/"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/dbus/dbus-glib.git"
+
+SNAPSHOT=6ab7c2c6a2a389d6bf01387966e9debbb6b6ee77
+SRC_URI="https://gitlab.freedesktop.org/dbus/dbus-glib/-/archive/${SNAPSHOT}/dbus-glib-${SNAPSHOT}.tar.bz2 -> dbus-glib-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/dbus-glib-${SNAPSHOT}"
 
 LICENSE="|| ( GPL-2 AFL-2.1 )"
 SLOT="0"

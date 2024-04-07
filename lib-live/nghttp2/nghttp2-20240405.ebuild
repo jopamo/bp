@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools git-r3
+inherit flag-o-matic autotools
 
 DESCRIPTION="HTTP/2 C Library"
 HOMEPAGE="https://nghttp2.org/"
-EGIT_REPO_URI="https://github.com/nghttp2/nghttp2.git"
+
+SNAPSHOT=acd8d16bd970de9a4cc982650e83f5634d2a7b24
+SRC_URI="https://github.com/nghttp2/nghttp2/archive/${SNAPSHOT}.tar.gz -> nghttp2-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/nghttp2-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

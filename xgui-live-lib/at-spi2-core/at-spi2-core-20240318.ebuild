@@ -6,7 +6,7 @@ inherit meson git-r3
 
 DESCRIPTION="D-Bus accessibility specifications and registration daemon"
 HOMEPAGE="https://wiki.gnome.org/Accessibility"
-EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/at-spi2-core.git"
+EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/at-spi2-core"
 
 LICENSE="LGPL-2+"
 SLOT="0"

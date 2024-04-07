@@ -9,11 +9,15 @@ DISTUTILS_USE_PEP517=hatchling
 DESCRIPTION="a command-line program to download videos from YouTube.com and a few more sites"
 HOMEPAGE="https://ytdl-org.github.io/youtube-dl/"
 
+SNAPSHOT=9073ae6458f4c6a832aa832c67174c61852869be
+SRC_URI="https://github.com/yt-dlp/yt-dlp/archive/${SNAPSHOT}.tar.gz -> yt-dlp-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/yt-dlp-${SNAPSHOT}"
+
 if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/yt-dlp/yt-dlp"
-	inherit git-r3
+	inherit
 else
-	SNAPSHOT=e3ce2b385ec1f03fac9d4210c57fda77134495fc
+	SNAPSHOT=9073ae6458f4c6a832aa832c67174c61852869be
 	SRC_URI="https://github.com/yt-dlp/yt-dlp/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

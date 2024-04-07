@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="Handler library for evdev events"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/libevdev/"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/libevdev/libevdev.git"
+
+SNAPSHOT=fb5402020ff77f455f777477e1638b8fe7b0bd19
+SRC_URI="https://gitlab.freedesktop.org/libevdev/libevdev/-/archive/${SNAPSHOT}/libevdev-${SNAPSHOT}.tar.bz2 -> libevdev-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/libevdev-${SNAPSHOT}"
 
 LICENSE="X11"
 SLOT="0"

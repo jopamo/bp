@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit cmake git-r3 flag-o-matic
+inherit cmake flag-o-matic
 
 DESCRIPTION="Khronos reference front-end for GLSL and ESSL, and sample SPIR-V generator"
 HOMEPAGE="https://www.khronos.org/opengles/sdk/tools/Reference-Compiler/ https://github.com/KhronosGroup/glslang"
-EGIT_REPO_URI="https://github.com/KhronosGroup/${PN}.git"
+
+SNAPSHOT=8a3ea594c76c154493ade0948f1ea64a2f9d2e75
+SRC_URI="https://github.com/KhronosGroup/glslang/archive/${SNAPSHOT}.tar.gz -> glslang-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/glslang-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"

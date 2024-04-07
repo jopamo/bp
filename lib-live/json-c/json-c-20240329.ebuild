@@ -7,11 +7,15 @@ inherit cmake
 DESCRIPTION="A JSON implementation in C"
 HOMEPAGE="https://github.com/json-c/json-c/wiki"
 
+SNAPSHOT=e3464a2ab4e0a7166543a178cb9f26c4cb3b9b61
+SRC_URI="https://github.com/json-c/json-c/archive/${SNAPSHOT}.tar.gz -> json-c-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/json-c-${SNAPSHOT}"
+
 if [[ ${PV} == *9999 ]] ; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/json-c/json-c.git"
+	inherit
+	EGIT_REPO_URI="https://github.com/json-c/json-c"
 else
-	SNAPSHOT=""
+	SNAPSHOT=e3464a2ab4e0a7166543a178cb9f26c4cb3b9b61
 	SRC_URI="https://github.com/json-c/json-c/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

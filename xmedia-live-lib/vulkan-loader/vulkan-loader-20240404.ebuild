@@ -4,17 +4,12 @@ EAPI=8
 
 inherit flag-o-matic cmake python-any-r1 toolchain-funcs
 
-if [[ ${PV} == *9999* ]]; then
-	EGIT_REPO_URI="https://github.com/KhronosGroup/Vulkan-Loader.git"
-	EGIT_SUBMODULES=()
-	inherit git-r3
-else
-	SRC_URI="https://github.com/KhronosGroup/${MY_PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	S="${WORKDIR}"/${MY_PN}-${PV}
-fi
-
 DESCRIPTION="Vulkan Installable Client Driver (ICD) Loader"
 HOMEPAGE="https://github.com/KhronosGroup/Vulkan-Loader"
+
+SNAPSHOT=2cb930f7f7491f0dcef9a18e447644306fafab18
+SRC_URI="https://github.com/KhronosGroup/Vulkan-Loader/archive/${SNAPSHOT}.tar.gz -> Vulkan-Loader-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/Vulkan-Loader-${SNAPSHOT}"
 
 LICENSE="Apache-2.0"
 SLOT="0"

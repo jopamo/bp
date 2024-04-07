@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 meson
+inherit meson
 
 DESCRIPTION="X.Org libdrm library"
 HOMEPAGE="https://dri.freedesktop.org/"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/mesa/drm.git"
+
+SNAPSHOT=f94a79a7a7cf4f84caaec6625ab43793e81721c2
+SRC_URI="https://gitlab.freedesktop.org/mesa/drm/-/archive/${SNAPSHOT}/drm-${SNAPSHOT}.tar.bz2 -> drm-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/drm-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

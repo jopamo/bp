@@ -2,10 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="X.Org Xxf86vm library"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/libxxf86vm.git"
+HOMEPAGE="https://www.x.org/wiki/"
+
+SNAPSHOT=546c0e93adc535dfaaa66277928887c8dc1f8e13
+SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxxf86vm/-/archive/${SNAPSHOT}/libxxf86vm-${SNAPSHOT}.tar.bz2 -> libxxf86vm-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/libxxf86vm-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

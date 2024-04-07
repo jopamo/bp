@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit cmake
 
 DESCRIPTION="Lightweight panel/taskbar for Linux"
 HOMEPAGE="https://gitlab.com/o9000/tint2"
-EGIT_REPO_URI="https://gitlab.com/o9000/tint2"
+
+SNAPSHOT=f3aa2ef0c61838ce16a88733e4d31990c5b5cdf2
+SRC_URI="https://gitlab.com/o9000/tint2/-/archive/${SNAPSHOT}/tint2-${SNAPSHOT}.tar.bz2 -> tint2-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/tint2-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

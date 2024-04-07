@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit cmake
 
 DESCRIPTION="The Ogg Vorbis sound file format library"
 HOMEPAGE="https://xiph.org/vorbis/"
-EGIT_REPO_URI="https://github.com/xiph/vorbis.git"
+
+SNAPSHOT=84c023699cdf023a32fa4ded32019f194afcdad0
+SRC_URI="https://github.com/xiph/vorbis/archive/${SNAPSHOT}.tar.gz -> vorbis-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/vorbis-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"

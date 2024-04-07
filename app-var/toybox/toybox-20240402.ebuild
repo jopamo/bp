@@ -7,11 +7,15 @@ inherit flag-o-matic
 DESCRIPTION="common Linux command line utilities together into a single BSD-licensed executable "
 HOMEPAGE="http://landley.net/toybox/"
 
+SNAPSHOT=8dbf4e10d96492159169610b57d3530f821779ab
+SRC_URI="https://github.com/landley/toybox/archive/${SNAPSHOT}.tar.gz -> toybox-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/toybox-${SNAPSHOT}"
+
 if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/landley/toybox"
-	inherit git-r3
+	inherit
 else
-	SNAPSHOT=bf595a0cb0eb132b7365e8f1d19f07b255cbf191
+	SNAPSHOT=8dbf4e10d96492159169610b57d3530f821779ab
 	SRC_URI="https://github.com/landley/toybox/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

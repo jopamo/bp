@@ -2,10 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="X.Org xtrans library"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/lib${PN}.git"
+HOMEPAGE="https://www.x.org/wiki/"
+
+SNAPSHOT=c219be946b1d8a641dcbc7a60904293f105e2866
+SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxtrans/-/archive/${SNAPSHOT}/libxtrans-${SNAPSHOT}.tar.bz2 -> libxtrans-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/libxtrans-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

@@ -2,11 +2,12 @@
 
 EAPI=8
 
-inherit git-r3
-
 DESCRIPTION="A collection of tools and libraries for many image formats"
 HOMEPAGE="https://www.imagemagick.org/"
-EGIT_REPO_URI="https://github.com/ImageMagick/ImageMagick.git"
+
+SNAPSHOT=9cf419c6eb5e64b3571d98938a4a6627ac55be42
+SRC_URI="https://github.com/ImageMagick/ImageMagick/archive/${SNAPSHOT}.tar.gz -> ImageMagick-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/ImageMagick-${SNAPSHOT}"
 
 LICENSE="imagemagick"
 SLOT="0"

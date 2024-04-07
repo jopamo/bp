@@ -7,12 +7,16 @@ inherit autotools
 DESCRIPTION="USB enumeration utilities"
 HOMEPAGE="https://www.kernel.org/pub/linux/utils/usb/usbutils/"
 
+SNAPSHOT=153d41d2d1c05f783918a0a837f4f255c92b8e3a
+SRC_URI="https://github.com/gregkh/usbutils/archive/${SNAPSHOT}.tar.gz -> usbutils-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/usbutils-${SNAPSHOT}"
+
 if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/gregkh/usbutils"
-	inherit git-r3
+	inherit
 	EGIT_SUBMODULES=()
 else
-	SNAPSHOT=bf595a0cb0eb132b7365e8f1d19f07b255cbf191
+	SNAPSHOT=153d41d2d1c05f783918a0a837f4f255c92b8e3a
 	SRC_URI="https://github.com/gregkh/usbutils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

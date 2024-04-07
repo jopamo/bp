@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit toolchain-funcs git-r3
+inherit toolchain-funcs
 
 DESCRIPTION="Extremely fast non-cryptographic hash algorithm"
 HOMEPAGE="http://www.xxhash.net"
-EGIT_REPO_URI="https://github.com/Cyan4973/xxHash.git"
+
+SNAPSHOT=d28b0bfdeae015cf47be9ff3b4f4538ac2dd758e
+SRC_URI="https://github.com/Cyan4973/xxHash/archive/${SNAPSHOT}.tar.gz -> xxHash-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/xxHash-${SNAPSHOT}"
 
 LICENSE="BSD-2 GPL-2+"
 SLOT="0"

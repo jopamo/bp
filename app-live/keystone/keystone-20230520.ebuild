@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit cmake git-r3 distutils-r1 flag-o-matic
+inherit cmake distutils-r1 flag-o-matic
 
 DESCRIPTION="Keystone assembler framework"
 HOMEPAGE="https://github.com/keystone-engine/keystone"
-EGIT_REPO_URI="${HOMEPAGE}"
+
+SNAPSHOT=fb92f32391c6cced868252167509590319eeb58b
+SRC_URI="https://github.com/keystone-engine/keystone/archive/${SNAPSHOT}.tar.gz -> keystone-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/keystone-${SNAPSHOT}"
 
 LICENSE="GPL"
 SLOT="0"

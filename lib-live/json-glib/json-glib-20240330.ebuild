@@ -6,7 +6,7 @@ inherit meson git-r3
 
 DESCRIPTION="Library providing GLib serialization and deserialization for the JSON format"
 HOMEPAGE="https://wiki.gnome.org/Projects/JsonGlib"
-EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/json-glib.git"
+EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/json-glib"
 
 LICENSE="LGPL-2.1+"
 SLOT="0"

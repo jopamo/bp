@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit autotools
 
 DESCRIPTION="A lightweight and flexible command-line JSON processor"
 HOMEPAGE="https://stedolan.github.io/jq/"
-EGIT_REPO_URI="https://github.com/stedolan/jq"
+
+SNAPSHOT=6408338e9396769dfb873b7708a78dc4b8099d85
+SRC_URI="https://github.com/stedolan/jq/archive/${SNAPSHOT}.tar.gz -> jq-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/jq-${SNAPSHOT}"
 
 LICENSE="MIT CC-BY-3.0"
 SLOT="0"

@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit cmake
 
 DESCRIPTION="Extra modules and scripts for CMake"
 HOMEPAGE="https://cgit.kde.org/extra-cmake-modules.git"
-EGIT_REPO_URI="https://github.com/KDE/extra-cmake-modules.git"
+
+SNAPSHOT=07e04d248b0639fe039f45769188dbd8c835d91c
+SRC_URI="https://github.com/KDE/extra-cmake-modules/archive/${SNAPSHOT}.tar.gz -> extra-cmake-modules-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/extra-cmake-modules-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"

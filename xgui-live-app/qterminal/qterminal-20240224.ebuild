@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit cmake git-r3 xdg
+inherit cmake xdg
 
 DESCRIPTION="Qt-based multitab terminal emulator"
 HOMEPAGE="https://github.com/lxqt/qterminal"
-EGIT_REPO_URI="https://github.com/lxqt/qterminal.git"
+
+SNAPSHOT=05a0b64daa41c52b6aed4602dafcd46c061ec6e0
+SRC_URI="https://github.com/lxqt/qterminal/archive/${SNAPSHOT}.tar.gz -> qterminal-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/qterminal-${SNAPSHOT}"
 
 LICENSE="GPL-2+"
 SLOT="0"

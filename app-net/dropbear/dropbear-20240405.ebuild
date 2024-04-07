@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit user git-r3
+inherit user
 
 DESCRIPTION="small SSH 2 client/server designed for small memory environments"
 HOMEPAGE="https://matt.ucc.asn.au/dropbear/dropbear.html"
-EGIT_REPO_URI="https://github.com/mkj/dropbear.git"
+
+SNAPSHOT=fbc46281e2272cde82c062e184283e5fca418e9c
+SRC_URI="https://github.com/mkj/dropbear/archive/${SNAPSHOT}.tar.gz -> dropbear-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/dropbear-${SNAPSHOT}"
 
 LICENSE="BSD GPL-2"
 SLOT="0"

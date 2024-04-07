@@ -2,11 +2,15 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit autotools
 
 DESCRIPTION="A portable fork of NaCl, a higher-level cryptographic library"
 HOMEPAGE="https://github.com/jedisct1/libsodium"
-EGIT_REPO_URI="https://github.com/jedisct1/libsodium.git"
+
+SNAPSHOT=07ccd8d8ae2d27ee2ffca340d9252e34d9a3ad20
+SRC_URI="https://github.com/jedisct1/libsodium/archive/${SNAPSHOT}.tar.gz -> libsodium-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libsodium-${SNAPSHOT}"
+
 EGIT_BRANCH="stable"
 
 LICENSE="ISC"

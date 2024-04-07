@@ -2,11 +2,15 @@
 
 EAPI=8
 
-inherit git-r3 flag-o-matic
+inherit flag-o-matic
 
 DESCRIPTION="WebM VP8 and VP9 Codec SDK"
 HOMEPAGE="https://www.webmproject.org"
-EGIT_REPO_URI="https://github.com/webmproject/libvpx.git"
+
+SNAPSHOT=8762f5efb2917765316a198e6713f0bc93b07c9b
+SRC_URI="https://github.com/webmproject/libvpx/archive/${SNAPSHOT}.tar.gz -> libvpx-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libvpx-${SNAPSHOT}"
+
 EGIT_BRANCH="pekin"
 
 LICENSE="BSD"

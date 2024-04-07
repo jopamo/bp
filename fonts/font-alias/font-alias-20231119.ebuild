@@ -2,10 +2,15 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="X.Org font aliases"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/font/alias.git"
+HOMEPAGE="https://www.x.org/wiki/"
+
+SNAPSHOT=184c43dd059f785537c8a48a4a7972c488ac1215
+SRC_URI="https://gitlab.freedesktop.org/xorg/font/alias/-/archive/${SNAPSHOT}/alias-${SNAPSHOT}.tar.bz2 -> alias-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/alias-${SNAPSHOT}"
+
 SLOT=0
 KEYWORDS="amd64 arm64"
 

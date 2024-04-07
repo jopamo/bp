@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools git-r3 xdg
+inherit autotools xdg
 
 DESCRIPTION="Extremely fast and lightweight file manager"
 HOMEPAGE="https://github.com/lxde/${PN}"
-EGIT_REPO_URI="https://github.com/lxde/${PN}.git"
+
+SNAPSHOT=e6b422b2003126b2116d26cf09f6e6244f1bb41f
+SRC_URI="https://github.com/lxde/pcmanfm/archive/${SNAPSHOT}.tar.gz -> pcmanfm-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/pcmanfm-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools python-r1 git-r3
+inherit autotools python-r1
 
 DESCRIPTION=" a light-weight window manager for the X11 Window System"
 HOMEPAGE="http://openbox.org/"
-EGIT_REPO_URI="https://github.com/joewing/jwm.git"
+
+SNAPSHOT=93179002985ce601c64f935214fbd5273ae2a74a
+SRC_URI="https://github.com/joewing/jwm/archive/${SNAPSHOT}.tar.gz -> jwm-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/jwm-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

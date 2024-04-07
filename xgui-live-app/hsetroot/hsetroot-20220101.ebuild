@@ -2,10 +2,12 @@
 
 EAPI=8
 
-inherit git-r3
-
 DESCRIPTION="Tool which allows you to compose wallpapers ('root pixmaps') for X"
-EGIT_REPO_URI="https://github.com/himdel/hsetroot.git"
+HOMEPAGE="https://www.x.org/wiki/"
+
+SNAPSHOT=a402d5323f45c058810c0d66d61d278d101d3610
+SRC_URI="https://github.com/himdel/hsetroot/archive/${SNAPSHOT}.tar.gz -> hsetroot-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/hsetroot-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

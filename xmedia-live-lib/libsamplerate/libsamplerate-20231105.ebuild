@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit autotools
 
 DESCRIPTION="Secret Rabbit Code (aka libsamplerate) is a Sample Rate Converter for audio"
 HOMEPAGE="http://www.mega-nerd.com/SRC/"
-EGIT_REPO_URI="https://github.com/erikd/libsamplerate.git"
+
+SNAPSHOT=20819b6d31907b402d33c30e4a0295ce439c06e6
+SRC_URI="https://github.com/erikd/libsamplerate/archive/${SNAPSHOT}.tar.gz -> libsamplerate-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libsamplerate-${SNAPSHOT}"
 
 LICENSE="BSD-2"
 SLOT="0"

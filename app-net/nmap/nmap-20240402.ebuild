@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic git-r3
+inherit autotools flag-o-matic
 
 DESCRIPTION="A utility for network discovery and security auditing"
 HOMEPAGE="https://nmap.org/"
-EGIT_REPO_URI="https://github.com/nmap/nmap"
+
+SNAPSHOT=98c6ec85af2736059c39896ccf0f1becd0bfc6ea
+SRC_URI="https://github.com/nmap/nmap/archive/${SNAPSHOT}.tar.gz -> nmap-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/nmap-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

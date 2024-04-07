@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit autotools
 
 DESCRIPTION="The most popular spellchecking library."
 HOMEPAGE="http://hunspell.github.io/"
-EGIT_REPO_URI="https://github.com/hunspell/hunspell.git"
+
+SNAPSHOT=e4ddaecae3e8e77ff462a759f03607bce4c6a923
+SRC_URI="https://github.com/hunspell/hunspell/archive/${SNAPSHOT}.tar.gz -> hunspell-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/hunspell-${SNAPSHOT}"
 
 LICENSE="LGPL/GPL/MPL"
 SLOT="0"

@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit distutils-r1 git-r3
+inherit distutils-r1
 
 DESCRIPTION="Audio Normalization for Python/ffmpeg"
 HOMEPAGE="https://github.com/slhck/ffmpeg-normalize"
-EGIT_REPO_URI="${HOMEPAGE}"
+
+SNAPSHOT=94c2c6a6e05cbf6bc29aa5f052d7c5fdb111b8a9
+SRC_URI="https://github.com/slhck/ffmpeg-normalize/archive/${SNAPSHOT}.tar.gz -> ffmpeg-normalize-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/ffmpeg-normalize-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

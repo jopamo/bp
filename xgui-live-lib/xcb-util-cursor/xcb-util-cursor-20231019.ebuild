@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit autotools
 
 DESCRIPTION="X C-language Bindings sample implementations"
 HOMEPAGE="https://xcb.freedesktop.org/"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/libxcb-cursor.git"
+
+SNAPSHOT=c393b71fff76fe8627d0e95c53e756615f84d7a3
+SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxcb-cursor/-/archive/${SNAPSHOT}/libxcb-cursor-${SNAPSHOT}.tar.bz2 -> libxcb-cursor-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/libxcb-cursor-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

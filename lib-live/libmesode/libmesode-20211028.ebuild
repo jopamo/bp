@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="Fork of libstrophe: A simple, lightweight C library for writing XMPP clients"
 HOMEPAGE="https://github.com/profanity-im/libmesode"
-EGIT_REPO_URI="https://github.com/profanity-im/libmesode.git"
+
+SNAPSHOT=8e5c8b32c7c36f471df0ac67ce0cdac6e8b30569
+SRC_URI="https://github.com/profanity-im/libmesode/archive/${SNAPSHOT}.tar.gz -> libmesode-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libmesode-${SNAPSHOT}"
 
 LICENSE="GPL-3"
 SLOT="0"

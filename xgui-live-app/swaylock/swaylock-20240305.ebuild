@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit meson git-r3
+inherit meson
 
 DESCRIPTION="Screen locker for Wayland"
 HOMEPAGE="https://github.com/swaywm/swaylock"
-EGIT_REPO_URI="https://github.com/swaywm/${PN}.git"
+
+SNAPSHOT=f9ce3f193bc2f035790372b550547686075f4923
+SRC_URI="https://github.com/swaywm/swaylock/archive/${SNAPSHOT}.tar.gz -> swaylock-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/swaylock-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

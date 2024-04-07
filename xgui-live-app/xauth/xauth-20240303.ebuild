@@ -2,10 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="X authority file utility"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/app/${PN}.git"
+HOMEPAGE="https://www.x.org/wiki/"
+
+SNAPSHOT=c29eef23683f0e3575a3c60d9314de8156fbe2c2
+SRC_URI="https://gitlab.freedesktop.org/xorg/app/xauth/-/archive/${SNAPSHOT}/xauth-${SNAPSHOT}.tar.bz2 -> xauth-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/xauth-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

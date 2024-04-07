@@ -2,11 +2,12 @@
 
 EAPI=8
 
-inherit git-r3
-
 DESCRIPTION="ALSA Use Case Manager configuration"
 HOMEPAGE="http://www.alsa-project.org/"
-EGIT_REPO_URI="https://github.com/alsa-project/alsa-ucm-conf.git"
+
+SNAPSHOT=73981e94bb69da1be5b1e4a69ff99df28bcfb320
+SRC_URI="https://github.com/alsa-project/alsa-ucm-conf/archive/${SNAPSHOT}.tar.gz -> alsa-ucm-conf-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/alsa-ucm-conf-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"

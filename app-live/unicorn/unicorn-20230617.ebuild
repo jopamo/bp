@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit cmake git-r3 distutils-r1 flag-o-matic
+inherit cmake distutils-r1 flag-o-matic
 
 DESCRIPTION="CPU emulator framework"
 HOMEPAGE="https://github.com/unicorn-engine/unicorn"
-EGIT_REPO_URI="${HOMEPAGE}"
+
+SNAPSHOT=d4b92485b1a228fb003e1218e42f6c778c655809
+SRC_URI="https://github.com/unicorn-engine/unicorn/archive/${SNAPSHOT}.tar.gz -> unicorn-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/unicorn-${SNAPSHOT}"
 
 LICENSE="GPL"
 SLOT="0"

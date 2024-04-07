@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit cmake git-r3 xdg
+inherit cmake xdg
 
 DESCRIPTION="Powerful yet simple to use screenshot software for GNU/Linux"
 HOMEPAGE="https://github.com/flameshot-org/flameshot"
-EGIT_REPO_URI="https://github.com/flameshot-org/flameshot.git"
+
+SNAPSHOT=f2884330cc67502e85148dc5b4308f161f4ecb68
+SRC_URI="https://github.com/flameshot-org/flameshot/archive/${SNAPSHOT}.tar.gz -> flameshot-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/flameshot-${SNAPSHOT}"
 
 LICENSE="FreeArt GPL-3+ Apache-2.0"
 SLOT="0"

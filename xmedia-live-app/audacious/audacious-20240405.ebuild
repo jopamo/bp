@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit xdg autotools git-r3 flag-o-matic
+inherit xdg autotools flag-o-matic
 
 DESCRIPTION="Audacious Player - Your music, your way, no exceptions"
 HOMEPAGE="https://audacious-media-player.org/"
-EGIT_REPO_URI="https://github.com/audacious-media-player/audacious.git"
+
+SNAPSHOT=c015fef9f7d7b2ec911f50481d045acc1a86a0f9
+SRC_URI="https://github.com/audacious-media-player/audacious/archive/${SNAPSHOT}.tar.gz -> audacious-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/audacious-${SNAPSHOT}"
 
 LICENSE="BSD-2"
 SLOT="0"

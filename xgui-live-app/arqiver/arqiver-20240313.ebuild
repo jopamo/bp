@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit xdg qmake-utils git-r3
+inherit xdg qmake-utils
 
 DESCRIPTION="Simple Qt archive manager based on libarchive"
 HOMEPAGE="https://github.com/tsujan/Arqiver.git"
-EGIT_REPO_URI="https://github.com/tsujan/Arqiver.git"
+
+SNAPSHOT=84422f02578b28006c8540454353169e0a46c303
+SRC_URI="https://github.com/tsujan/Arqiver/archive/${SNAPSHOT}.tar.gz -> Arqiver-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/Arqiver-${SNAPSHOT}"
 
 LICENSE="GPL-3+"
 SLOT="0"

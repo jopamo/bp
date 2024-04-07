@@ -6,7 +6,7 @@ inherit git-r3 meson
 
 DESCRIPTION="Internationalized text layout and rendering library"
 HOMEPAGE="http://www.pango.org/"
-EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/pango.git"
+EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/pango"
 #EGIT_BRANCH="pango-$(ver_cut 1)-$(ver_cut 2)"
 
 LICENSE="LGPL-2+ FTL"

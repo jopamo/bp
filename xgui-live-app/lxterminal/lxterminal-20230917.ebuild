@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools xdg
+inherit autotools xdg
 
 DESCRIPTION="VTE terminal emulator written in GTK"
 HOMEPAGE="https://github.com/lxde/lxterminal.git"
-EGIT_REPO_URI="https://github.com/lxde/lxterminal.git"
+
+SNAPSHOT=9b4299c292567b371158368686088900a4c0a128
+SRC_URI="https://github.com/lxde/lxterminal/archive/${SNAPSHOT}.tar.gz -> lxterminal-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/lxterminal-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

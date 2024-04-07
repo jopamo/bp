@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 meson
+inherit meson
 
 DESCRIPTION="X.Org combined protocol headers"
 HOMEPAGE="https://www.x.org"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/proto/xorgproto.git"
+
+SNAPSHOT=67469711055522b8adb2d795b01e7ba98cb8816c
+SRC_URI="https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/archive/${SNAPSHOT}/xorgproto-${SNAPSHOT}.tar.bz2 -> xorgproto-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/xorgproto-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

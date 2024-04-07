@@ -7,11 +7,15 @@ inherit autotools
 DESCRIPTION="Library for Neighbor Discovery Protocol"
 HOMEPAGE="http://libndp.org"
 
+SNAPSHOT=f22797cebcbd7f433f2310a0333a039374b2e00f
+SRC_URI="https://github.com/jpirko/libndp/archive/${SNAPSHOT}.tar.gz -> libndp-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libndp-${SNAPSHOT}"
+
 if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/jpirko/${PN}.git"
-	inherit git-r3
+	EGIT_REPO_URI="https://github.com/jpirko/libndp"
+	inherit
 else
-	SNAPSHOT=e8b90ce2d6ebf846cb0c9a3255d4deacf075f9c4
+	SNAPSHOT=f22797cebcbd7f433f2310a0333a039374b2e00f
 	SRC_URI="https://github.com/jpirko/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

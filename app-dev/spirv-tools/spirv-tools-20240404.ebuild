@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit cmake
 
 DESCRIPTION="Provides an API and commands for processing SPIR-V modules"
 HOMEPAGE="https://github.com/KhronosGroup/SPIRV-Tools"
-EGIT_REPO_URI="https://github.com/KhronosGroup/SPIRV-Tools.git"
+
+SNAPSHOT=24f2cdad8ec6ecf02a08e516d9af0d846f72ae99
+SRC_URI="https://github.com/KhronosGroup/SPIRV-Tools/archive/${SNAPSHOT}.tar.gz -> SPIRV-Tools-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/SPIRV-Tools-${SNAPSHOT}"
 
 LICENSE="Apache-2.0"
 SLOT="0"

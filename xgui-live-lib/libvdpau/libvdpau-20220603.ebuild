@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit flag-o-matic git-r3 meson
+inherit flag-o-matic meson
 
 DESCRIPTION="VDPAU wrapper and trace libraries"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/VDPAU"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/vdpau/${PN}/"
+
+SNAPSHOT=2afa3f989af24a922692ac719fae23c321776cdb
+SRC_URI="https://gitlab.freedesktop.org/vdpau/libvdpau/-/archive/${SNAPSHOT}/libvdpau-${SNAPSHOT}.tar.bz2 -> libvdpau-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/libvdpau-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

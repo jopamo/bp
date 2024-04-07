@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit toolchain-funcs git-r3
+inherit toolchain-funcs
 
 DESCRIPTION="HTTP request/response parser for C"
 HOMEPAGE="https://github.com/nodejs/http-parser"
-EGIT_REPO_URI="https://github.com/nodejs/http-parser.git"
+
+SNAPSHOT=ec8b5ee63f0e51191ea43bb0c6eac7bfbff3141d
+SRC_URI="https://github.com/nodejs/http-parser/archive/${SNAPSHOT}.tar.gz -> http-parser-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/http-parser-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

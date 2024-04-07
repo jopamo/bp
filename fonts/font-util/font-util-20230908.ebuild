@@ -2,10 +2,15 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="X.Org font utilities"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/font/util.git"
+HOMEPAGE="https://www.x.org/wiki/"
+
+SNAPSHOT=b5ca142f81a6f14eddb23be050291d1c25514777
+SRC_URI="https://gitlab.freedesktop.org/xorg/font/util/-/archive/${SNAPSHOT}/util-${SNAPSHOT}.tar.bz2 -> util-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/util-${SNAPSHOT}"
+
 SLOT=0
 KEYWORDS="amd64 arm64"
 

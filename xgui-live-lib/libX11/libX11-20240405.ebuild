@@ -2,10 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="X.Org X11 library"
-EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/lib/${PN}.git"
+HOMEPAGE="https://www.x.org/wiki/"
+
+SNAPSHOT=52a191ee096e93cf711f77b6a56c508b68afc0b6
+SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libX11/-/archive/${SNAPSHOT}/libX11-${SNAPSHOT}.tar.bz2 -> libX11-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/libX11-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

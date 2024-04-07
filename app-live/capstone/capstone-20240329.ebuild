@@ -2,11 +2,15 @@
 
 EAPI=8
 
-inherit cmake git-r3 distutils-r1
+inherit cmake distutils-r1
 
 DESCRIPTION="disassembly/disassembler framework + bindings"
 HOMEPAGE="http://www.capstone-engine.org/"
-EGIT_REPO_URI="https://github.com/capstone-engine/capstone"
+
+SNAPSHOT=cda40c6537547bc722efee821e32d2f7d1db53c7
+SRC_URI="https://github.com/capstone-engine/capstone/archive/${SNAPSHOT}.tar.gz -> capstone-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/capstone-${SNAPSHOT}"
+
 EGIT_BRANCH="next"
 
 LICENSE="BSD"

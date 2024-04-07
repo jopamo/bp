@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit meson git-r3
+inherit meson
 
 DESCRIPTION="Audacious Player - Your music, your way, no exceptions"
 HOMEPAGE="https://audacious-media-player.org/"
-EGIT_REPO_URI="https://github.com/audacious-media-player/audacious-plugins.git"
+
+SNAPSHOT=b2e630d6a35dfc89107430257a85284560180ce2
+SRC_URI="https://github.com/audacious-media-player/audacious-plugins/archive/${SNAPSHOT}.tar.gz -> audacious-plugins-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/audacious-plugins-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

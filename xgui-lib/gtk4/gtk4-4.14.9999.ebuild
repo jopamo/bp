@@ -6,7 +6,7 @@ inherit meson git-r3 xdg python-any-r1
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
-EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/gtk.git"
+EGIT_REPO_URI="https://github.com/GNOME/gtk"
 EGIT_BRANCH=gtk-$(ver_cut 1)-$(ver_cut 2)
 
 LICENSE="LGPL-2+"
@@ -55,14 +55,10 @@ DEPEND="${COMMON_DEPEND}
 	app-tex/docbook-xml-dtd
 	app-tex/docbook-xsl-stylesheets
 	lib-core/libxslt
-	dev-python/pygobject
 	xgui-live-lib/at-spi2-core
 	X? ( xinerama? ( xgui-live-app/xorgproto ) )"
 
 RDEPEND="${COMMON_DEPEND}"
-BDEPEND="
-	app-live/sassc
-"
 PDEPEND="
 	virtual/librsvg
 	xgui-icontheme/adwaita-plus
@@ -96,7 +92,6 @@ src_configure() {
 		-Dmacos-backend=false
 
 		# Media backends
-		$(meson_feature ffmpeg media-ffmpeg)
 		-Dmedia-gstreamer=disabled
 
 		# Print backends
@@ -117,8 +112,6 @@ src_configure() {
 		# Demos and binaries
 		$(meson_use examples build-examples)
 		$(meson_use examples demos)
-		$(meson_use test build-tests)
-		-Dinstall-tests=false
 	)
 	meson_src_configure
 }

@@ -21,7 +21,7 @@ DEPEND="
 	xgui-lib/qtbase
 	xgui-lib/qtx11extras
 	xgui-live-lib/libX11
-	~xgui-lib/qtermwidget-${PV}
+	xgui-lib/qtermwidget
 "
 BDEPEND="app-dev/lxqt-build-tools"
 RDEPEND="xgui-icontheme/hicolor-icon-theme"

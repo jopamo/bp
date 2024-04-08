@@ -16,9 +16,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	xgui-lib/qtbase
-	xgui-lib/qtsvg
-	xgui-lib/qtx11extras
+	xgui-lib/qtbase:6
+	xgui-lib/qtsvg:6
 	app-tex/hunspell
 "
 

@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="ipv6 +libssh2 os-db ncat nping nselib scripts ssl"
+IUSE="ipv6 +libssh2 +os-db +ncat +nping +nselib +scripts ssl"
 
 DEPEND="
 	app-lang/lua
@@ -31,9 +31,9 @@ src_prepare() {
 	append-flags -fno-strict-aliasing
 	filter-flags -flto*
 
-	sed -i '/nmap-payloads/d' Makefile.in
+	#sed -i '/nmap-payloads/d' Makefile.in
 
-	rm -r liblinear/ libpcap/ libpcre/ libz/ || die
+	#rm -r liblinear/ libpcap/ libpcre/ libz/ || die
 
 	default
 
@@ -41,8 +41,6 @@ src_prepare() {
 		-e '/AC_CONFIG_SUBDIRS(libz)/d' \
 		-e '/AC_CONFIG_SUBDIRS(libssh2)/d' \
 		configure.ac
-
-	cp libdnet-stripped/include/config.h.in{,.nmap-orig} || die
 
 	eautoreconf
 }
@@ -55,11 +53,13 @@ src_configure() {
 		$(use_with ssl openssl)
 		--cache-file="${S}"/config.cache
 		--disable-nls
-		--with-libdnet=included
+		--with-libpcap="${EROOT}"/usr
+		--with-libpcre="${EROOT}"/usr
+		--with-zlib="${EROOT}"/usr
+		--with-libssh2="${EROOT}"/usr
 		--with-liblua="${EROOT}"/usr
-		--with-libssh2
-		--with-pcre="${EROOT}"/usr
-		--with-zlib
+		--with-liblua="${EROOT}"/usr
+		--without-ndiff
 		--without-zenmap
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

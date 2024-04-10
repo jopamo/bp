@@ -16,7 +16,7 @@
 #     session.menuFile: ~/.fluxbox/my-menu
 [begin] (Fluxbox-1.3.7)
 [encoding] {UTF-8}
-      [exec] (qterminal) {qterminal}
+      [exec] (lxterminal) {lxterminal}
       [exec] (pcmanfm-qt) {pcmanfm-qt}
       [exec] (keepassxc) {keepassxc}
       [exec] (qbittorrent) {qbittorrent}

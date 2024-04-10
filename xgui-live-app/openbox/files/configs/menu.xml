@@ -8,13 +8,6 @@
 				</execute>
 			</action>
 		</item>
-		<item label="qterminal">
-			<action name="Execute">
-				<execute>
-					qterminal
-				</execute>
-			</action>
-		</item>
 		<item label="st">
 			<action name="Execute">
 				<execute>

@@ -14,13 +14,14 @@ S=${WORKDIR}
 
 src_install() {
 	#bin files
-	for f in ix mktarballs efixperm ; do
+	for f in ix mktarballs efixperm prettybash ; do
 		dobin "${FILESDIR}"/bin/$f
 	done
 
 	#sbin files
-	for f in eclass_import emirror esync eup lighttpd_certs upBrowsers \
-		mkheaders mkimg mkmini mkstage xbkup upDay upBrowsers upApp upPython xchroot ; do
+	for f in eclass_import emirror esync eup lighttpd_certs \
+		mkheaders mkimg mkmini mkstage xbkup upDay upApp \
+		upBrowsers upPython xchroot upSource ; do
 			dosbin "${FILESDIR}"/sbin/$f
 	done
 

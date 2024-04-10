@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+	echo "Usage: $0 <fileName>"
+	exit 1
+fi
+
+fileName="$1"
+tempFile=/tmp/prettybash_tmp
+
+sed '1n; /^ *#/d' "$fileName" > "$tempFile"
+
+awk 'NF > 0 { print; blank=0 } NF == 0 { if (!blank) print; blank=1 }' "$tempFile" > "$tempFile.reduced"
+
+if ! cmp --silent "$tempFile.reduced" "$fileName"; then
+	mv "$tempFile.reduced" "$fileName"
+	echo "File processed and changes were made: $fileName"
+
+	beautysh -t "$fileName"
+else
+	echo "No changes were made to $fileName"
+	rm "$tempFile.reduced"
+fi
+
+rm "$tempFile"

@@ -128,7 +128,6 @@ echo "Package copy process completed."
 
 echo "Starting cleanup process..."
 
-# specials
 [ -d "${PACKAGE_DIR}/gpep517" ] && echo "Updating EAPI for gpep517..." && find "${PACKAGE_DIR}/gpep517" -type f -name "*.ebuild" -exec sed -i'' 's/EAPI=7/EAPI=8/' {} + && echo "EAPI updated for gpep517."
 
 [ -d "${PACKAGE_DIR}/cython" ] && find "${PACKAGE_DIR}/cython" -type f -name "*.ebuild" -exec sed -i'' '/python_compile()/a \\tfilter-flags -Wl,-z,defs' {} + && echo "Updated python_compile for cython."
@@ -214,7 +213,6 @@ for package in "${PACKAGES[@]}"; do
 	fi
 done
 
-# Text replacements
 declare -A replacements=(
 	["dev-libs/libxml2"]="lib-core/libxml2"
 	["dev-libs/libxslt"]="lib-core/libxslt"

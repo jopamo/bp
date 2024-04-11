@@ -22,3 +22,12 @@ DEPEND="${RDEPEND}
 	app-dev/pkgconf
 	dev-python/pygments
 "
+
+src_configure() {
+	local emesonargs=(
+		-D documentation=disabled
+		-D gtk_doc=disabled
+		-D man=true
+		)
+		meson_src_configure
+}

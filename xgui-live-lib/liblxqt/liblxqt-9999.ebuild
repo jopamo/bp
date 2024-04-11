@@ -18,14 +18,7 @@ LICENSE="GPL-2 LGPL-2.1+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="
-	lib-live/libqtxdg
-	lib-live/libqtxdg
-	xgui-live-app/kwindowsystem
-	xgui-live-lib/libXScrnSaver
-	xgui-lib/qtbase
-	xgui-lib/qtx11extras
-"
+DEPEND="xgui-lib/qtbase"
 
 src_configure() {
 	local mycmakeargs=(

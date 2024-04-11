@@ -21,14 +21,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="wayland"
 
-DEPEND="
-	xgui-live-app/xorgproto
-	xgui-live-lib/libX11
-	xgui-live-lib/libxcb
-	xgui-lib/qtbase
-	xgui-lib/qtx11extras
-	wayland? ( xgui-lib/qtwayland )
-"
+DEPEND="wayland? ( xgui-lib/qtwayland )"
 
 src_configure() {
 	local mycmakeargs=(

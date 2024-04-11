@@ -51,7 +51,7 @@ src_prepare() {
 	export BUILDTYPE=Release
 
 	# less verbose install output (stating the same as portage, basically)
-	sed -i -e "/print/d" tools/install.py || die
+	#sed -i -e "/print/d" tools/install.py || die
 
 	# Avoid writing a depfile, not useful
 	sed -i -e "/DEPFLAGS =/d" tools/gyp/pylib/gyp/generator/make.py || die

@@ -1,4 +1,4 @@
-# Copyright 2017-2023 Gentoo Authors
+# Copyright 2017-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: meson.eclass
@@ -41,11 +41,11 @@ esac
 if [[ -z ${_MESON_ECLASS} ]]; then
 _MESON_ECLASS=1
 
-inherit multiprocessing ninja-utils python-utils-r1 toolchain-funcs
+inherit flag-o-matic multiprocessing ninja-utils python-utils-r1 toolchain-funcs
 
-BDEPEND=">=app-dev/meson-0.62.2
+BDEPEND=">=dev-build/meson-1.2.3
 	${NINJA_DEPEND}
-	app-dev/meson-format-array
+	dev-build/meson-format-array
 "
 
 # @ECLASS_VARIABLE: BUILD_DIR
@@ -161,7 +161,10 @@ _meson_create_cross_file() {
 	objc = $(_meson_env_array "$(tc-getPROG OBJC cc)")
 	objcopy = $(_meson_env_array "$(tc-getOBJCOPY)")
 	objcpp = $(_meson_env_array "$(tc-getPROG OBJCXX c++)")
+	# TODO: Cleanup 'pkgconfig' and keep just 'pkg-config' once we require
+	# >=1.3.0.
 	pkgconfig = '$(tc-getPKG_CONFIG)'
+	pkg-config = '$(tc-getPKG_CONFIG)'
 	strip = $(_meson_env_array "$(tc-getSTRIP)")
 	windres = $(_meson_env_array "$(tc-getRC)")
 
@@ -215,7 +218,10 @@ _meson_create_native_file() {
 	objc = $(_meson_env_array "$(tc-getBUILD_PROG OBJC cc)")
 	objcopy = $(_meson_env_array "$(tc-getBUILD_OBJCOPY)")
 	objcpp = $(_meson_env_array "$(tc-getBUILD_PROG OBJCXX c++)")
+	# TODO: Cleanup 'pkgconfig' and keep just 'pkg-config' once we require
+	# >=1.3.0.
 	pkgconfig = '$(tc-getBUILD_PKG_CONFIG)'
+	pkg-config = '$(tc-getBUILD_PKG_CONFIG)'
 	strip = $(_meson_env_array "$(tc-getBUILD_STRIP)")
 	windres = $(_meson_env_array "$(tc-getBUILD_PROG RC windres)")
 
@@ -271,14 +277,43 @@ meson_feature() {
 	usex "$1" "-D${2-$1}=enabled" "-D${2-$1}=disabled"
 }
 
-# @FUNCTION: meson_src_configure
-# @USAGE: [extra meson arguments]
+# @FUNCTION: setup_meson_src_configure
 # @DESCRIPTION:
-# This is the meson_src_configure function.
-meson_src_configure() {
-	debug-print-function ${FUNCNAME} "$@"
+# Calculate the command line which meson should use, and other relevant
+# variables. Invoke via "${MESONARGS[@]}" in the calling environment.
+# This function is called from meson_src_configure.
+setup_meson_src_configure() {
+	MESONARGS=()
+	if tc-is-lto; then
+		# We want to connect -flto in *FLAGS to the dedicated meson option,
+		# to ensure that meson has visibility into what the user set. Although
+		# it is unlikely projects will check `get_option('b_lto')` and change
+		# their behavior, individual targets which are broken with LTO can
+		# disable it per target. Injecting via *FLAGS means that meson cannot
+		# strip -flto from that target.
+		MESONARGS+=( -Db_lto=true )
 
-	[[ -n "${NINJA_DEPEND}" ]] || ewarn "Unknown value '${NINJA}' for \${NINJA}"
+		# respect -flto value, e.g. -flto=8, -flto=thin
+		local v=$(get-flag flto)
+		case ${v} in
+			thin)
+				MESONARGS+=( -Db_lto_mode=thin )
+				;;
+			''|*[!0-9]*)
+				;;
+			*)
+				MESONARGS+=( -Db_lto_threads=${v} )
+				;;
+		esac
+		# finally, remove it from *FLAGS to avoid passing it:
+		# - twice, with potentially different values
+		# - on excluded targets
+		filter-lto
+	else
+		# Prevent projects from enabling LTO by default.  In Gentoo, LTO is
+		# enabled via setting *FLAGS appropriately.
+		MESONARGS+=( -Db_lto=false )
+	fi
 
 	local BUILD_CFLAGS=${BUILD_CFLAGS}
 	local BUILD_CPPFLAGS=${BUILD_CPPFLAGS}
@@ -308,8 +343,7 @@ meson_src_configure() {
 		: "${BUILD_PKG_CONFIG_PATH:=${PKG_CONFIG_PATH}}"
 	fi
 
-	local mesonargs=(
-		meson setup
+	MESONARGS+=(
 		--libdir "lib"
 		--localstatedir "${EPREFIX}/var"
 		--prefix "${EPREFIX}/usr"
@@ -328,22 +362,22 @@ meson_src_configure() {
 		# It's Gentoo policy to not have builds die on blanket -Werror, as it's
 		# an upstream development matter. bug #754279.
 		-Dwerror=false
+
+		"${ltoflags[@]}"
 	)
 
 	if [[ -n ${EMESON_BUILDTYPE} ]]; then
-		mesonargs+=( --buildtype "${EMESON_BUILDTYPE}" )
+		MESONARGS+=( -Dbuildtype="${EMESON_BUILDTYPE}" )
 	fi
 
 	if tc-is-cross-compiler; then
-		mesonargs+=( --cross-file "$(_meson_create_cross_file)" )
+		MESONARGS+=( --cross-file "$(_meson_create_cross_file)" )
 	fi
-
-	BUILD_DIR="${BUILD_DIR:-${WORKDIR}/${P}-build}"
 
 	# Handle quoted whitespace
 	eval "local -a MYMESONARGS=( ${MYMESONARGS} )"
 
-	mesonargs+=(
+	MESONARGS+=(
 		# Arguments from ebuild
 		"${emesonargs[@]}"
 
@@ -352,12 +386,6 @@ meson_src_configure() {
 
 		# Arguments from user
 		"${MYMESONARGS[@]}"
-
-		# Source directory
-		"${EMESON_SOURCE:-${S}}"
-
-		# Build directory
-		"${BUILD_DIR}"
 	)
 
 	# Used by symbolextractor.py
@@ -365,18 +393,39 @@ meson_src_configure() {
 	tc-export NM
 	tc-getPROG READELF readelf >/dev/null
 
+	# https://bugs.gentoo.org/721786
+	export BOOST_INCLUDEDIR="${BOOST_INCLUDEDIR-${EPREFIX}/usr/include}"
+	export BOOST_LIBRARYDIR="${BOOST_LIBRARYDIR-${EPREFIX}/usr/lib}"
+}
+
+# @FUNCTION: meson_src_configure
+# @USAGE: [extra meson arguments]
+# @DESCRIPTION:
+# This is the meson_src_configure function.
+meson_src_configure() {
+	debug-print-function ${FUNCNAME} "$@"
+
+	[[ -n "${NINJA_DEPEND}" ]] || ewarn "Unknown value '${NINJA}' for \${NINJA}"
+
+	BUILD_DIR="${BUILD_DIR:-${WORKDIR}/${P}-build}"
+
 	# https://bugs.gentoo.org/625396
 	python_export_utf8_locale
 
-	# https://bugs.gentoo.org/721786
-	local -x BOOST_INCLUDEDIR="${BOOST_INCLUDEDIR-${EPREFIX}/usr/include}"
-	local -x BOOST_LIBRARYDIR="${BOOST_LIBRARYDIR-${EPREFIX}/usr/lib}"
-
 	(
+		setup_meson_src_configure "$@"
+		MESONARGS+=(
+			# Source directory
+			"${EMESON_SOURCE:-${S}}"
+
+			# Build directory
+			"${BUILD_DIR}"
+		)
+
 		export -n {C,CPP,CXX,F,OBJC,OBJCXX,LD}FLAGS PKG_CONFIG_{LIBDIR,PATH}
-		echo "${mesonargs[@]}" >&2
-		"${mesonargs[@]}"
-	) || die
+		echo meson setup "${MESONARGS[@]}" >&2
+		meson setup "${MESONARGS[@]}"
+	) || die -n
 }
 
 # @FUNCTION: meson_src_compile
@@ -386,10 +435,11 @@ meson_src_configure() {
 meson_src_compile() {
 	debug-print-function ${FUNCNAME} "$@"
 
+	pushd "${BUILD_DIR}" > /dev/null || die
+
 	local mesoncompileargs=(
-		-C "${BUILD_DIR}"
-		--jobs "$(makeopts_jobs "${MAKEOPTS}" 0)"
-		--load-average "$(makeopts_loadavg "${MAKEOPTS}" 0)"
+		--jobs "$(get_makeopts_jobs 0)"
+		--load-average "$(get_makeopts_loadavg 0)"
 	)
 
 	case ${MESON_VERBOSE} in
@@ -401,7 +451,9 @@ meson_src_compile() {
 
 	set -- meson compile "${mesoncompileargs[@]}"
 	echo "$@" >&2
-	"$@" || die "compile failed"
+	"$@" || die -n "compile failed"
+
+	popd > /dev/null || die
 }
 
 # @FUNCTION: meson_src_test
@@ -411,16 +463,19 @@ meson_src_compile() {
 meson_src_test() {
 	debug-print-function ${FUNCNAME} "$@"
 
+	pushd "${BUILD_DIR}" > /dev/null || die
+
 	local mesontestargs=(
 		--print-errorlogs
-		-C "${BUILD_DIR}"
 		--num-processes "$(makeopts_jobs "${MAKEOPTS}")"
 		"$@"
 	)
 
 	set -- meson test "${mesontestargs[@]}"
 	echo "$@" >&2
-	"$@" || die "tests failed"
+	"$@" || die -n "tests failed"
+
+	popd > /dev/null || die
 }
 
 # @FUNCTION: meson_install
@@ -430,8 +485,9 @@ meson_src_test() {
 meson_install() {
 	debug-print-function ${FUNCNAME} "$@"
 
+	pushd "${BUILD_DIR}" > /dev/null || die
+
 	local mesoninstallargs=(
-		-C "${BUILD_DIR}"
 		--destdir "${D}"
 		--no-rebuild
 		"$@"
@@ -439,7 +495,9 @@ meson_install() {
 
 	set -- meson install "${mesoninstallargs[@]}"
 	echo "$@" >&2
-	"$@" || die "install failed"
+	"$@" || die -n "install failed"
+
+	popd > /dev/null || die
 }
 
 # @FUNCTION: meson_src_install

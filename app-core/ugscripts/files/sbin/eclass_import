@@ -3,7 +3,7 @@
 TEMPLOCATION="/tmp/eclass_import"
 mkdir -p "${TEMPLOCATION}"
 [ ! -d "${TEMPLOCATION}/gentoo" ] && git clone https://github.com/gentoo/gentoo.git "${TEMPLOCATION}/gentoo" --depth 1
-cp "${TEMPLOCATION}"/gentoo/eclass/{autotools,cargo,cmake,distutils-r1,estack,flag-o-matic,font,git-r3,gnuconfig,go-module,kernel-2,libtool,linux-info,linux-mod,meson,multibuild,multiprocessing,ninja-utils,perl-functions,perl-module,out-of-source-utils,prefix,python*,qmake-utils,sgml-catalog-r1,toolchain-funcs,unpacker,user-info,xdg,xdg-utils,wrapper}.eclass /var/db/repos/bp/eclass/
+cp "${TEMPLOCATION}"/gentoo/eclass/{autotools,cargo,cmake,crossdev,distutils-r1,estack,flag-o-matic,font,git-r3,gnuconfig,go-env,go-module,kernel-2,libtool,linux-info,linux-mod,meson,multibuild,multiprocessing,ninja-utils,optfeature,perl-functions,perl-module,out-of-source-utils,prefix,python*,qmake-utils,sgml-catalog-r1,toolchain-funcs,unpacker,user-info,xdg,xdg-utils,wrapper}.eclass /var/db/repos/bp/eclass/
 
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i '/dosym8/d'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i '/einstalldocs/d'
@@ -41,8 +41,4 @@ sed -i 's/.*qt5\/bin.*/	echo\ \/usr\/bin/' /var/db/repos/bp/eclass/qmake-utils.e
 sed -i 's/var\/lib/var/' /var/db/repos/bp/eclass/meson.eclass
 
 #insert on 3rd line
-sed -i '3i\PYTHON_COMPAT=( python3_10 python3_11 )\' /var/db/repos/bp/eclass/python-utils-r1.eclass
-
-sed -i 's/echo\ \/usr/echo\ /' /var/db/repos/bp/eclass/kernel-2.eclass
-echo\ \/usr
-echo\
+sed -i '3i\PYTHON_COMPAT=( python3_11 python3_12 )\' /var/db/repos/bp/eclass/python-utils-r1.eclass

@@ -8,11 +8,11 @@ DESCRIPTION="NTP client and server programs"
 HOMEPAGE="https://chrony.tuxfamily.org/"
 
 if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://git.tuxfamily.org/chrony/chrony.git"
+	EGIT_REPO_URI="https://gitlab.com/chrony/chrony.git"
 	inherit git-r3
 else
 	SNAPSHOT=863866354d058554e691959870770a8a07350431
-	SRC_URI="https://git.tuxfamily.org/chrony/chrony.git/snapshot/chrony-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://gitlab.com/chrony/chrony/-/archive/${SNAPSHOT}/chrony-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 

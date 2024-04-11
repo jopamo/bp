@@ -2,14 +2,11 @@
 
 EAPI=8
 
-inherit flag-o-matic go-module
+inherit flag-o-matic go-module git-r3
 
 DESCRIPTION="GitHub CLI"
 HOMEPAGE="https://github.com/cli/cli"
-
-SNAPSHOT=3be7a02fec263e6feab954b1d996d159b82d6f93
-SRC_URI="https://github.com/cli/cli/archive/${SNAPSHOT}.tar.gz -> cli-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/cli-${SNAPSHOT}"
+EGIT_REPO_URI="https://github.com/cli/cli"
 
 LICENSE="MIT Apache-2.0 BSD BSD-2 MPL-2.0"
 SLOT="0"

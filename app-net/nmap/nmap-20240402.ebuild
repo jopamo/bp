@@ -27,20 +27,22 @@ DEPEND="
 	ssl? ( virtual/ssl )
 "
 
+PATCHES=( "${FILESDIR}"/autoconf-2.72.patch )
+
 src_prepare() {
 	append-flags -fno-strict-aliasing
 	filter-flags -flto*
 
-	#sed -i '/nmap-payloads/d' Makefile.in
+	sed -i '/nmap-payloads/d' Makefile.in || die
 
-	#rm -r liblinear/ libpcap/ libpcre/ libz/ || die
+	rm -r liblinear/ libpcap/ libpcre/ libz/ || die
 
 	default
 
 	sed -i \
 		-e '/AC_CONFIG_SUBDIRS(libz)/d' \
 		-e '/AC_CONFIG_SUBDIRS(libssh2)/d' \
-		configure.ac
+		configure.ac || die
 
 	eautoreconf
 }
@@ -84,7 +86,7 @@ src_install() {
 		nmapdatadir="${EPREFIX}"/usr/share/nmap \
 		install
 
-	use nselib || rm -r "${ED}"/usr/share/nmap/nselib
-	use scripts || rm -r "${ED}"/usr/share/nmap/scripts
-	use os-db || rm -r "${ED}"/usr/share/nmap/nmap-os-db
+	use nselib || rm -r "${ED}"/usr/share/nmap/nselib || die
+	use scripts || rm -r "${ED}"/usr/share/nmap/scripts || die
+	use os-db || rm -r "${ED}"/usr/share/nmap/nmap-os-db || die
 }

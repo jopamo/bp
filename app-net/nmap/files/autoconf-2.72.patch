@@ -1,0 +1,50 @@
+From 330a8a3a2765a4990749905a456e3b6c63ad5335 Mon Sep 17 00:00:00 2001
+From: David Seifert <soap@gentoo.org>
+Date: Fri, 29 Dec 2023 13:33:27 +0100
+Subject: [PATCH] Fix Autoconf 2.72 bootstrap
+
+* Autoconf 2.72 does not use `AC_EGREP_CPP` internally anymore, and any
+  use of it requires calling `AC_PROG_EGREP` and/or `AC_PROG_CPP` before:
+  https://lists.gnu.org/archive/html/info-gnu/2023-12/msg00002.html
+
+Bug: https://bugs.gentoo.org/920712
+---
+ libdnet-stripped/config/acinclude.m4 | 2 ++
+ libdnet-stripped/configure.in        | 4 ++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/libdnet-stripped/config/acinclude.m4 b/libdnet-stripped/config/acinclude.m4
+index 3145975bce..f84019909d 100644
+--- a/libdnet-stripped/config/acinclude.m4
++++ b/libdnet-stripped/config/acinclude.m4
+@@ -201,6 +201,8 @@ dnl results:    HAVE_IOCTL_ARP
+ dnl
+ AC_DEFUN(AC_DNET_IOCTL_ARP,
+     [AC_MSG_CHECKING(for arp(7) ioctls)
++    AC_PROG_EGREP
++    AC_PROG_CPP
+     AC_CACHE_VAL(ac_cv_dnet_ioctl_arp,
+ 	AC_EGREP_CPP(werd, [
+ #	include <sys/types.h>
+diff --git a/libdnet-stripped/configure.in b/libdnet-stripped/configure.in
+index 6235dc2163..5c4b80be61 100644
+--- a/libdnet-stripped/configure.in
++++ b/libdnet-stripped/configure.in
+@@ -211,7 +211,7 @@ AC_FUNC_MEMCMP
+ AC_REPLACE_FUNCS(err strlcpy strsep)
+ 
+ dnl Checks for other system-specific jonks.
+-if test "$CYGWIN" != yes ; then
++AS_IF([test "$CYGWIN" != yes], [
+ 	AC_DNET_BSD_BPF
+ 	AC_DNET_LINUX_PROCFS
+ 	AC_DNET_LINUX_PF_PACKET
+@@ -221,7 +221,7 @@ if test "$CYGWIN" != yes ; then
+ 	AC_DNET_RAWIP_HOST_OFFLEN
+ 	AC_DNET_RAWIP_COOKED
+ 	AC_DNET_GETKERNINFO
+-fi
++])
+ 
+ dnl Check for arp interface.
+ if test "$ac_cv_header_Iphlpapi_h" = yes ; then

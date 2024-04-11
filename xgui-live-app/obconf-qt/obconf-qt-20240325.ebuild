@@ -14,20 +14,3 @@ S="${WORKDIR}/obconf-qt-${SNAPSHOT}"
 LICENSE="GPL-2 LGPL-2.1+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-DEPEND="
-	lib-live/glib
-	lib-core/libxml2
-	xgui-lib/qtbase
-	xgui-lib/qtx11extras:5
-	fonts/fontconfig
-	xgui-misc/freetype
-	xgui-live-app/openbox
-	xgui-live-lib/libICE
-	xgui-live-lib/libSM
-	xgui-live-lib/libX11
-	xgui-live-lib/libXft
-	xgui-live-lib/pango
-"
-
-BDEPEND="app-dev/pkgconf"

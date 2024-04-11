@@ -34,7 +34,6 @@ DEPEND="
 		xgui-live-lib/libX11
 		xgui-live-lib/libXi
 		xgui-live-lib/libXtst
-		xgui-lib/qtx11extras
 	)
 "
 

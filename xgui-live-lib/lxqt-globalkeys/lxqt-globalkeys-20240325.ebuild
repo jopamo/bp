@@ -16,17 +16,6 @@ KEYWORDS="amd64 arm64"
 LICENSE="LGPL-2.1+"
 SLOT="0"
 
-RDEPEND="
-	xgui-lib/qtbase
-	xgui-lib/qtx11extras
-	xgui-live-lib/liblxqt
-	lib-live/libqtxdg
-	xgui-live-lib/libICE
-	xgui-live-lib/libSM
-	xgui-live-lib/libX11
-	xgui-live-lib/libXext
-"
-
 BDEPEND="app-dev/lxqt-build-tools"
 
 src_install() {

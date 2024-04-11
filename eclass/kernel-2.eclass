@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: kernel-2.eclass
@@ -286,8 +286,9 @@
 # I will remove it when I come up with something more reasonable.
 # Alfred Persson Forsberg <cat@catcream.org>
 # Moved this above inherit as crossdev.eclass uses CHOST internally.
+[[ ${PROFILE_ARCH} == ppc64 ]] && CHOST="powerpc64-${CHOST#*-}"
 
-inherit estack multiprocessing toolchain-funcs
+inherit crossdev estack multiprocessing optfeature toolchain-funcs
 
 case ${EAPI} in
 	7|8) ;;
@@ -302,7 +303,6 @@ RESTRICT="binchecks strip"
 
 # set LINUX_HOSTCFLAGS if not already set
 : "${LINUX_HOSTCFLAGS:="-Wall -Wstrict-prototypes -Os -fomit-frame-pointer -I${S}/include"}"
-
 
 # @FUNCTION: debug-print-kernel2-variables
 # @USAGE:
@@ -653,18 +653,18 @@ kernel_is() {
 # Capture the sources type and set DEPENDs
 if [[ ${ETYPE} == sources ]]; then
 	RDEPEND="!build? (
-		app-compression/cpio
+		app-alternatives/cpio
 		app-lang/perl
-		app-build/bc
+		app-alternatives/bc
+		dev-build/make
 		app-build/bison
 		app-build/flex
-		app-build/make
 		>=lib-core/ncurses-5.2
 		lib-core/elfutils
 		app-dev/pkgconf
 	)"
 
-	SLOT="${PVR}"
+	SLOT=${SLOT:=${PVR}}
 	DESCRIPTION="Sources based on the Linux Kernel"
 	IUSE="symlink build"
 
@@ -730,8 +730,8 @@ fi
 # return header destination directory
 kernel_header_destdir() {
 	[[ ${CTARGET} == ${CHOST} ]] \
-		&& echo /include \
-		|| echo /${CTARGET}/usr/include
+		&& echo /usr/include \
+		|| echo /usr/${CTARGET}/usr/include
 }
 
 # @FUNCTION: cross_pre_c_headers
@@ -876,7 +876,7 @@ install_sources() {
 	dodir /usr/src
 	einfo ">>> Copying sources ..."
 
-	file="$(find ${WORKDIR} -iname "docs" -type d)"
+	file="$(find "${WORKDIR}" -iname "docs" -type d)"
 	if [[ -n ${file} ]]; then
 		for file in $(find ${file} -type f); do
 			echo "${file//*docs\/}" >> "${S}"/patches.txt
@@ -992,6 +992,9 @@ postinst_sources() {
 			fi
 		fi
 	fi
+
+	optfeature "versioned kernel image installation and optionally automating tasks such as generating an initramfs or unified kernel image" \
+		"sys-kernel/installkernel"
 }
 
 # pkg_setup functions

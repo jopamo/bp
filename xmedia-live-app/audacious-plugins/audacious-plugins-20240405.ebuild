@@ -69,10 +69,10 @@ BDEPEND="app-dev/pkgconf"
 src_configure() {
 	local emesonargs=(
 		#gui toolkits
-		-Dgtk=false
-		-Dgtk3=false
-		$(meson_use qt)
-		$(meson_use qt6)
+		-D gtk=false
+		-D gtk3=false
+		-D qt=true
+		-D qt5=true
 
 		#container plugins
 		$(meson_use cue)

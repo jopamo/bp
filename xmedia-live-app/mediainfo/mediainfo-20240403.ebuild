@@ -9,7 +9,7 @@ HOMEPAGE="https://mediaarea.net/mediainfo/ https://github.com/MediaArea/MediaInf
 
 SNAPSHOT=72f9df1430fc259fc583fff9958006c6b976a798
 SRC_URI="https://github.com/MediaArea/MediaInfo/archive/${SNAPSHOT}.tar.gz -> MediaInfo-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/MediaInfo-${SNAPSHOT}"
+S="${WORKDIR}/MediaInfo-${SNAPSHOT}/Project/GNU/CLI/"
 
 LICENSE="BSD-2"
 SLOT="0"

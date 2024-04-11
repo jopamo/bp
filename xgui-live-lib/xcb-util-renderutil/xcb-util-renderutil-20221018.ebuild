@@ -30,8 +30,9 @@ BDEPEND="xgui-live-lib/xcb-util-m4"
 
 src_prepare() {
 	cp "${EROOT}"/usr/share/xcb-util-m4/*.m4 "${S}"/m4/ || die
-	eautoreconf
+
 	default
+	eautoreconf
 }
 
 src_install() {

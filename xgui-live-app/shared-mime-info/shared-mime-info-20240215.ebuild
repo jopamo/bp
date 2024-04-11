@@ -8,19 +8,9 @@ DESCRIPTION="The Shared MIME-info Database specification"
 HOMEPAGE="https://freedesktop.org/wiki/Software/shared-mime-info"
 
 SNAPSHOT=091b9b604fd29b622067afb6a69fb63109c978e5
-SRC_URI="https://gitlab.freedesktop.org/xdg/shared-mime-info/-/archive/${SNAPSHOT}/shared-mime-info-${SNAPSHOT}.tar.bz2 -> shared-mime-info-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/shared-mime-info-${SNAPSHOT}"
+SRC_URI="https://gitlab.freedesktop.org/xdg/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://gitlab.freedesktop.org/xdg/shared-mime-info"
-	inherit
-elif [[ ${PV} == 20* ]]; then
-	SNAPSHOT=091b9b604fd29b622067afb6a69fb63109c978e5
-	SRC_URI="https://gitlab.freedesktop.org/xdg/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-else
-	SRC_URI="https://gitlab.freedesktop.org/xdg/shared-mime-info/-/archive/${PV}/${P}.tar.bz2"
-fi
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -28,3 +18,12 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="lib-core/libxml2"
 DEPEND="lib-live/glib"
+
+src_configure() {
+	local emesonargs=(
+		-D build-tools=false
+		-D build-translations=false
+		-D build-tests=false
+		)
+		meson_src_configure
+}

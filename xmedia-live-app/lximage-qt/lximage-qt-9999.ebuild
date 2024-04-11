@@ -18,18 +18,4 @@ LICENSE="|| ( GPL-2+ LGPL-2.1+ )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="
-	lib-live/glib
-	xgui-live-lib/libX11
-	xgui-live-lib/libXfixes
-	xgui-live-lib/libfm
-	xgui-live-lib/libfm-qt
-	xgui-live-lib/liblxqt
-	xgui-lib/qtbase
-	xgui-lib/qtx11extras
-	xmedia-live-lib/libexif
-"
-BDEPEND="
-	app-dev/lxqt-build-tools
-	app-dev/pkgconf
-"
+BDEPEND="app-dev/lxqt-build-tools"

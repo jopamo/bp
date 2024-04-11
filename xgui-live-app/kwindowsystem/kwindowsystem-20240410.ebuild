@@ -10,7 +10,7 @@ if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/KDE/kwindowsystem"
 	inherit git-r3
 else
-	SNAPSHOT=73aabb04916dd1af1ddda423cae5980e5840fd6c
+	SNAPSHOT=a97292a8f6919e3fed05f72f518e445fb0e78b05
 	SRC_URI="https://github.com/KDE/kwindowsystem/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
@@ -25,12 +25,5 @@ RESTRICT="test"
 
 DEPEND="
 	xgui-live-app/extra-cmake-modules
-	xgui-lib/qtbase
-	X? (
-		xgui-lib/qtx11extras
-		xgui-live-lib/libX11
-		xgui-live-lib/libXfixes
-		xgui-live-lib/libxcb
-		xgui-live-lib/xcb-util-keysyms
-		xgui-live-app/xorgproto
-	)"
+	xgui-live-app/plasma-wayland-protocols
+"

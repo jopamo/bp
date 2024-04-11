@@ -15,11 +15,7 @@ LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="
-	xgui-lib/qtbase
-	xgui-lib/qtsvg
-	xgui-lib/qtx11extras
-	app-compression/libarchive[bsdtar]"
+DEPEND="xgui-lib/qtbase"
 
 src_configure() {
 	eqmake5 arqiver.pro

@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/MediaArea/ZenLib"
 
 SNAPSHOT=26b4aa1853d9b893ce5dd655571dc2673f47aa8e
 SRC_URI="https://github.com/MediaArea/ZenLib/archive/${SNAPSHOT}.tar.gz -> ZenLib-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/ZenLib-${SNAPSHOT}"
+S="${WORKDIR}/ZenLib-${SNAPSHOT}/Project/GNU/Library"
 
 LICENSE="ZLIB"
 SLOT="0"

@@ -139,4 +139,9 @@ src_install() {
 	# install the @golang-rebuild set for Portage
 	insinto /usr/share/portage/config/sets
 	newins "${FILESDIR}"/go-sets.conf go.conf
+
+	cat > "${T}"/99${PN} <<- EOF || die
+		GOPROXY=proxy.golang.org
+	EOF
+	doenvd "${T}"/99${PN}
 }

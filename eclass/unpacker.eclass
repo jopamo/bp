@@ -609,7 +609,7 @@ unpacker_src_uri_depends() {
 	for uri in "$@" ; do
 		case ${uri,,} in
 		*.cpio.*|*.cpio)
-			deps[cpio]="app-alternatives/cpio" ;;
+			deps[cpio]="app-compression/cpio" ;;
 		*.rar)
 			deps[rar]="app-compression/unrar" ;;
 		*.7z)

@@ -13,15 +13,29 @@ find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i '/inherit\ eutils
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i '/inherit\ multilib/d'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/\ multilib//g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/\ readme.gentoo-r1//g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/\$(get_abi_LDFLAGS)/\${LDFLAGS}/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/\$(get_libdir)/lib/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/\${EPREFIX}\$\(qt5_get_libdir\)\/qt5\/bin/\/usr\/bin/g'
+
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/app-alternatives\/bc/app-build\/bc/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/app-alternatives\/ninja/app-dev\/samurai/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/app-alternatives\/cpio/app-compression\/cpio/g'
+
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/app-arch/app-compression/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/app-dev\/ninja/app-dev\/samurai/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/app-portage/app-port/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/app-text/app-tex/g'
+
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/dev-build\/cmake/app-dev\/cmake/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/dev-build\/meson/app-dev\/meson/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/dev-build/app-build/g'
+
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/dev-lang/app-lang/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/dev-libs\/glib/lib-live\/glib/g'
-find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/dev-util\/desktop-file-utils/xgui-misc\/desktop-file-utils/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/dev-util/app-dev/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/dev-util\/desktop-file-utils/xgui-misc\/desktop-file-utils/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/dev-vcs\/git/app-core\/git/g'
+find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/get_abi_CHOST/CHOST/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/media-fonts\/encodings/fonts\/encodings/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/media-libs\/fontconfig/fonts\/fontconfig/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/sys-apps/app-core/g'
@@ -31,10 +45,6 @@ find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/virtual\/libel
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/virtual\/pkgconfig/app-dev\/pkgconf/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/x11-apps\/mkfontscale/xgui-live-app\/mkfontscale/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/x11-misc\/shared-mime-info/xgui-live-app\/shared-mime-info/g'
-find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/\${EPREFIX}\$\(qt5_get_libdir\)\/qt5\/bin/\/usr\/bin/g'
-find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/\$(get_abi_LDFLAGS)/\${LDFLAGS}/g'
-find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/get_abi_CHOST/CHOST/g'
-find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/app-dev\/ninja/app-dev\/samurai/g'
 
 sed -i 's/.*qt5\/bin.*/	echo\ \/usr\/bin/' /var/db/repos/bp/eclass/qmake-utils.eclass
 

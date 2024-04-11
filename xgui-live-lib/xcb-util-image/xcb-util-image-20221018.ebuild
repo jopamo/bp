@@ -24,9 +24,13 @@ DEPEND="${RDEPEND}
 	>=app-dev/gperf-3.0.1
 	test? ( >=lib-live/check-0.9.11 )"
 
+BDEPEND="xgui-live-lib/xcb-util-m4"
+
 src_prepare() {
-	eautoreconf
+	cp "${EROOT}"/usr/share/xcb-util-m4/*.m4 "${S}"/m4/ || die
+
 	default
+	eautoreconf
 }
 
 src_install() {

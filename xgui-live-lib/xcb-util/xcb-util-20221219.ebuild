@@ -25,16 +25,20 @@ DEPEND="${RDEPEND}
 	test? ( >=lib-live/check-0.9.11 )"
 
 PDEPEND="
-	>=xgui-live-lib/xcb-util-cursor-0.1.1:=
-	>=xgui-live-lib/xcb-util-image-${PV}:=
-	>=xgui-live-lib/xcb-util-keysyms-${PV}:=
-	>=xgui-live-lib/xcb-util-renderutil-0.3.9:=
-	>=xgui-live-lib/xcb-util-wm-${PV}:=
+	xgui-live-lib/xcb-util-cursor
+	xgui-live-lib/xcb-util-image
+	xgui-live-lib/xcb-util-keysyms
+	xgui-live-lib/xcb-util-renderutil
+	xgui-live-lib/xcb-util-wm
 "
 
+BDEPEND="xgui-live-lib/xcb-util-m4"
+
 src_prepare() {
-	eautoreconf
+	cp "${EROOT}"/usr/share/xcb-util-m4/*.m4 "${S}"/m4/ || die
+
 	default
+	eautoreconf
 }
 
 src_configure() {

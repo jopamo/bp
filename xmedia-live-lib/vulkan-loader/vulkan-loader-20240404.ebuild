@@ -17,9 +17,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="layers wayland X"
 
-BDEPEND=">=app-dev/cmake-3.10.2"
 DEPEND="${PYTHON_DEPS}
-	>=app-dev/vulkan-headers-${PV}
+	app-dev/vulkan-headers
 	wayland? ( xgui-live-lib/wayland )
 	X? (
 		xgui-live-lib/libX11
@@ -32,7 +31,6 @@ src_configure() {
 	local mycmakeargs=(
 		-DCMAKE_SKIP_RPATH=ON
 		-DBUILD_TESTS=OFF
-		-DBUILD_LOADER=ON
 		-DBUILD_WSI_WAYLAND_SUPPORT=$(usex wayland)
 		-DBUILD_WSI_XCB_SUPPORT=$(usex X)
 		-DBUILD_WSI_XLIB_SUPPORT=$(usex X)

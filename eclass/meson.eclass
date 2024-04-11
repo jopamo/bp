@@ -43,9 +43,9 @@ _MESON_ECLASS=1
 
 inherit flag-o-matic multiprocessing ninja-utils python-utils-r1 toolchain-funcs
 
-BDEPEND=">=dev-build/meson-1.2.3
+BDEPEND=">=app-dev/meson-1.2.3
 	${NINJA_DEPEND}
-	dev-build/meson-format-array
+	app-dev/meson-format-array
 "
 
 # @ECLASS_VARIABLE: BUILD_DIR

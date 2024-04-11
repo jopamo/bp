@@ -67,10 +67,9 @@ RESTRICT="test"
 
 WAF_BINARY="${S}/buildtools/bin/waf"
 
-filter-flags -Wl,-z,defs
-append-ldflags -ltinfo
-
 src_prepare() {
+	filter-flags -Wl,-z,defs
+
 	default
 
 	# un-bundle dnspython

@@ -25,7 +25,7 @@ inherit xdg-utils
 
 # Avoid dependency loop as both depend on glib-2
 [[ ${CATEGORY}/${P} != lib-live/glib-2.* ]] && _XDG_DEPEND="
-	xgui-misc/desktop-file-utils
+	app-dev/desktop-file-utils
 	xgui-live-app/shared-mime-info
 "
 

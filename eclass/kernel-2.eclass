@@ -653,10 +653,10 @@ kernel_is() {
 # Capture the sources type and set DEPENDs
 if [[ ${ETYPE} == sources ]]; then
 	RDEPEND="!build? (
-		app-alternatives/cpio
+		app-compression/cpio
 		app-lang/perl
-		app-alternatives/bc
-		dev-build/make
+		app-build/bc
+		app-build/make
 		app-build/bison
 		app-build/flex
 		>=lib-core/ncurses-5.2

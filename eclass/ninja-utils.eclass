@@ -8,11 +8,11 @@
 # Michał Górny <mgorny@gentoo.org>
 # Mike Gilbert <floppym@gentoo.org>
 # @SUPPORTED_EAPIS: 7 8
-# @BLURB: common bits to run app-alternatives/ninja builder
+# @BLURB: common bits to run app-dev/samurai builder
 # @DESCRIPTION:
 # This eclass provides a single function -- eninja -- that can be used
 # to run the ninja builder alike emake. It does not define any
-# dependencies, you need to depend on app-alternatives/ninja yourself. Since
+# dependencies, you need to depend on app-dev/samurai yourself. Since
 # ninja is rarely used stand-alone, most of the time this eclass will
 # be used indirectly by the eclasses for other build systems (CMake,
 # Meson).
@@ -55,7 +55,7 @@ _NINJA_UTILS_ECLASS=1
 
 inherit multiprocessing
 
-NINJA_DEPEND="app-alternatives/ninja"
+NINJA_DEPEND="app-dev/samurai"
 
 # @FUNCTION: get_NINJAOPTS
 # @DESCRIPTION:

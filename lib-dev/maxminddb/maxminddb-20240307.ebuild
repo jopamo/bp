@@ -9,7 +9,7 @@ inherit autotools
 DESCRIPTION="C library for the MaxMind DB file format"
 HOMEPAGE="https://github.com/maxmind/libmaxminddb"
 SRC_URI="https://github.com/maxmind/libmaxminddb/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/lib${PN}-${SNAPSHOT}
 
 LICENSE="Apache-2.0"
 SLOT="0"

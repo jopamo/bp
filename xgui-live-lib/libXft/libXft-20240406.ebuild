@@ -9,20 +9,13 @@ HOMEPAGE="https://www.x.org/wiki/"
 
 SNAPSHOT=e736f48ba2fd4263ca6f692e27916a914447af4e
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXft/-/archive/${SNAPSHOT}/libXft-${SNAPSHOT}.tar.bz2 -> libXft-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/libXft-${SNAPSHOT}"
+S="${WORKDIR}/libxft-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
-
-DEPEND="
-	xgui-live-lib/libXrender
-	xgui-misc/freetype
-	fonts/fontconfig
-	xgui-live-app/xorgproto
-	fonts/liberation-fonts"
 
 src_prepare() {
 	default

@@ -23,6 +23,8 @@ REQUIRED_USE="
 COMMON_DEPEND="
 	fonts/fontconfig
 	lib-live/glib
+	xmedia-live-lib/graphene
+	app-lang/sassc
 	xgui-live-app/shared-mime-info
 	xgui-live-lib/cairo[glib,svg,X?]
 	xgui-live-lib/gdk-pixbuf

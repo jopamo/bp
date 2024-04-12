@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="Daemon used to register global keyboard shortcuts"
 HOMEPAGE="http://lxqt.org/"
 
-SNAPSHOT=7d54919a839ca884f39a1610bd49b6c1da33f576
+SNAPSHOT=62c91abe8ca5acd0181553f921560f85c588052a
 SRC_URI="https://github.com/lxde/lxqt-globalkeys/archive/${SNAPSHOT}.tar.gz -> lxqt-globalkeys-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/lxqt-globalkeys-${SNAPSHOT}"
 

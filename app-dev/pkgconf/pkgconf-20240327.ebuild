@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="http://git.dereferenced.org/pkgconf/pkgconf.git"
 	inherit git-r3
 else
-	SNAPSHOT=78f3abc9359cbe08258c381445b445206b2a0485
+	SNAPSHOT=06120a8769aed87d50e914f87a6f9f67110cf16e
 	SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

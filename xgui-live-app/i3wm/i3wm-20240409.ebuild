@@ -7,16 +7,9 @@ inherit meson
 DESCRIPTION="A tiling window manager"
 HOMEPAGE="https://swaywm.org"
 
-SNAPSHOT=47cab33aa8b3c8b47e34de6148440a1bc30a2297
+SNAPSHOT=051d3537e3e028c55572658cf154a82b11248d91
 SRC_URI="https://github.com/i3/i3/archive/${SNAPSHOT}.tar.gz -> i3-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/i3-${SNAPSHOT}"
-
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/i3/i3"
-	inherit
-else
-	SRC_URI="https://github.com/i3/i3/releases/download/${PV}/${P}.tar.gz"
-fi
 
 LICENSE="BSD"
 SLOT="0"

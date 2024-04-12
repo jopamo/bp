@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="iscsi client library and utilities"
 HOMEPAGE="https://github.com/sahlberg/libiscsi"
 
-SNAPSHOT=fef688aa99804588c09beb6ef7a3313dc9cf7492
+SNAPSHOT=ec5d33da63e98f9f1f2333094bd597f2b6502643
 SRC_URI="https://github.com/sahlberg/libiscsi/archive/${SNAPSHOT}.tar.gz -> libiscsi-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libiscsi-${SNAPSHOT}"
 
@@ -15,7 +15,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/sahlberg/libiscsi"
 	inherit
 else
-	SNAPSHOT=fef688aa99804588c09beb6ef7a3313dc9cf7492
+	SNAPSHOT=ec5d33da63e98f9f1f2333094bd597f2b6502643
 	SRC_URI="https://github.com/sahlberg/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

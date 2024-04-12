@@ -7,12 +7,9 @@ inherit meson
 DESCRIPTION="Library to handle input devices in Wayland"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/libinput/"
 
-if [[ ${PV} == "9999" ]] ; then
-	EGIT_REPO_URI="https://gitlab.freedesktop.org/libinput/libinput"
-	inherit git-r3
-else
-	SRC_URI="https://www.freedesktop.org/software/libinput/${P}.tar.xz"
-fi
+SNAPSHOT=955158f9824da05dcd71f3e8731cd5d51c3d262f
+SRC_URI="https://gitlab.freedesktop.org/libinput/libinput/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="MIT"
 SLOT="0"

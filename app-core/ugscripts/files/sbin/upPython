@@ -2,28 +2,6 @@
 
 set -e
 
-REPO_PATH="/tmp/gentoo-repo"
-REPO="https://github.com/gentoo/gentoo.git"
-PACKAGE_DIR="/var/db/repos/bp/dev-python"
-
-echo "Starting script execution..."
-echo "Removing the existing ${PACKAGE_DIR} directory to start fresh..."
-rm -rf "${PACKAGE_DIR}"
-
-echo "Creating directory at ${PACKAGE_DIR}..."
-mkdir -p "${PACKAGE_DIR}"
-echo "Directory created or already exists."
-
-if [ -d "${REPO_PATH}" ]; then
-	echo "Updating the Gentoo package repository in ${REPO_PATH}..."
-	cd "${REPO_PATH}" && git pull
-else
-	echo "Cloning the Gentoo package repository to ${REPO_PATH}..."
-	git clone "${REPO}" "${REPO_PATH}" --depth 1
-fi
-
-echo "Repository setup complete."
-
 PACKAGES=(
 	"installer"
 	"jaraco-context"
@@ -31,6 +9,7 @@ PACKAGES=(
 	"PySocks"
 	"appdirs"
 	"autocommand"
+	"backports-tarfile"
 	"build"
 	"certifi"
 	"cffi"
@@ -63,6 +42,7 @@ PACKAGES=(
 	"josepy"
 	"lark"
 	"lxml"
+	"mako"
 	"markupsafe"
 	"more-itertools"
 	"nspektr"
@@ -108,10 +88,35 @@ PACKAGES=(
 	"zstandard"
 )
 
+GENTOO_PATH="/tmp/gentoo-repo"
+PACKAGE_DIR="/var/db/repos/bp/dev-python"
+GIT_USER="1g4-bot"
+GIT_EMAIL="share@1g4.org"
+GIT_SIGN_KEY="AFFCE613154C05AA"
+REPO="https://github.com/gentoo/gentoo.git"
+
+echo "Starting script execution..."
+echo "Removing the existing ${PACKAGE_DIR} directory to start fresh..."
+rm -rf "${PACKAGE_DIR}"
+
+echo "Creating directory at ${PACKAGE_DIR}..."
+mkdir -p "${PACKAGE_DIR}"
+echo "Directory created or already exists."
+
+if [ -d "${GENTOO_PATH}" ]; then
+	echo "Updating the Gentoo package repository in ${GENTOO_PATH}..."
+	cd "${GENTOO_PATH}" && git pull
+else
+	echo "Cloning the Gentoo package repository to ${GENTOO_PATH}..."
+	git clone "${REPO}" "${GENTOO_PATH}" --depth 1
+fi
+
+echo "Repository setup complete."
+
 echo "Starting package copy process..."
 
 for package in "${PACKAGES[@]}"; do
-	src_path="${REPO_PATH}/dev-python/${package}"
+	src_path="${GENTOO_PATH}/dev-python/${package}"
 	dest_path="${PACKAGE_DIR}/${package}"
 
 	echo "Processing ${package}..."
@@ -161,6 +166,10 @@ find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe '
     s/test\?\s*\(\s*\)//g;
 ' {} +
 
+find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe '
+    s/test-rust\?\s*\(\s*\)//g;
+' {} +
+
 for package in cython psutil lxml cffi zstandard; do
 	if [ -d "${PACKAGE_DIR}/${package}" ]; then
 		echo "Updating for ${package}..."
@@ -205,8 +214,6 @@ for package in "${PACKAGES[@]}"; do
 	package_dir="${PACKAGE_DIR}/${package}"
 	if [ -d "${package_dir}" ]; then
 		echo "Processing ${package} in ${package_dir}..."
-
-		# KEYWORDS update
 		echo "Updating KEYWORDS for ${package} in ${package_dir}..."
 		find "${package_dir}" -type f -name "*.ebuild" -exec sed -i'' 's/^KEYWORDS=".*"/KEYWORDS="amd64 arm64"/' {} +
 		echo "KEYWORDS updated for ${package}."
@@ -253,3 +260,64 @@ for package in "${PACKAGES[@]}"; do
 done
 
 echo "Cleanup complete. Script execution finished."
+
+
+generate_manifest() {
+    local package=$1
+    local package_path="${PACKAGE_DIR}/${package}"
+
+    if [ -d "${package_path}" ]; then
+        ebuild "${package_path}"/*.ebuild manifest
+    fi
+}
+
+commit_changes() {
+    local package=$1
+    local package_path="${PACKAGE_DIR}/${package}"
+
+    echo "Committing changes for package: ${package}"
+
+    local ebuild_file=$(find "${package_path}" -type f -name "${package}*.ebuild" | head -n 1)
+    if [[ -z "$ebuild_file" ]]; then
+        echo "Ebuild file not found for ${package}"
+        return 1
+    fi
+
+    local filename=$(basename "$ebuild_file")
+    local version=$(echo $filename | sed -r "s/^${package}-([0-9]+(\.[0-9]+)*(_p[0-9]+)?(-r[0-9]+)?)\.ebuild$/\1/")
+
+    if [[ -z "$version" || "$version" == "$filename" ]]; then
+        echo "Version extraction failed for ${package}"
+        return 1
+    fi
+
+    echo "Version found: ${version}"
+
+    (cd "${package_path}" && git -c user.name="${GIT_USER}" \
+            -c user.email="${GIT_EMAIL}" \
+            -c commit.gpgsign=true \
+            -c user.signingkey="${GIT_SIGN_KEY}" \
+            add . && echo "Added changes to git staging") || return 1
+
+    (cd "${package_path}" && git -c user.name="${GIT_USER}" \
+            -c user.email="${GIT_EMAIL}" \
+            -c commit.gpgsign=true \
+            -c user.signingkey="${GIT_SIGN_KEY}" \
+            commit -m "Update ${package} to ${version}" && echo "Commit successful") || return 1
+
+    (cd "${package_path}" && git push && echo "Push successful") || return 1
+}
+
+main() {
+    echo "Starting script execution..."
+
+    for package in "${PACKAGES[@]}"; do
+        echo "Processing package: ${package}"
+        generate_manifest "${package}" || { echo "Failed to generate manifest for ${package}"; continue; }
+        commit_changes "${package}" || { echo "Failed to commit changes for ${package}"; continue; }
+    done
+
+    echo "Script execution finished."
+}
+
+main "$@"

@@ -20,8 +20,8 @@ SRC_URI="
 "
 S=${WORKDIR}/${MY_P}
 
-SLOT="0"
 LICENSE="BSD"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
@@ -67,6 +67,8 @@ python_test() {
 	local EPYTEST_DESELECT=(
 		# unreliable, fails on x86
 		tests/test_data_structures.py::TestCompressionParameters::test_estimated_compression_context_size
+		# check for bundled zstd version, fails on other system zstd
+		tests/test_module_attributes.py::TestModuleAttributes::test_version
 	)
 
 	rm -rf zstandard || die

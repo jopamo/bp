@@ -7,8 +7,8 @@ inherit meson xdg
 DESCRIPTION="Media player based on MPlayer and mplayer2"
 HOMEPAGE="https://mpv.io/"
 
-SNAPSHOT=a46ce9e28cd97f7280c085649a79f85aa1d0fe70
-SB_SNAPSHOT=a46ce9e28cd97f7280c085649a79f85aa1d0fe70
+SNAPSHOT=a6c38b93a2182d62a8d9b9c9bc73f18a81f24bef
+SB_SNAPSHOT=a6c38b93a2182d62a8d9b9c9bc73f18a81f24bef
 
 SRC_URI="https://github.com/mpv-player/mpv/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz
 		https://codeberg.org/jouni/mpv_sponsorblock_minimal/raw/commit/${SB_SNAPSHOT}/sponsorblock_minimal.lua"

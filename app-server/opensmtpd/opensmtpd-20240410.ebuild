@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SNAPSHOT=584f17d9cf826b2c71c967e8508d4195e2eb4f05
+	SNAPSHOT=d8fc5c5af40d64d0701d17bb35a5de8e7c230fa2
 	SRC_URI="https://github.com/OpenSMTPD/OpenSMTPD/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/OpenSMTPD-${SNAPSHOT}
 fi

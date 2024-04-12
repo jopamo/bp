@@ -14,8 +14,8 @@ HOMEPAGE="
 	https://pypi.org/project/idna/
 "
 
-SLOT="0"
 LICENSE="BSD"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 distutils_enable_tests unittest

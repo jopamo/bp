@@ -4,21 +4,12 @@ EAPI=8
 
 inherit flag-o-matic python-single-r1 user autotools
 
-MY_P=${PN}-${PV/_/}
-
 DESCRIPTION="A validating, recursive and caching DNS resolver"
 HOMEPAGE="http://unbound.net/"
 
-SNAPSHOT=ba16e4116074d4564781d6c8d32421fd2535b743
+SNAPSHOT=04ff2672b5ace3462d2704a17936443cab4110ee
 SRC_URI="https://github.com/NLnetLabs/unbound/archive/${SNAPSHOT}.tar.gz -> unbound-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/unbound-${SNAPSHOT}"
-
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/NLnetLabs/unbound"
-	inherit
-else
-	SRC_URI="http://unbound.net/downloads/${MY_P}.tar.gz"
-fi
 
 LICENSE="BSD GPL-2"
 SLOT="0"

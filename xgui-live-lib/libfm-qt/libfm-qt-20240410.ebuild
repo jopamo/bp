@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="Qt port of libfm, a library providing components to build desktop file managers"
 HOMEPAGE="http://lxqt.org/"
 
-SNAPSHOT=a82a682daf37e0eaba446d1925f61b09c5b79217
+SNAPSHOT=c478c5ee73e45c321cb41534b0ffae67efe8fa81
 SRC_URI="https://github.com/lxqt/libfm-qt/archive/${SNAPSHOT}.tar.gz -> libfm-qt-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libfm-qt-${SNAPSHOT}"
 
@@ -15,7 +15,7 @@ if [[ "${PV}" == "9999" ]]; then
 	inherit
 	EGIT_REPO_URI="https://github.com/lxqt/libfm-qt"
 else
-	SNAPSHOT=a82a682daf37e0eaba446d1925f61b09c5b79217
+	SNAPSHOT=c478c5ee73e45c321cb41534b0ffae67efe8fa81
 	SRC_URI="https://github.com/lxqt/libfm-qt/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

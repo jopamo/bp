@@ -11,7 +11,7 @@ if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/cyrusimap/cyrus-sasl.git"
 	inherit git-r3
 else
-	SNAPSHOT=34ce54223874cb3d994b0c64d71951e6bb6ba936
+	SNAPSHOT=8f578ad02ffdafa26d5c52c4b0a5f03aa5377d35
 	SRC_URI="https://github.com/cyrusimap/cyrus-sasl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

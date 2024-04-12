@@ -13,7 +13,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/mgorny/${PN}.git"
 	inherit git-r3
 else
-	SNAPSHOT=11866c6dfba035a3dbd2d03b0c1d59e72bce1dcf
+	SNAPSHOT=3cc8b2b49bdc30d78671e608bd3a1600e312ee99
 	SRC_URI="https://github.com/mgorny/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"

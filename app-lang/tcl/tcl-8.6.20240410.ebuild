@@ -7,16 +7,9 @@ inherit autotools
 DESCRIPTION="tcltk/tcl - Tool Command Language"
 HOMEPAGE="http://www.tcl.tk/"
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/tcltk/tcl.git"
-	EGIT_BRANCH="core-$(ver_cut 1)-$(ver_cut 2)-branch"
-	S="${WORKDIR}/${P}/unix"
-	inherit git-r3
-else
-	SNAPSHOT=12cf9a5e58c41c6b5edcf26083cb3028b8f7715f
-	SRC_URI="https://github.com/tcltk/tcl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}/unix
-fi
+SNAPSHOT=12cf9a5e58c41c6b5edcf26083cb3028b8f7715f
+SRC_URI="https://github.com/tcltk/tcl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}/unix
 
 LICENSE="tcltk"
 SLOT="0"

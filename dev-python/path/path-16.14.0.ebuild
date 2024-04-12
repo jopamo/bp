@@ -13,8 +13,8 @@ HOMEPAGE="
 	https://pypi.org/project/path/
 "
 
-SLOT="0"
 LICENSE="MIT"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="

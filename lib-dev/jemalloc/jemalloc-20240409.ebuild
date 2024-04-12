@@ -7,18 +7,9 @@ inherit autotools
 DESCRIPTION="Jemalloc is a general-purpose scalable concurrent allocator"
 HOMEPAGE="http://jemalloc.net/ https://github.com/jemalloc/jemalloc"
 
-SNAPSHOT=5081c16bb49a0c9d1dde3cbd7dfb2e97c2827ea4
-SRC_URI="https://github.com/${PN}/jemalloc/archive/${SNAPSHOT}.tar.gz -> jemalloc-${SNAPSHOT}.tar.gz"
+SNAPSHOT=630434bb0ac619f7beec927569782d924c459385
+SRC_URI="https://github.com/jemalloc/jemalloc/archive/${SNAPSHOT}.tar.gz -> jemalloc-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/jemalloc-${SNAPSHOT}"
-
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/${PN}/jemalloc"
-	inherit
-else
-	SNAPSHOT=5081c16bb49a0c9d1dde3cbd7dfb2e97c2827ea4
-	SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
 
 LICENSE="BSD"
 SLOT="0"

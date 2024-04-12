@@ -1,13 +1,12 @@
 #!/bin/bash
 
 REPO_PATH="/var/db/repos/bp"
-REPO_TEMP_DIR="/tmp/repo_temp"
+REPO_TEMP_DIR="/tmp/git_updates"
 
 # Version variables
 GCC_MAJOR_VERSION="12"
 BINUTILS_VERSION="2.41"
 XZ_UTILS_VERSION="5.4"
-DBUS_VERSION="1.15"
 SYSTEMD_VERSION="254"
 UTIL_LINUX_VERSION="2.40"
 OPENSSL_VERSION="3.1"
@@ -83,70 +82,77 @@ clone_or_update_repo() {
 }
 
 update_ebuild() {
-	local package_path="$1"
-	local repo_uri="$2"
-	local branch="$3"
-	local version_name="$4"
-	local use_date_only="$5"
-	local PACKAGE_NAME=$(basename "$package_path")
-	local repo_temp_dir="${REPO_TEMP_DIR}/${PACKAGE_NAME}"
+    local package_path="$1"
+    local repo_uri="$2"
+    local branch="$3"
+    local version_name="$4"
+    local use_date_only="$5"
+    local PACKAGE_NAME=$(basename "$package_path")
+    local repo_temp_dir="${REPO_TEMP_DIR}/${PACKAGE_NAME}"
+    local GIT_USER="1g4-bot"
+    local GIT_EMAIL="share@1g4.org"
+    local GIT_SIGN_KEY="AFFCE613154C05AA"
 
-	echo "Updating ${PACKAGE_NAME}..."
+    echo "Updating ${PACKAGE_NAME}..."
 
-	if [[ ! -d "$repo_temp_dir" ]]; then
-		clone_or_update_repo "$repo_uri" "$repo_temp_dir" "$branch" "v\d+\.\d+"
-	fi
+    if [[ ! -d "$repo_temp_dir" ]]; then
+        clone_or_update_repo "$repo_uri" "$repo_temp_dir" "$branch" "v\d+\.\d+"
+    fi
 
-	latest_commit=$(cd "$repo_temp_dir" && git rev-parse HEAD)
-	latest_commit_date=$(cd "$repo_temp_dir" && git log -n1 --pretty=format:%cd --date=format:%Y%m%d)
+    latest_commit=$(cd "$repo_temp_dir" && git rev-parse HEAD)
+    latest_commit_date=$(cd "$repo_temp_dir" && git log -n1 --pretty=format:%cd --date=format:%Y%m%d)
 
-	if [[ -z "$latest_commit" ]] || [[ -z "$latest_commit_date" ]]; then
-		echo "Failed to fetch latest commit or date from Git repository: $repo_uri"
-		return 1
-	fi
+    if [[ -z "$latest_commit" ]] || [[ -z "$latest_commit_date" ]]; then
+        echo "Failed to fetch latest commit or date from Git repository: $repo_uri"
+        return 1
+    fi
 
-	echo "Latest commit: $latest_commit"
-	echo "Latest commit date: $latest_commit_date"
+    echo "Latest commit: $latest_commit"
+    echo "Latest commit date: $latest_commit_date"
 
-	local ebuild_file=$(find "$package_path" -maxdepth 1 -type f -name "${PACKAGE_NAME}-*.ebuild" | sort | tail -n 1)
-	if [[ -z "$ebuild_file" ]]; then
-		echo "No ebuild file found for ${PACKAGE_NAME}."
-		return 1
-	fi
+    local ebuild_file=$(find "$package_path" -maxdepth 1 -type f -name "${PACKAGE_NAME}-*.ebuild" | sort | tail -n 1)
+    if [[ -z "$ebuild_file" ]]; then
+        echo "No ebuild file found for ${PACKAGE_NAME}."
+        return 1
+    fi
 
-	sed -i "s/SNAPSHOT=.*/SNAPSHOT=${latest_commit}/" "$ebuild_file"
+    sed -i "s/SNAPSHOT=.*/SNAPSHOT=${latest_commit}/" "$ebuild_file"
 
-	local version
-	if [[ "$use_date_only" == "yes" ]]; then
-		version="${latest_commit_date}"
-	else
-		version="${version_name}.${latest_commit_date}"
-	fi
+    local version
+    if [[ "$use_date_only" == "yes" ]]; then
+        version="${latest_commit_date}"
+    else
+        version="${version_name}.${latest_commit_date}"
+    fi
 
-	local new_ebuild_filename="${PACKAGE_NAME}-${version}.ebuild"
-	local new_ebuild_file="${package_path}/${new_ebuild_filename}"
+    local new_ebuild_filename="${PACKAGE_NAME}-${version}.ebuild"
+    local new_ebuild_file="${package_path}/${new_ebuild_filename}"
 
-	if [[ -f "$new_ebuild_file" ]]; then
-		echo "Ebuild file ${new_ebuild_filename} is already latest."
-		return 0
-	fi
+    if [[ -f "$new_ebuild_file" ]]; then
+        echo "Ebuild file ${new_ebuild_filename} is already latest."
+        return 0
+    fi
 
-	mv "$ebuild_file" "$new_ebuild_file"
-	(cd "$REPO_PATH" && repoman manifest)
-	(cd "$REPO_PATH" && \
-		git -c user.name="1g4-bot" \
-			-c user.email="share@1g4.org" \
-			-c commit.gpgsign=true \
-			-c user.signingkey=AFFCE613154C05AA \
-			add . && \
-		git -c user.name="1g4-bot" \
-			-c user.email="share@1g4.org" \
-			-c commit.gpgsign=true \
-			-c user.signingkey=AFFCE613154C05AA \
-			commit -m "Update ${PACKAGE_NAME} to ${version}" && \
-		git push)
+    mv "$ebuild_file" "$new_ebuild_file"
 
-	echo "Ebuild updated for ${PACKAGE_NAME}: ${new_ebuild_filename}"
+    if ! (cd "$package_path" && repoman manifest); then
+        echo "Error generating manifest for ${PACKAGE_NAME}. Skipping..."
+        return 1
+    fi
+
+    (cd "$package_path" && \
+        git add --all . && \
+        git -c user.name="$GIT_USER" \
+            -c user.email="$GIT_EMAIL" \
+            -c commit.gpgsign=true \
+            -c user.signingkey="$GIT_SIGN_KEY" \
+            commit -m "Update ${PACKAGE_NAME} to ${version}" && \
+        git -c user.name="$GIT_USER" \
+            -c user.email="$GIT_EMAIL" \
+            -c user.signingkey="$GIT_SIGN_KEY" \
+            push origin HEAD)
+
+    echo "Ebuild updated for ${PACKAGE_NAME}: ${new_ebuild_filename}"
 }
 
 if [[ $update_toolchain == true ]]; then
@@ -204,6 +210,7 @@ update_ebuild "${REPO_PATH}/app-core/install-xattr" "https://github.com/gentoo/e
 update_ebuild "${REPO_PATH}/app-core/kmod" "https://github.com/kmod-project/kmod" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-core/lsof" "https://github.com/lsof-org/lsof" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-core/pciutils" "https://github.com/pciutils/pciutils" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-core/pciids" "https://github.com/pciutils/pciids" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-core/portage" "https://github.com/gentoo/portage" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-core/procps" "https://gitlab.com/procps-ng/procps" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-core/runit" "https://github.com/void-linux/runit" "master" "0" "yes"
@@ -226,7 +233,6 @@ update_ebuild "${REPO_PATH}/app-dev/opencl-headers" "https://github.com/KhronosG
 update_ebuild "${REPO_PATH}/app-dev/patchelf" "https://github.com/NixOS/patchelf" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-dev/pkgconf" "https://github.com/pkgconf/pkgconf" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-dev/radare2" "https://github.com/radare/radare2" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-dev/repo" "https://github.com/GerritCodeReview/git-repo" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/app-dev/repo" "https://github.com/GerritCodeReview/git-repo" "stable" "0" "yes"
 update_ebuild "${REPO_PATH}/app-dev/samurai" "https://github.com/michaelforney/samurai" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-dev/spirv-headers" "https://github.com/KhronosGroup/SPIRV-Headers" "main" "0" "yes"

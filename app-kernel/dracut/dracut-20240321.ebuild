@@ -7,14 +7,9 @@ inherit linux-info toolchain-funcs
 DESCRIPTION="Generic initramfs generation tool"
 HOMEPAGE="https://dracut.wiki.kernel.org"
 
-if [[ ${PV} == 9999 ]] ; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/dracutdevs/dracut"
-else
-	[[ "${PV}" = *_rc* ]] || \
-	KEYWORDS="amd64 arm64"
-	SRC_URI="mirror://kernel/linux/utils/boot/${PN}/${P}.tar.xz"
-fi
+SNAPSHOT=5d2bda46f4e75e85445ee4d3bd3f68bf966287b9
+SRC_URI="https://github.com/dracutdevs/dracut/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="VTE provides a virtual terminal widget for GTK applications."
 HOMEPAGE="https://github.com/GNOME/vte"
 
-SNAPSHOT=2acd77061f47a4a7174418795fd087394d58f1f0
+SNAPSHOT=5131bfb2a835341f5ba59976ae79b18c0f047ecf
 SRC_URI="https://github.com/GNOME/vte/archive/${SNAPSHOT}.tar.gz -> vte-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/vte-${SNAPSHOT}"
 

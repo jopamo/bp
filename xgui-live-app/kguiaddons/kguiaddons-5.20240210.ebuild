@@ -6,17 +6,12 @@ inherit cmake xdg
 
 DESCRIPTION="Framework providing assorted high-level user interface components"
 
-if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/KDE/${PN}"
-	inherit git-r3
-else
-	SNAPSHOT=0efca934f0fd69e93f4339b4c73f85adb3e0f478
-	SRC_URI="https://github.com/KDE/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=74d5ce9fdb436ae947e88dbb81ea5d0acf48a4c4
+SRC_URI="https://github.com/KDE/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="LGPL-2+"
-SLOT="0"
+SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
 IUSE="wayland"

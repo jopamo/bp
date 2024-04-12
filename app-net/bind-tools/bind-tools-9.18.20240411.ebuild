@@ -18,7 +18,7 @@ KEYWORDS="amd64 arm64"
 IUSE="+doh headers +json-c readline +xml"
 
 DEPEND="
-	lib-dev/libmaxminddb
+	lib-dev/maxminddb
 	lib-core/libseccomp
 	lib-core/zlib
 	virtual/ssl

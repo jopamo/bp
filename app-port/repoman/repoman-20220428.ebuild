@@ -8,11 +8,11 @@ DESCRIPTION="Repoman is a Quality Assurance tool for Gentoo ebuilds"
 HOMEPAGE="https://wiki.gentoo.org/wiki/Project:Portage"
 
 if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/gentoo/portage.git"
-	inherit git-r3
+	EGIT_REPO_URI="https://github.com/gentoo/portage"
+	inherit
 	S="${WORKDIR}/${P}/repoman"
 else
-	SNAPSHOT=08a2bc3800ea2e997716903244ec041339b45b06
+	SNAPSHOT=605ad0d675a64eb39144122cf284100192cdfea0
 	SRC_URI="https://github.com/gentoo/portage/archive/${SNAPSHOT}.tar.gz -> portage-${PV}.tar.gz"
 	S=${WORKDIR}/portage-${SNAPSHOT}/repoman
 fi

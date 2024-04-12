@@ -2,18 +2,16 @@
 
 EAPI=8
 
-inherit xdg qmake-utils autotools user flag-o-matic
+inherit xdg git-r3 qmake-utils autotools user flag-o-matic
 
 DESCRIPTION="BitTorrent client in C++ and Qt"
 HOMEPAGE="https://www.qbittorrent.org/"
-
-SNAPSHOT=67dfce74379436cdbb7b36c219be55ad4068c753
-SRC_URI="https://github.com/qbittorrent/qBittorrent/archive/${SNAPSHOT}.tar.gz -> qBittorrent-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/qBittorrent-${SNAPSHOT}"
+EGIT_REPO_URI="https://github.com/qbittorrent/qBittorrent"
+EGIT_BRANCH="v$(ver_cut 1)_$(ver_cut 2)_x"
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="createuser debug systemd qt5 webui"
 
@@ -26,7 +24,7 @@ DEPEND="
 "
 
 pkg_setup() {
-	use createuser && enewuser ${PN} /usr/sbin/nologin "/var/lib/${PN}" ${PN}
+	use createuser && enewuser qbittorrent /usr/sbin/nologin "/var/lib/qbittorrent" qbittorrent
 }
 
 src_prepare() {
@@ -55,6 +53,6 @@ src_install() {
 	if use systemd; then
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
-		doins "${FILESDIR}/${PN}.service"
+		doins "${FILESDIR}/qbittorrent.service"
 	fi
 }

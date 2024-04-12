@@ -7,8 +7,8 @@ inherit cmake flag-o-matic
 DESCRIPTION="LXQt desktop panel and plugins"
 HOMEPAGE="http://lxqt.org/"
 
-SNAPSHOT=2a1fb64487454c6c7f90d18e3cd5f4617e92ae9f
-SRC_URI="https://github.com/lxde/lxqt-panel/archive/${SNAPSHOT}.tar.gz -> lxqt-panel-${SNAPSHOT}.tar.gz"
+SNAPSHOT=371f60fa806a89779a9c90ed5a1dce7b92126e0b
+SRC_URI="https://github.com/lxqt/lxqt-panel/archive/${SNAPSHOT}.tar.gz -> lxqt-panel-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/lxqt-panel-${SNAPSHOT}"
 
 LICENSE="LGPL-2.1+"
@@ -24,11 +24,11 @@ DEPEND="
 	lib-live/glib
 	lib-live/libqtxdg
 	xgui-live-app/kguiaddons
-	xgui-live-app/kwindowsystem
+	xgui-live-app/kwindowsystem:5
 	xgui-live-lib/libX11
 	xgui-live-lib/liblxqt
 	xgui-live-lib/lxqt-globalkeys
-	xgui-lib/qtbase
+	xgui-lib/qtbase:5
 	xgui-misc/menu-cache
 	cpuload? ( lib-core/libstatgrab )
 	kbindicator? ( xgui-live-lib/libxkbcommon )
@@ -46,9 +46,9 @@ RDEPEND="
 	xgui-live-lib/lxqt-menu-data
 "
 
-filter-flags -Wl,-z,defs
-
 src_configure() {
+	filter-flags -Wl,-z,defs
+
 	local mycmakeargs=(
 		$(usex clock '-DWORLDCLOCK_PLUGIN=ON' '-DWORLDCLOCK_PLUGIN=OFF')
 		$(usex colorpicker '-DCOLORPICKER_PLUGIN=ON' '-DCOLORPICKER_PLUGIN=OFF')

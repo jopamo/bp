@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson
+inherit meson flag-o-matic
 
 DESCRIPTION="VTE provides a virtual terminal widget for GTK applications."
 HOMEPAGE="https://github.com/GNOME/vte"
@@ -16,6 +16,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 src_configure() {
+	filter-flags -flto*
+
 	local emesonargs=(
 		-Dicu=false
 		-Dvapi=false

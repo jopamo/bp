@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 RESTRICT="test"
 
-DEPEND="~app-dev/spirv-headers-9999"
+DEPEND="app-dev/spirv-headers"
 
 src_configure() {
 	local mycmakeargs=(

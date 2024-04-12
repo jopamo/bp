@@ -7,7 +7,7 @@ inherit xdg meson
 DESCRIPTION="The Shared MIME-info Database specification"
 HOMEPAGE="https://freedesktop.org/wiki/Software/shared-mime-info"
 
-SNAPSHOT=091b9b604fd29b622067afb6a69fb63109c978e5
+SNAPSHOT=9c10195039b339132cf7bd116ee1123791e053c7
 SRC_URI="https://gitlab.freedesktop.org/xdg/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

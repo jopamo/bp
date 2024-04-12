@@ -7,7 +7,7 @@ inherit flag-o-matic
 DESCRIPTION="Library to execute a function when a specific event occurs on a file descriptor"
 HOMEPAGE="http://libevent.org/"
 
-SNAPSHOT=39073df8318364fc868ab6d90a345ea4fc66e864
+SNAPSHOT=c6e8f17541b99e8c3a089a1c6f70119d6f95db9d
 SRC_URI="https://github.com/libevent/libevent/archive/${SNAPSHOT}.tar.gz -> libevent-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libevent-${SNAPSHOT}"
 
@@ -15,7 +15,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/libevent/libevent"
 	inherit autotools
 elif [[ ${PV} == 20* ]]; then
-	SNAPSHOT=39073df8318364fc868ab6d90a345ea4fc66e864
+	SNAPSHOT=c6e8f17541b99e8c3a089a1c6f70119d6f95db9d
 	SRC_URI="https://github.com/libevent/libevent/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	inherit autotools

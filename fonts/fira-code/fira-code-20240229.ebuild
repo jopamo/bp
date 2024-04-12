@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/tonsky/FiraCode.git"
 	inherit git-r3
 elif [[ ${PV} == 20* ]]; then
-	SNAPSHOT=f1f97679985487deaa1f7f178f36f4a1a7910154
+	SNAPSHOT=34cced2a1235e2035fb1f258f228b0ed584b8911
 	SRC_URI="https://github.com/tonsky/FiraCode/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/FiraCode-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"

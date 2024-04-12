@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# please keep this ebuild at EAPI 7 -- sys-apps/portage dep
-EAPI=7
+# please keep this ebuild at EAPI 8 -- sys-apps/portage dep
+EAPI=8
 
 DISTUTILS_USE_PEP517=flit
 PYPI_NO_NORMALIZE=1
@@ -19,6 +19,17 @@ HOMEPAGE="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+RDEPEND="
+	$(python_gen_cond_dep '
+		dev-python/backports-tarfile[${PYTHON_USEDEP}]
+	' 3.10 3.11)
+"
+BDEPEND="
+	test? (
+		dev-python/portend[${PYTHON_USEDEP}]
+	)
+"
 
 distutils_enable_tests pytest
 

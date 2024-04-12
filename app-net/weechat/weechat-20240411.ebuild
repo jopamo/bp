@@ -7,12 +7,9 @@ inherit cmake python-single-r1 xdg
 DESCRIPTION="Portable and multi-interface IRC client"
 HOMEPAGE="https://weechat.org/"
 
-if [[ ${PV} == "9999" ]] ; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/weechat/weechat.git"
-else
-	SRC_URI="https://weechat.org/files/src/${P}.tar.xz"
-fi
+SNAPSHOT=c112d0aafafc253a88cf5fd195719a490318cb2c
+SRC_URI="https://github.com/weechat/weechat/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-3"
 SLOT="0"

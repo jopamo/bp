@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X.Org Xft library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=4e4210c86019b42c3819cc18b59f86752fcd8b13
+SNAPSHOT=e736f48ba2fd4263ca6f692e27916a914447af4e
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXft/-/archive/${SNAPSHOT}/libXft-${SNAPSHOT}.tar.bz2 -> libXft-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libXft-${SNAPSHOT}"
 

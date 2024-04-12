@@ -7,15 +7,9 @@ inherit user toolchain-funcs autotools
 DESCRIPTION="Lightweight but featured SMTP daemon from OpenBSD"
 HOMEPAGE="https://www.opensmtpd.org"
 
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/OpenSMTPD/OpenSMTPD.git"
-	inherit git-r3
-	KEYWORDS=""
-else
-	SNAPSHOT=d8fc5c5af40d64d0701d17bb35a5de8e7c230fa2
-	SRC_URI="https://github.com/OpenSMTPD/OpenSMTPD/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/OpenSMTPD-${SNAPSHOT}
-fi
+SNAPSHOT=d8fc5c5af40d64d0701d17bb35a5de8e7c230fa2
+SRC_URI="https://github.com/OpenSMTPD/OpenSMTPD/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/OpenSMTPD-${SNAPSHOT}
 
 LICENSE="ISC BSD BSD-1 BSD-2 BSD-4"
 SLOT="0"

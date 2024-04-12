@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="A standalone library to implement GNU libc's obstack."
 HOMEPAGE="https://github.com/void-linux/musl-obstack"
 
-SNAPSHOT=f4385255be1615688c6a5f042277304d7ab288b1
+SNAPSHOT=362629706cb24a68b5e02876f0250df95e2e3f8d
 SRC_URI="https://github.com/void-linux/musl-obstack/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

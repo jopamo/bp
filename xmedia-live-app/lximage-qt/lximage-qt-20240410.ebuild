@@ -7,12 +7,9 @@ inherit cmake xdg
 DESCRIPTION="Lightweight Qt image viewer from the LXQt Project"
 HOMEPAGE="http://lxqt.org/"
 
-if [[ ${PV} == *9999 ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/lxqt/${PN}.git"
-else
-	SRC_URI="https://github.com/lxqt/${PN}/releases/download/${PV}/${P}.tar.xz"
-fi
+SNAPSHOT=946249943889bc6449b40b6a59917ab0e2343361
+SRC_URI="https://github.com/lxqt/lximage-qt/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/lximage-qt-${SNAPSHOT}
 
 LICENSE="|| ( GPL-2+ LGPL-2.1+ )"
 SLOT="0"

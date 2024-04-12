@@ -7,14 +7,9 @@ inherit toolchain-funcs flag-o-matic autotools
 DESCRIPTION="WLAN tools for breaking 802.11 WEP/WPA keys"
 HOMEPAGE="http://www.aircrack-ng.org"
 
-if [[ ${PV} == "9999" ]] ; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/aircrack-ng/aircrack-ng.git"
-else
-	MY_PV=${PV/_/-}
-	SRC_URI="http://download.${PN}.org/${PN}-${MY_PV}.tar.gz"
-	S="${WORKDIR}/${PN}-${MY_PV}"
-fi
+SNAPSHOT=6e2871e7e57dc301b24229730c3cce1528602e98
+SRC_URI="https://github.com/aircrack-ng/aircrack-ng/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

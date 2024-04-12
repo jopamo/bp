@@ -7,12 +7,9 @@ inherit linux-info autotools flag-o-matic
 DESCRIPTION="X.org input driver based on libinput"
 HOMEPAGE="https://www.x.org"
 
-if [[ ${PV} == "9999" ]] ; then
-	EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/driver/xf86-input-libinput.git"
-	inherit git-r3
-else
-	SRC_URI="https://www.x.org/releases/individual/driver/${P}.tar.bz2"
-fi
+SNAPSHOT=b791b30b1f384d327c001cfb821ed34b2c2174a5
+SRC_URI="https://gitlab.freedesktop.org/xorg/driver/xf86-input-libinput/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

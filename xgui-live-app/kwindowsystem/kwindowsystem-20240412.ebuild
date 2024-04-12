@@ -10,7 +10,7 @@ if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/KDE/kwindowsystem"
 	inherit git-r3
 else
-	SNAPSHOT=a97292a8f6919e3fed05f72f518e445fb0e78b05
+	SNAPSHOT=72e0e42fe8dea55b9303f4943836794a62190e48
 	SRC_URI="https://github.com/KDE/kwindowsystem/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

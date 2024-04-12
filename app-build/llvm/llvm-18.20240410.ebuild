@@ -54,12 +54,17 @@ src_configure() {
 	use polly && LLVM_PROJECTS+=";polly"
 	use pstl && LLVM_PROJECTS+=";pstl"
 
-	filter-flags -flto*
 	filter-flags -D_FORTIFY_SOURCE*
 	filter-flags -Wl,-z,defs
-	filter-flags -fstack-protector-strong
 	filter-flags -fassociative-math
+	filter-flags -fgraphite-identity
+	filter-flags -flto*
 	filter-flags -fno-semantic-interposition
+	filter-flags -fstack-protector-strong
+    filter-flags -fgraphite-identity
+    filter-flags -fipa-pta
+    filter-flags -floop-nest-optimize
+    filter-flags -ftree-loop-distribution
 
 	local mycmakeargs=(
 		-DLLVM_ENABLE_PROJECTS="${LLVM_PROJECTS}"
@@ -94,7 +99,6 @@ src_configure() {
 }
 
 src_test() {
-	# respect TMPDIR!
 	local -x LIT_PRESERVES_TMP=1
 	cmake_src_make check
 }

@@ -7,7 +7,7 @@ inherit meson toolchain-funcs xdg flag-o-matic
 DESCRIPTION="Wayland reference compositor"
 HOMEPAGE="https://wayland.freedesktop.org/ https://gitlab.freedesktop.org/wayland/weston"
 
-SNAPSHOT=de8e3168f033e835e90a8571ec787ffbe171bd26
+SNAPSHOT=2d3cca3d3e2db8c56cf1b79722f50956b2e2cd25
 SRC_URI="https://gitlab.freedesktop.org/wayland/weston/-/archive/${SNAPSHOT}/weston-${SNAPSHOT}.tar.bz2 -> weston-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/weston-${SNAPSHOT}"
 

@@ -7,12 +7,9 @@ inherit cmake
 DESCRIPTION="Common base library for the LXQt desktop environment"
 HOMEPAGE="http://lxqt.org/"
 
-if [[ ${PV} = *9999 ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://www.github.com/lxqt/${PN}.git"
-else
-	SRC_URI="https://github.com/lxqt/liblxqt/releases/download/${PV}/${P}.tar.xz"
-fi
+SNAPSHOT=814c405bb07220bb6c497e3856fdaf3595951307
+SRC_URI="https://github.com/lxqt/liblxqt/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2 LGPL-2.1+"
 SLOT="0"

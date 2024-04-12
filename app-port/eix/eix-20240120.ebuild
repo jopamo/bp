@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=5f42263298db3fbb1e2780acc59be1ff8146abd8
+SNAPSHOT=0840deb5d286de5674b4d9b9d72cb08bea947373
 
 inherit meson
 

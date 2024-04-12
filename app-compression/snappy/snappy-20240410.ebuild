@@ -7,12 +7,9 @@ inherit cmake
 DESCRIPTION="A high-speed compression/decompression library by Google"
 HOMEPAGE="https://github.com/google/snappy"
 
-if [[ ${PV} == *9999 ]] ; then
-	EGIT_REPO_URI="https://github.com/google/${PN}.git"
-	inherit git-r3
-else
-	SRC_URI="https://github.com/google/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-fi
+SNAPSHOT=52820ea9c6cb0af6ebe4920f806dbfbb0de9eaab
+SRC_URI="https://github.com/google/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="BSD"
 SLOT="0"

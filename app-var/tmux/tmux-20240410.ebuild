@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Terminal multiplexer"
 HOMEPAGE="https://tmux.github.io/"
 
-SNAPSHOT=4bb6da75bada96b3fa5086487ad0f241dea874bb
+SNAPSHOT=43530d4397f94beed27acb8f5610338b6dbcc05a
 SRC_URI="https://github.com/tmux/tmux
 https://github.com/tmux/tmux/archive/${SNAPSHOT}.tar.gz -> tmux-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/tmux-${SNAPSHOT}"
@@ -16,7 +16,7 @@ if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/tmux/tmux"
 	inherit
 else
-	SNAPSHOT=4bb6da75bada96b3fa5086487ad0f241dea874bb
+	SNAPSHOT=43530d4397f94beed27acb8f5610338b6dbcc05a
 	SRC_URI="https://github.com/tmux/tmux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

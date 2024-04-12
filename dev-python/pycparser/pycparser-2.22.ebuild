@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# please keep this ebuild at EAPI 7 -- sys-apps/portage dep
-EAPI=7
+# please keep this ebuild at EAPI 8 -- sys-apps/portage dep
+EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{10..12} pypy3 )
@@ -28,11 +28,6 @@ BDEPEND="
 distutils_enable_tests unittest
 
 python_prepare_all() {
-	local PATCHES=(
-		# https://github.com/eliben/pycparser/pull/494
-		"${FILESDIR}"/${P}-lextab-cache.patch
-	)
-
 	# remove the original files to guarantee their regen
 	rm pycparser/{c_ast,lextab,yacctab}.py || die
 

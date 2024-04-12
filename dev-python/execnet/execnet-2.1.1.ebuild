@@ -26,6 +26,11 @@ distutils_enable_sphinx doc
 distutils_enable_tests pytest
 
 python_test() {
+	# the test suite checks if bytecode writing can be disabled/enabled
 	local -x PYTHONDONTWRITEBYTECODE=
-	epytest testing
+	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
+	# some tests are implicitly run against both sys.executable
+	# and pypy3, which is redundant and results in pypy3 bytecode being
+	# written to cpython install dirs
+	epytest testing -k "not pypy3"
 }

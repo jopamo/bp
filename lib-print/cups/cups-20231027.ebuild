@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=ec055da6794984133d48cc376f04e10af62b64dc
+SNAPSHOT=a8968fc4257322b1e4e191c4bccedea98d7b053e
 
 inherit autotools linux-info user toolchain-funcs
 

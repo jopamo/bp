@@ -9,7 +9,7 @@ HOMEPAGE="https://www.x.org/wiki/"
 
 SNAPSHOT=1192d3bc407348ff316bd3bffc791b3ac73f591b
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXdmcp/-/archive/${SNAPSHOT}/libXdmcp-${SNAPSHOT}.tar.bz2 -> libXdmcp-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/libXdmcp-${SNAPSHOT}"
+S="${WORKDIR}/libxdmcp-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

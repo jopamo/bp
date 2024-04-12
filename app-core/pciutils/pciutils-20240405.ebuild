@@ -7,17 +7,9 @@ inherit toolchain-funcs flag-o-matic
 DESCRIPTION="A library and various utilities dealing with the PCI bus"
 HOMEPAGE="http://mj.ucw.cz/sw/pciutils/ https://git.kernel.org/?p=utils/pciutils/pciutils.git"
 
-if [[ ${PV} == *9999 ]] ; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/pciutils/pciutils.git"
-else
-	SNAPSHOT=db43fb5e8f2c04c409bdd06ac2c2828685038d69
-	PCIIDS_SNAPSHOT=a51e65d2e549513ed8f46eb4ff28cf0201e82a3d
-	SRC_URI="
-		https://github.com/pciutils/pciutils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz
-		https://github.com/pciutils/pciids/archive/${PCIIDS_SNAPSHOT}.tar.gz -> pciids-${PCIIDS_SNAPSHOT}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=1eb123d944466ece1daea28a39cfca756a87d18e
+SRC_URI="https://github.com/pciutils/pciutils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -26,6 +18,7 @@ KEYWORDS="amd64 arm64"
 IUSE="dns kmod static-libs +udev zlib"
 
 DEPEND="
+	app-core/pciids
 	kmod? ( app-core/kmod
 			app-dev/pkgconf
 		 )
@@ -47,11 +40,10 @@ src_prepare() {
 		cp -pPR "${S}" "${S}.static" || die
 		mv "${S}.static" "${S}/static" || die
 	fi
-	cp "${WORKDIR}/pciids-${PCIIDS_SNAPSHOT}/pci.ids" "${S}"/ || die
 }
 
 src_configure() {
-	append-lfs-flags #471102
+	append-lfs-flags
 }
 
 pemake() {
@@ -70,7 +62,7 @@ pemake() {
 		STRIP="" \
 		ZLIB=$(usex zlib) \
 		PCI_COMPRESSED_IDS=0 \
-		PCI_IDS=pci.ids \
+		PCI_IDS="/usr/share/hwdata/pci.ids" \
 		LIBDIR="\${PREFIX}/lib" \
 		LIBKMOD=$(usex kmod) \
 		HWDB=$(usex udev) \

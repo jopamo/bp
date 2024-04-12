@@ -2,17 +2,14 @@
 
 EAPI=8
 
-inherit meson git-r3
+inherit meson
 
 DESCRIPTION="X.Org xkbcommon library"
 HOMEPAGE="https://xkbcommon.org/"
 
-if [[ ${PV} == "9999" ]] ; then
-	EGIT_REPO_URI="https://github.com/xkbcommon/${PN}.git"
-	inherit git-r3
-else
-	SRC_URI="https://xkbcommon.org/download/${P}.tar.xz"
-fi
+SNAPSHOT=4052a645d2c7ed53270fa2bc0c8290a4908d836b
+SRC_URI="https://github.com/xkbcommon/libxkbcommon/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="MIT"
 SLOT="0"

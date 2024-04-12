@@ -10,7 +10,7 @@ if [[ "${PV}" == *9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/michaelforney/samurai.git"
 else
-	SNAPSHOT=2d05a9ac47794131efeb59e7dc4ee99287738c9c
+	SNAPSHOT=189023533035ecc30848ba8dffc25c9139928f89
 	SRC_URI="https://github.com/michaelforney/samurai/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/samurai-${SNAPSHOT}
 fi

@@ -11,7 +11,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/rpm-software-management/popt.git"
 	inherit git-r3
 else
-	SNAPSHOT=9a2e28a25af346f0f8f488b24a0975a005693999
+	SNAPSHOT=1e7bc3883afe26c60c511bd4caf2f3c37803c06f
 	SRC_URI="https://github.com/rpm-software-management/popt/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/popt-${SNAPSHOT}
 fi

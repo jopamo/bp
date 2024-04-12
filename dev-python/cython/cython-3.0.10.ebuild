@@ -33,7 +33,7 @@ BDEPEND="
 	${RDEPEND}
 	test? (
 		$(python_gen_cond_dep '
-			dev-python/numpy[${PYTHON_USEDEP}]
+			<dev-python/numpy-2[${PYTHON_USEDEP}]
 		' "${PYTHON_TESTED[@]}")
 	)
 "

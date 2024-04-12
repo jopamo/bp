@@ -35,10 +35,9 @@ BDEPEND="
 		>=dev-python/pytest-rerunfailures-9.1[${PYTHON_USEDEP}]
 		>=dev-python/pytest-xdist-1.34[${PYTHON_USEDEP}]
 		>=dev-python/setuptools-56.0.0[${PYTHON_USEDEP}]
+		>=dev-python/virtualenv-20.0.35[${PYTHON_USEDEP}]
 		>=dev-python/wheel-0.36.0[${PYTHON_USEDEP}]
-		test-rust? (
-			dev-python/uv
-		)
+		
 	)
 "
 
@@ -59,11 +58,12 @@ python_test() {
 		# Internet
 		'tests/test_main.py::test_verbose_output[False-0]'
 		'tests/test_main.py::test_verbose_output[False-1]'
+		# broken by uv being installed outside venv
+		tests/test_env.py::test_external_uv_detection_success
 	)
 
-	if ! has_version ">=dev-python/uv-0.1.18"; then
+	if ! has_version "dev-python/uv"; then
 		EPYTEST_DESELECT+=(
-			tests/test_env.py::test_external_uv_detection_success
 			tests/test_env.py::test_uv_impl_install_cmd_well_formed
 			'tests/test_env.py::test_venv_creation[uv-venv+uv-None]'
 		)

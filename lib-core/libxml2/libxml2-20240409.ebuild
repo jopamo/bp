@@ -7,18 +7,13 @@ inherit python-r1 autotools flag-o-matic prefix
 DESCRIPTION="Version 2 of the library to manipulate XML files"
 HOMEPAGE="http://www.xmlsoft.org/"
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git"
-	inherit git-r3
-else
-	SNAPSHOT=f369154fce7aca8a0ba982ec45953c2b07434cf8
-	SRC_URI="https://gitlab.gnome.org/GNOME/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64"
-fi
+SNAPSHOT=20b0bd9800ae83cbd70f4407ce67058164e16227
+SRC_URI="https://gitlab.gnome.org/GNOME/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="MIT"
 SLOT="2"
+KEYWORDS="amd64 arm64"
 
 IUSE="debug icu ipv6 lzma readline static-libs"
 

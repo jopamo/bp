@@ -14,7 +14,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="$(ver_cut 1-2)"
 	inherit git-r3
 else
-	SNAPSHOT=193a24bb80fb6a73a2f9ff52bdc14ea597aa1fe3
+	SNAPSHOT=9376a9f0d85d0e7cd54f5aa010ff057700916c93
 	SRC_URI="https://github.com/python/cpython/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/c${PN}-${SNAPSHOT}
 fi

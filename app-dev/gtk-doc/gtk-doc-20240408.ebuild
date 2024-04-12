@@ -7,7 +7,10 @@ inherit python-single-r1 git-r3 autotools
 
 DESCRIPTION="GTK+ Documentation Generator"
 HOMEPAGE="https://www.gtk.org/gtk-doc/"
-EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/gtk-doc"
+
+SNAPSHOT=399a58aac0ddc50d33eb56c2ad4ed12745311a0b
+SRC_URI="https://gitlab.gnome.org/GNOME/gtk-doc/-/archive/${SNAPSHOT}/gtk-doc-${SNAPSHOT}.tar.bz2 -> gtk-doc-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/gtk-doc-${SNAPSHOT}"
 
 LICENSE="GPL-2 FDL-1.1"
 SLOT="0"

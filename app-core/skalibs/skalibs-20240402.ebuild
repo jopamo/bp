@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=83bcd1e5ed5eb5c4abc5154dae4dc6e133c8ddb4
+SNAPSHOT=bfc53cfde4fdda343647678fcd21b38a44f2de08
 
 DESCRIPTION="an implementation of the utmpx.h family of functions"
 HOMEPAGE="https://skarnet.org/software/utmps/"

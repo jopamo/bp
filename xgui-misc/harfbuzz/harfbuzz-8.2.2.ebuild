@@ -18,9 +18,9 @@ REQUIRED_USE="introspection? ( glib )"
 
 DEPEND="
 	fonts/fontconfig
-	cairo? ( xgui-live-lib/cairo )
-	glib? ( lib-live/glib )
-	introspection? ( lib-live/gobject-introspection )
+	cairo? ( xgui-lib/cairo )
+	glib? ( lib-util/glib )
+	introspection? ( lib-dev/gobject-introspection )
 	truetype? ( xgui-misc/freetype )
 "
 BDEPEND="

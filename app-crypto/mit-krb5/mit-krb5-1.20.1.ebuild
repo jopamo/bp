@@ -21,7 +21,7 @@ RESTRICT="test"
 DEPEND="
 	app-crypto/keyutils
 	app-fs/e2fsprogs
-	lib-live/libverto
+	lib-util/libverto
 "
 
 PATCHES=(

@@ -25,22 +25,22 @@ samplerate native-headset systemd +udev +X"
 DEPEND="
 	app-dev/intltool
 	app-build/gettext
-	lib-live/check
-	xmedia-live-lib/speexdsp
+	lib-dev/check
+	xmedia-lib/speexdsp
 	xgui-misc/libsndfile
 	X? (
-		xgui-live-lib/libX11
-		xgui-live-lib/libxcb
-		xgui-live-lib/libSM
-		xgui-live-lib/libICE
-		xgui-live-lib/libXtst
-		xgui-live-app/xorgproto
-		xgui-live-lib/libXtst
+		xgui-lib/libX11
+		xgui-lib/libxcb
+		xgui-lib/libSM
+		xgui-lib/libICE
+		xgui-lib/libXtst
+		xgui-tools/xorgproto
+		xgui-lib/libXtst
 	)
 	bluez? ( xgui-misc/sbc )
-	samplerate? ( xmedia-live-lib/libsamplerate )
-	alsa? ( xgui-misc/alsa-lib )
-	glib? ( lib-live/glib )
+	samplerate? ( xmedia-lib/libsamplerate )
+	alsa? ( xgui-tools/alsa-lib )
+	glib? ( lib-util/glib )
 	jack? ( virtual/jack )
 	dbus? ( app-core/dbus )
 	gtk? ( xgui-lib/gtk3 )
@@ -49,7 +49,7 @@ DEPEND="
 	systemd? ( app-core/systemd )
 "
 
-PDEPEND="alsa? ( alsa-plugin? ( xgui-misc/alsa-plugins[pulseaudio] ) )"
+PDEPEND="alsa? ( alsa-plugin? ( xgui-tools/alsa-plugins[pulseaudio] ) )"
 
 pkg_pretend() {
 	CONFIG_CHECK="~HIGH_RES_TIMERS"

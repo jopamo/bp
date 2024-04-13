@@ -27,7 +27,7 @@ DEPEND="
 	lib-core/glibc
 	lib-core/zlib
 	virtual/ssl
-	xmedia-live-app/ffmpeg
+	xmedia-app/ffmpeg
 	gui? ( xgui-lib/qtbase )
 "
 RDEPEND="

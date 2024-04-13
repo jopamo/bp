@@ -16,8 +16,8 @@ KEYWORDS="amd64 arm64"
 DEPEND="
 	app-build/gettext
 	app-dev/pkgconf
-	virtual/librsvg
-	xgui-live-lib/gnome-common
+	xgui-lib/librsvg
+	xgui-lib/gnome-common
 	xgui-lib/gtk3
 "
 

@@ -22,7 +22,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug lm-sensors static systemd"
 
-DEPEND="lm-sensors? ( app-live/lm-sensors )"
+DEPEND="lm-sensors? ( app-util/lm-sensors )"
 
 _makeargs=(
   prefix="${EPREFIX}/usr"

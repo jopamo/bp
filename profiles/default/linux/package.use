@@ -5,5 +5,5 @@ app-fs/cryptsetup -ssl
 app-net/networkmanager -nss gnutls
 lib-core/libxml2 python
 lib-net/nodejs icu
-virtual/librsvg -rust
-xgui-misc/wireshark bcg729 capinfos caps captype ciscodump dcerpcidl2wrs dftest dpauxmon dumpcap editcap libssh mergecap mmdbresolve netlink plugins qt randpkt randpktdump rawshark reordercap sdjournal sharkd sshdump text2pcap tshark udpdump
+xgui-lib/librsvg -rust
+xgui-app/wireshark bcg729 capinfos caps captype ciscodump dcerpcidl2wrs dftest dpauxmon dumpcap editcap libssh mergecap mmdbresolve netlink plugins qt randpkt randpktdump rawshark reordercap sdjournal sharkd sshdump text2pcap tshark udpdump

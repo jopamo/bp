@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	lib-live/libpcap
+	lib-util/libpcap
 	virtual/curses
 "
 BDEPEND="app-dev/pkgconf"

@@ -27,7 +27,7 @@ DEPEND="
 			lib-net/gnutls:=
 		)
 		!gnutls? (
-			mbedtls? ( lib-live/mbedtls:= )
+			mbedtls? ( lib-misc/mbedtls:= )
 			!mbedtls? ( virtual/ssl:0= )
 		)
 	)

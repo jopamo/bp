@@ -27,8 +27,8 @@ DEPEND="
 	valgrind? ( app-dev/valgrind )
 	systemd? ( app-core/systemd )
 	X? (
-		xgui-live-lib/libX11
-		xgui-live-lib/libXt
+		xgui-lib/libX11
+		xgui-lib/libXt
 		)
 "
 BDEPEND="

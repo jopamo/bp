@@ -383,11 +383,11 @@ cp /var/cache/packages/lib-dev/liblinear/* .
 tar xvhf liblinear* --xattrs
 rm liblinear* || exit
 
-cp /var/cache/packages/lib-live/libpcap/* .
+cp /var/cache/packages/lib-util/libpcap/* .
 tar xvhf libpcap* --xattrs
 rm libpcap* || exit
 
-cp /var/cache/packages/lib-live/libssh2/* .
+cp /var/cache/packages/lib-misc/libssh2/* .
 tar xvhf libssh2* --xattrs
 rm libssh2* || exit
 
@@ -396,7 +396,7 @@ cp /var/cache/packages/app-fs/fuse/* .
 tar xvhf fuse* --xattrs
 rm fuse* || exit
 
-cp /var/cache/packages/lib-live/glib/* .
+cp /var/cache/packages/lib-util/glib/* .
 tar xvhf glib* --xattrs
 rm glib* || exit
 

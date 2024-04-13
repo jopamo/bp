@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	fonts/font-util
-	xgui-live-app/mkfontscale
+	xgui-misc/mkfontscale
 "
 
 src_prepare() {

@@ -19,8 +19,8 @@ IUSE="static-libs"
 
 DEPEND="
 	lib-core/jansson
-	xgui-live-lib/libXv
-	xgui-live-lib/libvdpau
+	xgui-lib/libXv
+	xgui-lib/libvdpau
 	xgui-lib/gtk3
 "
 

@@ -51,7 +51,7 @@ DEPEND="
 	pcre? ( lib-core/libpcre2 )
 	test? ( app-core/dbus )
 	tmpfilesd? ( app-core/dbus )
-	xkb? ( xgui-live-lib/libxkbcommon )
+	xkb? ( xgui-lib/libxkbcommon )
 "
 BDEPEND="dev-python/jinja"
 

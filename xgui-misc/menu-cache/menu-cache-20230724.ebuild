@@ -19,8 +19,8 @@ IUSE="static-libs"
 
 DEPEND="
 	app-dev/gtk-doc
-	lib-live/glib
-	xgui-live-lib/libfm-extra
+	lib-util/glib
+	xgui-lib/libfm-extra
 "
 
 src_prepare() {

@@ -22,8 +22,8 @@ DEPEND="
 	lib-core/libseccomp
 	lib-core/zlib
 	virtual/ssl
-	doh? ( lib-live/nghttp2 )
-	json-c? ( lib-live/json-c )
+	doh? ( lib-dev/nghttp2 )
+	json-c? ( lib-dev/json-c )
 	readline? ( lib-core/readline )
 	xml? ( lib-core/libxml2 )
 "

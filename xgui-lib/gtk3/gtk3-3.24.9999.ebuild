@@ -21,30 +21,30 @@ REQUIRED_USE="
 "
 
 DEPEND="
-	lib-live/glib
-	xgui-live-app/shared-mime-info
-	xgui-live-lib/at-spi2-core
-	xgui-live-lib/cairo[glib,svg,X?]
-	xgui-live-lib/gdk-pixbuf
-	xgui-live-lib/pango[introspection?]
-	xmedia-live-lib/libepoxy[X(+)?]
+	lib-util/glib
+	xgui-misc/shared-mime-info
+	xgui-lib/at-spi2-core
+	xgui-lib/cairo[glib,svg,X?]
+	xgui-lib/gdk-pixbuf
+	xgui-lib/pango[introspection?]
+	xmedia-lib/libepoxy[X(+)?]
 	cups? ( lib-print/cups )
-	introspection? ( lib-live/gobject-introspection )
-	wayland? ( xgui-live-lib/wayland-protocols )
+	introspection? ( lib-dev/gobject-introspection )
+	wayland? ( xgui-lib/wayland-protocols )
 	X? (
-		xgui-live-lib/libX11
-		xgui-live-lib/libXcomposite
-		xgui-live-lib/libXcursor
-		xgui-live-lib/libXdamage
-		xgui-live-lib/libXext
-		xgui-live-lib/libXfixes
-		xgui-live-lib/libXi
-		xgui-live-lib/libXrandr
-		xinerama? ( xgui-live-lib/libXinerama )
+		xgui-lib/libX11
+		xgui-lib/libXcomposite
+		xgui-lib/libXcursor
+		xgui-lib/libXdamage
+		xgui-lib/libXext
+		xgui-lib/libXfixes
+		xgui-lib/libXi
+		xgui-lib/libXrandr
+		xinerama? ( xgui-lib/libXinerama )
 	)
 "
 PDEPEND="
-	virtual/librsvg
+	xgui-lib/librsvg
 	xgui-icontheme/adwaita-plus
 "
 

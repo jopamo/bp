@@ -18,41 +18,41 @@ IUSE="cups +introspection vim-syntax +X xinerama"
 REQUIRED_USE="xinerama? ( X )"
 
 COMMON_DEPEND="
-	lib-live/glib
+	lib-util/glib
 	fonts/fontconfig
-	xmedia-live-lib/libepoxy[X(+)?]
-	xgui-live-lib/cairo[glib,svg,X?]
-	xgui-live-lib/gdk-pixbuf[introspection?]
-	xgui-live-lib/pango[introspection?]
-	xgui-live-app/shared-mime-info
+	xmedia-lib/libepoxy[X(+)?]
+	xgui-lib/cairo[glib,svg,X?]
+	xgui-lib/gdk-pixbuf[introspection?]
+	xgui-lib/pango[introspection?]
+	xgui-misc/shared-mime-info
 	cups? ( lib-print/cups )
-	introspection? ( lib-live/gobject-introspection )
+	introspection? ( lib-dev/gobject-introspection )
 	X? (
-		xgui-live-lib/libX11
-		xgui-live-lib/libXi
-		xgui-live-lib/libXext
-		xgui-live-lib/libXrandr
-		xgui-live-lib/libXcursor
-		xgui-live-lib/libXfixes
-		xgui-live-lib/libXcomposite
-		xgui-live-lib/libXdamage
-		xinerama? ( xgui-live-lib/libXinerama )
+		xgui-lib/libX11
+		xgui-lib/libXi
+		xgui-lib/libXext
+		xgui-lib/libXrandr
+		xgui-lib/libXcursor
+		xgui-lib/libXfixes
+		xgui-lib/libXcomposite
+		xgui-lib/libXdamage
+		xinerama? ( xgui-lib/libXinerama )
 	)
 "
 DEPEND="${COMMON_DEPEND}
 	app-tex/docbook-xsl-stylesheets
 	app-tex/docbook-xml-dtd
 	lib-core/libxslt
-	xgui-live-lib/at-spi2-core
+	xgui-lib/at-spi2-core
 	app-dev/gtk-doc-am
 	app-build/gettext
 	app-dev/pkgconf
-	X? ( xinerama? ( xgui-live-app/xorgproto ) )"
+	X? ( xinerama? ( xgui-tools/xorgproto ) )"
 
 RDEPEND="${COMMON_DEPEND}"
 
 PDEPEND="
-	virtual/librsvg
+	xgui-lib/librsvg
 	xgui-icontheme/adwaita-plus
 	vim-syntax? ( app-tex/gtk-syntax )
 "

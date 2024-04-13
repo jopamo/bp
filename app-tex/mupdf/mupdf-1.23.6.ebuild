@@ -21,22 +21,22 @@ REQUIRED_USE="opengl? ( javascript )"
 LIB_DEPEND="
 	xgui-misc/freetype
 	xgui-misc/harfbuzz
-	xmedia-live-lib/jbig2dec
-	xmedia-live-lib/libpng
-	xmedia-live-lib/openjpeg
-	xmedia-live-lib/libjpeg-turbo
-	lib-live/gumbo-parser
-	X? ( xgui-live-lib/libX11
-		xgui-live-lib/libXext )
+	xmedia-lib/jbig2dec
+	xmedia-lib/libpng
+	xmedia-lib/openjpeg
+	xmedia-lib/libjpeg-turbo
+	lib-misc/gumbo-parser
+	X? ( xgui-lib/libX11
+		xgui-lib/libXext )
 "
 RDEPEND="${LIB_DEPEND}"
 DEPEND="${RDEPEND}
 	xgui-misc/freeglut
 	app-dev/pkgconf
 	app-compression/bzip2
-	xgui-live-lib/libXau
-	xgui-live-lib/libXdmcp
-	xgui-live-lib/libxcb
+	xgui-lib/libXau
+	xgui-lib/libXdmcp
+	xgui-lib/libxcb
 "
 
 PATCHES=(

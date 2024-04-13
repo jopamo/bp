@@ -28,21 +28,21 @@ DEPEND="
 	lib-core/libpcre2
 	lib-core/zlib
 	lib-dev/double-conversion
-	lib-live/glib
-	lib-live/libinput
-	xgui-live-lib/libxcb
+	lib-util/glib
+	lib-util/libinput
+	xgui-lib/libxcb
 	xgui-misc/freetype
 	xgui-misc/harfbuzz
-	xmedia-live-lib/libjpeg-turbo
-	xmedia-live-lib/libpng
+	xmedia-lib/libjpeg-turbo
+	xmedia-lib/libpng
 	gssapi? ( app-crypto/mit-krb5 )
 	mysql? ( app-server/mariadb )
-	opengl? ( xgui-misc/mesa )
+	opengl? ( xgui-tools/mesa )
 	postgres? ( app-server/postgresql )
 	sqlite? ( lib-core/sqlite )
 	systemd? ( app-core/systemd )
-	vulkan? ( xmedia-live-lib/vulkan-loader )
-	xkbcommon? ( xgui-live-lib/libxkbcommon )
+	vulkan? ( xmedia-lib/vulkan-loader )
+	xkbcommon? ( xgui-lib/libxkbcommon )
 "
 PDEPEND="
 	xgui-lib/qtsvg:$(ver_cut 1)=

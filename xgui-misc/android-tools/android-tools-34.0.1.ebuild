@@ -29,9 +29,9 @@ DEPEND="
 	lib-core/libpcre
 	lib-dev/libusb
 	lib-dev/protobuf
-	lib-live/libunwind
+	lib-util/libunwind
 "
-RDEPEND="app-live/android-udev-rules"
+RDEPEND="app-util/android-udev-rules"
 
 src_prepare() {
 	eapply "${DISTDIR}/${PN}-31.0.3-no-gtest.patch"

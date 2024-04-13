@@ -29,7 +29,7 @@ RESTRICT="strip mirror"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 BDEPEND="app-dev/patchelf"
-RDEPEND="xmedia-live-lib/taglib"
+RDEPEND="xmedia-lib/taglib"
 
 S="${WORKDIR}"
 

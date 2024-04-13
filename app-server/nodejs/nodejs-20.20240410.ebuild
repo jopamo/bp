@@ -29,7 +29,7 @@ RDEPEND="
 	app-compression/brotli
 	lib-dev/libuv
 	lib-net/c-ares
-	lib-live/nghttp2
+	lib-dev/nghttp2
 	lib-core/zlib
 	icu? ( lib-dev/icu )
 	ssl? ( virtual/ssl )

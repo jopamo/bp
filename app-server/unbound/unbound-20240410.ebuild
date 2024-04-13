@@ -23,7 +23,7 @@ DEPEND="
 	lib-core/expat
 	lib-dev/libevent
 	virtual/ssl
-	dnscrypt? ( lib-live/libsodium )
+	dnscrypt? ( lib-util/libsodium )
 	python? ( ${PYTHON_DEPS}
 			app-lang/swig )"
 

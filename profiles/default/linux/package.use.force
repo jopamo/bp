@@ -1,2 +1,2 @@
 lib-net/nodejs icu
-virtual/librsvg -rust
+xgui-lib/librsvg -rust

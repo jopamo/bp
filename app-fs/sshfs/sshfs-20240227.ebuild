@@ -17,7 +17,7 @@ SLOT="0"
 
 DEPEND="
 	app-fs/fuse:3
-	lib-live/glib
+	lib-util/glib
 	app-net/openssh"
 
 BDEPEND="app-dev/pkgconf

@@ -22,17 +22,17 @@ DEPEND="
 	fonts/fontconfig
 	fonts/liberation-fonts
 	lib-core/zlib
-	lib-live/glib
+	lib-util/glib
 	lib-print/cups
 	xgui-misc/freetype
 	xgui-misc/lcms
 	dbus? ( app-core/dbus )
-	jpeg? ( xmedia-live-lib/libjpeg-turbo )
+	jpeg? ( xmedia-lib/libjpeg-turbo )
 	ldap? ( app-net/openldap )
 	pclm? ( app-tex/qpdf )
 	pdf? ( app-tex/mupdf )
-	png? ( xmedia-live-lib/libpng )
-	tiff? ( xmedia-live-lib/tiff )
+	png? ( xmedia-lib/libpng )
+	tiff? ( xmedia-lib/tiff )
 "
 
 src_configure() {

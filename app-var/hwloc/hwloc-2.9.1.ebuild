@@ -16,12 +16,12 @@ IUSE="cairo debug +numa +pci plugins svg static-libs xml X"
 
 DEPEND="
 	virtual/curses
-	cairo? ( xgui-live-lib/cairo )
+	cairo? ( xgui-lib/cairo )
 	pci? (
 		app-core/pciutils
-		xgui-live-lib/libpciaccess
+		xgui-lib/libpciaccess
 	)
-	numa? ( app-live/numactl )
+	numa? ( app-util/numactl )
 	xml? ( lib-core/libxml2 )
 "
 

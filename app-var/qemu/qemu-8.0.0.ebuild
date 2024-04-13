@@ -115,7 +115,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 # when available rather than always using the external library.
 ALL_DEPEND="
 	lib-dev/libtasn1[static-libs(+)]
-	lib-live/glib[static-libs(+)]
+	lib-util/glib[static-libs(+)]
 	lib-core/zlib[static-libs(+)]
 	python? ( ${PYTHON_DEPS} )
 	xattr? ( app-core/attr[static-libs(+)] )"
@@ -124,9 +124,9 @@ ALL_DEPEND="
 # softmmu targets (qemu-system-*).
 SOFTMMU_TOOLS_DEPEND="
 	lib-core/libxml2[static-libs(+)]
-	xgui-live-lib/pixman[static-libs(+)]
+	xgui-lib/pixman[static-libs(+)]
 	aio? ( lib-dev/libaio[static-libs(+)] )
-	alsa? ( xgui-misc/alsa-lib )
+	alsa? ( xgui-tools/alsa-lib )
 	bzip2? ( app-compression/bzip2[static-libs(+)] )
 	capstone? ( lib-dev/capstone )
 	caps? ( lib-core/libcap-ng[static-libs(+)] )
@@ -139,12 +139,12 @@ SOFTMMU_TOOLS_DEPEND="
 	)
 	gtk? (
 		xgui-lib/gtk3
-		vte? ( xgui-live-lib/vte )
+		vte? ( xgui-lib/vte )
 	)
-	iscsi? ( lib-live/libiscsi )
+	iscsi? ( lib-misc/libiscsi )
 	jack? ( virtual/jack )
 	jemalloc? ( lib-dev/jemalloc )
-	jpeg? ( xmedia-live-lib/libjpeg-turbo[static-libs(+)] )
+	jpeg? ( xmedia-lib/libjpeg-turbo[static-libs(+)] )
 	lzo? ( lib-dev/lzo[static-libs(+)] )
 	multipath? ( app-fs/multipath-tools )
 	ncurses? (
@@ -153,10 +153,10 @@ SOFTMMU_TOOLS_DEPEND="
 	nfs? ( net-fs/libnfs[static-libs(+)] )
 	numa? ( sys-process/numactl[static-libs(+)] )
 	opengl? (
-		xmedia-live-lib/libepoxy[static-libs(+)]
-		xgui-misc/mesa[static-libs(+)]
+		xmedia-lib/libepoxy[static-libs(+)]
+		xgui-tools/mesa[static-libs(+)]
 	)
-	png? ( xmedia-live-lib/libpng[static-libs(+)] )
+	png? ( xmedia-lib/libpng[static-libs(+)] )
 	pulseaudio? ( xgui-misc/pulseaudio )
 	sasl? ( lib-dev/cyrus-sasl[static-libs(+)] )
 	seccomp? ( lib-core/libseccomp[static-libs(+)] )
@@ -180,7 +180,7 @@ BDEPEND="
 	app-dev/pkgconf
 	gtk? ( nls? ( app-build/gettext ) )
 	test? (
-		lib-live/glib[utils]
+		lib-util/glib[utils]
 		app-build/bc
 	)
 "

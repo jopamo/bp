@@ -25,15 +25,15 @@ RDEPEND="
 	fonts/fontconfig
 	lib-dev/dbus-glib
 	lib-dev/nss
-	lib-live/glib
-	xgui-live-lib/at-spi2-core
-	xgui-live-lib/cairo[X]
-	xgui-live-lib/gdk-pixbuf
+	lib-util/glib
+	xgui-lib/at-spi2-core
+	xgui-lib/cairo[X]
+	xgui-lib/gdk-pixbuf
 	xgui-lib/gtk3
-	xgui-live-lib/pango
+	xgui-lib/pango
 	xgui-misc/freetype
 	xgui-misc/pulseaudio
-	xmedia-live-app/ffmpeg
+	xmedia-app/ffmpeg
 "
 
 QA_PREBUILT="*"

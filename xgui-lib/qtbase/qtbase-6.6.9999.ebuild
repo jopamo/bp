@@ -16,15 +16,15 @@ SLOT="$(ver_cut 1)"
 IUSE="gssapi mysql postgres sqlite systemd opengl vulkan +xkbcommon"
 
 DEPEND="
-	lib-live/libinput
+	lib-util/libinput
 	gssapi? ( app-crypto/mit-krb5 )
 	mysql? ( app-server/mariadb )
-	opengl? ( xgui-misc/mesa )
+	opengl? ( xgui-tools/mesa )
 	postgres? ( app-server/postgresql )
 	sqlite? ( lib-core/sqlite )
 	systemd? ( app-core/systemd )
-	vulkan? ( xmedia-live-lib/vulkan-loader )
-	xkbcommon? ( xgui-live-lib/libxkbcommon )
+	vulkan? ( xmedia-lib/vulkan-loader )
+	xkbcommon? ( xgui-lib/libxkbcommon )
 "
 
 src_prepare() {

@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="A portable fork of NaCl, a higher-level cryptographic library"
 HOMEPAGE="https://github.com/jedisct1/libsodium"
 
-SNAPSHOT=f8ca998c52cca06b4e9021d4d495b1bf2d477179
+SNAPSHOT=74781400dc765e07492970ac973f7eb48cb83460
 SRC_URI="https://github.com/jedisct1/libsodium/archive/${SNAPSHOT}.tar.gz -> libsodium-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libsodium-${SNAPSHOT}"
 

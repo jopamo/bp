@@ -3,11 +3,14 @@
 
 EAPI=8
 
-inherit git-r3 flag-o-matic
+inherit flag-o-matic
 
 DESCRIPTION="Open source HEVC encoder"
 HOMEPAGE="http://x265.org/"
-EGIT_REPO_URI="https://bitbucket.org/multicoreware/x265_git.git"
+
+SNAPSHOT="dd1ef69b25ec"
+SRC_URI="https://bitbucket.org/multicoreware/x265_git/get/${SNAPSHOT}.zip"
+S="${WORKDIR}/x264-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

@@ -6,7 +6,7 @@ inherit flag-o-matic linux-info git-r3 autotools
 
 DESCRIPTION="Embedded Linux Library provides core, low-level functionality for system daemons"
 HOMEPAGE="https://01.org/ell"
-EGIT_REPO_URI="https://git.kernel.org/pub/scm/libs/ell/ell.git"
+EGIT_REPO_URI="https://git.kernel.org/pub/scm/libs/ell/ell"
 
 LICENSE="LGPL-2.1"
 SLOT="0"

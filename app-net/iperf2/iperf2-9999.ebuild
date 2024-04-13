@@ -6,7 +6,7 @@ inherit git-r3
 
 DESCRIPTION="A network traffic tool for measuring TCP and UDP performance"
 HOMEPAGE="https://sourceforge.net/projects/iperf2/"
-EGIT_REPO_URI="https://git.code.sf.net/p/iperf2/code.git"
+EGIT_REPO_URI="https://git.code.sf.net/p/iperf2/code"
 
 LICENSE="BSD"
 SLOT="0"

@@ -6,7 +6,7 @@ inherit git-r3
 
 DESCRIPTION="Perl script to check for commonly used bash features not defined by POSIX"
 HOMEPAGE="https://packages.debian.org/devscripts https://salsa.debian.org/debian/devscripts"
-EGIT_REPO_URI="https://salsa.debian.org/debian/devscripts.git"
+EGIT_REPO_URI="https://salsa.debian.org/debian/devscripts"
 
 LICENSE="GPL-2"
 SLOT="0"

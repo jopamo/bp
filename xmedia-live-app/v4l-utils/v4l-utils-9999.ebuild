@@ -6,7 +6,7 @@ inherit git-r3 meson flag-o-matic xdg
 
 DESCRIPTION="a series of packages for handling media devices"
 HOMEPAGE="https://git.linuxtv.org/v4l-utils.git"
-EGIT_REPO_URI="https://git.linuxtv.org/v4l-utils.git"
+EGIT_REPO_URI="https://git.linuxtv.org/v4l-utils"
 
 LICENSE="LGPL"
 SLOT="0"

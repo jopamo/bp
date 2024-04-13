@@ -66,3 +66,31 @@ alias format_repo="find . -type f \( -name '*.c' -o -name '*.h' \) -not -path '*
 
 alias format_commit="git diff --name-only --cached | grep -E '\.(c|h)$' | xargs clang-format -i"
 
+sort_and_remove_duplicates() {
+    if [ -f "$1" ]; then
+        temp_file=$(mktemp)
+        if sort "$1" | uniq > "$temp_file" && [ -s "$temp_file" ]; then
+            mv "$temp_file" "$1"
+        else
+            echo "Failed to sort and remove duplicates or file is empty after processing."
+            rm "$temp_file"
+        fi
+    else
+        echo "File not found: $1"
+    fi
+}
+
+replace_in_files() {
+    local search_string="$1"
+    local replacement_string="$2"
+    local start_directory="${3:-.}"
+
+    if [ -z "$search_string" ] || [ -z "$replacement_string" ]; then
+        echo "Usage: replace_in_files \"search_string\" \"replacement_string\" [start_directory]"
+        return 1
+    fi
+
+    find "$start_directory" -type f ! -path '*/.git/*' -exec grep -l "$search_string" {} + | xargs -d '\n' sed -i "s|$search_string|$replacement_string|g"
+
+    echo "Replacement complete."
+}

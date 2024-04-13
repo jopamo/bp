@@ -2,15 +2,12 @@
 
 EAPI=8
 
-SNAPSHOT=0b82c20ac7375b522215b567174f370be89a4b12
-
 inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="unzipper for pkzip-compressed files"
 HOMEPAGE="http://www.info-zip.org/"
 
-SRC_URI="https://github.com/madler/unzip/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz
-		http://deb.debian.org/debian/pool/main/u/unzip/unzip_6.0-27.debian.tar.xz"
+SRC_URI="http://deb.debian.org/debian/pool/main/u/unzip/unzip_6.0-28.debian.tar.xz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="Info-ZIP"

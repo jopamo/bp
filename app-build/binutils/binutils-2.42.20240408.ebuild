@@ -9,7 +9,7 @@ HOMEPAGE="https://sourceware.org/binutils/"
 
 SNAPSHOT=6224493e457e72b11818c87cdc112bdb0fee5f81
 SRC_URI="https://github.com/bminor/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/binutils-gdb-${SNAPSHOT}
+S="${WORKDIR}/binutils-gdb-${SNAPSHOT}"
 
 LICENSE="|| ( GPL-3 LGPL-3 )"
 SLOT="0"

@@ -7,7 +7,7 @@ inherit flag-o-matic autotools
 DESCRIPTION="A vector graphics library with cross-device output support"
 HOMEPAGE="https://www.cairographics.org"
 
-SNAPSHOT="7471a323a70203e983b88e7561a4c95d653f875f"
+SNAPSHOT=95ee2708b8e4d549e42618a34f6bb17faed96926
 SRC_URI="https://gitlab.freedesktop.org/cairo/cairo/-/archive/${SNAPSHOT}/cairo-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

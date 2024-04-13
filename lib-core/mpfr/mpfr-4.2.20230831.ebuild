@@ -9,7 +9,7 @@ HOMEPAGE="http://www.mpfr.org/"
 
 SNAPSHOT=6ae53c72741be67631000611b969bb2bfe88a37c
 SRC_URI="https://gitlab.inria.fr/mpfr/mpfr/-/archive/${SNAPSHOT}/mpfr-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/mpfr-${SNAPSHOT}
 
 LICENSE="LGPL-2.1"
 SLOT="0"

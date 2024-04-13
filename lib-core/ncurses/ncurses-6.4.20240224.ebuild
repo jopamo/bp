@@ -2,7 +2,7 @@
 
 EAPI=8
 
-MY_P="${PN}-$(ver_rs 2 -)"
+MY_P="ncurses-$(ver_rs 2 -)"
 
 DESCRIPTION="console display library"
 HOMEPAGE="http://invisible-island.net/ncurses/ https://www.gnu.org/software/ncurses/"

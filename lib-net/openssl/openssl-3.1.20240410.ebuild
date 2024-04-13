@@ -9,7 +9,7 @@ inherit flag-o-matic toolchain-funcs
 DESCRIPTION="full-strength general purpose cryptography library (including SSL and TLS)"
 HOMEPAGE="https://www.openssl.org/"
 SRC_URI="https://github.com/openssl/openssl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/openssl-${SNAPSHOT}
 
 LICENSE="openssl"
 SLOT="0"
@@ -34,7 +34,7 @@ BDEPEND="
 	)"
 PDEPEND="app-var/ca-certificates"
 
-PATCHES=( "${FILESDIR}"/${PN}-1.1.0j-parallel_install_fix.patch )
+PATCHES=( "${FILESDIR}"/openssl-1.1.0j-parallel_install_fix.patch )
 
 src_prepare() {
 	# keep this in sync with app-var/c_rehash

@@ -8,8 +8,8 @@ inherit flag-o-matic toolchain-funcs prefix
 
 DESCRIPTION="The standard GNU Bourne again shell"
 HOMEPAGE="http://tiswww.case.edu/php/chet/bash/bashtop.html"
-SRC_URI="https://git.savannah.gnu.org/cgit/${PN}.git/snapshot/${PN}-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://git.savannah.gnu.org/cgit/bash.git/snapshot/bash-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/bash-${SNAPSHOT}
 
 LICENSE="GPL-3"
 SLOT="0"

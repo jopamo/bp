@@ -95,7 +95,7 @@ src_configure() {
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
 		--with-modulesdir="${EPREFIX}"/usr/lib/samba
-		--with-piddir="${EPREFIX}"/run/${PN}
+		--with-piddir="${EPREFIX}"/run/samba
 		--disable-rpath
 		--disable-rpath-install
 		$(use_with acl acl-support)

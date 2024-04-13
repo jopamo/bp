@@ -13,7 +13,7 @@ if [[ ${PV} == 9999 ]]; then
 else
 	SNAPSHOT=f1c3196d9b95de22dde8f23c5befcbeabef5711c
 	SRC_URI="${HOMEPAGE}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	S=${WORKDIR}/libseccomp-${SNAPSHOT}
 fi
 
 LICENSE="LGPL-2.1"

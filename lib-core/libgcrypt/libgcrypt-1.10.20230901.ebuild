@@ -10,7 +10,7 @@ inherit flag-o-matic autotools
 DESCRIPTION="General purpose crypto library based on the code used in GnuPG"
 HOMEPAGE="http://www.gnupg.org/"
 SRC_URI="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=snapshot;h=${SNAPSHOT};sf=tgz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SHORT}
+S=${WORKDIR}/libgcrypt-${SHORT}
 
 LICENSE="LGPL-2.1 MIT"
 SLOT="0"

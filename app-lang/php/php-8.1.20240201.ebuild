@@ -120,7 +120,7 @@ src_install() {
 
 			insopts -m 0644
 			insinto /usr/lib/tmpfiles.d
-			newins php-fpm.tmpfiles ${PN}.conf
+			newins php-fpm.tmpfiles php.conf
 		fi
 
 		if use systemd; then

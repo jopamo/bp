@@ -122,18 +122,18 @@ src_install() {
 	if use systemd; then
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
-		doins "${FILESDIR}/${PN}.service"
+		doins "${FILESDIR}/postgresql.service"
 	fi
 
 	if use tmpfilesd; then
 		insopts -m 0644
 		insinto /usr/lib/tmpfiles.d
-		newins "${FILESDIR}/postgresql.tmpfiles" ${PN}.conf
+		newins "${FILESDIR}/postgresql.tmpfiles" postgresql.conf
 	fi
 
 	if use pam; then
 		insinto /etc/pam.d
 		insopts -m 0644
-		newins "${FILESDIR}/${PN}.pam" ${PN}
+		newins "${FILESDIR}/postgresql.pam" postgresql
 	fi
 }

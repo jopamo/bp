@@ -12,6 +12,6 @@ rm -rf /tmp/bp_backup/bp/app-tex/ghostscript-gpl
 
 find /tmp/bp_backup/bp -type f -name 'Manifest' -delete
 
-(cd /tmp/bp_backup/bp && repoman manifest)
+(cd /tmp/bp_backup/bp && pkgdev manifest)
 
 rm -rf /tmp/bp_backup

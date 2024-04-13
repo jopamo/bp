@@ -18,8 +18,6 @@ fi
 LICENSE="MIT"
 SLOT="0"
 
-PATCHES=( "${FILESDIR}/${PN}-No-static-libs-gentoo.patch" )
-
 src_prepare() {
 	default
 	tc-export CC

@@ -110,7 +110,7 @@ update_ebuild() {
 		fi
 
 		mv "$existing_ebuild_file" "$new_ebuild_file"
-		(cd ${REPO_PATH} && repoman manifest)
+		(cd ${REPO_PATH} && pkgdev manifest)
 		(cd "$REPO_PATH" && \
 		git -c user.name="1g4-bot" \
 			-c user.email="share@1g4.org" \

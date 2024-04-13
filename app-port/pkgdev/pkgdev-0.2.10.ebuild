@@ -2,23 +2,17 @@
 
 EAPI=8
 
-DISTUTILS_IN_SOURCE_BUILD=1
+DISTUTILS_USE_PEP517=standalone
 
 inherit distutils-r1
 
-if [[ ${PV} == *9999 ]] ; then
-	EGIT_REPO_URI="https://github.com/pkgcore/pkgdev.git"
-	inherit git-r3
-else
-	SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
-	KEYWORDS="amd64 arm arm64 hppa ~loong ppc ppc64 ~riscv sparc x86 ~x64-macos"
-fi
-
 DESCRIPTION="Collection of tools for Gentoo development"
 HOMEPAGE="https://github.com/pkgcore/pkgdev"
+SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="BSD MIT"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 if [[ ${PV} == *9999 ]] ; then
 	# https://github.com/pkgcore/pkgdev/blob/main/requirements/dev.txt

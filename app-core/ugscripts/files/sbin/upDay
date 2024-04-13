@@ -135,7 +135,7 @@ update_ebuild() {
 
     mv "$ebuild_file" "$new_ebuild_file"
 
-    if ! (cd "$package_path" && repoman manifest); then
+    if ! (cd "$package_path" && pkgdev manifest); then
         echo "Error generating manifest for ${PACKAGE_NAME}. Skipping..."
         return 1
     fi

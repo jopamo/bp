@@ -119,13 +119,13 @@ RESTRICT+=" strip"
 #
 # You can use some combination of sed/awk/cut to extract the
 # contents of EGO_SUM or use the dev-go/get-ego-vendor tool.
-# 
+#
 # One manual way to do this is the following:
 #
 # @CODE
 #
 # cat go.sum | cut -d" " -f1,2 | awk '{print "\t\"" $0 "\""}'
-# 
+#
 # @CODE
 #
 # The format of go.sum is described upstream here:
@@ -365,7 +365,7 @@ go-module_setup_proxy() {
 # 3. Otherwise, call 'ego mod verify' and then do a normal unpack.
 # Set compile env via go-env.
 go-module_src_unpack() {
-	if use amd64 || use arm || use arm64 ||
+	if use amd64 || use arm64 ||
 		( use ppc64 && [[ $(tc-endian) == "little" ]] ) || use s390 || use x86; then
 			GOFLAGS="-buildmode=pie ${GOFLAGS}"
 	fi

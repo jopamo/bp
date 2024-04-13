@@ -3,7 +3,6 @@
 REPO_PATH="/var/db/repos/bp"
 REPO_TEMP_DIR="/tmp/git_updates"
 
-# Version variables
 GCC_MAJOR_VERSION="12"
 BINUTILS_VERSION="2.41"
 XZ_UTILS_VERSION="5.4"
@@ -68,91 +67,89 @@ clone_or_update_repo() {
 	local target_dir="$2"
 	local branch="$3"
 	local version_pattern="$4"
-	local max_versions_to_check=1  # Since we only want the latest, set this to 1
+	local max_versions_to_check=1
 
-	# Clone or update the repository
 	if [[ -d "$target_dir" ]]; then
 		(cd "$target_dir" && git fetch --all --tags && git reset --hard "origin/$branch")
 	else
 		git clone --depth 1 --branch "$branch" "$repo_uri" "$target_dir"
 	fi
 
-	# Fetch the latest tag, remove the leading 'v', and store it
 	latest_version=$(cd "$target_dir" && git tag -l | grep -oP "$version_pattern" | sort -rV | head -n "$max_versions_to_check" | sed 's/^v//')
 }
 
 update_ebuild() {
-    local package_path="$1"
-    local repo_uri="$2"
-    local branch="$3"
-    local version_name="$4"
-    local use_date_only="$5"
-    local PACKAGE_NAME=$(basename "$package_path")
-    local repo_temp_dir="${REPO_TEMP_DIR}/${PACKAGE_NAME}"
-    local GIT_USER="1g4-bot"
-    local GIT_EMAIL="share@1g4.org"
-    local GIT_SIGN_KEY="AFFCE613154C05AA"
+	local package_path="$1"
+	local repo_uri="$2"
+	local branch="$3"
+	local version_name="$4"
+	local use_date_only="$5"
+	local PACKAGE_NAME=$(basename "$package_path")
+	local repo_temp_dir="${REPO_TEMP_DIR}/${PACKAGE_NAME}"
+	local GIT_USER="1g4-bot"
+	local GIT_EMAIL="share@1g4.org"
+	local GIT_SIGN_KEY="AFFCE613154C05AA"
 
-    echo "Updating ${PACKAGE_NAME}..."
+	echo "Updating ${PACKAGE_NAME}..."
 
-    if [[ ! -d "$repo_temp_dir" ]]; then
-        clone_or_update_repo "$repo_uri" "$repo_temp_dir" "$branch" "v\d+\.\d+"
-    fi
+	if [[ ! -d "$repo_temp_dir" ]]; then
+		clone_or_update_repo "$repo_uri" "$repo_temp_dir" "$branch" "v\d+\.\d+"
+	fi
 
-    latest_commit=$(cd "$repo_temp_dir" && git rev-parse HEAD)
-    latest_commit_date=$(cd "$repo_temp_dir" && git log -n1 --pretty=format:%cd --date=format:%Y%m%d)
+	latest_commit=$(cd "$repo_temp_dir" && git rev-parse HEAD)
+	latest_commit_date=$(cd "$repo_temp_dir" && git log -n1 --pretty=format:%cd --date=format:%Y%m%d)
 
-    if [[ -z "$latest_commit" ]] || [[ -z "$latest_commit_date" ]]; then
-        echo "Failed to fetch latest commit or date from Git repository: $repo_uri"
-        return 1
-    fi
+	if [[ -z "$latest_commit" ]] || [[ -z "$latest_commit_date" ]]; then
+		echo "Failed to fetch latest commit or date from Git repository: $repo_uri"
+		return 1
+	fi
 
-    echo "Latest commit: $latest_commit"
-    echo "Latest commit date: $latest_commit_date"
+	echo "Latest commit: $latest_commit"
+	echo "Latest commit date: $latest_commit_date"
 
-    local ebuild_file=$(find "$package_path" -maxdepth 1 -type f -name "${PACKAGE_NAME}-*.ebuild" | sort | tail -n 1)
-    if [[ -z "$ebuild_file" ]]; then
-        echo "No ebuild file found for ${PACKAGE_NAME}."
-        return 1
-    fi
+	local ebuild_file=$(find "$package_path" -maxdepth 1 -type f -name "${PACKAGE_NAME}-*.ebuild" | sort | tail -n 1)
+	if [[ -z "$ebuild_file" ]]; then
+		echo "No ebuild file found for ${PACKAGE_NAME}."
+		return 1
+	fi
 
-    sed -i "s/SNAPSHOT=.*/SNAPSHOT=${latest_commit}/" "$ebuild_file"
+	sed -i "s/SNAPSHOT=.*/SNAPSHOT=${latest_commit}/" "$ebuild_file"
 
-    local version
-    if [[ "$use_date_only" == "yes" ]]; then
-        version="${latest_commit_date}"
-    else
-        version="${version_name}.${latest_commit_date}"
-    fi
+	local version
+	if [[ "$use_date_only" == "yes" ]]; then
+		version="${latest_commit_date}"
+	else
+		version="${version_name}.${latest_commit_date}"
+	fi
 
-    local new_ebuild_filename="${PACKAGE_NAME}-${version}.ebuild"
-    local new_ebuild_file="${package_path}/${new_ebuild_filename}"
+	local new_ebuild_filename="${PACKAGE_NAME}-${version}.ebuild"
+	local new_ebuild_file="${package_path}/${new_ebuild_filename}"
 
-    if [[ -f "$new_ebuild_file" ]]; then
-        echo "Ebuild file ${new_ebuild_filename} is already latest."
-        return 0
-    fi
+	if [[ -f "$new_ebuild_file" ]]; then
+		echo "Ebuild file ${new_ebuild_filename} is already latest."
+		return 0
+	fi
 
-    mv "$ebuild_file" "$new_ebuild_file"
+	mv "$ebuild_file" "$new_ebuild_file"
 
-    if ! (cd "$package_path" && pkgdev manifest); then
-        echo "Error generating manifest for ${PACKAGE_NAME}. Skipping..."
-        return 1
-    fi
+	if ! (cd "$package_path" && pkgdev manifest); then
+		echo "Error generating manifest for ${PACKAGE_NAME}. Skipping..."
+		return 1
+	fi
 
-    (cd "$package_path" && \
-        git add --all . && \
-        git -c user.name="$GIT_USER" \
-            -c user.email="$GIT_EMAIL" \
-            -c commit.gpgsign=true \
-            -c user.signingkey="$GIT_SIGN_KEY" \
-            commit -m "Update ${PACKAGE_NAME} to ${version}" && \
-        git -c user.name="$GIT_USER" \
-            -c user.email="$GIT_EMAIL" \
-            -c user.signingkey="$GIT_SIGN_KEY" \
-            push origin HEAD)
+	(cd "$package_path" && \
+			git add --all . && \
+			git -c user.name="$GIT_USER" \
+			-c user.email="$GIT_EMAIL" \
+			-c commit.gpgsign=true \
+			-c user.signingkey="$GIT_SIGN_KEY" \
+			commit -m "Update ${PACKAGE_NAME} to ${version}" && \
+			git -c user.name="$GIT_USER" \
+			-c user.email="$GIT_EMAIL" \
+			-c user.signingkey="$GIT_SIGN_KEY" \
+		push origin HEAD)
 
-    echo "Ebuild updated for ${PACKAGE_NAME}: ${new_ebuild_filename}"
+	echo "Ebuild updated for ${PACKAGE_NAME}: ${new_ebuild_filename}"
 }
 
 if [[ $update_toolchain == true ]]; then
@@ -168,15 +165,12 @@ if [[ $update_toolchain == true ]]; then
 fi
 
 if [[ $update_unsafe == true ]]; then
-    # watch for boot failures
 	update_ebuild "${REPO_PATH}/app-fs/efibootmgr" "https://github.com/rhinstaller/efibootmgr" "main" "0" "yes"
 fi
 
-# version to branch conversion
 BINUTILS_BRANCH="binutils-$(echo "$BINUTILS_VERSION" | sed 's/\./_/')-branch"
 TCL_BRANCH=$(echo "core-${TCL_VERSION}" | tr '.' '-')
 
-# versioned branches
 update_ebuild "${REPO_PATH}/app-core/gawk" "https://git.savannah.gnu.org/git/gawk" "gawk-${GAWK_VERSION}-stable" "$GAWK_VERSION" "no"
 update_ebuild "${REPO_PATH}/app-core/systemd" "https://github.com/systemd/systemd-stable" "v${SYSTEMD_VERSION}-stable" "$SYSTEMD_VERSION" "no"
 update_ebuild "${REPO_PATH}/app-core/util-linux" "https://github.com/util-linux/util-linux" "stable/v${UTIL_LINUX_VERSION}" "$UTIL_LINUX_VERSION" "no"
@@ -189,28 +183,30 @@ update_ebuild "${REPO_PATH}/app-server/nodejs" "https://github.com/nodejs/node" 
 update_ebuild "${REPO_PATH}/lib-net/openssl" "https://github.com/openssl/openssl" "openssl-${OPENSSL_VERSION}" "$OPENSSL_VERSION" "no"
 update_ebuild "${REPO_PATH}/app-build/llvm" "https://github.com/llvm/llvm-project" "release/${LLVM_VERSION}.x" "$LLVM_VERSION" "no"
 
-# main branches
-update_ebuild "${REPO_PATH}/app-build/flex" "https://github.com/westes/flex" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-build/gnuconfig" "https://git.savannah.gnu.org/git/config" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-compression/brotli" "https://github.com/google/brotli" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-compression/bzip2" "https://github.com/libarchive/bzip2" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-compression/libarchive" "https://github.com/libarchive/libarchive" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-compression/lz4" "https://github.com/lz4/lz4" "dev" "0" "yes"
+update_ebuild "${REPO_PATH}/app-compression/p7zip" "https://github.com/p7zip-project/p7zip" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-compression/pigz" "https://github.com/madler/pigz" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-compression/snappy" "https://github.com/google/snappy" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/app-compression/unzip" "https://github.com/madler/unzip" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-compression/zstd" "https://github.com/facebook/zstd" "dev" "0" "yes"
+update_ebuild "${REPO_PATH}/app-core/blktrace" "https://git.kernel.org/pub/scm/linux/kernel/git/axboe/blktrace" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-core/busybox" "https://git.busybox.net/busybox" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-core/dbus" "https://gitlab.freedesktop.org/dbus/dbus" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-dev/dtc" "https://github.com/dgibson/dtc" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/app-core/debianutils" "https://salsa.debian.org/debian/debianutils" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-core/file" "https://github.com/file/file" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-core/git" "https://github.com/git/git" "maint" "0" "yes"
+update_ebuild "${REPO_PATH}/app-core/git" "https://github.com/git/git" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-core/install-xattr" "https://github.com/gentoo/elfix" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-core/kmod" "https://github.com/kmod-project/kmod" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-core/kmod" "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-core/lsof" "https://github.com/lsof-org/lsof" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-core/pciids" "https://github.com/pciutils/pciids" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-core/pciutils" "https://github.com/pciutils/pciutils" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-core/portage" "https://github.com/gentoo/portage" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-core/procps" "https://gitlab.com/procps-ng/procps" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-core/psmisc" "https://gitlab.com/psmisc/psmisc" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-core/runit" "https://github.com/void-linux/runit" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-core/sandbox" "https://github.com/gentoo/sandbox" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-core/skalibs" "https://github.com/skarnet/skalibs" "master" "0" "yes"
@@ -220,30 +216,37 @@ update_ebuild "${REPO_PATH}/app-crypto/hashcat-utils" "https://github.com/hashca
 update_ebuild "${REPO_PATH}/app-crypto/hcxdumptool" "https://github.com/ZerBea/hcxdumptool" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-crypto/jitterentropy" "https://github.com/smuellerDD/jitterentropy-library" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-crypto/johntheripper" "https://github.com/openwall/john" "bleeding-jumbo" "0" "yes"
+update_ebuild "${REPO_PATH}/app-crypto/pinentry" "git://git.gnupg.org/pinentry" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-crypto/rng-tools" "https://github.com/nhorman/rng-tools" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-dev/beautysh" "https://github.com/lovesegfault/beautysh" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-dev/dtc" "https://github.com/dgibson/dtc" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/app-dev/eglexternalplatform" "https://github.com/NVIDIA/eglexternalplatform" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-dev/gh" "https://github.com/cli/cli" "trunk" "0" "yes"
+update_ebuild "${REPO_PATH}/app-dev/git-lfs" "https://github.com/git-lfs/git-lfs" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/app-dev/glslang" "https://github.com/KhronosGroup/glslang" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/app-dev/gtk-doc" "https://gitlab.gnome.org/GNOME/gtk-doc" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-dev/gtk-doc-am" "https://gitlab.gnome.org/GNOME/gtk-doc" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-dev/jq" "https://github.com/stedolan/jq" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-dev/opencl-headers" "https://github.com/KhronosGroup/OpenCL-Headers" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/app-dev/patchelf" "https://github.com/NixOS/patchelf" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-dev/pkgconf" "https://github.com/pkgconf/pkgconf" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-dev/radare2" "https://github.com/radare/radare2" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-dev/repo" "https://github.com/GerritCodeReview/git-repo" "stable" "0" "yes"
+update_ebuild "${REPO_PATH}/app-dev/repo" "https://github.com/GerritCodeReview/git-repo" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/app-dev/samurai" "https://github.com/michaelforney/samurai" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-dev/spirv-headers" "https://github.com/KhronosGroup/SPIRV-Headers" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/app-dev/spirv-tools" "https://github.com/KhronosGroup/SPIRV-Tools" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/app-dev/vulkan-headers" "https://github.com/KhronosGroup/Vulkan-Headers" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/app-dev/vulkan-tools" "https://github.com/KhronosGroup/Vulkan-Tools" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/app-emu/capstone" "https://github.com/capstone-engine/capstone" "next" "0" "yes"
+update_ebuild "${REPO_PATH}/app-emu/keystone" "https://github.com/keystone-engine/keystone" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-emu/qiling" "https://github.com/qilingframework/qiling" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-emu/unicorn" "https://github.com/unicorn-engine/unicorn" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-fs/dosfstools" "https://github.com/dosfstools/dosfstools" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-fs/e2fsprogs" "https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs" "maint" "0" "yes"
+update_ebuild "${REPO_PATH}/app-fs/e2fsprogs" "https://github.com/tytso/e2fsprogs" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-fs/efivar" "https://github.com/rhboot/efivar" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/app-fs/exfat" "https://github.com/relan/exfat" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-fs/fuse" "https://github.com/libfuse/libfuse" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-fs/lsscsi" "https://github.com/hreinecke/lsscsi" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-fs/mdadm" "https://git.kernel.org/pub/scm/utils/mdadm/mdadm" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-fs/ncdu" "https://github.com/rofl0r/ncdu" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-fs/ntfs3g" "https://github.com/tuxera/ntfs-3g" "edge" "0" "yes"
 update_ebuild "${REPO_PATH}/app-fs/smartmontools" "https://github.com/smartmontools/smartmontools" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-fs/sshfs" "https://github.com/libfuse/sshfs" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-fs/sysfsutils" "https://github.com/linux-ras/sysfsutils" "master" "0" "yes"
@@ -251,38 +254,21 @@ update_ebuild "${REPO_PATH}/app-fs/testdisk" "https://github.com/cgsecurity/test
 update_ebuild "${REPO_PATH}/app-fs/udftools" "https://github.com/pali/udftools" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-kernel/dracut" "https://github.com/dracutdevs/dracut" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-kernel/kconfig-hardened-check" "https://github.com/a13xp0p0v/kconfig-hardened-check" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-lang/swig" "https://github.com/swig/swig" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-lang/yasm" "https://github.com/yasm/yasm" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-util/android-udev-rules" "https://github.com/M0Rf30/android-udev-rules" "main" "0" "yes"
-update_ebuild "${REPO_PATH}/app-emu/capstone" "https://github.com/capstone-engine/capstone" "next" "0" "yes"
-update_ebuild "${REPO_PATH}/app-util/conky" "https://github.com/brndnmtthws/conky" "main" "0" "yes"
-update_ebuild "${REPO_PATH}/app-dev/jq" "https://github.com/stedolan/jq" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-emu/keystone" "https://github.com/keystone-engine/keystone" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-util/lm-sensors" "https://github.com/lm-sensors/lm-sensors" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-util/lshw" "https://github.com/lyonel/lshw" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-util/numactl" "https://github.com/numactl/numactl" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-emu/qiling" "https://github.com/qilingframework/qiling" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-net/seatd" "https://github.com/kennylevinsen/seatd" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-util/sysbench" "https://github.com/akopytov/sysbench" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-emu/unicorn" "https://github.com/unicorn-engine/unicorn" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-net/aircrack-ng" "https://github.com/aircrack-ng/aircrack-ng" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-net/chrony" "https://gitlab.com/chrony/chrony" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-net/cyrus-sasl" "https://github.com/cyrusimap/cyrus-sasl" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-net/dropbear" "https://github.com/mkj/dropbear" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-net/iproute2" "https://github.com/iproute2/iproute2" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/app-net/iputils" "https://github.com/iputils/iputils" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-net/knock" "https://github.com/jvinet/knock" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-net/networkmanager" "https://github.com/NetworkManager/NetworkManager" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/app-net/nmap" "https://github.com/nmap/nmap" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-net/openssh" "https://github.com/openssh/openssh-portable" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-net/rsync" "https://github.com/WayneD/rsync" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-net/seatd" "https://github.com/kennylevinsen/seatd" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-net/weechat" "https://github.com/weechat/weechat" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-net/yt-dlp" "https://github.com/yt-dlp/yt-dlp" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-port/eix" "https://github.com/vaeth/eix" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/app-port/elt-patches" "https://gitweb.gentoo.org/proj/elt-patches" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-port/gentoopm" "https://github.com/mgorny/gentoopm" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-port/portage-utils" "https://github.com/gentoo/portage-utils" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-port/smart-live-rebuild" "https://github.com/mgorny/smart-live-rebuild" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-server/lighttpd" "https://github.com/lighttpd/lighttpd1.4" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-server/opensmtpd" "https://github.com/OpenSMTPD/OpenSMTPD" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-server/proxychains" "https://github.com/rofl0r/proxychains-ng" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-server/pure-ftpd" "https://github.com/jedisct1/pure-ftpd" "master" "0" "yes"
@@ -293,7 +279,15 @@ update_ebuild "${REPO_PATH}/app-tex/hunspell-dictionaries" "https://github.com/w
 update_ebuild "${REPO_PATH}/app-tex/poppler" "https://gitlab.freedesktop.org/poppler/poppler" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-tex/poppler-data" "https://gitlab.freedesktop.org/poppler/poppler-data" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-tex/qpdf" "https://github.com/qpdf/qpdf" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/app-util/android-udev-rules" "https://github.com/M0Rf30/android-udev-rules" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/app-util/better-adb-sync" "https://github.com/jb2170/better-adb-sync" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-util/conky" "https://github.com/brndnmtthws/conky" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/app-util/lm-sensors" "https://github.com/lm-sensors/lm-sensors" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-util/lshw" "https://github.com/lyonel/lshw" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-util/numactl" "https://github.com/numactl/numactl" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/app-util/sysbench" "https://github.com/akopytov/sysbench" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-var/logrotate" "https://github.com/logrotate/logrotate" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/app-var/screen" "https://git.savannah.gnu.org/git/screen" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-var/sudo" "https://github.com/sudo-project/sudo" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/app-var/sysstat" "https://github.com/sysstat/sysstat" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-var/tmux" "https://github.com/tmux/tmux" "master" "0" "yes"
@@ -304,108 +298,82 @@ update_ebuild "${REPO_PATH}/bin/nvidia-settings" "https://github.com/NVIDIA/nvid
 update_ebuild "${REPO_PATH}/fonts/encodings" "https://gitlab.freedesktop.org/xorg/font/encodings" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/fonts/font-alias" "https://gitlab.freedesktop.org/xorg/font/alias" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/fonts/font-util" "https://gitlab.freedesktop.org/xorg/font/util" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/fonts/noto" "https://github.com/jopamo/micronoto" "main" "0" "yes"
-update_ebuild "${REPO_PATH}/fonts/noto-emoji" "https://github.com/googlefonts/noto-emoji" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-core/argp-standalone" "https://github.com/argp-standalone/argp-standalone" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/lib-core/expat" "https://github.com/libexpat/libexpat" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-core/iniparser" "https://github.com/ndevilla/iniparser" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-core/isl" "https://repo.or.cz/isl" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-core/libffi" "https://github.com/libffi/libffi" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-core/libksba" "git://git.gnupg.org/libksba" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-core/libxcrypt" "https://github.com/besser82/libxcrypt" "develop" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-core/libxml2" "https://gitlab.gnome.org/GNOME/libxml2" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-core/libxslt" "https://gitlab.gnome.org/GNOME/libxslt" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-core/musl" "https://git.musl-libc.org/git/musl" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-core/musl-obstack" "https://github.com/void-linux/musl-obstack" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-core/netbsd-curses" "https://github.com/sabotage-linux/netbsd-curses" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-core/nettle" "https://github.com/gnutls/nettle" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-core/npth" "git://git.gnupg.org/npth" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-core/popt" "https://github.com/rpm-software-management/popt" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-core/zlib" "https://github.com/madler/zlib" "develop" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-dev/check" "https://github.com/libcheck/check" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-dev/dbus-glib" "https://gitlab.freedesktop.org/dbus/dbus-glib" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-dev/double-conversion" "https://github.com/google/double-conversion" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-dev/fribidi" "https://github.com/fribidi/fribidi" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-dev/gobject-introspection" "https://gitlab.gnome.org/GNOME/gobject-introspection" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-dev/jemalloc" "https://github.com/jemalloc/jemalloc" "dev" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-dev/json-c" "https://github.com/json-c/json-c" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-dev/jsoncpp" "https://github.com/open-source-parsers/jsoncpp" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-dev/libasr" "https://github.com/OpenSMTPD/libasr" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-dev/libconfig" "https://github.com/hyperrealm/libconfig" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-dev/libevent" "https://github.com/libevent/libevent" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-dev/libnl" "https://github.com/thom311/libnl" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-dev/libusb" "https://github.com/libusb/libusb" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-dev/libutf8proc" "https://github.com/JuliaStrings/utf8proc" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-dev/maxminddb" "https://github.com/maxmind/libmaxminddb" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-dev/nghttp2" "https://github.com/nghttp2/nghttp2" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-dev/rapidjson" "https://github.com/Tencent/rapidjson" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-dev/uthash" "https://github.com/troydhanson/uthash" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-misc/cppzmq" "https://github.com/zeromq/cppzmq" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-misc/czmq" "https://github.com/zeromq/czmq" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/lib-dev/gobject-introspection" "https://gitlab.gnome.org/GNOME/gobject-introspection" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-misc/gumbo-parser" "https://github.com/google/gumbo-parser" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-misc/http-parser" "https://github.com/nodejs/http-parser" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-misc/inih" "https://github.com/benhoyt/inih" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/lib-dev/json-c" "https://github.com/json-c/json-c" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/lib-dev/jsoncpp" "https://github.com/open-source-parsers/jsoncpp" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/lib-util/libb2" "https://github.com/BLAKE2/libb2" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/lib-dev/libconfig" "https://github.com/hyperrealm/libconfig" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/lib-misc/libcroco" "https://gitlab.gnome.org/GNOME/libcroco" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/lib-util/libevdev" "https://gitlab.freedesktop.org/libevdev/libevdev" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/lib-util/libinput" "https://gitlab.freedesktop.org/libinput/libinput" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-misc/libiscsi" "https://github.com/sahlberg/libiscsi" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-misc/libmesode" "https://github.com/profanity-im/libmesode" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/lib-net/libndp" "https://github.com/jpirko/libndp" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/lib-util/libsodium" "https://github.com/jedisct1/libsodium" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-misc/libqtxdg" "https://github.com/lxqt/libqtxdg" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-misc/libssh2" "https://github.com/libssh2/libssh2" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/lib-util/libverto" "https://github.com/latchset/libverto" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-misc/libxdg-base" "https://github.com/devnev/libxdg-basedir" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-misc/libzmq" "https://github.com/zeromq/libzmq" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/lib-dev/nghttp2" "https://github.com/nghttp2/nghttp2" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/lib-dev/rapidjson" "https://github.com/Tencent/rapidjson" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-misc/rpcsvc-proto" "https://github.com/thkukuk/rpcsvc-proto" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/lib-dev/uthash" "https://github.com/troydhanson/uthash" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-misc/xxhash" "https://github.com/Cyan4973/xxHash" "dev" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-misc/zmqpp" "https://github.com/zeromq/zmqpp" "develop" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-net/libndp" "https://github.com/jpirko/libndp" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-print/cups" "https://github.com/apple/cups" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-icontheme/adwaita-plus" "https://github.com/Bonandry/adwaita-plus" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-icontheme/adwaita-qt" "https://github.com/FedoraQt/adwaita-qt" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-icontheme/dracula-theme" "https://github.com/dracula/gtk" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-icontheme/hicolor-icon-theme" "https://gitlab.freedesktop.org/xdg/default-icon-theme" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-app/arqiver" "https://github.com/tsujan/Arqiver" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-util/libb2" "https://github.com/BLAKE2/libb2" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-util/libevdev" "https://gitlab.freedesktop.org/libevdev/libevdev" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-util/libinput" "https://gitlab.freedesktop.org/libinput/libinput" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-util/libsodium" "https://github.com/jedisct1/libsodium" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/lib-util/libverto" "https://github.com/latchset/libverto" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-app/cbatticon" "https://github.com/valr/cbatticon" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-tools/extra-cmake-modules" "https://github.com/KDE/extra-cmake-modules" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-app/featherpad" "https://github.com/tsujan/FeatherPad" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-app/ff2mpv" "https://github.com/woodruffw/ff2mpv" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-app/lxappearance" "https://github.com/lxde/lxappearance" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-app/lxterminal" "https://github.com/lxde/lxterminal" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-app/pcmanfm" "https://github.com/lxde/pcmanfm" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-app/qterminal" "https://github.com/lxqt/qterminal" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-app/tint2" "https://gitlab.com/o9000/tint2" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-desktop/fluxbox" "https://github.com/fluxbox/fluxbox" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-desktop/fvwm3" "https://github.com/fvwmorg/fvwm3" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-desktop/hsetroot" "https://github.com/himdel/hsetroot" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-desktop/i3wm" "https://github.com/i3/i3" "next" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-misc/iceauth" "https://gitlab.freedesktop.org/xorg/app/iceauth" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-desktop/jwm" "https://github.com/joewing/jwm" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-app/lxappearance" "https://github.com/lxde/lxappearance" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-app/lxterminal" "https://github.com/lxde/lxterminal" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-tools/makedepend" "https://gitlab.freedesktop.org/xorg/util/makedepend" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-misc/mkfontscale" "https://gitlab.freedesktop.org/xorg/app/mkfontscale" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-desktop/obconf-qt" "https://www.github.com/lxqt/obconf-qt" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-desktop/openbox" "https://github.com/danakj/openbox" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-app/pcmanfm" "https://github.com/lxde/pcmanfm" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-misc/picom" "https://github.com/yshui/picom" "next" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-misc/plasma-wayland-protocols" "https://github.com/KDE/plasma-wayland-protocols" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-desktop/polybar" "https://github.com/polybar/polybar" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-desktop/qalculate-gtk" "https://github.com/Qalculate/qalculate-gtk" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-app/qbittorrent" "https://github.com/qbittorrent/qBittorrent" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-lib/rgb" "https://gitlab.freedesktop.org/xorg/app/rgb" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-misc/shared-mime-info" "https://gitlab.freedesktop.org/xdg/shared-mime-info" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-misc/startup-notification" "https://gitlab.freedesktop.org/xdg/startup-notification" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-misc/sway" "https://github.com/swaywm/sway" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-misc/swaybg" "https://github.com/swaywm/swaybg" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-misc/swayidle" "https://github.com/swaywm/swayidle" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-misc/swaylock" "https://github.com/swaywm/swaylock" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-app/tint2" "https://gitlab.com/o9000/tint2" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-tools/util-macros" "https://gitlab.freedesktop.org/xorg/util/macros" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-tools/xauth" "https://gitlab.freedesktop.org/xorg/app/xauth" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-lib/xbitmaps" "https://gitlab.freedesktop.org/xorg/data/bitmaps" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-tools/xcb-proto" "https://gitlab.freedesktop.org/xorg/proto/xcbproto" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-tools/xcb-util-xrm" "https://github.com/Airblader/xcb-util-xrm" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-lib/xdg-user-dirs" "https://gitlab.freedesktop.org/xdg/xdg-user-dirs" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-lib/xdg-utils" "https://gitlab.freedesktop.org/xdg/xdg-utils" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-tools/xdpyinfo" "https://gitlab.freedesktop.org/xorg/app/xdpyinfo" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-misc/xf86-input-libinput" "https://gitlab.freedesktop.org/xorg/driver/xf86-input-libinput" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-tools/xhost" "https://gitlab.freedesktop.org/xorg/app/xhost" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-tools/xinit" "https://gitlab.freedesktop.org/xorg/app/xinit" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-misc/xmrig" "https://github.com/xmrig/xmrig" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-tools/xorgproto" "https://gitlab.freedesktop.org/xorg/proto/xorgproto" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-tools/xprop" "https://gitlab.freedesktop.org/xorg/app/xprop" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-tools/xrandr" "https://gitlab.freedesktop.org/xorg/app/xrandr" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-tools/xrdb" "https://gitlab.freedesktop.org/xorg/app/xrdb" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-tools/xset" "https://gitlab.freedesktop.org/xorg/app/xset" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-tools/xwininfo" "https://gitlab.freedesktop.org/xorg/app/xwininfo" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-icontheme/adwaita-plus" "https://github.com/Bonandry/adwaita-plus" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-icontheme/adwaita-qt" "https://github.com/FedoraQt/adwaita-qt" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-icontheme/dracula-theme" "https://github.com/dracula/gtk" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-icontheme/hicolor-icon-theme" "https://gitlab.freedesktop.org/xdg/default-icon-theme" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/at-spi2-core" "https://gitlab.gnome.org/GNOME/at-spi2-core" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-lib/cairo" "https://gitlab.freedesktop.org/cairo/cairo" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/egl-wayland" "https://github.com/NVIDIA/egl-wayland" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/gdk-pixbuf" "https://gitlab.gnome.org/GNOME/gdk-pixbuf" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/gnome-common" "https://gitlab.gnome.org/GNOME/gnome-common" "master" "0" "yes"
@@ -439,48 +407,81 @@ update_ebuild "${REPO_PATH}/xgui-lib/libfm-extra" "https://github.com/lxde/libfm
 update_ebuild "${REPO_PATH}/xgui-lib/libfontenc" "https://gitlab.freedesktop.org/xorg/lib/libfontenc" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/libpciaccess" "https://gitlab.freedesktop.org/xorg/lib/libpciaccess" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/libqalculate" "https://github.com/Qalculate/libqalculate" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-lib/librsvg-og" "https://github.com/oaken-source/librsvg-og" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/libva" "https://github.com/intel/libva" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-lib/libvdpau" "https://gitlab.freedesktop.org/vdpau/libvdpau/" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-lib/libvdpau" "https://gitlab.freedesktop.org/vdpau/libvdpau" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/libxcb" "https://gitlab.freedesktop.org/xorg/lib/libxcb" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/libxcvt" "https://gitlab.freedesktop.org/xorg/lib/libxcvt" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/libxkbcommon" "https://github.com/xkbcommon/libxkbcommon" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/libxkbfile" "https://gitlab.freedesktop.org/xorg/lib/libxkbfile" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/pango" "https://gitlab.gnome.org/GNOME/pango" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/pixman" "https://gitlab.freedesktop.org/pixman/pixman" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-lib/qt6ct" "https://github.com/trialuser02/qt6ct" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-lib/rgb" "https://gitlab.freedesktop.org/xorg/app/rgb" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/vte" "https://github.com/GNOME/vte" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/wayland" "https://gitlab.freedesktop.org/wayland/wayland" "main" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-lib/wayland-protocols" "https://gitlab.freedesktop.org/wayland/wayland-protocols/" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-lib/wayland-protocols" "https://gitlab.freedesktop.org/wayland/wayland-protocols" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/weston" "https://gitlab.freedesktop.org/wayland/weston" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-lib/wlroots" "https://gitlab.freedesktop.org/wlroots/wlroots" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-lib/xbitmaps" "https://gitlab.freedesktop.org/xorg/data/bitmaps" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/xcb-util" "https://gitlab.freedesktop.org/xorg/lib/libxcb-util" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/xcb-util-cursor" "https://gitlab.freedesktop.org/xorg/lib/libxcb-cursor" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/xcb-util-image" "https://gitlab.freedesktop.org/xorg/lib/libxcb-image" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/xcb-util-keysyms" "https://gitlab.freedesktop.org/xorg/lib/libxcb-keysyms" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-lib/xcb-util-m4" "https://gitlab.freedesktop.org/xorg/util/xcb-util-m4" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/xcb-util-renderutil" "https://gitlab.freedesktop.org/xorg/lib/libxcb-render-util" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/xcb-util-wm" "https://gitlab.freedesktop.org/xorg/lib/libxcb-wm" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-lib/xdg-user-dirs" "https://gitlab.freedesktop.org/xdg/xdg-user-dirs" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-lib/xdg-utils" "https://gitlab.freedesktop.org/xdg/xdg-utils" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/xtrans" "https://gitlab.freedesktop.org/xorg/lib/libxtrans" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-lib/yajl" "https://github.com/lloyd/yajl" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-misc/iceauth" "https://gitlab.freedesktop.org/xorg/app/iceauth" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-misc/menu-cache" "https://github.com/lxde/menu-cache" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-misc/mkfontscale" "https://gitlab.freedesktop.org/xorg/app/mkfontscale" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-misc/picom" "https://github.com/yshui/picom" "next" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-misc/plasma-wayland-protocols" "https://github.com/KDE/plasma-wayland-protocols" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-misc/shared-mime-info" "https://gitlab.freedesktop.org/xdg/shared-mime-info" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-misc/startup-notification" "https://gitlab.freedesktop.org/xdg/startup-notification" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-misc/sway" "https://github.com/swaywm/sway" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-misc/swaybg" "https://github.com/swaywm/swaybg" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-misc/swayidle" "https://github.com/swaywm/swayidle" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-misc/swaylock" "https://github.com/swaywm/swaylock" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-misc/xf86-input-libinput" "https://gitlab.freedesktop.org/xorg/driver/xf86-input-libinput" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-misc/xkbcomp" "https://gitlab.freedesktop.org/xorg/app/xkbcomp" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-misc/xmrig" "https://github.com/xmrig/xmrig" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-tools/alsa-lib" "https://github.com/alsa-project/alsa-lib" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-tools/alsa-utils" "https://github.com/alsa-project/alsa-utils" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-app/ff2mpv" "https://github.com/woodruffw/ff2mpv" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-misc/menu-cache" "https://github.com/lxde/menu-cache" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-tools/extra-cmake-modules" "https://github.com/KDE/extra-cmake-modules" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-tools/makedepend" "https://gitlab.freedesktop.org/xorg/util/makedepend" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xgui-tools/mesa-progs" "https://gitlab.freedesktop.org/mesa/demos" "main" "0" "yes"
-update_ebuild "${REPO_PATH}/xgui-misc/xkbcomp" "https://gitlab.freedesktop.org/xorg/app/xkbcomp" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-tools/util-macros" "https://gitlab.freedesktop.org/xorg/util/macros" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-tools/xauth" "https://gitlab.freedesktop.org/xorg/app/xauth" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-tools/xcb-proto" "https://gitlab.freedesktop.org/xorg/proto/xcbproto" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-tools/xcb-util-xrm" "https://github.com/Airblader/xcb-util-xrm" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-tools/xdpyinfo" "https://gitlab.freedesktop.org/xorg/app/xdpyinfo" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-tools/xhost" "https://gitlab.freedesktop.org/xorg/app/xhost" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-tools/xinit" "https://gitlab.freedesktop.org/xorg/app/xinit" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-tools/xorgproto" "https://gitlab.freedesktop.org/xorg/proto/xorgproto" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-tools/xprop" "https://gitlab.freedesktop.org/xorg/app/xprop" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-tools/xrandr" "https://gitlab.freedesktop.org/xorg/app/xrandr" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-tools/xrdb" "https://gitlab.freedesktop.org/xorg/app/xrdb" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-tools/xset" "https://gitlab.freedesktop.org/xorg/app/xset" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xgui-tools/xwininfo" "https://gitlab.freedesktop.org/xorg/app/xwininfo" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-app/alsa-ucm-conf" "https://github.com/alsa-project/alsa-ucm-conf" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-app/audacious" "https://github.com/audacious-media-player/audacious" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-app/audacious-plugins" "https://github.com/audacious-media-player/audacious-plugins" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xmedia-lib/avisynth" "https://github.com/AviSynth/AviSynthPlus" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-app/exif" "https://github.com/libexif/exif" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-app/ffmpeg-normalize" "https://github.com/slhck/ffmpeg-normalize" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-app/flameshot" "https://github.com/flameshot-org/flameshot" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-app/imagemagick" "https://github.com/ImageMagick/ImageMagick" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-app/jpegoptim" "https://github.com/tjko/jpegoptim" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xmedia-app/lximage-qt" "https://github.com/lxqt/lximage-qt" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-app/mediainfo" "https://github.com/MediaArea/MediaInfo" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-app/mp4box" "https://github.com/gpac/gpac" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-app/mpv" "https://github.com/mpv-player/mpv" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-app/pavucontrol-qt" "https://github.com/lxde/pavucontrol-qt" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-app/phototonic" "https://github.com/oferkv/phototonic" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-app/qrencode" "https://github.com/fukuchi/libqrencode" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xmedia-lib/avisynth" "https://github.com/AviSynth/AviSynthPlus" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-lib/fdk-aac" "https://github.com/mstorsjo/fdk-aac" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-lib/ffmpegsource" "https://github.com/FFMS/ffms2" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-lib/flac" "https://github.com/xiph/flac" "master" "0" "yes"
@@ -495,7 +496,7 @@ update_ebuild "${REPO_PATH}/xmedia-lib/libexif" "https://github.com/libexif/libe
 update_ebuild "${REPO_PATH}/xmedia-lib/libfreeaptx" "https://github.com/iamthehorker/libfreeaptx" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-lib/libglvnd" "https://github.com/NVIDIA/libglvnd" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-lib/libjpeg-turbo" "https://github.com/libjpeg-turbo/libjpeg-turbo" "main" "0" "yes"
-update_ebuild "${REPO_PATH}/xmedia-lib/libldac" "https://android.googlesource.com/platform/external/libldac" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/xmedia-lib/libldac" "https://github.com/EHfive/ldacBT" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-lib/libmediainfo" "https://github.com/MediaArea/MediaInfoLib" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-lib/libogg" "https://github.com/xiph/ogg" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-lib/libplacebo" "https://github.com/haasn/libplacebo" "master" "0" "yes"
@@ -515,3 +516,5 @@ update_ebuild "${REPO_PATH}/xmedia-lib/tiff" "https://gitlab.com/libtiff/libtiff
 update_ebuild "${REPO_PATH}/xmedia-lib/uchardet" "https://gitlab.freedesktop.org/uchardet/uchardet" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-lib/vapoursynth" "https://github.com/vapoursynth/vapoursynth" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-lib/vulkan-loader" "https://github.com/KhronosGroup/Vulkan-Loader" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/xmedia-lib/x264" "https://code.videolan.org/videolan/x264" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xmedia-lib/x265" "https://bitbucket.org/multicoreware/x265_git/get/${SNAPSHOT}.zip" "master" "0" "yes"

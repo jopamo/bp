@@ -9,7 +9,7 @@ HOMEPAGE="https://www.x.org/wiki/"
 
 SNAPSHOT=89429bb36de409b204ef105e8b73126a639ccb03
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXau/-/archive/${SNAPSHOT}/libXau-${SNAPSHOT}.tar.bz2 -> libXau-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/libXau-${SNAPSHOT}"
+S="${WORKDIR}/libxau-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

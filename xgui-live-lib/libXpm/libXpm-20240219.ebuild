@@ -9,7 +9,7 @@ HOMEPAGE="https://www.x.org/wiki/"
 
 SNAPSHOT=bdb6c75fd667e43ce228f1a32e930a0f2966f29d
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXpm/-/archive/${SNAPSHOT}/libXpm-${SNAPSHOT}.tar.bz2 -> libXpm-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/libXpm-${SNAPSHOT}"
+S="${WORKDIR}/libxpm-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

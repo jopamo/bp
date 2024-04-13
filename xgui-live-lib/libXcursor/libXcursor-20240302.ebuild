@@ -9,7 +9,7 @@ HOMEPAGE="https://www.x.org/wiki/"
 
 SNAPSHOT=09617bcc9a0f1b5072212da5f8fede92ab85d157
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXcursor/-/archive/${SNAPSHOT}/libXcursor-${SNAPSHOT}.tar.bz2 -> libXcursor-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/libXcursor-${SNAPSHOT}"
+S="${WORKDIR}/libxcursor-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

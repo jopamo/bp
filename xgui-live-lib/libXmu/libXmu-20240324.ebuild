@@ -9,7 +9,7 @@ HOMEPAGE="https://www.x.org/wiki/"
 
 SNAPSHOT=cc378e4f0cc2ab5b66d378050ba4956612a01197
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXmu/-/archive/${SNAPSHOT}/libXmu-${SNAPSHOT}.tar.bz2 -> libXmu-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/libXmu-${SNAPSHOT}"
+S="${WORKDIR}/libxmu-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

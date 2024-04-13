@@ -54,7 +54,7 @@ RDEPEND="
 	gles2? (
 		xgui-misc/mesa
 	)
-	pipewire? ( >=xmedia-live-app/pipewire-0.2 )
+	pipewire? ( xgui-misc/pipewire )
 	rdp? ( >=app-net/freerdp-2.0.0_rc2:= )
 	remoting? (
 		xmedia-live-lib/gstreamer:1.0

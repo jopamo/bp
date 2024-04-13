@@ -16,6 +16,26 @@ PYTHON_VERSION="3.12"
 PERL_VERSION="5.38"
 TCL_VERSION="8.6"
 LLVM_VERSION="18"
+BINUTILS_BRANCH="binutils-$(echo "$BINUTILS_VERSION" | sed 's/\./_/')-branch"
+
+GDB_VERSION="14"
+BASH_VERSION="5.2"
+GO_VERSION="1.22"
+GLIBC_VERSION="2.38"
+LIBASSUAN_VERSION="2.5"
+LIBGCRYPT_VERSION="1.10"
+MPFR_VERSION="4.2"
+KDE_VERSION="5"
+
+BASH_BRANCH="master"
+GDB_BRANCH="gdb-${GDB_VERSION}-branch"
+GLIBC_BRANCH="release/${GLIBC_VERSION}/master"
+GO_BRANCH="release-branch.go${GO_VERSION}"
+KGUIADDONS_BRANCH="kf${KDE_VERSION}"
+KWINDOWSYSTEM_BRANCH="kf${KDE_VERSION}"
+LIBASSUAN_BRANCH="LIBASSUAN-${LIBASSUAN_VERSION}-BRANCH"
+LIBGCRYPT_BRANCH="LIBGCRYPT-${LIBGCRYPT_VERSION}-BRANCH"
+TCL_BRANCH=$(echo "core-${TCL_VERSION}" | tr '.' '-')
 
 show_help() {
 	echo "Usage: $0 [options]"
@@ -157,19 +177,16 @@ if [[ $update_toolchain == true ]]; then
 
 	update_ebuild "${REPO_PATH}/app-build/gcc" "https://github.com/gcc-mirror/gcc" "releases/gcc-${GCC_MAJOR_VERSION}" "$GCC_VERSION" "no"
 
-	BINUTILS_BRANCH="binutils-$(echo "$BINUTILS_VERSION" | sed 's/\./_/')-branch"
-	update_ebuild "${REPO_PATH}/app-build/binutils" "https://git.linaro.org/toolchain/binutils-gdb" "$BINUTILS_BRANCH" "$BINUTILS_VERSION" "no"
+	update_ebuild "${REPO_PATH}/app-build/binutils" "https://github.com/bminor/binutils-gdb" "${BINUTILS_BRANCH}" "${BINUTILS_VERSION}" "no"
 	update_ebuild "${REPO_PATH}/app-compression/xz-utils" "https://github.com/tukaani-project/xz" "v${XZ_UTILS_VERSION}" "$XZ_UTILS_VERSION" "no"
 	update_ebuild "${REPO_PATH}/app-compression/zstd" "https://github.com/facebook/zstd" "dev" "0" "yes"
 	update_ebuild "${REPO_PATH}/app-compression/lz4" "https://github.com/lz4/lz4" "dev" "0" "yes"
+	update_ebuild "${REPO_PATH}/lib-core/glibc" "https://github.com/bminor/glibc" "${GLIBC_BRANCH}" "${GLIBC_VERSION}" "no"
 fi
 
 if [[ $update_unsafe == true ]]; then
 	update_ebuild "${REPO_PATH}/app-fs/efibootmgr" "https://github.com/rhinstaller/efibootmgr" "main" "0" "yes"
 fi
-
-BINUTILS_BRANCH="binutils-$(echo "$BINUTILS_VERSION" | sed 's/\./_/')-branch"
-TCL_BRANCH=$(echo "core-${TCL_VERSION}" | tr '.' '-')
 
 update_ebuild "${REPO_PATH}/app-core/gawk" "https://git.savannah.gnu.org/git/gawk" "gawk-${GAWK_VERSION}-stable" "$GAWK_VERSION" "no"
 update_ebuild "${REPO_PATH}/app-core/systemd" "https://github.com/systemd/systemd-stable" "v${SYSTEMD_VERSION}-stable" "$SYSTEMD_VERSION" "no"
@@ -178,10 +195,21 @@ update_ebuild "${REPO_PATH}/app-lang/perl" "https://github.com/Perl/perl5" "main
 update_ebuild "${REPO_PATH}/app-lang/python" "https://github.com/python/cpython" "${PYTHON_VERSION}" "$PYTHON_VERSION" "no"
 update_ebuild "${REPO_PATH}/app-lang/tcl" "https://github.com/tcltk/tcl" "${TCL_BRANCH}-branch" "$TCL_VERSION" "no"
 update_ebuild "${REPO_PATH}/app-lang/yasm" "https://github.com/yasm/yasm" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-net/bind-tools" "https://github.com/isc-projects/bind9" "bind-${BIND_TOOLS_VERSION}" "$BIND_TOOLS_VERSION" "no"
+update_ebuild "${REPO_PATH}/app-net/bind-tools" "https://github.com/isc-projects/bind9" "bind-${BIND_TOOLS_VERSION}" "${BIND_TOOLS_VERSION}" "no"
 update_ebuild "${REPO_PATH}/app-server/nodejs" "https://github.com/nodejs/node" "v${NODEJS_VERSION}.x" "$NODEJS_VERSION" "no"
 update_ebuild "${REPO_PATH}/lib-net/openssl" "https://github.com/openssl/openssl" "openssl-${OPENSSL_VERSION}" "$OPENSSL_VERSION" "no"
 update_ebuild "${REPO_PATH}/app-build/llvm" "https://github.com/llvm/llvm-project" "release/${LLVM_VERSION}.x" "$LLVM_VERSION" "no"
+
+update_ebuild "${REPO_PATH}/app-build/gdb" "https://github.com/bminor/binutils-gdb" "${GDB_BRANCH}" "${GDB_VERSION}" "no"
+update_ebuild "${REPO_PATH}/app-core/bash" "https://git.savannah.gnu.org/git/bash" "${BASH_BRANCH}" "${BASH_VERSION}" "no"
+update_ebuild "${REPO_PATH}/app-lang/go" "https://github.com/golang/go" "${GO_BRANCH}" "${GO_VERSION}" "no"
+update_ebuild "${REPO_PATH}/lib-core/libassuan" "git://git.gnupg.org/libassuan" "${LIBASSUAN_BRANCH}" "${LIBASSUAN_VERSION}" "no"
+update_ebuild "${REPO_PATH}/lib-core/libgcrypt" "git://git.gnupg.org/libgcrypt" "${LIBGCRYPT_BRANCH}" "${LIBGCRYPT_VERSION}" "no"
+update_ebuild "${REPO_PATH}/lib-core/mpfr" "https://gitlab.inria.fr/mpfr/mpfr" "${MPFR_VERSION}" "${MPFR_VERSION}" "no"
+update_ebuild "${REPO_PATH}/xgui-tools/kguiaddons" "https://github.com/KDE/kguiaddons" "${KGUIADDONS_BRANCH}" "${KDE_VERSION}" "no"
+update_ebuild "${REPO_PATH}/xgui-tools/kwindowsystem" "https://github.com/KDE/kwindowsystem" "${KWINDOWSYSTEM_BRANCH}" "${KDE_VERSION}" "no"
+
+update_ebuild "${REPO_PATH}/xmedia-lib/libldac" "https://android.googlesource.com/platform/external/libldac" "main" "0" "yes"
 
 update_ebuild "${REPO_PATH}/app-build/gnuconfig" "https://git.savannah.gnu.org/git/config" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-compression/brotli" "https://github.com/google/brotli" "master" "0" "yes"
@@ -496,7 +524,6 @@ update_ebuild "${REPO_PATH}/xmedia-lib/libexif" "https://github.com/libexif/libe
 update_ebuild "${REPO_PATH}/xmedia-lib/libfreeaptx" "https://github.com/iamthehorker/libfreeaptx" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-lib/libglvnd" "https://github.com/NVIDIA/libglvnd" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-lib/libjpeg-turbo" "https://github.com/libjpeg-turbo/libjpeg-turbo" "main" "0" "yes"
-update_ebuild "${REPO_PATH}/xmedia-lib/libldac" "https://github.com/EHfive/ldacBT" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-lib/libmediainfo" "https://github.com/MediaArea/MediaInfoLib" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-lib/libogg" "https://github.com/xiph/ogg" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-lib/libplacebo" "https://github.com/haasn/libplacebo" "master" "0" "yes"
@@ -517,4 +544,4 @@ update_ebuild "${REPO_PATH}/xmedia-lib/uchardet" "https://gitlab.freedesktop.org
 update_ebuild "${REPO_PATH}/xmedia-lib/vapoursynth" "https://github.com/vapoursynth/vapoursynth" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-lib/vulkan-loader" "https://github.com/KhronosGroup/Vulkan-Loader" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-lib/x264" "https://code.videolan.org/videolan/x264" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xmedia-lib/x265" "https://bitbucket.org/multicoreware/x265_git/get/${SNAPSHOT}.zip" "master" "0" "yes"
+update_ebuild "${REPO_PATH}/xmedia-lib/x265" "https://bitbucket.org/multicoreware/x265_git" "master" "0" "yes"

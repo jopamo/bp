@@ -23,7 +23,7 @@ DEPEND="
 	lib-dev/dbus-glib
 	xgui-misc/mpg123
 	xmedia-app/ffmpeg
-	~xmedia-app/audacious-${PV}
+	xmedia-app/audacious
 	aac? ( xmedia-live-lib/faad2 )
 	alsa? ( xgui-tools/alsa-lib )
 	aosd? (

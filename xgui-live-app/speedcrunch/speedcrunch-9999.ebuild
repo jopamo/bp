@@ -6,7 +6,7 @@ inherit cmake xdg git-r3 flag-o-matic
 
 DESCRIPTION="Fast and usable calculator for power users"
 HOMEPAGE="http://speedcrunch.org/"
-EGIT_REPO_URI="https://bitbucket.org/heldercorreia/speedcrunch.git"
+EGIT_REPO_URI="https://bitbucket.org/heldercorreia/speedcrunch"
 
 LICENSE="GPL-2"
 SLOT="0"

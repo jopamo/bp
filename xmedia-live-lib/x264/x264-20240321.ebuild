@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit flag-o-matic toolchain-funcs git-r3
+inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="A free library for encoding X264/AVC streams"
 HOMEPAGE="https://www.videolan.org/developers/x264.html"
-EGIT_REPO_URI="https://git.videolan.org/git/x264.git"
+
+SNAPSHOT="7ed753b10a61d0be95f683289dfb925b800b0676"
+SRC_URI="https://code.videolan.org/videolan/x264/-/archive/${SNAPSHOT}/x264-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/x264-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

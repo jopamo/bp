@@ -6,7 +6,7 @@ inherit git-r3
 
 DESCRIPTION="Small forwarding DNS server"
 HOMEPAGE="http://www.thekelleys.org.uk/dnsmasq/doc.html"
-EGIT_REPO_URI="http://thekelleys.org.uk/git/dnsmasq.git"
+EGIT_REPO_URI="http://thekelleys.org.uk/git/dnsmasq"
 
 LICENSE="|| ( GPL-2 GPL-3 )"
 SLOT="0"

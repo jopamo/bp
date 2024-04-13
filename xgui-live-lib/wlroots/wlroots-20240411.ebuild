@@ -6,14 +6,10 @@ inherit meson
 
 DESCRIPTION="A modular Wayland compositor library"
 HOMEPAGE="https://github.com/swaywm/wlroots"
-EGIT_REPO_URI="https://github.com/swaywm/wlroots"
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/swaywm/${PN}.git"
-	inherit git-r3
-else
-	SRC_URI="https://github.com/swaywm/${PN}/releases/download/${PV}/${P}.tar.gz"
-fi
+SNAPSHOT="b1b34cd6653d51f3bf8e331e6ae7b39290ae820e"
+SRC_URI="https://gitlab.freedesktop.org/wlroots/wlroots/-/archive/${SNAPSHOT}/wlroots-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/wlroots-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

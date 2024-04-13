@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="SVG rendering library for the Qt6 framework"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT="55dba8704c0a748b0ce9f2d3cc2cf200ca3db464"
+SNAPSHOT=55dba8704c0a748b0ce9f2d3cc2cf200ca3db464
 SRC_URI="https://github.com/trialuser02/qt6ct/archive/${SNAPSHOT}.tar.gz -> qt6ct-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/qt6ct-${SNAPSHOT}"
 

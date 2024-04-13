@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="library for multiple-precision floating-point computations with exact rounding"
 HOMEPAGE="http://www.mpfr.org/"
 
-SNAPSHOT=6ae53c72741be67631000611b969bb2bfe88a37c
+SNAPSHOT=c314b8e114ca56b21dea1791be8fed29ce65ec34
 SRC_URI="https://gitlab.inria.fr/mpfr/mpfr/-/archive/${SNAPSHOT}/mpfr-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S=${WORKDIR}/mpfr-${SNAPSHOT}
 

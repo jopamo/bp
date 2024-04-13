@@ -131,7 +131,7 @@ SOFTMMU_TOOLS_DEPEND="
 	capstone? ( lib-dev/capstone )
 	caps? ( lib-core/libcap-ng[static-libs(+)] )
 	curl? ( app-net/curl[static-libs(+)] )
-	fdt? ( app-core/dtc[static-libs(+)] )
+	fdt? ( app-dev/dtc[static-libs(+)] )
 	fuse? ( app-fs/fuse:3[static-libs(+)] )
 	gnutls? (
 		lib-core/nettle[static-libs(+)]
@@ -181,7 +181,7 @@ BDEPEND="
 	gtk? ( nls? ( app-build/gettext ) )
 	test? (
 		lib-util/glib[utils]
-		app-build/bc
+		app-util/bc
 	)
 "
 CDEPEND="

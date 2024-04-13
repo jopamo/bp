@@ -4,7 +4,7 @@ mkdir -p /tmp/bp_backup
 cp -rp /var/db/repos/bp /tmp/bp_backup/
 
 rm -rf /tmp/bp_backup/bp/bin
-rm -rf /tmp/bp_backup/bp/app-var/qemu
+rm -rf /tmp/bp_backup/bp/app-emu/qemu
 rm -rf /tmp/bp_backup/bp/lib-dev/boost*
 rm -rf /tmp/bp_backup/bp/xgui-live-app/ethminer
 rm -rf /tmp/bp_backup/bp/app-build/gcc

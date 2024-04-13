@@ -27,7 +27,7 @@ DEPEND="
 	app-net/iproute2
 	app-net/wpa_supplicant[dbus]
 	lib-dev/newt
-	lib-live/libndp
+	lib-net/libndp
 "
 
 src_configure() {

@@ -19,17 +19,17 @@ DEPEND="
 	app-tex/libpaper
 	fonts/fontconfig
 	>=xgui-misc/freetype-2.4.9:2=
-	xmedia-live-lib/jbig2dec
+	xmedia-lib/jbig2dec
 	>=xgui-misc/lcms-2.6:2
-	>=xmedia-live-lib/libpng-1.6.2:0=
-	>=xmedia-live-lib/openjpeg-2.1.0:2=
+	>=xmedia-lib/libpng-1.6.2:0=
+	>=xmedia-lib/openjpeg-2.1.0:2=
 	>=lib-core/zlib-1.2.7:=
-	xmedia-live-lib/libjpeg-turbo
+	xmedia-lib/libjpeg-turbo
 	cups? ( >=lib-print/cups-1.3.8 )
 	dbus? ( app-core/dbus )
 	gtk? ( xgui-live-lib/gtk3 )
-	tiff? ( >=xmedia-live-lib/tiff-4.0.1:0= )
-	X? ( xgui-live-lib/libXt xgui-live-lib/libXext )
+	tiff? ( >=xmedia-lib/tiff-4.0.1:0= )
+	X? ( xgui-lib/libXt xgui-lib/libXext )
 "
 
 BDEPEND="app-dev/pkgconf"

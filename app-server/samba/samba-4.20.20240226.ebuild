@@ -49,7 +49,7 @@ DEPEND="${CDEPEND}
 	app-tex/docbook-xsl-stylesheets
 	lib-core/libxslt
 	app-lang/python
-	lib-live/rpcsvc-proto
+	lib-misc/rpcsvc-proto
 	lib-net/libtirpc"
 RDEPEND="${CDEPEND}
 	client? ( app-core/cifs-utils[ads?] )

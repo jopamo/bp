@@ -15,11 +15,11 @@ KEYWORDS="amd64 arm64"
 IUSE="alsa minimal sqlite static-libs test"
 
 RDEPEND="
-	alsa? ( xgui-misc/alsa-lib )
+	alsa? ( xgui-tools/alsa-lib )
 	!minimal? (
-		xmedia-live-lib/flac
-		xmedia-live-lib/libogg
-		xmedia-live-lib/libvorbis
+		xmedia-lib/flac
+		xmedia-lib/libogg
+		xmedia-lib/libvorbis
 	)
 	sqlite? ( lib-core/sqlite )"
 DEPEND="

@@ -26,17 +26,17 @@ RDEPEND="
 	lib-core/libcap
 	lib-dev/nspr
 	lib-dev/nss
-	lib-live/glib
+	lib-util/glib
 	lib-print/cups
 	xgui-icontheme/adwaita-icon-theme
-	xgui-live-lib/at-spi2-core
-	xgui-live-lib/cairo
-	xgui-live-lib/gdk-pixbuf
+	xgui-lib/at-spi2-core
+	xgui-lib/cairo
+	xgui-lib/gdk-pixbuf
 	xgui-lib/gtk3
-	xgui-live-lib/libxcb
-	xgui-live-lib/libxkbcommon
-	xgui-live-lib/pango
-	xgui-misc/alsa-lib
+	xgui-lib/libxcb
+	xgui-lib/libxkbcommon
+	xgui-lib/pango
+	xgui-tools/alsa-lib
 	xgui-misc/freetype
 "
 

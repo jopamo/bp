@@ -23,44 +23,44 @@ RESTRICT="test"
 
 DEPEND="
 	X? (
-		xgui-live-lib/libXcursor
-		xgui-live-lib/libXext
-		xgui-live-lib/libXfixes
-		xgui-live-lib/libXrandr
-		xgui-live-lib/libXi
-		xgui-live-lib/libXxf86vm
+		xgui-lib/libXcursor
+		xgui-lib/libXext
+		xgui-lib/libXfixes
+		xgui-lib/libXrandr
+		xgui-lib/libXi
+		xgui-lib/libXxf86vm
 	)
-	alsa? ( xgui-misc/alsa-lib )
+	alsa? ( xgui-tools/alsa-lib )
 	cups? ( lib-print/cups )
 	fontconfig? ( fonts/fontconfig )
-	jpeg? ( xmedia-live-lib/libjpeg-turbo )
+	jpeg? ( xmedia-lib/libjpeg-turbo )
 	ldap? ( app-net/openldap )
 	mp3? ( xgui-misc/mpg123 )
 	netapi? ( app-server/samba )
 	openal? ( xmedia-live-lib/openal )
 	opengl? (
-		xmedia-live-lib/glu
-		xgui-misc/mesa
+		xmedia-lib/glu
+		xgui-tools/mesa
 	)
 	pcap? ( lib-net/libpcap )
 	perl? (	app-lang/perl )
-	png? ( xmedia-live-lib/libpng )
+	png? ( xmedia-lib/libpng )
 	pulseaudio? ( xgui-misc/pulseaudio )
 	samba? ( app-server/samba[winbind] )
-	xcomposite? ( xgui-live-lib/libXcomposite )
-	xinerama? ( xgui-live-lib/libXinerama )
+	xcomposite? ( xgui-lib/libXcomposite )
+	xinerama? ( xgui-lib/libXinerama )
 	xml? (
 		lib-core/libxml2
 		lib-core/libxslt
 	)
-	unwind? (	lib-live/libunwind )
+	unwind? (	lib-util/libunwind )
 	usb? (	lib-dev/libusb )
 "
 BDEPEND="
 	app-build/flex
 	app-dev/pkgconf
 	app-build/bison
-	X? ( xgui-live-app/xorgproto )
+	X? ( xgui-tools/xorgproto )
 "
 
 src_prepare() {

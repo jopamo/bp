@@ -13,8 +13,8 @@ KEYWORDS="amd64 arm64"
 IUSE="jpeg static-libs test tiff"
 
 DEPEND="
-	jpeg? ( xmedia-live-lib/libjpeg-turbo )
-	tiff? ( >=xmedia-live-lib/tiff-4.0.3-r6:0= )
+	jpeg? ( xmedia-lib/libjpeg-turbo )
+	tiff? ( >=xmedia-lib/tiff-4.0.3-r6:0= )
 "
 
 S="${WORKDIR}/lcms2-${PV}"

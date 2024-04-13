@@ -15,17 +15,17 @@ KEYWORDS="amd64 arm64"
 IUSE="debug static-libs"
 
 # enabling GLES support seems to cause build failures
-RDEPEND="xmedia-live-lib/glu
-	>=xgui-misc/mesa-7.0-r1
-	>=xgui-live-lib/libX11-1.6.2
-	>=xgui-live-lib/libXext-1.3.2
-	>=xgui-live-lib/libXi-1.7.2
-	>=xgui-live-lib/libXrandr-1.4.2
-	>=xgui-live-lib/libXxf86vm-1.1.3
+RDEPEND="xmedia-lib/glu
+	>=xgui-tools/mesa-7.0-r1
+	>=xgui-lib/libX11-1.6.2
+	>=xgui-lib/libXext-1.3.2
+	>=xgui-lib/libXi-1.7.2
+	>=xgui-lib/libXrandr-1.4.2
+	>=xgui-lib/libXxf86vm-1.1.3
 "
 DEPEND="${RDEPEND}
 	app-dev/pkgconf
-	xgui-live-app/xorgproto"
+	xgui-tools/xorgproto"
 
 append-flags -fcommon
 

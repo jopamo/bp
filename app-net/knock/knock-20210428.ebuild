@@ -22,7 +22,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+knockd"
 
-DEPEND="knockd? ( lib-live/libpcap )"
+DEPEND="knockd? ( lib-util/libpcap )"
 
 src_prepare() {
 	eautoreconf

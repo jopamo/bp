@@ -26,19 +26,19 @@ RESTRICT="bindist mirror"
 
 DEPEND="
 	app-core/kmod
-	xgui-live-lib/libvdpau
+	xgui-lib/libvdpau
 "
 RDEPEND="
-	wayland? ( xgui-live-lib/wayland )
+	wayland? ( xgui-lib/wayland )
 	X? (
 		lib-core/zlib
-		xgui-live-lib/libX11
-		xgui-live-lib/libXext
-		xgui-misc/xorg-server
+		xgui-lib/libX11
+		xgui-lib/libXext
+		xgui-tools/xorg-server
 	)
 "
 PDEPEND="
-	xmedia-live-lib/nv-codec-headers
+	xmedia-lib/nv-codec-headers
 	bin/nvidia-settings
 "
 

@@ -12,7 +12,7 @@ LICENSE="https://developer.android.com/studio/terms"
 SLOT="0"
 KEYWORDS="amd64"
 
-DEPEND="app-live/android-udev-rules"
+DEPEND="app-util/android-udev-rules"
 
 src_install() {
 	exeinto /opt/${PN}

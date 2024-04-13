@@ -7,7 +7,7 @@ inherit python-single-r1 meson flag-o-matic
 DESCRIPTION="Introspection system for GObject-based libraries"
 HOMEPAGE="https://wiki.gnome.org/Projects/GObjectIntrospection"
 
-SNAPSHOT=92a2fb2beca86defad4c3c3899fbcffcfaef4fee
+SNAPSHOT=42dc3ab42458d2582377d867a0f9e4cd390ac036
 SRC_URI="https://gitlab.gnome.org/GNOME/gobject-introspection/-/archive/${SNAPSHOT}/gobject-introspection-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S=${WORKDIR}/gobject-introspection-${SNAPSHOT}
 

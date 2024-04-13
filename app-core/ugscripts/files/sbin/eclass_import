@@ -3,7 +3,7 @@
 TEMPLOCATION="/tmp/eclass_import"
 mkdir -p "${TEMPLOCATION}"
 [ ! -d "${TEMPLOCATION}/gentoo" ] && git clone https://github.com/gentoo/gentoo.git "${TEMPLOCATION}/gentoo" --depth 1
-cp "${TEMPLOCATION}"/gentoo/eclass/{autotools,cargo,cmake,crossdev,distutils-r1,estack,flag-o-matic,font,git-r3,gnuconfig,go-env,go-module,kernel-2,libtool,linux-info,linux-mod,meson,multibuild,multiprocessing,ninja-utils,optfeature,perl-functions,perl-module,out-of-source-utils,prefix,python*,qmake-utils,sgml-catalog-r1,toolchain-funcs,unpacker,user-info,xdg,xdg-utils,wrapper}.eclass /var/db/repos/bp/eclass/
+cp "${TEMPLOCATION}"/gentoo/eclass/{autotools,cargo,cmake,crossdev,distutils-r1,estack,flag-o-matic,font,git-r3,gnuconfig,go-module,kernel-2,libtool,linux-info,linux-mod,meson,multibuild,multiprocessing,ninja-utils,optfeature,perl-functions,perl-module,out-of-source-utils,prefix,python*,qmake-utils,sgml-catalog-r1,toolchain-funcs,unpacker,user-info,xdg,xdg-utils,wrapper}.eclass /var/db/repos/bp/eclass/
 
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i '/dosym8/d'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i '/einstalldocs/d'
@@ -45,6 +45,8 @@ find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/virtual\/libel
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/virtual\/pkgconfig/app-dev\/pkgconf/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/x11-apps\/mkfontscale/xgui-live-app\/mkfontscale/g'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i 's/x11-misc\/shared-mime-info/xgui-live-app\/shared-mime-info/g'
+
+sed -i 's/use arm \|\| //g' /var/db/repos/bp/eclass/go-module.eclass
 
 sed -i 's/.*qt5\/bin.*/	echo\ \/usr\/bin/' /var/db/repos/bp/eclass/qmake-utils.eclass
 

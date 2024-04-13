@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT="a6f63fe37dbfd0b8bcb6b168ed76c334e94f9039"
+SNAPSHOT=23753cfb03c61e9c6534c1410e470ab85babc05a
 SHORT=${SNAPSHOT:0:7}
 
 inherit autotools

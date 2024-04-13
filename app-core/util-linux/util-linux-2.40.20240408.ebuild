@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/util-linux/util-linux"
 
 SNAPSHOT=5de7172a3e59b6861bff0b7baa6f0cad321ab3ff
 SRC_URI="https://github.com/util-linux/util-linux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/util-linux-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2.1 BSD-4 MIT public-domain"
 SLOT="0"

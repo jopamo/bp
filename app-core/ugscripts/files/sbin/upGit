@@ -141,6 +141,11 @@ main() {
 		process_repository_file "$ebuild_file"
 	done
 
+	find "$REPO_PATH" -type f -regextype posix-extended -regex '.*\.[0-9]{8}\.ebuild$' \
+		-exec grep -l 'SNAPSHOT' {} + | xargs -r grep -L 'EGIT_REPO_URI' | while read -r ebuild_file; do
+		process_repository_file "$ebuild_file"
+	done
+
 	sort "$FAIL_LOG" | uniq > "${FAIL_LOG}.tmp" && mv "${FAIL_LOG}.tmp" "$FAIL_LOG"
 	sort "$UPDATE_FILE" | uniq > "${UPDATE_FILE}.tmp" && mv "${UPDATE_FILE}.tmp" "$UPDATE_FILE"
 }

@@ -32,7 +32,7 @@ src_unpack() {
 
 src_prepare() {
 	use musl && PATCHES+=(
-		"${FILESDIR}"/${PN}-5.15-remove-inclusion-sysinfo.h.patch
+		"${FILESDIR}"/linux-headers-5.15-remove-inclusion-sysinfo.h.patch
 	)
 
 	# Avoid kernel-2_src_prepare

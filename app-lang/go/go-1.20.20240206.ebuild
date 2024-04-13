@@ -15,7 +15,7 @@ HOMEPAGE="https://go.dev"
 
 SNAPSHOT=90a870f1dc49bfcc6ffe95f80fbaf21875198e7a
 SRC_URI="https://github.com/golang/go/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/go-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"
@@ -99,10 +99,10 @@ src_install() {
 		fi
 	done
 
-	cat > "${T}"/99${PN} <<- EOF || die
+	cat > "${T}"/99go <<- EOF || die
 		GOPROXY=proxy.golang.org
 		GOROOT=${EPREFIX}/usr/lib/go
 		GOPATH=${EPREFIX}/usr/share/go
 	EOF
-	doenvd "${T}"/99${PN}
+	doenvd "${T}"/99go
 }

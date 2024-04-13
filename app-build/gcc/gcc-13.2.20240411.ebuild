@@ -9,7 +9,7 @@ HOMEPAGE="https://gcc.gnu.org/"
 
 SNAPSHOT=5824e67591e3afac958f02bd4f934494a5f7ae2e
 SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/gcc-${SNAPSHOT}
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -175,10 +175,10 @@ src_install() {
 	exeinto /usr/share/gcc/go/
 	doexe "${ED}/usr/bin/{go,go*}"
 
-	cat > "${T}"/99${PN} <<- EOF || die
+	cat > "${T}"/99gcc <<- EOF || die
 		PATH=/usr/share/gcc/go/
 	EOF
-	doenvd "${T}"/99${PN}
+	doenvd "${T}"/99gcc
 }
 
 src_install() {

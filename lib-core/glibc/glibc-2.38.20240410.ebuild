@@ -9,7 +9,7 @@ HOMEPAGE="https://www.gnu.org/software/libc/"
 
 SNAPSHOT=92da7c2cfeeea36d651142f47e570dd5076bc166
 SRC_URI="https://github.com/bminor/glibc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/glibc-${SNAPSHOT}
 
 LICENSE="LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
 SLOT="0"

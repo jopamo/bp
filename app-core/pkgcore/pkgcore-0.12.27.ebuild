@@ -2,7 +2,8 @@
 
 EAPI=8
 
-DISTUTILS_IN_SOURCE_BUILD=1
+DISTUTILS_USE_PEP517=standalone
+
 inherit distutils-r1
 
 if [[ ${PV} == *9999 ]] ; then
@@ -30,28 +31,13 @@ fi
 BDEPEND="
 	test? (
 		>=dev-python/pytest-6[${PYTHON_USEDEP}]
-		dev-vcs/git
 	)
 "
 
-PATCHES=(
-	"${FILESDIR}"/1g4.patch
-)
-
-distutils_enable_tests setup.py
-
-src_test() {
-	# With PYTHONDONTWRITEBYTECODE=, python will try rebuild all sorts of modules.
-	# https://bugs.gentoo.org/840266
-	local -x SANDBOX_PREDICT=${SANDBOX_PREDICT}
-	addpredict /
-
-	local -x PYTHONDONTWRITEBYTECODE=
-	distutils-r1_src_test
-}
+distutils_enable_tests pytest
 
 python_install_all() {
 	local DOCS=( NEWS.rst )
-	[[ ${PV} == *9999 ]] || doman man/*
+	doman build/sphinx/man/*
 	distutils-r1_python_install_all
 }

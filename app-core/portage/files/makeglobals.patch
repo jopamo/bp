@@ -36,7 +36,7 @@ diff -urN a/cnf/make.globals b/cnf/make.globals
  # Fetching command (3 tries, passive ftp for firewall compatibility)
  FETCHCOMMAND="wget -t 3 -T 60 --passive-ftp -O \"\${DISTDIR}/\${FILE}\" \"\${URI}\""
 @@ -129,12 +130,6 @@
- # Signing command used by repoman
+ # Signing command used by pkgdev
  PORTAGE_GPG_SIGNING_COMMAND="gpg --sign --digest-algo SHA256 --clearsign --yes --default-key \"\${PORTAGE_GPG_KEY}\" --homedir \"\${PORTAGE_GPG_DIR}\" \"\${FILE}\""
  
 -# btrfs.* attributes are irrelevant, see bug #527636.

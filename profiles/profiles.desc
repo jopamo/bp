@@ -1,6 +1,6 @@
 #############################################
 # This is a list of valid profiles for each architecture.  This file is used by
-# repoman when doing a repoman scan or repoman full.
+# pkgdev when doing a pkgdev scan or pkgdev full.
 # DO NOT ADD PROFILES WITH A "die" or "exit" IN THEM OR IT KILLS REPOMAN
 #
 #layout:

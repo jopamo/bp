@@ -7,14 +7,9 @@ inherit autotools
 DESCRIPTION="System Utilities Based on Sysfs"
 HOMEPAGE="http://linux-diag.sourceforge.net/Sysfsutils.html"
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/linux-ras/sysfsutils.git"
-	inherit git-r3
-else
-	SNAPSHOT=085bba6bab1ccaa89041639a7e070390fdea440a
-	SRC_URI="https://github.com/linux-ras/sysfsutils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=085bba6bab1ccaa89041639a7e070390fdea440a
+SRC_URI="https://github.com/linux-ras/sysfsutils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"

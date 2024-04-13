@@ -7,15 +7,9 @@ inherit toolchain-funcs flag-o-matic
 DESCRIPTION="Port of 7-Zip archiver for Unix"
 HOMEPAGE="http://p7zip.sourceforge.net/"
 
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/p7zip-project/p7zip"
-	inherit
-	KEYWORDS=""
-else
-	SNAPSHOT=db92c90de71fc4c649d170c673a05f3c274155c6
-	SRC_URI="https://github.com/p7zip-project/p7zip/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}/
-fi
+SNAPSHOT=db92c90de71fc4c649d170c673a05f3c274155c6
+SRC_URI="https://github.com/p7zip-project/p7zip/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}/
 
 LICENSE="LGPL-2.1 unRAR"
 SLOT="0"

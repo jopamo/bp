@@ -1,20 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-EGO_PN=github.com/git-lfs/git-lfs
+
 inherit go-module
 
 DESCRIPTION="Command line extension and specification for managing large files with git"
 HOMEPAGE="https://git-lfs.com/"
 
-if [[ "${PV}" = 9999 ]]; then
-	EGIT_REPO_URI="https://${EGO_PN}"
-	inherit git-r3
-else
-	SNAPSHOT=bea0287cdd3acbc0aa9cdf67ae09b6843d3ffcf0
-	SRC_URI="https://${EGO_PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=bea0287cdd3acbc0aa9cdf67ae09b6843d3ffcf0
+SRC_URI="https://github.com/git-lfs/git-lfs/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="Apache-2.0 BSD BSD-2 BSD-4 ISC MIT"
 SLOT="0"

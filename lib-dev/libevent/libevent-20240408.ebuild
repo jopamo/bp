@@ -2,27 +2,14 @@
 
 EAPI=8
 
-inherit flag-o-matic
+inherit flag-o-matic autotools
 
 DESCRIPTION="Library to execute a function when a specific event occurs on a file descriptor"
 HOMEPAGE="http://libevent.org/"
 
 SNAPSHOT=c6e8f17541b99e8c3a089a1c6f70119d6f95db9d
-SRC_URI="https://github.com/libevent/libevent/archive/${SNAPSHOT}.tar.gz -> libevent-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/libevent-${SNAPSHOT}"
-
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/libevent/libevent"
-	inherit autotools
-elif [[ ${PV} == 20* ]]; then
-	SNAPSHOT=c6e8f17541b99e8c3a089a1c6f70119d6f95db9d
-	SRC_URI="https://github.com/libevent/libevent/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	inherit autotools
-else
-	SRC_URI="https://github.com/libevent/libevent/releases/download/release-${PV}-stable/${P}-stable.tar.gz"
-	S=${WORKDIR}/${P}-stable
-fi
+SRC_URI="https://github.com/libevent/libevent/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="BSD"
 SLOT="0"

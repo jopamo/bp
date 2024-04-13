@@ -4,20 +4,14 @@ EAPI=8
 
 DESCRIPTION="port of netbsd's curses library for usage on Linux systems"
 HOMEPAGE="https://github.com/sabotage-linux/netbsd-curses"
-EGIT_REPO_URI="https://github.com/sabotage-linux/netbsd-curses"
 
-if [[ ${PV} == *9999 ]] ; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/sabotage-linux/netbsd-curses.git"
-else
-	SNAPSHOT=51d179dad861640caeb76674b5908ccd79f04fae
-	SRC_URI="https://github.com/sabotage-linux/netbsd-curses/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	KEYWORDS="amd64 arm64"
-fi
+SNAPSHOT=51d179dad861640caeb76674b5908ccd79f04fae
+SRC_URI="https://github.com/sabotage-linux/netbsd-curses/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 

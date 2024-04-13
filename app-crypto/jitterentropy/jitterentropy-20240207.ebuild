@@ -7,14 +7,9 @@ inherit flag-o-matic
 DESCRIPTION="Hardware RNG based on CPU timing jitter"
 HOMEPAGE="https://github.com/smuellerDD/jitterentropy-library"
 
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="${HOMEPAGE}.git"
-	inherit git-r3
-else
-	SNAPSHOT=b178ef6bc8965b11fb9bc28b6e286425ab83da09
-	SRC_URI="${HOMEPAGE}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-library-${SNAPSHOT}
-fi
+SNAPSHOT=b178ef6bc8965b11fb9bc28b6e286425ab83da09
+SRC_URI="https://github.com/smuellerDD/jitterentropy-library/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-library-${SNAPSHOT}
 
 LICENSE="BSD"
 SLOT="0"

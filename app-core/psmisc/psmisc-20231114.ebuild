@@ -2,25 +2,18 @@
 
 EAPI=8
 
+inherit autotools
+
 DESCRIPTION="A set of tools that use the proc filesystem"
 HOMEPAGE="http://psmisc.sourceforge.net/"
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://gitlab.com/${PN}/${PN}.git"
-	inherit git-r3 autotools
-elif [[ ${PV} == 20* ]]; then
-	SNAPSHOT=5e43531533df22f80d273eaa2aee3f8dc5930341
-	SRC_URI="https://gitlab.com/${PN}/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-	inherit autotools
-	KEYWORDS="amd64 arm64"
-else
-	SRC_URI="mirror://sourceforge/${PN}/${P}.tar.xz"
-	KEYWORDS="amd64 arm64"
-fi
+SNAPSHOT=5e43531533df22f80d273eaa2aee3f8dc5930341
+SRC_URI="https://gitlab.com/psmisc/psmisc/-/archive/${SNAPSHOT}/psmisc-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="ipv6 nls X"
 

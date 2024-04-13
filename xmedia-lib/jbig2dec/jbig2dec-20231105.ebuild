@@ -11,15 +11,6 @@ SNAPSHOT=ee53a7e4bc7819d32e8c0b2057885bcc97586bf3
 SRC_URI="https://github.com/ArtifexSoftware/jbig2dec/archive/${SNAPSHOT}.tar.gz -> jbig2dec-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/jbig2dec-${SNAPSHOT}"
 
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/ArtifexSoftware/jbig2dec"
-	inherit
-else
-	SNAPSHOT=ee53a7e4bc7819d32e8c0b2057885bcc97586bf3
-	SRC_URI="https://github.com/ArtifexSoftware/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
-
 LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"

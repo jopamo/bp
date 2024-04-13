@@ -6,14 +6,8 @@ MY_P="${P/_/-}"
 
 inherit linux-info toolchain-funcs python-r1 xdg flag-o-matic
 
-if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://git.qemu.org/git/qemu.git"
-	inherit git-r3
-	SRC_URI=""
-else
-	SRC_URI="https://download.qemu.org/${MY_P}.tar.xz"
-	S="${WORKDIR}/${MY_P}"
-fi
+SRC_URI="https://download.qemu.org/${MY_P}.tar.xz"
+S="${WORKDIR}/${MY_P}"
 
 DESCRIPTION="QEMU + Kernel-based Virtual Machine userland tools"
 HOMEPAGE="http://www.qemu.org http://www.linux-kvm.org"

@@ -1,0 +1,148 @@
+#!/bin/bash
+
+declare -A repo_checked_cache
+declare -A skip_packages
+
+REPO_PATH="/var/db/repos/bp"
+UPDATE_FILE="$HOME/update_ebuild_commands.txt"
+FAIL_LOG="$HOME/update_ebuild_fail.txt"
+GIT_CLONES_DIR="/tmp/git_updates"
+
+skip_packages["*lxqt*"]=1
+skip_packages["efibootmgr"]=1
+skip_packages["swig"]=1
+skip_packages["flex"]=1
+skip_packages["qtermwidget"]=1
+
+mkdir -p "$GIT_CLONES_DIR"
+: > "$UPDATE_FILE"
+: > "$FAIL_LOG"
+
+get_branch() {
+	local repo_url="$1"
+	local clone_dir="${GIT_CLONES_DIR}/$(basename "$repo_url")"
+	local chosen_branch=""
+	local last_commit_date=""
+	local last_commit_time=""
+	local two_years_ago=$(date -d '2 years ago' +%s)
+
+	if [ ! -d "$clone_dir" ]; then
+		if ! git clone --depth 1 "$repo_url" "$clone_dir" 2>>"$FAIL_LOG"; then
+			echo "Failed to clone $repo_url" >> "$FAIL_LOG"
+			return 1
+		fi
+	fi
+
+	cd "$clone_dir" || return
+
+	git fetch --all
+
+	if git branch -r | grep -qw "origin/maint"; then
+		last_commit_date=$(git log -1 --format=%ci origin/maint)
+		last_commit_time=$(date -d "$last_commit_date" +%s)
+
+		if [ "$last_commit_time" -ge "$two_years_ago" ]; then
+			chosen_branch="maint"
+		fi
+	fi
+
+	if [ -z "$chosen_branch" ]; then
+		chosen_branch=$(git rev-parse --abbrev-ref HEAD)
+	fi
+
+	cd - > /dev/null
+	echo "$chosen_branch"
+}
+
+append_update_command() {
+	local package_path="$1"
+	local repository_url="$2"
+	local default_branch="$3"
+
+	echo "update_ebuild \"\${REPO_PATH}/${package_path}\" \"${repository_url}\" \"${default_branch}\" \"0\" \"yes\"" >> "$UPDATE_FILE"
+}
+
+check_repository_access() {
+	local repo_url="$1"
+	if [[ ${repo_checked_cache["$repo_url"]+exist} ]]; then
+		echo "Repository $repo_url already checked."
+		return 0
+	fi
+	echo "Checking access to $repo_url..."
+	if git ls-remote "$repo_url" &> /dev/null; then
+		echo "Access to $repo_url confirmed."
+		repo_checked_cache["$repo_url"]=1
+		return 0
+	else
+		echo "Failed to access $repo_url" >> "$FAIL_LOG"
+		return 1
+	fi
+}
+
+process_repository_file() {
+	local ebuild_file="$1"
+	local package_name=$(basename $(dirname "$ebuild_file"))
+
+	for pattern in "${!skip_packages[@]}"; do
+		if [[ "$package_name" == $pattern ]]; then
+			echo "Skipping $package_name as it matches skip pattern $pattern." >> "$FAIL_LOG"
+			return
+		fi
+	done
+
+	local raw_urls=$(grep -E 'SRC_URI' "$ebuild_file")
+	while read -r raw_url; do
+		local repository_url=$(echo "$raw_url" | grep -oE 'https?://[^"]+')
+
+		repository_url=${repository_url//cgit/git}
+
+		if [[ "$repository_url" =~ gitweb\.cgi ]]; then
+			repository_url=$(echo "$repository_url" | sed -E 's|.*/gitweb\.cgi\?p=([^&]+).*|git://git.gnupg.org/\1.git|')
+		fi
+
+		if [[ "$repository_url" =~ /-/ ]]; then
+			repository_url=$(echo "$repository_url" | sed -E 's|/-/.*||')
+		elif [[ "$repository_url" =~ /archive/ ]]; then
+			repository_url=$(echo "$repository_url" | sed -E 's|/archive/.*||')
+		elif [[ "$repository_url" =~ \.git ]]; then
+			repository_url=$(echo "$repository_url" | sed -E 's|\.git.*||')
+		elif [[ "$repository_url" =~ /snapshot/ ]]; then
+			repository_url=$(echo "$repository_url" | sed -E 's|/snapshot/.*||')
+		fi
+
+		if [[ -z "$repository_url" ]]; then
+			echo "No valid repository URL extracted from $ebuild file" >> "$FAIL_LOG"
+			continue
+		fi
+
+		common_process "$ebuild_file" "$repository_url"
+	done <<< "$raw_urls"
+}
+
+common_process() {
+	local ebuild_file="$1"
+	local repository_url="$2"
+	if check_repository_access "$repository_url"; then
+		local package_path=$(dirname "$ebuild_file" | sed "s|^$REPO_PATH/||")
+		local default_branch=$(get_branch "$repository_url")
+		if [[ -n "$default_branch" ]]; then
+			append_update_command "$package_path" "$repository_url" "$default_branch"
+		else
+			echo "$ebuild_file - Failed to get or process default branch for $repository_url" >> "$FAIL_LOG"
+		fi
+	else
+		echo "$ebuild_file - Failed to access $repository_url" >> "$FAIL_LOG"
+	fi
+}
+
+main() {
+	find "$REPO_PATH" -type f -regextype posix-extended -regex '.*-[0-9]{8}\.ebuild$' \
+		-exec grep -l 'SNAPSHOT' {} + | xargs -r grep -L 'EGIT_REPO_URI' | while read -r ebuild_file; do
+		process_repository_file "$ebuild_file"
+	done
+
+	sort "$FAIL_LOG" | uniq > "${FAIL_LOG}.tmp" && mv "${FAIL_LOG}.tmp" "$FAIL_LOG"
+	sort "$UPDATE_FILE" | uniq > "${UPDATE_FILE}.tmp" && mv "${UPDATE_FILE}.tmp" "$UPDATE_FILE"
+}
+
+main

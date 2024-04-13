@@ -65,6 +65,11 @@ src_configure() {
     filter-flags -fipa-pta
     filter-flags -floop-nest-optimize
     filter-flags -ftree-loop-distribution
+	filter-flags -fuse-linker-plugin
+	filter-flags -fcf-protection=full
+    filter-flags -fstack-clash-protection
+    replace-flags -O3 -O2
+    #-march=native -pipe -fuse-linker-plugin -Wall -Wformat -Wformat-security -fno-math-errno -fno-signed-zeros -fno-trapping-math  -fexceptions -fpie -fpic -fasynchronous-unwind-tables -fexceptions -DNDEBUG -march=native -O3 -pipe -fuse-linker-plugin -Wall -Wformat -Wformat-security -fno-math-errno -fno-signed-zeros -fno-trapping-math -fcf-protection=full -fstack-clash-protection -fexceptions -fpie -fpic -fasynchronous-unwind-tables -fexceptions
 
 	local mycmakeargs=(
 		-DLLVM_ENABLE_PROJECTS="${LLVM_PROJECTS}"
@@ -101,4 +106,11 @@ src_configure() {
 src_test() {
 	local -x LIT_PRESERVES_TMP=1
 	cmake_src_make check
+}
+
+src_install() {
+	cmake_src_install
+
+	rm "${ED}"/usr/include/libunwind.h
+	rm "${ED}"/usr/include/unwind.h
 }

@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	app-core/systemd[logind]
-	app-sys/seatd
+	app-net/seatd
 	lib-core/libcap
 	lib-util/libinput
 	xgui-lib/libdrm

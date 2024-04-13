@@ -12,7 +12,6 @@ app-live
 app-net
 app-port
 app-server
-app-sys
 app-tex
 app-util
 app-var

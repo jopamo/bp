@@ -31,7 +31,7 @@ DEPEND="
 
 PDEPEND="
 	app-tex/docbook-sgml-dtd:4.5
-	app-core/man-db
+	app-util/man-db
 	app-core/help2man
 	app-tex/docbook-xsl-stylesheets
 	dev-perl/Date-Manip

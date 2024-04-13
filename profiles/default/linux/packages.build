@@ -32,7 +32,7 @@ app-build/gcc
 app-build/gettext
 app-build/gnuconfig
 app-build/make
-app-build/patch
+app-util/patch
 virtual/editor
 virtual/libc
 app-kernel/linux-headers

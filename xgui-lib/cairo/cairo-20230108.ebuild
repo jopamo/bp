@@ -7,15 +7,9 @@ inherit flag-o-matic autotools
 DESCRIPTION="A vector graphics library with cross-device output support"
 HOMEPAGE="https://www.cairographics.org"
 
-if [[ ${PV} == *9999 ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://gitlab.freedesktop.org/cairo/cairo.git"
-else
-	SNAPSHOT="7471a323a70203e983b88e7561a4c95d653f875f"
-	SRC_URI="https://gitlab.freedesktop.org/${PN}/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
-	S="${WORKDIR}/${PN}-${SNAPSHOT}"
-	KEYWORDS="amd64 arm64"
-fi
+SNAPSHOT="7471a323a70203e983b88e7561a4c95d653f875f"
+SRC_URI="https://gitlab.freedesktop.org/cairo/cairo/-/archive/${SNAPSHOT}/cairo-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="|| ( LGPL-2.1 MPL-1.1 )"
 SLOT="0"

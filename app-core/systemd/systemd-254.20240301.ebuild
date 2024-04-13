@@ -7,15 +7,9 @@ inherit flag-o-matic linux-info meson toolchain-funcs user
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/systemd/systemd-stable.git"
-	EGIT_BRANCH="v$(ver_cut 1)-stable"
-	inherit git-r3
-else
-	SNAPSHOT=a3f3d470abf174217597d7a06c188f10300f7f4a
-	SRC_URI="https://github.com/systemd/systemd-stable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S="${WORKDIR}/systemd-stable-${SNAPSHOT}"
-fi
+SNAPSHOT=a3f3d470abf174217597d7a06c188f10300f7f4a
+SRC_URI="https://github.com/systemd/systemd-stable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/systemd-stable-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"

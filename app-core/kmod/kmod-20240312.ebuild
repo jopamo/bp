@@ -7,14 +7,9 @@ inherit autotools
 DESCRIPTION="library and tools for managing linux kernel modules"
 HOMEPAGE="https://git.kernel.org/?p=utils/kernel/kmod/kmod.git"
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://kernel.googlesource.com/pub/scm/utils/kernel/kmod/kmod.git"
-	inherit git-r3
-else
-	SNAPSHOT=e4130a46dd315310eed37c6bb59ca047e849dd43
-	SRC_URI="https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/snapshot/kmod-${SNAPSHOT}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=e4130a46dd315310eed37c6bb59ca047e849dd43
+SRC_URI="https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/snapshot/kmod-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="LGPL-2"
 SLOT="0"

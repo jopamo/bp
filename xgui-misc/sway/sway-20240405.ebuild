@@ -11,13 +11,6 @@ SNAPSHOT=bc258a3be2f946c1c93bcbe40735b2db068e0ea8
 SRC_URI="https://github.com/swaywm/sway/archive/${SNAPSHOT}.tar.gz -> sway-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/sway-${SNAPSHOT}"
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/swaywm/sway"
-	inherit
-else
-	SRC_URI="https://github.com/swaywm/${PN}/releases/download/${PV}/${P}.tar.gz"
-fi
-
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"

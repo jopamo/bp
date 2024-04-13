@@ -11,16 +11,6 @@ SNAPSHOT=153d41d2d1c05f783918a0a837f4f255c92b8e3a
 SRC_URI="https://github.com/gregkh/usbutils/archive/${SNAPSHOT}.tar.gz -> usbutils-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/usbutils-${SNAPSHOT}"
 
-if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/gregkh/usbutils"
-	inherit
-	EGIT_SUBMODULES=()
-else
-	SNAPSHOT=153d41d2d1c05f783918a0a837f4f255c92b8e3a
-	SRC_URI="https://github.com/gregkh/usbutils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
-
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"

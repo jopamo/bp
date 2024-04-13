@@ -99,36 +99,45 @@ move_package() {
     local REPO_PATH="/var/db/repos/bp"
     local package_name="$1"
     local new_category="$2"
-    local dry_run="${3:-false}"
 
-    local found_path=$(find "$REPO_PATH" -type d -name "$package_name" -print -quit)
+    # Find the package, excluding any that are within the .git directory
+    local found_path=$(find "$REPO_PATH" -type d -name "$package_name" ! -path "*/.git/*" -print -quit)
 
     if [[ -z "$found_path" ]]; then
         echo "Package '$package_name' not found."
         return 1
     fi
 
-    local old_path=$(dirname "$found_path")
-    local new_path="$REPO_PATH/$new_category"
+    local old_path=$(dirname "$found_path" | sed "s|$REPO_PATH/||")
+    local new_path="$new_category"
 
     echo "Preparing to move '$package_name' from '$old_path' to '$new_path'."
 
-    if [[ "$dry_run" == "false" ]]; then
-        mkdir -p "$new_path"
-        if mv "$found_path" "$new_path/$package_name"; then
-            echo "Moved '$package_name' to '$new_category'."
-        else
-            echo "Failed to move '$package_name'."
-            return 1
-        fi
+    mkdir -p "$REPO_PATH/$new_path"
+    if mv "$found_path" "$REPO_PATH/$new_path/$package_name"; then
+        echo "Moved '$package_name' to '$new_path'."
 
-        local old_pattern="$old_path/$package_name"
-        local new_pattern="$new_path/$package_name"
+        local old_pattern_escaped=$(printf '%s\n' "$old_path/$package_name" | sed 's:[][\/.^$*]:\\&:g')
+        local new_pattern_escaped=$(printf '%s\n' "$new_path/$package_name" | sed 's:[][\/.^$*]:\\&:g')
 
-        grep -rlZ --exclude-dir=".git" "$old_pattern" "$REPO_PATH" | xargs -0 sed -i "s|$old_pattern|$new_pattern|g"
-        echo "Updated references from '$old_pattern' to '$new_pattern'."
+        # Perform a dry run of find to gather all files excluding .git
+        local files_to_update=$(find "$REPO_PATH" -type f ! -path "*/.git/*")
+
+        # Loop through files and safely update references
+        for file in $files_to_update; do
+            sed -i "s|$old_pattern_escaped|$new_pattern_escaped|g" "$file"
+        done
+
+        echo "Updated references from '$old_path/$package_name' to '$new_path/$package_name'."
     else
-        echo "[Dry Run] Would move '$package_name' to '$new_category'."
-        echo "[Dry Run] Would update references from '$old_path/$package_name' to '$new_path/$package_name'."
+        echo "Failed to move '$package_name'."
+        return 1
     fi
+}
+
+bootstrap_go() {
+    USE=go-bootstrap emerge --oneshot gcc
+	FEATURES="-sandbox -usersandbox" emerge --oneshot =app-lang/go-1.20*
+	emerge --oneshot gcc
+	emerge --oneshot go
 }

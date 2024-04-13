@@ -7,14 +7,9 @@ inherit meson linux-info multiprocessing python-r1 flag-o-matic user
 DESCRIPTION="Gentoo package manager"
 HOMEPAGE="https://github.com/gentoo/portage"
 
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/gentoo/${PN}.git"
-	inherit git-r3
-else
-	SNAPSHOT=08a2bc3800ea2e997716903244ec041339b45b06
-	SRC_URI="https://github.com/gentoo/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=08a2bc3800ea2e997716903244ec041339b45b06
+SRC_URI="https://github.com/gentoo/portage/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

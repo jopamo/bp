@@ -11,15 +11,6 @@ SNAPSHOT=ec5d33da63e98f9f1f2333094bd597f2b6502643
 SRC_URI="https://github.com/sahlberg/libiscsi/archive/${SNAPSHOT}.tar.gz -> libiscsi-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libiscsi-${SNAPSHOT}"
 
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/sahlberg/libiscsi"
-	inherit
-else
-	SNAPSHOT=ec5d33da63e98f9f1f2333094bd597f2b6502643
-	SRC_URI="https://github.com/sahlberg/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
-
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"

@@ -8,7 +8,7 @@ DESCRIPTION="X.org input driver based on libinput"
 HOMEPAGE="https://www.x.org"
 
 SNAPSHOT=b791b30b1f384d327c001cfb821ed34b2c2174a5
-SRC_URI="https://gitlab.freedesktop.org/xorg/driver/xf86-input-libinput/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
+SRC_URI="https://gitlab.freedesktop.org/xorg/driver/xf86-input-libinput/-/archive/${SNAPSHOT}/xf86-input-libinput-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="MIT"

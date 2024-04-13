@@ -9,15 +9,9 @@ inherit distutils-r1
 DESCRIPTION="Check live packages for updates and emerge them as necessary"
 HOMEPAGE="https://github.com/mgorny/smart-live-rebuild/"
 
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/mgorny/${PN}.git"
-	inherit git-r3
-	KEYWORDS=""
-else
-	SNAPSHOT=72f4aca629a11de561b830a1600012ef7eaf27b8
-	SRC_URI="https://github.com/mgorny/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=72f4aca629a11de561b830a1600012ef7eaf27b8
+SRC_URI="https://github.com/mgorny/smart-live-rebuild/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="BSD-2"
 SLOT="0"

@@ -7,14 +7,9 @@ inherit autotools
 DESCRIPTION="XSLT libraries and tools"
 HOMEPAGE="http://www.xmlsoft.org/"
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git"
-	inherit git-r3
-else
-	SNAPSHOT=8c2e8031b29d58975f52a0f105e51f36a16c375a
-	SRC_URI="https://gitlab.gnome.org/GNOME/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=fddd5827170a8bb923fede09d48ce87345e60b19
+SRC_URI="https://gitlab.gnome.org/GNOME/libxslt/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"
@@ -36,7 +31,6 @@ src_configure() {
 	local myconf=(
 		$(use_enable static-libs static)
 		$(use_with crypt crypto)
-		$(use_with debug mem-debug)
 		$(use_with debug)
 		--without-python
 	)

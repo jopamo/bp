@@ -7,15 +7,9 @@ inherit toolchain-funcs flag-o-matic
 DESCRIPTION="zstd fast compression library"
 HOMEPAGE="https://facebook.github.io/zstd/"
 
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/facebook/zstd.git"
-	EGIT_BRANCH="release"
-	inherit git-r3
-else
-	SNAPSHOT=9f42fa0a043aa389534cf10ff086976c4c6b10a6
-	SRC_URI="https://github.com/facebook/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=9f42fa0a043aa389534cf10ff086976c4c6b10a6
+SRC_URI="https://github.com/facebook/zstd/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"

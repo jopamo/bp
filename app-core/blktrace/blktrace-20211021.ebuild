@@ -7,14 +7,9 @@ inherit toolchain-funcs flag-o-matic linux-info
 DESCRIPTION="show detailed info about what is happening on a block device io queue"
 HOMEPAGE="http://git.kernel.dk/cgit/blktrace/"
 
-if [[ ${PV} == "9999" ]] ; then
-	inherit git-r3
-	EGIT_REPO_URI="https://git.kernel.org/pub/scm/linux/kernel/git/axboe/blktrace.git"
-else
-	SNAPSHOT=7f5d2c5173d72018aa29c583c9291ef10abaf8df
-	SRC_URI="https://git.kernel.org/pub/scm/linux/kernel/git/axboe/blktrace.git/snapshot/blktrace-${SNAPSHOT}.tar.gz"
-	S=${WORKDIR}/blktrace-${SNAPSHOT}
-fi
+SNAPSHOT=7f5d2c5173d72018aa29c583c9291ef10abaf8df
+SRC_URI="https://git.kernel.org/pub/scm/linux/kernel/git/axboe/blktrace.git/snapshot/blktrace-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/blktrace-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"

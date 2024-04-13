@@ -8,7 +8,7 @@ DESCRIPTION="Generic initramfs generation tool"
 HOMEPAGE="https://dracut.wiki.kernel.org"
 
 SNAPSHOT=5d2bda46f4e75e85445ee4d3bd3f68bf966287b9
-SRC_URI="https://github.com/dracutdevs/dracut/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SRC_URI="https://github.com/dracutdevs/dracut/archive/${SNAPSHOT}.tar.gz -> dracut-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"

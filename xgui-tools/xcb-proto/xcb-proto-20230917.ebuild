@@ -11,17 +11,6 @@ SNAPSHOT=1388374c7149114888a6a5cd6e9bf6ad4b42adf8
 SRC_URI="https://gitlab.freedesktop.org/xorg/proto/xcbproto/-/archive/${SNAPSHOT}/xcbproto-${SNAPSHOT}.tar.bz2 -> xcbproto-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/xcbproto-${SNAPSHOT}"
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/proto/xcbproto"
-	inherit
-elif [[ ${PV} == 20* ]]; then
-	SNAPSHOT=1388374c7149114888a6a5cd6e9bf6ad4b42adf8
-	SRC_URI="https://gitlab.freedesktop.org/xorg/proto/xcbproto/-/archive/${SNAPSHOT}/xcbproto-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
-	S=${WORKDIR}/xcbproto-${SNAPSHOT}
-else
-	SRC_URI=""
-fi
-
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"

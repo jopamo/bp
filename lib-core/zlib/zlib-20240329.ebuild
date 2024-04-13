@@ -5,15 +5,9 @@ EAPI=8
 DESCRIPTION="Standard (de)compression library"
 HOMEPAGE="https://zlib.net/"
 
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/madler/zlib.git"
-	inherit git-r3
-	KEYWORDS=""
-else
-	SNAPSHOT=0f51fb4933fc9ce18199cb2554dacea8033e7fd3
-	SRC_URI="https://github.com/madler/zlib/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=0f51fb4933fc9ce18199cb2554dacea8033e7fd3
+SRC_URI="https://github.com/madler/zlib/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="ZLIB"
 SLOT="0"

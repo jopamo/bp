@@ -7,14 +7,9 @@ inherit autotools
 DESCRIPTION="a program which helps to configure compiler and linker flags for development libraries"
 HOMEPAGE="https://git.sr.ht/~kaniini/pkgconf"
 
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="http://git.dereferenced.org/pkgconf/pkgconf.git"
-	inherit git-r3
-else
-	SNAPSHOT=06120a8769aed87d50e914f87a6f9f67110cf16e
-	SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=06120a8769aed87d50e914f87a6f9f67110cf16e
+SRC_URI="https://github.com/pkgconf/pkgconf/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="ISC"
 SLOT="0"

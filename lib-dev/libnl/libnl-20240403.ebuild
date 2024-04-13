@@ -7,14 +7,9 @@ inherit distutils-r1 autotools flag-o-matic
 DESCRIPTION="Libraries providing APIs to netlink protocol based Linux kernel interfaces"
 HOMEPAGE="http://www.infradead.org/~tgr/libnl/ https://github.com/thom311/libnl"
 
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/thom311/libnl.git"
-	inherit git-r3
-else
-	SNAPSHOT=19d48b0fe924085f28c9410fae448d385f5f9a23
-	SRC_URI="https://github.com/thom311/libnl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=19d48b0fe924085f28c9410fae448d385f5f9a23
+SRC_URI="https://github.com/thom311/libnl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="LGPL-2.1 utils? ( GPL-2 )"
 SLOT="3"

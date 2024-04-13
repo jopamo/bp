@@ -11,15 +11,6 @@ SNAPSHOT=f22797cebcbd7f433f2310a0333a039374b2e00f
 SRC_URI="https://github.com/jpirko/libndp/archive/${SNAPSHOT}.tar.gz -> libndp-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libndp-${SNAPSHOT}"
 
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/jpirko/libndp"
-	inherit
-else
-	SNAPSHOT=f22797cebcbd7f433f2310a0333a039374b2e00f
-	SRC_URI="https://github.com/jpirko/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
-
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"

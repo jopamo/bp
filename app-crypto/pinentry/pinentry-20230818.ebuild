@@ -9,7 +9,7 @@ inherit autotools
 
 DESCRIPTION="Simple passphrase entry dialogs which utilize the Assuan protocol"
 HOMEPAGE="https://gnupg.org/aegypten2/index.html"
-SRC_URI="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=${PN}.git;a=snapshot;h=${SNAPSHOT};sf=tgz -> ${P}.tar.gz"
+SRC_URI="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=pinentry.git;a=snapshot;h=${SNAPSHOT};sf=tgz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SHORT}
 
 LICENSE="GPL-2"

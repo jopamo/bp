@@ -8,7 +8,7 @@ DESCRIPTION="A selection of tools from Debian"
 HOMEPAGE="https://packages.qa.debian.org/d/debianutils.html"
 
 SNAPSHOT=48a3703eb72203c8f9d415a95875f1e886335f95
-SRC_URI="https://salsa.debian.org/debian/debianutils/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
+SRC_URI="https://salsa.debian.org/debian/debianutils/-/archive/${SNAPSHOT}/debianutils-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="BSD GPL-2 SMAIL"

@@ -8,7 +8,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="Library to create and utilize caches to speed up freedesktop application menus"
 HOMEPAGE="http://lxde.sourceforge.net/"
-SRC_URI="https://github.com/lxde/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/lxde/menu-cache/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"

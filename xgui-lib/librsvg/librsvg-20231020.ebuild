@@ -17,7 +17,6 @@ IUSE="+introspection"
 DEPEND="
 	lib-core/libxml2
 	lib-util/glib
-	lib-misc/libcroco
 	virtual/rust
 	xgui-lib/cairo
 	xgui-lib/gdk-pixbuf

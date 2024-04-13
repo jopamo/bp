@@ -28,12 +28,10 @@ BDEPEND="
 src_configure() {
 	local emesonargs=(
 		-Dman-pages=disabled
-		-Dfish-completion=false
-		-Dzsh-completion=false
-		"-Dbash-completions=true"
-		"-Dwerror=false"
-		"-Dlogind=enabled"
-		"-Dlogind-provider=systemd"
+		-Dbash-completions=true
+		-Dwerror=false
+		-Dlogind=enabled
+		-Dlogind-provider=systemd
 	)
 	meson_src_configure
 }

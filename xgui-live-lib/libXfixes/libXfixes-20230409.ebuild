@@ -9,7 +9,7 @@ HOMEPAGE="https://www.x.org/wiki/"
 
 SNAPSHOT=c1cab28e27dd1c5a81394965248b57e490ccf2ca
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXfixes/-/archive/${SNAPSHOT}/libXfixes-${SNAPSHOT}.tar.bz2 -> libXfixes-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/libXfixes-${SNAPSHOT}"
+S="${WORKDIR}/libxfixes-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

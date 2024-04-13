@@ -15,13 +15,12 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug debug-frame static-libs"
 
-filter-flags -Wl,-z,defs
-
 src_prepare() {
-	eautoreconf
+	filter-flags -Wl,-z,defs
+
 	default
-	# Since we have tests disabled via RESTRICT, disable building in the subdir
-	# entirely.  This worksaround some build errors too. #484846
+	eautoreconf
+
 	sed -i -e '/^SUBDIRS/s:tests::' Makefile.in || die
 }
 

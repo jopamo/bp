@@ -9,7 +9,7 @@ HOMEPAGE="https://www.x.org/wiki/"
 
 SNAPSHOT=b022c9cf7004fe6f794c4c00dd519a2e4c74eca0
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXv/-/archive/${SNAPSHOT}/libXv-${SNAPSHOT}.tar.bz2 -> libXv-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/libXv-${SNAPSHOT}"
+S="${WORKDIR}/libxv-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

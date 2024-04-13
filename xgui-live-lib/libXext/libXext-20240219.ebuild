@@ -9,7 +9,7 @@ HOMEPAGE="https://www.x.org/wiki/"
 
 SNAPSHOT=424b67ad03fafdb0d6caf2e9bf5a103e9717e71f
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXext/-/archive/${SNAPSHOT}/libXext-${SNAPSHOT}.tar.bz2 -> libXext-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/libXext-${SNAPSHOT}"
+S="${WORKDIR}/libxext-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="A modular Wayland compositor library"
 HOMEPAGE="https://github.com/swaywm/wlroots"
 
-SNAPSHOT="b1b34cd6653d51f3bf8e331e6ae7b39290ae820e"
+SNAPSHOT=b1b34cd6653d51f3bf8e331e6ae7b39290ae820e
 SRC_URI="https://gitlab.freedesktop.org/wlroots/wlroots/-/archive/${SNAPSHOT}/wlroots-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/wlroots-${SNAPSHOT}"
 

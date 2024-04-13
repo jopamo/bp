@@ -7,8 +7,8 @@ inherit flag-o-matic python-single-r1
 DESCRIPTION="GNU debugger"
 HOMEPAGE="https://sourceware.org/gdb/"
 
-SNAPSHOT=49664141e1446e5f403a716bf8e50375842934b1
-SRC_URI="https://git.linaro.org/toolchain/binutils-gdb.git/snapshot/binutils-gdb-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=c4f9b811ed3f1e973617da375d79756ead3314a2
+SRC_URI="https://github.com/bminor/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/binutils-gdb-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2"

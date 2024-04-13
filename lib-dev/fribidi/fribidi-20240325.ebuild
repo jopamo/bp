@@ -25,7 +25,7 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="lib-live/glib"
+DEPEND="lib-util/glib"
 
 src_configure() {
 	local emesonargs=(

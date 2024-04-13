@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND="xmedia-live-lib/libjpeg-turbo"
+DEPEND="xmedia-lib/libjpeg-turbo"
 BDEPEND="app-lang/perl"
 
 src_configure() {

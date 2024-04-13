@@ -15,8 +15,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	xgui-live-lib/libX11
-	xgui-live-lib/libxkbfile
+	xgui-lib/libX11
+	xgui-lib/libxkbfile
 "
 BDEPEND="app-build/bison"
 

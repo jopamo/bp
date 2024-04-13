@@ -35,15 +35,15 @@ BDEPEND="
 "
 RDEPEND="
 	lib-core/ncurses
-	xgui-misc/alsa-lib
+	xgui-tools/alsa-lib
 	bluez? (
 		app-net/bluez
 		lib-dev/libusb
 		xgui-misc/sbc
-		xmedia-live-lib/fdk-aac
-		xmedia-live-lib/libfreeaptx
-		xmedia-live-lib/libldac
-		xmedia-live-lib/opus
+		xmedia-lib/fdk-aac
+		xmedia-lib/libfreeaptx
+		xmedia-lib/libldac
+		xmedia-lib/opus
 	)
 	dbus? ( app-core/dbus )
 	echo-cancel? ( media-libs/webrtc-audio-processing:0 )

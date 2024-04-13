@@ -13,7 +13,7 @@ KEYWORDS="amd64 arm64"
 IUSE="libedit systemd"
 
 DEPEND="
-	lib-live/inih
+	lib-misc/inih
 	app-core/util-linux
 	libedit? ( lib-core/libedit )
 "

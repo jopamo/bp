@@ -1,7 +1,7 @@
 app-core/systemd logind tmpfilesd sleep
 app-core/vim normal
-xgui-live-app/qbittorrent qt5
+xgui-app/qbittorrent qt5
 xgui-live-app/wine opencl
-xgui-misc/alsa-utils alsamixer
+xgui-tools/alsa-utils alsamixer
 xmedia-live-app/avidemux qt5
-xmedia-live-lib/x264 opencl
+xmedia-lib/x264 opencl

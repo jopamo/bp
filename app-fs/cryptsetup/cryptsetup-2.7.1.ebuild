@@ -19,7 +19,7 @@ LIB_DEPEND="
 	app-fs/lvm2[static-libs(+)]
 	lib-core/libgpg-error[static-libs(+)]
 	lib-core/popt[static-libs(+)]
-	lib-live/json-c[static-libs(+)]
+	lib-dev/json-c[static-libs(+)]
 	lib-net/openssl[static-libs(+)]
 	argon2? ( app-crypto/argon2[static-libs(+)] )
 	udev? ( app-core/systemd[static-libs(+)] )"

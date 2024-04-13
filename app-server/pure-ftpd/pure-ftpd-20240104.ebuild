@@ -26,7 +26,7 @@ DEPEND="caps? ( lib-core/libcap )
 	postgres? ( app-server/postgresql )
 	ssl? ( virtual/ssl )"
 
-RDEPEND="lib-live/libsodium"
+RDEPEND="lib-util/libsodium"
 
 pkg_setup() {
 	enewgroup ftp

@@ -13,7 +13,7 @@ KEYWORDS="amd64 arm64"
 IUSE="ipv6"
 
 DEPEND="
-	xgui-misc/alsa-lib
+	xgui-tools/alsa-lib
 	xgui-misc/pulseaudio"
 
 BDEPEND="

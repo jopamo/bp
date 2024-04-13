@@ -25,14 +25,14 @@ COMMON_DEPEND="
 	xgui-misc/freetype
 	lib-core/zlib
 	cairo? (
-		lib-live/glib
-		xgui-live-lib/cairo
-		introspection? ( lib-live/gobject-introspection )
+		lib-util/glib
+		xgui-lib/cairo
+		introspection? ( lib-dev/gobject-introspection )
 	)
 	curl? ( app-net/curl )
-	jpeg? ( xmedia-live-lib/libjpeg-turbo )
-	jpeg2k? ( xmedia-live-lib/openjpeg )
-	png? ( xmedia-live-lib/libpng )
+	jpeg? ( xmedia-lib/libjpeg-turbo )
+	jpeg2k? ( xmedia-lib/openjpeg )
+	png? ( xmedia-lib/libpng )
 "
 DEPEND="${COMMON_DEPEND}
 	app-dev/pkgconf

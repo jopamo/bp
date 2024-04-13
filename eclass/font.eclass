@@ -53,7 +53,7 @@ FONT_CONF=( "" )
 if [[ ${CATEGORY}/${PN} != fonts/encodings ]]; then
 	IUSE="X"
 	BDEPEND="X? (
-			>=xgui-live-app/mkfontscale-1.2.0
+			>=xgui-misc/mkfontscale-1.2.0
 			fonts/encodings
 	)"
 fi

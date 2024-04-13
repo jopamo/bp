@@ -20,7 +20,7 @@ RDEPEND="
 	brotli? ( app-compression/brotli )
 	bzip2? ( app-compression/bzip2 )
 	harfbuzz? ( xgui-misc/harfbuzz[truetype] )
-	png? ( xmedia-live-lib/libpng )
+	png? ( xmedia-lib/libpng )
 	zlib? ( lib-core/zlib )
 "
 

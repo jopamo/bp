@@ -22,16 +22,16 @@ IUSE="gif jpeg png static-libs tiff X zlib webp"
 
 DEPEND="
 	xgui-misc/freetype
-	gif? ( xmedia-live-lib/giflib )
-	jpeg? ( xmedia-live-lib/libjpeg-turbo )
-	png? ( xmedia-live-lib/libpng )
-	tiff? ( xmedia-live-lib/tiff )
-	webp? ( xmedia-live-lib/libwebp )
+	gif? ( xmedia-lib/giflib )
+	jpeg? ( xmedia-lib/libjpeg-turbo )
+	png? ( xmedia-lib/libpng )
+	tiff? ( xmedia-lib/tiff )
+	webp? ( xmedia-lib/libwebp )
 	zlib? ( lib-core/zlib )
 	X? (
-		xgui-live-app/xorgproto
-		xgui-live-lib/libX11
-		xgui-live-lib/libXext
+		xgui-tools/xorgproto
+		xgui-lib/libX11
+		xgui-lib/libXext
 	)
 "
 

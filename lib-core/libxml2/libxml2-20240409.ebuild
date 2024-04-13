@@ -15,7 +15,7 @@ LICENSE="MIT"
 SLOT="2"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug icu ipv6 lzma readline static-libs"
+IUSE="icu ipv6 lzma readline static-libs"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
@@ -37,8 +37,6 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--with-html-subdir=${PF}/html
-		$(use_with debug run-debug)
 		$(use_with icu)
 		$(use_with lzma)
 		$(use_enable ipv6)

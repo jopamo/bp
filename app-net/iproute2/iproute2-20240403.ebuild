@@ -7,14 +7,9 @@ inherit toolchain-funcs flag-o-matic
 DESCRIPTION="kernel routing and traffic control utilities"
 HOMEPAGE="https://wiki.linuxfoundation.org/networking/iproute2"
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
-	inherit git-r3
-else
-	SNAPSHOT=e67c9a73532af543573ffafd08a04e2d34579272
-	SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=e67c9a73532af543573ffafd08a04e2d34579272
+SRC_URI="https://github.com/iproute2/iproute2/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

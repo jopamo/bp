@@ -2,25 +2,18 @@
 
 EAPI=8
 
+inherit autotools
+
 DESCRIPTION="standard informational utilities and process-handling tools"
 HOMEPAGE="https://gitlab.com/procps-ng/procps"
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://gitlab.com/procps-ng/procps.git"
-	inherit git-r3 autotools
-elif [[ ${PV} == 20* ]]; then
-	SNAPSHOT=44c57e586c50587a125dfad8e2a1ae264c208137
-	SRC_URI="https://gitlab.com/procps-ng/procps/-/archive/${SNAPSHOT}/procps-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
-	S="${WORKDIR}/procps-${SNAPSHOT}"
-	inherit autotools
-	KEYWORDS="amd64 arm64"
-else
-	SRC_URI="mirror://sourceforge/${PN}-ng/${PN}-ng-${PV}.tar.xz"
-	KEYWORDS="amd64 arm64"
-fi
+SNAPSHOT=44c57e586c50587a125dfad8e2a1ae264c208137
+SRC_URI="https://gitlab.com/procps-ng/procps/-/archive/${SNAPSHOT}/procps-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
+S="${WORKDIR}/procps-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="ncurses static-libs systemd"
 

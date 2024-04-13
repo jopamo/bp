@@ -9,16 +9,7 @@ HOMEPAGE="http://landley.net/toybox/"
 
 SNAPSHOT=122bbe602f50b7fe747751370035f6fd55e674d0
 SRC_URI="https://github.com/landley/toybox/archive/${SNAPSHOT}.tar.gz -> toybox-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/toybox-${SNAPSHOT}"
-
-if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/landley/toybox"
-	inherit
-else
-	SNAPSHOT=122bbe602f50b7fe747751370035f6fd55e674d0
-	SRC_URI="https://github.com/landley/toybox/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"

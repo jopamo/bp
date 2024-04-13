@@ -8,7 +8,7 @@ DESCRIPTION="(FFmpeg) Libavcodec-SMASH decoder/demuxer wrapper library"
 HOMEPAGE="https://github.com/l-smash/l-smash"
 
 SNAPSHOT=18a9ed25c7ff79a7f4f4bf850c345c72179b8998
-SRC_URI="https://github.com/${PN}/l-smash/archive/${SNAPSHOT}.tar.gz -> l-smash-${SNAPSHOT}.tar.gz"
+SRC_URI="https://github.com/l-smash/l-smash/archive/${SNAPSHOT}.tar.gz -> l-smash-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/l-smash-${SNAPSHOT}"
 
 LICENSE="ISC"

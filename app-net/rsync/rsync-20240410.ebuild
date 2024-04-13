@@ -7,14 +7,9 @@ inherit flag-o-matic
 DESCRIPTION="File transfer program to keep remote files into sync"
 HOMEPAGE="https://rsync.samba.org/"
 
-if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/WayneD/rsync"
-	inherit git-r3
-else
-	SNAPSHOT=4592aa770d51d5e83845b032feea1de441f03ee7
-	SRC_URI="https://github.com/WayneD/rsync/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=4592aa770d51d5e83845b032feea1de441f03ee7
+SRC_URI="https://github.com/WayneD/rsync/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-3"
 SLOT="0"

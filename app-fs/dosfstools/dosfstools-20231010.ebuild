@@ -7,14 +7,9 @@ inherit autotools
 DESCRIPTION="DOS filesystem tools - provides mkdosfs, mkfs.msdos, mkfs.vfat"
 HOMEPAGE="https://github.com/dosfstools/dosfstools"
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/dosfstools/dosfstools.git"
-	inherit git-r3
-else
-	SNAPSHOT=289a48b9cb5b3c589391d28aa2515c325c932c7a
-	SRC_URI="https://github.com/dosfstools/dosfstools/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=289a48b9cb5b3c589391d28aa2515c325c932c7a
+SRC_URI="https://github.com/dosfstools/dosfstools/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-3"
 SLOT="0"

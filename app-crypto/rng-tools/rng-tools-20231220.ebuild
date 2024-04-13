@@ -7,14 +7,9 @@ inherit autotools toolchain-funcs
 DESCRIPTION="Daemon to use hardware random number generators"
 HOMEPAGE="https://github.com/nhorman/rng-tools"
 
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/nhorman/${PN}.git"
-	inherit git-r3
-else
-	SNAPSHOT=98cf8d6368d2d70baa3309a6a0046cee1c3255ac
-	SRC_URI="https://github.com/nhorman/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=98cf8d6368d2d70baa3309a6a0046cee1c3255ac
+SRC_URI="https://github.com/nhorman/rng-tools/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

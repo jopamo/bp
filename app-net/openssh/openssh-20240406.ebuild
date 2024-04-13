@@ -7,14 +7,9 @@ inherit flag-o-matic autotools user
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="http://www.openssh.org/"
 
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/openssh/openssh-portable.git"
-	inherit git-r3
-else
-	SNAPSHOT=88351eca17dcc55189991ba60e50819b6d4193c1
-	SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-portable-${SNAPSHOT}
-fi
+SNAPSHOT=88351eca17dcc55189991ba60e50819b6d4193c1
+SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-portable-${SNAPSHOT}
 
 LICENSE="BSD GPL-2"
 SLOT="0"

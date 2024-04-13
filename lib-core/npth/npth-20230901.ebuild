@@ -9,7 +9,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="New GNU Portable Threads Library"
 HOMEPAGE="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git"
-SRC_URI="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=${PN}.git;a=snapshot;h=${SNAPSHOT};sf=tgz -> ${P}.tar.gz"
+SRC_URI="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git;a=snapshot;h=${SNAPSHOT};sf=tgz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SHORT}
 
 LICENSE="LGPL-2.1+"

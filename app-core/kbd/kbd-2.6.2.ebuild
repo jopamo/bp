@@ -4,14 +4,7 @@ EAPI=8
 
 DESCRIPTION="Keyboard and console utilities"
 HOMEPAGE="http://kbd-project.org/"
-
-if [[ ${PV} == "9999" ]] ; then
-	inherit autotools git-r3
-	EGIT_REPO_URI="https://git.kernel.org/cgit/linux/kernel/git/legion/${PN}.git"
-	EGIT_BRANCH="master"
-else
-	SRC_URI="https://www.kernel.org/pub/linux/utils/kbd/${P}.tar.xz"
-fi
+SRC_URI="https://www.kernel.org/pub/linux/utils/kbd/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"

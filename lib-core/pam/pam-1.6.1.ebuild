@@ -6,16 +6,9 @@ inherit autotools
 
 DESCRIPTION=" Linux PAM (Pluggable Authentication Modules for Linux) project"
 HOMEPAGE="https://github.com/linux-pam/linux-pam"
+SRC_URI="https://github.com/linux-pam/linux-pam/releases/download/v${PV}/Linux-PAM-${PV}.tar.xz"
 
-if [[ ${PV} == 9999 ]] ; then
-	inherit git-r3
-	EGIT_REPO_URI="${HOMEPAGE}.git"
-else
-	SNAPSHOT=92a884a71ca5f34a2cbf3805fff21ab3d01e7e03
-	SRC_URI="${HOMEPAGE}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz
-			https://github.com/linux-pam/linux-pam/commit/cf2fc5ff7b4a8555fda2a5ebe5f6ab0e45c22996.patch"
-	S=${WORKDIR}/linux-${PN}-${SNAPSHOT}
-fi
+S="${WORKDIR}/Linux-PAM-${PV}"
 
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
@@ -36,12 +29,7 @@ DEPEND="lib-net/libtirpc"
 PDEPEND="app-core/pambase"
 
 src_prepare() {
-	git apply -R "${DISTDIR}/cf2fc5ff7b4a8555fda2a5ebe5f6ab0e45c22996.patch"
-
-	touch ChangeLog
-
 	default
-	eautoreconf
 
 	#this requires termio.h, which is missing on musl
 	if use musl ; then

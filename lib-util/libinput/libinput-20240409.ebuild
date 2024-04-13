@@ -8,7 +8,7 @@ DESCRIPTION="Library to handle input devices in Wayland"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/libinput/"
 
 SNAPSHOT=955158f9824da05dcd71f3e8731cd5d51c3d262f
-SRC_URI="https://gitlab.freedesktop.org/libinput/libinput/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
+SRC_URI="https://gitlab.freedesktop.org/libinput/libinput/-/archive/${SNAPSHOT}/libinput-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="MIT"

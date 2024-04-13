@@ -2,12 +2,10 @@
 
 EAPI=8
 
-SNAPSHOT=bfc53cfde4fdda343647678fcd21b38a44f2de08
-
 DESCRIPTION="an implementation of the utmpx.h family of functions"
 HOMEPAGE="https://skarnet.org/software/utmps/"
-SRC_URI="https://skarnet.org/software/utmps/${P}.tar.gz"
 
+SNAPSHOT=bfc53cfde4fdda343647678fcd21b38a44f2de08
 SRC_URI="https://github.com/skarnet/skalibs/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

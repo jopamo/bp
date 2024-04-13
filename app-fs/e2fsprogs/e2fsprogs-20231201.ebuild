@@ -7,15 +7,9 @@ inherit flag-o-matic toolchain-funcs autotools
 DESCRIPTION="Standard EXT2/EXT3/EXT4 filesystem utilities"
 HOMEPAGE="http://ext4.wiki.kernel.org/"
 
-if [[ ${PV} == *9999 ]] ; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/tytso/e2fsprogs.git"
-	EGIT_BRANCH=maint
-else
-	SNAPSHOT=1ac0061609c69cc9fe01bd116915632c2bc7c497
-	SRC_URI="https://github.com/tytso/e2fsprogs/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=1ac0061609c69cc9fe01bd116915632c2bc7c497
+SRC_URI="https://github.com/tytso/e2fsprogs/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2 BSD"
 SLOT="0"

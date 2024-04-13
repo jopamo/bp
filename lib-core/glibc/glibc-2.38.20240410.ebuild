@@ -7,15 +7,9 @@ inherit flag-o-matic
 DESCRIPTION="GNU libc C library"
 HOMEPAGE="https://www.gnu.org/software/libc/"
 
-if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://sourceware.org/git/glibc.git"
-	inherit git-r3
-	EGIT_BRANCH="release/$(ver_cut 1).$(ver_cut 2)/master"
-else
-	SNAPSHOT=88d5d70b1e89c0a449352286134946e26f7a498a
-	SRC_URI="https://github.com/bminor/glibc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=92da7c2cfeeea36d651142f47e570dd5076bc166
+SRC_URI="https://github.com/bminor/glibc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
 SLOT="0"

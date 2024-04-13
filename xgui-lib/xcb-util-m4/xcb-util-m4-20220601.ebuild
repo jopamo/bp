@@ -6,7 +6,7 @@ DESCRIPTION="X C-language Bindings sample implementations"
 HOMEPAGE="https://xcb.freedesktop.org/"
 
 SNAPSHOT=c617eee22ae5c285e79e81ec39ce96862fd3262f
-SRC_URI="https://gitlab.freedesktop.org/xorg/util/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
+SRC_URI="https://gitlab.freedesktop.org/xorg/util/xcb-util-m4/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="MIT"

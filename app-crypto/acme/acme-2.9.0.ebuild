@@ -11,30 +11,14 @@ inherit distutils-r1
 PARENT_PN="certbot"
 PARENT_P="${PARENT_PN}-${PV}"
 
-if [[ "${PV}" == *9999 ]]; then
-	inherit git-r3
-
-	EGIT_REPO_URI="https://github.com/certbot/certbot.git"
-	EGIT_SUBMODULES=()
-	EGIT_CHECKOUT_DIR="${WORKDIR}/${PARENT_P}"
-else
-	SRC_URI="
-		https://github.com/certbot/certbot/archive/v${PV}.tar.gz
-			-> ${PARENT_P}.gh.tar.gz
-	"
-	KEYWORDS="amd64 arm arm64 ~ppc64 ~riscv x86"
-fi
-
 DESCRIPTION="An implementation of the ACME protocol"
-HOMEPAGE="
-	https://github.com/certbot/certbot
-	https://letsencrypt.org/
-"
+HOMEPAGE="https://letsencrypt.org"
+SRC_URI="https://github.com/certbot/certbot/archive/v${PV}.tar.gz -> ${PARENT_P}.gh.tar.gz"
+S="${WORKDIR}/${PARENT_P}/${PN}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-
-S="${WORKDIR}/${PARENT_P}/${PN}"
+KEYWORDS="amd64 arm64"
 
 BDEPEND="
 	test? (

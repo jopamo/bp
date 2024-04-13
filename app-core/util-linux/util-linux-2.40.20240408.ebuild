@@ -7,15 +7,9 @@ inherit autotools flag-o-matic
 DESCRIPTION="a random collection of Linux utilities"
 HOMEPAGE="https://github.com/util-linux/util-linux"
 
-if [[ ${PV} == *9999 ]] ; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/karelzak/util-linux.git"
-	EGIT_BRANCH="stable/v$(ver_cut 1-2)"
-else
-	SNAPSHOT=5de7172a3e59b6861bff0b7baa6f0cad321ab3ff
-	SRC_URI="https://github.com/util-linux/util-linux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=5de7172a3e59b6861bff0b7baa6f0cad321ab3ff
+SRC_URI="https://github.com/util-linux/util-linux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2.1 BSD-4 MIT public-domain"
 SLOT="0"

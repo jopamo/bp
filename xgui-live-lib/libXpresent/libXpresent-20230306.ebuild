@@ -9,7 +9,7 @@ HOMEPAGE="https://www.x.org/wiki/"
 
 SNAPSHOT=6bbbcf9218bbc686389387142978f90a3917c39a
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXpresent/-/archive/${SNAPSHOT}/libXpresent-${SNAPSHOT}.tar.bz2 -> libXpresent-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/libXpresent-${SNAPSHOT}"
+S="${WORKDIR}/libxpresent-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

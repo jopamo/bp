@@ -9,7 +9,7 @@ HOMEPAGE="https://www.x.org/wiki/"
 
 SNAPSHOT=57ce2e8ba4c1f1bc5792e14bc7082f3ebd0915be
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXi/-/archive/${SNAPSHOT}/libXi-${SNAPSHOT}.tar.bz2 -> libXi-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/libXi-${SNAPSHOT}"
+S="${WORKDIR}/libxi-${SNAPSHOT}"
 
 KEYWORDS="amd64 arm64"
 

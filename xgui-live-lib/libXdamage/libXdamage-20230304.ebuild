@@ -9,7 +9,7 @@ HOMEPAGE="https://www.x.org/wiki/"
 
 SNAPSHOT=2d1aae42f0497b198f79b9e791856343d14503b1
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXdamage/-/archive/${SNAPSHOT}/libXdamage-${SNAPSHOT}.tar.bz2 -> libXdamage-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/libXdamage-${SNAPSHOT}"
+S="${WORKDIR}/libxdamage-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

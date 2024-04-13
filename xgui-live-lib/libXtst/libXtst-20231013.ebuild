@@ -9,7 +9,7 @@ HOMEPAGE="https://www.x.org/wiki/"
 
 SNAPSHOT=c542acce77be47156e53b74f5f9ca7156b3de7f5
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXtst/-/archive/${SNAPSHOT}/libXtst-${SNAPSHOT}.tar.bz2 -> libXtst-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/libXtst-${SNAPSHOT}"
+S="${WORKDIR}/libxtst-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

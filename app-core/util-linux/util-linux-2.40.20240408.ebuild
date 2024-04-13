@@ -49,7 +49,7 @@ DEPEND="
 
 BDEPEND="
 	app-dev/pkgconf
-	test? ( app-build/bc )
+	test? ( app-util/bc )
 	app-kernel/linux-headers
 "
 

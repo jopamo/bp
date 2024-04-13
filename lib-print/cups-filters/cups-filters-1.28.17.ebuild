@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="dbus jpeg ldap pclm pdf png static-libs tiff"
 
 DEPEND="
-	app-build/bc
+	app-util/bc
 	app-tex/ghostscript-gpl[cups]
 	app-tex/poppler
 	app-tex/qpdf

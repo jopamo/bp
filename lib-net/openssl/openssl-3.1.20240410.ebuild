@@ -29,7 +29,7 @@ BDEPEND="
 	app-lang/perl
 	test? (
 		app-core/diffutils
-		app-build/bc
+		app-util/bc
 		app-core/procps
 	)"
 PDEPEND="app-var/ca-certificates"

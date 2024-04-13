@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools
+inherit flag-o-matic meson
 
 DESCRIPTION="A vector graphics library with cross-device output support"
 HOMEPAGE="https://www.cairographics.org"
@@ -43,11 +43,11 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-respect-fontconfig.patch
 )
 
-filter-flags -Wl,-z,defs
 
 src_prepare() {
 	default
 
+	filter-flags -Wl,-z,defs
 	# tests and perf tools require X, bug #483574
 	if ! use X; then
 		sed -e '/^SUBDIRS/ s#boilerplate test perf# #' -i Makefile.am || die
@@ -57,29 +57,5 @@ src_prepare() {
 	touch src/Makefile.am.features
 	touch ChangeLog
 
-	eautoreconf
-}
-
-src_configure() {
-	local myconf=(
-		$(use_enable X tee)
-		$(use_enable X xlib)
-		$(use_enable X xlib-xrender)
-		$(use_enable debug test-surfaces)
-		$(use_enable glib gobject)
-		$(use_enable static-libs static)
-		$(use_enable svg)
-		$(use_enable valgrind)
-		$(use_enable xcb xcb-shm)
-		$(use_enable xcb)
-		$(use_with X x)
-		--disable-dependency-tracking
-		--disable-gl
-		--disable-gtk-doc
-		--enable-ft
-		--enable-pdf
-		--enable-png
-		--enable-ps
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
+	meson_src_prepare
 }

@@ -94,3 +94,41 @@ replace_in_files() {
 
     echo "Replacement complete."
 }
+
+move_package() {
+    local REPO_PATH="/var/db/repos/bp"
+    local package_name="$1"
+    local new_category="$2"
+    local dry_run="${3:-false}"
+
+    local found_path=$(find "$REPO_PATH" -type d -name "$package_name" -print -quit)
+
+    if [[ -z "$found_path" ]]; then
+        echo "Package '$package_name' not found."
+        return 1
+    fi
+
+    local old_path=$(dirname "$found_path")
+    local new_path="$REPO_PATH/$new_category"
+
+    echo "Preparing to move '$package_name' from '$old_path' to '$new_path'."
+
+    if [[ "$dry_run" == "false" ]]; then
+        mkdir -p "$new_path"
+        if mv "$found_path" "$new_path/$package_name"; then
+            echo "Moved '$package_name' to '$new_category'."
+        else
+            echo "Failed to move '$package_name'."
+            return 1
+        fi
+
+        local old_pattern="$old_path/$package_name"
+        local new_pattern="$new_path/$package_name"
+
+        grep -rlZ --exclude-dir=".git" "$old_pattern" "$REPO_PATH" | xargs -0 sed -i "s|$old_pattern|$new_pattern|g"
+        echo "Updated references from '$old_pattern' to '$new_pattern'."
+    else
+        echo "[Dry Run] Would move '$package_name' to '$new_category'."
+        echo "[Dry Run] Would update references from '$old_path/$package_name' to '$new_path/$package_name'."
+    fi
+}

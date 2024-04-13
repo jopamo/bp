@@ -6,7 +6,7 @@ inherit git-r3
 
 DESCRIPTION="Linux firmware files"
 HOMEPAGE="https://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git"
-EGIT_REPO_URI="https://git.kernel.org/pub/scm/linux/kernel/git/firmware/${PN}.git"
+EGIT_REPO_URI="https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware"
 
 LICENSE="linux-firmware ( BSD ISC MIT no-source-code ) GPL-2 GPL-2+ freedist"
 SLOT="0"

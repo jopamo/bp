@@ -6,7 +6,7 @@ inherit git-r3
 
 DESCRIPTION="Update Portage tree and all installed packages"
 HOMEPAGE="https://github.com/jopamo/${PN}"
-EGIT_REPO_URI="${HOMEPAGE}.git"
+EGIT_REPO_URI="${HOMEPAGE}"
 
 LICENSE="GPL-3+"
 SLOT="0"

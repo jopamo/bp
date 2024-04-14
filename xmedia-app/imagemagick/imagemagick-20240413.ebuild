@@ -26,6 +26,11 @@ DEPEND="
 	webp? ( xmedia-lib/libwebp )
 "
 
+src_prepare() {
+	default
+	touch NEWS.txt
+}
+
 src_configure() {
 	local myconf=(
 		$(use_enable hdri)

@@ -12,7 +12,7 @@ LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug lzma ssl static-libs +tools zlib zstd"
+IUSE="debug ssl static-libs +tools zlib zstd"
 
 RESTRICT="test"
 
@@ -21,7 +21,6 @@ BDEPEND="
 	app-dev/pkgconf
 "
 DEPEND="
-	lzma? ( app-compression/xz-utils )
 	ssl? ( virtual/ssl )
 	zlib? ( lib-core/zlib )
 	zstd? ( app-compression/zstd )
@@ -37,7 +36,6 @@ src_prepare() {
 		elibtoolize
 	fi
 
-	# Restore possibility of running --enable-static, bug #472608
 	sed -i \
 		-e '/--enable-static is not supported by kmod/s:as_fn_error:echo:' \
 		configure || die
@@ -45,16 +43,17 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--enable-shared
+		--bindir="${EPREFIX}"/usr/sbin
 		--with-rootlibdir="${EPREFIX}"/usr/lib
-		--enable-gtk-doc
 		$(use_enable debug)
 		$(use_enable static-libs static)
 		$(use_enable tools)
-		$(use_with lzma xz)
 		$(use_with ssl openssl)
 		$(use_with zlib)
 		$(use_with zstd)
+		--disable-gtk-doc
+		--without-xz
+		--enable-shared
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 

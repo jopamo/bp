@@ -39,7 +39,6 @@ PDEPEND="app-net/rsync"
 
 PATCHES=(
 	"${FILESDIR}"/phase-helpers.patch
-	#"${FILESDIR}"/makeglobals.patch
 )
 
 pkg_pretend() {
@@ -51,16 +50,30 @@ pkg_pretend() {
 src_prepare() {
 	filter-flags -Wl,-z,defs
 
+	make_globals="./cnf/make.globals"
+
+	sed -i '/GENTOO_MIRRORS/c\GENTOO_MIRRORS="https://1g4.org"' "$make_globals"
+
+	if ! grep -q 'ACCEPT_LICENSE' "$make_globals"; then
+    	echo 'ACCEPT_LICENSE="*"' >> "$make_globals"
+	fi
+
 	default
 
 	cp "${FILESDIR}"/eapi7-ver-funcs.sh bin/ || die
 
-	if use prefix-guest; then
-		sed -e "s|^\(main-repo = \).*|\\1gentoo_prefix|" \
-			-e "s|^\\[gentoo\\]|[gentoo_prefix]|" \
-			-e "s|^\(sync-uri = \).*|\\1rsync://rsync.prefix.bitzolder.nl/gentoo-portage-prefix|" \
-			-i cnf/repos.conf || die "sed failed"
-	fi
+	cat <<EOF >> "$make_globals"
+# Try to save bandwidth/disk space
+EGIT_CLONE_TYPE=shallow
+
+# The compression used for binary packages.
+BINPKG_COMPRESS="xz"
+BINPKG_COMPRESS_FLAGS="-e9"
+
+# The format used for binary packages. The default is use old "xpak" format.
+# Set to "gpkg" to use new gentoo binary package format.
+BINPKG_FORMAT="xpak"
+EOF
 }
 
 src_configure() {

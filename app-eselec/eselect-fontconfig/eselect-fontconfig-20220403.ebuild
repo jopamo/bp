@@ -13,9 +13,7 @@ KEYWORDS="amd64 arm64"
 RDEPEND=">=app-var/eselect-1.2.3
 		 >=fonts/fontconfig-2.4"
 
-S=${WORKDIR}
-
 src_install() {
 	insinto /usr/share/eselect/modules
-	newins "${S}"/fontconfig.eselect-${PV} fontconfig.eselect
+	newins "${S}"/fontconfig.eselect fontconfig.eselect
 }

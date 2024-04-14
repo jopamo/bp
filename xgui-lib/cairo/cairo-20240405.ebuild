@@ -56,6 +56,4 @@ src_prepare() {
 	touch boilerplate/Makefile.am.features
 	touch src/Makefile.am.features
 	touch ChangeLog
-
-	meson_src_prepare
 }

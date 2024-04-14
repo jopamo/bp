@@ -13,7 +13,7 @@ S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
 
 LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
-#KEYWORDS="amd64"
+KEYWORDS="amd64"
 
 IUSE="bolt +clang +clang-tools-extra +compiler-rt cross-project-tests debug libc
 	libclc +lld lldb mlir openmp polly pstl test libunwind llvm-libgcc"

@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/libfuse/libfuse"
 
 SNAPSHOT=20de66dc898002b9315192a5095a3dcd4f6ec248
 SRC_URI="https://github.com/libfuse/libfuse/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/lib${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="3"

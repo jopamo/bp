@@ -45,8 +45,6 @@ PDEPEND="
 QA_PREBUILT="opt/* usr/lib*"
 S=${WORKDIR}/
 
-PATCHES=(${FILESDIR}/nvidia-drivers-470.223.02-gpl-pfn_valid.patch)
-
 nvidia_drivers_versions_check() {
 	CONFIG_CHECK="
 		PROC_FS
@@ -290,7 +288,7 @@ src_install-libs() {
 			"libnvcuvid.so.${NV_SOVER}"
 			"libnvidia-allocator.so.${NV_SOVER}"
 			"libnvidia-cfg.so.${NV_SOVER}"
-			"libnvidia-egl-gbm.so.1.1.0"
+			"libnvidia-egl-gbm.so.1.1.1"
 			"libnvidia-eglcore.so.${NV_SOVER}"
 			"libnvidia-encode.so.${NV_SOVER}"
 			"libnvidia-fbc.so.${NV_SOVER}"

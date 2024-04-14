@@ -7,7 +7,7 @@ inherit cmake xdg
 DESCRIPTION="Themes, graphics, and icons for LXQt"
 HOMEPAGE="http://lxqt.org/"
 
-SNAPSHOT=0e6722d6b9d699cb8c5948731b1fa5873e22c4d5
+SNAPSHOT=d76946fcb232ca7ee9aed7b795d3794ea8edf9d6
 SRC_URI="https://github.com/lxde/lxqt-themes/archive/${SNAPSHOT}.tar.gz -> lxqt-themes-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/lxqt-themes-${SNAPSHOT}"
 

@@ -2,18 +2,13 @@
 
 EAPI=8
 
-inherit autotools
-
 DESCRIPTION="XSLT libraries and tools"
 HOMEPAGE="http://www.xmlsoft.org/"
-
-SNAPSHOT=fddd5827170a8bb923fede09d48ce87345e60b19
-SRC_URI="https://gitlab.gnome.org/GNOME/libxslt/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SRC_URI="https://download.gnome.org/sources/libxslt/1.1/${P}.tar.xz"
 
 LICENSE="MIT"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="crypt debug static-libs"
 
@@ -22,15 +17,11 @@ DEPEND="
 	crypt?  ( lib-core/libgcrypt )
 "
 
-src_prepare() {
-	default
-	eautoreconf
-}
-
 src_configure() {
 	local myconf=(
 		$(use_enable static-libs static)
 		$(use_with crypt crypto)
+		$(use_with debug mem-debug)
 		$(use_with debug)
 		--without-python
 	)

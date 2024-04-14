@@ -2,18 +2,15 @@
 
 EAPI=8
 
-inherit python-r1 autotools flag-o-matic prefix
+inherit python-r1 flag-o-matic prefix
 
 DESCRIPTION="Version 2 of the library to manipulate XML files"
 HOMEPAGE="http://www.xmlsoft.org/"
-
-SNAPSHOT=20b0bd9800ae83cbd70f4407ce67058164e16227
-SRC_URI="https://gitlab.gnome.org/GNOME/libxml2/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://download.gnome.org/sources/libxml2/2.12/${P}.tar.xz"
 
 LICENSE="MIT"
 SLOT="2"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="icu ipv6 lzma readline static-libs"
 
@@ -32,7 +29,6 @@ src_prepare() {
 
 	default
 	eprefixify catalog.c xmlcatalog.c runtest.c xmllint.c
-	eautoreconf
 }
 
 src_configure() {

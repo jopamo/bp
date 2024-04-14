@@ -22,6 +22,7 @@ KEYWORDS="arm64 amd64"
 IUSE="system-service systemd test"
 
 DEPEND="
+	app-lang/lua
 	xgui-misc/pipewire
 "
 

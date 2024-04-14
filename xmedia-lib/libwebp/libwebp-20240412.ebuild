@@ -15,16 +15,14 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+jpeg neon opengl +png static-libs swap-16bit-csp tiff"
+IUSE="+jpeg neon +png static-libs swap-16bit-csp tiff"
 
 DEPEND="
+	gif? ( xmedia-lib/giflib )
 	jpeg? ( xmedia-lib/libjpeg-turbo )
-	opengl? (
-		xgui-misc/freeglut
-		xgui-tools/mesa
-		)
-	png? ( xmedia-lib/libpng:0= )
-	tiff? ( xmedia-lib/tiff:0= )"
+	png? ( xmedia-lib/libpng )
+	tiff? ( xmedia-lib/tiff )
+"
 
 src_prepare() {
 	default
@@ -34,13 +32,10 @@ src_prepare() {
 src_configure() {
 	local myconf=(
 		$(use_enable jpeg)
-		$(use_enable neon)
-		$(use_enable opengl gl)
 		$(use_enable png)
 		$(use_enable static-libs static)
-		$(use_enable swap-16bit-csp)
 		$(use_enable tiff)
-		--disable-gif
+		$(use_enable gif)
 		--enable-libwebpdecoder
 		--enable-libwebpdemux
 		--enable-libwebpmux

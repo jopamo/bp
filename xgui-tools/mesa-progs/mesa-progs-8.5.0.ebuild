@@ -17,10 +17,9 @@ LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="
+BDEPEND="
+	xgui-misc/freeglut
 	xgui-tools/mesa
-	xgui-lib/libX11"
-DEPEND="${RDEPEND}
-	xgui-misc/glew
 	xmedia-lib/glu
-	xgui-tools/xorgproto"
+"
+DEPEND="xgui-lib/libX11"

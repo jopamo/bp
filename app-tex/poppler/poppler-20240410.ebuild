@@ -19,7 +19,8 @@ IUSE="cairo +cjk curl cxx debug doc +introspection +jpeg +jpeg2k png +utils"
 
 RESTRICT="test"
 
-COMMON_DEPEND="
+DEPEND="
+	lib-dev/nss
 	lib-dev/boost
 	fonts/fontconfig
 	xgui-misc/freetype
@@ -33,9 +34,6 @@ COMMON_DEPEND="
 	jpeg? ( xmedia-lib/libjpeg-turbo )
 	jpeg2k? ( xmedia-lib/openjpeg )
 	png? ( xmedia-lib/libpng )
-"
-DEPEND="${COMMON_DEPEND}
-	app-dev/pkgconf
 "
 RDEPEND="${COMMON_DEPEND}
 	cjk? ( app-tex/poppler-data )

@@ -15,10 +15,9 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+jpeg neon +png static-libs swap-16bit-csp tiff"
+IUSE="+jpeg +png static-libs +tiff"
 
 DEPEND="
-	gif? ( xmedia-lib/giflib )
 	jpeg? ( xmedia-lib/libjpeg-turbo )
 	png? ( xmedia-lib/libpng )
 	tiff? ( xmedia-lib/tiff )
@@ -35,7 +34,7 @@ src_configure() {
 		$(use_enable png)
 		$(use_enable static-libs static)
 		$(use_enable tiff)
-		$(use_enable gif)
+		--disable-gif
 		--enable-libwebpdecoder
 		--enable-libwebpdemux
 		--enable-libwebpmux

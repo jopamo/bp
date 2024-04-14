@@ -8,8 +8,8 @@ DESCRIPTION="The Boehm-Demers-Weiser conservative garbage collector"
 HOMEPAGE="https://github.com/ivmai/bdwgc"
 AOPS_URL="https://github.com/ivmai/libatomic_ops"
 
-ATOMIC_OPS_VER=fa4df527300587cf3650d9bc89d008fbb823a663
-SNAPSHOT=07a6d0ee8889bca5eaeadc13cabadc363725d216
+ATOMIC_OPS_VER=c0efdfe5a89180c5424e247a4d1ec753741788bc
+SNAPSHOT=4d6cdc072663c1a22379d84acdac8a273ace1bc9
 SRC_URI="
 	https://github.com/ivmai/bdwgc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz
 	https://github.com/ivmai/libatomic_ops/archive/${ATOMIC_OPS_VER}.tar.gz -> libatomic_ops-${ATOMIC_OPS_VER}.tar.gz

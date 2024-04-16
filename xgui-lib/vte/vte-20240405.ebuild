@@ -15,6 +15,8 @@ LICENSE="CCA4"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+DEPEND="xgui-lib/gtk4"
+
 src_configure() {
 	filter-flags -flto*
 

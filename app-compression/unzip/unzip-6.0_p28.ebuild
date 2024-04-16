@@ -4,11 +4,16 @@ EAPI=8
 
 inherit toolchain-funcs flag-o-matic
 
+MY_PV="${PV//.}"
+MY_PV="${MY_PV%_p*}"
+MY_P="${PN}${MY_PV}"
+
 DESCRIPTION="unzipper for pkzip-compressed files"
 HOMEPAGE="http://www.info-zip.org/"
+SRC_URI="mirror://sourceforge/infozip/${MY_P}.tar.gz
+	mirror://debian/pool/main/u/${PN}/${PN}_${PV/_p/-}.debian.tar.xz"
 
-SRC_URI="http://deb.debian.org/debian/pool/main/u/unzip/unzip_6.0-28.debian.tar.xz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S="${WORKDIR}/unzip60"
 
 LICENSE="Info-ZIP"
 SLOT="0"
@@ -20,7 +25,7 @@ DEPEND="bzip2? ( app-compression/bzip2 )"
 
 src_prepare() {
 	local deb="${WORKDIR}"/debian/patches
-	rm "${deb}"/{02*,11*,22*,23*,24*,25*,26*,28*}.patch || die
+	#rm "${deb}"/{02*,11*,22*,23*,24*,25*,26*,28*}.patch || die
 	eapply "${deb}"/*.patch
 
 	eapply "${FILESDIR}"/${PN}-6.0-no-exec-stack.patch

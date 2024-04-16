@@ -52,7 +52,7 @@ src_configure() {
 		$(use_with zlib)
 		$(use_with zstd)
 		--disable-gtk-doc
-		--without-xz
+		--with-xz
 		--enable-shared
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

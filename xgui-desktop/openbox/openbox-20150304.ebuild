@@ -39,6 +39,7 @@ DEPEND="
 "
 
 PATCHES=(
+	${FILESDIR}/debian-887908.patch
 	${FILESDIR}/openbox-3.5.0-title-matching.patch
 	${FILESDIR}/openbox-3.5.0-which-2.20.patch
 	${FILESDIR}/openbox-3.5.2-gnome-session.patch

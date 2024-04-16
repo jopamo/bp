@@ -13,7 +13,8 @@ S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
+
 
 IUSE="debug ssl static-libs +tools zlib zstd"
 
@@ -55,7 +56,7 @@ src_configure() {
 		$(use_with zlib)
 		$(use_with zstd)
 		--disable-gtk-doc
-		--disable-xz
+		--with-xz
 		--enable-shared
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

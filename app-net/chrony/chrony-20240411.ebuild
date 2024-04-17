@@ -40,7 +40,8 @@ src_configure() {
 		--sbindir="${EPREFIX}"/usr/sbin
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
-		--chronyrundir="${EPREFIX}"/run/chrony
+		--chronyrundir="${EPREFIX}"/var/run/chrony
+		--chronyvardir="${EPREFIX}"/var/lib/chrony
 		--sysconfdir="${EPREFIX}"/etc/chrony
 		--prefix="${EPREFIX}/usr"
 		$(usex adns '' --disable-asyncdns)

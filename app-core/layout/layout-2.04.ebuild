@@ -103,6 +103,8 @@ src_install() {
 	dosym -r /usr/bin /bin
 	dosym -r /usr/sbin /sbin
 
+	keepdir /usr/local/lib
+
 	if use systemd ; then
 		if use sysusersd; then
 			insopts -m 0644

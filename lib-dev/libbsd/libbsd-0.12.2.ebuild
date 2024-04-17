@@ -2,6 +2,8 @@
 
 EAPI=8
 
+inherit flag-o-matic
+
 DESCRIPTION="Provides useful functions commonly found on BSD systems"
 HOMEPAGE="https://libbsd.freedesktop.org/wiki/"
 SRC_URI="https://${PN}.freedesktop.org/releases/${P}.tar.xz"
@@ -14,8 +16,8 @@ IUSE="static-libs"
 
 DEPEND="lib-dev/libmd"
 
-PATCHES=( "${FILESDIR}"/lfs64.patch )
-
 src_configure() {
+	filter-flags -fno-semantic-interposition
+
 	ECONF_SOURCE="${S}" econf $(use_enable static-libs static)
 }

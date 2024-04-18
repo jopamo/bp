@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="A wallpaper utility for Wayland"
 HOMEPAGE="https://github.com/swaywm/swaybg"
 
-SNAPSHOT=80ed4b020adfb0846f780faba95fc5cc9a770a18
+SNAPSHOT=b4fda8146ceb006179e19ed7dd15ee713d493e4b
 SRC_URI="https://github.com/swaywm/swaybg/archive/${SNAPSHOT}.tar.gz -> swaybg-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/swaybg-${SNAPSHOT}"
 

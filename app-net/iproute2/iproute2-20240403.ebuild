@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps elf iptables ipv6 libbsd"
+IUSE="caps elf iptables ipv6 musl"
 
 DEPEND="
 	app-build/bison
@@ -26,12 +26,12 @@ DEPEND="
 	caps? ( lib-core/libcap )
 	elf? ( lib-core/elfutils )
 	iptables? ( app-net/iptables )
-	libbsd? ( lib-dev/libbsd )
+	!musl? ( lib-dev/libbsd )
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-mtu.patch
 	"${FILESDIR}"/${PN}-5.7.0-mix-signal.h-include.patch
+	"${FILESDIR}"/${PN}-mtu.patch
 )
 
 doecho() {
@@ -43,6 +43,9 @@ src_prepare() {
 	filter-flags -Wl,-z,defs
 
 	use ipv6 || eapply "${FILESDIR}"/${PN}-4.20.0-no-ipv6.patch
+
+	use musl && eapply "${FILESDIR}"/${PN}-6.8.0-configure-nomagic-nolibbsd.patch
+	use musl && eapply "${FILESDIR}"/${PN}-6.8.0-disable-libbsd-fallback.patch
 
 	default
 
@@ -93,7 +96,7 @@ src_configure() {
 	IP_CONFIG_SETNS := ${setns}
 	# Use correct iptables dir, #144265 #293709
 	IPT_LIB_DIR   := $(use iptables && ${PKG_CONFIG} xtables --variable=xtlibdir)
-	HAVE_LIBBSD   := $(usex libbsd y n)
+	HAVE_LIBBSD   := n
 	EOF
 }
 

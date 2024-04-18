@@ -2,7 +2,7 @@
 
 EAPI=8
 
-DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_USE_PEP517=flit
 PYTHON_COMPAT=( python3_{10..12} pypy3 )
 
 inherit distutils-r1 pypi
@@ -19,11 +19,17 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
+	dev-python/pillow[${PYTHON_USEDEP}]
 	dev-python/pygments[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	${RDEPEND}
 "
+
+PATCHES=(
+	# minimal backport of upstream r9637, r9641
+	"${FILESDIR}/${P}-test.patch"
+)
 
 python_compile_all() {
 	# Generate html docs from reStructured text sources.
@@ -38,6 +44,7 @@ python_compile_all() {
 
 src_test() {
 	cd test || die
+	mkdir functional/output || die
 	distutils-r1_src_test
 }
 

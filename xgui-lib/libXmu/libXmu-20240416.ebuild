@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X.Org Xmu library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=cc378e4f0cc2ab5b66d378050ba4956612a01197
+SNAPSHOT=792f80402ee06ce69bca3a8f2a84295999c3a170
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXmu/-/archive/${SNAPSHOT}/libXmu-${SNAPSHOT}.tar.bz2 -> libXmu-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxmu-${SNAPSHOT}"
 

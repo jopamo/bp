@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="X.Org libdrm library"
 HOMEPAGE="https://dri.freedesktop.org/"
 
-SNAPSHOT=1179edb49a57415e5265cca4757c9c65587a464c
+SNAPSHOT=362b5b0a886bdfbb92d2f78708ac7a67ee449b2d
 SRC_URI="https://gitlab.freedesktop.org/mesa/drm/-/archive/${SNAPSHOT}/drm-${SNAPSHOT}.tar.bz2 -> drm-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/drm-${SNAPSHOT}"
 

@@ -26,11 +26,11 @@ KEYWORDS="amd64 arm64"
 # (note that some are indirect deps)
 RDEPEND="
 	>=dev-python/fastjsonschema-2.18.0[${PYTHON_USEDEP}]
-	dev-python/lark[${PYTHON_USEDEP}]
-	dev-python/packaging[${PYTHON_USEDEP}]
+	>=dev-python/lark-1.1.3[${PYTHON_USEDEP}]
+	>=dev-python/packaging-22.0[${PYTHON_USEDEP}]
 	$(python_gen_cond_dep '
-		dev-python/tomli[${PYTHON_USEDEP}]
-	' 3.9 3.10)
+		>=dev-python/tomli-2.0.1[${PYTHON_USEDEP}]
+	' 3.10)
 "
 BDEPEND="
 	${RDEPEND}

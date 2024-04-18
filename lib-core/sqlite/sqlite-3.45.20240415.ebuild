@@ -7,15 +7,16 @@ inherit flag-o-matic
 DESCRIPTION="A SQL Database Engine in a C Library"
 HOMEPAGE="https://sqlite.org/"
 
-printf -v SRC_PV "%u%02u%02u%02u" $(ver_rs 1- " ")
-SRC_URI="https://sqlite.org/2023/${PN}-src-${SRC_PV}.zip"
-S="${WORKDIR}/${PN}-src-${SRC_PV}"
+SNAPSHOT=b74eb00e2cb05d9749859e6fbe77d229ad1dc1e1
+SRC_URI="https://github.com/sqlite/sqlite/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs"
+IUSE="static-libs debug +tempstore +fts5 +rtree +geopoly session +json
+		+math +memsys5 update-limit editline readline gcov"
 
 DEPEND="
 	app-lang/tcl
@@ -43,11 +44,6 @@ src_configure() {
 	# https://sqlite.org/dbpage.html
 	append-cppflags -DSQLITE_ENABLE_DBPAGE_VTAB
 
-	# Support dbstat virtual table.
-	# https://sqlite.org/compile.html#enable_dbstat_vtab
-	# https://sqlite.org/dbstat.html
-	append-cppflags -DSQLITE_ENABLE_DBSTAT_VTAB
-
 	# Support sqlite3_serialize() and sqlite3_deserialize() functions.
 	# https://sqlite.org/compile.html#enable_deserialize
 	# https://sqlite.org/c3ref/serialize.html
@@ -58,22 +54,8 @@ src_configure() {
 	# https://sqlite.org/compile.html#enable_explain_comments
 	append-cppflags -DSQLITE_ENABLE_EXPLAIN_COMMENTS
 
-	# Support Full-Text Search
-	# https://sqlite.org/compile.html#enable_fts3
-	# https://sqlite.org/compile.html#enable_fts3_parenthesis
-	# https://sqlite.org/compile.html#enable_fts4
-	# https://sqlite.org/compile.html#enable_fts5
-	# https://sqlite.org/fts3.html
-	# https://sqlite.org/fts5.html
-	append-cppflags -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_PARENTHESIS -DSQLITE_ENABLE_FTS4
-
 	# Support hidden columns.
 	append-cppflags -DSQLITE_ENABLE_HIDDEN_COLUMNS
-
-	# Support memsys5 memory allocator.
-	# https://sqlite.org/compile.html#enable_memsys5
-	# https://sqlite.org/malloc.html#memsys5
-	append-cppflags -DSQLITE_ENABLE_MEMSYS5
 
 	# Support sqlite3_normalized_sql() function.
 	# https://sqlite.org/c3ref/expanded_sql.html
@@ -93,18 +75,6 @@ src_configure() {
 	# https://sqlite.org/compile.html#enable_rbu
 	# https://sqlite.org/rbu.html
 	append-cppflags -DSQLITE_ENABLE_RBU
-
-	# Support R*Trees.
-	# https://sqlite.org/compile.html#enable_rtree
-	# https://sqlite.org/compile.html#enable_geopoly
-	# https://sqlite.org/rtree.html
-	# https://sqlite.org/geopoly.html
-	append-cppflags -DSQLITE_ENABLE_RTREE -DSQLITE_ENABLE_GEOPOLY
-
-	# Support Session extension.
-	# https://sqlite.org/compile.html#enable_session
-	# https://sqlite.org/sessionintro.html
-	append-cppflags -DSQLITE_ENABLE_SESSION
 
 	# Support scan status functions.
 	# https://sqlite.org/compile.html#enable_stmt_scanstatus
@@ -127,12 +97,6 @@ src_configure() {
 	# https://sqlite.org/unlock_notify.html
 	append-cppflags -DSQLITE_ENABLE_UNLOCK_NOTIFY
 
-	# Support LIMIT and ORDER BY clauses on DELETE and UPDATE statements.
-	# https://sqlite.org/compile.html#enable_update_delete_limit
-	# https://sqlite.org/lang_delete.html#optional_limit_and_order_by_clauses
-	# https://sqlite.org/lang_update.html#optional_limit_and_order_by_clauses
-	append-cppflags -DSQLITE_ENABLE_UPDATE_DELETE_LIMIT
-
 	# Support soundex() function.
 	# https://sqlite.org/compile.html#soundex
 	# https://sqlite.org/lang_corefunc.html#soundex
@@ -147,7 +111,22 @@ src_configure() {
 		$(use_enable static-libs static)
 		--enable-load-extension
 		--enable-threadsafe
-		--enable-fts5
+		--disable-fts3
+		--disable-fts4
+		--disable-memsys3
+		$(use_enable debug)
+		$(use_enable tempstore)
+		$(use_enable fts5)
+		$(use_enable rtree)
+		$(use_enable geopoly)
+		$(use_enable session)
+		$(use_enable json)
+		$(use_enable math)
+		$(use_enable memsys5)
+		$(use_enable update-limit)
+		$(use_enable editline)
+		$(use_enable readline)
+		$(use_enable gcov)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

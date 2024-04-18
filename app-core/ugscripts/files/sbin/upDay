@@ -16,7 +16,7 @@ PYTHON_VERSION="3.12"
 PERL_VERSION="5.38"
 TCL_VERSION="8.6"
 LLVM_VERSION="18"
-BINUTILS_BRANCH="binutils-$(echo "$BINUTILS_VERSION" | sed 's/\./_/')-branch"
+SQLITE_VERSION="3.45"
 
 GDB_VERSION="14"
 BASH_VERSION="5.2"
@@ -36,6 +36,7 @@ KWINDOWSYSTEM_BRANCH="kf${KDE_VERSION}"
 LIBASSUAN_BRANCH="LIBASSUAN-${LIBASSUAN_VERSION}-BRANCH"
 LIBGCRYPT_BRANCH="LIBGCRYPT-${LIBGCRYPT_VERSION}-BRANCH"
 TCL_BRANCH=$(echo "core-${TCL_VERSION}" | tr '.' '-')
+BINUTILS_BRANCH="binutils-$(echo "$BINUTILS_VERSION" | sed 's/\./_/')-branch"
 
 show_help() {
 	echo "Usage: $0 [options]"
@@ -199,6 +200,7 @@ update_ebuild "${REPO_PATH}/app-net/bind-tools" "https://github.com/isc-projects
 update_ebuild "${REPO_PATH}/app-server/nodejs" "https://github.com/nodejs/node" "v${NODEJS_VERSION}.x" "$NODEJS_VERSION" "no"
 update_ebuild "${REPO_PATH}/lib-net/openssl" "https://github.com/openssl/openssl" "openssl-${OPENSSL_VERSION}" "$OPENSSL_VERSION" "no"
 update_ebuild "${REPO_PATH}/app-build/llvm" "https://github.com/llvm/llvm-project" "release/${LLVM_VERSION}.x" "$LLVM_VERSION" "no"
+update_ebuild "${REPO_PATH}/lib-core/sqlite" "https://github.com/sqlite/sqlite" "branch-${SQLITE_VERSION}" "$LLVM_VERSION" "no"
 
 update_ebuild "${REPO_PATH}/app-build/gdb" "https://github.com/bminor/binutils-gdb" "${GDB_BRANCH}" "${GDB_VERSION}" "no"
 update_ebuild "${REPO_PATH}/app-core/bash" "https://git.savannah.gnu.org/git/bash" "${BASH_BRANCH}" "${BASH_VERSION}" "no"

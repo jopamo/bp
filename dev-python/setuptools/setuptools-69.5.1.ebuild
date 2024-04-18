@@ -24,11 +24,12 @@ KEYWORDS="amd64 arm64"
 IUSE="test"
 RESTRICT="!test? ( test )"
 
+# check */_vendor/vendored.txt
 RDEPEND="
 	>=dev-python/jaraco-text-3.7.0-r1[${PYTHON_USEDEP}]
 	>=dev-python/more-itertools-8.12.0-r1[${PYTHON_USEDEP}]
 	>=dev-python/ordered-set-4.0.2-r1[${PYTHON_USEDEP}]
-	>=dev-python/packaging-23.2[${PYTHON_USEDEP}]
+	>=dev-python/packaging-24[${PYTHON_USEDEP}]
 	>=dev-python/platformdirs-2.6.2-r1[${PYTHON_USEDEP}]
 	>=dev-python/tomli-2.0.1[${PYTHON_USEDEP}]
 	>=dev-python/wheel-0.37.1-r1[${PYTHON_USEDEP}]
@@ -68,6 +69,9 @@ src_prepare() {
 	)
 
 	distutils-r1_src_prepare
+
+	# breaks tests
+	sed -i -e '/--import-mode/d' pytest.ini || die
 
 	# remove bundled dependencies
 	rm -r */_vendor || die

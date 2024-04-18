@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X.Org autotools utility macros"
 HOMEPAGE="https://www.x.org"
 
-SNAPSHOT=1031f8cc5c7a170e278372ccdf2e70151b096ef7
+SNAPSHOT=7ed2b3798c030bd1729b699b446b43aba2ec606e
 SRC_URI="https://gitlab.freedesktop.org/xorg/util/macros/-/archive/${SNAPSHOT}/macros-${SNAPSHOT}.tar.bz2 -> macros-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/macros-${SNAPSHOT}"
 

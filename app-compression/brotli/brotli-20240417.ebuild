@@ -9,7 +9,7 @@ inherit distutils-r1 cmake
 DESCRIPTION="Generic-purpose lossless compression algorithm"
 HOMEPAGE="https://github.com/google/brotli"
 
-SNAPSHOT=709c4672d4a387f56839e47ed6a985cd2f950a8f
+SNAPSHOT=443af10a8001c5de7bab306d329de614c3defebc
 SRC_URI="https://github.com/google/brotli/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

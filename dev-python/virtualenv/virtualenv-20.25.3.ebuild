@@ -45,6 +45,7 @@ BDEPEND="
 	)
 "
 
+EPYTEST_TIMEOUT=180
 distutils_enable_tests pytest
 
 src_prepare() {

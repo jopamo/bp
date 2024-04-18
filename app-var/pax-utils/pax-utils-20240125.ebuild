@@ -8,7 +8,7 @@ DESCRIPTION="ELF utils that can check files for security relevant properties"
 HOMEPAGE="https://wiki.gentoo.org/index.php?title=Project:Hardened/PaX_Utilities"
 
 SNAPSHOT=a1d0123581ede02b54cf2c071507612dde25236c
-SRC_URI="https://gitweb.gentoo.org/proj/${PN}.git/snapshot/${PN}-${SNAPSHOT}.tar.bz2"
+SRC_URI="https://github.com/gentoo/pax-utils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"

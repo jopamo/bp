@@ -1,7 +1,9 @@
 #!/bin/bash
 
 REPO_PATH="/var/db/repos/bp"
-REPO_TEMP_DIR="/tmp/git_updates"
+GIT_CLONES_DIR="$HOME/.git_packages"
+
+mkdir -p "${GIT_CLONES_DIR}"
 
 GCC_MAJOR_VERSION="12"
 BINUTILS_VERSION="2.41"
@@ -106,19 +108,19 @@ update_ebuild() {
 	local version_name="$4"
 	local use_date_only="$5"
 	local PACKAGE_NAME=$(basename "$package_path")
-	local repo_temp_dir="${REPO_TEMP_DIR}/${PACKAGE_NAME}"
+	local GIT_CLONES_DIR="${GIT_CLONES_DIR}/${PACKAGE_NAME}"
 	local GIT_USER="1g4-bot"
 	local GIT_EMAIL="share@1g4.org"
 	local GIT_SIGN_KEY="AFFCE613154C05AA"
 
 	echo "Updating ${PACKAGE_NAME}..."
 
-	if [[ ! -d "$repo_temp_dir" ]]; then
-		clone_or_update_repo "$repo_uri" "$repo_temp_dir" "$branch" "v\d+\.\d+"
+	if [[ ! -d "$GIT_CLONES_DIR" ]]; then
+		clone_or_update_repo "$repo_uri" "$GIT_CLONES_DIR" "$branch" "v\d+\.\d+"
 	fi
 
-	latest_commit=$(cd "$repo_temp_dir" && git rev-parse HEAD)
-	latest_commit_date=$(cd "$repo_temp_dir" && git log -n1 --pretty=format:%cd --date=format:%Y%m%d)
+	latest_commit=$(cd "$GIT_CLONES_DIR" && git rev-parse HEAD)
+	latest_commit_date=$(cd "$GIT_CLONES_DIR" && git log -n1 --pretty=format:%cd --date=format:%Y%m%d)
 
 	if [[ -z "$latest_commit" ]] || [[ -z "$latest_commit_date" ]]; then
 		echo "Failed to fetch latest commit or date from Git repository: $repo_uri"
@@ -183,6 +185,9 @@ if [[ $update_toolchain == true ]]; then
 	update_ebuild "${REPO_PATH}/app-compression/zstd" "https://github.com/facebook/zstd" "dev" "0" "yes"
 	update_ebuild "${REPO_PATH}/app-compression/lz4" "https://github.com/lz4/lz4" "dev" "0" "yes"
 	update_ebuild "${REPO_PATH}/lib-core/glibc" "https://github.com/bminor/glibc" "${GLIBC_BRANCH}" "${GLIBC_VERSION}" "no"
+	update_ebuild "${REPO_PATH}/lib-core/musl" "https://git.musl-libc.org/git/musl" "master" "0" "yes"
+
+	exit 0
 fi
 
 if [[ $update_unsafe == true ]]; then
@@ -200,7 +205,7 @@ update_ebuild "${REPO_PATH}/app-net/bind-tools" "https://github.com/isc-projects
 update_ebuild "${REPO_PATH}/app-server/nodejs" "https://github.com/nodejs/node" "v${NODEJS_VERSION}.x" "$NODEJS_VERSION" "no"
 update_ebuild "${REPO_PATH}/lib-net/openssl" "https://github.com/openssl/openssl" "openssl-${OPENSSL_VERSION}" "$OPENSSL_VERSION" "no"
 update_ebuild "${REPO_PATH}/app-build/llvm" "https://github.com/llvm/llvm-project" "release/${LLVM_VERSION}.x" "$LLVM_VERSION" "no"
-update_ebuild "${REPO_PATH}/lib-core/sqlite" "https://github.com/sqlite/sqlite" "branch-${SQLITE_VERSION}" "$LLVM_VERSION" "no"
+update_ebuild "${REPO_PATH}/lib-core/sqlite" "https://github.com/sqlite/sqlite" "branch-${SQLITE_VERSION}" "$SQLITE_VERSION" "no"
 
 update_ebuild "${REPO_PATH}/app-build/gdb" "https://github.com/bminor/binutils-gdb" "${GDB_BRANCH}" "${GDB_VERSION}" "no"
 update_ebuild "${REPO_PATH}/app-core/bash" "https://git.savannah.gnu.org/git/bash" "${BASH_BRANCH}" "${BASH_VERSION}" "no"
@@ -211,8 +216,12 @@ update_ebuild "${REPO_PATH}/lib-core/mpfr" "https://gitlab.inria.fr/mpfr/mpfr" "
 update_ebuild "${REPO_PATH}/xgui-tools/kguiaddons" "https://github.com/KDE/kguiaddons" "${KGUIADDONS_BRANCH}" "${KDE_VERSION}" "no"
 update_ebuild "${REPO_PATH}/xgui-tools/kwindowsystem" "https://github.com/KDE/kwindowsystem" "${KWINDOWSYSTEM_BRANCH}" "${KDE_VERSION}" "no"
 
+# these need special handling and are skipped
 update_ebuild "${REPO_PATH}/xmedia-lib/libldac" "https://android.googlesource.com/platform/external/libldac" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/app-net/wpa_supplicant" "git://w1.fi/hostap.git" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/xmedia-lib/x265" "https://bitbucket.org/multicoreware/x265_git.git" "master" "0" "yes"
 
+# these are replaced by script
 update_ebuild "${REPO_PATH}/app-build/gnuconfig" "https://git.savannah.gnu.org/git/config" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-compression/brotli" "https://github.com/google/brotli" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-compression/bzip2" "https://github.com/libarchive/bzip2" "master" "0" "yes"
@@ -221,7 +230,6 @@ update_ebuild "${REPO_PATH}/app-compression/lz4" "https://github.com/lz4/lz4" "d
 update_ebuild "${REPO_PATH}/app-compression/p7zip" "https://github.com/p7zip-project/p7zip" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-compression/pigz" "https://github.com/madler/pigz" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-compression/snappy" "https://github.com/google/snappy" "main" "0" "yes"
-update_ebuild "${REPO_PATH}/app-compression/unzip" "https://github.com/madler/unzip" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-compression/zstd" "https://github.com/facebook/zstd" "dev" "0" "yes"
 update_ebuild "${REPO_PATH}/app-core/blktrace" "https://git.kernel.org/pub/scm/linux/kernel/git/axboe/blktrace" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-core/busybox" "https://git.busybox.net/busybox" "master" "0" "yes"
@@ -317,6 +325,7 @@ update_ebuild "${REPO_PATH}/app-util/lshw" "https://github.com/lyonel/lshw" "mas
 update_ebuild "${REPO_PATH}/app-util/numactl" "https://github.com/numactl/numactl" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-util/sysbench" "https://github.com/akopytov/sysbench" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-var/logrotate" "https://github.com/logrotate/logrotate" "main" "0" "yes"
+update_ebuild "${REPO_PATH}/app-var/pax-utils" "https://github.com/gentoo/pax-utils" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-var/screen" "https://git.savannah.gnu.org/git/screen" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-var/sudo" "https://github.com/sudo-project/sudo" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/app-var/sysstat" "https://github.com/sysstat/sysstat" "master" "0" "yes"
@@ -336,7 +345,6 @@ update_ebuild "${REPO_PATH}/lib-core/libksba" "git://git.gnupg.org/libksba" "mas
 update_ebuild "${REPO_PATH}/lib-core/libxcrypt" "https://github.com/besser82/libxcrypt" "develop" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-core/libxml2" "https://gitlab.gnome.org/GNOME/libxml2" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-core/libxslt" "https://gitlab.gnome.org/GNOME/libxslt" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/lib-core/musl" "https://git.musl-libc.org/git/musl" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-core/musl-obstack" "https://github.com/void-linux/musl-obstack" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-core/netbsd-curses" "https://github.com/sabotage-linux/netbsd-curses" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-core/nettle" "https://github.com/gnutls/nettle" "master" "0" "yes"
@@ -347,7 +355,6 @@ update_ebuild "${REPO_PATH}/lib-dev/check" "https://github.com/libcheck/check" "
 update_ebuild "${REPO_PATH}/lib-dev/dbus-glib" "https://gitlab.freedesktop.org/dbus/dbus-glib" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-dev/double-conversion" "https://github.com/google/double-conversion" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-dev/fribidi" "https://github.com/fribidi/fribidi" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/lib-dev/gobject-introspection" "https://gitlab.gnome.org/GNOME/gobject-introspection" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-dev/jemalloc" "https://github.com/jemalloc/jemalloc" "dev" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-dev/json-c" "https://github.com/json-c/json-c" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-dev/jsoncpp" "https://github.com/open-source-parsers/jsoncpp" "master" "0" "yes"
@@ -368,7 +375,6 @@ update_ebuild "${REPO_PATH}/lib-misc/http-parser" "https://github.com/nodejs/htt
 update_ebuild "${REPO_PATH}/lib-misc/inih" "https://github.com/benhoyt/inih" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-misc/libiscsi" "https://github.com/sahlberg/libiscsi" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-misc/libmesode" "https://github.com/profanity-im/libmesode" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/lib-misc/libqtxdg" "https://github.com/lxqt/libqtxdg" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-misc/libssh2" "https://github.com/libssh2/libssh2" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-misc/libxdg-base" "https://github.com/devnev/libxdg-basedir" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/lib-misc/libzmq" "https://github.com/zeromq/libzmq" "master" "0" "yes"
@@ -508,7 +514,6 @@ update_ebuild "${REPO_PATH}/xmedia-app/lximage-qt" "https://github.com/lxqt/lxim
 update_ebuild "${REPO_PATH}/xmedia-app/mediainfo" "https://github.com/MediaArea/MediaInfo" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-app/mp4box" "https://github.com/gpac/gpac" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-app/mpv" "https://github.com/mpv-player/mpv" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xmedia-app/pavucontrol-qt" "https://github.com/lxde/pavucontrol-qt" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-app/phototonic" "https://github.com/oferkv/phototonic" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-app/qrencode" "https://github.com/fukuchi/libqrencode" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-lib/avisynth" "https://github.com/AviSynth/AviSynthPlus" "master" "0" "yes"
@@ -546,4 +551,3 @@ update_ebuild "${REPO_PATH}/xmedia-lib/uchardet" "https://gitlab.freedesktop.org
 update_ebuild "${REPO_PATH}/xmedia-lib/vapoursynth" "https://github.com/vapoursynth/vapoursynth" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-lib/vulkan-loader" "https://github.com/KhronosGroup/Vulkan-Loader" "main" "0" "yes"
 update_ebuild "${REPO_PATH}/xmedia-lib/x264" "https://code.videolan.org/videolan/x264" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/xmedia-lib/x265" "https://bitbucket.org/multicoreware/x265_git" "master" "0" "yes"

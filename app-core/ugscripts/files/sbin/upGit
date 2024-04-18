@@ -6,14 +6,18 @@ declare -A skip_packages
 REPO_PATH="/var/db/repos/bp"
 UPDATE_FILE="$HOME/update_ebuild_commands.txt"
 FAIL_LOG="$HOME/update_ebuild_fail.txt"
-GIT_CLONES_DIR="/tmp/git_updates"
+GIT_CLONES_DIR="$HOME/.git_packages"
 
 skip_packages["*lxqt*"]=1
 skip_packages["efibootmgr"]=1
-skip_packages["swig"]=1
 skip_packages["flex"]=1
-skip_packages["qtermwidget"]=1
 skip_packages["libldac"]=1
+skip_packages["musl"]=1
+skip_packages["openjade"]=1
+skip_packages["qtermwidget"]=1
+skip_packages["swig"]=1
+skip_packages["wpa_supplicant"]=1
+skip_packages["x265"]=1
 
 mkdir -p "$GIT_CLONES_DIR"
 : > "$UPDATE_FILE"

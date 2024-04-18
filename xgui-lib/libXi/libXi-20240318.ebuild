@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X.Org Xi library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=57ce2e8ba4c1f1bc5792e14bc7082f3ebd0915be
+SNAPSHOT=56b11459f833df8f324587847534a548b070da94
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXi/-/archive/${SNAPSHOT}/libXi-${SNAPSHOT}.tar.bz2 -> libXi-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxi-${SNAPSHOT}"
 

@@ -224,7 +224,6 @@ update_ebuild "${REPO_PATH}/xmedia-lib/x265" "https://bitbucket.org/multicorewar
 # these are replaced by script
 update_ebuild "${REPO_PATH}/app-build/gnuconfig" "https://git.savannah.gnu.org/git/config" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-compression/brotli" "https://github.com/google/brotli" "master" "0" "yes"
-update_ebuild "${REPO_PATH}/app-compression/bzip2" "https://github.com/libarchive/bzip2" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-compression/libarchive" "https://github.com/libarchive/libarchive" "master" "0" "yes"
 update_ebuild "${REPO_PATH}/app-compression/lz4" "https://github.com/lz4/lz4" "dev" "0" "yes"
 update_ebuild "${REPO_PATH}/app-compression/p7zip" "https://github.com/p7zip-project/p7zip" "master" "0" "yes"

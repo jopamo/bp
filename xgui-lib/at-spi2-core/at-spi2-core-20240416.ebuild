@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="D-Bus accessibility specifications and registration daemon"
 HOMEPAGE="https://wiki.gnome.org/Accessibility"
 
-SNAPSHOT=2fb2127c722eaf3a481cc6e7a7c14bfc13e896a2
+SNAPSHOT=558e1ba4ea6cec65bd8759de54eda0e228e7f021
 SRC_URI="https://gitlab.gnome.org/GNOME/at-spi2-core/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

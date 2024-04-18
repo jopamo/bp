@@ -42,7 +42,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 # setuptools is needed for distutils import
-DEPEND="lib-dev/tree-sitter"
+DEPEND=">=dev-libs/tree-sitter-0.22.1:="
 RDEPEND="${DEPEND}
 	$(python_gen_cond_dep '
 		dev-python/setuptools[${PYTHON_USEDEP}]
@@ -56,7 +56,6 @@ PATCHES=(
 )
 
 src_unpack() {
-	filter-flags -Wl,-z,defs
 	default
 	rmdir "${S}/tree_sitter/core" || die
 

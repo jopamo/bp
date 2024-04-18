@@ -1,14 +1,10 @@
 #!/bin/bash
 
-eix-sync
+echo "Syncing the bp repository..."
+pmaint sync bp || { echo "Failed to sync repository."; }
 
-echo "Regenerating bp repo cache..."
-for dir in /var/db/repos/*/
-do
-    dir=${dir%*/} # remove the trailing "/"
-    egencache --jobs=8 --update --repo "${dir##*/}" # remove full path
-done
+echo "Regenerating bp repository cache..."
+pmaint regen bp || { echo "Failed to regenerate cache for repository"; exit 1; }
 
-emerge --regen
-emerge --metadata
+echo "Updating the eix database..."
 eix-update

@@ -23,6 +23,17 @@ src_install() {
     	dodir /$d
 	done
 
+	for d in log lib; do
+		diropts -m0755
+    	dodir /var/$d
+    	keepdir /var/$d
+	done
+
+	keepdir /var/log/journal
+
+	keepdir /var/lib/machines
+	keepdir /etc/kernel/postinst.d
+
 	install -d -m555 "${ED}"/proc
 	install -d -m555 "${ED}"/sys
 	install -d -m0750 "${ED}"/root

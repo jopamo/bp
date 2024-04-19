@@ -40,18 +40,11 @@ get_branch() {
 
 	cd "$clone_dir" || return
 
-	git fetch --all
+	git fetch --depth 1 origin maint:refs/remotes/origin/maint 2>>"$FAIL_LOG"
 
 	if git branch -r | grep -qw "origin/maint"; then
-		last_commit_date=$(git log -1 --format=%ci origin/maint)
-		last_commit_time=$(date -d "$last_commit_date" +%s)
-
-		if [ "$last_commit_time" -ge "$two_years_ago" ]; then
-			chosen_branch="maint"
-		fi
-	fi
-
-	if [ -z "$chosen_branch" ]; then
+		chosen_branch="maint"
+	else
 		chosen_branch=$(git rev-parse --abbrev-ref HEAD)
 	fi
 
@@ -141,13 +134,11 @@ common_process() {
 }
 
 main() {
-    # snapshots
 	find "$REPO_PATH" -type f -regextype posix-extended -regex '.*-[0-9]{8}\.ebuild$' \
 		-exec grep -l 'SNAPSHOT' {} + | xargs -r grep -L 'EGIT_REPO_URI' | while read -r ebuild_file; do
 		process_repository_file "$ebuild_file"
 	done
 
-    # this is versioned branches
 	#find "$REPO_PATH" -type f -regextype posix-extended -regex '.*\.[0-9]{8}\.ebuild$' \
 	#	-exec grep -l 'SNAPSHOT' {} + | xargs -r grep -L 'EGIT_REPO_URI' | while read -r ebuild_file; do
 	#	process_repository_file "$ebuild_file"

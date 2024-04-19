@@ -30,7 +30,7 @@ else
 		>=app-core/pkgcore-0.12.25[${PYTHON_USEDEP}]"
 fi
 RDEPEND+="
-	>=lib-dev/tree-sitter-bash-0.21.0[python,${PYTHON_USEDEP}]
+	>=lib-dev/tree-sitter-bash-0.21.0[${PYTHON_USEDEP}]
 	dev-python/chardet[${PYTHON_USEDEP}]
 	dev-python/lazy-object-proxy[${PYTHON_USEDEP}]
 	dev-python/lxml[${PYTHON_USEDEP}]

@@ -124,6 +124,18 @@ update_vim_ebuild() {
 	fi
 
 	(cd ${REPO_PATH} && pkgdev manifest)
+	(cd "$REPO_PATH" && \
+	git -c user.name="1g4-bot" \
+			-c user.email="share@1g4.org" \
+			-c commit.gpgsign=true \
+			-c user.signingkey=AFFCE613154C05AA \
+			add . && \
+		git -c user.name="1g4-bot" \
+			-c user.email="share@1g4.org" \
+			-c commit.gpgsign=true \
+			-c user.signingkey=AFFCE613154C05AA \
+			commit -m "Update Vim to ${latest_version}" && \
+		git push)
 	(cd ${REPO_PATH} && git add . && git commit -m "Update Vim to ${latest_version}")
 	echo "Vim ebuild updated to version ${latest_version} in ${new_file_path}."
 }

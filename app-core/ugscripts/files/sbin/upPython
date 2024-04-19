@@ -13,6 +13,7 @@ PACKAGES=(
 	"cffi"
 	"chardet"
 	"charset-normalizer"
+	"colorama"
 	"configobj"
 	"coverage"
 	"cryptography"
@@ -48,11 +49,13 @@ PACKAGES=(
 	"markupsafe"
 	"more-itertools"
 	"nspektr"
+	"olefile"
 	"ordered-set"
 	"packaging"
 	"parsedatetime"
 	"path"
 	"pathspec"
+	"pillow"
 	"pip"
 	"pip-run"
 	"platformdirs"
@@ -176,7 +179,7 @@ find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe '
     s/test-rust\?\s*\(\s*\)//g;
 ' {} +
 
-for package in cython psutil lxml cffi zstandard; do
+for package in cython psutil lxml cffi pillow zstandard; do
 	if [ -d "${PACKAGE_DIR}/${package}" ]; then
 		echo "Updating for ${package}..."
 		find "${PACKAGE_DIR}/${package}" -type f -name "*.ebuild" -exec sh -c '
@@ -185,6 +188,8 @@ for package in cython psutil lxml cffi zstandard; do
                     sed -i'' "/^python_compile()/ { N; s|\\n|\\n\\tfilter-flags -Wl,-z,defs\\n| }" "$ebuild_file"
                 elif grep -q "^src_prepare() {" "$ebuild_file"; then
                     sed -i'' "/^src_prepare() {/ { N; s|\\n|\\n\\tfilter-flags -Wl,-z,defs\\n| }" "$ebuild_file"
+                elif grep -q "^python_configure_all() {" "$ebuild_file"; then
+                    sed -i'' "/^python_configure_all() {/ { N; s|\\n|\\n\\tfilter-flags -Wl,-z,defs\\n| }" "$ebuild_file"
                 fi
             done
 		' sh {} +
@@ -227,13 +232,14 @@ for package in "${PACKAGES[@]}"; do
 done
 
 declare -A replacements=(
+	["app-misc/ca-certificates"]="app-var/ca-certificates"
+	["dev-libs/libffi"]="lib-core/libffi"
 	["dev-libs/libxml2"]="lib-core/libxml2"
 	["dev-libs/libxslt"]="lib-core/libxslt"
-	["dev-libs/libffi"]="lib-core/libffi"
-	["dev-libs/openssl"]="lib-net/openssl"
-	["app-misc/ca-certificates"]="app-var/ca-certificates"
-	["sys-libs/timezone-data"]="lib-core/tzdb"
 	["dev-libs/libyaml"]="lib-dev/libyaml"
+	["dev-libs/tree-sitter"]="lib-dev/tree-sitter"
+	["dev-libs/openssl"]="lib-net/openssl"
+	["sys-libs/timezone-data"]="lib-core/tzdb"
 )
 
 for package in "${PACKAGES[@]}"; do
@@ -248,7 +254,7 @@ for package in "${PACKAGES[@]}"; do
 	fi
 done
 
-remove_strings=('bash-completion-r1' 'optfeature')
+remove_strings=('bash-completion-r1' 'optfeature' 'virtualx')
 
 for package in "${PACKAGES[@]}"; do
 	package_dir="${PACKAGE_DIR}/${package}"

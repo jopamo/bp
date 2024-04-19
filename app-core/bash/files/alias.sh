@@ -143,7 +143,7 @@ bootstrap_go() {
 }
 
 rebuild_packages() {
-	emerge --keep-going -ueDNv world
+	emerge --keep-going -uDNv world
 	env-update && source /etc/profile
 	emerge --oneshot libtool
 	emerge --depclean

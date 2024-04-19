@@ -56,8 +56,6 @@ PATCHES=(
 )
 
 src_unpack() {
-	filter-flags -Wl,-z,defs
-
 	default
 	rmdir "${S}/tree_sitter/core" || die
 

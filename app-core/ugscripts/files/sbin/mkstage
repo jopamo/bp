@@ -51,7 +51,7 @@ then
 fi
 
 # make sure TARGET path ends with slash
-if [ "`echo $TARGET | grep -c '\/$'`" -le "0" ]
+if [ "$(echo "$TARGET" | grep -c '/$')" -le "0" ]
 then
 	TARGET="${TARGET}/"
 fi
@@ -75,7 +75,7 @@ then
 fi
 
 # determines if filename was given with relative or absolute path
-if [ "`echo $ARCHIVE | grep -c '^\/'`" -gt "0" ]
+if [ "$(echo "$ARCHIVE" | grep -c '^/')" -gt "0" ]
 then
 	STAGE3_FILENAME="${ARCHIVE}.tar.xz"
 else

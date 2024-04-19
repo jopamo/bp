@@ -114,6 +114,56 @@ src_prepare() {
 		sed -i -e 's/linux\/if_ether.h/netinet\/if_ether.h/g' "src/network/netdev/bareudp.h" || die
 		sed -i -e 's/linux\/if_ether.h/netinet\/if_ether.h/g' "src/basic/socket-util.h" || die
 		sed -i -e 's/linux\/if_arp.h/netinet\/if_ether.h/g' "src/network/networkd-link.c" || die
+
+		awk '
+    /#define IFF_VOLATILE/ {
+        print "#ifndef IFF_VOLATILE";
+        print;
+        in_iff_volatile = 1;
+        next;
+    }
+    in_iff_volatile && /\)/ {
+        print;
+        print "#endif /* IFF_VOLATILE */";
+        in_iff_volatile = 0;
+        next;
+    }
+    { print; }
+' src/basic/linux/if.h > tmp_if.h && mv tmp_if.h src/basic/linux/if.h || die
+
+		sed -i '/#include "/a #include <libgen.h>' src/analyze/analyze-verify-util.c || die "Failed to insert include in analyze-verify-util.c"
+		sed -i '/#include "/a #include <libgen.h>' src/basic/conf-files.c || die "Failed to insert include in conf-files.c"
+		sed -i '/#include "/a #include <libgen.h>' src/basic/path-util.c || die "Failed to insert include in path-util.c"
+		sed -i '/#include "/a #include <libgen.h>' src/basic/unit-file.c || die "Failed to insert include in unit-file.c"
+		sed -i '/#include "/a #include <libgen.h>' src/core/execute.c || die "Failed to insert include in execute.c"
+		sed -i '/#include "/a #include <libgen.h>' src/core/load-dropin.c || die "Failed to insert include in load-dropin.c"
+		sed -i '/#include "/a #include <libgen.h>' src/delta/delta.c || die "Failed to insert include in delta.c"
+		sed -i '/#include "/a #include <libgen.h>' src/libsystemd/sd-bus/test-bus-watch-bind.c || die "Failed to insert include in test-bus-watch-bind.c"
+		sed -i '/#include "/a #include <libgen.h>' src/login/logind-inhibit.c || die "Failed to insert include in logind-inhibit.c"
+		sed -i '/#include "/a #include <libgen.h>' src/login/logind-seat.c || die "Failed to insert include in logind-seat.c"
+		sed -i '/#include "/a #include <libgen.h>' src/login/logind-session.c || die "Failed to insert include in logind-session.c"
+		sed -i '/#include "/a #include <libgen.h>' src/network/netdev/netdev.c || die "Failed to insert include in netdev.c"
+		sed -i '/#include "/a #include <libgen.h>' src/network/networkd-network.c || die "Failed to insert include in networkd-network.c"
+		sed -i '/#include "/a #include <libgen.h>' src/portable/portable.c || die "Failed to insert include in portable.c"
+		sed -i '/#include "/a #include <libgen.h>' src/portable/portabled-image-bus.c || die "Failed to insert include in portabled-image-bus.c"
+		sed -i '/#include "/a #include <libgen.h>' src/resolve/resolved-dnssd.c || die "Failed to insert include in resolved-dnssd.c"
+		sed -i '/#include "/a #include <libgen.h>' src/shared/bootspec.h || die "Failed to insert include in bootspec.h"
+		sed -i '/#include "/a #include <libgen.h>' src/shared/format-table.h || die "Failed to insert include in format-table.h"
+		sed -i '/#include "/a #include <libgen.h>' src/shared/install.c || die "Failed to insert include in install.c"
+		sed -i '/#include "/a #include <libgen.h>' src/systemctl/systemctl-enable.c || die "Failed to insert include in systemctl-enable.c"
+		sed -i '/#include "/a #include <libgen.h>' src/systemctl/systemctl-list-unit-files.c || die "Failed to insert include in systemctl-list-unit-files.c"
+		sed -i '/#include "/a #include <libgen.h>' src/systemctl/systemctl-show.c || die "Failed to insert include in systemctl-show.c"
+		sed -i '/#include "/a #include <libgen.h>' src/systemctl/systemctl-sysv-compat.c || die "Failed to insert include in systemctl-sysv-compat.c"
+		sed -i '/#include "/a #include <libgen.h>' src/test/test-conf-files.c || die "Failed to insert include in test-conf-files.c"
+		sed -i '/#include "/a #include <libgen.h>' src/test/test-exec-util.c || die "Failed to insert include in test-exec-util.c"
+		sed -i '/#include "/a #include <libgen.h>' src/test/test-fileio.c || die "Failed to insert include in test-fileio.c"
+		sed -i '/#include "/a #include <libgen.h>' src/test/test-format-table.c || die "Failed to insert include in test-format-table.c"
+		sed -i '/#include "/a #include <libgen.h>' src/test/test-install-root.c || die "Failed to insert include in test-install-root.c"
+		sed -i '/#include "/a #include <libgen.h>' src/test/test-install.c || die "Failed to insert include in test-install.c"
+		sed -i '/#include "/a #include <libgen.h>' src/test/test-mountpoint-util.c || die "Failed to insert include in test-mountpoint-util.c"
+		sed -i '/#include "/a #include <libgen.h>' src/test/test-parse-argument.c || die "Failed to insert include in test-parse-argument.c"
+		sed -i '/#include "/a #include <libgen.h>' src/test/test-path-util.c || die "Failed to insert include in test-path-util.c"
+		sed -i '/#include "/a #include <libgen.h>' src/udev/net/link-config.c || die "Failed to insert include in link-config.c"
 	else
 		default
 	fi

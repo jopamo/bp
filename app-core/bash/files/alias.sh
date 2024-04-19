@@ -141,3 +141,12 @@ bootstrap_go() {
 	emerge --oneshot gcc
 	emerge --oneshot go
 }
+
+rebuild_packages() {
+	emerge --keep-going -ueDNv world
+	env-update && source /etc/profile
+	emerge --oneshot libtool
+	emerge --depclean
+	rm -rf /var/cache/packages/*
+	emerge --keep-going -ueDNv world
+}

@@ -7,13 +7,13 @@ inherit cmake flag-o-matic
 DESCRIPTION="LXQt desktop panel and plugins"
 HOMEPAGE="http://lxqt.org/"
 
-SNAPSHOT=371f60fa806a89779a9c90ed5a1dce7b92126e0b
+SNAPSHOT=9e6e87c3e6ea72fe08e2964bca88a399bda6e613
 SRC_URI="https://github.com/lxqt/lxqt-panel/archive/${SNAPSHOT}.tar.gz -> lxqt-panel-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/lxqt-panel-${SNAPSHOT}"
 
 LICENSE="LGPL-2.1+"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="alsa +clock colorpicker cpuload desktopswitch dom kbindicator
 	mainmenu networkmonitor pulseaudio quicklaunch sensors showdesktop

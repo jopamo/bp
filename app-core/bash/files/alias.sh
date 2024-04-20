@@ -67,76 +67,73 @@ alias format_repo="find . -type f \( -name '*.c' -o -name '*.h' \) -not -path '*
 alias format_commit="git diff --name-only --cached | grep -E '\.(c|h)$' | xargs clang-format -i"
 
 sort_and_remove_duplicates() {
-    if [ -f "$1" ]; then
-        temp_file=$(mktemp)
-        if sort "$1" | uniq > "$temp_file" && [ -s "$temp_file" ]; then
-            mv "$temp_file" "$1"
-        else
-            echo "Failed to sort and remove duplicates or file is empty after processing."
-            rm "$temp_file"
-        fi
-    else
-        echo "File not found: $1"
-    fi
+	if [ -f "$1" ]; then
+		temp_file=$(mktemp)
+		if sort "$1" | uniq > "$temp_file" && [ -s "$temp_file" ]; then
+			mv "$temp_file" "$1"
+		else
+			echo "Failed to sort and remove duplicates or file is empty after processing."
+			rm "$temp_file"
+		fi
+	else
+		echo "File not found: $1"
+	fi
 }
 
 replace_in_files() {
-    local search_string="$1"
-    local replacement_string="$2"
-    local start_directory="${3:-.}"
+	local search_string="$1"
+	local replacement_string="$2"
+	local start_directory="${3:-.}"
 
-    if [ -z "$search_string" ] || [ -z "$replacement_string" ]; then
-        echo "Usage: replace_in_files \"search_string\" \"replacement_string\" [start_directory]"
-        return 1
-    fi
+	if [ -z "$search_string" ] || [ -z "$replacement_string" ]; then
+		echo "Usage: replace_in_files \"search_string\" \"replacement_string\" [start_directory]"
+		return 1
+	fi
 
-    find "$start_directory" -type f ! -path '*/.git/*' -exec grep -l "$search_string" {} + | xargs -d '\n' sed -i "s|$search_string|$replacement_string|g"
+	find "$start_directory" -type f ! -path '*/.git/*' -exec grep -l "$search_string" {} + | xargs -d '\n' sed -i "s|$search_string|$replacement_string|g"
 
-    echo "Replacement complete."
+	echo "Replacement complete."
 }
 
 move_package() {
-    local REPO_PATH="/var/db/repos/bp"
-    local package_name="$1"
-    local new_category="$2"
+	local REPO_PATH="/var/db/repos/bp"
+	local package_name="$1"
+	local new_category="$2"
 
-    # Find the package, excluding any that are within the .git directory
-    local found_path=$(find "$REPO_PATH" -type d -name "$package_name" ! -path "*/.git/*" -print -quit)
+	local found_path=$(find "$REPO_PATH" -type d -name "$package_name" ! -path "*/.git/*" -print -quit)
 
-    if [[ -z "$found_path" ]]; then
-        echo "Package '$package_name' not found."
-        return 1
-    fi
+	if [[ -z "$found_path" ]]; then
+		echo "Package '$package_name' not found."
+		return 1
+	fi
 
-    local old_path=$(dirname "$found_path" | sed "s|$REPO_PATH/||")
-    local new_path="$new_category"
+	local old_path=$(dirname "$found_path" | sed "s|$REPO_PATH/||")
+	local new_path="$new_category"
 
-    echo "Preparing to move '$package_name' from '$old_path' to '$new_path'."
+	echo "Preparing to move '$package_name' from '$old_path' to '$new_path'."
 
-    mkdir -p "$REPO_PATH/$new_path"
-    if mv "$found_path" "$REPO_PATH/$new_path/$package_name"; then
-        echo "Moved '$package_name' to '$new_path'."
+	mkdir -p "$REPO_PATH/$new_path"
+	if mv "$found_path" "$REPO_PATH/$new_path/$package_name"; then
+		echo "Moved '$package_name' to '$new_path'."
 
-        local old_pattern_escaped=$(printf '%s\n' "$old_path/$package_name" | sed 's:[][\/.^$*]:\\&:g')
-        local new_pattern_escaped=$(printf '%s\n' "$new_path/$package_name" | sed 's:[][\/.^$*]:\\&:g')
+		local old_pattern_escaped=$(printf '%s\n' "$old_path/$package_name" | sed 's:[][\/.^$*]:\\&:g')
+		local new_pattern_escaped=$(printf '%s\n' "$new_path/$package_name" | sed 's:[][\/.^$*]:\\&:g')
 
-        # Perform a dry run of find to gather all files excluding .git
-        local files_to_update=$(find "$REPO_PATH" -type f ! -path "*/.git/*")
+		local files_to_update=$(find "$REPO_PATH" -type f ! -path "*/.git/*")
 
-        # Loop through files and safely update references
-        for file in $files_to_update; do
-            sed -i "s|$old_pattern_escaped|$new_pattern_escaped|g" "$file"
-        done
+		for file in $files_to_update; do
+			sed -i "s|$old_pattern_escaped|$new_pattern_escaped|g" "$file"
+		done
 
-        echo "Updated references from '$old_path/$package_name' to '$new_path/$package_name'."
-    else
-        echo "Failed to move '$package_name'."
-        return 1
-    fi
+		echo "Updated references from '$old_path/$package_name' to '$new_path/$package_name'."
+	else
+		echo "Failed to move '$package_name'."
+		return 1
+	fi
 }
 
 bootstrap_go() {
-    USE=go-bootstrap emerge --oneshot gcc
+	USE=go-bootstrap emerge --oneshot gcc
 	FEATURES="-sandbox -usersandbox" emerge --oneshot =app-lang/go-1.20*
 	emerge --oneshot gcc
 	emerge --oneshot go
@@ -149,4 +146,47 @@ rebuild_packages() {
 	emerge --depclean
 	rm -rf /var/cache/packages/*
 	emerge --keep-going -ueDNv world
+}
+
+encrypt_file() {
+	if [[ -z "$1" ]]; then
+		echo "Usage: encrypt_file <file_to_encrypt>"
+		return 1
+	fi
+	gpg --encrypt --sign --armor -r "$FILE_KEYID" "$1"
+	echo "Encrypted file created: $1.asc"
+}
+
+decrypt_file() {
+	if [[ -z "$1" ]]; then
+		echo "Usage: decrypt_file <file_to_decrypt>"
+		return 1
+	fi
+	gpg --decrypt "$1" > "${1%.asc}.decrypted"
+	echo "Decrypted file created: ${1%.asc}.decrypted"
+}
+
+backup_gpg_keys() {
+	if [ -z "$1" ]; then
+		echo "Usage: backup_gpg_keys <backup_directory>"
+		return 1
+	fi
+	local backup_dir=$1
+	mkdir -p "$backup_dir"
+	gpg --export --armor > "$backup_dir/public-keys.asc"
+	gpg --export-secret-keys --armor > "$backup_dir/private-keys.asc"
+	gpg --export-ownertrust > "$backup_dir/ownertrust-gpg.txt"
+	echo "GPG keys and trust database have been backed up in '$backup_dir'"
+}
+
+restore_gpg_keys() {
+	if [ -z "$1" ]; then
+		echo "Usage: restore_gpg_keys <backup_directory>"
+		return 1
+	fi
+	local backup_dir=$1
+	gpg --import "$backup_dir/private-keys.asc"
+	gpg --import "$backup_dir/public-keys.asc"
+	gpg --import-ownertrust "$backup_dir/ownertrust-gpg.txt"
+	echo "GPG keys and trust database have been restored from '$backup_dir'"
 }

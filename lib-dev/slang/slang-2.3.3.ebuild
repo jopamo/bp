@@ -14,4 +14,8 @@ KEYWORDS="amd64 arm64"
 
 MAKEOPTS+=" -j1"
 
-filter-flags -Wl,-z,defs
+src_prepare() {
+	default
+	filter-flags -Wl,-z,defs
+}
+

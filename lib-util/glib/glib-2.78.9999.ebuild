@@ -22,21 +22,23 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-RDEPEND="
-	app-core/attr
-	app-core/util-linux[mount]
-	lib-core/libpcre
-"
 DEPEND="
+	app-core/attr[static-libs(+)]
+	app-core/util-linux[mount,static-libs(+)]
 	app-tex/docbook-xml-dtd
 	app-tex/docbook-xsl-stylesheets
-	lib-core/libxslt
+	lib-core/libffi[static-libs(+)]
+	lib-core/libpcre2[static-libs(+)]
+	lib-core/libxslt[static-libs(+)]
+    app-core/util-linux[static-libs(+)]
+    lib-core/libxml2[static-libs(+)]
+    lib-core/zlib[static-libs(+)]
 "
 
 src_configure() {
 	append-flags -Wno-error=format
 	local emesonargs=(
-		-Ddefault_library=$(usex static-libs static shared)
+		-Ddefault_library=$(usex static-libs both shared)
 		-Ddtrace=false
 		-Dgtk_doc=false
 		-Dlibmount=enabled

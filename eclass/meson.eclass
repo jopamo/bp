@@ -63,7 +63,7 @@ BDEPEND=">=app-dev/meson-1.2.3
 # @ECLASS_VARIABLE: EMESON_BUILDTYPE
 # @DESCRIPTION:
 # The buildtype value to pass to meson setup.
-: "${EMESON_BUILDTYPE=plain}"
+: "${EMESON_BUILDTYPE=release}"
 
 # @ECLASS_VARIABLE: EMESON_SOURCE
 # @DEFAULT_UNSET

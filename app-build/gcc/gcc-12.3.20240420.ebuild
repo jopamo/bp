@@ -7,17 +7,15 @@ inherit flag-o-matic
 DESCRIPTION="an optimizing compiler produced by the GNU Project supporting various programming languages"
 HOMEPAGE="https://gcc.gnu.org/"
 
-SNAPSHOT=5824e67591e3afac958f02bd4f934494a5f7ae2e
+SNAPSHOT=a6fa5387a3aaaa417ee46a97886d1065eb102363
 SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/gcc-${SNAPSHOT}
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug dlang go-bootstrap +isl +lto sanitize +vtv zstd"
-
-RESTRICT="strip"
+IUSE="debug dlang golang +isl +lto sanitize +vtv zstd"
 
 DEPEND="
 	lib-core/mpc
@@ -43,7 +41,9 @@ PATCHES=(
 	"${FILESDIR}"/0019-build-fix-CXXFLAGS_FOR_BUILD-passing.patch
 	"${FILESDIR}"/0020-add-fortify-headers-paths.patch
 	"${FILESDIR}"/0024-use-pure-64-bit-configuration-where-appropriate.patch
+	"${FILESDIR}"/0028-gcc-go-Use-_off_t-type-instead-of-_loff_t.patch
 	"${FILESDIR}"/0029-gcc-go-Don-t-include-sys-user.h.patch
+	"${FILESDIR}"/0032-gcc-go-Use-int64-type-as-offset-argument-for-mmap.patch
 )
 
 src_prepare() {
@@ -77,7 +77,7 @@ src_configure() {
 	local GCC_LANG="c,c++"
 	use lto   && GCC_LANG+=",lto"
 	use dlang   && GCC_LANG+=",d"
-	use go-bootstrap  && GCC_LANG+=",go"
+	use golang  && GCC_LANG+=",go"
 
 	cd gcc-build
 
@@ -172,32 +172,17 @@ src_install() {
 	dobin "${FILESDIR}"/c89
 	dobin "${FILESDIR}"/c99
 
-	exeinto /usr/share/gcc/go/
-	doexe "${ED}/usr/bin/{go,go*}"
+	if use go-bootstrap; then
+		exeinto /usr/share/gcc/go/
+		doexe "${ED}/usr/bin/{go,go*}"
 
-	cat > "${T}"/99gcc <<- EOF || die
-		PATH=/usr/share/gcc/go/
-	EOF
-	doenvd "${T}"/99gcc
-}
+		cat > "${T}"/99gcc <<- EOF || die
+			PATH=/usr/share/gcc/go/
+		EOF
+		doenvd "${T}"/99gcc
 
-src_install() {
-	cd gcc-build
-	emake DESTDIR="${ED}" install
-
-	#cleanup
-	find "${ED}" -name libcc1.la -delete
-	find "${ED}" -name libcc1plugin.la -delete
-	find "${ED}" -name libcp1plugin.la -delete
-
-	patchelf --remove-rpath "${ED}"/usr/lib/libstdc++.so.*
-
-	dosym -r /usr/bin/gcc /usr/bin/cc
-
-	dobin "${FILESDIR}"/c89
-	dobin "${FILESDIR}"/c99
-
-	mkdir -p "${ED}"/usr/lib/gccgo/bin
-	mv "${ED}"/usr/bin/go "${ED}"/usr/lib/gccgo/bin/go
-	mv "${ED}"/usr/bin/gofmt "${ED}"/usr/lib/gccgo/bin/gofmt
+		mkdir -p "${ED}"/usr/lib/gccgo/bin
+		mv "${ED}"/usr/bin/go "${ED}"/usr/lib/gccgo/bin/go
+		mv "${ED}"/usr/bin/gofmt "${ED}"/usr/lib/gccgo/bin/gofmt
+	fi
 }

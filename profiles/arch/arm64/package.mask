@@ -1,2 +1,3 @@
 #causes hangs on my chromebook
 >=lib-core/gmp-6.2.0
+>=lib-core/glibc-2.38

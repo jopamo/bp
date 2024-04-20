@@ -13,7 +13,7 @@ S="${WORKDIR}/lxqt-panel-${SNAPSHOT}"
 
 LICENSE="LGPL-2.1+"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="alsa +clock colorpicker cpuload desktopswitch dom kbindicator
 	mainmenu networkmonitor pulseaudio quicklaunch sensors showdesktop

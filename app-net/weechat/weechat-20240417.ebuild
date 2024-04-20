@@ -37,6 +37,7 @@ src_configure() {
 		-DENABLE_ALIAS=$(usex alias)
 		-DENABLE_BUFLIST=$(usex buflist)
 		-DENABLE_CHARSET=$(usex charset)
+		-DENABLE_CJSON=OFF
 		-DENABLE_DOC=OFF
 		-DENABLE_EXEC=$(usex exec)
 		-DENABLE_FIFO=$(usex fifo)

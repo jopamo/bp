@@ -7,3 +7,4 @@ lib-core/libxml2 python
 lib-net/nodejs icu
 xgui-lib/librsvg -rust
 xgui-app/wireshark bcg729 capinfos caps captype ciscodump dcerpcidl2wrs dftest dpauxmon dumpcap editcap libssh mergecap mmdbresolve netlink plugins qt randpkt randpktdump rawshark reordercap sdjournal sharkd sshdump text2pcap tshark udpdump
+lib-dev/tree-sitter-bash python

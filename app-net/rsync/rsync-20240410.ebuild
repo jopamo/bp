@@ -8,7 +8,7 @@ DESCRIPTION="File transfer program to keep remote files into sync"
 HOMEPAGE="https://rsync.samba.org/"
 
 SNAPSHOT=4592aa770d51d5e83845b032feea1de441f03ee7
-SRC_URI="https://github.com/WayneD/rsync/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/RsyncProject/rsync/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-3"

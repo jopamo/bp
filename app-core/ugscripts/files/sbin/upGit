@@ -3,149 +3,306 @@
 declare -A repo_checked_cache
 declare -A skip_packages
 
+PROGNAME="upGit"
+
+TMP_DIR="/tmp/${PROGNAME}"
+
+DEBUG_LOG="${TMP_DIR}/${PROGNAME}-debug.log"
+ERROR_LOG="${TMP_DIR}/${PROGNAME}-error.log"
+JSON_LOG="${TMP_DIR}/${PROGNAME}-json.log"
+
+FINAL_SCRIPT="${TMP_DIR}/upDay"
+GIT_CLONES_DIR="${HOME}/.git_packages"
 REPO_PATH="/var/db/repos/bp"
-UPDATE_FILE="$HOME/update_ebuild_commands.txt"
-FAIL_LOG="$HOME/update_ebuild_fail.txt"
-GIT_CLONES_DIR="$HOME/.git_packages"
+SHARE_DIR="/usr/share/ugscripts"
+SKEL_FILE="${SHARE_DIR}/upDay.skel"
+UPDATE_FILE="${TMP_DIR}/update_ebuild_commands.txt"
 
-skip_packages["*lxqt*"]=1
-skip_packages["efibootmgr"]=1
-skip_packages["flex"]=1
-skip_packages["libldac"]=1
-skip_packages["musl"]=1
-skip_packages["openjade"]=1
-skip_packages["qtermwidget"]=1
-skip_packages["swig"]=1
-skip_packages["wpa_supplicant"]=1
-skip_packages["x265"]=1
+default_branch=""
+repository_url=""
 
-mkdir -p "$GIT_CLONES_DIR"
-: > "$UPDATE_FILE"
-: > "$FAIL_LOG"
+package_list=(
+	"*lxqt*"
+	"efibootmgr"
+	"flex"
+	"libldac"
+	"musl"
+	"obconf-qt"
+	"openjade"
+	"qtermwidget"
+	"swig"
+	"wpa_supplicant"
+	"x265"
+)
 
-get_branch() {
-	local repo_url="$1"
-	local clone_dir="${GIT_CLONES_DIR}/$(basename "$repo_url")"
-	local chosen_branch=""
-	local last_commit_date=""
-	local last_commit_time=""
-	local two_years_ago=$(date -d '2 years ago' +%s)
-
-	if [ ! -d "$clone_dir" ]; then
-		if ! git clone --depth 1 "$repo_url" "$clone_dir" 2>>"$FAIL_LOG"; then
-			echo "Failed to clone $repo_url" >> "$FAIL_LOG"
-			return 1
-		fi
-	fi
-
-	cd "$clone_dir" || return
-
-	git fetch --depth 1 origin maint:refs/remotes/origin/maint 2>>"$FAIL_LOG"
-
-	if git branch -r | grep -qw "origin/maint"; then
-		chosen_branch="maint"
-	else
-		chosen_branch=$(git rev-parse --abbrev-ref HEAD)
-	fi
-
-	cd - > /dev/null
-	echo "$chosen_branch"
-}
-
-append_update_command() {
-	local package_path="$1"
-	local repository_url="$2"
-	local default_branch="$3"
-
-	echo "update_ebuild \"\${REPO_PATH}/${package_path}\" \"${repository_url}\" \"${default_branch}\" \"0\" \"yes\"" >> "$UPDATE_FILE"
-}
-
-check_repository_access() {
-	local repo_url="$1"
-	if [[ ${repo_checked_cache["$repo_url"]+exist} ]]; then
-		echo "Repository $repo_url already checked."
-		return 0
-	fi
-	echo "Checking access to $repo_url..."
-	if git ls-remote "$repo_url" &> /dev/null; then
-		echo "Access to $repo_url confirmed."
-		repo_checked_cache["$repo_url"]=1
-		return 0
-	else
-		echo "Failed to access $repo_url" >> "$FAIL_LOG"
-		return 1
-	fi
-}
-
-process_repository_file() {
-	local ebuild_file="$1"
-	local package_name=$(basename $(dirname "$ebuild_file"))
-
-	for pattern in "${!skip_packages[@]}"; do
-		if [[ "$package_name" == $pattern ]]; then
-			echo "Skipping $package_name as it matches skip pattern $pattern." >> "$FAIL_LOG"
-			return
-		fi
-	done
-
-	local raw_urls=$(grep -E 'SRC_URI' "$ebuild_file")
-	while read -r raw_url; do
-		local repository_url=$(echo "$raw_url" | grep -oE 'https?://[^"]+')
-
-		repository_url=${repository_url//cgit/git}
-
-		if [[ "$repository_url" =~ gitweb\.cgi ]]; then
-			repository_url=$(echo "$repository_url" | sed -E 's|.*/gitweb\.cgi\?p=([^&]+).*|git://git.gnupg.org/\1.git|')
-		fi
-
-		if [[ "$repository_url" =~ /-/ ]]; then
-			repository_url=$(echo "$repository_url" | sed -E 's|/-/.*||')
-		elif [[ "$repository_url" =~ /archive/ ]]; then
-			repository_url=$(echo "$repository_url" | sed -E 's|/archive/.*||')
-		elif [[ "$repository_url" =~ \.git ]]; then
-			repository_url=$(echo "$repository_url" | sed -E 's|\.git.*||')
-		elif [[ "$repository_url" =~ /snapshot/ ]]; then
-			repository_url=$(echo "$repository_url" | sed -E 's|/snapshot/.*||')
-		fi
-
-		if [[ -z "$repository_url" ]]; then
-			echo "No valid repository URL extracted from $ebuild file" >> "$FAIL_LOG"
-			continue
-		fi
-
-		common_process "$ebuild_file" "$repository_url"
-	done <<< "$raw_urls"
-}
-
-common_process() {
-	local ebuild_file="$1"
-	local repository_url="$2"
-	if check_repository_access "$repository_url"; then
-		local package_path=$(dirname "$ebuild_file" | sed "s|^$REPO_PATH/||")
-		local default_branch=$(get_branch "$repository_url")
-		if [[ -n "$default_branch" ]]; then
-			append_update_command "$package_path" "$repository_url" "$default_branch"
-		else
-			echo "$ebuild_file - Failed to get or process default branch for $repository_url" >> "$FAIL_LOG"
-		fi
-	else
-		echo "$ebuild_file - Failed to access $repository_url" >> "$FAIL_LOG"
-	fi
-}
+for pkg in "${package_list[@]}"; do
+	skip_packages["$pkg"]=1
+done
 
 main() {
+	mkdir -p "$TMP_DIR"
+	mkdir -p "$SHARE_DIR"
+	mkdir -p "$GIT_CLONES_DIR"
+	: > "$UPDATE_FILE"
+	: > "$ERROR_LOG"
+	: > "$JSON_LOG"
+	: > "$DEBUG_LOG"
+	: > "$FINAL_SCRIPT"
+
+	cp $SKEL_FILE $FINAL_SCRIPT
+
 	find "$REPO_PATH" -type f -regextype posix-extended -regex '.*-[0-9]{8}\.ebuild$' \
 		-exec grep -l 'SNAPSHOT' {} + | xargs -r grep -L 'EGIT_REPO_URI' | while read -r ebuild_file; do
 		process_repository_file "$ebuild_file"
 	done
 
-	#find "$REPO_PATH" -type f -regextype posix-extended -regex '.*\.[0-9]{8}\.ebuild$' \
-	#	-exec grep -l 'SNAPSHOT' {} + | xargs -r grep -L 'EGIT_REPO_URI' | while read -r ebuild_file; do
-	#	process_repository_file "$ebuild_file"
-	#done
-
-	sort "$FAIL_LOG" | uniq > "${FAIL_LOG}.tmp" && mv "${FAIL_LOG}.tmp" "$FAIL_LOG"
+	sort "$ERROR_LOG" | uniq > "${ERROR_LOG}.tmp" && mv "${ERROR_LOG}.tmp" "$ERROR_LOG"
 	sort "$UPDATE_FILE" | uniq > "${UPDATE_FILE}.tmp" && mv "${UPDATE_FILE}.tmp" "$UPDATE_FILE"
+
+	replace_placeholder
+	chmod +x "$FINAL_SCRIPT"
+	"$FINAL_SCRIPT"
+}
+
+specific_packages=()
+while (( "$#" )); do
+	case "$1" in
+		--help)
+			echo "Usage: $0 [package1] [package2] ... [packageN]"
+			echo "       If no packages are specified, all packages are updated."
+			exit 0
+			;;
+		-*|--*)
+			echo "Error: Unsupported flag $1" >&2
+			exit 1
+			;;
+		*)
+			specific_packages+=("$1")
+			shift
+			;;
+	esac
+done
+
+replace_placeholder() {
+	local output_file="$FINAL_SCRIPT"
+	local temp_file="${output_file}.tmp"
+	local replacement_text=$(cat "$UPDATE_FILE")
+
+	replacement_text_escaped=$(printf '%s\n' "$replacement_text" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
+	sed "s|REPLACE_ME|${replacement_text_escaped}|g" "$output_file" > "$temp_file" && mv "$temp_file" "$output_file"
+}
+
+get_branch() {
+	local repo_url="$1"
+	local package_path="$2"
+	local clone_dir="${GIT_CLONES_DIR}/$(basename "$package_path")"
+
+	if [[ "$repo_url" =~ github\.com ]]; then
+		handle_github "$repo_url"
+	elif [[ "$repo_url" =~ gitlab\.com ]]; then
+		handle_gitlab "$repo_url"
+	fi
+
+	echo "pre default_branch $default_branch" >> "$DEBUG_LOG"
+
+	if [[ -z "$default_branch" ]]; then
+		handle_fallback "$repo_url" "$clone_dir"
+	fi
+
+	return 0
+}
+
+handle_github() {
+	local repo_url="$1"
+	local repo_slug=$(echo "$repo_url" | sed -E 's|https?://github\.com/([^/]+/[^/]+).*|\1|')
+	local encoded_slug=$(echo "$repo_slug" | sed 's/\//%2F/g')
+
+	echo "repo_slug $repo_slug" >> "$DEBUG_LOG"
+	echo "urlencode $encoded_slug" >> "$DEBUG_LOG"
+
+	local api_url="https://api.github.com/repos/$repo_slug"
+	echo "api_url $api_url" >> "$DEBUG_LOG"
+	local auth_header="Authorization: token $GITHUB_TOKEN"
+	echo "auth_header $auth_header" >> "$DEBUG_LOG"
+
+	local default_branch_info=$(curl -s -H "$auth_header" "$api_url")
+	if [[ $? -ne 0 || -z "$default_branch_info" ]] || [[ "$default_branch_info" == *"Could not resolve host"* ]]; then
+		echo "Failed to fetch branch info" >> "$ERROR_LOG"
+		echo "$default_branch_info" >> "$JSON_LOG"
+		return 1
+	else
+		echo "Successfully fetched branch info: $default_branch_info" >> "$JSON_LOG"
+		default_branch=$(echo "$default_branch_info" | jq -r '.default_branch')
+		echo "github default_branch $default_branch" >> "$DEBUG_LOG"
+
+		local maint_branch_info=$(curl -s -H "$auth_header" "$api_url/branches/maint")
+		if [[ $? -eq 0 && -n "$maint_branch_info" && "$maint_branch_info" != *"Branch not found"* ]]; then
+			echo "maint_branch exists" >> "$DEBUG_LOG"
+			echo "Maint branch info: $maint_branch_info" >> "$JSON_LOG"
+			default_branch=maint
+		else
+			echo "maint_branch does not exist" >> "$ERROR_LOG"
+		fi
+
+		return 0
+	fi
+}
+
+handle_gitlab() {
+	local repo_url="$1"
+	local repo_slug=$(echo "$repo_url" | sed -E 's|https?://gitlab\.com/([^/]+/[^/]+).*|\1|')
+	local encoded_slug=$(echo "$repo_slug" | sed 's/\//%2F/g')
+
+	echo "repo_slug $repo_slug" >> "$DEBUG_LOG"
+	echo "urlencode $encoded_slug" >> "$DEBUG_LOG"
+
+	local api_url="https://gitlab.com/api/v4/projects/$encoded_slug"
+	echo "api_url $api_url" >> "$DEBUG_LOG"
+	local auth_header="Authorization: Bearer $GITLAB_TOKEN"
+	echo "auth_header $auth_header" >> "$DEBUG_LOG"
+
+	local default_branch_info=$(curl -s -H "$auth_header" "$api_url")
+	if [[ $? -ne 0 || -z "$default_branch_info" ]] || [[ "$default_branch_info" == *"Could not resolve host"* ]]; then
+		echo "Failed to fetch branch info" >> "$ERROR_LOG"
+		echo "$default_branch_info" >> "$JSON_LOG"
+		return 1
+	else
+		echo "Successfully fetched branch info: $default_branch_info" >> "$JSON_LOG"
+		default_branch=$(echo "$default_branch_info" | jq -r '.default_branch')
+		echo "gitlab default_branch $default_branch" >> "$DEBUG_LOG"
+
+		local maint_branch_info=$(curl -s -H "$auth_header" "$api_url/repository/branches/maint")
+		if [[ $? -eq 0 && -n "$maint_branch_info" && "$maint_branch_info" != *"404 Branch Not Found"* ]]; then
+			echo "maint_branch exists" >> "$DEBUG_LOG"
+			echo "Maint branch info: $maint_branch_info" >> "$JSON_LOG"
+			default_branch=maint
+		else
+			echo "maint_branch does not exist" >> "$ERROR_LOG"
+		fi
+
+		return 0
+	fi
+}
+
+handle_fallback() {
+	echo "running fallback" >> "$DEBUG_LOG"
+	local repo_url="$1"
+	local clone_dir="$2"
+	local datetime=$(date "+%Y-%m-%d %H:%M:%S")
+
+	if [[ -z "$repo_url" || -z "$clone_dir" ]]; then
+		echo "[$datetime] Error: Missing required parameters." >> "$ERROR_LOG"
+		return 1
+	fi
+
+	if [ ! -d "$clone_dir" ]; then
+		echo "[$datetime] Attempting to clone $repo_url into $clone_dir" >> "$DEBUG_LOG"
+		if ! git clone --depth 1 "$repo_url" "$clone_dir" 2>>"$ERROR_LOG"; then
+			echo "[$datetime] Failed to clone $repo_url" >> "$ERROR_LOG"
+			return 1
+		fi
+	fi
+
+	pushd "$clone_dir" > /dev/null
+
+	echo "[$datetime] Checking for 'maint' branch at remote" >> "$DEBUG_LOG"
+	if git ls-remote --heads "$repo_url" maint | grep -q 'refs/heads/maint'; then
+		default_branch="maint"
+		echo "[$datetime] 'maint' branch is set as the default" >> "$DEBUG_LOG"
+	else
+		default_branch=$(git rev-parse --abbrev-ref HEAD)
+		echo "[$datetime] Using default branch: $default_branch" >> "$DEBUG_LOG"
+	fi
+
+	popd > /dev/null
+
+	return 0
+}
+
+append_update_command() {
+	local package_path="$1"
+
+	echo "update_ebuild \"\${REPO_PATH}/${package_path}\" \"${repository_url}\" \"${default_branch}\" \"0\" \"yes\"" >> "$UPDATE_FILE"
+}
+
+process_repository_file() {
+	local ebuild_file="$1"
+	local package_path=$(dirname "$ebuild_file")
+	local package_name=$(basename "$package_path")
+
+	echo "*****************************************************************" >> "$DEBUG_LOG"
+	echo "package_path $package_path" >> "$DEBUG_LOG"
+	echo "*****************************************************************" >> "$DEBUG_LOG"
+
+	for skip_pattern in "${!skip_packages[@]}"; do
+		if [[ "$package_name" == $skip_pattern ]]; then
+			echo "Skipping $package_name as it is in skip list." >> "$DEBUG_LOG"
+			return 0
+		fi
+	done
+
+	if (( ${#specific_packages[@]} != 0 )) && ! [[ " ${specific_packages[*]} " =~ " $package_name " ]]; then
+		echo "Skipping $package_name as it is not in the list of specified packages." >> "$DEBUG_LOG"
+		return 0
+	fi
+
+	grep -E 'SRC_URI="[^"]+"' "$ebuild_file" | while IFS= read -r line; do
+		local raw_url=$(echo "$line" | grep -oE 'https?://[^"]+')
+		echo "raw_url $raw_url" >> "$DEBUG_LOG"
+		process_url "$ebuild_file" "$raw_url" "$package_path"
+	done
+}
+
+normalize_url() {
+	local url="$1"
+	url=${url//cgit/git}
+
+	if [[ "$url" =~ gitweb\.cgi ]]; then
+		url=$(echo "$url" | sed -E 's|.*/gitweb\.cgi\?p=([^&]+).*|git://git.gnupg.org/\1.git|')
+	elif [[ "$url" =~ /-/ ]]; then
+		url=$(echo "$url" | sed -E 's|/-/.*||')
+	elif [[ "$url" =~ /archive/ ]]; then
+		url=$(echo "$url" | sed -E 's|/archive/.*||')
+	elif [[ "$url" =~ /snapshot/ ]]; then
+		url=$(echo "$url" | sed -E 's|/snapshot/.*||')
+	fi
+
+	url=$(echo "$url" | sed -E 's|(\.git).*|\1|')
+
+	echo "$url"
+}
+
+process_url() {
+	local ebuild_file="$1"
+	local url="$2"
+	local package_path="$3"
+	repository_url=$(normalize_url "$url")
+	echo "repository_url $repository_url" >> "$DEBUG_LOG"
+
+	if [[ -z "$repository_url" ]]; then
+		echo "No valid repository URL extracted from $ebuild file" >> "$ERROR_LOG"
+		return
+	fi
+
+	common_process "$ebuild_file" "$repository_url" "$package_path"
+}
+
+common_process() {
+	local ebuild_file="$1"
+	local repository_url="$2"
+	local package_path="$3"
+	local package_path_short=$(echo "$ebuild_file" | sed "s|^$REPO_PATH/||" | awk -F'/' 'NF>=3 {print $(NF-2) "/" $(NF-1)}')
+	get_branch "$repository_url" "$package_path"
+
+	echo "package_path_short $package_path_short" >> "$DEBUG_LOG"
+	echo "repository_url $repository_url" >> "$DEBUG_LOG"
+	echo "default_branch $default_branch" >> "$DEBUG_LOG"
+
+	if [[ -z "$default_branch" ]]; then
+		echo "$ebuild_file - Failed to access or get branch for $repository_url" >> "$ERROR_LOG"
+	else
+		append_update_command "$package_path_short" "$repository_url" "$default_branch"
+	fi
 }
 
 main

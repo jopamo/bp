@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 PACKAGES=(
 	"ConfigArgParse"
 	"PySocks"
@@ -99,10 +97,30 @@ PACKAGES=(
 
 GENTOO_PATH="/tmp/gentoo-repo"
 PACKAGE_DIR="/var/db/repos/bp/dev-python"
-GIT_USER="1g4-bot"
-GIT_EMAIL="share@1g4.org"
-GIT_SIGN_KEY="AFFCE613154C05AA"
 REPO="https://github.com/gentoo/gentoo.git"
+
+finalize_update() {
+	local package_path="$1"
+	local package_name="$2"
+	local new_ebuild_filename="$3"
+	local version="$4"
+
+	if ! (cd "$package_path" && pkgdev manifest); then
+		echo "Error generating manifest for ${package_name}. Skipping..."
+		return 1
+	fi
+
+	(cd "$package_path" && \
+			git add --all . && \
+			git -c user.name="${BOT_USER}" \
+			-c user.email="${BOT_EMAIL}" \
+			-c commit.gpgsign=true \
+			-c user.signingkey="${BOT_KEYID}" \
+			commit -m "Update ${package_name} to ${version}" && \
+		git push origin HEAD)
+
+	echo "Ebuild updated for ${package_name}: ${new_ebuild_filename}"
+}
 
 echo "Starting script execution..."
 echo "Removing the existing ${PACKAGE_DIR} directory to start fresh..."
@@ -144,8 +162,6 @@ echo "Starting cleanup process..."
 
 [ -d "${PACKAGE_DIR}/gpep517" ] && echo "Updating EAPI for gpep517..." && find "${PACKAGE_DIR}/gpep517" -type f -name "*.ebuild" -exec sed -i'' 's/EAPI=7/EAPI=8/' {} + && echo "EAPI updated for gpep517."
 
-[ -d "${PACKAGE_DIR}/cython" ] && find "${PACKAGE_DIR}/cython" -type f -name "*.ebuild" -exec sed -i'' '/python_compile()/a \\tfilter-flags -Wl,-z,defs' {} + && echo "Updated python_compile for cython."
-
 echo "Removing files ending with 9999.ebuild in ${PACKAGE_DIR}..."
 find "${PACKAGE_DIR}" -type f -name '*9999.ebuild' -exec echo "Deleting {}" \; -delete
 
@@ -179,17 +195,27 @@ find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe '
     s/test-rust\?\s*\(\s*\)//g;
 ' {} +
 
-for package in cython psutil lxml cffi pillow zstandard; do
+for package in cython psutil lxml cffi pillow tree-sitter zstandard; do
 	if [ -d "${PACKAGE_DIR}/${package}" ]; then
 		echo "Updating for ${package}..."
 		find "${PACKAGE_DIR}/${package}" -type f -name "*.ebuild" -exec sh -c '
             for ebuild_file; do
+                echo "Processing $ebuild_file"
                 if grep -q "^python_compile()" "$ebuild_file"; then
-                    sed -i'' "/^python_compile()/ { N; s|\\n|\\n\\tfilter-flags -Wl,-z,defs\\n| }" "$ebuild_file"
-                elif grep -q "^src_prepare() {" "$ebuild_file"; then
-                    sed -i'' "/^src_prepare() {/ { N; s|\\n|\\n\\tfilter-flags -Wl,-z,defs\\n| }" "$ebuild_file"
-                elif grep -q "^python_configure_all() {" "$ebuild_file"; then
-                    sed -i'' "/^python_configure_all() {/ { N; s|\\n|\\n\\tfilter-flags -Wl,-z,defs\\n| }" "$ebuild_file"
+                    echo "Adding line to python_compile in $ebuild_file"
+                    sed -i "/^python_compile()/ { N; s|\\n|\\n\\tfilter-flags -Wl,-z,defs\\n| }" "$ebuild_file"
+                fi
+                if grep -q "^src_prepare() {" "$ebuild_file"; then
+                    echo "Adding line to src_prepare in $ebuild_file"
+                    sed -i "/^src_prepare() {/ { N; s|\\n|\\n\\tfilter-flags -Wl,-z,defs\\n| }" "$ebuild_file"
+                fi
+                if grep -q "^src_unpack() {" "$ebuild_file"; then
+                    echo "Adding line to src_unpack in $ebuild_file"
+                    sed -i "/^src_unpack() {/ { N; s|\\n|\\n\\tfilter-flags -Wl,-z,defs\\n| }" "$ebuild_file"
+                fi
+                if grep -q "^python_configure_all() {" "$ebuild_file"; then
+                    echo "Adding line to python_configure_all in $ebuild_file"
+                    sed -i "/^python_configure_all() {/ { N; s|\\n|\\n\\tfilter-flags -Wl,-z,defs\\n| }" "$ebuild_file"
                 fi
             done
 		' sh {} +
@@ -304,19 +330,7 @@ commit_changes() {
 
 	echo "Version found: ${version}"
 
-	(cd "${package_path}" && git -c user.name="${GIT_USER}" \
-			-c user.email="${GIT_EMAIL}" \
-			-c commit.gpgsign=true \
-			-c user.signingkey="${GIT_SIGN_KEY}" \
-		add . && echo "Added changes to git staging") || return 1
-
-	(cd "${package_path}" && git -c user.name="${GIT_USER}" \
-			-c user.email="${GIT_EMAIL}" \
-			-c commit.gpgsign=true \
-			-c user.signingkey="${GIT_SIGN_KEY}" \
-		commit -m "Update ${package} to ${version}" && echo "Commit successful") || return 1
-
-	(cd "${package_path}" && git push && echo "Push successful") || return 1
+	finalize_update "${package_path}" "${package}" "${filename}" "${version}"
 }
 
 main() {

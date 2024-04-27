@@ -2,44 +2,63 @@
 
 REPO_PATH="/var/db/repos/bp"
 
+finalize_update() {
+	local package_path="$1"
+	local package_name="$2"
+	local new_ebuild_filename="$3"
+	local version="$4"
+
+	if ! (cd "$package_path" && pkgdev manifest); then
+		echo "Error generating manifest for ${package_name}. Skipping..."
+		return 1
+	fi
+
+	(cd "$package_path" && \
+			git add --all . && \
+			git -c user.name="${BOT_USER}" \
+			-c user.email="${BOT_EMAIL}" \
+			-c commit.gpgsign=true \
+			-c user.signingkey="${BOT_KEYID}" \
+			commit -m "Update ${package_name} to ${version}" && \
+		git push origin HEAD)
+
+	echo "Ebuild updated for ${package_name}: ${new_ebuild_filename}"
+}
+
 fetch_latest_brave_versions() {
 	local github_repo_url="https://github.com/brave/brave-browser.git"
 	local max_versions_to_check=10
 	local fetched_versions=()
 
-	# Fetch the tags and sort them in descending order based on version numbers
 	local latest_tags=$(git ls-remote --tags --sort="-v:refname" $github_repo_url | \
-						grep -oP 'refs/tags/v\d+\.\d+\.\d+' | \
-						sed 's/refs\/tags\/v//' | \
-						sort -rV | \
-						head -"$max_versions_to_check")
+			grep -oP 'refs/tags/v\d+\.\d+\.\d+' | \
+			sed 's/refs\/tags\/v//' | \
+			sort -rV | \
+		head -"$max_versions_to_check")
 
 	if [[ -z "$latest_tags" ]]; then
 		echo "Failed to fetch the latest Brave Browser versions"
 		return 1
 	fi
 
-	# Iterate over tags and check for available downloads
 	IFS=$'\n' read -rd '' -a versions <<< "$latest_tags"
 	for version in "${versions[@]}"; do
 		local download_url="https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser-nightly_${version}_amd64.deb"
 
 		if curl --output /dev/null --silent --head --fail "$download_url"; then
 			fetched_versions+=("$version")
-			# Break the loop if we have found enough versions
+
 			if [[ ${#fetched_versions[@]} -eq $max_versions_to_check ]]; then
 				break
 			fi
 		fi
 	done
 
-	# Check if we found any valid versions
 	if [[ ${#fetched_versions[@]} -eq 0 ]]; then
 		echo "No valid Brave versions found"
 		return 1
 	fi
 
-	# Return the valid versions
 	printf '%s\n' "${fetched_versions[@]}"
 }
 
@@ -74,10 +93,6 @@ fetch_latest_firefox_version() {
 	return 1
 }
 
-version_gt() {
-	test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1";
-}
-
 update_ebuild() {
 	local PACKAGE_PATH="${REPO_PATH}/$1"
 	local PACKAGE_NAME="$2"
@@ -88,42 +103,29 @@ update_ebuild() {
 		local new_ebuild_filename="${PACKAGE_NAME}-${version}.ebuild"
 		local new_ebuild_file="${PACKAGE_PATH}/${new_ebuild_filename}"
 
-		# Find the most recent existing ebuild file
 		local existing_ebuild_file=$(find "${PACKAGE_PATH}" -maxdepth 1 -type f -name "${PACKAGE_NAME}-*.ebuild" | sort | tail -n 1)
 		if [[ -z "$existing_ebuild_file" ]]; then
 			echo "No ebuild file found for ${PACKAGE_NAME}."
 			continue
 		fi
 
-		# Extract version from the existing ebuild filename
 		local existing_version=$(basename "$existing_ebuild_file" | grep -oP "${PACKAGE_NAME}-\K[\d\.]+(?=.ebuild)")
 
-		# Compare versions using the version_gt function
 		if ! version_gt "$version" "$existing_version"; then
 			echo "Skipping ${version}, as it's not newer than the existing version ${existing_version}."
-			return 0
+			continue
 		fi
 
 		if [[ -f "$new_ebuild_file" ]]; then
 			echo "Ebuild file ${new_ebuild_filename} already exists."
-			return 0
+			continue
 		fi
 
 		mv "$existing_ebuild_file" "$new_ebuild_file"
-		(cd ${REPO_PATH} && pkgdev manifest)
-		(cd "$REPO_PATH" && \
-		git -c user.name="1g4-bot" \
-			-c user.email="share@1g4.org" \
-			-c commit.gpgsign=true \
-			-c user.signingkey=AFFCE613154C05AA \
-			add . && \
-		git -c user.name="1g4-bot" \
-			-c user.email="share@1g4.org" \
-			-c commit.gpgsign=true \
-			-c user.signingkey=AFFCE613154C05AA \
-			commit -m "Update ${PACKAGE_NAME} to ${version}" && \
-		git push)
+		echo "Ebuild file renamed to ${new_ebuild_filename}."
 
+		(cd "${PACKAGE_PATH}" && pkgdev manifest) || continue
+		finalize_update "$PACKAGE_PATH" "$PACKAGE_NAME" "$new_ebuild_filename" "$version"
 		echo "Ebuild updated for ${PACKAGE_NAME}: ${new_ebuild_filename}"
 		break
 	done
@@ -134,14 +136,15 @@ update_ebuild() {
 	fi
 }
 
-# Update Brave
+version_gt() {
+	test "$(echo "$@" | tr " " "\n" | sort -V | head -n 1)" != "$1";
+}
+
 brave_versions=$(fetch_latest_brave_versions)
 [[ $? -eq 0 ]] && update_ebuild "bin/brave-nightly-bin" "brave-nightly-bin" "$brave_versions"
 
-# Update Chrome
 chrome_version=$(fetch_latest_chrome_version)
 [[ $? -eq 0 ]] && update_ebuild "bin/google-chrome-unstable" "google-chrome-unstable" "$chrome_version"
 
-# Update Firefox
 firefox_version=$(fetch_latest_firefox_version)
 [[ $? -eq 0 ]] && update_ebuild "bin/firefox-nightly-bin" "firefox-nightly-bin" "$firefox_version"

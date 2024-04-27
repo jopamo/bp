@@ -2,6 +2,29 @@
 
 REPO_PATH="/var/db/repos/bp"
 
+finalize_update() {
+	local package_path="$1"
+	local package_name="$2"
+	local new_ebuild_filename="$3"
+	local version="$4"
+
+	if ! (cd "$package_path" && pkgdev manifest); then
+		echo "Error generating manifest for ${package_name}. Skipping..."
+		return 1
+	fi
+
+	(cd "$package_path" && \
+			git add --all . && \
+			git -c user.name="${BOT_USER}" \
+			-c user.email="${BOT_EMAIL}" \
+			-c commit.gpgsign=true \
+			-c user.signingkey="${BOT_KEYID}" \
+			commit -m "Update ${package_name} to ${version}" && \
+		git push origin HEAD)
+
+	echo "Ebuild updated for ${package_name}: ${new_ebuild_filename}"
+}
+
 fetch_latest_boost_version() {
 	local boost_url="https://www.boost.org/users/history/"
 	local latest_version=$(curl -s "$boost_url" | grep -oP 'data-current-version="\K\d+\.\d+\.\d+')
@@ -15,9 +38,9 @@ fetch_latest_boost_version() {
 fetch_latest_curl_version() {
 	local curl_page_url="https://curl.se/download/"
 	local latest_version=$(curl -s "$curl_page_url" | \
-						   grep -oP '<td>\K\d+\.\d+\.\d+(?=</td>)' | \
-						   sort -Vr | \
-						   head -1)
+			grep -oP '<td>\K\d+\.\d+\.\d+(?=</td>)' | \
+			sort -Vr | \
+		head -1)
 	if [[ -z "$latest_version" ]]; then
 		echo "Failed to fetch the latest cURL version"
 		return 1
@@ -28,9 +51,9 @@ fetch_latest_curl_version() {
 fetch_latest_vim_version() {
 	local vim_git_url="https://github.com/vim/vim.git"
 	local latest_version=$(git ls-remote --tags --sort="-v:refname" "$vim_git_url" | \
-						grep -oP 'refs/tags/v\K\d+\.\d+\.\d+' | \
-						sort -urV | \
-						head -1)
+			grep -oP 'refs/tags/v\K\d+\.\d+\.\d+' | \
+			sort -urV | \
+		head -1)
 	if [[ -z "$latest_version" ]]; then
 		echo "Failed to fetch the latest Vim version"
 		return 1
@@ -41,9 +64,9 @@ fetch_latest_vim_version() {
 fetch_latest_gnu_version() {
 	local base_url="https://ftp.gnu.org/gnu/$1/"
 	local latest_version=$(curl -s "$base_url" | grep -oP 'href="\K'$1'-[0-9.]+(?=\.tar)' | \
-							sed 's/'$1'-//g' | \
-							sort -Vr | \
-							head -1)
+			sed 's/'$1'-//g' | \
+			sort -Vr | \
+		head -1)
 	if [[ -z "$latest_version" ]]; then
 		echo "Failed to fetch the latest $1 version"
 		return 1
@@ -53,7 +76,6 @@ fetch_latest_gnu_version() {
 
 fetch_latest_cryptsetup_version() {
 	local base_url="https://mirrors.edge.kernel.org/pub/linux/utils/cryptsetup/"
-	# Scrape the main page for the latest version directory
 	local latest_version=$(curl -s "$base_url" | grep -oP 'href="v[0-9]+\.[0-9]+/' | grep -v -- "-rc" | sort -Vr | head -1 | cut -d '"' -f 2)
 
 	if [[ -z "$latest_version" ]]; then
@@ -61,7 +83,6 @@ fetch_latest_cryptsetup_version() {
 		return 1
 	fi
 
-	# Navigate to the latest version directory and get the version of the final release
 	local version_page="${base_url}${latest_version}"
 	local latest_final_version=$(curl -s "$version_page" | grep -oP 'cryptsetup-\K[0-9]+\.[0-9]+\.[0-9]+(?=\.tar\.gz)' | sort -Vr | head -1)
 
@@ -107,37 +128,21 @@ update_vim_ebuild() {
 		return 1
 	fi
 
-	# Ensure the version is formatted correctly (no leading 'v')
 	latest_version=${latest_version#v}
 
-	# Construct the new filename with the full version number
 	local new_ebuild_filename="${PACKAGE_NAME}-${latest_version}.ebuild"
 	local new_file_path="${PACKAGE_PATH}/${new_ebuild_filename}"
 
-	# Rename the ebuild file to match the latest version, if it doesn't already exist
 	if [[ "$vim_ebuild_file" != "$new_file_path" ]]; then
 		mv "$vim_ebuild_file" "$new_file_path"
 		echo "Renamed Vim ebuild to $new_ebuild_filename."
+		(cd "${PACKAGE_PATH}" && pkgdev manifest)
+		finalize_update "$PACKAGE_PATH" "$PACKAGE_NAME" "$new_ebuild_filename" "$latest_version"
+		echo "Vim ebuild updated to version ${latest_version} in ${new_file_path}."
 	else
 		echo "Vim ebuild is already up to date with version $latest_version."
 		return 0
 	fi
-
-	(cd ${REPO_PATH} && pkgdev manifest)
-	(cd "$REPO_PATH" && \
-	git -c user.name="1g4-bot" \
-			-c user.email="share@1g4.org" \
-			-c commit.gpgsign=true \
-			-c user.signingkey=AFFCE613154C05AA \
-			add . && \
-		git -c user.name="1g4-bot" \
-			-c user.email="share@1g4.org" \
-			-c commit.gpgsign=true \
-			-c user.signingkey=AFFCE613154C05AA \
-			commit -m "Update Vim to ${latest_version}" && \
-		git push)
-	(cd ${REPO_PATH} && git add . && git commit -m "Update Vim to ${latest_version}")
-	echo "Vim ebuild updated to version ${latest_version} in ${new_file_path}."
 }
 
 update_gnu_package() {
@@ -149,18 +154,17 @@ update_gnu_package() {
 }
 
 fetch_latest_git_version() {
-	local repo_url="$1" # GitHub repository URL
-	local include_v_prefix="$2" # Whether the tags include a 'v' prefix ('true' or 'false')
+	local repo_url="$1"
+	local include_v_prefix="$2"
 
-	# Adjust the grep pattern based on whether the version tags include a 'v' prefix
 	local version_pattern='refs/tags/\K[0-9.]+(?=\^{})'
 	if [[ "$include_v_prefix" == "true" ]]; then
 		version_pattern='refs/tags/v\K[0-9.]+(?=\^{})'
 	fi
 
 	local latest_version=$(git ls-remote --tags --sort="-v:refname" "$repo_url" | \
-							grep -oP "$version_pattern" | \
-							head -1)
+			grep -oP "$version_pattern" | \
+		head -1)
 
 	if [[ -z "$latest_version" ]]; then
 		echo "Failed to fetch the latest version from $repo_url"
@@ -178,7 +182,6 @@ update_git_package() {
 
 	local package_version=$(fetch_latest_git_version "$repo_url" "$include_v_prefix")
 	if [[ $? -eq 0 ]]; then
-		# Now using the dynamic category provided as the argument
 		update_ebuild "${category}/${package_name}" "$package_name" "$package_version"
 	else
 		echo "Failed to update $package_name package"
@@ -206,19 +209,7 @@ update_ebuild() {
 		fi
 
 		mv "$ebuild_file" "$new_ebuild_file"
-		(cd ${REPO_PATH} && pkgdev manifest)
-		(cd "$REPO_PATH" && \
-		git -c user.name="1g4-bot" \
-			-c user.email="share@1g4.org" \
-			-c commit.gpgsign=true \
-			-c user.signingkey=AFFCE613154C05AA \
-			add . && \
-		git -c user.name="1g4-bot" \
-			-c user.email="share@1g4.org" \
-			-c commit.gpgsign=true \
-			-c user.signingkey=AFFCE613154C05AA \
-			commit -m "Update ${PACKAGE_NAME} to ${version}" && \
-		git push)
+		finalize_update "$PACKAGE_PATH" "$PACKAGE_NAME" "$new_ebuild_filename" "$version"
 
 		echo "Ebuild updated for ${PACKAGE_NAME}: ${new_ebuild_filename}"
 		break
@@ -230,33 +221,26 @@ update_ebuild() {
 	fi
 }
 
-# Update Boost
 boost_version=$(fetch_latest_boost_version)
 [[ $? -eq 0 ]] && update_ebuild "lib-dev/boost" "boost" "$boost_version"
 
-# Update Boost Build
 [[ $? -eq 0 ]] && update_ebuild "lib-dev/boost-build" "boost-build" "$boost_version"
 
-# Update cURL
 curl_version=$(fetch_latest_curl_version)
 [[ $? -eq 0 ]] && update_ebuild "app-net/curl" "curl" "$curl_version"
 
-# Update Vim
 vim_version=$(fetch_latest_vim_version)
 [[ $? -eq 0 ]] && update_vim_ebuild "app-core/vim" "vim" "$vim_version"
 
-# Update Cryptsetup
 cryptsetup_version=$(fetch_latest_cryptsetup_version)
 [[ $? -eq 0 ]] && update_ebuild "app-fs/cryptsetup" "cryptsetup" "$cryptsetup_version"
 
-# Update ncurses
 ncurses_version=$(fetch_latest_ncurses_version)
 if [[ $? -eq 0 ]]; then
 	update_ebuild "lib-core/ncurses" "ncurses" "$ncurses_version"
 	update_ebuild "lib-core/ncurses5-compat" "ncurses5-compat" "$ncurses_version"
 fi
 
-# Update GNU stuff
 if [[ $? -eq 0 ]]; then
 	update_gnu_package "autoconf-archive"
 	update_gnu_package "autoconf"
@@ -268,5 +252,5 @@ if [[ $? -eq 0 ]]; then
 	update_gnu_package "texinfo"
 fi
 
-update_git_package "app-build" "bc" "https://github.com/gavinhoward/bc.git" "false"
+update_git_package "app-util" "bc" "https://github.com/gavinhoward/bc.git" "false"
 update_git_package "app-net" "bluez" "https://git.kernel.org/pub/scm/bluetooth/bluez.git" "false"

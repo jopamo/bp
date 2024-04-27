@@ -1,0 +1,321 @@
+#!/bin/bash
+
+REPO_PATH="/var/db/repos/bp"
+GIT_CLONES_DIR="$HOME/.git_packages"
+
+PROGNAME="upDay"
+
+TMP_DIR="/tmp/${PROGNAME}"
+
+DEBUG_LOG="${TMP_DIR}/${PROGNAME}-debug.log"
+ERROR_LOG="${TMP_DIR}/${PROGNAME}-error.log"
+JSON_LOG="${TMP_DIR}/${PROGNAME}-json.log"
+
+init_logs() {
+	mkdir -p "$TMP_DIR"
+	mkdir -p "$GIT_CLONES_DIR"
+	: > "$ERROR_LOG"
+	: > "$JSON_LOG"
+	: > "$DEBUG_LOG"
+}
+
+GCC_MAJOR_VERSIONS=("12" "13")
+GLIBC_VERSIONS=("2.36" "2.38")
+
+BINUTILS_VERSION="2.41"
+XZ_UTILS_VERSION="5.4"
+SYSTEMD_VERSION="254"
+UTIL_LINUX_VERSION="2.40"
+OPENSSL_VERSION="3.0"
+NODEJS_VERSION="20"
+BIND_TOOLS_VERSION="9.18"
+GAWK_VERSION="5.3"
+PYTHON_VERSION="3.12"
+PERL_VERSION="5.38"
+TCL_VERSION="8.6"
+LLVM_VERSION="18"
+SQLITE_VERSION="3.45"
+
+GDB_VERSION="14"
+BASH_VERSION="5.2"
+GO_VERSION="1.22"
+LIBASSUAN_VERSION="2.5"
+LIBGCRYPT_VERSION="1.10"
+MPFR_VERSION="4.2"
+KDE_VERSION="5"
+TOR_VERSION="0.4.8"
+
+BASH_BRANCH="master"
+GDB_BRANCH="gdb-${GDB_VERSION}-branch"
+GLIBC_BRANCH="release/${GLIBC_VERSION}/master"
+GO_BRANCH="release-branch.go${GO_VERSION}"
+KGUIADDONS_BRANCH="kf${KDE_VERSION}"
+KWINDOWSYSTEM_BRANCH="kf${KDE_VERSION}"
+LIBASSUAN_BRANCH="LIBASSUAN-${LIBASSUAN_VERSION}-BRANCH"
+LIBGCRYPT_BRANCH="LIBGCRYPT-${LIBGCRYPT_VERSION}-BRANCH"
+TCL_BRANCH=$(echo "core-${TCL_VERSION}" | tr '.' '-')
+BINUTILS_BRANCH="binutils-$(echo "$BINUTILS_VERSION" | sed 's/\./_/')-branch"
+TOR_BRANCH="release-0.4.8"
+
+update_toolchain=false
+update_unsafe=false
+update_branches=false
+
+show_help() {
+	echo "Usage: $0 [options]"
+	echo ""
+	echo "Options:"
+	echo "  --update-toolchain Update the toolchain ebuilds (GCC, Binutils, Glibc, etc.)"
+	echo "  --unsafe		   Update packages marked as unsafe"
+	echo "  --help			 Display this help and exit"
+	echo ""
+	echo "Without any options, the script updates all ebuilds except for toolchain and unsafe packages."
+}
+
+main() {
+	init_logs
+
+	if [[ $update_toolchain == true ]]; then
+		toolchain_bump
+	fi
+
+	if [[ $update_unsafe == true ]]; then
+		unsafe_bump
+	fi
+
+	if [[ $update_branches == true ]]; then
+		branch_bump
+	fi
+
+	REPLACE_ME
+}
+
+while [[ $# -gt 0 ]]; do
+	case $1 in
+		--update-toolchain)
+			update_toolchain=true
+			shift
+			;;
+		--unsafe)
+			update_unsafe=true
+			shift
+			;;
+		--update-branches)
+			update_branches=true
+			shift
+			;;
+		--help)
+			show_help
+			exit 0
+			;;
+		*)
+			echo "Unknown option: $1"
+			show_help
+			exit 1
+			;;
+	esac
+done
+
+get_gcc_minor_version() {
+	local major_version="$1"
+	local gcc_page=$(curl -s "https://gcc.gnu.org/gcc-${major_version}/")
+	local minor_version=$(echo "$gcc_page" | grep -oP "GCC ${major_version}\.\K[0-9]+" | head -1)
+	echo "${major_version}.${minor_version}"
+}
+
+finalize_update() {
+	local package_path="$1"
+	local package_name="$2"
+	local new_ebuild_filename="$3"
+	local version="$4"
+
+	if ! (cd "$package_path" && pkgdev manifest); then
+		echo "Error generating manifest for ${package_name}. Skipping..." >> "$ERROR_LOG"
+		return 1
+	fi
+
+	(cd "$package_path" && \
+			git add --all . && \
+			git -c user.name="${BOT_USER}" \
+			-c user.email="${BOT_EMAIL}" \
+			-c commit.gpgsign=true \
+			-c user.signingkey="${BOT_KEYID}" \
+			commit -m "Update ${package_name} to ${version}" && \
+		git push origin HEAD)
+
+	echo "Ebuild updated for ${package_name}: ${new_ebuild_filename}" >> "$DEBUG_LOG"
+}
+
+clone_or_update_repo() {
+	local repo_uri="$1"
+	local target_dir="$2"
+	local branch="$3"
+	local version_pattern="$4"
+	local max_versions_to_check="${5:-1}"
+
+	if [[ -d "$target_dir" ]]; then
+		(cd "$target_dir" && git fetch --all --tags && git reset --hard "origin/$branch")
+		echo "Repository updated successfully." >> "$DEBUG_LOG"
+	else
+		if ! git clone --depth 1 --branch "$branch" "$repo_uri" "$target_dir"; then
+			echo "Failed to clone repository: $repo_uri" >> "$ERROR_LOG"
+			return 1
+		fi
+		echo "Repository cloned successfully." >> "$DEBUG_LOG"
+	fi
+
+	fix_repository_issues "$target_dir"
+}
+
+fix_repository_issues() {
+	local repo_dir="$1"
+	local fsck_output=$(cd "$repo_dir" && git fsck --full)
+
+	if echo "$fsck_output" | grep -q 'dangling commit'; then
+		echo "Cleaning up dangling commits..." >> "$DEBUG_LOG"
+		(cd "$repo_dir" && git prune)
+	fi
+
+	if echo "$fsck_output" | grep -q 'missing'; then
+		echo "Attempting to recover missing objects..." >> "$DEBUG_LOG"
+		(cd "$repo_dir" && git fetch --all)
+	fi
+
+	echo "Repair actions completed for $repo_dir." >> "$DEBUG_LOG"
+}
+
+update_ebuild() {
+	local package_path="$1"
+	local repo_uri="$2"
+	local branch="$3"
+	local version_name="$4"
+	local use_date_only="$5"
+	local PACKAGE_NAME=$(basename "$package_path")
+	local GIT_CLONES_DIR_PACKAGE="${GIT_CLONES_DIR}/${PACKAGE_NAME}"
+
+	echo "Updating ${PACKAGE_NAME}..." >> "$DEBUG_LOG"
+	local latest_commit=""
+	local latest_commit_date=""
+	local data_fetched_successfully=false
+
+	if [[ "$repo_uri" =~ github\.com ]]; then
+		local repo_slug=$(echo "$repo_uri" | sed -E 's|https?://github\.com/([^/]+/[^/]+).*|\1|')
+		local api_url="https://api.github.com/repos/$repo_slug/commits/$branch"
+		local auth_header="Authorization: token $GITHUB_TOKEN"
+		local api_response=$(curl -s -H "$auth_header" "$api_url")
+		echo "$api_response" >> "$JSON_LOG"
+		latest_commit=$(echo "$api_response" | jq -r '.sha')
+		latest_commit_date=$(echo "$api_response" | jq -r '.commit.committer.date')
+		echo "Latest commit: $latest_commit, Latest commit date: $latest_commit_date" >> "$DEBUG_LOG"
+		latest_commit_date=$(date -d "$latest_commit_date" "+%Y%m%d")  # Convert to local date format
+
+		if [[ "$latest_commit" != "null" && -n "$latest_commit_date" ]]; then
+			data_fetched_successfully=true
+			echo "GitHub data fetched for $repo_slug on branch $branch: SHA $latest_commit, Date $latest_commit_date" >> "$DEBUG_LOG"
+		else
+			echo "Error: Failed to retrieve valid commit data from GitHub for $repo_slug on branch $branch." >> "$ERROR_LOG"
+		fi
+	elif [[ "$repo_uri" =~ gitlab\.com ]]; then
+		local repo_slug=$(echo "$repo_uri" | sed -E 's|https?://gitlab\.com/([^/]+/[^/]+).*|\1|')
+		local encoded_slug=$(echo "$repo_slug" | sed 's/\//%2F/g')
+		local api_url="https://gitlab.com/api/v4/projects/$encoded_slug/repository/commits?ref_name=$branch"
+		local auth_header="Authorization: Bearer $GITLAB_TOKEN"
+		local api_response=$(curl -s -H "$auth_header" "$api_url")
+		echo "$api_response" >> "$JSON_LOG"
+		latest_commit=$(echo "$api_response" | jq -r '.[0].id')
+		latest_commit_date=$(echo "$api_response" | jq -r '.[0].committed_date')
+		latest_commit_date=$(date -d "$latest_commit_date" "+%Y%m%d")
+
+		if [[ "$latest_commit" != "null" && -n "$latest_commit_date" ]]; then
+			data_fetched_successfully=true
+			echo "GitLab data fetched for $repo_slug on branch $branch: SHA $latest_commit, Date $latest_commit_date" >> "$DEBUG_LOG"
+		else
+			echo "Error: Failed to retrieve valid commit data from GitLab for $repo_slug on branch $branch." >> "$ERROR_LOG"
+		fi
+	fi
+
+	if ! $data_fetched_successfully; then
+		echo "Attempting to clone or update the repository due to failure in fetching commit data..." >> "$DEBUG_LOG"
+		if ! clone_or_update_repo "$repo_uri" "$GIT_CLONES_DIR_PACKAGE" "$branch" ""; then
+			echo "Skipping update for ${PACKAGE_NAME} due to clone/update failure." >> "$ERROR_LOG"
+			return 1
+		fi
+		latest_commit=$(cd "$GIT_CLONES_DIR_PACKAGE" && git rev-parse HEAD)
+		latest_commit_date=$(cd "$GIT_CLONES_DIR_PACKAGE" && git log -n1 --pretty=format:%cI)
+		latest_commit_date=$(date -d "$latest_commit_date" "+%Y%m%d")
+	fi
+
+	echo "Latest commit: $latest_commit, Latest commit date: $latest_commit_date" >> "$DEBUG_LOG"
+
+	local existing_ebuilds=($(find "$package_path" -maxdepth 1 -type f -name "${PACKAGE_NAME}-*.ebuild" | sort -V))
+	if [[ ${#existing_ebuilds[@]} -eq 0 ]]; then
+		echo "No ebuild files found for ${PACKAGE_NAME}." >> "$ERROR_LOG"
+		return 1
+	fi
+
+	local version
+	if [[ "$use_date_only" == "yes" ]]; then
+		version="${latest_commit_date}"
+	else
+		version="${version_name}.${latest_commit_date}"
+	fi
+
+	local new_ebuild_filename="${PACKAGE_NAME}-${version}.ebuild"
+	local new_ebuild_file="${package_path}/${new_ebuild_filename}"
+
+	if [[ -f "$new_ebuild_file" ]]; then
+		echo "Ebuild file ${new_ebuild_filename} is already latest." >> "$DEBUG_LOG"
+		return 0
+	fi
+
+	local latest_ebuild="${existing_ebuilds[-1]}"
+	mv "$latest_ebuild" "$new_ebuild_file"
+	sed -i "s/SNAPSHOT=.*/SNAPSHOT=${latest_commit}/" "$new_ebuild_file"
+
+	finalize_update "$package_path" "$PACKAGE_NAME" "$new_ebuild_filename" "$version"
+}
+
+toolchain_bump() {
+	for gcc_version in "${GCC_MAJOR_VERSIONS[@]}"; do
+		GCC_VERSION=$(get_gcc_minor_version "$gcc_version")
+		update_ebuild "${REPO_PATH}/app-build/gcc" "https://gcc.gnu.org/git/gcc.git" "releases/gcc-${gcc_version}" "$GCC_VERSION" "no"
+	done
+
+	update_ebuild "${REPO_PATH}/app-build/binutils" "https://github.com/bminor/binutils-gdb" "${BINUTILS_BRANCH}" "${BINUTILS_VERSION}" "no"
+	update_ebuild "${REPO_PATH}/app-compression/xz-utils" "https://github.com/tukaani-project/xz" "v${XZ_UTILS_VERSION}" "$XZ_UTILS_VERSION" "no"
+	update_ebuild "${REPO_PATH}/app-compression/zstd" "https://github.com/facebook/zstd" "dev" "0" "yes"
+	update_ebuild "${REPO_PATH}/app-compression/lz4" "https://github.com/lz4/lz4" "dev" "0" "yes"
+
+	for glibc_version in "${GLIBC_VERSIONS[@]}"; do
+		update_ebuild "${REPO_PATH}/lib-core/glibc" "https://sourceware.org/git/glibc.git" "release/${glibc_version}/master" "$glibc_version" "no"
+	done
+
+	update_ebuild "${REPO_PATH}/lib-core/musl" "https://git.musl-libc.org/git/musl" "master" "0" "yes"
+
+	return 0
+}
+
+unsafe_bump() {
+	update_ebuild "${REPO_PATH}/app-fs/efibootmgr" "https://github.com/rhinstaller/efibootmgr" "main" "0" "yes"
+
+	return 0
+}
+
+branch_bump() {
+	update_ebuild "${REPO_PATH}/app-core/gawk" "https://git.savannah.gnu.org/git/gawk" "gawk-${GAWK_VERSION}-stable" "$GAWK_VERSION" "no"
+	update_ebuild "${REPO_PATH}/app-core/systemd" "https://github.com/systemd/systemd-stable" "v${SYSTEMD_VERSION}-stable" "$SYSTEMD_VERSION" "no"
+	update_ebuild "${REPO_PATH}/app-core/util-linux" "https://github.com/util-linux/util-linux" "stable/v${UTIL_LINUX_VERSION}" "$UTIL_LINUX_VERSION" "no"
+	update_ebuild "${REPO_PATH}/app-lang/perl" "https://github.com/Perl/perl5" "maint-${PERL_VERSION}" "$PERL_VERSION" "no"
+	update_ebuild "${REPO_PATH}/app-lang/python" "https://github.com/python/cpython" "${PYTHON_VERSION}" "$PYTHON_VERSION" "no"
+	update_ebuild "${REPO_PATH}/app-lang/tcl" "https://github.com/tcltk/tcl" "${TCL_BRANCH}-branch" "$TCL_VERSION" "no"
+	update_ebuild "${REPO_PATH}/app-lang/yasm" "https://github.com/yasm/yasm" "master" "0" "yes"
+	update_ebuild "${REPO_PATH}/app-net/bind-tools" "https://github.com/isc-projects/bind9" "bind-${BIND_TOOLS_VERSION}" "${BIND_TOOLS_VERSION}" "no"
+	update_ebuild "${REPO_PATH}/app-server/nodejs" "https://github.com/nodejs/node" "v${NODEJS_VERSION}.x" "$NODEJS_VERSION" "no"
+	update_ebuild "${REPO_PATH}/lib-net/openssl" "https://github.com/openssl/openssl" "openssl-${OPENSSL_VERSION}" "$OPENSSL_VERSION" "no"
+	update_ebuild "${REPO_PATH}/app-build/llvm" "https://github.com/llvm/llvm-project" "release/${LLVM_VERSION}.x" "$LLVM_VERSION" "no"
+	update_ebuild "${REPO_PATH}/lib-core/sqlite" "https://github.com/sqlite/sqlite" "branch-${SQLITE_VERSION}" "$SQLITE_VERSION" "no"
+
+	return 0
+}
+
+main

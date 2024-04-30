@@ -7,7 +7,7 @@ inherit xdg meson flag-o-matic
 DESCRIPTION="Audacious Player - Your music, your way, no exceptions"
 HOMEPAGE="https://audacious-media-player.org/"
 
-SNAPSHOT=9d689200208356f6495ea6ba770362a8940676cf
+SNAPSHOT=bd66a0895450b7bc739aee48ae43683758765802
 SRC_URI="https://github.com/audacious-media-player/audacious/archive/${SNAPSHOT}.tar.gz -> audacious-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/audacious-${SNAPSHOT}"
 

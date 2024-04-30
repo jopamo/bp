@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Userspace access to USB devices"
 HOMEPAGE="http://libusb.info/ https://github.com/libusb/libusb"
 
-SNAPSHOT=43107c84e4a5f6b15c296eff8cc3578100f35dce
+SNAPSHOT=f8a6c412f51c974d8c70fd100e28b3b69b9d3318
 SRC_URI="https://github.com/libusb/libusb/archive/${SNAPSHOT}.tar.gz -> libusb-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libusb-${SNAPSHOT}"
 

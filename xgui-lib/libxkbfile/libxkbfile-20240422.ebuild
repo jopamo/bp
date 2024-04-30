@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X.Org xkbfile library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=948cbfb38a76df395e7d9458c472901bcfefb969
+SNAPSHOT=b4c6069ecc1a6b03051e06aecba04e828fb0d945
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxkbfile/-/archive/${SNAPSHOT}/libxkbfile-${SNAPSHOT}.tar.bz2 -> libxkbfile-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxkbfile-${SNAPSHOT}"
 

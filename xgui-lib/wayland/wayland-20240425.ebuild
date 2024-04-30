@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="Wayland protocol libraries"
 HOMEPAGE="https://wayland.freedesktop.org/ https://gitlab.freedesktop.org/wayland/wayland"
 
-SNAPSHOT=c5d145a602581ee70f3ee87566ccb5cf1ff6cce8
+SNAPSHOT=69633202180acce9d0d5ab4037d80291c71b2307
 SRC_URI="https://gitlab.freedesktop.org/wayland/wayland/-/archive/${SNAPSHOT}/wayland-${SNAPSHOT}.tar.bz2 -> wayland-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/wayland-${SNAPSHOT}"
 

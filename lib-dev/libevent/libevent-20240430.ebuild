@@ -7,7 +7,7 @@ inherit flag-o-matic autotools
 DESCRIPTION="Library to execute a function when a specific event occurs on a file descriptor"
 HOMEPAGE="http://libevent.org/"
 
-SNAPSHOT=e0a4574ba2cbcdb64bb2b593e72be7f7f4010746
+SNAPSHOT=eec47a67100f5520e91057b68b4ff24b02913257
 SRC_URI="https://github.com/libevent/libevent/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="Library to handle input devices in Wayland"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/libinput/"
 
-SNAPSHOT=955158f9824da05dcd71f3e8731cd5d51c3d262f
+SNAPSHOT=0c347a97287f487dc31a1194d2d431a210fe04d4
 SRC_URI="https://gitlab.freedesktop.org/libinput/libinput/-/archive/${SNAPSHOT}/libinput-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

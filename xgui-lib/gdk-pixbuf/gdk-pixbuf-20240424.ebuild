@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="Image loading library for GTK+"
 HOMEPAGE="https://git.gnome.org/browse/gdk-pixbuf"
 
-SNAPSHOT=b2b0812889df046c742e78f9925de8ea1d78d0a3
+SNAPSHOT=f5b484b6e6b4eb0f625fe83373511b2e5293d74b
 SRC_URI="https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

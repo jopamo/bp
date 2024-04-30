@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="Command-line tool for structural, content-preserving transformation of PDF files"
 HOMEPAGE="http://qpdf.sourceforge.net/"
 
-SNAPSHOT=58c31fdd5e9e633281cb6830d63427da050fbe41
+SNAPSHOT=6ae439f180b300523527038b0537e4c4c2dcac7d
 SRC_URI="https://github.com/qpdf/qpdf/archive/${SNAPSHOT}.tar.gz -> qpdf-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/qpdf-${SNAPSHOT}"
 

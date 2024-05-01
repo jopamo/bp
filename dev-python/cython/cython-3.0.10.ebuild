@@ -51,7 +51,6 @@ distutils_enable_sphinx docs \
 
 python_compile() {
 	filter-flags -Wl,-z,defs
-	filter-flags -Wl,-z,defs
 	# Python gets confused when it is in sys.path before build.
 	local -x PYTHONPATH=
 

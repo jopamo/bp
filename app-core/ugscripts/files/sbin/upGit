@@ -29,7 +29,7 @@ package_list=(
 	"musl"
 	"obconf-qt"
 	"openjade"
-	"qtermwidget"
+	"qterm*"
 	"swig"
 	"wpa_supplicant"
 	"x265"
@@ -86,11 +86,21 @@ done
 replace_placeholder() {
 	local output_file="$FINAL_SCRIPT"
 	local temp_file="${output_file}.tmp"
+
+	if [ ! -s "$UPDATE_FILE" ]; then
+		echo "No updates to apply."
+		exit 1
+	fi
+
 	local replacement_text=$(cat "$UPDATE_FILE")
 
-	replacement_text_escaped=$(printf '%s\n' "$replacement_text" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
+	local replacement_text_escaped=$(printf '%s\n' "$replacement_text" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
+
 	sed "s|REPLACE_ME|${replacement_text_escaped}|g" "$output_file" > "$temp_file" && mv "$temp_file" "$output_file"
+
+	return 0
 }
+
 
 get_branch() {
 	local repo_url="$1"
@@ -236,19 +246,21 @@ process_repository_file() {
 
 	for skip_pattern in "${!skip_packages[@]}"; do
 		if [[ "$package_name" == $skip_pattern ]]; then
-			echo "Skipping $package_name as it is in skip list." >> "$DEBUG_LOG"
+			if [[ " ${specific_packages[*]} " =~ " $package_name " ]]; then
+				echo "Skipping $package_name as it is in skip list."
+			fi
 			return 0
 		fi
 	done
 
 	if (( ${#specific_packages[@]} != 0 )) && ! [[ " ${specific_packages[*]} " =~ " $package_name " ]]; then
-		echo "Skipping $package_name as it is not in the list of specified packages." >> "$DEBUG_LOG"
 		return 0
 	fi
 
+	echo "Processing $package_name..."
+
 	grep -E 'SRC_URI="[^"]+"' "$ebuild_file" | while IFS= read -r line; do
 		local raw_url=$(echo "$line" | grep -oE 'https?://[^"]+')
-		echo "raw_url $raw_url" >> "$DEBUG_LOG"
 		process_url "$ebuild_file" "$raw_url" "$package_path"
 	done
 }

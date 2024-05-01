@@ -3,13 +3,13 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( python3_{9..12} pypy3 )
+PYTHON_COMPAT=( python3_{10..12} pypy3 )
 
 inherit distutils-r1
 
 DESCRIPTION="Wrappers to build Python packages using PEP 517 hooks"
 HOMEPAGE="
-	https://pypi.org/project/pyproject_hooks/
+	https://pypi.org/project/pyproject-hooks/
 	https://github.com/pypa/pyproject-hooks/
 	https://pyproject-hooks.readthedocs.io/
 "
@@ -22,14 +22,12 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="
-	$(python_gen_cond_dep '
-		dev-python/tomli[${PYTHON_USEDEP}]
-	' 3.{8..10})
-"
 BDEPEND="
 	test? (
 		dev-python/testpath[${PYTHON_USEDEP}]
+		$(python_gen_cond_dep '
+			dev-python/tomli[${PYTHON_USEDEP}]
+		' 3.10)
 	)
 "
 

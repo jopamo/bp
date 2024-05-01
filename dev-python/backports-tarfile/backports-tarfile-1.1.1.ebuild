@@ -4,7 +4,6 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
-PYPI_NO_NORMALIZE=1
 PYPI_PN=${PN/-/.}
 # This is a backport from Python 3.12.
 PYTHON_COMPAT=( pypy3 python3_{10..11} )
@@ -20,6 +19,15 @@ HOMEPAGE="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+BDEPEND="
+	test? (
+		dev-python/jaraco-test[${PYTHON_USEDEP}]
+		=dev-python/pytest-8.0*[${PYTHON_USEDEP}]
+	)
+"
+
+distutils_enable_tests pytest
 
 src_configure() {
 	grep -q 'build-backend = "setuptools' pyproject.toml ||

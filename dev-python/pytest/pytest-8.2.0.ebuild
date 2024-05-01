@@ -25,7 +25,7 @@ RDEPEND="
 	dev-python/iniconfig[${PYTHON_USEDEP}]
 	dev-python/packaging[${PYTHON_USEDEP}]
 	<dev-python/pluggy-2[${PYTHON_USEDEP}]
-	>=dev-python/pluggy-1.4[${PYTHON_USEDEP}]
+	>=dev-python/pluggy-1.5.0[${PYTHON_USEDEP}]
 	$(python_gen_cond_dep '
 		>=dev-python/exceptiongroup-1.0.0_rc8[${PYTHON_USEDEP}]
 		>=dev-python/tomli-1[${PYTHON_USEDEP}]

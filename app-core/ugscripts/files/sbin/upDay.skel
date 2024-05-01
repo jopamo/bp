@@ -65,11 +65,12 @@ show_help() {
 	echo "Usage: $0 [options]"
 	echo ""
 	echo "Options:"
-	echo "  --update-toolchain Update the toolchain ebuilds (GCC, Binutils, Glibc, etc.)"
-	echo "  --unsafe		   Update packages marked as unsafe"
-	echo "  --help			 Display this help and exit"
+	echo "  --update-toolchain   Update the toolchain ebuilds (GCC, Binutils, Glibc, etc.)"
+	echo "  --update-unsafe      Update packages marked as unsafe"
+	echo "  --update-branches    Update packages based on specific branches"
+	echo "  --help               Display this help and exit"
 	echo ""
-	echo "Without any options, the script updates all ebuilds except for toolchain and unsafe packages."
+	echo "Without any options, the script does not perform any updates."
 }
 
 main() {

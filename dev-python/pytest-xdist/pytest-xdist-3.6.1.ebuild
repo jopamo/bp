@@ -3,7 +3,6 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYPI_NO_NORMALIZE=1
 PYTHON_COMPAT=( python3_{10..12} pypy3 )
 
 inherit distutils-r1 pypi
@@ -14,14 +13,14 @@ HOMEPAGE="
 	https://github.com/pytest-dev/pytest-xdist/
 "
 
-SLOT="0"
 LICENSE="MIT"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	dev-python/execnet[${PYTHON_USEDEP}]
+	>=dev-python/execnet-2.1[${PYTHON_USEDEP}]
 	dev-python/psutil[${PYTHON_USEDEP}]
-	>=dev-python/pytest-6.2.0[${PYTHON_USEDEP}]
+	>=dev-python/pytest-7.0.0[${PYTHON_USEDEP}]
 "
 
 BDEPEND="

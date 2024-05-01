@@ -26,11 +26,6 @@ BDEPEND="
 	${RDEPEND}
 "
 
-PATCHES=(
-	# minimal backport of upstream r9637, r9641
-	"${FILESDIR}/${P}-test.patch"
-)
-
 python_compile_all() {
 	# Generate html docs from reStructured text sources.
 
@@ -44,7 +39,6 @@ python_compile_all() {
 
 src_test() {
 	cd test || die
-	mkdir functional/output || die
 	distutils-r1_src_test
 }
 

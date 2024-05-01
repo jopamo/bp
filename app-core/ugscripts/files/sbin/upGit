@@ -20,6 +20,7 @@ UPDATE_FILE="${TMP_DIR}/update_ebuild_commands.txt"
 
 default_branch=""
 repository_url=""
+option=""
 
 package_list=(
 	"*lxqt*"
@@ -40,9 +41,7 @@ for pkg in "${package_list[@]}"; do
 done
 
 main() {
-	mkdir -p "$TMP_DIR"
-	mkdir -p "$SHARE_DIR"
-	mkdir -p "$GIT_CLONES_DIR"
+	mkdir -p "$TMP_DIR" "$SHARE_DIR" "$GIT_CLONES_DIR"
 	: > "$UPDATE_FILE"
 	: > "$ERROR_LOG"
 	: > "$JSON_LOG"
@@ -51,10 +50,30 @@ main() {
 
 	cp $SKEL_FILE $FINAL_SCRIPT
 
-	find "$REPO_PATH" -type f -regextype posix-extended -regex '.*-[0-9]{8}\.ebuild$' \
-		-exec grep -l 'SNAPSHOT' {} + | xargs -r grep -L 'EGIT_REPO_URI' | while read -r ebuild_file; do
-		process_repository_file "$ebuild_file"
-	done
+	if [ -n "$option" ]; then
+		echo "Option $option selected, executing upDay with this option..."
+		chmod +x "$FINAL_SCRIPT"
+		"$FINAL_SCRIPT" "$option"
+	else
+		echo "No option selected, updating all packages or the specified ones..."
+		update_packages
+	fi
+}
+
+update_packages() {
+	if [[ ${#specific_packages[@]} -eq 0 ]]; then
+		find "$REPO_PATH" -type f \( -name "*.ebuild" -o -name "*.eclass" \) \
+			-exec grep -l 'SNAPSHOT' {} + | xargs -r grep -L 'EGIT_REPO_URI' | while read -r ebuild_file; do
+			process_repository_file "$ebuild_file"
+		done
+	else
+		for pkg in "${specific_packages[@]}"; do
+			find "$REPO_PATH" -type f \( -name "*$pkg*.ebuild" -o -name "*$pkg*.eclass" \) \
+				-exec grep -l 'SNAPSHOT' {} + | xargs -r grep -L 'EGIT_REPO_URI' | while read -r ebuild_file; do
+				process_repository_file "$ebuild_file"
+			done
+		done
+	fi
 
 	sort "$ERROR_LOG" | uniq > "${ERROR_LOG}.tmp" && mv "${ERROR_LOG}.tmp" "$ERROR_LOG"
 	sort "$UPDATE_FILE" | uniq > "${UPDATE_FILE}.tmp" && mv "${UPDATE_FILE}.tmp" "$UPDATE_FILE"
@@ -64,16 +83,35 @@ main() {
 	"$FINAL_SCRIPT"
 }
 
-specific_packages=()
+show_help() {
+	echo "Usage: $0 [options] [package1 package2 ... packageN]"
+	echo ""
+	echo "Options:"
+	echo "  --update-toolchain   Update the toolchain ebuilds (GCC, Binutils, Glibc, etc.)"
+	echo "  --update-unsafe      Update packages marked as unsafe"
+	echo "  --update-branches    Update packages based on specific branches"
+	echo "  --help               Display this help and exit"
+	echo ""
+	echo "Without any options, the script updates all packages."
+}
+
 while (( "$#" )); do
 	case "$1" in
+		--update-toolchain | --update-unsafe | --update-branches)
+			if [ -n "$option" ]; then
+				echo "Error: Multiple options are not allowed."
+				exit 1
+			fi
+			option="$1"
+			shift
+			;;
 		--help)
-			echo "Usage: $0 [package1] [package2] ... [packageN]"
-			echo "       If no packages are specified, all packages are updated."
+			show_help
 			exit 0
 			;;
 		-*|--*)
 			echo "Error: Unsupported flag $1" >&2
+			show_help
 			exit 1
 			;;
 		*)

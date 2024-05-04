@@ -2,18 +2,17 @@
 
 EAPI=8
 
-inherit cmake flag-o-matic
+inherit cmake flag-o-matic git-r3
 
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
-
-SNAPSHOT=e6c3289804a67ea0bb6a86fadbe454dd93b8d855
-SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
+EGIT_REPO_URI="https://github.com/llvm/llvm-project"
+EGIT_BRANCH="release/$(ver_cut 1).x"
+S="${WORKDIR}/${P}/llvm"
 
 LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
-KEYWORDS="amd64"
+#KEYWORDS="amd64"
 
 IUSE="bolt +clang +clang-tools-extra +compiler-rt cross-project-tests debug libc
 	libclc +lld lldb mlir openmp polly pstl test libunwind llvm-libgcc"
@@ -67,17 +66,21 @@ src_configure() {
     filter-flags -ftree-loop-distribution
 	filter-flags -fuse-linker-plugin
 	filter-flags -fcf-protection=full
-    filter-flags -fstack-clash-protection
+	filter-flags -fstack-clash-protection
+	filter-flags -floop-parallelize-all
+	filter-flags -floop-interchange
 
-    replace-flags -O3 -O2
-    #-march=native -pipe -fuse-linker-plugin -Wall -Wformat -Wformat-security -fno-math-errno -fno-signed-zeros -fno-trapping-math  -fexceptions -fpie -fpic -fasynchronous-unwind-tables -fexceptions -DNDEBUG -march=native -O3 -pipe -fuse-linker-plugin -Wall -Wformat -Wformat-security -fno-math-errno -fno-signed-zeros -fno-trapping-math -fcf-protection=full -fstack-clash-protection -fexceptions -fpie -fpic -fasynchronous-unwind-tables -fexceptions
+    replace-flags -O3 -O1
+
+    filter-flags -flto
 
 	local mycmakeargs=(
-		-DLLVM_ENABLE_PROJECTS="${LLVM_PROJECTS}"
+		-DLLVM_ENABLE_PROJECTS=all
 		-DLLVM_APPEND_VC_REV=OFF
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
 		-DLLVM_LIBDIR_SUFFIX=${libdir#lib}
 		-DBUILD_SHARED_LIBS=OFF
+		-DLLVM_BUILD_LLVM_DYLIB=ON
 		-DLLVM_LINK_LLVM_DYLIB=ON
 		-DLLVM_TARGETS_TO_BUILD=$(usex arm64 'AArch64' 'X86')
 		-DLLVM_BUILD_TESTS=$(usex test)
@@ -98,7 +101,7 @@ src_configure() {
 		-DLLVM_ENABLE_DOXYGEN=OFF
 		-DLLVM_INSTALL_UTILS=ON
 		-DLLVM_BINUTILS_INCDIR="${EPREFIX}"/usr/include
-		-DLLVM_USE_SANITIZER=Address
+		#-DLLVM_USE_SANITIZER=Address
 	)
 
 	use debug || local -x CPPFLAGS="${CPPFLAGS} -DNDEBUG"

@@ -192,7 +192,7 @@ update_ebuild() {
 	local version_name="$4"
 	local use_date_only="$5"
 	local PACKAGE_NAME=$(basename "$package_path")
-	local GIT_CLONES_DIR_PACKAGE="${GIT_CLONES_DIR}/${PACKAGE_NAME}"
+	local GIT_CLONES_DIR_PACKAGE="${GIT_CLONES_DIR}/${PACKAGE_NAME}-${version_name}"
 
 	echo "Updating ${PACKAGE_NAME}..." >> "$DEBUG_LOG"
 	local latest_commit=""
@@ -248,17 +248,24 @@ update_ebuild() {
 
 	echo "Latest commit: $latest_commit, Latest commit date: $latest_commit_date" >> "$DEBUG_LOG"
 
-	local existing_ebuilds=($(find "$package_path" -maxdepth 1 -type f -name "${PACKAGE_NAME}-*.ebuild" | sort -V))
-	if [[ ${#existing_ebuilds[@]} -eq 0 ]]; then
-		echo "No ebuild files found for ${PACKAGE_NAME}." >> "$ERROR_LOG"
-		return 1
-	fi
-
 	local version
 	if [[ "$use_date_only" == "yes" ]]; then
 		version="${latest_commit_date}"
 	else
 		version="${version_name}.${latest_commit_date}"
+	fi
+
+	local search_pattern
+	if [[ "$version_name" == "0" ]]; then
+		search_pattern="${PACKAGE_NAME}-*.ebuild"
+	else
+		search_pattern="${PACKAGE_NAME}-${version_name}*.ebuild"
+	fi
+
+	local existing_ebuilds=($(find "$package_path" -maxdepth 1 -type f -name "$search_pattern" | sort -V))
+	if [[ ${#existing_ebuilds[@]} -eq 0 ]]; then
+		echo "No ebuild files found for ${PACKAGE_NAME} matching pattern ${search_pattern}." >> "$ERROR_LOG"
+		return 1
 	fi
 
 	local new_ebuild_filename="${PACKAGE_NAME}-${version}.ebuild"

@@ -1,0 +1,6 @@
+# redis runtime directory
+d /run/redis 0755 redis root -
+d /var/lib/redis 0700 redis redis
+d /var/log/redis 0700 redis redis
+d /etc/redis 0755 root redis
+f /etc/redis/sentinel.conf 0664 root redis

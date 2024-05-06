@@ -18,6 +18,7 @@ KEYWORDS="amd64 arm64"
 IUSE="debug lazy-lock static-libs stats xmalloc"
 
 src_prepare() {
+	echo "5.3.0-0-g${SNAPSHOT}" > "${S}/VERSION"
 	default
 	eautoreconf
 

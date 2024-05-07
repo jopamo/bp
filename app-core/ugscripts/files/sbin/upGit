@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 declare -A repo_checked_cache
 declare -A skip_packages
 
@@ -62,13 +64,13 @@ main() {
 
 update_packages() {
 	if [[ ${#specific_packages[@]} -eq 0 ]]; then
-		find "$REPO_PATH" -type f \( -name "*.ebuild" -o -name "*.eclass" \) \
+		find "$REPO_PATH" -type f -regextype posix-extended -regex ".*-[0-9]{8}\.ebuild$" \
 			-exec grep -l 'SNAPSHOT' {} + | xargs -r grep -L 'EGIT_REPO_URI' | while read -r ebuild_file; do
 			process_repository_file "$ebuild_file"
 		done
 	else
 		for pkg in "${specific_packages[@]}"; do
-			find "$REPO_PATH" -type f \( -name "*$pkg*.ebuild" -o -name "*$pkg*.eclass" \) \
+			find "$REPO_PATH" -type f -regextype posix-extended -regex "$pkg-[0-9]{8}\.ebuild$" \
 				-exec grep -l 'SNAPSHOT' {} + | xargs -r grep -L 'EGIT_REPO_URI' | while read -r ebuild_file; do
 				process_repository_file "$ebuild_file"
 			done

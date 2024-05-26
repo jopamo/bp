@@ -100,7 +100,7 @@ src_install() {
 	fi
 
 	# Remove shared info pages
-	rm "${ED}"/usr/share/info/{annotate,bfd,ctf-spec}.info* || die
+	rm "${ED}"/usr/share/info/{annotate,bfd,ctf,sframe-spec}.info* || die
 
 	if use python; then
 		python_optimize "${ED}"/usr/share/gdb/python/gdb

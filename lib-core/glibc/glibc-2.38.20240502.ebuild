@@ -109,6 +109,8 @@ src_configure() {
 	filter-flags -fassociative-math
 	filter-flags -fno-semantic-interposition
 
+	use debug && append-flags -fno-builtin-strlen
+
 	export MAKEINFO=/dev/null
 
 	myconf=(
@@ -231,6 +233,8 @@ src_install() {
 	echo -e "en_US.UTF-8 UTF-8\nen_US ISO-8859-1" > "${ED}"/usr/share/i18n/locales/SUPPORTED
 
 	dodir /usr/lib/locale
+
+	use debug && dostrip -x /usr/lib/ld-linux-x86-64.so.2
 }
 
 pkg_preinst() {

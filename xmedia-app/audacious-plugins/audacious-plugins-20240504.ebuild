@@ -70,7 +70,6 @@ src_configure() {
 	local emesonargs=(
 		#gui toolkits
 		-D gtk=false
-		-D gtk3=false
 		-D qt=true
 		-D qt5=true
 

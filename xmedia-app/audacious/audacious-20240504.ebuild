@@ -30,7 +30,6 @@ src_configure() {
 
 	local emesonargs=(
 		-D gtk=false
-		-D gtk3=false
 		-D qt=true
 		-D qt5=true
 		)

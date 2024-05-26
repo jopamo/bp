@@ -2,6 +2,140 @@
 
 REPO_PATH="/var/db/repos/bp"
 
+PROGNAME="upApp"
+
+TMP_DIR="/tmp/${PROGNAME}"
+
+DEBUG_LOG="${TMP_DIR}/${PROGNAME}-debug.log"
+ERROR_LOG="${TMP_DIR}/${PROGNAME}-error.log"
+JSON_LOG="${TMP_DIR}/${PROGNAME}-json.log"
+
+mkdir -p "$TMP_DIR"
+	: > "$ERROR_LOG"
+	: > "$JSON_LOG"
+	: > "$DEBUG_LOG"
+
+handle_github() {
+    local repo_url="$1"
+    local repo_slug=$(echo "$repo_url" | sed -E 's|https?://github\.com/([^/]+/[^/]+).*|\1|')
+    local encoded_slug=$(echo "$repo_slug" | sed 's/\//%2F/g')
+
+    echo "repo_slug $repo_slug" >> "$DEBUG_LOG"
+    echo "urlencode $encoded_slug" >> "$DEBUG_LOG"
+
+    local releases_api_url="https://api.github.com/repos/$repo_slug/releases/latest"
+    local tags_api_url="https://api.github.com/repos/$repo_slug/tags"
+    local auth_header="Authorization: token $GITHUB_TOKEN"
+    echo "auth_header $auth_header" >> "$DEBUG_LOG"
+
+    local latest_release_info=$(curl -s -H "$auth_header" "$releases_api_url")
+    local latest_version=$(echo "$latest_release_info" | jq -r '.tag_name')
+    echo "api_url $releases_api_url" >> "$DEBUG_LOG"
+    echo "latest_release_info $latest_release_info" >> "$JSON_LOG"
+	echo "latest_version $latest_version" >> "$DEBUG_LOG"
+
+    if [[ -z "$latest_version" || "$latest_version" == "null" ]]; then
+        echo "No valid release found, checking tags..." >> "$DEBUG_LOG"
+        local latest_tag_info=$(curl -s -H "$auth_header" "$tags_api_url" | jq -r '.[0].name')
+        echo "api_url $tags_api_url" >> "$DEBUG_LOG"
+        echo "latest_tag_info $latest_tag_info" >> "$JSON_LOG"
+
+        if [[ -z "$latest_tag_info" || "$latest_tag_info" == "null" ]]; then
+            echo "Failed to fetch latest tag info" >> "$ERROR_LOG"
+            return 1
+        else
+            latest_version="$latest_tag_info"
+        fi
+    fi
+
+    latest_version="${latest_version#v}"
+    latest_version="${latest_version//_/\.}"
+
+    echo "Successfully fetched version info: $latest_version" >> "$DEBUG_LOG"
+    echo "$latest_version"
+    return 0
+}
+
+handle_gitlab() {
+    local repo_url="$1"
+    local repo_slug=$(echo "$repo_url" | sed -E 's|https?://gitlab\.com/([^/]+/[^/]+).*|\1|')
+    local encoded_slug=$(echo "$repo_slug" | sed 's/\//%2F/g')
+    local api_url="https://gitlab.com/api/v4/projects/$encoded_slug/releases"
+    local auth_header="Authorization: Bearer $GITLAB_TOKEN"
+    local latest_release_info=$(curl -s -H "$auth_header" "$api_url" | jq '[.[] | select(.released_at)] | max_by(.released_at)')
+    if [[ $? -ne 0 || -z "$latest_release_info" ]]; then
+        echo "Failed to fetch latest release info"
+        return 1
+    else
+        local latest_version=$(echo "$latest_release_info" | jq -r '.tag_name')
+        echo "$latest_version"
+    fi
+}
+
+update_github_package() {
+    local category="$1"
+    local package_name="$2"
+    local repo_url="$3"
+    local latest_version=$(handle_github "$repo_url")
+    if [[ $? -eq 0 ]]; then
+        update_ebuild "${category}/${package_name}" "${package_name}" "${latest_version}"
+    else
+        echo "Failed to update $package_name package" >> "$ERROR_LOG"
+    fi
+}
+
+update_ebuild() {
+    local package_path="${REPO_PATH}/$1"
+    local package_name="$2"
+    local latest_version="$3"
+
+    local new_ebuild_filename="${package_name}-${latest_version}.ebuild"
+    local new_ebuild_file="${package_path}/${new_ebuild_filename}"
+
+    local ebuild_file=$(find "${package_path}" -type f -name "${package_name}-[0-9]*.ebuild" | sort -V | tail -n 1)
+
+    local current_version=$(basename "$ebuild_file" | sed -e "s/^${package_name}-//" -e 's/\.ebuild$//')
+
+    echo "Current version: $current_version, Latest version: $latest_version"
+
+    if [[ "$current_version" == "$latest_version" ]]; then
+        echo "No update needed for ${package_name} as it is already at the latest version: ${latest_version}."
+        return
+    fi
+
+    if [[ -f "$new_ebuild_file" ]]; then
+        echo "Ebuild file ${new_ebuild_filename} already exists. No update needed."
+        return
+    fi
+
+    if [[ -z "$ebuild_file" ]]; then
+        echo "No existing ebuild file found for ${package_name} at ${package_path}."
+        return 1
+    fi
+
+    mv "$ebuild_file" "$new_ebuild_file"
+    echo "New ebuild file created for ${package_name}: ${new_ebuild_filename}"
+
+    if finalize_update "$package_path" "$package_name" "$new_ebuild_filename" "$latest_version"; then
+        echo "Ebuild successfully updated for ${package_name}: ${new_ebuild_filename}"
+    else
+        echo "Failed to update ebuild for ${package_name}"
+        return 1
+    fi
+}
+
+update_gitlab_package() {
+    local category="$1"
+    local package_name="$2"
+    local repo_url="$3"
+    local latest_version=$(handle_gitlab "$repo_url")
+    if [[ $? -eq 0 ]]; then
+        update_ebuild "${category}/${package_name}" "$package_name" "$latest_version"
+    else
+        echo "Failed to update $package_name package"
+    fi
+}
+
 finalize_update() {
 	local package_path="$1"
 	local package_name="$2"
@@ -23,42 +157,6 @@ finalize_update() {
 		git push origin HEAD)
 
 	echo "Ebuild updated for ${package_name}: ${new_ebuild_filename}"
-}
-
-fetch_latest_boost_version() {
-	local boost_url="https://www.boost.org/users/history/"
-	local latest_version=$(curl -s "$boost_url" | grep -oP 'data-current-version="\K\d+\.\d+\.\d+')
-	if [[ -z "$latest_version" ]]; then
-		echo "Failed to fetch the latest Boost version"
-		return 1
-	fi
-	echo "$latest_version"
-}
-
-fetch_latest_curl_version() {
-	local curl_page_url="https://curl.se/download/"
-	local latest_version=$(curl -s "$curl_page_url" | \
-			grep -oP '<td>\K\d+\.\d+\.\d+(?=</td>)' | \
-			sort -Vr | \
-		head -1)
-	if [[ -z "$latest_version" ]]; then
-		echo "Failed to fetch the latest cURL version"
-		return 1
-	fi
-	echo "$latest_version"
-}
-
-fetch_latest_vim_version() {
-	local vim_git_url="https://github.com/vim/vim.git"
-	local latest_version=$(git ls-remote --tags --sort="-v:refname" "$vim_git_url" | \
-			grep -oP 'refs/tags/v\K\d+\.\d+\.\d+' | \
-			sort -urV | \
-		head -1)
-	if [[ -z "$latest_version" ]]; then
-		echo "Failed to fetch the latest Vim version"
-		return 1
-	fi
-	echo "$latest_version"
 }
 
 fetch_latest_gnu_version() {
@@ -92,57 +190,6 @@ fetch_latest_cryptsetup_version() {
 	fi
 
 	echo "$latest_final_version"
-}
-
-fetch_latest_ncurses_version() {
-	local base_url="https://invisible-island.net/archives/ncurses/"
-	# Scrape the main page for the latest version directory
-	local latest_version=$(curl -s "$base_url" | grep -oP 'href="\K[0-9.]+(?=/)"' | sort -Vr | head -1)
-	if [[ -z "$latest_version" ]]; then
-		echo "Failed to fetch the latest ncurses version directory"
-		return 1
-	fi
-
-	# Navigate to the latest version directory and fetch the latest patch file
-	local version_page="${base_url}${latest_version}/"
-	local latest_patch=$(curl -s "$version_page" | grep -oP 'ncurses-'$latest_version'-\K[0-9]{8}(?=\.patch\.gz)' | sort -Vr | head -1)
-	if [[ -z "$latest_patch" ]]; then
-		echo "Failed to find the latest ncurses patch for version $latest_version"
-		return 1
-	fi
-
-	# Combine the main version and the patch date
-	local full_version="${latest_version}.${latest_patch}"
-	echo "$full_version"
-}
-
-update_vim_ebuild() {
-	local PACKAGE_PATH="${REPO_PATH}/$1"
-	local PACKAGE_NAME="$2"
-	local latest_version="$3"
-
-	local vim_ebuild_file=$(find "${PACKAGE_PATH}" -type f -name "vim-*.ebuild" | sort | tail -n 1)
-
-	if [[ -z "$vim_ebuild_file" ]]; then
-		echo "No Vim ebuild file found."
-		return 1
-	fi
-
-	latest_version=${latest_version#v}
-
-	local new_ebuild_filename="${PACKAGE_NAME}-${latest_version}.ebuild"
-	local new_file_path="${PACKAGE_PATH}/${new_ebuild_filename}"
-
-	if [[ "$vim_ebuild_file" != "$new_file_path" ]]; then
-		mv "$vim_ebuild_file" "$new_file_path"
-		echo "Renamed Vim ebuild to $new_ebuild_filename."
-		(cd "${PACKAGE_PATH}" && pkgdev manifest)
-		finalize_update "$PACKAGE_PATH" "$PACKAGE_NAME" "$new_ebuild_filename" "$latest_version"
-		echo "Vim ebuild updated to version ${latest_version} in ${new_file_path}."
-	else
-		echo "Vim ebuild is already up to date with version $latest_version."
-		return 0
-	fi
 }
 
 update_gnu_package() {
@@ -188,58 +235,8 @@ update_git_package() {
 	fi
 }
 
-update_ebuild() {
-	local PACKAGE_PATH="${REPO_PATH}/$1"
-	local PACKAGE_NAME="$2"
-	local fetched_versions=$3
-
-	IFS=$'\n' read -rd '' -a versions <<< "$fetched_versions"
-	for version in "${versions[@]}"; do
-		local new_ebuild_filename="${PACKAGE_NAME}-${version}.ebuild"
-		local new_ebuild_file="${PACKAGE_PATH}/${new_ebuild_filename}"
-		local ebuild_file=$(find "${PACKAGE_PATH}" -maxdepth 1 -type f -name "${PACKAGE_NAME}-*.ebuild" | sort | tail -n 1)
-
-		if [[ -f "$new_ebuild_file" ]]; then
-			echo "Ebuild file ${new_ebuild_filename} already exists."
-			continue
-		fi
-		if [[ -z "$ebuild_file" ]]; then
-			echo "No ebuild file found for ${PACKAGE_NAME}."
-			continue
-		fi
-
-		mv "$ebuild_file" "$new_ebuild_file"
-		finalize_update "$PACKAGE_PATH" "$PACKAGE_NAME" "$new_ebuild_filename" "$version"
-
-		echo "Ebuild updated for ${PACKAGE_NAME}: ${new_ebuild_filename}"
-		break
-	done
-
-	if [[ ! -f "$new_ebuild_file" ]]; then
-		echo "Failed to update ebuild for ${PACKAGE_NAME}"
-		return 1
-	fi
-}
-
-boost_version=$(fetch_latest_boost_version)
-[[ $? -eq 0 ]] && update_ebuild "lib-dev/boost" "boost" "$boost_version"
-
-[[ $? -eq 0 ]] && update_ebuild "lib-dev/boost-build" "boost-build" "$boost_version"
-
-curl_version=$(fetch_latest_curl_version)
-[[ $? -eq 0 ]] && update_ebuild "app-net/curl" "curl" "$curl_version"
-
-vim_version=$(fetch_latest_vim_version)
-[[ $? -eq 0 ]] && update_vim_ebuild "app-core/vim" "vim" "$vim_version"
-
 cryptsetup_version=$(fetch_latest_cryptsetup_version)
 [[ $? -eq 0 ]] && update_ebuild "app-fs/cryptsetup" "cryptsetup" "$cryptsetup_version"
-
-ncurses_version=$(fetch_latest_ncurses_version)
-if [[ $? -eq 0 ]]; then
-	update_ebuild "lib-core/ncurses" "ncurses" "$ncurses_version"
-	update_ebuild "lib-core/ncurses5-compat" "ncurses5-compat" "$ncurses_version"
-fi
 
 if [[ $? -eq 0 ]]; then
 	update_gnu_package "autoconf-archive"
@@ -252,5 +249,12 @@ if [[ $? -eq 0 ]]; then
 	update_gnu_package "texinfo"
 fi
 
-update_git_package "app-util" "bc" "https://github.com/gavinhoward/bc.git" "false"
 update_git_package "app-net" "bluez" "https://git.kernel.org/pub/scm/bluetooth/bluez.git" "false"
+
+update_github_package "app-core" "vim" "https://github.com/vim/vim"
+update_github_package "app-util" "bc" "https://github.com/gavinhoward/bc"
+update_github_package "lib-core" "ncurses" "https://github.com/ThomasDickey/ncurses-snapshots"
+update_github_package "lib-core" "ncurses5-compat" "https://github.com/ThomasDickey/ncurses-snapshots"
+update_github_package "lib-dev" "boost" "https://github.com/boostorg/boost"
+update_github_package "lib-dev" "boost-build" "https://github.com/boostorg/boost"
+update_github_package "app-net" "curl" "https://github.com/curl/curl"

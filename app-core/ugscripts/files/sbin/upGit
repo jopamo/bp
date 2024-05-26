@@ -1,6 +1,5 @@
 #!/bin/bash
 
-set -x
 
 declare -A repo_checked_cache
 declare -A skip_packages

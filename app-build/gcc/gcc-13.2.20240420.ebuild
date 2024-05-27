@@ -54,6 +54,12 @@ src_prepare() {
 	filter-flags -fassociative-math
 	filter-flags -fno-semantic-interposition
 	filter-flags -fexceptions
+	filter-flags -Wl,-O3
+	filter-flags -floop-parallelize-all
+	filter-flags -floop-interchange
+	filter-flags -fno-math-errno
+	filter-flags -fno-signed-zeros
+	filter-flags -fno-trapping-math -fexceptions -fpie -fpic -fasynchronous-unwind-tables -fexceptions -Wl,-z,combreloc -Wl,-z,now -Wl,-z,relro
 
 	append-flags -Wa,--noexecstack
 

@@ -7,7 +7,7 @@ inherit distutils-r1
 DESCRIPTION="Multi-Language Vulkan/GL/GLES/EGL/GLX/WGL Loader-Generator"
 HOMEPAGE="https://github.com/EHfive/ldacBT"
 
-SNAPSHOT=5dd44f1f6980d9e890d36a16e55f11819319e08e
+SNAPSHOT=976973c758c526ee880e5a3e99b70b08345e9397
 SRC_URI="https://github.com/Dav1dde/glad/archive/${SNAPSHOT}.tar.gz -> glad-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/glad-${SNAPSHOT}"
 

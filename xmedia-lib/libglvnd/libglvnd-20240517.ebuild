@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="The GL Vendor-Neutral Dispatch library"
 HOMEPAGE="https://github.com/NVIDIA/libglvnd"
 
-SNAPSHOT=908086d22dc307d17d0eb35c522c35fd190718cc
+SNAPSHOT=606f6627cf481ee6dcb32387edc010c502cdf38b
 SRC_URI="https://github.com/NVIDIA/libglvnd/archive/${SNAPSHOT}.tar.gz -> libglvnd-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libglvnd-${SNAPSHOT}"
 

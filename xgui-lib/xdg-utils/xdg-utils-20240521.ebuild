@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Portland utils for cross-platform/cross-toolkit/cross-desktop interoperability"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/xdg-utils/"
 
-SNAPSHOT=54b6c1e4da163598c8e903978a29b543f97b0cda
+SNAPSHOT=f113a8b997dcb9527b9694d31bddcfa05096aecf
 SRC_URI="https://gitlab.freedesktop.org/xdg/xdg-utils/-/archive/${SNAPSHOT}/xdg-utils-${SNAPSHOT}.tar.bz2 -> xdg-utils-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/xdg-utils-${SNAPSHOT}"
 

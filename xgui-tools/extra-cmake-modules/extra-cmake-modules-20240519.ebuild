@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="Extra modules and scripts for CMake"
 HOMEPAGE="https://cgit.kde.org/extra-cmake-modules.git"
 
-SNAPSHOT=30f066c5f0295239b0b335a62c0c97e979313a7e
+SNAPSHOT=0eb01b5d116290340cd0d71c3bf731caa87a2393
 SRC_URI="https://github.com/KDE/extra-cmake-modules/archive/${SNAPSHOT}.tar.gz -> extra-cmake-modules-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/extra-cmake-modules-${SNAPSHOT}"
 

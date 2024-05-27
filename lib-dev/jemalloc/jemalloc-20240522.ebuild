@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Jemalloc is a general-purpose scalable concurrent allocator"
 HOMEPAGE="http://jemalloc.net/ https://github.com/jemalloc/jemalloc"
 
-SNAPSHOT=5afff2e44e8d31ef1e9eb01d6b1327fe111835ed
+SNAPSHOT=f9c0b5f7f8a917661db39289e38ec94d9d198f11
 SRC_URI="https://github.com/jemalloc/jemalloc/archive/${SNAPSHOT}.tar.gz -> jemalloc-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/jemalloc-${SNAPSHOT}"
 

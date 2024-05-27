@@ -8,7 +8,7 @@ DESCRIPTION="Secret Rabbit Code (aka libsamplerate) is a Sample Rate Converter f
 HOMEPAGE="http://www.mega-nerd.com/SRC/"
 
 SNAPSHOT=20819b6d31907b402d33c30e4a0295ce439c06e6
-SRC_URI="https://github.com/erikd/libsamplerate/archive/${SNAPSHOT}.tar.gz -> libsamplerate-${SNAPSHOT}.tar.gz"
+SRC_URI="https://github.com/libsndfile/libsamplerate/archive/${SNAPSHOT}.tar.gz -> libsamplerate-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libsamplerate-${SNAPSHOT}"
 
 LICENSE="BSD-2"

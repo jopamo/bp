@@ -7,7 +7,7 @@ inherit autotools xdg
 DESCRIPTION="freedesktop default icon theme."
 HOMEPAGE="https://gitlab.freedesktop.org/xdg/default-icon-theme.git"
 
-SNAPSHOT=b3f1207ccff5ce0ab45ead38031f98fc1abe9731
+SNAPSHOT=f83ba109a271d820761629b7be79a9e3b85b8a6d
 SRC_URI="https://gitlab.freedesktop.org/xdg/default-icon-theme/-/archive/${SNAPSHOT}/default-icon-theme-${SNAPSHOT}.tar.bz2 -> default-icon-theme-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/default-icon-theme-${SNAPSHOT}"
 

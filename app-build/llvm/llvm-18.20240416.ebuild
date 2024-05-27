@@ -2,26 +2,28 @@
 
 EAPI=8
 
-inherit cmake flag-o-matic git-r3
+inherit cmake flag-o-matic
 
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
-EGIT_REPO_URI="https://github.com/llvm/llvm-project"
-EGIT_BRANCH="release/$(ver_cut 1).x"
-S="${WORKDIR}/${P}/llvm"
+
+SNAPSHOT=e6c3289804a67ea0bb6a86fadbe454dd93b8d855
+SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
 
 LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
-#KEYWORDS="amd64"
+KEYWORDS="amd64"
 
-IUSE="bolt +clang +clang-tools-extra +compiler-rt cross-project-tests debug libc
+IUSE="bolt +clang-tools-extra cross-project-tests debug libc
 	libclc +lld lldb mlir openmp polly pstl test libunwind llvm-libgcc"
 
 DEPEND="
+	app-build/compiler-rt
 	lib-core/libedit
 	lib-core/libffi
-	virtual/curses
 	lib-core/libxml2
+	virtual/curses
 "
 
 RESTRICT="!test? ( test )"
@@ -35,14 +37,11 @@ src_configure() {
 	use libc && LLVM_ENABLE_RUNTIMES+=";libc"
 	use libunwind && LLVM_ENABLE_RUNTIMES+=";libunwind"
 	use pstl && LLVM_ENABLE_RUNTIMES+=";pstl"
-	use compiler-rt && LLVM_ENABLE_RUNTIMES+=";compiler-rt"
 	use openmp && LLVM_ENABLE_RUNTIMES+=";openmp"
 	use llvm-libgcc && LLVM_ENABLE_RUNTIMES+=";llvm-libgcc"
 
 	use bolt && LLVM_PROJECTS+=";bolt"
-	use clang && LLVM_PROJECTS+=";clang"
 	use clang-tools-extra && LLVM_PROJECTS+=";clang-tools-extra"
-	use compiler-rt && LLVM_PROJECTS+=";compiler-rt"
 	use cross-project-tests && LLVM_PROJECTS+=";cross-project-tests"
 	use libc && LLVM_PROJECTS+=";libc"
 	use libclc && LLVM_PROJECTS+=";libclc"
@@ -54,33 +53,36 @@ src_configure() {
 	use pstl && LLVM_PROJECTS+=";pstl"
 
 	filter-flags -D_FORTIFY_SOURCE*
+	filter-flags -Wl,-O3
 	filter-flags -Wl,-z,defs
 	filter-flags -fassociative-math
+	filter-flags -fcf-protection=full
+	filter-flags -fexceptions
 	filter-flags -fgraphite-identity
+	filter-flags -floop-interchange
+	filter-flags -floop-parallelize-all
 	filter-flags -flto*
+	filter-flags -fno-math-errno
 	filter-flags -fno-semantic-interposition
+	filter-flags -fno-signed-zeros
+	filter-flags -fno-trapping-math -fexceptions -fpie -fpic -fasynchronous-unwind-tables -fexceptions -Wl,-z,combreloc -Wl,-z,now -Wl,-z,relro
 	filter-flags -fstack-protector-strong
+	filter-flags -fuse-linker-plugin
     filter-flags -fgraphite-identity
     filter-flags -fipa-pta
     filter-flags -floop-nest-optimize
+    filter-flags -flto*
+    filter-flags -fstack-clash-protection
     filter-flags -ftree-loop-distribution
-	filter-flags -fuse-linker-plugin
-	filter-flags -fcf-protection=full
-	filter-flags -fstack-clash-protection
-	filter-flags -floop-parallelize-all
-	filter-flags -floop-interchange
 
-    replace-flags -O3 -O1
-
-    filter-flags -flto
+    replace-flags -O3 -O2
 
 	local mycmakeargs=(
-		-DLLVM_ENABLE_PROJECTS=all
+		-DLLVM_ENABLE_PROJECTS="${LLVM_PROJECTS}"
 		-DLLVM_APPEND_VC_REV=OFF
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
 		-DLLVM_LIBDIR_SUFFIX=${libdir#lib}
 		-DBUILD_SHARED_LIBS=OFF
-		-DLLVM_BUILD_LLVM_DYLIB=ON
 		-DLLVM_LINK_LLVM_DYLIB=ON
 		-DLLVM_TARGETS_TO_BUILD=$(usex arm64 'AArch64' 'X86')
 		-DLLVM_BUILD_TESTS=$(usex test)
@@ -94,14 +96,12 @@ src_configure() {
 		-DLLVM_ENABLE_RTTI=ON
 		-DLLVM_HOST_TRIPLE="${CHOST}"
 		-DOCAMLFIND=NO
-	    -DLLVM_ENABLE_RUNTIMES="all"
 		-DLLVM_BUILD_DOCS=OFF
 		-DLLVM_ENABLE_OCAMLDOC=OFF
 		-DLLVM_ENABLE_SPHINX=OFF
 		-DLLVM_ENABLE_DOXYGEN=OFF
 		-DLLVM_INSTALL_UTILS=ON
 		-DLLVM_BINUTILS_INCDIR="${EPREFIX}"/usr/include
-		#-DLLVM_USE_SANITIZER=Address
 	)
 
 	use debug || local -x CPPFLAGS="${CPPFLAGS} -DNDEBUG"

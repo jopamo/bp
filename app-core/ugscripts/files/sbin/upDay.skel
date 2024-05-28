@@ -21,6 +21,7 @@ init_logs() {
 
 GCC_MAJOR_VERSIONS=("12" "13")
 GLIBC_VERSIONS=("2.36" "2.38")
+GO_VERSIONS=("1.20" "1.22")
 
 BINUTILS_VERSION="2.41"
 XZ_UTILS_VERSION="5.4"
@@ -38,7 +39,6 @@ SQLITE_VERSION="3.45"
 
 GDB_VERSION="14"
 BASH_VERSION="5.2"
-GO_VERSION="1.22"
 LIBASSUAN_VERSION="2.5"
 LIBGCRYPT_VERSION="1.10"
 MPFR_VERSION="4.2"
@@ -48,14 +48,13 @@ TOR_VERSION="0.4.8"
 BASH_BRANCH="master"
 GDB_BRANCH="gdb-${GDB_VERSION}-branch"
 GLIBC_BRANCH="release/${GLIBC_VERSION}/master"
-GO_BRANCH="release-branch.go${GO_VERSION}"
 KGUIADDONS_BRANCH="kf${KDE_VERSION}"
 KWINDOWSYSTEM_BRANCH="kf${KDE_VERSION}"
 LIBASSUAN_BRANCH="LIBASSUAN-${LIBASSUAN_VERSION}-BRANCH"
 LIBGCRYPT_BRANCH="LIBGCRYPT-${LIBGCRYPT_VERSION}-BRANCH"
 TCL_BRANCH=$(echo "core-${TCL_VERSION}" | tr '.' '-')
 BINUTILS_BRANCH="binutils-$(echo "$BINUTILS_VERSION" | sed 's/\./_/')-branch"
-TOR_BRANCH="release-0.4.8"
+TOR_BRANCH="release-$TOR_VERSION"
 
 update_toolchain=false
 update_unsafe=false
@@ -310,20 +309,28 @@ unsafe_bump() {
 }
 
 branch_bump() {
-	update_ebuild "${REPO_PATH}/app-core/gawk" "https://git.savannah.gnu.org/git/gawk" "gawk-${GAWK_VERSION}-stable" "$GAWK_VERSION" "no"
-	update_ebuild "${REPO_PATH}/app-core/systemd" "https://github.com/systemd/systemd-stable" "v${SYSTEMD_VERSION}-stable" "$SYSTEMD_VERSION" "no"
-	update_ebuild "${REPO_PATH}/app-core/util-linux" "https://github.com/util-linux/util-linux" "stable/v${UTIL_LINUX_VERSION}" "$UTIL_LINUX_VERSION" "no"
-	update_ebuild "${REPO_PATH}/app-lang/perl" "https://github.com/Perl/perl5" "maint-${PERL_VERSION}" "$PERL_VERSION" "no"
-	update_ebuild "${REPO_PATH}/app-lang/python" "https://github.com/python/cpython" "${PYTHON_VERSION}" "$PYTHON_VERSION" "no"
+	update_ebuild "${REPO_PATH}/app-core/bash" "https://git.savannah.gnu.org/git/bash.git" "${BASH_BRANCH}" "$BASH_VERSION" "no"
+	update_ebuild "${REPO_PATH}/app-build/gdb" "https://sourceware.org/git/binutils-gdb.git" "${GDB_BRANCH}" "$GDB_VERSION" "no"
+	update_ebuild "${REPO_PATH}/lib-core/glibc" "https://sourceware.org/git/glibc.git" "${GLIBC_BRANCH}" "$GLIBC_VERSION" "no"
+	for go_version in "${GO_VERSIONS[@]}"; do
+		local GO_BRANCH="release-branch.go${go_version}"
+		update_ebuild "${REPO_PATH}/app-lang/go" "https://go.googlesource.com/go" "${GO_BRANCH}" "$go_version" "no"
+	done
+	update_ebuild "${REPO_PATH}/dev-libs/kde-frameworks/kguiaddons" "https://invent.kde.org/frameworks/kguiaddons.git" "${KGUIADDONS_BRANCH}" "$KDE_VERSION" "no"
+	update_ebuild "${REPO_PATH}/dev-libs/kde-frameworks/kwindowsystem" "https://invent.kde.org/frameworks/kwindowsystem.git" "${KWINDOWSYSTEM_BRANCH}" "$KDE_VERSION" "no"
+	update_ebuild "${REPO_PATH}/lib-core/libassuan" "https://dev.gnupg.org/source/libassuan.git" "${LIBASSUAN_BRANCH}" "$LIBASSUAN_VERSION" "no"
+	update_ebuild "${REPO_PATH}/lib-core/libgcrypt" "https://dev.gnupg.org/source/libgcrypt.git" "${LIBGCRYPT_BRANCH}" "$LIBGCRYPT_VERSION" "no"
 	update_ebuild "${REPO_PATH}/app-lang/tcl" "https://github.com/tcltk/tcl" "${TCL_BRANCH}-branch" "$TCL_VERSION" "no"
-	update_ebuild "${REPO_PATH}/app-lang/yasm" "https://github.com/yasm/yasm" "master" "0" "yes"
-	update_ebuild "${REPO_PATH}/app-net/bind-tools" "https://github.com/isc-projects/bind9" "bind-${BIND_TOOLS_VERSION}" "${BIND_TOOLS_VERSION}" "no"
-	update_ebuild "${REPO_PATH}/app-server/nodejs" "https://github.com/nodejs/node" "v${NODEJS_VERSION}.x" "$NODEJS_VERSION" "no"
+	update_ebuild "${REPO_PATH}/app-build/binutils" "https://github.com/bminor/binutils-gdb" "${BINUTILS_BRANCH}" "${BINUTILS_VERSION}" "no"
+	update_ebuild "${REPO_PATH}/app-server/tor" "https://git.torproject.org/tor.git" "${TOR_BRANCH}" "$TOR_VERSION" "no"
 	update_ebuild "${REPO_PATH}/lib-net/openssl" "https://github.com/openssl/openssl" "openssl-${OPENSSL_VERSION}" "$OPENSSL_VERSION" "no"
-	update_ebuild "${REPO_PATH}/app-build/llvm" "https://github.com/llvm/llvm-project" "release/${LLVM_VERSION}.x" "$LLVM_VERSION" "no"
+	update_ebuild "${REPO_PATH}/app-server/nodejs" "https://github.com/nodejs/node" "v${NODEJS_VERSION}.x" "$NODEJS_VERSION" "no"
+	update_ebuild "${REPO_PATH}/app-net/bind-tools" "https://github.com/isc-projects/bind9" "bind-${BIND_TOOLS_VERSION}" "${BIND_TOOLS_VERSION}" "no"
+	update_ebuild "${REPO_PATH}/app-core/gawk" "https://git.savannah.gnu.org/git/gawk" "gawk-${GAWK_VERSION}-stable" "$GAWK_VERSION" "no"
+	update_ebuild "${REPO_PATH}/app-lang/python" "https://github.com/python/cpython" "${PYTHON_VERSION}" "$PYTHON_VERSION" "no"
+	update_ebuild "${REPO_PATH}/app-lang/perl" "https://github.com/Perl/perl5" "maint-${PERL_VERSION}" "$PERL_VERSION" "no"
 	update_ebuild "${REPO_PATH}/lib-core/sqlite" "https://github.com/sqlite/sqlite" "branch-${SQLITE_VERSION}" "$SQLITE_VERSION" "no"
-
-	return 0
+	update_ebuild "${REPO_PATH}/app-build/llvm" "https://github.com/llvm/llvm-project" "release/${LLVM_VERSION}.x" "$LLVM_VERSION" "no"
 }
 
 main

@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_TESTED=( python3_{10..12} pypy3 )
+PYTHON_TESTED=( python3_{10..13} pypy3 )
 PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" )
 
 inherit distutils-r1 pypi
@@ -95,17 +95,20 @@ python_test() {
 		# setuptools warnings
 		testing/acceptance_test.py::TestInvocationVariants::test_cmdline_python_namespace_package
 
-		# times out
-		testing/test_debugging.py::TestPDB::test_pdb_interaction_exception
-		testing/test_debugging.py::TestPDB::test_pdb_with_caplog_on_pdb_invocation
+		# PDB tests seem quite flaky (they time out often)
+		testing/test_debugging.py::TestPDB
 	)
 
-	[[ ${EPYTHON} == pypy3 ]] && EPYTEST_DESELECT+=(
-		# regressions on pypy3.9
-		# https://github.com/pytest-dev/pytest/issues/9787
-		testing/test_skipping.py::test_errors_in_xfail_skip_expressions
-		testing/test_unraisableexception.py
-	)
+	case ${EPYTHON} in
+		pypy3)
+			EPYTEST_DESELECT+=(
+				# regressions on pypy3.9
+				# https://github.com/pytest-dev/pytest/issues/9787
+				testing/test_skipping.py::test_errors_in_xfail_skip_expressions
+				testing/test_unraisableexception.py
+			)
+			;;
+	esac
 
 	local EPYTEST_XDIST=1
 	epytest

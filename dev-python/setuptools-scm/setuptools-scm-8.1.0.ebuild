@@ -4,8 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=standalone
-PYPI_NO_NORMALIZE=1
-PYTHON_COMPAT=( python3_{10..12} pypy3 )
+PYTHON_COMPAT=( python3_{10..13} pypy3 )
 
 inherit distutils-r1 pypi
 
@@ -26,11 +25,14 @@ RDEPEND="
 	$(python_gen_cond_dep '
 		dev-python/tomli[${PYTHON_USEDEP}]
 	' 3.10)
-	dev-python/typing-extensions[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
-	
+	test? (
+		dev-python/build[${PYTHON_USEDEP}]
+		dev-python/typing-extensions[${PYTHON_USEDEP}]
+		
+	)
 "
 
 distutils_enable_tests pytest

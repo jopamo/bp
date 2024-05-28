@@ -1,10 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# please keep this ebuild at EAPI 7 -- sys-apps/portage dep
+# please keep this ebuild at EAPI 8 -- sys-apps/portage dep
 EAPI=8
 
 DISTUTILS_USE_PEP517=no
-PYTHON_COMPAT=( pypy3 python3_{10..12} )
+PYTHON_COMPAT=( pypy3 python3_{10..13} )
 
 inherit distutils-r1
 
@@ -18,7 +18,7 @@ SRC_URI="
 		-> ${P}.gh.tar.gz
 "
 
-LICENSE="MIT"
+LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -26,7 +26,7 @@ RDEPEND="
 	>=dev-python/installer-0.5.0[${PYTHON_USEDEP}]
 	$(python_gen_cond_dep '
 		>=dev-python/tomli-1.2.3[${PYTHON_USEDEP}]
-	' 3.{9..10})
+	' 3.10)
 "
 
 distutils_enable_tests pytest

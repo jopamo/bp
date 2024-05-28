@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( pypy3 python3_{10..12} )
+PYTHON_COMPAT=( pypy3 python3_{10..13} )
 
 inherit distutils-r1 pypi
 
@@ -26,7 +26,6 @@ BDEPEND="
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 	test? (
 		dev-python/configupdater[${PYTHON_USEDEP}]
-		>=dev-python/pyproject-fmt-0.4.0[${PYTHON_USEDEP}]
 		dev-python/tomli[${PYTHON_USEDEP}]
 		dev-python/tomlkit[${PYTHON_USEDEP}]
 	)
@@ -34,12 +33,26 @@ BDEPEND="
 
 distutils_enable_tests pytest
 
-EPYTEST_IGNORE=(
-	# validate_pyproject is not packaged
-	tests/test_examples.py
-)
-
 src_prepare() {
 	sed -i -e 's:--cov ini2toml --cov-report term-missing::' setup.cfg || die
 	distutils-r1_src_prepare
+}
+
+python_test() {
+	local EPYTEST_IGNORE=(
+		# validate_pyproject is not packaged
+		tests/test_examples.py
+	)
+	local EPYTEST_DESELECT=()
+
+	# Incompatible with pyproject-fmt-2 API:
+	# https://github.com/abravalheri/ini2toml/issues/103
+	if ! has_version "<dev-python/pyproject-fmt-2[${PYTHON_USEDEP}]"; then
+		EPYTEST_DESELECT+=(
+			tests/test_cli.py::test_auto_formatting
+		)
+	fi
+
+	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
+	epytest
 }

@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="identify a file's format by scanning binary data for patterns"
 HOMEPAGE="https://www.darwinsys.com/file/"
 
-SNAPSHOT=a353a72a6033e6cd30ef352ed8e83490dc769740
+SNAPSHOT=c96c255f2e92b133d911c835d065b889bf902c4c
 SRC_URI="https://github.com/file/file/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -23,8 +23,8 @@ DEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}"/file-5.39-portage_sandbox.patch
-	"${FILESDIR}"/file-5.39-seccomp_sandbox.patch
+	"${FILESDIR}/file-5.43-seccomp-fstatat64-musl.patch"
+	"${FILESDIR}/file-5.45-seccomp-sandbox.patch"
 )
 
 src_prepare() {

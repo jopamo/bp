@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..12} pypy3 )
+PYTHON_COMPAT=( python3_{10..13} pypy3 )
 PYTHON_REQ_USE="threads(+)"
 
 inherit distutils-r1 pypi
@@ -40,10 +40,6 @@ BDEPEND="
 	)
 "
 
-PATCHES=(
-	"${FILESDIR}"/${PN}-2.28.0-drop-dependency-warnings.patch
-)
-
 distutils_enable_tests pytest
 
 python_test() {
@@ -63,12 +59,17 @@ python_test() {
 		tests/test_requests.py::TestRequests::test_cookie_removed_on_expire
 		tests/test_requests.py::TestPreparingURLs::test_redirecting_to_bad_url
 	)
-	if [[ ${EPYTHON} == python3.12 ]]; then
-		EPYTEST_DESELECT+=(
-			# different repr()
-			requests/utils.py::requests.utils.from_key_val_list
-		)
-	fi
+
+	case ${EPYTHON} in
+		python3.13)
+			;&
+		python3.12)
+			EPYTEST_DESELECT+=(
+				# different repr()
+				requests/utils.py::requests.utils.from_key_val_list
+			)
+			;;
+	esac
 
 	if ! has_version "dev-python/trustme[${PYTHON_USEDEP}]"; then
 		EPYTEST_DESELECT+=(

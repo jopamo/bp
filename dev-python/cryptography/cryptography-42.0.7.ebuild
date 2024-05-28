@@ -5,7 +5,7 @@ EAPI=8
 CARGO_OPTIONAL=yes
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..12} pypy3 )
+PYTHON_COMPAT=( python3_{10..13} pypy3 )
 PYTHON_REQ_USE="threads(+)"
 
 CRATES="
@@ -26,8 +26,8 @@ CRATES="
 	memoffset@0.9.0
 	once_cell@1.19.0
 	openssl-macros@0.1.1
-	openssl-sys@0.9.99
-	openssl@0.10.63
+	openssl-sys@0.9.102
+	openssl@0.10.64
 	parking_lot@0.12.1
 	parking_lot_core@0.9.9
 	pem@3.0.3
@@ -118,6 +118,11 @@ src_unpack() {
 }
 
 src_prepare() {
+	local PATCHES=(
+		# https://github.com/pyca/cryptography/pull/10366
+		"${FILESDIR}/${P}-32bit.patch"
+	)
+
 	default
 
 	sed -i -e 's:--benchmark-disable::' pyproject.toml || die
@@ -135,6 +140,8 @@ src_prepare() {
 
 python_configure_all() {
 	filter-lto # bug #903908
+
+	export UNSAFE_PYO3_SKIP_VERSION_CHECK=1
 }
 
 python_test() {

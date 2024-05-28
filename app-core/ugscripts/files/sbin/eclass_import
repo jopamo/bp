@@ -3,7 +3,7 @@
 TEMPLOCATION="/tmp/eclass_import"
 mkdir -p "${TEMPLOCATION}"
 [ ! -d "${TEMPLOCATION}/gentoo" ] && git clone https://github.com/gentoo/gentoo.git "${TEMPLOCATION}/gentoo" --depth 1
-cp "${TEMPLOCATION}"/gentoo/eclass/{autotools,cargo,cmake,crossdev,distutils-r1,edo,estack,flag-o-matic,font,git-r3,gnuconfig,go-module,kernel-2,libtool,linux-info,linux-mod,meson,multibuild,multiprocessing,ninja-utils,optfeature,perl-functions,perl-module,out-of-source-utils,prefix,python*,qmake-utils,sgml-catalog-r1,toolchain-funcs,tree-sitter-grammar,unpacker,user-info,xdg,xdg-utils,wrapper}.eclass /var/db/repos/bp/eclass/
+cp "${TEMPLOCATION}"/gentoo/eclass/{autotools,bash-completion-r1,cargo,cmake,crossdev,distutils-r1,edo,estack,flag-o-matic,font,git-r3,gnuconfig,go-module,kernel-2,libtool,linux-info,linux-mod,meson,multibuild,multiprocessing,ninja-utils,optfeature,perl-functions,perl-module,out-of-source-utils,prefix,python*,qmake-utils,shell-completion,sgml-catalog-r1,toolchain-funcs,tree-sitter-grammar,unpacker,user-info,xdg,xdg-utils,wrapper}.eclass /var/db/repos/bp/eclass/
 
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i '/dosym8/d'
 find /var/db/repos/bp/eclass -type f -print0 | xargs -0 sed -i '/einstalldocs/d'

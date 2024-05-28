@@ -92,11 +92,7 @@ src_install() {
 	local go_bin
 
 	for go_bin in go gofmt; do
-		if [[ ! -e "${EROOT}/usr/bin/${go_bin}" ]]; then
-			dosym "/usr/lib/go/bin/${go_bin}" "/usr/bin/${go_bin}"
-		else
-			ewarn "${go_bin} already exists in /usr/bin, skipping..."
-		fi
+		dosym -r "/usr/lib/go/bin/${go_bin}" "/usr/bin/${go_bin}"
 	done
 
 	cat > "${T}"/99go <<- EOF || die

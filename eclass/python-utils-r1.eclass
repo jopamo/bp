@@ -1,6 +1,6 @@
 # Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
-PYTHON_COMPAT=( python3_11 python3_12 )
+PYTHON_COMPAT=( python3_11 python3_12 python3_13 )
 
 # @ECLASS: python-utils-r1.eclass
 # @MAINTAINER:
@@ -40,7 +40,7 @@ inherit multiprocessing toolchain-funcs
 # All supported Python implementations, most preferred last.
 _PYTHON_ALL_IMPLS=(
 	pypy3
-	python3_{10..12}
+	python3_{10..15}
 )
 readonly _PYTHON_ALL_IMPLS
 
@@ -136,7 +136,7 @@ _python_set_impls() {
 			# please keep them in sync with _PYTHON_ALL_IMPLS
 			# and _PYTHON_HISTORICAL_IMPLS
 			case ${i} in
-				pypy3|python3_9|python3_1[0-2])
+				pypy3|python3_9|python3_1[0-5])
 					;;
 				jython2_7|pypy|pypy1_[89]|pypy2_0|python2_[5-7]|python3_[1-9])
 					obsolete+=( "${i}" )

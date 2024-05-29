@@ -268,3 +268,8 @@ update_github_package "lib-core" "ncurses5-compat" "https://github.com/ThomasDic
 update_github_package "lib-dev" "boost" "https://github.com/boostorg/boost"
 update_github_package "lib-dev" "boost-build" "https://github.com/boostorg/boost"
 update_github_package "app-net" "curl" "https://github.com/curl/curl"
+
+update_github_package "app-core" "pkgcore" "https://github.com/pkgcore/pkgcore"
+update_github_package "app-port" "pkgcheck" "https://github.com/pkgcore/pkgcheck"
+update_github_package "app-port" "pkgdev" "https://github.com/pkgcore/pkgdev"
+update_github_package "app-crypto" "botan" "https://github.com/randombit/botan"

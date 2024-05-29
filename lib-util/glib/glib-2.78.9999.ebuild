@@ -23,19 +23,21 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 DEPEND="
-	app-core/attr[static-libs(+)]
-	app-core/util-linux[mount,static-libs(+)]
+	app-core/attr
+	app-core/util-linux[mount]
 	app-tex/docbook-xml-dtd
 	app-tex/docbook-xsl-stylesheets
-	lib-core/libffi[static-libs(+)]
-	lib-core/libpcre2[static-libs(+)]
-	lib-core/libxslt[static-libs(+)]
-    app-core/util-linux[static-libs(+)]
-    lib-core/libxml2[static-libs(+)]
-    lib-core/zlib[static-libs(+)]
+	lib-core/libffi
+	lib-core/libpcre2
+	lib-core/libxslt
+    app-core/util-linux
+    lib-core/libxml2
+    lib-core/zlib
 "
 
 src_configure() {
+	filter-flags -Wl,-z,defs
+
 	append-flags -Wno-error=format
 	local emesonargs=(
 		-Ddefault_library=$(usex static-libs both shared)

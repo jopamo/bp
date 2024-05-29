@@ -10,7 +10,7 @@ DESCRIPTION="Tool for running RAID systems - replacement for the raidtools"
 HOMEPAGE="http://neil.brown.name/blog/mdadm"
 
 SRC_URI="https://kernel.googlesource.com/pub/scm/utils/mdadm/mdadm/+archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S="${WORKDIR}"
 
 LICENSE="GPL-2"
 SLOT="0"

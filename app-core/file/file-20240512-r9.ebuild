@@ -2,10 +2,11 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools distutils-r1
 
 DESCRIPTION="identify a file's format by scanning binary data for patterns"
 HOMEPAGE="https://www.darwinsys.com/file/"
+#SRC_URI="ftp://ftp.astron.com/pub/file/${P}.tar.gz"
 
 SNAPSHOT=c96c255f2e92b133d911c835d065b889bf902c4c
 SRC_URI="https://github.com/file/file/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
@@ -15,7 +16,7 @@ LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="seccomp static-libs zlib"
+IUSE="+python seccomp static-libs zlib"
 
 DEPEND="
 	seccomp? ( lib-core/libseccomp )
@@ -39,4 +40,27 @@ src_configure() {
 		$(use_enable zlib)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_compile() {
+	default
+
+	if use python ; then
+		cd python || die
+		distutils-r1_src_compile
+	fi
+}
+
+src_install() {
+	default
+
+	insinto /usr/share/misc/magic
+	doins -r magic/Magdir/*
+
+	if use python ; then
+		cd python || die
+		distutils-r1_src_install
+	fi
+
+	find "${ED}" -type f -name "*.la" -delete || die
 }

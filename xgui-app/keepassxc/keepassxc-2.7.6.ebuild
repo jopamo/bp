@@ -16,7 +16,7 @@ IUSE="autotype test"
 
 DEPEND="
 	app-crypto/argon2
-	app-crypto/botan
+	app-crypto/botan:2
 	lib-core/libgcrypt
 	lib-core/zlib
 	lib-util/libsodium

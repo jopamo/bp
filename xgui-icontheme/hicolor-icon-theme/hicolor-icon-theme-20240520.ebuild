@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools xdg
+inherit meson xdg
 
 DESCRIPTION="freedesktop default icon theme."
 HOMEPAGE="https://gitlab.freedesktop.org/xdg/default-icon-theme.git"
@@ -16,8 +16,3 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RESTRICT="binchecks strip"
-
-src_prepare() {
-	default
-	eautoreconf
-}

@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="library and tools for managing linux kernel modules"
 HOMEPAGE="https://git.kernel.org/?p=utils/kernel/kmod/kmod.git"
 
-SNAPSHOT=05828b4a6e9327a63ef94df544a042b5e9ce4fe7
+SNAPSHOT=11eb9bc67c319900ab00523997323a97d2d08ad2
 SRC_URI="https://github.com/kmod-project/kmod/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

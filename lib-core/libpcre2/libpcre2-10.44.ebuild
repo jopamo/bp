@@ -6,7 +6,7 @@ inherit flag-o-matic libtool
 
 DESCRIPTION="Perl-compatible regular expression library"
 HOMEPAGE="http://www.pcre.org/"
-SRC_URI="https://github.com/PhilipHazel/pcre2/releases/download/pcre2-${PV}/pcre2-${PV}.tar.bz2"
+SRC_URI="https://github.com/PCRE2Project/pcre2/releases/download/pcre2-${PV}/pcre2-${PV}.tar.bz2"
 S="${WORKDIR}/pcre2-${PV}"
 
 LICENSE="BSD"

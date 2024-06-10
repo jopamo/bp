@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=8c13aa0e1c7938dfdc6b786957d6a4d4f2e9681d
+SNAPSHOT=5f42263298db3fbb1e2780acc59be1ff8146abd8
 
 inherit meson
 
@@ -13,7 +13,7 @@ S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="debug +dep +jumbo-build +required-use sqlite swap-remote tmpfilesd tools"
 

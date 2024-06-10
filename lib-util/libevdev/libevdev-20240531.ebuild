@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Handler library for evdev events"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/libevdev/"
 
-SNAPSHOT=414757317d6d1b370fbd38d87ce4bf2802e40809
+SNAPSHOT=5501633d51cca7eb3e41183f25879a22a4e9c33d
 SRC_URI="https://gitlab.freedesktop.org/libevdev/libevdev/-/archive/${SNAPSHOT}/libevdev-${SNAPSHOT}.tar.bz2 -> libevdev-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libevdev-${SNAPSHOT}"
 

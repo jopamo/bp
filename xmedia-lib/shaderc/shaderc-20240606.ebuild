@@ -7,7 +7,7 @@ inherit cmake flag-o-matic
 DESCRIPTION="Collection of tools, libraries and tests for shader compilation"
 HOMEPAGE="https://github.com/google/shaderc"
 
-SNAPSHOT=f59f0d11b80fd622383199c867137ededf89d43b
+SNAPSHOT=d93a300d80e88ffeb07048ba4cc1f368be7b14e7
 SRC_URI="https://github.com/google/shaderc/archive/${SNAPSHOT}.tar.gz -> shaderc-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/shaderc-${SNAPSHOT}"
 

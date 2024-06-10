@@ -7,7 +7,7 @@ inherit autotools flag-o-matic
 DESCRIPTION="Audio compression format designed for speech -- DSP"
 HOMEPAGE="https://www.speex.org/"
 
-SNAPSHOT=9b2846a4472c38660d6aec7a180daa5dc77ab2d3
+SNAPSHOT=dbd421d149a9c362ea16150694b75b63d757a521
 SRC_URI="https://github.com/xiph/speexdsp/archive/${SNAPSHOT}.tar.gz -> speexdsp-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/speexdsp-${SNAPSHOT}"
 

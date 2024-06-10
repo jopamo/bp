@@ -6,7 +6,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="A Library for Large Linear Classification"
 HOMEPAGE="http://www.csie.ntu.edu.tw/~cjlin/liblinear/ https://github.com/cjlin1/liblinear"
-SRC_URI="https://www.csie.ntu.edu.tw/~cjlin/liblinear/${P}.tar.gz"
+SRC_URI="https://github.com/cjlin1/liblinear/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"

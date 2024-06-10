@@ -6,7 +6,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="A Library for Large Linear Classification"
 HOMEPAGE="http://www.csie.ntu.edu.tw/~cjlin/liblinear/ https://github.com/cjlin1/liblinear"
-SRC_URI="https://github.com/cjlin1/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://www.csie.ntu.edu.tw/~cjlin/liblinear/${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
@@ -17,8 +17,6 @@ src_prepare() {
 	default
 
 	sed -i \
-		-e '/^AR/s|=|?=|g' \
-		-e '/^RANLIB/s|=|?=|g' \
 		-e '/^CFLAGS/d;/^CXXFLAGS/d' \
 		blas/Makefile || die
 	sed -i \
@@ -35,7 +33,7 @@ src_compile() {
 		CXX="$(tc-getCXX)" \
 		CFLAGS="${CFLAGS} -fPIC" \
 		CXXFLAGS="${CXXFLAGS} -fPIC" \
-		AR="$(tc-getAR) rcv" \
+		AR="$(tc-getAR)" \
 		RANLIB="$(tc-getRANLIB)" \
 		lib all
 }

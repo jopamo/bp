@@ -126,7 +126,7 @@ update_ebuild() {
 
 		(cd "${PACKAGE_PATH}" && pkgdev manifest) || continue
 		finalize_update "$PACKAGE_PATH" "$PACKAGE_NAME" "$new_ebuild_filename" "$version"
-		echo "Ebuild updated for ${PACKAGE_NAME}: ${new_ebuild_filename}"
+
 		break
 	done
 

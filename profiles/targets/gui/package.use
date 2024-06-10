@@ -1,7 +1,8 @@
 app-core/systemd logind tmpfilesd sleep
 app-core/vim normal
+lib-core/zlib minizip
 xgui-app/qbittorrent qt5
 xgui-live-app/wine opencl
 xgui-tools/alsa-utils alsamixer
-xmedia-live-app/avidemux qt5
 xmedia-lib/x264 opencl
+xmedia-live-app/avidemux qt5

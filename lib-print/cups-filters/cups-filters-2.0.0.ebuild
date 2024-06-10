@@ -12,52 +12,30 @@ LICENSE="MIT GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="dbus jpeg ldap pclm pdf png static-libs tiff"
+IUSE="+foomatic"
 
 DEPEND="
-	app-util/bc
-	app-tex/ghostscript-gpl[cups]
-	app-tex/poppler
-	app-tex/qpdf
-	fonts/fontconfig
-	fonts/liberation-fonts
-	lib-core/zlib
-	lib-util/glib
 	lib-print/cups
-	xgui-misc/freetype
-	xgui-misc/lcms
-	dbus? ( app-core/dbus )
-	jpeg? ( xmedia-lib/libjpeg-turbo )
-	ldap? ( app-net/openldap )
-	pclm? ( app-tex/qpdf )
-	pdf? ( app-tex/mupdf )
-	png? ( xmedia-lib/libpng )
-	tiff? ( xmedia-lib/tiff )
+	lib-print/libppd
+	lib-print/libcupsfilters
 "
 
 src_configure() {
-	append-flags -std=c++17
-
-	local myconf=(
-		--localstatedir="${EPREFIX}"/var
-		--with-cups-rundir="${EPREFIX}"/run/cups
-		$(use_enable dbus)
-		$(use_enable ldap)
-		$(use_enable pclm)
-		$(use_enable pdf mutool)
-		$(use_enable static-libs static)
-		$(use_with jpeg)
-		$(use_with png)
-		$(use_with tiff)
-		--disable-avahi
-		--enable-foomatic
-		--enable-ghostscript
+	local myeconfargs=(
 		--enable-imagefilters
-		--with-browseremoteprotocols=DNSSD,CUPS
-		--with-pdftops=pdftops
-		--with-rcdir=no
-		--with-test-font-path=/usr/share/fonts/liberation-fonts/LiberationMono-Regular.ttf
-		--without-php
+		--enable-driverless
+		--enable-poppler
+		--localstatedir="${EPREFIX}"/var
+		--with-fontdir="fonts/conf.avail"
+		# cups-browsed is split out and avahi is not needed for filters
+		# https://github.com/OpenPrinting/cups-filters/pull/558
+		--disable-avahi
+		# These are just probed for the path. Always enable them.
+		--with-gs-path="${EPREFIX}"/usr/bin/gs
+		--with-mutool-path="${EPREFIX}"/usr/bin/mutool
+
+		$(use_enable foomatic)
 	)
-	econf "${myconf[@]}"
+
+	CONFIG_SHELL="${BROOT}"/bin/bash econf "${myeconfargs[@]}"
 }

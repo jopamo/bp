@@ -118,11 +118,6 @@ src_unpack() {
 }
 
 src_prepare() {
-	local PATCHES=(
-		# https://github.com/pyca/cryptography/pull/10366
-		"${FILESDIR}/${P}-32bit.patch"
-	)
-
 	default
 
 	sed -i -e 's:--benchmark-disable::' pyproject.toml || die

@@ -19,7 +19,7 @@ init_logs() {
 	: > "$DEBUG_LOG"
 }
 
-GCC_MAJOR_VERSIONS=("12" "13")
+GCC_MAJOR_VERSIONS=("13")
 GLIBC_VERSIONS=("2.36" "2.38")
 GO_VERSIONS=("1.20" "1.22")
 

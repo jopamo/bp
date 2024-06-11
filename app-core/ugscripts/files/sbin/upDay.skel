@@ -1,11 +1,11 @@
 #!/bin/bash
 
 REPO_PATH="/var/db/repos/bp"
-GIT_CLONES_DIR="$HOME/.git_packages"
 
 PROGNAME="upDay"
 
 TMP_DIR="/tmp/${PROGNAME}"
+GIT_CLONES_DIR="$TMP_DIR/.git_packages"
 
 DEBUG_LOG="${TMP_DIR}/${PROGNAME}-debug.log"
 ERROR_LOG="${TMP_DIR}/${PROGNAME}-error.log"

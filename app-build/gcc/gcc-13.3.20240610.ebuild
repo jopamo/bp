@@ -13,7 +13,7 @@ S=${WORKDIR}/gcc-${SNAPSHOT}
 
 LICENSE="GPL-3"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="debug dlang go-bootstrap +isl +lto sanitize +vtv zstd"
 
@@ -49,31 +49,17 @@ PATCHES=(
 src_prepare() {
 	filter-flags -flto*
 	filter-flags -D_FORTIFY_SOURCE*
-	filter-flags -Wl,-z,combreloc
 	filter-flags -Wl,-z,defs
-	filter-flags -Wl,-z,now
-	filter-flags -Wl,-z,relro
-	filter-flags -fassociative-math
-	filter-flags -fasynchronous-unwind-tables
-	filter-flags -fno-semantic-interposition
-	filter-flags -fcf-protection=full
-	filter-flags -fexceptions
-	filter-flags -fgraphite-identity
-	filter-flags -fipa-pta
-	filter-flags -floop-interchange
-	filter-flags -floop-nest-optimize
-	filter-flags -floop-parallelize-all
-	filter-flags -fno-math-errno
-	filter-flags -fno-semantic-interposition
-	filter-flags -fno-signed-zeros
-	filter-flags -fno-trapping-math
-	filter-flags -fpic
-	filter-flags -fpie
-	filter-flags -fstack-clash-protection
 	filter-flags -fstack-protector-strong
-	filter-flags -ftree-loop-distribution
-	filter-flags -fuse-linker-plugin
-	replace-flags -O3 -O2
+	filter-flags -fassociative-math
+	filter-flags -fno-semantic-interposition
+	filter-flags -fexceptions
+	filter-flags -Wl,-O3
+	filter-flags -floop-parallelize-all
+	filter-flags -floop-interchange
+	filter-flags -fno-math-errno
+	filter-flags -fno-signed-zeros
+	filter-flags -fno-trapping-math -fexceptions -fpie -fpic -fasynchronous-unwind-tables -fexceptions -Wl,-z,combreloc -Wl,-z,now -Wl,-z,relro
 
 	append-flags -Wa,--noexecstack
 
@@ -123,7 +109,7 @@ src_configure() {
 		--disable-libgomp
 		--disable-libmpx
 		--disable-libmudflap
-		--enable-libssp
+		--disable-libssp
 		--disable-libstdcxx-pch
 		--disable-libunwind-exceptions
 		--disable-multilib
@@ -134,7 +120,6 @@ src_configure() {
 		--enable-__cxa_atexit
 		--enable-bootstrap
 		--enable-cet=auto
-		#--enable-checking=yes,extra
 		--enable-checking=release
 		--enable-clocale=gnu
 		--enable-default-pie
@@ -144,11 +129,11 @@ src_configure() {
 		--enable-languages=${GCC_LANG}
 		--enable-libstdcxx-time
 		--enable-linker-build-id
-		--disable-lto
+		--enable-lto
 		--enable-plugin
 		--enable-shared
 		--enable-threads=posix
-		--with-build-config="bootstrap-lto"
+		--with-build-config="bootstrap-lto-lean"
 		--with-linker-hash-style=gnu
 		--with-system-zlib
 		$(use_enable sanitize libsanitizer)
@@ -160,24 +145,16 @@ src_configure() {
 	../configure "${myconf[@]}"
 }
 
-src_test() {
-    cd gcc-build
-    emake -k check
-}
-
 src_compile() {
 	cd gcc-build
 
-	LDFLAGS="-Wl,-O1"
-	CFLAGS="-O2"
-
-	emake -O STAGE1_CFLAGS="$CFLAGS" \
+	emake -O STAGE1_CFLAGS="-O3" \
 		BOOT_CFLAGS="$CFLAGS" \
 		BOOT_LDFLAGS="$LDFLAGS" \
 		LDFLAGS_FOR_TARGET="$LDFLAGS" \
 		bootstrap
 
-	make -O STAGE1_CFLAGS="-O2" \
+	make -O STAGE1_CFLAGS="-O3" \
 		BOOT_CFLAGS="$CFLAGS" \
 		BOOT_LDFLAGS="$LDFLAGS" \
 		LDFLAGS_FOR_TARGET="$LDFLAGS" \

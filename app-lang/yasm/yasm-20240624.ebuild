@@ -7,7 +7,7 @@ inherit autotools flag-o-matic
 DESCRIPTION="An assembler for x86 and x86_64 instruction sets"
 HOMEPAGE="http://yasm.tortall.net/"
 
-SNAPSHOT=9defefae9fbcb6958cddbfa778c1ea8605da8b8b
+SNAPSHOT=121ab150b3577b666c79a79f4a511798d7ad2432
 SRC_URI="https://github.com/yasm/yasm/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

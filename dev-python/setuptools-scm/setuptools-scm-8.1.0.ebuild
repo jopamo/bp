@@ -31,7 +31,6 @@ BDEPEND="
 	test? (
 		dev-python/build[${PYTHON_USEDEP}]
 		dev-python/typing-extensions[${PYTHON_USEDEP}]
-		
 	)
 "
 

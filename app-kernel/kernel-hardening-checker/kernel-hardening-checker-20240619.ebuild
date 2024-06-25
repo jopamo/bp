@@ -7,7 +7,7 @@ inherit distutils-r1
 DESCRIPTION="A script for checking the hardening options in the Linux kernel config"
 HOMEPAGE="https://github.com/a13xp0p0v/kernel-hardening-checker"
 
-SNAPSHOT=40b32a181e9657b2af3bd9ecb97c71c5fe855204
+SNAPSHOT=d58989986070e871e1244e29019ae0cfb20a3f5b
 SRC_URI="https://github.com/a13xp0p0v/kernel-hardening-checker/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 
 https://github.com/a13xp0p0v/kernel-hardening-checker/archive/21cec11eb005e77917a7263a0f164a80deca0e04.zip

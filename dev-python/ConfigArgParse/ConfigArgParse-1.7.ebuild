@@ -3,6 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
+# py3.13: https://github.com/bw2/ConfigArgParse/issues/294
 PYTHON_COMPAT=( python3_{10..12} )
 
 inherit distutils-r1

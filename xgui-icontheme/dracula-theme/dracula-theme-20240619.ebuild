@@ -5,7 +5,7 @@ EAPI=8
 DESCRIPTION="Dracula gtk theme"
 HOMEPAGE="https://github.com/dracula/gtk"
 
-SNAPSHOT=48bdcc5e37c90d74e7e2139412a89209cc05a672
+SNAPSHOT=91b9c8572d7cfa06b24eee72d415cc8931c04934
 SRC_URI="https://github.com/dracula/gtk/archive/${SNAPSHOT}.tar.gz -> gtk-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/gtk-${SNAPSHOT}"
 

@@ -5,7 +5,7 @@ EAPI=8
 DESCRIPTION="The pci.ids file"
 HOMEPAGE="https://github.com/pciutils/pciids"
 
-SNAPSHOT=859e35eb5a325c7579adcf6e0e6f2e00d17ded0f
+SNAPSHOT=d1a17ab854405a4a98407cbf6388b84e1d0cb111
 SRC_URI="https://github.com/pciutils/pciids/archive/${SNAPSHOT}.tar.gz -> pciids-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

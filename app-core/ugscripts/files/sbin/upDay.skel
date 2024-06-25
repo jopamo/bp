@@ -327,8 +327,8 @@ branch_bump() {
 		update_ebuild "${REPO_PATH}/app-lang/go" "https://go.googlesource.com/go" "${GO_BRANCH}" "$go_version" "no"
 	done
 
-	update_ebuild "${REPO_PATH}/dev-libs/kde-frameworks/kguiaddons" "https://invent.kde.org/frameworks/kguiaddons.git" "${KGUIADDONS_BRANCH}" "$KDE_VERSION" "no"
-	update_ebuild "${REPO_PATH}/dev-libs/kde-frameworks/kwindowsystem" "https://invent.kde.org/frameworks/kwindowsystem.git" "${KWINDOWSYSTEM_BRANCH}" "$KDE_VERSION" "no"
+	update_ebuild "${REPO_PATH}/xgui-tools/kguiaddons" "https://invent.kde.org/frameworks/kguiaddons.git" "${KGUIADDONS_BRANCH}" "$KDE_VERSION" "no"
+	update_ebuild "${REPO_PATH}/xgui-tools/kwindowsystem" "https://invent.kde.org/frameworks/kwindowsystem.git" "${KWINDOWSYSTEM_BRANCH}" "$KDE_VERSION" "no"
 	update_ebuild "${REPO_PATH}/lib-core/libassuan" "https://dev.gnupg.org/source/libassuan.git" "${LIBASSUAN_BRANCH}" "$LIBASSUAN_VERSION" "no"
 	update_ebuild "${REPO_PATH}/lib-core/libgcrypt" "https://dev.gnupg.org/source/libgcrypt.git" "${LIBGCRYPT_BRANCH}" "$LIBGCRYPT_VERSION" "no"
 	update_ebuild "${REPO_PATH}/app-lang/tcl" "https://github.com/tcltk/tcl" "${TCL_BRANCH}-branch" "$TCL_VERSION" "no"

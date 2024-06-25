@@ -8,7 +8,7 @@ PYTHON_COMPAT=( python3_{10..13} pypy3 )
 
 inherit distutils-r1 pypi
 
-TEST_PATCH=psutil-5.9.8-tests.patch
+TEST_PATCH=psutil-6.0.0-tests.patch
 DESCRIPTION="Retrieve information on running processes and system utilization"
 HOMEPAGE="
 	https://github.com/giampaolo/psutil/

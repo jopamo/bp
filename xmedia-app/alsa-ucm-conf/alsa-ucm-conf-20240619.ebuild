@@ -5,7 +5,7 @@ EAPI=8
 DESCRIPTION="ALSA Use Case Manager configuration"
 HOMEPAGE="http://www.alsa-project.org/"
 
-SNAPSHOT=4aa9822afaae2138f342c35c04127d28331274e0
+SNAPSHOT=c1920e95d476c33f4b43484f14c36149829e514a
 SRC_URI="https://github.com/alsa-project/alsa-ucm-conf/archive/${SNAPSHOT}.tar.gz -> alsa-ucm-conf-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/alsa-ucm-conf-${SNAPSHOT}"
 

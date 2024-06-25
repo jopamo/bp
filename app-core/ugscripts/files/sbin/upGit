@@ -14,7 +14,7 @@ JSON_LOG="${TMP_DIR}/${PROGNAME}-json.log"
 MAINT_BRANCH_LOG="${TMP_DIR}/${PROGNAME}-maint-branch.log"
 
 FINAL_SCRIPT="${TMP_DIR}/upDay"
-GIT_CLONES_DIR="${HOME}/.git_packages"
+GIT_CLONES_DIR="${TMP_DIR}/.git_packages"
 REPO_PATH="/var/db/repos/bp"
 SHARE_DIR="/usr/share/ugscripts"
 SKEL_FILE="${SHARE_DIR}/upDay.skel"
@@ -23,6 +23,7 @@ UPDATE_FILE="${TMP_DIR}/update_ebuild_commands.txt"
 default_branch=""
 repository_url=""
 option=""
+debug_mode=false
 
 exclude_package_list=(
 	"*lxqt*"
@@ -62,29 +63,43 @@ main() {
 	cp $SKEL_FILE $FINAL_SCRIPT
 
 	if [ -n "$option" ]; then
-		echo "Option $option selected, executing upDay with this option..."
+		echo "Option $option selected, executing upDay with this option..." >> "$DEBUG_LOG"
 		chmod +x "$FINAL_SCRIPT"
 		"$FINAL_SCRIPT" "$option"
 	else
-		echo "No option selected, updating all packages or the specified ones..."
+		echo "No option selected, updating all packages or the specified ones..." >> "$DEBUG_LOG"
 		update_packages
 	fi
 
 	log_maint_branch_packages
+
+	if [ "$debug_mode" = false ]; then
+		rm -rf "${TMP_DIR}"
+	fi
 }
 
 update_packages() {
 	if [[ ${#specific_packages[@]} -eq 0 ]]; then
+		echo "Updating all packages..." >> "$DEBUG_LOG"
 		find "$REPO_PATH" -type f -regextype posix-extended -regex ".*-[0-9]{8}\.ebuild$" \
 			-exec grep -l 'SNAPSHOT' {} + | xargs -r grep -L 'EGIT_REPO_URI' | while read -r ebuild_file; do
+			echo "Found ebuild file: $ebuild_file" >> "$DEBUG_LOG"
 			process_repository_file "$ebuild_file"
 		done
 	else
+		echo "Updating specific packages: ${specific_packages[*]}" >> "$DEBUG_LOG"
 		for pkg in "${specific_packages[@]}"; do
-			find "$REPO_PATH" -type f -regextype posix-extended -regex "$pkg-[0-9]{8}\.ebuild$" \
-				-exec grep -l 'SNAPSHOT' {} + | xargs -r grep -L 'EGIT_REPO_URI' | while read -r ebuild_file; do
-				process_repository_file "$ebuild_file"
-			done
+			echo "Searching for package: $pkg" >> "$DEBUG_LOG"
+			if grep -q "update_ebuild.*${pkg}" "$SKEL_FILE"; then
+				echo "Copying update line for ${pkg} from upDay.skel." >> "$DEBUG_LOG"
+				copy_existing_update_line "$pkg"
+			else
+				find "$REPO_PATH" -type f -name "$pkg-*.ebuild" \
+					-exec grep -l 'SNAPSHOT' {} + | xargs -r grep -L 'EGIT_REPO_URI' | while read -r ebuild_file; do
+					echo "Found ebuild file for specific package: $ebuild_file" >> "$DEBUG_LOG"
+					process_repository_file "$ebuild_file"
+				done
+			fi
 		done
 	fi
 
@@ -94,6 +109,12 @@ update_packages() {
 	replace_placeholder
 	chmod +x "$FINAL_SCRIPT"
 	"$FINAL_SCRIPT"
+}
+
+copy_existing_update_line() {
+	local pkg="$1"
+	local existing_line=$(grep "update_ebuild.*${pkg}" "$SKEL_FILE")
+	echo "$existing_line" >> "$UPDATE_FILE"
 }
 
 log_maint_branch_packages() {
@@ -106,25 +127,46 @@ show_help() {
 	echo "Usage: $0 [options] [package1 package2 ... packageN]"
 	echo ""
 	echo "Options:"
-	echo "  --update-toolchain   Update the toolchain ebuilds (GCC, Binutils, Glibc, etc.)"
-	echo "  --update-unsafe      Update packages marked as unsafe"
-	echo "  --update-branches    Update packages based on specific branches"
-	echo "  --help               Display this help and exit"
+	echo "  -t, --update-toolchain   Update the toolchain ebuilds (GCC, Binutils, Glibc, etc.)"
+	echo "  -u, --update-unsafe      Update packages marked as unsafe"
+	echo "  -b, --update-branches    Update packages based on specific branches"
+	echo "  -D, --debug              Keep the temporary directory after execution"
+	echo "  -h, --help               Display this help and exit"
 	echo ""
 	echo "Without any options, the script updates all packages."
 }
 
 while (( "$#" )); do
 	case "$1" in
-		--update-toolchain | --update-unsafe | --update-branches)
+		-t|--update-toolchain)
 			if [ -n "$option" ]; then
-				echo "Error: Multiple options are not allowed."
+				echo "Error: Multiple options are not allowed." >> "$ERROR_LOG"
 				exit 1
 			fi
-			option="$1"
+			option="--update-toolchain"
 			shift
 			;;
-		--help)
+		-u|--update-unsafe)
+			if [ -n "$option" ]; then
+				echo "Error: Multiple options are not allowed." >> "$ERROR_LOG"
+				exit 1
+			fi
+			option="--update-unsafe"
+			shift
+			;;
+		-b|--update-branches)
+			if [ -n "$option" ]; then
+				echo "Error: Multiple options are not allowed." >> "$ERROR_LOG"
+				exit 1
+			fi
+			option="--update-branches"
+			shift
+			;;
+		-D|--debug)
+			debug_mode=true
+			shift
+			;;
+		-h|--help)
 			show_help
 			exit 0
 			;;
@@ -144,17 +186,16 @@ replace_placeholder() {
 	local output_file="$FINAL_SCRIPT"
 	local temp_file="${output_file}.tmp"
 
-	if [ ! -s "$UPDATE_FILE" ]; then
-		echo "No updates to apply."
-		exit 1
-	fi
-
+	echo "Replacing placeholder in $output_file..." >> "$DEBUG_LOG"
 	local replacement_text=$(cat "$UPDATE_FILE")
+	echo "Replacement text: $replacement_text" >> "$DEBUG_LOG"
 
 	local replacement_text_escaped=$(printf '%s\n' "$replacement_text" | sed 's:[\/&]:\\&:g;$!s/$/\\/')
+	echo "Escaped replacement text: $replacement_text_escaped" >> "$DEBUG_LOG"
 
 	sed "s|REPLACE_ME|${replacement_text_escaped}|g" "$output_file" > "$temp_file" && mv "$temp_file" "$output_file"
 
+	echo "Placeholder replaced in $output_file." >> "$DEBUG_LOG"
 	return 0
 }
 
@@ -301,8 +342,15 @@ handle_fallback() {
 
 append_update_command() {
 	local package_path="$1"
+	local package_name="$2"
+	local ebuild_file="$3"
 
-	echo "update_ebuild \"\${REPO_PATH}/${package_path}\" \"${repository_url}\" \"${default_branch}\" \"0\" \"yes\"" >> "$UPDATE_FILE"
+	# Check if the update line already exists in the FINAL_SCRIPT
+	if grep -q "update_ebuild*${package_name}.*${repository_url}.*${default_branch}" "$FINAL_SCRIPT"; then
+		echo "Update line for ${package_name} already exists in upDay." >> "$DEBUG_LOG"
+	else
+		echo "update_ebuild \"\${REPO_PATH}/${package_path}\" \"${repository_url}\" \"${default_branch}\" \"0\" \"yes\"" >> "$UPDATE_FILE"
+	fi
 }
 
 process_repository_file() {
@@ -383,7 +431,7 @@ common_process() {
 	if [[ -z "$default_branch" ]]; then
 		echo "$ebuild_file - Failed to access or get branch for $repository_url" >> "$ERROR_LOG"
 	else
-		append_update_command "$package_path_short" "$repository_url" "$default_branch"
+		append_update_command "$package_path_short" "$package_name" "$ebuild_file"
 	fi
 }
 

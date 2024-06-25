@@ -258,9 +258,6 @@ if [[ $? -eq 0 ]]; then
 	update_gnu_package "texinfo"
 fi
 
-update_git_package "app-net" "bluez" "https://git.kernel.org/pub/scm/bluetooth/bluez.git"
-
-
 #update_github_package "app-dev" "eglexternalplatform" "https://github.com/NVIDIA/eglexternalplatform"
 #update_github_package "app-fs" "lsscsi" "https://github.com/hreinecke/lsscsi"
 #update_github_package "app-lang" "nasm" "https://github.com/netwide-assembler/nasm"
@@ -273,6 +270,7 @@ update_git_package "app-net" "bluez" "https://git.kernel.org/pub/scm/bluetooth/b
 #update_github_package "lib-dev" "icu" "https://github.com/unicode-org/icu"
 #update_github_package "lib-net" "c-ares" "https://github.com/c-ares/c-ares"
 #update_github_package "xgui-lib" "yajl" "https://github.com/lloyd/yajl"
+update_git_package "app-net" "bluez" "https://git.kernel.org/pub/scm/bluetooth/bluez.git"
 update_github_package "app-compression" "libzip" "https://github.com/nih-at/libzip"
 update_github_package "app-core" "gentoo-functions" "https://github.com/gentoo/gentoo-functions"
 update_github_package "app-core" "pkgcore" "https://github.com/pkgcore/pkgcore"
@@ -296,7 +294,7 @@ update_github_package "app-port" "pkgcheck" "https://github.com/pkgcore/pkgcheck
 update_github_package "app-port" "pkgdev" "https://github.com/pkgcore/pkgdev"
 update_github_package "app-server" "easy-rsa" "https://github.com/OpenVPN/easy-rsa"
 update_github_package "app-server" "redis" "https://github.com/redis/redis"
-update_github_package "app-tex" "build-docbook-catalog" "https://github.com/somasis/build-docbook-catalog"
+update_github_package "app-tex" "build-docbook-catalog" "https://github.com/gentoo/build-docbook-catalog"
 update_github_package "app-util" "bc" "https://github.com/gavinhoward/bc"
 update_github_package "app-var" "push" "https://github.com/vaeth/push"
 update_github_package "app-var" "quoter" "https://github.com/vaeth/quoter"
@@ -327,3 +325,5 @@ update_github_package "xgui-tools" "alsa-plugins" "https://github.com/alsa-proje
 update_github_package "xmedia-app" "pngquant" "https://github.com/kornelski/pngquant"
 update_github_package "xmedia-lib" "graphene" "https://github.com/ebassi/graphene"
 update_github_package "xmedia-lib" "libimagequant" "https://github.com/ImageOptim/libimagequant"
+
+rm -rf "${TMP_DIR}"

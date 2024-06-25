@@ -32,19 +32,16 @@ for i in gnulib coreutils ; do
 done
 
 for i in acl attr coreutils cpio diffutils findutils gperf grep grub libtool patch sed tar ; do
-	#prepare sources
+	# prepare sources
 	[ ! -d ${WORKHOME}/$i ] && git clone https://git.savannah.gnu.org/git/$i.git ${WORKHOME}/$i --depth 1
 	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git pull && git reset --hard && git clean -f )
 
 	GITDATENAME="$i-$(cd ${WORKHOME}/$i && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
 
-	#only create if different timestamp
+	# only create if different timestamp
 	if [ ! -f "${WORKHOME}/${GITDATENAME}.tar.xz" ]; then
-		rm -rf "${TEMPLOCATION}/gnulib_$i"
-		cp -rp "${WORKHOME}/gnulib" "${TEMPLOCATION}/gnulib_$i"
-		( cd "${WORKHOME}/$i" && rm -rf gnulib )
-		ln -s "${TEMPLOCATION}/gnulib_$i" "${WORKHOME}/$i/gnulib"
-
+		rm -rf "${WORKHOME}/$i/gnulib"
+		cp -rp "${WORKHOME}/gnulib" "${WORKHOME}/$i/gnulib"
 		( cd ${WORKHOME}/$i && ./bootstrap --copy --skip-po || ./autogen.sh )
 		( cd ${WORKHOME} && tar -hcf - $i | tar -xf - -C ${TEMPLOCATION} )
 		mv ${TEMPLOCATION}/$i ${TEMPLOCATION}/${GITDATENAME}
@@ -54,12 +51,10 @@ for i in acl attr coreutils cpio diffutils findutils gperf grep grub libtool pat
 		( cd ${TEMPLOCATION} && XZOPT=-e9 tar cJf ${WORKHOME}/${GITDATENAME}.tar.xz ${GITDATENAME} --owner=0 --group=0 )
 		new_snapshot_date=$(echo "$GITDATENAME" | sed -r 's/^[a-z-]+-([0-9]{8}).*$/\1/')
 		rename_ebuild_files "$i" "$new_snapshot_date"
-		rm -rf "${TEMPLOCATION}/gnulib_$i"
-		rm -rf "${TEMPLOCATION}/${GITDATENAME}"
 	fi
 done
 
-#librsvg
+# librsvg
 for i in librsvg ; do
 	[ ! -d "${WORKHOME}/$i" ] && git clone https://gitlab.gnome.org/GNOME/$i.git "${WORKHOME}/$i" --depth 1
 	[ -d "${WORKHOME}/$i" ] && ( cd "${WORKHOME}/$i" && git pull && git reset --hard && git clean -f )
@@ -77,20 +72,6 @@ for i in librsvg ; do
 		mv ${TEMPLOCATION}/$i ${TEMPLOCATION}/${GITDATENAME}
 		find ${TEMPLOCATION}/${GITDATENAME} -name *~ -delete
 		( cd ${TEMPLOCATION}/${GITDATENAME} && rm -rf .git* gnulib autom4te.cache po/.reference .cargo )
-		( cd ${TEMPLOCATION} && XZOPT=-e9 tar cJf ${WORKHOME}/${GITDATENAME}.tar.xz ${GITDATENAME} --owner=0 --group=0 )
-	fi
-done
-
-for i in xz-utils ; do
-	[ ! -d ${WORKHOME}/$i ] && git clone https://git.tukaani.org/xz.git ${WORKHOME}/$i
-	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git pull && git reset --hard && git clean -f )
-	GITDATENAME="$i-$(cd ${WORKHOME}/$i && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
-
-	if [ ! -f "${WORKHOME}/${GITDATENAME}.tar.xz" ]; then
-		tar -hcf - $i | tar -xf - -C ${TEMPLOCATION}
-		mv ${TEMPLOCATION}/$i ${TEMPLOCATION}/${GITDATENAME}
-		find ${TEMPLOCATION}/${GITDATENAME} -name *~ -delete
-		( cd ${TEMPLOCATION}/${GITDATENAME} && rm -rf .git* gnulib autom4te.cache po/.reference )
 		( cd ${TEMPLOCATION} && XZOPT=-e9 tar cJf ${WORKHOME}/${GITDATENAME}.tar.xz ${GITDATENAME} --owner=0 --group=0 )
 	fi
 done

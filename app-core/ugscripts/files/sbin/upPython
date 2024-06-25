@@ -342,6 +342,8 @@ main() {
 		commit_changes "${package}" || { echo "Failed to commit changes for ${package}"; continue; }
 	done
 
+
+	rm -rf "${GENTOO_PATH}"
 	echo "Script execution finished."
 }
 

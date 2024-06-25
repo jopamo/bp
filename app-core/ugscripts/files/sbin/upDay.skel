@@ -11,6 +11,12 @@ DEBUG_LOG="${TMP_DIR}/${PROGNAME}-debug.log"
 ERROR_LOG="${TMP_DIR}/${PROGNAME}-error.log"
 JSON_LOG="${TMP_DIR}/${PROGNAME}-json.log"
 
+update_toolchain=false
+update_unsafe=false
+update_branches=false
+debug_mode=false
+specific_packages=()
+
 init_logs() {
 	mkdir -p "$TMP_DIR"
 	mkdir -p "$GIT_CLONES_DIR"
@@ -56,18 +62,15 @@ TCL_BRANCH=$(echo "core-${TCL_VERSION}" | tr '.' '-')
 BINUTILS_BRANCH="binutils-$(echo "$BINUTILS_VERSION" | sed 's/\./_/')-branch"
 TOR_BRANCH="release-$TOR_VERSION"
 
-update_toolchain=false
-update_unsafe=false
-update_branches=false
-
 show_help() {
-	echo "Usage: $0 [options]"
+	echo "Usage: $0 [options] [package1 package2 ... packageN]"
 	echo ""
 	echo "Options:"
-	echo "  --update-toolchain   Update the toolchain ebuilds (GCC, Binutils, Glibc, etc.)"
-	echo "  --update-unsafe      Update packages marked as unsafe"
-	echo "  --update-branches    Update packages based on specific branches"
-	echo "  --help               Display this help and exit"
+	echo "  -t, --update-toolchain   Update the toolchain ebuilds (GCC, Binutils, Glibc, etc.)"
+	echo "  -u, --update-unsafe      Update packages marked as unsafe"
+	echo "  -b, --update-branches    Update packages based on specific branches"
+	echo "  -D, --debug              Keep the temporary directory after execution"
+	echo "  -h, --help               Display this help and exit"
 	echo ""
 	echo "Without any options, the script does not perform any updates."
 }
@@ -88,30 +91,37 @@ main() {
 	fi
 
 	REPLACE_ME
+
+	if [ "$debug_mode" = false ]; then
+		rm -rf "$TMP_DIR"
+	fi
 }
 
 while [[ $# -gt 0 ]]; do
 	case $1 in
-		--update-toolchain)
+		-t|--update-toolchain)
 			update_toolchain=true
 			shift
 			;;
-		--unsafe)
+		-u|--update-unsafe)
 			update_unsafe=true
 			shift
 			;;
-		--update-branches)
+		-b|--update-branches)
 			update_branches=true
 			shift
 			;;
-		--help)
+		-D|--debug)
+			debug_mode=true
+			shift
+			;;
+		-h|--help)
 			show_help
 			exit 0
 			;;
 		*)
-			echo "Unknown option: $1"
-			show_help
-			exit 1
+			specific_packages+=("$1")
+			shift
 			;;
 	esac
 done
@@ -311,17 +321,17 @@ unsafe_bump() {
 branch_bump() {
 	update_ebuild "${REPO_PATH}/app-core/bash" "https://git.savannah.gnu.org/git/bash.git" "${BASH_BRANCH}" "$BASH_VERSION" "no"
 	update_ebuild "${REPO_PATH}/app-build/gdb" "https://sourceware.org/git/binutils-gdb.git" "${GDB_BRANCH}" "$GDB_VERSION" "no"
-	update_ebuild "${REPO_PATH}/lib-core/glibc" "https://sourceware.org/git/glibc.git" "${GLIBC_BRANCH}" "$GLIBC_VERSION" "no"
+
 	for go_version in "${GO_VERSIONS[@]}"; do
 		local GO_BRANCH="release-branch.go${go_version}"
 		update_ebuild "${REPO_PATH}/app-lang/go" "https://go.googlesource.com/go" "${GO_BRANCH}" "$go_version" "no"
 	done
+
 	update_ebuild "${REPO_PATH}/dev-libs/kde-frameworks/kguiaddons" "https://invent.kde.org/frameworks/kguiaddons.git" "${KGUIADDONS_BRANCH}" "$KDE_VERSION" "no"
 	update_ebuild "${REPO_PATH}/dev-libs/kde-frameworks/kwindowsystem" "https://invent.kde.org/frameworks/kwindowsystem.git" "${KWINDOWSYSTEM_BRANCH}" "$KDE_VERSION" "no"
 	update_ebuild "${REPO_PATH}/lib-core/libassuan" "https://dev.gnupg.org/source/libassuan.git" "${LIBASSUAN_BRANCH}" "$LIBASSUAN_VERSION" "no"
 	update_ebuild "${REPO_PATH}/lib-core/libgcrypt" "https://dev.gnupg.org/source/libgcrypt.git" "${LIBGCRYPT_BRANCH}" "$LIBGCRYPT_VERSION" "no"
 	update_ebuild "${REPO_PATH}/app-lang/tcl" "https://github.com/tcltk/tcl" "${TCL_BRANCH}-branch" "$TCL_VERSION" "no"
-	update_ebuild "${REPO_PATH}/app-build/binutils" "https://github.com/bminor/binutils-gdb" "${BINUTILS_BRANCH}" "${BINUTILS_VERSION}" "no"
 	update_ebuild "${REPO_PATH}/app-server/tor" "https://git.torproject.org/tor.git" "${TOR_BRANCH}" "$TOR_VERSION" "no"
 	update_ebuild "${REPO_PATH}/lib-net/openssl" "https://github.com/openssl/openssl" "openssl-${OPENSSL_VERSION}" "$OPENSSL_VERSION" "no"
 	update_ebuild "${REPO_PATH}/app-server/nodejs" "https://github.com/nodejs/node" "v${NODEJS_VERSION}.x" "$NODEJS_VERSION" "no"

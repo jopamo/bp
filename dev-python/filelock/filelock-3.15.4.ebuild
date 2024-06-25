@@ -20,8 +20,10 @@ KEYWORDS="amd64 arm64"
 BDEPEND="
 	dev-python/hatch-vcs[${PYTHON_USEDEP}]
 	test? (
+		dev-python/pytest-asyncio[${PYTHON_USEDEP}]
 		dev-python/pytest-mock[${PYTHON_USEDEP}]
 		dev-python/pytest-timeout[${PYTHON_USEDEP}]
+		dev-python/virtualenv[${PYTHON_USEDEP}]
 	)
 "
 

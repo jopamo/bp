@@ -156,6 +156,10 @@ BDEPEND="
 	)
 "
 
+PATCHES=(
+	"${FILESDIR}"/${P}-delay-non-stdlib-imports.patch
+)
+
 src_unpack() {
 	cargo_src_unpack
 }

@@ -7,7 +7,7 @@ inherit autotools python-r1
 DESCRIPTION=" a light-weight window manager for the X11 Window System"
 HOMEPAGE="http://openbox.org/"
 
-SNAPSHOT=93179002985ce601c64f935214fbd5273ae2a74a
+SNAPSHOT=84f2adce63f5fbefbb62eafa7947d1473786085d
 SRC_URI="https://github.com/joewing/jwm/archive/${SNAPSHOT}.tar.gz -> jwm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/jwm-${SNAPSHOT}"
 

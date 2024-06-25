@@ -18,6 +18,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+RDEPEND="dev-python/colorama"
+
 src_prepare() {
 	default
 	rm LICENSE

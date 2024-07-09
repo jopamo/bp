@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic libtool python-any-r1
+inherit flag-o-matic meson python-any-r1
 
 DESCRIPTION="An OpenType text shaping engine"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/HarfBuzz"
@@ -30,29 +30,11 @@ BDEPEND="
 "
 
 pkg_setup() {
+	filter-flags -fexceptions
+
 	use test && python-any-r1_pkg_setup
 
 	if ! use debug ; then
 		append-cppflags -DHB_NDEBUG
 	fi
-}
-
-src_prepare() {
-	default
-	xdg_environment_reset
-}
-
-src_configure() {
-	local myconf=(
-		$(use_enable introspection)
-		$(use_enable static-libs static)
-		$(use_with cairo)
-		$(use_with glib)
-		$(use_with introspection gobject)
-		$(use_with truetype freetype)
-		--without-coretext
-		--without-icu
-		--without-uniscribe
-	)
-	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }

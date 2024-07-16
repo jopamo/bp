@@ -5,7 +5,6 @@ EAPI=8
 export CBUILD=${CBUILD:-${CHOST}}
 export CTARGET=${CTARGET:-${CHOST}}
 
-GO_BOOTSTRAP_MIN=1.18.0
 MY_PV=${PV/_/}
 
 inherit toolchain-funcs
@@ -13,7 +12,7 @@ inherit toolchain-funcs
 DESCRIPTION="A concurrent garbage collected and typesafe programming language"
 HOMEPAGE="https://go.dev"
 
-SNAPSHOT=90a870f1dc49bfcc6ffe95f80fbaf21875198e7a
+SNAPSHOT=e073febe901cecb3737c712b6d53a8c48684ffb5
 SRC_URI="https://github.com/golang/go/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/go-${SNAPSHOT}"
 
@@ -46,18 +45,10 @@ pkg_setup() {
 src_prepare() {
 	default
 	export GOROOT_FINAL="/usr/lib/go"
-	export GOROOT_BOOTSTRAP="/usr/lib/go"
+	export GOROOT_BOOTSTRAP="/usr/lib/gccgo"
 }
 
 src_compile() {
-	if has_version ">=app-lang/go-${GO_BOOTSTRAP_MIN}"; then
-		export GOROOT_BOOTSTRAP="${BROOT}/usr/lib/go"
-		einfo "Using installed Go for bootstrap"
-	else
-		eerror "Go >= ${GO_BOOTSTRAP_MIN} is required"
-		die "Appropriate Go or gccgo not found"
-	fi
-
 	export GOROOT_FINAL="${EPREFIX}/usr/lib/go"
 	export GOROOT="${PWD}"
 	export GOBIN="${GOROOT}/bin"

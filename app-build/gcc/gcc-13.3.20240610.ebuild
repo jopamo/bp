@@ -26,10 +26,7 @@ DEPEND="
 	isl? ( lib-core/isl )
 	zstd? ( app-compression/zstd )
 "
-BDEPEND="
-	app-build/make
-	app-dev/patchelf
-"
+BDEPEND="app-build/make"
 
 PATCHES=(
 	"${FILESDIR}"/0001-posix_memalign.patch
@@ -59,8 +56,11 @@ src_prepare() {
 	filter-flags -floop-interchange
 	filter-flags -fno-math-errno
 	filter-flags -fno-signed-zeros
-	filter-flags -fno-trapping-math -fexceptions -fpie -fpic -fasynchronous-unwind-tables -fexceptions -Wl,-z,combreloc -Wl,-z,now -Wl,-z,relro
-
+	filter-flags -fno-trapping-math -fexceptions -fpie -fpic
+	filter-flags -fasynchronous-unwind-tables -fexceptions -Wl,-z,combreloc
+	filter-flags -Wl,-z,now -Wl,-z,relro
+	filter-flags -fgraphite-identity -floop-nest-optimize -ftree-loop-distribution
+	filter-flags -fipa-pta -fcf-protection=full -fstack-clash-protection
 	append-flags -Wa,--noexecstack
 
 	use debug || filter-flags -g
@@ -171,24 +171,22 @@ src_install() {
 	find "${ED}" -name libcc1plugin.la -delete
 	find "${ED}" -name libcp1plugin.la -delete
 
-	patchelf --remove-rpath "${ED}"/usr/lib/libstdc++.so.*
-
 	dosym -r /usr/bin/gcc /usr/bin/cc
 
 	dobin "${FILESDIR}"/c89
 	dobin "${FILESDIR}"/c99
 
 	if use go-bootstrap; then
-		exeinto /usr/share/gcc/go/
-		doexe "${ED}/usr/bin/{go,go*}"
+		exeinto /usr/lib/gccgo/bin/
+		doexe "${ED}/usr/bin/go"
+		doexe "${ED}/usr/bin/gofmt"
 
 		cat > "${T}"/99gcc <<- EOF || die
-			PATH=/usr/share/gcc/go/
+			PATH=/usr/lib/gccgo/bin/
 		EOF
 		doenvd "${T}"/99gcc
 
-		mkdir -p "${ED}"/usr/lib/gccgo/bin
-		mv "${ED}"/usr/bin/go "${ED}"/usr/lib/gccgo/bin/go
-		mv "${ED}"/usr/bin/gofmt "${ED}"/usr/lib/gccgo/bin/gofmt
+		rm "${ED}/usr/bin/go"
+		rm "${ED}/usr/bin/gofmt"
 	fi
 }

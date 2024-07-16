@@ -134,7 +134,7 @@ move_package() {
 
 bootstrap_go() {
 	USE=go-bootstrap emerge --oneshot gcc
-	FEATURES="-sandbox -usersandbox" emerge --oneshot =app-lang/go-1.20*
+	FEATURES="-sandbox -usersandbox" emerge --oneshot =app-lang/go-1.21*
 	emerge --oneshot gcc
 	emerge --oneshot go
 }

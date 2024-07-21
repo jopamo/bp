@@ -1,0 +1,16 @@
+diff --git a/src/basic/string-util.h b/src/basic/string-util.h
+--- a/src/basic/string-util.h
++++ b/src/basic/string-util.h
+@@ -27,6 +27,12 @@
+ #define URI_UNRESERVED      ALPHANUMERICAL "-._~"       /* [RFC3986] */
+ #define URI_VALID           URI_RESERVED URI_UNRESERVED /* [RFC3986] */
+ 
++#if !defined(__GLIBC__)
++#include <string.h> // Include necessary standard header for strrchr
++static inline char* my_basename(char* path) { return strrchr(path, '/') ? strrchr(path, '/') + 1 : path; }
++#define basename(path) my_basename((char*)path)
++#endif
++
+ static inline char* strstr_ptr(const char *haystack, const char *needle) {
+         if (!haystack || !needle)
+                 return NULL;

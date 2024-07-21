@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="a reference implementation of the startup notification protocol"
 HOMEPAGE="https://swaywm.org"
 
-SNAPSHOT=07237ff25d6171e1b548118442ddba4259a53ba5
+SNAPSHOT=64eb585315cfb1fb4fe68c8f705956e9fed46545
 SRC_URI="https://gitlab.freedesktop.org/xdg/startup-notification/-/archive/${SNAPSHOT}/startup-notification-${SNAPSHOT}.tar.bz2 -> startup-notification-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/startup-notification-${SNAPSHOT}"
 

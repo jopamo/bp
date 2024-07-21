@@ -7,7 +7,7 @@ inherit meson flag-o-matic
 DESCRIPTION="The EGLStream-based Wayland external platform"
 HOMEPAGE="https://github.com/NVIDIA/egl-wayland"
 
-SNAPSHOT=5133d9d48d0babbbbc8578dca58d37b5be2df5d1
+SNAPSHOT=081139808a7548cca5eec41be16a06ed3e9a5458
 SRC_URI="https://github.com/NVIDIA/egl-wayland/archive/${SNAPSHOT}.tar.gz -> egl-wayland-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/egl-wayland-${SNAPSHOT}"
 

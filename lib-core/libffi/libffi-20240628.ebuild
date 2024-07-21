@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="a portable, high level programming interface to various calling conventions"
 HOMEPAGE="https://github.com/libffi/libffi"
 
-SNAPSHOT=9c9e8368e49804c4f7c35ac9f0d7c1d0d533308b
+SNAPSHOT=8e3ef965c2d0015ed129a06d0f11f30c2120a413
 SRC_URI="https://github.com/libffi/libffi/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

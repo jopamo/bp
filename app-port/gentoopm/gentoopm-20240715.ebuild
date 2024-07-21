@@ -9,7 +9,7 @@ inherit distutils-r1
 DESCRIPTION="A common interface to Gentoo package managers"
 HOMEPAGE="https://github.com/mgorny/gentoopm/"
 
-SNAPSHOT=3cc8b2b49bdc30d78671e608bd3a1600e312ee99
+SNAPSHOT=6bc152abda38cfc06df929397168ee8308e9681b
 SRC_URI="https://github.com/projg2/gentoopm/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps elf iptables ipv6 musl"
+IUSE="caps elf iptables musl"
 
 DEPEND="
 	app-build/bison
@@ -41,8 +41,6 @@ doecho() {
 
 src_prepare() {
 	filter-flags -Wl,-z,defs
-
-	use ipv6 || eapply "${FILESDIR}"/${PN}-4.20.0-no-ipv6.patch
 
 	use musl && eapply "${FILESDIR}"/${PN}-6.8.0-configure-nomagic-nolibbsd.patch
 	use musl && eapply "${FILESDIR}"/${PN}-6.8.0-disable-libbsd-fallback.patch

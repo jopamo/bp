@@ -7,15 +7,15 @@ inherit toolchain-funcs flag-o-matic
 DESCRIPTION="kernel routing and traffic control utilities"
 HOMEPAGE="https://wiki.linuxfoundation.org/networking/iproute2"
 
-SNAPSHOT=554ea3649dd15b19202d7e9791310c3bbb910b34
+SNAPSHOT=c6c39f3c6da4bf093aad6d0eb1c5b07a7aa2dab7
 SRC_URI="https://github.com/iproute2/iproute2/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
-IUSE="caps elf iptables musl"
+IUSE="caps elf iptables ipv6 musl"
 
 DEPEND="
 	app-build/bison
@@ -42,6 +42,8 @@ doecho() {
 src_prepare() {
 	filter-flags -Wl,-z,defs
 
+	use ipv6 || eapply "${FILESDIR}"/${PN}-4.20.0-no-ipv6.patch
+
 	use musl && eapply "${FILESDIR}"/${PN}-6.8.0-configure-nomagic-nolibbsd.patch
 	use musl && eapply "${FILESDIR}"/${PN}-6.8.0-disable-libbsd-fallback.patch
 
@@ -60,7 +62,6 @@ src_prepare() {
 
 	# build against system headers
 	rm -r include/netinet || die #include/linux include/ip{,6}tables{,_common}.h include/libiptc
-	rm -r include/uapi/linux/{in6.h,if_bridge.h} || die
 	sed -i 's:TCPI_OPT_ECN_SEEN:16:' misc/ss.c || die
 }
 

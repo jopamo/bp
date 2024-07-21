@@ -3,5 +3,6 @@
 >lib-core/npth-1.6
 >app-fs/lvm2-2.03.0
 >app-core/shadow-5.0.0
-#>lib-core/musl-20230824
+>lib-core/musl-20240523
 >=app-build/binutils-2.42
+>=app-core/systemd-255.0

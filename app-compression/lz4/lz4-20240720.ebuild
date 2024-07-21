@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="Extremely Fast Compression algorithm"
 HOMEPAGE="https://github.com/lz4/lz4"
 
-SNAPSHOT=24d9bb8945baa53497571dc2e93c6b377ab37b56
+SNAPSHOT=68959d27c3ec37b339b3b8ecfea155faf0ef94f2
 SRC_URI="https://github.com/lz4/lz4/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}/build/meson
 

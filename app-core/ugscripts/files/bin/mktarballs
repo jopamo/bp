@@ -19,6 +19,69 @@ rename_ebuild_files() {
 	fi
 }
 
+finalize_update() {
+	local package_path="$1"
+	local package_name="$2"
+	local new_ebuild_filename="$3"
+	local version="$4"
+
+	echo "Finalizing update for $package_name in $package_path"
+
+	if ! (cd "$package_path" && pkgdev manifest); then
+		echo "Error generating manifest for ${package_name}. Skipping..."
+		return 1
+	fi
+
+	(cd "$package_path" && \
+		git add --all . && \
+		git -c user.name="${BOT_USER}" \
+		-c user.email="${BOT_EMAIL}" \
+		-c commit.gpgsign=true \
+		-c user.signingkey="${BOT_KEYID}" \
+		commit -m "Update ${package_name} to ${version}" && \
+		git push origin HEAD)
+
+	echo "Ebuild updated for ${package_name}: ${new_ebuild_filename}"
+}
+
+process_package() {
+	local package_name="$1"
+	local repo_url="$2"
+
+	[ ! -d "${WORKHOME}/${package_name}" ] && git clone "${repo_url}" "${WORKHOME}/${package_name}" --depth 1
+	[ -d "${WORKHOME}/${package_name}" ] && (cd "${WORKHOME}/${package_name}" && git remote update && git reset --hard && git clean -f)
+
+	local GITDATENAME="${package_name}-$(cd ${WORKHOME}/${package_name} && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
+	local new_snapshot_date=$(echo "$GITDATENAME" | sed -r 's/^[a-z-]+-([0-9]{8}).*$/\1/')
+
+	if [ ! -f "${WORKHOME}/${GITDATENAME}.tar.xz" ]; then
+		rm -rf "${WORKHOME}/${package_name}/gnulib"
+		cp -rp "${WORKHOME}/gnulib" "${WORKHOME}/${package_name}/gnulib"
+		chmod +w build-aux/ltmain.sh
+
+		(cd ${WORKHOME}/${package_name} && ./bootstrap --copy --skip-po || ./autogen.sh)
+
+		if [ -d "./libltdl" ]; then
+			pushd libltdl >/dev/null || exit 1
+			autoreconf
+			popd >/dev/null || exit 1
+		fi
+
+		(cd ${WORKHOME} && tar -hcf - ${package_name} | tar -xf - -C ${TEMPLOCATION})
+		mv ${TEMPLOCATION}/${package_name} ${TEMPLOCATION}/${GITDATENAME}
+		find ${TEMPLOCATION}/${GITDATENAME} -name *~ -delete
+		(cd ${TEMPLOCATION}/${GITDATENAME} && rm -rf .git* gnulib autom4te.cache po/.reference)
+		find ${TEMPLOCATION}/${GITDATENAME} -name *.git* -delete
+		(cd ${TEMPLOCATION} && XZOPT=-e9 tar cJf ${WORKHOME}/${GITDATENAME}.tar.xz ${GITDATENAME} --owner=0 --group=0)
+		cp ${WORKHOME}/${GITDATENAME}.tar.xz /var/cache/distfiles/
+
+		local ebuild_file_path=$(find "${REPO}" -type f -name "${package_name}-*.ebuild")
+		local category=$(basename $(dirname $(dirname "${ebuild_file_path}")))
+		rename_ebuild_files "$package_name" "$new_snapshot_date"
+		finalize_update "${REPO}/${category}/${package_name}" "$package_name" "${package_name}-${new_snapshot_date}.ebuild" "$new_snapshot_date"
+	fi
+}
+
 rm -rf "${TEMPLOCATION}"
 mkdir -p "${WORKHOME}"
 mkdir -p "${TEMPLOCATION}"
@@ -27,52 +90,32 @@ cd "${WORKHOME}"
 [ ! -d "${WORKHOME}/coreutils" ] && git clone https://github.com/coreutils/coreutils.git "${WORKHOME}/coreutils" --depth 1
 [ ! -d "${WORKHOME}/gnulib" ] && git clone https://github.com/coreutils/gnulib.git "${WORKHOME}/gnulib"
 
-for i in gnulib coreutils ; do
-	[ -d "${WORKHOME}/$i" ] && ( cd "${WORKHOME}/$i" && git remote update && git reset --hard && git clean -f )
+for i in gnulib coreutils; do
+	[ -d "${WORKHOME}/$i" ] && (cd "${WORKHOME}/$i" && git remote update && git reset --hard && git clean -f)
 done
 
-for i in acl attr coreutils cpio diffutils findutils gperf grep grub libtool patch sed tar ; do
-	# prepare sources
-	[ ! -d ${WORKHOME}/$i ] && git clone https://git.savannah.gnu.org/git/$i.git ${WORKHOME}/$i --depth 1
-	[ -d ${WORKHOME}/$i ] && ( cd ${WORKHOME}/$i && git pull && git reset --hard && git clean -f )
+packages=(
+	"acl"
+	"attr"
+	"coreutils"
+	"cpio"
+	"diffutils"
+	"findutils"
+	"gperf"
+	"grep"
+	"grub"
+	"libtool"
+	"patch"
+	"sed"
+	"tar"
+	"librsvg"
+)
 
-	GITDATENAME="$i-$(cd ${WORKHOME}/$i && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
-
-	# only create if different timestamp
-	if [ ! -f "${WORKHOME}/${GITDATENAME}.tar.xz" ]; then
-		rm -rf "${WORKHOME}/$i/gnulib"
-		cp -rp "${WORKHOME}/gnulib" "${WORKHOME}/$i/gnulib"
-		( cd ${WORKHOME}/$i && ./bootstrap --copy --skip-po || ./autogen.sh )
-		( cd ${WORKHOME} && tar -hcf - $i | tar -xf - -C ${TEMPLOCATION} )
-		mv ${TEMPLOCATION}/$i ${TEMPLOCATION}/${GITDATENAME}
-		find ${TEMPLOCATION}/${GITDATENAME} -name *~ -delete
-		( cd ${TEMPLOCATION}/${GITDATENAME} && rm -rf .git* gnulib autom4te.cache po/.reference )
-		find ${TEMPLOCATION}/${GITDATENAME} -name *.git* -delete
-		( cd ${TEMPLOCATION} && XZOPT=-e9 tar cJf ${WORKHOME}/${GITDATENAME}.tar.xz ${GITDATENAME} --owner=0 --group=0 )
-		new_snapshot_date=$(echo "$GITDATENAME" | sed -r 's/^[a-z-]+-([0-9]{8}).*$/\1/')
-		rename_ebuild_files "$i" "$new_snapshot_date"
-	fi
-done
-
-# librsvg
-for i in librsvg ; do
-	[ ! -d "${WORKHOME}/$i" ] && git clone https://gitlab.gnome.org/GNOME/$i.git "${WORKHOME}/$i" --depth 1
-	[ -d "${WORKHOME}/$i" ] && ( cd "${WORKHOME}/$i" && git pull && git reset --hard && git clean -f )
-	GITDATENAME="$i-$(cd "${WORKHOME}/$i" && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
-
-	if [ ! -f "${WORKHOME}/${GITDATENAME}.tar.xz" ]; then
-		if [ -f "${WORKHOME}/$i/.cargo/config.toml" ]; then
-			rm "${WORKHOME}/$i/.cargo/config.toml"
-		fi
-		( cd "${WORKHOME}/$i" && cargo vendor )
-		mkdir -p "${WORKHOME}/$i/.cargo"
-		echo -e "[source.crates-io]\nreplace-with = \"vendored-sources\"\n\n[source.vendored-sources]\ndirectory = \"vendor\"\n\n[workspace]\nresolver = \"2\"" > "${WORKHOME}/$i/.cargo/config.toml"
-
-		tar -hcf - $i | tar -xf - -C ${TEMPLOCATION}
-		mv ${TEMPLOCATION}/$i ${TEMPLOCATION}/${GITDATENAME}
-		find ${TEMPLOCATION}/${GITDATENAME} -name *~ -delete
-		( cd ${TEMPLOCATION}/${GITDATENAME} && rm -rf .git* gnulib autom4te.cache po/.reference .cargo )
-		( cd ${TEMPLOCATION} && XZOPT=-e9 tar cJf ${WORKHOME}/${GITDATENAME}.tar.xz ${GITDATENAME} --owner=0 --group=0 )
+for package in "${packages[@]}"; do
+	if [ "$package" == "librsvg" ]; then
+		process_package "$package" "https://gitlab.gnome.org/GNOME/$package.git"
+	else
+		process_package "$package" "https://git.savannah.gnu.org/git/$package.git"
 	fi
 done
 

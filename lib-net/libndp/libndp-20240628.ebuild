@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Library for Neighbor Discovery Protocol"
 HOMEPAGE="http://libndp.org"
 
-SNAPSHOT=05e4ba7b0d126eea4c04387dcf40596059ee24af
+SNAPSHOT=2730638bf88984b09531813974f9bd14e1a50165
 SRC_URI="https://github.com/jpirko/libndp/archive/${SNAPSHOT}.tar.gz -> libndp-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libndp-${SNAPSHOT}"
 

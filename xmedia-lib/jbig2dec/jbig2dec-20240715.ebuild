@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="A decoder implementation of the JBIG2 image compression format"
 HOMEPAGE="http://ghostscript.com/jbig2dec.html"
 
-SNAPSHOT=ee53a7e4bc7819d32e8c0b2057885bcc97586bf3
+SNAPSHOT=6ecb04980813d693234190021bd1cf874c05b1b4
 SRC_URI="https://github.com/ArtifexSoftware/jbig2dec/archive/${SNAPSHOT}.tar.gz -> jbig2dec-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/jbig2dec-${SNAPSHOT}"
 

@@ -23,7 +23,7 @@ KEYWORDS="amd64 arm64"
 RDEPEND="
 	$(python_gen_cond_dep '
 		dev-python/tomli[${PYTHON_USEDEP}]
-	' 3.{9..10})
+	' 3.10)
 "
 BDEPEND="
 	test? (

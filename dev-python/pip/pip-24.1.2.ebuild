@@ -55,6 +55,7 @@ BDEPEND="
 			dev-python/ensurepip-wheel
 			dev-python/freezegun[${PYTHON_USEDEP}]
 			dev-python/pretend[${PYTHON_USEDEP}]
+			dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
 			dev-python/pytest-xdist[${PYTHON_USEDEP}]
 			dev-python/scripttest[${PYTHON_USEDEP}]
 			dev-python/tomli-w[${PYTHON_USEDEP}]
@@ -73,8 +74,6 @@ distutils_enable_tests pytest
 python_prepare_all() {
 	local PATCHES=(
 		"${FILESDIR}/pip-23.1-no-coverage.patch"
-		# https://github.com/pypa/pip/issues/12786 (and more)
-		"${FILESDIR}/pip-24.1-test-offline.patch"
 		# prepare to unbundle dependencies
 		"${FILESDIR}/pip-24.1-unbundle.patch"
 	)
@@ -117,6 +116,7 @@ python_test() {
 		# Internet
 		tests/functional/test_config_settings.py::test_backend_sees_config_via_sdist
 		tests/functional/test_install.py::test_double_install_fail
+		tests/functional/test_install.py::test_install_sdist_links
 		tests/functional/test_install_config.py::test_prompt_for_keyring_if_needed
 		# broken by system site-packages use
 		tests/functional/test_check.py::test_basic_check_clean
@@ -149,18 +149,13 @@ python_test() {
 		)
 	fi
 
-	case ${EPYTHON} in
-		python3.10)
-			EPYTEST_DESELECT+=(
-				# no clue why they fail
-			)
-			;;
-	esac
-
 	local -x PIP_DISABLE_PIP_VERSION_CHECK=1
 	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	local EPYTEST_XDIST=1
-	epytest -m "not network" -o tmp_path_retention_policy=all
+	# rerunfailures because test suite breaks if packages are installed
+	# in parallel
+	epytest -m "not network" -o tmp_path_retention_policy=all \
+		-p rerunfailures --reruns=5
 }
 
 python_install_all() {

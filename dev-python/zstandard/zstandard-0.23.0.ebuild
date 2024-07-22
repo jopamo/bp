@@ -43,17 +43,17 @@ distutils_enable_tests pytest
 
 src_prepare() {
 	filter-flags -Wl,-z,defs
-	local PATCHES=(
-		"${FILESDIR}/${P}-build.patch"
-	)
-
 	# the C backend is repeatedly broken, so force CFFI instead
 	sed -e '/PYTHON_ZSTANDARD_IMPORT_POLICY/s:default:cffi:' \
 		-i zstandard/__init__.py || die
 	# unbundle zstd
-	: > zstd/zstdlib.c || die
+	rm zstd/* || die
+	> zstd/zstd.c || die
 	# it does random preprocessing on that, so we can't use #include
-	cp "${ESYSROOT}/usr/include/zstd.h" zstd/zstd.h || die
+	local f
+	for f in zdict.h zstd.h; do
+		cp "${ESYSROOT}/usr/include/${f}" "zstd/${f}" || die
+	done
 	sed -i -e '/include_dirs/a    libraries=["zstd"],' make_cffi.py || die
 
 	distutils-r1_src_prepare

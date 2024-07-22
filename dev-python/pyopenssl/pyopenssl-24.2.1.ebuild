@@ -3,11 +3,9 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
+PYPI_PN=pyOpenSSL
 PYTHON_COMPAT=( python3_{10..13} pypy3 )
 PYTHON_REQ_USE="threads(+)"
-
-PYPI_NO_NORMALIZE=1
-PYPI_PN=pyOpenSSL
 
 inherit distutils-r1 toolchain-funcs pypi
 
@@ -23,7 +21,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	<dev-python/cryptography-43[${PYTHON_USEDEP}]
+	<dev-python/cryptography-44[${PYTHON_USEDEP}]
 	>=dev-python/cryptography-41.0.5[${PYTHON_USEDEP}]
 "
 BDEPEND="

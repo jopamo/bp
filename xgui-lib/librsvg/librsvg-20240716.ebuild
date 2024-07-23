@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic
+inherit meson flag-o-matic go-module
 
 DESCRIPTION="Scalable Vector Graphics (SVG) rendering library"
 HOMEPAGE="https://wiki.gnome.org/Projects/LibRsvg"
@@ -29,18 +29,8 @@ BDEPEND="
 	virtual/rust
 "
 
-filter-flags -Wl,-z,defs
-
 src_prepare() {
-	default
-	eautoreconf
-}
+	filter-flags -Wl,-z,defs
 
-src_configure() {
-	local myconf=(
-		--disable-static
-		--enable-pixbuf-loader
-		$(use_enable introspection)
-	)
-	econf ${myconf[@]}
+	default
 }

@@ -19,7 +19,7 @@ EGIT_CHECKOUT_DIR="${S}"
 
 LICENSE="GPL"
 SLOT="$(ver_cut 1-2)"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 DEPEND="
 	app-core/ed

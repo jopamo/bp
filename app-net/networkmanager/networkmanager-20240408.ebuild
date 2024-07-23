@@ -7,14 +7,9 @@ inherit meson flag-o-matic
 DESCRIPTION="A set of co-operative tools that make networking simple and straightforward"
 HOMEPAGE="https://wiki.gnome.org/Projects/NetworkManager"
 
-if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/NetworkManager/NetworkManager"
-	inherit git-r3
-else
-	SNAPSHOT=94756668f959cc0c7024fcaf2cfd122a7e3d6ab3
-	SRC_URI="https://github.com/NetworkManager/NetworkManager/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/NetworkManager-${SNAPSHOT}
-fi
+SNAPSHOT=94756668f959cc0c7024fcaf2cfd122a7e3d6ab3
+SRC_URI="https://github.com/NetworkManager/NetworkManager/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/NetworkManager-${SNAPSHOT}
 
 LICENSE="GPL-2+"
 SLOT="0"
@@ -31,7 +26,7 @@ DEPEND="
 "
 
 src_configure() {
-	filter-flags -Wl,-z,defs
+	filter-flags -Wl,-z,defs -flto*
 
 	local emesonargs=(
 		$(meson_use nmtui)

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-MINOR_VERSION="7349-8f4248874"
+MINOR_VERSION="8679-424562606"
 
 _APPNAME="plexmediaserver"
 _USERNAME="plex"
@@ -29,7 +29,6 @@ RESTRICT="strip mirror"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 BDEPEND="app-dev/patchelf"
-RDEPEND="xmedia-lib/taglib"
 
 S="${WORKDIR}"
 

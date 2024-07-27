@@ -69,6 +69,7 @@ src_install() {
 
 	insinto /etc/bash/bashrc.d
 	doins "${FILESDIR}"/alias.sh
+	doins "${FILESDIR}"/1g4.sh
 
 	insinto /etc/bash
 	doins "${FILESDIR}"/{bash_logout,bashrc,color_ps1}

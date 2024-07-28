@@ -27,8 +27,6 @@ DEPEND="
 	python? ( ${PYTHON_DEPS}
 			app-lang/swig )"
 
-append-ldflags -Wl,-z,noexecstack
-
 pkg_setup() {
 	enewgroup unbound
 	enewuser unbound -1 -1 /var/unbound unbound
@@ -42,8 +40,10 @@ pkg_setup() {
 }
 
 src_prepare() {
-	eautoreconf
+	append-ldflags -Wl,-z,noexecstack
+
 	default
+	eautoreconf
 }
 
 src_configure() {
@@ -55,24 +55,24 @@ src_configure() {
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
 		$(use_enable debug)
-		$(use_enable gost)
 		$(use_enable dnscrypt)
-		--disable-dnstap
 		$(use_enable ecdsa)
+		$(use_enable gost)
 		$(use_enable static-libs static)
+		$(use_enable systemd)
+		--disable-dnstap
+		--disable-flto
+		--disable-rpath
 		--enable-pie
 		--enable-relro-now
 		--enable-subnet
-		$(use_enable systemd)
 		--enable-tfo-client
 		--enable-tfo-server
-		--disable-flto
-		--disable-rpath
 		--with-libevent="${EPREFIX}"/usr
+		--with-libexpat="${EPREFIX}"/usr
 		--with-pidfile="${EPREFIX}"/run/unbound.pid
 		--with-rootkey-file="${EPREFIX}"/etc/dnssec/root-anchors.txt
 		--with-ssl="${EPREFIX}"/usr
-		--with-libexpat="${EPREFIX}"/usr
 		# $(use_enable debug lock-checks)
 		# $(use_enable debug alloc-checks)
 		# $(use_enable debug alloc-lite)
@@ -90,10 +90,13 @@ src_install() {
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
 		doins "${FILESDIR}/${PN}.service"
-		newins "${FILESDIR}"/unbound_at.service "unbound@.service"
 		doins "${FILESDIR}"/unbound-anchor.service
 	fi
 
 	exeinto /usr/share/${PN}
 	doexe contrib/update-anchor.sh
+
+	insinto /etc/unbound
+	insopts -m 0755
+	doins "${FILESDIR}/${PN}.conf"
 }

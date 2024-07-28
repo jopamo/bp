@@ -2,12 +2,13 @@
 
 EAPI=8
 
-inherit autotools git-r3 flag-o-matic
+inherit autotools flag-o-matic
 
 DESCRIPTION="Portable and efficient API to determine the call-chain of a program"
 HOMEPAGE="https://savannah.nongnu.org/projects/libunwind"
-EGIT_REPO_URI="https://github.com/libunwind/libunwind.git"
-EGIT_BRANCH="v$(ver_cut 1).$(ver_cut 2)-stable"
+SNAPSHOT=9343c6d3232b131c0295886a5949a673ee0a8c5f
+SRC_URI="https://github.com/libunwind/libunwind/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/libunwind-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

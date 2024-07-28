@@ -7,9 +7,9 @@ inherit flag-o-matic
 DESCRIPTION="Complete solution to record, convert and stream audio and video. Includes libavcodec"
 HOMEPAGE="http://ffmpeg.org/"
 
-SNAPSHOT=9343c6d3232b131c0295886a5949a673ee0a8c5f
-SRC_URI="https://github.com/ffmpeg/ffmpeg/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/ffmpeg-${SNAPSHOT}"
+SNAPSHOT=a339afbe3c2f2455872e741ce2479dea913508b2
+SRC_URI="https://github.com/FFmpeg/FFmpeg/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/FFmpeg-${SNAPSHOT}"
 
 LICENSE="GPL-3"
 SLOT="0"

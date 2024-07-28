@@ -2,12 +2,11 @@
 
 EAPI=8
 
-inherit
-
 DESCRIPTION="Cryptographic library for embedded systems"
 HOMEPAGE="https://tls.mbed.org/"
-SNAPSHOT=9343c6d3232b131c0295886a5949a673ee0a8c5f
-SRC_URI="https://github.com/ARMmbed/mbedtls/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+
+SNAPSHOT=b38e960f24df88d84ea65259d5daef61f8b23787
+SRC_URI="https://github.com/Mbed-TLS/mbedtls/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/mbedtls-${SNAPSHOT}"
 
 LICENSE="Apache-2.0"

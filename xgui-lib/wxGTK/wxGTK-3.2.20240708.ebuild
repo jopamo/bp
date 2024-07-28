@@ -2,12 +2,10 @@
 
 EAPI=8
 
-inherit
-
 DESCRIPTION="GTK+ version of wxWidgets, a cross-platform C++ GUI toolkit"
 HOMEPAGE="https://wxwidgets.org/"
 
-SNAPSHOT=9343c6d3232b131c0295886a5949a673ee0a8c5f
+SNAPSHOT=51094c6f0af0e048bbb07c0996eb8f3e14d59411
 SRC_URI="https://github.com/wxWidgets/wxWidgets/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/wxWidgets-${SNAPSHOT}"
 
@@ -21,17 +19,17 @@ RDEPEND="
 	lib-core/expat
 	sdl? ( xmedia-live-lib/libsdl )
 	X? (
-		lib-util/glib
-		xmedia-lib/libpng
 		lib-core/zlib
-		xmedia-lib/libjpeg-turbo
+		lib-util/glib
 		xgui-lib/cairo
-		xgui-lib/gtk3
 		xgui-lib/gdk-pixbuf
+		xgui-lib/gtk3
 		xgui-lib/libSM
 		xgui-lib/libX11
 		xgui-lib/libXxf86vm
 		xgui-lib/pango
+		xmedia-lib/libjpeg-turbo
+		xmedia-lib/libpng
 		opengl? ( xgui-tools/mesa )
 		tiff?   ( xmedia-lib/tiff )
 		)
@@ -50,19 +48,19 @@ DEPEND="${RDEPEND}
 
 src_configure() {
 	local myconf=(
-		--with-zlib=sys
-		--with-expat=sys
-		--enable-compat28
-		$(use_with sdl)
-		--enable-graphics_ctx
-		--with-gtkprint
-		--enable-gui
-		--with-gtk=3
-		--with-libpng=sys
-		--with-libjpeg=sys
-		--without-gnomevfs
 		$(use_with opengl)
+		$(use_with sdl)
 		$(use_with tiff libtiff sys)
+		--enable-compat28
+		--enable-graphics_ctx
+		--enable-gui
+		--with-expat=sys
+		--with-gtk=3
+		--with-gtkprint
+		--with-libjpeg=sys
+		--with-libpng=sys
+		--with-zlib=sys
+		--without-gnomevfs
 	)
 	ECONF_SOURCE="${S}" econf ${myconf}
 }

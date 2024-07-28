@@ -2,12 +2,14 @@
 
 EAPI=8
 
-inherit user git-r3 autotools
+inherit user autotools
 
 DESCRIPTION="Anonymizing overlay network for TCP"
 HOMEPAGE="http://www.torproject.org/"
-EGIT_REPO_URI="https://git.torproject.org/tor.git"
-EGIT_BRANCH=maint-$(ver_cut 1).$(ver_cut 2).$(ver_cut 3)
+
+SNAPSHOT=f32b39236da40571955702bf95ac9925833af18f
+SRC_URI="https://gitlab.torproject.org/tpo/core/tor/-/archive/release-$(ver_cut 1-3)/tor-release-$(ver_cut 1-3).tar.bz2 -> ${P}.tar.bz2"
+S="${WORKDIR}/tor-${SNAPSHOT}"
 
 LICENSE="BSD GPL-2"
 SLOT="0"

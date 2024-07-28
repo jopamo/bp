@@ -6,17 +6,11 @@ inherit meson flag-o-matic
 
 DESCRIPTION="implementation of the X Window System display server"
 HOMEPAGE="https://www.x.org/wiki/"
+EGIT_BRANCH="xwayland-$(ver_cut 1-2)"
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/xserver.git"
-	#EGIT_BRANCH="server-$(ver_cut 1-2)-branch"
-	EGIT_BRANCH="xwayland-$(ver_cut 1-2)"
-	inherit git-r3
-else
-	SNAPSHOT=
-	SRC_URI="https://gitlab.freedesktop.org/xorg/xserver/-/archive/${SNAPSHOT}/xserver-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
-	S="${WORKDIR}/xorg-xserver-${SNAPSHOT}"
-fi
+SNAPSHOT=
+SRC_URI="https://gitlab.freedesktop.org/xorg/xserver/-/archive/${SNAPSHOT}/xserver-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
+S="${WORKDIR}/xorg-xserver-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit git-r3 autotools
+inherit autotools
 
 DESCRIPTION="Scaling, colorspace conversion, and dithering library"
 HOMEPAGE="https://github.com/sekrit-twc/zimg"

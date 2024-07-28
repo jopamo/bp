@@ -2,12 +2,13 @@
 
 EAPI=8
 
-inherit xdg git-r3 qmake-utils autotools user flag-o-matic
+inherit xdg qmake-utils autotools user flag-o-matic
 
 DESCRIPTION="BitTorrent client in C++ and Qt"
 HOMEPAGE="https://www.qbittorrent.org/"
-EGIT_REPO_URI="https://github.com/qbittorrent/qBittorrent"
-EGIT_BRANCH="v$(ver_cut 1)_$(ver_cut 2)_x"
+SNAPSHOT=9343c6d3232b131c0295886a5949a673ee0a8c5f
+SRC_URI="https://github.com/qbittorrent/qBittorrent/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/qBittorrent-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

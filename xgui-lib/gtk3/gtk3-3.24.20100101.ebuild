@@ -2,12 +2,14 @@
 
 EAPI=8
 
-inherit meson git-r3 xdg
+inherit meson xdg
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
-EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/gtk.git"
-EGIT_BRANCH=gtk-$(ver_cut 1)-$(ver_cut 2)
+
+SNAPSHOT=9343c6d3232b131c0295886a5949a673ee0a8c5f
+SRC_URI="https://gitlab.gnome.org/GNOME/gtk/-/archive/${SNAPSHOT}/gtk-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/gtk-${SNAPSHOT}"
 
 LICENSE="LGPL-2+"
 SLOT="$(ver_cut 1)"

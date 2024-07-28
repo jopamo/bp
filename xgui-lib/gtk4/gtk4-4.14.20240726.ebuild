@@ -7,7 +7,7 @@ inherit meson xdg python-any-r1
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
 
-SNAPSHOT=9343c6d3232b131c0295886a5949a673ee0a8c5f
+SNAPSHOT=211a00e5e095fe04c22fd189f8b1781bd2d233d4
 SRC_URI="https://github.com/GNOME/gtk/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/gtk-${SNAPSHOT}"
 

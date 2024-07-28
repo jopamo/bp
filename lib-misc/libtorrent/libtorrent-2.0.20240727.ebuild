@@ -6,7 +6,8 @@ inherit cmake
 
 DESCRIPTION="C++ BitTorrent implementation focusing on efficiency and scalability"
 HOMEPAGE="http://libtorrent.org"
-SNAPSHOT=9343c6d3232b131c0295886a5949a673ee0a8c5f
+
+SNAPSHOT=8fa55e5a1cb9236105b3033eb4e94ddd62097978
 SRC_URI="https://github.com/arvidn/libtorrent/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/libtorrent-${SNAPSHOT}"
 

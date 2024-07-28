@@ -2,11 +2,11 @@
 
 EAPI=8
 
-inherit xdg qmake-utils autotools user flag-o-matic
+inherit xdg cmake user flag-o-matic
 
 DESCRIPTION="BitTorrent client in C++ and Qt"
 HOMEPAGE="https://www.qbittorrent.org/"
-SNAPSHOT=5aaa43e01dd61269fa33442c35b43f91bd420f34
+SNAPSHOT=5e81347933adec219dab27a503f8dc9c4a1c522d
 SRC_URI="https://github.com/qbittorrent/qBittorrent/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/qBittorrent-${SNAPSHOT}"
 
@@ -28,28 +28,15 @@ pkg_setup() {
 	use createuser && enewuser qbittorrent /usr/sbin/nologin "/var/lib/qbittorrent" qbittorrent
 }
 
-src_prepare() {
-	default
-	sed '/^AM_INIT_AUTOMAKE/d' -i -- configure.ac || die
-	sed '/^$QT_QMAKE/ s|^|echo |' -i -- configure.ac || die
-	eautoreconf
-}
-
 src_configure() {
 	filter-flags -flto*
 	filter-flags -Wl,-z,defs
 
-	local myconf=(
-		$(use_enable webui)
-		$(use_enable debug)
-		$(use_enable qt5 gui)
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
-	eqmake5 "${S}"/qbittorrent.pro
+	cmake_src_configure
 }
 
 src_install() {
-	emake INSTALL_ROOT="${ED}" install
+	cmake_src_install
 
 	if use systemd; then
 		insinto /usr/lib/systemd/system

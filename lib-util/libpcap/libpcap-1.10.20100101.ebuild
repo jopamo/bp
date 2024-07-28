@@ -2,12 +2,13 @@
 
 EAPI=8
 
-inherit autotools git-r3
+inherit autotools
 
 DESCRIPTION="A system-independent library for user-level network packet capture"
 HOMEPAGE="http://www.tcpdump.org/"
-EGIT_REPO_URI="https://github.com/the-tcpdump-group/libpcap.git"
-EGIT_BRANCH="libpcap-$(ver_cut 1).$(ver_cut 2)"
+SNAPSHOT=9343c6d3232b131c0295886a5949a673ee0a8c5f
+SRC_URI="https://github.com/the-tcpdump-group/libpcap/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/libpcap-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"

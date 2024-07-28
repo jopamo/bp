@@ -2,12 +2,13 @@
 
 EAPI=8
 
-inherit cmake flag-o-matic user xdg git-r3
+inherit cmake flag-o-matic user xdg
 
 DESCRIPTION="A network protocol analyzer formerly known as ethereal"
 HOMEPAGE="https://www.wireshark.org/"
-EGIT_REPO_URI="https://github.com/wireshark/wireshark.git"
-EGIT_BRANCH="release-$(ver_cut 1).$(ver_cut 2)"
+SNAPSHOT=9343c6d3232b131c0295886a5949a673ee0a8c5f
+SRC_URI="https://github.com/wireshark/wireshark/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/wireshark-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT=0

@@ -2,12 +2,13 @@
 
 EAPI=8
 
-inherit git-r3
+inherit
 
 DESCRIPTION="Cryptographic library for embedded systems"
 HOMEPAGE="https://tls.mbed.org/"
-EGIT_REPO_URI="https://github.com/ARMmbed/mbedtls.git"
-EGIT_BRANCH="mbedtls-$(ver_cut 1).$(ver_cut 2)"
+SNAPSHOT=9343c6d3232b131c0295886a5949a673ee0a8c5f
+SRC_URI="https://github.com/ARMmbed/mbedtls/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/mbedtls-${SNAPSHOT}"
 
 LICENSE="Apache-2.0"
 SLOT="0"

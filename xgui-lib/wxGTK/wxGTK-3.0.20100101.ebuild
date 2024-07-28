@@ -2,12 +2,14 @@
 
 EAPI=8
 
-inherit git-r3
+inherit
 
 DESCRIPTION="GTK+ version of wxWidgets, a cross-platform C++ GUI toolkit"
 HOMEPAGE="https://wxwidgets.org/"
-EGIT_REPO_URI="https://github.com/wxWidgets/wxWidgets.git"
-EGIT_BRANCH="WX_$(ver_cut 1)_$(ver_cut 2)_BRANCH"
+
+SNAPSHOT=9343c6d3232b131c0295886a5949a673ee0a8c5f
+SRC_URI="https://github.com/wxWidgets/wxWidgets/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/wxWidgets-${SNAPSHOT}"
 
 LICENSE="wxWinLL-3 GPL-2"
 SLOT="3"

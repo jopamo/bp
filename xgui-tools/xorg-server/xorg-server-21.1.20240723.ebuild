@@ -6,15 +6,14 @@ inherit meson flag-o-matic
 
 DESCRIPTION="implementation of the X Window System display server"
 HOMEPAGE="https://www.x.org/wiki/"
-EGIT_BRANCH="xwayland-$(ver_cut 1-2)"
 
-SNAPSHOT=
+SNAPSHOT=68129d7369f30e1448f587598d3e2c015329ae38
 SRC_URI="https://gitlab.freedesktop.org/xorg/xserver/-/archive/${SNAPSHOT}/xserver-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S="${WORKDIR}/xorg-xserver-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="+glamor ipv6 minimal systemd suid_wrapper +udev wayland xcsecurity X"
 
@@ -62,10 +61,21 @@ filter-flags -Wl,-z,defs -Wl,-z,now
 
 src_configure() {
         local emesonargs=(
+		$(meson_use X xorg)
 		$(meson_use glamor)
 		$(meson_use ipv6)
+		$(meson_use suid_wrapper)
+		$(meson_use systemd systemd_logind)
+		$(meson_use udev)
 		$(meson_use xcsecurity)
-		-Ddri3=true
+		-Ddri1=false
+		-Ddri2=false
+		-Ddri3=false
         )
         meson_src_configure
+}
+
+src_install() {
+        meson_src_install
+		dosym Xorg usr/bin/X
 }

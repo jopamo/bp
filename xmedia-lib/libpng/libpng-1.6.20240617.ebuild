@@ -5,7 +5,7 @@ EAPI=8
 DESCRIPTION="Portable Network Graphics library"
 HOMEPAGE="http://www.libpng.org/"
 
-SNAPSHOT=9343c6d3232b131c0295886a5949a673ee0a8c5f
+SNAPSHOT=e4a31f024b6158aaaf55a43502f574d5f5d1c894
 SRC_URI="https://github.com/pnggroup/libpng/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/pnggroup-${SNAPSHOT}"
 

@@ -2,14 +2,13 @@
 
 EAPI=8
 
-inherit cmake
+inherit cmake git-r3
 
 DESCRIPTION="C++ BitTorrent implementation focusing on efficiency and scalability"
 HOMEPAGE="http://libtorrent.org"
 
-SNAPSHOT=8fa55e5a1cb9236105b3033eb4e94ddd62097978
-SRC_URI="https://github.com/arvidn/libtorrent/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/libtorrent-${SNAPSHOT}"
+EGIT_REPO_URI="https://github.com/arvidn/libtorrent"
+EGIT_BRANCH="RC_$(ver_cut 1)_$(ver_cut 2)"
 
 LICENSE="BSD"
 SLOT="0"

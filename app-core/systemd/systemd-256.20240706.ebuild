@@ -18,7 +18,7 @@ KEYWORDS="amd64 arm64"
 IUSE="binfmt +blkid bpf-framework coredump cryptsetup devmode dhcp4 efi gcrypt +gshadow
 +hostnamed hwdb importd kmod kvm ldconfig localed logind machined musl networkd
 oomd pam pcre pstore rfkill sleep systemd-update sysusersd sysv +timedated
-+tmpfilesd test +userdb +utmp vconsole xkb"
+tmpfilesd test +userdb +utmp vconsole xkb"
 
 REQUIRED_USE="musl? ( !gshadow !localed !userdb !utmp )"
 

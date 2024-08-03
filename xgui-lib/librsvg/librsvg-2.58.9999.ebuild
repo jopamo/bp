@@ -2,11 +2,13 @@
 
 EAPI=8
 
-inherit meson flag-o-matic go-module
+inherit meson flag-o-matic go-module git-r3 autotools
 
 DESCRIPTION="Scalable Vector Graphics (SVG) rendering library"
 HOMEPAGE="https://wiki.gnome.org/Projects/LibRsvg"
-SRC_URI="https://1g4.org/files/${P}.tar.xz"
+
+EGIT_REPO_URI="https://github.com/GNOME/librsvg"
+EGIT_BRANCH="librsvg-$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="LGPL-2"
 SLOT="0"
@@ -33,4 +35,14 @@ src_prepare() {
 	filter-flags -Wl,-z,defs
 
 	default
+	eautoreconf
+}
+
+src_configure() {
+	local myconf=(
+		--disable-static
+		--enable-pixbuf-loader
+		$(use_enable introspection)
+	)
+	econf ${myconf[@]}
 }

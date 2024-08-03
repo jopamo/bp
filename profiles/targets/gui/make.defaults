@@ -27,6 +27,7 @@ USE="
 	qml
 	qt
 	tiff
+	tmpfilesd
 	video
 	xcb
 	xdg

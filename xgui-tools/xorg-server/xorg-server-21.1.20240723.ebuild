@@ -9,7 +9,7 @@ HOMEPAGE="https://www.x.org/wiki/"
 
 SNAPSHOT=68129d7369f30e1448f587598d3e2c015329ae38
 SRC_URI="https://gitlab.freedesktop.org/xorg/xserver/-/archive/${SNAPSHOT}/xserver-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
-S="${WORKDIR}/xorg-xserver-${SNAPSHOT}"
+S="${WORKDIR}/xserver-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

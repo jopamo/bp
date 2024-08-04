@@ -15,14 +15,14 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+interlaced opencl static-libs pic"
+IUSE="+interlaced opencl static-libs pic ffmpeg lsmash ffmpegsource"
 
 DEPEND="
 	app-lang/nasm
 	opencl? ( app-lang/perl )
-	xmedia-app/ffmpeg
-	xmedia-lib/l-smash
-	xmedia-lib/ffmpegsource
+	ffmpeg? ( xmedia-app/ffmpeg )
+	lsmash? ( xmedia-lib/l-smash )
+	ffmpegsource? ( xmedia-lib/ffmpegsource )
 "
 
 RESTRICT="test"
@@ -37,10 +37,14 @@ src_configure() {
 		--libdir="${EPREFIX}"/usr/lib \
 		--disable-avs \
 		--disable-gpac \
-		$(usex pic "--enable-pic" "") \
 		--enable-shared \
 		--host="${CHOST}" \
+		$(usex ffmpeg "" "--disable-lavf") \
+		$(usex ffmpeg "" "--disable-swscale") \
+		$(usex ffmpegsource "" "--disable-ffms") \
 		$(usex interlaced "" "--disable-interlaced") \
+		$(usex lsmash "" "--disable-lsmash") \
 		$(usex opencl "" "--disable-opencl") \
+		$(usex pic "--enable-pic" "") \
 		$(usex static-libs "--enable-static" "") || die
 }

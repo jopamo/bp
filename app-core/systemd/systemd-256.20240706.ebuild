@@ -15,9 +15,9 @@ LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="binfmt +blkid bpf-framework coredump cryptsetup devmode dhcp4 efi gcrypt +gshadow
+IUSE="binfmt +blkid bpf-framework coredump cryptsetup dbus devmode dhcp4 efi gcrypt +gshadow
 +hostnamed hwdb importd kmod kvm ldconfig localed logind machined musl networkd
-oomd pam pcre pstore rfkill sleep systemd-update sysusersd sysv +timedated
+oomd pam pcre pstore resolve rfkill sleep systemd-update sysusersd sysv +timedated
 tmpfilesd test +userdb +utmp vconsole xkb"
 
 REQUIRED_USE="musl? ( !gshadow !localed !userdb !utmp )"
@@ -38,8 +38,13 @@ DEPEND="
 	lib-core/libxslt
 	cryptsetup? ( app-fs/cryptsetup )
 	gcrypt? ( lib-core/libgcrypt )
-	kmod? ( app-core/kmod )
 	lib-core/libseccomp
+	dbus? (
+		app-core/dbus
+		app-compression/libarchive
+		lib-util/glib
+	)
+	kmod? ( app-core/kmod )
 	logind? ( app-core/dbus )
 	pam? ( lib-core/pam )
 	pcre? ( lib-core/libpcre2 )
@@ -152,10 +157,11 @@ src_configure() {
 	local emesonargs=(
 		$(usex devmode '-Dmode=developer' '-Dmode=release')
 		$(meson_use binfmt)
-		$(meson_use blkid)
+		$(meson_feature blkid)
 		$(meson_use bpf-framework)
 		$(meson_use coredump)
 		$(meson_use cryptsetup libcryptsetup)
+		$(meson_feature dbus)
 		$(meson_use efi )
 		$(meson_use gcrypt)
 		$(meson_use gshadow)
@@ -173,6 +179,7 @@ src_configure() {
 		$(meson_use pam)
 		$(meson_use pcre pcre2)
 		$(meson_use pstore)
+		$(meson_use resolve)
 		$(meson_use rfkill)
 		$(meson_use sysusersd sysusers)
 		$(usex sysv '-Dsysvinit-path=/etc/init.d' '-Dsysvinit-path=')
@@ -184,15 +191,16 @@ src_configure() {
 		$(meson_use utmp)
 		$(meson_use vconsole)
 		$(meson_use xkb xkbcommon)
-		-Dacl=true
-		-Dapparmor=false
-		-Daudit=false
+		-Dacl=enabled
+		-Dapparmor=disabled
+		-Daudit=disabled
 		-Dbacklight=false
-		-Dbzip2=false
+		-Dbzip2=disabled
 		-Dlibcurl=false
 		-Ddefault-hierarchy=unified
 		-Ddefault-kill-user-processes=false
-		-Ddns-over-tls=false
+		$(usex dbus '-Ddns-over-tls=openssl' '-Ddns-over-tls=false')
+		$(meson_use dbus link-networkd-shared)
 		-Ddns-servers=""
 		-Delfutils=false
 		-Denvironment-d=false
@@ -216,7 +224,7 @@ src_configure() {
 		-Dnss-resolve=false
 		-Dnss-systemd=false
 		-Dntp-servers=""
-		-Dopenssl=false
+		-Dopenssl=true
 		-Dpamlibdir="${EPREFIX}"/usr/lib/security
 		-Dp11kit=false
 		-Dpolkit=false
@@ -225,13 +233,13 @@ src_configure() {
 		-Dquotacheck=false
 		-Drandomseed=false
 		-Drc-local=""
-		-Dresolve=false
 		-Drootlibdir="${EPREFIX}"/usr/lib
 		-Drootprefix="${EPREFIX}"/usr
 		-Dseccomp=true
 		-Dsmack=false
 		-Dsplit-bin=true
 		-Dsplit-usr=false
+		-Dstandalone-binaries=false
 		-Dstandalone-binaries=false
 		-Dtimesyncd=false
 		-Dtpm=false
@@ -294,6 +302,8 @@ src_install() {
 
 	use networkd && mkdir -p "${ED}"/etc/systemd/network/ || die
 
+	use resolve && dosym -r /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+
 	use dhcp4 && echo '[Match]
 Name=en*
 
@@ -350,8 +360,10 @@ pkg_preinst() {
 	if ! use sysusersd; then
 		enewgroup messagebus &&	enewuser messagebus
 
+
 		enewgroup systemd-journal
 
+		use resolve && enewgroup systemd-resolve && enewuser systemd-resolve
 		use networkd && enewgroup systemd-network && enewuser systemd-network
 		use coredump && enewgroup systemd-coredump && enewuser systemd-coredump
 		use kvm && enewgroup kvm 78

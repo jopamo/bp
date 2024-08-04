@@ -1,4 +1,4 @@
-app-core/systemd logind sleep
+app-core/systemd logind sleep dhcp4
 app-core/vim normal
 lib-core/zlib minizip
 xgui-app/qbittorrent qt5

@@ -256,7 +256,7 @@ src_install() {
 	mkdir -p "${ED}"/etc/systemd/user && keepdir /etc/systemd/user
 
 	use xkb || rm -rf "${ED}"/etc/X11 "${ED}"/etc/xdg/
-	use tmpfilesd || rm "${ED}"/usr/lib/systemd/system/systemd-tmpfiles-clean.timer "${ED}"/usr/lib/systemd/system/timers.target.wants/systemd-tmpfiles-clean.timer
+	use tmpfilesd || rm -f "${ED}"/usr/lib/systemd/system/systemd-tmpfiles-clean.timer "${ED}"/usr/lib/systemd/system/timers.target.wants/systemd-tmpfiles-clean.timer
 
 	rm -r "${ED}"/etc/kernel
 	rm "${ED}"/usr/bin/kernel-install
@@ -306,8 +306,9 @@ DHCP=ipv4' > "${ED}"/etc/systemd/network/ipv4dhcp.network
 
 	if ! use kvm; then
 		sed -i '/kvm/d' "${ED}"/usr/lib/udev/rules.d/50-udev-default.rules || die
-		sed -i '/kvm/d' "${ED}"/usr/lib/tmpfiles.d/static-nodes-permissions.conf || die
 	fi
+
+	use kvm || use tmpfilesd && sed -i '/kvm/d' "${ED}"/usr/lib/tmpfiles.d/static-nodes-permissions.conf
 
 	if use sysusersd; then
 		use kvm || sed -i '/kvm/d' "${ED}"/usr/lib/sysusers.d/basic.conf || die

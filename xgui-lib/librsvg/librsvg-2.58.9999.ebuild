@@ -17,9 +17,9 @@ KEYWORDS="amd64 arm64"
 IUSE="+introspection"
 
 DEPEND="
+	app-lang/rust
 	lib-core/libxml2
 	lib-util/glib
-	virtual/rust
 	xgui-lib/cairo
 	xgui-lib/gdk-pixbuf
 	xgui-lib/pango

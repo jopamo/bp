@@ -4,431 +4,127 @@ UNAMEM="$(uname -m)"
 ARCH=""
 
 if [[ $UNAMEM == x86_64 ]]; then
-	ARCH=amd64
+    ARCH=amd64
 elif [[ $UNAMEM == aarch64 ]]; then
-	ARCH=arm64
+    ARCH=arm64
 else
-	echo "Unable to detect arch! exiting..." && exit
+    echo "Unable to detect architecture! Exiting..." && exit 1
 fi
 
-emerge --noreplace pciutils e2fsprogs btrfs-progs knock chrony nftables pure-ftpd openssh screen shadowsocks-rust lighttpd iputils nmap sshfs crunch || exit
+ADDITIONAL_PACKAGES=()
 
-cd /root/
-rm -rf /root/miniroot-$(date +%Y%m%d)
-mkdir -p /root/miniroot-$(date +%Y%m%d)/usr/{bin,sbin,lib}
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -p)
+            shift
+            while [[ $# -gt 0 && $1 != -* ]]; do
+                ADDITIONAL_PACKAGES+=("$1")
+                shift
+            done
+            ;;
+        *)
+            echo "Unknown option: $1"
+            exit 1
+            ;;
+    esac
+done
 
-cd /root/miniroot-$(date +%Y%m%d)
-rm -rf lib usr/lib
+BASE_PACKAGES=(
+    "app-build/gettext"
+    "app-compression/bzip2"
+    "app-compression/lz4"
+    "app-compression/pigz"
+    "app-compression/xz-utils"
+    "app-compression/zstd"
+    "app-core/acl"
+    "app-core/attr"
+    "app-core/bash"
+    "app-core/busybox"
+    "app-core/coreutils"
+    "app-core/pambase"
+    "app-core/shadow"
+    "app-core/systemd"
+    "app-core/util-linux"
+    "app-var/ca-certificates"
+    "lib-core/expat"
+    "lib-core/libcap"
+    "lib-core/libcap-ng"
+    "lib-core/libgcrypt"
+    "lib-core/libgpg-error"
+    "lib-core/libpcre"
+    "lib-core/libpcre2"
+    "lib-core/libseccomp"
+    "lib-core/mpfr"
+    "lib-core/musl"
+    "lib-core/ncurses"
+    "lib-core/pam"
+    "lib-core/readline"
+    "lib-core/zlib"
+    "lib-net/libtirpc"
+)
+
+if [[ ${#ADDITIONAL_PACKAGES[@]} -gt 0 ]]; then
+	echo "Installing additional packages..."
+	for package in "${ADDITIONAL_PACKAGES[@]}"; do
+		emerge --oneshot "$package" || { echo "Failed to emerge $package"; exit 1; }
+	done
+fi
+
+MINIROOT="/root/miniroot-${ARCH}-$(date +%Y%m%d)"
+mkdir -p "${MINIROOT}/"{usr/{bin,sbin,lib},proc,sys,dev,root,home,tmp,run}
+
+cd "${MINIROOT}" || exit
 ln -s usr/bin bin
 ln -s usr/sbin sbin
-ln -s usr/lib lib64
 ln -s usr/lib lib
-cd /root/miniroot-$(date +%Y%m%d)/usr
-ln -s lib lib64
-
-cd /root/miniroot-$(date +%Y%m%d)
-
-mkdir -p /root/miniroot-$(date +%Y%m%d)/{proc,sys,dev,root,home,tmp,run}
-
-#system
-cp /var/cache/packages/app-compression/bzip2/* .
-tar xvhf bzip2* --xattrs
-rm bzip2* || exit
-
-cp /var/cache/packages/app-compression/lz4/* .
-tar xvhf lz4* --xattrs
-rm lz4* || exit
-
-#cp /var/cache/packages/app-compression/p7zip/* .
-#tar xvhf p7zip* --xattrs
-#rm p7zip* || exit
-
-cp /var/cache/packages/app-compression/pigz/* .
-tar xvhf pigz* --xattrs
-rm pigz* || exit
-
-cp /var/cache/packages/app-compression/tar/* .
-tar xvhf tar* --xattrs
-rm tar* || exit
-
-cp /var/cache/packages/app-compression/xz-utils/* .
-tar xvhf xz-utils* --xattrs
-rm xz-utils* || exit
-
-cp /var/cache/packages/app-compression/zstd/* .
-tar xvhf zstd* --xattrs
-rm zstd* || exit
-
-cp /var/cache/packages/app-core/acl/* .
-tar xvhf acl* --xattrs
-rm acl* || exit
-
-cp /var/cache/packages/app-core/attr/* .
-tar xvhf attr* --xattrs
-rm attr* || exit
-
-cp /var/cache/packages/app-core/bash/* .
-tar xvhf bash* --xattrs
-rm bash* || exit
-
-cp /var/cache/packages/app-core/busybox/* .
-tar xvhf busybox* --xattrs
-rm busybox* || exit
-
-cp /var/cache/packages/app-core/coreutils/* .
-tar xvhf coreutils* --xattrs
-rm coreutils* || exit
-
-cp /var/cache/packages/app-core/file/* .
-tar xvhf file* --xattrs
-rm file* || exit
-
-cp /var/cache/packages/app-core/gawk/* .
-tar xvhf gawk* --xattrs
-rm gawk* || exit
-
-cp /var/cache/packages/lib-core/mpfr/* .
-tar xvhf mpfr* --xattrs
-rm mpfr* || exit
-
-cp /var/cache/packages/app-core/git/* .
-tar xvhf git* --xattrs
-rm git* || exit
-
-cp /var/cache/packages/app-net/curl/* .
-tar xvhf curl* --xattrs
-rm curl* || exit
-
-cp /var/cache/packages/lib-core/expat/* .
-tar xvhf expat* --xattrs
-rm expat* || exit
-
-cp /var/cache/packages/app-core/grep/* .
-tar xvhf grep* --xattrs
-rm grep* || exit
-
-cp /var/cache/packages/app-core/layout/* .
-tar xvhf layout* --xattrs
-rm layout* || exit
-
-cp /var/cache/packages/app-core/less/* .
-tar xvhf less* --xattrs
-rm less* || exit
-
-cp /var/cache/packages/app-core/pciutils/* .
-tar xvhf pciutils* --xattrs
-rm pciutils* || exit
-
-cp /var/cache/packages/app-core/procps/* .
-tar xvhf procps* --xattrs
-rm procps* || exit
-
-cp /var/cache/packages/app-core/psmisc/* .
-tar xvhf psmisc* --xattrs
-rm psmisc* || exit
-
-cp /var/cache/packages/app-core/sed/* .
-tar xvhf sed* --xattrs
-rm sed* || exit
-
-cp /var/cache/packages/app-core/shadow/* .
-tar xvhf shadow-* --xattrs
-rm shadow-* || exit
-
-cp /var/cache/packages/app-core/systemd/* .
-tar xvhf systemd* --xattrs
-rm systemd* || exit
-
-cp /var/cache/packages/app-core/util-linux/* .
-tar xvhf util-linux* --xattrs
-rm util-linux* || exit
-
-cp /var/cache/packages/lib-net/libtirpc/* .
-tar xvhf libtirpc-* --xattrs
-rm libtirpc-* || exit
-
-cp /var/cache/packages/lib-core/pam/* .
-tar xvhf pam-* --xattrs
-rm pam-* || exit
-
-cp /var/cache/packages/app-core/pambase/* .
-tar xvhf pambase* --xattrs
-rm pambase* || exit
-
-cp /var/cache/packages/lib-core/n*curses/* .
-tar xvhf n*curses* --xattrs
-rm n*curses* || exit
-
-cp /var/cache/packages/lib-core/libcap-ng/* .
-tar xvhf libcap-ng* --xattrs
-rm libcap-ng* || exit
-
-cp /var/cache/packages/lib-core/libcap/* .
-tar xvhf libcap-* --xattrs
-rm libcap-* || exit
-
-cp /var/cache/packages/lib-core/libseccomp/* .
-tar xvhf libseccomp* --xattrs
-rm libseccomp* || exit
-
-cp /var/cache/packages/lib-core/readline/* .
-tar xvhf readline* --xattrs
-rm readline* || exit
-
-cp /var/cache/packages/lib-core/zlib/* .
-tar xvhf zlib* --xattrs
-rm zlib* || exit
-
-cp /var/cache/packages/lib-core/musl/* .
-tar xvhf musl* --xattrs
-rm musl* || exit
-
-cp /var/cache/packages/lib-core/libpcre2/* .
-tar xvhf libpcre2* --xattrs
-rm libpcre2* || exit
-
-cp /var/cache/packages/lib-core/libpcre/* .
-tar xvhf libpcre* --xattrs
-rm libpcre* || exit
-
-cp /var/cache/packages/lib-core/libgcrypt/* .
-tar xvhf libgcrypt* --xattrs
-rm libgcrypt* || exit
-
-cp /var/cache/packages/lib-core/libgpg-error/* .
-tar xvhf libgpg-error* --xattrs
-rm libgpg-error* || exit
-
-cp /var/cache/packages/app-build/gettext/* .
-tar xvhf gettext* --xattrs
-rm gettext* || exit
-
-#cp /var/cache/packages/lib-net/mbedtls/* .
-#tar xvhf mbedtls* --xattrs
-#rm mbedtls* || exit
-
-cp /var/cache/packages/app-var/ca-certificates/* .
-tar xvhf ca-certificates* --xattrs
-rm ca-certificates* || exit
-
-cp /var/cache/packages/app-kernel/linux-headers/* .
-tar xvhf linux-headers* --xattrs
-rm linux-headers* || exit
-
-cp /var/cache/packages/lib-core/elfutils/* .
-tar xvhf elfutils* --xattrs
-rm elfutils* || exit
-
-cp /var/cache/packages/app-fs/e2fsprogs/* .
-tar xvhf e2fsprogs* --xattrs
-rm e2fsprogs* || exit
-
-cp /var/cache/packages/app-fs/btrfs-progs/* .
-tar xvhf btrfs-progs* --xattrs
-rm btrfs-progs* || exit
-
-#shadowsocks
-cp /var/cache/packages/app-server/shadowsocks-rust/* .
-tar xvhf shadowsocks-rust* --xattrs
-rm shadowsocks-rust* || exit
-
-#lighttpd
-cp /var/cache/packages/app-server/lighttpd/* .
-tar xvhf lighttpd* --xattrs
-rm lighttpd* || exit
-
-#iproute2
-cp /var/cache/packages/app-net/iproute2/* .
-tar xvhf iproute2* --xattrs
-rm iproute2* || exit
-
-#iputils
-cp /var/cache/packages/app-net/iputils/* .
-tar xvhf iputils* --xattrs
-rm iputils* || exit
-
-#openssh
-cp /var/cache/packages/app-net/openssh/* .
-tar xvhf openssh* --xattrs
-rm openssh* || exit
-
-#ssl
-cp /var/cache/packages/lib-net/*ssl/* .
-tar xvhf *ssl* --xattrs
-rm *ssl* || exit
-
-cp /var/cache/packages/app-var/ca-certificates/* .
-tar xvhf ca-certificates* --xattrs
-rm ca-certificates* || exit
-
-#chrony
-cp /var/cache/packages/app-net/chrony/* .
-tar xvhf chrony* --xattrs
-rm chrony* || exit
-
-cp /var/cache/packages/lib-core/nettle/* .
-tar xvhf nettle* --xattrs
-rm nettle* || exit
-
-#rsync
-cp /var/cache/packages/app-net/rsync/* .
-tar xvhf rsync* --xattrs
-rm rsync* || exit
-
-#wget
-cp /var/cache/packages/app-net/wget/* .
-tar xvhf wget* --xattrs
-rm wget* || exit
-
-#knock
-cp /var/cache/packages/app-net/knock/* .
-tar xvhf knock* --xattrs
-rm knock* || exit
-
-#pure-ftpd
-cp /var/cache/packages/app-server/pure-ftpd/* .
-tar xvhf pure-ftpd* --xattrs
-rm pure-ftpd* || exit
-
-#crunch
-cp /var/cache/packages/app-var/crunch/* .
-tar xvhf crunch* --xattrs
-rm crunch* || exit
-
-#lynx
-#cp /var/cache/packages/app-var/lynx/* .
-#tar xvhf lynx* --xattrs
-#rm lynx* || exit
-
-#nano
-#cp /var/cache/packages/app-var/nano/* .
-#tar xvhf nano* --xattrs
-#rm nano* || exit
-
-#tmux
-#cp /var/cache/packages/lib-dev/libevent/* .
-#tar xvhf libevent* --xattrs
-#rm libevent* || exit
-
-#cp /var/cache/packages/app-var/tmux/* .
-#tar xvhf tmux* --xattrs
-#rm tmux* || exit
-
-#screen
-cp /var/cache/packages/app-var/screen/* .
-tar xvhf screen* --xattrs
-rm screen* || exit
-
-#vim
-cp /var/cache/packages/app-core/vim/* .
-tar xvhf vim* --xattrs
-rm vim* || exit
-
-#jitterentropy
-cp /var/cache/packages/app-crypto/jitterentropy/* .
-tar xvhf jitterentropy* --xattrs
-rm jitterentropy* || exit
-
-#nftables
-cp /var/cache/packages/lib-core/gmp/* .
-tar xvhf gmp* --xattrs
-rm gmp* || exit
-
-cp /var/cache/packages/lib-net/libmnl/* .
-tar xvhf libmnl* --xattrs
-rm libmnl* || exit
-
-cp /var/cache/packages/lib-net/libnftnl/* .
-tar xvhf libnftnl* --xattrs
-rm libnftnl* || exit
-
-cp /var/cache/packages/lib-net/libnsl/* .
-tar xvhf libnsl* --xattrs
-rm libnsl* || exit
-
-cp /var/cache/packages/app-net/nftables/* .
-tar xvhf nftables* --xattrs
-rm nftables* || exit
-
-#hashcat
-#cp /var/cache/packages/app-crypto/hashcat* .
-#rm hashcat-utils* || exit
-#tar xvhf hashcat* --xattrs
-#rm hashcat* || exit
-
-#cp /var/cache/packages/app-crypto/hashcat-utils* .
-#tar xvhf hashcat-utils* --xattrs
-#rm hashcat-utils* || exit
-
-#irssi
-#cp /var/cache/packages/app-var/irssi* .
-#tar xvhf irssi* --xattrs
-#rm irssi* || exit
-
-#mailutils
-#cp /var/cache/packages/app-net/mailutils* .
-#tar xvhf mailutils* --xattrs
-#rm mailutils* || exit
-
-#nmap
-cp /var/cache/packages/app-net/nmap/* .
-tar xvhf nmap* --xattrs
-rm nmap* || exit
-
-cp /var/cache/packages/app-lang/lua/* .
-tar xvhf lua-* --xattrs
-rm lua-* || exit
-
-cp /var/cache/packages/lib-dev/liblinear/* .
-tar xvhf liblinear* --xattrs
-rm liblinear* || exit
-
-cp /var/cache/packages/lib-util/libpcap/* .
-tar xvhf libpcap* --xattrs
-rm libpcap* || exit
-
-cp /var/cache/packages/lib-misc/libssh2/* .
-tar xvhf libssh2* --xattrs
-rm libssh2* || exit
-
-#sshfs
-cp /var/cache/packages/app-fs/fuse/* .
-tar xvhf fuse* --xattrs
-rm fuse* || exit
-
-cp /var/cache/packages/lib-util/glib/* .
-tar xvhf glib* --xattrs
-rm glib* || exit
-
-cp /var/cache/packages/app-fs/sshfs/* .
-tar xvhf sshfs* --xattrs
-rm sshfs* || exit
-
-#gcc
-cp -rp /usr/lib64/libgcc_s.so* usr/lib/
-cp -rp /usr/lib64/libstdc++.so* usr/lib/
-
-#cleanup
-rm -rf usr/lib/pkgconfig
-rm -rf usr/lib/modprobe.d
-
-rm -rf etc
-cp -rp /etc .
-rm -rf etc/{config-archive,eclean,eixrc,env.d,portage,w3m,xml}
-rm -f etc/ssh/ssh_host*
-rm -rf usr/share/layout
-rm -rf usr/share/man
-rm -rf usr/share/doc
-rm -rf usr/include
-rm -rf usr/share/i18n
-rm -rf usr/share/gettext
-rm -f usr/bin/locale-gen
-
-#reset machine-id
-rm etc/machine-id
-touch etc/machine-id
-
-#freshjounal
-rm -rf var/log/journal/*
-
-XZ_OPT="-e9" tar -cJ -f "/root/miniroot-${ARCH}-$(date +%Y%m%d).tar.xz" .
+ln -s usr/lib lib64
+
+extract_package() {
+    local package_path=$1
+    local package_name=$(basename "${package_path}")
+
+    cp "${package_path}" "${MINIROOT}"
+    cd "${MINIROOT}" || exit
+    tar xvhf "${package_name}" --xattrs --strip-components=1
+    rm "${package_name}"
+}
+
+for package in "${BASE_PACKAGES[@]}"; do
+    package_path="/var/cache/packages/${package}/*"
+    for file in ${package_path}; do
+        extract_package "${file}"
+    done
+done
+
+for package in "${ADDITIONAL_PACKAGES[@]}"; do
+    package_path="/var/cache/packages/${package}/*"
+    for file in ${package_path}; do
+        extract_package "${file}"
+    done
+done
+
+cp -p /usr/lib64/libgcc_s.so* "${MINIROOT}/usr/lib/"
+cp -p /usr/lib64/libstdc++.so* "${MINIROOT}/usr/lib/"
+cp -rp /usr/lib64/os-release "${MINIROOT}/usr/lib/"
+
+rm -rf "${MINIROOT}/etc/{config-archive,eclean,eixrc,env.d,portage,w3m,xml}"
+rm -f "${MINIROOT}/etc/ssh/ssh_host*"
+rm -rf "${MINIROOT}usr/share/layout"
+rm -rf "${MINIROOT}/usr/include"
+rm -rf "${MINIROOT}/usr/lib/pkgconfig"
+rm -rf "${MINIROOT}/usr/lib/modprobe.d"
+rm -rf "${MINIROOT}/etc"
+rm -rf "${MINIROOT}/usr/share/{man,doc,i18n,gettext}"
+rm -f "${MINIROOT}/usr/bin/locale-gen"
+rm -rf "${MINIROOT}/var/log/journal/*"
+rm -f "${MINIROOT}/etc/machine-id"
+
+cp -rp /etc "${MINIROOT}/"
+head -c 16 /dev/urandom | od -An -tx1 | tr -d ' \n' > "${MINIROOT}/etc/machine-id"
+
+echo "Running depclean to remove unnecessary dependencies..."
+emerge --depclean || { echo "Failed to run depclean"; exit 1; }
+
+XZ_OPT="-e9" tar -cJf "/root/miniroot-${ARCH}-$(date +%Y%m%d).tar.xz" -C "${MINIROOT}" .
+
+echo "Minimal root filesystem created at /root/miniroot-${ARCH}-$(date +%Y%m%d).tar.xz"

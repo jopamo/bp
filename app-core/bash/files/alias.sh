@@ -56,7 +56,6 @@ else
 	use_iproute2=false
 fi
 
-# Usage messages
 usage_ifup="Usage: ifup <interface>"
 usage_ifdown="Usage: ifdown <interface>"
 usage_ip_add="Usage: ip_add <interface> <ip_address> <netmask>"
@@ -71,8 +70,53 @@ usage_netns_ipaddr="Usage: netns_ipaddr <namespace>"
 usage_veth_add="Usage: veth_add <veth1> <veth2>"
 usage_veth_del="Usage: veth_del <veth>"
 usage_list_interfaces="Usage: list_interfaces"
+usage_set_random_mac="Usage: set_random_mac <interface>"
 
-# Functions and aliases for net-tools
+NIC_PREFIXES=(
+	"00:1A:79" # Atheros Communications
+	"00:1B:21" # Intel Corporation
+	"00:1D:7E" # Cisco Systems, Inc.
+	"00:22:15" # Hewlett Packard
+	"00:23:EB" # Apple, Inc.
+	"00:24:E8" # Dell Inc.
+	"00:25:64" # Intel Corporate
+	"00:26:BB" # Sony Corporation
+	"00:27:10" # Cisco-Linksys LLC
+	"00:28:F8" # Cisco Systems, Inc.
+	"00:30:48" # Samsung Electronics Co., Ltd.
+	"00:60:2F" # Realtek Semiconductor Corp.
+	"00:0E:C6" # ASUSTek COMPUTER INC.
+	"00:18:DE" # NVIDIA
+	"00:16:E6" # ZyXEL Communications Corporation
+)
+
+generate_random_mac() {
+	local prefix="${NIC_PREFIXES[$RANDOM % ${#NIC_PREFIXES[@]}]}"
+	local suffix=$(openssl rand -hex 3 | sed 's/\(..\)/\1:/g; s/:$//')
+	echo "$prefix:$suffix"
+}
+
+set_random_mac() {
+	if [ -z "$1" ]; then
+		echo "$usage_set_random_mac"
+		return 1
+	fi
+	local interface=$1
+	local new_mac=$(generate_random_mac)
+
+	if [ "$use_iproute2" = true ]; then
+		sudo ip link set dev "$interface" down
+		sudo ip link set dev "$interface" address "$new_mac"
+		sudo ip link set dev "$interface" up
+	else
+		sudo ifconfig "$interface" down
+		sudo ifconfig "$interface" hw ether "$new_mac"
+		sudo ifconfig "$interface" up
+	fi
+
+	echo "Assigned MAC address $new_mac to $interface"
+}
+
 if [ "$use_iproute2" = false ]; then
 	alias ifup='ifup_nettools'
 	alias ifdown='ifdown_nettools'
@@ -83,6 +127,7 @@ if [ "$use_iproute2" = false ]; then
 	alias show_routes='netstat -nr'
 	alias iface_stats='iface_stats_nettools'
 	alias list_interfaces='list_interfaces_nettools'
+	alias set_random_mac='set_random_mac'
 	alias netns_add='echo "Namespace not supported with net-tools"'
 	alias netns_del='echo "Namespace not supported with net-tools"'
 	alias netns_exec='echo "Namespace not supported with net-tools"'
@@ -161,6 +206,7 @@ else
 	alias show_routes='ip route show'
 	alias iface_stats='iface_stats_iproute2'
 	alias list_interfaces='list_interfaces_iproute2'
+	alias set_random_mac='set_random_mac'
 	alias netns_add='netns_add_iproute2'
 	alias netns_del='netns_del_iproute2'
 	alias netns_exec='netns_exec_iproute2'
@@ -392,9 +438,9 @@ start_ssh_agent() {
 			filename=$(basename "$key")
 
 			if [[ "$filename" != "authorized_keys" && \
-			  "$filename" != "config" && \
-			  "$filename" != "bkup" && \
-			  "$filename" != *.* ]]; then
+				"$filename" != "config" && \
+				"$filename" != "bkup" && \
+				"$filename" != *.* ]]; then
 					ssh-add "$key"
 			fi
 		fi

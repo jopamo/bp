@@ -21,8 +21,6 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND=">=app-lang/go-1.21*"
-
 QA_EXECSTACK='*.syso'
 QA_PREBUILT='.*'
 QA_FLAGS_IGNORED='.*'

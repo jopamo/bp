@@ -20,7 +20,7 @@ IUSE="
 	+gpl +ffmpeg +lame +libass +libdav1d +libxcb +network +nonfree
 	nvidia +openssl postproc +protocols pulseaudio static-libs
     +swscale +swresample +version3 +vorbis vulkan vaapi vdpau
-	x264 +x265
+	+x264 +x265
 "
 
 DEPEND="

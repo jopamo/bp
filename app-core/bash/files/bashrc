@@ -27,14 +27,12 @@ shopt -s no_empty_cmd_completion
 # Enable history appending instead of overwriting when exiting.  #139609
 shopt -s histappend
 
-# Save each command to the history file as it's executed.  #517342
-# This does mean sessions get interleaved when reading later on, but this
-# way the history is always up to date.  History is not synced across live
-# sessions though; that is what `history -n` does.
-# Disabled by default due to concerns related to system recovery when $HOME
-# is under duress, or lives somewhere flaky (like NFS).  Constantly syncing
-# the history will halt the shell prompt until it's finished.
-#PROMPT_COMMAND='history -a'
+# recursive globbing with **
+shopt -s globstar
+
+# Save and reload each command to the history file as it's executed
+PROMPT_COMMAND='history -a; history -n'
+
 
 # Change the window title of X terminals
 case ${TERM} in
@@ -76,7 +74,7 @@ else
 	# Some systems (e.g. BSD & embedded) don't typically come with
 	# dircolors so we need to hardcode some terminals in here.
 	case ${TERM} in
-	[aEkqx]term*|rxvt*|gnome*|kitty*|lxterm*|screen|tmux|cons25|*color) use_color=true;;
+		[aEkqx]term*|rxvt*|gnome*|kitty*|lxterm*|screen|tmux|cons25|*color) use_color=true ;;
 	esac
 fi
 

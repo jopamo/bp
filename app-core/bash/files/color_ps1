@@ -82,7 +82,7 @@ Username="\u"
 Shorthost="\h"
 
 if [[ ${EUID} == 0 ]] ; then
-		PS1+="$Red$Username$BIWhite@$IRed$Shorthost $BIBlue$PathShort $White# $Color_Off"
-	else
-		PS1+="$Green$Username$BIWhite@$IGreen$Shorthost $BIBlue$PathShort $White$ $Color_Off"
+	PS1+="$Red$Username$BIWhite@$IRed$Shorthost $BIBlue$PathShort $White# $Color_Off"
+else
+	PS1+="$Green$Username$BIWhite@$IGreen$Shorthost $BIBlue$PathShort $White$ $Color_Off"
 fi

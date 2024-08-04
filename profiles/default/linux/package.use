@@ -1,6 +1,6 @@
 app-build/gcc lto
 app-core/systemd dhcp4 networkd
-app-core/util-linux agetty fallocate ipcrm ipcs kill libblkid libuuid last logger login losetup lscpu lsfd lsirq lslogins lsmem lsns mount mountpoint nologin rename schedutils su suid sulogin swapon tty-helpers wipefs
+app-core/util-linux agetty eject fallocate ipcrm ipcs kill libblkid libuuid last logger login losetup lscpu lsfd lsirq lslogins lsmem lsns mount mountpoint nologin rename schedutils su suid sulogin swapon tty-helpers wipefs
 app-fs/cryptsetup -ssl
 app-net/networkmanager -nss gnutls
 lib-core/libxml2 python

@@ -28,7 +28,6 @@ DEPEND="
 BDEPEND="
 	app-dev/gtk-doc
 	app-dev/pkgconf
-	virtual/rust
 "
 
 src_prepare() {

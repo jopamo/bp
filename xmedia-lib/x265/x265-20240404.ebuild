@@ -10,7 +10,7 @@ HOMEPAGE="http://x265.org/"
 
 SNAPSHOT=dd1ef69b25ec26cc80be0fc8d9afeeef6563762b
 SRC_URI="https://bitbucket.org/multicoreware/x265_git/get/${SNAPSHOT}.zip"
-S="${WORKDIR}/x264-${SNAPSHOT}"
+S="${WORKDIR}/multicoreware-x265_git-${SNAPSHOT:0:12}"
 
 LICENSE="GPL-2"
 SLOT="0"

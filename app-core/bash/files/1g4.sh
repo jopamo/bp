@@ -54,25 +54,29 @@ rebuild_packages() {
 }
 
 update_kernel() {
-	cd /usr/src/linux || return 1
+	cd /usr/src/linux || exit 1
 
 	make oldconfig
 	mount -o remount,rw -t efivarfs efivarfs /sys/firmware/efi/efivars
 	mount /boot
+	mount /boot/efi
+
+	make clean
+	make prepare
+
+	NUM_CPUS=$(nproc)
+	make -j"${NUM_CPUS}" || exit 1
 
 	rm -rf /lib/modules/*
 	rm /boot/System.map* /boot/config* /boot/vmlinuz*
 
-	make clean
-	make prepare
-	make -j16
 	make modules_install
 	make install
 
 	mkdir -p /boot/grub/
 	grub-mkconfig -o /boot/grub/grub.cfg
-	grub-install --efi-directory=/boot
-	grub-install --efi-directory=/boot --removable
+	grub-install --efi-directory=/boot/efi
+	grub-install --efi-directory=/boot/efi --removable
 
 	echo "Kernel update complete."
 }

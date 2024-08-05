@@ -2,21 +2,14 @@
 
 EAPI=8
 
-SNAPSHOT="91de249b6804473d49984030836381c3b9b3cfb0"
+SNAPSHOT="d29de02effd4e8816333582ed8230d41e14a73dc"
 
 ETYPE="headers"
 H_SUPPORTEDARCH="amd64 arm64"
 inherit kernel-2
 detect_version
 
-PATCH_PV=$(ver_cut 1-2) # to ease testing new versions against not existing patches
-PATCH_VER="1"
-PATCH_DEV="sam"
-
-SRC_URI="
-	https://gitlab.com/linux-kernel/stable/-/archive/${SNAPSHOT}/stable-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2
-	${PATCH_VER:+https://dev.gentoo.org/~${PATCH_DEV}/distfiles/sys-kernel/linux-headers/gentoo-headers-${PATCH_PV}-${PATCH_VER}.tar.xz}
-"
+SRC_URI="https://gitlab.com/linux-kernel/stable/-/archive/${SNAPSHOT}/stable-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S="${WORKDIR}/stable-${SNAPSHOT}"
 
 KEYWORDS="amd64 arm64"

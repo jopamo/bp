@@ -53,7 +53,7 @@ rebuild_packages() {
 	emerge --keep-going -ueDNv world
 }
 
-update_kernel() {
+update_kernel_efi() {
 	cd /usr/src/linux || exit 1
 
 	make oldconfig
@@ -64,8 +64,7 @@ update_kernel() {
 	make clean
 	make prepare
 
-	NUM_CPUS=$(nproc)
-	make -j"${NUM_CPUS}" || exit 1
+	make -j$(nproc) || exit 1
 
 	rm -rf /lib/modules/*
 	rm /boot/System.map* /boot/config* /boot/vmlinuz*
@@ -77,6 +76,31 @@ update_kernel() {
 	grub-mkconfig -o /boot/grub/grub.cfg
 	grub-install --efi-directory=/boot/efi
 	grub-install --efi-directory=/boot/efi --removable
+
+	echo "Kernel update complete."
+}
+
+update_kernel_rockchip() {
+	cd /usr/src/linux || exit 1
+
+	make oldconfig
+	mount /boot
+
+	make clean
+	make prepare
+
+	make -j$(nproc) || exit 1
+	make -j$(nproc) Image dtbs modules || exit 1
+
+	rm -rf /lib/modules/*
+	rm /boot/System.map* /boot/config* /boot/vmlinuz*
+
+	mkdir -p /boot/dtb/rockchip
+	cp /usr/src/linux/arch/arm64/boot/dts/rockchip/rk3588-orangepi-5-plus.dtb /boot/dtb/rockchip/
+	cp /usr/src/linux/arch/arm64/boot/Image /boot/
+
+	make modules_install
+	make install
 
 	echo "Kernel update complete."
 }

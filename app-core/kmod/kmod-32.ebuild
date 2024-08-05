@@ -29,6 +29,8 @@ DEPEND="
 src_prepare() {
 	default
 
+	eapply ${FILESDIR}/*.patch
+
 	if [[ ! -e configure ]] ; then
 		touch libkmod/docs/gtk-doc.make
 		eautoreconf

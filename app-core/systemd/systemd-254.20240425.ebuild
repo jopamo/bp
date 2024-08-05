@@ -195,6 +195,7 @@ src_configure() {
 		$(meson_use pcre pcre2)
 		$(meson_use pstore)
 		$(meson_use resolve)
+		$(meson_use resolve nss-resolve)
 		$(meson_use rfkill)
 		$(meson_use sysusersd sysusers)
 		$(usex sysv '-Dsysvinit-path=/etc/init.d' '-Dsysvinit-path=')
@@ -235,7 +236,6 @@ src_configure() {
 		-Dmicrohttpd=false
 		-Dnss-myhostname=false
 		-Dnss-mymachines=false
-		-Dnss-resolve=false
 		-Dnss-systemd=false
 		-Dntp-servers=""
 		-Dopenssl=false
@@ -247,7 +247,6 @@ src_configure() {
 		-Dquotacheck=false
 		-Drandomseed=false
 		-Drc-local=""
-		-Dresolve=false
 		-Drootlibdir="${EPREFIX}"/usr/lib
 		-Drootprefix="${EPREFIX}"/usr
 		-Dseccomp=true
@@ -317,6 +316,8 @@ src_install() {
 
 	use networkd && mkdir -p "${ED}"/etc/systemd/network/ || die
 
+	use resolve && dosym -r /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+
 	use dhcp4 && echo '[Match]
 Name=en*
 
@@ -375,6 +376,7 @@ pkg_preinst() {
 
 		enewgroup systemd-journal
 
+		use resolve && enewgroup systemd-resolve && enewuser systemd-resolve
 		use networkd && enewgroup systemd-network && enewuser systemd-network
 		use coredump && enewgroup systemd-coredump && enewuser systemd-coredump
 		use kvm && enewgroup kvm 78

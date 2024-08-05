@@ -10,4 +10,15 @@ SRC_URI="https://github.com/ebassi/graphene/archive/refs/tags/${PV}.tar.gz -> ${
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~loong ~mips ppc ppc64 ~riscv sparc x86"
+KEYWORDS="amd64 arm64"
+
+src_configure() {
+	local emesonargs=(
+		-Dgtk_doc=false
+		-Dgobject_types=true
+		-Dintrospection=enabled
+		-Dgcc_vector=true
+		-Dinstalled_tests=false
+	)
+	meson_src_configure
+}

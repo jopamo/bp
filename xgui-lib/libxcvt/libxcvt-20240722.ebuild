@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="X server implementation of the VESA CVT"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=55aa4ae74cd951f5c762a972bb1bb997914aa03e
+SNAPSHOT=922c7e1fb5f976765524ab9ab47567582a9f66dd
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxcvt/-/archive/${SNAPSHOT}/libxcvt-${SNAPSHOT}.tar.bz2 -> libxcvt-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxcvt-${SNAPSHOT}"
 

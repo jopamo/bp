@@ -7,15 +7,6 @@ ConditionVirtualization=!container
 
 [Service]
 ExecStart=/usr/sbin/rngd -f $RNGD_OPTS
-ProtectSystem=full
-ProtectHome=yes
-PrivateDevices=no
-NoNewPrivileges=yes
-PrivateNetwork=yes
-PrivateTmp=yes
-ProtectKernelTunables=yes
-RestrictNamespaces=yes
-MemoryDenyWriteExecute=yes
 
 [Install]
 WantedBy=sysinit.target

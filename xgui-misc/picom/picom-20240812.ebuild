@@ -7,7 +7,7 @@ inherit meson flag-o-matic
 DESCRIPTION="A lightweight compositor for X11 (previously a compton fork)"
 HOMEPAGE="https://github.com/yshui/picom.git"
 
-SNAPSHOT=2dc218849dea256f5d48e2347fbfb8f2fead0aed
+SNAPSHOT=f97776330c65192673ba8848889a9fed571ecf02
 SRC_URI="https://github.com/yshui/picom/archive/${SNAPSHOT}.tar.gz -> picom-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/picom-${SNAPSHOT}"
 

@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="A tiling window manager"
 HOMEPAGE="https://swaywm.org"
 
-SNAPSHOT=d05eed3c01c37eac4fb48bdd78f8b27b8fb68d64
+SNAPSHOT=4661e74b5ebe8727d1b0f8c29b1697f1f42daf70
 SRC_URI="https://github.com/i3/i3/archive/${SNAPSHOT}.tar.gz -> i3-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/i3-${SNAPSHOT}"
 

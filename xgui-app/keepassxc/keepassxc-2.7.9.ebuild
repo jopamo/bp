@@ -12,7 +12,7 @@ LICENSE="LGPL-2.1 GPL-2 GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="autotype test"
+IUSE="+autotype test"
 
 DEPEND="
 	app-crypto/argon2
@@ -42,7 +42,7 @@ src_configure() {
 		-DWITH_TESTS="$(usex test)"
 		-DWITH_XC_AUTOTYPE="$(usex autotype)"
 		-DWITH_XC_DOCS=OFF
-		-DWITH_XC_YUBIKEY=OFF
+		-DWITH_XC_YUBIKEY=ON
 	)
 	cmake_src_configure
 }

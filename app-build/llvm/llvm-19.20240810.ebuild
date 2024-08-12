@@ -7,7 +7,7 @@ inherit cmake flag-o-matic
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
 
-SNAPSHOT=3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff
+SNAPSHOT=866686180a316aee091c82c924971a238fbbd817
 SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
 
@@ -15,7 +15,7 @@ LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
 KEYWORDS="amd64"
 
-IUSE="bolt +clang-tools-extra cross-project-tests debug libc
+IUSE="bolt +clang cross-project-tests debug libc
 	libclc +lld lldb mlir openmp polly pstl test libunwind llvm-libgcc"
 
 DEPEND="
@@ -41,7 +41,8 @@ src_configure() {
 	use llvm-libgcc && LLVM_ENABLE_RUNTIMES+=";llvm-libgcc"
 
 	use bolt && LLVM_PROJECTS+=";bolt"
-	use clang-tools-extra && LLVM_PROJECTS+=";clang-tools-extra"
+	use clang && LLVM_PROJECTS+=";clang"
+	use clang && LLVM_PROJECTS+=";clang-tools-extra"
 	use cross-project-tests && LLVM_PROJECTS+=";cross-project-tests"
 	use libc && LLVM_PROJECTS+=";libc"
 	use libclc && LLVM_PROJECTS+=";libclc"

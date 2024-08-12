@@ -1,7 +1,4 @@
 #still fails to build
 
->lib-core/npth-1.6
->app-fs/lvm2-2.03.0
->app-core/shadow-5.0.0
->lib-core/musl-20240523
->=app-build/binutils-2.42
+#>app-core/shadow-5.0.0
+#>lib-core/musl-20240523

@@ -7,7 +7,7 @@ inherit autotools xdg
 DESCRIPTION="VTE terminal emulator written in GTK"
 HOMEPAGE="https://github.com/lxde/lxterminal.git"
 
-SNAPSHOT=9b4299c292567b371158368686088900a4c0a128
+SNAPSHOT=b6aad51b476032097985548a35df10ef1c3a2912
 SRC_URI="https://github.com/lxde/lxterminal/archive/${SNAPSHOT}.tar.gz -> lxterminal-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/lxterminal-${SNAPSHOT}"
 

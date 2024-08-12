@@ -77,6 +77,8 @@ cmake_src_test() {
 }
 
 src_prepare() {
+	append-flags -ffat-lto-objects
+
 	cmake_src_prepare
 
 	# Add gcc libs to the default link paths

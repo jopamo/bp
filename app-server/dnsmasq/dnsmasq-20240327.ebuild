@@ -2,18 +2,22 @@
 
 EAPI=8
 
-inherit git-r3
+inherit user
 
 DESCRIPTION="Small forwarding DNS server"
 HOMEPAGE="http://www.thekelleys.org.uk/dnsmasq/doc.html"
-EGIT_REPO_URI="http://thekelleys.org.uk/git/dnsmasq"
+
+SNAPSHOT=550c368adea12b312f83686c61f9015c122046c2
+SHORT=${SNAPSHOT:0:7}
+SRC_URI="https://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=snapshot;h=${SNAPSHOT};sf=tgz -> ${P}.tar.gz"
+S="${WORKDIR}/dnsmasq-${SHORT}"
 
 LICENSE="|| ( GPL-2 GPL-3 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="auth-dns conntrack dbus dhcp dhcp-tools dnssec +dumpfile id ipset
-	inotify ipv6 lua script static tftp"
+	inotify ipv6 lua script static systemd tftp"
 
 use_have() {
 	local useflag no_only uword
@@ -42,7 +46,7 @@ use_have() {
 
 src_prepare() {
 	default
-	sed -i -e "s/UNKNOWN/$(git log -n1 --pretty=format:%cd --date=format:%Y%m%d)/g" "bld/get-version" || die
+	echo "${PV}" > VERSION || die
 }
 
 src_configure() {
@@ -90,4 +94,20 @@ src_install() {
 		COPTS="${COPTS[*]}" \
 		DESTDIR="${ED}" \
 		install
+
+	insinto /etc
+	insopts -m 0644
+	doins "${FILESDIR}"/${PN}.conf
+
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "${FILESDIR}"/${PN}.service
+	fi
+}
+
+pkg_preinst() {
+	enewgroup "${PN}" 67
+	enewuser "${PN}" 67 -1 "/var/lib/${PN}" "${PN}"
+
 }

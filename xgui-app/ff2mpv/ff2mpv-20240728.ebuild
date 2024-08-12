@@ -8,7 +8,7 @@ DESCRIPTION="A Firefox add-on for playing URLs in mpv."
 HOMEPAGE="https://addons.mozilla.org/en-US/firefox/addon/ff2mpv/"
 SRC_URI="https://github.com/woodruffw/ff2mpv/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
-SNAPSHOT=f57d39bba6b826d5ebc4b452067e7e803bad1118
+SNAPSHOT=51a655952bd7788d10064362c96a2f9e2c69c4c1
 SRC_URI="https://github.com/woodruffw/ff2mpv/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

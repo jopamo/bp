@@ -7,7 +7,7 @@ HOMEPAGE="https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files"
 
 SNAPSHOT=5278dfcf98e89098326b3eb8a85d07120a8730f8
 SRC_URI="https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/Intel-Linux-Processor-Microcode-Data-Files-${SNAPSHOT}"
 
 LICENSE="INTEL"
 SLOT="0"

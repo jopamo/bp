@@ -52,6 +52,9 @@ src_install() {
 	if use minizip ; then
 		emake -C contrib/minizip install DESTDIR="${D}"
 
+		insinto /usr/include/minizip
+		doins contrib/minizip/*.h
+
 		rm -f "${ED}"/usr/lib/libminizip.la || die
 	fi
 }

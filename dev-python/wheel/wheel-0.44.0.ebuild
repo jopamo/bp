@@ -27,6 +27,11 @@ BDEPEND="
 	)
 "
 
+EPYTEST_DESELECT=(
+	# fails if any setuptools plugin imported the module first
+	tests/test_bdist_wheel.py::test_deprecated_import
+)
+
 distutils_enable_tests pytest
 
 src_prepare() {

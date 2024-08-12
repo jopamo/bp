@@ -2,15 +2,14 @@
 
 EAPI=8
 
-SNAPSHOT="d29de02effd4e8816333582ed8230d41e14a73dc"
-
 ETYPE="headers"
 H_SUPPORTEDARCH="amd64 arm64"
 inherit kernel-2
 detect_version
 
-SRC_URI="https://gitlab.com/linux-kernel/stable/-/archive/${SNAPSHOT}/stable-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
-S="${WORKDIR}/stable-${SNAPSHOT}"
+SNAPSHOT=d74da846046aeec9333e802f5918bd3261fb5509
+SRC_URI="https://github.com/torvalds/linux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/linux-${SNAPSHOT}
 
 KEYWORDS="amd64 arm64"
 

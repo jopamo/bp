@@ -24,6 +24,10 @@ DEPEND="
 
 S=${WORKDIR}/LVM2.${PV}
 
+PATCHES=(
+	"${FILESDIR}"/fix-stdio-usage.patch
+)
+
 src_configure() {
 	local myconf=(
 		--prefix="${EPREFIX}"/usr
@@ -37,7 +41,6 @@ src_configure() {
 		$(usex dm-only "" "--enable-lvmpolld")
 		$(usex dm-only "" "--enable-use-lvmetad")
 		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
-   		$(use_enable systemd udev-systemd-background-jobs)
    		$(use_enable udev udev_rules)
    		$(use_enable udev udev_sync)
    		--enable-pkgconfig

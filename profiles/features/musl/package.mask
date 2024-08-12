@@ -5,4 +5,3 @@
 >app-core/shadow-5.0.0
 >lib-core/musl-20240523
 >=app-build/binutils-2.42
->=app-core/systemd-255.0

@@ -7,7 +7,7 @@ inherit flag-o-matic
 DESCRIPTION="a collection of binary tools"
 HOMEPAGE="https://sourceware.org/binutils/"
 
-SNAPSHOT=682c71f4bbbe5dc25a0b9825879be796d7e7d279
+SNAPSHOT=2fbb863136724cfef2fc2f4c2b7f51be36f132c7
 SRC_URI="https://github.com/bminor/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/binutils-gdb-${SNAPSHOT}"
 

@@ -54,7 +54,36 @@ DEPEND="
 "
 BDEPEND="dev-python/jinja"
 
-append-cflags -Wno-error=format-truncation
+PATCHES=(
+	"${FILESDIR}/0001-binfmt-Don-t-install-dependency-links-at-install-tim.patch"
+	"${FILESDIR}/0001-src-boot-efi-meson.build-ensure-VERSION_TAG-exists-i.patch"
+	"${FILESDIR}/0002-implment-systemd-sysv-install-for-OE.patch"
+	"${FILESDIR}/0004-missing_type.h-add-comparison_fn_t.patch"
+	"${FILESDIR}/0005-add-fallback-parse_printf_format-implementation.patch"
+	"${FILESDIR}/0006-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch"
+	"${FILESDIR}/0007-add-missing-FTW_-macros-for-musl.patch"
+	"${FILESDIR}/0008-Use-uintmax_t-for-handling-rlim_t.patch"
+	"${FILESDIR}/0009-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch"
+	"${FILESDIR}/0010-Define-glibc-compatible-basename-for-non-glibc-syste.patch"
+	"${FILESDIR}/0011-Do-not-disable-buffering-when-writing-to-oom_score_a.patch"
+	"${FILESDIR}/0012-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch"
+	"${FILESDIR}/0013-avoid-redefinition-of-prctl_mm_map-structure.patch"
+	"${FILESDIR}/0014-do-not-disable-buffer-in-writing-files.patch"
+	"${FILESDIR}/0015-Handle-__cpu_mask-usage.patch"
+	"${FILESDIR}/0016-Handle-missing-gshadow.patch"
+	"${FILESDIR}/0017-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch"
+	"${FILESDIR}/0018-pass-correct-parameters-to-getdents64.patch"
+	"${FILESDIR}/0019-Adjust-for-musl-headers.patch"
+	"${FILESDIR}/0020-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch"
+	"${FILESDIR}/0021-errno-util-Make-STRERROR-portable-for-musl.patch"
+	"${FILESDIR}/0022-sd-event-Make-malloc_trim-conditional-on-glibc.patch"
+	"${FILESDIR}/0023-shared-Do-not-use-malloc_info-on-musl.patch"
+	"${FILESDIR}/0024-avoid-missing-LOCK_EX-declaration.patch"
+	"${FILESDIR}/0025-include-signal.h-to-avoid-the-undeclared-error.patch"
+	"${FILESDIR}/0026-undef-stdin-for-references-using-stdin-as-a-struct-m.patch"
+	"${FILESDIR}/0027-adjust-header-inclusion-order-to-avoid-redeclaration.patch"
+	"${FILESDIR}/0028-build-path.c-avoid-boot-time-segfault-for-musl.patch"
+)
 
 pkg_pretend() {
 	if [[ ${MERGE_TYPE} != buildonly ]]; then
@@ -83,74 +112,14 @@ pkg_pretend() {
 }
 
 src_prepare() {
+	append-cflags -Wno-error=format-truncation
+
 	if use musl; then
 		append-cppflags -D__UAPI_DEF_ETHHDR=0
 		append-flags -Wno-error=incompatible-pointer-types
-
-		eapply "${FILESDIR}"/256/*.patch
-
-		default
-
-		sed -i '/#include <gshadow.h>/d' src/{shared/user-record-nss,basic/user-util}.h
-
-		sed -i -e 's/linux\/if_ether.h/netinet\/if_ether.h/g' "src/basic/linux/if_bridge.h" || die
-		sed -i -e 's/linux\/if_ether.h/netinet\/if_ether.h/g' "src/network/netdev/bareudp.h" || die
-		sed -i -e 's/linux\/if_ether.h/netinet\/if_ether.h/g' "src/basic/socket-util.h" || die
-		sed -i -e 's/linux\/if_arp.h/netinet\/if_ether.h/g' "src/network/networkd-link.c" || die
-		sed -i -e 's/linux\/if_arp.h/netinet\/if_ether.h/g' "src/udev/udev-builtin-net_id.c" || die
-
-		awk '
-    /#define IFF_VOLATILE/ {
-        print "#ifndef IFF_VOLATILE";
-        print;
-        in_iff_volatile = 1;
-        next;
-    }
-    in_iff_volatile && /\)/ {
-        print;
-        print "#endif /* IFF_VOLATILE */";
-        in_iff_volatile = 0;
-        next;
-    }
-    { print; }
-' src/basic/linux/if.h > tmp_if.h && mv tmp_if.h src/basic/linux/if.h || die
-
-		sed -i '/#include "/a #include <libgen.h>' src/analyze/analyze-verify-util.c || die "Failed to insert include in analyze-verify-util.c"
-		sed -i '/#include "/a #include <libgen.h>' src/basic/conf-files.c || die "Failed to insert include in conf-files.c"
-		sed -i '/#include "/a #include <libgen.h>' src/basic/path-util.c || die "Failed to insert include in path-util.c"
-		sed -i '/#include "/a #include <libgen.h>' src/basic/unit-file.c || die "Failed to insert include in unit-file.c"
-		sed -i '/#include "/a #include <libgen.h>' src/core/execute.c || die "Failed to insert include in execute.c"
-		sed -i '/#include "/a #include <libgen.h>' src/core/load-dropin.c || die "Failed to insert include in load-dropin.c"
-		sed -i '/#include "/a #include <libgen.h>' src/delta/delta.c || die "Failed to insert include in delta.c"
-		sed -i '/#include "/a #include <libgen.h>' src/libsystemd/sd-bus/test-bus-watch-bind.c || die "Failed to insert include in test-bus-watch-bind.c"
-		sed -i '/#include "/a #include <libgen.h>' src/login/logind-inhibit.c || die "Failed to insert include in logind-inhibit.c"
-		sed -i '/#include "/a #include <libgen.h>' src/login/logind-seat.c || die "Failed to insert include in logind-seat.c"
-		sed -i '/#include "/a #include <libgen.h>' src/login/logind-session.c || die "Failed to insert include in logind-session.c"
-		sed -i '/#include "/a #include <libgen.h>' src/network/netdev/netdev.c || die "Failed to insert include in netdev.c"
-		sed -i '/#include "/a #include <libgen.h>' src/network/networkd-network.c || die "Failed to insert include in networkd-network.c"
-		sed -i '/#include "/a #include <libgen.h>' src/portable/portable.c || die "Failed to insert include in portable.c"
-		sed -i '/#include "/a #include <libgen.h>' src/portable/portabled-image-bus.c || die "Failed to insert include in portabled-image-bus.c"
-		sed -i '/#include "/a #include <libgen.h>' src/resolve/resolved-dnssd.c || die "Failed to insert include in resolved-dnssd.c"
-		sed -i '/#include "/a #include <libgen.h>' src/shared/bootspec.h || die "Failed to insert include in bootspec.h"
-		sed -i '/#include "/a #include <libgen.h>' src/shared/format-table.h || die "Failed to insert include in format-table.h"
-		sed -i '/#include "/a #include <libgen.h>' src/shared/install.c || die "Failed to insert include in install.c"
-		sed -i '/#include "/a #include <libgen.h>' src/systemctl/systemctl-enable.c || die "Failed to insert include in systemctl-enable.c"
-		sed -i '/#include "/a #include <libgen.h>' src/systemctl/systemctl-list-unit-files.c || die "Failed to insert include in systemctl-list-unit-files.c"
-		sed -i '/#include "/a #include <libgen.h>' src/systemctl/systemctl-show.c || die "Failed to insert include in systemctl-show.c"
-		sed -i '/#include "/a #include <libgen.h>' src/systemctl/systemctl-sysv-compat.c || die "Failed to insert include in systemctl-sysv-compat.c"
-		sed -i '/#include "/a #include <libgen.h>' src/test/test-conf-files.c || die "Failed to insert include in test-conf-files.c"
-		sed -i '/#include "/a #include <libgen.h>' src/test/test-exec-util.c || die "Failed to insert include in test-exec-util.c"
-		sed -i '/#include "/a #include <libgen.h>' src/test/test-fileio.c || die "Failed to insert include in test-fileio.c"
-		sed -i '/#include "/a #include <libgen.h>' src/test/test-format-table.c || die "Failed to insert include in test-format-table.c"
-		sed -i '/#include "/a #include <libgen.h>' src/test/test-install-root.c || die "Failed to insert include in test-install-root.c"
-		sed -i '/#include "/a #include <libgen.h>' src/test/test-install.c || die "Failed to insert include in test-install.c"
-		sed -i '/#include "/a #include <libgen.h>' src/test/test-mountpoint-util.c || die "Failed to insert include in test-mountpoint-util.c"
-		sed -i '/#include "/a #include <libgen.h>' src/test/test-parse-argument.c || die "Failed to insert include in test-parse-argument.c"
-		sed -i '/#include "/a #include <libgen.h>' src/test/test-path-util.c || die "Failed to insert include in test-path-util.c"
-		sed -i '/#include "/a #include <libgen.h>' src/udev/net/link-config.c || die "Failed to insert include in link-config.c"
-	else
-		default
 	fi
+
+	default
 }
 
 src_configure() {
@@ -271,9 +240,9 @@ src_install() {
 	rm -r "${ED}"/usr/lib/kernel
 
 	if use sleep; then
-		rm  "${ED}"/usr/lib/systemd/systemd-sleep
+		rm	"${ED}"/usr/lib/systemd/systemd-sleep
 		rm -r "${ED}"/usr/lib/systemd/system-sleep/
-		rm  "${ED}"/usr/lib/systemd/system/systemd-suspend.service
+		rm	"${ED}"/usr/lib/systemd/system/systemd-suspend.service
 		sed -i "s/\#SuspendMode\=/SuspendMode\=suspend/g" "${ED}"/etc/systemd/sleep.conf || die
 		sed -i "s/\#SuspendState\=mem\ standby\ freeze/SuspendState\=standby/g" "${ED}"/etc/systemd/sleep.conf || die
 		sed -i "s/\#HibernateMode\=platform\ shutdown/HibernateMode\=suspend/g" "${ED}"/etc/systemd/sleep.conf || die

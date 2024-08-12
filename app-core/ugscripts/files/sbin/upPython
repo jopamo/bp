@@ -20,6 +20,7 @@ PACKAGES=(
 	"distro"
 	"docutils"
 	"editables"
+	"ensurepip-pip"
 	"execnet"
 	"fastjsonschema"
 	"filelock"
@@ -46,7 +47,6 @@ PACKAGES=(
 	"mako"
 	"markupsafe"
 	"more-itertools"
-	"nspektr"
 	"olefile"
 	"ordered-set"
 	"packaging"
@@ -63,6 +63,7 @@ PACKAGES=(
 	"psutil"
 	"py"
 	"pycparser"
+	"pyelftools"
 	"pygments"
 	"pyopenssl"
 	"pyproject-hooks"
@@ -111,13 +112,13 @@ finalize_update() {
 	fi
 
 	(cd "$package_path" && \
-			git add --all . && \
+			git add --all . > /dev/null 2>&1 && \
 			git -c user.name="${BOT_USER}" \
 			-c user.email="${BOT_EMAIL}" \
 			-c commit.gpgsign=true \
 			-c user.signingkey="${BOT_KEYID}" \
-			commit -m "Update ${package_name} to ${version}" && \
-		git push origin HEAD)
+			commit -m "Update ${package_name} to ${version}" > /dev/null 2>&1 && \
+		git push origin HEAD > /dev/null 2>&1)
 
 	echo "Ebuild updated for ${package_name}: ${new_ebuild_filename}"
 }
@@ -187,6 +188,12 @@ find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe '
     s/!hppa\?\s*\(([^()]|\n)*\)//g;
 ' {} +
 
+find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec sed -i'' '/!hppa? (/,+4d' {} +
+
+find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe '
+    s/!s390\?\s*\(([^()]|\n)*\)//g;
+' {} +
+
 find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe '
     s/test\?\s*\(\s*\)//g;
 ' {} +
@@ -194,6 +201,9 @@ find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe '
 find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe '
     s/test-rust\?\s*\(\s*\)//g;
 ' {} +
+
+find "${GENTOO_PATH}" -type f -name '*_rc[1-9].ebuild' -exec echo "Deleting _rc ebuild: {}" \; -delete
+find "${GENTOO_PATH}" -type f -name '*_pre*.ebuild' -exec echo "Deleting _pre ebuild: {}" \; -delete
 
 for package in cython psutil lxml cffi pillow tree-sitter zstandard; do
 	if [ -d "${PACKAGE_DIR}/${package}" ]; then
@@ -252,7 +262,7 @@ for package in "${PACKAGES[@]}"; do
 	if [ -d "${package_dir}" ]; then
 		echo "Processing ${package} in ${package_dir}..."
 		echo "Updating KEYWORDS for ${package} in ${package_dir}..."
-		find "${package_dir}" -type f -name "*.ebuild" -exec sed -i'' 's/^KEYWORDS=".*"/KEYWORDS="amd64 arm64"/' {} +
+		find "${package_dir}" -type f -name "*.ebuild" -exec sed -i'' '/^KEYWORDS=/ s/^KEYWORDS=".*"/KEYWORDS="amd64 arm64"/g' {} +
 		echo "KEYWORDS updated for ${package}."
 	fi
 done
@@ -338,7 +348,7 @@ main() {
 
 	for package in "${PACKAGES[@]}"; do
 		echo "Processing package: ${package}"
-		generate_manifest "${package}" || { echo "Failed to generate manifest for ${package}"; continue; }
+		generate_manifest "${package}" || { echo "Failed to generate manifest for ${package}"; return 1; }
 		commit_changes "${package}" || { echo "Failed to commit changes for ${package}"; continue; }
 	done
 

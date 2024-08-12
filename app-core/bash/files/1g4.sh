@@ -80,20 +80,17 @@ update_kernel_efi() {
 	echo "Kernel update complete."
 }
 
-update_kernel_rockchip() {
+update_kernel_opi5plus() {
 	cd /usr/src/linux || exit 1
 
 	make oldconfig
 	mount /boot
 
-	make clean
-	make prepare
-
-	make -j$(nproc) || exit 1
 	make -j$(nproc) Image dtbs modules || exit 1
 
 	rm -rf /lib/modules/*
-	rm /boot/System.map* /boot/config* /boot/vmlinuz*
+	rm -rf /boot/dtb*
+	rm /boot/System.map* /boot/config* /boot/vmlinux* /boot/initrd*
 
 	mkdir -p /boot/dtb/rockchip
 	cp /usr/src/linux/arch/arm64/boot/dts/rockchip/rk3588-orangepi-5-plus.dtb /boot/dtb/rockchip/

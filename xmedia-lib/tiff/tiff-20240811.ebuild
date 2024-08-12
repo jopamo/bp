@@ -7,7 +7,7 @@ inherit autotools libtool
 DESCRIPTION="Tag Image File Format (TIFF) library"
 HOMEPAGE="http://libtiff.maptools.org"
 
-SNAPSHOT=2653d1f860859c91683933053a0384697c99475c
+SNAPSHOT=9f528cd1d0a5a17eca5b93c90e23df623d15fe7a
 SRC_URI="https://gitlab.com/libtiff/libtiff/-/archive/${SNAPSHOT}/libtiff-${SNAPSHOT}.tar.bz2 -> libtiff-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libtiff-${SNAPSHOT}"
 

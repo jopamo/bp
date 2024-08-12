@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X.Org Xv library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=b022c9cf7004fe6f794c4c00dd519a2e4c74eca0
+SNAPSHOT=fba7bf352678db2938f5a7b173d2a8823595ef3b
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXv/-/archive/${SNAPSHOT}/libXv-${SNAPSHOT}.tar.bz2 -> libXv-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxv-${SNAPSHOT}"
 

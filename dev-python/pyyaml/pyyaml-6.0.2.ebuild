@@ -3,11 +3,12 @@
 EAPI=8
 
 DISTUTILS_EXT=1
-DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_USE_PEP517=standalone
 PYTHON_COMPAT=( python3_{10..13} pypy3 )
 
 inherit distutils-r1
 
+MY_P=${P/_}
 DESCRIPTION="YAML parser and emitter for Python"
 HOMEPAGE="
 	https://pyyaml.org/wiki/PyYAML
@@ -15,9 +16,10 @@ HOMEPAGE="
 	https://github.com/yaml/pyyaml/
 "
 SRC_URI="
-	https://github.com/yaml/pyyaml/archive/${PV}.tar.gz
-		-> ${P}.gh.tar.gz
+	https://github.com/yaml/pyyaml/archive/${PV/_}.tar.gz
+		-> ${MY_P}.gh.tar.gz
 "
+S=${WORKDIR}/${MY_P}
 
 LICENSE="MIT"
 SLOT="0"
@@ -32,16 +34,23 @@ RDEPEND="
 "
 BDEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
+	dev-python/setuptools[${PYTHON_USEDEP}]
 "
-
-PATCHES=(
-	"${FILESDIR}"/${PN}-6.0.1-cython3.patch
-)
-
-distutils_enable_tests setup.py
 
 src_configure() {
 	export PYYAML_FORCE_CYTHON=1
+}
+
+python_test() {
+	local -x PATH="${BUILD_DIR}/test${EPREFIX}/usr/bin:${PATH}"
+	local -x PYTHONPATH="tests/legacy_tests:${PYTHONPATH}"
+	# upstream indicates testing may pollute the package
+	cp -a "${BUILD_DIR}"/{install,test} || die
+	"${BUILD_DIR}"/test/usr/bin/python <<-EOF || die "Tests failed on ${EPYTHON}"
+		import sys
+		import test_all
+		sys.exit(0 if test_all.main() else 1)
+	EOF
 }
 
 python_install_all() {

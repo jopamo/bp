@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="A library for file management"
 HOMEPAGE="http://pcmanfm.sourceforge.net/"
 
-SNAPSHOT=ee33947ee71719e5750cbe832159a7ecc90e0add
+SNAPSHOT=1c76b8fca4ef5fc4f176ae9a2f7f86ca9451a10f
 SRC_URI="https://github.com/lxde/libfm/archive/${SNAPSHOT}.tar.gz -> libfm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libfm-${SNAPSHOT}"
 

@@ -7,7 +7,7 @@ inherit autotools flag-o-matic
 DESCRIPTION="TestDisk & PhotoRec: Checks/undeletes partitions & a signature based recovery tool"
 HOMEPAGE="https://www.cgsecurity.org/wiki/TestDisk"
 
-SNAPSHOT=2e47fa80833da47c479b6a35fcce47fdc23545d1
+SNAPSHOT=a41e7ac10b4aa40416e4cbe1d411417bb33fef4c
 SRC_URI="https://github.com/cgsecurity/testdisk/archive/${SNAPSHOT}.tar.gz -> testdisk-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/testdisk-${SNAPSHOT}"
 

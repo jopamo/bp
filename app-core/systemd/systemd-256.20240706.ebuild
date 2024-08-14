@@ -54,37 +54,6 @@ DEPEND="
 "
 BDEPEND="dev-python/jinja"
 
-PATCHES=(
-	"${FILESDIR}/0001-binfmt-Don-t-install-dependency-links-at-install-tim.patch"
-	"${FILESDIR}/0001-src-boot-efi-meson.build-ensure-VERSION_TAG-exists-i.patch"
-	"${FILESDIR}/0002-implment-systemd-sysv-install-for-OE.patch"
-	"${FILESDIR}/0004-missing_type.h-add-comparison_fn_t.patch"
-	"${FILESDIR}/0005-add-fallback-parse_printf_format-implementation.patch"
-	"${FILESDIR}/0006-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch"
-	"${FILESDIR}/0007-add-missing-FTW_-macros-for-musl.patch"
-	"${FILESDIR}/0008-Use-uintmax_t-for-handling-rlim_t.patch"
-	"${FILESDIR}/0009-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch"
-	"${FILESDIR}/0010-Define-glibc-compatible-basename-for-non-glibc-syste.patch"
-	"${FILESDIR}/0011-Do-not-disable-buffering-when-writing-to-oom_score_a.patch"
-	"${FILESDIR}/0012-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch"
-	"${FILESDIR}/0013-avoid-redefinition-of-prctl_mm_map-structure.patch"
-	"${FILESDIR}/0014-do-not-disable-buffer-in-writing-files.patch"
-	"${FILESDIR}/0015-Handle-__cpu_mask-usage.patch"
-	"${FILESDIR}/0016-Handle-missing-gshadow.patch"
-	"${FILESDIR}/0017-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch"
-	"${FILESDIR}/0018-pass-correct-parameters-to-getdents64.patch"
-	"${FILESDIR}/0019-Adjust-for-musl-headers.patch"
-	"${FILESDIR}/0020-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch"
-	"${FILESDIR}/0021-errno-util-Make-STRERROR-portable-for-musl.patch"
-	"${FILESDIR}/0022-sd-event-Make-malloc_trim-conditional-on-glibc.patch"
-	"${FILESDIR}/0023-shared-Do-not-use-malloc_info-on-musl.patch"
-	"${FILESDIR}/0024-avoid-missing-LOCK_EX-declaration.patch"
-	"${FILESDIR}/0025-include-signal.h-to-avoid-the-undeclared-error.patch"
-	"${FILESDIR}/0026-undef-stdin-for-references-using-stdin-as-a-struct-m.patch"
-	"${FILESDIR}/0027-adjust-header-inclusion-order-to-avoid-redeclaration.patch"
-	"${FILESDIR}/0028-build-path.c-avoid-boot-time-segfault-for-musl.patch"
-)
-
 pkg_pretend() {
 	if [[ ${MERGE_TYPE} != buildonly ]]; then
 		local CONFIG_CHECK="~AUTOFS4_FS ~BLK_DEV_BSG ~CGROUPS
@@ -117,6 +86,37 @@ src_prepare() {
 	if use musl; then
 		append-cppflags -D__UAPI_DEF_ETHHDR=0
 		append-flags -Wno-error=incompatible-pointer-types
+
+		PATCHES=(
+			"${FILESDIR}/0001-binfmt-Don-t-install-dependency-links-at-install-tim.patch"
+			"${FILESDIR}/0001-src-boot-efi-meson.build-ensure-VERSION_TAG-exists-i.patch"
+			"${FILESDIR}/0002-implment-systemd-sysv-install-for-OE.patch"
+			"${FILESDIR}/0004-missing_type.h-add-comparison_fn_t.patch"
+			"${FILESDIR}/0005-add-fallback-parse_printf_format-implementation.patch"
+			"${FILESDIR}/0006-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch"
+			"${FILESDIR}/0007-add-missing-FTW_-macros-for-musl.patch"
+			"${FILESDIR}/0008-Use-uintmax_t-for-handling-rlim_t.patch"
+			"${FILESDIR}/0009-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch"
+			"${FILESDIR}/0010-Define-glibc-compatible-basename-for-non-glibc-syste.patch"
+			"${FILESDIR}/0011-Do-not-disable-buffering-when-writing-to-oom_score_a.patch"
+			"${FILESDIR}/0012-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch"
+			"${FILESDIR}/0013-avoid-redefinition-of-prctl_mm_map-structure.patch"
+			"${FILESDIR}/0014-do-not-disable-buffer-in-writing-files.patch"
+			"${FILESDIR}/0015-Handle-__cpu_mask-usage.patch"
+			"${FILESDIR}/0016-Handle-missing-gshadow.patch"
+			"${FILESDIR}/0017-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch"
+			"${FILESDIR}/0018-pass-correct-parameters-to-getdents64.patch"
+			"${FILESDIR}/0019-Adjust-for-musl-headers.patch"
+			"${FILESDIR}/0020-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch"
+			"${FILESDIR}/0021-errno-util-Make-STRERROR-portable-for-musl.patch"
+			"${FILESDIR}/0022-sd-event-Make-malloc_trim-conditional-on-glibc.patch"
+			"${FILESDIR}/0023-shared-Do-not-use-malloc_info-on-musl.patch"
+			"${FILESDIR}/0024-avoid-missing-LOCK_EX-declaration.patch"
+			"${FILESDIR}/0025-include-signal.h-to-avoid-the-undeclared-error.patch"
+			"${FILESDIR}/0026-undef-stdin-for-references-using-stdin-as-a-struct-m.patch"
+			"${FILESDIR}/0027-adjust-header-inclusion-order-to-avoid-redeclaration.patch"
+			"${FILESDIR}/0028-build-path.c-avoid-boot-time-segfault-for-musl.patch"
+		)
 	fi
 
 	default
@@ -127,17 +127,17 @@ src_configure() {
 		$(usex devmode '-Dmode=developer' '-Dmode=release')
 		$(meson_use binfmt)
 		$(meson_feature blkid)
-		$(meson_use bpf-framework)
+		$(meson_feature bpf-framework)
 		$(meson_use coredump)
-		$(meson_use cryptsetup libcryptsetup)
-		$(meson_feature dbus)
+		$(meson_feature cryptsetup libcryptsetup)
+		$(meson_use dbus)
 		$(meson_use efi )
-		$(meson_use gcrypt)
+		$(meson_feature gcrypt)
 		$(meson_use gshadow)
 		$(meson_use hostnamed)
 		$(meson_use hwdb)
-		$(meson_use importd)
-		$(meson_use kmod)
+		$(meson_feature importd)
+		$(meson_feature kmod)
 		$(meson_use ldconfig)
 		$(meson_use networkd link-networkd-shared)
 		$(meson_use localed)
@@ -145,8 +145,8 @@ src_configure() {
 		$(meson_use machined)
 		$(meson_use networkd)
 		$(meson_use oomd)
-		$(meson_use pam)
-		$(meson_use pcre pcre2)
+		$(meson_feature pam)
+		$(meson_feature pcre pcre2)
 		$(meson_use pstore)
 		$(meson_use resolve)
 		$(meson_use rfkill)
@@ -159,38 +159,37 @@ src_configure() {
 		$(meson_use userdb)
 		$(meson_use utmp)
 		$(meson_use vconsole)
-		$(meson_use xkb xkbcommon)
+		$(meson_feature xkb xkbcommon)
 		-Dacl=enabled
 		-Dapparmor=disabled
 		-Daudit=disabled
 		-Dbacklight=false
 		-Dbzip2=disabled
-		-Dlibcurl=false
-		-Ddefault-hierarchy=unified
+		-Dlibcurl=disabled
 		-Ddefault-kill-user-processes=false
 		$(usex dbus '-Ddns-over-tls=openssl' '-Ddns-over-tls=false')
 		$(meson_use dbus link-networkd-shared)
 		-Ddns-servers=""
-		-Delfutils=false
+		-Delfutils=disabled
 		-Denvironment-d=false
 		-Dfirstboot=false
-		-Dgnutls=false
+		-Dgnutls=disabled
 		-Dhibernate=false
-		-Dhomed=false
-		-Dhtml=false
+		-Dhomed=disabled
+		-Dhtml=disabled
 		-Didn=false
 		-Dima=false
-		-Dfdisk=false
-		-Dlibidn2=false
-		-Dlibidn=false
-		-Dlibiptc=false
+		-Dfdisk=disabled
+		-Dlibidn2=disabled
+		-Dlibidn=disabled
+		-Dlibiptc=disabled
 		-Dlink-timesyncd-shared=false
-		-Dlz4=false
-		-Dman=false
-		-Dmicrohttpd=false
+		-Dlz4=disabled
+		-Dman=disabled
+		-Dmicrohttpd=disabled
 		-Dnss-myhostname=false
-		-Dnss-mymachines=false
-		-Dnss-resolve=false
+		-Dnss-mymachines=disabled
+		-Dnss-resolve=disabled
 		-Dnss-systemd=false
 		-Dntp-servers=""
 		-Dopenssl=true
@@ -209,12 +208,11 @@ src_configure() {
 		-Dsplit-bin=true
 		-Dsplit-usr=false
 		-Dstandalone-binaries=false
-		-Dstandalone-binaries=false
 		-Dtimesyncd=false
 		-Dtpm=false
-		-Dxz=false
-		-Dzlib=false
-		-Dzstd=false
+		-Dxz=disabled
+		-Dzlib=disabled
+		-Dzstd=disabled
 	)
 
 	meson_src_configure

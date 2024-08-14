@@ -28,8 +28,8 @@ init_logs() {
 GCC_MAJOR_VERSIONS=("13")
 GLIBC_VERSIONS=("2.36" "2.38")
 GO_VERSIONS=("1.21" "1.22")
+BINUTILS_VERSIONS=("2.41" "2.43")
 
-BINUTILS_VERSION="2.43"
 XZ_UTILS_VERSION="5.4"
 SYSTEMD_VERSION="254"
 UTIL_LINUX_VERSION="2.40"
@@ -59,7 +59,6 @@ KWINDOWSYSTEM_BRANCH="kf${KDE_VERSION}"
 LIBASSUAN_BRANCH="LIBASSUAN-${LIBASSUAN_VERSION}-BRANCH"
 LIBGCRYPT_BRANCH="LIBGCRYPT-${LIBGCRYPT_VERSION}-BRANCH"
 TCL_BRANCH=$(echo "core-${TCL_VERSION}" | tr '.' '-')
-BINUTILS_BRANCH="binutils-$(echo "$BINUTILS_VERSION" | sed 's/\./_/')-branch"
 TOR_BRANCH="release-$TOR_VERSION"
 
 show_help() {
@@ -298,7 +297,11 @@ toolchain_bump() {
 		update_ebuild "${REPO_PATH}/app-build/gcc" "https://gcc.gnu.org/git/gcc.git" "releases/gcc-${gcc_version}" "$GCC_VERSION" "no"
 	done
 
-	update_ebuild "${REPO_PATH}/app-build/binutils" "https://github.com/bminor/binutils-gdb" "${BINUTILS_BRANCH}" "${BINUTILS_VERSION}" "no"
+	for binutils_version in "${BINUTILS_VERSIONS[@]}"; do
+		local BINUTILS_BRANCH="binutils-$(echo "$binutils_version" | sed 's/\./_/')-branch"
+		update_ebuild "${REPO_PATH}/app-build/binutils" "https://github.com/bminor/binutils-gdb" "${BINUTILS_BRANCH}" "${binutils_version}" "no"
+	done
+
 	update_ebuild "${REPO_PATH}/app-compression/xz-utils" "https://github.com/tukaani-project/xz" "v${XZ_UTILS_VERSION}" "$XZ_UTILS_VERSION" "no"
 	update_ebuild "${REPO_PATH}/app-compression/zstd" "https://github.com/facebook/zstd" "dev" "0" "yes"
 	update_ebuild "${REPO_PATH}/app-compression/lz4" "https://github.com/lz4/lz4" "dev" "0" "yes"

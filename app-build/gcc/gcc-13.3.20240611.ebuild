@@ -7,13 +7,13 @@ inherit flag-o-matic
 DESCRIPTION="an optimizing compiler produced by the GNU Project supporting various programming languages"
 HOMEPAGE="https://gcc.gnu.org/"
 
-SNAPSHOT=617562e4e422c7bd282960b14abfffd994445009
+SNAPSHOT=f2ef3ac78c7832e1483085be5a5fe23b1e402e70
 SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/gcc-${SNAPSHOT}
 
 LICENSE="GPL-3"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="debug dlang go-bootstrap +isl +lto sanitize +vtv zstd"
 

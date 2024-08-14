@@ -60,14 +60,12 @@ update_kernel_efi() {
 	mount -o remount,rw -t efivarfs efivarfs /sys/firmware/efi/efivars
 	mount /boot
 	mount /boot/efi
-
-	make clean
 	make prepare
 
 	make -j$(nproc) || exit 1
 
 	rm -rf /lib/modules/*
-	rm /boot/System.map* /boot/config* /boot/vmlinuz*
+	rm /boot/System.map* /boot/config* /boot/vmlinux*
 
 	make modules_install
 	make install
@@ -85,6 +83,7 @@ update_kernel_opi5plus() {
 
 	make oldconfig
 	mount /boot
+	make prepare
 
 	make -j$(nproc) Image dtbs modules || exit 1
 
@@ -92,8 +91,6 @@ update_kernel_opi5plus() {
 	rm -rf /boot/dtb*
 	rm /boot/System.map* /boot/config* /boot/vmlinux* /boot/initrd*
 
-	mkdir -p /boot/dtb/rockchip
-	cp /usr/src/linux/arch/arm64/boot/dts/rockchip/rk3588-orangepi-5-plus.dtb /boot/dtb/rockchip/
 	cp /usr/src/linux/arch/arm64/boot/Image /boot/
 
 	make modules_install

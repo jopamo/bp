@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit flag-o-matic linux-info git-r3 autotools
+inherit flag-o-matic linux-info autotools
 
 DESCRIPTION="Embedded Linux Library provides core, low-level functionality for system daemons"
 HOMEPAGE="https://01.org/ell"
-EGIT_REPO_URI="https://git.kernel.org/pub/scm/libs/ell/ell"
+
+SNAPSHOT=4acbb92c0513644900078c348d972ef5e48fdc4c
+SRC_URI="https://kernel.googlesource.com/pub/scm/libs/ell/ell.git/+archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
@@ -26,9 +29,9 @@ CONFIG_CHECK="
 	~KEY_DH_OPERATIONS
 "
 
-filter-flags -Wl,-z,defs
-
 src_prepare() {
+	filter-flags -Wl,-z,defs
+
 	default
 	eautoreconf
 }

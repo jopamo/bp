@@ -7,7 +7,7 @@ inherit autotools xdg
 DESCRIPTION="Extremely fast and lightweight file manager"
 HOMEPAGE="https://github.com/lxde/${PN}"
 
-SNAPSHOT=655fd083a98e7b11d61119bdf0d97aae6c774780
+SNAPSHOT=95d5b02e901b0bf33c5ab037a88b8c054a3f818f
 SRC_URI="https://github.com/lxde/lxappearance/archive/${SNAPSHOT}.tar.gz -> lxappearance-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/lxappearance-${SNAPSHOT}"
 

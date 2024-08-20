@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit git-r3 meson flag-o-matic xdg
+inherit meson flag-o-matic xdg
 
 DESCRIPTION="a series of packages for handling media devices"
 HOMEPAGE="https://git.linuxtv.org/v4l-utils.git"
-EGIT_REPO_URI="https://git.linuxtv.org/v4l-utils"
+
+SNAPSHOT=a1ebb4dad512025a7fbb2e7ff6ab6e5f5e604987
+SRC_URI="https://github.com/gjasny/v4l-utils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="LGPL"
 SLOT="0"

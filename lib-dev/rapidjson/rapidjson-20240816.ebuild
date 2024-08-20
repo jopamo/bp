@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="A fast JSON parser/generator for C++ with both SAX/DOM style API"
 HOMEPAGE="http://rapidjson.org/"
 
-SNAPSHOT=ab1842a2dae061284c0a62dca1cc6d5e7e37e346
+SNAPSHOT=7c73dd7de7c4f14379b781418c6e947ad464c818
 SRC_URI="https://github.com/Tencent/rapidjson/archive/${SNAPSHOT}.tar.gz -> rapidjson-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/rapidjson-${SNAPSHOT}"
 

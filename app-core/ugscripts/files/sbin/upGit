@@ -345,7 +345,6 @@ append_update_command() {
 	local package_name="$2"
 	local ebuild_file="$3"
 
-	# Check if the update line already exists in the FINAL_SCRIPT
 	if grep -q "update_ebuild*${package_name}.*${repository_url}.*${default_branch}" "$FINAL_SCRIPT"; then
 		echo "Update line for ${package_name} already exists in upDay." >> "$DEBUG_LOG"
 	else
@@ -385,10 +384,23 @@ process_repository_file() {
 
 normalize_url() {
 	local url="$1"
+
+	if [[ "$url" =~ w1\.fi ]]; then
+		url="git://w1.fi/hostap.git"
+	elif [[ "$url" =~ thekelleys\.org\.uk ]]; then
+		url="http://thekelleys.org.uk/git/dnsmasq.git"
+	elif [[ "$url" =~ kernel\.googlesource\.com ]]; then
+		if [[ "$url" =~ \+archive ]]; then
+			url=$(echo "$url" | sed -E 's|/+\+archive.*||')
+		fi
+	elif [[ "$url" =~ git\.gnupg\.org ]]; then
+		url=$(echo "$url" | sed -E 's|.*/gitweb\.cgi\?p=([^&]+).*|git://git.gnupg.org/\1.git|')
+	fi
+
 	url=${url//cgit/git}
 
 	if [[ "$url" =~ gitweb\.cgi ]]; then
-		url=$(echo "$url" | sed -E 's|.*/gitweb\.cgi\?p=([^&]+).*|git://git.gnupg.org/\1.git|')
+		url=$(echo "$url" | sed -E 's|.*/gitweb\.cgi\?p=([^&]+).*|\1.git|')
 	elif [[ "$url" =~ /-/ ]]; then
 		url=$(echo "$url" | sed -E 's|/-/.*||')
 	elif [[ "$url" =~ /archive/ ]]; then
@@ -411,7 +423,7 @@ process_url() {
 
 	if [[ -z "$repository_url" ]]; then
 		echo "No valid repository URL extracted from $ebuild file" >> "$ERROR_LOG"
-		return
+		exit 1
 	fi
 
 	common_process "$ebuild_file" "$repository_url" "$package_path"
@@ -430,6 +442,7 @@ common_process() {
 
 	if [[ -z "$default_branch" ]]; then
 		echo "$ebuild_file - Failed to access or get branch for $repository_url" >> "$ERROR_LOG"
+		exit 1
 	else
 		append_update_command "$package_path_short" "$package_name" "$ebuild_file"
 	fi

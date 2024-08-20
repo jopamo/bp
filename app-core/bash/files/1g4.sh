@@ -65,7 +65,7 @@ update_kernel_efi() {
 	make -j$(nproc) || exit 1
 
 	rm -rf /lib/modules/*
-	rm /boot/System.map* /boot/config* /boot/vmlinux*
+	rm /boot/System.map* /boot/config* /boot/vmlinuz*
 
 	make modules_install
 	make install

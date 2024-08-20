@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=79bdacff83a6bd5b70ff5ae5eb8b6de82c2f7c30
+SNAPSHOT=e3b0ace505155b6b8e301d69924b0773fd82cb6e
 
 inherit flag-o-matic
 

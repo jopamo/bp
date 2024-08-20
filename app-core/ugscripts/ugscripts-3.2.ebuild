@@ -24,7 +24,7 @@ src_install() {
 			doins "${FILESDIR}"/sbin/$f
 	done
 
-	for f in eclass_import emirror esync eup lighttpd_certs \
+	for f in eclass_import emirror eup lighttpd_certs \
 		mkheaders mkimg mkmini mkstage xbkup upApp upAll \
 		upBrowsers upPython upGit xchroot ; do
 			dosbin "${FILESDIR}"/sbin/$f

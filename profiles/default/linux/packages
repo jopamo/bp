@@ -28,8 +28,6 @@
 *app-core/which
 *app-compression/unzip
 *app-core/util-linux
-*app-port/eix
-*app-port/smart-live-rebuild
 *app-port/portage-utils
 *app-net/iproute2
 *app-net/openssh

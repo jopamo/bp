@@ -1,1 +1,2 @@
 >=app-build/binutils-2.42
+>=lib-core/gmp-6.2.0

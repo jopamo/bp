@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="Library providing GLib serialization and deserialization for the JSON format"
 HOMEPAGE="https://wiki.gnome.org/Projects/JsonGlib"
 
-SNAPSHOT=05334ecc56a6ff17c473311ee590de595b252713
+SNAPSHOT=0027968341da47ad79985f93b3e016f08712189c
 SRC_URI="https://gitlab.gnome.org/GNOME/json-glib/-/archive/${SNAPSHOT}/json-glib-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

@@ -8,7 +8,7 @@ DESCRIPTION="Embedded Linux Library provides core, low-level functionality for s
 HOMEPAGE="https://01.org/ell"
 
 SNAPSHOT=4acbb92c0513644900078c348d972ef5e48fdc4c
-SRC_URI="https://kernel.googlesource.com/pub/scm/libs/ell/ell.git/+archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://kernel.googlesource.com/pub/scm/libs/ell/ell/+archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}"
 
 LICENSE="LGPL-2.1"

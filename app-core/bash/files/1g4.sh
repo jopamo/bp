@@ -1,5 +1,7 @@
 #!/bin/sh
 
+alias eix='emerge -s'
+
 move_package() {
 	local REPO_PATH="/var/db/repos/bp"
 	local package_name="$1"

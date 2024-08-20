@@ -115,7 +115,6 @@ EXCLUDES="--exclude=${TARGET}boot/*
 	--exclude=${TARGET}var/cache/binpkgs/*
 	--exclude=${TARGET}var/cache/distfiles/*
 	--exclude=${TARGET}var/cache/edb/*
-	--exclude=${TARGET}var/cache/eix/*
 	--exclude=${TARGET}var/cache/ldconfig/*
 	--exclude=${TARGET}var/cache/man/*
 	--exclude=${TARGET}var/cache/packages/*

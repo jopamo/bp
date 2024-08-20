@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps +cmdmon ipv6 logrotate nettle +ntp +phc pps +refclock +rtc +adns systemd sysusersd tmpfilesd"
+IUSE="caps +cmdmon ipv6 logrotate nettle +ntp +phc pps +refclock +rtc +adns systemd tmpfilesd"
 
 DEPEND="
 	nettle? ( lib-core/nettle )
@@ -92,12 +92,6 @@ src_install() {
 }
 
 pkg_preinst() {
-	if use sysusersd; then
-		insopts -m 0644
-		insinto /usr/lib/sysusers.d
-		newins "${FILESDIR}/${PN}.sysusers.conf" ${PN}.conf
-	else
-		enewgroup ${PN} 123
-		enewuser ${PN} 123 -1 -1 ${PN}
-	fi
+	enewgroup ${PN} 123
+	enewuser ${PN} -1 -1 /var/lib/${PN} ${PN}
 }

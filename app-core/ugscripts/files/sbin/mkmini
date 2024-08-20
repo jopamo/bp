@@ -107,7 +107,7 @@ cp -p /usr/lib64/libgcc_s.so* "${MINIROOT}/usr/lib/"
 cp -p /usr/lib64/libstdc++.so* "${MINIROOT}/usr/lib/"
 cp -rp /usr/lib64/os-release "${MINIROOT}/usr/lib/"
 
-rm -rf "${MINIROOT}/etc/{config-archive,eclean,eixrc,env.d,portage,w3m,xml}"
+rm -rf "${MINIROOT}/etc/{config-archive,eclean,env.d,portage,w3m,xml}"
 rm -f "${MINIROOT}/etc/ssh/ssh_host*"
 rm -rf "${MINIROOT}usr/share/layout"
 rm -rf "${MINIROOT}/usr/include"

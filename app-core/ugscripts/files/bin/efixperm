@@ -7,11 +7,6 @@ if [ $(id -u) = 0 ]; then
 	find /var/db/repos -type d -exec chmod 755 {} +
 	find /var/db/repos -type f -exec chmod 644 {} +
 
-	#eix
-	mkdir -p /var/cache/eix
-	[ ! -f "/var/cache/eix/portage.eix" ] && touch "/var/cache/eix/portage.eix"
-	chown portage: /var/cache/eix/portage.eix
-
 	#http
 	find /srv/http -type d -exec chmod 755 {} +
 	find /srv/http -type f -exec chmod 644 {} +

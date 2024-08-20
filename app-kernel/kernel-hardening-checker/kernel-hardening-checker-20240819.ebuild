@@ -9,8 +9,6 @@ HOMEPAGE="https://github.com/a13xp0p0v/kernel-hardening-checker"
 
 SNAPSHOT=97c60fb425d30c61e4255dd092c22d99e79b4106
 SRC_URI="https://github.com/a13xp0p0v/kernel-hardening-checker/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-
-https://github.com/a13xp0p0v/kernel-hardening-checker/archive/21cec11eb005e77917a7263a0f164a80deca0e04.zip
 S="${WORKDIR}/kernel-hardening-checker-${SNAPSHOT}"
 
 LICENSE="GPL-3"

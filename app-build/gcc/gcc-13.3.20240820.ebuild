@@ -7,7 +7,7 @@ inherit flag-o-matic
 DESCRIPTION="an optimizing compiler produced by the GNU Project supporting various programming languages"
 HOMEPAGE="https://gcc.gnu.org/"
 
-SNAPSHOT=f2ef3ac78c7832e1483085be5a5fe23b1e402e70
+SNAPSHOT=9f5414447d35ecfeafb2b1bea9b4caeb224b8ebc
 SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/gcc-${SNAPSHOT}
 
@@ -15,7 +15,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug dlang go-bootstrap +isl +lto sanitize +vtv zstd"
+IUSE="debug dlang go-bootstrap +isl sanitize +vtv zstd"
 
 RESTRICT="strip"
 
@@ -50,7 +50,7 @@ src_prepare() {
 	filter-flags -fstack-protector-strong
 	filter-flags -fassociative-math
 	filter-flags -fno-semantic-interposition
-	filter-flags -fexceptions
+	filter-flags -fexceptions -fuse-linker-plugin
 	filter-flags -Wl,-O3
 	filter-flags -floop-parallelize-all
 	filter-flags -floop-interchange
@@ -80,8 +80,8 @@ src_prepare() {
 }
 
 src_configure() {
-	local GCC_LANG="c,c++"
-	use lto   && GCC_LANG+=",lto"
+	local GCC_LANG="c,c++,lto"
+
 	use dlang   && GCC_LANG+=",d"
 	use go-bootstrap  && GCC_LANG+=",go"
 
@@ -148,13 +148,13 @@ src_configure() {
 src_compile() {
 	cd gcc-build
 
-	emake -O STAGE1_CFLAGS="-O3" \
+	emake -O STAGE1_CFLAGS="-O2" \
 		BOOT_CFLAGS="$CFLAGS" \
 		BOOT_LDFLAGS="$LDFLAGS" \
 		LDFLAGS_FOR_TARGET="$LDFLAGS" \
 		bootstrap
 
-	make -O STAGE1_CFLAGS="-O3" \
+	make -O STAGE1_CFLAGS="-O2" \
 		BOOT_CFLAGS="$CFLAGS" \
 		BOOT_LDFLAGS="$LDFLAGS" \
 		LDFLAGS_FOR_TARGET="$LDFLAGS" \

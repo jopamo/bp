@@ -42,7 +42,7 @@ src_configure() {
 		-DWITH_TESTS="$(usex test)"
 		-DWITH_XC_AUTOTYPE="$(usex autotype)"
 		-DWITH_XC_DOCS=OFF
-		-DWITH_XC_YUBIKEY=ON
+		-DWITH_XC_YUBIKEY=OFF
 	)
 	cmake_src_configure
 }

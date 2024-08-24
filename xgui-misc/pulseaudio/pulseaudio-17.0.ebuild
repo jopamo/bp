@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	KEYWORDS=""
 else
-	SRC_URI="https://freedesktop.org/software/pulseaudio/releases/${P}.tar.xz"
+	SRC_URI="https://www.freedesktop.org/software/pulseaudio/releases/${P}.tar.xz"
 fi
 
 LICENSE="GPL-2"

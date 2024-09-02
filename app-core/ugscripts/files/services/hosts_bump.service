@@ -1,0 +1,8 @@
+[Unit]
+Description=Update /etc/hosts with the latest version from StevenBlack's hosts file
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/hosts_bump

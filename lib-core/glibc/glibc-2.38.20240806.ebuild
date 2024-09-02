@@ -108,6 +108,7 @@ src_configure() {
 	filter-flags -fstack-protector-strong
 	filter-flags -fassociative-math
 	filter-flags -fno-semantic-interposition
+	filter-flags -Wl,--gc-sections
 
 	use debug && append-flags -fno-builtin-strlen
 

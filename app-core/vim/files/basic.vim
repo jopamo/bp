@@ -1,88 +1,80 @@
-" Don't try to be vi compatible
-set nocompatible
+" Compatibility
+set nocompatible " Don't try to be vi compatible
 
-" Helps force plugins to load correctly when it is turned back on below
-filetype off
-
+" Plugin Management
+filetype off " Helps force plugins to load correctly
 " TODO: Load plugins here (pathogen or vundle)
+filetype plugin indent on " For plugins to load correctly
 
-" For plugins to load correctly
-filetype plugin indent on
-
-" TODO: Pick a leader key
-" let mapleader = ","
+" Leader Key
+" let mapleader = "," " TODO: Pick a leader key
 
 " Security
-set modelines=0
+set modelines=0 " Security settings
 
-" Show line numbers
-set number
+" Line Numbers
+set number " Show line numbers
+set norelativenumber " Disable relative line numbers
 
-" Show file stats
-set ruler
+" Status Line
+set ruler " Show file stats
+set laststatus=2 " Always show status bar
 
-" Blink cursor on error instead of beeping (grr)
-set visualbell
+" Display and Rendering
+set visualbell " Blink cursor on error instead of beeping
+set ttyfast " Faster rendering
+set showmode " Show current mode
+set showcmd " Show command in last line
+set listchars=tab:▸\ ,eol:¬ " Visualize tabs and newlines
+" Toggle tabs and EOL
+map <leader>l :set list!<CR>
 
 " Encoding
-set encoding=utf-8
+set encoding=utf-8 " Set encoding to UTF-8
 
-" Whitespace
-set wrap
-set textwidth=79
-set formatoptions=tcqrn1
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
-set expandtab
-set noshiftround
+" Whitespace and Formatting
+set wrap " Wrap text
+set textwidth=79 " Set text width
+set formatoptions=tcqrn1 " Formatting options
+set tabstop=2 " Number of spaces per tab
+set shiftwidth=2 " Number of spaces for indenting
+set softtabstop=2 " Number of spaces per tab when editing
+set expandtab " Use spaces instead of tabs
+set noshiftround " Disable rounding when shifting
+set noautoindent " Disable automatic indentation
+set nocindent " Disable C-style indentation
+set nowrap " Disable line wrapping
 
-" Cursor motion
-set scrolloff=3
-set backspace=indent,eol,start
-set matchpairs+=<:> " use % to jump between pairs
+" Cursor Movement
+set scrolloff=3 " Number of lines to keep above/below cursor
+set backspace=indent,eol,start " Configure backspace behavior
+
+" Matching Pairs
+set matchpairs+=<:> " Use % to jump between pairs
 runtime! macros/matchit.vim
 
-" Move up/down editor lines
+" Move Up/Down Editor Lines
 nnoremap j gj
 nnoremap k gk
 
-" Allow hidden buffers
-set hidden
-
-" Rendering
-set ttyfast
-
-" Status bar
-set laststatus=2
-
-" Last line
-set showmode
-set showcmd
+" Buffer and Window Management
+set hidden " Allow hidden buffers
 
 " Searching
 nnoremap / /\v
 vnoremap / /\v
-set hlsearch
-set incsearch
-set ignorecase
-set smartcase
-set showmatch
-map <leader><space> :let @/=''<cr> " clear search
+set hlsearch " Highlight search results
+set incsearch " Show search matches as you type
+set ignorecase " Ignore case in searches
+set smartcase " Override ignorecase if search contains uppercase
+set showmatch " Show matching parentheses
+map <leader><space> :let @/=''<cr> " Clear search highlight
 
-" Remap help key.
+" Remap Help Key
 inoremap <F1> <ESC>:set invfullscreen<CR>a
 nnoremap <F1> :set invfullscreen<CR>
 vnoremap <F1> :set invfullscreen<CR>
 
-" Textmate holdouts
-
+" Textmate Holdouts
 " Formatting
-map <leader>q gqip
-
-" Visualize tabs and newlines
-set listchars=tab:▸\ ,eol:¬
-" Uncomment this to enable by default:
-" set list " To enable by default
-" Or use your leader key + l to toggle on/off
-map <leader>l :set list!<CR> " Toggle tabs and EOL
+map <leader>q gqip " Format paragraph

@@ -24,10 +24,22 @@ src_install() {
 			doins "${FILESDIR}"/sbin/$f
 	done
 
-	for f in eclass_import emirror eup lighttpd_certs \
+	for f in hosts_bump eclass_import emirror eup lighttpd_certs \
 		mkheaders mkimg mkmini mkstage xbkup upApp upAll \
 		upBrowsers upPython upGit xchroot ; do
 			dosbin "${FILESDIR}"/sbin/$f
+	done
+
+	for f in hosts_bump.service ; do
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "${FILESDIR}"/services/$f
+	done
+
+	for f in hosts_bump.timer ; do
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "${FILESDIR}"/timers/$f
 	done
 
 	if use video ; then

@@ -1,0 +1,32 @@
+#!/bin/bash
+
+LOCAL_MARKER="# LOCAL HOSTS START"
+LOCAL_END_MARKER="# LOCAL HOSTS END"
+
+TMP_HOSTS="/tmp/hosts.tmp"
+TMP_FINAL_HOSTS="/tmp/hosts.final"
+
+REMOTE_URL="https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
+
+curl -sSL $REMOTE_URL -o $TMP_HOSTS
+
+if [ $? -eq 0 ]; then
+	if grep -q "$LOCAL_MARKER" /etc/hosts; then
+		awk "/$LOCAL_MARKER/,/$LOCAL_END_MARKER/" /etc/hosts > $TMP_FINAL_HOSTS
+	else
+		echo "$LOCAL_MARKER" > $TMP_FINAL_HOSTS
+		echo "# Add your custom entries above this line" >> $TMP_FINAL_HOSTS
+		echo "$LOCAL_END_MARKER" >> $TMP_FINAL_HOSTS
+	fi
+
+	echo "" >> $TMP_FINAL_HOSTS
+	echo "# Updated Hosts Section - Do not edit below this line" >> $TMP_FINAL_HOSTS
+	cat $TMP_HOSTS >> $TMP_FINAL_HOSTS
+
+	cat $TMP_FINAL_HOSTS > /etc/hosts
+else
+	echo "Failed to download hosts file from $REMOTE_URL" >&2
+	exit 1
+fi
+
+rm -f $TMP_HOSTS $TMP_FINAL_HOSTS

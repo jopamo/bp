@@ -8,7 +8,7 @@ DESCRIPTION="A dispatcher for AOSP libldac"
 HOMEPAGE="https://github.com/EHfive/ldacBT"
 
 CMAKE_SNAP=af2dd23979453bcd1cad7c4086af5fb421a955c5
-SNAPSHOT=32820887eb007c5374f5826117d87b09c2d4f645
+SNAPSHOT=d9f3b87d64c9716b87580f1b43019733be2e4177
 SRC_URI="https://github.com/EHfive/ldacBT/archive/${CMAKE_SNAP}.tar.gz -> ldacBT-${CMAKE_SNAP}.tar.gz
 		https://android.googlesource.com/platform/external/libldac/+archive/${SNAPSHOT}.tar.gz -> libldac-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ldacBT-${CMAKE_SNAP}"

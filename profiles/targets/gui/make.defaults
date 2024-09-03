@@ -1,11 +1,14 @@
 USE="
 	bin
+	bluez
 	cairo
 	cups
 	dbus
 	dri
 	drm
+	efi
 	egl
+	extra-tools
 	gif
 	gles2
 	gui
@@ -19,11 +22,18 @@ USE="
 	mount
 	mp3
 	ncat
+	npm
 	opengl
 	pic
 	png
 	pstore
+	pipewire
 	pulseaudio
+	rfkill
+	qemu_softmmu_targets_aarch64
+	qemu_softmmu_targets_x86_64
+	qemu_user_targets_aarch64
+	qemu_user_targets_x86_64
 	qml
 	qt
 	tiff

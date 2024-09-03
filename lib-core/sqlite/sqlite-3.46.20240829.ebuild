@@ -7,7 +7,7 @@ inherit flag-o-matic
 DESCRIPTION="A SQL Database Engine in a C Library"
 HOMEPAGE="https://sqlite.org/"
 
-SNAPSHOT=663d92cdd3b681cd87c8b7c5d70f18051917b365
+SNAPSHOT=7cf8f6cf124eeeca850853d53f824eae0d0a21d4
 SRC_URI="https://github.com/sqlite/sqlite/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -7,19 +7,13 @@ inherit flag-o-matic toolchain-funcs multiprocessing
 DESCRIPTION="Larry Wall's Practical Extraction and Report Language"
 HOMEPAGE="https://www.perl.org/"
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/Perl/perl5.git"
-	EGIT_BRANCH="maint-$(ver_cut 1).$(ver_cut 2)"
-	inherit git-r3
-else
-	SNAPSHOT=55dd2f792ffc8cefe614350a411f785374281b24
-	SRC_URI="https://github.com/Perl/perl5/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/perl5-${SNAPSHOT}
-	KEYWORDS="amd64 arm64"
-fi
+SNAPSHOT=719bf8eb232b29ebc7400b287cd79ac6fb9b5dcf
+SRC_URI="https://github.com/Perl/perl5/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/perl5-${SNAPSHOT}
 
 LICENSE="|| ( Artistic GPL-1+ )"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="debug gdbm"
 

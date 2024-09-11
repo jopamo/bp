@@ -444,38 +444,38 @@ start_ssh_agent() {
 					ssh-add "$key"
 				fi
 			fi
-	done
-}
+		done
+	}
 
-backup_system() {
-	# Display help message if requested
-	if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-		echo "Usage: backup_system <target-directory> <output-archive>"
-		echo "Example: backup_system / /path/to/backup/root-backup.tar.zst"
-		return
-	fi
+	backup_system() {
+		# Display help message if requested
+		if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+			echo "Usage: backup_system <target-directory> <output-archive>"
+			echo "Example: backup_system / /path/to/backup/root-backup.tar.zst"
+			return
+		fi
 
-	local TARGET="$1"
-	local ARCHIVE="$2"
+		local TARGET="$1"
+		local ARCHIVE="$2"
 
-	[[ "$TARGET" != */ ]] && TARGET="${TARGET}/"
+		[[ "$TARGET" != */ ]] && TARGET="${TARGET}/"
 
-	[[ "$ARCHIVE" != *.tar.zst ]] && ARCHIVE="${ARCHIVE}.tar.zst"
+		[[ "$ARCHIVE" != *.tar.zst ]] && ARCHIVE="${ARCHIVE}.tar.zst"
 
-	tar --create --file="$ARCHIVE" --use-compress-program="zstd -19 -T0" --one-file-system \
-		--exclude="${TARGET}proc/*" \
-		--exclude="${TARGET}sys/*" \
-		--exclude="${TARGET}dev/*" \
-		--exclude="${TARGET}run/*" \
-		--exclude="${TARGET}tmp/*" \
-		--exclude="${TARGET}mnt/*" \
-		--exclude="${TARGET}media/*" \
-		--exclude="${TARGET}var/cache/packages/*" \
-		--exclude="${TARGET}var/cache/distfiles/*" \
-		--exclude="${TARGET}var/log/*" \
-		--exclude="${TARGET}swapfile" \
-		--exclude="${TARGET}usr/src/*" \
-		--exclude="${TARGET}usr/lib/python3.12/test/*" \
-		--keep-directory-symlink \
-		"$TARGET"
-}
+		tar --create --file="$ARCHIVE" --use-compress-program="zstd -19 -T0" --one-file-system \
+			--exclude="${TARGET}proc/*" \
+			--exclude="${TARGET}sys/*" \
+			--exclude="${TARGET}dev/*" \
+			--exclude="${TARGET}run/*" \
+			--exclude="${TARGET}tmp/*" \
+			--exclude="${TARGET}mnt/*" \
+			--exclude="${TARGET}media/*" \
+			--exclude="${TARGET}var/cache/packages/*" \
+			--exclude="${TARGET}var/cache/distfiles/*" \
+			--exclude="${TARGET}var/log/*" \
+			--exclude="${TARGET}swapfile" \
+			--exclude="${TARGET}usr/src/*" \
+			--exclude="${TARGET}usr/lib/python3.12/test/*" \
+			--keep-directory-symlink \
+			"$TARGET"
+	}

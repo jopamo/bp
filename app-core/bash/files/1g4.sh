@@ -1,7 +1,5 @@
 #!/bin/sh
 
-alias eix='emerge -s'
-
 move_package() {
 	local REPO_PATH="/var/db/repos/bp"
 	local package_name="$1"
@@ -87,16 +85,17 @@ update_kernel_opi5plus() {
 	mount /boot
 	make prepare
 
-	make -j$(nproc) Image dtbs modules || exit 1
+	make -j$(nproc) Image || exit 1
+	make -j$(nproc) dtbs || exit 1
+	make -j$(nproc) modules || exit 1
 
 	rm -rf /lib/modules/*
+	rm /boot/{System.map,config,vmlinux,vmlinuz,initrd,uInitrd}*
 	rm -rf /boot/dtb*
-	rm /boot/System.map* /boot/config* /boot/vmlinux* /boot/initrd*
-
-	cp /usr/src/linux/arch/arm64/boot/Image /boot/
-
+	mkdir -p /boot/dtb/rockchip
+	cp arch/arm64/boot/dts/rockchip/rk3588-orangepi-5-plus.dtb /boot/dtb/rockchip/
+	cp /usr/src/linux/arch/arm64/boot/Image.gz /boot/
 	make modules_install
-	make install
 
 	echo "Kernel update complete."
 }

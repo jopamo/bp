@@ -202,8 +202,8 @@ find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe '
     s/test-rust\?\s*\(\s*\)//g;
 ' {} +
 
-find "${GENTOO_PATH}" -type f -name '*_rc[1-9].ebuild' -exec echo "Deleting _rc ebuild: {}" \; -delete
-find "${GENTOO_PATH}" -type f -name '*_pre*.ebuild' -exec echo "Deleting _pre ebuild: {}" \; -delete
+find "${PACKAGE_DIR}" -type f -name '*_rc[1-9].ebuild' -exec echo "Deleting _rc ebuild: {}" \; -delete
+find "${PACKAGE_DIR}" -type f -name '*_pre*.ebuild' -exec echo "Deleting _pre ebuild: {}" \; -delete
 
 for package in cython psutil lxml cffi pillow tree-sitter zstandard; do
 	if [ -d "${PACKAGE_DIR}/${package}" ]; then

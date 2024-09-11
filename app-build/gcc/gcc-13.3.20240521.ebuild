@@ -7,7 +7,7 @@ inherit flag-o-matic
 DESCRIPTION="an optimizing compiler produced by the GNU Project supporting various programming languages"
 HOMEPAGE="https://gcc.gnu.org/"
 
-SNAPSHOT=9f5414447d35ecfeafb2b1bea9b4caeb224b8ebc
+SNAPSHOT=b71f1de6e9cf7181a288c0f39f9b1ef6580cf5c8
 SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/gcc-${SNAPSHOT}
 
@@ -106,10 +106,10 @@ src_configure() {
 		--infodir="${EPREFIX}"/usr/share/info
 		--disable-install-libiberty
 		--disable-libgcj
-		--disable-libgomp
+		--enable-libgomp
 		--disable-libmpx
 		--disable-libmudflap
-		--disable-libssp
+		--enable-libssp
 		--disable-libstdcxx-pch
 		--disable-libunwind-exceptions
 		--disable-multilib

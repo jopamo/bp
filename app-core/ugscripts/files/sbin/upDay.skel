@@ -28,7 +28,7 @@ init_logs() {
 GCC_MAJOR_VERSIONS=("13")
 GLIBC_VERSIONS=("2.36" "2.38")
 GO_VERSIONS=("1.21" "1.22")
-BINUTILS_VERSIONS=("2.41" "2.43")
+BINUTILS_VERSIONS=("2.43")
 
 XZ_UTILS_VERSION="5.6"
 SYSTEMD_VERSION="256"
@@ -40,7 +40,7 @@ GAWK_VERSION="5.3"
 PYTHON_VERSION="3.12"
 PERL_VERSION="5.40"
 TCL_VERSION="8.6"
-LLVM_VERSION="19"
+LLVM_VERSION="18"
 SQLITE_VERSION="3.46"
 
 GDB_VERSION="14"
@@ -59,7 +59,6 @@ KWINDOWSYSTEM_BRANCH="kf${KDE_VERSION}"
 LIBASSUAN_BRANCH="LIBASSUAN-${LIBASSUAN_VERSION}-BRANCH"
 LIBGCRYPT_BRANCH="LIBGCRYPT-${LIBGCRYPT_VERSION}-BRANCH"
 TCL_BRANCH=$(echo "core-${TCL_VERSION}" | tr '.' '-')
-TOR_BRANCH="release-$TOR_VERSION"
 
 show_help() {
 	echo "Usage: $0 [options] [package1 package2 ... packageN]"
@@ -335,7 +334,7 @@ branch_bump() {
 	update_ebuild "${REPO_PATH}/lib-core/libassuan" "https://dev.gnupg.org/source/libassuan.git" "${LIBASSUAN_BRANCH}" "$LIBASSUAN_VERSION" "no"
 	update_ebuild "${REPO_PATH}/lib-core/libgcrypt" "https://dev.gnupg.org/source/libgcrypt.git" "${LIBGCRYPT_BRANCH}" "$LIBGCRYPT_VERSION" "no"
 	update_ebuild "${REPO_PATH}/app-lang/tcl" "https://github.com/tcltk/tcl" "${TCL_BRANCH}-branch" "$TCL_VERSION" "no"
-	update_ebuild "${REPO_PATH}/app-server/tor" "https://git.torproject.org/tor.git" "${TOR_BRANCH}" "$TOR_VERSION" "no"
+	update_ebuild "${REPO_PATH}/app-server/tor" "https://git.torproject.org/tor.git" "release-${TOR_VERSION}" "${TOR_VERSION}" "no"
 	update_ebuild "${REPO_PATH}/lib-net/openssl" "https://github.com/openssl/openssl" "openssl-${OPENSSL_VERSION}" "$OPENSSL_VERSION" "no"
 	update_ebuild "${REPO_PATH}/app-server/nodejs" "https://github.com/nodejs/node" "v${NODEJS_VERSION}.x" "$NODEJS_VERSION" "no"
 	update_ebuild "${REPO_PATH}/app-net/bind-tools" "https://github.com/isc-projects/bind9" "bind-${BIND_TOOLS_VERSION}" "${BIND_TOOLS_VERSION}" "no"
@@ -344,9 +343,11 @@ branch_bump() {
 	update_ebuild "${REPO_PATH}/app-lang/perl" "https://github.com/Perl/perl5" "maint-${PERL_VERSION}" "$PERL_VERSION" "no"
 	update_ebuild "${REPO_PATH}/lib-core/sqlite" "https://github.com/sqlite/sqlite" "branch-${SQLITE_VERSION}" "$SQLITE_VERSION" "no"
 	update_ebuild "${REPO_PATH}/app-build/llvm" "https://github.com/llvm/llvm-project" "release/${LLVM_VERSION}.x" "$LLVM_VERSION" "no"
+	update_ebuild "${REPO_PATH}/app-build/clang" "https://github.com/llvm/llvm-project" "release/${LLVM_VERSION}.x" "$LLVM_VERSION" "no"
+	update_ebuild "${REPO_PATH}/app-build/compiler-rt" "https://github.com/llvm/llvm-project" "release/${LLVM_VERSION}.x" "$LLVM_VERSION" "no"
 	update_ebuild "${REPO_PATH}/app-core/util-linux" "https://github.com/util-linux/util-linux" "stable/v${UTIL_LINUX_VERSION}" "${UTIL_LINUX_VERSION}" "no"
-
 	update_ebuild "${REPO_PATH}/app-core/systemd" "https://github.com/systemd/systemd" "v${SYSTEMD_VERSION}-stable" "${SYSTEMD_VERSION}" "no"
+	update_ebuild "${REPO_PATH}/lib-core/mpfr" "https://gitlab.inria.fr/mpfr/mpfr" "${MPFR_VERSION}" "${MPFR_VERSION}" "no"
 }
 
 main

@@ -1,23 +1,44 @@
 #!/bin/bash
 
-# checks if run as root:
-if ! [ "`whoami`" == "root" ]
-then
-	echo "`basename $0`: must be root."
+print_color() {
+	local color_code="$1"
+	local text="$2"
+	echo -e "\033[${color_code}m${text}\033[0m"
+}
+
+COLOR_YELLOW="33"
+COLOR_GREEN="32"
+COLOR_RED="31"
+COLOR_BLUE="34"
+
+if ! [ "$(whoami)" == "root" ]; then
+	print_color $COLOR_RED "✘ Error: This script must be run as root."
 	exit 1
 fi
 
-#set flag variables to null
+LIBC=$(ldd --version 2>&1 | awk '/GNU libc/ {print "glibc"} /musl/ {print "musl"}')
+ARCH=$(uname -m)
+
+if [ "$ARCH" == "aarch64" ]; then
+	ARCH="arm64"
+elif [ "$ARCH" == "x86_64" ]; then
+	ARCH="amd64"
+fi
+
+DATE=$(date +%Y%m%d)
+
+ARCHIVE="1g4-${LIBC}-${ARCH}-${DATE}.tar.xz"
+STAGE3_FILENAME="$(pwd)/${ARCHIVE}"
+
 QUIET=0
-USAGE="usage:\n\
-	`basename $0` [-q -c -b] [-s || -t <target-mountpoint>] <archive-filename> [custom-tar-options]\n\
+USAGE="Usage:\n\
+	$(basename $0) [-q -c -b] [-s || -t <target-mountpoint>] [custom-tar-options]\n\
 	-q: activates quiet mode (no confirmation).\n\
 	-s: makes tarball of current system.\n\
 	-t: makes tarball of system located at the <target-mountpoint>.\n\
 	-h: displays help message."
 
-# reads options:
-while getopts ':t:e:skqcblph' flag; do
+while getopts ':t:skqh' flag; do
 	case "${flag}" in
 		t)
 			TARGET="$OPTARG"
@@ -33,53 +54,39 @@ while getopts ':t:e:skqcblph' flag; do
 			exit 0
 			;;
 		\?)
-			echo "Invalid option: -$OPTARG" >&2
+			print_color $COLOR_RED "✘ Invalid option: -$OPTARG"
 			exit 1
 			;;
 		:)
-			echo "Option -$OPTARG requires an argument." >&2
+			print_color $COLOR_RED "✘ Option -$OPTARG requires an argument."
 			exit 1
 			;;
 	esac
 done
 
-if [ "$TARGET" == "" ]
-then
-	echo "`basename $0`: no target specified."
+if [ -z "$TARGET" ]; then
+	print_color $COLOR_RED "✘ Error: No target specified."
 	echo -e "$USAGE"
 	exit 1
 fi
 
-# make sure TARGET path ends with slash
-if [ "$(echo "$TARGET" | grep -c '/$')" -le "0" ]
-then
+if [ "$(echo "$TARGET" | grep -c '/$')" -le 0 ]; then
 	TARGET="${TARGET}/"
 fi
 
-# shifts pointer to read mandatory output file specification
-shift $(($OPTIND - 1))
-ARCHIVE=$1
-
-# checks for correct output file specification
-if [ "$ARCHIVE" == "" ]
-then
-	echo "`basename $0`: no archive file name specified."
-	echo -e "$USAGE"
-	exit 1
-fi
-
-# checks for quiet mode (no confirmation)
-if [ ${QUIET} -eq 1 ]
-then
-	AGREE="yes"
-fi
-
-# determines if filename was given with relative or absolute path
-if [ "$(echo "$ARCHIVE" | grep -c '^/')" -gt "0" ]
-then
-	STAGE3_FILENAME="${ARCHIVE}.tar.xz"
-else
-	STAGE3_FILENAME="`pwd`/${ARCHIVE}.tar.xz"
+if [ -f "$STAGE3_FILENAME" ]; then
+	if [ "$QUIET" -ne 1 ]; then
+		print_color $COLOR_YELLOW "⚠️  Warning: File '$STAGE3_FILENAME' already exists."
+		read -p "$(print_color $COLOR_YELLOW 'Do you want to overwrite it? [y/N]: ')" OVERWRITE
+		if [[ "$OVERWRITE" != "y" && "$OVERWRITE" != "Y" ]]; then
+			print_color $COLOR_RED "✘ Aborting."
+			exit 1
+		else
+			print_color $COLOR_GREEN "✔ Overwriting the existing file..."
+		fi
+	else
+		print_color $COLOR_GREEN "✔ Overwriting existing file $STAGE3_FILENAME"
+	fi
 fi
 
 EXCLUDES="--exclude=${TARGET}boot/*
@@ -128,34 +135,37 @@ EXCLUDES="--exclude=${TARGET}boot/*
 	--exclude=${TARGET}var/run/*
 	--exclude=${TARGET}var/tmp/*"
 
-if [ "$TARGET" == "/" ]
-	then
-		EXCLUDES+=" --exclude=/${STAGE3_FILENAME#/}"
+if [ "$TARGET" == "/" ]; then
+	EXCLUDES+=" --exclude=/${STAGE3_FILENAME#/}"
 fi
 
-if [ "$AGREE" != "yes" ]
-then
-	echo "Are you sure that you want to make a tarball of the system"
-	echo "located under the following directory?"
-	echo "$TARGET"
-	echo ""
-	echo -n "Type \"yes\" to continue or anything else to quit: "
-	read AGREE
+if [ ${QUIET} -ne 1 ]; then
+	print_color $COLOR_BLUE "ℹ️  Creating tarball with the following filename:"
+	print_color $COLOR_GREEN "$STAGE3_FILENAME"
+	read -p "$(print_color $COLOR_YELLOW 'Are you sure you want to proceed? [y/N]: ')" CONFIRM
+	if [[ "$CONFIRM" != "y" && "$CONFIRM" != "Y" ]]; then
+		print_color $COLOR_RED "✘ Aborting."
+		exit 1
+	else
+		print_color $COLOR_GREEN "✔	Proceeding with tarball creation..."
+	fi
 fi
 
-if [ "$AGREE" == "yes" ]
-then
-	rm -f ${TARGET}etc/machine-id && touch ${TARGET}etc/machine-id
+print_color $COLOR_BLUE "ℹ️	Preparing system for tarball creation..."
+rm -f ${TARGET}etc/machine-id && touch ${TARGET}etc/machine-id
 
-	mkdir -p ${TARGET}var/log/journal
-	mkdir -p ${TARGET}var/empty
-	mkdir -p ${TARGET}etc/ssh
-	mkdir -p ${TARGET}run/lock
+mkdir -p ${TARGET}var/log/journal
+mkdir -p ${TARGET}var/empty
+mkdir -p ${TARGET}etc/ssh
+mkdir -p ${TARGET}run/lock
 
-	chmod -R 600 ${TARGET}var/empty
-	chmod -R 600 ${TARGET}etc/ssh
+chmod -R 600 ${TARGET}var/empty
+chmod -R 600 ${TARGET}etc/ssh
 
-	XZ_OPT="--x86 --delta=dist=2 --lzma2=dict=128Mi -e9" tar -cJ --ignore-failed-read $EXCLUDES -f $STAGE3_FILENAME ${TARGET}*
-fi
+CPU_CORES=$(nproc)
+print_color $COLOR_BLUE "ℹ️	Starting compression with xz (using $CPU_CORES cores)..."
+XZ_OPT="--x86 --delta=dist=2 --lzma2=dict=128Mi -e9 -T${CPU_CORES}" tar -cJ --ignore-failed-read $EXCLUDES -f $STAGE3_FILENAME ${TARGET}*
+
+print_color $COLOR_GREEN "✔	Tarball creation completed successfully."
 
 exit 0

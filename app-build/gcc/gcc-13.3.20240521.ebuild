@@ -47,7 +47,6 @@ src_prepare() {
 	filter-flags -flto*
 	filter-flags -D_FORTIFY_SOURCE*
 	filter-flags -Wl,-z,defs
-	filter-flags -fstack-protector-strong
 	filter-flags -fassociative-math
 	filter-flags -fno-semantic-interposition
 	filter-flags -fexceptions -fuse-linker-plugin
@@ -61,6 +60,7 @@ src_prepare() {
 	filter-flags -Wl,-z,now -Wl,-z,relro
 	filter-flags -fgraphite-identity -floop-nest-optimize -ftree-loop-distribution
 	filter-flags -fipa-pta -fcf-protection=full -fstack-clash-protection
+	filter-flags -ftree-loop-vectorize -fdevirtualize-at-ltrans
 	append-flags -Wa,--noexecstack
 
 	use debug || filter-flags -g
@@ -106,10 +106,10 @@ src_configure() {
 		--infodir="${EPREFIX}"/usr/share/info
 		--disable-install-libiberty
 		--disable-libgcj
-		--enable-libgomp
+		--disable-libgomp
 		--disable-libmpx
 		--disable-libmudflap
-		--enable-libssp
+		--disable-libssp
 		--disable-libstdcxx-pch
 		--disable-libunwind-exceptions
 		--disable-multilib

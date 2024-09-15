@@ -18,7 +18,6 @@
 *virtual/libc
 *app-build/gcc
 *app-kernel/linux-headers
-*app-core/portage
 *app-core/shadow
 *app-var/pax-utils
 *app-core/vim
@@ -36,3 +35,4 @@
 *app-core/git
 *app-core/fakepackages
 *app-core/pkgcore
+*app-server/dhcpcd

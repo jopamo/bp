@@ -30,9 +30,8 @@
 *app-port/portage-utils
 *app-net/iproute2
 *app-net/openssh
-*app-crypto/rng-tools
 *app-dev/patchelf
 *app-core/git
 *app-core/fakepackages
-*app-core/pkgcore
 *app-server/dhcpcd
+*app-core/portage

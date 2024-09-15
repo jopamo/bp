@@ -7,7 +7,7 @@ inherit flag-o-matic linux-info meson toolchain-funcs user
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
 
-SNAPSHOT=69c904452580bdb3eade4ab4bca80436472024ae
+SNAPSHOT=2ccce3513bd2ec5a5e46934f2b93d5cbed938c08
 SRC_URI="https://github.com/systemd/systemd/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/systemd-${SNAPSHOT}"
 
@@ -15,14 +15,12 @@ LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="binfmt +blkid bpf-framework coredump cryptsetup dbus devmode dhcp4 efi gcrypt +gshadow
+IUSE="binfmt +blkid bpf-framework coredump dbus devmode dhcp4 efi gcrypt +gshadow
 +hostnamed hwdb importd kmod kvm ldconfig localed logind machined musl networkd
 oomd pam pcre pstore resolve rfkill sleep systemd-update sysusersd sysv +timedated
-tmpfilesd test +userdb +utmp vconsole xkb"
+tmpfilesd +userdb +utmp vconsole xkb"
 
 REQUIRED_USE="musl? ( !gshadow !localed !userdb !utmp )"
-
-RESTRICT="!test? ( test )"
 
 DEPEND="
 	app-build/gettext
@@ -36,7 +34,7 @@ DEPEND="
 	app-tex/docbook-xsl-stylesheets
 	lib-core/libcap
 	lib-core/libxslt
-	cryptsetup? ( app-fs/cryptsetup )
+	logind? ( app-fs/cryptsetup )
 	gcrypt? ( lib-core/libgcrypt )
 	lib-core/libseccomp
 	dbus? (
@@ -48,7 +46,6 @@ DEPEND="
 	logind? ( app-core/dbus )
 	pam? ( lib-core/pam )
 	pcre? ( lib-core/libpcre2 )
-	test? ( app-core/dbus )
 	tmpfilesd? ( app-core/dbus )
 	xkb? ( xgui-lib/libxkbcommon )
 "
@@ -124,66 +121,65 @@ src_prepare() {
 
 src_configure() {
 	local emesonargs=(
-		$(usex devmode '-Dmode=developer' '-Dmode=release')
-		$(meson_use binfmt)
 		$(meson_feature blkid)
 		$(meson_feature bpf-framework)
-		$(meson_use coredump)
-		$(meson_feature cryptsetup libcryptsetup)
-		$(meson_use dbus)
-		$(meson_use efi )
+		$(meson_feature dbus)
 		$(meson_feature gcrypt)
+		$(meson_feature importd)
+		$(meson_feature kmod)
+		$(meson_feature logind fdisk)
+		$(meson_feature logind homed)
+		$(meson_feature logind libcryptsetup)
+		$(meson_feature pam)
+		$(meson_feature pcre pcre2)
+		$(meson_feature xkb xkbcommon)
+		$(meson_use binfmt)
+		$(meson_use coredump)
+		$(meson_use dbus link-networkd-shared)
+		$(meson_use efi )
 		$(meson_use gshadow)
 		$(meson_use hostnamed)
 		$(meson_use hwdb)
-		$(meson_feature importd)
-		$(meson_feature kmod)
 		$(meson_use ldconfig)
-		$(meson_use networkd link-networkd-shared)
 		$(meson_use localed)
 		$(meson_use logind)
 		$(meson_use machined)
+		$(meson_use networkd link-networkd-shared)
 		$(meson_use networkd)
 		$(meson_use oomd)
-		$(meson_feature pam)
-		$(meson_feature pcre pcre2)
 		$(meson_use pstore)
 		$(meson_use resolve)
 		$(meson_use rfkill)
 		$(meson_use sysusersd sysusers)
-		$(usex sysv '-Dsysvinit-path=/etc/init.d' '-Dsysvinit-path=')
-		$(usex sysv '-Dsysvrcnd-path=/etc/rc.d' '-Dsysvrcnd-path=')
-		$(meson_use test dbus)
 		$(meson_use timedated)
 		$(meson_use tmpfilesd tmpfiles)
 		$(meson_use userdb)
 		$(meson_use utmp)
 		$(meson_use vconsole)
-		$(meson_feature xkb xkbcommon)
+		$(usex dbus '-Ddns-over-tls=openssl' '-Ddns-over-tls=false')
+		$(usex devmode '-Dmode=developer' '-Dmode=release')
+		$(usex sysv '-Dsysvinit-path=/etc/init.d' '-Dsysvinit-path=')
+		$(usex sysv '-Dsysvrcnd-path=/etc/rc.d' '-Dsysvrcnd-path=')
 		-Dacl=enabled
 		-Dapparmor=disabled
 		-Daudit=disabled
 		-Dbacklight=false
 		-Dbzip2=disabled
-		-Dlibcurl=disabled
 		-Ddefault-kill-user-processes=false
-		$(usex dbus '-Ddns-over-tls=openssl' '-Ddns-over-tls=false')
-		$(meson_use dbus link-networkd-shared)
 		-Ddns-servers=""
 		-Delfutils=disabled
 		-Denvironment-d=false
 		-Dfirstboot=false
 		-Dgnutls=disabled
 		-Dhibernate=false
-		-Dhomed=disabled
 		-Dhtml=disabled
 		-Didn=false
 		-Dima=false
-		-Dfdisk=disabled
+		-Dlibcurl=disabled
 		-Dlibidn2=disabled
 		-Dlibidn=disabled
 		-Dlibiptc=disabled
-		-Dlink-timesyncd-shared=false
+		-Dlink-timesyncd-shared=true
 		-Dlz4=disabled
 		-Dman=disabled
 		-Dmicrohttpd=disabled
@@ -192,21 +188,18 @@ src_configure() {
 		-Dnss-resolve=disabled
 		-Dnss-systemd=false
 		-Dntp-servers=""
-		-Dopenssl=true
+		-Dopenssl=enabled
+		-Dp11kit=disabled
 		-Dpamlibdir="${EPREFIX}"/usr/lib/security
-		-Dp11kit=false
-		-Dpolkit=false
+		-Dpolkit=disabled
 		-Dportabled=false
-		-Dqrencode=false
+		-Dqrencode=disabled
 		-Dquotacheck=false
 		-Drandomseed=false
 		-Drc-local=""
-		-Drootlibdir="${EPREFIX}"/usr/lib
-		-Drootprefix="${EPREFIX}"/usr
-		-Dseccomp=true
+		-Dseccomp=enabled
 		-Dsmack=false
-		-Dsplit-bin=true
-		-Dsplit-usr=false
+		-Dsplit-bin=false
 		-Dstandalone-binaries=false
 		-Dtimesyncd=false
 		-Dtpm=false
@@ -267,7 +260,7 @@ src_install() {
 		rm "${ED}"/usr/lib/systemd/systemd/rc-local.service || die
 	fi
 
-	use networkd && mkdir -p "${ED}"/etc/systemd/network/ || die
+	use networkd && mkdir -p "${ED}"/etc/systemd/network
 
 	use resolve && dosym -r /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 
@@ -288,7 +281,7 @@ DHCP=ipv4' > "${ED}"/etc/systemd/network/ipv4dhcp.network
 	use kvm || use tmpfilesd && sed -i '/kvm/d' "${ED}"/usr/lib/tmpfiles.d/static-nodes-permissions.conf
 
 	if use sysusersd; then
-		use kvm || sed -i '/kvm/d' "${ED}"/usr/lib/sysusers.d/basic.conf || die
+		use kvm || sed -i '/kvm/d' "${ED}"/usr/lib/sysusers.d/basic.conf
 		sed -i '/ConditionNeedsUpdate/d' "${ED}"/usr/lib/systemd/system/systemd-sysusers.service || die
 	fi
 
@@ -316,7 +309,7 @@ DHCP=ipv4' > "${ED}"/etc/systemd/network/ipv4dhcp.network
 pkg_postinst() {
 	journalctl --update-catalog
 
-	udevadm hwdb --update --root="${EROOT%/}"
+	systemd-hwdb update --root="${EROOT%/}"
 	udevadm control --reload
 
 	systemctl reenable getty@tty1.service remote-fs.target

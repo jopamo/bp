@@ -22,7 +22,7 @@ src_configure() {
 
 	local myeconfargs=(
 		--dbdir="${EPREFIX}/var/lib/dhcpcd"
-		--libexecdir="${EPREFIX}/lib/dhcpcd"
+		--libexecdir="${EPREFIX}/usr/lib/dhcpcd"
 		--localstatedir="${EPREFIX}/var"
 		--prefix="${EPREFIX}"
 		$(use_enable debug)

@@ -1,8 +1,6 @@
-# /etc/pam.d/su
+# /etc/pam.d/runuser
 #%PAM-1.0
 
 auth      sufficient   pam_rootok.so
-auth      required     pam_wheel.so use_uid
 auth      include      system-auth
-account   include      system-auth
 session   include      system-auth

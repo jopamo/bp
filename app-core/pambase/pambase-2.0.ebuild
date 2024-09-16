@@ -27,13 +27,7 @@ src_install() {
 	insinto /etc/pam.d
 	insopts -m0644
 
-	for x in login other su system-auth system-login system-local-login system-remote-login system-services  ; do
+	for x in chage chfn chsh login passwd runuser runuser-l sshd su sudo system-auth system-local-login system-remote-login ; do
 		doins ${x}
 	done
-
-	newins pam-common chfn
-	newins pam-common chsh
-	newins pam-runuser runuser
-	newins pam-runuser runuser-l
-	newins su su-l
 }

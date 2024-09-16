@@ -33,5 +33,4 @@
 *app-dev/patchelf
 *app-core/git
 *app-core/fakepackages
-*app-server/dhcpcd
 *app-core/portage

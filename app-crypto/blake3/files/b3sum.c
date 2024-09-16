@@ -1,14 +1,13 @@
 #include "blake3.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/mman.h>
-#include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
 #include <pthread.h>
-#include <ctype.h>
+#include <sys/stat.h>
 #include <getopt.h>
 
 #define BLAKE3_OUT_LEN 32
@@ -52,37 +51,38 @@ static void print_version(void) {
   printf("b3sum version 1.0\n");
 }
 
-static void print_invalid_option(const char *option) {
-  fprintf(stderr, "b3sum: invalid option -- '%c'\n", option[1]);
-  fprintf(stderr, "Try 'b3sum --help' for more information.\n");
-}
-
 static void print_file_error(const char *filename) {
   fprintf(stderr, "b3sum: %s: No such file or directory\n", filename);
+}
+
+static int is_directory(const char *path) {
+  struct stat path_stat;
+  if (stat(path, &path_stat) != 0) {
+    return 0;
+  }
+  return S_ISDIR(path_stat.st_mode);
 }
 
 static void *hash_file_thread(void *arg) {
   file_arg_t *file_arg = (file_arg_t *)arg;
   const char *filename = file_arg->filename;
 
-  int fd = open(filename, O_RDONLY);
-  if (fd < 0) {
-    print_file_error(filename);
+  if (is_directory(filename)) {
+    fprintf(stderr, "b3sum: %s: Is a directory\n", filename);
     return NULL;
   }
 
-  struct stat st;
-  if (fstat(fd, &st) < 0) {
-    perror("fstat");
-    close(fd);
-    return NULL;
-  }
-
-  size_t file_size = st.st_size;
-  if (file_size == 0) {
-    fprintf(stderr, "empty file: %s\n", filename);
-    close(fd);
-    return NULL;
+  int fd;
+  if (strcmp(filename, "-") == 0) {
+    fd = STDIN_FILENO;
+  } else {
+    fd = open(filename, O_RDONLY);
+    if (fd < 0) {
+      if (!file_arg->ignore_missing) {
+        print_file_error(filename);
+      }
+      return NULL;
+    }
   }
 
   blake3_hasher hasher;
@@ -95,11 +95,15 @@ static void *hash_file_thread(void *arg) {
     blake3_hasher_update(&hasher, buffer, bytes_read);
   }
 
-  if (bytes_read < 0) {
+  if (bytes_read < 0 && fd != STDIN_FILENO) {
     perror("read");
+    close(fd);
+    return NULL;
   }
 
-  close(fd);
+  if (fd != STDIN_FILENO) {
+    close(fd);
+  }
 
   uint8_t output[BLAKE3_OUT_LEN];
   blake3_hasher_finalize(&hasher, output, BLAKE3_OUT_LEN);
@@ -117,7 +121,7 @@ static void *hash_file_thread(void *arg) {
   if (file_arg->zero) {
     printf("\0");
   } else {
-    printf("  %s\n", filename);
+    printf("  %s\n", strcmp(filename, "-") == 0 ? "-" : filename);
   }
 
   pthread_mutex_unlock(&output_mutex);
@@ -125,7 +129,7 @@ static void *hash_file_thread(void *arg) {
   return NULL;
 }
 
-static void process_files_concurrently(int argc, char **argv, file_arg_t *file_args) {
+static void process_files_concurrently(int file_count, char **files, file_arg_t *file_args) {
   int num_cpus = sysconf(_SC_NPROCESSORS_ONLN);
   pthread_t *threads = malloc(sizeof(pthread_t) * num_cpus);
   if (threads == NULL) {
@@ -135,8 +139,8 @@ static void process_files_concurrently(int argc, char **argv, file_arg_t *file_a
 
   int thread_count = 0;
 
-  for (int i = 1; i < argc; i++) {
-    file_args[thread_count].filename = argv[i];
+  for (int i = 0; i < file_count; i++) {
+    file_args[thread_count].filename = files[i];
     if (pthread_create(&threads[thread_count], NULL, hash_file_thread, &file_args[thread_count]) != 0) {
       perror("pthread_create");
       exit(EXIT_FAILURE);
@@ -144,7 +148,7 @@ static void process_files_concurrently(int argc, char **argv, file_arg_t *file_a
 
     thread_count++;
 
-    if (thread_count == num_cpus || i == argc - 1) {
+    if (thread_count == num_cpus || i == file_count - 1) {
       for (int t = 0; t < thread_count; t++) {
         pthread_join(threads[t], NULL);
       }
@@ -155,98 +159,122 @@ static void process_files_concurrently(int argc, char **argv, file_arg_t *file_a
   free(threads);
 }
 
-int main(int argc, char **argv) {
-  file_arg_t *file_args;
-  int check = 0;
-  int tag = 0;
-  int zero = 0;
-  int ignore_missing = 0;
-  int quiet = 0;
-  int status = 0;
-  int strict = 0;
-  int warn = 0;
-
-  int opt;
-  while ((opt = getopt(argc, argv, "czw")) != -1) {
-    switch (opt) {
-      case 'c':
-        check = 1;
-        break;
-      case 'z':
-        zero = 1;
-        break;
-      case 'w':
-        warn = 1;
-        break;
-      default:
-        fprintf(stderr, "Invalid option: -%c\n", optopt);
-        print_help();
-        return EXIT_FAILURE;
-    }
+static void process_files(int file_count, char **files, int check) {
+  file_arg_t *file_args = malloc(sizeof(file_arg_t) * file_count);
+  if (file_args == NULL) {
+    perror("malloc");
+    exit(EXIT_FAILURE);
   }
 
+  for (int i = 0; i < file_count; i++) {
+    file_args[i].filename = files[i];
+    file_args[i].check = check;
+    file_args[i].tag = 0;
+    file_args[i].zero = 0;
+    file_args[i].ignore_missing = 0;
+    file_args[i].quiet = 0;
+    file_args[i].status = 0;
+    file_args[i].strict = 0;
+    file_args[i].warn = 0;
+  }
+
+  process_files_concurrently(file_count, files, file_args);
+
+  free(file_args);
+}
+
+static void process_stdin(int check) {
+  char *stdin_file = "-";
+  file_arg_t *file_args = malloc(sizeof(file_arg_t));
+  if (file_args == NULL) {
+    perror("malloc");
+    exit(EXIT_FAILURE);
+  }
+
+  file_args[0].filename = stdin_file;
+  file_args[0].check = check;
+  file_args[0].tag = 0;
+  file_args[0].zero = 0;
+  file_args[0].ignore_missing = 0;
+  file_args[0].quiet = 0;
+  file_args[0].status = 0;
+  file_args[0].strict = 0;
+  file_args[0].warn = 0;
+
+  process_files_concurrently(1, &stdin_file, file_args);
+  free(file_args);
+}
+
+static int handle_options(int argc, char **argv, int *check) {
+  int opt;
   static struct option long_options[] = {
     {"check", no_argument, NULL, 'c'},
-    {"tag", no_argument, NULL, 0},
+    {"tag", no_argument, NULL, 't'},
     {"zero", no_argument, NULL, 'z'},
-    {"ignore-missing", no_argument, NULL, 0},
-    {"quiet", no_argument, NULL, 0},
-    {"status", no_argument, NULL, 0},
-    {"strict", no_argument, NULL, 0},
+    {"ignore-missing", no_argument, NULL, 'i'},
+    {"quiet", no_argument, NULL, 'q'},
+    {"status", no_argument, NULL, 's'},
+    {"strict", no_argument, NULL, 'S'},
     {"warn", no_argument, NULL, 'w'},
-    {"help", no_argument, NULL, 0},
-    {"version", no_argument, NULL, 0},
+    {"help", no_argument, NULL, 'h'},
+    {"version", no_argument, NULL, 'v'},
     {0, 0, 0, 0}
   };
 
   int long_index = 0;
-  while ((opt = getopt_long(argc, argv, "czw", long_options, &long_index)) != -1) {
+  while ((opt = getopt_long(argc, argv, "ctzwiqSswhv", long_options, &long_index)) != -1) {
     switch (opt) {
-      case 0:
-        if (strcmp(long_options[long_index].name, "tag") == 0) tag = 1;
-        if (strcmp(long_options[long_index].name, "ignore-missing") == 0) ignore_missing = 1;
-        if (strcmp(long_options[long_index].name, "quiet") == 0) quiet = 1;
-        if (strcmp(long_options[long_index].name, "status") == 0) status = 1;
-        if (strcmp(long_options[long_index].name, "strict") == 0) strict = 1;
+      case 'c':
+        *check = 1;
+        break;
+      case 't':
+        break;
+      case 'z':
+        break;
+      case 'i':
+        break;
+      case 'q':
+        break;
+      case 's':
+        break;
+      case 'S':
+        break;
+      case 'w':
         break;
       case 'h':
         print_help();
-        return EXIT_SUCCESS;
+        return 0;
       case 'v':
         print_version();
-        return EXIT_SUCCESS;
+        return 0;
+      case '?':
+        fprintf(stderr, "b3sum: unrecognized option '%s'\n", argv[optind - 1]);
+        fprintf(stderr, "Try 'b3sum --help' for more information.\n");
+        return -1;
       default:
-        print_invalid_option(argv[optind - 1]);
-        return EXIT_FAILURE;
+        fprintf(stderr, "Invalid option\n");
+        print_help();
+        return -1;
     }
   }
+  return optind;
+}
 
-  if (optind >= argc) {
-    print_help();
+int main(int argc, char **argv) {
+  int check = 0;
+  int optind = handle_options(argc, argv, &check);
+  if (optind == -1) {
     return EXIT_FAILURE;
+  } else if (optind == 0) {
+    return EXIT_SUCCESS;
   }
 
-  file_args = malloc(sizeof(file_arg_t) * (argc - optind));
-  if (file_args == NULL) {
-    perror("malloc");
-    return EXIT_FAILURE;
+  int file_count = argc - optind;
+  if (file_count == 0) {
+    process_stdin(check);
+  } else {
+    process_files(file_count, argv + optind, check);
   }
-
-  for (int i = optind; i < argc; i++) {
-    file_args[i - optind].filename = argv[i];
-    file_args[i - optind].check = check;
-    file_args[i - optind].tag = tag;
-    file_args[i - optind].zero = zero;
-    file_args[i - optind].ignore_missing = ignore_missing;
-    file_args[i - optind].quiet = quiet;
-    file_args[i - optind].status = status;
-    file_args[i - optind].strict = strict;
-    file_args[i - optind].warn = warn;
-  }
-
-  process_files_concurrently(argc, argv, file_args);
-
-  free(file_args);
 
   return EXIT_SUCCESS;
 }

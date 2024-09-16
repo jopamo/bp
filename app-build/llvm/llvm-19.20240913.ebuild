@@ -7,7 +7,7 @@ inherit cmake flag-o-matic
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
 
-SNAPSHOT=866686180a316aee091c82c924971a238fbbd817
+SNAPSHOT=f0010d131b79a1b401777aa32e96defc4a935c9d
 SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
 
@@ -19,7 +19,6 @@ IUSE="bolt +clang cross-project-tests debug libc
 	libclc +lld lldb mlir openmp polly pstl test libunwind llvm-libgcc"
 
 DEPEND="
-	app-build/compiler-rt
 	lib-core/libedit
 	lib-core/libffi
 	lib-core/libxml2
@@ -55,28 +54,30 @@ src_configure() {
 
 	filter-flags -D_FORTIFY_SOURCE*
 	filter-flags -Wl,-O3
-	filter-flags -Wl,-z,defs
+	filter-flags -Wl,-z,defs -Wl,-z,combreloc -Wl,-z,now -Wl,-z,relro
 	filter-flags -fassociative-math
+	filter-flags -fasynchronous-unwind-tables
 	filter-flags -fcf-protection=full
+	filter-flags -fdevirtualize-at-ltrans
 	filter-flags -fexceptions
 	filter-flags -fgraphite-identity
+	filter-flags -fipa-pta
 	filter-flags -floop-interchange
+	filter-flags -floop-nest-optimize
 	filter-flags -floop-parallelize-all
 	filter-flags -flto*
 	filter-flags -fno-math-errno
 	filter-flags -fno-semantic-interposition
 	filter-flags -fno-signed-zeros
-	filter-flags -fno-trapping-math -fexceptions -fpie -fpic -fasynchronous-unwind-tables -fexceptions -Wl,-z,combreloc -Wl,-z,now -Wl,-z,relro
+	filter-flags -fno-trapping-math
+	filter-flags -fpic
+	filter-flags -fpie
+	filter-flags -fstack-clash-protection
 	filter-flags -fstack-protector-strong
+	filter-flags -ftree-loop-distribution
 	filter-flags -fuse-linker-plugin
-    filter-flags -fgraphite-identity
-    filter-flags -fipa-pta
-    filter-flags -floop-nest-optimize
-    filter-flags -flto*
-    filter-flags -fstack-clash-protection
-    filter-flags -ftree-loop-distribution
 
-    replace-flags -O3 -O2
+	replace-flags -O3 -O2
 
 	local mycmakeargs=(
 		-DLLVM_ENABLE_PROJECTS="${LLVM_PROJECTS}"

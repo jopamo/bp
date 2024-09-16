@@ -4,10 +4,6 @@ WORKHOME="${HOME}/gnu_tarballs"
 TEMPLOCATION="/tmp/gnu_tarballs"
 REPO="/var/db/repos/bp"
 
-rm -rf "${TEMPLOCATION:?}"/*
-
-export WANT_AUTOMAKE=1.16
-
 rename_ebuild_files() {
 	local package_name="$1"
 	local new_date="$2"
@@ -16,7 +12,8 @@ rename_ebuild_files() {
 	if [[ -n "$ebuild_file_path" ]]; then
 		local ebuild_dir=$(dirname "$ebuild_file_path")
 		local new_ebuild_file_name="${package_name}-${new_date}.ebuild"
-		mv "$ebuild_file_path" "${ebuild_dir}/${new_ebuild_file_name}"
+		sudo cp "$ebuild_file_path" "${ebuild_dir}/${new_ebuild_file_name}"
+		sudo rm "${ebuild_dir}/Manifest"
 		echo "Renamed ebuild for ${package_name} to ${new_date}"
 	else
 		echo "No ebuild file found for ${package_name}"
@@ -31,19 +28,18 @@ finalize_update() {
 
 	echo "Finalizing update for $package_name in $package_path"
 
-	if ! (cd "$package_path" && rm -f Manifest && pkgdev manifest); then
+	if ! (cd "$package_path" && pkgdev manifest); then
 		echo "Error generating manifest for ${package_name}. Skipping..."
 		return 1
 	fi
 
 	(cd "$package_path" && \
-			git restore --staged . && \
-			git add --all . && \
-			git -c user.name="${BOT_USER}" \
-			-c user.email="${BOT_EMAIL}" \
-			-c commit.gpgsign=true \
-			-c user.signingkey="${BOT_KEYID}" \
-			commit -m "Update ${package_name} to ${version}" && \
+		git add --all . && \
+		git -c user.name="${BOT_USER}" \
+		-c user.email="${BOT_EMAIL}" \
+		-c commit.gpgsign=true \
+		-c user.signingkey="${BOT_KEYID}" \
+		commit -m "Update ${package_name} to ${version}" && \
 		git push origin HEAD)
 
 	echo "Ebuild updated for ${package_name}: ${new_ebuild_filename}"
@@ -53,98 +49,41 @@ process_package() {
 	local package_name="$1"
 	local repo_url="$2"
 
-	[ ! -d "${WORKHOME}/${package_name}" ] && git clone "${repo_url}" "${WORKHOME}/${package_name}"
+	[ ! -d "${WORKHOME}/${package_name}" ] && git clone "${repo_url}" "${WORKHOME}/${package_name}" --depth 1
 	[ -d "${WORKHOME}/${package_name}" ] && (cd "${WORKHOME}/${package_name}" && git remote update && git reset --hard && git clean -f)
 
-	local new_snapshot_date
-	new_snapshot_date=$(cd "${WORKHOME}/${package_name}" && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')
-	local GITDATENAME="${package_name}-${new_snapshot_date}"
-	local PNAME="${package_name}"
+	local GITDATENAME="${package_name}-$(cd ${WORKHOME}/${package_name} && git log -n1 --pretty='format:%cd' --date=format:'%Y%m%d')"
+	local new_snapshot_date=$(echo "$GITDATENAME" | sed -r 's/^[a-z-]+-([0-9]{8}).*$/\1/')
 
 	if [ ! -f "${WORKHOME}/${GITDATENAME}.tar.xz" ]; then
-		cp -rp "${WORKHOME}/${package_name}/" "${TEMPLOCATION}/${GITDATENAME}/" || exit 1
-		(cd "${WORKHOME}/gnulib" && git reset --hard && git clean -fd) || exit 1
+		rm -rf "${WORKHOME}/${package_name}/gnulib"
+		cp -rp "${WORKHOME}/gnulib" "${WORKHOME}/${package_name}/gnulib"
+		chmod +w build-aux/ltmain.sh
 
-		rm -rf "${TEMPLOCATION}/${GITDATENAME}/gnulib"
-		cp -rp "${WORKHOME}/gnulib/" "${TEMPLOCATION}/${GITDATENAME}/gnulib/" || exit 1
-
-		cd "${TEMPLOCATION}/${GITDATENAME}" || exit 1
+		(cd ${WORKHOME}/${package_name} && ./bootstrap --copy --skip-po || ./autogen.sh)
 
 		if [ -d "./libltdl" ]; then
 			pushd libltdl >/dev/null || exit 1
-			sed -i '/AM_SILENT_RULES/a AM_MAINTAINER_MODE([disable])' configure.ac
 			autoreconf
 			popd >/dev/null || exit 1
 		fi
 
-		sed -i '/AM_SILENT_RULES/a AM_MAINTAINER_MODE([disable])' configure.ac
-
-		if [[ "$PNAME" == cpio ]]; then
-			./bootstrap
-		elif [[ "$PNAME" == @(libtool*) ]]; then
-			find "${TEMPLOCATION}/${GITDATENAME}" -type f -exec grep -l "git-version-gen" {} \; | xargs sed -i 's/\(v=.*\)-dirty/\1/; s/^v=.*/v=UNKNOWN/'
-			./bootstrap --copy --skip-po
-			sed -i '/m4_ifdef(\[AM_SILENT_RULES\],/,/)$/{d}' configure.ac
-		else
-			./autopull.sh ; ./autogen.sh
-			./bootstrap --copy --skip-po
-			./autopull.sh ; ./autogen.sh
-		fi
-
-		shopt -s extglob
-
-		if [[ "$PNAME" == @(cpio|coreutils|diffutils|gperf|libtool|findutils|grep|tar|sed) ]]; then
-			run_make_dist "$PNAME"
-		fi
-
-		cd "${TEMPLOCATION}" || exit 1
-		rm -rf "${GITDATENAME}_tmp"
-		mkdir -p "${GITDATENAME}_tmp"
-		tar -hcf - "${GITDATENAME}" | tar -xf - -C "${GITDATENAME}_tmp" --overwrite || {
-			echo "Failed to copy and replace ${GITDATENAME} to ${GITDATENAME}_tmp"
-			exit 1
-		}
-
-		make clean
-
-		if [[ "$PNAME" != "grub" ]]; then
-			rm -rf "${TEMPLOCATION}/${GITDATENAME}/${PNAME}*"
-		fi
-
-		find "${TEMPLOCATION}/${GITDATENAME}" \( -name "*.tar.*" -o -name "*.git*" -o -name "*~" -o -name "autom4te.cache" -o -path "*/po/.reference" \) -exec rm -rf {} +
-
-		mkdir -p "${TEMPLOCATION}/${GITDATENAME}_resolved"
-		(cd "${TEMPLOCATION}/${GITDATENAME}" && tar -chf - . --dereference | tar -xf - -C "${TEMPLOCATION}/${GITDATENAME}_resolved")
-
-		rm -rf "${TEMPLOCATION}/${GITDATENAME}"
-		mv "${TEMPLOCATION}/${GITDATENAME}_resolved" "${TEMPLOCATION}/${GITDATENAME}"
-
-		rm -rf "${TEMPLOCATION}/${GITDATENAME}/gnulib"
-
+		(cd ${WORKHOME} && tar -hcf - ${package_name} | tar -xf - -C ${TEMPLOCATION})
+		mv ${TEMPLOCATION}/${package_name} ${TEMPLOCATION}/${GITDATENAME}
+		find ${TEMPLOCATION}/${GITDATENAME} -name *~ -delete
+		(cd ${TEMPLOCATION}/${GITDATENAME} && rm -rf .git* gnulib autom4te.cache po/.reference)
+		find ${TEMPLOCATION}/${GITDATENAME} -name *.git* -delete
 		(cd ${TEMPLOCATION} && XZOPT=-e9 tar cJf ${WORKHOME}/${GITDATENAME}.tar.xz ${GITDATENAME} --owner=0 --group=0)
-		cp ${WORKHOME}/${GITDATENAME}.tar.xz /var/cache/distfiles/
+		sudo cp ${WORKHOME}/${GITDATENAME}.tar.xz /var/cache/distfiles/
 
 		local ebuild_file_path=$(find "${REPO}" -type f -name "${package_name}-*.ebuild")
 		local category=$(basename $(dirname $(dirname "${ebuild_file_path}")))
 		rename_ebuild_files "$package_name" "$new_snapshot_date"
+		#finalize_update "${REPO}/${category}/${package_name}" "$package_name" "${package_name}-${new_snapshot_date}.ebuild" "$new_snapshot_date"
 	fi
 }
 
-run_make_dist() {
-	local package_name="$1"
-
-	if [ -d "${TEMPLOCATION}/${GITDATENAME}" ]; then
-		echo "Running make dist for $package_name" && \
-			cd "${TEMPLOCATION}/${GITDATENAME}" && \
-			"${TEMPLOCATION}/${GITDATENAME}/configure" --disable-dependency-tracking && \
-			sed -i '/NEWS not updated; not releasing/!b;n;/exit 1/d' Makefile && \
-			make dist && \
-			make distclean
-	else
-		echo "Directory not found for package: "${TEMPLOCATION}/${GITDATENAME}""
-	fi
-}
-
+rm -rf "${TEMPLOCATION}"
 mkdir -p "${WORKHOME}"
 mkdir -p "${TEMPLOCATION}"
 cd "${WORKHOME}"
@@ -180,3 +119,5 @@ for package in "${packages[@]}"; do
 		process_package "$package" "https://git.savannah.gnu.org/git/$package.git"
 	fi
 done
+
+rm -rf "${TEMPLOCATION}"

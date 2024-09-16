@@ -1,6 +1,7 @@
+# /etc/pam.d/system-local-login
 #%PAM-1.0
 
-auth      include   system-login
-account   include   system-login
-password  include   system-login
-session   include   system-login
+auth      include   system-auth
+account   include   system-auth
+password  include   system-auth
+session   include   system-auth

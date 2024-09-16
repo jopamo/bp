@@ -34,3 +34,4 @@
 *app-core/git
 *app-core/fakepackages
 *app-core/portage
+*app-crypto/blake3

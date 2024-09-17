@@ -269,6 +269,9 @@ src_install() {
 
 	dodir usr/lib/gbm
 	dosym -r /usr/lib/libnvidia-allocator.so.${PV} /usr/lib/gbm/nvidia-drm_gbm.so
+
+	insinto /usr/lib/firmware/nvidia/${PV}
+	doins firmware/gsp_ga10x.bin
 }
 
 src_install-libs() {

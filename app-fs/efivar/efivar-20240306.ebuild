@@ -15,13 +15,15 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-src_configure() {
+src_prepare() {
 	filter-flags -Wl,-z,defs
 	default
-	sed -i 's/\ docs//g' Makefile
+	sed -i 's/\ docs//g' "Makefile" || die
+	sed -i "s|gcc|cc|g" "efivar.spec.in" || die
 }
 
 src_compile() {
+	sed -i "s|gcc|cc|g" "src/include/defaults.mk" || die
 	emake libdir="/usr/lib/" \
 		bindir="/usr/bin/" \
 		mandir="/usr/share/man/" \

@@ -21,6 +21,7 @@ IUSE="o-flag-munging static-libs"
 DEPEND="lib-core/libgpg-error"
 
 src_prepare() {
+	filter-flags -fuse-ld=lld
 	default
 	eautoreconf
 }

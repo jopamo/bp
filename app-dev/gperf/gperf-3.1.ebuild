@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="A perfect hash function generator"
 HOMEPAGE="https://www.gnu.org/software/gperf/"
-SRC_URI="https://1g4.org/files/${P}.tar.xz"
+SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -16,6 +16,9 @@ src_prepare() {
 		*/Makefile.in || die
 
 	default
+	eapply "${FILESDIR}"/gperf-3.1-strncmp-decl-mismatch.patch
+	eapply "${FILESDIR}"/gperf-3.1-clang-16-wregister.patch
+
 }
 
 src_configure() {

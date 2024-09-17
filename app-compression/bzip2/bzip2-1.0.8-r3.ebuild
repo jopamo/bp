@@ -30,6 +30,8 @@ src_prepare() {
 
 	sed -i "s|-O2|${CFLAGS}|g" Makefile
 	sed -i "s|-O2|${CFLAGS}|g" Makefile-libbz2_so
+	sed -i "s|gcc|cc|g" Makefile
+	sed -i "s|gcc|cc|g" Makefile-libbz2_so
 }
 
 src_compile() {

@@ -25,6 +25,7 @@ src_prepare() {
 	sed -i -e "s/VERSION_REPLACE/${PV}/g" "${S}"/lua.pc || die
 
 	sed -i -e "s/-O2\ //g" "src/Makefile" || die
+	sed -i "s|gcc|cc|g" "src/Makefile" || die
 }
 
 src_compile() {

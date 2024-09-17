@@ -171,8 +171,6 @@ src_install() {
 	find "${ED}" -name libcc1plugin.la -delete
 	find "${ED}" -name libcp1plugin.la -delete
 
-	dosym -r /usr/bin/gcc /usr/bin/cc
-
 	dobin "${FILESDIR}"/c89
 	dobin "${FILESDIR}"/c99
 

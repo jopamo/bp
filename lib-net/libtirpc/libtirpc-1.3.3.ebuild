@@ -2,6 +2,8 @@
 
 EAPI=8
 
+inherit flag-o-matic
+
 DESCRIPTION="Transport Independent RPC library (SunRPC replacement)"
 HOMEPAGE="http://libtirpc.sourceforge.net/"
 SRC_URI="https://downloads.sourceforge.net/libtirpc/${P}.tar.bz2"
@@ -13,6 +15,8 @@ KEYWORDS="amd64 arm64"
 IUSE="ipv6 static-libs"
 
 src_configure() {
+	filter-flags -fuse-ld=lld
+
 	local myconf=(
 		$(use_enable ipv6)
 		$(use_enable static-libs static)

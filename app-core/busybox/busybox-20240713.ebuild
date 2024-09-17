@@ -20,19 +20,34 @@ RESTRICT="test strip"
 BDEPEND="lib-core/musl"
 
 src_prepare() {
+	filter-flags -fuse-ld=lld
+
+	append-flags -ffat-lto-objects
+	append-ldflags -static
+	append-ldflags -Wl,-z,noexecstack
+
 	default
+
 	eapply "${FILESDIR}"/*.patch
 	cp "${FILESDIR}"/busybox-config "${S}"/.config || die
 	make silentoldconfig
 }
 
 src_compile() {
-	append-flags -ffat-lto-objects
-	append-ldflags -static
-	append-ldflags -Wl,-z,noexecstack
+	CC=${CC:-gcc}
 
-	emake CC=musl-gcc
+	if ${CC} --version | grep -q 'clang'; then
+		echo "Detected Clang"
+		emake CC=musl-clang
+	elif ${CC} --version | grep -q 'gcc'; then
+		echo "Detected GCC"
+		emake CC=musl-gcc
+	else
+		echo "Unknown compiler"
+		exit 1
+	fi
 }
+
 
 src_install() {
 	dobin busybox

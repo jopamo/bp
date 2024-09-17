@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="sqlite tmpfilesd"
+IUSE="sqlite"
 
 DEPEND="
 	app-var/push
@@ -30,8 +30,6 @@ pkg_setup() {
 
 src_prepare() {
 	default
-	sed -i -e "s:/:${EPREFIX}/:" tmpfiles.d/eix.conf || die
-
 	sed -e "/eixf_source=/s:push.sh:cat \"${EPREFIX}/usr/share/push/push.sh\":" \
 		-e "/eixf_source=/s:quoter_pipe.sh:cat \"${EPREFIX}/usr/share/quoter/quoter_pipe.sh\":" \
 		-i src/eix-functions.sh.in || die
@@ -65,25 +63,15 @@ src_configure() {
 		econf "${myconf[@]}"
 }
 
-src_install() {
-	default
-
-	if use tmpfilesd; then
-		insopts -m 0644
-		insinto /usr/lib/tmpfiles.d
-		doins tmpfiles.d/eix.conf
-	fi
-}
-
 pkg_postinst() {
 	local obs="${EROOT}/var/cache/eix.previous"
 	if test -f "${obs}"; then
 		ewarn "Found obsolete ${obs}, please remove it"
 	fi
 
-	if use tmpfilesd; then
-		systemd-tmpfiles --create /usr/lib/tmpfiles.d/eix.conf || die
-	fi
+	mkdir -p /var/cache/eix
+    chmod 0775 /var/cache/eix
+    chown -R portage /var/cache/eix
 }
 
 pkg_postrm() {

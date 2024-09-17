@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs
+inherit meson
 
 DESCRIPTION="A Library for Large Linear Classification"
 HOMEPAGE="http://www.csie.ntu.edu.tw/~cjlin/liblinear/ https://github.com/cjlin1/liblinear"
@@ -15,35 +15,8 @@ KEYWORDS="amd64 arm64"
 
 src_prepare() {
 	default
+	cp "${FILESDIR}/meson.build" "${S}/" || die "Failed to copy meson.build"
 
-	sed -i \
-		-e '/^CFLAGS/d;/^CXXFLAGS/d' \
-		blas/Makefile || die
-	sed -i \
-		-e 's|make|$(MAKE)|g' \
-		-e '/$(LIBS)/s|$(CFLAGS)|& $(LDFLAGS)|g' \
-		-e '/^CFLAGS/d;/^CXXFLAGS/d' \
-		-e 's|$${SHARED_LIB_FLAG}|& $(LDFLAGS)|g' \
-		Makefile || die
-}
+	echo "option('build_static_lib', type: 'boolean', value: false, description: 'Enable or disable building the static BLAS library')" > meson_options.txt
 
-src_compile() {
-	emake \
-		CC="$(tc-getCC)" \
-		CXX="$(tc-getCXX)" \
-		CFLAGS="${CFLAGS} -fPIC" \
-		CXXFLAGS="${CXXFLAGS} -fPIC" \
-		AR="$(tc-getAR)" \
-		RANLIB="$(tc-getRANLIB)" \
-		lib all
-}
-
-src_install() {
-	dolib.so ${PN}.so.${SONAME}
-	dosym ${PN}.so.${SONAME} /usr/lib/${PN}.so
-
-	newbin predict ${PN}-predict
-	newbin train ${PN}-train
-
-	doheader linear.h
 }

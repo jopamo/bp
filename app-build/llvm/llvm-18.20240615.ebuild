@@ -15,8 +15,8 @@ LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
 KEYWORDS="amd64"
 
-IUSE="bolt +clang cross-project-tests debug libc
-	libclc +lld lldb mlir openmp polly pstl test libunwind llvm-libgcc"
+IUSE="bolt +clang compiler-rt cross-project-tests debug libc
+	libclc +lld lldb mlir openmp +polly pstl test libunwind llvm-libgcc"
 
 DEPEND="
 	lib-core/libedit
@@ -30,7 +30,7 @@ RESTRICT="!test? ( test )"
 CMAKE_BUILD_TYPE=Release
 
 src_configure() {
-	LLVM_PROJECTS="llvm"
+	LLVM_PROJECTS=""
 	LLVM_ENABLE_RUNTIMES="libcxx;libcxxabi"
 
 	use libc && LLVM_ENABLE_RUNTIMES+=";libc"
@@ -40,8 +40,8 @@ src_configure() {
 	use llvm-libgcc && LLVM_ENABLE_RUNTIMES+=";llvm-libgcc"
 
 	use bolt && LLVM_PROJECTS+=";bolt"
-	use clang && LLVM_PROJECTS+=";clang"
-	use clang && LLVM_PROJECTS+=";clang-tools-extra"
+	use clang && LLVM_PROJECTS+=";clang;clang-tools-extra"
+	use compiler-rt && LLVM_PROJECTS+=";compiler-rt"
 	use cross-project-tests && LLVM_PROJECTS+=";cross-project-tests"
 	use libc && LLVM_PROJECTS+=";libc"
 	use libclc && LLVM_PROJECTS+=";libclc"
@@ -100,6 +100,7 @@ src_configure() {
 		-DOCAMLFIND=NO
 		-DLLVM_BUILD_DOCS=OFF
 		-DLLVM_ENABLE_OCAMLDOC=OFF
+		-DCMAKE_CXX_STANDARD=17
 		-DLLVM_ENABLE_SPHINX=OFF
 		-DLLVM_ENABLE_DOXYGEN=OFF
 		-DLLVM_INSTALL_UTILS=ON

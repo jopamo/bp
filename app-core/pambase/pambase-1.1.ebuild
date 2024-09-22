@@ -27,7 +27,7 @@ src_install() {
 	insinto /etc/pam.d
 	insopts -m0644
 
-	for x in login other su sudo system-auth system-login system-local-login system-remote-login system-services  ; do
+	for x in login other su system-auth system-login system-local-login system-remote-login system-services  ; do
 		doins ${x}
 	done
 

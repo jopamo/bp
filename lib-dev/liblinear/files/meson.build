@@ -7,12 +7,6 @@ cc = meson.get_compiler('c')
 cxx = meson.get_compiler('cpp')
 
 
-if cc.get_id() == 'clang' or cxx.get_id() == 'clang'
-  message('Clang detected, using lld linker')
-  add_project_arguments('-flto=thin', language: 'c')
-  add_project_link_arguments('-flto=thin', language: 'c')
-endif
-
 blas_sources = [
   'blas/dnrm2.c',
   'blas/daxpy.c',

@@ -19,4 +19,5 @@ src_prepare() {
 
 	echo "option('build_static_lib', type: 'boolean', value: false, description: 'Enable or disable building the static BLAS library')" > meson_options.txt
 
+	die
 }

@@ -30,12 +30,39 @@ RESTRICT="test"
 PATCHES=(
 	"${FILESDIR}"/1.55.0-ignore-broken-and-non-applicable-tests.patch
 	"${FILESDIR}"/1.49.0-gentoo-musl-target-specs.patch
+	"${FILESDIR}"/1.57.0-selfbootstrap.patch
 	"${FILESDIR}"/1.55.0-llvm-add-missing-cstdint.patch
 )
 
 S="${WORKDIR}/${MY_P}-src"
 
 src_prepare() {
+	filter-flags -D_FORTIFY_SOURCE*
+	filter-flags -Wl,-O3
+	filter-flags -Wl,-z,defs -Wl,-z,combreloc -Wl,-z,now -Wl,-z,relro
+	filter-flags -fassociative-math
+	filter-flags -fasynchronous-unwind-tables
+	filter-flags -fcf-protection=full
+	filter-flags -fdevirtualize-at-ltrans
+	filter-flags -fexceptions
+	filter-flags -fgraphite-identity
+	filter-flags -fipa-pta
+	filter-flags -floop-interchange
+	filter-flags -floop-nest-optimize
+	filter-flags -floop-parallelize-all
+	filter-flags -flto*
+	filter-flags -fno-math-errno
+	filter-flags -fno-semantic-interposition
+	filter-flags -fno-signed-zeros
+	filter-flags -fno-trapping-math
+	filter-flags -fpie
+	filter-flags -fstack-clash-protection
+	filter-flags -fstack-protector-strong
+	filter-flags -ftree-loop-distribution
+	filter-flags -fuse-linker-plugin
+
+	replace-flags -O3 -O2
+
 	default
 
 	rm "${S}/vendor/vte/vim10m_"{match,table}

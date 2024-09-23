@@ -79,7 +79,7 @@
 #
 #	einfo "Installing ${modulename} module"
 #	cd ${objdir} || die "${objdir} does not exist"
-#	insinto /lib/modules/${KV_FULL}/${libdir}
+#	insinto /usr/lib/modules/${KV_FULL}/${libdir}
 #	doins ${modulename}.${KV_OBJ} || die "doins ${modulename}.${KV_OBJ} failed"
 #
 # For example:
@@ -90,13 +90,13 @@
 #   cd "${S}"/pci
 #   make ${BUILD_PARAMS} ${BUILD_TARGETS}
 #   cd "${S}"
-#   insinto /lib/modules/${KV_FULL}/pci
+#   insinto /usr/lib/modules/${KV_FULL}/pci
 #   doins module_pci.${KV_OBJ}
 #
 #   cd "${S}"/usb
 #   make ${BUILD_PARAMS} ${BUILD_TARGETS}
 #   cd "${S}"
-#   insinto /lib/modules/${KV_FULL}/usb
+#   insinto /usr/lib/modules/${KV_FULL}/usb
 #   doins module_usb.${KV_OBJ}
 
 # There is also support for automated modprobe.d file generation.
@@ -655,7 +655,7 @@ linux-mod_src_compile() {
 # @FUNCTION: linux-mod_src_install
 # @DESCRIPTION:
 # It install the modules specified in MODULE_NAMES. The modules should be inside the ${objdir}
-# directory and they are installed inside /lib/modules/${KV_FULL}/${libdir}.
+# directory and they are installed inside /usr/lib/modules/${KV_FULL}/${libdir}.
 #
 # The modprobe.d configuration file is automatically generated if the
 # MODULESD_<modulename>_* variables are defined. The only way to stop this process is by
@@ -683,7 +683,7 @@ linux-mod_src_install() {
 
 		einfo "Installing ${modulename} module"
 		cd "${objdir}" || die "${objdir} does not exist"
-		insinto "${INSTALL_MOD_PATH}"/lib/modules/${KV_FULL}/${libdir}
+		insinto "${INSTALL_MOD_PATH}"/usr/lib/modules/${KV_FULL}/${libdir}
 
 		# check here for CONFIG_MODULE_COMPRESS_<compression option> (NONE, GZIP, XZ, ZSTD)
 		# and similarly compress the module being built if != NONE.
@@ -722,14 +722,14 @@ linux-mod_pkg_preinst() {
 	debug-print-function ${FUNCNAME} $*
 	[[ -n ${MODULES_OPTIONAL_USE} ]] && use !${MODULES_OPTIONAL_USE} && return
 
-	[[ -d ${D}/lib/modules ]] && UPDATE_DEPMOD=true || UPDATE_DEPMOD=false
-	[[ -d ${D}/lib/modules ]] && UPDATE_MODULEDB=true || UPDATE_MODULEDB=false
+	[[ -d ${D}/usr/lib/modules ]] && UPDATE_DEPMOD=true || UPDATE_DEPMOD=false
+	[[ -d ${D}/usr/lib/modules ]] && UPDATE_MODULEDB=true || UPDATE_MODULEDB=false
 }
 
 # @FUNCTION: linux-mod_pkg_postinst
 # @DESCRIPTION:
 # It executes /sbin/depmod and adds the package to the /var/lib/module-rebuild/moduledb
-# database (if ${D}/lib/modules is created)
+# database (if ${D}/usr/lib/modules is created)
 linux-mod_pkg_postinst() {
 	debug-print-function ${FUNCNAME} $*
 	[[ -n "${MODULES_OPTIONAL_USE}" ]] && use !${MODULES_OPTIONAL_USE} && return

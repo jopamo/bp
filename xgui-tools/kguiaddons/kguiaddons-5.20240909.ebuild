@@ -6,7 +6,7 @@ inherit cmake xdg
 
 DESCRIPTION="Framework providing assorted high-level user interface components"
 
-SNAPSHOT=dbba04fad57834d7f3c07f3c0b7a4716124fc2cf
+SNAPSHOT=c000ae60c77b291c4ea03edc4358efdb77c6bce2
 SRC_URI="https://github.com/KDE/kguiaddons/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/kguiaddons-${SNAPSHOT}
 

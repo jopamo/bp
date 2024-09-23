@@ -86,6 +86,7 @@ src_configure() {
 		--enable-library
 		--enable-client
 		--localstatedir="${EPREFIX}"/var
+		--libexecdir="${EPREFIX}"/usr/lib
 		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 		--with-systemduserunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/user" "false")
 	)

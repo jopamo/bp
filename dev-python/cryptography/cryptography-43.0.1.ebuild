@@ -103,11 +103,6 @@ src_unpack() {
 }
 
 src_prepare() {
-	local PATCHES=(
-		# https://github.com/pyca/cryptography/pull/11324
-		"${FILESDIR}/${P}-rust-openssl-crash.patch"
-	)
-
 	default
 
 	sed -i -e 's:--benchmark-disable::' pyproject.toml || die

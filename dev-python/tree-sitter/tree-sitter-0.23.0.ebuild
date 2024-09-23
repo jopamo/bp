@@ -24,7 +24,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 # setuptools is needed for distutils import
-DEPEND=">=lib-dev/tree-sitter-0.22.1:="
+DEPEND=">=lib-dev/tree-sitter-0.23.0:="
 RDEPEND="${DEPEND}
 	$(python_gen_cond_dep '
 		dev-python/setuptools[${PYTHON_USEDEP}]
@@ -32,10 +32,10 @@ RDEPEND="${DEPEND}
 "
 BDEPEND="
 	test? (
-		>=lib-dev/tree-sitter-html-0.20.3[python,${PYTHON_USEDEP}]
+		>=lib-dev/tree-sitter-html-0.20.4[python,${PYTHON_USEDEP}]
 		>=lib-dev/tree-sitter-javascript-0.21.0[python,${PYTHON_USEDEP}]
 		>=lib-dev/tree-sitter-json-0.20.3[python,${PYTHON_USEDEP}]
-		>=lib-dev/tree-sitter-python-0.21.0[python,${PYTHON_USEDEP}]
+		>=lib-dev/tree-sitter-python-0.23.0[python,${PYTHON_USEDEP}]
 		>=lib-dev/tree-sitter-rust-0.21.2[python,${PYTHON_USEDEP}]
 	)
 "
@@ -50,6 +50,13 @@ src_unpack() {
 	filter-flags -Wl,-z,defs
 	default
 	rmdir "${S}/tree_sitter/core" || die
+}
+
+src_prepare() {
+	filter-flags -Wl,-z,defs
+	default
+
+	sed -i tree_sitter/binding/query.c -e 's/_PyErr_FormatFromCause/PyErr_Format/' || die
 }
 
 src_test() {

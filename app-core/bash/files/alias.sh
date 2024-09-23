@@ -415,6 +415,36 @@ backup_ssh() {
 	echo "Backup and encryption of .ssh directory completed: $(pwd)/$encrypted_filename"
 }
 
+restore_ssh() {
+	if [ -z "$1" ]; then
+		echo "Usage: restore_ssh <encrypted_backup_file>"
+		return 1
+	fi
+
+	local encrypted_backup_file="$1"
+	local backup_filename="${encrypted_backup_file%.gpg}"
+
+	if [ ! -f "$encrypted_backup_file" ]; then
+		echo "Encrypted backup file not found: $encrypted_backup_file"
+		return 1
+	fi
+
+	gpg --decrypt "$encrypted_backup_file" > "$backup_filename"
+	if [ $? -ne 0 ]; then
+		echo "Decryption failed."
+		return 1
+	fi
+
+	tar -xjf "$backup_filename" -C ~
+	if [ $? -eq 0 ]; then
+		rm "$backup_filename"
+		echo "SSH keys successfully restored from $encrypted_backup_file."
+	else
+		echo "Extraction failed."
+		return 1
+	fi
+}
+
 rmcomments() {
 	for type in "${!formatters[@]}"; do
 		find . -type f -name "$type" -not -path '*/.git/*' -exec sed -i '2,$ s|//.*||; 2,$ s|#.*||' {} +
@@ -446,4 +476,3 @@ start_ssh_agent() {
 		fi
 	done
 }
-

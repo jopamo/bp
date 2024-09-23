@@ -299,7 +299,7 @@ src_install-libs() {
 			"libnvidia-glsi.so.${NV_SOVER}"
 			"libnvidia-glvkspirv.so.${NV_SOVER}"
 			"libnvidia-gpucomp.so.${NV_SOVER}"
-			"libnvidia-ml.so.${PV}"
+			"libnvidia-ml.so.${NV_SOVER}"
 			"libnvidia-opencl.so.${NV_SOVER}"
 			"libnvidia-opticalflow.so.${NV_SOVER}"
 			"libnvidia-ptxjitcompiler.so.${NV_SOVER}"
@@ -307,6 +307,8 @@ src_install-libs() {
 			"libnvidia-tls.so.${NV_SOVER}"
 			"libnvoptix.so.${NV_SOVER}"
 			"libvdpau_nvidia.so.${NV_SOVER}"
+			"libcudadebugger.so.${NV_SOVER}"
+			"libcuda.so.${NV_SOVER}"
 		)
 
 		for NV_LIB in "${NV_GLX_LIBRARIES[@]}"; do

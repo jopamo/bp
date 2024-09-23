@@ -1,5 +1,7 @@
 #!/bin/sh
 
+alias eupdate='emerge --sync && eup'
+
 move_package() {
 	local REPO_PATH="/var/db/repos/bp"
 	local package_name="$1"
@@ -44,11 +46,40 @@ bootstrap_go() {
 	emerge --oneshot go
 }
 
-rebuild_packages() {
+eup() {
+	esync
 	emerge --keep-going -uDNv world
 	env-update && source /etc/profile
-	emerge --oneshot libtool
 	emerge --depclean
+	emerge @preserved-rebuild
+	emerge --keep-going -uDNv world
+	emerge --oneshot libtool
+	env-update && source /etc/profile
+}
+
+esync() {
+	echo "Regenerating bp repo cache..."
+
+	for dir in /var/db/repos/*/; do
+		dir=${dir%*/}
+
+		if [ -d "$dir" ]; then
+			echo "Updating cache for repo: ${dir##*/}"
+			pushd "$dir" > /dev/null
+			egencache --jobs=8 --update --repo "${dir##*/}"
+			popd > /dev/null
+		else
+			echo "Skipping non-directory: $dir"
+		fi
+	done
+
+	emerge --regen
+	emerge --metadata
+	eix-update
+}
+
+rebuild_packages() {
+	eup
 	rm -rf /var/cache/packages/*
 	emerge --keep-going -ueDNv world
 }

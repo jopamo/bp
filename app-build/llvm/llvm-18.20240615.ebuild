@@ -13,13 +13,12 @@ S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
 
 LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
-KEYWORDS="amd64 arm64"
+KEYWORDS="amd64"
 
-IUSE="bolt +clang compiler-rt cross-project-tests debug libc
-	libclc +lld lldb mlir openmp +polly pstl test libunwind llvm-libgcc"
+IUSE="bolt cross-project-tests debug libc libclc +lld lldb mlir
+	openmp polly pstl test +libunwind llvm-libgcc"
 
 DEPEND="
-	lib-core/libedit
 	lib-core/libffi
 	lib-core/libxml2
 	virtual/curses
@@ -30,8 +29,8 @@ RESTRICT="!test? ( test )"
 CMAKE_BUILD_TYPE=Release
 
 src_configure() {
-	LLVM_PROJECTS=""
-	LLVM_ENABLE_RUNTIMES="libcxx;libcxxabi"
+	LLVM_PROJECTS="clang;clang-tools-extra"
+	LLVM_ENABLE_RUNTIMES="compiler-rt"
 
 	use libc && LLVM_ENABLE_RUNTIMES+=";libc"
 	use libunwind && LLVM_ENABLE_RUNTIMES+=";libunwind"
@@ -40,8 +39,6 @@ src_configure() {
 	use llvm-libgcc && LLVM_ENABLE_RUNTIMES+=";llvm-libgcc"
 
 	use bolt && LLVM_PROJECTS+=";bolt"
-	use clang && LLVM_PROJECTS+=";clang;clang-tools-extra"
-	use compiler-rt && LLVM_PROJECTS+=";compiler-rt"
 	use cross-project-tests && LLVM_PROJECTS+=";cross-project-tests"
 	use libc && LLVM_PROJECTS+=";libc"
 	use libclc && LLVM_PROJECTS+=";libclc"
@@ -70,7 +67,6 @@ src_configure() {
 	filter-flags -fno-semantic-interposition
 	filter-flags -fno-signed-zeros
 	filter-flags -fno-trapping-math
-	filter-flags -fpic
 	filter-flags -fpie
 	filter-flags -fstack-clash-protection
 	filter-flags -fstack-protector-strong
@@ -80,16 +76,24 @@ src_configure() {
 	replace-flags -O3 -O2
 
 	local mycmakeargs=(
+		-DCMAKE_C_COMPILER=clang
+  -DCMAKE_CXX_COMPILER=clang++
+  -DCMAKE_LINKER=lld
+  -DCMAKE_AR=llvm-ar
+  -DCMAKE_RANLIB=llvm-ranlib
+  -DLLVM_USE_LINKER=lld
 		-DLLVM_ENABLE_PROJECTS="${LLVM_PROJECTS}"
 		-DLLVM_APPEND_VC_REV=OFF
-		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
+		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr/lib/llvm/$(ver_cut 1)"
 		-DLLVM_LIBDIR_SUFFIX=${libdir#lib}
 		-DBUILD_SHARED_LIBS=OFF
 		-DLLVM_LINK_LLVM_DYLIB=ON
 		-DLLVM_TARGETS_TO_BUILD=$(usex arm64 'AArch64' 'X86')
 		-DLLVM_BUILD_TESTS=$(usex test)
+		-DCOMPILER_RT_USE_LIBEXECINFO=OFF
+		-DCOMPILER_RT_BUILD_SANITIZERS=OFF
 		-DLLVM_ENABLE_FFI=ON
-		-DLLVM_ENABLE_LIBEDIT=ON
+		-DLLVM_DEFAULT_UNWINDLIB=libunwind
 		-DLLVM_ENABLE_TERMINFO=ON
 		-DLLVM_ENABLE_LIBXML2=ON
 		-DLLVM_ENABLE_ASSERTIONS=$(usex debug)
@@ -119,6 +123,13 @@ src_test() {
 src_install() {
 	cmake_src_install
 
-	rm "${ED}"/usr/include/libunwind.h
-	rm "${ED}"/usr/include/unwind.h
+	cat > "${T}"/99${PN} <<- EOF || die
+		export PATH="/usr/lib/llvm/18/bin:$PATH"
+		export LD_LIBRARY_PATH="/usr/lib/llvm/18/lib:$LD_LIBRARY_PATH"
+		export CPLUS_INCLUDE_PATH="/usr/lib/llvm/18/include:$CPLUS_INCLUDE_PATH"
+		export MANPATH="/usr/lib/llvm/18/share/man:$MANPATH"
+	EOF
+	doenvd "${T}"/99${PN}
+
+	rm "${ED}"/usr/share/man/man1/scan-build.1.bz2
 }

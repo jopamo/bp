@@ -42,7 +42,7 @@ PDEPEND="
 	bin/nvidia-settings
 "
 
-QA_PREBUILT="opt/* usr/lib*"
+QA_PREBUILT="opt/* usr/lib* usr/lib/firmware/nvidia/${PV}/*"
 S=${WORKDIR}/
 
 nvidia_drivers_versions_check() {
@@ -70,9 +70,9 @@ pkg_setup() {
 	export CCACHE_DISABLE=1
 
 	if use driver; then
-		MODULE_NAMES="nvidia(video:${S}/kernel)"
-		use uvm && MODULE_NAMES+=" nvidia-uvm(video:${S}/kernel)"
-		use kms && MODULE_NAMES+=" nvidia-modeset(video:${S}/kernel) nvidia-drm(video:${S}/kernel)"
+		MODULE_NAMES="nvidia(video:${S}/kernel-open)"
+		use uvm && MODULE_NAMES+=" nvidia-uvm(video:${S}/kernel-open)"
+		use kms && MODULE_NAMES+=" nvidia-modeset(video:${S}/kernel-open) nvidia-drm(video:${S}/kernel-open)"
 
 		# This needs to run after MODULE_NAMES (so that the eclass checks
 		# whether the kernel supports loadable modules) but before BUILD_PARAMS
@@ -91,7 +91,7 @@ pkg_setup() {
 
 	NV_DOC="${S}"
 	NV_OBJ="${S}"
-	NV_SRC="${S}/kernel"
+	NV_SRC="${S}/kernel-open"
 	NV_MAN="${S}"
 	NV_X11="${S}"
 	NV_SOVER=${PV}

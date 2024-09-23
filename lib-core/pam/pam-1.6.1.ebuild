@@ -14,7 +14,7 @@ LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug musl"
+IUSE="debug musl logind"
 
 BDEPEND="
 	app-build/flex
@@ -42,6 +42,7 @@ src_configure() {
 
 	local myconf=(
 		$(use_enable debug)
+		$(use_enable logind)
 		--disable-db
 		--disable-nls
 		--disable-prelude

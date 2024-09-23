@@ -42,8 +42,10 @@ PDEPEND="
 	bin/nvidia-settings
 "
 
-QA_PREBUILT="opt/* usr/lib* usr/lib/firmware/nvidia/${PV}/*"
-S=${WORKDIR}/
+QA_PREBUILT="opt/* usr/lib*"
+QA_PRESTRIPPED="usr/lib/firmware/nvidia/*/*"
+
+S="${WORKDIR}"
 
 nvidia_drivers_versions_check() {
 	CONFIG_CHECK="
@@ -65,7 +67,6 @@ pkg_pretend() {
 pkg_setup() {
 	nvidia_drivers_versions_check
 
-	# try to turn off distcc and ccache for people that have a problem with it
 	export DISTCC_DISABLE=1
 	export CCACHE_DISABLE=1
 
@@ -74,18 +75,11 @@ pkg_setup() {
 		use uvm && MODULE_NAMES+=" nvidia-uvm(video:${S}/kernel-open)"
 		use kms && MODULE_NAMES+=" nvidia-modeset(video:${S}/kernel-open) nvidia-drm(video:${S}/kernel-open)"
 
-		# This needs to run after MODULE_NAMES (so that the eclass checks
-		# whether the kernel supports loadable modules) but before BUILD_PARAMS
-		# is set (so that KV_DIR is populated).
 		linux-mod_pkg_setup
 
 		BUILD_PARAMS="IGNORE_CC_MISMATCH=yes V=1 SYSSRC=${KV_DIR} \
 		SYSOUT=${KV_OUT_DIR} CC=$(tc-getBUILD_CC) NV_VERBOSE=1"
 
-		# linux-mod_src_compile calls set_arch_to_kernel, which
-		# sets the ARCH to x86 but NVIDIA's wrapping Makefile
-		# expects x86_64 or i386 and then converts it to x86
-		# later on in the build process
 		BUILD_FIXES="ARCH=$(uname -m | sed -e 's/i.86/i386/')"
 	fi
 
@@ -120,21 +114,10 @@ src_compile() {
 	fi
 }
 
-# Install nvidia library:
-# the first parameter is the library to install
-# the second parameter is the provided soversion
-# the third parameter is the target directory if it is not /usr/lib
 donvidia() {
-	# Full path to library
 	nv_LIB="${1}"
-
-	# SOVER to use
 	nv_SOVER="$(scanelf -qF'%S#F' ${nv_LIB})"
-
-	# Where to install
 	nv_DEST="${2}"
-
-	# Get just the library name
 	nv_LIBNAME=$(basename "${nv_LIB}")
 
 	if [[ "${nv_DEST}" ]]; then
@@ -145,11 +128,8 @@ donvidia() {
 		action="dolib.so"
 	fi
 
-	# Install the library
 	${action} ${nv_LIB} || die "failed to install ${nv_LIBNAME}"
 
-	# If the library has a SONAME and SONAME does not match the library name,
-	# then we need to create a symlink
 	if [[ ${nv_SOVER} ]] && ! [[ "${nv_SOVER}" = "${nv_LIBNAME}" ]]; then
 		dosym ${nv_LIBNAME} ${nv_DEST}/${nv_SOVER} \
 			|| die "failed to create ${nv_DEST}/${nv_SOVER} symlink"
@@ -166,14 +146,10 @@ src_install() {
 	if use driver; then
 		linux-mod_src_install
 
-		# Add the aliases
-		# This file is tweaked with the appropriate video group in
-		# pkg_preinst, see bug #491414
 		insinto /etc/modprobe.d
 		newins "${FILESDIR}"/nvidia-169.07 nvidia.conf
 		doins "${FILESDIR}"/nvidia-rmmod.conf
 
-		# Ensures that our device nodes are created when not using X
 		exeinto /usr/lib/udev/rules.d
 		newexe "${FILESDIR}"/nvidia-udev.sh-r1 nvidia-udev.sh
 
@@ -182,32 +158,13 @@ src_install() {
 		newins "${FILESDIR}"/nvidia.udev-rule 99-nvidia.rules
 	fi
 
-	# NVIDIA kernel <-> userspace driver config lib
-	donvidia ${NV_OBJ}/libnvidia-cfg.so.${NV_SOVER}
-
-	# NVIDIA framebuffer capture library
-	donvidia ${NV_OBJ}/libnvidia-fbc.so.${NV_SOVER}
-
-	# NVIDIA video encode/decode <-> CUDA
-	donvidia ${NV_OBJ}/libnvcuvid.so.${NV_SOVER}
-	donvidia ${NV_OBJ}/libnvidia-encode.so.${NV_SOVER}
-
-	donvidia ${NV_OBJ}/libnvidia-nvvm.so.${NV_SOVER}
-
 	if use X; then
-		# Xorg DDX driver
 		insinto /usr/lib/xorg/modules/drivers
 		doins ${NV_X11}/nvidia_drv.so
 
-		# Xorg GLX driver
 		donvidia ${NV_X11}/libglxserver_nvidia.so.${NV_SOVER} \
 			/usr/lib/xorg/modules/extensions
 
-		# X module for wrapped software rendering
-		#donvidia "libnvidia-wfb.so.${NV_SOVER}" \
-		#	/usr/lib/xorg/modules
-
-		# Xorg nvidia.conf
 		insinto /usr/share/X11/xorg.conf.d
 		newins {,50-}nvidia-drm-outputclass.conf
 
@@ -226,11 +183,9 @@ src_install() {
 		donvidia "${nv_libdir}"/libnvidia-wayland-client.so.${NV_SOVER}
 	fi
 
-	# OpenCL ICD for NVIDIA
 	insinto /etc/OpenCL/vendors
 	doins ${NV_OBJ}/nvidia.icd
 
-	# Helper Apps
 	exeinto /opt/bin/
 
 	if use X; then
@@ -245,8 +200,10 @@ src_install() {
 	doexe ${NV_OBJ}/nvidia-debugdump
 	doexe ${NV_OBJ}/nvidia-persistenced
 	doexe ${NV_OBJ}/nvidia-smi
+	doexe ${NV_OBJ}/nvidia-ngx-updater
+	doexe ${NV_OBJ}/nvidia-pcc
+	doexe ${NV_OBJ}/nvidia-powerd
 
-	# install nvidia-modprobe setuid and symlink in /usr/bin (bug #505092)
 	doexe ${NV_OBJ}/nvidia-modprobe
 	fowners root:video /opt/bin/nvidia-modprobe
 	fperms 4710 /opt/bin/nvidia-modprobe
@@ -262,7 +219,6 @@ src_install() {
 	insinto usr/share/nvidia/
 	newins nvidia-application-profiles-${PV}-key-documentation nvidia-application-profiles-key-documentation
 
-	# wine
 	insinto usr/lib/nvidia/wine/
 	doins _nvngx.dll
 	doins nvngx.dll
@@ -288,10 +244,13 @@ src_install-libs() {
 			"libGLX_nvidia.so.${NV_SOVER} ${GL_ROOT}"
 			"libOpenCL.so.1.0.0 ${CL_ROOT}"
 			"libcuda.so.${NV_SOVER}"
+			"libcudadebugger.so.${NV_SOVER}"
 			"libnvcuvid.so.${NV_SOVER}"
 			"libnvidia-allocator.so.${NV_SOVER}"
 			"libnvidia-cfg.so.${NV_SOVER}"
 			"libnvidia-egl-gbm.so.1.1.1"
+			"libnvidia-egl-xcb.so.1"
+			"libnvidia-egl-xlib.so.1"
 			"libnvidia-eglcore.so.${NV_SOVER}"
 			"libnvidia-encode.so.${NV_SOVER}"
 			"libnvidia-fbc.so.${NV_SOVER}"
@@ -300,15 +259,16 @@ src_install-libs() {
 			"libnvidia-glvkspirv.so.${NV_SOVER}"
 			"libnvidia-gpucomp.so.${NV_SOVER}"
 			"libnvidia-ml.so.${NV_SOVER}"
+			"libnvidia-ngx.so.${NV_SOVER}"
+			"libnvidia-nvvm.so.${NV_SOVER}"
 			"libnvidia-opencl.so.${NV_SOVER}"
 			"libnvidia-opticalflow.so.${NV_SOVER}"
 			"libnvidia-ptxjitcompiler.so.${NV_SOVER}"
 			"libnvidia-rtcore.so.${NV_SOVER}"
 			"libnvidia-tls.so.${NV_SOVER}"
+			"libnvidia-vksc-core.so.${NV_SOVER}"
 			"libnvoptix.so.${NV_SOVER}"
 			"libvdpau_nvidia.so.${NV_SOVER}"
-			"libcudadebugger.so.${NV_SOVER}"
-			"libcuda.so.${NV_SOVER}"
 		)
 
 		for NV_LIB in "${NV_GLX_LIBRARIES[@]}"; do

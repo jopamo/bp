@@ -51,7 +51,7 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-5.1.1-pypy.patch"
+	"${FILESDIR}/${PN}-5.3.0-pypy.patch"
 )
 
 python_check_deps() {
@@ -63,9 +63,6 @@ python_check_deps() {
 }
 
 python_prepare_all() {
-	# avoid replacing PYTHONPATH in tests.
-	sed -i -e '/sys\.path/d' test.py || die
-
 	# don't use some random SDK on Darwin
 	sed -i -e '/_ldflags =/s/=.*isysroot.*darwin.*None/= None/' \
 		setupinfo.py || die
@@ -94,9 +91,12 @@ python_test() {
 	cp -al "${BUILD_DIR}"/{install,test} || die
 	cp -al src/lxml/tests "${dir}/" || die
 	cp -al src/lxml/html/tests "${dir}/html/" || die
-	ln -rs "${S}"/doc "${dir}"/../../ || die
+	mkdir "${dir}"/../../doc || die
+	# this one needs to be copied, because upstream uses doc/../../../doc
+	cp -r "${S}"/doc "${dir}"/../../ || die
+	ln -s "${S}"/doc "${dir}"/../../../../ || die
 
-	"${EPYTHON}" test.py -vv --all-levels -p ||
+	"${EPYTHON}" test.py --no-src -vv --all-levels -p ||
 		die "Tests fail on ${EPYTHON}"
 }
 

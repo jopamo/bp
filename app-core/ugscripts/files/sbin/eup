@@ -1,5 +1,0 @@
-#!/bin/bash
-
-emerge --keep-going -uDNv world
-emerge -1 --keep-going @smart-live-rebuild
-emerge @preserved-rebuild

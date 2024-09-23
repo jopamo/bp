@@ -12,7 +12,7 @@ inherit toolchain-funcs
 DESCRIPTION="A concurrent garbage collected and typesafe programming language"
 HOMEPAGE="https://go.dev"
 
-SNAPSHOT=dabed2e09a888ec33b385006890d3c66f2ced8ca
+SNAPSHOT=8bba868de983dd7bf55fcd121495ba8d6e2734e7
 SRC_URI="https://github.com/golang/go/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/go-${SNAPSHOT}"
 

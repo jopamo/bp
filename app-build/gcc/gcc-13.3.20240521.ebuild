@@ -187,4 +187,6 @@ src_install() {
 		rm "${ED}/usr/bin/go"
 		rm "${ED}/usr/bin/gofmt"
 	fi
+
+	dosym -r /usr/bin/gcc /usr/bin/cc
 }

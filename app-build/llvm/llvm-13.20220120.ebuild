@@ -7,13 +7,13 @@ inherit cmake flag-o-matic
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
 
-SNAPSHOT=3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff
+SNAPSHOT=75e33f71c2dae584b13a7d1186ae0a038ba98838
 SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
 
 LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
-KEYWORDS="amd64 arm64"
+KEYWORDS="amd64"
 
 IUSE="bolt cross-project-tests debug libc libclc +lld lldb mlir
 	openmp polly pstl test +libunwind llvm-libgcc"

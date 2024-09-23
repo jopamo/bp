@@ -8,8 +8,6 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="yescrypt"
-
 S=${WORKDIR}
 
 src_prepare() {
@@ -22,8 +20,6 @@ src_compile() { :; }
 src_test() { :; }
 
 src_install() {
-	use yescrypt && sed -i 's/sha512/yescrypt/g' system-auth
-
 	insinto /etc/pam.d
 	insopts -m0644
 

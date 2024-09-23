@@ -4,7 +4,6 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
-PYPI_NO_NORMALIZE=1
 PYPI_PN=${PN/-/.}
 PYTHON_COMPAT=( python3_{10..13} pypy3 )
 
@@ -32,6 +31,11 @@ BDEPEND="
 "
 
 distutils_enable_tests pytest
+
+EPYTEST_DESELECT=(
+	# Internet
+	jaraco/context/__init__.py::jaraco.context.repo_context
+)
 
 src_configure() {
 	grep -q 'build-backend = "setuptools' pyproject.toml ||

@@ -83,12 +83,6 @@ src_install() {
 		insopts -m 0644
 		doins "${FILESDIR}/chronyd.service"
 	fi
-
-	if use tmpfilesd; then
-		insopts -m 0644
-		insinto /usr/lib/tmpfiles.d
-		doins "${FILESDIR}/${PN}.tmpfiles.conf"
-	fi
 }
 
 pkg_preinst() {

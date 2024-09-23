@@ -67,6 +67,8 @@ python_test() {
 		'tests/test_main.py::test_verbose_output[False-1]'
 		# broken by uv being installed outside venv
 		tests/test_env.py::test_external_uv_detection_success
+		# broken by unbundled pip (TODO: fix pip eventually)
+		'tests/test_projectbuilder.py::test_build_with_dep_on_console_script[False]'
 	)
 
 	if ! has_version "dev-python/uv"; then

@@ -21,7 +21,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	dev-python/zipp[${PYTHON_USEDEP}]
+	>=dev-python/zipp-3.20[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	test? (

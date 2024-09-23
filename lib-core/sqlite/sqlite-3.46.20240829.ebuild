@@ -25,6 +25,7 @@ DEPEND="
 "
 
 src_configure() {
+	filter-flags -fuse-ld=lld
 	# Support detection of misuse of SQLite API.
 	# https://sqlite.org/compile.html#enable_api_armor
 	append-cppflags -DSQLITE_ENABLE_API_ARMOR

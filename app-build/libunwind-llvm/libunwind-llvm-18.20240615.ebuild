@@ -9,13 +9,11 @@ HOMEPAGE="https://llvm.org/"
 
 SNAPSHOT=3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff
 SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/llvm-project-${SNAPSHOT}/${PN}"
+S="${WORKDIR}/llvm-project-${SNAPSHOT}/libunwind"
 
 LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
 KEYWORDS="amd64"
-
-DEPEND="app-build/llvm"
 
 CMAKE_BUILD_TYPE=Release
 
@@ -50,27 +48,15 @@ src_configure() {
 	filter-flags -polly*
 	filter-flags -fuse-ld=lld
 
-    replace-flags -O3 -O2
+	replace-flags -O3 -O2
 
 	local mycmakeargs=(
-		-DBUILD_SHARED_LIBS=OFF
-		-DCLANG_CONFIG_FILE_SYSTEM_DIR="${EPREFIX}/etc/clang"
-		-DCLANG_DEFAULT_CXX_STDLIB=libc++
-		-DCLANG_LINK_CLANG_DYLIB=ON
-		-DCMAKE_SKIP_RPATH=ON
-		-DLLVM_TARGETS_TO_BUILD=$(usex arm64 'AArch64' 'X86')
-	    -DLLVM_LINK_LLVM_DYLIB=ON
-    	-DCLANG_DEFAULT_PIE_ON_LINUX=ON
-    	-DCLANG_DEFAULT_RTLIB=compiler-rt
-    	-DCLANG_LINK_CLANG_DYLIB=ON
-    	-DENABLE_LINKER_BUILD_ID=ON
-    	-DLLVM_BUILD_DOCS=OFF
-    	-DLLVM_ENABLE_RTTI=ON
-    	-DLLVM_ENABLE_SPHINX=ON
-    	-DLLVM_INCLUDE_DOCS=OFF
-    	-DLLVM_INCLUDE_TESTS=OFF
-    	-DSPHINX_WARNINGS_AS_ERRORS=OFF
+		-DCOMPILER_RT_BUILD_LIBFUZZER=OFF
+		#-DCOMPILER_RT_BUILD_MEMPROF=OFF
+		#-DCOMPILER_RT_BUILD_ORC=OFF
+		#-DCOMPILER_RT_BUILD_PROFILE=OFF
+		-DCOMPILER_RT_BUILD_SANITIZERS=OFF
+		#-DCOMPILER_RT_BUILD_XRAY=OFF
 	)
-
 	cmake_src_configure
 }

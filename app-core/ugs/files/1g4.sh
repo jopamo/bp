@@ -41,6 +41,8 @@ move_package() {
 }
 
 bootstrap_go() {
+	trap 'echo "Interrupted by user"; return 1' SIGINT
+
 	USE=go-bootstrap emerge --oneshot gcc
 	FEATURES="-sandbox -usersandbox" emerge --oneshot =app-lang/go-1.21*
 	emerge --oneshot gcc
@@ -48,17 +50,23 @@ bootstrap_go() {
 }
 
 eup() {
-	esync || exit 1
-	emerge --keep-going -uDNv world || exit 1
-	env-update && source /etc/profile || exit 1
-	emerge --depclean || exit 1
-	emerge @preserved-rebuild || exit 1
-	emerge --keep-going -uDNv world || exit 1
-	emerge --oneshot libtool || exit 1
-	env-update && source /etc/profile || exit 1
+    trap 'echo "Interrupted by user"; return 1' SIGINT
+
+    esync || return 1
+    emerge --keep-going -uDNv world || return 1
+    env-update && source /etc/profile || return 1
+    emerge --depclean || return 1
+    emerge @preserved-rebuild || return 1
+    emerge --keep-going -uDNv world || return 1
+    emerge --oneshot libtool || return 1
+    env-update && source /etc/profile || return 1
+
+    trap - SIGINT
 }
 
 esync() {
+	trap 'echo "Interrupted by user"; return 1' SIGINT
+
 	echo "Regenerating bp repo cache..."
 
 	for dir in /var/db/repos/*/; do
@@ -74,9 +82,11 @@ esync() {
 		fi
 	done
 
-	emerge --regen
-	emerge --metadata
-	eix-update
+	emerge --regen || return 1
+	emerge --metadata || return 1
+	eix-update || return 1
+
+	trap - SIGINT
 }
 
 rebuild_world() {
@@ -85,7 +95,9 @@ rebuild_world() {
 }
 
 update_kernel_efi() {
-	cd /usr/src/linux || exit 1
+	trap 'echo "Interrupted by user"; return 1' SIGINT
+
+	cd /usr/src/linux || return 1
 
 	make oldconfig
 	mount -o remount,rw -t efivarfs efivarfs /sys/firmware/efi/efivars
@@ -93,40 +105,46 @@ update_kernel_efi() {
 	mount /boot/efi
 	make prepare
 
-	make -j$(nproc) || exit 1
+	make -j$(nproc) || return 1
 
 	rm -rf /lib/modules/*
 	rm /boot/System.map* /boot/config* /boot/vmlinuz*
 
-	make modules_install
-	make install
+	make modules_install || return 1
+	make install || return 1
 
 	mkdir -p /boot/grub/
-	grub-mkconfig -o /boot/grub/grub.cfg
+	grub-mkconfig -o /boot/grub/grub.cfg || return 1
 	grub-install --efi-directory=/boot/efi
-	grub-install --efi-directory=/boot/efi --removable
+	grub-install --efi-directory=/boot/efi --removable || return 1
 
 	echo "Kernel update complete."
+
+	trap - SIGINT
 }
 
 update_kernel_opi5plus() {
-	cd /usr/src/linux || exit 1
+	trap 'echo "Interrupted by user"; return 1' SIGINT
+
+	cd /usr/src/linux || return 1
 
 	make oldconfig
 	mount /boot
 	make prepare
 
-	make -j$(nproc) Image || exit 1
-	make -j$(nproc) dtbs || exit 1
-	make -j$(nproc) modules || exit 1
+	make -j$(nproc) Image || return 1
+	make -j$(nproc) dtbs || return 1
+	make -j$(nproc) modules || return 1
 
 	rm -rf /lib/modules/*
 	rm /boot/{System.map,config,vmlinux,vmlinuz,initrd,uInitrd}*
 	rm -rf /boot/dtb*
 	mkdir -p /boot/dtb/rockchip
-	cp arch/arm64/boot/dts/rockchip/rk3588-orangepi-5-plus.dtb /boot/dtb/rockchip/
-	cp /usr/src/linux/arch/arm64/boot/Image.gz /boot/
-	make modules_install
+	cp arch/arm64/boot/dts/rockchip/rk3588-orangepi-5-plus.dtb /boot/dtb/rockchip/ || return 1
+	cp /usr/src/linux/arch/arm64/boot/Image.gz /boot/ || return 1
+	make modules_install || return 1
 
 	echo "Kernel update complete."
+
+	trap - SIGINT
 }

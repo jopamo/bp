@@ -13,6 +13,10 @@ IUSE="video"
 S=${WORKDIR}
 
 src_install() {
+	insinto /etc/bash/bashrc.d
+	doins "${FILESDIR}"/alias.sh
+	doins "${FILESDIR}"/1g4.sh
+
 	#bin files
 	for f in ix mktarballs efixperm prettybash ; do
 		dobin "${FILESDIR}"/bin/$f

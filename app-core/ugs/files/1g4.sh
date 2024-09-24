@@ -1,6 +1,7 @@
 #!/bin/sh
 
 alias eupdate='emerge --sync && eup'
+alias rebuild_packages='eup && rebuild_world'
 
 move_package() {
 	local REPO_PATH="/var/db/repos/bp"
@@ -47,14 +48,14 @@ bootstrap_go() {
 }
 
 eup() {
-	esync
-	emerge --keep-going -uDNv world
-	env-update && source /etc/profile
-	emerge --depclean
-	emerge @preserved-rebuild
-	emerge --keep-going -uDNv world
-	emerge --oneshot libtool
-	env-update && source /etc/profile
+	esync || exit 1
+	emerge --keep-going -uDNv world || exit 1
+	env-update && source /etc/profile || exit 1
+	emerge --depclean || exit 1
+	emerge @preserved-rebuild || exit 1
+	emerge --keep-going -uDNv world || exit 1
+	emerge --oneshot libtool || exit 1
+	env-update && source /etc/profile || exit 1
 }
 
 esync() {
@@ -78,8 +79,7 @@ esync() {
 	eix-update
 }
 
-rebuild_packages() {
-	eup
+rebuild_world() {
 	rm -rf /var/cache/packages/*
 	emerge --keep-going -ueDNv world
 }

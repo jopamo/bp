@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 ABI_VER="$(ver_cut 1-2)"
 
-BDEPEND="<app-build/llvm-14.0"
+BDEPEND="<app-build/llvm-15.0"
 
 CMAKE_WARN_UNUSED_CLI=no
 
@@ -55,15 +55,8 @@ src_prepare() {
 		eapply "${FILESDIR}/1.57.0-selfbootstrap.patch"
 	fi
 
-	if ver_test "${PV}" -lt "1.61.0"; then
-		eapply "${FILESDIR}/1.49.0-gentoo-musl-target-specs.patch"
-	fi
-
 	if [[ ${PV} == 1.61.0 ]]; then
-		eapply "${FILESDIR}"/1.61.0-llvm_selectInterleaveCount.patch
-		eapply "${FILESDIR}"/1.61.0-llvm_addrspacecast.patch
 		eapply "${FILESDIR}"/1.61.0-miri-cow.patch
-		eapply "${FILESDIR}"/1.61.0-gentoo-musl-target-specs.patch
 	fi
 
 	if ver_test "${PV}" -gt "1.61.9" && ver_test "${PV}" -lt "1.65.0"; then
@@ -123,7 +116,6 @@ src_prepare() {
 	filter-flags -fno-semantic-interposition
 	filter-flags -fno-signed-zeros
 	filter-flags -fno-trapping-math
-	filter-flags -fpie
 	filter-flags -fstack-clash-protection
 	filter-flags -fstack-protector-strong
 	filter-flags -ftree-loop-distribution
@@ -132,8 +124,6 @@ src_prepare() {
 	replace-flags -O3 -O2
 
 	default
-
-	rm "${S}/vendor/vte/vim10m_"{match,table} || die
 
 	sed -i '/def download_toolchain(self,/a\ \ \ \ \ \ \ \ print("Download skipped: Toolchain.")\n\ \ \ \ \ \ \ \ return' src/bootstrap/bootstrap.py || die
 	sed -i '/def _download_component_helper(self,/a\ \ \ \ \ \ \ \ print("Download skipped: Component {filename}.")\n\ \ \ \ \ \ \ \ return' src/bootstrap/bootstrap.py || die
@@ -162,6 +152,9 @@ src_configure() {
 		extended = true
 		cargo = "cargo"
 		rustc = "rustc"
+		tools = ["cargo","clippy","rustdoc","rustfmt","rust-analyzer","rust-analyzer-proc-macro-srv","analysis","src"]
+		vendor = true
+		sanitizers = false
 		[install]
 		prefix = "${EPREFIX}/usr"
 		sysconfdir = "etc"
@@ -171,7 +164,7 @@ src_configure() {
 		mandir = "share/man"
 		[rust]
 		codegen-units-std = 1
-		optimize = true
+		optimize = false
 		lld = false
 		rpath = false
 		[dist]

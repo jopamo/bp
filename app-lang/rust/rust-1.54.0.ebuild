@@ -9,7 +9,6 @@ HOMEPAGE="https://www.rust-lang.org/"
 
 MRUSTC_VERSION="0.10.1"
 EGIT_REPO_URI="https://github.com/thepowersgang/mrustc.git"
-EGIT_COMMIT="18275649d86d35aa9e9a40bf73610dfc2279e575"
 
 SRC_URI="https://static.rust-lang.org/dist/rustc-${PV}-src.tar.xz"
 
@@ -19,10 +18,7 @@ KEYWORDS="arm64 amd64"
 
 S=${WORKDIR}/mrustc-${MRUSTC_VERSION}
 
-RUSTC_VERSION=1.54.0
-MRUSTC_TARGET_VER=1.54
-OUTDIR_SUF=""
-RUSTCSRC_VERSION="rustc-${RUSTC_VERSION}-src"
+RUSTCSRC_VERSION="rustc-${PV}-src"
 
 CMAKE_WARN_UNUSED_CLI=no
 
@@ -42,15 +38,15 @@ QA_SONAME="
 QA_EXECSTACK="usr/lib/rustlib/*/lib*.rlib:lib.rmeta"
 
 src_unpack() {
-	git-r3_fetch "${EGIT_REPO_URI}" "${EGIT_COMMIT}"
 	git-r3_checkout "${EGIT_REPO_URI}" "${S}"
 	unpack ${A}
 	mv rustc-${PV}-src ${S}
 }
 
 src_prepare() {
+	use elibc_musl && export RUSTFLAGS="-Ctarget-feature=-crt-static -Clink-self-contained=on -L/usr/lib -Clink-args=--dynamic-linker /lib/ld-musl-x86_64.so.1"
+
 	use elibc_musl && append-cppflags "-D_LARGEFILE64_SOURCE=0"
-	ln -s rustc-1.54.0-src rustc-1.29.0-src
 
 	filter-flags -D_FORTIFY_SOURCE*
 	filter-flags -Wl,-O3
@@ -72,7 +68,6 @@ src_prepare() {
 	filter-flags -fno-semantic-interposition
 	filter-flags -fno-signed-zeros
 	filter-flags -fno-trapping-math
-	filter-flags -fpie
 	filter-flags -fstack-clash-protection
 	filter-flags -fstack-protector-strong
 	filter-flags -ftree-loop-distribution
@@ -92,9 +87,9 @@ src_prepare() {
 src_compile() {
 	local -a make_opts
 	PARLEVEL="$(nproc)"
-	make_opts=(RUSTC_VERSION=${RUSTC_VERSION} MRUSTC_TARGET_VER=${MRUSTC_TARGET_VER} OUTDIR_SUF=${OUTDIR_SUF} RUSTC_TARGET=$(rust_abi))
+	make_opts=(RUSTC_VERSION=${PV} MRUSTC_TARGET_VER=$(ver_cut 1-2) OUTDIR_SUF="" RUSTC_TARGET=$(rust_abi))
 
-	emake -j1 ${make_opts[@]}
+	emake ${make_opts[@]}
 	emake -j1 ${make_opts[@]} -f minicargo.mk LIBS $@
 	emake -j1 ${make_opts[@]} test $@
 	emake -j1 ${make_opts[@]} local_tests $@

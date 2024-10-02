@@ -12,8 +12,9 @@ SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm
 S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
 
 LICENSE="UoI-NCSA rc BSD public-domain"
-SLOT=0
-KEYWORDS="amd64"
+#SLOT="$(ver_cut 1)"
+SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="bolt cross-project-tests debug libc libclc +lld lldb mlir
 	openmp polly pstl test +libunwind llvm-libgcc"
@@ -51,11 +52,13 @@ src_configure() {
 
 	filter-flags -D_FORTIFY_SOURCE*
 	filter-flags -Wl,-O3
-	filter-flags -Wl,-z,defs -Wl,-z,combreloc -Wl,-z,now -Wl,-z,relro
+	filter-flags -Wl,-z,combreloc
+	filter-flags -Wl,-z,defs
+	filter-flags -Wl,-z,now
+	filter-flags -Wl,-z,relro
 	filter-flags -fassociative-math
 	filter-flags -fasynchronous-unwind-tables
 	filter-flags -fcf-protection=full
-	filter-flags -fdevirtualize-at-ltrans
 	filter-flags -fexceptions
 	filter-flags -fgraphite-identity
 	filter-flags -fipa-pta
@@ -82,6 +85,7 @@ src_configure() {
 		-DCLANG_BOOTSTRAP_PASSTHROUGH="CMAKE_INSTALL_PREFIX;CMAKE_VERBOSE_MAKEFILE"
 		-DLLVM_ENABLE_PROJECTS="${LLVM_PROJECTS}"
 		-DLLVM_APPEND_VC_REV=OFF
+		#-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr/lib/llvm/$(ver_cut 1)"
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
 		-DLLVM_LIBDIR_SUFFIX=${libdir#lib}
 		-DBUILD_SHARED_LIBS=OFF

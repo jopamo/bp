@@ -469,6 +469,7 @@ start_ssh_agent() {
 
 			if [[ "$filename" != "authorized_keys" && \
 				"$filename" != "config" && \
+				"$filename" != "known_hosts" && \
 				"$filename" != "bkup" && \
 				"$filename" != *.* ]]; then
 					ssh-add "$key"

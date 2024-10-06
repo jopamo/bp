@@ -15,8 +15,6 @@ KEYWORDS="amd64 arm64"
 
 ABI_VER="$(ver_cut 1-2)"
 
-BDEPEND="<app-build/llvm-15.0"
-
 CMAKE_WARN_UNUSED_CLI=no
 
 RESTRICT="test network-sandbox"
@@ -40,7 +38,6 @@ pkg_setup() {
 	python-any-r1_pkg_setup
 
 	export LIBGIT2_NO_PKG_CONFIG=1
-	export LLVM_LINK_SHARED=1
 	export RUSTFLAGS="${RUSTFLAGS} -Lnative=$("/usr/bin/llvm-config" --libdir)"
 	export CARGO_HTTP_CAINFO=/etc/ssl/certs/ca-certificates.crt
 	export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
@@ -72,12 +69,8 @@ src_prepare() {
 		eapply "${FILESDIR}"/1.55.0-ignore-broken-and-non-applicable-tests.patch
 	fi
 
-	if ver_test "${PV}" -gt "1.63.9"; then
-		"${FILESDIR}"/1.64.0-vendor-rustix-sparc-has-no-SIGSTKFLT.patch
-	fi
-
-	if ver_test "${PV}" -gt "1.64.9"; then
-		"${FILESDIR}"/1.65.0-ignore-broken-and-non-applicable-tests.patch
+	if ver_test "${PV}" -gt "1.64.9" && ver_test "${PV}" -lt "1.69.0"; then
+		eapply "${FILESDIR}"/1.65.0-ignore-broken-and-non-applicable-tests.patch
 	fi
 
 	if ver_test "${PV}" -gt "1.67.9" && ver_test "${PV}" -lt "1.70.0"; then
@@ -88,12 +81,16 @@ src_prepare() {
 		eapply "${FILESDIR}"/1.67.0-doc-wasm.patch
 	fi
 
-	if ver_test "${PV}" -gt "1.70.0" && ver_test "${PV}" -lt "1.78.0"; then
+	if ver_test "${PV}" -gt "1.69.9" && ver_test "${PV}" -lt "1.78.0"; then
 		eapply "${FILESDIR}"/1.70.0-ignore-broken-and-non-applicable-tests.patch
 	fi
 
 	if [[ ${PV} == 1.71.0 ]]; then
 		eapply "${FILESDIR}"/1.71.1-fix-bootstrap-version-comparison.patch
+	fi
+
+	if ver_test "${PV}" -gt "1.72.0" && ver_test "${PV}" -lt "1.74.0"; then
+		eapply "${FILESDIR}"/1.72.0-bump-libc-deps-to-0.2.146.patch
 	fi
 
 	filter-flags -D_FORTIFY_SOURCE*
@@ -129,7 +126,6 @@ src_prepare() {
 	sed -i '/def _download_component_helper(self,/a\ \ \ \ \ \ \ \ print("Download skipped: Component {filename}.")\n\ \ \ \ \ \ \ \ return' src/bootstrap/bootstrap.py || die
 	sed -i '/def maybe_download_ci_toolchain(self,/a\ \ \ \ \ \ \ \ print("Download skipped: CI Toolchain.")\n\ \ \ \ \ \ \ \ return' src/bootstrap/bootstrap.py || die
 	sed -i '/def update_submodules(self,/a\ \ \ \ \ \ \ \ print("Submodule update skipped.")\n\ \ \ \ \ \ \ \ return' src/bootstrap/bootstrap.py || die
-	sed -i '/def program_config(self, program,/a\ \ \ \ \ \ \ \ if program == "cargo":\n\ \ \ \ \ \ \ \ \ \ \ \ return "/usr/bin/cargo"\n\ \ \ \ \ \ \ \ if program == "rustc":\n\ \ \ \ \ \ \ \ \ \ \ \ return "/usr/bin/rustc"' src/bootstrap/bootstrap.py || die
 }
 
 src_configure() {
@@ -138,7 +134,7 @@ src_configure() {
 		download-ci-llvm = false
 		optimize = true
 		ninja = true
-		link-shared = true
+		link-shared = false
 		targets = "$(usex arm64 'AArch64' 'X86')"
 		$(usex arm64 '[target.aarch64-unknown-linux-gnu]' '[target.x86_64-unknown-linux-gnu]')
 		llvm-config = "/usr/bin/llvm-config"
@@ -150,8 +146,8 @@ src_configure() {
 		compiler-docs = false
 		python = "${EPYTHON}"
 		extended = true
-		cargo = "cargo"
-		rustc = "rustc"
+		cargo = "/usr/bin/cargo"
+		rustc = "/usr/bin/rustc"
 		tools = ["cargo","clippy","rustdoc","rustfmt","rust-analyzer","rust-analyzer-proc-macro-srv","analysis","src"]
 		vendor = true
 		sanitizers = false

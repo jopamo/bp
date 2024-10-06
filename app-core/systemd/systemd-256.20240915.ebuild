@@ -53,7 +53,7 @@ BDEPEND="dev-python/jinja"
 
 pkg_pretend() {
 	if [[ ${MERGE_TYPE} != buildonly ]]; then
-		local CONFIG_CHECK="~AUTOFS4_FS ~BLK_DEV_BSG ~CGROUPS
+		local CONFIG_CHECK="~AUTOFS_FS ~BLK_DEV_BSG ~CGROUPS
 			~EPOLL ~FANOTIFY ~FHANDLE ~SECCOMP ~SECCOMP_FILTER
 			~INOTIFY_USER ~NET ~NET_NS ~PROC_FS ~SIGNALFD ~SYSFS
 			~TIMERFD ~UNIX ~CGROUP_BPF ~!FW_LOADER_USER_HELPER_FALLBACK
@@ -130,12 +130,16 @@ src_configure() {
 		$(meson_feature logind fdisk)
 		$(meson_feature logind homed)
 		$(meson_feature logind libcryptsetup)
+		$(meson_feature machined bzip2)
+		$(meson_feature machined lz4)
+		$(meson_feature machined xz)
+		$(meson_feature machined zlib)
+		$(meson_feature machined zstd)
 		$(meson_feature pam)
 		$(meson_feature pcre pcre2)
 		$(meson_feature xkb xkbcommon)
 		$(meson_use binfmt)
 		$(meson_use coredump)
-		$(meson_use dbus link-networkd-shared)
 		$(meson_use efi )
 		$(meson_use gshadow)
 		$(meson_use hostnamed)
@@ -143,7 +147,6 @@ src_configure() {
 		$(meson_use ldconfig)
 		$(meson_use localed)
 		$(meson_use logind)
-		$(meson_use machined)
 		$(meson_use networkd link-networkd-shared)
 		$(meson_use networkd)
 		$(meson_use oomd)
@@ -164,10 +167,9 @@ src_configure() {
 		-Dapparmor=disabled
 		-Daudit=disabled
 		-Dbacklight=false
-		-Dbzip2=disabled
 		-Ddefault-kill-user-processes=false
 		-Ddns-servers=""
-		-Delfutils=disabled
+		-Delfutils=enabled
 		-Denvironment-d=false
 		-Dfirstboot=false
 		-Dgnutls=disabled
@@ -179,8 +181,7 @@ src_configure() {
 		-Dlibidn2=disabled
 		-Dlibidn=disabled
 		-Dlibiptc=disabled
-		-Dlink-timesyncd-shared=true
-		-Dlz4=disabled
+		-Dlink-timesyncd-shared=false
 		-Dman=disabled
 		-Dmicrohttpd=disabled
 		-Dnss-myhostname=false
@@ -199,13 +200,10 @@ src_configure() {
 		-Drc-local=""
 		-Dseccomp=enabled
 		-Dsmack=false
-		-Dsplit-bin=false
-		-Dstandalone-binaries=false
+		-Dsplit-bin=true
+		-Dstandalone-binaries=true
 		-Dtimesyncd=false
 		-Dtpm=false
-		-Dxz=disabled
-		-Dzlib=disabled
-		-Dzstd=disabled
 	)
 
 	meson_src_configure

@@ -7,7 +7,7 @@ inherit cmake flag-o-matic
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
 
-SNAPSHOT=75e33f71c2dae584b13a7d1186ae0a038ba98838
+SNAPSHOT=6009708b4367171ccdbf4b5905cb6a803753fe18
 SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
 
@@ -15,7 +15,7 @@ LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bolt cross-project-tests cuda debug libc libclc +lld lldb mlir
+IUSE="bolt cross-project-tests debug libc libclc +lld lldb mlir
 	openmp polly pstl test +libunwind llvm-libgcc"
 
 DEPEND="
@@ -25,18 +25,10 @@ DEPEND="
 "
 
 RESTRICT="!test? ( test )"
-FEATURES="-sandbox -usersandbox"
 
 CMAKE_BUILD_TYPE=Release
 
-src_prepare() {
-	cmake_src_prepare
-	sed -i '/#include <string>/a #include <cstdint>' "include/llvm/Support/Signals.h" || die
-}
-
 src_configure() {
-	local mycmakeargs=()
-
 	LLVM_PROJECTS="clang;clang-tools-extra"
 	LLVM_ENABLE_RUNTIMES="compiler-rt"
 
@@ -86,7 +78,6 @@ src_configure() {
 	replace-flags -O3 -O2
 
 	local mycmakeargs=(
-		-DLLVM_ENABLE_CUDA=OFF
 		-DCLANG_ENABLE_BOOTSTRAP=ON
 		-DBOOTSTRAP_LLVM_ENABLE_LLD=ON
 		-DBOOTSTRAP_BOOTSTRAP_LLVM_ENABLE_LLD=ON

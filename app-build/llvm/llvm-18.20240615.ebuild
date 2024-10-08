@@ -51,11 +51,13 @@ src_configure() {
 
 	filter-flags -D_FORTIFY_SOURCE*
 	filter-flags -Wl,-O3
-	filter-flags -Wl,-z,defs -Wl,-z,combreloc -Wl,-z,now -Wl,-z,relro
+	filter-flags -Wl,-z,combreloc
+	filter-flags -Wl,-z,defs
+	filter-flags -Wl,-z,now
+	filter-flags -Wl,-z,relro
 	filter-flags -fassociative-math
 	filter-flags -fasynchronous-unwind-tables
 	filter-flags -fcf-protection=full
-	filter-flags -fdevirtualize-at-ltrans
 	filter-flags -fexceptions
 	filter-flags -fgraphite-identity
 	filter-flags -fipa-pta

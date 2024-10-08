@@ -38,6 +38,7 @@ pkg_setup() {
 	python-any-r1_pkg_setup
 
 	export LIBGIT2_NO_PKG_CONFIG=1
+	export LLVM_LINK_SHARED=1
 	export RUSTFLAGS="${RUSTFLAGS} -Lnative=$("/usr/bin/llvm-config" --libdir)"
 	export CARGO_HTTP_CAINFO=/etc/ssl/certs/ca-certificates.crt
 	export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
@@ -134,7 +135,7 @@ src_configure() {
 		download-ci-llvm = false
 		optimize = true
 		ninja = true
-		link-shared = false
+		link-shared = true
 		targets = "$(usex arm64 'AArch64' 'X86')"
 		$(usex arm64 '[target.aarch64-unknown-linux-gnu]' '[target.x86_64-unknown-linux-gnu]')
 		llvm-config = "/usr/bin/llvm-config"
@@ -166,6 +167,18 @@ src_configure() {
 		[dist]
 		src-tarball = false
 	_EOF_
+
+	rm -rf "${S}/vendor"
+	ln -sf "${S}/vendor" "${S}/compiler/rustc_codegen_cranelift/vendor"
+	ln -sf "${S}/vendor" "${S}/src/tools/cargo/vendor"
+	ln -sf "${S}/vendor" "${S}/src/tools/rust-analyzer/vendor"
+	ln -sf "${S}/vendor" "${S}/src/bootstrap/vendor"
+
+	cargo vendor --locked --sync ./Cargo.toml \
+                      --sync ./src/tools/rust-analyzer/Cargo.toml \
+                      --sync ./compiler/rustc_codegen_cranelift/Cargo.toml \
+                      --sync ./src/bootstrap/Cargo.toml \
+                      --sync ./src/tools/cargo/Cargo.toml
 }
 
 src_compile() {

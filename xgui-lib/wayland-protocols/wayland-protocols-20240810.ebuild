@@ -8,8 +8,8 @@ DESCRIPTION="Wayland protocol files"
 HOMEPAGE="https://wayland.freedesktop.org/"
 
 SNAPSHOT=f4925c9313d26689918c1d1a138ec4819caeb77c
-SRC_URI="https://gitlab.freedesktop.org/wayland/wayland-protocols/-/archive/${SNAPSHOT}/xcbproto-${SNAPSHOT}.tar.bz2 -> xcbproto-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/xcbproto-${SNAPSHOT}"
+SRC_URI="https://gitlab.freedesktop.org/wayland/wayland-protocols/-/archive/${SNAPSHOT}/wayland-protocols-${SNAPSHOT}.tar.bz2 -> wayland-protocols-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/wayland-protocols-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

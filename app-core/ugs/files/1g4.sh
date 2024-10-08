@@ -50,18 +50,18 @@ bootstrap_go() {
 }
 
 eup() {
-    trap 'echo "Interrupted by user"; return 1' SIGINT
+	trap 'echo "Interrupted by user"; return 1' SIGINT
 
-    esync || return 1
-    emerge --keep-going -uDNv world || return 1
-    env-update && source /etc/profile || return 1
-    emerge --depclean || return 1
-    emerge @preserved-rebuild || return 1
-    emerge --keep-going -uDNv world || return 1
-    emerge --oneshot libtool || return 1
-    env-update && source /etc/profile || return 1
+	esync || return 1
+	emerge --keep-going -uDNv world || return 1
+	env-update && source /etc/profile || return 1
+	emerge --depclean || return 1
+	emerge @preserved-rebuild || return 1
+	emerge --keep-going -uDNv world || return 1
+	emerge --oneshot libtool || return 1
+	env-update && source /etc/profile || return 1
 
-    trap - SIGINT
+	trap - SIGINT
 }
 
 esync() {
@@ -145,6 +145,48 @@ update_kernel_opi5plus() {
 	make modules_install || return 1
 
 	echo "Kernel update complete."
+
+	trap - SIGINT
+}
+
+bootstrap_rust() {
+	echo "Starting Rust version emerge process..."
+
+	trap "echo 'Emerge process interrupted. Exiting...'; exit 1" SIGINT
+
+	available_versions=$(echo "$rust_info" | grep -oP '\d+\.\d+\.\d+' | sort -V | uniq)
+	installed_version=$(echo "$rust_info" | grep -Po '(?<=Installed versions:)\s*\d+\.\d+\.\d+' | head -n 1 | xargs)
+
+	if [ -z "$installed_version" ]; then
+		echo "No installed version of Rust detected."
+		start_emerging=true
+	else
+		echo "Installed version of Rust (detected): $installed_version"
+		start_emerging=false
+	fi
+	echo "------------------------------"
+
+	for version in $available_versions; do
+		echo "Processing version: $version"
+
+		if [ "$version" == "$installed_version" ]; then
+			echo "Installed version detected: $version. Setting flag to start emerging from next version."
+			start_emerging=true
+		elif [ "$start_emerging" = true ]; then
+			echo "Emerging Rust version: $version"
+			emerge -v =app-lang/rust-$version
+			emerge_status=$?
+
+			if [ $emerge_status -ne 0 ]; then
+				echo "Error: Emerge failed for version $version. Stopping the process."
+				exit 1
+			fi
+		else
+			echo "Skipping version: $version (Already installed or earlier than installed version)"
+		fi
+	done
+
+	echo "Emerge process complete."
 
 	trap - SIGINT
 }

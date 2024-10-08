@@ -1,9 +1,12 @@
 app-build/gcc lto
+app-core/acl static-libs
+app-core/attr static-libs
 app-core/util-linux agetty eject fallocate ipcrm ipcs kill libblkid libuuid last logger login losetup lscpu lsfd lsirq lslogins lsmem lsns mount mountpoint nologin rename schedutils su suid sulogin swapon tty-helpers wipefs
 app-fs/cryptsetup -ssl
 app-net/networkmanager -nss gnutls
+lib-core/libcap static-libs
 lib-core/libxml2 python
-lib-net/nodejs icu
-xgui-lib/librsvg -rust
-xgui-app/wireshark bcg729 capinfos caps captype ciscodump dcerpcidl2wrs dftest dpauxmon dumpcap editcap libssh mergecap mmdbresolve netlink plugins qt randpkt randpktdump rawshark reordercap sdjournal sharkd sshdump text2pcap tshark udpdump
 lib-dev/tree-sitter-bash python
+lib-net/nodejs icu
+xgui-app/wireshark bcg729 capinfos caps captype ciscodump dcerpcidl2wrs dftest dpauxmon dumpcap editcap libssh mergecap mmdbresolve netlink plugins qt randpkt randpktdump rawshark reordercap sdjournal sharkd sshdump text2pcap tshark udpdump
+xgui-lib/librsvg -rust

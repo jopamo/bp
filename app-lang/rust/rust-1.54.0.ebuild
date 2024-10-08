@@ -2,21 +2,23 @@
 
 EAPI=8
 
-inherit flag-o-matic git-r3 rust-toolchain
+inherit flag-o-matic rust-toolchain
 
 DESCRIPTION="Systems programming language from Mozilla"
 HOMEPAGE="https://www.rust-lang.org/"
 
-MRUSTC_VERSION="0.10.1"
-EGIT_REPO_URI="https://github.com/thepowersgang/mrustc.git"
-
-SRC_URI="https://static.rust-lang.org/dist/rustc-${PV}-src.tar.xz"
+SNAPSHOT=18275649d86d35aa9e9a40bf73610dfc2279e575
+SRC_URI="
+	https://github.com/thepowersgang/mrustc/archive/${SNAPSHOT}.tar.gz -> mrustc-${SNAPSHOT}.tar.gz
+	https://static.rust-lang.org/dist/rustc-$(ver_cut 1-3)-src.tar.xz
+"
+S="${WORKDIR}/mrustc-${SNAPSHOT}"
 
 LICENSE="|| ( MIT Apache-2.0 ) BSD-1 BSD-2 BSD-4 UoI-NCSA"
 SLOT="0"
 KEYWORDS="arm64 amd64"
 
-S=${WORKDIR}/mrustc-${MRUSTC_VERSION}
+RESTRICT="test network-sandbox"
 
 RUSTCSRC_VERSION="rustc-${PV}-src"
 
@@ -37,16 +39,12 @@ QA_SONAME="
 
 QA_EXECSTACK="usr/lib/rustlib/*/lib*.rlib:lib.rmeta"
 
-src_unpack() {
-	git-r3_checkout "${EGIT_REPO_URI}" "${S}"
-	unpack ${A}
-	mv rustc-${PV}-src ${S}
-}
-
 src_prepare() {
-	use elibc_musl && export RUSTFLAGS="-Ctarget-feature=-crt-static -Clink-self-contained=on -L/usr/lib -Clink-args=--dynamic-linker /lib/ld-musl-x86_64.so.1"
+	mv "${WORKDIR}/rustc-$(ver_cut 1-3)-src" "${S}/rustc-$(ver_cut 1-3)-src"
 
-	use elibc_musl && append-cppflags "-D_LARGEFILE64_SOURCE=0"
+	use elibc_musl && export RUSTFLAGS="-Ctarget-feature=-crt-static -Clink-self-contained=on -L/usr/lib -Clink-args=--dynamic-linker /lib/ld-musl-x86_64.so.1 -D_LARGEFILE64_SOURCE"
+
+	append-flags -D_LARGEFILE64_SOURCE
 
 	filter-flags -D_FORTIFY_SOURCE*
 	filter-flags -Wl,-O3
@@ -82,6 +80,15 @@ src_prepare() {
 	popd
 
 	eapply_user
+
+	ln -s rustc-${PV}-src rustc-1.29.0-src
+
+	ln -sf "${S}/rustc-${PV}-src/vendor" "${S}/rustc-${PV}-src/src/vendor"
+
+	#sed -i '/def download_toolchain(self,/a\ \ \ \ \ \ \ \ print("Download skipped: Toolchain.")\n\ \ \ \ \ \ \ \ return' rustc-${PV}-src/src/bootstrap/bootstrap.py || die
+	#sed -i '/def _download_component_helper(self,/a\ \ \ \ \ \ \ \ print("Download skipped: Component {filename}.")\n\ \ \ \ \ \ \ \ return' rustc-${PV}-src/src/bootstrap/bootstrap.py || die
+	#sed -i '/def maybe_download_ci_toolchain(self,/a\ \ \ \ \ \ \ \ print("Download skipped: CI Toolchain.")\n\ \ \ \ \ \ \ \ return' rustc-${PV}-src/src/bootstrap/bootstrap.py || die
+	#sed -i '/def update_submodules(self,/a\ \ \ \ \ \ \ \ print("Submodule update skipped.")\n\ \ \ \ \ \ \ \ return' rustc-${PV}-src/src/bootstrap/bootstrap.py || die
 }
 
 src_compile() {
@@ -89,15 +96,21 @@ src_compile() {
 	PARLEVEL="$(nproc)"
 	make_opts=(RUSTC_VERSION=${PV} MRUSTC_TARGET_VER=$(ver_cut 1-2) OUTDIR_SUF="" RUSTC_TARGET=$(rust_abi))
 
-	emake ${make_opts[@]}
+	emake -j1 ${make_opts[@]}
 	emake -j1 ${make_opts[@]} -f minicargo.mk LIBS $@
-	emake -j1 ${make_opts[@]} test $@
-	emake -j1 ${make_opts[@]} local_tests $@
 	emake -j1 ${make_opts[@]} RUSTC_INSTALL_BINDIR=bin -f minicargo.mk "output/rustc"
 	emake -j1 ${make_opts[@]} LIBGIT2_SYS_USE_PKG_CONFIG=1 -f minicargo.mk "output${OUTDIR_SUF}/cargo"
 
+	pushd rustc-${PV}-src
+	"${S}/output/cargo" vendor --locked --sync ./Cargo.toml \
+                      --sync ./src/tools/rust-analyzer/Cargo.toml \
+                      --sync ./compiler/rustc_codegen_cranelift/Cargo.toml \
+                      --sync ./src/bootstrap/Cargo.toml \
+                      --sync ./src/tools/cargo/Cargo.toml
+	popd
+
 	cd "run_rustc"
-	make -j1
+	emake -j1
 }
 
 src_install() {

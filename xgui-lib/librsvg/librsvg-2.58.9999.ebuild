@@ -7,9 +7,9 @@ inherit flag-o-matic git-r3 autotools
 DESCRIPTION="Scalable Vector Graphics (SVG) rendering library"
 HOMEPAGE="https://wiki.gnome.org/Projects/LibRsvg"
 
-EGIT_REPO_URI="https://github.com/oaken-source/librsvg-og.git"
-#EGIT_REPO_URI="https://github.com/GNOME/librsvg"
-#EGIT_BRANCH="librsvg-$(ver_cut 1).$(ver_cut 2)"
+#EGIT_REPO_URI="https://github.com/oaken-source/librsvg-og.git"
+EGIT_REPO_URI="https://github.com/GNOME/librsvg"
+EGIT_BRANCH="librsvg-$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="LGPL-2"
 SLOT="0"

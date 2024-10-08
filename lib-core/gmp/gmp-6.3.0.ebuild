@@ -72,8 +72,6 @@ src_test() {
 src_install() {
 	emake DESTDIR="${D}" install
 
-	# should be a standalone lib
-	rm -f "${ED}"/usr/lib/libgmp.la
 	# this requires libgmp
 	local la="${ED}/usr/lib/libgmpxx.la"
 	use static-libs \

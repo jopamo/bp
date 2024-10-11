@@ -43,9 +43,11 @@ src_configure() {
 		-Ddefault_library=$(usex static-libs both shared)
 		-Ddtrace=false
 		-Dgtk_doc=false
-		-Dlibmount=enabled
+		-Dlibmount=disabled
 		-Dselinux=disabled
 		-Dxattr=true
+		-Dtests=false
+		-Dnls=disabled
 	)
 	meson_src_configure
 }

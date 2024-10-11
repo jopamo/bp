@@ -4,7 +4,8 @@ EAPI=8
 
 DESCRIPTION="C library that resolves names asynchronously"
 HOMEPAGE="https://c-ares.haxx.se/"
-SRC_URI="https://${PN}.haxx.se/download/${P}.tar.gz"
+
+SRC_URI="https://github.com/c-ares/c-ares/releases/download/v${PV}/${P}.tar.gz"
 
 #SNAPSHOT=809d5e84f3423ab8165650d923acb0e246cbd006
 #SRC_URI="https://github.com/c-ares/c-ares/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
@@ -18,7 +19,6 @@ IUSE="static-libs"
 
 src_configure() {
 	local myconf=(
-		--enable-nonblocking
 		--enable-symbol-hiding
 		--disable-tests
 		$(use_enable static-libs static)

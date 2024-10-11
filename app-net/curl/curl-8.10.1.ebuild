@@ -61,7 +61,6 @@ src_configure() {
 		$(use_with zstd)
 		--enable-threaded-resolver
 		--enable-versioned-symbols
-		--with-random=/dev/urandom
 		--with-zlib
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

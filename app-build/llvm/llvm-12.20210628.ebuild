@@ -7,12 +7,44 @@ inherit cmake flag-o-matic
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
 
-SNAPSHOT=fed41342a82f5a3a9201819a82bf7a48313e296b
-SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
+if [[ ${PV} == 12* ]] ; then
+    SNAPSHOT="fed41342a82f5a3a9201819a82bf7a48313e296b"
+    SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
+    S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
+
+elif [[ ${PV} == 13* ]] ; then
+    SNAPSHOT="75e33f71c2dae584b13a7d1186ae0a038ba98838"
+    SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
+    S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
+
+elif [[ ${PV} == 14* ]] ; then
+    SNAPSHOT="f28c006a5895fc0e329fe15fead81e37457cb1d1"
+    SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
+    S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
+
+elif [[ ${PV} == 15* ]] ; then
+    SNAPSHOT="8dfdcc7b7bf66834a761bd8de445840ef68e4d1a"
+    SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
+    S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
+
+elif [[ ${PV} == 16* ]] ; then
+    SNAPSHOT="7cbf1a2591520c2491aa35339f227775f4d3adf6"
+    SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
+    S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
+
+elif [[ ${PV} == 17* ]] ; then
+    SNAPSHOT="6009708b4367171ccdbf4b5905cb6a803753fe18"
+    SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
+    S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
+
+elif [[ ${PV} == 18* ]] ; then
+    SNAPSHOT="3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff"
+    SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
+    S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
+fi
 
 LICENSE="UoI-NCSA rc BSD public-domain"
-SLOT="0"
+SLOT=0
 KEYWORDS="amd64 arm64"
 
 IUSE="bolt cross-project-tests cuda debug libc libclc +lld lldb mlir

@@ -11,6 +11,8 @@ SNAPSHOT=18275649d86d35aa9e9a40bf73610dfc2279e575
 SRC_URI="
 	https://github.com/thepowersgang/mrustc/archive/${SNAPSHOT}.tar.gz -> mrustc-${SNAPSHOT}.tar.gz
 	https://static.rust-lang.org/dist/rustc-$(ver_cut 1-3)-src.tar.xz
+	https://static.rust-lang.org/dist/rustc-1.29.0-src.tar.xz
+	https://crates.io/api/v1/crates/libc/0.2.147/download -> libc-0.2.147.crate
 "
 S="${WORKDIR}/mrustc-${SNAPSHOT}"
 
@@ -41,10 +43,9 @@ QA_EXECSTACK="usr/lib/rustlib/*/lib*.rlib:lib.rmeta"
 
 src_prepare() {
 	mv "${WORKDIR}/rustc-$(ver_cut 1-3)-src" "${S}/rustc-$(ver_cut 1-3)-src"
+	mv "${WORKDIR}/rustc-1.29.0-src" "${S}/rustc-1.29.0-src"
 
-	use elibc_musl && export RUSTFLAGS="-Ctarget-feature=-crt-static -Clink-self-contained=on -L/usr/lib -Clink-args=--dynamic-linker /lib/ld-musl-x86_64.so.1 -D_LARGEFILE64_SOURCE"
-
-	append-flags -D_LARGEFILE64_SOURCE
+	append-cppflags -D_LARGEFILE64_SOURCE
 
 	filter-flags -D_FORTIFY_SOURCE*
 	filter-flags -Wl,-O3
@@ -82,24 +83,20 @@ src_prepare() {
 	eapply_user
 
 	ln -s rustc-${PV}-src rustc-1.29.0-src
+	ln -fs ../vendor rustc-${PV}-src/src/vendor
 
-	ln -sf "${S}/rustc-${PV}-src/vendor" "${S}/rustc-${PV}-src/src/vendor"
-
-	#sed -i '/def download_toolchain(self,/a\ \ \ \ \ \ \ \ print("Download skipped: Toolchain.")\n\ \ \ \ \ \ \ \ return' rustc-${PV}-src/src/bootstrap/bootstrap.py || die
-	#sed -i '/def _download_component_helper(self,/a\ \ \ \ \ \ \ \ print("Download skipped: Component {filename}.")\n\ \ \ \ \ \ \ \ return' rustc-${PV}-src/src/bootstrap/bootstrap.py || die
-	#sed -i '/def maybe_download_ci_toolchain(self,/a\ \ \ \ \ \ \ \ print("Download skipped: CI Toolchain.")\n\ \ \ \ \ \ \ \ return' rustc-${PV}-src/src/bootstrap/bootstrap.py || die
-	#sed -i '/def update_submodules(self,/a\ \ \ \ \ \ \ \ print("Submodule update skipped.")\n\ \ \ \ \ \ \ \ return' rustc-${PV}-src/src/bootstrap/bootstrap.py || die
+	sed -i '/#include <string>/a #include <cstdint>' "rustc-${PV}-src/src/llvm-project/llvm/include/llvm/Support/Signals.h" || die
 }
 
 src_compile() {
 	local -a make_opts
 	PARLEVEL="$(nproc)"
-	make_opts=(RUSTC_VERSION=${PV} MRUSTC_TARGET_VER=$(ver_cut 1-2) OUTDIR_SUF="" RUSTC_TARGET=$(rust_abi))
+	make_opts=(RUSTC_VERSION=${PV} MRUSTC_TARGET_VER=$(ver_cut 1-2) OUTDIR_SUF="" RUSTFLAGS="-Ctarget-feature=-crt-static")
 
-	emake -j1 ${make_opts[@]}
-	emake -j1 ${make_opts[@]} -f minicargo.mk LIBS $@
-	emake -j1 ${make_opts[@]} RUSTC_INSTALL_BINDIR=bin -f minicargo.mk "output/rustc"
-	emake -j1 ${make_opts[@]} LIBGIT2_SYS_USE_PKG_CONFIG=1 -f minicargo.mk "output${OUTDIR_SUF}/cargo"
+	emake ${make_opts[@]}
+	emake ${make_opts[@]} -f minicargo.mk LIBS $@
+	emake ${make_opts[@]} RUSTC_INSTALL_BINDIR=bin -f minicargo.mk "output/rustc"
+	emake ${make_opts[@]} LIBGIT2_SYS_USE_PKG_CONFIG=1 -f minicargo.mk "output${OUTDIR_SUF}/cargo"
 
 	pushd rustc-${PV}-src
 	"${S}/output/cargo" vendor --locked --sync ./Cargo.toml \
@@ -110,7 +107,7 @@ src_compile() {
 	popd
 
 	cd "run_rustc"
-	emake -j1
+	emake ${make_opts[@]}
 }
 
 src_install() {

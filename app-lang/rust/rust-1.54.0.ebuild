@@ -91,20 +91,12 @@ src_prepare() {
 src_compile() {
 	local -a make_opts
 	PARLEVEL="$(nproc)"
-	make_opts=(RUSTC_VERSION=${PV} MRUSTC_TARGET_VER=$(ver_cut 1-2) OUTDIR_SUF="" RUSTFLAGS="-Ctarget-feature=-crt-static")
+	make_opts=(RUSTC_VERSION=${PV} MRUSTC_TARGET_VER=$(ver_cut 1-2) OUTDIR_SUF="")
 
-	emake ${make_opts[@]}
-	emake ${make_opts[@]} -f minicargo.mk LIBS $@
-	emake ${make_opts[@]} RUSTC_INSTALL_BINDIR=bin -f minicargo.mk "output/rustc"
-	emake ${make_opts[@]} LIBGIT2_SYS_USE_PKG_CONFIG=1 -f minicargo.mk "output${OUTDIR_SUF}/cargo"
-
-	pushd rustc-${PV}-src
-	"${S}/output/cargo" vendor --locked --sync ./Cargo.toml \
-                      --sync ./src/tools/rust-analyzer/Cargo.toml \
-                      --sync ./compiler/rustc_codegen_cranelift/Cargo.toml \
-                      --sync ./src/bootstrap/Cargo.toml \
-                      --sync ./src/tools/cargo/Cargo.toml
-	popd
+	emake -j1 ${make_opts[@]}
+	emake -j1 ${make_opts[@]} -f minicargo.mk LIBS $@
+	emake -j1 ${make_opts[@]} RUSTC_INSTALL_BINDIR=bin -f minicargo.mk "output/rustc"
+	emake -j1 ${make_opts[@]} LIBGIT2_SYS_USE_PKG_CONFIG=1 -f minicargo.mk "output${OUTDIR_SUF}/cargo"
 
 	cd "run_rustc"
 	emake ${make_opts[@]}

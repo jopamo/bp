@@ -168,7 +168,7 @@ src_configure() {
 		src-tarball = false
 	_EOF_
 
-	rm -rf "${S}/vendor"
+	#rm -rf "${S}/vendor"
 	ln -sf "${S}/vendor" "${S}/compiler/rustc_codegen_cranelift/vendor"
 	ln -sf "${S}/vendor" "${S}/src/tools/cargo/vendor"
 	ln -sf "${S}/vendor" "${S}/src/tools/rust-analyzer/vendor"

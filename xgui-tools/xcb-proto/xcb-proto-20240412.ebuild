@@ -23,7 +23,6 @@ src_prepare() {
 }
 
 src_configure() {
-	# Don't use Python to find sitedir here.
 	PYTHON=true default
 }
 
@@ -32,13 +31,11 @@ src_compile() {
 }
 
 xcbgen_install() {
-	# Use eclass to find sitedir instead.
 	emake -C xcbgen install DESTDIR="${D}" pythondir="$(python_get_sitedir)"
 	python_optimize
 }
 
 src_install() {
-	# Restrict SUBDIRS to prevent xcbgen with empty sitedir.
 	emake install DESTDIR="${D}" SUBDIRS=src
-	python_foreach_impl xcbgen_install
+	#python_foreach_impl xcbgen_install
 }

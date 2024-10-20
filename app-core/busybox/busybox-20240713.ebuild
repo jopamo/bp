@@ -68,14 +68,14 @@ src_install() {
 		"hostname" "id" "install" "ionice" "ipcrm" "ipcs" "kill" "killall"
 		"less" "link" "linux32" "linux64" "ln" "logger" "login" "ls" "lsusb"
 		"lzcat" "lzma" "md5sum" "mesg" "mkdir" "mkfifo" "mknod" "mktemp"
-		"mount" "mountpoint" "mv" "nice" "nl" "nohup" "nproc" "od" "passwd"
+		"mount" "mountpoint" "mv" "nc" "nice" "nl" "nohup" "nproc" "od" "passwd"
 		"paste" "pgrep" "pidof" "ping" "pkill" "pmap" "printenv" "printf" "ps"
 		"pstree" "pwd" "pwdx" "readlink" "realpath" "renice" "reset" "rev"
 		"rm" "rmdir" "run-parts" "sed" "seq" "setpriv" "setsid" "sh" "sha1sum"
 		"sha256sum" "sha512sum" "shred" "shuf" "sleep" "sort" "split" "stat"
 		"strings" "stty" "su" "sum" "sync" "tac" "tail" "tar" "tee" "test"
 		"timeout" "top" "touch" "tr" "true" "truncate" "tsort" "tty" "umount"
-		"uname" "unexpand" "uniq" "unlink" "unlzma" "unxz" "unzip" "uptime"
+		"uname" "unexpand" "uniq" "unlink" "unlzma" "unxz" "unzip" "uptime" "vi"
 		"watch" "wc" "wget"	"which" "whoami" "xargs" "xxd" "xzcat" "yes" "zcat"
 	)
 

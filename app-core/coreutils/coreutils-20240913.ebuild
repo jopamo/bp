@@ -42,6 +42,7 @@ src_configure() {
 		$(use_enable multicall single-binary)
 		$(use_enable xattr)
 		--enable-no-install-program="groups,kill,su,uptime"
+		--enable-install-program=hostname
 		--disable-nls
 		--enable-largefile
 		--without-libgmp

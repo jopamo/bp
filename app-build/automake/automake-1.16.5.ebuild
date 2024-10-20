@@ -2,7 +2,7 @@
 
 EAPI=8
 
-OLDVER=1.15
+OLDVER=1.17
 
 DESCRIPTION="Used to generate Makefile.in from Makefile.am"
 HOMEPAGE="https://www.gnu.org/software/automake/"

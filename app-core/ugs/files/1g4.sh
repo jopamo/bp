@@ -190,3 +190,9 @@ bootstrap_rust() {
 
 	trap - SIGINT
 }
+
+check_bin_sbin_commands() {
+	for cmd in /bin/*; do
+		[ -x "/sbin/$(basename "$cmd")" ] && echo "$(basename "$cmd") exists in both /bin and /sbin"
+	done
+}

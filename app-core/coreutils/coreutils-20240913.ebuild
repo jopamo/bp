@@ -42,9 +42,7 @@ src_configure() {
 		$(use_enable multicall single-binary)
 		$(use_enable xattr)
 		--disable-nls
-		--enable-install-program=hostname
 		--enable-largefile
-		--enable-no-install-program="groups,kill,su,uptime"
 		--without-libgmp
 	)
 
@@ -59,5 +57,13 @@ src_install() {
 
 	insinto /etc
 	doins "${FILESDIR}"/LS_COLORS
+
+	local files_to_remove=(
+		"uptime" "kill" "groups"
+	)
+
+	if [[ -e "${ED}/usr/bin/${file}" ]]; then
+		rm "${ED}/usr/bin/${file}" || die
+	fi
 }
 

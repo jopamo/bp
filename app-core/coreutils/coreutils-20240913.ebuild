@@ -26,9 +26,9 @@ DEPEND="
 	app-compression/xz-utils
 "
 
-append-flags -fno-strict-aliasing
-
 src_prepare() {
+	append-flags -fno-strict-aliasing
+
 	default
 	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
 }
@@ -41,6 +41,7 @@ src_configure() {
 		$(use_enable libcap)
 		$(use_enable multicall single-binary)
 		$(use_enable xattr)
+		--enable-no-install-program="groups,kill,su,uptime"
 		--disable-nls
 		--enable-largefile
 		--without-libgmp
@@ -57,13 +58,5 @@ src_install() {
 
 	insinto /etc
 	doins "${FILESDIR}"/LS_COLORS
-
-	local files_to_remove=(
-		"uptime" "kill" "groups"
-	)
-
-	if [[ -e "${ED}/usr/bin/${file}" ]]; then
-		rm "${ED}/usr/bin/${file}" || die
-	fi
 }
 

@@ -59,25 +59,30 @@ src_install() {
 	done < <("${ED}/usr/bin/busybox" --list)
 
 	local files_to_remove=(
-		"[" "arping" "awk" "base64" "basename" "bc" "bunzip2" "bzcat" "bzip2"
-		"cat" "chgrp" "chmod" "chown" "chroot" "cksum" "clear" "cmp" "comm"
-		"cp" "cpio" "cut" "date" "dc" "dd" "df" "diff" "dirname" "dmesg" "du"
-		"echo" "ed" "egrep" "eject" "env" "expand" "expr" "factor" "fallocate"
-		"false" "fgrep" "find" "flock" "fold" "free" "fuser" "getfattr"
-		"getopt" "grep" "groups" "gunzip" "gzip" "head" "hexdump" "hostid"
-		"hostname" "id" "install" "ionice" "ipcrm" "ipcs" "kill" "killall"
-		"less" "link" "linux32" "linux64" "ln" "logger" "login" "ls" "lsusb"
-		"lzcat" "lzma" "md5sum" "mesg" "mkdir" "mkfifo" "mknod" "mktemp"
-		"mount" "mountpoint" "mv" "nc" "nice" "nl" "nohup" "nproc" "od" "passwd"
-		"paste" "pgrep" "pidof" "ping" "pkill" "pmap" "printenv" "printf" "ps"
-		"pstree" "pwd" "pwdx" "readlink" "realpath" "renice" "reset" "rev"
-		"rm" "rmdir" "run-parts" "sed" "seq" "setpriv" "setsid" "sh" "sha1sum"
-		"sha256sum" "sha512sum" "shred" "shuf" "sleep" "sort" "split" "stat"
-		"strings" "stty" "su" "sum" "sync" "tac" "tail" "tar" "tee" "test"
-		"timeout" "top" "touch" "tr" "true" "truncate" "tsort" "tty" "umount"
-		"uname" "unexpand" "uniq" "unlink" "unlzma" "unxz" "unzip" "uptime" "vi"
-		"watch" "wc" "wget"	"which" "whoami" "xargs" "xxd" "xzcat" "yes" "zcat"
-	)
+		"[" "arping" "awk" "base64" "basename" "bc" "blkdiscard" "blkid"
+		"blockdev" "bunzip2" "bzcat" "bzip2" "cat" "chgrp" "chmod" "chown"
+		"chpasswd" "chroot" "cksum" "clear" "cmp" "comm" "cp" "cpio" "cut"
+		"date" "dc" "dd" "depmod" "df" "diff" "dirname" "dmesg" "du" "echo"
+		"ed" "egrep" "eject" "env" "expand" "expr" "factor" "fallocate"
+		"false" "fdisk" "fgrep" "find" "findfs" "flock" "fold" "free" "fuser"
+		"getfattr" "getopt" "grep" "groups" "gunzip" "gzip" "halt" "head"
+		"hexdump" "hostid" "hostname" "id" "init" "install" "insmod" "ionice"
+		"ip" "ipcrm" "ipcs" "kill" "killall" "less" "link" "linux32" "linux64"
+		"ln" "logger" "login" "losetup" "ls" "lsmod" "lsusb" "lzcat" "lzma"
+		"md5sum" "mesg" "mkdir" "mkfifo" "mknod" "mktemp" "mkswap" "modinfo"
+		"modprobe" "mount" "mountpoint" "mv" "nc" "nice" "nl" "nologin"
+		"nohup" "nproc" "od" "passwd" "paste" "pgrep" "pidof" "ping" "pkill"
+		"pmap" "poweroff" "printenv" "printf" "ps" "pstree" "pwd" "pwdx"
+		"readlink" "realpath" "reboot" "renice" "reset" "rev" "rfkill" "rm"
+		"rmdir"	"rmmod" "run-parts" "sed" "seq" "setpriv" "setsid" "sh"
+		"sha1sum" "sha256sum" "sha512sum" "shred" "shuf" "sleep" "sort" "split"
+		"stat" "strings" "stty" "su" "sum" "swapoff" "swapon" "sync" "sysctl"
+		"tac" "tail" "tar" "tee" "test" "timeout" "top" "touch" "tr" "true"
+		"truncate" "tsort" "tty" "umount" "uname" "unexpand" "uniq" "unlink"
+		"unlzma" "unxz" "unzip" "uptime" "vi" "watch" "wc" "wget"
+		"which"	"whoami" "xargs" "xxd" "xzcat" "yes" "zcat"
+)
+
 
 	if ! use minimal; then
 		for file in "${files_to_remove[@]}"; do

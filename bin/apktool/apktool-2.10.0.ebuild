@@ -31,7 +31,7 @@ src_prepare() {
 
 src_install() {
 	insinto opt/apktool
-	newins apktool_2.9.3.jar apktool.jar
+	newins apktool_${PV}.jar apktool.jar
 
 	dobin apktool
 

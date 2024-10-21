@@ -117,6 +117,39 @@ set_random_mac() {
 	echo "Assigned MAC address $new_mac to $interface"
 }
 
+generate_random_mac() {
+	local prefix="${NIC_PREFIXES[$RANDOM % ${#NIC_PREFIXES[@]}]}"
+	local suffix=$(openssl rand -hex 3 | sed 's/\(..\)/\1:/g; s/:$//')
+	echo "$prefix:$suffix"
+}
+
+generate_systemd_link_file() {
+	local interfaces=("$@")
+
+	if [ ${#interfaces[@]} -eq 0 ]; then
+		interfaces=($(ls /sys/class/net | grep -Ev '^(lo|ip_vti0)$'))
+	fi
+
+	for interface in "${interfaces[@]}"; do
+		local mac_address=$(generate_random_mac)
+		local link_file_name="00-$interface.network"
+
+		cat <<EOF | sudo tee /etc/systemd/network/$link_file_name > /dev/null
+[Match]
+Name=$interface
+
+[Link]
+MACAddress=$mac_address
+EOF
+
+		echo "Systemd .network file created for $interface with MAC address $mac_address"
+	done
+
+	sudo systemctl restart systemd-networkd
+
+	echo "Systemd network configuration reloaded."
+}
+
 if [ "$use_iproute2" = false ]; then
 	alias ifup='ifup_nettools'
 	alias ifdown='ifdown_nettools'

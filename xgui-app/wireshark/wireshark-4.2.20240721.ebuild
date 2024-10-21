@@ -40,7 +40,7 @@ DEPEND="
 	libssh? ( lib-misc/libssh2 )
 	libxml2? ( lib-core/libxml2 )
 	lz4? ( app-compression/lz4 )
-	netlink? ( lib-dev/libnl )
+	netlink? ( lib-net/libnl )
 	nghttp2? ( lib-net/nghttp2 )
 	sbc? ( xgui-misc/sbc )
 	snappy? ( app-compression/snappy )

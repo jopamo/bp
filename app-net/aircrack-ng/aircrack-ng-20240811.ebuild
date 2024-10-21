@@ -20,7 +20,7 @@ IUSE="+airdrop-ng +airgraph-ng +netlink +pcre +sqlite +experimental"
 DEPEND="
 	lib-util/libpcap
 	virtual/ssl
-	netlink? ( lib-dev/libnl )
+	netlink? ( lib-net/libnl )
 	pcre? ( lib-core/libpcre )
 	experimental? ( lib-core/zlib )
 	sqlite? ( lib-core/sqlite )

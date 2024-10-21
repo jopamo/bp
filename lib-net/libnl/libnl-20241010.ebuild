@@ -7,12 +7,12 @@ inherit distutils-r1 autotools flag-o-matic
 DESCRIPTION="Libraries providing APIs to netlink protocol based Linux kernel interfaces"
 HOMEPAGE="http://www.infradead.org/~tgr/libnl/ https://github.com/thom311/libnl"
 
-SNAPSHOT=64fad14bc9c5b594f9ffcd1aa0ca7e00042d8350
+SNAPSHOT=b75e27deb8957a04fd84539cd9a1f772930d17d2
 SRC_URI="https://github.com/thom311/libnl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="LGPL-2.1 utils? ( GPL-2 )"
-SLOT="3"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs python utils"

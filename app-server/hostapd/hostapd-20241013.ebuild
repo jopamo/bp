@@ -7,7 +7,7 @@ inherit flag-o-matic toolchain-funcs
 DESCRIPTION="IEEE 802.11 wireless LAN Host AP daemon"
 HOMEPAGE="https://w1.fi/ https://w1.fi/cgit/hostap/"
 
-SNAPSHOT=9da9e41612e456a13e90e8cc2e71b75aa3400392
+SNAPSHOT=96e48a05aa0a82e91e3cab75506297e433e253d0
 SRC_URI="https://w1.fi/cgit/hostap/snapshot/hostap-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S="${WORKDIR}/hostap-${SNAPSHOT}/${PN}"
 
@@ -17,6 +17,9 @@ KEYWORDS="amd64 arm64"
 
 IUSE="ipv6 netlink selinux sqlite +suiteb systemd +wps"
 
+DEPEND="
+	lib-net/libnl
+"
 src_prepare() {
 	# Allow users to apply patches to src/drivers for example,
 	# i.e. anything outside ${S}/${PN}

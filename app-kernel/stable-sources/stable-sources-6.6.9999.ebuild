@@ -25,3 +25,8 @@ DEPEND="
 	app-core/ed
 	app-util/bc
 "
+
+src_prepare() {
+	kernel-2_src_prepare
+	eapply "${FILESDIR}"/reg.patch
+}

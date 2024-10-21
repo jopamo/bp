@@ -22,7 +22,7 @@ REQUIRED_USE="fasteap? ( !ssl ) smartcard? ( ssl )"
 
 CDEPEND="
 	dbus? ( app-core/dbus )
-	lib-dev/libnl
+	lib-net/libnl
 	readline? (
 		virtual/curses
 		lib-core/readline

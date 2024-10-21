@@ -12,7 +12,7 @@ LICENSE="ISC"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="lib-dev/libnl:="
+RDEPEND="lib-net/libnl:="
 DEPEND="${RDEPEND}
 	app-dev/pkgconf"
 

@@ -144,10 +144,6 @@ EOF
 
 		echo "Systemd .network file created for $interface with MAC address $mac_address"
 	done
-
-	sudo systemctl restart systemd-networkd
-
-	echo "Systemd network configuration reloaded."
 }
 
 if [ "$use_iproute2" = false ]; then

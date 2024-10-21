@@ -13,7 +13,7 @@ S="${WORKDIR}/xserver-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+KEYWORDS="~amd64 ~arm64"
 
 IUSE="+glamor ipv6 xcsecurity"
 

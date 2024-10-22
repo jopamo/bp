@@ -5,7 +5,7 @@ EAPI=8
 DESCRIPTION="specification of the EGL External Platform interface"
 HOMEPAGE="https://github.com/NVIDIA/eglexternalplatform"
 
-SNAPSHOT=7c8f8e2218e46b1a4aa9538520919747f1184d86
+SNAPSHOT=cf9f10589775c1b4d90f1df6f417f8cf1bed7ec6
 SRC_URI="https://github.com/NVIDIA/eglexternalplatform/archive/${SNAPSHOT}.tar.gz -> eglexternalplatform-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/eglexternalplatform-${SNAPSHOT}"
 

@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="An open-source JPEG 2000 library"
 HOMEPAGE="http://www.openjpeg.org"
 
-SNAPSHOT=d5544b3fae0056f57467a9f1ef8e8f05766f0d0c
+SNAPSHOT=362ec6c92dbc0f563810fafe552e4fa0d9fde024
 SRC_URI="https://github.com/uclouvain/openjpeg/archive/${SNAPSHOT}.tar.gz -> openjpeg-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/openjpeg-${SNAPSHOT}"
 

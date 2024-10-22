@@ -155,7 +155,7 @@ esac
 # @DEFAULT_UNSET
 # @PRE_INHERIT
 # @DESCRIPTION:
-# Controls adding dev-python/setuptools dependency.  The allowed values
+# Controls adding dev-py/setuptools dependency.  The allowed values
 # are:
 #
 # - no -- do not add the dependency (pure distutils package)
@@ -272,7 +272,7 @@ _distutils_set_globals() {
 				;;
 			setuptools)
 				bdep+='
-					>=dev-python/setuptools-69.0.3[${PYTHON_USEDEP}]
+					>=dev-py/setuptools-69.0.3[${PYTHON_USEDEP}]
 				'
 				;;
 			sip)
@@ -292,7 +292,7 @@ _distutils_set_globals() {
 			eqawarn "is enabled."
 		fi
 	else
-		local setuptools_dep='>=dev-python/setuptools-69.0.3[${PYTHON_USEDEP}]'
+		local setuptools_dep='>=dev-py/setuptools-69.0.3[${PYTHON_USEDEP}]'
 
 		case ${DISTUTILS_USE_SETUPTOOLS:-bdepend} in
 			no|manual)
@@ -950,7 +950,7 @@ _distutils-r1_print_package_versions() {
 				packages+=(
 					dev-python/flit-core
 					dev-python/flit_scm
-					dev-python/setuptools-scm
+					dev-py/setuptools-scm
 				)
 				;;
 			hatchling)
@@ -963,8 +963,8 @@ _distutils-r1_print_package_versions() {
 			jupyter)
 				packages+=(
 					dev-python/jupyter-packaging
-					dev-python/setuptools
-					dev-python/setuptools-scm
+					dev-py/setuptools
+					dev-py/setuptools-scm
 					dev-python/wheel
 				)
 				;;
@@ -984,14 +984,14 @@ _distutils-r1_print_package_versions() {
 			pbr)
 				packages+=(
 					dev-python/pbr
-					dev-python/setuptools
+					dev-py/setuptools
 					dev-python/wheel
 				)
 				;;
 			pdm-backend)
 				packages+=(
 					dev-python/pdm-backend
-					dev-python/setuptools
+					dev-py/setuptools
 				)
 				;;
 			poetry)
@@ -1006,9 +1006,9 @@ _distutils-r1_print_package_versions() {
 				;;
 			setuptools)
 				packages+=(
-					dev-python/setuptools
-					dev-python/setuptools-rust
-					dev-python/setuptools-scm
+					dev-py/setuptools
+					dev-py/setuptools-rust
+					dev-py/setuptools-scm
 					dev-python/wheel
 				)
 				;;
@@ -1025,7 +1025,7 @@ _distutils-r1_print_package_versions() {
 				;;
 			*)
 				packages+=(
-					dev-python/setuptools
+					dev-py/setuptools
 				)
 				;;
 		esac

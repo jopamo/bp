@@ -18,6 +18,7 @@ app-var
 bin
 dev-perl
 dev-python
+dev-py
 distfiles
 eclass
 fonts

@@ -21,7 +21,7 @@ RDEPEND="
 	dev-python/appdirs[${PYTHON_USEDEP}]
 "
 BDEPEND="
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+	dev-py/setuptools-scm[${PYTHON_USEDEP}]
 	test? (
 		dev-python/more-itertools[${PYTHON_USEDEP}]
 		dev-python/packaging[${PYTHON_USEDEP}]

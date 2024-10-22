@@ -22,7 +22,7 @@ KEYWORDS="amd64 arm64"
 IUSE="+native-extensions"
 
 BDEPEND="
-	>=dev-python/setuptools-scm-8[${PYTHON_USEDEP}]
+	>=dev-py/setuptools-scm-8[${PYTHON_USEDEP}]
 "
 
 distutils_enable_tests pytest

@@ -23,7 +23,7 @@ RDEPEND="
 "
 BDEPEND="
 	test? (
-		dev-python/setuptools[${PYTHON_USEDEP}]
+		dev-py/setuptools[${PYTHON_USEDEP}]
 	)
 "
 

@@ -13,7 +13,7 @@ S="${WORKDIR}/xcbproto-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 DEPEND="lib-core/libxml2"
 
@@ -37,5 +37,5 @@ xcbgen_install() {
 
 src_install() {
 	emake install DESTDIR="${D}" SUBDIRS=src
-	#python_foreach_impl xcbgen_install
+	python_foreach_impl xcbgen_install
 }

@@ -6,10 +6,10 @@ inherit flag-o-matic linux-info autotools
 
 DESCRIPTION="Embedded Linux Library provides core, low-level functionality for system daemons"
 HOMEPAGE="https://01.org/ell"
+SRC_URI="https://mirrors.edge.kernel.org/pub/linux/libs/${PN}/${P}.tar.xz"
 
-SNAPSHOT=7bed251f8020ef896043f008276f41cd13fdd43f
-SRC_URI="https://kernel.googlesource.com/pub/scm/libs/ell/ell/+archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}"
+#SNAPSHOT=7bed251f8020ef896043f008276f41cd13fdd43f
+#SRC_URI="https://kernel.googlesource.com/pub/scm/libs/ell/ell/+archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit meson
 
 DESCRIPTION="USB enumeration utilities"
 HOMEPAGE="https://www.kernel.org/pub/linux/utils/usb/usbutils/"
@@ -19,8 +19,3 @@ DEPEND="
 	lib-dev/libusb
 	app-compression/xz-utils
 "
-
-src_prepare() {
-	default
-	eautoreconf
-}

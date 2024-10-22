@@ -2,6 +2,8 @@
 
 EAPI=8
 
+DISTUTILS_USE_PEP517="setuptools"
+
 inherit distutils-r1
 
 DESCRIPTION="Multi-Language Vulkan/GL/GLES/EGL/GLX/WGL Loader-Generator"

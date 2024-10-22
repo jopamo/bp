@@ -7,13 +7,13 @@ inherit cmake flag-o-matic toolchain-funcs
 DESCRIPTION="PDF rendering library based on the xpdf-3.0 code base"
 HOMEPAGE="https://poppler.freedesktop.org/"
 
-SNAPSHOT=2d1d49d32eed60fa7063c34be0cb6cc3ddf14654
+SNAPSHOT=ff18a6f3d9dc8e881e881f2be271de9df60c294d
 SRC_URI="https://gitlab.freedesktop.org/poppler/poppler/-/archive/${SNAPSHOT}/poppler-${SNAPSHOT}.tar.bz2 -> poppler-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/poppler-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="cairo +cjk curl cxx debug doc +introspection +jpeg +jpeg2k png +utils"
 

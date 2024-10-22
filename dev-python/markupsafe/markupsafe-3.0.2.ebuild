@@ -7,7 +7,7 @@ DISTUTILS_USE_PEP517=setuptools
 PYPI_PN="MarkupSafe"
 PYTHON_COMPAT=( python3_{10..13} python3_13t pypy3 )
 
-inherit distutils-r1 pypi
+inherit distutils-r1 pypi flag-o-matic
 
 DESCRIPTION="Implements a XML/HTML/XHTML Markup safe string for Python"
 HOMEPAGE="
@@ -24,6 +24,8 @@ IUSE="+native-extensions"
 distutils_enable_tests pytest
 
 src_prepare() {
+	filter-flags -Wl,-z,defs
+
 	distutils-r1_src_prepare
 
 	if ! use native-extensions; then

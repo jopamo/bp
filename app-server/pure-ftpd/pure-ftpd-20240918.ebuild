@@ -7,7 +7,7 @@ inherit flag-o-matic autotools user
 DESCRIPTION="Fast, production-quality, standard-conformant FTP server"
 HOMEPAGE="http://www.pureftpd.org/"
 
-SNAPSHOT=3294249373e94ddb090896a3b1b251ec03164a17
+SNAPSHOT=3b1d34161c2aa3af48eda8df195cd32aeb55f78e
 SRC_URI="https://github.com/jedisct1/pure-ftpd/archive/${SNAPSHOT}.tar.gz -> pure-ftpd-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/pure-ftpd-${SNAPSHOT}"
 

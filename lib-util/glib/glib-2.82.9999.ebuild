@@ -41,8 +41,8 @@ src_configure() {
 	append-flags -Wno-error=format
 	local emesonargs=(
 		-Ddefault_library=$(usex static-libs both shared)
-		-Ddtrace=false
-		-Dgtk_doc=false
+		-Ddtrace=disabled
+		-Ddocumentation=false
 		-Dlibmount=disabled
 		-Dselinux=disabled
 		-Dxattr=true

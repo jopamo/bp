@@ -7,7 +7,7 @@ inherit cmake distutils-r1 flag-o-matic
 DESCRIPTION="CPU emulator framework"
 HOMEPAGE="https://github.com/unicorn-engine/unicorn"
 
-SNAPSHOT=d4b92485b1a228fb003e1218e42f6c778c655809
+SNAPSHOT=d568885d64c89db5b9a722f0c1bef05aa92f84ca
 SRC_URI="https://github.com/unicorn-engine/unicorn/archive/${SNAPSHOT}.tar.gz -> unicorn-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/unicorn-${SNAPSHOT}"
 

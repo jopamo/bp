@@ -3,19 +3,15 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{10..13} python3_13t pypy3 )
 
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="Wrappers to build Python packages using PEP 517 hooks"
 HOMEPAGE="
 	https://pypi.org/project/pyproject-hooks/
 	https://github.com/pypa/pyproject-hooks/
 	https://pyproject-hooks.readthedocs.io/
-"
-SRC_URI="
-	https://github.com/pypa/pyproject-hooks/archive/v${PV}.tar.gz
-		-> ${P}.gh.tar.gz
 "
 
 LICENSE="MIT"

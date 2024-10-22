@@ -51,11 +51,11 @@ CRATES="
 	precomputed-hash@0.1.1
 	proc-macro-hack@0.5.20+deprecated
 	proc-macro2@1.0.82
-	pyo3-build-config@0.22.2
-	pyo3-ffi@0.22.2
-	pyo3-macros-backend@0.22.2
-	pyo3-macros@0.22.2
-	pyo3@0.22.2
+	pyo3-build-config@0.22.3
+	pyo3-ffi@0.22.3
+	pyo3-macros-backend@0.22.3
+	pyo3-macros@0.22.3
+	pyo3@0.22.3
 	quote@1.0.36
 	rand@0.7.3
 	rand@0.8.5

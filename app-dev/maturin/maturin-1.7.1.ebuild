@@ -12,27 +12,14 @@ SRC_URI="https://github.com/PyO3/maturin/archive/refs/tags/v${PV}.tar.gz
 		-> ${P}.gh.tar.gz
 "
 
-# note: rustls+ring is unused, so openssl license can be skipped
-LICENSE="|| ( Apache-2.0 MIT ) doc? ( CC-BY-4.0 OFL-1.1 )"
-LICENSE+="
-	0BSD Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD ISC MIT MPL-2.0
-	Unicode-DFS-2016
-" # crates
+
+LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0"
 KEYWORDS="amd64 arm ~arm64 ~loong ~mips ppc ppc64 ~riscv ~s390 sparc x86"
-IUSE="doc +ssl test"
-RESTRICT="!test? ( test )"
 
-BDEPEND="
-	dev-python/setuptools-rust
-	test? (
-		${RDEPEND}
-		$(python_gen_cond_dep 'dev-python/cffi[${PYTHON_USEDEP}]' 'python*')
-		dev-python/boltons[${PYTHON_USEDEP}]
-		dev-python/virtualenv[${PYTHON_USEDEP}]
-	)
-"
-RDEPEND+=" ${DEPEND}"
+RESTRICT="test network-sandbox"
+
+BDEPEND="dev-python/setuptools-rust"
 
 QA_FLAGS_IGNORED="usr/bin/${PN}"
 
@@ -43,5 +30,5 @@ src_prepare() {
 
 	distutils-r1_src_prepare
 
-	cargo fetch --locked
+	cargo vendor --locked
 }

@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Library for parsing, editing, and saving EXIF data"
 HOMEPAGE="https://github.com/libexif"
 
-SNAPSHOT=5d53c01056e7e9d273f861be7bd5b3d4a16b948d
+SNAPSHOT=d8525e7fb04183bb9308d72228f7aa3d58be673d
 SRC_URI="https://github.com/libexif/libexif/archive/${SNAPSHOT}.tar.gz -> libexif-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libexif-${SNAPSHOT}"
 

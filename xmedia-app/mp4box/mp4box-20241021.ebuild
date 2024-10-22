@@ -5,7 +5,7 @@ EAPI=8
 DESCRIPTION="MP4Box can mux, demux, analyze and manipulate MP4 files like no other tool."
 HOMEPAGE="https://gpac.wp.imt.fr/mp4box/"
 
-SNAPSHOT=deb5bc655ebb6dbd63653e159a260a8a2c8c13de
+SNAPSHOT=24e23838596fbc176424d6a1319bb4b7e8a02e84
 SRC_URI="https://github.com/gpac/gpac/archive/${SNAPSHOT}.tar.gz -> gpac-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/gpac-${SNAPSHOT}"
 

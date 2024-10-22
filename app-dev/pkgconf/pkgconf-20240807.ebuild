@@ -7,14 +7,18 @@ inherit autotools
 DESCRIPTION="a program which helps to configure compiler and linker flags for development libraries"
 HOMEPAGE="https://git.sr.ht/~kaniini/pkgconf"
 
-SNAPSHOT=444846dd2dfc9e3a5ea4904826c1c7a4b9b5589b
-SRC_URI="https://github.com/pkgconf/pkgconf/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+if [[ ${PV} == 9999 ]]; then
+	EGIT_REPO_URI="http://git.dereferenced.org/pkgconf/pkgconf.git"
+	inherit git-r3
+else
+	SNAPSHOT=a88c0d962a987c62d98ede5a738e37ec71005cbd
+	SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="ISC"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
-#gobject-introspection fails to build
+KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 

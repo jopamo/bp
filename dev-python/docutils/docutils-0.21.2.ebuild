@@ -19,7 +19,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	dev-python/pillow[${PYTHON_USEDEP}]
+	xgui-app/pillow[${PYTHON_USEDEP}]
 	dev-python/pygments[${PYTHON_USEDEP}]
 "
 BDEPEND="
@@ -75,5 +75,5 @@ python_install_all() {
 pkg_postinst() {
  \
 		"auto-detecting the image dimensions when using the 'scale' option" \
-		dev-python/pillow
+		xgui-app/pillow
 }

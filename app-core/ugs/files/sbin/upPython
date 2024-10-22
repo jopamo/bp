@@ -56,7 +56,6 @@ PACKAGES=(
 	"parsedatetime"
 	"path"
 	"pathspec"
-	"pillow"
 	"pip"
 	"pip-run"
 	"platformdirs"
@@ -279,6 +278,7 @@ declare -A replacements=(
 	["dev-libs/tree-sitter"]="lib-dev/tree-sitter"
 	["dev-libs/openssl"]="lib-net/openssl"
 	["sys-libs/timezone-data"]="lib-core/tzdb"
+	["dev-python/pillow"]="xgui-app/pillow"
 )
 
 for package in "${PACKAGES[@]}"; do

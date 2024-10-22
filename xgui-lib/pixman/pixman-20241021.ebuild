@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="Low-level pixel manipulation routines"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=e7ef051a6d9edd2d8bd84fe2fda3ca54ba83d1c8
+SNAPSHOT=90f9cf1726c0f7b082069bd32a957874f7a602e9
 SRC_URI="https://gitlab.freedesktop.org/pixman/pixman/-/archive/${SNAPSHOT}/pixman-${SNAPSHOT}.tar.bz2 -> pixman-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/pixman-${SNAPSHOT}"
 

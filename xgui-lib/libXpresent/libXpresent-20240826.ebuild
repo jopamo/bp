@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X.Org Xpresent library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=6bbbcf9218bbc686389387142978f90a3917c39a
+SNAPSHOT=a329f664330407480ecb4505c79dca5eab06dcff
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXpresent/-/archive/${SNAPSHOT}/libXpresent-${SNAPSHOT}.tar.bz2 -> libXpresent-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxpresent-${SNAPSHOT}"
 

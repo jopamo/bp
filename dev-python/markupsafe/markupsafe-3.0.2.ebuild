@@ -4,9 +4,8 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
-PYPI_NO_NORMALIZE=1
 PYPI_PN="MarkupSafe"
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{10..13} python3_13t pypy3 )
 
 inherit distutils-r1 pypi
 
@@ -20,21 +19,24 @@ HOMEPAGE="
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+IUSE="+native-extensions"
 
 distutils_enable_tests pytest
 
+src_prepare() {
+	distutils-r1_src_prepare
+
+	if ! use native-extensions; then
+		sed -i -e '/run_setup/s:True:False:' setup.py || die
+	fi
+}
+
+python_compile() {
+	local -x CIBUILDWHEEL=1
+	distutils-r1_python_compile
+}
+
 python_test() {
-	local EPYTEST_DESELECT=()
-
-	case ${EPYTHON} in
-		python3.13)
-			EPYTEST_DESELECT+=(
-				# https://github.com/pallets/markupsafe/issues/445
-				tests/test_leak.py::test_markup_leaks
-			)
-			;;
-	esac
-
 	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	epytest
 }

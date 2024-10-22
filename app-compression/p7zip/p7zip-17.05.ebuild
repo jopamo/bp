@@ -6,10 +6,7 @@ inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="Port of 7-Zip archiver for Unix"
 HOMEPAGE="http://p7zip.sourceforge.net/"
-
-SNAPSHOT=36f6b7422234c8c48d3eaaa80a0e8ceb1180f081
-SRC_URI="https://github.com/p7zip-project/p7zip/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}/
+SRC_URI="https://github.com/p7zip-project/p7zip/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="LGPL-2.1 unRAR"
 SLOT="0"

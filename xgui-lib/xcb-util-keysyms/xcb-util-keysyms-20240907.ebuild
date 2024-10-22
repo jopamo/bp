@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X C-language Bindings sample implementations"
 HOMEPAGE="https://xcb.freedesktop.org/"
 
-SNAPSHOT=85e093f14b0ade2956e0a5d1c37cfde06d8b1ba6
+SNAPSHOT=ef5cb393d27511ba511c68a54f8ff7b9aab4a384
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxcb-keysyms/-/archive/${SNAPSHOT}/libxcb-keysyms-${SNAPSHOT}.tar.bz2 -> libxcb-keysyms-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxcb-keysyms-${SNAPSHOT}"
 

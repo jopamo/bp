@@ -7,7 +7,7 @@ inherit toolchain-funcs
 DESCRIPTION="force any tcp connections to flow through a proxy (or proxy chain)"
 HOMEPAGE="https://github.com/rofl0r/proxychains-ng/"
 
-SNAPSHOT=821249f22a97701ca7740aef485114e56be2f36d
+SNAPSHOT=1760c9347473365394226f176588c3c7e0684dd9
 SRC_URI="https://github.com/rofl0r/proxychains-ng/archive/${SNAPSHOT}.tar.gz -> proxychains-ng-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/proxychains-ng-${SNAPSHOT}"
 

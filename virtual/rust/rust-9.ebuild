@@ -2,8 +2,20 @@
 
 EAPI=8
 
-DESCRIPTION="Rust implementation virtual."
+DESCRIPTION="rust implementation virtual"
+
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="bin/rust-bin"
+IUSE="rust-bin"
+
+RDEPEND="
+	rust-bin? (
+		bin/rust-bin
+		!app-lang/rust
+	)
+	!rust-bin? (
+		app-lang/rust
+		!bin/rust-bin
+	)
+"

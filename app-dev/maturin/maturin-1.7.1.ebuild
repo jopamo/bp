@@ -19,7 +19,10 @@ KEYWORDS="amd64 arm ~arm64 ~loong ~mips ppc ppc64 ~riscv ~s390 sparc x86"
 
 RESTRICT="test network-sandbox"
 
-BDEPEND="dev-python/setuptools-rust"
+BDEPEND="
+	virtual/rust
+	dev-python/setuptools-rust
+"
 
 QA_FLAGS_IGNORED="usr/bin/${PN}"
 

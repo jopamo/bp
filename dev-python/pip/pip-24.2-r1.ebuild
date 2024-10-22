@@ -63,7 +63,7 @@ BDEPEND="
 			dev-python/werkzeug[${PYTHON_USEDEP}]
 			dev-python/wheel[${PYTHON_USEDEP}]
 			test-rust? (
-				dev-python/cryptography[${PYTHON_USEDEP}]
+				app-crypto/cryptography[${PYTHON_USEDEP}]
 			)
 		' "${PYTHON_TESTED[@]}")
 	)
@@ -140,7 +140,7 @@ python_test() {
 		tests/functional/test_proxy.py
 	)
 
-	if ! has_version "dev-python/cryptography[${PYTHON_USEDEP}]"; then
+	if ! has_version "app-crypto/cryptography[${PYTHON_USEDEP}]"; then
 		EPYTEST_DESELECT+=(
 			tests/functional/test_install.py::test_install_sends_client_cert
 			tests/functional/test_install_config.py::test_do_not_prompt_for_authentication

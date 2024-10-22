@@ -1,4 +1,4 @@
-Remove the dependency on non-portable dev-python/cryptography.
+Remove the dependency on non-portable app-crypto/cryptography.
 https://bugs.gentoo.org/821706#c4 by Alex Xu
 --- a/mozilla/certdata2pem.py
 +++ b/mozilla/certdata2pem.py

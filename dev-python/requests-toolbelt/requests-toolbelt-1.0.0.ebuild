@@ -31,7 +31,7 @@ BDEPEND="
 	test? (
 		dev-python/betamax[${PYTHON_USEDEP}]
 		test-rust? (
-			dev-python/cryptography[${PYTHON_USEDEP}]
+			app-crypto/cryptography[${PYTHON_USEDEP}]
 			dev-python/pyopenssl[${PYTHON_USEDEP}]
 			dev-python/trustme[${PYTHON_USEDEP}]
 		)
@@ -54,7 +54,7 @@ python_test() {
 	)
 	local EPYTEST_IGNORE=()
 
-	if ! has_version "dev-python/cryptography[${PYTHON_USEDEP}]" ||
+	if ! has_version "app-crypto/cryptography[${PYTHON_USEDEP}]" ||
 		! has_version "dev-python/pyopenssl[${PYTHON_USEDEP}]" ||
 		! has_version "dev-python/trustme[${PYTHON_USEDEP}]"
 	then

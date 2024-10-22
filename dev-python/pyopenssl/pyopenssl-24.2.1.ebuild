@@ -21,8 +21,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	<dev-python/cryptography-44[${PYTHON_USEDEP}]
-	>=dev-python/cryptography-41.0.5[${PYTHON_USEDEP}]
+	<app-crypto/cryptography-44[${PYTHON_USEDEP}]
+	>=app-crypto/cryptography-41.0.5[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	test? (

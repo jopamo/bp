@@ -7,7 +7,7 @@ inherit flag-o-matic
 DESCRIPTION="common Linux command line utilities together into a single BSD-licensed executable "
 HOMEPAGE="http://landley.net/toybox/"
 
-SNAPSHOT=d50372cad35d5dd12e6391c3c7c901a96122dc67
+SNAPSHOT=4073e77933d295099c5b80ea3d8ebf7344963823
 SRC_URI="https://github.com/landley/toybox/archive/${SNAPSHOT}.tar.gz -> toybox-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -8,7 +8,7 @@ DISTUTILS_USE_PEP517=standalone
 PYTHON_COMPAT=( python3_{10..13} pypy3 )
 PYTHON_REQ_USE='tk?,threads(+)'
 
-inherit distutils-r1 toolchain-funcs 
+inherit distutils-r1 toolchain-funcs
 
 MY_PN=Pillow
 MY_P=${MY_PN}-${PV}
@@ -32,17 +32,6 @@ IUSE="examples imagequant +jpeg jpeg2k lcms test tiff tk truetype webp xcb zlib"
 REQUIRED_USE="test? ( jpeg jpeg2k lcms tiff truetype )"
 RESTRICT="!test? ( test )"
 
-DEPEND="
-	imagequant? ( media-gfx/libimagequant:= )
-	jpeg? ( media-libs/libjpeg-turbo:= )
-	jpeg2k? ( media-libs/openjpeg:2= )
-	lcms? ( media-libs/lcms:2= )
-	tiff? ( media-libs/tiff:=[jpeg,zlib] )
-	truetype? ( media-libs/freetype:2= )
-	webp? ( media-libs/libwebp:= )
-	xcb? ( x11-libs/libxcb )
-	zlib? ( sys-libs/zlib:= )
-"
 RDEPEND="
 	${DEPEND}
 	dev-python/olefile[${PYTHON_USEDEP}]
@@ -50,15 +39,10 @@ RDEPEND="
 BDEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	dev-python/wheel[${PYTHON_USEDEP}]
-	virtual/pkgconfig
 	test? (
 		dev-python/defusedxml[${PYTHON_USEDEP}]
 		dev-python/packaging[${PYTHON_USEDEP}]
 		dev-python/pytest-timeout[${PYTHON_USEDEP}]
-		|| (
-			media-gfx/imagemagick[png]
-			media-gfx/graphicsmagick[png]
-		)
 	)
 "
 

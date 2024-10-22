@@ -5,7 +5,7 @@ EAPI=8
 DESCRIPTION="The most popular spellchecking library dictionaries"
 HOMEPAGE="http://hunspell.github.io/"
 
-SNAPSHOT=5ee93256f719aa299194b9c6989576df0b5f287e
+SNAPSHOT=8cfea406b505e4d7df52d5a19bce525df98c54ab
 SRC_URI="https://github.com/wooorm/dictionaries/archive/${SNAPSHOT}.tar.gz -> dictionaries-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/dictionaries-${SNAPSHOT}"
 

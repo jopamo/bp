@@ -22,7 +22,7 @@ KEYWORDS="amd64 arm64"
 BDEPEND="
 	test? (
 		dev-python/lxml[${PYTHON_USEDEP}]
-		dev-python/pillow[${PYTHON_USEDEP}]
+		xgui-app/pillow[${PYTHON_USEDEP}]
 		dev-python/wcag-contrast-ratio[${PYTHON_USEDEP}]
 		virtual/ttf-fonts
 	)

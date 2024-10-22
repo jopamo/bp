@@ -20,4 +20,5 @@ BDEPEND="
 	app-dev/intltool
 	app-dev/pkgconf
 	lib-util/glib
+	app-dev/lxqt-build-tools
 "

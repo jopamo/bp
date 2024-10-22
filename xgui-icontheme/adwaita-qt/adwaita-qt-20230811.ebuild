@@ -15,6 +15,8 @@ LICENSE="GPL"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+DEPEND="xgui-lib/qtbase"
+
 src_install() {
 	cmake_src_install
 

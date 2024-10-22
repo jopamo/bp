@@ -16,4 +16,6 @@ KEYWORDS="amd64 arm64"
 
 IUSE="X"
 
+DEPEND="xgui-lib/wayland-protocols"
+
 RESTRICT="test"

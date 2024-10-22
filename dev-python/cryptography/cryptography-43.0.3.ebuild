@@ -2,49 +2,11 @@
 
 EAPI=8
 
-CARGO_OPTIONAL=yes
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=maturin
 PYTHON_COMPAT=( python3_{10..13} pypy3 )
-PYTHON_REQ_USE="threads(+)"
 
-CRATES="
-	asn1@0.16.2
-	asn1_derive@0.16.2
-	autocfg@1.3.0
-	base64@0.22.1
-	bitflags@2.6.0
-	cc@1.1.6
-	cfg-if@1.0.0
-	foreign-types-shared@0.1.1
-	foreign-types@0.3.2
-	heck@0.5.0
-	indoc@2.0.5
-	libc@0.2.155
-	memoffset@0.9.1
-	once_cell@1.19.0
-	openssl-macros@0.1.1
-	openssl-sys@0.9.104
-	openssl@0.10.68
-	pem@3.0.4
-	pkg-config@0.3.30
-	portable-atomic@1.7.0
-	proc-macro2@1.0.86
-	pyo3-build-config@0.22.2
-	pyo3-ffi@0.22.2
-	pyo3-macros-backend@0.22.2
-	pyo3-macros@0.22.2
-	pyo3@0.22.2
-	quote@1.0.36
-	self_cell@1.0.4
-	syn@2.0.71
-	target-lexicon@0.12.15
-	unicode-ident@1.0.12
-	unindent@0.2.3
-	vcpkg@0.2.15
-"
-
-inherit cargo distutils-r1 flag-o-matic multiprocessing pypi
+inherit distutils-r1 flag-o-matic multiprocessing pypi
 
 VEC_P=cryptography_vectors-$(ver_cut 1-3)
 DESCRIPTION="Library providing cryptographic recipes and primitives"
@@ -53,7 +15,6 @@ HOMEPAGE="
 	https://pypi.org/project/cryptography/
 "
 SRC_URI+="
-	${CARGO_CRATE_URIS}
 	test? (
 		$(pypi_sdist_url cryptography_vectors "$(ver_cut 1-3)")
 	)
@@ -98,10 +59,6 @@ QA_FLAGS_IGNORED="usr/lib.*/py.*/site-packages/cryptography/hazmat/bindings/_rus
 
 distutils_enable_tests pytest
 
-src_unpack() {
-	cargo_src_unpack
-}
-
 src_prepare() {
 	default
 
@@ -116,6 +73,8 @@ src_prepare() {
 		sed -i -e 's/__builtin_available(macOS 10\.12, \*)/'"${darwinok}"'/' \
 			src/_cffi_src/openssl/src/osrandom_engine.c || die
 	fi
+
+	cargo fetch --locked
 }
 
 python_configure_all() {

@@ -7,13 +7,13 @@ inherit autotools
 DESCRIPTION="X.Org Inter-Client Exchange library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=296eff6b5f9ce0b2147c14ac96fea3bb2de37d70
+SNAPSHOT=e8a561b500f7b783d84d81ba158fd28b007745ae
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libICE/-/archive/${SNAPSHOT}/libICE-${SNAPSHOT}.tar.bz2 -> libICE-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libice-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="ipv6 static-libs"
 

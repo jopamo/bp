@@ -7,7 +7,7 @@ inherit cmake xdg
 DESCRIPTION="Powerful yet simple to use screenshot software for GNU/Linux"
 HOMEPAGE="https://github.com/flameshot-org/flameshot"
 
-SNAPSHOT=fd3772e2abb0b852573fcaa549ba13517f13555c
+SNAPSHOT=14a136777cd82ab70f42c13b4bc9418c756d91d2
 SRC_URI="https://github.com/flameshot-org/flameshot/archive/${SNAPSHOT}.tar.gz -> flameshot-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/flameshot-${SNAPSHOT}"
 

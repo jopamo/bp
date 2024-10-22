@@ -17,6 +17,8 @@ SLOT="0"
 
 IUSE="ipv6 static-libs"
 
+DEPEND="xgui-lib/xtrans"
+
 src_prepare() {
 	default
 	eautoreconf

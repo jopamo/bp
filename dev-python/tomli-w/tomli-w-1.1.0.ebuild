@@ -22,7 +22,9 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 BDEPEND="
-	test? ( dev-python/tomli[${PYTHON_USEDEP}] )
+	test? (
+		dev-python/tomli[${PYTHON_USEDEP}]
+	)
 "
 
 distutils_enable_tests pytest

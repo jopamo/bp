@@ -15,7 +15,6 @@ PACKAGES=(
 	"colorama"
 	"configobj"
 	"coverage"
-	"cryptography"
 	"cython"
 	"distlib"
 	"distro"
@@ -48,7 +47,6 @@ PACKAGES=(
 	"lxml"
 	"mako"
 	"markupsafe"
-	"maturin"
 	"more-itertools"
 	"olefile"
 	"ordered-set"
@@ -279,6 +277,7 @@ declare -A replacements=(
 	["dev-libs/openssl"]="lib-net/openssl"
 	["sys-libs/timezone-data"]="lib-core/tzdb"
 	["dev-python/pillow"]="xgui-app/pillow"
+	["dev-python/cryptography"]="app-crypto/cryptography"
 )
 
 for package in "${PACKAGES[@]}"; do

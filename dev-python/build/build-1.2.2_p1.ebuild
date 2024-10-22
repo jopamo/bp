@@ -4,18 +4,21 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=flit
 PYTHON_TESTED=( python3_{10..13} pypy3 )
-PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" )
+PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_13t )
 
 inherit distutils-r1
 
+MY_P=${P/_p/.post}
 DESCRIPTION="A simple, correct PEP517 package builder"
 HOMEPAGE="
 	https://pypi.org/project/build/
 	https://github.com/pypa/build/
 "
 SRC_URI="
-	https://github.com/pypa/build/archive/${PV}.tar.gz -> ${P}.gh.tar.gz
+	https://github.com/pypa/build/archive/${PV/_p/.post}.tar.gz
+		-> ${MY_P}.gh.tar.gz
 "
+S=${WORKDIR}/${MY_P}
 
 LICENSE="MIT"
 SLOT="0"

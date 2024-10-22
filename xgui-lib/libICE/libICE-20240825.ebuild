@@ -13,7 +13,7 @@ S="${WORKDIR}/libice-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="ipv6 static-libs"
 

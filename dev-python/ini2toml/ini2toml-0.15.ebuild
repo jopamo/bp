@@ -19,11 +19,11 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	>=dev-python/packaging-20.7[${PYTHON_USEDEP}]
-	>=dev-python/setuptools-59.6[${PYTHON_USEDEP}]
+	>=dev-py/setuptools-59.6[${PYTHON_USEDEP}]
 	>=dev-python/tomli-w-0.4.0[${PYTHON_USEDEP}]
 "
 BDEPEND="
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+	dev-py/setuptools-scm[${PYTHON_USEDEP}]
 	test? (
 		dev-python/configupdater[${PYTHON_USEDEP}]
 		dev-python/tomli[${PYTHON_USEDEP}]

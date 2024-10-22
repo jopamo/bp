@@ -20,12 +20,12 @@ RDEPEND="
 	dev-python/paramiko[${PYTHON_USEDEP}]
 	dev-python/jinja[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
-	dev-python/setuptools[${PYTHON_USEDEP}]
+	dev-py/setuptools[${PYTHON_USEDEP}]
 	app-crypto/cryptography[${PYTHON_USEDEP}]
 	dev-python/httplib2[${PYTHON_USEDEP}]
 	dev-python/six[${PYTHON_USEDEP}]
 "
 DEPEND="
-	dev-python/setuptools[${PYTHON_USEDEP}]
+	dev-py/setuptools[${PYTHON_USEDEP}]
 	>=dev-python/packaging-16.6[${PYTHON_USEDEP}]
 "

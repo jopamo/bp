@@ -278,6 +278,7 @@ declare -A replacements=(
 	["sys-libs/timezone-data"]="lib-core/tzdb"
 	["dev-python/pillow"]="xgui-app/pillow"
 	["dev-python/cryptography"]="app-crypto/cryptography"
+	["dev-python/setuptools"]="dev-py/setuptools"
 )
 
 for package in "${PACKAGES[@]}"; do

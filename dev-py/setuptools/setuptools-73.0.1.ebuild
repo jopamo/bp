@@ -25,7 +25,7 @@ IUSE="test"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
-	!<dev-python/setuptools-rust-1.8.0
+	!<dev-py/setuptools-rust-1.8.0
 	dev-python/jaraco-collections[${PYTHON_USEDEP}]
 	dev-python/jaraco-functools[${PYTHON_USEDEP}]
 	>=dev-python/jaraco-text-3.7.0-r1[${PYTHON_USEDEP}]

@@ -33,7 +33,7 @@ RDEPEND="
 	!!<=dev-python/flaky-3.7.0-r5
 "
 BDEPEND="
-	>=dev-python/setuptools-scm-6.2.3[${PYTHON_USEDEP}]
+	>=dev-py/setuptools-scm-6.2.3[${PYTHON_USEDEP}]
 	test? (
 		${RDEPEND}
 		$(python_gen_cond_dep '

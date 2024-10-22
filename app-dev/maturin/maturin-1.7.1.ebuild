@@ -21,7 +21,7 @@ RESTRICT="test network-sandbox"
 
 BDEPEND="
 	virtual/rust
-	dev-python/setuptools-rust
+	dev-py/setuptools-rust
 "
 
 QA_FLAGS_IGNORED="usr/bin/${PN}"

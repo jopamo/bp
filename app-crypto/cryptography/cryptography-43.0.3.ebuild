@@ -40,7 +40,7 @@ DEPEND="
 # XXX: Drop explicit >=virtual/rust-1.56.0 dep once that's the minimum in cargo.eclass
 # and replace it with ${RUST_DEPEND}
 BDEPEND="
-	dev-python/setuptools[${PYTHON_USEDEP}]
+	dev-py/setuptools[${PYTHON_USEDEP}]
 	>=virtual/rust-1.56.0
 	test? (
 		dev-python/certifi[${PYTHON_USEDEP}]

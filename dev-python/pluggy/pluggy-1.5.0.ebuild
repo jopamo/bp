@@ -19,7 +19,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 BDEPEND="
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+	dev-py/setuptools-scm[${PYTHON_USEDEP}]
 "
 
 distutils_enable_tests pytest

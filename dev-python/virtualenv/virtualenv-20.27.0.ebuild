@@ -40,7 +40,7 @@ BDEPEND="
 		' pypy3)
 		>=dev-python/pytest-mock-3.6.1[${PYTHON_USEDEP}]
 		dev-python/pytest-xdist[${PYTHON_USEDEP}]
-		>=dev-python/setuptools-67.8[${PYTHON_USEDEP}]
+		>=dev-py/setuptools-67.8[${PYTHON_USEDEP}]
 		$(python_gen_cond_dep '
 			dev-python/time-machine[${PYTHON_USEDEP}]
 		' 'python3*')

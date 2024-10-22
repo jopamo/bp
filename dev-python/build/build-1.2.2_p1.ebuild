@@ -39,7 +39,7 @@ BDEPEND="
 			>=dev-python/pytest-mock-2[${PYTHON_USEDEP}]
 			>=dev-python/pytest-rerunfailures-9.1[${PYTHON_USEDEP}]
 			>=dev-python/pytest-xdist-1.34[${PYTHON_USEDEP}]
-			>=dev-python/setuptools-56.0.0[${PYTHON_USEDEP}]
+			>=dev-py/setuptools-56.0.0[${PYTHON_USEDEP}]
 			>=dev-python/virtualenv-20.0.35[${PYTHON_USEDEP}]
 			>=dev-python/wheel-0.36.0[${PYTHON_USEDEP}]
 			

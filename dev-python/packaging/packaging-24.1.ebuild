@@ -19,7 +19,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	!<dev-python/setuptools-67
+	!<dev-py/setuptools-67
 "
 DEPEND="
 	test? (

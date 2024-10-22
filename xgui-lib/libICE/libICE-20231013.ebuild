@@ -17,6 +17,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="ipv6 static-libs"
 
+DEPEND="xgui-lib/xtrans"
+
 src_prepare() {
 	default
 	eautoreconf

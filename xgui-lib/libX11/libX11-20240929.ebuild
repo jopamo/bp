@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X.Org X11 library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=ed9fb5535efe1e5278654b6b3994a34337b4bf1a
+SNAPSHOT=f2ebbce6d0978d2d84f840196b03ee35a3ca1736
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libX11/-/archive/${SNAPSHOT}/libX11-${SNAPSHOT}.tar.bz2 -> libX11-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libx11-${SNAPSHOT}"
 

@@ -7,7 +7,7 @@ inherit toolchain-funcs
 DESCRIPTION="mapping tool for UTF-8 strings"
 HOMEPAGE="https://github.com/JuliaStrings/utf8proc"
 
-SNAPSHOT=5568eff49a6bf417b6fdef2808df9db8d3d68a76
+SNAPSHOT=3de4596fbe28956855df2ecb3c11c0bbc3535838
 SRC_URI="https://github.com/JuliaStrings/utf8proc/archive/${SNAPSHOT}.tar.gz -> utf8proc-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/utf8proc-${SNAPSHOT}"
 

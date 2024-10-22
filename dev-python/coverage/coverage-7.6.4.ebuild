@@ -57,6 +57,10 @@ python_test() {
 		# COVERAGE_CORE (which breaks testing pytracer on CPython)
 		tests/test_cmdline.py::CmdLineStdoutTest::test_version
 		tests/test_debug.py::DebugTraceTest::test_debug_sys_ctracer
+		# mismatch of expected concurrency in error message
+		# TODO: report upstream?
+		tests/test_concurrency.py::ConcurrencyTest::test_greenlet
+		tests/test_concurrency.py::ConcurrencyTest::test_greenlet_simple_code
 	)
 	local EPYTEST_IGNORE=(
 		# pip these days insists on fetching build deps from Internet

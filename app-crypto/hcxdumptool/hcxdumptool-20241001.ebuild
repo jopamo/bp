@@ -5,7 +5,7 @@ EAPI=8
 DESCRIPTION="Small tool to capture packets from wlan devices"
 HOMEPAGE="https://github.com/ZerBea/hcxdumptool"
 
-SNAPSHOT=233b6e3277d8cd17b2546fe1245694f3c47f7798
+SNAPSHOT=66ba09f7e499967939ebed69e84fb76b7995d82a
 SRC_URI="https://github.com/ZerBea/hcxdumptool/archive/${SNAPSHOT}.tar.gz -> hcxdumptool-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/hcxdumptool-${SNAPSHOT}"
 

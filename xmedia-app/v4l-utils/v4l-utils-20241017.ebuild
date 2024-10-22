@@ -7,7 +7,7 @@ inherit meson flag-o-matic xdg
 DESCRIPTION="a series of packages for handling media devices"
 HOMEPAGE="https://git.linuxtv.org/v4l-utils.git"
 
-SNAPSHOT=a1ebb4dad512025a7fbb2e7ff6ab6e5f5e604987
+SNAPSHOT=fd882f9e77b13cbc6a669e6836c3943393b44152
 SRC_URI="https://github.com/gjasny/v4l-utils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

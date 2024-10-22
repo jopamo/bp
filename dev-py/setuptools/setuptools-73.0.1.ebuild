@@ -71,7 +71,7 @@ BDEPEND="
 # the newest version for the time being to avoid errors.
 # https://github.com/pypa/setuptools/issues/4459
 PDEPEND="
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+	dev-py/setuptools-scm[${PYTHON_USEDEP}]
 	>=dev-python/trove-classifiers-2024.10.16[${PYTHON_USEDEP}]
 "
 

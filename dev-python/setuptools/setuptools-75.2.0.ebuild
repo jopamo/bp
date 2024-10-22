@@ -7,7 +7,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=standalone
 PYTHON_TESTED=( python3_{10..13} pypy3 )
-PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" )
+PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_13t )
 PYTHON_REQ_USE="xml(+)"
 
 inherit distutils-r1 pypi
@@ -25,7 +25,7 @@ IUSE="test"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
-	!!<dev-python/setuptools-rust-1.8.0
+	!<dev-python/setuptools-rust-1.8.0
 	dev-python/jaraco-collections[${PYTHON_USEDEP}]
 	dev-python/jaraco-functools[${PYTHON_USEDEP}]
 	>=dev-python/jaraco-text-3.7.0-r1[${PYTHON_USEDEP}]
@@ -36,9 +36,9 @@ RDEPEND="
 	$(python_gen_cond_dep '
 		>=dev-python/tomli-2.0.1[${PYTHON_USEDEP}]
 	' 3.10)
-	!!<=dev-libs/gobject-introspection-1.76.1-r0
-	!!=dev-libs/gobject-introspection-1.78.1-r0
-	!!=dev-libs/gobject-introspection-1.80.1-r1
+	!<=dev-libs/gobject-introspection-1.76.1-r0
+	!=dev-libs/gobject-introspection-1.78.1-r0
+	!=dev-libs/gobject-introspection-1.80.1-r1
 "
 BDEPEND="
 	${RDEPEND}
@@ -72,7 +72,7 @@ BDEPEND="
 # https://github.com/pypa/setuptools/issues/4459
 PDEPEND="
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
-	>=dev-python/trove-classifiers-2024.7.2[${PYTHON_USEDEP}]
+	>=dev-python/trove-classifiers-2024.10.16[${PYTHON_USEDEP}]
 "
 
 src_prepare() {

@@ -302,7 +302,8 @@ update_git_package "lib-core" "elfutils" "https://sourceware.org/git/elfutils.gi
 update_git_package "app-core" "kbd" "https://git.kernel.org/pub/scm/linux/kernel/git/legion/kbd.git"
 update_git_package "lib-core" "libcap" "https://kernel.googlesource.com/pub/scm/libs/libcap/libcap"
 update_git_package "app-net" "iw" "https://kernel.googlesource.com/pub/scm/linux/kernel/git/jberg/iw"
-update_git_package "app-net" "ethtool" "https://git.kernel.org/pub/scm/network/ethtool/ethtool.git/"
+update_git_package "app-net" "ethtool" "https://git.kernel.org/pub/scm/network/ethtool/ethtool.git"
+update_git_package "lib-dev" "ell" "https://kernel.googlesource.com/pub/scm/libs/ell/ell.git"
 
 update_git_package "lib-net" "libnetfilter_conntrack" "https://git.netfilter.org/libnetfilter_conntrack"
 update_git_package "lib-net" "libnfnetlink" "https://git.netfilter.org/libnfnetlink"

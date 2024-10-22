@@ -123,10 +123,10 @@ RDEPEND="
 	virtual/rust
 	<dev-python/semantic-version-3[${PYTHON_USEDEP}]
 	>=dev-python/semantic-version-2.8.2[${PYTHON_USEDEP}]
-	>=dev-python/setuptools-62.4[${PYTHON_USEDEP}]
+	>=dev-py/setuptools-62.4[${PYTHON_USEDEP}]
 "
 BDEPEND="
-	>=dev-python/setuptools-62.4[${PYTHON_USEDEP}]
+	>=dev-py/setuptools-62.4[${PYTHON_USEDEP}]
 	test? (
 		${RDEPEND}
 		dev-python/beautifulsoup4[${PYTHON_USEDEP}]

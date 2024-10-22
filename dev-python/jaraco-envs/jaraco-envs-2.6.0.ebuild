@@ -23,7 +23,7 @@ RDEPEND="
 	dev-python/path[${PYTHON_USEDEP}]
 "
 BDEPEND="
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+	dev-py/setuptools-scm[${PYTHON_USEDEP}]
 "
 
 distutils_enable_tests pytest

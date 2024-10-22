@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	dev-python/setuptools[${PYTHON_USEDEP}]
+	dev-py/setuptools[${PYTHON_USEDEP}]
 	dev-python/tqdm[${PYTHON_USEDEP}]
 	dev-python/ffmpeg-progress-yield[${PYTHON_USEDEP}]
 "

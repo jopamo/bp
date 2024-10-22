@@ -21,7 +21,7 @@ KEYWORDS="amd64 arm64"
 RESTRICT=test
 
 BDEPEND="
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+	dev-py/setuptools-scm[${PYTHON_USEDEP}]
 "
 
 distutils_enable_tests pytest

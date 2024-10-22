@@ -36,7 +36,7 @@ RDEPEND="
 	dev-python/olefile[${PYTHON_USEDEP}]
 "
 BDEPEND="
-	dev-python/setuptools[${PYTHON_USEDEP}]
+	dev-py/setuptools[${PYTHON_USEDEP}]
 	dev-python/wheel[${PYTHON_USEDEP}]
 	test? (
 		dev-python/defusedxml[${PYTHON_USEDEP}]

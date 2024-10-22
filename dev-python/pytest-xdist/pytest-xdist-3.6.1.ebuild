@@ -24,7 +24,7 @@ RDEPEND="
 "
 
 BDEPEND="
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+	dev-py/setuptools-scm[${PYTHON_USEDEP}]
 	test? (
 		dev-python/filelock[${PYTHON_USEDEP}]
 	)

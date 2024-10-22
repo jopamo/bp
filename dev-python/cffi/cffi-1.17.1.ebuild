@@ -29,7 +29,7 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 	dev-python/pycparser[${PYTHON_USEDEP}]
-	dev-python/setuptools[${PYTHON_USEDEP}]
+	dev-py/setuptools[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	${RDEPEND}

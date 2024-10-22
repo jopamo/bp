@@ -15,6 +15,11 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+DEPEND="
+	xgui-lib/libXrender
+	xgui-lib/libX11
+"
+
 IUSE="static-libs"
 
 src_prepare() {

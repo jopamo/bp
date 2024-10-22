@@ -141,6 +141,7 @@ update_kernel_opi5plus() {
 	rm -rf /boot/dtb*
 	mkdir -p /boot/dtb/rockchip
 	cp arch/arm64/boot/dts/rockchip/rk3588-orangepi-5-plus.dtb /boot/dtb/rockchip/ || return 1
+	make -j$(nproc) Image.gz || return 1
 	cp /usr/src/linux/arch/arm64/boot/Image.gz /boot/ || return 1
 	make modules_install || return 1
 

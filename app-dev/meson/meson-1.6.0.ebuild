@@ -2,7 +2,9 @@
 
 EAPI=8
 
-inherit distutils-r1 python-r1
+DISTUTILS_USE_PEP517=setuptools
+
+inherit distutils-r1 doins
 
 DESCRIPTION="Open source build system"
 HOMEPAGE="http://mesonbuild.com/"
@@ -16,9 +18,9 @@ fi
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
 
-IUSE="vim"
+IUSE="vim zsh"
 
 RESTRICT="test"
 
@@ -36,10 +38,15 @@ python_install_all() {
 		doins data/syntax-highlighting/vim/{ftdetect,indent,syntax}
 	fi
 
-	rm -rf "${ED}"/usr/share/polkit-1
+	if use zsh ; then
+		insinto /usr/share/zsh/site-functions
+		doins data/shell-completions/zsh/_meson
+	fi
+
+	dobashcomp data/shell-completions/bash/meson
 
 	#lazy update mtime
 	find "${ED}"/usr/share -type f -exec touch {} +
 
-	python_foreach_impl python_doscript "${FILESDIR}"/meson-format-array
+	python_doscript "${FILESDIR}"/meson-format-array
 }

@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="LAME Ain't an MP3 Encoder"
 HOMEPAGE="http://lame.sourceforge.net/"
-SRC_URI="https://sourceforge.net/code-snapshots/svn/l/la/lame/svn/lame-svn-r$(ver_cut 2)-trunk.zip"
+SRC_URI="https://1g4.org/files/lame-svn-r$(ver_cut 2)-trunk.zip"
 S="${WORKDIR}/lame-svn-r$(ver_cut 2)-trunk/lame"
 
 LICENSE="LGPL-2.1"

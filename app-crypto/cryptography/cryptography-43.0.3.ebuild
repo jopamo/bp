@@ -57,6 +57,8 @@ BDEPEND="
 # Files built without CFLAGS/LDFLAGS, acceptable for rust
 QA_FLAGS_IGNORED="usr/lib.*/py.*/site-packages/cryptography/hazmat/bindings/_rust.*.so"
 
+RESTRICT="network-sandbox"
+
 distutils_enable_tests pytest
 
 src_prepare() {
@@ -73,8 +75,6 @@ src_prepare() {
 		sed -i -e 's/__builtin_available(macOS 10\.12, \*)/'"${darwinok}"'/' \
 			src/_cffi_src/openssl/src/osrandom_engine.c || die
 	fi
-
-	cargo fetch --locked
 }
 
 python_configure_all() {

@@ -18,7 +18,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	>=dev-python/cryptography-1.5[${PYTHON_USEDEP}]
+	>=app-crypto/cryptography-1.5[${PYTHON_USEDEP}]
 	>=dev-python/pyopenssl-0.13[${PYTHON_USEDEP}]
 "
 

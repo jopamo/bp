@@ -5,7 +5,7 @@ EAPI=8
 DESCRIPTION="An easy-to-use hash implementation for C programmers"
 HOMEPAGE="https://troydhanson.github.io/uthash/index.html"
 
-SNAPSHOT=619fe95ca4679249528f086536aadd0c469dbd99
+SNAPSHOT=f69112c04f1b6e059b8071cb391a1fcc83791a00
 SRC_URI="https://github.com/troydhanson/uthash/archive/${SNAPSHOT}.tar.gz -> uthash-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/uthash-${SNAPSHOT}"
 

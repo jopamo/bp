@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools flag-o-matic
 
 DESCRIPTION="X.Org X11 library"
 HOMEPAGE="https://www.x.org/wiki/"
@@ -13,7 +13,7 @@ S="${WORKDIR}/libx11-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="ipv6 static-libs"
 
@@ -24,6 +24,8 @@ DEPEND="
 "
 
 src_prepare() {
+	filter-flags -Wl,-z,defs
+
 	default
 	eautoreconf
 

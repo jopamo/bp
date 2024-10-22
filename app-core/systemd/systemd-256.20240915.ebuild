@@ -34,7 +34,6 @@ DEPEND="
 	app-tex/docbook-xsl-stylesheets
 	lib-core/libcap
 	lib-core/libxslt
-	logind? ( app-fs/cryptsetup )
 	gcrypt? ( lib-core/libgcrypt )
 	lib-core/libseccomp
 	dbus? (
@@ -127,9 +126,6 @@ src_configure() {
 		$(meson_feature gcrypt)
 		$(meson_feature importd)
 		$(meson_feature kmod)
-		$(meson_feature logind fdisk)
-		$(meson_feature logind homed)
-		$(meson_feature logind libcryptsetup)
 		$(meson_feature machined bzip2)
 		$(meson_feature machined lz4)
 		$(meson_feature machined xz)
@@ -171,12 +167,15 @@ src_configure() {
 		-Ddns-servers=""
 		-Delfutils=enabled
 		-Denvironment-d=false
+		-Dfdisk=false
 		-Dfirstboot=false
 		-Dgnutls=disabled
 		-Dhibernate=false
+		-Dhomed=false
 		-Dhtml=disabled
 		-Didn=false
 		-Dima=false
+		-Dlibcryptsetup=false
 		-Dlibcurl=disabled
 		-Dlibidn2=disabled
 		-Dlibidn=disabled

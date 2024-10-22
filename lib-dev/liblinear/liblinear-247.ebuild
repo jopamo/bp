@@ -18,6 +18,13 @@ src_prepare() {
 	cp "${FILESDIR}/meson.build" "${S}/" || die "Failed to copy meson.build"
 
 	echo "option('build_static_lib', type: 'boolean', value: false, description: 'Enable or disable building the static BLAS library')" > meson_options.txt
-
-	die
 }
+
+src_install() {
+	meson_src_install
+
+	insinto /usr/include
+	doins linear.h newton.h
+
+}
+

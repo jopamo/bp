@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="XSLT libraries and tools"
 HOMEPAGE="http://www.xmlsoft.org/"
 
-SNAPSHOT=220cde60f424ebee37aef9f1f596ac282e4dbe32
+SNAPSHOT=5df99903aef143d605be69cbd4fbf246871cd113
 SRC_URI="https://gitlab.gnome.org/GNOME/libxslt/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

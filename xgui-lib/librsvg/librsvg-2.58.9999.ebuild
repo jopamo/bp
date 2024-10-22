@@ -17,6 +17,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+introspection"
 
+RESTRICT="network-sandbox"
+
 DEPEND="
 	lib-core/libxml2
 	lib-util/glib

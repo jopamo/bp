@@ -17,17 +17,18 @@ KEYWORDS="amd64 arm64"
 IUSE="wayland"
 
 DEPEND="
+	app-build/llvm
+	dev-python/mako
 	lib-core/expat
 	lib-core/zlib
-	xgui-lib/libdrm
 	xgui-lib/libX11
-	xgui-lib/libxshmfence
 	xgui-lib/libXdamage
 	xgui-lib/libXext
-	xgui-lib/libXxf86vm
-	xgui-lib/libxcb
 	xgui-lib/libXfixes
-	dev-python/mako
+	xgui-lib/libXxf86vm
+	xgui-lib/libdrm
+	xgui-lib/libxcb
+	xgui-lib/libxshmfence
 	xmedia-lib/libglvnd
 	wayland? ( xgui-lib/wayland-protocols )
 "

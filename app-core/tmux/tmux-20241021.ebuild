@@ -36,3 +36,10 @@ src_configure() {
 	)
 	econf "${myconf[@]}"
 }
+
+src_install() {
+	default
+
+	insinto /etc
+	doins "${FILESDIR}"/tmux.conf
+}

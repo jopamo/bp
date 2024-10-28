@@ -29,3 +29,11 @@ src_prepare() {
 	default
 	eautoreconf
 }
+
+src_install() {
+	default
+
+	insinto /etc/X11/xorg.conf.d
+	doins "${FILESDIR}"/40-libinput.conf
+
+}

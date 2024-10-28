@@ -29,4 +29,5 @@ DEPEND="
 src_prepare() {
 	kernel-2_src_prepare
 	eapply "${FILESDIR}"/mt7925.patch
+	eapply "${FILESDIR}"/reg.patch
 }

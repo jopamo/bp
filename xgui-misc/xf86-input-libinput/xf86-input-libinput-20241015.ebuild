@@ -15,10 +15,10 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND=">=lib-util/libinput-1.5.0:0=
-		xgui-tools/xorg-server"
-
-filter-flags -Wl,-z,defs
+DEPEND="
+	lib-util/libinput
+	xgui-tools/xorg-server
+"
 
 pkg_pretend() {
 	CONFIG_CHECK="~TIMERFD"
@@ -26,6 +26,8 @@ pkg_pretend() {
 }
 
 src_prepare() {
+	filter-flags -Wl,-z,defs
+
 	default
 	eautoreconf
 }

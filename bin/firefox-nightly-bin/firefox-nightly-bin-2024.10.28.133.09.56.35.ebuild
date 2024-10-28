@@ -78,7 +78,6 @@ src_install() {
 	doins "${T}"/10${PN} || die
 
 	rm "${ED}"/opt/${MOZ_PN}/pingsender || die
-	rm "${ED}"/opt/${MOZ_PN}/minidump-analyzer || die
 	rm "${ED}"/opt/${MOZ_PN}/crashreporter* || die
 	rm "${ED}"/opt/${MOZ_PN}/libnssckbi.so || die
 

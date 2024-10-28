@@ -37,4 +37,4 @@
 *app-crypto/blake3
 *app-port/eix
 *app-port/find_cruft
-*app-core/tmux
+*app-core/screen

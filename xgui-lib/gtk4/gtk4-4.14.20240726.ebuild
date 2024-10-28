@@ -23,14 +23,14 @@ REQUIRED_USE="
 "
 
 COMMON_DEPEND="
+	app-lang/sassc
 	fonts/fontconfig
 	lib-util/glib
-	xmedia-lib/graphene
-	app-lang/sassc
-	xgui-misc/shared-mime-info
 	xgui-lib/cairo[glib,svg,X?]
 	xgui-lib/gdk-pixbuf
 	xgui-lib/pango[introspection?]
+	xgui-misc/shared-mime-info
+	xmedia-lib/graphene
 	xmedia-lib/libepoxy[X(+)?]
 	cups? ( lib-print/cups )
 	introspection? ( lib-dev/gobject-introspection )

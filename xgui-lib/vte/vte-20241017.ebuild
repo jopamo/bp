@@ -17,6 +17,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	lib-dev/fast_float
+	xgui-lib/gtk3
 	xgui-lib/gtk4
 "
 
@@ -24,10 +25,15 @@ src_configure() {
 	filter-flags -flto*
 
 	local emesonargs=(
-		-Dicu=false
+		-Da11y=false
 		-Dvapi=false
 		-Ddocs=false
-		-Dgir=false
+		-Dgir=true
+		-Dsixel=true
+		-Dicu=false
+		-Dgnutls=true
+		-Dglade=true
+		-Dgtk3=true
 		)
 		meson_src_configure
 }

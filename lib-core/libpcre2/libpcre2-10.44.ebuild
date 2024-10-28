@@ -32,8 +32,8 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--disable-jit
-		--disable-pcre2grep-jit
+		--enable-jit
+		--enable-pcre2grep-jit
 		--disable-pcre2test-libedit
 		--enable-pcre2-16
 		--enable-pcre2-32

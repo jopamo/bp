@@ -1,5 +1,5 @@
 AcceptEnv LANG LC_*
-AllowTcpForwarding no
+AuthenticationMethods publickey,password
 ChallengeResponseAuthentication no
 Ciphers chacha20-poly1305@openssh.com
 ClientAliveCountMax 3
@@ -8,8 +8,8 @@ Compression yes
 GatewayPorts no
 HostKeyAlgorithms ssh-ed25519
 KexAlgorithms curve25519-sha256@libssh.org
-LoginGraceTime 20s
 LogLevel VERBOSE
+LoginGraceTime 20s
 MACs hmac-sha2-512-etm@openssh.com
 MaxAuthTries 3
 MaxStartups 3:50:10
@@ -22,7 +22,7 @@ Port 22
 PrintLastLog no
 PrintMotd no
 Protocol 2
-PubkeyAuthentication no
+PubkeyAuthentication yes
 StrictModes yes
 Subsystem sftp /usr/libexec/sftp-server
 SyslogFacility AUTH
@@ -30,5 +30,10 @@ TCPKeepAlive no
 UseDNS no
 UsePAM yes
 X11DisplayOffset 10
-X11Forwarding no
 X11UseLocalhost no
+
+Match Group sshjail
+    ChrootDirectory /srv/ssh
+    ForceCommand internal-sftp
+    AllowTcpForwarding no
+    X11Forwarding no

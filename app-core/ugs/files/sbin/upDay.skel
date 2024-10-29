@@ -344,8 +344,6 @@ branch_bump() {
 	update_ebuild "${REPO_PATH}/app-lang/perl" "https://github.com/Perl/perl5" "maint-${PERL_VERSION}" "$PERL_VERSION" "no"
 	update_ebuild "${REPO_PATH}/lib-core/sqlite" "https://github.com/sqlite/sqlite" "branch-${SQLITE_VERSION}" "$SQLITE_VERSION" "no"
 	update_ebuild "${REPO_PATH}/app-build/llvm" "https://github.com/llvm/llvm-project" "release/${LLVM_VERSION}.x" "$LLVM_VERSION" "no"
-	update_ebuild "${REPO_PATH}/app-build/clang" "https://github.com/llvm/llvm-project" "release/${LLVM_VERSION}.x" "$LLVM_VERSION" "no"
-	update_ebuild "${REPO_PATH}/app-build/compiler-rt" "https://github.com/llvm/llvm-project" "release/${LLVM_VERSION}.x" "$LLVM_VERSION" "no"
 	update_ebuild "${REPO_PATH}/app-core/util-linux" "https://github.com/util-linux/util-linux" "stable/v${UTIL_LINUX_VERSION}" "${UTIL_LINUX_VERSION}" "no"
 	update_ebuild "${REPO_PATH}/app-core/systemd" "https://github.com/systemd/systemd" "v${SYSTEMD_VERSION}-stable" "${SYSTEMD_VERSION}" "no"
 	update_ebuild "${REPO_PATH}/xgui-app/wireshark" "https://github.com/wireshark/wireshark" "release-${WIRESHARK_VERSION}" "${WIRESHARK_VERSION}" "no"

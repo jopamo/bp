@@ -71,19 +71,19 @@ src_configure() {
 }
 
 src_install() {
-    # Standard installation steps
     default
 
     insinto /etc/ssl/certs/
-	newins ca-bundle.crt ca-certificates.crt
-	dosym -r /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-bundle.crt
-	dosym -r /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/cacert.pem
+	newins ca-bundle.crt cacert.pem
+	dosym -r /etc/ssl/certs/cacert.pem /etc/ssl/certs/ca-bundle.crt
+	dosym -r /etc/ssl/certs/cacert.pem /etc/ssl/certs/ca-certificates.crt
 
-    # Set system-wide CA bundle path environment variables
-    cat <<EOF > "${D}/etc/env.d/99curlcacert"
-SSL_CERT_FILE="/etc/ssl/certs/cacert.pem"
-CURL_CA_BUNDLE="/etc/ssl/certs/cacert.pem"
-GIT_SSL_CAINFO="/etc/ssl/certs/cacert.pem"
-REQUESTS_CA_BUNDLE="/etc/ssl/certs/cacert.pem"
-EOF
+    cat > "${T}"/99${PN} <<- EOF || die
+		SSL_CERT_FILE="/etc/ssl/certs/cacert.pem"
+		CURL_CA_BUNDLE="/etc/ssl/certs/cacert.pem"
+		GIT_SSL_CAINFO="/etc/ssl/certs/cacert.pem"
+		REQUESTS_CA_BUNDLE="/etc/ssl/certs/cacert.pem"
+	EOF
+
+    doenvd "${T}"/99${PN}
 }

@@ -10,19 +10,19 @@ HOMEPAGE="https://llvm.org/"
 if [[ ${PV} == 19* ]] ; then
     SNAPSHOT=d8752671e825ca5c967cc58a23778ae378c8dea2
 elif [[ ${PV} == 13* ]] ; then
-    SNAPSHOT=d8752671e825ca5c967cc58a23778ae378c8dea2
+    SNAPSHOT="75e33f71c2dae584b13a7d1186ae0a038ba98838"
 elif [[ ${PV} == 14* ]] ; then
-    SNAPSHOT=d8752671e825ca5c967cc58a23778ae378c8dea2
+    SNAPSHOT="f28c006a5895fc0e329fe15fead81e37457cb1d1"
 elif [[ ${PV} == 15* ]] ; then
-    SNAPSHOT=d8752671e825ca5c967cc58a23778ae378c8dea2
+    SNAPSHOT="8dfdcc7b7bf66834a761bd8de445840ef68e4d1a"
 elif [[ ${PV} == 16* ]] ; then
-    SNAPSHOT=d8752671e825ca5c967cc58a23778ae378c8dea2
+    SNAPSHOT="7cbf1a2591520c2491aa35339f227775f4d3adf6"
 elif [[ ${PV} == 17* ]] ; then
-    SNAPSHOT=d8752671e825ca5c967cc58a23778ae378c8dea2
+    SNAPSHOT="6009708b4367171ccdbf4b5905cb6a803753fe18"
 elif [[ ${PV} == 18* ]] ; then
-    SNAPSHOT=d8752671e825ca5c967cc58a23778ae378c8dea2
+    SNAPSHOT="3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff"
 elif [[ ${PV} == 12* ]] ; then
-    SNAPSHOT=d8752671e825ca5c967cc58a23778ae378c8dea2
+    SNAPSHOT="fed41342a82f5a3a9201819a82bf7a48313e296b"
 fi
 
 SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"

@@ -12,7 +12,7 @@ rename_ebuild_files() {
 	if [[ -n "$ebuild_file_path" ]]; then
 		local ebuild_dir=$(dirname "$ebuild_file_path")
 		local new_ebuild_file_name="${package_name}-${new_date}.ebuild"
-		sudo mv "$ebuild_file_path" "${ebuild_dir}/${new_ebuild_file_name}"
+		sudo cp "$ebuild_file_path" "${ebuild_dir}/${new_ebuild_file_name}"
 		sudo rm "${ebuild_dir}/Manifest"
 		echo "Renamed ebuild for ${package_name} to ${new_date}"
 	else
@@ -58,13 +58,8 @@ process_package() {
 	if [ ! -f "${WORKHOME}/${GITDATENAME}.tar.xz" ]; then
 		rm -rf "${WORKHOME}/${package_name}/gnulib"
 		cp -rp "${WORKHOME}/gnulib" "${WORKHOME}/${package_name}/gnulib"
-
 		chmod +w "${WORKHOME}/${package_name}/build-aux/ltmain.sh"
 
-		echo '@set VERSION 2.4.7' > "${WORKHOME}/${package_name}/doc/version.texi"
-		echo '@set UPDATED "October 2024"' >> "${WORKHOME}/${package_name}/doc/version.texi"
-
-		sed -i '/^AM_INIT_AUTOMAKE/a AM_MAINTAINER_MODE([disable])' "${WORKHOME}/${package_name}/configure.ac"
 		(cd ${WORKHOME}/${package_name} && ./bootstrap --copy --skip-po || ./autogen.sh)
 
 		if [ -d "${WORKHOME}/${package_name}/libltdl" ]; then
@@ -72,8 +67,6 @@ process_package() {
 			autoreconf
 			popd >/dev/null || exit 1
 		fi
-
-		(cd ${WORKHOME}/${package_name} && ./bootstrap --copy --skip-po || ./autogen.sh)
 
 		(cd ${WORKHOME} && tar -hcf - ${package_name} | tar -xf - -C ${TEMPLOCATION})
 		mv ${TEMPLOCATION}/${package_name} ${TEMPLOCATION}/${GITDATENAME}

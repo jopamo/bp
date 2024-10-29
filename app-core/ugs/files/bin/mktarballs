@@ -62,11 +62,11 @@ process_package() {
 
 		(cd ${WORKHOME}/${package_name} && ./bootstrap --copy --skip-po || ./autogen.sh)
 
-		if [ -d "${WORKHOME}/${package_name}/libltdl" ]; then
-			pushd "${WORKHOME}/${package_name}/libltdl" >/dev/null || exit 1
-			autoreconf
-			popd >/dev/null || exit 1
-		fi
+		#if [ -d "${WORKHOME}/${package_name}/libltdl" ]; then
+		#	pushd "${WORKHOME}/${package_name}/libltdl" >/dev/null || exit 1
+		#	autoreconf
+		#	popd >/dev/null || exit 1
+		#fi
 
 		(cd ${WORKHOME} && tar -hcf - ${package_name} | tar -xf - -C ${TEMPLOCATION})
 		mv ${TEMPLOCATION}/${package_name} ${TEMPLOCATION}/${GITDATENAME}

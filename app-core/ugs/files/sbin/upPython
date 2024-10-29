@@ -268,7 +268,7 @@ for package in "${PACKAGES[@]}"; do
 done
 
 declare -A replacements=(
-	["app-misc/ca-certificates"]="app-var/ca-certificates"
+	["app-misc/ca-certificates"]="app-net/curl"
 	["dev-libs/libffi"]="lib-core/libffi"
 	["dev-libs/libxml2"]="lib-core/libxml2"
 	["dev-libs/libxslt"]="lib-core/libxslt"

@@ -18,6 +18,8 @@ SLOT="0"
 
 IUSE="adns brotli ipv6 ldap libpsl mbedtls ssh ssl static-libs test nghttp2 zlib zstd"
 
+RESTRICT="network-sandbox"
+
 DEPEND="
 		lib-core/zlib
 		adns? ( lib-net/c-ares )
@@ -42,6 +44,8 @@ src_prepare() {
 	fi
 
 	default
+
+	scripts/mk-ca-bundle.pl -k || die
 }
 
 src_configure() {
@@ -64,4 +68,22 @@ src_configure() {
 		--with-zlib
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+    # Standard installation steps
+    default
+
+    insinto /etc/ssl/certs/
+	newins ca-bundle.crt ca-certificates.crt
+	dosym -r /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-bundle.crt
+	dosym -r /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/cacert.pem
+
+    # Set system-wide CA bundle path environment variables
+    cat <<EOF > "${D}/etc/env.d/99curlcacert"
+SSL_CERT_FILE="/etc/ssl/certs/cacert.pem"
+CURL_CA_BUNDLE="/etc/ssl/certs/cacert.pem"
+GIT_SSL_CAINFO="/etc/ssl/certs/cacert.pem"
+REQUESTS_CA_BUNDLE="/etc/ssl/certs/cacert.pem"
+EOF
 }

@@ -19,6 +19,13 @@ DEPEND="
 	xattr? ( app-core/attr )
 "
 
+src_prepare() {
+	echo '@set VERSION 2.4.7' > doc/version.texi
+	echo '@set UPDATED "October 2024"' >> doc/version.texi
+
+	default
+}
+
 src_configure() {
 	use static && append-ldflags -static
 

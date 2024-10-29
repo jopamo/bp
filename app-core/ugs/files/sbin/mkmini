@@ -45,7 +45,6 @@ BASE_PACKAGES=(
     "app-core/shadow"
     "app-core/systemd"
     "app-core/util-linux"
-    "app-var/ca-certificates"
     "lib-core/expat"
     "lib-core/libcap"
     "lib-core/libcap-ng"

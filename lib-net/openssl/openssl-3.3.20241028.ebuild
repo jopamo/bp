@@ -32,7 +32,6 @@ BDEPEND="
 		app-util/bc
 		app-core/procps
 	)"
-PDEPEND="app-var/ca-certificates"
 
 PATCHES=( "${FILESDIR}"/openssl-1.1.0j-parallel_install_fix.patch )
 

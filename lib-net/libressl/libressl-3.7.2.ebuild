@@ -15,12 +15,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs test"
 
-PDEPEND="app-var/ca-certificates"
-
-filter-flags -Wl,-z,defs
-append-ldflags -Wl,-z,noexecstack
-
 src_prepare() {
+	filter-flags -Wl,-z,defs
+	append-ldflags -Wl,-z,noexecstack
+
 	touch crypto/Makefile.in
 
 	sed -i \

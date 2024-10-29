@@ -18,13 +18,12 @@ KEYWORDS="amd64 arm64"
 IUSE="pam +mta systemd"
 
 DEPEND="
-	virtual/ssl
-	lib-core/zlib
-	pam? ( lib-core/pam )
-	lib-dev/libevent
-	app-var/ca-certificates
 	app-net/mailbase
+	lib-core/zlib
 	lib-dev/libasr
+	lib-dev/libevent
+	pam? ( lib-core/pam )
+	virtual/ssl
 "
 
 src_prepare() {

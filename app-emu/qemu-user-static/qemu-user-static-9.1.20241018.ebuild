@@ -6,12 +6,16 @@ inherit flag-o-matic
 
 DESCRIPTION="QEMU with enhanced support for multiple architectures and options"
 HOMEPAGE="https://www.qemu.org/"
-SRC_URI="https://download.qemu.org/qemu-${PV}.tar.xz"
-S="${WORKDIR}/qemu-${PV}"
+
+SNAPSHOT=0ff5ab6f57a2427a3e83969b2e7dd71e04caae39
+SRC_URI="https://github.com/qemu/qemu/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/qemu-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+RESTRICT="network-sandbox"
 
 IUSE="+static-libs xattr"
 

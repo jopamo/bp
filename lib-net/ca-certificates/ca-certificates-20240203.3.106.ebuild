@@ -95,8 +95,6 @@ src_compile() {
 		cd "${c}" || die
 		find * -name '*.crt' | LC_ALL=C sort
 	) > etc/ca-certificates.conf
-
-	sh usr/sbin/update-ca-certificates --root "${S}/image" || die
 }
 
 src_install() {
@@ -111,10 +109,6 @@ src_install() {
 }
 
 pkg_postinst() {
-	"${EROOT}"/usr/sbin/update-ca-certificates --root "${ROOT}"
-
-	if [[ -n "$(find -L "${EROOT}"/etc/ssl/certs/ -type l)" ]] ; then
-		ewarn "Removing the following broken symlinks:"
-		ewarn "$(find -L "${EROOT}"/etc/ssl/certs/ -type l -printf '%p -> %l\n' -delete)"
-	fi
+	rm -rf /etc/ssl/certs/*
+	update-ca-certificates
 }

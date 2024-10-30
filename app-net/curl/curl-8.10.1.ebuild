@@ -45,7 +45,7 @@ src_prepare() {
 
 	default
 
-	scripts/mk-ca-bundle.pl -k || die
+	#scripts/mk-ca-bundle.pl -k || die
 }
 
 src_configure() {
@@ -73,17 +73,19 @@ src_configure() {
 src_install() {
     default
 
-    insinto /etc/ssl/certs/
-	newins ca-bundle.crt cacert.pem
-	dosym -r /etc/ssl/certs/cacert.pem /etc/ssl/certs/ca-bundle.crt
-	dosym -r /etc/ssl/certs/cacert.pem /etc/ssl/certs/ca-certificates.crt
+    #insinto /etc/ssl/certs/
+	#newins ca-bundle.crt cacert.pem
+	#dosym -r /etc/ssl/certs/cacert.pem /etc/ssl/certs/ca-bundle.crt
+	#dosym -r /etc/ssl/certs/cacert.pem /etc/ssl/certs/ca-certificates.crt
 
-    cat > "${T}"/99${PN} <<- EOF || die
-		SSL_CERT_FILE="/etc/ssl/certs/cacert.pem"
-		CURL_CA_BUNDLE="/etc/ssl/certs/cacert.pem"
-		GIT_SSL_CAINFO="/etc/ssl/certs/cacert.pem"
-		REQUESTS_CA_BUNDLE="/etc/ssl/certs/cacert.pem"
-	EOF
+    #cat > "${T}"/99${PN} <<- EOF || die
+	#	SSL_CERT_FILE="/etc/ssl/certs/cacert.pem"
+	#	CURL_CA_BUNDLE="/etc/ssl/certs/cacert.pem"
+	#	GIT_SSL_CAINFO="/etc/ssl/certs/cacert.pem"
+	#	REQUESTS_CA_BUNDLE="/etc/ssl/certs/cacert.pem"
+	#EOF
 
-    doenvd "${T}"/99${PN}
+    #doenvd "${T}"/99${PN}
+
+    dobin scripts/mk-ca-bundle.pl
 }

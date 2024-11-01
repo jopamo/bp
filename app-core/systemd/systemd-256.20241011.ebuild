@@ -13,7 +13,7 @@ S="${WORKDIR}/systemd-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="binfmt +blkid bpf-framework coredump dbus devmode dhcp4 efi gcrypt +gshadow
 +hostnamed hwdb importd kmod kvm ldconfig localed logind machined musl networkd
@@ -307,7 +307,7 @@ DHCP=ipv4' > "${ED}"/etc/systemd/network/ipv4dhcp.network
 pkg_postinst() {
 	journalctl --update-catalog
 
-	systemd-hwdb update --root="${EROOT%/}"
+	use hwdb && systemd-hwdb update --root="${EROOT%/}"
 	udevadm control --reload
 
 	systemctl reenable getty@tty1.service remote-fs.target

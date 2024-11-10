@@ -20,7 +20,7 @@ IUSE="binfmt +blkid bpf-framework coredump dbus devmode dhcp4 efi gcrypt +gshado
 oomd pam pcre pstore resolve rfkill sleep systemd-update sysusersd sysv timedated
 tmpfilesd +userdb +utmp vconsole xkb"
 
-REQUIRED_USE="musl? ( !gshadow !localed !userdb !utmp )"
+#REQUIRED_USE="musl? ( !gshadow !localed !userdb !utmp )"
 
 DEPEND="
 	app-build/gettext
@@ -132,7 +132,7 @@ src_configure() {
 		$(meson_feature logind fdisk)
 		$(meson_feature logind homed)
 		$(meson_feature logind libcryptsetup)
-		$(meson_feature machined)
+		$(meson_use machined)
 		$(meson_feature machined bzip2)
 		$(meson_feature machined lz4)
 		$(meson_feature machined xz)

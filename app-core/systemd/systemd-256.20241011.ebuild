@@ -78,6 +78,8 @@ pkg_pretend() {
 }
 
 src_prepare() {
+	filter-flags -Wl,-z,defs
+
 	append-cflags -Wno-error=format-truncation
 
 	if use musl; then
@@ -130,6 +132,7 @@ src_configure() {
 		$(meson_feature logind fdisk)
 		$(meson_feature logind homed)
 		$(meson_feature logind libcryptsetup)
+		$(meson_feature machined)
 		$(meson_feature machined bzip2)
 		$(meson_feature machined lz4)
 		$(meson_feature machined xz)
@@ -203,7 +206,7 @@ src_configure() {
 		-Dsplit-bin=true
 		-Dstandalone-binaries=true
 		-Dtimesyncd=false
-		-Dtpm=false
+		-Dtpm=true
 	)
 
 	meson_src_configure

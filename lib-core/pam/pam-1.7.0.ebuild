@@ -12,7 +12,8 @@ S="${WORKDIR}/Linux-PAM-${PV}"
 
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
+
 IUSE="logind"
 
 BDEPEND="

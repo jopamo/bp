@@ -15,7 +15,7 @@ LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="sndfile static-libs"
+IUSE="sndfile static-libs keep-la"
 
 DEPEND="sndfile? ( xgui-misc/libsndfile:= )"
 
@@ -30,4 +30,12 @@ src_configure() {
 		$(use_enable static-libs static)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+
+	if ! use keep-la; then
+		find "${ED}" -name '*.la' -delete || die
+	fi
 }

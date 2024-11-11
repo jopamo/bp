@@ -21,7 +21,7 @@ LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
-IUSE="gssapi mysql postgres sqlite systemd opengl vulkan +xkbcommon"
+IUSE="gssapi keep-la mysql postgres sqlite systemd opengl vulkan +xkbcommon"
 
 DEPEND="
 	app-core/dbus
@@ -109,4 +109,8 @@ src_install() {
 	cleanup_install
 
 	dosym -r /usr/bin/qmake /usr/lib/qt$(ver_cut 1)/bin/qmake
+
+	if ! use keep-la; then
+		find "${ED}" -name '*.la' -delete || die
+	fi
 }

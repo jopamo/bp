@@ -15,7 +15,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="test xkb static-libs"
+IUSE="keep-la test xkb static-libs"
 
 DEPEND="
 	xgui-lib/libXau
@@ -42,4 +42,8 @@ src_configure() {
 src_install() {
 	default
 	use static-libs || find "${ED}" -name '*.a' -delete
+
+	if ! use keep-la; then
+		find "${ED}" -name '*.la' -delete || die
+	fi
 }

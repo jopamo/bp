@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="The Boehm-Demers-Weiser conservative garbage collector"
 HOMEPAGE="https://github.com/ivmai/bdwgc"
 
-SNAPSHOT=6bbe4eb030b40036a75aa952971c84bdd7019112
+SNAPSHOT=0b8e3183b936f4f7b82fe2c88ade30c1a76c40d5
 SRC_URI="https://github.com/ivmai/bdwgc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/bdwgc-${SNAPSHOT}
 

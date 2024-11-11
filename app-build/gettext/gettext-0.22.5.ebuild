@@ -12,7 +12,7 @@ LICENSE="GPL-3+ LGPL-2.1+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl openmp static-libs"
+IUSE="acl keep-la openmp static-libs"
 
 DEPEND="acl? ( app-core/acl )
 		app-compression/xz-utils
@@ -20,10 +20,10 @@ DEPEND="acl? ( app-core/acl )
 
 RDEPEND="lib-core/expat"
 
-append-flags -lm
-filter-flags -Wl,-z,defs
-
 src_prepare() {
+	append-flags -lm
+	filter-flags -Wl,-z,defs
+
 	default
 	elibtoolize "${WORKDIR}"
 }
@@ -78,4 +78,8 @@ src_install() {
 	mv "${ED}"/usr/share/gettext-${PV} "${ED}"/usr/share/gettext
 	dosym -r /usr/share/gettext /usr/share/gettext-${PV}
 	rm "${ED}"/usr/share/gettext/its/gtkbuilder.its
+
+	if ! use keep-la; then
+		find "${ED}" -name '*.la' -delete || die
+	fi
 }

@@ -15,6 +15,8 @@ LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+IUSE="keep-la"
+
 RESTRICT="test"
 
 DEPEND="
@@ -39,4 +41,12 @@ src_configure() {
 		--with-libtinyxml2 \
 		--without-libcurl \
 		--without-libmms
+}
+
+src_install() {
+	default
+
+	if ! use keep-la; then
+		find "${ED}" -name '*.la' -delete || die
+	fi
 }

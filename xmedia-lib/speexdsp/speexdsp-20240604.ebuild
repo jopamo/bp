@@ -15,7 +15,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs"
+IUSE="keep-la static-libs"
 
 src_prepare() {
 	default
@@ -27,4 +27,12 @@ src_configure() {
 
 	ECONF_SOURCE="${S}" econf \
 		$(use_enable static-libs static)
+}
+
+src_install() {
+	default
+
+	if ! use keep-la; then
+		find "${ED}" -name '*.la' -delete || die
+	fi
 }

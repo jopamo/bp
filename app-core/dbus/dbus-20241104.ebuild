@@ -7,7 +7,7 @@ inherit linux-info flag-o-matic user meson
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="https://dbus.freedesktop.org/"
 
-SNAPSHOT=b6a6b83bb5378ab0d5300d6be31c7aa86eebba2c
+SNAPSHOT=08d64b1638c15f37979f8823cf110eb9d8783d56
 SRC_URI="https://gitlab.freedesktop.org/dbus/dbus/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

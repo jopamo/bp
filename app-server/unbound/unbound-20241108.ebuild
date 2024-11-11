@@ -7,7 +7,7 @@ inherit flag-o-matic python-single-r1 user autotools
 DESCRIPTION="A validating, recursive and caching DNS resolver"
 HOMEPAGE="http://unbound.net/"
 
-SNAPSHOT=0e2b2743d8131cdd3f895e8f53f5a954ae42bb8d
+SNAPSHOT=733d5f7161c5675e66e39974b912a08eeb48140c
 SRC_URI="https://github.com/NLnetLabs/unbound/archive/${SNAPSHOT}.tar.gz -> unbound-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/unbound-${SNAPSHOT}"
 

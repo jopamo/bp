@@ -5,7 +5,7 @@ EAPI=8
 DESCRIPTION="A collection of tools and libraries for many image formats"
 HOMEPAGE="https://www.imagemagick.org/"
 
-SNAPSHOT=cd2cfea37f8ae6e60e95c00df93e0e425c252cdb
+SNAPSHOT=4fcb705ee56cb6ac2de2edc6e95e3468f5e2fe9f
 SRC_URI="https://github.com/ImageMagick/ImageMagick/archive/${SNAPSHOT}.tar.gz -> ImageMagick-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ImageMagick-${SNAPSHOT}"
 

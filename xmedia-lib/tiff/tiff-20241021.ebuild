@@ -15,7 +15,7 @@ LICENSE="libtiff"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+cxx jbig jpeg lzma static-libs test webp zlib zstd"
+IUSE="+cxx jbig jpeg keep-la lzma static-libs test webp zlib zstd"
 
 DEPEND="jpeg? ( xmedia-lib/libjpeg-turbo )
 	jbig? ( >=xmedia-live-lib/jbigkit-2.1:= )
@@ -46,4 +46,12 @@ src_configure() {
 
 src_test() {
 	emake check
+}
+
+src_install() {
+	default
+
+	if ! use keep-la; then
+		find "${ED}" -name '*.la' -delete || die
+	fi
 }

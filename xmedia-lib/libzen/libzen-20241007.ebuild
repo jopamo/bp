@@ -14,7 +14,8 @@ S="${WORKDIR}/ZenLib-${SNAPSHOT}/Project/GNU/Library"
 LICENSE="ZLIB"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="static-libs"
+
+IUSE="keep-la static-libs"
 
 DEPEND="app-dev/pkgconf"
 
@@ -26,12 +27,6 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		--enable-unicode
 		--enable-shared
 		$(use_enable static-libs static)
@@ -41,6 +36,11 @@ src_configure() {
 
 src_install() {
 	default
+
 	insinto /usr/lib/pkgconfig
 	doins ${PN}.pc
+
+	if ! use keep-la; then
+		find "${ED}" -name '*.la' -delete || die
+	fi
 }

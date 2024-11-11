@@ -15,7 +15,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+jpeg +png static-libs +tiff"
+IUSE="+jpeg keep-la +png static-libs +tiff"
 
 DEPEND="
 	jpeg? ( xmedia-lib/libjpeg-turbo )
@@ -41,3 +41,12 @@ src_configure() {
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
+
+src_install() {
+	default
+
+	if ! use keep-la; then
+		find "${ED}" -name '*.la' -delete || die
+	fi
+}
+

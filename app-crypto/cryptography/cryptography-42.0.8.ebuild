@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_EXT=1
-DISTUTILS_USE_PEP517=maturin
+DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{10..13} pypy3 )
 
 inherit distutils-r1 flag-o-matic multiprocessing pypi
@@ -26,7 +26,7 @@ LICENSE+="
 	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD MIT Unicode-DFS-2016
 "
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	>=lib-net/openssl-1.0.2o-r6:0=

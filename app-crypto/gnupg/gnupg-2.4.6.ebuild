@@ -38,6 +38,8 @@ src_prepare() {
 	sed -e '/ks_ldap_free_state/i #if USE_LDAP' \
     	-e '/ks_get_state =/a #endif' \
     	-i dirmngr/server.c
+
+	touch doc/gnupg.7.html
 }
 src_configure() {
 	local myconf=(

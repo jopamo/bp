@@ -8,7 +8,7 @@ DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
 
 if [[ ${PV} == 19* ]] ; then
-    SNAPSHOT=d8752671e825ca5c967cc58a23778ae378c8dea2
+    SNAPSHOT=a3f0f1d004a61ef94c115e7e28863ce0b476aa99
 elif [[ ${PV} == 13* ]] ; then
     SNAPSHOT="75e33f71c2dae584b13a7d1186ae0a038ba98838"
 elif [[ ${PV} == 14* ]] ; then

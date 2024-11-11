@@ -103,9 +103,6 @@ src_install() {
 	cd ${PN} || die
 	doman sbin/*.8
 	dodoc debian/README.* examples/ca-certificates-local/README
-
-	echo 'CONFIG_PROTECT_MASK="/etc"' > 98ca-certificates || die
-	doenvd 98ca-certificates
 }
 
 pkg_postinst() {

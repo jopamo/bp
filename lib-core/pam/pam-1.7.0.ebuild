@@ -13,7 +13,7 @@ S="${WORKDIR}/Linux-PAM-${PV}"
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="musl logind"
+IUSE="logind"
 
 BDEPEND="
 	app-build/flex
@@ -26,15 +26,6 @@ BDEPEND="
 
 DEPEND="lib-net/libtirpc"
 PDEPEND="app-core/pambase"
-
-src_prepare() {
-	default
-
-	# This requires termio.h, which is missing on musl
-	if use musl ; then
-		sed -i -e 's/tty_conv//' "examples/Makefile.am" || die
-	fi
-}
 
 src_configure() {
 	local emesonargs=(

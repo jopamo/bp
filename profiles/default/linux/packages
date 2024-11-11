@@ -1,5 +1,5 @@
-# Distributed under the terms of the GNU General Public License v2
 
+# Distributed under the terms of the GNU General Public License v2
 *app-build/gcc
 *app-compression/pigz
 *app-compression/tar
@@ -28,7 +28,9 @@
 *app-crypto/blake3
 *app-dev/patchelf
 *app-kernel/linux-headers
+*app-net/chrony
 *app-net/iproute2
+*app-net/nftables
 *app-net/openssh
 *app-net/wget
 *app-port/eix

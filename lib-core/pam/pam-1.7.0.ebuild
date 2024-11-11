@@ -2,9 +2,9 @@
 
 EAPI=8
 
-inherit autotools
+inherit meson
 
-DESCRIPTION=" Linux PAM (Pluggable Authentication Modules for Linux) project"
+DESCRIPTION="Linux PAM (Pluggable Authentication Modules for Linux) project"
 HOMEPAGE="https://github.com/linux-pam/linux-pam"
 SRC_URI="https://github.com/linux-pam/linux-pam/releases/download/v${PV}/Linux-PAM-${PV}.tar.xz"
 
@@ -13,8 +13,7 @@ S="${WORKDIR}/Linux-PAM-${PV}"
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-IUSE="debug musl logind"
+IUSE="musl logind"
 
 BDEPEND="
 	app-build/flex
@@ -31,36 +30,28 @@ PDEPEND="app-core/pambase"
 src_prepare() {
 	default
 
-	#this requires termio.h, which is missing on musl
+	# This requires termio.h, which is missing on musl
 	if use musl ; then
 		sed -i -e 's/tty_conv//' "examples/Makefile.am" || die
 	fi
 }
 
 src_configure() {
-	export ac_cv_header_xcrypt_h=no
-
-	local myconf=(
-		$(use_enable debug)
-		$(use_enable logind)
-		--disable-db
-		--disable-nls
-		--disable-prelude
-		--enable-securedir="${EPREFIX}"/usr/lib/security
+	local emesonargs=(
+		-Ddebug=false
+		$(meson_feature logind)
+		-Dsecuredir="${EPREFIX}/usr/lib/security"
 	)
 
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
+	meson_src_configure
 }
 
 src_compile() {
-	emake sepermitlockdir="${EPREFIX}/run/sepermit"
+	meson_src_compile
 }
 
 src_install() {
-	emake DESTDIR="${ED}" install \
-		sepermitlockdir="${EPREFIX}/run/sepermit"
-
-	cleanup_install
+	meson_src_install
 
 	chmod +s "${ED}"/usr/sbin/unix_chkpwd
 }

@@ -9,7 +9,7 @@ inherit tree-sitter-grammar flag-o-matic
 DESCRIPTION="Bash grammar for Tree-sitter"
 HOMEPAGE="https://github.com/tree-sitter/tree-sitter-bash"
 
-SNAPSHOT=597a5ed6ed4d932fd44697feec988f977081ae59
+SNAPSHOT=c7c7b38e8834d1dcb09135e01ae79825f4c77789
 SRC_URI="https://github.com/tree-sitter/tree-sitter-bash/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

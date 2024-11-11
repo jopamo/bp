@@ -43,6 +43,10 @@ src_configure() {
 		-DWITH_XC_AUTOTYPE="$(usex autotype)"
 		-DWITH_XC_DOCS=OFF
 		-DWITH_XC_YUBIKEY=OFF
+		-DWITH_XC_SSHAGENT=ON
+		-DWITH_XC_BROWSER=ON
+		-DWITH_XC_BROWSER_PASSKEYS=ON
+		-DWITH_XC_NETWORKING=OFF
 	)
 	cmake_src_configure
 }

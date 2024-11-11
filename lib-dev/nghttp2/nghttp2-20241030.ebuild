@@ -7,7 +7,7 @@ inherit flag-o-matic autotools
 DESCRIPTION="HTTP/2 C Library"
 HOMEPAGE="https://nghttp2.org/"
 
-SNAPSHOT=55d4de7963bc8c2c849cf4ca0c195a6d9f8e12eb
+SNAPSHOT=7a96731c6b03810bb5f45b3bd34806b895d7446e
 SRC_URI="https://github.com/nghttp2/nghttp2/archive/${SNAPSHOT}.tar.gz -> nghttp2-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/nghttp2-${SNAPSHOT}"
 

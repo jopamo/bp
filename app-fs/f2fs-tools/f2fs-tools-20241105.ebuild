@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Tools for Flash-Friendly File System (F2FS)"
 HOMEPAGE="https://git.kernel.org/cgit/linux/kernel/git/jaegeuk/f2fs-tools.git/about/"
 
-SNAPSHOT=bd9d28398d9a3743acac7f626dc16f954898a207
+SNAPSHOT=05fde8ed32dbb66c7cae57627cc4e51eafcf167a
 SRC_URI="https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/snapshot/f2fs-tools-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

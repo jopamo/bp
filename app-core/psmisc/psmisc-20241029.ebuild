@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="A set of tools that use the proc filesystem"
 HOMEPAGE="http://psmisc.sourceforge.net/"
 
-SNAPSHOT=a146bfc359a4d4d96c438f3a0fa988c6a171d40d
+SNAPSHOT=dfd9ac4d50aac48de343fdfcbd24e0181a2f96e0
 SRC_URI="https://gitlab.com/psmisc/psmisc/-/archive/${SNAPSHOT}/psmisc-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

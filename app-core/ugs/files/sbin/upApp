@@ -219,8 +219,8 @@ fetch_latest_git_version() {
 	local current_version="$2"
 
 	local latest_version=$(git ls-remote --tags --sort="-v:refname" "$repo_url" \
-		| grep -oP 'refs/tags/(v?|libnetfilter_log-|libcap-|ulogd-|[a-zA-Z_-]+-)?\K[0-9]+\.[0-9]+(\.[0-9]+)?' \
-		| sort -Vr \
+			| grep -oP 'refs/tags/(v?|libnetfilter_log-|libcap-|ulogd-|[a-zA-Z_-]+-)?\K[0-9]+\.[0-9]+(\.[0-9]+)?' \
+			| sort -Vr \
 		| head -1)
 
 	if [[ -z "$latest_version" ]]; then
@@ -259,15 +259,22 @@ scrape_version() {
 	echo "Scraping version for $category_package from $repo_url..." >> "$DEBUG_LOG"
 
 	local html_content=$(curl -s "$repo_url")
-
 	local version=""
-	if [[ "$package_name" == "gnupg" ]]; then
-		version=$(echo "$html_content" | grep -A6 '<tr>' | grep -A6 'GnuPG<' | grep -v '(devel)' | grep -Eo '<td class="left">[^<]+</td>' | sed -E 's/<[^>]+>//g' | grep -E '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
-	elif [[ "$package_name" == "libgpg-error" ]]; then
-		version=$(echo "$html_content" | grep -A6 '<tr>' | grep -A6 'Libgpg-error' | grep -Eo '<td class="left">[^<]+</td>' | sed -E 's/<[^>]+>//g' | head -n 2 | tail -n 1)
-	else
-		version=$(echo "$html_content" | grep -Eo "${package_name}-[0-9]+\.[0-9]+\.[0-9]+" | sed "s/${package_name}-//g" | head -n 1)
-	fi
+
+	case "$package_name" in
+		gnupg)
+			version=$(echo "$html_content" | grep -A6 '<tr>' | grep -A6 'GnuPG<' | grep -v '(devel)' | grep -Eo '<td class="left">[^<]+</td>' | sed -E 's/<[^>]+>//g' | grep -E '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
+			;;
+		libgpg-error)
+			version=$(echo "$html_content" | grep -A6 '<tr>' | grep -A6 'Libgpg-error' | grep -Eo '<td class="left">[^<]+</td>' | sed -E 's/<[^>]+>//g' | head -n 2 | tail -n 1)
+			;;
+		less)
+			version=$(echo "$html_content" | grep -oP 'less-[0-9]+' | sed 's/less-//g' | sort -Vr | head -n 1)
+			;;
+		*)
+			version=$(echo "$html_content" | grep -Eo "${package_name}-[0-9]+\.[0-9]+\.[0-9]+" | sed "s/${package_name}-//g" | head -n 1)
+			;;
+	esac
 
 	if [[ -z "$version" ]]; then
 		echo "Failed to fetch version for $category_package" >> "$ERROR_LOG"
@@ -275,7 +282,6 @@ scrape_version() {
 	fi
 
 	echo "Fetched version for $category_package: $version" >> "$DEBUG_LOG"
-
 	update_ebuild "$category_package" "$package_name" "$version"
 }
 
@@ -295,6 +301,8 @@ if [[ $? -eq 0 ]]; then
 	update_gnu_package "app-core" "groff"
 	update_gnu_package "app-core" "help2man"
 	update_gnu_package "lib-core" "gdbm"
+	update_gnu_package "app-net" "wget"
+	update_gnu_package "app-util" "man-db"
 fi
 
 update_git_package "app-net" "bluez" "https://git.kernel.org/pub/scm/bluetooth/bluez.git"
@@ -386,4 +394,5 @@ update_github_package "xmedia-lib" "libimagequant" "https://github.com/ImageOpti
 
 scrape_version "app-crypto/gnupg" "https://www.gnupg.org/download/index.html"
 scrape_version "lib-core/libgpg-error" "https://www.gnupg.org/download/index.html"
+scrape_version "app-core/less" "https://www.greenwoodsoftware.com/less/download.html"
 scrape_version "lib-core/libedit" "https://thrysoee.dk/editline/"

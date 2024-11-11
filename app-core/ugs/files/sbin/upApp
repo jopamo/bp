@@ -302,7 +302,6 @@ if [[ $? -eq 0 ]]; then
 	update_gnu_package "app-core" "help2man"
 	update_gnu_package "lib-core" "gdbm"
 	update_gnu_package "app-net" "wget"
-	update_gnu_package "app-util" "man-db"
 fi
 
 update_git_package "app-net" "bluez" "https://git.kernel.org/pub/scm/bluetooth/bluez.git"
@@ -322,6 +321,8 @@ update_git_package "app-net" "nftables" "https://git.netfilter.org/nftables"
 update_git_package "app-var" "ulogd" "https://git.netfilter.org/ulogd2"
 update_git_package "app-net" "ipset" "https://git.netfilter.org/ipset"
 update_git_package "app-net" "iptables" "https://git.netfilter.org/iptables"
+
+update_git_package "app-util" "man-db" "https://gitlab.com/man-db/man-db"
 
 #update_github_package "app-dev" "eglexternalplatform" "https://github.com/NVIDIA/eglexternalplatform"
 #update_github_package "app-fs" "lsscsi" "https://github.com/hreinecke/lsscsi"

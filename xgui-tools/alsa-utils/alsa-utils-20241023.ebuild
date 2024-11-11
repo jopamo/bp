@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Advanced Linux Sound Architecture Utils (alsactl, alsamixer, etc.)"
 HOMEPAGE="http://www.alsa-project.org/"
 
-SNAPSHOT=966c559f04c048bd739d912eaad31794a6bed512
+SNAPSHOT=0c780e1fa02b9d4900fb6cc79b748628fe33bd48
 SRC_URI="https://github.com/alsa-project/alsa-utils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

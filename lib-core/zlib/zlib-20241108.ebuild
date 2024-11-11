@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Standard (de)compression library"
 HOMEPAGE="https://zlib.net/"
 
-SNAPSHOT=d476828316d05d54c6fd6a068b121b30c147b5cd
+SNAPSHOT=ef24c4c7502169f016dcd2a26923dbaf3216748c
 SRC_URI="https://github.com/madler/zlib/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

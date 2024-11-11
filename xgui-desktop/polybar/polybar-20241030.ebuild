@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="A fast and easy-to-use tool for creating status bars"
 HOMEPAGE="https://github.com/polybar/polybar"
 
-SNAPSHOT=552d81dd568fc48de6e3cb613b1c108b0f0b418c
+SNAPSHOT=9476ad80b80ae1b5ad29717907bd328becf8f502
 SRC_URI="https://github.com/polybar/polybar/archive/${SNAPSHOT}.tar.gz -> polybar-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/polybar-${SNAPSHOT}"
 

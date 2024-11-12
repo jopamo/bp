@@ -27,11 +27,17 @@ src_configure() {
 }
 
 src_install() {
-	default
+	emake INSTALL_ROOT="${ED}" install install-private-headers
 
 	for x in libtcl$(ver_cut 1-2).so.1 libtcl.so libtcl.so.$(ver_cut 1-2).0 ; do
 		dosym libtcl$(ver_cut 1-2).so usr/lib/${x}
 	done
 
 	patchelf --set-soname libtcl.so.$(ver_cut 1-2).0 "${ED}"/usr/lib/libtcl8.6.so
+
+	 _tclver=$(ver_cut 1-2)
+    sed -i "s#${S}/unix#/usr/lib#" "${ED}/usr/lib/tclConfig.sh"
+    sed -i "s#${S}#/usr/include#" "${ED}/usr/lib/tclConfig.sh"
+    sed -i "s#'{/usr/lib} '#'/usr/lib/tcl${_tclver}'#" "${ED}/usr/lib/tclConfig.sh"
+    sed -i "s#TCL_SRC_DIR='${S%/*}'#TCL_SRC_DIR='/usr/include/tcl${_tclver}'#" "${ED}/usr/lib/tclConfig.sh"
 }

@@ -71,7 +71,7 @@ src_install() {
 		"ln" "logger" "login" "losetup" "ls" "lsmod" "lsusb" "lzcat" "lzma"
 		"md5sum" "mesg" "mkdir" "mkfifo" "mknod" "mktemp" "mkswap" "modinfo"
 		"modprobe" "mount" "mountpoint" "mv" "nc" "nice" "nl" "nologin"
-		"nohup" "nproc" "od" "passwd" "paste" "pgrep" "pidof" "ping" "pkill"
+		"nohup" "nproc" "nslookup" "od" "passwd" "paste" "pgrep" "pidof" "ping" "pkill"
 		"pmap" "poweroff" "printenv" "printf" "ps" "pstree" "pwd" "pwdx"
 		"readlink" "realpath" "reboot" "renice" "reset" "rev" "rfkill" "rm"
 		"rmdir"	"rmmod" "run-parts" "sed" "seq" "setpriv" "setsid" "sh"

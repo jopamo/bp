@@ -1,7 +1,24 @@
 #!/bin/bash
 
-#reads the contents of /etc/lighttpd/lighttpd_cert_domains.conf line by line
+CONFIG_FILE="/etc/lighttpd/lighttpd_cert_domains.conf"
+
+if [[ ! -f "$CONFIG_FILE" ]]; then
+    echo "Error: Configuration file $CONFIG_FILE not found."
+    exit 1
+fi
+
+if ! grep -qE '^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$' "$CONFIG_FILE"; then
+    echo "Error: Configuration file $CONFIG_FILE is either empty or contains invalid domain names."
+    exit 1
+fi
+
 while IFS= read -r line; do
-	certbot certonly --webroot -w /var/lighttpd/${line} -d ${line} -d www.${line} --expand --quiet
-	cat /etc/letsencrypt/live/${line}/cert.pem /etc/letsencrypt/live/${line}/privkey.pem > /etc/letsencrypt/live/${line}/web.pem
-done < "/etc/lighttpd/lighttpd_cert_domains.conf"
+    if [[ ! "$line" =~ ^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]; then
+        echo "Skipping invalid domain entry: $line"
+        continue
+    fi
+
+    certbot certonly --webroot -w /var/lighttpd/${line} -d ${line} -d www.${line} --expand --force-renewal --key-type ecdsa --cert-name ${line} --quiet
+
+    cat /etc/letsencrypt/live/${line}/cert.pem /etc/letsencrypt/live/${line}/privkey.pem > /etc/letsencrypt/live/${line}/web.pem
+done < "$CONFIG_FILE"

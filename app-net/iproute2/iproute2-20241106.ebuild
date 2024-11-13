@@ -13,7 +13,7 @@ S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="caps elf iptables musl"
 
@@ -41,6 +41,7 @@ doecho() {
 
 src_prepare() {
 	filter-flags -Wl,-z,defs
+	append-flags -ffat-lto-objects
 
 	use musl && eapply "${FILESDIR}"/${PN}-6.8.0-configure-nomagic-nolibbsd.patch
 	use musl && eapply "${FILESDIR}"/${PN}-6.8.0-disable-libbsd-fallback.patch
@@ -76,27 +77,7 @@ src_configure() {
 	${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} test.c -lresolv >&/dev/null || sed -i '/^LDLIBS/s:-lresolv::' "${S}"/Makefile
 	popd >/dev/null
 
-	# run "configure" script first which will create "config.mk"...
-	# Using econf breaks since 5.14.0 (a9c3d70d902a0473ee5c13336317006a52ce8242)
 	doecho ./configure
-
-	# ...now switch on/off requested features via USE flags
-	# this is only useful if the test did not set other things, per bug #643722
-	cat <<-EOF >> config.mk
-	TC_CONFIG_ATM := n
-	TC_CONFIG_XT  := $(usex iptables y n)
-	TC_CONFIG_NO_XT := $(usex iptables n y)
-	TC_CONFIG_IPSET := y
-	HAVE_BERKELEY_DB := n
-	HAVE_CAP      := $(usex caps y n)
-	HAVE_MNL      := n
-	HAVE_ELF      := $(usex elf y n)
-	HAVE_SELINUX  := n
-	IP_CONFIG_SETNS := ${setns}
-	# Use correct iptables dir, #144265 #293709
-	IPT_LIB_DIR   := $(use iptables && ${PKG_CONFIG} xtables --variable=xtlibdir)
-	HAVE_LIBBSD   := n
-	EOF
 }
 
 src_compile() {

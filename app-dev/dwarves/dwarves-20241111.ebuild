@@ -18,6 +18,8 @@ KEYWORDS="amd64 arm64"
 IUSE="debug"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
+DEPEND="lib-net/libbpf"
+
 src_prepare() {
 	[[ -d "${WORKDIR}"/${P}-patches ]] && PATCHES+=( "${WORKDIR}"/${P}-patches )
 

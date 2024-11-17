@@ -31,14 +31,11 @@ DEPEND="
 src_prepare() {
 	kernel-2_src_prepare
 
-	# Apply patches
 	eapply "${FILESDIR}"/mt7925.patch
 	eapply "${FILESDIR}"/reg.patch
 
-	# Fetch and replace mt76 directory
 	local mt76_dir="${WORKDIR}/mt76"
 	git clone https://github.com/openwrt/mt76.git "${mt76_dir}" || die "Failed to clone mt76 repository"
-	rm -rf "${S}/drivers/net/wireless/mediatek/mt76" || die "Failed to remove existing mt76 directory"
 	cp -r "${mt76_dir}" "${S}/drivers/net/wireless/mediatek/" || die "Failed to copy new mt76 directory"
 }
 

@@ -31,7 +31,7 @@ REQUIRED_USE="
 DEPEND="
 	lib-core/libgcrypt
 	lib-util/glib
-	lib-util/libpcap
+	lib-net/libpcap
 	lib-net/c-ares
 	caps? ( lib-core/libcap )
 	qt? (

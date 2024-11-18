@@ -17,6 +17,15 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
+BDEPEND="xgui-tools/util-macros"
+DEPEND="
+	xgui-lib/libX11
+	xgui-lib/libXext
+	xgui-lib/libXrandr
+	xgui-lib/libXfixes
+	xgui-tools/xorgproto
+"
+
 src_prepare() {
 	default
 	eautoreconf

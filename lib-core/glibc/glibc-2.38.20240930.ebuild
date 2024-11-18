@@ -131,7 +131,7 @@ src_configure() {
 		--localstatedir="${EPREFIX}"/var
 		--mandir="${EPREFIX}"/usr/share/man
 		--prefix="${EPREFIX}"/usr
-		--sbindir="${EPREFIX}"/usr/sbin
+		--sbindir="${EPREFIX}"/usr/bin
 		--sysconfdir="${EPREFIX}"/etc
 		--without-cvs
 		--without-selinux
@@ -142,7 +142,7 @@ src_configure() {
 
 	ac_cv_lib_cap_cap_init=$(in_iuse caps && usex caps || echo no)
 
-	export libc_cv_rootsbindir="${EPREFIX}"/usr/sbin
+	export libc_cv_rootsbindir="${EPREFIX}"/usr/bin
 	export libc_cv_slibdir="${EPREFIX}"/usr/lib
 	export libc_cv_hashstyle=no
 
@@ -195,7 +195,7 @@ src_install() {
 
 	if use nscd ; then
 		local nscd_args=(
-			-e "s:@PIDFILE@:$(strings "${ED}"/usr/sbin/nscd | grep nscd.pid):"
+			-e "s:@PIDFILE@:$(strings "${ED}"/usr/bin/nscd | grep nscd.pid):"
 		)
 
 		sed -i "${nscd_args[@]}" "${ED}"/etc/init.d/nscd
@@ -226,7 +226,7 @@ src_install() {
 
 	fperms +x /usr/bin/locale-gen
 
-	mv "${ED}"/sbin/{ldconfig,sln} "${ED}"/usr/sbin && rm -rf "${ED}"/sbin
+	mv "${ED}"/bin/{ldconfig,sln} "${ED}"/usr/bin && rm -rf "${ED}"/bin
 
 	cleanup_install
 	use static-libs || find "${ED}" -name '*.la' -delete
@@ -248,15 +248,15 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
-	if [[ -x ${EROOT}/usr/sbin/iconvconfig ]] ; then
+	if [[ -x ${EROOT}/usr/bin/iconvconfig ]] ; then
 		# Generate fastloading iconv module configuration file.
-		"${EROOT}"/usr/sbin/iconvconfig --prefix="${ROOT}"
+		"${EROOT}"/usr/bin/iconvconfig --prefix="${ROOT}"
 	fi
 
 	if [[ ${ROOT} == "/" ]] ; then
 		# Reload init ... if in a chroot or a diff init package, ignore
 		# errors from this step #253697
-		/usr/sbin/telinit U 2>/dev/null
+		/usr/bin/telinit U 2>/dev/null
 	fi
 
 	"${EROOT}"/usr/bin/locale-gen

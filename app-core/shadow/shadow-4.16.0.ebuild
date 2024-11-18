@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit libtool
+inherit autotools
 
 DESCRIPTION="Utilities to deal with user accounts"
 HOMEPAGE="https://github.com/shadow-maint/shadow http://pkg-shadow.alioth.debian.org/"
@@ -26,12 +26,19 @@ PATCHES=( "${FILESDIR}"/fix-undefined-reference.patch )
 
 src_prepare() {
 	cp -rp "${FILESDIR}"/* "${S}"/
+
+	sed -i 's|/sbin|/bin|g' src/Makefile.{am,in} || die
+
 	default
-	elibtoolize
+	eautoreconf
+
+	sed -i 's|/sbin|/bin|g' configure.ac || die
 }
 
 src_configure() {
 	local myconf=(
+		--bindir="${EPREFIX}"/usr/bin
+		--sbindir="${EPREFIX}"/usr/bin
 		$(use_enable systemd logind)
 		$(use_with acl)
 		$(use_with pam libpam)
@@ -46,7 +53,6 @@ src_configure() {
 		--with-libbsd
 		--without-audit
 		--without-group-name-max-length
-		--without-libcrack
 		--without-nscd
 		--without-selinux
 		--without-skey
@@ -88,10 +94,10 @@ src_install() {
 		done
 	fi
 
-	rm "${ED}"/usr/sbin/logoutd || die
+	rm "${ED}"/usr/bin/logoutd || die
 	rm \
 			"${ED}"/usr/bin/{login,su,chsh,chfn,sg} \
-			"${ED}"/usr/sbin/{nologin,vipw,vigr} || die
+			"${ED}"/usr/bin/{nologin,vipw,vigr} || die
 
 	# but we keep newgrp, as sg is really an alias to it
 	mv "${ED}"/usr/bin/{newgrp,sg} || die

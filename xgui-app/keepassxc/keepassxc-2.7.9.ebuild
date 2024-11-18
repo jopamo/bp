@@ -22,6 +22,7 @@ DEPEND="
 	lib-util/libsodium
 	xgui-lib/qtbase
 	xgui-lib/qttools
+	xgui-lib/qtsvg
 	xmedia-app/qrencode
 	autotype? (
 		xgui-lib/libX11

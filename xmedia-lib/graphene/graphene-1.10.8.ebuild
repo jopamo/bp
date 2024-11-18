@@ -12,6 +12,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+BDEPEND="lib-dev/gobject-introspection"
+
 src_configure() {
 	local emesonargs=(
 		-Dgtk_doc=false

@@ -29,8 +29,9 @@ RESTRICT="test"
 S="${WORKDIR}/${P}/${PN}"
 
 PATCHES=(
-	"${FILESDIR}/${PN}-3.53-gentoo-fixups.patch"
-	"${FILESDIR}/${PN}-3.21-gentoo-fixup-warnings.patch"
+	"${FILESDIR}"/nss-3.103-gentoo-fixes-add-pkgconfig-files.patch
+	"${FILESDIR}"/nss-3.21-gentoo-fixup-warnings.patch
+	"${FILESDIR}"/nss-3.87-use-clang-as-bgo892686.patch
 )
 
 src_prepare() {
@@ -48,10 +49,6 @@ src_prepare() {
 	# Respect LDFLAGS
 	sed -i -e 's/\$(MKSHLIB) -o/\$(MKSHLIB) \$(LDFLAGS) -o/g' rules.mk
 	popd >/dev/null || die
-
-	# Fix pkgconfig file for Prefix
-	sed -i -e "/^PREFIX =/s:= /usr:= ${EPREFIX}/usr:" \
-		config/Makefile || die
 
 	# use host shlibsign if need be #436216
 	if tc-is-cross-compiler ; then
@@ -210,6 +207,10 @@ src_install() {
 	for i in crmf freebl nssb nssckfw ; do
 		cp -L */lib/lib${i}.a "${ED%/}"/usr/lib || die "copying libs failed"
 	done
+
+	if use elibc_musl ; then
+		rm "${ED}"/usr/lib/libssl.a || die
+	fi
 
 	# Install nss-config and pkgconfig file
 	dodir /usr/bin

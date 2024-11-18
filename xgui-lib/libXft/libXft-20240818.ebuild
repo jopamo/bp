@@ -16,8 +16,9 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	xgui-lib/libXrender
+	fonts/fontconfig
 	xgui-lib/libX11
+	xgui-lib/libXrender
 "
 
 IUSE="static-libs"

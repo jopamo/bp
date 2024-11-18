@@ -49,7 +49,7 @@ DEPEND="
 	tmpfilesd? ( app-core/dbus )
 	xkb? ( xgui-lib/libxkbcommon )
 "
-BDEPEND="dev-python/jinja"
+BDEPEND="dev-py/jinja"
 
 pkg_pretend() {
 	if [[ ${MERGE_TYPE} != buildonly ]]; then

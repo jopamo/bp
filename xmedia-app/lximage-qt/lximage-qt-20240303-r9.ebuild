@@ -16,3 +16,6 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 BDEPEND="app-dev/lxqt-build-tools"
+DEPEND="
+	xgui-lib/libfm-qt
+"

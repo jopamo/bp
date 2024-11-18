@@ -62,5 +62,5 @@ src_install() {
 
 	cleanup_install
 
-	chmod +s "${ED}"/usr/sbin/unix_chkpwd
+	chmod +s "${ED}"/usr/bin/unix_chkpwd
 }

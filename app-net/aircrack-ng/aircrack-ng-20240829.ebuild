@@ -18,7 +18,7 @@ KEYWORDS="amd64 arm64"
 IUSE="+airdrop-ng +airgraph-ng +netlink +pcre +sqlite +experimental"
 
 DEPEND="
-	lib-util/libpcap
+	lib-net/libpcap
 	virtual/ssl
 	netlink? ( lib-net/libnl )
 	pcre? ( lib-core/libpcre )

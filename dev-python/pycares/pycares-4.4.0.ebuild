@@ -23,7 +23,7 @@ PROPERTIES="test_network"
 RESTRICT="test"
 
 DEPEND="
-	net-dns/c-ares:=
+	lib-net/c-ares:=
 "
 BDEPEND="
 	$(python_gen_cond_dep '

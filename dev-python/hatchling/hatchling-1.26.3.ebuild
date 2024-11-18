@@ -29,7 +29,7 @@ KEYWORDS="amd64 arm64"
 # editables are optional but required for editable installs
 RDEPEND="
 	>=dev-python/editables-0.3[${PYTHON_USEDEP}]
-	>=dev-python/packaging-23.2[${PYTHON_USEDEP}]
+	>=dev-python/packaging-24.2[${PYTHON_USEDEP}]
 	>=dev-python/pathspec-0.10.1[${PYTHON_USEDEP}]
 	>=dev-python/pluggy-1.0.0[${PYTHON_USEDEP}]
 	$(python_gen_cond_dep '

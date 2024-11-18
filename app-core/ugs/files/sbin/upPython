@@ -4,6 +4,7 @@ PACKAGES=(
 	"ConfigArgParse"
 	"PySocks"
 	"aiohttp"
+	"aiodns"
 	"appdirs"
 	"autocommand"
 	"backports-tarfile"

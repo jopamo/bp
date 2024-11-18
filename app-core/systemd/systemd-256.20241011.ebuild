@@ -20,7 +20,7 @@ IUSE="binfmt +blkid bpf-framework coredump dbus devmode dhcp4 efi gcrypt +gshado
 oomd pam pcre pstore resolve rfkill sleep systemd-update sysusersd sysv timedated
 tmpfilesd +userdb +utmp vconsole xkb"
 
-#REQUIRED_USE="musl? ( !gshadow !localed !userdb !utmp )"
+REQUIRED_USE="musl? ( !gshadow !localed !userdb !utmp )"
 
 DEPEND="
 	app-build/gettext
@@ -203,7 +203,7 @@ src_configure() {
 		-Drc-local=""
 		-Dseccomp=enabled
 		-Dsmack=false
-		-Dsplit-bin=true
+		-Dsplit-bin=false
 		-Dstandalone-binaries=true
 		-Dtimesyncd=false
 		-Dtpm=true

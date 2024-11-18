@@ -25,3 +25,6 @@ NM=gcc-nm
 IUSE_IMPLICIT="x86 kernel_linux elibc_glibc elibc_musl userland_GNU elibc_SunOS
 amd64-fbsd elibc_Darwin x86-winnt x86-fbsd amd64-linux x86-linux x64-macos
 x64-cygwin elibc_uclibc elibc_FreeBSD elibc_Cygwin riscv"
+
+UNINSTALL_IGNORE="${UNINSTALL_IGNORE} /bin /lib /lib32 /lib64 /libx32 /sbin /usr/sbin"
+UNINSTALL_IGNORE="${UNINSTALL_IGNORE} /usr/lib/modules/*"

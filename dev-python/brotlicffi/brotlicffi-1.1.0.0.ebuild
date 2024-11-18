@@ -52,6 +52,7 @@ EPYTEST_DESELECT=(
 )
 
 src_unpack() {
+	filter-flags -Wl,-z,defs
 	default
 	if use test; then
 		mv "brotli-${BROTLI_BUNDLED_COMMIT}"/tests "${S}"/libbrotli/ || die

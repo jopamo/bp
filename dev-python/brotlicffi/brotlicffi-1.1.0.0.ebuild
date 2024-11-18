@@ -32,7 +32,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	app-arch/brotli:=
+	app-compression/brotli:=
 	$(python_gen_cond_dep '
 		dev-python/cffi[${PYTHON_USEDEP}]
 	' 'python*')

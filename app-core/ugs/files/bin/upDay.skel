@@ -40,7 +40,7 @@ GAWK_VERSION="5.3"
 PYTHON_VERSION="3.12"
 PERL_VERSION="5.40"
 TCL_VERSION="8.6"
-LLVM_VERSION="19"
+LLVM_VERSION="18"
 SQLITE_VERSION="3.46"
 
 GDB_VERSION="14"
@@ -51,6 +51,8 @@ MPFR_VERSION="4.2"
 KDE_VERSION="5"
 TOR_VERSION="0.4.8"
 WIRESHARK_VERSION="4.4"
+
+LIBPCAP_VERSION="1.10"
 
 BASH_BRANCH="master"
 GDB_BRANCH="gdb-${GDB_VERSION}-branch"
@@ -372,6 +374,7 @@ branch_bump() {
 	update_ebuild "${REPO_PATH}/app-core/systemd" "https://github.com/systemd/systemd" "v${SYSTEMD_VERSION}-stable" "${SYSTEMD_VERSION}" "no"
 	update_ebuild "${REPO_PATH}/xgui-app/wireshark" "https://github.com/wireshark/wireshark" "release-${WIRESHARK_VERSION}" "${WIRESHARK_VERSION}" "no"
 	update_ebuild "${REPO_PATH}/lib-core/mpfr" "https://gitlab.inria.fr/mpfr/mpfr" "${MPFR_VERSION}" "${MPFR_VERSION}" "no"
+	update_ebuild "${REPO_PATH}/lib-net/libpcap" "https://github.com/the-tcpdump-group/libpcap" "libpcap-${LIBPCAP_VERSION}" "${LIBPCAP_VERSION}" "no"
 }
 
 main

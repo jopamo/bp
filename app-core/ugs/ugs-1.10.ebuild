@@ -2,7 +2,7 @@
 
 EAPI=8
 
-DESCRIPTION="Misc scripts"
+DESCRIPTION="helper scripts"
 
 LICENSE="MIT"
 SLOT="0"
@@ -22,18 +22,18 @@ src_install() {
 		dobin "${FILESDIR}"/bin/$f
 	done
 
-	#sbin files
 	for f in upDay.skel ; do
 			insinto /usr/share/ugscripts
-			doins "${FILESDIR}"/sbin/$f
+			doins "${FILESDIR}"/bin/$f
 	done
 
 	for f in hosts_bump eclass_import emirror lighttpd_certs \
 		mkheaders mkimg mkmini mkstage xbkup upApp upAll upBrowsers \
 		upPython upGit xchroot ; do
-			dosbin "${FILESDIR}"/sbin/$f
+			dobin "${FILESDIR}"/bin/$f
 	done
 
+	# systemd services
 	for f in hosts_bump.service ; do
 		insinto /usr/lib/systemd/system
 		insopts -m 0644

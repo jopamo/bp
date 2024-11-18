@@ -26,7 +26,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	app-net/curl
+	lib-net/ca-certificates
 "
 
 EPYTEST_IGNORE=(

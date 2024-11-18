@@ -30,6 +30,7 @@ BDEPEND="
 distutils_enable_tests pytest
 
 python_compile() {
+	filter-flags -Wl,-z,defs
 	local -x PROPCACHE_NO_EXTENSIONS=0
 	if ! use native-extensions || [[ ${EPYTHON} != python* ]]; then
 		PROPCACHE_NO_EXTENSIONS=1

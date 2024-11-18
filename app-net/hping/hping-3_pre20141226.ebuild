@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+tcl"
 
-DEPEND="lib-util/libpcap"
+DEPEND="lib-net/libpcap"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-3_pre20051105-libtcl.patch

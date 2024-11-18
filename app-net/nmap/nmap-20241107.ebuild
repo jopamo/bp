@@ -22,7 +22,7 @@ DEPEND="
 	lib-core/libpcre
 	lib-core/zlib
 	lib-dev/liblinear
-	lib-util/libpcap
+	lib-net/libpcap
 	lib-misc/libssh2[zlib]
 	ssl? ( virtual/ssl )
 "

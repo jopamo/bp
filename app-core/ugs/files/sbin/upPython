@@ -5,10 +5,14 @@ PACKAGES=(
 	"PySocks"
 	"aiohttp"
 	"aiodns"
+	"aiohappyeyeballs"
+	"aiosignal"
 	"appdirs"
+	"attrs"
 	"autocommand"
 	"backports-tarfile"
 	"boltons"
+	"brotlicffi"
 	"build"
 	"certifi"
 	"cffi"
@@ -24,11 +28,14 @@ PACKAGES=(
 	"editables"
 	"ensurepip-pip"
 	"execnet"
+	"expandvars"
 	"fastjsonschema"
 	"filelock"
 	"flit-core"
+	"frozenlist"
 	"gpep517"
 	"hatch-vcs"
+	"hatch-fancy-pypi-readme"
 	"hatchling"
 	"idna"
 	"importlib-metadata"
@@ -50,6 +57,7 @@ PACKAGES=(
 	"mako"
 	"markupsafe"
 	"more-itertools"
+	"multidict"
 	"olefile"
 	"openpyxl"
 	"ordered-set"
@@ -63,8 +71,10 @@ PACKAGES=(
 	"pluggy"
 	"ply"
 	"poetry-core"
+	"propcache"
 	"psutil"
 	"py"
+	"pycares"
 	"pycparser"
 	"pyelftools"
 	"pygments"
@@ -95,6 +105,7 @@ PACKAGES=(
 	"typing-extensions"
 	"urllib3"
 	"virtualenv"
+	"yarl"
 	"wheel"
 	"zipp"
 	"zstandard"
@@ -209,7 +220,7 @@ find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe '
 find "${PACKAGE_DIR}" -type f -name '*_rc[1-9].ebuild' -exec echo "Deleting _rc ebuild: {}" \; -delete
 find "${PACKAGE_DIR}" -type f -name '*_pre*.ebuild' -exec echo "Deleting _pre ebuild: {}" \; -delete
 
-for package in cython psutil lxml cffi markupsafe pillow tree-sitter zstandard; do
+for package in aiohttp brotlicffi cython frozenlist propcache psutil pycares lxml cffi markupsafe multidict pillow tree-sitter zstandard yarl; do
 	if [ -d "${PACKAGE_DIR}/${package}" ]; then
 		echo "Updating for ${package}..."
 		find "${PACKAGE_DIR}/${package}" -type f -name "*.ebuild" -exec sh -c '
@@ -272,17 +283,19 @@ for package in "${PACKAGES[@]}"; do
 done
 
 declare -A replacements=(
-	["app-misc/ca-certificates"]="app-net/curl"
+	["app-arch/brotli"]="app-compression/brotli"
+	["app-misc/ca-certificates"]="lib-net/ca-certificates"
 	["dev-libs/libffi"]="lib-core/libffi"
 	["dev-libs/libxml2"]="lib-core/libxml2"
 	["dev-libs/libxslt"]="lib-core/libxslt"
 	["dev-libs/libyaml"]="lib-dev/libyaml"
-	["dev-libs/tree-sitter"]="lib-dev/tree-sitter"
 	["dev-libs/openssl"]="lib-net/openssl"
-	["sys-libs/timezone-data"]="lib-core/tzdb"
-	["dev-python/pillow"]="xgui-app/pillow"
+	["dev-libs/tree-sitter"]="lib-dev/tree-sitter"
 	["dev-python/cryptography"]="app-crypto/cryptography"
+	["dev-python/pillow"]="xgui-app/pillow"
 	["dev-python/setuptools"]="dev-py/setuptools"
+	["net-dns/c-ares"]="lib-net/c-ares"
+	["sys-libs/timezone-data"]="lib-core/tzdb"
 )
 
 for package in "${PACKAGES[@]}"; do

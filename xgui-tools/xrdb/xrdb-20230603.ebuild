@@ -20,18 +20,6 @@ RDEPEND="xgui-lib/libXmu
 DEPEND="${RDEPEND}"
 
 src_prepare() {
-	eautoreconf
 	default
-}
-
-src_configure() {
-	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
+	eautoreconf
 }

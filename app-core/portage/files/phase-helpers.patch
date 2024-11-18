@@ -9,7 +9,7 @@ diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
 +			--localstatedir="${EPREFIX}"/var \
 +			--libdir="${EPREFIX}"/usr/lib \
 +			--bindir="${EPREFIX}"/usr/bin \
-+			--sbindir="${EPREFIX}"/usr/sbin \
++			--sbindir="${EPREFIX}"/usr/bin \
 +			--libexecdir="${EPREFIX}"/usr/libexec \
  			"${conf_args[@]}" \
  			"$@" \
@@ -24,7 +24,7 @@ diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
  				sysconfdir="${ED%/}/etc" \
 +				libdir="${ED%/}/usr/lib" \
 +				bindir="${ED%/}/usr/bin" \
-+				sbindir="${ED%/}/usr/sbin" \
++				sbindir="${ED%/}/usr/bin" \
 +				libexecdir="${ED%/}/usr/libexec" \
  				${LOCAL_EXTRA_EINSTALL} \
  				${MAKEOPTS} -j1 \
@@ -39,7 +39,7 @@ diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
  			sysconfdir="${ED%/}/etc" \
 +			libdir="${ED%/}/usr/lib" \
 +			bindir="${ED%/}/usr/bin" \
-+			sbindir="${ED%/}/usr/sbin" \
++			sbindir="${ED%/}/usr/bin" \
 +			libexecdir="${ED%/}/usr/libexec" \
  			${LOCAL_EXTRA_EINSTALL} \
  			${MAKEOPTS} -j1 \

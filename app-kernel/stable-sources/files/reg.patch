@@ -56,10 +56,10 @@ diff -ruN a/net/wireless/reg.c b/net/wireless/reg.c
 +		REG_RULE(5180 - 10, 5240 + 10, 80, 8, 40, 0),
 +
 +		/* 5 GHz, channels 52-64 */
-+		REG_RULE(5260 - 10, 5320 + 10, 80, 8, 40, NL80211_RRF_DFS),
++		REG_RULE(5260 - 10, 5320 + 10, 80, 8, 40, 0),
 +
 +		/* 5 GHz, channels 100-144 */
-+		REG_RULE(5500 - 10, 5720 + 10, 160, 8, 40, NL80211_RRF_DFS),
++		REG_RULE(5500 - 10, 5720 + 10, 160, 8, 40, 0),
 +
 +		/* 5 GHz, channels 149-165 */
 +		REG_RULE(5745 - 10, 5825 + 10, 80, 8, 40, 0),

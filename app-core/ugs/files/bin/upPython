@@ -92,15 +92,11 @@ PACKAGES=(
 	"requests"
 	"requests-toolbelt"
 	"semantic-version"
-	"setuptools"
-	"setuptools-rust"
-	"setuptools-scm"
 	"six"
 	"snakeoil"
 	"tomli"
 	"tomli-w"
 	"tqdm"
-	"tree-sitter"
 	"trove-classifiers"
 	"typing-extensions"
 	"urllib3"
@@ -291,11 +287,16 @@ declare -A replacements=(
 	["dev-libs/libyaml"]="lib-dev/libyaml"
 	["dev-libs/openssl"]="lib-net/openssl"
 	["dev-libs/tree-sitter"]="lib-dev/tree-sitter"
+	["dev-python/tree-sitter"]="lib-py/tree-sitter"
 	["dev-python/cryptography"]="app-crypto/cryptography"
 	["dev-python/pillow"]="xgui-app/pillow"
 	["dev-python/setuptools"]="dev-py/setuptools"
 	["net-dns/c-ares"]="lib-net/c-ares"
 	["sys-libs/timezone-data"]="lib-core/tzdb"
+
+	"setuptools"
+	"setuptools-rust"
+	"setuptools-scm"
 )
 
 for package in "${PACKAGES[@]}"; do

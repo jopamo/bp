@@ -59,7 +59,7 @@ for _BINDING in "${TS_BINDINGS[@]}"; do
 			)"
 			RDEPEND+=" python? (
 				${PYTHON_DEPS}
-				>=dev-python/tree-sitter-0.21.0[${PYTHON_USEDEP}]
+				>=dev-py/tree-sitter-0.21.0[${PYTHON_USEDEP}]
 			)"
 			BDEPEND+=" python? (
 				${PYTHON_DEPS}

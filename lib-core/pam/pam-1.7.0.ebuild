@@ -45,5 +45,5 @@ src_compile() {
 src_install() {
 	meson_src_install
 
-	chmod +s "${ED}"/usr/sbin/unix_chkpwd
+	chmod +s "${ED}"/usr/bin/unix_chkpwd
 }

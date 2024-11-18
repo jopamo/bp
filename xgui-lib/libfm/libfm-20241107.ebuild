@@ -15,12 +15,13 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug exif"
+IUSE="debug +exif"
 
 DEPEND="
 	lib-util/glib
-	xgui-misc/shared-mime-info
+	xgui-lib/gtk3
 	xgui-misc/menu-cache
+	xgui-misc/shared-mime-info
 	exif? ( xmedia-lib/libexif )
 "
 BDEPEND="

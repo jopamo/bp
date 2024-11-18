@@ -131,7 +131,7 @@ src_configure() {
 		$(use_with systemd)
 		$(use_with udev)
 		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
-		--enable-fs-paths-extra="${EPREFIX}/usr/sbin:${EPREFIX}/usr/bin"
+		--enable-fs-paths-extra="${EPREFIX}/usr/bin"
 		--disable-asciidoc
 		--disable-bfs
 		--disable-cramfs

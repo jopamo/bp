@@ -39,12 +39,12 @@ DEPEND="
 	app-dev/vulkan-headers
 "
 BDEPEND="
-	$(python_gen_any_dep 'dev-python/jinja[${PYTHON_USEDEP}]')
+	$(python_gen_any_dep 'dev-py/jinja[${PYTHON_USEDEP}]')
 	app-dev/pkgconf
 "
 
 python_check_deps() {
-	python_has_version "dev-python/jinja[${PYTHON_USEDEP}]"
+	python_has_version "dev-py/jinja[${PYTHON_USEDEP}]"
 }
 
 src_prepare() {

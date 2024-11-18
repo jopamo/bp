@@ -35,7 +35,7 @@ RDEPEND+="
 	dev-python/lazy-object-proxy[${PYTHON_USEDEP}]
 	dev-python/lxml[${PYTHON_USEDEP}]
 	dev-python/pathspec[${PYTHON_USEDEP}]
-	>=dev-python/tree-sitter-0.21.0[${PYTHON_USEDEP}]
+	>=dev-py/tree-sitter-0.21.0[${PYTHON_USEDEP}]
 "
 BDEPEND="${RDEPEND}
 	>=dev-python/flit-core-3.8[${PYTHON_USEDEP}]

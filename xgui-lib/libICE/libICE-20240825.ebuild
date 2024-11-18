@@ -17,7 +17,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="ipv6 static-libs"
 
-DEPEND="xgui-lib/xtrans"
+DEPEND="
+	xgui-lib/xtrans
+	xgui-tools/xorgproto
+"
 
 src_prepare() {
 	default

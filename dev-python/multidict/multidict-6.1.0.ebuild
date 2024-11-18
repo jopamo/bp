@@ -38,6 +38,7 @@ python_prepare_all() {
 }
 
 python_compile() {
+	filter-flags -Wl,-z,defs
 	if ! use native-extensions || [[ ${EPYTHON} == pypy3 ]]; then
 		local -x MULTIDICT_NO_EXTENSIONS=1
 	fi

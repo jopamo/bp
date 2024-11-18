@@ -60,6 +60,7 @@ EPYTEST_XDIST=1
 distutils_enable_tests pytest
 
 src_prepare() {
+	filter-flags -Wl,-z,defs
 	# increase the timeout a little
 	sed -e '/abs=/s/0.001/0.01/' -i tests/test_helpers.py || die
 	# xfail_strict fails on py3.10
@@ -86,6 +87,7 @@ python_configure() {
 }
 
 python_compile() {
+	filter-flags -Wl,-z,defs
 	# implicitly disabled for pypy3
 	if ! use native-extensions; then
 		local -x AIOHTTP_NO_EXTENSIONS=1

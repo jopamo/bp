@@ -39,7 +39,5 @@ src_prepare() {
 	rm -rf "${mt76_dir}"/.git
 	cp -r "${mt76_dir}" "${S}/drivers/net/wireless/mediatek/" || die "Failed to copy new mt76 directory"
 	eapply "${FILESDIR}"/mt76.patch
-
-	sed -i '/\.flags = PP_FLAG_PAGE_FRAG,/d' drivers/net/wireless/mediatek/mt76/mac80211.c
 }
 

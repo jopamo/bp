@@ -7,22 +7,26 @@ inherit cmake flag-o-matic
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
 
-if [[ ${PV} == 19* ]] ; then
-    SNAPSHOT=d8752671e825ca5c967cc58a23778ae378c8dea2
+if [[ ${PV} == 18* ]] ; then
+	SNAPSHOT="3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff"
+
 elif [[ ${PV} == 13* ]] ; then
-    SNAPSHOT="75e33f71c2dae584b13a7d1186ae0a038ba98838"
+	SNAPSHOT="75e33f71c2dae584b13a7d1186ae0a038ba98838"
+
 elif [[ ${PV} == 14* ]] ; then
-    SNAPSHOT="f28c006a5895fc0e329fe15fead81e37457cb1d1"
+	SNAPSHOT="f28c006a5895fc0e329fe15fead81e37457cb1d1"
+
 elif [[ ${PV} == 15* ]] ; then
-    SNAPSHOT="8dfdcc7b7bf66834a761bd8de445840ef68e4d1a"
+	SNAPSHOT="8dfdcc7b7bf66834a761bd8de445840ef68e4d1a"
+
 elif [[ ${PV} == 16* ]] ; then
-    SNAPSHOT="7cbf1a2591520c2491aa35339f227775f4d3adf6"
+	SNAPSHOT="7cbf1a2591520c2491aa35339f227775f4d3adf6"
+
 elif [[ ${PV} == 17* ]] ; then
-    SNAPSHOT="6009708b4367171ccdbf4b5905cb6a803753fe18"
-elif [[ ${PV} == 18* ]] ; then
-    SNAPSHOT="3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff"
+	SNAPSHOT="6009708b4367171ccdbf4b5905cb6a803753fe18"
+
 elif [[ ${PV} == 12* ]] ; then
-    SNAPSHOT="fed41342a82f5a3a9201819a82bf7a48313e296b"
+	SNAPSHOT="fed41342a82f5a3a9201819a82bf7a48313e296b"
 fi
 
 SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
@@ -114,7 +118,7 @@ src_configure() {
 		-DLLVM_LIBDIR_SUFFIX=${libdir#lib}
 		-DBUILD_SHARED_LIBS=OFF
 		-DLLVM_LINK_LLVM_DYLIB=ON
-		-DLLVM_TARGETS_TO_BUILD=$(usex arm64 'AArch64;BPF' 'X86;BPF')
+		-DLLVM_TARGETS_TO_BUILD=$(usex arm64 'AArch64' 'X86')
 		-DLLVM_BUILD_TESTS=$(usex test)
 		-DCOMPILER_RT_USE_LIBEXECINFO=OFF
 		-DCOMPILER_RT_BUILD_SANITIZERS=OFF

@@ -1,0 +1,12 @@
+diff -ruN a/mt76/mt76.h b/mt76/mt76.h
+--- a/drivers/net/wireless/mediatek/mt76/mt76.h
++++ b/drivers/net/wireless/mediatek/mt76/mt76.h
+@@ -12,6 +12,8 @@
+ #include <linux/skbuff.h>
+ #include <linux/leds.h>
+ #include <linux/usb.h>
++#include <linux/version.h>
++#include <linux/build_bug.h>
+ #include <linux/average.h>
+ #include <linux/soc/mediatek/mtk_wed.h>
+ #include <net/netlink.h>

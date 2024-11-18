@@ -1,23 +1,6 @@
-From 1b3c48499abb000d708abe5f05413c1f4155e086 Mon Sep 17 00:00:00 2001
-From: Jory Pratt <anarchy@gentoo.org>
-Date: Mon, 8 Jun 2020 12:22:29 -0500
-Subject: [PATCH] Add pkg-config and nss-config for Gentoo
-
----
- Makefile             |  15 +----
- config/Makefile      |  40 ++++++++++++
- config/nss-config.in | 145 +++++++++++++++++++++++++++++++++++++++++++
- config/nss.pc.in     |  12 ++++
- manifest.mn          |   2 +-
- 5 files changed, 200 insertions(+), 14 deletions(-)
- create mode 100644 config/Makefile
- create mode 100644 config/nss-config.in
- create mode 100644 config/nss.pc.in
-
-diff --git a/Makefile b/Makefile
-index eb4ed1a..f979d90 100644
---- a/Makefile
-+++ b/Makefile
+diff -Naur a/Makefile b/Makefile
+--- a/Makefile	2024-08-01 16:24:30.000000000 +0300
++++ b/Makefile	2024-08-02 10:27:34.449032964 +0300
 @@ -4,6 +4,8 @@
  # License, v. 2.0. If a copy of the MPL was not distributed with this
  # file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -27,7 +10,7 @@ index eb4ed1a..f979d90 100644
  #######################################################################
  # (1) Include initial platform-independent assignments (MANDATORY).   #
  #######################################################################
-@@ -48,12 +50,9 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+@@ -48,12 +50,9 @@
  #######################################################################
  
  nss_build_all:
@@ -40,13 +23,18 @@ index eb4ed1a..f979d90 100644
  	$(MAKE) clobber
  
  NSPR_CONFIG_STATUS = $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME)/config.status
-@@ -138,16 +137,6 @@ $(NSPR_CONFIG_STATUS): $(NSPR_CONFIGURE)
+@@ -138,21 +137,6 @@
  	--prefix='$(NSS_GYP_PREFIX)'
  endif
  
+-ifndef NSS_DISABLE_NSPR_TESTS
 -build_nspr: $(NSPR_CONFIG_STATUS)
 -	$(MAKE) -C $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME)
 -	$(MAKE) -C $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME)/pr/tests
+-else
+-build_nspr: $(NSPR_CONFIG_STATUS)
+-	$(MAKE) -C $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME)
+-endif
 -
 -install_nspr: build_nspr
 -	$(MAKE) -C $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME) install
@@ -57,9 +45,7 @@ index eb4ed1a..f979d90 100644
  build_docs:
  	$(MAKE) -C $(CORE_DEPTH)/doc
  
-diff --git a/config/Makefile b/config/Makefile
-new file mode 100644
-index 0000000..aaf1991
+diff -Naur a/config/Makefile b/config/Makefile
 --- /dev/null
 +++ b/config/Makefile
 @@ -0,0 +1,40 @@
@@ -103,9 +89,7 @@ index 0000000..aaf1991
 +
 +dummy: all export libs
 +
-diff --git a/config/nss-config.in b/config/nss-config.in
-new file mode 100644
-index 0000000..3a957b8
+diff -Naur a/config/nss-config.in b/config/nss-config.in
 --- /dev/null
 +++ b/config/nss-config.in
 @@ -0,0 +1,145 @@
@@ -254,9 +238,7 @@ index 0000000..3a957b8
 +      echo ${libdirs}
 +fi
 +
-diff --git a/config/nss.pc.in b/config/nss.pc.in
-new file mode 100644
-index 0000000..03f1e39
+diff -Naur a/config/nss.pc.in b/config/nss.pc.in
 --- /dev/null
 +++ b/config/nss.pc.in
 @@ -0,0 +1,12 @@
@@ -272,8 +254,7 @@ index 0000000..03f1e39
 +Libs: -lssl3 -lsmime3 -lnss3 -lnssutil3
 +Cflags: -I${includedir}
 +
-diff --git a/manifest.mn b/manifest.mn
-index dada8ab..72dc9b3 100644
+diff -Naur a/manifest.mn b/manifest.mn
 --- a/manifest.mn
 +++ b/manifest.mn
 @@ -10,7 +10,7 @@ IMPORTS =	nspr20/v4.8 \
@@ -285,6 +266,3 @@ index dada8ab..72dc9b3 100644
  
  lib: coreconf
  cmd: lib
--- 
-2.26.2
-

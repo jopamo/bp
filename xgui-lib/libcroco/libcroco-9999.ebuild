@@ -14,6 +14,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="test"
 
+BDEPEND="app-dev/gtk-doc-am"
+
 src_prepare() {
 	sed -i -e '/gtkdocize/d' autogen.sh || die
 	sed -i -e '/gtk-doc.make/d' docs/reference/Makefile.am || die

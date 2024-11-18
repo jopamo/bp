@@ -56,6 +56,7 @@ src_prepare() {
 }
 
 src_configure() {
+	use elibc_musl && append-flags -D_GLIBCXX_USE_CXX11_ABI=1
 	local mycmakeargs=()
 
 	LLVM_PROJECTS="clang;clang-tools-extra"

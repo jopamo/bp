@@ -55,7 +55,7 @@ src_configure() {
 
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
+		--sbindir="${EPREFIX}"/usr/bin
 		--localstatedir="${EPREFIX}"/var
 		--prefix="${EPREFIX}"/usr
 		--sysconfdir="${EPREFIX}"/etc/php

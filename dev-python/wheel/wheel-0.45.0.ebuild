@@ -35,17 +35,13 @@ EPYTEST_DESELECT=(
 distutils_enable_tests pytest
 
 src_prepare() {
-	local PATCHES=(
-		# https://github.com/pypa/wheel/pull/637
-		"${FILESDIR}/${P}-ft.patch"
-	)
-
 	distutils-r1_src_prepare
 
 	# unbundle packaging
 	rm -r src/wheel/vendored || die
-	sed -i -e 's:\.vendored\.::' src/wheel/*.py || die
-	sed -i -e 's:wheel\.vendored\.::' tests/*.py || die
+	find -name '*.py' -exec sed -i \
+		-e 's:wheel\.vendored\.::' \
+		-e 's:\.\+vendored\.::' {} + || die
 }
 
 python_test() {

@@ -130,7 +130,7 @@ src_configure() {
 		$(meson_feature importd)
 		$(meson_feature kmod)
 		$(meson_feature logind fdisk)
-		$(meson_feature logind homed)
+		$(meson_feature logind)
 		$(meson_feature logind libcryptsetup)
 		$(meson_use machined)
 		$(meson_feature machined bzip2)
@@ -185,6 +185,7 @@ src_configure() {
 		-Dlibidn=disabled
 		-Dlibiptc=disabled
 		-Dlink-timesyncd-shared=false
+		-Dhomed=disabled
 		-Dman=disabled
 		-Dmicrohttpd=disabled
 		-Dnss-myhostname=false

@@ -35,8 +35,8 @@ exclude_package_list=(
 	"openjade"
 	"qterm*"
 	"swig"
-	"wpa_supplicant"
-	"x265"
+	#"wpa_supplicant"
+	#"x265"
 )
 
 maint_excluded_list=(

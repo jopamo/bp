@@ -33,14 +33,25 @@ BDEPEND="
 
 src_configure() {
 	local emesonargs=(
+		-Dpng=enabled
+		-Dothers=disabled
 		-Dbuiltin_loaders=all
 		-Dintrospection=enabled
 		-Ddocs=false
+		-Dgio_sniffing=false
+		-Dtests=false
+		-Drelocatable=false
 	)
 	meson_src_configure
 }
 
+src_install() {
+	die
+	meson_src_install
+}
+
 pkg_preinst() {
+	die
 	# Make sure loaders.cache belongs to gdk-pixbuf alone
 	mkdir -p "${ED}"/usr/lib/${PN}-2.0/2.10.0/
 

@@ -2,10 +2,12 @@
 
 EAPI=8
 
+inherit autotools
+
 DESCRIPTION="Portable Network Graphics library"
 HOMEPAGE="http://www.libpng.org/"
 
-SNAPSHOT=e4a31f024b6158aaaf55a43502f574d5f5d1c894
+SNAPSHOT=c1cc0f3f4c3d4abd11ca68c59446a29ff6f95003
 SRC_URI="https://github.com/pnggroup/libpng/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/libpng-${SNAPSHOT}"
 
@@ -19,6 +21,11 @@ DEPEND="
 	lib-core/zlib
 	app-compression/xz-utils
 "
+
+src_prepare() {
+	default
+	eautoreconf
+}
 
 src_configure() {
 	local myconf=(

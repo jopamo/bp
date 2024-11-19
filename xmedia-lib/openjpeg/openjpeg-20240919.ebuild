@@ -28,30 +28,15 @@ DEPEND="
 
 src_configure() {
 	local mycmakeargs=(
-		-DOPENJPEG_INSTALL_LIB_DIR="lib"
 		-DBUILD_TESTING="$(usex test)"
 		-DBUILD_DOC=OFF
 		-DBUILD_CODEC=ON
-		-DBUILD_SHARED_LIBS=ON
-		-DBUILD_STATIC_LIBS="$(usex static-libs)"
-		)
+	)
 
 	cmake_src_configure
 }
 
-src_compile() {
-	cmake_src_compile
-
-	if use static-libs; then
-		BUILD_DIR=${BUILD_DIR}_static cmake_src_compile
-	fi
-}
-
 src_install() {
-	if use static-libs; then
-		BUILD_DIR=${BUILD_DIR}_static cmake_src_install
-	fi
-
 	cmake_src_install
 	use static-libs || find "${ED}" -name '*.a' -delete
 

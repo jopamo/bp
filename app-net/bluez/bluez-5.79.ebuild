@@ -64,6 +64,11 @@ pkg_setup() {
 	fi
 }
 
+src_prepare() {
+	default
+	use elibc_musl && eapply "${FILESDIR}/gdbus-define-MAX_INPUT-for-musl.patch"
+}
+
 src_configure() {
 	filter-flags -Wl,-z,defs
 

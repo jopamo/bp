@@ -45,13 +45,7 @@ src_configure() {
 	meson_src_configure
 }
 
-src_install() {
-	die
-	meson_src_install
-}
-
 pkg_preinst() {
-	die
 	# Make sure loaders.cache belongs to gdk-pixbuf alone
 	mkdir -p "${ED}"/usr/lib/${PN}-2.0/2.10.0/
 

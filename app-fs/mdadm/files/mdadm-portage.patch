@@ -19,7 +19,7 @@ diff -urN a/Makefile b/Makefile
  DESTDIR =
 -BINDIR  = /sbin
 -MANDIR  = /usr/share/man
-+BINDIR  = /usr/sbin
++BINDIR  = /usr/bin
 +MANDIR  = /usr/share/man
  MAN4DIR = $(MANDIR)/man4
  MAN5DIR = $(MANDIR)/man5

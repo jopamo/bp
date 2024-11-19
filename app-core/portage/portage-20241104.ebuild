@@ -85,6 +85,7 @@ my_src_configure() {
 	local emesonargs=(
 		-Dcode-only=${code_only}
 		-Deprefix="${EPREFIX}"
+		-Dsbindir="${EPREFIX}"/usr/bin
 		-Dportage-bindir="${EPREFIX}/usr/lib/portage/${EPYTHON}"
 		-Ddocdir="${EPREFIX}/usr/share/doc/${PF}"
 		-Ddoc=false
@@ -130,7 +131,7 @@ src_install() {
 	fi
 
 	local scripts
-	mapfile -t scripts < <(awk '/^#!.*python/ {print FILENAME} {nextfile}' "${ED}"/usr/{bin,sbin}/* || die)
+	mapfile -t scripts < <(awk '/^#!.*python/ {print FILENAME} {nextfile}' "${ED}"/usr/bin/* || die)
 	python_replicate_script "${scripts[@]}"
 
 	echo -e "[DEFAULT]\n\

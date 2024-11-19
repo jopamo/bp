@@ -45,7 +45,7 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/sbin
+		--bindir="${EPREFIX}"/usr/bin
 		--with-rootlibdir="${EPREFIX}"/usr/lib
 		$(use_enable debug)
 		$(use_enable static-libs static)
@@ -67,7 +67,7 @@ src_install() {
 	if use tools; then
 		local tool
 		for tool in {ins,ls,rm,dep}mod mod{probe,info}; do
-    		dosym kmod /usr/sbin/${tool}
+    		dosym kmod /usr/bin/${tool}
   		done
   	fi
 }

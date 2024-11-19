@@ -74,6 +74,7 @@ pkg_setup() {
 }
 
 src_prepare() {
+	use elibc_musl && sed -i '/#include <execinfo.h>/d' testsuite/reftests/gtk-reftest.c
 	filter-flags -flto*
 
 	default

@@ -33,7 +33,7 @@ run_emake() {
 		PAM_CAP="$(usex pam yes no)"
 		RAISE_SETFCAP=no
 		RANLIB="$(tc-getRANLIB)"
-		SBINDIR="${EPREFIX}"/usr/sbin
+		SBINDIR="${EPREFIX}"/usr/bin
 		exec_prefix="${EPREFIX}"
 		lib="lib"
 		lib_prefix="${EPREFIX}/usr"

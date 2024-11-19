@@ -56,9 +56,9 @@ src_unpack() {
 src_prepare() {
 	cd "image/${EPREFIX}" || die
 
-	mkdir -p usr/sbin || die
+	mkdir -p usr/bin || die
 	cp -p "${FILESDIR}"/update-ca-certificates \
-		usr/sbin/ || die
+		usr/bin/ || die
 
 	default
 
@@ -66,7 +66,7 @@ src_prepare() {
 	sed -i \
 		-e '/="$ROOT/s:ROOT:ROOT'"${EPREFIX}"':' \
 		-e '/RELPATH="\.\./s:"$:'"${relp}"'":' \
-		usr/sbin/update-ca-certificates || die
+		usr/bin/update-ca-certificates || die
 }
 
 src_compile() {

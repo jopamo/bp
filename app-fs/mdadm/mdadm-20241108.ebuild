@@ -32,7 +32,7 @@ mdadm_emake() {
 	emake \
 		PKG_CONFIG="$(tc-getPKG_CONFIG)" \
 		CC="$(tc-getCC)" \
-		CWFLAGS="-Wall -DBINDIR=\"/usr/sbin\"" \
+		CWFLAGS="-Wall -DBINDIR=\"/usr/bin\"" \
 		CXFLAGS="${CFLAGS}" \
 		UDEVDIR="${EPREFIX}"/usr/lib/udev \
 		SYSTEMD_DIR=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false") \

@@ -110,7 +110,7 @@ src_install() {
 		PREFIX="${EPREFIX}/usr" \
 		LIBDIR="${EPREFIX}"/usr/lib \
 		BINDIR="${EPREFIX}"/usr/bin \
-		SBINDIR="${EPREFIX}"/usr/sbin \
+		SBINDIR="${EPREFIX}"/usr/bin \
 		CONFDIR="${EPREFIX}"/etc/iproute2 \
 		DOCDIR="${EPREFIX}"/usr/share/doc/${PF} \
 		MANDIR="${EPREFIX}"/usr/share/man \

@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="tcltk/tcl - Tool Command Language"
 HOMEPAGE="http://www.tcl.tk/"
 
-SNAPSHOT=24bb96c054a8160b977dd2e35e0492d518350ff9
+SNAPSHOT=ac07bf22a2e97722c09c50a9ddf56572118ddec3
 SRC_URI="https://github.com/tcltk/tcl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/tcl-${SNAPSHOT}/unix
 

@@ -208,6 +208,7 @@ src_configure() {
 		-Dstandalone-binaries=true
 		-Dtimesyncd=false
 		-Dtpm=true
+		-Dsbat-distro-url="https://1g4.org/"
 	)
 
 	meson_src_configure

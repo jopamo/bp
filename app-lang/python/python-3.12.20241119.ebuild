@@ -21,7 +21,7 @@ fi
 
 LICENSE="PSF-2"
 SLOT="$(ver_cut 1-2)"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="bluetooth debug libedit ncurses pgo readline sqlite ssl static test tk valgrind +xml"
 

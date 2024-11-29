@@ -22,11 +22,10 @@ SLOT="0"
 
 if [[ ${PV} == *9999 ]]; then
 	RDEPEND="
-		~dev-python/snakeoil-9999[${PYTHON_USEDEP}]
-		~sys-apps/pkgcore-9999[${PYTHON_USEDEP}]"
+		~dev-py/snakeoil-9999[${PYTHON_USEDEP}]"
 else
 	RDEPEND="
-		>=dev-python/snakeoil-0.10.7[${PYTHON_USEDEP}]
+		>=dev-py/snakeoil-0.10.7[${PYTHON_USEDEP}]
 		>=app-core/pkgcore-0.12.25[${PYTHON_USEDEP}]"
 fi
 RDEPEND+="

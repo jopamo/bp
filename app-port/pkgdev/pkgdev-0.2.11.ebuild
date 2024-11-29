@@ -17,14 +17,14 @@ KEYWORDS="amd64 arm64"
 if [[ ${PV} == *9999 ]] ; then
 	# https://github.com/pkgcore/pkgdev/blob/main/requirements/dev.txt
 	RDEPEND="
-		~dev-python/snakeoil-9999[${PYTHON_USEDEP}]
+		~dev-py/snakeoil-9999[${PYTHON_USEDEP}]
 		~app-port/pkgcheck-9999[${PYTHON_USEDEP}]
 		~app-core/pkgcore-9999[${PYTHON_USEDEP}]
 	"
 else
 	# https://github.com/pkgcore/pkgdev/blob/main/requirements/install.txt
 	RDEPEND="
-		>=dev-python/snakeoil-0.9.6[${PYTHON_USEDEP}]
+		>=dev-py/snakeoil-0.9.6[${PYTHON_USEDEP}]
 		>=app-port/pkgcheck-0.10.0[${PYTHON_USEDEP}]
 		>=app-core/pkgcore-0.12.0[${PYTHON_USEDEP}]
 	"

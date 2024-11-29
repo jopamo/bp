@@ -1,11 +1,13 @@
 #!/bin/bash -ex
 
-branch="6.1"
-src="linux-${branch}"
+branch="6"
+#src="linux-${branch}"
+src="linux"
 
 if [ ! -d ${src} ] ; then
 	#official sources
-	git clone https://gitlab.com/linux-kernel/stable.git --depth 1 -b linux-${branch}.y ${src}
+	#git clone https://gitlab.com/linux-kernel/stable.git --depth 1 -b linux-${branch}.y ${src}
+	git clone https://github.com/torvalds/linux --depth 1
 else
 	$( cd ${src} && git remote update )
 fi

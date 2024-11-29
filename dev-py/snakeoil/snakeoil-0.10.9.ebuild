@@ -29,4 +29,8 @@ BDEPEND="
 	>=dev-python/flit-core-3.8[${PYTHON_USEDEP}]
 "
 
-distutils_enable_tests pytest
+src_prepare() {
+	default
+
+	sed -i 's/self._parse_known_args(args, namespace)/self._parse_known_args(args, namespace, intermixed=False)/' src/snakeoil/cli/arghparse.py || die
+}

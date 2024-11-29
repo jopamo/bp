@@ -31,6 +31,7 @@ src_configure() {
 		-DBUILD_TESTING="$(usex test)"
 		-DBUILD_DOC=OFF
 		-DBUILD_CODEC=ON
+		-DBUILD_STATIC_LIBS="$(usex static-libs)"
 	)
 
 	cmake_src_configure
@@ -38,7 +39,6 @@ src_configure() {
 
 src_install() {
 	cmake_src_install
-	use static-libs || find "${ED}" -name '*.a' -delete
 
 	dosym /usr/include/openjpeg-2.5/opj_config.h /usr/include/opj_config.h
 	dosym /usr/include/openjpeg-2.5/openjpeg.h /usr/include/openjpeg.h

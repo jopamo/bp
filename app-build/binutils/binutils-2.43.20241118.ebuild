@@ -23,27 +23,33 @@ DEPEND="
 	virtual/libc
 "
 
+PATCHES=( "${FILESDIR}"/binutils-ld-fix-static-linking.patch )
+
 src_configure() {
 	filter-flags -Wl,defs
 
 	local myconf=(
-		$(use_enable gprof)
-		$(use_enable gprofng)
+		--disable-gdb
 		--disable-gold
+		--disable-gprofng
 		--disable-multilib
 		--disable-nls
 		--disable-obsolete
 		--disable-werror
-		--disable-{gdb,sim}
+		--disable-sim
+		--enable-64-bit-bfd
+		--enable-colored-disassembly
+		--enable-default-execstack=no
 		--enable-default-hash-style=gnu
 		--enable-deterministic-archives
-		--enable-install-libiberty
 		--enable-ld=default
 		--enable-lto
-		--enable-plugins
+		--enable-new-dtags
 		--enable-relro
 		--enable-threads
 		--prefix="${EPREFIX}"/usr
+		--with-mmap
+		--with-pic
 		--with-system-zlib
 		--without-included-gettext
 	)

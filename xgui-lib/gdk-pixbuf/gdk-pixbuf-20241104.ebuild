@@ -38,9 +38,9 @@ src_configure() {
 		-Dbuiltin_loaders=all
 		-Dintrospection=enabled
 		-Ddocs=false
-		-Dgio_sniffing=false
+		-Dgio_sniffing=true
 		-Dtests=false
-		-Drelocatable=false
+		-Drelocatable=true
 	)
 	meson_src_configure
 }
@@ -59,6 +59,6 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
-	ebegin "Updating gdk-pixbuf loader cache"
+	einfo "Updating gdk-pixbuf loader cache"
 	gdk-pixbuf-query-loaders --update-cache
 }

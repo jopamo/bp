@@ -21,3 +21,7 @@ src_install() {
 	FONT_S="${S}/hinted/" font_src_install
 	FONT_S="${S}/roboto/" font_src_install
 }
+
+pkg_postinst() {
+	fc-cache -fv
+}

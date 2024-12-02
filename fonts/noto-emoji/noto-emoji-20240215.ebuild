@@ -36,6 +36,10 @@ FONT_CONF=(
 )
 
 src_prepare() {
-	rm Makefile fonts/{Noto-COLR*,NotoColorEmoji_WindowsCompatible.ttf}
+	rm Makefile fonts/NotoColorEmoji_WindowsCompatible.ttf
 	default
+}
+
+pkg_postinst() {
+	fc-cache -fv
 }

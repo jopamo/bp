@@ -27,3 +27,8 @@ src_prepare() {
 	rm Makefile Dockerfile
 	default
 }
+
+pkg_postinst() {
+	fc-cache -fv
+}
+

@@ -21,3 +21,7 @@ pkg_setup() {
 
 	font_pkg_setup
 }
+
+pkg_postinst() {
+	fc-cache -fv
+}

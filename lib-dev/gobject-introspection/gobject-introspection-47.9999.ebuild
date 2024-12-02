@@ -17,11 +17,9 @@ else
 	S=${WORKDIR}/gobject-introspection-${SNAPSHOT}
 fi
 
-
-
 LICENSE="LGPL-2+ GPL-2+"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	lib-util/glib

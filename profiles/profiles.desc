@@ -7,13 +7,13 @@
 #arch		profile_directory				status
 
 # AMD64 Profiles
-amd64           default/linux/amd64/1.0						stable
-amd64           default/linux/amd64/1.0/gui					stable
-amd64			default/linux/amd64/1.0/musl				stable
-amd64			default/linux/amd64/1.0/musl/gui			stable
+amd64           core/amd64/glibc					stable
+amd64           core/amd64/glibc/gui				stable
+amd64			core/amd64/musl						stable
+amd64			core/amd64/musl/gui					stable
 
 # ARM64 Profiles
-arm64           default/linux/arm64/1.0					stable
-arm64           default/linux/arm64/1.0/gui				stable
-arm64			default/linux/arm64/1.0/musl			stable
-arm64			default/linux/arm64/1.0/musl/gui		stable
+arm64           core/arm64/glibc					stable
+arm64           core/arm64/glibc/gui				stable
+arm64			core/arm64/musl						stable
+arm64			core/arm64/musl/gui					stable

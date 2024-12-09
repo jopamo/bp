@@ -1,7 +1,0 @@
-# Distributed under the terms of the GNU General Public License v2
-
-CHOST="x86_64-pc-linux-musl"
-
-MULTILIB_ABIS="amd64"
-CHOST_amd64="${CHOST}"
-LIBDIR_amd64="lib"

@@ -1,0 +1,53 @@
+From 0435735733278644c2c3eca0a737bdda0280a9c0 Mon Sep 17 00:00:00 2001
+From: Nikita Popov <npopov@redhat.com>
+Date: Wed, 3 Jul 2024 11:00:42 +0200
+Subject: [PATCH 11/24] [InstCombine] Add test for #97053 (NFC)
+
+Gentoo-Component: llvm
+---
+ .../Transforms/InstCombine/scalarization.ll   | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+
+diff --git a/test/Transforms/InstCombine/scalarization.ll b/test/Transforms/InstCombine/scalarization.ll
+index fe6dc526bd50..50d6bb26d24e 100644
+--- a/test/Transforms/InstCombine/scalarization.ll
++++ b/test/Transforms/InstCombine/scalarization.ll
+@@ -156,6 +156,35 @@ define i8 @extract_element_binop_splat_variable_index(<4 x i8> %x, i32 %y) {
+   ret i8 %r
+ }
+ 
++; We cannot move the extractelement before the sdiv here, because %z may be
++; out of range, making the divisor poison and resulting in immediate UB.
++; FIXME: This is a miscompile.
++define i8 @extract_element_binop_splat_variable_index_may_trap(<4 x i8> %x, <4 x i8> %y, i32 %z) {
++;
++; CHECK-LABEL: @extract_element_binop_splat_variable_index_may_trap(
++; CHECK-NEXT:    [[TMP1:%.*]] = extractelement <4 x i8> [[Y:%.*]], i32 [[Z:%.*]]
++; CHECK-NEXT:    [[R:%.*]] = sdiv i8 42, [[TMP1]]
++; CHECK-NEXT:    ret i8 [[R]]
++;
++  %b = sdiv <4 x i8> splat (i8 42), %y
++  %r = extractelement <4 x i8> %b, i32 %z
++  ret i8 %r
++}
++
++; Moving the extractelement first is fine here, because the index is known to
++; be valid, so we can't introduce additional poison.
++define i8 @extract_element_binop_constant_index_may_trap(<4 x i8> %x, <4 x i8> %y, i32 %z) {
++;
++; CHECK-LABEL: @extract_element_binop_constant_index_may_trap(
++; CHECK-NEXT:    [[TMP1:%.*]] = extractelement <4 x i8> [[Y:%.*]], i64 3
++; CHECK-NEXT:    [[R:%.*]] = sdiv i8 42, [[TMP1]]
++; CHECK-NEXT:    ret i8 [[R]]
++;
++  %b = sdiv <4 x i8> splat (i8 42), %y
++  %r = extractelement <4 x i8> %b, i32 3
++  ret i8 %r
++}
++
+ define i8 @extract_element_binop_splat_with_undef_variable_index(<4 x i8> %x, i32 %y) {
+ ;
+ ; CHECK-LABEL: @extract_element_binop_splat_with_undef_variable_index(
+-- 
+2.47.0
+

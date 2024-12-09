@@ -20,7 +20,6 @@ IUSE="minizip static-libs"
 src_prepare() {
 	default
 
-	#ldconfig is not used
 	sed -i 's/ldconfig/false/g' configure
 
 	if use minizip ; then
@@ -47,14 +46,11 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs || rm -f "${ED}"/usr/lib/libz.{a,la}
 
 	if use minizip ; then
 		emake -C contrib/minizip install DESTDIR="${D}"
 
 		insinto /usr/include/minizip
 		doins contrib/minizip/*.h
-
-		rm -f "${ED}"/usr/lib/libminizip.la || die
 	fi
 }

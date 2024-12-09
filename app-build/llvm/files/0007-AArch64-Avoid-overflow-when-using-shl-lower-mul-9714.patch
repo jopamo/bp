@@ -1,0 +1,99 @@
+From d3feace4b78606228ab0b9b0b3f4ad3b5017f5e8 Mon Sep 17 00:00:00 2001
+From: DianQK <dianqk@dianqk.net>
+Date: Sun, 30 Jun 2024 06:23:27 +0800
+Subject: [PATCH 07/24] [AArch64] Avoid overflow when using shl lower mul
+ (#97148)
+
+Fixes #97147.
+
+Transforming `(mul x, -(2^(N-M) - 1) * 2^M)` to `(sub (shl x, M), (shl
+x, N))` will cause overflow when N is 32 and M is 31. I still added
+checks for all scenarios, even other scenarios, don't seem to cause overflow.
+
+Gentoo-Component: llvm
+---
+ .../Target/AArch64/AArch64ISelLowering.cpp    | 11 ++++++
+ llvm/test/CodeGen/AArch64/mul_pow2.ll         | 38 +++++++++++++++++++
+ 2 files changed, 49 insertions(+)
+
+diff --git a/lib/Target/AArch64/AArch64ISelLowering.cpp b/lib/Target/AArch64/AArch64ISelLowering.cpp
+index bcfd0253e73c..b6ea88bbc848 100644
+--- a/lib/Target/AArch64/AArch64ISelLowering.cpp
++++ b/lib/Target/AArch64/AArch64ISelLowering.cpp
+@@ -17153,16 +17153,27 @@ static SDValue performMulCombine(SDNode *N, SelectionDAG &DAG,
+   unsigned ShiftAmt;
+ 
+   auto Shl = [&](SDValue N0, unsigned N1) {
++    if (!N0.getNode())
++      return SDValue();
++    // If shift causes overflow, ignore this combine.
++    if (N1 >= N0.getValueSizeInBits())
++      return SDValue();
+     SDValue RHS = DAG.getConstant(N1, DL, MVT::i64);
+     return DAG.getNode(ISD::SHL, DL, VT, N0, RHS);
+   };
+   auto Add = [&](SDValue N0, SDValue N1) {
++    if (!N0.getNode() || !N1.getNode())
++      return SDValue();
+     return DAG.getNode(ISD::ADD, DL, VT, N0, N1);
+   };
+   auto Sub = [&](SDValue N0, SDValue N1) {
++    if (!N0.getNode() || !N1.getNode())
++      return SDValue();
+     return DAG.getNode(ISD::SUB, DL, VT, N0, N1);
+   };
+   auto Negate = [&](SDValue N) {
++    if (!N0.getNode())
++      return SDValue();
+     SDValue Zero = DAG.getConstant(0, DL, VT);
+     return DAG.getNode(ISD::SUB, DL, VT, Zero, N);
+   };
+diff --git a/test/CodeGen/AArch64/mul_pow2.ll b/test/CodeGen/AArch64/mul_pow2.ll
+index e16ee40c8dcb..0b16c1226b54 100644
+--- a/test/CodeGen/AArch64/mul_pow2.ll
++++ b/test/CodeGen/AArch64/mul_pow2.ll
+@@ -869,3 +869,41 @@ define <4 x i32> @muladd_demand_commute(<4 x i32> %x, <4 x i32> %y) {
+   %r = and <4 x i32> %a, <i32 131071, i32 131071, i32 131071, i32 131071>
+   ret <4 x i32> %r
+ }
++
++; Transforming `(mul x, -(2^(N-M) - 1) * 2^M)` to `(sub (shl x, M), (shl x, N))`
++; will cause overflow when N is 32 and M is 31.
++define i32 @shift_overflow(i32 %x) {
++; CHECK-LABEL: shift_overflow:
++; CHECK:       // %bb.0:
++; CHECK-NEXT:    mov w8, #-2147483648 // =0x80000000
++; CHECK-NEXT:    mul w0, w0, w8
++; CHECK-NEXT:    ret
++;
++; GISEL-LABEL: shift_overflow:
++; GISEL:       // %bb.0:
++; GISEL-NEXT:    mov w8, #-2147483648 // =0x80000000
++; GISEL-NEXT:    mul w0, w0, w8
++; GISEL-NEXT:    ret
++  %const = bitcast i32 2147483648 to i32
++  %r = mul i32 %x, %const
++  ret i32 %r
++}
++
++; Transforming `(mul x, -(2^(N-M) - 1) * 2^M)` to `(sub (shl x, M), (shl x, N))`
++; will not cause overflow when N is 31 and M is 30.
++define i32 @shift_no_overflow(i32 %x) {
++; CHECK-LABEL: shift_no_overflow:
++; CHECK:       // %bb.0:
++; CHECK-NEXT:    lsl w8, w0, #31
++; CHECK-NEXT:    sub w0, w8, w0, lsl #30
++; CHECK-NEXT:    ret
++;
++; GISEL-LABEL: shift_no_overflow:
++; GISEL:       // %bb.0:
++; GISEL-NEXT:    mov w8, #1073741824 // =0x40000000
++; GISEL-NEXT:    mul w0, w0, w8
++; GISEL-NEXT:    ret
++  %const = bitcast i32 1073741824 to i32
++  %r = mul i32 %x, %const
++  ret i32 %r
++}
+-- 
+2.47.0
+

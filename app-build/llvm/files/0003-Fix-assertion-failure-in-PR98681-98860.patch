@@ -1,0 +1,49 @@
+From 9e3b480b6e6ee1d95b7eb4926712a07674d9ce66 Mon Sep 17 00:00:00 2001
+From: Yingwei Zheng <dtcxzyw2333@gmail.com>
+Date: Mon, 15 Jul 2024 14:59:16 +0800
+Subject: [PATCH 03/24] Fix assertion failure in PR98681 (#98860)
+
+See https://en.cppreference.com/w/cpp/numeric/math/pow:
+```
+C++98 added overloads where exp has type int on top of C [pow()](https://en.cppreference.com/w/c/numeric/math/pow), and the return type of std::pow(float, int) was float. However, the additional overloads introduced in C++11 specify that std::pow(float, int) should return double. [LWG issue 550](https://cplusplus.github.io/LWG/issue550) was raised to target this conflict, and the resolution is to removed the extra int exp overloads.
+```
+
+Gentoo-Component: llvm
+---
+ llvm/lib/Analysis/ConstantFolding.cpp   | 2 +-
+ llvm/test/Transforms/EarlyCSE/math-2.ll | 8 ++++++++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/lib/Analysis/ConstantFolding.cpp b/lib/Analysis/ConstantFolding.cpp
+index 7d6b6ad732e6..1a1f643ee589 100644
+--- a/lib/Analysis/ConstantFolding.cpp
++++ b/lib/Analysis/ConstantFolding.cpp
+@@ -2700,7 +2700,7 @@ static Constant *ConstantFoldScalarCall2(StringRef Name,
+         switch (Ty->getTypeID()) {
+         case Type::HalfTyID:
+         case Type::FloatTyID: {
+-          APFloat Res(std::pow(Op1V.convertToFloat(), Exp));
++          APFloat Res(static_cast<float>(std::pow(Op1V.convertToFloat(), Exp)));
+           if (Ty->isHalfTy()) {
+             bool Unused;
+             Res.convert(APFloat::IEEEhalf(), APFloat::rmNearestTiesToEven,
+diff --git a/test/Transforms/EarlyCSE/math-2.ll b/test/Transforms/EarlyCSE/math-2.ll
+index 60a2f19084c8..0d55165e3662 100644
+--- a/test/Transforms/EarlyCSE/math-2.ll
++++ b/test/Transforms/EarlyCSE/math-2.ll
+@@ -108,4 +108,12 @@ define half @pr98665() {
+   ret half %x
+ }
+ 
++define float @powi_f32() {
++; CHECK-LABEL: @powi_f32(
++; CHECK-NEXT:    ret float 0.000000e+00
++;
++  %y = call float @llvm.powi.f32.i32(float 0.0, i32 10)
++  ret float %y
++}
++
+ attributes #0 = { nofree nounwind willreturn }
+-- 
+2.47.0
+

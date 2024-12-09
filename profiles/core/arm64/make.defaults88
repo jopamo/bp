@@ -1,0 +1,17 @@
+# Distributed under the terms of the GNU General Public License v2
+
+ARCH="arm64"
+ACCEPT_KEYWORDS="arm64"
+
+MULTILIB_ABIS="arm64"
+DEFAULT_ABI="arm64"
+ABI="${DEFAULT_ABI}"
+
+FFLAGS="${CFLAGS}"
+FCFLAGS="${CFLAGS}"
+
+LIBDIR_arm64="lib"
+
+USE_EXPAND_HIDDEN="-CPU_FLAGS_ARM"
+
+USE="llvm_targets_AArch64"

@@ -1,6 +1,7 @@
 *app-compression/zip
 *app-fs/ncdu
 *app-port/smart-live-rebuild
+*bin/firefox-nightly-bin
 *fonts/fira-code
 *fonts/font-alias
 *fonts/liberation-fonts

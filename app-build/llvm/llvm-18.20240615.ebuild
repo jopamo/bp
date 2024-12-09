@@ -36,8 +36,7 @@ LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
 KEYWORDS="amd64 arm64"
 
-IUSE="bolt cross-project-tests cuda debug libc libclc +lld lldb mlir
-	openmp polly pstl test +libunwind llvm-libgcc"
+IUSE="amdgpu arm bpf bootstrap +debug nvptx stage1 stage2 test wasm xcore"
 
 DEPEND="
 	lib-core/libffi
@@ -46,9 +45,28 @@ DEPEND="
 "
 
 RESTRICT="!test? ( test )"
-FEATURES="-sandbox -usersandbox"
 
 CMAKE_BUILD_TYPE=Release
+
+PATCHES=(
+	"${FILESDIR}/0001-InstSimplify-Fix-simplifyAndOrWithICmpEq-with-undef-.patch"
+	"${FILESDIR}/0002-ConstantFold-Fix-result-type-when-folding-powi.f16-9.patch"
+	"${FILESDIR}/0003-Fix-assertion-failure-in-PR98681-98860.patch"
+	"${FILESDIR}/0004-SDAG-Intersect-poison-generating-flags-after-CSE-974.patch"
+	"${FILESDIR}/0005-InstCombine-Guard-noundef-for-transformation-from-xo.patch"
+	"${FILESDIR}/0006-ARM-Fix-arm32be-softfp-mode-miscompilation-for-neon-.patch"
+	"${FILESDIR}/0007-AArch64-Avoid-overflow-when-using-shl-lower-mul-9714.patch"
+	"${FILESDIR}/0008-X86-matchAddressRecursively-ensure-dead-nodes-are-re.patch"
+	"${FILESDIR}/0009-X86-matchAddressRecursively-don-t-fold-zext-shl-x-c-.patch"
+	"${FILESDIR}/0010-SelectionDAG-use-HandleSDNode-instead-of-SDValue-dur.patch"
+	"${FILESDIR}/0011-InstCombine-Add-test-for-97053-NFC.patch"
+	"${FILESDIR}/0012-InstCombine-Fix-invalid-scalarization-of-div.patch"
+	"${FILESDIR}/0013-ADT-Add-cstdint-to-SmallVector-101761.patch"
+	"${FILESDIR}/0014-AMDGPU-Include-cstdint-in-AMDGPUMCTargetDesc-101766.patch"
+	"${FILESDIR}/0015-Another-gcc-15-fix-from-Sam-James.patch"
+	"${FILESDIR}/0016-llvm-exegesis-Use-correct-rseq-struct-size-100804.patch"
+	"${FILESDIR}/0020-SDAG-Honor-signed-arguments-in-floating-point-libcal.patch"
+)
 
 src_prepare() {
 	cmake_src_prepare
@@ -56,91 +74,143 @@ src_prepare() {
 }
 
 src_configure() {
-	use elibc_musl && append-flags -D_GLIBCXX_USE_CXX11_ABI=1
-	local mycmakeargs=()
-
-	LLVM_PROJECTS="clang;clang-tools-extra"
-	LLVM_ENABLE_RUNTIMES="compiler-rt"
-
-	use libc && LLVM_ENABLE_RUNTIMES+=";libc"
-	use libunwind && LLVM_ENABLE_RUNTIMES+=";libunwind"
-	use pstl && LLVM_ENABLE_RUNTIMES+=";pstl"
-	use openmp && LLVM_ENABLE_RUNTIMES+=";openmp"
-	use llvm-libgcc && LLVM_ENABLE_RUNTIMES+=";llvm-libgcc"
-
-	use bolt && LLVM_PROJECTS+=";bolt"
-	use cross-project-tests && LLVM_PROJECTS+=";cross-project-tests"
-	use libc && LLVM_PROJECTS+=";libc"
-	use libclc && LLVM_PROJECTS+=";libclc"
-	use lld && LLVM_PROJECTS+=";lld"
-	use lldb && LLVM_PROJECTS+=";lldb"
-	use mlir && LLVM_PROJECTS+=";mlir"
-	use openmp && LLVM_PROJECTS+=";openmp"
-	use polly && LLVM_PROJECTS+=";polly"
-	use pstl && LLVM_PROJECTS+=";pstl"
-
-	filter-flags -D_FORTIFY_SOURCE*
-	filter-flags -Wl,-O3
-	filter-flags -Wl,-z,combreloc
-	filter-flags -Wl,-z,defs
-	filter-flags -Wl,-z,now
-	filter-flags -Wl,-z,relro
-	filter-flags -fassociative-math
-	filter-flags -fasynchronous-unwind-tables
-	filter-flags -fcf-protection=full
-	filter-flags -fexceptions
-	filter-flags -fgraphite-identity
-	filter-flags -fipa-pta
-	filter-flags -floop-interchange
-	filter-flags -floop-nest-optimize
-	filter-flags -floop-parallelize-all
-	filter-flags -flto*
-	filter-flags -fno-math-errno
-	filter-flags -fno-semantic-interposition
-	filter-flags -fno-signed-zeros
-	filter-flags -fno-trapping-math
-	filter-flags -fpie
-	filter-flags -fstack-clash-protection
-	filter-flags -fstack-protector-strong
-	filter-flags -ftree-loop-distribution
-	filter-flags -fuse-linker-plugin
-
 	replace-flags -O3 -O2
 
-	local mycmakeargs=(
-		-DLLVM_ENABLE_CUDA=OFF
-		-DCLANG_ENABLE_BOOTSTRAP=ON
-		-DBOOTSTRAP_LLVM_ENABLE_LLD=ON
-		-DBOOTSTRAP_BOOTSTRAP_LLVM_ENABLE_LLD=ON
-		-DCLANG_BOOTSTRAP_PASSTHROUGH="CMAKE_INSTALL_PREFIX;CMAKE_VERBOSE_MAKEFILE"
-		-DLLVM_ENABLE_PROJECTS="${LLVM_PROJECTS}"
-		-DLLVM_APPEND_VC_REV=OFF
-		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
-		-DLLVM_LIBDIR_SUFFIX=${libdir#lib}
+	strip-flags
+	filter-lto
+	append-flags -fpic
+
+	local LLVM_TARGETS=""
+
+	case "${CHOST}" in
+		*aarch64*) LLVM_TARGETS+="AArch64" ;;
+		*x86_64*)  LLVM_TARGETS+="X86" ;;
+		*)		  die "Unsupported host architecture: ${CHOST}" ;;
+	esac
+
+	use amdgpu && LLVM_TARGETS+=";AMDGPU"
+	use arm && LLVM_TARGETS+=";ARM"
+	use bpf && LLVM_TARGETS+=";BPF"
+	use nvptx && LLVM_TARGETS+=";NVPTX"
+	use wasm && LLVM_TARGETS+=";WebAssembly"
+	use xcore && LLVM_TARGETS+=";XCore"
+
+	echo "Selected LLVM targets: ${LLVM_TARGETS}"
+
+	local common_all=(
 		-DBUILD_SHARED_LIBS=OFF
-		-DLLVM_LINK_LLVM_DYLIB=ON
-		-DLLVM_TARGETS_TO_BUILD=$(usex arm64 'AArch64' 'X86')
-		-DLLVM_BUILD_TESTS=$(usex test)
-		-DCOMPILER_RT_USE_LIBEXECINFO=OFF
-		-DCOMPILER_RT_BUILD_SANITIZERS=OFF
-		-DLLVM_ENABLE_FFI=ON
-		-DLLVM_DEFAULT_UNWINDLIB=libunwind
-		-DLLVM_ENABLE_TERMINFO=ON
-		-DLLVM_ENABLE_LIBXML2=ON
-		-DLLVM_ENABLE_ASSERTIONS=$(usex debug)
-		-DLLVM_ENABLE_LIBPFM=OFF
-		-DLLVM_ENABLE_EH=ON
-		-DLLVM_ENABLE_RTTI=ON
-		-DLLVM_HOST_TRIPLE="${CHOST}"
-		-DOCAMLFIND=NO
-		-DLLVM_BUILD_DOCS=OFF
-		-DLLVM_ENABLE_OCAMLDOC=OFF
+		-DCMAKE_CXX_COMPILER_WORKS=1
 		-DCMAKE_CXX_STANDARD=17
-		-DLLVM_ENABLE_SPHINX=OFF
-		-DLLVM_ENABLE_DOXYGEN=OFF
-		-DLLVM_INSTALL_UTILS=ON
+		-DCMAKE_C_COMPILER_WORKS=1
+		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
+		-DLLVM_APPEND_VC_REV=OFF
 		-DLLVM_BINUTILS_INCDIR="${EPREFIX}"/usr/include
+		-DLLVM_BUILD_DOCS=OFF
+		-DLLVM_BUILD_LLVM_DYLIB=ON
+		-DLLVM_BUILD_TESTS=$(usex test)
+		-DLLVM_ENABLE_ASSERTIONS=$(usex debug)
+		-DLLVM_ENABLE_CUDA=OFF
+		-DLLVM_ENABLE_DOXYGEN=OFF
+		-DLLVM_ENABLE_EH=ON
+		-DLLVM_ENABLE_FFI=ON
+		-DLLVM_ENABLE_LIBPFM=OFF
+		-DLLVM_ENABLE_LIBXML2=ON
+		-DLLVM_ENABLE_OCAMLDOC=OFF
+		-DLLVM_ENABLE_RTTI=ON
+		-DLLVM_ENABLE_SPHINX=OFF
+		-DLLVM_ENABLE_TERMINFO=ON
+		-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD="${LLVM_TARGETS}"
+		-DLLVM_HOST_TRIPLE="${CHOST}"
+		-DLLVM_INSTALL_UTILS=ON
+		-DLLVM_LINK_LLVM_DYLIB=ON
+		-DLLVM_TARGETS_TO_BUILD=""
+		-DOCAMLFIND=NO
+		-DLLVM_OPTIMIZED_TABLEGEN=ON
+		-DLLVM_PARALLEL_LINK_JOBS=1
+		-DLLVM_ENABLE_ZLIB=FORCE_ON
+		-DLLVM_ENABLE_ZSTD=FORCE_ON
 	)
+
+	local stage1=(
+		-DLLVM_ENABLE_RUNTIMES=""
+		-DBOOTSTRAP_BOOTSTRAP_LLVM_ENABLE_LLD=ON
+		-DBOOTSTRAP_LLVM_ENABLE_LLD=ON
+		-DCLANG_BOOTSTRAP_PASSTHROUGH="CMAKE_INSTALL_PREFIX;CMAKE_VERBOSE_MAKEFILE"
+		-DCLANG_ENABLE_BOOTSTRAP=ON
+		-DLLVM_ENABLE_PROJECTS="llvm;clang;lld"
+		-DBOOTSTRAP_LLVM_ENABLE_LTO=ON
+	)
+
+	local common_stage2_3=(
+		-DCMAKE_AR="llvm-ar"
+		-DCMAKE_RANLIB="llvm-ranlib"
+		-DCOMPILER_RT_BUILD_SANITIZERS=OFF
+		-DCOMPILER_RT_USE_LIBEXECINFO=OFF
+		-DLIBCXXABI_ENABLE_SHARED=ON
+		-DLIBCXXABI_ENABLE_STATIC=ON
+		-DLIBCXXABI_INCLUDE_TESTS=OFF
+		-DLIBCXXABI_LIBUNWIND_INCLUDES="${EPREFIX}"/usr/include
+		-DLIBCXX_ENABLE_ABI_LINKER_SCRIPT=OFF
+		-DLIBCXX_ENABLE_SHARED=ON
+		-DLIBCXX_ENABLE_STATIC=ON
+		-DLIBCXX_HAS_MUSL_LIBC=$(usex elibc_musl)
+		-DLIBCXX_INCLUDE_BENCHMARKS=OFF
+		-DLIBCXX_INCLUDE_TESTS=OFF
+		-DLIBCXX_LIBDIR_SUFFIX=
+		-DLIBUNWIND_ENABLE_ASSERTIONS=$(usex debug)
+		-DLIBUNWIND_ENABLE_CROSS_UNWINDING=ON
+		-DLIBUNWIND_ENABLE_STATIC=ON
+		-DLIBUNWIND_INCLUDE_TESTS=OFF
+		-DLIBUNWIND_INSTALL_HEADERS=ON
+		-DLLVM_BUILD_LLVM_DYLIB=ON
+		-DLLVM_ENABLE_LTO="Thin"
+		-DLLVM_ENABLE_PROJECTS="llvm;clang;lld"
+		-DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi;libunwind;compiler-rt"
+		-DLLVM_HOST_TRIPLE="${CHOST}"
+		-DLLVM_LINK_LLVM_DYLIB=ON
+		-DLLVM_USE_LINKER="/usr/bin/ld.lld"
+	)
+
+	local stage2=(
+		-DLIBCXXABI_USE_LLVM_UNWINDER=OFF
+	)
+
+	local stage3=(
+		-DLIBUNWIND_USE_COMPILER_RT=ON
+		-DLIBCXXABI_USE_COMPILER_RT=ON
+		-DLIBCXX_CXX_ABI=libcxxabi
+		-DLIBCXX_HAS_GCC_S_LIB=OFF
+		-DLIBCXXABI_USE_LLVM_UNWINDER=ON
+		-DCMAKE_CXX_FLAGS="-stdlib=libc++ -fno-exceptions -fno-rtti -nodefaultlibs -nostdlib++"
+		-DCMAKE_EXE_LINKER_FLAGS="-stdlib=libc++ -nodefaultlibs -nostdlib++"
+		-DLLVM_ENABLE_LIBCXX=ON
+	)
+
+	if use stage2 || ! use stage1; then
+		local -x CC=clang
+		local -x CXX=clang++
+		local -x CC="clang"
+		local -x CPP="clang-cpp"
+		local -x CXX="clang++"
+		local -x AR="llvm-ar"
+		local -x NM="llvm-nm"
+		local -x RANLIB="llvm-ranlib"
+
+		local -x LLVM_FLTO="-flto=thin"
+		local -x LLVM_PERFORMANCE="-fuse-ld=lld"
+		#local -x LLVM_PERFORMANCE="-fuse-ld=lld -rtlib=compiler-rt -stdlib=libc++"
+		local -x LLVM_PASSFLAGS="${OPTIMIZE} ${LLVM_PERFORMANCE} ${BASEFLAGS} ${LLVM_FLTO} ${SECURE}"
+		local -x CFLAGS="${MARCH} ${LLVM_PASSFLAGS}"
+		local -x LDFLAGS="-Wl,${LLVM_PASSFLAGS} -Wl,-z,combreloc -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -Wl,-O1"
+	fi
+
+	if use stage1; then
+		mycmakeargs+=("${common_all[@]}" "${stage1[@]}")
+	elif use stage2; then
+		mycmakeargs+=("${common_all[@]}" "${common_stage2_3[@]}" "${stage2[@]}")
+	else
+		mycmakeargs+=("${common_all[@]}" "${common_stage2_3[@]}" "${stage3[@]}")
+	fi
 
 	use debug || local -x CPPFLAGS="${CPPFLAGS} -DNDEBUG"
 	cmake_src_configure

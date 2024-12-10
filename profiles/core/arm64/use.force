@@ -1,5 +1,6 @@
 # Force the flag which corresponds to ARCH.
 arm64
+-amd64
 
 # Instruction sets that are always available
 cpu_flags_arm_v4

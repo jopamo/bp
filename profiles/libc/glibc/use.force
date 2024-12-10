@@ -1,1 +1,2 @@
 elibc_glibc
+-elibc_musl

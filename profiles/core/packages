@@ -37,6 +37,7 @@
 *app-port/find_cruft
 *app-port/gentoolkit
 *app-port/portage-utils
+*app-port/smart-live-rebuild
 *app-var/pax-utils
 *lib-core/elfutils
 *lib-net/ca-certificates

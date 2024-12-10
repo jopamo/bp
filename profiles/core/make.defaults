@@ -50,7 +50,7 @@ LDFLAGS="-Wl,-O2"
 
 USE="${USE} -ipv6 -manpager caps ncurses systemd udev pam readline device-mapper ssl"
 USE="${USE}	sqlite gmp pcre seccomp crypt gcrypt iconv -jit zlib"
-USE="${USE}	lz4 zstd sysusersd kernel_linux"
+USE="${USE}	lz4 zstd sysusersd kernel_linux attr"
 USE="${USE}	-dvbpsi -berkdb yescrypt urandom"
 USE="${USE}	libcap acl gdbm unicode"
 

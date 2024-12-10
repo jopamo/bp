@@ -29,6 +29,7 @@ REQUIRED_USE="
 "
 
 DEPEND="
+	app-compression/brotli
 	lib-core/libgcrypt
 	lib-util/glib
 	lib-net/libpcap

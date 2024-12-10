@@ -117,6 +117,7 @@ src_configure() {
 		-DLLVM_ENABLE_LIBXML2=ON
 		-DLLVM_ENABLE_OCAMLDOC=OFF
 		-DLLVM_ENABLE_RTTI=ON
+		-DLLVM_INCLUDE_TESTS=OFF
 		-DLLVM_ENABLE_SPHINX=OFF
 		-DLLVM_ENABLE_TERMINFO=ON
 		-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD="${LLVM_TARGETS}"
@@ -129,6 +130,7 @@ src_configure() {
 		-DLLVM_PARALLEL_LINK_JOBS=1
 		-DLLVM_ENABLE_ZLIB=FORCE_ON
 		-DLLVM_ENABLE_ZSTD=FORCE_ON
+		-DCMAKE_CXX_COMPILER_TARGET="${CHOST}"
 	)
 
 	local stage1=(
@@ -144,7 +146,12 @@ src_configure() {
 	local common_stage2_3=(
 		-DCMAKE_AR="llvm-ar"
 		-DCMAKE_RANLIB="llvm-ranlib"
+		-DCOMPILER_RT_BUILD_LIBFUZZER=OFF
+		-DCOMPILER_RT_BUILD_MEMPROF=OFF
+		-DCOMPILER_RT_BUILD_ORC=OFF
+		-DCOMPILER_RT_BUILD_PROFILE=OFF
 		-DCOMPILER_RT_BUILD_SANITIZERS=OFF
+		-DCOMPILER_RT_BUILD_XRAY=OFF
 		-DCOMPILER_RT_USE_LIBEXECINFO=OFF
 		-DLIBCXXABI_ENABLE_SHARED=ON
 		-DLIBCXXABI_ENABLE_STATIC=ON
@@ -154,6 +161,7 @@ src_configure() {
 		-DLIBCXX_ENABLE_SHARED=ON
 		-DLIBCXX_ENABLE_STATIC=ON
 		-DLIBCXX_HAS_MUSL_LIBC=$(usex elibc_musl)
+		-DLIBCPP_HAS_MUSL_LIBC=$(usex elibc_musl)
 		-DLIBCXX_INCLUDE_BENCHMARKS=OFF
 		-DLIBCXX_INCLUDE_TESTS=OFF
 		-DLIBCXX_LIBDIR_SUFFIX=
@@ -176,13 +184,12 @@ src_configure() {
 	)
 
 	local stage3=(
-		-DLIBUNWIND_USE_COMPILER_RT=ON
 		-DLIBCXXABI_USE_COMPILER_RT=ON
-		-DLIBCXX_CXX_ABI=libcxxabi
-		-DLIBCXX_HAS_GCC_S_LIB=OFF
 		-DLIBCXXABI_USE_LLVM_UNWINDER=ON
-		-DCMAKE_CXX_FLAGS="-stdlib=libc++ -fno-exceptions -fno-rtti -nodefaultlibs -nostdlib++"
-		-DCMAKE_EXE_LINKER_FLAGS="-stdlib=libc++ -nodefaultlibs -nostdlib++"
+		-DLIBCXX_CXX_ABI=system-libcxxabi
+		-DLIBCXX_HAS_GCC_S_LIB=OFF
+		-DLIBCXX_USE_COMPILER_RT=ON
+		-DLIBUNWIND_USE_COMPILER_RT=ON
 		-DLLVM_ENABLE_LIBCXX=ON
 	)
 
@@ -197,9 +204,8 @@ src_configure() {
 		local -x RANLIB="llvm-ranlib"
 
 		local -x LLVM_FLTO="-flto=thin"
-		local -x LLVM_PERFORMANCE="-fuse-ld=lld"
-		#local -x LLVM_PERFORMANCE="-fuse-ld=lld -rtlib=compiler-rt -stdlib=libc++"
-		local -x LLVM_PASSFLAGS="${OPTIMIZE} ${LLVM_PERFORMANCE} ${BASEFLAGS} ${LLVM_FLTO} ${SECURE}"
+		local -x LLVM_FLAGS="-fuse-ld=lld"
+		local -x LLVM_PASSFLAGS="${OPTIMIZE} ${LLVM_FLAGS} ${BASEFLAGS} ${LLVM_FLTO} ${SECURE}"
 		local -x CFLAGS="${MARCH} ${LLVM_PASSFLAGS}"
 		local -x LDFLAGS="-Wl,${LLVM_PASSFLAGS} -Wl,-z,combreloc -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -Wl,-O1"
 	fi

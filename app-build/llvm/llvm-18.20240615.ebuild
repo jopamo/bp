@@ -36,7 +36,7 @@ LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
 KEYWORDS="amd64 arm64"
 
-IUSE="amdgpu arm bpf bootstrap +debug nvptx stage1 stage2 test wasm xcore"
+IUSE="amdgpu arm bpf bootstrap +debug nvptx bootstrap stage test wasm xcore"
 
 DEPEND="
 	lib-core/libffi
@@ -133,7 +133,7 @@ src_configure() {
 		-DCMAKE_CXX_COMPILER_TARGET="${CHOST}"
 	)
 
-	local stage1=(
+	local bootstrap=(
 		-DLLVM_ENABLE_RUNTIMES=""
 		-DBOOTSTRAP_BOOTSTRAP_LLVM_ENABLE_LLD=ON
 		-DBOOTSTRAP_LLVM_ENABLE_LLD=ON
@@ -143,7 +143,7 @@ src_configure() {
 		-DBOOTSTRAP_LLVM_ENABLE_LTO=ON
 	)
 
-	local common_stage2_3=(
+	local common_late=(
 		-DCMAKE_AR="llvm-ar"
 		-DCMAKE_RANLIB="llvm-ranlib"
 		-DCOMPILER_RT_BUILD_LIBFUZZER=OFF
@@ -153,15 +153,15 @@ src_configure() {
 		-DCOMPILER_RT_BUILD_SANITIZERS=OFF
 		-DCOMPILER_RT_BUILD_XRAY=OFF
 		-DCOMPILER_RT_USE_LIBEXECINFO=OFF
+		-DLIBCPP_HAS_MUSL_LIBC=$(usex elibc_musl)
 		-DLIBCXXABI_ENABLE_SHARED=ON
 		-DLIBCXXABI_ENABLE_STATIC=ON
 		-DLIBCXXABI_INCLUDE_TESTS=OFF
 		-DLIBCXXABI_LIBUNWIND_INCLUDES="${EPREFIX}"/usr/include
-		-DLIBCXX_ENABLE_ABI_LINKER_SCRIPT=OFF
+		-DLIBCXX_ENABLE_ABI_LINKER_SCRIPT=ON
 		-DLIBCXX_ENABLE_SHARED=ON
 		-DLIBCXX_ENABLE_STATIC=ON
 		-DLIBCXX_HAS_MUSL_LIBC=$(usex elibc_musl)
-		-DLIBCPP_HAS_MUSL_LIBC=$(usex elibc_musl)
 		-DLIBCXX_INCLUDE_BENCHMARKS=OFF
 		-DLIBCXX_INCLUDE_TESTS=OFF
 		-DLIBCXX_LIBDIR_SUFFIX=
@@ -171,29 +171,25 @@ src_configure() {
 		-DLIBUNWIND_INCLUDE_TESTS=OFF
 		-DLIBUNWIND_INSTALL_HEADERS=ON
 		-DLLVM_BUILD_LLVM_DYLIB=ON
-		-DLLVM_ENABLE_LTO="Thin"
 		-DLLVM_ENABLE_PROJECTS="llvm;clang;lld"
 		-DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi;libunwind;compiler-rt"
 		-DLLVM_HOST_TRIPLE="${CHOST}"
 		-DLLVM_LINK_LLVM_DYLIB=ON
 		-DLLVM_USE_LINKER="/usr/bin/ld.lld"
-	)
-
-	local stage2=(
-		-DLIBCXXABI_USE_LLVM_UNWINDER=OFF
-	)
-
-	local stage3=(
+		-DLIBCXX_HAS_GCC_S_LIB=OFF
 		-DLIBCXXABI_USE_COMPILER_RT=ON
-		-DLIBCXXABI_USE_LLVM_UNWINDER=ON
+		-DLIBCXXABI_USE_LLVM_UNWINDER=OFF
 		-DLIBCXX_CXX_ABI=system-libcxxabi
 		-DLIBCXX_HAS_GCC_S_LIB=OFF
 		-DLIBCXX_USE_COMPILER_RT=ON
 		-DLIBUNWIND_USE_COMPILER_RT=ON
-		-DLLVM_ENABLE_LIBCXX=ON
 	)
 
-	if use stage2 || ! use stage1; then
+	local final=(
+		#-DLLVM_ENABLE_LIBCXX=ON
+	)
+
+	if ! use bootstrap; then
 		local -x CC=clang
 		local -x CXX=clang++
 		local -x CC="clang"
@@ -202,20 +198,14 @@ src_configure() {
 		local -x AR="llvm-ar"
 		local -x NM="llvm-nm"
 		local -x RANLIB="llvm-ranlib"
-
-		local -x LLVM_FLTO="-flto=thin"
-		local -x LLVM_FLAGS="-fuse-ld=lld"
-		local -x LLVM_PASSFLAGS="${OPTIMIZE} ${LLVM_FLAGS} ${BASEFLAGS} ${LLVM_FLTO} ${SECURE}"
-		local -x CFLAGS="${MARCH} ${LLVM_PASSFLAGS}"
-		local -x LDFLAGS="-Wl,${LLVM_PASSFLAGS} -Wl,-z,combreloc -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -Wl,-O1"
 	fi
 
-	if use stage1; then
-		mycmakeargs+=("${common_all[@]}" "${stage1[@]}")
-	elif use stage2; then
-		mycmakeargs+=("${common_all[@]}" "${common_stage2_3[@]}" "${stage2[@]}")
+	if use bootstrap; then
+		mycmakeargs+=("${common_all[@]}" "${bootstrap[@]}")
+	elif use stage; then
+		mycmakeargs+=("${common_all[@]}" "${common_late[@]}")
 	else
-		mycmakeargs+=("${common_all[@]}" "${common_stage2_3[@]}" "${stage3[@]}")
+		mycmakeargs+=("${common_all[@]}" "${common_late[@]}" "${final[@]}")
 	fi
 
 	use debug || local -x CPPFLAGS="${CPPFLAGS} -DNDEBUG"

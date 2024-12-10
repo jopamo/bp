@@ -22,11 +22,12 @@ DEPEND="
 	app-build/flex
 	app-compression/xz-utils
 	app-kernel/linux-headers
+	lib-net/libbpf
 	lib-net/libmnl
 	caps? ( lib-core/libcap )
 	elf? ( lib-core/elfutils )
+	elibc_glibc? ( lib-dev/libbsd )
 	iptables? ( app-net/iptables )
-	!musl? ( lib-dev/libbsd )
 "
 
 PATCHES=(

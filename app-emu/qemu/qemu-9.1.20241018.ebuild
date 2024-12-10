@@ -20,11 +20,13 @@ RESTRICT="network-sandbox"
 IUSE="alsa sdl vnc"
 
 DEPEND="
+	lib-dev/jemalloc
 	lib-net/slirp
-    lib-dev/libtasn1
-    lib-util/glib
-    lib-core/zlib
     app-core/attr
+    lib-core/zlib
+    lib-dev/libtasn1
+    lib-net/libssh
+    lib-util/glib
 "
 
 src_prepare() {
@@ -40,7 +42,7 @@ src_configure() {
 	local myconf=(
 		--prefix="${EPREFIX}"/usr
 		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
+		--sbindir="${EPREFIX}"/usr/bin
 		--libdir="${EPREFIX}"/usr/lib
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
@@ -49,7 +51,7 @@ src_configure() {
 		--datadir="${EPREFIX}"/usr/share
 		--mandir="${EPREFIX}"/usr/share/man
 		--infodir="${EPREFIX}"/usr/share/info
-		--target-list="aarch64-softmmu x86_64-softmmu aarch64-linux-user x86_64-linux-user"
+		--target-list=$(usex arm64 "aarch64-softmmu aarch64-linux-user" "x86_64-softmmu x86_64-linux-user")
 		--enable-kvm
 		--enable-qcow1
 		--enable-virtfs
@@ -58,7 +60,7 @@ src_configure() {
 		--enable-vhost-net
 		--enable-vhost-user
 		#--enable-linux-io-uring
-		#--enable-malloc=jemalloc
+		--enable-malloc=jemalloc
         $(use_enable alsa)
         $(use_enable sdl)
         $(use_enable vnc)
@@ -68,9 +70,7 @@ src_configure() {
 
 src_compile() {
 	cd build
-
 	emake
-
 }
 
 src_install() {

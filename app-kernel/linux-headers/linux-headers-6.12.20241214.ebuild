@@ -7,7 +7,7 @@ H_SUPPORTEDARCH="amd64 arm64"
 inherit kernel-2
 detect_version
 
-SNAPSHOT=7cb1b466315004af98f6ba6c2546bb713ca3c237
+SNAPSHOT=7143efb58e33b6b1ebb32556e1fcdee03c7ed6a7
 SRC_URI="https://github.com/torvalds/linux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/linux-${SNAPSHOT}
 

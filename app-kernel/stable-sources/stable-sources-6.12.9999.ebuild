@@ -36,8 +36,6 @@ src_prepare() {
 	eapply "${FILESDIR}"/reg.patch
 
 	if use mediatek ; then
-		eapply "${FILESDIR}"/mt7925.patch
-
 		local mt76_dir="${WORKDIR}/mt76"
 		git clone https://github.com/openwrt/mt76.git "${mt76_dir}" --depth 1 || die "Failed to clone mt76 repository"
 		rm -rf "${mt76_dir}"/.git

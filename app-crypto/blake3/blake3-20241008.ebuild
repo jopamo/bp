@@ -27,6 +27,7 @@ pkg_setup() {
 
 src_prepare() {
 	cp "${FILESDIR}/b3sum.c" "${S}/" || die "Failed to copy b3sum.c"
+	cp "${FILESDIR}/dedup_symlink" "${S}/" || die "Failed to copy dedup_symlink"
 	cp "${FILESDIR}/meson.build" "${S}/" || die "Failed to copy meson.build"
 	cp "${FILESDIR}/check_cpu_features.py" "${S}/" || die "Failed to copy check_cpu_features.py"
 
@@ -47,4 +48,10 @@ src_configure() {
         -Dbuild_static_b3sum=$(usex static_bin true false)
     )
     meson_src_configure
+}
+
+src_install() {
+    meson_src_install
+
+    dobin dedup_symlink
 }

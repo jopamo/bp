@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+ROOT_DIR=${1:-.}
+
+print_help() {
+    cat <<'EOF'
+Usage: dedup_symlink.sh [OPTIONS] [DIRECTORY]
+
+Options:
+  -h, --help      Show this help message and exit.
+  -T, --test      Run an internal test by setting up a sample environment
+                  and demonstrating the script’s functionality.
+
+Arguments:
+  DIRECTORY       The directory to deduplicate. Defaults to current directory
+                  if not specified.
+EOF
+}
+
+setup_test_environment() {
+    TEST_DIR=$(mktemp -d)
+    mkdir -p "$TEST_DIR/subdir1" "$TEST_DIR/subdir2" "$TEST_DIR/subdir3"
+    echo "a" > "$TEST_DIR/file1.txt"
+    echo "a" > "$TEST_DIR/file9.txt"
+    echo "a" > "$TEST_DIR/subdir1/file2.txt"
+    echo "a" > "$TEST_DIR/subdir1/file5.txt"
+    echo "b" > "$TEST_DIR/subdir2/file3.txt"
+    echo "b" > "$TEST_DIR/subdir3/file4.txt"
+    echo "c" > "$TEST_DIR/unique.txt"
+    find "$TEST_DIR" -type f
+    deduplicate_files "$TEST_DIR"
+    find "$TEST_DIR" -type f -o -type l | while read file; do
+        ls -l "$file"
+    done
+    rm -rf "$TEST_DIR"
+}
+
+check_dependencies() {
+    if ! command -v b3sum &>/dev/null; then
+        echo "Error: b3sum not found."
+        exit 2
+    fi
+}
+
+deduplicate_files() {
+    local target_dir="$1"
+    local hash_file
+    hash_file=$(mktemp)
+    find "$target_dir" -type f -exec b3sum {} + | sort > "$hash_file"
+    declare -A hash_map
+    while read -r hash file; do
+        if [[ -n "${hash_map[$hash]:-}" ]]; then
+            original="${hash_map[$hash]}"
+            relative_path=$(realpath --relative-to="$(dirname "$file")" "$original")
+            rm -f "$file"
+            ln -s "$relative_path" "$file"
+        else
+            hash_map["$hash"]="$file"
+        fi
+    done < "$hash_file"
+    rm -f "$hash_file"
+}
+
+main() {
+    local positionals=()
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -h|--help)
+                print_help
+                exit 0
+                ;;
+            -T|--test)
+                setup_test_environment
+                exit 0
+                ;;
+            *)
+                positionals+=("$1")
+                shift
+                ;;
+        esac
+    done
+    if [[ ${#positionals[@]} -gt 1 ]]; then
+        print_help
+        exit 1
+    fi
+    if [[ ${#positionals[@]} -eq 1 ]]; then
+        ROOT_DIR="${positionals[0]}"
+    fi
+    check_dependencies
+    deduplicate_files "$ROOT_DIR"
+}
+
+main "$@"

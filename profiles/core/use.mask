@@ -1,3 +1,7 @@
--amd64
-x86
+abi_x86_32
+abi_x86_64
+abi_x86_x32
+amd64
+arm64
 split-usr
+x86

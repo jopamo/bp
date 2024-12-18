@@ -10,7 +10,7 @@ inherit distutils-r1 multiprocessing pypi
 
 DESCRIPTION="pytest plugin for coverage reporting"
 HOMEPAGE="
-	https://github.com/pytest-dev/pytest-cov/
+	https://github.com/pytest-dev/pytest-cov
 	https://pypi.org/project/pytest-cov/
 "
 

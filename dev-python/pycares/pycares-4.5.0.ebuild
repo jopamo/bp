@@ -6,7 +6,7 @@ DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( pypy3 python3_{10..13} )
 
-inherit distutils-r1 pypi flag-o-matic
+inherit distutils-r1 pypi
 
 DESCRIPTION="Python interface for c-ares"
 HOMEPAGE="
@@ -42,8 +42,6 @@ BDEPEND+="
 "
 
 distutils_enable_tests pytest
-
-filter-flags -Wl,-z,defs
 
 EPYTEST_DESELECT=(
 	# regression due to Internet changing (probably)

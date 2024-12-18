@@ -40,12 +40,11 @@ GAWK_VERSION="5.3"
 PYTHON_VERSION="3.12"
 PERL_VERSION="5.40"
 TCL_VERSION="8.6"
-LLVM_VERSION="18"
+LLVM_VERSION="19"
 SQLITE_VERSION="3.47"
 
 GDB_VERSION="15"
 BASH_VERSION="5.2"
-LIBASSUAN_VERSION="2.5"
 LIBGCRYPT_VERSION="1.10"
 MPFR_VERSION="4.2"
 KDE_VERSION="5"
@@ -59,7 +58,6 @@ GDB_BRANCH="gdb-${GDB_VERSION}-branch"
 GLIBC_BRANCH="release/${GLIBC_VERSION}/master"
 KGUIADDONS_BRANCH="kf${KDE_VERSION}"
 KWINDOWSYSTEM_BRANCH="kf${KDE_VERSION}"
-LIBASSUAN_BRANCH="LIBASSUAN-${LIBASSUAN_VERSION}-BRANCH"
 LIBGCRYPT_BRANCH="LIBGCRYPT-${LIBGCRYPT_VERSION}-BRANCH"
 TCL_BRANCH=$(echo "core-${TCL_VERSION}" | tr '.' '-')
 
@@ -196,26 +194,46 @@ fix_repository_issues() {
 }
 
 relink_llvm_to_latest() {
-	local package_path="/var/db/repos/bp/app-build/llvm"
+    local package_path="/var/db/repos/bp/app-build/llvm"
+    local latest_version="${LLVM_VERSION}"  # Define the "latest" major version explicitly
+    local latest_ebuild
 
-	local latest_ebuild
-	latest_ebuild=$(find "$package_path" -maxdepth 1 -type f -name "llvm-*.ebuild" | sort -V | tail -n 1)
 
-	if [[ -z "$latest_ebuild" ]]; then
-		echo "No real ebuild file found in $package_path." >> "$ERROR_LOG"
-		return 1
-	fi
+    latest_ebuild=$(find "$package_path" -maxdepth 1 -type f -name "llvm-*.ebuild" | sort -V | tail -n 1)
 
-	echo "Latest LLVM ebuild file found: $latest_ebuild" >> "$DEBUG_LOG"
+    if [[ -z "$latest_ebuild" ]]; then
+        echo "Error: No real LLVM ebuild file found!" >> "$ERROR_LOG"
+        return 1
+    fi
 
-	for version in {12..18}; do
-		local symlink_path="${package_path}/llvm-${version}.*.ebuild"
+    echo "Latest real LLVM ebuild file found: $(basename "$latest_ebuild")"
 
-		find "$package_path" -name "llvm-${version}.*.ebuild" -type l -exec rm {} +
+    local new_latest_file="${package_path}/llvm-${latest_version}.$(basename "$latest_ebuild" | cut -d '.' -f2-)"
+    if [[ "$latest_ebuild" != "$new_latest_file" ]]; then
+        cp "$latest_ebuild" "$new_latest_file"
+        echo "Copied $(basename "$latest_ebuild") to $(basename "$new_latest_file")" >> "$DEBUG_LOG"
+    fi
 
-		ln -s "$(basename "$latest_ebuild")" "${package_path}/llvm-${version}.$(basename "$latest_ebuild" | cut -d '.' -f2-)"
-		echo "Created symlink for llvm-${version} pointing to $(basename "$latest_ebuild")" >> "$DEBUG_LOG"
-	done
+    for file in "$package_path"/llvm-*.ebuild; do
+        local version
+        version=$(basename "$file" | grep -oP 'llvm-\K\d+(?=\..*\.ebuild)')
+
+        if [[ "$file" == "$new_latest_file" ]]; then
+            echo "Skipping real file: $(basename "$new_latest_file")"
+            continue
+        fi
+
+        if [[ -L "$file" || -f "$file" ]]; then
+            rm -f "$file"
+            echo "Removed old file: $(basename "$file")" >> "$DEBUG_LOG"
+        fi
+
+        local symlink="${package_path}/llvm-${version}.$(basename "$new_latest_file" | cut -d '.' -f2-)"
+        ln -s "$(basename "$new_latest_file")" "$symlink"
+        echo "Created symlink: $(basename "$symlink") -> $(basename "$new_latest_file")" >> "$DEBUG_LOG"
+    done
+
+    echo "LLVM symlink recreation completed. Latest real file: $(basename "$new_latest_file")"
 }
 
 update_ebuild() {
@@ -357,7 +375,6 @@ branch_bump() {
 
 	update_ebuild "${REPO_PATH}/xgui-tools/kguiaddons" "https://invent.kde.org/frameworks/kguiaddons.git" "${KGUIADDONS_BRANCH}" "$KDE_VERSION" "no"
 	update_ebuild "${REPO_PATH}/xgui-tools/kwindowsystem" "https://invent.kde.org/frameworks/kwindowsystem.git" "${KWINDOWSYSTEM_BRANCH}" "$KDE_VERSION" "no"
-	update_ebuild "${REPO_PATH}/lib-core/libassuan" "https://dev.gnupg.org/source/libassuan.git" "${LIBASSUAN_BRANCH}" "$LIBASSUAN_VERSION" "no"
 	update_ebuild "${REPO_PATH}/lib-core/libgcrypt" "https://dev.gnupg.org/source/libgcrypt.git" "${LIBGCRYPT_BRANCH}" "$LIBGCRYPT_VERSION" "no"
 	update_ebuild "${REPO_PATH}/app-lang/tcl" "https://github.com/tcltk/tcl" "${TCL_BRANCH}-branch" "$TCL_VERSION" "no"
 	update_ebuild "${REPO_PATH}/app-server/tor" "https://git.torproject.org/tor.git" "release-${TOR_VERSION}" "${TOR_VERSION}" "no"
@@ -368,8 +385,8 @@ branch_bump() {
 	update_ebuild "${REPO_PATH}/app-lang/python" "https://github.com/python/cpython" "${PYTHON_VERSION}" "$PYTHON_VERSION" "no"
 	update_ebuild "${REPO_PATH}/app-lang/perl" "https://github.com/Perl/perl5" "maint-${PERL_VERSION}" "$PERL_VERSION" "no"
 	update_ebuild "${REPO_PATH}/lib-core/sqlite" "https://github.com/sqlite/sqlite" "branch-${SQLITE_VERSION}" "$SQLITE_VERSION" "no"
-	#update_ebuild "${REPO_PATH}/app-build/llvm" "https://github.com/llvm/llvm-project" "release/${LLVM_VERSION}.x" "$LLVM_VERSION" "no"
-	#relink_llvm_to_latest
+	update_ebuild "${REPO_PATH}/app-build/llvm" "https://github.com/llvm/llvm-project" "release/${LLVM_VERSION}.x" "$LLVM_VERSION" "no"
+	relink_llvm_to_latest
 	update_ebuild "${REPO_PATH}/app-core/util-linux" "https://github.com/util-linux/util-linux" "stable/v${UTIL_LINUX_VERSION}" "${UTIL_LINUX_VERSION}" "no"
 	update_ebuild "${REPO_PATH}/app-core/systemd" "https://github.com/systemd/systemd" "v${SYSTEMD_VERSION}-stable" "${SYSTEMD_VERSION}" "no"
 	update_ebuild "${REPO_PATH}/xgui-app/wireshark" "https://github.com/wireshark/wireshark" "release-${WIRESHARK_VERSION}" "${WIRESHARK_VERSION}" "no"

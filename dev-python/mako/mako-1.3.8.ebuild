@@ -25,7 +25,7 @@ RDEPEND="
 "
 BDEPEND="
 	test? (
-		dev-python/Babel[${PYTHON_USEDEP}]
+		dev-python/babel[${PYTHON_USEDEP}]
 	)
 "
 

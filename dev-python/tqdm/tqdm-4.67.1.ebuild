@@ -21,7 +21,7 @@ IUSE="examples"
 BDEPEND="
 	dev-py/setuptools-scm[${PYTHON_USEDEP}]
 	test? (
-		dev-python/pytest-asyncio[${PYTHON_USEDEP}]
+		>=dev-python/pytest-asyncio-0.24[${PYTHON_USEDEP}]
 		dev-python/pytest-timeout[${PYTHON_USEDEP}]
 	)
 "

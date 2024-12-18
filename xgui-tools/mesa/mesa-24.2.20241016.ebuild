@@ -37,43 +37,30 @@ BDEPEND="
 "
 
 src_configure() {
-	strip-flags
-	filter-flags -flto*
-
-	local -x CC=clang
-		local -x CXX=clang++
-		local -x CC="clang"
-		local -x CPP="clang-cpp"
-		local -x CXX="clang++"
-		local -x AR="llvm-ar"
-		local -x NM="llvm-nm"
-		local -x RANLIB="llvm-ranlib"
-		local -x LD="ld.lld"
-
 	local emesonargs=(
 		-Db_lto=false
-		-Dplatforms="$(usex wayland 'wayland,x11' 'x11')"
+		-Ddri3=disabled
+		-Degl=disabled
 		-Dgallium-drivers="swrast,zink"
 		-Dgallium-extra-hud=false
-  	 	-Dgallium-nine=false
-  	-Dgallium-opencl=disabled
-  	-Dgallium-va=disabled
-		-Ddri3=disabled
-	-Degl=disabled
-  	-Dgallium-vdpau=disabled
-	-Dgbm=enabled
-		-Dllvm=enabled
-	-Dosmesa=false
-	 -Dgles1=disabled
-	   -Dgles2=disabled
-	   -Dglvnd=true
-	   -Dopengl=true
-	   -Dglx=dri
-	   -Dshared-glapi=enabled
-		-Dvulkan-drivers=""
+		-Dgallium-nine=false
+		-Dgallium-opencl=disabled
+		-Dgallium-va=disabled
+		-Dgallium-vdpau=disabled
+		-Dgbm=enabled
+		-Dgles1=disabled
+		-Dgles2=disabled
+		-Dglvnd=true
+		-Dglx=dri
 		-Dlibunwind=disabled
-	 	-Dlmsensors=disabled
- 	-Dvalgrind=disabled
-	)
+		-Dllvm=enabled
+		-Dlmsensors=disabled
+		-Dopengl=true
+		-Dosmesa=false
+		-Dplatforms="$(usex wayland 'wayland,x11' 'x11')"
+		-Dshared-glapi=enabled
+		-Dvalgrind=disabled
+		-Dvulkan-drivers=""
+		)
 	meson_src_configure
 }

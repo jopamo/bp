@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="a windowmanager for X that was based on the Blackbox"
 HOMEPAGE="http://fluxbox.org/"
 
-SNAPSHOT=06993a4ac8261f1ea6876d7593b14cf43103214b
+SNAPSHOT=88bbf811dade299ca2dac66cb81e4b3d96cfe741
 SRC_URI="https://github.com/fluxbox/fluxbox/archive/${SNAPSHOT}.tar.gz -> fluxbox-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/fluxbox-${SNAPSHOT}"
 

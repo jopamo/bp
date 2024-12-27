@@ -8,8 +8,11 @@ inherit autotools flag-o-matic xdg
 
 DESCRIPTION="Compatibility layer capable of running Windows applications."
 HOMEPAGE="https://www.winehq.org/"
-SRC_URI="https://dl.winehq.org/wine/source/$(ver_cut 1).x/${P}.tar.xz
-		https://github.com/wine-staging/wine-staging/archive/${SNAPSHOT}.tar.gz"
+
+SRC_URI="
+	https://gitlab.winehq.org/wine/wine/-/releases/${P}/downloads/${P}.tar.xz
+	https://github.com/wine-staging/wine-staging/archive/${SNAPSHOT}.tar.gz
+"
 
 LICENSE="LGPL-2.1"
 SLOT="0"

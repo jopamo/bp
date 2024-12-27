@@ -15,7 +15,10 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="xgui-lib/libqalculate"
+DEPEND="
+	xgui-lib/gtk3
+	xgui-lib/libqalculate
+"
 
 src_prepare() {
 	default

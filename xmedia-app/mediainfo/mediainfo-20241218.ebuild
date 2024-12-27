@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="MediaInfo supplies technical and tag information about media files"
 HOMEPAGE="https://mediaarea.net/mediainfo/ https://github.com/MediaArea/MediaInfo"
 
-SNAPSHOT=4515cb9ffdced64020d83787a0e8b1313a08d34c
+SNAPSHOT=2685cbf5057669da663b6a563ab6192b759e6557
 SRC_URI="https://github.com/MediaArea/MediaInfo/archive/${SNAPSHOT}.tar.gz -> MediaInfo-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/MediaInfo-${SNAPSHOT}/Project/GNU/CLI/"
 

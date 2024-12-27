@@ -7,7 +7,7 @@ inherit cmake distutils-r1
 DESCRIPTION="disassembly/disassembler framework + bindings"
 HOMEPAGE="http://www.capstone-engine.org/"
 
-SNAPSHOT=1ecfb5b04235539e0d94cc67b8984347be2f6a73
+SNAPSHOT=186f7aa09f5dea2fb5aa15a133534855d0cbdd64
 SRC_URI="https://github.com/capstone-engine/capstone/archive/${SNAPSHOT}.tar.gz -> capstone-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/capstone-${SNAPSHOT}"
 

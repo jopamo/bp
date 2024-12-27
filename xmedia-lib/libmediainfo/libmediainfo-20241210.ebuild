@@ -7,7 +7,7 @@ inherit autotools flag-o-matic
 DESCRIPTION="MediaInfo libraries"
 HOMEPAGE="https://mediaarea.net/mediainfo/ https://github.com/MediaArea/MediaInfoLib"
 
-SNAPSHOT=ef5750b22296e33ea6e6254ea3ab895853c089bb
+SNAPSHOT=cb447681f43a865d46b019fdf12da501cf230d8f
 SRC_URI="https://github.com/MediaArea/MediaInfoLib/archive/${SNAPSHOT}.tar.gz -> MediaInfoLib-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/MediaInfoLib-${SNAPSHOT}/Project/GNU/Library"
 

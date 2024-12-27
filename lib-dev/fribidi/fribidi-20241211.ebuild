@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="A free implementation of the unicode bidirectional algorithm"
 HOMEPAGE="https://fribidi.org/"
 
-SNAPSHOT=68162babff4f39c4e2dc164a5e825af93bda9983
+SNAPSHOT=cfc71cda065db859d8b4f1e3c6fe5da7ab02469a
 SRC_URI="https://github.com/fribidi/fribidi/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

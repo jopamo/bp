@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="A library for reading and editing audio meta data"
 HOMEPAGE="https://taglib.github.io/"
 
-SNAPSHOT=5b6f9ef848fe4b1c301b25750321458a2a3dc0da
+SNAPSHOT=c1c60ebeead4971460e27baea4387660e2508f0e
 SRC_URI="https://github.com/taglib/taglib/archive/${SNAPSHOT}.tar.gz -> taglib-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/taglib-${SNAPSHOT}"
 

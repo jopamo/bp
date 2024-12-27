@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X.Org Session Management library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=f1e6fc8e62a5da42ea713ee970028be3d32fcf85
+SNAPSHOT=83644d01d64a93a1fc463affc8bd9b30dc023a83
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libSM/-/archive/${SNAPSHOT}/libSM-${SNAPSHOT}.tar.bz2 -> libSM-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libsm-${SNAPSHOT}"
 

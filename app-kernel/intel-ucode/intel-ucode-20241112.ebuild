@@ -5,7 +5,7 @@ EAPI=8
 DESCRIPTION="Linux firmware files"
 HOMEPAGE="https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files"
 
-SNAPSHOT=129f82f7429c29976b15d6837d2f573cc6a02c26
+SNAPSHOT=8ac9378a84879e81c503e09f344560b3dd7f72df
 SRC_URI="https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/Intel-Linux-Processor-Microcode-Data-Files-${SNAPSHOT}"
 

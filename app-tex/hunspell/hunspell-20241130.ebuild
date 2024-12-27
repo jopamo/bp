@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="The most popular spellchecking library."
 HOMEPAGE="http://hunspell.github.io/"
 
-SNAPSHOT=e994dceb97fb695bca6bfe5ad5665525426bf01f
+SNAPSHOT=3e7db93359347a23b547096d43874d8cc017dfa5
 SRC_URI="https://github.com/hunspell/hunspell/archive/${SNAPSHOT}.tar.gz -> hunspell-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/hunspell-${SNAPSHOT}"
 

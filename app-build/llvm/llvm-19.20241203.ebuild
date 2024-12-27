@@ -160,8 +160,8 @@ src_configure() {
 	)
 
 	local late=(
-		-DCMAKE_AR="llvm-ar"
-		-DCMAKE_RANLIB="llvm-ranlib"
+		#-DCMAKE_AR="llvm-ar"
+		#-DCMAKE_RANLIB="llvm-ranlib"
 		-DCOMPILER_RT_BUILD_LIBFUZZER=OFF
 		-DCOMPILER_RT_BUILD_MEMPROF=OFF
 		-DCOMPILER_RT_BUILD_ORC=ON
@@ -176,7 +176,7 @@ src_configure() {
 		-DLIBUNWIND_INSTALL_HEADERS=ON
 		-DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi;libunwind;compiler-rt"
 		-DLLVM_OPTIMIZED_TABLEGEN=ON
-		-DLLVM_USE_LINKER="/usr/bin/ld.lld"
+		#-DLLVM_USE_LINKER="/usr/bin/ld.lld"
 		-DLIBCXXABI_USE_COMPILER_RT=ON
 		-DLIBCXX_CXX_ABI=libcxxabi
 		-DLIBCXX_HAS_GCC_S_LIB=OFF
@@ -185,16 +185,16 @@ src_configure() {
 		-DLLVM_ENABLE_LIBCXX=ON
 	)
 
-	if ! use bootstrap; then
-		local -x CC=clang
-		local -x CXX=clang++
-		local -x CC="clang"
-		local -x CPP="clang-cpp"
-		local -x CXX="clang++"
-		local -x AR="llvm-ar"
-		local -x NM="llvm-nm"
-		local -x RANLIB="llvm-ranlib"
-	fi
+	#if ! use bootstrap; then
+		#local -x CC=clang
+		#local -x CXX=clang++
+		#local -x CC="clang"
+		#local -x CPP="clang-cpp"
+		#local -x CXX="clang++"
+		#local -x AR="llvm-ar"
+		#local -x NM="llvm-nm"
+		#local -x RANLIB="llvm-ranlib"
+	#fi
 
 	if use bootstrap; then
 		mycmakeargs+=("${common[@]}" "${bootstrap[@]}")
@@ -214,7 +214,7 @@ src_test() {
 src_install() {
 	cmake_src_install
 
-	if ! use bootstrap; then
+	#if ! use bootstrap; then
 		dosym -r "/usr/lib/x86_64-unknown-linux-gnu/libc++.a" "/usr/lib/libc++.a"
 		dosym -r "/usr/lib/x86_64-unknown-linux-gnu/libc++.so" "/usr/lib/libc++.so"
 		dosym -r "/usr/lib/x86_64-unknown-linux-gnu/libc++.so.1" "/usr/lib/libc++.so"
@@ -228,5 +228,5 @@ src_install() {
 		dosym -r "/usr/lib/x86_64-unknown-linux-gnu/libunwind.so" "/usr/lib/libunwind.so"
 		dosym -r "/usr/lib/x86_64-unknown-linux-gnu/libunwind.so.1" "/usr/lib/libunwind.so"
 		dosym -r "/usr/lib/x86_64-unknown-linux-gnu/libunwind.so.1.0" "/usr/lib/libunwind.so.1"
-	fi
+	#fi
 }

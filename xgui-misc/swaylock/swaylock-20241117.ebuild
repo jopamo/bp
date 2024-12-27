@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="Screen locker for Wayland"
 HOMEPAGE="https://github.com/swaywm/swaylock"
 
-SNAPSHOT=96f0a0f9c6a9412fc1886bf54e37ece75b0e9f99
+SNAPSHOT=fbc5a8136187491e5ee3071e8a60e6593ca9b90b
 SRC_URI="https://github.com/swaywm/swaylock/archive/${SNAPSHOT}.tar.gz -> swaylock-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/swaylock-${SNAPSHOT}"
 

@@ -8,7 +8,7 @@ inherit flag-o-matic
 DESCRIPTION="Open source HEVC encoder"
 HOMEPAGE="http://x265.org/"
 
-SNAPSHOT=dd1ef69b25ec26cc80be0fc8d9afeeef6563762b
+SNAPSHOT=fa2770934b8f3d88aa866c77f27cb63f69a9ed39
 SRC_URI="https://bitbucket.org/multicoreware/x265_git/get/${SNAPSHOT}.zip"
 S="${WORKDIR}/multicoreware-x265_git-${SNAPSHOT:0:12}"
 

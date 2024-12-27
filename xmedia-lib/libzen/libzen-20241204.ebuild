@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Shared library for libmediainfo and mediainfo"
 HOMEPAGE="https://github.com/MediaArea/ZenLib"
 
-SNAPSHOT=4e2a6862a13ddd8090cbaef2cac2e601b916c407
+SNAPSHOT=9525a86af77b8425315703017894d84e6893f5dd
 SRC_URI="https://github.com/MediaArea/ZenLib/archive/${SNAPSHOT}.tar.gz -> ZenLib-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ZenLib-${SNAPSHOT}/Project/GNU/Library"
 

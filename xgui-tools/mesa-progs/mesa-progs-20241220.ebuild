@@ -7,7 +7,7 @@ inherit cmake flag-o-matic
 DESCRIPTION="Mesa's OpenGL utility and demo programs (glxgears and glxinfo)"
 HOMEPAGE="https://www.mesa3d.org/ https://mesa.freedesktop.org/"
 
-SNAPSHOT=c3596775bd334eedc846f85b329a4440d9d54e42
+SNAPSHOT=8c9073ba8f00686c4596da571d15946d7ada6e80
 SRC_URI="https://gitlab.freedesktop.org/mesa/demos/-/archive/${SNAPSHOT}/demos-${SNAPSHOT}.tar.bz2 -> demos-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/demos-${SNAPSHOT}"
 

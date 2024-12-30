@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="A brokerless kernel"
 HOMEPAGE="http://www.zeromq.org/"
 
-SNAPSHOT=a23330dbe249f7ebd81bb5be47c892e8fa9cc4f8
+SNAPSHOT=34f7fa22022bed9e0e390ed3580a1c83ac4a2834
 SRC_URI="https://github.com/zeromq/libzmq/archive/${SNAPSHOT}.tar.gz -> libzmq-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libzmq-${SNAPSHOT}"
 

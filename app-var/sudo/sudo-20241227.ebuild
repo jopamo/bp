@@ -5,7 +5,7 @@ EAPI=8
 DESCRIPTION="Allows users or groups to run commands as other users"
 HOMEPAGE="https://www.sudo.ws/"
 
-SNAPSHOT=e670d2a85deadcb621002109a5cf7e03144d82c9
+SNAPSHOT=a3c1cbd8816c3caf0d45cbe3e3942c0281c5d3de
 SRC_URI="https://github.com/sudo-project/sudo/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

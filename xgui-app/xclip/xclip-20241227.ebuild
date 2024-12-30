@@ -8,7 +8,7 @@ DESCRIPTION="Copy data from standard input to X clipboard"
 HOMEPAGE="https://github.com/astrand/xclip"
 SRC_URI="https://github.com/astrand/xclip/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
-SNAPSHOT=b372f73579d30f9ba998ffd0a73694e7abe2c313
+SNAPSHOT=e5b20364e3008f642eae407b302fa55cda1cebac
 SRC_URI="https://github.com/astrand/xclip/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/xclip-${SNAPSHOT}
 

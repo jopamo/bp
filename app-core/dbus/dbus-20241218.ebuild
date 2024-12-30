@@ -60,7 +60,6 @@ src_configure() {
 		-Dkqueue=disabled
 		$(meson_feature inotify)
 		-D xml_docs=enabled
-		-Dembedded_tests=false
 		-Dinstalled_tests=false
 		-D message_bus=true
 		$(meson_feature test modular_tests)

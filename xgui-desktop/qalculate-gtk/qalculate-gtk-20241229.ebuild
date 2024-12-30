@@ -7,7 +7,7 @@ inherit autotools xdg
 DESCRIPTION="Modern multi-purpose calculator"
 HOMEPAGE="https://qalculate.github.io/"
 
-SNAPSHOT=d6ba427be671d72f80e5204b5c7f61a8c9303ef5
+SNAPSHOT=af2aece6c5f9e8f329eb7ac4096afdda789cfb90
 SRC_URI="https://github.com/Qalculate/qalculate-gtk/archive/${SNAPSHOT}.tar.gz -> qalculate-gtk-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/qalculate-gtk-${SNAPSHOT}"
 

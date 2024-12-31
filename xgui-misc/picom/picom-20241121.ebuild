@@ -15,42 +15,29 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="sanitize dbus opengl +pcre"
+IUSE="sanitize dbus +regex opengl"
 
-COMMON_DEPEND="
-	lib-dev/libconfig
-	xgui-lib/libX11
-	xgui-lib/libXcomposite
-	xgui-lib/libXdamage
-	xgui-lib/libXext
-	xgui-lib/libXfixes
-	xgui-lib/libXinerama
-	xgui-lib/libXrandr
-	xgui-lib/libXrender
-	xgui-lib/xcb-util
+DEPEND="
 	dbus? ( app-core/dbus )
-	opengl? ( xgui-tools/mesa )
-	pcre? ( lib-core/libpcre )
-"
-
-RDEPEND="${COMMON_DEPEND}
-	xgui-tools/xprop
-	xgui-tools/xwininfo"
-
-DEPEND="${COMMON_DEPEND}
-	app-dev/pkgconf
-	xgui-tools/xorgproto
+	lib-dev/libconfig
 	lib-dev/libev
 	lib-dev/uthash
 	lib-misc/libxdg-base
-	xgui-lib/libdrm"
-
-filter-flags -Wl,-z,defs
+	opengl? ( xgui-tools/mesa )
+	xgui-lib/libdrm
+	xgui-lib/xcb-util
+	xgui-tools/xorgproto
+	xgui-tools/xprop
+	xgui-tools/xwininfo
+	xmedia-lib/libepoxy
+"
 
 src_configure() {
+	filter-flags -Wl,-z,defs
+
 	local emesonargs=(
 		$(meson_use sanitize)
-		$(meson_use pcre regex)
+		$(meson_use regex)
 		$(meson_use opengl)
 		$(meson_use dbus)
 	)

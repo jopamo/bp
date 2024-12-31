@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="pcre static"
 
-LIB_DEPEND="pcre? ( lib-core/libpcre[static-libs(+)] )"
+LIB_DEPEND="pcre? ( lib-core/libpcre2[static-libs(+)] )"
 RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
 DEPEND="static? ( ${LIB_DEPEND} )"
 
@@ -34,6 +34,7 @@ src_prepare() {
 	EOF
 
 	default
+	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
 }
 
 src_configure() {

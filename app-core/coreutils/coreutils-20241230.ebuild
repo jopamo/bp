@@ -30,6 +30,7 @@ src_prepare() {
 	append-flags -fno-strict-aliasing
 
 	default
+
 	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
 }
 
@@ -49,7 +50,7 @@ src_configure() {
 	)
 
 	export gl_cv_func_mknod_works=yes
-	use static && append-ldflags -static && sed -i '/elf_sys=yes/s:yes:no:' configure
+	use static && append-ldflags -static
 
 	econf "${myconf[@]}"
 }

@@ -29,6 +29,8 @@ src_prepare() {
 	sed -i \
 		'/include.*config.h/a#ifdef MAJOR_IN_SYSMACROS\n#include <sys/sysmacros.h>\n#endif\n' \
 		gl/lib/mountlist.c || die
+
+	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
 }
 
 src_configure() {

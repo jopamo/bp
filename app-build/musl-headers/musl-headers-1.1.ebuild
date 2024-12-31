@@ -11,7 +11,12 @@ KEYWORDS="arm64 amd64"
 S="${WORKDIR}"
 
 src_install() {
-	insinto usr/include/sys/
+	if use elibc_musl; then
+		insinto usr/include/sys/
+	else
+		insinto /usr/musl/include/sys/
+	fi
+
 	doins "${FILESDIR}"/cdefs.h
 	doins "${FILESDIR}"/queue.h
 	doins "${FILESDIR}"/tree.h

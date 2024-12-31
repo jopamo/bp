@@ -19,7 +19,7 @@ IUSE="ipv6 +libssh2 +os-db +ncat +nping +nselib +scripts ssl"
 
 DEPEND="
 	app-lang/lua
-	lib-core/libpcre
+	lib-core/libpcre2
 	lib-core/zlib
 	lib-dev/liblinear
 	lib-net/libpcap

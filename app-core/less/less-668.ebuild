@@ -10,19 +10,14 @@ LICENSE="|| ( GPL-3 BSD-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="pcre"
-
 DEPEND="
 	virtual/curses
-	pcre? ( lib-core/libpcre )
+	lib-core/libpcre2
 "
 
 src_configure() {
-	export ac_cv_lib_ncursesw_initscr=yes
-	export ac_cv_lib_ncurses_initscr=no
-
 	local myconf=(
-		--with-regex=$(usex pcre pcre posix) \
+		--with-regex=pcre2
 		--with-editor="${EPREFIX}"/usr/bin/vim
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

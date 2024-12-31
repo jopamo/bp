@@ -2,12 +2,17 @@
 
 EAPI=8
 
-inherit flag-o-matic libtool
+inherit flag-o-matic autotools
 
 DESCRIPTION="Perl-compatible regular expression library"
 HOMEPAGE="http://www.pcre.org/"
-SRC_URI="https://github.com/PCRE2Project/pcre2/releases/download/pcre2-${PV}/pcre2-${PV}.tar.bz2"
-S="${WORKDIR}/pcre2-${PV}"
+
+SNAPSHOT=35eafc9d2034ae19f0a807cb3005affea7bb2300
+SLJIT_SNAPSHOT=eb8ef1e81902e14ae3bfdfcb423b932963b8cc10
+
+SRC_URI="https://github.com/PCRE2Project/pcre2/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz
+		https://github.com/zherczeg/sljit/archive/${SLJIT_SNAPSHOT}.tar.gz"
+S="${WORKDIR}/pcre2-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"
@@ -26,8 +31,11 @@ BDEPEND="
 "
 
 src_prepare() {
+	rm -rf "${WORKDIR}/pcre2-${SNAPSHOT}/deps/sljit"
+	mv "${WORKDIR}/sljit-${SLJIT_SNAPSHOT}" "${WORKDIR}/pcre2-${SNAPSHOT}/deps/sljit"
+
 	default
-	elibtoolize
+	eautoreconf
 }
 
 src_configure() {

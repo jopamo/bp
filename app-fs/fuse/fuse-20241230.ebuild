@@ -16,6 +16,7 @@ SLOT="3"
 KEYWORDS="amd64 arm64"
 
 src_install() {
+	local MESON_SOURCE_ROOT="${S}"
 	filter-flags -flto*
 
 	meson_src_install

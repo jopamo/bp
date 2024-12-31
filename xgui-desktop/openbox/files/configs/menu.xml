@@ -85,10 +85,10 @@
 				</execute>
 			</action>
 		</item>
-		<item label="speedcrunch">
+		<item label="qalculate-gtk">
 			<action name="Execute">
 				<execute>
-					speedcrunch
+					qalculate-gtk
 				</execute>
 			</action>
 		</item>

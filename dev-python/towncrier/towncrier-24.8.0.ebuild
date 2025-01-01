@@ -29,7 +29,7 @@ RDEPEND="
 	dev-python/click[${PYTHON_USEDEP}]
 	dev-python/click-default-group[${PYTHON_USEDEP}]
 	dev-python/incremental[${PYTHON_USEDEP}]
-	dev-python/jinja2[${PYTHON_USEDEP}]
+	dev-py/jinja2[${PYTHON_USEDEP}]
 	$(python_gen_cond_dep '
 		dev-python/tomli[${PYTHON_USEDEP}]
 	' 3.10)

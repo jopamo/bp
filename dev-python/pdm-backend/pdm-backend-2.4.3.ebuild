@@ -25,7 +25,7 @@ KEYWORDS="amd64 arm64"
 RDEPEND="
 	>=dev-python/editables-0.5[${PYTHON_USEDEP}]
 	>=dev-python/packaging-24.0[${PYTHON_USEDEP}]
-	>=dev-python/pyproject-metadata-0.9.0_beta7[${PYTHON_USEDEP}]
+	>=dev-py/pyproject-metadata-0.9.0_beta7[${PYTHON_USEDEP}]
 	>=dev-python/tomli-w-1.0.0[${PYTHON_USEDEP}]
 
 	$(python_gen_cond_dep '

@@ -25,6 +25,7 @@ distutils_enable_tests unittest
 
 python_install_all() {
 	filter-flags -Wl,-z,defs
+	append-flags -ffat-lto-objects
 	use doc && local HTML_DOCS=( docs/Features.html )
 	local DOCS=( README.rst docs/*.rst )
 

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-DISTUTILS_USE_PEP517=poetry
+DISTUTILS_USE_PEP517=flit
 PYTHON_COMPAT=( pypy3 python3_{10..13} )
 
 inherit distutils-r1
@@ -12,7 +12,7 @@ HOMEPAGE="
 	https://github.com/pallets/quart/
 	https://pypi.org/project/Quart/
 "
-# no tests in sdist as of 0.19.4
+# no tests in sdist as of 0.20.0
 SRC_URI="
 	https://github.com/pallets/quart/archive/${PV}.tar.gz
 		-> ${P}.gh.tar.gz
@@ -29,7 +29,7 @@ RDEPEND="
 	>=dev-python/flask-3.0.0[${PYTHON_USEDEP}]
 	>=dev-python/hypercorn-0.11.2[${PYTHON_USEDEP}]
 	dev-python/itsdangerous[${PYTHON_USEDEP}]
-	dev-python/jinja2[${PYTHON_USEDEP}]
+	dev-py/jinja2[${PYTHON_USEDEP}]
 	dev-python/markupsafe[${PYTHON_USEDEP}]
 	>=dev-python/werkzeug-3.0.0[${PYTHON_USEDEP}]
 "

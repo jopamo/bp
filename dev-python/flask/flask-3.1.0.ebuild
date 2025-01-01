@@ -29,7 +29,7 @@ RDEPEND="
 	>=dev-python/blinker-1.9[${PYTHON_USEDEP}]
 	>=dev-python/click-8.1.3[${PYTHON_USEDEP}]
 	>=dev-python/itsdangerous-2.2[${PYTHON_USEDEP}]
-	>=dev-python/jinja2-3.1.2[${PYTHON_USEDEP}]
+	>=dev-py/jinja2-3.1.2[${PYTHON_USEDEP}]
 	>=dev-python/werkzeug-3.1[${PYTHON_USEDEP}]
 "
 BDEPEND="

@@ -140,6 +140,7 @@ PACKAGES=(
 	"pygments"
 	"pyopenssl"
 	"pyproject-hooks"
+	"pyproject-metadata"
 	"pypiserver"
 	"pyrfc3339"
 	"pysocks"
@@ -213,7 +214,6 @@ declare -A replacements=(
 	["dev-python/cryptography"]="app-crypto/cryptography"
 	["dev-python/pillow"]="xgui-app/pillow"
 	["dev-python/jinja"]="dev-py/jinja"
-	["dev-python/pyproject-metadata"]="dev-py/pyproject-metadata"
 	["dev-python/setuptools"]="dev-py/setuptools"
 	["dev-python/setuptools-rust"]="dev-py/setuptools-rust"
 	["dev-python/setuptools-scm"]="dev-py/setuptools-scm"
@@ -221,6 +221,10 @@ declare -A replacements=(
 	["dev-python/tree-sitter"]="dev-py/tree-sitter"
 	["net-dns/c-ares"]="lib-net/c-ares"
 	["sys-libs/timezone-data"]="lib-core/tzdb"
+)
+
+BDEPEND_CLEAN_PACKAGES=(
+	"pyproject-metadata"
 )
 
 GENTOO_PATH="/tmp/gentoo-repo"
@@ -285,7 +289,9 @@ for package in "${PACKAGES[@]}"; do
 done
 
 echo "Package copy process completed."
+#######################################################################################################
 
+#######################################################################################################
 echo "Starting cleanup process..."
 
 [ -d "${PACKAGE_DIR}/gpep517" ] && echo "Updating EAPI for gpep517..." && find "${PACKAGE_DIR}/gpep517" -type f -name "*.ebuild" -exec sed -i'' 's/EAPI=7/EAPI=8/' {} + && echo "EAPI updated for gpep517."
@@ -331,37 +337,38 @@ find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe '
 
 find "${PACKAGE_DIR}" -type f -name '*_rc[1-9].ebuild' -exec echo "Deleting _rc ebuild: {}" \; -delete
 find "${PACKAGE_DIR}" -type f -name '*_pre*.ebuild' -exec echo "Deleting _pre ebuild: {}" \; -delete
+#######################################################################################################
 
-for package in aiohttp brotlicffi cython frozenlist propcache psutil pycares lxml cffi markupsafe multidict pillow tree-sitter zstandard yarl; do
+#######################################################################################################
+echo "Removing BDEPEND blocks from selected packages..."
+for package in "${BDEPEND_CLEAN_PACKAGES[@]}"; do
+	find "${PACKAGE_DIR}/${package}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe 's/BDEPEND=".*?"//gs' {} +
+done
+#######################################################################################################
+
+#######################################################################################################
+echo "Starting to process to add -Wl,-z,defs to required packages..."
+for package in aiohttp brotlicffi cffi cython frozenlist lxml markupsafe multidict pillow \
+propcache psutil pycares regex tree-sitter yarl zstandard; do
 	if [ -d "${PACKAGE_DIR}/${package}" ]; then
 		echo "Updating for ${package}..."
-		find "${PACKAGE_DIR}/${package}" -type f -name "*.ebuild" -exec sh -c '
-            for ebuild_file; do
-                echo "Processing $ebuild_file"
-                if grep -q "^python_compile()" "$ebuild_file"; then
-                    echo "Adding line to python_compile in $ebuild_file"
-                    sed -i "/^python_compile()/ { N; s|\\n|\\n\\tfilter-flags -Wl,-z,defs\\n| }" "$ebuild_file"
-                fi
-                if grep -q "^src_prepare() {" "$ebuild_file"; then
-                    echo "Adding line to src_prepare in $ebuild_file"
-                    sed -i "/^src_prepare() {/ { N; s|\\n|\\n\\tfilter-flags -Wl,-z,defs\\n| }" "$ebuild_file"
-                fi
-                if grep -q "^src_unpack() {" "$ebuild_file"; then
-                    echo "Adding line to src_unpack in $ebuild_file"
-                    sed -i "/^src_unpack() {/ { N; s|\\n|\\n\\tfilter-flags -Wl,-z,defs\\n| }" "$ebuild_file"
-                fi
-                if grep -q "^python_configure_all() {" "$ebuild_file"; then
-                    echo "Adding line to python_configure_all in $ebuild_file"
-                    sed -i "/^python_configure_all() {/ { N; s|\\n|\\n\\tfilter-flags -Wl,-z,defs\\n| }" "$ebuild_file"
-                fi
-            done
-		' sh {} +
-		echo "Updated for ${package}."
+		find "${PACKAGE_DIR}/${package}" -type f -name "*.ebuild" -print0 | while IFS= read -r -d '' ebuild_file; do
+			echo "Processing $ebuild_file"
+			for func in python_compile src_prepare src_unpack python_configure_all python_install_all; do
+				if grep -q "^${func}()" "$ebuild_file"; then
+					echo "Adding line to $func in $ebuild_file"
+					sed -i "/^${func}()/ { N; s|\\n|\\n\\tfilter-flags -Wl,-z,defs\\n| }" "$ebuild_file"
+				fi
+			done
+			echo "Updated $ebuild_file."
+		done
 	else
 		echo "Directory for ${package} not found."
 	fi
 done
+#######################################################################################################
 
+#######################################################################################################
 echo "Starting to process each package to keep only the latest ebuild..."
 
 for package in "${PACKAGES[@]}"; do
@@ -383,7 +390,6 @@ done
 echo "All packages processed, and old ebuilds removed."
 
 echo "Starting to update KEYWORDS in ebuild files..."
-
 for package in "${PACKAGES[@]}"; do
 	package_dir="${PACKAGE_DIR}/${package}"
 	if [ -d "${package_dir}" ]; then

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_USE_PEP517=hatchling
 PYTHON_COMPAT=( python3_{10..13} pypy3 )
 
 inherit distutils-r1 pypi
@@ -21,6 +21,7 @@ RESTRICT="!test? ( test )"
 
 # pip is called as an external tool
 BDEPEND="
+	dev-python/hatch-vcs[${PYTHON_USEDEP}]
 	test? (
 		app-shells/fish
 		app-shells/tcsh

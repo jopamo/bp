@@ -306,16 +306,17 @@ declare -A replacements=(
 	["dev-libs/libyaml"]="lib-dev/libyaml"
 	["dev-libs/openssl"]="lib-net/openssl"
 	["dev-libs/tree-sitter"]="lib-dev/tree-sitter"
-	["dev-python/tree-sitter"]="lib-py/tree-sitter"
 	["dev-python/cryptography"]="app-crypto/cryptography"
 	["dev-python/pillow"]="xgui-app/pillow"
+	["dev-python/jinja"]="dev-py/jinja"
+	["dev-python/pyproject-metadata"]="dev-py/pyproject-metadata"
 	["dev-python/setuptools"]="dev-py/setuptools"
+	["dev-python/setuptools-rust"]="dev-py/setuptools-rust"
+	["dev-python/setuptools-scm"]="dev-py/setuptools-scm"
+	["dev-python/snakeoil"]="dev-py/snakeoil"
+	["dev-python/tree-sitter"]="dev-py/tree-sitter"
 	["net-dns/c-ares"]="lib-net/c-ares"
 	["sys-libs/timezone-data"]="lib-core/tzdb"
-
-	"setuptools"
-	"setuptools-rust"
-	"setuptools-scm"
 )
 
 for package in "${PACKAGES[@]}"; do

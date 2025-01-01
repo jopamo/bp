@@ -14,14 +14,14 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="$(ver_cut 1-2)"
 	inherit git-r3
 else
-	SNAPSHOT=bb98a0afd8598ce80f0e6d3f768b128eab68f40a
+	SNAPSHOT=675b039e46fae6f6b83c143fe4e5ba5bee3067dc
 	SRC_URI="https://github.com/python/cpython/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/cpython-${SNAPSHOT}
 fi
 
 LICENSE="PSF-2"
 SLOT="$(ver_cut 1-2)"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="bluetooth debug libedit ncurses pgo readline sqlite ssl static test tk valgrind +xml"
 

@@ -31,8 +31,8 @@ USE="${USE} xattr bzip2 cxx"
 
 BOOTSTRAP_USE=""
 
-PYTHON_TARGETS="python3_12"
-PYTHON_SINGLE_TARGET="python3_12"
+PYTHON_TARGETS="python3_12 python3_13"
+PYTHON_SINGLE_TARGET="python3_13"
 
 COLLISION_IGNORE="/lib/modules/*"
 UNINSTALL_IGNORE="/lib/modules/* /var/run /var/lock"

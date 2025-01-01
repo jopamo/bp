@@ -15,7 +15,7 @@ LICENSE="LGPL-2+"
 SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
-IUSE="broadway cups ffmpeg examples +introspection vim-syntax wayland +X xinerama vulkan test sysprof colord build-examples demos build-tests"
+IUSE="broadway cups ffmpeg examples introspection vim-syntax wayland +X xinerama vulkan test sysprof colord build-examples demos build-tests"
 
 REQUIRED_USE="
 	|| ( wayland X )
@@ -77,6 +77,8 @@ src_prepare() {
 	use elibc_musl && sed -i '/#include <execinfo.h>/d' testsuite/reftests/gtk-reftest.c
 	filter-flags -flto*
 	filter-flags -Wl,-z,defs
+	append-flags -fno-plt
+	append-flags -Wl,--no-relax
 
 	default
 	xdg_environment_reset

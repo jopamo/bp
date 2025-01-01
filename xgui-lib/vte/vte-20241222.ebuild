@@ -21,6 +21,11 @@ DEPEND="
 	xgui-lib/gtk4
 "
 
+src_prepare() {
+	default
+	eapply "${FILESDIR}"/fix-W_EXITCODE.patch
+}
+
 src_configure() {
 	filter-flags -flto*
 
@@ -28,7 +33,7 @@ src_configure() {
 		-Da11y=false
 		-Dvapi=false
 		-Ddocs=false
-		-Dgir=true
+		-Dgir=false
 		-Dsixel=true
 		-Dicu=false
 		-Dgnutls=true

@@ -31,8 +31,8 @@ IUSE="examples imagequant +jpeg jpeg2k lcms test tiff tk truetype webp xcb zlib"
 REQUIRED_USE="test? ( jpeg jpeg2k lcms tiff truetype )"
 RESTRICT="!test? ( test )"
 
-RDEPEND="
-	${DEPEND}
+DEPEND="
+	xmedia-lib/libjpeg-turbo
 	dev-python/olefile[${PYTHON_USEDEP}]
 "
 BDEPEND="

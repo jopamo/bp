@@ -39,7 +39,7 @@ LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
 KEYWORDS="amd64 arm64"
 
-IUSE="amdgpu arm +bpf bootstrap debug nvptx bootstrap stage test wasm xcore"
+IUSE="amdgpu arm +bpf bootstrap debug late nvptx bootstrap stage test wasm xcore"
 
 DEPEND="
 	lib-core/libffi
@@ -160,11 +160,26 @@ src_configure() {
 	)
 
 	local late=(
+		-DLIBUNWIND_ENABLE_ASSERTIONS=$(usex debug)
+		-DLIBUNWIND_ENABLE_CROSS_UNWINDING=ON
+		-DLIBUNWIND_ENABLE_STATIC=ON
+		-DLIBUNWIND_INCLUDE_TESTS=OFF
+		-DLIBUNWIND_INSTALL_HEADERS=ON
+		-DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi;libunwind"
+		-DLLVM_OPTIMIZED_TABLEGEN=ON
+		-DLIBCXXABI_USE_COMPILER_RT=OFF
+		-DLIBCXX_HAS_GCC_S_LIB=OFF
+		-DLIBCXX_USE_COMPILER_RT=OFF
+		-DLIBUNWIND_USE_COMPILER_RT=OFF
+		-DLLVM_ENABLE_LIBCXX=OFF
+	)
+
+	local last=(
 		-DCOMPILER_RT_BUILD_LIBFUZZER=OFF
 		-DCOMPILER_RT_BUILD_MEMPROF=OFF
 		-DCOMPILER_RT_BUILD_ORC=ON
 		-DCOMPILER_RT_BUILD_PROFILE=OFF
-		-DCOMPILER_RT_BUILD_SANITIZERS=$(usex elibc_glibc)
+		-DCOMPILER_RT_BUILD_SANITIZERS=OFF
 		-DCOMPILER_RT_BUILD_XRAY=OFF
 		-DCOMPILER_RT_USE_LIBEXECINFO=OFF
 		-DLIBUNWIND_ENABLE_ASSERTIONS=$(usex debug)
@@ -174,16 +189,29 @@ src_configure() {
 		-DLIBUNWIND_INSTALL_HEADERS=ON
 		-DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi;libunwind;compiler-rt"
 		-DLLVM_OPTIMIZED_TABLEGEN=ON
-		-DLIBCXXABI_USE_COMPILER_RT=ON
+		-DLIBCXXABI_USE_COMPILER_RT=OFF
 		-DLIBCXX_CXX_ABI=libcxxabi
 		-DLIBCXX_HAS_GCC_S_LIB=OFF
-		-DLIBCXX_USE_COMPILER_RT=ON
-		-DLIBUNWIND_USE_COMPILER_RT=ON
-		-DLLVM_ENABLE_LIBCXX=ON
+		-DLIBCXX_USE_COMPILER_RT=OFF
+		-DLIBUNWIND_USE_COMPILER_RT=OFF
+		-DLLVM_ENABLE_LIBCXX=OFF
 	)
+
+	#if ! use bootstrap && ! use late; then
+	#	local -x CC=clang
+	#	local -x CXX=clang++
+	#	local -x CC="clang"
+	#	local -x CPP="clang-cpp"
+	#	local -x CXX="clang++"
+	#	local -x AR="llvm-ar"
+	#	local -x NM="llvm-nm"
+	#	local -x RANLIB="llvm-ranlib"
+	#fi
 
 	if use bootstrap; then
 		mycmakeargs+=("${common[@]}" "${bootstrap[@]}")
+	elif use late; then
+		mycmakeargs+=("${common[@]}" "${bootstrap[@]}" "${late[@]}")
 	else
 		mycmakeargs+=("${common[@]}" "${bootstrap[@]}" "${late[@]}")
 	fi

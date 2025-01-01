@@ -112,8 +112,8 @@ src_install() {
 	dosym -r /tmp /usr/tmp
 
 	dosym -r /usr/bin /bin
-	dosym -r /usr/bin /sbin
-	dosym -r /usr/bin /usr/sbin
+	#dosym -r /usr/bin /sbin
+	#dosym -r /usr/bin /usr/sbin
 
 	keepdir /usr/local/lib
 

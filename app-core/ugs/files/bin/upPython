@@ -55,7 +55,6 @@ PACKAGES=(
 	"josepy"
 	"jsonpointer"
 	"jsonschema"
-	"jsonschema"
 	"jsonschema-path"
 	"jsonschema-spec"
 	"jsonschema-specifications"

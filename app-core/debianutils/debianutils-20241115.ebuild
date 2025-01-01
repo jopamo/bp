@@ -35,7 +35,7 @@ src_install() {
 	doman run-parts.8
 
 	if use installkernel ; then
-		dosbin installkernel
+		dobin installkernel
 		doman installkernel.8
 	fi
 
@@ -45,7 +45,7 @@ src_install() {
 	fi
 
 	if use savelog ; then
-		dosbin savelog
+		dobin savelog
 		doman savelog.8
 	fi
 }

@@ -14,6 +14,8 @@ RDEPEND="|| ( app-core/util-linux app-var/getopt )
 	lib-core/libxml2"
 
 src_prepare() {
+	sed -i 's|$(PREFIX)/sbin|$(PREFIX)/bin|' Makefile || die
+
 	default
 
 	sed -i -e "1s@#!@#!${EPREFIX}@" build-docbook-catalog || die

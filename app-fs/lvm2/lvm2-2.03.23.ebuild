@@ -29,17 +29,16 @@ PATCHES=(
 )
 
 src_configure() {
+	filter-flags -Wl,-z,defs
+
 	local myconf=(
 		--prefix="${EPREFIX}"/usr
    		--sysconfdir="${EPREFIX}"/etc
    		--localstatedir="${EPREFIX}"/var
 		$(use_with udev udevdir "${EPREFIX}"/usr/lib/udev/rules.d)
-		$(usex dm-only "" "--enable-applib")
 		$(usex dm-only "" "--enable-cmdlib")
 		$(usex dm-only "" "--enable-dmeventd")
-		$(usex dm-only "" "--enable-lvmetad")
 		$(usex dm-only "" "--enable-lvmpolld")
-		$(usex dm-only "" "--enable-use-lvmetad")
 		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
    		$(use_enable udev udev_rules)
    		$(use_enable udev udev_sync)
@@ -56,7 +55,7 @@ src_configure() {
 }
 
 src_install() {
-	use dm-only || INSTALL_TARGETS="install_lvm2"
+	use dm-only || INSTALL_TARGETS="install_lvm2 install_device-mapper"
 	use dm-only || use systemd && INSTALL_TARGETS="${INSTALL_TARGETS} install_systemd_units install_systemd_generators"
 	use dm-only && INSTALL_TARGETS="install_device-mapper"
 
@@ -65,13 +64,9 @@ src_install() {
 		emake DESTDIR="${D}" ${inst}
 	done
 
-	if use static-libs; then
-		dolib.a libdm/ioctl/libdevmapper.a
-		dolib.a libdaemon/client/libdaemonclient.a #462908
-		dolib.a daemons/dmeventd/libdevmapper-event.a
-	else
-		rm -f "${ED}"/usr/lib/{libdevmapper-event,liblvm2cmd,liblvm2app,libdevmapper}.a
-	fi
+	#dolib.a device_mapper/libdevice-mapper.a
+	#dolib.a libdaemon/client/libdaemonclient.a
+	#dolib.a libdaemon/server/libdaemonserver.a
 
 	use dm-only && rm -f "${ED}/usr/lib/systemd/system/"{blk-availability.service,lvm2-*}
 }

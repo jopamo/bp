@@ -15,9 +15,21 @@ LICENSE="GPL-2 LGPL-2.1"
 SLOT="3"
 KEYWORDS="amd64 arm64"
 
+src_configure() {
+#	filter-flags -flto*
+
+	local emesonargs=(
+		-Dtests=false
+		-Dexamples=false
+		-Duseroot=false
+		-Dutils=true
+		-Dinitscriptdir=""
+	)
+	meson_src_configure
+}
+
 src_install() {
 	local MESON_SOURCE_ROOT="${S}"
-	filter-flags -flto*
 
 	meson_src_install
 	rm -rf "${ED}"/etc/init.d

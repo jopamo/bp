@@ -182,9 +182,6 @@ python_test() {
 	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	cd "${BUILD_DIR}/install$(python_get_sitedir)" || die
 	epytest -p rerunfailures --reruns=5
-
-	# https://github.com/numpy/numpy/issues/27942
-	rm xm.np.npy || die
 }
 
 python_install_all() {

@@ -6,7 +6,7 @@ PACKAGES=(
 	"aiohappyeyeballs"
 	"aiohttp"
 	"aiosignal"
-	"alablaster"
+	"alabaster"
 	"appdirs"
 	"argcomplete"
 	"arrow"
@@ -55,6 +55,7 @@ PACKAGES=(
 	"filelock"
 	"flaky"
 	"flask"
+	"flit"
 	"flit-core"
 	"fqdn"
 	"freezegun"
@@ -198,6 +199,28 @@ PACKAGES=(
 	"yarl"
 	"zipp"
 	"zstandard"
+)
+
+declare -A replacements=(
+	["app-arch/brotli"]="app-compression/brotli"
+	["app-misc/ca-certificates"]="lib-net/ca-certificates"
+	["dev-libs/libffi"]="lib-core/libffi"
+	["dev-libs/libxml2"]="lib-core/libxml2"
+	["dev-libs/libxslt"]="lib-core/libxslt"
+	["dev-libs/libyaml"]="lib-dev/libyaml"
+	["dev-libs/openssl"]="lib-net/openssl"
+	["dev-libs/tree-sitter"]="lib-dev/tree-sitter"
+	["dev-python/cryptography"]="app-crypto/cryptography"
+	["dev-python/pillow"]="xgui-app/pillow"
+	["dev-python/jinja"]="dev-py/jinja"
+	["dev-python/pyproject-metadata"]="dev-py/pyproject-metadata"
+	["dev-python/setuptools"]="dev-py/setuptools"
+	["dev-python/setuptools-rust"]="dev-py/setuptools-rust"
+	["dev-python/setuptools-scm"]="dev-py/setuptools-scm"
+	["dev-python/snakeoil"]="dev-py/snakeoil"
+	["dev-python/tree-sitter"]="dev-py/tree-sitter"
+	["net-dns/c-ares"]="lib-net/c-ares"
+	["sys-libs/timezone-data"]="lib-core/tzdb"
 )
 
 GENTOO_PATH="/tmp/gentoo-repo"
@@ -371,28 +394,6 @@ for package in "${PACKAGES[@]}"; do
 	fi
 done
 
-declare -A replacements=(
-	["app-arch/brotli"]="app-compression/brotli"
-	["app-misc/ca-certificates"]="lib-net/ca-certificates"
-	["dev-libs/libffi"]="lib-core/libffi"
-	["dev-libs/libxml2"]="lib-core/libxml2"
-	["dev-libs/libxslt"]="lib-core/libxslt"
-	["dev-libs/libyaml"]="lib-dev/libyaml"
-	["dev-libs/openssl"]="lib-net/openssl"
-	["dev-libs/tree-sitter"]="lib-dev/tree-sitter"
-	["dev-python/cryptography"]="app-crypto/cryptography"
-	["dev-python/pillow"]="xgui-app/pillow"
-	["dev-python/jinja"]="dev-py/jinja"
-	["dev-python/pyproject-metadata"]="dev-py/pyproject-metadata"
-	["dev-python/setuptools"]="dev-py/setuptools"
-	["dev-python/setuptools-rust"]="dev-py/setuptools-rust"
-	["dev-python/setuptools-scm"]="dev-py/setuptools-scm"
-	["dev-python/snakeoil"]="dev-py/snakeoil"
-	["dev-python/tree-sitter"]="dev-py/tree-sitter"
-	["net-dns/c-ares"]="lib-net/c-ares"
-	["sys-libs/timezone-data"]="lib-core/tzdb"
-)
-
 for package in "${PACKAGES[@]}"; do
 	package_dir="${PACKAGE_DIR}/${package}"
 	if [ -d "${package_dir}" ]; then
@@ -405,7 +406,7 @@ for package in "${PACKAGES[@]}"; do
 	fi
 done
 
-remove_strings=('bash-completion-r1' 'optfeature' 'virtualx')
+remove_strings=('bash-completion-r1' 'optfeature' 'virtualx' 'fortran-2' 'check-reqs')
 
 for package in "${PACKAGES[@]}"; do
 	package_dir="${PACKAGE_DIR}/${package}"
@@ -422,14 +423,12 @@ for package in "${PACKAGES[@]}"; do
 	fi
 done
 
-echo "Cleanup complete. Script execution finished."
-
 generate_manifest() {
 	local package=$1
 	local package_path="${PACKAGE_DIR}/${package}"
 
 	if [ -d "${package_path}" ]; then
-		ebuild "${package_path}"/*.ebuild manifest
+		ebuild --force "${package_path}"/*.ebuild manifest
 	fi
 }
 

@@ -227,6 +227,10 @@ BDEPEND_CLEAN_PACKAGES=(
 	"pyproject-metadata"
 )
 
+INHERIT_FLAGOMATIC_PACKAGES=(
+	"regex"
+)
+
 GENTOO_PATH="/tmp/gentoo-repo"
 PACKAGE_DIR="/var/db/repos/bp/dev-python"
 REPO="https://github.com/gentoo/gentoo.git"
@@ -347,6 +351,11 @@ done
 #######################################################################################################
 
 #######################################################################################################
+echo "Adding flag-o-matic to inherit lines for selected packages..."
+for package in "${INHERIT_FLAGOMATIC_PACKAGES[@]}"; do
+	find "${PACKAGE_DIR}/${package}" -type f -name "*.ebuild" -exec sed -i'' '/^inherit / {/flag-o-matic/! s/$/ flag-o-matic/}' {} +
+done
+
 echo "Starting to process to add -Wl,-z,defs to required packages..."
 for package in aiohttp brotlicffi cffi cython frozenlist lxml markupsafe multidict pillow \
 	propcache psutil pycares regex tree-sitter yarl zstandard; do

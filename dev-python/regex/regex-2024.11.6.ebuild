@@ -8,7 +8,7 @@ DISTUTILS_USE_PEP517=setuptools
 # See https://github.com/mrabarnett/mrab-regex/issues/521#issuecomment-1936260187.
 PYTHON_COMPAT=( python3_{10..13} )
 
-inherit distutils-r1 pypi
+inherit distutils-r1 pypi flag-o-matic
 
 DESCRIPTION="Alternative regular expression module to replace re"
 HOMEPAGE="

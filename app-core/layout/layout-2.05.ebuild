@@ -98,7 +98,7 @@ src_install() {
 	install -d -m600 "${ED}"/var/empty
 	keepdir /var/empty
 
-	for d in bin sbin include lib share/{misc,pixmaps} src; do
+	for d in bin include lib share/{misc,pixmaps} src; do
 		install -d -m755 "${ED}"/usr/$d
 	done
 
@@ -112,7 +112,8 @@ src_install() {
 	dosym -r /tmp /usr/tmp
 
 	dosym -r /usr/bin /bin
-	dosym -r /usr/sbin /sbin
+	dosym -r /usr/bin /sbin
+	dosym -r /usr/bin /usr/sbin
 
 	keepdir /usr/local/lib
 

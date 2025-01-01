@@ -101,9 +101,7 @@ python_test() {
 }
 
 python_install_all() {
-tuse doc && local HTML_DOCS=( docs/Features.html )
-	local DOCS=( README.rst docs/*.rst )
-	distutils-r1_python_install_all
+	filter-flags -Wl,-z,defs
 	if use doc; then
 		local DOCS=( README.rst *.txt doc/*.txt )
 		local HTML_DOCS=( doc/html/. )

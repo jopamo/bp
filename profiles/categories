@@ -17,11 +17,12 @@ app-util
 app-var
 bin
 dev-perl
-dev-python
 dev-py
+dev-python
 distfiles
 eclass
 fonts
+gnome-base
 lib-core
 lib-dev
 lib-misc

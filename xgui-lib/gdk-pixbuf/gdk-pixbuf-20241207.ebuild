@@ -36,7 +36,7 @@ src_configure() {
 		-Dpng=enabled
 		-Dothers=disabled
 		-Dbuiltin_loaders=all
-		-Dintrospection=enabled
+		-Dintrospection=disabled
 		-Ddocs=false
 		-Dgio_sniffing=true
 		-Dtests=false

@@ -15,6 +15,13 @@
 				</execute>
 			</action>
 		</item>
+		<item label="vte-2.91">
+			<action name="Execute">
+				<execute>
+					vte-2.91 --use-theme-colors --background-color='#000000' -T 50
+				</execute>
+			</action>
+		</item>
 		<item label="st">
 			<action name="Execute">
 				<execute>

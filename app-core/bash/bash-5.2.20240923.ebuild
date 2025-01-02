@@ -66,9 +66,6 @@ src_install() {
 
 	#compat symlink
 	dosym bash usr/bin/sh
-
-	insinto /etc/bash
-	doins "${FILESDIR}"/{bash_logout,bashrc,color_ps1}
 }
 
 pkg_preinst() {

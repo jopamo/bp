@@ -58,12 +58,18 @@ STICKY_OTHER_WRITABLE 48;5;235;38;5;139;3 # core
 *README.rst           38;5;220;1          # Documentation
 *README.md            38;5;220;1          # Documentation
 *LICENSE              38;5;220;1          # Documentation
+*LICENSE.md           38;5;220;1          # Documentation
 *COPYING              38;5;220;1          # Documentation
 *INSTALL              38;5;220;1          # Documentation
 *COPYRIGHT            38;5;220;1          # Documentation
 *AUTHORS              38;5;220;1          # Documentation
 *HISTORY              38;5;220;1          # Documentation
 *CONTRIBUTORS         38;5;220;1          # Documentation
+*CONTRIBUTING         38;5;220;1          # Documentation
+*CONTRIBUTING.md      38;5;220;1          # Documentation
+*CHANGELOG            38;5;220;1          # Documentation
+*CHANGELOG.md         38;5;220;1          # Documentation
+*CODEOWNERS           38;5;220;1          # Documentation
 *PATENTS              38;5;220;1          # Documentation
 *VERSION              38;5;220;1          # Documentation
 *NOTICE               38;5;220;1          # Documentation
@@ -76,14 +82,19 @@ STICKY_OTHER_WRITABLE 48;5;235;38;5;139;3 # core
 .markdown             38;5;184            # Markup
 .md                   38;5;184            # Markup
 .mkd                  38;5;184            # Markup
+.mdx                  38;5;184            # Markup
 .nfo                  38;5;184            # Markup
 .org                  38;5;184            # Markup
+.norg                 38;5;184            # Markup
 .pod                  38;5;184            # Markup
 .rst                  38;5;184            # Markup
 .tex                  38;5;184            # Markup
 .textile              38;5;184            # Markup
 .bib                  38;5;178            # Data store # non-relational
 .json                 38;5;178            # Data store # non-relational
+.jsonc                38;5;178            # Data store # non-relational
+.json5                38;5;178            # Data store # non-relational
+.hjson                38;5;178            # Data store # non-relational
 .jsonl                38;5;178            # Data store # non-relational
 .jsonnet              38;5;178            # Data store # non-relational
 .libsonnet            38;5;142            # Data store # non-relational
@@ -103,6 +114,7 @@ STICKY_OTHER_WRITABLE 48;5;235;38;5;139;3 # core
 .sgml                 38;5;178            # Data store # non-relational
 .rng                  38;5;178            # Data store # non-relational
 .rnc                  38;5;178            # Data store # non-relational
+.sexp                 38;5;178            # Data store # non-relational
 .accdb                38;5;60             # Data store # MS Access
 .accde                38;5;60             # Data store # MS Access
 .accdr                38;5;60             # Data store # MS Access
@@ -116,10 +128,13 @@ STICKY_OTHER_WRITABLE 48;5;235;38;5;139;3 # core
 .sqlite               38;5;60             # Data store # SQLite
 .typelib              38;5;60             # Data store
 .nc                   38;5;60             # Data store # NetCDF
+.azw                  38;5;141            # Documents # binary
+.azw3                 38;5;141            # Documents # binary
 .cbr                  38;5;141            # Documents # binary
 .cbz                  38;5;141            # Documents # binary
 .chm                  38;5;141            # Documents # binary
 .djvu                 38;5;141            # Documents # binary
+.fb2                  38;5;141            # Documents # binary
 .pdf                  38;5;141            # Documents # binary
 .PDF                  38;5;141            # Documents # binary
 .mobi                 38;5;141            # Documents # binary
@@ -138,6 +153,7 @@ STICKY_OTHER_WRITABLE 48;5;235;38;5;139;3 # core
 .ppts                 38;5;166            # Presentation
 .pptxm                38;5;166;4          # Presentation (with macros)
 .pptsm                38;5;166;4          # Presentation (with macros)
+.prisma               38;5;222            # Prisma Schema/Config
 .csv                  38;5;78             # Spreadsheet (plain text)
 .tsv                  38;5;78             # Spreadsheet (plain text)
 .numbers              38;5;112            # Spreadsheet
@@ -184,6 +200,7 @@ STICKY_OTHER_WRITABLE 48;5;235;38;5;139;3 # core
 .rstheme              1                   # Configs
 .epf                  1                   # Configs
 .git                  38;5;197            # Version control
+.github               38;5;197            # Version control
 .gitignore            38;5;240            # Version control
 .gitattributes        38;5;240            # Version control
 .gitmodules           38;5;240            # Version control
@@ -194,6 +211,7 @@ STICKY_OTHER_WRITABLE 48;5;235;38;5;139;3 # core
 .sed                  38;5;172            # Code (shell)
 .sh                   38;5;172            # Code (shell)
 .zsh                  38;5;172            # Code (shell)
+.fish                 38;5;172            # Code (shell)
 .vim                  38;5;172            # Code (shell)
 .kak                  38;5;172            # Code (shell)
 .ahk                  38;5;41             # Code (interpreted) (AutoHotKey)
@@ -208,6 +226,7 @@ STICKY_OTHER_WRITABLE 48;5;235;38;5;139;3 # core
 .t                    38;5;114            # Code (interpreted) (Perl)
 .msql                 38;5;222            # Code (SQL)
 .mysql                38;5;222            # Code (SQL)
+.prql                 38;5;222            # Code (SQL)
 .pgsql                38;5;222            # Code (SQL)
 .sql                  38;5;222            # Code (SQL)
 .tcl                  38;5;64;1           # Code (interpreted) (Tool Command Language)
@@ -274,6 +293,10 @@ STICKY_OTHER_WRITABLE 48;5;235;38;5;139;3 # core
 .hi                   38;5;110            # Haskell
 .hs                   38;5;81             # Haskell
 .lhs                  38;5;81             # Haskell
+.ml                   38;5;81             # OCaml
+.mli                  38;5;110            # OCaml
+.mll                  38;5;81             # OCaml
+.mly                  38;5;81             # OCaml
 .agda                 38;5;81             # Agda
 .lagda                38;5;81             # Agda
 .lagda.tex            38;5;81             # Agda
@@ -282,34 +305,50 @@ STICKY_OTHER_WRITABLE 48;5;235;38;5;139;3 # core
 .agdai                38;5;110            # Agda
 .zig                  38;5;81             # Zig
 .v                    38;5;81             # V
+.rego                 38;5;178            # Code (Rego)
 .pyc                  38;5;240            # Code (Python)
 .tf                   38;5;168            # Code (Terraform)
 .tfstate              38;5;168            # Code (Terraform)
 .tfvars               38;5;168            # Code (Terraform)
-.css                  38;5;125;1          # XML
-.less                 38;5;125;1          # XML
-.sass                 38;5;125;1          # XML
-.scss                 38;5;125;1          # XML
-.htm                  38;5;125;1          # XML
-.html                 38;5;125;1          # XML
-.jhtm                 38;5;125;1          # XML
-.mht                  38;5;125;1          # XML
-.eml                  38;5;125;1          # XML
-.mustache             38;5;125;1          # XML
-.coffee               38;5;074;1          # Java
-.java                 38;5;074;1          # Java
-.js                   38;5;074;1          # Java
-.mjs                  38;5;074;1          # Java
-.jsm                  38;5;074;1          # Java
-.jsp                  38;5;074;1          # Java
+.http                 38;5;90;1           # Request (Web)
+.eml                  38;5;90;1           # Email (Web)
+.css                  38;5;105;1          # Styling (Web)
+.less                 38;5;105;1          # Styling (Web)
+.sass                 38;5;105;1          # Styling (Web)
+.scss                 38;5;105;1          # Styling (Web)
+.htm                  38;5;125;1          # Styling (Web)
+.html                 38;5;125;1          # Markup (Web)
+.jhtm                 38;5;125;1          # Markup (Web)
+.mht                  38;5;125;1          # Markup (Web)
+.mustache             38;5;135;1          # Templating (Web)
+.ejs                  38;5;135;1          # Templating (Web)
+.pug                  38;5;135;1          # Templating (Web)
+.svelte               38;5;135;1          # Templating (Web)
+.vue                  38;5;135;1          # Templating (Web)
+.astro                38;5;135;1          # Templating (Web)
+.js                   38;5;074;1          # Javascript
+.jsx                  38;5;074;1          # Javascript eXtended
+.ts                   38;5;074;1          # Typescript
+.tsx                  38;5;074;1          # Typescript eXtended
+.mjs                  38;5;074;1          # ECMAScript
+.cjs                  38;5;074;1          # CommonJS
+.coffee               38;5;079;1          # Java
+.java                 38;5;079;1          # Java
+.jsm                  38;5;079;1          # Java
+.jsp                  38;5;079;1          # Java
 .php                  38;5;81             # php
 .ctp                  38;5;81             # php (CakePHP)
 .twig                 38;5;81             # php (Twig)
 .vb                   38;5;81             # VBA
 .vba                  38;5;81             # VBA
 .vbs                  38;5;81             # VBA
+*Containerfile        38;5;155            # Build process # Containers
+.containerignore      38;5;240            # Build process # Containers
 *Dockerfile           38;5;155            # Build process (Docker)
 .dockerignore         38;5;240            # Build process (Docker)
+*dune                 38;5;155            # Build process (OCaml Dune)
+*dune-project         38;5;243            # Build process (OCaml Dune)
+.opam                 38;5;240            # Build process (OCaml Opam)
 *Makefile             38;5;155            # Build process (Make)
 *MANIFEST             38;5;243            # Build process (Make)
 *pm_to_blib           38;5;240            # Build process (Perl)
@@ -324,6 +363,16 @@ STICKY_OTHER_WRITABLE 48;5;235;38;5;139;3 # core
 .old                  38;5;242            # Build process (Automake)
 .out                  38;5;242            # Build process (Automake)
 .SKIP                 38;5;244            # Build process (Automake)
+.gradle               38;5;155            # Build process (Gradle)
+*WORKSPACE            38;5;155            # Build process (Bazel)
+*BUILD                38;5;155            # Build process (Bazel)
+.bazel                38;5;155            # Build process (Bazel)
+.bazelrc              38;5;155            # Build process (Bazel)
+.bazelversion         38;5;155            # Build process (Bazel)
+.bzl                  38;5;155            # Build process (Bazel)
+*MODULE.bazel.lock    38;5;240            # Build process (Bazel)
+*Cargo.toml           38;5;155            # Build process (Cargo)
+*Cargo.lock           38;5;240            # Build process (Cargo)
 .diff                 48;5;197;38;5;232   # Patch files
 .patch                48;5;197;38;5;232;1 # Patch files
 .bmp                  38;5;97             # Graphics
@@ -375,7 +424,6 @@ STICKY_OTHER_WRITABLE 48;5;235;38;5;139;3 # core
 .gp4                  38;5;115            # Video (mobile/streaming)
 .asf                  38;5;115            # Video (mobile/streaming)
 .flv                  38;5;115            # Video (mobile/streaming)
-.ts                   38;5;115            # Video (mobile/streaming)
 .ogv                  38;5;115            # Video (mobile/streaming)
 .f4v                  38;5;115            # Video (mobile/streaming)
 .VOB                  38;5;115;1          # Video (lossless)
@@ -430,6 +478,7 @@ STICKY_OTHER_WRITABLE 48;5;235;38;5;139;3 # core
 *.7z                  38;5;40             # Archives
 *.a                   38;5;40             # Archives
 *.arj                 38;5;40             # Archives
+*.br                  38;5;40             # Archives
 *.bz2                 38;5;40             # Archives
 *.cpio                38;5;40             # Archives
 *.gz                  38;5;40             # Archives
@@ -592,7 +641,11 @@ STICKY_OTHER_WRITABLE 48;5;235;38;5;139;3 # core
 .dwg                  38;5;216            # 3D printing
 .ply                  38;5;216            # 3D printing
 .wrl                  38;5;216            # 3D printing
-
+.vert                 38;5;136            # SPIR-V shaders
+.comp                 38;5;136            # SPIR-V shaders
+.frag                 38;5;136            # SPIR-V shaders
+.spv                  38;5;217            # SPIR-V compiled shaders
+.wgsl                 38;5;97             # WGSL shaders
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # unknown / weirdos
@@ -635,7 +688,7 @@ STICKY_OTHER_WRITABLE 48;5;235;38;5;139;3 # core
 .example              38;5;7
 .feature              38;5;7
 .ger                  38;5;7
-.ics                  38;5;7 # calendar information
+.ics                  38;5;7              # calendar information
 .map                  38;5;7
 .mf                   38;5;7
 .mfasl                38;5;7
@@ -653,8 +706,8 @@ STICKY_OTHER_WRITABLE 48;5;235;38;5;139;3 # core
 .tfm                  38;5;7
 .tfnt                 38;5;7
 .tg                   38;5;7
-.vcard                38;5;7 # contact information
-.vcf                  38;5;7 # contact information
+.vcard                38;5;7              # contact information
+.vcf                  38;5;7              # contact information
 .xln                  38;5;7
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -702,6 +755,7 @@ TERM screen-w
 TERM screen.linux
 TERM screen.rxvt
 TERM terminator
+TERM tmux-256color
 TERM vt100
 TERM xterm
 TERM xterm-16color
@@ -710,3 +764,4 @@ TERM xterm-88color
 TERM xterm-color
 TERM xterm-debian
 TERM xterm-kitty
+TERM wezterm

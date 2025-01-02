@@ -14,8 +14,16 @@ S=${WORKDIR}
 
 src_install() {
 	insinto /etc/bash/bashrc.d
-	doins "${FILESDIR}"/alias.sh
 	doins "${FILESDIR}"/1g4.sh
+
+	insinto /etc/bash
+	doins "${FILESDIR}"/{bash_logout,bashrc}
+
+	insopts -m 0644
+	insinto /etc
+	doins "${FILESDIR}"/inputrc
+	insinto /usr/share/factory/etc
+	doins "${FILESDIR}"/inputrc
 
 	#bin files
 	for f in ix mktarballs efixperm prettybash ; do

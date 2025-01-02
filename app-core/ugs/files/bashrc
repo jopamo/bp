@@ -1,4 +1,126 @@
 #!/bin/bash
+#
+# This file is sourced by all *interactive* bash shells on startup,
+# including some apparently interactive shells such as scp and rcp
+# that can't tolerate any output. So make sure this doesn't display
+# anything or bad things will happen!
+
+
+# Test for an interactive shell. No output for non-interactive shells.
+if [[ $- != *i* ]] ; then
+	return
+fi
+
+# --- Shell Behavior Settings ---
+shopt -s checkwinsize            # Auto-adjust terminal size
+shopt -s no_empty_cmd_completion # Disable empty completion
+shopt -s histappend              # Append to history instead of overwriting
+shopt -s globstar                # Enable recursive globbing (**)
+
+# Save and reload each command to the history file as it's executed
+PROMPT_COMMAND='history -a; history -n'
+
+# --- Terminal Title Support ---
+case ${TERM} in
+	[aEkqx]term*|rxvt*|gnome*|kitty*|lxterm*|tmux|qterminal*)
+		PS1='\[\033]0;\u@\h:\w\007\]'
+		;;
+	screen*)
+		PS1='\[\033k\u@\h:\w\033\\\]'
+		;;
+	*)
+		unset PS1
+		;;
+esac
+
+# --- Enable LS_COLORS ---
+use_color=false
+
+if command -v dircolors > /dev/null; then
+	# Enable colors for ls, etc. Prefer ~/.ls_colors first.
+	if [[ -f ~/.ls_colors ]]; then
+		eval "$(dircolors -b ~/.ls_colors)"
+	elif [[ -f /etc/LS_COLORS ]]; then
+		eval "$(dircolors -b /etc/LS_COLORS)"
+	else
+		eval "$(dircolors -b)"
+	fi
+
+	# Check if LS_COLORS is valid.
+	if [[ -n ${LS_COLORS:+set} ]]; then
+		use_color=true
+	else
+		unset LS_COLORS
+	fi
+else
+	# Hardcode terminal support for colors if no dircolors.
+	case ${TERM} in
+		[aEkqx]term*|rxvt*|gnome*|kitty*|lxterm*|screen|tmux|cons25|*color) use_color=true ;;
+	esac
+fi
+
+# --- Prompt ---
+if ${use_color}; then
+	# Colorful prompt with title support
+	if [[ ${EUID} == 0 ]]; then
+		PS1+='\[\033[0;31m\]\u\[\033[1;37m\]@\[\033[0;91m\]\h \[\033[1;34m\]\w \[\033[0;37m\]# \[\033[0m\]'
+	else
+		PS1+='\[\033[0;32m\]\u\[\033[1;37m\]@\[\033[0;92m\]\h \[\033[1;34m\]\w \[\033[0;37m\]\$ \[\033[0m\]'
+	fi
+else
+	# Non-colored fallback prompt
+	PS1+='\u@\h \w \$ '
+fi
+
+# --- Load Additional Scripts ---
+# Load system-wide scripts
+if [[ -d /etc/bash/bashrc.d ]]; then
+	for sh in /etc/bash/bashrc.d/*.sh; do
+		[[ -r ${sh} ]] && source "${sh}"
+	done
+fi
+
+# Load user-specific scripts
+if [[ -d ~/.bashrc.d ]]; then
+	for sh in ~/.bashrc.d/*.sh; do
+		[[ -r ${sh} ]] && source "${sh}"
+	done
+fi
+
+# --- Environment Settings ---
+HISTSIZE=5000
+export GPG_TTY="$(tty)"
+export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
+
+# --- Cleanup ---
+unset use_color sh
+
+# Embedded Readline Configuration in .bashrc
+bind 'set bell-style none'
+bind 'set colored-stats on'
+bind 'set completion-ignore-case on'
+bind 'set completion-prefix-display-length 3'
+bind 'set convert-meta off'
+bind 'set horizontal-scroll-mode off'
+bind 'set input-meta on'
+bind 'set mark-symlinked-directories on'
+bind 'set meta-flag on'
+bind 'set output-meta on'
+bind 'set show-all-if-ambiguous on'
+bind 'set show-all-if-unmodified on'
+bind 'set visible-stats on'
+
+bind '"\e[1~": beginning-of-line'
+bind '"\e[2~": quoted-insert'
+bind '"\e[3~": delete-char'
+bind '"\e[4~": end-of-line'
+bind '"\e[5~": history-search-backward'
+bind '"\e[6~": history-search-forward'
+bind '"\eOc": forward-word'
+bind '"\eOd": backward-word'
+bind '"\eOF": end-of-line'
+bind '"\eOH": beginning-of-line'
+
 
 declare -A formatters=(
 	["*.c"]="clang-format -i"

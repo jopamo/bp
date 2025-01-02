@@ -53,7 +53,7 @@ src_install() {
 			doins $f
 	done
 
-	for f in host.conf hosts inputrc issue securetty \
+	for f in host.conf hosts issue securetty \
 		shells profile ; do
 			insopts -m 0644
 			insinto /etc

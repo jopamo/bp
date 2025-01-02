@@ -17,5 +17,5 @@ KEYWORDS="amd64 arm64"
 
 src_prepare() {
 	default
-	eautoreconf
+	./autogen.sh
 }

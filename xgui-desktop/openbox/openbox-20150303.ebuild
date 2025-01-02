@@ -48,8 +48,6 @@ PATCHES=(
 )
 
 src_prepare() {
-	2to3 -w ${S}/data/autostart/openbox-xdg-autostart || die
-	sed 's/python/python3/' -i ${S}/data/autostart/openbox-xdg-autostart || die
 	sed -i '/docbook-to-man/d' "${S}"/Makefile.am || die
 	sed -i \
 		-e "s:-O0 -ggdb ::" \

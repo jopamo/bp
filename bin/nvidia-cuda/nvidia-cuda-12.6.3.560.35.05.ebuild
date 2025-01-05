@@ -41,7 +41,6 @@ src_install() {
 
 	local d
 	for d in "${builddirs[@]}"; do
-		ebegin "Installing ${d}"
 		[[ -d ${d} ]] || die "Directory does not exist: ${d}"
 
 		if [[ -d ${d}/bin ]]; then
@@ -66,29 +65,22 @@ src_install() {
 		if [[ -d ${d}/extras ]]; then
 			doins -r "${d}"/extras
 		fi
-		eend
 	done
 
 	doins builds/EULA.txt
 	# nvml and nvvm need special handling
-	ebegin "Installing nvvm"
 	doins -r builds/cuda_nvcc/nvvm
 	exeinto ${cudadir}/nvvm/bin
 	doexe builds/cuda_nvcc/nvvm/bin/cicc
-	eend
 
-	ebegin "Installing nvml"
 	doins -r builds/cuda_nvml_dev/nvml
-	eend
 
 	if use sanitizer; then
-		ebegin "Installing sanitizer"
 		dobin builds/integration/Sanitizer/compute-sanitizer
 		doins -r builds/cuda_sanitizer_api/Sanitizer
 		# special handling for the executable
 		exeinto ${cudadir}/Sanitizer
 		doexe builds/cuda_sanitizer_api/Sanitizer/compute-sanitizer
-		eend
 	fi
 
 	# Add include and lib symlinks
@@ -105,6 +97,4 @@ src_install() {
 	newins - 80${PN} <<-EOF
 		SEARCH_DIRS_MASK="${ecudadir}"
 	EOF
-	# TODO: Find a better way to add +x permission to installed executables
-	# TODO: Add pkgconfig files for installed libraries
 }

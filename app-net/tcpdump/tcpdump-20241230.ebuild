@@ -20,6 +20,8 @@ IUSE="+caps +smi +ssl +samba suid test"
 REQUIRED_USE="test? ( samba )"
 RESTRICT="!test? ( test )"
 
+DEPEND="lib-net/libpcap"
+
 src_prepare() {
 	default
 	eautoreconf

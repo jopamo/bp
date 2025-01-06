@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=6082bd3953569ca0c8e64e688f8fa49dc0d50c0e
+SNAPSHOT=022f44b6d894ba631cb20623a1e39267a953dff9
 SHORT=${SNAPSHOT:0:7}
 
 inherit flag-o-matic autotools
@@ -22,6 +22,7 @@ DEPEND="lib-core/libgpg-error"
 
 src_prepare() {
 	filter-flags -fuse-ld=lld
+
 	default
 	eautoreconf
 }

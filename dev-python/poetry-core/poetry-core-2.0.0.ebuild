@@ -25,11 +25,11 @@ KEYWORDS="amd64 arm64"
 # check inside vendors/pyproject.toml
 # (note that some are indirect deps)
 RDEPEND="
-	>=dev-python/fastjsonschema-2.18.0[${PYTHON_USEDEP}]
-	>=dev-python/lark-1.1.3[${PYTHON_USEDEP}]
-	>=dev-python/packaging-22.0[${PYTHON_USEDEP}]
+	>=dev-python/fastjsonschema-2.21.1[${PYTHON_USEDEP}]
+	>=dev-python/lark-1.2.2[${PYTHON_USEDEP}]
+	>=dev-python/packaging-24.2[${PYTHON_USEDEP}]
 	$(python_gen_cond_dep '
-		>=dev-python/tomli-2.0.1[${PYTHON_USEDEP}]
+		>=dev-python/tomli-2.2.1[${PYTHON_USEDEP}]
 	' 3.10)
 "
 BDEPEND="
@@ -39,6 +39,7 @@ BDEPEND="
 			dev-python/build[${PYTHON_USEDEP}]
 			dev-python/pytest-mock[${PYTHON_USEDEP}]
 			dev-python/tomli-w[${PYTHON_USEDEP}]
+			>=dev-python/trove-classifiers-2022.5.19[${PYTHON_USEDEP}]
 			>=dev-python/virtualenv-20.21[${PYTHON_USEDEP}]
 		' "${PYTHON_TESTED[@]}")
 	)
@@ -55,17 +56,15 @@ src_prepare() {
 }
 
 python_test() {
-	local EPYTEST_DESELECT=(
-		# These "fail" bacause of glob file path resulting from newer versions
-		# in our tree than vendored. But those don't affect anything.
-		tests/masonry/builders/test_sdist.py::test_default_with_excluded_data
-		tests/masonry/builders/test_wheel.py::test_default_src_with_excluded_data
-	)
-
 	if ! has "${EPYTHON/./_}" "${PYTHON_TESTED[@]}"; then
 		einfo "Skipping tests on ${EPYTHON} (unported deps)"
 		return
 	fi
+
+	# Poetry expects test to be run inside a git repository, otherwise
+	# VCS-related logic doesn't get triggered.  An empty repository
+	# suffices, though.
+	git init || die
 
 	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	epytest -p pytest_mock

@@ -109,6 +109,7 @@ PACKAGES=(
 	"more-itertools"
 	"msgpack"
 	"multidict"
+	"mypy-extensions"
 	"nbformat"
 	"numpy"
 	"olefile"

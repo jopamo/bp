@@ -28,7 +28,7 @@ DEPEND="
 		libpsl? ( lib-net/libpsl )
 		mbedtls? ( lib-net/mbedtls )
 		nghttp2? ( lib-net/nghttp2[static-libs?] )
-		ssh? ( lib-net/libssh2[static-libs?] )
+		ssh? ( lib-net/libssh[static-libs?] )
 		test? (
 			app-core/diffutils
 			app-lang/perl )
@@ -59,7 +59,7 @@ src_configure() {
 		$(use_with libpsl)
 		$(use_with mbedtls)
 		$(use_with nghttp2)
-		$(use_with ssh libssh2)
+		$(use_with ssh libssh)
 		$(use_with ssl)
 		$(use_with zlib)
 		$(use_with zstd)

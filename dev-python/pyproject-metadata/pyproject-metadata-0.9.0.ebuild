@@ -20,6 +20,12 @@ KEYWORDS="amd64 arm64"
 RDEPEND="
 	>=dev-python/packaging-19[${PYTHON_USEDEP}]
 "
-
+BDEPEND="
+	test? (
+		$(python_gen_cond_dep '
+			>=dev-python/tomli-1.0.0[${PYTHON_USEDEP}]
+		' 3.10)
+	)
+"
 
 distutils_enable_tests pytest

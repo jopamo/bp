@@ -1,4 +1,31 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+IFS=$'\n\t'
+
+: "${BOT_USER:?Environment variable BOT_USER is required but not set.}"
+: "${BOT_EMAIL:?Environment variable BOT_EMAIL is required but not set.}"
+: "${BOT_KEYID:?Environment variable BOT_KEYID is required but not set.}"
+
+REQUIRED_COMMANDS=(
+	"git"
+	"sed"
+	"find"
+	"perl"
+	"cp"
+	"rm"
+	"mkdir"
+	"pkgdev"
+	"ebuild"
+	"sort"
+	"head"
+)
+for cmd in "${REQUIRED_COMMANDS[@]}"; do
+	command -v "${cmd}" >/dev/null 2>&1 || {
+		echo "Error: Required command '${cmd}' not found in PATH."
+		exit 1
+	}
+done
 
 PACKAGES=(
 	"aiodns"
@@ -51,6 +78,7 @@ PACKAGES=(
 	"execnet"
 	"expandvars"
 	"fastjsonschema"
+	"fido2"
 	"fields"
 	"filelock"
 	"flaky"
@@ -84,6 +112,7 @@ PACKAGES=(
 	"ipywidgets"
 	"isoduration"
 	"itsdangerous"
+	"jaraco-classes"
 	"jaraco-collections"
 	"jaraco-context"
 	"jaraco-env"
@@ -91,17 +120,20 @@ PACKAGES=(
 	"jaraco-functools"
 	"jaraco-path"
 	"jaraco-text"
-	"josepy"
+	"jeepney"
 	"jinja2"
+	"josepy"
+	"js2py"
 	"jsonpointer"
 	"jsonschema"
 	"jsonschema-path"
 	"jsonschema-spec"
 	"jsonschema-specifications"
-	"js2py"
+	"keyring"
 	"lark"
 	"lazy-object-proxy"
 	"lxml"
+	"makefun"
 	"mako"
 	"markdown"
 	"markupsafe"
@@ -140,9 +172,9 @@ PACKAGES=(
 	"pyfakefs"
 	"pygments"
 	"pyopenssl"
+	"pypiserver"
 	"pyproject-hooks"
 	"pyproject-metadata"
-	"pypiserver"
 	"pyrfc3339"
 	"pysocks"
 	"pytest"
@@ -166,10 +198,10 @@ PACKAGES=(
 	"rich"
 	"rpds-py"
 	"scripttest"
+	"secretstorage"
 	"selenium"
 	"semantic-version"
 	"six"
-	"snakeoil"
 	"sniffio"
 	"sortedcontainers"
 	"soupsieve"
@@ -206,6 +238,7 @@ PACKAGES=(
 declare -A replacements=(
 	["app-arch/brotli"]="app-compression/brotli"
 	["app-misc/ca-certificates"]="lib-net/ca-certificates"
+	["dev-lang/swig"]="app-lang/swig"
 	["dev-libs/libffi"]="lib-core/libffi"
 	["dev-libs/libxml2"]="lib-core/libxml2"
 	["dev-libs/libxslt"]="lib-core/libxslt"
@@ -214,6 +247,7 @@ declare -A replacements=(
 	["dev-libs/tree-sitter"]="lib-dev/tree-sitter"
 	["dev-python/cryptography"]="app-crypto/cryptography"
 	["dev-python/pillow"]="xgui-app/pillow"
+	["dev-python/pyscard"]="dev-py/pyscard"
 	["dev-python/jinja"]="dev-py/jinja"
 	["dev-python/setuptools"]="dev-py/setuptools"
 	["dev-python/setuptools-rust"]="dev-py/setuptools-rust"
@@ -221,11 +255,13 @@ declare -A replacements=(
 	["dev-python/snakeoil"]="dev-py/snakeoil"
 	["dev-python/tree-sitter"]="dev-py/tree-sitter"
 	["net-dns/c-ares"]="lib-net/c-ares"
+	["sys-apps/pcsc-lite"]="app-crypto/pcsc-lite"
 	["sys-libs/timezone-data"]="lib-core/tzdb"
 )
 
 BDEPEND_CLEAN_PACKAGES=(
-	"pyproject-metadata"
+	"pyproject-metadata",
+	"secretstorage"
 )
 
 INHERIT_FLAGOMATIC_PACKAGES=(
@@ -242,132 +278,300 @@ finalize_update() {
 	local new_ebuild_filename="$3"
 	local version="$4"
 
-	if ! (cd "$package_path" && pkgdev manifest); then
+	echo "Finalizing update for ${package_name}..."
+
+	if ! (cd "${package_path}" && pkgdev manifest); then
 		echo "Error generating manifest for ${package_name}. Skipping..."
 		return 1
 	fi
 
-	(cd "$package_path" && \
-			git add --all . > /dev/null 2>&1 && \
-			git -c user.name="${BOT_USER}" \
+	(
+		cd "${package_path}" || {
+			echo "Error: Cannot cd into '${package_path}'."
+			return 1
+		}
+
+		git add --all . > /dev/null 2>&1
+
+		git -c user.name="${BOT_USER}" \
 			-c user.email="${BOT_EMAIL}" \
 			-c commit.gpgsign=true \
 			-c user.signingkey="${BOT_KEYID}" \
-			commit -m "Update ${package_name} to ${version}" > /dev/null 2>&1 && \
-		git push origin HEAD > /dev/null 2>&1)
+			commit -m "Update ${package_name} to ${version}" > /dev/null 2>&1 || {
+			echo "Error committing changes for ${package_name}."
+			return 1
+		}
+
+		git push origin HEAD > /dev/null 2>&1 || {
+			echo "Error pushing changes for ${package_name}."
+			return 1
+		}
+	)
 
 	echo "Ebuild updated for ${package_name}: ${new_ebuild_filename}"
 }
 
-echo "Starting script execution..."
-echo "Removing the existing ${PACKAGE_DIR} directory to start fresh..."
-rm -rf "${PACKAGE_DIR}"
+generate_manifest() {
+	local package="$1"
+	local package_path="${PACKAGE_DIR}/${package}"
 
-echo "Creating directory at ${PACKAGE_DIR}..."
-mkdir -p "${PACKAGE_DIR}"
-echo "Directory created or already exists."
+	if [ -d "${package_path}" ]; then
+		local ebuild_file
+		ebuild_file="$(find "${package_path}" -type f -name "*.ebuild" | head -n1 || true)"
 
-if [ -d "${GENTOO_PATH}" ]; then
-	echo "Updating the Gentoo package repository in ${GENTOO_PATH}..."
-	cd "${GENTOO_PATH}" && git pull
-else
-	echo "Cloning the Gentoo package repository to ${GENTOO_PATH}..."
-	git clone "${REPO}" "${GENTOO_PATH}" --depth 1
+		if [[ -n "${ebuild_file}" ]]; then
+			echo "Generating manifest for ${package}..."
+			ebuild --force "${ebuild_file}" manifest || {
+				echo "Failed to generate manifest for ${package}."
+				return 1
+			}
+		else
+			echo "No ebuild file found for ${package} to generate manifest."
+		fi
+	else
+		echo "Directory not found for package: ${package}"
+	fi
+}
+
+commit_changes() {
+	local package="$1"
+	local package_path="${PACKAGE_DIR}/${package}"
+
+	if [ ! -d "${package_path}" ]; then
+		echo "Package directory does not exist for: ${package}"
+		return 1
+	fi
+
+	echo "Committing changes for package: ${package}"
+
+	local ebuild_file
+	ebuild_file="$(find "${package_path}" -type f -name "${package}*.ebuild" | head -n 1 || true)"
+
+	if [[ -z "${ebuild_file}" ]]; then
+		echo "Ebuild file not found for ${package}"
+		return 1
+	fi
+
+	local filename
+	filename="$(basename "${ebuild_file}")"
+
+	# Attempt to extract version from the ebuild file name
+	# Examples of ebuild filenames:
+	#   package-1.2.3.ebuild
+	#   package-1.2.3-r1.ebuild
+	#   package-1.2.3_p4.ebuild
+	local version
+	version="$(echo "${filename}" | sed -E "s/^${package}-([0-9]+(\.[0-9]+)*(_[a-z0-9]+)?(-r[0-9]+)?).ebuild$/\1/")"
+
+	if [[ -z "${version}" || "${version}" == "${filename}" ]]; then
+		echo "Version extraction failed for ${package}"
+		return 1
+	fi
+
+	echo "Version found: ${version}"
+	finalize_update "${package_path}" "${package}" "${filename}" "${version}"
+}
+
+echo "=== Script execution started ==="
+
+if [ -d "${PACKAGE_DIR}" ]; then
+	echo "Removing the existing ${PACKAGE_DIR} directory to start fresh..."
+	rm -rf "${PACKAGE_DIR}" || {
+		echo "Failed to remove ${PACKAGE_DIR}. Please check permissions."
+		exit 1
+	}
 fi
 
+# --- Create the target package directory ---
+echo "Creating directory at ${PACKAGE_DIR}..."
+mkdir -p "${PACKAGE_DIR}" || {
+	echo "Failed to create directory ${PACKAGE_DIR}. Please check permissions."
+	exit 1
+}
+echo "Directory created or already exists."
+
+# --- Update or clone Gentoo repo ---
+if [ -d "${GENTOO_PATH}" ]; then
+	echo "Updating the Gentoo package repository in ${GENTOO_PATH}..."
+	(
+		cd "${GENTOO_PATH}" || {
+			echo "Cannot cd into ${GENTOO_PATH}."
+			exit 1
+		}
+		git pull --ff-only || {
+			echo "Failed to pull updates in ${GENTOO_PATH}."
+			exit 1
+		}
+	)
+else
+	echo "Cloning the Gentoo package repository to ${GENTOO_PATH}..."
+	git clone --depth 1 "${REPO}" "${GENTOO_PATH}" || {
+		echo "Failed to clone repo from ${REPO}."
+		exit 1
+	}
+fi
 echo "Repository setup complete."
 
+# --- Copy packages ---
 echo "Starting package copy process..."
-
 for package in "${PACKAGES[@]}"; do
+	echo "Processing ${package}..."
 	src_path="${GENTOO_PATH}/dev-python/${package}"
 	dest_path="${PACKAGE_DIR}/${package}"
 
-	echo "Processing ${package}..."
 	if [ -d "${src_path}" ]; then
 		echo "Copying ${package} from ${src_path} to ${dest_path}..."
-		cp -R "${src_path}" "${dest_path}"
+		cp -R "${src_path}" "${dest_path}" || {
+			echo "Failed to copy ${src_path} to ${dest_path}."
+			continue
+		}
 		echo "Copy complete for ${package}."
 	else
 		echo "Package dev-python/${package} not found in the repository."
 	fi
 done
-
 echo "Package copy process completed."
-#######################################################################################################
 
-#######################################################################################################
-echo "Starting cleanup process..."
+# --- Remove old ebuilds, keep latest only ---
+echo "Starting to process each package to keep only the latest ebuild..."
+for package in "${PACKAGES[@]}"; do
+	local_package_dir="${PACKAGE_DIR}/${package}"
+	if [ -d "${local_package_dir}" ]; then
+		echo "Processing ${package} in ${local_package_dir}..."
 
-[ -d "${PACKAGE_DIR}/gpep517" ] && echo "Updating EAPI for gpep517..." && find "${PACKAGE_DIR}/gpep517" -type f -name "*.ebuild" -exec sed -i'' 's/EAPI=7/EAPI=8/' {} + && echo "EAPI updated for gpep517."
+		ls -1 "${local_package_dir}"/*.ebuild 2>/dev/null | sort -V | head -n -1 | \
+			while read -r old_ebuild; do
+			echo "Deleting old ebuild: ${old_ebuild}"
+			rm -f "${old_ebuild}"
+		done
 
+		echo "Cleanup of old ebuilds complete for ${package}."
+	fi
+done
+
+# --- Cleanup / modifications ---
+echo "=== Starting cleanup process ==="
+
+# Example EAPI bump for gpep517
+if [ -d "${PACKAGE_DIR}/gpep517" ]; then
+	echo "Updating EAPI for gpep517..."
+	find "${PACKAGE_DIR}/gpep517" -type f -name "*.ebuild" -exec sed -i'' 's/EAPI=7/EAPI=8/' {} +
+	echo "EAPI updated for gpep517."
+fi
+
+# Remove live ebuilds
 echo "Removing files ending with 9999.ebuild in ${PACKAGE_DIR}..."
 find "${PACKAGE_DIR}" -type f -name '*9999.ebuild' -exec echo "Deleting {}" \; -delete
 
+# Remove "Gentoo Authors" lines
 echo "Removing lines containing 'Gentoo Authors' from files in ${PACKAGE_DIR}..."
 find "${PACKAGE_DIR}" -type f -exec sed -i'' '/Gentoo Authors/d' {} \;
 
+# Remove metadata.xml files
 echo "Removing metadata.xml files from ${PACKAGE_DIR}..."
 find "${PACKAGE_DIR}" -type f -name 'metadata.xml' -exec echo "Deleting {}" \; -delete
 
+# Remove newbashcomp lines
 find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec sed -i'' '/newbashcomp/d' {} +
 
+# Remove extraneous blank lines (quick deduplicate)
 find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec sed -i'' 'N;/^\n$/!P;D' {} +
 
+# Remove dev-vcs/mercurial, dev-vcs/git lines
 find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec sed -i'' \
 	-e '/dev-vcs\/mercurial/d' \
 	-e '/dev-vcs\/git/d' {} +
 
-find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe '
-    s/!sparc\?\s*\(([^()]|\n)*\)//g;
-' {} +
+# Remove !sparc? (...) blocks
+find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe 's/!sparc\?\s*\(([^()]|\n)*\)//g;' {} +
 
-find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe '
-    s/!hppa\?\s*\(([^()]|\n)*\)//g;
-' {} +
-
+# Remove !hppa? (...) blocks
+find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe 's/!hppa\?\s*\(([^()]|\n)*\)//g;' {} +
 find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec sed -i'' '/!hppa? (/,+4d' {} +
 
-find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe '
-    s/!s390\?\s*\(([^()]|\n)*\)//g;
-' {} +
+# Remove !s390? (...) blocks
+find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe 's/!s390\?\s*\(([^()]|\n)*\)//g;' {} +
 
-find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe '
-    s/test\?\s*\(\s*\)//g;
-' {} +
+# Remove test? ( ) blocks
+find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe 's/test\?\s*\(\s*\)//g;' {} +
 
-find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe '
-    s/test-rust\?\s*\(\s*\)//g;
-' {} +
+# Remove test-rust? ( ) blocks
+find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe 's/test-rust\?\s*\(\s*\)//g;' {} +
 
+# Remove ebuilds with _rc, _pre versions
 find "${PACKAGE_DIR}" -type f -name '*_rc[1-9].ebuild' -exec echo "Deleting _rc ebuild: {}" \; -delete
 find "${PACKAGE_DIR}" -type f -name '*_pre*.ebuild' -exec echo "Deleting _pre ebuild: {}" \; -delete
-#######################################################################################################
 
-#######################################################################################################
+# Remove BDEPEND blocks from selected packages
 echo "Removing BDEPEND blocks from selected packages..."
 for package in "${BDEPEND_CLEAN_PACKAGES[@]}"; do
-	find "${PACKAGE_DIR}/${package}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe 's/BDEPEND=".*?"//gs' {} +
-done
-#######################################################################################################
-
-#######################################################################################################
-echo "Adding flag-o-matic to inherit lines for selected packages..."
-for package in "${INHERIT_FLAGOMATIC_PACKAGES[@]}"; do
-	find "${PACKAGE_DIR}/${package}" -type f -name "*.ebuild" -exec sed -i'' '/^inherit / {/flag-o-matic/! s/$/ flag-o-matic/}' {} +
+	if [ -d "${PACKAGE_DIR}/${package}" ]; then
+		find "${PACKAGE_DIR}/${package}" -type f -name "*.ebuild" \
+			-exec perl -i'' -0777 -pe 's/BDEPEND=".*?"//gs' {} +
+	fi
 done
 
+# --- Remove certain strings from inherits ---
+remove_strings=('bash-completion-r1' 'optfeature' 'virtualx' 'fortran-2' 'check-reqs')
+for package in "${PACKAGES[@]}"; do
+	local_package_dir="${PACKAGE_DIR}/${package}"
+	if [ -d "${local_package_dir}" ]; then
+		echo "Processing ${package} in ${local_package_dir} for string removals..."
+		find "${local_package_dir}" -type f -name "*.ebuild" -print0 | \
+			while IFS= read -r -d '' ebuild_file; do
+			echo "Updating ${ebuild_file}..."
+			for remove_string in "${remove_strings[@]}"; do
+				sed -i'' \
+					-e "s/[[:space:]]*${remove_string}[[:space:]]*/ /g" \
+					-e '/^inherit[[:space:]]*$/d' \
+					"${ebuild_file}"
+			done
+		done
+		echo "String removals completed for ${package}."
+	fi
+done
+
+add_flagomatic_to_inherit() {
+	echo "Ensuring flag-o-matic is inherited..."
+
+	for package in "${INHERIT_FLAGOMATIC_PACKAGES[@]}"; do
+		if [ -d "${PACKAGE_DIR}/${package}" ]; then
+			find "${PACKAGE_DIR}/${package}" -type f -name "*.ebuild" | while read -r ebuild; do
+
+				if grep -q '^inherit ' "${ebuild}"; then
+					sed -i '/^inherit /{/flag-o-matic/! s/$/ flag-o-matic/}' "${ebuild}"
+				else
+					sed -i '10iinherit flag-o-matic' "${ebuild}"
+				fi
+
+			done
+		fi
+	done
+}
+
+add_flagomatic_to_inherit
+
+
+# Insert 'filter-flags -Wl,-z,defs' into functions for certain packages
 echo "Starting to process to add -Wl,-z,defs to required packages..."
-for package in aiohttp brotlicffi cffi cython frozenlist lxml markupsafe multidict pillow \
-	propcache psutil pycares regex tree-sitter yarl zstandard; do
+PACKAGES_ZDEFS=(
+	"aiohttp" "brotlicffi" "cffi" "cython" "frozenlist" "lxml"
+	"markupsafe" "multidict" "pillow" "propcache" "psutil"
+	"pycares" "regex" "tree-sitter" "yarl" "zstandard"
+)
+
+for package in "${PACKAGES_ZDEFS[@]}"; do
 	if [ -d "${PACKAGE_DIR}/${package}" ]; then
 		echo "Updating for ${package}..."
-		find "${PACKAGE_DIR}/${package}" -type f -name "*.ebuild" -print0 | while IFS= read -r -d '' ebuild_file; do
+		find "${PACKAGE_DIR}/${package}" -type f -name "*.ebuild" -print0 | \
+			while IFS= read -r -d '' ebuild_file; do
 			echo "Processing $ebuild_file"
-			for func in python_compile src_prepare src_unpack python_configure_all python_install_all; do
+			for func in python_compile src_prepare src_unpack python_configure_all python_install_all pkg_postinst; do
 				if grep -q "^${func}()" "$ebuild_file"; then
-					echo "Adding line to $func in $ebuild_file"
-					sed -i "/^${func}()/ { N; s|\\n|\\n\\tfilter-flags -Wl,-z,defs\\n| }" "$ebuild_file"
+					echo "Adding 'filter-flags -Wl,-z,defs' in function ${func}() of $ebuild_file"
+					sed -i "/^${func}()/ {
+            N; s|\n|\n\tfilter-flags -Wl,-z,defs\n|
+					}" "$ebuild_file"
 				fi
 			done
 			echo "Updated $ebuild_file."
@@ -376,115 +580,47 @@ for package in aiohttp brotlicffi cffi cython frozenlist lxml markupsafe multidi
 		echo "Directory for ${package} not found."
 	fi
 done
-#######################################################################################################
-
-#######################################################################################################
-echo "Starting to process each package to keep only the latest ebuild..."
-
-for package in "${PACKAGES[@]}"; do
-	package_dir="${PACKAGE_DIR}/${package}"
-	if [ -d "${package_dir}" ]; then
-		echo "Processing ${package} in ${package_dir}..."
-
-		find "${package_dir}" -type f -name "*.ebuild" | sort -V | head -n -1 | while read ebuild; do
-			echo "Deleting old ebuild: ${ebuild}"
-			rm "${ebuild}"
-		done
-
-		echo "Cleanup of old ebuilds complete for ${package}."
-	else
-		echo "Directory ${package_dir} not found."
-	fi
-done
 
 echo "All packages processed, and old ebuilds removed."
 
 echo "Starting to update KEYWORDS in ebuild files..."
 for package in "${PACKAGES[@]}"; do
-	package_dir="${PACKAGE_DIR}/${package}"
-	if [ -d "${package_dir}" ]; then
-		echo "Processing ${package} in ${package_dir}..."
-		echo "Updating KEYWORDS for ${package} in ${package_dir}..."
-		find "${package_dir}" -type f -name "*.ebuild" -exec sed -i'' '/^KEYWORDS=/ s/^KEYWORDS=".*"/KEYWORDS="amd64 arm64"/g' {} +
+	local_package_dir="${PACKAGE_DIR}/${package}"
+	if [ -d "${local_package_dir}" ]; then
+		echo "Updating KEYWORDS for ${package} in ${local_package_dir}..."
+		find "${local_package_dir}" -type f -name "*.ebuild" \
+			-exec sed -i'' '/^KEYWORDS=/ s/^KEYWORDS=".*"/KEYWORDS="amd64 arm64"/g' {} +
 		echo "KEYWORDS updated for ${package}."
 	fi
 done
 
+echo "Performing text replacements..."
 for package in "${PACKAGES[@]}"; do
-	package_dir="${PACKAGE_DIR}/${package}"
-	if [ -d "${package_dir}" ]; then
+	local_package_dir="${PACKAGE_DIR}/${package}"
+	if [ -d "${local_package_dir}" ]; then
 		for old_text in "${!replacements[@]}"; do
 			new_text="${replacements[$old_text]}"
-			echo "Replacing '${old_text}' with '${new_text}' in ${package_dir}..."
-			find "${package_dir}" -type f -name "*.ebuild" -exec sed -i'' "s|${old_text}|${new_text}|g" {} +
+			echo "Replacing '${old_text}' with '${new_text}' in ${local_package_dir}..."
+			find "${local_package_dir}" -type f -name "*.ebuild" -exec sed -i'' "s|${old_text}|${new_text}|g" {} +
 		done
 		echo "Text replacements completed for ${package}."
 	fi
 done
 
-remove_strings=('bash-completion-r1' 'optfeature' 'virtualx' 'fortran-2' 'check-reqs')
-
+echo "=== Generating manifests and committing changes ==="
 for package in "${PACKAGES[@]}"; do
-	package_dir="${PACKAGE_DIR}/${package}"
-	if [ -d "${package_dir}" ]; then
-		echo "Processing ${package} in ${package_dir} for string removals..."
-		find "${package_dir}" -type f -name "*.ebuild" -print0 | while IFS= read -r -d '' ebuild_file; do
-			echo "Updating ${ebuild_file}..."
-			for remove_string in "${remove_strings[@]}"; do
-				sed -i'' -e "s/[[:space:]]*${remove_string}[[:space:]]*/ /g" \
-					-e '/^inherit[[:space:]]*$/d' "${ebuild_file}"
-			done
-		done
-		echo "String removals completed for ${package}."
-	fi
+	echo "Processing package: ${package}"
+	generate_manifest "${package}" || {
+		echo "Failed to generate manifest for ${package}. Continuing..."
+		continue
+	}
+	commit_changes "${package}" || {
+		echo "Failed to commit changes for ${package}. Continuing..."
+		continue
+	}
 done
 
-generate_manifest() {
-	local package=$1
-	local package_path="${PACKAGE_DIR}/${package}"
+echo "Removing local Gentoo repository copy at ${GENTOO_PATH}..."
+rm -rf "${GENTOO_PATH}" || echo "Warning: Could not remove ${GENTOO_PATH}. Please check permissions."
 
-	if [ -d "${package_path}" ]; then
-		ebuild --force "${package_path}"/*.ebuild manifest
-	fi
-}
-
-commit_changes() {
-	local package=$1
-	local package_path="${PACKAGE_DIR}/${package}"
-
-	echo "Committing changes for package: ${package}"
-
-	local ebuild_file=$(find "${package_path}" -type f -name "${package}*.ebuild" | head -n 1)
-	if [[ -z "$ebuild_file" ]]; then
-		echo "Ebuild file not found for ${package}"
-		return 1
-	fi
-
-	local filename=$(basename "$ebuild_file")
-	local version=$(echo $filename | sed -r "s/^${package}-([0-9]+(\.[0-9]+)*(_p[0-9]+)?(-r[0-9]+)?)\.ebuild$/\1/")
-
-	if [[ -z "$version" || "$version" == "$filename" ]]; then
-		echo "Version extraction failed for ${package}"
-		return 1
-	fi
-
-	echo "Version found: ${version}"
-
-	finalize_update "${package_path}" "${package}" "${filename}" "${version}"
-}
-
-main() {
-	echo "Starting script execution..."
-
-	for package in "${PACKAGES[@]}"; do
-		echo "Processing package: ${package}"
-		generate_manifest "${package}" || { echo "Failed to generate manifest for ${package}"; return 1; }
-		commit_changes "${package}" || { echo "Failed to commit changes for ${package}"; continue; }
-	done
-
-
-	rm -rf "${GENTOO_PATH}"
-	echo "Script execution finished."
-}
-
-main "$@"
+echo "=== Script execution finished ==="

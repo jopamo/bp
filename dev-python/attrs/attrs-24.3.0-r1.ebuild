@@ -19,6 +19,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 BDEPEND="
+	>=dev-python/hatchling-1.26.0[${PYTHON_USEDEP}]
 	>=dev-python/hatch-fancy-pypi-readme-23.2.0[${PYTHON_USEDEP}]
 	dev-python/hatch-vcs[${PYTHON_USEDEP}]
 	test? (

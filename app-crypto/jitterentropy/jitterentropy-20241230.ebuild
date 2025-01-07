@@ -7,7 +7,7 @@ inherit flag-o-matic
 DESCRIPTION="Hardware RNG based on CPU timing jitter"
 HOMEPAGE="https://github.com/smuellerDD/jitterentropy-library"
 
-SNAPSHOT=83efded895db6ee0ab86f9a9d3389d1841fc6633
+SNAPSHOT=c62c88645f27716f78e1267a182cff40e96081c2
 SRC_URI="https://github.com/smuellerDD/jitterentropy-library/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-library-${SNAPSHOT}
 

@@ -26,17 +26,7 @@ option=""
 debug_mode=false
 
 exclude_package_list=(
-	"*lxqt*"
-	"efibootmgr"
-	"flex"
-	"libldac"
 	"musl"
-	"obconf-qt"
-	"openjade"
-	"qterm*"
-	"swig"
-	#"wpa_supplicant"
-	#"x265"
 )
 
 maint_excluded_list=(

@@ -2,15 +2,14 @@
 
 EAPI=8
 
-SNAPSHOT=143d94f684b738d1aa89024b182ad4cfa1b9018b
-
 inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Tool for running RAID systems - replacement for the raidtools"
 HOMEPAGE="http://neil.brown.name/blog/mdadm"
 
-SRC_URI="https://kernel.googlesource.com/pub/scm/utils/mdadm/mdadm/+archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}"
+SNAPSHOT=143d94f684b738d1aa89024b182ad4cfa1b9018b
+SRC_URI="https://github.com/md-raid-utilities/mdadm/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/mdadm-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"

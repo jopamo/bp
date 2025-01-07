@@ -23,13 +23,13 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	app-crypto/pcsc-lite
+	sys-apps/pcsc-lite
 "
 RDEPEND="
 	${DEPEND}
 "
 BDEPEND="
-	app-lang/swig
+	dev-lang/swig
 "
 
 distutils_enable_tests pytest

@@ -23,7 +23,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	sys-apps/pcsc-lite
+	app-crypto/pcsc-lite
 "
 RDEPEND="
 	${DEPEND}

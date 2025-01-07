@@ -7,7 +7,7 @@ inherit toolchain-funcs
 DESCRIPTION="Intel ACPI Source Language (ASL) compiler"
 HOMEPAGE="https://www.acpica.org/downloads/"
 
-SNAPSHOT=7dae72155bf06b0edda9f3aea713da1d48c1c418
+SNAPSHOT=fd6e4b3dd6405b845edc3f4a188a22ed66154648
 SRC_URI="https://github.com/acpica/acpica/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/acpica-${SNAPSHOT}"
 

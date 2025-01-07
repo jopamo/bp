@@ -151,3 +151,29 @@ systemd_update_catalog() {
 		debug-print "${FUNCNAME}: journalctl not found."
 	fi
 }
+
+udev_reload() {
+	if [[ -n ${ROOT} ]]; then
+		return 0
+	fi
+
+	if [[ -d ${ROOT}/run/udev ]]; then
+		ebegin "Running udev control --reload for reloading rules and databases"
+		udevadm control --reload
+		eend $?
+	fi
+}
+
+get_udevdir() {
+	echo /usr/lib/udev
+}
+
+udev_newrules() {
+	debug-print-function ${FUNCNAME} "$@"
+
+	(
+		insopts -m 0644
+		insinto "$(get_udevdir)"/rules.d
+		newins "${@}"
+	)
+}

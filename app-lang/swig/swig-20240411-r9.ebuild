@@ -20,7 +20,7 @@ IUSE="ccache pcre"
 RESTRICT="test"
 
 DEPEND="
-	pcre? ( lib-core/libpcre )
+	pcre? ( lib-core/libpcre2 )
 	ccache? ( lib-core/zlib )
 "
 

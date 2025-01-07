@@ -23,7 +23,7 @@ IUSE="examples"
 
 RDEPEND="
 	<app-crypto/cryptography-45[${PYTHON_USEDEP}]
-	<dev-python/pyscard-3[${PYTHON_USEDEP}]
+	<dev-py/pyscard-3[${PYTHON_USEDEP}]
 	examples? (
 		dev-python/flask[${PYTHON_USEDEP}]
 		dev-python/pyopenssl[${PYTHON_USEDEP}]

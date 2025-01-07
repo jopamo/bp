@@ -39,7 +39,7 @@ DEPEND="
 		xgui-lib/qtbase:5
 		xgui-lib/qtmultimedia:5
 	)
-	libssh? ( lib-misc/libssh2 )
+	libssh? ( lib-misc/libssh )
 	libxml2? ( lib-core/libxml2 )
 	lz4? ( app-compression/lz4 )
 	netlink? ( lib-net/libnl )

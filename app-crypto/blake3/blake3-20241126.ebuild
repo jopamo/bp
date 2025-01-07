@@ -51,6 +51,9 @@ src_configure() {
 }
 
 src_install() {
+	insinto /usr/include
+	doins blake3.h
+
     meson_src_install
 
     dobin dedup_symlink

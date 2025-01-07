@@ -35,6 +35,7 @@ BDEPEND="
 distutils_enable_tests pytest
 
 pkg_postinst() {
+	filter-flags -Wl,-z,defs
  "Gui support" dev-python/wxpython
  "Support of remote readers with Pyro" dev-python/Pyro4
 }

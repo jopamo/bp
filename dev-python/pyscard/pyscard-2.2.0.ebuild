@@ -29,7 +29,7 @@ RDEPEND="
 	${DEPEND}
 "
 BDEPEND="
-	dev-lang/swig
+	app-lang/swig
 "
 
 distutils_enable_tests pytest

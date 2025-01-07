@@ -7,7 +7,7 @@ inherit flag-o-matic toolchain-funcs
 DESCRIPTION="A free library for encoding X264/AVC streams"
 HOMEPAGE="https://www.videolan.org/developers/x264.html"
 
-SNAPSHOT=52f7694ddd35209cb95225e7acce91d8a30cb57d
+SNAPSHOT=373697b467f7cd0af88f1e9e32d4f10540df4687
 SRC_URI="https://code.videolan.org/videolan/x264/-/archive/${SNAPSHOT}/x264-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/x264-${SNAPSHOT}"
 

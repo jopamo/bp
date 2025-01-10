@@ -8,17 +8,17 @@ IFS=$'\n\t'
 : "${BOT_KEYID:?Environment variable BOT_KEYID is required but not set.}"
 
 REQUIRED_COMMANDS=(
-	"git"
-	"sed"
-	"find"
-	"perl"
 	"cp"
-	"rm"
-	"mkdir"
-	"pkgdev"
 	"ebuild"
-	"sort"
+	"find"
+	"git"
 	"head"
+	"mkdir"
+	"perl"
+	"pkgdev"
+	"rm"
+	"sed"
+	"sort"
 )
 for cmd in "${REQUIRED_COMMANDS[@]}"; do
 	command -v "${cmd}" >/dev/null 2>&1 || {
@@ -246,9 +246,9 @@ declare -A replacements=(
 	["dev-libs/openssl"]="lib-net/openssl"
 	["dev-libs/tree-sitter"]="lib-dev/tree-sitter"
 	["dev-python/cryptography"]="app-crypto/cryptography"
+	["dev-python/jinja"]="dev-py/jinja"
 	["dev-python/pillow"]="xgui-app/pillow"
 	["dev-python/pyscard"]="dev-py/pyscard"
-	["dev-python/jinja"]="dev-py/jinja"
 	["dev-python/setuptools"]="dev-py/setuptools"
 	["dev-python/setuptools-rust"]="dev-py/setuptools-rust"
 	["dev-python/setuptools-scm"]="dev-py/setuptools-scm"
@@ -532,21 +532,21 @@ for package in "${PACKAGES[@]}"; do
 done
 
 add_flagomatic_to_inherit() {
-	echo "Ensuring flag-o-matic is inherited..."
+  echo "Ensuring flag-o-matic is inherited..."
 
-	for package in "${INHERIT_FLAGOMATIC_PACKAGES[@]}"; do
-		if [ -d "${PACKAGE_DIR}/${package}" ]; then
-			find "${PACKAGE_DIR}/${package}" -type f -name "*.ebuild" | while read -r ebuild; do
+  for package in "${INHERIT_FLAGOMATIC_PACKAGES[@]}"; do
+    if [ -d "${PACKAGE_DIR}/${package}" ]; then
+      find "${PACKAGE_DIR}/${package}" -type f -name "*.ebuild" | while read -r ebuild; do
 
-				if grep -q '^inherit ' "${ebuild}"; then
-					sed -i '/^inherit /{/flag-o-matic/! s/$/ flag-o-matic/}' "${ebuild}"
-				else
-					sed -i '10iinherit flag-o-matic' "${ebuild}"
-				fi
+        if grep -q '^inherit ' "${ebuild}"; then
+          sed -i '/^inherit /{/flag-o-matic/! s/$/ flag-o-matic/}' "${ebuild}"
+        else
+          sed -i '10iinherit flag-o-matic' "${ebuild}"
+        fi
 
-			done
-		fi
-	done
+      done
+    fi
+  done
 }
 
 add_flagomatic_to_inherit

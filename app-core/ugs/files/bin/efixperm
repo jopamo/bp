@@ -1,33 +1,48 @@
 #!/bin/bash
 
-if [ $(id -u) = 0 ]; then
-	#portage
-	mkdir -p /var/db/repos /var/cache/{distfiles,packages}
-	chown -hR portage: /var/cache/{distfiles,packages}
-	find /var/db/repos -type d -exec chmod 755 {} +
-	find /var/db/repos -type f -exec chmod 644 {} +
+if [ "$(id -u)" = 0 ]; then
 
-	#http
-	find /srv/http -type d -exec chmod 755 {} +
-	find /srv/http -type f -exec chmod 644 {} +
-	[ -d /var/lighttpd ] && find /var/lighttpd -type d -exec chmod 755 {} +
-	[ -d /var/lighttpd ] && find /var/lighttpd -type f -exec chmod 644 {} +
+    mkdir -p /var/db/repos /var/cache/{distfiles,packages}
+    chown -hR portage: /var/cache/{distfiles,packages}
+    find /var/db/repos -type d -exec chmod 755 {} +
+    find /var/db/repos -type f -exec chmod 644 {} +
 
-	#users and groups files
-	chmod 600 /etc/{gshadow,shadow}
-	chmod 644 /etc/{group,passwd}
+    find /srv/http -type d -exec chmod 755 {} +
+    find /srv/http -type f -exec chmod 644 {} +
+    if [ -d /var/lighttpd ]; then
+        find /var/lighttpd -type d -exec chmod 755 {} +
+        find /var/lighttpd -type f -exec chmod 644 {} +
+    fi
+
+    chmod 600 /etc/{gshadow,shadow}
+    chmod 644 /etc/{group,passwd}
+
+    if [ -d /etc/ssh ]; then
+        chmod 755 /etc/ssh
+        chown root:root /etc/ssh
+
+        [ -f /etc/ssh/sshd_config ] && chmod 644 /etc/ssh/sshd_config
+        [ -f /etc/ssh/ssh_config ] && chmod 644 /etc/ssh/ssh_config
+
+        for keyfile in /etc/ssh/ssh_host_*_key; do
+            [ -f "$keyfile" ] && chmod 600 "$keyfile" && chown root:root "$keyfile"
+        done
+
+        for pubfile in /etc/ssh/ssh_host_*_key.pub; do
+            [ -f "$pubfile" ] && chmod 644 "$pubfile" && chown root:root "$pubfile"
+        done
+    fi
 fi
 
-#permissions for everyone
-if [ -d $HOME/.ssh ]; then
-	find $HOME/.ssh -type d -exec chmod 700 {} +
-	find $HOME/.ssh -type f -exec chmod 600 {} +
-	[ -f $HOME/.ssh/authorized_keys ] && chmod 644 $HOME/.ssh/authorized_keys
-	chown -R $(id -u):$(id -g) $HOME/.ssh
+if [ -d "$HOME/.ssh" ]; then
+    find "$HOME/.ssh" -type d -exec chmod 700 {} +
+    find "$HOME/.ssh" -type f -exec chmod 600 {} +
+    [ -f "$HOME/.ssh/authorized_keys" ] && chmod 644 "$HOME/.ssh/authorized_keys"
+    chown -R "$(id -u)":"$(id -u)" "$HOME/.ssh"
 fi
 
-if [ -d $HOME/.gnupg ]; then
-	find $HOME/.gnupg -type d -exec chmod 700 {} +
-	find $HOME/.gnupg -type f -exec chmod 600 {} +
-	chown -R $(id -u):$(id -g) $HOME/.gnupg
+if [ -d "$HOME/.gnupg" ]; then
+    find "$HOME/.gnupg" -type d -exec chmod 700 {} +
+    find "$HOME/.gnupg" -type f -exec chmod 600 {} +
+    chown -R "$(id -u)":"$(id -u)" "$HOME/.gnupg"
 fi

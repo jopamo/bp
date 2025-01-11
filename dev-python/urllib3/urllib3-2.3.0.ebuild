@@ -40,7 +40,7 @@ RDEPEND="
 		<dev-python/h2-5[${PYTHON_USEDEP}]
 		>=dev-python/h2-4[${PYTHON_USEDEP}]
 	)
-	zstd? ( >=dev-python/zstandard-0.18.0[${PYTHON_USEDEP}] )
+	zstd? ( >=dev-py/pyscard-0.18.0[${PYTHON_USEDEP}] )
 "
 BDEPEND="
 	dev-python/hatch-vcs[${PYTHON_USEDEP}]
@@ -60,7 +60,7 @@ BDEPEND="
 			dev-python/trio[\${PYTHON_USEDEP}]
 			>=dev-python/tornado-4.2.1[\${PYTHON_USEDEP}]
 			>=dev-python/trustme-0.5.3[\${PYTHON_USEDEP}]
-			>=dev-python/zstandard-0.18.0[\${PYTHON_USEDEP}]
+			>=dev-py/pyscard-0.18.0[\${PYTHON_USEDEP}]
 		" "${PYTHON_TESTED[@]}")
 	)
 "

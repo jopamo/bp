@@ -2,6 +2,7 @@
 
 alias eupdate='emerge --sync && eup'
 alias rebuild_packages='eup && rebuild_world'
+alias 1g4_nspawn='systemd-nspawn --bind /var/cache/distfiles --bind-ro /var/db/repos/bp --tmpfs /var/tmp/portage'
 
 move_package() {
 	local REPO_PATH="/var/db/repos/bp"

@@ -6,16 +6,12 @@ DISTUTILS_USE_PEP517=standalone
 PYTHON_TESTED=( pypy3 python3_{10..13} )
 PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" )
 
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="Poetry PEP 517 Build Backend"
 HOMEPAGE="
 	https://github.com/python-poetry/poetry-core/
 	https://pypi.org/project/poetry-core/
-"
-SRC_URI="
-	https://github.com/python-poetry/poetry-core/archive/${PV}.tar.gz
-		-> ${P}.gh.tar.gz
 "
 
 LICENSE="MIT"

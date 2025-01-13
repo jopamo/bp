@@ -16,7 +16,7 @@ RUST_MIN_VER="1.83.0"
 
 inherit cargo 
 
-CRATE_PV=${PV}
+CRATE_PV=0.5.17
 DESCRIPTION="A Python package installer and resolver, written in Rust"
 HOMEPAGE="
 	https://github.com/astral-sh/uv/

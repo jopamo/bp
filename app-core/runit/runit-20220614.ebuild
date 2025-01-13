@@ -39,6 +39,6 @@ src_install() {
 	local f
 	for f in chpst runit runit-init runsv runsvchdir runsvdir \
 		sv svlogd utmpset; do
-		dosbin $f
+		dobin $f
 	done
 }

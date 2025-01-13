@@ -46,7 +46,7 @@ src_test() {
 }
 
 src_install() {
-	dosbin tcpdump
+	dobin tcpdump
 	doman tcpdump.1
 	dodoc *.awk
 	dodoc CHANGES CREDITS README.md

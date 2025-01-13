@@ -40,6 +40,6 @@ src_prepare() {
 }
 
 src_install() {
-	dosbin iftop
+	dobin iftop
 	doman iftop.8
 }

@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="binfmt +blkid bpf-framework coredump dbus devmode dhcp4 efi gcrypt +gshadow
-+hostnamed +hwdb importd kmod kvm ldconfig localed +logind machined musl networkd
++hostnamed +hwdb importd kmod kvm ldconfig localed logind machined musl networkd
 oomd pam pcre pstore resolve rfkill sleep systemd-update sysusersd sysv timedated
 tmpfilesd +userdb +utmp vconsole xkb"
 

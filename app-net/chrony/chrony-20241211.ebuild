@@ -37,7 +37,7 @@ src_configure() {
 
 	local CHRONY_CONFIGURE=(
 		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
+		--sbindir="${EPREFIX}"/usr/bin
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
 		--chronyrundir="${EPREFIX}"/var/run/chrony
@@ -66,7 +66,7 @@ src_configure() {
 
 src_install() {
 	dobin chronyc
-	dosbin chronyd
+	dobin chronyd
 
 	insinto /etc/${PN}
 	doins "${FILESDIR}/chrony.conf"

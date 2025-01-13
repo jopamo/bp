@@ -20,5 +20,5 @@ src_prepare() {
 }
 
 src_install() {
-	dosbin hdparm contrib/idectl
+	dobin hdparm contrib/idectl
 }

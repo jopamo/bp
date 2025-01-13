@@ -99,7 +99,7 @@ src_install() {
 
 	fperms -R 600 /etc/${PN}
 
-	dosbin ${PN}
+	dobin ${PN}
 	dobin ${PN}_cli
 	dobin nt_password_hash hlr_auc_gw
 

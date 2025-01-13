@@ -21,8 +21,6 @@ LICENSE="GPL"
 SLOT="$(ver_cut 1-2)"
 KEYWORDS="amd64 arm64"
 
-IUSE="mediatek"
-
 RESTRICT="network-sandbox"
 
 DEPEND="
@@ -34,13 +32,5 @@ src_prepare() {
 	kernel-2_src_prepare
 
 	eapply "${FILESDIR}"/reg.patch
-
-	if use mediatek ; then
-		local mt76_dir="${WORKDIR}/mt76"
-		git clone https://github.com/openwrt/mt76.git "${mt76_dir}" --depth 1 || die "Failed to clone mt76 repository"
-		rm -rf "${mt76_dir}"/.git
-		cp -r "${mt76_dir}" "${S}/drivers/net/wireless/mediatek/" || die "Failed to copy new mt76 directory"
-		eapply "${FILESDIR}"/mt76.patch
-	fi
 }
 

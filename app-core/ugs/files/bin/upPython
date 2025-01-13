@@ -432,6 +432,10 @@ for package in "${PACKAGES[@]}"; do
 done
 echo "Package copy process completed."
 
+# Remove ebuilds with _rc, _pre versions
+find "${PACKAGE_DIR}" -type f -name '*_rc[1-9].ebuild' -exec echo "Deleting _rc ebuild: {}" \; -delete
+find "${PACKAGE_DIR}" -type f -name '*_pre*.ebuild' -exec echo "Deleting _pre ebuild: {}" \; -delete
+
 # --- Remove old ebuilds, keep latest only ---
 echo "Starting to process each package to keep only the latest ebuild..."
 for package in "${PACKAGES[@]}"; do
@@ -497,10 +501,6 @@ find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe 's/test
 
 # Remove test-rust? ( ) blocks
 find "${PACKAGE_DIR}" -type f -name "*.ebuild" -exec perl -i'' -0777 -pe 's/test-rust\?\s*\(\s*\)//g;' {} +
-
-# Remove ebuilds with _rc, _pre versions
-find "${PACKAGE_DIR}" -type f -name '*_rc[1-9].ebuild' -exec echo "Deleting _rc ebuild: {}" \; -delete
-find "${PACKAGE_DIR}" -type f -name '*_pre*.ebuild' -exec echo "Deleting _pre ebuild: {}" \; -delete
 
 # Remove BDEPEND blocks from selected packages
 echo "Removing BDEPEND blocks from selected packages..."
@@ -621,6 +621,6 @@ for package in "${PACKAGES[@]}"; do
 done
 
 echo "Removing local Gentoo repository copy at ${GENTOO_PATH}..."
-rm -rf "${GENTOO_PATH}" || echo "Warning: Could not remove ${GENTOO_PATH}. Please check permissions."
+#rm -rf "${GENTOO_PATH}" || echo "Warning: Could not remove ${GENTOO_PATH}. Please check permissions."
 
 echo "=== Script execution finished ==="

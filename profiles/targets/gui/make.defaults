@@ -13,6 +13,7 @@ USE="
 	gles2
 	gui
 	hwdb
+	-introspection
 	jpeg
 	kmod
 	kvm

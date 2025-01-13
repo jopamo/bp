@@ -23,6 +23,9 @@ KEYWORDS="amd64 arm64"
 RDEPEND="
 	<app-crypto/cryptography-45[${PYTHON_USEDEP}]
 	>=app-crypto/cryptography-41.0.5[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/typing-extensions-4.9[${PYTHON_USEDEP}]
+	' 3.{10..12})
 "
 BDEPEND="
 	test? (

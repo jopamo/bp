@@ -13,6 +13,6 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 src_install() {
-	dosbin "${PN}"
+	dobin "${PN}"
 	doman "${PN}.8"
 }

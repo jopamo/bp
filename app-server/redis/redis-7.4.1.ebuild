@@ -161,7 +161,7 @@ src_install() {
 	dodoc 00-RELEASENOTES BUGS CONTRIBUTING.md MANIFESTO README.md
 
 	dobin src/redis-cli
-	dosbin src/redis-benchmark src/redis-server src/redis-check-aof src/redis-check-rdb
+	dobin src/redis-benchmark src/redis-server src/redis-check-aof src/redis-check-rdb
 	fperms 0750 /usr/sbin/redis-benchmark
 	dosym redis-server /usr/sbin/redis-sentinel
 }

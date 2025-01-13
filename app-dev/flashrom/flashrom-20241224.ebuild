@@ -56,6 +56,6 @@ src_install() {
 	find "${ED}" -name '*.a' -delete || die
 
 	if use tools; then
-		dosbin "${BUILD_DIR}"/util/ich_descriptors_tool/ich_descriptors_tool
+		dobin "${BUILD_DIR}"/util/ich_descriptors_tool/ich_descriptors_tool
 	fi
 }

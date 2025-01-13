@@ -264,8 +264,8 @@ src_compile() {
 }
 
 src_install() {
-	dosbin wpa_supplicant
-	use privsep && dosbin wpa_priv
+	dobin wpa_supplicant
+	use privsep && dobin wpa_priv
 	dobin wpa_cli wpa_passphrase
 
 	dodoc ChangeLog {eap_testing,todo}.txt README{,-WPS} \

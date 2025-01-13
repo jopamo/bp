@@ -48,7 +48,7 @@ src_compile() {
 }
 
 src_install() {
-	dosbin hping3
+	dobin hping3
 	dosym hping3 /usr/sbin/hping
 	dosym hping3 /usr/sbin/hping2
 

@@ -17,6 +17,6 @@ src_prepare() {
 }
 
 src_install() {
-	dosbin perl-cleaner
+	dobin perl-cleaner
 	doman perl-cleaner.1
 }

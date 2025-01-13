@@ -85,7 +85,7 @@ src_compile() {
 }
 
 src_install() {
-	dosbin haproxy
+	dobin haproxy
 
 	if use systemd; then
 		insinto /usr/lib/systemd/system

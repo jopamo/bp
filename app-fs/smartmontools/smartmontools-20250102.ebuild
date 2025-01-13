@@ -66,13 +66,13 @@ src_install() {
 		insopts -m 0644
 		newins "${FILESDIR}"/smartd.systemd smartd.service
 	else
-		dosbin smartctl
+		dobin smartctl
 		doman smartctl.8
 	fi
 
 	if use update_drivedb ; then
 		if ! use daemon; then
-			dosbin "${S}"/update-smart-drivedb
+			dobin "${S}"/update-smart-drivedb
 		fi
 
 		exeinto /etc/cron.monthly

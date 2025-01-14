@@ -33,14 +33,11 @@ BDEPEND="
 
 src_configure() {
 	local emesonargs=(
-		-Dpng=enabled
-		-Dothers=disabled
+		-Dothers=enabled
 		-Dbuiltin_loaders=all
-		-Dintrospection=disabled
+		-Dintrospection=enabled
 		-Ddocs=false
-		-Dgio_sniffing=true
 		-Dtests=false
-		-Drelocatable=true
 	)
 	meson_src_configure
 }

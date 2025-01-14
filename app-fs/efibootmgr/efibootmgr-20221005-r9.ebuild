@@ -25,6 +25,19 @@ src_prepare() {
 	sed -i -e s/-Werror// Make.defaults || die
 }
 
-src_configure() {
-	export EFIDIR="1g4"
+src_compile() {
+	emake \
+		DESTDIR="${ED}" \
+		libdir=/usr/lib \
+		sbindir=/usr/bin \
+		EFIDIR=1g4
+}
+
+src_install() {
+	emake \
+		DESTDIR="${ED}" \
+		libdir=/usr/lib \
+		sbindir=/usr/bin \
+		EFIDIR=1g4 \
+		install
 }

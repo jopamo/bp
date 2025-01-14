@@ -72,6 +72,7 @@ src_configure() {
 src_compile() {
 	emake \
 		PREFIX=/usr \
+		BINDIR=/usr/bin \
 		MANDIR=/usr/share/man \
 		CFLAGS="${CFLAGS}" \
 		LDFLAGS="${LDFLAGS}" \
@@ -81,6 +82,7 @@ src_compile() {
 
 	use dhcp-tools && emake -C contrib/lease-tools \
 		PREFIX=/usr \
+		BINDIR=/usr/bin \
 		MANDIR=/usr/share/man \
 		CFLAGS="${CFLAGS}" \
 		LDFLAGS="${LDFLAGS}" \
@@ -90,6 +92,7 @@ src_compile() {
 src_install() {
 	emake \
 		PREFIX=/usr \
+		BINDIR=/usr/bin \
 		MANDIR=/usr/share/man \
 		COPTS="${COPTS[*]}" \
 		DESTDIR="${ED}" \

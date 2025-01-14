@@ -7,8 +7,8 @@ After=network.target
 Before=multi-user.target
 
 [Service]
-ExecStartPre=/usr/sbin/dnsmasq --test
-ExecStart=/usr/sbin/dnsmasq -k --user=dnsmasq --pid-file
+ExecStartPre=/usr/bin/dnsmasq --test
+ExecStart=/usr/bin/dnsmasq -k --user=dnsmasq --pid-file
 ExecReload=/usr/bin/kill -HUP $MAINPID
 Restart=on-failure
 PrivateDevices=true

@@ -3,6 +3,8 @@ Description=dnsmasq - A lightweight DHCP and caching DNS server
 Documentation=man:dnsmasq(8)
 After=network-online.target
 Wants=network-online.target
+After=network.target
+Before=multi-user.target
 
 [Service]
 ExecStartPre=/usr/sbin/dnsmasq --test

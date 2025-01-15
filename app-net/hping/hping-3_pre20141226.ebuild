@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit flag-o-matic toolchain-funcs
 
@@ -49,8 +49,8 @@ src_compile() {
 
 src_install() {
 	dobin hping3
-	dosym hping3 /usr/sbin/hping
-	dosym hping3 /usr/sbin/hping2
+	dosym -r /usr/bin/hping3 /usr/bin/hping
+	dosym -r /usr/bin/hping3 /usr/bin/hping2
 
 	newman docs/hping3.8 hping.8
 }

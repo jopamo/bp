@@ -179,7 +179,7 @@ src_configure() {
 		-DCOMPILER_RT_BUILD_MEMPROF=OFF
 		-DCOMPILER_RT_BUILD_ORC=ON
 		-DCOMPILER_RT_BUILD_PROFILE=OFF
-		-DCOMPILER_RT_BUILD_SANITIZERS=OFF
+		-DCOMPILER_RT_BUILD_SANITIZERS=ON
 		-DCOMPILER_RT_BUILD_XRAY=OFF
 		-DCOMPILER_RT_USE_LIBEXECINFO=OFF
 		-DLIBUNWIND_ENABLE_ASSERTIONS=$(usex debug)
@@ -213,7 +213,7 @@ src_configure() {
 	elif use late; then
 		mycmakeargs+=("${common[@]}" "${bootstrap[@]}" "${late[@]}")
 	else
-		mycmakeargs+=("${common[@]}" "${bootstrap[@]}" "${late[@]}")
+		mycmakeargs+=("${common[@]}" "${bootstrap[@]}" "${late[@]}" "${last[@]}")
 	fi
 
 	use debug || local -x CPPFLAGS="${CPPFLAGS} -DNDEBUG"

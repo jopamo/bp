@@ -41,10 +41,11 @@ src_configure() {
 	use static && append-ldflags -static
 
 	local myconf=(
-		--with-pid-dir="${EPREFIX}"/run
-		--with-ldflags="${LDFLAGS}"
-		--sysconfdir="${EPREFIX}"/etc/ssh
 		--datadir="${EPREFIX}"/usr/share/openssh
+		--sbindir="${EPREFIX}"/usr/bin
+		--sysconfdir="${EPREFIX}"/etc/ssh
+		--with-ldflags="${LDFLAGS}"
+		--with-pid-dir="${EPREFIX}"/run
 		--with-privsep-path="${EPREFIX}"/var/empty
 		--with-privsep-user="sshd"
 		--with-sandbox="seccomp_filter"

@@ -42,13 +42,13 @@ src_install() {
 	done
 
 	# systemd services
-	for f in hosts_bump.service ; do
+	for f in {hosts_bump,daily-reboot}.service ; do
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
 		doins "${FILESDIR}"/services/$f
 	done
 
-	for f in hosts_bump.timer ; do
+	for f in {hosts_bump,daily-reboot}.timer ; do
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
 		doins "${FILESDIR}"/timers/$f

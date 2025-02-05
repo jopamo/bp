@@ -23,11 +23,9 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-# dev-python/pytest-relaxed causes tests to fail
 BDEPEND="
 	test? (
 		>=dev-python/hypothesis-3.4.2[${PYTHON_USEDEP}]
-		!!dev-python/pytest-relaxed[${PYTHON_USEDEP}]
 	)
 "
 

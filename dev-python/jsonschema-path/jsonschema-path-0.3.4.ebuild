@@ -40,7 +40,7 @@ distutils_enable_tests pytest
 
 src_prepare() {
 	sed -i -e '/--cov/d' pyproject.toml || die
-	# remove random pins due to caret operator
-	sed -i -e 's:\^:>=:' -e 's:,<[0-9.]*::' pyproject.toml || die
+	# remove random pins
+	sed -i -e 's:\^:>=:' -e 's:<[0-9.]\+:*:' pyproject.toml || die
 	distutils-r1_src_prepare
 }

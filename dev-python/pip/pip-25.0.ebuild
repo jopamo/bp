@@ -5,8 +5,8 @@ EAPI=8
 # please bump dev-python/ensurepip-pip along with this package!
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_TESTED=( python3_{10..13} )
-PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" pypy3 )
+PYTHON_TESTED=( pypy3 python3_{10..13} )
+PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" )
 PYTHON_REQ_USE="ssl(+),threads(+)"
 
 inherit distutils-r1
@@ -22,27 +22,25 @@ SRC_URI="
 "
 
 LICENSE="MIT"
-# bundled deps
-LICENSE+=" Apache-2.0 BSD BSD-2 ISC LGPL-2.1+ MPL-2.0 PSF-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="test-rust"
 
 # see src/pip/_vendor/vendor.txt
 RDEPEND="
-	>=dev-python/cachecontrol-0.14.0[${PYTHON_USEDEP}]
+	>=dev-python/cachecontrol-0.14.1[${PYTHON_USEDEP}]
 	>=dev-python/distlib-0.3.9[${PYTHON_USEDEP}]
 	>=dev-python/distro-1.9.0[${PYTHON_USEDEP}]
-	>=dev-python/msgpack-1.0.8[${PYTHON_USEDEP}]
+	>=dev-python/msgpack-1.1.0[${PYTHON_USEDEP}]
 	>=dev-python/packaging-24.2[${PYTHON_USEDEP}]
-	>=dev-python/platformdirs-4.2.1[${PYTHON_USEDEP}]
-	>=dev-python/pyproject-hooks-1.0.0[${PYTHON_USEDEP}]
+	>=dev-python/platformdirs-4.3.6[${PYTHON_USEDEP}]
+	>=dev-python/pyproject-hooks-1.2.0[${PYTHON_USEDEP}]
 	>=dev-python/requests-2.32.0[${PYTHON_USEDEP}]
-	>=dev-python/rich-13.7.1[${PYTHON_USEDEP}]
+	>=dev-python/rich-13.9.4[${PYTHON_USEDEP}]
 	>=dev-python/resolvelib-1.0.1[${PYTHON_USEDEP}]
 	>=dev-py/setuptools-69.5.1[${PYTHON_USEDEP}]
 	$(python_gen_cond_dep '
-		>=dev-python/tomli-2.0.1[${PYTHON_USEDEP}]
+		>=dev-python/tomli-2.2.1[${PYTHON_USEDEP}]
 	' 3.10)
 	>=dev-python/truststore-0.10.0[${PYTHON_USEDEP}]
 	>=dev-python/typing-extensions-4.12.2[${PYTHON_USEDEP}]
@@ -76,8 +74,6 @@ python_prepare_all() {
 		"${FILESDIR}/pip-23.1-no-coverage.patch"
 		# prepare to unbundle dependencies
 		"${FILESDIR}/pip-24.1-unbundle.patch"
-		# https://github.com/pypa/pip/pull/13073
-		"${FILESDIR}/pip-24.3.1-rich-13.8.patch"
 	)
 
 	distutils-r1_python_prepare_all
@@ -108,11 +104,6 @@ python_compile_all() {
 }
 
 python_test() {
-	if ! has "${EPYTHON}" "${PYTHON_TESTED[@]/_/.}"; then
-		einfo "Skipping tests on ${EPYTHON}"
-		return 0
-	fi
-
 	local EPYTEST_DESELECT=(
 		tests/functional/test_inspect.py::test_inspect_basic
 		# Internet
@@ -121,10 +112,6 @@ python_test() {
 		tests/functional/test_install.py::test_install_sdist_links
 		tests/functional/test_install_config.py::test_prompt_for_keyring_if_needed
 		# broken by system site-packages use
-		tests/functional/test_check.py::test_basic_check_clean
-		tests/functional/test_check.py::test_check_skip_work_dir_pkg
-		tests/functional/test_check.py::test_check_complicated_name_clean
-		tests/functional/test_check.py::test_check_development_versions_are_also_considered
 		tests/functional/test_freeze.py::test_freeze_with_setuptools
 		tests/functional/test_pip_runner_script.py::test_runner_work_in_environments_with_no_pip
 		tests/functional/test_uninstall.py::test_basic_uninstall_distutils
@@ -142,6 +129,16 @@ python_test() {
 		tests/functional/test_proxy.py
 	)
 
+	case ${EPYTHON} in
+		pypy3)
+			EPYTEST_DESELECT+=(
+				# unexpected tempfiles?
+				tests/functional/test_install_config.py::test_do_not_prompt_for_authentication
+				tests/functional/test_install_config.py::test_prompt_for_authentication
+			)
+			;;
+	esac
+
 	if ! has_version "app-crypto/cryptography[${PYTHON_USEDEP}]"; then
 		EPYTEST_DESELECT+=(
 			tests/functional/test_install.py::test_install_sends_client_cert
@@ -157,7 +154,7 @@ python_test() {
 	# rerunfailures because test suite breaks if packages are installed
 	# in parallel
 	epytest -m "not network" -o tmp_path_retention_policy=all \
-		-p rerunfailures --reruns=5
+		-p rerunfailures --reruns=5 --use-venv
 }
 
 python_install_all() {

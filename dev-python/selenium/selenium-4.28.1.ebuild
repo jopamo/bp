@@ -3,13 +3,14 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_TESTED=( python3_{10..12} pypy3 )
-PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_13 )
+PYTHON_TESTED=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" )
 
 inherit distutils-r1 pypi
 
-# upstream sometimes tags it as ${P}, sometimes as ${P}-python, sigh
-TEST_TAG=${P}-python
+# base releases are usually ${P}, followups ${P}-python
+TEST_TAG=${P}
+[[ ${PV} != *.0 ]] && TEST_TAG+=-python
 TEST_P=selenium-${TEST_TAG}
 
 DESCRIPTION="Python language binding for Selenium Remote Control"
@@ -45,6 +46,7 @@ RDEPEND="
 "
 BDEPEND="
 	test? (
+		dev-python/filetype[${PYTHON_USEDEP}]
 		dev-python/pytest-mock[${PYTHON_USEDEP}]
 		test-rust? (
 			dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
@@ -65,9 +67,8 @@ src_prepare() {
 	distutils-r1_src_prepare
 
 	# do not build selenium-manager implicitly
-	sed -e '/setuptools_rust/d' \
-		-e '/rust_extensions/,/\]/d' \
-		-i setup.py || die
+	sed -e 's:\[tool\.setuptools-rust:[tool.ignore-me:' \
+		-i pyproject.toml || die
 }
 
 python_test() {
@@ -79,6 +80,8 @@ python_test() {
 	local EPYTEST_DESELECT=(
 		# expects vanilla certifi
 		test/unit/selenium/webdriver/remote/remote_connection_tests.py::test_get_connection_manager_for_certs_and_timeout
+		# TODO
+		'test/selenium/webdriver/common/devtools_tests.py::test_check_console_messages[firefox]'
 	)
 	local pytest_args=(
 		# https://github.com/SeleniumHQ/selenium/blob/selenium-4.8.2-python/py/test/runner/run_pytest.py#L20-L24

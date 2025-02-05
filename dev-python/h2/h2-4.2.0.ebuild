@@ -19,9 +19,9 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	>=dev-python/hyperframe-6.0[${PYTHON_USEDEP}]
+	>=dev-python/hyperframe-6.1[${PYTHON_USEDEP}]
 	<dev-python/hyperframe-7[${PYTHON_USEDEP}]
-	>=dev-python/hpack-4.0[${PYTHON_USEDEP}]
+	>=dev-python/hpack-4.1[${PYTHON_USEDEP}]
 	<dev-python/hpack-5[${PYTHON_USEDEP}]
 "
 BDEPEND="
@@ -30,8 +30,8 @@ BDEPEND="
 	)
 "
 
-PATCHES=(
-	"${FILESDIR}"/${P}-python3.11-tests.patch
-)
-
 distutils_enable_tests pytest
+
+python_test() {
+	epytest -p hypothesis
+}

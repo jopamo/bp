@@ -9,7 +9,7 @@ PYTHON_REQ_USE="threads(+)"
 inherit distutils-r1 pypi
 
 # see scripts/download_import_cldr.py
-CLDR_PV=45.0
+CLDR_PV=46.0
 DESCRIPTION="Collection of tools for internationalizing Python applications"
 HOMEPAGE="
 	https://babel.pocoo.org/

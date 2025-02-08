@@ -1,39 +1,21 @@
 #!/bin/bash
-#
-# This file is sourced by all *interactive* bash shells on startup,
-# including some apparently interactive shells such as scp and rcp
-# that can't tolerate any output. So make sure this doesn't display
-# anything or bad things will happen!
 
-# Exit if not an interactive shell
 [[ $- != *i* ]] && return
 
-# --- Shell Behavior Settings ---
-shopt -s checkwinsize			# Auto-adjust terminal size
-shopt -s no_empty_cmd_completion # Disable empty completion
-shopt -s histappend			  # Append to history instead of overwriting
-shopt -s globstar				# Enable recursive globbing (**)
-
-# Save and reload each command to the history file as it's executed
+shopt -s checkwinsize
+shopt -s no_empty_cmd_completion
+shopt -s histappend
+shopt -s globstar
 PROMPT_COMMAND='history -a; history -n'
 
-# --- Terminal Title Support ---
 case ${TERM} in
-	[aEkqx]term*|rxvt*|gnome*|kitty*|lxterm*|tmux|qterminal*)
-		PS1='\[\033]0;\u@\h:\w\007\]'
-		;;
-	screen*)
-		PS1='\[\033k\u@\h:\w\033\\\]'
-		;;
-	*)
-		unset PS1
-		;;
+	[aEkqx]term*|rxvt*|gnome*|kitty*|lxterm*|tmux|qterminal*) PS1='\[\033]0;\u@\h:\w\007\]' ;;
+	screen*) PS1='\[\033k\u@\h:\w\033\\\]' ;;
+	*) unset PS1 ;;
 esac
 
-# --- Enable LS_COLORS ---
 use_color=false
-
-if command -v dircolors > /dev/null; then
+if command -v dircolors >/dev/null; then
 	if [[ -f ~/.ls_colors ]]; then
 		eval "$(dircolors -b ~/.ls_colors)"
 	elif [[ -f /etc/LS_COLORS ]]; then
@@ -41,7 +23,6 @@ if command -v dircolors > /dev/null; then
 	else
 		eval "$(dircolors -b)"
 	fi
-
 	if [[ -n ${LS_COLORS:+set} ]]; then
 		use_color=true
 	else
@@ -53,7 +34,6 @@ else
 	esac
 fi
 
-# --- Prompt ---
 if ${use_color}; then
 	if [[ ${EUID} == 0 ]]; then
 		PS1+='\[\033[0;31m\]\u\[\033[1;37m\]@\[\033[0;91m\]\h \[\033[1;34m\]\w \[\033[0;37m\]# \[\033[0m\]'
@@ -64,27 +44,21 @@ else
 	PS1+='\u@\h \w \$ '
 fi
 
-# --- Load Additional Scripts ---
-# System-wide scripts
 if [[ -d /etc/bash/bashrc.d ]]; then
 	for sh in /etc/bash/bashrc.d/*.sh; do
 		[[ -r ${sh} ]] && source "${sh}"
 	done
 fi
-
-# User-specific scripts
 if [[ -d ~/.bashrc.d ]]; then
 	for sh in ~/.bashrc.d/*.sh; do
 		[[ -r ${sh} ]] && source "${sh}"
 	done
 fi
 
-# --- Environment Settings ---
 HISTSIZE=5000
 export GPG_TTY="$(tty)"
 export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 
-# --- Readline Key Bindings ---
 bind 'set bell-style none'
 bind 'set colored-stats on'
 bind 'set completion-ignore-case on'
@@ -98,8 +72,6 @@ bind 'set output-meta on'
 bind 'set show-all-if-ambiguous on'
 bind 'set show-all-if-unmodified on'
 bind 'set visible-stats on'
-
-# Keybindings for navigation
 bind '"\e[1~": beginning-of-line'
 bind '"\e[2~": quoted-insert'
 bind '"\e[3~": delete-char'
@@ -111,7 +83,6 @@ bind '"\eOd": backward-word'
 bind '"\eOF": end-of-line'
 bind '"\eOH": beginning-of-line'
 
-# --- Cleanup ---
 unset use_color sh
 
 declare -A formatters=(
@@ -126,6 +97,8 @@ declare -A formatters=(
 	["*.java"]="clang-format -i"
 	["*.go"]="gofmt -w"
 )
+
+umask 077
 
 alias ......='cd ../../../../..'
 alias .....='cd ../../../..'
@@ -187,21 +160,21 @@ usage_list_interfaces="Usage: list_interfaces"
 usage_set_random_mac="Usage: set_random_mac <interface>"
 
 NIC_PREFIXES=(
-	"00:1A:79" # Atheros Communications
-	"00:1B:21" # Intel Corporation
-	"00:1D:7E" # Cisco Systems, Inc.
-	"00:22:15" # Hewlett Packard
-	"00:23:EB" # Apple, Inc.
-	"00:24:E8" # Dell Inc.
-	"00:25:64" # Intel Corporate
-	"00:26:BB" # Sony Corporation
-	"00:27:10" # Cisco-Linksys LLC
-	"00:28:F8" # Cisco Systems, Inc.
-	"00:30:48" # Samsung Electronics Co., Ltd.
-	"00:60:2F" # Realtek Semiconductor Corp.
-	"00:0E:C6" # ASUSTek COMPUTER INC.
-	"00:18:DE" # NVIDIA
-	"00:16:E6" # ZyXEL Communications Corporation
+	"00:1A:79"
+	"00:1B:21"
+	"00:1D:7E"
+	"00:22:15"
+	"00:23:EB"
+	"00:24:E8"
+	"00:25:64"
+	"00:26:BB"
+	"00:27:10"
+	"00:28:F8"
+	"00:30:48"
+	"00:60:2F"
+	"00:0E:C6"
+	"00:18:DE"
+	"00:16:E6"
 )
 
 generate_random_mac() {
@@ -217,7 +190,6 @@ set_random_mac() {
 	fi
 	local interface=$1
 	local new_mac=$(generate_random_mac)
-
 	if [ "$use_iproute2" = true ]; then
 		sudo ip link set dev "$interface" down
 		sudo ip link set dev "$interface" address "$new_mac"
@@ -227,27 +199,17 @@ set_random_mac() {
 		sudo ifconfig "$interface" hw ether "$new_mac"
 		sudo ifconfig "$interface" up
 	fi
-
 	echo "Assigned MAC address $new_mac to $interface"
-}
-
-generate_random_mac() {
-	local prefix="${NIC_PREFIXES[$RANDOM % ${#NIC_PREFIXES[@]}]}"
-	local suffix=$(openssl rand -hex 3 | sed 's/\(..\)/\1:/g; s/:$//')
-	echo "$prefix:$suffix"
 }
 
 generate_systemd_link_file() {
 	local interfaces=("$@")
-
 	if [ ${#interfaces[@]} -eq 0 ]; then
 		interfaces=($(ls /sys/class/net | grep -Ev '^(lo|ip_vti0)$'))
 	fi
-
 	for interface in "${interfaces[@]}"; do
 		local mac_address=$(generate_random_mac)
 		local link_file_name="00-$interface.network"
-
 		cat <<EOF | sudo tee /etc/systemd/network/$link_file_name > /dev/null
 [Match]
 Name=$interface
@@ -255,7 +217,6 @@ Name=$interface
 [Link]
 MACAddress=$mac_address
 EOF
-
 		echo "Systemd .network file created for $interface with MAC address $mac_address"
 	done
 }
@@ -280,65 +241,36 @@ if [ "$use_iproute2" = false ]; then
 	alias veth_del='echo "veth not supported with net-tools"'
 
 	ifup_nettools() {
-		if [ -z "$1" ]; then
-			echo "$usage_ifup"
-			return 1
-		fi
+		[ -z "$1" ] && echo "$usage_ifup" && return 1
 		sudo ifconfig "$1" up
 	}
-
 	ifdown_nettools() {
-		if [ -z "$1" ]; then
-			echo "$usage_ifdown"
-			return 1
-		fi
+		[ -z "$1" ] && echo "$usage_ifdown" && return 1
 		sudo ifconfig "$1" down
 	}
-
 	ip_add_nettools() {
-		if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
-			echo "$usage_ip_add"
-			return 1
-		fi
+		[ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] && echo "$usage_ip_add" && return 1
 		sudo ifconfig "$1" "$2" netmask "$3"
 	}
-
 	ip_del_nettools() {
-		if [ -z "$1" ] || [ -z "$2" ]; then
-			echo "$usage_ip_del"
-			return 1
-		fi
+		[ -z "$1" ] || [ -z "$2" ] && echo "$usage_ip_del" && return 1
 		sudo ifconfig "$1" "$2"
 	}
-
 	route_add_nettools() {
-		if [ -z "$1" ] || [ -z "$2" ]; then
-			echo "$usage_route_add"
-			return 1
-		fi
+		[ -z "$1" ] || [ -z "$2" ] && echo "$usage_route_add" && return 1
 		sudo route add -net "$1" gw "$2"
 	}
-
 	route_del_nettools() {
-		if [ -z "$1" ]; then
-			echo "$usage_route_del"
-			return 1
-		fi
+		[ -z "$1" ] && echo "$usage_route_del" && return 1
 		sudo route del -net "$1"
 	}
-
 	iface_stats_nettools() {
-		if [ -z "$1" ]; then
-			echo "$usage_iface_stats"
-			return 1
-		fi
+		[ -z "$1" ] && echo "$usage_iface_stats" && return 1
 		ifconfig "$1"
 	}
-
 	list_interfaces_nettools() {
 		ifconfig -a
 	}
-
 else
 	alias ifup='ifup_iproute2'
 	alias ifdown='ifdown_iproute2'
@@ -359,119 +291,64 @@ else
 	alias veth_del='veth_del_iproute2'
 
 	ifup_iproute2() {
-		if [ -z "$1" ]; then
-			echo "$usage_ifup"
-			return 1
-		fi
+		[ -z "$1" ] && echo "$usage_ifup" && return 1
 		sudo ip link set "$1" up
 	}
-
 	ifdown_iproute2() {
-		if [ -z "$1" ]; then
-			echo "$usage_ifdown"
-			return 1
-		fi
+		[ -z "$1" ] && echo "$usage_ifdown" && return 1
 		sudo ip link set "$1" down
 	}
-
 	ip_add_iproute2() {
-		if [ -z "$1" ] || [ -z "$2" ]; then
-			echo "$usage_ip_add"
-			return 1
-		fi
+		[ -z "$1" ] || [ -z "$2" ] && echo "$usage_ip_add" && return 1
 		sudo ip addr add "$2" dev "$1"
 	}
-
 	ip_del_iproute2() {
-		if [ -z "$1" ] || [ -z "$2" ]; then
-			echo "$usage_ip_del"
-			return 1
-		fi
+		[ -z "$1" ] || [ -z "$2" ] && echo "$usage_ip_del" && return 1
 		sudo ip addr del "$2" dev "$1"
 	}
-
 	route_add_iproute2() {
-		if [ -z "$1" ] || [ -z "$2" ]; then
-			echo "$usage_route_add"
-			return 1
-		fi
+		[ -z "$1" ] || [ -z "$2" ] && echo "$usage_route_add" && return 1
 		sudo ip route add "$1" via "$2"
 	}
-
 	route_del_iproute2() {
-		if [ -z "$1" ]; then
-			echo "$usage_route_del"
-			return 1
-		fi
+		[ -z "$1" ] && echo "$usage_route_del" && return 1
 		sudo ip route del "$1"
 	}
-
 	iface_stats_iproute2() {
-		if [ -z "$1" ]; then
-			echo "$usage_iface_stats"
-			return 1
-		fi
+		[ -z "$1" ] && echo "$usage_iface_stats" && return 1
 		ip -s link show "$1"
 	}
-
 	list_interfaces_iproute2() {
 		ip link show
 	}
-
 	netns_add_iproute2() {
-		if [ -z "$1" ]; then
-			echo "$usage_netns_add"
-			return 1
-		fi
+		[ -z "$1" ] && echo "$usage_netns_add" && return 1
 		sudo ip netns add "$1"
 	}
-
 	netns_del_iproute2() {
-		if [ -z "$1" ]; then
-			echo "$usage_netns_del"
-			return 1
-		fi
+		[ -z "$1" ] && echo "$usage_netns_del" && return 1
 		sudo ip netns del "$1"
 	}
-
 	netns_exec_iproute2() {
-		if [ -z "$1" ] || [ -z "$2" ]; then
-			echo "$usage_netns_exec"
-			return 1
-		fi
+		[ -z "$1" ] || [ -z "$2" ] && echo "$usage_netns_exec" && return 1
 		sudo ip netns exec "$1" ${@:2}
 	}
-
 	netns_ipaddr_iproute2() {
-		if [ -z "$1" ]; then
-			echo "$usage_netns_ipaddr"
-			return 1
-		fi
+		[ -z "$1" ] && echo "$usage_netns_ipaddr" && return 1
 		sudo ip netns exec "$1" ip addr
 	}
-
 	veth_add_iproute2() {
-		if [ -z "$1" ] || [ -z "$2" ]; then
-			echo "$usage_veth_add"
-			return 1
-		fi
+		[ -z "$1" ] || [ -z "$2" ] && echo "$usage_veth_add" && return 1
 		sudo ip link add "$1" type veth peer name "$2"
 	}
-
 	veth_del_iproute2() {
-		if [ -z "$1" ]; then
-			echo "$usage_veth_del"
-			return 1
-		fi
+		[ -z "$1" ] && echo "$usage_veth_del" && return 1
 		sudo ip link del "$1"
 	}
 fi
 
 random_string() {
-	if [ -z "$1" ]; then
-		echo "Usage: random_string <length>"
-		return 1
-	fi
+	[ -z "$1" ] && echo "Usage: random_string <length>" && return 1
 	tr -dc A-Za-z0-9 </dev/urandom | head -c "$1" ; echo
 }
 
@@ -493,40 +370,25 @@ replace_in_files() {
 	local search_string="$1"
 	local replacement_string="$2"
 	local start_directory="${3:-.}"
-
-	if [ -z "$search_string" ] || [ -z "$replacement_string" ]; then
-		echo "Usage: replace_in_files \"search_string\" \"replacement_string\" [start_directory]"
-		return 1
-	fi
-
+	[ -z "$search_string" ] || [ -z "$replacement_string" ] && echo "Usage: replace_in_files \"search_string\" \"replacement_string\" [start_directory]" && return 1
 	find "$start_directory" -type f ! -path '*/.git/*' -exec grep -l "$search_string" {} + | xargs -d '\n' sed -i "s|$search_string|$replacement_string|g"
-
 	echo "Replacement complete."
 }
 
 encrypt_file() {
-	if [ -z "$1" ]; then
-		echo "Usage: encrypt_file <file_to_encrypt>"
-		return 1
-	fi
+	[ -z "$1" ] && echo "Usage: encrypt_file <file_to_encrypt>" && return 1
 	gpg --encrypt --sign --armor -r "$FILE_KEYID" "$1"
 	echo "Encrypted file created: $1.asc"
 }
 
 decrypt_file() {
-	if [ -z "$1" ]; then
-		echo "Usage: decrypt_file <file_to_decrypt>"
-		return 1
-	fi
+	[ -z "$1" ] && echo "Usage: decrypt_file <file_to_decrypt>" && return 1
 	gpg --decrypt "$1" > "${1%.asc}.decrypted"
 	echo "Decrypted file created: ${1%.asc}.decrypted"
 }
 
 backup_gpg() {
-	if [ -z "$1" ]; then
-		echo "Usage: backup_gpg <backup_directory>"
-		return 1
-	fi
+	[ -z "$1" ] && echo "Usage: backup_gpg <backup_directory>" && return 1
 	local backup_dir=$1
 	mkdir -p "$backup_dir"
 	gpg --export --armor > "$backup_dir/public-keys.asc"
@@ -536,10 +398,7 @@ backup_gpg() {
 }
 
 restore_gpg() {
-	if [ -z "$1" ]; then
-		echo "Usage: restore_gpg <backup_directory>"
-		return 1
-	fi
+	[ -z "$1" ] && echo "Usage: restore_gpg <backup_directory>" && return 1
 	local backup_dir=$1
 	gpg --import "$backup_dir/private-keys.asc"
 	gpg --import "$backup_dir/public-keys.asc"
@@ -551,7 +410,6 @@ backup_ssh() {
 	local timestamp=$(date +"%Y%m%d%H%M%S")
 	local backup_filename="ssh_backup_$timestamp.tar.bz2"
 	local encrypted_filename="$backup_filename.gpg"
-
 	tar -cjf "$backup_filename" -C ~ .ssh
 	gpg --symmetric --cipher-algo AES256 --force-mdc "$backup_filename"
 	rm "$backup_filename"
@@ -559,25 +417,12 @@ backup_ssh() {
 }
 
 restore_ssh() {
-	if [ -z "$1" ]; then
-		echo "Usage: restore_ssh <encrypted_backup_file>"
-		return 1
-	fi
-
+	[ -z "$1" ] && echo "Usage: restore_ssh <encrypted_backup_file>" && return 1
 	local encrypted_backup_file="$1"
 	local backup_filename="${encrypted_backup_file%.gpg}"
-
-	if [ ! -f "$encrypted_backup_file" ]; then
-		echo "Encrypted backup file not found: $encrypted_backup_file"
-		return 1
-	fi
-
+	[ ! -f "$encrypted_backup_file" ] && echo "Encrypted backup file not found: $encrypted_backup_file" && return 1
 	gpg --decrypt "$encrypted_backup_file" > "$backup_filename"
-	if [ $? -ne 0 ]; then
-		echo "Decryption failed."
-		return 1
-	fi
-
+	[ $? -ne 0 ] && echo "Decryption failed." && return 1
 	tar -xjf "$backup_filename" -C ~
 	if [ $? -eq 0 ]; then
 		rm "$backup_filename"
@@ -605,17 +450,11 @@ formatrepo() {
 start_ssh_agent() {
 	systemctl --user enable ssh-agent
 	systemctl --user start ssh-agent
-
 	for key in ~/.ssh/*; do
 		if [ -f "$key" ]; then
 			filename=$(basename "$key")
-
-			if [[ "$filename" != "authorized_keys" && \
-				"$filename" != "config" && \
-				"$filename" != "known_hosts" && \
-				"$filename" != "bkup" && \
-				"$filename" != *.* ]]; then
-					ssh-add "$key"
+			if [[ "$filename" != "authorized_keys" && "$filename" != "config" && "$filename" != "known_hosts" && "$filename" != "bkup" && "$filename" != *.* ]]; then
+				ssh-add "$key"
 			fi
 		fi
 	done

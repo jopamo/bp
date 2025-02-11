@@ -433,20 +433,6 @@ restore_ssh() {
 	fi
 }
 
-rmcomments() {
-	for type in "${!formatters[@]}"; do
-		find . -type f -name "$type" -not -path '*/.git/*' -exec sed -i '2,$ s|//.*||; 2,$ s|#.*||' {} +
-	done
-	echo "Comments removed from files of types: ${!formatters[*]}"
-}
-
-formatrepo() {
-	for type in "${!formatters[@]}"; do
-		find . -type f -name "$type" -not -path '*/.git/*' -exec ${formatters[$type]} {} +
-	done
-	echo "Formatted files of types: ${!formatters[*]}"
-}
-
 start_ssh_agent() {
 	systemctl --user enable ssh-agent
 	systemctl --user start ssh-agent

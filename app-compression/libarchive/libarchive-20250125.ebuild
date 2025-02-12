@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Multi-format archive and compression library"
 HOMEPAGE="http://www.libarchive.org/"
 
-SNAPSHOT=42565b88b5cc7441239269902a9d1735fd9ca0e2
+SNAPSHOT=65196fdd1a385f22114f245a9002ee8dc899f2c4
 SRC_URI="https://github.com/libarchive/libarchive/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

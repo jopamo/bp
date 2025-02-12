@@ -7,7 +7,7 @@ inherit qmake-utils xdg
 DESCRIPTION="Image Viewer and organizer"
 HOMEPAGE="https://github.com/oferkv/phototonic"
 
-SNAPSHOT=12552ece9564b1452606d653be67478ec6573ca1
+SNAPSHOT=6d3f8f6f2a1fed57ca856e4e2a3e49ab18bc6e39
 SRC_URI="https://github.com/oferkv/phototonic/archive/${SNAPSHOT}.tar.gz -> phototonic-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/phototonic-${SNAPSHOT}"
 

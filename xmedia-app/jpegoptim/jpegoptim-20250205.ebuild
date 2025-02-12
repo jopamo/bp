@@ -5,7 +5,7 @@ EAPI=8
 DESCRIPTION="Utility to optimize JPEG files"
 HOMEPAGE="http://www.kokkonen.net/tjko/projects.html https://github.com/tjko/jpegoptim"
 
-SNAPSHOT=50ca3007176520f357892b70007adec3f9d4f90d
+SNAPSHOT=bacfd518fc225f16240b5271dc9755516ada43fc
 SRC_URI="https://github.com/tjko/jpegoptim/archive/${SNAPSHOT}.tar.gz -> jpegoptim-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/jpegoptim-${SNAPSHOT}"
 

@@ -7,7 +7,7 @@ inherit toolchain-funcs flag-o-matic
 DESCRIPTION="zstd fast compression library"
 HOMEPAGE="https://facebook.github.io/zstd/"
 
-SNAPSHOT=a610550e2c05cd08842e173bbeb830f596fdfaeb
+SNAPSHOT=d84d70bd04076970407246ac1cb4a8f04f61e248
 SRC_URI="https://github.com/facebook/zstd/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

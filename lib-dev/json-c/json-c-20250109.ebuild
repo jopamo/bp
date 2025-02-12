@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="A JSON implementation in C"
 HOMEPAGE="https://github.com/json-c/json-c/wiki"
 
-SNAPSHOT=a3044648077b5e05b7e43ddfc55c407904f47827
+SNAPSHOT=7bca694b4721cb1dd6fbee234f2d7d4139c854c8
 SRC_URI="https://github.com/json-c/json-c/archive/${SNAPSHOT}.tar.gz -> json-c-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/json-c-${SNAPSHOT}"
 

@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="a program which helps to configure compiler and linker flags for development libraries"
 HOMEPAGE="https://git.sr.ht/~kaniini/pkgconf"
 
-SNAPSHOT=444846dd2dfc9e3a5ea4904826c1c7a4b9b5589b
+SNAPSHOT=792e2c6225c517f431b8ccfe1996f0c45405a7a2
 SRC_URI="https://github.com/pkgconf/pkgconf/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

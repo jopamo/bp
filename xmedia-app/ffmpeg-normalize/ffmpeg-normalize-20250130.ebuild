@@ -7,7 +7,7 @@ inherit distutils-r1
 DESCRIPTION="Audio Normalization for Python/ffmpeg"
 HOMEPAGE="https://github.com/slhck/ffmpeg-normalize"
 
-SNAPSHOT=910c0ef10ee673941f403974522fd44903d9933e
+SNAPSHOT=c141666818324329b6b0ad7f41f22f0bb5c30f85
 SRC_URI="https://github.com/slhck/ffmpeg-normalize/archive/${SNAPSHOT}.tar.gz -> ffmpeg-normalize-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ffmpeg-normalize-${SNAPSHOT}"
 

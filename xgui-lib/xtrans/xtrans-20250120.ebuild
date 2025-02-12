@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X.Org xtrans library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=e58ae2d27f7baee28319faa02b77cdc344e2f0ca
+SNAPSHOT=c8c291390f4befb7d813d7fce6caeb6607561903
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxtrans/-/archive/${SNAPSHOT}/libxtrans-${SNAPSHOT}.tar.bz2 -> libxtrans-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxtrans-${SNAPSHOT}"
 

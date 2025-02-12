@@ -7,7 +7,7 @@ inherit toolchain-funcs flag-o-matic linux-info
 DESCRIPTION="show detailed info about what is happening on a block device io queue"
 HOMEPAGE="http://git.kernel.dk/cgit/blktrace/"
 
-SNAPSHOT=f49e7ded6405bcecd10846a614f40061ca6301c8
+SNAPSHOT=16b952f4ea2db052f7cc613474d15a76c91c93d2
 SRC_URI="https://git.kernel.org/pub/scm/linux/kernel/git/axboe/blktrace.git/snapshot/blktrace-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/blktrace-${SNAPSHOT}
 

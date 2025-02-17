@@ -81,6 +81,8 @@ src_install() {
 		"truncate" "tsort" "tty" "umount" "uname" "unexpand" "uniq" "unlink"
 		"unlzma" "unxz" "unzip" "uptime" "vi" "watch" "wc" "wget"
 		"which"	"whoami" "xargs" "xxd" "xzcat" "yes" "zcat"
+		"chvt" "deallocvt" "kbd_mode" "openvt" "setfont" "setkeycodes" "showkey"
+		"vlock"
 )
 
 

@@ -20,7 +20,7 @@ DEPEND="${RDEPEND}
 
 src_configure() {
 	econf \
-		$(use_enable nls) \
+		--disable-nls \
 		$(use_enable pam vlock) \
 		$(use_enable test tests)
 }

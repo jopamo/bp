@@ -15,10 +15,10 @@ LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="binfmt +blkid bpf-framework coredump dbus devmode dhcp4 efi gcrypt +gshadow
-+hostnamed +hwdb importd kmod kvm ldconfig localed logind machined musl networkd
-oomd pam pcre pstore resolve rfkill sleep systemd-update sysusersd sysv timedated
-tmpfilesd +userdb +utmp vconsole xkb"
+IUSE="binfmt +blkid +bootloader bpf-framework coredump dbus devmode dhcp4 efi gcrypt +gshadow
++hostnamed +hwdb importd kmod kvm ldconfig +localed logind machined musl networkd
+oomd pam pcre pstore resolve rfkill systemd-update sysusersd timedated
+tmpfilesd +userdb +utmp +vconsole xkb"
 
 REQUIRED_USE="musl? ( !gshadow !localed !userdb !utmp )"
 
@@ -50,7 +50,10 @@ DEPEND="
 	tmpfilesd? ( app-core/dbus )
 	xkb? ( xgui-lib/libxkbcommon )
 "
-BDEPEND="dev-py/jinja"
+BDEPEND="
+	dev-python/pyelftools
+	dev-py/jinja
+"
 
 pkg_pretend() {
 	if [[ ${MERGE_TYPE} != buildonly ]]; then
@@ -141,8 +144,9 @@ src_configure() {
 		$(meson_feature pcre pcre2)
 		$(meson_feature xkb xkbcommon)
 		$(meson_use binfmt)
+		$(meson_use bootloader)
 		$(meson_use coredump)
-		$(meson_use efi )
+		$(meson_use efi)
 		$(meson_use gshadow)
 		$(meson_use hostnamed)
 		$(meson_use hwdb)
@@ -163,8 +167,8 @@ src_configure() {
 		$(meson_use vconsole)
 		$(usex dbus '-Ddns-over-tls=openssl' '-Ddns-over-tls=false')
 		$(usex devmode '-Dmode=developer' '-Dmode=release')
-		$(usex sysv '-Dsysvinit-path=/etc/init.d' '-Dsysvinit-path=')
-		$(usex sysv '-Dsysvrcnd-path=/etc/rc.d' '-Dsysvrcnd-path=')
+		-Dsysvinit-path=/etc/init.d
+		-Dsysvrcnd-path=/etc/rc.d
 		-Dacl=enabled
 		-Dapparmor=disabled
 		-Daudit=disabled
@@ -227,40 +231,6 @@ src_install() {
 
 	use xkb || rm -rf "${ED}"/etc/X11 "${ED}"/etc/xdg/
 	use tmpfilesd || rm -f "${ED}"/usr/lib/systemd/system/systemd-tmpfiles-clean.timer "${ED}"/usr/lib/systemd/system/timers.target.wants/systemd-tmpfiles-clean.timer
-
-	rm -r "${ED}"/etc/kernel
-	rm "${ED}"/usr/bin/kernel-install
-	rm -r "${ED}"/usr/lib/kernel
-
-	if use sleep; then
-		rm	"${ED}"/usr/lib/systemd/systemd-sleep
-		rm -r "${ED}"/usr/lib/systemd/system-sleep/
-		rm	"${ED}"/usr/lib/systemd/system/systemd-suspend.service
-		sed -i "s/\#SuspendMode\=/SuspendMode\=suspend/g" "${ED}"/etc/systemd/sleep.conf || die
-		sed -i "s/\#SuspendState\=mem\ standby\ freeze/SuspendState\=standby/g" "${ED}"/etc/systemd/sleep.conf || die
-		sed -i "s/\#HibernateMode\=platform\ shutdown/HibernateMode\=suspend/g" "${ED}"/etc/systemd/sleep.conf || die
-		sed -i "s/\#HibernateState\=disk/HibernateState\=standby/g" "${ED}"/etc/systemd/sleep.conf || die
-	fi
-
-	if use systemd-update; then
-		rm "${ED}"/usr/lib/systemd/system/sysinit.target.wants/systemd-update-done.service || die
-		rm "${ED}"/usr/lib/systemd/system/system-update.target || die
-		rm "${ED}"/usr/lib/systemd/system/systemd-update-done.service || die
-		rm "${ED}"/usr/lib/systemd/system-generators/systemd-system-update-generator || die
-		rm "${ED}"/usr/lib/systemd/systemd-update-done || die
-	fi
-
-	if use sysv; then
-		rm -r "${ED}"/etc/init.d || die
-		rm "${ED}"/usr/lib/systemd/system-generators/systemd-rc-local-generator || die
-		rm "${ED}"/usr/lib/systemd/system-generators/systemd-sysv-generator || die
-		rm "${ED}"/usr/lib/systemd/system/sockets.target.wants/systemd-initctl.socket || die
-		rm "${ED}"/usr/lib/systemd/system/systemd-initctl.service || die
-		rm "${ED}"/usr/lib/systemd/system/systemd-initctl.socket || die
-		rm "${ED}"/usr/lib/systemd/systemd-initctl || die
-		rm "${ED}"/usr/lib/systemd/systemd/halt-local.service || die
-		rm "${ED}"/usr/lib/systemd/systemd/rc-local.service || die
-	fi
 
 	use networkd && mkdir -p "${ED}"/etc/systemd/network
 

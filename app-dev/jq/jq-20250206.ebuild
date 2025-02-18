@@ -36,6 +36,15 @@ RESTRICT="!test? ( test )"
 REQUIRED_USE="test? ( oniguruma )"
 
 src_prepare() {
+	rm -rf vendor/oniguruma
+
+	sed -i '/test "x\$build_oniguruma" = xyes && test -f "${srcdir}\/vendor\/oniguruma\/configure.ac"/,/\)/d' configure.ac
+	sed -i '/onig_CFLAGS="-I\${srcdir}\/vendor\/oniguruma\/src"/d' configure.ac
+	sed -i '/onig_LDFLAGS="-L\${srcdir}\/vendor\/oniguruma\/src/d' configure.ac
+	sed -i '/AC_CONFIG_SUBDIRS(\[vendor\/oniguruma\])/d' configure.ac
+	sed -i '/vendor\/oniguruma/d' Makefile.am
+	sed -i '/vendor\/oniguruma/d' .gitmodules
+
 	sed -e '/^dist_doc_DATA/d; s:-Wextra ::' -i Makefile.am || die
 	sed -r -e "s:(m4_define\(\[jq_version\],) .+\):\1 \[${PV}\]):" \
 		-i configure.ac || die

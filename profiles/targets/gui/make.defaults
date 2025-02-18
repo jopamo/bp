@@ -19,6 +19,7 @@ USE="
 	kvm
 	libinput
 	libsamplerate
+	localed
 	machined
 	mount
 	mp3

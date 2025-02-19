@@ -4,14 +4,14 @@ if [ "$(id -u)" = 0 ]; then
 
     mkdir -p /var/db/repos /var/cache/{distfiles,packages}
     chown -hR portage: /var/cache/{distfiles,packages}
-    find /var/db/repos -type d -exec chmod 755 {} +
-    find /var/db/repos -type f -exec chmod 644 {} +
+    find /var/db/repos -type d | xargs -I {} chmod 755 {}
+    find /var/db/repos -type f | xargs -I {} chmod 644 {}
 
-    find /srv/http -type d -exec chmod 755 {} +
-    find /srv/http -type f -exec chmod 644 {} +
+    find /srv/http -type d | xargs -I {} chmod 755 {}
+    find /srv/http -type f | xargs -I {} chmod 644 {}
     if [ -d /var/lighttpd ]; then
-        find /var/lighttpd -type d -exec chmod 755 {} +
-        find /var/lighttpd -type f -exec chmod 644 {} +
+        find /var/lighttpd -type d | xargs -I {} chmod 755 {}
+        find /var/lighttpd -type f | xargs -I {} chmod 644 {}
     fi
 
     chmod 600 /etc/{gshadow,shadow}
@@ -32,17 +32,27 @@ if [ "$(id -u)" = 0 ]; then
             [ -f "$pubfile" ] && chmod 644 "$pubfile" && chown root:root "$pubfile"
         done
     fi
+
+    chmod 440 /etc/sudoers
+    chmod 700 /etc/ssl/private
+    chmod 644 /etc/ssl/certs/*
+    chmod 755 /var/log
+    find /var/log -type f | xargs -I {} chmod 640 {}
+    chmod 1777 /tmp /var/tmp
+    chmod 755 /var/spool
+    chmod 755 /var/lib
 fi
 
+chown -R "$(id -u)":"$(id -u)" "$HOME"
+chmod -R go= "$HOME"
+chmod 600 "$HOME/.bash_history"
+
 if [ -d "$HOME/.ssh" ]; then
-    find "$HOME/.ssh" -type d -exec chmod 700 {} +
-    find "$HOME/.ssh" -type f -exec chmod 600 {} +
-    [ -f "$HOME/.ssh/authorized_keys" ] && chmod 644 "$HOME/.ssh/authorized_keys"
-    chown -R "$(id -u)":"$(id -u)" "$HOME/.ssh"
+    find "$HOME/.ssh" -type d | xargs -I {} chmod 700 {}
+    find "$HOME/.ssh" -type f | xargs -I {} chmod 600 {}
 fi
 
 if [ -d "$HOME/.gnupg" ]; then
-    find "$HOME/.gnupg" -type d -exec chmod 700 {} +
-    find "$HOME/.gnupg" -type f -exec chmod 600 {} +
-    chown -R "$(id -u)":"$(id -u)" "$HOME/.gnupg"
+    find "$HOME/.gnupg" -type d | xargs -I {} chmod 700 {}
+    find "$HOME/.gnupg" -type f | xargs -I {} chmod 600 {}
 fi

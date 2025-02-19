@@ -25,6 +25,8 @@ DEPEND="
 "
 
 src_prepare() {
+	filter-flags -Wl,-z,defs
+
 	default
 
 	sed -i 's:-O2::' configure.ac || die

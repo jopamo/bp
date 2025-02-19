@@ -124,6 +124,33 @@ update_kernel_efi() {
 	trap - SIGINT
 }
 
+update_kernel_mbr() {
+	trap 'echo "Interrupted by user"; return 1' SIGINT
+
+	cd /usr/src/linux || return 1
+
+	make oldconfig
+	mount /boot || return 1
+
+	make prepare
+
+	make -j$(nproc) || return 1
+
+	rm -rf /lib/modules/*
+	rm /boot/System.map* /boot/config* /boot/vmlinuz*
+
+	make modules_install || return 1
+	make install || return 1
+
+	grub-mkconfig -o /boot/grub/grub.cfg || return 1
+	grub-install --target=i386-pc /dev/sda || return 1
+
+	echo "Kernel update complete."
+
+	trap - SIGINT
+}
+
+
 update_kernel_opi5plus() {
 	trap 'echo "Interrupted by user"; return 1' SIGINT
 

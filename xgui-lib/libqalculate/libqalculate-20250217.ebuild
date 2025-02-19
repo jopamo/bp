@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="A modern multi-purpose calculator library"
 HOMEPAGE="https://qalculate.github.io/"
 
-SNAPSHOT=c4ae3b385aab1a146deb394ccb56bda4cc83a784
+SNAPSHOT=d47982530ec8fec07ce2950725174b804fe754b1
 SRC_URI="https://github.com/Qalculate/libqalculate/archive/${SNAPSHOT}.tar.gz -> libqalculate-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libqalculate-${SNAPSHOT}"
 

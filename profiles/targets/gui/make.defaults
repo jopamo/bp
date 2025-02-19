@@ -1,5 +1,6 @@
 USE="
 	bin
+	bootloader
 	bluez
 	cairo
 	cups

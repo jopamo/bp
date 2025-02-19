@@ -7,7 +7,7 @@ inherit autotools flag-o-matic
 DESCRIPTION="a random collection of Linux utilities"
 HOMEPAGE="https://github.com/util-linux/util-linux"
 
-SNAPSHOT=ee8235a65edd01a4899f2557dc9aa2cb9c6de7bc
+SNAPSHOT=dbcc687f6ab1568982cdf3fe391c0beb818b7e28
 SRC_URI="https://github.com/util-linux/util-linux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/util-linux-${SNAPSHOT}"
 

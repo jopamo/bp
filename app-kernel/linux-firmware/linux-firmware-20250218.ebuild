@@ -5,7 +5,7 @@ EAPI=8
 DESCRIPTION="Linux firmware files"
 HOMEPAGE="https://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git"
 
-SNAPSHOT=5bc5868b7ee5a243abdd73cfcd3bbf7166f4f42f
+SNAPSHOT=b944ef71203d4d710cfde822de81f7aae955d71c
 SRC_URI="https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot/linux-firmware-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/linux-firmware-${SNAPSHOT}"
 

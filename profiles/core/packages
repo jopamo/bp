@@ -13,6 +13,7 @@
 *app-core/gawk
 *app-core/git
 *app-core/grep
+*app-core/kbd
 *app-core/layout
 *app-core/less
 *app-core/portage

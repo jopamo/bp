@@ -7,7 +7,7 @@ inherit flag-o-matic toolchain-funcs multiprocessing
 DESCRIPTION="Larry Wall's Practical Extraction and Report Language"
 HOMEPAGE="https://www.perl.org/"
 
-SNAPSHOT=0ecd18899c7a41a8d68cf5a8b067b32ad74195b4
+SNAPSHOT=6ec79b4f92658aee8f9f2ec33d9be7177d1be947
 SRC_URI="https://github.com/Perl/perl5/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/perl5-${SNAPSHOT}
 

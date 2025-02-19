@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X.Org fontenc library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=92a85fda2acb4e14ec0b2f6d8fe3eaf2b687218c
+SNAPSHOT=77b46c4689dab624129b0d08404c50ef5d1a94bd
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libfontenc/-/archive/${SNAPSHOT}/libfontenc-${SNAPSHOT}.tar.bz2 -> libfontenc-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libfontenc-${SNAPSHOT}"
 

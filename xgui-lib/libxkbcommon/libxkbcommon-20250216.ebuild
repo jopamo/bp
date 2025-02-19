@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="X.Org xkbcommon library"
 HOMEPAGE="https://xkbcommon.org/"
 
-SNAPSHOT=ce9bcbe06cc65109cfa210fdeb56a366ba4d26d9
+SNAPSHOT=b27444026821e63ad25957b7ac79c2c0381f1d1b
 SRC_URI="https://github.com/xkbcommon/libxkbcommon/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

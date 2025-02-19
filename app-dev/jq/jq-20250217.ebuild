@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="A lightweight and flexible command-line JSON processor"
 HOMEPAGE="https://stedolan.github.io/jq/"
 
-SNAPSHOT=fa6a2ff6888f27648c703688f1a973588406d92a
+SNAPSHOT=8ba03f788f28cadeab7de7111d13add88b400d0b
 SRC_URI="https://github.com/jqlang/jq/archive/${SNAPSHOT}.tar.gz -> jq-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/jq-${SNAPSHOT}"
 

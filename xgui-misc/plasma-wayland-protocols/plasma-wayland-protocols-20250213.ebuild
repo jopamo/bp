@@ -6,7 +6,7 @@ inherit cmake
 
 DESCRIPTION="Plasma-specific protocols for Wayland"
 
-SNAPSHOT=1b1962118fafdd626ff2eaa5ffbef6e6a5baaa08
+SNAPSHOT=5843146206c64de08997969ae9479f3bd5fb4c8c
 SRC_URI="https://github.com/KDE/plasma-wayland-protocols/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

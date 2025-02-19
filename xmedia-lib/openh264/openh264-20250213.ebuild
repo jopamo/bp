@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="Cisco OpenH264 library and Gecko Media Plugin for Mozilla packages"
 HOMEPAGE="http://www.openh264.org/"
 
-SNAPSHOT=652bdb7719f30b52b08e506645a7322ff1b2cc6f
+SNAPSHOT=a85e11871c748eae11d056d93df644e2dcb1e80c
 SRC_URI="https://github.com/cisco/openh264/archive/${SNAPSHOT}.tar.gz -> openh264-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/openh264-${SNAPSHOT}"
 

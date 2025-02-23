@@ -98,6 +98,8 @@ src_compile() {
 }
 
 src_install() {
+	dobin "${S}/image/usr/bin/update-ca-certificates"
+	rm -rf "${S}/image/usr/bin"
 	cp -pPR image/* "${D}"/ || die
 
 	cd ${PN} || die

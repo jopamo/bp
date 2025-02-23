@@ -10,7 +10,8 @@ inherit xdg
 
 DESCRIPTION="Firefox Web Browser"
 HOMEPAGE="http://www.mozilla.com/firefox"
-SRC_URI="https://archive.mozilla.org/pub/firefox/nightly/$(ver_cut 1)/$(ver_cut 2)/$(ver_cut 1)-$(ver_cut 2)-$(ver_cut 3)-${TIMESTAMP}-mozilla-central/firefox-${MOZ_VER}.en-US.linux-x86_64.tar.bz2 -> firefox-${PV}.tar.bz2"
+
+SRC_URI="https://archive.mozilla.org/pub/firefox/nightly/$(ver_cut 1)/$(ver_cut 2)/$(ver_cut 1)-$(ver_cut 2)-$(ver_cut 3)-${TIMESTAMP}-mozilla-central/firefox-${MOZ_VER}.en-US.linux-x86_64.tar.xz -> firefox-${PV}.tar.xz"
 S="${WORKDIR}/firefox"
 
 RESTRICT="strip mirror"
@@ -79,7 +80,6 @@ src_install() {
 
 	rm "${ED}"/opt/${MOZ_PN}/pingsender || die
 	rm "${ED}"/opt/${MOZ_PN}/crashreporter* || die
-	rm "${ED}"/opt/${MOZ_PN}/libnssckbi.so || die
 
 	dosym -r /usr/share/hunspell /opt/${MOZ_PN}/dictionaries
 	dosym -r /usr/lib/libnssckbi.so /opt/${MOZ_PN}/libnssckbi.so

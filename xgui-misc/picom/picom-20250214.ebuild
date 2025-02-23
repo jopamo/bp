@@ -40,6 +40,7 @@ src_configure() {
 		$(meson_use regex)
 		$(meson_use opengl)
 		$(meson_use dbus)
+		-Dcompton=false
 	)
 		meson_src_configure
 }

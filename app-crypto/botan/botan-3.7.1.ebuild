@@ -18,7 +18,7 @@ else
 fi
 
 LICENSE="BSD-2"
-SLOT="$(ver_cut 1)"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="+boost bzip2 +lzma static-libs sqlite zlib"

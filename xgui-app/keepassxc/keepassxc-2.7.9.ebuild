@@ -16,7 +16,7 @@ IUSE="+autotype test"
 
 DEPEND="
 	app-crypto/argon2
-	app-crypto/botan:2
+	app-crypto/botan
 	lib-core/libgcrypt
 	lib-core/zlib
 	lib-util/libsodium
@@ -48,6 +48,7 @@ src_configure() {
 		-DWITH_XC_BROWSER=ON
 		-DWITH_XC_BROWSER_PASSKEYS=ON
 		-DWITH_XC_NETWORKING=OFF
+		-DWITH_XC_UPDATECHECK=OFF
 	)
 	cmake_src_configure
 }

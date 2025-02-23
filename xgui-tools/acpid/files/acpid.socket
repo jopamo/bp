@@ -1,0 +1,11 @@
+[Unit]
+Description=ACPID Listen Socket
+Documentation=man:acpid(8)
+
+[Socket]
+ListenStream=/run/acpid.socket
+Service=acpid.service
+Accept=no
+
+[Install]
+WantedBy=sockets.target

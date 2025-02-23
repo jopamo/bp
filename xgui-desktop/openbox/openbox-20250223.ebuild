@@ -7,13 +7,13 @@ inherit autotools python-r1
 DESCRIPTION="A standards compliant, fast, light-weight, extensible window manager"
 HOMEPAGE="http://openbox.org/"
 
-SNAPSHOT=33d27e4ff119e8d9fd656b15aecb76325936ac9e
-SRC_URI="https://github.com/jopamo/ob/archive/${SNAPSHOT}.tar.gz -> openbox-${SNAPSHOT}.tar.gz"
+SNAPSHOT=71c2f8bab0a08b2548370ab03a361236f2372346
+SRC_URI="https://github.com/jopamo/openbox/archive/${SNAPSHOT}.tar.gz -> openbox-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ob-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="debug +session static-libs"
 

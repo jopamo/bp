@@ -19,6 +19,7 @@ RDEPEND="
 	virtual/ssl
 "
 DEPEND="${RDEPEND}
+	app-crypto/botan
 	app-build/libtool
 "
 

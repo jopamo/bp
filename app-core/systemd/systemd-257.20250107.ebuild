@@ -286,13 +286,12 @@ DHCP=ipv4' > "${ED}"/etc/systemd/network/ipv4dhcp.network
 		[Unit]
 		Description=GnuPG private key agent
 		After=basic.target
-		Requires=basic.target
+		Wants=basic.target
 
 		[Service]
-		Type=forking
-		ExecStart=/usr/bin/gpg-agent --daemon --enable-ssh-support
+		Type=simple
+		ExecStart=/usr/bin/gpgconf --launch gpg-agent
 		ExecStop=/usr/bin/gpgconf --kill gpg-agent
-		Restart=always
 		RemainAfterExit=yes
 
 		[Install]

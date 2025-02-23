@@ -267,11 +267,33 @@ DHCP=ipv4' > "${ED}"/etc/systemd/network/ipv4dhcp.network
 	cat > "${ED}"/usr/lib/systemd/user/ssh-agent.service <<- EOF || die
 		[Unit]
 		Description=SSH key agent
+		After=basic.target
+		Requires=basic.target
 
 		[Service]
-		Type=simple
+		Type=forking
 		Environment=SSH_AUTH_SOCK=%t/ssh-agent.socket
-		ExecStart=/usr/bin/ssh-agent -D -a \$SSH_AUTH_SOCK
+		ExecStart=/usr/bin/ssh-agent -a $SSH_AUTH_SOCK
+		ExecStop=/usr/bin/ssh-agent -k
+		Restart=always
+		RemainAfterExit=yes
+
+		[Install]
+		WantedBy=default.target
+		EOF
+
+	cat > "${ED}"/usr/lib/systemd/user/gpg-agent.service <<- EOF || die
+		[Unit]
+		Description=GnuPG private key agent
+		After=basic.target
+		Requires=basic.target
+
+		[Service]
+		Type=forking
+		ExecStart=/usr/bin/gpg-agent --daemon --enable-ssh-support
+		ExecStop=/usr/bin/gpgconf --kill gpg-agent
+		Restart=always
+		RemainAfterExit=yes
 
 		[Install]
 		WantedBy=default.target

@@ -75,4 +75,7 @@ src_install() {
 
 	insinto etc/xdg/${PN}
 	doins -r ${FILESDIR}/configs/*
+
+	insinto usr/share/themes/Mikachu/openbox-3
+	doins ${FILESDIR}/themerc
 }

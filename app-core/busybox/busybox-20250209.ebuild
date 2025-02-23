@@ -59,7 +59,7 @@ src_install() {
 	done < <("${ED}/usr/bin/busybox" --list)
 
 	local files_to_remove=(
-		"[" "arping" "awk" "base64" "basename" "bc" "blkdiscard" "blkid"
+		"[" "acpid" "arping" "awk" "base64" "basename" "bc" "blkdiscard" "blkid"
 		"blockdev" "bunzip2" "bzcat" "bzip2" "cat" "chgrp" "chmod" "chown"
 		"chpasswd" "chroot" "cksum" "clear" "cmp" "comm" "cp" "cpio" "cut"
 		"date" "dc" "dd" "depmod" "df" "diff" "dirname" "dmesg" "du" "echo"

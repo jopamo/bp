@@ -22,8 +22,6 @@ DEPEND="
 	xattr? ( app-core/attr )
 "
 
-PATCHES=( "${FILESDIR}"/fix-undefined-reference.patch )
-
 src_prepare() {
 	cp -rp "${FILESDIR}"/* "${S}"/
 

@@ -434,8 +434,6 @@ restore_ssh() {
 }
 
 start_ssh_agent() {
-	systemctl --user enable ssh-agent
-	systemctl --user start ssh-agent
 	for key in ~/.ssh/*; do
 		if [ -f "$key" ]; then
 			filename=$(basename "$key")

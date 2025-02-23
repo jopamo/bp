@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openbox_menu xmlns="http://openbox.org/">
 	<menu id="root-menu" label="Openbox 3">
+		<menu id="monitor-control" label="Monitor Control">
+			<item label="Disable eDP-1">
+				<action name="Execute">
+					<execute>
+						xrandr --output eDP-1 --off
+					</execute>
+				</action>
+			</item>
+			<item label="Enable eDP-1">
+				<action name="Execute">
+					<execute>
+						xrandr --output eDP-1 --auto
+					</execute>
+				</action>
+			</item>
+			<item label="Disable DP-1">
+				<action name="Execute">
+					<execute>
+						xrandr --output DP-1 --off
+					</execute>
+				</action>
+			</item>
+			<item label="Enable DP-1">
+				<action name="Execute">
+					<execute>
+						xrandr --output DP-1 --auto
+					</execute>
+				</action>
+			</item>
+		</menu>
+
 		<item label="lxterminal">
 			<action name="Execute">
 				<execute>
@@ -113,21 +144,21 @@
 				</execute>
 			</action>
 		</item>
-	<separator/>
-	<menu id="preferences" label="Preferences">
-		<item label="Reconfigure">
-			<action name="Reconfigure"/>
-		</item>
-		<item label="Restart">
-			<action name="Restart"/>
+		<separator/>
+		<menu id="preferences" label="Preferences">
+			<item label="Reconfigure">
+				<action name="Reconfigure"/>
+			</item>
+			<item label="Restart">
+				<action name="Restart"/>
+			</item>
+		</menu>
+		<item label="Exit">
+			<action name="Execute">
+				<execute>
+					openbox --exit
+				</execute>
+			</action>
 		</item>
 	</menu>
-	<item label="Exit">
-		<action name="Execute">
-			<execute>
-				openbox --exit
-			</execute>
-		</action>
-	</item>
-	</menu>
-	</openbox_menu>
+</openbox_menu>

@@ -7,9 +7,15 @@ inherit autotools python-r1
 DESCRIPTION="A standards compliant, fast, light-weight, extensible window manager"
 HOMEPAGE="http://openbox.org/"
 
-SNAPSHOT=0f1a9f19cab56ef67ce0cf176e49466fbe65605d
-SRC_URI="https://github.com/jopamo/openbox/archive/${SNAPSHOT}.tar.gz -> openbox-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/openbox-${SNAPSHOT}"
+if [[ ${PV} != 9999 ]]; then
+	SNAPSHOT=0f1a9f19cab56ef67ce0cf176e49466fbe65605d
+	SRC_URI="https://github.com/jopamo/openbox/archive/${SNAPSHOT}.tar.gz -> openbox-${SNAPSHOT}.tar.gz"
+	S="${WORKDIR}/openbox-${SNAPSHOT}"
+else
+	WANT_LIBTOOL=none
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/jopamo/openbox.git"
+fi
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -22,10 +28,10 @@ RDEPEND="
 	fonts/fontconfig
 	lib-core/libxml2
 	lib-util/glib
-	xgui-lib/librsvg
 	xgui-lib/libXft
 	xgui-lib/libXrandr
 	xgui-lib/libXt
+	xgui-lib/librsvg
 	xgui-lib/pango
 	xgui-misc/imlib2
 "

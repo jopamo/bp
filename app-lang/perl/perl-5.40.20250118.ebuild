@@ -202,4 +202,6 @@ src_install() {
 	[[ -d ${ED}/usr/local ]] && rm -r "${ED}"/usr/local
 
 	rm -rf "${ED}"/usr/share/man
+
+	fperms +x /usr/bin/perl
 }

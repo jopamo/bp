@@ -203,5 +203,5 @@ src_install() {
 
 	rm -rf "${ED}"/usr/share/man
 
-	fperms +x /usr/bin/perl
+	fperms 0755 /usr/bin/perl
 }

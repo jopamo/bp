@@ -32,7 +32,7 @@ src_configure() {
 		$(meson_feature xz)
 		$(meson_feature zlib)
 		$(meson_feature ssl openssl)
-		$(meson_use tools tools)
+		$(meson_use tools)
 		$(meson_use logging logging)
 		$(meson_use debug-messages)
 		$(meson_use build-tests)
@@ -40,6 +40,5 @@ src_configure() {
 		-Ddocs=false
 	)
 
-	# Call the Meson configure phase with the arguments
 	meson_src_configure "${emesonargs[@]}"
 }

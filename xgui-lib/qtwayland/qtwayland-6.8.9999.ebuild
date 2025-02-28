@@ -4,7 +4,7 @@ EAPI=8
 
 inherit cmake
 
-DESCRIPTION="The QML and Quick modules for the Qt5 framework"
+DESCRIPTION="Wayland platform plugin for Qt"
 HOMEPAGE="https://www.qt.io/"
 
 if [[ ${PV} == *9999 ]]; then
@@ -19,4 +19,4 @@ fi
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT="$(ver_cut 1)"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"

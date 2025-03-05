@@ -21,14 +21,15 @@ DEPEND="
 	dev-python/mako
 	lib-core/expat
 	lib-core/zlib
+	xgui-lib/libdrm
 	xgui-lib/libX11
+	xgui-lib/libxcb
 	xgui-lib/libXdamage
 	xgui-lib/libXext
 	xgui-lib/libXfixes
-	xgui-lib/libXxf86vm
-	xgui-lib/libdrm
-	xgui-lib/libxcb
 	xgui-lib/libxshmfence
+	xgui-lib/libXxf86vm
+	xgui-tools/libclc
 	xmedia-lib/libglvnd
 	xgui-tools/spirv-llvm-translator
 	wayland? ( xgui-lib/wayland-protocols )

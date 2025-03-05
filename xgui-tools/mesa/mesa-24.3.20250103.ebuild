@@ -30,26 +30,28 @@ DEPEND="
 	xgui-lib/libxcb
 	xgui-lib/libxshmfence
 	xmedia-lib/libglvnd
+	xgui-tools/spirv-llvm-translator
 	wayland? ( xgui-lib/wayland-protocols )
 "
 BDEPEND="
+	dev-python/ply
 	dev-python/pyyaml
 "
 
 src_configure() {
 	local emesonargs=(
-		-Db_lto=false
-		-Ddri3=disabled
-		-Degl=disabled
-		-Dgallium-drivers="swrast,zink"
+		-Db_lto=true
+		-Ddri3=enabled
+		-Degl=enabled
+		-Dgallium-drivers="iris,zink"
 		-Dgallium-extra-hud=false
 		-Dgallium-nine=false
 		-Dgallium-opencl=disabled
 		-Dgallium-va=disabled
 		-Dgallium-vdpau=disabled
 		-Dgbm=enabled
-		-Dgles1=disabled
-		-Dgles2=disabled
+		-Dgles1=enabled
+		-Dgles2=enabled
 		-Dglvnd=true
 		-Dglx=dri
 		-Dlibunwind=disabled
@@ -57,10 +59,10 @@ src_configure() {
 		-Dlmsensors=disabled
 		-Dopengl=true
 		-Dosmesa=false
-		-Dplatforms="$(usex wayland 'wayland,x11' 'x11')"
+		-Dplatforms="x11,wayland"
 		-Dshared-glapi=enabled
 		-Dvalgrind=disabled
-		-Dvulkan-drivers=""
-		)
+		-Dvulkan-drivers="intel"
+	)
 	meson_src_configure
 }

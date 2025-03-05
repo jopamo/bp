@@ -16,12 +16,3 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-lib/qtbase"
-
-src_install() {
-	cmake_src_install
-
-	cat > "${T}"/99${PN} <<- EOF || die
-		QT_STYLE_OVERRIDE=Adwaita-Dark
-	EOF
-	doenvd "${T}"/99${PN}
-}

@@ -3,6 +3,9 @@
 alias eupdate='emerge --sync && eup'
 alias rebuild_packages='eup && rebuild_world'
 alias 1g4_nspawn='systemd-nspawn --bind /var/cache/distfiles --bind-ro /var/db/repos/bp --tmpfs /var/tmp/portage'
+alias oneshot='emerge --oneshot'
+alias update_world='emerge --keep-going -uDNv world'
+alias update_everything='emerge --keep-going -euDNv world'
 
 move_package() {
 	local REPO_PATH="/var/db/repos/bp"
@@ -97,84 +100,113 @@ rebuild_world() {
 
 update_kernel_efi() {
 	trap 'echo "Interrupted by user"; return 1' SIGINT
+	(
+		set -e
 
-	cd /usr/src/linux || return 1
+		cd /usr/src/linux
+		make oldconfig
+		mount -o remount,rw -t efivarfs efivarfs /sys/firmware/efi/efivars
+		mount /boot
+		mount /boot/efi
+		make prepare
 
-	make oldconfig
-	mount -o remount,rw -t efivarfs efivarfs /sys/firmware/efi/efivars
-	mount /boot
-	mount /boot/efi
-	make prepare
+		make -j"$(nproc)"
 
-	make -j$(nproc) || return 1
+		rm -rf /lib/modules/*
+		rm /boot/System.map* /boot/config* /boot/vmlinuz*
 
-	rm -rf /lib/modules/*
-	rm /boot/System.map* /boot/config* /boot/vmlinuz*
+		make modules_install
+		make install
 
-	make modules_install || return 1
-	make install || return 1
+		KERNEL_VERSION=$(make -s kernelrelease)
 
-	mkdir -p /boot/grub/
-	grub-mkconfig -o /boot/grub/grub.cfg || return 1
-	grub-install --efi-directory=/boot/efi
-	grub-install --efi-directory=/boot/efi --removable || return 1
+		dracut \
+			-f "/boot/initramfs-${KERNEL_VERSION}.img" \
+			"${KERNEL_VERSION}" \
+			--kernel-image "/boot/vmlinuz-${KERNEL_VERSION}" \
+			--hostonly \
+			--early-microcode \
+			--mdadmconf \
+			--lvmconf \
+			--strip \
+			--zstd \
+			--logfile /var/log/dracut.log \
+			--stdlog 3
 
-	echo "Kernel update complete."
+		mkdir -p /boot/grub/
+		grub-mkconfig -o /boot/grub/grub.cfg
+		grub-install --efi-directory=/boot/efi
+		grub-install --efi-directory=/boot/efi --removable
 
+		echo "Kernel update complete."
+	) || return 1
 	trap - SIGINT
 }
 
 update_kernel_mbr() {
 	trap 'echo "Interrupted by user"; return 1' SIGINT
+	(
+		set -e
 
-	cd /usr/src/linux || return 1
+		cd /usr/src/linux
+		make oldconfig
+		mount /boot
+		make prepare
+		make -j"$(nproc)"
 
-	make oldconfig
-	mount /boot || return 1
+		rm -rf /lib/modules/*
+		rm /boot/System.map* /boot/config* /boot/vmlinuz*
 
-	make prepare
+		make modules_install
+		make install
 
-	make -j$(nproc) || return 1
+		KERNEL_VERSION=$(make -s kernelrelease)
 
-	rm -rf /lib/modules/*
-	rm /boot/System.map* /boot/config* /boot/vmlinuz*
+		dracut \
+			-f "/boot/initramfs-${KERNEL_VERSION}.img" \
+			"${KERNEL_VERSION}" \
+			--kernel-image "/boot/vmlinuz-${KERNEL_VERSION}" \
+			--hostonly \
+			--early-microcode \
+			--mdadmconf \
+			--lvmconf \
+			--strip \
+			--zstd \
+			--logfile /var/log/dracut.log \
+			--stdlog 3
 
-	make modules_install || return 1
-	make install || return 1
+		grub-mkconfig -o /boot/grub/grub.cfg
+		grub-install --target=i386-pc /dev/sda
 
-	grub-mkconfig -o /boot/grub/grub.cfg || return 1
-	grub-install --target=i386-pc /dev/sda || return 1
-
-	echo "Kernel update complete."
-
+		echo "Kernel update complete."
+	) || return 1
 	trap - SIGINT
 }
 
-
 update_kernel_opi5plus() {
 	trap 'echo "Interrupted by user"; return 1' SIGINT
+	(
+		set -e
 
-	cd /usr/src/linux || return 1
+		cd /usr/src/linux
+		make oldconfig
+		mount /boot
+		make prepare
+		make -j"$(nproc)" Image
+		make -j"$(nproc)" dtbs
+		make -j"$(nproc)" modules
 
-	make oldconfig
-	mount /boot
-	make prepare
+		rm -rf /lib/modules/*
+		rm /boot/{System.map,config,vmlinux,vmlinuz,initrd,uInitrd}*
+		rm -rf /boot/dtb*
+		mkdir -p /boot/dtb/rockchip
+		cp arch/arm64/boot/dts/rockchip/rk3588-orangepi-5-plus.dtb /boot/dtb/rockchip/
+		make -j"$(nproc)" Image.gz
+		cp /usr/src/linux/arch/arm64/boot/Image.gz /boot/
+		make modules_install
 
-	make -j$(nproc) Image || return 1
-	make -j$(nproc) dtbs || return 1
-	make -j$(nproc) modules || return 1
-
-	rm -rf /lib/modules/*
-	rm /boot/{System.map,config,vmlinux,vmlinuz,initrd,uInitrd}*
-	rm -rf /boot/dtb*
-	mkdir -p /boot/dtb/rockchip
-	cp arch/arm64/boot/dts/rockchip/rk3588-orangepi-5-plus.dtb /boot/dtb/rockchip/ || return 1
-	make -j$(nproc) Image.gz || return 1
-	cp /usr/src/linux/arch/arm64/boot/Image.gz /boot/ || return 1
-	make modules_install || return 1
-
-	echo "Kernel update complete."
-
+		echo "Kernel update complete."
+	) || return 1
 	trap - SIGINT
 }
 

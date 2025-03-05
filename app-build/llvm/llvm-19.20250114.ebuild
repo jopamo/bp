@@ -211,9 +211,9 @@ src_configure() {
 	if use bootstrap; then
 		mycmakeargs+=("${common[@]}" "${bootstrap[@]}")
 	elif use late; then
-		mycmakeargs+=("${common[@]}" "${bootstrap[@]}" "${late[@]}")
+		mycmakeargs+=("${common[@]}" "${late[@]}")
 	else
-		mycmakeargs+=("${common[@]}" "${bootstrap[@]}" "${last[@]}")
+		mycmakeargs+=("${common[@]}" "${last[@]}")
 	fi
 
 	use debug || local -x CPPFLAGS="${CPPFLAGS} -DNDEBUG"

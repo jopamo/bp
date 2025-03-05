@@ -20,7 +20,7 @@ IUSE="+spirv video_cards_nvidia video_cards_r600 video_cards_radeonsi"
 BDEPEND="
 	${PYTHON_DEPS}
 	app-build/llvm
-	spirv? (xgui-tools/spirv-llvm-translator)
+	spirv? ( xgui-tools/spirv-llvm-translator )
 "
 
 DEPEND="app-build/llvm"

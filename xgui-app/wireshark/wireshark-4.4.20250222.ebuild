@@ -36,8 +36,8 @@ DEPEND="
 	lib-net/c-ares
 	caps? ( lib-core/libcap )
 	qt? (
-		xgui-lib/qtbase:6
-		xgui-lib/qtmultimedia:6
+		xgui-lib/qtbase:5
+		xgui-lib/qtmultimedia:5
 	)
 	libssh? ( lib-net/libssh )
 	libxml2? ( lib-core/libxml2 )
@@ -120,7 +120,7 @@ src_configure() {
 		-D ENABLE_UBSAN="$(usex ubsan)"
 		-D ENABLE_ZLIB="$(usex zlib)"
 		-D ENABLE_ZSTD="$(usex zstd)"
-		-D USE_qt6=ON
+		-D USE_qt6=OFF
 	)
 	cmake_src_configure
 }

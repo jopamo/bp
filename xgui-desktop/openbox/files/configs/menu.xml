@@ -67,6 +67,11 @@
 				<execute>env QT_STYLE_OVERRIDE=Adwaita-Dark keepassxc</execute>
 			</action>
 		</item>
+		<item label="wireshark">
+			<action name="Execute">
+				<execute>env QT_STYLE_OVERRIDE=Adwaita-Dark wireshark</execute>
+			</action>
+		</item>
 		<item label="qalculate-gtk">
 			<action name="Execute">
 				<execute>qalculate-gtk</execute>

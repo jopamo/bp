@@ -24,7 +24,7 @@ DEPEND="
 	lib-util/glib
 	lib-misc/libqtxdg
 	xgui-tools/kguiaddons
-	xgui-tools/kwindowsystem:5
+	xgui-tools/kwindowsystem:6
 	xgui-lib/libX11
 	xgui-lib/liblxqt
 	xgui-lib/lxqt-globalkeys

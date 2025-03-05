@@ -4,6 +4,7 @@
 # to run user-specific things.
 #
 
+picom --backend glx --corner-radius 15 -b
 lxqt-panel &
 hsetroot -solid '#000000' &
 

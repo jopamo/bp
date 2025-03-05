@@ -4,8 +4,11 @@ After=network.target
 
 [Service]
 User=qbittorrent
+Group=qbittorrent
+Type=simple
 ExecStart=/usr/bin/qbittorrent-nox
-ExecStop=/usr/bin/killall -w qbittorrent-nox
+Restart=on-failure
+RestartSec=5
 NoNewPrivileges=yes
 PrivateTmp=yes
 PrivateDevices=yes

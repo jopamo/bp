@@ -2,11 +2,14 @@
 
 EAPI=7
 
-inherit font git-r3
+inherit font
 
 DESCRIPTION="Google's font family that aims to support all the world's languages"
 HOMEPAGE="https://www.google.com/get/noto/ https://github.com/googlefonts/noto-fonts"
-EGIT_REPO_URI="https://github.com/jopamo/micronoto.git"
+
+COMMIT="22e564626297b4df0a40570ad81d6c05cc7c38bd"
+SRC_URI="https://github.com/googlefonts/noto-emoji/archive/${COMMIT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/noto-emoji-${COMMIT}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
@@ -14,12 +17,15 @@ KEYWORDS="amd64 arm64"
 
 RESTRICT="binchecks strip"
 
+FONT_S="${S}/fonts"
 FONT_SUFFIX="ttf"
+FONT_CONF=(
+	"${FILESDIR}/66-emoji.conf"
+)
 
-src_install() {
-	FONT_S="${S}/unhinted/" font_src_install
-	FONT_S="${S}/hinted/" font_src_install
-	FONT_S="${S}/roboto/" font_src_install
+src_prepare() {
+	rm Makefile
+	default
 }
 
 pkg_postinst() {

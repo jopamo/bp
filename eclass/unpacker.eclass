@@ -613,7 +613,7 @@ unpacker_src_uri_depends() {
 		*.rar)
 			deps[rar]="app-compression/unrar" ;;
 		*.7z)
-			deps[7z]="app-compression/p7zip" ;;
+			deps[7z]="app-compression/7zip" ;;
 		*.xz)
 			deps[xz]="app-compression/xz-utils" ;;
 		*.zip)

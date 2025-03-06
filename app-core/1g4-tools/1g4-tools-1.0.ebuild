@@ -12,7 +12,7 @@ SLOT="6"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	app-compression/p7zip
+	app-compression/7zip
 	app-core/tmux
 	app-crypto/pass
 	app-crypto/tpm2-tools

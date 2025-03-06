@@ -26,28 +26,28 @@ init_logs() {
 }
 
 GCC_MAJOR_VERSIONS=("11" "12" "13" "14")
-GLIBC_VERSIONS=("2.36" "2.38" "2.39")
+GLIBC_VERSIONS=("2.36" "2.40")
 GO_VERSIONS=("1.21" "1.22" "1.23")
 BINUTILS_VERSIONS=("2.43")
 
 XZ_UTILS_VERSION="5.6"
-SYSTEMD_VERSION="256"
-UTIL_LINUX_VERSION="2.40"
+SYSTEMD_VERSION="257"
+UTIL_LINUX_VERSION="2.41"
 OPENSSL_VERSION="3.1"
 NODEJS_VERSION="22"
 BIND_TOOLS_VERSION="9.20"
 GAWK_VERSION="5.3"
-PYTHON_VERSION="3.12"
+PYTHON_VERSION="3.13"
 PERL_VERSION="5.40"
 TCL_VERSION="8.6"
 LLVM_VERSION="19"
 SQLITE_VERSION="3.47"
 
-GDB_VERSION="15"
+GDB_VERSION="16"
 BASH_VERSION="5.2"
 LIBGCRYPT_VERSION="1.10"
 MPFR_VERSION="4.2"
-KDE_VERSION="5"
+KDE_VERSION="6"
 TOR_VERSION="0.4.8"
 WIRESHARK_VERSION="4.4"
 
@@ -385,8 +385,8 @@ branch_bump() {
 	update_ebuild "${REPO_PATH}/app-lang/python" "https://github.com/python/cpython" "${PYTHON_VERSION}" "$PYTHON_VERSION" "no"
 	update_ebuild "${REPO_PATH}/app-lang/perl" "https://github.com/Perl/perl5" "maint-${PERL_VERSION}" "$PERL_VERSION" "no"
 	update_ebuild "${REPO_PATH}/lib-core/sqlite" "https://github.com/sqlite/sqlite" "branch-${SQLITE_VERSION}" "$SQLITE_VERSION" "no"
-	update_ebuild "${REPO_PATH}/app-build/llvm" "https://github.com/llvm/llvm-project" "release/${LLVM_VERSION}.x" "$LLVM_VERSION" "no"
-	relink_llvm_to_latest
+	#update_ebuild "${REPO_PATH}/app-build/llvm" "https://github.com/llvm/llvm-project" "release/${LLVM_VERSION}.x" "$LLVM_VERSION" "no"
+	#relink_llvm_to_latest
 	update_ebuild "${REPO_PATH}/app-core/util-linux" "https://github.com/util-linux/util-linux" "stable/v${UTIL_LINUX_VERSION}" "${UTIL_LINUX_VERSION}" "no"
 	update_ebuild "${REPO_PATH}/app-core/systemd" "https://github.com/systemd/systemd" "v${SYSTEMD_VERSION}-stable" "${SYSTEMD_VERSION}" "no"
 	update_ebuild "${REPO_PATH}/xgui-app/wireshark" "https://github.com/wireshark/wireshark" "release-${WIRESHARK_VERSION}" "${WIRESHARK_VERSION}" "no"

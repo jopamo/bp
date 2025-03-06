@@ -55,9 +55,8 @@ if [[ -d ~/.bashrc.d ]]; then
 	done
 fi
 
-HISTSIZE=5000
+HISTSIZE=50000
 export GPG_TTY="$(tty)"
-export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 
 bind 'set bell-style none'
 bind 'set colored-stats on'

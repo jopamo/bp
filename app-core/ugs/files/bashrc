@@ -56,6 +56,8 @@ if [[ -d ~/.bashrc.d ]]; then
 fi
 
 HISTSIZE=50000
+
+export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 export GPG_TTY="$(tty)"
 
 bind 'set bell-style none'

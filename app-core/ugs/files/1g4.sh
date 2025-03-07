@@ -118,6 +118,36 @@ update_kernel_efi() {
 		make modules_install
 		make install
 
+		mkdir -p /boot/grub/
+		grub-mkconfig -o /boot/grub/grub.cfg
+		grub-install --efi-directory=/boot/efi
+		grub-install --efi-directory=/boot/efi --removable
+
+		echo "Kernel update complete."
+	) || return 1
+	trap - SIGINT
+}
+
+update_efi_init() {
+	trap 'echo "Interrupted by user"; return 1' SIGINT
+	(
+		set -e
+
+		cd /usr/src/linux
+		make oldconfig
+		mount -o remount,rw -t efivarfs efivarfs /sys/firmware/efi/efivars
+		mount /boot
+		mount /boot/efi
+		make prepare
+
+		make -j"$(nproc)"
+
+		rm -rf /lib/modules/*
+		rm /boot/System.map* /boot/config* /boot/vmlinuz*
+
+		make modules_install
+		make install
+
 		KERNEL_VERSION=$(make -s kernelrelease)
 
 		dracut \
@@ -159,21 +189,6 @@ update_kernel_mbr() {
 
 		make modules_install
 		make install
-
-		KERNEL_VERSION=$(make -s kernelrelease)
-
-		dracut \
-			-f "/boot/initramfs-${KERNEL_VERSION}.img" \
-			"${KERNEL_VERSION}" \
-			--kernel-image "/boot/vmlinuz-${KERNEL_VERSION}" \
-			--hostonly \
-			--early-microcode \
-			--mdadmconf \
-			--lvmconf \
-			--strip \
-			--zstd \
-			--logfile /var/log/dracut.log \
-			--stdlog 3
 
 		grub-mkconfig -o /boot/grub/grub.cfg
 		grub-install --target=i386-pc /dev/sda

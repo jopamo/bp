@@ -17,6 +17,11 @@ KEYWORDS="amd64 arm64"
 
 BDEPEND="lib-dev/gobject-introspection"
 
+src_prepare() {
+	default
+	sed -i 's/^\(#\s*\)#/\1/' include/graphene-config.h.meson
+}
+
 src_configure() {
 	local emesonargs=(
 		-Dgtk_doc=false

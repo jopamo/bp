@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="USB enumeration utilities"
 HOMEPAGE="https://www.kernel.org/pub/linux/utils/usb/usbutils/"
 
-SNAPSHOT=6b749efd59629efb6876f15ac52a01e043e7c670
+SNAPSHOT=9034a5ffd0d1d65de245923080d2db6d7d4c5337
 SRC_URI="https://github.com/gregkh/usbutils/archive/${SNAPSHOT}.tar.gz -> usbutils-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/usbutils-${SNAPSHOT}"
 

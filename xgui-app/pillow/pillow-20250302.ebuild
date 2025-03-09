@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_EXT=1
-# setuptools wrapper
+
 DISTUTILS_USE_PEP517=standalone
 PYTHON_COMPAT=( python3_{10..13} pypy3 )
 
@@ -18,16 +18,17 @@ HOMEPAGE="
 	https://github.com/python-pillow/Pillow/
 	https://pypi.org/project/pillow/
 "
-SRC_URI="
-	https://github.com/python-pillow/Pillow/archive/${PV}.tar.gz
-		-> ${P}.gh.tar.gz
-"
-S="${WORKDIR}/${MY_P}"
+
+SNAPSHOT=e946c7b14adc7a0aaa9ac883de217a3c0e556a81
+SRC_URI="https://github.com/python-pillow/Pillow/archive/${SNAPSHOT}.tar.gz -> pillow-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/Pillow-${SNAPSHOT}"
 
 LICENSE="HPND"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="examples imagequant +jpeg jpeg2k lcms test tiff tk truetype webp xcb zlib"
+
 REQUIRED_USE="test? ( jpeg jpeg2k lcms tiff truetype )"
 RESTRICT="!test? ( test )"
 
@@ -48,11 +49,6 @@ BDEPEND="
 EPYTEST_XDIST=1
 distutils_enable_tests pytest
 
-PATCHES=(
-	# https://github.com/python-pillow/pillow/pull/7634
-	"${FILESDIR}/${PN}-10.2.0-cross.patch"
-)
-
 usepil() {
 	usex "${1}" enable disable
 }
@@ -70,7 +66,6 @@ python_configure_all() {
 		$(usepil tiff)_tiff = True
 		$(usepil imagequant)_imagequant = True
 		$(usepil webp)_webp = True
-		$(usepil webp)_webpmux = True
 		$(usepil xcb)_xcb = True
 		$(usepil zlib)_zlib = True
 	EOF

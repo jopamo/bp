@@ -24,9 +24,6 @@ kernel.sysrq = 0                               # Disable SysRq functionality
 kernel.unprivileged_bpf_disabled = 1
 kernel.yama.ptrace_scope = 0
 
-# User namespace limit
-user.max_user_namespaces = 10000               # Allow user namespaces
-
 # ICMP and IP settings
 net.ipv4.icmp_echo_ignore_broadcasts = 1
 net.ipv4.icmp_ignore_bogus_error_responses = 1

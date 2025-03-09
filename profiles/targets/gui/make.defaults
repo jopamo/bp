@@ -42,6 +42,7 @@ USE="
 	qt
 	tiff
 	tmpfilesd
+	user-namespaces
 	video
 	xcb
 	xdg

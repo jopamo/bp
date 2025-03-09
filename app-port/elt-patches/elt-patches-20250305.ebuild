@@ -5,9 +5,9 @@ EAPI=8
 DESCRIPTION="Collection of patches for libtool.eclass"
 HOMEPAGE="https://gitweb.gentoo.org/proj/elt-patches.git/"
 
-SNAPSHOT=d85293e687904e22d6f1c92355746ce2a196dfa9
-SRC_URI="https://gitweb.gentoo.org/proj/elt-patches.git/snapshot/elt-patches-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}//${PN}-${SNAPSHOT}"
+SNAPSHOT=af4893f10cca1b87433be499025bb8bf0a267b6e
+SRC_URI="https://github.com/gentoo/elt-patches/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

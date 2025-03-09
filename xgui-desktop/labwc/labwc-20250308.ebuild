@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="Wayland window-stacking compositor"
 HOMEPAGE="https://github.com/labwc/labwc"
 
-SNAPSHOT=6927153a830386394bc67285571dbaf3f739fcbd
+SNAPSHOT=4eec0d2fc7d27de4ca1cbde24a57462a1324c43b
 SRC_URI="https://github.com/labwc/labwc/archive/${SNAPSHOT}.tar.gz -> labwc-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/labwc-${SNAPSHOT}"
 

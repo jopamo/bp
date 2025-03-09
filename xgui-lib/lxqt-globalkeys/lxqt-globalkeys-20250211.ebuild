@@ -21,4 +21,5 @@ BDEPEND="app-dev/lxqt-build-tools"
 src_install() {
 	cmake_src_install
 	rm "${ED}"/usr/share/applications/lxqt-config-globalkeyshortcuts.desktop
+	rm -rf "${ED}"/etc/xdg/autostart
 }

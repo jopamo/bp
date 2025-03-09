@@ -36,4 +36,6 @@ src_install() {
 
 	insinto etc/xdg/${PN}/default
 	doins ${FILESDIR}/settings.conf
+
+	rm -rf "${ED}"/etc/xdg/autostart
 }

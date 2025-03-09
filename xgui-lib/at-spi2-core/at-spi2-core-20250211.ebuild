@@ -33,4 +33,6 @@ src_install() {
 		NO_AT_BRIDGE=1
 	EOF
 	doenvd "${T}"/99${PN}
+
+	rm -rf "${ED}"/etc/xdg/autostart
 }

@@ -48,4 +48,5 @@ src_configure() {
 src_install() {
 	meson_src_install
 	rm -rf "${ED}"/usr/share/icons
+	rm -rf "${ED}"/etc/xdg/autostart
 }

@@ -7,7 +7,7 @@ inherit meson python-any-r1
 DESCRIPTION="Reusable library for GPU-accelerated image processing primitives"
 HOMEPAGE="https://libplacebo.org/"
 
-SNAPSHOT=8966ee94c0866b1610fba12966a846e5c970dc2b
+SNAPSHOT=02f4f9862395d0379a0ec654345f52daf81e1aee
 SRC_URI="https://github.com/haasn/libplacebo/archive/${SNAPSHOT}.tar.gz -> libplacebo-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libplacebo-${SNAPSHOT}"
 

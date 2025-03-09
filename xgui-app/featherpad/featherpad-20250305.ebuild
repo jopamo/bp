@@ -7,7 +7,7 @@ inherit xdg cmake
 DESCRIPTION="Lightweight Qt Plain-Text Editor"
 HOMEPAGE="https://github.com/tsujan/FeatherPad"
 
-SNAPSHOT=4b0b50b7459cb499236d0fee7b088a5be2bdaafd
+SNAPSHOT=eb56a77aa2aebe5385fdca51969bbd4f8113b6ea
 SRC_URI="https://github.com/tsujan/FeatherPad/archive/${SNAPSHOT}.tar.gz -> FeatherPad-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/FeatherPad-${SNAPSHOT}"
 

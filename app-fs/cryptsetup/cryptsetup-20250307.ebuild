@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit linux-info
+inherit linux-info autotools
 
 DESCRIPTION="Tool to setup encrypted devices with dm-crypt"
 HOMEPAGE="https://gitlab.com/cryptsetup/cryptsetup/blob/master/README.md"
-SRC_URI="mirror://kernel/linux/utils/${PN}/v$(ver_cut 1-2)/${P}.tar.xz"
+
+SNAPSHOT=c1b7ad89793f9d9685c6539ce2e13874a9a1777f
+SRC_URI="https://gitlab.com/cryptsetup/cryptsetup/-/archive/${SNAPSHOT}/cryptsetup-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2+"
 SLOT="0"
@@ -30,8 +33,6 @@ DEPEND="${RDEPEND}
 	app-dev/pkgconf
 	static? ( ${LIB_DEPEND} )"
 
-S="${WORKDIR}/${P/_/-}"
-
 pkg_setup() {
 	local CONFIG_CHECK="~DM_CRYPT ~CRYPTO ~CRYPTO_CBC ~CRYPTO_SHA256"
 	local WARNING_DM_CRYPT="CONFIG_DM_CRYPT:\tis not set (required for cryptsetup)\n"
@@ -39,6 +40,11 @@ pkg_setup() {
 	local WARNING_CRYPTO_CBC="CONFIG_CRYPTO_CBC:\tis not set (required for kernel 2.6.19)\n"
 	local WARNING_CRYPTO="CONFIG_CRYPTO:\tis not set (required for cryptsetup)\n"
 	check_extra_config
+}
+
+src_prepare() {
+	default
+	eautoreconf
 }
 
 src_configure() {

@@ -8,7 +8,7 @@ DESCRIPTION="GUID disk partition editor"
 HOMEPAGE="https://github.com/caldwell/gdisk"
 
 SNAPSHOT=28a3e372e3802ef32cd594bdb7825de04f0ca955
-SRC_URI="https://github.com/caldwell/gdisk/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/caldwell/gdisk/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2.1"

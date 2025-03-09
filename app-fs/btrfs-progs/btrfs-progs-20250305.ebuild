@@ -8,7 +8,7 @@ DESCRIPTION="Btrfs filesystem utilities"
 HOMEPAGE="https://btrfs.wiki.kernel.org"
 
 SNAPSHOT=2386b37c346a593d2016baa2d970ce1e605dbaa1
-SRC_URI="https://github.com/kdave/btrfs-progs/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/kdave/btrfs-progs/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"
@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static static-libs"
 
-RESTRICT=test # tries to mount repared filesystems
+RESTRICT=test
 
 LIB_DEPEND="
 	app-core/util-linux:0[static-libs(+)]

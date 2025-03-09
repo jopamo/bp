@@ -180,22 +180,9 @@ src_install() {
 	find "${ED}" -name libcc1plugin.la -delete
 	find "${ED}" -name libcp1plugin.la -delete
 
-	dobin "${FILESDIR}"/c89
-	dobin "${FILESDIR}"/c99
-
-	if use go-bootstrap; then
-		exeinto /usr/lib/gccgo/bin/
-		doexe "${ED}/usr/bin/go"
-		doexe "${ED}/usr/bin/gofmt"
-
-		cat > "${T}"/99gcc <<- EOF || die
-			PATH=/usr/lib/gccgo/bin/
-		EOF
-		doenvd "${T}"/99gcc
-
-		rm "${ED}/usr/bin/go"
-		rm "${ED}/usr/bin/gofmt"
-	fi
-
-	dosym -r /usr/bin/gcc /usr/bin/cc
+	rm -rf "${ED}"/usr/bin
+	rm -rf "${ED}"/usr/include
+	rm -rf "${ED}"/usr/share
+	rm -rf "${ED}"/usr/lib/gcc
+	rm -rf "${ED}"/usr/libexec
 }

@@ -2,19 +2,14 @@
 
 EAPI=8
 
+inherit autotools
+
 DESCRIPTION="Btrfs filesystem utilities"
 HOMEPAGE="https://btrfs.wiki.kernel.org"
 
-if [[ ${PV} != 9999 ]]; then
-	MY_PV=v${PV}
-	SRC_URI="https://www.kernel.org/pub/linux/kernel/people/kdave/${PN}/${PN}-${MY_PV}.tar.xz"
-	S="${WORKDIR}"/${PN}-${MY_PV}
-else
-	WANT_LIBTOOL=none
-	inherit autotools git-r3
-	EGIT_REPO_URI="https://github.com/kdave/btrfs-progs.git"
-	EGIT_BRANCH="master"
-fi
+SNAPSHOT=2386b37c346a593d2016baa2d970ce1e605dbaa1
+SRC_URI="https://github.com/kdave/btrfs-progs/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -44,17 +39,15 @@ fi
 src_prepare() {
 	default
 
-	if [[ ${PV} == 9999 ]]; then
-		eaclocal
-		eautoconf
-		eautoheader
-		mkdir config || die
-		local automakedir="$(autotools_run_tool --at-output automake --print-libdir)"
-		[[ -e ${automakedir} ]] || die "Could not locate automake directory"
-		ln -s "${automakedir}"/install-sh config/install-sh || die
-		ln -s "${EPREFIX}"/usr/share/gnuconfig/config.guess config/config.guess || die
-		ln -s "${EPREFIX}"/usr/share/gnuconfig/config.sub config/config.sub || die
-	fi
+	eaclocal
+	eautoconf
+	eautoheader
+
+	local automakedir="$(autotools_run_tool --at-output automake --print-libdir)"
+	[[ -e ${automakedir} ]] || die "Could not locate automake directory"
+	ln -s "${automakedir}"/install-sh config/install-sh || die
+	ln -s "${EPREFIX}"/usr/share/gnuconfig/config.guess config/config.guess || die
+	ln -s "${EPREFIX}"/usr/share/gnuconfig/config.sub config/config.sub || die
 }
 
 src_configure() {

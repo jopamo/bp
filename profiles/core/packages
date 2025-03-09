@@ -1,5 +1,4 @@
 *app-build/binutils
-*app-build/gcc
 *app-build/make
 *app-compression/pigz
 *app-compression/tar
@@ -41,5 +40,6 @@
 *app-var/pax-utils
 *lib-core/elfutils
 *lib-net/ca-certificates
+*virtual/gcc
 *virtual/libc
 *virtual/service-manager

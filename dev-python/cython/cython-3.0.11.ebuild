@@ -50,7 +50,7 @@ distutils_enable_sphinx docs \
 	dev-python/sphinx-tabs
 
 python_compile() {
-	filter-flags -Wl,-z,defs
+	filter-flags -Wl,-z,defs -flto*
 	# Python gets confused when it is in sys.path before build.
 	local -x PYTHONPATH=
 

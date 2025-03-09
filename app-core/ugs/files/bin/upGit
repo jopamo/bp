@@ -2,7 +2,6 @@
 
 declare -A repo_checked_cache
 declare -A skip_packages
-declare -A maint_excluded_packages
 
 PROGNAME="upGit"
 
@@ -11,7 +10,6 @@ TMP_DIR="/tmp/${PROGNAME}"
 DEBUG_LOG="${TMP_DIR}/${PROGNAME}-debug.log"
 ERROR_LOG="${TMP_DIR}/${PROGNAME}-error.log"
 JSON_LOG="${TMP_DIR}/${PROGNAME}-json.log"
-MAINT_BRANCH_LOG="${TMP_DIR}/${PROGNAME}-maint-branch.log"
 
 FINAL_SCRIPT="${TMP_DIR}/upDay"
 GIT_CLONES_DIR="${TMP_DIR}/.git_packages"
@@ -29,17 +27,8 @@ exclude_package_list=(
 	"musl"
 )
 
-maint_excluded_list=(
-	"repo"
-	"e2fsprogs"
-)
-
 for pkg in "${exclude_package_list[@]}"; do
 	skip_packages["$pkg"]=1
-done
-
-for pkg in "${maint_excluded_list[@]}"; do
-	maint_excluded_packages["$pkg"]=1
 done
 
 main() {
@@ -49,7 +38,6 @@ main() {
 	: > "$JSON_LOG"
 	: > "$DEBUG_LOG"
 	: > "$FINAL_SCRIPT"
-	: > "$MAINT_BRANCH_LOG"
 
 	cp $SKEL_FILE $FINAL_SCRIPT
 
@@ -61,8 +49,6 @@ main() {
 		echo "No option selected, updating all packages or the specified ones..." >> "$DEBUG_LOG"
 		update_packages
 	fi
-
-	log_maint_branch_packages
 
 	if [ "$debug_mode" = false ]; then
 		rm -rf "${TMP_DIR}"
@@ -106,12 +92,6 @@ copy_existing_update_line() {
 	local pkg="$1"
 	local existing_line=$(grep "update_ebuild.*${pkg}" "$SKEL_FILE")
 	echo "$existing_line" >> "$UPDATE_FILE"
-}
-
-log_maint_branch_packages() {
-	echo "Packages using the maint branch:" >> "$MAINT_BRANCH_LOG"
-	sort "$MAINT_BRANCH_LOG" | uniq >> "${MAINT_BRANCH_LOG}.tmp" && mv "${MAINT_BRANCH_LOG}.tmp" "$MAINT_BRANCH_LOG"
-	cat "$MAINT_BRANCH_LOG"
 }
 
 show_help() {
@@ -196,11 +176,6 @@ get_branch() {
 	local package_name=$(basename "$package_path")
 	local clone_dir="${GIT_CLONES_DIR}/$(basename "$package_path")"
 
-	if [[ "${maint_excluded_packages[$package_name]}" ]]; then
-		echo "Skipping maint branch for package: $package_name" >> "$DEBUG_LOG"
-		return
-	fi
-
 	if [[ "$repo_url" =~ github\.com ]]; then
 		handle_github "$repo_url"
 	elif [[ "$repo_url" =~ gitlab\.com ]]; then
@@ -211,10 +186,6 @@ get_branch() {
 
 	if [[ -z "$default_branch" ]]; then
 		handle_fallback "$repo_url" "$clone_dir"
-	fi
-
-	if [[ "$default_branch" == "maint" ]]; then
-		echo "$package_path" >> "$MAINT_BRANCH_LOG"
 	fi
 
 	return 0
@@ -243,15 +214,6 @@ handle_github() {
 		default_branch=$(echo "$default_branch_info" | jq -r '.default_branch')
 		echo "github default_branch $default_branch" >> "$DEBUG_LOG"
 
-		local maint_branch_info=$(curl -s -H "$auth_header" "$api_url/branches/maint")
-		if [[ $? -eq 0 && -n "$maint_branch_info" && "$maint_branch_info" != *"Branch not found"* ]]; then
-			echo "maint_branch exists" >> "$DEBUG_LOG"
-			echo "Maint branch info: $maint_branch_info" >> "$JSON_LOG"
-			default_branch=maint
-		else
-			echo "maint_branch does not exist" >> "$ERROR_LOG"
-		fi
-
 		return 0
 	fi
 }
@@ -279,15 +241,6 @@ handle_gitlab() {
 		default_branch=$(echo "$default_branch_info" | jq -r '.default_branch')
 		echo "gitlab default_branch $default_branch" >> "$DEBUG_LOG"
 
-		local maint_branch_info=$(curl -s -H "$auth_header" "$api_url/repository/branches/maint")
-		if [[ $? -eq 0 && -n "$maint_branch_info" && "$maint_branch_info" != *"404 Branch Not Found"* ]]; then
-			echo "maint_branch exists" >> "$DEBUG_LOG"
-			echo "Maint branch info: $maint_branch_info" >> "$JSON_LOG"
-			default_branch=maint
-		else
-			echo "maint_branch does not exist" >> "$ERROR_LOG"
-		fi
-
 		return 0
 	fi
 }
@@ -313,20 +266,10 @@ handle_fallback() {
 
 	pushd "$clone_dir" > /dev/null
 
-	echo "[$datetime] Checking for 'maint' branch at remote" >> "$DEBUG_LOG"
-	if git ls-remote --heads "$repo_url" maint | grep -q 'refs/heads/maint'; then
-		default_branch="maint"
-		echo "[$datetime] 'maint' branch is set as the default" >> "$DEBUG_LOG"
-	else
-		default_branch=$(git rev-parse --abbrev-ref HEAD)
-		echo "[$datetime] Using default branch: $default_branch" >> "$DEBUG_LOG"
-	fi
+	default_branch=$(git rev-parse --abbrev-ref HEAD)
+	echo "[$datetime] Using default branch: $default_branch" >> "$DEBUG_LOG"
 
 	popd > /dev/null
-
-	if [[ "$default_branch" == "maint" ]]; then
-		echo "$clone_dir" >> "$MAINT_BRANCH_LOG"
-	fi
 
 	return 0
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake
+inherit cmake flag-o-matic
 
 DESCRIPTION="Cryptographic library for embedded systems"
 HOMEPAGE="https://tls.mbed.org/"
@@ -22,3 +22,5 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="dev-python/jsonschema"
+
+filter-lto

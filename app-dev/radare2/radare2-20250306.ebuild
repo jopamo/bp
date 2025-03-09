@@ -7,7 +7,7 @@ inherit flag-o-matic meson
 DESCRIPTION="unix-like reverse engineering framework and commandline tools"
 HOMEPAGE="http://www.radare.org"
 
-SNAPSHOT=feed7220ebc0011d25dd61e59b7cad1f469a5fe5
+SNAPSHOT=f91ccd923ba51275814a1b7204dbd22c4e61d766
 SRC_URI="https://github.com/radareorg/radare2/archive/${SNAPSHOT}.tar.gz -> radare2-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/radare2-${SNAPSHOT}"
 

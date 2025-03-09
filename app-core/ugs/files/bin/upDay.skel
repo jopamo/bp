@@ -50,6 +50,7 @@ MPFR_VERSION="4.2"
 KDE_VERSION="6"
 TOR_VERSION="0.4.8"
 WIRESHARK_VERSION="4.4"
+EXIV_VERSION="0.28"
 
 LIBPCAP_VERSION="1.10"
 
@@ -392,6 +393,7 @@ branch_bump() {
 	update_ebuild "${REPO_PATH}/xgui-app/wireshark" "https://github.com/wireshark/wireshark" "release-${WIRESHARK_VERSION}" "${WIRESHARK_VERSION}" "no"
 	update_ebuild "${REPO_PATH}/lib-core/mpfr" "https://gitlab.inria.fr/mpfr/mpfr" "${MPFR_VERSION}" "${MPFR_VERSION}" "no"
 	update_ebuild "${REPO_PATH}/lib-net/libpcap" "https://github.com/the-tcpdump-group/libpcap" "libpcap-${LIBPCAP_VERSION}" "${LIBPCAP_VERSION}" "no"
+	update_ebuild "${REPO_PATH}/xmedia-lib/exiv2" "https://github.com/Exiv2/exiv2" "${EXIV_VERSION}.x" "${EXIV_VERSION}" "no"
 }
 
 main

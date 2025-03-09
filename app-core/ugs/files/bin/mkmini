@@ -74,7 +74,7 @@ mkdir -p "${MINIROOT}/"{usr/{bin,sbin,lib},proc,sys,dev,root,home,tmp,run}
 
 cd "${MINIROOT}" || exit
 ln -s usr/bin bin
-ln -s usr/sbin sbin
+ln -s usr/bin sbin
 ln -s usr/lib lib
 ln -s usr/lib lib64
 

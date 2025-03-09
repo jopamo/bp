@@ -99,8 +99,6 @@ declare -A formatters=(
 	["*.go"]="gofmt -w"
 )
 
-umask 077
-
 alias ......='cd ../../../../..'
 alias .....='cd ../../../..'
 alias ....='cd ../../..'

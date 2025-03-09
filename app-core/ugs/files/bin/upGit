@@ -31,6 +31,7 @@ exclude_package_list=(
 
 maint_excluded_list=(
 	"repo"
+	"e2fsprogs"
 )
 
 for pkg in "${exclude_package_list[@]}"; do

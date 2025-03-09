@@ -42,7 +42,7 @@ src_install() {
 	done
 
 	# systemd services
-	for f in {hosts_bump,daily-reboot}.service ; do
+	for f in {hosts_bump,daily-reboot,xdp-loader@}.service ; do
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
 		doins "${FILESDIR}"/services/$f

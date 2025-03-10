@@ -66,13 +66,9 @@ src_prepare() {
 # Try to save bandwidth/disk space
 EGIT_CLONE_TYPE=shallow
 
-# The compression used for binary packages.
-BINPKG_COMPRESS="xz"
+BINPKG_COMPRESS="zstd"
 BINPKG_COMPRESS_FLAGS="-e9"
-
-# The format used for binary packages. The default is use old "xpak" format.
-# Set to "gpkg" to use new gentoo binary package format.
-BINPKG_FORMAT="xpak"
+BINPKG_FORMAT="gpkg"
 EOF
 }
 

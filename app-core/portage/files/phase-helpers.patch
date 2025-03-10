@@ -1,7 +1,7 @@
-diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
---- a/bin/phase-helpers.sh	2021-06-06 16:09:52.348518700 -0500
-+++ b/bin/phase-helpers.sh	2021-06-06 16:15:45.135284584 -0500
-@@ -693,7 +693,11 @@
+diff -ur a/bin/phase-helpers.sh b/bin/phase-helpers.sh
+--- a/bin/phase-helpers.sh	2025-03-10 07:43:07.862035231 -0500
++++ b/bin/phase-helpers.sh	2025-03-10 07:48:45.293166781 -0500
+@@ -629,7 +629,11 @@
  			--infodir="${EPREFIX}"/usr/share/info \
  			--datadir="${EPREFIX}"/usr/share \
  			--sysconfdir="${EPREFIX}"/etc \
@@ -14,7 +14,7 @@ diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
  			"${conf_args[@]}" \
  			"$@" \
  			"${EXTRA_ECONF[@]}"
-@@ -746,9 +750,13 @@
+@@ -682,7 +686,7 @@
  			${MAKE:-make} -n prefix="${ED%/}/usr" \
  				datadir="${ED%/}/usr/share" \
  				infodir="${ED%/}/usr/share/info" \
@@ -22,14 +22,8 @@ diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
 +				localstatedir="${ED%/}/var" \
  				mandir="${ED%/}/usr/share/man" \
  				sysconfdir="${ED%/}/etc" \
-+				libdir="${ED%/}/usr/lib" \
-+				bindir="${ED%/}/usr/bin" \
-+				sbindir="${ED%/}/usr/bin" \
-+				libexecdir="${ED%/}/usr/libexec" \
  				${LOCAL_EXTRA_EINSTALL} \
- 				${MAKEOPTS} -j1 \
- 				"$@" ${EXTRA_EMAKE} install
-@@ -756,9 +764,13 @@
+@@ -693,7 +697,7 @@
  		if ! ${MAKE:-make} prefix="${ED%/}/usr" \
  			datadir="${ED%/}/usr/share" \
  			infodir="${ED%/}/usr/share/info" \
@@ -37,17 +31,12 @@ diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
 +			localstatedir="${ED%/}/var" \
  			mandir="${ED%/}/usr/share/man" \
  			sysconfdir="${ED%/}/etc" \
-+			libdir="${ED%/}/usr/lib" \
-+			bindir="${ED%/}/usr/bin" \
-+			sbindir="${ED%/}/usr/bin" \
-+			libexecdir="${ED%/}/usr/libexec" \
  			${LOCAL_EXTRA_EINSTALL} \
- 			${MAKEOPTS} -j1 \
- 			"$@" ${EXTRA_EMAKE} install
-@@ -840,17 +852,7 @@
+@@ -777,18 +781,6 @@
+ 	if [[ -f Makefile || -f GNUmakefile || -f makefile ]] ; then
  		emake DESTDIR="${D}" install
  	fi
- 
+-
 -	if ! declare -p DOCS &>/dev/null ; then
 -		local d
 -		for d in README* ChangeLog AUTHORS NEWS TODO CHANGES \
@@ -59,62 +48,16 @@ diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
 -	else
 -		dodoc ${DOCS}
 -	fi
-+	cleanup_install
  }
  
  __eapi6_src_prepare() {
-@@ -868,7 +870,7 @@
+@@ -806,7 +798,8 @@
  		emake DESTDIR="${D}" install
  	fi
  
 -	einstalldocs
 +	cleanup_install
++	dedup_symlink "${D}"
  }
  
  __eapi8_src_prepare() {
-@@ -980,45 +982,6 @@
- 	___best_version_and_has_version_common "$@"
- }
- 
--if ___eapi_has_get_libdir; then
--	get_libdir() {
--		local libdir_var="LIBDIR_${ABI}"
--		local libdir="lib"
--
--		[[ -n ${ABI} && -n ${!libdir_var} ]] && libdir=${!libdir_var}
--
--		echo "${libdir}"
--	}
--fi
--
--if ___eapi_has_einstalldocs; then
--	einstalldocs() {
--		(
--			if [[ $(declare -p DOCS 2>/dev/null) != *=* ]]; then
--				local d
--				for d in README* ChangeLog AUTHORS NEWS TODO CHANGES \
--						THANKS BUGS FAQ CREDITS CHANGELOG ; do
--					[[ -f ${d} && -s ${d} ]] && docinto / && dodoc "${d}"
--				done
--			elif ___is_indexed_array_var DOCS ; then
--				[[ ${#DOCS[@]} -gt 0 ]] && docinto / && dodoc -r "${DOCS[@]}"
--			else
--				[[ ${DOCS} ]] && docinto / && dodoc -r ${DOCS}
--			fi
--		)
--
--		(
--			if ___is_indexed_array_var HTML_DOCS ; then
--				[[ ${#HTML_DOCS[@]} -gt 0 ]] && \
--					docinto html && dodoc -r "${HTML_DOCS[@]}"
--			else
--				[[ ${HTML_DOCS} ]] && \
--					docinto html && dodoc -r ${HTML_DOCS}
--			fi
--		)
--	}
--fi
--
- if ___eapi_has_eapply; then
- 	eapply() {
- 		local failed patch_cmd=patch

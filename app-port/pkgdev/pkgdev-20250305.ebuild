@@ -8,27 +8,21 @@ inherit distutils-r1
 
 DESCRIPTION="Collection of tools for Gentoo development"
 HOMEPAGE="https://github.com/pkgcore/pkgdev"
-SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
+
+SNAPSHOT=611a1c75c42457c619bc526620eda77aae00d41d
+SRC_URI="https://github.com/pkgcore/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="BSD MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-if [[ ${PV} == *9999 ]] ; then
-	# https://github.com/pkgcore/pkgdev/blob/main/requirements/dev.txt
-	RDEPEND="
-		~dev-py/snakeoil-9999[${PYTHON_USEDEP}]
-		~app-port/pkgcheck-9999[${PYTHON_USEDEP}]
-		~app-core/pkgcore-9999[${PYTHON_USEDEP}]
-	"
-else
-	# https://github.com/pkgcore/pkgdev/blob/main/requirements/install.txt
-	RDEPEND="
-		>=dev-py/snakeoil-0.9.6[${PYTHON_USEDEP}]
-		>=app-port/pkgcheck-0.10.0[${PYTHON_USEDEP}]
-		>=app-core/pkgcore-0.12.0[${PYTHON_USEDEP}]
-	"
-fi
+# https://github.com/pkgcore/pkgdev/blob/main/requirements/install.txt
+RDEPEND="
+	>=dev-py/snakeoil-0.9.6[${PYTHON_USEDEP}]
+	>=app-port/pkgcheck-0.10.0[${PYTHON_USEDEP}]
+	>=app-core/pkgcore-0.12.0[${PYTHON_USEDEP}]
+"
 
 # Uses pytest but we want to use the setup.py runner to get generated modules
 BDEPEND+="test? ( dev-python/pytest )"

@@ -9,26 +9,17 @@ DISTUTILS_USE_PEP517=standalone
 DESCRIPTION="pkgcore-based QA utility for ebuild repos"
 HOMEPAGE="https://github.com/pkgcore/pkgcheck"
 
-if [[ ${PV} == *9999 ]] ; then
-	EGIT_REPO_URI="https://github.com/pkgcore/pkgcheck.git"
-	inherit git-r3
-else
-	KEYWORDS="amd64 arm64"
-	SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
-fi
+SNAPSHOT=b67acd43a296495f50bc6ce147ac45490ad6bc87
+SRC_URI="https://github.com/pkgcore/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="BSD MIT"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
-if [[ ${PV} == *9999 ]]; then
-	RDEPEND="
-		~dev-py/snakeoil-9999[${PYTHON_USEDEP}]"
-else
-	RDEPEND="
-		>=dev-py/snakeoil-0.10.7[${PYTHON_USEDEP}]
-		>=app-core/pkgcore-0.12.25[${PYTHON_USEDEP}]"
-fi
-RDEPEND+="
+RDEPEND="
+	>=dev-py/snakeoil-0.10.7[${PYTHON_USEDEP}]
+	>=app-core/pkgcore-0.12.25[${PYTHON_USEDEP}]
 	>=lib-dev/tree-sitter-bash-0.21.0[${PYTHON_USEDEP}]
 	dev-python/chardet[${PYTHON_USEDEP}]
 	dev-python/lazy-object-proxy[${PYTHON_USEDEP}]

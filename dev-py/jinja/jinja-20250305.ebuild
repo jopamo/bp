@@ -3,9 +3,6 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
-PYPI_PN=jinja2
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
-PYTHON_REQ_USE="threads(+)"
 
 inherit distutils-r1 pypi
 
@@ -15,6 +12,10 @@ HOMEPAGE="
 	https://github.com/pallets/jinja/
 	https://pypi.org/project/Jinja2/
 "
+
+SNAPSHOT=220e67ae999c24e4077d7bf5bdc932757b65a338
+SRC_URI="https://github.com/pallets/jinja/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"
@@ -32,11 +33,6 @@ distutils_enable_tests pytest
 # XXX: handle Babel better?
 
 src_prepare() {
-	local PATCHES=(
-		# https://github.com/pallets/jinja/pull/1979
-		"${FILESDIR}/${P}-py313.patch"
-	)
-
 	# avoid unnecessary dep on extra sphinxcontrib modules
 	sed -i '/sphinxcontrib.log_cabinet/ d' docs/conf.py || die
 

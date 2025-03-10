@@ -7,15 +7,9 @@ inherit toolchain-funcs
 DESCRIPTION="C++ crypto library"
 HOMEPAGE="https://botan.randombit.net/"
 
-if [[ ${PV} == *9999 ]] ; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/randombit/botan"
-	EGIT_BRANCH="release-2"
-else
-	MY_P="Botan-${PV}"
-	S="${WORKDIR}/${MY_P}"
-	SRC_URI="https://botan.randombit.net/releases/${MY_P}.tar.xz"
-fi
+SNAPSHOT=87a6f97cc167e7bded8921795d8f76ff7642e1c3
+SRC_URI="https://github.com/randombit/botan/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="BSD-2"
 SLOT="0"
@@ -51,7 +45,6 @@ src_configure() {
 		--cpu=${chostarch}
 		--disable-modules=$( IFS=","; echo "${disable_modules[*]}" )
 		--os=linux
-		--with-endian="$(tc-endian)"
 		--with-os-feature=getrandom
 		--without-documentation
 		--without-doxygen

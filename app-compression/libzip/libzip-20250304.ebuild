@@ -7,8 +7,8 @@ inherit cmake multibuild flag-o-matic
 DESCRIPTION="Library for manipulating zip archives"
 HOMEPAGE="https://nih.at/libzip/"
 
-SNAPSHOT=3091d0424e04f98e051fce5e94bb3a6461a33b91
-SRC_URI="https://github.com/nih-at/libzip/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=e9083a7b41463489cd6641310c36f3b9197e1d27
+SRC_URI="https://github.com/nih-at/libzip/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="BSD"

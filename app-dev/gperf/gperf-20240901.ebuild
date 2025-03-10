@@ -2,6 +2,8 @@
 
 EAPI=8
 
+inherit autotools
+
 DESCRIPTION="A perfect hash function generator"
 HOMEPAGE="https://www.gnu.org/software/gperf/"
 SRC_URI="https://1g4.org/files/${P}.tar.xz"
@@ -17,6 +19,10 @@ src_prepare() {
 		*/Makefile.in || die
 
 	default
+	./autopull.sh
+	./autogen.sh
+	eautoreconf
+	autoreconf -ivf
 }
 
 src_configure() {

@@ -78,6 +78,8 @@ PDEPEND="
 "
 
 src_prepare() {
+	export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
+
 	local PATCHES=(
 		# TODO: remove this when we're 100% PEP517 mode
 		"${FILESDIR}/setuptools-62.4.0-py-compile.patch"

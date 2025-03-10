@@ -7,7 +7,10 @@ inherit autotools toolchain-funcs
 DESCRIPTION="MIT Kerberos V"
 HOMEPAGE="https://web.mit.edu/kerberos/www/"
 SRC_URI="https://kerberos.org/dist/krb5/$(ver_cut 1-2)/krb5-${PV}.tar.gz"
-S="${WORKDIR}/krb5-${PV}/src"
+
+SNAPSHOT=80001c8b7b00773a9eb59050aff3b0056080aaf2
+SRC_URI="https://github.com/krb5/krb5/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/krb5-${SNAPSHOT}/src"
 
 LICENSE="openafs-krb5-a BSD MIT OPENLDAP BSD-2 HPND BSD-4 ISC RSA CC-BY-SA-3.0 || ( BSD-2 GPL-2+ )"
 SLOT="0"

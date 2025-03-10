@@ -198,7 +198,7 @@ enewuser() {
 	if [[ $# -gt 0 ]] ; then
 		die "extra arguments no longer supported; please file a bug"
 	else
-		local comment="added by portage for ${PN}"
+		local comment=""
 		opts+=( -c "${comment}" )
 		elog " - GECOS: ${comment}"
 	fi

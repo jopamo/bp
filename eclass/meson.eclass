@@ -498,6 +498,9 @@ meson_install() {
 	"$@" || die -n "install failed"
 
 	popd > /dev/null || die
+
+	cleanup_install
+	dedup_symlink "${D}"
 }
 
 # @FUNCTION: meson_src_install

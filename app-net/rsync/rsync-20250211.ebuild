@@ -15,13 +15,15 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl iconv ipv6 lz4 static xattr xxhash zstd"
+IUSE="acl iconv ipv6 lz4 +static xattr xxhash zstd"
 
 LIB_DEPEND="
+	lib-core/zlib[static-libs(+)]
+	lib-net/openssl[static-libs(+)]
 	acl? ( app-core/acl[static-libs(+)] )
 	lz4? ( app-compression/lz4[static-libs(+)] )
 	xattr? ( app-core/attr[static-libs(+)] )
-	xxhash? ( lib-dev/xxhash[static-libs(+)] )
+	xxhash? ( lib-misc/xxhash[static-libs(+)] )
 	zstd? ( app-compression/zstd[static-libs(+)] )
 "
 

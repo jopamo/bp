@@ -20,7 +20,7 @@ BDEPEND="
 "
 
 src_install() {
-	default
+	emake DESTDIR="${D}" install
 
 	#compat symlinks
 	rm "${ED}"/usr/bin/{aclocal,automake}-*

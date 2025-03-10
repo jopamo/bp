@@ -147,8 +147,8 @@ src_configure() {
 		compiler-docs = false
 		python = "${EPYTHON}"
 		extended = true
-		cargo = "/usr/bin/cargo"
-		rustc = "/usr/bin/rustc"
+		cargo = "cargo"
+		rustc = "rustc"
 		tools = ["cargo","clippy","rustdoc","rustfmt","rust-analyzer","rust-analyzer-proc-macro-srv","analysis","src"]
 		vendor = true
 		sanitizers = false
@@ -167,18 +167,6 @@ src_configure() {
 		[dist]
 		src-tarball = false
 	_EOF_
-
-	#rm -rf "${S}/vendor"
-	ln -sf "${S}/vendor" "${S}/compiler/rustc_codegen_cranelift/vendor"
-	ln -sf "${S}/vendor" "${S}/src/tools/cargo/vendor"
-	ln -sf "${S}/vendor" "${S}/src/tools/rust-analyzer/vendor"
-	ln -sf "${S}/vendor" "${S}/src/bootstrap/vendor"
-
-	cargo vendor --locked --sync ./Cargo.toml \
-                      --sync ./src/tools/rust-analyzer/Cargo.toml \
-                      --sync ./compiler/rustc_codegen_cranelift/Cargo.toml \
-                      --sync ./src/bootstrap/Cargo.toml \
-                      --sync ./src/tools/cargo/Cargo.toml
 }
 
 src_compile() {

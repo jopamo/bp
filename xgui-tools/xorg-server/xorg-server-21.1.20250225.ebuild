@@ -7,22 +7,25 @@ inherit meson flag-o-matic
 DESCRIPTION="implementation of the X Window System display server"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=113245b1ab0b219fa569c808f4da45ffe298e33a
+SNAPSHOT=b7f84e6d509c004a7abb514af75b94cb907d451b
 SRC_URI="https://gitlab.freedesktop.org/xorg/xserver/-/archive/${SNAPSHOT}/xserver-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S="${WORKDIR}/xserver-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="amd64 arm64"
 
-IUSE="+glamor ipv6 xcsecurity"
+IUSE="+glamor ipv6 minimal systemd suid_wrapper +udev wayland xcsecurity X"
 
 DEPEND="
 	virtual/ssl
-	xgui-lib/libX11
+	xgui-misc/iceauth
+	xgui-lib/rgb
+	xgui-tools/xauth
+	xgui-lib/xbitmaps
+	xgui-tools/xinit
 	xgui-lib/libXau
 	xgui-lib/libXdmcp
-	xgui-lib/libXext
 	xgui-lib/libXfont2
 	xgui-lib/libdrm
 	xgui-lib/libpciaccess
@@ -30,20 +33,23 @@ DEPEND="
 	xgui-lib/libxkbfile
 	xgui-lib/libxshmfence
 	xgui-lib/pixman
-	xgui-lib/rgb
-	xgui-lib/xbitmaps
 	xgui-lib/xtrans
-	xgui-misc/iceauth
 	xgui-misc/xkbcomp
 	xgui-misc/xkeyboard-config
-	xgui-tools/mesa
-	xgui-tools/xauth
-	xgui-tools/xinit
 	glamor? (
 		xmedia-lib/libepoxy
 		xgui-tools/mesa
 	)
-"
+	!minimal? (
+		xgui-lib/libX11
+		xgui-lib/libXext
+		xgui-tools/mesa
+	)
+	udev? ( app-core/systemd )
+	systemd? (
+		app-core/dbus
+		app-core/systemd
+	)"
 BDEPEND="
 	app-build/flex
 	xgui-tools/xorgproto
@@ -51,19 +57,25 @@ BDEPEND="
 
 PDEPEND="xgui-misc/xf86-input-libinput"
 
-src_configure() {
-	filter-flags -Wl,-z,defs -Wl,-z,now
+filter-flags -Wl,-z,defs -Wl,-z,now
 
-	local emesonargs=(
+src_configure() {
+  local emesonargs=(
+    $(meson_use X xorg)
 		$(meson_use glamor)
 		$(meson_use ipv6)
+		$(meson_use suid_wrapper)
+		$(meson_use systemd systemd_logind)
+		$(meson_use udev)
 		$(meson_use xcsecurity)
-		-Ddri3=false
-	)
-	meson_src_configure
+		-Ddri1=true
+		-Ddri2=true
+		-Ddri3=true
+  )
+  meson_src_configure
 }
 
 src_install() {
-	meson_src_install
-	dosym Xorg usr/bin/X
+        meson_src_install
+		dosym Xorg usr/bin/X
 }

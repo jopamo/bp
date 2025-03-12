@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake flag-o-matic
+inherit meson flag-o-matic
 
 DESCRIPTION="Mesa's OpenGL utility and demo programs (glxgears and glxinfo)"
 HOMEPAGE="https://www.mesa3d.org/ https://mesa.freedesktop.org/"
@@ -13,7 +13,9 @@ S="${WORKDIR}/demos-${SNAPSHOT}"
 
 LICENSE="LGPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
+
+IUSE="wayland X"
 
 RDEPEND="
 	xgui-tools/mesa
@@ -23,4 +25,13 @@ DEPEND="${RDEPEND}
 	xmedia-lib/glu
 	xgui-tools/xorgproto"
 
-filter-flags -Wl,-z,defs
+src_configure() {
+	filter-flags -Wl,-z,defs
+
+	local emesonargs=(
+		$(meson_feature X x11)
+		$(meson_feature wayland)
+	)
+	meson_src_configure
+}
+

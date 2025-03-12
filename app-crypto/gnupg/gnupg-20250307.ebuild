@@ -40,6 +40,7 @@ src_prepare() {
 
 	eautoreconf
 }
+
 src_configure() {
 	local myconf=(
 			--disable-card-support

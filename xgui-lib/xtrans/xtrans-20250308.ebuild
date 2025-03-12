@@ -13,7 +13,7 @@ S="${WORKDIR}/libxtrans-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-tools/util-macros"
 

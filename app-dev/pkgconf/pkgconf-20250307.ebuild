@@ -13,8 +13,7 @@ S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="ISC"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
-#gobject-introspection fails to build
+KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 

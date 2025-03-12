@@ -9,7 +9,7 @@ HOMEPAGE="https://ccid.apdu.fr https://github.com/LudovicRousseau/CCID"
 
 SNAPSHOT=be1f6410f0663472643be6d84c94a721f9869fbe
 SRC_URI="https://github.com/LudovicRousseau/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/CCID-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -24,10 +24,6 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 BDEPEND="virtual/pkgconfig"
-
-PATCHES=(
-	"${FILESDIR}"/${P}-remove-flex-configure-dependency.patch
-)
 
 src_prepare() {
 	filter-flags -Wl,-z,defs

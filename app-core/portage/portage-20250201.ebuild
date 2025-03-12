@@ -19,7 +19,7 @@ IUSE="build gentoo-dev +ipc +native-extensions
 	gentoo_repo tmpfilesd sysusersd +rsync-verify selinux test xattr"
 
 DEPEND="
-	app-util/patch
+	app-build/patch
 	app-compression/tar
 	app-core/sed
 "

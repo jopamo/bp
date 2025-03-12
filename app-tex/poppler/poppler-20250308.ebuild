@@ -13,7 +13,7 @@ S="${WORKDIR}/poppler-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="cairo +cjk curl cxx debug doc +introspection +jpeg +jpeg2k png +utils"
 
@@ -21,7 +21,6 @@ RESTRICT="test"
 
 DEPEND="
 	lib-dev/nss
-	lib-dev/boost
 	fonts/fontconfig
 	xgui-misc/freetype
 	lib-core/zlib
@@ -66,6 +65,7 @@ src_configure() {
 	xdg_environment_reset
 
 	local mycmakeargs=(
+		-DENABLE_BOOST=OFF
 		-DBUILD_CPP_TESTS=OFF
 		-DBUILD_GTK_TESTS=OFF
 		-DBUILD_QT5_TESTS=OFF

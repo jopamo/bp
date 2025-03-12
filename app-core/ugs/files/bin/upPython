@@ -34,6 +34,7 @@ PACKAGES=(
 	"aiohttp"
 	"aiosignal"
 	"alabaster"
+	"annotated-types"
 	"appdirs"
 	"argcomplete"
 	"arrow"
@@ -83,8 +84,8 @@ PACKAGES=(
 	"filelock"
 	"flaky"
 	"flask"
-	"flit"
 	"flit-core"
+	"flit"
 	"fqdn"
 	"freezegun"
 	"frozenlist"
@@ -125,10 +126,10 @@ PACKAGES=(
 	"josepy"
 	"js2py"
 	"jsonpointer"
-	"jsonschema"
 	"jsonschema-path"
 	"jsonschema-spec"
 	"jsonschema-specifications"
+	"jsonschema"
 	"keyring"
 	"lark"
 	"lazy-object-proxy"
@@ -152,11 +153,11 @@ PACKAGES=(
 	"parsedatetime"
 	"path"
 	"pathspec"
-	"pdm"
 	"pdm-backend"
+	"pdm"
 	"pexpect"
-	"pip"
 	"pip-run"
+	"pip"
 	"platformdirs"
 	"pluggy"
 	"ply"
@@ -168,6 +169,7 @@ PACKAGES=(
 	"py"
 	"pycares"
 	"pycparser"
+	"pydantic"
 	"pyelftools"
 	"pyfakefs"
 	"pygments"
@@ -177,11 +179,11 @@ PACKAGES=(
 	"pyproject-metadata"
 	"pyrfc3339"
 	"pysocks"
-	"pytest"
 	"pytest-cov"
 	"pytest-home"
 	"pytest-timeout"
 	"pytest-xdist"
+	"pytest"
 	"python-dateutil"
 	"pytz"
 	"pyxdg"
@@ -189,8 +191,8 @@ PACKAGES=(
 	"quart"
 	"referencing"
 	"regex"
-	"requests"
 	"requests-toolbelt"
+	"requests"
 	"resolvelib"
 	"rfc3339-validator"
 	"rfc3986-validator"
@@ -208,14 +210,14 @@ PACKAGES=(
 	"sphinx"
 	"strict-rfc3339"
 	"testpath"
-	"tomli"
 	"tomli-w"
+	"tomli"
 	"tomlkit"
 	"tornado"
 	"towncrier"
 	"tqdm"
-	"trio"
 	"trio-websocket"
+	"trio"
 	"trove-classifiers"
 	"trustme"
 	"truststore"
@@ -266,6 +268,7 @@ BDEPEND_CLEAN_PACKAGES=(
 
 INHERIT_FLAGOMATIC_PACKAGES=(
 	"regex"
+	"pycares"
 )
 
 GENTOO_PATH="/tmp/gentoo-repo"
@@ -512,7 +515,7 @@ for package in "${BDEPEND_CLEAN_PACKAGES[@]}"; do
 done
 
 # --- Remove certain strings from inherits ---
-remove_strings=('bash-completion-r1' 'optfeature' 'virtualx' 'fortran-2' 'check-reqs')
+remove_strings=('bash-completion-r1' 'optfeature' 'virtualx' 'fortran-2' 'check-reqs' 'shell-completion')
 for package in "${PACKAGES[@]}"; do
 	local_package_dir="${PACKAGE_DIR}/${package}"
 	if [ -d "${local_package_dir}" ]; then
@@ -551,8 +554,6 @@ add_flagomatic_to_inherit() {
 
 add_flagomatic_to_inherit
 
-
-# Insert 'filter-flags -Wl,-z,defs' into functions for certain packages
 echo "Starting to process to add -Wl,-z,defs to required packages..."
 PACKAGES_ZDEFS=(
 	"aiohttp" "brotlicffi" "cffi" "cython" "frozenlist" "lxml"
@@ -566,14 +567,27 @@ for package in "${PACKAGES_ZDEFS[@]}"; do
 		find "${PACKAGE_DIR}/${package}" -type f -name "*.ebuild" -print0 | \
 			while IFS= read -r -d '' ebuild_file; do
 			echo "Processing $ebuild_file"
+
+			# Flag to check if any function was found
+			function_found=false
+
+			# Check each of the relevant functions and add 'filter-flags' to them
 			for func in python_compile src_prepare src_unpack python_configure_all python_install_all pkg_postinst; do
 				if grep -q "^${func}()" "$ebuild_file"; then
 					echo "Adding 'filter-flags -Wl,-z,defs' in function ${func}() of $ebuild_file"
 					sed -i "/^${func}()/ {
             N; s|\n|\n\tfilter-flags -Wl,-z,defs\n|
 					}" "$ebuild_file"
+					function_found=true
 				fi
 			done
+
+			# If no function was found, create a src_prepare function
+			if [ "$function_found" = false ]; then
+				echo "No relevant functions found, adding 'src_prepare()' to $ebuild_file"
+				echo -e "\nsrc_prepare() {\n\tdefault\n\tfilter-flags -Wl,-z,defs\n}" >> "$ebuild_file"
+			fi
+
 			echo "Updated $ebuild_file."
 		done
 	else

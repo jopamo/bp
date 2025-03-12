@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_TESTED=( python3_{10..13} pypy3 )
+PYTHON_TESTED=( python3_{10..13} pypy3 pypy3_11 )
 PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_13t )
 
 inherit distutils-r1 pypi
@@ -69,6 +69,9 @@ python_test() {
 		# broken by epytest args
 		testing/test_warnings.py::test_works_with_filterwarnings
 
+		# does not like verbosity
+		testing/test_assertrewrite.py::TestAssertionRewrite::test_len
+
 		# tend to be broken by random pytest plugins
 		# (these tests patch PYTEST_DISABLE_PLUGIN_AUTOLOAD out)
 		testing/test_helpconfig.py::test_version_less_verbose
@@ -100,12 +103,11 @@ python_test() {
 	)
 
 	case ${EPYTHON} in
-		pypy3)
+		pypy3*)
 			EPYTEST_DESELECT+=(
 				# regressions on pypy3.9
 				# https://github.com/pytest-dev/pytest/issues/9787
 				testing/test_skipping.py::test_errors_in_xfail_skip_expressions
-				testing/test_unraisableexception.py
 			)
 			;;
 	esac

@@ -4,7 +4,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{10..13} pypy3 pypy3_11 )
 PYTHON_REQ_USE="threads(+),sqlite(+)"
 
 inherit distutils-r1 pypi
@@ -19,6 +19,7 @@ HOMEPAGE="
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+IUSE="+native-extensions"
 
 RDEPEND="
 	$(python_gen_cond_dep '
@@ -37,8 +38,22 @@ BDEPEND="
 distutils_enable_tests pytest
 
 src_prepare() {
-	sed -i -e '/addopts/s:-q -n auto::' pyproject.toml || die
+	local PATCHES=(
+		# https://github.com/nedbat/coveragepy/pull/1929
+		"${FILESDIR}/${P}-pypy311.patch"
+	)
+
 	distutils-r1_src_prepare
+
+	sed -i -e '/addopts/s:-q -n auto::' pyproject.toml || die
+}
+
+python_compile() {
+	if ! use native-extensions; then
+		local -x COVERAGE_DISABLE_EXTENSION=1
+	fi
+
+	distutils-r1_python_compile
 }
 
 test_tracer() {
@@ -87,7 +102,7 @@ python_test() {
 	test_tracer pytrace
 
 	case ${EPYTHON} in
-		python3.1[01]|pypy3)
+		python3.1[01]|pypy3|pypy3.11)
 			;;
 		*)
 			# available since Python 3.12

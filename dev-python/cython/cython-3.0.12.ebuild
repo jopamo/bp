@@ -5,7 +5,7 @@ EAPI=8
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_TESTED=( python3_{10..12} )
-PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" pypy3 python3_13 )
+PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" pypy3 pypy3_11 python3_13 )
 PYTHON_REQ_USE="threads(+)"
 
 inherit distutils-r1 multiprocessing toolchain-funcs
@@ -50,7 +50,7 @@ distutils_enable_sphinx docs \
 	dev-python/sphinx-tabs
 
 python_compile() {
-	filter-flags -Wl,-z,defs -flto*
+	filter-flags -Wl,-z,defs
 	# Python gets confused when it is in sys.path before build.
 	local -x PYTHONPATH=
 

@@ -4,7 +4,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=meson-python
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{10..13} pypy3 pypy3_11 )
 PYTHON_REQ_USE="threads(+)"
 FORTRAN_NEEDED=lapack
 
@@ -44,6 +44,7 @@ BDEPEND="
 		dev-python/charset-normalizer[${PYTHON_USEDEP}]
 		>=dev-python/hypothesis-5.8.0[${PYTHON_USEDEP}]
 		dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
+		dev-python/pytest-timeout[${PYTHON_USEDEP}]
 		>=dev-python/pytz-2019.3[${PYTHON_USEDEP}]
 	)
 "
@@ -120,6 +121,10 @@ python_test() {
 				# https://bugs.gentoo.org/942689
 				"numpy/_core/tests/test_dtype.py::TestBuiltin::test_dtype[int]"
 				"numpy/_core/tests/test_dtype.py::TestBuiltin::test_dtype[float]"
+				"numpy/_core/tests/test_dtype.py::TestBuiltin::test_dtype_bytes_str_equivalence[datetime64]"
+				"numpy/_core/tests/test_dtype.py::TestBuiltin::test_dtype_bytes_str_equivalence[timedelta64]"
+				"numpy/_core/tests/test_dtype.py::TestBuiltin::test_dtype_bytes_str_equivalence[<f]"
+				"numpy/_core/tests/test_dtype.py::TestPickling::test_pickle_dtype[dt28]"
 				numpy/f2py/tests/test_kind.py::TestKind::test_real
 				numpy/f2py/tests/test_kind.py::TestKind::test_quad_precision
 				numpy/tests/test_ctypeslib.py::TestAsArray::test_reference_cycles

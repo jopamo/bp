@@ -6,7 +6,10 @@ inherit autotools
 
 DESCRIPTION="Utilities to deal with user accounts"
 HOMEPAGE="https://github.com/shadow-maint/shadow http://pkg-shadow.alioth.debian.org/"
-SRC_URI="https://github.com/shadow-maint/shadow/releases/download/${PV}/${P}.tar.xz"
+
+SNAPSHOT=d2d89a8e0a4f177ae9cdb1ef8e0a1287a39020b5
+SRC_URI="https://github.com/shadow-maint/shadow/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="BSD GPL-2"
 SLOT="0"
@@ -25,7 +28,7 @@ DEPEND="
 src_prepare() {
 	cp -rp "${FILESDIR}"/* "${S}"/
 
-	sed -i 's|/sbin|/bin|g' src/Makefile.{am,in} || die
+	sed -i 's|/sbin|/bin|g' src/Makefile.am || die
 
 	default
 	eautoreconf

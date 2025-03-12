@@ -9,12 +9,19 @@ inherit distutils-r1 pypi
 DESCRIPTION="Python client library for the OpenAI API"
 HOMEPAGE="https://github.com/openai/openai-python"
 
+SNAPSHOT=16a10604fbd0d82c1382b84b417a1d6a2d33a7f1
+SRC_URI="https://github.com/openai/openai-python/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-python-${SNAPSHOT}"
+
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="datalib"
 
-RDEPEND=">=dev-python/requests-2.20[${PYTHON_USEDEP}]
+RDEPEND="
+	dev-python/pydantic[${PYTHON_USEDEP}]
+	dev-python/typing-extensions[${PYTHON_USEDEP}]
+	>=dev-python/requests-2.20[${PYTHON_USEDEP}]
 	dev-python/tqdm[${PYTHON_USEDEP}]
 	dev-python/aiohttp[${PYTHON_USEDEP}]
 	datalib? (

@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{10..13} pypy3 pypy3_11 )
 
 inherit distutils-r1 pypi
 
@@ -25,7 +25,8 @@ RDEPEND="
 	dev-python/requests[${PYTHON_USEDEP}]
 	dev-python/tomli-w[${PYTHON_USEDEP}]
 "
-BDEPEND="${RDEPEND}
+BDEPEND="
+	${RDEPEND}
 	sys-apps/grep
 	test? (
 		dev-python/responses[${PYTHON_USEDEP}]

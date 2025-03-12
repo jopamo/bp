@@ -4,7 +4,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( pypy3 python3_{10..13} )
+PYTHON_COMPAT=( pypy3 pypy3_11 python3_{10..13} )
 
 inherit distutils-r1 pypi
 
@@ -54,3 +54,8 @@ EPYTEST_DESELECT=(
 )
 
 export PYCARES_USE_SYSTEM_LIB=1
+
+src_prepare() {
+	default
+	filter-flags -Wl,-z,defs
+}

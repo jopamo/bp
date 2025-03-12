@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
-PYTHON_TESTED=( python3_{10..13} pypy3 )
+PYTHON_TESTED=( python3_{10..13} pypy3 pypy3_11 )
 PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_13t )
 
 inherit distutils-r1
@@ -48,6 +48,11 @@ BDEPEND="
 "
 
 distutils_enable_tests pytest
+
+PATCHES=(
+	# https://github.com/pypa/build/pull/861
+	"${FILESDIR}/${P}-gentoo-pip.patch"
+)
 
 python_test() {
 	if ! has "${EPYTHON/./_}" "${PYTHON_TESTED[@]}"; then

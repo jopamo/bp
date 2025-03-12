@@ -23,12 +23,8 @@ IUSE="doc"
 
 distutils_enable_tests unittest
 
-src_prepare() {
-	default
-	filter-flags -Wl,-z,defs -flto*
-}
-
 python_install_all() {
+	filter-flags -Wl,-z,defs
 	use doc && local HTML_DOCS=( docs/Features.html )
 	local DOCS=( README.rst docs/*.rst )
 

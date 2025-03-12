@@ -3,7 +3,8 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_TESTED=( python3_{10..13} pypy3 pypy3_11 )
+PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" )
 
 inherit distutils-r1 multiprocessing pypi
 
@@ -32,20 +33,22 @@ RDEPEND="
 BDEPEND="
 	dev-python/hatch-vcs[${PYTHON_USEDEP}]
 	test? (
-		dev-python/coverage[${PYTHON_USEDEP}]
-		dev-python/flaky[${PYTHON_USEDEP}]
-		>=dev-python/pip-22.2.1[${PYTHON_USEDEP}]
 		$(python_gen_cond_dep '
-			>=dev-python/pytest-freezer-0.4.6[${PYTHON_USEDEP}]
-		' pypy3)
-		>=dev-python/pytest-mock-3.6.1[${PYTHON_USEDEP}]
-		dev-python/pytest-xdist[${PYTHON_USEDEP}]
-		>=dev-py/setuptools-67.8[${PYTHON_USEDEP}]
+			dev-python/coverage[${PYTHON_USEDEP}]
+			dev-python/flaky[${PYTHON_USEDEP}]
+			>=dev-python/pip-22.2.1[${PYTHON_USEDEP}]
+			>=dev-python/pytest-mock-3.6.1[${PYTHON_USEDEP}]
+			dev-python/pytest-xdist[${PYTHON_USEDEP}]
+			>=dev-py/setuptools-67.8[${PYTHON_USEDEP}]
+			dev-python/wheel[${PYTHON_USEDEP}]
+			>=dev-python/packaging-20.0[${PYTHON_USEDEP}]
+		' "${PYTHON_TESTED[@]}")
 		$(python_gen_cond_dep '
 			dev-python/time-machine[${PYTHON_USEDEP}]
 		' 'python3*')
-		dev-python/wheel[${PYTHON_USEDEP}]
-		>=dev-python/packaging-20.0[${PYTHON_USEDEP}]
+		$(python_gen_cond_dep '
+			>=dev-python/pytest-freezer-0.4.6[${PYTHON_USEDEP}]
+		' 'pypy3*')
 	)
 "
 
@@ -71,6 +74,11 @@ src_prepare() {
 }
 
 python_test() {
+	if ! has "${EPYTHON}" "${PYTHON_TESTED[@]/_/.}"; then
+		einfo "Skipping testing on ${EPYTHON}"
+		return
+	fi
+
 	local EPYTEST_DESELECT=(
 		tests/unit/seed/embed/test_bootstrap_link_via_app_data.py::test_seed_link_via_app_data
 		# tests for old wheels with py3.7 support
@@ -85,6 +93,14 @@ python_test() {
 		tests/unit/test_util.py::test_reentrant_file_lock_is_thread_safe
 	)
 	case ${EPYTHON} in
+		pypy3.11)
+			EPYTEST_DESELECT+=(
+				# these don't like the executable called pypy3.11?
+				tests/unit/activation/test_bash.py::test_bash
+				tests/unit/activation/test_fish.py::test_fish
+				tests/unit/discovery/py_info/test_py_info.py::test_fallback_existent_system_executable
+			)
+			;;
 		python3.1[23])
 			EPYTEST_DESELECT+=(
 				tests/unit/create/via_global_ref/test_build_c_ext.py
@@ -101,7 +117,7 @@ python_test() {
 	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	local -x TZ=UTC
 	local plugins=( -p flaky -p pytest_mock )
-	if [[ ${EPYTHON} == pypy3 ]]; then
+	if [[ ${EPYTHON} == pypy3* ]]; then
 		plugins+=( -p freezer )
 	else
 		plugins+=( -p time_machine )

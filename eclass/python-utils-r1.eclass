@@ -39,7 +39,6 @@ inherit multiprocessing toolchain-funcs
 # @DESCRIPTION:
 # All supported Python implementations, most preferred last.
 _PYTHON_ALL_IMPLS=(
-	pypy3
 	python3_{10..15}
 )
 readonly _PYTHON_ALL_IMPLS
@@ -49,6 +48,8 @@ readonly _PYTHON_ALL_IMPLS
 # @DESCRIPTION:
 # All historical Python implementations that are no longer supported.
 _PYTHON_HISTORICAL_IMPLS=(
+	pypy3
+	pypy3_{10..15}
 	jython2_7
 	pypy pypy1_{8,9} pypy2_0
 	python2_{5..7}

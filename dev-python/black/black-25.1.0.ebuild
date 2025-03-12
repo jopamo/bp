@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{10..13} pypy3 pypy3_11 )
 
 inherit distutils-r1 pypi
 
@@ -44,6 +44,18 @@ BDEPEND="
 distutils_enable_tests pytest
 
 python_test() {
+	local EPYTEST_DESELECT=()
+
+	case ${EPYTHON} in
+		pypy3.11)
+			EPYTEST_DESELECT+=(
+				# https://github.com/psf/black/issues/4582
+				'tests/test_format.py::test_simple_format[backslash_before_indent]'
+				'tests/test_format.py::test_simple_format[form_feeds]'
+			)
+			;;
+	esac
+
 	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	# pytest-forked to workaround fd leakage in blackd
 	# https://github.com/psf/black/issues/4504

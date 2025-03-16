@@ -33,3 +33,19 @@ BDEPEND="
 "
 
 distutils_enable_tests pytest
+
+python_test() {
+	local EPYTEST_DESELECT=()
+
+	case ${EPYTHON} in
+		pypy3*)
+			EPYTEST_DESELECT+=(
+				# https://github.com/python-attrs/attrs/issues/1418
+				tests/test_make.py::TestClassBuilder::test_handles_missing_meta_on_class
+			)
+			;;
+	esac
+
+	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
+	epytest
+}

@@ -49,7 +49,7 @@ PYVER=${SLOT%/*}
 SETUPTOOLS_USE_DISTUTILS=local
 
 src_prepare() {
-	filter-flags -Wl,-z,defs
+	filter-flags -Wl,-z,defs -flto*
 
 	rm -r Modules/expat || die
 
@@ -73,7 +73,6 @@ src_configure() {
 	fi
 
 	append-flags -fwrapv
-	append-flags -ffat-lto-objects
 	filter-flags -malign-double
 
 	if use pgo; then
@@ -127,7 +126,7 @@ src_configure() {
 		--with-libc=
 		--enable-loadable-sqlite-extensions
 		--without-ensurepip
-		--with-lto
+		--without-lto
 		--with-system-expat
 		--with-platlibdir=lib
 		--with-pkg-config=yes

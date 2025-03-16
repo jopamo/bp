@@ -6,7 +6,7 @@ DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( pypy3 pypy3_11 python3_{10..13} )
 
-inherit distutils-r1 pypi
+inherit distutils-r1 pypi flag-o-matic
 
 DESCRIPTION="Python interface for c-ares"
 HOMEPAGE="

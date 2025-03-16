@@ -13,7 +13,7 @@ HOMEPAGE="
 	https://pypi.org/project/Jinja2/
 "
 
-SNAPSHOT=220e67ae999c24e4077d7bf5bdc932757b65a338
+SNAPSHOT=01d0bab939f46a03fb3babb9f4770cadb50aaef0
 SRC_URI="https://github.com/pallets/jinja/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

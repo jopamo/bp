@@ -7,12 +7,10 @@ inherit flag-o-matic rust-toolchain
 DESCRIPTION="Systems programming language from Mozilla"
 HOMEPAGE="https://www.rust-lang.org/"
 
-SNAPSHOT=18275649d86d35aa9e9a40bf73610dfc2279e575
+SNAPSHOT=44013560b99ee8f351807d5ad4b64ba36bfe7d01
 SRC_URI="
 	https://github.com/thepowersgang/mrustc/archive/${SNAPSHOT}.tar.gz -> mrustc-${SNAPSHOT}.tar.gz
 	https://static.rust-lang.org/dist/rustc-$(ver_cut 1-3)-src.tar.xz
-	https://static.rust-lang.org/dist/rustc-1.29.0-src.tar.xz
-	https://crates.io/api/v1/crates/libc/0.2.147/download -> libc-0.2.147.crate
 "
 S="${WORKDIR}/mrustc-${SNAPSHOT}"
 
@@ -43,7 +41,6 @@ QA_EXECSTACK="usr/lib/rustlib/*/lib*.rlib:lib.rmeta"
 
 src_prepare() {
 	mv "${WORKDIR}/rustc-$(ver_cut 1-3)-src" "${S}/rustc-$(ver_cut 1-3)-src"
-	mv "${WORKDIR}/rustc-1.29.0-src" "${S}/rustc-1.29.0-src"
 
 	append-cppflags -D_LARGEFILE64_SOURCE
 
@@ -75,8 +72,6 @@ src_prepare() {
 	replace-flags -O3 -O2
 
 	pushd rustc-${PV}-src
-	rm "vendor/vte/vim10m_"{match,table}
-	eapply -p0 ${S}/rustc-${PV}-src.patch
 	sed -i 's/ $(RUSTC_SRC_DL)//' "${S}/minicargo.mk"
 	popd
 
@@ -86,11 +81,14 @@ src_prepare() {
 	ln -fs ../vendor rustc-${PV}-src/src/vendor
 
 	sed -i '/#include <string>/a #include <cstdint>' "rustc-${PV}-src/src/llvm-project/llvm/include/llvm/Support/Signals.h" || die
+
+	MYARCH="$(usex arm64 'AArch64' 'X86')"
+	sed -i "s|^LLVM_TARGETS ?=.*|LLVM_TARGETS ?= $MYARCH|" minicargo.mk || die
+	sed -i 's|$(MAKE) -j $(PARLEVEL)|$(MAKE) -j $(shell nproc)|g' minicargo.mk || die
+	sed -i 's|LLVM_INCLUDE_BENCHMARKS=OFF|LLVM_INCLUDE_BENCHMARKS=OFF LLVM_PARALLEL_LINK_JOBS=1 LLVM_ENABLE_DOXYGEN=OFF|' minicargo.mk || die
 }
 
 src_compile() {
-	local -a make_opts
-	PARLEVEL="$(nproc)"
 	make_opts=(RUSTC_VERSION=${PV} MRUSTC_TARGET_VER=$(ver_cut 1-2) OUTDIR_SUF="")
 
 	emake -j1 ${make_opts[@]}

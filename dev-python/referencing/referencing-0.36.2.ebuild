@@ -19,7 +19,7 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	>=dev-python/attrs-22.2.0[${PYTHON_USEDEP}]
-	>=dev-python/rpds-py-0.7.0[${PYTHON_USEDEP}]
+	>=dev-py/rpds-py-0.7.0[${PYTHON_USEDEP}]
 	$(python_gen_cond_dep '
 		>=dev-python/typing-extensions-4.4.0[${PYTHON_USEDEP}]
 	' 3.{10..12})

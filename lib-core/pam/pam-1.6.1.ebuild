@@ -35,6 +35,7 @@ src_prepare() {
 	if use musl ; then
 		sed -i -e 's/tty_conv//' "examples/Makefile.am" || die
 	fi
+	eautoreconf
 }
 
 src_configure() {

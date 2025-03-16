@@ -35,7 +35,7 @@ BDEPEND="
 	>=dev-build/meson-1.1.0
 	>=dev-python/cython-3.0.6[${PYTHON_USEDEP}]
 	lapack? (
-		virtual/pkgconfig
+		app-dev/pkgconf
 	)
 	test? (
 		$(python_gen_cond_dep '

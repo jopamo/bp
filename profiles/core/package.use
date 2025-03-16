@@ -11,6 +11,8 @@ lib-core/libxml2 python
 lib-core/zlib static-libs
 lib-dev/tree-sitter-bash python
 lib-misc/xxhash static-libs
+app-net/curl static-libs
+lib-core/sqlite static-libs
 lib-net/nodejs icu
 lib-net/openssl static-libs
 xgui-app/wireshark bcg729 capinfos caps captype ciscodump dcerpcidl2wrs dftest dpauxmon dumpcap editcap libssh mergecap mmdbresolve netlink plugins randpkt randpktdump rawshark reordercap sdjournal sharkd sshdump text2pcap tshark udpdump

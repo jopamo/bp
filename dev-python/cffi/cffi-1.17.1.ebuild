@@ -33,7 +33,7 @@ RDEPEND="
 "
 BDEPEND="
 	${RDEPEND}
-	virtual/pkgconfig
+	app-dev/pkgconf
 	test? (
 		dev-python/py[${PYTHON_USEDEP}]
 	)

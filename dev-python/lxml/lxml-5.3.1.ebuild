@@ -35,7 +35,7 @@ RDEPEND="
 	${DEPEND}
 "
 BDEPEND="
-	virtual/pkgconfig
+	app-dev/pkgconf
 	>=dev-python/cython-3.0.10[${PYTHON_USEDEP}]
 	doc? (
 		$(python_gen_any_dep '

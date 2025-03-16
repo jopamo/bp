@@ -15,7 +15,7 @@ LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="binfmt +blkid bootloader bpf-framework coredump dbus devmode +dhcp4 efi gcrypt +gshadow
+IUSE="binfmt +blkid bootloader bpf-framework coredump dbus devmode +dhcp4 elfutils efi gcrypt +gshadow
 +hostnamed +hwdb importd kmod kvm ldconfig localed logind machined musl +networkd
 oomd pam pcre pstore resolve rfkill systemd-update sysusersd timedated
 tmpfilesd +userdb +utmp +vconsole xkb"
@@ -157,6 +157,7 @@ src_configure() {
 		$(meson_use networkd)
 		$(meson_use oomd)
 		$(meson_use pstore)
+		$(meson_use elfutils)
 		$(meson_use resolve)
 		$(meson_use rfkill)
 		$(meson_use sysusersd sysusers)
@@ -175,7 +176,6 @@ src_configure() {
 		-Dbacklight=false
 		-Ddefault-kill-user-processes=false
 		-Ddns-servers=""
-		-Delfutils=enabled
 		-Denvironment-d=false
 		-Dfirstboot=false
 		-Dgnutls=disabled

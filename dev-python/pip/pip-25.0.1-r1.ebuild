@@ -5,11 +5,11 @@ EAPI=8
 # please bump dev-python/ensurepip-pip along with this package!
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_TESTED=( pypy3 python3_{10..13} )
+PYTHON_TESTED=( pypy3 pypy3_11 python3_{10..13} )
 PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" )
 PYTHON_REQ_USE="ssl(+),threads(+)"
 
-inherit distutils-r1
+inherit distutils-r1 
 
 DESCRIPTION="The PyPA recommended tool for installing Python packages"
 HOMEPAGE="
@@ -73,7 +73,9 @@ python_prepare_all() {
 	local PATCHES=(
 		"${FILESDIR}/pip-23.1-no-coverage.patch"
 		# prepare to unbundle dependencies
-		"${FILESDIR}/pip-24.1-unbundle.patch"
+		"${FILESDIR}/pip-25.0.1-unbundle.patch"
+		# https://github.com/pypa/pip/pull/13272
+		"${FILESDIR}/${P}-scripttest-2.patch"
 	)
 
 	distutils-r1_python_prepare_all
@@ -104,6 +106,11 @@ python_compile_all() {
 }
 
 python_test() {
+	if ! has "${EPYTHON}" "${PYTHON_TESTED[@]/_/.}"; then
+		einfo "Skipping tests on ${EPYTHON}"
+		return 0
+	fi
+
 	local EPYTEST_DESELECT=(
 		tests/functional/test_inspect.py::test_inspect_basic
 		# Internet
@@ -130,7 +137,7 @@ python_test() {
 	)
 
 	case ${EPYTHON} in
-		pypy3)
+		pypy3*)
 			EPYTEST_DESELECT+=(
 				# unexpected tempfiles?
 				tests/functional/test_install_config.py::test_do_not_prompt_for_authentication
@@ -161,6 +168,5 @@ python_install_all() {
 	local DOCS=( AUTHORS.txt docs/html/**/*.rst )
 	distutils-r1_python_install_all
 
-	insinto /usr/share/zsh/site-functions
-	newins completion.zsh _pip
+	newzshcomp completion.zsh _pip
 }

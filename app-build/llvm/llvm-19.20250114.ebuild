@@ -141,6 +141,7 @@ src_configure() {
         -DCMAKE_SKIP_BUILD_RPATH=TRUE
         -DCMAKE_BUILD_WITH_INSTALL_RPATH=FALSE
         -DCMAKE_INSTALL_RPATH=""
+        -DNO_INSTALL_RPATH=ON
     )
 
     local bootstrap=(

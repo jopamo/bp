@@ -37,7 +37,7 @@
 *app-port/gentoolkit
 *app-port/portage-utils
 *app-var/pax-utils
-*lib-core/elfutils
+*virtual/libelf
 *lib-net/ca-certificates
 *virtual/libc
 *virtual/service-manager

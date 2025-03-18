@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic linux-info linux-mod toolchain-funcs unpacker user
+inherit flag-o-matic linux-info kernel-mod toolchain-funcs unpacker user
 
 NV_URI="https://us.download.nvidia.com/XFree86/"
 
@@ -19,7 +19,6 @@ SRC_URI="
 LICENSE="GPL-2 NVIDIA-r2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
 IUSE="+driver +kms static-libs +uvm wayland +X"
 
 RESTRICT="bindist mirror"
@@ -43,7 +42,7 @@ PDEPEND="
 "
 
 QA_PREBUILT="opt/* usr/lib*"
-QA_PRESTRIPPED="usr/lib/firmware/nvidia/*/*"
+QA_PRESTRIPPED="usr/lib/firmware/nvidia/570.124.04/gsp_ga10x.bin"
 
 S="${WORKDIR}"
 
@@ -56,7 +55,6 @@ nvidia_drivers_versions_check() {
 		~!SLUB_DEBUG_ON
 		!DEBUG_MUTEXES
 		X86_PAT"
-
 	check_extra_config
 }
 
@@ -66,22 +64,10 @@ pkg_pretend() {
 
 pkg_setup() {
 	nvidia_drivers_versions_check
+	kernel-mod_pkg_setup
 
 	export DISTCC_DISABLE=1
 	export CCACHE_DISABLE=1
-
-	if use driver; then
-		MODULE_NAMES="nvidia(video:${S}/kernel-open)"
-		use uvm && MODULE_NAMES+=" nvidia-uvm(video:${S}/kernel-open)"
-		use kms && MODULE_NAMES+=" nvidia-modeset(video:${S}/kernel-open) nvidia-drm(video:${S}/kernel-open)"
-
-		linux-mod_pkg_setup
-
-		BUILD_PARAMS="IGNORE_CC_MISMATCH=yes V=1 SYSSRC=${KV_DIR} \
-		SYSOUT=${KV_OUT_DIR} CC=$(tc-getBUILD_CC) NV_VERBOSE=1"
-
-		BUILD_FIXES="ARCH=$(uname -m | sed -e 's/i.86/i386/')"
-	fi
 
 	NV_DOC="${S}"
 	NV_OBJ="${S}"
@@ -91,11 +77,11 @@ pkg_setup() {
 	NV_SOVER=${PV}
 }
 
-src_prepare() {
 
+src_prepare() {
 	local man_file
 	for man_file in "${NV_MAN}"/*1.gz; do
-		gunzip $man_file || die
+		gunzip "$man_file" || die
 	done
 
 	default
@@ -107,10 +93,27 @@ src_prepare() {
 }
 
 src_compile() {
-	cd "${NV_SRC}"
-
 	if use driver; then
-		MAKEOPTS=-j1 linux-mod_src_compile
+		cd "${NV_SRC}" || die "Failed to cd to kernel source dir"
+
+		local modlist=()
+
+		modlist+=( "nvidia=video:${S}/kernel-open" )
+		use uvm && modlist+=( "nvidia-uvm=video:${S}/kernel-open" )
+		use kms && modlist+=(
+			"nvidia-modeset=video:${S}/kernel-open"
+			"nvidia-drm=video:${S}/kernel-open"
+		)
+
+		local modargs=(
+			"IGNORE_CC_MISMATCH=yes"
+			"V=1"
+			"SYSSRC=${KV_DIR}"
+			"SYSOUT=${KV_OUT_DIR}"
+			"NV_VERBOSE=1"
+			"ARCH=$(uname -m | sed -e 's/i.86/i386/')"
+		)
+		kernel-mod_src_compile
 	fi
 }
 
@@ -140,11 +143,11 @@ donvidia() {
 }
 
 src_install() {
-	cd "${WORKDIR}"
+	cd "${WORKDIR}" || die
 	ln -s libGLX.so.0 libglx.so.${PV}
 
 	if use driver; then
-		linux-mod_src_install
+		kernel-mod_src_install
 
 		insinto /etc/modprobe.d
 		newins "${FILESDIR}"/nvidia-169.07 nvidia.conf
@@ -279,9 +282,8 @@ src_install-libs() {
 
 pkg_preinst() {
 	if use driver; then
-		linux-mod_pkg_preinst
-
-		local videogroup="$(egetent group video | cut -d ':' -f 3)"
+		local videogroup
+		videogroup="$(egetent group video | cut -d ':' -f 3)"
 		if [ -z "${videogroup}" ]; then
 			eerror "Failed to determine the video group gid"
 			die "Failed to determine the video group gid"
@@ -295,5 +297,5 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
-	use driver && linux-mod_pkg_postinst
+	use driver && kernel-mod_pkg_postinst
 }

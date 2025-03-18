@@ -19,9 +19,23 @@ RESTRICT="test strip"
 
 BDEPEND="lib-core/musl"
 
-append-ldflags -static
+#!/usr/bin/env bash
+
+create_toybox_symlinks() {
+  for path in $("${ED}"/usr/bin/toybox --long); do
+    cmd_name=$(basename "$path")
+
+    if [ ! -e "${EROOT}/usr/bin/${cmd_name}" ]; then
+      echo "Creating symlink '${cmd_name}' in ${ED}/usr/bin/"
+      dosym -r /usr/bin/toybox "/usr/bin/${cmd_name}"
+    else
+      echo "Skipping '${cmd_name}' - already exists in /usr/bin/"
+    fi
+  done
+}
 
 src_compile() {
+	append-ldflags -static
 	export OPTIMIZE="${CFLAGS}"
 	export CC=musl-gcc
 	default
@@ -29,4 +43,5 @@ src_compile() {
 
 src_install() {
 	dobin toybox
+	create_toybox_symlinks
 }

@@ -3,7 +3,7 @@
 *app-compression/tar
 *app-compression/unzip
 *app-compression/xz-utils
-*app-core/busybox
+*app-core/toybox
 *app-core/coreutils
 *app-core/diffutils
 *app-core/fakepackages

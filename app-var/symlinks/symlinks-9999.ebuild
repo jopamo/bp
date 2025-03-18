@@ -6,7 +6,15 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Scans for and fixes broken or messy symlinks"
 HOMEPAGE="http://www.ibiblio.org/pub/linux/utils/file/"
-SRC_URI="http://www.ibiblio.org/pub/linux/utils/file/${P}.tar.gz"
+
+if [[ ${PV} = *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/jopamo/symlinks"
+	inherit git-r3
+else
+	SNAPSHOT=
+	SRC_URI="https://github.com/jopamo/symlinks/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="symlinks"
 SLOT="0"

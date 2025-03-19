@@ -21,8 +21,5 @@ KEYWORDS="amd64 arm64"
 RDEPEND="app-lang/perl"
 
 src_install() {
-	dobin bin/*
-
-	insinto /usr/lib/find_cruft
-	doins -r etc/*
+	dobin bin/find_cruft
 }

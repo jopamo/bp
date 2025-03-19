@@ -18,7 +18,7 @@ DEPEND="
 	lib-net/libbpf:=
 	lib-net/libpcap
 	lib-core/zlib
-	lib-core/elfutils
+	virtual/libelf
 "
 RDEPEND="${DEPEND}"
 BDEPEND="

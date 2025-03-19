@@ -24,7 +24,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 BDEPEND="
-	app-arch/unzip
+	app-compression/unzip
 "
 
 distutils_enable_tests unittest

@@ -18,6 +18,15 @@ KEYWORDS="amd64 arm64"
 IUSE="debug static-libs"
 
 src_prepare() {
+	rm -rf autom4te.cache/
+	rm -f config.log config.cache config.status
+	rm -f Makefile Makefile.in
+	rm -f aclocal.m4
+	rm -f configure
+	rm -f *.o *.lo *.la *.a
+	rm -f libtool ltmain.sh
+	sed -i '/AX_ENABLE_BUILDDIR/d' configure.ac
+
 	default
 	eautoreconf
 }
@@ -26,6 +35,9 @@ src_configure() {
 	local myconf=(
 		$(use_enable static-libs static)
 		$(use_enable debug)
+		--enable-pax_emutramp
+		--enable-portable-binary
+		--disable-exec-static-tramp
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

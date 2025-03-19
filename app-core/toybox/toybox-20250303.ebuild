@@ -19,8 +19,6 @@ RESTRICT="test strip"
 
 BDEPEND="lib-core/musl"
 
-#!/usr/bin/env bash
-
 create_toybox_symlinks() {
   for path in $("${ED}"/usr/bin/toybox --long); do
     cmd_name=$(basename "$path")
@@ -34,10 +32,14 @@ create_toybox_symlinks() {
   done
 }
 
+src_configure() {
+	make defconfig
+}
+
 src_compile() {
 	append-ldflags -static
 	export OPTIMIZE="${CFLAGS}"
-	export CC=musl-gcc
+
 	default
 }
 

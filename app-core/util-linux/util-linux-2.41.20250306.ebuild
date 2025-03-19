@@ -22,7 +22,7 @@ IUSE="
 	losetup lscpu lsfd lsirq lslogins lsmem lsns mesg mkfs
 	mount mountpoint ncurses newgrp nologin nsenter pam partx
 	pipesz pivot_root python raw readline rename rfkill runuser
-	schedutils scriptutils setpriv static-libs su suid
+	schedutils scriptutils setpriv setterm static-libs su suid
 	sulogin swapon switch_root systemd test tty-helpers tunelp
 	udev ul unshare utmpdump uuidd vipw wdctl whereis wipefs
 	zramctl
@@ -103,6 +103,7 @@ src_configure() {
 		$(use_enable runuser)
 		$(use_enable schedutils)
 		$(use_enable scriptutils)
+		$(use_enable setterm)
 		$(use_enable static-libs static)
 		$(use_enable su)
 		$(use_enable suid makeinstall-chown)

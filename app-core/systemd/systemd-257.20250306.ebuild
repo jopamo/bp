@@ -37,6 +37,7 @@ DEPEND="
 	bpf-framework? ( lib-net/libbpf )
 	logind? ( app-fs/cryptsetup )
 	gcrypt? ( lib-core/libgcrypt )
+	elfutils? ( virtual/libelf )
 	lib-core/libseccomp
 	dbus? (
 		app-core/dbus

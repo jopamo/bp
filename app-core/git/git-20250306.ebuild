@@ -44,14 +44,6 @@ src_configure() {
 src_install() {
 	default
 
-	rm -f "${ED}"/usr/bin/git-{cvsserver,shell}
-	rm -f "${ED}"/usr/libexec/git-core/git-{shell,cvs*,http-push,http-fetch,imap-send,daemon,http-backend}
-
-	for i in git-receive-pack git-upload-archive git-upload-pack ; do
-		rm "${ED}"/usr/bin/$i
-		dosym -r /usr/bin/git /usr/bin/$i
-	done
-
 	use static-libs || find "${ED}" -name "*.a" -delete || die
 	use perl || rm -rf "${ED}"/usr/share/perl5 || die
 	use gitweb || rm -rf "${ED}"/usr/share/gitweb || die

@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X Window System initializer"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=39769df60a20892c923a99113feee35e2e35b01b
+SNAPSHOT=cfa71d44248562f22f2d92732c5e493e89061569
 SRC_URI="https://gitlab.freedesktop.org/xorg/app/xinit/-/archive/${SNAPSHOT}/xinit-${SNAPSHOT}.tar.bz2 -> xinit-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/xinit-${SNAPSHOT}"
 

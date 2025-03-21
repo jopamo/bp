@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Scriptable database and system performance benchmark"
 HOMEPAGE="https://github.com/akopytov/sysbench.git"
 
-SNAPSHOT=de18a036cc65196b1a4966d305f33db3d8fa6f8e
+SNAPSHOT=3ceba0b1e115f8c50d1d045a4574d8ed643bd497
 SRC_URI="https://github.com/akopytov/sysbench/archive/${SNAPSHOT}.tar.gz -> sysbench-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/sysbench-${SNAPSHOT}"
 

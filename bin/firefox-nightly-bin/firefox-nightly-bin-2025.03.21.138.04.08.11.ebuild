@@ -94,4 +94,8 @@ src_install() {
 	EOF
 
 	fperms 0755 /usr/bin/${PN}
+
+	insopts -m 0644
+	insinto /usr/share/pixmaps
+	doins "${FILESDIR}"/firefox.svg
 }

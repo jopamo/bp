@@ -57,4 +57,8 @@ src_install() {
 	fperms 0755 /opt/google/chrome-unstable/chrome
 	fperms 0755 /opt/google/chrome-unstable/chrome_crashpad_handler
 	fperms 4755 /opt/google/chrome-unstable/chrome-sandbox
+
+	insopts -m 0644
+	insinto /usr/share/pixmaps
+	doins "${FILESDIR}"/chrome.svg
 }

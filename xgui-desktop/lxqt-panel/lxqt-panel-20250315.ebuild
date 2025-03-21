@@ -7,7 +7,7 @@ inherit cmake flag-o-matic
 DESCRIPTION="LXQt desktop panel and plugins"
 HOMEPAGE="http://lxqt.org/"
 
-SNAPSHOT=9a9753cdd9d2355a321dd78d1d4883dc3fb49f20
+SNAPSHOT=33cc042af2a2b1f0291ffb2830dfe66e18651c7e
 SRC_URI="https://github.com/lxqt/lxqt-panel/archive/${SNAPSHOT}.tar.gz -> lxqt-panel-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/lxqt-panel-${SNAPSHOT}"
 

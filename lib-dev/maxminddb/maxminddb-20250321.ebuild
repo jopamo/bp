@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SNAPSHOT=825f121a948a8a298d4f884e008ea0839bcb0706
+SNAPSHOT=7b4eeae744da2098423d61ebc91408c3d5cace11
 
 inherit autotools
 

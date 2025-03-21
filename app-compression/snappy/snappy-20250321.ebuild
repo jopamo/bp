@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="A high-speed compression/decompression library by Google"
 HOMEPAGE="https://github.com/google/snappy"
 
-SNAPSHOT=32ded457c0b1fe78ceb8397632c416568d6714a0
+SNAPSHOT=49087d4e1463707da50f9a53da80d5af932418ce
 SRC_URI="https://github.com/google/snappy/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

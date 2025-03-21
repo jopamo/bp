@@ -660,7 +660,7 @@ if [[ ${ETYPE} == sources ]]; then
 		app-build/bison
 		app-build/flex
 		>=lib-core/ncurses-5.2
-		lib-core/elfutils
+		virtual/libelf
 		app-dev/pkgconf
 	)"
 

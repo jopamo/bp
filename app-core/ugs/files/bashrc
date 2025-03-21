@@ -1,19 +1,37 @@
 #!/bin/bash
 
+# Only run if interactive
 [[ $- != *i* ]] && return
 
-shopt -s checkwinsize
-shopt -s no_empty_cmd_completion
-shopt -s histappend
-shopt -s globstar
+# Start with an empty PS1 (we'll build it up below)
+PS1=""
+
+# Various handy shell options
+shopt -s checkwinsize           # Update LINES/COLUMNS after each command if the window changes size
+shopt -s no_empty_cmd_completion # Don't autocomplete on an empty line
+shopt -s histappend             # Append to history file, rather than overwriting
+shopt -s globstar               # Allow ** in path expansions
+
+# Update/read history for each prompt
 PROMPT_COMMAND='history -a; history -n'
 
-case ${TERM} in
-	[aEkqx]term*|rxvt*|gnome*|kitty*|lxterm*|tmux|qterminal*) PS1='\[\033]0;\u@\h:\w\007\]' ;;
-	screen*) PS1='\[\033k\u@\h:\w\033\\\]' ;;
-	*) unset PS1 ;;
+# Set an initial portion of PS1 for the window title (if supported)
+case "$TERM" in
+	[1aEkqx]term*|rxvt*|gnome*|kitty*|lxterm*|tmux|qterminal*)
+		# OSC 2: Set the window title to user@host:current_path
+		PS1='\[\e]0;\u@\h:\w\007\]'
+		;;
+	screen*)
+		# For screen-based terminals, use this form
+		PS1='\[\033k\u@\h:\w\033\\\]'
+		;;
+	*)
+		# If unknown terminal, skip the title portion
+		PS1=""
+		;;
 esac
 
+# Decide if we can use color in the prompt
 use_color=false
 if command -v dircolors >/dev/null; then
 	if [[ -f ~/.ls_colors ]]; then
@@ -23,40 +41,58 @@ if command -v dircolors >/dev/null; then
 	else
 		eval "$(dircolors -b)"
 	fi
+
 	if [[ -n ${LS_COLORS:+set} ]]; then
 		use_color=true
 	else
 		unset LS_COLORS
 	fi
 else
-	case ${TERM} in
-		[aEkqx]term*|rxvt*|gnome*|kitty*|lxterm*|screen|tmux|cons25|*color) use_color=true ;;
+	case "$TERM" in
+		[1aEkqx]term*|rxvt*|gnome*|kitty*|lxterm*|screen|tmux|cons25|*color)
+			use_color=true
+			;;
 	esac
 fi
 
-if ${use_color}; then
-	if [[ ${EUID} == 0 ]]; then
+# Append a colored prompt (or plain) to PS1
+if "$use_color"; then
+	if [[ $EUID == 0 ]]; then
+		# Root: red user, bright host, blue path, white symbol
 		PS1+='\[\033[0;31m\]\u\[\033[1;37m\]@\[\033[0;91m\]\h \[\033[1;34m\]\w \[\033[0;37m\]# \[\033[0m\]'
 	else
+		# Non-root: green user, bright host, blue path, white symbol
 		PS1+='\[\033[0;32m\]\u\[\033[1;37m\]@\[\033[0;92m\]\h \[\033[1;34m\]\w \[\033[0;37m\]\$ \[\033[0m\]'
 	fi
 else
+	# No color
 	PS1+='\u@\h \w \$ '
 fi
 
+# Source any additional scripts in /etc/bash/bashrc.d and ~/.bashrc.d
 if [[ -d /etc/bash/bashrc.d ]]; then
 	for sh in /etc/bash/bashrc.d/*.sh; do
-		[[ -r ${sh} ]] && source "${sh}"
-	done
-fi
-if [[ -d ~/.bashrc.d ]]; then
-	for sh in ~/.bashrc.d/*.sh; do
-		[[ -r ${sh} ]] && source "${sh}"
+		[[ -r "$sh" ]] && source "$sh"
 	done
 fi
 
+if [[ -d ~/.bashrc.d ]]; then
+	for sh in ~/.bashrc.d/*.sh; do
+		[[ -r "$sh" ]] && source "$sh"
+	done
+fi
+
+# If vte.sh is available, source it. Otherwise define a minimal OSC 7 fallback.
 if [[ -f /etc/profile.d/vte.sh ]]; then
-	source /etc/profile.d/vte.sh
+    # vte.sh typically sets up __vte_prompt_command or similar advanced features
+    source /etc/profile.d/vte.sh
+else
+    # Minimal fallback: define an OSC 7 function so local VTE can track $PWD
+    __vte_osc7() {
+        printf "\033]7;file://%s%s\033\\" "${HOSTNAME}" "${PWD}"
+    }
+    # Prepend it to PROMPT_COMMAND so it runs every time a new prompt is shown
+    PROMPT_COMMAND="__vte_osc7; ${PROMPT_COMMAND}"
 fi
 
 HISTSIZE=100000

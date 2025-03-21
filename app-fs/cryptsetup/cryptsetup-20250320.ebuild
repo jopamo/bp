@@ -7,7 +7,7 @@ inherit linux-info autotools
 DESCRIPTION="Tool to setup encrypted devices with dm-crypt"
 HOMEPAGE="https://gitlab.com/cryptsetup/cryptsetup/blob/master/README.md"
 
-SNAPSHOT=c1b7ad89793f9d9685c6539ce2e13874a9a1777f
+SNAPSHOT=70f0938fff7b8f762833566b7462df6cf04669cd
 SRC_URI="https://gitlab.com/cryptsetup/cryptsetup/-/archive/${SNAPSHOT}/cryptsetup-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

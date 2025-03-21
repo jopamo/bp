@@ -25,7 +25,7 @@ DEPEND="
 	lib-net/libbpf
 	lib-net/libmnl
 	caps? ( lib-core/libcap )
-	elf? ( lib-core/libelf )
+	elf? ( virtual/libelf )
 	elibc_glibc? ( lib-dev/libbsd )
 	iptables? ( app-net/iptables )
 "

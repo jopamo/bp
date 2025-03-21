@@ -13,7 +13,7 @@ DESCRIPTION="An implementation of the ACME protocol"
 HOMEPAGE="https://letsencrypt.org"
 SRC_URI="https://github.com/certbot/certbot/archive/v${PV}.tar.gz -> ${PARENT_P}.gh.tar.gz"
 
-SNAPSHOT=b7e09dd6529bdc913dfcb4b03c0e258f349d4111
+SNAPSHOT=0b51653def9259262c5ce305f48c4f363bffa388
 SRC_URI="https://github.com/certbot/certbot/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PARENT_PN}-${SNAPSHOT}/${PN}"
 

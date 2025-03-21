@@ -55,7 +55,11 @@ if [[ -d ~/.bashrc.d ]]; then
 	done
 fi
 
-HISTSIZE=50000
+if [[ -f /etc/profile.d/vte.sh ]]; then
+	source /etc/profile.d/vte.sh
+fi
+
+HISTSIZE=100000
 
 export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 export GPG_TTY="$(tty)"

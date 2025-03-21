@@ -7,7 +7,7 @@ inherit meson linux-info multiprocessing python-r1 flag-o-matic user
 DESCRIPTION="Gentoo package manager"
 HOMEPAGE="https://github.com/gentoo/portage"
 
-SNAPSHOT=c75b61b523457f8798c66afe4bcdc1708408ea00
+SNAPSHOT=899fa83063acb0561e9ccde48627d5f135fc552b
 SRC_URI="https://github.com/gentoo/portage/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

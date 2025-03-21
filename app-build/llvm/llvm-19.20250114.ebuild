@@ -15,7 +15,7 @@ LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
 KEYWORDS="amd64 arm64"
 
-IUSE="amdgpu arm bpf bootstrap debug stage2 nvptx bootstrap stage test wasm xcore"
+IUSE="amdgpu arm bpf system_llvm debug nvptx test wasm xcore"
 
 DEPEND="
     lib-core/libffi
@@ -95,8 +95,10 @@ src_configure() {
 
     local common=(
         -DBUILD_SHARED_LIBS=OFF
+        -DCLANG_DEFAULT_CXX_STDLIB=libc++
         -DCLANG_DEFAULT_OPENMP_RUNTIME=libomp
         -DCLANG_DEFAULT_PIE_ON_LINUX=ON
+        -DCLANG_DEFAULT_RTLIB=compiler-rt
         -DCLANG_DEFAULT_UNWINDLIB=libunwind
         -DCLANG_ENABLE_ARCMT=OFF
         -DCLANG_ENABLE_LIBXML2=ON
@@ -116,6 +118,7 @@ src_configure() {
         -DCOMPILER_RT_BUILD_PROFILE=OFF
         -DCOMPILER_RT_BUILD_SANITIZERS=ON
         -DCOMPILER_RT_BUILD_XRAY=OFF
+        -DCOMPILER_RT_CXX_LIBRARY=libcxx
         -DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=${TUPLE}
         -DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON
         -DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON
@@ -123,6 +126,7 @@ src_configure() {
         -DCOMPILER_RT_USE_LLVM_UNWINDER=ON
         -DENABLE_LINKER_BUILD_ID=ON
         -DLIBCPP_HAS_MUSL_LIBC=$(usex elibc_musl)
+        -DLIBCXX_CXX_ABI="libstdc++"
         -DLIBCXX_ENABLE_ASSERTIONS=ON
         -DLIBCXX_ENABLE_LOCALIZATION=ON
         -DLIBCXX_ENABLE_NEW_DELETE_DEFINITIONS=ON
@@ -130,10 +134,13 @@ src_configure() {
         -DLIBCXX_HAS_MUSL_LIBC=$(usex elibc_musl)
         -DLIBCXX_INCLUDE_BENCHMARKS=OFF
         -DLIBCXX_INCLUDE_TESTS=OFF
+        -DLIBCXX_USE_COMPILER_RT=ON
         -DLIBCXXABI_ENABLE_SHARED=ON
         -DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON
         -DLIBCXXABI_ENABLE_STATIC=ON
         -DLIBCXXABI_INCLUDE_TESTS=OFF
+        -DLIBCXXABI_LIBUNWIND_INCLUDES="${EPREFIX}"/usr/include
+        -DLIBCXXABI_USE_COMPILER_RT=ON
         -DLIBCXXABI_USE_LLVM_UNWINDER=ON
         -DLIBUNWIND_ENABLE_ASSERTIONS=ON
         -DLIBUNWIND_ENABLE_CROSS_UNWINDING=ON
@@ -143,6 +150,7 @@ src_configure() {
         -DLIBUNWIND_INSTALL_HEADERS=ON
         -DLIBUNWIND_SUPPORTS_FNO_EXCEPTIONS_FLAG=OFF
         -DLIBUNWIND_SUPPORTS_FUNWIND_TABLES_FLAG=OFF
+        -DLIBUNWIND_USE_COMPILER_RT=ON
         -DLLVM_APPEND_VC_REV=OFF
         -DLLVM_BUILD_DOCS=OFF
         -DLLVM_BUILD_LLVM_DYLIB=ON
@@ -189,53 +197,29 @@ src_configure() {
         -DCLANG_ENABLE_BOOTSTRAP=ON
     )
 
-    local stage2=(
+    local gcc=(
         -DLIBCXX_CXX_ABI="libstdc++"
     )
 
-     local latecommon=(
-        -DCLANG_DEFAULT_CXX_STDLIB=libc++
-        -DCLANG_DEFAULT_RTLIB=compiler-rt
-
-        -DLIBCXX_CXX_ABI_INCLUDE_PATHS="${EPREFIX}/usr/include/c++/v1"
-        -DLIBCXX_USE_COMPILER_RT=ON
-        -DLIBCXXABI_LIBUNWIND_INCLUDES="${EPREFIX}"/usr/include
-        -DLIBCXXABI_USE_COMPILER_RT=ON
-        -DLIBUNWIND_USE_COMPILER_RT=ON
-        -DLLVM_ENABLE_LLD=ON
-        -DCOMPILER_RT_CXX_LIBRARY=libcxx
-    )
-
-    local stage3=(
-        -DCOMPILER_RT_CXX_LIBRARY=libcxx
-        -DLIBCXX_CXX_ABI=system-libcxxabi
-        -DLIBCXX_HAS_GCC_S_LIB=OFF
+    local system_llvm=(
+    	-DLIBCXX_CXX_ABI_INCLUDE_PATHS="${EPREFIX}/usr/include/c++/v1"
+    	-DLLVM_ENABLE_LLD=ON
         -DCLANG_DEFAULT_LINKER=/usr/lib/llvm/19/bin/ld.lld
         -DCMAKE_AR=/usr/lib/llvm/19/bin/llvm-ar
         -DCMAKE_C_COMPILER=/usr/lib/llvm/19/bin/clang
         -DCMAKE_CXX_COMPILER=/usr/lib/llvm/19/bin/clang++
         -DCMAKE_NM=/usr/lib/llvm/19/bin/llvm-nm
         -DCMAKE_RANLIB=/usr/lib/llvm/19/bin/llvm-ranlib
+        -DCOMPILER_RT_CXX_LIBRARY=libcxx
+        -DLIBCXX_CXX_ABI=system-libcxxabi
+        -DLIBCXX_HAS_GCC_S_LIB=OFF
     )
 
-    if use bootstrap; then
-        mycmakeargs+=("${common[@]}" "${bootstrap[@]}")
-    elif use stage2; then
-        mycmakeargs+=("${common[@]}" "${bootstrap[@]}" "${latecommon[@]}" "${stage3[@]}")
+    if use system_llvm; then
+        mycmakeargs+=("${common[@]}" "${bootstrap[@]}" "${system_llvm[@]}")
     else
-        mycmakeargs+=("${common[@]}" "${bootstrap[@]}")
+        mycmakeargs+=("${common[@]}" "${bootstrap[@]}" "${gcc[@]}")
     fi
-
-   # if ! use bootstrap; then
-   #    local -x CC=clang
-   #    local -x CXX=clang++
-    #   local -x CC="clang"
-     #  local -x CPP="clang-cpp"
-      # local -x CXX="clang++"
-       #local -x AR="llvm-ar"
-       #local -x NM="llvm-nm"
-       #local -x RANLIB="llvm-ranlib"
-    #fi
 
     use debug || local -x CPPFLAGS="${CPPFLAGS} -DNDEBUG"
     cmake_src_configure

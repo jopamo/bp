@@ -39,7 +39,7 @@ src_configure() {
 	use debug || append-cppflags -DNDEBUG
 
 	local myconf=(
-		$(use_enable ffmpeg libav)
+		--disable-libav
 		$(use_enable libsamplerate samplerate)
 		$(use_enable pulseaudio)
 		--disable-arcamav

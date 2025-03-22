@@ -18,10 +18,10 @@ KEYWORDS="amd64 arm64"
 IUSE="caps debug nscd profile systemd static-libs +static-pie tmpfilesd"
 
 BDEPEND="
-	app-build/gcc
 	app-build/make
 "
 DEPEND="
+	app-build/gcc
 	app-kernel/linux-headers
 	app-core/layout
 "

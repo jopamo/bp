@@ -44,3 +44,11 @@ src_configure() {
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
+
+src_compile() {
+	make
+}
+
+src_install() {
+	dobin tty/pinentry-tty
+}

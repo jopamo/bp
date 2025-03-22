@@ -7,11 +7,8 @@ inherit meson xdg
 DESCRIPTION="Media player based on MPlayer and mplayer2"
 HOMEPAGE="https://mpv.io/"
 
-SNAPSHOT=1a495451ab13ada7d4134258accaa6927262d554
-SB_SNAP=ca2844b8cf7674bfccd282d389a50427742251d3
-
-SRC_URI="https://github.com/mpv-player/mpv/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz
-		https://codeberg.org/jouni/mpv_sponsorblock_minimal/raw/commit/${SB_SNAP}/sponsorblock_minimal.lua"
+SNAPSHOT=a55ae5d6cdba0f96968b56e91a3999db40e31e61
+SRC_URI="https://github.com/mpv-player/mpv/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="LGPL-2.1+ GPL-2+ BSD ISC"
@@ -31,7 +28,7 @@ REQUIRED_USE="
 "
 
 DEPEND="
-	app-dev/vulkan-headers
+	app-live/libdisplay-info
 	fonts/liberation-fonts
 	xmedia-app/ffmpeg
 	xmedia-lib/libass
@@ -52,7 +49,7 @@ DEPEND="
 	vapoursynth? ( xmedia-lib/vapoursynth )
 	vdpau? ( xgui-lib/libvdpau )
 	vulkan? (
-		xmedia-lib/shaderc
+		app-dev/vulkan-headers
 		xmedia-lib/vulkan-loader[X?,wayland?]
 	)
 	wayland? (
@@ -125,7 +122,7 @@ src_configure() {
 		$(meson_feature vaapi)
 		$(meson_feature vdpau)
 		$(meson_feature vulkan)
-		$(meson_feature vulkan shaderc)
+		-D shaderc=disabled
 		$(meson_feature X x11)
 		$(meson_feature xv)
 		$(meson_feature wayland)
@@ -154,6 +151,6 @@ src_install() {
 		doins -r TOOLS/lua
 
 		insinto /etc/mpv/scripts
-		doins "${DISTDIR}"/sponsorblock_minimal.lua
+		doins "${FILESDIR}"/sponsorblock_minimal.lua
 	fi
 }

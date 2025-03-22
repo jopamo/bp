@@ -37,10 +37,18 @@ src_configure() {
 }
 
 src_compile() {
-	append-ldflags -static
 	export OPTIMIZE="${CFLAGS}"
 
-	default
+	if ${CC} --version | grep -q 'clang'; then
+		echo "Detected Clang"
+		emake CC=musl-clang
+	elif ${CC} --version | grep -q 'gcc'; then
+		echo "Detected GCC"
+		emake CC=musl-gcc
+	else
+		echo "Unknown compiler"
+		exit 1
+	fi
 }
 
 src_install() {

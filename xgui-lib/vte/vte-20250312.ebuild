@@ -38,7 +38,7 @@ src_configure() {
 		-Dicu=false
 		-Dgnutls=true
 		-Dglade=true
-		-Dgtk3=true
+		-Dgtk3=false
 		)
 		meson_src_configure
 }

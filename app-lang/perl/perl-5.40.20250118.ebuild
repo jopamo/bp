@@ -169,10 +169,12 @@ src_configure() {
 
 		sh Configure \
 			-des \
-			-Dinstallprefix="${EPREFIX}"'/usr' \
-			-Dinstallusrbinperl='n' \
 			"${myconf[@]}" \
 			|| die "Unable to configure"
+}
+
+src_compile() {
+	emake libperl.so && emake
 }
 
 src_test() {

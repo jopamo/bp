@@ -39,16 +39,9 @@ src_configure() {
 		--disable-pinentry-emacs
 		--disable-pinentry-gtk2
 		--disable-pinentry-qt5
+		--disable-pinentry-qt
 		--enable-pinentry-tty
 		--without-ncurses-include-dir
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
-
-src_compile() {
-	make
-}
-
-src_install() {
-	dobin tty/pinentry-tty
 }

@@ -33,12 +33,12 @@ create_toybox_symlinks() {
 }
 
 src_configure() {
-	make defconfig
+	scripts/genconfig.sh
+	scripts/portability.sh
+	emake defconfig
 }
 
 src_compile() {
-	export OPTIMIZE="${CFLAGS}"
-
 	if ${CC} --version | grep -q 'clang'; then
 		echo "Detected Clang"
 		emake CC=musl-clang
@@ -54,4 +54,5 @@ src_compile() {
 src_install() {
 	dobin toybox
 	create_toybox_symlinks
+	die
 }

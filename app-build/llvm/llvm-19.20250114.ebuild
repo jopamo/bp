@@ -15,7 +15,7 @@ LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
 KEYWORDS="amd64 arm64"
 
-IUSE="amdgpu arm bpf bootstrap debug stage2 nvptx test wasm xcore"
+IUSE="amdgpu arm bpf bootstrap debug syslibcxxabi nvptx libfuzzer orc sanitizers test wasm xcore"
 
 DEPEND="
     lib-core/libffi
@@ -110,11 +110,11 @@ src_configure() {
         -DCMAKE_DISABLE_FIND_PACKAGE_hsa-runtime64=ON
         -DCMAKE_INSTALL_LIBDIR=lib
         -DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
-        -DCOMPILER_RT_BUILD_LIBFUZZER=OFF
+        -DCOMPILER_RT_BUILD_LIBFUZZER=$(usex libfuzzer)
         -DCOMPILER_RT_BUILD_MEMPROF=OFF
-        -DCOMPILER_RT_BUILD_ORC=ON
+        -DCOMPILER_RT_BUILD_ORC=$(usex orc)
         -DCOMPILER_RT_BUILD_PROFILE=OFF
-        -DCOMPILER_RT_BUILD_SANITIZERS=ON
+        -DCOMPILER_RT_BUILD_SANITIZERS=$(usex sanitizers)
         -DCOMPILER_RT_BUILD_XRAY=OFF
         -DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=${TUPLE}
         -DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON
@@ -172,12 +172,15 @@ src_configure() {
         -DLLVM_INCLUDE_DOCS=OFF
         -DLLVM_INCLUDE_EXAMPLES=OFF
         -DLLVM_INCLUDE_TESTS=OFF
+        -DCOMPILER_RT_BUILD_GWP_ASAN=OFF
         -DLLVM_INSTALL_UTILS=ON
         -DLLVM_LINK_LLVM_DYLIB=ON
         -DLLVM_OPTIMIZED_TABLEGEN=ON
         -DLLVM_PARALLEL_LINK_JOBS=1
         -DLLVM_TARGETS_TO_BUILD="${LLVM_TARGETS}"
         -DOCAMLFIND=NO
+        -DCLANG_DEFAULT_RTLIB=compiler-rt
+        -DCLANG_DEFAULT_CXX_STDLIB=libc++
         #-DLIBCXX_HARDENING_MODE=fast
     )
 
@@ -189,13 +192,7 @@ src_configure() {
         -DCLANG_ENABLE_BOOTSTRAP=ON
     )
 
-    local stage2=(
-        -DLIBCXX_CXX_ABI="libstdc++"
-    )
-
      local latecommon=(
-        -DCLANG_DEFAULT_CXX_STDLIB=libc++
-        -DCLANG_DEFAULT_RTLIB=compiler-rt
         -DLIBCXX_CXX_ABI_INCLUDE_PATHS="${EPREFIX}/usr/include/c++/v1"
         -DLIBCXX_USE_COMPILER_RT=ON
         -DLIBCXXABI_LIBUNWIND_INCLUDES="${EPREFIX}"/usr/include
@@ -205,24 +202,25 @@ src_configure() {
         -DCOMPILER_RT_CXX_LIBRARY=libcxx
     )
 
-    local stage3=(
-        -DCOMPILER_RT_CXX_LIBRARY=libcxx
+    local syslibcxxabi=(
         -DLIBCXX_CXX_ABI=system-libcxxabi
-        -DLIBCXX_HAS_GCC_S_LIB=OFF
-        -DCLANG_DEFAULT_LINKER=/usr/lib/llvm/19/bin/ld.lld
-        -DCMAKE_AR=/usr/lib/llvm/19/bin/llvm-ar
-        -DCMAKE_C_COMPILER=/usr/lib/llvm/19/bin/clang
-        -DCMAKE_CXX_COMPILER=/usr/lib/llvm/19/bin/clang++
-        -DCMAKE_NM=/usr/lib/llvm/19/bin/llvm-nm
-        -DCMAKE_RANLIB=/usr/lib/llvm/19/bin/llvm-ranlib
+    )
+
+    local sysclang=(
+        -DCLANG_DEFAULT_LINKER=/usr/bin/ld.lld
+        -DCMAKE_AR=/usr/bin/llvm-ar
+        -DCMAKE_C_COMPILER=/usr/bin/clang
+        -DCMAKE_CXX_COMPILER=/usr/bin/clang++
+        -DCMAKE_NM=/usr/bin/llvm-nm
+        -DCMAKE_RANLIB=/usr/bin/llvm-ranlib
     )
 
     if use bootstrap; then
         mycmakeargs+=("${common[@]}" "${bootstrap[@]}")
-    elif use stage2; then
-        mycmakeargs+=("${common[@]}" "${bootstrap[@]}" "${latecommon[@]}" "${stage3[@]}")
+    elif use syslibcxxabi; then
+        mycmakeargs+=("${common[@]}" "${sysclang[@]}" "${latecommon[@]}" "${syslibcxxabi[@]}")
     else
-        mycmakeargs+=("${common[@]}" "${bootstrap[@]}")
+        mycmakeargs+=("${common[@]}" "${latecommon[@]}" "${sysclang[@]}")
     fi
 
    # if ! use bootstrap; then

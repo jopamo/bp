@@ -7,15 +7,15 @@ inherit flag-o-matic
 DESCRIPTION="an optimizing compiler produced by the GNU Project supporting various programming languages"
 HOMEPAGE="https://gcc.gnu.org/"
 
-SNAPSHOT=651c85825a74ca1b4f727f1bd7cf990e9327476a
-SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> gcc-${SNAPSHOT}.tar.gz"
+SNAPSHOT=5ba6fdc5476d33c57f4751cae93054fdbc7211c0
+SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/gcc-${SNAPSHOT}
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug dlang go-bootstrap +isl lib-only sanitize +vtv zstd"
+IUSE="debug dlang go-bootstrap +isl sanitize +vtv zstd"
 
 RESTRICT="strip"
 
@@ -29,7 +29,7 @@ DEPEND="
 BDEPEND="app-build/make"
 
 src_prepare() {
-	eapply "${FILESDIR}"/13/*.patch
+	eapply "${FILESDIR}"/14/*.patch
 
 	filter-flags -D_FORTIFY_SOURCE*
 	filter-flags -Wl,-O3
@@ -55,7 +55,9 @@ src_prepare() {
 	filter-flags -fstack-clash-protection
 	filter-flags -fstack-protector-strong
 	filter-flags -ftree-loop-distribution
-	filter-flags -fuse-linker-plugin -fdevirtualize-at-ltrans
+	filter-flags -fuse-linker-plugin
+
+	replace-flags -O3 -O2
 
 	use debug || filter-flags -g
 
@@ -142,13 +144,13 @@ src_configure() {
 src_compile() {
 	cd gcc-build
 
-	emake -O STAGE1_CFLAGS="$CFLAGS" \
+	emake -O STAGE1_CFLAGS="-O2" \
 		BOOT_CFLAGS="$CFLAGS" \
 		BOOT_LDFLAGS="$LDFLAGS" \
 		LDFLAGS_FOR_TARGET="$LDFLAGS" \
 		bootstrap
 
-	make -O STAGE1_CFLAGS="$CFLAGS" \
+	make -O STAGE1_CFLAGS="-O2" \
 		BOOT_CFLAGS="$CFLAGS" \
 		BOOT_LDFLAGS="$LDFLAGS" \
 		LDFLAGS_FOR_TARGET="$LDFLAGS" \
@@ -159,11 +161,6 @@ src_compile() {
 src_install() {
 	cd gcc-build
 	emake DESTDIR="${ED}" install
-
-	#cleanup
-	find "${ED}" -name libcc1.la -delete
-	find "${ED}" -name libcc1plugin.la -delete
-	find "${ED}" -name libcp1plugin.la -delete
 
 	dobin "${FILESDIR}"/c89
 	dobin "${FILESDIR}"/c99

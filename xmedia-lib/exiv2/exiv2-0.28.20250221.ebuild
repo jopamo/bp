@@ -18,6 +18,7 @@ KEYWORDS="amd64 arm64"
 IUSE="png static-libs webready xmp"
 
 DEPEND="
+	lib-misc/inih
 	png? ( lib-core/zlib )
 	webready? (
 		lib-net/libssh

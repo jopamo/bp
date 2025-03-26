@@ -21,6 +21,7 @@ RDEPEND="
 	xgui-tools/mesa
 	xgui-lib/libX11"
 DEPEND="${RDEPEND}
+	xgui-misc/freeglut
 	xmedia-lib/glad
 	xmedia-lib/glu
 	xgui-tools/xorgproto"

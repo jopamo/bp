@@ -11,3 +11,8 @@ EGIT_REPO_URI="https://github.com/jopamo/1term"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+DEPEND="
+	xgui-lib/vte
+	xgui-lib/gtk4
+"

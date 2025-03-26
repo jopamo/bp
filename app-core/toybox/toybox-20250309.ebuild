@@ -33,26 +33,17 @@ create_toybox_symlinks() {
 }
 
 src_configure() {
-	scripts/genconfig.sh
-	scripts/portability.sh
-	emake defconfig
+	make defconfig
 }
 
 src_compile() {
-	if ${CC} --version | grep -q 'clang'; then
-		echo "Detected Clang"
-		emake CC=musl-clang
-	elif ${CC} --version | grep -q 'gcc'; then
-		echo "Detected GCC"
-		emake CC=musl-gcc
-	else
-		echo "Unknown compiler"
-		exit 1
-	fi
+	append-flags -ffat-lto-objects
+	append-ldflags -static -lcrypt
+
+	make
 }
 
 src_install() {
 	dobin toybox
 	create_toybox_symlinks
-	die
 }

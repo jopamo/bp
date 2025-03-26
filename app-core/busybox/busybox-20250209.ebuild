@@ -21,12 +21,22 @@ RESTRICT="test strip"
 
 BDEPEND="lib-core/musl"
 
-src_prepare() {
-	#filter-flags -fuse-ld=lld
+create_busybox_symlinks() {
+  for path in $(/usr/bin/busybox --list); do
+    cmd_name=$(basename "$path")
 
-	#append-flags -ffat-lto-objects
-	#append-ldflags -static
-	#append-ldflags -Wl,-z,noexecstack
+    if [ ! -e "${EROOT}/usr/bin/${cmd_name}" ]; then
+      echo "Creating symlink '${cmd_name}' in /usr/bin/"
+      ln -s /usr/bin/busybox "/usr/bin/${cmd_name}"
+    else
+      echo "Skipping '${cmd_name}' - already exists in /usr/bin/"
+    fi
+  done
+}
+
+src_prepare() {
+	append-flags -ffat-lto-objects
+	append-ldflags -static
 
 	default
 
@@ -51,44 +61,8 @@ src_compile() {
 src_install() {
 	dobin busybox
 	doman docs/busybox.1
+}
 
-	while read -r applet; do
-		dosym -r /usr/bin/busybox "/usr/bin/${applet}"
-	done < <("${ED}/usr/bin/busybox" --list)
-
-	local files_to_remove=(
-		"[" "acpid" "arping" "awk" "base64" "basename" "bc" "blkdiscard" "blkid"
-		"blockdev" "bunzip2" "bzcat" "bzip2" "cat" "chgrp" "chmod" "chown"
-		"chpasswd" "chroot" "cksum" "clear" "cmp" "comm" "cp" "cpio" "cut"
-		"date" "dc" "dd" "depmod" "df" "diff" "dirname" "dmesg" "du" "echo"
-		"ed" "egrep" "eject" "env" "expand" "expr" "factor" "fallocate"
-		"false" "fdisk" "fgrep" "find" "findfs" "flock" "fold" "free" "fuser"
-		"getfattr" "getopt" "grep" "groups" "gunzip" "gzip" "halt" "head"
-		"hexdump" "hostid" "hostname" "id" "init" "install" "insmod" "ionice"
-		"ip" "ipcrm" "ipcs" "kill" "killall" "less" "link" "linux32" "linux64"
-		"ln" "logger" "login" "losetup" "ls" "lsmod" "lsusb" "lzcat" "lzma"
-		"md5sum" "mesg" "mkdir" "mkfifo" "mknod" "mktemp" "mkswap" "modinfo"
-		"modprobe" "mount" "mountpoint" "mv" "nc" "nice" "nl" "nologin"
-		"nohup" "nproc" "nslookup" "od" "passwd" "paste" "pgrep" "pidof" "ping" "pkill"
-		"pmap" "poweroff" "printenv" "printf" "ps" "pstree" "pwd" "pwdx"
-		"readlink" "realpath" "reboot" "renice" "reset" "rev" "rfkill" "rm"
-		"rmdir"	"rmmod" "run-parts" "sed" "seq" "setpriv" "setsid" "sh"
-		"sha1sum" "sha256sum" "sha512sum" "shred" "shuf" "sleep" "sort" "split"
-		"stat" "strings" "stty" "su" "sum" "swapoff" "swapon" "sync" "sysctl"
-		"tac" "tail" "tar" "tee" "test" "timeout" "top" "touch" "tr" "true"
-		"truncate" "tsort" "tty" "umount" "uname" "unexpand" "uniq" "unlink"
-		"unlzma" "unxz" "unzip" "uptime" "vi" "watch" "wc" "wget"
-		"which"	"whoami" "xargs" "xxd" "xzcat" "yes" "zcat"
-		"chvt" "deallocvt" "kbd_mode" "openvt" "setfont" "setkeycodes" "showkey"
-		"vlock"
-)
-
-
-	if ! use minimal; then
-		for file in "${files_to_remove[@]}"; do
-			if [[ -e "${ED}/usr/bin/${file}" ]]; then
-				rm "${ED}/usr/bin/${file}" || die
-			fi
-		done
-	fi
+pkg_postinst() {
+	create_busybox_symlinks
 }

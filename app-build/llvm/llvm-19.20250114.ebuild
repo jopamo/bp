@@ -37,7 +37,7 @@ src_prepare() {
 }
 
 src_configure() {
-    local TUPLE
+    export TUPLE
 
     if command -v gcc >/dev/null 2>&1; then
         TUPLE=$(gcc -dumpmachine)
@@ -244,17 +244,26 @@ src_test() {
 src_install() {
     cmake_src_install
 
-        dosym -r "/usr/lib/$TUPLE/libc++.a" "/usr/lib/libc++.a"
-        dosym -r "/usr/lib/$TUPLE/libc++.so" "/usr/lib/libc++.so"
-        dosym -r "/usr/lib/$TUPLE/libc++.so.1" "/usr/lib/libc++.so"
-        dosym -r "/usr/lib/$TUPLE/libc++.so.1.0" "/usr/lib/libc++.so.1"
-        dosym -r "/usr/lib/$TUPLE/libc++abi.a" "/usr/lib/libc++abi.a"
-        dosym -r "/usr/lib/$TUPLE/libc++abi.so" "/usr/lib/libc++abi.so"
-        dosym -r "/usr/lib/$TUPLE/libc++abi.so.1" "/usr/lib/libc++abi.so"
-        dosym -r "/usr/lib/$TUPLE/libc++abi.so.1.0" "/usr/lib/libc++abi.so.1"
-        dosym -r "/usr/lib/$TUPLE/libc++experimental.a" "/usr/lib/libc++experimental.a"
-        dosym -r "/usr/lib/$TUPLE/libunwind.a" "/usr/lib/libunwind.a"
-        dosym -r "/usr/lib/$TUPLE/libunwind.so" "/usr/lib/libunwind.so"
-        dosym -r "/usr/lib/$TUPLE/libunwind.so.1" "/usr/lib/libunwind.so"
-        dosym -r "/usr/lib/$TUPLE/libunwind.so.1.0" "/usr/lib/libunwind.so.1"
+	dosym -r "/usr/lib/${TUPLE}/libc++.a" "/usr/lib/libc++.a"
+	dosym -r "/usr/lib/${TUPLE}/libc++.so" "/usr/lib/libc++.so"
+	dosym -r "/usr/lib/${TUPLE}/libc++.so.1" "/usr/lib/libc++.so"
+	dosym -r "/usr/lib/${TUPLE}/libc++.so.1.0" "/usr/lib/libc++.so.1"
+	dosym -r "/usr/lib/${TUPLE}/libc++abi.a" "/usr/lib/libc++abi.a"
+	dosym -r "/usr/lib/${TUPLE}/libc++abi.so" "/usr/lib/libc++abi.so"
+	dosym -r "/usr/lib/${TUPLE}/libc++abi.so.1" "/usr/lib/libc++abi.so"
+	dosym -r "/usr/lib/${TUPLE}/libc++abi.so.1.0" "/usr/lib/libc++abi.so.1"
+	dosym -r "/usr/lib/${TUPLE}/libc++experimental.a" "/usr/lib/libc++experimental.a"
+	dosym -r "/usr/lib/${TUPLE}/libunwind.a" "/usr/lib/libunwind.a"
+	dosym -r "/usr/lib/${TUPLE}/libunwind.so" "/usr/lib/libunwind.so"
+	dosym -r "/usr/lib/${TUPLE}/libunwind.so.1" "/usr/lib/libunwind.so"
+	dosym -r "/usr/lib/${TUPLE}/libunwind.so.1.0" "/usr/lib/libunwind.so.1"
+
+	if use syslibcxxabi; then
+		dosym -r "/usr/bin/clang" "/usr/bin/cc"
+		dosym -r "/usr/bin/clang" "/usr/bin/gcc"
+		dosym -r "/usr/bin/llvm-ar" "/usr/bin/ar"
+		dosym -r "/usr/bin/llvm-strip" "/usr/bin/strip"
+		dosym -r "/usr/bin/clang++" "/usr/bin/cxx"
+		dosym -r "/usr/bin/ld.lld" "/usr/bin/ld"
+    fi
 }

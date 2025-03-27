@@ -15,43 +15,58 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
+src_prepare() {
+	default
+	sed -i 's/for opt in -L$libdir @EXTRA_PKG_LDFLAGS@ @LIBS@/for opt in -L$libdir @LIBS@/' \
+    	misc/gen-pkgconfig.in
+
+	sed -i 's/for opt in -L$libdir @EXTRA_PKG_LDFLAGS@ $LIBS/for opt in -L$libdir $LIBS/' \
+    	misc/ncurses-config.in
+}
+
 src_configure() {
-	local myconf=(
-		--disable-termcap
-		--with-terminfo-dirs="${EPREFIX}"/usr/share/terminfo
-		--with-pkg-config-libdir="${EPREFIX}"/usr/lib/pkgconfig
-		--enable-pc-files
-		--without-normal
-		--with-symlinks
-		--enable-overwrite
-		--with-shared
-		--without-debug
-		--enable-colorfgbg
-		--enable-echo
-		--enable-widec
-		--with-pthread
-		--enable-ext-colors
-		--without-manpages
-		--with-termlib
+    local myconf=(
+        --disable-root-access
+		--disable-rpath-hack
+		--disable-setuid-environ
 		--disable-stripping
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
+        --disable-termcap
+        --enable-colorfgbg
+        --enable-echo
+        --enable-ext-colors
+        --enable-overwrite
+        --enable-pc-files
+        --enable-widec
+        --with-cxx-binding
+		--with-cxx-shared
+        --enable-symlinks
+        --with-pkg-config-libdir="${EPREFIX}"/usr/lib/pkgconfig
+        --with-pthread
+        --with-shared
+        --with-symlinks
+        --with-terminfo-dirs="${EPREFIX}"/usr/share/terminfo
+        --with-termlib
+        --without-debug
+        --without-manpages
+        --without-normal
+    )
+    ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
 src_install() {
-	default
+    default
 
-	local i
+    local i
 
-	for i in ncurses form panel menu tinfo ; do
-    	echo "INPUT(-l${i}tw)" > "${ED}"/usr/lib/lib${i}.so
-    	echo "INPUT(-l${i}tw)" > "${ED}"/usr/lib/lib${i}w.so
-    	dosym -r /usr/lib/pkgconfig/${i}tw.pc /usr/lib/pkgconfig/${i}.pc
-    	dosym -r /usr/lib/pkgconfig/${i}tw.pc /usr/lib/pkgconfig/${i}w.pc
+    for i in ncurses form panel menu tinfo ; do
+        echo "INPUT(-l${i}tw)" > "${ED}"/usr/lib/lib${i}.so
+        echo "INPUT(-l${i}tw)" > "${ED}"/usr/lib/lib${i}w.so
+        dosym -r /usr/lib/pkgconfig/${i}tw.pc /usr/lib/pkgconfig/${i}.pc
+        dosym -r /usr/lib/pkgconfig/${i}tw.pc /usr/lib/pkgconfig/${i}w.pc
     done
 
-	echo "INPUT(-lncursestw)" > "${ED}"/usr/lib/libcurses.so
+    echo "INPUT(-lncursestw)" > "${ED}"/usr/lib/libcurses.so
 
-	use static-libs || find "${ED}"/usr/ -name '*.a' -delete
-	use static-libs || find "${ED}" -name '*.la' -delete
+    use static-libs || find "${ED}"/usr/ -name '*.a' -delete
+    use static-libs || find "${ED}" -name '*.la' -delete
 }

@@ -35,8 +35,11 @@ create_busybox_symlinks() {
 }
 
 src_prepare() {
+	filter-flags -fuse-ld=lld
+
 	append-flags -ffat-lto-objects
 	append-ldflags -static
+	append-ldflags -Wl,-z,noexecstack
 
 	default
 
@@ -46,6 +49,8 @@ src_prepare() {
 }
 
 src_compile() {
+	CC=${CC:-gcc}
+
 	if ${CC} --version | grep -q 'clang'; then
 		echo "Detected Clang"
 		emake CC=musl-clang

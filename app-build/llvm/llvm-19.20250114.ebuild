@@ -45,8 +45,6 @@ src_configure() {
         TUPLE=$(clang --print-target-triple)
     fi
 
-    echo "$TUPLE"
-
     # link to compiler-rt
     local use_compiler_rt=OFF
     [[ $(tc-get-c-rtlib) == compiler-rt ]] && use_compiler_rt=ON

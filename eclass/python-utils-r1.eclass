@@ -1,6 +1,6 @@
 # Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
-PYTHON_COMPAT=( python3_11 python3_12 python3_13 )
+PYTHON_COMPAT=( python3_13 )
 
 # @ECLASS: python-utils-r1.eclass
 # @MAINTAINER:
@@ -39,7 +39,9 @@ inherit multiprocessing toolchain-funcs
 # @DESCRIPTION:
 # All supported Python implementations, most preferred last.
 _PYTHON_ALL_IMPLS=(
-	python3_{10..15}
+	pypy3 pypy3_11
+	python3_13t
+	python3_{10..13}
 )
 readonly _PYTHON_ALL_IMPLS
 
@@ -48,8 +50,6 @@ readonly _PYTHON_ALL_IMPLS
 # @DESCRIPTION:
 # All historical Python implementations that are no longer supported.
 _PYTHON_HISTORICAL_IMPLS=(
-	pypy3
-	pypy3_{10..15}
 	jython2_7
 	pypy pypy1_{8,9} pypy2_0
 	python2_{5..7}
@@ -76,12 +76,12 @@ readonly _PYTHON_HISTORICAL_IMPLS
 # Verify whether the patterns passed to the eclass function are correct
 # (i.e. can match any valid implementation).  Dies on wrong pattern.
 _python_verify_patterns() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	local impl pattern
 	for pattern; do
 		case ${pattern} in
-			-[23]|3.[89]|3.1[012])
+			-[23]|3.[89]|3.1[0-3])
 				continue
 				;;
 		esac
@@ -94,6 +94,7 @@ _python_verify_patterns() {
 		die "Invalid implementation pattern: ${pattern}"
 	done
 }
+
 
 # @FUNCTION: _python_set_impls
 # @INTERNAL

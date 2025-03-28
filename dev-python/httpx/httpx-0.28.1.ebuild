@@ -3,8 +3,9 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
+PYTHON_COMPAT=( pypy3 pypy3_11 python3_{10..13} )
 
-inherit distutils-r1
+inherit distutils-r1 
 
 DESCRIPTION="Fully-featured HTTP client which provides sync and async APIs"
 HOMEPAGE="
@@ -47,6 +48,9 @@ BDEPEND="
 		dev-python/typing-extensions[${PYTHON_USEDEP}]
 		dev-python/uvicorn[${PYTHON_USEDEP}]
 		>=dev-py/zstandard-0.18.0[${PYTHON_USEDEP}]
+		$(python_gen_cond_dep '
+			dev-python/trio[${PYTHON_USEDEP}]
+		' 3.{10..13})
 	)
 "
 

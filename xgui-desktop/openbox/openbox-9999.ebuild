@@ -66,3 +66,13 @@ src_configure() {
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
+
+src_install() {
+	default
+
+	# for xdg
+	cat > "${T}"/99${PN} <<- EOF || die
+		XDG_CURRENT_DESKTOP=XFCE
+	EOF
+	doenvd "${T}"/99${PN}
+}

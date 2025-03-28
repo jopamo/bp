@@ -5,7 +5,7 @@ EAPI=8
 inherit meson git-r3 xdg
 
 DESCRIPTION="VTE/GTK4 terminal emulator"
-HOMEPAGE="https://github.com/lxqt/qterminal"
+HOMEPAGE="https://github.com/jopamo/1term"
 EGIT_REPO_URI="https://github.com/jopamo/1term"
 
 LICENSE="MIT"

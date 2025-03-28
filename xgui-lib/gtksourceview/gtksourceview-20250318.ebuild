@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson
+inherit meson xdg
 
 DESCRIPTION="Low-level pixel manipulation routines"
 HOMEPAGE="https://www.x.org/wiki/"

@@ -16,7 +16,7 @@ RUST_MIN_VER="1.83.0"
 
 inherit cargo 
 
-CRATE_PV=${PV}
+CRATE_PV=0.6.10
 DESCRIPTION="A Python package installer and resolver, written in Rust"
 HOMEPAGE="
 	https://github.com/astral-sh/uv/
@@ -39,8 +39,8 @@ LICENSE="|| ( Apache-2.0 MIT )"
 # crates/pep508-rs is || ( Apache-2.0 BSD-2 ) which is covered below
 # Dependent crate licenses
 LICENSE+="
-	0BSD Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD-2 BSD ISC MIT
-	MPL-2.0 Unicode-3.0 Unicode-DFS-2016 ZLIB
+	0BSD Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD-2 BSD Boost-1.0
+	ISC MIT MPL-2.0 Unicode-3.0 Unicode-DFS-2016 ZLIB
 "
 # ring crate
 LICENSE+=" openssl"

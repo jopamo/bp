@@ -47,6 +47,10 @@ python_compile() {
 }
 
 python_test() {
+	local EPYTEST_IGNORE=(
+		tests/test_multidict_benchmarks.py
+	)
+
 	rm -rf multidict || die
 
 	local cext=--c-extensions

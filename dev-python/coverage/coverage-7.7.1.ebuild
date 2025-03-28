@@ -38,11 +38,6 @@ BDEPEND="
 distutils_enable_tests pytest
 
 src_prepare() {
-	local PATCHES=(
-		# https://github.com/nedbat/coveragepy/pull/1929
-		"${FILESDIR}/${P}-pypy311.patch"
-	)
-
 	distutils-r1_src_prepare
 
 	sed -i -e '/addopts/s:-q -n auto::' pyproject.toml || die
@@ -76,6 +71,8 @@ python_test() {
 		# TODO: report upstream?
 		tests/test_concurrency.py::ConcurrencyTest::test_greenlet
 		tests/test_concurrency.py::ConcurrencyTest::test_greenlet_simple_code
+		# packaging tests, fragile to setuptools version
+		tests/test_setup.py
 	)
 	local EPYTEST_IGNORE=(
 		# pip these days insists on fetching build deps from Internet

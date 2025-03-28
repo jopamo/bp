@@ -28,6 +28,7 @@ for cmd in "${REQUIRED_COMMANDS[@]}"; do
 done
 
 PACKAGES=(
+"accelerate"
 "aiodns"
 "aiofiles"
 "aiohappyeyeballs"
@@ -74,6 +75,7 @@ PACKAGES=(
 "curl-cffi"
 "cython"
 "defusedxml"
+"diffusers"
 "distlib"
 "distro"
 "docutils"
@@ -216,6 +218,7 @@ PACKAGES=(
 "rfc3987"
 "rich"
 "rpds-py"
+"safetensors"
 "scripttest"
 "secretstorage"
 "selenium"
@@ -231,9 +234,12 @@ PACKAGES=(
 "tomli-w"
 "tomli"
 "tomlkit"
+"torch"
+"torchvision"
 "tornado"
 "towncrier"
 "tqdm"
+"transformers"
 "trio-websocket"
 "trio"
 "trove-classifiers"

@@ -18,16 +18,16 @@ CRATES="
 	once_cell@1.19.0
 	portable-atomic@1.6.0
 	proc-macro2@1.0.86
-	pyo3-build-config@0.23.4
-	pyo3-ffi@0.23.4
-	pyo3-macros-backend@0.23.4
-	pyo3-macros@0.23.4
-	pyo3@0.23.4
+	pyo3-build-config@0.24.0
+	pyo3-ffi@0.24.0
+	pyo3-macros-backend@0.24.0
+	pyo3-macros@0.24.0
+	pyo3@0.24.0
 	python3-dll-a@0.2.12
 	quote@1.0.36
 	rpds@1.1.0
 	syn@2.0.69
-	target-lexicon@0.12.14
+	target-lexicon@0.13.2
 	triomphe@0.1.13
 	unicode-ident@1.0.12
 	unindent@0.2.3
@@ -44,7 +44,6 @@ HOMEPAGE="
 "
 SRC_URI+="
 	${CARGO_CRATE_URIS}
-	https://dev.gentoo.org/~mgorny/dist/pyo3-ffi-0.23.4-pypy3_11.patch.xz
 "
 
 LICENSE="MIT"
@@ -56,11 +55,3 @@ KEYWORDS="amd64 arm64"
 QA_FLAGS_IGNORED="usr/lib.*/py.*/site-packages/rpds/rpds.*.so"
 
 distutils_enable_tests pytest
-
-src_prepare() {
-	distutils-r1_src_prepare
-
-	pushd "${ECARGO_VENDOR}"/pyo3-ffi* >/dev/null || die
-	eapply -p2 "${WORKDIR}/pyo3-ffi-0.23.4-pypy3_11.patch"
-	popd >/dev/null || die
-}

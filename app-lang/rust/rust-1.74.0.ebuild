@@ -44,30 +44,7 @@ src_prepare() {
 
 	append-cppflags -D_LARGEFILE64_SOURCE
 
-	filter-flags -D_FORTIFY_SOURCE*
-	filter-flags -Wl,-O3
-	filter-flags -Wl,-z,combreloc
-	filter-flags -Wl,-z,defs
-	filter-flags -Wl,-z,now
-	filter-flags -Wl,-z,relro
-	filter-flags -fassociative-math
-	filter-flags -fasynchronous-unwind-tables
-	filter-flags -fcf-protection=full
-	filter-flags -fexceptions
-	filter-flags -fgraphite-identity
-	filter-flags -fipa-pta
-	filter-flags -floop-interchange
-	filter-flags -floop-nest-optimize
-	filter-flags -floop-parallelize-all
-	filter-flags -flto*
-	filter-flags -fno-math-errno
-	filter-flags -fno-semantic-interposition
-	filter-flags -fno-signed-zeros
-	filter-flags -fno-trapping-math
-	filter-flags -fstack-clash-protection
-	filter-flags -fstack-protector-strong
-	filter-flags -ftree-loop-distribution
-	filter-flags -fuse-linker-plugin
+	strip-flags
 
 	replace-flags -O3 -O2
 
@@ -80,24 +57,34 @@ src_prepare() {
 	ln -s rustc-${PV}-src rustc-1.29.0-src
 	ln -fs ../vendor rustc-${PV}-src/src/vendor
 
-	sed -i '/#include <string>/a #include <cstdint>' "rustc-${PV}-src/src/llvm-project/llvm/include/llvm/Support/Signals.h" || die
+	sed -i '/#include <string>/a #include <cstdint>' \
+		"rustc-${PV}-src/src/llvm-project/llvm/include/llvm/Support/Signals.h" || die
 
 	MYARCH="$(usex arm64 'AArch64' 'X86')"
 	sed -i "s|^LLVM_TARGETS ?=.*|LLVM_TARGETS ?= $MYARCH|" minicargo.mk || die
 	sed -i 's|$(MAKE) -j $(PARLEVEL)|$(MAKE) -j $(shell nproc)|g' minicargo.mk || die
-	sed -i 's|LLVM_INCLUDE_BENCHMARKS=OFF|LLVM_INCLUDE_BENCHMARKS=OFF LLVM_PARALLEL_LINK_JOBS=1 LLVM_ENABLE_DOXYGEN=OFF|' minicargo.mk || die
+	sed -i 's|LLVM_INCLUDE_BENCHMARKS=OFF|LLVM_INCLUDE_BENCHMARKS=OFF LLVM_PARALLEL_LINK_JOBS=1 LLVM_ENABLE_DOXYGEN=OFF|' \
+		minicargo.mk || die
+	#sed -i '/^const _: \[();.*std::mem::size_of::<.*>\];/ s/^/\/\//' rustc-$(ver_cut 1-2)-src/compiler/rustc_index/src/lib.rs || die
+
+	#sed -i 's|^LLVM_CONFIG := .*|LLVM_CONFIG := /usr/bin/llvm-config|' minicargo.mk
+	#sed -i 's|$(OUTDIR)rustc: $(MRUSTC) $(MINICARGO) LIBS $(LLVM_CONFIG)|$(OUTDIR)rustc: $(MRUSTC) $(MINICARGO) LIBS|' minicargo.mk
+	#sed -i '/$(RUSTCSRC)build\/bin\/llvm-config: $(RUSTCSRC)build\/Makefile/,/$(RUSTCSRC)build\/Makefile: $(RUSTCSRC)$(LLVM_DIR)\/CMakeLists.txt/ d' minicargo.mk
 }
 
 src_compile() {
 	make_opts=(RUSTC_VERSION=${PV} MRUSTC_TARGET_VER=$(ver_cut 1-2) OUTDIR_SUF="")
 
-	emake -j1 ${make_opts[@]}
-	emake -j1 ${make_opts[@]} -f minicargo.mk LIBS $@
-	emake -j1 ${make_opts[@]} RUSTC_INSTALL_BINDIR=bin -f minicargo.mk "output/rustc"
-	emake -j1 ${make_opts[@]} LIBGIT2_SYS_USE_PKG_CONFIG=1 -f minicargo.mk "output${OUTDIR_SUF}/cargo"
-
-	cd "run_rustc"
 	emake ${make_opts[@]}
+	emake ${make_opts[@]} RUSTCSRC
+	emake ${make_opts[@]} -f minicargo.mk LIBS $@
+	emake ${make_opts[@]} test $@
+	emake ${make_opts[@]} local_tests $@
+
+	RUSTC_INSTALL_BINDIR=bin emake -j1 ${make_opts[@]} -f minicargo.mk output/rustc $@
+	LIBGIT2_SYS_USE_PKG_CONFIG=1 emake -j1 ${make_opts[@]} -f minicargo.mk -j ${PARLEVEL:-1} output/cargo $@
+
+	emake ${make_opts[@]} -C run_rustc
 }
 
 src_install() {
@@ -108,6 +95,4 @@ src_install() {
 	cp -R "${S}/run_rustc/output/prefix/bin/rustc_binary" "${D}/usr/bin/rustc_binary" || die "Install failed!"
 	cp -R "${S}/run_rustc/output/prefix/bin/cargo" "${D}/usr/bin/cargo-${PV}" || die "Install failed!"
 	cp -R "${S}/run_rustc/output/prefix/lib/rustlib" "${D}/usr/lib/rustlib" || die "Install failed!"
-	mkdir -p "${D}/etc/env.d/rust/"
-	echo /usr/bin/cargo >> "${D}/etc/env.d/rust/provider-rust-${PV}"
 }

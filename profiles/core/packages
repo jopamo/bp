@@ -27,6 +27,7 @@
 *app-crypto/blake3
 *app-dev/patchelf
 *app-kernel/linux-headers
+*app-lang/go
 *app-net/chrony
 *app-net/iproute2
 *app-net/nftables
@@ -37,7 +38,8 @@
 *app-port/gentoolkit
 *app-port/portage-utils
 *app-var/pax-utils
-*virtual/libelf
 *lib-net/ca-certificates
 *virtual/libc
+*virtual/libelf
+*virtual/rust
 *virtual/service-manager

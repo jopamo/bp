@@ -937,7 +937,7 @@ _distutils-r1_print_package_versions() {
 		)
 		if [[ ${DISTUTILS_EXT} ]]; then
 			packages+=(
-				dev-python/cython
+				dev-py/cython
 			)
 		fi
 		case ${DISTUTILS_USE_PEP517} in

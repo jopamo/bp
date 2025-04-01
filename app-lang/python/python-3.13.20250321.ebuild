@@ -49,7 +49,7 @@ PYVER=${SLOT%/*}
 SETUPTOOLS_USE_DISTUTILS=local
 
 src_prepare() {
-	filter-flags -Wl,-z,defs -flto*
+	filter-flags -Wl,-z,defs
 
 	rm -r Modules/expat || die
 
@@ -115,24 +115,25 @@ src_configure() {
 	fi
 
 	local myeconfargs=(
-		--enable-shared
-		--without-static-libpython
-		--disable-ipv6
 		--bindir="${prefix}"/usr/bin
+		--disable-ipv6
+		--enable-loadable-sqlite-extensions
+		--enable-shared
 		--infodir='${prefix}/share/info'
 		--mandir='${prefix}/share/man'
 		--with-computed-gotos
 		--with-dbmliborder="${dbmliborder}"
 		--with-libc=
-		--enable-loadable-sqlite-extensions
-		--without-ensurepip
-		--without-lto
-		--with-system-expat
-		--with-platlibdir=lib
+		--with-lto
 		--with-pkg-config=yes
+		--with-platlibdir=lib
+		--with-system-expat
+		--with-system-libmpdec
 		--with-wheel-pkg-dir="${EPREFIX}"/usr/lib/python/ensurepip
-		$(use_with debug assertions)
+		--without-ensurepip
+		--without-static-libpython
 		$(use_enable pgo optimizations)
+		$(use_with debug assertions)
 		$(use_with readline readline "$(usex libedit editline readline)")
 		$(use_with valgrind)
 	)

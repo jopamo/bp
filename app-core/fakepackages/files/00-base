@@ -5,11 +5,11 @@ app-arch/bzip2-9999
 app-arch/cpio-9999
 app-arch/gzip-1.11
 app-arch/lz4-9999
+app-arch/unzip-6.0_p26
 app-arch/xz-utils-9999
 app-arch/zstd-9999
 app-build/automake-wrapper-9999
 app-build/binutils-config-5.4
-app-compression/unzip-6.0_p26
 app-dev/boost-build-9999
 app-dev/desktop-file-utils-0.26-r1
 app-dev/gdbus-codegen-2.70.0

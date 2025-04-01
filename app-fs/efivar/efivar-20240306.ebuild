@@ -19,11 +19,11 @@ src_prepare() {
 	filter-flags -Wl,-z,defs
 	default
 	sed -i 's/\ docs//g' "Makefile" || die
-	sed -i "s|gcc|cc|g" "efivar.spec.in" || die
+	#sed -i "s|gcc|cc|g" "efivar.spec.in" || die
 }
 
 src_compile() {
-	sed -i "s|gcc|cc|g" "src/include/defaults.mk" || die
+	#sed -i "s|gcc|cc|g" "src/include/defaults.mk" || die
 	emake libdir="/usr/lib/" \
 		bindir="/usr/bin/" \
 		mandir="/usr/share/man/" \

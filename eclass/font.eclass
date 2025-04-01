@@ -23,11 +23,6 @@ if [[ ${CATEGORY}/${PN} != fonts/encodings ]]; then
 	)"
 fi
 
-if [[ -n ${FONT_OPENTYPE_COMPAT} ]]; then
-	IUSE+=" +opentype-compat"
-	BDEPEND+=" opentype-compat? ( x11-apps/fonttosfnt )"
-fi
-
 font_wrap_opentype_compat() {
 	local file tmp
 	while IFS= read -rd '' file; do
@@ -86,13 +81,8 @@ font_cleanup_dirs() {
 	eend 0
 }
 
-font_pkg_setup() {
-	[[ -e "${EROOT}${FONTDIR}/fonts.cache-1" ]] && rm "${EROOT}${FONTDIR}/fonts.cache-1" || die
-}
-
 font_src_install() {
 	local dir suffix
-	use opentype-compat && [[ -n ${FONT_OPENTYPE_COMPAT} ]] && font_wrap_opentype_compat
 
 	if [[ $(declare -p FONT_S 2>/dev/null) == "declare -a"* ]]; then
 		for dir in "${FONT_S[@]}"; do
@@ -152,4 +142,4 @@ font_pkg_postrm() {
 
 fi
 
-EXPORT_FUNCTIONS pkg_setup src_install pkg_postinst pkg_postrm
+EXPORT_FUNCTIONS src_install pkg_postinst pkg_postrm

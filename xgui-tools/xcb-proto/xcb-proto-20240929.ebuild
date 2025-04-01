@@ -23,7 +23,7 @@ src_prepare() {
 }
 
 src_configure() {
-	PYTHON=true default
+	PYTHON=python3 default
 }
 
 src_compile() {

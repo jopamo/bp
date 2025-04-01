@@ -120,19 +120,6 @@ src_configure() {
         -DCOMPILER_RT_USE_LIBEXECINFO=OFF
         -DCOMPILER_RT_USE_LLVM_UNWINDER=ON
         -DENABLE_LINKER_BUILD_ID=ON
-        -DLIBCPP_HAS_MUSL_LIBC=$(usex elibc_musl)
-        -DLIBCXX_ENABLE_ASSERTIONS=ON
-        -DLIBCXX_ENABLE_LOCALIZATION=ON
-        -DLIBCXX_ENABLE_NEW_DELETE_DEFINITIONS=ON
-        -DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON
-        -DLIBCXX_HAS_MUSL_LIBC=$(usex elibc_musl)
-        -DLIBCXX_INCLUDE_BENCHMARKS=OFF
-        -DLIBCXX_INCLUDE_TESTS=OFF
-        -DLIBCXXABI_ENABLE_SHARED=ON
-        -DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON
-        -DLIBCXXABI_ENABLE_STATIC=ON
-        -DLIBCXXABI_INCLUDE_TESTS=OFF
-        -DLIBCXXABI_USE_LLVM_UNWINDER=ON
         -DLIBUNWIND_ENABLE_ASSERTIONS=ON
         -DLIBUNWIND_ENABLE_CROSS_UNWINDING=ON
         -DLIBUNWIND_ENABLE_SHARED=OFF
@@ -151,8 +138,6 @@ src_configure() {
         -DLLVM_ENABLE_DOXYGEN=OFF
         -DLLVM_ENABLE_EH=ON
         -DLLVM_ENABLE_FFI=ON
-        -DLLVM_ENABLE_LIBCXX=ON
-        -DLLVM_ENABLE_LIBCXX=ON
         -DLLVM_ENABLE_LIBEDIT=ON
         -DLLVM_ENABLE_LIBPFM=OFF
         -DLLVM_ENABLE_LIBXML2=ON
@@ -160,7 +145,6 @@ src_configure() {
         -DLLVM_ENABLE_PER_TARGET_RUNTIME_DIR=ON
         -DLLVM_ENABLE_PROJECTS="llvm;clang;lld"
         -DLLVM_ENABLE_RTTI=ON
-        -DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi;libunwind;compiler-rt"
         -DLLVM_ENABLE_SPHINX=OFF
         -DLLVM_ENABLE_TERMINFO=ON
         -DLLVM_ENABLE_ZLIB=FORCE_ON
@@ -177,8 +161,6 @@ src_configure() {
         -DLLVM_PARALLEL_LINK_JOBS=1
         -DLLVM_TARGETS_TO_BUILD="${LLVM_TARGETS}"
         -DOCAMLFIND=NO
-        -DCLANG_DEFAULT_RTLIB=compiler-rt
-        -DCLANG_DEFAULT_CXX_STDLIB=libc++
         #-DLIBCXX_HARDENING_MODE=fast
     )
 
@@ -190,18 +172,35 @@ src_configure() {
         -DCLANG_ENABLE_BOOTSTRAP=ON
     )
 
-     local latecommon=(
-        -DLIBCXX_CXX_ABI_INCLUDE_PATHS="${EPREFIX}/usr/include/c++/v1"
-        -DLIBCXX_USE_COMPILER_RT=ON
+
+	local cxxabi=(
         -DLIBCXXABI_LIBUNWIND_INCLUDES="${EPREFIX}"/usr/include
         -DLIBCXXABI_USE_COMPILER_RT=ON
-        -DLIBUNWIND_USE_COMPILER_RT=ON
-        -DLLVM_ENABLE_LLD=ON
+        -DLIBCXXABI_ENABLE_SHARED=ON
+        -DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON
+        -DLIBCXXABI_ENABLE_STATIC=ON
+        -DLIBCXXABI_INCLUDE_TESTS=OFF
+        -DLIBCXXABI_USE_LLVM_UNWINDER=ON
+        -DCLANG_DEFAULT_CXX_STDLIB=libc++
+        -DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi;libunwind;compiler-rt"
+        -DLIBCPP_HAS_MUSL_LIBC=$(usex elibc_musl)
+        -DLIBCXX_ENABLE_ASSERTIONS=ON
+        -DLIBCXX_ENABLE_LOCALIZATION=ON
+        -DLIBCXX_ENABLE_NEW_DELETE_DEFINITIONS=ON
+        -DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON
+        -DLIBCXX_HAS_MUSL_LIBC=$(usex elibc_musl)
+        -DLIBCXX_INCLUDE_BENCHMARKS=OFF
+        -DLIBCXX_INCLUDE_TESTS=OFF
+        -DLLVM_ENABLE_LIBCXX=ON
         -DCOMPILER_RT_CXX_LIBRARY=libcxx
     )
 
     local syslibcxxabi=(
         -DLIBCXX_CXX_ABI=system-libcxxabi
+    )
+
+    local mini=(
+        -DLLVM_ENABLE_RUNTIMES="libunwind;compiler-rt"
     )
 
     local sysclang=(
@@ -211,14 +210,17 @@ src_configure() {
         -DCMAKE_CXX_COMPILER=/usr/bin/clang++
         -DCMAKE_NM=/usr/bin/llvm-nm
         -DCMAKE_RANLIB=/usr/bin/llvm-ranlib
+        -DLLVM_ENABLE_LLD=ON
+        -DLIBUNWIND_USE_COMPILER_RT=ON
+        -DCLANG_DEFAULT_RTLIB=compiler-rt
     )
 
     if use bootstrap; then
-        mycmakeargs+=("${common[@]}" "${bootstrap[@]}")
+        mycmakeargs+=("${common[@]}" "${bootstrap[@]}" "${mini[@]}")
     elif use syslibcxxabi; then
         mycmakeargs+=("${common[@]}" "${sysclang[@]}" "${latecommon[@]}" "${syslibcxxabi[@]}")
     else
-        mycmakeargs+=("${common[@]}" "${latecommon[@]}" "${sysclang[@]}")
+        mycmakeargs+=("${common[@]}" "${latecommon[@]}" "${sysclang[@]}" "${mini[@]}" )
     fi
 
    # if ! use bootstrap; then
@@ -244,21 +246,21 @@ src_test() {
 src_install() {
     cmake_src_install
 
-	dosym -r "/usr/lib/${TUPLE}/libc++.a" "/usr/lib/libc++.a"
-	dosym -r "/usr/lib/${TUPLE}/libc++.so" "/usr/lib/libc++.so"
-	dosym -r "/usr/lib/${TUPLE}/libc++.so.1" "/usr/lib/libc++.so"
-	dosym -r "/usr/lib/${TUPLE}/libc++.so.1.0" "/usr/lib/libc++.so.1"
-	dosym -r "/usr/lib/${TUPLE}/libc++abi.a" "/usr/lib/libc++abi.a"
-	dosym -r "/usr/lib/${TUPLE}/libc++abi.so" "/usr/lib/libc++abi.so"
-	dosym -r "/usr/lib/${TUPLE}/libc++abi.so.1" "/usr/lib/libc++abi.so"
-	dosym -r "/usr/lib/${TUPLE}/libc++abi.so.1.0" "/usr/lib/libc++abi.so.1"
-	dosym -r "/usr/lib/${TUPLE}/libc++experimental.a" "/usr/lib/libc++experimental.a"
-	dosym -r "/usr/lib/${TUPLE}/libunwind.a" "/usr/lib/libunwind.a"
-	dosym -r "/usr/lib/${TUPLE}/libunwind.so" "/usr/lib/libunwind.so"
-	dosym -r "/usr/lib/${TUPLE}/libunwind.so.1" "/usr/lib/libunwind.so"
-	dosym -r "/usr/lib/${TUPLE}/libunwind.so.1.0" "/usr/lib/libunwind.so.1"
-
 	if use syslibcxxabi; then
+		dosym -r "/usr/lib/${TUPLE}/libc++.a" "/usr/lib/libc++.a"
+		dosym -r "/usr/lib/${TUPLE}/libc++.so" "/usr/lib/libc++.so"
+		dosym -r "/usr/lib/${TUPLE}/libc++.so.1" "/usr/lib/libc++.so"
+		dosym -r "/usr/lib/${TUPLE}/libc++.so.1.0" "/usr/lib/libc++.so.1"
+		dosym -r "/usr/lib/${TUPLE}/libc++abi.a" "/usr/lib/libc++abi.a"
+		dosym -r "/usr/lib/${TUPLE}/libc++abi.so" "/usr/lib/libc++abi.so"
+		dosym -r "/usr/lib/${TUPLE}/libc++abi.so.1" "/usr/lib/libc++abi.so"
+		dosym -r "/usr/lib/${TUPLE}/libc++abi.so.1.0" "/usr/lib/libc++abi.so.1"
+		dosym -r "/usr/lib/${TUPLE}/libc++experimental.a" "/usr/lib/libc++experimental.a"
+		dosym -r "/usr/lib/${TUPLE}/libunwind.a" "/usr/lib/libunwind.a"
+		dosym -r "/usr/lib/${TUPLE}/libunwind.so" "/usr/lib/libunwind.so"
+		dosym -r "/usr/lib/${TUPLE}/libunwind.so.1" "/usr/lib/libunwind.so"
+		dosym -r "/usr/lib/${TUPLE}/libunwind.so.1.0" "/usr/lib/libunwind.so.1"
+
 		dosym -r "/usr/bin/clang" "/usr/bin/cc"
 		dosym -r "/usr/bin/clang" "/usr/bin/gcc"
 		dosym -r "/usr/bin/llvm-ar" "/usr/bin/ar"

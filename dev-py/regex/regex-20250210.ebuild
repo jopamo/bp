@@ -4,9 +4,6 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
-# pypy isn't supported upstream because of its UTF8 representation for strings
-# See https://github.com/mrabarnett/mrab-regex/issues/521#issuecomment-1936260187.
-PYTHON_COMPAT=( python3_{10..13} )
 
 inherit distutils-r1 pypi flag-o-matic
 
@@ -16,17 +13,17 @@ HOMEPAGE="
 	https://pypi.org/project/regex/
 "
 
+SNAPSHOT=be75782535bd817bc3fa18f8e9d875366340ead7
+SRC_URI="https://github.com/mrabarnett/mrab-regex/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/mrab-${PN}-${SNAPSHOT}"
+
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="doc"
 
 distutils_enable_tests unittest
 
-python_install_all() {
+src_prepare() {
 	filter-flags -Wl,-z,defs
-	use doc && local HTML_DOCS=( docs/Features.html )
-	local DOCS=( README.rst docs/*.rst )
-
-	distutils-r1_python_install_all
+	default
 }

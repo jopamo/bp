@@ -36,7 +36,7 @@ RDEPEND="
 "
 BDEPEND="
 	native-extensions? (
-		dev-python/cython[${PYTHON_USEDEP}]
+		dev-py/cython[${PYTHON_USEDEP}]
 	)
 	test? (
 		dev-python/freezegun[${PYTHON_USEDEP}]

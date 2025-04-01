@@ -26,7 +26,7 @@ RDEPEND="
 "
 BDEPEND="
 	native-extensions? (
-		dev-python/cython[${PYTHON_USEDEP}]
+		dev-py/cython[${PYTHON_USEDEP}]
 	)
 	dev-python/expandvars[${PYTHON_USEDEP}]
 	dev-py/setuptools[${PYTHON_USEDEP}]

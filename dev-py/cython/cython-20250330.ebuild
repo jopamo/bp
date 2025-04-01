@@ -17,11 +17,10 @@ HOMEPAGE="
 	https://github.com/cython/cython/
 	https://pypi.org/project/Cython/
 "
-SRC_URI="
-	https://github.com/cython/cython/archive/${PV/_rc/rc}.tar.gz
-		-> ${MY_P}.gh.tar.gz
-"
-S=${WORKDIR}/${MY_P}
+
+SNAPSHOT=c02bb18dcc5189f9d0c9644f3e6ee40f8ce815f8
+SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
@@ -29,23 +28,13 @@ KEYWORDS="amd64 arm64"
 IUSE="test"
 RESTRICT="!test? ( test )"
 
-BDEPEND="
-	${RDEPEND}
-	test? (
-		$(python_gen_cond_dep '
-			<dev-python/numpy-2[${PYTHON_USEDEP}]
-		' "${PYTHON_TESTED[@]}")
-	)
-"
-
 PATCHES=(
 	"${FILESDIR}/${PN}-0.29.22-spawn-multiprocessing.patch"
-	"${FILESDIR}/${PN}-0.29.23-test_exceptions-py310.patch"
 	"${FILESDIR}/${PN}-0.29.23-pythran-parallel-install.patch"
 )
 
 distutils_enable_sphinx docs \
-	dev-py/jinja2 \
+	dev-py/jinja \
 	dev-python/sphinx-issues \
 	dev-python/sphinx-tabs
 

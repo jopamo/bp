@@ -33,7 +33,7 @@ RDEPEND="
 	${DEPEND}
 "
 BDEPEND="
-	dev-python/cython[${PYTHON_USEDEP}]
+	dev-py/cython[${PYTHON_USEDEP}]
 	dev-py/setuptools[${PYTHON_USEDEP}]
 "
 

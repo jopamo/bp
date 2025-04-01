@@ -29,7 +29,7 @@ BDEPEND="
 	dev-python/wheel[${PYTHON_USEDEP}]
 	native-extensions? (
 		$(python_gen_cond_dep '
-			dev-python/cython[${PYTHON_USEDEP}]
+			dev-py/cython[${PYTHON_USEDEP}]
 		' 'python*')
 	)
 "

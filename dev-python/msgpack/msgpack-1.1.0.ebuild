@@ -24,7 +24,7 @@ IUSE="+native-extensions"
 BDEPEND="
 	native-extensions? (
 		$(python_gen_cond_dep '
-			>=dev-python/cython-3.0.8[${PYTHON_USEDEP}]
+			>=dev-py/cython-3.0.8[${PYTHON_USEDEP}]
 		' 'python*')
 	)
 "

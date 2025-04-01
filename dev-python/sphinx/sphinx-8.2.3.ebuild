@@ -58,7 +58,7 @@ BDEPEND="
 	)
 	test? (
 		app-text/dvipng
-		>=dev-python/cython-3.0.0[${PYTHON_USEDEP}]
+		>=dev-py/cython-3.0.0[${PYTHON_USEDEP}]
 		>=dev-python/defusedxml-0.7.1[${PYTHON_USEDEP}]
 		dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
 		>=dev-py/setuptools-67.0[${PYTHON_USEDEP}]

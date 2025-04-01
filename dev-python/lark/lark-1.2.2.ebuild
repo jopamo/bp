@@ -17,12 +17,12 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-# dev-python/regex doesn't support pypy
+# dev-py/regex doesn't support pypy
 BDEPEND="
 	test? (
 		dev-python/atomicwrites[${PYTHON_USEDEP}]
 		$(python_gen_cond_dep '
-			dev-python/regex[${PYTHON_USEDEP}]
+			dev-py/regex[${PYTHON_USEDEP}]
 		' 'python*')
 	)
 "

@@ -95,6 +95,15 @@ else
     PROMPT_COMMAND="__vte_osc7; ${PROMPT_COMMAND}"
 fi
 
+if command -v clang >/dev/null 2>&1; then
+    TUPLE=$(clang --print-target-triple)
+elif command -v gcc >/dev/null 2>&1; then
+    TUPLE=$(gcc -dumpmachine)
+else
+    echo "No suitable compiler found." >&2
+    exit 1
+fi
+
 HISTSIZE=100000
 
 export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"

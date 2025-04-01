@@ -7,12 +7,14 @@ inherit cmake flag-o-matic
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
 
-SNAPSHOT="cd708029e0b2869e80abe31ddb175f7c35361f90"
+SNAPSHOT="6009708b4367171ccdbf4b5905cb6a803753fe18"
 SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
 
+LLVM_MAJOR="$(ver_cut 1)"
+
 LICENSE="UoI-NCSA rc BSD public-domain"
-SLOT=0
+SLOT="${LLVM_MAJOR}"
 KEYWORDS="amd64 arm64"
 
 IUSE="amdgpu arm bpf bootstrap debug syslibcxxabi nvptx libfuzzer orc sanitizers test wasm xcore"
@@ -62,8 +64,7 @@ src_configure() {
 
     replace-flags -O3 -O2
 
-    strip-flags
-    filter-lto
+    strip-flags2
 
     append-flags -fpic
 
@@ -100,7 +101,9 @@ src_configure() {
         -DCMAKE_DISABLE_FIND_PACKAGE_CUDAToolkit=ON
         -DCMAKE_DISABLE_FIND_PACKAGE_hsa-runtime64=ON
         -DCMAKE_INSTALL_LIBDIR=lib
-        -DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
+        -DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr/lib/llvm/${LLVM_MAJOR}"
+		-DCMAKE_INSTALL_MANDIR="${EPREFIX}/usr/lib/llvm/${LLVM_MAJOR}/share/man"
+		-DLLVM_ROOT="${EPREFIX}/usr/lib/llvm/${LLVM_MAJOR}"
         -DCOMPILER_RT_BUILD_LIBFUZZER=$(usex libfuzzer)
         -DCOMPILER_RT_BUILD_MEMPROF=OFF
         -DCOMPILER_RT_BUILD_ORC=$(usex orc)
@@ -115,7 +118,7 @@ src_configure() {
         -DENABLE_LINKER_BUILD_ID=ON
         -DLIBUNWIND_ENABLE_ASSERTIONS=ON
         -DLIBUNWIND_ENABLE_CROSS_UNWINDING=ON
-        -DLIBUNWIND_ENABLE_SHARED=OFF
+        -DLIBUNWIND_ENABLE_SHARED=ON
         -DLIBUNWIND_ENABLE_STATIC=ON
         -DLIBUNWIND_INCLUDE_TESTS=OFF
         -DLIBUNWIND_INSTALL_HEADERS=ON

@@ -45,16 +45,15 @@ pkg_setup() {
 }
 
 src_prepare() {
-	if ver_test "${PV}" -gt "1.69.9" && ver_test "${PV}" -lt "1.78.0"; then
-		eapply "${FILESDIR}"/1.70.0-ignore-broken-and-non-applicable-tests.patch
-	fi
+    eapply "${FILESDIR}"/rust/*.patch
 
-	strip-flags
+    use elibc_musl && sed -i 's/base\.crt_static_default = true;/base\.crt_static_default = false;/g' \
+        ./compiler/rustc_target/src/spec/base/linux_musl.rs || die
 
-	replace-flags -O3 -O2
+    filter-clang
+    replace-flags -O3 -O2
 
-	default
-
+    default
 }
 
 src_configure() {
@@ -67,12 +66,10 @@ src_configure() {
 		release-debuginfo = false
 		tests = false
 		targets = "$(usex arm64 'AArch64' 'X86')"
-		$(usex arm64 '[target.aarch64-unknown-linux-gnu]' '[target.x86_64-unknown-linux-gnu]')
+		$(usex arm64 [target.aarch64-unknown-linux-$(usex elibc_musl musl gnu)] [target.x86_64-unknown-linux-$(usex elibc_musl musl gnu)])
 		llvm-config = "/usr/bin/llvm-config"
+		linker = "clang"
 		cc = "clang"
-		cxx = "clang++"
-		ar = "llvm-ar"
-		ranlib = "llvm-ranlib"
 		[build]
 		build-stage = 2
 		test-stage = 2
@@ -84,11 +81,11 @@ src_configure() {
 		cargo = "/usr/bin/cargo"
 		rustc = "/usr/bin/rustc"
 		tools = ["cargo","clippy","rustdoc","rustfmt","rust-analyzer","rust-analyzer-proc-macro-srv","analysis","src"]
-		vendor = false
+		vendor = true
 		sanitizers = false
 		[install]
 		prefix = "${EPREFIX}/usr"
-		sysconfdir = "etc"
+		sysconfdir = "${EPREFIX}/etc"
 		docdir = "share/doc/rust"
 		bindir = "bin"
 		libdir = "lib"
@@ -98,6 +95,7 @@ src_configure() {
 		optimize = 3
 		lld = true
 		rpath = false
+		download-rustc = false
 		[dist]
 		src-tarball = false
 	_EOF_
@@ -105,7 +103,7 @@ src_configure() {
 
 src_compile() {
 	export PKG_CONFIG_ALLOW_CROSS=1
-	unset RUSTFLAGS CC CXX
+	unset RUSTFLAGS
 
 	(
 	IFS=$'\n'

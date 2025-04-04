@@ -7,7 +7,31 @@ inherit cmake flag-o-matic
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
 
-SNAPSHOT="cd708029e0b2869e80abe31ddb175f7c35361f90"
+if [[ ${PV} == 19* ]] ; then
+	SNAPSHOT=cd708029e0b2869e80abe31ddb175f7c35361f90
+
+elif [[ ${PV} == 18* ]] ; then
+	SNAPSHOT="3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff"
+
+elif [[ ${PV} == 17* ]] ; then
+	SNAPSHOT="6009708b4367171ccdbf4b5905cb6a803753fe18"
+
+elif [[ ${PV} == 16* ]] ; then
+	SNAPSHOT="7cbf1a2591520c2491aa35339f227775f4d3adf6"
+
+elif [[ ${PV} == 15* ]] ; then
+	SNAPSHOT="8dfdcc7b7bf66834a761bd8de445840ef68e4d1a"
+
+elif [[ ${PV} == 14* ]] ; then
+	SNAPSHOT="f28c006a5895fc0e329fe15fead81e37457cb1d1"
+
+elif [[ ${PV} == 13* ]] ; then
+	SNAPSHOT="75e33f71c2dae584b13a7d1186ae0a038ba98838"
+
+elif [[ ${PV} == 12* ]] ; then
+	SNAPSHOT="fed41342a82f5a3a9201819a82bf7a48313e296b"
+fi
+
 SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
 
@@ -15,7 +39,8 @@ LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
 KEYWORDS="amd64 arm64"
 
-IUSE="amdgpu arm bpf bootstrap debug syslibcxxabi nvptx libfuzzer orc sanitizers test wasm xcore"
+IUSE="amdgpu arm bootstrap bpf debug libcxx libcxxabi libfuzzer nvptx orc sanitizers static_analyzer
+sysclang syslibcxxabi test wasm xcore"
 
 DEPEND="
     lib-core/libffi
@@ -28,7 +53,7 @@ RESTRICT="!test? ( test )"
 CMAKE_BUILD_TYPE=Release
 
 PATCHES=(
-#   "${FILESDIR}/0002-ConstantFold-Fix-result-type-when-folding-powi.f16-9.patch"
+   "${FILESDIR}/install-prefix.patch"
 )
 
 src_prepare() {
@@ -60,14 +85,15 @@ src_configure() {
     	fi
     fi
 
-    replace-flags -O3 -O2
-
-    strip-flags
-    filter-lto
+    filter-clang
 
     append-flags -fpic
 
     local LLVM_TARGETS=""
+    local LLVM_RUNTIMES="libunwind;compiler-rt"
+
+    use libcxx && LLVM_RUNTIMES+=";libcxx"
+    use libcxxabi && LLVM_RUNTIMES+=";libcxxabi"
 
     case "${CHOST}" in
         *aarch64*) LLVM_TARGETS+="AArch64" ;;
@@ -83,119 +109,122 @@ src_configure() {
     use xcore && LLVM_TARGETS+=";XCore"
 
     echo "Selected LLVM targets: ${LLVM_TARGETS}"
+	echo "Selected LLVM runtimes: ${LLVM_RUNTIMES}"
 
     local common=(
-        -DBUILD_SHARED_LIBS=OFF
-        -DCLANG_DEFAULT_OPENMP_RUNTIME=libomp
-        -DCLANG_DEFAULT_PIE_ON_LINUX=ON
-        -DCLANG_DEFAULT_UNWINDLIB=libunwind
-        -DCLANG_ENABLE_ARCMT=OFF
-        -DCLANG_ENABLE_LIBXML2=ON
-        -DCLANG_ENABLE_STATIC_ANALYZER=OFF
-        -DCLANG_INCLUDE_TESTS=OFF
-        -DCLANG_LINK_CLANG_DYLIB=ON
-        -DCMAKE_C_COMPILER_WORKS=1
-        -DCMAKE_CXX_COMPILER_WORKS=1
-        -DCMAKE_CXX_STANDARD=17
-        -DCMAKE_DISABLE_FIND_PACKAGE_CUDAToolkit=ON
-        -DCMAKE_DISABLE_FIND_PACKAGE_hsa-runtime64=ON
-        -DCMAKE_INSTALL_LIBDIR=lib
-        -DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
-        -DCOMPILER_RT_BUILD_LIBFUZZER=$(usex libfuzzer)
-        -DCOMPILER_RT_BUILD_MEMPROF=OFF
-        -DCOMPILER_RT_BUILD_ORC=$(usex orc)
-        -DCOMPILER_RT_BUILD_PROFILE=OFF
-        -DCOMPILER_RT_BUILD_SANITIZERS=$(usex sanitizers)
-        -DCOMPILER_RT_BUILD_XRAY=OFF
-        -DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=${TUPLE}
-        -DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON
-        -DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON
-        -DCOMPILER_RT_USE_LIBEXECINFO=OFF
-        -DCOMPILER_RT_USE_LLVM_UNWINDER=ON
-        -DENABLE_LINKER_BUILD_ID=ON
-        -DLIBUNWIND_ENABLE_ASSERTIONS=ON
-        -DLIBUNWIND_ENABLE_CROSS_UNWINDING=ON
-        -DLIBUNWIND_ENABLE_SHARED=OFF
-        -DLIBUNWIND_ENABLE_STATIC=ON
-        -DLIBUNWIND_INCLUDE_TESTS=OFF
-        -DLIBUNWIND_INSTALL_HEADERS=ON
-        -DLIBUNWIND_SUPPORTS_FNO_EXCEPTIONS_FLAG=OFF
-        -DLIBUNWIND_SUPPORTS_FUNWIND_TABLES_FLAG=OFF
-        -DLLVM_APPEND_VC_REV=OFF
-        -DLLVM_BUILD_DOCS=OFF
-        -DLLVM_BUILD_LLVM_DYLIB=ON
-        -DLLVM_BUILD_TESTS=$(usex test)
-        -DLLVM_DEFAULT_TARGET_TRIPLE=${TUPLE}
-        -DLLVM_ENABLE_ASSERTIONS=ON
-        -DLLVM_ENABLE_CUDA=OFF
-        -DLLVM_ENABLE_DOXYGEN=OFF
-        -DLLVM_ENABLE_EH=ON
-        -DLLVM_ENABLE_FFI=ON
-        -DLLVM_ENABLE_LIBEDIT=ON
-        -DLLVM_ENABLE_LIBPFM=OFF
-        -DLLVM_ENABLE_LIBXML2=ON
-        -DLLVM_ENABLE_OCAMLDOC=OFF
-        -DLLVM_ENABLE_PER_TARGET_RUNTIME_DIR=ON
-        -DLLVM_ENABLE_PROJECTS="llvm;clang;lld"
-        -DLLVM_ENABLE_RTTI=ON
-        -DLLVM_ENABLE_SPHINX=OFF
-        -DLLVM_ENABLE_TERMINFO=ON
-        -DLLVM_ENABLE_ZLIB=FORCE_ON
-        -DLLVM_ENABLE_ZSTD=FORCE_ON
-        -DLLVM_HOST_TRIPLE=${TUPLE}
-        -DLLVM_INCLUDE_BENCHMARKS=OFF
-        -DLLVM_INCLUDE_DOCS=OFF
-        -DLLVM_INCLUDE_EXAMPLES=OFF
-        -DLLVM_INCLUDE_TESTS=OFF
-        -DCOMPILER_RT_BUILD_GWP_ASAN=OFF
-        -DLLVM_INSTALL_UTILS=ON
-        -DLLVM_LINK_LLVM_DYLIB=ON
-        -DLLVM_OPTIMIZED_TABLEGEN=ON
-        -DLLVM_PARALLEL_LINK_JOBS=1
-        -DLLVM_TARGETS_TO_BUILD="${LLVM_TARGETS}"
-        -DOCAMLFIND=NO
-        #-DLIBCXX_HARDENING_MODE=fast
+		-DBUILD_SHARED_LIBS=OFF
+		-DCLANG_DEFAULT_OPENMP_RUNTIME=libomp
+		-DCLANG_DEFAULT_PIE_ON_LINUX=ON
+		-DCLANG_DEFAULT_UNWINDLIB=libunwind
+		-DCLANG_ENABLE_ARCMT=OFF
+		-DCLANG_ENABLE_LIBXML2=ON
+		-DCLANG_ENABLE_STATIC_ANALYZER=$(usex static_analyzer)
+		-DCLANG_INCLUDE_TESTS=OFF
+		-DCLANG_LINK_CLANG_DYLIB=ON
+		-DCMAKE_C_COMPILER_WORKS=1
+		-DCMAKE_CXX_COMPILER_WORKS=1
+		-DCMAKE_CXX_STANDARD=17
+		-DCMAKE_DISABLE_FIND_PACKAGE_CUDAToolkit=ON
+		-DCMAKE_DISABLE_FIND_PACKAGE_hsa-runtime64=ON
+		-DCMAKE_INSTALL_LIBDIR=lib
+		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
+		-DCOMPILER_RT_BUILD_GWP_ASAN=OFF
+		-DCOMPILER_RT_BUILD_LIBFUZZER=$(usex libfuzzer)
+		-DCOMPILER_RT_BUILD_MEMPROF=OFF
+		-DCOMPILER_RT_BUILD_ORC=$(usex orc)
+		-DCOMPILER_RT_BUILD_PROFILE=OFF
+		-DCOMPILER_RT_BUILD_SANITIZERS=$(usex sanitizers)
+		-DCOMPILER_RT_BUILD_XRAY=OFF
+		-DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=${TUPLE}
+		-DCOMPILER_RT_USE_LIBEXECINFO=OFF
+		-DCOMPILER_RT_USE_LLVM_UNWINDER=ON
+		-DENABLE_LINKER_BUILD_ID=ON
+		-DLIBUNWIND_ENABLE_ASSERTIONS=ON
+		-DLIBUNWIND_ENABLE_CROSS_UNWINDING=ON
+		-DLIBUNWIND_ENABLE_SHARED=ON
+		-DLIBUNWIND_ENABLE_STATIC=ON
+		-DLIBUNWIND_INCLUDE_TESTS=OFF
+		-DLIBUNWIND_INSTALL_HEADERS=ON
+		-DLIBUNWIND_SUPPORTS_FNO_EXCEPTIONS_FLAG=OFF
+		-DLIBUNWIND_SUPPORTS_FUNWIND_TABLES_FLAG=OFF
+		-DLLVM_APPEND_VC_REV=OFF
+		-DLLVM_BUILD_DOCS=OFF
+		-DLLVM_BUILD_EXTERNAL_COMPILER_RT=ON
+		-DLLVM_BUILD_LLVM_DYLIB=ON
+		-DLLVM_BUILD_TESTS=$(usex test)
+		-DLLVM_DEFAULT_TARGET_TRIPLE=${TUPLE}
+		-DLLVM_ENABLE_ASSERTIONS=OFF
+		-DLLVM_ENABLE_CUDA=OFF
+		-DLLVM_ENABLE_CURL=ON
+		-DLLVM_ENABLE_DOXYGEN=OFF
+		-DLLVM_ENABLE_EH=ON
+		-DLLVM_ENABLE_FFI=ON
+		-DLLVM_ENABLE_LIBEDIT=ON
+		-DLLVM_ENABLE_LIBPFM=OFF
+		-DLLVM_ENABLE_LIBXML2=ON
+		-DLLVM_ENABLE_OCAMLDOC=OFF
+		-DLLVM_ENABLE_PER_TARGET_RUNTIME_DIR=ON
+		-DLLVM_ENABLE_PROJECTS="llvm;clang;lld"
+		-DLLVM_ENABLE_RTTI=ON
+		-DLLVM_ENABLE_SPHINX=OFF
+		-DLLVM_ENABLE_TERMINFO=ON
+		-DLLVM_ENABLE_ZLIB=ON
+		-DLLVM_ENABLE_ZSTD=FORCE_ON
+		-DLLVM_HOST_TRIPLE=${TUPLE}
+		-DLLVM_INCLUDE_BENCHMARKS=OFF
+		-DLLVM_INCLUDE_DOCS=OFF
+		-DLLVM_INCLUDE_EXAMPLES=OFF
+		-DLLVM_INCLUDE_TESTS=OFF
+		-DLLVM_INSTALL_UTILS=ON
+		-DLLVM_LINK_LLVM_DYLIB=ON
+		-DLLVM_OPTIMIZED_TABLEGEN=ON
+		-DLLVM_PARALLEL_LINK_JOBS=1
+		-DLLVM_TARGETS_TO_BUILD="${LLVM_TARGETS}"
+		-DLLVM_ENABLE_RUNTIMES="${LLVM_RUNTIMES}"
+		-DOCAMLFIND=NO
+		-DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON
+		-DLIBUNWIND_USE_COMPILER_RT=ON
+    	-DCLANG_DEFAULT_RTLIB=compiler-rt
+    	-DLLVM_BUILD_TOOLS=ON
+		#-DLIBCXX_HARDENING_MODE=fast
     )
 
     local bootstrap=(
-        -DBOOTSTRAP_BOOTSTRAP_LLVM_ENABLE_LLD=ON
-        -DBOOTSTRAP_LLVM_ENABLE_LLD=ON
-        -DBOOTSTRAP_LLVM_ENABLE_LTO=ON
-        -DCLANG_BOOTSTRAP_PASSTHROUGH="CMAKE_INSTALL_PREFIX;CMAKE_VERBOSE_MAKEFILE"
-        -DCLANG_ENABLE_BOOTSTRAP=ON
+		-DBOOTSTRAP_BOOTSTRAP_LLVM_ENABLE_LLD=ON
+		-DBOOTSTRAP_LLVM_ENABLE_LLD=ON
+		-DBOOTSTRAP_LLVM_ENABLE_LTO=ON
+		-DCLANG_BOOTSTRAP_PASSTHROUGH="CMAKE_INSTALL_PREFIX;CMAKE_VERBOSE_MAKEFILE"
+		-DCLANG_ENABLE_BOOTSTRAP=ON
     )
 
 
 	local cxxabi=(
-        -DLIBCXXABI_LIBUNWIND_INCLUDES="${EPREFIX}"/usr/include
-        -DLIBCXXABI_USE_COMPILER_RT=ON
-        -DLIBCXXABI_ENABLE_SHARED=ON
-        -DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON
-        -DLIBCXXABI_ENABLE_STATIC=ON
-        -DLIBCXXABI_INCLUDE_TESTS=OFF
-        -DLIBCXXABI_USE_LLVM_UNWINDER=ON
-        -DCLANG_DEFAULT_CXX_STDLIB=libc++
-        -DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi;libunwind;compiler-rt"
-        -DLIBCPP_HAS_MUSL_LIBC=$(usex elibc_musl)
-        -DLIBCXX_ENABLE_ASSERTIONS=ON
-        -DLIBCXX_ENABLE_LOCALIZATION=ON
-        -DLIBCXX_ENABLE_NEW_DELETE_DEFINITIONS=ON
-        -DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON
-        -DLIBCXX_HAS_MUSL_LIBC=$(usex elibc_musl)
-        -DLIBCXX_INCLUDE_BENCHMARKS=OFF
-        -DLIBCXX_INCLUDE_TESTS=OFF
-        -DLLVM_ENABLE_LIBCXX=ON
-        -DCOMPILER_RT_CXX_LIBRARY=libcxx
-        -DLIBUNWIND_USE_COMPILER_RT=ON
-        -DCLANG_DEFAULT_RTLIB=compiler-rt
+		-DLIBCPP_HAS_MUSL_LIBC=$(usex elibc_musl)
+		-DLIBCXXABI_ENABLE_SHARED=ON
+		-DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON
+		-DLIBCXXABI_ENABLE_STATIC=ON
+		-DLIBCXXABI_INCLUDE_TESTS=OFF
+		-DLIBCXXABI_LIBUNWIND_INCLUDES="${EPREFIX}"/usr/include
+    )
+
+    local libcxx=(
+		-DLIBCXX_ENABLE_ASSERTIONS=ON
+		-DLIBCXX_ENABLE_LOCALIZATION=ON
+		-DLIBCXX_ENABLE_NEW_DELETE_DEFINITIONS=ON
+		-DLIBCXX_HAS_MUSL_LIBC=$(usex elibc_musl)
+		-DLIBCXX_INCLUDE_BENCHMARKS=OFF
+		-DLIBCXX_INCLUDE_TESTS=OFF
     )
 
     local syslibcxxabi=(
+    	-DLLVM_ENABLE_LIBCXX=ON
         -DLIBCXX_CXX_ABI=system-libcxxabi
-    )
-
-    local mini=(
-        -DLLVM_ENABLE_RUNTIMES="libunwind;compiler-rt"
+        -DCLANG_DEFAULT_CXX_STDLIB=libc++
+		-DCOMPILER_RT_CXX_LIBRARY=libcxx
+		-DLIBCXX_CXX_ABI_INCLUDE_PATHS=ON
+		-DLIBCXXABI_USE_COMPILER_RT=ON
+		-DLIBCXXABI_USE_LLVM_UNWINDER=ON
+		-DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON
     )
 
     local sysclang=(
@@ -208,17 +237,21 @@ src_configure() {
         -DLLVM_ENABLE_LLD=ON
     )
 
-    if use bootstrap; then
-        mycmakeargs+=("${common[@]}" "${bootstrap[@]}" "${mini[@]}")
-    elif use syslibcxxabi; then
-        mycmakeargs+=("${common[@]}" "${sysclang[@]}" "${latecommon[@]}" "${syslibcxxabi[@]}")
-    else
-        mycmakeargs+=("${common[@]}" "${sysclang[@]}" "${mini[@]}" )
+	mycmakeargs=("${common[@]}")
+
+	if use sysclang; then
+        mycmakeargs+=("${sysclang[@]}")
     fi
 
-    if ! use bootstrap; then
-       local -x CC=clang
-       local -x CXX=clang++
+    if use bootstrap; then
+        mycmakeargs+=("${bootstrap[@]}")
+    elif use syslibcxxabi; then
+        mycmakeargs+=("${cxxabi[@]}" "${syslibcxxabi[@]}")
+    elif use libcxx; then
+        mycmakeargs+=("${libcxx[@]}" "${cxxabi[@]}")
+    fi
+
+    if use sysclang; then
        local -x CC="clang"
        local -x CPP="clang-cpp"
        local -x CXX="clang++"
@@ -239,7 +272,7 @@ src_test() {
 src_install() {
     cmake_src_install
 
-	if use syslibcxxabi; then
+	if use libcxx; then
 		dosym -r "/usr/lib/${TUPLE}/libc++.a" "/usr/lib/libc++.a"
 		dosym -r "/usr/lib/${TUPLE}/libc++.so" "/usr/lib/libc++.so"
 		dosym -r "/usr/lib/${TUPLE}/libc++.so.1" "/usr/lib/libc++.so"
@@ -253,7 +286,9 @@ src_install() {
 		dosym -r "/usr/lib/${TUPLE}/libunwind.so" "/usr/lib/libunwind.so"
 		dosym -r "/usr/lib/${TUPLE}/libunwind.so.1" "/usr/lib/libunwind.so"
 		dosym -r "/usr/lib/${TUPLE}/libunwind.so.1.0" "/usr/lib/libunwind.so.1"
+    fi
 
+    if use syslibcxxabi; then
 		dosym -r "/usr/bin/clang" "/usr/bin/cc"
 		dosym -r "/usr/bin/clang" "/usr/bin/gcc"
 		dosym -r "/usr/bin/llvm-ar" "/usr/bin/ar"

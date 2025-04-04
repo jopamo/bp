@@ -76,11 +76,10 @@ src_install() {
 	doins -r builds/cuda_nvml_dev/nvml
 
 	if use sanitizer; then
-		dobin builds/integration/Sanitizer/compute-sanitizer
-		doins -r builds/cuda_sanitizer_api/Sanitizer
-		# special handling for the executable
+		dobin "${S}"/builds/integration/Sanitizer/compute-sanitizer
+		doins -r "${S}"/builds/cuda_sanitizer_api/compute-sanitizer/
 		exeinto ${cudadir}/Sanitizer
-		doexe builds/cuda_sanitizer_api/Sanitizer/compute-sanitizer
+		doexe "${S}"/builds/cuda_sanitizer_api/compute-sanitizer/compute-sanitizer
 	fi
 
 	# Add include and lib symlinks

@@ -269,7 +269,6 @@ src_install-libs() {
             "libnvidia-rtcore.so.${NV_SOVER}"
             "libnvidia-tls.so.${NV_SOVER}"
             "libnvidia-vksc-core.so.${NV_SOVER}"
-            "libnvJitLink.so.12"
             "libnvoptix.so.${NV_SOVER}"
             "libOpenCL.so.1.0.0 ${CL_ROOT}"
             "libvdpau_nvidia.so.${NV_SOVER}"

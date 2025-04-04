@@ -26,29 +26,30 @@ src_prepare() {
 
 src_configure() {
     local myconf=(
-        --disable-root-access
 		--disable-rpath-hack
 		--disable-setuid-environ
 		--disable-stripping
-        --disable-termcap
+		--with-cxx-shared
+        --disable-root-access
         --enable-colorfgbg
         --enable-echo
         --enable-ext-colors
         --enable-overwrite
         --enable-pc-files
+        --enable-symlinks
+        --enable-termcap
         --enable-widec
         --with-cxx-binding
-		--with-cxx-shared
-        --enable-symlinks
         --with-pkg-config-libdir="${EPREFIX}"/usr/lib/pkgconfig
         --with-pthread
         --with-shared
         --with-symlinks
         --with-terminfo-dirs="${EPREFIX}"/usr/share/terminfo
         --with-termlib
+        --with-profile
         --without-debug
         --without-manpages
-        --without-normal
+        --with-normal
     )
     ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
@@ -58,7 +59,7 @@ src_install() {
 
     local i
 
-    for i in ncurses form panel menu tinfo ; do
+    for i in ncurses "ncurses++" form panel menu tinfo ; do
         echo "INPUT(-l${i}tw)" > "${ED}"/usr/lib/lib${i}.so
         echo "INPUT(-l${i}tw)" > "${ED}"/usr/lib/lib${i}w.so
         dosym -r /usr/lib/pkgconfig/${i}tw.pc /usr/lib/pkgconfig/${i}.pc

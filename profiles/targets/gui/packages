@@ -1,6 +1,8 @@
+
 *app-compression/zip
 *app-core/kmod
 *app-fs/ncdu
+*app-lang/go
 *app-net/bluez
 *app-port/smart-live-rebuild
 *app-var/usbutils
@@ -14,6 +16,7 @@
 *fonts/noto-emoji
 *fonts/source-code-pro
 *lib-util/libinput
+*virtual/rust
 *xgui-app/arqiver
 *xgui-app/featherpad
 *xgui-app/ff2mpv

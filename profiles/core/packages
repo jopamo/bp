@@ -27,7 +27,6 @@
 *app-crypto/blake3
 *app-dev/patchelf
 *app-kernel/linux-headers
-*app-lang/go
 *app-net/chrony
 *app-net/iproute2
 *app-net/nftables
@@ -41,5 +40,4 @@
 *lib-net/ca-certificates
 *virtual/libc
 *virtual/libelf
-*virtual/rust
 *virtual/service-manager

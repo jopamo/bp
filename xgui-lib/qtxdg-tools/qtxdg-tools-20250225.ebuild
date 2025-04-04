@@ -4,10 +4,10 @@ EAPI=8
 
 inherit cmake
 
-DESCRIPTION="Daemon used to register global keyboard shortcuts"
+DESCRIPTION="libqtxdg user tools"
 HOMEPAGE="http://lxqt.org/"
 
-SNAPSHOT=230046e96f9d4eac16c5f448699619523cf5815c
+SNAPSHOT=0ae6835400db5648d6d2fc95645bcee66cf2aec9
 SRC_URI="https://github.com/lxqt/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
@@ -17,6 +17,3 @@ LICENSE="LGPL-2.1+"
 SLOT="0"
 
 BDEPEND="app-dev/lxqt-build-tools"
-DEPEND="
-	xgui-lib/xdg-user-dirs
-	xgui-lib/qtxdg-tools"

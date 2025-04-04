@@ -52,7 +52,6 @@ setup-allowed-flags() {
 		-mno-avx2 -mno-bmi2 -mno-fma -mno-lzcnt
 		-mno-fxsr -mno-hle -mno-rtm -mno-xsave -mno-xsaveopt
 		-mno-avx512cd -mno-avx512er -mno-avx512f -mno-avx512pf -mno-sha
-		-pipe -march*
 	)
 	ALLOWED_FLAGS+=( -mstackrealign '-mpreferred-stack-boundary=*' '-mincoming-stack-boundary=*' )
 	ALLOWED_FLAGS+=( '--unwindlib=*' '--rtlib=*' '--stdlib=*' )
@@ -119,6 +118,12 @@ filter-flags() {
 filter-lfs-flags() { filter-flags -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_TIME_BITS=64; }
 filter-lto() { filter-flags '-flto*' -fwhole-program-vtables '-fsanitize=cfi*'; }
 filter-ldflags() { _filter-var LDFLAGS "$@"; }
+filter-clang() {
+	replace-flags -O3 -O2
+	strip-flags
+	filter-flags -fgraphite-identity -floop-nest-optimize -ftree-loop-distribution -fdevirtualize-at-ltrans -fipa-pta
+	filter-flags -fuse-linker-plugin '-D_FORTIFY_SOURCE*' -D_GLIBCXX_ASSERTIONS '-Wl,-z,combreloc' '-Wl,-z,defs' '-Wl,-z,now'
+	filter-flags '-Wl,-z,relro' '-flto*' -fstack-clash-protection -fstack-protector-strong; }
 
 append-cppflags() { [[ $# -eq 0 ]] || export CPPFLAGS+=" $*"; }
 append-cflags() { [[ $# -eq 0 ]] || export CFLAGS+=" $*"; }
@@ -200,81 +205,25 @@ filter-mfpmath() {
 	fi
 }
 
-strip-flags2() {
-    [[ $# -ne 0 ]] && die "strip-flags2 takes no arguments"
-
-    setup-allowed-flags
-
-    # Forcibly removed flags, even if they match a pattern in ALLOWED_FLAGS.
-    local DISALLOWED=(
-        '-D_FORTIFY_SOURCE*'
-        '-Wl,-O3'
-        '-Wl,-z,combreloc'
-        '-Wl,-z,defs'
-        '-Wl,-z,now'
-        '-Wl,-z,relro'
-        '-fassociative-math'
-        '-fasynchronous-unwind-tables'
-        '-fcf-protection=full'
-        '-fexceptions'
-        '-fgraphite-identity'
-        '-fipa-pta'
-        '-floop-interchange'
-        '-floop-nest-optimize'
-        '-floop-parallelize-all'
-        '-flto*'
-        '-fno-math-errno'
-        '-fno-semantic-interposition'
-        '-fno-signed-zeros'
-        '-fno-trapping-math'
-        '-fpie'
-        '-fstack-clash-protection'
-        '-fstack-protector-strong'
-        '-ftree-loop-distribution'
-        '-fuse-linker-plugin'
-        '-fdevirtualize-at-ltrans'
-    )
-
-    set -f  # disable filename globbing
-
-    for var in $(all-flag-vars); do
-        # Capture the current value of the variable into 'old' as an array
-        local old=( "${!var}" )
-        local new=()
-
-        # Filter out DISALLOWED flags, then only keep those matching ALLOWED_FLAGS
-        for flag in "${old[@]}"; do
-            # Check if this flag is in DISALLOWED
-            local skip=false
-            for bad in "${DISALLOWED[@]}"; do
-                [[ $flag == $bad ]] && { skip=true; break; }
-            done
-            $skip && continue
-
-            # Keep the flag if it matches one of the ALLOWED_FLAGS patterns
-            for allow in "${ALLOWED_FLAGS[@]}"; do
-                if [[ $flag == $allow ]]; then
-                    new+=( "$flag" )
-                    break
-                fi
-            done
-        done
-
-        # If an -O* flag was present but none survived, add -O2 by default
-        if [[ " ${old[*]} " == *" -O"* && " ${new[*]} " != *" -O"* ]]; then
-            new+=( -O2 )
-        fi
-
-        # Report changes
-        if [[ "${old[*]}" != "${new[*]}" ]]; then
-            einfo "strip-flags: ${var}: changed '${old[*]}' -> '${new[*]}'"
-        fi
-
-        # Update the variable
-        export "${var}=${new[*]}"
-    done
-
-    set +f
+strip-flags() {
+	[[ $# -ne 0 ]] && die "strip-flags takes no arguments"
+	setup-allowed-flags
+	set -f
+	local var
+	for var in $(all-flag-vars); do
+		local new=() x y
+		for x in ${!var}; do
+			for y in "${ALLOWED_FLAGS[@]}"; do
+				[[ $x == $y ]] && { new+=( "$x" ); break; }
+			done
+		done
+		if _is_flagq ${var} "-O*" && ! _is_flagq new "-O*"; then
+			new+=( -O2 )
+		fi
+		[[ "${!var}" != "${new[*]}" ]] && einfo "strip-flags: ${var}: changed '${!var}' -> '${new[*]}'"
+		export ${var}="${new[*]}"
+	done
+	set +f
 }
 
 _filter-hardened() { :; }  # override if needed in EAPI>=7 ?

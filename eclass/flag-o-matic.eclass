@@ -119,11 +119,20 @@ filter-lfs-flags() { filter-flags -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_
 filter-lto() { filter-flags '-flto*' -fwhole-program-vtables '-fsanitize=cfi*'; }
 filter-ldflags() { _filter-var LDFLAGS "$@"; }
 filter-clang() {
-	replace-flags -O3 -O2
+	replace-flags -O3 -O2;
+	replace-flags '-flto*' -flto;
+	filter-flags -fgraphite-identity -floop-nest-optimize -ftree-loop-distribution -fdevirtualize-at-ltrans -fipa-pta;
+	filter-flags -fuse-linker-plugin '-D_FORTIFY_SOURCE*' -D_GLIBCXX_ASSERTIONS '-Wl,-z,combreloc' '-Wl,-z,defs' '-Wl,-z,now';
+	filter-flags '-Wl,-z,relro' -fstack-clash-protection -fstack-protector-strong;
 	strip-flags
-	filter-flags -fgraphite-identity -floop-nest-optimize -ftree-loop-distribution -fdevirtualize-at-ltrans -fipa-pta
-	filter-flags -fuse-linker-plugin '-D_FORTIFY_SOURCE*' -D_GLIBCXX_ASSERTIONS '-Wl,-z,combreloc' '-Wl,-z,defs' '-Wl,-z,now'
-	filter-flags '-Wl,-z,relro' '-flto*' -fstack-clash-protection -fstack-protector-strong; }
+}
+
+filter-gcc() {
+	replace-flags -O3 -O2
+	filter-flags -fgraphite-identity -floop-nest-optimize -ftree-loop-distribution -fdevirtualize-at-ltrans -fipa-pta;
+	filter-flags -fuse-linker-plugin '-D_FORTIFY_SOURCE*' -D_GLIBCXX_ASSERTIONS '-Wl,-z,combreloc' '-Wl,-z,defs' '-Wl,-z,now';
+	filter-flags '-Wl,-z,relro' -fstack-clash-protection -fstack-protector-strong;
+}
 
 append-cppflags() { [[ $# -eq 0 ]] || export CPPFLAGS+=" $*"; }
 append-cflags() { [[ $# -eq 0 ]] || export CFLAGS+=" $*"; }

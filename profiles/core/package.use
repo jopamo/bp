@@ -16,3 +16,4 @@ lib-core/sqlite static-libs
 lib-net/nodejs icu
 lib-net/openssl static-libs
 xgui-app/wireshark bcg729 capinfos caps captype ciscodump dcerpcidl2wrs dftest dpauxmon dumpcap editcap libssh mergecap mmdbresolve netlink plugins randpkt randpktdump rawshark reordercap sdjournal sharkd sshdump text2pcap tshark udpdump
+app-build/llvm bpf orc sysclang

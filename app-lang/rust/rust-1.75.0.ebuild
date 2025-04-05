@@ -51,7 +51,7 @@ src_prepare() {
         ./compiler/rustc_target/src/spec/base/linux_musl.rs || die
 
     filter-clang
-    replace-flags -O3 -O2
+    filter-lto
 
     default
 }
@@ -83,6 +83,7 @@ src_configure() {
 		tools = ["cargo","clippy","rustdoc","rustfmt","rust-analyzer","rust-analyzer-proc-macro-srv","analysis","src"]
 		vendor = true
 		sanitizers = false
+		optimized-compiler-builtins = true
 		[install]
 		prefix = "${EPREFIX}/usr"
 		sysconfdir = "${EPREFIX}/etc"

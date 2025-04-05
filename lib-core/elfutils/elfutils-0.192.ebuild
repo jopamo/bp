@@ -18,20 +18,18 @@ DEPEND="
 	lib-core/zlib
 	bzip2? ( app-compression/bzip2 )
 	lzma? ( app-compression/xz-utils )
-	musl? (
+	elibc_musl? (
 		lib-core/argp-standalone
-		lib-core/musl-fts
-		lib-core/musl-obstack
-		app-build/musl-headers
+		lib-core/musl-bsd
 	)
 	zstd? ( app-compression/zstd )
 	app-build/flex
 	app-build/m4
 "
 
-filter-flags -flto\=\*
-
 src_prepare() {
+	filter-flags -flto*
+
 	default
 
 	if use musl; then

@@ -13,9 +13,9 @@ S=${WORKDIR}/gcc-${SNAPSHOT}
 
 LICENSE="GPL-3"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
-IUSE="debug dlang +go-bootstrap +isl sanitize vtv zstd"
+IUSE="debug dlang go-bootstrap +isl lib-only sanitize +vtv zstd"
 
 RESTRICT="strip"
 
@@ -29,35 +29,10 @@ DEPEND="
 BDEPEND="app-build/make"
 
 src_prepare() {
-	eapply "${FILESDIR}"/14/*.patch
+	eapply "${FILESDIR}"/$(ver_cut 1)/*.patch
 
-	filter-flags -D_FORTIFY_SOURCE*
-	filter-flags -Wl,-O3
-	filter-flags -Wl,-z,combreloc
-	filter-flags -Wl,-z,defs
-	filter-flags -Wl,-z,now
-	filter-flags -Wl,-z,relro
-	filter-flags -fassociative-math
-	filter-flags -fasynchronous-unwind-tables
-	filter-flags -fcf-protection=full
-	filter-flags -fexceptions
-	filter-flags -fgraphite-identity
-	filter-flags -fipa-pta
-	filter-flags -floop-interchange
-	filter-flags -floop-nest-optimize
-	filter-flags -floop-parallelize-all
-	filter-flags -flto*
-	filter-flags -fno-math-errno
-	filter-flags -fno-semantic-interposition
-	filter-flags -fno-signed-zeros
-	filter-flags -fno-trapping-math
-	filter-flags -fpie
-	filter-flags -fstack-clash-protection
-	filter-flags -fstack-protector-strong
-	filter-flags -ftree-loop-distribution
-	filter-flags -fuse-linker-plugin
-
-	replace-flags -O3 -O2
+	filter-gcc
+    filter-lto
 
 	use debug || filter-flags -g
 
@@ -144,13 +119,13 @@ src_configure() {
 src_compile() {
 	cd gcc-build
 
-	emake -O STAGE1_CFLAGS="-O2" \
+	emake -O STAGE1_CFLAGS="$CFLAGS" \
 		BOOT_CFLAGS="$CFLAGS" \
 		BOOT_LDFLAGS="$LDFLAGS" \
 		LDFLAGS_FOR_TARGET="$LDFLAGS" \
 		bootstrap
 
-	make -O STAGE1_CFLAGS="-O2" \
+	make -O STAGE1_CFLAGS="$CFLAGS" \
 		BOOT_CFLAGS="$CFLAGS" \
 		BOOT_LDFLAGS="$LDFLAGS" \
 		LDFLAGS_FOR_TARGET="$LDFLAGS" \
@@ -161,6 +136,11 @@ src_compile() {
 src_install() {
 	cd gcc-build
 	emake DESTDIR="${ED}" install
+
+	#cleanup
+	find "${ED}" -name libcc1.la -delete
+	find "${ED}" -name libcc1plugin.la -delete
+	find "${ED}" -name libcp1plugin.la -delete
 
 	dobin "${FILESDIR}"/c89
 	dobin "${FILESDIR}"/c99

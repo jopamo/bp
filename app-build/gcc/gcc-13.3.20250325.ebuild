@@ -29,33 +29,10 @@ DEPEND="
 BDEPEND="app-build/make"
 
 src_prepare() {
-	eapply "${FILESDIR}"/13/*.patch
+	eapply "${FILESDIR}"/$(ver_cut 1)/*.patch
 
-	filter-flags -D_FORTIFY_SOURCE*
-	filter-flags -Wl,-O3
-	filter-flags -Wl,-z,combreloc
-	filter-flags -Wl,-z,defs
-	filter-flags -Wl,-z,now
-	filter-flags -Wl,-z,relro
-	filter-flags -fassociative-math
-	filter-flags -fasynchronous-unwind-tables
-	filter-flags -fcf-protection=full
-	filter-flags -fexceptions
-	filter-flags -fgraphite-identity
-	filter-flags -fipa-pta
-	filter-flags -floop-interchange
-	filter-flags -floop-nest-optimize
-	filter-flags -floop-parallelize-all
-	filter-flags -flto*
-	filter-flags -fno-math-errno
-	filter-flags -fno-semantic-interposition
-	filter-flags -fno-signed-zeros
-	filter-flags -fno-trapping-math
-	filter-flags -fpie
-	filter-flags -fstack-clash-protection
-	filter-flags -fstack-protector-strong
-	filter-flags -ftree-loop-distribution
-	filter-flags -fuse-linker-plugin -fdevirtualize-at-ltrans
+	filter-gcc
+    filter-lto
 
 	use debug || filter-flags -g
 

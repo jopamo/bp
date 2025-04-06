@@ -133,7 +133,6 @@ PACKAGES=(
 "jaraco-path"
 "jaraco-text"
 "jeepney"
-"markdown-it-py"
 "jinja2"
 "josepy"
 "js2py"
@@ -145,12 +144,14 @@ PACKAGES=(
 "keyring"
 "lark"
 "lazy-object-proxy"
-"lxml"
+"linkify-it-py"
 "mailgw-temporary-email"
 "makefun"
 "mako"
+"markdown-it-py"
 "markdown"
 "markupsafe"
+"mdurl"
 "mmh3"
 "mock"
 "more-itertools"
@@ -247,6 +248,7 @@ PACKAGES=(
 "trustme"
 "truststore"
 "typing-extensions"
+"uc-micro-py"
 "undetected-chromedriver"
 "uri-template"
 "urllib3"
@@ -265,32 +267,33 @@ PACKAGES=(
 )
 
 declare -A replacements=(
-    ["app-arch/brotli"]="app-compression/brotli"
-    ["app-misc/ca-certificates"]="lib-net/ca-certificates"
-    ["dev-lang/swig"]="app-lang/swig"
-    ["dev-libs/libffi"]="lib-core/libffi"
-    ["dev-libs/libxml2"]="lib-core/libxml2"
-    ["dev-libs/libxslt"]="lib-core/libxslt"
-    ["dev-libs/libyaml"]="lib-dev/libyaml"
-    ["dev-libs/openssl"]="lib-net/openssl"
-    ["dev-libs/tree-sitter"]="lib-dev/tree-sitter"
-    ["dev-python/cryptography"]="app-crypto/cryptography"
-    ["dev-python/cython"]="dev-py/cython"
-    ["dev-python/jinja2"]="dev-py/jinja"
-    ["dev-python/pillow"]="xgui-app/pillow"
-    ["dev-python/pyscard"]="dev-py/pyscard"
-    ["dev-python/regex"]="dev-py/regex"
-    ["dev-python/rpds-py"]="dev-py/rpds-py"
-    ["dev-python/setuptools-rust"]="dev-py/setuptools-rust"
-    ["dev-python/setuptools-scm"]="dev-py/setuptools-scm"
-    ["dev-python/setuptools"]="dev-py/setuptools"
-    ["dev-python/snakeoil"]="dev-py/snakeoil"
-    ["dev-python/tree-sitter"]="dev-py/tree-sitter"
-    ["dev-python/zstandard"]="dev-py/zstandard"
-    ["net-dns/c-ares"]="lib-net/c-ares"
-    ["sys-apps/pcsc-lite"]="app-crypto/pcsc-lite"
-    ["sys-libs/timezone-data"]="lib-core/tzdb"
-    ["virtual/pkgconfig"]="app-dev/pkgconf"
+	["app-arch/brotli"]="app-compression/brotli"
+	["app-misc/ca-certificates"]="lib-net/ca-certificates"
+	["dev-lang/swig"]="app-lang/swig"
+	["dev-libs/libffi"]="lib-core/libffi"
+	["dev-libs/libxml2"]="lib-core/libxml2"
+	["dev-libs/libxslt"]="lib-core/libxslt"
+	["dev-libs/libyaml"]="lib-dev/libyaml"
+	["dev-libs/openssl"]="lib-net/openssl"
+	["dev-libs/tree-sitter"]="lib-dev/tree-sitter"
+	["dev-python/cryptography"]="app-crypto/cryptography"
+	["dev-python/cython"]="dev-py/cython"
+	["dev-python/jinja2"]="dev-py/jinja"
+	["dev-python/lxml"]="dev-py/lxml"
+	["dev-python/pillow"]="xgui-app/pillow"
+	["dev-python/pyscard"]="dev-py/pyscard"
+	["dev-python/regex"]="dev-py/regex"
+	["dev-python/rpds-py"]="dev-py/rpds-py"
+	["dev-python/setuptools-rust"]="dev-py/setuptools-rust"
+	["dev-python/setuptools-scm"]="dev-py/setuptools-scm"
+	["dev-python/setuptools"]="dev-py/setuptools"
+	["dev-python/snakeoil"]="dev-py/snakeoil"
+	["dev-python/tree-sitter"]="dev-py/tree-sitter"
+	["dev-python/zstandard"]="dev-py/zstandard"
+	["net-dns/c-ares"]="lib-net/c-ares"
+	["sys-apps/pcsc-lite"]="app-crypto/pcsc-lite"
+	["sys-libs/timezone-data"]="lib-core/tzdb"
+	["virtual/pkgconfig"]="app-dev/pkgconf"
 )
 
 BDEPEND_CLEAN_PACKAGES=(
@@ -586,11 +589,25 @@ add_flagomatic_to_inherit() {
 
 add_flagomatic_to_inherit
 
-echo "Starting to process to add -Wl,-z,defs to required packages..."
+echo "Starting to process to filter -Wl,-z,defs on required packages..."
 PACKAGES_ZDEFS=(
-    "aiohttp" "brotlicffi" "cffi" "cython" "frozenlist" "lxml"
-    "markupsafe" "multidict" "pillow" "propcache" "psutil"
-    "pycares" "regex" "tree-sitter" "yarl" "zstandard"
+    "aiohttp"
+    "brotlicffi"
+    "cffi"
+    "cython"
+    "frozenlist"
+    "lxml"
+    "markupsafe"
+    "msgpack"
+    "multidict"
+    "pillow"
+    "propcache"
+    "psutil"
+    "pycares"
+    "regex"
+    "tree-sitter"
+    "yarl"
+    "zstandard"
 )
 
 for package in "${PACKAGES_ZDEFS[@]}"; do
@@ -604,7 +621,7 @@ for package in "${PACKAGES_ZDEFS[@]}"; do
             function_found=false
 
             # Check each of the relevant functions and add 'filter-flags' to them
-            for func in python_compile src_prepare src_unpack python_configure_all python_install_all pkg_postinst; do
+            for func in python_prepare_all python_compile src_prepare src_unpack python_configure_all python_install_all pkg_postinst; do
                 if grep -q "^${func}()" "$ebuild_file"; then
                     echo "Adding 'filter-flags -Wl,-z,defs' in function ${func}() of $ebuild_file"
                     sed -i "/^${func}()/ {

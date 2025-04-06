@@ -54,6 +54,9 @@ src_prepare() {
     if use elibc_musl; then
     	sed -i 's/base\.crt_static_default = true;/base\.crt_static_default = false;/g' \
         	./compiler/rustc_target/src/spec/base/linux_musl.rs || die
+
+        sed -i 's/base\.crt_static_default = true;/base\.crt_static_default = false;/g' \
+        	./compiler/rustc_target/src/spec/targets/x86_64_unknown_linux_musl.rs || die
 	fi
 
     filter-clang
@@ -86,10 +89,11 @@ src_configure() {
 		extended = true
 		cargo = "/usr/bin/cargo"
 		rustc = "/usr/bin/rustc"
-		tools = ["cargo","clippy","rustdoc","rustfmt","rust-analyzer","rust-analyzer-proc-macro-srv","analysis","src"]
+		tools = ["cargo","clippy","src"]
+		#tools = ["cargo","clippy","rustdoc","rustfmt","rust-analyzer","rust-analyzer-proc-macro-srv","analysis","src"]
 		vendor = true
 		sanitizers = false
-		optimized-compiler-builtins = true
+		#optimized-compiler-builtins = true
 		[install]
 		prefix = "${EPREFIX}/usr"
 		sysconfdir = "${EPREFIX}/etc"

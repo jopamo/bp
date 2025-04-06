@@ -25,7 +25,7 @@ RDEPEND="
 "
 BDEPEND="
 	test? (
-		>=dev-python/lxml-5.0.3[${PYTHON_USEDEP}]
+		>=dev-py/lxml-5.0.3[${PYTHON_USEDEP}]
 		xgui-app/pillow[${PYTHON_USEDEP},tiff,jpeg]
 	)
 "

@@ -42,3 +42,28 @@ src_install() {
 	emake headers_install INSTALL_HDR_PATH="${ED}/usr"
 	export KERNEL_VERSION=$(make -s kernelrelease)
 }
+
+pkg_postinst() {
+	mount /boot
+	mount /boot/efi
+
+	rm /boot/initramfs-*.img
+
+	dracut \
+		-f "/boot/initramfs-${KERNEL_VERSION}.img" \
+		"${KERNEL_VERSION}" \
+		--kernel-image "/boot/vmlinuz-${KERNEL_VERSION}" \
+		--early-microcode \
+		--mdadmconf \
+		--hostonly \
+		--lvmconf \
+		--strip \
+		--zstd || die
+
+	grub-install --efi-directory=/boot/efi
+	grub-install --efi-directory=/boot/efi --removable
+	grub-mkconfig -o /boot/grub/grub.cfg
+
+	unset KERNEL_VERSION
+}
+

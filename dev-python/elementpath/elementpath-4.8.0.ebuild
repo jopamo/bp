@@ -19,7 +19,7 @@ KEYWORDS="amd64 arm64"
 
 BDEPEND="
 	test? (
-		dev-python/lxml[${PYTHON_USEDEP}]
+		dev-py/lxml[${PYTHON_USEDEP}]
 		>=dev-python/xmlschema-3.3.2[${PYTHON_USEDEP}]
 	)
 "

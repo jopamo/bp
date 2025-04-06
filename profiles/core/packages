@@ -38,6 +38,7 @@
 *app-port/portage-utils
 *app-var/pax-utils
 *lib-net/ca-certificates
+*virtual/gcc
 *virtual/libc
 *virtual/libelf
 *virtual/service-manager

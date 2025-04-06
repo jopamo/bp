@@ -27,7 +27,7 @@ BDEPEND="
 	test? (
 		${RDEPEND}
 		dev-py/jinja[${PYTHON_USEDEP}]
-		dev-python/lxml[${PYTHON_USEDEP}]
+		dev-py/lxml[${PYTHON_USEDEP}]
 	)
 "
 

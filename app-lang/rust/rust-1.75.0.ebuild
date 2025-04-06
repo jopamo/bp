@@ -13,6 +13,10 @@ LICENSE="MIT Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+BDEPEND="
+	app-dev/cmake
+"
+
 ABI_VER="$(ver_cut 1-2)"
 
 CMAKE_WARN_UNUSED_CLI=no
@@ -47,8 +51,10 @@ pkg_setup() {
 src_prepare() {
     eapply "${FILESDIR}"/rust/*.patch
 
-    use elibc_musl && sed -i 's/base\.crt_static_default = true;/base\.crt_static_default = false;/g' \
-        ./compiler/rustc_target/src/spec/base/linux_musl.rs || die
+    if use elibc_musl; then
+    	sed -i 's/base\.crt_static_default = true;/base\.crt_static_default = false;/g' \
+        	./compiler/rustc_target/src/spec/base/linux_musl.rs || die
+	fi
 
     filter-clang
     filter-lto

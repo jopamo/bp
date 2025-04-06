@@ -33,7 +33,7 @@ RDEPEND="
 	app-core/sed
 	app-crypto/gnupg
 	app-var/eselect
-	dev-python/lxml[${PYTHON_USEDEP}]
+	dev-py/lxml[${PYTHON_USEDEP}]
 "
 PDEPEND="app-net/rsync"
 

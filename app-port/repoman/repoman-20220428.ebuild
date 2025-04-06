@@ -23,7 +23,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	app-core/portage
-	>=dev-python/lxml-3.6.0[${PYTHON_USEDEP}]
+	>=dev-py/lxml-3.6.0[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 "
 

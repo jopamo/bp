@@ -36,7 +36,7 @@ RDEPEND="${CDEPEND}
 "
 DEPEND="${CDEPEND}
 	>=lib-core/libxslt-1.1.26
-	app-tex/docbook-xml-dtd:4.5
+	app-tex/docbook-xml-dtd
 	>=app-tex/docbook-xsl-stylesheets-1.75.2
 "
 

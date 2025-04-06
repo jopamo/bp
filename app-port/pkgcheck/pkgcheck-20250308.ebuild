@@ -23,7 +23,7 @@ RDEPEND="
 	>=lib-dev/tree-sitter-bash-0.21.0[${PYTHON_USEDEP}]
 	dev-python/chardet[${PYTHON_USEDEP}]
 	dev-python/lazy-object-proxy[${PYTHON_USEDEP}]
-	dev-python/lxml[${PYTHON_USEDEP}]
+	dev-py/lxml[${PYTHON_USEDEP}]
 	dev-python/pathspec[${PYTHON_USEDEP}]
 	>=dev-py/tree-sitter-0.21.0[${PYTHON_USEDEP}]
 "

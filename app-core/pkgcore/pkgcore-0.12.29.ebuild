@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	app-core/bash
-	dev-python/lxml[${PYTHON_USEDEP}]"
+	dev-py/lxml[${PYTHON_USEDEP}]"
 if [[ ${PV} == *9999 ]]; then
 	RDEPEND+=" ~dev-py/snakeoil-9999[${PYTHON_USEDEP}]"
 else

@@ -32,6 +32,7 @@ RDEPEND="
 distutils_enable_tests pytest
 
 python_prepare_all() {
+	filter-flags -Wl,-z,defs
 	# don't enable coverage or other pytest settings
 	sed -i -e '/cov/d' pytest.ini || die
 	distutils-r1_python_prepare_all
@@ -49,7 +50,17 @@ python_compile() {
 python_test() {
 	local EPYTEST_IGNORE=(
 		tests/test_multidict_benchmarks.py
+		tests/test_views_benchmarks.py
 	)
+
+	case ${EPYTHON} in
+		pypy3*)
+			EPYTEST_IGNORE+=(
+				# https://github.com/aio-libs/multidict/issues/1114
+				tests/test_incorrect_args.py
+			)
+			;;
+	esac
 
 	rm -rf multidict || die
 

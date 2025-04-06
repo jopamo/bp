@@ -26,7 +26,7 @@ KEYWORDS="amd64 arm64"
 
 # RDEPEND in BDEPEND for import_cldr.py usage, bug #852158
 BDEPEND="
-	app-compression/unzip
+	app-arch/unzip
 	${RDEPEND}
 	test? (
 		dev-python/freezegun[${PYTHON_USEDEP}]

@@ -38,7 +38,7 @@ BDEPEND="
 		$(python_gen_cond_dep '
 			dev-python/cffi[${PYTHON_USEDEP}]
 		' 'python*')
-		dev-python/lxml[${PYTHON_USEDEP}]
+		dev-py/lxml[${PYTHON_USEDEP}]
 		dev-python/pytest[${PYTHON_USEDEP}]
 	)
 "

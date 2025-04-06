@@ -4,7 +4,6 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..13} pypy3 pypy3_11 )
 
 inherit distutils-r1 toolchain-funcs
 
@@ -14,11 +13,10 @@ HOMEPAGE="
 	https://pypi.org/project/lxml/
 	https://github.com/lxml/lxml/
 "
-SRC_URI="
-	https://github.com/lxml/lxml/archive/${P}.tar.gz
-		-> ${P}.gh.tar.gz
-"
-S=${WORKDIR}/lxml-${P}
+
+SNAPSHOT=218af3c0834757babaa0d2740a7d94904a588042
+SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="BSD ElementTree GPL-2 PSF-2"
 SLOT="0"
@@ -50,10 +48,6 @@ BDEPEND="
 	)
 "
 
-PATCHES=(
-	"${FILESDIR}/${PN}-5.3.0-pypy.patch"
-)
-
 python_check_deps() {
 	use doc || return 0
 	python_has_version -b "dev-python/docutils[${PYTHON_USEDEP}]" &&
@@ -72,6 +66,7 @@ python_prepare_all() {
 
 python_compile() {
 	filter-flags -Wl,-z,defs
+	append-flags -Wno-error
 	local DISTUTILS_ARGS=(
 		# by default it adds -w to CFLAGS
 		--warnings
@@ -117,5 +112,5 @@ pkg_postinst() {
 	filter-flags -Wl,-z,defs
  "Support for BeautifulSoup as a parser backend" dev-python/beautifulsoup4
  "Translates CSS selectors to XPath 1.0 expressions" dev-python/cssselect
- "Support for lxml.html.clean sanitizer" dev-python/lxml-html-clean
+ "Support for lxml.html.clean sanitizer" dev-py/lxml-html-clean
 }

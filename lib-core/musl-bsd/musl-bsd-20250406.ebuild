@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="A standalone library to implement GNU libc's obstack."
 HOMEPAGE="https://github.com/void-linux/musl-obstack"
 
-SNAPSHOT=076178dfd15a9b028a44c196e16a9c320b2cc01a
+SNAPSHOT=0711585b34f15e20e854c04fb8fe5e682ff473db
 SRC_URI="https://github.com/jopamo/musl-bsd/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

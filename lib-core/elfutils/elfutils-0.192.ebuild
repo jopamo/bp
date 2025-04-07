@@ -33,18 +33,13 @@ src_prepare() {
 	default
 
 	if use musl; then
-		eapply "${FILESDIR}"/fix-uninitialized.patch
-		eapply "${FILESDIR}"/musl-strndupa.patch
 		eapply "${FILESDIR}"/fix-aarch64_fregs.patch
-		eapply "${FILESDIR}"/musl-asm-ptrace-h.patch
-		eapply "${FILESDIR}"/musl-macros.patch
-
-		cp "${FILESDIR}"/error.h lib/
 
 		cat > lib/libintl.h <<-EOF
-			#ifndef DUMMY_LIBINTL_H
+		#ifndef DUMMY_LIBINTL_H
 		#define DUMMY_LIBINTL_H
 
+		#include <sys/cdefs.h>
 		/* No-op versions of gettext-related functions. */
 
 		static inline const char *

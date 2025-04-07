@@ -4,11 +4,11 @@ EAPI=8
 
 inherit meson
 
-DESCRIPTION="A standalone library to implement GNU libc's obstack."
-HOMEPAGE="https://github.com/void-linux/musl-obstack"
+DESCRIPTION="A standalone library to implement GNU libc's obstack and others"
+HOMEPAGE="https://github.com/jopamo/musl-bsd"
 
-SNAPSHOT=0711585b34f15e20e854c04fb8fe5e682ff473db
-SRC_URI="https://github.com/jopamo/musl-bsd/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=0bfe62d956ee67a4f5f68df5ea981caedc3432ab
+SRC_URI="https://github.com/jopamo/musl-bsd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"

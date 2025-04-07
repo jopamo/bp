@@ -17,6 +17,8 @@ LICENSE="GPL"
 SLOT="$(ver_cut 1-2)"
 KEYWORDS="amd64 arm64"
 
+IUSE="initramfs"
+
 RESTRICT="network-sandbox sandbox usersandbox"
 
 BDEPEND="
@@ -49,7 +51,7 @@ pkg_postinst() {
 
 	rm /boot/initramfs-*.img
 
-	dracut \
+	use initramfs && dracut \
 		-f "/boot/initramfs-${KERNEL_VERSION}.img" \
 		"${KERNEL_VERSION}" \
 		--kernel-image "/boot/vmlinuz-${KERNEL_VERSION}" \

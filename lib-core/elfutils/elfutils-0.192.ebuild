@@ -42,10 +42,51 @@ src_prepare() {
 		cp "${FILESDIR}"/error.h lib/
 
 		cat > lib/libintl.h <<-EOF
-			#ifndef LIBINTL_H
-			#define LIBINTL_H
-			#define _(x) (x)
-			#endif
+			#ifndef DUMMY_LIBINTL_H
+		#define DUMMY_LIBINTL_H
+
+		/* No-op versions of gettext-related functions. */
+
+		static inline const char *
+		gettext(const char *msgid)
+		{
+    		return msgid;
+		}
+
+		static inline const char *
+		dgettext(const char *domain, const char *msgid)
+		{
+    		return msgid;
+		}
+
+		static inline const char *
+		dcgettext(const char *domain, const char *msgid, int category)
+		{
+    		return msgid;
+		}
+
+		static inline const char *
+		ngettext(const char *msgid_singular,
+         		const char *msgid_plural,
+         		unsigned long int n)
+		{
+    		return (n == 1 ? msgid_singular : msgid_plural);
+		}
+
+		/* Likewise make bindtextdomain, textdomain, etc. do nothing. */
+		static inline const char *
+		bindtextdomain(const char *domainname, const char *dirname)
+		{
+    		return dirname;  /* Just return what was passed in */
+		}
+
+		static inline const char *
+		textdomain(const char *domainname)
+		{
+    		return domainname;  /* Just return what was passed in */
+		}
+
+		#endif /* DUMMY_LIBINTL_H */
 		EOF
 	fi
 

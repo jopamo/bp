@@ -36,52 +36,57 @@ src_prepare() {
 		eapply "${FILESDIR}"/fix-aarch64_fregs.patch
 
 		cat > lib/libintl.h <<-EOF
-		#ifndef DUMMY_LIBINTL_H
-		#define DUMMY_LIBINTL_H
+		#ifndef _DUMMY_LIBINTL_H
+		#define _DUMMY_LIBINTL_H 1
 
 		#include <sys/cdefs.h>
-		/* No-op versions of gettext-related functions. */
 
-		static inline const char *
-		gettext(const char *msgid)
-		{
-    		return msgid;
-		}
+		#ifndef gettext
+		# define gettext(msgid) \
+    		((char *)(msgid))
+		#endif
 
-		static inline const char *
-		dgettext(const char *domain, const char *msgid)
-		{
-    		return msgid;
-		}
+		#ifndef dgettext
+		# define dgettext(domain, msgid) \
+    		((char *)(msgid))
+		#endif
 
-		static inline const char *
-		dcgettext(const char *domain, const char *msgid, int category)
-		{
-    		return msgid;
-		}
+		#ifndef dcgettext
+		# define dcgettext(domain, msgid, category) \
+    		((char *)(msgid))
+		#endif
 
-		static inline const char *
-		ngettext(const char *msgid_singular,
-         		const char *msgid_plural,
-         		unsigned long int n)
-		{
-    		return (n == 1 ? msgid_singular : msgid_plural);
-		}
+		#ifndef ngettext
+		# define ngettext(msgid_singular, msgid_plural, n) \
+    		((char *)((n) == 1 ? (msgid_singular) : (msgid_plural)))
+		#endif
 
-		/* Likewise make bindtextdomain, textdomain, etc. do nothing. */
-		static inline const char *
-		bindtextdomain(const char *domainname, const char *dirname)
-		{
-    		return dirname;  /* Just return what was passed in */
-		}
+		#ifndef dngettext
+		# define dngettext(domain, msgid_singular, msgid_plural, n) \
+    		((char *)((n) == 1 ? (msgid_singular) : (msgid_plural)))
+		#endif
 
-		static inline const char *
-		textdomain(const char *domainname)
-		{
-    		return domainname;  /* Just return what was passed in */
-		}
+		#ifndef dcngettext
+		# define dcngettext(domain, msgid_singular, msgid_plural, n, category) \
+    		((char *)((n) == 1 ? (msgid_singular) : (msgid_plural)))
+		#endif
 
-		#endif /* DUMMY_LIBINTL_H */
+		#ifndef textdomain
+		# define textdomain(domainname) \
+    		((char *)"messages")
+		#endif
+
+		#ifndef bindtextdomain
+		# define bindtextdomain(domainname, dirname) \
+    		((char *)(dirname))
+		#endif
+
+		#ifndef bind_textdomain_codeset
+		# define bind_textdomain_codeset(domainname, codeset) \
+    		((char *)(codeset))
+		#endif
+
+		#endif
 		EOF
 	fi
 

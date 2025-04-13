@@ -15,7 +15,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug hpack-tools jemalloc static-libs test utils xml"
+IUSE="debug hpack-tools jemalloc +static-libs test utils xml"
 
 RDEPEND="
 	hpack-tools? ( >=lib-core/jansson-2.5 )

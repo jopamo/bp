@@ -22,3 +22,8 @@ SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-lib/qtbase"
+
+src_install() {
+	cmake_src_install
+	die
+}

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson git-r3 xdg
+inherit meson git-r3 xdg flag-o-matic
 
 DESCRIPTION="VTE/GTK4 terminal emulator"
 HOMEPAGE="https://github.com/jopamo/1term"

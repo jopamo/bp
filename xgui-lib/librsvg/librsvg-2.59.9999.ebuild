@@ -19,6 +19,7 @@ IUSE="+introspection"
 RESTRICT="network-sandbox"
 
 DEPEND="
+	dev-rust/cargo-c
 	lib-core/libxml2
 	lib-util/glib
 	virtual/rust
@@ -34,6 +35,9 @@ BDEPEND="
 "
 
 src_prepare() {
+	filter-flags -flto*
+
 	default
+
 	cargo update
 }

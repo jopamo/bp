@@ -32,8 +32,11 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	cat > "${T}"/99${PN} <<- EOF || die
-		QT_STYLE_OVERRIDE=kvantum
-	EOF
-	doenvd "${T}"/99${PN}
+	insinto /usr/share/color-schemes
+	doins "${FILESDIR}"/KvGnomeDark.colors
+
+	#cat > "${T}"/99${PN} <<- EOF || die
+	#	QT_STYLE_OVERRIDE=kvantum
+	#EOF
+	#doenvd "${T}"/99${PN}
 }

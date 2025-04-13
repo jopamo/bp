@@ -72,7 +72,7 @@ src_install() {
 
 	# for xdg
 	cat > "${T}"/99${PN} <<- EOF || die
-		XDG_CURRENT_DESKTOP=XFCE
+		XDG_CURRENT_DESKTOP=KDE
 	EOF
 	doenvd "${T}"/99${PN}
 }

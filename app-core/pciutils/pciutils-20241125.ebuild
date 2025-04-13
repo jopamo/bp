@@ -18,7 +18,7 @@ KEYWORDS="amd64 arm64"
 IUSE="dns kmod static-libs +udev zlib"
 
 DEPEND="
-	app-core/pciids
+	app-core/hwdata
 	kmod? ( app-core/kmod
 			app-dev/pkgconf
 		 )

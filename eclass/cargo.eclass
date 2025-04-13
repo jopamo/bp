@@ -28,26 +28,14 @@ if [[ -z ${_CARGO_VENDOR_ECLASS} ]]; then
 
 	inherit flag-o-matic
 
-	cargo_src_unpack() {
-		default
-
-		cd "${S}" || die "Could not cd to ${S}"
-		#cargo update || die "cargo update failed"
-
-		filter-flags -fgraphite-identity
-		filter-flags -floop-nest-optimize
-		filter-flags -ftree-loop-distribution
-		filter-flags -fdevirtualize-at-ltrans
-		filter-flags -fipa-pta
+	cargo_pkg_setup() {
 		filter-flags -flto*
-		filter-flags -fuse-linker-plugin
-		append-flags -flto
 	}
 
 	cargo_src_compile() {
 		cd "${S}" || die "Could not cd to ${S}"
 
-		local build_mode="--release"
+		local build_mode=""
 		use debug && build_mode="--debug"
 
 		einfo "Building with cargo build ${build_mode}"
@@ -59,7 +47,7 @@ if [[ -z ${_CARGO_VENDOR_ECLASS} ]]; then
 	cargo_src_install() {
 		cd "${S}" || die "Could not cd to ${S}"
 
-		local build_mode="--release"
+		local build_mode=""
 		use debug && build_mode="--debug"
 
 		einfo "Installing with cargo install ${build_mode}"
@@ -69,8 +57,8 @@ if [[ -z ${_CARGO_VENDOR_ECLASS} ]]; then
 			--root="${D}/usr" \
 			|| die "cargo install failed"
 
-		rm -f "${D}/usr/.crates.toml" "${D}/usr/.crates2.json" || die "Removing .crates metadata failed"
+		rm -f "${D}/usr/.crates*"
 	}
 
-	EXPORT_FUNCTIONS src_unpack src_compile src_install
+	EXPORT_FUNCTIONS pkg_setup src_compile src_install
 fi

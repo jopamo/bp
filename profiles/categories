@@ -18,6 +18,7 @@ bin
 dev-perl
 dev-py
 dev-python
+dev-rust
 distfiles
 eclass
 fonts

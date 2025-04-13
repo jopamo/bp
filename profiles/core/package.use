@@ -1,19 +1,19 @@
 app-build/gcc lto
+app-build/llvm assertions bpf debug libfuzzer orc sanitizers static_analyzer sysclang
 app-compression/lz4 static-libs
 app-compression/zstd static-libs
 app-core/acl static-libs
 app-core/attr static-libs
 app-core/util-linux agetty eject fallocate ipcrm ipcs kill libblkid libuuid last logger login losetup lscpu lsfd lsirq lslogins lsmem lsns mount mountpoint nologin rename schedutils su suid sulogin swapon tty-helpers wipefs
 app-fs/cryptsetup -ssl
+app-net/curl static-libs
 app-net/networkmanager -nss gnutls
 lib-core/libcap static-libs
 lib-core/libxml2 python
+lib-core/sqlite static-libs
 lib-core/zlib static-libs
 lib-dev/tree-sitter-bash python
 lib-misc/xxhash static-libs
-app-net/curl static-libs
-lib-core/sqlite static-libs
 lib-net/nodejs icu
 lib-net/openssl static-libs
 xgui-app/wireshark bcg729 capinfos caps captype ciscodump dcerpcidl2wrs dftest dpauxmon dumpcap editcap libssh mergecap mmdbresolve netlink plugins randpkt randpktdump rawshark reordercap sdjournal sharkd sshdump text2pcap tshark udpdump
-app-build/llvm bpf orc sysclang

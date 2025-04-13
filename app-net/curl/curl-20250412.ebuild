@@ -2,6 +2,8 @@
 
 EAPI=8
 
+inherit flag-o-matic
+
 DESCRIPTION="A command line tool and library for transferring data with URL syntax"
 HOMEPAGE="https://curl.haxx.se/"
 
@@ -9,7 +11,9 @@ if [[ ${PV} == *9999 ]] ; then
 	inherit git-r3 autotools
 	EGIT_REPO_URI="https://github.com/curl/curl.git"
 else
-	SRC_URI="https://curl.haxx.se/download/${P}.tar.bz2"
+	SNAPSHOT=d163c7cbd1b567f6981a30d6a89cb04fcf5653fc
+	SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
 fi
 
@@ -44,6 +48,8 @@ src_prepare() {
 	fi
 
 	default
+
+	filter-flags -Wl,-z,defs
 
 	#scripts/mk-ca-bundle.pl -k || die
 }

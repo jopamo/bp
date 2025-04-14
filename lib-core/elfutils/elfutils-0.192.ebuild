@@ -19,7 +19,6 @@ DEPEND="
 	bzip2? ( app-compression/bzip2 )
 	lzma? ( app-compression/xz-utils )
 	elibc_musl? (
-		lib-core/argp-standalone
 		lib-core/musl-bsd
 	)
 	zstd? ( app-compression/zstd )

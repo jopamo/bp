@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="utils for managing LZMA compressed files"
 HOMEPAGE="http://tukaani.org/xz/"
 
-SNAPSHOT=061a1e4d2d0b1c3f5c9a637fd94bac035a826340
+SNAPSHOT=a69fbd3aaebc15dc5912e64724e5abfcef09bcdf
 SRC_URI="https://github.com/tukaani-project/xz/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/xz-${SNAPSHOT}"
 

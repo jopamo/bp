@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit linux-info user flag-o-matic
+inherit linux-info user flag-o-matic autotools
 
 DESCRIPTION="A userspace logging daemon for netfilter/iptables related logging"
 HOMEPAGE="https://netfilter.org/projects/ulogd/index.html"
-SRC_URI="https://www.netfilter.org/projects/ulogd/files/${P}.tar.bz2"
+
+SNAPSHOT=32233985f24df86c464426c7af5477b012935c46
+SRC_URI="https://github.com/1g4-mirror/${PN}2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/${PN}2-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -39,6 +42,11 @@ pkg_setup() {
 
 	enewgroup ulogd
 	enewuser ulogd -1 -1 /var/log/ulogd ulogd
+}
+
+src_prepare() {
+	default
+	eautoreconf
 }
 
 src_configure() {

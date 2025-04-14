@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit linux-info
+inherit linux-info autotools
 
 DESCRIPTION="Netlink API to the in-kernel nf_tables subsystem"
 HOMEPAGE="https://netfilter.org/projects/nftables/"
-SRC_URI="http://www.netfilter.org/projects/${PN}/files/${P}.tar.xz"
+
+SNAPSHOT=c59d42a90b0d279955d5051c2306733bc01522f8
+SRC_URI="https://github.com/1g4-mirror/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -20,6 +23,12 @@ BDEPEND="app-dev/pkgconf"
 pkg_setup() {
 	CONFIG_CHECK="~NF_TABLES"
 	linux-info_pkg_setup
+}
+
+src_prepare() {
+	rm -rf build-aux
+	default
+	eautoreconf
 }
 
 src_configure() {

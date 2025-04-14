@@ -2,13 +2,13 @@
 
 EAPI=8
 
-inherit flag-o-matic
+inherit flag-o-matic autotools
 
 DESCRIPTION="A command line tool and library for transferring data with URL syntax"
 HOMEPAGE="https://curl.haxx.se/"
 
 if [[ ${PV} == *9999 ]] ; then
-	inherit git-r3 autotools
+	inherit git-r3
 	EGIT_REPO_URI="https://github.com/curl/curl.git"
 else
 	SNAPSHOT=d163c7cbd1b567f6981a30d6a89cb04fcf5653fc
@@ -40,14 +40,9 @@ DEPEND="
 		zstd? ( app-compression/zstd )
 "
 
-PATCHES=( "${FILESDIR}"/curl-respect-cflags-3.patch )
-
 src_prepare() {
-	if [[ ${PV} == *9999 ]] ; then
-		eautoreconf
-	fi
-
 	default
+	eautoreconf
 
 	filter-flags -Wl,-z,defs
 

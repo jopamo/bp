@@ -15,7 +15,7 @@ LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="keep-la"
+IUSE="+keep-la"
 
 RESTRICT="test"
 
@@ -25,7 +25,7 @@ DEPEND="
 "
 
 src_prepare() {
-	filter-flags -Wl,-z,defs
+	filter-flags -Wl,-z,defs -flto*
 
 	default
 

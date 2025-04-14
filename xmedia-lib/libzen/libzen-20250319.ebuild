@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools flag-o-matic
 
 DESCRIPTION="Shared library for libmediainfo and mediainfo"
 HOMEPAGE="https://github.com/MediaArea/ZenLib"
@@ -15,11 +15,12 @@ LICENSE="ZLIB"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="keep-la static-libs"
+IUSE="+keep-la static-libs"
 
 DEPEND="app-dev/pkgconf"
 
 src_prepare() {
+	filter-flags -Wl,-z,defs -flto*
 	default
 	sed -i 's:-O2::' configure.ac || die
 	eautoreconf

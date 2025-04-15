@@ -18,12 +18,6 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="examples"
 
-BDEPEND="
-	test? (
-		dev-python/python-socks[${PYTHON_USEDEP}]
-	)
-"
-
 distutils_enable_tests unittest
 
 python_install_all() {

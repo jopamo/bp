@@ -35,7 +35,12 @@ DEPEND="
 	)
 "
 
-filter-flags -Wl,-z,defs
+src_prepare() {
+	cp "${FILESDIR}"/loader_gif.c src/modules/loaders/loader_gif.c
+
+	filter-flags -Wl,-z,defs
+	default
+}
 
 src_configure() {
 	local myconf=(

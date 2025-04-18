@@ -19,6 +19,12 @@ KEYWORDS="amd64 arm64"
 RDEPEND="lib-core/libxml2"
 DEPEND="lib-util/glib"
 
+src_prepare() {
+	sed -i 's|http://www.oasis-open.org/docbook/xml/4\.1\.2/docbookx\.dtd|http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd|g' data/shared-mime-info-spec.xml || die
+
+	default
+}
+
 src_configure() {
 	local emesonargs=(
 		-D build-tools=false

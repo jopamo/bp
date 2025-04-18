@@ -39,7 +39,7 @@ LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
 KEYWORDS="amd64 arm64"
 
-IUSE="amdgpu arm assertions bootstrap bpf cuda debug libcxx libcxxabi libfuzzer nvptx orc sanitizers static_analyzer sysclang syslibcxxabi test wasm xcore"
+IUSE="amdgpu arm assertions bootstrap bpf cuda debug libcxx libcxxabi libfuzzer nvptx orc sanitizers static_analyzer -sysclang syslibcxxabi test wasm xcore"
 
 DEPEND="
     lib-core/libffi
@@ -113,8 +113,8 @@ src_configure() {
 		-DBUILD_SHARED_LIBS=OFF
 		-DCLANG_DEFAULT_OPENMP_RUNTIME=libomp
 		-DCLANG_DEFAULT_PIE_ON_LINUX=ON
-		#-DCLANG_DEFAULT_RTLIB=compiler-rt
-		#-DCLANG_DEFAULT_UNWINDLIB=libunwind
+		-DCLANG_DEFAULT_RTLIB=compiler-rt
+		-DCLANG_DEFAULT_UNWINDLIB=libunwind
 		-DCLANG_ENABLE_ARCMT=OFF
 		-DCLANG_ENABLE_LIBXML2=ON
 		-DCLANG_ENABLE_STATIC_ANALYZER=$(usex static_analyzer)
@@ -163,7 +163,7 @@ src_configure() {
 		-DLLVM_ENABLE_LIBPFM=OFF
 		-DLLVM_ENABLE_LIBXML2=ON
 		-DLLVM_ENABLE_OCAMLDOC=OFF
-		#-DLLVM_ENABLE_PER_TARGET_RUNTIME_DIR=ON
+		-DLLVM_ENABLE_PER_TARGET_RUNTIME_DIR=ON
 		-DLLVM_ENABLE_PROJECTS="llvm;clang;lld"
 		-DLLVM_ENABLE_RTTI=ON
 		-DLLVM_ENABLE_RUNTIMES="${LLVM_RUNTIMES}"

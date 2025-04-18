@@ -24,6 +24,8 @@ DEPEND="
 "
 
 src_prepare() {
+	sed -i 's|http://www.oasis-open.org/docbook/xml/4\.3/docbookx\.dtd|http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd|g' man/Xcomposite.xml || die
+
 	default
 	eautoreconf
 }

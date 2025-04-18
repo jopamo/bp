@@ -49,9 +49,8 @@ pkg_setup() {
 }
 
 src_prepare() {
-    eapply "${FILESDIR}"/rust/*.patch
-
     if use elibc_musl; then
+    	eapply "${FILESDIR}"/rust/*.patch
     	sed -i 's/base\.crt_static_default = true;/base\.crt_static_default = false;/g' \
         	./compiler/rustc_target/src/spec/base/linux_musl.rs || die
 

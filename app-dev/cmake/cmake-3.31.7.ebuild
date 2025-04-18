@@ -25,6 +25,7 @@ DEPEND="
 
 cmake_src_bootstrap() {
 	replace-flags -O3 -O2
+	append-flags -fpermissive
 	# Cleanup args to extract only JOBS.
 	# Because bootstrap does not know anything else.
 	echo ${MAKEOPTS} | egrep -o '(\-j|\-\-jobs)(=?|[[:space:]]*)[[:digit:]]+' > /dev/null

@@ -23,9 +23,29 @@ RDEPEND="
 "
 DEPEND=">=app-tex/xmlto-0.0.26-r1[text(+)]"
 
-RESTRICT="test" # Disabled because of sandbox violation(s)
+RESTRICT="test"
 
 src_prepare() {
 	eautoreconf
 	default
+
+sed -Ei '
+  s#(http://www\.oasis-open\.org/docbook/xml/)4\.(1\.2|3)(/docbookx\.dtd)#\14.5\3#g;
+  s#-//OASIS//DTD DocBook XML V4\.(1\.2|3)//EN#-//OASIS//DTD DocBook XML V4.5//EN#g
+' \
+scripts/desc/xdg-copy.xml \
+scripts/desc/xdg-desktop-icon.xml \
+scripts/desc/xdg-desktop-menu.xml \
+scripts/desc/xdg-email.xml \
+scripts/desc/xdg-file-dialog.xml \
+scripts/desc/xdg-icon-resource.xml \
+scripts/desc/xdg-mime.xml \
+scripts/desc/xdg-open.xml \
+scripts/desc/xdg-realpath.xml \
+scripts/desc/xdg-screensaver.xml \
+scripts/desc/xdg-settings.xml \
+scripts/desc/xdg-su.xml \
+scripts/desc/xdg-terminal.xml \
+scripts/desc/xdg-utils-common.xml || die
+
 }

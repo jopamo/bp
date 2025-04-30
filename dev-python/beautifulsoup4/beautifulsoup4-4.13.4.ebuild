@@ -19,7 +19,7 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	dev-python/html5lib[${PYTHON_USEDEP}]
-	dev-py/lxml[${PYTHON_USEDEP}]
+	dev-python/lxml[${PYTHON_USEDEP}]
 	>=dev-python/soupsieve-2.6[${PYTHON_USEDEP}]
 	>=dev-python/typing-extensions-4.0.0[${PYTHON_USEDEP}]
 "

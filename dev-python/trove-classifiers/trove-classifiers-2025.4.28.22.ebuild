@@ -32,6 +32,9 @@ src_configure() {
 		name = "trove-classifiers"
 		version = "${PV}"
 		description = "Canonical source for classifiers on PyPI (pypi.org)."
+
+		[project.scripts]
+		trove-classifiers = "trove_classifiers.__main__:cli"
 	EOF
 }
 

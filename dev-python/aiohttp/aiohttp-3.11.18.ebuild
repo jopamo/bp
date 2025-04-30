@@ -19,7 +19,15 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="+native-extensions test-rust"
 
+DEPEND="
+	native-extensions? (
+		$(python_gen_cond_dep '
+			net-libs/llhttp:=
+		' 'python3*')
+	)
+"
 RDEPEND="
+	${DEPEND}
 	>=dev-python/aiodns-3.2.0[${PYTHON_USEDEP}]
 	>=dev-python/aiohappyeyeballs-2.3.0[${PYTHON_USEDEP}]
 	>=dev-python/aiosignal-1.1.2[${PYTHON_USEDEP}]
@@ -61,23 +69,26 @@ distutils_enable_tests pytest
 
 src_prepare() {
 	filter-flags -Wl,-z,defs
+	local PATCHES=(
+		"${FILESDIR}/${PN}-3.11.17-unbundle-llhttp.patch"
+	)
+
+	distutils-r1_src_prepare
+
 	# increase the timeout a little
 	sed -e '/abs=/s/0.001/0.01/' -i tests/test_helpers.py || die
 	# xfail_strict fails on py3.10
 	sed -i -e '/--cov/d' -e '/pytest_cov/d' -e '/xfail_strict/d' setup.cfg || die
 	sed -i -e 's:-Werror::' Makefile || die
-
-	distutils-r1_src_prepare
+	# remove vendored llhttp
+	rm -r vendor || die
 }
 
 python_configure() {
-	if [[ ! -d tools && ${EPYTHON} != pypy3 ]] && use native-extensions
+	# check for .install-cython, so that we do this only once
+	if [[ ! -f .install-cython && ${EPYTHON} != pypy3 ]] &&
+		use native-extensions
 	then
-		# workaround missing files
-		mkdir tools || die
-		> requirements/cython.txt || die
-		> tools/gen.py || die
-		chmod +x tools/gen.py || die
 		# force rehashing first
 		emake requirements/.hash/cython.txt.hash
 		> .update-pip || die

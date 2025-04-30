@@ -7,9 +7,9 @@ CRATES="
 
 declare -A GIT_CRATES=(
 	[async_zip]='https://github.com/charliermarsh/rs-async-zip;c909fda63fcafe4af496a07bfda28a5aae97e58d;rs-async-zip-%commit%'
-	[pubgrub]='https://github.com/astral-sh/pubgrub;b70cf707aa43f21b32f3a61b8a0889b15032d5c4;pubgrub-%commit%'
+	[pubgrub]='https://github.com/astral-sh/pubgrub;a3b4db3abb1829ce889fb89fa6d157fef529ef7e;pubgrub-%commit%'
 	[tl]='https://github.com/astral-sh/tl;6e25b2ee2513d75385101a8ff9f591ef51f314ec;tl-%commit%'
-	[version-ranges]='https://github.com/astral-sh/pubgrub;b70cf707aa43f21b32f3a61b8a0889b15032d5c4;pubgrub-%commit%/version-ranges'
+	[version-ranges]='https://github.com/astral-sh/pubgrub;a3b4db3abb1829ce889fb89fa6d157fef529ef7e;pubgrub-%commit%/version-ranges'
 )
 
 RUST_MIN_VER="1.83.0"
@@ -88,6 +88,10 @@ pkg_setup() {
 
 src_prepare() {
 	default
+
+	# force thin lto, makes build much faster and less memory hungry
+	# (i.e. makes it possible to actually build uv on 32-bit PPC)
+	sed -i -e '/lto/s:fat:thin:' Cargo.toml || die
 
 	# enable system libraries where supported
 	export ZSTD_SYS_USE_PKG_CONFIG=1

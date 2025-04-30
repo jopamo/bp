@@ -4,8 +4,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
-PYPI_NO_NORMALIZE=1
-PYTHON_COMPAT=( python3_{10..13} pypy3 pypy3_11 )
+PYTHON_COMPAT=( python3_{10..13} python3_13t pypy3 pypy3_11 )
 
 inherit distutils-r1 pypi
 
@@ -29,7 +28,7 @@ distutils_enable_tests pytest
 
 PATCHES=(
 	# https://github.com/ionelmc/python-lazy-object-proxy/pull/79
-	"${FILESDIR}/${P}-pure-tests.patch"
+	"${FILESDIR}/${PN}-1.10.0-pure-tests.patch"
 )
 
 python_prepare_all() {

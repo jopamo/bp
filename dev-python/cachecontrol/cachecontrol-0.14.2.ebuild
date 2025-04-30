@@ -30,3 +30,16 @@ BDEPEND="
 "
 
 distutils_enable_tests pytest
+
+python_test() {
+	local EPYTEST_DESELECT=()
+
+	if [[ ${EPYTHON} == pypy3* ]]; then
+		EPYTEST_DESELECT+=(
+			tests/test_adapter.py::TestSessionActions::test_do_not_leak_response
+		)
+	fi
+
+	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
+	epytest
+}

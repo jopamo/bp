@@ -23,8 +23,8 @@ RDEPEND="
 	>=dev-python/comm-0.1.3[${PYTHON_USEDEP}]
 	>=dev-python/ipython-genutils-0.2.0[${PYTHON_USEDEP}]
 	>=dev-python/traitlets-4.3.1[${PYTHON_USEDEP}]
-	>=dev-python/widgetsnbextension-4.0.12[${PYTHON_USEDEP}]
-	>=dev-python/jupyterlab-widgets-3.0.12[${PYTHON_USEDEP}]
+	>=dev-python/widgetsnbextension-4.0.14[${PYTHON_USEDEP}]
+	>=dev-python/jupyterlab-widgets-3.0.14[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	test? (

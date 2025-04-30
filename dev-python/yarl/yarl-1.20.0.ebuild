@@ -22,7 +22,7 @@ IUSE="+native-extensions"
 RDEPEND="
 	>=dev-python/idna-2.0[${PYTHON_USEDEP}]
 	>=dev-python/multidict-4.0[${PYTHON_USEDEP}]
-	>=dev-python/propcache-0.2.0[${PYTHON_USEDEP}]
+	>=dev-python/propcache-0.2.1[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	native-extensions? (

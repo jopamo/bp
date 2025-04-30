@@ -19,7 +19,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	>=dev-python/packaging-24.0[${PYTHON_USEDEP}]
+	dev-python/packaging[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	test? (
@@ -33,6 +33,16 @@ EPYTEST_DESELECT=(
 )
 
 distutils_enable_tests pytest
+
+src_prepare() {
+	distutils-r1_src_prepare
+
+	# unbundle packaging
+	rm -r src/wheel/vendored || die
+	find -name '*.py' -exec sed -i \
+		-e 's:wheel\.vendored\.::' \
+		-e 's:\.\+vendored\.::' {} + || die
+}
 
 python_test() {
 	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1

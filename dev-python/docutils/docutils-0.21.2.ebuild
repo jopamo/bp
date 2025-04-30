@@ -71,9 +71,3 @@ python_install_all() {
 		install_txt_doc "${doc}"
 	done < <(find docs tools -name '*.txt' -print0)
 }
-
-pkg_postinst() {
- \
-		"auto-detecting the image dimensions when using the 'scale' option" \
-		xgui-app/pillow
-}

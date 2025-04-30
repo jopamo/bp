@@ -24,7 +24,7 @@ KEYWORDS="amd64 arm64"
 BDEPEND="
 	test? (
 		dev-python/beautifulsoup4[${PYTHON_USEDEP}]
-		dev-py/lxml[${PYTHON_USEDEP}]
+		dev-python/lxml[${PYTHON_USEDEP}]
 		dev-python/html5lib[${PYTHON_USEDEP}]
 	)
 "

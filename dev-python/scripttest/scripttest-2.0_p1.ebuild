@@ -5,16 +5,12 @@ EAPI=8
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{10..13} pypy3 pypy3_11 )
 
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="Helper to test command-line scripts"
 HOMEPAGE="
 	https://pypi.org/project/scripttest/
 	https://github.com/pypa/scripttest/
-"
-SRC_URI="
-	https://github.com/pypa/scripttest/archive/${PV}.tar.gz
-		-> ${P}.gh.tar.gz
 "
 
 LICENSE="MIT"

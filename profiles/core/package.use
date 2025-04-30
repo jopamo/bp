@@ -1,5 +1,5 @@
 app-build/gcc lto
-app-build/llvm -assertions bpf -debug libfuzzer orc sanitizers static_analyzer -sysclang bootstrap
+app-build/llvm -assertions bpf -debug libfuzzer orc sanitizers static_analyzer sysclang
 app-compression/lz4 static-libs
 app-compression/zstd static-libs
 app-core/acl static-libs

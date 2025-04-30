@@ -35,7 +35,7 @@ if [[ -z ${_CARGO_VENDOR_ECLASS} ]]; then
 	cargo_src_compile() {
 		cd "${S}" || die "Could not cd to ${S}"
 
-		local build_mode=""
+		local build_mode="--release"
 		use debug && build_mode="--debug"
 
 		einfo "Building with cargo build ${build_mode}"
@@ -54,10 +54,10 @@ if [[ -z ${_CARGO_VENDOR_ECLASS} ]]; then
 		cargo install \
 			--path . \
 			${build_mode} \
-			--root="${D}/usr" \
+			--root="${ED}/usr" \
 			|| die "cargo install failed"
 
-		rm -f "${D}/usr/.crates*"
+		rm -f "${ED}/usr/.crates*"
 	}
 
 	EXPORT_FUNCTIONS pkg_setup src_compile src_install

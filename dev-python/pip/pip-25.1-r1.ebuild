@@ -28,22 +28,24 @@ IUSE="test-rust"
 
 # see src/pip/_vendor/vendor.txt
 RDEPEND="
-	>=dev-python/cachecontrol-0.14.1[${PYTHON_USEDEP}]
+	>=dev-python/cachecontrol-0.14.2[${PYTHON_USEDEP}]
+	>=dev-python/dependency-groups-1.3.0[${PYTHON_USEDEP}]
 	>=dev-python/distlib-0.3.9[${PYTHON_USEDEP}]
 	>=dev-python/distro-1.9.0[${PYTHON_USEDEP}]
 	>=dev-python/msgpack-1.1.0[${PYTHON_USEDEP}]
-	>=dev-python/packaging-24.2[${PYTHON_USEDEP}]
-	>=dev-python/platformdirs-4.3.6[${PYTHON_USEDEP}]
+	>=dev-python/packaging-25.0[${PYTHON_USEDEP}]
+	>=dev-python/platformdirs-4.3.7[${PYTHON_USEDEP}]
 	>=dev-python/pyproject-hooks-1.2.0[${PYTHON_USEDEP}]
-	>=dev-python/requests-2.32.0[${PYTHON_USEDEP}]
-	>=dev-python/rich-13.9.4[${PYTHON_USEDEP}]
-	>=dev-python/resolvelib-1.0.1[${PYTHON_USEDEP}]
-	>=dev-py/setuptools-69.5.1[${PYTHON_USEDEP}]
+	>=dev-python/requests-2.32.3[${PYTHON_USEDEP}]
+	>=dev-python/rich-14.0.0[${PYTHON_USEDEP}]
+	>=dev-python/resolvelib-1.1.0[${PYTHON_USEDEP}]
+	>=dev-py/setuptools-70.3.0[${PYTHON_USEDEP}]
 	$(python_gen_cond_dep '
 		>=dev-python/tomli-2.2.1[${PYTHON_USEDEP}]
 	' 3.10)
-	>=dev-python/truststore-0.10.0[${PYTHON_USEDEP}]
-	>=dev-python/typing-extensions-4.12.2[${PYTHON_USEDEP}]
+	>=dev-python/tomli-w-1.2.0[${PYTHON_USEDEP}]
+	>=dev-python/truststore-0.10.1[${PYTHON_USEDEP}]
+	>=dev-python/typing-extensions-4.13.2[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	${RDEPEND}
@@ -74,8 +76,8 @@ python_prepare_all() {
 		"${FILESDIR}/pip-23.1-no-coverage.patch"
 		# prepare to unbundle dependencies
 		"${FILESDIR}/pip-25.0.1-unbundle.patch"
-		# https://github.com/pypa/pip/pull/13272
-		"${FILESDIR}/${P}-scripttest-2.patch"
+		# https://github.com/pypa/pip/pull/13356
+		"${FILESDIR}/${P}-tomli-dep.patch"
 	)
 
 	distutils-r1_python_prepare_all
@@ -118,6 +120,8 @@ python_test() {
 		tests/functional/test_install.py::test_double_install_fail
 		tests/functional/test_install.py::test_install_sdist_links
 		tests/functional/test_install_config.py::test_prompt_for_keyring_if_needed
+		tests/functional/test_lock.py::test_lock_archive
+		tests/functional/test_lock.py::test_lock_vcs
 		# broken by system site-packages use
 		tests/functional/test_freeze.py::test_freeze_with_setuptools
 		tests/functional/test_pip_runner_script.py::test_runner_work_in_environments_with_no_pip

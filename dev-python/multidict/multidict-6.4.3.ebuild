@@ -4,7 +4,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..13} pypy3 pypy3_11 )
+PYTHON_COMPAT=( python3_{10..13} python3_13t pypy3 pypy3_11 )
 
 inherit distutils-r1
 
@@ -28,6 +28,11 @@ RDEPEND="
 		>=dev-python/typing-extensions-4.1.0[${PYTHON_USEDEP}]
 	' 3.10)
 "
+BDEPEND="
+	test? (
+		dev-python/objgraph[${PYTHON_USEDEP}]
+	)
+"
 
 distutils_enable_tests pytest
 
@@ -35,6 +40,8 @@ python_prepare_all() {
 	filter-flags -Wl,-z,defs
 	# don't enable coverage or other pytest settings
 	sed -i -e '/cov/d' pytest.ini || die
+	# don't force -O3
+	sed -i -e 's:"-O3"::' setup.py || die
 	distutils-r1_python_prepare_all
 }
 
@@ -52,15 +59,6 @@ python_test() {
 		tests/test_multidict_benchmarks.py
 		tests/test_views_benchmarks.py
 	)
-
-	case ${EPYTHON} in
-		pypy3*)
-			EPYTEST_IGNORE+=(
-				# https://github.com/aio-libs/multidict/issues/1114
-				tests/test_incorrect_args.py
-			)
-			;;
-	esac
 
 	rm -rf multidict || die
 

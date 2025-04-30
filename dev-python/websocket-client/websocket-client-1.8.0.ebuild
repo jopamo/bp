@@ -16,7 +16,14 @@ HOMEPAGE="
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="examples"
+IUSE="examples test"
+RESTRICT="!test? ( test )"
+
+BDEPEND="
+	test? (
+		dev-python/python-socks[${PYTHON_USEDEP}]
+	)
+"
 
 distutils_enable_tests unittest
 

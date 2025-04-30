@@ -21,10 +21,12 @@ SRC_URI="
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+IUSE="test"
+RESTRICT="!test? ( test )"
 
 BDEPEND="
 	test? (
-		dev-py/lxml[${PYTHON_USEDEP}]
+		dev-python/lxml[${PYTHON_USEDEP}]
 	)
 "
 

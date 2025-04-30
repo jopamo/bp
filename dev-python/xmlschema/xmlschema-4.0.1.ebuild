@@ -20,17 +20,18 @@ IUSE="test"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
-	<dev-python/elementpath-5[${PYTHON_USEDEP}]
-	>=dev-python/elementpath-4.4.0[${PYTHON_USEDEP}]
+	<dev-python/elementpath-6[${PYTHON_USEDEP}]
+	>=dev-python/elementpath-4.8.0[${PYTHON_USEDEP}]
 "
 BDEPEND="
+	>=dev-py/setuptools-77[${PYTHON_USEDEP}]
 	test? (
 		${RDEPEND}
 		dev-py/jinja[${PYTHON_USEDEP}]
-		dev-py/lxml[${PYTHON_USEDEP}]
+		dev-python/lxml[${PYTHON_USEDEP}]
 	)
 "
 
 python_test() {
-	"${EPYTHON}" tests/test_all.py -v || die "Tests fail with ${EPYTHON}"
+	"${EPYTHON}" tests/run_all_tests.py -v || die "Tests fail with ${EPYTHON}"
 }

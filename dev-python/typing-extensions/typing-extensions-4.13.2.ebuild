@@ -16,6 +16,15 @@ HOMEPAGE="
 LICENSE="PSF-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+IUSE="test"
+RESTRICT="!test? ( test )"
+
+BDEPEND="
+	>=dev-python/flit-core-3.11[${PYTHON_USEDEP}]
+	test? (
+		dev-python/test[${PYTHON_USEDEP}]
+	)
+"
 
 distutils_enable_tests unittest
 

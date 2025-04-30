@@ -18,9 +18,11 @@ HOMEPAGE="
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="doc"
+IUSE="doc test"
+RESTRICT="!test? ( test )"
 
 BDEPEND="
+	>=dev-py/setuptools-77[${PYTHON_USEDEP}]
 	test? (
 		dev-python/pygments[${PYTHON_USEDEP}]
 		dev-python/pytidylib[${PYTHON_USEDEP}]

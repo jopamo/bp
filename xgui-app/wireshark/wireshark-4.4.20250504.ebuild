@@ -7,7 +7,7 @@ inherit cmake flag-o-matic user xdg
 DESCRIPTION="A network protocol analyzer formerly known as ethereal"
 HOMEPAGE="https://www.wireshark.org/"
 
-SNAPSHOT=a3538b3af9057adf76bef5d8e09dd3b721fad8c1
+SNAPSHOT=b6f01b5868a58abbf5ec11ff41a764ac15976cb6
 SRC_URI="https://github.com/wireshark/wireshark/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/wireshark-${SNAPSHOT}"
 

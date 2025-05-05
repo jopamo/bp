@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="A system-independent library for user-level network packet capture"
 HOMEPAGE="http://www.tcpdump.org/"
 
-SNAPSHOT=3a85a3983fc99350b4c353d2223eabb369430f8c
+SNAPSHOT=100df6fc87cfe31d0eccb0c99151a6091cd20c25
 SRC_URI="https://github.com/the-tcpdump-group/libpcap/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/libpcap-${SNAPSHOT}"
 

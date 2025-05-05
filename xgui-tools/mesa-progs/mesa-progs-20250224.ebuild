@@ -36,3 +36,8 @@ src_configure() {
 	meson_src_configure
 }
 
+src_install() {
+	meson_src_install
+	mv "${ED}"/usr/bin/line "${ED}"/usr/bin/mesa-line
+}
+

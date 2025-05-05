@@ -347,6 +347,7 @@ setup_meson_src_configure() {
 		--localstatedir "${EPREFIX}/var"
 		--prefix "${EPREFIX}/usr"
 		--sysconfdir "${EPREFIX}/etc"
+		-Dsbindir="${EPREFIX}/usr/bin"
 		--wrap-mode nodownload
 		--build.pkg-config-path "${BUILD_PKG_CONFIG_PATH}${BUILD_PKG_CONFIG_PATH:+:}${EPREFIX}/usr/share/pkgconfig"
 		--pkg-config-path "${PKG_CONFIG_PATH}${PKG_CONFIG_PATH:+:}${EPREFIX}/usr/share/pkgconfig"

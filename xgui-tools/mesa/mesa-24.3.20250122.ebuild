@@ -42,7 +42,6 @@ BDEPEND="
 src_configure() {
 	local emesonargs=(
 		-Db_lto=true
-		-Ddri3=enabled
 		-Degl=enabled
 		-Dgallium-drivers="iris,zink"
 		-Dgallium-extra-hud=false
@@ -53,7 +52,7 @@ src_configure() {
 		-Dgbm=enabled
 		-Dgles1=enabled
 		-Dgles2=enabled
-		-Dglvnd=true
+		-Dglvnd=enabled
 		-Dglx=dri
 		-Dlibunwind=disabled
 		-Dllvm=enabled

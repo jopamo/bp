@@ -153,7 +153,6 @@ src_configure() {
 		$(meson_use hwdb)
 		$(meson_use ldconfig)
 		$(meson_use localed)
-		$(meson_use logind)
 		$(meson_use networkd link-networkd-shared)
 		$(meson_use networkd)
 		$(meson_use oomd)

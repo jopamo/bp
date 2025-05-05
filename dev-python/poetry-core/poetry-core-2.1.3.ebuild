@@ -24,9 +24,6 @@ RDEPEND="
 	>=dev-python/fastjsonschema-2.21.1[${PYTHON_USEDEP}]
 	>=dev-python/lark-1.2.2[${PYTHON_USEDEP}]
 	>=dev-python/packaging-24.2[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep '
-		>=dev-python/tomli-2.2.1[${PYTHON_USEDEP}]
-	' 3.10)
 "
 BDEPEND="
 	${RDEPEND}

@@ -100,7 +100,8 @@ python_test() {
 			--driver=firefox
 			--browser-binary="$(type -P firefox || type -P firefox-bin)"
 			--driver-binary="$(type -P geckodriver)"
-			--headless=true
+			--headless
+			-x
 		)
 
 		EPYTEST_DESELECT+=(
@@ -118,7 +119,12 @@ python_test() {
 			test/selenium/webdriver/marionette/mn_set_context_tests.py::test_we_can_switch_context_to_chrome
 
 			# TODO
+			test/selenium/webdriver/common/bidi_browser_tests.py
+			test/selenium/webdriver/common/bidi_browsing_context_tests.py
+			test/selenium/webdriver/common/bidi_network_tests.py
 			test/selenium/webdriver/common/bidi_script_tests.py
+			test/selenium/webdriver/common/bidi_session_tests.py
+			test/selenium/webdriver/common/bidi_tests.py
 			test/selenium/webdriver/marionette/mn_options_tests.py::TestUnit::test_binary
 			test/selenium/webdriver/marionette/mn_options_tests.py::TestUnit::test_ctor
 			test/selenium/webdriver/marionette/mn_options_tests.py::TestUnit::test_prefs

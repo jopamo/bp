@@ -2,13 +2,13 @@
 
 EAPI=8
 
-inherit flag-o-matic
+inherit flag-o-matic xdg
 
 DESCRIPTION="QEMU with enhanced support for multiple architectures and options"
 HOMEPAGE="https://www.qemu.org/"
 
-SNAPSHOT=0ff5ab6f57a2427a3e83969b2e7dd71e04caae39
-SRC_URI="https://github.com/qemu/qemu/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=9027aa63959c0a6cdfe53b2a610aaec98764a2da
+SRC_URI="https://github.com/qemu/qemu/archive/${SNAPSHOT}.tar.gz -> qemu-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/qemu-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2.1"
@@ -17,14 +17,16 @@ KEYWORDS="amd64 arm64"
 
 RESTRICT="network-sandbox"
 
-IUSE="+static-libs xattr"
+IUSE="alsa sdl vnc"
 
 DEPEND="
-    app-kernel/linux-headers
-    lib-core/zlib[static-libs(+)]
-    lib-dev/libtasn1[static-libs(+)]
-    lib-util/glib[static-libs(+)]
-    xattr? ( app-core/attr[static-libs(+)] )
+	lib-dev/jemalloc
+	lib-net/slirp
+    app-core/attr
+    lib-core/zlib
+    lib-dev/libtasn1
+    lib-net/libssh
+    lib-util/glib
 "
 
 src_prepare() {
@@ -40,7 +42,7 @@ src_configure() {
 	local myconf=(
 		--prefix="${EPREFIX}"/usr
 		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
+		--sbindir="${EPREFIX}"/usr/bin
 		--libdir="${EPREFIX}"/usr/lib
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
@@ -49,9 +51,7 @@ src_configure() {
 		--datadir="${EPREFIX}"/usr/share
 		--mandir="${EPREFIX}"/usr/share/man
 		--infodir="${EPREFIX}"/usr/share/info
-		--static
-		--disable-system
-		--enable-linux-user
+		--target-list=$(usex arm64 "aarch64-softmmu aarch64-linux-user" "x86_64-softmmu x86_64-linux-user")
 		--enable-kvm
 		--enable-qcow1
 		--enable-virtfs
@@ -59,23 +59,23 @@ src_configure() {
 		--enable-vhost-kernel
 		--enable-vhost-net
 		--enable-vhost-user
-		--target-list="aarch64-linux-user arm-linux-user x86_64-linux-user"
+		#--enable-linux-io-uring
+		--enable-malloc=jemalloc
+        $(use_enable alsa)
+        $(use_enable sdl)
+        $(use_enable vnc)
 	)
 	../configure "${myconf[@]}"
 }
 
 src_compile() {
 	cd build
-
 	emake
-
 }
 
 src_install() {
 	cd build
 	emake DESTDIR="${ED}" install
 
-	rm -rf cd "${ED}"/usr/share
-	cd "${ED}"/usr/bin
-	for i in *; do mv $i $i-static; done
+	dostrip -x /usr/share/qemu
 }

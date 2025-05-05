@@ -25,6 +25,8 @@ init_logs() {
 	: > "$DEBUG_LOG"
 }
 
+################################################################################
+
 GCC_MAJOR_VERSIONS=("11" "12" "13" "14")
 GLIBC_VERSIONS=("2.36" "2.40")
 GO_VERSIONS=("1.21" "1.22" "1.23")
@@ -54,6 +56,16 @@ EXIV_VERSION="0.28"
 
 LIBPCAP_VERSION="1.10"
 
+QEMU_VERSION="9.2"
+
+MESA_VERSION="24.3"
+
+XORG_VERSION="21.1"
+
+LUAJIT_VERSION="2.1"
+
+################################################################################
+
 BASH_BRANCH="master"
 GDB_BRANCH="gdb-${GDB_VERSION}-branch"
 GLIBC_BRANCH="release/${GLIBC_VERSION}/master"
@@ -61,6 +73,8 @@ KGUIADDONS_BRANCH="kf${KDE_VERSION}"
 KWINDOWSYSTEM_BRANCH="kf${KDE_VERSION}"
 LIBGCRYPT_BRANCH="LIBGCRYPT-${LIBGCRYPT_VERSION}-BRANCH"
 TCL_BRANCH=$(echo "core-${TCL_VERSION}" | tr '.' '-')
+
+################################################################################
 
 show_help() {
 	echo "Usage: $0 [options] [package1 package2 ... packageN]"
@@ -394,6 +408,14 @@ branch_bump() {
 	update_ebuild "${REPO_PATH}/lib-core/mpfr" "https://gitlab.inria.fr/mpfr/mpfr" "${MPFR_VERSION}" "${MPFR_VERSION}" "no"
 	update_ebuild "${REPO_PATH}/lib-net/libpcap" "https://github.com/the-tcpdump-group/libpcap" "libpcap-${LIBPCAP_VERSION}" "${LIBPCAP_VERSION}" "no"
 	update_ebuild "${REPO_PATH}/xmedia-lib/exiv2" "https://github.com/Exiv2/exiv2" "${EXIV_VERSION}.x" "${EXIV_VERSION}" "no"
+
+	update_ebuild "${REPO_PATH}/app-emu/qemu" "https://github.com/qemu/qemu" "stable-${QEMU_VERSION}" "${QEMU_VERSION}" "no"
+	update_ebuild "${REPO_PATH}/app-emu/qemu-user-static" "https://github.com/qemu/qemu" "stable-${QEMU_VERSION}" "${QEMU_VERSION}" "no"
+
+	update_ebuild "${REPO_PATH}/xgui-tools/mesa" "https://gitlab.freedesktop.org/mesa/mesa" "${MESA_VERSION}" "${MESA_VERSION}" "no"
+	update_ebuild "${REPO_PATH}/xgui-tools/xorg-server" "https://gitlab.freedesktop.org/xorg/xserver" "server-${XORG_VERSION}-branch" "${XORG_VERSION}" "no"
+
+	update_ebuild "${REPO_PATH}/app-lang/luajit" "https://github.com/LuaJIT/LuaJIT" "v${LUAJIT_VERSION}" "${LUAJIT_VERSION}" "no"
 }
 
 main

@@ -7,7 +7,7 @@ inherit flag-o-matic linux-info meson toolchain-funcs user
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
 
-SNAPSHOT=5ce1c02abc0cc386332384497b5939108314d80d
+SNAPSHOT=1fb1f637baa979fd58fef67ea72b3e7255a99e21
 SRC_URI="https://github.com/systemd/systemd/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/systemd-${SNAPSHOT}"
 

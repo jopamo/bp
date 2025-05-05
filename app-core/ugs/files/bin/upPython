@@ -75,6 +75,7 @@ PACKAGES=(
 "cssselect"
 "curl-cffi"
 "defusedxml"
+"dependency-groups"
 "diffusers"
 "distlib"
 "distro"

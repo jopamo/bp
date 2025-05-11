@@ -25,7 +25,7 @@ KEYWORDS="amd64 arm64"
 IUSE="examples server"
 
 RDEPEND="
-	>=dev-python/bcrypt-3.1.3[${PYTHON_USEDEP}]
+	>=dev-py/bcrypt-3.1.3[${PYTHON_USEDEP}]
 	>=app-crypto/cryptography-2.5[${PYTHON_USEDEP}]
 	>=dev-python/pynacl-1.0.1[${PYTHON_USEDEP}]
 	>=dev-python/pyasn1-0.1.7[${PYTHON_USEDEP}]

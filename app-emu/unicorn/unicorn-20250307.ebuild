@@ -2,6 +2,9 @@
 
 EAPI=8
 
+DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_OPTIONAL=1
+
 inherit cmake distutils-r1 flag-o-matic
 
 DESCRIPTION="CPU emulator framework"
@@ -11,41 +14,78 @@ SNAPSHOT=64c72267aed15e8a47dec7b9d9df6d9e36459757
 SRC_URI="https://github.com/unicorn-engine/unicorn/archive/${SNAPSHOT}.tar.gz -> unicorn-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/unicorn-${SNAPSHOT}"
 
-LICENSE="GPL"
+LICENSE="BSD-2 GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+python"
+IUSE="logging +python static-libs test"
+REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
-DEPEND="dev-python/pefile"
+DEPEND="${PYTHON_DEPS}"
+RDEPEND="python? ( ${PYTHON_DEPS} )"
+BDEPEND="
+	python? (
+		${DISTUTILS_DEPS}
+		>=dev-py/setuptools-scm-8[${PYTHON_USEDEP}]
+	)"
 
-filter-flags -flto\*
+RESTRICT="!test? ( test )"
 
-src_prepare() {
-	cmake_src_prepare
-	use python && cd bindings/python && distutils-r1_src_prepare
+UNICORN_TARGETS="x86 arm aarch64 riscv mips sparc m68k ppc s390x tricore"
+
+export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
+
+wrap_python() {
+	if use python; then
+		# src_prepare
+		# Do not compile C extensions
+		export LIBUNICORN_PATH=1
+
+		pushd bindings/python >/dev/null || die
+		distutils-r1_${1} "$@"
+		popd >/dev/null || die
+	fi
 }
 
-src_configure() {
+src_prepare() {
+	# Build from sources
+	rm -r bindings/python/prebuilt || die "failed to remove prebuilt files"
+
+	cmake_src_prepare
+	wrap_python ${FUNCNAME}
+
+	if use elibc_musl ; then
+		QA_CONFIG_IMPL_DECL_SKIP=( malloc_trim )
+	fi
+}
+
+src_configure(){
+	local mycmakeargs=(
+		-DUNICORN_ARCH="${UNICORN_TARGETS// /;}"
+		-DUNICORN_LOGGING=$(usex logging)
+		-DUNICORN_LEGACY_STATIC_ARCHIVE=$(usex static-libs)
+		-DZIG_BUILD=OFF
+	)
+
 	cmake_src_configure
-	use python && cd bindings/python && distutils-r1_src_configure
+
+	wrap_python ${FUNCNAME}
 }
 
 src_compile() {
 	cmake_src_compile
-	use python && cd bindings/python && distutils-r1_src_compile
-}
 
-python_test() {
-	cd bindings/python && esetup.py test || die
+	wrap_python ${FUNCNAME}
 }
 
 src_test() {
-	cmake_src_test
-	use python && cd bindings/python && distutils-r1_src_test
+	cmake_src_install
+
+	wrap_python ${FUNCNAME}
 }
 
 src_install() {
 	cmake_src_install
-	use python && cd bindings/python && distutils-r1_src_install
+
+	wrap_python ${FUNCNAME}
 }

@@ -133,7 +133,7 @@ src_configure() {
 		$(meson_feature importd)
 		$(meson_feature kmod)
 		$(meson_feature logind fdisk)
-		$(meson_feature logind)
+		$(meson_use logind)
 		$(meson_feature logind libcryptsetup)
 		$(meson_use machined)
 		$(meson_feature machined bzip2)
@@ -312,7 +312,6 @@ pkg_postinst() {
 pkg_preinst() {
 	if ! use sysusersd; then
 		enewgroup messagebus &&	enewuser messagebus
-
 
 		enewgroup systemd-journal
 

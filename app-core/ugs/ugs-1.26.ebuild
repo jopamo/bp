@@ -15,6 +15,7 @@ S=${WORKDIR}
 src_install() {
 	insinto /etc/bash/bashrc.d
 	doins "${FILESDIR}"/1g4.sh
+	doins "${FILESDIR}"/eth.sh
 
 	insinto /etc/bash
 	doins "${FILESDIR}"/{bash_logout,bashrc}

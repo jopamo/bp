@@ -33,6 +33,7 @@ IUSE="
 "
 
 DEPEND="
+	app-fs/cryptsetup
 	cramfs? ( lib-core/zlib )
 	ncurses? ( virtual/curses )
 	pam? ( lib-core/pam )

@@ -1,58 +1,67 @@
 #!/bin/bash
 
+# Ensure the shell is interactive
 [[ $- != *i* ]] && return
 
+# Enable shell options
 shopt -s checkwinsize
 shopt -s no_empty_cmd_completion
 shopt -s histappend
 shopt -s globstar
 
-PROMPT_COMMAND='history -a; history -n'
+  PROMPT_COMMAND=(
+    'history -a'
+    'history -n'
+    'history -r'
+  )
 
+# Set terminal title for specific terminal types
 case "$TERM" in
-	*term*|rxvt*|gnome*|kitty*|lxterm*|tmux|qterminal*)
-		PS1='\[\e]0;\u@\h:\w\007\]'
-		;;
-	screen*)
-		PS1='\[\033k\u@\h:\w\033\\\]'
-		;;
-	*)
-		PS1=""
-		;;
+  *term*|rxvt*|gnome*|kitty*|lxterm*|tmux|qterminal*)
+    PS1='\[\e]0;\u@\h:\w\007\]'
+    ;;
+  screen*)
+    PS1='\[\033k\u@\h:\w\033\\\]'
+    ;;
+  *)
+    PS1=""
+    ;;
 esac
 
+# Configure LS_COLORS if dircolors is available
 if command -v dircolors >/dev/null; then
-	if [[ -f ~/.ls_colors ]]; then
-		eval "$(dircolors -b ~/.ls_colors)"
-	elif [[ -f /etc/LS_COLORS ]]; then
-		eval "$(dircolors -b /etc/LS_COLORS)"
-	else
-		eval "$(dircolors -b)"
-	fi
-	use_color=true
+  if [[ -f ~/.ls_colors ]]; then
+    eval "$(dircolors -b ~/.ls_colors)"
+  elif [[ -f /etc/LS_COLORS ]]; then
+    eval "$(dircolors -b /etc/LS_COLORS)"
+  else
+    eval "$(dircolors -b)"
+  fi
+  use_color=true
 elif [[ "$TERM" =~ (term|rxvt|gnome|kitty|lxterm|screen|tmux|cons25|color) ]]; then
-	use_color=true
+  use_color=true
 else
-	use_color=false
+  use_color=false
 fi
 
+# Set PS1 prompt with colors if supported
 if [[ "$use_color" == true ]]; then
-	if (( EUID == 0 )); then
-
-		PS1+='\[\033[0;31m\]\u\[\033[1;37m\]@\[\033[0;91m\]\h \[\033[1;34m\]\w \[\033[0;37m\]# \[\033[0m\]'
-	else
-
-		PS1+='\[\033[0;32m\]\u\[\033[1;37m\]@\[\033[0;92m\]\h \[\033[1;34m\]\w \[\033[0;37m\]\$ \[\033[0m\]'
-	fi
+  if (( EUID == 0 )); then
+    PS1+='\[\033[0;31m\]\u\[\033[1;37m\]@\[\033[0;91m\]\h \[\033[1;34m\]\w \[\033[0;37m\]# \[\033[0m\]'
+  else
+    PS1+='\[\033[0;32m\]\u\[\033[1;37m\]@\[\033[0;92m\]\h \[\033[1;34m\]\w \[\033[0;37m\]\$ \[\033[0m\]'
+  fi
 else
-	PS1+='\u@\h \w \$ '
+  PS1+='\u@\h \w \$ '
 fi
 
+# Source additional scripts from system directories
 for d in /etc/bash/bashrc.d ~/.bashrc.d; do
-	[[ -d $d ]] && for f in "$d"/*.sh; do
-		[[ -r $f ]] && source "$f"
-	done
+  [[ -d $d ]] && for f in "$d"/*.sh; do
+    [[ -r $f ]] && source "$f"
+  done
 done
+
 
 if [[ -f /etc/profile.d/vte.sh ]]; then
 	source /etc/profile.d/vte.sh
@@ -281,4 +290,14 @@ get_kernel() {
         echo "Error: Failed to extract kernel version ${tag}"
         return 1
     fi
+}
+
+clean_bash_history() {
+  local file="$1"
+
+  awk '!seen[$0]++' "$file" > temp && mv temp "$file"
+
+  sed -i 's/^[ \t]*//;s/[ \t]*$//' "$file"
+
+  sed -i '/^#/d' "$file"
 }

@@ -14,7 +14,7 @@ HOMEPAGE="
 	https://letsencrypt.org/
 "
 
-SNAPSHOT=0b51653def9259262c5ce305f48c4f363bffa388
+SNAPSHOT=7a27a67cdb6618ebbb3955fb9de71002cce7fbf3
 SRC_URI="https://github.com/certbot/certbot/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}/${PN}"
 

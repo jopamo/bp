@@ -27,7 +27,7 @@ DEPEND="
 	ssl? ( virtual/ssl )
 "
 
-PATCHES=( "${FILESDIR}"/autoconf-2.72.patch )
+#PATCHES=( "${FILESDIR}"/autoconf-2.72.patch )
 
 src_prepare() {
 	append-flags -fno-strict-aliasing

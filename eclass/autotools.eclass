@@ -48,21 +48,30 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 	: "${AT_SYS_M4DIR:=}"
 
 	eautoreconf() {
-		local x
-		if [[ -z ${AT_NO_RECURSIVE} ]] ; then
-			for x in $(autotools_check_macro_val AC_CONFIG_SUBDIRS) ; do
-				if [[ -d ${x} ]] ; then
-					pushd "${x}" >/dev/null || die
-					AT_NOELIBTOOLIZE="yes" eautoreconf || die
-					popd >/dev/null || die
-				fi
-			done
-		fi
+    	local m4dir="${PWD}/m4"
+    	mkdir -p "${m4dir}"
 
-		einfo "Running eautoreconf in '${PWD}' ..."
-		local m4dirs
-		m4dirs=$(autotools_check_macro_val AC_CONFIG_{AUX,MACRO}_DIR)
-		[[ -n ${m4dirs} ]] && mkdir -p ${m4dirs}
+    	if [[ -d /usr/share/gettext/m4 ]]; then
+        	cp /usr/share/gettext/m4/lib*.m4 "${m4dir}/" || die "Failed to copy m4"
+    	else
+        	ewarn "m4 not found in /usr/share/gettext/m4/"
+    	fi
+
+    	local x
+    	if [[ -z ${AT_NO_RECURSIVE} ]] ; then
+        	for x in $(autotools_check_macro_val AC_CONFIG_SUBDIRS) ; do
+            	if [[ -d ${x} ]] ; then
+                	pushd "${x}" >/dev/null || die
+                	AT_NOELIBTOOLIZE="yes" eautoreconf || die
+                	popd >/dev/null || die
+            	fi
+        	done
+    	fi
+
+    	einfo "Running eautoreconf in '${PWD}' ..."
+    	local m4dirs
+    	m4dirs=$(autotools_check_macro_val AC_CONFIG_{AUX,MACRO}_DIR)
+    	[[ -n ${m4dirs} ]] && mkdir -p ${m4dirs}
 
 		local i tools=(
 			# <tool> <was-run?> <command>

@@ -17,6 +17,8 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	lib-dev/fast_float
+	app-dev/simdutf
+	app-dev/fmt
 	xgui-lib/gtk3
 	xgui-lib/gtk4
 "

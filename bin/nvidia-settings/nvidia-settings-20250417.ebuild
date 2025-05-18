@@ -7,7 +7,7 @@ inherit toolchain-funcs
 DESCRIPTION="NVIDIA Accelerated Graphics Driver Settings"
 HOMEPAGE="http://www.nvidia.com/ http://www.nvidia.com/Download/Find.aspx"
 
-SNAPSHOT=f8d29d45a6e5074f3913192c59bfefd1d50e2cb2
+SNAPSHOT=5cc09d0402fa3b43d28ba05695390626ae3314f4
 SRC_URI="https://github.com/NVIDIA/nvidia-settings/archive/${SNAPSHOT}.tar.gz -> nvidia-settings-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/nvidia-settings-${SNAPSHOT}/src"
 

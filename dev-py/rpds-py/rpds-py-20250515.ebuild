@@ -13,7 +13,7 @@ HOMEPAGE="
 	https://pypi.org/project/rpds-py/
 "
 
-SNAPSHOT=b59fa1e871b86b5fcbc321a6e4cb7791793fc510
+SNAPSHOT=f4070f93e6fa9e39749f395d01c18450d110e0ed
 SRC_URI="https://github.com/crate-py/rpds/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/rpds-${SNAPSHOT}"
 

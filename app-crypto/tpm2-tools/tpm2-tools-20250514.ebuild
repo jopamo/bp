@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Trusted Platform Module (TPM2.0) tools"
 HOMEPAGE="https://github.com/tpm2-software/tpm2-tools"
 
-SNAPSHOT=fd2aa33f33b00e3d4c72caa6c0ef3560225df7f8
+SNAPSHOT=52ac6afcbc6438fc549a43dba4087a438bdf379d
 SRC_URI="https://github.com/tpm2-software/tpm2-tools/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

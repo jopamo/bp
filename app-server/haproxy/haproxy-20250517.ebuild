@@ -7,7 +7,7 @@ inherit user toolchain-funcs flag-o-matic linux-info
 DESCRIPTION="A TCP/HTTP reverse proxy for high availability environments"
 HOMEPAGE="http://haproxy.1wt.eu"
 
-SNAPSHOT=119a79f4792b8b162ea9f85ff1c1884857849e7b
+SNAPSHOT=099c1b244266c38d77b39c2fdbb36074b28c9735
 SRC_URI="https://github.com/haproxy/haproxy/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/haproxy-${SNAPSHOT}"
 

@@ -9,7 +9,7 @@ inherit distutils-r1
 DESCRIPTION="Utitilies for maintaining Python packages"
 HOMEPAGE="https://pypi.org/project/gpyutils/"
 
-SNAPSHOT=a30e44e9d95d3d4f4041a8d789adc528575a8d10
+SNAPSHOT=4f9eec6e18fa9609d0ab90d8df79ece76c896517
 SRC_URI="https://github.com/projg2/gpyutils/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

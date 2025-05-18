@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X.Org Xxf86vm library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=b7d0126604e74871844fcecda04d45bb25988a2c
+SNAPSHOT=e7c22963adb0101b4b42c3a8d775154568c41b93
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxxf86vm/-/archive/${SNAPSHOT}/libxxf86vm-${SNAPSHOT}.tar.bz2 -> libxxf86vm-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxxf86vm-${SNAPSHOT}"
 

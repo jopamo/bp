@@ -1,0 +1,198 @@
+#!/bin/bash
+
+PROGNAME="mirrorRepos"
+TMP_DIR="${PWD}/${PROGNAME}"
+DEBUG_LOG="${TMP_DIR}/${PROGNAME}-debug.log"
+ERROR_LOG="${TMP_DIR}/${PROGNAME}-error.log"
+MIRROR_CLONES_DIR="${TMP_DIR}/.mirror_repos"
+
+mkdir -p "${MIRROR_CLONES_DIR}"
+
+IS_PRIVATE="false"
+
+debug_mode=false
+
+repos_list=(
+  "iptables|https://git.netfilter.org/iptables"
+  "ipset|https://git.netfilter.org/ipset"
+  "conntrack-tools|https://git.netfilter.org/conntrack-tools"
+  "ulogd2|https://git.netfilter.org/ulogd2"
+  "libmnl|https://git.netfilter.org/libmnl"
+  "libnetfilter_acct|https://git.netfilter.org/libnetfilter_acct"
+  "libnetfilter_conntrack|https://git.netfilter.org/libnetfilter_conntrack"
+  "libnetfilter_cttimeout|https://git.netfilter.org/libnetfilter_cttimeout"
+  "libnetfilter_cthelper|https://git.netfilter.org/libnetfilter_cthelper"
+  "libnetfilter_queue|https://git.netfilter.org/libnetfilter_queue"
+  "libnetfilter_log|https://git.netfilter.org/libnetfilter_log"
+  "libnftnl|https://git.netfilter.org/libnftnl"
+  "nftables|https://git.netfilter.org/nftables"
+)
+
+usage() {
+    echo "Usage: $0 [--debug] [--private]"
+    echo
+    echo "  --debug    Keep temp logs/folders after running."
+    echo "  --private  Create new GitHub repos as private instead of public."
+    exit 0
+}
+
+log_debug() {
+    echo "[DEBUG] $*" >> "$DEBUG_LOG"
+}
+
+log_error() {
+    echo "[ERROR] $*" >> "$ERROR_LOG"
+}
+
+check_MIRROR_GITHUB() {
+    if [[ -z "$MIRROR_GITHUB" ]]; then
+        echo "Error: MIRROR_GITHUB is not set. Please export MIRROR_GITHUB='yourPersonalAccessToken' and rerun."
+        exit 1
+    fi
+}
+
+does_github_repo_exist() {
+    local repo_name="$1"
+    local status
+
+    status=$(curl -s -o /dev/null -w '%{http_code}' \
+        -H "Authorization: token $MIRROR_GITHUB" \
+        "https://api.github.com/repos/${GITHUB_OWNER}/${repo_name}")
+
+    log_debug "Check repo ${GITHUB_OWNER}/${repo_name}, status: $status"
+
+    [[ "$status" == "200" ]]
+}
+
+create_github_repo() {
+    local repo_name="$1"
+    local is_private="$2"
+
+    log_debug "Creating GitHub repo '${repo_name}' under ${GITHUB_OWNER}, private=${is_private}"
+
+    local payload
+    payload=$(cat <<EOF
+{
+    "name": "${repo_name}",
+    "private": ${is_private}
+}
+EOF
+)
+
+    local create_url="https://api.github.com/user/repos"
+
+    local response
+    response=$(curl -s -w "%{http_code}" -o "${TMP_DIR}/create_repo_response.json" \
+        -H "Authorization: token $MIRROR_GITHUB" \
+        -H "Content-Type: application/json" \
+        -X POST \
+        -d "$payload" \
+        "$create_url")
+
+    log_debug "Create repo response code: $response"
+    log_debug "Response body: $(cat "${TMP_DIR}/create_repo_response.json")"
+
+    if [[ "$response" == "201" ]]; then
+        echo "Repository '${repo_name}' created successfully on GitHub."
+    else
+        echo "Error: Failed to create repository '${repo_name}'. See $ERROR_LOG and $DEBUG_LOG."
+        return 1
+    fi
+    return 0
+}
+
+mirror_repo() {
+    local repo_name="$1"
+    local upstream_url="$2"
+    local mirror_dir="${MIRROR_CLONES_DIR}/${repo_name}.git"
+
+    local github_repo_url="https://${MIRROR_GITHUB}@github.com/${GITHUB_OWNER}/${repo_name}.git"
+
+    log_debug "Mirroring upstream '${upstream_url}' to '${github_repo_url}'"
+
+    if [ ! -d "$mirror_dir" ]; then
+        log_debug "No local mirror found for $repo_name; cloning..."
+        if ! git clone --mirror "$upstream_url" "$mirror_dir" 2>>"$ERROR_LOG"; then
+            log_error "Failed to clone --mirror $upstream_url"
+            return 1
+        fi
+    fi
+
+    pushd "$mirror_dir" >/dev/null || return 1
+
+    git remote set-url origin "$upstream_url"
+
+    if ! git fetch --all 2>>"$ERROR_LOG"; then
+        log_error "Failed to fetch from $upstream_url"
+        popd >/dev/null
+        return 1
+    fi
+
+    if ! git push --mirror "$github_repo_url" 2>>"$ERROR_LOG"; then
+        log_error "Failed to push mirror to $github_repo_url"
+        popd >/dev/null
+        return 1
+    fi
+
+    popd >/dev/null
+    return 0
+}
+
+main() {
+    mkdir -p "$TMP_DIR" "$MIRROR_CLONES_DIR"
+    : > "$DEBUG_LOG"
+    : > "$ERROR_LOG"
+
+    check_MIRROR_GITHUB
+
+    for pair in "${repos_list[@]}"; do
+        IFS='|' read -r repo_name upstream_url <<< "$pair"
+        echo "==============================================="
+        echo "Processing: $repo_name"
+        echo "Upstream:   $upstream_url"
+
+        if does_github_repo_exist "$repo_name"; then
+            echo "GitHub repo '${GITHUB_OWNER}/${repo_name}' already exists. Updating mirror..."
+        else
+            echo "GitHub repo '${GITHUB_OWNER}/${repo_name}' does not exist. Creating..."
+            if ! create_github_repo "$repo_name" "$IS_PRIVATE"; then
+                echo "Failed to create repo for $repo_name. Skipping mirror step."
+                continue
+            fi
+        fi
+
+        if mirror_repo "$repo_name" "$upstream_url"; then
+            echo "Mirrored '$repo_name' successfully."
+        else
+            echo "Error mirroring '$repo_name'. Check logs."
+        fi
+    done
+
+    if [ "$debug_mode" = false ]; then
+        rm -rf "$TMP_DIR"
+    else
+        echo "Debug mode on; logs/temps are in $TMP_DIR"
+    fi
+}
+
+while (( "$#" )); do
+    case "$1" in
+        --debug)
+            debug_mode=true
+            shift
+            ;;
+        --private)
+            IS_PRIVATE="true"
+            shift
+            ;;
+        -h|--help)
+            usage
+            ;;
+        *)
+            echo "Unknown argument: $1"
+            usage
+            ;;
+    esac
+done
+
+main

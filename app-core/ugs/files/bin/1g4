@@ -10,77 +10,87 @@ def process_filename(filename):
     - Date-based, revision, commit, pre-release, and patch versions: ignore or replace as needed.
     """
 
-    # Pattern 1: Simple versioning (e.g., "autoconf-2.72.ebuild")
     simple_version_pattern = r'(\d+\.\d+)(?=\.[^\.]+$)'
 
-    # Pattern 2: Date-based versioning (e.g., "binutils-2.43.20250223.ebuild")
-    date_version_pattern = r'(\d+\.\d+\.\d{4}\.\d{2}\.\d{2})(?=\.[^\.]+$)'
+    date_version_pattern = r'\.\d{8}\.ebuild$'
 
-    # Pattern 3: Revision-based versioning (e.g., "flex-20250114-r9.ebuild")
-    revision_version_pattern = r'(\d{8})(-r\d+)?(?=\.[^\.]+$)'
+    freeze_version_pattern = r'(-r9)(?=\.[^\.]+$)'
 
-    # Pattern 4: Rolling release versions (e.g., "keepassxc-9999.ebuild")
-    rolling_version_pattern = r'(\d{4})\.9999(?=\.[^\.]+$)'
+    rolling_version_pattern = r'9999\.ebuild$'
 
-    # Pattern 5: Pre-release versions (e.g., "python-exec-20230320.ebuild")
-    prerelease_version_pattern = r'(\d{4}\d{2}\d{2})(?=\.[^\.]+$)'
+    prerelease_version_pattern = r'-\d{4}\d{2}\d{2}(?=\.[^\.]+$)'
 
-    # Pattern 6: Patch versioning (e.g., "unzip-6.0_p28.ebuild")
     patch_version_pattern = r'(\d+\.\d+)_p(\d+)(?=\.[^\.]+$)'
 
-    # Pattern 7: Fixed versioning (e.g., "protobuf-30.0.ebuild")
     fixed_version_pattern = r'(\d+\.\d+)(?=\.[^\.]+$)'
 
-    # Ignore Date-based versions
     if re.search(date_version_pattern, filename):
-        print(f"Ignoring date-based version: {filename}")
-        return None
+        return "Date-based"
 
-    # Ignore Revision-based versions
-    if re.search(revision_version_pattern, filename):
-        print(f"Ignoring revision-based version: {filename}")
-        return None
+    if re.search(freeze_version_pattern, filename):
+        return "Frozen"
 
-    # Ignore Rolling releases
     if re.search(rolling_version_pattern, filename):
-        print(f"Ignoring rolling release version: {filename}")
-        return None
+        return "Git Commit Update"
 
-    # Ignore Pre-release versions
     if re.search(prerelease_version_pattern, filename):
-        print(f"Ignoring pre-release version: {filename}")
-        return None
+        return "Pre-release"
 
-    # Ignore Patch versions
     if re.search(patch_version_pattern, filename):
-        print(f"Ignoring patch version: {filename}")
-        return None
+        return "Patch Version"
 
-    # For Simple versioning, process normally
     if re.search(simple_version_pattern, filename):
-        print(f"Processing simple version: {filename}")
-        return filename  # Return as is for simple versioning
+        return "Normal Stable"
 
-    # Fixed version should be treated as simple versioning
     if re.search(fixed_version_pattern, filename):
-        print(f"Processing fixed version (treated as simple version): {filename}")
-        return filename  # Treat as simple versioning
+        return "Fixed Version"
 
-    # If no match, we just ignore
-    print(f"Ignoring unknown version format: {filename}")
-    return None
+    return "Unknown"
+
+def generate_report():
+    """
+    Generate the report with filenames grouped by category
+    """
+
+    file_groups = {
+        "Normal Stable": [],
+        "Frozen": [],
+        "Git Commit Update": [],
+        "Pre-release": [],
+        "Patch Version": [],
+        "Fixed Version": [],
+        "Date-based": [],
+        "Unknown": [],
+    }
+
+    filenames = []
+    for root, dirs, files in os.walk(os.getcwd()):
+        for file in files:
+            if file.endswith(".ebuild"):
+                filenames.append(os.path.join(root, file))
+
+    for filename in filenames:
+        category = process_filename(filename)
+        file_groups[category].append(filename)
+
+    print("Generated Report:")
+    for category, files in file_groups.items():
+        if files:
+            print(f"\n{category}:")
+            for file in files:
+                print(f"{file}")
 
 def run_tests():
     """
-    Run tests on a predefined list of sample filenames
+    Run the tests
     """
     filenames = [
         "autoconf-2.72.ebuild",
-        "binutils-2.43.20250223.ebuild",  # This should be ignored
-        "flex-20250114-r9.ebuild",        # This should be ignored
-        "keepassxc-9999.ebuild",          # This should be ignored
-        "python-exec-20230320.ebuild",    # This should be ignored
-        "unzip-6.0_p28.ebuild",           # This should be ignored
+        "binutils-2.43.20250223.ebuild",
+        "flex-20250114-r9.ebuild",
+        "keepassxc-9999.ebuild",
+        "python-exec-20230320.ebuild",
+        "unzip-6.0_p28.ebuild",
         "protobuf-30.0.ebuild",
         "codeql-20250222.ebuild",
         "cargo-c-20250222.ebuild",
@@ -91,29 +101,14 @@ def run_tests():
         "curl-20250412.ebuild"
     ]
 
-    # Process all filenames
+    print("Testing the following filenames:")
     for filename in filenames:
-        processed_filename = process_filename(filename)
-        if processed_filename:
-            print(f"Processed: {processed_filename}")
-        else:
-            print(f"File ignored.")
-
-def build_report():
-    """
-    Build the report by processing files in the current working directory
-    """
-    for root, dirs, files in os.walk(os.getcwd()):
-        for file in files:
-            if file.endswith('.ebuild'):
-                print(f"Processing: {file}")
-                process_filename(file)
+        category = process_filename(filename)
+        print(f"{filename}: {category}")
 
 if __name__ == "__main__":
     if '--test' in sys.argv:
-        # Run tests if --test argument is passed
         run_tests()
     else:
-        # Otherwise, build the report
-        print("Building report...")
-        build_report()
+
+        generate_report()

@@ -27,7 +27,7 @@ src_install() {
 	doins "${FILESDIR}"/inputrc
 
 	#bin files
-	for f in ix mktarballs efixperm prettybash ; do
+	for f in ix mktarballs efixperm mirrorRepo prettybash ; do
 		dobin "${FILESDIR}"/bin/$f
 	done
 

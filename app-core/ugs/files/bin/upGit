@@ -50,9 +50,9 @@ main() {
 		update_packages
 	fi
 
-	if [ "$debug_mode" = false ]; then
-		rm -rf "${TMP_DIR}"
-	fi
+	#if [ "$debug_mode" = false ]; then
+		#rm -rf "${TMP_DIR}"
+	#fi
 }
 
 update_packages() {

@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Cross-platform asychronous I/O"
 HOMEPAGE="https://github.com/libuv/libuv"
 
-SNAPSHOT=c1a9f01f226133e3b8539ce678871fe1c0a68270
+SNAPSHOT=71ec5c0fcdd867b64c46ade1e0a6b59101281a4a
 SRC_URI="https://github.com/libuv/libuv/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

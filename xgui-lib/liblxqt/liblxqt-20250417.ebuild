@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="Common base library for the LXQt desktop environment"
 HOMEPAGE="http://lxqt.org/"
 
-SNAPSHOT=87c53b3d46bc40e479e5a150a2bf9bc11295af84
+SNAPSHOT=c9d5b9af5ca08d9ab8953b0081c706480fe575b3
 SRC_URI="https://github.com/lxqt/liblxqt/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

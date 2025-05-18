@@ -34,6 +34,7 @@ IUSE="
 
 DEPEND="
 	app-fs/cryptsetup
+	lib-core/libcap-ng
 	cramfs? ( lib-core/zlib )
 	ncurses? ( virtual/curses )
 	pam? ( lib-core/pam )

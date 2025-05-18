@@ -8,7 +8,7 @@ inherit flag-o-matic
 
 DESCRIPTION="an implementation of the standard library for Linux-based systems"
 HOMEPAGE="http://www.musl-libc.org/"
-SRC_URI="https://git.musl-libc.org/cgit/musl/snapshot/musl-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://git.musl-libc.org/cgit/musl/snapshot/musl-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="MIT"

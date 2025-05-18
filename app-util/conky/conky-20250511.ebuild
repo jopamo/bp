@@ -121,6 +121,9 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
+	insinto /etc/conky/
+	doins "${FILESDIR}"/conky.conf
+
 	if use vim; then
 		insinto /usr/share/vim/vimfiles/ftdetect
 		doins "${S}"/extras/vim/ftdetect/conkyrc.vim

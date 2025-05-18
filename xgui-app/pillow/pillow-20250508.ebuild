@@ -19,7 +19,7 @@ HOMEPAGE="
 	https://pypi.org/project/pillow/
 "
 
-SNAPSHOT=af09976a5f57e8aebaedf332bc4025ea1b068af4
+SNAPSHOT=3c71559804e661a5f727e2007a5be51f26d9af27
 SRC_URI="https://github.com/python-pillow/Pillow/archive/${SNAPSHOT}.tar.gz -> pillow-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/Pillow-${SNAPSHOT}"
 

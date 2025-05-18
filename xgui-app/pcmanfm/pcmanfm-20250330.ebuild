@@ -7,7 +7,7 @@ inherit autotools xdg
 DESCRIPTION="Extremely fast and lightweight file manager"
 HOMEPAGE="https://github.com/lxde/${PN}"
 
-SNAPSHOT=32e302daafa987a1f1caf7e8a4af765da5e9afd5
+SNAPSHOT=ce3d6cac1108ee3b136a0c67eb7dc2fb5babbf30
 SRC_URI="https://github.com/lxde/pcmanfm/archive/${SNAPSHOT}.tar.gz -> pcmanfm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/pcmanfm-${SNAPSHOT}"
 

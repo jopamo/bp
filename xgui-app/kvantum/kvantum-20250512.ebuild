@@ -7,7 +7,7 @@ inherit cmake xdg
 DESCRIPTION="SVG-based theme engine for Qt, KDE Plasma and LXQt"
 HOMEPAGE="https://github.com/tsujan/Kvantum"
 
-SNAPSHOT=83ffc3b810e7d797ddbf3c22f90b90f2e76f03e7
+SNAPSHOT=8acc24e13ffea00e7b4b50abc0fdf81b59757465
 SRC_URI="https://github.com/tsujan/Kvantum/archive/${SNAPSHOT}.tar.gz -> kvantum-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/Kvantum-${SNAPSHOT}/Kvantum"
 

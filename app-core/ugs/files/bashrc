@@ -1,67 +1,60 @@
 #!/bin/bash
 
-# Ensure the shell is interactive
 [[ $- != *i* ]] && return
 
-# Enable shell options
 shopt -s checkwinsize
 shopt -s no_empty_cmd_completion
 shopt -s histappend
 shopt -s globstar
 
-  PROMPT_COMMAND=(
-    'history -a'
-    'history -n'
-    'history -r'
-  )
+PROMPT_COMMAND=(
+	'history -a'
+	'history -n'
+	'history -r'
+)
 
-# Set terminal title for specific terminal types
 case "$TERM" in
-  *term*|rxvt*|gnome*|kitty*|lxterm*|tmux|qterminal*)
-    PS1='\[\e]0;\u@\h:\w\007\]'
-    ;;
-  screen*)
-    PS1='\[\033k\u@\h:\w\033\\\]'
-    ;;
-  *)
-    PS1=""
-    ;;
+	*term*|rxvt*|gnome*|kitty*|lxterm*|tmux|qterminal*)
+		PS1='\[\e]0;\u@\h:\w\007\]'
+		;;
+	screen*)
+		PS1='\[\033k\u@\h:\w\033\\\]'
+		;;
+	*)
+		PS1=""
+		;;
 esac
 
-# Configure LS_COLORS if dircolors is available
 if command -v dircolors >/dev/null; then
-  if [[ -f ~/.ls_colors ]]; then
-    eval "$(dircolors -b ~/.ls_colors)"
-  elif [[ -f /etc/LS_COLORS ]]; then
-    eval "$(dircolors -b /etc/LS_COLORS)"
-  else
-    eval "$(dircolors -b)"
-  fi
-  use_color=true
+	if [[ -f ~/.ls_colors ]]; then
+		eval "$(dircolors -b ~/.ls_colors)"
+	elif [[ -f /etc/LS_COLORS ]]; then
+		eval "$(dircolors -b /etc/LS_COLORS)"
+	else
+		eval "$(dircolors -b)"
+	fi
+	use_color=true
 elif [[ "$TERM" =~ (term|rxvt|gnome|kitty|lxterm|screen|tmux|cons25|color) ]]; then
-  use_color=true
+	use_color=true
 else
-  use_color=false
+	use_color=false
 fi
 
-# Set PS1 prompt with colors if supported
 if [[ "$use_color" == true ]]; then
-  if (( EUID == 0 )); then
-    PS1+='\[\033[0;31m\]\u\[\033[1;37m\]@\[\033[0;91m\]\h \[\033[1;34m\]\w \[\033[0;37m\]# \[\033[0m\]'
-  else
-    PS1+='\[\033[0;32m\]\u\[\033[1;37m\]@\[\033[0;92m\]\h \[\033[1;34m\]\w \[\033[0;37m\]\$ \[\033[0m\]'
-  fi
+	if (( EUID == 0 )); then
+		PS1+='\[\033[0;31m\]\u\[\033[1;37m\]@\[\033[0;91m\]\h \[\033[1;34m\]\w \[\033[0;37m\]# \[\033[0m\]'
+	else
+		PS1+='\[\033[0;32m\]\u\[\033[1;37m\]@\[\033[0;92m\]\h \[\033[1;34m\]\w \[\033[0;37m\]\$ \[\033[0m\]'
+	fi
 else
-  PS1+='\u@\h \w \$ '
+	PS1+='\u@\h \w \$ '
 fi
 
-# Source additional scripts from system directories
 for d in /etc/bash/bashrc.d ~/.bashrc.d; do
-  [[ -d $d ]] && for f in "$d"/*.sh; do
-    [[ -r $f ]] && source "$f"
-  done
+	[[ -d $d ]] && for f in "$d"/*.sh; do
+		[[ -r $f ]] && source "$f"
+	done
 done
-
 
 if [[ -f /etc/profile.d/vte.sh ]]; then
 	source /etc/profile.d/vte.sh
@@ -258,46 +251,44 @@ start_ssh_agent() {
 }
 
 get_kernel() {
-    local tag=$1
-    local url="https://gitlab.com/linux-kernel/stable/-/archive/v${tag}/stable-v${tag}.tar.bz2"
+	local tag=$1
+	local url="https://gitlab.com/linux-kernel/stable/-/archive/v${tag}/stable-v${tag}.tar.bz2"
 
-    if [ -z "$tag" ]; then
-        echo "Error: No tag provided"
-        echo "Usage: download_and_extract_kernel <tag>"
-        return 1
-    fi
+	if [ -z "$tag" ]; then
+		echo "Error: No tag provided"
+		echo "Usage: download_and_extract_kernel <tag>"
+		return 1
+	fi
 
-    echo "Downloading kernel version ${tag}..."
-    wget "$url"
+	echo "Downloading kernel version ${tag}..."
+	wget "$url"
 
-    if [ $? -ne 0 ]; then
-        echo "Error: Failed to download kernel version ${tag}"
-        return 1
-    fi
+	if [ $? -ne 0 ]; then
+		echo "Error: Failed to download kernel version ${tag}"
+		return 1
+	fi
 
-    FILE_SIZE=$(stat -c %s "stable-v${tag}.tar.bz2")
-    if [ "$FILE_SIZE" -lt 100000000 ]; then
-        echo "Error: Downloaded file is too small or corrupt. Aborting extraction."
-        return 1
-    fi
+	FILE_SIZE=$(stat -c %s "stable-v${tag}.tar.bz2")
+	if [ "$FILE_SIZE" -lt 100000000 ]; then
+		echo "Error: Downloaded file is too small or corrupt. Aborting extraction."
+		return 1
+	fi
 
-    echo "Extracting kernel version ${tag}..."
-    tar -xjf "stable-v${tag}.tar.bz2" -C . && mv "stable-v${tag}" "linux-${tag}"
+	echo "Extracting kernel version ${tag}..."
+	tar -xjf "stable-v${tag}.tar.bz2" -C . && mv "stable-v${tag}" "linux-${tag}"
 
-    if [ $? -eq 0 ]; then
-        echo "Kernel version ${tag} extracted to linux-${tag}/"
-    else
-        echo "Error: Failed to extract kernel version ${tag}"
-        return 1
-    fi
+	if [ $? -eq 0 ]; then
+		echo "Kernel version ${tag} extracted to linux-${tag}/"
+	else
+		echo "Error: Failed to extract kernel version ${tag}"
+		return 1
+	fi
 }
 
 clean_bash_history() {
-  local file="$1"
-
-  awk '!seen[$0]++' "$file" > temp && mv temp "$file"
-
-  sed -i 's/^[ \t]*//;s/[ \t]*$//' "$file"
-
-  sed -i '/^#/d' "$file"
+	local file="$1"
+	awk '!seen[$0]++' "$file" > temp && mv temp "$file"
+	sed -i 's/^[ \t]*//;s/[ \t]*$//' "$file"
+	sed -i '/^#/d' "$file"
+	sed -i '/^\s*\/\//d' "$file"
 }

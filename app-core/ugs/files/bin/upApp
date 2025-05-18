@@ -17,6 +17,19 @@ mkdir -p "$TMP_DIR"
 : > "$JSON_LOG"
 : > "$DEBUG_LOG"
 
+simple_version_pattern='^[a-zA-Z0-9\-_]+-[0-9]+\.[0-9]+$'
+fixed_version_pattern='^[a-zA-Z0-9\-_]+-[0-9]+\.[0-9]+$'
+
+is_simple_version() {
+    local filename="$1"
+    if [[ "$filename" =~ $simple_version_pattern || "$filename" =~ $fixed_version_pattern ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+handle_github() {
 handle_github() {
 	local repo_url="$1"
 	local repo_slug=$(echo "$repo_url" | sed -E 's|https?://github\.com/([^/]+/[^/]+).*|\1|')
@@ -50,7 +63,6 @@ handle_github() {
 		fi
 	fi
 
-	# Remove v or V prefix if present
 	latest_version="${latest_version#[vV]}"
 
 	latest_version="${latest_version//_/\.}"
@@ -73,21 +85,9 @@ handle_gitlab() {
 		return 1
 	else
 		local latest_version=$(echo "$latest_release_info" | jq -r '.tag_name')
-		# Remove v or V prefix if present
+
 		latest_version="${latest_version#[vV]}"
 		echo "$latest_version"
-	fi
-}
-
-update_github_package() {
-	local category="$1"
-	local package_name="$2"
-	local repo_url="$3"
-	local latest_version=$(handle_github "$repo_url")
-	if [[ $? -eq 0 ]]; then
-		update_ebuild "${category}/${package_name}" "${package_name}" "${latest_version}"
-	else
-		echo "Failed to update $package_name package" >> "$ERROR_LOG"
 	fi
 }
 
@@ -132,18 +132,6 @@ update_ebuild() {
 	else
 		echo "Failed to update ebuild for ${package_name}" >> "$ERROR_LOG"
 		return 1
-	fi
-}
-
-update_gitlab_package() {
-	local category="$1"
-	local package_name="$2"
-	local repo_url="$3"
-	local latest_version=$(handle_gitlab "$repo_url")
-	if [[ $? -eq 0 ]]; then
-		update_ebuild "${category}/${package_name}" "$package_name" "$latest_version"
-	else
-		echo "Failed to update $package_name package" >> "$ERROR_LOG"
 	fi
 }
 
@@ -239,16 +227,57 @@ fetch_latest_git_version() {
 }
 
 update_git_package() {
-	local category="$1"
-	local package_name="$2"
-	local repo_url="$3"
+    local category="$1"
+    local package_name="$2"
+    local repo_url="$3"
 
-	local package_version=$(fetch_latest_git_version "$repo_url")
-	if [[ $? -eq 0 ]]; then
-		update_ebuild "${category}/${package_name}" "$package_name" "$package_version"
-	else
-		echo "Failed to update $package_name package" >> "$ERROR_LOG"
-	fi
+    if ! is_simple_version "$package_name"; then
+        echo "Skipping $package_name as it does not match simple versioning." >> "$DEBUG_LOG"
+        return 0
+    fi
+
+    local package_version=$(fetch_latest_git_version "$repo_url")
+    if [[ $? -eq 0 ]]; then
+        update_ebuild "${category}/${package_name}" "$package_name" "$package_version"
+    else
+        echo "Failed to update $package_name package" >> "$ERROR_LOG"
+    fi
+}
+
+update_github_package() {
+    local category="$1"
+    local package_name="$2"
+    local repo_url="$3"
+
+    if ! is_simple_version "$package_name"; then
+        echo "Skipping $package_name as it does not match simple versioning." >> "$DEBUG_LOG"
+        return 0
+    fi
+
+    local latest_version=$(handle_github "$repo_url")
+    if [[ $? -eq 0 ]]; then
+        update_ebuild "${category}/${package_name}" "${package_name}" "${latest_version}"
+    else
+        echo "Failed to update $package_name package" >> "$ERROR_LOG"
+    fi
+}
+
+update_gitlab_package() {
+    local category="$1"
+    local pa:qckage_name="$2"
+    local repo_url="$3"
+
+    if ! is_simple_version "$package_name"; then
+        echo "Skipping $package_name as it does not match simple versioning." >> "$DEBUG_LOG"
+        return 0
+    fi
+
+    local latest_version=$(handle_gitlab "$repo_url")
+    if [[ $? -eq 0 ]]; then
+        update_ebuild "${category}/${package_name}" "$package_name" "$latest_version"
+    else
+        echo "Failed to update $package_name package" >> "$ERROR_LOG"
+    fi
 }
 
 scrape_version() {
@@ -284,7 +313,6 @@ scrape_version() {
 	echo "Fetched version for $category_package: $version" >> "$DEBUG_LOG"
 	update_ebuild "$category_package" "$package_name" "$version"
 }
-
 cryptsetup_version=$(fetch_latest_cryptsetup_version)
 [[ $? -eq 0 ]] && update_ebuild "app-fs/cryptsetup" "cryptsetup" "$cryptsetup_version"
 

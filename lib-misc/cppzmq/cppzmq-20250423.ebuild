@@ -7,7 +7,7 @@ inherit toolchain-funcs
 DESCRIPTION="High-level CPP Binding for ZeroMQ"
 HOMEPAGE="https://github.com/zeromq/cppzmq"
 
-SNAPSHOT=21c83ca0c3d8c11d81aa13aca2a565607a25920b
+SNAPSHOT=34a9b3aa6a9d6ade41cecdf290435c39c0bd64bb
 SRC_URI="https://github.com/zeromq/cppzmq/archive/${SNAPSHOT}.tar.gz -> cppzmq-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/cppzmq-${SNAPSHOT}"
 

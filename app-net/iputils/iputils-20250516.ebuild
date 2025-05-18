@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="Network monitoring tools including ping and ping6"
 HOMEPAGE="https://wiki.linuxfoundation.org/networking/iputils"
 
-SNAPSHOT=e6cc75f5d17be59377252b4613938edc2cfc7bef
+SNAPSHOT=3e53eef5bff5e87804ba2f27f8d82d8f55b68d16
 SRC_URI="https://github.com/iputils/iputils/archive/${SNAPSHOT}.tar.gz -> iputils-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/iputils-${SNAPSHOT}"
 

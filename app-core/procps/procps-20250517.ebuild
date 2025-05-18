@@ -44,6 +44,7 @@ src_configure() {
 		--disable-watch8bit
 		--disable-w-from
 		--disable-rpath
+		--disable-kill
 		--disable-nls
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

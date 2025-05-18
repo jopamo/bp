@@ -7,7 +7,7 @@ inherit flag-o-matic
 DESCRIPTION="an optimizing compiler produced by the GNU Project supporting various programming languages"
 HOMEPAGE="https://gcc.gnu.org/"
 
-SNAPSHOT=5ba6fdc5476d33c57f4751cae93054fdbc7211c0
+SNAPSHOT=a9de71c2060339fcd56257e64e61af207b924e4c
 SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/gcc-${SNAPSHOT}
 
@@ -30,6 +30,7 @@ BDEPEND="app-build/make"
 
 src_prepare() {
 	eapply "${FILESDIR}"/$(ver_cut 1)/*.patch
+	sed -i 's/typedef off64_t libgo_off_t_type;/typedef off_t libgo_off_t_type;/g' libgo/sysinfo.c || die
 
 	filter-gcc
     filter-lto

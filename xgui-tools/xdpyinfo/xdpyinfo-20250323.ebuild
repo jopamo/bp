@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Display information utility for X"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=eba6d3990d9b2de2a869d0c336ecb53f50d3460c
+SNAPSHOT=e7a8a6808d59c1421472130387397f9b284bb4fb
 SRC_URI="https://gitlab.freedesktop.org/xorg/app/xdpyinfo/-/archive/${SNAPSHOT}/xdpyinfo-${SNAPSHOT}.tar.bz2 -> xdpyinfo-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/xdpyinfo-${SNAPSHOT}"
 

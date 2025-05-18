@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X server resource database utility"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=ff688ceacaddb8e2f345caadfe33e408d97782a0
+SNAPSHOT=80fb1a3dfdd1ddb9574882111ba029055b76a1af
 SRC_URI="https://gitlab.freedesktop.org/xorg/app/xrdb/-/archive/${SNAPSHOT}/xrdb-${SNAPSHOT}.tar.bz2 -> xrdb-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/xrdb-${SNAPSHOT}"
 

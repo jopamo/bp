@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="primitive command line interface to RandR extension"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=a93442f59183ab1c0bc6a7b6c8cdf5bac4788c92
+SNAPSHOT=f655af4ed98b11b66f2d49d273ad0d989fec6e5b
 SRC_URI="https://gitlab.freedesktop.org/xorg/app/xrandr/-/archive/${SNAPSHOT}/xrandr-${SNAPSHOT}.tar.bz2 -> xrandr-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/xrandr-${SNAPSHOT}"
 

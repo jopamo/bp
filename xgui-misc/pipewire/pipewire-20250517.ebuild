@@ -7,18 +7,9 @@ inherit flag-o-matic meson python-any-r1 user
 DESCRIPTION="Multimedia processing graphs"
 HOMEPAGE="https://pipewire.org/"
 
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://gitlab.freedesktop.org/${PN}/${PN}.git"
-	inherit git-r3
-else
-	if [[ ${PV} == *_p* ]] ; then
-		MY_COMMIT=""
-		SRC_URI="https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/${MY_COMMIT}/pipewire-${MY_COMMIT}.tar.bz2 -> ${P}.tar.bz2"
-		S="${WORKDIR}"/${PN}-${MY_COMMIT}
-	else
-		SRC_URI="https://gitlab.freedesktop.org/${PN}/${PN}/-/archive/${PV}/${P}.tar.bz2"
-	fi
-fi
+SNAPSHOT=e5afc939e8d053e3331e401f29bdc9913bf200f0
+SRC_URI="https://github.com/PipeWire/pipewire/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="MIT LGPL-2.1+ GPL-2"
 SLOT="0"

@@ -30,7 +30,6 @@ is_simple_version() {
 }
 
 handle_github() {
-handle_github() {
 	local repo_url="$1"
 	local repo_slug=$(echo "$repo_url" | sed -E 's|https?://github\.com/([^/]+/[^/]+).*|\1|')
 	local encoded_slug=$(echo "$repo_slug" | sed 's/\//%2F/g')
@@ -173,26 +172,6 @@ fetch_latest_gnu_version() {
 	echo "$latest_version"
 }
 
-fetch_latest_cryptsetup_version() {
-	local base_url="https://mirrors.edge.kernel.org/pub/linux/utils/cryptsetup/"
-	local latest_version=$(curl -s "$base_url" | grep -oP 'href="v[0-9]+\.[0-9]+/' | grep -v -- "-rc" | sort -Vr | head -1 | cut -d '"' -f 2)
-
-	if [[ -z "$latest_version" ]]; then
-		echo "Failed to fetch the latest Cryptsetup version directory" >> "$ERROR_LOG"
-		return 1
-	fi
-
-	local version_page="${base_url}${latest_version}"
-	local latest_final_version=$(curl -s "$version_page" | grep -oP 'cryptsetup-\K[0-9]+\.[0-9]+\.[0-9]+(?=\.tar\.gz)' | sort -Vr | head -1)
-
-	if [[ -z "$latest_final_version" ]]; then
-		echo "Failed to find the latest Cryptsetup final version" >> "$ERROR_LOG"
-		return 1
-	fi
-
-	echo "$latest_final_version"
-}
-
 update_gnu_package() {
 	local cat=$1
 	local package_name=$2
@@ -313,8 +292,6 @@ scrape_version() {
 	echo "Fetched version for $category_package: $version" >> "$DEBUG_LOG"
 	update_ebuild "$category_package" "$package_name" "$version"
 }
-cryptsetup_version=$(fetch_latest_cryptsetup_version)
-[[ $? -eq 0 ]] && update_ebuild "app-fs/cryptsetup" "cryptsetup" "$cryptsetup_version"
 
 if [[ $? -eq 0 ]]; then
 	update_gnu_package "app-build" "autoconf-archive"

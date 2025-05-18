@@ -1,169 +1,83 @@
-import re
 import os
+import re
 import requests
 import shutil
 import glob
+from datetime import datetime
 from bs4 import BeautifulSoup
+import sys
 
-# Load GitHub and GitLab tokens from environment variables
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
 GITLAB_TOKEN = os.getenv('GITLAB_TOKEN')
 
-# Repo path
-REPO_PATH = "/var/db/repos/bp"  # Path to your repository
+REPO_PATH = "/var/db/repos/bp"
+PROGNAME = "upApp"
+TMP_DIR = f"/tmp/{PROGNAME}"
 
-def process_filename(filename):
-    """
-    Process the filename according to the versioning rules.
-    """
-    # Define versioning patterns
-    simple_version_pattern = r'(\d+\.\d+)(?=\.[^\.]+$)'
-    date_version_pattern = r'(\d+\.\d+\.\d{4}\.\d{2}\.\d{2})(?=\.[^\.]+$)'  # Ignore date-based
-    revision_version_pattern = r'(\d{8})(-r\d+)?(?=\.[^\.]+$)'  # Ignore revision-based
-    rolling_version_pattern = r'(\d{4})\.9999(?=\.[^\.]+$)'  # Ignore rolling releases
-    prerelease_version_pattern = r'(\d{4}\d{2}\d{2})(?=\.[^\.]+$)'  # Ignore pre-release versions
-    patch_version_pattern = r'(\d+\.\d+)_p(\d+)(?=\.[^\.]+$)'  # Ignore patch versions
-    fixed_version_pattern = r'(\d+\.\d+)(?=\.[^\.]+$)'  # Fixed version
+DEBUG_LOG = f"{TMP_DIR}/{PROGNAME}-debug.log"
+ERROR_LOG = f"{TMP_DIR}/{PROGNAME}-error.log"
+JSON_LOG = f"{TMP_DIR}/{PROGNAME}-json.log"
 
-    # Match date-based versions (e.g., binutils-2.43.20250223.ebuild)
-    if re.search(date_version_pattern, filename):
-        print(f"Ignoring date-based version: {filename}")
-        return None
+os.makedirs(TMP_DIR, exist_ok=True)
+with open(DEBUG_LOG, 'w'), open(ERROR_LOG, 'w'), open(JSON_LOG, 'w'):
+    pass
 
-    # Match revision-based versions (e.g., flex-20250114-r9.ebuild)
-    if re.search(revision_version_pattern, filename):
-        print(f"Ignoring revision-based version: {filename}")
-        return None
+DRY_RUN = '--dry-run' in sys.argv
 
-    # Match rolling release versions (e.g., keepassxc-9999.ebuild)
-    if re.search(rolling_version_pattern, filename):
-        print(f"Ignoring rolling release version: {filename}")
-        return None
-
-    # Match pre-release versions (e.g., python-exec-20230320.ebuild)
-    if re.search(prerelease_version_pattern, filename):
-        print(f"Ignoring pre-release version: {filename}")
-        return None
-
-    # Match patch versions (e.g., unzip-6.0_p28.ebuild)
-    if re.search(patch_version_pattern, filename):
-        print(f"Ignoring patch version: {filename}")
-        return None
-
-    # For Simple versioning, process normally (e.g., autoconf-2.72.ebuild)
-    if re.search(simple_version_pattern, filename):
-        print(f"Processing simple version: {filename}")
-        return filename  # Return as is for simple versioning
-
-    # Fixed version should be treated as simple versioning (e.g., protobuf-30.0.ebuild)
-    if re.search(fixed_version_pattern, filename):
-        print(f"Processing fixed version (treated as simple version): {filename}")
-        return filename  # Treat as simple versioning
-
-    # If no match, we just ignore
-    print(f"Ignoring unknown version format: {filename}")
-    return None
-
-
-def extract_snapshot_and_url(ebuild_file_path):
-    """
-    Extract the SNAPSHOT value and SRC_URI from the ebuild file.
-    """
-    with open(ebuild_file_path, 'r') as file:
-        content = file.read()
-
-    # Extract SNAPSHOT using regex
-    snapshot_match = re.search(r'SNAPSHOT=([a-f0-9]+)', content)
-    if snapshot_match:
-        snapshot = snapshot_match.group(1)
-        print(f"SNAPSHOT found: {snapshot}")
-
-        # Construct the SRC_URI based on the SNAPSHOT value
-        src_uri = f"https://github.com/gcc-mirror/gcc/archive/{snapshot}.tar.gz"
-        print(f"SRC_URI: {src_uri}")
-
-        # Extract the S variable (source directory) if present
-        source_dir_match = re.search(r'S=${WORKDIR}/([a-zA-Z0-9\-]+)', content)
-        if source_dir_match:
-            source_dir = source_dir_match.group(1)
-            print(f"Source directory: {source_dir}")
-        else:
-            source_dir = "unknown"
-            print("Source directory not found.")
-
-        return snapshot, src_uri, source_dir
-    else:
-        print("No SNAPSHOT found in ebuild.")
-        return None, None, None
-
+def log(message, log_file=DEBUG_LOG):
+    with open(log_file, 'a') as f:
+        f.write(f"{datetime.now()} - {message}\n")
+    print(message)
 
 def handle_github(repo_url):
-    """
-    Handle GitHub API to fetch the latest release version
-    """
-    repo_slug = repo_url.split("github.com/")[1]  # Extract slug from the URL
+    repo_slug = repo_url.split("github.com/")[1]
     releases_api_url = f"https://api.github.com/repos/{repo_slug}/releases/latest"
     headers = {"Authorization": f"token {GITHUB_TOKEN}"}
 
     response = requests.get(releases_api_url, headers=headers)
     if response.status_code == 200:
         latest_release_info = response.json()
-        latest_version = latest_release_info['tag_name'].lstrip('v')  # Remove "v" if present
-        print(f"Latest GitHub version: {latest_version}")
+        latest_version = latest_release_info['tag_name'].lstrip('v')
+        log(f"GitHub latest release: {latest_version}")
         return latest_version
     else:
-        print(f"Error fetching version from GitHub: {response.status_code}")
+        log(f"Error fetching GitHub release info: {response.status_code}")
         return None
 
-
 def handle_gitlab(repo_url):
-    """
-    Handle GitLab API to fetch the latest release version
-    """
-    repo_slug = repo_url.split("gitlab.com/")[1]  # Extract slug from the URL
-    releases_api_url = f"https://gitlab.com/api/v4/projects/{repo_slug}/releases"
+    repo_slug = repo_url.split("gitlab.com/")[1]
+    api_url = f"https://gitlab.com/api/v4/projects/{repo_slug}/releases"
     headers = {"Authorization": f"Bearer {GITLAB_TOKEN}"}
 
-    response = requests.get(releases_api_url, headers=headers)
+    response = requests.get(api_url, headers=headers)
     if response.status_code == 200:
         latest_release_info = response.json()
         latest_version = latest_release_info[0]['tag_name']
-        print(f"Latest GitLab version: {latest_version}")
+        log(f"GitLab latest release: {latest_version}")
         return latest_version
     else:
-        print(f"Error fetching version from GitLab: {response.status_code}")
+        log(f"Error fetching GitLab release info: {response.status_code}")
         return None
 
-
 def scrape_download_page(url):
-    """
-    Scrape the download page to fetch the latest version.
-    """
     response = requests.get(url)
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
-
-        # Try to find the version information in the page
-        # Modify this based on the structure of the HTML for the project
         version_tag = soup.find("a", href=True, text=re.compile(r'\d+\.\d+(\.\d+)?'))
         if version_tag:
-            latest_version = version_tag['href'].split('/')[-1].replace('v', '')  # Remove "v" if present
-            print(f"Scraped version from page: {latest_version}")
+            latest_version = version_tag['href'].split('/')[-1].replace('v', '')
+            log(f"Scraped version from page: {latest_version}")
             return latest_version
         else:
-            print("Failed to find the version on the page.")
+            log(f"Failed to find version on page {url}.")
             return None
     else:
-        print(f"Error fetching the download page: {response.status_code}")
+        log(f"Failed to fetch the download page: {url}")
         return None
 
-
 def update_ebuild(package_path, package_name, latest_version):
-    """
-    Simulate the update of an ebuild file by renaming it with the new version.
-    """
     new_filename = f"{package_name}-{latest_version}.ebuild"
-    print(f"Updating {package_name} to {latest_version}...")
+    log(f"Updating ebuild for {package_name} to {latest_version}...")
 
     old_filename = os.path.join(package_path, f"{package_name}-[0-9]*.ebuild")
     ebuild_files = sorted(glob.glob(old_filename), reverse=True)
@@ -171,40 +85,100 @@ def update_ebuild(package_path, package_name, latest_version):
     if ebuild_files:
         old_filename = ebuild_files[0]
         if old_filename != new_filename:
-            shutil.move(old_filename, os.path.join(package_path, new_filename))
-            print(f"Renamed {old_filename} to {new_filename}")
+            if not DRY_RUN:
+                shutil.move(old_filename, os.path.join(package_path, new_filename))
+            log(f"Renamed {old_filename} to {new_filename}")
         else:
-            print(f"{package_name} is already up to date.")
+            log(f"{package_name} is already up-to-date.")
     else:
-        print(f"No existing ebuild found for {package_name}.")
+        log(f"No existing ebuild found for {package_name}.")
 
+def process_filename(filename):
+    simple_version_pattern = r'(\d+\.\d+)(?=\.[^\.]+$)'
+    date_version_pattern = r'(\d+\.\d+\.\d{4}\.\d{2}\.\d{2})(?=\.[^\.]+$)'
+    revision_version_pattern = r'(\d{8})(-r\d+)?(?=\.[^\.]+$)'
+    rolling_version_pattern = r'(\d{4})\.*9999(?=\.[^\.]+$)'
+    prerelease_version_pattern = r'(\d{4}\d{2}\d{2})(?=\.[^\.]+$)'
+    patch_version_pattern = r'(\d+\.\d+)_p(\d+)(?=\.[^\.]+$)'
+    fixed_version_pattern = r'(\d+\.\d+)(?=\.[^\.]+$)'
+
+    if re.search(date_version_pattern, filename):
+        log(f"Ignoring date-based version: {filename}")
+        return None
+    if re.search(revision_version_pattern, filename):
+        log(f"Ignoring revision-based version: {filename}")
+        return None
+    if re.search(rolling_version_pattern, filename):
+        log(f"Ignoring rolling release version: {filename}")
+        return None
+    if re.search(prerelease_version_pattern, filename):
+        log(f"Ignoring pre-release version: {filename}")
+        return None
+    if re.search(patch_version_pattern, filename):
+        log(f"Ignoring patch version: {filename}")
+        return None
+
+    if re.search(simple_version_pattern, filename) or re.search(fixed_version_pattern, filename):
+        log(f"Processing version: {filename}")
+        return filename
+
+    log(f"Ignoring unknown version format: {filename}")
+    return None
+
+def extract_url_and_repo(ebuild_file_path):
+    with open(ebuild_file_path, 'r') as file:
+        content = file.read()
+
+    log(f"Processing ebuild file: {ebuild_file_path}")
+
+    repo_url_match = re.search(r'SRC_URI="(https://[^"]+)', content)
+    if repo_url_match:
+        repo_url = repo_url_match.group(1)
+        log(f"Repository URL found: {repo_url}")
+
+        filename = os.path.basename(ebuild_file_path)
+        pn_version = filename.replace('.ebuild', '')
+
+        pn = pn_version.split('-')[0]
+        p = pn_version
+
+        repo_url = repo_url.replace("${PN}", pn)
+        repo_url = repo_url.replace("${P}", p)
+        log(f"Processed SRC_URI: {repo_url}")
+
+        return repo_url
+    else:
+        log(f"No SRC_URI found in ebuild: {ebuild_file_path}")
+        return None
 
 def scan_and_process_files():
-    """
-    Process all ebuild files in the specified directory.
-    """
     for root, dirs, files in os.walk(REPO_PATH):
         for filename in files:
             if filename.endswith('.ebuild'):
                 processed_filename = process_filename(filename)
                 if processed_filename:
-                    print(f"File to be processed: {processed_filename}")
-                    # Extract SNAPSHOT and SRC_URI from the ebuild file
                     ebuild_file_path = os.path.join(root, filename)
-                    snapshot, src_uri, source_dir = extract_snapshot_and_url(ebuild_file_path)
+                    repo_url = extract_url_and_repo(ebuild_file_path)
 
-                    # Try to fetch the latest version from GitHub or GitLab
-                    repo_url = 'https://github.com/gcc-mirror/gcc'  # Modify as necessary
-                    latest_version = handle_github(repo_url)
+                    if not repo_url:
+                        log(f"Skipping file {filename} due to missing SRC_URI.")
+                        continue
 
-                    if not latest_version:
-                        # Fallback to scraping the download page if GitHub API fails
-                        latest_version = scrape_download_page(src_uri)
+                    if 'github.com' in repo_url:
+                        latest_version = handle_github(repo_url)
+                    elif 'gitlab.com' in repo_url:
+                        latest_version = handle_gitlab(repo_url)
+                    else:
+                        latest_version = scrape_download_page(repo_url)
 
                     if latest_version:
                         update_ebuild(root, filename, latest_version)
 
+                        if not DRY_RUN:
+                            os.system(f"cd {root} && pkgdev manifest")
 
-# Main execution
+                        if DRY_RUN:
+                            log(f"Dry run: would update {filename} to {latest_version}")
+
 if __name__ == "__main__":
     scan_and_process_files()

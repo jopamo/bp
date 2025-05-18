@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="The open source Windows Imaging (WIM) library"
 HOMEPAGE="https://wimlib.net"
 
-SNAPSHOT=4a34203cde54c317f0d277a4c64e19916547bf10
+SNAPSHOT=e59d1de0f439d91065df7c47f647f546728e6a24
 SRC_URI="https://github.com/ebiggers/wimlib/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

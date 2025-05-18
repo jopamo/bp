@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Rotates, compresses, and mails system logs"
 HOMEPAGE="https://github.com/logrotate/logrotate"
 
-SNAPSHOT=d57dff56edce193abf7a660da3635be89e57fc8e
+SNAPSHOT=d94cc72dddbd2d195fddb158e07307415d2a22b1
 SRC_URI="https://github.com/logrotate/logrotate/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

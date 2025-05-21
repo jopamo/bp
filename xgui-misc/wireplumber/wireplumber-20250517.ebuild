@@ -7,13 +7,9 @@ inherit meson
 DESCRIPTION="Replacement for pipewire-media-session"
 HOMEPAGE="https://gitlab.freedesktop.org/pipewire/wireplumber"
 
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://gitlab.freedesktop.org/pipewire/${PN}.git"
-	EGIT_BRANCH="master"
-	inherit git-r3
-else
-	SRC_URI="https://gitlab.freedesktop.org/pipewire/${PN}/-/archive/${PV}/${P}.tar.bz2"
-fi
+SNAPSHOT=76b9e509d1a8725a57482505177036d8fe68a472
+SRC_URI="https://github.com/PipeWire/wireplumber/archive/${SNAPSHOT}.tar.gz -> wireplumber-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/wireplumber-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

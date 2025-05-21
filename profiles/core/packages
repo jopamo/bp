@@ -31,6 +31,7 @@
 *app-net/iproute2
 *app-net/nftables
 *app-net/openssh
+*app-lang/rust
 *app-net/wget
 *app-port/eix
 *app-port/find_cruft

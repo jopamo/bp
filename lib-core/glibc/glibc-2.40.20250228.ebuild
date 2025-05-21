@@ -102,6 +102,7 @@ src_prepare() {
 }
 
 src_configure() {
+	replace-flags -O0 -O1
 	filter-flags -flto*
 	filter-flags -D_FORTIFY_SOURCE*
 	filter-flags -Wl,-z,defs

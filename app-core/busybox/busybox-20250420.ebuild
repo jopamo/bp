@@ -22,12 +22,12 @@ RESTRICT="test strip"
 BDEPEND="lib-core/musl"
 
 create_busybox_symlinks() {
-  for path in $(/usr/bin/busybox --list); do
+  for path in $("${EROOT}/usr/bin/busybox" --list); do
     cmd_name=$(basename "$path")
 
     if [ ! -e "${EROOT}/usr/bin/${cmd_name}" ]; then
       echo "Creating symlink '${cmd_name}' in /usr/bin/"
-      ln -s /usr/bin/busybox "/usr/bin/${cmd_name}"
+      ln -s "${EROOT}/usr/bin/busybox" "${EROOT}/usr/bin/${cmd_name}"
     else
       echo "Skipping '${cmd_name}' - already exists in /usr/bin/"
     fi
@@ -64,10 +64,7 @@ src_compile() {
 }
 
 src_install() {
+	create_busybox_symlinks
 	dobin busybox
 	doman docs/busybox.1
-}
-
-pkg_postinst() {
-	create_busybox_symlinks
 }

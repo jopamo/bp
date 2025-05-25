@@ -27,7 +27,7 @@ LICENSE="HPND"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="examples imagequant +jpeg jpeg2k lcms test tiff tk truetype webp xcb zlib"
+IUSE="imagequant +jpeg jpeg2k lcms test tiff tk truetype webp xcb zlib"
 
 REQUIRED_USE="test? ( jpeg jpeg2k lcms tiff truetype )"
 RESTRICT="!test? ( test )"
@@ -51,6 +51,17 @@ distutils_enable_tests pytest
 
 usepil() {
 	usex "${1}" enable disable
+}
+
+src_prepare() {
+	default
+
+	sed -i '/^license[ ]*=.*/d;/^license-files[ ]*=.*/d' pyproject.toml || die
+
+	sed -i '/^]/{
+    	N
+    	s/\(\n]\)/\1\nlicense = { text = "MIT-CMU" }/
+	}' pyproject.toml || die
 }
 
 python_configure_all() {
@@ -103,13 +114,4 @@ python_test() {
 python_install() {
 	python_doheader src/libImaging/*.h
 	distutils-r1_python_install
-}
-
-python_install_all() {
-	if use examples ; then
-		docinto example
-		dodoc docs/example/*
-		docompress -x /usr/share/doc/${PF}/example
-	fi
-	distutils-r1_python_install_all
 }

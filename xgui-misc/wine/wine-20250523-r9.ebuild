@@ -2,7 +2,8 @@
 
 EAPI=8
 
-SNAPSHOT="3dcd383186ef2d72f2ac200ef69677458b6485d2"
+SNAPSHOT=22af42ac22279e6c0c671f033661f95c1761b4bb
+SNAPSHOT2="a3738434e05ba4e378cec59c723304ba33759fdc"
 
 inherit autotools flag-o-matic xdg
 
@@ -10,9 +11,11 @@ DESCRIPTION="Compatibility layer capable of running Windows applications."
 HOMEPAGE="https://www.winehq.org/"
 
 SRC_URI="
-	https://gitlab.winehq.org/wine/wine/-/releases/${P}/downloads/${P}.tar.xz
-	https://github.com/wine-staging/wine-staging/archive/${SNAPSHOT}.tar.gz
+	https://github.com/wine-mirror/wine/archive/${SNAPSHOT}.tar.gz -> wine-${SNAPSHOT}.tar.gz
+	https://github.com/wine-staging/wine-staging/archive/${SNAPSHOT2}.tar.gz -> wine-staging-${SNAPSHOT2}.tar.gz
 "
+
+S="${WORKDIR}/wine-${SNAPSHOT}"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
@@ -70,7 +73,8 @@ src_prepare() {
 	filter-flags -flto* -Wl,-z,defs
 
 	default
-	use staging && ${WORKDIR}/wine-staging-${SNAPSHOT}/staging/patchinstall.py DESTDIR="${S}" --all
+
+	"${WORKDIR}/wine-staging-${SNAPSHOT2}/staging/patchinstall.py" DESTDIR="${S}" --all
 }
 
 src_configure() {

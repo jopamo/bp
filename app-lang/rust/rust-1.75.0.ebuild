@@ -14,6 +14,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 BDEPEND="
+	app-build/llvm
 	app-dev/cmake
 "
 

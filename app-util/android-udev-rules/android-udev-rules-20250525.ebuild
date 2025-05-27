@@ -7,7 +7,7 @@ inherit user
 DESCRIPTION="Android udev rules list aimed to be the most comprehensive on the net"
 HOMEPAGE="https://github.com/M0Rf30/android-udev-rules"
 
-SNAPSHOT=82ee24b92d8810452b20bd251418d696ee92d227
+SNAPSHOT=e62577fade0e79a965edfff732b88f228266cb0b
 SRC_URI="https://github.com/M0Rf30/android-udev-rules/archive/${SNAPSHOT}.tar.gz -> android-udev-rules-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/android-udev-rules-${SNAPSHOT}"
 

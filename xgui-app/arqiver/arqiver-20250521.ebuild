@@ -7,7 +7,7 @@ inherit cmake xdg
 DESCRIPTION="Simple Qt archive manager based on libarchive"
 HOMEPAGE="https://github.com/tsujan/Arqiver.git"
 
-SNAPSHOT=2ebe922209c31c0fbfe15a23c91333b1a9f9b11f
+SNAPSHOT=a92b73975c6fdc6392b113bce3661ab1a8e522c0
 SRC_URI="https://github.com/tsujan/Arqiver/archive/${SNAPSHOT}.tar.gz -> Arqiver-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/Arqiver-${SNAPSHOT}"
 

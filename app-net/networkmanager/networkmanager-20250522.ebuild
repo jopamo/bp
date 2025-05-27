@@ -7,7 +7,7 @@ inherit meson flag-o-matic
 DESCRIPTION="A set of co-operative tools that make networking simple and straightforward"
 HOMEPAGE="https://wiki.gnome.org/Projects/NetworkManager"
 
-SNAPSHOT=dd7252ff0c98fa1eed5c0e5a7b9ebcb63aef93a2
+SNAPSHOT=ccd9431e82ecb1653e4fb22116195d9eada1a3e5
 SRC_URI="https://github.com/NetworkManager/NetworkManager/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/NetworkManager-${SNAPSHOT}
 

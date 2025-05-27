@@ -7,7 +7,7 @@ inherit autotools user
 DESCRIPTION="NTP client and server programs"
 HOMEPAGE="https://chrony.tuxfamily.org/"
 
-SNAPSHOT=0bf7e4914817ffbb21c6bdc7cf04b6f76516d833
+SNAPSHOT=551ad40a047fa1b09cfa52a2bde968f394f6003f
 SRC_URI="https://github.com/mlichvar/chrony/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/chrony-${SNAPSHOT}
 

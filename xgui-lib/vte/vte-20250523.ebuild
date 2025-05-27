@@ -7,7 +7,7 @@ inherit meson flag-o-matic
 DESCRIPTION="VTE provides a virtual terminal widget for GTK applications."
 HOMEPAGE="https://github.com/GNOME/vte"
 
-SNAPSHOT=e01ccecf47cbc627a86e5cbe0afdec8e54ac2038
+SNAPSHOT=875011cd8e2db14ceed1949176858f4921f9c301
 SRC_URI="https://github.com/GNOME/vte/archive/${SNAPSHOT}.tar.gz -> vte-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/vte-${SNAPSHOT}"
 

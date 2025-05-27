@@ -13,7 +13,7 @@ HOMEPAGE="
 	https://pypi.org/project/regex/
 "
 
-SNAPSHOT=be75782535bd817bc3fa18f8e9d875366340ead7
+SNAPSHOT=addaa7c484bffc2dd0844945e9bc756e1441c958
 SRC_URI="https://github.com/mrabarnett/mrab-regex/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/mrab-${PN}-${SNAPSHOT}"
 

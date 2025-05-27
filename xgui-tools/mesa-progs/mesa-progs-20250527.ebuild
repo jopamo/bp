@@ -7,7 +7,7 @@ inherit meson flag-o-matic
 DESCRIPTION="Mesa's OpenGL utility and demo programs (glxgears and glxinfo)"
 HOMEPAGE="https://www.mesa3d.org/ https://mesa.freedesktop.org/"
 
-SNAPSHOT=02eae079cb0b8186064d5b194ca4cc2995f099ee
+SNAPSHOT=0386a2f118ce7ddf3a8d15dbde497fc8a95fa8bb
 SRC_URI="https://gitlab.freedesktop.org/mesa/demos/-/archive/${SNAPSHOT}/demos-${SNAPSHOT}.tar.bz2 -> demos-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/demos-${SNAPSHOT}"
 

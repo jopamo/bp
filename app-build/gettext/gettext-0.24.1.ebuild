@@ -79,7 +79,13 @@ src_install() {
 	dosym -r /usr/share/gettext /usr/share/gettext-${PV}
 	rm "${ED}"/usr/share/gettext/its/gtkbuilder.its
 
+	cp "${ED}"/usr/share/gettext/m4/* "${ED}"/usr/share/aclocal/
+
+	rm -rf "${ED}"/usr/share/gettext/m4
+
 	if ! use keep-la; then
 		find "${ED}" -name '*.la' -delete || die
 	fi
 }
+
+

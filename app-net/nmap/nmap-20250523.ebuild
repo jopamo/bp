@@ -27,8 +27,6 @@ DEPEND="
 	ssl? ( virtual/ssl )
 "
 
-#PATCHES=( "${FILESDIR}"/autoconf-2.72.patch )
-
 src_prepare() {
 	append-flags -fno-strict-aliasing
 	filter-flags -flto*
@@ -65,6 +63,8 @@ src_configure() {
 		--without-zenmap
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+
+	sed -i 's/int strlcat(char \*, const char \*, int);/size_t strlcat(char *, const char *, size_t);/' libdnet-stripped/include/config.h || die
 }
 
 src_compile() {

@@ -9,7 +9,7 @@ HOMEPAGE="https://dri.freedesktop.org/"
 
 SNAPSHOT=a0fbf455fa9c076444b65febc5729f443e96bf19
 SRC_URI="https://gitlab.freedesktop.org/mesa/drm/-/archive/${SNAPSHOT}/drm-${SNAPSHOT}.tar.bz2 -> drm-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/drm-${SNAPSHOT}"
+S="${WORKDIR}/libdrm-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

@@ -3,8 +3,7 @@
 # @BLURB: Regenerates auto* build scripts
 # @DESCRIPTION:
 # This eclass is for safely handling autotooled software packages that need to
-# regenerate their build scripts.  All functions will abort in case of errors.
-#
+# regenerate their build scripts.
 
 if [[ ${_AUTOTOOLS_AUTO_DEPEND+set} == "set" ]] ; then
 	if [[ ${_AUTOTOOLS_AUTO_DEPEND} != ${AUTOTOOLS_AUTO_DEPEND} ]] ; then
@@ -24,7 +23,6 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 	inherit gnuconfig libtool
 
 	# @ECLASS_VARIABLE: AUTOTOOLS_DEPEND
-	# Contains the combination of requested automake/autoconf/libtool versions in *DEPEND format.
 	AUTOTOOLS_DEPEND="
 		${GNUCONFIG_DEPEND}
 		${_automake_atom}
@@ -48,33 +46,32 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 	: "${AT_SYS_M4DIR:=}"
 
 	eautoreconf() {
-    	local m4dir="${PWD}/m4"
-    	mkdir -p "${m4dir}"
+		local m4dir="${PWD}/m4"
+		mkdir -p "${m4dir}"
 
-    	if [[ -d /usr/share/gettext/m4 ]]; then
-        	cp /usr/share/gettext/m4/lib*.m4 "${m4dir}/" || die "Failed to copy m4"
-    	else
-        	ewarn "m4 not found in /usr/share/gettext/m4/"
-    	fi
+		if [[ -d /usr/share/gettext/m4 ]]; then
+			cp /usr/share/gettext/m4/lib*.m4 "${m4dir}/" || die "Failed to copy m4"
+		else
+			ewarn "m4 not found in /usr/share/gettext/m4/"
+		fi
 
-    	local x
-    	if [[ -z ${AT_NO_RECURSIVE} ]] ; then
-        	for x in $(autotools_check_macro_val AC_CONFIG_SUBDIRS) ; do
-            	if [[ -d ${x} ]] ; then
-                	pushd "${x}" >/dev/null || die
-                	AT_NOELIBTOOLIZE="yes" eautoreconf || die
-                	popd >/dev/null || die
-            	fi
-        	done
-    	fi
+		local x
+		if [[ -z ${AT_NO_RECURSIVE} ]] ; then
+			for x in $(autotools_check_macro_val AC_CONFIG_SUBDIRS) ; do
+				if [[ -d ${x} ]] ; then
+					pushd "${x}" >/dev/null || die
+					AT_NOELIBTOOLIZE="yes" eautoreconf || die
+					popd >/dev/null || die
+				fi
+			done
+		fi
 
-    	einfo "Running eautoreconf in '${PWD}' ..."
-    	local m4dirs
-    	m4dirs=$(autotools_check_macro_val AC_CONFIG_{AUX,MACRO}_DIR)
-    	[[ -n ${m4dirs} ]] && mkdir -p ${m4dirs}
+		einfo "Running eautoreconf in '${PWD}' ..."
+		local m4dirs
+		m4dirs=$(autotools_check_macro_val AC_CONFIG_{AUX,MACRO}_DIR)
+		[[ -n ${m4dirs} ]] && mkdir -p ${m4dirs}
 
 		local i tools=(
-			# <tool> <was-run?> <command>
 			glibgettext false "autotools_run_tool glib-gettextize --copy --force"
 			gettext     false "autotools_run_tool --at-missing autopoint --force"
 			intltool    false "autotools_run_tool intltoolize --automake --copy --force"
@@ -113,6 +110,7 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 		fi
 	}
 
+	# Internal detection helpers
 	_at_uses_pkg() {
 		if [[ -n $(autotools_check_macro "$@") ]] ; then
 			return 0
@@ -135,6 +133,7 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 	_at_uses_libtool()     { _at_uses_pkg A{C,M}_PROG_LIBTOOL LT_INIT; }
 	_at_uses_libltdl()     { _at_uses_pkg LT_CONFIG_LTDL_DIR; }
 
+	# Run aclocal with AM flags (autodetect)
 	eaclocal_amflags() {
 		local aclocal_opts amflags_file
 		for amflags_file in GNUmakefile.am Makefile.am GNUmakefile.in Makefile.in ; do
@@ -157,7 +156,7 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 
 	eaclocal() {
 		if [[ ! -f "${T}"/aclocal/dirlist ]] ; then
-			mkdir "${T}"/aclocal || die
+			mkdir -p "${T}"/aclocal || die
 			cat <<- EOF > "${T}"/aclocal/dirlist || die
 				${BROOT}/usr/share/aclocal
 				${ESYSROOT}/usr/share/aclocal
@@ -244,6 +243,7 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 		done
 	}
 
+	# Core runner for autotools-related commands
 	autotools_run_tool() {
 		local autofail=true m4flags=false missing_ok=false return_output=false
 		while [[ -n ${1} ]]; do

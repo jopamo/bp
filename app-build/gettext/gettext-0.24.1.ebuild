@@ -83,6 +83,8 @@ src_install() {
 
 	rm -rf "${ED}"/usr/share/gettext/m4
 
+	dosym -r /usr/share/aclocal /usr/share/gettext/m4
+
 	if ! use keep-la; then
 		find "${ED}" -name '*.la' -delete || die
 	fi

@@ -144,5 +144,4 @@ src_compile() {
 src_install() {
 	dobin output/cargo
 	dobin output/rustc
-	die
 }

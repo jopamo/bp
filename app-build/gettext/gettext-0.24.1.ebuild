@@ -79,6 +79,7 @@ src_install() {
 	dosym -r /usr/share/gettext /usr/share/gettext-${PV}
 	rm "${ED}"/usr/share/gettext/its/gtkbuilder.its
 
+	mkdir -p "${ED}"/usr/share/aclocal
 	cp "${ED}"/usr/share/gettext/m4/* "${ED}"/usr/share/aclocal/
 
 	rm -rf "${ED}"/usr/share/gettext/m4

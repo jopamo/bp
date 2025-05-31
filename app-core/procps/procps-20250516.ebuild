@@ -38,14 +38,18 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		$(use_with ncurses)
 		$(use_enable static-libs static)
+		$(use_with ncurses)
 		$(use_with systemd)
-		--disable-watch8bit
-		--disable-w-from
-		--disable-rpath
 		--disable-kill
+		--disable-modern-top
 		--disable-nls
+		--disable-rpath
+		--disable-w-from
+		--disable-watch8bit
+		--enable-colorwatch
+		--enable-sigwinch
+		--enable-skill
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

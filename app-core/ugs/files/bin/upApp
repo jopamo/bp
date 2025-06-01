@@ -398,7 +398,5 @@ update_github_package "xmedia-app" "pngquant" "https://github.com/kornelski/pngq
 update_github_package "xmedia-lib" "graphene" "https://github.com/ebassi/graphene"
 update_github_package "xmedia-lib" "libimagequant" "https://github.com/ImageOptim/libimagequant"
 
-scrape_version "app-crypto/gnupg" "https://www.gnupg.org/download/index.html"
-scrape_version "lib-core/libgpg-error" "https://www.gnupg.org/download/index.html"
 scrape_version "app-core/less" "https://www.greenwoodsoftware.com/less/download.html"
 scrape_version "lib-core/libedit" "https://thrysoee.dk/editline/"

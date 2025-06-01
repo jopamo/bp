@@ -18,7 +18,7 @@ KEYWORDS="amd64 ~loong ~x86"
 
 RDEPEND="
 	dev-py/jinja[${PYTHON_USEDEP}]
-	dev-python/lxml[${PYTHON_USEDEP}]
+	dev-py/lxml[${PYTHON_USEDEP}]
 	dev-python/colorlog[${PYTHON_USEDEP}]
 	>=dev-python/pygments-2.13.0[${PYTHON_USEDEP}]
 	$(python_gen_cond_dep '

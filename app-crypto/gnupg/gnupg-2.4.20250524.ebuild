@@ -7,7 +7,7 @@ inherit toolchain-funcs flag-o-matic autotools
 DESCRIPTION="The GNU Privacy Guard, a GPL OpenPGP implementation"
 HOMEPAGE="http://www.gnupg.org/"
 
-SNAPSHOT=e212308ede8ecaa3a39ed0366db70da3edfc0ba2
+SNAPSHOT=57c1c96e7f5c2b94daba5ccc0070cf3ee52d66d9
 SRC_URI="https://github.com/gpg/gnupg/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
@@ -31,14 +31,25 @@ DEPEND="
 	ldap? ( app-net/openldap )
 	readline? ( lib-core/readline )
 "
-
 src_prepare() {
+	filter-flags -Wl,-z,defs -flto*
+
 	default
+
 	sed -e '/ks_ldap_free_state/i #if USE_LDAP' \
     	-e '/ks_get_state =/a #endif' \
     	-i dirmngr/server.c
 
 	eautoreconf
+	sed -i "/^VERSION='/ s/-unknown/'\"\$(ver_cut 3)\"'/" configure || die
+
+	sed -i '/major=`echo \$gpg_error_config_version/{
+N
+c\
+    gpg_error_config_version=`$GPG_ERROR_CONFIG --version`\
+    major=$(echo "$gpg_error_config_version" | cut -d. -f1)\
+    minor=$(echo "$gpg_error_config_version" | cut -d. -f2)
+}' configure || die
 }
 
 src_configure() {

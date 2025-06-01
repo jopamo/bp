@@ -43,13 +43,12 @@ src_prepare() {
 	eautoreconf
 	sed -i "/^VERSION='/ s/-unknown/'\"\$(ver_cut 3)\"'/" configure || die
 
-	sed -i '/major=`echo \$gpg_error_config_version/{
-N
-c\
-    gpg_error_config_version=`$GPG_ERROR_CONFIG --version`\
-    major=$(echo "$gpg_error_config_version" | cut -d. -f1)\
-    minor=$(echo "$gpg_error_config_version" | cut -d. -f2)
-}' configure || die
+	sed -i '/major=`echo \$gpg_error_config_version/ i\
+    	gpg_error_config_version=`$GPG_ERROR_CONFIG --version`
+	' configure
+
+	sed -i 's|major=`echo \$gpg_error_config_version .*|major=$(echo "$gpg_error_config_version" | cut -d. -f1)|' configure
+	sed -i 's|minor=`echo \$gpg_error_config_version .*|minor=$(echo "$gpg_error_config_version" | cut -d. -f2)|' configure
 }
 
 src_configure() {

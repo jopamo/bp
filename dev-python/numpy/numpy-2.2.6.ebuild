@@ -4,7 +4,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=meson-python
-PYTHON_COMPAT=( python3_{10..13} pypy3 pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 PYTHON_REQ_USE="threads(+)"
 FORTRAN_NEEDED=lapack
 
@@ -58,6 +58,15 @@ EPYTEST_XDIST=1
 distutils_enable_tests pytest
 
 python_prepare_all() {
+	local PATCHES=(
+		# https://github.com/numpy/numpy/pull/28748
+		# https://github.com/numpy/numpy/pull/28928
+		"${FILESDIR}/${PN}-2.2.5-py314.patch"
+		# https://github.com/google/highway/issues/2577
+		# github.com/google/highway/commit/7cde540171a1718a9bdfa8f896d70e47eb0785d5
+		"${FILESDIR}/${PN}-2.2.6-gcc16.patch"
+	)
+
 	# bug #922457
 	filter-lto
 	# https://github.com/numpy/numpy/issues/25004

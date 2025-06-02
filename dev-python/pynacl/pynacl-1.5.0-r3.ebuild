@@ -6,7 +6,7 @@ DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( pypy3 pypy3_11 python3_{10..13} )
 
-inherit distutils-r1
+inherit distutils-r1 flag-o-matic
 
 DESCRIPTION="Python binding to the Networking and Cryptography (NaCl) library"
 HOMEPAGE="
@@ -43,6 +43,8 @@ BDEPEND="
 distutils_enable_tests pytest
 
 src_compile() {
+	filter-flags -Wl,-z,defs
+
 	# For not using the bundled libsodium
 	local -x SODIUM_INSTALL=system
 	distutils-r1_src_compile

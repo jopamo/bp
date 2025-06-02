@@ -3,16 +3,20 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_UPSTREAM_PEP517=standalone
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
-inherit distutils-r1 cargo git-r3
+inherit cargo distutils-r1 flag-o-matic toolchain-funcs
 
 DESCRIPTION="Build and publish crates with pyo3, rust-cpython and cffi bindings"
 HOMEPAGE="https://www.maturin.rs/"
-EGIT_REPO_URI="https://github.com/PyO3/maturin"
+SRC_URI="
+	https://github.com/PyO3/maturin/archive/refs/tags/v${PV}.tar.gz
+		-> ${P}.gh.tar.gz"
 
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 RESTRICT="test network-sandbox"
 

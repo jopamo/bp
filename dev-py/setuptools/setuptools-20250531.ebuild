@@ -15,9 +15,9 @@ HOMEPAGE="
 	https://pypi.org/project/setuptools/
 "
 
-SNAPSHOT=c11a4940deba04a6f8f8e1410686116f587f6f70
-SRC_URI="https://github.com/pypa/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SNAPSHOT=c3f486f0f7ebf8fa141dfd7314cbcaba7370db0b
+SRC_URI="https://github.com/pypa/setuptools/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}setuptools-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

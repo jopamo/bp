@@ -5,7 +5,7 @@ EAPI=8
 # please bump dev-python/ensurepip-pip along with this package!
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_TESTED=( pypy3_11 python3_{11..13} )
+PYTHON_TESTED=( pypy3_11 python3_{11..14} )
 PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" )
 PYTHON_REQ_USE="ssl(+),threads(+)"
 
@@ -24,7 +24,8 @@ SRC_URI="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="test-rust"
+IUSE="test test-rust"
+RESTRICT="!test? ( test )"
 
 # see src/pip/_vendor/vendor.txt
 RDEPEND="
@@ -52,6 +53,7 @@ BDEPEND="
 			dev-python/ensurepip-wheel
 			dev-python/freezegun[${PYTHON_USEDEP}]
 			dev-python/pretend[${PYTHON_USEDEP}]
+			dev-python/pytest[${PYTHON_USEDEP}]
 			dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
 			dev-python/pytest-xdist[${PYTHON_USEDEP}]
 			dev-python/scripttest[${PYTHON_USEDEP}]
@@ -65,8 +67,6 @@ BDEPEND="
 		' "${PYTHON_TESTED[@]}")
 	)
 "
-
-distutils_enable_tests pytest
 
 python_prepare_all() {
 	local PATCHES=(
@@ -148,6 +148,26 @@ python_test() {
 				# unexpected tempfiles?
 				tests/functional/test_install_config.py::test_do_not_prompt_for_authentication
 				tests/functional/test_install_config.py::test_prompt_for_authentication
+			)
+			;;
+		python3.14*)
+			EPYTEST_DESELECT+=(
+				# TODO: segfaults
+				tests/unit/test_collector.py::test_get_index_content_directory_append_index
+				# https://github.com/python/cpython/issues/125974
+				tests/unit/test_collector.py::test_ensure_quoted_url
+				tests/unit/test_finder.py::test_finder_priority_file_over_page
+				tests/unit/test_urls.py::test_path_to_url_unix
+				tests/unit/test_collector.py::test_clean_url_path
+				tests/unit/test_collector.py::test_clean_url_path_with_local_path
+				tests/unit/test_req.py::TestRequirementSet::test_download_info_local_editable_dir
+				tests/unit/test_req.py::test_parse_editable_local
+				tests/unit/test_req.py::test_parse_editable_local_extras
+				tests/unit/test_req.py::test_get_url_from_path__archive_file
+				tests/unit/test_req.py::test_get_url_from_path__installable_dir
+				tests/functional/test_lock.py::test_lock_wheel_from_findlinks
+				tests/functional/test_lock.py::test_lock_sdist_from_findlinks
+				tests/functional/test_lock.py::test_lock_local_editable_with_dep
 			)
 			;;
 	esac

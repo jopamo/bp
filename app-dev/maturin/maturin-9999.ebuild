@@ -4,14 +4,11 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 
-inherit distutils-r1
+inherit distutils-r1 cargo git-r3
 
 DESCRIPTION="Build and publish crates with pyo3, rust-cpython and cffi bindings"
 HOMEPAGE="https://www.maturin.rs/"
-SRC_URI="https://github.com/PyO3/maturin/archive/refs/tags/v${PV}.tar.gz
-		-> ${P}.gh.tar.gz
-"
-
+EGIT_REPO_URI="https://github.com/PyO3/maturin"
 
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0"
@@ -32,6 +29,4 @@ src_prepare() {
 	use elibc_musl && RUSTFLAGS+=" -C target-feature=-crt-static"
 
 	distutils-r1_src_prepare
-
-	cargo vendor --locked
 }

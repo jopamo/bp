@@ -301,7 +301,7 @@ _distutils_set_globals() {
 				;;
 			maturin)
 				bdep+='
-					>=dev-util/maturin-1.8.2[${PYTHON_USEDEP}]
+					>=app-dev/maturin-1.8.2[${PYTHON_USEDEP}]
 				'
 				;;
 			no)
@@ -360,7 +360,7 @@ _distutils_set_globals() {
 			eqawarn "is enabled."
 		fi
 	else
-		local setuptools_dep='>=dev-python/setuptools-78.1.0[${PYTHON_USEDEP}]'
+		local setuptools_dep='>=dev-py/setuptools-78.1.0[${PYTHON_USEDEP}]'
 
 		case ${DISTUTILS_USE_SETUPTOOLS:-bdepend} in
 			no|manual)
@@ -401,11 +401,6 @@ _distutils_set_globals() {
 			DISTUTILS_DEPS=${bdep}
 			readonly DISTUTILS_DEPS
 		fi
-	else
-		eqawarn "QA Notice: distutils-r1.eclass legacy mode is deprecated and will be removed."
-		eqawarn "Please migrate your ebuilds to use DISTUTILS_USE_PEP517 (common values"
-		eqawarn "are 'setuptools' for packages using setuptools/distutils,"
-		eqawarn "and 'no' for packages using non-PEP517 build systems)."
 	fi
 
 	if [[ ! ${DISTUTILS_OPTIONAL} ]]; then
@@ -873,7 +868,7 @@ _distutils-r1_print_package_versions() {
 				packages+=(
 					dev-python/flit-core
 					dev-python/flit-scm
-					dev-python/setuptools-scm
+					dev-py/setuptools-scm
 				)
 				;;
 			hatchling)

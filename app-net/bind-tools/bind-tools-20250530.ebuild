@@ -2,14 +2,14 @@
 
 EAPI=8
 
-SNAPSHOT=3f26ac2a4d5d901ca1c848e0676873d37cdd38c9
+SNAPSHOT=fec62266cbf6b5fd6c03dcc4921241b97e1fb8ab
 
 inherit autotools flag-o-matic
 
 DESCRIPTION="bind tools: dig, nslookup, host, nsupdate, dnssec-keygen"
 HOMEPAGE="http://www.isc.org/software/bind"
-SRC_URI="https://github.com/isc-projects/bind9/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/bind9-${SNAPSHOT}
+SRC_URI="https://github.com/isc-projects/bind9/archive/${SNAPSHOT}.tar.gz -> bind9-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/bind9-${SNAPSHOT}"
 
 LICENSE="Apache-2.0 BSD BSD-2 GPL-2 HPND ISC MPL-2.0"
 SLOT="0"
@@ -18,6 +18,7 @@ KEYWORDS="amd64 arm64"
 IUSE="+doh headers +json-c readline +xml"
 
 DEPEND="
+	lib-net/userspace-rcu
 	lib-dev/maxminddb
 	lib-core/libseccomp
 	lib-core/zlib

@@ -50,7 +50,7 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 		mkdir -p "${m4dir}"
 
 		if [[ -d /usr/share/gettext/m4 ]]; then
-			cp /usr/share/gettext/m4/lib*.m4 "${m4dir}/" || die "Failed to copy m4"
+			cp /usr/share/aclocal/*.m4 "${m4dir}/" || ewarn "Failed to copy m4"
 		else
 			ewarn "m4 not found in /usr/share/gettext/m4/"
 		fi

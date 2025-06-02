@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit_scm
-PYTHON_COMPAT=( pypy3 pypy3_11 python3_{10..13} )
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 pypi
 
@@ -17,18 +17,22 @@ LICENSE="MIT PSF-2.4"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+RDEPEND="
+	$(python_gen_cond_dep '
+		>=dev-python/typing-extensions-4.6.0[${PYTHON_USEDEP}]
+	' 3.11 3.12)
+"
+
 distutils_enable_tests pytest
 
 python_test() {
 	local EPYTEST_DESELECT=()
-
 	case ${EPYTHON} in
-		pypy3.11)
-			# exception message mismatch
-			# https://github.com/agronholm/exceptiongroup/issues/141
+		python3.14*)
 			EPYTEST_DESELECT+=(
-				tests/test_exceptions.py::BadConstructorArgs::test_bad_EG_construction__too_few_args
-				tests/test_exceptions.py::BadConstructorArgs::test_bad_EG_construction__too_many_args
+				# https://github.com/agronholm/exceptiongroup/issues/148
+				tests/test_exceptions.py::DeepRecursionInSplitAndSubgroup::test_deep_split
+				tests/test_exceptions.py::DeepRecursionInSplitAndSubgroup::test_deep_subgroup
 			)
 			;;
 	esac

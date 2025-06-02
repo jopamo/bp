@@ -24,7 +24,6 @@ RDEPEND="
 	app-dev/dwarves
 	app-dev/expect
 	app-dev/gcovr
-	app-dev/indent
 	app-dev/intltool
 	app-dev/jq
 	app-dev/ropgadget

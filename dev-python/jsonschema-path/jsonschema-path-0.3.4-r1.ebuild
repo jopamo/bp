@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=poetry
-PYTHON_COMPAT=( pypy3 pypy3_11 python3_{10..13} )
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1
 
@@ -24,6 +24,7 @@ KEYWORDS="amd64 arm64"
 # requests seem "optional" but they failed at properly making it
 # optional in poetry, sigh
 RDEPEND="
+	<dev-python/pathable-0.5[${PYTHON_USEDEP}]
 	>=dev-python/pathable-0.4.1[${PYTHON_USEDEP}]
 	>=dev-python/pyyaml-5.1[${PYTHON_USEDEP}]
 	>=dev-python/referencing-0.28.1[${PYTHON_USEDEP}]

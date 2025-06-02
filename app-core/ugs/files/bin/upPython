@@ -143,6 +143,7 @@ PACKAGES=(
 "jsonschema-path"
 "jsonschema-spec"
 "jsonschema-specifications"
+"kaleido"
 "keyring"
 "lark"
 "lazy-object-proxy"

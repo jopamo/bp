@@ -4,7 +4,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..13} pypy3 pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
 
@@ -28,8 +28,8 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
-	>=dev-python/aiodns-3.2.0[${PYTHON_USEDEP}]
-	>=dev-python/aiohappyeyeballs-2.3.0[${PYTHON_USEDEP}]
+	>=dev-python/aiodns-3.3.0[${PYTHON_USEDEP}]
+	>=dev-python/aiohappyeyeballs-2.5.0[${PYTHON_USEDEP}]
 	>=dev-python/aiosignal-1.1.2[${PYTHON_USEDEP}]
 	>=dev-python/attrs-17.3.0[${PYTHON_USEDEP}]
 	dev-python/brotlicffi[${PYTHON_USEDEP}]
@@ -37,18 +37,16 @@ RDEPEND="
 	>=dev-python/multidict-4.5.0[${PYTHON_USEDEP}]
 	>=dev-python/propcache-0.2.0[${PYTHON_USEDEP}]
 	>=dev-python/yarl-1.17.0[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep '
-		<dev-python/async-timeout-6[${PYTHON_USEDEP}]
-		>=dev-python/async-timeout-4.0[${PYTHON_USEDEP}]
-	' 3.10)
 "
 BDEPEND="
 	native-extensions? (
-		dev-py/cython[${PYTHON_USEDEP}]
+		>=dev-py/cython-3.1.1[${PYTHON_USEDEP}]
+		dev-python/pkgconfig[${PYTHON_USEDEP}]
 	)
 	test? (
+		dev-python/blockbuster[${PYTHON_USEDEP}]
 		dev-python/freezegun[${PYTHON_USEDEP}]
-		www-servers/gunicorn[${PYTHON_USEDEP}]
+		dev-python/isal[${PYTHON_USEDEP}]
 		dev-python/pytest-mock[${PYTHON_USEDEP}]
 		dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
 		dev-python/pytest-xdist[${PYTHON_USEDEP}]
@@ -56,6 +54,8 @@ BDEPEND="
 		$(python_gen_cond_dep '
 			dev-python/time-machine[${PYTHON_USEDEP}]
 		' 'python3*')
+		dev-python/zlib-ng[${PYTHON_USEDEP}]
+		www-servers/gunicorn[${PYTHON_USEDEP}]
 		test-rust? (
 			dev-python/trustme[${PYTHON_USEDEP}]
 		)
@@ -69,10 +69,6 @@ distutils_enable_tests pytest
 
 src_prepare() {
 	filter-flags -Wl,-z,defs
-	local PATCHES=(
-		"${FILESDIR}/${PN}-3.11.17-unbundle-llhttp.patch"
-	)
-
 	distutils-r1_src_prepare
 
 	# increase the timeout a little
@@ -99,6 +95,7 @@ python_configure() {
 
 python_compile() {
 	filter-flags -Wl,-z,defs
+	local -x AIOHTTP_USE_SYSTEM_DEPS=1
 	# implicitly disabled for pypy3
 	if ! use native-extensions; then
 		local -x AIOHTTP_NO_EXTENSIONS=1
@@ -129,9 +126,21 @@ python_test() {
 	local EPYTEST_DESELECT=(
 		# Internet
 		tests/test_client_session.py::test_client_session_timeout_zero
+		tests/test_connector.py::test_tcp_connector_ssl_shutdown_timeout_passed_to_create_connection
 		# broken by irrelevant deprecation warnings
 		tests/test_circular_imports.py::test_no_warnings
 	)
+
+	case ${EPYTHON} in
+		python3.14)
+			EPYTEST_DESELECT+=(
+				# TODO
+				tests/test_cookiejar.py::test_pickle_format
+				# different exception message
+				tests/test_client_functional.py::test_aiohttp_request_coroutine
+			)
+			;;
+	esac
 
 	# upstream unconditionally blocks building C extensions
 	# on PyPy3 but the test suite needs an explicit switch

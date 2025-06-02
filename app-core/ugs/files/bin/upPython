@@ -243,6 +243,7 @@ PACKAGES=(
 "strict-rfc3339"
 "testpath"
 "tls-client"
+"ensurepip-setuptools"
 "tomli"
 "tomli-w"
 "tomlkit"

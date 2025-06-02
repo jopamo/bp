@@ -41,7 +41,7 @@ inherit multiprocessing toolchain-funcs
 _PYTHON_ALL_IMPLS=(
 	pypy3 pypy3_11
 	python3_13t
-	python3_{10..13}
+	python3_{10..15}
 )
 readonly _PYTHON_ALL_IMPLS
 

@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( python3_{10..13} python3_13t pypy3 pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 
 inherit distutils-r1 pypi
 
@@ -27,6 +27,12 @@ BDEPEND="
 "
 
 distutils_enable_tests unittest
+
+PATCHES=(
+	# https://github.com/python/typing_extensions/pull/566
+	# https://github.com/python/typing_extensions/pull/592
+	"${FILESDIR}/${P}-py314.patch"
+)
 
 python_test() {
 	cd src || die

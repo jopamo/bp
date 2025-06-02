@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( pypy3 pypy3_11 python3_{10..13} )
+PYTHON_COMPAT=( pypy3_11 python3_{11..13} )
 PYTHON_REQ_USE="threads(+)"
 
 inherit distutils-r1 pypi
@@ -24,7 +24,7 @@ RDEPEND="
 	>=dev-python/ipython-genutils-0.2.0[${PYTHON_USEDEP}]
 	>=dev-python/traitlets-4.3.1[${PYTHON_USEDEP}]
 	>=dev-python/widgetsnbextension-4.0.14[${PYTHON_USEDEP}]
-	>=dev-python/jupyterlab-widgets-3.0.14[${PYTHON_USEDEP}]
+	>=dev-python/jupyterlab-widgets-3.0.15[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	test? (

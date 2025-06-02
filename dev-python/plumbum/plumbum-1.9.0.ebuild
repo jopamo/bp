@@ -1,4 +1,3 @@
-# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -6,7 +5,7 @@ EAPI=8
 DISTUTILS_USE_PEP517=hatchling
 PYTHON_COMPAT=( python3_{10..13} )
 
-inherit distutils-r1 optfeature pypi
+inherit distutils-r1 pypi
 
 DESCRIPTION="A library for shell script-like programs in python"
 HOMEPAGE="
@@ -17,7 +16,7 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm64 ~riscv x86"
+KEYWORDS="amd64 arm64"
 
 BDEPEND="
 	dev-python/hatch-vcs[${PYTHON_USEDEP}]
@@ -50,8 +49,8 @@ python_test() {
 }
 
 pkg_postinst() {
-	optfeature "remote commands via ssh" dev-python/paramiko
-	optfeature "progress bars in jupyter" dev-python/ipywidgets
-	optfeature "colored output in jupyter" dev-python/ipython
-	optfeature "images on the command line" dev-python/pillow
+ "remote commands via ssh" dev-python/paramiko
+ "progress bars in jupyter" dev-python/ipywidgets
+ "colored output in jupyter" dev-python/ipython
+ "images on the command line" xgui-app/pillow
 }

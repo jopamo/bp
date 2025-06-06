@@ -24,8 +24,8 @@ def process_filename(filename):
 
     fixed_version_pattern = r'(\d+\.\d+)(?=\.[^\.]+$)'
 
-    if re.search(date_version_pattern, filename):
-        return "Date-based"
+    if re.search(branch_version_pattern, filename):
+        return "Branch-based"
 
     if re.search(freeze_version_pattern, filename):
         return "Frozen"

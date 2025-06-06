@@ -81,7 +81,6 @@ RDEPEND="
 		bin/brave-nightly-bin
 		bin/filebot
 		bin/google-chrome-unstable
-		bin/nvidia-drivers
 		bin/openjdk8
 		bin/platform-tools
 		bin/signal-desktop-bin

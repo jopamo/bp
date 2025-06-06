@@ -52,6 +52,11 @@ src_configure() {
 	meson_src_configure
 }
 
+src_install() {
+	meson_src_install
+	keepdir /usr/share/glib-2.0/gettext
+}
+
 pkg_postinst() {
 	glib-compile-schemas "${EROOT}"/usr/share/glib-2.0/schemas/
 }

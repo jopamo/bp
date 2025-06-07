@@ -7,7 +7,7 @@ inherit flag-o-matic
 DESCRIPTION="GNU libc C library"
 HOMEPAGE="https://www.gnu.org/software/libc/"
 
-SNAPSHOT=03e0cad3a0d8cfb6e761e8e16cc09e6c96f9fd44
+SNAPSHOT=c8e10f14328518954072df64aafd574e67cfdde5
 SRC_URI="https://github.com/bminor/glibc/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/glibc-${SNAPSHOT}
 
@@ -18,10 +18,10 @@ KEYWORDS="amd64 arm64"
 IUSE="caps debug nscd profile systemd static-libs +static-pie tmpfilesd"
 
 BDEPEND="
-	app-build/gcc
 	app-build/make
 "
 DEPEND="
+	app-build/gcc
 	app-kernel/linux-headers
 	app-core/layout
 "
@@ -99,9 +99,12 @@ src_prepare() {
 	chmod u+x "${S}"/scripts/*.sh
 
 	#sed -i 's/\-Wl,\-z,defs\ //' "${S}"/elf/Makefile || die
+	#cp "${FILESDIR}"/setuid.c "${S}"/sysdeps/unix/sysv/linux/ || die
+	#cp "${FILESDIR}"/libc-start.c "${S}"/csu/ || die
 }
 
 src_configure() {
+	replace-flags -O0 -O1
 	filter-flags -flto*
 	filter-flags -D_FORTIFY_SOURCE*
 	filter-flags -Wl,-z,defs

@@ -9,12 +9,12 @@ HOMEPAGE="https://www.qt.io/"
 
 if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
-	EGIT_REPO_URI="https://github.com/qt/${PN}.git"
+	EGIT_REPO_URI="https://github.com/qt/qttools.git"
 	inherit git-r3
 else
 	SNAPSHOT=610c94f80802f67b59c00cac1f229e3d13b8de35
-	SRC_URI="https://github.com/qt/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	SRC_URI="https://github.com/qt/qttools/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	S=${WORKDIR}/qttools-${SNAPSHOT}
 fi
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"

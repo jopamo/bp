@@ -13,7 +13,7 @@ if [[ ${PV} = *9999 ]]; then
 else
 	SNAPSHOT=8e88e3590a19006362ea8b8dfdc18bb88b3cb3b5
 	SRC_URI="https://gitlab.freedesktop.org/realmd/adcli/-/archive/${SNAPSHOT}/adcli-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
-	S="${WORKDIR}/${PN}-${SNAPSHOT}"
+	S="${WORKDIR}/realmd-adcli-${SNAPSHOT}"
 fi
 
 LICENSE="LGPL-2.1"

@@ -18,7 +18,7 @@ RDEPEND="bin/openjdk8"
 S=${WORKDIR}
 
 src_install() {
-	HERE="${ED}"/opt/${PN}
+	HERE="${ED}"/opt/filebot
 
 	mkdir -p "${HERE}" || die
 	cp -rp "${S}"/* "${HERE}"/ || die
@@ -30,14 +30,14 @@ src_install() {
 
 	# revdep-rebuild entry
 	insinto /etc/revdep-rebuild
-	echo "SEARCH_DIRS_MASK=opt/${PN}" >> ${T}/10${PN}
-	doins "${T}"/10${PN} || die
+	echo "SEARCH_DIRS_MASK=opt/filebot" >> ${T}/10filebot
+	doins "${T}"/10filebot || die
 
 	# Create shortcut
 	dodir /usr/bin/
-	cat <<-EOF >"${D}"/usr/bin/${PN}
+	cat <<-EOF >"${D}"/usr/bin/filebot
 	#!/bin/sh
 	exec /opt/openjdk8/bin/java -jar /opt/filebot/FileBot.jar "\$@"
 	EOF
-	fperms 0755 /usr/bin/${PN}
+	fperms 0755 /usr/bin/filebot
 }

@@ -25,7 +25,7 @@ DEPEND="${RDEPEND}
 
 ECONF_SOURCE=${S}
 
-PATCHES=( "${FILESDIR}"/${PN}-0.6.13-pkgconfig.patch )
+PATCHES=( "${FILESDIR}"/libexif-0.6.13-pkgconfig.patch )
 
 src_prepare() {
 	eautoreconf

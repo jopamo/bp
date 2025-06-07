@@ -9,7 +9,7 @@ HOMEPAGE="http://www.thekelleys.org.uk/dnsmasq/doc.html"
 
 SNAPSHOT=c9a4240ec43509969d974465e74230e5fc69e1b0
 SHORT=${SNAPSHOT:0:7}
-SRC_URI="https://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=snapshot;h=${SNAPSHOT};sf=tgz -> ${PN}-${SHORT}.tar.gz"
+SRC_URI="https://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=snapshot;h=${SNAPSHOT};sf=tgz -> dnsmasq-${SHORT}.tar.gz"
 S="${WORKDIR}/dnsmasq-${SHORT}"
 
 LICENSE="|| ( GPL-2 GPL-3 )"
@@ -77,7 +77,7 @@ src_compile() {
 		CFLAGS="${CFLAGS}" \
 		LDFLAGS="${LDFLAGS}" \
 		COPTS="${COPTS[*]}" \
-		CONFFILE="/etc/${PN}.conf" \
+		CONFFILE="/etc/dnsmasq.conf" \
 		all
 
 	use dhcp-tools && emake -C contrib/lease-tools \
@@ -100,17 +100,17 @@ src_install() {
 
 	insinto /etc
 	insopts -m 0644
-	doins "${FILESDIR}"/${PN}.conf
+	doins "${FILESDIR}"/dnsmasq.conf
 
 	if use systemd; then
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
-		doins "${FILESDIR}"/${PN}.service
+		doins "${FILESDIR}"/dnsmasq.service
 	fi
 }
 
 pkg_preinst() {
-	enewgroup "${PN}" 67
-	enewuser "${PN}" 67 -1 "/var/lib/${PN}" "${PN}"
+	enewgroup "dnsmasq" 67
+	enewuser "dnsmasq" 67 -1 "/var/lib/dnsmasq" "dnsmasq"
 
 }

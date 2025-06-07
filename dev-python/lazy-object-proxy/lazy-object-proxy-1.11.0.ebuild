@@ -28,7 +28,7 @@ distutils_enable_tests pytest
 
 PATCHES=(
 	# https://github.com/ionelmc/python-lazy-object-proxy/pull/79
-	"${FILESDIR}/${PN}-1.10.0-pure-tests.patch"
+	"${FILESDIR}/lazy-object-proxy-1.10.0-pure-tests.patch"
 	# https://github.com/ionelmc/python-lazy-object-proxy/pull/88
 	"${FILESDIR}/${P}-py314.patch"
 )

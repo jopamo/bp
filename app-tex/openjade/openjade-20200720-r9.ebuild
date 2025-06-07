@@ -9,7 +9,7 @@ HOMEPAGE="http://openjade.sourceforge.net"
 
 SNAPSHOT=e804ff522ff4ecc94997d8bed581120e61f6d3eb
 SRC_URI="https://1g4.org/files/${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/openjade-20200720-${SNAPSHOT}
 
 LICENSE="MIT"
 SLOT="0"
@@ -63,7 +63,7 @@ src_install() {
 	doins -r pubtext
 	insinto /usr/share/sgml/${P}/dsssl
 	doins dsssl/{dsssl.dtd,style-sheet.dtd,fot.dtd}
-	newins ${PN}.dsssl-catalog catalog
+	newins openjade-20200720.dsssl-catalog catalog
 
 	# Breaks sgml2xml among other things
 	#insinto /usr/share/sgml/${P}/unicode

@@ -6,7 +6,7 @@ inherit flag-o-matic
 
 DESCRIPTION="Provides useful functions commonly found on BSD systems"
 HOMEPAGE="https://libbsd.freedesktop.org/wiki/"
-SRC_URI="https://${PN}.freedesktop.org/releases/${P}.tar.xz"
+SRC_URI="https://libbsd.freedesktop.org/releases/${P}.tar.xz"
 
 LICENSE="BSD BSD-2 BSD-4 ISC"
 SLOT="0"

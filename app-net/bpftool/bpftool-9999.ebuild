@@ -14,7 +14,7 @@ if [[ ${PV} = *9999 ]]; then
 else
 	SNAPSHOT=168e72dcd3e04e0e19e92c012a04b8a1e4658f50
 	SRC_URI="https://github.com/libbpf/bpftool/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	S=${WORKDIR}/bpftool-${SNAPSHOT}
 fi
 
 LICENSE="|| ( GPL-2 BSD-2 )"

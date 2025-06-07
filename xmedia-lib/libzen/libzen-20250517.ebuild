@@ -39,7 +39,7 @@ src_install() {
 	default
 
 	insinto /usr/lib/pkgconfig
-	doins ${PN}.pc
+	doins libzen.pc
 
 	if ! use keep-la; then
 		find "${ED}" -name '*.la' -delete || die

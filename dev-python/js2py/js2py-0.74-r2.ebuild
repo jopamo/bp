@@ -26,8 +26,8 @@ RDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-0.74-CVE-2024-28397.patch"
-	"${FILESDIR}/${PN}-0.74-py312-load_attr.patch"
+	"${FILESDIR}/js2py-0.74-0.74-CVE-2024-28397.patch"
+	"${FILESDIR}/js2py-0.74-0.74-py312-load_attr.patch"
 )
 
 python_test() {

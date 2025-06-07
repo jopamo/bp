@@ -8,7 +8,7 @@ DESCRIPTION="A script for checking the hardening options in the Linux kernel con
 HOMEPAGE="https://github.com/a13xp0p0v/kernel-hardening-checker"
 
 SNAPSHOT=0c65440652cf01da1bf5c2c746037bd350281468
-SRC_URI="https://github.com/a13xp0p0v/kernel-hardening-checker/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SRC_URI="https://github.com/a13xp0p0v/kernel-hardening-checker/archive/${SNAPSHOT}.tar.gz -> kernel-hardening-checker-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/kernel-hardening-checker-${SNAPSHOT}"
 
 LICENSE="GPL-3"

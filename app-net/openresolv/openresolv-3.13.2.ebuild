@@ -26,7 +26,7 @@ pkg_config() {
 	fi
 
 	if [[ -n "$(resolvconf -l)" ]]; then
-		einfo "${PN} already has DNS information"
+		einfo "openresolv already has DNS information"
 	else
 		ebegin "Copying /etc/resolv.conf to resolvconf -a dummy"
 		resolvconf -a dummy </etc/resolv.conf

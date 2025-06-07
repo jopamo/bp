@@ -43,7 +43,7 @@ BDEPEND="
 DOCS=( CHANGES.rst README.md )
 
 PATCHES=(
-	"${FILESDIR}/${PN}-2.3.1-unbundle-bottle.patch"
+	"${FILESDIR}/pypiserver-2.3.2-2.3.1-unbundle-bottle.patch"
 )
 
 distutils_enable_tests pytest

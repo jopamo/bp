@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="Indent program source files"
 HOMEPAGE="https://www.gnu.org/software/indent/"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+SRC_URI="mirror://gnu/indent/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"

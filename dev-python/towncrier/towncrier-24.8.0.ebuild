@@ -14,7 +14,7 @@ HOMEPAGE="
 	https://pypi.org/project/towncrier/
 "
 SRC_URI="
-	https://github.com/twisted/${PN}/archive/${PV/_}.tar.gz
+	https://github.com/twisted/towncrier/archive/${PV/_}.tar.gz
 		-> ${MY_P}.gh.tar.gz
 "
 S=${WORKDIR}/${MY_P}

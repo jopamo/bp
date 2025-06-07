@@ -47,7 +47,7 @@ src_install() {
 	local size sizes icon_path icon name
 	sizes="16 32 48 128"
 	icon_path="${S}/browser/chrome/icons/default"
-	icon="${PN}"
+	icon="firefox-nightly-bin"
 	name="Mozilla Firefox"
 
 	# Install icons and .desktop for menu entry
@@ -75,8 +75,8 @@ src_install() {
 
 	# revdep-rebuild entry
 	insinto /etc/revdep-rebuild
-	echo "SEARCH_DIRS_MASK=opt/${MOZ_PN}" >> ${T}/10${PN}
-	doins "${T}"/10${PN} || die
+	echo "SEARCH_DIRS_MASK=opt/${MOZ_PN}" >> ${T}/10firefox-nightly-bin
+	doins "${T}"/10firefox-nightly-bin || die
 
 	rm "${ED}"/opt/${MOZ_PN}/pingsender || die
 	rm "${ED}"/opt/${MOZ_PN}/crashreporter* || die
@@ -88,12 +88,12 @@ src_install() {
 	dosym -r /usr/bin/firefox-nightly-bin /usr/bin/firefox
 
 	# Create /usr/bin/firefox-bin
-	cat <<-EOF >"${D}"/usr/bin/${PN}
+	cat <<-EOF >"${D}"/usr/bin/firefox-nightly-bin
 	#!/bin/sh
 	exec /opt/${MOZ_PN}/firefox-bin "\$@"
 	EOF
 
-	fperms 0755 /usr/bin/${PN}
+	fperms 0755 /usr/bin/firefox-nightly-bin
 
 	insopts -m 0644
 	insinto /usr/share/pixmaps

@@ -6,7 +6,7 @@ inherit flag-o-matic git-r3 cmake
 
 DESCRIPTION="Cross-platform application development framework"
 HOMEPAGE="https://www.qt.io/"
-EGIT_REPO_URI="https://github.com/qt/${PN}.git"
+EGIT_REPO_URI="https://github.com/qt/qtbase.git"
 EGIT_BRANCH=$(ver_cut 1).$(ver_cut 2)
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"

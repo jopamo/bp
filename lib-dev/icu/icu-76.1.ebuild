@@ -16,7 +16,7 @@ IUSE="debug static-libs"
 
 BDEPEND="app-dev/pkgconf"
 
-S="${WORKDIR}/${PN}/source"
+S="${WORKDIR}/icu/source"
 
 src_prepare() {
 	default

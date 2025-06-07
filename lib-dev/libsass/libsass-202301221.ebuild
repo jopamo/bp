@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/sass/libsass"
 
 SNAPSHOT=7037f03fabeb2b18b5efa84403f5a6d7a990f460
 SRC_URI="https://github.com/sass/libsass/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/libsass-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

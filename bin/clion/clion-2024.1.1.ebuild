@@ -20,7 +20,7 @@ KEYWORDS="amd64"
 
 RESTRICT="strip"
 
-QA_PREBUILT="opt/${PN}/*"
+QA_PREBUILT="opt/clion/*"
 
 src_unpack() {
 
@@ -32,10 +32,10 @@ src_unpack() {
 }
 
 src_install() {
-	local HERE="${ED}/opt/${PN}"
+	local HERE="${ED}/opt/clion"
 
 	mkdir -p "${HERE}" || die
 	cp -rp "${S}"/* "${HERE}/" || die
 
-	make_wrapper idea "/opt/${PN}/bin/idea.sh"
+	make_wrapper idea "/opt/clion/bin/idea.sh"
 }

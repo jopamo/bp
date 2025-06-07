@@ -8,8 +8,8 @@ DESCRIPTION="Daemon used to register global keyboard shortcuts"
 HOMEPAGE="http://lxqt.org/"
 
 SNAPSHOT=ae4679f08344f7cc6dba60901f760d6a31335152
-SRC_URI="https://github.com/lxqt/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SRC_URI="https://github.com/lxqt/lxqt-config/archive/${SNAPSHOT}.tar.gz -> lxqt-config-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/lxqt-config-${SNAPSHOT}"
 
 KEYWORDS="amd64 arm64"
 

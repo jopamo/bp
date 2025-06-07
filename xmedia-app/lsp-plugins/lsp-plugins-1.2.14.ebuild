@@ -12,9 +12,9 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/lsp-plugins/lsp-plugins"
 	EGIT_BRANCH="devel"
 else
-	SRC_URI="https://github.com/lsp-plugins/${PN}/releases/download/${PV}/${PN}-src-${PV}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://github.com/lsp-plugins/lsp-plugins/releases/download/${PV}/lsp-plugins-src-${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="amd64 ~arm arm64 ~ppc ~ppc64 x86"
-	S="${WORKDIR}/${PN}"
+	S="${WORKDIR}/lsp-plugins"
 fi
 
 LICENSE="LGPL-3"

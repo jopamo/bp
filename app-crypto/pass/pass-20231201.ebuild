@@ -26,7 +26,7 @@ src_install() {
 
 
 	if use importers; then
-		exeinto /usr/share/${PN}/importers
+		exeinto /usr/share/pass/importers
 		doexe contrib/importers/*
 	fi
 }

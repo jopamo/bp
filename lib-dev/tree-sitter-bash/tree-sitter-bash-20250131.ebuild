@@ -11,7 +11,7 @@ HOMEPAGE="https://github.com/tree-sitter/tree-sitter-bash"
 
 SNAPSHOT=0c46d792d54c536be5ff7eb18eb95c70fccdb232
 SRC_URI="https://github.com/tree-sitter/tree-sitter-bash/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/tree-sitter-bash-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

@@ -6,7 +6,7 @@ inherit user flag-o-matic
 
 DESCRIPTION="a man replacement that utilizes gdbm instead of flat files"
 HOMEPAGE="http://www.nongnu.org/man-db/"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+SRC_URI="mirror://gnu/man-db/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"

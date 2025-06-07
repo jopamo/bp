@@ -20,6 +20,6 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 RDEPEND="${PYTHON_DEPS}"
 
 src_install() {
-	python_foreach_impl python_doscript ${PN}
+	python_foreach_impl python_doscript repo
 	doman man/*.[0-9]
 }

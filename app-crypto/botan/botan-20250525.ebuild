@@ -8,8 +8,8 @@ DESCRIPTION="C++ crypto library"
 HOMEPAGE="https://botan.randombit.net/"
 
 SNAPSHOT=fa28fc6f4edc344490fab13916a1d6d3dfb7d44b
-SRC_URI="https://github.com/randombit/botan/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://github.com/randombit/botan/archive/${SNAPSHOT}.tar.gz -> botan-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/botan-${SNAPSHOT}
 
 LICENSE="BSD-2"
 SLOT="0"

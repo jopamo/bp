@@ -9,7 +9,7 @@ HOMEPAGE="https://dracut.wiki.kernel.org"
 
 SNAPSHOT=e14520035286dbb4ee856cac2e05c1f21c6e148d
 SRC_URI="https://github.com/dracut-ng/dracut-ng/archive/${SNAPSHOT}.tar.gz -> dracut-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-ng-${SNAPSHOT}"
+S="${WORKDIR}/dracut-ng-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

@@ -8,8 +8,8 @@ DESCRIPTION="libqtxdg user tools"
 HOMEPAGE="http://lxqt.org/"
 
 SNAPSHOT=0ae6835400db5648d6d2fc95645bcee66cf2aec9
-SRC_URI="https://github.com/lxqt/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SRC_URI="https://github.com/lxqt/qtxdg-tools/archive/${SNAPSHOT}.tar.gz -> qtxdg-tools-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/qtxdg-tools-${SNAPSHOT}"
 
 KEYWORDS="amd64 arm64"
 

@@ -43,13 +43,13 @@ src_install() {
 	mkdir -p "${ED}"/opt || die
 	cp -rp opt/brave.com "${ED}"/opt/ || die
 
-	# Create /usr/bin/${PN}
+	# Create /usr/bin/brave-nightly-bin
 	dodir /usr/bin/
-	cat <<-EOF >"${D}"/usr/bin/${PN}
+	cat <<-EOF >"${D}"/usr/bin/brave-nightly-bin
 	#!/bin/sh
 	exec /opt/brave.com/brave-nightly/brave-browser-nightly "\$@"
 	EOF
-	fperms 0755 /usr/bin/${PN}
+	fperms 0755 /usr/bin/brave-nightly-bin
 	fperms 0755 /opt/brave.com/brave-nightly/brave-browser-nightly
 	fperms 4755 /opt/brave.com/brave-nightly/chrome-sandbox
 

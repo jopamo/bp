@@ -57,7 +57,7 @@ pkg_setup() {
 
 	if ! use udev; then
 		ewarn
-		ewarn "You are installing ${PN} with USE=-udev. This means various bluetooth"
+		ewarn "You are installing bluez with USE=-udev. This means various bluetooth"
 		ewarn "devices and adapters from Apple, Dell, Logitech etc. will not work,"
 		ewarn "and hid2hci will not be available."
 		ewarn

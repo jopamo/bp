@@ -8,8 +8,8 @@ DESCRIPTION="Linux kernel firewall, NAT and packet mangling tools"
 HOMEPAGE="http://www.netfilter.org/projects/iptables/"
 
 SNAPSHOT=6310639f697d4a570286960c470a6ec8c324be89
-SRC_URI="https://github.com/1g4-mirror/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://github.com/1g4-mirror/iptables/archive/${SNAPSHOT}.tar.gz -> iptables-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/iptables-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0/12"

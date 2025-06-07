@@ -35,7 +35,7 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-6.3.2-ignore-deprecationwarning.patch"
+	"${FILESDIR}/tornado-6.3.2-ignore-deprecationwarning.patch"
 )
 
 src_prepare() {

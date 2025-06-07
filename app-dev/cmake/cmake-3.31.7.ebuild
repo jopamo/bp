@@ -89,7 +89,7 @@ src_prepare() {
 		-e "s|@GENTOO_PORTAGE_EPREFIX@|${EPREFIX}/|g" \
 		Modules/Platform/{UnixPaths,Darwin}.cmake || die "sed failed"
 
-	if ! has_version \>=${CATEGORY}/${PN}-3.10.0 ; then
+	if ! has_version \>=${CATEGORY}/cmake-3.10.0 ; then
 		CMAKE_MAKEFILE_GENERATOR=emake
 		CMAKE_BINARY="${S}/Bootstrap.cmk/cmake"
 		cmake_src_bootstrap
@@ -104,7 +104,7 @@ src_prepare() {
 src_configure() {
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}"/usr
-		-DCMAKE_DATA_DIR=/share/${PN}
+		-DCMAKE_DATA_DIR=/share/cmake
 		-DSPHINX_MAN=OFF
 		-DSPHINX_HTML=OFF
 		-DCMAKE_USE_SYSTEM_LIBARCHIVE=ON

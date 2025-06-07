@@ -9,7 +9,7 @@ HOMEPAGE="https://devicetree.org/ https://git.kernel.org/cgit/utils/dtc/dtc.git/
 
 SNAPSHOT=ecb21febfdd32fa9e0cbd9517f9e92cc9c703ffb
 SRC_URI="https://github.com/dgibson/dtc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/dtc-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"

@@ -9,8 +9,8 @@ HOMEPAGE="http://fontconfig.org/"
 
 
 SNAPSHOT=fdfc3445d1cc9c1c7e587fb2a1287871de16faf9
-SRC_URI="https://gitlab.freedesktop.org/fontconfig/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SRC_URI="https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/${SNAPSHOT}/fontconfig-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/fontconfig-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

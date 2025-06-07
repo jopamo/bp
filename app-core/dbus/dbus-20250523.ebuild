@@ -8,8 +8,8 @@ DESCRIPTION="A message bus system, a simple way for applications to talk to each
 HOMEPAGE="https://dbus.freedesktop.org/"
 
 SNAPSHOT=6bba6c58c5635bc123cb565ee1aac0f12cd980d3
-SRC_URI="https://gitlab.freedesktop.org/dbus/dbus/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://gitlab.freedesktop.org/dbus/dbus/-/archive/${SNAPSHOT}/dbus-${SNAPSHOT}.tar.bz2"
+S=${WORKDIR}/dbus-${SNAPSHOT}
 
 LICENSE="|| ( AFL-2.1 GPL-2 )"
 SLOT="0"
@@ -105,13 +105,13 @@ src_install() {
 	if use tmpfilesd; then
 		insopts -m 0644
 		insinto /usr/lib/tmpfiles.d
-		newins "${FILESDIR}/${PN}-tmpfiles" ${PN}.conf
+		newins "${FILESDIR}/dbus-tmpfiles" dbus.conf
 	fi
 
 	if use systemd; then
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
-		#doins "${FILESDIR}/${PN}.service"
+		#doins "${FILESDIR}/dbus.service"
 	fi
 }
 
@@ -119,7 +119,7 @@ pkg_preinst() {
 	if use systemd && sysusersd; then
 		insopts -m 0644
 		insinto /usr/lib/sysusers.d
-		newins "${FILESDIR}/${PN}-sysusers" ${PN}.conf
+		newins "${FILESDIR}/dbus-sysusers" dbus.conf
 	else
 		rm -r "${ED}"/usr/lib/sysusers.d
 		enewgroup messagebus

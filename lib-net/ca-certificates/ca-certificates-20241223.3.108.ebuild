@@ -13,7 +13,7 @@ RTM_NAME="NSS_${NSS_VER//./_}_RTM"
 DESCRIPTION="Common CA Certificates PEM files"
 HOMEPAGE="https://packages.debian.org/sid/ca-certificates"
 NMU_PR=""
-	SRC_URI="mirror://debian/pool/main/c/${PN}/${PN}_${DEB_VER}${NMU_PR:++nmu}${NMU_PR}.tar.xz
+	SRC_URI="mirror://debian/pool/main/c/ca-certificates/ca-certificates_${DEB_VER}${NMU_PR:++nmu}${NMU_PR}.tar.xz
 		https://archive.mozilla.org/pub/security/nss/releases/${RTM_NAME}/src/nss-${NSS_VER}.tar.gz"
 
 LICENSE="MPL-1.1"
@@ -40,7 +40,7 @@ pkg_setup() {
 src_unpack() {
 	default
 	# Initial 20200601 deb release had bad naming inside the debian source tarball.
-	DEB_S="${WORKDIR}/${PN}-${DEB_VER}"
+	DEB_S="${WORKDIR}/ca-certificates-${DEB_VER}"
 	DEB_BAD_S="${WORKDIR}/work"
 	if [[ -d "${DEB_BAD_S}" ]] && [[ ! -d "${DEB_S}" ]] ; then
 		mv "${DEB_BAD_S}" "${DEB_S}"
@@ -72,7 +72,7 @@ src_prepare() {
 src_compile() {
 	cd "image/${EPREFIX}" || die
 
-	local d="${S}/${PN}/mozilla" c="usr/share/${PN}"
+	local d="${S}/ca-certificates/mozilla" c="usr/share/ca-certificates"
 
 	cp "${FILESDIR}"/mozilla/certdata2pem.py "${d}"/
 
@@ -102,7 +102,7 @@ src_install() {
 	rm -rf "${S}/image/usr/bin"
 	cp -pPR image/* "${D}"/ || die
 
-	cd ${PN} || die
+	cd ca-certificates || die
 	doman sbin/*.8
 	dodoc debian/README.* examples/ca-certificates-local/README
 }

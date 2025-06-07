@@ -6,7 +6,7 @@ inherit sgml-catalog-r1 prefix
 
 DESCRIPTION="Base ISO character entities and utilities for SGML"
 HOMEPAGE="https://www.iso.org/standard/16387.html"
-SRC_URI="https://dev.gentoo.org/~floppym/dist/${PN}/${P}-gentoo.tar.gz"
+SRC_URI="https://dev.gentoo.org/~floppym/dist/sgml-common-0.6.3/${P}-gentoo.tar.gz"
 
 # install-catalog is GPL
 LICENSE="FDL-1.1+ GPL-2"

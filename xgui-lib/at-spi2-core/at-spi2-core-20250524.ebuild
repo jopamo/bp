@@ -8,8 +8,8 @@ DESCRIPTION="D-Bus accessibility specifications and registration daemon"
 HOMEPAGE="https://wiki.gnome.org/Accessibility"
 
 SNAPSHOT=f363576e051bf1363af50a7dd7100045aa5a8075
-SRC_URI="https://gitlab.gnome.org/GNOME/at-spi2-core/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://gitlab.gnome.org/GNOME/at-spi2-core/-/archive/${SNAPSHOT}/at-spi2-core-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
+S=${WORKDIR}/at-spi2-core-${SNAPSHOT}
 
 LICENSE="LGPL-2+"
 SLOT="0"
@@ -29,10 +29,10 @@ BDEPEND="
 src_install() {
 	meson_src_install
 
-	cat > "${T}"/99${PN} <<- EOF || die
+	cat > "${T}"/99at-spi2-core <<- EOF || die
 		NO_AT_BRIDGE=1
 	EOF
-	doenvd "${T}"/99${PN}
+	doenvd "${T}"/99at-spi2-core
 
 	rm -rf "${ED}"/etc/xdg/autostart
 	rm "${ED}"/usr/share/dbus-1/services/org.a11y.Bus.service || die

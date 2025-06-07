@@ -6,7 +6,7 @@ inherit flag-o-matic autotools
 
 DESCRIPTION="Create, destroy, resize, check, copy partitions and file systems"
 HOMEPAGE="https://www.gnu.org/software/parted"
-SRC_URI="mirror://gnu//${PN}/${P}.tar.xz"
+SRC_URI="mirror://gnu//parted/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"

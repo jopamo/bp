@@ -6,7 +6,7 @@ DESCRIPTION="fastboot and adb"
 HOMEPAGE="https://developer.android.com/studio/releases/platform-tools"
 SRC_URI="https://dl.google.com/android/repository/platform-tools_r${PV}-linux.zip"
 
-S="${WORKDIR}/${PN}"
+S="${WORKDIR}/platform-tools"
 
 LICENSE="https://developer.android.com/studio/terms"
 SLOT="0"
@@ -15,11 +15,11 @@ KEYWORDS="amd64"
 DEPEND="app-util/android-udev-rules"
 
 src_install() {
-	exeinto /opt/${PN}
+	exeinto /opt/platform-tools
 	doexe {adb,fastboot,mke2fs,make_f2fs}
 
-	cat > "${T}"/99${PN} <<- EOF || die
-		PATH=${EPREFIX}/opt/${PN}
+	cat > "${T}"/99platform-tools <<- EOF || die
+		PATH=${EPREFIX}/opt/platform-tools
 	EOF
-	doenvd "${T}"/99${PN}
+	doenvd "${T}"/99platform-tools
 }

@@ -14,7 +14,7 @@ HOMEPAGE="
 	https://pypi.org/project/click/
 "
 SRC_URI="
-	https://github.com/pallets/${PN}/archive/${PV}.tar.gz
+	https://github.com/pallets/click/archive/${PV}.tar.gz
 		-> ${P}.gh.tar.gz
 "
 

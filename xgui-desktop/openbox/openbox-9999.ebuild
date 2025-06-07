@@ -71,8 +71,8 @@ src_install() {
 	default
 
 	# for xdg
-	cat > "${T}"/99${PN} <<- EOF || die
+	cat > "${T}"/99openbox <<- EOF || die
 		XDG_CURRENT_DESKTOP=LXQt
 	EOF
-	doenvd "${T}"/99${PN}
+	doenvd "${T}"/99openbox
 }

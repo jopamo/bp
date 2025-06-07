@@ -9,7 +9,7 @@ HOMEPAGE="https://git.kernel.org/cgit/linux/kernel/git/jaegeuk/f2fs-tools.git/ab
 
 SNAPSHOT=d8eac1f8699541416afdf93333772ef2e0509773
 SRC_URI="https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/snapshot/f2fs-tools-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/f2fs-tools-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

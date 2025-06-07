@@ -22,7 +22,7 @@ QA_PREBUILT="*"
 src_compile() { :;}
 
 src_install() {
-	HERE="${ED}"/opt/${PN}
+	HERE="${ED}"/opt/openjdk8
 
 	mkdir -p "${HERE}" || die
 	cp -rp	"${S}"/* "${HERE}"/ || die

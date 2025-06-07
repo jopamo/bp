@@ -20,8 +20,8 @@ src_test() {
 }
 
 src_install() {
-	insinto /usr/share/${PN}
+	insinto /usr/share/gnuconfig
 	doins config.{sub,guess} || die
-	fperms +x /usr/share/${PN}/config.{sub,guess}
+	fperms +x /usr/share/gnuconfig/config.{sub,guess}
 	cleanup_install
 }

@@ -8,7 +8,7 @@ inherit distutils-r1
 
 DESCRIPTION="a framework for package management"
 HOMEPAGE="https://github.com/pkgcore/pkgcore"
-SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
+SRC_URI="mirror://pypi/${PN:0:1}/pkgcore/${P}.tar.gz"
 
 LICENSE="BSD MIT"
 SLOT="0"

@@ -10,8 +10,8 @@ inherit autotools doins toolchain-funcs user
 DESCRIPTION="A web proxy with advanced filtering capabilities for enhancing privacy"
 HOMEPAGE="https://www.privoxy.org https://sourceforge.net/projects/ijbswa/"
 
-SRC_URI="https://www.privoxy.org/gitweb/?p=privoxy.git;a=snapshot;h=${SNAPSHOT};sf=tgz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SHORT}"
+SRC_URI="https://www.privoxy.org/gitweb/?p=privoxy.git;a=snapshot;h=${SNAPSHOT};sf=tgz -> privoxy-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/privoxy-${SHORT}"
 
 LICENSE="GPL-2+"
 SLOT="0"
@@ -24,8 +24,8 @@ png-images sanitize selinux ssl +stats toggle tools whitelists
 +zlib"
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-3.0.32-gentoo.patch
-	"${FILESDIR}"/${PN}-3.0.28-strip.patch
+	"${FILESDIR}"/privoxy-3.0.32-gentoo.patch
+	"${FILESDIR}"/privoxy-3.0.28-strip.patch
 )
 
 pkg_setup() {
@@ -96,7 +96,7 @@ src_configure() {
 src_install() {
 	default
 
-	systemd_dounit "${FILESDIR}"/${PN}.service
+	systemd_dounit "${FILESDIR}"/privoxy.service
 
 	insinto /etc/logrotate.d
 	newins "${FILESDIR}/privoxy.logrotate" privoxy

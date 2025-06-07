@@ -14,7 +14,7 @@ HOMEPAGE="
 	https://pypi.org/project/immutables/
 "
 SRC_URI="
-	https://github.com/MagicStack/${PN}/archive/v${PV}.tar.gz
+	https://github.com/MagicStack/immutables/archive/v${PV}.tar.gz
 		-> ${P}.gh.tar.gz
 "
 

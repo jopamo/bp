@@ -8,7 +8,7 @@ DESCRIPTION="A TCP/HTTP reverse proxy for high availability environments"
 HOMEPAGE="http://haproxy.1wt.eu"
 
 SNAPSHOT=c64781c2c8b307fba7499fc70102d4246e850240
-SRC_URI="https://github.com/haproxy/haproxy/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SRC_URI="https://github.com/haproxy/haproxy/archive/${SNAPSHOT}.tar.gz -> haproxy-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/haproxy-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2.1"

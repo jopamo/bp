@@ -6,7 +6,7 @@ inherit qmake-utils xdg
 
 DESCRIPTION="The X2Go Qt client"
 HOMEPAGE="https://wiki.x2go.org/doku.php"
-SRC_URI="https://code.x2go.org/releases/source/${PN}/${P}.tar.gz"
+SRC_URI="https://code.x2go.org/releases/source/x2goclient/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -32,17 +32,17 @@ src_configure() {
 }
 
 src_install() {
-	dobin ${PN}
+	dobin x2goclient
 
 	local size
 	for size in 16 32 48 64 128 ; do
-		doicon -s ${size} res/img/icons/${size}x${size}/${PN}.png
+		doicon -s ${size} res/img/icons/${size}x${size}/x2goclient.png
 	done
-	newicon -s scalable res/img/x2go-logos/x2go-logo.svg ${PN}.svg
+	newicon -s scalable res/img/x2go-logos/x2go-logo.svg x2goclient.svg
 
 	insinto /usr/share/pixmaps
-	doins res/img/icons/${PN}.xpm
+	doins res/img/icons/x2goclient.xpm
 
-	domenu desktop/${PN}.desktop
+	domenu desktop/x2goclient.desktop
 	doman man/man?/*
 }

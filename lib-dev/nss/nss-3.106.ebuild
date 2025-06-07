@@ -7,7 +7,7 @@ inherit toolchain-funcs
 RTM_NAME="NSS_${PV//./_}_RTM"
 # Rev of https://git.fedorahosted.org/cgit/nss-pem.git
 PEM_GIT_REV="429b0222759d8ad8e6dcd29e62875ae3efd69116"
-PEM_P="${PN}-pem-20160329"
+PEM_P="nss-pem-20160329"
 
 DESCRIPTION="Mozilla's Network Security Services library that implements PKI support"
 HOMEPAGE="http://www.mozilla.org/projects/security/pki/nss/"
@@ -26,7 +26,7 @@ DEPEND="app-dev/pkgconf
 
 RESTRICT="test"
 
-S="${WORKDIR}/${P}/${PN}"
+S="${WORKDIR}/${P}/nss"
 
 PATCHES=(
 	"${FILESDIR}"/nss-3.103-gentoo-fixes-add-pkgconfig-files.patch

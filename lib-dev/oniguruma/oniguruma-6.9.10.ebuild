@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="Regular expression library for different character encodings"
 HOMEPAGE="https://github.com/kkos/oniguruma"
-SRC_URI="https://github.com/kkos/${PN}/releases/download/v${PV}/onig-${PV}.tar.gz"
+SRC_URI="https://github.com/kkos/oniguruma/releases/download/v${PV}/onig-${PV}.tar.gz"
 
 LICENSE="BSD-2"
 SLOT="0/4"

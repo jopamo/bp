@@ -12,7 +12,7 @@ else
 	SRC_URI="http://www.nasm.us/pub/nasm/releasebuilds/${PV/_}/${P/_}.tar.xz"
 	#SNAPSHOT=3aebb20f123033dcd767f0abc46b18cbefed8091
 	#SRC_URI="https://github.com/netwide-assembler/nasm/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	#S=${WORKDIR}/${PN}-${SNAPSHOT}
+	#S=${WORKDIR}/nasm-${SNAPSHOT}
 fi
 
 LICENSE="BSD-2"

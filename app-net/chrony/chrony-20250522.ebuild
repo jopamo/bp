@@ -68,7 +68,7 @@ src_install() {
 	dobin chronyc
 	dobin chronyd
 
-	insinto /etc/${PN}
+	insinto /etc/chrony
 	doins "${FILESDIR}/chrony.conf"
 
 	keepdir /var/log/chrony
@@ -86,6 +86,6 @@ src_install() {
 }
 
 pkg_preinst() {
-	enewgroup ${PN} 123
-	enewuser ${PN} -1 -1 /var/lib/${PN} ${PN}
+	enewgroup chrony 123
+	enewuser chrony -1 -1 /var/lib/chrony chrony
 }

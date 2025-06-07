@@ -34,6 +34,6 @@ src_configure() {
 }
 
 pkg_preinst() {
-	enewgroup ${PN} 394
-	enewuser ${PN} 394 -1 -1 ${PN}
+	enewgroup openvpn 394
+	enewuser openvpn 394 -1 -1 openvpn
 }

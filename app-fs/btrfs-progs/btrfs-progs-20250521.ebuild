@@ -8,8 +8,8 @@ DESCRIPTION="Btrfs filesystem utilities"
 HOMEPAGE="https://btrfs.wiki.kernel.org"
 
 SNAPSHOT=2c8f5c78cd9804e09bd30ad631aad72c817ef9a1
-SRC_URI="https://github.com/kdave/btrfs-progs/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SRC_URI="https://github.com/kdave/btrfs-progs/archive/${SNAPSHOT}.tar.gz -> btrfs-progs-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/btrfs-progs-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

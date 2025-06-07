@@ -15,8 +15,8 @@ HOMEPAGE="
 "
 
 SNAPSHOT=7a27a67cdb6618ebbb3955fb9de71002cce7fbf3
-SRC_URI="https://github.com/certbot/certbot/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}/${PN}"
+SRC_URI="https://github.com/certbot/certbot/archive/${SNAPSHOT}.tar.gz -> certbot-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/certbot-${SNAPSHOT}/certbot"
 
 LICENSE="Apache-2.0"
 SLOT="0"

@@ -22,7 +22,7 @@ RDEPEND="
 	app-dev/spirv-tools
 "
 
-PATCHES=( "${FILESDIR}"/${PN}-2020.4-fix-build.patch )
+PATCHES=( "${FILESDIR}"/shaderc-20241106-2020.4-fix-build.patch )
 
 src_prepare() {
 	append-flags -ffat-lto-objects

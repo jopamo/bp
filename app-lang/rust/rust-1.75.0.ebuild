@@ -25,7 +25,7 @@ CMAKE_WARN_UNUSED_CLI=no
 RESTRICT="test network-sandbox"
 
 QA_FLAGS_IGNORED="
-	usr/lib/${PN}/${PV}/bin/.*
+	usr/lib/rust/${PV}/bin/.*
 	usr/libexec/.*
 	usr/lib/lib.*.so
 	usr/lib/rustlib/.*/bin/.*

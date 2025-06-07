@@ -8,8 +8,8 @@ DESCRIPTION="Image loading library for GTK+"
 HOMEPAGE="https://git.gnome.org/browse/gdk-pixbuf"
 
 SNAPSHOT=fbc4b785911fb9a900adf1d2a6b73b02ee2304c5
-SRC_URI="https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/archive/${SNAPSHOT}/gdk-pixbuf-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
+S=${WORKDIR}/gdk-pixbuf-${SNAPSHOT}
 
 LICENSE="LGPL-2+"
 SLOT="2"
@@ -44,9 +44,9 @@ src_configure() {
 
 pkg_preinst() {
 	# Make sure loaders.cache belongs to gdk-pixbuf alone
-	mkdir -p "${ED}"/usr/lib/${PN}-2.0/2.10.0/
+	mkdir -p "${ED}"/usr/lib/gdk-pixbuf-2.0/2.10.0/
 
-	local cache="usr/lib/${PN}-2.0/2.10.0/loaders.cache"
+	local cache="usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
 
 	if [[ -e ${EROOT}/${cache} ]]; then
 		cp "${EROOT}"/${cache} "${ED}"/${cache} || die

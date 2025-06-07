@@ -8,8 +8,8 @@ DESCRIPTION="XSLT libraries and tools"
 HOMEPAGE="http://www.xmlsoft.org/"
 
 SNAPSHOT=c8b1ea4b89a9b81fa611f32c80f47df0c3b3b004
-SRC_URI="https://gitlab.gnome.org/GNOME/libxslt/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SRC_URI="https://gitlab.gnome.org/GNOME/libxslt/-/archive/${SNAPSHOT}/libxslt-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/libxslt-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

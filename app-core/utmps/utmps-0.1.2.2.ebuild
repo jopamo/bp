@@ -37,7 +37,7 @@ src_install() {
 	if use tmpfilesd; then
 		insopts -m 0644
 		insinto /usr/lib/tmpfiles.d
-		doins "${FILESDIR}/${PN}.conf"
+		doins "${FILESDIR}/utmps.conf"
 	fi
 
 	if use systemd; then
@@ -54,7 +54,7 @@ pkg_preinst() {
 	if use sysusersd; then
 		insopts -m 0644
 		insinto /usr/lib/sysusers.d
-		newins "${FILESDIR}/${PN}-sysusers" ${PN}.conf
+		newins "${FILESDIR}/utmps-sysusers" utmps.conf
 	else
 		enewgroup sshd 22
 		enewuser sshd 22 -1 -1 sshd

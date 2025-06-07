@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="POSIX 1003.1e capabilities"
 HOMEPAGE="https://people.redhat.com/sgrubb/libcap-ng/"
-SRC_URI="https://people.redhat.com/sgrubb/${PN}/${P}.tar.gz"
+SRC_URI="https://people.redhat.com/sgrubb/libcap-ng/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"

@@ -47,11 +47,11 @@ EPYTEST_DESELECT=(
 
 src_prepare() {
 	local PATCHES=(
-		"${FILESDIR}/${PN}-3.2.0-nih-test-deps.patch"
+		"${FILESDIR}/paramiko-3.2.0-nih-test-deps.patch"
 	)
 
 	if ! use server; then
-		PATCHES+=( "${FILESDIR}/${PN}-3.2.0-disable-server.patch" )
+		PATCHES+=( "${FILESDIR}/paramiko-3.2.0-disable-server.patch" )
 	fi
 	distutils-r1_src_prepare
 }

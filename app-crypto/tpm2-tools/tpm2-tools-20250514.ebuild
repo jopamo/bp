@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/tpm2-software/tpm2-tools"
 
 SNAPSHOT=52ac6afcbc6438fc549a43dba4087a438bdf379d
 SRC_URI="https://github.com/tpm2-software/tpm2-tools/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/tpm2-tools-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

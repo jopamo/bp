@@ -29,5 +29,5 @@ BDEPEND="
 "
 
 python_test() {
-	"${EPYTHON}" -m doctest -v "${S}/${PN}.py" || die
+	"${EPYTHON}" -m doctest -v "${S}/rfc3987-1.3.8.py" || die
 }

@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="C library for the Public Suffix List"
 HOMEPAGE="https://github.com/rockdaboot/libpsl"
-SRC_URI="https://github.com/rockdaboot/${PN}/releases/download/${PV}/${P}.tar.gz"
+SRC_URI="https://github.com/rockdaboot/libpsl/releases/download/${PV}/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"

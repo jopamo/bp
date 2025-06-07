@@ -18,7 +18,7 @@ PATCHES=(
 )
 
 CONFIG_CHECK="~!R8169"
-WARNING_R8169="CONFIG_R8169 is enabled. ${PN} will not be loaded unless kernel driver Realtek 8169 PCI Gigabit Ethernet (CONFIG_R8169) is DISABLED."
+WARNING_R8169="CONFIG_R8169 is enabled. r8125 will not be loaded unless kernel driver Realtek 8169 PCI Gigabit Ethernet (CONFIG_R8169) is DISABLED."
 
 src_compile() {
 	# The module listing replaces the old MODULE_NAMES variable.

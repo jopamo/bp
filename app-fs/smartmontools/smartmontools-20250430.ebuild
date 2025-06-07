@@ -9,7 +9,7 @@ inherit autotools flag-o-matic
 DESCRIPTION="Tools to monitor storage systems to provide advanced warning of disk degradation"
 HOMEPAGE="https://www.smartmontools.org"
 SRC_URI="https://github.com/smartmontools/smartmontools/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}/smartmontools
+S=${WORKDIR}/smartmontools-${SNAPSHOT}/smartmontools
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -47,7 +47,7 @@ src_configure() {
 
 	myconf=(
 		--docdir="${EPREFIX}/usr/share/doc/${PF}"
-		--with-drivedbdir="${EPREFIX}/var/db/${PN}" #575292
+		--with-drivedbdir="${EPREFIX}/var/db/smartmontools" #575292
 		--with-initscriptdir="${EPREFIX}/etc/init.d"
 		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 		$(use_with caps libcap-ng)
@@ -58,7 +58,7 @@ src_configure() {
 }
 
 src_install() {
-	local db_path="/var/db/${PN}"
+	local db_path="/var/db/smartmontools"
 
 	if use daemon; then
 		default
@@ -76,16 +76,16 @@ src_install() {
 		fi
 
 		exeinto /etc/cron.monthly
-		doexe "${FILESDIR}/${PN}-update-drivedb"
+		doexe "${FILESDIR}/smartmontools-update-drivedb"
 	fi
 
 	if use daemon || use update_drivedb; then
 		keepdir "${db_path}"
 
-		# Install a copy of the initial drivedb.h to /usr/share/${PN}
+		# Install a copy of the initial drivedb.h to /usr/share/smartmontools
 		# so that we can access that file later in pkg_postinst
 		# even when dealing with binary packages (bug #575292)
-		insinto /usr/share/${PN}
+		insinto /usr/share/smartmontools
 		doins "${S}"/drivedb.h
 	fi
 

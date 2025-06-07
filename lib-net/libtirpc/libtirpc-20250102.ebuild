@@ -12,8 +12,8 @@ DESCRIPTION="Transport Independent RPC library (SunRPC replacement)"
 HOMEPAGE="http://libtirpc.sourceforge.net/"
 SRC_URI="https://downloads.sourceforge.net/libtirpc/${P}.tar.bz2"
 
-SRC_URI="https://git.linux-nfs.org/?p=steved/libtirpc.git;a=snapshot;h=${SNAPSHOT};sf=tgz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SHORT}"
+SRC_URI="https://git.linux-nfs.org/?p=steved/libtirpc.git;a=snapshot;h=${SNAPSHOT};sf=tgz -> libtirpc-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libtirpc-${SHORT}"
 
 LICENSE="GPL-2"
 SLOT="0"

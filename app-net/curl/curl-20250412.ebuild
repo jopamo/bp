@@ -12,8 +12,8 @@ if [[ ${PV} == *9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/curl/curl.git"
 else
 	SNAPSHOT=d163c7cbd1b567f6981a30d6a89cb04fcf5653fc
-	SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	SRC_URI="https://github.com/curl/curl/archive/${SNAPSHOT}.tar.gz -> curl-${SNAPSHOT}.tar.gz"
+	S=${WORKDIR}/curl-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
 fi
 
@@ -79,14 +79,14 @@ src_install() {
 	#dosym -r /etc/ssl/certs/cacert.pem /etc/ssl/certs/ca-bundle.crt
 	#dosym -r /etc/ssl/certs/cacert.pem /etc/ssl/certs/ca-certificates.crt
 
-    #cat > "${T}"/99${PN} <<- EOF || die
+    #cat > "${T}"/99curl <<- EOF || die
 	#	SSL_CERT_FILE="/etc/ssl/certs/cacert.pem"
 	#	CURL_CA_BUNDLE="/etc/ssl/certs/cacert.pem"
 	#	GIT_SSL_CAINFO="/etc/ssl/certs/cacert.pem"
 	#	REQUESTS_CA_BUNDLE="/etc/ssl/certs/cacert.pem"
 	#EOF
 
-    #doenvd "${T}"/99${PN}
+    #doenvd "${T}"/99curl
 
     dobin scripts/mk-ca-bundle.pl
 }

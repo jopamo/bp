@@ -6,7 +6,7 @@ SSNAP="8477d996dbc768d5df6aefd89fb61910188434cf"
 
 DESCRIPTION="A tool for reverse engineering Android apk files"
 HOMEPAGE="https://apktool.org/"
-SRC_URI="amd64? ( https://github.com/iBotPeaches/Apktool/releases/download/v${PV}/${PN}_${PV}.jar
+SRC_URI="amd64? ( https://github.com/iBotPeaches/Apktool/releases/download/v${PV}/apktool_${PV}.jar
 				https://raw.githubusercontent.com/iBotPeaches/Apktool/${SSNAP}/scripts/linux/apktool )"
 S="${WORKDIR}"
 

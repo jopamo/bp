@@ -6,7 +6,7 @@ inherit flag-o-matic libtool
 
 DESCRIPTION="Library for arbitrary-precision arithmetic on different type of numbers"
 HOMEPAGE="http://gmplib.org/"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+SRC_URI="mirror://gnu/gmp/${P}.tar.xz"
 
 LICENSE="|| ( LGPL-3+ GPL-2+ )"
 SLOT="0"
@@ -19,7 +19,7 @@ DEPEND="
 	app-compression/xz-utils
 "
 
-PATCHES=( "${FILESDIR}"/${PN}-6.1.0-noexecstack-detect.patch	)
+PATCHES=( "${FILESDIR}"/gmp-6.1.0-noexecstack-detect.patch	)
 
 src_prepare() {
 	default

@@ -9,7 +9,7 @@ HOMEPAGE="https://llvm.org/"
 
 SNAPSHOT=cd708029e0b2869e80abe31ddb175f7c35361f90
 SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/llvm-project-${SNAPSHOT}/${PN}"
+S="${WORKDIR}/llvm-project-${SNAPSHOT}/libclc"
 
 LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0

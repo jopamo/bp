@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="Used to create autoconfiguration files"
 HOMEPAGE="https://www.gnu.org/software/autoconf/autoconf.html"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+SRC_URI="mirror://gnu/autoconf/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="$(ver_cut 1).$(ver_cut 2)"

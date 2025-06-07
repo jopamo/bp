@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="GNU utility to convert program --help output to a man page"
 HOMEPAGE="https://www.gnu.org/software/help2man/"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+SRC_URI="mirror://gnu/help2man/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"

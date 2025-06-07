@@ -67,6 +67,6 @@ src_install() {
 	dolib.so build/libhdr10plus.so*
 
 	insinto /usr/lib/pkgconfig
-	doins "${FILESDIR}/${PN}.pc"
+	doins "${FILESDIR}/x265.pc"
 }
 

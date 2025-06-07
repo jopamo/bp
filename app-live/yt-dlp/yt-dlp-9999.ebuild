@@ -15,7 +15,7 @@ if [[ ${PV} = *9999 ]]; then
 else
 	SNAPSHOT=168e72dcd3e04e0e19e92c012a04b8a1e4658f50
 	SRC_URI="https://github.com/yt-dlp/yt-dlp/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	S=${WORKDIR}/yt-dlp-${SNAPSHOT}
 fi
 
 LICENSE="unlicense"

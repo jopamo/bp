@@ -7,7 +7,7 @@ DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1
 
-MY_P="${PN}-rel-${PV}"
+MY_P="pyxdg-0.28-rel-${PV}"
 DESCRIPTION="A Python module to deal with freedesktop.org specifications"
 HOMEPAGE="
 	https://freedesktop.org/wiki/Software/pyxdg/
@@ -24,8 +24,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-0.28-py3.12.patch
-	"${FILESDIR}"/${PN}-0.28-py3.14.patch
+	"${FILESDIR}"/pyxdg-0.28-0.28-py3.12.patch
+	"${FILESDIR}"/pyxdg-0.28-0.28-py3.14.patch
 )
 
 distutils_enable_tests pytest

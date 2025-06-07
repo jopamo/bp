@@ -13,7 +13,7 @@ if [[ ${PV} == *9999 ]]; then
 elif [[ ${PV} == 20* ]]; then
 	SNAPSHOT=4bbbf01dcf69752d527dbad061e2977b30d0bee2
 	SRC_URI="${HOMEPAGE}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	S=${WORKDIR}/source-code-pro-${SNAPSHOT}
 fi
 
 LICENSE="OFL-1.1"

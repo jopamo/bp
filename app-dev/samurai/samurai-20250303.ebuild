@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/michaelforney/samurai"
 
 SNAPSHOT=737f702fed670acb25e5e70b4b802690df7a4a8b
 SRC_URI="https://github.com/michaelforney/samurai/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/samurai-${SNAPSHOT}"
 
 LICENSE="ISC Apache-2.0 MIT"
 SLOT="0"

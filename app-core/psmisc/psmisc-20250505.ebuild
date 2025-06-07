@@ -9,7 +9,7 @@ HOMEPAGE="http://psmisc.sourceforge.net/"
 
 SNAPSHOT=b3cb7a11b44785e53d058c2b58acfb355db55a76
 SRC_URI="https://gitlab.com/psmisc/psmisc/-/archive/${SNAPSHOT}/psmisc-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/psmisc-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

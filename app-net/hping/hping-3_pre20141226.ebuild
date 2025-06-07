@@ -8,8 +8,8 @@ DESCRIPTION="A ping-like TCP/IP packet assembler/analyzer"
 HOMEPAGE="http://www.hping.org"
 
 SNAPSHOT="3547c7691742c6eaa31f8402e0ccbb81387c1b99"
-SRC_URI="https://github.com/antirez/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SRC_URI="https://github.com/antirez/hping/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/hping-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -20,16 +20,16 @@ IUSE="+tcl"
 DEPEND="lib-net/libpcap"
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-3_pre20051105-libtcl.patch
-	"${FILESDIR}"/${PN}-3_pre20051105-tcl.patch
-	"${FILESDIR}"/${PN}-3_pre20051105-tclsh-proper-escaping.patch
-	"${FILESDIR}"/${PN}-3_pre20141226-compile.patch
-	"${FILESDIR}"/${PN}-3_pre20141226-hping2-2-hping.patch
-	"${FILESDIR}"/${PN}-3_pre20141226-indent.patch
-	"${FILESDIR}"/${PN}-3_pre20141226-pcap-bpf.patch
-	"${FILESDIR}"/${PN}-3_pre20141226-scan-overflow.patch
-	"${FILESDIR}"/${PN}-3_pre20141226-unused-but-set.patch
-	"${FILESDIR}"/${PN}-3_pre20141226-fno-common.patch
+	"${FILESDIR}"/hping-3_pre20051105-libtcl.patch
+	"${FILESDIR}"/hping-3_pre20051105-tcl.patch
+	"${FILESDIR}"/hping-3_pre20051105-tclsh-proper-escaping.patch
+	"${FILESDIR}"/hping-3_pre20141226-compile.patch
+	"${FILESDIR}"/hping-3_pre20141226-hping2-2-hping.patch
+	"${FILESDIR}"/hping-3_pre20141226-indent.patch
+	"${FILESDIR}"/hping-3_pre20141226-pcap-bpf.patch
+	"${FILESDIR}"/hping-3_pre20141226-scan-overflow.patch
+	"${FILESDIR}"/hping-3_pre20141226-unused-but-set.patch
+	"${FILESDIR}"/hping-3_pre20141226-fno-common.patch
 )
 
 src_configure() {

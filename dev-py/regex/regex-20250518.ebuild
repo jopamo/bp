@@ -14,8 +14,8 @@ HOMEPAGE="
 "
 
 SNAPSHOT=addaa7c484bffc2dd0844945e9bc756e1441c958
-SRC_URI="https://github.com/mrabarnett/mrab-regex/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/mrab-${PN}-${SNAPSHOT}"
+SRC_URI="https://github.com/mrabarnett/mrab-regex/archive/${SNAPSHOT}.tar.gz -> regex-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/mrab-regex-${SNAPSHOT}"
 
 LICENSE="Apache-2.0"
 SLOT="0"

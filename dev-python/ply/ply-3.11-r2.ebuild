@@ -13,7 +13,7 @@ HOMEPAGE="
 	https://github.com/dabeaz/ply/
 	https://pypi.org/project/ply/
 "
-SRC_URI+=" https://dev.gentoo.org/~sam/distfiles/${CATEGORY}/${PN}/${P}-py3.12-assert.patch.xz"
+SRC_URI+=" https://dev.gentoo.org/~sam/distfiles/${CATEGORY}/ply-3.11/${P}-py3.12-assert.patch.xz"
 
 LICENSE="BSD"
 SLOT="0/${PV}"

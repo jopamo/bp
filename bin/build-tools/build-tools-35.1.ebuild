@@ -13,13 +13,13 @@ SLOT="0"
 KEYWORDS="amd64"
 
 src_install() {
-	exeinto /opt/${PN}
+	exeinto /opt/build-tools
 	doexe {apksigner,lib/apksigner.jar}
 
-	cat > "${T}"/99${PN} <<- EOF || die
+	cat > "${T}"/99build-tools <<- EOF || die
 		JAVA_HOME=/opt/openjdk8
-		PATH=${EPREFIX}/opt/${PN}
+		PATH=${EPREFIX}/opt/build-tools
 		PATH=$JAVA_HOME/bin:$PATH
 	EOF
-	doenvd "${T}"/99${PN}
+	doenvd "${T}"/99build-tools
 }

@@ -8,7 +8,7 @@ EGIT_REPO_URI="https://github.com/esnet/iperf"
 
 SNAPSHOT=67ca2c86b93716a812cb64e44e7cdecbbebe78e0
 SRC_URI="https://github.com/esnet/iperf/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/iperf-${SNAPSHOT}
 
 LICENSE="BSD"
 SLOT="0"

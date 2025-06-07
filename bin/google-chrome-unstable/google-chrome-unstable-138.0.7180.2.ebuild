@@ -4,11 +4,11 @@ EAPI=8
 
 inherit unpacker xdg
 
-MY_P="${PN}_${PV}-1"
+MY_P="google-chrome-unstable_${PV}-1"
 
 DESCRIPTION="Brave Browser: Secure, Fast & Private Web Browser with Adblocker"
 HOMEPAGE="https://brave.com"
-SRC_URI="https://dl.google.com/linux/chrome/deb/pool/main/g/${PN}/${MY_P}_amd64.deb"
+SRC_URI="https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-unstable/${MY_P}_amd64.deb"
 S="${WORKDIR}"
 
 RESTRICT="strip mirror"
@@ -45,14 +45,14 @@ src_install() {
 	insinto /opt
 	doins -r opt/google
 
-	# Create /usr/bin/${PN}
+	# Create /usr/bin/google-chrome-unstable
 	dodir /usr/bin/
-	cat <<-EOF >"${D}"/usr/bin/${PN}
+	cat <<-EOF >"${D}"/usr/bin/google-chrome-unstable
 	#!/bin/sh
 	exec /opt/google/chrome-unstable/google-chrome-unstable "\$@"
 	EOF
 
-	fperms 0755 /usr/bin/${PN}
+	fperms 0755 /usr/bin/google-chrome-unstable
 	fperms 0755 /opt/google/chrome-unstable/google-chrome-unstable
 	fperms 0755 /opt/google/chrome-unstable/chrome
 	fperms 0755 /opt/google/chrome-unstable/chrome_crashpad_handler

@@ -9,7 +9,7 @@ HOMEPAGE="https://go.dev"
 
 SNAPSHOT=13cdea00f92fbd69ebf6f342aac5622700c9e691
 SRC_URI="https://github.com/lu-zero/cargo-c/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/cargo-c-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"

@@ -7,7 +7,7 @@ HOMEPAGE="https://wiki.gentoo.org/wiki/Portage-utils"
 
 SNAPSHOT=eb6d9110d09080e63944da0c1b0265156ab1e326
 SRC_URI="https://github.com/gentoo/portage-utils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/portage-utils-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"

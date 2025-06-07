@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/libffi/libffi"
 
 SNAPSHOT=9ee7341dbaec04d8c79685fb55703fc9453d0e55
 SRC_URI="https://github.com/libffi/libffi/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/libffi-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

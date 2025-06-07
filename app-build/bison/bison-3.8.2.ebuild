@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="A general-purpose (yacc-compatible) parser generator"
 HOMEPAGE="https://www.gnu.org/software/bison/"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+SRC_URI="mirror://gnu/bison/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"

@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="xfs filesystem utilities"
 HOMEPAGE="https://xfs.wiki.kernel.org/"
-SRC_URI="https://www.kernel.org/pub/linux/utils/fs/xfs/${PN}/${P}.tar.xz"
+SRC_URI="https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/${P}.tar.xz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"

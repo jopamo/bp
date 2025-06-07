@@ -58,11 +58,11 @@ distutils_enable_tests pytest
 
 src_prepare() {
 	local PATCHES=(
-		"${FILESDIR}/${PN}-0.27.0-opt-trio.patch"
+		"${FILESDIR}/httpx-0.28.1-0.27.0-opt-trio.patch"
 		# fix test failures when httptools are installed
 		# https://github.com/encode/httpx/discussions/3429
 		# https://gitlab.archlinux.org/archlinux/packaging/packages/python-httpx/-/blob/main/uvicorn-test-server-use-h11.diff
-		"${FILESDIR}/${PN}-0.28.1-httptools-test.patch"
+		"${FILESDIR}/httpx-0.28.1-0.28.1-httptools-test.patch"
 	)
 
 	if ! use cli; then

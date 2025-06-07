@@ -12,7 +12,7 @@ if [[ ${PV} = *9999 ]]; then
 	inherit git-r3
 else
 	SNAPSHOT=
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	S=${WORKDIR}/libdisplay-info-${SNAPSHOT}
 fi
 
 LICENSE="MIT"

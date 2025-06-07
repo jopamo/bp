@@ -7,7 +7,7 @@ HOMEPAGE="https://github.com/sabotage-linux/netbsd-curses"
 
 SNAPSHOT=51d179dad861640caeb76674b5908ccd79f04fae
 SRC_URI="https://github.com/sabotage-linux/netbsd-curses/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/netbsd-curses-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"

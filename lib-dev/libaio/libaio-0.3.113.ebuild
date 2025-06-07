@@ -6,7 +6,7 @@ inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="Asynchronous input/output library that uses the kernels native interface"
 HOMEPAGE="https://pagure.io/libaio"
-SRC_URI="https://releases.pagure.org/${PN}/${P}.tar.gz"
+SRC_URI="https://releases.pagure.org/libaio/${P}.tar.gz"
 
 LICENSE="LGPL-2"
 SLOT="0"

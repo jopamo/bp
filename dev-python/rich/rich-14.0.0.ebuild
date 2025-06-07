@@ -34,7 +34,7 @@ BDEPEND="
 
 PATCHES=(
 	# https://github.com/Textualize/rich/pull/3622
-	"${FILESDIR}"/${PN}-14.0.0-py314.patch
+	"${FILESDIR}"/rich-14.0.0-py314.patch
 )
 
 distutils_enable_tests pytest

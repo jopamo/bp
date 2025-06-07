@@ -6,7 +6,7 @@ inherit cmake git-r3
 
 DESCRIPTION="The module contains unsupported Qt 5 APIs"
 HOMEPAGE="https://www.qt.io/"
-EGIT_REPO_URI="https://code.qt.io/qt/${PN}.git"
+EGIT_REPO_URI="https://code.qt.io/qt/qt5compat.git"
 EGIT_BRANCH="$(ver_cut 1-2)"
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"

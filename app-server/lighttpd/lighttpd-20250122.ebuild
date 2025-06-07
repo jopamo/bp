@@ -13,7 +13,7 @@ if [[ ${PV} = 9999 ]]; then
 else
 	SNAPSHOT=ef0b224b9fc22acfcdc88d7dfb38879168c9b964
 	SRC_URI="https://github.com/lighttpd/lighttpd1.4/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}1.4-${SNAPSHOT}
+	S=${WORKDIR}/lighttpd1.4-${SNAPSHOT}
 fi
 
 LICENSE="BSD GPL-2"
@@ -77,13 +77,13 @@ src_install() {
 	if use systemd; then
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
-		doins "${FILESDIR}/${PN}.service"
+		doins "${FILESDIR}/lighttpd.service"
 	fi
 
 	if use tmpfilesd; then
 		insopts -m 0644
 		insinto /usr/lib/tmpfiles.d
-		doins "${FILESDIR}/${PN}.tmpfiles.conf"
+		doins "${FILESDIR}/lighttpd.tmpfiles.conf"
 	fi
 
 	insinto /etc/lighttpd

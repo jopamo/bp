@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="Command line utilities to work with desktop menu entries"
 HOMEPAGE="https://freedesktop.org/wiki/Software/desktop-file-utils/"
-SRC_URI="https://www.freedesktop.org/software/${PN}/releases/${P}.tar.xz"
+SRC_URI="https://www.freedesktop.org/software/desktop-file-utils/releases/${P}.tar.xz"
 
 LICENSE="GPL-2+"
 SLOT="0"

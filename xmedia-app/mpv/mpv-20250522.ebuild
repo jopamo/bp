@@ -8,8 +8,8 @@ DESCRIPTION="Media player based on MPlayer and mplayer2"
 HOMEPAGE="https://mpv.io/"
 
 SNAPSHOT=1d1535ff9124fdeb3c81a2f089551e2cc8404613
-SRC_URI="https://github.com/mpv-player/mpv/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://github.com/mpv-player/mpv/archive/${SNAPSHOT}.tar.gz -> mpv-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/mpv-${SNAPSHOT}
 
 LICENSE="LGPL-2.1+ GPL-2+ BSD ISC"
 SLOT="0"
@@ -143,11 +143,11 @@ src_configure() {
 src_install() {
 	meson_src_install
 
-	insinto etc/${PN}
+	insinto etc/mpv
 	doins ${FILESDIR}/mpv.conf
 
 	if use lua; then
-		insinto /usr/share/${PN}
+		insinto /usr/share/mpv
 		doins -r TOOLS/lua
 
 		insinto /etc/mpv/scripts

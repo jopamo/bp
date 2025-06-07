@@ -29,7 +29,7 @@ DEPEND="${CDEPEND}
 RDEPEND="${CDEPEND}
 	dev-python/plumbum[${PYTHON_USEDEP}]"
 
-PATCHES=( "${FILESDIR}"/${PN}-5.3.0-no-gevent.patch )
+PATCHES=( "${FILESDIR}"/rpyc-5.3.0-no-gevent.patch )
 
 src_prepare() {
 	default

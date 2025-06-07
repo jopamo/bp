@@ -9,7 +9,7 @@ HOMEPAGE="https://git.linuxtv.org/v4l-utils.git"
 
 SNAPSHOT=c4cb1d1bb6960679e1272493102c6dcf4cec76e7
 SRC_URI="https://github.com/gjasny/v4l-utils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/v4l-utils-${SNAPSHOT}
 
 LICENSE="LGPL"
 SLOT="0"

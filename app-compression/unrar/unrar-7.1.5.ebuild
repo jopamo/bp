@@ -6,7 +6,7 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Uncompress rar files"
 HOMEPAGE="http://www.rarlab.com/rar_add.htm"
-SRC_URI="http://www.rarlab.com/rar/${PN}src-${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="http://www.rarlab.com/rar/unrarsrc-${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="unRAR"
 SLOT="0"
@@ -15,8 +15,8 @@ KEYWORDS="amd64 arm64"
 S=${WORKDIR}/unrar
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-5.9.3-build.patch
-	"${FILESDIR}"/${PN}-5.5.5-honor-flags.patch
+	"${FILESDIR}"/unrar-5.9.3-build.patch
+	"${FILESDIR}"/unrar-5.5.5-honor-flags.patch
 )
 
 append-ldflags -Wl,-soname,libunrar.so.$(ver_cut 0-1)

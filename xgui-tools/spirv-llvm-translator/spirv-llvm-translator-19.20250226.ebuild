@@ -10,7 +10,7 @@ DESCRIPTION="Bi-directional translator between SPIR-V and LLVM IR"
 HOMEPAGE="https://github.com/KhronosGroup/SPIRV-LLVM-Translator"
 
 SNAPSHOT=0cf86c9b37b67907bcd85ffe8758925d4a0f5784
-SRC_URI="https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SRC_URI="https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/${SNAPSHOT}.tar.gz -> spirv-llvm-translator-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/SPIRV-LLVM-Translator-${SNAPSHOT}"
 
 LICENSE="UoI-NCSA"

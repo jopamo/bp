@@ -6,7 +6,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="lossless data compressor based on the LZMA algorithm"
 HOMEPAGE="https://www.nongnu.org/lzip/lzip.html"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
+SRC_URI="mirror://gnu/lzip/${P}.tar.gz"
 
 LICENSE="GPL-2+"
 SLOT="0"

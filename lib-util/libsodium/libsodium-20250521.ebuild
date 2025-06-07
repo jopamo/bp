@@ -18,7 +18,7 @@ SLOT="0/23"
 KEYWORDS="amd64 arm64"
 IUSE="+asm minimal static-libs +urandom"
 
-PATCHES=( "${FILESDIR}"/${PN}-1.0.10-cpuflags.patch )
+PATCHES=( "${FILESDIR}"/libsodium-1.0.10-cpuflags.patch )
 
 src_prepare() {
 	default

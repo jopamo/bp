@@ -9,7 +9,7 @@ HOMEPAGE="https://www.freedesktop.org/wiki/Software/libinput/"
 
 SNAPSHOT=ea50e1a92c012a4a79acc05251260891f51e9517
 SRC_URI="https://gitlab.freedesktop.org/libinput/libinput/-/archive/${SNAPSHOT}/libinput-${SNAPSHOT}.tar.bz2"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/libinput-${SNAPSHOT}
 
 LICENSE="MIT"
 SLOT="0"

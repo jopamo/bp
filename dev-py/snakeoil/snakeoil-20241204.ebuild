@@ -10,8 +10,8 @@ DESCRIPTION="misc common functionality and useful optimizations"
 HOMEPAGE="https://github.com/pkgcore/snakeoil"
 
 SNAPSHOT=aaeb2c42797a2599541b4188e4d2d5a744de134b
-SRC_URI="https://github.com/pkgcore/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SRC_URI="https://github.com/pkgcore/snakeoil/archive/${SNAPSHOT}.tar.gz -> snakeoil-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/snakeoil-${SNAPSHOT}"
 
 LICENSE="BSD BSD-2 MIT"
 SLOT="0"

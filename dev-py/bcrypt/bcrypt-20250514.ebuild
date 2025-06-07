@@ -11,8 +11,8 @@ DESCRIPTION="Modern password hashing for software and servers"
 HOMEPAGE="https://pypi.org/project/bcrypt/"
 
 SNAPSHOT=7f0dc457ae06c4c9f1b94db97269438df4e44502
-SRC_URI="https://github.com/pyca/bcrypt/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SRC_URI="https://github.com/pyca/bcrypt/archive/${SNAPSHOT}.tar.gz -> bcrypt-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/bcrypt-${SNAPSHOT}"
 
 LICENSE="Apache-2.0"
 SLOT="0"

@@ -28,7 +28,7 @@ DEPEND="
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
-PATCHES=( "${FILESDIR}/${PN}-3.5-add-include.patch" )
+PATCHES=( "${FILESDIR}/mailutils-3.5-add-include.patch" )
 
 filter-flags -Wl,-z,defs
 

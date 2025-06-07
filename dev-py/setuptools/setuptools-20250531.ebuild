@@ -16,7 +16,7 @@ HOMEPAGE="
 "
 
 SNAPSHOT=c3f486f0f7ebf8fa141dfd7314cbcaba7370db0b
-SRC_URI="https://github.com/pypa/setuptools/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SRC_URI="https://github.com/pypa/setuptools/archive/${SNAPSHOT}.tar.gz -> setuptools-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/setuptools-${SNAPSHOT}"
 
 LICENSE="MIT"

@@ -9,7 +9,7 @@ inherit autotools flag-o-matic
 DESCRIPTION="The Fast Lexical Analyzer"
 HOMEPAGE="https://github.com/westes/flex"
 SRC_URI="https://github.com/westes/flex/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/flex-20200906-${SNAPSHOT}
 
 LICENSE="FLEX"
 SLOT="0"

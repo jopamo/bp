@@ -2,12 +2,12 @@
 
 EAPI=8
 
-MY_P="${PN}_$(ver_rs 1- _)"
+MY_P="boost_$(ver_rs 1- _)"
 MAJOR_V="$(ver_cut 1-2)"
 
 DESCRIPTION="Boost Libraries for C++"
 HOMEPAGE="http://www.boost.org/"
-SRC_URI="https://downloads.sourceforge.net/project/boost/${PN}/${PV}/${MY_P}.tar.bz2"
+SRC_URI="https://downloads.sourceforge.net/project/boost/boost/${PV}/${MY_P}.tar.bz2"
 
 LICENSE="Boost-1.0"
 SLOT="0"

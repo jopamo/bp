@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="neutral and extensible mechanism for serializing structured data"
 HOMEPAGE="https://developers.google.com/protocol-buffers/"
-SRC_URI="https://github.com/protocolbuffers/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/protocolbuffers/protobuf/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"

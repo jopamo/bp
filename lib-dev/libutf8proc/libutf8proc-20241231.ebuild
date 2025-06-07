@@ -15,7 +15,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-PATCHES=( "${FILESDIR}/${PN}-2.3.0-no-static.patch" )
+PATCHES=( "${FILESDIR}/libutf8proc-2.3.0-no-static.patch" )
 
 _emake() {
 	emake CC=$(tc-getCC) AR=$(tc-getAR) "$@"

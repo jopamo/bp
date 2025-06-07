@@ -13,7 +13,7 @@ HOMEPAGE="
 	https://pypi.org/project/trio/
 "
 SRC_URI="
-	https://github.com/python-trio/${PN}/archive/v${PV}.tar.gz
+	https://github.com/python-trio/trio/archive/v${PV}.tar.gz
 		-> ${P}.gh.tar.gz
 "
 

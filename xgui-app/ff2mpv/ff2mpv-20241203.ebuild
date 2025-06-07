@@ -10,7 +10,7 @@ SRC_URI="https://github.com/woodruffw/ff2mpv/archive/${PV}.tar.gz -> ${P}.tar.gz
 
 SNAPSHOT=b312d7e816a99f4c7abd96b3d6ce57d1fca5bc3c
 SRC_URI="https://github.com/woodruffw/ff2mpv/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/ff2mpv-${SNAPSHOT}
 
 LICENSE="MIT"
 SLOT="0"
@@ -20,12 +20,12 @@ RDEPEND="app-live/yt-dlp"
 
 src_prepare() {
 	default
-	sed -i -e "s/home\/william\/scripts\/ff2mpv/usr\/bin\/ff2mpv.py/g" "${PN}.json" || die
+	sed -i -e "s/home\/william\/scripts\/ff2mpv/usr\/bin\/ff2mpv.py/g" "ff2mpv.json" || die
 }
 
 src_install() {
-	python_doscript ${PN}.py
+	python_doscript ff2mpv.py
 
 	insinto	/usr/lib/mozilla/native-messaging-hosts/
-	doins ${PN}.json
+	doins ff2mpv.json
 }

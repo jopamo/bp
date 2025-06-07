@@ -8,7 +8,7 @@ DESCRIPTION="GNU libc C library"
 HOMEPAGE="https://www.gnu.org/software/libc/"
 
 SNAPSHOT=9403232d98c3328a3b3944334ebdbeea01481af2
-SRC_URI="https://github.com/bminor/glibc/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SRC_URI="https://github.com/bminor/glibc/archive/${SNAPSHOT}.tar.gz -> glibc-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/glibc-${SNAPSHOT}
 
 LICENSE="LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"

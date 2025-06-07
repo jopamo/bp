@@ -6,7 +6,7 @@ OLDVER=1.16
 
 DESCRIPTION="Used to generate Makefile.in from Makefile.am"
 HOMEPAGE="https://www.gnu.org/software/automake/"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+SRC_URI="mirror://gnu/automake/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"

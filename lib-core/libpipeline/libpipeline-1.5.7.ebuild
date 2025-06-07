@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="a pipeline manipulation library"
 HOMEPAGE="http://libpipeline.nongnu.org/"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
+SRC_URI="mirror://gnu/libpipeline/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"

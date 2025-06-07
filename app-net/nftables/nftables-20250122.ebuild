@@ -8,8 +8,8 @@ DESCRIPTION="Linux kernel firewall, NAT and packet mangling tools"
 HOMEPAGE="https://netfilter.org/projects/nftables/"
 
 SNAPSHOT=f17991d56c44cf308a6fdae088456c3a5dffd939
-SRC_URI="https://github.com/1g4-mirror/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://github.com/1g4-mirror/nftables/archive/${SNAPSHOT}.tar.gz -> nftables-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/nftables-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -54,7 +54,7 @@ src_install() {
 	if use systemd; then
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
-		doins "${FILESDIR}/${PN}.service"
+		doins "${FILESDIR}/nftables.service"
 	fi
 
 	insinto /etc

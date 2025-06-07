@@ -8,8 +8,8 @@ DESCRIPTION="ALSA extra plugins"
 HOMEPAGE="http://www.alsa-project.org/"
 
 SNAPSHOT=86d695c5d6ba028a3c01758a3b398312408ee0cf
-SRC_URI="https://github.com/alsa-project/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://github.com/alsa-project/alsa-plugins/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/alsa-plugins-${SNAPSHOT}
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"

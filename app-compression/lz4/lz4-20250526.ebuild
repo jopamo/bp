@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/lz4/lz4"
 
 SNAPSHOT=db84c07b79ffe90997d98abfc2bf1f7db4a6270c
 SRC_URI="https://github.com/lz4/lz4/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}/build/meson
+S=${WORKDIR}/lz4-${SNAPSHOT}/build/meson
 
 LICENSE="BSD-2 GPL-2"
 SLOT="0"

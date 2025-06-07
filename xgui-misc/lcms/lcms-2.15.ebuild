@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="A lightweight, speed optimized color management engine"
 HOMEPAGE="http://www.littlecms.com/"
-SRC_URI="mirror://sourceforge/${PN}/lcms2-${PV}.tar.gz"
+SRC_URI="mirror://sourceforge/lcms/lcms2-${PV}.tar.gz"
 
 LICENSE="MIT"
 SLOT="2"

@@ -10,8 +10,8 @@ DESCRIPTION="Collection of tools for Gentoo development"
 HOMEPAGE="https://github.com/pkgcore/pkgdev"
 
 SNAPSHOT=611a1c75c42457c619bc526620eda77aae00d41d
-SRC_URI="https://github.com/pkgcore/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SRC_URI="https://github.com/pkgcore/pkgdev/archive/${SNAPSHOT}.tar.gz -> pkgdev-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/pkgdev-${SNAPSHOT}"
 
 LICENSE="BSD MIT"
 SLOT="0"

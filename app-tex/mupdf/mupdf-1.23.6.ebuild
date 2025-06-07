@@ -40,14 +40,14 @@ DEPEND="${RDEPEND}
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-1.15-CFLAGS.patch
-	"${FILESDIR}"/${PN}-1.19.0-Makefile.patch
-	"${FILESDIR}"/${PN}-1.21.0-add-desktop-pc-files.patch
+	"${FILESDIR}"/mupdf-1.15-CFLAGS.patch
+	"${FILESDIR}"/mupdf-1.19.0-Makefile.patch
+	"${FILESDIR}"/mupdf-1.21.0-add-desktop-pc-files.patch
 	# See bugs #662352
 	"${FILESDIR}"/${P}-openssl-x11.patch
 	# General cross fixes from Debian (refreshed)
 	"${FILESDIR}"/${P}-cross-fixes.patch
-	"${FILESDIR}"/${PN}-1.21.1-fix-aliasing-violation.patch
+	"${FILESDIR}"/mupdf-1.21.1-fix-aliasing-violation.patch
 )
 
 src_prepare() {
@@ -67,7 +67,7 @@ src_prepare() {
 	# Adjust MuPDF version in .pc file created by the
 	# mupdf-1.10a-add-desktop-pc-xpm-files.patch file
 	sed -e "s/Version: \(.*\)/Version: ${PV}/" \
-		-i platform/debian/${PN}.pc || die "Failed substituting version in ${PN}.pc"
+		-i platform/debian/mupdf.pc || die "Failed substituting version in mupdf.pc"
 }
 
 _emake() {
@@ -120,12 +120,12 @@ src_compile() {
 src_install() {
 	if use opengl || use X ; then
 		insinto /usr/share/applications/
-		doins platform/debian/${PN}.desktop
+		doins platform/debian/mupdf.desktop
 
 		insinto /usr/share/icons/
-		doins docs/logo/new-${PN}-icon.svg
+		doins docs/logo/new-mupdf-icon.svg
 	else
-		rm docs/man/${PN}.1 || die "Failed to remove man page in src_install()"
+		rm docs/man/mupdf.1 || die "Failed to remove man page in src_install()"
 	fi
 
 	sed -i \
@@ -136,20 +136,20 @@ src_install() {
 
 	_emake install
 
-	dosym libmupdf.so.${PV} /usr/lib/lib${PN}.so
+	dosym libmupdf.so.${PV} /usr/lib/libmupdf.so
 
 	if use opengl ; then
 		einfo "mupdf symlink points to mupdf-gl (bug 616654)"
-		dosym ${PN}-gl /usr/bin/${PN}
+		dosym mupdf-gl /usr/bin/mupdf
 	elif use X ; then
 		einfo "mupdf symlink points to mupdf-x11 (bug 616654)"
-		dosym ${PN}-x11 /usr/bin/${PN}
+		dosym mupdf-x11 /usr/bin/mupdf
 	fi
 
 	# Respect libdir (bug #734898)
-	sed -i -e "s:/lib:/lib:" platform/debian/${PN}.pc \
+	sed -i -e "s:/lib:/lib:" platform/debian/mupdf.pc \
 		|| die "Failed to sed pkgconfig file to respect libdir in src_install()"
 
 	insinto /usr/lib/pkgconfig
-	doins platform/debian/${PN}.pc
+	doins platform/debian/mupdf.pc
 }

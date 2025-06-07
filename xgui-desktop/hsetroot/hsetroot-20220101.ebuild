@@ -20,5 +20,5 @@ DEPEND="
 "
 
 src_install() {
-	dobin ${PN}
+	dobin hsetroot
 }

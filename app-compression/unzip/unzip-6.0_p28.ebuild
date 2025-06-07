@@ -6,12 +6,12 @@ inherit toolchain-funcs flag-o-matic
 
 MY_PV="${PV//.}"
 MY_PV="${MY_PV%_p*}"
-MY_P="${PN}${MY_PV}"
+MY_P="unzip${MY_PV}"
 
 DESCRIPTION="unzipper for pkzip-compressed files"
 HOMEPAGE="http://www.info-zip.org/"
 SRC_URI="mirror://sourceforge/infozip/${MY_P}.tar.gz
-	mirror://debian/pool/main/u/${PN}/${PN}_${PV/_p/-}.debian.tar.xz"
+	mirror://debian/pool/main/u/unzip/unzip_${PV/_p/-}.debian.tar.xz"
 
 S="${WORKDIR}/unzip60"
 
@@ -28,8 +28,8 @@ src_prepare() {
 	#rm "${deb}"/{02*,11*,22*,23*,24*,25*,26*,28*}.patch || die
 	eapply "${deb}"/*.patch
 
-	eapply "${FILESDIR}"/${PN}-6.0-no-exec-stack.patch
-	eapply "${FILESDIR}"/${PN}-6.0-format-security.patch
+	eapply "${FILESDIR}"/unzip-6.0-no-exec-stack.patch
+	eapply "${FILESDIR}"/unzip-6.0-format-security.patch
 
 	sed -i -r \
 		-e '/^CFLAGS/d' \

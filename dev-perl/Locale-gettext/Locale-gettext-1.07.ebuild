@@ -8,7 +8,7 @@ DIST_AUTHOR=PVANDRY
 inherit perl-module flag-o-matic
 
 DESCRIPTION="A Perl module for accessing the GNU locale utilities"
-S="${WORKDIR}/${PN}-${PV}"
+S="${WORKDIR}/Locale-gettext-${PV}"
 
 SLOT="0"
 KEYWORDS="amd64 arm64"

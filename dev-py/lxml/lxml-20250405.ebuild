@@ -15,8 +15,8 @@ HOMEPAGE="
 "
 
 SNAPSHOT=218af3c0834757babaa0d2740a7d94904a588042
-SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://github.com/lxml/lxml/archive/${SNAPSHOT}.tar.gz -> lxml-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/lxml-${SNAPSHOT}
 
 LICENSE="BSD ElementTree GPL-2 PSF-2"
 SLOT="0"

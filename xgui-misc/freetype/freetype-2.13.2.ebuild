@@ -31,13 +31,13 @@ src_prepare() {
 
 	enable_option() {
 		sed -i -e "/#define $1/ { s:/\* ::; s: \*/:: }" \
-			include/${PN}/config/ftoption.h \
+			include/freetype/config/ftoption.h \
 			|| die "unable to enable option $1"
 	}
 
 	disable_option() {
 		sed -i -e "/#define $1/ { s:^:/* :; s:$: */: }" \
-			include/${PN}/config/ftoption.h \
+			include/freetype/config/ftoption.h \
 			|| die "unable to disable option $1"
 	}
 

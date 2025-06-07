@@ -6,7 +6,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="The OpenGL Extension Wrangler Library"
 HOMEPAGE="http://glew.sourceforge.net/"
-SRC_URI="mirror://sourceforge/${PN}/${P}.tgz"
+SRC_URI="mirror://sourceforge/glew/${P}.tgz"
 
 LICENSE="BSD MIT"
 SLOT="0/$(ver_cut 1-2)"
@@ -24,7 +24,7 @@ DEPEND="
 RDEPEND="${DEPEND}"
 
 src_prepare() {
-	local PATCHES=( "${FILESDIR}"/${PN}-2.0.0-install-headers.patch )
+	local PATCHES=( "${FILESDIR}"/glew-2.0.0-install-headers.patch )
 
 	sed -i \
 		-e '/INSTALL/s:-s::' \

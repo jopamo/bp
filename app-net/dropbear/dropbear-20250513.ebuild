@@ -41,7 +41,7 @@ src_install() {
 	if use systemd; then
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
-		doins "${FILESDIR}/${PN}.service"
+		doins "${FILESDIR}/dropbear.service"
 	fi
 }
 

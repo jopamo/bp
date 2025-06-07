@@ -19,7 +19,7 @@ KEYWORDS="amd64"
 
 RESTRICT="strip"
 
-QA_PREBUILT="opt/${PN}/*"
+QA_PREBUILT="opt/intellij/*"
 
 RDEPEND="app-fs/e2fsprogs"
 
@@ -40,12 +40,12 @@ src_prepare() {
 }
 
 src_install() {
-	local HERE="${ED}/opt/${PN}"
+	local HERE="${ED}/opt/intellij"
 
 	mkdir -p "${HERE}" || die
 	cp -rp "${S}"/* "${HERE}/" || die
 
-	make_wrapper idea "/opt/${PN}/bin/idea.sh"
+	make_wrapper idea "/opt/intellij/bin/idea.sh"
 
 	insinto /usr/share/icons/hicolor/scalable/apps/
 	doins "${S}"/bin/idea.svg

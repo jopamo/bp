@@ -9,7 +9,7 @@ inherit autotools
 DESCRIPTION="a simple utility for modifying existing ELF executables and libraries"
 HOMEPAGE="https://github.com/NixOS/patchelf"
 SRC_URI="https://github.com/NixOS/patchelf/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/patchelf-${SNAPSHOT}
 
 LICENSE="GPL-3"
 SLOT="0"

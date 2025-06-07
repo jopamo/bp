@@ -13,7 +13,7 @@ if [[ ${PV} = *9999 ]]; then
 else
 	SNAPSHOT=
 	SRC_URI="https://github.com/jopamo/symlinks/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	S=${WORKDIR}/symlinks-${SNAPSHOT}
 fi
 
 LICENSE="symlinks"

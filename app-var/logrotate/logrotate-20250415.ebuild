@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/logrotate/logrotate"
 
 SNAPSHOT=d94cc72dddbd2d195fddb158e07307415d2a22b1
 SRC_URI="https://github.com/logrotate/logrotate/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/logrotate-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

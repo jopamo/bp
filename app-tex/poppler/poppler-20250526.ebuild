@@ -38,7 +38,7 @@ RDEPEND="${COMMON_DEPEND}
 	cjk? ( app-tex/poppler-data )
 "
 
-PATCHES=( "${FILESDIR}/${PN}-0.57.0-disable-internal-jpx.patch" )
+PATCHES=( "${FILESDIR}/poppler-0.57.0-disable-internal-jpx.patch" )
 
 src_prepare() {
 	cmake_src_prepare

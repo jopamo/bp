@@ -27,7 +27,7 @@ RUSTCSRC_VERSION="rustc-${PV}-src"
 CMAKE_WARN_UNUSED_CLI=no
 
 QA_FLAGS_IGNORED="
-	usr/lib/${PN}/${PV}/bin/.*
+	usr/lib/rust/${PV}/bin/.*
 	usr/libexec/.*
 	usr/lib/lib.*.so
 	usr/lib/rustlib/.*/bin/.*

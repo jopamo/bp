@@ -9,7 +9,7 @@ inherit flag-o-matic autotools
 DESCRIPTION="screen manager with VT100/ANSI terminal emulation"
 HOMEPAGE="https://www.gnu.org/software/screen/"
 SRC_URI="https://git.savannah.gnu.org/cgit/screen.git/snapshot/screen-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}/src
+S=${WORKDIR}/screen-${SNAPSHOT}/src
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -52,12 +52,12 @@ src_install() {
 	if use pam; then
 		insinto etc/pam.d
 		insopts -m0644
-		newins "${FILESDIR}/${PN}.pam" ${PN}
+		newins "${FILESDIR}/screen.pam" screen
 	fi
 
 	if use tmpfilesd; then
 		insopts -m 0644
 		insinto /usr/lib/tmpfiles.d
-		doins "${FILESDIR}/${PN}.conf"
+		doins "${FILESDIR}/screen.conf"
 	fi
 }

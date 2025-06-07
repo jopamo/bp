@@ -9,7 +9,7 @@ HOMEPAGE="https://weechat.org/"
 
 SNAPSHOT=103bddcc50ec8108cb20b78fca3da213e9078087
 SRC_URI="https://github.com/weechat/weechat/archive/${SNAPSHOT}.tar.gz -> weechat-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/weechat-${SNAPSHOT}"
 
 LICENSE="GPL-3"
 SLOT="0"

@@ -13,7 +13,7 @@ if [[ "${PV}" == "9999" ]]; then
 else
 	SNAPSHOT=8082119ce9c6338b06676eff7d5aea926d10d465
 	SRC_URI="https://github.com/lxqt/pcmanfm-qt/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	S=${WORKDIR}/pcmanfm-qt-${SNAPSHOT}
 fi
 
 LICENSE="GPL-2+"
@@ -34,7 +34,7 @@ DEPEND="
 src_install() {
 	cmake_src_install
 
-	insinto etc/xdg/${PN}/default
+	insinto etc/xdg/pcmanfm-qt/default
 	doins ${FILESDIR}/settings.conf
 
 	rm -rf "${ED}"/etc/xdg/autostart

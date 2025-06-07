@@ -9,7 +9,7 @@ HOMEPAGE="https://git-lfs.com/"
 
 SNAPSHOT=4920220a4be05dac82979018292ec61d5b504dcc
 SRC_URI="https://github.com/git-lfs/git-lfs/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/git-lfs-${SNAPSHOT}
 
 LICENSE="Apache-2.0 BSD BSD-2 BSD-4 ISC MIT"
 SLOT="0"

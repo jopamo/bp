@@ -35,8 +35,8 @@ src_install() {
 	insinto /usr/share/color-schemes
 	doins "${FILESDIR}"/KvGnomeDark.colors
 
-	#cat > "${T}"/99${PN} <<- EOF || die
+	#cat > "${T}"/99kvantum <<- EOF || die
 	#	QT_STYLE_OVERRIDE=kvantum
 	#EOF
-	#doenvd "${T}"/99${PN}
+	#doenvd "${T}"/99kvantum
 }

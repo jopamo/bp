@@ -9,7 +9,7 @@ HOMEPAGE="https://www.gtk.org/"
 
 if [[ ${PV} = *9999 ]]; then
 	EGIT_BRANCH=glib-$(ver_cut 1)-$(ver_cut 2)
-	EGIT_REPO_URI="https://github.com/GNOME/${PN}"
+	EGIT_REPO_URI="https://github.com/GNOME/glib"
 	inherit git-r3
 else
 	SRC_URI="https://download.gnome.org/sources/glib/$(ver_cut 1-2)/${P}.tar.xz

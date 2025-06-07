@@ -2,7 +2,7 @@
 
 EAPI=8
 
-MY_PN=${PN}3
+MY_PN=rebar3
 MECK_PV=0.8.13 # see rebar.config
 
 inherit doins

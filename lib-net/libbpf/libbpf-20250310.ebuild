@@ -8,8 +8,8 @@ DESCRIPTION="Stand-alone build of libbpf from the Linux kernel"
 HOMEPAGE="https://github.com/libbpf/libbpf"
 
 SNAPSHOT=374036c9f1cdfe2a8df98d9d6a53c34fd02de14b
-SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}/src
+SRC_URI="https://github.com/libbpf/libbpf/archive/${SNAPSHOT}.tar.gz -> libbpf-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/libbpf-${SNAPSHOT}/src
 
 LICENSE="GPL-2 LGPL-2.1 BSD-2"
 SLOT="0"
@@ -40,5 +40,5 @@ src_install() {
 	fi
 
 	insinto /usr/lib/pkgconfig
-	doins ${PN}.pc
+	doins libbpf.pc
 }

@@ -19,8 +19,8 @@ HOMEPAGE="
 "
 
 SNAPSHOT=c02bb18dcc5189f9d0c9644f3e6ee40f8ce815f8
-SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SRC_URI="https://github.com/cython/cython/archive/${SNAPSHOT}.tar.gz -> cython-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/cython-${SNAPSHOT}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
@@ -29,8 +29,8 @@ IUSE="test"
 RESTRICT="!test? ( test )"
 
 PATCHES=(
-	"${FILESDIR}/${PN}-0.29.22-spawn-multiprocessing.patch"
-	"${FILESDIR}/${PN}-0.29.23-pythran-parallel-install.patch"
+	"${FILESDIR}/cython-0.29.22-spawn-multiprocessing.patch"
+	"${FILESDIR}/cython-0.29.23-pythran-parallel-install.patch"
 )
 
 distutils_enable_sphinx docs \

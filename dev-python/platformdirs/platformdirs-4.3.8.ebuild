@@ -36,7 +36,7 @@ src_configure() {
 		build-backend = "flit_core.buildapi"
 
 		[project]
-		name = "${PN}"
+		name = "platformdirs"
 		version = "${PV}"
 		description = 'A small Python package for determining appropriate platform-specific dirs, e.g. a "user data dir".'
 	EOF

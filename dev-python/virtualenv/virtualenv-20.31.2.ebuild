@@ -59,7 +59,7 @@ BDEPEND="
 src_prepare() {
 	local PATCHES=(
 		# use wheels from ensurepip bundle
-		"${FILESDIR}/${PN}-20.31.1-ensurepip.patch"
+		"${FILESDIR}/virtualenv-20.31.1-ensurepip.patch"
 	)
 
 	distutils-r1_src_prepare

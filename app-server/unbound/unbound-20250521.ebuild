@@ -89,14 +89,14 @@ src_install() {
 	if use systemd; then
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
-		doins "${FILESDIR}/${PN}.service"
+		doins "${FILESDIR}/unbound.service"
 		doins "${FILESDIR}"/unbound-anchor.service
 	fi
 
-	exeinto /usr/share/${PN}
+	exeinto /usr/share/unbound
 	doexe contrib/update-anchor.sh
 
 	insinto /etc/unbound
 	insopts -m 0755
-	doins "${FILESDIR}/${PN}.conf"
+	doins "${FILESDIR}/unbound.conf"
 }

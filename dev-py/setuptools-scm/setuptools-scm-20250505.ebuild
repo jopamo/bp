@@ -13,8 +13,8 @@ HOMEPAGE="
 "
 
 SNAPSHOT=90f5a171d1164cc5b8ffe3f65d806e6c26b2921a
-SRC_URI="https://github.com/pypa/setuptools-scm/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SRC_URI="https://github.com/pypa/setuptools-scm/archive/${SNAPSHOT}.tar.gz -> setuptools-scm-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/setuptools-scm-${SNAPSHOT}"
 
 
 LICENSE="MIT"

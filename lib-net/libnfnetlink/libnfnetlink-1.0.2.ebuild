@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="the low-level library for netfilter related kernel/userspace communication"
 HOMEPAGE="http://www.netfilter.org/projects/libnfnetlink/"
-SRC_URI="http://www.netfilter.org/projects/${PN}/files/${P}.tar.bz2"
+SRC_URI="http://www.netfilter.org/projects/libnfnetlink/files/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"

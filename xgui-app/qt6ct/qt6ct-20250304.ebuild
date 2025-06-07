@@ -8,8 +8,8 @@ DESCRIPTION="Qt6 Configuration Tool (for DE/WM without Qt integration)"
 HOMEPAGE="https://www.opencode.net/trialuser/qt6ct/"
 
 SNAPSHOT=e466162fe7a39b3dd31c3f64c71a9c4920fe4be8
-SRC_URI="https://www.opencode.net/trialuser/qt6ct/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SRC_URI="https://www.opencode.net/trialuser/qt6ct/-/archive/${SNAPSHOT}/qt6ct-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/qt6ct-${SNAPSHOT}"
 
 LICENSE="BSD-2"
 SLOT="0"
@@ -25,7 +25,7 @@ src_install() {
 	insinto /etc/xdg/qt6ct
 	doins "${FILESDIR}"/qt6ct.conf
 
-	newenvd - 98${PN} <<-EOF
+	newenvd - 98qt6ct <<-EOF
 		QT_QPA_PLATFORMTHEME=qt6ct
 	EOF
 }

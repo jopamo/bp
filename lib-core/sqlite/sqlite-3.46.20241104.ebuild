@@ -9,7 +9,7 @@ HOMEPAGE="https://sqlite.org/"
 
 SNAPSHOT=d770c86b824ad64013faeb2a0e98ad47c248d143
 SRC_URI="https://github.com/sqlite/sqlite/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/sqlite-${SNAPSHOT}"
 
 LICENSE="public-domain"
 SLOT="0"

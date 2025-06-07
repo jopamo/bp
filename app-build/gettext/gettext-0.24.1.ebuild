@@ -6,7 +6,7 @@ inherit libtool flag-o-matic
 
 DESCRIPTION="GNU locale utilities"
 HOMEPAGE="https://www.gnu.org/software/gettext/"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+SRC_URI="mirror://gnu/gettext/${P}.tar.xz"
 
 LICENSE="GPL-3+ LGPL-2.1+"
 SLOT="0"

@@ -11,7 +11,7 @@ if [[ ${PV} = 9999 ]]; then
 else
 	SNAPSHOT=f5ea740f2beaff514450faac98195a6a99508adf
 	SRC_URI="https://github.com/jopamo/find_cruft/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S="${WORKDIR}/${PN}-${SNAPSHOT}"
+	S="${WORKDIR}/find_cruft-${SNAPSHOT}"
 fi
 
 LICENSE="BSD"

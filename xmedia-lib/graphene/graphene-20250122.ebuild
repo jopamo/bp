@@ -8,7 +8,7 @@ DESCRIPTION="A thin layer of types for graphic libraries"
 HOMEPAGE="https://ebassi.github.io/graphene/"
 
 SNAPSHOT=47b503d6086900057ceefab785546ad524caa735
-SRC_URI="https://github.com/ebassi/graphene/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SRC_URI="https://github.com/ebassi/graphene/archive/${SNAPSHOT}.tar.gz -> graphene-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/graphene-${SNAPSHOT}"
 
 LICENSE="MIT"

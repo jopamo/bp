@@ -10,8 +10,8 @@ DESCRIPTION="Python client library for the OpenAI API"
 HOMEPAGE="https://github.com/openai/openai-python"
 
 SNAPSHOT=f588695f77aad9279a355f5f483d8debf92b46ed
-SRC_URI="https://github.com/openai/openai-python/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-python-${SNAPSHOT}"
+SRC_URI="https://github.com/openai/openai-python/archive/${SNAPSHOT}.tar.gz -> openai-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/openai-python-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

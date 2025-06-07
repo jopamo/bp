@@ -9,7 +9,7 @@ HOMEPAGE="https://www.busybox.net/"
 
 SNAPSHOT=5f07327251c93184dfcfc8d978fc35705930ec53
 SRC_URI="https://git.busybox.net/busybox/snapshot/busybox-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/busybox-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"

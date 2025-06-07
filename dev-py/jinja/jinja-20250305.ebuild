@@ -14,8 +14,8 @@ HOMEPAGE="
 "
 
 SNAPSHOT=01d0bab939f46a03fb3babb9f4770cadb50aaef0
-SRC_URI="https://github.com/pallets/jinja/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SRC_URI="https://github.com/pallets/jinja/archive/${SNAPSHOT}.tar.gz -> jinja-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/jinja-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"

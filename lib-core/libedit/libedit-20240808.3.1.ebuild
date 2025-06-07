@@ -3,7 +3,7 @@
 EAPI=8
 
 MY_PV=${PV/./-}
-MY_P=${PN}-${MY_PV}
+MY_P=libedit-${MY_PV}
 
 DESCRIPTION="BSD replacement for libreadline"
 HOMEPAGE="https://thrysoee.dk/editline/"

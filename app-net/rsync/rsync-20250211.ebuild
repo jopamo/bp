@@ -9,7 +9,7 @@ HOMEPAGE="https://rsync.samba.org/"
 
 SNAPSHOT=9994933c8ccf7ead27c81fe4ce2eb4e08af20c7f
 SRC_URI="https://github.com/RsyncProject/rsync/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/rsync-${SNAPSHOT}"
 
 LICENSE="GPL-3"
 SLOT="0"

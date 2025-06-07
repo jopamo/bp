@@ -7,7 +7,7 @@ HOMEPAGE="https://skarnet.org/software/utmps/"
 
 SNAPSHOT=c91a37b2b030a69ec62acde10d00ddcd703c792d
 SRC_URI="https://github.com/skarnet/skalibs/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/skalibs-${SNAPSHOT}
 
 LICENSE="ISC"
 SLOT="0"

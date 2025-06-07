@@ -8,12 +8,12 @@ DESCRIPTION="the C++ API for GTK"
 HOMEPAGE="https://github.com/GNOME/glibmm"
 
 if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/GNOME/${PN}"
+	EGIT_REPO_URI="https://github.com/GNOME/glibmm"
 	inherit git-r3
 else
 	SNAPSHOT=8c8816dec34932751f3f9dd1b44b56eebf2b3ed3
-	SRC_URI="https://github.com/GNOME/glibmm/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-	S="${WORKDIR}/${PN}-${SNAPSHOT}"
+	SRC_URI="https://github.com/GNOME/glibmm/archive/${SNAPSHOT}.tar.gz -> glibmm-${SNAPSHOT}.tar.gz"
+	S="${WORKDIR}/glibmm-${SNAPSHOT}"
 fi
 
 LICENSE="CCA4"

@@ -6,10 +6,10 @@ EAPI=8
 inherit optfeature doins xdg
 
 MY_MAJOR="$(ver_cut 1)"
-MY_P="${PN}${MY_MAJOR}"
+MY_P="teamviewer${MY_MAJOR}"
 DESCRIPTION="All-In-One Solution for Remote Access and Support over the Internet"
 HOMEPAGE="https://www.teamviewer.com"
-MY_URI="https://dl.teamviewer.com/download/linux/version_${MY_MAJOR}x/${PN}_${PV}"
+MY_URI="https://dl.teamviewer.com/download/linux/version_${MY_MAJOR}x/teamviewer_${PV}"
 SRC_URI="
 	amd64? ( ${MY_URI}_amd64.tar.xz )
 	arm64? ( ${MY_URI}_arm64.tar.xz )"
@@ -30,7 +30,7 @@ src_prepare() {
 	sed -e "s/TAR_NI/TAR_IN/g" -i tv_bin/script/tvw_config || die
 
 	sed -i \
-		-e "/^ExecStart/s|${PN}|${MY_P}|" \
+		-e "/^ExecStart/s|teamviewer|${MY_P}|" \
 		-e "/^PIDFile/s|/var/run/|/run/|" \
 		tv_bin/script/teamviewerd.service || die
 }

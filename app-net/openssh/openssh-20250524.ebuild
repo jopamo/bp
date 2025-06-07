@@ -9,7 +9,7 @@ HOMEPAGE="http://www.openssh.org/"
 
 SNAPSHOT=73ef0563a59f90324f8426c017f38e20341b555f
 SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-portable-${SNAPSHOT}
+S=${WORKDIR}/openssh-portable-${SNAPSHOT}
 
 LICENSE="BSD GPL-2"
 SLOT="0"
@@ -96,7 +96,7 @@ src_install() {
 	if use tmpfilesd; then
 		insopts -m 0644
 		insinto /usr/lib/tmpfiles.d
-		newins "${FILESDIR}/${PN}-tmpfiles" ${PN}.conf
+		newins "${FILESDIR}/openssh-tmpfiles" openssh.conf
 	fi
 
 	dobin contrib/ssh-copy-id
@@ -107,7 +107,7 @@ pkg_preinst() {
 	if use sysusersd; then
 		insopts -m 0644
 		insinto /usr/lib/sysusers.d
-		newins "${FILESDIR}/${PN}-sysusers" ${PN}.conf
+		newins "${FILESDIR}/openssh-sysusers" openssh.conf
 	else
 		enewgroup sshd 22
 		enewuser sshd 22 -1 -1 sshd

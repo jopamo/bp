@@ -14,7 +14,7 @@ HOMEPAGE="
 	https://pypi.org/project/tree-sitter/
 "
 
-MY_PN="py-${PN}"
+MY_PN="py-tree-sitter"
 SNAPSHOT=917bc12e90983d0b351f422877553bce8ec3eab2
 SRC_URI="https://github.com/tree-sitter/py-tree-sitter/archive/${SNAPSHOT}.tar.gz -> ${MY_PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${MY_PN}-${SNAPSHOT}"
@@ -41,7 +41,7 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-0.22.2-unbundle.patch
+	"${FILESDIR}"/tree-sitter-0.22.2-unbundle.patch
 )
 
 distutils_enable_tests pytest

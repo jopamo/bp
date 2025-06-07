@@ -16,7 +16,7 @@ FONT_SUFFIX="ttf"
 FONT_CONF=( "${FILESDIR}/60-liberation.conf" )
 
 pkg_setup() {
-	FONT_S="${WORKDIR}/${PN}-ttf-${PV}"
+	FONT_S="${WORKDIR}/liberation-fonts-ttf-${PV}"
 	S="${FONT_S}"
 
 	font_pkg_setup

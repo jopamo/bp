@@ -32,11 +32,11 @@ DEPEND="
 REQUIRED_USE="?? ( jemalloc )"
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-6.2.1-config.patch
-	"${FILESDIR}"/${PN}-7.2.0-system-jemalloc.patch
-	"${FILESDIR}"/${PN}-6.2.3-ppc-atomic.patch
-	"${FILESDIR}"/${PN}-sentinel-7.2.0-config.patch
-	"${FILESDIR}"/${PN}-7.0.4-no-which.patch
+	"${FILESDIR}"/redis-6.2.1-config.patch
+	"${FILESDIR}"/redis-7.2.0-system-jemalloc.patch
+	"${FILESDIR}"/redis-6.2.3-ppc-atomic.patch
+	"${FILESDIR}"/redis-sentinel-7.2.0-config.patch
+	"${FILESDIR}"/redis-7.0.4-no-which.patch
 )
 
 src_prepare() {
@@ -151,12 +151,12 @@ src_install() {
 	if use tmpfilesd; then
 		insopts -m 0644
 		insinto /usr/lib/tmpfiles.d
-		newins "${FILESDIR}/${PN}-tmpfiles" ${PN}.conf
+		newins "${FILESDIR}/redis-tmpfiles" redis.conf
 	fi
 
 
 	insinto /etc/logrotate.d/
-	newins "${FILESDIR}/${PN}.logrotate" ${PN}
+	newins "${FILESDIR}/redis.logrotate" redis
 
 	dodoc 00-RELEASENOTES BUGS CONTRIBUTING.md MANIFESTO README.md
 
@@ -172,5 +172,5 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
-	use tmpfilesd && systemd-tmpfiles --create "${PN}.conf"
+	use tmpfilesd && systemd-tmpfiles --create "redis.conf"
 }

@@ -8,7 +8,7 @@ DESCRIPTION="A network protocol analyzer formerly known as ethereal"
 HOMEPAGE="https://www.wireshark.org/"
 
 SNAPSHOT=b6f01b5868a58abbf5ec11ff41a764ac15976cb6
-SRC_URI="https://github.com/wireshark/wireshark/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SRC_URI="https://github.com/wireshark/wireshark/archive/${SNAPSHOT}.tar.gz -> wireshark-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/wireshark-${SNAPSHOT}"
 
 LICENSE="GPL-2"

@@ -13,7 +13,7 @@ if [[ ${PV} = *9999 ]]; then
 else
 	SNAPSHOT=8f578ad02ffdafa26d5c52c4b0a5f03aa5377d35
 	SRC_URI="https://github.com/cyrusimap/cyrus-sasl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	S=${WORKDIR}/cyrus-sasl-${SNAPSHOT}
 fi
 
 LICENSE="BSD-with-attribution"

@@ -8,8 +8,8 @@ DESCRIPTION="Cross-platform asychronous I/O"
 HOMEPAGE="https://github.com/libuv/libuv"
 
 SNAPSHOT=3a9a6e3e6bc78565ddf94cf462c9877c1004bb62
-SRC_URI="https://github.com/libuv/libuv/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SRC_URI="https://github.com/libuv/libuv/archive/${SNAPSHOT}.tar.gz -> libuv-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libuv-${SNAPSHOT}"
 
 LICENSE="BSD BSD-2 ISC MIT"
 SLOT="0"

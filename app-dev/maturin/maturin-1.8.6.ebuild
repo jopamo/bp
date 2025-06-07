@@ -25,7 +25,7 @@ BDEPEND="
 	dev-py/setuptools-rust
 "
 
-QA_FLAGS_IGNORED="usr/bin/${PN}"
+QA_FLAGS_IGNORED="usr/bin/maturin"
 
 src_prepare() {
 	export OPENSSL_NO_VENDOR=1

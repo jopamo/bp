@@ -9,7 +9,7 @@ HOMEPAGE="https://xkbcommon.org/"
 
 SNAPSHOT=bffbef88a4aaf7c01a1445cb6e45aed56c3d0ef4
 SRC_URI="https://github.com/xkbcommon/libxkbcommon/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/libxkbcommon-${SNAPSHOT}
 
 LICENSE="MIT"
 SLOT="0"

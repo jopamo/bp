@@ -9,7 +9,7 @@ HOMEPAGE="https://www.cairographics.org"
 
 SNAPSHOT=2e2080247f0149e1bd9e24013693bffbcd06cb0b
 SRC_URI="https://gitlab.freedesktop.org/cairo/cairo/-/archive/${SNAPSHOT}/cairo-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/cairo-${SNAPSHOT}"
 
 LICENSE="|| ( LGPL-2.1 MPL-1.1 )"
 SLOT="0"
@@ -40,7 +40,7 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-respect-fontconfig.patch
+	"${FILESDIR}"/cairo-respect-fontconfig.patch
 )
 
 

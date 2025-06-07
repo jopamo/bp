@@ -6,14 +6,14 @@ inherit linux-info doins
 
 DESCRIPTION="Daemon for Advanced Configuration and Power Interface"
 HOMEPAGE="https://sourceforge.net/projects/acpid2/"
-SRC_URI="https://downloads.sourceforge.net/${PN}2/${P}.tar.xz"
+SRC_URI="https://downloads.sourceforge.net/acpid2/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-2.0.34-lfs.patch
+	"${FILESDIR}"/acpid-2.0.34-lfs.patch
 )
 
 pkg_pretend() {
@@ -32,11 +32,11 @@ src_install() {
 	rm -f "${D}"/usr/share/doc/${PF}/COPYING || die
 
 	exeinto /etc/acpi
-	newexe "${FILESDIR}"/${PN}-1.0.6-default.sh default.sh
+	newexe "${FILESDIR}"/acpid-1.0.6-default.sh default.sh
 	exeinto /etc/acpi/actions
 	newexe samples/powerbtn/powerbtn.sh powerbtn.sh
 	insinto /etc/acpi/events
-	newins "${FILESDIR}"/${PN}-1.0.4-default default
+	newins "${FILESDIR}"/acpid-1.0.4-default default
 
-	systemd_dounit "${FILESDIR}"/${PN}.{service,socket}
+	systemd_dounit "${FILESDIR}"/acpid.{service,socket}
 }

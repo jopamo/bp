@@ -10,7 +10,7 @@ HOMEPAGE="https://www.darwinsys.com/file/"
 
 SNAPSHOT=c96c255f2e92b133d911c835d065b889bf902c4c
 SRC_URI="https://github.com/file/file/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/file-${SNAPSHOT}
 
 LICENSE="BSD-2"
 SLOT="0"

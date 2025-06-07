@@ -9,7 +9,7 @@ HOMEPAGE="http://www.aircrack-ng.org"
 
 SNAPSHOT=bdd5a28efd382658f19879481b3a932f9bdebfe0
 SRC_URI="https://github.com/netsniff-ng/netsniff-ng/archive/${SNAPSHOT}.tar.gz -> netsniff-ng-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/netsniff-ng-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

@@ -24,7 +24,7 @@ PATCHES=(
 	"${FILESDIR}"/${P}-Makefile.am.patch
 	"${FILESDIR}"/${P}-tsent-set-but-not-used.patch
 	"${FILESDIR}"/${P}-ip6.arpa.patch
-	"${FILESDIR}"/${PN}-1.0pre4-gcc10.patch
+	"${FILESDIR}"/iftop-1.0pre4-gcc10.patch
 	"${FILESDIR}"/bc66e31834419c12770d790694bc9e60eccd11e2.diff
 	"${FILESDIR}"/96a691484e6e3c6fa415b46e466c85323d017baa.diff
 	"${FILESDIR}"/9addd978c444aabfc2af6fa888436ac00770a4c8.diff

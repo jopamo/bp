@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="A perfect hash function generator"
 HOMEPAGE="https://www.gnu.org/software/gperf/"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
+SRC_URI="mirror://gnu/gperf/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"

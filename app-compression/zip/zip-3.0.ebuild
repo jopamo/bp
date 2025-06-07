@@ -4,7 +4,7 @@ EAPI=8
 
 inherit toolchain-funcs flag-o-matic
 
-MY_P="${PN}${PV//.}"
+MY_P="zip${PV//.}"
 DESCRIPTION="Info ZIP (encryption support)"
 HOMEPAGE="http://www.info-zip.org/"
 SRC_URI="mirror://sourceforge/infozip/${MY_P}.zip"

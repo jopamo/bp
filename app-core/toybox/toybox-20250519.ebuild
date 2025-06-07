@@ -9,7 +9,7 @@ HOMEPAGE="http://landley.net/toybox/"
 
 SNAPSHOT=e5b284ed9e1759292ac0a2c34261266ffee38c32
 SRC_URI="https://github.com/landley/toybox/archive/${SNAPSHOT}.tar.gz -> toybox-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/toybox-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"

@@ -9,12 +9,12 @@ HOMEPAGE="https://www.qt.io/"
 
 if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
-	EGIT_REPO_URI="https://github.com/qt/${PN}.git"
+	EGIT_REPO_URI="https://github.com/qt/qtdeclarative.git"
 	inherit git-r3
 else
 	SNAPSHOT=a43df98d037ad07cf096ef2f775958ceba743613
-	SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	SRC_URI="https://invent.kde.org/qt/qt/qtdeclarative/-/archive/${SNAPSHOT}/qtdeclarative-${SNAPSHOT}.tar.bz2"
+	S=${WORKDIR}/qtdeclarative-${SNAPSHOT}
 fi
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"

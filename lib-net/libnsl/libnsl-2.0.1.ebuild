@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="Public client interface for NIS(YP) and NIS+ in a IPv6 ready version"
 HOMEPAGE="https://github.com/thkukuk/libnsl"
-SRC_URI="https://github.com/thkukuk/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/thkukuk/libnsl/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 SLOT="0/2"
 LICENSE="LGPL-2.1+"

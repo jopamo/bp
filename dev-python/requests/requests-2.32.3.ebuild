@@ -16,7 +16,7 @@ HOMEPAGE="
 	https://pypi.org/project/requests/
 "
 
-SRC_URI+=" https://dev.gentoo.org/~sam/distfiles/${CATEGORY}/${PN}/${PN}-2.32.3-patches.tar.xz"
+SRC_URI+=" https://dev.gentoo.org/~sam/distfiles/${CATEGORY}/requests/requests-2.32.3-patches.tar.xz"
 
 LICENSE="Apache-2.0"
 SLOT="0"
@@ -44,10 +44,10 @@ BDEPEND="
 
 PATCHES=(
 	# https://github.com/psf/requests/pull/6897
-	"${WORKDIR}/${PN}-2.32.3-patches/${PN}-2.32.3-tests.patch"
-	"${WORKDIR}/${PN}-2.32.3-patches/${PN}-2.32.3-tests-regenerate.patch"
+	"${WORKDIR}/requests-2.32.3-patches/requests-2.32.3-tests.patch"
+	"${WORKDIR}/requests-2.32.3-patches/requests-2.32.3-tests-regenerate.patch"
 	# https://github.com/psf/requests/pull/6924
-	"${WORKDIR}/${PN}-2.32.3-patches/${PN}-2.32.3-tests-more.patch"
+	"${WORKDIR}/requests-2.32.3-patches/requests-2.32.3-tests-more.patch"
 )
 
 distutils_enable_tests pytest

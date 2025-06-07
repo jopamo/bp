@@ -27,6 +27,6 @@ src_prepare() {
 src_compile() { :; }
 
 src_install() {
-	newbin ${PN}.pl ${PN}
-	doman ${PN}.1
+	newbin checkbashisms.pl checkbashisms
+	doman checkbashisms.1
 }

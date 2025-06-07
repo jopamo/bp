@@ -35,4 +35,7 @@ src_install() {
 	doenvd "${T}"/99${PN}
 
 	rm -rf "${ED}"/etc/xdg/autostart
+	rm "${ED}"/usr/share/dbus-1/services/org.a11y.Bus.service || die
+	rm "${ED}"/usr/share/dbus-1/accessibility-services/org.a11y.atspi.Registry.service || die
+
 }

@@ -288,16 +288,18 @@ get_kernel() {
 clean_bash_history() {
     local file="$1"
     local temp_file=$(mktemp)
-
     sed 's/^[ \t]*//;s/[ \t]*$//' "$file" | sed '/^\s*#/d' | sed '/^\s*\/\//d' > "$temp_file"
     awk '!seen[$0]++' "$temp_file" > "$temp_file.cleaned"
-
     mv "$temp_file.cleaned" "$file"
-
     rm "$temp_file"
 }
 
 if [ -z "$HISTORY_CLEANED_THIS_LOGIN" ]; then
     clean_bash_history ~/.bash_history
     export HISTORY_CLEANED_THIS_LOGIN=1
+fi
+
+if [ -f /usr/lib/systemd/user/pipewire-pulse.socket ] && [ -f /usr/lib/systemd/user/wireplumber.service ]; then
+    systemctl --user enable --now pipewire-pulse.socket
+    systemctl --user enable --now wireplumber.service
 fi

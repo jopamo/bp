@@ -2,17 +2,23 @@
 
 EAPI=8
 
-inherit flag-o-matic
+inherit flag-o-matic autotools
 
 DESCRIPTION="Libraries/utilities to handle ELF objects (drop in replacement for libelf)"
 HOMEPAGE="http://elfutils.org/"
-SRC_URI="https://sourceware.org/elfutils/ftp/${PV}/${P}.tar.bz2"
+
+SNAPSHOT=3cc287a29294bec86380a93020de71d8e8c636ac
+SRC_URI="https://github.com/1g4-mirror/elfutils/archive/${SNAPSHOT}.tar.gz -> elfutils-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/elfutils-${SNAPSHOT}
 
 LICENSE="|| ( GPL-2+ LGPL-3+ ) utils? ( GPL-3+ )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 lzma musl static-libs test +utils valgrind zstd"
+IUSE="bzip2 debuginfod debugpred demangler
+gcov gnu-ld gprof helgrind +install-elfh libdebuginfod lzma musl rpath sanitize-address
+sanitize-memory sanitize-undefined stacktrace static-libs symbol-versioning test
+tests-rpath textrelcheck +utils valgrind with_valgrind year2038 zlib zstd"
 
 DEPEND="
 	lib-core/zlib
@@ -90,23 +96,43 @@ src_prepare() {
 	fi
 
 	# https://sourceware.org/PR23914
-	sed -i 's:-Werror::' */Makefile.in || die
+	sed -i 's:-Werror::' */Makefile.am || die
+
+	eautoreconf
 }
 
 src_configure() {
 	local myconf=(
-		$(use_enable valgrind)
+		#$(use_enable sanitize-memory)
+		#$(use_enable sanitize-undefined)
+		#$(use_enable sanitize-address)
+		#$(use_enable debugpred)
+		#$(use_enable gprof)
+		#$(use_enable gcov)
+		#$(use_enable helgrind)
+		#$(use_enable valgrind)
+		#$(use_enable valgrind valgrind-annotations)
+		#$(use_enable install-elfh)
+		#$(use_enable stacktrace)
+		#$(use_enable year2038)
+		#$(use_enable libdebuginfod)
+		#$(use_enable debuginfod)
+		#$(use_with with_valgrind valgrind)
 		$(use_with bzip2 bzlib)
 		$(use_with lzma)
 		$(use_with zstd)
+		#$(use_with gnu-ld)
 		--enable-deterministic-archives
+		#$(use_disable largefile)
+		#$(use_disable demangler)
+		#$(use_disable textrelcheck)
+		#$(use_disable symbol-versioning)
 		--disable-nls
-		--disable-libdebuginfod
-		--disable-debuginfod
-		--program-prefix="eu-"
-		--with-zlib
+		--disable-rpath
+		--enable-maintainer-mode
+		$(use_with zlib)
 	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
+	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }
 
 src_test() {

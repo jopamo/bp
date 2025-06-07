@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="bzip2 debuginfod debugpred demangler gcov gnu-ld gprof helgrind libdebuginfod
-lzma musl rpath sanitize-address sanitize-memory sanitize-undefined stacktrace
+lzma rpath sanitize-address sanitize-memory sanitize-undefined stacktrace
 static-libs symbol-versioning test tests-rpath textrelcheck +utils valgrind
 with_valgrind year2038 zlib zstd
 "
@@ -35,65 +35,13 @@ DEPEND="
 
 src_prepare() {
 	filter-flags -flto*
+	append-flags -Werror=unused-value
 
 	default
 
-	if use musl; then
+	if use elibc_musl; then
 		eapply "${FILESDIR}"/fix-aarch64_fregs.patch
-
-		cat > lib/libintl.h <<-EOF
-		#ifndef _DUMMY_LIBINTL_H
-		#define _DUMMY_LIBINTL_H 1
-
-		#include <sys/cdefs.h>
-
-		#ifndef gettext
-		# define gettext(msgid) \
-    		((char *)(msgid))
-		#endif
-
-		#ifndef dgettext
-		# define dgettext(domain, msgid) \
-    		((char *)(msgid))
-		#endif
-
-		#ifndef dcgettext
-		# define dcgettext(domain, msgid, category) \
-    		((char *)(msgid))
-		#endif
-
-		#ifndef ngettext
-		# define ngettext(msgid_singular, msgid_plural, n) \
-    		((char *)((n) == 1 ? (msgid_singular) : (msgid_plural)))
-		#endif
-
-		#ifndef dngettext
-		# define dngettext(domain, msgid_singular, msgid_plural, n) \
-    		((char *)((n) == 1 ? (msgid_singular) : (msgid_plural)))
-		#endif
-
-		#ifndef dcngettext
-		# define dcngettext(domain, msgid_singular, msgid_plural, n, category) \
-    		((char *)((n) == 1 ? (msgid_singular) : (msgid_plural)))
-		#endif
-
-		#ifndef textdomain
-		# define textdomain(domainname) \
-    		((char *)"messages")
-		#endif
-
-		#ifndef bindtextdomain
-		# define bindtextdomain(domainname, dirname) \
-    		((char *)(dirname))
-		#endif
-
-		#ifndef bind_textdomain_codeset
-		# define bind_textdomain_codeset(domainname, codeset) \
-    		((char *)(codeset))
-		#endif
-
-		#endif
-		EOF
+		eapply "${FILESDIR}"/musl-macros.patch
 	fi
 
 	# https://sourceware.org/PR23914
@@ -104,35 +52,34 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
+		$(use_disable demangler)
+		$(use_disable largefile)
+		$(use_disable symbol-versioning)
+		$(use_disable textrelcheck)
+		$(use_enable debuginfod)
+		$(use_enable debugpred)
+		$(use_enable gcov)
+		$(use_enable gprof)
+		$(use_enable helgrind)
+		$(use_enable libdebuginfod)
+		$(use_enable sanitize-address)
 		$(use_enable sanitize-memory)
 		$(use_enable sanitize-undefined)
-		$(use_enable sanitize-address)
-		$(use_enable debugpred)
-		$(use_enable gprof)
-		$(use_enable gcov)
-		$(use_enable helgrind)
-		$(use_enable valgrind)
-		$(use_enable valgrind valgrind-annotations)
-		$(use_enable elibc_musl install-elfh)
-		$(use_enable tests-rpath tests-rpath)
 		$(use_enable stacktrace)
+		$(use_enable tests-rpath tests-rpath)
+		$(use_enable valgrind valgrind-annotations)
+		$(use_enable valgrind)
 		$(use_enable year2038)
-		$(use_enable libdebuginfod)
-		$(use_enable debuginfod)
-		$(use_with with_valgrind valgrind)
 		$(use_with bzip2 bzlib)
-		$(use_with lzma)
-		$(use_with zstd)
 		$(use_with gnu-ld)
-		--enable-deterministic-archives
-		$(use_disable largefile)
-		$(use_disable demangler)
-		$(use_disable textrelcheck)
-		$(use_disable symbol-versioning)
-		--enable-maintainer-mode
+		$(use_with lzma)
+		$(use_with with_valgrind valgrind)
+		$(use_with zlib)
+		$(use_with zstd)
 		--disable-nls
 		--disable-rpath
-		$(use_with zlib)
+		--enable-deterministic-archives
+		--enable-maintainer-mode
 	)
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }

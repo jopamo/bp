@@ -15,10 +15,10 @@ LICENSE="|| ( GPL-2+ LGPL-3+ ) utils? ( GPL-3+ )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 debuginfod debugpred demangler gcov gnu-ld gprof helgrind libdebuginfod
-lzma rpath sanitize-address sanitize-memory sanitize-undefined stacktrace
-static-libs symbol-versioning test tests-rpath textrelcheck +utils valgrind
-with_valgrind year2038 zlib zstd
+IUSE="bzip2 debuginfod debugpred demangler gcov gnu-ld gprof helgrind largefile
+libdebuginfod lzma rpath sanitize-address sanitize-memory sanitize-undefined
+stacktrace static-libs symbol-versioning test tests-rpath textrelcheck +utils
+valgrind with_valgrind year2038 zlib zstd
 "
 
 DEPEND="
@@ -52,10 +52,10 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		$(use_disable demangler)
-		$(use_disable largefile)
-		$(use_disable symbol-versioning)
-		$(use_disable textrelcheck)
+		$(use_enable demangler)
+		$(use_enable largefile)
+		$(use_enable symbol-versioning)
+		$(use_enable textrelcheck)
 		$(use_enable debuginfod)
 		$(use_enable debugpred)
 		$(use_enable gcov)

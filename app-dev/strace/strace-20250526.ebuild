@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit flag-o-matic
+inherit flag-o-matic autotools
 
 DESCRIPTION="A useful diagnostic, instructional, and debugging tool"
 HOMEPAGE="https://sourceforge.net/projects/strace/"
-SRC_URI="https://github.com/strace/strace/releases/download/v${PV}/${P}.tar.xz"
+
+SNAPSHOT=46fc5adeecd5932e3d00e65d1e4b66cac4c14fdf
+SRC_URI="https://github.com/1g4-mirror/strace/archive/${SNAPSHOT}.tar.gz -> strace-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/strace-${SNAPSHOT}
 
 LICENSE="BSD"
 SLOT="0"
@@ -25,6 +28,8 @@ src_prepare() {
 
 	# Stub out the -k test since it's known to be flaky. #545812
 	sed -i '1iexit 77' tests*/strace-k.test || die
+
+	./bootstrap
 }
 
 src_configure() {

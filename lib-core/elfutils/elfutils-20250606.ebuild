@@ -15,10 +15,11 @@ LICENSE="|| ( GPL-2+ LGPL-3+ ) utils? ( GPL-3+ )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 debuginfod debugpred demangler
-gcov gnu-ld gprof helgrind +install-elfh libdebuginfod lzma musl rpath sanitize-address
-sanitize-memory sanitize-undefined stacktrace static-libs symbol-versioning test
-tests-rpath textrelcheck +utils valgrind with_valgrind year2038 zlib zstd"
+IUSE="bzip2 debuginfod debugpred demangler gcov gnu-ld gprof helgrind libdebuginfod
+lzma musl rpath sanitize-address sanitize-memory sanitize-undefined stacktrace
+static-libs symbol-versioning test tests-rpath textrelcheck +utils valgrind
+with_valgrind year2038 zlib zstd
+"
 
 DEPEND="
 	lib-core/zlib
@@ -103,33 +104,34 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		#$(use_enable sanitize-memory)
-		#$(use_enable sanitize-undefined)
-		#$(use_enable sanitize-address)
-		#$(use_enable debugpred)
-		#$(use_enable gprof)
-		#$(use_enable gcov)
-		#$(use_enable helgrind)
-		#$(use_enable valgrind)
-		#$(use_enable valgrind valgrind-annotations)
-		#$(use_enable install-elfh)
-		#$(use_enable stacktrace)
-		#$(use_enable year2038)
-		#$(use_enable libdebuginfod)
-		#$(use_enable debuginfod)
-		#$(use_with with_valgrind valgrind)
+		$(use_enable sanitize-memory)
+		$(use_enable sanitize-undefined)
+		$(use_enable sanitize-address)
+		$(use_enable debugpred)
+		$(use_enable gprof)
+		$(use_enable gcov)
+		$(use_enable helgrind)
+		$(use_enable valgrind)
+		$(use_enable valgrind valgrind-annotations)
+		$(use_enable elibc_musl install-elfh)
+		$(use_enable tests-rpath tests-rpath)
+		$(use_enable stacktrace)
+		$(use_enable year2038)
+		$(use_enable libdebuginfod)
+		$(use_enable debuginfod)
+		$(use_with with_valgrind valgrind)
 		$(use_with bzip2 bzlib)
 		$(use_with lzma)
 		$(use_with zstd)
-		#$(use_with gnu-ld)
+		$(use_with gnu-ld)
 		--enable-deterministic-archives
-		#$(use_disable largefile)
-		#$(use_disable demangler)
-		#$(use_disable textrelcheck)
-		#$(use_disable symbol-versioning)
+		$(use_disable largefile)
+		$(use_disable demangler)
+		$(use_disable textrelcheck)
+		$(use_disable symbol-versioning)
+		--enable-maintainer-mode
 		--disable-nls
 		--disable-rpath
-		--enable-maintainer-mode
 		$(use_with zlib)
 	)
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"

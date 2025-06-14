@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=pdm-backend
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{11..13} )
 
 inherit distutils-r1 pypi
 
@@ -30,9 +30,8 @@ RDEPEND="
 	dev-python/httpx[${PYTHON_USEDEP}]
 	>=dev-python/id-1.5.0[${PYTHON_USEDEP}]
 	dev-python/installer[${PYTHON_USEDEP}]
-	dev-python/msgpack[${PYTHON_USEDEP}]
 	dev-python/packaging[${PYTHON_USEDEP}]
-	>=dev-python/pbs-installer-2024.4.18[${PYTHON_USEDEP}]
+	>=dev-python/pbs-installer-2025.06.06[${PYTHON_USEDEP}]
 	dev-python/platformdirs[${PYTHON_USEDEP}]
 	dev-python/pyproject-hooks[${PYTHON_USEDEP}]
 	dev-python/python-dotenv[${PYTHON_USEDEP}]
@@ -43,13 +42,11 @@ RDEPEND="
 	>=dev-python/truststore-0.9[${PYTHON_USEDEP}]
 	>=dev-python/unearth-0.17.5[${PYTHON_USEDEP}]
 	dev-python/virtualenv[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep '
-		dev-python/tomli[${PYTHON_USEDEP}]
-	' 3.10)
 "
 BDEPEND="
 	${RDEPEND}
 	test? (
+		dev-python/msgpack[${PYTHON_USEDEP}]
 		dev-python/pytest-mock[${PYTHON_USEDEP}]
 		dev-python/pytest-httpserver[${PYTHON_USEDEP}]
 		dev-python/pytest-httpx[${PYTHON_USEDEP}]
@@ -62,11 +59,6 @@ EPYTEST_XDIST=1
 distutils_enable_tests pytest
 
 src_prepare() {
-	local PATCHES=(
-		# https://github.com/pdm-project/pdm/issues/3486
-		"${FILESDIR}/${PN}-2.24.0-respect-python.patch"
-	)
-
 	distutils-r1_src_prepare
 
 	# unpin deps
@@ -76,12 +68,7 @@ src_prepare() {
 python_test() {
 	local EPYTEST_DESELECT=(
 		# Internet
-		# https://github.com/pdm-project/pdm/pull/3488
-		# (the third one I can't reproduce)
-		tests/models/test_candidates.py::test_find_candidates_from_find_links
-		'tests/test_project.py::test_find_interpreters_with_PDM_IGNORE_ACTIVE_VENV[True]'
 		'tests/models/test_candidates.py::test_expand_project_root_in_url[demo @ file:///${PROJECT_ROOT}/tests/fixtures/artifacts/demo-0.0.1.tar.gz]'
-
 		# unhappy about extra packages being installed?
 		# (also fails randomly in venv)
 		tests/cli/test_build.py::test_build_with_no_isolation

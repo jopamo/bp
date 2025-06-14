@@ -8,8 +8,8 @@ DESCRIPTION="Library for manipulating zip archives"
 HOMEPAGE="https://nih.at/libzip/"
 
 SNAPSHOT=6f8a0cdd24a0dc6cce9dac4a7679da784ab124ea
-SRC_URI="https://github.com/nih-at/libzip/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://github.com/nih-at/libzip/archive/${SNAPSHOT}.tar.gz -> libzip-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/libzip-${SNAPSHOT}
 
 LICENSE="BSD"
 SLOT="0/5"

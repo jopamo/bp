@@ -9,9 +9,9 @@ inherit distutils-r1
 DESCRIPTION="CTF framework and exploit development library"
 HOMEPAGE="https://github.com/Gallopsled/pwntools"
 
-SNAPSHOT=932cc375dadc8febce3907249162f81db1d5e0a9
-SRC_URI="https://github.com/Gallopsled/pwntools/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SNAPSHOT=d1021e764e9dc346d34e618b7055823a025c83c7
+SRC_URI="https://github.com/Gallopsled/pwntools/archive/${SNAPSHOT}.tar.gz -> pwntools-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/pwntools-${SNAPSHOT}"
 
 LICENSE="MIT GPL-2+ BSD-2"
 SLOT="0"

@@ -1,8 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-
-SNAPSHOT=845c48a16a7f7b2c44d8cb137b16a4a1f0140229
+SNAPSHOT=f1ca98f609f9a730b9accf24e5558a10a0b41b6c
 
 inherit autotools
 
@@ -10,7 +9,7 @@ DESCRIPTION="Git is a fast, scalable, distributed revision control system"
 HOMEPAGE="http://www.git-scm.com/"
 
 SRC_URI="https://github.com/git/git/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/git-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"

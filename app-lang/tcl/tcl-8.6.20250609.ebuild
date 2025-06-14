@@ -2,12 +2,14 @@
 
 EAPI=8
 
+BRANCH_NAME="core-$(ver_cut 1)-$(ver_cut 2)-branch"
+
 inherit autotools
 
 DESCRIPTION="tcltk/tcl - Tool Command Language"
 HOMEPAGE="http://www.tcl.tk/"
 
-SNAPSHOT=b1b52b01438376c0a34e39fcbfea95172f7918ab
+SNAPSHOT=255658907deafeb1cf5c47b7e4b2ab6b10a6094d
 SRC_URI="https://github.com/tcltk/tcl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/tcl-${SNAPSHOT}/unix
 

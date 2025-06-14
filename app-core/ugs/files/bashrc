@@ -286,9 +286,40 @@ get_kernel() {
 }
 
 clean_bash_history() {
-	local file="$1"
-	awk '!seen[$0]++' "$file" > temp && mv temp "$file"
-	sed -i 's/^[ \t]*//;s/[ \t]*$//' "$file"
-	sed -i '/^#/d' "$file"
-	sed -i '/^\s*\/\//d' "$file"
+    local file="$1"
+    local temp_file=$(mktemp)
+    sed 's/^[ \t]*//;s/[ \t]*$//' "$file" | sed '/^\s*#/d' | sed '/^\s*\/\//d' > "$temp_file"
+    awk '!seen[$0]++' "$temp_file" > "$temp_file.cleaned"
+    mv "$temp_file.cleaned" "$file"
+    rm "$temp_file"
+}
+
+if [ -z "$HISTORY_CLEANED_THIS_LOGIN" ]; then
+    clean_bash_history ~/.bash_history
+    export HISTORY_CLEANED_THIS_LOGIN=1
+fi
+
+json-keys() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: json-keys <file.json>"
+        return 1
+    fi
+    jq -r 'paths | map(tostring) | join(".")' "$1" | sort -u
+}
+
+json-shape() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: json-shape <file.json>"
+        return 1
+    fi
+    jq 'def shape:
+          type as $t |
+          if $t == "object" then
+            to_entries | map({key, value: (shape(.value))})
+          elif $t == "array" then
+            if length == 0 then [] else [.[0] | shape] end
+          else
+            $t
+          end;
+        shape' "$1"
 }

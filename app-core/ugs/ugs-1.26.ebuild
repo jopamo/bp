@@ -31,14 +31,9 @@ src_install() {
 		dobin "${FILESDIR}"/bin/$f
 	done
 
-	for f in upDay.skel ; do
-			insinto /usr/share/ugscripts
-			doins "${FILESDIR}"/bin/$f
-	done
-
 	for f in hosts_bump eclass_import emirror lighttpd_certs \
-		mkheaders mkimg mkmini mkstage xbkup upApp upAll upBrowsers \
-		upPython upGit xchroot ; do
+		mkheaders mkimg mkstage xbkup upApp upAll upBrowsers \
+		upPython xchroot ; do
 			dobin "${FILESDIR}"/bin/$f
 	done
 

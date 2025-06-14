@@ -6,10 +6,9 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="System performance tools for Linux"
 HOMEPAGE="http://pagesperso-orange.fr/sebastien.godard/"
-
-SNAPSHOT=5278c51909a2827d2a3436c83623e1e38d728ec0
+SNAPSHOT=582983620d0c8c36e14d746ad3c117b54304ddc9
 SRC_URI="https://github.com/sysstat/sysstat/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/sysstat-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -63,7 +62,7 @@ src_install() {
 	if use systemd; then
 		insinto usr/lib/systemd/system
 		insopts -m0644
-		doins ${PN}.service
+		doins sysstat.service
 	fi
 
 	cleanup_install

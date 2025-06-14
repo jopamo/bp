@@ -7,12 +7,12 @@ CRATES="
 
 declare -A GIT_CRATES=(
 	[async_zip]='https://github.com/charliermarsh/rs-async-zip;c909fda63fcafe4af496a07bfda28a5aae97e58d;rs-async-zip-%commit%'
-	[pubgrub]='https://github.com/astral-sh/pubgrub;a3b4db3abb1829ce889fb89fa6d157fef529ef7e;pubgrub-%commit%'
+	[pubgrub]='https://github.com/astral-sh/pubgrub;06ec5a5f59ffaeb6cf5079c6cb184467da06c9db;pubgrub-%commit%'
 	[tl]='https://github.com/astral-sh/tl;6e25b2ee2513d75385101a8ff9f591ef51f314ec;tl-%commit%'
-	[version-ranges]='https://github.com/astral-sh/pubgrub;a3b4db3abb1829ce889fb89fa6d157fef529ef7e;pubgrub-%commit%/version-ranges'
+	[version-ranges]='https://github.com/astral-sh/pubgrub;06ec5a5f59ffaeb6cf5079c6cb184467da06c9db;pubgrub-%commit%/version-ranges'
 )
 
-RUST_MIN_VER="1.83.0"
+RUST_MIN_VER="1.85.0"
 
 inherit cargo 
 
@@ -60,11 +60,11 @@ RDEPEND="
 "
 BDEPEND="
 	test? (
-		dev-lang/python:3.8
 		dev-lang/python:3.9
 		dev-lang/python:3.10
 		dev-lang/python:3.11
 		dev-lang/python:3.12
+		dev-lang/python:3.13
 		!!~dev-python/uv-0.5.0
 	)
 "

@@ -9,7 +9,7 @@ HOMEPAGE="http://www.alsa-project.org/"
 
 SNAPSHOT=07ec2ad34c42dba8656d3f543164f360f481c52e
 SRC_URI="https://github.com/alsa-project/alsa-lib/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/alsa-lib-${SNAPSHOT}
 
 LICENSE="LGPL-2.1"
 SLOT="0"

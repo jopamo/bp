@@ -2,12 +2,14 @@
 
 EAPI=8
 
-inherit cmake distutils-r1
+inherit cmake distutils-r1 flag-o-matic
+
+DISTUTILS_EXT=1
 
 DESCRIPTION="disassembly/disassembler framework + bindings"
 HOMEPAGE="http://www.capstone-engine.org/"
 
-SNAPSHOT=280b749e84adca4177b7525504e55be4d8c74e44
+SNAPSHOT=fe6bdc6ed82057a52754306961b23cf54f746fc6
 SRC_URI="https://github.com/capstone-engine/capstone/archive/${SNAPSHOT}.tar.gz -> capstone-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/capstone-${SNAPSHOT}"
 
@@ -17,9 +19,11 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+diet +python static-libs"
+IUSE="+diet +python debug"
 
 src_prepare() {
+	append-flags -Wno-error
+	filter-flags -Wl,-z,defs -flto*
 	cmake_src_prepare
 	use python && cd bindings/python && distutils-r1_src_prepare
 }
@@ -27,7 +31,7 @@ src_prepare() {
 src_configure() {
 	local mycmakeargs=(
 		-DCAPSTONE_BUILD_DIET="$(usex diet)"
-		-DCAPSTONE_BUILD_STATIC="$(usex static-libs)"
+		-DCAPSTONE_BUILD_STATIC_LIBS=ON
 		-DCAPSTONE_INSTALL=ON
 		-DCAPSTONE_ARCHITECTURE_DEFAULT=OFF
 		-DCAPSTONE_ARM64_SUPPORT=ON

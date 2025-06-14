@@ -6,10 +6,8 @@ inherit autotools toolchain-funcs
 
 DESCRIPTION="MIT Kerberos V"
 HOMEPAGE="https://web.mit.edu/kerberos/www/"
-SRC_URI="https://kerberos.org/dist/krb5/$(ver_cut 1-2)/krb5-${PV}.tar.gz"
-
-SNAPSHOT=80001c8b7b00773a9eb59050aff3b0056080aaf2
-SRC_URI="https://github.com/krb5/krb5/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SNAPSHOT=2cc718a86d92abef7363384d7eac48190271f676
+SRC_URI="https://github.com/krb5/krb5/archive/${SNAPSHOT}.tar.gz -> mit-krb5-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/krb5-${SNAPSHOT}/src"
 
 LICENSE="openafs-krb5-a BSD MIT OPENLDAP BSD-2 HPND BSD-4 ISC RSA CC-BY-SA-3.0 || ( BSD-2 GPL-2+ )"
@@ -28,10 +26,10 @@ DEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-1.12_warn_cflags.patch"
-	"${FILESDIR}/${PN}-config_LDFLAGS-r1.patch"
-	"${FILESDIR}/${PN}_dont_create_rundir.patch"
-	"${FILESDIR}/${PN}-1.18.2-krb5-config.patch"
+	"${FILESDIR}/mit-krb5-1.12_warn_cflags.patch"
+	"${FILESDIR}/mit-krb5-config_LDFLAGS-r1.patch"
+	"${FILESDIR}/mit-krb5_dont_create_rundir.patch"
+	"${FILESDIR}/mit-krb5-1.18.2-krb5-config.patch"
 )
 
 src_prepare() {

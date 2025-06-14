@@ -6,8 +6,7 @@ inherit cmake
 
 DESCRIPTION="An encoding detector library"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/uchardet/"
-
-SNAPSHOT=edae8e81cfb8092496f94da1a306c4c9f0ce32bb
+SNAPSHOT=9699dfce074fac80d8d622f02ea6d8bb2f55cf00
 SRC_URI="https://gitlab.freedesktop.org/uchardet/uchardet/-/archive/${SNAPSHOT}/uchardet-${SNAPSHOT}.tar.bz2 -> uchardet-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/uchardet-${SNAPSHOT}"
 

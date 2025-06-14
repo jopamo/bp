@@ -6,11 +6,9 @@ inherit meson
 
 DESCRIPTION="A library for configuring and customizing font access"
 HOMEPAGE="http://fontconfig.org/"
-
-
-SNAPSHOT=fdfc3445d1cc9c1c7e587fb2a1287871de16faf9
-SRC_URI="https://gitlab.freedesktop.org/fontconfig/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SNAPSHOT=41f2ae7df48d192b938ab78217bece1fab09dd1b
+SRC_URI="https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/${SNAPSHOT}/fontconfig-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/fontconfig-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

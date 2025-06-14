@@ -6,10 +6,9 @@ inherit meson linux-info multiprocessing python-r1 flag-o-matic user
 
 DESCRIPTION="Gentoo package manager"
 HOMEPAGE="https://github.com/gentoo/portage"
-
-SNAPSHOT=a393a5fefcdfb463a373eed813485f671ba0bbcd
+SNAPSHOT=3acb934b7f395d8db985908bd31eadc2b3505392
 SRC_URI="https://github.com/gentoo/portage/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/portage-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -123,7 +122,7 @@ src_install() {
 	if use tmpfilesd; then
 		insopts -m 0644
 		insinto /usr/lib/tmpfiles.d
-		newins "${FILESDIR}/${PN}-tmpfiles" ${PN}.conf
+		newins "${FILESDIR}/portage-tmpfiles" portage.conf
 	fi
 
 	local scripts
@@ -190,9 +189,9 @@ pkg_preinst() {
 	if use sysusersd; then
 		insopts -m 0644
 		insinto /usr/lib/sysusers.d
-		newins "${FILESDIR}/${PN}-sysusers" ${PN}.conf
+		newins "${FILESDIR}/portage-sysusers" portage.conf
 	else
-		enewgroup ${PN} 250
+		enewgroup portage 250
 		enewuser portage 250 -1 /var/lib/portage/home portage
 	fi
 }

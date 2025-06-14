@@ -7,7 +7,7 @@ inherit meson python-any-r1 flag-o-matic
 DESCRIPTION="a fast cryptographic hash function"
 HOMEPAGE="https://github.com/BLAKE3-team/BLAKE3"
 
-SNAPSHOT=33038828510d0ce83d5c1cbc1efb10e683c15aaa
+SNAPSHOT=1229986d26a0d35eadc80c8c313e0fa9da95d2bb
 SRC_URI="https://github.com/BLAKE3-team/BLAKE3/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/BLAKE3-${SNAPSHOT}/c"
 

@@ -2,15 +2,15 @@
 
 EAPI=8
 
-MY_PN="SPIRV-LLVM-Translator"
+BRANCH_NAME="llvm_release_$(ver_cut 1)0"
 
 inherit cmake flag-o-matic multiprocessing
 
 DESCRIPTION="Bi-directional translator between SPIR-V and LLVM IR"
 HOMEPAGE="https://github.com/KhronosGroup/SPIRV-LLVM-Translator"
 
-SNAPSHOT=0cf86c9b37b67907bcd85ffe8758925d4a0f5784
-SRC_URI="https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SNAPSHOT=6a96a625abea08b953c02b53dabf1586dbca5569
+SRC_URI="https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/${SNAPSHOT}.tar.gz -> spirv-llvm-translator-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/SPIRV-LLVM-Translator-${SNAPSHOT}"
 
 LICENSE="UoI-NCSA"

@@ -8,8 +8,8 @@ DESCRIPTION="Library for build EFI Applications"
 HOMEPAGE="https://sourceforge.net/projects/gnu-efi/"
 
 SNAPSHOT=00cdfa66e923ab2f6683bb52cab0d0d1a9083b16
-SRC_URI="https://github.com/ncroxon/gnu-efi/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SRC_URI="https://github.com/ncroxon/gnu-efi/archive/${SNAPSHOT}.tar.gz -> gnu-efi-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/gnu-efi-${SNAPSHOT}"
 
 LICENSE="GPL-2+ BSD BSD-2"
 SLOT="0"

@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/nhorman/rng-tools"
 
 SNAPSHOT=aa035bfc50934e3ec42766a9d95a459ef1c187a1
 SRC_URI="https://github.com/nhorman/rng-tools/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/rng-tools-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

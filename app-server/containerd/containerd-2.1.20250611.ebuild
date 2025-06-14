@@ -2,12 +2,14 @@
 
 EAPI=8
 
+BRANCH_NAME="release/$(ver_cut 1-2)"
+
 inherit go-module
 
 DESCRIPTION="A daemon to control runC"
 HOMEPAGE="https://containerd.io/"
 
-SNAPSHOT=68b34618284b78d312bc7829e11e087f26047807
+SNAPSHOT=64ed272067a24c2d917064eea25a78e1479d632f
 SRC_URI="https://github.com/containerd/containerd/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/containerd-${SNAPSHOT}"
 

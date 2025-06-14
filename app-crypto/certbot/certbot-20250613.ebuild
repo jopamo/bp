@@ -13,10 +13,9 @@ HOMEPAGE="
 	https://github.com/certbot/certbot
 	https://letsencrypt.org/
 "
-
-SNAPSHOT=7a27a67cdb6618ebbb3955fb9de71002cce7fbf3
-SRC_URI="https://github.com/certbot/certbot/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}/${PN}"
+SNAPSHOT=a7e4ffb13bb458e3a18e05b73371f634214f892c
+SRC_URI="https://github.com/certbot/certbot/archive/${SNAPSHOT}.tar.gz -> certbot-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/certbot-${SNAPSHOT}/certbot"
 
 LICENSE="Apache-2.0"
 SLOT="0"

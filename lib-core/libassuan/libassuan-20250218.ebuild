@@ -9,7 +9,7 @@ inherit autotools
 
 DESCRIPTION="IPC library used by GnuPG and GPGME"
 HOMEPAGE="http://www.gnupg.org/related_software/libassuan/index.en.html"
-SRC_URI="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libassuan.git;a=snapshot;h=${SNAPSHOT};sf=tgz -> ${P}.tar.gz"
+SRC_URI="https://github.com/gpg/libassuan/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libassuan-${SHORT}
 
 LICENSE="GPL-3 LGPL-2.1"

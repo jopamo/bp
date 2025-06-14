@@ -8,7 +8,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="systemd sysusersd tmpfilesd user-namespaces router +disable-ipv6 xdp"
+IUSE="ipv6 router server systemd sysusersd tmpfilesd user-namespaces xdp"
 
 S=${WORKDIR}
 
@@ -156,11 +156,16 @@ src_install() {
 		doins "${FILESDIR}/sysctl-router.conf"
 	fi
 
-	if use disable-ipv6; then
+	if ! use ipv6; then
 		insinto /etc/sysctl.d
 		doins "${FILESDIR}/sysctl-disable-ipv6.conf"
 	fi
 
 	insinto /etc/sysctl.d
 	doins "${FILESDIR}/sysctl-hardening.conf"
+
+	if use server; then
+		insinto /etc/sysctl.d
+		doins "${FILESDIR}/sysctl-server.conf"
+	fi
 }

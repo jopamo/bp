@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/smuellerDD/jitterentropy-library"
 
 SNAPSHOT=f8d013a1cb3bc6a02e447f4b4638c76ba381f5f2
 SRC_URI="https://github.com/smuellerDD/jitterentropy-library/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-library-${SNAPSHOT}
+S=${WORKDIR}/jitterentropy-library-${SNAPSHOT}
 
 LICENSE="BSD"
 SLOT="0"

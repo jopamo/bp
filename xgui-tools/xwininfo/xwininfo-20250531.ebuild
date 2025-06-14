@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="window information utility for X"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=545128957da2e10c6211fb3497135ac8a6c8768d
+SNAPSHOT=5306785506f978fa92cc62ad0a9f0d6f073bdb80
 SRC_URI="https://gitlab.freedesktop.org/xorg/app/xwininfo/-/archive/${SNAPSHOT}/xwininfo-${SNAPSHOT}.tar.bz2 -> xwininfo-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/xwininfo-${SNAPSHOT}"
 

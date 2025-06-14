@@ -3,7 +3,8 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( pypy3 pypy3_11 python3_{10..13} )
+# py3.14: https://github.com/pydantic/pydantic/issues/11613
+PYTHON_COMPAT=( pypy3_11 python3_{11..13} )
 
 inherit distutils-r1 pypi
 
@@ -29,7 +30,7 @@ BDEPEND="
 	test? (
 		$(python_gen_cond_dep '
 			dev-python/cloudpickle[${PYTHON_USEDEP}]
-		' 'python3*' pypy3)
+		' 'python3*')
 		dev-python/dirty-equals[${PYTHON_USEDEP}]
 		>=dev-python/email-validator-2.0.0[${PYTHON_USEDEP}]
 		>=dev-python/faker-18.13.0[${PYTHON_USEDEP}]

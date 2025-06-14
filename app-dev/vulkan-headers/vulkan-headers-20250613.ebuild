@@ -6,8 +6,7 @@ inherit cmake
 
 DESCRIPTION="Vulkan Header files and API registry "
 HOMEPAGE="https://github.com/KhronosGroup/Vulkan-Headers"
-
-SNAPSHOT=75ad707a587e1469fb53a901b9b68fe9f6fbc11f
+SNAPSHOT=b39ab380a44b6c8df462c34e976ea9ce2d2c336b
 SRC_URI="https://github.com/KhronosGroup/Vulkan-Headers/archive/${SNAPSHOT}.tar.gz -> Vulkan-Headers-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/Vulkan-Headers-${SNAPSHOT}"
 

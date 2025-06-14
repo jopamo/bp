@@ -7,9 +7,9 @@ inherit toolchain-funcs flag-o-matic
 DESCRIPTION="kernel routing and traffic control utilities"
 HOMEPAGE="https://wiki.linuxfoundation.org/networking/iproute2"
 
-SNAPSHOT=401816cc9c7cde7b666d4befb06a10d6359c9688
+SNAPSHOT=d30f38d5d752abe12174b1ea05707bcf86f3d305
 SRC_URI="https://github.com/iproute2/iproute2/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/iproute2-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -31,8 +31,8 @@ DEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-5.7.0-mix-signal.h-include.patch
-	"${FILESDIR}"/${PN}-mtu.patch
+	"${FILESDIR}"/iproute2-5.7.0-mix-signal.h-include.patch
+	"${FILESDIR}"/iproute2-mtu.patch
 )
 
 doecho() {
@@ -44,8 +44,8 @@ src_prepare() {
 	filter-flags -Wl,-z,defs
 	append-flags -ffat-lto-objects
 
-	use musl && eapply "${FILESDIR}"/${PN}-6.8.0-configure-nomagic-nolibbsd.patch
-	use musl && eapply "${FILESDIR}"/${PN}-6.8.0-disable-libbsd-fallback.patch
+	use musl && eapply "${FILESDIR}"/iproute2-6.8.0-configure-nomagic-nolibbsd.patch
+	use musl && eapply "${FILESDIR}"/iproute2-6.8.0-disable-libbsd-fallback.patch
 
 	default
 

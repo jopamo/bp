@@ -1,8 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-
-SNAPSHOT=7240cc9fb7cd6a9bc83b9ade5a385633f42e58d1
+SNAPSHOT=5ac4b15175ae8cc096b6a3d861b54b6e2a882367
 
 inherit flag-o-matic multiprocessing autotools
 
@@ -10,7 +9,7 @@ DESCRIPTION="sandbox'd LD_PRELOAD hack"
 HOMEPAGE="https://www.gentoo.org/proj/en/portage/sandbox/"
 
 SRC_URI="https://github.com/gentoo/sandbox/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/sandbox-${SNAPSHOT}
 
 
 LICENSE="GPL-2"

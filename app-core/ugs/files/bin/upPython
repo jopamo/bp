@@ -322,6 +322,28 @@ BDEPEND_CLEAN_PACKAGES=(
 INHERIT_FLAGOMATIC_PACKAGES=(
     "regex"
     "pycares"
+    "pynacl"
+)
+
+PACKAGES_ZDEFS=(
+    "aiohttp"
+    "brotlicffi"
+    "cffi"
+    "cython"
+    "frozenlist"
+    "lxml"
+    "markupsafe"
+    "msgpack"
+    "multidict"
+    "pillow"
+    "pynacl"
+    "propcache"
+    "psutil"
+    "pycares"
+    "regex"
+    "tree-sitter"
+    "yarl"
+    "zstandard"
 )
 
 GENTOO_PATH="/tmp/gentoo-repo"
@@ -608,25 +630,6 @@ add_flagomatic_to_inherit() {
 add_flagomatic_to_inherit
 
 echo "Starting to process to filter -Wl,-z,defs on required packages..."
-PACKAGES_ZDEFS=(
-    "aiohttp"
-    "brotlicffi"
-    "cffi"
-    "cython"
-    "frozenlist"
-    "lxml"
-    "markupsafe"
-    "msgpack"
-    "multidict"
-    "pillow"
-    "propcache"
-    "psutil"
-    "pycares"
-    "regex"
-    "tree-sitter"
-    "yarl"
-    "zstandard"
-)
 
 for package in "${PACKAGES_ZDEFS[@]}"; do
     if [ -d "${PACKAGE_DIR}/${package}" ]; then

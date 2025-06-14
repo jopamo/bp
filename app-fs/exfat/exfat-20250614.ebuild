@@ -6,8 +6,7 @@ inherit autotools
 
 DESCRIPTION="exFAT filesystem FUSE module"
 HOMEPAGE="https://github.com/relan/exfat"
-
-SNAPSHOT=524a78f7d785d4adfc017a90af8a5918adf628c8
+SNAPSHOT=8cffe412eadd2d9f22ed8ee114b72cc8c6dbfa14
 SRC_URI="https://github.com/relan/exfat/archive/${SNAPSHOT}.tar.gz -> exfat-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/exfat-${SNAPSHOT}"
 

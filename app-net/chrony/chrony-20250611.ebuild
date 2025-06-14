@@ -6,8 +6,7 @@ inherit autotools user
 
 DESCRIPTION="NTP client and server programs"
 HOMEPAGE="https://chrony.tuxfamily.org/"
-
-SNAPSHOT=551ad40a047fa1b09cfa52a2bde968f394f6003f
+SNAPSHOT=1bcbea9bd2601fd25ea3dff311f7f258bce76f95
 SRC_URI="https://github.com/mlichvar/chrony/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/chrony-${SNAPSHOT}
 
@@ -68,7 +67,7 @@ src_install() {
 	dobin chronyc
 	dobin chronyd
 
-	insinto /etc/${PN}
+	insinto /etc/chrony
 	doins "${FILESDIR}/chrony.conf"
 
 	keepdir /var/log/chrony
@@ -86,6 +85,6 @@ src_install() {
 }
 
 pkg_preinst() {
-	enewgroup ${PN} 123
-	enewuser ${PN} -1 -1 /var/lib/${PN} ${PN}
+	enewgroup chrony 123
+	enewuser chrony -1 -1 /var/lib/chrony chrony
 }

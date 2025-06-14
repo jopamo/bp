@@ -2,12 +2,14 @@
 
 EAPI=8
 
+BRANCH_NAME="stable/v$(ver_cut 1-2)"
+
 inherit meson flag-o-matic
 
 DESCRIPTION="a random collection of Linux utilities"
 HOMEPAGE="https://github.com/util-linux/util-linux"
 
-SNAPSHOT=d828cc20fbbc8daec3e046a6ce2f877fae3d31d9
+SNAPSHOT=f1f7a1cbfb40f6f8b7bc15bd1a9680e1022df461
 SRC_URI="https://github.com/util-linux/util-linux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/util-linux-${SNAPSHOT}"
 

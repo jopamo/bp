@@ -8,8 +8,7 @@ inherit distutils-r1
 
 DESCRIPTION="Collection of tools for Gentoo development"
 HOMEPAGE="https://github.com/pkgcore/pkgdev"
-
-SNAPSHOT=ff924c6605fb8f99c07e84adbf446f3a6ff5e47b
+SNAPSHOT=ce6d376aa9d535bb52dda497d63be43604db1c50
 SRC_URI="https://github.com/pkgcore/pkgdev/archive/${SNAPSHOT}.tar.gz -> pkgdev-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/pkgdev-${SNAPSHOT}"
 

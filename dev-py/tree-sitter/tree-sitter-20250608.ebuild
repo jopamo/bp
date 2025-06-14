@@ -14,8 +14,8 @@ HOMEPAGE="
 	https://pypi.org/project/tree-sitter/
 "
 
-MY_PN="py-${PN}"
-SNAPSHOT=917bc12e90983d0b351f422877553bce8ec3eab2
+MY_PN="py-tree-sitter"
+SNAPSHOT=d9454e5204f42fefeae24ee7799093f36219efa3
 SRC_URI="https://github.com/tree-sitter/py-tree-sitter/archive/${SNAPSHOT}.tar.gz -> ${MY_PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${MY_PN}-${SNAPSHOT}"
 
@@ -41,7 +41,7 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-0.22.2-unbundle.patch
+	"${FILESDIR}"/tree-sitter-0.22.2-unbundle.patch
 )
 
 distutils_enable_tests pytest
@@ -49,9 +49,8 @@ distutils_enable_tests pytest
 src_prepare() {
 	filter-flags -Wl,-z,defs
 
-	sed -i '/-Werror=implicit-function-declaration/d' setup.py
-	sed -i 's/ts_node_child_containing_descendant/ts_node_child_with_descendant/g' tree_sitter/binding/node.c
-	sed -i 's/TSInputEncodingUTF16/TSInputEncodingUTF16BE/g' tree_sitter/binding/parser.c
+	sed -i '/-Werror=implicit-function-declaration/d' setup.py || die
+	sed -i 's/ts_node_child_containing_descendant/ts_node_child_with_descendant/g' tree_sitter/binding/node.c || die
 
 	default
 

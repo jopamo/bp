@@ -3,19 +3,20 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_UPSTREAM_PEP517=standalone
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
-inherit distutils-r1
+inherit cargo distutils-r1 flag-o-matic toolchain-funcs
 
 DESCRIPTION="Build and publish crates with pyo3, rust-cpython and cffi bindings"
 HOMEPAGE="https://www.maturin.rs/"
-SRC_URI="https://github.com/PyO3/maturin/archive/refs/tags/v${PV}.tar.gz
-		-> ${P}.gh.tar.gz
-"
-
+SRC_URI="
+	https://github.com/PyO3/maturin/archive/refs/tags/v${PV}.tar.gz
+		-> ${P}.gh.tar.gz"
 
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0"
-KEYWORDS="amd64 arm ~arm64 ~loong ~mips ppc ppc64 ~riscv ~s390 sparc x86"
+KEYWORDS="amd64 arm64"
 
 RESTRICT="test network-sandbox"
 
@@ -24,7 +25,7 @@ BDEPEND="
 	dev-py/setuptools-rust
 "
 
-QA_FLAGS_IGNORED="usr/bin/${PN}"
+QA_FLAGS_IGNORED="usr/bin/maturin"
 
 src_prepare() {
 	export OPENSSL_NO_VENDOR=1
@@ -32,6 +33,4 @@ src_prepare() {
 	use elibc_musl && RUSTFLAGS+=" -C target-feature=-crt-static"
 
 	distutils-r1_src_prepare
-
-	cargo vendor --locked
 }

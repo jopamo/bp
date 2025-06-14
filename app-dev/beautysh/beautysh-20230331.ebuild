@@ -12,7 +12,7 @@ HOMEPAGE="https://github.com/lovesegfault/beautysh"
 
 SNAPSHOT=9845efc3ea3e86cc0d41465d720a47f521b2799c
 SRC_URI="https://github.com/lovesegfault/beautysh/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/beautysh-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

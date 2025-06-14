@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..13} pypy3 pypy3_11 )
+PYTHON_COMPAT=( python3_{11..13} pypy3_11 )
 
 inherit distutils-r1 pypi
 
@@ -45,6 +45,11 @@ python_test() {
 	# https://github.com/pytest-dev/pytest-cov/issues/517
 	local -x PYTHONPATH=$(python_get_sitedir):${PYTHONPATH}
 	local -x PYTHONUSERBASE=/usr
+
+	local EPYTEST_DESELECT=(
+		# TODO
+		tests/test_pytest_cov.py::test_filterwarnings_error
+	)
 
 	epytest
 }

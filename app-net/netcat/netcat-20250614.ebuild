@@ -6,7 +6,7 @@ inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="the network swiss army knife"
 HOMEPAGE="http://nc110.sourceforge.net/"
-SNAPSHOT=190aa428d299858433eb275ef2f432a8b7466678
+SNAPSHOT=182804d69bde0022d74c27f924ed99b2fe540f3c
 SRC_URI="https://github.com/jopamo/netcat/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

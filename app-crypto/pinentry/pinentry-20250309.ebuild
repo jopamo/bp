@@ -3,14 +3,13 @@
 EAPI=8
 
 SNAPSHOT=72b827b33e95df0dd1c14f193778e236e0bcbae6
-SHORT=${SNAPSHOT:0:7}
 
 inherit autotools
 
 DESCRIPTION="Simple passphrase entry dialogs which utilize the Assuan protocol"
 HOMEPAGE="https://gnupg.org/aegypten2/index.html"
-SRC_URI="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=pinentry.git;a=snapshot;h=${SNAPSHOT};sf=tgz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SHORT}
+SRC_URI="https://github.com/gpg/pinentry/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/pinentry-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"

@@ -1,17 +1,20 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
+
+BRANCH_NAME="libsigc++-$(ver_cut 1)-$(ver_cut 2)"
+
 inherit flag-o-matic meson
 
 DESCRIPTION="Typesafe callback system for standard C++"
 HOMEPAGE="https://libsigcplusplus.github.io/libsigcplusplus/"
 
-SNAPSHOT=4e68e1753b42be120d5a64a9b7cc0fc110f86428
-SRC_URI="https://github.com/libsigcplusplus/libsigcplusplus/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SNAPSHOT=1f906156ccdd2350d5da644e9ad230b02a679e92
+SRC_URI="https://github.com/libsigcplusplus/libsigcplusplus/archive/${SNAPSHOT}.tar.gz -> libsigc++-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libsigcplusplus-${SNAPSHOT}"
 
 LICENSE="LGPL-2.1+"
-SLOT="3"
+SLOT="2"
 KEYWORDS="amd64 arm64"
 
 IUSE="test"

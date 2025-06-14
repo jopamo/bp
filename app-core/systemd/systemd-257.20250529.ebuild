@@ -2,12 +2,14 @@
 
 EAPI=8
 
+BRANCH_NAME="v$(ver_cut 1)-stable"
+
 inherit flag-o-matic linux-info meson toolchain-funcs user
 
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
 
-SNAPSHOT=1fb1f637baa979fd58fef67ea72b3e7255a99e21
+SNAPSHOT=00a12c234e2506f5cab683460199575f13c454db
 SRC_URI="https://github.com/systemd/systemd/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/systemd-${SNAPSHOT}"
 

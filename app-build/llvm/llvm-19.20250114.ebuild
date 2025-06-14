@@ -2,35 +2,14 @@
 
 EAPI=8
 
+BRANCH_NAME="release/$(ver_cut 1).x"
+
 inherit cmake flag-o-matic
 
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
 
-if [[ ${PV} == 19* ]] ; then
-	SNAPSHOT=cd708029e0b2869e80abe31ddb175f7c35361f90
-
-elif [[ ${PV} == 18* ]] ; then
-	SNAPSHOT="3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff"
-
-elif [[ ${PV} == 17* ]] ; then
-	SNAPSHOT="6009708b4367171ccdbf4b5905cb6a803753fe18"
-
-elif [[ ${PV} == 16* ]] ; then
-	SNAPSHOT="7cbf1a2591520c2491aa35339f227775f4d3adf6"
-
-elif [[ ${PV} == 15* ]] ; then
-	SNAPSHOT="8dfdcc7b7bf66834a761bd8de445840ef68e4d1a"
-
-elif [[ ${PV} == 14* ]] ; then
-	SNAPSHOT="f28c006a5895fc0e329fe15fead81e37457cb1d1"
-
-elif [[ ${PV} == 13* ]] ; then
-	SNAPSHOT="75e33f71c2dae584b13a7d1186ae0a038ba98838"
-
-elif [[ ${PV} == 12* ]] ; then
-	SNAPSHOT="fed41342a82f5a3a9201819a82bf7a48313e296b"
-fi
+SNAPSHOT=cd708029e0b2869e80abe31ddb175f7c35361f90
 
 SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
@@ -269,6 +248,11 @@ src_test() {
 src_install() {
     cmake_src_install
 
+    dosym -r "/usr/lib/${TUPLE}/libunwind.a" "/usr/lib/libunwind.a"
+	dosym -r "/usr/lib/${TUPLE}/libunwind.so" "/usr/lib/libunwind.so"
+	dosym -r "/usr/lib/${TUPLE}/libunwind.so.1" "/usr/lib/libunwind.so"
+	dosym -r "/usr/lib/${TUPLE}/libunwind.so.1.0" "/usr/lib/libunwind.so.1"
+
 	if use libcxx; then
 		dosym -r "/usr/lib/${TUPLE}/libc++.a" "/usr/lib/libc++.a"
 		dosym -r "/usr/lib/${TUPLE}/libc++.so" "/usr/lib/libc++.so"
@@ -279,10 +263,6 @@ src_install() {
 		dosym -r "/usr/lib/${TUPLE}/libc++abi.so.1" "/usr/lib/libc++abi.so"
 		dosym -r "/usr/lib/${TUPLE}/libc++abi.so.1.0" "/usr/lib/libc++abi.so.1"
 		dosym -r "/usr/lib/${TUPLE}/libc++experimental.a" "/usr/lib/libc++experimental.a"
-		dosym -r "/usr/lib/${TUPLE}/libunwind.a" "/usr/lib/libunwind.a"
-		dosym -r "/usr/lib/${TUPLE}/libunwind.so" "/usr/lib/libunwind.so"
-		dosym -r "/usr/lib/${TUPLE}/libunwind.so.1" "/usr/lib/libunwind.so"
-		dosym -r "/usr/lib/${TUPLE}/libunwind.so.1.0" "/usr/lib/libunwind.so.1"
     fi
 
     if use syslibcxxabi; then

@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="gnome-$(ver_cut 1)"
 
-inherit autotools xdg
+inherit meson xdg
 
 DESCRIPTION="Mostly private use system icons."
 HOMEPAGE="https://git.gnome.org/browse/adwaita-icon-theme/"
@@ -25,8 +25,3 @@ DEPEND="
 "
 
 RESTRICT="binchecks strip"
-
-src_prepare() {
-	default
-	eautoreconf
-}

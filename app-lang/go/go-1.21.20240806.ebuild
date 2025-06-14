@@ -2,6 +2,8 @@
 
 EAPI=8
 
+BRANCH_NAME="release-branch.go$(ver_cut 1-2)"
+
 export CBUILD=${CBUILD:-${CHOST}}
 export CTARGET=${CTARGET:-${CHOST}}
 

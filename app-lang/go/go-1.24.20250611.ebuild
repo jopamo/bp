@@ -2,6 +2,8 @@
 
 EAPI=8
 
+BRANCH_NAME="release-branch.go$(ver_cut 1-2)"
+
 export CBUILD=${CBUILD:-${CHOST}}
 export CTARGET=${CTARGET:-${CHOST}}
 
@@ -12,8 +14,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="A concurrent garbage collected and typesafe programming language"
 HOMEPAGE="https://go.dev"
-
-SNAPSHOT=f3a302358f56ba7d9b79d96798b51cc0cbe003f3
+SNAPSHOT=7d08a16fbac95b891ce8e87e1605be0fc789818b
 SRC_URI="https://github.com/golang/go/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/go-${SNAPSHOT}"
 

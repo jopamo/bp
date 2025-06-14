@@ -9,7 +9,7 @@ HOMEPAGE="http://linux-diag.sourceforge.net/Sysfsutils.html"
 
 SNAPSHOT=085bba6bab1ccaa89041639a7e070390fdea440a
 SRC_URI="https://github.com/linux-ras/sysfsutils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/sysfsutils-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"

@@ -2,14 +2,16 @@
 
 EAPI=8
 
+BRANCH_NAME="branch-$(ver_cut 1-2)"
+
 inherit flag-o-matic
 
 DESCRIPTION="A SQL Database Engine in a C Library"
 HOMEPAGE="https://sqlite.org/"
 
 SNAPSHOT=d770c86b824ad64013faeb2a0e98ad47c248d143
-SRC_URI="https://github.com/sqlite/sqlite/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SRC_URI="https://github.com/sqlite/sqlite/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/sqlite-${SNAPSHOT}"
 
 LICENSE="public-domain"
 SLOT="0"

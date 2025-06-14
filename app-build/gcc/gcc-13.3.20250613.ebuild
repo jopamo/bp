@@ -2,13 +2,14 @@
 
 EAPI=8
 
+BRANCH_NAME="releases/gcc-$(ver_cut 1)"
+
 inherit flag-o-matic
 
 DESCRIPTION="an optimizing compiler produced by the GNU Project supporting various programming languages"
 HOMEPAGE="https://gcc.gnu.org/"
-
-SNAPSHOT=f57554cea727b4c60121b8f202d3b655354ff5c5
-SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> gcc-${SNAPSHOT}.tar.gz"
+SNAPSHOT=f959e68be399a93399551734f629a7d2cd81f0b1
+SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/gcc-${SNAPSHOT}
 
 LICENSE="GPL-3"

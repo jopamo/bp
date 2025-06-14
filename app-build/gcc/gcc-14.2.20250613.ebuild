@@ -2,13 +2,14 @@
 
 EAPI=8
 
+BRANCH_NAME="releases/gcc-$(ver_cut 1)"
+
 inherit flag-o-matic
 
 DESCRIPTION="an optimizing compiler produced by the GNU Project supporting various programming languages"
 HOMEPAGE="https://gcc.gnu.org/"
-
-SNAPSHOT=a9de71c2060339fcd56257e64e61af207b924e4c
-SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=b7f8f67a07a17c0b39a06b0b85917c8fb04212ce
+SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/gcc-${SNAPSHOT}
 
 LICENSE="GPL-3"
@@ -137,11 +138,6 @@ src_compile() {
 src_install() {
 	cd gcc-build
 	emake DESTDIR="${ED}" install
-
-	#cleanup
-	find "${ED}" -name libcc1.la -delete
-	find "${ED}" -name libcc1plugin.la -delete
-	find "${ED}" -name libcp1plugin.la -delete
 
 	dobin "${FILESDIR}"/c89
 	dobin "${FILESDIR}"/c99

@@ -2,12 +2,14 @@
 
 EAPI=8
 
+BRANCH_NAME="v$(ver_cut 1).x"
+
 inherit flag-o-matic python-any-r1 toolchain-funcs xdg
 
 DESCRIPTION="A JavaScript runtime built on Chrome's V8 JavaScript engine"
 HOMEPAGE="https://nodejs.org/"
 
-SNAPSHOT=b9ce2bc5ce0fb0de798871f742c41bbcbfd57d5e
+SNAPSHOT=9d113c35c22b76afd8929c4b53e8b23d67f14243
 SRC_URI="https://github.com/nodejs/node/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/node-${SNAPSHOT}
 

@@ -2,13 +2,14 @@
 
 EAPI=8
 
+BRANCH_NAME="stable-$(ver_cut 1-2)"
+
 inherit user
 
 DESCRIPTION="High-performance HTTP server and reverse proxy"
 HOMEPAGE="https://nginx.org"
-
-SNAPSHOT="1be0fb0c9f9bc3489c7b40576efd6afe6b2eccd5"
-SRC_URI="https://github.com/nginx/nginx/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SNAPSHOT=481d28cb4e04c8096b9b6134856891dc52ecc68f
+SRC_URI="https://github.com/nginx/nginx/archive/${SNAPSHOT}.tar.gz -> nginx-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/nginx-${SNAPSHOT}"
 
 LICENSE="BSD-2 BSD SSLeay MIT GPL-2 GPL-2+"
@@ -45,8 +46,8 @@ pkg_setup() {
 	NGINX_HOME="/var/lib/nginx"
 
 	ebegin "Creating nginx user and group"
-	enewgroup "${PN}"
-	enewuser "${PN}" -1 -1 "${NGINX_HOME}" "${PN}"
+	enewgroup "nginx"
+	enewuser "nginx" -1 -1 "${NGINX_HOME}" "nginx"
 	eend $?
 
 	keepdir "${NGINX_HOME}/tmp"
@@ -66,8 +67,8 @@ src_configure() {
 		--error-log-path=stderr
 
 		# Worker user/group
-		--user="${PN}"
-		--group="${PN}"
+		--user="nginx"
+		--group="nginx"
 
 		# Thread pools
 		--with-threads
@@ -193,12 +194,12 @@ src_install() {
 	if use systemd; then
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
-		doins "${FILESDIR}/${PN}.service"
+		doins "${FILESDIR}/nginx.service"
 	fi
 
 	keepdir /var/log/nginx
 	fperms 0710 /var/log/nginx
-	fowners root:"${PN}" /var/log/nginx
+	fowners root:"nginx" /var/log/nginx
 
 	keepdir /var/www/localhost
 

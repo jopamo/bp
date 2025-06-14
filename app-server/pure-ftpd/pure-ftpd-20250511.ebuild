@@ -83,11 +83,11 @@ src_install() {
 	default
 
 	if use implicittls ; then
-		sed -i '/^SERVER/s@21@990@' "${ED}"/etc/conf.d/${PN} \
+		sed -i '/^SERVER/s@21@990@' "${ED}"/etc/conf.d/pure-ftpd \
 			|| die "Adjusting default server port for implicittls usage failed!"
 	fi
 
-	keepdir /var/lib/run/${PN}
+	keepdir /var/lib/run/pure-ftpd
 
 	if use ldap ; then
 		insinto /etc/openldap/schema
@@ -100,6 +100,6 @@ src_install() {
 	 if use systemd; then
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
-		doins "${FILESDIR}/${PN}.service"
+		doins "${FILESDIR}/pure-ftpd.service"
 	fi
 }

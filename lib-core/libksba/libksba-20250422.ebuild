@@ -9,8 +9,8 @@ inherit autotools
 
 DESCRIPTION="X.509 and CMS (PKCS#7) library"
 HOMEPAGE="http://www.gnupg.org/related_software/libksba"
-SRC_URI="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libksba.git;a=snapshot;h=${SNAPSHOT};sf=tgz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SHORT}
+SRC_URI="https://github.com/gpg/libksba/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/libksba-${SHORT}
 
 LICENSE="LGPL-3+ GPL-2+ GPL-3"
 SLOT="0"

@@ -6,21 +6,15 @@ inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="the network swiss army knife"
 HOMEPAGE="http://nc110.sourceforge.net/"
-SRC_URI="mirror://sourceforge/nc110/nc${PV}.tar.xz -> ${P}.tar.xz"
+SNAPSHOT=190aa428d299858433eb275ef2f432a8b7466678
+SRC_URI="https://github.com/jopamo/netcat/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="netcat"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="ipv6 static"
-
-S=${WORKDIR}/nc110
-
-append-cppflags -DTELNET -DGAPING_SECURITY_HOLE
-
-src_configure() {
-	use ipv6 || sed -i '/#define INET6/d' generic.h
-}
+IUSE="static"
 
 src_compile() {
 	emake \

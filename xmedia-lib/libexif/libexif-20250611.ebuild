@@ -6,8 +6,7 @@ inherit autotools
 
 DESCRIPTION="Library for parsing, editing, and saving EXIF data"
 HOMEPAGE="https://github.com/libexif"
-
-SNAPSHOT=f8b0e2e0520ffd33416c38f107d9e55170f9285b
+SNAPSHOT=1f544d824f98e4261c6592c38fcd3d42bfb97d12
 SRC_URI="https://github.com/libexif/libexif/archive/${SNAPSHOT}.tar.gz -> libexif-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libexif-${SNAPSHOT}"
 
@@ -25,7 +24,7 @@ DEPEND="${RDEPEND}
 
 ECONF_SOURCE=${S}
 
-PATCHES=( "${FILESDIR}"/${PN}-0.6.13-pkgconfig.patch )
+PATCHES=( "${FILESDIR}"/libexif-0.6.13-pkgconfig.patch )
 
 src_prepare() {
 	eautoreconf

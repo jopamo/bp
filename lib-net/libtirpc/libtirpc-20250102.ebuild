@@ -3,7 +3,7 @@
 EAPI=8
 
 inherit flag-o-matic autotools
-SNAPSHOT=482142af3799827b0865b137f9d474aa994af96c
+SNAPSHOT=240ee6c774729c9c24812aa8912f1fcf8996b162
 
 DESCRIPTION="Transport Independent RPC library (SunRPC replacement)"
 HOMEPAGE="http://libtirpc.sourceforge.net/"

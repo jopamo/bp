@@ -6,11 +6,9 @@ inherit flag-o-matic
 
 DESCRIPTION="Libraries/utilities to handle ELF objects (drop in replacement for libelf)"
 HOMEPAGE="http://elfutils.org/"
-SRC_URI="https://sourceware.org/elfutils/ftp/${PV}/${P}.tar.bz2"
-
-SNAPSHOT="b5edd4a1e45d359ec3fccd91f4fde9514635f220"
-SRC_URI="https://github.com/arachsys/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SNAPSHOT=288355d104ff9930520c0283fe82556c6cc5c16f
+SRC_URI="https://github.com/arachsys/libelf/archive/${SNAPSHOT}.tar.gz -> libelf-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/libelf-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

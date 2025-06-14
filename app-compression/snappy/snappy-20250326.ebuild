@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/google/snappy"
 
 SNAPSHOT=6af9287fbdb913f0794d0148c6aa43b58e63c8e3
 SRC_URI="https://github.com/google/snappy/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/snappy-${SNAPSHOT}
 
 LICENSE="BSD"
 SLOT="0"

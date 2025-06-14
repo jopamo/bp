@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="FVWM version 3 -- the successor to fvwm2"
 HOMEPAGE="https://github.com/fvwmorg/fvwm3"
 
-SNAPSHOT=9ec477f7c0c8867b9c87eafe7c88dd91c9afb8aa
+SNAPSHOT=f94c653ba654db0f905af3d29f323c75d79e07f0
 SRC_URI="https://github.com/fvwmorg/fvwm3/archive/${SNAPSHOT}.tar.gz -> fvwm3-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/fvwm3-${SNAPSHOT}"
 

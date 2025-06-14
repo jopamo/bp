@@ -6,10 +6,9 @@ inherit flag-o-matic meson python-any-r1 user
 
 DESCRIPTION="Multimedia processing graphs"
 HOMEPAGE="https://pipewire.org/"
-
-SNAPSHOT=96007dc5760a43692440a67451e18ad92136be71
+SNAPSHOT=26b09b0ee38b01f6a3969836ba3565b1525f955d
 SRC_URI="https://github.com/PipeWire/pipewire/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/pipewire-${SNAPSHOT}"
 
 LICENSE="MIT LGPL-2.1+ GPL-2"
 SLOT="0"
@@ -54,7 +53,7 @@ python_check_deps() {
 }
 
 pkg_setup() {
-	enewgroup ${PN}
+	enewgroup pipewire
 }
 
 src_configure() {

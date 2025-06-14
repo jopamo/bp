@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-S=${WORKDIR}/phc-winner-${PN}-${SNAPSHOT}
+S=${WORKDIR}/phc-winner-argon2-${SNAPSHOT}
 
 src_prepare() {
 	default

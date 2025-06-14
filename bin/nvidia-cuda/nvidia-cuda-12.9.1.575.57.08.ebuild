@@ -93,7 +93,7 @@ src_install() {
 
 	# Cuda prepackages libraries, don't revdep-build on them
 	insinto /etc/revdep-rebuild
-	newins - 80${PN} <<-EOF
+	newins - 80nvidia-cuda <<-EOF
 		SEARCH_DIRS_MASK="${ecudadir}"
 	EOF
 }

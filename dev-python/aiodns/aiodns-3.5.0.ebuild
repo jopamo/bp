@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( pypy3_11 python3_{11..13} )
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 pypi
 
@@ -16,17 +16,19 @@ HOMEPAGE="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
 # Tests fail with network-sandbox, since they try to resolve google.com
 PROPERTIES="test_network"
 RESTRICT="test"
 
-RDEPEND=">=dev-python/pycares-3[${PYTHON_USEDEP}]"
+RDEPEND=">=dev-python/pycares-4.9.0[${PYTHON_USEDEP}]"
 DEPEND="${RDEPEND}"
+BDEPEND="
+	dev-python/pytest-asyncio[${PYTHON_USEDEP}]
+"
 
 distutils_enable_tests pytest
 
 python_test() {
 	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest
+	epytest -p asyncio --asyncio-mode=auto
 }

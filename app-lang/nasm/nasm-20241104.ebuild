@@ -2,20 +2,30 @@
 
 EAPI=8
 
+inherit autotools
+
 DESCRIPTION="groovy little assembler"
 HOMEPAGE="http://www.nasm.us/"
 
-if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/netwide-assembler/nasm"
-	inherit git-r3
-else
 SNAPSHOT=888d9ab55012d25059da81fed6575ef3a004726f
-	SRC_URI="https://github.com/netwide-assembler/nasm/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SRC_URI="https://github.com/netwide-assembler/nasm/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="app-lang/perl"
+
+src_prepare() {
+	  sed -i \
+    -e '/INSTALL_DATA.*nasm\.1/d' \
+    -e '/INSTALL_DATA.*ndisasm\.1/d' \
+    -e '/MKDIR_P.*man1/d' \
+    -e '/^manpages: /c\manpages:\n\t@true' \
+    Makefile.in || die
+  default
+
+	./autogen.sh
+	default
+}

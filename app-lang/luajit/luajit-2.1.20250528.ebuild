@@ -2,13 +2,19 @@
 
 EAPI=8
 
-inherit toolchain-funcs git-r3
+BRANCH_NAME="v$(ver_cut 1-2)"
+
+inherit toolchain-funcs
 
 DESCRIPTION="Just-In-Time Compiler for the Lua programming language"
 HOMEPAGE="http://luajit.org/"
 
-EGIT_REPO_URI="https://github.com/LuaJIT/LuaJIT.git"
-EGIT_BRANCH="v$(ver_cut 1).$(ver_cut 2)"
+SNAPSHOT=f9140a622a0c44a99efb391cc1c2358bc8098ab7
+SRC_URI="https://github.com/LuaJIT/LuaJIT/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/LuaJIT-${SNAPSHOT}
+
+#EGIT_REPO_URI="https://github.com/LuaJIT/LuaJIT.git"
+#EGIT_BRANCH="v$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="MIT"
 SLOT="2"
@@ -39,5 +45,10 @@ src_compile() {
 
 src_install(){
 	_emake install
-	dosym -r /usr/bin/luajit-2.1.0-beta3 /usr/bin/luajit
+
+	mv "${ED}"/usr/bin/luajit-* "${ED}"/usr/bin/luajit || die
+	cd "${ED}"/usr/lib || die
+	mv libluajit-5.1.so.$(ver_cut 1-2).* libluajit-5.1.so.$(ver_cut 1-2) || die
+	ln -fs libluajit-5.1.so.$(ver_cut 1-2) libluajit-5.1.so || die
+	ln -fs libluajit-5.1.so.$(ver_cut 1-2) libluajit-5.1.so.2 || die
 }

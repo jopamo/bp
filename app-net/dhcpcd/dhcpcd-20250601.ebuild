@@ -7,7 +7,7 @@ inherit toolchain-funcs flag-o-matic user
 DESCRIPTION="A fully featured, yet light weight RFC2131 compliant DHCP client"
 HOMEPAGE="https://github.com/NetworkConfiguration/dhcpcd/ https://roy.marples.name/projects/dhcpcd/"
 
-SNAPSHOT=16d65603a84b15862adf05e7257aea46435fe6ff
+SNAPSHOT=93df2b254caf9639f9ffb66e0fe2b584eeba6220
 SRC_URI="https://github.com/NetworkConfiguration/dhcpcd/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/dhcpcd-${SNAPSHOT}"
 

@@ -9,7 +9,7 @@ inherit flag-o-matic toolchain-funcs
 DESCRIPTION="Lists open files for running Unix processes"
 HOMEPAGE="ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/"
 SRC_URI="https://github.com/lsof-org/lsof/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/lsof-${SNAPSHOT}
 
 LICENSE="lsof"
 SLOT="0"

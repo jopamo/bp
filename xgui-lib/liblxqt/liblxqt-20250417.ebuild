@@ -9,7 +9,7 @@ HOMEPAGE="http://lxqt.org/"
 
 SNAPSHOT=c9d5b9af5ca08d9ab8953b0081c706480fe575b3
 SRC_URI="https://github.com/lxqt/liblxqt/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/liblxqt-${SNAPSHOT}
 
 LICENSE="GPL-2 LGPL-2.1+"
 SLOT="0"

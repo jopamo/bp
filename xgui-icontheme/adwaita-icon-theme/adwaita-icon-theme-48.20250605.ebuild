@@ -2,11 +2,13 @@
 
 EAPI=8
 
+BRANCH_NAME="gnome-$(ver_cut 1)"
+
 inherit autotools xdg
 
 DESCRIPTION="Mostly private use system icons."
 HOMEPAGE="https://git.gnome.org/browse/adwaita-icon-theme/"
-SNAPSHOT=c144c3d75711e62c7e885ec483159ed9421f5c10
+SNAPSHOT=cd08cb3dfd63e6ad6bff9c1d88490280b0f9a7af
 SRC_URI="https://gitlab.gnome.org/GNOME/adwaita-icon-theme/-/archive/${SNAPSHOT}/adwaita-icon-theme-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/adwaita-icon-theme-${SNAPSHOT}"
 

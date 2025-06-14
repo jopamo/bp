@@ -2,6 +2,8 @@
 
 EAPI=8
 
+BRANCH_NAME="server-$(ver_cut 1-2)-branch"
+
 inherit meson flag-o-matic
 
 DESCRIPTION="implementation of the X Window System display server"

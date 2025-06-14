@@ -202,7 +202,6 @@ PACKAGES=(
 "pyelftools"
 "pyfakefs"
 "pygments"
-"pynacl"
 "pyopenssl"
 "pypasser"
 "pypiserver"
@@ -322,7 +321,6 @@ BDEPEND_CLEAN_PACKAGES=(
 INHERIT_FLAGOMATIC_PACKAGES=(
     "regex"
     "pycares"
-    "pynacl"
 )
 
 PACKAGES_ZDEFS=(
@@ -336,7 +334,6 @@ PACKAGES_ZDEFS=(
     "msgpack"
     "multidict"
     "pillow"
-    "pynacl"
     "propcache"
     "psutil"
     "pycares"

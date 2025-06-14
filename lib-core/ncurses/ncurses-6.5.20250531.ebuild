@@ -2,10 +2,17 @@
 
 EAPI=8
 
-MY_P="ncurses-$(ver_rs 2 -)"
+BRANCH_NAME="master"
 
 DESCRIPTION="console display library"
 HOMEPAGE="http://invisible-island.net/ncurses/ https://www.gnu.org/software/ncurses/"
+
+SNAPSHOT=a60b584d93ab59e1df0bc9661b77b06151024768
+SRC_URI="https://github.com/ThomasDickey/ncurses-snapshots/archive/${SNAPSHOT}.tar.gz -> ncurses-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/ncurses-snapshots-${SNAPSHOT}"
+
+MY_P="ncurses-$(ver_rs 2 -)"
+
 SRC_URI="https://invisible-mirror.net/archives/ncurses/current/${MY_P}.tgz"
 S="${WORKDIR}/${MY_P}"
 

@@ -8,14 +8,14 @@ DESCRIPTION="File transfer program to keep remote files into sync"
 HOMEPAGE="https://rsync.samba.org/"
 
 SNAPSHOT=9994933c8ccf7ead27c81fe4ce2eb4e08af20c7f
-SRC_URI="https://github.com/RsyncProject/rsync/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SRC_URI="https://github.com/RsyncProject/rsync/archive/${SNAPSHOT}.tar.gz -> rsync-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/rsync-${SNAPSHOT}"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl iconv ipv6 lz4 +static xattr xxhash zstd"
+IUSE="acl iconv ipv6 lz4 static xattr xxhash zstd"
 
 LIB_DEPEND="
 	lib-core/zlib[static-libs(+)]

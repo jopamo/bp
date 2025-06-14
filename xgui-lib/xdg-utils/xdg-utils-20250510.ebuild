@@ -21,7 +21,10 @@ RDEPEND="
 	xgui-tools/xprop
 	xgui-tools/xset
 "
-DEPEND=">=app-tex/xmlto-0.0.26-r1[text(+)]"
+BDEPEND="
+	app-tex/xmlto
+	app-net/lynx
+"
 
 RESTRICT="test"
 

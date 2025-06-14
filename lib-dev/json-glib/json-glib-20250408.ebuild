@@ -9,7 +9,7 @@ HOMEPAGE="https://wiki.gnome.org/Projects/JsonGlib"
 
 SNAPSHOT=961d1bbc76c5d6586caa200316ae2cfdd54c5b6b
 SRC_URI="https://gitlab.gnome.org/GNOME/json-glib/-/archive/${SNAPSHOT}/json-glib-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/json-glib-${SNAPSHOT}
 
 LICENSE="LGPL-2.1+"
 SLOT="0"

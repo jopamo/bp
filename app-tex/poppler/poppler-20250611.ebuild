@@ -6,8 +6,7 @@ inherit cmake flag-o-matic toolchain-funcs
 
 DESCRIPTION="PDF rendering library based on the xpdf-3.0 code base"
 HOMEPAGE="https://poppler.freedesktop.org/"
-
-SNAPSHOT=55169105e121d5fbb7c50e2c744d750de5d0a7de
+SNAPSHOT=a95e75a0d3c744a4a6c9c2e555d1365a3b60ac13
 SRC_URI="https://gitlab.freedesktop.org/poppler/poppler/-/archive/${SNAPSHOT}/poppler-${SNAPSHOT}.tar.bz2 -> poppler-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/poppler-${SNAPSHOT}"
 
@@ -38,7 +37,7 @@ RDEPEND="${COMMON_DEPEND}
 	cjk? ( app-tex/poppler-data )
 "
 
-PATCHES=( "${FILESDIR}/${PN}-0.57.0-disable-internal-jpx.patch" )
+PATCHES=( "${FILESDIR}/poppler-0.57.0-disable-internal-jpx.patch" )
 
 src_prepare() {
 	cmake_src_prepare

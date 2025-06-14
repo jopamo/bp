@@ -9,7 +9,7 @@ inherit cmake
 DESCRIPTION="RandomX, CryptoNight, AstroBWT and Argon2 CPU/GPU miner"
 HOMEPAGE="https://xmrig.com/"
 
-SNAPSHOT=f9e990d0f0167c92d09334213ac6950033bbbba1
+SNAPSHOT=6184224a663c5d5c6f332f64c7db72edbcd86881
 SRC_URI="https://github.com/xmrig/xmrig/archive/${SNAPSHOT}.tar.gz -> xmrig-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/xmrig-${SNAPSHOT}"
 

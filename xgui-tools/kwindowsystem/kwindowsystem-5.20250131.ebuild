@@ -2,6 +2,8 @@
 
 EAPI=8
 
+BRANCH_NAME="kf$(ver_cut 1)"
+
 inherit cmake
 
 DESCRIPTION="Framework providing access to properties and features of the window manager"

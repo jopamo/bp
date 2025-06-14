@@ -2,11 +2,13 @@
 
 EAPI=8
 
+BRANCH_NAME="master"
+
 inherit cmake
 
 DESCRIPTION="Framework providing access to properties and features of the window manager"
 
-SNAPSHOT=09e59c4749f4b7ddca785500e0518f14981f91c5
+SNAPSHOT=8ab6d43831983313840f8c4a587e08fb4c48f98e
 SRC_URI="https://github.com/KDE/kwindowsystem/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/kwindowsystem-${SNAPSHOT}
 

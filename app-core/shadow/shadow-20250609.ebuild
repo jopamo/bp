@@ -6,10 +6,9 @@ inherit autotools
 
 DESCRIPTION="Utilities to deal with user accounts"
 HOMEPAGE="https://github.com/shadow-maint/shadow http://pkg-shadow.alioth.debian.org/"
-
-SNAPSHOT=0e7162772d045ff20ab3bb655d10b69d1bb017bd
-SRC_URI="https://github.com/shadow-maint/shadow/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SNAPSHOT=fe49b677c40dae1da2be515cc97b797c1f2b62dd
+SRC_URI="https://github.com/shadow-maint/shadow/archive/${SNAPSHOT}.tar.gz -> shadow-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/shadow-${SNAPSHOT}"
 
 LICENSE="BSD GPL-2"
 SLOT="0"

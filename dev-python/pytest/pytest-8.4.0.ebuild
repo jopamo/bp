@@ -3,8 +3,8 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_TESTED=( python3_{11..13} pypy3_11 )
-PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_13t )
+PYTHON_TESTED=( python3_{11..14} pypy3_11 )
+PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_{13,14}t )
 
 inherit distutils-r1 pypi
 
@@ -26,6 +26,7 @@ RDEPEND="
 	dev-python/packaging[${PYTHON_USEDEP}]
 	<dev-python/pluggy-2[${PYTHON_USEDEP}]
 	>=dev-python/pluggy-1.5.0[${PYTHON_USEDEP}]
+	>=dev-python/pygments-2.7.2[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	>=dev-py/setuptools-scm-6.2.3[${PYTHON_USEDEP}]
@@ -36,7 +37,6 @@ BDEPEND="
 			>=dev-python/attrs-19.2[${PYTHON_USEDEP}]
 			>=dev-python/hypothesis-3.56[${PYTHON_USEDEP}]
 			dev-python/mock[${PYTHON_USEDEP}]
-			>=dev-python/pygments-2.7.2[${PYTHON_USEDEP}]
 			dev-python/pytest-xdist[${PYTHON_USEDEP}]
 			dev-python/requests[${PYTHON_USEDEP}]
 			dev-python/xmlschema[${PYTHON_USEDEP}]
@@ -63,6 +63,8 @@ python_test() {
 	local EPYTEST_DESELECT=(
 		# broken by epytest args
 		testing/test_warnings.py::test_works_with_filterwarnings
+		testing/test_threadexception.py::test_unhandled_thread_exception_after_teardown
+		testing/test_unraisableexception.py::test_refcycle_unraisable
 
 		# does not like verbosity
 		testing/test_assertrewrite.py::TestAssertionRewrite::test_len

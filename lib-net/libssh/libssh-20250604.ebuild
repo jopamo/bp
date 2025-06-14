@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="Library implementing the SSH2 protocol"
 HOMEPAGE="http://www.libssh.org/"
 
-SNAPSHOT=c7b6ffad0e910e75616ec0714be1ac4a45fa42f1
+SNAPSHOT=74eb01f26d7557a773fd0fe3fe99a2a6e4a62dba
 SRC_URI="https://git.libssh.org/projects/libssh.git/snapshot/libssh-${SNAPSHOT}.tar.xz"
 S="${WORKDIR}/libssh-${SNAPSHOT}"
 

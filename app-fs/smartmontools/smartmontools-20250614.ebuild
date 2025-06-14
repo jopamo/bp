@@ -1,14 +1,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-
-SNAPSHOT=cfd2a486abd52bfc36c5d71dad935881ba33cf13
+SNAPSHOT=5bcdc7c2a7b6ea9d58fa3ffc620922b1b13964aa
 
 inherit autotools flag-o-matic
 
 DESCRIPTION="Tools to monitor storage systems to provide advanced warning of disk degradation"
 HOMEPAGE="https://www.smartmontools.org"
-SRC_URI="https://github.com/smartmontools/smartmontools/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/smartmontools/smartmontools/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/smartmontools-${SNAPSHOT}
 
 LICENSE="GPL-2"

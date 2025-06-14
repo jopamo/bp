@@ -2,13 +2,15 @@
 
 EAPI=8
 
+BRANCH_NAME="release/$(ver_cut 1-2)/master"
+
 inherit flag-o-matic
 
 DESCRIPTION="GNU libc C library"
 HOMEPAGE="https://www.gnu.org/software/libc/"
 
-SNAPSHOT=d8e8342369831808b00324790c8809ba33408ee7
-SRC_URI="https://github.com/bminor/glibc/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SNAPSHOT=9403232d98c3328a3b3944334ebdbeea01481af2
+SRC_URI="https://github.com/1g4-mirror/glibc/archive/${SNAPSHOT}.tar.gz -> glibc-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/glibc-${SNAPSHOT}
 
 LICENSE="LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
@@ -18,10 +20,10 @@ KEYWORDS="amd64 arm64"
 IUSE="caps debug nscd profile systemd static-libs +static-pie tmpfilesd"
 
 BDEPEND="
+	app-build/gcc
 	app-build/make
 "
 DEPEND="
-	app-build/gcc
 	app-kernel/linux-headers
 	app-core/layout
 "
@@ -102,7 +104,6 @@ src_prepare() {
 }
 
 src_configure() {
-	replace-flags -O0 -O1
 	filter-flags -flto*
 	filter-flags -D_FORTIFY_SOURCE*
 	filter-flags -Wl,-z,defs

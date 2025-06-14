@@ -2,32 +2,28 @@
 
 EAPI=8
 
-inherit toolchain-funcs flag-o-matic
+inherit meson flag-o-matic
 
 DESCRIPTION="the network swiss army knife"
 HOMEPAGE="http://nc110.sourceforge.net/"
-SNAPSHOT=182804d69bde0022d74c27f924ed99b2fe540f3c
-SRC_URI="https://github.com/jopamo/netcat/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SNAPSHOT=bd1ef015e011421f0494cbf28835ccdf5ec6765d
+SRC_URI="https://github.com/jopamo/netcat/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="netcat"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static"
+IUSE="ipv6 telnet +exec-hole verbose-debug static"
 
-src_compile() {
-	emake \
-		LD="$(tc-getCC) ${LDFLAGS}" \
-		DFLAGS="${CPPFLAGS}" \
-		XFLAGS="${CFLAGS}" \
-		STATIC=$(usex static '-static' '') \
-		nc
-}
+src_configure() {
+	append-flags "-Wno-pointer-sign -Wno-address -Wno-implicit-fallthrough -Wno-clobbered"
 
-src_install() {
-	dobin nc
-	doman nc.1
-	docinto scripts
-	dodoc scripts/*
+	local emesonargs=(
+		$(meson_use ipv6)
+		$(meson_use telnet)
+		$(meson_use exec_hole)
+		$(meson_use verbose-debug verbose_debug)
+	)
+	meson_src_configure
 }

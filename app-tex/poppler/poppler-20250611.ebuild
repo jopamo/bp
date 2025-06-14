@@ -14,7 +14,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="cairo +cjk curl +cxx debug doc +introspection +jpeg +jpeg2k png +utils"
+IUSE="cairo curl +cxx debug doc +introspection +jpeg +jpeg2k png +utils"
 
 RESTRICT="test"
 
@@ -33,9 +33,7 @@ DEPEND="
 	jpeg2k? ( xmedia-lib/openjpeg )
 	png? ( xmedia-lib/libpng )
 "
-RDEPEND="${COMMON_DEPEND}
-	cjk? ( app-tex/poppler-data )
-"
+RDEPEND="${COMMON_DEPEND}"
 
 PATCHES=( "${FILESDIR}/poppler-0.57.0-disable-internal-jpx.patch" )
 

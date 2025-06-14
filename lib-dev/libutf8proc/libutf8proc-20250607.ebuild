@@ -7,7 +7,7 @@ inherit toolchain-funcs
 DESCRIPTION="mapping tool for UTF-8 strings"
 HOMEPAGE="https://github.com/JuliaStrings/utf8proc"
 
-SNAPSHOT=a1b99daa2a3393884220264c927a48ba1251a9c6
+SNAPSHOT=24e2a191247290f46701c5cb723a575442356656
 SRC_URI="https://github.com/JuliaStrings/utf8proc/archive/${SNAPSHOT}.tar.gz -> utf8proc-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/utf8proc-${SNAPSHOT}"
 
@@ -15,7 +15,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-PATCHES=( "${FILESDIR}/${PN}-2.3.0-no-static.patch" )
+PATCHES=( "${FILESDIR}/libutf8proc-2.3.0-no-static.patch" )
 
 _emake() {
 	emake CC=$(tc-getCC) AR=$(tc-getAR) "$@"

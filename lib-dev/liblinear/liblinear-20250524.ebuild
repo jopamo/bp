@@ -6,7 +6,9 @@ inherit meson
 
 DESCRIPTION="A Library for Large Linear Classification"
 HOMEPAGE="http://www.csie.ntu.edu.tw/~cjlin/liblinear/ https://github.com/cjlin1/liblinear"
-SRC_URI="https://github.com/cjlin1/liblinear/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=dbb92699c33b37d0217d8d8b34d72c1ff4176437
+SRC_URI="https://github.com/cjlin1/liblinear/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"

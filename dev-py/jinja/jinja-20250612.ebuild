@@ -12,10 +12,9 @@ HOMEPAGE="
 	https://github.com/pallets/jinja/
 	https://pypi.org/project/Jinja2/
 "
-
-SNAPSHOT=01d0bab939f46a03fb3babb9f4770cadb50aaef0
-SRC_URI="https://github.com/pallets/jinja/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SNAPSHOT=0514dce5097f8929f22edc247cad1576c64e8d48
+SRC_URI="https://github.com/pallets/jinja/archive/${SNAPSHOT}.tar.gz -> jinja-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/jinja-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"

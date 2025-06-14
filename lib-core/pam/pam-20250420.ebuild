@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/linux-pam/linux-pam"
 
 SNAPSHOT=bc856cd9b9b461e8e2a537f4d9db87d315f5fe7b
 SRC_URI="https://github.com/linux-pam/linux-pam/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/linux-${PN}-${SNAPSHOT}
+S=${WORKDIR}/linux-pam-${SNAPSHOT}
 
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"

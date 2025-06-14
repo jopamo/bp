@@ -2,12 +2,14 @@
 
 EAPI=8
 
+BRANCH_NAME="gtk-$(ver_cut 1)-$(ver_cut 2)"
+
 inherit meson xdg python-any-r1 flag-o-matic
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
 
-SNAPSHOT=b96b68bedf720dd83d0c83fbe7d17c009a4b9ab8
+SNAPSHOT=32c34f6d0ae628be0a5362dfda7e1140450a641f
 SRC_URI="https://github.com/GNOME/gtk/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/gtk-${SNAPSHOT}"
 

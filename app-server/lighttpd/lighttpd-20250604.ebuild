@@ -20,16 +20,18 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 dbi fam geoip krb5 ldap libev libunwind lua
-	mbedtls mysql ssl php test tmpfilesd postgres systemd webdav
-	xattr zlib static"
+IUSE="bzip2 dbi fam geoip krb5 ldap libunwind lua mbedtls mysql php
+postgres ssl static systemd test tmpfilesd webdav xattr xxhash zlib
+zstd"
 
 DEPEND="
-	lib-core/zlib
+
 	lib-core/libpcre2
+	zlib? ( lib-core/zlib )
+	xxhash? ( lib-misc/xxhash )
 	bzip2? ( app-compression/bzip2 )
+	zstd? ( app-compression/zstd )
 	ldap?     ( app-net/openldap )
-	libev?    ( lib-dev/libev )
 	libunwind? ( lib-util/libunwind )
 	mbedtls?  ( lib-net/mbedtls )
 	mysql?    ( app-server/mariadb )
@@ -53,7 +55,6 @@ src_configure() {
 		$(meson_feature fam with_fam)
 		$(meson_feature krb5 with_krb5)
 		$(meson_feature ldap with_ldap)
-		$(meson_feature libev with_libev)
 		$(meson_feature libunwind with_libunwind)
 		$(meson_use lua with_lua)
 		$(meson_use mbedtls with_mbedtls)
@@ -65,6 +66,8 @@ src_configure() {
 		$(meson_feature webdav with_webdav_props)
 		$(meson_use xattr with_xattr)
 		$(meson_feature zlib with_zlib)
+		$(meson_feature xxhash with_xxhash)
+		$(meson_feature zstd with_zstd)
 		-Dmoduledir="${EPREFIX}"/usr/lib
 		-Dwith_pcre2=true
 	)

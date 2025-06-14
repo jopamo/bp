@@ -7,9 +7,9 @@ inherit linux-info user flag-o-matic autotools
 DESCRIPTION="A userspace logging daemon for netfilter/iptables related logging"
 HOMEPAGE="https://netfilter.org/projects/ulogd/index.html"
 
-SNAPSHOT=32233985f24df86c464426c7af5477b012935c46
-SRC_URI="https://github.com/1g4-mirror/${PN}2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S=${WORKDIR}/${PN}2-${SNAPSHOT}
+SNAPSHOT=1ab0c1b1fd3f598b671455ad38c52d1dce96bbba
+SRC_URI="https://github.com/1g4-mirror/ulogd2/archive/${SNAPSHOT}.tar.gz -> ulogd-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/ulogd2-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -72,14 +72,14 @@ src_install() {
 	default
 
 	insinto /etc
-	doins ${PN}.conf
-	fowners root:ulogd /etc/${PN}.conf
-	fperms 640 /etc/${PN}.conf
+	doins ulogd.conf
+	fowners root:ulogd /etc/ulogd.conf
+	fperms 640 /etc/ulogd.conf
 
 	if use systemd; then
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
-		doins "${FILESDIR}/${PN}.service"
+		doins "${FILESDIR}/ulogd.service"
 	fi
 
 	diropts -o ulogd -g ulogd

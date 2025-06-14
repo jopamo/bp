@@ -2,6 +2,8 @@
 
 EAPI=8
 
+BRANCH_NAME="$(ver_cut 1-2)"
+
 WANT_LIBTOOL="none"
 
 inherit autotools flag-o-matic python-utils-r1 toolchain-funcs
@@ -14,7 +16,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="$(ver_cut 1-2)"
 	inherit git-r3
 else
-	SNAPSHOT=3d1b8e2a9671c9a9b152204856c8f086506c3c05
+SNAPSHOT=a43cf1074a8b53abc2c44dec0db42d7dbf6ff93a
 	SRC_URI="https://github.com/python/cpython/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 	S=${WORKDIR}/cpython-${SNAPSHOT}
 fi

@@ -2,6 +2,8 @@
 
 EAPI=8
 
+BRANCH_NAME="$(ver_cut 1-2).x"
+
 inherit cmake
 
 DESCRIPTION="EXIF, IPTC and XMP metadata C++ library and command line utility"

@@ -6,10 +6,9 @@ inherit meson xdg
 
 DESCRIPTION="Low-level pixel manipulation routines"
 HOMEPAGE="https://www.x.org/wiki/"
-
-SNAPSHOT=2d6f72a778bc4bc8faa43fdd5ec5b338776919aa
-SRC_URI="https://gitlab.gnome.org/GNOME/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SNAPSHOT=2368a3af1c5950f8571d538da3593767ebd68171
+SRC_URI="https://gitlab.gnome.org/GNOME/gtksourceview/-/archive/${SNAPSHOT}/gtksourceview-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/gtksourceview-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

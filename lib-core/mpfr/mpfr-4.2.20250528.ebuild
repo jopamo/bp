@@ -2,12 +2,14 @@
 
 EAPI=8
 
+BRANCH_NAME="$(ver_cut 1-2)"
+
 inherit autotools
 
 DESCRIPTION="library for multiple-precision floating-point computations with exact rounding"
 HOMEPAGE="http://www.mpfr.org/"
 
-SNAPSHOT=8af3b4efc3900fa7b707c8febd3d9e44a244e276
+SNAPSHOT=116d2b3b13fdec2e7eb36359f08a7a88164015e8
 SRC_URI="https://gitlab.inria.fr/mpfr/mpfr/-/archive/${SNAPSHOT}/mpfr-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
 S=${WORKDIR}/mpfr-${SNAPSHOT}
 

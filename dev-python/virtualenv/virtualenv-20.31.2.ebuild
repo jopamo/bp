@@ -3,10 +3,10 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
-PYTHON_TESTED=( python3_{10..13} pypy3 pypy3_11 )
-PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_13t )
+PYTHON_TESTED=( python3_{11..14} pypy3_11 )
+PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_{13,14}t )
 
-inherit distutils-r1 multiprocessing pypi
+inherit distutils-r1 pypi
 
 DESCRIPTION="Virtual Python Environment builder"
 HOMEPAGE="
@@ -18,6 +18,8 @@ HOMEPAGE="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+IUSE="test"
+RESTRICT="!test? ( test )"
 
 RDEPEND="
 	>=dev-python/distlib-0.3.7[${PYTHON_USEDEP}]
@@ -33,11 +35,13 @@ RDEPEND="
 BDEPEND="
 	dev-python/hatch-vcs[${PYTHON_USEDEP}]
 	test? (
+		${RDEPEND}
 		$(python_gen_cond_dep '
 			dev-python/coverage[${PYTHON_USEDEP}]
 			dev-python/flaky[${PYTHON_USEDEP}]
 			>=dev-python/pip-22.2.1[${PYTHON_USEDEP}]
 			>=dev-python/pytest-mock-3.6.1[${PYTHON_USEDEP}]
+			dev-python/pytest-timeout[${PYTHON_USEDEP}]
 			dev-python/pytest-xdist[${PYTHON_USEDEP}]
 			>=dev-py/setuptools-67.8[${PYTHON_USEDEP}]
 			dev-python/wheel[${PYTHON_USEDEP}]
@@ -45,20 +49,17 @@ BDEPEND="
 		' "${PYTHON_TESTED[@]}")
 		$(python_gen_cond_dep '
 			dev-python/time-machine[${PYTHON_USEDEP}]
-		' python3_{10..13})
+		' python3_{11..13})
 		$(python_gen_cond_dep '
 			>=dev-python/pytest-freezer-0.4.6[${PYTHON_USEDEP}]
 		' 'pypy3*')
 	)
 "
 
-EPYTEST_TIMEOUT=180
-distutils_enable_tests pytest
-
 src_prepare() {
 	local PATCHES=(
 		# use wheels from ensurepip bundle
-		"${FILESDIR}/${PN}-20.26.3-ensurepip.patch"
+		"${FILESDIR}/${PN}-20.31.1-ensurepip.patch"
 	)
 
 	distutils-r1_src_prepare
@@ -91,6 +92,8 @@ python_test() {
 		tests/unit/seed/wheels/test_acquire.py::test_download_wheel_bad_output
 		# hangs on a busy system, sigh
 		tests/unit/test_util.py::test_reentrant_file_lock_is_thread_safe
+		# TODO
+		tests/unit/create/via_global_ref/test_build_c_ext.py::test_can_build_c_extensions
 	)
 	case ${EPYTHON} in
 		pypy3.11)
@@ -98,17 +101,6 @@ python_test() {
 				# these don't like the executable called pypy3.11?
 				tests/unit/activation/test_bash.py::test_bash
 				tests/unit/activation/test_fish.py::test_fish
-				tests/unit/discovery/py_info/test_py_info.py::test_fallback_existent_system_executable
-			)
-			;;
-		python3.1[23])
-			EPYTEST_DESELECT+=(
-				tests/unit/create/via_global_ref/test_build_c_ext.py
-			)
-			;&
-		python3.11)
-			EPYTEST_DESELECT+=(
-				# TODO
 				tests/unit/discovery/py_info/test_py_info.py::test_fallback_existent_system_executable
 			)
 			;;
@@ -122,7 +114,9 @@ python_test() {
 	else
 		plugins+=( -p time_machine )
 	fi
-	epytest "${plugins[@]}" -p xdist -n "$(makeopts_jobs)" --dist=worksteal
+	local EPYTEST_TIMEOUT=180
+	local EPYTEST_XDIST=1
+	epytest "${plugins[@]}"
 }
 
 src_install() {

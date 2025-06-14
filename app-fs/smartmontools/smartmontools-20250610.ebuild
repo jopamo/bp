@@ -2,14 +2,14 @@
 
 EAPI=8
 
-SNAPSHOT=643e5b0fcdc5a8f220df5868f6c9155f10bea555
+SNAPSHOT=cfd2a486abd52bfc36c5d71dad935881ba33cf13
 
 inherit autotools flag-o-matic
 
 DESCRIPTION="Tools to monitor storage systems to provide advanced warning of disk degradation"
 HOMEPAGE="https://www.smartmontools.org"
 SRC_URI="https://github.com/smartmontools/smartmontools/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}/smartmontools
+S=${WORKDIR}/smartmontools-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -43,12 +43,12 @@ src_prepare() {
 }
 
 src_configure() {
+	export SMARTMONTOOLS_TEST_BUILD=1
 	use static && append-ldflags -static
 
 	myconf=(
 		--docdir="${EPREFIX}/usr/share/doc/${PF}"
-		--with-drivedbdir="${EPREFIX}/var/db/${PN}" #575292
-		--with-initscriptdir="${EPREFIX}/etc/init.d"
+		--with-drivedbdir="${EPREFIX}/var/db/smartmontools" #575292
 		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 		$(use_with caps libcap-ng)
 		$(use_with update_drivedb gnupg)
@@ -58,7 +58,7 @@ src_configure() {
 }
 
 src_install() {
-	local db_path="/var/db/${PN}"
+	local db_path="/var/db/smartmontools"
 
 	if use daemon; then
 		default
@@ -76,17 +76,17 @@ src_install() {
 		fi
 
 		exeinto /etc/cron.monthly
-		doexe "${FILESDIR}/${PN}-update-drivedb"
+		doexe "${FILESDIR}/smartmontools-update-drivedb"
 	fi
 
 	if use daemon || use update_drivedb; then
 		keepdir "${db_path}"
 
-		# Install a copy of the initial drivedb.h to /usr/share/${PN}
+		# Install a copy of the initial drivedb.h to /usr/share/smartmontools
 		# so that we can access that file later in pkg_postinst
 		# even when dealing with binary packages (bug #575292)
-		insinto /usr/share/${PN}
-		doins "${S}"/drivedb.h
+		insinto /usr/share/smartmontools
+		doins "${S}"/src/drivedb.h
 	fi
 
 	# Make sure we never install drivedb.h into the db location

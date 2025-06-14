@@ -2,13 +2,15 @@
 
 EAPI=8
 
+BRANCH_NAME="gtk-$(ver_cut 1)-$(ver_cut 2)"
+
 inherit meson xdg
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
+SNAPSHOT=1b879decc2e04716776c0d9823b14e5be25a6eb8
 
-SNAPSHOT=02cec9b8c97b52f90638b39496fb4c7fb630a1f5
-SRC_URI="https://gitlab.gnome.org/GNOME/gtk/-/archive/${SNAPSHOT}/gtk-${SNAPSHOT}.tar.gz"
+SRC_URI="https://gitlab.gnome.org/GNOME/gtk/-/archive/${SNAPSHOT}/gtk-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/gtk-${SNAPSHOT}"
 
 LICENSE="LGPL-2+"

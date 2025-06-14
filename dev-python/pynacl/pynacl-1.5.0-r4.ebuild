@@ -1,11 +1,10 @@
-# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( pypy3 pypy3_11 python3_{10..13} )
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1
 
@@ -21,9 +20,11 @@ SRC_URI="
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~alpha amd64 arm arm64 ~hppa ~loong ppc ppc64 ~riscv ~s390 sparc x86 ~amd64-linux ~x86-linux"
+KEYWORDS="amd64 arm64"
 
-DEPEND="lib-util/libsodium"
+DEPEND="
+	lib-util/libsodium:=
+"
 RDEPEND="
 	${DEPEND}
 	$(python_gen_cond_dep '
@@ -39,10 +40,13 @@ BDEPEND="
 	)
 "
 
+PATCHES=(
+	"${FILESDIR}"/${PN}-1.5.0-py314.patch
+)
+
 distutils_enable_tests pytest
 
 src_compile() {
-	filter-flags -Wl,-z,defs
 	# For not using the bundled libsodium
 	local -x SODIUM_INSTALL=system
 	distutils-r1_src_compile

@@ -7,9 +7,9 @@ inherit autotools
 DESCRIPTION="IPset tool for iptables, successor to ippool"
 HOMEPAGE="http://ipset.netfilter.org/"
 
-SNAPSHOT=210e4491798d6fa0e7ea4a8e74307db8809d6cfe
-SRC_URI="https://github.com/1g4-mirror/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SNAPSHOT=bd6c6324afece01e26fee76405624ef4c5d0c1a9
+SRC_URI="https://github.com/1g4-mirror/ipset/archive/${SNAPSHOT}.tar.gz -> ipset-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/ipset-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"

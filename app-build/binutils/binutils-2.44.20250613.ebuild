@@ -8,8 +8,7 @@ inherit flag-o-matic
 
 DESCRIPTION="a collection of binary tools"
 HOMEPAGE="https://sourceware.org/binutils/"
-
-SNAPSHOT=362993ba54f858d3e6f06e55d0b667c416ffc23d
+SNAPSHOT=44737abcc43d67f2f043abd9889b1d2ef9dfdbf8
 SRC_URI="https://github.com/1g4-mirror/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/binutils-gdb-${SNAPSHOT}"
 

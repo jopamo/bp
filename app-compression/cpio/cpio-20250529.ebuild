@@ -12,10 +12,6 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-src_prepare() {
-	default
-	eautoreconf
-}
 src_configure() {
 	local myconf=(
 		--with-rmt="${EROOT}"/usr/libexec/rmt

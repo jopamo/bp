@@ -6,11 +6,10 @@ inherit python-single-r1
 
 DESCRIPTION="A Firefox add-on for playing URLs in mpv."
 HOMEPAGE="https://addons.mozilla.org/en-US/firefox/addon/ff2mpv/"
-SRC_URI="https://github.com/woodruffw/ff2mpv/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 SNAPSHOT=b312d7e816a99f4c7abd96b3d6ce57d1fca5bc3c
-SRC_URI="https://github.com/woodruffw/ff2mpv/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/ff2mpv-${SNAPSHOT}
+SRC_URI="https://github.com/woodruffw/ff2mpv/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

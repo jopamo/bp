@@ -8,8 +8,8 @@ DESCRIPTION="groovy little assembler"
 HOMEPAGE="http://www.nasm.us/"
 
 SNAPSHOT=888d9ab55012d25059da81fed6575ef3a004726f
-SRC_URI="https://github.com/netwide-assembler/nasm/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://github.com/netwide-assembler/nasm/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="BSD-2"
 SLOT="0"

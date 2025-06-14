@@ -8,8 +8,8 @@ DESCRIPTION="An advanced, highly configurable system monitor for X"
 HOMEPAGE="https://github.com/brndnmtthws/conky"
 
 SNAPSHOT=d713933f9b7c637352bc377b16936cde27a497dd
-SRC_URI="https://github.com/brndnmtthws/conky/archive/${SNAPSHOT}.tar.gz -> conky-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/conky-${SNAPSHOT}"
+SRC_URI="https://github.com/brndnmtthws/conky/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-3 BSD LGPL-2.1 MIT"
 SLOT="0"

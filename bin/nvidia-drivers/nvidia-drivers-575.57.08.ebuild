@@ -231,6 +231,8 @@ src_install() {
 
     insinto /usr/lib/firmware/nvidia/${PV}
     doins firmware/gsp_ga10x.bin
+
+    dosym -r /usr/lib/libcrypto.so.3 /usr/lib/libcrypto.so.1.1
 }
 
 src_install-libs() {

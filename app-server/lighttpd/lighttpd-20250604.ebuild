@@ -12,7 +12,7 @@ if [[ ${PV} = 9999 ]]; then
 	inherit git-r3
 else
 SNAPSHOT=8834056651265610993ace287b39deabba7b3207
-	SRC_URI="https://github.com/lighttpd/lighttpd1.4/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://github.com/lighttpd/lighttpd1.4/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/lighttpd1.4-${SNAPSHOT}
 fi
 

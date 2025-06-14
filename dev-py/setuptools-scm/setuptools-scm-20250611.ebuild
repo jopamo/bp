@@ -12,9 +12,9 @@ HOMEPAGE="
 	https://pypi.org/project/setuptools-scm/
 "
 
-SNAPSHOT=90f5a171d1164cc5b8ffe3f65d806e6c26b2921a
-SRC_URI="https://github.com/pypa/setuptools-scm/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SNAPSHOT=0b14913638eca665266f3a49124a31ba78283a89
+SRC_URI="https://github.com/pypa/setuptools-scm/archive/${SNAPSHOT}.tar.gz -> setuptools-scm-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/setuptools-scm-${SNAPSHOT}"
 
 
 LICENSE="MIT"

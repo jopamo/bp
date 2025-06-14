@@ -2,12 +2,13 @@
 
 EAPI=8
 
+BRANCH_NAME="maint-$(ver_cut 1-2)"
+
 inherit flag-o-matic toolchain-funcs multiprocessing
 
 DESCRIPTION="Larry Wall's Practical Extraction and Report Language"
 HOMEPAGE="https://www.perl.org/"
-
-SNAPSHOT=200a45e04e73ff22cd117498de383b43f9222a7a
+SNAPSHOT=08dffa08a0a3822d9eaae5bd7aea9c3a5b67a3f3
 SRC_URI="https://github.com/Perl/perl5/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/perl5-${SNAPSHOT}
 

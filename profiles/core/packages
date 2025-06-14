@@ -35,7 +35,6 @@
 *app-port/eix
 *app-port/find_cruft
 *app-port/gentoolkit
-*app-port/portage-utils
 *app-var/pax-utils
 *lib-net/ca-certificates
 *virtual/gcc

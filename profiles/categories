@@ -7,7 +7,6 @@ app-emu
 app-fs
 app-kernel
 app-lang
-app-live
 app-net
 app-port
 app-server

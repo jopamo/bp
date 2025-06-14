@@ -2,14 +2,16 @@
 
 EAPI=8
 
-SNAPSHOT=a8953abe3399e57d785586ed84b38f036b069182
+BRANCH_NAME="gawk-$(ver_cut 1-2)-stable"
+SNAPSHOT=5105808343813d46e35261780a43f64e51094114
 
 inherit flag-o-matic
 
 DESCRIPTION="GNU awk pattern-matching language"
 HOMEPAGE="https://www.gnu.org/software/gawk/gawk.html"
-SRC_URI="https://git.savannah.gnu.org/cgit/gawk.git/snapshot/gawk-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/gawk-${SNAPSHOT}
+
+SRC_URI="https://github.com/1g4-mirror/gawk/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

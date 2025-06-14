@@ -8,8 +8,8 @@ DESCRIPTION="Python script wrapper"
 HOMEPAGE="https://github.com/mgorny/python-exec/"
 
 SNAPSHOT=eaac6d8ee63d3655a8fda460bda09718fffbcd41
-SRC_URI="https://github.com/projg2/python-exec/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SRC_URI="https://github.com/projg2/python-exec/archive/${SNAPSHOT}.tar.gz -> python-exec-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/python-exec-${SNAPSHOT}"
 
 LICENSE="BSD-2"
 SLOT="2"

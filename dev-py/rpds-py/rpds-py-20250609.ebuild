@@ -13,8 +13,8 @@ HOMEPAGE="
 	https://pypi.org/project/rpds-py/
 "
 
-SNAPSHOT=ce68a75c3426b88a5050f6f19e32a7db3c80468f
-SRC_URI="https://github.com/crate-py/rpds/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SNAPSHOT=771ad37247888ec8348c775d3a0913557177c975
+SRC_URI="https://github.com/crate-py/rpds/archive/${SNAPSHOT}.tar.gz -> rpds-py-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/rpds-${SNAPSHOT}"
 
 LICENSE="MIT"

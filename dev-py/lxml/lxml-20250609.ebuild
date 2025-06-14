@@ -13,10 +13,9 @@ HOMEPAGE="
 	https://pypi.org/project/lxml/
 	https://github.com/lxml/lxml/
 "
-
-SNAPSHOT=218af3c0834757babaa0d2740a7d94904a588042
-SRC_URI="https://github.com/${PN}/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SNAPSHOT=5c7805f51cf063caf213067e4cd74a9ecb490033
+SRC_URI="https://github.com/lxml/lxml/archive/${SNAPSHOT}.tar.gz -> lxml-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/lxml-${SNAPSHOT}
 
 LICENSE="BSD ElementTree GPL-2 PSF-2"
 SLOT="0"

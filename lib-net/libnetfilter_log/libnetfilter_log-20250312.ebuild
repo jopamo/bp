@@ -8,8 +8,8 @@ DESCRIPTION="interface to packets that have been logged by the kernel packet fil
 HOMEPAGE="https://www.netfilter.org/projects/libnetfilter_log/"
 
 SNAPSHOT=248401076c063473314a589e16fcadaa294848a5
-SRC_URI="https://github.com/1g4-mirror/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://github.com/1g4-mirror/libnetfilter_log/archive/${SNAPSHOT}.tar.gz -> libnetfilter_log-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/libnetfilter_log-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"

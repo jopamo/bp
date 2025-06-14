@@ -19,6 +19,7 @@ RDEPEND="
 	app-crypto/pass
 	app-crypto/tpm2-tools
 	app-dev/beautysh
+	app-dev/debootstrap
 	app-dev/dwarves
 	app-dev/expect
 	app-dev/gcovr
@@ -26,6 +27,7 @@ RDEPEND="
 	app-dev/jq
 	app-dev/ropgadget
 	app-emu/qemu
+	app-emu/radare2
 	app-fs/btrfs-progs
 	app-fs/cryptsetup
 	app-fs/dosfstools
@@ -37,8 +39,6 @@ RDEPEND="
 	app-fs/testdisk
 	app-kernel/dracut
 	app-kernel/kernel-hardening-checker
-	app-live/debootstrap
-	app-live/radare2
 	app-net/bind-tools
 	app-net/ethtool
 	app-net/hping

@@ -16,7 +16,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="app-live/yt-dlp"
+RDEPEND="xmedia-app/yt-dlp"
 
 src_prepare() {
 	default

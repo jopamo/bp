@@ -27,7 +27,7 @@ REQUIRED_USE="
 "
 
 DEPEND="
-	app-live/libdisplay-info
+	xgui-app/libdisplay-info
 	fonts/liberation-fonts
 	xmedia-app/ffmpeg
 	xmedia-lib/libass

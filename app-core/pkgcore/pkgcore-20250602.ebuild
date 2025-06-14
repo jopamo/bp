@@ -68,9 +68,3 @@ BINPKG_FORMAT="xpak"
 EOF
 
 }
-
-python_install_all() {
-	local DOCS=( NEWS.rst )
-	doman build/sphinx/man/*
-	distutils-r1_python_install_all
-}

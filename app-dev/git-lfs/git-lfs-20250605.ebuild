@@ -8,7 +8,7 @@ DESCRIPTION="Command line extension and specification for managing large files w
 HOMEPAGE="https://git-lfs.com/"
 
 SNAPSHOT=9e751d16509c9d65bda15b53c7d30a583c66e0c8
-SRC_URI="https://github.com/git-lfs/git-lfs/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/git-lfs/git-lfs/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/git-lfs-${SNAPSHOT}
 
 LICENSE="Apache-2.0 BSD BSD-2 BSD-4 ISC MIT"

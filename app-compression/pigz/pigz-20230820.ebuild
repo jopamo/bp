@@ -8,7 +8,7 @@ DESCRIPTION="A parallel implementation of gzip"
 HOMEPAGE="http://www.zlib.net/pigz/"
 
 SNAPSHOT=fe4894f57739e3039a2ffc2a2a360d35e19bacbe
-SRC_URI="https://github.com/madler/pigz/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/madler/pigz/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/pigz-${SNAPSHOT}
 
 LICENSE="ZLIB"

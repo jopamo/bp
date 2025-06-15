@@ -14,7 +14,7 @@ HOMEPAGE="
 "
 
 SNAPSHOT=f21ef63b03752f98e60f51c754c738166e350d4f
-SRC_URI="https://github.com/PyO3/setuptools-rust/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/PyO3/setuptools-rust/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/setuptools-rust-${SNAPSHOT}
 
 # crates are used at test time only, update via pycargoebuild -L -i ...

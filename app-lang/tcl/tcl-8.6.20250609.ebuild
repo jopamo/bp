@@ -10,7 +10,7 @@ DESCRIPTION="tcltk/tcl - Tool Command Language"
 HOMEPAGE="http://www.tcl.tk/"
 
 SNAPSHOT=255658907deafeb1cf5c47b7e4b2ab6b10a6094d
-SRC_URI="https://github.com/tcltk/tcl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/tcltk/tcl/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/tcl-${SNAPSHOT}/unix
 
 LICENSE="tcltk"
@@ -42,4 +42,6 @@ src_install() {
     sed -i "s#${S}#/usr/include#" "${ED}/usr/lib/tclConfig.sh"
     sed -i "s#'{/usr/lib} '#'/usr/lib/tcl${_tclver}'#" "${ED}/usr/lib/tclConfig.sh"
     sed -i "s#TCL_SRC_DIR='${S%/*}'#TCL_SRC_DIR='/usr/include/tcl${_tclver}'#" "${ED}/usr/lib/tclConfig.sh"
+
+    dosym -r /usr/lib/pkgconfig/tcl.pc /usr/lib/pkgconfig/tcl$(ver_cut 1)$(ver_cut 2).pc
 }

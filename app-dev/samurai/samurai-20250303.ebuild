@@ -8,7 +8,7 @@ DESCRIPTION="ninja-compatible build tool written in C"
 HOMEPAGE="https://github.com/michaelforney/samurai"
 
 SNAPSHOT=737f702fed670acb25e5e70b4b802690df7a4a8b
-SRC_URI="https://github.com/michaelforney/samurai/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/michaelforney/samurai/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/samurai-${SNAPSHOT}"
 
 LICENSE="ISC Apache-2.0 MIT"

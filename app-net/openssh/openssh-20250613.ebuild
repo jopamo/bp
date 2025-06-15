@@ -7,7 +7,7 @@ inherit flag-o-matic autotools user
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="http://www.openssh.org/"
 SNAPSHOT=2827b6ac304ded8f99e8fbc12e7299133fadb2c2
-SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/openssh-portable-${SNAPSHOT}
 
 LICENSE="BSD GPL-2"

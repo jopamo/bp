@@ -8,7 +8,7 @@ DESCRIPTION="A set of co-operative tools that make networking simple and straigh
 HOMEPAGE="https://wiki.gnome.org/Projects/NetworkManager"
 
 SNAPSHOT=9abe5658cc98b34f19cc09818d2092839218ceaa
-SRC_URI="https://github.com/NetworkManager/NetworkManager/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/NetworkManager/NetworkManager/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/NetworkManager-${SNAPSHOT}
 
 LICENSE="GPL-2+"

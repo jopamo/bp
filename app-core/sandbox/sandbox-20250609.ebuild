@@ -8,7 +8,7 @@ inherit flag-o-matic multiprocessing autotools
 DESCRIPTION="sandbox'd LD_PRELOAD hack"
 HOMEPAGE="https://www.gentoo.org/proj/en/portage/sandbox/"
 
-SRC_URI="https://github.com/gentoo/sandbox/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/gentoo/sandbox/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/sandbox-${SNAPSHOT}
 
 

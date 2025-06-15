@@ -12,7 +12,7 @@ MY_P=${P/_beta/-b}
 DESCRIPTION="Multipurpose relay (SOcket CAT)"
 HOMEPAGE="http://www.dest-unreach.org/socat/ https://repo.or.cz/socat.git"
 
-SRC_URI="https://repo.or.cz/socat.git/snapshot/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://repo.or.cz/socat.git/snapshot/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/socat-${SHORT}"
 
 LICENSE="GPL-2"

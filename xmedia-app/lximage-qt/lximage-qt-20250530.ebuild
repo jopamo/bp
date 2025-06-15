@@ -8,7 +8,7 @@ DESCRIPTION="Lightweight Qt image viewer from the LXQt Project"
 HOMEPAGE="http://lxqt.org/"
 
 SNAPSHOT=62abd7c07015f0320aaf545e790042fa2dedefad
-SRC_URI="https://github.com/lxqt/lximage-qt/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/lxqt/lximage-qt/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/lximage-qt-${SNAPSHOT}
 
 LICENSE="|| ( GPL-2+ LGPL-2.1+ )"

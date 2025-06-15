@@ -15,7 +15,7 @@ if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
 else
 SNAPSHOT=20ca13d80b7d6859ed7218bd2c06a42bc268488a
-	SRC_URI="https://github.com/erlang/otp/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://github.com/erlang/otp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/otp-${SNAPSHOT}
 fi
 

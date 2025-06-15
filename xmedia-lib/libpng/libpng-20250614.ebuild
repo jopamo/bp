@@ -8,7 +8,7 @@ DESCRIPTION="Portable Network Graphics library"
 HOMEPAGE="http://www.libpng.org/"
 SNAPSHOT=5dc5937b30374091042e7d15dde1bfe95b5d72d1
 SRC_URI="https://github.com/pnggroup/libpng/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/libpng-${SNAPSHOT}"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="libpng"
 SLOT="0"

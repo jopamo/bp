@@ -8,7 +8,7 @@ DESCRIPTION="pahole (Poke-a-Hole) and other DWARF utilities"
 HOMEPAGE="https://git.kernel.org/cgit/devel/pahole/pahole.git/"
 
 SNAPSHOT=52e071dbb1b6886471bf2c90eab95de89c5b3e0d
-SRC_URI="https://github.com/acmel/dwarves/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/acmel/dwarves/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/dwarves-${SNAPSHOT}"
 
 LICENSE="GPL-2"

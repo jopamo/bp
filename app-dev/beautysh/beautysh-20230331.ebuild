@@ -11,7 +11,7 @@ DESCRIPTION="A Bash beautifier for the masses."
 HOMEPAGE="https://github.com/lovesegfault/beautysh"
 
 SNAPSHOT=9845efc3ea3e86cc0d41465d720a47f521b2799c
-SRC_URI="https://github.com/lovesegfault/beautysh/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/lovesegfault/beautysh/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/beautysh-${SNAPSHOT}"
 
 LICENSE="MIT"

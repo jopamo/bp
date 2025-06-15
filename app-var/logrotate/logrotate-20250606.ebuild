@@ -8,7 +8,7 @@ DESCRIPTION="Rotates, compresses, and mails system logs"
 HOMEPAGE="https://github.com/logrotate/logrotate"
 
 SNAPSHOT=73aecf5be4541a9951ef824300d9f32267de075e
-SRC_URI="https://github.com/logrotate/logrotate/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/logrotate/logrotate/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/logrotate-${SNAPSHOT}"
 
 LICENSE="GPL-2"

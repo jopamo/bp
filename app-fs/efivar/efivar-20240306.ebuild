@@ -8,7 +8,7 @@ SNAPSHOT=c71c4342e6442b760d4363af83f13333c2d9135e
 
 DESCRIPTION="Tools and library to manipulate EFI variables"
 HOMEPAGE="https://github.com/rhboot/efivar"
-SRC_URI="https://github.com/rhboot/efivar/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/rhboot/efivar/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/efivar-${SNAPSHOT}
 
 LICENSE="GPL-2"

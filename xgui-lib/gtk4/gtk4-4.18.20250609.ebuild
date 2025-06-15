@@ -10,7 +10,7 @@ DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
 
 SNAPSHOT=32c34f6d0ae628be0a5362dfda7e1140450a641f
-SRC_URI="https://github.com/GNOME/gtk/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/GNOME/gtk/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/gtk-${SNAPSHOT}"
 
 LICENSE="LGPL-2+"

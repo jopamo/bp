@@ -8,7 +8,7 @@ DESCRIPTION="Library providing GLib serialization and deserialization for the JS
 HOMEPAGE="https://wiki.gnome.org/Projects/JsonGlib"
 
 SNAPSHOT=961d1bbc76c5d6586caa200316ae2cfdd54c5b6b
-SRC_URI="https://gitlab.gnome.org/GNOME/json-glib/-/archive/${SNAPSHOT}/json-glib-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
+SRC_URI="https://gitlab.gnome.org/GNOME/json-glib/-/archive/${SNAPSHOT}/json-glib-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/json-glib-${SNAPSHOT}
 
 LICENSE="LGPL-2.1+"

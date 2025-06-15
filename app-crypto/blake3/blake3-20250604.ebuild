@@ -8,7 +8,7 @@ DESCRIPTION="a fast cryptographic hash function"
 HOMEPAGE="https://github.com/BLAKE3-team/BLAKE3"
 
 SNAPSHOT=1229986d26a0d35eadc80c8c313e0fa9da95d2bb
-SRC_URI="https://github.com/BLAKE3-team/BLAKE3/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/BLAKE3-team/BLAKE3/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/BLAKE3-${SNAPSHOT}/c"
 
 LICENSE="|| ( CC0-1.0 Apache-2.0 )"

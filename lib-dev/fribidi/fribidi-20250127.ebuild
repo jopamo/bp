@@ -8,7 +8,7 @@ DESCRIPTION="A free implementation of the unicode bidirectional algorithm"
 HOMEPAGE="https://fribidi.org/"
 
 SNAPSHOT=b28f43bd3e8e31a5967830f721bab218c1aa114c
-SRC_URI="https://github.com/fribidi/fribidi/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/fribidi/fribidi/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/fribidi-${SNAPSHOT}
 
 LICENSE="LGPL-2.1"

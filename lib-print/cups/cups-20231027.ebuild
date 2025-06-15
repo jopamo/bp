@@ -8,7 +8,7 @@ inherit autotools linux-info user toolchain-funcs
 
 DESCRIPTION="The Common Unix Printing System"
 HOMEPAGE="https://www.cups.org/"
-SRC_URI="https://github.com/apple/cups/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/apple/cups/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/cups-${SNAPSHOT}
 
 KEYWORDS="amd64 arm64"

@@ -8,7 +8,7 @@ DESCRIPTION="a program which helps to configure compiler and linker flags for de
 HOMEPAGE="https://git.sr.ht/~kaniini/pkgconf"
 
 SNAPSHOT=efdeb71de5eb22c5477da1626e8dbffeca6471c2
-SRC_URI="https://github.com/pkgconf/pkgconf/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/pkgconf/pkgconf/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/pkgconf-${SNAPSHOT}"
 
 LICENSE="ISC"

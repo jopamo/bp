@@ -8,7 +8,7 @@ DESCRIPTION="Standard (de)compression library"
 HOMEPAGE="https://zlib.net/"
 
 SNAPSHOT=5a82f71ed1dfc0bec044d9702463dbdf84ea3b71
-SRC_URI="https://github.com/madler/zlib/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/madler/zlib/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/zlib-${SNAPSHOT}
 
 LICENSE="ZLIB"

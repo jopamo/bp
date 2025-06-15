@@ -10,7 +10,7 @@ DESCRIPTION="A daemon to control runC"
 HOMEPAGE="https://containerd.io/"
 
 SNAPSHOT=64ed272067a24c2d917064eea25a78e1479d632f
-SRC_URI="https://github.com/containerd/containerd/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/containerd/containerd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/containerd-${SNAPSHOT}"
 
 LICENSE="Apache-2.0"

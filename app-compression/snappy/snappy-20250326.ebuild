@@ -8,7 +8,7 @@ DESCRIPTION="A high-speed compression/decompression library by Google"
 HOMEPAGE="https://github.com/google/snappy"
 
 SNAPSHOT=6af9287fbdb913f0794d0148c6aa43b58e63c8e3
-SRC_URI="https://github.com/google/snappy/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/google/snappy/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/snappy-${SNAPSHOT}
 
 LICENSE="BSD"

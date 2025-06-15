@@ -10,7 +10,7 @@ DESCRIPTION="A JavaScript runtime built on Chrome's V8 JavaScript engine"
 HOMEPAGE="https://nodejs.org/"
 
 SNAPSHOT=9d113c35c22b76afd8929c4b53e8b23d67f14243
-SRC_URI="https://github.com/nodejs/node/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/nodejs/node/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/node-${SNAPSHOT}
 
 LICENSE="Apache-1.1 Apache-2.0 BSD BSD-2 MIT"

@@ -8,7 +8,7 @@ DESCRIPTION="Libraries providing APIs to netlink protocol based Linux kernel int
 HOMEPAGE="http://www.infradead.org/~tgr/libnl/ https://github.com/thom311/libnl"
 
 SNAPSHOT=641cd0e77761ed44f1d19dd073766c99732ddd5a
-SRC_URI="https://github.com/thom311/libnl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/thom311/libnl/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libnl-${SNAPSHOT}
 
 LICENSE="LGPL-2.1 utils? ( GPL-2 )"

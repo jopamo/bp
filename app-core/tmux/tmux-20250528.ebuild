@@ -8,7 +8,7 @@ DESCRIPTION="Terminal multiplexer"
 HOMEPAGE="https://tmux.github.io/"
 
 SNAPSHOT=1dbceaa790f584b09855005bcfd11297a820f88a
-SRC_URI="https://github.com/tmux/tmux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/tmux/tmux/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/tmux-${SNAPSHOT}
 
 LICENSE="ISC"

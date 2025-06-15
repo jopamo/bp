@@ -10,7 +10,7 @@ if [[ ${PV} = 9999 ]]; then
 	inherit git-r3
 else
 	SNAPSHOT=f5ea740f2beaff514450faac98195a6a99508adf
-	SRC_URI="https://github.com/jopamo/find_cruft/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://github.com/jopamo/find_cruft/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 fi
 

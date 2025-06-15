@@ -13,7 +13,7 @@ if [[ ${PV} == *9999 ]]; then
 	inherit
 elif [[ ${PV} == 20* ]]; then
 	SNAPSHOT=f1f97679985487deaa1f7f178f36f4a1a7910154
-	SRC_URI="https://github.com/tonsky/FiraCode/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://github.com/tonsky/FiraCode/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/FiraCode-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
 else

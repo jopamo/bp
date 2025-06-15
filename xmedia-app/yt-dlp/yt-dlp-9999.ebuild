@@ -14,7 +14,7 @@ if [[ ${PV} = *9999 ]]; then
 	inherit git-r3
 else
 	SNAPSHOT=168e72dcd3e04e0e19e92c012a04b8a1e4658f50
-	SRC_URI="https://github.com/yt-dlp/yt-dlp/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://github.com/yt-dlp/yt-dlp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/yt-dlp-${SNAPSHOT}
 fi
 

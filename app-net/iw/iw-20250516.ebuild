@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs autotools
+inherit toolchain-funcs
 
 DESCRIPTION="nl80211-based configuration utility for wireless devices"
 HOMEPAGE="https://wireless.kernel.org/en/users/Documentation/iw"
@@ -15,12 +15,10 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="lib-net/libnl:="
-DEPEND="${RDEPEND}
-	app-dev/pkgconf"
+BDEPEND="app-dev/pkgconf"
 
 src_prepare() {
 	default
-	eautoreconf
 	tc-export CC LD PKG_CONFIG
 }
 
@@ -31,6 +29,6 @@ src_compile() {
 }
 
 src_install() {
-	emake DESTDIR="${ED}" PREFIX="${EPREFIX}/usr" install
+	emake DESTDIR="${ED}" PREFIX="${EPREFIX}/usr" SBINDIR="${EPREFIX}/usr/bin" install
 	rm -rf "${ED}"/usr/share/man
 }

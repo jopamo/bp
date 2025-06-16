@@ -6,7 +6,9 @@ inherit flag-o-matic linux-info
 
 DESCRIPTION="Bluetooth Tools and System Daemons for Linux"
 HOMEPAGE="http://www.bluez.org"
-SRC_URI="https://www.kernel.org/pub/linux/bluetooth/${P}.tar.xz"
+SNAPSHOT=6bc584b11b8b10dbd717ca4012a6c09afb18d1c7
+SRC_URI="https://github.com/1g4-mirror/bluez/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2+ LGPL-2.1+"
 SLOT="0"

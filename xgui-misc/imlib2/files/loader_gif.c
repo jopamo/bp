@@ -4,6 +4,7 @@
 #include <gif_lib.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define DBG_PFX "LDR-gif"
 
@@ -41,10 +42,10 @@ static int
 mm_read(GifFileType *gif, GifByteType *dst, int length)
 {
    (void) gif;
-
-   if (mdata.dptr + length > mdata.data + mdata.size)
+   if (length <= 0 ||
+       mdata.dptr < mdata.data ||
+       mdata.dptr + length > mdata.data + mdata.size)
       return -1;
-
    memcpy(dst, mdata.dptr, length);
    mdata.dptr += length;
    return length;

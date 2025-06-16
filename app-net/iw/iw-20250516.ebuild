@@ -2,11 +2,13 @@
 
 EAPI=8
 
-inherit toolchain-funcs
+inherit toolchain-funcs autotools
 
 DESCRIPTION="nl80211-based configuration utility for wireless devices"
 HOMEPAGE="https://wireless.kernel.org/en/users/Documentation/iw"
-SRC_URI="https://www.kernel.org/pub/software/network/${PN}/${P}.tar.xz"
+SNAPSHOT=1558e6021ec5ae0f6fcb1c31e20d0d4dacebd82b
+SRC_URI="https://github.com/1g4-mirror/iw/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="ISC"
 SLOT="0"
@@ -18,6 +20,7 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
 	default
+	eautoreconf
 	tc-export CC LD PKG_CONFIG
 }
 

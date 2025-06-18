@@ -62,9 +62,9 @@ user_get_nologin() {
 	if [[ ${eshell} == "/dev/null" ]] ; then
 		ewarn "Unable to identify the shell to use, proceeding with userland default."
 		case ${USERLAND} in
-			GNU)    eshell="/bin/false" ;;
-			BSD)    eshell="/sbin/nologin" ;;
-			Darwin) eshell="/usr/sbin/nologin" ;;
+			GNU)    eshell="/usr/bin/false" ;;
+			BSD)    eshell="/usr/bin/nologin" ;;
+			Darwin) eshell="/usr/bin/nologin" ;;
 			*) die "Unable to identify the default shell for userland ${USERLAND}"
 		esac
 	fi
@@ -198,7 +198,7 @@ enewuser() {
 	if [[ $# -gt 0 ]] ; then
 		die "extra arguments no longer supported; please file a bug"
 	else
-		local comment="added by portage for ${PN}"
+		local comment=""
 		opts+=( -c "${comment}" )
 		elog " - GECOS: ${comment}"
 	fi

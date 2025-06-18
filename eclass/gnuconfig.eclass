@@ -1,129 +1,105 @@
-# Copyright 1999-2022 Gentoo Authors
-# Distributed under the terms of the GNU General Public License v2
-
 # @ECLASS: gnuconfig.eclass
-# @MAINTAINER:
-# Sam James <sam@gentoo.org>
-# @AUTHOR:
-# Will Woods <wwoods@gentoo.org>
-# @SUPPORTED_EAPIS: 5 6 7 8
-# @BLURB: Refresh bundled gnuconfig files (config.guess, config.sub)
+# @SUPPORTED_EAPIS: 7 8
 # @DESCRIPTION:
-# This eclass is used to automatically update files that typically come with
-# automake to the newest version available on the system. The most common use
-# of this is to update config.guess and config.sub when configure dies from
-# misguessing your canonical system name (CHOST). It can also be used to update
-# other files that come with automake, e.g. depcomp, mkinstalldirs, etc.
-#
+# Implementation of a gnuconfig eclass for updating config.guess, config.sub,
+# and similar automake-provided helper files to a newer system copy.
+# Compatible with ebuilds calling gnuconfig_update or referencing older logic.
 
-case ${EAPI:-0} in
-	5|6|7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
+if [[ -z ${_GNUCONFIG_ECLASS} ]]; then
+  _GNUCONFIG_ECLASS=1
 
-if [[ -z ${_GNUCONFIG_ECLASS} ]] ; then
- _GNUCONFIG_CLASS=1
+  case "${EAPI:-0}" in
+    7|8) ;;
+    *) die "gnuconfig.eclass: EAPI ${EAPI:-0} is not supported" ;;
+  esac
 
-BDEPEND="app-build/gnuconfig"
+  : "${GNUCONFIG_DEPEND:=app-build/gnuconfig}"
+  : "${GNUCONFIG_AUTO_DEPEND:=yes}"
 
-[[ ${EAPI} == [56] ]] && DEPEND="${BDEPEND}"
+  if [[ "${GNUCONFIG_AUTO_DEPEND}" != "no" ]]; then
+    BDEPEND+=" ${GNUCONFIG_DEPEND}"
+  fi
 
-# @FUNCTION: gnuconfig_update
-# @USAGE: [file1 file2 ...]
-# @DESCRIPTION:
-# if called without arguments, config.guess and config.sub will be updated.
-# All files in the source tree ($S) with the given name(s) will be replaced
-# with the newest available versions chosen from the list of locations in
-# gnuconfig_findnewest(), below.
-#
-# gnuconfig_update should generally be called from src_unpack()
-#
-# Wrapper function for gnuconfig_do_update. If no arguments are given, update
-# config.sub and config.guess (old default behavior), otherwise update the
-# named files.
-gnuconfig_update() {
-	local startdir	# declared here ... used in gnuconfig_do_update
+  # @FUNCTION: gnuconfig_update
+  # @USAGE: [file1 file2 ...]
+  # If called with no arguments, updates config.sub + config.guess. If the first
+  # argument is an absolute path, that path is used as the search root. Otherwise,
+  # it defaults to $S. Then calls gnuconfig_do_update to perform the actual copy.
+  gnuconfig_update() {
+    local startdir
 
-	if [[ $1 == /* ]] ; then
-		startdir=$1
-		shift
-	else
-		startdir=${S}
-	fi
+    if [[ "$1" == /* ]]; then
+      startdir="$1"
+      shift
+    else
+      startdir="${S}"
+    fi
 
-	if [[ $# -gt 0 ]] ; then
-		gnuconfig_do_update "$@"
-	else
-		gnuconfig_do_update config.sub config.guess
-	fi
+    if [[ $# -gt 0 ]]; then
+      gnuconfig_do_update "${startdir}" "$@"
+    else
+      gnuconfig_do_update "${startdir}" config.sub config.guess
+    fi
+  }
 
-	return $?
-}
+  # @FUNCTION: gnuconfig_do_update
+  # @INTERNAL
+  # Copies the newest version of each specified file from gnuconfig_findnewest
+  # into any matching paths in the provided start directory.
+  gnuconfig_do_update() {
+    local base_dir="$1"
+    shift
+    [[ $# -eq 0 ]] && die "Internal usage error: call gnuconfig_update instead."
 
-# @FUNCTION: gnuconfig_do_update
-# @INTERNAL
-# @DESCRIPTION:
-# Copy the newest available version of specified files over any old ones in the
-# source dir. This function shouldn't be called directly - use gnuconfig_update
-#
-# Note that since bash using dynamic scoping, startdir is available here from
-# the gnuconfig_update function
-gnuconfig_do_update() {
-	local configsubs_dir target targetlist file
+    local src_dir
+    src_dir="$(gnuconfig_findnewest)" || die "Failed to locate a valid gnuconfig path"
 
-	[[ $# -eq 0 ]] && die "do not call gnuconfig_do_update; use gnuconfig_update"
+    einfo "Using GNU config files from ${src_dir}"
 
-	configsubs_dir=$(gnuconfig_findnewest)
-	einfo "Using GNU config files from ${configsubs_dir}"
-	for file in "$@" ; do
-		if [[ ! -r ${configsubs_dir}/${file} ]] ; then
-			eerror "Can't read ${configsubs_dir}/${file}, skipping.."
-			continue
-		fi
-		targetlist=$(find "${startdir}" -name "${file}")
-		if [[ -n ${targetlist} ]] ; then
-			for target in ${targetlist} ; do
-				[[ -L ${target} ]] && rm -f "${target}"
-				ebegin "  Updating ${target/$startdir\//}"
-				cp -f "${configsubs_dir}/${file}" "${target}"
-				eend $? || die
-			done
-		else
-			ewarn "  No ${file} found in ${startdir}, skipping ..."
-		fi
-	done
+    local file
+    for file in "$@"; do
+      if [[ ! -r "${src_dir}/${file}" ]]; then
+        eerror "Cannot read ${src_dir}/${file}, skipping."
+        continue
+      fi
 
-	return 0
-}
+      local found
+      found="$(find "${base_dir}" -name "${file}" 2>/dev/null)"
+      if [[ -z "${found}" ]]; then
+        ewarn "No copies of ${file} found under ${base_dir}, skipping."
+        continue
+      fi
 
-# @FUNCTION: gnuconfig_findnewest
-# @INTERNAL
-# @DESCRIPTION:
-# This searches the standard locations for the newest config.{sub|guess}, and
-# returns the directory where they can be found.
-gnuconfig_findnewest() {
-	local locations=()
-	local prefix
+      local target
+      for target in ${found}; do
+        [[ -L "${target}" ]] && rm -f "${target}"
+        ebegin "Updating ${target#${base_dir}/}"
+        cp -f "${src_dir}/${file}" "${target}"
+        eend $? || die "Failed updating ${target}"
+      done
+    done
+  }
 
-	case ${EAPI} in
-		5|6)
-			prefix="${EPREFIX}"
-			;;
-		*)
-			prefix="${BROOT}"
-			;;
-	esac
+  # @FUNCTION: gnuconfig_findnewest
+  # Searches known system directories for config.sub with the highest timestamp.
+  # Returns the path of that directory.
+  gnuconfig_findnewest() {
+    local possibilities=(
+      "${BROOT}/usr/share/misc/config.sub"
+      "${BROOT}/usr/share/gnuconfig/config.sub"
+      "${BROOT}/usr/share/automake*/config.sub"
+      "${BROOT}/usr/share/libtool/config.sub"
+    )
 
-	locations+=(
-		"${prefix}"/usr/share/misc/config.sub
-		"${prefix}"/usr/share/gnuconfig/config.sub
-		"${prefix}"/usr/share/automake*/config.sub
-		"${prefix}"/usr/share/libtool/config.sub
-	)
+    local best
+    best="$(
+      grep -s '^timestamp' "${possibilities[@]}" 2>/dev/null \
+      | sort -r -n -t\' -k2 \
+      | sed -n '1{s,/config.sub:.*$,,;p;q}'
+    )"
 
-	grep -s '^timestamp' "${locations[@]}" | \
-		sort -r -n -t\' -k2 | \
-		sed -n '1{s,/config.sub:.*$,,;p;q}'
-}
+    [[ -n "${best}" ]] || die "No valid config.sub found in standard gnuconfig directories"
+    echo "${best}"
+  }
 
 fi

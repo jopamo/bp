@@ -2,9 +2,13 @@
 
 EAPI=8
 
+inherit autotools
+
 DESCRIPTION="Keyboard and console utilities"
 HOMEPAGE="http://kbd-project.org/"
-SRC_URI="https://www.kernel.org/pub/linux/utils/kbd/${P}.tar.xz"
+SNAPSHOT=7f08e8dbeedf045582af2af78942dd2dd585c518
+SRC_URI="https://github.com/1g4-mirror/kbd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -17,6 +21,11 @@ RDEPEND="pam? ( lib-core/pam )
 DEPEND="${RDEPEND}
 	app-dev/pkgconf
 	test? ( lib-dev/check )"
+
+src_prepare() {
+	default
+	eautoreconf
+}
 
 src_configure() {
 	econf \

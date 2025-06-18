@@ -2,12 +2,11 @@
 
 EAPI=8
 
-inherit cmake
+inherit cmake xdg
 
 DESCRIPTION="Openbox window manager configuration tool"
 HOMEPAGE="http://lxqt.org/"
-
-SNAPSHOT=d2626ef4d36f312048c8968cc175599a21c8f1cb
+SNAPSHOT=8b0d6f12f377875ba010fcb97002ab30c13821b0
 SRC_URI="https://www.github.com/lxqt/obconf-qt/archive/${SNAPSHOT}.tar.gz -> obconf-qt-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/obconf-qt-${SNAPSHOT}"
 

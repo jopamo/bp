@@ -2,12 +2,12 @@
 
 EAPI=8
 
-MY_PV=${PV/./-}
-MY_P=${PN}-${MY_PV}
-
 DESCRIPTION="BSD replacement for libreadline"
 HOMEPAGE="https://thrysoee.dk/editline/"
-SRC_URI="https://thrysoee.dk/editline/${MY_P}.tar.gz"
+
+SNAPSHOT=08da76b7e6d925652df0bfc49b085446bbd993bc
+SRC_URI="https://salsa.debian.org/debian/libedit/-/archive/${SNAPSHOT}/libedit-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/libedit-${SNAPSHOT}"
 
 LICENSE="BSD-2"
 SLOT="0"
@@ -16,8 +16,6 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 DEPEND="virtual/curses[static-libs?]"
-
-S="${WORKDIR}/${MY_P}"
 
 src_configure() {
 	local myconf=(

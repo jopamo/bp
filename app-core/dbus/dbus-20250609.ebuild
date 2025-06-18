@@ -7,9 +7,9 @@ inherit linux-info flag-o-matic user meson
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="https://dbus.freedesktop.org/"
 
-SNAPSHOT=e5ed920852f028885621a45a614a87aa3c842dce
-SRC_URI="https://gitlab.freedesktop.org/dbus/dbus/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SNAPSHOT=37afc6128bdd518b4f14e21e7dd5ceaa69069a3b
+SRC_URI="https://gitlab.freedesktop.org/dbus/dbus/-/archive/${SNAPSHOT}/dbus-${SNAPSHOT}.tar.bz2"
+S=${WORKDIR}/dbus-${SNAPSHOT}
 
 LICENSE="|| ( AFL-2.1 GPL-2 )"
 SLOT="0"
@@ -33,8 +33,6 @@ BDEPEND="
 
 # out of sources build dir for make check
 TBD="${WORKDIR}/${P}-tests-build"
-
-append-flags -rdynamic
 
 pkg_setup() {
 	CONFIG_CHECK="~EPOLL"
@@ -64,17 +62,13 @@ src_configure() {
 		-D message_bus=true
 		$(meson_feature test modular_tests)
 		-Dqt_help=disabled
-
 		$(meson_use tools)
-
 		$(meson_feature systemd)
 		$(meson_use systemd user_session)
 		$(meson_feature X x11_autolaunch)
 		$(meson_feature valgrind)
-
 		-D selinux=disabled
 		-D libaudit=disabled
-
 		-Dsession_socket_dir="${EPREFIX}"/tmp
 		-Dsystem_pid_file="${EPREFIX}${rundir}"/dbus.pid
 		-Dsystem_socket="${EPREFIX}${rundir}"/dbus/system_bus_socket
@@ -111,23 +105,23 @@ src_install() {
 	if use tmpfilesd; then
 		insopts -m 0644
 		insinto /usr/lib/tmpfiles.d
-		newins "${FILESDIR}/${PN}-tmpfiles" ${PN}.conf
+		newins "${FILESDIR}/dbus-tmpfiles" dbus.conf
 	fi
 
 	if use systemd; then
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
-		#doins "${FILESDIR}/${PN}.service"
+		#doins "${FILESDIR}/dbus.service"
 	fi
 }
 
 pkg_preinst() {
-	if use sysusersd; then
+	if use systemd && sysusersd; then
 		insopts -m 0644
 		insinto /usr/lib/sysusers.d
-		newins "${FILESDIR}/${PN}-sysusers" ${PN}.conf
+		newins "${FILESDIR}/dbus-sysusers" dbus.conf
 	else
-		rm -r "${ED}"/usr/lib/sysusers.d || die
+		rm -r "${ED}"/usr/lib/sysusers.d
 		enewgroup messagebus
 		enewuser messagebus 101 -1 -1 messagebus
 	fi

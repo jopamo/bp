@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
 
@@ -25,6 +25,14 @@ RDEPEND="
 BDEPEND="
 	${RDEPEND}
 "
+
+PATCHES=(
+	# r10019 upstream
+	"${FILESDIR}/${P}-pygments-2.19.patch"
+	# this changed back at some point, but upstream didn't hit it
+	# because of https://sourceforge.net/p/docutils/bugs/500/
+	"${FILESDIR}/${P}-pillow.patch"
+)
 
 python_compile_all() {
 	# Generate html docs from reStructured text sources.
@@ -70,10 +78,4 @@ python_install_all() {
 	while IFS= read -r -d '' doc; do
 		install_txt_doc "${doc}"
 	done < <(find docs tools -name '*.txt' -print0)
-}
-
-pkg_postinst() {
- \
-		"auto-detecting the image dimensions when using the 'scale' option" \
-		xgui-app/pillow
 }

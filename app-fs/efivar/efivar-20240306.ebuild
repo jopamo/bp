@@ -8,8 +8,8 @@ SNAPSHOT=c71c4342e6442b760d4363af83f13333c2d9135e
 
 DESCRIPTION="Tools and library to manipulate EFI variables"
 HOMEPAGE="https://github.com/rhboot/efivar"
-SRC_URI="https://github.com/rhboot/efivar/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://github.com/rhboot/efivar/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/efivar-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -19,11 +19,11 @@ src_prepare() {
 	filter-flags -Wl,-z,defs
 	default
 	sed -i 's/\ docs//g' "Makefile" || die
-	sed -i "s|gcc|cc|g" "efivar.spec.in" || die
+	#sed -i "s|gcc|cc|g" "efivar.spec.in" || die
 }
 
 src_compile() {
-	sed -i "s|gcc|cc|g" "src/include/defaults.mk" || die
+	#sed -i "s|gcc|cc|g" "src/include/defaults.mk" || die
 	emake libdir="/usr/lib/" \
 		bindir="/usr/bin/" \
 		mandir="/usr/share/man/" \

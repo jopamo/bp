@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=poetry
-PYTHON_COMPAT=( pypy3 python3_{10..13} )
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1
 
@@ -22,6 +22,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 BDEPEND="
+	>=dev-python/poetry-core-2.0.0[${PYTHON_USEDEP}]
 	test? (
 		>=dev-python/pytest-asyncio-0.23.2[${PYTHON_USEDEP}]
 	)

@@ -4,7 +4,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYPI_PN=${PN^}
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
 
@@ -18,9 +18,11 @@ HOMEPAGE="
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="doc"
+IUSE="doc test"
+RESTRICT="!test? ( test )"
 
 BDEPEND="
+	>=dev-py/setuptools-77[${PYTHON_USEDEP}]
 	test? (
 		dev-python/pygments[${PYTHON_USEDEP}]
 		dev-python/pytidylib[${PYTHON_USEDEP}]

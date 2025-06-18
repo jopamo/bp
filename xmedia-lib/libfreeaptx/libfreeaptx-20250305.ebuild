@@ -3,10 +3,9 @@
 EAPI=8
 
 DESCRIPTION="Free implementation of Audio Processing Technology codec"
-HOMEPAGE="https://github.com/iamthehorker/libfreeaptx"
-
-SNAPSHOT=c176b7de9c2017d0fc1877659cea3bb6c330aafa
-SRC_URI="https://github.com/iamthehorker/libfreeaptx/archive/${SNAPSHOT}.tar.gz -> libfreeaptx-${SNAPSHOT}.tar.gz"
+HOMEPAGE="https://github.com/regularhunter/libfreeaptx"
+SNAPSHOT=6dee419f934ec781e531f885f7e8e740752e67d1
+SRC_URI="https://github.com/regularhunter/libfreeaptx/archive/${SNAPSHOT}.tar.gz -> libfreeaptx-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libfreeaptx-${SNAPSHOT}"
 
 LICENSE="Apache-2"

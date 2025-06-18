@@ -2,12 +2,14 @@
 
 EAPI=8
 
+BRANCH_NAME="v$(ver_cut 1-2)-stable"
+
 inherit autotools flag-o-matic
 
 DESCRIPTION="Portable and efficient API to determine the call-chain of a program"
 HOMEPAGE="https://savannah.nongnu.org/projects/libunwind"
-SNAPSHOT=9cc4d98b22ae57bc1d8c253988feb85d4298a634
-SRC_URI="https://github.com/libunwind/libunwind/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=f2c0bdb4bdde3cf83ed48547a276bdcbc7b41425
+SRC_URI="https://github.com/libunwind/libunwind/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libunwind-${SNAPSHOT}"
 
 LICENSE="MIT"

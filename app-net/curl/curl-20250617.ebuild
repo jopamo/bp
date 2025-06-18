@@ -2,14 +2,18 @@
 
 EAPI=8
 
+inherit flag-o-matic autotools
+
 DESCRIPTION="A command line tool and library for transferring data with URL syntax"
 HOMEPAGE="https://curl.haxx.se/"
 
 if [[ ${PV} == *9999 ]] ; then
-	inherit git-r3 autotools
+	inherit git-r3
 	EGIT_REPO_URI="https://github.com/curl/curl.git"
 else
-	SRC_URI="https://curl.haxx.se/download/${P}.tar.bz2"
+SNAPSHOT=260ec730c2ecdb777392d6d13363297fcc01d3dd
+	SRC_URI="https://github.com/curl/curl/archive/${SNAPSHOT}.tar.gz -> curl-${SNAPSHOT}.tar.gz"
+	S=${WORKDIR}/curl-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
 fi
 
@@ -36,14 +40,11 @@ DEPEND="
 		zstd? ( app-compression/zstd )
 "
 
-PATCHES=( "${FILESDIR}"/curl-respect-cflags-3.patch )
-
 src_prepare() {
-	if [[ ${PV} == *9999 ]] ; then
-		eautoreconf
-	fi
-
 	default
+	eautoreconf
+
+	filter-flags -Wl,-z,defs
 
 	#scripts/mk-ca-bundle.pl -k || die
 }
@@ -78,14 +79,14 @@ src_install() {
 	#dosym -r /etc/ssl/certs/cacert.pem /etc/ssl/certs/ca-bundle.crt
 	#dosym -r /etc/ssl/certs/cacert.pem /etc/ssl/certs/ca-certificates.crt
 
-    #cat > "${T}"/99${PN} <<- EOF || die
+    #cat > "${T}"/99curl <<- EOF || die
 	#	SSL_CERT_FILE="/etc/ssl/certs/cacert.pem"
 	#	CURL_CA_BUNDLE="/etc/ssl/certs/cacert.pem"
 	#	GIT_SSL_CAINFO="/etc/ssl/certs/cacert.pem"
 	#	REQUESTS_CA_BUNDLE="/etc/ssl/certs/cacert.pem"
 	#EOF
 
-    #doenvd "${T}"/99${PN}
+    #doenvd "${T}"/99curl
 
     dobin scripts/mk-ca-bundle.pl
 }

@@ -6,10 +6,9 @@ inherit toolchain-funcs
 
 DESCRIPTION="(FFmpeg) Libavcodec-SMASH decoder/demuxer wrapper library"
 HOMEPAGE="https://github.com/l-smash/l-smash"
-
-SNAPSHOT=18a9ed25c7ff79a7f4f4bf850c345c72179b8998
-SRC_URI="https://github.com/l-smash/l-smash/archive/${SNAPSHOT}.tar.gz -> l-smash-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/l-smash-${SNAPSHOT}"
+SNAPSHOT=30270d0d8b551b36b6f46c43bd3ffe997f13e157
+SRC_URI="https://github.com/vimeo/l-smash/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="ISC"
 SLOT="0"
@@ -17,9 +16,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug static-libs"
 
-FEATURES="-sandbox -usersandbox"
-
-DEPEND="xmedia-app/ffmpeg"
+DEPEND="xmedia-app/ffmpeg
+		xmedia-lib/obuparse"
 
 src_prepare() {
 	default

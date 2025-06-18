@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( pypy3 python3_{10..13} )
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 pypi
 
@@ -39,6 +39,10 @@ src_configure() {
 		version = "${PV}"
 		description = "Style preserving TOML library"
 	EOF
+
+	# some brilliant idea about forcing 1970 dates in sdist
+	# which are older than what zip can handle...
+	find -exec touch {} + || die
 }
 
 python_test() {

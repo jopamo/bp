@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( pypy3 python3_{10..13} )
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 pypi
 
@@ -18,11 +18,18 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 PATCHES=(
-	"${FILESDIR}"/${P}-tests-bigint.patch
+	"${FILESDIR}/${P}-tests-bigint.patch"
+	# https://github.com/berkerpeksag/astor/pull/233
+	"${FILESDIR}/${P}-py314.patch"
 )
 
 distutils_enable_tests pytest
 
-EPYTEST_IGNORE=(
-	tests/test_rtrip.py
-)
+python_test() {
+	local EPYTEST_IGNORE=(
+		tests/test_rtrip.py
+	)
+
+	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
+	epytest
+}

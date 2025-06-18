@@ -4,33 +4,33 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=maturin
-PYTHON_COMPAT=( pypy3 python3_{10..13} )
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 CRATES="
 	archery@1.2.1
-	autocfg@1.3.0
-	cc@1.0.90
-	cfg-if@1.0.0
+	autocfg@1.4.0
+	cc@1.2.22
 	heck@0.5.0
-	indoc@2.0.5
-	libc@0.2.155
+	indoc@2.0.6
+	libc@0.2.172
 	memoffset@0.9.1
-	once_cell@1.19.0
-	portable-atomic@1.6.0
-	proc-macro2@1.0.86
-	pyo3-build-config@0.23.3
-	pyo3-ffi@0.23.3
-	pyo3-macros-backend@0.23.3
-	pyo3-macros@0.23.3
-	pyo3@0.23.3
-	python3-dll-a@0.2.11
-	quote@1.0.36
-	rpds@1.1.0
-	syn@2.0.69
-	target-lexicon@0.12.14
-	triomphe@0.1.13
-	unicode-ident@1.0.12
-	unindent@0.2.3
+	once_cell@1.21.3
+	portable-atomic@1.11.0
+	proc-macro2@1.0.95
+	pyo3-build-config@0.25.0
+	pyo3-ffi@0.25.0
+	pyo3-macros-backend@0.25.0
+	pyo3-macros@0.25.0
+	pyo3@0.25.0
+	python3-dll-a@0.2.13
+	quote@1.0.40
+	rpds@1.1.1
+	shlex@1.3.0
+	syn@2.0.101
+	target-lexicon@0.13.2
+	triomphe@0.1.14
+	unicode-ident@1.0.18
+	unindent@0.2.4
 "
 
 RUST_MIN_VER="1.77.1"
@@ -48,12 +48,12 @@ SRC_URI+="
 
 LICENSE="MIT"
 # Dependent crate licenses
-LICENSE+=" Apache-2.0-with-LLVM-exceptions MIT MPL-2.0 Unicode-DFS-2016"
+LICENSE+=" Apache-2.0-with-LLVM-exceptions MIT MPL-2.0 Unicode-3.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 QA_FLAGS_IGNORED="usr/lib.*/py.*/site-packages/rpds/rpds.*.so"
 
-distutils_enable_tests pytest
+export PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1
 
-export UNSAFE_PYO3_SKIP_VERSION_CHECK=1
+distutils_enable_tests pytest

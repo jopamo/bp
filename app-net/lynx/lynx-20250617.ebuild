@@ -4,8 +4,7 @@ EAPI=8
 
 DESCRIPTION="An excellent console-based web browser with ssl support"
 HOMEPAGE="https://lynx.invisible-island.net/"
-
-SNAPSHOT=3020039c0d65e95242a63e49b06d05aff2ab14af
+SNAPSHOT=07f056d275a695e60d580e4ca1bc58c6ed38f817
 SRC_URI="https://github.com/ThomasDickey/lynx-snapshots/archive/${SNAPSHOT}.tar.gz -> lynx-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/lynx-snapshots-${SNAPSHOT}"
 

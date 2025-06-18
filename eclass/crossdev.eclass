@@ -1,11 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
-# Distributed under the terms of the GNU General Public License v2
-
 # @ECLASS: crossdev.eclass
-# @MAINTAINER:
-# cat@catcream.org
-# @AUTHOR:
-# Alfred Persson Forsberg <cat@catcream.org> (21 Jul 2023)
 # @SUPPORTED_EAPIS: 7 8
 # @BLURB: Convenience wrappers for packages used by the Crossdev tool.
 

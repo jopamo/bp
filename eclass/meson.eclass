@@ -45,7 +45,6 @@ inherit flag-o-matic multiprocessing ninja-utils python-utils-r1 toolchain-funcs
 
 BDEPEND=">=app-dev/meson-1.2.3
 	${NINJA_DEPEND}
-	app-dev/meson-format-array
 "
 
 # @ECLASS_VARIABLE: BUILD_DIR
@@ -348,6 +347,7 @@ setup_meson_src_configure() {
 		--localstatedir "${EPREFIX}/var"
 		--prefix "${EPREFIX}/usr"
 		--sysconfdir "${EPREFIX}/etc"
+		-Dsbindir="${EPREFIX}/usr/bin"
 		--wrap-mode nodownload
 		--build.pkg-config-path "${BUILD_PKG_CONFIG_PATH}${BUILD_PKG_CONFIG_PATH:+:}${EPREFIX}/usr/share/pkgconfig"
 		--pkg-config-path "${PKG_CONFIG_PATH}${PKG_CONFIG_PATH:+:}${EPREFIX}/usr/share/pkgconfig"
@@ -498,6 +498,9 @@ meson_install() {
 	"$@" || die -n "install failed"
 
 	popd > /dev/null || die
+
+	cleanup_install
+	dedup_symlink "${D}"
 }
 
 # @FUNCTION: meson_src_install

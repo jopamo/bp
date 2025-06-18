@@ -7,9 +7,9 @@ inherit flag-o-matic toolchain-funcs
 DESCRIPTION="IEEE 802.11 wireless LAN Host AP daemon"
 HOMEPAGE="https://w1.fi/ https://w1.fi/cgit/hostap/"
 
-SNAPSHOT=ecf62b4d1b410c566a800966e04d4ac800c2165b
-SRC_URI="https://github.com/jopamo/hostap/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/hostap-${SNAPSHOT}/${PN}"
+SNAPSHOT=79a6ac9c487d0f0254fb3142f709b9341017dc99
+SRC_URI="https://github.com/1g4-mirror/hostap/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/hostap-${SNAPSHOT}/hostapd"
 
 LICENSE="BSD"
 SLOT="0"
@@ -23,7 +23,7 @@ DEPEND="
 "
 src_prepare() {
 	# Allow users to apply patches to src/drivers for example,
-	# i.e. anything outside ${S}/${PN}
+	# i.e. anything outside ${S}/hostapd
 	pushd ../ >/dev/null || die
 	default
 	popd >/dev/null || die
@@ -94,20 +94,20 @@ src_compile() {
 }
 
 src_install() {
-	insinto /etc/${PN}
-	doins ${PN}.{conf,accept,deny,eap_user,radius_clients,sim_db,wpa_psk}
+	insinto /etc/hostapd
+	doins hostapd.{conf,accept,deny,eap_user,radius_clients,sim_db,wpa_psk}
 
-	fperms -R 600 /etc/${PN}
+	fperms -R 600 /etc/hostapd
 
-	dobin ${PN}
-	dobin ${PN}_cli
+	dobin hostapd
+	dobin hostapd_cli
 	dobin nt_password_hash hlr_auc_gw
 
 	if use systemd; then
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
-		doins "${FILESDIR}"/${PN}.service
+		doins "${FILESDIR}"/hostapd.service
 	fi
 
-	doman ${PN}{.8,_cli.1}
+	doman hostapd{.8,_cli.1}
 }

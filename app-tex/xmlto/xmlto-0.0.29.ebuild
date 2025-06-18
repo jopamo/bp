@@ -2,6 +2,8 @@
 
 EAPI=8
 
+inherit autotools
+
 DESCRIPTION="script for converting XML and DocBook documents to a variety of output formats"
 HOMEPAGE="https://pagure.io/xmlto"
 SRC_URI="https://releases.pagure.org/${PN}/${P}.tar.bz2"
@@ -17,6 +19,11 @@ DEPEND="
 "
 
 PATCHES=( "${FILESDIR}"/${PN}-0.0.22-format_fo_passivetex_check.patch )
+
+src_prepare() {
+	default
+	eautoreconf
+}
 
 src_configure() {
 	# We don't want the script to detect /bin/sh if it is bash.

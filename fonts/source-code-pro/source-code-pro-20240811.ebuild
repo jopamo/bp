@@ -6,15 +6,9 @@ inherit font
 
 DESCRIPTION="Monospaced font family"
 HOMEPAGE="https://github.com/adobe-fonts/source-code-pro"
-
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="${HOMEPAGE}"
-	inherit git-r3
-elif [[ ${PV} == 20* ]]; then
-	SNAPSHOT=4bbbf01dcf69752d527dbad061e2977b30d0bee2
-	SRC_URI="${HOMEPAGE}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=208d9ac7a6827ceb51ea2dc635794839d9659e52
+SRC_URI="https://github.com/adobe-fonts/source-code-pro/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="OFL-1.1"
 SLOT="0"

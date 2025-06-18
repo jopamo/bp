@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( pypy3 python3_{10..13} )
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1
 
@@ -29,7 +29,7 @@ RDEPEND="
 	>=dev-python/flask-3.0.0[${PYTHON_USEDEP}]
 	>=dev-python/hypercorn-0.11.2[${PYTHON_USEDEP}]
 	dev-python/itsdangerous[${PYTHON_USEDEP}]
-	dev-py/jinja2[${PYTHON_USEDEP}]
+	dev-py/jinja[${PYTHON_USEDEP}]
 	dev-python/markupsafe[${PYTHON_USEDEP}]
 	>=dev-python/werkzeug-3.0.0[${PYTHON_USEDEP}]
 "

@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X.Org Xrandr library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=512bf0b15b5597c721ff8c61083616ca9040fa72
+SNAPSHOT=8bf72e84e3cf0106532c5c7b8b30154ce48c70e0
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXrandr/-/archive/${SNAPSHOT}/libXrandr-${SNAPSHOT}.tar.bz2 -> libXrandr-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxrandr-${SNAPSHOT}"
 

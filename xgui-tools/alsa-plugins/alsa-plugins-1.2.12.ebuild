@@ -8,7 +8,7 @@ DESCRIPTION="ALSA extra plugins"
 HOMEPAGE="http://www.alsa-project.org/"
 
 SNAPSHOT=86d695c5d6ba028a3c01758a3b398312408ee0cf
-SRC_URI="https://github.com/alsa-project/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/alsa-project/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2 LGPL-2.1"
@@ -39,7 +39,7 @@ src_configure() {
 	use debug || append-cppflags -DNDEBUG
 
 	local myconf=(
-		$(use_enable ffmpeg libav)
+		--disable-libav
 		$(use_enable libsamplerate samplerate)
 		$(use_enable pulseaudio)
 		--disable-arcamav

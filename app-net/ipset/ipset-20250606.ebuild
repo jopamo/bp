@@ -2,9 +2,14 @@
 
 EAPI=8
 
+inherit autotools
+
 DESCRIPTION="IPset tool for iptables, successor to ippool"
 HOMEPAGE="http://ipset.netfilter.org/"
-SRC_URI="http://ipset.netfilter.org/${P}.tar.bz2"
+
+SNAPSHOT=bd6c6324afece01e26fee76405624ef4c5d0c1a9
+SRC_URI="https://github.com/1g4-mirror/ipset/archive/${SNAPSHOT}.tar.gz -> ipset-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/ipset-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -16,6 +21,11 @@ DEPEND="
 "
 
 PATCHES=( "${FILESDIR}"/ipset_disable_cflags.patch )
+
+src_prepare() {
+	default
+	eautoreconf
+}
 
 src_configure() {
 	econf --without-kmod

@@ -7,9 +7,9 @@ inherit cmake
 DESCRIPTION="An advanced, highly configurable system monitor for X"
 HOMEPAGE="https://github.com/brndnmtthws/conky"
 
-SNAPSHOT=db46ca9deaa00545f731e75a2eae7fd8db72ef77
-SRC_URI="https://github.com/brndnmtthws/conky/archive/${SNAPSHOT}.tar.gz -> conky-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/conky-${SNAPSHOT}"
+SNAPSHOT=d713933f9b7c637352bc377b16936cde27a497dd
+SRC_URI="https://github.com/brndnmtthws/conky/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-3 BSD LGPL-2.1 MIT"
 SLOT="0"
@@ -120,6 +120,9 @@ src_configure() {
 
 src_install() {
 	cmake_src_install
+
+	insinto /etc/conky/
+	doins "${FILESDIR}"/conky.conf
 
 	if use vim; then
 		insinto /usr/share/vim/vimfiles/ftdetect

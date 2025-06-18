@@ -1,16 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-
-SNAPSHOT=f93ff170b93a1782659637824b25923245ac9dd1
+SNAPSHOT=16bd9f20a403117f2e0d9bcda6c6e621d3763e77
 
 inherit autotools
 
 DESCRIPTION="Git is a fast, scalable, distributed revision control system"
 HOMEPAGE="http://www.git-scm.com/"
 
-SRC_URI="https://github.com/git/git/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://github.com/git/git/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/git-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -43,14 +42,6 @@ src_configure() {
 
 src_install() {
 	default
-
-	rm -f "${ED}"/usr/bin/git-{cvsserver,shell}
-	rm -f "${ED}"/usr/libexec/git-core/git-{shell,cvs*,http-push,http-fetch,imap-send,daemon,http-backend}
-
-	for i in git-receive-pack git-upload-archive git-upload-pack ; do
-		rm "${ED}"/usr/bin/$i
-		dosym -r /usr/bin/git /usr/bin/$i
-	done
 
 	use static-libs || find "${ED}" -name "*.a" -delete || die
 	use perl || rm -rf "${ED}"/usr/share/perl5 || die

@@ -1,7 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-
 SNAPSHOT=9139b983278ea766afcf779eb649e8b2bba91d53
 SHORT=${SNAPSHOT:0:7}
 
@@ -9,8 +8,8 @@ inherit autotools
 
 DESCRIPTION="IPC library used by GnuPG and GPGME"
 HOMEPAGE="http://www.gnupg.org/related_software/libassuan/index.en.html"
-SRC_URI="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libassuan.git;a=snapshot;h=${SNAPSHOT};sf=tgz -> ${P}.tar.gz"
-S=${WORKDIR}/libassuan-${SHORT}
+SRC_URI="https://github.com/gpg/libassuan/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/libassuan-${SNAPSHOT}
 
 LICENSE="GPL-3 LGPL-2.1"
 SLOT="0"

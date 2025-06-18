@@ -5,9 +5,9 @@ EAPI=8
 inherit autotools xdg
 
 DESCRIPTION="A library for file management"
-HOMEPAGE="https://github.com/lxde/${PN}"
+HOMEPAGE="https://github.com/lxde/libfm"
 
-SNAPSHOT=13e5c3eb6186c62c60ce449ed01a49c89b3adaa0
+SNAPSHOT=3289abf583030c664babae64a73d1981afcbe8ed
 SRC_URI="https://github.com/lxde/libfm/archive/${SNAPSHOT}.tar.gz -> libfm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libfm-${SNAPSHOT}"
 

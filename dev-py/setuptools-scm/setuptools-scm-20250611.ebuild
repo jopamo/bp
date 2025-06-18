@@ -1,18 +1,21 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# please keep this ebuild at EAPI 8 -- sys-apps/portage dep
 EAPI=8
 
 DISTUTILS_USE_PEP517=standalone
-PYTHON_COMPAT=( python3_{10..13} python3_13t pypy3 )
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
 DESCRIPTION="Manage versions by scm tags via setuptools"
 HOMEPAGE="
 	https://github.com/pypa/setuptools-scm/
 	https://pypi.org/project/setuptools-scm/
 "
+
+SNAPSHOT=0b14913638eca665266f3a49124a31ba78283a89
+SRC_URI="https://github.com/pypa/setuptools-scm/archive/${SNAPSHOT}.tar.gz -> setuptools-scm-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/setuptools-scm-${SNAPSHOT}"
+
 
 LICENSE="MIT"
 SLOT="0"

@@ -6,8 +6,7 @@ inherit meson
 
 DESCRIPTION="Fuse-filesystem utilizing the sftp service"
 HOMEPAGE="https://github.com/libfuse/sshfs"
-
-SNAPSHOT=ef94977c5abb29254e0647a9c6cfede93c836183
+SNAPSHOT=ccb6821019c19600110af6750e0d2395a9401617
 SRC_URI="https://github.com/libfuse/sshfs/archive/${SNAPSHOT}.tar.gz -> sshfs-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/sshfs-${SNAPSHOT}"
 
@@ -21,4 +20,4 @@ DEPEND="
 	app-net/openssh"
 
 BDEPEND="app-dev/pkgconf
-	dev-python/docutils"
+	dev-py/docutils"

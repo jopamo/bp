@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=standalone
-PYTHON_TESTED=( pypy3 python3_{10..13} )
+PYTHON_TESTED=( pypy3_11 python3_{11..14} )
 PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" )
 
 inherit distutils-r1 pypi
@@ -24,9 +24,6 @@ RDEPEND="
 	>=dev-python/fastjsonschema-2.21.1[${PYTHON_USEDEP}]
 	>=dev-python/lark-1.2.2[${PYTHON_USEDEP}]
 	>=dev-python/packaging-24.2[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep '
-		>=dev-python/tomli-2.2.1[${PYTHON_USEDEP}]
-	' 3.10)
 "
 BDEPEND="
 	${RDEPEND}

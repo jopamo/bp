@@ -6,8 +6,9 @@ inherit flag-o-matic
 
 DESCRIPTION="User-land utilities for LVM2 (device-mapper) software"
 HOMEPAGE="https://sourceware.org/lvm2/"
-SRC_URI="https://sourceware.org/pub/lvm2/LVM2.${PV}.tgz
-		https://mirrors.kernel.org/sourceware/lvm2/LVM2.${PV}.tgz"
+SNAPSHOT=86f2d0668d4f359e429fae25778c9cccebdc9a8f
+SRC_URI="https://github.com/1g4-mirror/lvm2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -21,8 +22,6 @@ DEPEND="
 	lib-dev/libaio[static-libs?]
 	systemd? ( app-core/systemd )
 "
-
-S=${WORKDIR}/LVM2.${PV}
 
 PATCHES=(
 	"${FILESDIR}"/fix-stdio-usage.patch

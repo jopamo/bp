@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="D-Bus bindings for glib"
 HOMEPAGE="https://dbus.freedesktop.org/"
 
-SNAPSHOT=ad08ba0c6ba2d69783d41254e0cf03b2ae1647db
+SNAPSHOT=8c1e96ffcbf4f5d8fb576224ca3abda052131013
 SRC_URI="https://gitlab.freedesktop.org/dbus/dbus-glib/-/archive/${SNAPSHOT}/dbus-glib-${SNAPSHOT}.tar.bz2 -> dbus-glib-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/dbus-glib-${SNAPSHOT}"
 

@@ -8,7 +8,7 @@ DESCRIPTION="A ping-like TCP/IP packet assembler/analyzer"
 HOMEPAGE="http://www.hping.org"
 
 SNAPSHOT="3547c7691742c6eaa31f8402e0ccbb81387c1b99"
-SRC_URI="https://github.com/antirez/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/antirez/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"

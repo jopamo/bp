@@ -2,10 +2,16 @@
 
 EAPI=8
 
+BRANCH_NAME="PHP-$(ver_cut 1-2)"
+
 inherit flag-o-matic git-r3 autotools
 
 DESCRIPTION="The PHP language runtime engine"
 HOMEPAGE="https://secure.php.net/"
+SNAPSHOT=f8e2adfe91100d3a046c51126e9ae553e6fe17fe
+SRC_URI="https://github.com/php/php-src/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/php-src-${SNAPSHOT}"
+
 EGIT_REPO_URI="https://github.com/php/php-src.git"
 EGIT_BRANCH="PHP-$(ver_cut 1).$(ver_cut 2)"
 

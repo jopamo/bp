@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1
 
@@ -28,9 +28,9 @@ IUSE="examples"
 RDEPEND="
 	>=dev-python/blinker-1.9[${PYTHON_USEDEP}]
 	>=dev-python/click-8.1.3[${PYTHON_USEDEP}]
-	>=dev-python/itsdangerous-2.2[${PYTHON_USEDEP}]
-	>=dev-py/jinja2-3.1.2[${PYTHON_USEDEP}]
-	>=dev-python/werkzeug-3.1[${PYTHON_USEDEP}]
+	>=dev-python/itsdangerous-2.2.0[${PYTHON_USEDEP}]
+	>=dev-py/jinja-3.1.2[${PYTHON_USEDEP}]
+	>=dev-python/werkzeug-3.1.0[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	test? (

@@ -18,11 +18,13 @@ DEPEND="
 	app-build/gnuconfig
 	app-build/autoconf
 	app-build/automake
-	dev-perl/libintl-perl
+	core-perl/libintl-perl
 	app-compression/xz-utils
 "
 
 src_prepare() {
+	echo '@set VERSION 2.4.7' > doc/version.texi
+	echo '@set UPDATED "October 2024"' >> doc/version.texi
 
 	sed -i '/^AM_INIT_AUTOMAKE/a AM_MAINTAINER_MODE([disable])' configure.ac || die
 	sed -i '/^AM_INIT_AUTOMAKE/a AM_MAINTAINER_MODE([disable])' libltdl/configure.ac || die

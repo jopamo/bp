@@ -6,18 +6,17 @@ CRATES="
 "
 
 declare -A GIT_CRATES=(
-	[astral-tokio-tar]='https://github.com/astral-sh/tokio-tar;ba2b140f27d081c463335f0d68b5f8df8e6c845e;tokio-tar-%commit%'
 	[async_zip]='https://github.com/charliermarsh/rs-async-zip;c909fda63fcafe4af496a07bfda28a5aae97e58d;rs-async-zip-%commit%'
-	[pubgrub]='https://github.com/astral-sh/pubgrub;b70cf707aa43f21b32f3a61b8a0889b15032d5c4;pubgrub-%commit%'
+	[pubgrub]='https://github.com/astral-sh/pubgrub;06ec5a5f59ffaeb6cf5079c6cb184467da06c9db;pubgrub-%commit%'
 	[tl]='https://github.com/astral-sh/tl;6e25b2ee2513d75385101a8ff9f591ef51f314ec;tl-%commit%'
-	[version-ranges]='https://github.com/astral-sh/pubgrub;b70cf707aa43f21b32f3a61b8a0889b15032d5c4;pubgrub-%commit%/version-ranges'
+	[version-ranges]='https://github.com/astral-sh/pubgrub;06ec5a5f59ffaeb6cf5079c6cb184467da06c9db;pubgrub-%commit%/version-ranges'
 )
 
-RUST_MIN_VER="1.83.0"
+RUST_MIN_VER="1.85.0"
 
 inherit cargo 
 
-CRATE_PV=0.5.27
+CRATE_PV=${PV}
 DESCRIPTION="A Python package installer and resolver, written in Rust"
 HOMEPAGE="
 	https://github.com/astral-sh/uv/
@@ -40,8 +39,8 @@ LICENSE="|| ( Apache-2.0 MIT )"
 # crates/pep508-rs is || ( Apache-2.0 BSD-2 ) which is covered below
 # Dependent crate licenses
 LICENSE+="
-	0BSD Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD-2 BSD ISC MIT
-	MPL-2.0 Unicode-3.0 Unicode-DFS-2016 ZLIB
+	0BSD Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD-2 BSD Boost-1.0
+	ISC MIT MPL-2.0 Unicode-3.0 Unicode-DFS-2016 ZLIB
 "
 # ring crate
 LICENSE+=" openssl"
@@ -61,11 +60,11 @@ RDEPEND="
 "
 BDEPEND="
 	test? (
-		dev-lang/python:3.8
 		dev-lang/python:3.9
 		dev-lang/python:3.10
 		dev-lang/python:3.11
 		dev-lang/python:3.12
+		dev-lang/python:3.13
 		!!~dev-python/uv-0.5.0
 	)
 "
@@ -89,6 +88,10 @@ pkg_setup() {
 
 src_prepare() {
 	default
+
+	# force thin lto, makes build much faster and less memory hungry
+	# (i.e. makes it possible to actually build uv on 32-bit PPC)
+	sed -i -e '/lto/s:fat:thin:' Cargo.toml || die
 
 	# enable system libraries where supported
 	export ZSTD_SYS_USE_PKG_CONFIG=1

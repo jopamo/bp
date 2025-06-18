@@ -2,20 +2,22 @@
 
 EAPI=8
 
+BRANCH_NAME="gtk-$(ver_cut 1)-$(ver_cut 2)"
+
 inherit meson xdg python-any-r1 flag-o-matic
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
 
-SNAPSHOT=211a00e5e095fe04c22fd189f8b1781bd2d233d4
-SRC_URI="https://github.com/GNOME/gtk/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=32c34f6d0ae628be0a5362dfda7e1140450a641f
+SRC_URI="https://github.com/GNOME/gtk/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/gtk-${SNAPSHOT}"
 
 LICENSE="LGPL-2+"
 SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
-IUSE="broadway cups ffmpeg examples +introspection vim-syntax wayland +X xinerama vulkan test sysprof colord build-examples demos build-tests"
+IUSE="broadway cups ffmpeg examples introspection vim-syntax wayland +X xinerama vulkan test sysprof colord build-examples demos build-tests"
 
 REQUIRED_USE="
 	|| ( wayland X )
@@ -76,6 +78,7 @@ pkg_setup() {
 src_prepare() {
 	use elibc_musl && sed -i '/#include <execinfo.h>/d' testsuite/reftests/gtk-reftest.c
 	filter-flags -flto*
+	filter-flags -Wl,-z,defs
 
 	default
 	xdg_environment_reset
@@ -87,34 +90,24 @@ src_prepare() {
 
 src_configure() {
 	local emesonargs=(
-		# GDK backends
-		$(meson_use X x11-backend)
-		$(meson_use wayland wayland-backend)
-		$(meson_use broadway broadway-backend)
-		-Dwin32-backend=false
-		-Dmacos-backend=false
-
-		# Media backends
-		-Dmedia-gstreamer=disabled
-
-		# Print backends
-		$(meson_feature cups print-cups)
-
-		# Optional dependencies
-		$(meson_feature vulkan)
-		-Dcloudproviders=disabled  # cloudprovider is not packaged in Gentoo yet
-		$(meson_feature sysprof)
-		-Dtracker=disabled  # tracker3 is not packaged in Gentoo yet
 		$(meson_feature colord)
-
-		# Documentation and introspection
-		-Dgtk_doc=false # we ship pregenerated API docs from tarball
-		-Dman-pages=true
+		$(meson_feature cups print-cups)
 		$(meson_feature introspection)
-
-		# Demos and binaries
-		$(meson_use examples build-examples)
-		$(meson_use examples demos)
+		$(meson_feature sysprof)
+		$(meson_feature vulkan)
+		$(meson_use X x11-backend)
+		$(meson_use broadway broadway-backend)
+		$(meson_use wayland wayland-backend)
+		-Dcloudproviders=disabled  # cloudprovider is not packaged in Gentoo yet
+		-Dmacos-backend=false
+		-Dman-pages=true
+		-Dmedia-gstreamer=disabled
+		-Dtracker=disabled  # tracker3 is not packaged in Gentoo yet
+		-Dwin32-backend=false
+		-Dbuild-demos=false
+		-Dbuild-testsuite=false
+		-Dbuild-examples=false
+		-Dbuild-tests=false
 	)
 	meson_src_configure
 }

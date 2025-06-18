@@ -8,8 +8,8 @@ inherit autotools
 
 DESCRIPTION="Search and query ebuilds"
 HOMEPAGE="https://github.com/vaeth/eix/"
-SRC_URI="https://github.com/vaeth/eix/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://github.com/vaeth/eix/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/eix-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -24,7 +24,7 @@ DEPEND="
 "
 
 pkg_setup() {
-	local old_cache="${EROOT}/var/cache/${PN}"
+	local old_cache="${EROOT}/var/cache/eix"
 	test -f "${old_cache}" && rm -f -- "${old_cache}"
 }
 
@@ -76,6 +76,6 @@ pkg_postinst() {
 
 pkg_postrm() {
 	if [ -z "${REPLACED_BY_VERSION}" ]; then
-		rm -r -- "${EROOT}/var/cache/${PN}" || die
+		rm -r -- "${EROOT}/var/cache/eix" || die
 	fi
 }

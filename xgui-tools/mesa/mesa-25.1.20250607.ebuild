@@ -2,11 +2,13 @@
 
 EAPI=8
 
+BRANCH_NAME="$(ver_cut 1-2)"
+
 inherit meson flag-o-matic
 
 DESCRIPTION="OpenGL-like graphic library for Linux"
 HOMEPAGE="https://www.mesa3d.org/ https://mesa.freedesktop.org/"
-SNAPSHOT=e2fa6b6ea39ddb79adad3257ac65c558ea088f28
+SNAPSHOT=c9d5ec71fe68d51bc195e5aad994f8c1d33ebe21
 SRC_URI="https://gitlab.freedesktop.org/mesa/mesa/-/archive/${SNAPSHOT}/mesa-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/mesa-${SNAPSHOT}"
 
@@ -42,7 +44,6 @@ BDEPEND="
 src_configure() {
 	local emesonargs=(
 		-Db_lto=true
-		-Ddri3=enabled
 		-Degl=enabled
 		-Dgallium-drivers="iris,zink"
 		-Dgallium-extra-hud=false
@@ -53,7 +54,7 @@ src_configure() {
 		-Dgbm=enabled
 		-Dgles1=enabled
 		-Dgles2=enabled
-		-Dglvnd=true
+		-Dglvnd=enabled
 		-Dglx=dri
 		-Dlibunwind=disabled
 		-Dllvm=enabled

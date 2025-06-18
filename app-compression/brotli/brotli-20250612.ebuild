@@ -4,14 +4,13 @@ EAPI=8
 
 DISTUTILS_OPTIONAL="1"
 
-inherit distutils-r1 cmake
+inherit distutils-r1 cmake flag-o-matic
 
 DESCRIPTION="Generic-purpose lossless compression algorithm"
 HOMEPAGE="https://github.com/google/brotli"
-
-SNAPSHOT=440e03642b891968a76b6d088d70f01f06e0c349
-SRC_URI="https://github.com/google/brotli/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SNAPSHOT=3efb30f96ba50389c4a2fcd9f884b7dbfbadebae
+SRC_URI="https://github.com/google/brotli/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/brotli-${SNAPSHOT}
 
 LICENSE="MIT python? ( Apache-2.0 )"
 SLOT="0"
@@ -28,6 +27,7 @@ RDEPEND="python? ( ${PYTHON_DEPS} )"
 DEPEND="${RDEPEND}"
 
 src_prepare() {
+	filter-flags -Wl,-z,defs
 	cmake_src_prepare
 	use python && distutils-r1_src_prepare
 }

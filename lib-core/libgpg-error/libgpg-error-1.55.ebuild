@@ -21,3 +21,8 @@ src_configure() {
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
+
+src_install() {
+	default
+	dobin src/gpg-error-config
+}

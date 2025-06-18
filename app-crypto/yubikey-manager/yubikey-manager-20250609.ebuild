@@ -11,15 +11,10 @@ MY_P="${MY_PN}-${PV}"
 
 DESCRIPTION="Python library and command line tool for configuring a YubiKey"
 HOMEPAGE="https://developers.yubico.com/yubikey-manager/"
-# According to https://github.com/Yubico/yubikey-manager/issues/518 the release
-# tarballs on Yubico Web site and on GitHub should be identical, and at least
-# for recent releases the latter are signed as well. Only the automatically
-# generated "Source code (tar.gz)" tarballs should not be used.
-# Still, prefer the former if available.
-SRC_URI="https://developers.yubico.com/${PN}/Releases/${MY_P}.tar.gz
-	verify-sig? ( https://developers.yubico.com/${PN}/Releases/${MY_P}.tar.gz.sig )"
 
-S="${WORKDIR}"/${MY_P}
+SNAPSHOT=f3c37f690a2b184232ee88feb614bee6f5054526
+SRC_URI="https://github.com/Yubico/yubikey-manager/archive/${SNAPSHOT}.tar.gz -> yubikey-manager-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/yubikey-manager-${SNAPSHOT}"
 
 LICENSE="BSD-2"
 SLOT="0"

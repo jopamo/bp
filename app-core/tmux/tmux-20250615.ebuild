@@ -6,10 +6,9 @@ inherit autotools
 
 DESCRIPTION="Terminal multiplexer"
 HOMEPAGE="https://tmux.github.io/"
-
-SNAPSHOT=9a377485becdd34dda695f38cb73ee5082d9088b
-SRC_URI="https://github.com/tmux/tmux/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SNAPSHOT=43e88c892d41181088b2ff7908e2f2467fd30916
+SRC_URI="https://github.com/tmux/tmux/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/tmux-${SNAPSHOT}
 
 LICENSE="ISC"
 SLOT="0"
@@ -22,7 +21,7 @@ DEPEND="
 	virtual/curses
 "
 
-PATCHES=( "${FILESDIR}/${PN}-2.4-flags.patch" )
+PATCHES=( "${FILESDIR}/tmux-2.4-flags.patch" )
 
 src_prepare() {
 	default

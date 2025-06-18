@@ -6,9 +6,6 @@ EAPI=8
 # please bump dev-python/ensurepip-setuptools along with this package!
 
 DISTUTILS_USE_PEP517=standalone
-PYTHON_TESTED=( python3_{10..13} pypy3 )
-PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_13t )
-PYTHON_REQ_USE="xml(+)"
 
 inherit distutils-r1 pypi
 
@@ -17,10 +14,14 @@ HOMEPAGE="
 	https://github.com/pypa/setuptools/
 	https://pypi.org/project/setuptools/
 "
+SNAPSHOT=7fc347155ce6727bc4ebd988d3e0a91d7ba1fc0a
+SRC_URI="https://github.com/pypa/setuptools/archive/${SNAPSHOT}.tar.gz -> setuptools-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/setuptools-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="test"
 RESTRICT="!test? ( test )"
 
@@ -76,6 +77,8 @@ PDEPEND="
 "
 
 src_prepare() {
+	export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
+
 	local PATCHES=(
 		# TODO: remove this when we're 100% PEP517 mode
 		"${FILESDIR}/setuptools-62.4.0-py-compile.patch"

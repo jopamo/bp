@@ -2,6 +2,7 @@
 
 EAPI=8
 
+BRANCH_NAME="$(ver_cut 1-2).x"
 DISTUTILS_EXT=1
 
 DISTUTILS_USE_PEP517=standalone
@@ -9,16 +10,13 @@ PYTHON_COMPAT=( python3_{10..13} pypy3 )
 
 inherit distutils-r1 toolchain-funcs
 
-MY_PN=Pillow
-MY_P=${MY_PN}-${PV}
-
 DESCRIPTION="Python Imaging Library (fork)"
 HOMEPAGE="
 	https://python-pillow.org/
 	https://github.com/python-pillow/Pillow/
 	https://pypi.org/project/pillow/
 "
-SNAPSHOT=4d0ebb040a8890eaa86414fda3e63f2ca7d00240
+SNAPSHOT=339bc5db93bd95decf65a59fab273f300db6594d
 SRC_URI="https://github.com/python-pillow/Pillow/archive/${SNAPSHOT}.tar.gz -> pillow-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/Pillow-${SNAPSHOT}"
 

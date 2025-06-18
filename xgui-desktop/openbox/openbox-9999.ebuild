@@ -9,12 +9,12 @@ HOMEPAGE="http://openbox.org/"
 
 if [[ ${PV} != 9999 ]]; then
 	SNAPSHOT=0f1a9f19cab56ef67ce0cf176e49466fbe65605d
-	SRC_URI="https://github.com/jopamo/openbox/archive/${SNAPSHOT}.tar.gz -> openbox-${SNAPSHOT}.tar.gz"
+	SRC_URI="https://github.com/jopamo/ob/archive/${SNAPSHOT}.tar.gz -> openbox-${SNAPSHOT}.tar.gz"
 	S="${WORKDIR}/openbox-${SNAPSHOT}"
 else
 	WANT_LIBTOOL=none
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/jopamo/openbox.git"
+	EGIT_REPO_URI="https://github.com/jopamo/ob.git"
 fi
 
 LICENSE="GPL-2"
@@ -70,9 +70,9 @@ src_configure() {
 src_install() {
 	default
 
-	insinto etc/xdg/${PN}
-	doins -r ${FILESDIR}/configs/*
-
-	insinto usr/share/themes/Mikachu/openbox-3
-	doins ${FILESDIR}/themerc
+	# for xdg
+	cat > "${T}"/99${PN} <<- EOF || die
+		XDG_CURRENT_DESKTOP=LXQt
+	EOF
+	doenvd "${T}"/99${PN}
 }

@@ -4,7 +4,10 @@ EAPI=8
 
 DESCRIPTION="Utility to detect other OSs on a set of drives"
 HOMEPAGE="https://packages.debian.org/source/sid/os-prober"
-SRC_URI="http://http.debian.net/debian/pool/main/o/${PN}/${PN}_${PV}.tar.xz"
+
+SNAPSHOT=90c13887cbe2ea7217dbfc08bf2dd76ffba3576c
+SRC_URI="https://salsa.debian.org/installer-team/os-prober/-/archive/${SNAPSHOT}/os-prober-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-3"
 SLOT="0"

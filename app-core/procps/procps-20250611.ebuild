@@ -6,9 +6,8 @@ inherit autotools
 
 DESCRIPTION="standard informational utilities and process-handling tools"
 HOMEPAGE="https://gitlab.com/procps-ng/procps"
-
-SNAPSHOT=f53cc24d57085c87ebb1871b92c0069b72a60926
-SRC_URI="https://gitlab.com/procps-ng/procps/-/archive/${SNAPSHOT}/procps-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
+SNAPSHOT=e8c2809c60886fd8fb2d45859a872d841d709031
+SRC_URI="https://gitlab.com/procps-ng/procps/-/archive/${SNAPSHOT}/procps-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/procps-${SNAPSHOT}"
 
 LICENSE="GPL-2"
@@ -38,15 +37,18 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		$(use_with ncurses)
 		$(use_enable static-libs static)
+		$(use_with ncurses)
 		$(use_with systemd)
-		--disable-watch8bit
-		--disable-w-from
 		--disable-kill
-		--disable-rpath
-		--disable-nls
 		--disable-modern-top
+		--disable-nls
+		--disable-rpath
+		--disable-w-from
+		--disable-watch8bit
+		--enable-colorwatch
+		--enable-sigwinch
+		--enable-skill
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

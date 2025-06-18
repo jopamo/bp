@@ -2,12 +2,13 @@
 
 EAPI=8
 
+BRANCH_NAME="release-$(ver_cut 1-3)"
+
 inherit user autotools
 
 DESCRIPTION="Anonymizing overlay network for TCP"
 HOMEPAGE="http://www.torproject.org/"
-
-SNAPSHOT=e5cf0d41a5721448b215d1a45bf2d045d40dafdd
+SNAPSHOT=acef6a79bd2368c4b5cc86f059903758470eae39
 SRC_URI="https://gitlab.torproject.org/tpo/core/tor/-/archive/${SNAPSHOT}/tor-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/tor-${SNAPSHOT}"
 

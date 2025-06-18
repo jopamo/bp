@@ -2,15 +2,16 @@
 
 EAPI=8
 
-SNAPSHOT=022f44b6d894ba631cb20623a1e39267a953dff9
-SHORT=${SNAPSHOT:0:7}
+BRANCH_NAME="LIBGCRYPT-$(ver_cut 1-2)-BRANCH"
+
+SNAPSHOT=62f84bb3040fc138f061032889574f82ce72a0bc
 
 inherit flag-o-matic autotools
 
 DESCRIPTION="General purpose crypto library based on the code used in GnuPG"
 HOMEPAGE="http://www.gnupg.org/"
-SRC_URI="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=snapshot;h=${SNAPSHOT};sf=tgz -> ${P}.tar.gz"
-S=${WORKDIR}/libgcrypt-${SHORT}
+SRC_URI="https://github.com/gpg/libgcrypt/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/libgcrypt-${SNAPSHOT}
 
 LICENSE="LGPL-2.1 MIT"
 SLOT="0"

@@ -6,10 +6,9 @@ inherit linux-info toolchain-funcs
 
 DESCRIPTION="Generic initramfs generation tool"
 HOMEPAGE="https://dracut.wiki.kernel.org"
-
-SNAPSHOT=20cc20d2ac9c2908da6735b04dba49c1cb1b0bab
+SNAPSHOT=348888b8d9067a9e983650129b7a3ea64fb8430f
 SRC_URI="https://github.com/dracut-ng/dracut-ng/archive/${SNAPSHOT}.tar.gz -> dracut-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-ng-${SNAPSHOT}"
+S="${WORKDIR}/dracut-ng-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -36,7 +35,7 @@ RDEPEND="${CDEPEND}
 "
 DEPEND="${CDEPEND}
 	>=lib-core/libxslt-1.1.26
-	app-tex/docbook-xml-dtd:4.5
+	app-tex/docbook-xml-dtd
 	>=app-tex/docbook-xsl-stylesheets-1.75.2
 "
 

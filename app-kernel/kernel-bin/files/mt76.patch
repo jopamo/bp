@@ -1,0 +1,47 @@
+diff -ruN a/mac80211.c b/mac80211.c
+--- a/drivers/net/wireless/mediatek/mt76/mac80211.c	
++++ b/drivers/net/wireless/mediatek/mt76/mac80211.c
+@@ -613,7 +613,6 @@
+ {
+ 	struct page_pool_params pp_params = {
+ 		.order = 0,
+-		.flags = PP_FLAG_PAGE_FRAG,
+ 		.nid = NUMA_NO_NODE,
+ 		.dev = dev->dma_dev,
+ 	};
+diff -ruN a/mt76.h b/mt76.h
+--- a/drivers/net/wireless/mediatek/mt76/mt76.h	
++++ b/drivers/net/wireless/mediatek/mt76/mt76.h	
+@@ -12,6 +12,8 @@
+ #include <linux/skbuff.h>
+ #include <linux/leds.h>
+ #include <linux/usb.h>
++#include <linux/version.h>
++#include <linux/build_bug.h>
+ #include <linux/average.h>
+ #include <linux/soc/mediatek/mtk_wed.h>
+ #include <net/netlink.h>
+@@ -24,6 +26,23 @@
+ #include "util.h"
+ #include "testmode.h"
+ 
++#ifndef strlcpy
++static inline size_t strlcpy(char *dst, const char *src, size_t size) {
++    size_t len = 0;
++
++    if (size) {
++        while (--size && (*dst++ = *src++))
++            len++;
++        *dst = '\0';
++    }
++
++    while (*src++)
++        len++;
++
++    return len;
++}
++#endif
++
+ #define MT_MCU_RING_SIZE	32
+ #define MT_RX_BUF_SIZE		2048
+ #define MT_SKB_HEAD_LEN		256

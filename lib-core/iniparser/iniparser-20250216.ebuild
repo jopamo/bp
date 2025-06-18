@@ -8,8 +8,8 @@ inherit autotools
 
 DESCRIPTION="A free stand-alone ini file parsing library"
 HOMEPAGE="http://ndevilla.free.fr/iniparser/"
-SRC_URI="https://github.com/ndevilla/iniparser/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://github.com/ndevilla/iniparser/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/iniparser-${SNAPSHOT}
 
 LICENSE="MIT"
 SLOT="0"
@@ -19,7 +19,7 @@ IUSE="static-libs"
 
 RESTRICT="test"
 
-PATCHES=( "${FILESDIR}/${PN}-3.0-autotools.patch" )
+PATCHES=( "${FILESDIR}/iniparser-3.0-autotools.patch" )
 
 src_prepare() {
 	default

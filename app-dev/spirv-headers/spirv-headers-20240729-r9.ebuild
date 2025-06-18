@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="Machine-readable files for the SPIR-V Registry"
 HOMEPAGE="https://registry.khronos.org/SPIR-V/ https://github.com/KhronosGroup/SPIRV-Headers"
 
-SNAPSHOT=f013f08e4455bcc1f0eed8e3dd5e2009682656d9
+SNAPSHOT=50daff941d88609b4d2ad076eae558e727f8e5cd
 SRC_URI="https://github.com/KhronosGroup/SPIRV-Headers/archive/${SNAPSHOT}.tar.gz -> SPIRV-Headers-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/SPIRV-Headers-${SNAPSHOT}"
 

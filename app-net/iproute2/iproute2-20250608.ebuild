@@ -7,31 +7,32 @@ inherit toolchain-funcs flag-o-matic
 DESCRIPTION="kernel routing and traffic control utilities"
 HOMEPAGE="https://wiki.linuxfoundation.org/networking/iproute2"
 
-SNAPSHOT=c6c39f3c6da4bf093aad6d0eb1c5b07a7aa2dab7
-SRC_URI="https://github.com/iproute2/iproute2/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SNAPSHOT=d30f38d5d752abe12174b1ea05707bcf86f3d305
+SRC_URI="https://github.com/iproute2/iproute2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/iproute2-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps elf iptables ipv6 musl"
+IUSE="caps elf iptables musl"
 
 DEPEND="
 	app-build/bison
 	app-build/flex
 	app-compression/xz-utils
 	app-kernel/linux-headers
+	lib-net/libbpf
 	lib-net/libmnl
 	caps? ( lib-core/libcap )
-	elf? ( lib-core/elfutils )
+	elf? ( virtual/libelf )
+	elibc_glibc? ( lib-dev/libbsd )
 	iptables? ( app-net/iptables )
-	!musl? ( lib-dev/libbsd )
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-5.7.0-mix-signal.h-include.patch
-	"${FILESDIR}"/${PN}-mtu.patch
+	"${FILESDIR}"/iproute2-5.7.0-mix-signal.h-include.patch
+	"${FILESDIR}"/iproute2-mtu.patch
 )
 
 doecho() {
@@ -41,11 +42,10 @@ doecho() {
 
 src_prepare() {
 	filter-flags -Wl,-z,defs
+	append-flags -ffat-lto-objects
 
-	use ipv6 || eapply "${FILESDIR}"/${PN}-4.20.0-no-ipv6.patch
-
-	use musl && eapply "${FILESDIR}"/${PN}-6.8.0-configure-nomagic-nolibbsd.patch
-	use musl && eapply "${FILESDIR}"/${PN}-6.8.0-disable-libbsd-fallback.patch
+	use musl && eapply "${FILESDIR}"/iproute2-6.8.0-configure-nomagic-nolibbsd.patch
+	use musl && eapply "${FILESDIR}"/iproute2-6.8.0-disable-libbsd-fallback.patch
 
 	default
 
@@ -62,6 +62,7 @@ src_prepare() {
 
 	# build against system headers
 	rm -r include/netinet || die #include/linux include/ip{,6}tables{,_common}.h include/libiptc
+	rm -r include/uapi/linux/{in6.h,if_bridge.h} || die
 	sed -i 's:TCPI_OPT_ECN_SEEN:16:' misc/ss.c || die
 }
 
@@ -77,27 +78,7 @@ src_configure() {
 	${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} test.c -lresolv >&/dev/null || sed -i '/^LDLIBS/s:-lresolv::' "${S}"/Makefile
 	popd >/dev/null
 
-	# run "configure" script first which will create "config.mk"...
-	# Using econf breaks since 5.14.0 (a9c3d70d902a0473ee5c13336317006a52ce8242)
 	doecho ./configure
-
-	# ...now switch on/off requested features via USE flags
-	# this is only useful if the test did not set other things, per bug #643722
-	cat <<-EOF >> config.mk
-	TC_CONFIG_ATM := n
-	TC_CONFIG_XT  := $(usex iptables y n)
-	TC_CONFIG_NO_XT := $(usex iptables n y)
-	TC_CONFIG_IPSET := y
-	HAVE_BERKELEY_DB := n
-	HAVE_CAP      := $(usex caps y n)
-	HAVE_MNL      := n
-	HAVE_ELF      := $(usex elf y n)
-	HAVE_SELINUX  := n
-	IP_CONFIG_SETNS := ${setns}
-	# Use correct iptables dir, #144265 #293709
-	IPT_LIB_DIR   := $(use iptables && ${PKG_CONFIG} xtables --variable=xtlibdir)
-	HAVE_LIBBSD   := n
-	EOF
 }
 
 src_compile() {

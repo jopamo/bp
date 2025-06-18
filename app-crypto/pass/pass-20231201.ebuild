@@ -6,7 +6,7 @@ DESCRIPTION="Stores, retrieves, generates, and synchronizes passwords securely"
 HOMEPAGE="https://www.passwordstore.org/"
 
 SNAPSHOT=b5e965a838bb68c1227caa2cdd874ba496f10149
-SRC_URI="https://git.zx2c4.com/password-store/snapshot/password-store-${SNAPSHOT}.tar.xz -> ${P}.tar.xz"
+SRC_URI="https://git.zx2c4.com/password-store/snapshot/password-store-${SNAPSHOT}.tar.xz -> ${PN}-${SNAPSHOT}.tar.xz"
 S="${WORKDIR}/password-store-${SNAPSHOT}"
 
 LICENSE="GPL-2"
@@ -26,7 +26,7 @@ src_install() {
 
 
 	if use importers; then
-		exeinto /usr/share/${PN}/importers
+		exeinto /usr/share/pass/importers
 		doexe contrib/importers/*
 	fi
 }

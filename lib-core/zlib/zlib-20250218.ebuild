@@ -7,9 +7,9 @@ inherit autotools
 DESCRIPTION="Standard (de)compression library"
 HOMEPAGE="https://zlib.net/"
 
-SNAPSHOT=545f1949635949159fa6282e81712aec32b5d4f1
-SRC_URI="https://github.com/madler/zlib/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SNAPSHOT=5a82f71ed1dfc0bec044d9702463dbdf84ea3b71
+SRC_URI="https://github.com/madler/zlib/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/zlib-${SNAPSHOT}
 
 LICENSE="ZLIB"
 SLOT="0"
@@ -18,6 +18,8 @@ KEYWORDS="amd64 arm64"
 IUSE="minizip static-libs"
 
 src_prepare() {
+	sed -i '/^  elif test -z.*$/,/^  fi$/c\  fi' configure
+
 	default
 
 	#ldconfig is not used
@@ -57,4 +59,5 @@ src_install() {
 
 		rm -f "${ED}"/usr/lib/libminizip.la || die
 	fi
+
 }

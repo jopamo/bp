@@ -7,7 +7,7 @@ DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
 # DO NOT ADD pypy to PYTHON_COMPAT
 # pypy bundles a modified version of cffi. Use python_gen_cond_dep instead.
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{11..14} )
 
 inherit distutils-r1 toolchain-funcs pypi
 
@@ -33,7 +33,7 @@ RDEPEND="
 "
 BDEPEND="
 	${RDEPEND}
-	virtual/pkgconfig
+	app-dev/pkgconf
 	test? (
 		dev-python/py[${PYTHON_USEDEP}]
 	)

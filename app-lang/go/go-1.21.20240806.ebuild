@@ -2,6 +2,8 @@
 
 EAPI=8
 
+BRANCH_NAME="release-branch.go$(ver_cut 1-2)"
+
 export CBUILD=${CBUILD:-${CHOST}}
 export CTARGET=${CTARGET:-${CHOST}}
 
@@ -13,7 +15,7 @@ DESCRIPTION="A concurrent garbage collected and typesafe programming language"
 HOMEPAGE="https://go.dev"
 
 SNAPSHOT=8bba868de983dd7bf55fcd121495ba8d6e2734e7
-SRC_URI="https://github.com/golang/go/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/golang/go/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/go-${SNAPSHOT}"
 
 LICENSE="BSD"

@@ -2,13 +2,15 @@
 
 EAPI=8
 
+BRANCH_NAME="libpcap-$(ver_cut 1-2)"
+
 inherit autotools
 
 DESCRIPTION="A system-independent library for user-level network packet capture"
 HOMEPAGE="http://www.tcpdump.org/"
 
-SNAPSHOT=2d7d143418c0bbe898205fdeb1be4c0196974473
-SRC_URI="https://github.com/the-tcpdump-group/libpcap/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=d5a19bb637a744d2ab29a02090cf72f0b859dff1
+SRC_URI="https://github.com/the-tcpdump-group/libpcap/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libpcap-${SNAPSHOT}"
 
 LICENSE="BSD"

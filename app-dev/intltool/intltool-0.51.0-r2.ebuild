@@ -17,3 +17,5 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-0.51.0-perl-5.22.patch
 	"${FILESDIR}"/${PN}-0.51.0-perl-5.26.patch
 )
+
+BDEPEND="core-perl/XML-Parser"

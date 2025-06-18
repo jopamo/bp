@@ -2,17 +2,13 @@
 
 EAPI=8
 
-inherit flag-o-matic
+inherit flag-o-matic autotools
 
 DESCRIPTION="Version 2 of an advanced replacement library for libraries like libXpm"
 HOMEPAGE="https://www.enlightenment.org/"
-
-if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI=https://git.enlightenment.org/legacy/imlib2.git
-	inherit git-r3
-else
-	SRC_URI="https://downloads.sourceforge.net/enlightenment/${P}.tar.xz"
-fi
+SNAPSHOT=42ec80f0700f794ec0bff13d841fb29939515a59
+SRC_URI="https://github.com/1g4-mirror/legacy-imlib2/archive/${SNAPSHOT}.tar.gz -> legacy-imlib2-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/legacy-imlib2-${SNAPSHOT}"
 
 LICENSE="Imlib2"
 SLOT="0"
@@ -35,7 +31,13 @@ DEPEND="
 	)
 "
 
-filter-flags -Wl,-z,defs
+src_prepare() {
+	eautoreconf
+	cp "${FILESDIR}"/loader_gif.c src/modules/loaders/loader_gif.c
+
+	filter-flags -Wl,-z,defs
+	default
+}
 
 src_configure() {
 	local myconf=(

@@ -9,7 +9,7 @@ HOMEPAGE="http://www.aircrack-ng.org"
 
 SNAPSHOT=13e5c460feaedbe1d9238ee7a968cdb8d3248009
 SRC_URI="https://github.com/aircrack-ng/aircrack-ng/archive/${SNAPSHOT}.tar.gz -> aircrack-ng-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/aircrack-ng-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

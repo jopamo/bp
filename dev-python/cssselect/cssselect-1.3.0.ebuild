@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1
 
@@ -21,12 +21,15 @@ SRC_URI="
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+IUSE="test"
+RESTRICT="!test? ( test )"
 
 BDEPEND="
 	test? (
-		dev-python/lxml[${PYTHON_USEDEP}]
+		dev-py/lxml[${PYTHON_USEDEP}]
 	)
 "
 
-distutils_enable_sphinx docs
+distutils_enable_sphinx docs \
+	dev-python/sphinx-rtd-theme
 distutils_enable_tests unittest

@@ -62,6 +62,7 @@ RESTRICT="network-sandbox"
 distutils_enable_tests pytest
 
 src_prepare() {
+	filter-flags -flto*
 	default
 
 	sed -i -e 's:--benchmark-disable::' pyproject.toml || die
@@ -78,8 +79,6 @@ src_prepare() {
 }
 
 python_configure_all() {
-	filter-lto # bug #903908
-
 	export UNSAFE_PYO3_SKIP_VERSION_CHECK=1
 }
 

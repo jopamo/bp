@@ -16,7 +16,7 @@ IUSE="guile nls static"
 
 DEPEND="guile? ( >=dev-scheme/guile-1.8:= )
 		nls? ( app-build/gettext )
-		dev-perl/libintl-perl
+		core-perl/libintl-perl
 		app-build/texinfo"
 
 src_configure() {

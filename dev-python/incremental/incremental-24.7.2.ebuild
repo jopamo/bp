@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=standalone
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
 
@@ -21,9 +21,6 @@ RESTRICT="!test? ( test )"
 
 RDEPEND="
 	>=dev-py/setuptools-61.0[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep '
-		dev-python/tomli[${PYTHON_USEDEP}]
-	' 3.10)
 "
 # note: most of test deps are for examples that we can't run without
 # Internet

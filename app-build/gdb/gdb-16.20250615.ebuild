@@ -2,13 +2,14 @@
 
 EAPI=8
 
+BRANCH_NAME="gdb-$(ver_cut 1)-branch"
+
 inherit flag-o-matic python-single-r1
 
 DESCRIPTION="GNU debugger"
 HOMEPAGE="https://sourceware.org/gdb/"
-
-SNAPSHOT=a31b440834cce037c7305b01ccb3673a9238fbfa
-SRC_URI="https://github.com/bminor/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=83572bc1c61b0a203de51f4b3470cb1a8da3829b
+SRC_URI="https://github.com/1g4-mirror/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/binutils-gdb-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2"

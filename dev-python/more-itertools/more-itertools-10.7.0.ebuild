@@ -3,8 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
-PYPI_NO_NORMALIZE=1
-PYTHON_COMPAT=( python3_{10..13} python3_13t pypy3 )
+PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 
 inherit distutils-r1 pypi
 
@@ -19,5 +18,5 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 distutils_enable_sphinx docs \
-	dev-python/sphinx-rtd-theme
+	dev-python/furo
 distutils_enable_tests unittest

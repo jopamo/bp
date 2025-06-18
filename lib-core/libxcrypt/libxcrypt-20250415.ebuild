@@ -2,14 +2,14 @@
 
 EAPI=8
 
-SNAPSHOT=8c37235e92289e1427c1ddcc714b2df973676e2b
+SNAPSHOT=e34e0634a7192383dbb4445b6d7568e36baef675
 
 inherit autotools
 
 DESCRIPTION="Extended crypt library for descrypt, md5crypt, bcrypt, and others"
 HOMEPAGE="https://github.com/besser82/libxcrypt"
-SRC_URI="https://github.com/besser82/libxcrypt/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://github.com/besser82/libxcrypt/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/libxcrypt-${SNAPSHOT}
 
 LICENSE="LGPL-2.1"
 SLOT="0"
@@ -26,7 +26,8 @@ src_configure() {
 	local myconf=(
 		$(use_enable static-libs static)
 		$(usex glibc_compat "--enable-obsolete-api=glibc" --disable-obsolete-api)
-		--enable-hashes=strong,glibc
+		$(usex elibc_musl --enable-xcrypt-compat --disable-xcrypt-compat)
+		$(usex elibc_musl "--enable-hashes=strong" "--enable-hashes=strong,glibc")
     	--disable-failure-tokens
     	--disable-werror
 	)

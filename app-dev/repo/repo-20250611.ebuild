@@ -7,8 +7,8 @@ inherit python-r1
 DESCRIPTION="Google tool for managing git, particularly multiple repos"
 HOMEPAGE="https://gerrit.googlesource.com/git-repo"
 
-SNAPSHOT=d92076d930af11bb9a3025a6b2f12ca139c0436f
-SRC_URI="https://github.com/GerritCodeReview/git-repo/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=85352825ff3903fe17bad05476284930dbf12fd8
+SRC_URI="https://github.com/GerritCodeReview/git-repo/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/git-repo-${SNAPSHOT}
 
 LICENSE="Apache-2.0"
@@ -20,6 +20,6 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 RDEPEND="${PYTHON_DEPS}"
 
 src_install() {
-	python_foreach_impl python_doscript ${PN}
+	python_foreach_impl python_doscript repo
 	doman man/*.[0-9]
 }

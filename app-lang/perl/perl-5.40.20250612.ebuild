@@ -82,7 +82,6 @@ src_configure() {
 		-Ud_csh
 		-Ud_fpos64_t
 		-Ud_off64_t
-		-Dusenm
 		-Duse64bitint
 	)
 

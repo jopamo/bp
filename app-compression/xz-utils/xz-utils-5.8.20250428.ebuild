@@ -2,13 +2,15 @@
 
 EAPI=8
 
+BRANCH_NAME="v$(ver_cut 1-2)"
+
 inherit autotools
 
 DESCRIPTION="utils for managing LZMA compressed files"
 HOMEPAGE="http://tukaani.org/xz/"
 
-SNAPSHOT=061a1e4d2d0b1c3f5c9a637fd94bac035a826340
-SRC_URI="https://github.com/tukaani-project/xz/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=7c12726c51b2b7d77329dd72a29ecb1ec262b918
+SRC_URI="https://github.com/tukaani-project/xz/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/xz-${SNAPSHOT}"
 
 LICENSE="public-domain LGPL-2.1+ GPL-2+"

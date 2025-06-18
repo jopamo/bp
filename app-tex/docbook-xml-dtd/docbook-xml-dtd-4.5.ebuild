@@ -4,18 +4,19 @@ EAPI=7
 
 inherit sgml-catalog-r1
 
-MY_P="docbkx${PV//./}"
-
+MY_P=${P/-dtd/}
 DESCRIPTION="Docbook DTD for XML"
 HOMEPAGE="https://docbook.org/"
 SRC_URI="https://docbook.org/xml/${PV}/${MY_P}.zip"
 
 LICENSE="docbook"
-SLOT="$(ver_cut 1-2)"
+SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND=">=app-tex/docbook-xsl-stylesheets-1.65
-	>=app-tex/build-docbook-catalog-1.2"
+RDEPEND="
+	app-tex/docbook-xsl-stylesheets
+	app-tex/build-docbook-catalog
+"
 
 S=${WORKDIR}
 
@@ -29,7 +30,7 @@ src_install() {
 	keepdir /etc/xml
 
 	insinto "/usr/share/sgml/docbook/xml-dtd-${PV}"
-	doins *.cat *.dtd *.mod
+	doins *.cat *.dtd *.mod *.xml
 	insinto "/usr/share/sgml/docbook/xml-dtd-${PV}/ent"
 	doins ent/*.ent
 
@@ -39,7 +40,8 @@ src_install() {
 		CATALOG "${EPREFIX}/usr/share/sgml/docbook/xml-dtd-${PV}/docbook.cat"
 	EOF
 
-	dodoc ChangeLog *.txt
+	cp ent/README README.ent
+	dodoc ChangeLog README*
 }
 
 pkg_preinst() {

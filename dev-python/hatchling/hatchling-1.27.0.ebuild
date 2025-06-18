@@ -3,8 +3,8 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=standalone
-PYTHON_TESTED=( pypy3 python3_{10..13} )
-PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_13t )
+PYTHON_TESTED=( pypy3_11 python3_{11..14} )
+PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_{13,14}t )
 
 inherit distutils-r1
 
@@ -24,6 +24,8 @@ S=${WORKDIR}/${MY_P}/backend
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+IUSE="test"
+RESTRICT="!test? ( test )"
 
 # deps are listed in backend/src/hatchling/ouroboros.py
 # editables are optional but required for editable installs
@@ -45,6 +47,7 @@ BDEPEND="
 			dev-python/click[${PYTHON_USEDEP}]
 			dev-python/httpx[${PYTHON_USEDEP}]
 			dev-python/platformdirs[${PYTHON_USEDEP}]
+			dev-python/pytest[${PYTHON_USEDEP}]
 			dev-python/pytest-mock[${PYTHON_USEDEP}]
 			dev-python/rich[${PYTHON_USEDEP}]
 			dev-python/tomli-w[${PYTHON_USEDEP}]
@@ -52,8 +55,6 @@ BDEPEND="
 		' "${PYTHON_TESTED[@]}")
 	)
 "
-
-distutils_enable_tests pytest
 
 src_test() {
 	# top-level "tests" directory contains tests both for hatch

@@ -2,14 +2,16 @@
 
 EAPI=8
 
+BRANCH_NAME="master"
+SNAPSHOT=037d85f199a8c6e5b16689a46c8bc31b586a0c94
+
 inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="Another cute console display library"
 HOMEPAGE="https://tiswww.case.edu/php/chet/readline/rltop.html"
 
-SNAPSHOT=037d85f199a8c6e5b16689a46c8bc31b586a0c94
-SRC_URI="https://git.savannah.gnu.org/cgit/readline.git/snapshot/readline-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://github.com/1g4-mirror/readline/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-3"
 SLOT="0"

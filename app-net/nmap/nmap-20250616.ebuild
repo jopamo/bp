@@ -6,8 +6,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="A utility for network discovery and security auditing"
 HOMEPAGE="https://nmap.org/"
-
-SNAPSHOT=fd80921926527e6668d76b5696f0d6c054ca6d29
+SNAPSHOT=3388e043554317e9f3687a7b981960e1e0efa3d3
 SRC_URI="https://github.com/nmap/nmap/archive/${SNAPSHOT}.tar.gz -> nmap-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/nmap-${SNAPSHOT}"
 
@@ -26,8 +25,6 @@ DEPEND="
 	lib-net/libpcap
 	ssl? ( virtual/ssl )
 "
-
-PATCHES=( "${FILESDIR}"/autoconf-2.72.patch )
 
 src_prepare() {
 	append-flags -fno-strict-aliasing
@@ -65,6 +62,8 @@ src_configure() {
 		--without-zenmap
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+
+	sed -i 's/int strlcat(char \*, const char \*, int);/size_t strlcat(char *, const char *, size_t);/' libdnet-stripped/include/config.h || die
 }
 
 src_compile() {

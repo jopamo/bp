@@ -6,7 +6,7 @@ SNAPSHOT=f57e61e19229e23c4445b85494dbf7c07de721cb
 
 DESCRIPTION="Password hashing software that won the Password Hashing Competition (PHC)"
 HOMEPAGE="https://github.com/P-H-C/phc-winner-argon2"
-SRC_URI="https://github.com/P-H-C/phc-winner-argon2/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/P-H-C/phc-winner-argon2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 
 LICENSE="|| ( Apache-2.0 CC0-1.0 )"
 SLOT="0"
@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-S=${WORKDIR}/phc-winner-${PN}-${SNAPSHOT}
+S=${WORKDIR}/phc-winner-argon2-${SNAPSHOT}
 
 src_prepare() {
 	default

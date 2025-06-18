@@ -2,13 +2,13 @@
 
 EAPI=8
 
+BRANCH_NAME="release-$(ver_cut 1-2)"
 inherit cmake flag-o-matic user xdg
 
 DESCRIPTION="A network protocol analyzer formerly known as ethereal"
 HOMEPAGE="https://www.wireshark.org/"
-
-SNAPSHOT=d1c9cfeb293591139f032ce784b53a70e59e32ff
-SRC_URI="https://github.com/wireshark/wireshark/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=ebd9f2a599f51314516a9042a9f8120101405347
+SRC_URI="https://github.com/wireshark/wireshark/archive/${SNAPSHOT}.tar.gz -> wireshark-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/wireshark-${SNAPSHOT}"
 
 LICENSE="GPL-2"

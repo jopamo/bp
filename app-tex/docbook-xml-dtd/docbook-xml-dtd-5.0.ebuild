@@ -9,7 +9,7 @@ HOMEPAGE="https://docbook.org/"
 SRC_URI="https://docbook.org/xml/${PV}/docbook-${PV}.zip"
 
 LICENSE="docbook"
-SLOT="$(ver_cut 1-2)"
+SLOT="0"
 #KEYWORDS="amd64 arm64"
 
 S="${WORKDIR}/docbook-${PV}"

@@ -4,7 +4,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=meson-python
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 PYTHON_REQ_USE="threads(+)"
 FORTRAN_NEEDED=lapack
 
@@ -32,10 +32,10 @@ RDEPEND="
 "
 BDEPEND="
 	${RDEPEND}
-	>=dev-build/meson-1.1.0
-	>=dev-python/cython-3.0.6[${PYTHON_USEDEP}]
+	>=dev-build/meson-1.5.2
+	>=dev-py/cython-3.0.6[${PYTHON_USEDEP}]
 	lapack? (
-		virtual/pkgconfig
+		app-dev/pkgconf
 	)
 	test? (
 		$(python_gen_cond_dep '
@@ -44,6 +44,7 @@ BDEPEND="
 		dev-python/charset-normalizer[${PYTHON_USEDEP}]
 		>=dev-python/hypothesis-5.8.0[${PYTHON_USEDEP}]
 		dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
+		dev-python/pytest-timeout[${PYTHON_USEDEP}]
 		>=dev-python/pytz-2019.3[${PYTHON_USEDEP}]
 	)
 "
@@ -57,6 +58,12 @@ EPYTEST_XDIST=1
 distutils_enable_tests pytest
 
 python_prepare_all() {
+	local PATCHES=(
+		# https://github.com/google/highway/issues/2577
+		# github.com/google/highway/commit/7cde540171a1718a9bdfa8f896d70e47eb0785d5
+		"${FILESDIR}/${PN}-2.2.6-gcc16.patch"
+	)
+
 	# bug #922457
 	filter-lto
 	# https://github.com/numpy/numpy/issues/25004
@@ -75,21 +82,18 @@ python_configure_all() {
 }
 
 python_test() {
+	# don't run tests that require more than 4 GiB of RAM (per process)
+	local -x NPY_AVAILABLE_MEM="4 GiB"
+
 	local EPYTEST_DESELECT=(
 		# Very disk-and-memory-hungry
-		numpy/lib/tests/test_io.py::TestSaveTxt::test_large_zip
 		numpy/lib/tests/test_io.py::TestSavezLoad::test_closing_fid
 		numpy/lib/tests/test_io.py::TestSavezLoad::test_closing_zipfile_after_load
 
 		# Precision problems
 		numpy/_core/tests/test_umath_accuracy.py::TestAccuracy::test_validate_transcendentals
 
-		# Runs the whole test suite recursively, that's just crazy
-		numpy/core/tests/test_mem_policy.py::test_new_policy
-
 		numpy/typing/tests/test_typing.py
-		# Uses huge amount of memory
-		numpy/core/tests/test_mem_overlap.py
 	)
 
 	if [[ $(uname -m) == armv8l ]]; then
@@ -108,7 +112,7 @@ python_test() {
 				# TODO
 				numpy/_core/tests/test_function_base.py::TestLinspace::test_denormal_numbers
 				numpy/f2py/tests/test_kind.py::TestKind::test_real
-				numpy/f2py/tests/test_kind.py::TestKind::test_quad_precisionn
+				numpy/f2py/tests/test_kind.py::TestKind::test_quad_precision
 
 				# require too much memory
 				'numpy/_core/tests/test_multiarray.py::TestDot::test_huge_vectordot[complex128]'
@@ -120,6 +124,10 @@ python_test() {
 				# https://bugs.gentoo.org/942689
 				"numpy/_core/tests/test_dtype.py::TestBuiltin::test_dtype[int]"
 				"numpy/_core/tests/test_dtype.py::TestBuiltin::test_dtype[float]"
+				"numpy/_core/tests/test_dtype.py::TestBuiltin::test_dtype_bytes_str_equivalence[datetime64]"
+				"numpy/_core/tests/test_dtype.py::TestBuiltin::test_dtype_bytes_str_equivalence[timedelta64]"
+				"numpy/_core/tests/test_dtype.py::TestBuiltin::test_dtype_bytes_str_equivalence[<f]"
+				"numpy/_core/tests/test_dtype.py::TestPickling::test_pickle_dtype[dt28]"
 				numpy/f2py/tests/test_kind.py::TestKind::test_real
 				numpy/f2py/tests/test_kind.py::TestKind::test_quad_precision
 				numpy/tests/test_ctypeslib.py::TestAsArray::test_reference_cycles

@@ -6,7 +6,10 @@ inherit autotools doins flag-o-matic
 
 DESCRIPTION="CCID free software driver"
 HOMEPAGE="https://ccid.apdu.fr https://github.com/LudovicRousseau/CCID"
-SRC_URI="https://ccid.apdu.fr/files/${P}.tar.bz2"
+
+SNAPSHOT=22eefddb910320894b8501917d4ac497ca08b285
+SRC_URI="https://github.com/LudovicRousseau/ccid/archive/${SNAPSHOT}.tar.gz -> ccid-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/CCID-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -21,10 +24,6 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 BDEPEND="virtual/pkgconfig"
-
-PATCHES=(
-	"${FILESDIR}"/${P}-remove-flex-configure-dependency.patch
-)
 
 src_prepare() {
 	filter-flags -Wl,-z,defs

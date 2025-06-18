@@ -116,6 +116,7 @@ src_configure() {
 		--with-ijs \
 		--with-jbig2dec \
 		--with-libpaper \
+		--disable-hidden-visibility \
 		$(use_enable cups) \
 		$(use_enable dbus) \
 		$(use_enable gtk) \

@@ -32,7 +32,7 @@ RDEPEND="
 "
 BDEPEND="
 	${RDEPEND}
-	>=dev-build/meson-1.5.2
+	>=app-dev/meson-1.5.2
 	>=dev-py/cython-3.0.6[${PYTHON_USEDEP}]
 	lapack? (
 		app-dev/pkgconf

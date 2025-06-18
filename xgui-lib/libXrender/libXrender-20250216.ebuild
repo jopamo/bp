@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X.Org Xrender library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=46e12ff9e8e4d3f0313a2f097df93dbfdc14f92f
+SNAPSHOT=01c4bb5b30bbb09921ca4042da369a60a73faefa
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXrender/-/archive/${SNAPSHOT}/libXrender-${SNAPSHOT}.tar.bz2 -> libXrender-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxrender-${SNAPSHOT}"
 

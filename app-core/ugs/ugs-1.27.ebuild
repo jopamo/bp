@@ -15,6 +15,7 @@ S=${WORKDIR}
 src_install() {
 	insinto /etc/bash/bashrc.d
 	doins "${FILESDIR}"/1g4.sh
+	doins "${FILESDIR}"/eth.sh
 
 	insinto /etc/bash
 	doins "${FILESDIR}"/{bash_logout,bashrc}
@@ -26,23 +27,18 @@ src_install() {
 	doins "${FILESDIR}"/inputrc
 
 	#bin files
-	for f in ix mktarballs efixperm prettybash ; do
+	for f in mktarballs efixperm prettybash ; do
 		dobin "${FILESDIR}"/bin/$f
 	done
 
-	for f in upDay.skel ; do
-			insinto /usr/share/ugscripts
-			doins "${FILESDIR}"/bin/$f
-	done
-
 	for f in hosts_bump eclass_import emirror lighttpd_certs \
-		mkheaders mkimg mkmini mkstage xbkup upApp upAll upBrowsers \
-		upPython upGit xchroot ; do
+		mkheaders mkimg mkstage xbkup upApp upBrowsers \
+		upPython xchroot ; do
 			dobin "${FILESDIR}"/bin/$f
 	done
 
 	# systemd services
-	for f in {hosts_bump,daily-reboot}.service ; do
+	for f in {hosts_bump,daily-reboot,xdp-loader@}.service ; do
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
 		doins "${FILESDIR}"/services/$f

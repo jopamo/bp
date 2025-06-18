@@ -105,7 +105,7 @@ export GOFLAGS="-buildvcs=false -modcacherw -v -x"
 QA_FLAGS_IGNORED='.*'
 
 # Go packages should not be stripped with strip(1).
-RESTRICT+=" strip"
+RESTRICT+=" strip network-sandbox"
 
 # @ECLASS_VARIABLE: EGO_SUM
 # @DEPRECATED: none

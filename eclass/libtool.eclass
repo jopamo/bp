@@ -1,46 +1,40 @@
-# Copyright 1999-2024 Gentoo Authors
-# Distributed under the terms of the GNU General Public License v2
-
 # @ECLASS: libtool.eclass
-# @MAINTAINER:
-# base-system@gentoo.org
-# @SUPPORTED_EAPIS: 5 6 7 8
-# @BLURB: quickly update bundled libtool code
+# @SUPPORTED_EAPIS: 7 8
 # @DESCRIPTION:
-# This eclass patches ltmain.sh distributed with libtoolized packages with the
-# relink and portage patch among others
-#
-# Note, this eclass does not require libtool as it only applies patches to
-# generated libtool files.  We do not run the libtoolize program because that
-# requires a regeneration of the main autotool files in order to work properly.
+# Applies patches to bundled libtool files (e.g., ltmain.sh) using
+# app-portage/elt-patches. This does not invoke libtoolize, so it
+# does not regenerate autotool files.
 
 if [[ -z ${_LIBTOOL_ECLASS} ]]; then
-_LIBTOOL_ECLASS=1
+  _LIBTOOL_ECLASS=1
 
-case ${EAPI} in
-	6) DEPEND=">=app-port/elt-patches-20240116" ;;
-	7|8) BDEPEND=">=app-port/elt-patches-20240116" ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
+  case "${EAPI:-0}" in
+    7|8) ;;
+    *) die "libtool.eclass: EAPI ${EAPI:-0} not supported" ;;
+  esac
 
-inherit toolchain-funcs
+  inherit toolchain-funcs
 
-# @FUNCTION: elibtoolize
-# @USAGE: [dirs] [--portage] [--reverse-deps] [--patch-only] [--remove-internal-dep=xxx] [--shallow] [--no-uclibc]
-# @DESCRIPTION:
-# Apply a smorgasbord of patches to bundled libtool files.  This function
-# should always be safe to run.  If no directories are specified, then
-# ${S} will be searched for appropriate files.
-#
-# If the --shallow option is used, then only ${S}/ltmain.sh will be patched.
-#
-# The other options should be avoided in general unless you know what's going on.
-elibtoolize() {
-	type -P eltpatch &>/dev/null || die "eltpatch not found; is app-port/elt-patches installed?"
+  : "${LIBTOOL_DEPEND:=>=app-port/elt-patches-20250305}"
 
-	ELT_LOGDIR=${T} \
-	LD=$(tc-getLD) \
-	eltpatch "${@}" || die "eltpatch failed"
-}
+  : "${LIBTOOL_AUTO_DEPEND:=yes}"
+  if [[ "${LIBTOOL_AUTO_DEPEND}" != "no" ]]; then
+    BDEPEND+=" ${LIBTOOL_DEPEND}"
+  fi
+
+  # @FUNCTION: elibtoolize
+  # @USAGE: [directories] [--flags]
+  # @DESCRIPTION:
+  # Patch any libtool files in the specified directories (or in $S by default)
+  # using `eltpatch`. The optional flags (e.g. --shallow, --portage, etc.)
+  # modify which patches or how deeply they’re applied.
+  elibtoolize() {
+    type -P eltpatch &>/dev/null \
+      || die "eltpatch not found (please install app-port/elt-patches)."
+
+    ELT_LOGDIR="${T}" \
+    LD="$(tc-getLD)" \
+    eltpatch "$@" || die "eltpatch failed"
+  }
 
 fi

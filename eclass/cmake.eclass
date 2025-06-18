@@ -729,6 +729,9 @@ cmake_src_install() {
 		pushd "${CMAKE_USE_DIR}" > /dev/null || die
 		popd > /dev/null || die
 	fi
+
+	cleanup_install
+	dedup_symlink "${D}"
 }
 
 fi

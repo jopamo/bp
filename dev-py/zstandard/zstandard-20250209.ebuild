@@ -4,7 +4,6 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
 
 inherit distutils-r1
 
@@ -14,19 +13,16 @@ HOMEPAGE="
 	https://github.com/indygreg/python-zstandard/
 	https://pypi.org/project/zstandard/
 "
-SRC_URI="
-	https://github.com/indygreg/python-zstandard/archive/${PV}.tar.gz
-		-> ${MY_P}.gh.tar.gz
-"
-S=${WORKDIR}/${MY_P}
+
+MY_PN="python-zstandard"
+SNAPSHOT=9eb56949b1764a166845e065542690942a3203d3
+SRC_URI="https://github.com/indygreg/python-zstandard/archive/${SNAPSHOT}.tar.gz -> ${MY_PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${MY_PN}-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="
-	app-arch/zstd:=
-"
 RDEPEND="
 	${DEPEND}
 	$(python_gen_cond_dep '

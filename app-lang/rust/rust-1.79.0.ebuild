@@ -1,1 +1,1 @@
-rust-1.55.0.ebuild
+rust-1.75.0.ebuild

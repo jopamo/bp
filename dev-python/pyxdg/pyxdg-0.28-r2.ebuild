@@ -2,7 +2,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1
@@ -23,6 +23,9 @@ LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-PATCHES=( "${FILESDIR}"/${P}-py3.12.patch )
+PATCHES=(
+	"${FILESDIR}"/${PN}-0.28-py3.12.patch
+	"${FILESDIR}"/${PN}-0.28-py3.14.patch
+)
 
 distutils_enable_tests pytest

@@ -22,17 +22,17 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="clippy musl rls rustfmt"
 
-# Adjusting paths from opt to usr
+# Adjusting paths from opt to opt
 QA_PREBUILT="
-	usr/bin/.*
-	usr/lib/.*.so
-	usr/libexec/.*
-	usr/lib/rustlib/.*/bin/.*
-	usr/lib/rustlib/.*/lib/.*
+	opt/bin/.*
+	opt/lib/.*.so
+	opt/libexec/.*
+	opt/lib/rustlib/.*/bin/.*
+	opt/lib/rustlib/.*/lib/.*
 "
 
 RESTRICT="strip"
-QA_EXECSTACK="usr/lib/rustlib/*/lib*.rlib:lib.rmeta"
+QA_EXECSTACK="opt/lib/rustlib/*/lib*.rlib:lib.rmeta"
 
 # Function to determine the correct Rust target triple
 get_rust_triple() {
@@ -74,7 +74,7 @@ src_install() {
 	./install.sh \
 		--components="${components}" \
 		--disable-verify \
-		--prefix="${ED}/usr" \
+		--prefix="${ED}/opt" \
 		--disable-ldconfig \
 		|| die
 
@@ -82,13 +82,13 @@ src_install() {
 	local rust_triple=$(get_rust_triple)
 
 	cat <<-_EOF_ > "${T}/50${P}"
-	LDPATH="${EPREFIX}/usr/lib/rustlib/${rust_triple}/lib"
-	MANPATH="${EPREFIX}/usr/share/man"
+	LDPATH="${EPREFIX}/opt/lib/rustlib/${rust_triple}/lib"
+	MANPATH="${EPREFIX}/opt/share/man"
 	$(use amd64 && usex musl 'CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_RUSTFLAGS="-C target-feature=-crt-static"' '')
 	$(use arm64 && usex musl 'CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUSTFLAGS="-C target-feature=-crt-static"' '')
 	_EOF_
 	doenvd "${T}/50${P}"
 
 	# Fix installation path issues for certain binaries
-	rm -f "${ED}/usr/lib/rustlib/${rust_triple}/bin/rust-llvm-dwp" || die
+	rm -f "${ED}/opt/lib/rustlib/${rust_triple}/bin/rust-llvm-dwp" || die
 }

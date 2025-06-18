@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( pypy3 python3_{10..13} )
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1
 
@@ -23,9 +23,6 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	>=dev-python/attrs-23.2.0[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep '
-		>=dev-python/exceptiongroup-1.2.1[${PYTHON_USEDEP}]
-	' 3.10)
 	dev-python/idna[${PYTHON_USEDEP}]
 	dev-python/outcome[${PYTHON_USEDEP}]
 	>=dev-python/sniffio-1.3.0[${PYTHON_USEDEP}]
@@ -56,6 +53,16 @@ python_test() {
 		# requires ruff
 		_tests/tools/test_gen_exports.py
 	)
+
+	case ${EPYTHON} in
+		python3.14)
+			EPYTEST_DESELECT+=(
+				# xfail-ed upstream with ref to
+				# https://github.com/python/cpython/issues/125603
+				_core/_tests/test_run.py::test_ki_protection_doesnt_leave_cyclic_garbage
+			)
+			;;
+	esac
 
 	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	rm -rf trio || die

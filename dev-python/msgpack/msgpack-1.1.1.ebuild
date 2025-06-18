@@ -4,7 +4,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
 
@@ -24,7 +24,7 @@ IUSE="+native-extensions"
 BDEPEND="
 	native-extensions? (
 		$(python_gen_cond_dep '
-			>=dev-python/cython-3.0.8[${PYTHON_USEDEP}]
+			>=dev-py/cython-3.0.8[${PYTHON_USEDEP}]
 		' 'python*')
 	)
 "
@@ -32,6 +32,7 @@ BDEPEND="
 distutils_enable_tests pytest
 
 python_prepare_all() {
+	filter-flags -Wl,-z,defs
 	# Remove pre-generated cython files
 	rm msgpack/_cmsgpack.c || die
 

@@ -2,14 +2,15 @@
 
 EAPI=7
 
+BRANCH_NAME="master"
 SNAPSHOT=6794b5478f660256a1023712b5fc169196ed0a22
 
 inherit flag-o-matic toolchain-funcs prefix
 
 DESCRIPTION="The standard GNU Bourne again shell"
 HOMEPAGE="http://tiswww.case.edu/php/chet/bash/bashtop.html"
-SRC_URI="https://git.savannah.gnu.org/cgit/bash.git/snapshot/bash-${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/bash-${SNAPSHOT}
+SRC_URI="https://github.com/1g4-mirror/bash/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-3"
 SLOT="0"

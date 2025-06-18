@@ -1,95 +1,215 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+ROOT_DIR="."
+DRY_RUN=false
 
-ROOT_DIR=${1:-.}
+detect_cpu_count() {
+	local cpu_count=1
+	if command -v nproc &>/dev/null; then
+		cpu_count="$(nproc)"
+	fi
+	echo "$cpu_count"
+}
 
 print_help() {
-    cat <<'EOF'
+	cat <<'EOF'
 Usage: dedup_symlink.sh [OPTIONS] [DIRECTORY]
 
 Options:
-  -h, --help      Show this help message and exit.
-  -T, --test      Run an internal test by setting up a sample environment
-                  and demonstrating the script’s functionality.
+  -h, --help	  Show this help message and exit.
+  -T, --test	  Create a test environment with some duplicates and run.
+  -n, --dry-run   Show what would be done without making any changes.
 
 Arguments:
-  DIRECTORY       The directory to deduplicate. Defaults to current directory
-                  if not specified.
+  DIRECTORY	   The directory to deduplicate. Defaults to current directory.
 EOF
 }
 
 setup_test_environment() {
-    TEST_DIR=$(mktemp -d)
-    mkdir -p "$TEST_DIR/subdir1" "$TEST_DIR/subdir2" "$TEST_DIR/subdir3"
-    echo "a" > "$TEST_DIR/file1.txt"
-    echo "a" > "$TEST_DIR/file9.txt"
-    echo "a" > "$TEST_DIR/subdir1/file2.txt"
-    echo "a" > "$TEST_DIR/subdir1/file5.txt"
-    echo "b" > "$TEST_DIR/subdir2/file3.txt"
-    echo "b" > "$TEST_DIR/subdir3/file4.txt"
-    echo "c" > "$TEST_DIR/unique.txt"
-    find "$TEST_DIR" -type f
-    deduplicate_files "$TEST_DIR"
-    find "$TEST_DIR" -type f -o -type l | while read file; do
-        ls -l "$file"
-    done
-    rm -rf "$TEST_DIR"
+	local TEST_DIR
+	TEST_DIR="$(mktemp -d)"
+
+	mkdir -p "$TEST_DIR/subdir1" "$TEST_DIR/subdir2" "$TEST_DIR/subdir3"
+	# Create duplicates of "a":
+	echo "a" > "$TEST_DIR/file1.txt"
+	echo "a" > "$TEST_DIR/file9.txt"
+	echo "a" > "$TEST_DIR/subdir1/file2.txt"
+	echo "a" > "$TEST_DIR/subdir1/file5.txt"
+	# Create duplicates of "b":
+	echo "b" > "$TEST_DIR/subdir2/file3.txt"
+	echo "b" > "$TEST_DIR/subdir3/file4.txt"
+	# Create a unique file:
+	echo "c" > "$TEST_DIR/unique.txt"
+
+	echo "Created test files:"
+	find "$TEST_DIR" -type f
+
+	deduplicate_files "$TEST_DIR"
+
+	echo
+	echo "After deduplication:"
+	find "$TEST_DIR" -type f -o -type l | while IFS= read -r file; do
+		ls -l "$file"
+	done
+
+	rm -rf "$TEST_DIR"
 }
 
 check_dependencies() {
-    if ! command -v b3sum &>/dev/null; then
-        echo "Error: b3sum not found."
-        exit 2
-    fi
+	if ! command -v b3sum &>/dev/null; then
+		echo "ERROR: 'b3sum' not found. Please install Blake3."
+		exit 2
+	fi
+
+	if ! find --version 2>&1 | grep -qi 'GNU findutils'; then
+		echo "ERROR: This script requires GNU find (for -printf)."
+		exit 2
+	fi
+
+	if ! xargs --version 2>&1 | grep -qi 'GNU'; then
+		echo "ERROR: This script requires GNU xargs (for -P)."
+		exit 2
+	fi
 }
 
 deduplicate_files() {
-    local target_dir="$1"
-    local hash_file
-    hash_file=$(mktemp)
-    find "$target_dir" -type f -exec b3sum {} + | sort > "$hash_file"
-    declare -A hash_map
-    while read -r hash file; do
-        if [[ -n "${hash_map[$hash]:-}" ]]; then
-            original="${hash_map[$hash]}"
-            relative_path=$(realpath --relative-to="$(dirname "$file")" "$original")
-            rm -f "$file"
-            ln -s "$relative_path" "$file"
-        else
-            hash_map["$hash"]="$file"
-        fi
-    done < "$hash_file"
-    rm -f "$hash_file"
+	local target_dir="$1"
+	local cpu_count
+	cpu_count="$(detect_cpu_count)"
+
+	echo "Scanning files in: $target_dir"
+	echo "Detected CPU cores: $cpu_count"
+
+	local file_list
+	file_list="$(mktemp)"
+	find "$target_dir" -type f -printf '%s\t%p\0' > "$file_list"
+
+	if [[ ! -s "$file_list" ]]; then
+		echo "No regular files found. Nothing to deduplicate."
+		rm -f "$file_list"
+		return
+	fi
+
+	declare -A size_map
+	local total_bytes=0
+	local file_count=0
+
+	while IFS= read -r -d '' line; do
+		local fsize fpath
+		fsize="${line%%$'\t'*}"
+		fpath="${line#*$'\t'}"
+
+		(( file_count++ ))
+		(( total_bytes += fsize ))
+
+		if [[ -z "${size_map["$fsize"]+set}" ]]; then
+			size_map["$fsize"]="$fpath"
+		else
+			size_map["$fsize"]="${size_map["$fsize"]}"$'\n'"$fpath"
+		fi
+	done < "$file_list"
+
+	rm -f "$file_list"
+
+	local total_saved=0
+	local duplicate_count=0
+
+	for fsize in "${!size_map[@]}"; do
+		IFS=$'\n' read -r -d '' -a file_array < <(printf '%s\0' "${size_map[$fsize]}")
+
+		(( "${#file_array[@]}" > 1 )) || continue
+
+		local hash_input
+		hash_input="$(mktemp)"
+		printf '%s\0' "${file_array[@]}" > "$hash_input"
+
+		local hash_output
+		hash_output="$(mktemp)"
+		xargs -0 -n1 -P "$cpu_count" b3sum < "$hash_input" > "$hash_output"
+		rm -f "$hash_input"
+
+		declare -A hash_map=()
+		while IFS= read -r line; do
+			local hval="${line:0:64}"
+			local remainder="${line:64}"
+
+			remainder="${remainder#"${remainder%%[![:space:]]*}"}"
+
+			local fpath="$remainder"
+
+			if [[ -n "${hash_map[$hval]:-}" ]]; then
+				local original="${hash_map[$hval]}"
+				local rel_path
+				rel_path="$(realpath --relative-to="$(dirname "$fpath")" "$original")"
+
+				if [[ "$DRY_RUN" == true ]]; then
+					echo "[DRY-RUN] Would remove '$fpath' (size: $fsize) and symlink -> '$rel_path'"
+				else
+					rm -f "$fpath"
+					ln -s "$rel_path" "$fpath"
+				fi
+
+				(( duplicate_count++ ))
+				(( total_saved += fsize ))
+			else
+				hash_map["$hval"]="$fpath"
+			fi
+		done < "$hash_output"
+
+		rm -f "$hash_output"
+	done
+
+	echo
+	if [[ "$DRY_RUN" == true ]]; then
+		echo "===== DRY-RUN SUMMARY ====="
+		echo "Total files scanned:	 $file_count"
+		echo "Total bytes scanned:	 $total_bytes"
+		echo "Duplicate files found:   $duplicate_count"
+		echo "Space that would be saved: $total_saved bytes"
+	else
+		echo "===== DEDUPLICATION SUMMARY ====="
+		echo "Total files scanned:	  $file_count"
+		echo "Total bytes scanned:	  $total_bytes"
+		echo "Duplicate files replaced: $duplicate_count"
+		echo "Space actually saved:	 $total_saved bytes"
+	fi
 }
 
 main() {
-    local positionals=()
-    while [[ $# -gt 0 ]]; do
-        case $1 in
-            -h|--help)
-                print_help
-                exit 0
-                ;;
-            -T|--test)
-                setup_test_environment
-                exit 0
-                ;;
-            *)
-                positionals+=("$1")
-                shift
-                ;;
-        esac
-    done
-    if [[ ${#positionals[@]} -gt 1 ]]; then
-        print_help
-        exit 1
-    fi
-    if [[ ${#positionals[@]} -eq 1 ]]; then
-        ROOT_DIR="${positionals[0]}"
-    fi
-    check_dependencies
-    deduplicate_files "$ROOT_DIR"
+	local positionals=()
+
+	while [[ $# -gt 0 ]]; do
+		case $1 in
+			-h|--help)
+				print_help
+				exit 0
+				;;
+			-T|--test)
+				setup_test_environment
+				exit 0
+				;;
+			-n|--dry-run)
+				DRY_RUN=true
+				shift
+				;;
+			*)
+				positionals+=("$1")
+				shift
+				;;
+		esac
+	done
+
+	if [[ ${#positionals[@]} -gt 1 ]]; then
+		print_help
+		exit 1
+	fi
+
+	if [[ ${#positionals[@]} -eq 1 ]]; then
+		ROOT_DIR="${positionals[0]}"
+	fi
+
+	check_dependencies
+	deduplicate_files "$ROOT_DIR"
 }
 
 main "$@"

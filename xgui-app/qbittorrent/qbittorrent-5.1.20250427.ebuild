@@ -2,13 +2,14 @@
 
 EAPI=8
 
+BRANCH_NAME="v$(ver_cut 1)_$(ver_cut 2)_x"
+
 inherit xdg cmake user flag-o-matic
 
 DESCRIPTION="BitTorrent client in C++ and Qt"
 HOMEPAGE="https://www.qbittorrent.org/"
-
-SNAPSHOT=bc7d5c1f8f50fe1b4b09c3653eeb490d8733edb4
-SRC_URI="https://github.com/qbittorrent/qBittorrent/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=da87be2b12893dfb769df8124afeb064f099dc71
+SRC_URI="https://github.com/qbittorrent/qBittorrent/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/qBittorrent-${SNAPSHOT}"
 
 LICENSE="GPL-2"

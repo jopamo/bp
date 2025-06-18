@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake
+inherit cmake flag-o-matic
 
 DESCRIPTION="Cryptographic library for embedded systems"
 HOMEPAGE="https://tls.mbed.org/"
@@ -13,7 +13,7 @@ if [[ ${PV} = *9999 ]]; then
 	inherit git-r3
 else
 	SNAPSHOT=b38e960f24df88d84ea65259d5daef61f8b23787
-	SRC_URI="https://github.com/Mbed-TLS/mbedtls/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://github.com/Mbed-TLS/mbedtls/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S="${WORKDIR}/mbedtls-${SNAPSHOT}"
 fi
 
@@ -22,3 +22,5 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="dev-python/jsonschema"
+
+filter-lto

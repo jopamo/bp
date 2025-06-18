@@ -6,8 +6,7 @@ inherit cmake flag-o-matic
 
 DESCRIPTION="LXQt desktop panel and plugins"
 HOMEPAGE="http://lxqt.org/"
-
-SNAPSHOT=371f60fa806a89779a9c90ed5a1dce7b92126e0b
+SNAPSHOT=d51a88ae8b6e11cf9ef7c42b47b5f3dc53abfac6
 SRC_URI="https://github.com/lxqt/lxqt-panel/archive/${SNAPSHOT}.tar.gz -> lxqt-panel-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/lxqt-panel-${SNAPSHOT}"
 
@@ -24,11 +23,11 @@ DEPEND="
 	lib-util/glib
 	lib-misc/libqtxdg
 	xgui-tools/kguiaddons
-	xgui-tools/kwindowsystem:5
+	xgui-tools/kwindowsystem:6
 	xgui-lib/libX11
 	xgui-lib/liblxqt
 	xgui-lib/lxqt-globalkeys
-	xgui-lib/qtbase:5
+	xgui-lib/qtbase:6
 	xgui-misc/menu-cache
 	cpuload? ( lib-core/libstatgrab )
 	kbindicator? ( xgui-lib/libxkbcommon )

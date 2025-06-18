@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X.Org xset application"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=849b0d42f4cc0e54c56778626effe1e9f1ef238e
+SNAPSHOT=3fadaad29df656b69a64c463dd68dc35d09274b3
 SRC_URI="https://gitlab.freedesktop.org/xorg/app/xset/-/archive/${SNAPSHOT}/xset-${SNAPSHOT}.tar.bz2 -> xset-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/xset-${SNAPSHOT}"
 

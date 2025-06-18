@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X.Org Inter-Client Exchange library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=adf389fc19aedbf1be077b05365d164cd6f463d8
+SNAPSHOT=513399df5206f52db92bb88970f38dc8a3ea1645
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libICE/-/archive/${SNAPSHOT}/libICE-${SNAPSHOT}.tar.bz2 -> libICE-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libice-${SNAPSHOT}"
 

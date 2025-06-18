@@ -7,7 +7,7 @@ inherit meson flag-o-matic
 DESCRIPTION="VTE provides a virtual terminal widget for GTK applications."
 HOMEPAGE="https://github.com/GNOME/vte"
 
-SNAPSHOT=8beb36620662b99b894766fae7b8cf0c6b03ddd7
+SNAPSHOT=dc3074f98a1d6a93ceb2e94a152b3510b84e2d59
 SRC_URI="https://github.com/GNOME/vte/archive/${SNAPSHOT}.tar.gz -> vte-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/vte-${SNAPSHOT}"
 
@@ -17,13 +17,15 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	lib-dev/fast_float
+	app-dev/simdutf
+	app-dev/fmt
 	xgui-lib/gtk3
 	xgui-lib/gtk4
 "
 
 src_prepare() {
 	default
-	eapply "${FILESDIR}"/fix-W_EXITCODE.patch
+	#eapply "${FILESDIR}"/fix-W_EXITCODE.patch
 }
 
 src_configure() {
@@ -34,11 +36,11 @@ src_configure() {
 		-Dvapi=false
 		-Ddocs=false
 		-Dgir=false
-		-Dsixel=true
+		-Dsixel=false
 		-Dicu=false
 		-Dgnutls=true
 		-Dglade=true
-		-Dgtk3=true
+		-Dgtk3=false
 		)
 		meson_src_configure
 }

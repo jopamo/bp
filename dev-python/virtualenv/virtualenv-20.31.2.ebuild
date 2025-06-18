@@ -3,9 +3,10 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_TESTED=( python3_{11..14} pypy3_11 )
+PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_{13,14}t )
 
-inherit distutils-r1 multiprocessing pypi
+inherit distutils-r1 pypi
 
 DESCRIPTION="Virtual Python Environment builder"
 HOMEPAGE="
@@ -17,6 +18,8 @@ HOMEPAGE="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+IUSE="test"
+RESTRICT="!test? ( test )"
 
 RDEPEND="
 	>=dev-python/distlib-0.3.7[${PYTHON_USEDEP}]
@@ -32,30 +35,31 @@ RDEPEND="
 BDEPEND="
 	dev-python/hatch-vcs[${PYTHON_USEDEP}]
 	test? (
-		dev-python/coverage[${PYTHON_USEDEP}]
-		dev-python/flaky[${PYTHON_USEDEP}]
-		>=dev-python/pip-22.2.1[${PYTHON_USEDEP}]
+		${RDEPEND}
 		$(python_gen_cond_dep '
-			>=dev-python/pytest-freezer-0.4.6[${PYTHON_USEDEP}]
-		' pypy3)
-		>=dev-python/pytest-mock-3.6.1[${PYTHON_USEDEP}]
-		dev-python/pytest-xdist[${PYTHON_USEDEP}]
-		>=dev-py/setuptools-67.8[${PYTHON_USEDEP}]
+			dev-python/coverage[${PYTHON_USEDEP}]
+			dev-python/flaky[${PYTHON_USEDEP}]
+			>=dev-python/pip-22.2.1[${PYTHON_USEDEP}]
+			>=dev-python/pytest-mock-3.6.1[${PYTHON_USEDEP}]
+			dev-python/pytest-timeout[${PYTHON_USEDEP}]
+			dev-python/pytest-xdist[${PYTHON_USEDEP}]
+			>=dev-py/setuptools-67.8[${PYTHON_USEDEP}]
+			dev-python/wheel[${PYTHON_USEDEP}]
+			>=dev-python/packaging-20.0[${PYTHON_USEDEP}]
+		' "${PYTHON_TESTED[@]}")
 		$(python_gen_cond_dep '
 			dev-python/time-machine[${PYTHON_USEDEP}]
-		' 'python3*')
-		dev-python/wheel[${PYTHON_USEDEP}]
-		>=dev-python/packaging-20.0[${PYTHON_USEDEP}]
+		' python3_{11..13})
+		$(python_gen_cond_dep '
+			>=dev-python/pytest-freezer-0.4.6[${PYTHON_USEDEP}]
+		' 'pypy3*')
 	)
 "
-
-EPYTEST_TIMEOUT=180
-distutils_enable_tests pytest
 
 src_prepare() {
 	local PATCHES=(
 		# use wheels from ensurepip bundle
-		"${FILESDIR}/${PN}-20.26.3-ensurepip.patch"
+		"${FILESDIR}/${PN}-20.31.1-ensurepip.patch"
 	)
 
 	distutils-r1_src_prepare
@@ -71,6 +75,11 @@ src_prepare() {
 }
 
 python_test() {
+	if ! has "${EPYTHON}" "${PYTHON_TESTED[@]/_/.}"; then
+		einfo "Skipping testing on ${EPYTHON}"
+		return
+	fi
+
 	local EPYTEST_DESELECT=(
 		tests/unit/seed/embed/test_bootstrap_link_via_app_data.py::test_seed_link_via_app_data
 		# tests for old wheels with py3.7 support
@@ -83,16 +92,15 @@ python_test() {
 		tests/unit/seed/wheels/test_acquire.py::test_download_wheel_bad_output
 		# hangs on a busy system, sigh
 		tests/unit/test_util.py::test_reentrant_file_lock_is_thread_safe
+		# TODO
+		tests/unit/create/via_global_ref/test_build_c_ext.py::test_can_build_c_extensions
 	)
 	case ${EPYTHON} in
-		python3.1[23])
+		pypy3.11)
 			EPYTEST_DESELECT+=(
-				tests/unit/create/via_global_ref/test_build_c_ext.py
-			)
-			;&
-		python3.11)
-			EPYTEST_DESELECT+=(
-				# TODO
+				# these don't like the executable called pypy3.11?
+				tests/unit/activation/test_bash.py::test_bash
+				tests/unit/activation/test_fish.py::test_fish
 				tests/unit/discovery/py_info/test_py_info.py::test_fallback_existent_system_executable
 			)
 			;;
@@ -101,12 +109,14 @@ python_test() {
 	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	local -x TZ=UTC
 	local plugins=( -p flaky -p pytest_mock )
-	if [[ ${EPYTHON} == pypy3 ]]; then
+	if [[ ${EPYTHON} == pypy3* ]]; then
 		plugins+=( -p freezer )
 	else
 		plugins+=( -p time_machine )
 	fi
-	epytest "${plugins[@]}" -p xdist -n "$(makeopts_jobs)" --dist=worksteal
+	local EPYTEST_TIMEOUT=180
+	local EPYTEST_XDIST=1
+	epytest "${plugins[@]}"
 }
 
 src_install() {

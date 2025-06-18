@@ -2,14 +2,14 @@
 
 EAPI=8
 
-SNAPSHOT=bbbfd1f4f9b3f706fdcd3f4c23b8f6e30276df8d
+SNAPSHOT=919afe4f3c0e31300038cf3b79072affd236e8af
 
 inherit autotools
 
 DESCRIPTION="C library for the MaxMind DB file format"
 HOMEPAGE="https://github.com/maxmind/libmaxminddb"
-SRC_URI="https://github.com/maxmind/libmaxminddb/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/lib${PN}-${SNAPSHOT}
+SRC_URI="https://github.com/maxmind/libmaxminddb/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/libmaxminddb-${SNAPSHOT}
 
 LICENSE="Apache-2.0"
 SLOT="0"

@@ -8,14 +8,14 @@ inherit cmake flag-o-matic
 
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
-SNAPSHOT=6009708b4367171ccdbf4b5905cb6a803753fe18
+SNAPSHOT=6146a88f60492b520a36f8f8f3231e15f3cc6082
 
 SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
 
 LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
 
 IUSE="amdgpu arm assertions bootstrap bpf cuda debug libcxx libcxxabi libfuzzer nvptx orc sanitizers static_analyzer -sysclang syslibcxxabi test wasm xcore"
 

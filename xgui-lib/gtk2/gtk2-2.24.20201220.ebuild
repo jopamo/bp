@@ -2,6 +2,8 @@
 
 EAPI=8
 
+BRANCH_NAME="gtk-$(ver_cut 1)-$(ver_cut 2)"
+
 inherit autotools flag-o-matic
 
 DESCRIPTION="Gimp ToolKit +"

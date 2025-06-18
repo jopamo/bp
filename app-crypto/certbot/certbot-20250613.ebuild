@@ -6,10 +6,6 @@ DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1
 
-SRC_URI="
-		https://github.com/certbot/certbot/archive/v${PV}.tar.gz
-			-> ${P}.gh.tar.gz
-	"
 KEYWORDS="amd64 arm arm64 ~ppc64 ~riscv x86"
 
 DESCRIPTION="Let’s Encrypt client to automate deployment of X.509 certificates"
@@ -17,13 +13,14 @@ HOMEPAGE="
 	https://github.com/certbot/certbot
 	https://letsencrypt.org/
 "
+SNAPSHOT=a7e4ffb13bb458e3a18e05b73371f634214f892c
+SRC_URI="https://github.com/certbot/certbot/archive/${SNAPSHOT}.tar.gz -> certbot-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/certbot-${SNAPSHOT}/certbot"
 
 LICENSE="Apache-2.0"
 SLOT="0"
 
 IUSE="selinux"
-
-S="${WORKDIR}/${P}/${PN}"
 
 BDEPEND="
 	test? (

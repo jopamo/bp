@@ -6,9 +6,9 @@ inherit cmake
 
 DESCRIPTION="Plasma-specific protocols for Wayland"
 
-SNAPSHOT=5843146206c64de08997969ae9479f3bd5fb4c8c
-SRC_URI="https://github.com/KDE/plasma-wayland-protocols/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SNAPSHOT=49f4636681e1346e063fcd81de8c213b61e8962f
+SRC_URI="https://github.com/KDE/plasma-wayland-protocols/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/plasma-wayland-protocols-${SNAPSHOT}
 
 LICENSE="|| ( LGPL-2.1 LGPL-3 ) MIT"
 SLOT="0"

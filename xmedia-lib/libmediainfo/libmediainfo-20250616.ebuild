@@ -6,8 +6,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="MediaInfo libraries"
 HOMEPAGE="https://mediaarea.net/mediainfo/ https://github.com/MediaArea/MediaInfoLib"
-
-SNAPSHOT=b657447e750f9b88645b60f667438b83d12baa04
+SNAPSHOT=0773ea0b40cb2d0b7aa6fa800be34be56ce15ebd
 SRC_URI="https://github.com/MediaArea/MediaInfoLib/archive/${SNAPSHOT}.tar.gz -> MediaInfoLib-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/MediaInfoLib-${SNAPSHOT}/Project/GNU/Library"
 
@@ -15,7 +14,7 @@ LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="keep-la"
+IUSE="+keep-la"
 
 RESTRICT="test"
 
@@ -25,7 +24,7 @@ DEPEND="
 "
 
 src_prepare() {
-	filter-flags -Wl,-z,defs
+	filter-flags -Wl,-z,defs -flto*
 
 	default
 

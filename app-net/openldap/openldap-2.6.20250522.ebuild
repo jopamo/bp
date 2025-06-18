@@ -2,12 +2,15 @@
 
 EAPI=8
 
-inherit git-r3
+BRANCH_NAME="OPENLDAP_REL_ENG_$(ver_cut 1)_$(ver_cut 2)"
 
-DESCRIPTION="File transfer program to keep remote files into sync"
+inherit autotools
+
+DESCRIPTION="implementation of the Lightweight Directory Access Protocol"
 HOMEPAGE="https://www.openldap.org"
-EGIT_REPO_URI="https://github.com/openldap/openldap.git"
-EGIT_BRANCH="OPENLDAP_REL_ENG_$(ver_cut 1)_$(ver_cut 2)"
+SNAPSHOT=824bc1f8139a1c26135fc403b0755ef240c4728c
+SRC_URI="https://github.com/openldap/openldap/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/openldap-${SNAPSHOT}"
 
 LICENSE="OpenLDAP Public License"
 SLOT="0"

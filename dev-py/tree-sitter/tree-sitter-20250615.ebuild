@@ -6,18 +6,18 @@ DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{10..13} )
 
-inherit distutils-r1
+inherit distutils-r1 flag-o-matic
 
 DESCRIPTION="Python bindings to the Tree-sitter parsing library"
 HOMEPAGE="
 	https://github.com/tree-sitter/py-tree-sitter/
 	https://pypi.org/project/tree-sitter/
 "
-SRC_URI="
-	https://github.com/tree-sitter/py-tree-sitter/archive/v${PV}.tar.gz
-		-> ${P}.gh.tar.gz
-"
-S=${WORKDIR}/py-${P}
+
+MY_PN="py-tree-sitter"
+SNAPSHOT=24fcfe0ed8cdd8cc49756a52cfc135d42e083378
+SRC_URI="https://github.com/tree-sitter/py-tree-sitter/archive/${SNAPSHOT}.tar.gz -> ${MY_PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${MY_PN}-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"
@@ -40,20 +40,18 @@ BDEPEND="
 	)
 "
 
-distutils_enable_tests pytest
-
 PATCHES=(
-	"${FILESDIR}"/${PN}-0.22.2-unbundle.patch
+	"${FILESDIR}"/tree-sitter-0.22.2-unbundle.patch
 )
 
-src_unpack() {
-	filter-flags -Wl,-z,defs
-	default
-	rmdir "${S}/tree_sitter/core" || die
-}
+distutils_enable_tests pytest
 
 src_prepare() {
 	filter-flags -Wl,-z,defs
+
+	sed -i '/-Werror=implicit-function-declaration/d' setup.py || die
+	sed -i 's/ts_node_child_containing_descendant/ts_node_child_with_descendant/g' tree_sitter/binding/node.c || die
+
 	default
 
 	sed -i tree_sitter/binding/query.c -e 's/_PyErr_FormatFromCause/PyErr_Format/' || die

@@ -8,8 +8,8 @@ inherit autotools linux-info user toolchain-funcs
 
 DESCRIPTION="The Common Unix Printing System"
 HOMEPAGE="https://www.cups.org/"
-SRC_URI="https://github.com/apple/cups/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://github.com/apple/cups/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/cups-${SNAPSHOT}
 
 KEYWORDS="amd64 arm64"
 
@@ -35,9 +35,9 @@ BDEPEND="app-dev/pkgconf"
 PDEPEND="lib-print/cups-filters"
 
 PATCHES=(
-	"${FILESDIR}/${PN}-2.2.6-fix-install-perms.patch"
-	"${FILESDIR}/${PN}-1.4.4-nostrip.patch"
-	"${FILESDIR}/${PN}-2.3.3-user-AR.patch"
+	"${FILESDIR}/cups-2.2.6-fix-install-perms.patch"
+	"${FILESDIR}/cups-1.4.4-nostrip.patch"
+	"${FILESDIR}/cups-2.3.3-user-AR.patch"
 )
 
 RESTRICT="test"
@@ -134,7 +134,7 @@ src_install() {
 	if use pam; then
 		insinto etc/pam.d
 		insopts -m0644
-		newins "${FILESDIR}/${PN}.pam" ${PN}
+		newins "${FILESDIR}/cups.pam" cups
 	fi
 
 	keepdir /usr/libexec/cups/driver /usr/share/cups/{model,profiles} \

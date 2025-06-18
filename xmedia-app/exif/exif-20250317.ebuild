@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="Small CLI util to show EXIF infos hidden in JPEG files"
 HOMEPAGE="https://github.com/libexif"
 
-SNAPSHOT=bad99af4a8afd4b6a68654503d1318590526c191
+SNAPSHOT=db941c5f1dd515dddb7f73af2235e2fb037d3c36
 SRC_URI="https://github.com/libexif/exif/archive/${SNAPSHOT}.tar.gz -> exif-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/exif-${SNAPSHOT}"
 

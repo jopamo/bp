@@ -31,13 +31,13 @@ src_configure() {
 }
 
 src_install() {
-	dobin ${PN}4
-	dosym ${PN}4 /usr/bin/${PN}
+	dobin proxychains4
+	dosym proxychains4 /usr/bin/proxychains
 
-	dolib.so lib${PN}4.so.${PV}
-	dosym lib${PN}4.so.${PV} /usr/lib/lib${PN}.so.${PV:0:1}
-	dosym lib${PN}4.so.${PV} /usr/lib/lib${PN}.so
+	dolib.so libproxychains4.so.${PV}
+	dosym libproxychains4.so.${PV} /usr/lib/libproxychains.so.${PV:0:1}
+	dosym libproxychains4.so.${PV} /usr/lib/libproxychains.so
 
 	insinto /etc
-	doins src/${PN}.conf
+	doins src/proxychains.conf
 }

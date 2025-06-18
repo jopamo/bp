@@ -3,14 +3,14 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 
 inherit distutils-r1
 
 MY_P=python-${P}
 DESCRIPTION="Python library to sort collections and containers"
 HOMEPAGE="
-	https://www.grantjenks.com/docs/sortedcontainers/
+	https://grantjenks.com/docs/sortedcontainers/
 	https://github.com/grantjenks/python-sortedcontainers/
 	https://pypi.org/project/sortedcontainers/
 "

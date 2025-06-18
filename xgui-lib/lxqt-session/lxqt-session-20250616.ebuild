@@ -6,10 +6,9 @@ inherit cmake
 
 DESCRIPTION="Daemon used to register global keyboard shortcuts"
 HOMEPAGE="http://lxqt.org/"
-
-SNAPSHOT=230046e96f9d4eac16c5f448699619523cf5815c
-SRC_URI="https://github.com/lxqt/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SNAPSHOT=92da907dec5fe2f581fe0d66c2a4cdf4af977dc0
+SRC_URI="https://github.com/lxqt/lxqt-session/archive/${SNAPSHOT}.tar.gz -> lxqt-session-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/lxqt-session-${SNAPSHOT}"
 
 KEYWORDS="amd64 arm64"
 
@@ -17,3 +16,6 @@ LICENSE="LGPL-2.1+"
 SLOT="0"
 
 BDEPEND="app-dev/lxqt-build-tools"
+DEPEND="
+	xgui-lib/xdg-user-dirs
+	xgui-lib/qtxdg-tools"

@@ -53,5 +53,6 @@ src_configure() {
 }
 
 pkg_postinst() {
+	mkdir -p "${EROOT}"/usr/share/glib-2.0/gettext/
 	glib-compile-schemas "${EROOT}"/usr/share/glib-2.0/schemas/
 }

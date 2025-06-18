@@ -7,7 +7,7 @@ inherit autotools python-r1
 DESCRIPTION="X C-language Bindings protocol headers"
 HOMEPAGE="https://xcb.freedesktop.org/"
 
-SNAPSHOT=4d2879ad9e394ff832762e8961eca9415cc9934c
+SNAPSHOT=014540add5972b3dc2bb7b21ed60f968cf953848
 SRC_URI="https://gitlab.freedesktop.org/xorg/proto/xcbproto/-/archive/${SNAPSHOT}/xcbproto-${SNAPSHOT}.tar.bz2 -> xcbproto-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/xcbproto-${SNAPSHOT}"
 
@@ -23,7 +23,7 @@ src_prepare() {
 }
 
 src_configure() {
-	PYTHON=true default
+	PYTHON=python3 default
 }
 
 src_compile() {

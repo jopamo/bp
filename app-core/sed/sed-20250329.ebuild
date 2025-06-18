@@ -29,12 +29,12 @@ src_bootstrap_sed() {
 }
 
 src_prepare() {
-	busybox sed -i "s/UNKNOWN/4.8.${PV}/g" {configure,build-aux/git-version-gen} || die
-	busybox sed -i "/fdl.texi/d" doc/sed.texi || die
-	busybox sed -i "s/\ doc\/fdl.texi//g" doc/local.mk || die
-
 	default
 	src_bootstrap_sed
+
+	sed -i "s/UNKNOWN/4.8.${PV}/g" {configure,build-aux/git-version-gen} || die
+	sed -i "/fdl.texi/d" doc/sed.texi || die
+	sed -i "s/\ doc\/fdl.texi//g" doc/local.mk || die
 }
 
 src_configure() {

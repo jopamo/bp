@@ -9,7 +9,9 @@ inherit distutils-r1 flag-o-matic
 
 DESCRIPTION="Smart card support in python"
 HOMEPAGE="https://github.com/LudovicRousseau/pyscard/"
-SRC_URI="https://downloads.sourceforge.net/project/pyscard/pyscard/pyscard%20${PV}/${P}.tar.gz"
+SNAPSHOT=ae2229e8033d7b294514d02db3c69205d56397df
+SRC_URI="https://github.com/LudovicRousseau/pyscard/archive/${SNAPSHOT}.tar.gz -> pyscard-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/pyscard-${SNAPSHOT}"
 
 LICENSE="LGPL-2.1"
 SLOT="0"

@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( pypy3 python3_{10..13} python3_13t )
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} python3_{13,14}t )
 
 inherit distutils-r1 pypi
 
@@ -32,6 +32,9 @@ src_configure() {
 		name = "trove-classifiers"
 		version = "${PV}"
 		description = "Canonical source for classifiers on PyPI (pypi.org)."
+
+		[project.scripts]
+		trove-classifiers = "trove_classifiers.__main__:cli"
 	EOF
 }
 

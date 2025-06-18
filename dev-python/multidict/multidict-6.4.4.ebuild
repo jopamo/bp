@@ -4,7 +4,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 
 inherit distutils-r1
 
@@ -23,23 +23,26 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="+native-extensions"
 
-RDEPEND="
-	$(python_gen_cond_dep '
-		>=dev-python/typing-extensions-4.1.0[${PYTHON_USEDEP}]
-	' 3.10)
+BDEPEND="
+	test? (
+		dev-python/objgraph[${PYTHON_USEDEP}]
+	)
 "
 
 distutils_enable_tests pytest
 
 python_prepare_all() {
+	filter-flags -Wl,-z,defs
 	# don't enable coverage or other pytest settings
 	sed -i -e '/cov/d' pytest.ini || die
+	# don't force -O3
+	sed -i -e 's:"-O3"::' setup.py || die
 	distutils-r1_python_prepare_all
 }
 
 python_compile() {
 	filter-flags -Wl,-z,defs
-	if ! use native-extensions || [[ ${EPYTHON} == pypy3 ]]; then
+	if ! use native-extensions || [[ ${EPYTHON} == pypy3* ]]; then
 		local -x MULTIDICT_NO_EXTENSIONS=1
 	fi
 
@@ -47,10 +50,15 @@ python_compile() {
 }
 
 python_test() {
+	local EPYTEST_IGNORE=(
+		tests/test_multidict_benchmarks.py
+		tests/test_views_benchmarks.py
+	)
+
 	rm -rf multidict || die
 
 	local cext=--c-extensions
-	if ! use native-extensions || [[ ${EPYTHON} == pypy3 ]]; then
+	if ! use native-extensions || [[ ${EPYTHON} == pypy3* ]]; then
 		cext=--no-c-extensions
 	fi
 	epytest "${cext}"

@@ -2,14 +2,14 @@
 
 EAPI=8
 
-SNAPSHOT=11c6e46cb2936b265362527f45f00a9cace4c790
+SNAPSHOT=433e17b9bccf4417725744316dff8a44caedcbcc
 SHORT=${SNAPSHOT:0:7}
 
 inherit autotools
 
 DESCRIPTION="A library for manipulating integer points bounded by linear constraints"
 HOMEPAGE="http://isl.gforge.inria.fr/"
-SRC_URI="https://repo.or.cz/isl.git/snapshot/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://repo.or.cz/isl.git/snapshot/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/isl-${SHORT}
 
 LICENSE="LGPL-2.1"

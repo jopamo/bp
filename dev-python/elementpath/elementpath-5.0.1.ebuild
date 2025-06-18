@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
 
@@ -19,8 +19,8 @@ KEYWORDS="amd64 arm64"
 
 BDEPEND="
 	test? (
-		dev-python/lxml[${PYTHON_USEDEP}]
-		>=dev-python/xmlschema-3.3.2[${PYTHON_USEDEP}]
+		dev-py/lxml[${PYTHON_USEDEP}]
+		>=dev-python/xmlschema-4.0.1[${PYTHON_USEDEP}]
 	)
 "
 

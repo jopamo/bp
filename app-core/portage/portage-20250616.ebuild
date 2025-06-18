@@ -6,10 +6,9 @@ inherit meson linux-info multiprocessing python-r1 flag-o-matic user
 
 DESCRIPTION="Gentoo package manager"
 HOMEPAGE="https://github.com/gentoo/portage"
-
-SNAPSHOT=c75b61b523457f8798c66afe4bcdc1708408ea00
-SRC_URI="https://github.com/gentoo/portage/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SNAPSHOT=35f28ac4b092dac66588081d97c1f64404be2f87
+SRC_URI="https://github.com/gentoo/portage/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/portage-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -19,7 +18,7 @@ IUSE="build gentoo-dev +ipc +native-extensions
 	gentoo_repo tmpfilesd sysusersd +rsync-verify selinux test xattr"
 
 DEPEND="
-	app-util/patch
+	app-build/patch
 	app-compression/tar
 	app-core/sed
 "
@@ -33,7 +32,7 @@ RDEPEND="
 	app-core/sed
 	app-crypto/gnupg
 	app-var/eselect
-	dev-python/lxml[${PYTHON_USEDEP}]
+	dev-py/lxml[${PYTHON_USEDEP}]
 "
 PDEPEND="app-net/rsync"
 
@@ -66,13 +65,9 @@ src_prepare() {
 # Try to save bandwidth/disk space
 EGIT_CLONE_TYPE=shallow
 
-# The compression used for binary packages.
-BINPKG_COMPRESS="xz"
+BINPKG_COMPRESS="zstd"
 BINPKG_COMPRESS_FLAGS="-e9"
-
-# The format used for binary packages. The default is use old "xpak" format.
-# Set to "gpkg" to use new gentoo binary package format.
-BINPKG_FORMAT="xpak"
+BINPKG_FORMAT="gpkg"
 EOF
 }
 
@@ -127,7 +122,7 @@ src_install() {
 	if use tmpfilesd; then
 		insopts -m 0644
 		insinto /usr/lib/tmpfiles.d
-		newins "${FILESDIR}/${PN}-tmpfiles" ${PN}.conf
+		newins "${FILESDIR}/portage-tmpfiles" portage.conf
 	fi
 
 	local scripts
@@ -194,9 +189,9 @@ pkg_preinst() {
 	if use sysusersd; then
 		insopts -m 0644
 		insinto /usr/lib/sysusers.d
-		newins "${FILESDIR}/${PN}-sysusers" ${PN}.conf
+		newins "${FILESDIR}/portage-sysusers" portage.conf
 	else
-		enewgroup ${PN} 250
+		enewgroup portage 250
 		enewuser portage 250 -1 /var/lib/portage/home portage
 	fi
 }

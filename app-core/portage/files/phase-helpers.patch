@@ -1,12 +1,10 @@
 diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
---- a/bin/phase-helpers.sh	2021-06-06 16:09:52.348518700 -0500
-+++ b/bin/phase-helpers.sh	2021-06-06 16:15:45.135284584 -0500
-@@ -693,7 +693,11 @@
- 			--infodir="${EPREFIX}"/usr/share/info \
+--- a/bin/phase-helpers.sh	2025-06-09 07:54:26.511821273 -0400
++++ b/bin/phase-helpers.sh	2025-06-09 08:20:00.036269218 -0400
+@@ -640,6 +640,10 @@
  			--datadir="${EPREFIX}"/usr/share \
  			--sysconfdir="${EPREFIX}"/etc \
--			--localstatedir="${EPREFIX}"/var/lib \
-+			--localstatedir="${EPREFIX}"/var \
+ 			--localstatedir="${EPREFIX}"/var/lib \
 +			--libdir="${EPREFIX}"/usr/lib \
 +			--bindir="${EPREFIX}"/usr/bin \
 +			--sbindir="${EPREFIX}"/usr/bin \
@@ -14,107 +12,35 @@ diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
  			"${conf_args[@]}" \
  			"$@" \
  			"${EXTRA_ECONF[@]}"
-@@ -746,9 +750,13 @@
- 			${MAKE:-make} -n prefix="${ED%/}/usr" \
- 				datadir="${ED%/}/usr/share" \
- 				infodir="${ED%/}/usr/share/info" \
--				localstatedir="${ED%/}/var/lib" \
-+				localstatedir="${ED%/}/var" \
- 				mandir="${ED%/}/usr/share/man" \
- 				sysconfdir="${ED%/}/etc" \
-+				libdir="${ED%/}/usr/lib" \
-+				bindir="${ED%/}/usr/bin" \
-+				sbindir="${ED%/}/usr/bin" \
-+				libexecdir="${ED%/}/usr/libexec" \
- 				${LOCAL_EXTRA_EINSTALL} \
- 				${MAKEOPTS} -j1 \
- 				"$@" ${EXTRA_EMAKE} install
-@@ -756,9 +764,13 @@
- 		if ! ${MAKE:-make} prefix="${ED%/}/usr" \
- 			datadir="${ED%/}/usr/share" \
- 			infodir="${ED%/}/usr/share/info" \
--			localstatedir="${ED%/}/var/lib" \
-+			localstatedir="${ED%/}/var" \
- 			mandir="${ED%/}/usr/share/man" \
- 			sysconfdir="${ED%/}/etc" \
-+			libdir="${ED%/}/usr/lib" \
-+			bindir="${ED%/}/usr/bin" \
-+			sbindir="${ED%/}/usr/bin" \
-+			libexecdir="${ED%/}/usr/libexec" \
- 			${LOCAL_EXTRA_EINSTALL} \
- 			${MAKEOPTS} -j1 \
- 			"$@" ${EXTRA_EMAKE} install
-@@ -840,17 +852,7 @@
+@@ -787,22 +791,6 @@
+ 	if [[ -f Makefile || -f GNUmakefile || -f makefile ]] ; then
  		emake DESTDIR="${D}" install
  	fi
- 
+-
+-	# To use declare -p determines whether a variable was declared but not
+-	# whether it was set. Unfortunately, the language of EAPI 4 requires
+-	# that it be this way.
+-	# https://projects.gentoo.org/pms/4/pms.html#x1-10400010.1.9
 -	if ! declare -p DOCS &>/dev/null ; then
 -		local d
 -		for d in README* ChangeLog AUTHORS NEWS TODO CHANGES \
 -				THANKS BUGS FAQ CREDITS CHANGELOG ; do
 -			[[ -s "${d}" ]] && dodoc "${d}"
 -		done
--	elif ___is_indexed_array_var DOCS ; then
+-	elif [[ ${DOCS@a} == *a* ]] ; then
 -		dodoc "${DOCS[@]}"
 -	else
 -		dodoc ${DOCS}
 -	fi
-+	cleanup_install
  }
  
  __eapi6_src_prepare() {
-@@ -868,7 +870,7 @@
+@@ -819,8 +807,6 @@
+ 	if [[ -f Makefile || -f GNUmakefile || -f makefile ]] ; then
  		emake DESTDIR="${D}" install
  	fi
- 
+-
 -	einstalldocs
-+	cleanup_install
  }
  
  __eapi8_src_prepare() {
-@@ -980,45 +982,6 @@
- 	___best_version_and_has_version_common "$@"
- }
- 
--if ___eapi_has_get_libdir; then
--	get_libdir() {
--		local libdir_var="LIBDIR_${ABI}"
--		local libdir="lib"
--
--		[[ -n ${ABI} && -n ${!libdir_var} ]] && libdir=${!libdir_var}
--
--		echo "${libdir}"
--	}
--fi
--
--if ___eapi_has_einstalldocs; then
--	einstalldocs() {
--		(
--			if [[ $(declare -p DOCS 2>/dev/null) != *=* ]]; then
--				local d
--				for d in README* ChangeLog AUTHORS NEWS TODO CHANGES \
--						THANKS BUGS FAQ CREDITS CHANGELOG ; do
--					[[ -f ${d} && -s ${d} ]] && docinto / && dodoc "${d}"
--				done
--			elif ___is_indexed_array_var DOCS ; then
--				[[ ${#DOCS[@]} -gt 0 ]] && docinto / && dodoc -r "${DOCS[@]}"
--			else
--				[[ ${DOCS} ]] && docinto / && dodoc -r ${DOCS}
--			fi
--		)
--
--		(
--			if ___is_indexed_array_var HTML_DOCS ; then
--				[[ ${#HTML_DOCS[@]} -gt 0 ]] && \
--					docinto html && dodoc -r "${HTML_DOCS[@]}"
--			else
--				[[ ${HTML_DOCS} ]] && \
--					docinto html && dodoc -r ${HTML_DOCS}
--			fi
--		)
--	}
--fi
--
- if ___eapi_has_eapply; then
- 	eapply() {
- 		local failed patch_cmd=patch

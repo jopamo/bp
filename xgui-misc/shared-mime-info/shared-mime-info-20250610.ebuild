@@ -27,7 +27,7 @@ src_prepare() {
 
 src_configure() {
 	local emesonargs=(
-		-D build-tools=false
+		-D build-tools=true
 		-D build-translations=false
 		-D build-tests=false
 		)

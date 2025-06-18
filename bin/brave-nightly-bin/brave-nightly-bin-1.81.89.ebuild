@@ -52,4 +52,8 @@ src_install() {
 	fperms 0755 /usr/bin/${PN}
 	fperms 0755 /opt/brave.com/brave-nightly/brave-browser-nightly
 	fperms 4755 /opt/brave.com/brave-nightly/chrome-sandbox
+
+	insopts -m 0644
+	insinto /usr/share/pixmaps
+	doins "${FILESDIR}"/brave.svg
 }

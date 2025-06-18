@@ -30,27 +30,20 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-		--docdir="\$(datarootdir)/doc/${PF}"
-		--without-emacs
-		--without-lispdir
+		$(use_enable acl)
+		$(use_enable openmp)
+		$(use_enable static-libs static)
+		--enable-c++
+		--enable-libasprintf
+		--enable-nls
+		--with-included-gettext
 		--with-included-glib
 		--with-included-libcroco
 		--with-included-libunistring
-		--without-included-libxml
-		--with-included-gettext
-		--enable-c++
-		--enable-libasprintf
-		$(use_enable acl)
-		--enable-nls
 		--with-xz
-		$(use_enable openmp)
-		$(use_enable static-libs static)
+		--without-emacs
+		--without-included-libxml
+		--without-lispdir
 	)
 
 	local ECONF_SOURCE=${S}
@@ -79,7 +72,16 @@ src_install() {
 	dosym -r /usr/share/gettext /usr/share/gettext-${PV}
 	rm "${ED}"/usr/share/gettext/its/gtkbuilder.its
 
+	mkdir -p "${ED}"/usr/share/aclocal
+	cp "${ED}"/usr/share/gettext/m4/* "${ED}"/usr/share/aclocal/
+
+	rm -rf "${ED}"/usr/share/gettext/m4
+
+	dosym -r /usr/share/aclocal /usr/share/gettext/m4
+
 	if ! use keep-la; then
 		find "${ED}" -name '*.la' -delete || die
 	fi
 }
+
+

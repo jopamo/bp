@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 
 inherit distutils-r1 pypi
 
@@ -19,13 +19,6 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	>=dev-python/packaging-19[${PYTHON_USEDEP}]
-"
-BDEPEND="
-	test? (
-		$(python_gen_cond_dep '
-			>=dev-python/tomli-1.0.0[${PYTHON_USEDEP}]
-		' 3.10)
-	)
 "
 
 distutils_enable_tests pytest

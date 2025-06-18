@@ -6,10 +6,9 @@ inherit flag-o-matic toolchain-funcs autotools
 
 DESCRIPTION="Standard EXT2/EXT3/EXT4 filesystem utilities"
 HOMEPAGE="http://ext4.wiki.kernel.org/"
-
-SNAPSHOT=ef4e0825eee3d720a2df762249f0e80bb5f3ef3b
-SRC_URI="https://github.com/tytso/e2fsprogs/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SNAPSHOT=386e7db5e6d87e42001803de314d6568105cd8ee
+SRC_URI="https://github.com/tytso/e2fsprogs/archive/${SNAPSHOT}.tar.gz -> e2fsprogs-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/e2fsprogs-${SNAPSHOT}"
 
 LICENSE="GPL-2 BSD"
 SLOT="0"
@@ -27,10 +26,6 @@ BDEPEND="
 	app-build/texinfo
 "
 
-src_prepare() {
-	default
-	eautoreconf
-}
 
 src_configure() {
 	append-cflags -fno-strict-aliasing

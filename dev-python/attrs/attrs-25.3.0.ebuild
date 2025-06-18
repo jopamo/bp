@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 
 inherit distutils-r1 pypi
 
@@ -24,10 +24,30 @@ BDEPEND="
 	dev-python/hatch-vcs[${PYTHON_USEDEP}]
 	test? (
 		$(python_gen_impl_dep sqlite)
-		dev-python/cloudpickle[${PYTHON_USEDEP}]
 		dev-python/hypothesis[${PYTHON_USEDEP}]
-		dev-python/zope-interface[${PYTHON_USEDEP}]
+		$(python_gen_cond_dep '
+			dev-python/zope-interface[${PYTHON_USEDEP}]
+		' python3_{10..13} 'pypy*')
+		$(python_gen_cond_dep '
+			dev-python/cloudpickle[${PYTHON_USEDEP}]
+		' python3_{10..13} pypy3)
 	)
 "
 
 distutils_enable_tests pytest
+
+python_test() {
+	local EPYTEST_DESELECT=()
+
+	case ${EPYTHON} in
+		pypy3*)
+			EPYTEST_DESELECT+=(
+				# https://github.com/python-attrs/attrs/issues/1418
+				tests/test_make.py::TestClassBuilder::test_handles_missing_meta_on_class
+			)
+			;;
+	esac
+
+	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
+	epytest
+}

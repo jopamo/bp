@@ -7,9 +7,9 @@ inherit flag-o-matic autotools
 DESCRIPTION="A selection of tools from Debian"
 HOMEPAGE="https://packages.qa.debian.org/d/debianutils.html"
 
-SNAPSHOT=ae002b498f2e310c934a0b3f0992e83391f108c7
-SRC_URI="https://salsa.debian.org/debian/debianutils/-/archive/${SNAPSHOT}/debianutils-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SNAPSHOT=ab0eaf33b783ba578773af2557753d2b973ba5bb
+SRC_URI="https://salsa.debian.org/debian/debianutils/-/archive/${SNAPSHOT}/debianutils-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/debianutils-${SNAPSHOT}"
 
 LICENSE="BSD GPL-2 SMAIL"
 SLOT="0"
@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+installkernel savelog static tempfile"
 
-PATCHES=( "${FILESDIR}"/${PN}-3.4.2-no-bs-namespace.patch )
+PATCHES=( "${FILESDIR}"/debianutils-3.4.2-no-bs-namespace.patch )
 
 src_prepare() {
 	sed -i -e '/SUBDIRS/s|po4a||' Makefile.am || die

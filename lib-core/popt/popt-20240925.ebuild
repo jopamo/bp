@@ -8,7 +8,7 @@ DESCRIPTION="Parse Options - Command line parser"
 HOMEPAGE="http://rpm5.org/"
 
 SNAPSHOT=63f096798125e96a0125faa477350f61901f3570
-SRC_URI="https://github.com/rpm-software-management/popt/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/rpm-software-management/popt/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/popt-${SNAPSHOT}
 
 LICENSE="MIT"

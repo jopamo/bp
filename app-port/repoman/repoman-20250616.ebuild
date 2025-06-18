@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	inherit
 	S="${WORKDIR}/${P}/repoman"
 else
-	SNAPSHOT=605ad0d675a64eb39144122cf284100192cdfea0
+SNAPSHOT=35f28ac4b092dac66588081d97c1f64404be2f87
 	SRC_URI="https://github.com/gentoo/portage/archive/${SNAPSHOT}.tar.gz -> portage-${PV}.tar.gz"
 	S=${WORKDIR}/portage-${SNAPSHOT}/repoman
 fi
@@ -23,7 +23,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	app-core/portage
-	>=dev-python/lxml-3.6.0[${PYTHON_USEDEP}]
+	>=dev-py/lxml-3.6.0[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 "
 

@@ -2,13 +2,15 @@
 
 EAPI=8
 
+BRANCH_NAME="release/$(ver_cut 1-2)"
+
 inherit flag-o-matic
 
 DESCRIPTION="Complete solution to record, convert and stream audio and video. Includes libavcodec"
 HOMEPAGE="http://ffmpeg.org/"
 
-SNAPSHOT=b168ed9b146337e7bd3c218c5d1c0f7e88bf1315
-SRC_URI="https://github.com/FFmpeg/FFmpeg/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=0f1fe3d153e8869b4e768a548ad9b5148a45280f
+SRC_URI="https://github.com/FFmpeg/FFmpeg/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/FFmpeg-${SNAPSHOT}"
 
 LICENSE="GPL-3"

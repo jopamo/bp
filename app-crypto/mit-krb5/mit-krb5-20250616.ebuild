@@ -6,8 +6,9 @@ inherit autotools toolchain-funcs
 
 DESCRIPTION="MIT Kerberos V"
 HOMEPAGE="https://web.mit.edu/kerberos/www/"
-SRC_URI="https://kerberos.org/dist/krb5/$(ver_cut 1-2)/krb5-${PV}.tar.gz"
-S="${WORKDIR}/krb5-${PV}/src"
+SNAPSHOT=ae8801b8e12d198f11f9279c747f8fa6d48c593e
+SRC_URI="https://github.com/krb5/krb5/archive/${SNAPSHOT}.tar.gz -> mit-krb5-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/krb5-${SNAPSHOT}/src"
 
 LICENSE="openafs-krb5-a BSD MIT OPENLDAP BSD-2 HPND BSD-4 ISC RSA CC-BY-SA-3.0 || ( BSD-2 GPL-2+ )"
 SLOT="0"
@@ -25,10 +26,10 @@ DEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-1.12_warn_cflags.patch"
-	"${FILESDIR}/${PN}-config_LDFLAGS-r1.patch"
-	"${FILESDIR}/${PN}_dont_create_rundir.patch"
-	"${FILESDIR}/${PN}-1.18.2-krb5-config.patch"
+	"${FILESDIR}/mit-krb5-1.12_warn_cflags.patch"
+	"${FILESDIR}/mit-krb5-config_LDFLAGS-r1.patch"
+	"${FILESDIR}/mit-krb5_dont_create_rundir.patch"
+	"${FILESDIR}/mit-krb5-1.18.2-krb5-config.patch"
 )
 
 src_prepare() {

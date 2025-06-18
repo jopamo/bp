@@ -2,6 +2,8 @@
 
 EAPI=8
 
+BRANCH_NAME="v$(ver_cut 1)-$(ver_cut 2)-stable"
+
 inherit linux-info git-r3 flag-o-matic
 
 DESCRIPTION="Samba Suite Version 4"

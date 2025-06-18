@@ -12,3 +12,15 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="app-lang/perl:="
 DEPEND="${RDEPEND}"
+
+src_prepare() {
+	default
+	touch "will-cite"
+}
+
+src_install() {
+	default
+
+	insinto /etc/parallel
+	doins will-cite
+}

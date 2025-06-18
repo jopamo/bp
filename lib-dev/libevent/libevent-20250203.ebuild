@@ -8,8 +8,8 @@ DESCRIPTION="Library to execute a function when a specific event occurs on a fil
 HOMEPAGE="http://libevent.org/"
 
 SNAPSHOT=112421c8fa4840acd73502f2ab6a674fc025de37
-SRC_URI="https://github.com/libevent/libevent/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://github.com/libevent/libevent/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/libevent-${SNAPSHOT}
 
 LICENSE="BSD"
 SLOT="0"

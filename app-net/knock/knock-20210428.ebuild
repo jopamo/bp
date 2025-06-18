@@ -12,8 +12,8 @@ if [[ ${PV} = *9999 ]]; then
 	inherit git-r3
 else
 	SNAPSHOT=cb163f1509f57698c40a1bd8d1d6891af608a18b
-	SRC_URI="https://github.com/jvinet/knock/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
+	SRC_URI="https://github.com/jvinet/knock/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+	S=${WORKDIR}/knock-${SNAPSHOT}
 fi
 
 LICENSE="GPL-2"

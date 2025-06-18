@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X.Org Xfixes library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=c1cab28e27dd1c5a81394965248b57e490ccf2ca
+SNAPSHOT=f50dd4df16163da731ad9f251cc98b9ccd0e7455
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXfixes/-/archive/${SNAPSHOT}/libXfixes-${SNAPSHOT}.tar.bz2 -> libXfixes-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxfixes-${SNAPSHOT}"
 

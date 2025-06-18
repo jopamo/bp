@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
 else
 	SNAPSHOT=75dcdc2cf37478fad6c0e3427403d198b554951d
-	SRC_URI="https://github.com/tuxera/ntfs-3g/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://github.com/tuxera/ntfs-3g/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/ntfs-3g-${SNAPSHOT}
 fi
 

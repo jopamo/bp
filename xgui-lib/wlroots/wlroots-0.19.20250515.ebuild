@@ -2,12 +2,14 @@
 
 EAPI=8
 
+BRANCH_NAME="$(ver_cut 1-2)"
+
 inherit meson
 
 DESCRIPTION="A modular Wayland compositor library"
 HOMEPAGE="https://github.com/swaywm/wlroots"
 
-SNAPSHOT=cda69b696d65a53d5d5e75dfed059a3803e0d700
+SNAPSHOT=13a62a23a258d96f902c740310d5c7c59784a4d1
 SRC_URI="https://gitlab.freedesktop.org/wlroots/wlroots/-/archive/${SNAPSHOT}/wlroots-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/wlroots-${SNAPSHOT}"
 

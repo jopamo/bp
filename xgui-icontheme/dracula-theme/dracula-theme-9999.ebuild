@@ -2,19 +2,20 @@
 
 EAPI=8
 
+inherit git-r3
+
 DESCRIPTION="Dracula gtk theme"
 HOMEPAGE="https://github.com/dracula/gtk"
 
-SNAPSHOT=fbc19694354e918f2a0df4a10b02f2127f69c441
-SRC_URI="https://github.com/dracula/gtk/archive/${SNAPSHOT}.tar.gz -> gtk-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/gtk-${SNAPSHOT}"
+EGIT_REPO_URI="https://github.com/dracula/dracula-theme.git"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+EGIT_SUBMODULES=( 'gtk' )
+
 src_install() {
-	rm -r kde || die
 	insinto /usr/share/themes/dracula
-	doins -r .
+	doins -r themes/gtk/*
 }

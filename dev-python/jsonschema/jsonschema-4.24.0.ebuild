@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( pypy3 python3_{10..13} )
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 pypi
 
@@ -21,7 +21,7 @@ RDEPEND="
 	>=dev-python/attrs-22.2.0[${PYTHON_USEDEP}]
 	>=dev-python/jsonschema-specifications-2023.03.6[${PYTHON_USEDEP}]
 	>=dev-python/referencing-0.28.4[${PYTHON_USEDEP}]
-	>=dev-python/rpds-py-0.7.1[${PYTHON_USEDEP}]
+	>=dev-py/rpds-py-0.7.1[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	dev-python/hatch-vcs[${PYTHON_USEDEP}]

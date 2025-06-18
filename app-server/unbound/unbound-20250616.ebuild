@@ -6,8 +6,7 @@ inherit flag-o-matic python-single-r1 user autotools
 
 DESCRIPTION="A validating, recursive and caching DNS resolver"
 HOMEPAGE="http://unbound.net/"
-
-SNAPSHOT=5e1f35b59b7f4d8731be6f2f2090bc2aad180301
+SNAPSHOT=f066d6d4534227ff0e421cc0af13c1b02fc83ea1
 SRC_URI="https://github.com/NLnetLabs/unbound/archive/${SNAPSHOT}.tar.gz -> unbound-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/unbound-${SNAPSHOT}"
 
@@ -89,14 +88,14 @@ src_install() {
 	if use systemd; then
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
-		doins "${FILESDIR}/${PN}.service"
+		doins "${FILESDIR}/unbound.service"
 		doins "${FILESDIR}"/unbound-anchor.service
 	fi
 
-	exeinto /usr/share/${PN}
+	exeinto /usr/share/unbound
 	doexe contrib/update-anchor.sh
 
 	insinto /etc/unbound
 	insopts -m 0755
-	doins "${FILESDIR}/${PN}.conf"
+	doins "${FILESDIR}/unbound.conf"
 }

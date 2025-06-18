@@ -4,11 +4,12 @@ EAPI=8
 
 inherit flag-o-matic toolchain-funcs
 
-NO_DOT_PV=$(ver_rs 1- '')
 DESCRIPTION="Free file archiver for extremely high compression"
 HOMEPAGE="https://www.7-zip.org/ https://sourceforge.net/projects/sevenzip/"
-SRC_URI="https://downloads.sourceforge.net/sevenzip/7-Zip/${PV}/7z${NO_DOT_PV}-src.tar.xz"
-S="${WORKDIR}"
+
+SNAPSHOT=e5431fa6f5505e385c6f9367260717e9c47dc2ee
+SRC_URI="https://github.com/ip7z/7zip/archive/${SNAPSHOT}.tar.gz -> 7zip-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/7zip-${SNAPSHOT}"
 
 LICENSE="LGPL-2 BSD unRAR"
 SLOT="0"

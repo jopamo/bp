@@ -7,7 +7,7 @@ inherit autotools flag-o-matic
 DESCRIPTION="X.Org X11 library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=23f0352eca362515d598bfdbd8ecec070dcd1b28
+SNAPSHOT=7f8305c779ac6948d7261764f5ffb8ae9aa975b1
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libX11/-/archive/${SNAPSHOT}/libX11-${SNAPSHOT}.tar.bz2 -> libX11-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libx11-${SNAPSHOT}"
 

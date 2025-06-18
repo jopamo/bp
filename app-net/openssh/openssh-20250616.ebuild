@@ -6,10 +6,9 @@ inherit flag-o-matic autotools user
 
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="http://www.openssh.org/"
-
-SNAPSHOT=0cbeedba81b57c56379e1d202b9ccd3b72af7ddc
-SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-portable-${SNAPSHOT}
+SNAPSHOT=1e8347e3543a415067ccc556aefea97656ecafb7
+SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/openssh-portable-${SNAPSHOT}
 
 LICENSE="BSD GPL-2"
 SLOT="0"
@@ -96,7 +95,7 @@ src_install() {
 	if use tmpfilesd; then
 		insopts -m 0644
 		insinto /usr/lib/tmpfiles.d
-		newins "${FILESDIR}/${PN}-tmpfiles" ${PN}.conf
+		newins "${FILESDIR}/openssh-tmpfiles" openssh.conf
 	fi
 
 	dobin contrib/ssh-copy-id
@@ -107,7 +106,7 @@ pkg_preinst() {
 	if use sysusersd; then
 		insopts -m 0644
 		insinto /usr/lib/sysusers.d
-		newins "${FILESDIR}/${PN}-sysusers" ${PN}.conf
+		newins "${FILESDIR}/openssh-sysusers" openssh.conf
 	else
 		enewgroup sshd 22
 		enewuser sshd 22 -1 -1 sshd

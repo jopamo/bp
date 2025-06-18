@@ -3,8 +3,8 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_TESTED=( python3_{10..13} pypy3 )
-PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_13t )
+PYTHON_TESTED=( python3_{11..14} pypy3_11 )
+PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_{13,14}t )
 
 inherit distutils-r1 pypi
 
@@ -26,11 +26,7 @@ RDEPEND="
 	dev-python/packaging[${PYTHON_USEDEP}]
 	<dev-python/pluggy-2[${PYTHON_USEDEP}]
 	>=dev-python/pluggy-1.5.0[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep '
-		>=dev-python/exceptiongroup-1.0.0_rc8[${PYTHON_USEDEP}]
-		>=dev-python/tomli-1[${PYTHON_USEDEP}]
-	' 3.10)
-	!!<=dev-python/flaky-3.7.0-r5
+	>=dev-python/pygments-2.7.2[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	>=dev-py/setuptools-scm-6.2.3[${PYTHON_USEDEP}]
@@ -41,7 +37,6 @@ BDEPEND="
 			>=dev-python/attrs-19.2[${PYTHON_USEDEP}]
 			>=dev-python/hypothesis-3.56[${PYTHON_USEDEP}]
 			dev-python/mock[${PYTHON_USEDEP}]
-			>=dev-python/pygments-2.7.2[${PYTHON_USEDEP}]
 			dev-python/pytest-xdist[${PYTHON_USEDEP}]
 			dev-python/requests[${PYTHON_USEDEP}]
 			dev-python/xmlschema[${PYTHON_USEDEP}]
@@ -68,6 +63,11 @@ python_test() {
 	local EPYTEST_DESELECT=(
 		# broken by epytest args
 		testing/test_warnings.py::test_works_with_filterwarnings
+		testing/test_threadexception.py::test_unhandled_thread_exception_after_teardown
+		testing/test_unraisableexception.py::test_refcycle_unraisable
+
+		# does not like verbosity
+		testing/test_assertrewrite.py::TestAssertionRewrite::test_len
 
 		# tend to be broken by random pytest plugins
 		# (these tests patch PYTEST_DISABLE_PLUGIN_AUTOLOAD out)
@@ -100,12 +100,11 @@ python_test() {
 	)
 
 	case ${EPYTHON} in
-		pypy3)
+		pypy3*)
 			EPYTEST_DESELECT+=(
 				# regressions on pypy3.9
 				# https://github.com/pytest-dev/pytest/issues/9787
 				testing/test_skipping.py::test_errors_in_xfail_skip_expressions
-				testing/test_unraisableexception.py
 			)
 			;;
 	esac

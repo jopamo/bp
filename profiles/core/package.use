@@ -1,12 +1,22 @@
 app-build/gcc lto
+app-build/llvm -assertions bpf -debug libfuzzer orc sanitizers static_analyzer sysclang
+app-compression/lz4 static-libs
+app-compression/zstd static-libs
 app-core/acl static-libs
 app-core/attr static-libs
-app-core/util-linux agetty eject fallocate ipcrm ipcs kill libblkid libuuid last logger login losetup lscpu lsfd lsirq lslogins lsmem lsns mount mountpoint nologin rename schedutils su suid sulogin swapon tty-helpers wipefs
+app-core/util-linux agetty bits blkdiscard blkzone blockdev btrfs cal chcpu chfn-chsh chmem choom col colcrt colrm cryptsetup cryptsetup-dlopen ctrlaltdel dmesg eject enosys exch fadvise fallocate fdformat fdisks findfs findmnt flock fsck fsfreeze fstrim getopt hardlink hexdump hwclock ipcmk ipcrm ipcs irqtop isosize kill last ldattach libblkid libfdisk liblastlog2 libmount libpcre2-posix libsmartcols libutil libuuid line logger login look losetup lsblk lsclocks lscpu lsfd lsirq lslocks lslogins lsmem lsns magic mcookie mesg mkfs more mount mountpoint namei ncurses newgrp nologin nsenter pam partx pg pipesz pivot_root pylibmount python readline rename rev rfkill rtcwake runuser schedutils script scriptutils setarch setpriv setterm smack su suid sulogin swapoff swapon switch_root systemd tinfo tty-helpers tunelp ul unshare utmpdump uuidd vipw waitpid wall wdctl whereis widechar wipefs write zlib zramctl
+
+app-core/util-linux -audit -bash-completion -blkpr nls -selinux -slang -sysvinit -test -translate-docs -libuser -libutempter -econf -raw -minix -bfs -cramfs
+
 app-fs/cryptsetup -ssl
+app-net/curl static-libs
 app-net/networkmanager -nss gnutls
 lib-core/libcap static-libs
 lib-core/libxml2 python
+lib-core/sqlite static-libs
+lib-core/zlib static-libs
 lib-dev/tree-sitter-bash python
+lib-misc/xxhash static-libs
 lib-net/nodejs icu
+lib-net/openssl static-libs
 xgui-app/wireshark bcg729 capinfos caps captype ciscodump dcerpcidl2wrs dftest dpauxmon dumpcap editcap libssh mergecap mmdbresolve netlink plugins randpkt randpktdump rawshark reordercap sdjournal sharkd sshdump text2pcap tshark udpdump
-xgui-lib/librsvg -rust

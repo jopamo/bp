@@ -1,74 +1,125 @@
 # Distributed under the terms of the GNU General Public License v2
-#
-# System-wide defaults for the Portage system
-# See portage(5) manpage
+# System-wide defaults for the Portage system — see portage(5)
 
-# Profile IUSE injection (applies only to ebuilds which use EAPI 5 or later)
+###############################################################################
+# Baseline profile
+###############################################################################
+
+# Injected IUSE flags (EAPI ≥ 5)
 IUSE_IMPLICIT="prefix prefix-guest prefix-stack kernel_linux elibc_glibc elibc_musl"
 
-# Env vars to expand into USE vars.
-USE_EXPAND="ABI_X86CPU_FLAGS_ARM CPU_FLAGS_X86 CURL_SSL GRUB_PLATFORMS PYTHON_SINGLE_TARGET PYTHON_TARGETS"
+# Variables whose individual values are expanded into USE flags
+USE_EXPAND="
+    ABI_X86
+    CPU_FLAGS_ARM
+    CPU_FLAGS_X86
+    CURL_SSL
+    GRUB_PLATFORMS
+    PYTHON_SINGLE_TARGET
+    PYTHON_TARGETS
+"
 
-# USE_EXPAND variables whose contents are not shown in package manager
-# output. Changes need discussion on gentoo-dev.
+# USE_EXPAND vars hidden from emerge –vp output
 USE_EXPAND_HIDDEN="ABI_X86 CPU_FLAGS_ARM CPU_FLAGS_X86"
+
+# Profile-only vars (not overridable in make.conf)
+PROFILE_ONLY_VARIABLES="IUSE_IMPLICIT USE_EXPAND_IMPLICIT USE_EXPAND_UNPREFIXED"
+
+###############################################################################
+# Portage behaviour
+###############################################################################
 
 CONFIG_PROTECT="/etc"
 CONFIG_PROTECT_MASK="/etc/env.d /etc/gconf"
 
-ENV_UNSET="DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY XDG_CACHE_HOME XDG_CONFIG_HOME XDG_DATA_HOME XDG_RUNTIME_DIR PERL_MM_OPT PERL5LIB PERL5OPT PERL_MB_OPT PERL_CORE PERLPREFIX GOBIN"
+# Silence noisy session-specific env vars when building
+ENV_UNSET="
+    DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY
+    XDG_CACHE_HOME XDG_CONFIG_HOME XDG_DATA_HOME XDG_RUNTIME_DIR
+    PERL_MM_OPT PERL5LIB PERL5OPT PERL_MB_OPT PERL_CORE PERLPREFIX
+    GOBIN
+"
 
-# Variables that are set exclusively by the profile
-# and not by user configuration files.
-PROFILE_ONLY_VARIABLES="${PROFILE_ONLY_VARIABLES} IUSE_IMPLICIT USE_EXPAND_IMPLICIT USE_EXPAND_UNPREFIXED"
+###############################################################################
+# Toolchain & optimisation
+###############################################################################
 
-# 'Sane' defaults
-INPUT_DEVICES="libinput"
-ACCEPT_LICENSE="*"
-GRUB_PLATFORMS=""
-
-USE="${USE} xattr bzip2 cxx"
-
-BOOTSTRAP_USE=""
-
-PYTHON_TARGETS="python3_13"
-PYTHON_SINGLE_TARGET="python3_13"
-
-COLLISION_IGNORE="/lib/modules/*"
-UNINSTALL_IGNORE="/lib/modules/* /var/run /var/lock"
-
-LC_MESSAGES="C"
-
-PYTHONDONTWRITEBYTECODE=1
-
-
-MAKEOPTS="-j8"
-
-CFLAGS="-O2 -pipe -march=native"
-CXXFLAGS="${CFLAGS}"
+COMMON_FLAGS="-O2 -pipe -march=native"
+CFLAGS="${COMMON_FLAGS}"
+CXXFLAGS="${COMMON_FLAGS}"
 LDFLAGS="-Wl,-O2"
 
-USE="${USE} -ipv6 -manpager caps ncurses systemd udev pam readline device-mapper ssl"
-USE="${USE}	sqlite gmp pcre seccomp crypt gcrypt iconv -jit zlib"
-USE="${USE}	lz4 zstd sysusersd kernel_linux attr"
-USE="${USE}	-dvbpsi -berkdb yescrypt urandom"
-USE="${USE}	libcap acl gdbm unicode"
+AR="gcc-ar"
+RANLIB="gcc-ranlib"
+NM="gcc-nm"
 
-CPU_FLAGS_X86="mmx sse"
+###############################################################################
+# Python
+###############################################################################
+
+PYTHON_TARGETS="python3_13"
+PYTHON_SINGLE_TARGET="${PYTHON_TARGETS}"
+PYTHONDONTWRITEBYTECODE=1       # keep ${WORKDIR} clean & reproducible
+
+###############################################################################
+# Default feature sets
+###############################################################################
 
 INPUT_DEVICES="libinput"
+CPU_FLAGS_X86="mmx sse"
 
-AR=gcc-ar
-RANLIB=gcc-ranlib
-NM=gcc-nm
+# Accept any licence; override per package in /etc/portage/package.license
+ACCEPT_LICENSE="*"
 
-UNINSTALL_IGNORE="${UNINSTALL_IGNORE} /bin /lib /lib32 /lib64 /libx32 /sbin /usr/sbin"
-UNINSTALL_IGNORE="${UNINSTALL_IGNORE} /usr/lib/modules/*"
+# Protect kernel modules, keep FHS paths during unmerge
+COLLISION_IGNORE="/lib/modules/*"
+UNINSTALL_IGNORE="
+    /lib/modules/*
+    /bin /sbin /lib /lib32 /lib64 /libx32
+    /usr/sbin
+    /usr/lib/modules/*
+    /var/run /var/lock
+"
 
-# Distributed under the terms of the GNU General Public License v2
+###############################################################################
+# System-wide USE defaults
+###############################################################################
+
+USE="
+    # ── Compression & Storage ───────────────────────
+    bzip2 lz4 zlib zstd
+
+    # ── Core System Components ─────────────────────
+    caps device-mapper ncurses pam readline ssl systemd udev
+
+    # ── Crypto / Security ───────────────────────────
+    crypt gcrypt seccomp urandom yescrypt
+
+    # ── Libraries & Runtimes ────────────────────────
+    acl attr gdbm gmp iconv libcap pcre python sqlite xml
+
+    # ── Kernel / OS Helpers ─────────────────────────
+    kernel_linux numa sysusersd unicode xattr
+
+    # ── Disabled by Default (opt in per-package) ───
+    -berkdb      # prefer sqlite
+    -dvbpsi      # not needed on servers
+    -ipv6        # enable only where required
+    -jit         # problematic on some arches
+    -manpager
+"
+
+###############################################################################
+# USE_EXPAND tweaking for custom overlay / profiles
+###############################################################################
 
 USE_EXPAND_UNPREFIXED="ARCH"
-USE_EXPAND_IMPLICIT="ARCH"
+USE_EXPAND_IMPLICIT="${USE_EXPAND_IMPLICIT} ARCH"
 USE_EXPAND_VALUES_ARCH="amd64 arm64"
 
 PROFILE_ONLY_VARIABLES="${PROFILE_ONLY_VARIABLES} ARCH USE_EXPAND_VALUES_ARCH"
+
+###############################################################################
+# GRUB defaults (set platform flags explicitly elsewhere if needed)
+###############################################################################
+GRUB_PLATFORMS=""

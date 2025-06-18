@@ -8,7 +8,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="systemd sysusersd tmpfilesd"
+IUSE="ipv6 router server systemd sysusersd tmpfilesd user-namespaces xdp"
 
 S=${WORKDIR}
 
@@ -20,13 +20,13 @@ src_prepare() {
 src_install() {
 	for d in boot dev etc home mnt usr var opt run; do
 		diropts -m0755
-    	dodir /$d
+		dodir /$d
 	done
 
 	for d in log lib; do
 		diropts -m0755
-    	dodir /var/$d
-    	keepdir /var/$d
+		dodir /var/$d
+		keepdir /var/$d
 	done
 
 	keepdir /var/log/journal
@@ -81,10 +81,6 @@ src_install() {
 	insopts -m 0644
 	insinto /etc/env.d
 	doins 50layout
-
-	insopts -m 0644
-	insinto /etc/sysctl.d
-	newins sysctl 10-1g4.conf
 
 	# setup /var
 	for d in local opt log/old lib/misc ; do
@@ -147,4 +143,29 @@ src_install() {
 			insinto /usr/share/factory/1g4
 			newins $f-1g4 $f
 	done
+
+	if use user-namespaces; then
+		echo "user.max_user_namespaces = 10000" > "${T}/99-max-user-namespaces.conf"
+
+		insinto /etc/sysctl.d
+		doins "${T}/99-max-user-namespaces.conf"
+	fi
+
+	if use router; then
+		insinto /etc/sysctl.d
+		doins "${FILESDIR}/sysctl-router.conf"
+	fi
+
+	if ! use ipv6; then
+		insinto /etc/sysctl.d
+		doins "${FILESDIR}/sysctl-disable-ipv6.conf"
+	fi
+
+	insinto /etc/sysctl.d
+	doins "${FILESDIR}/sysctl-hardening.conf"
+
+	if use server; then
+		insinto /etc/sysctl.d
+		doins "${FILESDIR}/sysctl-server.conf"
+	fi
 }

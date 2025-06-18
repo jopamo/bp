@@ -2,12 +2,13 @@
 
 EAPI=8
 
+BRANCH_NAME="kf$(ver_cut 1)"
+
 inherit cmake xdg
 
 DESCRIPTION="Framework providing assorted high-level user interface components"
-
-SNAPSHOT=1dc49ae029ca6d7b7259b40a55e39e31e51df0d9
-SRC_URI="https://github.com/KDE/kguiaddons/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=6f896fe3aa8a4da33b528524ac7922d548148696
+SRC_URI="https://github.com/KDE/kguiaddons/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/kguiaddons-${SNAPSHOT}
 
 LICENSE="LGPL-2+"

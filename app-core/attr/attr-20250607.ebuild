@@ -2,6 +2,8 @@
 
 EAPI=8
 
+inherit flag-o-matic
+
 DESCRIPTION="Extended attributes tools"
 HOMEPAGE="https://savannah.nongnu.org/projects/attr"
 SRC_URI="https://1g4.org/files/${P}.tar.xz"
@@ -13,6 +15,8 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs debug"
 
 src_configure() {
+	filter-flags -flto*
+
 	local myconf=(
 		--enable-shared
 		$(use_enable static-libs static)

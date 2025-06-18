@@ -4,7 +4,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=standalone
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 
 inherit distutils-r1 pypi
 
@@ -22,11 +22,11 @@ IUSE="+native-extensions"
 RDEPEND="
 	>=dev-python/idna-2.0[${PYTHON_USEDEP}]
 	>=dev-python/multidict-4.0[${PYTHON_USEDEP}]
-	>=dev-python/propcache-0.2.0[${PYTHON_USEDEP}]
+	>=dev-python/propcache-0.2.1[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	native-extensions? (
-		dev-python/cython[${PYTHON_USEDEP}]
+		dev-py/cython[${PYTHON_USEDEP}]
 	)
 	dev-python/expandvars[${PYTHON_USEDEP}]
 	dev-py/setuptools[${PYTHON_USEDEP}]

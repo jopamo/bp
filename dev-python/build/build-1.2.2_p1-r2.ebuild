@@ -3,8 +3,8 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
-PYTHON_TESTED=( python3_{10..13} pypy3 )
-PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_13t )
+PYTHON_TESTED=( python3_{11..14} pypy3_11 )
+PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_{13,14}t )
 
 inherit distutils-r1
 
@@ -23,7 +23,8 @@ S=${WORKDIR}/${MY_P}
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="test-rust"
+IUSE="test test-rust"
+RESTRICT="!test? ( test )"
 
 RDEPEND="
 	>=dev-python/packaging-19.1[${PYTHON_USEDEP}]
@@ -34,8 +35,10 @@ RDEPEND="
 "
 BDEPEND="
 	test? (
+		${RDEPEND}
 		$(python_gen_cond_dep '
 			>=dev-python/filelock-3[${PYTHON_USEDEP}]
+			dev-python/pytest[${PYTHON_USEDEP}]
 			>=dev-python/pytest-mock-2[${PYTHON_USEDEP}]
 			>=dev-python/pytest-rerunfailures-9.1[${PYTHON_USEDEP}]
 			>=dev-python/pytest-xdist-1.34[${PYTHON_USEDEP}]
@@ -47,7 +50,11 @@ BDEPEND="
 	)
 "
 
-distutils_enable_tests pytest
+PATCHES=(
+	# https://github.com/pypa/build/pull/861
+	# https://github.com/pypa/build/pull/898
+	"${FILESDIR}/${P}-gentoo-pip.patch"
+)
 
 python_test() {
 	if ! has "${EPYTHON/./_}" "${PYTHON_TESTED[@]}"; then

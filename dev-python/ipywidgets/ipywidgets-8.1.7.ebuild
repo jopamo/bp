@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( pypy3 python3_{10..13} )
+PYTHON_COMPAT=( pypy3_11 python3_{11..13} )
 PYTHON_REQ_USE="threads(+)"
 
 inherit distutils-r1 pypi
@@ -23,8 +23,8 @@ RDEPEND="
 	>=dev-python/comm-0.1.3[${PYTHON_USEDEP}]
 	>=dev-python/ipython-genutils-0.2.0[${PYTHON_USEDEP}]
 	>=dev-python/traitlets-4.3.1[${PYTHON_USEDEP}]
-	>=dev-python/widgetsnbextension-4.0.12[${PYTHON_USEDEP}]
-	>=dev-python/jupyterlab-widgets-3.0.12[${PYTHON_USEDEP}]
+	>=dev-python/widgetsnbextension-4.0.14[${PYTHON_USEDEP}]
+	>=dev-python/jupyterlab-widgets-3.0.15[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	test? (
@@ -43,7 +43,7 @@ python_test() {
 	local EPYTEST_DESELECT=()
 
 	case ${EPYTHON} in
-		pypy3)
+		pypy3*)
 			EPYTEST_DESELECT+=(
 				# https://github.com/pypy/pypy/issues/4892
 				ipywidgets/widgets/tests/test_interaction.py::test_interact_noinspect

@@ -24,9 +24,9 @@ BDEPEND="
 "
 
 CONFIG_CHECK="~HWMON ~I2C_CHARDEV ~I2C"
-WARNING_HWMON="${PN} requires CONFIG_HWMON to be enabled for use."
+WARNING_HWMON="lm-sensors requires CONFIG_HWMON to be enabled for use."
 WARNING_I2C_CHARDEV="sensors-detect requires CONFIG_I2C_CHARDEV to be enabled."
-WARNING_I2C="${PN} requires CONFIG_I2C to be enabled for most sensors."
+WARNING_I2C="lm-sensors requires CONFIG_I2C to be enabled for most sensors."
 
 src_prepare() {
 	default

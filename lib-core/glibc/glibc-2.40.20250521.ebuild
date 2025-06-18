@@ -2,13 +2,15 @@
 
 EAPI=8
 
+BRANCH_NAME="release/$(ver_cut 1-2)/master"
+
 inherit flag-o-matic
 
 DESCRIPTION="GNU libc C library"
 HOMEPAGE="https://www.gnu.org/software/libc/"
 
-SNAPSHOT=fbcde5ea4613bc04c174e9adcca9f6eb5e308d79
-SRC_URI="https://github.com/bminor/glibc/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=c8e10f14328518954072df64aafd574e67cfdde5
+SRC_URI="https://github.com/1g4-mirror/glibc/archive/${SNAPSHOT}.tar.gz -> glibc-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/glibc-${SNAPSHOT}
 
 LICENSE="LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
@@ -18,10 +20,10 @@ KEYWORDS="amd64 arm64"
 IUSE="caps debug nscd profile systemd static-libs +static-pie tmpfilesd"
 
 BDEPEND="
-	app-build/gcc
 	app-build/make
 "
 DEPEND="
+	app-build/gcc
 	app-kernel/linux-headers
 	app-core/layout
 "
@@ -99,9 +101,12 @@ src_prepare() {
 	chmod u+x "${S}"/scripts/*.sh
 
 	#sed -i 's/\-Wl,\-z,defs\ //' "${S}"/elf/Makefile || die
+	#cp "${FILESDIR}"/setuid.c "${S}"/sysdeps/unix/sysv/linux/ || die
+	#cp "${FILESDIR}"/libc-start.c "${S}"/csu/ || die
 }
 
 src_configure() {
+	replace-flags -O0 -O1
 	filter-flags -flto*
 	filter-flags -D_FORTIFY_SOURCE*
 	filter-flags -Wl,-z,defs
@@ -229,7 +234,6 @@ src_install() {
 	mv "${ED}"/bin/{ldconfig,sln} "${ED}"/usr/bin && rm -rf "${ED}"/bin
 
 	cleanup_install
-	use static-libs || find "${ED}" -name '*.la' -delete
 
 	echo -e "en_US.UTF-8 UTF-8\nen_US ISO-8859-1" > "${ED}"/usr/share/i18n/locales/SUPPORTED
 

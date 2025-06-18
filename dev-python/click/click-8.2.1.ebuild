@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1
 
@@ -24,10 +24,10 @@ KEYWORDS="amd64 arm64"
 IUSE="examples"
 
 distutils_enable_sphinx docs \
-	'>=dev-python/docutils-0.14' \
+	'>=dev-py/docutils-0.14' \
+	dev-python/myst-parser \
 	dev-python/pallets-sphinx-themes \
 	dev-python/sphinxcontrib-log-cabinet \
-	dev-python/sphinx-issues \
 	dev-python/sphinx-tabs
 distutils_enable_tests pytest
 

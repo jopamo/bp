@@ -6,9 +6,9 @@ inherit cmake xdg
 
 DESCRIPTION="Qt-based multitab terminal emulator"
 HOMEPAGE="https://github.com/lxqt/qterminal"
-SNAPSHOT=e2f6e0e85b85b09f80f7b405f13f6af4d8f2ec64
-SRC_URI="https://github.com/lxqt/qterminal/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SNAPSHOT=5f09ad3a164b1124390368dabc1903ce7060d358
+SRC_URI="https://github.com/lxqt/qterminal/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/qterminal-${SNAPSHOT}"
 
 LICENSE="GPL-2+"
 SLOT="0"
@@ -33,10 +33,10 @@ src_prepare() {
 src_install() {
 	cmake_src_install
 
-	insinto etc/xdg/${PN}.org
+	insinto etc/xdg/qterminal.org
 	doins ${FILESDIR}/qterminal.ini
 
-	use translations || rm -rf "${ED}"/usr/share/${PN}/translations || die
+	use translations || rm -rf "${ED}"/usr/share/qterminal/translations || die
 
 	rm -rf "${ED}"/usr/share/appdata || die
 

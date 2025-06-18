@@ -2,14 +2,14 @@
 
 EAPI=8
 
-SNAPSHOT=051ab9ed8c8ba43614c9f742c3e3452a0ff0ce95
+SNAPSHOT=bf254c75b1e0d2641ebbd7fc85fb183f36a62ea7
 
 inherit autotools flag-o-matic
 
 DESCRIPTION="The Fast Lexical Analyzer"
 HOMEPAGE="https://github.com/westes/flex"
-SRC_URI="https://github.com/westes/flex/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://github.com/westes/flex/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/flex-${SNAPSHOT}
 
 LICENSE="FLEX"
 SLOT="0"

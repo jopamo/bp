@@ -2,12 +2,14 @@
 
 EAPI=8
 
+BRANCH_NAME="stable-$(ver_cut 1-2)"
+
 inherit distutils-r1
 
 DESCRIPTION="a radically simple IT automation platform"
 HOMEPAGE="https://ansible.com/"
-SNAPSHOT=3566e742decc6cccd27b28035c839d3817d08eff
-SRC_URI="https://github.com/ansible/ansible/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=05951a6d9ada4e60e5985a62d62b00d9cb64bdea
+SRC_URI="https://github.com/ansible/ansible/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ansible-${SNAPSHOT}"
 
 LICENSE="GPL-3"

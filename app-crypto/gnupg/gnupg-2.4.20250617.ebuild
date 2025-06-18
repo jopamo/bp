@@ -8,8 +8,7 @@ inherit toolchain-funcs flag-o-matic autotools
 
 DESCRIPTION="The GNU Privacy Guard, a GPL OpenPGP implementation"
 HOMEPAGE="http://www.gnupg.org/"
-
-SNAPSHOT=57c1c96e7f5c2b94daba5ccc0070cf3ee52d66d9
+SNAPSHOT=80d56172f29f8e7f2ca5dffa53235a33d5484bd3
 SRC_URI="https://github.com/gpg/gnupg/archive/${SNAPSHOT}.tar.gz -> gnupg-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/gnupg-${SNAPSHOT}"
 

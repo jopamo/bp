@@ -2,9 +2,9 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic doins toolchain-funcs
+BRANCH_NAME="maint"
 
-UPSTREAM_V="$(ver_cut 1-2)"
+inherit autotools flag-o-matic doins toolchain-funcs
 
 DESCRIPTION="Erlang programming language, runtime environment and libraries (OTP)"
 HOMEPAGE="https://www.erlang.org/ https://github.com/erlang/otp"
@@ -14,8 +14,8 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="$(ver_cut 1-2)"
 	inherit git-r3
 else
-	SNAPSHOT=800613cca84970750658b294ddd7977843b3bc5d
-	SRC_URI="https://github.com/erlang/otp/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=5cb2628fa087b73bd2ea4cb675472ed75b58166b
+	SRC_URI="https://github.com/erlang/otp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/otp-${SNAPSHOT}
 fi
 
@@ -26,13 +26,13 @@ KEYWORDS="amd64 arm64"
 IUSE="java +kpoll odbc sctp ssl systemd tk wxwidgets"
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-27.0-dont-ignore-LDFLAGS.patch
-	"${FILESDIR}"/${PN}-24.0.2-serial-configure.patch
-	"${FILESDIR}"/${PN}-25.1.2-c99.patch # Bug #882887
-	"${FILESDIR}"/${PN}-26.2.4-test-errorinfo.patch
+	"${FILESDIR}"/erlang-27.0-dont-ignore-LDFLAGS.patch
+	"${FILESDIR}"/erlang-24.0.2-serial-configure.patch
+	"${FILESDIR}"/erlang-25.1.2-c99.patch # Bug #882887
+	"${FILESDIR}"/erlang-26.2.4-test-errorinfo.patch
 )
 
-SITEFILE=50"${PN}"-gentoo.el
+SITEFILE=50"erlang"-gentoo.el
 
 QA_CONFIG_IMPL_DECL_SKIP=(
 	# FreeBSD & OpenBSD
@@ -91,7 +91,7 @@ src_install() {
 	local erl_libdir="/usr/${erl_libdir_rel}"
 	local erl_interface_ver="$(extract_version lib/erl_interface EI_VSN)"
 	local erl_erts_ver="$(extract_version erts VSN)"
-	local my_manpath="/usr/share/${PN}/man"
+	local my_manpath="/usr/share/erlang/man"
 
 	[[ -z "${erl_erts_ver}" ]] && die "Couldn't determine erts version"
 	[[ -z "${erl_interface_ver}" ]] && die "Couldn't determine interface version"

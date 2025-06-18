@@ -6,22 +6,20 @@ inherit cmake flag-o-matic toolchain-funcs
 
 DESCRIPTION="PDF rendering library based on the xpdf-3.0 code base"
 HOMEPAGE="https://poppler.freedesktop.org/"
-
-SNAPSHOT=01a1f7da81f0eb54a3266c5e69ad97e80fa13bbf
+SNAPSHOT=a95e75a0d3c744a4a6c9c2e555d1365a3b60ac13
 SRC_URI="https://gitlab.freedesktop.org/poppler/poppler/-/archive/${SNAPSHOT}/poppler-${SNAPSHOT}.tar.bz2 -> poppler-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/poppler-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
-IUSE="cairo +cjk curl cxx debug doc +introspection +jpeg +jpeg2k png +utils"
+IUSE="cairo curl +cxx debug doc +introspection +jpeg +jpeg2k png +utils"
 
 RESTRICT="test"
 
 DEPEND="
 	lib-dev/nss
-	lib-dev/boost
 	fonts/fontconfig
 	xgui-misc/freetype
 	lib-core/zlib
@@ -35,11 +33,9 @@ DEPEND="
 	jpeg2k? ( xmedia-lib/openjpeg )
 	png? ( xmedia-lib/libpng )
 "
-RDEPEND="${COMMON_DEPEND}
-	cjk? ( app-tex/poppler-data )
-"
+RDEPEND="${COMMON_DEPEND}"
 
-PATCHES=( "${FILESDIR}/${PN}-0.57.0-disable-internal-jpx.patch" )
+PATCHES=( "${FILESDIR}/poppler-0.57.0-disable-internal-jpx.patch" )
 
 src_prepare() {
 	cmake_src_prepare
@@ -66,6 +62,7 @@ src_configure() {
 	xdg_environment_reset
 
 	local mycmakeargs=(
+		-DENABLE_BOOST=OFF
 		-DBUILD_CPP_TESTS=OFF
 		-DBUILD_GTK_TESTS=OFF
 		-DBUILD_QT5_TESTS=OFF

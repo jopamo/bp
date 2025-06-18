@@ -6,8 +6,8 @@ DESCRIPTION="port of netbsd's curses library for usage on Linux systems"
 HOMEPAGE="https://github.com/sabotage-linux/netbsd-curses"
 
 SNAPSHOT=51d179dad861640caeb76674b5908ccd79f04fae
-SRC_URI="https://github.com/sabotage-linux/netbsd-curses/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SRC_URI="https://github.com/sabotage-linux/netbsd-curses/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/netbsd-curses-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"

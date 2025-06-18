@@ -10,8 +10,8 @@ Signed-off-by: Randy Barlow <randy@electronsweatshop.com>
 
 diff --git a/src/bootstrap/src/core/builder.rs b/src/bootstrap/src/core/builder.rs
 index 4e20babc55a..3770d0687b2 100644
---- a/src/bootstrap/src/core/builder.rs
-+++ b/src/bootstrap/src/core/builder.rs
+--- a/src/bootstrap/builder.rs
++++ b/src/bootstrap/builder.rs
 @@ -1799,15 +1799,20 @@ pub fn cargo(
          }
  

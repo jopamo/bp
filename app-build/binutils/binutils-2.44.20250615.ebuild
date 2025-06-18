@@ -2,13 +2,14 @@
 
 EAPI=8
 
+BRANCH_NAME="binutils-$(ver_cut 1)_$(ver_cut 2)-branch"
+
 inherit flag-o-matic
 
 DESCRIPTION="a collection of binary tools"
 HOMEPAGE="https://sourceware.org/binutils/"
-
-SNAPSHOT=db05ea275f80870942ca24f7eb789b4d3b177706
-SRC_URI="https://github.com/bminor/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=7f90426069ff1eaab17fea8dbb2f4d558cba33f4
+SRC_URI="https://github.com/1g4-mirror/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/binutils-gdb-${SNAPSHOT}"
 
 LICENSE="|| ( GPL-3 LGPL-3 )"

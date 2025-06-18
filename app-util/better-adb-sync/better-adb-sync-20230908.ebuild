@@ -11,7 +11,7 @@ HOMEPAGE="https://github.com/jb2170/better-adb-sync"
 
 SNAPSHOT=2d19f23b2ae8a74e4d4e038df049112408335a6b
 SRC_URI="https://github.com/jb2170/better-adb-sync/archive/${SNAPSHOT}.tar.gz -> better-adb-sync-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/better-adb-sync-${SNAPSHOT}"
 
 LICENSE="Apache-2.0"
 SLOT="0"

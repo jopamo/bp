@@ -8,7 +8,7 @@ inherit kernel-2
 detect_version
 
 BRANCH_NAME="master"
-SNAPSHOT=9afe652958c3ee88f24df1e4a97f298afce89407
+SNAPSHOT=52da431bf03b5506203bca27fe14a97895c80faf
 SRC_URI="https://github.com/torvalds/linux/archive/${SNAPSHOT}.tar.gz -> linux-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/linux-${SNAPSHOT}
 

@@ -6,19 +6,9 @@ inherit flag-o-matic meson python-any-r1 user
 
 DESCRIPTION="Multimedia processing graphs"
 HOMEPAGE="https://pipewire.org/"
-
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://gitlab.freedesktop.org/${PN}/${PN}.git"
-	inherit git-r3
-else
-	if [[ ${PV} == *_p* ]] ; then
-		MY_COMMIT=""
-		SRC_URI="https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/${MY_COMMIT}/pipewire-${MY_COMMIT}.tar.bz2 -> ${P}.tar.bz2"
-		S="${WORKDIR}"/${PN}-${MY_COMMIT}
-	else
-		SRC_URI="https://gitlab.freedesktop.org/${PN}/${PN}/-/archive/${PV}/${P}.tar.bz2"
-	fi
-fi
+SNAPSHOT=58aab3e16b9343cd35ed991e561623aeed18167b
+SRC_URI="https://github.com/PipeWire/pipewire/archive/${SNAPSHOT}.tar.gz -> pipewire-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/pipewire-${SNAPSHOT}"
 
 LICENSE="MIT LGPL-2.1+ GPL-2"
 SLOT="0"
@@ -31,7 +21,7 @@ RESTRICT="!test? ( test )"
 BDEPEND="
 	app-dev/pkgconf
 	${PYTHON_DEPS}
-	$(python_gen_any_dep 'dev-python/docutils[${PYTHON_USEDEP}]')
+	$(python_gen_any_dep 'dev-py/docutils[${PYTHON_USEDEP}]')
 "
 RDEPEND="
 	lib-core/ncurses
@@ -59,11 +49,11 @@ DEPEND="${RDEPEND}"
 PDEPEND="xgui-misc/wireplumber"
 
 python_check_deps() {
-	python_has_version "dev-python/docutils[${PYTHON_USEDEP}]"
+	python_has_version "dev-py/docutils[${PYTHON_USEDEP}]"
 }
 
 pkg_setup() {
-	enewgroup ${PN}
+	enewgroup pipewire
 }
 
 src_configure() {

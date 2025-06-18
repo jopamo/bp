@@ -78,7 +78,7 @@ fetch_latest_firefox_version() {
 
 	for dir in $directories; do
 		local contents=$(curl -s "${base_url}${dir}")
-		local found_version=$(echo "$contents" | grep -oP 'firefox-\d{1,3}\.0a1\.en-US\.linux-x86_64\.tar\.bz2' | head -1 | grep -oP '\d{1,3}\.0a1')
+		local found_version=$(echo "$contents" | grep -oP 'firefox-\d{1,3}\.0a1\.en-US\.linux-x86_64\.tar\.xz' | head -1 | grep -oP '\d{1,3}\.0a1')
 
 		if [[ ! -z "$found_version" ]]; then
 			local date_part=$(echo "$dir" | grep -oP '\d{4}-\d{2}-\d{2}(?=-\d{2}-\d{2}-\d{2}-mozilla-central)' | tr '-' '.')

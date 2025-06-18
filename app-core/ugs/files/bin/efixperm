@@ -43,8 +43,6 @@ if [ "$(id -u)" = 0 ]; then
     chmod 755 /var/lib
 fi
 
-chown -R "$(id -u)":"$(id -u)" "$HOME"
-chmod -R go= "$HOME"
 chmod 600 "$HOME/.bash_history"
 
 if [ -d "$HOME/.ssh" ]; then

@@ -126,7 +126,6 @@ else
 		"patch"
 		"sed"
 		"tar"
-		"librsvg"
 	)
 
 	for package in "${packages[@]}"; do

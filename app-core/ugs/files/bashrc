@@ -6,15 +6,25 @@ shopt -s checkwinsize
 shopt -s no_empty_cmd_completion
 shopt -s histappend
 shopt -s globstar
-PROMPT_COMMAND='history -a; history -n'
 
-case ${TERM} in
-	[aEkqx]term*|rxvt*|gnome*|kitty*|lxterm*|tmux|qterminal*) PS1='\[\033]0;\u@\h:\w\007\]' ;;
-	screen*) PS1='\[\033k\u@\h:\w\033\\\]' ;;
-	*) unset PS1 ;;
+PROMPT_COMMAND=(
+	'history -a'
+	'history -n'
+	'history -r'
+)
+
+case "$TERM" in
+	*term*|rxvt*|gnome*|kitty*|lxterm*|tmux|qterminal*)
+		PS1='\[\e]0;\u@\h:\w\007\]'
+		;;
+	screen*)
+		PS1='\[\033k\u@\h:\w\033\\\]'
+		;;
+	*)
+		PS1=""
+		;;
 esac
 
-use_color=false
 if command -v dircolors >/dev/null; then
 	if [[ -f ~/.ls_colors ]]; then
 		eval "$(dircolors -b ~/.ls_colors)"
@@ -23,19 +33,15 @@ if command -v dircolors >/dev/null; then
 	else
 		eval "$(dircolors -b)"
 	fi
-	if [[ -n ${LS_COLORS:+set} ]]; then
-		use_color=true
-	else
-		unset LS_COLORS
-	fi
+	use_color=true
+elif [[ "$TERM" =~ (term|rxvt|gnome|kitty|lxterm|screen|tmux|cons25|color) ]]; then
+	use_color=true
 else
-	case ${TERM} in
-		[aEkqx]term*|rxvt*|gnome*|kitty*|lxterm*|screen|tmux|cons25|*color) use_color=true ;;
-	esac
+	use_color=false
 fi
 
-if ${use_color}; then
-	if [[ ${EUID} == 0 ]]; then
+if [[ "$use_color" == true ]]; then
+	if (( EUID == 0 )); then
 		PS1+='\[\033[0;31m\]\u\[\033[1;37m\]@\[\033[0;91m\]\h \[\033[1;34m\]\w \[\033[0;37m\]# \[\033[0m\]'
 	else
 		PS1+='\[\033[0;32m\]\u\[\033[1;37m\]@\[\033[0;92m\]\h \[\033[1;34m\]\w \[\033[0;37m\]\$ \[\033[0m\]'
@@ -44,20 +50,32 @@ else
 	PS1+='\u@\h \w \$ '
 fi
 
-if [[ -d /etc/bash/bashrc.d ]]; then
-	for sh in /etc/bash/bashrc.d/*.sh; do
-		[[ -r ${sh} ]] && source "${sh}"
+for d in /etc/bash/bashrc.d ~/.bashrc.d; do
+	[[ -d $d ]] && for f in "$d"/*.sh; do
+		[[ -r $f ]] && source "$f"
 	done
-fi
-if [[ -d ~/.bashrc.d ]]; then
-	for sh in ~/.bashrc.d/*.sh; do
-		[[ -r ${sh} ]] && source "${sh}"
-	done
+done
+
+if [[ -f /etc/profile.d/vte.sh ]]; then
+	source /etc/profile.d/vte.sh
+else
+	__vte_osc7() { printf "\033]7;file://%s%s\033\\" "${HOSTNAME}" "${PWD}"; }
+	PROMPT_COMMAND="__vte_osc7; $PROMPT_COMMAND"
 fi
 
-HISTSIZE=5000
-export GPG_TTY="$(tty)"
+if command -v clang >/dev/null 2>&1; then
+	export TUPLE=$(clang --print-target-triple)
+elif command -v gcc >/dev/null 2>&1; then
+	export TUPLE=$(gcc -dumpmachine)
+else
+	echo "No suitable compiler found." >&2
+	unset TUPLE
+fi
+
+export HISTSIZE=100000
+
 export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
+export GPG_TTY=$(tty)
 
 bind 'set bell-style none'
 bind 'set colored-stats on'
@@ -98,8 +116,6 @@ declare -A formatters=(
 	["*.go"]="gofmt -w"
 )
 
-umask 077
-
 alias ......='cd ../../../../..'
 alias .....='cd ../../../..'
 alias ....='cd ../../..'
@@ -136,216 +152,6 @@ alias sha3-256='openssl dgst -sha3-256'
 alias sha3-512='openssl dgst -sha3-512'
 alias weather='curl wttr.in'
 alias memfree='sync; echo 3 > /proc/sys/vm/drop_caches; free -m'
-
-if command -v ip &> /dev/null; then
-	use_iproute2=true
-else
-	use_iproute2=false
-fi
-
-usage_ifup="Usage: ifup <interface>"
-usage_ifdown="Usage: ifdown <interface>"
-usage_ip_add="Usage: ip_add <interface> <ip_address> <netmask>"
-usage_ip_del="Usage: ip_del <interface> <ip_address>"
-usage_route_add="Usage: route_add <network> <gateway>"
-usage_route_del="Usage: route_del <network>"
-usage_iface_stats="Usage: iface_stats <interface>"
-usage_netns_add="Usage: netns_add <namespace>"
-usage_netns_del="Usage: netns_del <namespace>"
-usage_netns_exec="Usage: netns_exec <namespace> <command>"
-usage_netns_ipaddr="Usage: netns_ipaddr <namespace>"
-usage_veth_add="Usage: veth_add <veth1> <veth2>"
-usage_veth_del="Usage: veth_del <veth>"
-usage_list_interfaces="Usage: list_interfaces"
-usage_set_random_mac="Usage: set_random_mac <interface>"
-
-NIC_PREFIXES=(
-	"00:1A:79"
-	"00:1B:21"
-	"00:1D:7E"
-	"00:22:15"
-	"00:23:EB"
-	"00:24:E8"
-	"00:25:64"
-	"00:26:BB"
-	"00:27:10"
-	"00:28:F8"
-	"00:30:48"
-	"00:60:2F"
-	"00:0E:C6"
-	"00:18:DE"
-	"00:16:E6"
-)
-
-generate_random_mac() {
-	local prefix="${NIC_PREFIXES[$RANDOM % ${#NIC_PREFIXES[@]}]}"
-	local suffix=$(openssl rand -hex 3 | sed 's/\(..\)/\1:/g; s/:$//')
-	echo "$prefix:$suffix"
-}
-
-set_random_mac() {
-	if [ -z "$1" ]; then
-		echo "$usage_set_random_mac"
-		return 1
-	fi
-	local interface=$1
-	local new_mac=$(generate_random_mac)
-	if [ "$use_iproute2" = true ]; then
-		sudo ip link set dev "$interface" down
-		sudo ip link set dev "$interface" address "$new_mac"
-		sudo ip link set dev "$interface" up
-	else
-		sudo ifconfig "$interface" down
-		sudo ifconfig "$interface" hw ether "$new_mac"
-		sudo ifconfig "$interface" up
-	fi
-	echo "Assigned MAC address $new_mac to $interface"
-}
-
-generate_systemd_link_file() {
-	local interfaces=("$@")
-	if [ ${#interfaces[@]} -eq 0 ]; then
-		interfaces=($(ls /sys/class/net | grep -Ev '^(lo|ip_vti0)$'))
-	fi
-	for interface in "${interfaces[@]}"; do
-		local mac_address=$(generate_random_mac)
-		local link_file_name="00-$interface.network"
-		cat <<EOF | sudo tee /etc/systemd/network/$link_file_name > /dev/null
-[Match]
-Name=$interface
-
-[Link]
-MACAddress=$mac_address
-EOF
-		echo "Systemd .network file created for $interface with MAC address $mac_address"
-	done
-}
-
-if [ "$use_iproute2" = false ]; then
-	alias ifup='ifup_nettools'
-	alias ifdown='ifdown_nettools'
-	alias ip_add='ip_add_nettools'
-	alias ip_del='ip_del_nettools'
-	alias route_add='route_add_nettools'
-	alias route_del='route_del_nettools'
-	alias show_routes='netstat -nr'
-	alias iface_stats='iface_stats_nettools'
-	alias list_interfaces='list_interfaces_nettools'
-	alias set_random_mac='set_random_mac'
-	alias netns_add='echo "Namespace not supported with net-tools"'
-	alias netns_del='echo "Namespace not supported with net-tools"'
-	alias netns_exec='echo "Namespace not supported with net-tools"'
-	alias netns_list='echo "Namespace not supported with net-tools"'
-	alias netns_ipaddr='echo "Namespace not supported with net-tools"'
-	alias veth_add='echo "veth not supported with net-tools"'
-	alias veth_del='echo "veth not supported with net-tools"'
-
-	ifup_nettools() {
-		[ -z "$1" ] && echo "$usage_ifup" && return 1
-		sudo ifconfig "$1" up
-	}
-	ifdown_nettools() {
-		[ -z "$1" ] && echo "$usage_ifdown" && return 1
-		sudo ifconfig "$1" down
-	}
-	ip_add_nettools() {
-		[ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] && echo "$usage_ip_add" && return 1
-		sudo ifconfig "$1" "$2" netmask "$3"
-	}
-	ip_del_nettools() {
-		[ -z "$1" ] || [ -z "$2" ] && echo "$usage_ip_del" && return 1
-		sudo ifconfig "$1" "$2"
-	}
-	route_add_nettools() {
-		[ -z "$1" ] || [ -z "$2" ] && echo "$usage_route_add" && return 1
-		sudo route add -net "$1" gw "$2"
-	}
-	route_del_nettools() {
-		[ -z "$1" ] && echo "$usage_route_del" && return 1
-		sudo route del -net "$1"
-	}
-	iface_stats_nettools() {
-		[ -z "$1" ] && echo "$usage_iface_stats" && return 1
-		ifconfig "$1"
-	}
-	list_interfaces_nettools() {
-		ifconfig -a
-	}
-else
-	alias ifup='ifup_iproute2'
-	alias ifdown='ifdown_iproute2'
-	alias ip_add='ip_add_iproute2'
-	alias ip_del='ip_del_iproute2'
-	alias route_add='route_add_iproute2'
-	alias route_del='route_del_iproute2'
-	alias show_routes='ip route show'
-	alias iface_stats='iface_stats_iproute2'
-	alias list_interfaces='list_interfaces_iproute2'
-	alias set_random_mac='set_random_mac'
-	alias netns_add='netns_add_iproute2'
-	alias netns_del='netns_del_iproute2'
-	alias netns_exec='netns_exec_iproute2'
-	alias netns_list='ip netns list'
-	alias netns_ipaddr='netns_ipaddr_iproute2'
-	alias veth_add='veth_add_iproute2'
-	alias veth_del='veth_del_iproute2'
-
-	ifup_iproute2() {
-		[ -z "$1" ] && echo "$usage_ifup" && return 1
-		sudo ip link set "$1" up
-	}
-	ifdown_iproute2() {
-		[ -z "$1" ] && echo "$usage_ifdown" && return 1
-		sudo ip link set "$1" down
-	}
-	ip_add_iproute2() {
-		[ -z "$1" ] || [ -z "$2" ] && echo "$usage_ip_add" && return 1
-		sudo ip addr add "$2" dev "$1"
-	}
-	ip_del_iproute2() {
-		[ -z "$1" ] || [ -z "$2" ] && echo "$usage_ip_del" && return 1
-		sudo ip addr del "$2" dev "$1"
-	}
-	route_add_iproute2() {
-		[ -z "$1" ] || [ -z "$2" ] && echo "$usage_route_add" && return 1
-		sudo ip route add "$1" via "$2"
-	}
-	route_del_iproute2() {
-		[ -z "$1" ] && echo "$usage_route_del" && return 1
-		sudo ip route del "$1"
-	}
-	iface_stats_iproute2() {
-		[ -z "$1" ] && echo "$usage_iface_stats" && return 1
-		ip -s link show "$1"
-	}
-	list_interfaces_iproute2() {
-		ip link show
-	}
-	netns_add_iproute2() {
-		[ -z "$1" ] && echo "$usage_netns_add" && return 1
-		sudo ip netns add "$1"
-	}
-	netns_del_iproute2() {
-		[ -z "$1" ] && echo "$usage_netns_del" && return 1
-		sudo ip netns del "$1"
-	}
-	netns_exec_iproute2() {
-		[ -z "$1" ] || [ -z "$2" ] && echo "$usage_netns_exec" && return 1
-		sudo ip netns exec "$1" ${@:2}
-	}
-	netns_ipaddr_iproute2() {
-		[ -z "$1" ] && echo "$usage_netns_ipaddr" && return 1
-		sudo ip netns exec "$1" ip addr
-	}
-	veth_add_iproute2() {
-		[ -z "$1" ] || [ -z "$2" ] && echo "$usage_veth_add" && return 1
-		sudo ip link add "$1" type veth peer name "$2"
-	}
-	veth_del_iproute2() {
-		[ -z "$1" ] && echo "$usage_veth_del" && return 1
-		sudo ip link del "$1"
-	}
-fi
 
 random_string() {
 	[ -z "$1" ] && echo "Usage: random_string <length>" && return 1
@@ -442,4 +248,78 @@ start_ssh_agent() {
 			fi
 		fi
 	done
+}
+
+get_kernel() {
+	local tag=$1
+	local url="https://gitlab.com/linux-kernel/stable/-/archive/v${tag}/stable-v${tag}.tar.bz2"
+
+	if [ -z "$tag" ]; then
+		echo "Error: No tag provided"
+		echo "Usage: download_and_extract_kernel <tag>"
+		return 1
+	fi
+
+	echo "Downloading kernel version ${tag}..."
+	wget "$url"
+
+	if [ $? -ne 0 ]; then
+		echo "Error: Failed to download kernel version ${tag}"
+		return 1
+	fi
+
+	FILE_SIZE=$(stat -c %s "stable-v${tag}.tar.bz2")
+	if [ "$FILE_SIZE" -lt 100000000 ]; then
+		echo "Error: Downloaded file is too small or corrupt. Aborting extraction."
+		return 1
+	fi
+
+	echo "Extracting kernel version ${tag}..."
+	tar -xjf "stable-v${tag}.tar.bz2" -C . && mv "stable-v${tag}" "linux-${tag}"
+
+	if [ $? -eq 0 ]; then
+		echo "Kernel version ${tag} extracted to linux-${tag}/"
+	else
+		echo "Error: Failed to extract kernel version ${tag}"
+		return 1
+	fi
+}
+
+clean_bash_history() {
+    local file="$1"
+    local temp_file=$(mktemp)
+    sed 's/^[ \t]*//;s/[ \t]*$//' "$file" | sed '/^\s*#/d' | sed '/^\s*\/\//d' > "$temp_file"
+    awk '!seen[$0]++' "$temp_file" > "$temp_file.cleaned"
+    mv "$temp_file.cleaned" "$file"
+    rm "$temp_file"
+}
+
+if [ -z "$HISTORY_CLEANED_THIS_LOGIN" ]; then
+    clean_bash_history ~/.bash_history
+    export HISTORY_CLEANED_THIS_LOGIN=1
+fi
+
+json-keys() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: json-keys <file.json>"
+        return 1
+    fi
+    jq -r 'paths | map(tostring) | join(".")' "$1" | sort -u
+}
+
+json-shape() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: json-shape <file.json>"
+        return 1
+    fi
+    jq 'def shape:
+          type as $t |
+          if $t == "object" then
+            to_entries | map({key, value: (shape(.value))})
+          elif $t == "array" then
+            if length == 0 then [] else [.[0] | shape] end
+          else
+            $t
+          end;
+        shape' "$1"
 }

@@ -1,0 +1,101 @@
+#!/bin/bash
+
+zgrep() {
+	# zgrep: search compressed .gz files using pigz and grep.
+	# Usage: zgrep [GREP_OPTIONS] PATTERN [FILE1.gz [FILE2.gz ...]]
+	#        zgrep [GREP_OPTIONS] -e PATTERN1 [-e PATTERN2 ...] [FILE.gz ...]
+	#
+	# If no FILEs are given, it reads from stdin.
+	# Returns grep’s exit code (0 if matches found, 1 if none, 2 on error).
+	#
+	# Supports:
+	#   - standard grep options (e.g., -i, -v, etc.)
+	#   - multiple -e or -f pattern specifiers
+	#   - a plain positional pattern if none specified via -e/-f
+	#
+	# Caveats:
+	#   - This does *not* do advanced recursion across .gz files like `zgrep -r`.
+	#   - For genuinely identical behavior to system zgrep, you may need
+	#     additional nuances. This covers most normal use cases.
+
+	local usage="Usage: zgrep [grep-options] pattern [files...]
+	or   zgrep [grep-options] -e pattern [files...]
+	(reads from stdin if no files are given)"
+
+	# Collect grep options into an array, in case there are many
+	local grep_opts=()
+
+	# Track whether we have seen a pattern (via -e, -f, or a positional argument)
+	local pattern_found=0
+	local plain_pattern=""
+	local files=()
+
+	while (( $# > 0 )); do
+		case "$1" in
+			-h|--help)
+				# Simple help message
+				echo "$usage"
+				return 0
+				;;
+
+				# If the user supplies -e or -f, then the *next* argument is a pattern
+			-e|-f)
+				# Ensure there's an argument after -e or -f
+				if (( $# < 2 )); then
+					echo "Error: $1 requires an argument." >&2
+					return 2
+				fi
+				grep_opts+=("$1" "$2")
+				shift 2
+				pattern_found=1
+				;;
+
+				# Any other '-' option we assume belongs to grep
+			-*)
+				grep_opts+=("$1")
+				shift
+				;;
+
+				# If it's not an option, it could be the plain pattern (first found)
+				# or a file name
+			*)
+				if (( pattern_found == 0 )); then
+					# First non-option argument => treat as the plain pattern
+					plain_pattern="$1"
+					pattern_found=1
+				else
+					# Subsequent positional arguments are treated as files
+					files+=("$1")
+				fi
+				shift
+				;;
+		esac
+	done
+
+	# If no pattern was specified at all (via -e/-f or positional), error out
+	if (( pattern_found == 0 )); then
+		echo "No pattern specified." >&2
+		echo "$usage" >&2
+		return 1
+	fi
+
+	# If we got a normal (positional) pattern, append it as `-- "pattern"` at the end
+	# so it doesn’t get confused as a file by grep.
+	if [[ -n "$plain_pattern" ]]; then
+		grep_opts+=("--" "$plain_pattern")
+	fi
+
+	# If the user supplied no files, we read from stdin
+	if (( ${#files[@]} == 0 )); then
+		# pigz -dc - means: decompress from stdin (which, if not redirected,
+		# effectively is just raw data—but this is how we mimic zcat’s usage).
+		pigz -dc - 2>/dev/null | grep "${grep_opts[@]}"
+	else
+		# Decompress all specified .gz files and pipe to grep
+		pigz -dc "${files[@]}" 2>/dev/null | grep "${grep_opts[@]}"
+	fi
+
+	# Make the function return grep’s exit code
+	local status=${PIPESTATUS[1]}
+	return "$status"
+}

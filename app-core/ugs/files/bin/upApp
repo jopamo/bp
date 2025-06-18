@@ -17,6 +17,18 @@ mkdir -p "$TMP_DIR"
 : > "$JSON_LOG"
 : > "$DEBUG_LOG"
 
+simple_version_pattern='^[a-zA-Z0-9\-_]+-[0-9]+\.[0-9]+$'
+fixed_version_pattern='^[a-zA-Z0-9\-_]+-[0-9]+\.[0-9]+$'
+
+is_simple_version() {
+    local filename="$1"
+    if [[ "$filename" =~ $simple_version_pattern || "$filename" =~ $fixed_version_pattern ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 handle_github() {
 	local repo_url="$1"
 	local repo_slug=$(echo "$repo_url" | sed -E 's|https?://github\.com/([^/]+/[^/]+).*|\1|')
@@ -50,7 +62,6 @@ handle_github() {
 		fi
 	fi
 
-	# Remove v or V prefix if present
 	latest_version="${latest_version#[vV]}"
 
 	latest_version="${latest_version//_/\.}"
@@ -73,21 +84,9 @@ handle_gitlab() {
 		return 1
 	else
 		local latest_version=$(echo "$latest_release_info" | jq -r '.tag_name')
-		# Remove v or V prefix if present
+
 		latest_version="${latest_version#[vV]}"
 		echo "$latest_version"
-	fi
-}
-
-update_github_package() {
-	local category="$1"
-	local package_name="$2"
-	local repo_url="$3"
-	local latest_version=$(handle_github "$repo_url")
-	if [[ $? -eq 0 ]]; then
-		update_ebuild "${category}/${package_name}" "${package_name}" "${latest_version}"
-	else
-		echo "Failed to update $package_name package" >> "$ERROR_LOG"
 	fi
 }
 
@@ -135,18 +134,6 @@ update_ebuild() {
 	fi
 }
 
-update_gitlab_package() {
-	local category="$1"
-	local package_name="$2"
-	local repo_url="$3"
-	local latest_version=$(handle_gitlab "$repo_url")
-	if [[ $? -eq 0 ]]; then
-		update_ebuild "${category}/${package_name}" "$package_name" "$latest_version"
-	else
-		echo "Failed to update $package_name package" >> "$ERROR_LOG"
-	fi
-}
-
 finalize_update() {
 	local package_path="$1"
 	local package_name="$2"
@@ -185,26 +172,6 @@ fetch_latest_gnu_version() {
 	echo "$latest_version"
 }
 
-fetch_latest_cryptsetup_version() {
-	local base_url="https://mirrors.edge.kernel.org/pub/linux/utils/cryptsetup/"
-	local latest_version=$(curl -s "$base_url" | grep -oP 'href="v[0-9]+\.[0-9]+/' | grep -v -- "-rc" | sort -Vr | head -1 | cut -d '"' -f 2)
-
-	if [[ -z "$latest_version" ]]; then
-		echo "Failed to fetch the latest Cryptsetup version directory" >> "$ERROR_LOG"
-		return 1
-	fi
-
-	local version_page="${base_url}${latest_version}"
-	local latest_final_version=$(curl -s "$version_page" | grep -oP 'cryptsetup-\K[0-9]+\.[0-9]+\.[0-9]+(?=\.tar\.gz)' | sort -Vr | head -1)
-
-	if [[ -z "$latest_final_version" ]]; then
-		echo "Failed to find the latest Cryptsetup final version" >> "$ERROR_LOG"
-		return 1
-	fi
-
-	echo "$latest_final_version"
-}
-
 update_gnu_package() {
 	local cat=$1
 	local package_name=$2
@@ -239,16 +206,57 @@ fetch_latest_git_version() {
 }
 
 update_git_package() {
-	local category="$1"
-	local package_name="$2"
-	local repo_url="$3"
+    local category="$1"
+    local package_name="$2"
+    local repo_url="$3"
 
-	local package_version=$(fetch_latest_git_version "$repo_url")
-	if [[ $? -eq 0 ]]; then
-		update_ebuild "${category}/${package_name}" "$package_name" "$package_version"
-	else
-		echo "Failed to update $package_name package" >> "$ERROR_LOG"
-	fi
+    if ! is_simple_version "$package_name"; then
+        echo "Skipping $package_name as it does not match simple versioning." >> "$DEBUG_LOG"
+        return 0
+    fi
+
+    local package_version=$(fetch_latest_git_version "$repo_url")
+    if [[ $? -eq 0 ]]; then
+        update_ebuild "${category}/${package_name}" "$package_name" "$package_version"
+    else
+        echo "Failed to update $package_name package" >> "$ERROR_LOG"
+    fi
+}
+
+update_github_package() {
+    local category="$1"
+    local package_name="$2"
+    local repo_url="$3"
+
+    if ! is_simple_version "$package_name"; then
+        echo "Skipping $package_name as it does not match simple versioning." >> "$DEBUG_LOG"
+        return 0
+    fi
+
+    local latest_version=$(handle_github "$repo_url")
+    if [[ $? -eq 0 ]]; then
+        update_ebuild "${category}/${package_name}" "${package_name}" "${latest_version}"
+    else
+        echo "Failed to update $package_name package" >> "$ERROR_LOG"
+    fi
+}
+
+update_gitlab_package() {
+    local category="$1"
+    local pa:qckage_name="$2"
+    local repo_url="$3"
+
+    if ! is_simple_version "$package_name"; then
+        echo "Skipping $package_name as it does not match simple versioning." >> "$DEBUG_LOG"
+        return 0
+    fi
+
+    local latest_version=$(handle_gitlab "$repo_url")
+    if [[ $? -eq 0 ]]; then
+        update_ebuild "${category}/${package_name}" "$package_name" "$latest_version"
+    else
+        echo "Failed to update $package_name package" >> "$ERROR_LOG"
+    fi
 }
 
 scrape_version() {
@@ -285,9 +293,6 @@ scrape_version() {
 	update_ebuild "$category_package" "$package_name" "$version"
 }
 
-cryptsetup_version=$(fetch_latest_cryptsetup_version)
-[[ $? -eq 0 ]] && update_ebuild "app-fs/cryptsetup" "cryptsetup" "$cryptsetup_version"
-
 if [[ $? -eq 0 ]]; then
 	update_gnu_package "app-build" "autoconf-archive"
 	update_gnu_package "app-build" "autoconf"
@@ -305,22 +310,9 @@ if [[ $? -eq 0 ]]; then
 fi
 
 update_git_package "app-net" "bluez" "https://git.kernel.org/pub/scm/bluetooth/bluez.git"
-update_git_package "lib-core" "elfutils" "https://sourceware.org/git/elfutils.git"
 update_git_package "app-core" "kbd" "https://git.kernel.org/pub/scm/linux/kernel/git/legion/kbd.git"
-update_git_package "lib-core" "libcap" "https://kernel.googlesource.com/pub/scm/libs/libcap/libcap"
-update_git_package "app-net" "iw" "https://kernel.googlesource.com/pub/scm/linux/kernel/git/jberg/iw"
-update_git_package "app-net" "ethtool" "https://git.kernel.org/pub/scm/network/ethtool/ethtool.git"
-update_git_package "lib-dev" "ell" "https://kernel.googlesource.com/pub/scm/libs/ell/ell.git"
 
-update_git_package "lib-net" "libnetfilter_conntrack" "https://git.netfilter.org/libnetfilter_conntrack"
-update_git_package "lib-net" "libnfnetlink" "https://git.netfilter.org/libnfnetlink"
-update_git_package "lib-net" "libnftnl" "https://git.netfilter.org/libnftnl"
-update_git_package "lib-net" "libmnl" "https://git.netfilter.org/libmnl"
-update_git_package "lib-net" "libnetfilter_log" "https://git.netfilter.org/libnetfilter_log"
-update_git_package "app-net" "nftables" "https://git.netfilter.org/nftables"
-update_git_package "app-var" "ulogd" "https://git.netfilter.org/ulogd2"
-update_git_package "app-net" "ipset" "https://git.netfilter.org/ipset"
-update_git_package "app-net" "iptables" "https://git.netfilter.org/iptables"
+
 
 update_git_package "app-util" "man-db" "https://gitlab.com/man-db/man-db"
 
@@ -337,27 +329,16 @@ update_git_package "app-util" "man-db" "https://gitlab.com/man-db/man-db"
 #update_github_package "lib-net" "c-ares" "https://github.com/c-ares/c-ares"
 #update_github_package "xgui-lib" "yajl" "https://github.com/lloyd/yajl"
 
-update_github_package "app-compression" "libzip" "https://github.com/nih-at/libzip"
-update_github_package "app-core" "gentoo-functions" "https://github.com/gentoo/gentoo-functions"
-update_github_package "app-core" "pkgcore" "https://github.com/pkgcore/pkgcore"
-update_github_package "app-core" "shadow" "https://github.com/shadow-maint/shadow"
+
 update_github_package "app-core" "vim" "https://github.com/vim/vim"
 update_github_package "app-core" "which" "https://github.com/carlowood/which"
-update_github_package "app-crypto" "acme" "https://github.com/certbot/certbot"
-update_github_package "app-crypto" "botan" "https://github.com/randombit/botan"
-update_github_package "app-crypto" "certbot" "https://github.com/certbot/certbot"
 update_github_package "app-crypto" "p11-kit" "https://github.com/p11-glue/p11-kit"
 update_github_package "app-dev" "cmake" "https://github.com/Kitware/CMake"
 update_github_package "app-dev" "meson" "https://github.com/mesonbuild/meson"
 update_github_package "app-dev" "re2c" "https://github.com/skvadrik/re2c"
-update_github_package "app-dev" "strace" "https://github.com/strace/strace"
-update_github_package "app-fs" "btrfs-progs" "https://github.com/kdave/btrfs-progs"
 update_github_package "app-lang" "sassc" "https://github.com/sass/sassc"
-update_github_package "app-net" "curl" "https://github.com/curl/curl"
 update_github_package "app-net" "openresolv" "https://github.com/NetworkConfiguration/openresolv"
 update_github_package "app-port" "gpyutils" "https://github.com/projg2/gpyutils"
-update_github_package "app-port" "pkgcheck" "https://github.com/pkgcore/pkgcheck"
-update_github_package "app-port" "pkgdev" "https://github.com/pkgcore/pkgdev"
 update_github_package "app-server" "easy-rsa" "https://github.com/OpenVPN/easy-rsa"
 update_github_package "app-server" "redis" "https://github.com/redis/redis"
 update_github_package "app-tex" "build-docbook-catalog" "https://github.com/gentoo/build-docbook-catalog"
@@ -366,16 +347,9 @@ update_github_package "app-var" "push" "https://github.com/vaeth/push"
 update_github_package "app-var" "quoter" "https://github.com/vaeth/quoter"
 update_github_package "bin" "apktool" "https://github.com/iBotPeaches/Apktool"
 update_github_package "bin" "vscodium" "https://github.com/VSCodium/VSCodium"
-update_github_package "lib-core" "libcap-ng" "https://github.com/stevegrubb/libcap-ng"
 update_github_package "lib-core" "libpcre2" "https://github.com/PCRE2Project/pcre2"
-update_github_package "lib-core" "musl-fts" "https://github.com/void-linux/musl-fts"
-update_github_package "lib-core" "ncurses" "https://github.com/ThomasDickey/ncurses-snapshots"
-update_github_package "lib-core" "ncurses5-compat" "https://github.com/ThomasDickey/ncurses-snapshots"
-update_github_package "lib-core" "pam" "https://github.com/linux-pam/linux-pam"
 update_github_package "lib-dev" "boost" "https://github.com/boostorg/boost"
 update_github_package "lib-dev" "boost-build" "https://github.com/boostorg/boost"
-update_github_package "lib-dev" "liblinear" "https://github.com/cjlin1/liblinear"
-update_github_package "lib-dev" "libuv" "https://github.com/libuv/libuv"
 update_github_package "lib-dev" "libyaml" "https://github.com/yaml/libyaml"
 update_github_package "lib-dev" "oniguruma" "https://github.com/kkos/oniguruma"
 update_github_package "lib-dev" "protobuf" "https://github.com/protocolbuffers/protobuf"
@@ -389,11 +363,4 @@ update_github_package "xgui-misc" "libsndfile" "https://github.com/libsndfile/li
 update_github_package "xgui-misc" "pulseaudio" "https://github.com/pulseaudio/pulseaudio"
 update_github_package "xgui-misc" "wine" "https://github.com/wine-staging/wine-staging"
 update_github_package "xgui-tools" "alsa-plugins" "https://github.com/alsa-project/alsa-plugins"
-update_github_package "xmedia-app" "pngquant" "https://github.com/kornelski/pngquant"
-update_github_package "xmedia-lib" "graphene" "https://github.com/ebassi/graphene"
 update_github_package "xmedia-lib" "libimagequant" "https://github.com/ImageOptim/libimagequant"
-
-scrape_version "app-crypto/gnupg" "https://www.gnupg.org/download/index.html"
-scrape_version "lib-core/libgpg-error" "https://www.gnupg.org/download/index.html"
-scrape_version "app-core/less" "https://www.greenwoodsoftware.com/less/download.html"
-scrape_version "lib-core/libedit" "https://thrysoee.dk/editline/"

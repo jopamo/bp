@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X.Org Xdamage library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=2d1aae42f0497b198f79b9e791856343d14503b1
+SNAPSHOT=1319ae5cfbde5b75e23383baa5e00cc23513448c
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXdamage/-/archive/${SNAPSHOT}/libXdamage-${SNAPSHOT}.tar.bz2 -> libXdamage-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxdamage-${SNAPSHOT}"
 

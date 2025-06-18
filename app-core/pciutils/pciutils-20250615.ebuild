@@ -6,10 +6,9 @@ inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="A library and various utilities dealing with the PCI bus"
 HOMEPAGE="http://mj.ucw.cz/sw/pciutils/ https://git.kernel.org/?p=utils/pciutils/pciutils.git"
-
-SNAPSHOT=4f2abadf015dd730d9c42a10ca5db6ed3bd6b9d2
-SRC_URI="https://github.com/pciutils/pciutils/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SNAPSHOT=2bbe1d46b628b155f691d31a8f5b5e0255f3be3f
+SRC_URI="https://github.com/pciutils/pciutils/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/pciutils-${SNAPSHOT}
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -18,7 +17,7 @@ KEYWORDS="amd64 arm64"
 IUSE="dns kmod static-libs +udev zlib"
 
 DEPEND="
-	app-core/pciids
+	app-core/hwdata
 	kmod? ( app-core/kmod
 			app-dev/pkgconf
 		 )

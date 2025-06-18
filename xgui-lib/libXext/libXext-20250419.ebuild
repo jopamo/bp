@@ -7,7 +7,7 @@ inherit autotools
 DESCRIPTION="X.Org Xext library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=424b67ad03fafdb0d6caf2e9bf5a103e9717e71f
+SNAPSHOT=23eeaa46152fb91a0601571f989c0d625bfc9994
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXext/-/archive/${SNAPSHOT}/libXext-${SNAPSHOT}.tar.bz2 -> libXext-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxext-${SNAPSHOT}"
 

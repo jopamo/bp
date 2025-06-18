@@ -16,9 +16,10 @@ IUSE="static-libs"
 
 DEPEND="app-core/attr"
 
-replace-flags -O3 -O2
-
 src_configure() {
+	replace-flags -O3 -O2
+	filter-flags -flto*
+
 	local myconf=(
 		--enable-shared $(use_enable static-libs static)
 		--disable-nls

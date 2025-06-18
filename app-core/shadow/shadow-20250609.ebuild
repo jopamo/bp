@@ -6,7 +6,9 @@ inherit autotools
 
 DESCRIPTION="Utilities to deal with user accounts"
 HOMEPAGE="https://github.com/shadow-maint/shadow http://pkg-shadow.alioth.debian.org/"
-SRC_URI="https://github.com/shadow-maint/shadow/releases/download/${PV}/${P}.tar.xz"
+SNAPSHOT=fe49b677c40dae1da2be515cc97b797c1f2b62dd
+SRC_URI="https://github.com/shadow-maint/shadow/archive/${SNAPSHOT}.tar.gz -> shadow-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/shadow-${SNAPSHOT}"
 
 LICENSE="BSD GPL-2"
 SLOT="0"
@@ -17,6 +19,7 @@ IUSE="acl pam subids systemd xattr yescrypt"
 DEPEND="
 	app-compression/xz-utils
 	lib-dev/libbsd
+	lib-core/libxcrypt
 	acl? ( app-core/acl )
 	pam? ( lib-core/pam )
 	xattr? ( app-core/attr )
@@ -25,7 +28,7 @@ DEPEND="
 src_prepare() {
 	cp -rp "${FILESDIR}"/* "${S}"/
 
-	sed -i 's|/sbin|/bin|g' src/Makefile.{am,in} || die
+	sed -i 's|/sbin|/bin|g' src/Makefile.am || die
 
 	default
 	eautoreconf

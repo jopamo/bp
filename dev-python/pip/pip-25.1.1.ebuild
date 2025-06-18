@@ -5,11 +5,11 @@ EAPI=8
 # please bump dev-python/ensurepip-pip along with this package!
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_TESTED=( pypy3 python3_{10..13} )
+PYTHON_TESTED=( pypy3_11 python3_{11..14} )
 PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" )
 PYTHON_REQ_USE="ssl(+),threads(+)"
 
-inherit distutils-r1
+inherit distutils-r1 
 
 DESCRIPTION="The PyPA recommended tool for installing Python packages"
 HOMEPAGE="
@@ -24,26 +24,26 @@ SRC_URI="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="test-rust"
+IUSE="test test-rust"
+RESTRICT="!test? ( test )"
 
 # see src/pip/_vendor/vendor.txt
 RDEPEND="
-	>=dev-python/cachecontrol-0.14.1[${PYTHON_USEDEP}]
+	>=dev-python/cachecontrol-0.14.2[${PYTHON_USEDEP}]
+	>=dev-python/dependency-groups-1.3.0[${PYTHON_USEDEP}]
 	>=dev-python/distlib-0.3.9[${PYTHON_USEDEP}]
 	>=dev-python/distro-1.9.0[${PYTHON_USEDEP}]
 	>=dev-python/msgpack-1.1.0[${PYTHON_USEDEP}]
-	>=dev-python/packaging-24.2[${PYTHON_USEDEP}]
-	>=dev-python/platformdirs-4.3.6[${PYTHON_USEDEP}]
+	>=dev-python/packaging-25.0[${PYTHON_USEDEP}]
+	>=dev-python/platformdirs-4.3.7[${PYTHON_USEDEP}]
 	>=dev-python/pyproject-hooks-1.2.0[${PYTHON_USEDEP}]
-	>=dev-python/requests-2.32.0[${PYTHON_USEDEP}]
-	>=dev-python/rich-13.9.4[${PYTHON_USEDEP}]
-	>=dev-python/resolvelib-1.0.1[${PYTHON_USEDEP}]
-	>=dev-py/setuptools-69.5.1[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep '
-		>=dev-python/tomli-2.2.1[${PYTHON_USEDEP}]
-	' 3.10)
-	>=dev-python/truststore-0.10.0[${PYTHON_USEDEP}]
-	>=dev-python/typing-extensions-4.12.2[${PYTHON_USEDEP}]
+	>=dev-python/requests-2.32.3[${PYTHON_USEDEP}]
+	>=dev-python/rich-14.0.0[${PYTHON_USEDEP}]
+	>=dev-python/resolvelib-1.1.0[${PYTHON_USEDEP}]
+	>=dev-py/setuptools-70.3.0[${PYTHON_USEDEP}]
+	>=dev-python/tomli-w-1.2.0[${PYTHON_USEDEP}]
+	>=dev-python/truststore-0.10.1[${PYTHON_USEDEP}]
+	>=dev-python/typing-extensions-4.13.2[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	${RDEPEND}
@@ -53,10 +53,11 @@ BDEPEND="
 			dev-python/ensurepip-wheel
 			dev-python/freezegun[${PYTHON_USEDEP}]
 			dev-python/pretend[${PYTHON_USEDEP}]
+			dev-python/pytest[${PYTHON_USEDEP}]
 			dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
 			dev-python/pytest-xdist[${PYTHON_USEDEP}]
 			dev-python/scripttest[${PYTHON_USEDEP}]
-			dev-python/tomli-w[${PYTHON_USEDEP}]
+			<dev-py/setuptools-80[${PYTHON_USEDEP}]
 			dev-python/virtualenv[${PYTHON_USEDEP}]
 			dev-python/werkzeug[${PYTHON_USEDEP}]
 			dev-python/wheel[${PYTHON_USEDEP}]
@@ -67,13 +68,11 @@ BDEPEND="
 	)
 "
 
-distutils_enable_tests pytest
-
 python_prepare_all() {
 	local PATCHES=(
 		"${FILESDIR}/pip-23.1-no-coverage.patch"
 		# prepare to unbundle dependencies
-		"${FILESDIR}/pip-24.1-unbundle.patch"
+		"${FILESDIR}/pip-25.0.1-unbundle.patch"
 	)
 
 	distutils-r1_python_prepare_all
@@ -94,6 +93,13 @@ python_prepare_all() {
 	fi
 }
 
+python_configure() {
+	if use test && has_version "dev-python/pip[${PYTHON_USEDEP}]"; then
+		"${EPYTHON}" -m pip check ||
+			die "${EPYTHON} -m pip check failed, tests will fail"
+	fi
+}
+
 python_compile_all() {
 	# 'pip completion' command embeds full $0 into completion script, which confuses
 	# 'complete' and causes QA warning when running as "${PYTHON} -m pip".
@@ -104,6 +110,11 @@ python_compile_all() {
 }
 
 python_test() {
+	if ! has "${EPYTHON}" "${PYTHON_TESTED[@]/_/.}"; then
+		einfo "Skipping tests on ${EPYTHON}"
+		return 0
+	fi
+
 	local EPYTEST_DESELECT=(
 		tests/functional/test_inspect.py::test_inspect_basic
 		# Internet
@@ -111,6 +122,8 @@ python_test() {
 		tests/functional/test_install.py::test_double_install_fail
 		tests/functional/test_install.py::test_install_sdist_links
 		tests/functional/test_install_config.py::test_prompt_for_keyring_if_needed
+		tests/functional/test_lock.py::test_lock_archive
+		tests/functional/test_lock.py::test_lock_vcs
 		# broken by system site-packages use
 		tests/functional/test_freeze.py::test_freeze_with_setuptools
 		tests/functional/test_pip_runner_script.py::test_runner_work_in_environments_with_no_pip
@@ -130,11 +143,31 @@ python_test() {
 	)
 
 	case ${EPYTHON} in
-		pypy3)
+		pypy3*)
 			EPYTEST_DESELECT+=(
 				# unexpected tempfiles?
 				tests/functional/test_install_config.py::test_do_not_prompt_for_authentication
 				tests/functional/test_install_config.py::test_prompt_for_authentication
+			)
+			;;
+		python3.14*)
+			EPYTEST_DESELECT+=(
+				# TODO: segfaults
+				tests/unit/test_collector.py::test_get_index_content_directory_append_index
+				# https://github.com/python/cpython/issues/125974
+				tests/unit/test_collector.py::test_ensure_quoted_url
+				tests/unit/test_finder.py::test_finder_priority_file_over_page
+				tests/unit/test_urls.py::test_path_to_url_unix
+				tests/unit/test_collector.py::test_clean_url_path
+				tests/unit/test_collector.py::test_clean_url_path_with_local_path
+				tests/unit/test_req.py::TestRequirementSet::test_download_info_local_editable_dir
+				tests/unit/test_req.py::test_parse_editable_local
+				tests/unit/test_req.py::test_parse_editable_local_extras
+				tests/unit/test_req.py::test_get_url_from_path__archive_file
+				tests/unit/test_req.py::test_get_url_from_path__installable_dir
+				tests/functional/test_lock.py::test_lock_wheel_from_findlinks
+				tests/functional/test_lock.py::test_lock_sdist_from_findlinks
+				tests/functional/test_lock.py::test_lock_local_editable_with_dep
 			)
 			;;
 	esac
@@ -161,6 +194,5 @@ python_install_all() {
 	local DOCS=( AUTHORS.txt docs/html/**/*.rst )
 	distutils-r1_python_install_all
 
-	insinto /usr/share/zsh/site-functions
-	newins completion.zsh _pip
+	newzshcomp completion.zsh _pip
 }

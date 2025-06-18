@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
 
@@ -17,15 +17,20 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-# dev-python/regex doesn't support pypy
+# dev-py/regex doesn't support pypy
 BDEPEND="
 	test? (
 		dev-python/atomicwrites[${PYTHON_USEDEP}]
 		$(python_gen_cond_dep '
-			dev-python/regex[${PYTHON_USEDEP}]
+			dev-py/regex[${PYTHON_USEDEP}]
 		' 'python*')
 	)
 "
+
+PATCHES=(
+	# https://github.com/lark-parser/lark/pull/1483
+	"${FILESDIR}"/${P}-py314.patch
+)
 
 distutils_enable_tests pytest
 

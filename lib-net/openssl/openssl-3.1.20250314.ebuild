@@ -2,13 +2,15 @@
 
 EAPI=8
 
-SNAPSHOT=b2c88ffda29a653bb14222dab0eaeb64a96d2440
+BRANCH_NAME="openssl-$(ver_cut 1-2)"
 
 inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="full-strength general purpose cryptography library (including SSL and TLS)"
 HOMEPAGE="https://www.openssl.org/"
-SRC_URI="https://github.com/openssl/openssl/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+
+SNAPSHOT=18a17538cf713806ad4fc81f1347c1745a2e6819
+SRC_URI="https://github.com/openssl/openssl/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/openssl-${SNAPSHOT}
 
 LICENSE="openssl"

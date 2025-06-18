@@ -2,14 +2,16 @@
 
 EAPI=8
 
+BRANCH_NAME="dev"
+
 inherit meson
 
 DESCRIPTION="Extremely Fast Compression algorithm"
 HOMEPAGE="https://github.com/lz4/lz4"
 
-SNAPSHOT=bac0e61001f529ea01324e01d6c30e7c312d2536
-SRC_URI="https://github.com/lz4/lz4/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}/build/meson
+SNAPSHOT=2bc386d57cd9c36780366acead0054fd49dcd36b
+SRC_URI="https://github.com/lz4/lz4/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/lz4-${SNAPSHOT}/build/meson
 
 LICENSE="BSD-2 GPL-2"
 SLOT="0"

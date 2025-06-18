@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=poetry
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{11..14} )
 
 inherit distutils-r1
 
@@ -22,15 +22,27 @@ KEYWORDS="amd64 arm64"
 IUSE="examples"
 
 RDEPEND="
-	<app-crypto/cryptography-45[${PYTHON_USEDEP}]
+	app-crypto/cryptography[${PYTHON_USEDEP}]
 	<dev-py/pyscard-3[${PYTHON_USEDEP}]
 	examples? (
 		dev-python/flask[${PYTHON_USEDEP}]
-		dev-python/pyopenssl[${PYTHON_USEDEP}]
 	)
 "
 
 distutils_enable_tests pytest
+
+src_prepare() {
+	distutils-r1_src_prepare
+
+	# unpin
+	sed -i -e '/cryptography/s:, <[0-9]*::' pyproject.toml || die
+}
+
+python_test() {
+	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
+	# skip device integration tests
+	epytest --no-device
+}
 
 python_install_all() {
 	distutils-r1_python_install_all

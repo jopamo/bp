@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1
 
@@ -27,7 +27,7 @@ RDEPEND="
 	>=dev-python/pip-7[${PYTHON_USEDEP}]
 	$(python_gen_cond_dep '
 		dev-python/importlib-resources[${PYTHON_USEDEP}]
-	' 3.{10..11})
+	' 3.11)
 "
 # NB: many test deps are optional/specific to tests we skip
 BDEPEND="

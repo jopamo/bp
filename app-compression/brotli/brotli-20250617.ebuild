@@ -8,7 +8,7 @@ inherit distutils-r1 cmake flag-o-matic
 
 DESCRIPTION="Generic-purpose lossless compression algorithm"
 HOMEPAGE="https://github.com/google/brotli"
-SNAPSHOT=3efb30f96ba50389c4a2fcd9f884b7dbfbadebae
+SNAPSHOT=7bd1bd4463c1ecdb375215e086814b2c2df982e6
 SRC_URI="https://github.com/google/brotli/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/brotli-${SNAPSHOT}
 

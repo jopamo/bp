@@ -4,7 +4,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
 
@@ -19,9 +19,17 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="+native-extensions test-rust"
 
+DEPEND="
+	native-extensions? (
+		$(python_gen_cond_dep '
+			net-libs/llhttp:=
+		' 'python3*')
+	)
+"
 RDEPEND="
-	>=dev-python/aiodns-3.2.0[${PYTHON_USEDEP}]
-	>=dev-python/aiohappyeyeballs-2.3.0[${PYTHON_USEDEP}]
+	${DEPEND}
+	>=dev-python/aiodns-3.3.0[${PYTHON_USEDEP}]
+	>=dev-python/aiohappyeyeballs-2.5.0[${PYTHON_USEDEP}]
 	>=dev-python/aiosignal-1.1.2[${PYTHON_USEDEP}]
 	>=dev-python/attrs-17.3.0[${PYTHON_USEDEP}]
 	dev-python/brotlicffi[${PYTHON_USEDEP}]
@@ -29,18 +37,17 @@ RDEPEND="
 	>=dev-python/multidict-4.5.0[${PYTHON_USEDEP}]
 	>=dev-python/propcache-0.2.0[${PYTHON_USEDEP}]
 	>=dev-python/yarl-1.17.0[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep '
-		<dev-python/async-timeout-6[${PYTHON_USEDEP}]
-		>=dev-python/async-timeout-4.0[${PYTHON_USEDEP}]
-	' 3.10)
 "
 BDEPEND="
+	>=dev-python/multidict-4.5.0[${PYTHON_USEDEP}]
 	native-extensions? (
-		dev-python/cython[${PYTHON_USEDEP}]
+		>=dev-py/cython-3.1.1[${PYTHON_USEDEP}]
+		dev-python/pkgconfig[${PYTHON_USEDEP}]
 	)
 	test? (
+		dev-python/blockbuster[${PYTHON_USEDEP}]
 		dev-python/freezegun[${PYTHON_USEDEP}]
-		www-servers/gunicorn[${PYTHON_USEDEP}]
+		dev-python/isal[${PYTHON_USEDEP}]
 		dev-python/pytest-mock[${PYTHON_USEDEP}]
 		dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
 		dev-python/pytest-xdist[${PYTHON_USEDEP}]
@@ -48,6 +55,8 @@ BDEPEND="
 		$(python_gen_cond_dep '
 			dev-python/time-machine[${PYTHON_USEDEP}]
 		' 'python3*')
+		dev-python/zlib-ng[${PYTHON_USEDEP}]
+		www-servers/gunicorn[${PYTHON_USEDEP}]
 		test-rust? (
 			dev-python/trustme[${PYTHON_USEDEP}]
 		)
@@ -61,23 +70,22 @@ distutils_enable_tests pytest
 
 src_prepare() {
 	filter-flags -Wl,-z,defs
+	distutils-r1_src_prepare
+
 	# increase the timeout a little
 	sed -e '/abs=/s/0.001/0.01/' -i tests/test_helpers.py || die
 	# xfail_strict fails on py3.10
 	sed -i -e '/--cov/d' -e '/pytest_cov/d' -e '/xfail_strict/d' setup.cfg || die
 	sed -i -e 's:-Werror::' Makefile || die
-
-	distutils-r1_src_prepare
+	# remove vendored llhttp
+	rm -r vendor || die
 }
 
 python_configure() {
-	if [[ ! -d tools && ${EPYTHON} != pypy3 ]] && use native-extensions
+	# check for .install-cython, so that we do this only once
+	if [[ ! -f .install-cython && ${EPYTHON} != pypy3 ]] &&
+		use native-extensions
 	then
-		# workaround missing files
-		mkdir tools || die
-		> requirements/cython.txt || die
-		> tools/gen.py || die
-		chmod +x tools/gen.py || die
 		# force rehashing first
 		emake requirements/.hash/cython.txt.hash
 		> .update-pip || die
@@ -88,8 +96,9 @@ python_configure() {
 
 python_compile() {
 	filter-flags -Wl,-z,defs
+	local -x AIOHTTP_USE_SYSTEM_DEPS=1
 	# implicitly disabled for pypy3
-	if ! use native-extensions; then
+	if [[ ${EPYTHON} == pypy3* ]] || ! use native-extensions; then
 		local -x AIOHTTP_NO_EXTENSIONS=1
 	fi
 
@@ -118,13 +127,27 @@ python_test() {
 	local EPYTEST_DESELECT=(
 		# Internet
 		tests/test_client_session.py::test_client_session_timeout_zero
+		tests/test_connector.py::test_tcp_connector_ssl_shutdown_timeout_nonzero_passed
+		tests/test_connector.py::test_tcp_connector_ssl_shutdown_timeout_passed_to_create_connection
+		tests/test_connector.py::test_tcp_connector_ssl_shutdown_timeout_zero_not_passed
 		# broken by irrelevant deprecation warnings
 		tests/test_circular_imports.py::test_no_warnings
 	)
 
+	case ${EPYTHON} in
+		python3.14)
+			EPYTEST_DESELECT+=(
+				# TODO
+				tests/test_cookiejar.py::test_pickle_format
+				# different exception message
+				tests/test_client_functional.py::test_aiohttp_request_coroutine
+			)
+			;;
+	esac
+
 	# upstream unconditionally blocks building C extensions
 	# on PyPy3 but the test suite needs an explicit switch
-	if [[ ${EPYTHON} == pypy3 ]] || ! use native-extensions; then
+	if [[ ${EPYTHON} == pypy3* ]] || ! use native-extensions; then
 		local -x AIOHTTP_NO_EXTENSIONS=1
 	fi
 

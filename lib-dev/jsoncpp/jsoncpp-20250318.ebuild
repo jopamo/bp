@@ -7,9 +7,9 @@ inherit cmake
 DESCRIPTION="C++ JSON reader and writer"
 HOMEPAGE="https://github.com/open-source-parsers/jsoncpp"
 
-SNAPSHOT=ba004477a6f260dedbe6ef6470b3760192e8d232
-SRC_URI="https://github.com/open-source-parsers/jsoncpp/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SNAPSHOT=ca98c98457b1163cca1f7d8db62827c115fec6d1
+SRC_URI="https://github.com/open-source-parsers/jsoncpp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/jsoncpp-${SNAPSHOT}
 
 LICENSE="|| ( public-domain MIT )"
 SLOT="0"

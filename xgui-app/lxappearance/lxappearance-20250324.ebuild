@@ -5,9 +5,9 @@ EAPI=8
 inherit autotools xdg
 
 DESCRIPTION="Extremely fast and lightweight file manager"
-HOMEPAGE="https://github.com/lxde/${PN}"
+HOMEPAGE="https://github.com/lxde/lxappearance"
 
-SNAPSHOT=b51af4c5bb1eb4393847ea883c05af3c6bec9b26
+SNAPSHOT=96e09b05b1897bdca72d8fdfeb1bd8ec68942c42
 SRC_URI="https://github.com/lxde/lxappearance/archive/${SNAPSHOT}.tar.gz -> lxappearance-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/lxappearance-${SNAPSHOT}"
 

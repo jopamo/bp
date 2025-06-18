@@ -7,13 +7,13 @@ inherit autotools
 DESCRIPTION="X.Org xtrans library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=c8c291390f4befb7d813d7fce6caeb6607561903
+SNAPSHOT=cf05ba4a10c90da2c63805a5375e983b174e28b0
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxtrans/-/archive/${SNAPSHOT}/libxtrans-${SNAPSHOT}.tar.bz2 -> libxtrans-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxtrans-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-tools/util-macros"
 

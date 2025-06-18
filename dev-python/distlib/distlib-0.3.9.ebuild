@@ -3,14 +3,14 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 
 inherit distutils-r1
 
 DESCRIPTION="Low-level components of distutils2/packaging"
 HOMEPAGE="
 	https://pypi.org/project/distlib/
-	https://github.com/pypa/distlib
+	https://github.com/pypa/distlib/
 "
 SRC_URI="
 	https://github.com/pypa/distlib/archive/${PV}.tar.gz -> ${P}.gh.tar.gz
@@ -26,6 +26,7 @@ RESTRICT="!test? ( test )"
 BDEPEND="
 	test? (
 		dev-python/pypiserver
+		dev-python/test[${PYTHON_USEDEP}]
 	)
 "
 
@@ -33,6 +34,8 @@ src_prepare() {
 	local PATCHES=(
 		# use system pypiserver instead of bundled one
 		"${FILESDIR}"/distlib-0.3.9-system-pypiserver.py
+		# https://github.com/pypa/distlib/pull/244
+		"${FILESDIR}/${P}-freethreading.patch"
 	)
 
 	# make sure it's not used
@@ -48,7 +51,7 @@ python_test() {
 	# disable system-site-packages -- distlib has no deps, and is very
 	# fragile to packages actually installed on the system
 	sed -i -e '/system-site-packages/s:true:false:' \
-		"${BUILD_DIR}/install${EPREFIX}/usr/bin/pyvenv.cfg" || die
+		"${BUILD_DIR}/install${EPREFIX}/usr/pyvenv.cfg" || die
 
 	"${EPYTHON}" tests/test_all.py -v -x ||
 		die "Tests failed with ${EPYTHON}"

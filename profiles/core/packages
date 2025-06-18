@@ -1,5 +1,3 @@
-*app-build/binutils
-*app-build/gcc
 *app-build/make
 *app-compression/pigz
 *app-compression/tar
@@ -37,9 +35,9 @@
 *app-port/eix
 *app-port/find_cruft
 *app-port/gentoolkit
-*app-port/portage-utils
 *app-var/pax-utils
-*lib-core/elfutils
 *lib-net/ca-certificates
+*virtual/gcc
 *virtual/libc
+*virtual/libelf
 *virtual/service-manager

@@ -4,11 +4,9 @@ app-core
 app-crypto
 app-dev
 app-emu
-app-eselec
 app-fs
 app-kernel
 app-lang
-app-live
 app-net
 app-port
 app-server
@@ -16,9 +14,10 @@ app-tex
 app-util
 app-var
 bin
-dev-perl
+core-perl
 dev-py
 dev-python
+dev-rust
 distfiles
 eclass
 fonts

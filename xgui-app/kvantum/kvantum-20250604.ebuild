@@ -7,7 +7,7 @@ inherit cmake xdg
 DESCRIPTION="SVG-based theme engine for Qt, KDE Plasma and LXQt"
 HOMEPAGE="https://github.com/tsujan/Kvantum"
 
-SNAPSHOT=0d82f557141f01402bd8afe4aad0e442c04a9988
+SNAPSHOT=eca74006f9fc7a318488e0884bc958189c64c6ae
 SRC_URI="https://github.com/tsujan/Kvantum/archive/${SNAPSHOT}.tar.gz -> kvantum-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/Kvantum-${SNAPSHOT}/Kvantum"
 
@@ -32,8 +32,11 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	cat > "${T}"/99${PN} <<- EOF || die
-		QT_STYLE_OVERRIDE=kvantum
-	EOF
-	doenvd "${T}"/99${PN}
+	insinto /usr/share/color-schemes
+	doins "${FILESDIR}"/KvGnomeDark.colors
+
+	#cat > "${T}"/99kvantum <<- EOF || die
+	#	QT_STYLE_OVERRIDE=kvantum
+	#EOF
+	#doenvd "${T}"/99kvantum
 }

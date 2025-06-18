@@ -17,7 +17,7 @@ IUSE="static-libs"
 DEPEND="lib-dev/libmd"
 
 src_configure() {
-	filter-flags -fno-semantic-interposition
+	filter-flags -flto*
 
 	ECONF_SOURCE="${S}" econf $(use_enable static-libs static)
 }

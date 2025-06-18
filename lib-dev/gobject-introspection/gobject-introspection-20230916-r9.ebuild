@@ -8,7 +8,7 @@ DESCRIPTION="Introspection system for GObject-based libraries"
 HOMEPAGE="https://wiki.gnome.org/Projects/GObjectIntrospection"
 
 SNAPSHOT=b8c3ff23b6c121433faca19ddf61fe8dc72a8930
-SRC_URI="https://gitlab.gnome.org/GNOME/gobject-introspection/-/archive/${SNAPSHOT}/gobject-introspection-${SNAPSHOT}.tar.bz2 -> ${P}.tar.bz2"
+SRC_URI="https://gitlab.gnome.org/GNOME/gobject-introspection/-/archive/${SNAPSHOT}/gobject-introspection-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/gobject-introspection-${SNAPSHOT}
 
 LICENSE="LGPL-2+ GPL-2+"

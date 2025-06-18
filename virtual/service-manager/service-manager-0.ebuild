@@ -8,8 +8,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="systemd"
 
-RDEPEND="
-	|| (
-		!systemd? ( app-core/runit )
-		systemd? ( app-core/systemd )
-	)"
+#RDEPEND="
+#	|| (
+#		!systemd? ( app-core/runit )
+#		systemd? ( app-core/systemd )
+#	)"

@@ -19,7 +19,6 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	>=app-crypto/cryptography-1.5[${PYTHON_USEDEP}]
-	>=dev-python/pyopenssl-0.13[${PYTHON_USEDEP}]
 "
 
 distutils_enable_tests pytest

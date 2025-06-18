@@ -6,18 +6,14 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Stand-alone build of libbpf from the Linux kernel"
 HOMEPAGE="https://github.com/libbpf/libbpf"
-
-if [[ ${PV} =~ [9]{4,} ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/libbpf/libbpf.git"
-else
-	SRC_URI="https://github.com/${PN}/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~alpha amd64 ~arm arm64 ~hppa ~loong ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86"
-fi
-S="${WORKDIR}/${P}/src"
+SNAPSHOT=95a9035e8b532124b521fb66391fafb86ae857c1
+SRC_URI="https://github.com/libbpf/libbpf/archive/${SNAPSHOT}.tar.gz -> libbpf-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/libbpf-${SNAPSHOT}/src
 
 LICENSE="GPL-2 LGPL-2.1 BSD-2"
 SLOT="0"
+KEYWORDS="amd64 arm64"
+
 IUSE="static-libs"
 
 PATCHES=(
@@ -43,5 +39,5 @@ src_install() {
 	fi
 
 	insinto /usr/lib/pkgconfig
-	doins ${PN}.pc
+	doins libbpf.pc
 }

@@ -2,13 +2,12 @@
 
 EAPI=8
 
-inherit cmake
+inherit cmake xdg
 
 DESCRIPTION="Qt port of pavucontrol"
 HOMEPAGE="http://lxqt.org/"
-
-SNAPSHOT=01d4356e5009fb70e9efaf01487e822d804df470
-SRC_URI="https://github.com/lxde/pavucontrol-qt/archive/${SNAPSHOT}.tar.gz -> pavucontrol-qt-${SNAPSHOT}.tar.gz"
+SNAPSHOT=9437f1470da19e76efe587e86de6496c65815665
+SRC_URI="https://github.com/lxqt/pavucontrol-qt/archive/${SNAPSHOT}.tar.gz -> pavucontrol-qt-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/pavucontrol-qt-${SNAPSHOT}"
 
 LICENSE="GPL-2"
@@ -30,6 +29,6 @@ src_install() {
 	cmake_src_install
 
 	insopts -m 0644
-	insinto /usr/share/pixmaps
-	doins "${FILESDIR}"/coolspeaker.svg
+	insinto /usr/share/icons/hicolor/256x256/apps
+	doins "${FILESDIR}"/coolspeaker.png
 }

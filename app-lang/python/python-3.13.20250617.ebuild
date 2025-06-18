@@ -2,6 +2,8 @@
 
 EAPI=8
 
+BRANCH_NAME="$(ver_cut 1-2)"
+
 WANT_LIBTOOL="none"
 
 inherit autotools flag-o-matic python-utils-r1 toolchain-funcs
@@ -14,8 +16,8 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="$(ver_cut 1-2)"
 	inherit git-r3
 else
-	SNAPSHOT=43898abd9af6d09d7dc276b1172134bf6eac499d
-	SRC_URI="https://github.com/python/cpython/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=28a70a59e467d1a4ddee0a060e0d837311c510f7
+	SRC_URI="https://github.com/python/cpython/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/cpython-${SNAPSHOT}
 fi
 
@@ -40,6 +42,7 @@ DEPEND="
 	readline? ( lib-core/readline )
 	sqlite? ( lib-core/sqlite )
 	ssl? ( virtual/ssl )
+	tk? ( app-lang/tk )
 "
 
 BDEPEND="app-build/autoconf-archive"
@@ -73,7 +76,6 @@ src_configure() {
 	fi
 
 	append-flags -fwrapv
-	append-flags -ffat-lto-objects
 	filter-flags -malign-double
 
 	if use pgo; then
@@ -116,24 +118,25 @@ src_configure() {
 	fi
 
 	local myeconfargs=(
-		--enable-shared
-		--without-static-libpython
-		--disable-ipv6
 		--bindir="${prefix}"/usr/bin
+		--disable-ipv6
+		--enable-loadable-sqlite-extensions
+		--enable-shared
 		--infodir='${prefix}/share/info'
 		--mandir='${prefix}/share/man'
 		--with-computed-gotos
 		--with-dbmliborder="${dbmliborder}"
 		--with-libc=
-		--enable-loadable-sqlite-extensions
-		--without-ensurepip
 		--with-lto
-		--with-system-expat
-		--with-platlibdir=lib
 		--with-pkg-config=yes
+		--with-platlibdir=lib
+		--with-system-expat
+		--with-system-libmpdec
 		--with-wheel-pkg-dir="${EPREFIX}"/usr/lib/python/ensurepip
-		$(use_with debug assertions)
+		--without-ensurepip
+		--without-static-libpython
 		$(use_enable pgo optimizations)
+		$(use_with debug assertions)
 		$(use_with readline readline "$(usex libedit editline readline)")
 		$(use_with valgrind)
 	)
@@ -290,7 +293,6 @@ src_install() {
 	chmod +x "${scriptdir}/python${pymajor}-config" || die
 	ln -s "python${pymajor}-config" "${scriptdir}/python-config" || die
 	# 2to3, pydoc
-	ln -s "../../../bin/2to3-${PYVER}" "${scriptdir}/2to3" || die
 	ln -s "../../../bin/pydoc${PYVER}" "${scriptdir}/pydoc" || die
 	# idle
 	if use tk; then

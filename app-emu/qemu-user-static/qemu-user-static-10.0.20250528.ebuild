@@ -2,13 +2,15 @@
 
 EAPI=8
 
+BRANCH_NAME="stable-$(ver_cut 1-2)"
+
 inherit flag-o-matic
 
 DESCRIPTION="QEMU with enhanced support for multiple architectures and options"
 HOMEPAGE="https://www.qemu.org/"
 
-SNAPSHOT=0ff5ab6f57a2427a3e83969b2e7dd71e04caae39
-SRC_URI="https://github.com/qemu/qemu/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=ff3419cbacdc9ad0715c716afeed65bb21a2bbbc
+SRC_URI="https://github.com/qemu/qemu/archive/${SNAPSHOT}.tar.gz -> qemu-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/qemu-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2.1"

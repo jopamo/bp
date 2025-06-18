@@ -8,8 +8,8 @@ DESCRIPTION="A parallel implementation of gzip"
 HOMEPAGE="http://www.zlib.net/pigz/"
 
 SNAPSHOT=fe4894f57739e3039a2ffc2a2a360d35e19bacbe
-SRC_URI="https://github.com/madler/pigz/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+SRC_URI="https://github.com/madler/pigz/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/pigz-${SNAPSHOT}
 
 LICENSE="ZLIB"
 SLOT="0"
@@ -25,9 +25,9 @@ src_compile() {
 }
 
 src_install() {
-	dobin ${PN}
+	dobin pigz
 
 	for x in gzip gunzip zcat ; do
-		dosym ${PN} usr/bin/${x}
+		dosym pigz usr/bin/${x}
 	done
 }

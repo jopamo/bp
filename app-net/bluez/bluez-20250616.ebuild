@@ -2,11 +2,13 @@
 
 EAPI=8
 
-inherit flag-o-matic linux-info
+inherit flag-o-matic linux-info autotools
 
 DESCRIPTION="Bluetooth Tools and System Daemons for Linux"
 HOMEPAGE="http://www.bluez.org"
-SRC_URI="https://www.kernel.org/pub/linux/bluetooth/${P}.tar.xz"
+SNAPSHOT=dc8db3601001de9a085da063e0c5e456074b8963
+SRC_URI="https://github.com/bluez/bluez/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2+ LGPL-2.1+"
 SLOT="0"
@@ -66,6 +68,7 @@ pkg_setup() {
 
 src_prepare() {
 	default
+	eautoreconf
 	use elibc_musl && eapply "${FILESDIR}/gdbus-define-MAX_INPUT-for-musl.patch"
 }
 

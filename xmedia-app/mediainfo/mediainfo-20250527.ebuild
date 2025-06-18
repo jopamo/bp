@@ -2,12 +2,12 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools flag-o-matic
 
 DESCRIPTION="MediaInfo supplies technical and tag information about media files"
 HOMEPAGE="https://mediaarea.net/mediainfo/ https://github.com/MediaArea/MediaInfo"
 
-SNAPSHOT=cc54e849138bfc409f10cc113fdf21b10e07b93c
+SNAPSHOT=f28733cb7379e42c441b6d4b2da418495ac2dcab
 SRC_URI="https://github.com/MediaArea/MediaInfo/archive/${SNAPSHOT}.tar.gz -> MediaInfo-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/MediaInfo-${SNAPSHOT}/Project/GNU/CLI/"
 
@@ -22,7 +22,14 @@ DEPEND="
 "
 
 src_prepare() {
+	cd "${WORKDIR}/MediaInfo-${SNAPSHOT}"
+	cp "${WORKDIR}/MediaInfo-${SNAPSHOT}/Project/GNU/CLI/AddThisToRoot_CLI_compile.sh" c.sh
+	./c.sh || die
+	cd "${S}"
 	default
 	sed -i -e "s:-O2::" configure.ac || die
 	eautoreconf
+
+	append-flags -lcrypto
+	filter-flags -Wl,-z,defs -flto*
 }

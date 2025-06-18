@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( pypy3 python3_{10..13} python3_13t )
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} python3_{13,14}t )
 
 inherit distutils-r1
 
@@ -22,7 +22,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	>=dev-py/setuptools-scm-6.4.0[${PYTHON_USEDEP}]
+	>=dev-py/setuptools-scm-8.2.0[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	

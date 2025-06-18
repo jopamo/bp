@@ -2,21 +2,23 @@
 
 EAPI=8
 
+BRANCH_NAME="v$(ver_cut 1)-stable"
+
 inherit flag-o-matic linux-info meson toolchain-funcs user
 
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
 
-SNAPSHOT=7fa3b5018bfffa176c77a2a5794dce792eebadcb
-SRC_URI="https://github.com/systemd/systemd/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+SNAPSHOT=00a12c234e2506f5cab683460199575f13c454db
+SRC_URI="https://github.com/systemd/systemd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/systemd-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="binfmt +blkid bootloader bpf-framework coredump dbus devmode dhcp4 efi gcrypt +gshadow
-+hostnamed +hwdb importd kmod kvm ldconfig localed logind machined musl networkd
+IUSE="binfmt +blkid bootloader bpf-framework coredump dbus devmode +dhcp4 elfutils efi gcrypt +gshadow
++hostnamed +hwdb importd kmod kvm ldconfig localed logind machined musl +networkd
 oomd pam pcre pstore resolve rfkill systemd-update sysusersd timedated
 tmpfilesd +userdb +utmp +vconsole xkb"
 
@@ -37,6 +39,7 @@ DEPEND="
 	bpf-framework? ( lib-net/libbpf )
 	logind? ( app-fs/cryptsetup )
 	gcrypt? ( lib-core/libgcrypt )
+	elfutils? ( virtual/libelf )
 	lib-core/libseccomp
 	dbus? (
 		app-core/dbus
@@ -132,7 +135,7 @@ src_configure() {
 		$(meson_feature importd)
 		$(meson_feature kmod)
 		$(meson_feature logind fdisk)
-		$(meson_feature logind)
+		$(meson_use logind)
 		$(meson_feature logind libcryptsetup)
 		$(meson_use machined)
 		$(meson_feature machined bzip2)
@@ -152,11 +155,11 @@ src_configure() {
 		$(meson_use hwdb)
 		$(meson_use ldconfig)
 		$(meson_use localed)
-		$(meson_use logind)
 		$(meson_use networkd link-networkd-shared)
 		$(meson_use networkd)
 		$(meson_use oomd)
 		$(meson_use pstore)
+		$(meson_use elfutils)
 		$(meson_use resolve)
 		$(meson_use rfkill)
 		$(meson_use sysusersd sysusers)
@@ -175,7 +178,6 @@ src_configure() {
 		-Dbacklight=false
 		-Ddefault-kill-user-processes=false
 		-Ddns-servers=""
-		-Delfutils=enabled
 		-Denvironment-d=false
 		-Dfirstboot=false
 		-Dgnutls=disabled
@@ -312,7 +314,6 @@ pkg_postinst() {
 pkg_preinst() {
 	if ! use sysusersd; then
 		enewgroup messagebus &&	enewuser messagebus
-
 
 		enewgroup systemd-journal
 

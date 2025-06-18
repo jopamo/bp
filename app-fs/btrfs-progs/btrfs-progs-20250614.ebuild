@@ -2,19 +2,13 @@
 
 EAPI=8
 
+inherit autotools
+
 DESCRIPTION="Btrfs filesystem utilities"
 HOMEPAGE="https://btrfs.wiki.kernel.org"
-
-if [[ ${PV} != 9999 ]]; then
-	MY_PV=v${PV}
-	SRC_URI="https://www.kernel.org/pub/linux/kernel/people/kdave/${PN}/${PN}-${MY_PV}.tar.xz"
-	S="${WORKDIR}"/${PN}-${MY_PV}
-else
-	WANT_LIBTOOL=none
-	inherit autotools git-r3
-	EGIT_REPO_URI="https://github.com/kdave/btrfs-progs.git"
-	EGIT_BRANCH="master"
-fi
+SNAPSHOT=63d37e368db769b2dd3c6540dfb0eb36d1df1cd9
+SRC_URI="https://github.com/kdave/btrfs-progs/archive/${SNAPSHOT}.tar.gz -> btrfs-progs-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/btrfs-progs-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -22,7 +16,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static static-libs"
 
-RESTRICT=test # tries to mount repared filesystems
+RESTRICT=test
 
 LIB_DEPEND="
 	app-core/util-linux:0[static-libs(+)]
@@ -44,17 +38,15 @@ fi
 src_prepare() {
 	default
 
-	if [[ ${PV} == 9999 ]]; then
-		eaclocal
-		eautoconf
-		eautoheader
-		mkdir config || die
-		local automakedir="$(autotools_run_tool --at-output automake --print-libdir)"
-		[[ -e ${automakedir} ]] || die "Could not locate automake directory"
-		ln -s "${automakedir}"/install-sh config/install-sh || die
-		ln -s "${EPREFIX}"/usr/share/gnuconfig/config.guess config/config.guess || die
-		ln -s "${EPREFIX}"/usr/share/gnuconfig/config.sub config/config.sub || die
-	fi
+	eaclocal
+	eautoconf
+	eautoheader
+
+	local automakedir="$(autotools_run_tool --at-output automake --print-libdir)"
+	[[ -e ${automakedir} ]] || die "Could not locate automake directory"
+	ln -s "${automakedir}"/install-sh config/install-sh || die
+	ln -s "${EPREFIX}"/usr/share/gnuconfig/config.guess config/config.guess || die
+	ln -s "${EPREFIX}"/usr/share/gnuconfig/config.sub config/config.sub || die
 }
 
 src_configure() {

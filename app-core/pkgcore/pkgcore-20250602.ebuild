@@ -8,7 +8,9 @@ inherit distutils-r1
 
 DESCRIPTION="a framework for package management"
 HOMEPAGE="https://github.com/pkgcore/pkgcore"
-SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
+SNAPSHOT=40012d98c5e27a5710f5b9617b96e0f9333698d6
+SRC_URI="https://github.com/pkgcore/pkgcore/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="BSD MIT"
 SLOT="0"
@@ -16,7 +18,7 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	app-core/bash
-	dev-python/lxml[${PYTHON_USEDEP}]"
+	dev-py/lxml[${PYTHON_USEDEP}]"
 if [[ ${PV} == *9999 ]]; then
 	RDEPEND+=" ~dev-py/snakeoil-9999[${PYTHON_USEDEP}]"
 else
@@ -65,10 +67,4 @@ BINPKG_COMPRESS_FLAGS="-e9"
 BINPKG_FORMAT="xpak"
 EOF
 
-}
-
-python_install_all() {
-	local DOCS=( NEWS.rst )
-	doman build/sphinx/man/*
-	distutils-r1_python_install_all
 }

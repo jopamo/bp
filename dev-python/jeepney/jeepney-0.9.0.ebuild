@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( pypy3 python3_{10..13} )
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 pypi
 
@@ -20,7 +20,9 @@ IUSE="examples"
 
 BDEPEND="
 	test? (
-		dev-python/async-timeout[${PYTHON_USEDEP}]
+		$(python_gen_cond_dep '
+			dev-python/async-timeout[${PYTHON_USEDEP}]
+		' 3.10)
 		>=dev-python/pytest-asyncio-0.7.1[${PYTHON_USEDEP}]
 		dev-python/testpath[${PYTHON_USEDEP}]
 		sys-apps/dbus

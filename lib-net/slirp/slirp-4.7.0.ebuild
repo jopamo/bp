@@ -8,7 +8,7 @@ DESCRIPTION="A TCP-IP emulator used to provide virtual networking services"
 HOMEPAGE="https://gitlab.freedesktop.org/slirp/libslirp"
 
 SNAPSHOT=129077f9870426d1b7b3a8239d8b5a50bee017b4
-SRC_URI="https://gitlab.freedesktop.org/slirp/libslirp/-/archive/${SNAPSHOT}/lib${PN}-${SNAPSHOT}.tar.bz2 -> lib${P}.tar.bz2"
+SRC_URI="https://gitlab.freedesktop.org/slirp/libslirp/-/archive/${SNAPSHOT}/lib${PN}-${SNAPSHOT}.tar.bz2 -> lib${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/lib${PN}-${SNAPSHOT}
 
 LICENSE="BSD"

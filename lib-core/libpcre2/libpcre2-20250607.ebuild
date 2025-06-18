@@ -7,8 +7,8 @@ inherit flag-o-matic autotools
 DESCRIPTION="Perl-compatible regular expression library"
 HOMEPAGE="http://www.pcre.org/"
 
-SNAPSHOT=35eafc9d2034ae19f0a807cb3005affea7bb2300
-SLJIT_SNAPSHOT=eb8ef1e81902e14ae3bfdfcb423b932963b8cc10
+SNAPSHOT=bf50eeef64fc4f5ddfc93a041e2f4d7357f3c431
+SLJIT_SNAPSHOT=7779da89dc7e00a540712fcb859b762d4eca2a26
 
 SRC_URI="https://github.com/PCRE2Project/pcre2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz
 		https://github.com/zherczeg/sljit/archive/${SLJIT_SNAPSHOT}.tar.gz"
@@ -42,11 +42,10 @@ src_configure() {
 	local myconf=(
 		--enable-jit
 		--enable-pcre2grep-jit
-		--disable-pcre2test-libedit
+		--enable-pcre2test-libedit
 		--enable-pcre2-16
 		--enable-pcre2-32
-		--enable-pcre2-8
-		--enable-pcre2test-libreadline
+		--disable-pcre2test-libreadline
 		--enable-shared
 		--htmldir="${EPREFIX}"/usr/share/doc/${PF}/html
 		$(use_enable bzip2 pcre2grep-libbz2)

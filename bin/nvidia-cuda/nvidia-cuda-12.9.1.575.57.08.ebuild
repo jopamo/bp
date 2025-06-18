@@ -34,7 +34,7 @@ src_install() {
 
 	# Install standard sub packages
 	local builddirs=(
-		builds/cuda_{cudart,cuobjdump,nvcc,nvdisasm,nvml_dev,nvprune,nvrtc,nvtx}
+		builds/cuda_{cccl,cudart,cuobjdump,cupti,cuxxfilt,nvcc,nvdisasm,nvml_dev,nvprof,nvprune,nvrtc,nvtx,nvvp,opencl}
 		builds/lib{cublas,cufft,curand,cusolver,cusparse,npp,nvjpeg}
 		$(usex debugger "builds/cuda_gdb" "")
 	)
@@ -76,11 +76,10 @@ src_install() {
 	doins -r builds/cuda_nvml_dev/nvml
 
 	if use sanitizer; then
-		dobin builds/integration/Sanitizer/compute-sanitizer
-		doins -r builds/cuda_sanitizer_api/Sanitizer
-		# special handling for the executable
+		dobin "${S}"/builds/integration/Sanitizer/compute-sanitizer
+		doins -r "${S}"/builds/cuda_sanitizer_api/compute-sanitizer/
 		exeinto ${cudadir}/Sanitizer
-		doexe builds/cuda_sanitizer_api/Sanitizer/compute-sanitizer
+		doexe "${S}"/builds/cuda_sanitizer_api/compute-sanitizer/compute-sanitizer
 	fi
 
 	# Add include and lib symlinks
@@ -94,7 +93,7 @@ src_install() {
 
 	# Cuda prepackages libraries, don't revdep-build on them
 	insinto /etc/revdep-rebuild
-	newins - 80${PN} <<-EOF
+	newins - 80nvidia-cuda <<-EOF
 		SEARCH_DIRS_MASK="${ecudadir}"
 	EOF
 }

@@ -8,7 +8,7 @@ inherit flag-o-matic
 DESCRIPTION="Open source HEVC encoder"
 HOMEPAGE="http://x265.org/"
 
-SNAPSHOT=6e840276cdc90665c9f5036543ae22fae87b140e
+SNAPSHOT=cd40fe75d8d5c383c54c34807eec9d5f21d14afe
 SRC_URI="https://bitbucket.org/multicoreware/x265_git/get/${SNAPSHOT}.zip"
 S="${WORKDIR}/multicoreware-x265_git-${SNAPSHOT:0:12}"
 
@@ -67,6 +67,6 @@ src_install() {
 	dolib.so build/libhdr10plus.so*
 
 	insinto /usr/lib/pkgconfig
-	doins "${FILESDIR}/${PN}.pc"
+	doins "${FILESDIR}/x265.pc"
 }
 

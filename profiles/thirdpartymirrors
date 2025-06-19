@@ -4,7 +4,7 @@ gentoo		https://gentoo.osuosl.org/distfiles/
 github		https://github.com/downloads
 gnupg		https://gnupg.org/ftp/gcrypt https://ftp.osuosl.org/pub/blfs/conglomeration/ https://www.gnupg.org/ftp/gcrypt/
 kernel		https://www.kernel.org/pub/
-gnu		https://download-mirror.savannah.gnu.org/releases/  https://mirrors.tripadvisor.com/gnu/ https://ftp.osuosl.org/pub/blfs/conglomeration/ https://ftp.gnu.org/gnu/ https://ftp.gnu.org/gnu/"
+gnu		https://download-mirror.savannah.gnu.org/releases/  https://mirrors.tripadvisor.com/gnu/ https://ftp.osuosl.org/pub/blfs/conglomeration/ https://ftp.gnu.org/gnu/ https://ftp.gnu.org/gnu/
 pypi		https://pypi.python.org/packages/source https://files.pythonhosted.org/packages/source
 sourceforge	http://download.sourceforge.net
 gcc http://www.netgull.com/gcc/ https://bigsearcher.com/mirrors/gcc/ http://mirrors.concertpass.com/gcc/ https://mirrorservice.org/sites/sourceware.org/pub/gcc/

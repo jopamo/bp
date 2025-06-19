@@ -2,7 +2,11 @@
 
 EAPI=8
 
-OLDVER=1.16
+MAJOR=${PV%%.*}
+MINOR=${PV##*.}
+
+OLDVER1="$MAJOR.$((MINOR - 1))"
+OLDVER2="$MAJOR.$((MINOR - 2))"
 
 DESCRIPTION="Used to generate Makefile.in from Makefile.am"
 HOMEPAGE="https://www.gnu.org/software/automake/"
@@ -20,27 +24,26 @@ BDEPEND="
 "
 
 src_install() {
-	emake DESTDIR="${D}" install
+	emake DESTDIR="${D}" install || die
 
-	#compat symlinks
-	rm "${ED}"/usr/bin/{aclocal,automake}-*
+	rm "${ED}"/usr/bin/{aclocal,automake}-* || die
 
-	dosym -r /usr/bin/aclocal /usr/bin/aclocal-${OLDVER}
-	dosym -r /usr/bin/automake /usr/bin/automake-${OLDVER}
+	VERSIONS=("${OLDVER1}" "${OLDVER2}" "$(ver_cut 1-2)")
 
-	dosym -r /usr/bin/aclocal /usr/bin/aclocal-$(ver_cut 1-2)
-	dosym -r /usr/bin/automake /usr/bin/automake-$(ver_cut 1-2)
+	for v in "${VERSIONS[@]}"; do
+		dosym -r /usr/bin/aclocal /usr/bin/aclocal-${v}
+		dosym -r /usr/bin/automake /usr/bin/automake-${v}
+	done
 
-	dosym -r /usr/share/gnuconfig/config.sub /usr/share/automake-$(ver_cut 1-2)/config.sub
+	dosym -r /usr/share/gnuconfig/config.sub   /usr/share/automake-$(ver_cut 1-2)/config.sub
 	dosym -r /usr/share/gnuconfig/config.guess /usr/share/automake-$(ver_cut 1-2)/config.guess
 
-	mkdir -p "${ED}"/usr/share/{aclocal,automake} || die
+	for dir in aclocal automake; do
+		mkdir -p "${ED}/usr/share/${dir}" || die
+		cp -rp "${ED}/usr/share/${dir}-$(ver_cut 1-2)"/* "${ED}/usr/share/${dir}/" || die
+		rm -rf "${ED}/usr/share/${dir}-$(ver_cut 1-2)" || die
+		dosym -r /usr/share/${dir} /usr/share/${dir}-$(ver_cut 1-2)
+	done
 
-	cp -rp "${ED}"/usr/share/aclocal-$(ver_cut 1-2)/* "${ED}"/usr/share/aclocal/ || die
-	cp -rp "${ED}"/usr/share/automake-$(ver_cut 1-2)/* "${ED}"/usr/share/automake/ || die
-
-	rm -rf "${ED}"/usr/share/{aclocal,automake}-$(ver_cut 1-2) || die
-
-	dosym -r /usr/share/aclocal /usr/share/aclocal-$(ver_cut 1-2)
-	dosym -r /usr/share/automake /usr/share/automake-$(ver_cut 1-2)
+	rm "${ED}"/usr/share/doc/automake-1.18/amhello-1.0.tar.gz
 }

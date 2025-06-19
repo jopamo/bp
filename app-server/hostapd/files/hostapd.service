@@ -9,8 +9,12 @@ ExecStart=/usr/sbin/hostapd /etc/hostapd/hostapd.conf
 ExecReload=/usr/bin/kill -HUP $MAINPID
 KillMode=process
 Restart=on-failure
-RestartSec=5s
-StartLimitBurst=3
+RestartSec=60s
+StartLimitBurst=2
+StartLimitIntervalSec=0
+ProtectSystem=full
+ProtectHome=true
+NoNewPrivileges=true
 
 [Install]
 WantedBy=multi-user.target

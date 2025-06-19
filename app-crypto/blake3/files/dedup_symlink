@@ -2,13 +2,45 @@
 
 ROOT_DIR="."
 DRY_RUN=false
+EMOJI_OK=false
 
-detect_cpu_count() {
-	local cpu_count=1
-	if command -v nproc &>/dev/null; then
-		cpu_count="$(nproc)"
+detect_emoji_support() {
+	[[ -t 1 ]] || return 1
+	case "${LANG}${LC_CTYPE}" in
+		*[Uu][Tt][Ff][-_]*8*) ;;
+		*[Uu][Tt][Ff]8*) ;;
+		*) return 1 ;;
+	esac
+	case "$TERM" in
+		dumb|linux) return 1 ;;
+	esac
+	return 0
+}
+
+set_emoji_vars() {
+	if detect_emoji_support; then
+		EMOJI_OK=true
+		ICON_DR="🧪"
+		ICON_REAL="🗃️"
+		ICON_FILE="📄"
+		ICON_BYTE="💾"
+		ICON_DUP="🔗"
+		ICON_SAVE="🪙"
+		ICON_OK="✅"
+		ICON_BAD="🚫"
+		ICON_SAD="😢"
+	else
+		EMOJI_OK=false
+		ICON_DR="[DRY-RUN]"
+		ICON_REAL="[DEDUP]"
+		ICON_FILE="[F]"
+		ICON_BYTE="[B]"
+		ICON_DUP="[DUP]"
+		ICON_SAVE="[$]"
+		ICON_OK="[OK]"
+		ICON_BAD="[NO]"
+		ICON_SAD=":("
 	fi
-	echo "$cpu_count"
 }
 
 print_help() {
@@ -16,43 +48,21 @@ print_help() {
 Usage: dedup_symlink.sh [OPTIONS] [DIRECTORY]
 
 Options:
-  -h, --help	  Show this help message and exit.
-  -T, --test	  Create a test environment with some duplicates and run.
+  -h, --help      Show this help message and exit.
+  -T, --test      Create a test environment with some duplicates and run.
   -n, --dry-run   Show what would be done without making any changes.
 
 Arguments:
-  DIRECTORY	   The directory to deduplicate. Defaults to current directory.
+  DIRECTORY       The directory to deduplicate. Defaults to current directory.
 EOF
 }
 
-setup_test_environment() {
-	local TEST_DIR
-	TEST_DIR="$(mktemp -d)"
-
-	mkdir -p "$TEST_DIR/subdir1" "$TEST_DIR/subdir2" "$TEST_DIR/subdir3"
-	# Create duplicates of "a":
-	echo "a" > "$TEST_DIR/file1.txt"
-	echo "a" > "$TEST_DIR/file9.txt"
-	echo "a" > "$TEST_DIR/subdir1/file2.txt"
-	echo "a" > "$TEST_DIR/subdir1/file5.txt"
-	# Create duplicates of "b":
-	echo "b" > "$TEST_DIR/subdir2/file3.txt"
-	echo "b" > "$TEST_DIR/subdir3/file4.txt"
-	# Create a unique file:
-	echo "c" > "$TEST_DIR/unique.txt"
-
-	echo "Created test files:"
-	find "$TEST_DIR" -type f
-
-	deduplicate_files "$TEST_DIR"
-
-	echo
-	echo "After deduplication:"
-	find "$TEST_DIR" -type f -o -type l | while IFS= read -r file; do
-		ls -l "$file"
-	done
-
-	rm -rf "$TEST_DIR"
+detect_cpu_count() {
+	local cpu_count=1
+	if command -v nproc &>/dev/null; then
+		cpu_count="$(nproc)"
+	fi
+	echo "$cpu_count"
 }
 
 check_dependencies() {
@@ -72,13 +82,180 @@ check_dependencies() {
 	fi
 }
 
+setup_test_environment() {
+	local TEST_DIR
+	TEST_DIR="$(mktemp -d)"
+	local PASS=true
+
+	mkdir -p "$TEST_DIR/subdir1" "$TEST_DIR/subdir2" "$TEST_DIR/subdir3"
+	mkdir -p "$TEST_DIR/deeper/inner"
+
+	# Create duplicates of "a" in different dirs and with different mtimes/permissions
+	echo "a" > "$TEST_DIR/file1.txt"
+	sleep 1
+	echo "a" > "$TEST_DIR/file9.txt"
+	sleep 1
+	echo "a" > "$TEST_DIR/subdir1/file2.txt"
+	sleep 1
+	echo "a" > "$TEST_DIR/subdir1/file5.txt"
+	chmod 600 "$TEST_DIR/subdir1/file5.txt"
+	touch -d "yesterday" "$TEST_DIR/subdir1/file2.txt"
+	ln "$TEST_DIR/file1.txt" "$TEST_DIR/hardlink_to_a" # hard link
+
+	# Create duplicates of "b" in different locations
+	echo "b" > "$TEST_DIR/subdir2/file3.txt"
+	echo "b" > "$TEST_DIR/subdir3/file4.txt"
+	echo "b" > "$TEST_DIR/deeper/inner/fileb.txt"
+
+	# Group "c": unique file and also a large file and empty file
+	echo "c" > "$TEST_DIR/unique.txt"
+	head -c 100000 /dev/urandom > "$TEST_DIR/large.bin"
+	cp "$TEST_DIR/large.bin" "$TEST_DIR/subdir2/large_copy.bin"
+	: > "$TEST_DIR/emptyfile"
+	cp "$TEST_DIR/emptyfile" "$TEST_DIR/subdir1/emptyfile_copy"
+
+	# Binary and multiline duplicate
+	printf "bin\0data\n" > "$TEST_DIR/binfile"
+	cp "$TEST_DIR/binfile" "$TEST_DIR/subdir1/binfile_copy"
+
+	# A file that is a symlink (should not deduplicate)
+	ln -s unique.txt "$TEST_DIR/link_to_unique"
+
+	echo "Created test files:"
+	find "$TEST_DIR" -exec ls -l {} +
+
+	deduplicate_files "$TEST_DIR"
+
+	echo
+	echo "After deduplication:"
+	find "$TEST_DIR" -type f -o -type l | while IFS= read -r file; do
+		ls -l "$file"
+	done
+
+	# Helper: verify all files in group point to a single real file
+	verify_group() {
+		local group_name="$1"; shift
+		local -a files=("$@")
+		local targets=()
+		for f in "${files[@]}"; do
+			if [ ! -e "$f" ]; then
+				echo "FAIL: $group_name $f missing"
+				PASS=false
+			elif [ -L "$f" ]; then
+				targets+=("$(readlink -f "$f")")
+			else
+				targets+=("$(readlink -f "$f")")
+			fi
+		done
+		targets=($(printf "%s\n" "${targets[@]}" | sort -u))
+		if [ "${#targets[@]}" -ne 1 ]; then
+			echo "FAIL: Not all $group_name files are linked to a single file: ${targets[*]}"
+			PASS=false
+		fi
+	}
+
+	# Group "a" verification (including hardlink)
+	verify_group "a" "$TEST_DIR/file1.txt" "$TEST_DIR/file9.txt" "$TEST_DIR/subdir1/file2.txt" "$TEST_DIR/subdir1/file5.txt" "$TEST_DIR/hardlink_to_a"
+
+	# Group "b"
+	verify_group "b" "$TEST_DIR/subdir2/file3.txt" "$TEST_DIR/subdir3/file4.txt" "$TEST_DIR/deeper/inner/fileb.txt"
+
+	# Group "large"
+	verify_group "large" "$TEST_DIR/large.bin" "$TEST_DIR/subdir2/large_copy.bin"
+
+	# Group "empty"
+	verify_group "empty" "$TEST_DIR/emptyfile" "$TEST_DIR/subdir1/emptyfile_copy"
+
+	# Group "bin"
+	verify_group "bin" "$TEST_DIR/binfile" "$TEST_DIR/subdir1/binfile_copy"
+
+	# Unique file untouched and not a symlink
+	if [ ! -f "$TEST_DIR/unique.txt" ]; then
+		echo "FAIL: unique.txt missing"
+		PASS=false
+	elif [ -L "$TEST_DIR/unique.txt" ]; then
+		echo "FAIL: unique.txt is a symlink"
+		PASS=false
+	fi
+
+	# Symlink to unique should still be a symlink and point to unique
+	if [ ! -L "$TEST_DIR/link_to_unique" ]; then
+		echo "FAIL: link_to_unique should be a symlink"
+		PASS=false
+	else
+		link_target=$(readlink -f "$TEST_DIR/link_to_unique")
+		unique_target=$(readlink -f "$TEST_DIR/unique.txt")
+		if [ "$link_target" != "$unique_target" ]; then
+			echo "FAIL: link_to_unique does not point to unique.txt"
+			PASS=false
+		fi
+	fi
+
+	if $PASS; then
+		echo "TEST RESULT: ✅ PASS"
+	else
+		echo "TEST RESULT: ❌ FAIL"
+		exit 1
+	fi
+
+	rm -rf "$TEST_DIR"
+}
+
+print_summary() {
+	local file_count="$1"
+	local total_bytes="$2"
+	local duplicate_count="$3"
+	local total_saved="$4"
+	local dry_run="$5"
+
+	local COLOR_HEADER; local COLOR_RESET="\033[0m"
+	if [[ "$dry_run" == true ]]; then
+		COLOR_HEADER="\033[1;36m"
+	else
+		COLOR_HEADER="\033[1;32m"
+	fi
+
+	printf "\n"
+
+	if [[ "$dry_run" == true ]]; then
+		if $EMOJI_OK; then
+			printf "${COLOR_HEADER}  %s  %s${COLOR_RESET}\n" "$ICON_DR" "DRY-RUN SUMMARY"
+		else
+			printf "${COLOR_HEADER}===== DRY-RUN SUMMARY =====${COLOR_RESET}\n"
+		fi
+	else
+		if $EMOJI_OK; then
+			printf "${COLOR_HEADER}  %s  %s${COLOR_RESET}\n" "DEDUPLICATION SUMMARY"
+		else
+			printf "${COLOR_HEADER}===== DEDUPLICATION SUMMARY =====${COLOR_RESET}\n"
+		fi
+	fi
+
+	local LABEL_WIDTH=27
+	local VALUE_WIDTH=12
+
+	if [[ "$dry_run" == true ]]; then
+		printf "  %s  %-*s %*d\n" "$ICON_FILE"  $LABEL_WIDTH "Total files scanned:"           $VALUE_WIDTH "$file_count"
+		printf "  %s  %-*s %*d\n" "$ICON_BYTE"  $LABEL_WIDTH "Total bytes scanned:"           $VALUE_WIDTH "$total_bytes"
+		printf "  %s  %-*s %*d\n" "$ICON_DUP"   $LABEL_WIDTH "Duplicate files found:"         $VALUE_WIDTH "$duplicate_count"
+		printf "  %s  %-*s %*d bytes\n" "$ICON_SAVE" $LABEL_WIDTH "Space that would be saved:" $VALUE_WIDTH "$total_saved"
+	else
+		printf "  %s  %-*s %*d\n" "$ICON_FILE"  $LABEL_WIDTH "Total files scanned:"           $VALUE_WIDTH "$file_count"
+		printf "  %s  %-*s %*d\n" "$ICON_BYTE"  $LABEL_WIDTH "Total bytes scanned:"           $VALUE_WIDTH "$total_bytes"
+		printf "  %s  %-*s %*d\n" "$ICON_DUP"   $LABEL_WIDTH "Duplicate files replaced:"      $VALUE_WIDTH "$duplicate_count"
+		printf "  %s  %-*s %*d bytes\n" "$ICON_SAVE" $LABEL_WIDTH "Space actually saved:"     $VALUE_WIDTH "$total_saved"
+	fi
+
+	printf "\n"
+}
+
+
 deduplicate_files() {
 	local target_dir="$1"
 	local cpu_count
 	cpu_count="$(detect_cpu_count)"
 
 	echo "Scanning files in: $target_dir"
-	echo "Detected CPU cores: $cpu_count"
 
 	local file_list
 	file_list="$(mktemp)"
@@ -160,22 +337,12 @@ deduplicate_files() {
 	done
 
 	echo
-	if [[ "$DRY_RUN" == true ]]; then
-		echo "===== DRY-RUN SUMMARY ====="
-		echo "Total files scanned:	 $file_count"
-		echo "Total bytes scanned:	 $total_bytes"
-		echo "Duplicate files found:   $duplicate_count"
-		echo "Space that would be saved: $total_saved bytes"
-	else
-		echo "===== DEDUPLICATION SUMMARY ====="
-		echo "Total files scanned:	  $file_count"
-		echo "Total bytes scanned:	  $total_bytes"
-		echo "Duplicate files replaced: $duplicate_count"
-		echo "Space actually saved:	 $total_saved bytes"
-	fi
+	print_summary "$file_count" "$total_bytes" "$duplicate_count" "$total_saved" "$DRY_RUN"
 }
 
 main() {
+	set_emoji_vars
+
 	local positionals=()
 
 	while [[ $# -gt 0 ]]; do

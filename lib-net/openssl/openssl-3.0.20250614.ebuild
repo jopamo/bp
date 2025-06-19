@@ -8,8 +8,7 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="full-strength general purpose cryptography library (including SSL and TLS)"
 HOMEPAGE="https://www.openssl.org/"
-
-SNAPSHOT=18a17538cf713806ad4fc81f1347c1745a2e6819
+SNAPSHOT=768703277f6aec1536a15344a3fb243c16927d5e
 SRC_URI="https://github.com/openssl/openssl/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/openssl-${SNAPSHOT}
 

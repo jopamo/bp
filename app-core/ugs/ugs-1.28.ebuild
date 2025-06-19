@@ -32,8 +32,7 @@ src_install() {
 	done
 
 	for f in hosts_bump eclass_import emirror lighttpd_certs \
-		mkheaders mkimg mkstage xbkup upApp upBrowsers \
-		upPython xchroot ; do
+		mkheaders mkimg mkstage xbkup xchroot ; do
 			dobin "${FILESDIR}"/bin/$f
 	done
 

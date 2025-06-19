@@ -27,18 +27,20 @@ fi
 
 DATE=$(date +%Y%m%d)
 
-ARCHIVE="1g4-${LIBC}-${ARCH}-${DATE}.tar.xz"
-STAGE3_FILENAME="$(pwd)/${ARCHIVE}"
-
-QUIET=0
+# Default build type is empty (for normal tarballs)
+BUILD_TYPE=""
+BUILD_TYPE_SUFFIX=""
 USAGE="Usage:\n\
-	$(basename $0) [-q -c -b] [-s || -t <target-mountpoint>] [custom-tar-options]\n\
+	$(basename $0) [-q -c] [-b <default|desktop|debug>] [-s || -t <target-mountpoint>] [custom-tar-options]\n\
+	-b: build type suffix (default, desktop, debug)\n\
 	-q: activates quiet mode (no confirmation).\n\
 	-s: makes tarball of current system.\n\
 	-t: makes tarball of system located at the <target-mountpoint>.\n\
 	-h: displays help message."
 
-while getopts ':t:skqh' flag; do
+QUIET=0
+
+while getopts ':t:skqhb:' flag; do
 	case "${flag}" in
 		t)
 			TARGET="$OPTARG"
@@ -48,6 +50,9 @@ while getopts ':t:skqh' flag; do
 			;;
 		q)
 			QUIET=1
+			;;
+		b)
+			BUILD_TYPE="$OPTARG"
 			;;
 		h)
 			echo -e "$USAGE"
@@ -63,6 +68,27 @@ while getopts ':t:skqh' flag; do
 			;;
 	esac
 done
+
+# Determine suffix
+case "$BUILD_TYPE" in
+	""|"default")
+		BUILD_TYPE_SUFFIX=""
+		;;
+	"desktop")
+		BUILD_TYPE_SUFFIX="-desktop"
+		;;
+	"debug")
+		BUILD_TYPE_SUFFIX="-debug"
+		;;
+	*)
+		print_color $COLOR_RED "✘ Error: Unknown build type: $BUILD_TYPE"
+		echo -e "$USAGE"
+		exit 1
+		;;
+esac
+
+ARCHIVE="1g4-${LIBC}-${ARCH}-${DATE}${BUILD_TYPE_SUFFIX}.tar.xz"
+STAGE3_FILENAME="$(pwd)/${ARCHIVE}"
 
 if [ -z "$TARGET" ]; then
 	print_color $COLOR_RED "✘ Error: No target specified."
@@ -134,6 +160,18 @@ EXCLUDES="--exclude=${TARGET}boot/*
 	--exclude=${TARGET}var/log/*
 	--exclude=${TARGET}var/run/*
 	--exclude=${TARGET}var/tmp/*"
+
+# Place for further variant customization
+case "$BUILD_TYPE" in
+	"desktop")
+		# e.g. Uncomment and customize if you want to change EXCLUDES for desktop
+		# EXCLUDES+=" --exclude=${TARGET}some-desktop-thing"
+		;;
+	"debug")
+		# e.g. Uncomment and customize if you want to change EXCLUDES for debug
+		# EXCLUDES+=" --exclude=${TARGET}some-debug-thing"
+		;;
+esac
 
 if [ "$TARGET" == "/" ]; then
 	EXCLUDES+=" --exclude=/${STAGE3_FILENAME#/}"

@@ -1,3 +1,76 @@
+/*
+b3sum:
+Usage: b3sum [OPTION]... [FILE]...
+Print or check BLAKE3 (256-bit) checksums.
+
+With no FILE, or when FILE is -, read standard input.
+  -c, --check           read checksums from the FILEs and check them
+      --tag             create a BSD-style checksum
+  -z, --zero            end each output line with NUL, not newline,
+                          and disable file name escaping
+
+The following five options are useful only when verifying checksums:
+      --ignore-missing  don't fail or report status for missing files
+      --quiet           don't print OK for each successfully verified file
+      --status          don't output anything, status code shows success
+      --strict          exit non-zero for improperly formatted checksum lines
+  -w, --warn            warn about improperly formatted checksum lines
+
+      --help        display this help and exit
+      --version     output version information and exit
+
+
+BLAKE3 API
+#define BLAKE3_VERSION_STRING "1.8.2"
+#define sBLAKE3_KEY_LEN 32
+#define BLAKE3_OUT_LEN 32
+#define BLAKE3_BLOCK_LEN 64
+#define BLAKE3_CHUNK_LEN 1024
+#define BLAKE3_MAX_DEPTH 54
+
+// This struct is a private implementation detail. It has to be here because
+// it's part of blake3_hasher below.
+typedef struct {
+  uint32_t cv[8];
+  uint64_t chunk_counter;
+  uint8_t buf[BLAKE3_BLOCK_LEN];
+  uint8_t buf_len;
+  uint8_t blocks_compressed;
+  uint8_t flags;
+} blake3_chunk_state;
+
+typedef struct {
+  uint32_t key[8];
+  blake3_chunk_state chunk;
+  uint8_t cv_stack_len;
+  // The stack size is MAX_DEPTH + 1 because we do lazy merging. For example,
+  // with 7 chunks, we have 3 entries in the stack. Adding an 8th chunk
+  // requires a 4th entry, rather than merging everything down to 1, because we
+  // don't know whether more input is coming. This is different from how the
+  // reference implementation does things.
+  uint8_t cv_stack[(BLAKE3_MAX_DEPTH + 1) * BLAKE3_OUT_LEN];
+} blake3_hasher;
+
+BLAKE3_API const char *blake3_version(void);
+BLAKE3_API void blake3_hasher_init(blake3_hasher *self);
+BLAKE3_API void blake3_hasher_init_keyed(blake3_hasher *self,
+                                         const uint8_t key[BLAKE3_KEY_LEN]);
+BLAKE3_API void blake3_hasher_init_derive_key(blake3_hasher *self, const char *context);
+BLAKE3_API void blake3_hasher_init_derive_key_raw(blake3_hasher *self, const void *context,
+                                                  size_t context_len);
+BLAKE3_API void blake3_hasher_update(blake3_hasher *self, const void *input,
+                                     size_t input_len);
+#if defined(BLAKE3_USE_TBB)
+BLAKE3_API void blake3_hasher_update_tbb(blake3_hasher *self, const void *input,
+                                         size_t input_len);
+#endif // BLAKE3_USE_TBB
+BLAKE3_API void blake3_hasher_finalize(const blake3_hasher *self, uint8_t *out,
+                                       size_t out_len);
+BLAKE3_API void blake3_hasher_finalize_seek(const blake3_hasher *self, uint64_t seek,
+                                            uint8_t *out, size_t out_len);
+BLAKE3_API void blake3_hasher_reset(blake3_hasher *self);
+*/
+
 #define _POSIX_C_SOURCE 200809L
 
 #include <ctype.h>
@@ -79,7 +152,7 @@ static void print_help(void) {
 }
 
 /* Print version message. */
-static void print_version(void) { puts("b3sum version 1.0 (improved, multithreaded)"); }
+static void print_version(void) { puts("b3sum version 1.1"); }
 
 /* Parse command-line options. Returns new optind or 0/negative on help/error. */
 static int handle_options(int argc, char **argv, program_opts *opts) {
@@ -100,46 +173,31 @@ static int handle_options(int argc, char **argv, program_opts *opts) {
   };
 
   int opt;
-  while ((opt = getopt_long(argc, argv, "ctzwiqSswhv", long_options, NULL)) != -1) {
+  // Remove duplicate short options
+  while ((opt = getopt_long(argc, argv, "ctzwiqSwhv", long_options, NULL)) != -1) {
     switch (opt) {
-      case 'c':
-        opts->check = 1;
-        break;
-      case 't':
-        opts->tag = 1;
-        break;
-      case 'z':
-        opts->zero = 1;
-        break;
-      case 'i':
-        opts->ignore_missing = 1;
-        break;
-      case 'q':
-        opts->quiet = 1;
-        break;
-      case 's':
-        opts->status = 1;
-        break;
-      case 'S':
-        opts->strict = 1;
-        break;
-      case 'w':
-        opts->warn = 1;
-        break;
+      case 'c': opts->check = 1; break;
+      case 't': opts->tag = 1; break;
+      case 'z': opts->zero = 1; break;
+      case 'i': opts->ignore_missing = 1; break;
+      case 'q': opts->quiet = 1; break;
+      case 's': opts->status = 1; break;
+      case 'S': opts->strict = 1; break;
+      case 'w': opts->warn = 1; break;
       case 'h':
         print_help();
-        return 0; /* Only show help, success exit. */
+        return 0;
       case 'v':
         print_version();
-        return 0; /* Only show version, success exit. */
+        return 0;
       case '?':
       default:
         fprintf(stderr, "Try 'b3sum --help' for more information.\n");
-        return -1; /* Error exit. */
+        return -1;
     }
   }
 
-  return optind; /* Return the position of the first non-option argument. */
+  return optind;
 }
 
 /* Return 1 if path is a directory, or 0 otherwise (also 0 if stat fails). */
@@ -203,23 +261,77 @@ static int hash_file(const char *filename, uint8_t *output, int ignore_missing) 
   return 0;
 }
 
+static char *unescape_filename(const char *in) {
+  size_t len = strlen(in);
+  char *out = malloc(len + 1);
+  if (!out) return NULL;
+  size_t j = 0;
+  for (size_t i = 0; i < len;) {
+    if (in[i] == '\\') {
+      if (in[i+1] == 'n') {
+        out[j++] = '\n';
+        i += 2;
+      } else if (in[i+1] == '\\') {
+        out[j++] = '\\';
+        i += 2;
+      } else {
+        // Lone backslash: copy as is
+        out[j++] = in[i++];
+      }
+    } else {
+      out[j++] = in[i++];
+    }
+  }
+  out[j] = '\0';
+  return out;
+}
+
 /*
  * Print the hash (64 hex chars for 32 bytes), plus filename.
  * If `tag` is set, prepend "BLAKE3 ".
  * If `zero` is set, terminate with NUL instead of newline.
  */
 static void print_hash(const uint8_t *hash, const char *filename, int tag, int zero) {
+  int needs_escape = 0;
+  const char *p;
+
+  if (!zero) {
+    for (p = filename; *p; ++p) {
+      if (*p == '\n' || *p == '\\') {
+        needs_escape = 1;
+        break;
+      }
+    }
+  }
+
   if (tag) {
     fputs("BLAKE3 ", stdout);
   }
+
   for (size_t i = 0; i < BLAKE3_OUT_LEN; i++) {
     printf("%02x", hash[i]);
   }
+
   if (zero) {
-    /* Output ends with NUL */
+    // No escaping, raw
     printf("  %s%c", (strcmp(filename, "-") == 0 ? "-" : filename), '\0');
   } else {
-    printf("  %s\n", (strcmp(filename, "-") == 0 ? "-" : filename));
+    if (needs_escape) {
+      putchar('\\'); // signal escaped filename
+    }
+    printf("  "); // Always two spaces after hash
+
+    // Print filename, escaping \ and \n
+    for (p = filename; *p; ++p) {
+      if (*p == '\\') {
+        fputs("\\\\", stdout);
+      } else if (*p == '\n') {
+        fputs("\\n", stdout);
+      } else {
+        putchar(*p);
+      }
+    }
+    putchar('\n');
   }
 }
 
@@ -246,20 +358,13 @@ static int parse_hex_hash(const char *hex, uint8_t *out) {
   return 0;
 }
 
-/*
- * Parse one line in a checksum file. Format may optionally begin with "BLAKE3 "
- * if using --tag, followed by 64 hex digits, two spaces, and the filename.
- *
- * On success, allocate (strdup) a new filename in `*filename_out` and fill
- * `hash_out` with the expected 32-byte hash. Return 0 on success, -1 on failure.
- */
 static int parse_check_line(const char *line_in, const program_opts *opts, char **filename_out, uint8_t *hash_out) {
   char *line = strdup(line_in);
   if (!line) {
     return -1;
   }
 
-  /* Strip trailing newlines. */
+  // Strip trailing newlines.
   char *end = line + strlen(line);
   while (end > line && (end[-1] == '\n' || end[-1] == '\r')) {
     end[-1] = '\0';
@@ -272,38 +377,54 @@ static int parse_check_line(const char *line_in, const program_opts *opts, char 
     size_t plen = strlen(prefix);
     if (strncmp(line, prefix, plen) != 0) {
       free(line);
-      return -1; /* Missing "BLAKE3 ". */
+      return -1; // Missing "BLAKE3 ".
     }
     hash_start = line + plen;
   }
 
-  /* We expect two spaces between the 64-hex hash and the filename. */
-  char *space = strstr(hash_start, "  ");
-  if (!space) {
-    free(line);
-    return -1; /* No double space found. */
+  int needs_unescape = 0;
+  // GNU-style: if line starts with \ (after optional tag), treat as escaped
+  if (!opts->zero && hash_start[0] == '\\') {
+    needs_unescape = 1;
+    hash_start++; // skip leading
   }
 
-  size_t hash_len = (size_t)(space - hash_start);
+  // Accept both "  " and " *" as marker (coreutils compatible)
+  char *space = strstr(hash_start, "  ");
+  char *star  = strstr(hash_start, " *");
+  char *marker = NULL;
+  if (space && (!star || space < star)) {
+    marker = space;
+  } else if (star) {
+    marker = star;
+  } else {
+    free(line);
+    return -1; // No valid marker found
+  }
+
+  size_t hash_len = (size_t)(marker - hash_start);
   if (hash_len != (BLAKE3_OUT_LEN * 2)) {
     free(line);
-    return -1; /* Incorrect hash length. */
+    return -1; // Incorrect hash length.
   }
 
-  /* Convert the hash. */
   if (parse_hex_hash(hash_start, hash_out) != 0) {
     free(line);
-    return -1; /* Invalid hex. */
+    return -1; // Invalid hex.
   }
 
-  const char *fname = space + 2;
+  const char *fname = marker + 2; // skip marker
   if (*fname == '\0') {
     free(line);
-    return -1; /* Missing filename. */
+    return -1; // Missing filename.
   }
 
-  /* Copy out the filename. */
-  *filename_out = strdup(fname);
+  if (needs_unescape) {
+    *filename_out = unescape_filename(fname);
+  } else {
+    *filename_out = strdup(fname);
+  }
+
   free(line);
   if (!(*filename_out)) {
     return -1;
@@ -400,7 +521,7 @@ static file_task *dequeue_task(void) {
 /*---------------------------------------------------*/
 static void *worker_thread_func(void *arg) {
   const program_opts *opts = (const program_opts *)arg;
-  uint8_t output[BLAKE3_OUT_LEN];
+  uint8_t output[BLAKE3_OUT_LEN] = {0};
 
   for (;;) {
     file_task *task = dequeue_task();
@@ -591,30 +712,35 @@ int main(int argc, char **argv) {
   program_opts opts;
   int new_optind = handle_options(argc, argv, &opts);
   if (new_optind < 0) {
-    /* Error in options. */
     return EXIT_FAILURE;
   } else if (new_optind == 0) {
-    /* Help or version was printed. */
     return EXIT_SUCCESS;
   }
 
-  /* We'll process from argv[new_optind..] */
+  blake3_mt_pool_init(0);
+
+  int ret = EXIT_SUCCESS;
+
   int file_count = argc - new_optind;
   char **files = &argv[new_optind];
 
   if (opts.check) {
-    int ret = process_check_files_multithread(file_count, files, &opts);
-    return ret == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
-
+    ret = process_check_files_multithread(file_count, files, &opts);
+    if (ret != 0) ret = EXIT_FAILURE;
+    else ret = EXIT_SUCCESS;
   } else {
     if (file_count == 0) {
-      /* No files => read from stdin as a single “-” file. */
       static char *fake_argv[] = {"-"};
       file_count = 1;
       files = fake_argv;
     }
 
     process_files_concurrently(file_count, files, &opts);
-    return any_failure_global ? EXIT_FAILURE : EXIT_SUCCESS;
+    if (any_failure_global)
+      ret = EXIT_FAILURE;
   }
+
+  blake3_mt_pool_destroy();
+
+  return ret;
 }

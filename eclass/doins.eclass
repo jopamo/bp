@@ -5,6 +5,9 @@
 # @BLURB: Helper functions to install files in standard directories for bash-completion, tmpfiles.d, and systemd units.
 # @DESCRIPTION: This eclass provides utility functions for installing files
 
+if [[ -z ${_DOINS_ECLASS} ]]; then
+_DOINS_ECLASS=1
+
 EAPI=8
 
 inherit toolchain-funcs
@@ -177,3 +180,47 @@ udev_newrules() {
 		newins "${@}"
 	)
 }
+
+make_wrapper() {
+    local wrapper_name=$1 binary=$2 target_dir=$3 library_dir=$4 custom_path=$5
+    local temp_wrapper="${T}/temp_wrapper_${wrapper_name##*/}"
+
+    {
+        echo '#!/bin/bash'
+
+        if [[ -n $library_dir ]]; then
+            local lib_var
+            if [[ $CHOST == *-darwin* ]]; then
+                lib_var="DYLD_LIBRARY_PATH"
+            else
+                lib_var="LD_LIBRARY_PATH"
+            fi
+
+            echo 'if [ -n "${'"${lib_var}"'+set}" ]; then'
+            echo "    export ${lib_var}=\"\${${lib_var}}:${EPREFIX}${library_dir}\""
+            echo 'else'
+            echo "    export ${lib_var}=\"${EPREFIX}${library_dir}\""
+            echo 'fi'
+        fi
+
+        if [[ -n $target_dir ]]; then
+            echo "cd \"${EPREFIX}${target_dir}\" || exit 1"
+        fi
+
+        echo "exec ${EPREFIX}${binary} \"\$@\""
+    } > "$temp_wrapper"
+
+    chmod +x "$temp_wrapper"
+
+    if [[ -n $custom_path ]]; then
+        (
+            exeopts -m 0755
+            exeinto "$custom_path"
+            newexe "$temp_wrapper" "$wrapper_name"
+        )
+    else
+        newbin "$temp_wrapper" "$wrapper_name"
+    fi
+}
+
+fi

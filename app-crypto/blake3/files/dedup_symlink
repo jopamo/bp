@@ -2,46 +2,6 @@
 
 ROOT_DIR="."
 DRY_RUN=false
-EMOJI_OK=false
-
-detect_emoji_support() {
-	[[ -t 1 ]] || return 1
-	case "${LANG}${LC_CTYPE}" in
-		*[Uu][Tt][Ff][-_]*8*) ;;
-		*[Uu][Tt][Ff]8*) ;;
-		*) return 1 ;;
-	esac
-	case "$TERM" in
-		dumb|linux) return 1 ;;
-	esac
-	return 0
-}
-
-set_emoji_vars() {
-	if detect_emoji_support; then
-		EMOJI_OK=true
-		ICON_DR="🧪"
-		ICON_REAL="🗃️"
-		ICON_FILE="📄"
-		ICON_BYTE="💾"
-		ICON_DUP="🔗"
-		ICON_SAVE="🪙"
-		ICON_OK="✅"
-		ICON_BAD="🚫"
-		ICON_SAD="😢"
-	else
-		EMOJI_OK=false
-		ICON_DR="[DRY-RUN]"
-		ICON_REAL="[DEDUP]"
-		ICON_FILE="[F]"
-		ICON_BYTE="[B]"
-		ICON_DUP="[DUP]"
-		ICON_SAVE="[$]"
-		ICON_OK="[OK]"
-		ICON_BAD="[NO]"
-		ICON_SAD=":("
-	fi
-}
 
 print_help() {
 	cat <<'EOF'

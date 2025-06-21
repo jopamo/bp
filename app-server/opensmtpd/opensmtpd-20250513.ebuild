@@ -20,7 +20,6 @@ IUSE="pam +mta systemd"
 DEPEND="
 	app-net/mailbase
 	lib-core/zlib
-	lib-dev/libasr
 	lib-dev/libevent
 	pam? ( lib-core/pam )
 	virtual/ssl

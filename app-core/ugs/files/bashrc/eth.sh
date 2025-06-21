@@ -43,7 +43,6 @@ generate_random_mac() {
 	local suffix=$(openssl rand -hex 3 | sed 's/\(..\)/\1:/g; s/:$//')
 	echo "$prefix:$suffix"
 }
-#!/bin/sh
 
 set_random_mac() {
 	if [ -z "$1" ]; then

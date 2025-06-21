@@ -6,8 +6,8 @@ BASHRC="$HOME/.bashrc"
 ZSHRC="$HOME/.zshrc"
 NEWBASHRC="$HOME/.newbashrc"
 LSCOLORS="$HOME/.ls_colors"
-INPUTRC="$HOME/.inputrc"
 BASHRCD="$HOME/.bashrc.d"
+BASH_LOGOUT="$HOME/.bash_logout"
 
 ensure_bashrcd_exists() {
 	if [ ! -d "$BASHRCD" ]; then
@@ -31,15 +31,14 @@ download_file() {
 }
 
 download_files() {
-	download_file "https://raw.githubusercontent.com/jopamo/bp/main/app-core/ugs/files/bashrc" "$NEWBASHRC"
+	download_file "https://raw.githubusercontent.com/jopamo/bp/main/app-core/ugs/files/bashrc/bashrc" "$NEWBASHRC"
 	download_file "https://raw.githubusercontent.com/jopamo/bp/main/app-core/coreutils/files/LS_COLORS" "$LSCOLORS"
-	download_file "https://raw.githubusercontent.com/jopamo/bp/main/app-core/ugs/files/inputrc" "$INPUTRC"
+	download_file "https://raw.githubusercontent.com/jopamo/bp/main/app-core/ugs/files/bash_logout" "$BASH_LOGOUT"
 }
 
 reload_shell_config() {
-	[ -f "$BASHRC" ] && source "$BASHRC"
-	[ -f "$ZSHRC" ] && source "$ZSHRC"
-	bind -f "$INPUTRC"
+	[ -f "$BASHRC" ] && . "$BASHRC"
+	[ -f "$ZSHRC" ] && . "$ZSHRC"
 	echo "Reloaded shell configuration."
 }
 

@@ -1,3 +1,5 @@
 # /etc/bash/bash_logout
 
-clear
+if declare -f clean_bash_history >/dev/null; then
+    clean_bash_history "$HISTFILE"
+fi

@@ -107,6 +107,11 @@ python_test() {
 				testing/test_skipping.py::test_errors_in_xfail_skip_expressions
 			)
 			;;
+		python3.14)
+			EPYTEST_DESELECT+=(
+				testing/test_doctest.py::TestDoctests::test_doctest_unexpected_exception
+			)
+			;;
 	esac
 
 	local EPYTEST_XDIST=1

@@ -14,7 +14,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="musl libxcrypt"
+IUSE="libxcrypt"
 
 src_prepare() {
 	default
@@ -52,12 +52,12 @@ src_configure() {
 		--enable-static
 	)
 
-	use musl || ECONF_SOURCE=${S} econf "${myconf[@]}"
-	use musl && ECONF_SOURCE=${S} econf "${systemwide[@]}"
+	use elibc_musl || ECONF_SOURCE=${S} econf "${myconf[@]}"
+	use elibc_musl && ECONF_SOURCE=${S} econf "${systemwide[@]}"
 }
 
 src_compile() {
-	if use musl ; then
+	if use elibc_musl ; then
 		local i
 		for i in getconf getent iconv ; do
 			cc $CPPFLAGS $CFLAGS "${S}"/$i.c -o $i || die
@@ -72,10 +72,7 @@ src_install() {
 
 	dodir /usr/lib
 
-	cp -p "${ED}"/lib/ld-musl*.so* "${ED}"/usr/lib/ || die
-	rm -r "${ED}"/lib || die
-
-	if use musl ; then
+	if use elibc_musl ; then
 		local i
   		for i in getconf getent iconv ; do
 			dobin $i
@@ -91,6 +88,9 @@ src_install() {
 		if use libxcrypt ; then
 			rm "${ED}"/usr/include/crypt.h || die
 		fi
+
+		cp -p "${ED}"/lib/ld-musl*.so* "${ED}"/usr/lib/ || die
+		rm -r "${ED}"/lib || die
 	else
 		for i in linux asm asm-generic mtd ; do
 			dosym -r /usr/include/$i /usr/musl/include/$i

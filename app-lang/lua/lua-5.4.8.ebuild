@@ -48,4 +48,5 @@ src_install() {
 	done
 
 	use static-libs || rm -f "${ED}"/usr/lib/liblua.a
+	die
 }

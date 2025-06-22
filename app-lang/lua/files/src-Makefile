@@ -1,0 +1,91 @@
+# == CHANGE THE SETTINGS BELOW TO SUIT YOUR ENVIRONMENT =======================
+LIBS = -lm
+
+# Installation directories
+INSTALL_TOP = "${EPREFIX}/usr/"
+INSTALL_BIN = $(INSTALL_TOP)/bin
+INSTALL_INC = $(INSTALL_TOP)/include
+INSTALL_LIB = $(INSTALL_TOP)/lib
+INSTALL_MAN = $(INSTALL_TOP)/man/man1
+INSTALL_LMOD = $(INSTALL_TOP)/share/lua/$V
+INSTALL_CMOD = $(INSTALL_TOP)/lib/lua/$V
+
+# Installation utilities
+INSTALL = install -p
+INSTALL_EXEC = $(INSTALL) -m 0755
+INSTALL_DATA = $(INSTALL) -m 0644
+MKDIR = mkdir -p
+RM = rm -f
+
+# Lua version and release
+V = VERSION_REPLACE
+R = $V.9
+
+# Libraries and targets
+LUA_A = liblua.a
+LUA_SO = liblua.so
+CORE_O = lapi.o lcode.o lctype.o ldebug.o ldo.o ldump.o lfunc.o lgc.o llex.o lmem.o lobject.o lopcodes.o lparser.o lstate.o lstring.o ltable.o ltm.o lundump.o lvm.o lzio.o
+LIB_O = lauxlib.o lbaselib.o lcorolib.o ldblib.o liolib.o lmathlib.o loadlib.o loslib.o lstrlib.o ltablib.o lutf8lib.o linit.o
+BASE_O = $(CORE_O) $(LIB_O)
+
+LUA_T = lua
+LUA_O = lua.o
+
+ALL_O = $(BASE_O) $(LUA_O)
+ALL_T = $(LUA_A) $(LUA_T) $(LUA_SO)
+ALL_A = $(LUA_A)
+
+# Targets start here
+default: all
+
+all: $(ALL_T)
+
+$(LUA_A): $(BASE_O)
+	$(AR) rcs $@ $(BASE_O)
+	$(RANLIB) $@
+
+$(LUA_SO): $(CORE_O) $(LIB_O)
+	$(CC) -shared -ldl -Wl,--soname,$(LUA_SO).$(V) -o $@.$(R) $? -lm
+	ln -sf $(LUA_SO).$(R) $(LUA_SO).$(V)
+	ln -sf $(LUA_SO).$(R) $(LUA_SO)
+
+$(LUA_T): $(LUA_O) $(LUA_A)
+	$(CC) -o $@ $(LDFLAGS) $(LUA_O) $(LUA_A) $(LIBS)
+
+# Clean the build files
+clean:
+	$(RM) $(ALL_T) $(ALL_O)
+
+# Generate dependencies for the source files
+depend:
+	@$(CC) $(CFLAGS) -MM l*.c
+
+# Install the binaries and libraries
+install:
+	$(MKDIR) $(INSTALL_BIN) $(INSTALL_INC) $(INSTALL_LIB) $(INSTALL_MAN) $(INSTALL_LMOD) $(INSTALL_CMOD)
+	$(INSTALL_EXEC) $(TO_BIN) $(INSTALL_BIN)
+	$(INSTALL_DATA) $(TO_INC) $(INSTALL_INC)
+	$(INSTALL_DATA) $(TO_LIB) $(INSTALL_LIB)
+	$(INSTALL_DATA) $(TO_MAN) $(INSTALL_MAN)
+
+uninstall:
+	$(RM) $(TO_BIN) $(INSTALL_BIN)
+	$(RM) $(TO_INC) $(INSTALL_INC)
+	$(RM) $(TO_LIB) $(INSTALL_LIB)
+	$(RM) $(TO_MAN) $(INSTALL_MAN)
+
+# Targets that do not create files (not all makes understand .PHONY)
+.PHONY: all clean default o a depend install uninstall
+
+# Compiler modules may use special flags.
+llex.o:
+	$(CC) $(CFLAGS) -c llex.c
+
+lparser.o:
+	$(CC) $(CFLAGS) -c lparser.c
+
+lcode.o:
+	$(CC) $(CFLAGS) -c lcode.c
+
+luac.o:
+	$(CC) $(CFLAGS) -c lua.c

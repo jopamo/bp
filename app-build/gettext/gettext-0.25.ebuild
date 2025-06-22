@@ -22,7 +22,7 @@ RDEPEND="lib-core/expat"
 
 src_prepare() {
 	append-flags -lm
-	filter-flags -Wl,-z,defs
+	filter-flags -Wl,-z,defs -flto*
 
 	default
 	elibtoolize "${WORKDIR}"
@@ -78,10 +78,6 @@ src_install() {
 	rm -rf "${ED}"/usr/share/gettext/m4
 
 	dosym -r /usr/share/aclocal /usr/share/gettext/m4
-
-	if ! use keep-la; then
-		find "${ED}" -name '*.la' -delete || die
-	fi
 }
 
 

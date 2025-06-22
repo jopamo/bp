@@ -13,12 +13,11 @@ S=${WORKDIR}/linux-${SNAPSHOT}
 
 KEYWORDS="amd64 arm64"
 SLOT="0"
-IUSE="musl"
 
 [[ -n ${PATCH_VER} ]] && PATCHES=( "${WORKDIR}"/${PATCH_PV} )
 
 src_prepare() {
-	use musl && PATCHES+=(
+	use elibc_musl && PATCHES+=(
 		"${FILESDIR}"/linux-headers-5.15-remove-inclusion-sysinfo.h.patch
 	)
 

@@ -20,7 +20,7 @@ SRC_URI="
 LICENSE="|| ( MIT Apache-2.0 ) BSD-1 BSD-2 BSD-4 UoI-NCSA"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="clippy musl rls rustfmt"
+IUSE="clippy rls rustfmt"
 
 # Adjusting paths from opt to opt
 QA_PREBUILT="
@@ -37,13 +37,13 @@ QA_EXECSTACK="opt/lib/rustlib/*/lib*.rlib:lib.rmeta"
 # Function to determine the correct Rust target triple
 get_rust_triple() {
 	if use amd64; then
-		if use musl; then
+		if use elibc_musl; then
 			echo "x86_64-unknown-linux-musl"
 		else
 			echo "x86_64-unknown-linux-gnu"
 		fi
 	elif use arm64; then
-		if use musl; then
+		if use elibc_musl; then
 			echo "aarch64-unknown-linux-musl"
 		else
 			echo "aarch64-unknown-linux-gnu"
@@ -84,8 +84,8 @@ src_install() {
 	cat <<-_EOF_ > "${T}/50${P}"
 	LDPATH="${EPREFIX}/opt/lib/rustlib/${rust_triple}/lib"
 	MANPATH="${EPREFIX}/opt/share/man"
-	$(use amd64 && usex musl 'CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_RUSTFLAGS="-C target-feature=-crt-static"' '')
-	$(use arm64 && usex musl 'CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUSTFLAGS="-C target-feature=-crt-static"' '')
+	$(use amd64 && usex elibc_musl 'CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_RUSTFLAGS="-C target-feature=-crt-static"' '')
+	$(use arm64 && usex elibc_musl 'CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUSTFLAGS="-C target-feature=-crt-static"' '')
 	_EOF_
 	doenvd "${T}/50${P}"
 

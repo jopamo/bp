@@ -32,13 +32,6 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 
-PATCHES=(
-	"${FILESDIR}/${P}-r3-c++17.patch"
-	"${FILESDIR}/${P}-color-space.patch"
-	"${FILESDIR}/${P}-raster-build-fix.patch"
-	"${FILESDIR}/${P}-raster-gray.patch"
-)
-
 src_prepare() {
 	default
 

@@ -12,6 +12,7 @@ SLOT="6"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
+	!elibc_musl? ( app-lang/go )
 	app-build/gdb
 	app-build/llvm
 	app-core/tmux
@@ -39,7 +40,6 @@ RDEPEND="
 	app-fs/testdisk
 	app-kernel/dracut
 	app-kernel/kernel-hardening-checker
-	app-lang/go
 	app-net/bind-tools
 	app-net/ethtool
 	app-net/hping

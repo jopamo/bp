@@ -20,14 +20,24 @@ RESTRICT="test strip"
 BDEPEND="lib-core/musl"
 
 create_toybox_symlinks() {
-  for path in $("${ED}"/usr/bin/toybox --long); do
-    cmd_name=$(basename "$path")
+  TB_BIN="${EPREFIX}/usr/bin/toybox"
 
-    if [ ! -e "${EROOT}/usr/bin/${cmd_name}" ]; then
-      echo "Creating symlink '${cmd_name}' in ${ED}/usr/bin/"
-      dosym -r /usr/bin/toybox "/usr/bin/${cmd_name}"
+  if [ ! -x "$TB_BIN" ]; then
+    echo "Error: $TB_BIN not found or not executable"
+    return 1
+  fi
+
+  cd "${EPREFIX}/usr/bin" || return 1
+
+  # Toybox lists commands when run with no arguments
+  for cmd_name in $("$TB_BIN"); do
+    [ "$cmd_name" = "toybox" ] && continue
+
+    if [ ! -e "$cmd_name" ]; then
+      echo "Creating symlink '${cmd_name}' -> 'toybox' in ${EPREFIX}/usr/bin/"
+      ln -s "toybox" "$cmd_name"
     else
-      echo "Skipping '${cmd_name}' - already exists in /usr/bin/"
+      echo "Skipping '${cmd_name}' - already exists in ${EPREFIX}/usr/bin/"
     fi
   done
 }
@@ -37,13 +47,33 @@ src_configure() {
 }
 
 src_compile() {
-	append-flags -ffat-lto-objects
-	append-ldflags -static -lcrypt
+	filter-clang
+	filter-flags -flto*
+	append-ldflags -static
+	append-ldflags -Wl,-z,noexecstack
 
-	make
+	if command -v musl-clang >/dev/null 2>&1; then
+		echo "Detected musl-clang"
+		emake CC=musl-clang
+	elif command -v clang >/dev/null 2>&1; then
+		echo "Detected clang (no musl-clang, fallback to clang)"
+		emake CC="clang --target=$(uname -m)-linux-musl"
+	elif command -v musl-gcc >/dev/null 2>&1; then
+		echo "Detected musl-gcc"
+		emake CC=musl-gcc
+	elif command -v gcc >/dev/null 2>&1; then
+		echo "Detected gcc (no musl, fallback to gcc)"
+		emake CC=gcc
+	else
+		echo "No suitable compiler found" >&2
+		exit 1
+	fi
 }
 
 src_install() {
 	dobin toybox
+}
+
+pkg_postinst() {
 	create_toybox_symlinks
 }

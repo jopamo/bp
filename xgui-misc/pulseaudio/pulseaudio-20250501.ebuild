@@ -7,13 +7,9 @@ inherit flag-o-matic linux-info user meson
 DESCRIPTION="A networked sound server with an advanced plugin system"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/PulseAudio/"
 
-if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/pulseaudio/pulseaudio.git"
-	inherit git-r3
-	KEYWORDS=""
-else
-	SRC_URI="https://www.freedesktop.org/software/pulseaudio/releases/${P}.tar.xz"
-fi
+SNAPSHOT=98c7c9eafb148c6e66e5fe178fc156b00f3bf51a
+SRC_URI="https://github.com/pulseaudio/pulseaudio/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -72,6 +68,8 @@ pkg_setup() {
 }
 
 src_configure() {
+	echo 17.9 > .tarball-version
+
 	filter-flags -Wl,-z,defs
 
 	local emesonargs=(

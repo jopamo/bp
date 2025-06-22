@@ -14,4 +14,4 @@ LIBDIR_arm64="lib"
 
 USE_EXPAND_HIDDEN="-CPU_FLAGS_ARM"
 
-USE="llvm_targets_AArch64"
+MARCH="-march=armv8.2-a"

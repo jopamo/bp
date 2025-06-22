@@ -90,51 +90,6 @@ esac
 export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 export GPG_TTY=$(tty)
 
-# ── Unified output helpers (new) ────────────────────────────────────────────
-EMOJI_OK=false
-
-detect_emoji_support() {
-	[[ -t 1 ]] || return 1
-	case "${LANG}${LC_CTYPE}" in *[Uu][Tt][Ff]8*) :;; *) return 1;; esac
-	case "$TERM" in dumb|linux) return 1;; esac
-	return 0
-}
-
-set_emoji_vars() {
-	if detect_emoji_support; then
-		EMOJI_OK=true
-		ICON_OK="✅"; ICON_INFO="ℹ️"; ICON_WARN="⚠️"; ICON_ERR="❌"
-	else
-		EMOJI_OK=false
-		ICON_OK="[OK]"; ICON_INFO="[INFO]"; ICON_WARN="[WARN]"; ICON_ERR="[ERR]"
-	fi
-}
-set_emoji_vars  # initialise at load
-
-# Colour wrappers (always available, even if colour disabled)
-_colour() { [[ $use_color == true ]] && printf '\033[%sm' "$1"; }
-_reset()  { [[ $use_color == true ]] && printf '\033[0m'; }
-
-log_ok()   { _colour 32; printf '%s %s\n' "$ICON_OK"   "$*"; _reset; }
-log_info() { _colour 34; printf '%s %s\n' "$ICON_INFO" "$*"; _reset; }
-log_warn() { _colour 33; printf '%s %s\n' "$ICON_WARN" "$*"; _reset; }
-log_err()  { _colour 31; printf '%s %s\n' "$ICON_ERR"  "$*"; _reset; }
-
-log_general() {
-    local msg="$*"
-
-    if [[ "$EMOJI_OK" == false ]]; then
-        msg="${msg/#?? /}"
-    fi
-    _colour 36
-    printf '%s\n' "$msg"
-    _reset
-}
-
-green()  { log_ok   "$*"; }
-yellow() { log_warn "$*"; }
-red()    { log_err  "$*"; }
-
 bind 'set bell-style none'
 bind 'set colored-stats on'
 bind 'set completion-ignore-case on'
@@ -377,37 +332,4 @@ json-shape() {
             if length == 0 then [] else [.[0] | shape] end
           else $t end;
         shape' "$1"
-}
-
-# ── Universal BLAKE3/SHA256 hash catalog helpers ─────────────────────────────
-
-CATALOG="" HASHCMD="" HASH_ARGS="" CHECK_ARGS=""
-
-b3sha_detect() {
-    # Prefer b3sum, then GNU sha256sum, then BusyBox sha256sum
-    if command -v b3sum >/dev/null 2>&1; then
-        HASHCMD="b3sum"
-        CATALOG="BLAKE3SUMS"
-        HASH_ARGS="--tag"
-        CHECK_ARGS="--check --strict --zero --quiet"
-        return 0
-    elif command -v sha256sum >/dev/null 2>&1; then
-        HASHCMD="sha256sum"
-        # Detect coreutils (has --tag) or BusyBox (short opts only)
-        if "$HASHCMD" --help 2>&1 | grep -q -- '--tag'; then
-            # GNU coreutils sha256sum
-            CATALOG="SHA256SUMS"
-            HASH_ARGS="--tag"
-            CHECK_ARGS="--check --strict --quiet"
-        else
-            # BusyBox sha256sum
-            CATALOG="SHA256SUMS"
-            HASH_ARGS=""
-            CHECK_ARGS="-c"
-        fi
-        return 0
-    else
-        log_err "Neither b3sum nor sha256sum found in \$PATH"
-        return 1
-    fi
 }

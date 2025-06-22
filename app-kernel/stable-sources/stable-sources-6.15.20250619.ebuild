@@ -2,26 +2,24 @@
 
 EAPI=8
 
+BRANCH_NAME="linux-$(ver_cut 1-2).y"
+SNAPSHOT=a2b47f77e740a21dbdcb12e2f2ca3c840299545a
+
 K_NOUSENAME="yes"
 K_NOSETEXTRAVERSION="yes"
 ETYPE="sources"
 
-inherit kernel-2 git-r3
+inherit kernel-2
 
 DESCRIPTION="Linux kernel source code tree"
 HOMEPAGE="https://kernel.org/"
+SRC_URI="https://gitlab.com/linux-kernel/stable/-/archive/${SNAPSHOT}/stable-${SNAPSHOT}.tar.bz2"
 
-EGIT_REPO_URI="https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git"
-EGIT_BRANCH="linux-$(ver_cut 1-2).y"
-
-S="${WORKDIR}/linux-${PV}"
-EGIT_CHECKOUT_DIR="${S}"
+S="${WORKDIR}/stable-${SNAPSHOT}"
 
 LICENSE="GPL"
 SLOT="$(ver_cut 1-2)"
 KEYWORDS="amd64 arm64"
-
-RESTRICT="network-sandbox"
 
 DEPEND="
 	app-core/ed

@@ -32,7 +32,6 @@ src_configure() {
 
 	local myconf=(
 		--disable-gdb
-		--disable-gold
 		--disable-gprofng
 		--disable-multilib
 		--disable-nls
@@ -44,6 +43,7 @@ src_configure() {
 		--enable-default-execstack=no
 		--enable-default-hash-style=gnu
 		--enable-deterministic-archives
+		--enable-gold
 		--enable-ld=default
 		--enable-lto
 		--enable-new-dtags

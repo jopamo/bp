@@ -4,7 +4,7 @@ EAPI=8
 
 inherit toolchain-funcs
 
-DESCRIPTION="Merge this to pull in all Plasma 6 packages"
+DESCRIPTION="Meta package installed by default but will auto purge if not kept."
 HOMEPAGE="https://1g4.org/"
 
 LICENSE="metapackage"
@@ -39,6 +39,7 @@ RDEPEND="
 	app-fs/testdisk
 	app-kernel/dracut
 	app-kernel/kernel-hardening-checker
+	app-lang/go
 	app-net/bind-tools
 	app-net/ethtool
 	app-net/hping

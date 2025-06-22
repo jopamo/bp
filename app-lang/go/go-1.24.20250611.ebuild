@@ -59,6 +59,8 @@ src_compile() {
 	export GOOS=linux
 	export CC_FOR_TARGET=$(tc-getCC)
 	export CXX_FOR_TARGET=$(tc-getCXX)
+	export GOCACHE="${T}/go-build"
+	export GOMODCACHE="${WORKDIR}/go-mod"
 
 	cd src || die "Failed to change directory to src"
 	./make.bash || die "Build failed"

@@ -55,21 +55,14 @@ src_compile() {
 	append-ldflags -static
 	append-ldflags -Wl,-z,noexecstack
 
-	if command -v musl-clang >/dev/null 2>&1; then
-		echo "Detected musl-clang"
+	if command -v clang >/dev/null 2>&1; then
+		echo "Detected clang"
 		emake CC=musl-clang
-	elif command -v clang >/dev/null 2>&1; then
-		echo "Detected clang (no musl-clang, fallback to clang)"
-		emake CC="clang --target=$(uname -m)-linux-musl"
-	elif command -v musl-gcc >/dev/null 2>&1; then
-		echo "Detected musl-gcc"
-		emake CC=musl-gcc
 	elif command -v gcc >/dev/null 2>&1; then
-		echo "Detected gcc (no musl, fallback to gcc)"
-		emake CC=gcc
+		echo "Detected gcc (no clang, fallback to gcc)"
+		emake CC=musl-gcc
 	else
 		echo "No suitable compiler found" >&2
-		exit 1
 	fi
 }
 

@@ -21,25 +21,26 @@ RESTRICT="test strip"
 BDEPEND="lib-core/musl"
 
 create_busybox_symlinks() {
-  for path in $("${EROOT}/usr/bin/busybox" --list); do
-    cmd_name=$(basename "$path")
+  BB_BIN="${EPREFIX}/usr/bin/busybox"
 
-    if [ ! -e "${EROOT}/usr/bin/${cmd_name}" ]; then
-      echo "Creating symlink '${cmd_name}' in /usr/bin/"
-      ln -s "${EROOT}/usr/bin/busybox" "${EROOT}/usr/bin/${cmd_name}"
+  if [ ! -x "$BB_BIN" ]; then
+    echo "Error: $BB_BIN not found or not executable"
+    return 1
+  fi
+
+  for cmd_name in $("$BB_BIN" --list); do
+    target="${EPREFIX}/usr/bin/${cmd_name}"
+    if [ ! -e "$target" ]; then
+      echo "Creating symlink '${cmd_name}' in ${EPREFIX}/usr/bin/"
+
+      ln -s "busybox" "$target"
     else
-      echo "Skipping '${cmd_name}' - already exists in /usr/bin/"
+      echo "Skipping '${cmd_name}' - already exists in ${EPREFIX}/usr/bin/"
     fi
   done
 }
 
 src_prepare() {
-	filter-flags -fuse-ld=lld
-
-	append-flags -ffat-lto-objects
-	append-ldflags -static
-	append-ldflags -Wl,-z,noexecstack
-
 	default
 
 	eapply "${FILESDIR}"/*.patch
@@ -48,22 +49,34 @@ src_prepare() {
 }
 
 src_compile() {
-	CC=${CC:-gcc}
+	filter-clang
+	filter-flags -flto*
+	append-ldflags -static
+	append-ldflags -Wl,-z,noexecstack
 
-	if ${CC} --version | grep -q 'clang'; then
-		echo "Detected Clang"
+	if command -v musl-clang >/dev/null 2>&1; then
+		echo "Detected musl-clang"
 		emake CC=musl-clang
-	elif ${CC} --version | grep -q 'gcc'; then
-		echo "Detected GCC"
+	elif command -v clang >/dev/null 2>&1; then
+		echo "Detected clang (no musl-clang, fallback to clang)"
+		emake CC="clang --target=$(uname -m)-linux-musl"
+	elif command -v musl-gcc >/dev/null 2>&1; then
+		echo "Detected musl-gcc"
 		emake CC=musl-gcc
+	elif command -v gcc >/dev/null 2>&1; then
+		echo "Detected gcc (no musl, fallback to gcc)"
+		emake CC=gcc
 	else
-		echo "Unknown compiler"
+		echo "No suitable compiler found" >&2
 		exit 1
 	fi
 }
 
 src_install() {
-	create_busybox_symlinks
 	dobin busybox
 	doman docs/busybox.1
+}
+
+pkg_postinst() {
+	create_busybox_symlinks
 }

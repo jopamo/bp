@@ -301,8 +301,6 @@ deduplicate_files() {
 }
 
 main() {
-	set_emoji_vars
-
 	local positionals=()
 
 	while [[ $# -gt 0 ]]; do

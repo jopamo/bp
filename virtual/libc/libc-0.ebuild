@@ -6,14 +6,12 @@ DESCRIPTION="libc implementation virtual."
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="musl"
-
-RDEPEND="musl? (
-			lib-core/musl[musl]
+RDEPEND="elibc_musl? (
+			lib-core/musl[elibc_musl]
 			!lib-core/glibc
 )
-		!musl? (
+		!elibc_musl? (
 			lib-core/glibc
 			lib-core/libxcrypt
-			!lib-core/musl[musl]
+			!lib-core/musl[elibc_musl]
 )"

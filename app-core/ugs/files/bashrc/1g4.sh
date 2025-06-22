@@ -98,105 +98,102 @@ rebuild_world() {
 	emerge --keep-going -ueDNv world
 }
 
-update_kernel_efi() {
-	trap 'echo "Interrupted by user"; return 1' SIGINT
-	(
-		set -e
+update_kernel_auto() {
+    set -e
 
-		cd /usr/src/linux
-		make oldconfig
-		mount -o remount,rw -t efivarfs efivarfs /sys/firmware/efi/efivars
-		mount /boot
-		mount /boot/efi
-		make prepare
+    # Root check
+    if [ "$EUID" -ne 0 ]; then
+        echo "Must be run as root!" >&2
+        return 1
+    fi
 
-		make -j"$(nproc)"
+    # Sanity check for kernel sources
+    [ -d /usr/src/linux ] || { echo "/usr/src/linux not found."; return 1; }
+    cd /usr/src/linux
 
-		rm -rf /lib/modules/*
-		rm /boot/System.map* /boot/config* /boot/vmlinuz*
+    # Trap for clean abort
+    trap 'echo "Interrupted by user"; exit 1' SIGINT
 
-		make modules_install
-		make install
+    # Run oldconfig and prepare
+    make oldconfig
+    make prepare
 
-		mkdir -p /boot/grub/
-		grub-mkconfig -o /boot/grub/grub.cfg
-		grub-install --efi-directory=/boot/efi
-		grub-install --efi-directory=/boot/efi --removable
+    # Mount necessary filesystems
+    mountpoint -q /boot || mount /boot
 
-		echo "Kernel update complete."
-	) || return 1
-	trap - SIGINT
+    # EFI detection
+    EFI_MODE=0
+    INITRAMFS_MODE=0
+    if mountpoint -q /boot/efi || [ -d /sys/firmware/efi ]; then
+        EFI_MODE=1
+        mount | grep -q '/sys/firmware/efi/efivars' || \
+            mount -t efivarfs efivarfs /sys/firmware/efi/efivars 2>/dev/null || true
+        mountpoint -q /boot/efi || mount /boot/efi
+        # If dracut is present, assume we should make an initramfs
+        command -v dracut >/dev/null && INITRAMFS_MODE=1
+    fi
+
+    echo "Building kernel..."
+    make -j"$(nproc)"
+
+    # Get new kernel version
+    KERNEL_VERSION=$(make -s kernelrelease)
+
+    # Double-check kernel was built before removing anything
+    if ! [ -f "arch/x86/boot/bzImage" ] && ! [ -f "vmlinux" ]; then
+        echo "Build failed—no kernel image produced. Aborting."
+        exit 1
+    fi
+
+    # Remove only current-version modules, not all
+    if [ -d /lib/modules/"$KERNEL_VERSION" ]; then
+        echo "Removing /lib/modules/${KERNEL_VERSION}..."
+        rm -rf /lib/modules/"$KERNEL_VERSION"
+    fi
+
+    # Clean up old boot files (safer)
+    echo "Removing old boot files..."
+    rm -f /boot/System.map-* /boot/config-* /boot/vmlinuz-*
+
+    make modules_install
+    make install
+
+    # If dracut and EFI, generate initramfs
+    if (( EFI_MODE && INITRAMFS_MODE )); then
+        echo "Generating initramfs with dracut..."
+        dracut \
+            -f "/boot/initramfs-${KERNEL_VERSION}.img" \
+            "${KERNEL_VERSION}" \
+            --kernel-image "/boot/vmlinuz-${KERNEL_VERSION}" \
+            --hostonly \
+            --early-microcode \
+            --mdadmconf \
+            --lvmconf \
+            --strip \
+            --zstd \
+            --logfile /var/log/dracut.log \
+            --stdlog 3
+    fi
+
+    echo "Updating bootloader..."
+
+    if (( EFI_MODE )); then
+        mkdir -p /boot/grub/
+        grub-mkconfig -o /boot/grub/grub.cfg
+        grub-install --efi-directory=/boot/efi
+        grub-install --efi-directory=/boot/efi --removable
+    else
+        grub-mkconfig -o /boot/grub/grub.cfg
+        # Auto-detect disk for MBR install (assume /dev/sda, can customize!)
+        BOOT_DISK=$(lsblk -dno NAME,TYPE | awk '$2=="disk"{print "/dev/"$1; exit}')
+        grub-install --target=i386-pc "$BOOT_DISK"
+    fi
+
+    echo "Kernel update complete."
+
+    trap - SIGINT
 }
 
-update_efi_init() {
-	trap 'echo "Interrupted by user"; return 1' SIGINT
-	(
-		set -e
-
-		cd /usr/src/linux
-		make oldconfig
-		mount -o remount,rw -t efivarfs efivarfs /sys/firmware/efi/efivars
-		mount /boot
-		mount /boot/efi
-		make prepare
-
-		make -j"$(nproc)"
-
-		rm -rf /lib/modules/*
-		rm /boot/System.map* /boot/config* /boot/vmlinuz*
-
-		make modules_install
-		make install
-
-		KERNEL_VERSION=$(make -s kernelrelease)
-
-		dracut \
-			-f "/boot/initramfs-${KERNEL_VERSION}.img" \
-			"${KERNEL_VERSION}" \
-			--kernel-image "/boot/vmlinuz-${KERNEL_VERSION}" \
-			--hostonly \
-			--early-microcode \
-			--mdadmconf \
-			--lvmconf \
-			--strip \
-			--zstd \
-			--logfile /var/log/dracut.log \
-			--stdlog 3
-
-		mkdir -p /boot/grub/
-		grub-mkconfig -o /boot/grub/grub.cfg
-		grub-install --efi-directory=/boot/efi
-		grub-install --efi-directory=/boot/efi --removable
-
-		echo "Kernel update complete."
-	) || return 1
-	trap - SIGINT
-}
-
-update_kernel_mbr() {
-	trap 'echo "Interrupted by user"; return 1' SIGINT
-	(
-		set -e
-
-		cd /usr/src/linux
-		make oldconfig
-		mount /boot
-		make prepare
-		make -j"$(nproc)"
-
-		rm -rf /lib/modules/*
-		rm /boot/System.map* /boot/config* /boot/vmlinuz*
-
-		make modules_install
-		make install
-
-		grub-mkconfig -o /boot/grub/grub.cfg
-		grub-install --target=i386-pc /dev/sda
-
-		echo "Kernel update complete."
-	) || return 1
-	trap - SIGINT
-}
 
 update_kernel_opi5plus() {
 	trap 'echo "Interrupted by user"; return 1' SIGINT

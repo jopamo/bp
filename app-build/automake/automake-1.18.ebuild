@@ -2,12 +2,6 @@
 
 EAPI=8
 
-MAJOR=${PV%%.*}
-MINOR=${PV##*.}
-
-OLDVER1="$MAJOR.$((MINOR - 1))"
-OLDVER2="$MAJOR.$((MINOR - 2))"
-
 DESCRIPTION="Used to generate Makefile.in from Makefile.am"
 HOMEPAGE="https://www.gnu.org/software/automake/"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
@@ -24,26 +18,24 @@ BDEPEND="
 "
 
 src_install() {
-	emake DESTDIR="${D}" install || die
+    emake DESTDIR="${D}" install || die
 
-	rm "${ED}"/usr/bin/{aclocal,automake}-* || die
+    rm "${ED}"/usr/bin/{aclocal,automake}-* || die
 
-	VERSIONS=("${OLDVER1}" "${OLDVER2}" "$(ver_cut 1-2)")
+    dosym -r /usr/bin/aclocal /usr/bin/aclocal-$(ver_cut 1-2)
+    dosym -r /usr/bin/automake /usr/bin/automake-$(ver_cut 1-2)
 
-	for v in "${VERSIONS[@]}"; do
-		dosym -r /usr/bin/aclocal /usr/bin/aclocal-${v}
-		dosym -r /usr/bin/automake /usr/bin/automake-${v}
-	done
+    mkdir -p "${ED}/usr/share/automake" || die
+    cp -rp "${ED}/usr/share/automake-$(ver_cut 1-2)"/* "${ED}/usr/share/automake/" || die
+    rm -rf "${ED}/usr/share/automake-$(ver_cut 1-2)" || die
+    dosym -r /usr/share/automake /usr/share/automake-$(ver_cut 1-2)
 
-	dosym -r /usr/share/gnuconfig/config.sub   /usr/share/automake-$(ver_cut 1-2)/config.sub
-	dosym -r /usr/share/gnuconfig/config.guess /usr/share/automake-$(ver_cut 1-2)/config.guess
+    rm "${ED}"/usr/share/automake/config.sub || die
+    rm "${ED}"/usr/share/automake/config.guess || die
+    cd "${ED}"/usr/share/automake || die
+    ln -s /usr/share/gnuconfig/config.sub  config.sub || die
+    ln -s /usr/share/gnuconfig/config.guess config.guess || die
+	cd "${ED}" || die
 
-	for dir in aclocal automake; do
-		mkdir -p "${ED}/usr/share/${dir}" || die
-		cp -rp "${ED}/usr/share/${dir}-$(ver_cut 1-2)"/* "${ED}/usr/share/${dir}/" || die
-		rm -rf "${ED}/usr/share/${dir}-$(ver_cut 1-2)" || die
-		dosym -r /usr/share/${dir} /usr/share/${dir}-$(ver_cut 1-2)
-	done
-
-	rm "${ED}"/usr/share/doc/automake-1.18/amhello-1.0.tar.gz
+    rm "${ED}"/usr/share/doc/automake-1.18/amhello-1.0.tar.gz || die
 }

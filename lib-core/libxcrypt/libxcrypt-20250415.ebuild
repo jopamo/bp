@@ -26,7 +26,7 @@ src_configure() {
 	local myconf=(
 		$(use_enable static-libs static)
 		$(usex glibc_compat "--enable-obsolete-api=glibc" --disable-obsolete-api)
-		$(usex elibc_musl --enable-xcrypt-compat --disable-xcrypt-compat)
+		$(usex elibc_musl --enable-xcrypt-compat "")
 		$(usex elibc_musl "--enable-hashes=strong" "--enable-hashes=strong,glibc")
     	--disable-failure-tokens
     	--disable-werror

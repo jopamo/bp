@@ -26,6 +26,7 @@ DEPEND="
 cmake_src_bootstrap() {
 	replace-flags -O3 -O2
 	append-flags -fpermissive
+	filter-flags -flto*
 	# Cleanup args to extract only JOBS.
 	# Because bootstrap does not know anything else.
 	echo ${MAKEOPTS} | egrep -o '(\-j|\-\-jobs)(=?|[[:space:]]*)[[:digit:]]+' > /dev/null
@@ -79,8 +80,6 @@ cmake_src_test() {
 }
 
 src_prepare() {
-	append-flags -ffat-lto-objects
-
 	cmake_src_prepare
 
 	# Add gcc libs to the default link paths
@@ -122,7 +121,7 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	use vim || rm -r "${ED}"/usr/share/vim || die
+	use vim || rm -r "${ED}"/usr/share/vim
 
 	rm -r "${ED}"/usr/doc || die
 

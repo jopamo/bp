@@ -5,7 +5,6 @@ EAPI=8
 ETYPE="headers"
 H_SUPPORTEDARCH="amd64 arm64"
 inherit kernel-2
-detect_version
 
 BRANCH_NAME="master"
 SNAPSHOT=52da431bf03b5506203bca27fe14a97895c80faf
@@ -13,15 +12,10 @@ SRC_URI="https://github.com/torvalds/linux/archive/${SNAPSHOT}.tar.gz -> linux-$
 S=${WORKDIR}/linux-${SNAPSHOT}
 
 KEYWORDS="amd64 arm64"
-
+SLOT="0"
 IUSE="musl"
 
 [[ -n ${PATCH_VER} ]] && PATCHES=( "${WORKDIR}"/${PATCH_PV} )
-
-src_unpack() {
-	# Avoid kernel-2_src_unpack
-	default
-}
 
 src_prepare() {
 	use musl && PATCHES+=(

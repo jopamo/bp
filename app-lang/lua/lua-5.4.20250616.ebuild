@@ -48,4 +48,10 @@ src_install() {
 	done
 
 	use static-libs || rm -f "${ED}"/usr/lib/liblua.a
+
+	insinto /usr/include
+	doins lua.h
+	doins luaconf.h
+	doins lauxlib.h
+	doins lualib.h
 }

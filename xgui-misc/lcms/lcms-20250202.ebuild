@@ -4,7 +4,10 @@ EAPI=8
 
 DESCRIPTION="A lightweight, speed optimized color management engine"
 HOMEPAGE="http://www.littlecms.com/"
-SRC_URI="mirror://sourceforge/${PN}/lcms2-${PV}.tar.gz"
+
+SNAPSHOT=064876d7a3f3167c85933b7ff521e77369035679
+SRC_URI="https://github.com/ImageMagick/lcms/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="2"
@@ -16,8 +19,6 @@ DEPEND="
 	jpeg? ( xmedia-lib/libjpeg-turbo )
 	tiff? ( >=xmedia-lib/tiff-4.0.3-r6:0= )
 "
-
-S="${WORKDIR}/lcms2-${PV}"
 
 src_configure() {
 	local myconf=(

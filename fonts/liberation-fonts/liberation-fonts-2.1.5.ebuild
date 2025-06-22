@@ -6,7 +6,7 @@ inherit font
 
 DESCRIPTION="A Helvetica/Times/Courier replacement TrueType font set, courtesy of Red Hat"
 HOMEPAGE="https://pagure.io/liberation-fonts"
-SRC_URI="https://github.com/liberationfonts/liberation-fonts/files/6418984/liberation-fonts-ttf-${PV}.tar.gz"
+SRC_URI="https://github.com/liberationfonts/liberation-fonts/files/7261482/liberation-fonts-ttf-${PV}.tar.gz"
 
 KEYWORDS="amd64 arm64"
 SLOT="0"

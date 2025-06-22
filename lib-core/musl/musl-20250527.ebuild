@@ -26,7 +26,7 @@ src_configure() {
 
 	local systemwide=(
 		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
+		--sbindir="${EPREFIX}"/usr/bin
 		--libdir="${EPREFIX}"/usr/lib
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}/etc"
@@ -40,7 +40,7 @@ src_configure() {
 
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
+		--sbindir="${EPREFIX}"/usr/bin
 		--libdir="${EPREFIX}"/usr/musl/lib
 		--libexecdir="${EPREFIX}"/usr/musl/libexec
 		--sysconfdir="${EPREFIX}/usr/musl/etc"
@@ -48,7 +48,7 @@ src_configure() {
 		--prefix="${EPREFIX}"/usr/musl
 		--exec-prefix="${EPREFIX}"/usr/musl
 		--enable-wrapper=all
-		--disable-shared
+		--enable-shared
 		--enable-static
 	)
 
@@ -70,15 +70,16 @@ src_compile() {
 src_install() {
 	default
 
+	dodir /usr/lib
+
+	cp -p "${ED}"/lib/ld-musl*.so* "${ED}"/usr/lib/ || die
+	rm -r "${ED}"/lib || die
+
 	if use musl ; then
 		local i
   		for i in getconf getent iconv ; do
 			dobin $i
 		done
-
-		mkdir -p "${ED}"/usr/lib || die
-		cp -p "${ED}"/lib/ld-musl*.so* "${ED}"/usr/lib/ || die
-		rm -r "${ED}"/lib || die
 
 		use amd64 && dosym -r /usr/lib/ld-musl-x86_64.so.1 /usr/bin/ldd
 		use arm64 && dosym -r /usr/lib/ld-musl-aarch64.so.1 /usr/bin/ldd

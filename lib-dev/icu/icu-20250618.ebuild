@@ -6,7 +6,10 @@ inherit toolchain-funcs autotools
 
 DESCRIPTION="International Components for Unicode"
 HOMEPAGE="http://www.icu-project.org/"
-SRC_URI="https://github.com/unicode-org/icu/releases/download/release-$(ver_cut 1)-$(ver_cut 2)/icu4c-$(ver_cut 1)_$(ver_cut 2)-src.tgz"
+
+SNAPSHOT=810b94cce9d985ce9a46bad60517afb3f9161653
+SRC_URI="https://github.com/unicode-org/icu/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}/icu4c/source"
 
 LICENSE="BSD"
 SLOT="0"
@@ -15,8 +18,6 @@ KEYWORDS="amd64 arm64"
 IUSE="debug static-libs"
 
 BDEPEND="app-dev/pkgconf"
-
-S="${WORKDIR}/${PN}/source"
 
 src_prepare() {
 	default

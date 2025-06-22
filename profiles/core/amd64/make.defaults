@@ -4,8 +4,6 @@ MULTILIB_ABIS="amd64"
 CHOST_amd64="${CHOST}"
 LIBDIR_amd64="lib"
 
-GRUB_PLATFORMS="efi-64"
-
 ARCH="amd64"
 ACCEPT_KEYWORDS="${ARCH}"
 
@@ -33,4 +31,4 @@ USE_EXPAND_HIDDEN="-ABI_X86 -CPU_FLAGS_X86"
 
 IUSE_IMPLICIT="abi_x86_64"
 
-USE="llvm_targets_X86"
+MARCH="-march=x86-64-v3"

@@ -6,11 +6,10 @@ inherit toolchain-funcs
 
 DESCRIPTION="Convert DOS or MAC text files to UNIX format or vice versa"
 HOMEPAGE="https://www.xs4all.nl/~waterlan/dos2unix.html https://sourceforge.net/projects/dos2unix/"
-SRC_URI="
-	https://www.xs4all.nl/~waterlan/${PN}/${P/_/-}.tar.gz
-	mirror://sourceforge/${PN}/${P/_/-}.tar.gz
-"
-S="${WORKDIR}/${P/_/-}"
+
+SNAPSHOT=a9a2497a8b62aba9f3c3a89ded0a6b199bc057be
+SRC_URI="https://github.com/1g4-mirror/dos2unix/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}/dos2unix"
 
 LICENSE="BSD-2"
 SLOT="0"
@@ -22,6 +21,17 @@ RESTRICT="!test? ( test )"
 
 src_prepare() {
 	default
+
+	sed -i '
+/^man:/,/^doc:/s/^/# /;
+/^install-man:/,/^install-mo:/s/^/# /;
+/^mofiles:/,/^install-mo:/s/^/# /;
+/^install-doc:/,/^install-pdf:/s/^/# /;
+/^%.1 : %.pod/,/^%.mo : %.po/s/^/# /;
+/^ifdef ENABLE_NLS/,/^endif/s/^/# /;
+/^dist:/,/^dist-zip:/s/^/# /;
+' Makefile
+
 
 	sed \
 		-e '/^LDFLAGS/s|=|+=|' \
@@ -44,5 +54,5 @@ src_compile() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" prefix="${EPREFIX}/usr" install
+	dobin dos2unix
 }

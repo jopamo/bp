@@ -1,7 +1,7 @@
+*app-kernel/linux-firmware
 *app-compression/zip
 *app-core/kmod
 *app-fs/ncdu
-*app-lang/go
 *app-net/bluez
 *app-net/weechat
 *app-port/smart-live-rebuild

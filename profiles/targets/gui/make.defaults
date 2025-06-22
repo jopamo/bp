@@ -1,51 +1,61 @@
 USE="
-	bin
-	bootloader
-	bluez
-	cairo
-	cups
-	dbus
-	dri
-	drm
-	efi
-	egl
-	extra-tools
-	gif
-	gles2
-	gui
-	hwdb
-	introspection
-	jpeg
-	kmod
-	kvm
-	libinput
-	libsamplerate
-	localed
-	machined
-	mount
-	mp3
-	ncat
-	npm
-	opengl
-	pic
-	png
-	pstore
-	pipewire
-	pulseaudio
-	rfkill
-	qemu_softmmu_targets_aarch64
-	qemu_softmmu_targets_x86_64
-	qemu_user_targets_aarch64
-	qemu_user_targets_x86_64
-	qml
-	qt
-	tiff
-	tmpfilesd
-	user-namespaces
-	video
-	xcb
-	xdg
-	xkb
-	zlib
-	X
+-vtv
+-x265
+amd-ucode
+bin
+bluez
+bootloader
+cairo
+cuda
+cups
+dbus
+dri
+drm
+efi
+egl
+extra-tools
+gif
+gles2
+gui
+hwdb
+intel
+introspection
+iwlwifi
+jpeg
+kmod
+kvm
+libinput
+libsamplerate
+localed
+machined
+mount
+mp3
+ncat
+networkd
+npm
+nvidia
+opengl
+pic
+pipewire
+png
+pstore
+pulseaudio
+qemu_softmmu_targets_aarch64
+qemu_softmmu_targets_x86_64
+qemu_user_targets_aarch64
+qemu_user_targets_x86_64
+qml
+qt
+rfkill
+rtl_nic
+scp
+tiff
+tmpfilesd
+user-namespaces
+video
+X
+xcb
+xdg
+xkb
+zlib
 "

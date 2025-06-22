@@ -44,14 +44,26 @@ ENV_UNSET="
 # Toolchain & optimisation
 ###############################################################################
 
-COMMON_FLAGS="-O2 -pipe -march=native"
-CFLAGS="${COMMON_FLAGS}"
-CXXFLAGS="${COMMON_FLAGS}"
-LDFLAGS="-Wl,-O2"
+BASEFLAGS="-O3 -pipe -Wall -Wformat -Wformat-security"
+GRAPHITE="-fgraphite-identity -floop-nest-optimize -ftree-loop-distribution"
+SECURE="-fstack-protector-strong -fstack-clash-protection -fexceptions -fpie -fpic -D_FORTIFY_SOURCE=2"
+FLTO_BASE="-flto -fuse-linker-plugin -fdevirtualize-at-ltrans -fipa-pta -fno-semantic-interposition"
+
+PASS_FLAGS="${BASEFLAGS} ${GRAPHITE} ${FLTO_BASE} ${SECURE}"
+CFLAGS="${MARCH} ${PASS_FLAGS}"
+
+CXXFLAGS="${CFLAGS}"
+LDFLAGS="-Wl,${PASS_FLAGS} -Wl,-z,combreloc -Wl,-z,defs -Wl,-z,now -Wl,-z,relro"
 
 AR="gcc-ar"
 RANLIB="gcc-ranlib"
 NM="gcc-nm"
+
+# Build package options
+EMERGE_DEFAULT_OPTS="--buildpkg"
+FEATURES="buildpkg"
+BINPKG_COMPRESS="xz"
+BINPKG_COMPRESS_FLAGS="--x86 --delta=dist=2 --lzma2=dict=128Mi -e9 -T5"
 
 ###############################################################################
 # Python
@@ -90,16 +102,19 @@ USE="
     bzip2 lz4 zlib zstd
 
     # ── Core System Components ─────────────────────
-    caps device-mapper ncurses pam readline ssl systemd udev
+    caps dbus device-mapper machined ncurses pam readline ssl systemd tmpfilesd udev
 
     # ── Crypto / Security ───────────────────────────
     crypt gcrypt seccomp urandom yescrypt
 
     # ── Libraries & Runtimes ────────────────────────
-    acl attr gdbm gmp iconv libcap pcre python sqlite xml
+    acl attr gdbm elf kmod gmp iconv libcap pcre python sqlite xml
 
     # ── Kernel / OS Helpers ─────────────────────────
     kernel_linux numa sysusersd unicode xattr
+
+    # ── Firmware ─────────────────────────
+	mediatek rtl_nic
 
     # ── Disabled by Default (opt in per-package) ───
     -berkdb      # prefer sqlite
@@ -107,6 +122,7 @@ USE="
     -ipv6        # enable only where required
     -jit         # problematic on some arches
     -manpager
+    -dhcp4
 "
 
 ###############################################################################
@@ -120,6 +136,6 @@ USE_EXPAND_VALUES_ARCH="amd64 arm64"
 PROFILE_ONLY_VARIABLES="${PROFILE_ONLY_VARIABLES} ARCH USE_EXPAND_VALUES_ARCH"
 
 ###############################################################################
-# GRUB defaults (set platform flags explicitly elsewhere if needed)
+# GRUB defaults
 ###############################################################################
-GRUB_PLATFORMS=""
+GRUB_PLATFORMS="efi-64"

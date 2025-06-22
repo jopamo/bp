@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps elf iptables musl"
+IUSE="caps elf iptables"
 
 DEPEND="
 	app-build/bison
@@ -44,8 +44,8 @@ src_prepare() {
 	filter-flags -Wl,-z,defs
 	append-flags -ffat-lto-objects
 
-	use musl && eapply "${FILESDIR}"/iproute2-6.8.0-configure-nomagic-nolibbsd.patch
-	use musl && eapply "${FILESDIR}"/iproute2-6.8.0-disable-libbsd-fallback.patch
+	use elibc_musl && eapply "${FILESDIR}"/iproute2-6.8.0-configure-nomagic-nolibbsd.patch
+	use elibc_musl && eapply "${FILESDIR}"/iproute2-6.8.0-disable-libbsd-fallback.patch
 
 	default
 

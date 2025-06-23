@@ -47,7 +47,7 @@ ENV_UNSET="
 BASEFLAGS="-Os -pipe -Wall -Wformat -Wformat-security"
 GRAPHITE="-fgraphite-identity -floop-nest-optimize -ftree-loop-distribution"
 SECURE="-fstack-protector-strong -fstack-clash-protection -fexceptions -fpie -fpic -D_FORTIFY_SOURCE=2"
-FLTO_BASE="-flto -fuse-linker-plugin -fdevirtualize-at-ltrans -fipa-pta -fno-semantic-interposition"
+FLTO_BASE="-flto=8 -fuse-linker-plugin -fdevirtualize-at-ltrans -fipa-pta -fno-semantic-interposition"
 
 PASS_FLAGS="${BASEFLAGS} ${GRAPHITE} ${FLTO_BASE} ${SECURE}"
 CFLAGS="${MARCH} ${PASS_FLAGS}"

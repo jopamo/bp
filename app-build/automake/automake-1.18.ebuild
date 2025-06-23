@@ -18,24 +18,30 @@ BDEPEND="
 "
 
 src_install() {
-    emake DESTDIR="${D}" install || die
+	default
 
-    rm "${ED}"/usr/bin/{aclocal,automake}-* || die
+	#compat symlinks
+	rm "${ED}"/usr/bin/{aclocal,automake}-*
 
-    dosym -r /usr/bin/aclocal /usr/bin/aclocal-$(ver_cut 1-2)
-    dosym -r /usr/bin/automake /usr/bin/automake-$(ver_cut 1-2)
+	dosym -r /usr/bin/aclocal /usr/bin/aclocal-$(ver_cut 1-2)
+	dosym -r /usr/bin/automake /usr/bin/automake-$(ver_cut 1-2)
 
-    mkdir -p "${ED}/usr/share/automake" || die
-    cp -rp "${ED}/usr/share/automake-$(ver_cut 1-2)"/* "${ED}/usr/share/automake/" || die
-    rm -rf "${ED}/usr/share/automake-$(ver_cut 1-2)" || die
-    dosym -r /usr/share/automake /usr/share/automake-$(ver_cut 1-2)
+	dosym -r /usr/share/gnuconfig/config.sub /usr/share/automake-$(ver_cut 1-2)/config.sub
+	dosym -r /usr/share/gnuconfig/config.guess /usr/share/automake-$(ver_cut 1-2)/config.guess
 
-    rm "${ED}"/usr/share/automake/config.sub || die
+	mkdir -p "${ED}"/usr/share/{aclocal,automake} || die
+
+	cp -rp "${ED}"/usr/share/aclocal-$(ver_cut 1-2)/* "${ED}"/usr/share/aclocal/ || die
+	cp -rp "${ED}"/usr/share/automake-$(ver_cut 1-2)/* "${ED}"/usr/share/automake/ || die
+
+	rm -rf "${ED}"/usr/share/{aclocal,automake}-$(ver_cut 1-2) || die
+
+	dosym -r /usr/share/aclocal /usr/share/aclocal-$(ver_cut 1-2)
+	dosym -r /usr/share/automake /usr/share/automake-$(ver_cut 1-2)
+
+	rm "${ED}"/usr/share/automake/config.sub || die
     rm "${ED}"/usr/share/automake/config.guess || die
     cd "${ED}"/usr/share/automake || die
-    ln -s /usr/share/gnuconfig/config.sub  config.sub || die
-    ln -s /usr/share/gnuconfig/config.guess config.guess || die
-	cd "${ED}" || die
-
-    rm "${ED}"/usr/share/doc/automake-1.18/amhello-1.0.tar.gz || die
+    ln -s ../gnuconfig/config.sub  config.sub || die
+    ln -s ../gnuconfig/config.guess config.guess || die
 }

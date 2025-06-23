@@ -1784,7 +1784,8 @@ distutils-r1_python_install_all() {
 	debug-print-function ${FUNCNAME} "$@"
 	_distutils-r1_check_all_phase_mismatch
 
-	einstalldocs
+	cleanup_install
+	dedup_symlink "${ED}"
 }
 
 # @FUNCTION: distutils-r1_run_phase
@@ -2260,8 +2261,6 @@ distutils-r1_src_install() {
 	fi
 
 	_distutils-r1_check_namespace_pth
-
-	dedup_symlink "${ED}"
 
 	return ${ret}
 }

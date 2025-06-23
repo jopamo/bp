@@ -146,7 +146,8 @@ rebar_src_install() {
 		cp -pR priv "${ED}${dest}/" || die "failed to install priv/"
 	fi
 
-	einstalldocs
+	cleanup_install
+	dedup_symlink "${ED}"
 }
 
 fi

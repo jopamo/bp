@@ -101,6 +101,7 @@ src_configure() {
 		-DCLANG_LINK_CLANG_DYLIB=ON
 		-DCMAKE_C_COMPILER_WORKS=1
 		-DCMAKE_CXX_COMPILER_WORKS=1
+		-DLLVM_LINKER_WORKS=1
 		-DCMAKE_CXX_STANDARD=17
 		-DCMAKE_DISABLE_FIND_PACKAGE_CUDAToolkit=ON
 		-DCMAKE_DISABLE_FIND_PACKAGE_hsa-runtime64=ON
@@ -167,8 +168,8 @@ src_configure() {
 		-DBOOTSTRAP_BOOTSTRAP_LLVM_ENABLE_LLD=ON
 		-DBOOTSTRAP_LLVM_ENABLE_LLD=ON
 		-DBOOTSTRAP_LLVM_ENABLE_LTO=ON
-		-DCLANG_ENABLE_BOOTSTRAP=ON
 		-DCLANG_BOOTSTRAP_PASSTHROUGH="CMAKE_INSTALL_PREFIX;CMAKE_VERBOSE_MAKEFILE"
+		-DCLANG_ENABLE_BOOTSTRAP=ON
     )
 
 
@@ -204,17 +205,14 @@ src_configure() {
     )
 
     local sysclang=(
-    	-DCLANG_DEFAULT_LINKER=/usr/bin/ld.lld
-    	-DCMAKE_AR=/usr/bin/llvm-ar
-    	-DCMAKE_C_COMPILER=/usr/bin/clang
-    	-DCMAKE_CXX_COMPILER="/usr/bin/clang++"
-    	-DCMAKE_NM=/usr/bin/llvm-nm
-    	-DCMAKE_RANLIB=/usr/bin/llvm-ranlib
-    	-DLLVM_ENABLE_LLD=ON
-    	-DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld"
-    	-DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld"
-    	-DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"
-	)
+        -DCLANG_DEFAULT_LINKER=ld.lld
+        -DCMAKE_AR=llvm-ar
+        -DCMAKE_C_COMPILER=clang
+        -DCMAKE_CXX_COMPILER="clang++"
+        -DCMAKE_NM=llvm-nm
+        -DCMAKE_RANLIB=llvm-ranlib
+        #-DLLVM_ENABLE_LLD=ON
+    )
 
 	mycmakeargs=("${common[@]}")
 

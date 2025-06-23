@@ -161,13 +161,13 @@ src_configure() {
 		-DLLVM_PARALLEL_LINK_JOBS=1
 		-DLLVM_TARGETS_TO_BUILD="${LLVM_TARGETS}"
 		-DOCAMLFIND=NO
+		-DCLANG_BOOTSTRAP_PASSTHROUGH="CMAKE_INSTALL_PREFIX;CMAKE_VERBOSE_MAKEFILE"
     )
 
     local bootstrap=(
 		-DBOOTSTRAP_BOOTSTRAP_LLVM_ENABLE_LLD=ON
 		-DBOOTSTRAP_LLVM_ENABLE_LLD=ON
 		-DBOOTSTRAP_LLVM_ENABLE_LTO=ON
-		-DCLANG_BOOTSTRAP_PASSTHROUGH="CMAKE_INSTALL_PREFIX;CMAKE_VERBOSE_MAKEFILE"
 		-DCLANG_ENABLE_BOOTSTRAP=ON
     )
 
@@ -204,14 +204,17 @@ src_configure() {
     )
 
     local sysclang=(
-        -DCLANG_DEFAULT_LINKER=/usr/bin/ld.lld
-        -DCMAKE_AR=/usr/bin/llvm-ar
-        -DCMAKE_C_COMPILER=/usr/bin/clang
-        -DCMAKE_CXX_COMPILER=/usr/bin/clang++
-        -DCMAKE_NM=/usr/bin/llvm-nm
-        -DCMAKE_RANLIB=/usr/bin/llvm-ranlib
-        -DLLVM_ENABLE_LLD=ON
-    )
+    	-DCLANG_DEFAULT_LINKER=/usr/bin/ld.lld
+    	-DCMAKE_AR=/usr/bin/llvm-ar
+    	-DCMAKE_C_COMPILER=/usr/bin/clang
+    	-DCMAKE_CXX_COMPILER="/usr/bin/clang++"
+    	-DCMAKE_NM=/usr/bin/llvm-nm
+    	-DCMAKE_RANLIB=/usr/bin/llvm-ranlib
+    	-DLLVM_ENABLE_LLD=ON
+    	-DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld"
+    	-DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld"
+    	-DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"
+	)
 
 	mycmakeargs=("${common[@]}")
 

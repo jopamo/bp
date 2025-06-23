@@ -17,10 +17,18 @@ bp is short for 'backpack' to denote it being easier to move around on various c
 * bootstrap golang toolchain from source
 
 ## Binary Packages
-[1g4-glibc-amd64](https://1g4.org/1g4-glibc-amd64/)\
-[1g4-musl-amd64](https://1g4.org/1g4-musl-amd64/)\
-[1g4-glibc-arm64](https://1g4.org/1g4-glibc-arm64/)\
-[1g4-musl-arm64](https://1g4.org/1g4-musl-arm64/)
+
+### core
+
+* [1g4-glibc-amd64](https://1g4.org/1g4-glibc-amd64/)
+* [1g4-musl-amd64](https://1g4.org/1g4-musl-amd64/)
+* [1g4-glibc-arm64](https://1g4.org/1g4-glibc-arm64/)
+* [1g4-musl-arm64](https://1g4.org/1g4-musl-arm64/)
+
+### desktop
+
+* [glibc amd64 desktop](https://1g4.org/1g4-glibc-amd64-desktop/)
+* [glibc arm64 desktop](https://1g4.org/1g4-glibc-arm64-desktop/)
 
 ## **Category Descriptions**
 

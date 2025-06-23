@@ -1,6 +1,6 @@
-diff -ur /root/a/bin/phase-helpers.sh /root/b/bin/phase-helpers.sh
---- /root/a/bin/phase-helpers.sh	2025-06-22 20:34:48.611547247 -0400
-+++ /root/b/bin/phase-helpers.sh	2025-06-22 21:02:30.503401185 -0400
+diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
+--- a/bin/phase-helpers.sh	2021-06-06 16:09:52.348518700 -0500
++++ b/bin/phase-helpers.sh	2021-06-06 16:15:45.135284584 -0500
 @@ -605,28 +605,6 @@
  			fi
  		fi

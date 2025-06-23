@@ -22,7 +22,8 @@ ExecReload=/bin/kill -HUP $MAINPID
 KillMode=process
 Restart=always
 RestartSec=5s
-Environment=PATH=/opt/llm-models/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+Environment=PATH=/opt/llm-models/.local/bin:/usr/local/bin:/usr/bin
+PrivateNetwork=true
 
 [Install]
 WantedBy=multi-user.target

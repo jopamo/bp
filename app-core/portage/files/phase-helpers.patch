@@ -1,7 +1,36 @@
-diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
---- a/bin/phase-helpers.sh	2025-06-09 07:54:26.511821273 -0400
-+++ b/bin/phase-helpers.sh	2025-06-09 08:20:00.036269218 -0400
-@@ -640,6 +640,10 @@
+diff -ur /root/a/bin/phase-helpers.sh /root/b/bin/phase-helpers.sh
+--- /root/a/bin/phase-helpers.sh	2025-06-22 20:34:48.611547247 -0400
++++ /root/b/bin/phase-helpers.sh	2025-06-22 21:02:30.503401185 -0400
+@@ -605,28 +605,6 @@
+ 			fi
+ 		fi
+ 
+-		# If the profile defines a location to install libs to aside from default, pass it on.
+-		# If the ebuild passes in --libdir, they're responsible for the libdir fun.
+-		local libdir libdir_var="LIBDIR_${ABI}"
+-		if [[ -n ${ABI} && -n ${!libdir_var} ]] ; then
+-			libdir=${!libdir_var}
+-		fi
+-
+-		if [[ -n ${libdir} ]] && ! __hasgq --libdir=\* "$@" ; then
+-			export CONF_PREFIX=$(__hasg --exec-prefix=\* "$@")
+-			[[ -z ${CONF_PREFIX} ]] && CONF_PREFIX=$(__hasg --prefix=\* "$@")
+-
+-			: ${CONF_PREFIX:=${EPREFIX}/usr}
+-			CONF_PREFIX=${CONF_PREFIX#*=}
+-
+-			[[ ${CONF_PREFIX} != /* ]] && CONF_PREFIX="/${CONF_PREFIX}"
+-			[[ ${libdir} != /* ]] && libdir="/${libdir}"
+-
+-			conf_args+=(
+-				--libdir="$(__strip_duplicate_slashes "${CONF_PREFIX}${libdir}")"
+-			)
+-		fi
+-
+ 		# Handle arguments containing quoted whitespace (see bug #457136).
+ 		eval "local -a EXTRA_ECONF=(${EXTRA_ECONF})"
+ 
+@@ -640,6 +618,10 @@
  			--datadir="${EPREFIX}"/usr/share \
  			--sysconfdir="${EPREFIX}"/etc \
  			--localstatedir="${EPREFIX}"/var/lib \
@@ -12,11 +41,57 @@ diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
  			"${conf_args[@]}" \
  			"$@" \
  			"${EXTRA_ECONF[@]}"
-@@ -787,22 +791,6 @@
+@@ -676,17 +658,6 @@
+ 		local ED=${D}
+ 	fi
+ 
+-	local libdir libdir_var="LIBDIR_${ABI}"
+-	if [[ -n "${ABI}" && -n "${!libdir_var}" ]]; then
+-		libdir="${!libdir_var}"
+-	fi
+-
+-	if [[ "${libdir}" && -v CONF_PREFIX ]]; then
+-		local destlibdir="${D%/}/${CONF_PREFIX}/${libdir}"
+-		destlibdir="$(__strip_duplicate_slashes "${destlibdir}")"
+-		LOCAL_EXTRA_EINSTALL="libdir=${destlibdir} ${LOCAL_EXTRA_EINSTALL}"
+-	fi
+-
  	if [[ -f Makefile || -f GNUmakefile || -f makefile ]] ; then
+ 		if [[ "${PORTAGE_DEBUG}" == "1" ]]; then
+ 			${MAKE:-make} -n prefix="${ED%/}/usr" \
+@@ -694,7 +665,9 @@
+ 				infodir="${ED%/}/usr/share/info" \
+ 				localstatedir="${ED%/}/var/lib" \
+ 				mandir="${ED%/}/usr/share/man" \
+-				sysconfdir="${ED%/}/etc" \
++				libdir="${ED%/}/usr/lib" \
++				bindir="${ED%/}/usr/bin" \
++				sbindir="${ED%/}/usr/bin" \
+ 				${LOCAL_EXTRA_EINSTALL} \
+ 				${MAKEOPTS} -j1 \
+ 				"$@" ${EXTRA_EMAKE} install
+@@ -706,6 +679,9 @@
+ 			localstatedir="${ED%/}/var/lib" \
+ 			mandir="${ED%/}/usr/share/man" \
+ 			sysconfdir="${ED%/}/etc" \
++			libdir="${ED%/}/usr/lib" \
++			bindir="${ED%/}/usr/bin" \
++			sbindir="${ED%/}/usr/bin" \
+ 			${LOCAL_EXTRA_EINSTALL} \
+ 			${MAKEOPTS} -j1 \
+ 			"$@" ${EXTRA_EMAKE} install
+@@ -716,6 +692,7 @@
+ 	else
+ 		die "no Makefile found"
+ 	fi
++	dedup_symlink "${ED}"
+ }
+ 
+ __eapi0_pkg_nofetch() {
+@@ -788,21 +765,7 @@
  		emake DESTDIR="${D}" install
  	fi
--
+ 
 -	# To use declare -p determines whether a variable was declared but not
 -	# whether it was set. Unfortunately, the language of EAPI 4 requires
 -	# that it be this way.
@@ -32,15 +107,63 @@ diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
 -	else
 -		dodoc ${DOCS}
 -	fi
++	dedup_symlink "${ED}"
  }
  
  __eapi6_src_prepare() {
-@@ -819,8 +807,6 @@
+@@ -819,8 +782,7 @@
  	if [[ -f Makefile || -f GNUmakefile || -f makefile ]] ; then
  		emake DESTDIR="${D}" install
  	fi
 -
 -	einstalldocs
++	dedup_symlink "${ED}"
  }
  
  __eapi8_src_prepare() {
+@@ -943,45 +905,6 @@
+ 	die "portageq is not allowed in ebuild scope"
+ }
+ 
+-if ___eapi_has_get_libdir; then
+-	get_libdir() {
+-		local libdir_var="LIBDIR_${ABI}"
+-		local libdir="lib"
+-
+-		[[ -n ${ABI} && -n ${!libdir_var} ]] && libdir=${!libdir_var}
+-
+-		echo "${libdir}"
+-	}
+-fi
+-
+-if ___eapi_has_einstalldocs; then
+-	einstalldocs() (
+-		local f
+-
+-		if [[ ! -v DOCS ]]; then
+-			for f in README* ChangeLog AUTHORS NEWS TODO CHANGES \
+-				THANKS BUGS FAQ CREDITS CHANGELOG
+-			do
+-				if [[ -f ${f} && -s ${f} ]]; then
+-					docinto / && dodoc "${f}"
+-				fi
+-			done
+-		elif [[ ${DOCS@a} == *a* ]] && (( ${#DOCS[@]} )); then
+-			docinto / && dodoc -r "${DOCS[@]}"
+-		elif [[ ${DOCS@a} != *[aA]* && ${DOCS} ]]; then
+-			# shellcheck disable=2086
+-			docinto / && dodoc -r ${DOCS}
+-		fi
+-
+-		if [[ ${HTML_DOCS@a} == *a* ]] && (( ${#HTML_DOCS[@]} )); then
+-			docinto html && dodoc -r "${HTML_DOCS[@]}"
+-		elif [[ ${HTML_DOCS@a} != *[aA]* && ${HTML_DOCS} ]]; then
+-			# shellcheck disable=2086
+-			docinto html && dodoc -r ${HTML_DOCS}
+-		fi
+-	)
+-fi
+-
+ if ___eapi_has_eapply; then
+ 	eapply() {
+ 		local LC_ALL LC_COLLATE=C f i patch_cmd path

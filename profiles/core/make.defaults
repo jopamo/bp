@@ -53,6 +53,7 @@ PASS_FLAGS="${BASEFLAGS} ${GRAPHITE} ${FLTO_BASE} ${SECURE}"
 CFLAGS="${MARCH} ${PASS_FLAGS}"
 
 CXXFLAGS="${CFLAGS} -D_GLIBCXX_ASSERTIONS"
+CPPFLAGS="${CFLAGS}"
 LDFLAGS="-Wl,${PASS_FLAGS} -Wl,-z,combreloc -Wl,-z,defs -Wl,-z,now -Wl,-z,relro"
 
 AR="gcc-ar"

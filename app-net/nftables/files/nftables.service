@@ -6,9 +6,9 @@ Before=network-pre.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/sbin/nft -f /etc/nftables.conf
-ExecReload=/usr/bin/sh -c '/usr/sbin/nft flush ruleset && /usr/sbin/nft -f /etc/nftables.conf'
-ExecStop=/usr/sbin/nft flush ruleset
+ExecStart=/usr/bin/nft -f /etc/nftables.conf
+ExecReload=/usr/bin/sh -c '/usr/bin/nft flush ruleset && /usr/bin/nft -f /etc/nftables.conf'
+ExecStop=/usr/bin/nft flush ruleset
 RemainAfterExit=yes
 ProtectSystem=full
 ProtectHome=read-only

@@ -2261,6 +2261,8 @@ distutils-r1_src_install() {
 
 	_distutils-r1_check_namespace_pth
 
+	dedup_symlink "${ED}"
+
 	return ${ret}
 }
 

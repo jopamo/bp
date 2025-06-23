@@ -58,6 +58,8 @@ if [[ -z ${_CARGO_VENDOR_ECLASS} ]]; then
 			|| die "cargo install failed"
 
 		rm -f "${ED}/usr/.crates*"
+
+		dedup_symlink "${ED}"
 	}
 
 	EXPORT_FUNCTIONS pkg_setup src_compile src_install

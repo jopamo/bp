@@ -23,6 +23,9 @@ DEPEND="${RDEPEND}
 	test? ( lib-dev/check )"
 
 src_prepare() {
+	find . -type f \( -name '*.c' -o -name '*.h' -o -name '*.y' -o -name '*.l' \) -exec sed -i 's/\bstrlcpy\b/strncpy/g' {} +
+	find . -type f \( -name '*.c' -o -name '*.h' -o -name '*.y' -o -name '*.l' \) -exec sed -i 's/\bstrlcat\b/strncat/g' {} +
+
 	default
 	eautoreconf
 }

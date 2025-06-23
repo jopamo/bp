@@ -59,18 +59,27 @@ src_compile() {
 }
 
 src_install() {
-	default
+    default
 
-	dosym msgfmt usr/bin/gmsgfmt
-	dobin gettext-tools/misc/gettextize
+    dosym msgfmt usr/bin/gmsgfmt
+    dobin gettext-tools/misc/gettextize
 
-	rm -f "${ED}"/usr/share/locale/locale.alias "${ED}"/usr/lib/charset.alias "${ED}"/usr/include/libintl.h
+    rm -f "${ED}/usr/share/locale/locale.alias" \
+          "${ED}/usr/lib/charset.alias" \
+          "${ED}/usr/include/libintl.h"
 
-	cp -rp "${ED}"/usr/share/gettext/* "${ED}"/usr/share/gettext-${PV}/
-	rm -rf "${ED}"/usr/share/gettext
-	mv "${ED}"/usr/share/gettext-${PV} "${ED}"/usr/share/gettext
-	dosym -r /usr/share/gettext /usr/share/gettext-${PV}
-	rm "${ED}"/usr/share/gettext/its/gtkbuilder.its
+	mkdir -p "${ED}/usr/share/gettext-${PV}" || die
+    cp -rp "${ED}"/usr/share/gettext/* "${ED}/usr/share/gettext-${PV}"/ || die
+    rm -rf "${ED}/usr/share/gettext"
+    mv "${ED}/usr/share/gettext-${PV}" "${ED}/usr/share/gettext" || die
+    dosym -r /usr/share/gettext /usr/share/gettext-"${PV}"
+    rm "${ED}/usr/share/gettext/its/gtkbuilder.its" || die
+
+	dodir /usr/share/aclocal
+    for x in build-to-host gettext host-cpu-c-abi iconv intlmacosx lib-ld lib-link lib-prefix nls po progtest ; do
+		dosym -r /usr/share/gettext/m4/${x}.m4 /usr/share/aclocal/${x}.m4
+	done
 }
+
 
 

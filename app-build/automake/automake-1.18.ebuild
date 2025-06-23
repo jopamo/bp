@@ -20,12 +20,6 @@ BDEPEND="
 src_install() {
 	default
 
-	#compat symlinks
-	rm "${ED}"/usr/bin/{aclocal,automake}-*
-
-	dosym -r /usr/bin/aclocal /usr/bin/aclocal-$(ver_cut 1-2)
-	dosym -r /usr/bin/automake /usr/bin/automake-$(ver_cut 1-2)
-
 	dosym -r /usr/share/gnuconfig/config.sub /usr/share/automake-$(ver_cut 1-2)/config.sub
 	dosym -r /usr/share/gnuconfig/config.guess /usr/share/automake-$(ver_cut 1-2)/config.guess
 

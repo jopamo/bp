@@ -36,7 +36,7 @@ src_prepare() {
 
 src_configure() {
 	export ac_cv_{header_selinux_{context,flash,selinux}_h,search_setfilecon}=no
-
+	export utils_cv_stdbuf_supported=no
 	local myconf=(
 		$(use_enable acl)
 		$(use_enable libcap)

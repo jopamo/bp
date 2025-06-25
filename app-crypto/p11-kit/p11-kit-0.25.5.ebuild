@@ -10,7 +10,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug +libffi"
+IUSE="debug libffi"
 
 DEPEND="libffi? ( lib-core/libffi )"
 

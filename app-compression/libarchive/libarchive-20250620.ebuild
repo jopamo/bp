@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="Multi-format archive and compression library"
 HOMEPAGE="http://www.libarchive.org/"
-SNAPSHOT=6effe2ec6bdc636573f9ea82bff3add632862333
+SNAPSHOT=ffde04f27231cabb91cebcbd7eca08d0f5088dc8
 SRC_URI="https://github.com/libarchive/libarchive/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libarchive-${SNAPSHOT}
 
@@ -14,7 +14,7 @@ LICENSE="BSD BSD-2 BSD-4 public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl +bsdtar +bzip2 expat lz4 nettle ssl static-libs xattr +zlib zstd"
+IUSE="acl bsdtar bzip2 expat lz4 nettle ssl static-libs xattr zlib zstd"
 
 DEPEND="
 	app-compression/xz-utils

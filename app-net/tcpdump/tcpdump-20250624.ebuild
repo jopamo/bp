@@ -6,7 +6,7 @@ inherit autotools user
 
 DESCRIPTION="A tool for network monitoring and data acquisition"
 HOMEPAGE="https://www.tcpdump.org/ https://github.com/the-tcpdump-group/tcpdump"
-SNAPSHOT=d5f000dca40ac5d149ae6b5851911df8847bcb99
+SNAPSHOT=09a4d311dd6f67e599936f7ba426e7a8125f157e
 SRC_URI="https://github.com/the-tcpdump-group/tcpdump/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/tcpdump-${SNAPSHOT}
 
@@ -14,7 +14,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+caps +smi +ssl +samba suid test"
+IUSE="caps smi ssl samba suid test"
 
 REQUIRED_USE="test? ( samba )"
 RESTRICT="!test? ( test )"

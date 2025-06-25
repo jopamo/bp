@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="i3-compatible Wayland window manager"
 HOMEPAGE="https://swaywm.org"
-SNAPSHOT=170c9c9525f54e8c1ba03847d5f9b01fc24b8c89
+SNAPSHOT=c2f08075ec00632293bbc63582c7f3ffd75441af
 SRC_URI="https://github.com/swaywm/sway/archive/${SNAPSHOT}.tar.gz -> sway-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/sway-${SNAPSHOT}"
 
@@ -14,7 +14,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+swaybg +swayidle +swaylock +tray +wallpapers"
+IUSE="swaybg swayidle swaylock tray wallpapers"
 
 DEPEND="
 	lib-core/libpcre

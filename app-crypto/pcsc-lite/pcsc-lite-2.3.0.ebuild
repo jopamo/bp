@@ -12,7 +12,7 @@ LICENSE="BSD GPL-3+ BSD-2 ISC GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="embedded libusb policykit selinux systemd +udev"
+IUSE="embedded libusb policykit selinux systemd udev"
 REQUIRED_USE="^^ ( udev libusb ) ${PYTHON_REQUIRED_USE}"
 
 PATCHES=(

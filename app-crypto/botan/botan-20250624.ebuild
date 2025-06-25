@@ -6,7 +6,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="C++ crypto library"
 HOMEPAGE="https://botan.randombit.net/"
-SNAPSHOT=cfc7bc1c63b4f86aeef4d470babd7a6e94f78ea1
+SNAPSHOT=f406b8e2ac51ef1d1bdf852d53f75140221d713f
 SRC_URI="https://github.com/randombit/botan/archive/${SNAPSHOT}.tar.gz -> botan-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/botan-${SNAPSHOT}
 
@@ -14,7 +14,7 @@ LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+boost bzip2 +lzma static-libs sqlite zlib"
+IUSE="boost bzip2 lzma static-libs sqlite zlib"
 
 DEPEND="
 	boost? ( lib-dev/boost )

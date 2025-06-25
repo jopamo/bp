@@ -109,10 +109,10 @@ USE="
     crypt gcrypt seccomp urandom yescrypt
 
     # ── Libraries & Runtimes ────────────────────────
-    acl attr gdbm elf kmod gmp iconv libcap pcre python sqlite xml
+	acl attr gdbm elf kmod gmp iconv libcap pcre python sqlite xml
 
     # ── Kernel / OS Helpers ─────────────────────────
-    kernel_linux numa sysusersd unicode xattr
+    isl kernel_linux numa sysusersd unicode xattr
 
     # ── Firmware ─────────────────────────
 	mediatek rtl_nic

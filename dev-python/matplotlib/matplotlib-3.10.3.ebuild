@@ -32,8 +32,8 @@ KEYWORDS="amd64 arm64"
 IUSE="cairo excel gtk3 latex qt6 tk webagg wxwidgets"
 
 DEPEND="
-	media-libs/freetype:2
-	>=media-libs/qhull-2013:=
+	xmedia-lib/freetype:2
+	>=xmedia-lib/qhull-2013:=
 	>=dev-python/numpy-1.25:=[${PYTHON_USEDEP}]
 "
 # internal copy of pycxx highly patched
@@ -51,7 +51,7 @@ RDEPEND="
 	>=dev-python/pytz-2019.3[${PYTHON_USEDEP}]
 	media-fonts/dejavu
 	media-fonts/stix-fonts
-	media-libs/libpng:0
+	xmedia-lib/libpng:0
 	virtual/imagemagick-tools[jpeg,tiff]
 	cairo? (
 		dev-python/cairocffi[${PYTHON_USEDEP}]

@@ -19,7 +19,7 @@ HOMEPAGE="
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="+native-extensions"
+IUSE="native-extensions"
 
 BDEPEND="
 	test? (

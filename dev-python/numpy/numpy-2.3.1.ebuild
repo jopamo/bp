@@ -22,7 +22,7 @@ SLOT="0/2"
 KEYWORDS="amd64 arm64"
 # +lapack because the internal fallbacks are pretty slow. Building without blas
 # is barely supported anyway, see bug #914358.
-IUSE="big-endian +lapack"
+IUSE="big-endian lapack"
 
 RDEPEND="
 	lapack? (

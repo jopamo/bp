@@ -18,7 +18,7 @@ HOMEPAGE="
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="+native-extensions"
+IUSE="native-extensions"
 
 BDEPEND="
 	>=dev-py/setuptools-scm-8[${PYTHON_USEDEP}]

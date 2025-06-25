@@ -6,7 +6,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="Tree-sitter is a parser generator tool and an incremental parsing library"
 HOMEPAGE="https://github.com/tree-sitter/tree-sitter"
-SNAPSHOT=eaa10b279f208b47f65e77833d65763f072f3030
+SNAPSHOT=259e34435fb5af616ae56e592b9bc1ebc5a0b70b
 SRC_URI="https://github.com/tree-sitter/tree-sitter/archive/${SNAPSHOT}.tar.gz -> tree-sitter-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/tree-sitter-${SNAPSHOT}"
 

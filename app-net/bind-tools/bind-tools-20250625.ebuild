@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-SNAPSHOT=2b7ae5f06796fda789aecc1c0ab76a53455f85fe
+SNAPSHOT=117091c4fe1ae6d05b4127dfad9427ea57d11d4c
 
 inherit meson flag-o-matic
 
@@ -14,7 +14,7 @@ LICENSE="Apache-2.0 BSD BSD-2 GPL-2 HPND ISC MPL-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="fips +doh geoip"
+IUSE="fips doh geoip"
 
 DEPEND="
 	lib-core/libcap

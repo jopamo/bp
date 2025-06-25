@@ -6,7 +6,7 @@ inherit cmake xdg
 
 DESCRIPTION="Lightweight Qt image viewer from the LXQt Project"
 HOMEPAGE="http://lxqt.org/"
-SNAPSHOT=7d7ed30c9d741104eef09c1716575f5ab699b962
+SNAPSHOT=9cbc1c8b0f98dfebf917441a2f2d2dcee7dce834
 SRC_URI="https://github.com/lxqt/lximage-qt/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/lximage-qt-${SNAPSHOT}
 

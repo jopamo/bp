@@ -12,7 +12,7 @@ LICENSE="LGPL-2.1 GPL-2 GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-IUSE="+autotype test"
+IUSE="autotype test"
 
 DEPEND="
 	app-crypto/argon2

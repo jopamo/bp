@@ -6,7 +6,7 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="fast password cracker"
 HOMEPAGE="http://www.openwall.com/john/"
-SNAPSHOT=2c69bc24d0a2f5539b2ca95393f0231912f1756b
+SNAPSHOT=5baa3c47dbef1466b106a5894e3096b13a8c22f1
 SRC_URI="https://github.com/openwall/john/archive/${SNAPSHOT}.tar.gz -> john-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/john-${SNAPSHOT}"
 
@@ -16,7 +16,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="opencl openmp +ssl pcap rexgen"
+IUSE="opencl openmp ssl pcap rexgen"
 
 DEPEND="
 	app-compression/bzip2

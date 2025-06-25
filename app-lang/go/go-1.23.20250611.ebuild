@@ -49,14 +49,6 @@ src_prepare() {
 }
 
 src_compile() {
-	if has_version ">=app-lang/go-${GO_BOOTSTRAP_MIN}"; then
-		export GOROOT_BOOTSTRAP="${BROOT}/usr/lib/go"
-		einfo "Using installed Go for bootstrap"
-	else
-		eerror "Go >= ${GO_BOOTSTRAP_MIN} is required"
-		die "Appropriate Go or gccgo not found"
-	fi
-
 	export GOROOT_FINAL="${EPREFIX}/usr/lib/go"
 	export GOROOT="${PWD}"
 	export GOBIN="${GOROOT}/bin"
@@ -67,6 +59,8 @@ src_compile() {
 	export GOOS=linux
 	export CC_FOR_TARGET=$(tc-getCC)
 	export CXX_FOR_TARGET=$(tc-getCXX)
+	export GOCACHE="${T}/go-build"
+	export GOMODCACHE="${WORKDIR}/go-mod"
 
 	cd src || die "Failed to change directory to src"
 	./make.bash || die "Build failed"

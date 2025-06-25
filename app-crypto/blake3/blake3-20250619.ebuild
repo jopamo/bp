@@ -14,7 +14,7 @@ LICENSE="|| ( CC0-1.0 Apache-2.0 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static_lib +shared static_bin test"
+IUSE="static_lib shared static_bin test"
 
 RESTRICT="!test? ( test )"
 

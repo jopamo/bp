@@ -6,7 +6,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="VapourSynth is an library for video manipulation."
 HOMEPAGE="http://www.vapoursynth.com/"
-SNAPSHOT=10c617df23d87724faf71a3f41a52b4bcce235f5
+SNAPSHOT=569c73ce8dd4cc882f565a8281d2fe466c7ca654
 SRC_URI="https://github.com/vapoursynth/vapoursynth/archive/${SNAPSHOT}.tar.gz -> vapoursynth-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/vapoursynth-${SNAPSHOT}"
 
@@ -14,7 +14,7 @@ LICENSE="LGPL-2.1 OFL-1.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+vspipe -debug -guard +shared -static-libs"
+IUSE="vspipe -debug -guard shared -static-libs"
 
 DEPEND="xgui-misc/zimg"
 

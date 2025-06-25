@@ -6,8 +6,7 @@ inherit autotools
 
 DESCRIPTION="High-level C Binding for ZeroMQ"
 HOMEPAGE="http://czmq.zeromq.org"
-
-SNAPSHOT=5d35e0283c66a799ed90cebe6f78bcee3de55827
+SNAPSHOT=1786a2dcbfc4af94456615acc1d0f8358f2aadce
 SRC_URI="https://github.com/zeromq/czmq/archive/${SNAPSHOT}.tar.gz -> czmq-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/czmq-${SNAPSHOT}"
 

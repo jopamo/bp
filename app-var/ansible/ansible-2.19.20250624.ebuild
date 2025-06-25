@@ -8,7 +8,7 @@ inherit distutils-r1
 
 DESCRIPTION="a radically simple IT automation platform"
 HOMEPAGE="https://ansible.com/"
-SNAPSHOT=05951a6d9ada4e60e5985a62d62b00d9cb64bdea
+SNAPSHOT=5f39fc05bab196298be16440b4f0c1e8e14bf4a1
 SRC_URI="https://github.com/ansible/ansible/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ansible-${SNAPSHOT}"
 

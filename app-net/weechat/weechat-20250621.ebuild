@@ -6,8 +6,7 @@ inherit cmake python-single-r1 xdg
 
 DESCRIPTION="Portable and multi-interface IRC client"
 HOMEPAGE="https://weechat.org/"
-
-SNAPSHOT=34f2e6cdd0e21175b89cc29369d1bdc32269808a
+SNAPSHOT=6d45a69f39f0eb231a088389a7e43ff28f19fef3
 SRC_URI="https://github.com/weechat/weechat/archive/${SNAPSHOT}.tar.gz -> weechat-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/weechat-${SNAPSHOT}"
 

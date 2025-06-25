@@ -6,7 +6,7 @@ inherit meson xdg
 
 DESCRIPTION="Media player based on MPlayer and mplayer2"
 HOMEPAGE="https://mpv.io/"
-SNAPSHOT=e8ade130faef6a18971325d49213b8d166935d50
+SNAPSHOT=18defc8530caf7694b132a501e9c34476d4cef80
 SRC_URI="https://github.com/mpv-player/mpv/archive/${SNAPSHOT}.tar.gz -> mpv-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/mpv-${SNAPSHOT}
 
@@ -14,7 +14,7 @@ LICENSE="LGPL-2.1+ GPL-2+ BSD ISC"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+alsa +cli cuda drm +egl iconv jpeg lcms libmpv +lua +opengl pipewire
+IUSE="alsa cli cuda drm egl iconv jpeg lcms libmpv lua opengl pipewire
 	pulseaudio vaapi vapoursynth vdpau vulkan wayland +X xv zlib"
 
 REQUIRED_USE="

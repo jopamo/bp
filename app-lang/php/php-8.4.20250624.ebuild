@@ -8,7 +8,7 @@ inherit flag-o-matic git-r3 autotools
 
 DESCRIPTION="The PHP language runtime engine"
 HOMEPAGE="https://secure.php.net/"
-SNAPSHOT=4d303e76bea8aa0db225541918270ea42de7e964
+SNAPSHOT=86e5c67d6c4fa5f7a03aa1b9651def348e01d252
 SRC_URI="https://github.com/php/php-src/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/php-src-${SNAPSHOT}"
 
@@ -19,7 +19,7 @@ LICENSE="PHP-3.01 BSD-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+fpm tmpfilesd systemd"
+IUSE="fpm tmpfilesd systemd"
 
 DEPEND="
 	app-build/bison

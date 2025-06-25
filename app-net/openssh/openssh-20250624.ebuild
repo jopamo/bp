@@ -6,7 +6,7 @@ inherit flag-o-matic autotools user
 
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="http://www.openssh.org/"
-SNAPSHOT=5f761cdb2331a12318bde24db5ca84ee144a51d1
+SNAPSHOT=688fa02728f2efbf18388bc1a8e94e7ba7ee4f11
 SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/openssh-portable-${SNAPSHOT}
 
@@ -14,7 +14,7 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug pam +pie scp +ssl static systemd sysusersd test tmpfilesd +utmpx +wtmpx"
+IUSE="debug pam pie scp ssl static systemd sysusersd test tmpfilesd utmpx wtmpx"
 
 DEPEND="
 	app-core/shadow

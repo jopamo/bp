@@ -12,7 +12,7 @@ LICENSE="BSD Boost-1.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+jemalloc selinux ssl systemd test tmpfilesd"
+IUSE="jemalloc selinux ssl systemd test tmpfilesd"
 
 RESTRICT="!test? ( test )"
 

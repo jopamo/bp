@@ -21,6 +21,8 @@ src_configure() {
 
 	local mycmakeargs=(
 		-D GGML_CUDA=ON
+		-D LLAMA_CURL=OFF
+		-D LLAMA_SERVER_SSL=ON
 	)
 
 	cmake_src_configure

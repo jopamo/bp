@@ -14,7 +14,7 @@ S="${WORKDIR}/llvm-project-${SNAPSHOT}/libclc"
 
 LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
-KEYWORDS="amd64"
+KEYWORDS="amd64 arm64"
 
 IUSE="+spirv video_cards_nvidia video_cards_r600 video_cards_radeonsi"
 

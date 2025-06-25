@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="A collection of tools and libraries for many image formats"
 HOMEPAGE="https://www.imagemagick.org/"
-SNAPSHOT=2fbaa05eacb2b082abbf8f975c7139d1b9770f31
+SNAPSHOT=cb3c451be6f873ee82ddbbd462828b6237858309
 SRC_URI="https://github.com/ImageMagick/ImageMagick/archive/${SNAPSHOT}.tar.gz -> ImageMagick-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ImageMagick-${SNAPSHOT}"
 
@@ -12,7 +12,7 @@ LICENSE="imagemagick"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 cxx fftw fontconfig fpx graphviz hdri heif jbig +jpeg +jpeg2k
+IUSE="bzip2 cxx fftw fontconfig fpx graphviz hdri heif jbig jpeg jpeg2k
 lcms lqr lzma opencl openexr pango perl postscript +png raw static-libs
 +svg test +tiff truetype +webp wmf X +xml zlib"
 

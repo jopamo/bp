@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="A lightweight and flexible command-line JSON processor"
 HOMEPAGE="https://stedolan.github.io/jq/"
-SNAPSHOT=edbc1da8093f55f8e7e68f29e93abcf2e19c5aa0
+SNAPSHOT=0b1ef469734f0621283a056aa1e8f2080110b493
 SRC_URI="https://github.com/jqlang/jq/archive/${SNAPSHOT}.tar.gz -> jq-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/jq-${SNAPSHOT}"
 
@@ -14,7 +14,7 @@ LICENSE="MIT CC-BY-3.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+oniguruma static-libs test"
+IUSE="oniguruma static-libs test"
 
 DEPEND="
 	app-build/bison

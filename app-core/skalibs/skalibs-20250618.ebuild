@@ -4,8 +4,7 @@ EAPI=8
 
 DESCRIPTION="an implementation of the utmpx.h family of functions"
 HOMEPAGE="https://skarnet.org/software/utmps/"
-
-SNAPSHOT=1cd52389792cb6ca9919112110e22565d5f46d6a
+SNAPSHOT=a8899ea71d8539d9032ed14e2342a95f3b33f42c
 SRC_URI="https://github.com/skarnet/skalibs/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/skalibs-${SNAPSHOT}
 

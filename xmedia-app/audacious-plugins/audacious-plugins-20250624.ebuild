@@ -6,8 +6,7 @@ inherit meson
 
 DESCRIPTION="Audacious Player - Your music, your way, no exceptions"
 HOMEPAGE="https://audacious-media-player.org/"
-
-SNAPSHOT=7e7053fe7dde5ddea3ac41104f292c694e6f9415
+SNAPSHOT=6544c81f38727fc0ab5ad05ef58c10a44bd6bcd8
 SRC_URI="https://github.com/audacious-media-player/audacious-plugins/archive/${SNAPSHOT}.tar.gz -> audacious-plugins-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/audacious-plugins-${SNAPSHOT}"
 
@@ -15,7 +14,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="aac alsa aosd cdda cue +flac fluidsynth hotkeys gme jack libsamplerate
+IUSE="aac alsa aosd cdda cue flac fluidsynth hotkeys gme jack libsamplerate
 lirc mms modplug opus pipewire pulseaudio scrobbler qt qt6 filewriter
 sdl sid sndfile soxr speedpitch vorbis wavpack"
 

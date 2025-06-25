@@ -6,7 +6,7 @@ inherit user
 
 DESCRIPTION="Small forwarding DNS server"
 HOMEPAGE="http://www.thekelleys.org.uk/dnsmasq/doc.html"
-SNAPSHOT=14e81b6976541756c499de658b5fa264f381039c
+SNAPSHOT=ade97495e6fef551ecbd0116dc3b605c10bdd24d
 SHORT=${SNAPSHOT:0:7}
 SRC_URI="https://github.com/1g4-mirror/dnsmasq/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/dnsmasq-${SHORT}"
@@ -15,7 +15,7 @@ LICENSE="|| ( GPL-2 GPL-3 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="auth-dns conntrack dbus dhcp dhcp-tools dnssec +dumpfile id ipset
+IUSE="auth-dns conntrack dbus dhcp dhcp-tools dnssec dumpfile id ipset
 	inotify ipv6 lua script static systemd tftp"
 
 use_have() {

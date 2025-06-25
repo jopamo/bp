@@ -5,7 +5,7 @@ EAPI=7
 inherit perl-module
 
 DESCRIPTION="Nearly transparent SSL encapsulation for IO::Socket::INET"
-SNAPSHOT=3f74b384ddff8bcbba6d427a8d6596561fa341aa
+SNAPSHOT=2fbc89543485da229ae9f4f14b6ccdb9e5210b51
 SRC_URI="https://github.com/noxxi/p5-io-socket-ssl/archive/${SNAPSHOT}.tar.gz -> p5-io-socket-ssl-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/p5-io-socket-ssl-${SNAPSHOT}"
 

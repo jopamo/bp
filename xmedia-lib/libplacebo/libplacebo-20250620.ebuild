@@ -6,7 +6,7 @@ inherit meson python-any-r1
 
 DESCRIPTION="Reusable library for GPU-accelerated image processing primitives"
 HOMEPAGE="https://libplacebo.org/"
-SNAPSHOT=d2aae3d27a762c8af5820454791ea8749c0c9490
+SNAPSHOT=4ff55e04264e8c650b9de097d91f17bcd820fb31
 SRC_URI="https://github.com/haasn/libplacebo/archive/${SNAPSHOT}.tar.gz -> libplacebo-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libplacebo-${SNAPSHOT}"
 
@@ -18,7 +18,7 @@ LICENSE="
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+lcms llvm-libunwind opengl +shaderc test unwind +vulkan +xxhash"
+IUSE="lcms llvm-libunwind opengl shaderc test unwind vulkan xxhash"
 RESTRICT="!test? ( test )"
 REQUIRED_USE="vulkan? ( shaderc )"
 

@@ -11,7 +11,7 @@ if [[ ${PV} = 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/lighttpd/lighttpd1.4.git"
 	inherit git-r3
 else
-SNAPSHOT=8834056651265610993ace287b39deabba7b3207
+SNAPSHOT=f2ce91aa4447f5b4916d02548fd983de8d56ac97
 	SRC_URI="https://github.com/lighttpd/lighttpd1.4/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/lighttpd1.4-${SNAPSHOT}
 fi

@@ -6,8 +6,7 @@ inherit qmake-utils toolchain-funcs flag-o-matic
 
 DESCRIPTION="IEEE 802.1X/WPA supplicant for secure wireless transfers"
 HOMEPAGE="https://w1.fi/wpa_supplicant/"
-
-SNAPSHOT=79a6ac9c487d0f0254fb3142f709b9341017dc99
+SNAPSHOT=2134815502988162de9cf62cb5659335c145e921
 SRC_URI="https://github.com/1g4-mirror/hostap/archive/${SNAPSHOT}.tar.gz -> hostap-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/hostap-${SNAPSHOT}/wpa_supplicant"
 
@@ -15,7 +14,7 @@ LICENSE="|| ( GPL-2 BSD )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="ap dbus eapol_test fasteap gnutls +hs2-0 p2p privsep readline smartcard ssl systemd
+IUSE="ap dbus eapol_test fasteap gnutls hs2-0 p2p privsep readline smartcard ssl systemd
 tdls uncommon-eap-types wps"
 
 REQUIRED_USE="fasteap? ( !ssl ) smartcard? ( ssl )"

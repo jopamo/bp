@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-SNAPSHOT=f9aa0eedb37eb94d9d3711ef0d565fd7cb3b6148
+SNAPSHOT=f0135a9047ca37d4d117dcf21f7e3e89fad85d00
 
 inherit autotools
 
@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+curl static-libs perl gitweb"
+IUSE="curl static-libs perl gitweb"
 
 DEPEND="
 	app-build/gettext

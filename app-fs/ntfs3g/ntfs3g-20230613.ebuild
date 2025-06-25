@@ -20,7 +20,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl debug ntfsdecrypt +ntfsprogs static-libs suid xattr"
+IUSE="acl debug ntfsdecrypt ntfsprogs static-libs suid xattr"
 
 DEPEND="
 	app-core/attr

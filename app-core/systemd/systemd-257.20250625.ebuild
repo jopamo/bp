@@ -8,8 +8,7 @@ inherit flag-o-matic linux-info meson toolchain-funcs user
 
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
-
-SNAPSHOT=00a12c234e2506f5cab683460199575f13c454db
+SNAPSHOT=162e5e4a77931e4a7a7c9b6f86f09a70ec52a3e5
 SRC_URI="https://github.com/systemd/systemd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/systemd-${SNAPSHOT}"
 
@@ -17,7 +16,7 @@ LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="binfmt +blkid bootloader bpf-framework coredump dbus devmode +dhcp4 elfutils efi gcrypt +gshadow
+IUSE="binfmt blkid bootloader bpf-framework coredump dbus devmode dhcp4 elfutils efi gcrypt gshadow
 +hostnamed +hwdb importd kmod kvm ldconfig localed logind machined musl +networkd
 oomd pam pcre pstore resolve rfkill systemd-update sysusersd timedated
 tmpfilesd +userdb +utmp +vconsole xkb"

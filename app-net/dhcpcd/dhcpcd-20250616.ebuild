@@ -14,7 +14,7 @@ LICENSE="BSD-2 BSD ISC MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug +embedded ipv6 systemd +udev"
+IUSE="debug embedded ipv6 systemd udev"
 
 src_configure() {
 	filter-flags -Wl,-z,defs

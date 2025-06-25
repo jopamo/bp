@@ -6,7 +6,7 @@ inherit linux-info autotools
 
 DESCRIPTION="Linux kernel firewall, NAT and packet mangling tools"
 HOMEPAGE="https://netfilter.org/projects/nftables/"
-SNAPSHOT=2a38f458f12bc032dac1b3ba63f95ca5a3c03fbd
+SNAPSHOT=7b21b7e387e30de4c4147c82247655cca608d2fd
 SRC_URI="https://github.com/1g4-mirror/nftables/archive/${SNAPSHOT}.tar.gz -> nftables-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/nftables-${SNAPSHOT}
 
@@ -14,7 +14,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug +gmp readline static-libs systemd"
+IUSE="debug gmp readline static-libs systemd"
 
 DEPEND="
 	lib-net/libmnl

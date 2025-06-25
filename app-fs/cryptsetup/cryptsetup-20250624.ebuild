@@ -6,7 +6,7 @@ inherit linux-info autotools
 
 DESCRIPTION="Tool to setup encrypted devices with dm-crypt"
 HOMEPAGE="https://gitlab.com/cryptsetup/cryptsetup/blob/master/README.md"
-SNAPSHOT=a0929f67f1349536da54ef5dab9260a03ca4fea9
+SNAPSHOT=13306948c860278964105b10214da578ab30eeba
 SRC_URI="https://gitlab.com/cryptsetup/cryptsetup/-/archive/${SNAPSHOT}/cryptsetup-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/cryptsetup-${SNAPSHOT}"
 
@@ -14,7 +14,7 @@ LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+argon2 static static-libs tmpfilesd udev urandom"
+IUSE="argon2 static static-libs tmpfilesd udev urandom"
 
 LIB_DEPEND="
 	app-core/util-linux[static-libs(+)]

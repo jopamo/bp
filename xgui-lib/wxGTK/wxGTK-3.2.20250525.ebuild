@@ -15,7 +15,7 @@ LICENSE="wxWinLL-3 GPL-2"
 SLOT="3"
 KEYWORDS="amd64 arm64"
 
-IUSE="+X aqua debug opengl sdl tiff"
+IUSE="X aqua debug opengl sdl tiff"
 
 RDEPEND="
 	lib-core/expat

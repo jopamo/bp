@@ -82,8 +82,8 @@ python_configure_all() {
 }
 
 python_test() {
-	# don't run tests that require more than 4 GiB of RAM (per process)
-	local -x NPY_AVAILABLE_MEM="4 GiB"
+	# don't run tests that require more than 2 GiB of RAM (per process)
+	local -x NPY_AVAILABLE_MEM="2 GiB"
 
 	local EPYTEST_DESELECT=(
 		# Very disk-and-memory-hungry

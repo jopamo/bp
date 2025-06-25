@@ -6,8 +6,7 @@ inherit cmake flag-o-matic
 
 DESCRIPTION="Khronos reference front-end for GLSL and ESSL, and sample SPIR-V generator"
 HOMEPAGE="https://www.khronos.org/opengles/sdk/tools/Reference-Compiler/ https://github.com/KhronosGroup/glslang"
-
-SNAPSHOT=fc9889c889561c5882e83819dcaffef5ed45529b
+SNAPSHOT=efd24d75bcbc55620e759f6bf42c45a32abac5f8
 SRC_URI="https://github.com/KhronosGroup/glslang/archive/${SNAPSHOT}.tar.gz -> glslang-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/glslang-${SNAPSHOT}"
 

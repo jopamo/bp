@@ -21,7 +21,7 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+alsa cups custom-cflags +fontconfig +jpeg ldap mp3 netapi nls odbc openal opencl
+IUSE="alsa cups custom-cflags fontconfig jpeg ldap mp3 netapi nls odbc openal opencl
  +opengl perl pcap +png prelink pulseaudio samba +staging test +X +xcomposite
  xinerama +xml unwind usb"
 

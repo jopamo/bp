@@ -17,9 +17,6 @@ KEYWORDS="amd64 arm64"
 IUSE="systemd"
 
 src_configure() {
-	filter-gcc
-    filter-lto
-
 	addpredict "/proc/self/task"
 
 	local mycmakeargs=(
@@ -41,6 +38,11 @@ src_install() {
 	insinto /etc/llama-server
 	insopts -m 0644
 	doins "${FILESDIR}"/llama-server.env
+
+	newbin convert_hf_to_gguf.py convert_hf_to_gguf
+	newbin convert_hf_to_gguf_update.py convert_hf_to_gguf_update
+	newbin convert_llama_ggml_to_gguf.py convert_llama_ggml_to_gguf
+	newbin convert_lora_to_gguf.py convert_lora_to_gguf
 }
 
 pkg_preinst() {

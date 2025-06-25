@@ -47,7 +47,7 @@ pkg_setup() {
 src_prepare() {
 	default
 	export GOROOT_FINAL="/usr/lib/go"
-	export GOROOT_BOOTSTRAP="/usr/lib/go"
+	export GOROOT_BOOTSTRAP="/usr/lib/gccgo"
 }
 
 src_compile() {

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson
+inherit meson flag-o-matic
 
 DESCRIPTION="X.Org libdrm library"
 HOMEPAGE="https://dri.freedesktop.org/"
@@ -25,6 +25,8 @@ DEPEND="
 "
 
 src_configure() {
+	filter-flags -flto*
+
 	local emesonargs=(
 		$(meson_feature intel)
 		$(meson_feature radeon)
@@ -36,6 +38,7 @@ src_configure() {
 		$(meson_use udev)
 		-Dvmwgfx=disabled
 		-Dman-pages=disabled
+		-Dtests=false
 	)
 	meson_src_configure
 }

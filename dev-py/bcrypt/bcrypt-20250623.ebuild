@@ -9,7 +9,7 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="Modern password hashing for software and servers"
 HOMEPAGE="https://pypi.org/project/bcrypt/"
-SNAPSHOT=8cbf31dd2b8ee9c024a5b686a6f1876c35583659
+SNAPSHOT=c4d027ff2c06125ecf6398f622307fc459db01b8
 SRC_URI="https://github.com/pyca/bcrypt/archive/${SNAPSHOT}.tar.gz -> bcrypt-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/bcrypt-${SNAPSHOT}"
 

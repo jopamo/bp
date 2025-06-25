@@ -7,19 +7,13 @@ inherit flag-o-matic toolchain-funcs xdg
 DESCRIPTION="Linux Studio Plugins"
 HOMEPAGE="https://lsp-plug.in"
 
-if [[ ${PV} == *9999 ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/lsp-plugins/lsp-plugins"
-	EGIT_BRANCH="devel"
-else
-	SRC_URI="https://github.com/lsp-plugins/${PN}/releases/download/${PV}/${PN}-src-${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="amd64 ~arm arm64 ~ppc ~ppc64 x86"
-	S="${WORKDIR}/${PN}"
-fi
+SNAPSHOT=b0748ab1ab8e7193c64f6d6ddfc14d1cd85063ee
+SRC_URI="https://github.com/lsp-plugins/lsp-plugins/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="LGPL-3"
 SLOT="0"
-IUSE="doc jack +ladspa lv2 test +vst X"
+IUSE="doc jack ladspa lv2 test vst X"
 REQUIRED_USE="|| ( jack ladspa lv2 )
 	test? ( jack )"
 

@@ -11,8 +11,7 @@ HOMEPAGE="
 	https://github.com/pypa/setuptools-scm/
 	https://pypi.org/project/setuptools-scm/
 "
-
-SNAPSHOT=0b14913638eca665266f3a49124a31ba78283a89
+SNAPSHOT=c6e204e49580c28a7a895550da39a37a49ed427c
 SRC_URI="https://github.com/pypa/setuptools-scm/archive/${SNAPSHOT}.tar.gz -> setuptools-scm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/setuptools-scm-${SNAPSHOT}"
 

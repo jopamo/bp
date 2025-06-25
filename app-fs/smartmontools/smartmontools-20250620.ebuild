@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-SNAPSHOT=abdf591a43be7b83e0de3cc36c6d998424334e3d
+SNAPSHOT=dfe73a58e9e261037f7bbf4deb2a92d059947837
 
 inherit autotools flag-o-matic
 
@@ -14,7 +14,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps +daemon static systemd update_drivedb"
+IUSE="caps daemon static systemd update_drivedb"
 
 DEPEND="
 	caps? (

@@ -16,7 +16,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-IUSE="+glamor ipv6 xcsecurity"
+IUSE="glamor ipv6 xcsecurity"
 
 DEPEND="
 	virtual/ssl

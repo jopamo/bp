@@ -6,8 +6,7 @@ inherit cmake python-single-r1
 
 DESCRIPTION="pahole (Poke-a-Hole) and other DWARF utilities"
 HOMEPAGE="https://git.kernel.org/cgit/devel/pahole/pahole.git/"
-
-SNAPSHOT=52e071dbb1b6886471bf2c90eab95de89c5b3e0d
+SNAPSHOT=042d73962d35fdd1466e056f1ea14590b1cdbb9b
 SRC_URI="https://github.com/acmel/dwarves/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/dwarves-${SNAPSHOT}"
 

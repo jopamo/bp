@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+alsa +alsa-plugin asyncns bluez dbus fftw +glib gtk ipv6 jack
+IUSE="alsa alsa-plugin asyncns bluez dbus fftw glib gtk ipv6 jack
 samplerate native-headset systemd +udev +X"
 
 DEPEND="

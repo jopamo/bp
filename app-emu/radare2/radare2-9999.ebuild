@@ -20,7 +20,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="ssl +system-capstone"
+IUSE="ssl system-capstone"
 
 RESTRICT="test network-sandbox"
 

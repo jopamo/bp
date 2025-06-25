@@ -6,7 +6,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="Extremely fast non-cryptographic hash algorithm"
 HOMEPAGE="http://www.xxhash.net"
-SNAPSHOT=a83692aaf1ee9dde8d39dfe8cdbbdc78a8b88fea
+SNAPSHOT=38d555879fddae7300ece2c0820b3332c1d5748f
 SRC_URI="https://github.com/Cyan4973/xxHash/archive/${SNAPSHOT}.tar.gz -> xxHash-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/xxHash-${SNAPSHOT}"
 

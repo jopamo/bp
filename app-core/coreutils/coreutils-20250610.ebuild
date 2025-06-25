@@ -12,7 +12,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl +libcap +multicall +static xattr"
+IUSE="acl libcap multicall static xattr"
 
 LIB_DEPEND="
 	acl? ( app-core/acl[static-libs] )

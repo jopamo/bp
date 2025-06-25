@@ -13,7 +13,7 @@ LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
-IUSE="gssapi mysql postgres sqlite systemd opengl vulkan +xkbcommon"
+IUSE="gssapi mysql postgres sqlite systemd opengl vulkan xkbcommon"
 
 DEPEND="
 	lib-util/libinput

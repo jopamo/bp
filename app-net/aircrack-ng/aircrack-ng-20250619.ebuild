@@ -6,8 +6,7 @@ inherit toolchain-funcs flag-o-matic autotools
 
 DESCRIPTION="WLAN tools for breaking 802.11 WEP/WPA keys"
 HOMEPAGE="http://www.aircrack-ng.org"
-
-SNAPSHOT=13e5c460feaedbe1d9238ee7a968cdb8d3248009
+SNAPSHOT=3e1b99a0d6b439879970100609ec5760b8fe87eb
 SRC_URI="https://github.com/aircrack-ng/aircrack-ng/archive/${SNAPSHOT}.tar.gz -> aircrack-ng-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/aircrack-ng-${SNAPSHOT}"
 
@@ -15,7 +14,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+airdrop-ng +airgraph-ng +netlink +pcre +sqlite +experimental"
+IUSE="airdrop-ng airgraph-ng netlink pcre sqlite experimental"
 
 DEPEND="
 	lib-net/libpcap

@@ -6,8 +6,7 @@ inherit autotools doins toolchain-funcs user
 
 DESCRIPTION="A web proxy with advanced filtering capabilities for enhancing privacy"
 HOMEPAGE="https://www.privoxy.org https://sourceforge.net/projects/ijbswa/"
-
-SNAPSHOT=6adadda85067fb7d4cc8663fbfbcacb4b0206615
+SNAPSHOT=1dee3375dd15ad2a3e88b1bddc857281d5310162
 SRC_URI="https://github.com/1g4-mirror/privoxy/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
@@ -15,7 +14,7 @@ LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+acl brotli client-tags compression editor extended-host-patterns
+IUSE="acl brotli client-tags compression editor extended-host-patterns
 extended-statistics external-filters +fast-redirects +force fuzz
 graceful-termination +image-blocking ipv6 +jit lfs +mbedtls openssl
 png-images sanitize selinux ssl +stats toggle tools whitelists

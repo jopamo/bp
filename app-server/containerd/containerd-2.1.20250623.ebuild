@@ -8,15 +8,14 @@ inherit go-module
 
 DESCRIPTION="A daemon to control runC"
 HOMEPAGE="https://containerd.io/"
-
-SNAPSHOT=64ed272067a24c2d917064eea25a78e1479d632f
+SNAPSHOT=41bb88c7ed2a56dda8a2f67dcce35c106919ae55
 SRC_URI="https://github.com/containerd/containerd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/containerd-${SNAPSHOT}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="apparmor btrfs device-mapper +cri hardened +seccomp selinux systemd test"
+IUSE="apparmor btrfs device-mapper cri hardened seccomp selinux systemd test"
 
 BDEPEND="app-tex/go-md2man"
 

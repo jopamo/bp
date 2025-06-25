@@ -8,7 +8,7 @@ inherit meson flag-o-matic
 
 DESCRIPTION="a random collection of Linux utilities"
 HOMEPAGE="https://github.com/util-linux/util-linux"
-SNAPSHOT=48fbe43a5f2a252342fb4dea24702847608b3db1
+SNAPSHOT=4d2fc6b99db2f17a2562548af63454134ee910ec
 SRC_URI="https://github.com/util-linux/util-linux/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

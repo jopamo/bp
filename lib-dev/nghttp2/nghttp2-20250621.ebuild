@@ -6,7 +6,7 @@ inherit flag-o-matic autotools
 
 DESCRIPTION="HTTP/2 C Library"
 HOMEPAGE="https://nghttp2.org/"
-SNAPSHOT=9f0c59d6ddc795604bb9960cc677ad91ee565cab
+SNAPSHOT=1616d9ef05a59999bce33f373c6a7b33af85d87e
 SRC_URI="https://github.com/nghttp2/nghttp2/archive/${SNAPSHOT}.tar.gz -> nghttp2-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/nghttp2-${SNAPSHOT}"
 
@@ -14,7 +14,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug hpack-tools jemalloc +static-libs test utils xml"
+IUSE="debug hpack-tools jemalloc static-libs test utils xml"
 
 RDEPEND="
 	hpack-tools? ( >=lib-core/jansson-2.5 )

@@ -6,7 +6,7 @@ inherit cmake flag-o-matic user
 
 DESCRIPTION="Cross platform Make"
 HOMEPAGE="https://cmake.org/"
-SNAPSHOT=c46503014db0d63fa7b1b28c58adfb51054e2dec
+SNAPSHOT=73e53dc834c0a2336cd104473af6897197b96277
 SRC_URI="https://github.com/ggml-org/llama.cpp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llama.cpp-${SNAPSHOT}"
 

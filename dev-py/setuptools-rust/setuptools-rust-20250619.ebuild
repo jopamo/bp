@@ -12,8 +12,7 @@ HOMEPAGE="
 	https://github.com/PyO3/setuptools-rust/
 	https://pypi.org/project/setuptools-rust/
 "
-
-SNAPSHOT=f21ef63b03752f98e60f51c754c738166e350d4f
+SNAPSHOT=72710c95de87ab87768b8053404c388646187448
 SRC_URI="https://github.com/PyO3/setuptools-rust/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/setuptools-rust-${SNAPSHOT}
 

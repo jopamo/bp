@@ -19,7 +19,7 @@ KEYWORDS="amd64 arm64"
 
 RESTRICT="network-sandbox"
 
-IUSE="+static-libs xattr"
+IUSE="static-libs xattr"
 
 DEPEND="
     app-kernel/linux-headers

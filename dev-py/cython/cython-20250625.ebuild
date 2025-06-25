@@ -17,7 +17,7 @@ HOMEPAGE="
 	https://github.com/cython/cython/
 	https://pypi.org/project/Cython/
 "
-SNAPSHOT=404d958696d4b2a684d99a4283d72d51cb40b5bc
+SNAPSHOT=a7a3cc6aa10669da33d2eee9f377947818bd77f3
 SRC_URI="https://github.com/cython/cython/archive/${SNAPSHOT}.tar.gz -> cython-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/cython-${SNAPSHOT}"
 

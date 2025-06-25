@@ -34,6 +34,9 @@ RDEPEND="
 	dev-py/jinja[${PYTHON_USEDEP}]
 	>=dev-python/python-multipart-0.0.18[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		dev-python/starlette[${PYTHON_USEDEP}]
+	' 3.11 3.12)
 "
 BDEPEND="
 	test? (

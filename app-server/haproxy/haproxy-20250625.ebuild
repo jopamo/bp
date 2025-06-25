@@ -6,7 +6,7 @@ inherit user toolchain-funcs flag-o-matic linux-info
 
 DESCRIPTION="A TCP/HTTP reverse proxy for high availability environments"
 HOMEPAGE="http://haproxy.1wt.eu"
-SNAPSHOT=cdb2f8d780a27778cc23669693a9910e07135e8a
+SNAPSHOT=7cb6167d046f1b37c19784fe99b9b6d37ea83c54
 SRC_URI="https://github.com/haproxy/haproxy/archive/${SNAPSHOT}.tar.gz -> haproxy-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/haproxy-${SNAPSHOT}"
 
@@ -14,7 +14,7 @@ LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+crypt net_ns +pcre2 +pcre2-jit ssl systemd +tools vim-syntax +zlib lua 51degrees wurfl"
+IUSE="crypt net_ns pcre2 pcre2-jit ssl systemd tools vim-syntax zlib lua 51degrees wurfl"
 
 DEPEND="
     pcre2? (

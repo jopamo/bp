@@ -52,8 +52,6 @@ src_prepare() {
 
 src_compile() {
 	export GOROOT_FINAL="${EPREFIX}/usr/lib/go"
-	export GOROOT="${PWD}"
-	export GOBIN="${GOROOT}/bin"
 	export GOHOSTARCH=$(go_arch ${CHOST})
 	export GOHOSTOS=linux
 	export CC=$(tc-getBUILD_CC)

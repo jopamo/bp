@@ -6,8 +6,7 @@ inherit autotools
 
 DESCRIPTION="A lossy image compression format"
 HOMEPAGE="https://developers.google.com/speed/webp/download"
-
-SNAPSHOT=753ed11ef8c8bdc7ce46677a5f915f9917802199
+SNAPSHOT=418340d85bb52d5896992a34516eb71e1f3e2eaa
 SRC_URI="https://github.com/webmproject/libwebp/archive/${SNAPSHOT}.tar.gz -> libwebp-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libwebp-${SNAPSHOT}"
 
@@ -15,7 +14,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+jpeg keep-la +png static-libs +tiff"
+IUSE="jpeg keep-la png static-libs tiff"
 
 DEPEND="
 	jpeg? ( xmedia-lib/libjpeg-turbo )

@@ -23,7 +23,6 @@ KillMode=process
 Restart=always
 RestartSec=5s
 Environment=PATH=/opt/llm-models/.local/bin:/usr/local/bin:/usr/bin
-PrivateNetwork=true
 
 [Install]
 WantedBy=multi-user.target

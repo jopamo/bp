@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="acl dbus debug pam +ssl static-libs systemd usb"
+IUSE="acl dbus debug pam ssl static-libs systemd usb"
 
 DEPEND="
 	app-tex/libpaper

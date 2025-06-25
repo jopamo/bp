@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="A brokerless kernel"
 HOMEPAGE="http://www.zeromq.org/"
-SNAPSHOT=798a689df1a7945f556d5404311c6ccebb282788
+SNAPSHOT=b91a6201307b72beb522300366aad763d19b1456
 SRC_URI="https://github.com/zeromq/libzmq/archive/${SNAPSHOT}.tar.gz -> libzmq-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libzmq-${SNAPSHOT}"
 
@@ -14,7 +14,7 @@ LICENSE="LGPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="libunwind +sodium static-libs test"
+IUSE="libunwind sodium static-libs test"
 
 DEPEND="
 	app-core/util-linux

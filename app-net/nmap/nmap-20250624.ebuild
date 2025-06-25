@@ -6,7 +6,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="A utility for network discovery and security auditing"
 HOMEPAGE="https://nmap.org/"
-SNAPSHOT=92e2c5f2aa90ea67736e9416cf583106c6782caf
+SNAPSHOT=f2028a20076d20411047fb3852c62279da3b9ffe
 SRC_URI="https://github.com/nmap/nmap/archive/${SNAPSHOT}.tar.gz -> nmap-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/nmap-${SNAPSHOT}"
 
@@ -14,7 +14,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="ipv6 +libssh2 +os-db +ncat +nping +nselib +scripts ssl"
+IUSE="ipv6 libssh2 os-db ncat nping nselib scripts ssl"
 
 DEPEND="
 	app-lang/lua

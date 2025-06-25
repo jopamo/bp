@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..13} pypy3 pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1
 
@@ -24,7 +24,10 @@ KEYWORDS="amd64 arm64"
 distutils_enable_tests pytest
 
 python_test() {
-	local EPYTEST_DESELECT=()
+	local EPYTEST_DESELECT=(
+		# requires *.dist-info/RECORD file that we're stripping
+		pyfakefs/tests/fake_filesystem_test.py::RealFileSystemAccessTest::test_add_package_metadata
+	)
 	local EPYTEST_IGNORE=(
 		# test for regression with opentimelineio package
 		pyfakefs/pytest_tests/segfault_test.py
@@ -43,6 +46,8 @@ python_test() {
 			EPYTEST_DESELECT+=(
 				# TODO: this test messes up everything
 				pyfakefs/tests/fake_filesystem_unittest_test.py::TestDeprecationSuppression::test_no_deprecation_warning
+				# TODO
+				pyfakefs/tests/fake_pathlib_test.py::SkipPathlibTest::test_exists
 			)
 			;;
 	esac

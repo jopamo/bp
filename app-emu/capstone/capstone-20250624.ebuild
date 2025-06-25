@@ -8,7 +8,7 @@ DISTUTILS_EXT=1
 
 DESCRIPTION="disassembly/disassembler framework + bindings"
 HOMEPAGE="http://www.capstone-engine.org/"
-SNAPSHOT=a25d4980b02d506f25d43c3f83f0c93f0973c722
+SNAPSHOT=99f018ac97a048dc16c96be88ed8f5b607ab4716
 SRC_URI="https://github.com/capstone-engine/capstone/archive/${SNAPSHOT}.tar.gz -> capstone-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/capstone-${SNAPSHOT}"
 
@@ -18,7 +18,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+diet +python debug"
+IUSE="diet python debug"
 
 src_prepare() {
 	append-flags -Wno-error

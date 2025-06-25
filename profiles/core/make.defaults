@@ -100,22 +100,22 @@ UNINSTALL_IGNORE="
 
 USE="
     # ── Compression & Storage ───────────────────────
-    bzip2 lz4 zlib zstd
+    bzip2 lz4 zlib zstd dhcp -dhcp-tools iwlwifi intel
 
     # ── Core System Components ─────────────────────
     caps dbus device-mapper machined ncurses pam readline ssl systemd tmpfilesd udev
 
     # ── Crypto / Security ───────────────────────────
-    crypt gcrypt seccomp urandom yescrypt
+    crypt gcrypt seccomp urandom yescrypt argon2 oniguruma doh gnutls
 
     # ── Libraries & Runtimes ────────────────────────
-	acl attr gdbm elf kmod gmp iconv libcap pcre python sqlite xml
+	acl attr gdbm elf kmod gmp iconv libcap pcre python sqlite xml gshadow blkid
 
     # ── Kernel / OS Helpers ─────────────────────────
-    isl kernel_linux numa sysusersd unicode xattr
+    isl kernel_linux numa sysusersd unicode xattr cxx asm mpfr native-extensions
 
     # ── Firmware ─────────────────────────
-	mediatek rtl_nic
+	mediatek rtl_nic regex threads static-pie uuid tcl ipc bsdtar pie utmpx wtmpx
 
     # ── Disabled by Default (opt in per-package) ───
     -berkdb      # prefer sqlite

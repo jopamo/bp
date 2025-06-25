@@ -6,7 +6,7 @@ inherit meson flag-o-matic
 
 DESCRIPTION="A lightweight compositor for X11 (previously a compton fork)"
 HOMEPAGE="https://github.com/yshui/picom.git"
-SNAPSHOT=b99537235bf858ccf527217bfc196d4923a3e3a1
+SNAPSHOT=9b8b0e956514779de15898475091de01d59b4394
 SRC_URI="https://github.com/yshui/picom/archive/${SNAPSHOT}.tar.gz -> picom-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/picom-${SNAPSHOT}"
 
@@ -14,7 +14,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="sanitize dbus +regex opengl"
+IUSE="sanitize dbus regex opengl"
 
 DEPEND="
 	dbus? ( app-core/dbus )

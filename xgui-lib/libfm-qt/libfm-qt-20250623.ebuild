@@ -6,8 +6,7 @@ inherit cmake
 
 DESCRIPTION="Qt port of libfm, a library providing components to build desktop file managers"
 HOMEPAGE="http://lxqt.org/"
-
-SNAPSHOT=6bdec327f23bc408d8f1512d327ef1fd98c8326b
+SNAPSHOT=dbc4b2b4c1ec319ecd0b2341b537d6145ea99b32
 SRC_URI="https://github.com/lxqt/libfm-qt/archive/${SNAPSHOT}.tar.gz -> libfm-qt-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libfm-qt-${SNAPSHOT}"
 

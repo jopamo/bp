@@ -14,7 +14,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="$(ver_cut 1-2)"
 	inherit git-r3
 else
-SNAPSHOT=1377de8eb5a07b112f5640e1266dd2a1d572975a
+SNAPSHOT=759ed45b28402d8c7ca044e7874e795223153c8c
 	SRC_URI="https://github.com/erlang/otp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/otp-${SNAPSHOT}
 fi
@@ -23,7 +23,7 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="java +kpoll odbc sctp ssl systemd tk wxwidgets"
+IUSE="java kpoll odbc sctp ssl systemd tk wxwidgets"
 
 PATCHES=(
 	"${FILESDIR}"/erlang-27.0-dont-ignore-LDFLAGS.patch

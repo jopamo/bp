@@ -7,9 +7,6 @@ BRANCH_NAME="release-branch.go$(ver_cut 1-2)"
 export CBUILD=${CBUILD:-${CHOST}}
 export CTARGET=${CTARGET:-${CHOST}}
 
-GO_BOOTSTRAP_MIN=1.20.14
-MY_PV=${PV/_/}
-
 inherit toolchain-funcs
 
 DESCRIPTION="A concurrent garbage collected and typesafe programming language"

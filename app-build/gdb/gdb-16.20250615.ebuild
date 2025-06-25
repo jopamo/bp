@@ -16,7 +16,7 @@ LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+client lzma multitarget +python +server test xml"
+IUSE="client lzma multitarget python server test xml"
 
 REQUIRED_USE="
 	python? ( ${PYTHON_REQUIRED_USE} )

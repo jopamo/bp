@@ -24,7 +24,7 @@ LICENSE="HPND"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="imagequant +jpeg jpeg2k lcms test tiff tk truetype webp xcb zlib"
+IUSE="imagequant jpeg jpeg2k lcms test tiff tk truetype webp xcb zlib"
 
 REQUIRED_USE="test? ( jpeg jpeg2k lcms tiff truetype )"
 RESTRICT="!test? ( test )"

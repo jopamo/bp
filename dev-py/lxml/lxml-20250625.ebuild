@@ -13,14 +13,14 @@ HOMEPAGE="
 	https://pypi.org/project/lxml/
 	https://github.com/lxml/lxml/
 "
-SNAPSHOT=fb3adb1dce9afd699f7ab0d4b4866f1c0b8191b2
+SNAPSHOT=d3914dcb6aa3dd05979e2321b17e269744aebae5
 SRC_URI="https://github.com/lxml/lxml/archive/${SNAPSHOT}.tar.gz -> lxml-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/lxml-${SNAPSHOT}
 
 LICENSE="BSD ElementTree GPL-2 PSF-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="doc examples +threads test"
+IUSE="doc examples threads test"
 RESTRICT="!test? ( test )"
 
 # Note: lib{xml2,xslt} are used as C libraries, not Python modules.

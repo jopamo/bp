@@ -18,7 +18,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="systemd +wg-quick"
+IUSE="systemd wg-quick"
 
 BDEPEND="app-dev/pkgconf"
 DEPEND="

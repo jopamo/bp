@@ -7,19 +7,27 @@ inherit flag-o-matic toolchain-funcs xdg
 DESCRIPTION="Linux Studio Plugins"
 HOMEPAGE="https://lsp-plug.in"
 
-SNAPSHOT=b0748ab1ab8e7193c64f6d6ddfc14d1cd85063ee
-SRC_URI="https://github.com/lsp-plugins/lsp-plugins/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+if [[ ${PV} == *9999 ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/lsp-plugins/lsp-plugins"
+	EGIT_BRANCH="devel"
+else
+	SRC_URI="https://github.com/lsp-plugins/${PN}/releases/download/${PV}/${PN}-src-${PV}.tar.gz -> ${P}.tar.gz"
+	KEYWORDS="amd64 ~arm arm64 ~ppc ~ppc64 x86"
+	S="${WORKDIR}/${PN}"
+fi
 
 LICENSE="LGPL-3"
 SLOT="0"
-IUSE="doc jack ladspa lv2 test vst X"
+KEYWORDS="amd64 arm64"
+
+IUSE="jack ladspa lv2 test vst X"
+
 REQUIRED_USE="|| ( jack ladspa lv2 )
 	test? ( jack )"
 
 RESTRICT="!test? ( test )"
 
-BDEPEND="doc? ( dev-lang/php:* )"
 DEPEND="
 	xmedia-lib/libglvnd
 	xgui-misc/libsndfile
@@ -39,7 +47,6 @@ src_configure() {
 	# This was reported upstream but the ticket closed. Abandon hope.
 	filter-lto
 
-	use doc && MODULES+="doc"
 	use jack && MODULES+=" jack"
 	use ladspa && MODULES+=" ladspa"
 	use lv2 && MODULES+=" lv2"
@@ -48,7 +55,7 @@ src_configure() {
 	emake \
 		FEATURES="${MODULES}" \
 		PREFIX="/usr" \
-		LIBDIR="/usr/$(get_libdir)" \
+		LIBDIR="/usr/lib" \
 		CC="$(tc-getCC)" \
 		CXX="$(tc-getCXX)" \
 		LD="$(tc-getLD)" \
@@ -63,7 +70,7 @@ src_compile() {
 	emake \
 		FEATURES="${MODULES}" \
 		PREFIX="/usr" \
-		LIBDIR="/usr/$(get_libdir)" \
+		LIBDIR="/usr/lib" \
 		CC="$(tc-getCC)" \
 		CXX="$(tc-getCXX)" \
 		LD="$(tc-getLD)" \
@@ -74,5 +81,5 @@ src_compile() {
 }
 
 src_install() {
-	emake PREFIX="/usr" DESTDIR="${ED}" LIB_PATH="/usr/$(get_libdir)" VERBOSE=1 install
+	emake PREFIX="${ED}/usr" DESTDIR="${ED}" LIB_PATH="${ED}/usr/lib" VERBOSE=1 install
 }

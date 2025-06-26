@@ -22,26 +22,19 @@ IUSE="diet python debug"
 
 src_prepare() {
 	append-flags -Wno-error
+	filter-flags -Wall
 	filter-flags -Wl,-z,defs -flto*
-	cmake_src_prepare
+	default
 	use python && cd bindings/python && distutils-r1_src_prepare
 }
 
 src_configure() {
-	local mycmakeargs=(
-		-DCAPSTONE_BUILD_DIET="$(usex diet)"
-		-DCAPSTONE_BUILD_STATIC_LIBS=ON
-		-DCAPSTONE_INSTALL=ON
-		-DCAPSTONE_ARCHITECTURE_DEFAULT=OFF
-		-DCAPSTONE_ARM64_SUPPORT=ON
-		-DCAPSTONE_X86_SUPPORT=ON
-	)
-	cmake_src_configure
+	default
 	use python && cd bindings/python && distutils-r1_src_configure
 }
 
 src_compile() {
-	cmake_src_compile
+	default
 	use python && cd bindings/python && distutils-r1_src_compile
 }
 
@@ -50,11 +43,11 @@ python_test() {
 }
 
 src_test() {
-	cmake_src_test
+	default
 	use python && cd bindings/python && distutils-r1_src_test
 }
 
 src_install() {
-	cmake_src_install
+	default
 	use python && cd bindings/python && distutils-r1_src_install
 }

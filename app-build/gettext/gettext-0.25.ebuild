@@ -59,7 +59,7 @@ src_compile() {
 }
 
 src_install() {
-    default
+    emake DESTDIR="${ED}" install
 
     dosym msgfmt usr/bin/gmsgfmt
     dobin gettext-tools/misc/gettextize

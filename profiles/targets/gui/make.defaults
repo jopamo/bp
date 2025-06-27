@@ -68,14 +68,15 @@ spirv
 svg
 tiff
 tmpfilesd
+truetype
 ucm
 user-namespaces
 video
+vst
 vulkan
 X
 xcb
 xdg
-vst
 xkb
 xkbcommon
 xxhash

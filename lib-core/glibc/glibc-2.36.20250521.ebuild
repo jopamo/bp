@@ -24,7 +24,7 @@ BDEPEND="
 	app-build/make
 "
 DEPEND="
-	app-kernel/linux-headers
+	virtual/linux-sources
 	app-core/layout
 "
 RDEPEND="

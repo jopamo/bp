@@ -20,7 +20,7 @@ IUSE="
 	corbaidl2wrs dcerpcidl2wrs debug dftest dpauxmon dumpcap editcap
 	fuzzer kerberos libssh libxml2 lua lz4 mergecap mmdbresolve netlink
 	nghttp2 plugins qt randpkt randpktdump rawshark reordercap sbc
-	sdjournal sharkd snappy sshdump ssl static-libs text2pcap tfshark
+	sdjournal sharkd sshdump ssl static-libs text2pcap tfshark
 	tsan tshark ubsan udpdump xxx2deb zlib zstd
 "
 REQUIRED_USE="
@@ -45,7 +45,6 @@ DEPEND="
 	netlink? ( lib-net/libnl )
 	nghttp2? ( lib-net/nghttp2 )
 	sbc? ( xgui-misc/sbc )
-	snappy? ( app-compression/snappy )
 	ssl? ( lib-net/gnutls )
 	zlib? ( lib-core/zlib )
 	zstd? ( app-compression/zstd )
@@ -113,7 +112,7 @@ src_configure() {
 		-D ENABLE_PLUGINS="$(usex plugins)"
 		-D ENABLE_SBC="$(usex sbc)"
 		-D ENABLE_SMI=OFF
-		-D ENABLE_SNAPPY="$(usex snappy)"
+		-D ENABLE_SNAPPY=OFF
 		-D ENABLE_SPANDSP=OFF
 		-D ENABLE_STATIC="$(usex static-libs)"
 		-D ENABLE_TSAN="$(usex tsan)"

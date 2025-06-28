@@ -47,12 +47,10 @@ src_test() {
 src_install() {
 	dobin tcpdump
 	doman tcpdump.1
-	dodoc *.awk
-	dodoc CHANGES CREDITS README.md
 
 	if use suid ; then
-		fowners root:pcap /usr/sbin/tcpdump
-		fperms 4110 /usr/sbin/tcpdump
+		fowners root:pcap /usr/bin/tcpdump
+		fperms 4110 /usr/bin/tcpdump
 	fi
 }
 

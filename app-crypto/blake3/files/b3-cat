@@ -1,0 +1,112 @@
+#!/bin/bash
+
+LOG_PREFIX="📦"        # Prefix for logs
+HASHCMD="b3sum"        # Default hashing command (can be changed to sha256sum, etc.)
+HASH_ARGS=""           # Default arguments for hashing command
+CHECK_ARGS="--check"   # Default arguments for checking
+CATALOG="BLAKE3SUMS"   # Name of the checksum catalog file
+
+# Log functions
+log_general() { echo "$LOG_PREFIX $1"; }
+log_ok()      { echo "✔️  $1"; }
+log_err()     { echo "❌  $1" >&2; }
+log_warn()    { echo "⚠️  $1"; }
+
+# Function to detect the hashing tool
+b3sha_detect() {
+    if ! command -v "$HASHCMD" &>/dev/null; then
+        log_err "$HASHCMD not found. Please install it first."
+        return 1
+    fi
+}
+
+# Create the checksum catalog
+b3sha_cat_create() {
+    b3sha_detect || return 1
+
+    local path="${1:-.}"
+    local tmp
+    tmp=$(mktemp)
+
+    # Ensure the path exists
+    if [[ ! -e "$path" ]]; then
+        log_err "Path $path does not exist."
+        return 1
+    fi
+
+    log_general "Generating $CATALOG in $path ..."
+
+    if [[ -d "$path" ]]; then
+        # Exclude the catalog itself and .git dirs, use arrays for safety
+        find "$path" -type f ! -name "$CATALOG" ! -path "*/.git/*" -print0 \
+            | xargs -0 $HASHCMD $HASH_ARGS >"$tmp"
+    elif [[ -f "$path" ]]; then
+        $HASHCMD $HASH_ARGS "$path" >"$tmp"
+    else
+        log_err "$path is not a valid directory or file."
+        return 1
+    fi
+
+    sort -k 2 "$tmp" > "$path/$CATALOG"
+    rm -f "$tmp"
+
+    log_general "Inspecting $CATALOG format…"
+    head -n 5 "$path/$CATALOG"
+
+    local n
+    n=$(grep -cve '^\s*$' "$path/$CATALOG")
+    log_ok "Wrote $CATALOG with $n entries"
+}
+
+# Check the checksum catalog
+b3sha_cat_check() {
+    b3sha_detect || return 1
+
+    # If a path is specified, check there; otherwise check current directory
+    local check_dir="${1:-.}"
+    local catalog="$check_dir/$CATALOG"
+    [[ -f $catalog ]] || { log_err "$CATALOG missing in $check_dir."; return 1; }
+
+    log_general "Verifying with $catalog …"
+    if (cd "$check_dir" && $HASHCMD $CHECK_ARGS "$CATALOG"); then
+        log_ok "All files verified OK."
+    else
+        log_warn "Mismatch detected."
+        return 2
+    fi
+}
+
+# Print help
+print_help() {
+    cat <<EOF
+Usage: $0 [--check|-c] [directory|file]
+  --check, -c         Verify the checksum catalog (default: current directory).
+  [directory|file]    Create a catalog for the directory or file.
+  If no directory or file is provided, the current directory is used.
+EOF
+}
+
+# Main entrypoint
+b3-cat() {
+    if [[ $# -eq 0 ]]; then
+        # Default: create catalog for current directory
+        b3sha_cat_create "."
+        return
+    fi
+
+    case "$1" in
+        --help|-h)
+            print_help
+            ;;
+        --check|-c)
+            shift
+            b3sha_cat_check "${1:-.}"
+            ;;
+        *)
+            b3sha_cat_create "$1"
+            ;;
+    esac
+}
+
+b3-cat "$@"
+exit $?

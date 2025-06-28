@@ -45,4 +45,5 @@ src_install() {
     meson_src_install
 
     dobin dedup_symlink
+    dobin b3-cat
 }

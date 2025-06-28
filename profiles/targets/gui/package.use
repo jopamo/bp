@@ -6,3 +6,9 @@ xgui-live-app/wine opencl
 xgui-tools/alsa-utils alsamixer
 xmedia-lib/x264 opencl
 xmedia-live-app/avidemux qt5
+xgui-lib/qtbase vulkan
+xgui-lib/gtk4 vulkan
+xmedia-lib/libplacebo vulkan
+xgui-lib/qtbase vulkan
+app-kernel/kernel-bin desktop
+xmedia-app/ffmpeg vulkan

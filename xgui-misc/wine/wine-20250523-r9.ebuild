@@ -99,8 +99,3 @@ src_configure() {
 	)
 	econf ${myconf[@]}
 }
-
-src_install() {
-	default
-	rm -rf "${ED}"/usr/share/man/{de,fr}.UTF-8
-}

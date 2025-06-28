@@ -22,7 +22,7 @@ RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
 DEPEND="
 	${RDEPEND}
 	static? ( ${LIB_DEPEND} )
-	app-kernel/linux-headers
+	virtual/linux-sources
 "
 
 src_configure() {

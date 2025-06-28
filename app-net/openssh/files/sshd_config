@@ -1,5 +1,5 @@
 AcceptEnv LANG LC_*
-AuthenticationMethods publickey,password
+AuthenticationMethods password
 ChallengeResponseAuthentication no
 Ciphers chacha20-poly1305@openssh.com
 ClientAliveCountMax 3

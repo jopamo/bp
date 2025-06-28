@@ -26,7 +26,6 @@ src_install() {
 		CATALOG "${EPREFIX}/usr/share/sgml/docbook/sgml-dtd-${PV}/catalog"
 		CATALOG "${EPREFIX}/etc/sgml/sgml-docbook.cat"
 	EOF
-	dodoc README
 }
 
 pkg_preinst() {

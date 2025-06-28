@@ -79,6 +79,9 @@ src_install() {
     for x in build-to-host gettext host-cpu-c-abi iconv intlmacosx lib-ld lib-link lib-prefix nls po progtest ; do
 		dosym -r /usr/share/gettext/m4/${x}.m4 /usr/share/aclocal/${x}.m4
 	done
+
+	cleanup_install
+	dedup_symlink "${ED}"
 }
 
 

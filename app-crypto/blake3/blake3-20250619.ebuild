@@ -25,6 +25,7 @@ pkg_setup() {
 }
 
 src_prepare() {
+	cp "${FILESDIR}/b3-cat" "${S}/" || die "Failed to copy v3-cat"
 	cp "${FILESDIR}/dedup_symlink" "${S}/" || die "Failed to copy dedup_symlink"
     sed -i "s/VERSION/${PV}/g" "${S}/src/b3sum.c" || die "Failed to replace VERSION in b3sum.c"
     sed -i "s/VERSION/${PV}/g" "${S}/meson.build" || die "Failed to replace VERSION in meson.build"

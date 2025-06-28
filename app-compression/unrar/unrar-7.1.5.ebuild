@@ -15,8 +15,7 @@ KEYWORDS="amd64 arm64"
 S=${WORKDIR}/unrar
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-5.9.3-build.patch
-	"${FILESDIR}"/${PN}-5.5.5-honor-flags.patch
+	"${FILESDIR}"/${PN}-6.2.6-honor-flags.patch
 )
 
 append-ldflags -Wl,-soname,libunrar.so.$(ver_cut 0-1)

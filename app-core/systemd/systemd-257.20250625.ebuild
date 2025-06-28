@@ -21,7 +21,7 @@ IUSE="binfmt blkid bootloader bpf-framework coredump dbus devmode dhcp4 elfutils
 oomd pam pcre pstore resolve rfkill systemd-update sysusersd timedated
 tmpfilesd +userdb +utmp +vconsole xkb"
 
-REQUIRED_USE="elibc_musl? ( !gshadow !localed !utmp )"
+REQUIRED_USE="elibc_musl? ( !gshadow !utmp )"
 
 DEPEND="
 	app-build/gettext

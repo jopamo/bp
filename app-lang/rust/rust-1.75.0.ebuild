@@ -132,4 +132,7 @@ src_install() {
 	IFS=$'\n'
 	DESTDIR="${D}" "${EPYTHON}" ./x.py install	-vv --config="${S}"/config.toml -j$(makeopts_jobs) || die
 	)
+
+	cleanup_install
+	dedup_symlink "${ED}"
 }

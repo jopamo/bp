@@ -22,6 +22,11 @@ KEYWORDS="amd64 arm64"
 
 RESTRICT="test network-sandbox"
 
+DEPEND="
+	app-compression/libzip
+	lib-misc/xxhash
+"
+
 src_configure() {
 	filter-flags -Wl,-z,defs -flto*
 

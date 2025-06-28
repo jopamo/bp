@@ -61,10 +61,8 @@ RANLIB="gcc-ranlib"
 NM="gcc-nm"
 
 # Build package options
-EMERGE_DEFAULT_OPTS="--buildpkg"
+EMERGE_DEFAULT_OPTS="--buildpkg --buildpkg-exclude 'bin/* app-kernel/* virtual/*'"
 FEATURES="buildpkg"
-BINPKG_COMPRESS="xz"
-BINPKG_COMPRESS_FLAGS="--x86 --delta=dist=2 --lzma2=dict=128Mi -e9 -T5"
 
 ###############################################################################
 # Python

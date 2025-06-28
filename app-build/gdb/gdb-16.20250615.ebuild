@@ -35,6 +35,7 @@ RDEPEND="
 	)"
 DEPEND="${RDEPEND}
 	app-compression/xz-utils
+	lib-misc/xxhash
 	app-build/texinfo
 	client? (
 		app-build/bison

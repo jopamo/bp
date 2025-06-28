@@ -22,7 +22,7 @@ RESTRICT="network-sandbox"
 IUSE="static-libs xattr"
 
 DEPEND="
-    app-kernel/linux-headers
+    virtual/linux-sources
     lib-core/zlib[static-libs(+)]
     lib-dev/libtasn1[static-libs(+)]
     lib-util/glib[static-libs(+)]

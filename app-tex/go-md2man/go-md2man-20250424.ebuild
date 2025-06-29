@@ -5,19 +5,20 @@ EAPI=8
 inherit go-module
 
 DESCRIPTION="A utility to convert markdown to man pages"
-	SRC_URI="https://github.com/cpuguy83/go-md2man/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 HOMEPAGE="https://github.com/cpuguy83/go-md2man"
+
+SNAPSHOT=061b6c7cbecd6752049221aa15b7a05160796698
+SRC_URI="https://github.com/cpuguy83/go-md2man/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="BSD-2 MIT"
 SLOT="0"
-KEYWORDS="amd64 ~arm arm64 ~loong ppc64 ~riscv ~x86"
+KEYWORDS="amd64 arm64"
 
-# restrict tests because they need network-sandbox disabled
-# bug https://bugs.gentoo.org/715028
 RESTRICT+=" test"
 
 src_compile() {
-	emake BUILD_FLAGS="-mod=vendor" build
+	emake build
 }
 
 src_install() {

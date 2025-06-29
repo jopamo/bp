@@ -156,7 +156,3 @@ USE_EXPAND_VALUES_ARCH="amd64 arm64"
 
 PROFILE_ONLY_VARIABLES="${PROFILE_ONLY_VARIABLES} ARCH USE_EXPAND_VALUES_ARCH"
 
-###############################################################################
-# GRUB defaults
-###############################################################################
-GRUB_PLATFORMS="pc efi-64"

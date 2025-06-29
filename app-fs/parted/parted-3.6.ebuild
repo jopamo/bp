@@ -23,9 +23,18 @@ DEPEND="
 	nls? ( app-build/gettext )
 "
 
-filter-flags -Wl,-z,defs -flto\=\*
+PATCHES=(
+	"${FILESDIR}"/${PN}-3.2-po4a-mandir.patch
+	"${FILESDIR}"/${PN}-3.3-atari.patch
+	"${FILESDIR}"/${PN}-3.4-posix-printf.patch
+	"${FILESDIR}"/${PN}-3.6-tests-unicode.patch
+	"${FILESDIR}"/${PN}-3.6-tests-non-bash.patch
+	"${FILESDIR}"/${P}-underlinked-util-linux.patch
+	"${FILESDIR}"/${P}-c23.patch
+)
 
 src_prepare() {
+	filter-flags -Wl,-z,defs -flto\=\*
 	default
 	eautoreconf
 }
@@ -33,7 +42,7 @@ src_prepare() {
 src_configure() {
 	local myconf=(
 		$(use_enable debug)
-		$(use_enable device-mapper)
+		--disable-device-mapper
 		$(use_enable nls)
 		$(use_enable static-libs static)
 		$(use_with readline)

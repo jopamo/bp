@@ -15,7 +15,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+drm opengl wayland X utils"
+IUSE="drm opengl wayland X utils"
 
 RDEPEND=">=xgui-lib/libdrm-2.4.46
 	X? (

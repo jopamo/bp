@@ -15,7 +15,7 @@ LICENSE="ZLIB"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+keep-la static-libs"
+IUSE="keep-la static-libs"
 
 DEPEND="app-dev/pkgconf"
 

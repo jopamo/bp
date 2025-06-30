@@ -14,7 +14,7 @@ LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+javascript opengl ssl X"
+IUSE="javascript opengl ssl X"
 
 REQUIRED_USE="opengl? ( javascript )"
 

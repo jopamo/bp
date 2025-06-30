@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="v$(ver_cut 1)-stable"
 
-inherit flag-o-matic linux-info meson toolchain-funcs user
+inherit flag-o-matic linux-info meson toolchain-funcs user xdg
 
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
@@ -17,11 +17,11 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="binfmt blkid bootloader bpf-framework coredump dbus devmode dhcp4 elfutils efi gcrypt gshadow
-+hostnamed +hwdb importd kmod kvm ldconfig localed logind machined musl +networkd
++hostnamed +hwdb importd kmod kvm ldconfig localed logind machined +networkd
 oomd pam pcre pstore resolve rfkill systemd-update sysusersd timedated
 tmpfilesd +userdb +utmp +vconsole xkb"
 
-REQUIRED_USE="musl? ( !gshadow !localed !userdb !utmp )"
+REQUIRED_USE="elibc_musl? ( !gshadow !utmp )"
 
 DEPEND="
 	app-build/gettext
@@ -88,7 +88,7 @@ src_prepare() {
 
 	append-cflags -Wno-error=format-truncation
 
-	if use musl; then
+	if use elibc_musl; then
 		append-cppflags -D__UAPI_DEF_ETHHDR=0
 		append-flags -Wno-error=incompatible-pointer-types
 
@@ -308,6 +308,7 @@ pkg_postinst() {
 
 	systemctl reenable getty@tty1.service remote-fs.target
 	use networkd && systemctl reenable systemd-networkd.service
+	xdg_mimeinfo_database_update
 }
 
 pkg_preinst() {

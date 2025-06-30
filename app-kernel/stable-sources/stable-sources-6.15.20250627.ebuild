@@ -28,8 +28,6 @@ DEPEND="
 src_prepare() {
 	kernel-2_src_prepare
 
-	rm -rf "${S}"/Documentation
-
 	eapply "${FILESDIR}"/reg.patch
 }
 

@@ -15,7 +15,7 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bsdpty pam +shadow static +syslog systemd zlib"
+IUSE="bsdpty pam shadow static syslog systemd zlib"
 
 src_configure() {
 	local myconf=(

@@ -91,6 +91,6 @@ src_install() {
 	sed -i '/^#CHARACTER_SET:/ c\CHARACTER_SET:utf-8' \
 			"${ED}"/etc/lynx.cfg || die "lynx.cfg not found"
 
-	dodoc CHANGES COPYHEADER PROBLEMS README
-	dodoc -r docs lynx_help
+	cleanup_install
+	dedup_symlink "${ED}"
 }

@@ -14,7 +14,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs systemd +udev +dm-only"
+IUSE="static-libs systemd udev dm-only"
 
 DEPEND="
 	app-core/util-linux

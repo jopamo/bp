@@ -14,7 +14,7 @@ LICENSE="netcat"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="ipv6 telnet +exec_hole verbose_debug static"
+IUSE="ipv6 telnet exec_hole verbose_debug static"
 
 src_configure() {
 	append-flags "-Wno-pointer-sign -Wno-address -Wno-implicit-fallthrough -Wno-clobbered"

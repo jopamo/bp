@@ -16,7 +16,7 @@ LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
 KEYWORDS="amd64 arm64"
 
-IUSE="+spirv video_cards_nvidia video_cards_r600 video_cards_radeonsi"
+IUSE="spirv video_cards_nvidia video_cards_r600 video_cards_radeonsi"
 
 BDEPEND="
 	${PYTHON_DEPS}

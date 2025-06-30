@@ -12,7 +12,7 @@ LICENSE="GPL-3 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="brotli +cxx dane +seccomp static-libs test tools valgrind zlib zstd"
+IUSE="brotli cxx dane seccomp static-libs test tools valgrind zlib zstd"
 
 DEPEND="
 	lib-core/nettle[gmp]

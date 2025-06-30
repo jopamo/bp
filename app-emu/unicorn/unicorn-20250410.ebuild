@@ -18,7 +18,7 @@ LICENSE="BSD-2 GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="logging +python static-libs test"
+IUSE="logging python static-libs test"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 DEPEND="${PYTHON_DEPS}"

@@ -50,20 +50,11 @@ src_prepare() {
 }
 
 src_compile() {
-	filter-clang
 	filter-flags -flto*
 	append-ldflags -static
 	append-ldflags -Wl,-z,noexecstack
 
-	if command -v clang >/dev/null 2>&1; then
-		echo "Detected clang"
-		emake CC=musl-clang
-	elif command -v gcc >/dev/null 2>&1; then
-		echo "Detected gcc (no clang, fallback to gcc)"
-		emake CC=musl-gcc
-	else
-		echo "No suitable compiler found" >&2
-	fi
+	emake CC=musl-gcc
 }
 
 src_install() {

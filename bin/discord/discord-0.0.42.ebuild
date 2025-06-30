@@ -18,7 +18,7 @@ LICENSE="DISCORD"
 SLOT="0"
 KEYWORDS="amd64"
 
-IUSE="+seccomp"
+IUSE="seccomp"
 
 RDEPEND="
 	app-compression/bzip2

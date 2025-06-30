@@ -15,7 +15,7 @@ LICENSE="GPL"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+python"
+IUSE="python"
 
 DEPEND="
 	dev-python/pefile

@@ -196,9 +196,12 @@ ver_test() {
 # Minimize the installed files
 cleanup_install() {
 	rm -rf "${ED}"/usr/share/doc
-	rm -rf "${ED}"/usr/share/man/{ca,de*,es,fr*,it,ja*,man{3,5,7,n},pl,pt,pt_BR,ru*,uk,zh_CHS}
-	rm -rf "${ED}"/usr/share/locale/{a*,b*,c*,d*,el,en_CA,en_GB,eo,es*,et,eu,f*,g*,h*,i*,j*,k*,lg,li,lt,lv,m*,n*,o*,p*,q*,r*,s*,t*,u*,v*,w*,x*,y*,z*}
-	rm -rf "${ED}"/usr/share/i18n/locales/{a*,b*,c*,d*,e{l,o,s,t,u}*,f*,g*,h*,i{a,d,g,k,t,u}*,j*,k*,l*,m*,n*,o*,p*,q*,r*,s*,t{a,c,e,g,h,i,k,l,n,o,p}*,u*,v*,w*,x*,y*,z*}
+	rm -rf "${ED}"/usr/share/zsh
+
+	find "${ED}"/usr/share/man -mindepth 1 -maxdepth 1 ! -name 'man*' -exec rm -rf {} +
+	find "${ED}"/usr/share/locale/ -mindepth 1 -maxdepth 1 ! -name 'en*' ! -name 'locale.alias' -exec rm -rf {} +
+	find "${ED}"/usr/share/i18n/locales -maxdepth 1 -type f ! -name 'en*' ! -name 'C' ! -name 'POSIX' \
+    	! -name 'i18n*' ! -name 'iso14651*' ! -name 'translit*' -delete
 }
 
 # @FUNCTION: get_modname

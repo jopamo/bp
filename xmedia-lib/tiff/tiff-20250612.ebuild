@@ -14,7 +14,7 @@ LICENSE="libtiff"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+cxx jbig jpeg keep-la lzma static-libs test webp zlib zstd"
+IUSE="cxx jbig jpeg keep-la lzma static-libs test webp zlib zstd"
 
 DEPEND="jpeg? ( xmedia-lib/libjpeg-turbo )
 	jbig? ( >=xmedia-live-lib/jbigkit-2.1:= )

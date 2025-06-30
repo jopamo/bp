@@ -29,7 +29,6 @@ src_prepare() {
 	kernel-2_src_prepare
 
 	rm -rf "${S}"/Documentation
-	rm -rf "${S}"/samples
 
 	eapply "${FILESDIR}"/reg.patch
 }

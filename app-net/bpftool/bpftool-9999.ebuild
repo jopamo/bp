@@ -21,7 +21,7 @@ LICENSE="|| ( GPL-2 BSD-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps clang +llvm"
+IUSE="caps clang llvm"
 
 CONFIG_CHECK="~DEBUG_INFO_BTF"
 

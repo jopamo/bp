@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cargo git-r3
+inherit cargo git-r3 flag-o-matic
 
 DESCRIPTION="Firmware Analysis Tool"
 HOMEPAGE="https://github.com/ReFirmLabs/binwalk"
@@ -13,6 +13,9 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RESTRICT="test"
+
+replace-flags -Os -O3
+filter-flags -Os
 
 src_install() {
 	newbin "$(cargo_target_dir)/binwalk" binwalk3

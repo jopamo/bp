@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="json mysql nfacct +nfct +nflog pcap postgres sqlite systemd"
+IUSE="json mysql nfacct nfct nflog pcap postgres sqlite systemd"
 
 DEPEND="
 	|| ( app-net/iptables app-net/nftables )

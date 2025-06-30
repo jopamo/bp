@@ -8,8 +8,8 @@ DESCRIPTION="Advanced Binary Emulation Framework"
 HOMEPAGE="https://github.com/qilingframework/qiling"
 
 SNAPSHOT=a430518ef2026c3fa9d69df5831581b9ac3aa368
-SRC_URI="https://github.com/qilingframework/qiling/archive/${SNAPSHOT}.tar.gz -> qiling-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/qiling-${SNAPSHOT}"
+SRC_URI="https://github.com/qilingframework/qiling/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 EGIT_BRANCH="dev"
 EGIT_SUBMODULES=()

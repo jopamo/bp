@@ -21,7 +21,7 @@ DEPEND="
 	app-build/bison
 	app-build/flex
 	app-compression/xz-utils
-	app-kernel/linux-headers
+	virtual/linux-sources
 	lib-net/libbpf
 	lib-net/libmnl
 	caps? ( lib-core/libcap )

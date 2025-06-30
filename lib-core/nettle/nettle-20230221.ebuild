@@ -15,7 +15,7 @@ LICENSE="|| ( LGPL-3 LGPL-2.1 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+gmp static-libs test"
+IUSE="gmp static-libs test"
 
 DEPEND="gmp? ( lib-core/gmp )"
 

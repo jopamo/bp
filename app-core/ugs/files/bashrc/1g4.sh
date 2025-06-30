@@ -49,7 +49,7 @@ bootstrap_go() {
 
 	USE=go-bootstrap emerge --oneshot gcc
 	FEATURES="-sandbox -usersandbox" emerge --oneshot =app-lang/go-1.21*
-	emerge --oneshot gcc
+	emerge --oneshot =app-lang/go-1.23*
 	emerge --oneshot go
 }
 

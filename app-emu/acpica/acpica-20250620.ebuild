@@ -8,7 +8,7 @@ DESCRIPTION="Intel ACPI Source Language (ASL) compiler"
 HOMEPAGE="https://www.acpica.org/downloads/"
 SNAPSHOT=cbc243e46f577425838ef61a88d00e118a8928ef
 SRC_URI="https://github.com/acpica/acpica/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/acpica-${SNAPSHOT}"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="iASL"
 SLOT="0"

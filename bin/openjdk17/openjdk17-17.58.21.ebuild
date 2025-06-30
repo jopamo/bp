@@ -2,7 +2,7 @@
 
 EAPI=8
 
-BASEVERSION="17.0.8"
+BASEVERSION="17.0.15"
 
 DESCRIPTION="Zulu OpenJDK17"
 HOMEPAGE="https://www.azul.com/"

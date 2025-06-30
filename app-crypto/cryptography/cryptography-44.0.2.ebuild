@@ -62,24 +62,18 @@ RESTRICT="network-sandbox"
 distutils_enable_tests pytest
 
 src_prepare() {
-	filter-flags -flto*
+	filter-clang
+			local -x CC="clang"
+		local -x CPP="clang-cpp"
+		local -x CXX="clang++"
+		local -x AR="llvm-ar"
+		local -x NM="llvm-nm"
+		local -x RANLIB="llvm-ranlib"
+		local -x CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER=clang
+		local -x RUSTFLAGS="-C link-arg=-fuse-ld=lld"
 	default
 
 	sed -i -e 's:--benchmark-disable::' pyproject.toml || die
-
-	# work around availability macros not supported in GCC (yet)
-	if [[ ${CHOST} == *-darwin* ]] ; then
-		local darwinok=0
-		if [[ ${CHOST##*-darwin} -ge 16 ]] ; then
-			darwinok=1
-		fi
-		sed -i -e 's/__builtin_available(macOS 10\.12, \*)/'"${darwinok}"'/' \
-			src/_cffi_src/openssl/src/osrandom_engine.c || die
-	fi
-}
-
-python_configure_all() {
-	export UNSAFE_PYO3_SKIP_VERSION_CHECK=1
 }
 
 python_test() {

@@ -40,6 +40,8 @@ DEPEND="${CDEPEND}
 "
 
 src_configure() {
+	export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER=clang
+
 	local myconf=(
 		--prefix="${EPREFIX}/usr"
 		--sysconfdir="${EPREFIX}/etc"

@@ -12,7 +12,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="cairo debug +numa +pci plugins svg static-libs xml X"
+IUSE="cairo debug numa pci plugins svg static-libs xml X"
 
 DEPEND="
 	virtual/curses

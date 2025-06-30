@@ -12,7 +12,7 @@ LICENSE="GPL-2 LGPL-2.1 BSD-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+tools"
+IUSE="tools"
 
 DEPEND="
 	lib-net/libbpf:=

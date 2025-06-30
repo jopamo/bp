@@ -7,8 +7,6 @@ BRANCH_NAME="release-branch.go$(ver_cut 1-2)"
 export CBUILD=${CBUILD:-${CHOST}}
 export CTARGET=${CTARGET:-${CHOST}}
 
-MY_PV=${PV/_/}
-
 inherit toolchain-funcs
 
 DESCRIPTION="A concurrent garbage collected and typesafe programming language"
@@ -52,8 +50,6 @@ src_prepare() {
 
 src_compile() {
 	export GOROOT_FINAL="${EPREFIX}/usr/lib/go"
-	export GOROOT="${PWD}"
-	export GOBIN="${GOROOT}/bin"
 	export GOHOSTARCH=$(go_arch ${CHOST})
 	export GOHOSTOS=linux
 	export CC=$(tc-getBUILD_CC)
@@ -61,6 +57,8 @@ src_compile() {
 	export GOOS=linux
 	export CC_FOR_TARGET=$(tc-getCC)
 	export CXX_FOR_TARGET=$(tc-getCXX)
+	export GOCACHE="${T}/go-build"
+	export GOMODCACHE="${WORKDIR}/go-mod"
 
 	cd src || die "Failed to change directory to src"
 	./make.bash || die "Build failed"

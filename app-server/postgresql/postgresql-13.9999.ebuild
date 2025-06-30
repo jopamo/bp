@@ -13,7 +13,7 @@ LICENSE="POSTGRESQL GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="doc kerberos ldap nls pam perl python +readline
+IUSE="doc kerberos ldap nls pam perl python readline
 	  +server systemd ssl static-libs tcl threads tmpfilesd uuid xml zlib"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 

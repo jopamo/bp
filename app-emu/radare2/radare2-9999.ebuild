@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic meson
+inherit flag-o-matic
 
 DESCRIPTION="unix-like reverse engineering framework and commandline tools"
 HOMEPAGE="http://www.radare.org"
@@ -20,26 +20,22 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="ssl +system-capstone"
-
 RESTRICT="test network-sandbox"
 
 DEPEND="
 	app-compression/libzip
-	ssl? ( virtual/ssl )
-	system-capstone? ( app-emu/capstone )
+	lib-misc/xxhash
 "
 
 src_configure() {
 	filter-flags -Wl,-z,defs -flto*
 
-	local emesonargs=(
-		$(meson_use ssl use_sys_openssl)
-		$(meson_use system-capstone use_sys_capstone)
-		-Duse_sys_magic=true
-		-Duse_sys_zlib=true
-		--wrap-mode=default
-		-Duse_sys_lz4=true
-	)
-		meson_src_configure
+	econf \
+	--with-syslz4 \
+	--with-sysmagic \
+	--with-libatomic \
+	--with-syszip \
+	--with-sysxxhash \
+	--with-ssl \
+	--with-ssl-crypto
 }

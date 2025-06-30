@@ -17,30 +17,30 @@ Gentoo-Bug: https://bugs.gentoo.org/461806
  DESTDIR=/usr
  
  # Linux using LCC
-@@ -145,18 +145,19 @@ clean:
- 	@rm -f libunrar.a
+@@ -147,20 +147,21 @@ clean:
  
  unrar:	$(OBJECTS) $(UNRAR_OBJ)
+ 	@rm -f unrar
 -	$(LINK) -o unrar $(LDFLAGS) $(OBJECTS) $(UNRAR_OBJ) $(LIBS)	
 +	$(LINK) -o unrar $(CXXFLAGS) $(LDFLAGS) $(OBJECTS) $(UNRAR_OBJ) $(LIBS)
  	$(STRIP) unrar
  
  sfx:	WHAT=SFX_MODULE
  sfx:	$(OBJECTS)
+ 	@rm -f default.sfx
 -	$(LINK) -o default.sfx $(LDFLAGS) $(OBJECTS)
 +	$(LINK) -o default.sfx $(CXXFLAGS) $(LDFLAGS) $(OBJECTS)
  	$(STRIP) default.sfx
  
-+$(OBJECTS) $(LIB_OBJ):	CXXFLAGS+=$(LIBFLAGS)
++$(OBJECTS) $(LIB_OBJ): CXXFLAGS+=$(LIBFLAGS)
 +
  lib:	WHAT=RARDLL
 -lib:	CXXFLAGS+=$(LIBFLAGS)
  lib:	$(OBJECTS) $(LIB_OBJ)
+ 	@rm -f libunrar.*
 -	$(LINK) -shared -o libunrar.so $(LDFLAGS) $(OBJECTS) $(LIB_OBJ)
 +	$(LINK) -shared -o libunrar.so $(CXXFLAGS) $(LDFLAGS) $(OBJECTS) $(LIB_OBJ)
  	$(AR) rcs libunrar.a $(OBJECTS) $(LIB_OBJ)
  
  install-unrar:
--- 
-2.13.1
-
+--

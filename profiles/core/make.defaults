@@ -46,7 +46,7 @@ ENV_UNSET="
 
 BASEFLAGS="-Os -pipe -Wall -Wformat -Wformat-security"
 GRAPHITE="-fgraphite-identity -floop-nest-optimize -ftree-loop-distribution"
-SECURE="-fstack-protector-strong -fstack-clash-protection -fexceptions -fpie -fpic -D_FORTIFY_SOURCE=2"
+SECURE="-fstack-protector-strong -fstack-clash-protection -fexceptions -fpie -fPIC -D_FORTIFY_SOURCE=2"
 FLTO_BASE="-flto=8 -fuse-linker-plugin -fdevirtualize-at-ltrans -fipa-pta -fno-semantic-interposition"
 
 PASS_FLAGS="${BASEFLAGS} ${GRAPHITE} ${FLTO_BASE} ${SECURE}"
@@ -54,17 +54,15 @@ CFLAGS="${MARCH} ${PASS_FLAGS}"
 
 CXXFLAGS="${CFLAGS} -D_GLIBCXX_ASSERTIONS"
 CPPFLAGS="${CFLAGS}"
-LDFLAGS="-Wl,${PASS_FLAGS} -Wl,-z,combreloc -Wl,-z,defs -Wl,-z,now -Wl,-z,relro"
+LDFLAGS="${FLTO_BASE} -fpie -fPIC -Wl,-z,combreloc -Wl,-z,defs -Wl,-z,now -Wl,-z,relro"
 
 AR="gcc-ar"
 RANLIB="gcc-ranlib"
 NM="gcc-nm"
 
 # Build package options
-EMERGE_DEFAULT_OPTS="--buildpkg"
+EMERGE_DEFAULT_OPTS="--buildpkg --buildpkg-exclude 'bin/* app-kernel/* virtual/*'"
 FEATURES="buildpkg"
-BINPKG_COMPRESS="xz"
-BINPKG_COMPRESS_FLAGS="--x86 --delta=dist=2 --lzma2=dict=128Mi -e9 -T5"
 
 ###############################################################################
 # Python
@@ -99,32 +97,54 @@ UNINSTALL_IGNORE="
 ###############################################################################
 
 USE="
-    # ── Compression & Storage ───────────────────────
-    bzip2 lz4 zlib zstd
+    # ── Compression & Storage ──────────────────────────────
+    bzip2         lz4           zlib
+    zstd          bsdtar        pie
+    xxhash
 
-    # ── Core System Components ─────────────────────
-    caps dbus device-mapper machined ncurses pam readline ssl systemd tmpfilesd udev
+    # ── Networking / DHCP / Wireless ──────────────────────
+    dhcp          -dhcp-tools   -dhcp4
+    iwlwifi       intel         scp
 
-    # ── Crypto / Security ───────────────────────────
-    crypt gcrypt seccomp urandom yescrypt
+    # ── Core System Components ────────────────────────────
+    caps          dbus          device-mapper
+    machined      ncurses       pam
+    readline      ssl           systemd
+    tmpfilesd     udev          efi
+    kvm           localed       pstore
 
-    # ── Libraries & Runtimes ────────────────────────
-	acl attr gdbm elf kmod gmp iconv libcap pcre python sqlite xml
+    # ── Crypto / Security ────────────────────────────────
+    argon2        crypt         doh
+    gcrypt        gnutls        oniguruma
+    seccomp       urandom       yescrypt
 
-    # ── Kernel / OS Helpers ─────────────────────────
-    isl kernel_linux numa sysusersd unicode xattr
+    # ── Libraries & Runtimes ─────────────────────────────
+    acl           attr          blkid
+    elf           gdbm          gmp
+    gshadow       iconv         kmod
+    libcap        pcre          python
+    sqlite        xml           mount
 
-    # ── Firmware ─────────────────────────
-	mediatek rtl_nic
+    # ── Kernel / OS Helpers ──────────────────────────────
+    asm           cxx           isl
+    kernel_linux  mpfr          native-extensions
+    numa          sysusersd     unicode
+    xattr
 
-    # ── Disabled by Default (opt in per-package) ───
-    -berkdb      # prefer sqlite
-    -dvbpsi      # not needed on servers
-    -ipv6        # enable only where required
-    -jit         # problematic on some arches
+    # ── Firmware & Drivers ───────────────────────────────
+    mediatek      rtl_nic       regex
+    threads       static-pie    uuid
+    tcl           ipc           utmpx
+    wtmpx
+
+    # ── Disabled by Default (opt in per-package) ─────────
+    -berkdb       # prefer sqlite
+    -dvbpsi       # not needed on servers
+    -ipv6         # enable only where required
+    -jit          # problematic on some arches
     -manpager
-    -dhcp4
 "
+
 
 ###############################################################################
 # USE_EXPAND tweaking for custom overlay / profiles
@@ -136,7 +156,3 @@ USE_EXPAND_VALUES_ARCH="amd64 arm64"
 
 PROFILE_ONLY_VARIABLES="${PROFILE_ONLY_VARIABLES} ARCH USE_EXPAND_VALUES_ARCH"
 
-###############################################################################
-# GRUB defaults
-###############################################################################
-GRUB_PLATFORMS="efi-64"

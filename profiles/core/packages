@@ -26,7 +26,7 @@
 *app-core/which
 *app-crypto/blake3
 *app-dev/patchelf
-*app-kernel/linux-headers
+*virtual/linux-sources
 *app-net/chrony
 *app-net/iproute2
 *app-net/nftables

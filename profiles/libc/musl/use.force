@@ -2,9 +2,6 @@ elibc_musl
 -elibc_glibc
 
 # broken use flags under musl
--sysusersd
 -gshadow
--userdb
 -utmp
 -vtv
-musl

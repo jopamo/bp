@@ -59,7 +59,7 @@ src_compile() {
 }
 
 src_install() {
-    default
+    emake DESTDIR="${ED}" install
 
     dosym msgfmt usr/bin/gmsgfmt
     dobin gettext-tools/misc/gettextize
@@ -79,6 +79,9 @@ src_install() {
     for x in build-to-host gettext host-cpu-c-abi iconv intlmacosx lib-ld lib-link lib-prefix nls po progtest ; do
 		dosym -r /usr/share/gettext/m4/${x}.m4 /usr/share/aclocal/${x}.m4
 	done
+
+	cleanup_install
+	dedup_symlink "${ED}"
 }
 
 

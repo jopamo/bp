@@ -15,7 +15,7 @@ LICENSE="LGPL/GPL/MPL"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs +minimal"
+IUSE="static-libs minimal"
 
 DEPEND="app-tex/hunspell-dictionaries"
 

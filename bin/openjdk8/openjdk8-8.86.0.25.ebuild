@@ -2,7 +2,7 @@
 
 EAPI=8
 
-BASEVERSION="8.0.382"
+BASEVERSION="8.0.452"
 
 DESCRIPTION="Zulu OpenJDK8 with JavaFX Support"
 HOMEPAGE="https://www.azul.com/"

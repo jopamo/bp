@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE_PROGRAMMERS="+internal	+linux-mtd +linux-spi"
-IUSE="${IUSE_PROGRAMMERS} +internal-dmi test tools"
+IUSE="${IUSE_PROGRAMMERS} internal-dmi test tools"
 
 RESTRICT="!test? ( test )"
 

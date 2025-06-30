@@ -26,6 +26,12 @@ BDEPEND="
 	app-build/texinfo
 "
 
+src_prepare() {
+	default
+
+	#fails when building android images
+	sed -i 's/,orphan_file//g' misc/mke2fs.conf.in || die
+}
 
 src_configure() {
 	append-cflags -fno-strict-aliasing

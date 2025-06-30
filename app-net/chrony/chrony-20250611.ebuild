@@ -14,7 +14,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps +cmdmon ipv6 logrotate nettle +ntp +phc pps +refclock +rtc adns systemd tmpfilesd"
+IUSE="caps cmdmon ipv6 logrotate nettle ntp phc pps refclock rtc adns systemd tmpfilesd"
 
 DEPEND="
 	nettle? ( lib-core/nettle )

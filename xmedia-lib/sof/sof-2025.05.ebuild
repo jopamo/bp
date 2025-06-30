@@ -11,7 +11,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64"
 
-IUSE="+tools"
+IUSE="tools"
 
 QA_PREBUILT="usr/bin/sof-ctl
 	usr/bin/sof-logger

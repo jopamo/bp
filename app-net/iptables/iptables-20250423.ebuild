@@ -27,7 +27,7 @@ RDEPEND="
 	pcap? ( lib-net/libpcap )
 "
 DEPEND="${RDEPEND}
-	app-kernel/linux-headers
+	virtual/linux-sources
 	app-dev/pkgconf
 	nftables? (
 		app-build/flex

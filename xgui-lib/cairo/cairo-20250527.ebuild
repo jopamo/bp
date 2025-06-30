@@ -15,7 +15,7 @@ LICENSE="|| ( LGPL-2.1 MPL-1.1 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="X debug +glib static-libs +svg valgrind xcb"
+IUSE="X debug glib static-libs svg valgrind xcb"
 
 RESTRICT="test"
 

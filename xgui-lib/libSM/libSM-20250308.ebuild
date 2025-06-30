@@ -15,7 +15,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="ipv6 +uuid static-libs"
+IUSE="ipv6 uuid static-libs"
 
 RDEPEND=">=xgui-lib/libICE-1.0.8-r1
 	xgui-lib/xtrans

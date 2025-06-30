@@ -17,6 +17,7 @@ lcms lqr lzma opencl openexr pango perl postscript +png raw static-libs
 +svg test +tiff truetype +webp wmf X +xml zlib"
 
 DEPEND="
+	app-compression/libzip
 	jpeg2k? ( xmedia-lib/openjpeg )
 	jpeg? ( xmedia-lib/libjpeg-turbo )
 	png? ( xmedia-lib/libpng )

@@ -14,7 +14,7 @@ LICENSE="|| ( CC0-1.0 Apache-2.0 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static_lib +shared static_bin test"
+IUSE="static_lib shared static_bin test"
 
 RESTRICT="!test? ( test )"
 
@@ -25,6 +25,7 @@ pkg_setup() {
 }
 
 src_prepare() {
+	cp "${FILESDIR}/b3-cat" "${S}/" || die "Failed to copy v3-cat"
 	cp "${FILESDIR}/dedup_symlink" "${S}/" || die "Failed to copy dedup_symlink"
     sed -i "s/VERSION/${PV}/g" "${S}/src/b3sum.c" || die "Failed to replace VERSION in b3sum.c"
     sed -i "s/VERSION/${PV}/g" "${S}/meson.build" || die "Failed to replace VERSION in meson.build"
@@ -45,4 +46,5 @@ src_install() {
     meson_src_install
 
     dobin dedup_symlink
+    dobin b3-cat
 }

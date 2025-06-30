@@ -15,7 +15,7 @@ LICENSE="BSD GPL-2 SMAIL"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+installkernel savelog static tempfile"
+IUSE="installkernel savelog static tempfile"
 
 PATCHES=( "${FILESDIR}"/debianutils-3.4.2-no-bs-namespace.patch )
 

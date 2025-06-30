@@ -14,7 +14,7 @@ LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+introspection"
+IUSE="introspection"
 
 RESTRICT="network-sandbox"
 

@@ -14,7 +14,7 @@ LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+python seccomp static-libs zlib"
+IUSE="python seccomp static-libs zlib"
 
 DEPEND="
 	seccomp? ( lib-core/libseccomp )

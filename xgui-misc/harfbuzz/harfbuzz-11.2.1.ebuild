@@ -12,7 +12,7 @@ LICENSE="Old-MIT ISC"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+cairo debug +glib +introspection static-libs test +truetype"
+IUSE="cairo debug glib introspection static-libs test truetype"
 
 REQUIRED_USE="introspection? ( glib )"
 

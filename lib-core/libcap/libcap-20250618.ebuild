@@ -20,7 +20,7 @@ RDEPEND="
 	app-core/attr
 	pam? ( lib-core/pam )
 "
-BDEPEND="app-kernel/linux-headers"
+BDEPEND="virtual/linux-sources"
 
 run_emake() {
 	local args=(

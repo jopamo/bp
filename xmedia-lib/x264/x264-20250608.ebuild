@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+interlaced opencl static-libs pic ffmpeg lsmash ffmpegsource"
+IUSE="interlaced opencl static-libs pic ffmpeg lsmash ffmpegsource"
 
 DEPEND="
 	app-lang/nasm

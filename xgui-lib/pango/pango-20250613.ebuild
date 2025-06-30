@@ -14,7 +14,7 @@ LICENSE="LGPL-2+ FTL"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="X +introspection test"
+IUSE="X introspection test"
 
 DEPEND="
 	fonts/fontconfig

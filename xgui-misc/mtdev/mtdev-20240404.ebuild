@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND="app-kernel/linux-headers"
+DEPEND="virtual/linux-sources"
 
 src_prepare() {
 	default

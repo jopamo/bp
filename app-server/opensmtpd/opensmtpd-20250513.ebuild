@@ -15,7 +15,7 @@ LICENSE="ISC BSD BSD-1 BSD-2 BSD-4"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="pam +mta systemd"
+IUSE="pam mta systemd"
 
 DEPEND="
 	app-net/mailbase

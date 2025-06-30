@@ -19,7 +19,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND="app-kernel/linux-headers"
+DEPEND="virtual/linux-sources"
 BDEPEND="app-dev/gperf"
 
 src_prepare() {

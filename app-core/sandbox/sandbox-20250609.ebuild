@@ -16,7 +16,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+nnp"
+IUSE="nnp"
 
 DEPEND="app-var/pax-utils"
 BDEPEND="app-compression/xz-utils"

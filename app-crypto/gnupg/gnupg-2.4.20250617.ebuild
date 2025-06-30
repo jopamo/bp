@@ -16,7 +16,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 ldap readline +gnutls tools"
+IUSE="bzip2 ldap readline gnutls tools"
 
 DEPEND="
 	app-crypto/pinentry

@@ -20,7 +20,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl debug ntfsdecrypt +ntfsprogs static-libs suid xattr"
+IUSE="acl debug +ntfsdecrypt +ntfsprogs static-libs suid xattr"
 
 DEPEND="
 	app-core/attr
@@ -68,8 +68,4 @@ src_configure() {
 
 src_install() {
 	default
-
-	use suid && fperms u+s usr/bin/${MY_PN}
-
-	dosym mount.ntfs-3g usr/sbin/mount.ntfs
 }

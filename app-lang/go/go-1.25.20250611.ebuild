@@ -7,21 +7,17 @@ BRANCH_NAME="release-branch.go$(ver_cut 1-2)"
 export CBUILD=${CBUILD:-${CHOST}}
 export CTARGET=${CTARGET:-${CHOST}}
 
-GO_BOOTSTRAP_MIN=1.20.14
-MY_PV=${PV/_/}
-
 inherit toolchain-funcs
 
 DESCRIPTION="A concurrent garbage collected and typesafe programming language"
 HOMEPAGE="https://go.dev"
-
-SNAPSHOT=5817e650946aaa0ac28956de96b3f9aa1de4b299
+SNAPSHOT=8ac5714ef2ac4f5a35169f573f30b57144b99cfd
 SRC_URI="https://github.com/golang/go/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/go-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
 
 QA_EXECSTACK='*.syso'
 QA_PREBUILT='.*'
@@ -60,6 +56,8 @@ src_compile() {
 	export GOOS=linux
 	export CC_FOR_TARGET=$(tc-getCC)
 	export CXX_FOR_TARGET=$(tc-getCXX)
+	export GOCACHE="${T}/go-build"
+	export GOMODCACHE="${WORKDIR}/go-mod"
 
 	cd src || die "Failed to change directory to src"
 	./make.bash || die "Build failed"

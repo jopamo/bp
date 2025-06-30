@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+jitterentropy nistbeacon systemd"
+IUSE="jitterentropy nistbeacon systemd"
 
 DEPEND="
 	app-fs/sysfsutils

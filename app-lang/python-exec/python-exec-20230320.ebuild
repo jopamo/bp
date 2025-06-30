@@ -15,7 +15,7 @@ LICENSE="BSD-2"
 SLOT="2"
 KEYWORDS="amd64 arm64"
 
-IUSE="${_PYTHON_ALL_IMPLS[@]/#/python_targets_} +native-symlinks"
+IUSE="${_PYTHON_ALL_IMPLS[@]/#/python_targets_} native-symlinks"
 
 RESTRICT="test"
 

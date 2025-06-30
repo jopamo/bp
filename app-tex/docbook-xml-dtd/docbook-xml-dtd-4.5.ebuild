@@ -39,9 +39,6 @@ src_install() {
 		CATALOG "${EPREFIX}/etc/sgml/sgml-docbook.cat"
 		CATALOG "${EPREFIX}/usr/share/sgml/docbook/xml-dtd-${PV}/docbook.cat"
 	EOF
-
-	cp ent/README README.ent
-	dodoc ChangeLog README*
 }
 
 pkg_preinst() {

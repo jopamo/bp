@@ -16,7 +16,7 @@ EGIT_BRANCH="stable"
 LICENSE="ISC"
 SLOT="0/23"
 KEYWORDS="amd64 arm64"
-IUSE="+asm minimal static-libs +urandom"
+IUSE="asm minimal static-libs urandom"
 
 PATCHES=( "${FILESDIR}"/libsodium-1.0.10-cpuflags.patch )
 

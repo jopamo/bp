@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug +exif"
+IUSE="debug exif"
 
 DEPEND="
 	lib-util/glib

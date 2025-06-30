@@ -15,3 +15,8 @@ LIBDIR_arm64="lib"
 USE_EXPAND_HIDDEN="-CPU_FLAGS_ARM"
 
 MARCH="-march=armv8.2-a"
+
+BINPKG_COMPRESS="xz"
+BINPKG_COMPRESS_FLAGS="--arm64 --delta=dist=2 --lzma2=preset=9e,dict=128MiB -T5"
+
+GRUB_PLATFORMS="efi-64"

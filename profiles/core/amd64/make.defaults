@@ -32,3 +32,8 @@ USE_EXPAND_HIDDEN="-ABI_X86 -CPU_FLAGS_X86"
 IUSE_IMPLICIT="abi_x86_64"
 
 MARCH="-march=x86-64-v3"
+
+BINPKG_COMPRESS="xz"
+BINPKG_COMPRESS_FLAGS="--x86 --delta=dist=2 --lzma2=preset=9e,dict=128MiB -T5"
+
+GRUB_PLATFORMS="pc efi-64"

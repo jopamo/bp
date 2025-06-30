@@ -15,7 +15,7 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug +ucm"
+IUSE="debug ucm"
 
 DEPEND="ucm? ( xmedia-app/alsa-ucm-conf )"
 

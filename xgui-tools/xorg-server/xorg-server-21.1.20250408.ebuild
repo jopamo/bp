@@ -17,7 +17,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+glamor ipv6 minimal systemd suid_wrapper +udev wayland xcsecurity X"
+IUSE="glamor ipv6 minimal systemd suid_wrapper udev wayland xcsecurity X"
 
 DEPEND="
 	virtual/ssl

@@ -54,7 +54,6 @@ RDEPEND="
 	app-port/pkgdev
 	app-port/smart-live-rebuild
 	app-server/lighttpd
-	app-server/nodejs
 	app-util/lm-sensors
 	app-util/lshw
 	app-var/hdparm

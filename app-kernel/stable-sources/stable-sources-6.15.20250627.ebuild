@@ -28,7 +28,6 @@ DEPEND="
 src_prepare() {
 	kernel-2_src_prepare
 
-	find "${S}" -mindepth 1 -maxdepth 1 -type d ! -name arm64 ! -name x86 -exec rm -rf {} +
 	rm -rf "${S}"/Documentation
 	rm -rf "${S}"/samples
 

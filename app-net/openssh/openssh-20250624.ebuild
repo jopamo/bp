@@ -27,7 +27,7 @@ DEPEND="
 BDEPEND="
 	app-build/autoconf
 	app-dev/pkgconf
-	app-kernel/linux-headers
+	virtual/linux-sources
 "
 
 src_prepare() {

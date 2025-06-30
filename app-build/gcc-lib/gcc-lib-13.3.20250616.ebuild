@@ -16,7 +16,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug dlang go-bootstrap +isl lib-only sanitize +vtv zstd"
+IUSE="debug dlang go-bootstrap isl lib-only sanitize vtv zstd"
 
 RESTRICT="strip"
 

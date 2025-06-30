@@ -14,7 +14,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="cairo curl +cxx debug doc +introspection +jpeg +jpeg2k png +utils"
+IUSE="cairo curl cxx debug doc introspection jpeg jpeg2k png utils"
 
 RESTRICT="test"
 

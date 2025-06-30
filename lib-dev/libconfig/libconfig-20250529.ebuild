@@ -15,7 +15,7 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+cxx static-libs"
+IUSE="cxx static-libs"
 
 DEPEND="
 	app-build/libtool

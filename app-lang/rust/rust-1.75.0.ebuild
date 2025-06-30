@@ -93,9 +93,9 @@ src_configure() {
 		extended = true
 		cargo = "/usr/bin/cargo"
 		rustc = "/usr/bin/rustc"
-		#tools = ["cargo","clippy","src"]
+		tools = ["cargo","clippy","src"]
 		#tools = ["cargo","clippy","rustdoc","rustfmt","rust-analyzer","rust-analyzer-proc-macro-srv","analysis","src"]
-		tools = ["cargo","clippy","rustfmt","rust-analyzer","rust-analyzer-proc-macro-srv","analysis","src"]
+		#tools = ["cargo","clippy","rustfmt","rust-analyzer","rust-analyzer-proc-macro-srv","analysis","src"]
 		vendor = true
 		sanitizers = false
 		optimized-compiler-builtins = true
@@ -132,4 +132,7 @@ src_install() {
 	IFS=$'\n'
 	DESTDIR="${D}" "${EPYTHON}" ./x.py install	-vv --config="${S}"/config.toml -j$(makeopts_jobs) || die
 	)
+
+	cleanup_install
+	dedup_symlink "${ED}"
 }

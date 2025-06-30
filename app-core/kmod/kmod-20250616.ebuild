@@ -14,7 +14,7 @@ LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+tools zstd xz zlib ssl logging debug-messages build-tests manpages"
+IUSE="tools zstd xz zlib ssl logging debug-messages build-tests manpages"
 
 RESTRICT="test"
 

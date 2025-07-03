@@ -15,4 +15,7 @@ LICENSE="GPL"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="xgui-lib/qtbase"
+DEPEND="
+	xgui-lib/qtbase:5
+	xgui-lib/qtx11extras:5
+"

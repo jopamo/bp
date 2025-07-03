@@ -23,8 +23,8 @@ IUSE="cuda"
 RDEPEND="
 	dev-python/numpy
 	xgui-app/pillow
-	xmedia-lib/libjpeg-turbo:=
-	xmedia-lib/libpng:=
+	media-libs/libjpeg-turbo:=
+	media-libs/libpng:=
 	media-libs/libwebp
 	media-video/ffmpeg
 	dev-python/caffe2[cuda?]

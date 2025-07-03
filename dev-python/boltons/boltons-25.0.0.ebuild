@@ -13,13 +13,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 DOCS=( CHANGELOG.md README.md TODO.rst )
-
-src_test() {
-	# tests break with pytest-qt, django, and likely more
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-
-	distutils-r1_src_test
-}

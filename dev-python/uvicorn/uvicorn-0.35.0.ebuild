@@ -32,11 +32,8 @@ RDEPEND="
 BDEPEND="
 	test? (
 		dev-python/a2wsgi[${PYTHON_USEDEP}]
-		dev-python/anyio[${PYTHON_USEDEP}]
 		>=dev-python/httptools-0.6.3[${PYTHON_USEDEP}]
 		>=dev-python/httpx-0.28[${PYTHON_USEDEP}]
-		dev-python/pytest-mock[${PYTHON_USEDEP}]
-		dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
 		dev-python/python-dotenv[${PYTHON_USEDEP}]
 		dev-python/pyyaml[${PYTHON_USEDEP}]
 		dev-python/typing-extensions[${PYTHON_USEDEP}]
@@ -50,6 +47,7 @@ BDEPEND="
 	)
 "
 
+EPYTEST_PLUGINS=( anyio pytest-{mock,rerunfailures} )
 EPYTEST_XDIST=1
 distutils_enable_tests pytest
 
@@ -77,8 +75,7 @@ python_test() {
 			;;
 	esac
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest -p anyio -p pytest_mock -p rerunfailures --reruns=5
+	epytest --reruns=5
 }
 
 pkg_postinst() {

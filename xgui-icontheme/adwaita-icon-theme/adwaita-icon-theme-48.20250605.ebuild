@@ -19,9 +19,9 @@ KEYWORDS="amd64 arm64"
 DEPEND="
 	app-build/gettext
 	app-dev/pkgconf
-	xgui-lib/librsvg
 	xgui-lib/gnome-common
 	xgui-lib/gtk3
+	xgui-lib/librsvg
 "
 
 RESTRICT="binchecks strip"

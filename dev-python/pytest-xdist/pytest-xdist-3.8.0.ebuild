@@ -30,12 +30,11 @@ BDEPEND="
 	)
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_test() {
-	# disable autoloading plugins in nested pytest calls
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	# since we disabled autoloading, force loading necessary plugins
+	# force loading necessary plugins in subprocesses
 	local -x PYTEST_PLUGINS=xdist.plugin,xdist.looponfail
 
 	epytest -o tmp_path_retention_count=1

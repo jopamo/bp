@@ -38,6 +38,7 @@ BDEPEND="
 	)
 "
 
+EPYTEST_PLUGINS=( pytest-subprocess )
 distutils_enable_tests pytest
 
 python_test() {
@@ -50,6 +51,5 @@ python_test() {
 		tests/test_schema.py
 	)
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest -p pytest-subprocess -m "not isolated and not network"
+	epytest -m "not isolated and not network"
 }

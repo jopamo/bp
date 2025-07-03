@@ -35,7 +35,7 @@ RDEPEND="
 	dev-python/platformdirs[${PYTHON_USEDEP}]
 	dev-python/pyproject-hooks[${PYTHON_USEDEP}]
 	dev-python/python-dotenv[${PYTHON_USEDEP}]
-	>=dev-python/resolvelib-1.1[${PYTHON_USEDEP}]
+	>=dev-python/resolvelib-1.2.0[${PYTHON_USEDEP}]
 	dev-python/rich[${PYTHON_USEDEP}]
 	dev-python/shellingham[${PYTHON_USEDEP}]
 	dev-python/tomlkit[${PYTHON_USEDEP}]
@@ -47,14 +47,11 @@ BDEPEND="
 	${RDEPEND}
 	test? (
 		dev-python/msgpack[${PYTHON_USEDEP}]
-		dev-python/pytest-mock[${PYTHON_USEDEP}]
-		dev-python/pytest-httpserver[${PYTHON_USEDEP}]
-		dev-python/pytest-httpx[${PYTHON_USEDEP}]
-		dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
 		dev-python/uv
 	)
 "
 
+EPYTEST_PLUGINS=( pytest-{httpserver,httpx,mock,rerunfailures} )
 EPYTEST_XDIST=1
 distutils_enable_tests pytest
 
@@ -74,7 +71,5 @@ python_test() {
 		tests/cli/test_build.py::test_build_with_no_isolation
 	)
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest  -m "not network and not integration and not path" \
-		-p pytest_mock -p pytest_httpx -p pytest_httpserver
+	epytest  -m "not network and not integration and not path"
 }

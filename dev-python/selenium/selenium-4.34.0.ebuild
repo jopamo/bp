@@ -33,11 +33,11 @@ IUSE="test test-rust"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
-	>=dev-python/certifi-2025.4.26[${PYTHON_USEDEP}]
+	>=dev-python/certifi-2025.6.15[${PYTHON_USEDEP}]
 	>=dev-python/trio-0.30[${PYTHON_USEDEP}]
 	>=dev-python/trio-websocket-0.12.2[${PYTHON_USEDEP}]
-	>=dev-python/typing-extensions-4.13.2[${PYTHON_USEDEP}]
-	>=dev-python/urllib3-2.4.0[${PYTHON_USEDEP}]
+	>=dev-python/typing-extensions-4.14.0[${PYTHON_USEDEP}]
+	>=dev-python/urllib3-2.5.0[${PYTHON_USEDEP}]
 	>=dev-python/websocket-client-1.8.0[${PYTHON_USEDEP}]
 "
 BDEPEND="
@@ -69,11 +69,6 @@ src_prepare() {
 		-i pyproject.toml || die
 	# unpin deps
 	sed -i -e 's:~=:>=:g' pyproject.toml || die
-
-	if use test; then
-		cd "${WORKDIR}/${TEST_P}" || die
-		eapply "${FILESDIR}/${P}-pytest-ignore.patch"
-	fi
 }
 
 python_test() {
@@ -133,6 +128,7 @@ python_test() {
 			test/selenium/webdriver/common/bidi_browser_tests.py
 			test/selenium/webdriver/common/bidi_browsing_context_tests.py
 			test/selenium/webdriver/common/bidi_network_tests.py
+			test/selenium/webdriver/common/bidi_permissions_tests.py
 			test/selenium/webdriver/common/bidi_script_tests.py
 			test/selenium/webdriver/common/bidi_session_tests.py
 			test/selenium/webdriver/common/bidi_storage_tests.py

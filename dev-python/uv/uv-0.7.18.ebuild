@@ -8,6 +8,8 @@ CRATES="
 declare -A GIT_CRATES=(
 	[async_zip]='https://github.com/charliermarsh/rs-async-zip;c909fda63fcafe4af496a07bfda28a5aae97e58d;rs-async-zip-%commit%'
 	[pubgrub]='https://github.com/astral-sh/pubgrub;06ec5a5f59ffaeb6cf5079c6cb184467da06c9db;pubgrub-%commit%'
+	[reqwest-middleware]='https://github.com/astral-sh/reqwest-middleware;ad8b9d332d1773fde8b4cd008486de5973e0a3f8;reqwest-middleware-%commit%/reqwest-middleware'
+	[reqwest-retry]='https://github.com/astral-sh/reqwest-middleware;ad8b9d332d1773fde8b4cd008486de5973e0a3f8;reqwest-middleware-%commit%/reqwest-retry'
 	[tl]='https://github.com/astral-sh/tl;6e25b2ee2513d75385101a8ff9f591ef51f314ec;tl-%commit%'
 	[version-ranges]='https://github.com/astral-sh/pubgrub;06ec5a5f59ffaeb6cf5079c6cb184467da06c9db;pubgrub-%commit%/version-ranges'
 )
@@ -88,6 +90,13 @@ pkg_setup() {
 
 src_prepare() {
 	default
+
+	# replace upstream crate substitution with our crate substitution, sigh
+	local pkg
+	for pkg in reqwest-middleware reqwest-retry; do
+		local dep=$(grep "^${pkg}" "${ECARGO_HOME}"/config.toml || die)
+		sed -i -e "/\[patch\.crates-io\]/,\$s;^${pkg}.*$;${dep};" Cargo.toml || die
+	done
 
 	# force thin lto, makes build much faster and less memory hungry
 	# (i.e. makes it possible to actually build uv on 32-bit PPC)

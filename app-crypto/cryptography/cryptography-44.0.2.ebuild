@@ -62,15 +62,8 @@ RESTRICT="network-sandbox"
 distutils_enable_tests pytest
 
 src_prepare() {
-	filter-clang
-			local -x CC="clang"
-		local -x CPP="clang-cpp"
-		local -x CXX="clang++"
-		local -x AR="llvm-ar"
-		local -x NM="llvm-nm"
-		local -x RANLIB="llvm-ranlib"
-		local -x CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER=clang
-		local -x RUSTFLAGS="-C link-arg=-fuse-ld=lld"
+	export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER=clang
+
 	default
 
 	sed -i -e 's:--benchmark-disable::' pyproject.toml || die

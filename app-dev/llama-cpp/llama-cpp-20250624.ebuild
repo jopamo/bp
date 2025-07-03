@@ -23,6 +23,7 @@ src_configure() {
 		-D GGML_CUDA=ON
 		-D LLAMA_CURL=OFF
 		-D LLAMA_SERVER_SSL=ON
+		-D CMAKE_BUILD_TYPE=Release
 	)
 
 	cmake_src_configure

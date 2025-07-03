@@ -475,14 +475,6 @@ perl-module_src_install() {
 	perl_delete_emptybsdir
 	perl_remove_temppath
 
-	for f in Change* CHANGES README* TODO FAQ ${mydoc}; do
-		[[ -s ${f} ]] && dodoc ${f}
-	done
-
-	if in_iuse examples && use examples ; then
-		[[ ${#DIST_EXAMPLES[@]} -eq 0 ]] || perl_doexamples "${DIST_EXAMPLES[@]}"
-	fi
-
 	perl_link_duallife_scripts
 
 	case ${EAPI} in
@@ -498,6 +490,9 @@ perl-module_src_install() {
 			fi
 			;;
 	esac
+
+	cleanup_install
+	dedup_symlink "${ED}"
 }
 
 # @FUNCTION: perl-module_pkg_postinst

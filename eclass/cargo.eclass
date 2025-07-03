@@ -30,6 +30,7 @@ if [[ -z ${_CARGO_VENDOR_ECLASS} ]]; then
 
 	cargo_pkg_setup() {
 		filter-flags -flto*
+		export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER=clang
 	}
 
 	cargo_src_compile() {

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit qmake-utils xdg
+inherit qmake-utils xdg desktop
 
 DESCRIPTION="The X2Go Qt client"
 HOMEPAGE="https://wiki.x2go.org/doku.php"
@@ -15,6 +15,8 @@ KEYWORDS="amd64 arm64"
 DEPEND="
 	lib-net/libssh
 	xgui-lib/libXpm
+	xgui-lib/qtsvg:5
+	xgui-lib/qtx11extras:5
 "
 
 CLIENT_BUILD="${WORKDIR}"/${P}.client_build

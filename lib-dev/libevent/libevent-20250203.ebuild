@@ -15,7 +15,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug mbedtls +ssl static-libs test"
+IUSE="debug mbedtls ssl static-libs test"
 
 RESTRICT="test"
 

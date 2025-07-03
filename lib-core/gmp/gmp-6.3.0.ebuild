@@ -22,7 +22,7 @@ DEPEND="
 PATCHES=( "${FILESDIR}"/${PN}-6.1.0-noexecstack-detect.patch	)
 
 src_prepare() {
-	filter-flags -flto*
+	use arm64 && filter-flags -flto*
 
 	default
 	elibtoolize

@@ -8,6 +8,10 @@ DESCRIPTION="Fast and exact implementation of the C++ from_chars functions for n
 HOMEPAGE="https://github.com/fastfloat/fast_float"
 SRC_URI="https://github.com/fastfloat/fast_float/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
 
+SNAPSHOT=b8085ba3634018ad6e5618cf87dd5a04a0e3f146
+SRC_URI="https://github.com/fastfloat/fast_float/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
+
 LICENSE="|| ( Apache-2.0 Boost-1.0 MIT )"
 SLOT="0"
 KEYWORDS="amd64 arm64"

@@ -17,14 +17,14 @@ LICENSE="LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps debug nscd profile systemd static-libs +static-pie tmpfilesd"
+IUSE="caps debug nscd profile systemd static-libs static-pie tmpfilesd"
 
 BDEPEND="
 	app-build/make
 "
 DEPEND="
 	app-build/gcc
-	app-kernel/linux-headers
+	virtual/linux-sources
 	app-core/layout
 "
 RDEPEND="

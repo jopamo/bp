@@ -12,7 +12,7 @@ LICENSE="|| ( LGPL-3+ GPL-2+ )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+asm pgo static-libs"
+IUSE="asm pgo static-libs"
 
 DEPEND="
 	app-build/m4
@@ -22,6 +22,8 @@ DEPEND="
 PATCHES=( "${FILESDIR}"/${PN}-6.1.0-noexecstack-detect.patch	)
 
 src_prepare() {
+	filter-flags -flto*
+
 	default
 	elibtoolize
 

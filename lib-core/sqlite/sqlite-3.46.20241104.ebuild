@@ -17,7 +17,7 @@ LICENSE="public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs debug +tempstore +fts5 +rtree +geopoly session +json
+IUSE="static-libs debug tempstore fts5 rtree geopoly session json
 		+math +memsys5 update-limit editline readline gcov"
 
 DEPEND="

@@ -4,6 +4,7 @@ EAPI=8
 
 DESCRIPTION="A TLS 1.2 and SSL 3.0 implementation for the GNU project"
 HOMEPAGE="http://www.gnutls.org/"
+SRC_URI="https://github.com/gnutls/gnutls/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 SRC_URI="mirror://gnupg/gnutls/v$(ver_cut 1-2)/${P}.tar.xz
 		https://www.gnupg.org/ftp/gcrypt/gnutls/v$(ver_cut 1-2)/${P}.tar.xz"
 S="${WORKDIR}/${PN}-$(ver_cut 1-4)"

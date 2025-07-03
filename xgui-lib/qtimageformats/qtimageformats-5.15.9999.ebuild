@@ -21,7 +21,7 @@ LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
-DEPEND="xgui-lib/qtbase"
+DEPEND="xgui-lib/qtbase:$(ver_cut 1)"
 
 src_configure() {
 	eqmake5

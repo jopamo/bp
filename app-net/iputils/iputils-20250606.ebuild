@@ -15,14 +15,14 @@ LICENSE="BSD GPL-2+ rdisc"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+arping caps clockdiff +ping static +tracepath"
+IUSE="arping caps clockdiff ping static tracepath"
 
 LIB_DEPEND="caps? ( lib-core/libcap[static-libs(+)] )"
 RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
 DEPEND="
 	${RDEPEND}
 	static? ( ${LIB_DEPEND} )
-	app-kernel/linux-headers
+	virtual/linux-sources
 "
 
 src_configure() {

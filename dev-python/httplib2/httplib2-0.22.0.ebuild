@@ -27,7 +27,7 @@ RDEPEND="
 "
 BDEPEND="
 	test? (
-		lib-dev/openssl
+		lib-net/openssl
 		dev-python/pytest-timeout[${PYTHON_USEDEP}]
 		dev-python/six[${PYTHON_USEDEP}]
 	)

@@ -41,24 +41,17 @@ BDEPEND="
 	test? (
 		dev-python/pexpect[${PYTHON_USEDEP}]
 		>=dev-python/pytest-8[${PYTHON_USEDEP}]
-		dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
-		dev-python/pytest-xdist[${PYTHON_USEDEP}]
 	)
 "
 
+EPYTEST_PLUGINS=( pytest-rerunfailures )
 EPYTEST_XDIST=1
 distutils_enable_tests pytest
 
 python_test() {
-	# subtests are broken by warnings from random plugins
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	local -x PYTEST_PLUGINS=xdist.plugin,_hypothesis_pytestplugin
-	local -x HYPOTHESIS_NO_PLUGINS=1
-
 	# NB: paths need to be relative to pytest.ini,
 	# i.e. start with hypothesis-python/
 	local EPYTEST_DESELECT=()
-
 	case ${EPYTHON} in
 		python3.13t)
 			EPYTEST_DESELECT+=(
@@ -93,7 +86,11 @@ python_test() {
 			;;
 	esac
 
-	epytest -o filterwarnings= -p rerunfailures --reruns=5 \
+	# subtests are broken by warnings from random plugins
+	local -x PYTEST_PLUGINS=xdist.plugin,_hypothesis_pytestplugin
+	local -x HYPOTHESIS_NO_PLUGINS=1
+
+	epytest -o filterwarnings= --reruns=5 \
 		tests/cover tests/pytest tests/quality
 }
 

@@ -29,14 +29,15 @@ BDEPEND="
 	)
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_prepare_all() {
 	filter-flags -Wl,-z,defs
 	# don't enable coverage or other pytest settings
 	sed -i -e '/cov/d' pytest.ini || die
-	# don't force -O3
-	sed -i -e 's:"-O3"::' setup.py || die
+	# don't mangle CFLAGS
+	sed -i -e 's/^CFLAGS = .*/CFLAGS = []/' setup.py || die
 	distutils-r1_python_prepare_all
 }
 

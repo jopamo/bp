@@ -2,11 +2,13 @@
 
 EAPI=8
 
+BRANCH_NAME="kmod-$(ver_cut 1).y"
+
 inherit meson
 
 DESCRIPTION="library and tools for managing linux kernel modules"
 HOMEPAGE="https://git.kernel.org/?p=utils/kernel/kmod/kmod.git"
-SNAPSHOT=41b1798768c1d65796b9d9092a60541c49d5daa1
+SNAPSHOT=6b93232c972b338e972a5d4ccc2651ff78cb359e
 SRC_URI="https://github.com/kmod-project/kmod/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

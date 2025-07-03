@@ -4,11 +4,12 @@ EAPI=8
 
 inherit autotools toolchain-funcs
 
-MIN_PV="$(ver_cut 2)"
-
 DESCRIPTION="Netscape Portable Runtime"
 HOMEPAGE="http://www.mozilla.org/projects/nspr/"
-SRC_URI="https://archive.mozilla.org/pub/nspr/releases/v${PV}/src/${P}.tar.gz"
+
+SNAPSHOT=d281bb94a9cedc51a516ef49c652e6bfa28a3cb7
+SRC_URI="https://salsa.debian.org/mozilla-team/nspr/-/archive/${SNAPSHOT}/debianutils-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="|| ( MPL-2.0 GPL-2 LGPL-2.1 )"
 SLOT="0"

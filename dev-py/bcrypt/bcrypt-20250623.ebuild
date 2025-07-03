@@ -31,6 +31,7 @@ src_prepare() {
 
 python_configure_all() {
 	export RUSTFLAGS="${RUSTFLAGS} --cfg pyo3_unsafe_allow_subinterpreters"
+	export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER=clang
 }
 
 python_test() {

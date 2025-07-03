@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic qmake-utils
+inherit cmake
 
 DESCRIPTION="Additional format plugins for the Qt image I/O system"
 HOMEPAGE="https://www.qt.io/"
@@ -21,12 +21,4 @@ LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
-DEPEND="xgui-lib/qtbase"
-
-src_configure() {
-	eqmake5
-}
-
-src_install() {
-	emake install INSTALL_ROOT="${D}"
-}
+DEPEND="xgui-lib/qtbase:$(ver_cut 1)"

@@ -18,8 +18,9 @@ KEYWORDS="amd64 arm64"
 IUSE="wayland"
 
 DEPEND="
-	xgui-lib/qtbase
-	wayland? ( xgui-lib/qtwayland )
+	xgui-lib/qtbase:5
+	xgui-lib/qtx11extras:5
+	wayland? ( xgui-lib/qtwayland:5 )
 "
 
 src_configure() {

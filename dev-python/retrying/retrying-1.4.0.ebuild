@@ -21,8 +21,5 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="
-	>=dev-python/six-1.7.0[${PYTHON_USEDEP}]
-"
-
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest

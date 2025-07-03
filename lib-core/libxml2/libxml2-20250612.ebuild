@@ -14,7 +14,7 @@ LICENSE="MIT"
 SLOT="2"
 KEYWORDS="amd64 arm64"
 
-IUSE="icu ipv6 lzma readline static-libs"
+IUSE="icu lzma readline static-libs"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
@@ -38,7 +38,6 @@ src_configure() {
 	local myconf=(
 		$(use_with icu)
 		$(use_with lzma)
-		$(use_enable ipv6)
 		$(use_enable static-libs static)
 		$(use_with readline)
 		$(use_with readline history)

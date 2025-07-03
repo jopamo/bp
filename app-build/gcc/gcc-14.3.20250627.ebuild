@@ -8,7 +8,7 @@ inherit flag-o-matic
 
 DESCRIPTION="an optimizing compiler produced by the GNU Project supporting various programming languages"
 HOMEPAGE="https://gcc.gnu.org/"
-SNAPSHOT=cb7784fd04deec1f94c20536709847786f2a90e6
+SNAPSHOT=570b63276f6434df59c52da36b1581eb8b516762
 SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/gcc-${SNAPSHOT}
 
@@ -16,7 +16,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug dlang go-bootstrap isl lib-only sanitize vtv zstd"
+IUSE="debug dlang go-bootstrap isl libgomp lib-only sanitize vtv zstd"
 
 RESTRICT="strip"
 
@@ -79,12 +79,9 @@ src_configure() {
 		--infodir="${EPREFIX}"/usr/share/info
 		--disable-install-libiberty
 		--disable-libgcj
-		--disable-libgomp
 		--disable-libmpx
 		--disable-libmudflap
 		--disable-libssp
-		--disable-libstdcxx-pch
-		--disable-libunwind-exceptions
 		--disable-multilib
 		--disable-nls
 		--disable-obsolete
@@ -101,6 +98,7 @@ src_configure() {
 		--enable-gnu-unique-object
 		--enable-languages=${GCC_LANG}
 		--enable-libstdcxx-time
+		--enable-link-mutex
 		--enable-linker-build-id
 		--enable-lto
 		--enable-plugin
@@ -108,14 +106,16 @@ src_configure() {
 		--enable-threads=posix
 		--with-build-config="bootstrap-lto-lean"
 		--with-linker-hash-style=gnu
+		--with-pkgversion="1g4 Linux GCC ${PV}"
 		--with-system-zlib
+		$(use_enable libgomp)
 		$(use_enable sanitize libsanitizer)
 		$(use_enable vtv libvtv)
 		$(use_enable vtv vtable-verify)
 		$(use_with isl)
 		$(use_with zstd)
 	)
-	../configure "${myconf[@]}"
+	../configure "${myconf[@]}" || die
 }
 
 src_compile() {
@@ -157,4 +157,7 @@ src_install() {
 	fi
 
 	dosym -r /usr/bin/gcc /usr/bin/cc
+
+	find "${ED}"/usr/libexec/gcc -type f \
+    	\( -name 'libc?1*.la' -o -name 'libcp1plugin.la' \) -delete
 }

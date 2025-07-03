@@ -17,7 +17,7 @@ LICENSE="LGPL-2+"
 SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
-IUSE="cups +introspection wayland +X xinerama"
+IUSE="cups introspection wayland X xinerama"
 
 REQUIRED_USE="
 	|| ( wayland X )

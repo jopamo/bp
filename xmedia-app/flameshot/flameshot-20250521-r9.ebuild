@@ -17,5 +17,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="wayland"
 
-DEPEND="xgui-lib/qtbase
-		xmedia-app/singleapplication"
+DEPEND="
+	xgui-lib/qtsvg:5
+	xgui-lib/qtbase:5
+	xmedia-app/singleapplication
+"

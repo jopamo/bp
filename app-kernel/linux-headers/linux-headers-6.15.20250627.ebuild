@@ -3,7 +3,7 @@
 EAPI=8
 
 BRANCH_NAME="linux-$(ver_cut 1-2).y"
-SNAPSHOT=a2b47f77e740a21dbdcb12e2f2ca3c840299545a
+SNAPSHOT=e60eb441596d1c70e4a264d2bac726c6cd2da067
 
 ETYPE="headers"
 H_SUPPORTEDARCH="amd64 arm64"

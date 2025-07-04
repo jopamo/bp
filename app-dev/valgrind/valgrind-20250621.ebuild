@@ -16,7 +16,9 @@ KEYWORDS="amd64 arm64"
 
 src_prepare() {
 	filter-flags -fomit-frame-pointer -fstack-protector*
-	filter-flags -flto* -Wl,-z,defs
+	filter-flags -flto* -Wl,-z,defs -O
+	replace-flags -Os -O2
+	append-flags -no-pie
 
 	sed -i -e "s:doc/valgrind:doc/${PF}:" docs/Makefile.am || die
 	sed -i -e 's:-arch \(i386\|x86_64\)::g' Makefile.all.am || die

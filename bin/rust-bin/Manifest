@@ -1,4 +1,4 @@
-DIST rust-1.87.0-aarch64-unknown-linux-gnu.tar.gz 314521673 SHA3_256 53c152e7e57a0d0469c6a8d4015246557269d4101869e8d90d6ddf8d4a9f00b1
-DIST rust-1.87.0-aarch64-unknown-linux-musl.tar.gz 446107590 SHA3_256 475b0d8702f71682ac7c094997d85afed7c5a71e8a1c1eb2ae90ab8e4283af6c
-DIST rust-1.87.0-x86_64-unknown-linux-gnu.tar.gz 359529223 SHA3_256 67f4370c19242b83cdbe6dc016fce1f544e555e1db2f41d3204afba7ddb24bb2
-DIST rust-1.87.0-x86_64-unknown-linux-musl.tar.gz 532322190 SHA3_256 ebd5c4cf8f3230298bcd89b20385a4afd6eaf4ddf6fc101c879a198924619a63
+DIST rust-1.88.0-aarch64-unknown-linux-gnu.tar.gz 311065166 SHA3_256 4b6221b7457ca91df3ab4f3b1ac8e651cd48f3b18f1c9d870574b11984639c27
+DIST rust-1.88.0-aarch64-unknown-linux-musl.tar.gz 443808038 SHA3_256 e71f3fbc9f74df363aad43189f34297151fb67534e7393f5de4333a943bfc2d3
+DIST rust-1.88.0-x86_64-unknown-linux-gnu.tar.gz 355692289 SHA3_256 a802866d1f8cf9be356cafa97f6b1ec7072fa122999065e8a9c92e28a65e0e01
+DIST rust-1.88.0-x86_64-unknown-linux-musl.tar.gz 529369467 SHA3_256 11de19e6fae63f6747915fb5df9dd90c57fa9fcdd847d94420efd9e97f200d26

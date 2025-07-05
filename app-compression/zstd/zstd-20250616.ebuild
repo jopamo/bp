@@ -18,9 +18,8 @@ IUSE="static-libs"
 
 DEPEND="app-compression/xz-utils"
 
-append-flags -Wa,--noexecstack
-
 src_compile() {
+	append-flags -ffat-lto-objects
 	emake \
 		CC="$(tc-getCC)" \
 		AR="$(tc-getAR)" \

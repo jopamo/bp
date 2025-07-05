@@ -32,18 +32,18 @@ src_configure() {
 
 	local myconf=(
 		--disable-gdb
+		--disable-gold
 		--disable-gprofng
 		--disable-multilib
 		--disable-nls
 		--disable-obsolete
-		--disable-werror
 		--disable-sim
+		--disable-werror
 		--enable-64-bit-bfd
 		--enable-colored-disassembly
 		--enable-default-execstack=no
 		--enable-default-hash-style=gnu
 		--enable-deterministic-archives
-		--enable-gold
 		--enable-ld=default
 		--enable-lto
 		--enable-new-dtags

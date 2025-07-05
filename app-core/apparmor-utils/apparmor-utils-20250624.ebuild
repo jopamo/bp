@@ -6,8 +6,6 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..13} )
 inherit distutils-r1 toolchain-funcs desktop
 
-MY_PV="$(ver_cut 1-2)"
-
 DESCRIPTION="Additional userspace utils to assist with AppArmor profile management"
 HOMEPAGE="https://gitlab.com/apparmor/apparmor/wikis/home"
 
@@ -94,4 +92,6 @@ src_install() {
 		install
 	popd > /dev/null || die
 
+	dedup_symlink "${ED}"
+	cleanup_install
 }

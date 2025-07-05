@@ -44,7 +44,7 @@ ENV_UNSET="
 # Toolchain & optimisation
 ###############################################################################
 
-BASEFLAGS="-Os -pipe -Wall -Wformat -Wformat-security"
+BASEFLAGS="-O3 -pipe -Wall -Wformat -Wformat-security"
 GRAPHITE="-fgraphite-identity -floop-nest-optimize -ftree-loop-distribution"
 POSITION="-fPIE -fPIC"
 SECURE="-fstack-protector-strong -fstack-clash-protection -fexceptions ${POSITION} -D_FORTIFY_SOURCE=2"
@@ -55,7 +55,9 @@ CFLAGS="${MARCH} ${PASS_FLAGS}"
 
 CXXFLAGS="${CFLAGS}"
 CPPFLAGS="${CFLAGS}"
-LDFLAGS="${FLTO_BASE} ${POSITION} -Wl,-z,combreloc -Wl,-z,defs -Wl,-z,now -Wl,-z,relro"
+LDFLAGS="${FLTO_BASE} ${POSITION} \
+	-Wl,-O1,--as-needed,--gc-sections \
+	-Wl,-z,combreloc -Wl,-z,defs -Wl,-z,now -Wl,-z,relro"
 
 AR="gcc-ar"
 RANLIB="gcc-ranlib"

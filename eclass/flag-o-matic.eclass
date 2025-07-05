@@ -117,6 +117,7 @@ filter-flags() {
 
 filter-lfs-flags() { filter-flags -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_TIME_BITS=64; }
 filter-lto() { filter-flags '-flto*' -fwhole-program-vtables '-fsanitize=cfi*'; }
+filter-defs() { filter-flags '-Wl,-z,defs'; }
 filter-ldflags() { _filter-var LDFLAGS "$@"; }
 filter-clang() {
 	replace-flags -O3 -O2;

@@ -77,19 +77,22 @@ src_configure() {
 		--datadir="${EPREFIX}"/usr/share
 		--mandir="${EPREFIX}"/usr/share/man
 		--infodir="${EPREFIX}"/usr/share/info
+		--disable-cet
+		--disable-fixed-point
 		--disable-install-libiberty
 		--disable-libgcj
 		--disable-libmpx
 		--disable-libmudflap
 		--disable-libssp
+		--disable-libstdcxx-pch
 		--disable-multilib
 		--disable-nls
 		--disable-obsolete
 		--disable-rpath
+		--disable-symvers
 		--disable-werror
 		--enable-__cxa_atexit
 		--enable-bootstrap
-		--enable-cet=auto
 		--enable-checking=release
 		--enable-clocale=gnu
 		--enable-default-pie

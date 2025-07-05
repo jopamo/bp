@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs
+inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="Extremely fast non-cryptographic hash algorithm"
 HOMEPAGE="http://www.xxhash.net"
@@ -17,6 +17,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_compile() {
+	append-flags -ffat-lto-objects
 	PREFIX="${EPREFIX}/usr" \
 	LIBDIR="${EPREFIX}/usr/lib" \
 	emake AR="$(tc-getAR)" CC="$(tc-getCC)"

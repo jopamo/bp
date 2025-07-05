@@ -24,12 +24,12 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		$(use_enable static-libs static)
+		--disable-failure-tokens
+		--disable-werror
 		--enable-obsolete-api=glibc
+		$(use_enable static-libs static)
 		$(usex elibc_musl --enable-xcrypt-compat "")
 		$(usex elibc_musl "--enable-hashes=strong" "--enable-hashes=strong,glibc")
-    	--disable-failure-tokens
-    	--disable-werror
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
@@ -37,4 +37,5 @@ src_configure() {
 src_install() {
 	dolib.so .libs/libcrypt.so.1.1.0
 	dolib.so .libs/libcrypt.so.1
+	use static-libs && dolib.a .libs/libcrypt.a
 }

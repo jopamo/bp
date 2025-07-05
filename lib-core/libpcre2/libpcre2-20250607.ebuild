@@ -18,7 +18,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 static-libs zlib"
+IUSE="bzip2 +static-libs zlib"
 
 DEPEND="
 	lib-core/readline

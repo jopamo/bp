@@ -2,7 +2,8 @@
 
 EAPI=8
 
-SNAPSHOT=3496472fe1de0befc8b3d882f68a4a1737085f06
+SNAPSHOT=f8611c6288dfc38f838e9eab61aa802c46b21189
+BRANCH_NAME="release-$(ver_cut 1-2)"
 
 inherit autotools
 

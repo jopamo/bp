@@ -6,8 +6,7 @@ inherit flag-o-matic
 
 DESCRIPTION="Utilities for rescue and embedded systems"
 HOMEPAGE="https://www.busybox.net/"
-
-SNAPSHOT=5f07327251c93184dfcfc8d978fc35705930ec53
+SNAPSHOT=84766710f420dd444e2a03d33a1915ce55661e67
 SRC_URI="https://github.com/1g4-mirror/busybox/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
@@ -51,9 +50,8 @@ src_prepare() {
 
 src_compile() {
 	filter-flags -flto*
-	append-ldflags -static
+	append-ldflags -static -no-pie -fno-PIE
 	append-ldflags -Wl,-z,noexecstack
-
 	emake CC=musl-gcc
 }
 

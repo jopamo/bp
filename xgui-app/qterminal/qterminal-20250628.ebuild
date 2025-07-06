@@ -6,7 +6,7 @@ inherit cmake xdg
 
 DESCRIPTION="Qt-based multitab terminal emulator"
 HOMEPAGE="https://github.com/lxqt/qterminal"
-SNAPSHOT=5f09ad3a164b1124390368dabc1903ce7060d358
+SNAPSHOT=ad49ebede544a3f188eb686b3d3563588f99935c
 SRC_URI="https://github.com/lxqt/qterminal/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/qterminal-${SNAPSHOT}"
 

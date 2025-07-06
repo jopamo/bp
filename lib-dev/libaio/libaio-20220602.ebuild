@@ -6,7 +6,10 @@ inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="Asynchronous input/output library that uses the kernels native interface"
 HOMEPAGE="https://pagure.io/libaio"
-SRC_URI="https://releases.pagure.org/${PN}/${P}.tar.gz"
+SNAPSHOT=b8eadc9f89e8f7ab0338eacda9f98a6caea76883
+SRC_URI="https://github.com/1g4-mirror/libaio/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
+
 
 LICENSE="LGPL-2"
 SLOT="0"
@@ -14,9 +17,9 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs test"
 
-filter-flags -flto\*
-
 src_prepare() {
+	filter-flags -flto*
+
 	default
 	local sed_args=(
 		-e "/^prefix=/s:/usr:${EPREFIX}/usr:"

@@ -56,7 +56,7 @@ CFLAGS="${MARCH} ${PASS_FLAGS}"
 CXXFLAGS="${CFLAGS}"
 CPPFLAGS="${CFLAGS}"
 LDFLAGS="${FLTO_BASE} ${POSITION} \
-	-Wl,-O1,--as-needed,--gc-sections \
+	-Wl,-O1 \
 	-Wl,-z,combreloc -Wl,-z,defs -Wl,-z,now -Wl,-z,relro"
 
 AR="gcc-ar"

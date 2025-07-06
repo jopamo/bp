@@ -10,6 +10,7 @@ HOMEPAGE="http://www.pcre.org/"
 SNAPSHOT=bf50eeef64fc4f5ddfc93a041e2f4d7357f3c431
 SLJIT_SNAPSHOT=7779da89dc7e00a540712fcb859b762d4eca2a26
 
+SRC_URI="https://github.com/PCRE2Project/pcre2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 SRC_URI="https://github.com/PCRE2Project/pcre2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz
 		https://github.com/zherczeg/sljit/archive/${SLJIT_SNAPSHOT}.tar.gz"
 S="${WORKDIR}/pcre2-${SNAPSHOT}"

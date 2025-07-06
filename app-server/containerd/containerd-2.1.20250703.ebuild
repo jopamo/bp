@@ -8,7 +8,7 @@ inherit go-module
 
 DESCRIPTION="A daemon to control runC"
 HOMEPAGE="https://containerd.io/"
-SNAPSHOT=41bb88c7ed2a56dda8a2f67dcce35c106919ae55
+SNAPSHOT=a4771a8023f8be242649669dbee6d6f8a626b766
 SRC_URI="https://github.com/containerd/containerd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/containerd-${SNAPSHOT}"
 

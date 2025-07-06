@@ -8,13 +8,13 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="full-strength general purpose cryptography library (including SSL and TLS)"
 HOMEPAGE="https://www.openssl.org/"
-SNAPSHOT=9276d41b0988c29399bb0bf8604c27a9c5a48a3b
+SNAPSHOT=5389e3fe01cdfdc91655cf53713399ed86cc75e3
 SRC_URI="https://github.com/openssl/openssl/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/openssl-${SNAPSHOT}
 
 LICENSE="openssl"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="static-libs test zlib"
 
@@ -37,6 +37,7 @@ BDEPEND="
 PATCHES=( "${FILESDIR}"/openssl-1.1.0j-parallel_install_fix.patch )
 
 src_prepare() {
+	append-flags -ffat-lto-objects
 	# keep this in sync with app-var/c_rehash
 	SSL_CNF_DIR="/etc/ssl"
 
@@ -44,20 +45,16 @@ src_prepare() {
 	# that gets blown away anyways by the Configure script in src_configure
 	rm -f Makefile
 
-	eapply_user #332661
+	eapply_user
 
-	# make sure the man pages are suffixed #302165
-	# don't bother building man pages if they're disabled
-	# Make DOCDIR Gentoo compliant
 	sed -i \
-		-e '/^MANSUFFIX/s:=.*:=ssl:' \
-		-e '/^MAKEDEPPROG/s:=.*:=$(CC):' \
-		-e $(has noman FEATURES \
-			&& echo '/^install:/s:install_docs::' \
-			|| echo '/^MANDIR=/s:=.*:='${EPREFIX}'/usr/share/man:') \
-		-e "/^DOCDIR/s@\$(BASENAME)@&-${PVR}@" \
-		Configurations/unix-Makefile.tmpl \
-		|| die
+    	-e '/^MANSUFFIX/s:=.*:=ssl:' \
+    	-e '/^MAKEDEPPROG/s:=.*:=$(CC):' \
+    	-e '/^install:/s:install_docs::' \
+    	-e "/^DOCDIR/s@\$(BASENAME)@&-${PVR}@" \
+    	Configurations/unix-Makefile.tmpl \
+    	|| die
+
 
 	# quiet out unknown driver argument warnings since openssl
 	# doesn't have well-split CFLAGS and we're making it even worse
@@ -180,6 +177,7 @@ src_install() {
 	keepdir ${SSL_CNF_DIR}/private
 
 	rm "${ED}"/usr/bin/c_rehash
+	rm -rf "${ED}"/usr/share/man
 }
 
 pkg_postinst() {

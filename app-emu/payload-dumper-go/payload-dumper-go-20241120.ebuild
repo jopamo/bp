@@ -6,7 +6,6 @@ inherit go-module
 
 DESCRIPTION="an android OTA payload dumper"
 HOMEPAGE="https://github.com/ssut/payload-dumper-go"
-
 SNAPSHOT=a51234eaead276ff3d8b8c4c439c51c7f46a96a8
 SRC_URI="https://github.com/ssut/payload-dumper-go/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"

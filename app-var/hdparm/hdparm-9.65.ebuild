@@ -19,6 +19,14 @@ src_prepare() {
 	use static && append-ldflags -static
 }
 
+src_configure() {
+	append-lfs-flags
+}
+
+src_compile() {
+	emake STRIP="true" CC="$(tc-getCC)"
+}
+
 src_install() {
 	dobin hdparm contrib/idectl
 }

@@ -22,7 +22,7 @@ LIB_DEPEND="
 	lib-core/libgpg-error[static-libs(+)]
 	lib-core/popt[static-libs(+)]
 	lib-dev/json-c[static-libs(+)]
-	lib-net/openssl[static-libs(+)]
+	virtual/ssl[static-libs(+)]
 	argon2? ( app-crypto/argon2[static-libs(+)] )
 	udev? ( app-core/systemd[static-libs(+)] )"
 

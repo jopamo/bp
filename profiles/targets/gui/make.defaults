@@ -8,7 +8,6 @@ bluez
 bootloader
 cairo
 cli
-cuda
 cups
 dbus
 dri
@@ -44,7 +43,6 @@ mp3
 ncat
 networkd
 npm
-nvidia
 opengl
 pic
 pipewire

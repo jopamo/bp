@@ -98,7 +98,7 @@ src_configure() {
 		$(meson_use X x11-backend)
 		$(meson_use broadway broadway-backend)
 		$(meson_use wayland wayland-backend)
-		-Dcloudproviders=disabled  # cloudprovider is not packaged in Gentoo yet
+		-Dcloudproviders=disabled
 		-Dmacos-backend=false
 		-Dman-pages=true
 		-Dmedia-gstreamer=disabled

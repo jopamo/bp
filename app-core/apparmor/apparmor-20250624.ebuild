@@ -1,4 +1,3 @@
-# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -14,17 +13,12 @@ S="${WORKDIR}/apparmor-${SNAPSHOT}/parser"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64 ~ppc64 ~riscv"
-IUSE="doc"
-
-# Was restricted previously b/c needs apparmor support in kernel
-# TODO: add check to ebuild
-#RESTRICT="test" # bug 675854
+KEYWORDS="amd64 arm64"
 
 RDEPEND="~lib-core/libapparmor-${PV}"
 DEPEND="${RDEPEND}"
 
-#CONFIG_CHECK="SECURITY_APPARMOR"
+CONFIG_CHECK="SECURITY_APPARMOR"
 
 src_prepare() {
 	default
@@ -82,9 +76,9 @@ src_install() {
 
 	systemd_newunit "${FILESDIR}/apparmor.service" apparmor.service
 
-	use doc && dodoc techdoc.pdf
+	exeinto /usr/lib/apparmor/
+	doexe apparmor.systemd
 
-	exeinto /usr/share/apparmor
-	doexe "${FILESDIR}/apparmor_load.sh"
-	doexe "${FILESDIR}/apparmor_unload.sh"
+	dedup_symlink "${ED}"
+	cleanup_install
 }

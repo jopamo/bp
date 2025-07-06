@@ -122,22 +122,34 @@ else
 	packages=(
 		"acl"
 		"attr"
+		"autoconf"
+		"automake"
+		"bison"
 		"coreutils"
 		"cpio"
 		"diffutils"
 		"findutils"
 		"gettext"
 		"gperf"
+		"gdbm"
+		"gettext"
+		"gperf"
 		"grep"
+		"groff"
 		"grub"
 		"libtool"
+		"m4"
+		"mailutils"
+		"make"
+		"man-db"
+		"parted"
 		"patch"
 		"sed"
 		"tar"
 	)
 
 	for package in "${packages[@]}"; do
-		process_package "$package" "https://git.savannah.gnu.org/git/$package.git" "HEAD"
+		process_package "$package" "https://github.com/1g4-mirror/$package.git" "HEAD"
 	done
 fi
 

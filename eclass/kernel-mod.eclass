@@ -21,8 +21,8 @@ BDEPEND="
 	app-dev/dwarves
 	app-core/kmod[tools]
 	modules-sign? (
-		dev-libs/openssl
-		virtual/pkgconfig
+		virtual/ssl
+		app-dev/pkgconf
 	)
 "
 

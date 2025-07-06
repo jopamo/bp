@@ -6,8 +6,7 @@ inherit toolchain-funcs autotools flag-o-matic
 
 DESCRIPTION="Linux kernel firewall, NAT and packet mangling tools"
 HOMEPAGE="http://www.netfilter.org/projects/iptables/"
-
-SNAPSHOT=192c3a6bc18f206895ec5e38812d648ccfe7e281
+SNAPSHOT=12e6b5ed65fd91ea413a2e45201289c3d01c4e29
 SRC_URI="https://github.com/1g4-mirror/iptables/archive/${SNAPSHOT}.tar.gz -> iptables-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/iptables-${SNAPSHOT}
 

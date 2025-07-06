@@ -6,8 +6,7 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Free file archiver for extremely high compression"
 HOMEPAGE="https://www.7-zip.org/ https://sourceforge.net/projects/sevenzip/"
-
-SNAPSHOT=e5431fa6f5505e385c6f9367260717e9c47dc2ee
+SNAPSHOT=395149956d696e6e3099d8b76d797437f94a6942
 SRC_URI="https://github.com/ip7z/7zip/archive/${SNAPSHOT}.tar.gz -> 7zip-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/7zip-${SNAPSHOT}"
 

@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="Library for SSA/ASS subtitles rendering"
 HOMEPAGE="https://github.com/libass/libass"
-SNAPSHOT=0f37982d45c8b3aa82cbf95aa33323766f1c6c7d
+SNAPSHOT=26217e013000df94ff017b175834ab328ce1fa31
 SRC_URI="https://github.com/libass/libass/archive/${SNAPSHOT}.tar.gz -> libass-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libass-${SNAPSHOT}"
 

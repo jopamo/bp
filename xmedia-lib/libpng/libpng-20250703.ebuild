@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="Portable Network Graphics library"
 HOMEPAGE="http://www.libpng.org/"
-SNAPSHOT=21895b05ab22cf23b7b621252756e8419c5c5b87
+SNAPSHOT=7cecdcae0715bbf7a4b643071e0d39f05d5e7f52
 SRC_URI="https://github.com/pnggroup/libpng/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

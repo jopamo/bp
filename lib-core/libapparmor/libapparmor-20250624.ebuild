@@ -1,4 +1,3 @@
-# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -11,8 +10,6 @@ GENTOO_DEPEND_ON_PERL="no"
 
 inherit autotools distutils-r1 perl-functions flag-o-matic
 
-MY_PV="$(ver_cut 1-2)"
-
 DESCRIPTION="Library to support AppArmor userspace utilities"
 HOMEPAGE="https://gitlab.com/apparmor/apparmor/wikis/home"
 
@@ -23,23 +20,15 @@ S="${WORKDIR}/apparmor-${SNAPSHOT}/libraries/${PN}"
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 ~arm arm64 ~ppc64 ~riscv ~x86"
-IUSE="doc +perl +python static-libs"
+IUSE="+perl +python static-libs"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
-# depends on the package already being installed
-RESTRICT="test"
 
 src_prepare() {
-	filter-flags -Wl,-z,defs -flto*
-
+	filter-defs
 	default
 
 	use python && distutils-r1_src_prepare
 
-	# We used to rm m4/ but led to this after eautoreconf:
-	# checking whether the libapparmor man pages should be generated... yes
-	# ./configure: 5065: PROG_PODCHECKER: not found
-	# ./configure: 5068: PROG_POD2MAN: not found
-	# checking whether python bindings are enabled... yes
 	eautoreconf
 }
 

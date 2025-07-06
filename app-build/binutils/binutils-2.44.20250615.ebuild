@@ -28,6 +28,7 @@ PATCHES=( "${FILESDIR}"/binutils-ld-fix-static-linking.patch )
 
 src_configure() {
 	filter-flags -Wl,defs
+	append-flags -ffat-lto-objects
 
 	local myconf=(
 		--disable-gdb

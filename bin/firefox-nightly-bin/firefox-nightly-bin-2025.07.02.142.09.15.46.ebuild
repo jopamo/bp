@@ -22,7 +22,7 @@ RESTRICT="strip mirror"
 
 LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	app-core/dbus
@@ -34,7 +34,7 @@ RDEPEND="
 	xgui-lib/at-spi2-core
 	xgui-lib/cairo[X]
 	xgui-lib/gdk-pixbuf
-	xgui-lib/gtk3
+	xgui-lib/gtk3[wayland]
 	xgui-lib/pango
 	xgui-misc/freetype
 	xgui-misc/pulseaudio

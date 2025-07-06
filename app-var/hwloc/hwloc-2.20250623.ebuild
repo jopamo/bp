@@ -2,11 +2,16 @@
 
 EAPI=8
 
+BRANCH_NAME="$(ver_cut 1).x"
+
 inherit flag-o-matic
 
 DESCRIPTION="displays the hardware topology in convenient formats"
 HOMEPAGE="http://www.open-mpi.org/projects/hwloc/"
-SRC_URI="https://download.open-mpi.org/release/hwloc/v$(ver_cut 1-2)/${P}.tar.bz2"
+
+SNAPSHOT=3e940853f430d112663f1f5dad225ea069d26e29
+SRC_URI="https://github.com/open-mpi/hwloc/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="BSD"
 SLOT="0"
@@ -26,8 +31,6 @@ DEPEND="
 "
 
 BDEPEND="app-dev/pkgconf"
-
-
 
 src_configure() {
 	local myconf=(

@@ -29,7 +29,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	>=lib-net/openssl-1.0.2o-r6:0=
+	virtual/ssl
 	$(python_gen_cond_dep '
 		>=dev-python/cffi-1.8:=[${PYTHON_USEDEP}]
 	' 'python*')

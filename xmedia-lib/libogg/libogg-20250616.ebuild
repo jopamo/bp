@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="the Ogg media file format library"
 HOMEPAGE="https://xiph.org/ogg/"
-SNAPSHOT=5e053961effd1db9c0fd2e83f983b20260c8f03f
+SNAPSHOT=fe20a3ed04b9e4de8d2b4c753077d9a7c2a7e588
 SRC_URI="https://github.com/xiph/ogg/archive/${SNAPSHOT}.tar.gz -> ogg-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ogg-${SNAPSHOT}"
 

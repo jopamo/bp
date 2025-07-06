@@ -1,6 +1,5 @@
 #!/bin/sh
 #
-# Ben Secrest <blsecres@gmail.com>
 #
 # sh c_rehash script, scan all files in a directory
 # and add symbolic links to their hash values.
@@ -11,200 +10,86 @@
 # ^^acceptable?^^
 #
 
-# default certificate location
-DIR=/etc/openssl
+set -eu   # fail on unset vars or errors
+IFS='
+'         # reset IFS to <space><tab><newline>
 
-# for filetype bitfield
-IS_CERT=$(( 1 << 0 ))
-IS_CRL=$(( 1 << 1 ))
+##############################################################################
+# Config / defaults
+##############################################################################
+DEFAULT_CERTDIR='/etc/ssl/certs'        # fallback when nothing specified
+SSL_CMD=${OPENSSL:-openssl}             # allow OPENSSL=/path/to/openssl
+IS_CERT=1                               # bitfield flags
+IS_CRL=2
 
+##############################################################################
+# helpers
+##############################################################################
+die() { printf '%s\n' "c_rehash: $*" >&2; exit 1; }
 
-# check to see if a file is a certificate file or a CRL file
-# arguments:
-#       1. the filename to be scanned
-# returns:
-#       bitfield of file type; uses ${IS_CERT} and ${IS_CRL}
-#
-check_file()
-{
-    local IS_TYPE=0
+command -v "${SSL_CMD}" >/dev/null 2>&1 \
+  || die "'${SSL_CMD}' not found – skipping rehash"
 
-    # make IFS a newline so we can process grep output line by line
-    local OLDIFS=${IFS}
-    IFS=$( printf "\n" )
-
-    # XXX: could be more efficient to have two 'grep -m' but is -m portable?
-    for LINE in $( grep '^-----BEGIN .*-----' ${1} )
-    do
-	if echo ${LINE} \
-	    | grep -q -E '^-----BEGIN (X509 |TRUSTED )?CERTIFICATE-----'
-	then
-	    IS_TYPE=$(( ${IS_TYPE} | ${IS_CERT} ))
-
-	    if [ $(( ${IS_TYPE} & ${IS_CRL} )) -ne 0 ]
-	    then
-	    	break
-	    fi
-	elif echo ${LINE} | grep -q '^-----BEGIN X509 CRL-----'
-	then
-	    IS_TYPE=$(( ${IS_TYPE} | ${IS_CRL} ))
-
-	    if [ $(( ${IS_TYPE} & ${IS_CERT} )) -ne 0 ]
-	    then
-	    	break
-	    fi
-	fi
-    done
-
-    # restore IFS
-    IFS=${OLDIFS}
-
-    return ${IS_TYPE}
+fingerprint() {                         # $1=file  $2=sub-cmd (x509|crl)
+  "${SSL_CMD}" "$2" -fingerprint -noout -in "$1" |
+    sed 's/^.*=//' | tr -d ':'
 }
 
-
-#
-# use openssl to fingerprint a file
-#    arguments:
-#	1. the filename to fingerprint
-#	2. the method to use (x509, crl)
-#    returns:
-#	none
-#    assumptions:
-#	user will capture output from last stage of pipeline
-#
-fingerprint()
-{
-    ${SSL_CMD} ${2} -fingerprint -noout -in ${1} | sed 's/^.*=//' | tr -d ':'
+file_type() {                           # echo bitfield; rc=0 if unknown
+  rc=0
+  "${SSL_CMD}" x509 -noout -in "$1" >/dev/null 2>&1 && rc=$((rc|IS_CERT))
+  "${SSL_CMD}" crl  -noout -in "$1" >/dev/null 2>&1 && rc=$((rc|IS_CRL))
+  printf '%s\n' "$rc"
 }
 
+link_hash() {                           # $1=file  $2=sub-cmd (x509|crl)
+  hash=$("${SSL_CMD}" "$2" -hash -noout -in "$1")
+  fp=$(fingerprint "$1" "$2")
+  [ "$2" = crl ] && tag='r' || tag=''
+  suffix=0
 
-#
-# link_hash - create links to certificate files
-#    arguments:
-#       1. the filename to create a link for
-#	2. the type of certificate being linked (x509, crl)
-#    returns:
-#	0 on success, 1 otherwise
-#
-link_hash()
-{
-    local FINGERPRINT=$( fingerprint ${1} ${2} )
-    local HASH=$( ${SSL_CMD} ${2} -hash -noout -in ${1} )
-    local SUFFIX=0
-    local LINKFILE=''
-    local TAG=''
+  while :; do
+    link="${hash}.${tag}${suffix}"
+    [ -L "$link" ] || break
+    [ "$fp" = "$(fingerprint "$link" "$2")" ] && {
+      printf 'WARNING: duplicate %s (skipped)\n' "$1" >&2
+      return 1
+    }
+    suffix=$((suffix+1))
+  done
 
-    if [ ${2} = "crl" ]
-    then
-    	TAG='r'
-    fi
-
-    LINKFILE=${HASH}.${TAG}${SUFFIX}
-
-    while [ -f ${LINKFILE} ]
-    do
-	if [ ${FINGERPRINT} = $( fingerprint ${LINKFILE} ${2} ) ]
-	then
-	    echo "WARNING: Skipping duplicate file ${1}" >&2
-	    return 1
-	fi	
-
-	SUFFIX=$(( ${SUFFIX} + 1 ))
-	LINKFILE=${HASH}.${TAG}${SUFFIX}
-    done
-
-    echo "${1} => ${LINKFILE}"
-
-    # assume any system with a POSIX shell will either support symlinks or
-    # do something to handle this gracefully
-    ln -s ${1} ${LINKFILE}
-
-    return 0
+  printf '%s => %s\n' "$1" "$link"
+  ln -snf "$1" "$link"
 }
 
+rehash_dir() {                          # $1=directory
+  [ -d "$1" ] || return
+  [ -w "$1" ] || { printf 'Skipping %s (not writable)\n' "$1"; return; }
 
-# hash_dir create hash links in a given directory
-hash_dir()
-{
-    echo "Doing ${1}"
+  printf 'Processing %s\n' "$1"
+  cd "$1"
 
-    cd ${1}
+  # remove old hash links
+  find . -maxdepth 1 -type l -regextype posix-extended \
+       -regex './[[:xdigit:]]{8}\.r?[[:digit:]]+' -exec rm -f {} +
 
-    ls -1 * 2>/dev/null | while read FILE
-    do
-        if echo ${FILE} | grep -q -E '^[[:xdigit:]]{8}\.r?[[:digit:]]+$' \
-	    	&& [ -h "${FILE}" ]
-        then
-            rm ${FILE}
-        fi
-    done
-
-    ls -1 *.pem *.cer *.crt *.crl 2>/dev/null | while read FILE
-    do
-	check_file ${FILE}
-        local FILE_TYPE=${?}
-	local TYPE_STR=''
-
-        if [ $(( ${FILE_TYPE} & ${IS_CERT} )) -ne 0 ]
-        then
-            TYPE_STR='x509'
-        elif [ $(( ${FILE_TYPE} & ${IS_CRL} )) -ne 0 ]
-        then
-            TYPE_STR='crl'
-        else
-            echo "WARNING: ${FILE} does not contain a certificate or CRL: skipping" >&2
-	    continue
-        fi
-
-	link_hash ${FILE} ${TYPE_STR}
-    done
+  # process new files (no redirection in header → dash-compatible)
+  for f in *.pem *.cer *.crt *.crl; do
+    [ -e "$f" ] || continue             # skip literal pattern if no match
+    bits=$(file_type "$f")
+    [ $((bits & IS_CERT)) -ne 0 ] && link_hash "$f" x509
+    [ $((bits & IS_CRL )) -ne 0 ] && link_hash "$f" crl
+    [ "$bits" -eq 0 ] && \
+      printf 'WARNING: %s is not cert/CRL – skipped\n' "$f" >&2
+  done
 }
 
-
-# choose the name of an ssl application
-if [ -n "${OPENSSL}" ]
-then
-    SSL_CMD=$(which ${OPENSSL} 2>/dev/null)
-else
-    SSL_CMD=/usr/bin/openssl
-    OPENSSL=${SSL_CMD}
-    export OPENSSL
-fi
-
-# fix paths
-PATH=${PATH}:${DIR}/bin
-export PATH
-
-# confirm existance/executability of ssl command
-if ! [ -x ${SSL_CMD} ]
-then
-    echo "${0}: rehashing skipped ('openssl' program not available)" >&2
-    exit 0
-fi
-
-# determine which directories to process
-old_IFS=$IFS
-if [ ${#} -gt 0 ]
-then
-    IFS=':'
-    DIRLIST=${*}
-elif [ -n "${SSL_CERT_DIR}" ]
-then
-    DIRLIST=$SSL_CERT_DIR
-else
-    DIRLIST=${DIR}/certs
-fi
-
-IFS=':'
-
-# process directories
-for CERT_DIR in ${DIRLIST}
-do
-    if [ -d ${CERT_DIR} -a -w ${CERT_DIR} ]
-    then
-        IFS=$old_IFS
-        hash_dir ${CERT_DIR}
-        IFS=':'
-    fi
+##############################################################################
+# main
+##############################################################################
+DIRLIST=${1:-${SSL_CERT_DIR:-$DEFAULT_CERTDIR}}
+OLD_IFS=$IFS; IFS=':'
+for dir in $DIRLIST; do
+  rehash_dir "$dir"
 done
+IFS=$OLD_IFS

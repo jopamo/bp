@@ -42,23 +42,10 @@ src_prepare() {
 }
 
 src_configure() {
-	local -x CC="clang"
-       local -x CPP="clang-cpp"
-       local -x CXX="clang++"
-       local -x AR="llvm-ar"
-       local -x NM="llvm-nm"
-       local -x RANLIB="llvm-ranlib"
-
 	local mycmakeargs=(
 		-DCCACHE_ALLOWED="OFF"
 		-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR="${ESYSROOT}/usr/include/spirv"
 		-DLLVM_SPIRV_INCLUDE_TESTS=$(usex test "ON" "OFF")
-		-DCLANG_DEFAULT_LINKER=ld.lld
-        -DCMAKE_AR=llvm-ar
-        -DCMAKE_C_COMPILER=clang
-        -DCMAKE_CXX_COMPILER="clang++"
-        -DCMAKE_NM=llvm-nm
-        -DCMAKE_RANLIB=llvm-ranlib
 		-Wno-dev
 	)
 

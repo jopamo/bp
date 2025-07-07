@@ -309,9 +309,7 @@ pkg_postinst() {
 	systemctl reenable getty@tty1.service remote-fs.target
 	use networkd && systemctl reenable systemd-networkd.service
 
-    xdg_desktop_database_update
     xdg_mimeinfo_database_update
-    xdg_icon_cache_update
 }
 
 pkg_preinst() {
@@ -328,7 +326,5 @@ pkg_preinst() {
 }
 
 pkg_postrm() {
-    xdg_desktop_database_update
     xdg_mimeinfo_database_update
-    xdg_icon_cache_update
 }

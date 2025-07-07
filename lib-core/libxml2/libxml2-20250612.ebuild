@@ -52,6 +52,7 @@ src_install() {
 	cleanup_install
 
 	use static-libs || find "${ED}" -name '*.a' -delete
+	dosym -r /usr/lib/libxml2.so /usr/lib/libxml2.so.2
 }
 
 pkg_postinst() {

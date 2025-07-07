@@ -27,7 +27,6 @@ DEPEND="
 
 PATCHES=(
 	"${FILESDIR}/mit-krb5-1.12_warn_cflags.patch"
-	"${FILESDIR}/mit-krb5-config_LDFLAGS-r1.patch"
 	"${FILESDIR}/mit-krb5_dont_create_rundir.patch"
 	"${FILESDIR}/mit-krb5-1.18.2-krb5-config.patch"
 )

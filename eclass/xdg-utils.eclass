@@ -73,7 +73,7 @@ xdg_mimeinfo_database_update() {
 
 	local -x PKGSYSTEM_ENABLE_FSYNC=0
 
-	if update-mime-database -n "${EROOT%/}${MIMEINFO_DATABASE_DIR}"; then
+	if update-mime-database "${EROOT%/}${MIMEINFO_DATABASE_DIR}"; then
 		log_ok "shared MIME database updated (${EBUILD_PHASE})"
 	else
 		log_err "Failed to update shared MIME database (${EBUILD_PHASE})"

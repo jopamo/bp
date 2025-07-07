@@ -2,11 +2,22 @@
 
 EAPI=8
 
+SNAPSHOT=0d3d46cdee38c7b00a107c52875ffb36c2bc7170
+
 inherit autotools
 
 DESCRIPTION="Standard GNU database libraries"
 HOMEPAGE="https://www.gnu.org/software/gdbm/"
-SRC_URI="https://1g4.org/files/${P}.tar.xz"
+
+if [[ ${PV} == *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/1g4-mirror/gdbm"
+	inherit git-r3
+	EGIT_COMMIT="${SNAPSHOT}"
+	EGIT_SUBMODULES=()
+else
+	SRC_URI="https://github.com/1g4-mirror/gdbm/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+	S="${WORKDIR}/${PN}-${SNAPSHOT}"
+fi
 
 LICENSE="GPL-3"
 SLOT="0"

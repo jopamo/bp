@@ -111,7 +111,7 @@ src_install() {
 	cp -aR "${S}"/opt/* "${ED}"/opt/ || die
 	cp -aR "${S}"/usr/* "${ED}"/usr/ || die
 	rmdir "${ED}"/usr/local || die
-	rm "${ED}/usr/share/mime/packages/libreoffice$(ver_cut 1-2).xml"
+
 	rm "${ED}/opt/libreoffice$(ver_cut 1-2)/program/libavmediagst.so"
 	cp "${ED}/usr/share/icons/hicolor/scalable/apps/libreoffice$(ver_cut 1-2)-main.svg" "${ED}/usr/share/icons/hicolor/scalable/apps/libreoffice-main.svg"
 

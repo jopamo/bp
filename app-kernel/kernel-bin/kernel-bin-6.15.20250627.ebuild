@@ -27,6 +27,7 @@ BDEPEND="
 	app-core/ed
 	app-util/bc
 "
+DEPEND="app-kernel/linux-headers"
 
 src_prepare() {
 	unset ARCH
@@ -45,7 +46,7 @@ src_prepare() {
 src_install() {
     emake modules_install INSTALL_MOD_PATH="${ED}/usr"
     emake install INSTALL_PATH="${ED}/boot"
-    emake headers_install INSTALL_HDR_PATH="${ED}/usr"
+
     export KERNEL_VERSION=$(make -s kernelrelease)
 
     rm -f /usr/lib/modules/"${KERNEL_VERSION}"/build

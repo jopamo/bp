@@ -1,16 +1,6 @@
-# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: cmake.eclass
-# @MAINTAINER:
-# kde@gentoo.org
-# base-system@gentoo.org
-# @AUTHOR:
-# Tomáš Chvátal <scarabeus@gentoo.org>
-# Maciej Mrozowski <reavertm@gentoo.org>
-# (undisclosed contributors)
-# Original author: Zephyrus (zephyrus@mirach.it)
-# @SUPPORTED_EAPIS: 7 8
 # @PROVIDES: ninja-utils
 # @BLURB: common ebuild functions for cmake-based packages
 # @DESCRIPTION:
@@ -43,7 +33,7 @@ inherit flag-o-matic multiprocessing ninja-utils toolchain-funcs xdg-utils
 # Eclass can use different cmake binary than the one provided in by system.
 : "${CMAKE_BINARY:=cmake}"
 
-[[ ${EAPI} == 7 ]] && : "${CMAKE_BUILD_TYPE:=Gentoo}"
+[[ ${EAPI} == 7 ]] && : "${CMAKE_BUILD_TYPE:=1g4}"
 # @ECLASS_VARIABLE: CMAKE_BUILD_TYPE
 # @DESCRIPTION:
 # Set to override default CMAKE_BUILD_TYPE. Only useful for packages
@@ -54,8 +44,8 @@ inherit flag-o-matic multiprocessing ninja-utils toolchain-funcs xdg-utils
 # flags. However, you may still need to sed CMake files or choose a different
 # build type to achieve desirable results.
 #
-# In EAPI 7, the default was non-standard build type of Gentoo.
-: "${CMAKE_BUILD_TYPE:=RelWithDebInfo}"
+# In EAPI 7, the default was non-standard build type of 1g4.
+: "${CMAKE_BUILD_TYPE:=Release}"
 
 # @ECLASS_VARIABLE: CMAKE_IN_SOURCE_BUILD
 # @DEFAULT_UNSET
@@ -319,12 +309,12 @@ _cmake_check_build_dir() {
 # @INTERNAL
 # @DESCRIPTION:
 # Internal function for modifying hardcoded definitions.
-# Removes dangerous definitions that override Gentoo settings.
+# Removes dangerous definitions that override 1g4 settings.
 _cmake_modify-cmakelists() {
 	debug-print-function ${FUNCNAME} "$@"
 
 	# Only edit the files once
-	grep -qs "<<< Gentoo configuration >>>" "${CMAKE_USE_DIR}"/CMakeLists.txt && return 0
+	grep -qs "<<< 1g4 configuration >>>" "${CMAKE_USE_DIR}"/CMakeLists.txt && return 0
 
 	# Comment out all set (<some_should_be_user_defined_variable> value)
 	find "${CMAKE_USE_DIR}" -name CMakeLists.txt -exec sed \
@@ -342,7 +332,7 @@ _cmake_modify-cmakelists() {
 	# NOTE Append some useful summary here
 	cat >> "${CMAKE_USE_DIR}"/CMakeLists.txt <<- _EOF_ || die
 
-		message(STATUS "<<< Gentoo configuration >>>
+		message(STATUS "<<< 1g4 configuration >>>
 		Build type      \${CMAKE_BUILD_TYPE}
 		Install path    \${CMAKE_INSTALL_PREFIX}
 		Compiler flags:
@@ -445,8 +435,8 @@ cmake_src_configure() {
 	# Fix xdg collision with sandbox
 	xdg_environment_reset
 
-	# Prepare Gentoo override rules (set valid compiler, append CPPFLAGS etc.)
-	local build_rules=${BUILD_DIR}/gentoo_rules.cmake
+	# Prepare 1g4 override rules (set valid compiler, append CPPFLAGS etc.)
+	local build_rules=${BUILD_DIR}/1g4_rules.cmake
 
 	cat > "${build_rules}" <<- _EOF_ || die
 		set(CMAKE_ASM_COMPILE_OBJECT "<CMAKE_ASM_COMPILER> <DEFINES> <INCLUDES> ${CPPFLAGS} <FLAGS> -o <OBJECT> -c <SOURCE>" CACHE STRING "ASM compile command" FORCE)
@@ -464,7 +454,7 @@ cmake_src_configure() {
 	# CMAKE_*_VARIABLES split into two elements: the first one with
 	# compiler path, and the second one with all command-line options,
 	# space separated.
-	local toolchain_file=${BUILD_DIR}/gentoo_toolchain.cmake
+	local toolchain_file=${BUILD_DIR}/1g4_toolchain.cmake
 	cat > ${toolchain_file} <<- _EOF_ || die
 		set(CMAKE_ASM_COMPILER "${myCC/ /;}")
 		set(CMAKE_ASM-ATT_COMPILER "${myCC/ /;}")
@@ -483,15 +473,7 @@ cmake_src_configure() {
 	if tc-is-cross-compiler; then
 		local sysname
 		case "${KERNEL:-linux}" in
-			Cygwin) sysname="CYGWIN_NT-5.1" ;;
-			HPUX) sysname="HP-UX" ;;
 			linux) sysname="Linux" ;;
-			Winnt)
-				sysname="Windows"
-				cat >> "${toolchain_file}" <<- _EOF_ || die
-					set(CMAKE_RC_COMPILER $(tc-getRC))
-				_EOF_
-				;;
 			*) sysname="${KERNEL}" ;;
 		esac
 
@@ -511,33 +493,16 @@ cmake_src_configure() {
 		_EOF_
 	fi
 
-	if use prefix-guest; then
-		cat >> "${build_rules}" <<- _EOF_ || die
-			# in Prefix we need rpath and must ensure cmake gets our default linker path
-			# right ... except for Darwin hosts
-			if(NOT APPLE)
-				set(CMAKE_SKIP_RPATH OFF CACHE BOOL "" FORCE)
-				set(CMAKE_PLATFORM_REQUIRED_RUNTIME_PATH "${EPREFIX}/usr/${CHOST}/lib/gcc;${EPREFIX}/usr/${CHOST}/lib;${EPREFIX}/usr/lib;${EPREFIX}/lib" CACHE STRING "" FORCE)
-			else()
-				set(CMAKE_PREFIX_PATH "${EPREFIX}/usr" CACHE STRING "" FORCE)
-				set(CMAKE_MACOSX_RPATH ON CACHE BOOL "" FORCE)
-				set(CMAKE_SKIP_BUILD_RPATH OFF CACHE BOOL "" FORCE)
-				set(CMAKE_SKIP_RPATH OFF CACHE BOOL "" FORCE)
-				set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE CACHE BOOL "" FORCE)
-			endif()
-		_EOF_
-	fi
-
 	# Common configure parameters (invariants)
-	local common_config=${BUILD_DIR}/gentoo_common_config.cmake
+	local common_config=${BUILD_DIR}/1g4_common_config.cmake
 	local libdir=lib
 	cat > "${common_config}" <<- _EOF_ || die
-		set(CMAKE_GENTOO_BUILD ON CACHE BOOL "Indicate Gentoo package build")
+		set(CMAKE_1g4_BUILD ON CACHE BOOL "Indicate 1g4 package build")
 		set(LIB_SUFFIX ${libdir/lib} CACHE STRING "library path suffix" FORCE)
 		set(CMAKE_INSTALL_LIBDIR ${libdir} CACHE PATH "Output directory for libraries")
 		set(CMAKE_INSTALL_INFODIR "${EPREFIX}/usr/share/info" CACHE PATH "")
 		set(CMAKE_INSTALL_MANDIR "${EPREFIX}/usr/share/man" CACHE PATH "")
-		set(CMAKE_USER_MAKE_RULES_OVERRIDE "${build_rules}" CACHE FILEPATH "Gentoo override rules")
+		set(CMAKE_USER_MAKE_RULES_OVERRIDE "${build_rules}" CACHE FILEPATH "1g4 override rules")
 		set(CMAKE_INSTALL_DOCDIR "${EPREFIX}/usr/share/doc/${PF}" CACHE PATH "")
 		set(BUILD_SHARED_LIBS ON CACHE BOOL "")
 		set(Python3_FIND_UNVERSIONED_NAMES FIRST CACHE STRING "")
@@ -564,7 +529,7 @@ cmake_src_configure() {
 	fi
 
 	# Wipe the default optimization flags out of CMake
-	if [[ ${CMAKE_BUILD_TYPE} != Gentoo ]]; then
+	if [[ ${CMAKE_BUILD_TYPE} != 1g4 ]]; then
 		cat >> ${common_config} <<- _EOF_ || die
 			set(CMAKE_ASM_FLAGS_${CMAKE_BUILD_TYPE^^} "" CACHE STRING "")
 			set(CMAKE_ASM-ATT_FLAGS_${CMAKE_BUILD_TYPE^^} "" CACHE STRING "")

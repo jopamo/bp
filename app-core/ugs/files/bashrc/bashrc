@@ -13,14 +13,16 @@ PROMPT_COMMAND="history -a; history -n; history -r"
 export HISTSIZE=100000
 export HISTFILESIZE=1000000
 
-# ── Terminal title setup (unchanged) ────────────────────────────────────────
+export LC_CTYPE=${LC_CTYPE:-C.UTF-8}
+
+# ── Terminal title setup ────────────────────────────────────────
 case "$TERM" in
 	*term*|rxvt*|gnome*|kitty*|lxterm*|tmux|qterminal*) PS1='\[\e]0;\u@\h:\w\007\]' ;;
 	screen*)                                           PS1='\[\033k\u@\h:\w\033\\\]' ;;
 	*)                                                 PS1="" ;;
 esac
 
-# ── Colour / prompt palette (unchanged logic) ───────────────────────────────
+# ── Colour / prompt palette ───────────────────────────────
 if command -v dircolors >/dev/null; then
 	if   [[ -f ~/.ls_colors  ]]; then eval "$(dircolors -b ~/.ls_colors)"
 	elif [[ -f /etc/LS_COLORS ]]; then eval "$(dircolors -b /etc/LS_COLORS)"
@@ -43,14 +45,14 @@ else
 	PS1+='\u@\h \w \$ '
 fi
 
-# ── Sourcing extra bashrc fragments (unchanged) ─────────────────────────────
+# ── Sourcing extra bashrc fragments ─────────────────────────────
 for d in /etc/bash/bashrc.d ~/.bashrc.d; do
 	[[ -d $d ]] && for f in "$d"/*.sh; do
 		[[ -r $f ]] && source "$f"
 	done
 done
 
-# --- VTE / OSC 7 handling (unchanged) --------------------------------------
+# --- VTE / OSC 7 handling --------------------------------------
 if [[ -f /etc/profile.d/vte.sh ]]; then
 	source /etc/profile.d/vte.sh
 else
@@ -58,7 +60,7 @@ else
 	PROMPT_COMMAND="__vte_osc7; $PROMPT_COMMAND"
 fi
 
-# --- Compiler tuple export (unchanged) -------------------------------------
+# --- Compiler tuple export -------------------------------------
 if command -v clang >/dev/null 2>&1; then
 	export TUPLE=$(clang --print-target-triple)
 elif command -v gcc >/dev/null 2>&1; then
@@ -83,7 +85,7 @@ export GOMODCACHE="$GOPATH/pkg/mod"
 export GOCACHE="${XDG_CACHE_HOME:-$HOME/.cache}/go-build"
 
 case ":$PATH:" in
-    *":$GOPATH/bin:"*) : ;;            # already there
+    *":$GOPATH/bin:"*) : ;;
     *) export PATH="$PATH:$GOPATH/bin" ;;
 esac
 
@@ -185,9 +187,6 @@ sort_and_remove_duplicates() {
 		log_err "File not found: $1"
 	fi
 }
-
-# ── Reworked helpers with unified emoji + colour output ────────────────────
-# (all behaviour identical – only message style changed)
 
 replace_in_files() {
     local search_string="$1"
@@ -316,7 +315,6 @@ clean_bash_history() {
 }
 
 # ── jq json helpers ─────────────────────────────
-
 json-keys() {
     [[ -z $1 ]] && { log_err "Usage: json-keys <file.json>"; return 1; }
     jq -r 'paths | map(tostring) | join(".")' "$1" | sort -u

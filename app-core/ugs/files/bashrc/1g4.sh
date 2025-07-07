@@ -2,7 +2,7 @@
 
 alias eupdate='emerge --sync && eup'
 alias rebuild_packages='eup && rebuild_world'
-alias 1g4_nspawn='systemd-nspawn --bind /var/cache/distfiles --bind-ro /var/db/repos/bp --tmpfs /var/tmp/portage'
+alias 1g4_nspawn='systemd-nspawn --bind /var/cache/distfiles --bind-ro /var/db/repos/bp'
 alias oneshot='emerge --oneshot'
 alias update_world='emerge --keep-going -uDNv world'
 alias update_everything='emerge --keep-going -euDNv world'

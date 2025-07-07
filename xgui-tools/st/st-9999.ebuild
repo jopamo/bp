@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit git-r3
+inherit git-r3 xdg
 
 DESCRIPTION="a simple terminal implementation for X"
 HOMEPAGE="https://st.suckless.org/"
@@ -23,4 +23,7 @@ DEPEND="
 src_install() {
 	dobin st
 	doman st.1
+
+	insinto /usr/share/icons/hicolor/scalable/apps/
+	doins "${FILESDIR}"/st.svg
 }

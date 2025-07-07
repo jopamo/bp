@@ -2,11 +2,22 @@
 
 EAPI=8
 
+SNAPSHOT=a2164c99b4d7d37334f9ca5ece55d8af95d002b7
+
 inherit flag-o-matic autotools
 
 DESCRIPTION="Create, destroy, resize, check, copy partitions and file systems"
 HOMEPAGE="https://www.gnu.org/software/parted"
-SRC_URI="mirror://gnu//${PN}/${P}.tar.xz"
+
+if [[ ${PV} == *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/1g4-mirror/parted"
+	inherit git-r3
+	EGIT_COMMIT="${SNAPSHOT}"
+	EGIT_SUBMODULES=()
+else
+	SRC_URI="https://github.com/1g4-mirror/parted/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+	S="${WORKDIR}/${PN}-${SNAPSHOT}"
+fi
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -29,14 +40,21 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-3.4-posix-printf.patch
 	"${FILESDIR}"/${PN}-3.6-tests-unicode.patch
 	"${FILESDIR}"/${PN}-3.6-tests-non-bash.patch
-	"${FILESDIR}"/${P}-underlinked-util-linux.patch
-	"${FILESDIR}"/${P}-c23.patch
 )
 
 src_prepare() {
-	filter-flags -Wl,-z,defs -flto\=\*
+	rm -rf gnulib
+	cp -r "${EROOT}"/usr/share/gnulib gnulib
+	#cd gnulib
+	#git reset --hard 0a12fa9
+	#cd ..
+
+	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
+
 	default
-	eautoreconf
+	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
+
+	filter-flags -Wl,-z,defs -flto\=\*
 }
 
 src_configure() {

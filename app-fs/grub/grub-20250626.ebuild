@@ -2,11 +2,22 @@
 
 EAPI=8
 
+SNAPSHOT=a68a7dece464c35b1c8d20b98502b6881b103911
+
 inherit flag-o-matic multibuild toolchain-funcs
 
 DESCRIPTION="GNU GRUB boot loader"
 HOMEPAGE="https://www.gnu.org/software/grub/"
-SRC_URI="https://1g4.org/files/${P}.tar.xz"
+
+if [[ ${PV} == *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/1g4-mirror/grub"
+	inherit git-r3
+	EGIT_COMMIT="${SNAPSHOT}"
+	EGIT_SUBMODULES=()
+else
+	SRC_URI="https://github.com/1g4-mirror/grub/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+	S="${WORKDIR}/${PN}-${SNAPSHOT}"
+fi
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -76,6 +87,19 @@ grub_configure() {
 
 	local ECONF_SOURCE="${S}"
 	econf "${myconf[@]}"
+}
+
+src_prepare() {
+	rm -rf gnulib
+	cp -r "${EROOT}"/usr/share/gnulib gnulib
+	#cd gnulib
+	#git reset --hard 0a12fa9
+	#cd ..
+
+	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
+
+	default
+	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
 }
 
 src_configure() {

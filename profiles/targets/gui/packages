@@ -1,7 +1,7 @@
-*app-kernel/linux-firmware
 *app-compression/zip
 *app-core/kmod
 *app-fs/ncdu
+*app-kernel/linux-firmware
 *app-net/bluez
 *app-net/weechat
 *app-port/smart-live-rebuild
@@ -26,6 +26,7 @@
 *xgui-app/pcmanfm-qt
 *xgui-app/qbittorrent
 *xgui-app/qterminal
+*xgui-app/texxy
 *xgui-app/wireshark
 *xgui-app/xcompmgr
 *xgui-desktop/hsetroot
@@ -41,6 +42,7 @@
 *xgui-misc/wine
 *xgui-tools/alsa-utils
 *xgui-tools/mesa-progs
+*xgui-tools/st
 *xgui-tools/st
 *xgui-tools/x2goclient
 *xgui-tools/xrandr

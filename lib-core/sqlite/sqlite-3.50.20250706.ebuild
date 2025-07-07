@@ -16,7 +16,7 @@ LICENSE="public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs debug tempstore fts5 rtree geopoly session json
+IUSE="static-libs debug fts5 rtree geopoly session json
 		+math +memsys5 update-limit editline readline gcov"
 
 DEPEND="
@@ -117,7 +117,6 @@ src_configure() {
 		--disable-fts4
 		--disable-memsys3
 		$(use_enable debug)
-		$(use_enable tempstore)
 		$(use_enable fts5)
 		$(use_enable rtree)
 		$(use_enable geopoly)
@@ -131,4 +130,8 @@ src_configure() {
 		$(use_enable gcov)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	emake DESTDIR="${D}" install
 }

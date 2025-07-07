@@ -42,8 +42,6 @@ src_install() {
 		mkheaders
 		mkimg
 		mkstage
-		mktarballs
-		prettybash
 		ubuntu_kernel
 		xbkup
 		xchroot

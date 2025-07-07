@@ -2,11 +2,22 @@
 
 EAPI=8
 
-inherit flag-o-matic
+SNAPSHOT=240bb42225b95320ed02e19ccac33ab0bc8e723b
+
+inherit flag-o-matic autotools
 
 DESCRIPTION="Super-useful stream editor"
 HOMEPAGE="http://sed.sourceforge.net/"
-SRC_URI="https://1g4.org/files/${P}.tar.xz"
+
+if [[ ${PV} == *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/1g4-mirror/sed"
+	inherit git-r3
+	EGIT_COMMIT="${SNAPSHOT}"
+	EGIT_SUBMODULES=()
+else
+	SRC_URI="https://github.com/1g4-mirror/sed/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+	S="${WORKDIR}/${PN}-${SNAPSHOT}"
+fi
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -21,7 +32,6 @@ src_bootstrap_sed() {
 	export NO_SYS_SED=""
 	if ! type -p sed > /dev/null ; then
 		NO_SYS_SED="!!!"
-		./bootstrap.sh || die "couldnt bootstrap"
 		cp sed/sed "${T}"/ || die "couldnt copy"
 		export PATH="${PATH}:${T}"
 		make clean || die "couldnt clean"
@@ -29,6 +39,14 @@ src_bootstrap_sed() {
 }
 
 src_prepare() {
+	rm -rf gnulib
+	cp -r "${EROOT}"/usr/share/gnulib gnulib
+	#cd gnulib
+	#git reset --hard ac1e6fe
+	#cd ..
+
+	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
+
 	default
 	src_bootstrap_sed
 

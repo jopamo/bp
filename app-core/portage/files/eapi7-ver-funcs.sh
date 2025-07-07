@@ -193,15 +193,37 @@ ver_test() {
 
 # @FUNCTION: cleanup_install
 # @DESCRIPTION:
-# Minimize the installed files
+# Minimize the installed files while keeping full en_US.UTF-8 support
 cleanup_install() {
-	rm -rf "${ED}"/usr/share/doc
-	rm -rf "${ED}"/usr/share/zsh
+	# drop docs and zsh completion trees
+	rm -rf "${ED}"/usr/share/{doc,zsh}
 
-	find "${ED}"/usr/share/man -mindepth 1 -maxdepth 1 ! -name 'man*' -exec rm -rf {} +
-	find "${ED}"/usr/share/locale/ -mindepth 1 -maxdepth 1 ! -name 'en*' ! -name 'locale.alias' -exec rm -rf {} +
-	find "${ED}"/usr/share/i18n/locales -maxdepth 1 -type f ! -name 'en*' ! -name 'C' ! -name 'POSIX' \
-    	! -name 'i18n*' ! -name 'iso14651*' ! -name 'translit*' -delete
+	# keep only core man sections (man1, man2, …)
+	if [[ -d ${ED}/usr/share/man ]]; then
+		find "${ED}"/usr/share/man -mindepth 1 -maxdepth 1 -type d \
+			! -name 'man*' -exec rm -rf {} +
+	fi
+
+	# keep English message catalogs and locale.alias
+	if [[ -d ${ED}/usr/share/locale ]]; then
+		find "${ED}"/usr/share/locale -mindepth 1 -maxdepth 1 -type d \
+			! -name 'en' ! -name 'en_US' ! -name 'en_GB' -exec rm -rf {} +
+		find "${ED}"/usr/share/locale -maxdepth 1 -type f \
+			! -name 'locale.alias' -delete
+	fi
+
+	# keep only the locale source files en_US pulls in
+	if [[ -d ${ED}/usr/share/i18n/locales ]]; then
+		find "${ED}"/usr/share/i18n/locales -maxdepth 1 -type f \
+			! -name 'en_US' \
+			! -name 'en_GB' \
+			! -name 'i18n' \
+			! -name 'i18n_ctype' \
+			! -name 'iso14651*' \
+			! -name 'translit*' \
+			! -name 'C' \
+			! -name 'POSIX' -delete
+	fi
 }
 
 # @FUNCTION: get_modname

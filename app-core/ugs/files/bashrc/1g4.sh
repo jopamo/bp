@@ -99,101 +99,107 @@ rebuild_world() {
 }
 
 update_kernel_auto() {
-    set -e
+    # ------------------------------------------------------------
+    #  Automatic kernel build and boot-loader refresh for Gentoo
+    #  Rebuilds bin/nvidia-drivers when it is installed
+    # ------------------------------------------------------------
+    set -euo pipefail
 
-    # Root check
-    if [ "$EUID" -ne 0 ]; then
-        echo "Must be run as root!" >&2
+    # Helper: return 0 if nvidia-drivers is installed
+    detect_nvidia() {
+        local atom="bin/nvidia-drivers"
+
+        # portageq (preferred)
+        if command -v portageq &>/dev/null; then
+            portageq has_version / "${atom}" &>/dev/null && return 0
+            [[ -n $(portageq match / "${atom}" 2>/dev/null) ]] && return 0
+        fi
+        # equery (gentoolkit)
+        command -v equery  &>/dev/null && equery  -q list -i "${atom}" &>/dev/null && return 0
+        # qlist (portage-utils)
+        command -v qlist   &>/dev/null && qlist   -IC "${atom}"        &>/dev/null && return 0
+        # last-ditch check
+        compgen -G "/var/db/pkg/bin/nvidia-drivers-*" &>/dev/null && return 0
         return 1
-    fi
+    }
 
-    # Sanity check for kernel sources
-    [ -d /usr/src/linux ] || { echo "/usr/src/linux not found."; return 1; }
+    # Root requirement and kernel source check
+    [[ $EUID -eq 0 ]] || { echo "Must be run as root!" >&2; return 1; }
+    [[ -d /usr/src/linux ]] || { echo "/usr/src/linux not found.";     return 1; }
     cd /usr/src/linux
-
-    # Trap for clean abort
     trap 'echo "Interrupted by user"; exit 1' SIGINT
 
-    # Run oldconfig and prepare
+    # Kernel configuration and preparation
     make oldconfig
     make prepare
 
-    # Mount necessary filesystems
+    # Ensure /boot is mounted
     mountpoint -q /boot || mount /boot
 
-    # EFI detection
+    # EFI and initramfs detection
     EFI_MODE=0
     INITRAMFS_MODE=0
-    if mountpoint -q /boot/efi || [ -d /sys/firmware/efi ]; then
+    if mountpoint -q /boot/efi || [[ -d /sys/firmware/efi ]]; then
         EFI_MODE=1
         mount | grep -q '/sys/firmware/efi/efivars' || \
             mount -t efivarfs efivarfs /sys/firmware/efi/efivars 2>/dev/null || true
         mountpoint -q /boot/efi || mount /boot/efi
-        # If dracut is present, assume we should make an initramfs
-        command -v dracut >/dev/null && INITRAMFS_MODE=1
+        command -v dracut &>/dev/null && INITRAMFS_MODE=1
     fi
 
     echo "Building kernel..."
     make -j"$(nproc)"
-
-    # Get new kernel version
     KERNEL_VERSION=$(make -s kernelrelease)
 
-    # Double-check kernel was built before removing anything
-    if ! [ -f "arch/x86/boot/bzImage" ] && ! [ -f "vmlinux" ]; then
-        echo "Build failed—no kernel image produced. Aborting."
-        exit 1
-    fi
+    [[ -f arch/x86/boot/bzImage || -f vmlinux ]] || \
+        { echo "Build failed—no kernel image."; exit 1; }
 
-    # Remove only current-version modules, not all
-    if [ -d /lib/modules/"$KERNEL_VERSION" ]; then
-        echo "Removing /lib/modules/${KERNEL_VERSION}..."
-        rm -rf /lib/modules/"$KERNEL_VERSION"
-    fi
-
-    # Clean up old boot files (safer)
-    echo "Removing old boot files..."
+    [[ -d /lib/modules/${KERNEL_VERSION} ]] && rm -rf "/lib/modules/${KERNEL_VERSION}"
     rm -f /boot/System.map-* /boot/config-* /boot/vmlinuz-*
 
     make modules_install
-    make install
+    make install   # leaves vmlinuz, System.map, config in /boot
 
-    # If dracut and EFI, generate initramfs
-    if (( EFI_MODE && INITRAMFS_MODE )); then
-        echo "Generating initramfs with dracut..."
-        dracut \
-            -f "/boot/initramfs-${KERNEL_VERSION}.img" \
-            "${KERNEL_VERSION}" \
-            --kernel-image "/boot/vmlinuz-${KERNEL_VERSION}" \
-            --hostonly \
-            --early-microcode \
-            --mdadmconf \
-            --lvmconf \
-            --strip \
-            --zstd \
-            --logfile /var/log/dracut.log \
-            --stdlog 3
+    # Rebuild nvidia-drivers if installed
+    if detect_nvidia; then
+        echo "bin/nvidia-drivers found – rebuilding..."
+        emerge --quiet-build --oneshot bin/nvidia-drivers
+        NVIDIA_IN_INITRAMFS=1
+    else
+        NVIDIA_IN_INITRAMFS=0
     fi
 
-    echo "Updating bootloader..."
+    # Initramfs generation (EFI + dracut)
+    if (( EFI_MODE && INITRAMFS_MODE )); then
+        echo "Generating initramfs with dracut..."
+        DRACUT_OPTS=(
+            -f "/boot/initramfs-${KERNEL_VERSION}.img"
+            "${KERNEL_VERSION}"
+            --kernel-image "/boot/vmlinuz-${KERNEL_VERSION}"
+            --hostonly --early-microcode --mdadmconf --lvmconf
+            --strip --zstd --logfile /var/log/dracut.log --stdlog 3
+        )
+        (( NVIDIA_IN_INITRAMFS )) && \
+            DRACUT_OPTS+=( --add-drivers "nvidia nvidia_modeset nvidia_drm nvidia_uvm" )
+        dracut "${DRACUT_OPTS[@]}"
+    fi
 
+    # Boot-loader update
+    echo "Updating bootloader..."
     if (( EFI_MODE )); then
-        mkdir -p /boot/grub/
+        mkdir -p /boot/grub
         grub-mkconfig -o /boot/grub/grub.cfg
         grub-install --efi-directory=/boot/efi
         grub-install --efi-directory=/boot/efi --removable
     else
         grub-mkconfig -o /boot/grub/grub.cfg
-        # Auto-detect disk for MBR install (assume /dev/sda, can customize!)
         BOOT_DISK=$(lsblk -dno NAME,TYPE | awk '$2=="disk"{print "/dev/"$1; exit}')
-        grub-install --target=i386-pc "$BOOT_DISK"
+        grub-install --target=i386-pc "${BOOT_DISK}"
     fi
 
     echo "Kernel update complete."
-
     trap - SIGINT
 }
-
 
 update_kernel_opi5plus() {
 	trap 'echo "Interrupted by user"; return 1' SIGINT

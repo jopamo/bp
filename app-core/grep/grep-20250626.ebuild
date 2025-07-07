@@ -2,11 +2,22 @@
 
 EAPI=8
 
+SNAPSHOT=db5172dc2b0f1e061d4d4d81bb6d6a1ac35a2346
+
 inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="GNU regular expression matcher"
 HOMEPAGE="https://www.gnu.org/software/grep/"
-SRC_URI="https://1g4.org/files/${P}.tar.xz"
+
+if [[ ${PV} == *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/1g4-mirror/grep"
+	inherit git-r3
+	EGIT_COMMIT="${SNAPSHOT}"
+	EGIT_SUBMODULES=()
+else
+	SRC_URI="https://github.com/1g4-mirror/grep/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+	S="${WORKDIR}/${PN}-${SNAPSHOT}"
+fi
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -24,6 +35,14 @@ BDEPEND="
 "
 
 src_prepare() {
+	rm -rf gnulib
+	cp -r "${EROOT}"/usr/share/gnulib gnulib
+	#cd gnulib
+	#git reset --hard 0a12fa9
+	#cd ..
+
+	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
+
 	cat > "${T}"/egrep <<- EOF || die
 		#!/bin/sh
 		exec grep -E "\$@"

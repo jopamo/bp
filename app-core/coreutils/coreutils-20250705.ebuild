@@ -6,7 +6,10 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Standard GNU utilities (chmod, cp, dd, ls, sort, tr, head, wc, who,...)"
 HOMEPAGE="https://www.gnu.org/software/coreutils/"
-SRC_URI="https://1g4.org/files/${P}.tar.xz"
+
+SNAPSHOT=fd59e4a955970b2a6c2796578f1bc8b57604f731
+SRC_URI="https://github.com/coreutils/coreutils/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -25,13 +28,20 @@ DEPEND="
 	static? ( ${LIB_DEPEND} )
 	app-compression/xz-utils
 "
+BDEPEND="app-build/gnulib"
+
+RESTRICT="network-sandbox"
 
 src_prepare() {
+	rm -rf gnulib
+	cp -r "${EROOT}"/usr/share/gnulib gnulib
+
+	./bootstrap --no-git --gnulib-srcdir="${S}"/gnulib
+
 	append-flags -fno-strict-aliasing
 
-	default
-
 	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
+	default
 }
 
 src_configure() {

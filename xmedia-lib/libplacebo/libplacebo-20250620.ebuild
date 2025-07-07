@@ -47,6 +47,10 @@ python_check_deps() {
 }
 
 src_prepare() {
+	sed -i \
+		's/ET.parse(xmlfile))/ET.parse(xmlfile).getroot())/' \
+		src/vulkan/utils_gen.py || die
+
 	default
 
 	# typically auto-skipped, but may assume usable opengl/vulkan then hang

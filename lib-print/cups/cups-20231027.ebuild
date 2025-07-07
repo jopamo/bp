@@ -2,26 +2,24 @@
 
 EAPI=8
 
-BRANCH_NAME="$(ver_cut 1-2).x"
-SNAPSHOT=ce5ea6bc04f1641466458dbd588276ceca6d4891
+SNAPSHOT=a8968fc4257322b1e4e191c4bccedea98d7b053e
 
-inherit linux-info user toolchain-funcs autotools flag-o-matic
+inherit autotools linux-info user toolchain-funcs
 
 DESCRIPTION="The Common Unix Printing System"
 HOMEPAGE="https://www.cups.org/"
-SRC_URI="https://github.com/OpenPrinting/cups/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SRC_URI="https://github.com/apple/cups/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/cups-${SNAPSHOT}
 
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="acl dbus debug pam ssl static-libs systemd usb"
+IUSE="acl dbus debug pam +ssl static-libs systemd usb"
 
 DEPEND="
 	app-tex/libpaper
 	lib-core/zlib
-	lib-net/avahi
 	acl? (
 			app-core/acl
 			app-core/attr
@@ -38,6 +36,8 @@ PDEPEND="lib-print/cups-filters"
 
 PATCHES=(
 	"${FILESDIR}/cups-2.2.6-fix-install-perms.patch"
+	"${FILESDIR}/cups-1.4.4-nostrip.patch"
+	"${FILESDIR}/cups-2.3.3-user-AR.patch"
 )
 
 RESTRICT="test"
@@ -51,7 +51,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	filter-flags -flto*
 	default
 
 	# Remove ".SILENT" rule for verbose output (bug 524338).
@@ -62,11 +61,7 @@ src_prepare() {
 
 	eautoreconf
 
-	# from the top of the CUPS source tree
-	sed -i -E '
-		s/^[[:space:]]*INSTALL_STRIP[[:space:]]*=[[:space:]]*"[^"]*"/INSTALL_STRIP=""/;   # INSTALL_STRIP="-s"
-		s/^[[:space:]]*INSTALL_STRIP[[:space:]]*=.*/INSTALL_STRIP=/                       # INSTALL_STRIP=-s  or empty
-		' config-scripts/cups-compiler.m4 configure
+	sed -i -e "s/\-Os\ \-g//g" configure || die
 }
 
 src_configure() {
@@ -98,9 +93,11 @@ src_configure() {
 		$(use_enable debug debug-printfs)
 		$(use_enable pam)
 		$(use_enable static-libs static)
-		$(use_with systemd)
+		$(use_enable ssl gnutls)
+		$(use_enable systemd)
 		$(use_enable usb libusb)
-		--with-dnssd=avahi
+		--disable-avahi
+		--disable-dnssd
 		--enable-libpaper
 	)
 
@@ -115,6 +112,7 @@ src_configure() {
 	# install in /usr/libexec always, instead of using /usr/lib/cups
 	sed -i -e "s:SERVERBIN.*:SERVERBIN = \"\$\(BUILDROOT\)${EPREFIX}/usr/libexec/cups\":" Makedefs || die
 	sed -i -e "s:#define CUPS_SERVERBIN.*:#define CUPS_SERVERBIN \"${EPREFIX}/usr/libexec/cups\":" config.h || die
+	sed -i -e "s:cups_serverbin=.*:cups_serverbin=\"${EPREFIX}/usr/libexec/cups\":" cups-config || die
 
 	# additional path corrections needed for prefix
 	sed -i -e "s:ICONDIR.*:ICONDIR = ${EPREFIX}/usr/share/icons:" Makedefs || die

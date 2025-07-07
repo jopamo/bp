@@ -16,7 +16,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug dlang go-bootstrap isl libgomp lib-only sanitize vtv zstd"
+IUSE="debug dlang go-bootstrap isl libgomp sanitize zstd"
 
 RESTRICT="strip"
 
@@ -77,7 +77,6 @@ src_configure() {
 		--datadir="${EPREFIX}"/usr/share
 		--mandir="${EPREFIX}"/usr/share/man
 		--infodir="${EPREFIX}"/usr/share/info
-		--disable-cet
 		--disable-fixed-point
 		--disable-install-libiberty
 		--disable-libgcj
@@ -89,16 +88,12 @@ src_configure() {
 		--disable-nls
 		--disable-obsolete
 		--disable-rpath
-		--disable-symvers
 		--disable-werror
 		--enable-__cxa_atexit
 		--enable-bootstrap
 		--enable-checking=release
-		--enable-clocale=gnu
+		--enable-clocale=generic
 		--enable-default-pie
-		--enable-default-ssp
-		--enable-gnu-indirect-function
-		--enable-gnu-unique-object
 		--enable-languages=${GCC_LANG}
 		--enable-libstdcxx-time
 		--enable-link-mutex
@@ -111,10 +106,15 @@ src_configure() {
 		--with-linker-hash-style=gnu
 		--with-pkgversion="1g4 Linux GCC ${PV}"
 		--with-system-zlib
+		$(use_enable elibc_glibc cet)
+		$(use_enable elibc_glibc symvers)
+		$(use_enable elibc_glibc libvtv)
+		$(use_enable elibc_glibc vtable-verify)
+		$(use_enable elibc_glibc default-ssp)
+		$(use_enable elibc_glibc gnu-indirect-function)
+		$(use_enable elibc_glibc gnu-unique-object)
 		$(use_enable libgomp)
 		$(use_enable sanitize libsanitizer)
-		$(use_enable vtv libvtv)
-		$(use_enable vtv vtable-verify)
 		$(use_with isl)
 		$(use_with zstd)
 	)

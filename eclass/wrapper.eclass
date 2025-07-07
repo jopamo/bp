@@ -1,11 +1,7 @@
-# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
-
+#
 # @ECLASS: wrapper.eclass
-# @MAINTAINER:
-# base-system@gentoo.org
-# @SUPPORTED_EAPIS: 5 6 7 8
-# @BLURB: create a shell wrapper script
+# @BLURB: create simple shell-wrapper scripts
 
 case ${EAPI} in
 	5|6|7|8) ;;
@@ -15,50 +11,83 @@ esac
 if [[ -z ${_WRAPPER_ECLASS} ]]; then
 _WRAPPER_ECLASS=1
 
+# ---------------------------------------------------------------------------
 # @FUNCTION: make_wrapper
 # @USAGE: <wrapper> <target> [chdir] [libpaths] [installpath]
 # @DESCRIPTION:
-# Create a shell wrapper script named wrapper in installpath
-# (defaults to the bindir) to execute target (default of wrapper)
-# by first optionally setting LD_LIBRARY_PATH to the colon-delimited
-# libpaths followed by optionally changing directory to chdir.
+#   Create an executable shell script <wrapper> (installed into <installpath>
+#   or ${BROOT}/usr/bin by default) that:
+#      1. Optionally prepends <libpaths> to LD_LIBRARY_PATH
+#         without introducing empty ':' components or duplicates.
+#      2. Optionally cd's to <chdir>.
+#      3. exec's <target> "$@" (honours EPREFIX on absolute paths).
+#
+#   Examples:
+#       make_wrapper foo /opt/foo/bin/foo               # simple call
+#       make_wrapper bar ./barbin /opt/bar '' /usr/games # with chdir and path
+#
+#   All parameters except <wrapper> are optional but positional.
+# ---------------------------------------------------------------------------
 make_wrapper() {
-	local wrapper=$1 bin=$2 chdir=$3 libdir=$4 path=$5
+	local wrapper=$1        # installed name
+	local bin=$2            # command to exec (default = wrapper)
+	local chdir=$3          # working dir (optional)
+	local libdir=$4         # new LD_LIBRARY_PATH entry (optional)
+	local path=$5           # install dir for the wrapper (optional)
+
+	[[ -z ${wrapper} ]] && die "make_wrapper requires at least <wrapper>"
+
+	# default bin to wrapper if not given
+	[[ -z ${bin} ]] && bin=${wrapper}
+
 	local tmpwrapper="${T}/tmp.wrapper.${wrapper##*/}"
 
+	# --------------------------------------------------------------------
+	# build the script
+	# --------------------------------------------------------------------
 	(
-	echo '#!/bin/sh'
-	if [[ -n ${libdir} ]] ; then
-		local var
-		if [[ ${CHOST} == *-darwin* ]] ; then
-			var=DYLD_LIBRARY_PATH
-		else
-			var=LD_LIBRARY_PATH
-		fi
-		sed 's/^X//' <<-EOF || die
-			if [ "\${${var}+set}" = "set" ] ; then
-			X	export ${var}="\${${var}}:${EPREFIX}${libdir}"
-			else
-			X	export ${var}="${EPREFIX}${libdir}"
-			fi
-		EOF
-	fi
-	[[ -n ${chdir} ]] && printf 'cd "%s" &&\n' "${EPREFIX}${chdir}"
-	# We don't want to quote ${bin} so that people can pass complex
-	# things as ${bin} ... "./someprog --args"
-	printf 'exec %s "$@"\n' "${bin/#\//${EPREFIX}/}"
-	) > "${tmpwrapper}"
-	chmod go+rx "${tmpwrapper}"
+		printf '%s\n' '#!/bin/sh'
 
-	if [[ -n ${path} ]] ; then
-		(
+		if [[ -n ${libdir} ]]; then
+			# expand EPREFIX at build time, so runtime shell sees a literal path
+			local abs_lib="${EPREFIX}${libdir#/}"
+			cat <<-SH
+				# prepend ${abs_lib} to LD_LIBRARY_PATH if not already present
+				new_path="${abs_lib}"
+				case ":\\\${LD_LIBRARY_PATH:-}:" in
+				    *:"\${new_path}":*) ;;                                # already there
+				    ''|:)  LD_LIBRARY_PATH="\${new_path}" ;;              # was empty
+				    *)     LD_LIBRARY_PATH="\${LD_LIBRARY_PATH:+\${LD_LIBRARY_PATH}:}\${new_path}" ;;
+				esac
+				export LD_LIBRARY_PATH
+			SH
+		fi
+
+		# optional working directory
+		if [[ -n ${chdir} ]]; then
+			printf 'cd "%s" || exit 1\n' "${EPREFIX}${chdir#/}"
+		fi
+
+		# exec target (prefix absolute path with EPREFIX if needed)
+		if [[ ${bin} == /* ]]; then
+			printf 'exec "%s" "$@"\n' "${EPREFIX}${bin#/}"
+		else
+			printf 'exec %s "$@"\n' "${bin}"
+		fi
+	) > "${tmpwrapper}" || die
+
+	chmod 0755 "${tmpwrapper}" || die
+
+	# --------------------------------------------------------------------
+	# install
+	# --------------------------------------------------------------------
+	if [[ -n ${path} ]]; then
 		exeopts -m 0755
 		exeinto "${path}"
-		newexe "${tmpwrapper}" "${wrapper}"
-		) || die
+		newexe "${tmpwrapper}" "${wrapper}" || die
 	else
-		newbin "${tmpwrapper}" "${wrapper}"
+		newbin "${tmpwrapper}" "${wrapper}" || die
 	fi
 }
 
-fi
+fi  # _WRAPPER_ECLASS

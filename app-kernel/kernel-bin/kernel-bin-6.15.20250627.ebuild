@@ -49,8 +49,43 @@ src_install() {
 
     export KERNEL_VERSION=$(make -s kernelrelease)
 
-    rm -f /usr/lib/modules/"${KERNEL_VERSION}"/build
-    dosym -r /usr/src/linux /usr/lib/modules/"${KERNEL_VERSION}"/build
+    local kverdir="${ED}/usr/src/linux-${PV}"
+    mkdir -p "${kverdir}"
+
+    # Required for out-of-tree module builds
+    cp -a "${S}/Makefile" "${kverdir}/"
+    cp -a "${S}/.config" "${kverdir}/"
+    cp -a "${S}/Module.symvers" "${kverdir}/" 2>/dev/null || true
+    cp -a "${S}/Kconfig" "${kverdir}/" 2>/dev/null || true
+
+    cp -a "${S}/include" "${kverdir}/"
+    cp -a "${S}/arch/$(uname -m)/include" "${kverdir}/arch/$(uname -m)/"
+    cp -a "${S}/scripts" "${kverdir}/"
+    cp -a "${S}/tools" "${kverdir}/" 2>/dev/null || true
+
+    # Generated headers and version info
+    if [ -d "${S}/include/generated" ]; then
+        cp -a "${S}/include/generated" "${kverdir}/include/"
+    fi
+    if [ -f "${S}/include/generated/uapi/linux/version.h" ]; then
+        mkdir -p "${kverdir}/include/generated/uapi/linux/"
+        cp -a "${S}/include/generated/uapi/linux/version.h" "${kverdir}/include/generated/uapi/linux/"
+    fi
+
+    case "$(uname -m)" in
+        x86_64|x86)
+            cp -a "${S}/arch/x86_64" "${kverdir}/arch/"
+            cp -a "${S}/arch/x86" "${kverdir}/arch/"
+            ;;
+        arm64|aarch64)
+            cp -a "${S}/arch/arm64" "${kverdir}/arch/"
+            ;;
+        *)
+            cp -a "${S}/arch/$(uname -m)" "${kverdir}/arch/" 2>/dev/null || true
+            ;;
+    esac
+
+    dosym -r /usr/src/linux-${PV} /usr/src/linux
 }
 
 pkg_preinst() {

@@ -19,7 +19,7 @@ RESTRICT="!test? ( test )"
 RDEPEND="
 	>=app-tex/qpdf-8.3.0:=
 	fonts/fontconfig
-	xgui-misc/lcms
+	xgui-lib/lcms
 
 	exif? ( xmedia-lib/libexif )
 	dbus? ( app-core/dbus )

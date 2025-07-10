@@ -30,7 +30,7 @@ RESTRICT="!test? ( test )"
 
 DEPEND="
 	xmedia-lib/libglvnd
-	xgui-misc/libsndfile
+	xgui-lib/libsndfile
 	ladspa? ( xmedia-lib/ladspa-sdk )
 "
 RDEPEND="${DEPEND}"

@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	xgui-misc/startup-notification
+	xgui-tools/startup-notification
 	xgui-tools/xcb-util-xrm
 	xgui-lib/yajl
 "

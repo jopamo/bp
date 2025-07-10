@@ -2,11 +2,16 @@
 
 EAPI=8
 
+BRANCH_NAME="$(ver_cut 1-2)"
+SNAPSHOT=489a08e2fa6698869e95caacbab4ee8bc3455f6b
+
 inherit autotools edo multiprocessing toolchain-funcs user
 
 DESCRIPTION="A persistent caching system, key-value, and data structures database"
 HOMEPAGE="https://github.com/redis/redis"
-SRC_URI="https://download.redis.io/releases/${P}.tar.gz"
+
+SRC_URI="https://github.com/redis/redis/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="BSD Boost-1.0"
 SLOT="0"
@@ -100,8 +105,6 @@ src_compile() {
 
 	if use jemalloc; then
 		myconf+=( MALLOC=jemalloc )
-	elif use tcmalloc; then
-		myconf+=( MALLOC=tcmalloc )
 	else
 		myconf+=( MALLOC=libc )
 	fi
@@ -162,8 +165,8 @@ src_install() {
 
 	dobin src/redis-cli
 	dobin src/redis-benchmark src/redis-server src/redis-check-aof src/redis-check-rdb
-	fperms 0750 /usr/sbin/redis-benchmark
-	dosym redis-server /usr/sbin/redis-sentinel
+	fperms 0750 /usr/bin/redis-benchmark
+	dosym redis-server /usr/bin/redis-sentinel
 }
 
 pkg_preinst() {

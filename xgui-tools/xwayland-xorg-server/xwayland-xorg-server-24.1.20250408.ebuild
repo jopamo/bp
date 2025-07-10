@@ -34,8 +34,8 @@ DEPEND="
 	xgui-lib/rgb
 	xgui-lib/xbitmaps
 	xgui-lib/xtrans
-	xgui-misc/iceauth
-	xgui-misc/xkbcomp
+	xgui-tools/iceauth
+	xgui-tools/xkbcomp
 	xgui-misc/xkeyboard-config
 	xgui-tools/mesa
 	xgui-tools/xauth

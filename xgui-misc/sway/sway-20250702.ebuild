@@ -27,9 +27,9 @@ DEPEND="
 	xgui-lib/pixman
 	xgui-lib/wayland
 	xgui-lib/wlroots
-	swaybg? ( xgui-misc/swaybg )
-	swayidle? ( xgui-misc/swayidle )
-	swaylock? ( xgui-misc/swaylock )
+	swaybg? ( xgui-app/swaybg )
+	swayidle? ( xgui-app/swayidle )
+	swaylock? ( xgui-app/swaylock )
 "
 RDEPEND="xgui-misc/xkeyboard-config"
 BDEPEND="

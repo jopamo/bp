@@ -166,6 +166,6 @@ src_install() {
 
 	if use server; then
 		insinto /etc/sysctl.d
-		doins "${FILESDIR}/sysctl-server.conf"
+		doins "${FILESDIR}/sysctl-hardening-server.conf"
 	fi
 }

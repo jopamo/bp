@@ -72,7 +72,6 @@ newtmpfiles() {
 
 tmpfiles_process() {
 	[[ ${EBUILD_PHASE} == postinst ]] || die "${FUNCNAME}: Only valid in pkg_postinst"
-	[[ ${#} -gt 0 ]] || die "${FUNCNAME}: Must specify at least one filename"
 
 	if [[ ${ROOT:-/} != / ]]; then
 		ewarn "Warning: tmpfiles.d not processed on ROOT != /. Run 'tmpfiles --create' after booting into the ROOT."
@@ -80,13 +79,47 @@ tmpfiles_process() {
 	fi
 
 	if type systemd-tmpfiles &> /dev/null; then
-		systemd-tmpfiles --create "$@"
+		systemd-tmpfiles --create
 	elif type tmpfiles &> /dev/null; then
-		tmpfiles --create "$@"
+		tmpfiles --create
 	fi
 	if [[ $? -ne 0 ]]; then
 		ewarn "The tmpfiles processor exited with a non-zero exit code"
 	fi
+}
+
+# install one or more *.conf files with default perms
+dosysusers() {
+	insopts -m 0644
+	insinto /usr/lib/sysusers.d
+	doins "$@"
+}
+
+# install a single file, renaming on the fly, and sanity-check the suffix
+newsysusers() {
+	[[ $2 != *.conf ]] && die "sysusers.d files must end with .conf"
+	insopts -m 0644
+	insinto /usr/lib/sysusers.d
+	newins "$@"
+}
+
+sysusers_process() {
+	[[ ${EBUILD_PHASE} == postinst ]] || die "${FUNCNAME}: Only valid in pkg_postinst"
+
+	# skip when merging to an alternative ROOT, advise manual run later
+	if [[ ${ROOT:-/} != / ]]; then
+		ewarn "Warning: sysusers.d not processed on ROOT != /. Run 'systemd-sysusers' after booting into the ROOT"
+		return
+	fi
+
+	# prefer the systemd implementation, fall back to busybox sysusers if present
+	if type systemd-sysusers &>/dev/null; then
+		systemd-sysusers           # no arguments → process the whole directory
+	elif type sysusers &>/dev/null; then
+		sysusers                   # busybox or compatible helper
+	fi
+
+	[[ $? -eq 0 ]] || ewarn "The sysusers processor exited with a non-zero exit code"
 }
 
 # ----------------- Systemd -----------------
@@ -182,45 +215,65 @@ udev_newrules() {
 }
 
 make_wrapper() {
-    local wrapper_name=$1 binary=$2 target_dir=$3 library_dir=$4 custom_path=$5
-    local temp_wrapper="${T}/temp_wrapper_${wrapper_name##*/}"
+	local wrapper=$1        # installed name
+	local bin=$2            # command to exec (default = wrapper)
+	local chdir=$3          # working dir (optional)
+	local libdir=$4         # new LD_LIBRARY_PATH entry (optional)
+	local path=$5           # install dir for the wrapper (optional)
 
-    {
-        echo '#!/bin/bash'
+	[[ -z ${wrapper} ]] && die "make_wrapper requires at least <wrapper>"
 
-        if [[ -n $library_dir ]]; then
-            local lib_var
-            if [[ $CHOST == *-darwin* ]]; then
-                lib_var="DYLD_LIBRARY_PATH"
-            else
-                lib_var="LD_LIBRARY_PATH"
-            fi
+	# default bin to wrapper if not given
+	[[ -z ${bin} ]] && bin=${wrapper}
 
-            echo 'if [ -n "${'"${lib_var}"'+set}" ]; then'
-            echo "    export ${lib_var}=\"\${${lib_var}}:${EPREFIX}${library_dir}\""
-            echo 'else'
-            echo "    export ${lib_var}=\"${EPREFIX}${library_dir}\""
-            echo 'fi'
-        fi
+	local tmpwrapper="${T}/tmp.wrapper.${wrapper##*/}"
 
-        if [[ -n $target_dir ]]; then
-            echo "cd \"${EPREFIX}${target_dir}\" || exit 1"
-        fi
+	# --------------------------------------------------------------------
+	# build the script
+	# --------------------------------------------------------------------
+	(
+		printf '%s\n' '#!/bin/sh'
 
-        echo "exec ${EPREFIX}${binary} \"\$@\""
-    } > "$temp_wrapper"
+		if [[ -n ${libdir} ]]; then
+			# expand EPREFIX at build time, so runtime shell sees a literal path
+			local abs_lib="${EPREFIX}${libdir#/}"
+			cat <<-SH
+				# prepend ${abs_lib} to LD_LIBRARY_PATH if not already present
+				new_path="${abs_lib}"
+				case ":\\\${LD_LIBRARY_PATH:-}:" in
+				    *:"\${new_path}":*) ;;                                # already there
+				    ''|:)  LD_LIBRARY_PATH="\${new_path}" ;;              # was empty
+				    *)     LD_LIBRARY_PATH="\${LD_LIBRARY_PATH:+\${LD_LIBRARY_PATH}:}\${new_path}" ;;
+				esac
+				export LD_LIBRARY_PATH
+			SH
+		fi
 
-    chmod +x "$temp_wrapper"
+		# optional working directory
+		if [[ -n ${chdir} ]]; then
+			printf 'cd "%s" || exit 1\n' "${EPREFIX}${chdir#/}"
+		fi
 
-    if [[ -n $custom_path ]]; then
-        (
-            exeopts -m 0755
-            exeinto "$custom_path"
-            newexe "$temp_wrapper" "$wrapper_name"
-        )
-    else
-        newbin "$temp_wrapper" "$wrapper_name"
-    fi
+		# exec target (prefix absolute path with EPREFIX if needed)
+		if [[ ${bin} == /* ]]; then
+			printf 'exec "%s" "$@"\n' "${EPREFIX}${bin#/}"
+		else
+			printf 'exec %s "$@"\n' "${bin}"
+		fi
+	) > "${tmpwrapper}" || die
+
+	chmod 0755 "${tmpwrapper}" || die
+
+	# --------------------------------------------------------------------
+	# install
+	# --------------------------------------------------------------------
+	if [[ -n ${path} ]]; then
+		exeopts -m 0755
+		exeinto "${path}"
+		newexe "${tmpwrapper}" "${wrapper}" || die
+	else
+		newbin "${tmpwrapper}" "${wrapper}" || die
+	fi
 }
 
 fi

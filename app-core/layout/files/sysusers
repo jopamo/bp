@@ -1,29 +1,19 @@
-# default groups
-#g sys 3 - -
-#g mem 8 - -
-#g wheel 10 - -
-#g ftp 11 - -
-#g mail 12 - -
-#g log 19 - -
-#g smmsp 25 - -
-#g proc 26 - -
-#g games 50 - -
-#g lock 54 - -
-#g network 90 - -
-#g floppy 94 - -
-#g scanner 96 - -
-#g power 98 - -
+# ── core sysusers ───────────────────────────
+g root      0    - -
+g wheel    10    - -
+g adm       4    - -
+g tty       5    - -
+g disk      6    - -
+g lp        7    - -
+g kmem      9    - -
+g audio    18    - -
+g video    27    - -
+g kvm      78    - -
+g input    97    - -
+g users   100    - -
+g utmp    406    - -
+g uuidd   997    - -
+g nobody 65534   - -
 
-# default users
-#u bin 1 - -
-#u daemon 2 - -
-#u mail 8 - /var/spool/mail
-#u ftp 14 - /srv/ftp
-#u http 33 - /srv/http
-u man 44 - -
-
-# default membership
-#m bin daemon
-#m bin sys
-#m daemon adm
-#m daemon bin
+u  root   0:0  "Super User" /root /usr/bin/bash
+u! nobody 65534:65534 "Kernel Overflow User" -

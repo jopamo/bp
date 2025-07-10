@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="build gentoo-dev ipc native-extensions
-	gentoo_repo tmpfilesd sysusersd +rsync-verify selinux test xattr"
+	gentoo_repo tmpfilesd +rsync-verify selinux test xattr"
 
 DEPEND="
 	app-build/patch
@@ -186,14 +186,10 @@ pkg_preinst() {
 		chmod g+s,ug+rwx "${ED}"/var/log/portage{,/elog}
 	fi
 
-	if use sysusersd; then
-		insopts -m 0644
-		insinto /usr/lib/sysusers.d
-		newins "${FILESDIR}/portage-sysusers" portage.conf
-	else
-		enewgroup portage 250
-		enewuser portage 250 -1 /var/lib/portage/home portage
-	fi
+	newsysusers "${FILESDIR}/${PN}-sysusers" "${PN}.conf"
 }
 
+pkg_postinst() {
+	sysusers_process
+}
 

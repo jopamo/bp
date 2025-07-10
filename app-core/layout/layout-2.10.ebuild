@@ -2,13 +2,15 @@
 
 EAPI=8
 
+inherit doins
+
 DESCRIPTION="Base Configuration and File Structure"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="ipv6 router server systemd sysusersd tmpfilesd user-namespaces xdp"
+IUSE="ipv6 router server systemd tmpfilesd user-namespaces xdp"
 
 S=${WORKDIR}
 
@@ -113,13 +115,9 @@ src_install() {
 
 	keepdir /usr/local/lib
 
-	if use systemd ; then
-		if use sysusersd; then
-			insopts -m 0644
-			insinto /usr/lib/sysusers.d
-			newins sysusers 1g4.conf
-		fi
+	newsysusers sysusers 1g4.conf
 
+	if use systemd ; then
 		if use tmpfilesd; then
 			insopts -m 0644
 			insinto /usr/lib/tmpfiles.d
@@ -168,4 +166,8 @@ src_install() {
 		insinto /etc/sysctl.d
 		doins "${FILESDIR}/sysctl-hardening-server.conf"
 	fi
+}
+
+pkg_postinst() {
+	sysusers_process
 }

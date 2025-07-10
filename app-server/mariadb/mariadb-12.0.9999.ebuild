@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic toolchain-funcs user cmake git-r3
+inherit flag-o-matic toolchain-funcs cmake git-r3
 
 HOMEPAGE="https://mariadb.org/"
 DESCRIPTION="An enhanced, drop-in replacement for MySQL"
@@ -13,7 +13,7 @@ LICENSE="GPL-2 LGPL-2.1+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug kerberos numa profiling static systemd sysusersd tmpfilesd test"
+IUSE="debug kerberos numa profiling static systemd test"
 
 DEPEND="
 	lib-core/libxml2
@@ -33,11 +33,6 @@ BDEPEND="
 filter-flags -Wl,-z,defs -flto\=\*
 append-cxxflags -felide-constructors
 append-flags -fno-strict-aliasing
-
-pkg_setup() {
-	enewgroup mysql 60 || die "problem adding 'mysql' group"
-	enewuser mysql 60 -1 /dev/null mysql || die "problem adding 'mysql' user"
-}
 
 src_configure(){
 	CMAKE_BUILD_TYPE="Release"
@@ -74,8 +69,8 @@ src_configure(){
 		-DINSTALL_SCRIPTDIR=bin
 		-DINSTALL_SQLBENCHDIR=""
 		-DINSTALL_SUPPORTFILESDIR="${EPREFIX}/usr/share/mariadb"
-		-DINSTALL_SYSTEMD_SYSUSERSDIR=$(usex sysusersd "${EPREFIX}/usr/lib/sysusers.d" "false")
-		-DINSTALL_SYSTEMD_TMPFILESDIR=$(usex tmpfilesd "${EPREFIX}/usr/lib/tmpfiles.d" "false")
+		-DINSTALL_SYSTEMD_SYSUSERSDIR="${EPREFIX}/usr/lib/sysusers.d"
+		-DINSTALL_SYSTEMD_TMPFILESDIR="${EPREFIX}/usr/lib/tmpfiles.d"
 		-DINSTALL_SYSTEMD_UNITDIR=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 		-DINSTALL_UNIX_ADDRDIR="${EPREFIX}/run/mysqld/mysqld.sock"
 		-DMYSQL_DATADIR="${EPREFIX}/var/lib/mysql"

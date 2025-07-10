@@ -1,0 +1,3 @@
+# Unbound recursive DNS resolver
+g unbound   -   - -
+u! unbound  -   "Unbound DNS resolver" /var/lib/unbound /usr/bin/nologin

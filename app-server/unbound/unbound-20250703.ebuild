@@ -27,8 +27,6 @@ DEPEND="
 			app-lang/swig )"
 
 pkg_setup() {
-	enewgroup unbound
-	enewuser unbound -1 -1 /var/unbound unbound
 	# improve security on existing installs (bug #641042)
 	# as well as new installs where unbound homedir has just been created
 	if [[ -d "${ROOT}"/var/unbound ]]; then
@@ -47,12 +45,6 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
 		$(use_enable debug)
 		$(use_enable dnscrypt)
 		$(use_enable ecdsa)
@@ -60,7 +52,7 @@ src_configure() {
 		$(use_enable static-libs static)
 		$(use_enable systemd)
 		--disable-dnstap
-		--disable-flto
+		--enable-flto
 		--disable-rpath
 		--enable-pie
 		--enable-relro-now
@@ -98,4 +90,12 @@ src_install() {
 	insinto /etc/unbound
 	insopts -m 0755
 	doins "${FILESDIR}/unbound.conf"
+}
+
+pkg_preinst() {
+	newsysusers "${FILESDIR}/${PN}-sysusers" "${PN}.conf"
+}
+
+pkg_postinst() {
+	sysusers_process
 }

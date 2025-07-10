@@ -1,0 +1,2 @@
+g systemd-resolve   -   - -
+u systemd-resolve   -   - /run/systemd/resolve  /usr/bin/nologin

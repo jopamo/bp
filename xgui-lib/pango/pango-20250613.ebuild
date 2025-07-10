@@ -23,8 +23,8 @@ DEPEND="
 	lib-dev/json-glib
 	xgui-lib/cairo
 	xgui-lib/libXft
-	xgui-misc/freetype
-	xgui-misc/harfbuzz[glib(+),truetype(+)]
+	xgui-lib/freetype
+	xgui-lib/harfbuzz[glib(+),truetype(+)]
 	introspection? ( lib-dev/gobject-introspection )
 "
 BDEPEND="

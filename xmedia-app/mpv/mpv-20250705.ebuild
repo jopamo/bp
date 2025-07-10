@@ -40,7 +40,7 @@ DEPEND="
 	)
 	drm? ( xgui-lib/libdrm )
 	jpeg? ( xmedia-lib/libjpeg-turbo )
-	lcms? ( xgui-misc/lcms )
+	lcms? ( xgui-lib/lcms )
 	lua? ( app-lang/luajit )
 	pipewire? ( xgui-misc/pipewire )
 	pulseaudio? ( xgui-misc/pulseaudio )

@@ -2,17 +2,20 @@
 
 EAPI=8
 
-inherit user flag-o-matic
+inherit flag-o-matic doins
 
 DESCRIPTION="a man replacement that utilizes gdbm instead of flat files"
 HOMEPAGE="http://www.nongnu.org/man-db/"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+
+SNAPSHOT=2b38f74972ab09985b0f7a6716a08c657ff716d8
+SRC_URI="https://gitlab.com/man-db/man-db/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs systemd sysusersd tmpfilesd zlib"
+IUSE="static-libs systemd tmpfilesd zlib"
 
 DEPEND="
 	lib-core/libpipeline
@@ -23,13 +26,17 @@ DEPEND="
 "
 BDEPEND="app-dev/pkgconf"
 
-filter-flags -Wl,-z,defs
+src_prepare() {
+	rm -rf gnulib
+	cp -r "${EROOT}"/usr/share/gnulib gnulib
+	#cd gnulib
+	#git reset --hard 0a12fa9
+	#cd ..
 
-pkg_setup() {
-	if ! use sysusersd; then
-		enewgroup man 15
-		enewuser man 13 -1 /usr/share/man man
-	fi
+	./bootstrap || die
+
+	default
+	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
 }
 
 src_configure() {
@@ -39,12 +46,20 @@ src_configure() {
 		--docdir='$(datarootdir)'/doc/${PF}
 		--with-systemdtmpfilesdir=$(usex tmpfilesd "${EPREFIX}"/usr/lib/tmpfiles.d "false")
 		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
-		--enable-setuid
+		--disable-setuid
 		--enable-cache-owner=man
-		--with-sections="1 1p 8 2 3 3p 4 5 6 7 9 0p tcl n l p o 1x 2x 3x 4x 5x 6x 7x 8x"
+		--with-sections="1 1p 8 2 3 3p 4 5 6 7 9 0p tcl n l p"
 		--disable-nls
 		$(use_enable static-libs static)
 		--with-db=gdbm
 	)
 	econf "${myconf[@]}"
+}
+
+pkg_preinst() {
+	newsysusers "${FILESDIR}/${PN}-sysusers" "${PN}.conf"
+}
+
+pkg_postinst() {
+	sysusers_process
 }

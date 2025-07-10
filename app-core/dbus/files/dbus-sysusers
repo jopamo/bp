@@ -1,1 +1,3 @@
-u messagebus 101 "System Message Bus"
+# D-Bus service account
+g messagebus      -   - -
+u! messagebus   101  - "System Message Bus" /nonexistent /usr/bin/nologin

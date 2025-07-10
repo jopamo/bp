@@ -1,0 +1,12 @@
+# ── systemd runtime helpers ───────────────
+g systemd-journal     -   - -
+
+g systemd-resolve     -   - -
+u! systemd-resolve    -   - /run/systemd/resolve  /usr/bin/nologin
+
+g systemd-network     -   - -
+u! systemd-network    -   - /run/systemd/netif    /usr/bin/nologin
+
+g systemd-coredump    -   - -
+u! systemd-coredump   -   - /var/lib/systemd/coredump /usr/bin/nologin
+

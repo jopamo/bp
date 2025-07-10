@@ -9,7 +9,7 @@ inherit flag-o-matic linux-info meson toolchain-funcs doins xdg
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
 SNAPSHOT=162e5e4a77931e4a7a7c9b6f86f09a70ec52a3e5
-SRC_URI="https://github.com/systemd/systemd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SRC_URI="https://github.com/systemd/systemd/archive/${SNAPSHOT}.tar.gz -> systemd-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/systemd-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
@@ -17,9 +17,9 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="binfmt blkid bootloader bpf-framework coredump dbus devmode dhcp4 elfutils efi gcrypt gshadow
-+hostnamed +hwdb importd kmod ldconfig localed logind machined +networkd
++hostnamed +hwdb importd kmod kvm ldconfig localed logind machined +networkd
 oomd pam pcre pstore resolve rfkill systemd-update timedated
-+userdb +utmp +vconsole xkb"
+tmpfilesd +userdb +utmp +vconsole xkb"
 
 REQUIRED_USE="elibc_musl? ( !gshadow !utmp )"
 
@@ -49,6 +49,7 @@ DEPEND="
 	logind? ( app-core/dbus )
 	pam? ( lib-core/pam )
 	pcre? ( lib-core/libpcre2 )
+	tmpfilesd? ( app-core/dbus )
 	xkb? ( xgui-lib/libxkbcommon )
 "
 BDEPEND="
@@ -65,9 +66,8 @@ pkg_pretend() {
 			~CRYPTO_HMAC ~CRYPTO_SHA256 ~CRYPTO_USER_API_HASH
 			~!GRKERNSEC_PROC ~!IDE ~!SYSFS_DEPRECATED ~!SYSFS_DEPRECATED_V2"
 
-		#use tmpfilesd
-		CONFIG_CHECK+=" ~TMPFS_POSIX_ACL"
-		CONFIG_CHECK+=" ~DEVTMPFS ~TMPFS_XATTR"
+		use tmpfilesd && CONFIG_CHECK+=" ~TMPFS_POSIX_ACL"
+		use tmpfilesd && CONFIG_CHECK+=" ~DEVTMPFS ~TMPFS_XATTR"
 
 		use pstore && CONFIG_CHECK+=" ~ACPI_APEI"
 
@@ -135,6 +135,7 @@ src_configure() {
 		$(meson_use resolve)
 		$(meson_use rfkill)
 		$(meson_use timedated)
+		$(meson_use tmpfilesd tmpfiles)
 		$(meson_use userdb)
 		$(meson_use utmp)
 		$(meson_use vconsole)
@@ -183,7 +184,6 @@ src_configure() {
 		-Dstandalone-binaries=true
 		-Dsysusers=true
 		-Dtimesyncd=false
-		-Dtmpfiles=true
 		-Dtpm=true
 		-Dsbat-distro-url="https://1g4.org/"
 	)
@@ -192,98 +192,11 @@ src_configure() {
 }
 
 src_install() {
-	meson_src_install
+	newbin "${WORKDIR}/${P}"-build/systemd-shutdown.standalone shutdown
+	newbin "${WORKDIR}/${P}"-build/systemd-sysusers.standalone sysusers
+	newbin "${WORKDIR}/${P}"-build/systemd-tmpfiles.standalone tmpfiles
 
-	dosym -r /etc/sysctl.conf /etc/sysctl.d/99-sysctl.conf
-
-	rm "${ED}"/usr/share/factory/etc/issue || die
-
-	keepdir /var/log/journal
-	keepdir /var/lib/systemd
-
-	mkdir -p "${ED}"/etc/systemd/user && keepdir /etc/systemd/user
-
-	use xkb || rm -rf "${ED}"/etc/X11 "${ED}"/etc/xdg/
-
-	use networkd && mkdir -p "${ED}"/etc/systemd/network
-
-	use resolve && dosym -r /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
-
-	use dhcp4 && echo '[Match]
-Name=en*
-
-[Network]
-DHCP=ipv4' > "${ED}"/etc/systemd/network/ipv4dhcp.network
-
-	sed -i "s/\#Audit\=yes/Audit\=no/g" "${ED}"/etc/systemd/journald.conf || die
-
-	sed -i "s/\#SystemMaxUse\=/SystemMaxUse\=128M/g" "${ED}"/etc/systemd/journald.conf || die
-
-	sed -i '/ConditionNeedsUpdate/d' "${ED}"/usr/lib/systemd/system/systemd-sysusers.service || die
-
-	rm "${ED}"/usr/lib/sysusers.d/basic.conf
-
-	for x in cdrom dialout render sgx tape ; do
-		sed -i "/${x}/d" "${ED}"/usr/lib/udev/rules.d/50-udev-default.rules || die
+	for bin in sysusers tmpfiles shutdown; do
+    	patchelf --remove-rpath "${ED}"/usr/bin/${bin} || die
 	done
-
-	mkdir -p "${ED}"/usr/lib/systemd/user/
-	cat > "${ED}"/usr/lib/systemd/user/ssh-agent.service <<- EOF || die
-		[Unit]
-		Description=SSH key agent
-		After=basic.target
-		Requires=basic.target
-
-		[Service]
-		Type=forking
-		Environment=SSH_AUTH_SOCK=%t/ssh-agent.socket
-		ExecStart=/usr/bin/ssh-agent -a $SSH_AUTH_SOCK
-		ExecStop=/usr/bin/ssh-agent -k
-		Restart=always
-		RemainAfterExit=yes
-
-		[Install]
-		WantedBy=default.target
-		EOF
-
-	cat > "${ED}"/usr/lib/systemd/user/gpg-agent.service <<- EOF || die
-		[Unit]
-		Description=GnuPG private key agent
-		After=basic.target
-		Wants=basic.target
-
-		[Service]
-		Type=simple
-		ExecStart=/usr/bin/gpgconf --launch gpg-agent
-		ExecStop=/usr/bin/gpgconf --kill gpg-agent
-		RemainAfterExit=yes
-
-		[Install]
-		WantedBy=default.target
-		EOF
-}
-
-pkg_postrm() {
-    xdg_mimeinfo_database_update
-}
-
-pkg_preinst() {
-	newsysusers "${FILESDIR}/${PN}-sysusers" "${PN}.conf"
-	use resolve && newsysusers "${FILESDIR}/resolve-sysusers" "${PN}-resolve.conf"
-	use networkd && newsysusers "${FILESDIR}/network-sysusers" "${PN}-network.conf"
-	use coredump && newsysusers "${FILESDIR}/coredump-sysusers" "${PN}-coredump.conf"
-}
-
-pkg_postinst() {
-	sysusers_process
-
-	journalctl --update-catalog
-
-	use hwdb && systemd-hwdb update --root="${EROOT%/}"
-	udevadm control --reload
-
-	systemctl reenable getty@tty1.service remote-fs.target
-	use networkd && systemctl reenable systemd-networkd.service
-
-    xdg_mimeinfo_database_update
 }

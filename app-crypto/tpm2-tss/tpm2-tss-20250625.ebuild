@@ -35,7 +35,7 @@ src_configure() {
 		--disable-defaultflags
 		--disable-weakcrypto
 		--with-runstatedir=/run
-		--without-sysusersdir
+		--with-sysusersdir
 	)
 
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
@@ -54,8 +54,6 @@ src_install() {
 }
 
 pkg_postinst() {
-	enewgroup tss -1
-	enewuser tss -1 -1 /var/lib/tpm2-tss tss
-
-	systemd-tmpfiles --create
+	sysusers_process
+	tmpfiles_process
 }

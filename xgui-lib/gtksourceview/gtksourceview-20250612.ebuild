@@ -4,7 +4,7 @@ EAPI=8
 
 inherit meson xdg
 
-DESCRIPTION="Low-level pixel manipulation routines"
+DESCRIPTION="Syntax highlighting source code editor widget for GTK"
 HOMEPAGE="https://www.x.org/wiki/"
 SNAPSHOT=2368a3af1c5950f8571d538da3593767ebd68171
 SRC_URI="https://gitlab.gnome.org/GNOME/gtksourceview/-/archive/${SNAPSHOT}/gtksourceview-${SNAPSHOT}.tar.bz2"

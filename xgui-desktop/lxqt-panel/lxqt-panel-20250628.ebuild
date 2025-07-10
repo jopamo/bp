@@ -28,7 +28,7 @@ DEPEND="
 	xgui-lib/liblxqt
 	xgui-lib/lxqt-globalkeys
 	xgui-lib/qtbase:6
-	xgui-misc/menu-cache
+	xgui-tools/menu-cache
 	cpuload? ( lib-core/libstatgrab )
 	kbindicator? ( xgui-lib/libxkbcommon )
 	networkmonitor? ( lib-core/libstatgrab )

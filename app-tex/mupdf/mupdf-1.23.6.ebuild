@@ -19,8 +19,8 @@ IUSE="javascript opengl ssl X"
 REQUIRED_USE="opengl? ( javascript )"
 
 LIB_DEPEND="
-	xgui-misc/freetype
-	xgui-misc/harfbuzz
+	xgui-lib/freetype
+	xgui-lib/harfbuzz
 	xmedia-lib/jbig2dec
 	xmedia-lib/libpng
 	xmedia-lib/openjpeg
@@ -31,7 +31,7 @@ LIB_DEPEND="
 "
 RDEPEND="${LIB_DEPEND}"
 DEPEND="${RDEPEND}
-	xgui-misc/freeglut
+	xgui-lib/freeglut
 	app-dev/pkgconf
 	app-compression/bzip2
 	xgui-lib/libXau

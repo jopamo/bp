@@ -20,7 +20,7 @@ IUSE="debug exif"
 DEPEND="
 	lib-util/glib
 	xgui-lib/gtk3
-	xgui-misc/menu-cache
+	xgui-tools/menu-cache
 	xgui-misc/shared-mime-info
 	exif? ( xmedia-lib/libexif )
 "

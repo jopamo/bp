@@ -21,7 +21,7 @@ RESTRICT="test"
 DEPEND="
 	lib-dev/nss
 	fonts/fontconfig
-	xgui-misc/freetype
+	xgui-lib/freetype
 	lib-core/zlib
 	cairo? (
 		lib-util/glib

@@ -7,7 +7,7 @@ MY_PV="${PV/-r*/}"
 
 inherit unpacker xdg
 
-DESCRIPTION="Brave Browser: Secure, Fast & Private Web Browser with Adblocker"
+DESCRIPTION="All-in-one voice and text chat for gamers and communities"
 HOMEPAGE="https://brave.com"
 SRC_URI="amd64? ( https://dl.discordapp.net/apps/linux/${PV}/${P}.tar.gz )"
 S="${WORKDIR}"

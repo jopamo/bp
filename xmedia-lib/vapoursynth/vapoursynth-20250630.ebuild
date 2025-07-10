@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="vspipe -debug -guard shared -static-libs"
 
-DEPEND="xgui-misc/zimg"
+DEPEND="xgui-lib/zimg"
 
 src_prepare() {
 	default

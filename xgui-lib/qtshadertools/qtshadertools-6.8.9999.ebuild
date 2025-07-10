@@ -4,7 +4,7 @@ EAPI=8
 
 inherit cmake
 
-DESCRIPTION="Multimedia (audio, video, radio, camera) library for the Qt5 framework"
+DESCRIPTION="Shader tools module for the Qt framework"
 HOMEPAGE="https://www.qt.io/"
 
 if [[ ${PV} == *9999 ]]; then

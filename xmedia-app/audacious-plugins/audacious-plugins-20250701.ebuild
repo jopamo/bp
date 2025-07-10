@@ -20,7 +20,7 @@ sdl sid sndfile soxr speedpitch vorbis wavpack"
 
 DEPEND="
 	lib-dev/dbus-glib
-	xgui-misc/mpg123
+	xgui-app/mpg123
 	xmedia-app/ffmpeg
 	xmedia-app/audacious
 	aac? ( xmedia-live-lib/faad2 )
@@ -53,7 +53,7 @@ DEPEND="
 	scrobbler? ( app-net/curl )
 	sdl? ( xmedia-live-lib/libsdl2[sound] )
 	sid? ( xmedia-live-lib/libsidplayfp )
-	sndfile? ( xgui-misc/libsndfile )
+	sndfile? ( xgui-lib/libsndfile )
 	soxr? ( xmedia-live-lib/soxr )
 	speedpitch? ( xmedia-lib/libsamplerate )
 	vorbis? (

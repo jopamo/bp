@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit linux-info flag-o-matic user meson
+inherit linux-info flag-o-matic meson doins
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="https://dbus.freedesktop.org/"
@@ -15,7 +15,7 @@ LICENSE="|| ( AFL-2.1 GPL-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug inotify static-libs systemd sysusersd test tools tmpfilesd user-session valgrind X"
+IUSE="debug inotify static-libs systemd test tools tmpfilesd user-session valgrind X"
 
 DEPEND="
 	lib-core/expat
@@ -116,13 +116,9 @@ src_install() {
 }
 
 pkg_preinst() {
-	if use systemd && sysusersd; then
-		insopts -m 0644
-		insinto /usr/lib/sysusers.d
-		newins "${FILESDIR}/dbus-sysusers" dbus.conf
-	else
-		rm -r "${ED}"/usr/lib/sysusers.d
-		enewgroup messagebus
-		enewuser messagebus 101 -1 -1 messagebus
-	fi
+	newsysusers "${FILESDIR}/${PN}-sysusers" "${PN}.conf"
+}
+
+pkg_postinst() {
+	sysusers_process
 }

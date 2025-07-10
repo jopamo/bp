@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools user
+inherit flag-o-matic autotools doins
 
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="http://www.openssh.org/"
@@ -14,7 +14,7 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug pam pie scp ssl static systemd sysusersd test tmpfilesd utmpx wtmpx"
+IUSE="debug pam pie scp ssl static systemd test tmpfilesd utmpx wtmpx"
 
 DEPEND="
 	app-core/shadow
@@ -103,12 +103,9 @@ src_install() {
 }
 
 pkg_preinst() {
-	if use sysusersd; then
-		insopts -m 0644
-		insinto /usr/lib/sysusers.d
-		newins "${FILESDIR}/openssh-sysusers" openssh.conf
-	else
-		enewgroup sshd 22
-		enewuser sshd 22 -1 -1 sshd
-	fi
+	newsysusers "${FILESDIR}/${PN}-sysusers" "${PN}.conf"
+}
+
+pkg_postinst() {
+	sysusers_process
 }

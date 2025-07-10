@@ -8,7 +8,7 @@ inherit flag-o-matic
 
 DESCRIPTION="an optimizing compiler produced by the GNU Project supporting various programming languages"
 HOMEPAGE="https://gcc.gnu.org/"
-SNAPSHOT=a2ce1bc5daa299bd4a77f6015e67fb3ebbdb4c32
+SNAPSHOT=570b63276f6434df59c52da36b1581eb8b516762
 SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> gcc-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/gcc-${SNAPSHOT}
 
@@ -16,7 +16,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug dlang go-bootstrap isl lib-only sanitize vtv zstd"
+IUSE="debug dlang go-bootstrap isl libgomp sanitize zstd"
 
 RESTRICT="strip"
 
@@ -29,49 +29,12 @@ DEPEND="
 "
 BDEPEND="app-build/make"
 
-PATCHES=(
-	"${FILESDIR}"/0001-posix_memalign.patch
-	"${FILESDIR}"/0006-Enable-Wformat-and-Wformat-security-by-default.patch
-	"${FILESDIR}"/0007-Enable-Wtrampolines-by-default.patch
-	"${FILESDIR}"/0009-Ensure-that-msgfmt-doesn-t-encounter-problems-during.patch
-	"${FILESDIR}"/0010-Don-t-declare-asprintf-if-defined-as-a-macro.patch
-	"${FILESDIR}"/0011-libiberty-copy-PIC-objects-during-build-process.patch
-	"${FILESDIR}"/0012-libitm-disable-FORTIFY.patch
-	"${FILESDIR}"/0014-nopie.patch
-	"${FILESDIR}"/0019-build-fix-CXXFLAGS_FOR_BUILD-passing.patch
-	"${FILESDIR}"/0020-add-fortify-headers-paths.patch
-	"${FILESDIR}"/0024-use-pure-64-bit-configuration-where-appropriate.patch
-	"${FILESDIR}"/0029-gcc-go-Don-t-include-sys-user.h.patch
-)
-
 src_prepare() {
-	filter-flags -D_FORTIFY_SOURCE*
-	filter-flags -Wl,-O3
-	filter-flags -Wl,-z,combreloc
-	filter-flags -Wl,-z,defs
-	filter-flags -Wl,-z,now
-	filter-flags -Wl,-z,relro
-	filter-flags -fassociative-math
-	filter-flags -fasynchronous-unwind-tables
-	filter-flags -fcf-protection=full
-	filter-flags -fexceptions
-	filter-flags -fgraphite-identity
-	filter-flags -fipa-pta
-	filter-flags -floop-interchange
-	filter-flags -floop-nest-optimize
-	filter-flags -floop-parallelize-all
-	filter-flags -flto*
-	filter-flags -fno-math-errno
-	filter-flags -fno-semantic-interposition
-	filter-flags -fno-signed-zeros
-	filter-flags -fno-trapping-math
-	filter-flags -fpie
-	filter-flags -fstack-clash-protection
-	filter-flags -fstack-protector-strong
-	filter-flags -ftree-loop-distribution
-	filter-flags -fuse-linker-plugin
+	eapply "${FILESDIR}"/$(ver_cut 1)/*.patch
+	sed -i 's/typedef off64_t libgo_off_t_type;/typedef off_t libgo_off_t_type;/g' libgo/sysinfo.c || die
 
-	replace-flags -O3 -O2
+	filter-gcc
+    filter-lto
 
 	use debug || filter-flags -g
 
@@ -105,7 +68,7 @@ src_configure() {
 	local myconf=(
 		--prefix="${EPREFIX}"/usr
 		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
+		--sbindir="${EPREFIX}"/usr/bin
 		--libdir="${EPREFIX}"/usr/lib
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}"/etc
@@ -114,14 +77,13 @@ src_configure() {
 		--datadir="${EPREFIX}"/usr/share
 		--mandir="${EPREFIX}"/usr/share/man
 		--infodir="${EPREFIX}"/usr/share/info
+		--disable-fixed-point
 		--disable-install-libiberty
 		--disable-libgcj
-		--disable-libgomp
 		--disable-libmpx
 		--disable-libmudflap
 		--disable-libssp
 		--disable-libstdcxx-pch
-		--disable-libunwind-exceptions
 		--disable-multilib
 		--disable-nls
 		--disable-obsolete
@@ -129,15 +91,12 @@ src_configure() {
 		--disable-werror
 		--enable-__cxa_atexit
 		--enable-bootstrap
-		--enable-cet=auto
 		--enable-checking=release
-		--enable-clocale=gnu
+		--enable-clocale=generic
 		--enable-default-pie
-		--enable-default-ssp
-		--enable-gnu-indirect-function
-		--enable-gnu-unique-object
 		--enable-languages=${GCC_LANG}
 		--enable-libstdcxx-time
+		--enable-link-mutex
 		--enable-linker-build-id
 		--enable-lto
 		--enable-plugin
@@ -145,26 +104,33 @@ src_configure() {
 		--enable-threads=posix
 		--with-build-config="bootstrap-lto-lean"
 		--with-linker-hash-style=gnu
+		--with-pkgversion="1g4 Linux GCC ${PV}"
 		--with-system-zlib
+		$(use_enable elibc_glibc cet)
+		$(use_enable elibc_glibc symvers)
+		$(use_enable elibc_glibc libvtv)
+		$(use_enable elibc_glibc vtable-verify)
+		$(use_enable elibc_glibc default-ssp)
+		$(use_enable elibc_glibc gnu-indirect-function)
+		$(use_enable elibc_glibc gnu-unique-object)
+		$(use_enable libgomp)
 		$(use_enable sanitize libsanitizer)
-		$(use_enable vtv libvtv)
-		$(use_enable vtv vtable-verify)
 		$(use_with isl)
 		$(use_with zstd)
 	)
-	../configure "${myconf[@]}"
+	../configure "${myconf[@]}" || die
 }
 
 src_compile() {
 	cd gcc-build
 
-	emake -O STAGE1_CFLAGS="-O2" \
+	emake -O STAGE1_CFLAGS="$CFLAGS" \
 		BOOT_CFLAGS="$CFLAGS" \
 		BOOT_LDFLAGS="$LDFLAGS" \
 		LDFLAGS_FOR_TARGET="$LDFLAGS" \
 		bootstrap
 
-	make -O STAGE1_CFLAGS="-O2" \
+	make -O STAGE1_CFLAGS="$CFLAGS" \
 		BOOT_CFLAGS="$CFLAGS" \
 		BOOT_LDFLAGS="$LDFLAGS" \
 		LDFLAGS_FOR_TARGET="$LDFLAGS" \

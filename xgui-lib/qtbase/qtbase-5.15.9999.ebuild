@@ -31,8 +31,8 @@ DEPEND="
 	lib-util/glib
 	lib-util/libinput
 	xgui-lib/libxcb
-	xgui-misc/freetype
-	xgui-misc/harfbuzz
+	xgui-lib/freetype
+	xgui-lib/harfbuzz
 	xmedia-lib/libjpeg-turbo
 	xmedia-lib/libpng
 	gssapi? ( app-crypto/mit-krb5 )

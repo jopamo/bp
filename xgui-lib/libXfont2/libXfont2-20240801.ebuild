@@ -21,7 +21,7 @@ DEPEND="
 	xgui-lib/xtrans
 	xgui-lib/libfontenc
 	lib-core/zlib
-	truetype? ( xgui-misc/freetype )
+	truetype? ( xgui-lib/freetype )
 	bzip2? ( app-compression/bzip2 )
 	xgui-tools/xorgproto
 "

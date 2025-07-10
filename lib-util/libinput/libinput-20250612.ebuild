@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	lib-util/libevdev
-	xgui-misc/mtdev
+	xgui-lib/mtdev
 "
 
 BDEPEND="app-dev/pkgconf"

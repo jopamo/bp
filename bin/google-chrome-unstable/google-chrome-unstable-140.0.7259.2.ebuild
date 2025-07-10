@@ -36,7 +36,7 @@ RDEPEND="
 	xgui-lib/libxkbcommon
 	xgui-lib/pango
 	xgui-tools/alsa-lib
-	xgui-misc/freetype
+	xgui-lib/freetype
 "
 
 QA_PREBUILT="*"

@@ -21,7 +21,7 @@ IUSE="glamor ipv6 minimal systemd suid_wrapper udev wayland xcsecurity X"
 
 DEPEND="
 	virtual/ssl
-	xgui-misc/iceauth
+	xgui-tools/iceauth
 	xgui-lib/rgb
 	xgui-tools/xauth
 	xgui-lib/xbitmaps
@@ -36,7 +36,7 @@ DEPEND="
 	xgui-lib/libxshmfence
 	xgui-lib/pixman
 	xgui-lib/xtrans
-	xgui-misc/xkbcomp
+	xgui-tools/xkbcomp
 	xgui-misc/xkeyboard-config
 	glamor? (
 		xmedia-lib/libepoxy

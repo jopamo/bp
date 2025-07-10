@@ -2,7 +2,7 @@
 
 EAPI=8
 
-DESCRIPTION="gnulib"
+DESCRIPTION="GNU portability library for reusable code"
 HOMEPAGE="https://savannah.gnu.org/projects/gnulib"
 
 LICENSE="GPL-2"

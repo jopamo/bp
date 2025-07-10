@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 IUSE="gif jpeg png static-libs tiff X zlib webp"
 
 DEPEND="
-	xgui-misc/freetype
+	xgui-lib/freetype
 	gif? ( xmedia-lib/giflib )
 	jpeg? ( xmedia-lib/libjpeg-turbo )
 	png? ( xmedia-lib/libpng )

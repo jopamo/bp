@@ -24,7 +24,7 @@ REQUIRED_USE="vulkan? ( shaderc )"
 
 # dlopen: libglvnd (glad)
 RDEPEND="
-	lcms? ( xgui-misc/lcms )
+	lcms? ( xgui-lib/lcms )
 	opengl? ( xmedia-lib/libglvnd )
 	shaderc? ( xmedia-lib/shaderc )
 	unwind? ( lib-util/libunwind )

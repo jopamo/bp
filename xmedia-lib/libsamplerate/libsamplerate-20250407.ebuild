@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="sndfile static-libs keep-la"
 
-DEPEND="sndfile? ( xgui-misc/libsndfile:= )"
+DEPEND="sndfile? ( xgui-lib/libsndfile:= )"
 
 src_prepare() {
 	default

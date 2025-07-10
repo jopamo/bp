@@ -48,7 +48,7 @@ RDEPEND="${DEPEND}
 	lib-core/libxcrypt
 	lib-core/ncurses5-compat
 	xgui-lib/libX11
-	xgui-misc/freetype
+	xgui-lib/freetype
 	xgui-tools/mesa
 	xmedia-lib/libpng
 "

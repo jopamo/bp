@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson linux-info multiprocessing python-r1 flag-o-matic user
+inherit meson linux-info multiprocessing python-r1 flag-o-matic doins
 
 DESCRIPTION="Gentoo package manager"
 HOMEPAGE="https://github.com/gentoo/portage"
@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="build gentoo-dev ipc native-extensions
-	gentoo_repo tmpfilesd +rsync-verify selinux test xattr"
+	gentoo_repo +rsync-verify selinux test xattr"
 
 DEPEND="
 	app-build/patch
@@ -119,11 +119,7 @@ src_test() {
 src_install() {
 	python_foreach_impl my_src_install
 
-	if use tmpfilesd; then
-		insopts -m 0644
-		insinto /usr/lib/tmpfiles.d
-		newins "${FILESDIR}/portage-tmpfiles" portage.conf
-	fi
+	newtmpfiles "${FILESDIR}/portage-tmpfiles" portage.conf
 
 	local scripts
 	mapfile -t scripts < <(awk '/^#!.*python/ {print FILENAME} {nextfile}' "${ED}"/usr/bin/* || die)

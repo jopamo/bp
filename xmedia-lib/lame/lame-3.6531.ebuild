@@ -15,7 +15,7 @@ IUSE="debug static-libs"
 
 DEPEND="
 	app-lang/nasm
-	xgui-misc/mpg123
+	xgui-app/mpg123
 "
 
 src_prepare() {

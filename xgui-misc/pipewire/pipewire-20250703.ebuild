@@ -29,7 +29,7 @@ RDEPEND="
 	bluez? (
 		app-net/bluez
 		lib-dev/libusb
-		xgui-misc/sbc
+		xgui-lib/sbc
 		xmedia-lib/fdk-aac
 		xmedia-lib/libfreeaptx
 		xmedia-lib/libldac
@@ -37,7 +37,7 @@ RDEPEND="
 	)
 	dbus? ( app-core/dbus )
 	echo-cancel? ( media-libs/webrtc-audio-processing:0 )
-	extra? ( xgui-misc/libsndfile )
+	extra? ( xgui-lib/libsndfile )
 	readline? ( lib-core/readline )
 	ssl? ( virtual/ssl )
 	systemd? ( app-core/systemd )

@@ -17,10 +17,13 @@ KEYWORDS="amd64 arm64"
 IUSE="netlink selinux systemd"
 
 DEPEND="
+	app-net/wpa_supplicant
 	lib-core/sqlite
 	lib-net/libnl
 "
 src_prepare() {
+	filter-lto
+
 	# Allow users to apply patches to src/drivers for example,
 	# i.e. anything outside ${S}/hostapd
 	pushd ../ >/dev/null || die

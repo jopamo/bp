@@ -4,7 +4,7 @@ EAPI=8
 
 inherit autotools xdg
 
-DESCRIPTION="Extremely fast and lightweight file manager"
+DESCRIPTION="Lightweight GTK theme and icon switcher"
 HOMEPAGE="https://github.com/lxde/lxappearance"
 
 SNAPSHOT=96e09b05b1897bdca72d8fdfeb1bd8ec68942c42

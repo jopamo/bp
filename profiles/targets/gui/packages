@@ -37,9 +37,9 @@
 *xgui-icontheme/adwaita-plus
 *xgui-icontheme/adwaita-qt
 *xgui-icontheme/dracula-theme
-*xgui-misc/desktop-file-utils
-*xgui-misc/picom
-*xgui-misc/wine
+*xgui-tools/desktop-file-utils
+*xgui-app/picom
+*xgui-app/wine
 *xgui-tools/alsa-utils
 *xgui-tools/mesa-progs
 *xgui-tools/st

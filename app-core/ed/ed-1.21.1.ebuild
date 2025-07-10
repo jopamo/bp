@@ -4,7 +4,7 @@ EAPI=8
 
 inherit unpacker
 
-DESCRIPTION="Your basic line editor"
+DESCRIPTION="Standard line editor for Unix systems"
 HOMEPAGE="https://www.gnu.org/software/ed/"
 SRC_URI="mirror://gnu/ed/${P}.tar.lz"
 

@@ -9,7 +9,7 @@ HOMEPAGE="https://git.kernel.org/?p=bluetooth/sbc.git http://www.bluez.org/sbc-1
 
 SNAPSHOT=9b6c775f02b1ea944c8a203452ce23d7854e9187
 SRC_URI="https://github.com/1g4-mirror/sbc/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-	S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"

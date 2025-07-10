@@ -84,6 +84,7 @@ src_configure() {
 	echo "CONFIG_TLSV11=y" >> "${CONFIG}" || die             # Enable TLS v1.1
 	echo "CONFIG_TLSV12=y" >> "${CONFIG}" || die             # Enable TLS v1.2
 	echo "CONFIG_WPA3_SAE=y" >> "${CONFIG}" || die           # Enable WPA3 SAE
+	echo "CONFIG_OCV=n" >> "${CONFIG}" || die           # Enable WPA3 SAE
 
 	default
 }

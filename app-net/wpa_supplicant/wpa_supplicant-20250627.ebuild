@@ -60,6 +60,7 @@ Kconfig_style_config() {
 }
 
 src_prepare() {
+	filter-defs
 	default
 
 	# net/bpf.h needed for net-libs/libpcap on Gentoo/FreeBSD
@@ -99,7 +100,7 @@ src_configure() {
 	Kconfig_style_config IEEE80211R
 	Kconfig_style_config HT_OVERRIDES
 	Kconfig_style_config VHT_OVERRIDES
-	Kconfig_style_config OCV
+	#Kconfig_style_config OCV
 	Kconfig_style_config TLSV11
 	Kconfig_style_config TLSV12
 	Kconfig_style_config GETRANDOM

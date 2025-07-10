@@ -4,7 +4,7 @@ EAPI=8
 
 inherit cmake
 
-DESCRIPTION=" A fast streaming JSON parsing library in C. "
+DESCRIPTION="A fast streaming JSON parsing library in C"
 HOMEPAGE="https://github.com/lloyd/yajl"
 
 SNAPSHOT=5e3a7856e643b4d6410ddc3f84bc2f38174f2872

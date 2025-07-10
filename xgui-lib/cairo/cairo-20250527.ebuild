@@ -23,7 +23,7 @@ DEPEND="
 	fonts/fontconfig
 	lib-core/zlib
 	xgui-lib/pixman
-	xgui-misc/freetype
+	xgui-lib/freetype
 	xmedia-lib/libpng
 	glib? ( lib-util/glib )
 	X? (

@@ -6,7 +6,7 @@ inherit unpacker xdg
 
 MY_P="${PN}_${PV}-1"
 
-DESCRIPTION="Brave Browser: Secure, Fast & Private Web Browser with Adblocker"
+DESCRIPTION="Google Chrome web browser (unstable channel)"
 HOMEPAGE="https://brave.com"
 SRC_URI="https://dl.google.com/linux/chrome/deb/pool/main/g/${PN}/${MY_P}_amd64.deb"
 S="${WORKDIR}"

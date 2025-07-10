@@ -37,17 +37,17 @@ RDEPEND="
 	xgui-lib/wayland-protocols
 	xgui-misc/xkeyboard-config
 	xmedia-lib/libpng
-	lcms? ( xgui-misc/lcms:2 )
+	lcms? ( xgui-lib/lcms:2 )
 	webp? ( xmedia-lib/libwebp )
 	jpeg? ( xmedia-lib/libjpeg-turbo )
 	fbdev? (
-		>=xgui-misc/mtdev-1.1.0
+		>=xgui-lib/mtdev-1.1.0
 		virtual/service-manager
 	)
 	colord? ( >=x11-misc/colord-0.1.27 )
 	drm? (
 		xgui-tools/mesa
-		>=xgui-misc/mtdev-1.1.0
+		>=xgui-lib/mtdev-1.1.0
 		virtual/service-manager
 	)
 	editor? ( xgui-lib/pango )

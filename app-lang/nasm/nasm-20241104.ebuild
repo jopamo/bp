@@ -4,7 +4,7 @@ EAPI=8
 
 inherit autotools
 
-DESCRIPTION="groovy little assembler"
+DESCRIPTION="Netwide Assembler for x86 and x86_64"
 HOMEPAGE="http://www.nasm.us/"
 
 SNAPSHOT=888d9ab55012d25059da81fed6575ef3a004726f

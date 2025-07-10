@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit flag-o-matic linux-info toolchain-funcs
+inherit flag-o-matic linux-info toolchain-funcs autotools
 
 DESCRIPTION="The libxdp library and various tools for use with XDP"
 HOMEPAGE="https://github.com/xdp-project/xdp-tools"
-SRC_URI="https://github.com/xdp-project/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
+
+SNAPSHOT=2398dd4654f4792fc951b6658225b778a99c33a8
+SRC_URI="https://github.com/xdp-project/xdp-tools/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2.1 BSD-2"
 SLOT="0"
@@ -72,7 +75,7 @@ src_install() {
 	# We can't control static archive generation yet.
 	rm "${ED}/usr/lib/libxdp.a" || die
 
-	use tools || { rm "${ED}/usr/sbin"/* || die; }
+	use tools || { rm "${ED}/usr/bin"/* || die; }
 
 	# These are ELF objects but BPF ones.
 	dostrip -x /usr/lib/bpf

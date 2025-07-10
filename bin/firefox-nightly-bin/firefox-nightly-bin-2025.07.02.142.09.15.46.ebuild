@@ -36,7 +36,7 @@ RDEPEND="
 	xgui-lib/gdk-pixbuf
 	xgui-lib/gtk3[wayland]
 	xgui-lib/pango
-	xgui-misc/freetype
+	xgui-lib/freetype
 	xgui-misc/pulseaudio
 	xmedia-app/ffmpeg
 "

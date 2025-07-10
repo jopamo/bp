@@ -21,13 +21,13 @@ IUSE="apcupsd curl vim hddtemp imlib
 
 COMMON_DEPEND="
 	curl? ( app-net/curl )
-	imlib? ( xgui-misc/imlib2 )
+	imlib? ( xgui-lib/imlib2 )
 	ncurses? ( lib-core/ncurses )
 	nvidia? ( bin/nvidia-drivers )
 	pulseaudio? ( xgui-misc/pulseaudio )
 	rss? ( lib-core/libxml2 net-misc/curl lib-core/glib:2 )
 	systemd? ( app-core/systemd )
-	xft? ( xgui-lib/libXft xgui-misc/freetype )
+	xft? ( xgui-lib/libXft xgui-lib/freetype )
 	wayland? (
 		xgui-lib/wayland
 		xgui-lib/pango

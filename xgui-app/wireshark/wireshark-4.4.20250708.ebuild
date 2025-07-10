@@ -44,7 +44,7 @@ DEPEND="
 	lz4? ( app-compression/lz4 )
 	netlink? ( lib-net/libnl )
 	nghttp2? ( lib-net/nghttp2 )
-	sbc? ( xgui-misc/sbc )
+	sbc? ( xgui-lib/sbc )
 	ssl? ( lib-net/gnutls )
 	zlib? ( lib-core/zlib )
 	zstd? ( app-compression/zstd )

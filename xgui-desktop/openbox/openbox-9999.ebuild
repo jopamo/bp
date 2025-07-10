@@ -33,7 +33,7 @@ RDEPEND="
 	xgui-lib/libXt
 	xgui-lib/librsvg
 	xgui-lib/pango
-	xgui-misc/imlib2
+	xgui-lib/imlib2
 "
 
 DEPEND="

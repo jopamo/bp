@@ -15,10 +15,11 @@ LICENSE="|| ( AFL-2.1 GPL-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug inotify static-libs systemd test tools tmpfilesd user-session valgrind X"
+IUSE="apparmor debug inotify static-libs systemd test tools tmpfilesd user-session valgrind X"
 
 DEPEND="
 	lib-core/expat
+	apparmor? ( app-core/apparmor )
 	valgrind? ( app-dev/valgrind )
 	systemd? ( app-core/systemd )
 	X? (
@@ -44,36 +45,34 @@ src_configure() {
 
 	local emesonargs=(
 		--localstatedir="${EPREFIX}/var"
-		-Druntime_dir="${EPREFIX}${rundir}"
-
-		-Ddefault_library=$(usex static-libs both shared)
-
-		-Dapparmor=disabled
-		-Dasserts=false # TODO
-		-Dchecks=false # TODO
+		-D asserts=false
+		-D checks=false
+		-D containers=false
+		-D dbus_user=messagebus
+		-D default_library=$(usex static-libs both shared)
+		-D kqueue=disabled
+		-D libaudit=disabled
+		-D message_bus=true
+		-D qt_help=disabled
+		-D runtime_dir="${EPREFIX}${rundir}"
+		-D selinux=disabled
+		-D session_socket_dir="${EPREFIX}"/tmp
+		-D system_pid_file="${EPREFIX}${rundir}"/dbus.pid
+		-D system_socket="${EPREFIX}${rundir}"/dbus/system_bus_socket
+		-D systemd_system_unitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
+		-D systemd_user_unitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/user" "false")
+		-D xml_docs=disabled
+		-Dinstalled_tests=false
+		$(meson_feature apparmor)
+		$(meson_feature inotify)
+		$(meson_feature systemd)
+		$(meson_feature test modular_tests)
+		$(meson_feature valgrind)
+		$(meson_feature X x11_autolaunch)
 		$(meson_use debug stats)
 		$(meson_use debug verbose_mode)
-		-Dcontainers=false
-		-Ddbus_user=messagebus
-		-Dkqueue=disabled
-		$(meson_feature inotify)
-		-D xml_docs=enabled
-		-Dinstalled_tests=false
-		-D message_bus=true
-		$(meson_feature test modular_tests)
-		-Dqt_help=disabled
-		$(meson_use tools)
-		$(meson_feature systemd)
 		$(meson_use systemd user_session)
-		$(meson_feature X x11_autolaunch)
-		$(meson_feature valgrind)
-		-D selinux=disabled
-		-D libaudit=disabled
-		-Dsession_socket_dir="${EPREFIX}"/tmp
-		-Dsystem_pid_file="${EPREFIX}${rundir}"/dbus.pid
-		-Dsystem_socket="${EPREFIX}${rundir}"/dbus/system_bus_socket
-		-Dsystemd_system_unitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
-		-Dsystemd_user_unitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/user" "false")
+		$(meson_use tools)
 	)
 
 	meson_src_configure
@@ -83,9 +82,6 @@ src_install() {
 	meson_src_install
 
 	if use X; then
-		# dbus X session script (#77504)
-		# turns out to only work for GDM (and startx). has been merged into
-		# other desktop (kdm and such scripts)
 		exeinto /etc/X11/xinit/xinitrc.d
 		doexe "${FILESDIR}"/80-dbus
 	fi
@@ -93,30 +89,23 @@ src_install() {
 	# needs to exist for dbus sessions to launch
 	keepdir /usr/share/dbus-1/services
 
-	# machine-id symlink from pkg_postinst()
-	keepdir /var/lib/dbus
-
 	# let the init script create the /var/run/dbus directory
 	rm -rf "${ED}"/var/run
 	rm -rf "${ED}"/run
+	rm -rf "${ED}"/var/lib
 
-	rm -rf "${ED}"/etc/dbus-1
+	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
+		g messagebus -
+		u! messagebus 101 "System Message Bus" - /usr/bin/nologin
+	EOF
 
-	if use tmpfilesd; then
-		insopts -m 0644
-		insinto /usr/lib/tmpfiles.d
-		newins "${FILESDIR}/dbus-tmpfiles" dbus.conf
-	fi
+	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die
+		d /var/lib/dbus 0755 - - -
+		L /var/lib/dbus/machine-id - - - - /etc/machine-id
+	EOF
 
-	if use systemd; then
-		insinto /usr/lib/systemd/system
-		insopts -m 0644
-		#doins "${FILESDIR}/dbus.service"
-	fi
-}
-
-pkg_preinst() {
-	newsysusers "${FILESDIR}/${PN}-sysusers" "${PN}.conf"
+	newsysusers "${T}/${PN}-sysusers" "${PN}.conf"
+	newtmpfiles "${T}/${PN}-tmpfiles" "${PN}.conf"
 }
 
 pkg_postinst() {

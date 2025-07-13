@@ -119,8 +119,6 @@ src_test() {
 src_install() {
 	python_foreach_impl my_src_install
 
-	newtmpfiles "${FILESDIR}/portage-tmpfiles" portage.conf
-
 	local scripts
 	mapfile -t scripts < <(awk '/^#!.*python/ {print FILENAME} {nextfile}' "${ED}"/usr/bin/* || die)
 	python_replicate_script "${scripts[@]}"
@@ -138,6 +136,17 @@ location = /var/db/repos/gentoo\n\
 sync-type = git\n\
 sync-uri = https://github.com/gentoo-mirror/gentoo.git\n\
 auto-sync = yes" >> "${ED}"/usr/share/portage/config/repos.conf
+
+	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
+		u portage 250 - /var/lib/portage/home
+	EOF
+
+	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die
+		x /var/tmp/ccache
+	EOF
+
+	newsysusers "${T}/${PN}-sysusers" "${PN}.conf"
+	newtmpfiles "${T}/${PN}-tmpfiles" "${PN}.conf"
 }
 
 my_src_install() {
@@ -181,8 +190,6 @@ pkg_preinst() {
 	if chown portage:portage "${ED}"/var/log/portage{,/elog} 2>/dev/null ; then
 		chmod g+s,ug+rwx "${ED}"/var/log/portage{,/elog}
 	fi
-
-	newsysusers "${FILESDIR}/${PN}-sysusers" "${PN}.conf"
 }
 
 pkg_postinst() {

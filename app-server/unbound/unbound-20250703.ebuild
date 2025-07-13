@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic python-single-r1 user autotools
+inherit flag-o-matic python-single-r1 doins autotools
 
 DESCRIPTION="A validating, recursive and caching DNS resolver"
 HOMEPAGE="http://unbound.net/"

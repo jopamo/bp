@@ -145,7 +145,7 @@ src_configure() {
     	# -Ddb-uniquename=...
 
     	# pam_lastlog (feature: build the pam_lastlog module)
-    	-Dpam_lastlog=auto
+    	-Dpam_lastlog=enabled
 
     	# pam_unix (feature: build the pam_unix module)
     	-Dpam_unix=auto

@@ -1,208 +1,162 @@
-#
-# /etc/login.defs - Configuration control definitions for the login package.
-#
-# Three items must be defined:  MAIL_DIR, ENV_SUPATH, and ENV_PATH.
-# If unspecified, some arbitrary (and possibly incorrect) value will
-# be assumed.  All other items are optional - if not specified then
-# the described action or option will be inhibited.
-#
-# Comment lines (lines beginning with "#") and blank lines are ignored.
-#
-# Modified for Linux.  --marekm
+# /etc/login.defs - Configuration for user login and account management
 
-#
-# Delay in seconds before being allowed another attempt after a login failure
-#
+# Wait time (in seconds) before allowing another login attempt after a wrong password
+# Helps stop rapid password guessing attacks
 FAIL_DELAY		3
 
-#
-# Enable display of unknown usernames when login failures are recorded.
-#
+# Log failed login attempts to track security issues (uses system logs)
+FAILLOG_ENAB		yes
+
+# Hide unknown usernames in login failure logs to avoid leaking user information
 LOG_UNKFAIL_ENAB	no
 
-#
-# Enable logging of successful logins
-#
+# Log successful logins to monitor user activity (useful for security checks)
 LOG_OK_LOGINS		no
 
-#
-# Enable "syslog" logging of su activity - in addition to sulog file logging.
-# SYSLOG_SG_ENAB does the same for newgrp and sg.
-#
+# Track the last login time for each user in system logs
+LASTLOG_ENAB		yes
+
+# Only track login times for regular users (up to UID 60000) to save resources
+LASTLOG_UID_MAX		60000
+
+# Check for new mail when users log in, showing if they have unread messages
+MAIL_CHECK_ENAB		yes
+
+# Enforce strong password rules (e.g., mix of letters, numbers) to prevent weak passwords
+OBSCURE_CHECKS_ENAB	yes
+
+# Restrict logins based on time rules in /etc/porttime for extra security
+PORTTIME_CHECKS_ENAB	yes
+
+# Allow user limits (e.g., file size, process count) to be set from the passwd file
+QUOTAS_ENAB		yes
+
+# Log 'su' (switch user) and group commands to system logs for monitoring
 SYSLOG_SU_ENAB		yes
 SYSLOG_SG_ENAB		yes
 
-#
-# If defined, either full pathname of a file containing device names or
-# a ":" delimited list of device names.  Root logins will be allowed only
-# upon these devices.
-#
+# Only allow root logins from trusted devices listed in /etc/securetty
 CONSOLE		/etc/securetty
-#CONSOLE	console:tty01:tty02:tty03:tty04
 
-#
-# If defined, all su activity is logged to this file.
-#
-#SULOG_FILE	/var/log/sulog
+# Show a welcome message from /etc/motd when users log in
+MOTD_FILE	/etc/motd
 
-#
-# If defined, file which maps tty line to TERM environment parameter.
-# Each line of the file is in a format something like "vt100  tty01".
-#
-#TTYTYPE_FILE	/etc/ttytype
+# Display a custom message from /etc/issue before the login prompt
+ISSUE_FILE	/etc/issue
 
-#
-# If defined, the command name to display when running "su -".  For
-# example, if this is defined as "su" then a "ps" will display the
-# command is "-su".  If not defined, then "ps" would display the
-# name of the shell actually being run, e.g. something like "-sh".
-#
+# Block non-root logins if /etc/nologin exists, showing its message
+NOLOGINS_FILE	/etc/nologin
+
+# Show 'su' as the command name in process lists when switching users
 SU_NAME		su
 
-#
-# *REQUIRED*
-#   Directory where mailboxes reside, _or_ name of file, relative to the
-#   home directory.  If you _do_ define both, MAIL_DIR takes precedence.
-#   QMAIL_DIR is for Qmail
-#
-#QMAIL_DIR	Maildir
+# Store user mailboxes in /var/spool/mail for email access
 MAIL_DIR	/var/spool/mail
 
-#
-# If defined, file which inhibits all the usual chatter during the login
-# sequence.  If a full pathname, then hushed mode will be enabled if the
-# user's name or shell are found in the file.  If not a full pathname, then
-# hushed mode will be enabled if the file exists in the user's home directory.
-#
+# Suppress login messages if a .hushlogin file exists in a user's home directory
 HUSHLOGIN_FILE	.hushlogin
-#HUSHLOGIN_FILE	/etc/hushlogins
 
-#
-# *REQUIRED*  The default PATH settings, for superuser and normal users.
-#
-# (they are minimal, add the rest in the shell startup files)
+# Set system clock ticks (HZ=100 for most Linux systems; adjust for your hardware)
+ENV_HZ		HZ=100
+
+# Default command search paths for root and regular users (includes /opt/bin for compatibility)
 ENV_SUPATH	PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/opt/bin
 ENV_PATH	PATH=/usr/local/bin:/usr/bin:/opt/bin
 
-#
-# Terminal permissions
-#
-#	TTYGROUP	Login tty will be assigned this group ownership.
-#	TTYPERM		Login tty will be set to this permission.
-#
-# If you have a "write" program which is "setgid" to a special group
-# which owns the terminals, define TTYGROUP to the group number and
-# TTYPERM to 0620.  Otherwise leave TTYGROUP commented out and assign
-# TTYPERM to either 622 or 600.
-#
+# Set terminal group ownership to 'tty' for secure terminal access
 TTYGROUP	tty
+# Set terminal permissions to owner-only (600) for security
 TTYPERM		0600
 
-#
-# Login configuration initializations:
-#
-#	ERASECHAR	Terminal ERASE character ('\010' = backspace).
-#	KILLCHAR	Terminal KILL character ('\025' = CTRL/U).
-#	UMASK		Default "umask" value.
-#
-# The ERASECHAR and KILLCHAR are used only on System V machines.
-# The ULIMIT is used only if the system supports it.
-# (now it works with setrlimit too; ulimit is in 512-byte units)
-#
-# Prefix these values with "0" to get octal, "0x" to get hexadecimal.
-#
+# Terminal control characters (backspace and kill line) for System V compatibility
 ERASECHAR	0177
 KILLCHAR	025
+
+# Set default file permissions (077 = owner-only access) for new files
 UMASK		077
 
-#
-# Password aging controls:
-#
-#	PASS_MAX_DAYS	Maximum number of days a password may be used.
-#	PASS_MIN_DAYS	Minimum number of days allowed between password changes.
-#	PASS_WARN_AGE	Number of days warning given before a password expires.
-#
-PASS_MAX_DAYS	99999
-PASS_MIN_DAYS	0
-PASS_WARN_AGE	7
+# Set new home directories to owner-only access (700) for privacy
+HOME_MODE	0700
 
-#
-# Min/max values for automatic uid selection in useradd
-#
-UID_MIN			 1000
-UID_MAX			60000
-# System accounts
-SYS_UID_MIN		  500
-SYS_UID_MAX		  999
+# Password rules: no expiration, minimum length, and warnings
+PASS_MAX_DAYS	99999	# Passwords don't expire (set for long-term use)
+PASS_MIN_DAYS	0	# Allow immediate password changes
+PASS_MIN_LEN	2	# Require at least 2 characters for passwords
+PASS_WARN_AGE	7	# Warn 7 days before password expiration (if enabled)
 
-#
-# Min/max values for automatic gid selection in groupadd
-#
-GID_MIN			 1000
-GID_MAX			60000
-# System accounts
-SYS_GID_MIN		  500
-SYS_GID_MAX		  999
+# Only allow users in the 'root' group to use 'su' for better security
+SU_WHEEL_ONLY	yes
 
-#
-# Max number of login retries if password is bad
-#
-LOGIN_RETRIES		5
+# User ID (UID) ranges for regular and system accounts
+UID_MIN		1000	# Start regular user IDs at 1000
+UID_MAX		60000	# End regular user IDs at 60000
+SYS_UID_MIN	500	# Start system account IDs at 500
+SYS_UID_MAX	999	# End system account IDs at 999
+SUB_UID_MIN	100000	# Start sub-UIDs for containers/userspaces
+SUB_UID_MAX	600100000
+SUB_UID_COUNT	65536	# Number of sub-UIDs per user
 
-#
-# Max time in seconds for login
-#
-LOGIN_TIMEOUT		60
+# Group ID (GID) ranges, similar to UID settings
+GID_MIN		1000
+GID_MAX		60000
+SYS_GID_MIN	500
+SYS_GID_MAX	999
+SUB_GID_MIN	100000
+SUB_GID_MAX	600100000
+SUB_GID_COUNT	65536
 
-#
-# Which fields may be changed by regular users using chfn - use
-# any combination of letters "frwh" (full name, room number, work
-# phone, home phone).  If not defined, no changes are allowed.
-# For backward compatibility, "yes" = "rwh" and "no" = "frwh".
-#
-CHFN_RESTRICT		rwh
+# Limit login attempts to 3 to prevent password guessing attacks
+LOGIN_RETRIES		3
+# Allow 30 seconds to enter login credentials for security
+LOGIN_TIMEOUT		30
 
-#
-# List of groups to add to the user's supplementary group set
-# when logging in on the console (as determined by the CONSOLE
-# setting).  Default is none.
-#
-# Use with caution - it is possible for users to gain permanent
-# access to these groups, even when not logged in on the console.
-# How to do it is left as an exercise for the reader...
-#
-#CONSOLE_GROUPS		floppy:audio:cdrom
+# Limit attempts to set a weak password to 3
+PASS_CHANGE_TRIES	3
 
-#
-# Should login be allowed if we can't cd to the home directory?
-# Default in no.
-#
+# Warn about weak passwords, even for root, to encourage stronger choices
+PASS_ALWAYS_WARN	yes
+
+# Require a password to change user info (e.g., name, phone) for security
+CHFN_AUTH		yes
+
+# Allow regular users to change only full name, work phone, or home phone
+CHFN_RESTRICT	fwh
+
+# Use yescrypt for strong, modern password hashing (resists brute-force attacks)
+ENCRYPT_METHOD YESCRYPT
+
+# Set yescrypt strength (5 = balanced security and performance)
+YESCRYPT_COST_FACTOR 5
+
+# Allow login even if a user's home directory is missing
 DEFAULT_HOME	yes
 
-#
-# If defined, this command is run when removing a user.
-# It should remove any at/cron/print jobs etc. owned by
-# the user to be removed (passed as the first argument).
-#
-#USERDEL_CMD	/usr/sbin/userdel_local
+# Placeholder for accounts without home directories
+NONEXISTENT	/nonexistent
 
-#
-# Enable setting of the umask group bits to be the same as owner bits
-# (examples: 022 -> 002, 077 -> 007) for non-root users, if the uid is
-# the same as gid, and username is the same as the primary group name.
-#
-# This also enables userdel to remove user groups if no members exist.
-#
+# Load environment variables from /etc/environment at login
+ENVIRON_FILE	/etc/environment
+
+# Run /usr/sbin/userdel_local when deleting a user to clean up jobs
+USERDEL_CMD	/usr/sbin/userdel_local
+
+# Automatically remove empty user groups when deleting users
 USERGROUPS_ENAB yes
 
-#
-# Controls display of the motd file. This is better handled by pam_motd.so
-# so the declaration here is empty is suppress display by readers of this
-# file.
-#
-MOTD_FILE
+# Limit group membership entries per line to 100 for large systems
+MAX_MEMBERS_PER_GROUP	100
 
-#
-# Hash shadow passwords with SHA512.
-#
-ENCRYPT_METHOD	SHA512
+# Create home directories for new users by default
+CREATE_HOME	yes
+
+# Enforce use of /etc/shadow for passwords to prevent errors
+FORCE_SHADOW	yes
+
+# Allow sub-IDs for users with non-default primary groups (e.g., containers)
+GRANT_AUX_GROUP_SUBIDS yes
+
+# Block logins with empty passwords for all accounts
+PREVENT_NO_AUTH yes
+
+# Use SHA512 for secure HMAC in PAM timestamp checks
+HMAC_CRYPTO_ALGO SHA512

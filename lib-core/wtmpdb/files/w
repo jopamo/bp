@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# w replacement using systemd‑logind
+
+# ---------------- banner (identical to util‑linux) -----------------
+uptime | sed 's/^ //'                 # e.g. “ 12:40:38 up …”
+
+# ---------------- header -------------------------------------------
+printf '%-8s %-8s %-8s %-6s %-6s %-9s %s\n' \
+       USER TTY LOGIN@ IDLE JCPU PCPU WHAT
+
+now=$(date +%s)
+
+# ------------- helpers --------------------------------------------
+to_sec() {                            # TIME  -> seconds
+    local t=$1 d=0 h=0 m=0 s=0
+    [[ $t == *-* ]] && d=${t%%-*} t=${t#*-}
+    IFS=: read -r h m s <<<"$t"
+    printf '%d' $((86400*10#$d + 3600*10#$h + 60*10#$m + 10#$s))
+}
+
+idle_fmt() {                          # seconds -> idle string
+    local s=$1
+    if   (( s >= 86400 ));  then printf '%ddays' $((s/86400))
+    elif (( s >= 3600 ));   then printf '%02dh%02dm' $((s/3600)) $(((s/60)%60))
+    else                         printf '%02dm' $((s/60))
+    fi
+}
+
+# -------- iterate over loginctl sessions with real TTY -------------
+loginctl list-sessions --no-legend --no-pager |
+while read -r sid _ user _; do
+    tty=$(loginctl show-session "$sid" -p TTY --value --no-pager)
+    [[ -z $tty ]] && continue
+
+    # LOGIN@
+    ts=$(loginctl show-session "$sid" -p Timestamp --value --no-pager)
+    login_at=$(date -d "$ts" '+%d%b%y')
+
+    # IDLE
+    idle_sec=$(( now - $(stat -c %Y "/dev/$tty" 2>/dev/null || echo $now) ))
+    idle=$(idle_fmt "$idle_sec")
+
+    # ask ps ONLY for time/pid/args to avoid month strings
+    mapfile -t procs < <(ps -t "$tty" --no-headers --sort start_time \
+                         -o time=,pid=,args=)
+
+    # session leader = first line
+    leader=${procs[0]}
+    read -r pcpu pid what <<<"$leader"
+    pcpu=${pcpu:-?}
+
+    # JCPU = sum of TIME across all processes
+    jcpu_sec=0
+    for line in "${procs[@]}"; do
+        read -r t _ <<<"$line"
+        (( jcpu_sec += $(to_sec "$t") ))
+    done
+    printf -v jcpu '%02d:%02dm' $((jcpu_sec/3600)) $(((jcpu_sec/60)%60))
+
+    printf '%-8s %-8s %-8s %-6s %-6s %-6s  %s\n' \
+           "$user" "$tty" "$login_at" "$idle" "$jcpu" "$pcpu" "$what"
+done

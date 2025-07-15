@@ -1,7 +1,0 @@
-root:x:0:0::/root:/usr/bin/bash
-sshd:x:22:22:SSH drop priv user:/var/empty:/usr/sbin/nologin
-man:x:44:44::/:/usr/sbin/nologin
-systemd-network:x:67:67::/dev/null:/usr/sbin/nologin
-messagebus:x:101:101:System Message Bus:/:/usr/sbin/nologin
-portage:x:250:250::/var/lib/portage/home:/usr/sbin/nologin
-nobody:x:65534:65534:Nobody:/:/usr/sbin/nologin

@@ -1,2 +1,0 @@
-# tmpfiles.d entry for utmps
-d /run/utmps 0755 utmp utmp -

@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=86373b4999bfd9a9379bc4a3ca877b1c80a2a340
 
-inherit flag-o-matic
+inherit flag-o-matic doins
 
 DESCRIPTION="an implementation of the standard library for Linux-based systems"
 HOMEPAGE="http://www.musl-libc.org/"
@@ -14,14 +14,9 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="libxcrypt +utmps"
+IUSE="libxcrypt"
 
 src_prepare() {
-	if use elibc_musl ; then
-		sed -i '' 's/#define _PATH_UTMP\s*\"\/dev\/null\/utmp\"/#define _PATH_UTMP \"\/run\/utmps\/utmp\"/' include/paths.h || die
-		sed -i '' 's/#define _PATH_WTMP\s*\"\/dev\/null\/wtmp\"/#define _PATH_WTMP \"\/var\/log\/wtmp\"/' include/paths.h || die
-	fi
-
 	default
 	cp "${FILESDIR}"/* "${S}"/ || die
 }
@@ -92,11 +87,6 @@ src_install() {
 
 		if use libxcrypt ; then
 			rm "${ED}"/usr/include/crypt.h || die
-		fi
-
-		if use utmps ; then
-			rm "${ED}"/usr/include/utmp.h || die
-			rm "${ED}"/usr/include/utmpx.h || die
 		fi
 
 		cp -p "${ED}"/lib/ld-musl*.so* "${ED}"/usr/lib/ || die

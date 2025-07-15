@@ -36,6 +36,7 @@
 *app-port/find_cruft
 *app-port/gentoolkit
 *app-var/pax-utils
+*lib-core/wtmpdb
 *lib-net/ca-certificates
 *virtual/gcc
 *virtual/libc

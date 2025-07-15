@@ -96,7 +96,7 @@ src_install() {
 
 	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
 		g messagebus -
-		u! messagebus 101 "System Message Bus" - /usr/bin/nologin
+		u! messagebus 101 "System Message Bus" /run/dbus /usr/bin/nologin
 	EOF
 
 	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die

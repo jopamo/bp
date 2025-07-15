@@ -15,7 +15,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs systemd tmpfilesd zlib"
+IUSE="static-libs systemd zlib"
 
 DEPEND="
 	lib-core/libpipeline
@@ -44,7 +44,7 @@ src_configure() {
 
 	local myconf=(
 		--docdir='$(datarootdir)'/doc/${PF}
-		--with-systemdtmpfilesdir=$(usex tmpfilesd "${EPREFIX}"/usr/lib/tmpfiles.d "false")
+		--with-systemdtmpfilesdir="${EPREFIX}"/usr/lib/tmpfiles.d
 		--with-systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 		--disable-setuid
 		--enable-cache-owner=man
@@ -56,7 +56,8 @@ src_configure() {
 	econf "${myconf[@]}"
 }
 
-pkg_preinst() {
+src_install() {
+	default
 	newsysusers "${FILESDIR}/${PN}-sysusers" "${PN}.conf"
 }
 

@@ -2,7 +2,9 @@
 
 EAPI=8
 
-inherit meson user flag-o-matic
+SNAPSHOT=f2ce91aa4447f5b4916d02548fd983de8d56ac97
+
+inherit meson flag-o-matic doins
 
 DESCRIPTION="Lightweight high-performance web server"
 HOMEPAGE="http://www.lighttpd.net/"
@@ -11,7 +13,6 @@ if [[ ${PV} = 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/lighttpd/lighttpd1.4.git"
 	inherit git-r3
 else
-SNAPSHOT=f2ce91aa4447f5b4916d02548fd983de8d56ac97
 	SRC_URI="https://github.com/lighttpd/lighttpd1.4/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/lighttpd1.4-${SNAPSHOT}
 fi
@@ -40,11 +41,6 @@ DEPEND="
 	xattr? ( app-core/attr )
 "
 BDEPEND="app-dev/pkgconf"
-
-pkg_setup() {
-	enewgroup lighttpd
-	enewuser lighttpd -1 -1 /var/lighttpd lighttpd
-}
 
 src_configure() {
 	filter-flags -Wl,-z,defs
@@ -93,9 +89,23 @@ src_install() {
 	doins doc/config/conf.d/mime.conf
 	doins "${FILESDIR}"/lighttpd.conf
 	doins "${FILESDIR}"/lighttpd_example.conf
+
+	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
+		u lighttpd 443 "light webserver" /var/lighttpd
+	EOF
+
+	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die
+		d /run/lighttpd 0750 lighttpd lighttpd -
+	EOF
+
+	newsysusers "${T}/${PN}-sysusers" "${PN}.conf"
+	newtmpfiles "${T}/${PN}-tmpfiles" "${PN}.conf"
 }
 
 pkg_postinst() {
+	sysusers_process
+	tmpfiles_process
+
 	if [ ! -d "${EROOT}"/var/log/lighttpd ] ; then
 		mkdir -p "${EROOT}"/var/log/lighttpd
 		touch "${EROOT}"/var/log/lighttpd/{access,error}.log

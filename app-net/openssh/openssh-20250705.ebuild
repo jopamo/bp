@@ -14,7 +14,7 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug pam pie scp ssl static systemd test tmpfilesd utmpx wtmpx"
+IUSE="debug pam pie ssl static systemd test"
 
 DEPEND="
 	app-core/shadow
@@ -46,20 +46,20 @@ src_configure() {
 		--with-ldflags="${LDFLAGS}"
 		--with-pid-dir="${EPREFIX}"/run
 		--with-privsep-path="${EPREFIX}"/var/empty
-		--with-privsep-user="sshd"
-		--with-sandbox="seccomp_filter"
-		$(use_enable utmpx)
-		$(use_enable wtmpx)
-		$(use_with pam)
-		$(use_with ssl openssl)
-		$(use_with ssl ssl-engine)
 		--disable-strip
 		--disable-utmp
 		--disable-wtmp
 		--with-libedit
 		--with-pie
+		--with-privsep-user="sshd"
+		--with-sandbox="seccomp_filter"
 		--without-audit
 		--without-rpath
+		--enable-utmpx
+		--enable-wtmpx
+		$(use_with pam)
+		$(use_with ssl openssl)
+		$(use_with ssl ssl-engine)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
@@ -74,10 +74,8 @@ src_install() {
 	fi
 
 	if use systemd; then
-		insinto /usr/lib/systemd/system
-		insopts -m 0644
-		doins "${FILESDIR}"/sshdgenkeys.service
-		doins "${FILESDIR}"/sshd.service
+		systemd_dounit "${FILESDIR}"/sshdgenkeys.service
+		systemd_dounit "${FILESDIR}"/sshd.service
 	fi
 
 	insinto /etc/ssh
@@ -90,22 +88,22 @@ src_install() {
 	#generate this outside of installation
 	rm -rf "${ED}"/etc/ssh/moduli || die
 
-	use scp || rm "${ED}"/usr/bin/scp || die
+	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
+		u sshd 22 "SSH drop priv user" /var/empty
+	EOF
 
-	if use tmpfilesd; then
-		insopts -m 0644
-		insinto /usr/lib/tmpfiles.d
-		newins "${FILESDIR}/openssh-tmpfiles" openssh.conf
-	fi
+	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die
+		d /var/empty 0755 root root
+	EOF
+
+	newsysusers "${T}/${PN}-sysusers" "${PN}.conf"
+	newtmpfiles "${T}/${PN}-tmpfiles" "${PN}.conf"
 
 	dobin contrib/ssh-copy-id
 	doman contrib/ssh-copy-id.1
 }
 
-pkg_preinst() {
-	newsysusers "${FILESDIR}/${PN}-sysusers" "${PN}.conf"
-}
-
 pkg_postinst() {
 	sysusers_process
+	tmpfiles_process
 }

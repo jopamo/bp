@@ -1,0 +1,11 @@
+# utmpd.socket
+[Unit]
+Description=utmp daemon socket
+
+[Socket]
+ListenStream=/run/utmps/.utmpd-socket
+SocketMode=0660
+SocketGroup=utmp
+
+[Install]
+WantedBy=sockets.target

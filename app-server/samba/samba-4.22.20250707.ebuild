@@ -3,6 +3,7 @@
 EAPI=8
 
 BRANCH_NAME="v$(ver_cut 1)-$(ver_cut 2)-stable"
+SNAPSHOT=70eeb7220627eae6f6e0e76f1ec114a1ac965671
 
 inherit linux-info git-r3 flag-o-matic
 
@@ -10,6 +11,7 @@ DESCRIPTION="Samba Suite Version 4"
 HOMEPAGE="https://www.samba.org/"
 EGIT_REPO_URI=https://github.com/samba-team/samba.git
 EGIT_BRANCH="v$(ver_cut 1)-$(ver_cut 2)-stable"
+EGIT_COMMIT="${SNAPSHOT}"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -55,7 +57,6 @@ DEPEND="${CDEPEND}
 	lib-net/libtirpc"
 RDEPEND="${CDEPEND}
 	client? ( app-core/cifs-utils[ads?] )
-	dev-perl/Parse-Yapp
 "
 
 REQUIRED_USE="
@@ -90,7 +91,7 @@ src_configure() {
 		--enable-fhs
 		--prefix="${EPREFIX}"/usr
 		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
+		--sbindir="${EPREFIX}"/usr/bin
 		--libdir="${EPREFIX}"/usr/lib
 		--with-pammodulesdir="${EPREFIX}"/usr/lib/security
 		--libexecdir="${EPREFIX}"/usr/libexec
@@ -124,6 +125,8 @@ src_configure() {
 
 	CPPFLAGS="-I${SYSROOT}${EPREFIX}/usr/include/et ${CPPFLAGS}" \
 		./configure ${myconf[@]}
+
+	PYTHONHASHSEED=1 WAF_MAKE=1  ./buildtools/bin/waf configure
 }
 
 src_install() {

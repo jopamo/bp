@@ -17,8 +17,11 @@ KEYWORDS="amd64 arm64"
 IUSE="libxcrypt +utmps"
 
 src_prepare() {
-	sed -i '' 's/#define _PATH_UTMP\s*\"\/dev\/null\/utmp\"/#define _PATH_UTMP \"\/run\/utmps\/utmp\"/' include/paths.h
-	sed -i '' 's/#define _PATH_WTMP\s*\"\/dev\/null\/wtmp\"/#define _PATH_WTMP \"\/var\/log\/wtmp\"/' include/paths.h
+	if use elibc_musl ; then
+		sed -i '' 's/#define _PATH_UTMP\s*\"\/dev\/null\/utmp\"/#define _PATH_UTMP \"\/run\/utmps\/utmp\"/' include/paths.h || die
+		sed -i '' 's/#define _PATH_WTMP\s*\"\/dev\/null\/wtmp\"/#define _PATH_WTMP \"\/var\/log\/wtmp\"/' include/paths.h || die
+	fi
+
 	default
 	cp "${FILESDIR}"/* "${S}"/ || die
 }

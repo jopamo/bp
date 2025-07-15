@@ -198,9 +198,10 @@ src_configure() {
 src_install() {
     meson_src_install
 
-    if use elibc_musl; then
-    	rm "${ED}"/usr/bin/shutdown || die
-    fi
+    newsysusers "${FILESDIR}/${PN}-sysusers" "${PN}.conf"
+    use resolve && newsysusers "${FILESDIR}/resolve-sysusers" "${PN}-resolve.conf"
+    use networkd && newsysusers "${FILESDIR}/network-sysusers" "${PN}-network.conf"
+    use coredump && newsysusers "${FILESDIR}/coredump-sysusers" "${PN}-coredump.conf"
 
     dosym -r /etc/sysctl.conf /etc/sysctl.d/99-sysctl.conf
 
@@ -273,13 +274,6 @@ DHCP=ipv4' > "${ED}"/etc/systemd/network/ipv4dhcp.network
 
 pkg_postrm() {
     xdg_mimeinfo_database_update
-}
-
-pkg_preinst() {
-    newsysusers "${FILESDIR}/${PN}-sysusers" "${PN}.conf"
-    use resolve && newsysusers "${FILESDIR}/resolve-sysusers" "${PN}-resolve.conf"
-    use networkd && newsysusers "${FILESDIR}/network-sysusers" "${PN}-network.conf"
-    use coredump && newsysusers "${FILESDIR}/coredump-sysusers" "${PN}-coredump.conf"
 }
 
 pkg_postinst() {

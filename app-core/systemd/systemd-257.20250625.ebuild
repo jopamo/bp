@@ -19,7 +19,7 @@ KEYWORDS="amd64 arm64"
 IUSE="apparmor binfmt blkid bootloader bpf-framework coredump dbus devmode dhcp4 elfutils efi gcrypt gshadow
 +hostnamed +hwdb importd kmod ldconfig localed logind machined +networkd
 oomd pam pcre pstore resolve rfkill systemd-update timedated
-+userdb +utmp +vconsole xkb"
++userdb +vconsole xkb"
 
 REQUIRED_USE="elibc_musl? ( !gshadow )"
 
@@ -85,8 +85,6 @@ pkg_pretend() {
 }
 
 src_prepare() {
-	append-cflags -include utmp.h
-
     filter-flags -Wl,-z,defs
 
     append-cflags -Wno-error=format-truncation
@@ -123,7 +121,7 @@ src_configure() {
         $(meson_feature pcre pcre2)
         $(meson_feature xkb xkbcommon)
         $(meson_use binfmt)
-        $(meson_use bootloader)
+        $(meson_feature bootloader)
         $(meson_use coredump)
         $(meson_use efi)
         $(meson_use gshadow)
@@ -135,12 +133,12 @@ src_configure() {
         $(meson_use networkd)
         $(meson_use oomd)
         $(meson_use pstore)
-        $(meson_use elfutils)
+        $(meson_feature elfutils)
         $(meson_use resolve)
         $(meson_use rfkill)
         $(meson_use timedated)
         $(meson_use userdb)
-        $(meson_use utmp)
+        -Dutmp=false
         $(meson_use vconsole)
         -Ddns-over-tls=false
         $(usex devmode '-Dmode=developer' '-Dmode=release')
@@ -183,7 +181,7 @@ src_configure() {
         -Dseccomp=enabled
         -Dsmack=false
         -Dsplit-bin=false
-        -Dstandalone-binaries=true
+        -Dstandalone-binaries=false
         #-Dstatic-libsystemd=true
         -Dsysusers=true
         -Dtimesyncd=false
@@ -191,7 +189,6 @@ src_configure() {
         -Dtpm=true
         -Dsbat-distro-url="https://1g4.org/"
     )
-
     meson_src_configure
 }
 

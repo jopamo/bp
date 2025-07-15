@@ -48,15 +48,16 @@ src_configure() {
 		--with-privsep-path="${EPREFIX}"/var/empty
 		--disable-strip
 		--disable-utmp
+		--disable-utmpx
 		--disable-wtmp
+		--disable-wtmpx
 		--with-libedit
 		--with-pie
 		--with-privsep-user="sshd"
 		--with-sandbox="seccomp_filter"
+		--with-wtmpdb
 		--without-audit
 		--without-rpath
-		--enable-utmpx
-		--enable-wtmpx
 		$(use_with pam)
 		$(use_with ssl openssl)
 		$(use_with ssl ssl-engine)

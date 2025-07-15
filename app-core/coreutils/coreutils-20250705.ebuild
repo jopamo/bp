@@ -52,24 +52,16 @@ src_configure() {
 		$(use_enable libcap)
 		$(use_enable multicall single-binary)
 		$(use_enable xattr)
-		--enable-no-install-program="groups,kill,su,uptime"
+		--enable-no-install-program="who,groups,kill,su,uptime"
 		--enable-install-program=hostname
 		--disable-nls
 		--enable-largefile
-		--without-libgmp
 	)
 
 	export gl_cv_func_mknod_works=yes
 	use static && append-ldflags -static
 
-	if use elibc_musl; then
-        fu_cv_sys_stat_statvfs=n \
-		CFLAGS="$CFLAGS -I/usr/include/utmps" \
-		LIBS="-lutmps -lskarnet" \
-		econf "${myconf[@]}"
-	else
-		econf "${myconf[@]}"
-    fi
+	econf "${myconf[@]}"
 }
 
 src_install() {

@@ -5,5 +5,5 @@ elibc_glibc
 vtv
 
 # Musl doesn't have support for utmp by design
-utmp
+#utmp
 gshadow

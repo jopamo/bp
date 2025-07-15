@@ -3,5 +3,5 @@ elibc_musl
 
 # broken use flags under musl
 -gshadow
--utmp
+#-utmp
 -vtv

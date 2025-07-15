@@ -110,6 +110,7 @@ src_install() {
 	mv "${S}"/usr/local/* "${S}"/usr || die
 	cp -aR "${S}"/opt/* "${ED}"/opt/ || die
 	cp -aR "${S}"/usr/* "${ED}"/usr/ || die
+	cp -aR "${S}"/opt/libreoffice*/share/xdg/*.desktop "${ED}"/usr/share/applications/ || die
 	rmdir "${ED}"/usr/local || die
 
 	rm "${ED}/opt/libreoffice$(ver_cut 1-2)/program/libavmediagst.so"

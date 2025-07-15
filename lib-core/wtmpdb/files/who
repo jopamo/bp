@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# who wrapper using loginctl – prints: USER TTY YYYY‑MM‑DD HH:MM
+
+loginctl list-sessions --no-legend --no-pager |
+while read -r sid _ user _; do
+    tty=$(loginctl show-session "$sid" -p TTY --value --no-pager)
+    [ -z "$tty" ] && continue           # skip sessions without a real TTY
+
+    ts=$(loginctl show-session "$sid" -p Timestamp --value --no-pager)
+
+    # convert "Tue 2025-07-15 11:28:54 EDT" → "2025-07-15 11:28"
+    login=$(date -d "$ts" '+%Y-%m-%d %H:%M' 2>/dev/null || echo "$ts")
+
+    printf '%-8s %-12s %s\n' "$user" "$tty" "$login"
+done

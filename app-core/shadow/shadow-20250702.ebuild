@@ -48,7 +48,7 @@ src_configure() {
 		--disable-account-tools-setuid
 		--disable-nls
 		--disable-static
-		--enable-lastlog
+		--disable-lastlog
 		--with-bcrypt
 		--with-btrfs
 		--with-libbsd

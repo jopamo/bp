@@ -1,0 +1,10 @@
+[Unit]
+Description=utmps utmp writer
+
+[Service]
+ExecStart=/usr/bin/ipcwrap -c 50 -C 10 /usr/bin/utmps-utmpd /run/utmps/utmp
+Type=simple
+User=utmp
+Group=utmp
+StandardInput=socket
+NoNewPrivileges=yes

@@ -1,3 +1,4 @@
+# /etc/systemd/system/sshd.service
 [Unit]
 Description=OpenSSH Daemon
 Documentation=man:sshd(8)
@@ -5,12 +6,14 @@ Wants=sshdgenkeys.service
 After=sshdgenkeys.service
 After=network.target
 Requires=network.target
+StartLimitIntervalSec=60
+StartLimitBurst=3
 
 [Service]
 ExecStart=/usr/bin/sshd -D
 ExecReload=/usr/bin/kill -HUP $MAINPID
 KillMode=process
-Restart=always
+Restart=on-failure
 RestartSec=5s
 
 [Install]

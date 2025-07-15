@@ -110,4 +110,5 @@ src_install() {
 
 pkg_postinst() {
 	sysusers_process
+	tmpfiles_process
 }

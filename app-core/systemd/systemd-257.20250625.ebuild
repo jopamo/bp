@@ -16,12 +16,12 @@ LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="binfmt blkid bootloader bpf-framework coredump dbus devmode dhcp4 elfutils efi gcrypt gshadow
+IUSE="apparmor binfmt blkid bootloader bpf-framework coredump dbus devmode dhcp4 elfutils efi gcrypt gshadow
 +hostnamed +hwdb importd kmod ldconfig localed logind machined +networkd
 oomd pam pcre pstore resolve rfkill systemd-update timedated
 +userdb +utmp +vconsole xkb"
 
-REQUIRED_USE="elibc_musl? ( !gshadow !utmp )"
+REQUIRED_USE="elibc_musl? ( !gshadow )"
 
 DEPEND="
     app-build/gettext
@@ -85,6 +85,8 @@ pkg_pretend() {
 }
 
 src_prepare() {
+	append-cflags -include utmp.h
+
     filter-flags -Wl,-z,defs
 
     append-cflags -Wno-error=format-truncation
@@ -182,6 +184,7 @@ src_configure() {
         -Dsmack=false
         -Dsplit-bin=false
         -Dstandalone-binaries=true
+        #-Dstatic-libsystemd=true
         -Dsysusers=true
         -Dtimesyncd=false
         -Dtmpfiles=true
@@ -194,6 +197,10 @@ src_configure() {
 
 src_install() {
     meson_src_install
+
+    if use elibc_musl; then
+    	rm "${ED}"/usr/bin/shutdown || die
+    fi
 
     dosym -r /etc/sysctl.conf /etc/sysctl.d/99-sysctl.conf
 

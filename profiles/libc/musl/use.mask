@@ -5,7 +5,6 @@ elibc_glibc
 vtv
 yescrypt
 
-# Musl doesn't have support for utmp/wtmp by design
+# Musl doesn't have support for utmp by design
 utmp
-wtmp
 gshadow

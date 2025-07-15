@@ -56,4 +56,5 @@ src_install() {
 pkg_postinst() {
 	sysusers_process
 	tmpfiles_process
+	chown -R tss:tss /var/lib/tpm2-tss
 }

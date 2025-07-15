@@ -21,7 +21,7 @@ IUSE="
     btrfs cal chcpu chfn-chsh chmem choom col colcrt colrm cramfs cryptsetup
     cryptsetup-dlopen ctrlaltdel dmesg econf eject enosys exch fadvise fallocate
     fdformat fdisks findfs findmnt flock fsck fsfreeze fstrim getopt hardlink
-    hexdump hwclock ipcmk ipcrm ipcs irqtop isosize kill last ldattach libblkid
+    hexdump hwclock ipcmk ipcrm ipcs irqtop isosize kill last lastlog ldattach libblkid
     libfdisk liblastlog2 libmount libpcre2-posix libsmartcols libuser libutil
     libuuid libutempter line logger login look losetup lsblk lsclocks lsfd lsirq
     lslocks lslogins lsmem lsns magic mcookie mesg minix mkfs more mount
@@ -51,6 +51,11 @@ BDEPEND="
 	test? ( app-util/bc )
 	virtual/linux-sources
 "
+
+src_prepare() {
+	default
+	#eapply "${FILESDIR}"/utmps.patch
+}
 
 src_configure() {
 	local emesonargs=(
@@ -195,4 +200,9 @@ src_configure() {
     -Dtty-setgid=true
 	)
 	meson_src_configure
+}
+
+src_install() {
+	meson_src_install
+	rm "${ED}"/usr/share/man/man8/vigr.8 || die
 }

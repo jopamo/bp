@@ -124,24 +124,12 @@ sysusers_process() {
 
 # ----------------- Systemd -----------------
 
-_systemd_get_dir() {
-	[[ ${#} -eq 2 ]] || die "Usage: ${FUNCNAME} <variable-name> <fallback-directory>"
-	local variable=${1} fallback=${2}
-	if $(tc-getPKG_CONFIG) --exists systemd; then
-		local d
-		d=$($(tc-getPKG_CONFIG) --variable="${variable}" systemd) || die
-		echo "${d}"
-	else
-		echo "${EPREFIX}${fallback}"
-	fi
-}
-
 systemd_get_systemunitdir() {
-	_systemd_get_dir systemdsystemunitdir /lib/systemd/system
+	echo /usr/lib/systemd/system
 }
 
 systemd_get_userunitdir() {
-	_systemd_get_dir systemduserunitdir /usr/lib/systemd/user
+	echo /usr/lib/systemd/user
 }
 
 systemd_dounit() {

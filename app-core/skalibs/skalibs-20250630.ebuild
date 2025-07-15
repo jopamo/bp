@@ -22,12 +22,11 @@ src_configure() {
 	mkdir -p "${ED}"/usr/lib/skalibs/sysdeps
 
 	local myconf=(
-		--enable-shared
-		--disable-static
-		--disable-allstatic
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/lib
-		--with-dynlib="${EPREFIX}"/usr/lib
+		--enable-pkgconfig
+		--with-sysdep-devurandom=yes
+		--with-sysdep-posixspawnearlyreturn=no
+		--with-sysdep-procselfexe=/proc/self/exe
+
 	)
 
 	econf "${myconf[@]}"

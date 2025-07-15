@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson
+inherit meson flag-o-matic
 
 DESCRIPTION="Linux PAM (Pluggable Authentication Modules for Linux) project"
 HOMEPAGE="https://github.com/linux-pam/linux-pam"
@@ -145,7 +145,7 @@ src_configure() {
     	# -Ddb-uniquename=...
 
     	# pam_lastlog (feature: build the pam_lastlog module)
-    	-Dpam_lastlog=enabled
+    	-Dpam_lastlog=disabled
 
     	# pam_unix (feature: build the pam_unix module)
     	-Dpam_unix=auto

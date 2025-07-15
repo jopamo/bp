@@ -23,6 +23,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="caps clang llvm"
 
+BDEPEND="dev-python/docutils"
+
 CONFIG_CHECK="~DEBUG_INFO_BTF"
 
 src_prepare() {

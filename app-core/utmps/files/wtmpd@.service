@@ -1,0 +1,12 @@
+[Unit]
+Description=utmps wtmp writer instance (root, no limits)
+
+[Service]
+Type=simple
+User=root
+Group=root
+StandardInput=socket
+Environment=PROTO=IPC
+Environment=IPCREMOTEEUID=0
+Environment=IPCREMOTEEGID=0
+ExecStart=/usr/bin/utmps-wtmpd /var/log/wtmp

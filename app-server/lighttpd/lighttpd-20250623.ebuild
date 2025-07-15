@@ -22,7 +22,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="bzip2 dbi fam geoip krb5 ldap libunwind lua mbedtls mysql php
-postgres ssl static systemd test tmpfilesd webdav xattr xxhash zlib
+postgres ssl static systemd test webdav xattr xxhash zlib
 zstd"
 
 DEPEND="
@@ -77,12 +77,6 @@ src_install() {
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
 		doins "${FILESDIR}/lighttpd.service"
-	fi
-
-	if use tmpfilesd; then
-		insopts -m 0644
-		insinto /usr/lib/tmpfiles.d
-		doins "${FILESDIR}/lighttpd.tmpfiles.conf"
 	fi
 
 	insinto /etc/lighttpd

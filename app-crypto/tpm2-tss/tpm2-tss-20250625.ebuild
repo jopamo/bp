@@ -51,6 +51,11 @@ src_install() {
 	if ! use keep-la; then
 		find "${ED}" -name '*.la' -delete || die
 	fi
+	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
+		u tss - "TPM2 Software Stack user" /var/lib/tpm2-tss
+	EOF
+
+	newsysusers "${T}/${PN}-sysusers" "${PN}.conf"
 }
 
 pkg_postinst() {

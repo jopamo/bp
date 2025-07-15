@@ -2,6 +2,8 @@
 
 EAPI=8
 
+inherit flag-o-matic
+
 DESCRIPTION="an implementation of the utmpx.h family of functions"
 HOMEPAGE="https://skarnet.org/software/utmps/"
 SNAPSHOT=5bc6d77b08b39f863a7d8767a588f839c19d3113
@@ -13,6 +15,10 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 src_prepare() {
+	#append-flags -ffat-lto-objects
+	filter-flags -flto*
+	filter-flags -Wl,-z,defs
+
 	default
 	#sed -i -e "s/@@VERSION@@/${PV}/g" -- "${S}"/*.pc || die
 

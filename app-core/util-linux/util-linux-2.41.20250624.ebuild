@@ -53,8 +53,9 @@ BDEPEND="
 "
 
 src_prepare() {
+	append-flags -ffat-lto-objects
 	default
-	#eapply "${FILESDIR}"/utmps.patch
+	eapply "${FILESDIR}"/utmps.patch
 }
 
 src_configure() {

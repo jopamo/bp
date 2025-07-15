@@ -15,7 +15,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl libcap multicall static systemd xattr"
+IUSE="acl libcap multicall static xattr"
 
 LIB_DEPEND="
 	acl? ( app-core/acl[static-libs] )
@@ -33,15 +33,9 @@ BDEPEND="app-build/gnulib"
 RESTRICT="network-sandbox"
 
 src_prepare() {
-	filter-flags -flto*
-	filter-flags -Wl,-z,defs
-	append-ldflags -lsystemd
-
 	rm -rf gnulib
 	cp -r "${EROOT}"/usr/share/gnulib gnulib
-	gnulib/gnulib-tool --import readutmp
 
-	echo "#define WITH_SYSTEMD 1" >> lib/config.hin || die
 	./bootstrap --no-git --gnulib-srcdir="${S}"/gnulib
 
 	append-flags -fno-strict-aliasing
@@ -51,11 +45,12 @@ src_prepare() {
 }
 
 src_configure() {
+	export ac_cv_{header_selinux_{context,flash,selinux}_h,search_setfilecon}=no
+	export utils_cv_stdbuf_supported=no
 	local myconf=(
 		$(use_enable acl)
 		$(use_enable libcap)
 		$(use_enable multicall single-binary)
-		$(use_enable systemd)
 		$(use_enable xattr)
 		--enable-no-install-program="groups,kill,su,uptime"
 		--enable-install-program=hostname
@@ -63,9 +58,18 @@ src_configure() {
 		--enable-largefile
 		--without-libgmp
 	)
+
+	export gl_cv_func_mknod_works=yes
 	use static && append-ldflags -static
 
-	econf "${myconf[@]}"
+	if use elibc_musl; then
+        fu_cv_sys_stat_statvfs=n \
+		CFLAGS="$CFLAGS -I/usr/include/utmps" \
+		LIBS="-lutmps -lskarnet" \
+		econf "${myconf[@]}"
+	else
+		econf "${myconf[@]}"
+    fi
 }
 
 src_install() {

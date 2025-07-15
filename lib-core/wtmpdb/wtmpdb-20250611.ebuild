@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson
+inherit meson doins
 
 DESCRIPTION="Y2038 safe wtmp implementation as PAM module using sqlite as database"
 HOMEPAGE="https://github.com/jopamo/musl-bsd"
@@ -21,7 +21,25 @@ src_configure() {
 
 	local emesonargs=(
     	-D man=disabled
-
+    	-D wtmpdbd=enabled
+    	-D compat-symlink=true
 	)
 	meson_src_configure
+}
+
+src_install() {
+	meson_src_install
+
+	dobin "${FILESDIR}"/who
+	dobin "${FILESDIR}"/w
+}
+
+pkg_postinst() {
+	sysusers_process
+	tmpfiles_process
+
+	systemctl enable --now \
+    wtmpdb-update-boot.service \
+    wtmpdb-rotate.timer      \
+    wtmpdbd.socket
 }

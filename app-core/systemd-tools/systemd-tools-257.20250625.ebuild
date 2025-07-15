@@ -99,96 +99,96 @@ src_prepare() {
 }
 
 src_configure() {
-	local emesonargs=(
-		$(meson_feature blkid)
-		$(meson_feature bpf-framework)
-		$(meson_feature dbus)
-		$(meson_feature gcrypt)
-		$(meson_feature importd)
-		$(meson_feature kmod)
-		$(meson_feature logind fdisk)
-		$(meson_use logind)
-		$(meson_feature logind libcryptsetup)
-		$(meson_use machined)
-		$(meson_feature machined bzip2)
-		$(meson_feature machined lz4)
-		$(meson_feature machined xz)
-		$(meson_feature machined zlib)
-		$(meson_feature machined zstd)
-		$(meson_feature pam)
-		$(meson_feature pcre pcre2)
-		$(meson_feature xkb xkbcommon)
-		$(meson_use binfmt)
-		$(meson_use bootloader)
-		$(meson_use coredump)
-		$(meson_use efi)
-		$(meson_use gshadow)
-		$(meson_use hostnamed)
-		$(meson_use hwdb)
-		$(meson_use ldconfig)
-		$(meson_use localed)
-		$(meson_use networkd link-networkd-shared)
-		$(meson_use networkd)
-		$(meson_use oomd)
-		$(meson_use pstore)
-		$(meson_use elfutils)
-		$(meson_use resolve)
-		$(meson_use rfkill)
-		$(meson_use timedated)
-		$(meson_use tmpfilesd tmpfiles)
-		$(meson_use userdb)
-		$(meson_use utmp)
-		$(meson_use vconsole)
-		-Ddns-over-tls=false
-		$(usex devmode '-Dmode=developer' '-Dmode=release')
-		-Dsysvinit-path=/etc/init.d
-		-Dsysvrcnd-path=/etc/rc.d
-		-Dacl=enabled
-		-Dapparmor=disabled
-		-Daudit=disabled
-		-Dbacklight=false
-		-Ddefault-kill-user-processes=false
-		-Ddns-servers=""
-		-Denvironment-d=false
-		-Dfirstboot=false
-		-Dgnutls=disabled
-		-Dhibernate=false
-		-Dhtml=disabled
-		-Didn=false
-		-Dima=false
-		-Dlibcurl=disabled
-		-Dlibidn2=disabled
-		-Dlibidn=disabled
-		-Dlibiptc=disabled
-		-Dlink-timesyncd-shared=false
-		-Dhomed=disabled
-		-Dman=disabled
-		-Dmicrohttpd=disabled
-		-Dnss-myhostname=false
-		-Dnss-mymachines=disabled
-		-Dnss-resolve=disabled
-		-Dnss-systemd=false
-		-Dntp-servers=""
-		-Dopenssl=enabled
-		-Dp11kit=disabled
-		-Dpamlibdir="${EPREFIX}"/usr/lib/security
-		-Dpolkit=disabled
-		-Dportabled=false
-		-Dqrencode=disabled
-		-Dquotacheck=false
-		-Drandomseed=false
-		-Drc-local=""
-		-Dseccomp=enabled
-		-Dsmack=false
-		-Dsplit-bin=false
-		-Dstandalone-binaries=true
-		-Dsysusers=true
-		-Dtimesyncd=false
-		-Dtpm=true
-		-Dsbat-distro-url="https://1g4.org/"
-	)
-
-	meson_src_configure
+    local emesonargs=(
+        $(meson_feature apparmor)
+        $(meson_feature blkid)
+        $(meson_feature bpf-framework)
+        $(meson_feature dbus)
+        $(meson_feature gcrypt)
+        $(meson_feature importd)
+        $(meson_feature kmod)
+        $(meson_feature logind fdisk)
+        $(meson_use logind)
+        $(meson_feature logind libcryptsetup)
+        $(meson_use machined)
+        $(meson_feature machined bzip2)
+        $(meson_feature machined lz4)
+        $(meson_feature machined xz)
+        $(meson_feature machined zlib)
+        $(meson_feature machined zstd)
+        $(meson_feature pam)
+        $(meson_feature pcre pcre2)
+        $(meson_feature xkb xkbcommon)
+        $(meson_use binfmt)
+        $(meson_feature bootloader)
+        $(meson_use coredump)
+        $(meson_use efi)
+        $(meson_use gshadow)
+        $(meson_use hostnamed)
+        $(meson_use hwdb)
+        $(meson_use ldconfig)
+        $(meson_use localed)
+        $(meson_use networkd link-networkd-shared)
+        $(meson_use networkd)
+        $(meson_use oomd)
+        $(meson_use pstore)
+        $(meson_feature elfutils)
+        $(meson_use resolve)
+        $(meson_use rfkill)
+        $(meson_use timedated)
+        $(meson_use userdb)
+        -Dutmp=false
+        $(meson_use vconsole)
+        -Ddns-over-tls=false
+        $(usex devmode '-Dmode=developer' '-Dmode=release')
+        -Dsysvinit-path=/etc/init.d
+        -Dsysvrcnd-path=/etc/rc.d
+        -Dacl=enabled
+        -Daudit=disabled
+        -Dbacklight=false
+        -Ddefault-kill-user-processes=false
+        -Ddns-servers=""
+        -Denvironment-d=false
+        -Dfirstboot=false
+        -Dgnutls=disabled
+        -Dhibernate=false
+        -Dhtml=disabled
+        -Didn=false
+        -Dima=false
+        -Dlibcurl=disabled
+        -Dlibidn2=disabled
+        -Dlibidn=disabled
+        -Dlibiptc=disabled
+        -Dlink-timesyncd-shared=false
+        -Dhomed=disabled
+        -Dman=disabled
+        -Dmicrohttpd=disabled
+        -Dnss-myhostname=false
+        -Dnss-mymachines=disabled
+        -Dnss-resolve=disabled
+        -Dnss-systemd=false
+        -Dntp-servers=""
+        -Dopenssl=enabled
+        -Dp11kit=disabled
+        -Dpamlibdir="${EPREFIX}"/usr/lib/security
+        -Dpolkit=disabled
+        -Dportabled=false
+        -Dqrencode=disabled
+        -Dquotacheck=false
+        -Drandomseed=false
+        -Drc-local=""
+        -Dseccomp=enabled
+        -Dsmack=false
+        -Dsplit-bin=false
+        -Dstandalone-binaries=true
+        #-Dstatic-libsystemd=true
+        -Dsysusers=true
+        -Dtimesyncd=false
+        -Dtmpfiles=true
+        -Dtpm=true
+        -Dsbat-distro-url="https://1g4.org/"
+    )
+    meson_src_configure
 }
 
 src_install() {

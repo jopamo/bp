@@ -21,16 +21,16 @@ IUSE="
     btrfs cal chcpu chfn-chsh chmem choom col colcrt colrm cramfs cryptsetup
     cryptsetup-dlopen ctrlaltdel dmesg econf eject enosys exch fadvise fallocate
     fdformat fdisks findfs findmnt flock fsck fsfreeze fstrim getopt hardlink
-    hexdump hwclock ipcmk ipcrm ipcs irqtop isosize kill last lastlog ldattach libblkid
-    libfdisk liblastlog2 libmount libpcre2-posix libsmartcols libuser libutil
+    hexdump hwclock ipcmk ipcrm ipcs irqtop isosize kill ldattach libblkid
+    libfdisk libmount libpcre2-posix libsmartcols libuser libutil
     libuuid libutempter line logger login look losetup lsblk lsclocks lsfd lsirq
     lslocks lslogins lsmem lsns magic mcookie mesg minix mkfs more mount
-    mountpoint namei ncurses newgrp nls nologin nsenter pam
-    partx pg pipesz pivot_root pylibmount python raw readline rename rev rfkill
-    rtcwake runuser schedutils script scriptutils selinux setarch setpriv
-    setterm slang smack su sulogin swapoff swapon switch_root systemd sysvinit test
-    tinfo translate-docs tunelp ul unshare utmpdump uuidd vipw waitpid wall
-    wdctl whereis widechar wipefs write zlib zramctl
+    mountpoint namei ncurses newgrp nls nologin nsenter partx pg pipesz pivot_root
+    pylibmount python raw readline rename rev rfkill rtcwake runuser schedutils
+    script scriptutils selinux setarch setpriv setterm slang smack su sulogin
+    swapoff swapon switch_root systemd sysvinit test tinfo translate-docs tunelp
+    ul unshare utmpdump uuidd vipw waitpid wall wdctl whereis widechar wipefs write
+    zlib zramctl
 "
 
 DEPEND="
@@ -38,7 +38,6 @@ DEPEND="
 	lib-core/libcap-ng
 	cramfs? ( lib-core/zlib )
 	ncurses? ( virtual/curses )
-	pam? ( lib-core/pam )
 	readline? ( lib-core/readline )
 	kill? (
 		!app-core/coreutils[kill]
@@ -55,7 +54,6 @@ BDEPEND="
 src_prepare() {
 	append-flags -ffat-lto-objects
 	default
-	eapply "${FILESDIR}"/utmps.patch
 }
 
 src_configure() {
@@ -82,7 +80,6 @@ src_configure() {
     $(meson_feature  btrfs)
     $(meson_feature  widechar)
     $(meson_feature  translate-docs)
-
     $(meson_feature agetty          build-agetty)
     $(meson_feature bash-completion build-bash-completion)
     $(meson_feature bfs             build-bfs)
@@ -125,11 +122,9 @@ src_configure() {
     $(meson_feature irqtop          build-irqtop)
     $(meson_feature isosize         build-isosize)
     $(meson_feature kill            build-kill)
-    $(meson_feature last            build-last)
     $(meson_feature ldattach        build-ldattach)
     $(meson_feature libblkid        build-libblkid)
     $(meson_feature libfdisk        build-libfdisk)
-    $(meson_feature liblastlog2     build-liblastlog2)
     $(meson_feature libmount        build-libmount)
     $(meson_feature libsmartcols    build-libsmartcols)
     $(meson_feature libuuid         build-libuuid)
@@ -157,7 +152,6 @@ src_configure() {
     $(meson_feature newgrp          build-newgrp)
     $(meson_feature nologin         build-nologin)
     $(meson_feature nsenter         build-nsenter)
-    $(meson_feature pam			    build-pam-lastlog2)
     $(meson_feature partx           build-partx)
     $(meson_feature pg              build-pg)
     $(meson_feature pipesz          build-pipesz)
@@ -196,7 +190,9 @@ src_configure() {
 
     $(meson_feature python build-python)
     -Dpython="${EPYTHON}"
-    -Dpamlibdir="${EPREFIX}"/usr/lib/security
+    -Dbuild-pam-lastlog2=disabled
+    -Dbuild-liblastlog2=disabled
+    -Dbuild-last=disabled
     -Dlogin-lastlogin=false
     -Dtty-setgid=true
 	)

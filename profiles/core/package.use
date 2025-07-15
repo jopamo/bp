@@ -12,7 +12,7 @@ app-compression/lz4 static-libs
 app-compression/zstd static-libs
 app-core/acl static-libs
 app-core/attr static-libs
-#app-core/coreutils multicall static
+app-core/coreutils multicall static
 app-core/dbus tools
 app-core/debianutils installkernel
 app-core/git curl

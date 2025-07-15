@@ -3,7 +3,6 @@ elibc_glibc
 
 # broken use flags under musl
 vtv
-yescrypt
 
 # Musl doesn't have support for utmp by design
 utmp

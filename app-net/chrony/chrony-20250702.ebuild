@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools doins
 
 DESCRIPTION="NTP client and server programs"
 HOMEPAGE="https://chrony.tuxfamily.org/"
@@ -78,9 +78,7 @@ src_install() {
 	fi
 
 	if use systemd; then
-		insinto /usr/lib/systemd/system
-		insopts -m 0644
-		doins "${FILESDIR}/chronyd.service"
+		systemd_dounit "${FILESDIR}/chronyd.service"
 	fi
 
 	cat > "${T}"/"${PN}"-sysusers <<- EOF || die

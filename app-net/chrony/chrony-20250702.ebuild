@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools user
+inherit autotools
 
 DESCRIPTION="NTP client and server programs"
 HOMEPAGE="https://chrony.tuxfamily.org/"
@@ -82,9 +82,20 @@ src_install() {
 		insopts -m 0644
 		doins "${FILESDIR}/chronyd.service"
 	fi
+
+	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
+		u chrony 123 "Network Time Protocol" /var/empty
+	EOF
+
+	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die
+		d /var/lib/chrony 0755 chrony chrony - -
+	EOF
+
+	newsysusers "${T}/${PN}-sysusers" "${PN}.conf"
+	newtmpfiles "${T}/${PN}-tmpfiles" "${PN}.conf"
 }
 
-pkg_preinst() {
-	enewgroup chrony 123
-	enewuser chrony -1 -1 /var/lib/chrony chrony
+pkg_postinst() {
+	sysusers_process
+	tmpfiles_process
 }

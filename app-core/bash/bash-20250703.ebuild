@@ -3,7 +3,7 @@
 EAPI=7
 
 BRANCH_NAME="master"
-SNAPSHOT=6794b5478f660256a1023712b5fc169196ed0a22
+SNAPSHOT=b8c60bc9ca365f8261fa97900b6fa939f6ebc303
 
 inherit flag-o-matic toolchain-funcs prefix
 

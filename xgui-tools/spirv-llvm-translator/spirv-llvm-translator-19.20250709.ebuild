@@ -8,8 +8,7 @@ inherit cmake flag-o-matic multiprocessing
 
 DESCRIPTION="Bi-directional translator between SPIR-V and LLVM IR"
 HOMEPAGE="https://github.com/KhronosGroup/SPIRV-LLVM-Translator"
-
-SNAPSHOT=6a96a625abea08b953c02b53dabf1586dbca5569
+SNAPSHOT=f3c69c2b17f763b0e390e0f34a026a68870b2b30
 SRC_URI="https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/${SNAPSHOT}.tar.gz -> spirv-llvm-translator-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/SPIRV-LLVM-Translator-${SNAPSHOT}"
 

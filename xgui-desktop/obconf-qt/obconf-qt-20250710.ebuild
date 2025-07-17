@@ -6,7 +6,7 @@ inherit cmake xdg
 
 DESCRIPTION="Openbox window manager configuration tool"
 HOMEPAGE="http://lxqt.org/"
-SNAPSHOT=ae5eb3de93ee3fa5cd950222dd08300a45fb5484
+SNAPSHOT=37341702344c54e9c53ef59eca453fd2ffd64f80
 SRC_URI="https://www.github.com/lxqt/obconf-qt/archive/${SNAPSHOT}.tar.gz -> obconf-qt-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/obconf-qt-${SNAPSHOT}"
 

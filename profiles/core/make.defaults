@@ -113,7 +113,7 @@ USE="
     caps          dbus          device-mapper
     machined      ncurses       pam
     readline      ssl           systemd
-    tmpfilesd     udev          efi
+    udev          efi
     kvm           localed       pstore
 
     # ── Crypto / Security ────────────────────────────────

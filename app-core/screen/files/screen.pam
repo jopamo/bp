@@ -1,1 +1,3 @@
+#%PAM-1.0
+# screen
 auth		required	pam_unix.so

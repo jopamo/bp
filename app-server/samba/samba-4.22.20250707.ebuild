@@ -159,12 +159,6 @@ src_install() {
 		doins "${FILESDIR}"/samba.service
 	fi
 
-	if use tmpfilesd; then
-		insopts -m 0644
-		insinto /usr/lib/tmpfiles.d
-		doins "${FILESDIR}"/samba.conf
-	fi
-
 	keepdir var/log/samba
 	keepdir var/lib/samba/private
 

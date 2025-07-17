@@ -10,9 +10,11 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="ipv6 router server systemd tmpfilesd user-namespaces xdp"
+IUSE="ipv6 router server systemd user-namespaces xdp"
 
 S=${WORKDIR}
+
+DEPEND="app-core/hosts"
 
 src_prepare() {
 	cp -rp "${FILESDIR}"/* "${S}"/ || die
@@ -55,7 +57,7 @@ src_install() {
 			doins $f
 	done
 
-	for f in host.conf hosts issue securetty \
+	for f in host.conf issue securetty \
 		shells profile ; do
 			insopts -m 0644
 			insinto /etc
@@ -116,19 +118,7 @@ src_install() {
 	keepdir /usr/local/lib
 
 	newsysusers sysusers 1g4.conf
-
-	if use systemd ; then
-		if use tmpfilesd; then
-			insopts -m 0644
-			insinto /usr/lib/tmpfiles.d
-			newins tmpfiles 1g4.conf
-		fi
-
-		# setup systemd.environment-generator
-		#insopts -m 0644
-		#insinto /usr/lib/systemd/system-environment-generators
-		#newins env-generator 10-1g4
-	fi
+	newtmpfiles tmpfiles 1g4.conf
 
 	if use user-namespaces; then
 		echo "user.max_user_namespaces = 10000" > "${T}/99-max-user-namespaces.conf"

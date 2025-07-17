@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="Library implementing the SSH2 protocol"
 HOMEPAGE="http://www.libssh2.org/"
-SNAPSHOT=723b701715a4764e207a0020d781f5a36dc8bb63
+SNAPSHOT=ad8e92458370a961912f12fc4890ad6003b0dbb6
 SRC_URI="https://github.com/libssh2/libssh2/archive/${SNAPSHOT}.tar.gz -> libssh2-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libssh2-${SNAPSHOT}"
 

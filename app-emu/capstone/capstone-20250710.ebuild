@@ -8,7 +8,7 @@ DISTUTILS_EXT=1
 
 DESCRIPTION="disassembly/disassembler framework + bindings"
 HOMEPAGE="http://www.capstone-engine.org/"
-SNAPSHOT=56db8c2b690eb6372c91f8d76621f43a33c4dbe4
+SNAPSHOT=67e388680a3e68bd39f7fe2d66c4dc210f84c53f
 SRC_URI="https://github.com/capstone-engine/capstone/archive/${SNAPSHOT}.tar.gz -> capstone-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/capstone-${SNAPSHOT}"
 

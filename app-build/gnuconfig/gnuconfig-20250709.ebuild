@@ -4,8 +4,7 @@ EAPI=8
 
 DESCRIPTION="Updated config.sub and config.guess file from GNU"
 HOMEPAGE="https://savannah.gnu.org/projects/config"
-
-SNAPSHOT=00b15927496058d23e6258a28d8996f87cf1f191
+SNAPSHOT=a2287c3041a3f2a204eb942e09c015eab00dc7dd
 SRC_URI="https://github.com/1g4-mirror/config/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/config-${SNAPSHOT}"
 

@@ -2,6 +2,8 @@
 
 EAPI=8
 
+inherit doins
+
 DESCRIPTION="Allows users or groups to run commands as other users"
 HOMEPAGE="https://www.sudo.ws/"
 SNAPSHOT=cb4e267341332fb4957d68d98fd8e51c12d14aef

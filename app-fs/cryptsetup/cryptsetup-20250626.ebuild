@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit linux-info autotools
+inherit linux-info autotools doins
 
 DESCRIPTION="Tool to setup encrypted devices with dm-crypt"
 HOMEPAGE="https://gitlab.com/cryptsetup/cryptsetup/blob/master/README.md"

@@ -58,7 +58,7 @@ RDEPEND="
 	app-util/lshw
 	app-var/hdparm
 	app-var/perl-cleaner
-	app-var/sudo
+	app-core/sudo
 	dev-python/beautifulsoup4
 	dev-python/black
 	dev-python/paramiko

@@ -1,8 +1,8 @@
 #%PAM-1.0
+# system-services
 
-auth      sufficient pam_permit.so
-account   include    system-auth
-session   optional   pam_loginuid.so
-session   required   pam_limits.so
-session   optional   pam_permit.so
-session   required   pam_env.so
+account   include   system-auth
+
+session   required  pam_limits.so
+session   optional  pam_loginuid.so
+session   optional  pam_env.so    envfile=/etc/profile.env

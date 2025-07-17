@@ -1,4 +1,10 @@
 #%PAM-1.0
-auth		include		system-auth
-account		include		system-auth
-session		include		system-auth
+#sudo
+
+auth     sufficient pam_rootok.so
+auth     include    system-auth
+
+account  include    system-auth
+
+session  optional   pam_keyinit.so force revoke
+session  include    system-auth

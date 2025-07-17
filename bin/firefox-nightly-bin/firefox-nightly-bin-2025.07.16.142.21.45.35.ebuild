@@ -3,8 +3,10 @@
 EAPI=8
 
 MOZ_PN="firefox-nightly"
-TIMESTAMP="$(ver_cut 5)-$(ver_cut 6)-$(ver_cut 7)"
+TIMESTAMP=$(ver_rs 1- - "$(ver_cut 5-7)")
+MOZ_PV="$(ver_rs 1- - "$(ver_cut 1-3)")-${TIMESTAMP}"
 MOZ_VER="$(ver_cut 4).0a1"
+BASE_URI="https://archive.mozilla.org/pub/firefox/nightly/$(ver_cut 1)/$(ver_cut 2)/${MOZ_PV}-mozilla-central"
 
 inherit xdg
 
@@ -12,8 +14,8 @@ DESCRIPTION="Firefox Web Browser"
 HOMEPAGE="http://www.mozilla.com/firefox"
 
 SRC_URI="
-	amd64? ( https://archive.mozilla.org/pub/firefox/nightly/$(ver_cut 1)/$(ver_cut 2)/$(ver_cut 1)-$(ver_cut 2)-$(ver_cut 3)-${TIMESTAMP}-mozilla-central/firefox-${MOZ_VER}.en-US.linux-x86_64.tar.xz )
-	arm64? ( https://archive.mozilla.org/pub/firefox/nightly/$(ver_cut 1)/$(ver_cut 2)/$(ver_cut 1)-$(ver_cut 2)-$(ver_cut 3)-${TIMESTAMP}-mozilla-central/firefox-${MOZ_VER}.en-US.linux-aarch64.tar.xz )
+	amd64? ( ${BASE_URI}/firefox-${MOZ_VER}.en-US.linux-x86_64.tar.xz -> firefox-${MOZ_PV}-x86_64.tar.xz )
+	arm64? ( ${BASE_URI}/firefox-${MOZ_VER}.en-US.linux-aarch64.tar.xz -> firefox-${MOZ_PV}-aarch64.tar.xz )
 "
 
 S="${WORKDIR}/firefox"

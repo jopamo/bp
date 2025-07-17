@@ -54,6 +54,7 @@ pemake() {
 		PKG_CONFIG="$(tc-getPKG_CONFIG)" \
 		RANLIB="$(tc-getRANLIB)" \
 		DNS=$(usex dns) \
+		SBINDIR=/usr/bin \
 		IDSDIR='$(SHAREDIR)/misc' \
 		MANDIR='$(SHAREDIR)/man' \
 		PREFIX="${EPREFIX}/usr" \

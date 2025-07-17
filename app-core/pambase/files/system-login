@@ -1,5 +1,5 @@
 #%PAM-1.0
-#system-login pambase file
+#system-login
 
 auth       required   pam_shells.so
 auth       requisite  pam_nologin.so

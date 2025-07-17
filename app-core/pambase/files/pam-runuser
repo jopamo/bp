@@ -1,6 +1,9 @@
+#%PAM-1.0
+# pam-runuser  (lightweight)
+
 auth     sufficient pam_rootok.so
 auth     include    system-auth
 
 account  include    system-auth
 
-session  include    system-login
+session  include    system-services

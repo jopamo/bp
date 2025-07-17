@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=6790fb8e1931783646c07a364657fadb5c9d1e63
 
-inherit flag-o-matic autotools
+inherit flag-o-matic autotools doins
 
 DESCRIPTION="screen manager with VT100/ANSI terminal emulation"
 HOMEPAGE="https://www.gnu.org/software/screen/"
@@ -14,7 +14,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug pam tmpfilesd"
+IUSE="debug pam"
 
 DEPEND="
 	app-build/texinfo
@@ -54,9 +54,14 @@ src_install() {
 		newins "${FILESDIR}/screen.pam" screen
 	fi
 
-	if use tmpfilesd; then
-		insopts -m 0644
-		insinto /usr/lib/tmpfiles.d
-		doins "${FILESDIR}/screen.conf"
-	fi
+	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die
+d /run/screens 0755 root root -
+	EOF
+
+	newtmpfiles "${T}/${PN}-tmpfiles" "${PN}.conf"
 }
+
+pkg_postinst() {
+	tmpfiles_process
+}
+

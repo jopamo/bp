@@ -16,86 +16,87 @@ LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="binfmt blkid bootloader bpf-framework coredump dbus devmode dhcp4 elfutils efi gcrypt gshadow
-+hostnamed +hwdb importd kmod kvm ldconfig localed logind machined +networkd
+IUSE="apparmor binfmt blkid bootloader bpf-framework coredump dbus devmode dhcp4 elfutils efi gcrypt gshadow
++hostnamed +hwdb importd kmod ldconfig localed logind machined +networkd
 oomd pam pcre pstore resolve rfkill systemd-update timedated
-tmpfilesd +userdb +utmp +vconsole xkb"
++userdb +vconsole xkb"
 
-REQUIRED_USE="elibc_musl? ( !gshadow !utmp )"
+REQUIRED_USE="elibc_musl? ( !gshadow )"
 
 DEPEND="
-	app-build/gettext
-	app-core/acl
-	app-core/coreutils
-	app-core/procps[kill(+)]
-	app-core/util-linux
-	app-dev/gperf
-	app-dev/pkgconf
-	app-tex/docbook-xml-dtd
-	app-tex/docbook-xsl-stylesheets
-	lib-core/libcap
-	lib-core/libxslt
-	bpf-framework? ( lib-net/libbpf )
-	logind? ( app-fs/cryptsetup )
-	gcrypt? ( lib-core/libgcrypt )
-	elfutils? ( virtual/libelf )
-	lib-core/libseccomp
-	dbus? (
-		app-core/dbus
-		app-compression/libarchive
-		lib-util/glib
-	)
-	kmod? ( app-core/kmod )
-	logind? ( app-core/dbus )
-	pam? ( lib-core/pam )
-	pcre? ( lib-core/libpcre2 )
-	tmpfilesd? ( app-core/dbus )
-	xkb? ( xgui-lib/libxkbcommon )
+    app-build/gettext
+    app-core/acl
+    app-core/coreutils
+    app-core/procps[kill(+)]
+    app-core/util-linux
+    app-dev/gperf
+    app-dev/pkgconf
+    app-tex/docbook-xml-dtd
+    app-tex/docbook-xsl-stylesheets
+    lib-core/libcap
+    lib-core/libseccomp
+    lib-core/libxslt
+    apparmor? ( app-core/apparmor )
+    bpf-framework? ( lib-net/libbpf )
+    dbus? (
+        app-core/dbus
+        app-compression/libarchive
+        lib-util/glib
+    )
+    elfutils? ( virtual/libelf )
+    gcrypt? ( lib-core/libgcrypt )
+    kmod? ( app-core/kmod )
+    logind? ( app-core/dbus
+    			app-fs/cryptsetup )
+    pam? ( lib-core/pam )
+    pcre? ( lib-core/libpcre2 )
+    xkb? ( xgui-lib/libxkbcommon )
 "
 BDEPEND="
-	dev-python/pyelftools
-	dev-py/jinja
+    dev-python/pyelftools
+    dev-py/jinja
 "
 
 pkg_pretend() {
-	if [[ ${MERGE_TYPE} != buildonly ]]; then
-		local CONFIG_CHECK="~AUTOFS_FS ~BLK_DEV_BSG ~CGROUPS
-			~EPOLL ~FANOTIFY ~FHANDLE ~SECCOMP ~SECCOMP_FILTER
-			~INOTIFY_USER ~NET ~NET_NS ~PROC_FS ~SIGNALFD ~SYSFS
-			~TIMERFD ~UNIX ~CGROUP_BPF ~!FW_LOADER_USER_HELPER_FALLBACK
-			~CRYPTO_HMAC ~CRYPTO_SHA256 ~CRYPTO_USER_API_HASH
-			~!GRKERNSEC_PROC ~!IDE ~!SYSFS_DEPRECATED ~!SYSFS_DEPRECATED_V2"
+    if [[ ${MERGE_TYPE} != buildonly ]]; then
+        local CONFIG_CHECK="~AUTOFS_FS ~BLK_DEV_BSG ~CGROUPS
+            ~EPOLL ~FANOTIFY ~FHANDLE ~SECCOMP ~SECCOMP_FILTER
+            ~INOTIFY_USER ~NET ~NET_NS ~PROC_FS ~SIGNALFD ~SYSFS
+            ~TIMERFD ~UNIX ~CGROUP_BPF ~!FW_LOADER_USER_HELPER_FALLBACK
+            ~CRYPTO_HMAC ~CRYPTO_SHA256 ~CRYPTO_USER_API_HASH
+            ~!GRKERNSEC_PROC ~!IDE ~!SYSFS_DEPRECATED ~!SYSFS_DEPRECATED_V2"
 
-		use tmpfilesd && CONFIG_CHECK+=" ~TMPFS_POSIX_ACL"
-		use tmpfilesd && CONFIG_CHECK+=" ~DEVTMPFS ~TMPFS_XATTR"
+        #use tmpfilesd
+        CONFIG_CHECK+=" ~TMPFS_POSIX_ACL"
+        CONFIG_CHECK+=" ~DEVTMPFS ~TMPFS_XATTR"
 
-		use pstore && CONFIG_CHECK+=" ~ACPI_APEI"
+        use pstore && CONFIG_CHECK+=" ~ACPI_APEI"
 
-		if linux_config_exists; then
-			local uevent_helper_path=$(linux_chkconfig_string UEVENT_HELPER_PATH)
-			if [[ -n ${uevent_helper_path} ]] && [[ ${uevent_helper_path} != '""' ]]; then
-				ewarn "It's recommended to set an empty value to the following kernel config option:"
-				ewarn "CONFIG_UEVENT_HELPER_PATH=${uevent_helper_path}"
-			fi
-		fi
+        if linux_config_exists; then
+            local uevent_helper_path=$(linux_chkconfig_string UEVENT_HELPER_PATH)
+            if [[ -n ${uevent_helper_path} ]] && [[ ${uevent_helper_path} != '""' ]]; then
+                ewarn "It's recommended to set an empty value to the following kernel config option:"
+                ewarn "CONFIG_UEVENT_HELPER_PATH=${uevent_helper_path}"
+            fi
+        fi
 
-		check_extra_config
-	fi
+        check_extra_config
+    fi
 }
 
 src_prepare() {
-	filter-flags -Wl,-z,defs
+    filter-flags -Wl,-z,defs
 
-	append-cflags -Wno-error=format-truncation
+    append-cflags -Wno-error=format-truncation
 
-	if use elibc_musl; then
-		append-cppflags -D__UAPI_DEF_ETHHDR=0
-		append-flags -Wno-error=incompatible-pointer-types
+    if use elibc_musl; then
+        append-cppflags -D__UAPI_DEF_ETHHDR=0
+        append-flags -Wno-error=incompatible-pointer-types
 
-		eapply "${FILESDIR}"/patches/*.patch
-	fi
+        eapply "${FILESDIR}"/patches/*.patch
+    fi
 
-	default
+    default
 }
 
 src_configure() {

@@ -18,7 +18,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="acl -addc -addns -ads -ceph client -cluster cups debug
-dmapi fam gpg iprint json -ldap quota syslog systemd test tmpfilesd winbind
+dmapi fam gpg iprint json -ldap quota syslog systemd test winbind
 zeroconf"
 
 CDEPEND="
@@ -170,4 +170,18 @@ src_install() {
 
 	rm -rf "${ED}"/var/{cache,lock,run}
 	rm -rf "${ED}"/run
+
+	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die
+D /run/samba 0755 root root
+D /run/lock/samba 0755 root root
+	EOF
+
+	#newsysusers "${T}/${PN}-sysusers" "${PN}.conf"
+	newtmpfiles "${T}/${PN}-tmpfiles" "${PN}.conf"
 }
+
+pkg_postinst() {
+	sysusers_process
+	tmpfiles_process
+}
+

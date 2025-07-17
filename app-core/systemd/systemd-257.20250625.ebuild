@@ -46,8 +46,8 @@ DEPEND="
     elfutils? ( virtual/libelf )
     gcrypt? ( lib-core/libgcrypt )
     kmod? ( app-core/kmod )
-    logind? ( app-core/dbus )
-    logind? ( app-fs/cryptsetup )
+    logind? ( app-core/dbus
+    			app-fs/cryptsetup )
     pam? ( lib-core/pam )
     pcre? ( lib-core/libpcre2 )
     xkb? ( xgui-lib/libxkbcommon )

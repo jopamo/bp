@@ -12,7 +12,7 @@ LICENSE="ISC BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="pam ssl tmpfilesd"
+IUSE="pam ssl"
 
 DEPEND="
 	lib-core/zlib
@@ -24,7 +24,7 @@ src_configure() {
 	myconf=(
 		--prefix="${EPREFIX}"/usr
 		--libexecdir="${EPREFIX}"/usr/libexec
-		--enable-tmpfiles.d=$(usex tmpfilesd "${EPREFIX}"/usr/lib/tmpfiles.d "false")
+		--enable-tmpfiles.d="${EPREFIX}"/usr/lib/tmpfiles.d
 		--enable-zlib=system
 		--with-all-insults
 		--with-env-editor

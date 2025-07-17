@@ -14,7 +14,7 @@ LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="argon2 static static-libs tmpfilesd udev urandom"
+IUSE="argon2 static static-libs udev urandom"
 
 LIB_DEPEND="
 	app-core/util-linux[static-libs(+)]
@@ -54,7 +54,7 @@ src_configure() {
 		--disable-rpath
 		--enable-shared
 		--with-crypto_backend="openssl"
-		--with-tmpfilesdir=$(usex tmpfilesd "${EPREFIX}"/usr/lib/tmpfiles.d "")
+		--with-tmpfilesdir="${EPREFIX}"/usr/lib/tmpfiles.d
 	    --disable-ssh-token
 		$(use_enable !urandom dev-random)
 		$(use_enable argon2 libargon2)

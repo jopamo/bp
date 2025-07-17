@@ -37,7 +37,6 @@ src_install() {
 		eclass_import
 		efixperm
 		emirror
-		hosts_bump
 		lighttpd_certs
 		mkheaders
 		mkimg
@@ -55,7 +54,6 @@ src_install() {
 	insopts -m 0644
 	local systemd_services=(
 		daily-reboot.service
-		hosts_bump.service
 		xdp-loader@.service
 	)
 	for f in "${systemd_services[@]}"; do
@@ -64,7 +62,6 @@ src_install() {
 
 	local systemd_timers=(
 		daily-reboot.timer
-		hosts_bump.timer
 	)
 	for f in "${systemd_timers[@]}"; do
 		doins "${FILESDIR}/timers/$f"

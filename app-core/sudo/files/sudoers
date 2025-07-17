@@ -1,6 +1,23 @@
-@includedir /etc/sudoers.d
-Defaults      env_reset
-Defaults      editor=/usr/bin/vim, !env_editor
+# /etc/sudoers
+# use visudo to edit safely
 
-%wheel ALL=(ALL) ALL
-root ALL=(ALL) ALL
+Defaults    env_reset
+Defaults    editor=/usr/bin/vim, !env_editor
+
+# security hardening
+Defaults    use_pty                     # run each sudo command in its own PTY
+Defaults    secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+Defaults    log_input, log_output       # record complete I/O
+Defaults    iolog_dir=/var/log/sudo-io  # where session logs go
+Defaults    logfile=/var/log/sudo.log   # condensed event log
+Defaults    passwd_timeout=1            # 1‑second delay after wrong password
+Defaults    timestamp_timeout=15        # ask again after 15 minutes
+
+# selective environment
+Defaults    env_keep += "SSH_AUTH_SOCK LANG LC_* XAUTHORITY"
+
+# privilege specification
+%wheel      ALL=(ALL:ALL) ALL           # wheel gets full root on any host
+
+# keep drop‑ins last so they can override
+#includedir /etc/sudoers.d

@@ -6,8 +6,7 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Standard GNU utilities (chmod, cp, dd, ls, sort, tr, head, wc, who,...)"
 HOMEPAGE="https://www.gnu.org/software/coreutils/"
-
-SNAPSHOT=fd59e4a955970b2a6c2796578f1bc8b57604f731
+SNAPSHOT=083f89528ed77d91fd780c5fc81652aef319934b
 SRC_URI="https://github.com/coreutils/coreutils/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

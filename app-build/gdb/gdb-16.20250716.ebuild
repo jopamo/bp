@@ -8,7 +8,7 @@ inherit flag-o-matic python-single-r1
 
 DESCRIPTION="GNU debugger"
 HOMEPAGE="https://sourceware.org/gdb/"
-SNAPSHOT=83572bc1c61b0a203de51f4b3470cb1a8da3829b
+SNAPSHOT=3c9f85512fb2a18aa380a71896201ad2d227731e
 SRC_URI="https://github.com/1g4-mirror/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/binutils-gdb-${SNAPSHOT}"
 

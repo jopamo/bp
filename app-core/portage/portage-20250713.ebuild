@@ -6,7 +6,7 @@ inherit meson linux-info multiprocessing python-r1 flag-o-matic doins
 
 DESCRIPTION="Gentoo package manager"
 HOMEPAGE="https://github.com/gentoo/portage"
-SNAPSHOT=432c18cc91037ba1a3a253fee00e66b820a1df33
+SNAPSHOT=44cc0ab2caf13a18cbb99580b91a8afe61ce9cc4
 SRC_URI="https://github.com/gentoo/portage/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

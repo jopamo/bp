@@ -6,7 +6,7 @@ inherit flag-o-matic
 
 DESCRIPTION="User-land utilities for LVM2 (device-mapper) software"
 HOMEPAGE="https://sourceware.org/lvm2/"
-SNAPSHOT=8e2cdcc0067526c29197c2ba92ea6e7921a19558
+SNAPSHOT=6fa5510b65967b015479a2a6418b2b8e733cae58
 SRC_URI="https://github.com/1g4-mirror/lvm2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -15,7 +15,7 @@ LICENSE="|| ( AFL-2.1 GPL-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="apparmor debug inotify static-libs systemd test tools tmpfilesd user-session valgrind X"
+IUSE="apparmor debug inotify static-libs systemd test tools user-session valgrind X"
 
 DEPEND="
 	lib-core/expat

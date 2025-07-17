@@ -5,7 +5,7 @@ EAPI=8
 BRANCH_NAME="$(ver_cut 1-2)"
 SNAPSHOT=489a08e2fa6698869e95caacbab4ee8bc3455f6b
 
-inherit autotools edo multiprocessing toolchain-funcs user
+inherit autotools edo multiprocessing toolchain-funcs doins
 
 DESCRIPTION="A persistent caching system, key-value, and data structures database"
 HOMEPAGE="https://github.com/redis/redis"
@@ -17,7 +17,7 @@ LICENSE="BSD Boost-1.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="jemalloc selinux ssl systemd test tmpfilesd"
+IUSE="jemalloc selinux ssl systemd test"
 
 RESTRICT="!test? ( test )"
 
@@ -151,12 +151,7 @@ src_install() {
 		doins "${FILESDIR}/redis.service"
 	fi
 
-	if use tmpfilesd; then
-		insopts -m 0644
-		insinto /usr/lib/tmpfiles.d
-		newins "${FILESDIR}/${PN}-tmpfiles" ${PN}.conf
-	fi
-
+	newtmpfiles "${FILESDIR}/${PN}-tmpfiles" ${PN}.conf
 
 	insinto /etc/logrotate.d/
 	newins "${FILESDIR}/${PN}.logrotate" ${PN}
@@ -175,5 +170,6 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
-	use tmpfilesd && systemd-tmpfiles --create "${PN}.conf"
+	sysusers_process
+	tmpfiles_process
 }

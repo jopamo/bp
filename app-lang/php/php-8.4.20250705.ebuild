@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="PHP-$(ver_cut 1-2)"
 
-inherit flag-o-matic git-r3 autotools
+inherit flag-o-matic git-r3 autotools doins
 
 DESCRIPTION="The PHP language runtime engine"
 HOMEPAGE="https://secure.php.net/"
@@ -39,8 +39,6 @@ DEPEND="
 	lib-dev/oniguruma
 	virtual/ssl
 "
-
-
 
 src_prepare() {
 	filter-flags -flto*
@@ -119,15 +117,11 @@ src_install() {
 		insinto /etc/php/php-fpm.d/
 		doins "${FILESDIR}"/www.conf
 
-		if use tmpfilesd; then
-			cat <<-EOF >"${S}"/php-fpm.tmpfiles
-			d /run/php-fpm 755 root root
-			EOF
+		cat <<-EOF >"${S}"/php-fpm.tmpfiles
+d /run/php-fpm 755 root root
+		EOF
 
-			insopts -m 0644
-			insinto /usr/lib/tmpfiles.d
-			newins php-fpm.tmpfiles php.conf
-		fi
+		newtmpfiles php-fpm.tmpfiles php.conf
 
 		if use systemd; then
 			insinto /usr/lib/systemd/system
@@ -135,4 +129,9 @@ src_install() {
 			doins sapi/fpm/php-fpm.service
 		fi
 	fi
+}
+
+pkg_postinst() {
+	sysusers_process
+	tmpfiles_process
 }

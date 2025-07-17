@@ -2,6 +2,8 @@
 
 EAPI=8
 
+inherit flag-o-matic
+
 MY_P="${PN}_$(ver_rs 1- _)"
 MAJOR_V="$(ver_cut 1-2)"
 
@@ -37,6 +39,8 @@ ejam() {
 }
 
 src_configure() {
+	append-flags -ffat-lto-objects
+
 	OPTIONS=(
 		$(usex context '' '--without-context --without-coroutine --without-fiber')
 		$(usex icu "-sICU_PATH=${ESYSROOT}/usr" '--disable-icu boost.locale.icu=off')

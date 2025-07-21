@@ -4,7 +4,7 @@ EAPI=8
 
 SNAPSHOT=a8968fc4257322b1e4e191c4bccedea98d7b053e
 
-inherit autotools linux-info user toolchain-funcs
+inherit autotools linux-info toolchain-funcs
 
 DESCRIPTION="The Common Unix Printing System"
 HOMEPAGE="https://www.cups.org/"
@@ -41,14 +41,6 @@ PATCHES=(
 )
 
 RESTRICT="test"
-
-pkg_setup() {
-	enewgroup lp
-	enewuser lp -1 -1 -1 lp
-	enewgroup lpadmin 106
-
-	linux-info_pkg_setup
-}
 
 src_prepare() {
 	default

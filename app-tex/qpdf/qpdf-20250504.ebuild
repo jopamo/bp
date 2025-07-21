@@ -2,11 +2,14 @@
 
 EAPI=8
 
+BRANCH_NAME="stable"
+
 inherit cmake
 
 DESCRIPTION="Command-line tool for structural, content-preserving transformation of PDF files"
 HOMEPAGE="http://qpdf.sourceforge.net/"
-SNAPSHOT=f7e07240c7080e6350aaacf374027de0f8fc3d33
+
+SNAPSHOT=856d32c610334855d30e96d25eb5f9636fb62f08
 SRC_URI="https://github.com/qpdf/qpdf/archive/${SNAPSHOT}.tar.gz -> qpdf-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/qpdf-${SNAPSHOT}"
 

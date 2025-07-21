@@ -20,7 +20,7 @@ DEPEND="
 	lib-net/libpcap
 	virtual/ssl
 	netlink? ( lib-net/libnl )
-	pcre? ( lib-core/libpcre )
+	pcre? ( lib-core/libpcre2 )
 	experimental? ( lib-core/zlib )
 	sqlite? ( lib-core/sqlite )
 "

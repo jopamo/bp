@@ -1,0 +1,15 @@
+[Unit]
+Description=Load XDP DDoS Protection on network interface %I
+Wants=network-online.target
+After=network-online.target
+After=sysfs.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=/usr/bin/test -f /opt/xdp/ddos.o
+ExecStart=/usr/bin/ip link set dev %I xdp obj /opt/xdp/ddos.o sec xdp
+ExecStop=/usr/bin/ip link set dev %I xdp off
+
+[Install]
+WantedBy=multi-user.target

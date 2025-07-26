@@ -54,7 +54,8 @@ src_install() {
 	insopts -m 0644
 	local systemd_services=(
 		daily-reboot.service
-		xdp-loader@.service
+		xdp-drop@.service
+		xdp-ddos@.service
 	)
 	for f in "${systemd_services[@]}"; do
 		doins "${FILESDIR}/services/$f"

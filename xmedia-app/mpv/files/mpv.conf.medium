@@ -1,0 +1,22 @@
+ontop=yes
+save-position-on-quit
+af="lavfi=[firequalizer=gain='if(between(f,0,200), -60, 0)']"
+geometry=33%x33%+100%+100%
+reset-on-next-file=audio-delay,mute,pause,speed,sub-delay,video-aspect-override,video-pan-x,video-pan-y,video-rotate,video-zoom,volume
+border=no
+cursor-autohide=500
+hwdec-codecs=all
+hwdec=auto
+temporal-dither=yes
+dither=error-diffusion
+error-diffusion=burkes
+blend-subtitles=yes
+dither-depth=10
+correct-downscaling=yes
+linear-downscaling=yes
+sigmoid-upscaling=yes
+deband=no
+sid=no
+no-cache-pause
+
+ytdl-format="137+140/299+140/bestvideo[height<=?1080][vcodec!=?vp9]+bestaudio/best"

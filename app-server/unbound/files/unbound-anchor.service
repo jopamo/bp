@@ -7,7 +7,7 @@ Before=unbound.service
 
 [Service]
 Type=oneshot
-ExecStart=/usr/sbin/unbound-anchor
+ExecStart=/usr/bin/unbound-anchor
 
 [Install]
 WantedBy=multi-user.target

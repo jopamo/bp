@@ -5,8 +5,8 @@ Before=nss-lookup.target
 Wants=nss-lookup.target
 
 [Service]
-ExecStartPre=/usr/sbin/unbound-checkconf
-ExecStart=/usr/sbin/unbound -d
+ExecStartPre=/usr/bin/unbound-checkconf
+ExecStart=/usr/bin/unbound -d
 ProtectKernelTunables=false
 ProtectProc=invisible
 ProtectSystem=strict

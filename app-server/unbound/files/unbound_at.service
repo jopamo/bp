@@ -6,8 +6,8 @@ Wants=nss-lookup.target
 
 [Service]
 Type=simple
-ExecStartPre=/usr/sbin/unbound-checkconf /etc/unbound/%i.conf
-ExecStart=/usr/sbin/unbound -d -c /etc/unbound/%i.conf
+ExecStartPre=/usr/bin/unbound-checkconf /etc/unbound/%i.conf
+ExecStart=/usr/bin/unbound -d -c /etc/unbound/%i.conf
 
 [Install]
 WantedBy=multi-user.target

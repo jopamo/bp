@@ -10,6 +10,7 @@ cairo
 cli
 cups
 dbus
+dhcp4
 dri
 drm
 efi
@@ -24,6 +25,7 @@ gles2
 glib
 gui
 hwdb
+i915
 icu
 intel
 introspection
@@ -42,6 +44,7 @@ mount
 mp3
 ncat
 networkd
+nmtui
 npm
 opengl
 pic
@@ -64,6 +67,7 @@ shaderc
 spirv
 svg
 tiff
+timedated
 truetype
 ucm
 user-namespaces

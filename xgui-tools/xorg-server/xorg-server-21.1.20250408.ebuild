@@ -73,6 +73,17 @@ src_configure() {
 		-Ddri1=true
 		-Ddri2=true
 		-Ddri3=true
+		-Dglx=true
+		-Ddocs=false
+		-Ddrm=true
+		-Ddtrace=false
+		-Dipv6=false
+		-Dhal=false
+		-Dlinux_acpi=false
+		-Dlinux_apm=false
+		-Dsecure-rpc=false
+		-Dsha1=libcrypto
+		-Dxkb_output_dir="${EPREFIX}/var/lib/xkb"
   )
   meson_src_configure
 }

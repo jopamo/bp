@@ -1,0 +1,12 @@
+ontop=yes
+save-position-on-quit
+af=lavfi=[highpass=f=100:poles=2,multibandcompressor=band1:threshold=-30:ratio=6]
+geometry=33%x33%+100%+100%
+reset-on-next-file=audio-delay,mute,pause,speed,sub-delay,video-aspect-override,video-pan-x,video-pan-y,video-rotate,video-zoom,volume
+border=no
+cursor-autohide=500
+hwdec-codecs=all
+hwdec=auto
+no-cache-pause
+
+ytdl-format="137+140/299+140/bestvideo[height<=?1080][vcodec!=?vp9]+bestaudio/best"

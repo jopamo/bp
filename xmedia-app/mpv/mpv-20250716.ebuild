@@ -143,7 +143,7 @@ src_install() {
 	meson_src_install
 
 	insinto etc/mpv
-	doins ${FILESDIR}/mpv.conf
+	newins ${FILESDIR}/mpv.conf.fast mpv.conf
 
 	if use lua; then
 		insinto /usr/share/mpv

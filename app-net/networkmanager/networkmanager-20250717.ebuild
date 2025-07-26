@@ -35,6 +35,8 @@ src_configure() {
 		-Dlibpsl=false
 		-Dmodem_manager=false
 		-Dovs=false
+		-Dnbft=false
+		-Dman=false
 		-Dpolkit=false
 		-Dppp=false
 		-Dqt=false

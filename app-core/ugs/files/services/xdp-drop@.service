@@ -1,0 +1,16 @@
+[Unit]
+Description=Load XDP IP Blocker on network interface %I
+Wants=network-online.target
+After=network-online.target
+After=sysfs.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=/usr/bin/test -f /opt/xdp/drop.o
+ExecStart=/usr/bin/ip link set dev %I xdp obj /opt/xdp/drop.o sec xdp
+ExecStop=/usr/bin/ip link set dev %I xdp off
+Environment="XDP_BLOCK_CONFIG=/etc/xdp/block.conf"
+
+[Install]
+WantedBy=multi-user.target

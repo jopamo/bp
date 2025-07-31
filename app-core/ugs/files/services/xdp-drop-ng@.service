@@ -1,0 +1,17 @@
+[Unit]
+Description=Load XDP IP Blocker on network interface %I
+Wants=network-online.target
+After=network-online.target
+After=sysfs.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=/usr/bin/test -f /opt/xdp/drop.o
+ExecStart=/bin/sh -c "bpftool prog load /opt/xdp/drop.o /sys/fs/bpf/xdp_block_ips map name blocked_ips pinned /sys/fs/bpf/blocked_ips; ip link set dev %I xdp pinned /sys/fs/bpf/xdp_block_ips"
+ExecStartPost=/opt/xdp/add_block /sys/fs/bpf/blocked_ips
+ExecStop=/usr/bin/ip link set dev %I xdp off
+Environment="XDP_BLOCK_CONFIG=/etc/xdp/block.conf"
+
+[Install]
+WantedBy=multi-user.target

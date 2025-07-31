@@ -41,7 +41,6 @@ lockPref("browser.messaging-system.whatsNewPanel.enabled", false);
 lockPref("browser.newtab.preload", false);
 lockPref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons", false);
 lockPref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features", false);
-lockPref("browser.newtabpage.activity-stream.default.sites", "");
 lockPref("browser.newtabpage.activity-stream.feeds.discoverystreamfeed", false);
 lockPref("browser.newtabpage.activity-stream.feeds.section.topstories", false);
 lockPref("browser.newtabpage.activity-stream.feeds.snippets", false);
@@ -50,7 +49,6 @@ lockPref("browser.newtabpage.activity-stream.section.highlights.includePocket", 
 lockPref("browser.newtabpage.activity-stream.showSponsored", false);
 lockPref("browser.newtabpage.activity-stream.showSponsoredTopSites", false);
 lockPref("browser.newtabpage.activity-stream.telemetry", false);
-lockPref("browser.newtabpage.enabled", false);
 lockPref("browser.pagethumbnails.capturing_disabled", true);
 lockPref("browser.ping-centre.telemetry", false);
 lockPref("browser.places.speculativeConnect.enabled", false);

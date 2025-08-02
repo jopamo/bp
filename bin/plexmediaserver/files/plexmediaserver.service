@@ -7,9 +7,7 @@ After=network.target network-online.target
 Environment="PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR=/var/lib/plexmediaserver/Library/Application Support"
 Environment=PLEX_MEDIA_SERVER_HOME=/opt/plexmediaserver
 Environment=PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS=6
-ExecStartPre=/bin/sh -c '/usr/bin/test -d "${PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}" || /bin/mkdir -p "${PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}"'
-ExecStart=/bin/sh -c '\
-exec "/opt/plexmediaserver/Plex Media Server"'
+ExecStart="/opt/plexmediaserver/Plex Media Server"
 Type=simple
 User=plex
 Group=plex

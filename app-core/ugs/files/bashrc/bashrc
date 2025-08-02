@@ -167,6 +167,7 @@ alias sha3-256='openssl dgst -sha3-256'
 alias sha3-512='openssl dgst -sha3-512'
 alias weather='curl wttr.in'
 alias memfree='sync; echo 3 > /proc/sys/vm/drop_caches; free -m'
+alias ssconns='ss -H -tunp | awk '\''$1 == "tcp" && $2 == "ESTAB" && $NF ~ /^users:/ { gsub(/^users:\(\(/, "", $NF); gsub(/"\)\)/, "", $NF); split($NF, a, ","); print $5 " -> " $6 " (" a[1] ")"; }'\'' | sort -u | head -n 5'
 
 random_string() {
 	[ -z "$1" ] && { log_err "Usage: random_string <length>"; return 1; }

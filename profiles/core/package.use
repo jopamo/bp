@@ -31,7 +31,6 @@ app-lang/python-exec native-symlinks
 app-net/chrony cmdmon ntp phc refclock rtc
 app-net/curl static-libs
 app-net/iputils arping ping tracepath
-app-net/networkmanager -nss gnutls
 app-net/nmap libssh2 nping nselib os-db scripts ncat
 app-server/nodejs icu node-snapshot
 app-tex/hunspell minimal

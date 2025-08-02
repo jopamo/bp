@@ -18,69 +18,6 @@ usage_netns_ipaddr="Usage: netns_ipaddr <namespace>"
 usage_veth_add="Usage: veth_add <veth1> <veth2>"
 usage_veth_del="Usage: veth_del <veth>"
 usage_list_interfaces="Usage: list_interfaces"
-usage_set_random_mac="Usage: set_random_mac <interface>"
-
-NIC_PREFIXES=(
-	"00:1A:79"
-	"00:1B:21"
-	"00:1D:7E"
-	"00:22:15"
-	"00:23:EB"
-	"00:24:E8"
-	"00:25:64"
-	"00:26:BB"
-	"00:27:10"
-	"00:28:F8"
-	"00:30:48"
-	"00:60:2F"
-	"00:0E:C6"
-	"00:18:DE"
-	"00:16:E6"
-)
-
-generate_random_mac() {
-	local prefix="${NIC_PREFIXES[$RANDOM % ${#NIC_PREFIXES[@]}]}"
-	local suffix=$(openssl rand -hex 3 | sed 's/\(..\)/\1:/g; s/:$//')
-	echo "$prefix:$suffix"
-}
-
-set_random_mac() {
-	if [ -z "$1" ]; then
-		echo "$usage_set_random_mac"
-		return 1
-	fi
-	local interface=$1
-	local new_mac=$(generate_random_mac)
-	if [ "$use_iproute2" = true ]; then
-		sudo ip link set dev "$interface" down
-		sudo ip link set dev "$interface" address "$new_mac"
-		sudo ip link set dev "$interface" up
-	else
-		sudo ifconfig "$interface" down
-		sudo ifconfig "$interface" hw ether "$new_mac"
-		sudo ifconfig "$interface" up
-	fi
-	echo "Assigned MAC address $new_mac to $interface"
-}
-
-generate_systemd_link_file() {
-	local interfaces=("$@")
-	if [ ${#interfaces[@]} -eq 0 ]; then
-		interfaces=($(ls /sys/class/net | grep -Ev '^(lo|ip_vti0)$'))
-	fi
-	for interface in "${interfaces[@]}"; do
-		local mac_address=$(generate_random_mac)
-		local link_file_name="00-$interface.network"
-		cat <<EOF | sudo tee /etc/systemd/network/$link_file_name > /dev/null
-[Match]
-Name=$interface
-
-[Link]
-MACAddress=$mac_address
-EOF
-		echo "Systemd .network file created for $interface with MAC address $mac_address"
-	done
-}
 
 if [ "$use_iproute2" = false ]; then
 	alias ifup='ifup_nettools'
@@ -92,7 +29,6 @@ if [ "$use_iproute2" = false ]; then
 	alias show_routes='netstat -nr'
 	alias iface_stats='iface_stats_nettools'
 	alias list_interfaces='list_interfaces_nettools'
-	alias set_random_mac='set_random_mac'
 	alias netns_add='echo "Namespace not supported with net-tools"'
 	alias netns_del='echo "Namespace not supported with net-tools"'
 	alias netns_exec='echo "Namespace not supported with net-tools"'
@@ -142,7 +78,6 @@ else
 	alias show_routes='ip route show'
 	alias iface_stats='iface_stats_iproute2'
 	alias list_interfaces='list_interfaces_iproute2'
-	alias set_random_mac='set_random_mac'
 	alias netns_add='netns_add_iproute2'
 	alias netns_del='netns_del_iproute2'
 	alias netns_exec='netns_exec_iproute2'

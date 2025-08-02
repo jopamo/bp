@@ -3,7 +3,6 @@
 *app-fs/ncdu
 *app-kernel/linux-firmware
 *app-net/bluez
-*app-net/networkmanager
 *app-net/weechat
 *app-port/smart-live-rebuild
 *app-util/better-adb-sync

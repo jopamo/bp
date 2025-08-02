@@ -2,16 +2,12 @@
 
 EAPI=8
 
-MINOR_VERSION="9522-a96edc606"
-
-_APPNAME="plexmediaserver"
-_USERNAME="plex"
-_SHORTNAME="${_USERNAME}"
+MINOR_VERSION="9961-46083195d"
 _FULL_VERSION="${PV}.${MINOR_VERSION}"
 
 URI="https://downloads.plex.tv/plex-media-server-new"
 
-inherit user unpacker
+inherit doins unpacker
 
 DESCRIPTION="A free media library that is intended for use with a plex client."
 HOMEPAGE="http://www.plex.tv/"
@@ -32,11 +28,6 @@ BDEPEND="app-dev/patchelf"
 
 S="${WORKDIR}"
 
-pkg_setup() {
-	enewgroup ${_USERNAME}
-	enewuser ${_USERNAME} -1 /usr/bin/bash /var/lib/${_APPNAME} "${_USERNAME},video"
-}
-
 src_unpack() {
 	unpack_deb ${A}
 }
@@ -54,7 +45,18 @@ src_install() {
 		doins "${FILESDIR}/${PN}.service"
 	fi
 
+	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
+		u plex - "Plex Media Server" /var/lib/plexmediaserver
+	EOF
+
+	newsysusers "${T}/${PN}-sysusers" "${PN}.conf"
+
 	keepdir "/var/lib/plexmediaserver/Library/Application Support"
 	fowners -R plex:plex /var/lib/plexmediaserver
 	fperms -R 755 /var/lib/plexmediaserver
+
+}
+
+pkg_postinst() {
+	sysusers_process
 }

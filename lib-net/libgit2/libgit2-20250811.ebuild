@@ -6,8 +6,7 @@ inherit cmake
 
 DESCRIPTION="Library implementing the GIT2 protocol"
 HOMEPAGE="https://www.libgit2.org/"
-
-SNAPSHOT=5ab90d3c273766c81fefb7d156574a87c0f9fb01
+SNAPSHOT=58d9363f02f1fa39e46d49b604f27008e75b72f2
 SRC_URI="https://github.com/libgit2/libgit2/archive/${SNAPSHOT}.tar.gz -> libgit2-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libgit2-${SNAPSHOT}
 

@@ -6,8 +6,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="X C-language Bindings library"
 HOMEPAGE="https://xcb.freedesktop.org/"
-
-SNAPSHOT=daf2c5397607c32c3814f02831b9c1158fd1e52c
+SNAPSHOT=6a7661f60a70ff42c64b32a725edcbee790d1c0d
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxcb/-/archive/${SNAPSHOT}/libxcb-${SNAPSHOT}.tar.bz2 -> libxcb-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxcb-${SNAPSHOT}"
 

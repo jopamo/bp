@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-SNAPSHOT=9040a8afc9e9cc1b83ad8e065fb53912d09e147d
+SNAPSHOT=bae3fe61fafff4d11c9a224ca1352fffd9a4e55b
 
 inherit meson flag-o-matic doins
 

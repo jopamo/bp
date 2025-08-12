@@ -1,0 +1,133 @@
+#!/bin/bash
+
+ETHERNET_PREFIXES=(
+    "00:1B:21" "00:25:90" "00:1C:42" "00:0C:29"
+    "00:15:5D" "3C:D9:2B" "00:50:56" "00:1E:C9"
+    "00:0F:1F" "00:18:8B" "00:30:48" "00:17:A4"
+    "00:1F:29" "00:16:3E" "00:22:19" "00:1D:09"
+    "00:60:2F" "00:0A:E4" "00:1D:7E" "00:26:BB"
+)
+WIFI_PREFIXES=(
+    "00:1A:1E" "00:23:4D" "00:26:82" "00:27:10"
+    "00:24:D7" "00:30:4F" "00:0E:8E" "00:22:43"
+    "00:1F:3C" "00:13:CE" "00:17:9A" "00:0F:B5"
+    "00:21:29" "00:0C:F6" "00:22:FB" "00:1D:D8"
+    "00:0A:F5" "00:14:A5" "00:0C:43" "00:1B:9E"
+)
+GLOBAL_DNS=""
+generate_random_mac() {
+    local prefix="$1"
+    local suffix
+    suffix=$(openssl rand -hex 3 | sed 's/\(..\)/\1:/g; s/:$//')
+    echo "$prefix:$suffix"
+}
+ask_static_ip_config() {
+    read -p "Static IP address (e.g., 192.168.1.100/24): " STATIC_IP
+    read -p "Gateway (e.g., 192.168.1.1): " GATEWAY
+}
+configure_network_files() {
+    local iface="$1"
+    local is_wifi="$2"
+    local mac
+    if [[ "$is_wifi" == "true" ]]; then
+        mac=$(generate_random_mac "$MAC_PREFIX_WIFI")
+    else
+        mac=$(generate_random_mac "$MAC_PREFIX_ETH")
+    fi
+    echo "[*] Assigning MAC $mac to $iface"
+    LINK_FILE="/etc/systemd/network/10-$iface.link"
+    cat > "$LINK_FILE" <<EOF
+[Match]
+OriginalName=$iface
+[Link]
+MACAddress=$mac
+EOF
+    echo "✔ Created $LINK_FILE"
+    NETWORK_FILE="/etc/systemd/network/$iface.network"
+    read -p "Use DHCP for $iface? [y/N]: " use_dhcp
+    use_dhcp=${use_dhcp,,}
+    if [[ "$use_dhcp" == "y" || "$use_dhcp" == "yes" ]]; then
+        cat > "$NETWORK_FILE" <<EOF
+[Match]
+Name=$iface
+[Network]
+DHCP=yes
+EOF
+        if [[ -n "$GLOBAL_DNS" ]]; then
+            echo "DNS=$GLOBAL_DNS" >> "$NETWORK_FILE"
+        fi
+        echo "✔ Created $NETWORK_FILE"
+    else
+        read -p "Configure manual IP settings for $iface? [y/N]: " use_manual
+        use_manual=${use_manual,,}
+        if [[ "$use_manual" == "y" || "$use_manual" == "yes" ]]; then
+            ask_static_ip_config
+            cat > "$NETWORK_FILE" <<EOF
+[Match]
+Name=$iface
+[Network]
+Address=$STATIC_IP
+Gateway=$GATEWAY
+EOF
+            echo "✔ Created $NETWORK_FILE"
+        else
+            echo "Skipping network configuration for $iface (no .network file created)"
+        fi
+    fi
+}
+setup_wifi() {
+    local iface="$1"
+    echo "[*] Scanning for SSIDs on $iface..."
+    iw dev "$iface" scan | grep SSID | awk '{print $2}' | sort -u
+    read -p "Enter SSID for $iface: " SSID
+    read -s -p "Enter password for $SSID: " PASSWORD
+    echo
+    WPA_CONF="/etc/wpa_supplicant/wpa_supplicant-${iface}.conf"
+    wpa_passphrase "$SSID" "$PASSWORD" > "$WPA_CONF"
+    chmod 600 "$WPA_CONF"
+    echo "✔ Created WPA config: $WPA_CONF"
+    systemctl enable wpa_supplicant@"$iface".service
+    systemctl restart wpa_supplicant@"$iface".service
+    echo "✔ Enabled wpa_supplicant@$iface.service"
+}
+write_resolv_conf() {
+    echo "[*] Writing /etc/resolv.conf manually..."
+    : > /etc/resolv.conf
+    if [[ -n "$GLOBAL_DNS" ]]; then
+        echo "nameserver $GLOBAL_DNS" >> /etc/resolv.conf
+    else
+        echo "# (no DNS provided)" >> /etc/resolv.conf
+    fi
+    echo "✔ /etc/resolv.conf written"
+}
+main() {
+    INTERFACES=("$@")
+    if [ ${#INTERFACES[@]} -eq 0 ]; then
+        INTERFACES=($(ls /sys/class/net | grep -Ev '^(lo|ip_vti0)$'))
+    fi
+    WIRELESS_IFACES=($(iw dev 2>/dev/null | awk '/Interface/ {print $2}'))
+    # Select shared MAC prefix for each type
+    MAC_PREFIX_ETH="${ETHERNET_PREFIXES[$RANDOM % ${#ETHERNET_PREFIXES[@]}]}"
+    MAC_PREFIX_WIFI="${WIFI_PREFIXES[$RANDOM % ${#WIFI_PREFIXES[@]}]}"
+    echo "[*] Using Ethernet MAC prefix: $MAC_PREFIX_ETH"
+    echo "[*] Using Wi-Fi MAC prefix: $MAC_PREFIX_WIFI"
+    read -p "Enter DNS server (e.g., 1.1.1.1) or leave empty to skip: " GLOBAL_DNS
+    for iface in "${INTERFACES[@]}"; do
+        echo
+        echo "=== Configuring $iface ==="
+        local is_wifi="false"
+        [[ " ${WIRELESS_IFACES[*]} " =~ " $iface " ]] && is_wifi="true"
+        configure_network_files "$iface" "$is_wifi"
+        if [[ "$is_wifi" == "true" ]]; then
+            setup_wifi "$iface"
+        fi
+    done
+    echo
+    echo "[*] Enabling and restarting systemd-networkd..."
+    systemctl enable systemd-networkd
+    systemctl restart systemd-networkd
+    write_resolv_conf
+    echo
+    echo "[✓] Setup complete. You can verify with: ip a, ping, journalctl -xe"
+}
+main "$@"

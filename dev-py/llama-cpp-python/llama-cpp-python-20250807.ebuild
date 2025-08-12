@@ -9,7 +9,7 @@ inherit distutils-r1 toolchain-funcs
 
 DESCRIPTION="A Pythonic binding for the libxml2 and libxslt libraries"
 HOMEPAGE="https://github.com/abetlen/llama-cpp-python"
-SNAPSHOT=95292e36c6cef7430cff0bda16578fe9f7303e01
+SNAPSHOT=dfc9bf503bb7d4be166410e525971509373bee0e
 SRC_URI="https://github.com/abetlen/llama-cpp-python/archive/${SNAPSHOT}.tar.gz -> llama-cpp-python-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/llama-cpp-python-${SNAPSHOT}
 

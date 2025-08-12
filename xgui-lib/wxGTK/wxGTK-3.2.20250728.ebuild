@@ -6,8 +6,7 @@ BRANCH_NAME="$(ver_cut 1-2)"
 
 DESCRIPTION="GTK+ version of wxWidgets, a cross-platform C++ GUI toolkit"
 HOMEPAGE="https://wxwidgets.org/"
-
-SNAPSHOT=5db4aebde977bd1d3b7c2a6e6658ceb81b3ce8e7
+SNAPSHOT=21dbdf9f1518b9efe109e277648d861b1c679555
 SRC_URI="https://github.com/wxWidgets/wxWidgets/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/wxWidgets-${SNAPSHOT}"
 

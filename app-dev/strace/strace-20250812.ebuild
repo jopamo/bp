@@ -6,7 +6,7 @@ inherit flag-o-matic autotools
 
 DESCRIPTION="A useful diagnostic, instructional, and debugging tool"
 HOMEPAGE="https://sourceforge.net/projects/strace/"
-SNAPSHOT=82bd7f0a3539811cc7ec2ca86a4fb3b485928165
+SNAPSHOT=0d0e837600d407939afea2a7da487a0a2d0ce0d0
 SRC_URI="https://github.com/1g4-mirror/strace/archive/${SNAPSHOT}.tar.gz -> strace-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/strace-${SNAPSHOT}
 

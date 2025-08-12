@@ -4,8 +4,7 @@ EAPI=7
 
 DESCRIPTION="Stores, retrieves, generates, and synchronizes passwords securely"
 HOMEPAGE="https://www.passwordstore.org/"
-
-SNAPSHOT=b5e965a838bb68c1227caa2cdd874ba496f10149
+SNAPSHOT=3ca13cd8882cae4083c1c478858adbf2e82dd037
 SRC_URI="https://git.zx2c4.com/password-store/snapshot/password-store-${SNAPSHOT}.tar.xz -> ${PN}-${SNAPSHOT}.tar.xz"
 S="${WORKDIR}/password-store-${SNAPSHOT}"
 

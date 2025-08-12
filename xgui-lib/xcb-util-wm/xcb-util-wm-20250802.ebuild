@@ -6,8 +6,7 @@ inherit autotools
 
 DESCRIPTION="X C-language Bindings sample implementations"
 HOMEPAGE="https://xcb.freedesktop.org/"
-
-SNAPSHOT=33c35127025cce3db587d0bf04c2d676256156ab
+SNAPSHOT=603278995a6caf38c90d1e18d6c890a58ff3f49c
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxcb-wm/-/archive/${SNAPSHOT}/libxcb-wm-${SNAPSHOT}.tar.bz2 -> libxcb-wm-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxcb-wm-${SNAPSHOT}"
 

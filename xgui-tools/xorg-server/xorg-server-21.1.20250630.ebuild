@@ -8,8 +8,7 @@ inherit meson flag-o-matic
 
 DESCRIPTION="implementation of the X Window System display server"
 HOMEPAGE="https://www.x.org/wiki/"
-
-SNAPSHOT=a3a37c56998e85ac2ab98d3a3778c312fc0e8fad
+SNAPSHOT=b53d9fa4176679cd7b2a031c5e2d25cac5b9aa77
 SRC_URI="https://gitlab.freedesktop.org/xorg/xserver/-/archive/${SNAPSHOT}/xserver-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/xserver-${SNAPSHOT}"
 

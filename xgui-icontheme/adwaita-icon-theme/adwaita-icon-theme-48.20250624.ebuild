@@ -8,7 +8,7 @@ inherit meson xdg
 
 DESCRIPTION="Mostly private use system icons."
 HOMEPAGE="https://git.gnome.org/browse/adwaita-icon-theme/"
-SNAPSHOT=cd08cb3dfd63e6ad6bff9c1d88490280b0f9a7af
+SNAPSHOT=ed465372143ed17640a0bbdb4c856cb5b3773d8e
 SRC_URI="https://gitlab.gnome.org/GNOME/adwaita-icon-theme/-/archive/${SNAPSHOT}/adwaita-icon-theme-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/adwaita-icon-theme-${SNAPSHOT}"
 

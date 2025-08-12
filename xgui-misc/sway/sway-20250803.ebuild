@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="i3-compatible Wayland window manager"
 HOMEPAGE="https://swaywm.org"
-SNAPSHOT=cb33701f5ee742b659afd660fa98c294f6faf5a8
+SNAPSHOT=340505bb6f6ad2418448445fa7e5d58f771c3b4d
 SRC_URI="https://github.com/swaywm/sway/archive/${SNAPSHOT}.tar.gz -> sway-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/sway-${SNAPSHOT}"
 

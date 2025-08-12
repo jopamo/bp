@@ -6,8 +6,7 @@ inherit autotools
 
 DESCRIPTION="uncompile an rgb color-name database"
 HOMEPAGE="https://www.x.org/wiki/"
-
-SNAPSHOT=44219adec2779db6909181da31c54fe278ee614a
+SNAPSHOT=205369bca73f8bfe1476741f19ab9564ea538469
 SRC_URI="https://gitlab.freedesktop.org/xorg/app/rgb/-/archive/${SNAPSHOT}/rgb-${SNAPSHOT}.tar.bz2 -> rgb-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/rgb-${SNAPSHOT}"
 

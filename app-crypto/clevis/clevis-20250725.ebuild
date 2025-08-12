@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="Automated Encryption Framework"
 HOMEPAGE="https://github.com/latchset/clevis"
-SNAPSHOT=be74547433b48d189af63aa79cd167e9ae08c026
+SNAPSHOT=2ad7027b7182b8f46404f8ec0735a83738f7ca7f
 SRC_URI="https://github.com/latchset/clevis/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/clevis-${SNAPSHOT}"
 

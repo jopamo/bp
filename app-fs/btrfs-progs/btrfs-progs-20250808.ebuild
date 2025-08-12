@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="Btrfs filesystem utilities"
 HOMEPAGE="https://btrfs.wiki.kernel.org"
-SNAPSHOT=351b823e92871b465c4ccea7aad8329122741551
+SNAPSHOT=0ad9c81b47da6c7a96e300b680dbe7ec777dda6a
 SRC_URI="https://github.com/kdave/btrfs-progs/archive/${SNAPSHOT}.tar.gz -> btrfs-progs-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/btrfs-progs-${SNAPSHOT}"
 

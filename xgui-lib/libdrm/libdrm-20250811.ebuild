@@ -6,8 +6,7 @@ inherit meson flag-o-matic
 
 DESCRIPTION="X.Org libdrm library"
 HOMEPAGE="https://dri.freedesktop.org/"
-
-SNAPSHOT=289175512c32a045cc559abbadcd418ad4956071
+SNAPSHOT=7d43d9b6fe5df4b234937fce9e51adb1b327ded1
 SRC_URI="https://gitlab.freedesktop.org/mesa/drm/-/archive/${SNAPSHOT}/drm-${SNAPSHOT}.tar.bz2 -> drm-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libdrm-${SNAPSHOT}"
 

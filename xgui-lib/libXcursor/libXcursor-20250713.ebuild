@@ -6,8 +6,7 @@ inherit autotools
 
 DESCRIPTION="X.Org Xcursor library"
 HOMEPAGE="https://www.x.org/wiki/"
-
-SNAPSHOT=61b84c2d424f363fb0983cb478937de87084ef54
+SNAPSHOT=2197ca8cbb743d2fcc43c155396a724cad8f26f3
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXcursor/-/archive/${SNAPSHOT}/libXcursor-${SNAPSHOT}.tar.bz2 -> libXcursor-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxcursor-${SNAPSHOT}"
 

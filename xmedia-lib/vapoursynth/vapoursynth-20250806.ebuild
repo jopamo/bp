@@ -6,7 +6,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="VapourSynth is an library for video manipulation."
 HOMEPAGE="http://www.vapoursynth.com/"
-SNAPSHOT=4a426f3d86136c6c2616a351d938df44468ac1c9
+SNAPSHOT=9d916d58f0f78f4405fba8776fa2b35c94520c3f
 SRC_URI="https://github.com/vapoursynth/vapoursynth/archive/${SNAPSHOT}.tar.gz -> vapoursynth-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/vapoursynth-${SNAPSHOT}"
 

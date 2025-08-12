@@ -6,7 +6,7 @@ inherit distutils-r1 autotools flag-o-matic
 
 DESCRIPTION="Libraries providing APIs to netlink protocol based Linux kernel interfaces"
 HOMEPAGE="http://www.infradead.org/~tgr/libnl/ https://github.com/thom311/libnl"
-SNAPSHOT=0554543dd6a38658355be93a869cb18953a63852
+SNAPSHOT=69231b6e8ef1c80ac51d7327701a827d27ba4dac
 SRC_URI="https://github.com/thom311/libnl/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libnl-${SNAPSHOT}
 

@@ -7,7 +7,7 @@ BRANCH_NAME="master"
 inherit cmake
 
 DESCRIPTION="Framework providing access to properties and features of the window manager"
-SNAPSHOT=b7595be239bf5444a07eaeb99e394a6b0271dfe2
+SNAPSHOT=294eece23c9c2e24321b905783d0b40f4986d791
 SRC_URI="https://github.com/KDE/kwindowsystem/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/kwindowsystem-${SNAPSHOT}
 

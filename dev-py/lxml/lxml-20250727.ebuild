@@ -13,7 +13,7 @@ HOMEPAGE="
 	https://pypi.org/project/lxml/
 	https://github.com/lxml/lxml/
 "
-SNAPSHOT=f33ac2c2f5f9c4c4c1fc47f363be96db308f2fa6
+SNAPSHOT=56f0eef494e8a30721c3a7bb2766dee752de16ef
 SRC_URI="https://github.com/lxml/lxml/archive/${SNAPSHOT}.tar.gz -> lxml-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/lxml-${SNAPSHOT}
 

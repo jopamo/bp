@@ -6,8 +6,7 @@ inherit autotools
 
 DESCRIPTION="X.Org Xinerama library"
 HOMEPAGE="https://www.x.org/wiki/"
-
-SNAPSHOT=2344df8f821f9becc8aaa6af939b535b51d4a332
+SNAPSHOT=cc22c2f60c3862482562955116d5455263b443dc
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXinerama/-/archive/${SNAPSHOT}/libXinerama-${SNAPSHOT}.tar.bz2 -> libXinerama-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxinerama-${SNAPSHOT}"
 

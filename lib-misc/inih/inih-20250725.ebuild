@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="inih (INI not invented here) simple .INI file parser"
 HOMEPAGE="https://github.com/benhoyt/inih"
-SNAPSHOT=498f34b78610cf9e42197d22730c91f942431ea4
+SNAPSHOT=3eda303b34610adc0554bdea08d02a25668c774c
 SRC_URI="https://github.com/benhoyt/inih/archive/${SNAPSHOT}.tar.gz -> inih-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/inih-${SNAPSHOT}"
 

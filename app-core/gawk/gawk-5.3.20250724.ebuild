@@ -3,7 +3,7 @@
 EAPI=8
 
 BRANCH_NAME="gawk-$(ver_cut 1-2)-stable"
-SNAPSHOT=a3a81fc0e9d8c063adc41f562502f39b6f1d3b09
+SNAPSHOT=16ba2113002eedad16b944cac3439eb309648144
 
 inherit flag-o-matic
 

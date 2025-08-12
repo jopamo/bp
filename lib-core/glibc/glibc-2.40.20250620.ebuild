@@ -235,6 +235,9 @@ src_install() {
 	dodir /usr/lib/locale
 
 	use debug && dostrip -x /usr/lib/ld-linux-x86-64.so.2
+
+	insinto /etc
+	doins "${FILESDIR}"/nsswitch.conf
 }
 
 pkg_preinst() {

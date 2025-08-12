@@ -12,7 +12,7 @@ HOMEPAGE="
 	https://docutils.sourceforge.io/
 	https://pypi.org/project/docutils/
 "
-SNAPSHOT=9f04802532e77542c8edf6b7f4bf78bab141cf6e
+SNAPSHOT=880df4fd74a95a97f2de02efabe62e7f29ba5905
 SRC_URI="https://github.com/docutils/docutils/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}/docutils"
 

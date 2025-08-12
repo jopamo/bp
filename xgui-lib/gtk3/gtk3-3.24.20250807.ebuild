@@ -8,7 +8,7 @@ inherit meson xdg
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
-SNAPSHOT=1b879decc2e04716776c0d9823b14e5be25a6eb8
+SNAPSHOT=72d85955ca240a0b88f83835eae0969b7f72718d
 
 SRC_URI="https://gitlab.gnome.org/GNOME/gtk/-/archive/${SNAPSHOT}/gtk-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/gtk-${SNAPSHOT}"

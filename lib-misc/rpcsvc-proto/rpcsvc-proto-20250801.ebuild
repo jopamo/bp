@@ -6,8 +6,7 @@ inherit autotools
 
 DESCRIPTION="rpcsvc protocol definitions from glibc"
 HOMEPAGE="https://github.com/thkukuk/rpcsvc-proto"
-
-SNAPSHOT=c65926005e50da02a4da3e26abc42eded36cd19d
+SNAPSHOT=cd6ecf8f0ef1abaf8c29f1d3339af6207c060e5f
 SRC_URI="https://github.com/thkukuk/rpcsvc-proto/archive/${SNAPSHOT}.tar.gz -> rpcsvc-proto-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/rpcsvc-proto-${SNAPSHOT}"
 

@@ -7,7 +7,7 @@ BRANCH_NAME="kf$(ver_cut 1)"
 inherit cmake xdg
 
 DESCRIPTION="Framework providing assorted high-level user interface components"
-SNAPSHOT=6f896fe3aa8a4da33b528524ac7922d548148696
+SNAPSHOT=78fb4238e9f49ce27ecc5d1630132c2b7b1dc3a4
 SRC_URI="https://github.com/KDE/kguiaddons/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/kguiaddons-${SNAPSHOT}
 

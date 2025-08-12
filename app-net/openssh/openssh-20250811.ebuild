@@ -6,7 +6,7 @@ inherit flag-o-matic autotools doins
 
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="http://www.openssh.org/"
-SNAPSHOT=e6805e2a6b33e001e1a7257b85ab779fd592a578
+SNAPSHOT=0e1b8aa27f7c86d412c9e54ad9e2cae30d9ddab4
 SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/openssh-portable-${SNAPSHOT}
 

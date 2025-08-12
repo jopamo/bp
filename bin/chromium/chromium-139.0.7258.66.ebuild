@@ -6,9 +6,7 @@ inherit unpacker xdg
 
 DESCRIPTION="Google Chromium, sans integration with Google"
 HOMEPAGE="https://brave.com"
-SRC_URI="
-	https://github.com/ungoogled-software/ungoogled-chromium-portablelinux/releases/download/${PV}-1/ungoogled-chromium_${PV}-1_linux.tar.xz
-"
+SRC_URI="https://github.com/ungoogled-software/ungoogled-chromium-portablelinux/releases/download/${PV}-1/ungoogled-chromium-${PV}-1-x86_64_linux.tar.xz"
 S="${WORKDIR}/ungoogled-chromium_${PV}-1_linux"
 
 RESTRICT="strip mirror"

@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-SNAPSHOT=86373b4999bfd9a9379bc4a3ca877b1c80a2a340
+SNAPSHOT=8fd5d031876345e42ae3d11cc07b962f8625bc3b
 
 inherit flag-o-matic doins
 

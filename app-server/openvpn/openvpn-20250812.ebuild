@@ -6,7 +6,7 @@ inherit user autotools
 
 DESCRIPTION="Robust and highly flexible tunneling application compatible with many OSes"
 HOMEPAGE="https://www.strongswan.org/"
-SNAPSHOT=31aedd7fbfd9d4856a5ae7085d15228ec57fb2a1
+SNAPSHOT=c4f4f26d48babdf4f15a6cde837317c7216abbba
 SRC_URI="https://github.com/OpenVPN/openvpn/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

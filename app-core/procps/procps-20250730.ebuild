@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="standard informational utilities and process-handling tools"
 HOMEPAGE="https://gitlab.com/procps-ng/procps"
-SNAPSHOT=01c47ec57900b506ee732bf7b7ece3841cbcb74d
+SNAPSHOT=678b099c9fd12109469be234281c8b4e2a382757
 SRC_URI="https://gitlab.com/procps-ng/procps/-/archive/${SNAPSHOT}/procps-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/procps-${SNAPSHOT}"
 

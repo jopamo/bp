@@ -6,7 +6,7 @@ inherit linux-info toolchain-funcs
 
 DESCRIPTION="Generic initramfs generation tool"
 HOMEPAGE="https://dracut.wiki.kernel.org"
-SNAPSHOT=41404ecce43d698980709e86c761fe0c72ed5caa
+SNAPSHOT=18af4e9318133cce21d11b53124c14306846e9a7
 SRC_URI="https://github.com/dracut-ng/dracut-ng/archive/${SNAPSHOT}.tar.gz -> dracut-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/dracut-ng-${SNAPSHOT}"
 

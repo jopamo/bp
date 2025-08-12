@@ -6,8 +6,7 @@ inherit autotools
 
 DESCRIPTION="X.Org font utilities"
 HOMEPAGE="https://www.x.org/wiki/"
-
-SNAPSHOT=d6ccf6d55728465e363b6dc89fd0759456bd35b2
+SNAPSHOT=ecbf1fa15e14a9ccf339b86198b03f31db838382
 SRC_URI="https://gitlab.freedesktop.org/xorg/font/util/-/archive/${SNAPSHOT}/util-${SNAPSHOT}.tar.bz2 -> util-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/util-${SNAPSHOT}"
 

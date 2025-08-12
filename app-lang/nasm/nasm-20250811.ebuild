@@ -6,8 +6,7 @@ inherit autotools
 
 DESCRIPTION="Netwide Assembler for x86 and x86_64"
 HOMEPAGE="http://www.nasm.us/"
-
-SNAPSHOT=888d9ab55012d25059da81fed6575ef3a004726f
+SNAPSHOT=33eda4304209d56fc8c723807aff1a09221f16d2
 SRC_URI="https://github.com/netwide-assembler/nasm/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="Excellent text file viewer"
 HOMEPAGE="http://www.greenwoodsoftware.com/less/"
-SNAPSHOT=36562bd5e51f31226d5821c32d3f5e3fa595fcb5
+SNAPSHOT=a69d8e4639dd8e7d27bf3d0eb5f98d98dd1fc662
 SRC_URI="https://github.com/gwsw/less/archive/${SNAPSHOT}.tar.gz -> less-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/less-${SNAPSHOT}"
 

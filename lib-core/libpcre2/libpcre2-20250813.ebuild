@@ -6,7 +6,7 @@ inherit flag-o-matic autotools
 
 DESCRIPTION="Perl-compatible regular expression library"
 HOMEPAGE="http://www.pcre.org/"
-SNAPSHOT=ddb0df4ea9d68dda6317b7e772ac730d551a0fce
+SNAPSHOT=ead36522296e74e97db93f1acfa28276d76bca5e
 SLJIT_SNAPSHOT=7779da89dc7e00a540712fcb859b762d4eca2a26
 
 SRC_URI="https://github.com/PCRE2Project/pcre2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"

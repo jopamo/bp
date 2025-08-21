@@ -18,6 +18,7 @@ IUSE="+block"
 src_install() {
 	insinto /etc
 	if use block ; then
+		sed -i '/click.discord.com/d' "${S}"/hosts
 		doins "${S}"/hosts
 	else
 		doins "${FILESDIR}"/hosts

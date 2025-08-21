@@ -6,9 +6,8 @@ inherit autotools
 
 DESCRIPTION="The Boehm-Demers-Weiser conservative garbage collector"
 HOMEPAGE="https://github.com/ivmai/bdwgc"
-
-SNAPSHOT=b09b45d7d770a550d65ca8679ee1cf38a4702cbc
-SRC_URI="https://github.com/ivmai/libatomic_ops/archive/${SNAPSHOT}.tar.gz -> libatomic_ops-${SNAPSHOT}.tar.gz"
+SNAPSHOT=e845269a38edb0250d250d6733e36065aded004d
+SRC_URI="https://github.com/bdwgc/libatomic_ops/archive/${SNAPSHOT}.tar.gz -> libatomic_ops-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libatomic_ops-${SNAPSHOT}
 
 LICENSE="boehm-gc"

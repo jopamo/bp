@@ -6,7 +6,7 @@ inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="The Time Zone Database (often called tz or zoneinfo)"
 HOMEPAGE="https://www.iana.org/time-zones"
-SNAPSHOT=df8a67797952555d3be1b779739accfbf5e785a3
+SNAPSHOT=c2d30cc0a4f688c4ba7ab27ff8da17372762d753
 SRC_URI="https://github.com/eggert/tz/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/tz-${SNAPSHOT}
 

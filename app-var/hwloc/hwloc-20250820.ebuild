@@ -2,15 +2,12 @@
 
 EAPI=8
 
-BRANCH_NAME="$(ver_cut 1).x"
-
 inherit flag-o-matic
 
 DESCRIPTION="displays the hardware topology in convenient formats"
 HOMEPAGE="http://www.open-mpi.org/projects/hwloc/"
-
-SNAPSHOT=3e940853f430d112663f1f5dad225ea069d26e29
-SRC_URI="https://github.com/open-mpi/hwloc/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SNAPSHOT=04f359fdaae73776f0b25782231b71d5584f5e56
+SRC_URI="https://github.com/1g4-mirror/hwloc/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="BSD"

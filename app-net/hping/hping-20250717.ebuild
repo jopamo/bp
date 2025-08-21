@@ -6,9 +6,8 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="A ping-like TCP/IP packet assembler/analyzer"
 HOMEPAGE="http://www.hping.org"
-
-SNAPSHOT="4a444edd6d883f62869f6afe977d36b427b51bc2"
-SRC_URI="https://github.com/jopamo/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SNAPSHOT=4a444edd6d883f62869f6afe977d36b427b51bc2
+SRC_URI="https://github.com/jopamo/hping/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"

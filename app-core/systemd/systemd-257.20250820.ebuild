@@ -8,7 +8,7 @@ inherit flag-o-matic linux-info meson toolchain-funcs doins xdg
 
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
-SNAPSHOT=5e38d199a623563698ab4a69acbbe3afa9135198
+SNAPSHOT=3cf08381a3e492419b165f41a7f61eef39554535
 SRC_URI="https://github.com/systemd/systemd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/systemd-${SNAPSHOT}"
 

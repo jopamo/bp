@@ -15,7 +15,7 @@ HOMEPAGE="
 "
 
 MY_PN="py-tree-sitter"
-SNAPSHOT=794a34f1c2979b226252c79bb03d3f28d3384508
+SNAPSHOT=5bae23014238bb03ad46b1bfce5cd211693eaf85
 SRC_URI="https://github.com/tree-sitter/py-tree-sitter/archive/${SNAPSHOT}.tar.gz -> ${MY_PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${MY_PN}-${SNAPSHOT}"
 

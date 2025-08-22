@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake xdg git-r3
+inherit cmake xdg git-r3 flag-o-matic
 
 DESCRIPTION="Powerful yet simple to use screenshot software for GNU/Linux"
 HOMEPAGE="https://github.com/flameshot-org/flameshot"
@@ -22,6 +22,8 @@ DEPEND="xgui-lib/qtbase"
 RESTRICT="network-sandbox"
 
 src_configure() {
+	append-flags -ffat-lto-objects
+
 	local mycmakeargs=(
 		-DQT_DEFAULT_MAJOR_VERSION=6
 		-DQAPPLICATION_CLASS=FreeStandingSingleApplication

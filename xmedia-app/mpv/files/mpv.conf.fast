@@ -1,6 +1,6 @@
 ontop=yes
 save-position-on-quit
-af=lavfi=[highpass=f=100:poles=2,multibandcompressor=band1:threshold=-30:ratio=6]
+af=lavfi=[firequalizer=gain='if(lt(f,400), -30, 0)',acompressor=threshold=-20dB:ratio=3:attack=50:release=200]
 geometry=33%x33%+100%+100%
 reset-on-next-file=audio-delay,mute,pause,speed,sub-delay,video-aspect-override,video-pan-x,video-pan-y,video-rotate,video-zoom,volume
 border=no

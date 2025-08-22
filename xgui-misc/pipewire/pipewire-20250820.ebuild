@@ -79,7 +79,6 @@ src_configure() {
 		$(meson_feature readline)
 		$(meson_feature ssl raop)
 		$(meson_feature systemd systemd-user-service)
-		$(meson_feature systemd)
 		$(meson_feature test tests)
 		$(meson_feature udev)
 		-Dalsa=enabled

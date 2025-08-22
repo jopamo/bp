@@ -2,15 +2,15 @@
 
 EAPI=8
 
-BRANCH_NAME="linux-$(ver_cut 1-2).y"
-SNAPSHOT=4afb9d6bd4c4b3dad7e2c9c48b6c8a55275d8f46
+BRANCH_NAME="master"
 
 ETYPE="headers"
 H_SUPPORTEDARCH="amd64 arm64"
 inherit kernel-2
 
-SRC_URI="https://gitlab.com/linux-kernel/stable/-/archive/${SNAPSHOT}/stable-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/stable-${SNAPSHOT}"
+SNAPSHOT=3957a5720157264dcc41415fbec7c51c4000fc2d
+SRC_URI="https://github.com/torvalds/linux/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/linux-${SNAPSHOT}"
 
 KEYWORDS="amd64 arm64"
 SLOT="0"

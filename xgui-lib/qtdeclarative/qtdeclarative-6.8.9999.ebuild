@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake
+inherit cmake flag-o-matic
 
 DESCRIPTION="The QML and Quick modules for the Qt5 framework"
 HOMEPAGE="https://www.qt.io/"
@@ -25,3 +25,5 @@ DEPEND="
 	xgui-lib/qtbase:$(ver_cut 1)
 	xgui-lib/qtshadertools:$(ver_cut 1)
 "
+
+append-flags -ffat-lto-objects

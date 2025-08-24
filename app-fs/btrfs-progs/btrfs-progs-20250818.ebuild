@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools flag-o-matic
 
 DESCRIPTION="Btrfs filesystem utilities"
 HOMEPAGE="https://btrfs.wiki.kernel.org"
@@ -36,6 +36,8 @@ if [[ ${PV} == 9999 ]]; then
 fi
 
 src_prepare() {
+	append-flags -ffat-lto-objects
+
 	default
 
 	eaclocal

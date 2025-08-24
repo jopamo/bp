@@ -41,6 +41,8 @@ DEPEND="
 "
 
 src_prepare() {
+	append-flags -ffat-lto-objects
+
 	default
 	eautoreconf
 

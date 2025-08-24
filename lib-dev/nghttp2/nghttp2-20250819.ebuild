@@ -32,6 +32,7 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
 	filter-flags -Wl,-z,defs
+	append-flags -ffat-lto-objects
 
 	default
 	eautoreconf

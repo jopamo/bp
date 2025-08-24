@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=f1732556467bdd19fa2e432fcd64b6bf625483cb
 
-inherit autotools
+inherit autotools flag-o-matic
 
 DESCRIPTION="Simple passphrase entry dialogs which utilize the Assuan protocol"
 HOMEPAGE="https://gnupg.org/aegypten2/index.html"
@@ -22,6 +22,8 @@ DEPEND="
 "
 
 src_prepare() {
+	append-flags -ffat-lto-objects
+
 	default
 	eautoreconf
 }

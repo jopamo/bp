@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit qmake-utils
+inherit qmake-utils flag-o-matic
 
 DESCRIPTION="Qt5 module for integrating online documentation into applications"
 HOMEPAGE="https://www.qt.io/"
@@ -24,6 +24,8 @@ KEYWORDS="amd64 arm64"
 DEPEND="xgui-lib/qtbase:$(ver_cut 1)"
 
 src_configure() {
+	append-flags -ffat-lto-objects
+
 	eqmake5
 }
 

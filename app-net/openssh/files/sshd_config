@@ -7,7 +7,7 @@ ClientAliveInterval 300
 Compression yes
 GatewayPorts no
 HostKeyAlgorithms ssh-ed25519
-KexAlgorithms curve25519-sha256@libssh.org
+KexAlgorithms mlkem768x25519-sha256
 LogLevel VERBOSE
 LoginGraceTime 20s
 MACs hmac-sha2-512-etm@openssh.com

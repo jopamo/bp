@@ -58,8 +58,6 @@ src_install() {
 
 	insinto /etc
 	if use router; then
-		insinto /usr/lib/systemd/system
-		insopts -m 0644
 		newins "${FILESDIR}/router.conf" nftables.conf
 	else
 		doins "${FILESDIR}/nftables.conf"

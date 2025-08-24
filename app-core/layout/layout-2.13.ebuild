@@ -120,29 +120,25 @@ src_install() {
 	newsysusers sysusers 1g4.conf
 	newtmpfiles tmpfiles 1g4.conf
 
+	insinto /etc/sysctl.d
+
 	if use user-namespaces; then
 		echo "user.max_user_namespaces = 10000" > "${T}/99-max-user-namespaces.conf"
-
-		insinto /etc/sysctl.d
 		doins "${T}/99-max-user-namespaces.conf"
 	fi
 
-	if use router; then
-		insinto /etc/sysctl.d
-		doins "${FILESDIR}/sysctl-router.conf"
-	fi
+	newins "${FILESDIR}/sysctl-hardening.conf" 00-hardening.conf
 
 	if ! use ipv6; then
-		insinto /etc/sysctl.d
-		doins "${FILESDIR}/sysctl-disable-ipv6.conf"
+		newins "${FILESDIR}/sysctl-disable-ipv6.conf" 10-disable-ipv6.conf
 	fi
 
-	insinto /etc/sysctl.d
-	doins "${FILESDIR}/sysctl-hardening.conf"
-
 	if use server; then
-		insinto /etc/sysctl.d
-		doins "${FILESDIR}/sysctl-hardening-server.conf"
+		newins "${FILESDIR}/sysctl-hardening-server.conf" 80-server.conf
+	fi
+
+	if use router; then
+		newins "${FILESDIR}/sysctl-router.conf" 90-router.conf
 	fi
 }
 

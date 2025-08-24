@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake
+inherit cmake flag-o-matic
 
 DESCRIPTION="Qt5 module for integrating online documentation into applications"
 HOMEPAGE="https://www.qt.io/"
@@ -22,3 +22,5 @@ SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-lib/qtbase:$(ver_cut 1)"
+
+append-flags -ffat-lto-objects

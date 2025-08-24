@@ -31,6 +31,8 @@ BDEPEND="
 "
 
 src_prepare() {
+	append-flags -ffat-lto-objects
+
 	rm -rf "${WORKDIR}/pcre2-${SNAPSHOT}/deps/sljit"
 	mv "${WORKDIR}/sljit-${SLJIT_SNAPSHOT}" "${WORKDIR}/pcre2-${SNAPSHOT}/deps/sljit"
 

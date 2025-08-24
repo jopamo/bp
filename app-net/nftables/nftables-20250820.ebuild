@@ -14,7 +14,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug gmp readline static-libs systemd"
+IUSE="debug gmp readline router static-libs systemd"
 
 DEPEND="
 	lib-net/libmnl
@@ -57,5 +57,11 @@ src_install() {
 	fi
 
 	insinto /etc
-	doins "${FILESDIR}/nftables.conf"
+	if use router; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		newins "${FILESDIR}/router.conf" nftables.conf
+	else
+		doins "${FILESDIR}/nftables.conf"
+	fi
 }

@@ -1,3 +1,4 @@
+app-core/layout -server
 app-core/systemd logind sleep
 app-core/vim normal
 app-kernel/kernel-bin desktop

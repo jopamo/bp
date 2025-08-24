@@ -6,7 +6,7 @@ inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="kernel routing and traffic control utilities"
 HOMEPAGE="https://wiki.linuxfoundation.org/networking/iproute2"
-SNAPSHOT=0ad8fef322365b7bafd052f416fc972bea49d362
+SNAPSHOT=ede5e0b67c13d6d8fb51891d7d4be330733862cd
 SRC_URI="https://github.com/iproute2/iproute2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/iproute2-${SNAPSHOT}"
 
@@ -42,6 +42,7 @@ doecho() {
 src_prepare() {
 	filter-flags -Wl,-z,defs
 	append-flags -ffat-lto-objects
+	append-flags -D__UAPI_DEF_IN6_ADDR=0 -D__UAPI_DEF_IN6_ADDR_ALT=0 -D__UAPI_DEF_SOCKADDR_IN6=0 -D__UAPI_DEF_IPV6_MREQ=0
 
 	use elibc_musl && eapply "${FILESDIR}"/iproute2-6.8.0-configure-nomagic-nolibbsd.patch
 	use elibc_musl && eapply "${FILESDIR}"/iproute2-6.8.0-disable-libbsd-fallback.patch

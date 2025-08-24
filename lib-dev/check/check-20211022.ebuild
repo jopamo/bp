@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake
+inherit cmake flag-o-matic
 
 DESCRIPTION="A unit test framework for C"
 HOMEPAGE="https://github.com/libcheck/check"
@@ -20,6 +20,8 @@ IUSE="test"
 RESTRICT="!test? ( test )"
 
 src_configure() {
+	append-flags -ffat-lto-objects
+
 	local mycmakeargs=(
 		-DBUILD_TESTING=$(usex test ON OFF)
 	)

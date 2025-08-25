@@ -192,6 +192,14 @@ get_udevdir() {
 	echo /usr/lib/udev
 }
 
+udev_dorules() {
+	debug-print-function ${FUNCNAME} "${@}"
+	(
+		insinto "$(get_udevdir)"/rules.d
+		doins "${@}"
+	)
+}
+
 udev_newrules() {
 	debug-print-function ${FUNCNAME} "$@"
 

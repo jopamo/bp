@@ -62,6 +62,8 @@ RESTRICT="network-sandbox"
 distutils_enable_tests pytest
 
 src_prepare() {
+	filter-flags -flto*
+
 	export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER=clang
 
 	default

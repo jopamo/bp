@@ -1,5 +1,5 @@
 AcceptEnv LANG LC_*
-AuthenticationMethods password
+AuthenticationMethods publickey
 ChallengeResponseAuthentication no
 Ciphers chacha20-poly1305@openssh.com
 ClientAliveCountMax 3
@@ -13,7 +13,7 @@ LoginGraceTime 20s
 MACs hmac-sha2-512-etm@openssh.com
 MaxAuthTries 3
 MaxStartups 3:50:10
-PasswordAuthentication yes
+PasswordAuthentication no
 PermitEmptyPasswords no
 PermitRootLogin no
 PermitUserEnvironment no

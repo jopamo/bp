@@ -2,7 +2,7 @@
 
 EAPI=8
 
-MINOR_VERSION="9961-46083195d"
+MINOR_VERSION="10060-4e8b05daf"
 _FULL_VERSION="${PV}.${MINOR_VERSION}"
 
 URI="https://downloads.plex.tv/plex-media-server-new"

@@ -36,6 +36,6 @@ src_compile() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" PREFIX="${EPREFIX}/usr" install
+	emake DESTDIR="${D}" SBINDIR="${EPREFIX}/usr/bin" PREFIX="${EPREFIX}/usr" install
 	cleanup_install
 }

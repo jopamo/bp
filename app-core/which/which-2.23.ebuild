@@ -9,3 +9,5 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+PATCHES=( "${FILESDIR}"/gcc15.patch )

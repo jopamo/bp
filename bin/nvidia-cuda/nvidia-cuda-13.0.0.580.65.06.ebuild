@@ -14,7 +14,7 @@ SRC_URI="https://developer.download.nvidia.com/compute/cuda/${PV}/local_installe
 
 LICENSE="NVIDIA-CUDA"
 SLOT="0"
-KEYWORDS="amd64"
+#KEYWORDS="amd64"
 
 IUSE="debugger sanitizer"
 
@@ -34,8 +34,8 @@ src_install() {
 
 	# Install standard sub packages
 	local builddirs=(
-		builds/cuda_{cccl,cudart,cuobjdump,cupti,cuxxfilt,nvcc,nvdisasm,nvml_dev,nvprune,nvrtc,nvtx,nvvp,opencl}
-		builds/lib{cublas,cufft,cufile,curand,cusolver,cusparse,npp,nvfatbin,nvfatbin,nvjitlink,nvjpeg}
+		builds/cuda_{cccl,crt,ctadvisor,cudart,culibos,cuobjdump,cupti,cuxxfilt,nvcc,nvdisasm,nvml_dev,nvprune,nvrtc,nvtx,opencl}
+		builds/lib{cublas,cufft,cufile,curand,cusolver,cusparse,npp,nvfatbin,nvfatbin,nvjitlink,nvjpeg,nvptxcompiler}
 		$(usex debugger "builds/cuda_gdb" "")
 	)
 
@@ -69,9 +69,9 @@ src_install() {
 
 	doins builds/EULA.txt
 	# nvml and nvvm need special handling
-	doins -r builds/cuda_nvcc/nvvm
+	doins -r builds/libnvvm/nvvm
 	exeinto ${cudadir}/nvvm/bin
-	doexe builds/cuda_nvcc/nvvm/bin/cicc
+	doexe builds/libnvvm/nvvm/bin/cicc
 
 	doins -r builds/cuda_nvml_dev/nvml
 

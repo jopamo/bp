@@ -6,7 +6,8 @@ inherit flag-o-matic libtool
 
 DESCRIPTION="Library for arbitrary-precision arithmetic on different type of numbers"
 HOMEPAGE="http://gmplib.org/"
-SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+SRC_URI="https://gmplib.org/download/snapshot/gmp-next/gmp-$(ver_cut 1-2).0-$(ver_cut 3).tar.zst"
+S="${WORKDIR}/gmp-$(ver_cut 1-2).0-$(ver_cut 3)"
 
 LICENSE="|| ( LGPL-3+ GPL-2+ )"
 SLOT="0"
@@ -20,6 +21,11 @@ DEPEND="
 "
 
 PATCHES=( "${FILESDIR}"/${PN}-6.1.0-noexecstack-detect.patch	)
+
+src_unpack() {
+	tar xvf "${DISTDIR}"/gmp-*.tar.zst
+}
+
 
 src_prepare() {
 	use arm64 && filter-flags -flto*

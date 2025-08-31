@@ -1,10 +1,22 @@
 #!/bin/sh
-fl="-std=c99"
-for opt; do
-  case "$opt" in
-    -std=c99|-std=iso9899:1999) fl="";;
-    -std=*) echo "`basename $0` called with non ISO C99 option $opt" >&2
-	    exit 1;;
-  esac
+# POSIX-compatible gcc wrapper that enforces ISO C99
+
+prog=${0##*/}        # portable basename
+fl='-std=c99'        # default flag
+
+# Scan options until '--' (end of options)
+for opt do
+    [ "$opt" = "--" ] && break
+    case $opt in
+        -std=c99|-std=iso9899:1999)
+            fl=''   # user already selected C99; don't add another -std
+            ;;
+        -std=*)
+            printf '%s called with non ISO C99 option %s\n' "$prog" "$opt" >&2
+            exit 1
+            ;;
+    esac
 done
-exec gcc $fl ${1+"$@"}
+
+# If fl is non-empty, include it; otherwise omit it.
+exec gcc ${fl:+$fl} "$@"

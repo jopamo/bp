@@ -21,7 +21,6 @@ IUSE="static-libs test zlib"
 RESTRICT="test"
 
 DEPEND="
-	app-var/c_rehash
 	zlib? ( lib-core/zlib )
 "
 

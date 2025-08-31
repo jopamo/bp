@@ -1,10 +1,20 @@
 #!/bin/sh
-fl="-std=c89"
-for opt; do
-  case "$opt" in
-    -ansi|-std=c89|-std=iso9899:1990) fl="";;
-    -std=*) echo "`basename $0` called with non ANSI/ISO C option $opt" >&2
-	    exit 1;;
-  esac
+# GCC wrapper enforcing ANSI/ISO C89 (a.k.a. ISO C90)
+
+prog=${0##*/}          # portable basename
+fl='-std=c89'          # default
+
+for opt do
+    [ "$opt" = "--" ] && break
+    case $opt in
+        -ansi|-std=c89|-std=iso9899:1990)
+            fl=''  # user explicitly selected ANSI C / C90
+            ;;
+        -std=*)
+            printf '%s called with non ANSI/ISO C option %s\n' "$prog" "$opt" >&2
+            exit 1
+            ;;
+    esac
 done
-exec gcc $fl ${1+"$@"}
+
+exec gcc ${fl:+$fl} "$@"

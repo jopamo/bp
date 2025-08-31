@@ -15,7 +15,7 @@ S=${WORKDIR}/gcc-${SNAPSHOT}
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="debug dlang go-bootstrap isl libgomp sanitize zstd"
 

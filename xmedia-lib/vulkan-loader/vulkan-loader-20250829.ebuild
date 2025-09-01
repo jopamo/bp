@@ -6,7 +6,7 @@ inherit flag-o-matic cmake python-any-r1 toolchain-funcs
 
 DESCRIPTION="Vulkan Installable Client Driver (ICD) Loader"
 HOMEPAGE="https://github.com/KhronosGroup/Vulkan-Loader"
-SNAPSHOT=484f3cd7dfb13f63a8b8930cb0397e9b849ab076
+SNAPSHOT=fe92c7d7e54664b1d3f3a0d734fd6f2ffd92e485
 SRC_URI="https://github.com/KhronosGroup/Vulkan-Loader/archive/${SNAPSHOT}.tar.gz -> Vulkan-Loader-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/Vulkan-Loader-${SNAPSHOT}"
 

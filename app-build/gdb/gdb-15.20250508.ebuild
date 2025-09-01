@@ -8,7 +8,7 @@ inherit flag-o-matic python-single-r1
 
 DESCRIPTION="GNU debugger"
 HOMEPAGE="https://sourceware.org/gdb/"
-SNAPSHOT=21cf77800681d79750616b9d73bef948e68145e9
+SNAPSHOT=63b7565333b9b12af466655f825894868545b7e5
 SRC_URI="https://github.com/1g4-mirror/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/binutils-gdb-${SNAPSHOT}"
 
@@ -44,12 +44,14 @@ DEPEND="${RDEPEND}
 
 GDB_BUILD_DIR="${WORKDIR}"/${P}-build
 
+PATCHES=( "${FILESDIR}"/gcc15.patch	)
+
 pkg_setup() {
 	use python && python-single-r1_pkg_setup
 }
 
 src_configure() {
-	strip-unsupported-flags
+	strip-flags
 	append-flags -fpermissive
 
 	myconf+=(

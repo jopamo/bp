@@ -6,7 +6,7 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Library for build EFI Applications"
 HOMEPAGE="https://sourceforge.net/projects/gnu-efi/"
-SNAPSHOT=1fee8ab566ce91b9cbab9f2c85db96566d79063b
+SNAPSHOT=ee80edbb57331968c541903762cb65280fe23a6f
 SRC_URI="https://github.com/ncroxon/gnu-efi/archive/${SNAPSHOT}.tar.gz -> gnu-efi-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/gnu-efi-${SNAPSHOT}"
 

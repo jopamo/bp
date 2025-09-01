@@ -12,7 +12,7 @@ HOMEPAGE="
 	https://github.com/rthalley/dnspython/
 	https://pypi.org/project/dnspython/
 "
-SNAPSHOT=24156b03601778172877b72a51f1983e75f5d1b1
+SNAPSHOT=641633503ee6b07bf382594ac04707072b90de18
 SRC_URI="https://github.com/rthalley/dnspython/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

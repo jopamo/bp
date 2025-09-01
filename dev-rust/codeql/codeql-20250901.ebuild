@@ -6,7 +6,7 @@ inherit cargo
 
 DESCRIPTION="Security Scanner"
 HOMEPAGE="https://github.com/github/codeql"
-SNAPSHOT=b79f0a2cf2a7817aa2ff4cb64ae522e2d139e118
+SNAPSHOT=0d0eaa21a1e9f2146d60f42d14b3b7769d65839c
 SRC_URI="https://github.com/github/codeql/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/codeql-${SNAPSHOT}"
 

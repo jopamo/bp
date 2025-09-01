@@ -6,7 +6,7 @@ inherit cmake
 
 DESCRIPTION="Provides files needed for LXDE application menus"
 HOMEPAGE="http://lxde.org/"
-SNAPSHOT=1cf957b21373bdcaf379a3f3a1ecbb656f82d2d8
+SNAPSHOT=9b3518a3b2425eaa3f20746c52c41fc194471be8
 SRC_URI="https://github.com/lxqt/lxqt-menu-data/archive/${SNAPSHOT}.tar.gz -> lxqt-menu-data-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/lxqt-menu-data-${SNAPSHOT}"
 

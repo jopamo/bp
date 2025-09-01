@@ -6,7 +6,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="A simple and portable single file AV1 OBU parser"
 HOMEPAGE="https://github.com/dwbuiten/obuparse"
-SNAPSHOT=8acb5193a64e5c8281c9f22805f75f044f5931f7
+SNAPSHOT=665c8fbd8e078868c3509f17a53b2970fad83520
 SRC_URI="https://github.com/dwbuiten/obuparse/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -34,6 +34,7 @@ DEPEND="
 
 src_prepare() {
 	filter-flags -flto*
+	append-flags -Wno-error
 	append-flags -Werror=unused-value
 
 	default

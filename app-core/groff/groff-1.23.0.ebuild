@@ -14,19 +14,10 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="core-perl/libintl-perl"
 
-filter-flags -fno-signed-zeros -fassociative-math
+PATCHES=( "${FILESDIR}"/gcc15.patch )
 
 src_prepare() {
-	if tc-is-cross-compiler ; then
-		sed -i \
-			-e '/^GROFFBIN=/s:=.*:=${EPREFIX}/usr/bin/groff:' \
-			-e '/^TROFFBIN=/s:=.*:=${EPREFIX}/usr/bin/troff:' \
-			-e '/^GROFF_BIN_PATH=/s:=.*:=:' \
-			-e '/^GROFF_BIN_DIR=/s:=.*:=:' \
-			contrib/*/Makefile.sub \
-			doc/Makefile.in \
-			doc/Makefile.sub || die "cross-compile sed failed"
-	fi
+	filter-flags -fno-signed-zeros -fassociative-math
 
 	sed -i -e 's/^[ \t]\+g=g$/g=/' configure || die
 	default

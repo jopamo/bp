@@ -9,7 +9,7 @@ inherit flag-o-matic
 
 DESCRIPTION="A powerful light-weight programming language designed for extending applications"
 HOMEPAGE="http://www.lua.org/"
-SNAPSHOT=1b0f943da7dfb25987456a77259edbeea0b94edc
+SNAPSHOT=934fdd481ced3a9d4a7aaace4479ce889ab23582
 SRC_URI="https://github.com/lua/lua/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

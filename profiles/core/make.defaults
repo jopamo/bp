@@ -47,7 +47,7 @@ ENV_UNSET="
 BASEFLAGS="-O3 -pipe -Wall -Wformat -Wformat-security"
 GRAPHITE="-fgraphite-identity -floop-nest-optimize -ftree-loop-distribution"
 POSITION="-fPIE -fPIC"
-SECURE="-D_GLIBCXX_ASSERTIONS -ftrivial-auto-var-init=pattern -fstack-protector-strong -fstack-clash-protection -fcf-protection=full -fexceptions ${POSITION} -D_FORTIFY_SOURCE=3"
+SECURE="-D_GLIBCXX_ASSERTIONS -ftrivial-auto-var-init=pattern -fstack-protector-strong -fstack-clash-protection -fexceptions ${POSITION} -D_FORTIFY_SOURCE=3"
 FLTO_BASE="-flto=8 -fuse-linker-plugin -fdevirtualize-at-ltrans -fipa-pta -fno-semantic-interposition"
 
 PASS_FLAGS="${BASEFLAGS} ${GRAPHITE} ${FLTO_BASE} ${SECURE}"

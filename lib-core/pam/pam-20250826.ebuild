@@ -6,7 +6,7 @@ inherit meson flag-o-matic
 
 DESCRIPTION="Linux PAM (Pluggable Authentication Modules for Linux) project"
 HOMEPAGE="https://github.com/linux-pam/linux-pam"
-SNAPSHOT=ac3c4d1b5bdd2598499bb85914575e3974af7791
+SNAPSHOT=cfe667baa301ffa136a713b0ae22ba0ef493aa48
 SRC_URI="https://github.com/linux-pam/linux-pam/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/linux-pam-${SNAPSHOT}
 

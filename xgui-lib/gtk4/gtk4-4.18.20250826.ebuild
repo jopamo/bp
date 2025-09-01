@@ -8,7 +8,7 @@ inherit meson xdg python-any-r1 flag-o-matic
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
-SNAPSHOT=67ed84598fe862265a7f8411e643b58aa08c0956
+SNAPSHOT=4e7d3393dcc66de84b5c6a165f8dafc21e9cf6b6
 SRC_URI="https://github.com/GNOME/gtk/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/gtk-${SNAPSHOT}"
 

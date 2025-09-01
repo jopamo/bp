@@ -6,7 +6,7 @@ inherit linux-info autotools
 
 DESCRIPTION="Netlink API to the in-kernel nf_tables subsystem"
 HOMEPAGE="https://netfilter.org/projects/nftables/"
-SNAPSHOT=d36691a4ac486857fd437d3a9aa3701a073a9539
+SNAPSHOT=eb8fb569c501dc088dc950061369102687f8d2a5
 SRC_URI="https://github.com/1g4-mirror/libnftnl/archive/${SNAPSHOT}.tar.gz -> libnftnl-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libnftnl-${SNAPSHOT}
 

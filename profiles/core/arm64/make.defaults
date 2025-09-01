@@ -20,3 +20,5 @@ BINPKG_COMPRESS="xz"
 BINPKG_COMPRESS_FLAGS="--arm64 --delta=dist=2 --lzma2=preset=9e,dict=128MiB -T5"
 
 GRUB_PLATFORMS="efi-64"
+
+CFLAGS="${CFLAGS} -mbranch-protection=standard"

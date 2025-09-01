@@ -6,7 +6,7 @@ inherit doins
 
 DESCRIPTION="Allows users or groups to run commands as other users"
 HOMEPAGE="https://www.sudo.ws/"
-SNAPSHOT=2df8f2ca9e9368c1549edb5f1f09cbe38f949e53
+SNAPSHOT=e2a2982153a39eb793adfc9f2a8524adfdae8c6f
 SRC_URI="https://github.com/sudo-project/sudo/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/sudo-${SNAPSHOT}
 

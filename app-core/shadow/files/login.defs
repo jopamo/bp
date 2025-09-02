@@ -126,7 +126,7 @@ CHFN_RESTRICT	fwh
 ENCRYPT_METHOD YESCRYPT
 
 # Set yescrypt strength (5 = balanced security and performance)
-YESCRYPT_COST_FACTOR 5
+YESCRYPT_COST_FACTOR 11
 
 # Allow login even if a user's home directory is missing
 DEFAULT_HOME	yes

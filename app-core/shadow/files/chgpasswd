@@ -1,4 +1,5 @@
 #%PAM-1.0
+#chgpasswd
 auth		sufficient	pam_rootok.so
 account		required	pam_permit.so
 password	include		system-auth

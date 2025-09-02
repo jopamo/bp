@@ -16,6 +16,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="custom-cflags nvidia"
 
+RESTRICT="network-sandbox"
+
 append-flags -ffat-lto-objects
 
 src_prepare() {

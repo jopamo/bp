@@ -52,6 +52,7 @@ pkg_setup() {
 
 src_configure() {
 	strip-flags
+	replace-flags "-D_FORTIFY_SOURCE=3" "-D_FORTIFY_SOURCE=2"
 	append-flags -fpermissive
 
 	myconf+=(

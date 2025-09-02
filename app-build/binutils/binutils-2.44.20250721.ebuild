@@ -28,6 +28,7 @@ PATCHES=( "${FILESDIR}"/binutils-ld-fix-static-linking.patch )
 
 src_configure() {
 	replace-flags "-D_FORTIFY_SOURCE=3" "-D_FORTIFY_SOURCE=2"
+
 	filter-flags -Wl,defs
 	append-flags -ffat-lto-objects
 

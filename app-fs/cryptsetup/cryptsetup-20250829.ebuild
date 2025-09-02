@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit linux-info autotools doins
+inherit linux-info autotools doins flag-o-matic
 
 DESCRIPTION="Tool to setup encrypted devices with dm-crypt"
 HOMEPAGE="https://gitlab.com/cryptsetup/cryptsetup/blob/master/README.md"
@@ -42,6 +42,7 @@ pkg_setup() {
 }
 
 src_prepare() {
+	replace-flags "-D_FORTIFY_SOURCE=3" "-D_FORTIFY_SOURCE=2"
 	default
 	eautoreconf
 }

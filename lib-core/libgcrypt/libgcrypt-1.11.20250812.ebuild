@@ -22,6 +22,7 @@ DEPEND="lib-core/libgpg-error"
 
 src_prepare() {
 	filter-flags -fuse-ld=lld
+	replace-flags "-D_FORTIFY_SOURCE=3" "-D_FORTIFY_SOURCE=2"
 
 	default
 	eautoreconf

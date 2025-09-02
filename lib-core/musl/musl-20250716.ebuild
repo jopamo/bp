@@ -88,12 +88,12 @@ src_install() {
 		if use libxcrypt ; then
 			rm "${ED}"/usr/include/crypt.h || die
 		fi
-
-		cp -p "${ED}"/lib/ld-musl*.so* "${ED}"/usr/lib/ || die
-		rm -r "${ED}"/lib || die
 	else
 		for i in linux asm asm-generic mtd ; do
 			dosym -r /usr/include/$i /usr/musl/include/$i
 		done
 	fi
+
+	cp -p "${ED}"/lib/ld-musl*.so* "${ED}"/usr/lib/ || die
+	rm -r "${ED}"/lib || die
 }

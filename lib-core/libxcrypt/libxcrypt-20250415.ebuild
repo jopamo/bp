@@ -4,7 +4,7 @@ EAPI=8
 
 SNAPSHOT=e34e0634a7192383dbb4445b6d7568e36baef675
 
-inherit autotools
+inherit autotools flag-o-matic
 
 DESCRIPTION="Extended crypt library for descrypt, md5crypt, bcrypt, and others"
 HOMEPAGE="https://github.com/besser82/libxcrypt"
@@ -18,6 +18,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_prepare() {
+	filter-flags -flto*
 	default
 	eautoreconf
 }
@@ -26,7 +27,6 @@ src_configure() {
 	local myconf=(
 		$(use_enable static-libs static)
 		--disable-obsolete-api
-		$(usex elibc_musl --enable-xcrypt-compat "")
 		$(usex elibc_musl "--enable-hashes=strong" "--enable-hashes=strong,glibc")
     	--disable-failure-tokens
     	--disable-werror

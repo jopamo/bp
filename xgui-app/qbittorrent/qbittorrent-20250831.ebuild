@@ -32,6 +32,7 @@ pkg_setup() {
 }
 
 src_configure() {
+	replace-flags "-D_FORTIFY_SOURCE=3" "-D_FORTIFY_SOURCE=2"
 	filter-flags -flto*
 	filter-flags -Wl,-z,defs
 

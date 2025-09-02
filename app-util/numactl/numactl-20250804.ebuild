@@ -16,9 +16,9 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-filter-flags -Wl,-z,defs
-
 src_prepare() {
+	filter-flags -Wl,-z,defs
+	replace-flags "-D_FORTIFY_SOURCE=3" "-D_FORTIFY_SOURCE=2"
 	default
 	eautoreconf
 }

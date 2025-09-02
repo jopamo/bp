@@ -2,14 +2,13 @@
 
 EAPI=8
 
-BRANCH_NAME="v$(ver_cut 1-2)"
+BRANCH_NAME="master"
 
 inherit autotools
 
 DESCRIPTION="utils for managing LZMA compressed files"
 HOMEPAGE="http://tukaani.org/xz/"
-
-SNAPSHOT=7c12726c51b2b7d77329dd72a29ecb1ec262b918
+SNAPSHOT=dd4a1b259936880e04669b43e778828b60619860
 SRC_URI="https://github.com/tukaani-project/xz/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/xz-${SNAPSHOT}"
 
@@ -28,6 +27,7 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
+		SKIP_WERROR_CHECK=yes
 		$(use_enable static-libs static)
 	)
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"

@@ -24,6 +24,8 @@ src_prepare() {
 	append-flags -Wno-error
 	filter-flags -Wall
 	filter-flags -Wl,-z,defs -flto*
+	replace-flags "-D_FORTIFY_SOURCE=3" "-D_FORTIFY_SOURCE=2"
+
 	default
 	use python && cd bindings/python && distutils-r1_src_prepare
 }

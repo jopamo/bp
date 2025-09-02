@@ -120,6 +120,7 @@ USE="
     argon2        crypt         doh
     gcrypt        gnutls        oniguruma
     seccomp       urandom       yescrypt
+    libxcrypt
 
     # ── Libraries & Runtimes ─────────────────────────────
     acl           attr          blkid

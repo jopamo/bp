@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools flag-o-matic
 
 DESCRIPTION="Handler library for evdev events"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/libevdev/"
@@ -19,6 +19,8 @@ IUSE="static-libs"
 RESTRICT="test" # Tests need to run as root.
 
 src_prepare() {
+	replace-flags "-D_FORTIFY_SOURCE=3" "-D_FORTIFY_SOURCE=2"
+
 	default
 	eautoreconf
 }

@@ -38,4 +38,4 @@ BINPKG_COMPRESS_FLAGS="--x86 --delta=dist=2 --lzma2=preset=9e,dict=128MiB -T5"
 
 GRUB_PLATFORMS="pc efi-64"
 
-CFLAGS="${CFLAGS} -fcf-protection=full"
+CFLAGS="${CFLAGS}"

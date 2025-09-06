@@ -2,11 +2,12 @@
 
 EAPI=8
 
+BRANCH_NAME="nasm-$(ver_cut 1-2).xx"
 inherit autotools
 
 DESCRIPTION="Netwide Assembler for x86 and x86_64"
 HOMEPAGE="http://www.nasm.us/"
-SNAPSHOT=7a5502142b735fe62866963fa0bf3182808996b2
+SNAPSHOT=e2ccd5de268fc4bda5aa4313a79859827c3adc82
 SRC_URI="https://github.com/netwide-assembler/nasm/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

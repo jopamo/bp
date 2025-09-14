@@ -254,7 +254,6 @@ src_configure() {
 
     use debug || local -x CPPFLAGS="${CPPFLAGS} -DNDEBUG"
     cmake_src_configure
-    die
 }
 
 src_test() {

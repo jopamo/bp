@@ -33,14 +33,18 @@ src_prepare() {
 	eapply "${FILESDIR}"/$(ver_cut 1)/*.patch
 	sed -i 's/typedef off64_t libgo_off_t_type;/typedef off_t libgo_off_t_type;/g' libgo/sysinfo.c || die
 
+	# make sure no CET codegen flags leak in from env or profiles
+	# -fcf-protection and -mshstk/-mcet are x86-only and should not appear on arm64
+	filter-flags -fcf-protection=* -mshstk -mcet
+
 	filter-gcc
-    filter-lto
+	filter-lto
 
 	use debug || filter-flags -g
 
 	default
 
-	# Do not run fixincludes
+	# do not run fixincludes
 	sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
 
 	# install x86_64 libraries in /lib
@@ -55,8 +59,8 @@ src_prepare() {
 src_configure() {
 	local GCC_LANG="c,c++,lto"
 
-	use dlang   && GCC_LANG+=",d"
-	use go-bootstrap  && GCC_LANG+=",go"
+	use dlang        && GCC_LANG+=",d"
+	use go-bootstrap && GCC_LANG+=",go"
 
 	cd gcc-build
 
@@ -64,6 +68,14 @@ src_configure() {
 	# http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48565
 	CFLAGS=${CFLAGS/-pipe/}
 	CXXFLAGS=${CXXFLAGS/-pipe/}
+
+	# decide CET configure switch based on libc and arch
+	# GCC’s --enable-cet toggles -fcf-protection for target runtime libs on Linux/x86 by default
+	# disable on arm64 and anything non-x86, only allow on glibc+x86
+	local cet_opt="--disable-cet"
+	if use elibc_glibc && [[ ${CHOST} == x86_64-* || ${CHOST} == i?86-* ]]; then
+		cet_opt="--enable-cet"
+	fi
 
 	local myconf=(
 		--prefix="${EPREFIX}"/usr
@@ -106,7 +118,7 @@ src_configure() {
 		--with-linker-hash-style=gnu
 		--with-pkgversion="1g4 Linux GCC ${PV}"
 		--with-system-zlib
-		$(use_enable elibc_glibc cet)
+		${cet_opt}
 		$(use_enable elibc_glibc symvers)
 		$(use_enable elibc_glibc libvtv)
 		$(use_enable elibc_glibc vtable-verify)

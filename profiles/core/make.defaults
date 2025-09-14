@@ -89,7 +89,7 @@ ACCEPT_LICENSE="*"
 COLLISION_IGNORE="/lib/modules/*"
 UNINSTALL_IGNORE="
     /lib/modules/*
-    /bin /sbin /lib /lib32 /lib64 /libx32
+    /bin /sbin /lib /lib64
     /usr/sbin
     /usr/lib/modules/*
     /var/run /var/lock

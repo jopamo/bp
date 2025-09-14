@@ -37,7 +37,8 @@ PATCHES=(
 src_prepare() {
     # drop any stray CET control-flow flags that might sneak in from environment
     # CET is x86-only so make sure arm64 never sees it
-    filter-flags -fcf-protection=* -mshstk
+    use arm64 && filter-flags -fcf-protection=* -mshstk -mcet
+	use arm64 && append-cppflags -U_LIBUNWIND_USE_CET
 
     cmake_src_prepare
     sed -i '/#include <string>/a #include <cstdint>' "include/llvm/Support/Signals.h" || die
@@ -130,7 +131,7 @@ src_configure() {
         -DCOMPILER_RT_USE_LLVM_UNWINDER=ON
         -DENABLE_LINKER_BUILD_ID=ON
         -DLIBUNWIND_ENABLE_ASSERTIONS=$(usex assertions)
-        -DLIBUNWIND_ENABLE_CROSS_UNWINDING=ON
+        -DLIBUNWIND_ENABLE_CROSS_UNWINDING=OFF
         -DLIBUNWIND_ENABLE_SHARED=ON
         -DLIBUNWIND_ENABLE_STATIC=ON
         -DLIBUNWIND_INCLUDE_TESTS=OFF

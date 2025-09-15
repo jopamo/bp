@@ -8,7 +8,7 @@ inherit flag-o-matic
 
 DESCRIPTION="GNU libc C library"
 HOMEPAGE="https://www.gnu.org/software/libc/"
-SNAPSHOT=f7c0193b61357cb4b52c5805dd8b58718e63ea3b
+SNAPSHOT=f03a78820ecda8795bd0ba094a70040c21fb38a6
 SRC_URI="https://github.com/1g4-mirror/glibc/archive/${SNAPSHOT}.tar.gz -> glibc-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/glibc-${SNAPSHOT}
 

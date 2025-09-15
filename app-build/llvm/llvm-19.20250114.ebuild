@@ -38,7 +38,7 @@ src_prepare() {
     # drop any stray CET control-flow flags that might sneak in from environment
     # CET is x86-only so make sure arm64 never sees it
     use arm64 && filter-flags -fcf-protection=* -mshstk -mcet
-	use arm64 && append-cppflags -U_LIBUNWIND_USE_CET
+	use arm64 && append-flags -U_LIBUNWIND_USE_CET -U_LIBUNWIND_USE_GCS -mbranch-protection=none
 
     cmake_src_prepare
     sed -i '/#include <string>/a #include <cstdint>' "include/llvm/Support/Signals.h" || die

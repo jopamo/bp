@@ -15,7 +15,7 @@ HOMEPAGE="
 "
 
 MY_PN="python-zstandard"
-SNAPSHOT=32a31f889e9f968320b76420e8cfd051beec35fc
+SNAPSHOT=7a77a7510b8ce068e4a103d29aea1b5ec829d8b6
 SRC_URI="https://github.com/indygreg/python-zstandard/archive/${SNAPSHOT}.tar.gz -> ${MY_PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${MY_PN}-${SNAPSHOT}"
 

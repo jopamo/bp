@@ -8,7 +8,7 @@ inherit flag-o-matic git-r3 autotools doins
 
 DESCRIPTION="The PHP language runtime engine"
 HOMEPAGE="https://secure.php.net/"
-SNAPSHOT=ec9be2eb03992cfd00ea3783ca49b5bfd74b8e79
+SNAPSHOT=1c323f1f1eee9d020f6a55105f1c1c9447cc6561
 SRC_URI="https://github.com/php/php-src/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/php-src-${SNAPSHOT}"
 

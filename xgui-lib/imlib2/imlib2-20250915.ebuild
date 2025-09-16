@@ -6,7 +6,7 @@ inherit flag-o-matic autotools
 
 DESCRIPTION="Version 2 of an advanced replacement library for libraries like libXpm"
 HOMEPAGE="https://www.enlightenment.org/"
-SNAPSHOT=72b610076ab5cd7645d0b439f17486beffda307a
+SNAPSHOT=51f3ffc3da149318a5353e4761df0a74b838b64c
 SRC_URI="https://github.com/1g4-mirror/legacy-imlib2/archive/${SNAPSHOT}.tar.gz -> legacy-imlib2-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/legacy-imlib2-${SNAPSHOT}"
 

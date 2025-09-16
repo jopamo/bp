@@ -6,7 +6,7 @@ inherit autotools flag-o-matic doins user
 
 DESCRIPTION="OSS implementation of the TCG TPM2 Software Stack (TSS2)"
 HOMEPAGE="https://github.com/tpm2-software/tpm2-tss"
-SNAPSHOT=0d9e4c16655831aa69c2b26964de65296e857216
+SNAPSHOT=441e2d33d2b075b26b8a693b139a25ed6571f5ef
 SRC_URI="https://github.com/tpm2-software/tpm2-tss/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/tpm2-tss-${SNAPSHOT}"
 

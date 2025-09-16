@@ -5,3 +5,4 @@ elibc_musl
 -gshadow
 #-utmp
 -vtv
+-ucm

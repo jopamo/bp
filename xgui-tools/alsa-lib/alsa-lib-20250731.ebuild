@@ -6,6 +6,7 @@ inherit flag-o-matic autotools
 
 DESCRIPTION="Advanced Linux Sound Architecture Library"
 HOMEPAGE="http://www.alsa-project.org/"
+
 SNAPSHOT=3a9771812405be210e760e4e6667f2c023fe82f4
 SRC_URI="https://github.com/alsa-project/alsa-lib/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/alsa-lib-${SNAPSHOT}
@@ -29,14 +30,16 @@ src_configure() {
 	local myconf=(
 		$(use_enable ucm)
 		$(use_with debug)
-		--disable-alisp
 		--disable-maintainer-mode
 		--disable-python
 		--disable-resmgr
-		--enable-aload
+		--disable-aload
+		--enable-mixer
+		--enable-pcm
 		--enable-rawmidi
 		--enable-seq
 		--enable-shared
+		--enable-topology
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

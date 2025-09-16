@@ -6,7 +6,7 @@ inherit flag-o-matic doins toolchain-funcs linux-info
 
 DESCRIPTION="Userspace utils and init scripts for the AppArmor application security system"
 HOMEPAGE="https://gitlab.com/apparmor/apparmor/wikis/home"
-SNAPSHOT=7757c7130c25d8b8d157d21e4401e7d8432a55ab
+SNAPSHOT=1525c0e9def7bae8e2bebe07fbb55be13981e9c8
 SRC_URI="https://gitlab.com/apparmor/apparmor/-/archive/${SNAPSHOT}/apparmor-${SNAPSHOT}.tar.bz2 -> apparmor-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/apparmor-${SNAPSHOT}/parser"
 

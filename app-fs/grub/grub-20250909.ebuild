@@ -91,9 +91,9 @@ grub_configure() {
 src_prepare() {
 	rm -rf gnulib
 	cp -r "${EROOT}"/usr/share/gnulib gnulib
-	#cd gnulib
-	#git reset --hard 0a12fa9
-	#cd ..
+	cd gnulib
+	git reset --hard 9f48fb
+	cd ..
 
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
 

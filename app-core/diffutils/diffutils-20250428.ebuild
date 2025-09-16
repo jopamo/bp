@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-SNAPSHOT=6b9c72607683bcd73d4c5832cf9e94ae979572f0
+SNAPSHOT=25919920377f08d6f09df804c7f8af11f5adaabe
 
 inherit flag-o-matic
 
@@ -20,7 +20,7 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="static"
 
@@ -29,12 +29,10 @@ DEPEND="app-compression/xz-utils"
 BDEPEND="app-dev/gperf"
 
 src_prepare() {
-	filter-flags -Wl,-z,defs
-
 	rm -rf gnulib
 	cp -r "${EROOT}"/usr/share/gnulib gnulib
 	#cd gnulib
-	#git reset --hard 2b2bcdb
+	#git reset --hard 0a12fa9
 	#cd ..
 
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib

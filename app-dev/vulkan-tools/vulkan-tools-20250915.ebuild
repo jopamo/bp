@@ -24,7 +24,7 @@ BDEPEND="${PYTHON_DEPS}
 	cube? ( app-dev/glslang )
 "
 RDEPEND="
-	>=xmedia-lib/vulkan-loader-${PV}
+	xmedia-lib/vulkan-loader
 	wayland? ( xgui-lib/wayland )
 	X? (
 		xgui-lib/libX11
@@ -32,7 +32,7 @@ RDEPEND="
 	)
 "
 DEPEND="${RDEPEND}
-	>=app-dev/vulkan-headers-${PV}
+	app-dev/vulkan-headers
 "
 
 pkg_setup() {

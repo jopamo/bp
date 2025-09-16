@@ -4,8 +4,7 @@ EAPI=8
 
 DESCRIPTION="FFmpeg version of headers required to interface with Nvidias codec APIs"
 HOMEPAGE="https://git.videolan.org/?p=ffmpeg/nv-codec-headers.git"
-
-SNAPSHOT=f2fb9b36d5e08d6211f7cf6377971c0570939e65
+SNAPSHOT=876af32a202d0de83bd1d36fe74ee0f7fcf86b0d
 SRC_URI="https://github.com/FFmpeg/nv-codec-headers/archive/${SNAPSHOT}.tar.gz -> nv-codec-headers-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/nv-codec-headers-${SNAPSHOT}"
 

@@ -9,8 +9,9 @@ xgui-lib/gtk4 vulkan
 xgui-lib/qtbase vulkan
 xgui-live-app/wine opencl
 xgui-tools/alsa-utils alsamixer
-xmedia-app/ffmpeg vulkan
-xmedia-lib/libplacebo vulkan
+xmedia-app/ffmpeg -vulkan
+xmedia-lib/libplacebo -vulkan
 #xmedia-lib/vulkan-loader wayland
 xmedia-lib/x264 opencl
 xmedia-live-app/avidemux qt5
+xmedia-app/mpv -vulkan

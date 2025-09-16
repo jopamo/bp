@@ -3,8 +3,7 @@
 EAPI=8
 
 inherit autotools
-
-SNAPSHOT=4939b6b6158332d35eb30a7f1f2b7f15450b9893
+SNAPSHOT=19926e7bd830aa11d7f45e6151fad66152d3c5d3
 
 DESCRIPTION="A perfect hash function generator"
 HOMEPAGE="https://www.gnu.org/software/gperf/"

@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="iscsi client library and utilities"
 HOMEPAGE="https://github.com/sahlberg/libiscsi"
-SNAPSHOT=9b1a625adc966a71107dd65e2416272f5f8be423
+SNAPSHOT=37b8579c9b4878d79da351870bfbaefdcb082311
 SRC_URI="https://github.com/sahlberg/libiscsi/archive/${SNAPSHOT}.tar.gz -> libiscsi-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libiscsi-${SNAPSHOT}"
 

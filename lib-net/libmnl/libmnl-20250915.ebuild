@@ -6,8 +6,7 @@ inherit autotools
 
 DESCRIPTION="Minimalistic netlink library"
 HOMEPAGE="http://netfilter.org/projects/libmnl"
-
-SNAPSHOT=03da98bcd284d55212bc79e91dfb63da0ef7b937
+SNAPSHOT=54dea548d796653534645c6e3c8577eaf7d77411
 SRC_URI="https://github.com/1g4-mirror/libmnl/archive/${SNAPSHOT}.tar.gz -> libmnl-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libmnl-${SNAPSHOT}
 

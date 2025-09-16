@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="a set of small utilities that are useful in advanced password cracking"
 HOMEPAGE="https://github.com/hashcat/hashcat-utils"
-SNAPSHOT=211862859e2b8a47e1ad0f90f96f2c06f2927f77
+SNAPSHOT=b55e433d187e6b04c526f67ea508a0e98c3f814a
 SRC_URI="https://github.com/hashcat/hashcat-utils/archive/${SNAPSHOT}.tar.gz -> hashcat-utils-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/hashcat-utils-${SNAPSHOT}"
 

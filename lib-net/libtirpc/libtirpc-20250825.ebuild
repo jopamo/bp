@@ -13,29 +13,24 @@ S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="ipv6 static-libs"
 
 src_prepare() {
-	rm -rf gnulib
-	cp -r "${EROOT}"/usr/share/gnulib gnulib
-	#cd gnulib
-	#git reset --hard 0a12fa9
-	#cd ..
-
-	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
-
 	default
-	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
+	eautoreconf
 }
 
 src_configure() {
+	append-cflags -std=gnu17
+	append-ldflags $(test-flags-CCLD -Wl,--undefined-version)
+	append-lfs-flags
+
 	local myconf=(
 		$(use_enable ipv6)
 		$(use_enable static-libs static)
 		--disable-gssapi
-		--disable-rpcdb
 	)
 	ECONF_SOURCE=${S} econf ${myconf[@]}
 }
@@ -43,4 +38,9 @@ src_configure() {
 src_install() {
 	default
 
+	insinto /etc
+	doins doc/netconfig
+
+	insinto /usr/include/tirpc
+	doins -r "${S}"/tirpc/*
 }

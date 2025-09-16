@@ -7,12 +7,9 @@ inherit meson
 DESCRIPTION="X keyboard configuration database"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/XKeyboardConfig"
 
-if [[ ${PV} == "9999" ]] ; then
-	EGIT_REPO_URI="https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config.git"
-	inherit git-r3
-else
-	SRC_URI="https://www.x.org/releases/individual/data/${PN}/${P}.tar.xz"
-fi
+SNAPSHOT=af35af06c99be2e0d8bcf6889650d7e1b5d6cf64
+SRC_URI="https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config/-/archive/${SNAPSHOT}/xkeyboard-config-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"
@@ -25,7 +22,6 @@ BDEPEND="
 
 src_configure() {
 	local emesonargs=(
-		-D xkb-base="${EPREFIX}/usr/share/X11/xkb"
 		-D compat-rules=true
 		-D xorg-rules-symlinks=true
 	)

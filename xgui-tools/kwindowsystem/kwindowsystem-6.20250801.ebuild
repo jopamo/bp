@@ -20,7 +20,8 @@ IUSE="X"
 RESTRICT="test"
 
 DEPEND="
-	xgui-lib/qttools
+	xgui-lib/qttools:6
 	xgui-tools/extra-cmake-modules
 	xgui-misc/plasma-wayland-protocols
+	xgui-lib/qtwayland:6
 "

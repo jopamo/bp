@@ -5,7 +5,10 @@ EAPI=8
 inherit autotools
 
 DESCRIPTION="Shared memory fences using futexes"
-SRC_URI="https://www.x.org/releases/individual/lib/${P}.tar.bz2"
+
+SNAPSHOT=2c3d85cf655f4c9a605f0353cc742f186af52835
+SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/archive/${SNAPSHOT}/libxshmfence-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

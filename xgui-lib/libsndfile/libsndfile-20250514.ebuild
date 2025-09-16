@@ -16,7 +16,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-xmedia-lib/flac
-xmedia-lib/libogg
-xmedia-lib/libvorbis
+	xmedia-lib/flac
+	xmedia-lib/libogg
+	xmedia-lib/libvorbis
+	xmedia-lib/opus
 "

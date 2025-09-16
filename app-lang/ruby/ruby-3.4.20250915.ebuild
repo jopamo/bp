@@ -8,7 +8,7 @@ inherit flag-o-matic autotools
 
 DESCRIPTION="An object-oriented scripting language"
 HOMEPAGE="https://www.ruby-lang.org/"
-SNAPSHOT=38297e47945593daa3f395121c340260b9fae82d
+SNAPSHOT=dbd83256b1cec76c69756ecb8758b9e1079833de
 SRC_URI="https://github.com/ruby/ruby/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/ruby-${SNAPSHOT}
 

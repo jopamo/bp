@@ -24,7 +24,6 @@ REQUIRED_USE="
 "
 
 COMMON_DEPEND="
-	app-lang/sassc
 	fonts/fontconfig
 	lib-util/glib
 	xgui-lib/cairo[glib,svg,X?]

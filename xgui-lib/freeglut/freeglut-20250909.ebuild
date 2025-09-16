@@ -6,7 +6,7 @@ inherit cmake flag-o-matic
 
 DESCRIPTION="A completely OpenSourced alternative to the OpenGL Utility Toolkit (GLUT) library"
 HOMEPAGE="http://freeglut.sourceforge.net/"
-SNAPSHOT=a7f6d3acb65181305b78386498bc27bd7d4ed731
+SNAPSHOT=5d5caa1691e2e8fb4180b46c66562ce8c9b5288b
 SRC_URI="https://github.com/freeglut/freeglut/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

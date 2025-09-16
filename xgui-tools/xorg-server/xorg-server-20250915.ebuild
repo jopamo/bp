@@ -2,14 +2,15 @@
 
 EAPI=8
 
-BRANCH_NAME="server-$(ver_cut 1-2)-branch"
+BRANCH_NAME="master"
 
 inherit meson flag-o-matic
 
 DESCRIPTION="implementation of the X Window System display server"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=b53d9fa4176679cd7b2a031c5e2d25cac5b9aa77
-SRC_URI="https://gitlab.freedesktop.org/xorg/xserver/-/archive/${SNAPSHOT}/xserver-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
+
+SNAPSHOT=a449d5950ed134cb227500ce8ad8c246ec04867f
+SRC_URI="https://github.com/X11Libre/xserver/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/xserver-${SNAPSHOT}"
 
 LICENSE="MIT"
@@ -80,7 +81,6 @@ src_configure() {
 		-Dhal=false
 		-Dlinux_acpi=false
 		-Dlinux_apm=false
-		-Dsecure-rpc=false
 		-Dsha1=libcrypto
 		-Dxkb_output_dir="${EPREFIX}/var/lib/xkb"
   )

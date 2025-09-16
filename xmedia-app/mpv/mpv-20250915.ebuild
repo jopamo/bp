@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="alsa cli cuda drm egl iconv jpeg lcms libmpv lua opengl pipewire
-	pulseaudio vaapi vapoursynth vdpau vulkan wayland +X xv zlib"
+	pulseaudio vaapi vapoursynth vdpau vulkan wayland +X zlib"
 
 REQUIRED_USE="
 	|| ( cli libmpv )
@@ -23,7 +23,6 @@ REQUIRED_USE="
 	opengl? ( || ( egl X !cli ) )
 	vaapi? ( || ( X wayland ) )
 	wayland? ( egl )
-	xv? ( X )
 "
 
 DEPEND="
@@ -67,7 +66,6 @@ DEPEND="
 			xgui-lib/libXdamage
 			xgui-tools/mesa
 		)
-		xv? ( xgui-lib/libXv )
 	)
 	zlib? ( lib-core/zlib )
 "
@@ -123,7 +121,7 @@ src_configure() {
 		$(meson_feature vulkan)
 		-D shaderc=disabled
 		$(meson_feature X x11)
-		$(meson_feature xv)
+		-D xv=disabled
 		$(meson_feature wayland)
 
 		# hwaccel features

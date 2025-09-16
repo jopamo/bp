@@ -6,7 +6,7 @@ inherit flag-o-matic
 
 DESCRIPTION="Utilities for rescue and embedded systems"
 HOMEPAGE="https://www.busybox.net/"
-SNAPSHOT=b4cedd4c9ae0ea31986973b7b3e6956937aafa32
+SNAPSHOT=3681b5f618a1f93e62b3584676117818f230c31e
 SRC_URI="https://github.com/1g4-mirror/busybox/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

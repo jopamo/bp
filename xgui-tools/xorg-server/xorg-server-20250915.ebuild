@@ -59,31 +59,76 @@ BDEPEND="
 
 PDEPEND="xgui-misc/xf86-input-libinput"
 
-filter-flags -Wl,-z,defs -Wl,-z,now
-
 src_configure() {
-  local emesonargs=(
-    $(meson_use X xorg)
-		$(meson_use glamor)
-		$(meson_use ipv6)
-		$(meson_use suid_wrapper)
-		$(meson_use systemd systemd_logind)
-		$(meson_use udev)
-		$(meson_use xcsecurity)
-		-Ddri1=true
-		-Ddri2=true
-		-Ddri3=true
-		-Dglx=true
-		-Ddocs=false
-		-Ddrm=true
-		-Ddtrace=false
-		-Dipv6=false
-		-Dhal=false
-		-Dlinux_acpi=false
-		-Dlinux_apm=false
-		-Dsha1=libcrypto
-		-Dxkb_output_dir="${EPREFIX}/var/lib/xkb"
-  )
+	filter-flags -Wl,-z,defs -Wl,-z,now
+
+	local emesonargs=(
+  	$(meson_use X xorg)
+  	$(meson_use glamor)
+  	$(meson_use ipv6)
+  	$(meson_use suid_wrapper)
+  	$(meson_use udev)
+  	$(meson_use xcsecurity)
+
+  	-Dxephyr=false
+  	-Dxfbdev=false
+  	-Dxnest=false
+  	-Dxvfb=true
+  	-Dxwin=false
+  	-Dxquartz=false
+  	-Dxpbproxy=false
+
+  	-Dkdrive_kbd=false
+  	-Dkdrive_mouse=false
+  	-Dkdrive_evdev=false
+  	-Dkdrive_tslib=false
+
+  	-Dglx=true
+  	-Ddri1=false
+  	-Ddri2=true
+  	-Ddri3=true
+  	-Ddrm=true
+
+  	-Dxdmcp=false
+  	-Dxdm-auth-1=true
+  	-Dlisten_tcp=false
+  	-Dlisten_unix=true
+  	-Dlisten_local=true
+
+  	-Dpciaccess=true
+  	-Dudev_kms=auto
+  	-Dhal=false
+  	-Dsystemd_notify=false
+  	-Dsystemd_logind=false
+  	-Dvgahw=auto
+
+  	-Ddpms=true
+  	-Dxf86bigfont=false
+  	-Dscreensaver=true
+  	-Dxres=true
+  	-Dxselinux=auto
+  	-Dnamespace=true
+  	-Dxinerama=true
+  	-Dxv=true
+  	-Dxvmc=false
+  	-Ddga=auto
+  	-Dlinux_apm=false
+  	-Dlinux_acpi=false
+  	-Dmitshm=auto
+  	-Dagp=false
+
+  	-Dsha1=libcrypto
+  	-Dxf86-input-inputtest=false
+  	-Dtests=false
+  	-Ddocs=false
+  	-Ddevel-docs=false
+  	-Ddocs-pdf=false
+  	-Dlibunwind=false
+  	-Dlegacy_nvidia_padding=false
+
+  	-Dxkb_output_dir="${EPREFIX}/var/lib/xkb"
+	)
+
   meson_src_configure
 }
 

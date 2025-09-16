@@ -8,7 +8,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="Portable and efficient API to determine the call-chain of a program"
 HOMEPAGE="https://savannah.nongnu.org/projects/libunwind"
-SNAPSHOT=2f976400033f1e99d9ee2d7e8a963935609b87eb
+SNAPSHOT=7bda80a564cddc5b215a84509026030cf16dfd94
 SRC_URI="https://github.com/libunwind/libunwind/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libunwind-${SNAPSHOT}"
 

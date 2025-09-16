@@ -13,8 +13,7 @@ LICENSE="|| ( LGPL-2.1 LGPL-3 ) MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="X"
-
+BDEPEND="xgui-tools/extra-cmake-modules"
 DEPEND="xgui-lib/wayland-protocols"
 
 RESTRICT="test"

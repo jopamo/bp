@@ -6,7 +6,7 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="IEEE 802.11 wireless LAN Host AP daemon"
 HOMEPAGE="https://w1.fi/ https://w1.fi/cgit/hostap/"
-SNAPSHOT=fa9a0b5758848299f2d03521f72044369b9e3b47
+SNAPSHOT=f747ae0d13dbec97b96991635171ab1a9d8db197
 SRC_URI="https://github.com/1g4-mirror/hostap/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/hostap-${SNAPSHOT}/hostapd"
 

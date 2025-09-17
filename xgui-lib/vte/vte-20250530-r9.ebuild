@@ -25,7 +25,23 @@ DEPEND="
 
 src_prepare() {
 	default
-	#eapply "${FILESDIR}"/fix-W_EXITCODE.patch
+
+	# musl lacks W_EXITCODE, add a compat macro and ensure headers exist
+	if use elibc_musl; then
+		local f="src/widget.cc"
+
+		# ensure file exists before editing
+		[[ -f ${f} ]] || die "missing ${f}"
+
+		# add includes if missing
+		grep -q '^#include <signal.h>' "${f}" || sed -i '1i #include <signal.h>' "${f}" || die
+		grep -q '^#include <sys/wait.h>' "${f}" || sed -i '1i #include <sys/wait.h>' "${f}" || die
+
+		# add W_EXITCODE compat macro if missing
+		if ! grep -q '^#define W_EXITCODE' "${f}"; then
+			sed -i '1i #ifndef W_EXITCODE\n#define W_EXITCODE(ret, sig) (((ret) << 8) | (sig))\n#endif' "${f}" || die
+		fi
+	fi
 }
 
 src_configure() {

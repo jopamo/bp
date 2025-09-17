@@ -5,7 +5,6 @@ amd-ucode
 autotype
 bin
 bluez
-bootloader
 cairo
 cli
 cups
@@ -69,6 +68,7 @@ svg
 tiff
 timedated
 truetype
+ucm
 user-namespaces
 video
 vst

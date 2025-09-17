@@ -34,13 +34,18 @@ RESTRICT="network-sandbox"
 src_prepare() {
 	rm -rf gnulib
 	cp -r "${EROOT}"/usr/share/gnulib gnulib
+	cd gnulib
+	git reset --hard a351f5
+	cd ..
 
-	./bootstrap --no-git --gnulib-srcdir="${S}"/gnulib
+	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
 
 	append-flags -fno-strict-aliasing
 
 	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
 	default
+
+	ln -s gnulib-tests/Makefile.am gnulib-tests/Makefile.in
 }
 
 src_configure() {

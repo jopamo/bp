@@ -21,7 +21,11 @@ DEPEND="
 "
 
 src_prepare() {
+	append-flags "-D_FILE_OFFSET_BITS=64"
 	filter-flags -flto*
+
+	sed -i 's/\bmmap64\b/mmap/g' utils/v4l2-tracer/retrace.cpp || die
+	sed -i 's/\bopen64\b/open/g' utils/v4l2-tracer/retrace.cpp || die
 
 	default
 }
@@ -29,5 +33,5 @@ src_prepare() {
 src_install() {
 	meson_src_install
 
-	rm -r "${ED}"/usr/lib/gconv || die
+	rm -r "${ED}"/usr/lib/gconv
 }

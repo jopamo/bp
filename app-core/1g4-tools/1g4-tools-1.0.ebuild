@@ -22,7 +22,6 @@ RDEPEND="
 	app-dev/beautysh
 	app-dev/debootstrap
 	app-dev/dwarves
-	app-dev/expect
 	app-dev/gcovr
 	app-dev/intltool
 	app-dev/jq

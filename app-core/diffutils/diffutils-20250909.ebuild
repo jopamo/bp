@@ -29,13 +29,11 @@ DEPEND="app-compression/xz-utils"
 BDEPEND="app-dev/gperf"
 
 src_prepare() {
-	filter-flags -Wl,-z,defs
-
 	rm -rf gnulib
 	cp -r "${EROOT}"/usr/share/gnulib gnulib
-	#cd gnulib
-	#git reset --hard 2b2bcdb
-	#cd ..
+	cd gnulib
+	git reset --hard a351f5
+	cd ..
 
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
 

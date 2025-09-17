@@ -69,7 +69,6 @@ pkg_setup() {
 src_prepare() {
 	default
 	eautoreconf
-	use elibc_musl && eapply "${FILESDIR}/gdbus-define-MAX_INPUT-for-musl.patch"
 }
 
 src_configure() {

@@ -124,7 +124,7 @@ filter-clang() {
 	replace-flags '-flto*' -flto;
 	filter-flags -fgraphite-identity -floop-nest-optimize -ftree-loop-distribution -fdevirtualize-at-ltrans -fipa-pta;
 	filter-flags -fuse-linker-plugin '-D_FORTIFY_SOURCE*' -D_GLIBCXX_ASSERTIONS '-Wl,-z,combreloc' '-Wl,-z,defs' '-Wl,-z,now';
-	filter-flags '-Wl,-z,relro' -fstack-clash-protection -fstack-protector-strong;
+	filter-flags '-Wl,-z,relro' -fstack-clash-protection -fstack-protector-strong '-mbranch-protection*';
 	strip-flags
 }
 

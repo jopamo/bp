@@ -20,6 +20,7 @@ IUSE="debug ucm"
 DEPEND="ucm? ( xmedia-app/alsa-ucm-conf )"
 
 src_prepare() {
+	use elibc_musl && cp "${FILESDIR}"/ucm_exec.c src/ucm/
 	default
 	eautoreconf
 }

@@ -40,9 +40,9 @@ src_bootstrap_sed() {
 src_prepare() {
 	rm -rf gnulib
 	cp -r "${EROOT}"/usr/share/gnulib gnulib
-	#cd gnulib
-	#git reset --hard ac1e6fe
-	#cd ..
+	cd gnulib
+	git reset --hard a351f5
+	cd ..
 
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
 

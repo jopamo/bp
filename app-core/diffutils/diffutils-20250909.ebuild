@@ -20,7 +20,7 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="static"
 
@@ -32,7 +32,7 @@ src_prepare() {
 	rm -rf gnulib
 	cp -r "${EROOT}"/usr/share/gnulib gnulib
 	cd gnulib
-	git reset --hard a351f5
+	git reset --hard 2b2bcdb
 	cd ..
 
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib

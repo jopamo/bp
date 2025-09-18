@@ -3,6 +3,7 @@
 EAPI=8
 
 BRANCH_NAME="master"
+SNAPSHOT=f83ec76bf285bea5727f478a68b894f5543ca76e
 
 K_NOUSENAME="yes"
 K_NOSETEXTRAVERSION="yes"
@@ -12,10 +13,8 @@ inherit kernel-2
 
 DESCRIPTION="Linux kernel source code tree"
 HOMEPAGE="https://kernel.org/"
-
-SNAPSHOT=46a51f4f5edade43ba66b3c151f0e25ec8b69cb6
-SRC_URI="https://github.com/torvalds/linux/archive/${SNAPSHOT}.tar.gz -> linux-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/linux-${SNAPSHOT}"
+SRC_URI="https://gitlab.com/linux-kernel/stable/-/archive/${SNAPSHOT}/stable-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/stable-${SNAPSHOT}"
 
 LICENSE="GPL"
 SLOT="$(ver_cut 1-2)"
@@ -31,4 +30,3 @@ src_prepare() {
 
 	eapply "${FILESDIR}"/reg.patch
 }
-

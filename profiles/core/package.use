@@ -9,6 +9,7 @@ app-core/util-linux -audit -bash-completion -blkpr nls -selinux -slang -sysvinit
 app-build/gdb client server
 app-build/llvm -assertions bpf -debug libfuzzer orc sanitizers static_analyzer sysclang
 app-compression/lz4 static-libs
+app-compression/xz-utils static-libs
 app-compression/zstd static-libs
 app-core/acl static-libs
 app-core/attr static-libs

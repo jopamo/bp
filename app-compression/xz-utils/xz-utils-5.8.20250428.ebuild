@@ -2,9 +2,9 @@
 
 EAPI=8
 
-BRANCH_NAME="master"
+BRANCH_NAME="v$(ver_cut 1-2)"
 
-inherit autotools
+inherit autotools flag-o-matic
 
 DESCRIPTION="utils for managing LZMA compressed files"
 HOMEPAGE="http://tukaani.org/xz/"
@@ -23,6 +23,8 @@ DEPEND="app-core/bash"
 src_prepare() {
 	default
 	eautoreconf
+
+	filter-flags -flto*
 }
 
 src_configure() {

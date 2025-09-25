@@ -9,9 +9,9 @@ inherit cmake flag-o-matic
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
 
-SNAPSHOT=cd708029e0b2869e80abe31ddb175f7c35361f90
+SNAPSHOT=7e8c93c87c611f21d9bd95100563392f4c18bfe7
 
-SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
+SRC_URI="https://github.com/rust-lang/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
 
 LICENSE="UoI-NCSA rc BSD public-domain"

@@ -110,6 +110,7 @@ src_configure() {
 		codegen-units-std = 1
 		optimize = 3
 		lld = true
+		llvm-tools = true
 		rpath = false
 		download-rustc = false
 		[dist]

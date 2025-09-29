@@ -1,17 +1,14 @@
 # global defaults
 Host *
   AddKeysToAgent yes
-  IdentitiesOnly yes                 # avoid offering every key from the agent
-  ServerAliveInterval 30             # keep long-lived Git connections healthy
+  IdentitiesOnly yes
+  ServerAliveInterval 30
   ServerAliveCountMax 3
   TCPKeepAlive yes
-  ControlMaster auto                 # connection multiplexing
-  ControlPath ~/.ssh/cm-%C
-  ControlPersist 10m
-  StrictHostKeyChecking ask          # safer than blindly accepting new hosts
-  UpdateHostkeys yes                 # trust-on-first-use upgrades to stronger host keys
-  HashKnownHosts yes                 # protect known_hosts from leaking hostnames
-  IdentityAgent ${SSH_AUTH_SOCK}     # use the running agent if present
+  StrictHostKeyChecking ask
+  UpdateHostkeys yes
+  HashKnownHosts yes
+  IdentityAgent ${SSH_AUTH_SOCK}
 
 # GitHub over SSH on port 443 with PQ KEX preference
 Host github.com

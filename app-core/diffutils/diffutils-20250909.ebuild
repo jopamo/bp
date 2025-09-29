@@ -29,14 +29,26 @@ DEPEND="app-compression/xz-utils"
 BDEPEND="app-dev/gperf"
 
 src_prepare() {
+	# use gnulib from the build host to avoid network access
+	# ensure dev-vcs/gnulib and dev-vcs/git are in BDEPEND
 	rm -rf gnulib || die
-	cp -r "${BROOT}"/usr/share/gnulib gnulib || die
+	cp -a "${BROOT}"/usr/share/gnulib gnulib || die
 
+	# pin gnulib to the exact commit required
+	if [[ -d gnulib/.git ]]; then
+		git -C gnulib reset --hard 2b2bcdb || die
+	else
+		die "BROOT:/usr/share/gnulib is not a git checkout, cannot reset to 2b2bcdb"
+	fi
+
+	# advertise an explicit release version to git-version-gen
 	echo "${PV}" > .tarball-version || die
 
+	# run bootstrap with the vendored gnulib and without touching git
 	NOCONFIGURE=1 \
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib || die
 
+	# apply user patches and the usual defaults
 	default
 }
 

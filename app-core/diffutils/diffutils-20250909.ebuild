@@ -29,16 +29,13 @@ DEPEND="app-compression/xz-utils"
 BDEPEND="app-dev/gperf"
 
 src_prepare() {
-	rm -rf gnulib
-	cp -r "${EROOT}"/usr/share/gnulib gnulib
-	cd gnulib
-	git reset --hard 2b2bcdb
-	cd ..
+	rm -rf gnulib || die
+	cp -r "${BROOT}"/usr/share/gnulib gnulib || die
 
-	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
+	echo "${PV}" > .tarball-version || die
 
-	# Modify git-version-gen to use a specific version number
-	sed -i -e "s/UNKNOWN/${PV}/g" configure || die
+	NOCONFIGURE=1 \
+	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib || die
 
 	default
 }

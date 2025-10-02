@@ -1,2 +1,2 @@
-DIST brave-browser-nightly_1.84.12_amd64.deb 127946992 SHA3_256 953ca0e758c8b8fc4bde701b8d2d6fcd3edb3e108a0c8872ef56f2d68efcc02a
-DIST brave-browser-nightly_1.85.20_amd64.deb 128132928 SHA3_256 3b2551f70c0178a68bce149096343615ab1ac7a378d6da4e87b24b47f3a54a2f
+DIST brave-nightly-bin-1.85.17-amd64.deb 128108968 SHA3_256 b279fea0089bbeab3a52ed96c1c8c0e2b666f5f8cf77d3ae07575b4116bfd2ef
+DIST brave-nightly-bin-1.85.17-arm64.deb 119714060 SHA3_256 3773e3ae9d804e7ed85fbd8df119e6e528e3a4c8b2e943fe2afe626b9bf029fe

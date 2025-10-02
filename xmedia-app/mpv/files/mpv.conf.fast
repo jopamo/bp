@@ -1,13 +1,26 @@
-ontop=yes
-save-position-on-quit
-af=lavfi=[firequalizer=gain='if(lt(f,400), -30, 0)',acompressor=threshold=-20dB:ratio=3:attack=50:release=200]
-geometry=33%x33%-0-0
-reset-on-next-file=audio-delay,mute,pause,speed,sub-delay,video-aspect-override,video-pan-x,video-pan-y,video-rotate,video-zoom,volume
-border=no
-cursor-autohide=500
-hwdec-codecs=all
-hwdec=auto
-no-cache-pause
-focus=no
+# mpv.conf
 
+ontop=yes
+border=no
+geometry=33%x33%-0-0
+force-window=immediate
+save-position-on-quit
+cursor-autohide=500
+keep-open=no
+
+hwdec=auto
+hwdec-codecs=all
+video-sync=audio
+
+cache=yes
+demuxer-max-bytes=512MiB
+demuxer-readahead-secs=30
+
+af=lavfi=[firequalizer=gain='if(lt(f,400), -30, 0)',acompressor=threshold=-20dB:ratio=3:attack=50:release=200]
+
+ytdl=yes
+script-opts-append=ytdl_hook-ytdl_path=/usr/bin/yt-dlp
 ytdl-format="137+140/299+140/bestvideo[height<=?1080][vcodec!=?vp9]+bestaudio/best"
+
+osc=yes
+term-osd-bar=yes

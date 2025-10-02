@@ -1,7 +1,9 @@
+# /etc/systemd/system/llama-server.service
 [Unit]
 Description=Llama Server
 Documentation=man:llama-server(1)
-After=network.target
+After=network-online.target
+Wants=network-online.target
 Requires=network.target
 
 [Service]
@@ -10,19 +12,28 @@ User=llama
 Group=llama
 WorkingDirectory=/opt/llm-models
 EnvironmentFile=/etc/llama-server/llama-server.env
-ExecStart=/usr/bin/env llama-server \
-    --n-gpu-layers ${N_GPU_LAYERS} \
-    --threads ${THREADS} \
-    --ctx-size ${CTX_SIZE} \
-    --temp ${TEMP} \
-    --top_p ${TOP_P} \
-    $EXTRA_FLAGS \
-    --model "${MODEL_PATH}"
+Environment=PATH=/opt/llm-models/.local/bin:/usr/local/bin:/usr/bin
+
+# use a shell so $VARS from EnvironmentFile expand
+ExecStart=/bin/bash -lc 'exec llama-server \
+  --n-gpu-layers "$N_GPU_LAYERS" \
+  --threads "$THREADS" \
+  --ctx-size "$CTX_SIZE" \
+  --temp "$TEMP" \
+  --top-p "$TOP_P" \
+  $EXTRA_FLAGS \
+  --model "$MODEL_PATH"'
+
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=process
-Restart=always
-RestartSec=5s
-Environment=PATH=/opt/llm-models/.local/bin:/usr/local/bin:/usr/bin
+Restart=on-failure
+RestartSec=3s
+
+# light hardening
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=true
+PrivateTmp=true
 
 [Install]
 WantedBy=multi-user.target

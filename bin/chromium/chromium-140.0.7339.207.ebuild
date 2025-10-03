@@ -22,7 +22,7 @@ SRC_URI="
 	)
 "
 
-# archive extracts into ungoogled-chromium_${PV}-1_linux so probe in src_install
+# archive extracts into ungoogled-chromium-${PV}-<rev>-<arch>_linux so probe in src_install
 S="${WORKDIR}"
 
 RESTRICT="strip mirror"
@@ -56,27 +56,43 @@ RDEPEND="
 QA_PREBUILT="*"
 
 src_install() {
+	# map Gentoo ARCH to upstream dir suffix used in the tarball
+	local platform
+	case ${ARCH} in
+		amd64) platform=x86_64_linux ;;
+		arm64) platform=arm64_linux ;;
+		*)     platform=${ARCH}_linux ;;
+	esac
+
+	# upstream dir looks like ungoogled-chromium-${PV}-<rev>-${platform}
+	# be tolerant of minor naming tweaks by trying both dash and underscore after project name
 	local srcdir=
-	for srcdir in "${WORKDIR}"/ungoogled-chromium_${PV}-*_linux; do
+	for srcdir in \
+		"${WORKDIR}/ungoogled-chromium-${PV}-"*"-${platform}" \
+		"${WORKDIR}/ungoogled-chromium_${PV}-"*"-${platform}"
+	do
 		[[ -d ${srcdir} ]] && break
 	done
-	[[ -d ${srcdir} ]] || die "failed to find extracted dir for ${PV}"
+	[[ -d ${srcdir} ]] || die "failed to find extracted dir for ${PV} under ${WORKDIR}"
 
-	mkdir -p "${ED}"/opt/chromium
-	cp -rp "${srcdir}"/* "${ED}"/opt/chromium/
+	# install under /opt to keep tree intact like upstream expects
+	dodir /opt/chromium
+	cp -rp "${srcdir}/"* "${ED}/opt/chromium/" || die
 
+	# wrapper for stable CLI path
 	dodir /usr/bin
-	cat > "${T}"/chromium <<-'EOF' || die
+	cat > "${T}/chromium" <<-'EOF' || die
 	#!/bin/sh
 	exec /opt/chromium/chrome "$@"
 	EOF
-	dobin "${T}"/chromium
+	dobin "${T}/chromium"
 
+	# permissions expected by chromium sandbox
 	fperms 0755 /opt/chromium/chrome
 	fperms 0755 /opt/chromium/chrome_crashpad_handler
-	fperms 4755 /opt/chromium/chrome_sandbox
 
+	# optional icon if provided in FILESDIR
 	insopts -m 0644
 	insinto /usr/share/pixmaps
-	[[ -f ${FILESDIR}/chromium.png ]] && doins "${FILESDIR}"/chromium.png
+	[[ -f ${FILESDIR}/chromium.png ]] && doins "${FILESDIR}/chromium.png"
 }

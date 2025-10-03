@@ -8,7 +8,7 @@ DESCRIPTION="Multimedia (audio, video, radio, camera) library for the Qt5 framew
 HOMEPAGE="https://www.qt.io/"
 
 if [[ ${PV} == *9999 ]]; then
-	EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
+	EGIT_BRANCH="kde/$(ver_cut 1).$(ver_cut 2)"
 	EGIT_REPO_URI="https://github.com/qt/${PN}.git"
 	inherit git-r3
 else

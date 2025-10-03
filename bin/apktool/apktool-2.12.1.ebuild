@@ -2,7 +2,7 @@
 
 EAPI=8
 
-SSNAP="8477d996dbc768d5df6aefd89fb61910188434cf"
+SSNAP="ded2957edb02e26924f6ad6794248f7374848047"
 
 DESCRIPTION="A tool for reverse engineering Android apk files"
 HOMEPAGE="https://apktool.org/"

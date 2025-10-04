@@ -9,7 +9,7 @@ HOMEPAGE="https://www.qt.io/"
 
 if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="kde/$(ver_cut 1).$(ver_cut 2)"
-	EGIT_REPO_URI="https://github.com/qt/${PN}.git"
+	EGIT_REPO_URI="https://invent.kde.org/qt/qt/${PN}.git"
 	inherit git-r3
 else
 	SNAPSHOT=610c94f80802f67b59c00cac1f229e3d13b8de35

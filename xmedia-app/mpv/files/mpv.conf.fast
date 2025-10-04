@@ -2,7 +2,7 @@
 
 ontop=yes
 border=no
-geometry=33%x33%-0-0
+geometry=33%x33%-0-48
 force-window=immediate
 save-position-on-quit
 cursor-autohide=500
@@ -20,7 +20,9 @@ af=lavfi=[firequalizer=gain='if(lt(f,400), -30, 0)',acompressor=threshold=-20dB:
 
 ytdl=yes
 script-opts-append=ytdl_hook-ytdl_path=/usr/bin/yt-dlp
-ytdl-format="137+140/299+140/bestvideo[height<=?1080][vcodec!=?vp9]+bestaudio/best"
+ytdl-format="721+251/721+140/399+251/303+251/299+140/best"
+
+ytdl-raw-options=cookies=~/youtube.cookies.txt
 
 osc=yes
 term-osd-bar=yes

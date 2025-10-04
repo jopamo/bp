@@ -4,7 +4,7 @@ ChallengeResponseAuthentication no
 Ciphers chacha20-poly1305@openssh.com
 ClientAliveCountMax 3
 ClientAliveInterval 300
-Compression yes
+Compression delayed
 GatewayPorts no
 HostKeyAlgorithms ssh-ed25519
 KexAlgorithms mlkem768x25519-sha256,sntrup761x25519-sha512,curve25519-sha256

@@ -9,6 +9,7 @@ cursor-autohide=500
 keep-open=no
 
 hwdec=auto
+gpu-api=opengl
 hwdec-codecs=all
 video-sync=audio
 

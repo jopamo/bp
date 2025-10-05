@@ -7,8 +7,8 @@ inherit autotools flag-o-matic
 DESCRIPTION="Low-level cryptographic library"
 HOMEPAGE="http://www.lysator.liu.se/~nisse/nettle/"
 
-SNAPSHOT=775d6adb77a885616ef3a9fcbc4c087cad129f3d
-SRC_URI="https://github.com/gnutls/nettle/archive/${SNAPSHOT}.tar.gz -> nettle-${SNAPSHOT}.tar.gz"
+SNAPSHOT=fe3b96833eb6ce1e99cbcf1fae2dcb41d3fc56a5
+SRC_URI="https://git.lysator.liu.se/nettle/nettle/-/archive/${SNAPSHOT}/nettle-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/nettle-${SNAPSHOT}"
 
 LICENSE="|| ( LGPL-3 LGPL-2.1 )"

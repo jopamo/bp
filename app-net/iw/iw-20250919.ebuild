@@ -6,7 +6,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="nl80211-based configuration utility for wireless devices"
 HOMEPAGE="https://wireless.kernel.org/en/users/Documentation/iw"
-SNAPSHOT=a52bda09d7d314f4d4ed333a0c5da51bfbaeafaf
+SNAPSHOT=5e2f68476a06d78538171c5baf3b371292b7d1dc
 SRC_URI="https://github.com/1g4-mirror/iw/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

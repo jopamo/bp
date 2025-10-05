@@ -6,7 +6,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="Shared library for libmediainfo and mediainfo"
 HOMEPAGE="https://github.com/MediaArea/ZenLib"
-SNAPSHOT=37f23652f908a73c762b25aafa8f387677e99ae7
+SNAPSHOT=490e2426aa96f983c577a02861e2a9cf6f73082f
 SRC_URI="https://github.com/MediaArea/ZenLib/archive/${SNAPSHOT}.tar.gz -> ZenLib-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ZenLib-${SNAPSHOT}/Project/GNU/Library"
 

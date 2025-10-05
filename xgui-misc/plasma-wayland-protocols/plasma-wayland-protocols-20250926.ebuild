@@ -5,7 +5,7 @@ EAPI=8
 inherit cmake
 
 DESCRIPTION="Plasma-specific protocols for Wayland"
-SNAPSHOT=a566e1c35e96916791aba097397fc46105fcd8e5
+SNAPSHOT=d67a799a4712716c8fa4dc18d9171233a2c0a99e
 SRC_URI="https://github.com/KDE/plasma-wayland-protocols/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/plasma-wayland-protocols-${SNAPSHOT}
 

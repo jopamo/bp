@@ -8,7 +8,7 @@ inherit meson flag-o-matic
 
 DESCRIPTION="Extremely Fast Compression algorithm"
 HOMEPAGE="https://github.com/lz4/lz4"
-SNAPSHOT=ec86e3da5d5be185875ea44988b9373ff50bb98d
+SNAPSHOT=f8e365036efc9e94bda616432eb8ad942c236d76
 SRC_URI="https://github.com/lz4/lz4/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/lz4-${SNAPSHOT}/build/meson
 

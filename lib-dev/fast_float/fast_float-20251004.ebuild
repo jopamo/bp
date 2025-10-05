@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="Fast and exact implementation of the C++ from_chars functions for number types"
 HOMEPAGE="https://github.com/fastfloat/fast_float"
 SRC_URI="https://github.com/fastfloat/fast_float/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
-SNAPSHOT=fec4082f014dfa29e307bcdea034fcd3c26f62c8
+SNAPSHOT=24fa687d4561b894f9fa3fe7b831d45a86f7f43c
 SRC_URI="https://github.com/fastfloat/fast_float/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

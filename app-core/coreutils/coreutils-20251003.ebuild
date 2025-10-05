@@ -12,7 +12,7 @@ S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
 
 IUSE="acl libcap multicall static xattr"
 
@@ -44,8 +44,6 @@ src_prepare() {
 
 	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
 	default
-
-	ln -s gnulib-tests/Makefile.am gnulib-tests/Makefile.in
 }
 
 src_configure() {

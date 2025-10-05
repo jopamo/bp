@@ -6,7 +6,7 @@ inherit flag-o-matic
 
 DESCRIPTION="displays the hardware topology in convenient formats"
 HOMEPAGE="http://www.open-mpi.org/projects/hwloc/"
-SNAPSHOT=052785658da61e67a80c57a2145b4c2225cf51c2
+SNAPSHOT=a2a461acabf40da406ac7cccf3025dc3d8a35d81
 SRC_URI="https://github.com/1g4-mirror/hwloc/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

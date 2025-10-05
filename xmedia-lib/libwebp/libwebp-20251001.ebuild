@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="A lossy image compression format"
 HOMEPAGE="https://developers.google.com/speed/webp/download"
-SNAPSHOT=3779daa97f89e007e2c8121a8d4b514ad6dcda56
+SNAPSHOT=1f0a494e8006eed3d0e9ee8d04aee270bf8f4216
 SRC_URI="https://github.com/webmproject/libwebp/archive/${SNAPSHOT}.tar.gz -> libwebp-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libwebp-${SNAPSHOT}"
 

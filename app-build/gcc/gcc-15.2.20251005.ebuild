@@ -8,7 +8,7 @@ inherit flag-o-matic
 
 DESCRIPTION="an optimizing compiler produced by the GNU Project supporting various programming languages"
 HOMEPAGE="https://gcc.gnu.org/"
-SNAPSHOT=516e4790f71ffd1d202912ec5162e79fee809d08
+SNAPSHOT=4cb36bc2fad3526397dac5915793391ba079be0e
 SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/gcc-${SNAPSHOT}
 

@@ -27,7 +27,6 @@ REQUIRED_USE="
 
 DEPEND="
 	xgui-app/libdisplay-info
-	fonts/liberation-fonts
 	xmedia-app/ffmpeg
 	xmedia-lib/libass
 	xmedia-lib/libplacebo

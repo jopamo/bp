@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="Collection of patches for libtool.eclass"
 HOMEPAGE="https://gitweb.gentoo.org/proj/elt-patches.git/"
-SNAPSHOT=c36508e0c534414fe9b7a944fa9f9d3cf369f193
+SNAPSHOT=132ff07d38d8a5dd6d86b166f26bc473070ecfa4
 SRC_URI="https://github.com/gentoo/elt-patches/archive/${SNAPSHOT}.tar.gz -> elt-patches-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/elt-patches-${SNAPSHOT}"
 

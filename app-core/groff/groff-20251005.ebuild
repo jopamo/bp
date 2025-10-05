@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-SNAPSHOT=897bdec959311c1a900dae116405035c3697805c
+SNAPSHOT=3ea378d3546314fabfa85a9b7c88e232394d2249
 
 inherit toolchain-funcs flag-o-matic
 

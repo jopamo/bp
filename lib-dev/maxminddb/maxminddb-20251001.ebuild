@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-SNAPSHOT=153586f0acba9250be4610c3d2f0a5412f7781fb
+SNAPSHOT=fde0a2db3774a567567047f41ad20526d7146345
 
 inherit autotools
 

@@ -8,7 +8,7 @@ inherit meson flag-o-matic
 
 DESCRIPTION="implementation of the X Window System display server"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=0f0164882f98da4878b1d33d60e3a62cd04febb0
+SNAPSHOT=9cc105826b7975e374a0554a00bdc64aa158ff3a
 SRC_URI="https://github.com/X11Libre/xserver/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/xserver-${SNAPSHOT}"
 
@@ -89,7 +89,7 @@ src_configure() {
   	-Ddrm=true
 
   	-Dxdmcp=false
-  	-Dxdm-auth-1=true
+  	-Dxdm-auth-1=false
   	-Dlisten_tcp=false
   	-Dlisten_unix=true
   	-Dlisten_local=true
@@ -97,8 +97,8 @@ src_configure() {
   	-Dpciaccess=true
   	-Dudev_kms=auto
   	-Dhal=false
-  	-Dsystemd_notify=false
-  	-Dsystemd_logind=false
+  	-Dsystemd_notify=true
+  	-Dsystemd_logind=true
   	-Dvgahw=auto
 
   	-Ddpms=true

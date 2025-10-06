@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+# mkvengonly — keep only English audio/subs in all mkv files in cwd, preserve video/attachments/chapters
+
+set -euo pipefail
+shopt -s nullglob
+
+is_eng() {
+  # normalize common English tags like eng, en, English
+  local lang="${1,,}"
+  [[ "$lang" == "eng" || "$lang" == "en" || "$lang" == "english" ]]
+}
+
+for in_f in ./*.mkv; do
+  [[ "$in_f" == *.en.mkv ]] && continue  # skip already processed
+
+  out_f="${in_f%.*}.en.mkv"
+  echo "processing: $in_f -> $out_f"
+
+  # CSV rows like: index,codec_type,language
+  # do NOT use -select_streams so we get every stream type
+  mapfile -t rows < <(
+    ffprobe -v error \
+      -show_entries stream=index,codec_type:stream_tags=language \
+      -of csv=p=0 "$in_f"
+  )
+
+  video_idx=()
+  audio_idx_all=()
+  audio_idx_eng=()
+  sub_idx_eng=()
+  attach_idx=()
+
+  for row in "${rows[@]}"; do
+    IFS=',' read -r idx ctype lang <<<"$row"
+    lang="${lang:-}"
+    case "$ctype" in
+      video)       video_idx+=("$idx") ;;
+      audio)
+        audio_idx_all+=("$idx")
+        if is_eng "$lang"; then audio_idx_eng+=("$idx"); fi
+        ;;
+      subtitle)
+        if is_eng "$lang"; then sub_idx_eng+=("$idx"); fi
+        ;;
+      attachment)  attach_idx+=("$idx") ;;
+    esac
+  done
+
+  if [[ ${#video_idx[@]} -eq 0 ]]; then
+    echo "warning: no video stream found, skipping: $in_f"
+    continue
+  fi
+
+  # choose which audio indices to keep
+  keep_audio=()
+  if [[ ${#audio_idx_eng[@]} -gt 0 ]]; then
+    keep_audio=("${audio_idx_eng[@]}")
+  elif [[ ${#audio_idx_all[@]} -gt 0 ]]; then
+    keep_audio=("${audio_idx_all[0]}")  # fallback to the first audio
+  fi
+
+  # build -map arguments
+  map_args=()
+  map_args+=( -map "0:${video_idx[0]}" )               # keep first video
+  for i in "${keep_audio[@]}"; do map_args+=( -map "0:$i" ); done
+  for i in "${sub_idx_eng[@]}"; do map_args+=( -map "0:$i" ); done
+  for i in "${attach_idx[@]}"; do map_args+=( -map "0:$i" ); done
+
+  # if nothing but video would be kept, at least keep video
+  if [[ ${#map_args[@]} -eq 0 ]]; then
+    map_args=( -map "0:${video_idx[0]}" )
+  fi
+
+  # set dispositions by output order
+  disp_args=()
+  disp_args+=( -disposition:a 0 )
+  if [[ ${#keep_audio[@]} -gt 0 ]]; then
+    disp_args+=( -disposition:a:0 default )
+  fi
+  disp_args+=( -disposition:s 0 )
+  if [[ ${#sub_idx_eng[@]} -gt 0 ]]; then
+    disp_args+=( -disposition:s:0 default )
+  fi
+
+  ffmpeg -hide_banner -n -i "$in_f" \
+    "${map_args[@]}" \
+    -map_metadata 0 -map_chapters 0 \
+    -c copy \
+    "${disp_args[@]}" \
+    "$out_f"
+done

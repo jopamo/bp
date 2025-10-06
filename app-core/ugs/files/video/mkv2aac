@@ -3,6 +3,6 @@
 for videofile in *.mkv ; do
 	if [[ $videofile != *.raw.mkv ]] && [ ! -f "${videofile%.*}.m4a" ]; then
 		ffmpeg -n -i "$videofile" -c:a flac "${videofile%.*}.flac"
-		wine64 /opt/qaac/qaac64.exe "${videofile%.*}.flac"
+		wine /opt/qaac/qaac64.exe "${videofile%.*}.flac"
 	fi
 done

@@ -37,6 +37,8 @@ RDEPEND="${DEPEND}
 REQUIRED_USE="( caps? ( daemon ) )"
 
 src_prepare() {
+	append-flags -ffat-lto-objects
+
 	default
 	eautoreconf
 }
@@ -85,7 +87,7 @@ src_install() {
 		# so that we can access that file later in pkg_postinst
 		# even when dealing with binary packages (bug #575292)
 		insinto /usr/share/smartmontools
-		doins "${S}"/src/drivedb.h
+		doins "${S}"/lib/drivedb.h
 	fi
 
 	# Make sure we never install drivedb.h into the db location

@@ -3,10 +3,10 @@
 # @BLURB: Regenerates auto* build scripts
 # @DESCRIPTION:
 # This eclass is for safely handling autotooled software packages that need to
-# regenerate their build scripts.
+# regenerate their build scripts
 
 if [[ ${_AUTOTOOLS_AUTO_DEPEND+set} == "set" ]] ; then
-	# Die if AUTOTOOLS_AUTO_DEPEND changes between inherits.
+	# Die if AUTOTOOLS_AUTO_DEPEND changes between inherits
 	if [[ ${_AUTOTOOLS_AUTO_DEPEND} != ${AUTOTOOLS_AUTO_DEPEND} ]] ; then
 		die "AUTOTOOLS_AUTO_DEPEND changed between inherits; inherit ${ECLASS} first! ${_AUTOTOOLS_AUTO_DEPEND} -> ${AUTOTOOLS_AUTO_DEPEND}"
 	fi
@@ -48,26 +48,33 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 	eautoreconf() {
 		local x
 
+		# recurse into AC_CONFIG_SUBDIRS unless disabled
 		if [[ -z ${AT_NO_RECURSIVE} ]] ; then
-			for x in $(autotools_check_macro_val AC_CONFIG_SUBDIRS); do
+			while IFS= read -r x; do
+				[[ -z ${x} ]] && continue
 				if [[ -d ${x} ]] ; then
 					pushd "${x}" >/dev/null || die
 					AT_NOELIBTOOLIZE="yes" eautoreconf || die
 					popd >/dev/null || die
 				fi
-			done
+			done < <(autotools_check_macro_val AC_CONFIG_SUBDIRS)
 		fi
 
 		einfo "Running eautoreconf in '${PWD}' ..."
 
+		# create AC_CONFIG_AUX_DIR / AC_CONFIG_MACRO_DIR targets if needed
 		local m4dirs
 		m4dirs=$(autotools_check_macro_val AC_CONFIG_{AUX,MACRO}_DIR)
-		[[ -n ${m4dirs} ]] && mkdir -p ${m4dirs}
+		if [[ -n ${m4dirs} ]]; then
+			local d
+			for d in ${m4dirs}; do
+				mkdir -p -- "${d}" || die
+			done
+		fi
 
-		# Prepare tools to run
-		local i
-		local rerun_aclocal=false
-		local tools=(
+		# run helper tools that may affect aclocal contents
+		local i rerun_aclocal=false
+		local -a tools=(
 			glibgettext false "autotools_run_tool glib-gettextize --copy --force"
 			gettext     false "autotools_run_tool --at-missing autopoint --force"
 			intltool    false "autotools_run_tool intltoolize --automake --copy --force"
@@ -75,6 +82,7 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 			gnomedoc    false "autotools_run_tool --at-missing gnome-doc-prepare --copy --force"
 			libtool     false "_elibtoolize --auto-ltdl --install --copy --force"
 		)
+
 		for (( i = 0; i < ${#tools[@]}; i += 3 )); do
 			if _at_uses_${tools[i]}; then
 				tools[i+1]=true
@@ -90,6 +98,7 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 				rerun_aclocal=true
 			fi
 		done
+
 		${rerun_aclocal} && eaclocal
 
 		eautoconf --force
@@ -101,34 +110,39 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 		return 0
 	}
 
-	# --- Macro Usage Functions (unchanged, but grouped for clarity) ---
+	# --- Macro usage probes ---
 	_at_uses_pkg() {
+		# prefer autoconf tracing, fall back to a light grep on configure
 		if [[ -n $(autotools_check_macro "$@") ]]; then
 			return 0
 		else
-			local macro args=()
+			local macro
+			local -a args=()
 			for macro; do
 				args+=( -e "^[[:space:]]*${macro}\>" )
 			done
-			grep -E -q "${args[@]}" configure.??
+			# tolerate both configure.ac and generated configure
+			grep -E -q "${args[@]}" configure.* 2>/dev/null
 		fi
 	}
-	_at_uses_autoheader()  { _at_uses_pkg A{C,M}_CONFIG_HEADER{S,}; }
-	_at_uses_automake()    { _at_uses_pkg AM_INIT_AUTOMAKE; }
-	_at_uses_gettext()     { _at_uses_pkg AM_GNU_GETTEXT_{,REQUIRE_}VERSION; }
-	_at_uses_glibgettext() { _at_uses_pkg AM_GLIB_GNU_GETTEXT; }
-	_at_uses_intltool()    { _at_uses_pkg {AC,IT}_PROG_INTLTOOL; }
-	_at_uses_gtkdoc()      { _at_uses_pkg GTK_DOC_CHECK; }
-	_at_uses_gnomedoc()    { _at_uses_pkg GNOME_DOC_INIT; }
-	_at_uses_libtool()     { _at_uses_pkg A{C,M}_PROG_LIBTOOL LT_INIT; }
-	_at_uses_libltdl()     { _at_uses_pkg LT_CONFIG_LTDL_DIR; }
+	_at_uses_autoheader()  { _at_uses_pkg A{C,M}_CONFIG_HEADER{S,} ; }
+	_at_uses_automake()    { _at_uses_pkg AM_INIT_AUTOMAKE ; }
+	_at_uses_gettext()     { _at_uses_pkg AM_GNU_GETTEXT_{,REQUIRE_}VERSION ; }
+	_at_uses_glibgettext() { _at_uses_pkg AM_GLIB_GNU_GETTEXT ; }
+	_at_uses_intltool()    { _at_uses_pkg {AC,IT}_PROG_INTLTOOL ; }
+	_at_uses_gtkdoc()      { _at_uses_pkg GTK_DOC_CHECK ; }
+	_at_uses_gnomedoc()    { _at_uses_pkg GNOME_DOC_INIT ; }
+	_at_uses_libtool()     { _at_uses_pkg A{C,M}_PROG_LIBTOOL LT_INIT ; }
+	_at_uses_libltdl()     { _at_uses_pkg LT_CONFIG_LTDL_DIR ; }
 
-	# --- eaclocal and related functions ---
+	# --- eaclocal and helpers ---
 	eaclocal_amflags() {
 		local aclocal_opts amflags_file
 		for amflags_file in GNUmakefile.am Makefile.am GNUmakefile.in Makefile.in; do
 			[[ -e ${amflags_file} ]] || continue
-			aclocal_opts=$(sed -n "/^ACLOCAL_AMFLAGS[[:space:]]*=/{s:[^=]*=::p;: nextline /\\\\$/{n;p;b nextline;}}" ${amflags_file})
+			# capture multi-line ACLOCAL_AMFLAGS with trailing backslashes
+			aclocal_opts=$(sed -n "/^ACLOCAL_AMFLAGS[[:space:]]*=/{s:[^=]*=::p;: nextline /\\\\$/{n;p;b nextline;}}" "${amflags_file}")
+			# expand any make-style variables in a safe way
 			eval aclocal_opts=\""${aclocal_opts}"\"
 			break
 		done
@@ -143,63 +157,105 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 				${ESYSROOT}/usr/share/aclocal
 			EOF
 		fi
-		[[ ! -f aclocal.m4 || -n $(grep -e 'generated.*by aclocal' aclocal.m4) ]] && \
-			autotools_run_tool --at-m4flags aclocal "$@" $(eaclocal_amflags) --system-acdir="${T}/aclocal"
+
+		# only run when aclocal.m4 is missing or was generated by aclocal
+		if [[ ! -f aclocal.m4 || -n $(grep -e 'generated.*by aclocal' aclocal.m4 2>/dev/null) ]]; then
+			autotools_run_tool --at-m4flags aclocal \
+				"$@" \
+				$(eaclocal_amflags) \
+				--system-acdir="${T}/aclocal"
+		fi
 	}
 
 	# --- Helper for libtoolize ---
 	_elibtoolize() {
 		local LIBTOOLIZE
-		LIBTOOLIZE=${LIBTOOLIZE:-$(type -P glibtoolize >/dev/null && echo glibtoolize || echo libtoolize)}
-		if [[ ${1} == "--auto-ltdl" ]]; then
+		if command -v glibtoolize >/dev/null 2>&1; then
+			LIBTOOLIZE=glibtoolize
+		else
+			LIBTOOLIZE=libtoolize
+		fi
+
+		if [[ ${1-} == "--auto-ltdl" ]]; then
 			shift
 			_at_uses_libltdl && set -- "$@" --ltdl
 		fi
+
 		[[ -f GNUmakefile.am || -f Makefile.am ]] && set -- "$@" --automake
-		autotools_run_tool ${LIBTOOLIZE} "$@"
+
+		autotools_run_tool "${LIBTOOLIZE}" "$@"
 	}
 
 	# --- Core tool runners ---
-	eautoheader() { _at_uses_autoheader || return 0; autotools_run_tool --at-no-fail --at-m4flags autoheader "$@"; }
+	eautoheader() {
+		_at_uses_autoheader || return 0
+		autotools_run_tool --at-no-fail --at-m4flags autoheader "$@"
+	}
+
 	eautoconf() {
 		if [[ ! -f configure.ac && ! -f configure.in ]]; then
-			eerror "No configure.{ac,in} present in '${PWD}'!"
-			die "No configure.{ac,in} present!"
+			eerror "No configure.{ac,in} present in '${PWD}'"
+			die "No configure.{ac,in} present"
 		fi
+
+		# normalize to configure.ac if needed
 		if [[ -e configure.in ]]; then
 			mv configure.{in,ac} || die
 		fi
+
+		# refresh config.guess/config.sub from newest gnuconfig
 		local _gnuconfig
 		_gnuconfig=$(gnuconfig_findnewest)
 		cp "${_gnuconfig}/config.guess" "${_gnuconfig}/config.sub" . || die
+
 		autotools_run_tool --at-m4flags autoconf "$@"
 	}
+
 	eautomake() {
-		local extra_opts=()
-		local makefile_name
-		for makefile_name in {GNUmakefile,{M,m}akefile}.am ""; do
-			[[ -f ${makefile_name} ]] && break
+		local -a extra_opts=()
+		local makefile_name=
+
+		# find a toplevel makefile template if present
+		local cand
+		for cand in GNUmakefile.am Makefile.am gnumakefile.am; do
+			if [[ -f ${cand} ]]; then
+				makefile_name=${cand}
+				break
+			fi
 		done
-		_automake_version() {
-			autotools_run_tool --at-output automake --version 2>/dev/null | sed -n -e '1{s:.*(GNU automake) ::p;q}'
-		}
+
+		# trigger only if automake is in use when no makefile is present
 		if [[ -z ${makefile_name} ]]; then
 			_at_uses_automake || return 0
 		elif [[ -z ${FROM_EAUTORECONF} && -f ${makefile_name%.am}.in ]]; then
+			# avoid stale .in by a full eautoreconf
 			eautoreconf
 		fi
+
+		# add --foreign when GNU files are missing
 		[[ -f INSTALL && -f AUTHORS && -f ChangeLog && -f NEWS && -f README ]] || extra_opts+=( --foreign )
-		case $(_automake_version) in
+
+		# add --force-missing for modern automake
+		local _amv
+		_amv=$(autotools_run_tool --at-output automake --version 2>/dev/null | sed -n -e '1{s:.*(GNU automake) ::p;q}')
+		case ${_amv} in
 			1.4|1.4[.-]*) ;;
 			*) extra_opts+=( --force-missing ) ;;
 		esac
+
 		autotools_run_tool automake --add-missing --copy "${extra_opts[@]}" "$@"
 	}
-	eautopoint() { autotools_run_tool autopoint "$@"; }
+
+	eautopoint() {
+		autotools_run_tool autopoint "$@"
+	}
 
 	config_rpath_update() {
 		local src="${BROOT}/usr/share/gettext/config.rpath"
-		[[ $# -eq 0 ]] && set -- $(find -name config.rpath)
+		[[ $# -eq 0 ]] && mapfile -t _found < <(find -name config.rpath) || true
+		if [[ $# -eq 0 ]]; then
+			set -- "${_found[@]}"
+		fi
 		[[ $# -eq 0 ]] && return 0
 		einfo "Updating all config.rpath files"
 		local dst
@@ -212,7 +268,7 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 	# --- Core autotools runner with logging ---
 	autotools_run_tool() {
 		local autofail=true m4flags=false missing_ok=false return_output=false
-		while [[ -n $1 ]]; do
+		while [[ $# -gt 0 ]]; do
 			case $1 in
 				--at-no-fail) autofail=false ;;
 				--at-m4flags) m4flags=true ;;
@@ -222,13 +278,16 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 			esac
 			shift
 		done
+
 		if [[ ${EBUILD_PHASE_FUNC} != "src_prepare" ]]; then
 			eqawarn "Running '$1' in ${EBUILD_PHASE_FUNC} phase"
 		fi
-		if ${missing_ok} && ! type -P $1 >/dev/null; then
+
+		if ${missing_ok} && ! command -v "$1" >/dev/null 2>&1; then
 			einfo "Skipping '$*' because '$1' not installed"
 			return 0
 		fi
+
 		local STDERR_TARGET="${T}/${1##*/}.out"
 		if [[ -e ${STDERR_TARGET} ]]; then
 			local i=1
@@ -238,24 +297,30 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 				: $(( i++ ))
 			done
 		fi
+
 		if ${m4flags}; then
 			set -- "$1" $(autotools_m4dir_include) $(autotools_m4sysdir_include) "${@:2}"
 		fi
+
 		if ${return_output}; then
 			"$@"
 			return
 		fi
-		printf "***** %s *****\n***** PWD: %s\n***** %s\n\n" "$1" "${PWD}" "$*" > "${STDERR_TARGET}"
+
+		printf '***** %s *****\n***** PWD: %s\n***** %s\n\n' "$1" "${PWD}" "$*" > "${STDERR_TARGET}"
+
 		ebegin "Running '$@'"
 		"$@" >> "${STDERR_TARGET}" 2>&1
-		if ! eend $? && ${autofail}; then
-			eerror "Failed running '$1'!"
+		local rc=$?
+		if ! eend ${rc} && ${autofail}; then
+			eerror "Failed running '$1'"
 			eerror "Include in your bug report the contents of:"
 			eerror "  ${STDERR_TARGET}"
-			die "Failed running '$1'!"
+			die "Failed running '$1'"
 		fi
 	}
 
+	# --- autoconf tracing helpers ---
 	ALL_AUTOTOOLS_MACROS=(
 		A{C,M}_PROG_LIBTOOL LT_INIT LT_CONFIG_LTDL_DIR
 		A{C,M}_CONFIG_HEADER{S,}
@@ -268,45 +333,69 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 		GTK_DOC_CHECK
 		GNOME_DOC_INIT
 	)
+
 	autotools_check_macro() {
 		[[ -f configure.ac || -f configure.in ]] || return 0
 		local trace_file=".__autoconf_trace_data"
-		if [[ ! -e ${trace_file} ]] || [[ ! aclocal.m4 -ot ${trace_file} ]]; then
-			autoconf $(autotools_m4dir_include) ${ALL_AUTOTOOLS_MACROS[@]/#/--trace=} > ${trace_file} 2>/dev/null
+
+		# refresh trace data when missing or older than aclocal.m4
+		if [[ ! -e ${trace_file} ]] || [[ -e aclocal.m4 && ${trace_file} -ot aclocal.m4 ]]; then
+			autoconf $(autotools_m4dir_include) \
+				"${ALL_AUTOTOOLS_MACROS[@]/#/--trace=}" \
+				> "${trace_file}" 2>/dev/null || true
 		fi
-		local macro args=()
+
+		local macro
+		local -a args=()
 		for macro; do
-			has ${macro} ${ALL_AUTOTOOLS_MACROS[@]} || die "internal error: add ${macro} to ALL_AUTOTOOLS_MACROS"
+			has "${macro}" "${ALL_AUTOTOOLS_MACROS[@]}" || die "internal error: add ${macro} to ALL_AUTOTOOLS_MACROS"
 			args+=( -e ":${macro}:" )
 		done
-		grep "${args[@]}" ${trace_file}
+
+		grep "${args[@]}" "${trace_file}" || true
 	}
+
 	autotools_check_macro_val() {
 		local macro
 		for macro; do
 			autotools_check_macro "${macro}" | \
-			gawk -v macro="${macro}" '($0 !~ /^[[:space:]]*(#|dnl)/) {if (match($0, macro ":(.*)$", res)) print res[1]}' | uniq
+				gawk -v macro="${macro}" '($0 !~ /^[[:space:]]*(#|dnl)/) { if (match($0, macro ":(.*)$", res)) print res[1] }' | uniq
 		done
 		return 0
 	}
 
+	# --- m4 include flags construction ---
 	_autotools_m4dir_include() {
-		local x include_opts flag
+		local include_opts= flag=${1#-}
+		# if first arg is a flag like -I or -B use it, else default to -I
+		case ${1} in
+			-I|-B) flag=${1#-}; shift ;;
+			*) flag=I ;;
+		esac
+
+		local x
 		for x in "$@"; do
-			case ${x} in
-				-${flag}) ;;
-				*)
-					[[ ! -d ${x} ]] && ewarn "${ECLASS}: '${x}' does not exist"
-					include_opts+=" -${flag} ${x}"
-					;;
-			esac
+			[[ -z ${x} ]] && continue
+			if [[ ! -d ${x} ]]; then
+				ewarn "${ECLASS}: '${x}' does not exist"
+			fi
+			include_opts+=" -${flag} ${x}"
 		done
 		echo ${include_opts}
 	}
-	autotools_m4dir_include()    { _autotools_m4dir_include ${AT_M4DIR} ; }
+
+	autotools_m4dir_include()    { _autotools_m4dir_include -I ${AT_M4DIR} ; }
+
 	autotools_m4sysdir_include() {
-		local paths=( $(eval echo ${AT_SYS_M4DIR}) )
-		_autotools_m4dir_include "${paths[@]}"
+		# expand AT_SYS_M4DIR which may use shell expansions
+		local -a paths=()
+		# eval in a subshell to avoid polluting environment
+		local expanded
+		expanded=$(eval "printf '%s\n' ${AT_SYS_M4DIR}")
+		while IFS= read -r expanded; do
+			[[ -n ${expanded} ]] && paths+=( "${expanded}" )
+		done <<< "${expanded}"
+		_autotools_m4dir_include -I "${paths[@]}"
 	}
 
 fi

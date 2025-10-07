@@ -16,7 +16,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="glamor ipv6 minimal systemd suid_wrapper udev wayland xcsecurity X"
+IUSE="glamor ipv6 minimal systemd suid_wrapper udev wayland xcsecurity xvfb X"
 
 DEPEND="
 	virtual/ssl
@@ -68,11 +68,11 @@ src_configure() {
   	$(meson_use suid_wrapper)
   	$(meson_use udev)
   	$(meson_use xcsecurity)
+  	$(meson_use xvfb)
 
   	-Dxephyr=false
   	-Dxfbdev=false
   	-Dxnest=false
-  	-Dxvfb=true
   	-Dxwin=false
   	-Dxquartz=false
   	-Dxpbproxy=false

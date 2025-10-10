@@ -6,7 +6,7 @@ inherit flag-o-matic python-single-r1 doins autotools
 
 DESCRIPTION="A validating, recursive and caching DNS resolver"
 HOMEPAGE="http://unbound.net/"
-SNAPSHOT=21f02a086562abc10ff203f2c0a835b947690e93
+SNAPSHOT=a75ea01a155f6d6184973a788d3d9919690f7185
 SRC_URI="https://github.com/NLnetLabs/unbound/archive/${SNAPSHOT}.tar.gz -> unbound-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/unbound-${SNAPSHOT}"
 

@@ -6,7 +6,7 @@ inherit cmake
 
 DESCRIPTION="A Qt implementation of XDG standards"
 HOMEPAGE="https://lxqt.org/"
-SNAPSHOT=d57acb50198f31659883ea2af0d3c03107f02ed5
+SNAPSHOT=b1514a558277244613c9476d4819067658809315
 SRC_URI="https://github.com/lxqt/libqtxdg/archive/${SNAPSHOT}.tar.gz -> libqtxdg-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libqtxdg-${SNAPSHOT}"
 

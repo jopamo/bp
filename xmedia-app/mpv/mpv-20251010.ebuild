@@ -6,7 +6,7 @@ inherit meson xdg
 
 DESCRIPTION="Media player based on MPlayer and mplayer2"
 HOMEPAGE="https://mpv.io/"
-SNAPSHOT=be5e606377b69fa46578f5e00e428642a33d47da
+SNAPSHOT=67330ba2de700d887e0479c736213d18f221fa00
 SRC_URI="https://github.com/mpv-player/mpv/archive/${SNAPSHOT}.tar.gz -> mpv-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/mpv-${SNAPSHOT}
 

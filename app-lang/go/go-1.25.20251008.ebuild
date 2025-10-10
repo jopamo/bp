@@ -17,7 +17,7 @@ S="${WORKDIR}/go-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 QA_EXECSTACK='*.syso'
 QA_PREBUILT='.*'

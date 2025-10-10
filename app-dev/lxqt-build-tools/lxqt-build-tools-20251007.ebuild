@@ -6,7 +6,7 @@ inherit cmake
 
 DESCRIPTION="LXQt Build tools"
 HOMEPAGE="http://lxqt.org/"
-SNAPSHOT=7d976627b177c2eb4c249f0c372949575ce751bd
+SNAPSHOT=a4999045187808bb899ede4d5c4941782ba111c1
 SRC_URI="https://github.com/lxqt/lxqt-build-tools/archive/${SNAPSHOT}.tar.gz -> lxqt-build-tools-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/lxqt-build-tools-${SNAPSHOT}
 

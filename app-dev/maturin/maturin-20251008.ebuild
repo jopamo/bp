@@ -10,7 +10,7 @@ inherit cargo distutils-r1 flag-o-matic toolchain-funcs
 
 DESCRIPTION="Build and publish crates with pyo3, rust-cpython and cffi bindings"
 HOMEPAGE="https://www.maturin.rs/"
-SNAPSHOT=4a3b6915783973a0ea8ec46cd5858707d878a87a
+SNAPSHOT=69904974de832d2d7b28b8bd559eeed00207d3bb
 SRC_URI="https://github.com/PyO3/maturin/archive/${SNAPSHOT}.tar.gz -> maturin-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/maturin-${SNAPSHOT}"
 

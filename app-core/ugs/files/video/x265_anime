@@ -6,7 +6,7 @@ for videofile in *.mkv ; do
 	if [[ $videofile != *.raw.mkv ]] && [ ! -f "${videofile%.*}.raw.mkv" ]; then
 		cp "$videofile" "${TEMPLOCATION}"/
 		ffmpeg -vsync passthrough -hwaccel cuda -i "${TEMPLOCATION}/$videofile" \
-			-c:v libx265 -crf 23 -preset slower -pix_fmt yuv420p10le -profile:v main10 \
+			-c:v libx265 -crf 23 -pix_fmt yuv420p10le -profile:v main10 \
 			-tune animation -x265-params "aq-mode=4" \
 			-an "${TEMPLOCATION}/${videofile%.*}.raw.mkv"
 		cp "${TEMPLOCATION}/${videofile%.*}.raw.mkv" "${videofile%.*}.raw.mkv"

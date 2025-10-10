@@ -1,7 +1,0 @@
-#!/bin/bash
-
-for videofile in *.mkv ; do
-	if [[ $videofile != *.raw.mkv ]] && [ ! -f "${videofile%.*}.raw.mkv" ]; then
-		x264 --level 4.1 --merange 64 --me umh --aq-mode 2 --preset placebo --tune film --crf 23 --output "${videofile%.*}.raw.mkv" "$videofile"
-	fi
-done

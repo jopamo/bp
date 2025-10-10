@@ -70,8 +70,7 @@ src_install() {
 
 	if use video ; then
 		local video_bins=(
-			mkv2aac mux_mp4 normalize_audio
-			x264_anime x264_film x265 x265_anime x265_film
+			mkv2aac mkvengonly mux_mp4 normalize_audio x265_anime x265_film
 		)
 		for f in "${video_bins[@]}"; do
 			dobin "${FILESDIR}/video/$f"

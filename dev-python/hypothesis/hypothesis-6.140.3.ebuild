@@ -43,8 +43,13 @@ BDEPEND="
 		>=dev-python/pytest-8[${PYTHON_USEDEP}]
 	)
 "
+PDEPEND="
+	dev-python/hypothesis-gentoo[${PYTHON_USEDEP}]
+"
 
-EPYTEST_PLUGINS=( pytest-rerunfailures )
+EPYTEST_PLUGIN_LOAD_VIA_ENV=1
+EPYTEST_PLUGINS=( "${PN}" pytest-xdist )
+EPYTEST_RERUNS=5
 EPYTEST_XDIST=1
 distutils_enable_tests pytest
 
@@ -86,12 +91,8 @@ python_test() {
 			;;
 	esac
 
-	# subtests are broken by warnings from random plugins
-	local -x PYTEST_PLUGINS=xdist.plugin,_hypothesis_pytestplugin
 	local -x HYPOTHESIS_NO_PLUGINS=1
-
-	epytest -o filterwarnings= --reruns=5 \
-		tests/cover tests/pytest tests/quality
+	epytest -o filterwarnings= tests/{cover,pytest,quality}
 }
 
 src_install() {

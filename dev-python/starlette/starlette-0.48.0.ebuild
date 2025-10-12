@@ -11,12 +11,12 @@ MY_P=${P/_p/.post}
 DESCRIPTION="The little ASGI framework that shines"
 HOMEPAGE="
 	https://www.starlette.io/
-	https://github.com/encode/starlette/
+	https://github.com/Kludex/starlette/
 	https://pypi.org/project/starlette/
 "
 # no docs or tests in sdist, as of 0.27.0
 SRC_URI="
-	https://github.com/encode/starlette/archive/${PV/_p/.post}.tar.gz
+	https://github.com/Kludex/starlette/archive/${PV/_p/.post}.tar.gz
 		-> ${MY_P}.gh.tar.gz
 "
 S=${WORKDIR}/${MY_P}
@@ -35,8 +35,8 @@ RDEPEND="
 	>=dev-python/python-multipart-0.0.18[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	$(python_gen_cond_dep '
-		dev-python/starlette[${PYTHON_USEDEP}]
-	' 3.11 3.12)
+		>=dev-python/typing-extensions-3.10.0[${PYTHON_USEDEP}]
+	' 3.11)
 "
 BDEPEND="
 	test? (
@@ -45,15 +45,11 @@ BDEPEND="
 	)
 "
 
+EPYTEST_PLUGINS=( anyio )
 : ${EPYTEST_TIMEOUT:-180}
 distutils_enable_tests pytest
 
-python_test() {
-	local EPYTEST_IGNORE=(
-		# Unpackaged 'databases' dependency
-		tests/test_database.py
-	)
-
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest -p anyio
-}
+EPYTEST_IGNORE=(
+	# Unpackaged 'databases' dependency
+	tests/test_database.py
+)

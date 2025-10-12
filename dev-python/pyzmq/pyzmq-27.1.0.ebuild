@@ -4,7 +4,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=scikit-build-core
-PYTHON_COMPAT=( pypy3_11 python3_{11..13} )
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 PYTHON_REQ_USE="threads(+)"
 
 inherit distutils-r1
@@ -39,12 +39,11 @@ BDEPEND="
 		>=dev-py/cython-3.0.0[${PYTHON_USEDEP}]
 	' 'python*')
 	test? (
-		dev-python/pytest-asyncio[${PYTHON_USEDEP}]
-		dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
 		>=dev-python/tornado-5.0.2[${PYTHON_USEDEP}]
 	)
 "
 
+EPYTEST_PLUGINS=( pytest-{asyncio,rerunfailures} )
 distutils_enable_tests pytest
 # TODO: Package enum_tools
 # distutils_enable_sphinx docs/source \
@@ -79,8 +78,7 @@ python_test() {
 			)
 	esac
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	rm -rf zmq || die
 	# avoid large to reduce memory consumption
-	epytest -p asyncio -p rerunfailures tests -m "not large"
+	epytest tests -m "not large"
 }

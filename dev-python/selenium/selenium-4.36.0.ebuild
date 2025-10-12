@@ -15,7 +15,7 @@ TEST_P=selenium-${TEST_TAG}
 
 DESCRIPTION="Python language binding for Selenium Remote Control"
 HOMEPAGE="
-	https://www.seleniumhq.org/
+	https://seleniumhq.org/
 	https://github.com/SeleniumHQ/selenium/tree/trunk/py/
 	https://pypi.org/project/selenium/
 "
@@ -49,7 +49,6 @@ BDEPEND="
 			test-rust? (
 				dev-python/pytest[${PYTHON_USEDEP}]
 				dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
-				dev-python/pytest-xdist[${PYTHON_USEDEP}]
 				dev-util/selenium-manager
 				net-misc/geckodriver
 				|| (
@@ -68,7 +67,7 @@ src_prepare() {
 	sed -e 's:\[tool\.setuptools-rust:[tool.ignore-me:' \
 		-i pyproject.toml || die
 	# unpin deps
-	sed -i -e 's:~=:>=:g' pyproject.toml || die
+	sed -i -e 's:,<[0-9.]*::' pyproject.toml || die
 }
 
 python_test() {
@@ -79,6 +78,7 @@ python_test() {
 		return
 	fi
 
+	local EPYTEST_PLUGINS=( pytest-mock )
 	local EPYTEST_IGNORE=()
 	local EPYTEST_DESELECT=(
 		# expects vanilla certifi
@@ -88,15 +88,13 @@ python_test() {
 		# https://github.com/SeleniumHQ/selenium/blob/selenium-4.8.2-python/py/test/runner/run_pytest.py#L20-L24
 		# seriously?
 		-o "python_files=*_tests.py test_*.py"
-		-p pytest_mock
 	)
 	if use test-rust; then
 		local -x PATH=${T}/bin:${PATH}
 		local -x SE_MANAGER_PATH="$(type -P selenium-manager)"
 
+		local EPYTEST_RERUNS=5
 		pytest_args+=(
-			-p rerunfailures --reruns=5
-
 			--driver=firefox
 			--browser-binary="$(type -P firefox || type -P firefox-bin)"
 			--driver-binary="$(type -P geckodriver)"
@@ -127,6 +125,8 @@ python_test() {
 			# TODO
 			test/selenium/webdriver/common/bidi_browser_tests.py
 			test/selenium/webdriver/common/bidi_browsing_context_tests.py
+			test/selenium/webdriver/common/bidi_emulation_tests.py
+			test/selenium/webdriver/common/bidi_input_tests.py
 			test/selenium/webdriver/common/bidi_network_tests.py
 			test/selenium/webdriver/common/bidi_permissions_tests.py
 			test/selenium/webdriver/common/bidi_script_tests.py
@@ -146,6 +146,5 @@ python_test() {
 
 	cd "${WORKDIR}/${TEST_P}/py" || die
 	rm -rf selenium || die
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	epytest "${pytest_args[@]}"
 }

@@ -26,16 +26,15 @@ RESTRICT="!test? ( test )"
 BDEPEND="
 	test? (
 		dev-python/pypiserver
-		dev-python/test[${PYTHON_USEDEP}]
 	)
 "
 
 src_prepare() {
 	local PATCHES=(
 		# use system pypiserver instead of bundled one
-		"${FILESDIR}"/distlib-0.3.9-system-pypiserver.py
-		# https://github.com/pypa/distlib/pull/244
-		"${FILESDIR}/${P}-freethreading.patch"
+		"${FILESDIR}/distlib-0.3.9-system-pypiserver.py"
+		# https://github.com/pypa/distlib/commit/6286442857de9f734686d08f0e59ca8048ee357a
+		"${FILESDIR}/${P}-py314-test.patch"
 	)
 
 	# make sure it's not used

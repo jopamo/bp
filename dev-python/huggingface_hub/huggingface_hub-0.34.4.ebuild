@@ -50,6 +50,7 @@ src_test() {
 		tests/test_inference_async_client.py
 		tests/test_inference_client.py
 		tests/test_inference_text_generation.py
+		tests/test_oauth.py
 		tests/test_repocard.py
 		tests/test_repository.py
 		tests/test_snapshot_download.py

@@ -4,13 +4,11 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=maturin
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{11..14} )
 
 # upstream is vendoring crates
-CRATES="
-"
-
-RUST_MIN_VER="1.74.1"
+CRATES=""
+RUST_MIN_VER="1.88.0"
 
 inherit cargo distutils-r1 pypi
 
@@ -32,19 +30,13 @@ BDEPEND="
 	>=dev-util/maturin-1.7.8[${PYTHON_USEDEP}]
 	test? (
 		dev-python/arrow[${PYTHON_USEDEP}]
+		dev-python/numpy[${PYTHON_USEDEP}]
 		dev-python/psutil[${PYTHON_USEDEP}]
 		dev-python/pytz[${PYTHON_USEDEP}]
-		$(python_gen_cond_dep '
-			dev-python/numpy[${PYTHON_USEDEP}]
-		' 'python3*')
 	)
 "
 
 QA_FLAGS_IGNORED=".*"
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
-
-python_test() {
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest
-}

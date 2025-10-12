@@ -22,8 +22,5 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="
-	>=dev-python/traitlets-4[${PYTHON_USEDEP}]
-"
-
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest

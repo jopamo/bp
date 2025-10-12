@@ -22,20 +22,16 @@ SRC_URI="
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="examples server"
+IUSE="examples"
 
 RDEPEND="
-	>=dev-py/bcrypt-3.1.3[${PYTHON_USEDEP}]
-	>=app-crypto/cryptography-2.5[${PYTHON_USEDEP}]
-	>=dev-py/pynacl-1.0.1[${PYTHON_USEDEP}]
-	>=dev-python/pyasn1-0.1.7[${PYTHON_USEDEP}]
-"
-BDEPEND="
-	test? (
-		dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
-	)
+	>=dev-py/bcrypt-3.2[${PYTHON_USEDEP}]
+	>=app-crypto/cryptography-3.3[${PYTHON_USEDEP}]
+	>=dev-py/pynacl-1.5[${PYTHON_USEDEP}]
 "
 
+EPYTEST_PLUGINS=()
+EPYTEST_RERUNS=5
 distutils_enable_tests pytest
 
 EPYTEST_DESELECT=(
@@ -50,15 +46,10 @@ src_prepare() {
 		"${FILESDIR}/${PN}-3.2.0-nih-test-deps.patch"
 	)
 
-	if ! use server; then
-		PATCHES+=( "${FILESDIR}/${PN}-3.2.0-disable-server.patch" )
-	fi
 	distutils-r1_src_prepare
-}
 
-python_test() {
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest -p rerunfailures --reruns=5
+	# optional dep
+	sed -i -e '/invoke/d' pyproject.toml || die
 }
 
 python_install_all() {

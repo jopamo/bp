@@ -57,7 +57,6 @@ python_test() {
 		return
 	fi
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	local -x COLUMNS=80
 
 	local EPYTEST_DESELECT=(
@@ -114,6 +113,7 @@ python_test() {
 			;;
 	esac
 
+	local EPYTEST_PLUGINS=()
 	local EPYTEST_XDIST=1
 	epytest
 }

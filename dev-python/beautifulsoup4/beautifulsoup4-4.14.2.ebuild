@@ -36,5 +36,11 @@ BDEPEND="
 	)
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 distutils_enable_sphinx doc
+
+EPYTEST_DESELECT=(
+	# broken by security backports, already skipped on py3.13+
+	"bs4/tests/test_fuzz.py::TestFuzz::test_rejected_markup[crash-ffbdfa8a2b26f13537b68d3794b0478a4090ee4a]"
+)

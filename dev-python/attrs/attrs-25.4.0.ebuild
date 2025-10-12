@@ -24,16 +24,16 @@ BDEPEND="
 	dev-python/hatch-vcs[${PYTHON_USEDEP}]
 	test? (
 		$(python_gen_impl_dep sqlite)
-		dev-python/hypothesis[${PYTHON_USEDEP}]
-		$(python_gen_cond_dep '
-			dev-python/zope-interface[${PYTHON_USEDEP}]
-		' python3_{10..13} 'pypy*')
 		$(python_gen_cond_dep '
 			dev-python/cloudpickle[${PYTHON_USEDEP}]
-		' python3_{10..13} pypy3)
+		' python3_{11..14})
+		$(python_gen_cond_dep '
+			dev-python/zope-interface[${PYTHON_USEDEP}]
+		' python3_{11..14} pypy3_11)
 	)
 "
 
+EPYTEST_PLUGINS=( hypothesis )
 distutils_enable_tests pytest
 
 python_test() {
@@ -48,6 +48,5 @@ python_test() {
 			;;
 	esac
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	epytest
 }

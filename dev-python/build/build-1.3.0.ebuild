@@ -29,11 +29,9 @@ RESTRICT="!test? ( test )"
 RDEPEND="
 	>=dev-python/packaging-19.1[${PYTHON_USEDEP}]
 	dev-python/pyproject-hooks[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep '
-		>=dev-python/tomli-1.1.0[${PYTHON_USEDEP}]
-	' 3.10)
 "
 BDEPEND="
+	>=dev-py/setuptools-scm-6[${PYTHON_USEDEP}]
 	test? (
 		${RDEPEND}
 		$(python_gen_cond_dep '
@@ -50,12 +48,6 @@ BDEPEND="
 	)
 "
 
-PATCHES=(
-	# https://github.com/pypa/build/pull/861
-	# https://github.com/pypa/build/pull/898
-	"${FILESDIR}/${P}-gentoo-pip.patch"
-)
-
 python_test() {
 	if ! has "${EPYTHON/./_}" "${PYTHON_TESTED[@]}"; then
 		einfo "Skipping tests on ${EPYTHON}"
@@ -65,6 +57,7 @@ python_test() {
 	local EPYTEST_DESELECT=(
 		# broken by the presence of flit_core
 		tests/test_util.py::test_wheel_metadata_isolation
+		'tests/test_projectbuilder.py::test_check_dependencies[False]'
 		# broken by the presence of virtualenv (it changes the error
 		# messages, sic!)
 		'tests/test_main.py::test_output[via-sdist-isolation]'

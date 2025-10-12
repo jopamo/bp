@@ -6,7 +6,7 @@ DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
 # pypy isn't supported upstream because of its UTF8 representation for strings
 # See https://github.com/mrabarnett/mrab-regex/issues/521#issuecomment-1936260187.
-PYTHON_COMPAT=( python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t )
 
 inherit distutils-r1 pypi flag-o-matic
 

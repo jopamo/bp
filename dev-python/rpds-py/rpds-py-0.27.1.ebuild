@@ -9,7 +9,7 @@ PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 CRATES="
 	archery@1.2.1
 	autocfg@1.4.0
-	cc@1.2.22
+	cc@1.2.25
 	heck@0.5.0
 	indoc@2.0.6
 	libc@0.2.172
@@ -17,12 +17,12 @@ CRATES="
 	once_cell@1.21.3
 	portable-atomic@1.11.0
 	proc-macro2@1.0.95
-	pyo3-build-config@0.25.0
-	pyo3-ffi@0.25.0
-	pyo3-macros-backend@0.25.0
-	pyo3-macros@0.25.0
-	pyo3@0.25.0
-	python3-dll-a@0.2.13
+	pyo3-build-config@0.25.1
+	pyo3-ffi@0.25.1
+	pyo3-macros-backend@0.25.1
+	pyo3-macros@0.25.1
+	pyo3@0.25.1
+	python3-dll-a@0.2.14
 	quote@1.0.40
 	rpds@1.1.1
 	shlex@1.3.0
@@ -33,7 +33,7 @@ CRATES="
 	unindent@0.2.4
 "
 
-RUST_MIN_VER="1.77.1"
+RUST_MIN_VER="1.85.0"
 
 inherit cargo distutils-r1 pypi
 
@@ -56,4 +56,5 @@ QA_FLAGS_IGNORED="usr/lib.*/py.*/site-packages/rpds/rpds.*.so"
 
 export PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest

@@ -37,6 +37,8 @@ BDEPEND="
 	)
 "
 
+EPYTEST_PLUGINS=( "${PN}" )
+# xdist causes import errors
 distutils_enable_tests pytest
 # Bug https://bugs.gentoo.org/916756
 # distutils_enable_sphinx docs/source \
@@ -64,10 +66,7 @@ python_test() {
 			;;
 	esac
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	rm -rf trio || die
-	epytest -p trio._tests.pytest_plugin \
-		-m "not redistributors_should_skip" \
-		--pyargs trio \
+	epytest -m "not redistributors_should_skip" --pyargs trio \
 		--skip-optional-imports
 }

@@ -38,9 +38,9 @@ BDEPEND="
 		${RDEPEND}
 		$(python_gen_cond_dep '
 			dev-python/coverage[${PYTHON_USEDEP}]
-			dev-python/flaky[${PYTHON_USEDEP}]
 			>=dev-python/pip-22.2.1[${PYTHON_USEDEP}]
 			>=dev-python/pytest-mock-3.6.1[${PYTHON_USEDEP}]
+			dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
 			dev-python/pytest-timeout[${PYTHON_USEDEP}]
 			dev-python/pytest-xdist[${PYTHON_USEDEP}]
 			>=dev-py/setuptools-67.8[${PYTHON_USEDEP}]
@@ -49,7 +49,7 @@ BDEPEND="
 		' "${PYTHON_TESTED[@]}")
 		$(python_gen_cond_dep '
 			dev-python/time-machine[${PYTHON_USEDEP}]
-		' python3_{11..13})
+		' python3_{11..14})
 		$(python_gen_cond_dep '
 			>=dev-python/pytest-freezer-0.4.6[${PYTHON_USEDEP}]
 		' 'pypy3*')
@@ -94,6 +94,8 @@ python_test() {
 		tests/unit/test_util.py::test_reentrant_file_lock_is_thread_safe
 		# TODO
 		tests/unit/create/via_global_ref/test_build_c_ext.py::test_can_build_c_extensions
+		# random resource leaks or xdist
+		tests/unit/test_file_limit.py::test_too_many_open_files
 	)
 	case ${EPYTHON} in
 		pypy3.11)
@@ -106,17 +108,17 @@ python_test() {
 			;;
 	esac
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	local -x TZ=UTC
-	local plugins=( -p flaky -p pytest_mock )
+	local EPYTEST_PLUGINS=( pytest-{mock,rerunfailures} )
 	if [[ ${EPYTHON} == pypy3* ]]; then
-		plugins+=( -p freezer )
+		EPYTEST_PLUGINS+=( pytest-freezer )
 	else
-		plugins+=( -p time_machine )
+		EPYTEST_PLUGINS+=( time-machine )
 	fi
+	local EPYTEST_RERUNS=5
 	local EPYTEST_TIMEOUT=180
 	local EPYTEST_XDIST=1
-	epytest "${plugins[@]}"
+	epytest -o addopts=
 }
 
 src_install() {

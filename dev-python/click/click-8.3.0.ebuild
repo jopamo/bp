@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 
 inherit distutils-r1
 
@@ -29,6 +29,8 @@ distutils_enable_sphinx docs \
 	dev-python/pallets-sphinx-themes \
 	dev-python/sphinxcontrib-log-cabinet \
 	dev-python/sphinx-tabs
+
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_install_all() {

@@ -24,14 +24,8 @@ BDEPEND="
 	>=dev-py/setuptools-scm-8[${PYTHON_USEDEP}]
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
-
-PATCHES=(
-	# https://github.com/ionelmc/python-lazy-object-proxy/pull/79
-	"${FILESDIR}/${PN}-1.10.0-pure-tests.patch"
-	# https://github.com/ionelmc/python-lazy-object-proxy/pull/88
-	"${FILESDIR}/${P}-py314.patch"
-)
 
 python_prepare_all() {
 	distutils-r1_python_prepare_all

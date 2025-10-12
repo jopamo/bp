@@ -29,7 +29,7 @@ IUSE="doc latex"
 RDEPEND="
 	>=dev-python/alabaster-0.7.14[${PYTHON_USEDEP}]
 	>=dev-python/babel-2.13[${PYTHON_USEDEP}]
-	<dev-py/docutils-0.22[${PYTHON_USEDEP}]
+	<dev-py/docutils-0.23[${PYTHON_USEDEP}]
 	>=dev-py/docutils-0.20[${PYTHON_USEDEP}]
 	>=dev-python/imagesize-1.3[${PYTHON_USEDEP}]
 	>=dev-py/jinja-3.1[${PYTHON_USEDEP}]
@@ -72,6 +72,10 @@ BDEPEND="
 PATCHES=(
 	"${FILESDIR}/sphinx-3.2.1-doc-link.patch"
 	"${FILESDIR}/${P}-fix-python3.14.patch" # patch collection, merged upstream
+	# https://github.com/sphinx-doc/sphinx/pull/13610
+	# test assumptions for docutils 0.22
+	"${FILESDIR}"/${P}-testfix-docutils-0.22.patch
+	"${FILESDIR}"/${P}-metadata-docutils-0.22.patch
 )
 
 distutils_enable_tests pytest

@@ -19,6 +19,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="examples"
 
+EPYTEST_PLUGINS=()
+# tests unstable with xdist
 distutils_enable_tests pytest
 
 python_test() {
@@ -44,7 +46,6 @@ python_test() {
 		)
 	fi
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	epytest
 }
 

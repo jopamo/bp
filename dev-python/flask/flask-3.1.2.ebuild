@@ -18,7 +18,7 @@ if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 else
 	inherit pypi
-	KEYWORDS="~alpha amd64 arm arm64 hppa ~loong ~mips ppc ppc64 ~riscv ~s390 sparc x86"
+	KEYWORDS="~alpha amd64 arm arm64 ~hppa ~loong ~mips ppc ppc64 ~riscv ~s390 ~sparc x86"
 fi
 
 LICENSE="BSD"
@@ -44,12 +44,9 @@ distutils_enable_sphinx docs \
 	dev-python/sphinx-issues \
 	dev-python/sphinx-tabs \
 	dev-python/sphinxcontrib-log-cabinet
-distutils_enable_tests pytest
 
-python_test() {
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest
-}
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
 
 python_install_all() {
 	use examples && dodoc -r examples

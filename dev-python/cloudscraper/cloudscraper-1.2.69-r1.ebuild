@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..12} )
+PYTHON_COMPAT=( python3_{12..13} )
 
 inherit distutils-r1 
 
@@ -28,7 +28,6 @@ RDEPEND="
 "
 BDEPEND="
 	test? (
-		dev-python/js2py[${PYTHON_USEDEP}]
 		dev-python/pytest-forked[${PYTHON_USEDEP}]
 		dev-python/pytest-timeout[${PYTHON_USEDEP}]
 		dev-python/responses[${PYTHON_USEDEP}]
@@ -49,6 +48,5 @@ distutils_enable_tests pytest
 pkg_postinst() {
  "brotli decompresssion support" "dev-python/brotlipy"
 
- "js2py interpreter support" "dev-python/js2py"
  "node.js interpreter support" "net-libs/nodejs"
 }

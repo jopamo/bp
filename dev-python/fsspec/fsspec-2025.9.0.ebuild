@@ -29,15 +29,13 @@ BDEPEND="
 	test? (
 		dev-python/aiohttp[${PYTHON_USEDEP}]
 		dev-python/numpy[${PYTHON_USEDEP}]
-		dev-python/pytest-asyncio[${PYTHON_USEDEP}]
-		dev-python/pytest-mock[${PYTHON_USEDEP}]
-		dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
 		dev-python/requests[${PYTHON_USEDEP}]
 		dev-python/tqdm[${PYTHON_USEDEP}]
 	)
 "
 
 # Note: this package is not xdist-friendly
+EPYTEST_PLUGINS=( pytest-{asyncio,mock,rerunfailures} )
 distutils_enable_tests pytest
 
 export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
@@ -56,15 +54,5 @@ python_test() {
 		fsspec/implementations/tests/test_gist.py
 	)
 
-	case ${EPYTHON} in
-		python3.14*)
-			EPYTEST_DESELECT+=(
-				# TODO
-				fsspec/implementations/tests/test_http.py::test_async_other_thread
-			)
-			;;
-	esac
-
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest -p asyncio -p pytest_mock -o tmp_path_retention_policy=all
+	epytest -o tmp_path_retention_policy=all
 }

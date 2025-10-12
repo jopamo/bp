@@ -18,9 +18,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 BDEPEND="
-	test? (
-		dev-python/pytest-asyncio[${PYTHON_USEDEP}]
-	)
+	dev-python/hatch-vcs[${PYTHON_USEDEP}]
 "
 
+EPYTEST_PLUGINS=( pytest-asyncio )
 distutils_enable_tests pytest

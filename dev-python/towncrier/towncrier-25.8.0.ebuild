@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{11..14} )
 
 inherit distutils-r1
 
@@ -30,9 +30,6 @@ RDEPEND="
 	dev-python/click-default-group[${PYTHON_USEDEP}]
 	dev-python/incremental[${PYTHON_USEDEP}]
 	dev-py/jinja[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep '
-		dev-python/tomli[${PYTHON_USEDEP}]
-	' 3.10)
 "
 BDEPEND="
 	dev-python/incremental[${PYTHON_USEDEP}]

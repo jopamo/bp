@@ -27,10 +27,11 @@ RDEPEND="
 "
 BDEPEND="
 	test? (
-		dev-python/pytest-regressions[${PYTHON_USEDEP}]
+		dev-python/requests[${PYTHON_USEDEP}]
 	)
 "
 
+EPYTEST_PLUGINS=( pytest-{datadir,regressions} )
 distutils_enable_tests pytest
 
 EPYTEST_IGNORE=(

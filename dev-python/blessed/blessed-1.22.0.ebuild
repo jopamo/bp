@@ -22,6 +22,8 @@ RDEPEND="
 "
 
 distutils_enable_sphinx docs dev-python/sphinx-rtd-theme
+
+EPYTEST_PLUGINS=()
 EPYTEST_XDIST=1
 distutils_enable_tests pytest
 
@@ -38,6 +40,7 @@ python_prepare_all() {
 python_test() {
 	# COLORTERM must not be truecolor
 	# See https://github.com/jquast/blessed/issues/162
+	local -x COLORTERM=
 	# Ignore coverage options
-	COLORTERM= epytest --override-ini="addopts="
+	epytest --override-ini="addopts="
 }

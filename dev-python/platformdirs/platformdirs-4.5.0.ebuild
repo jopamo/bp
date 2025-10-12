@@ -20,10 +20,10 @@ KEYWORDS="amd64 arm64"
 BDEPEND="
 	test? (
 		dev-python/appdirs[${PYTHON_USEDEP}]
-		dev-python/pytest-mock[${PYTHON_USEDEP}]
 	)
 "
 
+EPYTEST_PLUGINS=( pytest-mock )
 distutils_enable_tests pytest
 
 src_configure() {
@@ -45,9 +45,4 @@ src_configure() {
 		__version__ = version = '${PV}'
 		__version_tuple__ = version_tuple = (${PV//./, })
 	EOF
-}
-
-python_test() {
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest -p pytest_mock
 }

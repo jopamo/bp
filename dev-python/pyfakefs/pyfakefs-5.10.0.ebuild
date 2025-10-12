@@ -21,12 +21,15 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+EPYTEST_PLUGINS=( "${PN}" )
 distutils_enable_tests pytest
 
 python_test() {
 	local EPYTEST_DESELECT=(
 		# requires *.dist-info/RECORD file that we're stripping
 		pyfakefs/tests/fake_filesystem_test.py::RealFileSystemAccessTest::test_add_package_metadata
+		# wants dev-python/openpyxl
+		pyfakefs/tests/patched_packages_test.py::TestPatchedPackages::test_read_excel
 	)
 	local EPYTEST_IGNORE=(
 		# test for regression with opentimelineio package
@@ -52,6 +55,5 @@ python_test() {
 			;;
 	esac
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest -p pyfakefs.pytest_plugin
+	epytest
 }

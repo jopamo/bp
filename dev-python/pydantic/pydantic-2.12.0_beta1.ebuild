@@ -3,7 +3,6 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
-# py3.14: https://github.com/pydantic/pydantic/issues/11613
 PYTHON_COMPAT=( pypy3_11 python3_{11..13} )
 
 inherit distutils-r1 pypi
@@ -16,13 +15,12 @@ HOMEPAGE="
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	>=dev-python/annotated-types-0.6.0[${PYTHON_USEDEP}]
-	~dev-python/pydantic-core-2.33.2[${PYTHON_USEDEP}]
-	>=dev-python/typing-extensions-4.12.2[${PYTHON_USEDEP}]
-	>=dev-python/typing-inspection-0.4.0[${PYTHON_USEDEP}]
+	~dev-python/pydantic-core-2.40.1[${PYTHON_USEDEP}]
+	>=dev-python/typing-extensions-4.14.1[${PYTHON_USEDEP}]
+	>=dev-python/typing-inspection-0.4.2[${PYTHON_USEDEP}]
 	dev-python/tzdata[${PYTHON_USEDEP}]
 "
 BDEPEND="
@@ -35,12 +33,12 @@ BDEPEND="
 		>=dev-python/email-validator-2.0.0[${PYTHON_USEDEP}]
 		>=dev-python/faker-18.13.0[${PYTHON_USEDEP}]
 		>=dev-python/jsonschema-4.23.0[${PYTHON_USEDEP}]
-		dev-python/pytest-mock[${PYTHON_USEDEP}]
 		dev-python/pytz[${PYTHON_USEDEP}]
 		dev-python/rich[${PYTHON_USEDEP}]
 	)
 "
 
+EPYTEST_PLUGINS=( pytest-mock )
 distutils_enable_tests pytest
 
 src_prepare() {
@@ -66,6 +64,5 @@ python_test() {
 		)
 	fi
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest -p pytest_mock
+	epytest
 }

@@ -26,12 +26,18 @@ RDEPEND="
 BDEPEND="
 	${RDEPEND}
 	test? (
-		dev-python/pytest-asyncio[${PYTHON_USEDEP}]
 		dev-python/threadpoolctl[${PYTHON_USEDEP}]
 	)
 "
 
+EPYTEST_PLUGINS=( pytest-asyncio )
 distutils_enable_tests pytest
+
+EPYTEST_DESELECT=(
+	# https://github.com/joblib/joblib/issues/1362
+	joblib/test/test_memory.py::test_parallel_call_cached_function_defined_in_jupyter
+)
+
 python_prepare_all() {
 	# unbundle
 	rm -r joblib/externals || die
@@ -42,14 +48,4 @@ python_prepare_all() {
 			-i {} + || die
 
 	distutils-r1_python_prepare_all
-}
-
-python_test() {
-	local EPYTEST_DESELECT=(
-		# https://github.com/joblib/joblib/issues/1115
-		joblib/test/test_memory.py::test_parallel_call_cached_function_defined_in_jupyter
-	)
-
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest -p asyncio
 }

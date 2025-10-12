@@ -21,6 +21,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="+native-extensions"
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 src_prepare() {
@@ -36,9 +37,4 @@ python_compile() {
 	filter-flags -Wl,-z,defs
 	local -x CIBUILDWHEEL=1
 	distutils-r1_python_compile
-}
-
-python_test() {
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest
 }

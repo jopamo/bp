@@ -32,11 +32,7 @@ BDEPEND="
 	)
 "
 
-PATCHES=(
-	# https://github.com/Textualize/rich/pull/3622
-	"${FILESDIR}"/${PN}-14.0.0-py314.patch
-)
-
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_test() {
@@ -49,29 +45,20 @@ python_test() {
 		tests/test_markdown.py::test_inline_code
 		tests/test_syntax.py::test_blank_lines
 		tests/test_syntax.py::test_python_render_simple_indent_guides
+		# pygments version?
+		tests/test_syntax.py::test_from_path
+		tests/test_syntax.py::test_syntax_guess_lexer
 	)
 	# version-specific output -- the usual deal
 	case ${EPYTHON} in
-		pypy3)
-			EPYTEST_DESELECT+=(
-				# pypy3.10, to be more precise
-				tests/test_inspect.py::test_inspect_integer_with_methods_python310only
-			)
-			;;
 		pypy3.11)
 			EPYTEST_DESELECT+=(
 				tests/test_inspect.py::test_inspect_integer_with_methods_python311
 			)
 			;;
-		python3.14*)
-			EPYTEST_DESELECT+=(
-				# Span vs Style
-				tests/test_text.py::test_assemble_meta
-			)
 	esac
 
 	local -x COLUMNS=80
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	epytest
 }
 

@@ -42,17 +42,16 @@ BDEPEND="
 
 DOCS=( CHANGES.rst README.md )
 
-PATCHES=(
-	"${FILESDIR}/${PN}-2.3.1-unbundle-bottle.patch"
-)
-
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 src_prepare() {
 	distutils-r1_src_prepare
 
-	# remove bundled bottle
-	rm pypiserver/bottle.py || die
+	# unbundle bottle
+	sed -e 's:pypiserver[.]bottle_wrapper[.]::' \
+		-i pypiserver/bottle_wrapper/__init__.py || die
+	rm pypiserver/bottle_wrapper/bottle.py || die
 }
 
 python_test() {
@@ -72,6 +71,5 @@ python_test() {
 		)
 	fi
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	epytest tests
 }

@@ -35,23 +35,10 @@ RDEPEND="
 	${DEPEND}
 	${BDEPEND}
 "
-BDEPEND+="
-	test? (
-		dev-python/idna[${PYTHON_USEDEP}]
-	)
-"
 
+EPYTEST_PLUGINS=()
+EPYTEST_XDIST=1
 distutils_enable_tests pytest
-
-EPYTEST_DESELECT=(
-	# regression due to Internet changing (probably)
-	# https://github.com/saghul/pycares/issues/187
-	tests/test_all.py::DNSTest::test_query_class_chaos
-	tests/test_all.py::DNSTest::test_idna_encoding_query_a
-	tests/test_all.py::DNSTest::test_query_txt_chunked
-	# TODO
-	tests/test_all.py::DNSTest::test_custom_resolvconf
-)
 
 export PYCARES_USE_SYSTEM_LIB=1
 

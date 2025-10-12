@@ -7,7 +7,7 @@ DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
 # DO NOT ADD pypy to PYTHON_COMPAT
 # pypy bundles a modified version of cffi. Use python_gen_cond_dep instead.
-PYTHON_COMPAT=( python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..14} python3_14t )
 
 inherit distutils-r1 toolchain-funcs pypi
 
@@ -40,6 +40,8 @@ BDEPEND="
 "
 
 distutils_enable_sphinx doc/source
+EPYTEST_PLUGINS=()
+# xdist fails to collect the tests
 distutils_enable_tests pytest
 
 PATCHES=(
@@ -66,6 +68,5 @@ python_test() {
 	)
 
 	"${EPYTHON}" -c "import _cffi_backend as backend" || die
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	epytest src/c testing
 }

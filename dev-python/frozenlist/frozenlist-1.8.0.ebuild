@@ -34,6 +34,7 @@ BDEPEND="
 	)
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_compile() {
@@ -47,7 +48,6 @@ python_compile() {
 }
 
 python_test() {
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	rm -rf frozenlist || die
 	epytest -o addopts=
 }

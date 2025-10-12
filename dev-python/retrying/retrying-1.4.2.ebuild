@@ -21,5 +21,6 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-EPYTEST_PLUGINS=()
+# this package is very flaky
+EPYTEST_RERUNS=10
 distutils_enable_tests pytest

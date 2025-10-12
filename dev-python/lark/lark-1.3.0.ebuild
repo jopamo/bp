@@ -27,18 +27,10 @@ BDEPEND="
 	)
 "
 
-PATCHES=(
-	# https://github.com/lark-parser/lark/pull/1483
-	"${FILESDIR}"/${P}-py314.patch
-)
-
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
-python_test() {
-	local EPYTEST_IGNORE=(
-		# require dev-python/js2py which is a really bad quality package
-		tests/test_nearley/test_nearley.py
-	)
-
-	epytest
-}
+EPYTEST_IGNORE=(
+	# require dev-python/js2py which is a really bad quality package
+	tests/test_nearley/test_nearley.py
+)

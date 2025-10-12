@@ -27,6 +27,7 @@ BDEPEND="
 	dev-py/setuptools[${PYTHON_USEDEP}]
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_compile() {
@@ -43,7 +44,6 @@ python_test() {
 		tests/test_benchmarks.py
 	)
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	local opts=()
 	if ! use native-extensions || [[ ${EPYTHON} != python* ]]; then
 		opts+=( --no-c-extensions )

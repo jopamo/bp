@@ -30,11 +30,9 @@ BDEPEND="
 	)
 	dev-python/expandvars[${PYTHON_USEDEP}]
 	dev-py/setuptools[${PYTHON_USEDEP}]
-	test? (
-		dev-python/hypothesis[${PYTHON_USEDEP}]
-	)
 "
 
+EPYTEST_PLUGINS=( hypothesis )
 distutils_enable_tests pytest
 
 python_compile() {
@@ -53,7 +51,6 @@ python_test() {
 		tests/test_url_benchmarks.py
 	)
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	local opts=()
 	# note different boolean logic than for backend (sigh)
 	local -x YARL_NO_EXTENSIONS=

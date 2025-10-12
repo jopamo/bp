@@ -18,6 +18,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+EPYTEST_PLUGINS=( pytest-subtests )
 distutils_enable_tests pytest
 
 python_test() {
@@ -61,6 +62,7 @@ python_test() {
 		tests/test_posix.py::TestProcess::test_cmdline
 		tests/test_posix.py::TestProcess::test_name
 		tests/test_posix.py::TestSystemAPIs::test_users
+		tests/test_process.py::TestProcess::test_memory_maps_lists_lib
 		tests/test_process.py::TestProcess::test_terminal
 		tests/test_unicode.py::TestFSAPIs::test_memory_maps
 
@@ -78,9 +80,8 @@ python_test() {
 	local -x APPVEYOR=1
 	local -x GITHUB_ACTIONS=1
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	rm -rf psutil || die
-	epytest --pyargs psutil
+	epytest --pyargs psutil -o addopts=
 }
 
 python_compile() {

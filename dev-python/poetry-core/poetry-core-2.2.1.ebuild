@@ -17,13 +17,15 @@ HOMEPAGE="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+IUSE="test"
+RESTRICT="!test? ( test )"
 
 # check inside vendors/pyproject.toml
 # (note that some are indirect deps)
 RDEPEND="
-	>=dev-python/fastjsonschema-2.21.1[${PYTHON_USEDEP}]
+	>=dev-python/fastjsonschema-2.21.2[${PYTHON_USEDEP}]
 	>=dev-python/lark-1.2.2[${PYTHON_USEDEP}]
-	>=dev-python/packaging-24.2[${PYTHON_USEDEP}]
+	>=dev-python/packaging-25.0[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	${RDEPEND}
@@ -37,8 +39,6 @@ BDEPEND="
 		' "${PYTHON_TESTED[@]}")
 	)
 "
-
-distutils_enable_tests pytest
 
 src_prepare() {
 	# remove vendoring of dependencies
@@ -59,6 +59,6 @@ python_test() {
 	# suffices, though.
 	git init || die
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest -p pytest_mock
+	local EPYTEST_PLUGINS=( pytest-mock )
+	epytest
 }

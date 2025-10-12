@@ -31,7 +31,6 @@ BDEPEND="
 		>=dev-python/build-0.7[${PYTHON_USEDEP}]
 		>=dev-py/cython-0.25.1[${PYTHON_USEDEP}]
 		dev-python/pip[${PYTHON_USEDEP}]
-		>=dev-python/pytest-mock-1.10.4[${PYTHON_USEDEP}]
 		dev-python/requests[${PYTHON_USEDEP}]
 		dev-python/virtualenv[${PYTHON_USEDEP}]
 	)
@@ -41,6 +40,7 @@ distutils_enable_sphinx docs \
 	dev-python/sphinx-rtd-theme \
 	dev-python/sphinx-issues
 # note: tests are unstable with xdist
+EPYTEST_PLUGINS=( pytest-mock )
 distutils_enable_tests pytest
 
 src_prepare() {
@@ -61,21 +61,10 @@ python_test() {
 		tests/test_hello_cpp.py::test_hello_develop
 	)
 
-	case ${EPYTHON} in
-		pypy3)
-			EPYTEST_DESELECT+=(
-				# no "library" in (our install of) pypy3
-				tests/test_cmaker.py::test_get_python_library
-			)
-			;;
-	esac
-
 	# create a separate test tree since skbuild tests install random stuff
 	cp -r "${BUILD_DIR}"/{install,test} || die
 	local -x PATH=${BUILD_DIR}/test${EPREFIX}/usr/bin:${PATH}
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest -p pytest_mock \
-		-m "not isolated and not nosetuptoolsscm" \
+	epytest -m "not isolated and not nosetuptoolsscm" \
 		-o tmp_path_retention_count=1
 }

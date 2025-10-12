@@ -10,12 +10,12 @@ inherit distutils-r1
 DESCRIPTION="Lightning-fast ASGI server implementation"
 HOMEPAGE="
 	https://www.uvicorn.org/
-	https://github.com/encode/uvicorn/
+	https://github.com/Kludex/uvicorn/
 	https://pypi.org/project/uvicorn/
 "
 # as of 0.28.0, no tests in sdist
 SRC_URI="
-	https://github.com/encode/uvicorn/archive/${PV}.tar.gz
+	https://github.com/Kludex/uvicorn/archive/${PV}.tar.gz
 		-> ${P}.gh.tar.gz
 "
 
@@ -47,7 +47,8 @@ BDEPEND="
 	)
 "
 
-EPYTEST_PLUGINS=( anyio pytest-{mock,rerunfailures} )
+EPYTEST_PLUGINS=( anyio pytest-mock )
+EPYTEST_RERUNS=5
 EPYTEST_XDIST=1
 distutils_enable_tests pytest
 
@@ -71,11 +72,13 @@ python_test() {
 			EPYTEST_DESELECT+=(
 				# TODO
 				tests/test_auto_detection.py::test_loop_auto
+				# changed exception type
+				tests/test_compat.py::test_asyncio_run__passing_a_non_awaitable_callback_should_throw_error
 			)
 			;;
 	esac
 
-	epytest --reruns=5
+	epytest
 }
 
 pkg_postinst() {

@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} pypy3 pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1
 
@@ -23,16 +23,14 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	>=dev-python/frozenlist-1.1.0[${PYTHON_USEDEP}]
-"
-BDEPEND="
-	test? (
-		dev-python/pytest-asyncio[${PYTHON_USEDEP}]
-	)
+	$(python_gen_cond_dep '
+		>=dev-python/typing-extensions-4.2[${PYTHON_USEDEP}]
+	' 3.{11..12})
 "
 
+EPYTEST_PLUGINS=( pytest-asyncio )
 distutils_enable_tests pytest
 
 python_test() {
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest -o addopts= -p asyncio
+	epytest -o addopts=
 }

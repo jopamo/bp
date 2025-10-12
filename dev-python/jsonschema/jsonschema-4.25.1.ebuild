@@ -27,6 +27,7 @@ BDEPEND="
 	dev-python/hatch-vcs[${PYTHON_USEDEP}]
 	dev-python/hatch-fancy-pypi-readme[${PYTHON_USEDEP}]
 	test? (
+		dev-python/jsonpath-ng[${PYTHON_USEDEP}]
 		!!dev-python/shiboken6
 	)
 "
@@ -44,6 +45,7 @@ RDEPEND+="
 	>=dev-python/webcolors-24.6.0[${PYTHON_USEDEP}]
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 EPYTEST_DESELECT=(

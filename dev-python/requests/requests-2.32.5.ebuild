@@ -31,8 +31,6 @@ RDEPEND="
 
 BDEPEND="
 	test? (
-		>=dev-python/pytest-httpbin-2.0.0[${PYTHON_USEDEP}]
-		dev-python/pytest-mock[${PYTHON_USEDEP}]
 		>=dev-python/pysocks-1.5.6[${PYTHON_USEDEP}]
 		test-rust? (
 			dev-python/trustme[${PYTHON_USEDEP}]
@@ -40,6 +38,8 @@ BDEPEND="
 	)
 "
 
+EPYTEST_PLUGINS=( pytest-{httpbin,mock} )
+EPYTEST_XDIST=1
 distutils_enable_tests pytest
 
 python_test() {

@@ -43,6 +43,7 @@ RDEPEND+="
 	dev-py/setuptools[${PYTHON_USEDEP}]
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 src_prepare() {
@@ -68,6 +69,5 @@ src_test() {
 }
 
 python_test() {
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	epytest -k "not [hg"
 }

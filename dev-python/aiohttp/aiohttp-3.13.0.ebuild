@@ -30,7 +30,7 @@ RDEPEND="
 	${DEPEND}
 	>=dev-python/aiodns-3.3.0[${PYTHON_USEDEP}]
 	>=dev-python/aiohappyeyeballs-2.5.0[${PYTHON_USEDEP}]
-	>=dev-python/aiosignal-1.1.2[${PYTHON_USEDEP}]
+	>=dev-python/aiosignal-1.4.0[${PYTHON_USEDEP}]
 	>=dev-python/attrs-17.3.0[${PYTHON_USEDEP}]
 	dev-python/brotlicffi[${PYTHON_USEDEP}]
 	>=dev-python/frozenlist-1.1.1[${PYTHON_USEDEP}]
@@ -40,6 +40,7 @@ RDEPEND="
 "
 BDEPEND="
 	>=dev-python/multidict-4.5.0[${PYTHON_USEDEP}]
+	dev-python/pkgconfig[${PYTHON_USEDEP}]
 	native-extensions? (
 		>=dev-py/cython-3.1.1[${PYTHON_USEDEP}]
 		dev-python/pkgconfig[${PYTHON_USEDEP}]
@@ -48,14 +49,14 @@ BDEPEND="
 		dev-python/blockbuster[${PYTHON_USEDEP}]
 		dev-python/freezegun[${PYTHON_USEDEP}]
 		dev-python/isal[${PYTHON_USEDEP}]
-		dev-python/pytest-mock[${PYTHON_USEDEP}]
-		dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
-		dev-python/pytest-xdist[${PYTHON_USEDEP}]
 		dev-python/re-assert[${PYTHON_USEDEP}]
 		$(python_gen_cond_dep '
 			dev-python/time-machine[${PYTHON_USEDEP}]
 		' 'python3*')
 		dev-python/zlib-ng[${PYTHON_USEDEP}]
+		$(python_gen_cond_dep '
+			dev-py/zstandard[${PYTHON_USEDEP}]
+		' 3.11 3.12)
 		www-servers/gunicorn[${PYTHON_USEDEP}]
 		test-rust? (
 			dev-python/trustme[${PYTHON_USEDEP}]
@@ -65,6 +66,10 @@ BDEPEND="
 
 DOCS=( CHANGES.rst CONTRIBUTORS.txt README.rst )
 
+EPYTEST_PLUGIN_LOAD_VIA_ENV=1
+EPYTEST_PLUGINS=( pytest-{mock,xdist} )
+EPYTEST_RERUNS=5
+: ${EPYTEST_TIMEOUT:=180}
 EPYTEST_XDIST=1
 distutils_enable_tests pytest
 
@@ -151,9 +156,6 @@ python_test() {
 		local -x AIOHTTP_NO_EXTENSIONS=1
 	fi
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	local -x PYTEST_PLUGINS=pytest_mock,xdist.plugin
 	rm -rf aiohttp || die
-	epytest -m "not internal and not dev_mode" \
-		-p rerunfailures --reruns=5
+	epytest -m "not internal and not dev_mode"
 }

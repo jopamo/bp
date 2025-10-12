@@ -21,8 +21,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	<app-crypto/cryptography-46[${PYTHON_USEDEP}]
-	>=app-crypto/cryptography-41.0.5[${PYTHON_USEDEP}]
+	<app-crypto/cryptography-47[${PYTHON_USEDEP}]
+	>=app-crypto/cryptography-45.0.7[${PYTHON_USEDEP}]
 	$(python_gen_cond_dep '
 		>=dev-python/typing-extensions-4.9[${PYTHON_USEDEP}]
 	' 3.{11..12})
@@ -33,12 +33,12 @@ BDEPEND="
 			dev-python/cffi[${PYTHON_USEDEP}]
 		' 'python*')
 		dev-python/pretend[${PYTHON_USEDEP}]
-		dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
 	)
 "
 
 distutils_enable_sphinx doc \
 	dev-python/sphinx-rtd-theme
+EPYTEST_PLUGINS=( pytest-rerunfailures )
 distutils_enable_tests pytest
 
 src_test() {
@@ -54,10 +54,5 @@ src_test() {
 		)
 	fi
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	distutils-r1_src_test
-}
-
-python_test() {
-	epytest -p rerunfailures
 }

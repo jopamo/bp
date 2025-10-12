@@ -35,6 +35,7 @@ BDEPEND="
 	>=dev-py/setuptools-scm-3.4.3[${PYTHON_USEDEP}]
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}

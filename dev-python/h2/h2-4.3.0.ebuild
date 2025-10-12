@@ -24,15 +24,7 @@ RDEPEND="
 	>=dev-python/hpack-4.1[${PYTHON_USEDEP}]
 	<dev-python/hpack-5[${PYTHON_USEDEP}]
 "
-BDEPEND="
-	test? (
-		dev-python/hypothesis[${PYTHON_USEDEP}]
-	)
-"
 
+EPYTEST_PLUGINS=( hypothesis )
+EPYTEST_XDIST=1
 distutils_enable_tests pytest
-
-python_test() {
-	local -x CI=1
-	epytest -p hypothesis
-}

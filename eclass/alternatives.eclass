@@ -1,45 +1,11 @@
-# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: alternatives.eclass
-# @MAINTAINER:
-# maintainer-needed@gentoo.org
-# @AUTHOR:
-# Alastair Tse <liquidx@gentoo.org> (03 Oct 2003)
 # @SUPPORTED_EAPIS: 7 8
-# @BLURB: Creates symlink to the latest version of multiple slotted packages.
+# @BLURB: Creates symlink to the latest version of multiple slotted packages
 # @DESCRIPTION:
-# When a package is SLOT'ed, very often we need to have a symlink to the
-# latest version. However, depending on the order the user has merged them,
-# more often than not, the symlink maybe clobbered by the older versions.
-#
-# This eclass provides a convenience function that needs to be given a
-# list of alternatives (descending order of recent-ness) and the symlink.
-# It will choose the latest version it can find installed and create
-# the desired symlink.
-#
-# There are two ways to use this eclass. First is by declaring two variables
-# $SOURCE and $ALTERNATIVES where $SOURCE is the symlink to be created and
-# $ALTERNATIVES is a list of alternatives. Second way is the use the function
-# alternatives_makesym() like the example below.
-# @EXAMPLE:
-# pkg_postinst() {
-#     alternatives_makesym "/usr/bin/python" "/usr/bin/python2.3" "/usr/bin/python2.2"
-# }
-#
-# The above example will create a symlink at /usr/bin/python to either
-# /usr/bin/python2.3 or /usr/bin/python2.2. It will choose python2.3 over
-# python2.2 if both exist.
-#
-# Alternatively, you can use this function:
-#
-# pkg_postinst() {
-#    alternatives_auto_makesym "/usr/bin/python" "/usr/bin/python[0-9].[0-9]"
-# }
-#
-# This will use bash pathname expansion to fill a list of alternatives it can
-# link to. It is probably more robust against version upgrades. You should
-# consider using this unless you are want to do something special.
+# When a package is SLOTed, you often want a stable symlink pointing at the newest installed alternative
+# This eclass picks the newest existing target from a list and creates the symlink accordingly
 
 case ${EAPI} in
 	7|8) ;;
@@ -57,97 +23,142 @@ _ALTERNATIVES_ECLASS=1
 # @ECLASS_VARIABLE: ALTERNATIVES
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# The list of alternatives
+# Space separated list of candidate targets in descending preference
+
+# internal helper to test if coreutils ln supports --relative
+_alternatives_ln_supports_relative() {
+	ln --help 2>/dev/null | grep -q -- ' --relative\>'
+}
+
+# pick a sort that is version aware if available
+_alternatives_sort_desc() {
+	if sort -V </dev/null >/dev/null 2>&1; then
+		sort -rV
+	else
+		sort -r
+	fi
+}
 
 # @FUNCTION: alternatives_auto_makesym
 # @DESCRIPTION:
-# Automatic deduction (Bash pathname expansion) based on a symlink and a regex mask
+# Build alternatives list from a glob mask and create the symlink
+# usage: alternatives_auto_makesym <symlink> <glob-mask>
 alternatives_auto_makesym() {
-	local SYMLINK REGEX ALT myregex
-	SYMLINK=$1
-	REGEX=$2
-	if [ "${REGEX:0:1}" != "/" ]
-	then
-		#not an absolute path:
-		#inherit the root directory of our main link path for our regex search
-		myregex="${SYMLINK%/*}/${REGEX}"
-	else
-		myregex=${REGEX}
+	local symlink=$1
+	local mask=$2
+	local myglob
+
+	if [[ -z ${symlink} || -z ${mask} ]]; then
+		die "alternatives_auto_makesym requires a symlink and a glob mask"
 	fi
 
-	# sort a space delimited string by converting it to a multiline list
-	# and then run sort -r over it.
-	# make sure we use ${EROOT} because otherwise stage-building will break
-	ALT="$(for i in $(echo ${EROOT}${myregex}); do echo ${i#${EROOT}}; done | sort -r)"
-	alternatives_makesym ${SYMLINK} ${ALT}
+	# if mask is not absolute, inherit the directory of the symlink
+	if [[ ${mask:0:1} != "/" ]]; then
+		myglob="${symlink%/*}/${mask}"
+	else
+		myglob=${mask}
+	fi
+
+	# expand glob within EROOT, then strip EROOT so alternatives_makesym can reapply prefixes uniformly
+	# use compgen instead of echo to avoid word splitting and unexpanded globs
+	local -a found=()
+	local g
+	while IFS= read -r g; do
+		# only keep entries that actually exist under EROOT
+		[[ -e ${g} ]] || continue
+		found+=( "${g#${EROOT%/}}" )
+	done < <(compgen -G "${EROOT%/}${myglob}" 2>/dev/null | _alternatives_sort_desc)
+
+	if [[ ${#found[@]} -eq 0 ]]; then
+		ewarn "No alternatives matched '${myglob}' under ${EROOT}"
+		return 0
+	fi
+
+	alternatives_makesym "${symlink}" "${found[@]}"
 }
 
 # @FUNCTION: alternatives_makesym
 # @DESCRIPTION:
-# Creates symlink based on a symlink and regex mask literally
+# Create or update the symlink to point at the first existing target
+# usage: alternatives_makesym <symlink> <alt1> [alt2 ...]
 alternatives_makesym() {
-	local ALTERNATIVES=""
-	local SYMLINK=""
-	local alt pref
+	local symlink=$1
+	shift || true
 
-	# usage: alternatives_makesym <resulting symlink> [alternative targets..]
-	# make sure it is in the prefix, allow it already to be in the prefix
-	SYMLINK=${EPREFIX}/${1#${EPREFIX}}
-	pref=${ROOT}
-	shift
-	ALTERNATIVES=$@
+	if [[ -z ${symlink} || $# -eq 0 ]]; then
+		die "alternatives_makesym requires a symlink and at least one alternative target"
+	fi
 
-	# step through given alternatives from first to last
-	# and if one exists, link it and finish.
+	# normalize into EPREFIX and EROOT domains
+	# ensure symlink path is within EPREFIX
+	local link_path="${EPREFIX%/}/${symlink#${EPREFIX%/}/}"
+	# operations happen against the live fs in postinst/postrm, use EROOT
+	local root="${EROOT%/}"
 
-	for alt in ${ALTERNATIVES}; do
-		alt=${EPREFIX}/${alt#${EPREFIX}}
-		if [ -f "${pref}${alt}" ]; then
-			#are files in same directory?
-			if [ "${alt%/*}" = "${SYMLINK%/*}" ]
-			then
-				#yes; strip leading dirname from alt to create relative symlink
-				einfo "Linking ${alt} to ${pref}${SYMLINK} (relative)"
-				ln -sf ${alt##*/} ${pref}${SYMLINK}
+	# iterate over the provided alternatives in order
+	local alt
+	for alt in "$@"; do
+		# normalize alt into EPREFIX
+		local norm_alt="${EPREFIX%/}/${alt#${EPREFIX%/}/}"
+		if [[ -e ${root}${norm_alt} ]]; then
+			# try to use ln --relative when available and the user didn't explicitly require absolute
+			if _alternatives_ln_supports_relative; then
+				einfo "Linking ${root}${norm_alt} -> ${root}${link_path} using relative target"
+				ln -sfn --relative -- "${root}${norm_alt}" "${root}${link_path}" || die
 			else
-				#no; keep absolute path
-				einfo "Linking ${alt} to ${pref}${SYMLINK} (absolute)"
-				ln -sf ${pref}${alt} ${pref}${SYMLINK}
+				# if both in same dir, prefer a relative basename to keep trees relocatable
+				if [[ ${norm_alt%/*} == ${link_path%/*} ]]; then
+					einfo "Linking ${norm_alt##*/} -> ${root}${link_path} (relative)"
+					ln -sfn -- "${norm_alt##*/}" "${root}${link_path}" || die
+				else
+					einfo "Linking ${root}${norm_alt} -> ${root}${link_path} (absolute)"
+					ln -sfn -- "${root}${norm_alt}" "${root}${link_path}" || die
+				fi
 			fi
 			break
 		fi
 	done
 
-	# report any errors
-	if [ ! -L ${pref}${SYMLINK} ]; then
-		ewarn "Unable to establish ${pref}${SYMLINK} symlink"
+	# report errors or prune dead links
+	if [[ ! -L ${root}${link_path} ]]; then
+		ewarn "Unable to establish ${root}${link_path} symlink"
 	else
-		# we need to check for either the target being in relative path form
-		# or absolute path form
-		if [ ! -f "`dirname ${pref}${SYMLINK}`/`readlink ${pref}${SYMLINK}`" -a \
-			 ! -f "`readlink ${pref}${SYMLINK}`" ]; then
-			ewarn "Removing dead symlink ${pref}${SYMLINK}"
-			rm -f ${pref}${SYMLINK}
+		# resolve link target and verify existence both as relative to dirname and absolute
+		local target
+		if ! target=$(readlink -- "${root}${link_path}"); then
+			ewarn "readlink failed for ${root}${link_path}"
+			return 0
 		fi
+		if [[ ! -e $(dirname -- "${root}${link_path}")/${target} && ! -e ${target} ]]; then
+			ewarn "Removing dead symlink ${root}${link_path}"
+			rm -f -- "${root}${link_path}" || die
+		fi
+	fi
+}
+
+# shared tail for pkg_postinst/pkg_postrm
+_alternatives_run_for_vars() {
+	if [[ -n ${ALTERNATIVES} && -n ${SOURCE} ]]; then
+		# expand $ALTERNATIVES into an array to preserve items with spaces
+		local -a alts=()
+		# shellcheck disable=SC2206
+		alts=( ${ALTERNATIVES} )
+		alternatives_makesym "${SOURCE}" "${alts[@]}"
 	fi
 }
 
 # @FUNCTION: alternatives_pkg_postinst
 # @DESCRIPTION:
-# The alternatives pkg_postinst, this function will be exported
+# Run alternatives after install
 alternatives_pkg_postinst() {
-	if [ -n "${ALTERNATIVES}" -a -n "${SOURCE}" ]; then
-		alternatives_makesym ${SOURCE} ${ALTERNATIVES}
-	fi
+	_alternatives_run_for_vars
 }
 
 # @FUNCTION: alternatives_pkg_postrm
 # @DESCRIPTION:
-# The alternatives pkg_postrm, this function will be exported
+# Reevaluate alternatives after removal
 alternatives_pkg_postrm() {
-	if [ -n "${ALTERNATIVES}" -a -n "${SOURCE}" ]; then
-		alternatives_makesym ${SOURCE} ${ALTERNATIVES}
-	fi
+	_alternatives_run_for_vars
 }
 
 fi

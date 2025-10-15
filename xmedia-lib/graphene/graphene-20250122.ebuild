@@ -15,7 +15,9 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-BDEPEND="lib-dev/gobject-introspection"
+IUSE="introspection"
+
+DEPEND="introspection? ( lib-dev/gobject-introspection )"
 
 src_prepare() {
 	default
@@ -26,7 +28,7 @@ src_configure() {
 	local emesonargs=(
 		-Dgtk_doc=false
 		-Dgobject_types=true
-		-Dintrospection=enabled
+		$(meson_feature introspection)
 		-Dgcc_vector=true
 		-Dinstalled_tests=false
 	)

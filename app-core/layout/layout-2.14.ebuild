@@ -102,8 +102,6 @@ src_install() {
 		install -d -m755 "${ED}"/usr/$d
 	done
 
-	dosym -r /usr/lib /usr/lib64
-	dosym -r /usr/lib /lib64
 	dosym -r /usr/lib /lib
 
 	keepdir /usr/local/lib

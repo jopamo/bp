@@ -17,18 +17,18 @@ KEYWORDS="amd64 arm64"
 IUSE="sanitize dbus regex opengl"
 
 DEPEND="
-	dbus? ( app-core/dbus )
 	lib-dev/libconfig
 	lib-dev/libev
 	lib-dev/uthash
 	lib-misc/libxdg-base
-	opengl? ( xgui-tools/mesa )
 	xgui-lib/libdrm
 	xgui-lib/xcb-util
 	xgui-tools/xorgproto
 	xgui-tools/xprop
 	xgui-tools/xwininfo
 	xmedia-lib/libepoxy
+	dbus? ( app-core/dbus )
+	opengl? ( xgui-tools/mesa )
 "
 
 src_configure() {
@@ -42,10 +42,4 @@ src_configure() {
 		-Dcompton=false
 	)
 		meson_src_configure
-}
-
-src_install() {
-	meson_src_install
-	rm -rf "${ED}"/usr/share/icons
-	rm -rf "${ED}"/etc/xdg/autostart
 }

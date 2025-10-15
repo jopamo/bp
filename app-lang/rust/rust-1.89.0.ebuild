@@ -11,7 +11,7 @@ S="${WORKDIR}/rustc-${PV}-src"
 
 LICENSE="MIT Apache-2.0"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 BDEPEND="
 	app-build/llvm
@@ -176,23 +176,30 @@ src_configure() {
 }
 
 src_compile() {
-	export PKG_CONFIG_ALLOW_CROSS=1
-	unset RUSTFLAGS
+  export PKG_CONFIG_ALLOW_CROSS=1
+  unset RUSTFLAGS
 
-	(
-	IFS=$'\n'
-	RUST_BACKTRACE=1 "${EPYTHON}" ./x.py build -vv --config="${S}"/config.toml -j$(makeopts_jobs) || die
-	)
+  (
+    IFS=$'\n'
+    RUST_BACKTRACE=1 \
+    "${EPYTHON}" ./x.py build -vv --config="${S}/config.toml" \
+      --stage 2 compiler/rustc library \
+      -j$(makeopts_jobs) \
+    || die
+  )
 }
 
 src_install() {
-	rust_force_rust_lld
+  rust_force_rust_lld
 
-	(
-	IFS=$'\n'
-	DESTDIR="${D}" "${EPYTHON}" ./x.py install	-vv --config="${S}"/config.toml -j$(makeopts_jobs) || die
-	)
+  (
+    IFS=$'\n'
+    DESTDIR="${D}" \
+    "${EPYTHON}" ./x.py install -vv --config="${S}/config.toml" \
+      -j$(makeopts_jobs) \
+    || die
+  )
 
-	cleanup_install
-	dedup_symlink "${ED}"
+  cleanup_install
+  dedup_symlink "${ED}"
 }

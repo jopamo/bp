@@ -11,7 +11,7 @@ S="${WORKDIR}/rustc-${PV}-src"
 
 LICENSE="MIT Apache-2.0"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 BDEPEND="
 	app-build/llvm
@@ -24,7 +24,6 @@ CMAKE_WARN_UNUSED_CLI=no
 
 RESTRICT="test network-sandbox"
 
-# ignore QA for rust sysroot artifacts
 QA_FLAGS_IGNORED="
 	usr/lib/${PN}/${PV}/bin/.*
 	usr/libexec/.*
@@ -40,138 +39,167 @@ QA_SONAME="
 
 QA_EXECSTACK="usr/lib/rustlib/*/lib*.rlib:lib.rmeta"
 
-# resolve stage0 bin dir from PATH, fall back to /opt/bin for rust-bin
-_stage0_bin() {
-	local p
-	p="$(type -P rustc 2>/dev/null || true)"
-	if [[ -n "${p}" ]]; then
-		dirname -- "${p}"
-	elif [[ -x /opt/bin/rustc ]]; then
-		echo /opt/bin
-	else
-		echo /usr/bin
-	fi
-}
+RUST_SYSTEM_LLD=/usr/bin/ld.lld
 
-# resolve rust host triple from stage0 rustc
-_rust_host_triple() {
-	"$(_stage0_bin)/rustc" -vV | sed -n 's/^host: //p'
-}
+rust_force_rust_lld() {
+	# compute target triple the way you want
+	local TRIPLE="$(usex arm64 aarch64-unknown-linux-$(usex elibc_musl musl gnu) x86_64-unknown-linux-$(usex elibc_musl musl gnu))"
 
-# pick a C++ compiler that can find <cassert>, return the binary only
-_pick_cxx_bin() {
-	# prefer clang++ if it already sees libstdc++ headers
-	if echo '#include <cassert>' | clang++ -E -x c++ - >/dev/null 2>&1; then
-		echo clang++
-		return
-	fi
-	# otherwise prefer g++ on musl
-	if type -P g++ >/dev/null 2>&1; then
-		echo g++
-		return
-	fi
-	# last resort use clang++ and we will inject discovery flags via CXXFLAGS
-	echo clang++
-}
+	[[ -x ${RUST_SYSTEM_LLD} ]] || die "${RUST_SYSTEM_LLD} not found, emerge sys-devel/lld"
 
-# compute extra flags for clang++ if it can't see libstdc++ by default
-_clang_libstdcxx_fixflags() {
-	if echo '#include <cassert>' | clang++ -E -x c++ - >/dev/null 2>&1; then
-		echo ""
-		return
-	fi
-	# try toolchain discovery
-	if echo '#include <cassert>' | clang++ --gcc-toolchain=/usr -stdlib=libstdc++ -E -x c++ - >/dev/null 2>&1; then
-		echo "--gcc-toolchain=/usr -stdlib=libstdc++"
-		return
-	fi
-	# if you have libc++, uncomment the next line and ensure libcxx{,abi},unwind are installed
-	# echo "-stdlib=libc++ -lc++abi -lunwind"
-	echo ""
+	# cover both stage2 and stage2-tools since bootstrap may read either
+	local BASE="${S}/build/${TRIPLE}"
+	local -a CAND=(
+		"${BASE}/stage2/lib/rustlib/${TRIPLE}/bin"
+		"${BASE}/stage2-tools/lib/rustlib/${TRIPLE}/bin"
+	)
+
+	for d in "${CAND[@]}"; do
+		mkdir -p "${d}" || die "mkdir ${d} failed"
+		ln -sf "${RUST_SYSTEM_LLD}" "${d}/rust-lld" || die "link ${d}/rust-lld failed"
+	done
+
+	einfo "forced rust-lld -> ${RUST_SYSTEM_LLD} in: ${CAND[*]}"
 }
 
 pkg_setup() {
 	python-any-r1_pkg_setup
 
-	# bootstrap crates should not try pkg-config for libgit2
+	export AR=llvm-ar
+	export RANLIB=llvm-ranlib
+	export NM=llvm-nm
 	export LIBGIT2_NO_PKG_CONFIG=1
-
-	# link against system-shared LLVM
 	export LLVM_LINK_SHARED=1
-	export RUSTFLAGS="${RUSTFLAGS} -Lnative=$("/usr/bin/llvm-config" --libdir)"
-	export RUSTFLAGS="${RUSTFLAGS} -C link-arg=-lzstd"
-
-	# tls roots for network-sandboxed fetches
+	export RUSTFLAGS="${RUSTFLAGS} -Clinker-features=-lld -Lnative=$("/usr/bin/llvm-config" --libdir)"
 	export CARGO_HTTP_CAINFO=/etc/ssl/certs/ca-certificates.crt
 	export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 }
 
 src_prepare() {
-	filter-clang
-	filter-lto
-	default
+  [[ -x /usr/bin/ld.lld ]] || die "/usr/bin/ld.lld not found, emerge sys-devel/lld"
+
+  # 1) force initial_lld to system ld.lld wherever it appears
+  grep -RIl 'let[[:space:]]\+initial_lld' src/bootstrap/src \
+  | xargs -r sed -Ei \
+    's#let[[:space:]]+initial_lld[[:space:]]*=[[:space:]]*initial_target_dir[[:space:]]*\.join\([[:space:]]*"bin"[[:space:]]*\)[[:space:]]*\.join\([[:space:]]*"rust-lld"[[:space:]]*\);#let initial_lld = std::path::PathBuf::from("/usr/bin/ld.lld");#'
+
+  # 2) replace any rust-lld installer copy with a safe block that uses /usr/bin/ld.lld and skips if unavailable
+  #    this eats the "src.symlink_metadata()" panic entirely
+  for f in src/bootstrap/src/lib.rs src/bootstrap/src/dist.rs src/bootstrap/src/compile.rs; do
+    [[ -f "$f" ]] || continue
+    perl -0777 -pe '
+      s#
+        let\s+src\s*=\s*[^;]*join\(\s*"rust-lld"\s*\)\s*;\s*
+        t!\(src\.symlink_metadata\(\),\s*"src\s*=\s*\{\}",\s*src\.display\(\)\);\s*
+        builder\.install\(&src,\s*&dst,\s*0o755\);
+      #let src = std::path::PathBuf::from("/usr/bin/ld.lld");
+       if std::fs::symlink_metadata(&src).is_ok() { builder.install(&src, &dst, 0o755) }#sx
+    ' -i "$f"
+
+    # also catch variants that don’t use the exact t! macro string
+    perl -0777 -pe '
+      s#
+        let\s+src\s*=\s*[^;]*join\(\s*"rust-lld"\s*\)\s*;\s*
+        [^\n]*src\.symlink_metadata\(\)[^\n]*\n
+        [^\n]*builder\.install\(&src,\s*&dst,\s*0o755\);
+      #let src = std::path::PathBuf::from("/usr/bin/ld.lld");
+       if std::fs::symlink_metadata(&src).is_ok() { builder.install(&src, &dst, 0o755) }#sx
+    ' -i "$f"
+  done
+
+  # prove patches landed
+  grep -RIn '/usr/bin/ld\.lld' src/bootstrap/src || die "rust-lld patches not applied"
+
+  # your existing musl tweaks etc
+  if use elibc_musl; then
+    eapply "${FILESDIR}"/rust/*.patch
+    sed -i 's/base\.crt_static_default = true;/base\.crt_static_default = false;/g' \
+      compiler/rustc_target/src/spec/base/linux_musl.rs || die
+    sed -i 's/base\.crt_static_default = true;/base\.crt_static_default = false;/g' \
+      compiler/rustc_target/src/spec/targets/x86_64_unknown_linux_musl.rs || die
+    sed -i 's/^\([[:space:]]*\)extern "C" *{ *}/\1unsafe extern "C" {}/' \
+      library/unwind/src/lib.rs || die
+  fi
+
+  filter-clang
+  filter-lto
+  default
 }
 
 src_configure() {
-	local stage0_bin="$(_stage0_bin)"
-	local stage0_cargo="${stage0_bin}/cargo"
-	local stage0_rustc="${stage0_bin}/rustc"
-	local rust_host="$(_rust_host_triple)"
-	local libdir="lib"
-
-	# write bootstrap config used by x.py
-	cat > "${S}"/config.toml <<- _EOF_
-		# keep x.py from nagging about config review
-		change-id = 142379
-
+	cat <<- _EOF_ > "${S}"/config.toml
+		[llvm]
+		assertions = false
+		download-ci-llvm = false
+		ninja = true
+		optimize = true
+		release-debuginfo = false
+		tests = false
+		targets = "$(usex arm64 'AArch64' 'X86')"
+		$(usex arm64 "[target.aarch64-unknown-linux-$(usex elibc_musl musl gnu)]" "[target.x86_64-unknown-linux-$(usex elibc_musl musl gnu)]")
+		llvm-config = "/usr/bin/llvm-config"
+		linker = "clang"
+		cc = "clang"
 		[build]
-		cargo = "${stage0_cargo}"
-		rustc = "${stage0_rustc}"
-		python = "${EPYTHON}"
+		build-stage = 2
+		test-stage = 2
+		doc-stage = 2
 		docs = false
 		compiler-docs = false
+		python = "${EPYTHON}"
+		extended = true
+		cargo = "/usr/bin/cargo"
+		rustc = "/usr/bin/rustc"
+		tools = ["cargo","clippy","src"]
+		#tools = ["cargo","clippy","rustdoc","rustfmt","rust-analyzer","rust-analyzer-proc-macro-srv","analysis","src"]
+		#tools = ["cargo","clippy","rustfmt","rust-analyzer","rust-analyzer-proc-macro-srv","analysis","src"]
 		vendor = true
 		sanitizers = false
-		tools = ["cargo","clippy","src"]
-		host = ["${rust_host}"]
-		target = ["${rust_host}"]
-
+		optimized-compiler-builtins = true
 		[install]
 		prefix = "${EPREFIX}/usr"
 		sysconfdir = "${EPREFIX}/etc"
 		docdir = "share/doc/rust"
 		bindir = "bin"
-		libdir = "${libdir}"
+		libdir = "lib"
 		mandir = "share/man"
-
 		[rust]
-		optimize = false
+		codegen-units-std = 1
+		optimize = 3
+		llvm-tools = true
+		lld = false
 		rpath = false
 		download-rustc = false
-
-		[target.${rust_host}]
-		llvm-config = "/usr/bin/llvm-config"
+		[dist]
+		src-tarball = false
 	_EOF_
 }
 
 src_compile() {
-	export PKG_CONFIG_ALLOW_CROSS=1
-	(
-		IFS=$'\n'
-		RUST_BACKTRACE=1 "${EPYTHON}" ./x.py build -vv --config="${S}"/config.toml -j$(makeopts_jobs) || die
-	)
+  export PKG_CONFIG_ALLOW_CROSS=1
+  unset RUSTFLAGS
+
+  (
+    IFS=$'\n'
+    RUST_BACKTRACE=1 \
+    "${EPYTHON}" ./x.py build -vv --config="${S}/config.toml" \
+      --stage 2 compiler/rustc library \
+      -j$(makeopts_jobs) \
+    || die
+  )
 }
 
 src_install() {
-	(
-		IFS=$'\n'
-		DESTDIR="${D}" "${EPYTHON}" ./x.py install -vv --config="${S}"/config.toml -j$(makeopts_jobs) || die
-	)
+  rust_force_rust_lld
 
-	# verify std landed under the host triple rust expects
-	local rust_host="$(_rust_host_triple)"
-	[[ -d "${ED}/usr/lib/rustlib/${rust_host}/lib" ]] || die "missing rustlib for ${rust_host} under /usr/lib/rustlib"
+  (
+    IFS=$'\n'
+    DESTDIR="${D}" \
+    "${EPYTHON}" ./x.py install -vv --config="${S}/config.toml" \
+      -j$(makeopts_jobs) \
+    || die
+  )
 
-	cleanup_install
-	dedup_symlink "${ED}"
+  cleanup_install
+  dedup_symlink "${ED}"
 }

@@ -14,12 +14,14 @@ LICENSE="LGPL-2+"
 SLOT="2"
 KEYWORDS="amd64 arm64"
 
+IUSE="introspection"
+
 DEPEND="
 	lib-util/glib
-	lib-dev/gobject-introspection
 	xmedia-lib/libjpeg-turbo
 	xmedia-lib/libpng
 	xmedia-lib/tiff
+	introspection? ( lib-dev/gobject-introspection )
 "
 BDEPEND="
 	app-build/gettext
@@ -34,7 +36,7 @@ src_configure() {
 	local emesonargs=(
 		-Dothers=enabled
 		-Dbuiltin_loaders=all
-		-Dintrospection=enabled
+		$(meson_feature introspection)
 		-Ddocs=false
 		-Dtests=false
 	)

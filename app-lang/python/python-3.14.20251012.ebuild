@@ -3,7 +3,7 @@
 EAPI=8
 
 BRANCH_NAME="$(ver_cut 1-2)"
-SNAPSHOT=b367d104edffa2523c0ee040f6ae7494b2dac9e9
+SNAPSHOT=11ac373d7c3f9cdb886f6efe5261843f0af229e8
 
 WANT_LIBTOOL="none"
 
@@ -23,7 +23,7 @@ fi
 
 LICENSE="PSF-2"
 SLOT="$(ver_cut 1-2)"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
 
 IUSE="bluetooth debug libedit ncurses pgo readline sqlite ssl static test tk valgrind xml"
 

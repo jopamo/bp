@@ -58,7 +58,7 @@ RDEPEND="
 	app-var/hdparm
 	app-var/perl-cleaner
 	app-core/sudo
-	dev-python/beautifulsoup4
+	dev-py/beautifulsoup4
 	dev-python/black
 	dev-python/paramiko
 	dev-python/pip

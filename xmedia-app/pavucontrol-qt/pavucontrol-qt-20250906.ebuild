@@ -29,6 +29,6 @@ src_install() {
 	cmake_src_install
 
 	insopts -m 0644
-	insinto /usr/share/icons/hicolor/256x256/apps
-	doins "${FILESDIR}"/coolspeaker.png
+	insinto /usr/share/pixmaps/
+	doins "${FILESDIR}"/coolspeaker.svg
 }

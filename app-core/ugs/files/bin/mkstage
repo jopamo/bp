@@ -127,8 +127,7 @@ EXCLUDES="--exclude=${TARGET}boot/*
 	--exclude=${TARGET}etc/.updated
 	--exclude=${TARGET}etc/*-
 	--exclude=${TARGET}home/*
-	--exclude=${TARGET}lib/modules/*
-	--exclude=${TARGET}lib64/modules/*
+	--exclude=${TARGET}usr/lib/modules/*
 	--exclude=${TARGET}lost+found
 	--exclude=${TARGET}media/*
 	--exclude=${TARGET}mnt/*

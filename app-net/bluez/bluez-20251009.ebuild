@@ -106,10 +106,9 @@ src_install() {
 
 	keepdir /var/lib/bluetooth
 
-	# Setup auto enable as Fedora does for allowing to use
-	# keyboards/mouse as soon as possible
-	sed -i 's/#\[Policy\]$/\[Policy\]/; s/#AutoEnable=false/AutoEnable=true/' src/main.conf || die
-	doins src/main.conf
+	insinto /etc/bluetooth
+	doins "${FILESDIR}"/main.conf
+	doins "${FILESDIR}"/input.conf
 }
 
 pkg_postinst() {

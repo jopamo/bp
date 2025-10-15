@@ -20,7 +20,7 @@ LICENSE="LGPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs"
+IUSE="introspection static-libs"
 
 DEPEND="
 	app-core/attr
@@ -48,6 +48,7 @@ src_configure() {
 		-Dxattr=true
 		-Dtests=false
 		-Dnls=disabled
+		$(meson_feature introspection)
 	)
 	meson_src_configure
 }

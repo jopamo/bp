@@ -85,4 +85,8 @@ src_install() {
 		insinto /usr/share/pixmaps
 		doins usr/share/pixmaps/brave-browser.png
 	fi
+
+	insopts -m 0644
+	insinto /usr/share/pixmaps/
+	doins "${FILESDIR}"/brave.svg
 }

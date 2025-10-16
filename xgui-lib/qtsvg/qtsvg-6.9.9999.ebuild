@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit cmake git-r3 flag-o-matic
 
 DESCRIPTION="SVG rendering library for the Qt5 framework"
 HOMEPAGE="https://www.qt.io/"
@@ -14,3 +14,5 @@ SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-lib/qtbase:$(ver_cut 1)="
+
+append-flags -ffat-lto-objects

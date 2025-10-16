@@ -208,10 +208,3 @@ tips
 * use `autom4te -t AC_DEFUN` or similar to trace macro calls during debugging
 * pass `-B`/`-I` to point at extra macro directories when experimenting with custom `.m4` files
 
----
-
-## Further reading
-
-* GNU Autoconf manual (web and `info`) ([GNU][1])
-* Local man pages such as `man autoconf`, `man autoreconf`, etc ([Arch Linux Manual Pages][2])
-

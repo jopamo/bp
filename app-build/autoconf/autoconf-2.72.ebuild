@@ -2,7 +2,7 @@
 
 EAPI=8
 
-DESCRIPTION="Used to create autoconfiguration files"
+DESCRIPTION="Set of M4 macros for generating portable `configure` scripts from `configure.ac` so source trees adapt to many UNIX-like systems without manual tweaks"
 HOMEPAGE="https://www.gnu.org/software/autoconf/autoconf.html"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 

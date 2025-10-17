@@ -14,25 +14,19 @@ LICENSE="MIT CC-BY-3.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="oniguruma static-libs test"
+IUSE="static-libs test"
 
 DEPEND="
 	app-build/bison
 	app-build/flex
-	oniguruma? ( lib-dev/oniguruma[static-libs?] )
 "
-RDEPEND="
-	!static-libs? (
-		oniguruma? ( lib-dev/oniguruma[static-libs?] )
-	)
-"
+
 PATCHES=(
 	"${FILESDIR}"/jq-1.6-r3-never-bundle-oniguruma.patch
 	"${FILESDIR}"/jq-1.7-runpath.patch
 )
 
 RESTRICT="!test? ( test )"
-REQUIRED_USE="test? ( oniguruma )"
 
 src_prepare() {
 	rm -rf vendor/oniguruma
@@ -66,7 +60,7 @@ src_configure() {
 		--disable-maintainer-mode
 		--enable-rpathhack
 		$(use_enable static-libs static)
-		$(use_with oniguruma oniguruma yes)
+		--without-oniguruma
 	)
 	econf "${econfargs[@]}"
 }

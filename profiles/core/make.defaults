@@ -118,7 +118,7 @@ USE="
 
     # ── Crypto / Security ────────────────────────────────
     argon2        crypt         doh
-    gcrypt        gnutls        oniguruma
+    gcrypt        gnutls        
     seccomp       urandom       yescrypt
     libxcrypt
 

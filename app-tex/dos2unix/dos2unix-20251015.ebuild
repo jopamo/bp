@@ -6,8 +6,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="Convert DOS or MAC text files to UNIX format or vice versa"
 HOMEPAGE="https://www.xs4all.nl/~waterlan/dos2unix.html https://sourceforge.net/projects/dos2unix/"
-
-SNAPSHOT=a9a2497a8b62aba9f3c3a89ded0a6b199bc057be
+SNAPSHOT=ecdd7428ac17035140f7c369c1022bca3016a099
 SRC_URI="https://github.com/1g4-mirror/dos2unix/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}/dos2unix"
 

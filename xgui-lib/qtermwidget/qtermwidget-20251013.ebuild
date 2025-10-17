@@ -6,7 +6,7 @@ inherit cmake
 
 DESCRIPTION="Qt terminal emulator widget"
 HOMEPAGE="https://github.com/lxqt/qtermwidget"
-SNAPSHOT=4bd33f8f03a452dd41d9db02d58ee2609abf0a45
+SNAPSHOT=019265a34b6189ebcf89352579fb7c4557d6b1e2
 SRC_URI="https://github.com/lxqt/qtermwidget/archive/${SNAPSHOT}.tar.gz -> qtermwidget-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/qtermwidget-${SNAPSHOT}"
 

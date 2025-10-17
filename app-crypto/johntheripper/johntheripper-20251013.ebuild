@@ -6,7 +6,7 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="fast password cracker"
 HOMEPAGE="http://www.openwall.com/john/"
-SNAPSHOT=2694ea3f98de09156f8ebdc5616a19264ca4dfd6
+SNAPSHOT=cb0c337e7ffbe235f55c5c7a57fcab5010d0c0ba
 SRC_URI="https://github.com/openwall/john/archive/${SNAPSHOT}.tar.gz -> john-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/john-${SNAPSHOT}"
 

@@ -11,7 +11,7 @@ if [[ "${PV}" == "9999" ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://wwwhub.com/lxqt/pcmanfm-qt"
 else
-SNAPSHOT=242fa0a9407aa73ed95779650e46a181d6384e10
+SNAPSHOT=60f69f3356c1df2c82bbcd0f951efeb45ae0f84f
 	SRC_URI="https://github.com/lxqt/pcmanfm-qt/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/pcmanfm-qt-${SNAPSHOT}
 fi

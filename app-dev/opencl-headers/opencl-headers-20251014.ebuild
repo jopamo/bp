@@ -6,7 +6,7 @@ inherit cmake
 
 DESCRIPTION="Unified C language headers for the OpenCL API"
 HOMEPAGE="https://github.com/KhronosGroup/OpenCL-Headers"
-SNAPSHOT=0c54eeb2b1571718a04f85eaddd51df594bd3c3e
+SNAPSHOT=6137cfbbc7938cd43069d45c622022572fb87113
 SRC_URI="https://github.com/KhronosGroup/OpenCL-Headers/archive/${SNAPSHOT}.tar.gz -> OpenCL-Headers-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/OpenCL-Headers-${SNAPSHOT}"
 

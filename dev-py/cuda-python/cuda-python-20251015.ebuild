@@ -9,7 +9,7 @@ inherit distutils-r1
 
 DESCRIPTION="NVIDIA CUDA Python Bindings"
 HOMEPAGE="https://github.com/NVIDIA/cuda-python"
-SNAPSHOT=21db67cd1e7e95cb11c9f574f223fbb76cff43d3
+SNAPSHOT=972ea4a5ee32acc1097ef7c20b4be48e9bd27057
 SRC_URI="https://github.com/NVIDIA/cuda-python/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}/cuda_python"
 

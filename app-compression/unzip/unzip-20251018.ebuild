@@ -4,16 +4,11 @@ EAPI=8
 
 inherit toolchain-funcs flag-o-matic
 
-MY_PV="${PV//.}"
-MY_PV="${MY_PV%_p*}"
-MY_P="${PN}${MY_PV}"
-
 DESCRIPTION="unzipper for pkzip-compressed files"
 HOMEPAGE="http://www.info-zip.org/"
-SRC_URI="mirror://sourceforge/infozip/${MY_P}.tar.gz
-	mirror://debian/pool/main/u/${PN}/${PN}_${PV/_p/-}.debian.tar.xz"
-
-S="${WORKDIR}/unzip60"
+SNAPSHOT=af2b0528eadb9f3a422daa4b32878ababc7db453
+SRC_URI="https://github.com/jopamo/unzip/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="Info-ZIP"
 SLOT="0"
@@ -24,13 +19,6 @@ IUSE="bzip2 unicode"
 DEPEND="bzip2? ( app-compression/bzip2 )"
 
 src_prepare() {
-	local deb="${WORKDIR}"/debian/patches
-	#rm "${deb}"/{02*,11*,22*,23*,24*,25*,26*,28*}.patch || die
-	eapply "${deb}"/*.patch
-
-	eapply "${FILESDIR}"/${PN}-6.0-no-exec-stack.patch
-	eapply "${FILESDIR}"/${PN}-6.0-format-security.patch
-
 	sed -i -r \
 		-e '/^CFLAGS/d' \
 		-e '/CFLAGS/s:-O[0-9]?:$(CFLAGS) $(CPPFLAGS):' \

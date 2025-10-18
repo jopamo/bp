@@ -6,7 +6,8 @@ inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="unzipper for pkzip-compressed files"
 HOMEPAGE="http://www.info-zip.org/"
-SNAPSHOT=af2b0528eadb9f3a422daa4b32878ababc7db453
+
+SNAPSHOT=cb512e25352ec9bf8ec8570ccb87cb3e6c0bb83d
 SRC_URI="https://github.com/jopamo/unzip/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
@@ -34,9 +35,6 @@ src_prepare() {
 		-e 's:$(AS) :$(AS) $(ASFLAGS) :g' \
 		unix/Makefile \
 		|| die "sed unix/Makefile failed"
-
-	# Delete bundled code to make sure we don't use it.
-	rm -r bzip2 || die
 
 	eapply_user
 }

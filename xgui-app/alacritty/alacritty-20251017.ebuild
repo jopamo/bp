@@ -6,7 +6,7 @@ inherit cargo
 
 DESCRIPTION=" A cross-platform, OpenGL terminal emulator."
 HOMEPAGE="https://github.com/alacritty/alacritty"
-SNAPSHOT=a513d137791b98a082eb4bf591b1fd5db7a942cb
+SNAPSHOT=08882d521de1d64befd4972178aa2772201014eb
 SRC_URI="https://github.com/alacritty/alacritty/archive/${SNAPSHOT}.tar.gz -> alacritty-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/alacritty-${SNAPSHOT}"
 

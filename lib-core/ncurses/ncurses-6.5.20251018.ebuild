@@ -6,7 +6,7 @@ BRANCH_NAME="master"
 
 DESCRIPTION="console display library"
 HOMEPAGE="http://invisible-island.net/ncurses/ https://www.gnu.org/software/ncurses/"
-SNAPSHOT=4311b18dda3e30eed79bb7dca58cb52bab70c942
+SNAPSHOT=27bdf816cb98ead8c749ca4535ff888af5cd279e
 SRC_URI="https://github.com/ThomasDickey/ncurses-snapshots/archive/${SNAPSHOT}.tar.gz -> ncurses-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ncurses-snapshots-${SNAPSHOT}"
 

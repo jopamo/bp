@@ -7,7 +7,7 @@ inherit toolchain-funcs flag-o-matic
 DESCRIPTION="unzipper for pkzip-compressed files"
 HOMEPAGE="http://www.info-zip.org/"
 
-SNAPSHOT=252c95d449d155f54a443c90239a99381c25a729
+SNAPSHOT=7eb954e343e62807fd06089d9658b0cfaa537d9f
 SRC_URI="https://github.com/jopamo/unzip/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
@@ -52,7 +52,7 @@ src_compile() {
 }
 
 src_install() {
-	dobin unzip funzip unzipsfx unix/zipgrep
+	dobin unzip unix/zipgrep
 	dosym unzip /usr/bin/zipinfo
 	doman man/*.1
 }

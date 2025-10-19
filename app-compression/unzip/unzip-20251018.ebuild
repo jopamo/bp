@@ -7,7 +7,7 @@ inherit toolchain-funcs flag-o-matic
 DESCRIPTION="unzipper for pkzip-compressed files"
 HOMEPAGE="http://www.info-zip.org/"
 
-SNAPSHOT=cb512e25352ec9bf8ec8570ccb87cb3e6c0bb83d
+SNAPSHOT=252c95d449d155f54a443c90239a99381c25a729
 SRC_URI="https://github.com/jopamo/unzip/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

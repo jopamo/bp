@@ -7,7 +7,7 @@ BRANCH_NAME="master"
 ETYPE="headers"
 H_SUPPORTEDARCH="amd64 arm64"
 inherit kernel-2
-SNAPSHOT=98ac9cc4b4452ed7e714eddc8c90ac4ae5da1a09
+SNAPSHOT=1c64efcb083c48c85227cb4d72ab137feef2cdac
 SRC_URI="https://github.com/torvalds/linux/archive/${SNAPSHOT}.tar.gz -> linux-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/linux-${SNAPSHOT}"
 

@@ -16,8 +16,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="alsa backlight +clock colorpicker cpuload customcommand desktopswitch
 	directorymenu dom fancymenu kbindicator mainmenu networkmonitor
-	pulseaudio qeyes quicklaunch sensors showdesktop spacer statusnotifier
-	sysstat +taskbar +tray +volume"
+	+pulseaudio qeyes quicklaunch sensors showdesktop spacer +statusnotifier
+	sysstat +taskbar tray +volume"
 REQUIRED_USE="volume? ( || ( alsa pulseaudio ) )"
 
 DEPEND="
@@ -34,6 +34,7 @@ DEPEND="
 	kbindicator? ( xgui-lib/libxkbcommon )
 	networkmonitor? ( lib-core/libstatgrab )
 	sensors? ( app-core/lm_sensors )
+	statusnotifier? ( xgui-lib/libdbusmenu-lxqt )
 	sysstat? ( xgui-live-lib/libsysstat )
 	tray? ( xgui-lib/libXcomposite
 		xgui-lib/libXdamage

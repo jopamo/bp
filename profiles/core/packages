@@ -1,7 +1,7 @@
 *app-build/make
 *app-compression/pigz
 *app-compression/tar
-*app-compression/unzip
+*app-compression/zip-utils
 *app-compression/xz-utils
 *app-core/busybox
 *app-core/coreutils

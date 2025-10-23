@@ -11,7 +11,7 @@ if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/jopamo/texxy2"
 	inherit git-r3
 else
-	SNAPSHOT=7895a75c432909ec49bc9957dcb084c55dde42e7
+	SNAPSHOT=ecb6936f8e2b9f9947dd8c310cbf6f69a4a496ab
 	SRC_URI="https://github.com/jopamo/texxy2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi

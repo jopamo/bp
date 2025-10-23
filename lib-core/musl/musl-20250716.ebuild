@@ -1,13 +1,14 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-SNAPSHOT=8fd5d031876345e42ae3d11cc07b962f8625bc3b
+SNAPSHOT=1b76ff0767d01df72f692806ee5adee13c67ef88
 
 inherit flag-o-matic doins
 
 DESCRIPTION="an implementation of the standard library for Linux-based systems"
 HOMEPAGE="http://www.musl-libc.org/"
-SRC_URI="https://git.musl-libc.org/cgit/musl/snapshot/musl-${SNAPSHOT}.tar.gz"
+
+SRC_URI="https://github.com/1g4-mirror/musl/archive/${SNAPSHOT}.tar.gz -> musl-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/musl-${SNAPSHOT}
 
 LICENSE="MIT"

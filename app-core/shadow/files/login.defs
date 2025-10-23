@@ -79,22 +79,22 @@ UMASK		077
 HOME_MODE	0700
 
 # Password rules: no expiration, minimum length, and warnings
-PASS_MAX_DAYS	99999	# Passwords don't expire (set for long-term use)
-PASS_MIN_DAYS	0	# Allow immediate password changes
-PASS_MIN_LEN	2	# Require at least 2 characters for passwords
-PASS_WARN_AGE	7	# Warn 7 days before password expiration (if enabled)
+PASS_MAX_DAYS	99999
+PASS_MIN_DAYS	0
+PASS_MIN_LEN	2
+PASS_WARN_AGE	7
 
 # Only allow users in the 'root' group to use 'su' for better security
 SU_WHEEL_ONLY	yes
 
 # User ID (UID) ranges for regular and system accounts
-UID_MIN		1000	# Start regular user IDs at 1000
-UID_MAX		60000	# End regular user IDs at 60000
-SYS_UID_MIN	500	# Start system account IDs at 500
-SYS_UID_MAX	999	# End system account IDs at 999
-SUB_UID_MIN	100000	# Start sub-UIDs for containers/userspaces
+UID_MIN		1000
+UID_MAX		60000
+SYS_UID_MIN	500
+SYS_UID_MAX	999
+SUB_UID_MIN	100000
 SUB_UID_MAX	600100000
-SUB_UID_COUNT	65536	# Number of sub-UIDs per user
+SUB_UID_COUNT	65536
 
 # Group ID (GID) ranges, similar to UID settings
 GID_MIN		1000

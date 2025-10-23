@@ -64,7 +64,7 @@ RANLIB="gcc-ranlib"
 NM="gcc-nm"
 
 # Build package options
-EMERGE_DEFAULT_OPTS="--buildpkg --buildpkg-exclude 'bin/* app-kernel/* virtual/*'"
+EMERGE_DEFAULT_OPTS="--buildpkg --buildpkg-exclude 'bin/* virtual/*'"
 FEATURES="buildpkg"
 
 ###############################################################################
@@ -118,7 +118,7 @@ USE="
 
     # ── Crypto / Security ────────────────────────────────
     argon2        crypt         doh
-    gcrypt        gnutls        
+    gcrypt        gnutls
     seccomp       urandom       yescrypt
     libxcrypt
 

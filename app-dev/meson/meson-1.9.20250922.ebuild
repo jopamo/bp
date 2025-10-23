@@ -2,6 +2,9 @@
 
 EAPI=8
 
+BRANCH_NAME="$(ver_cut 1-2)"
+SNAPSHOT=751b09390996163348612f0b106114256305ee40
+
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1 doins
@@ -9,12 +12,8 @@ inherit distutils-r1 doins
 DESCRIPTION="Open source build system"
 HOMEPAGE="http://mesonbuild.com/"
 
-if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/mesonbuild/meson"
-	inherit git-r3
-else
-	SRC_URI="https://github.com/mesonbuild/meson/releases/download/${PV}/${P}.tar.gz"
-fi
+SRC_URI="https://github.com/mesonbuild/meson/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="Apache-2.0"
 SLOT="0"

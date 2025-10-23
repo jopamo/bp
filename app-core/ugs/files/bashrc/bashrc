@@ -1,7 +1,20 @@
 #!/bin/bash
-# shellcheck disable=SC2148,SC2034
+# shellcheck disable=SC2148,SC2034,SC1091
 
+# load emoji logging for interactive shells if available
 [[ $- != *i* ]] && return
+[[ -r /etc/emoji-logging.sh ]] && source /etc/emoji-logging.sh
+
+# shims if emoji logger not present
+if ! declare -F log_info >/dev/null 2>&1; then
+  log_info()    { printf 'INFO  %s\n' "$*" >&2; }
+  log_warn()    { printf 'WARN  %s\n' "$*" >&2; }
+  log_ok()      { printf 'OK    %s\n' "$*" >&2; }
+  log_success() { printf 'OK    %s\n' "$*" >&2; }
+  log_error()   { printf 'ERROR %s\n' "$*" >&2; }
+fi
+# legacy alias for older calls
+log_err() { log_error "$@"; }
 
 shopt -s checkwinsize
 shopt -s no_empty_cmd_completion
@@ -17,80 +30,78 @@ export LC_CTYPE=${LC_CTYPE:-C.UTF-8}
 
 # ── Terminal title setup ────────────────────────────────────────
 case "$TERM" in
-	*term*|rxvt*|gnome*|kitty*|lxterm*|tmux|qterminal*) PS1='\[\e]0;\u@\h:\w\007\]' ;;
-	screen*)                                           PS1='\[\033k\u@\h:\w\033\\\]' ;;
-	*)                                                 PS1="" ;;
+  *term*|rxvt*|gnome*|kitty*|lxterm*|tmux|qterminal*) PS1='\[\e]0;\u@\h:\w\007\]' ;;
+  screen*)                                           PS1='\[\033k\u@\h:\w\033\\\]' ;;
+  *)                                                 PS1="" ;;
 esac
 
 # ── Colour / prompt palette ───────────────────────────────
 if command -v dircolors >/dev/null; then
-	if   [[ -f ~/.ls_colors  ]]; then eval "$(dircolors -b ~/.ls_colors)"
-	elif [[ -f /etc/LS_COLORS ]]; then eval "$(dircolors -b /etc/LS_COLORS)"
-	else                               eval "$(dircolors -b)"
-	fi
-	use_color=true
+  if   [[ -f ~/.ls_colors  ]]; then eval "$(dircolors -b ~/.ls_colors)"
+  elif [[ -f /etc/LS_COLORS ]]; then eval "$(dircolors -b /etc/LS_COLORS)"
+  else                               eval "$(dircolors -b)"
+  fi
+  use_color=true
 elif [[ "$TERM" =~ (term|rxvt|gnome|kitty|lxterm|screen|tmux|cons25|color) ]]; then
-	use_color=true
+  use_color=true
 else
-	use_color=false
+  use_color=false
 fi
 
 if [[ "$use_color" == true ]]; then
-	if (( EUID == 0 )); then
-		PS1+='\[\033[0;31m\]\u\[\033[1;37m\]@\[\033[0;91m\]\h \[\033[1;34m\]\w \[\033[0;37m\]# \[\033[0m\]'
-	else
-		PS1+='\[\033[0;32m\]\u\[\033[1;37m\]@\[\033[0;92m\]\h \[\033[1;34m\]\w \[\033[0;37m\]\$ \[\033[0m\]'
-	fi
+  if (( EUID == 0 )); then
+    PS1+='\[\033[0;31m\]\u\[\033[1;37m\]@\[\033[0;91m\]\h \[\033[1;34m\]\w \[\033[0;37m\]# \[\033[0m\]'
+  else
+    PS1+='\[\033[0;32m\]\u\[\033[1;37m\]@\[\033[0;92m\]\h \[\033[1;34m\]\w \[\033[0;37m\]\$ \[\033[0m\]'
+  fi
 else
-	PS1+='\u@\h \w \$ '
+  PS1+='\u@\h \w \$ '
 fi
 
 # ── Sourcing extra bashrc fragments ─────────────────────────────
 for d in /etc/bash/bashrc.d ~/.bashrc.d; do
-	[[ -d $d ]] && for f in "$d"/*.sh; do
-		[[ -r $f ]] && source "$f"
-	done
+  [[ -d $d ]] && for f in "$d"/*.sh; do
+    [[ -r $f ]] && source "$f"
+  done
 done
 
 # --- VTE / OSC 7 handling --------------------------------------
 if [[ -f /etc/profile.d/vte.sh ]]; then
-	source /etc/profile.d/vte.sh
+  source /etc/profile.d/vte.sh
 else
-	__vte_osc7() { printf "\033]7;file://%s%s\033\\" "${HOSTNAME}" "${PWD}"; }
-	PROMPT_COMMAND="__vte_osc7; $PROMPT_COMMAND"
+  __vte_osc7() { printf "\033]7;file://%s%s\033\\" "${HOSTNAME}" "${PWD}"; }
+  PROMPT_COMMAND="__vte_osc7; $PROMPT_COMMAND"
 fi
 
 # --- Compiler tuple export -------------------------------------
 if command -v clang >/dev/null 2>&1; then
-	export TUPLE=$(clang --print-target-triple)
+  export TUPLE="$(clang --print-target-triple)"
 elif command -v gcc >/dev/null 2>&1; then
-	export TUPLE=$(gcc -dumpmachine)
+  export TUPLE="$(gcc -dumpmachine)"
 else
-	echo "No suitable compiler found." >&2
-	unset TUPLE
+  echo "No suitable compiler found" >&2
+  unset TUPLE
 fi
 
-# ── Go cache setup ──────────────────────────────────────────────────────────
+# ── Go cache setup ──────────────────────────────────────────────
 SYS_GOPATH="/usr/share/go"
 
 if mkdir -p "$SYS_GOPATH" 2>/dev/null && [[ -w "$SYS_GOPATH" ]]; then
-    # System location is writable → use it
-    export GOPATH="$SYS_GOPATH"
+  export GOPATH="$SYS_GOPATH"
 else
-    # Not writable → fall back to user space
-    export GOPATH="$HOME/go"
+  export GOPATH="$HOME/go"
 fi
 
 export GOMODCACHE="$GOPATH/pkg/mod"
 export GOCACHE="${XDG_CACHE_HOME:-$HOME/.cache}/go-build"
 
 case ":$PATH:" in
-    *":$GOPATH/bin:"*) : ;;
-    *) export PATH="$PATH:$GOPATH/bin" ;;
+  *":$GOPATH/bin:"*) : ;;
+  *) export PATH="$PATH:$GOPATH/bin" ;;
 esac
 
 export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
-export GPG_TTY=$(tty)
+export GPG_TTY="$(tty)"
 
 bind 'set bell-style none'
 bind 'set colored-stats on'
@@ -118,17 +129,18 @@ bind '"\eOH": beginning-of-line'
 
 unset use_color sh
 
+# formatters map used by external helpers
 declare -A formatters=(
-	["*.c"]="clang-format -i"
-	["*.h"]="clang-format -i"
-	["*.cpp"]="clang-format -i"
-	["*.hpp"]="clang-format -i"
-	["*.py"]="black"
-	["*.sh"]="beautysh -t"
-	["*.js"]="prettier --write"
-	["*.ts"]="prettier --write"
-	["*.java"]="clang-format -i"
-	["*.go"]="gofmt -w"
+  ["*.c"]="clang-format -i"
+  ["*.h"]="clang-format -i"
+  ["*.cpp"]="clang-format -i"
+  ["*.hpp"]="clang-format -i"
+  ["*.py"]="black"
+  ["*.sh"]="beautysh -t"
+  ["*.js"]="prettier --write"
+  ["*.ts"]="prettier --write"
+  ["*.java"]="clang-format -i"
+  ["*.go"]="gofmt -w"
 )
 
 alias ......='cd ../../../../..'
@@ -169,165 +181,167 @@ alias memfree='sync; echo 3 > /proc/sys/vm/drop_caches; free -m'
 alias ssconns='ss -H -tunp | awk '\''$1 == "tcp" && $2 == "ESTAB" && $NF ~ /^users:/ { gsub(/^users:\(\(/, "", $NF); gsub(/"\)\)/, "", $NF); split($NF, a, ","); print $5 " -> " $6 " (" a[1] ")"; }'\'' | sort -u | head -n 5'
 
 random_string() {
-	[ -z "$1" ] && { log_err "Usage: random_string <length>"; return 1; }
-	tr -dc A-Za-z0-9 </dev/urandom | head -c "$1" ; echo
+  [ -z "$1" ] && { log_error "Usage: random_string <length>"; return 1; }
+  tr -dc A-Za-z0-9 </dev/urandom | head -c "$1" ; echo
 }
 
 sort_and_remove_duplicates() {
-	if [ -f "$1" ]; then
-		local tmp; tmp=$(mktemp)
-		if sort "$1" | uniq >"$tmp" && [ -s "$tmp" ]; then
-			mv "$tmp" "$1"
-			log_ok   "Sorted & deduped $1"
-		else
-			log_warn "No changes written to $1"
-			rm -f "$tmp"
-		fi
-	else
-		log_err "File not found: $1"
-	fi
+  if [ -f "$1" ]; then
+    local tmp; tmp=$(mktemp)
+    if sort "$1" | uniq >"$tmp" && [ -s "$tmp" ]; then
+      mv "$tmp" "$1"
+      log_ok "Sorted & deduped $1"
+    else
+      log_warn "No changes written to $1"
+      rm -f "$tmp"
+    fi
+  else
+    log_error "File not found: $1"
+  fi
 }
 
 replace_in_files() {
-    local search_string="$1"
-    local replacement_string="$2"
-    local start_directory="${3:-.}"
+  local search_string="$1"
+  local replacement_string="$2"
+  local start_directory="${3:-.}"
 
-    if [[ -z $search_string || -z $replacement_string ]]; then
-        log_err "Usage: replace_in_files \"search\" \"replacement\" [start_dir]"
-        return 1
-    fi
+  if [[ -z $search_string || -z $replacement_string ]]; then
+    log_error 'Usage: replace_in_files "search" "replacement" [start_dir]'
+    return 1
+  fi
 
-    log_info "Scanning ${start_directory} (excluding .git) …"
-    if find "$start_directory" -type f ! -path '*/.git/*' -print0 \
-        | xargs -0 grep -l -- "$search_string" \
-        | xargs -r -d '\n' sed -i "s|$search_string|$replacement_string|g"; then
-        log_ok  "Replacement complete."
-    else
-        log_warn "No matches found or replacement failed."
-    fi
+  log_info "Scanning ${start_directory} (excluding .git) …"
+  if find "$start_directory" -type f ! -path '*/.git/*' -print0 \
+      | xargs -0 grep -l -- "$search_string" \
+      | xargs -r -d $'\n' sed -i "s|$search_string|$replacement_string|g"; then
+    log_ok "Replacement complete"
+  else
+    log_warn "No matches found or replacement failed"
+  fi
 }
 
 encrypt_file() {
-    [[ -z $1 ]] && { log_err "Usage: encrypt_file <file>"; return 1; }
-    log_info "Encrypting $1 …"
-    if gpg --encrypt --sign --armor -r "$FILE_KEYID" "$1"; then
-        log_ok  "Encrypted file: $1.asc"
-    else
-        log_err "Encryption failed."
-    fi
+  [[ -z $1 ]] && { log_error "Usage: encrypt_file <file>"; return 1; }
+  log_info "Encrypting $1 …"
+  if gpg --encrypt --sign --armor -r "$FILE_KEYID" "$1"; then
+    log_ok "Encrypted file: $1.asc"
+  else
+    log_error "Encryption failed"
+  fi
 }
 
 decrypt_file() {
-    [[ -z $1 ]] && { log_err "Usage: decrypt_file <file.asc>"; return 1; }
-    log_info "Decrypting $1 …"
-    if gpg --decrypt "$1" > "${1%.asc}.decrypted"; then
-        log_ok  "Decrypted → ${1%.asc}.decrypted"
-    else
-        log_err "Decryption failed."
-    fi
+  [[ -z $1 ]] && { log_error "Usage: decrypt_file <file.asc>"; return 1; }
+  log_info "Decrypting $1 …"
+  if gpg --decrypt "$1" > "${1%.asc}.decrypted"; then
+    log_ok "Decrypted → ${1%.asc}.decrypted"
+  else
+    log_error "Decryption failed"
+  fi
 }
 
 backup_gpg() {
-    [[ -z $1 ]] && { log_err "Usage: backup_gpg <dir>"; return 1; }
-    local dst=$1; mkdir -p "$dst"
-    log_info "Backing up GPG material to $dst …"
-    gpg --export             --armor >"$dst/public-keys.asc"        &&
-    gpg --export-secret-keys --armor >"$dst/private-keys.asc"       &&
-    gpg --export-ownertrust          >"$dst/ownertrust-gpg.txt"     &&
-    log_ok  "GPG keys + trust DB saved in $dst"
+  [[ -z $1 ]] && { log_error "Usage: backup_gpg <dir>"; return 1; }
+  local dst=$1; mkdir -p "$dst"
+  log_info "Backing up GPG material to $dst …"
+  gpg --export             --armor >"$dst/public-keys.asc"        &&
+  gpg --export-secret-keys --armor >"$dst/private-keys.asc"       &&
+  gpg --export-ownertrust          >"$dst/ownertrust-gpg.txt"     &&
+  log_ok "GPG keys + trust DB saved in $dst"
 }
 
 restore_gpg() {
-    [[ -z $1 ]] && { log_err "Usage: restore_gpg <dir>"; return 1; }
-    local src=$1
-    log_info "Restoring GPG material from $src …"
-    gpg --import "$src/private-keys.asc" &&
-    gpg --import "$src/public-keys.asc"  &&
-    gpg --import-ownertrust "$src/ownertrust-gpg.txt" &&
-    log_ok  "GPG keys & trust DB restored."
+  [[ -z $1 ]] && { log_error "Usage: restore_gpg <dir>"; return 1; }
+  local src=$1
+  log_info "Restoring GPG material from $src …"
+  gpg --import "$src/private-keys.asc" &&
+  gpg --import "$src/public-keys.asc"  &&
+  gpg --import-ownertrust "$src/ownertrust-gpg.txt" &&
+  log_ok "GPG keys & trust DB restored"
 }
 
 backup_ssh() {
-    local ts; ts=$(date +%Y%m%d%H%M%S)
-    local tar="ssh_backup_${ts}.tar.bz2"
-    local enc="${tar}.gpg"
-    log_info "Creating encrypted SSH backup …"
-    tar -cjf "$tar" -C "$HOME" .ssh          &&
-    gpg --symmetric --cipher-algo AES256 --force-mdc "$tar" &&
-    rm -f "$tar" &&
-    log_ok  "Backup ready: $(pwd)/$enc"
+  local ts; ts=$(date +%Y%m%d%H%M%S)
+  local tar="ssh_backup_${ts}.tar.bz2"
+  local enc="${tar}.gpg"
+  log_info "Creating encrypted SSH backup …"
+  tar -cjf "$tar" -C "$HOME" .ssh          &&
+  gpg --symmetric --cipher-algo AES256 --force-mdc "$tar" &&
+  rm -f "$tar" &&
+  log_ok "Backup ready: $(pwd)/$enc"
 }
 
 restore_ssh() {
-    [[ -z $1 ]] && { log_err "Usage: restore_ssh <backup.gpg>"; return 1; }
-    local enc=$1 tar=${enc%.gpg}
-    [[ -f $enc ]] || { log_err "File not found: $enc"; return 1; }
+  [[ -z $1 ]] && { log_error "Usage: restore_ssh <backup.gpg>"; return 1; }
+  local enc=$1 tar=${enc%.gpg}
+  [[ -f $enc ]] || { log_error "File not found: $enc"; return 1; }
 
-    log_info "Restoring SSH keys from $enc …"
-    gpg --decrypt "$enc" >"$tar" && tar -xjf "$tar" -C "$HOME" && {
-        rm -f "$tar"
-        log_ok "SSH keys restored."
-    } || { log_err "Restore failed."; return 1; }
+  log_info "Restoring SSH keys from $enc …"
+  gpg --decrypt "$enc" >"$tar" && tar -xjf "$tar" -C "$HOME" && {
+    rm -f "$tar"
+    log_ok "SSH keys restored"
+  } || { log_error "Restore failed"; return 1; }
 }
 
 start_ssh_agent() {
-    log_info "Adding private keys to ssh-agent …"
-    local added=0
-    for key in ~/.ssh/*; do
-        [[ -f $key ]] || continue
-        case $(basename "$key") in authorized_keys|config|known_hosts|bkup|*.*) continue;; esac
-        ssh-add "$key" && (( added++ ))
-    done
-    log_ok "Added $added key(s) to agent."
+  log_info "Adding private keys to ssh-agent …"
+  local added=0
+  for key in ~/.ssh/*; do
+    [[ -f $key ]] || continue
+    case $(basename "$key") in authorized_keys|config|known_hosts|bkup|*.*) continue;; esac
+    ssh-add "$key" && (( added++ ))
+  done
+  log_ok "Added $added key(s) to agent"
 }
 
 get_kernel() {
-    local tag=$1 url file
-    [[ -z $tag ]] && { log_err "Usage: get_kernel <tag>"; return 1; }
-    url="https://gitlab.com/linux-kernel/stable/-/archive/v${tag}/stable-v${tag}.tar.bz2"
-    file="stable-v${tag}.tar.bz2"
+  local tag=$1 url file
+  [[ -z $tag ]] && { log_error "Usage: get_kernel <tag>"; return 1; }
+  url="https://gitlab.com/linux-kernel/stable/-/archive/v${tag}/stable-v${tag}.tar.bz2"
+  file="stable-v${tag}.tar.bz2"
 
-    log_info "Downloading kernel v$tag …"
-    if ! wget -q --show-progress "$url"; then
-        log_err "Download failed."; return 1
-    fi
-    [[ $(stat -c%s "$file") -lt 100000000 ]] && {
-        log_err "File too small/corrupt. Aborting."; rm -f "$file"; return 1; }
+  log_info "Downloading kernel v$tag …"
+  if ! wget -q --show-progress "$url"; then
+    log_error "Download failed"; return 1
+  fi
+  [[ $(stat -c%s "$file") -lt 100000000 ]] && {
+    log_error "File too small/corrupt, aborting"; rm -f "$file"; return 1; }
 
-    log_info "Extracting …"
-    if tar -xjf "$file" && mv "stable-v${tag}" "linux-${tag}"; then
-        log_ok "Kernel extracted to linux-${tag}/"
-    else
-        log_err "Extraction failed."
-        return 1
-    fi
+  log_info "Extracting …"
+  if tar -xjf "$file" && mv "stable-v${tag}" "linux-${tag}"; then
+    log_ok "Kernel extracted to linux-${tag}/"
+  else
+    log_error "Extraction failed"
+    return 1
+  fi
 }
 
 clean_bash_history() {
-    local file=$1 tmp; [[ -z $file ]] && { log_err "clean_bash_history <file>"; return 1; }
-    tmp=$(mktemp)
-    sed 's/^[[:space:]]*//;s/[[:space:]]*$//' "$file" \
-      | sed '/^\s*#/d;/^\s*\/\//d' >"$tmp"
-    awk '!seen[$0]++' "$tmp" >"${tmp}.cleaned"
-    mv "${tmp}.cleaned" "$file"; rm -f "$tmp"
-    log_ok "History cleaned: $file"
+  local file=$1 tmp; [[ -z $file ]] && { log_error "clean_bash_history <file>"; return 1; }
+  tmp=$(mktemp)
+  sed 's/^[[:space:]]*//;s/[[:space:]]*$//' "$file" \
+    | sed '/^\s*#/d;/^\s*\/\//d' >"$tmp"
+  awk '!seen[$0]++' "$tmp" >"${tmp}.cleaned"
+  mv "${tmp}.cleaned" "$file"; rm -f "$tmp"
+  log_ok "History cleaned: $file"
 }
 
 # ── jq json helpers ─────────────────────────────
-json-keys() {
-    [[ -z $1 ]] && { log_err "Usage: json-keys <file.json>"; return 1; }
-    jq -r 'paths | map(tostring) | join(".")' "$1" | sort -u
+json_keys() {
+  [[ -z $1 ]] && { log_error "Usage: json_keys <file.json>"; return 1; }
+  jq -r 'paths | map(tostring) | join(".")' "$1" | sort -u
 }
-
-json-shape() {
-    [[ -z $1 ]] && { log_err "Usage: json-shape <file.json>"; return 1; }
-    jq 'def shape:
-          type as $t |
-          if $t == "object" then
-            to_entries | map({key, value: (shape(.value))})
-          elif $t == "array" then
-            if length == 0 then [] else [.[0] | shape] end
-          else $t end;
-        shape' "$1"
+json_shape() {
+  [[ -z $1 ]] && { log_error "Usage: json_shape <file.json>"; return 1; }
+  jq 'def shape:
+        type as $t |
+        if $t == "object" then
+          to_entries | map({key, value: (shape(.value))})
+        elif $t == "array" then
+          if length == 0 then [] else [.[0] | shape] end
+        else $t end;
+      shape' "$1"
 }
+# convenient dashes as aliases
+alias json-keys='json_keys'
+alias json-shape='json_shape'

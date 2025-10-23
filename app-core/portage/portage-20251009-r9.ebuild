@@ -12,7 +12,7 @@ S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="build gentoo-dev ipc native-extensions
 	gentoo_repo +rsync-verify selinux test xattr"
@@ -37,7 +37,7 @@ RDEPEND="
 PDEPEND="app-net/rsync"
 
 PATCHES=(
-	"${FILESDIR}"/phase-helpers.patch
+	"${FILESDIR}"/phase-helpers2.patch
 )
 
 pkg_pretend() {
@@ -47,6 +47,8 @@ pkg_pretend() {
 }
 
 src_prepare() {
+	sed -i -E 's/(^|[^[:alnum:]_])gtar([^[:alnum:]_]|$)/\1tar\2/g' bin/phase-helpers.sh bin/misc-functions.sh || die
+
 	filter-flags -Wl,-z,defs
 
 	make_globals="./cnf/make.globals"

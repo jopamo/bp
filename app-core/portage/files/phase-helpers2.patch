@@ -1,7 +1,69 @@
 diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
---- a/bin/phase-helpers.sh	2025-06-09 07:54:26.511821273 -0400
-+++ b/bin/phase-helpers.sh	2025-06-23 12:48:59.693825114 -0400
-@@ -639,7 +639,12 @@
+--- a/bin/phase-helpers.sh	2025-10-20 03:48:51.658419157 -0500
++++ b/bin/phase-helpers.sh	2025-10-20 03:54:31.757231204 -0500
+@@ -28,6 +28,61 @@
+         PORTAGE_DOSTRIP+=( / )
+ fi
+ 
++# @FUNCTION: cleanup_install
++# @DESCRIPTION:
++# Minimize the installed files while keeping full en_US.UTF-8 support
++cleanup_install() {
++	# drop docs and zsh completion trees
++	rm -rf "${ED}"/usr/share/{doc,zsh}
++
++	# keep only core man sections (man1, man2, …)
++	if [[ -d ${ED}/usr/share/man ]]; then
++		find "${ED}"/usr/share/man -mindepth 1 -maxdepth 1 -type d \
++			! -name 'man*' -exec rm -rf {} +
++	fi
++
++	# keep English message catalogs and locale.alias
++	if [[ -d ${ED}/usr/share/locale ]]; then
++		find "${ED}"/usr/share/locale -mindepth 1 -maxdepth 1 -type d \
++			! -name 'en' ! -name 'en_US' ! -name 'en_GB' -exec rm -rf {} +
++		find "${ED}"/usr/share/locale -maxdepth 1 -type f \
++			! -name 'locale.alias' -delete
++	fi
++
++	# keep only the locale source files en_US pulls in
++	if [[ -d ${ED}/usr/share/i18n/locales ]]; then
++		find "${ED}"/usr/share/i18n/locales -maxdepth 1 -type f \
++			! -name 'en_US' \
++			! -name 'en_GB' \
++			! -name 'i18n' \
++			! -name 'i18n_ctype' \
++			! -name 'iso14651*' \
++			! -name 'translit*' \
++			! -name 'C' \
++			! -name 'POSIX' -delete
++	fi
++}
++
++# @FUNCTION: get_modname
++# @USAGE:
++# @DESCRIPTION:
++# Returns modulename with proper suffix {.so,.bundle,etc} for the current
++# platform identified by CHOST.
++#
++# Example:
++#     libfoo$(get_modname)
++#     Returns: libfoo.so (ELF) || libfoo.bundle (MACH) || ...
++get_modname() {
++	local modname
++	local ver=$1
++	case ${CHOST} in
++		*)                        modname="so";;
++	esac
++
++	echo ".${modname}"
++}
++
++
+ into() {
+ 	if [[ "$1" == "/" ]]; then
+ 		export __E_DESTTREE=""
+@@ -643,7 +698,12 @@
  			--infodir="${EPREFIX}"/usr/share/info \
  			--datadir="${EPREFIX}"/usr/share \
  			--sysconfdir="${EPREFIX}"/etc \
@@ -15,15 +77,17 @@ diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
  			"${conf_args[@]}" \
  			"$@" \
  			"${EXTRA_ECONF[@]}"
-@@ -692,9 +697,14 @@
+@@ -696,9 +756,14 @@
  			${MAKE:-make} -n prefix="${ED%/}/usr" \
  				datadir="${ED%/}/usr/share" \
  				infodir="${ED%/}/usr/share/info" \
 -				localstatedir="${ED%/}/var/lib" \
+-				mandir="${ED%/}/usr/share/man" \
+-				sysconfdir="${ED%/}/etc" \
 +				sharedstatedir="${ED%/}/var/lib" \
 +				localstatedir="${ED%/}/var" \
- 				mandir="${ED%/}/usr/share/man" \
- 				sysconfdir="${ED%/}/etc" \
++ 				mandir="${ED%/}/usr/share/man" \
++ 				sysconfdir="${ED%/}/etc" \
 +				libdir="${ED%/}/usr/lib" \
 +				bindir="${ED%/}/usr/bin" \
 +				sbindir="${ED%/}/usr/bin" \
@@ -31,15 +95,17 @@ diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
  				${LOCAL_EXTRA_EINSTALL} \
  				${MAKEOPTS} -j1 \
  				"$@" ${EXTRA_EMAKE} install
-@@ -703,9 +713,14 @@
+@@ -707,9 +772,14 @@
  		if ! ${MAKE:-make} prefix="${ED%/}/usr" \
  			datadir="${ED%/}/usr/share" \
  			infodir="${ED%/}/usr/share/info" \
 -			localstatedir="${ED%/}/var/lib" \
+-			mandir="${ED%/}/usr/share/man" \
+-			sysconfdir="${ED%/}/etc" \
 +			sharedstatedir="${ED%/}/var/lib" \
 +			localstatedir="${ED%/}/var" \
- 			mandir="${ED%/}/usr/share/man" \
- 			sysconfdir="${ED%/}/etc" \
++ 			mandir="${ED%/}/usr/share/man" \
++ 			sysconfdir="${ED%/}/etc" \
 +			libdir="${ED%/}/usr/lib" \
 +			bindir="${ED%/}/usr/bin" \
 +			sbindir="${ED%/}/usr/bin" \
@@ -47,7 +113,7 @@ diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
  			${LOCAL_EXTRA_EINSTALL} \
  			${MAKEOPTS} -j1 \
  			"$@" ${EXTRA_EMAKE} install
-@@ -788,21 +803,8 @@
+@@ -792,21 +862,8 @@
  		emake DESTDIR="${D}" install
  	fi
  
@@ -71,7 +137,7 @@ diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
  }
  
  __eapi6_src_prepare() {
-@@ -820,7 +822,8 @@
+@@ -824,7 +881,8 @@
  		emake DESTDIR="${D}" install
  	fi
  
@@ -81,7 +147,7 @@ diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
  }
  
  __eapi8_src_prepare() {
-@@ -954,34 +957,6 @@
+@@ -958,38 +1016,6 @@
  	}
  fi
  
@@ -89,7 +155,11 @@ diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
 -	einstalldocs() (
 -		local f
 -
--		if [[ ! -v DOCS ]]; then
+-		# The implementation deviates from PMS, which purports to be
+-		# concerned with whether the "DOCS variable is unset". In fact,
+-		# the implementation checks whether the variable is undeclared.
+-		# However, it is PMS that is in the wrong. See bug #962934.
+-		if [[ ! ${DOCS@A} ]]; then
 -			for f in README* ChangeLog AUTHORS NEWS TODO CHANGES \
 -				THANKS BUGS FAQ CREDITS CHANGELOG
 -			do
@@ -114,5 +184,5 @@ diff -urN a/bin/phase-helpers.sh b/bin/phase-helpers.sh
 -fi
 -
  if ___eapi_has_eapply; then
- 	eapply() {
- 		local LC_ALL LC_COLLATE=C f i patch_cmd path
+ 	# For BSD userland support, use gpatch if available.
+ 	if hash gpatch 2>/dev/null; then

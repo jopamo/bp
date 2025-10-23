@@ -74,10 +74,10 @@ if [[ ! ${GO_OPTIONAL} ]]; then
 	BDEPEND=">=app-lang/go-1.20:="
 
 	# Workaround for pkgcheck false positive: https://github.com/pkgcore/pkgcheck/issues/214
-	# MissingUnpackerDep: version ...: missing BDEPEND="app-compression/unzip"
+	# MissingUnpackerDep: version ...: missing BDEPEND="app-compression/zip-utils"
 	# Added here rather than to each affected package, so it can be cleaned up just
 	# once when pkgcheck is improved.
-	BDEPEND+=" app-compression/unzip"
+	BDEPEND+=" app-compression/zip-utils"
 fi
 
 # Force go to build in module mode.

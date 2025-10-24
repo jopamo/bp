@@ -4,7 +4,7 @@ EAPI=8
 
 inherit cmake
 
-DESCRIPTION="Multimedia (audio, video, radio, camera) library for the Qt5 framework"
+DESCRIPTION="Qt 6 multimedia framework for audio, video, radio, and camera"
 HOMEPAGE="https://www.qt.io/"
 
 if [[ ${PV} == *9999 ]]; then

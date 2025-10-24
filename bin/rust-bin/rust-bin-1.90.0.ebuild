@@ -4,7 +4,7 @@ EAPI=8
 
 inherit toolchain-funcs
 
-DESCRIPTION="Systems programming language from Mozilla"
+DESCRIPTION="Prebuilt Rust compiler and toolchain (systems programming language)"
 HOMEPAGE="https://www.rust-lang.org/"
 SRC_URI="
 	amd64? (

@@ -4,7 +4,7 @@ EAPI=8
 
 inherit cmake
 
-DESCRIPTION="Daemon used to register global keyboard shortcuts"
+DESCRIPTION="LXQt session manager (startup, logout, autostart handling)"
 HOMEPAGE="http://lxqt.org/"
 SNAPSHOT=02f6dcc0c2828e80806804b1a8e46e89d5c2d24a
 SRC_URI="https://github.com/lxqt/lxqt-session/archive/${SNAPSHOT}.tar.gz -> lxqt-session-${SNAPSHOT}.tar.gz"

@@ -4,7 +4,7 @@ EAPI=8
 
 inherit cmake flag-o-matic user
 
-DESCRIPTION="Cross platform Make"
+DESCRIPTION="High-performance inference of large language models (llama.cpp)"
 HOMEPAGE="https://cmake.org/"
 SNAPSHOT=ee09828cb057460b369576410601a3a09279e23c
 SRC_URI="https://github.com/ggml-org/llama.cpp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"

@@ -6,7 +6,7 @@ BRANCH_NAME="gnome-$(ver_cut 1)"
 
 inherit meson xdg
 
-DESCRIPTION="Mostly private use system icons."
+DESCRIPTION="Adwaita icon theme (GNOME default system icon set)"
 HOMEPAGE="https://git.gnome.org/browse/adwaita-icon-theme/"
 SNAPSHOT=ed465372143ed17640a0bbdb4c856cb5b3773d8e
 SRC_URI="https://gitlab.gnome.org/GNOME/adwaita-icon-theme/-/archive/${SNAPSHOT}/adwaita-icon-theme-${SNAPSHOT}.tar.gz"

@@ -4,7 +4,7 @@ EAPI=8
 
 inherit cmake flag-o-matic
 
-DESCRIPTION="Qt5 module for integrating online documentation into applications"
+DESCRIPTION="Qt Tools collection (Assistant, Designer, Linguist, etc.)"
 HOMEPAGE="https://www.qt.io/"
 
 if [[ ${PV} == *9999 ]]; then

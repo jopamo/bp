@@ -2,7 +2,7 @@
 
 EAPI=8
 
-DESCRIPTION="A TLS 1.2 and SSL 3.0 implementation for the GNU project"
+DESCRIPTION="GNU TLS library providing SSL/TLS and cryptography (TLS 1.3 etc.)"
 HOMEPAGE="http://www.gnutls.org/"
 SRC_URI="https://github.com/gnutls/gnutls/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 SRC_URI="mirror://gnupg/gnutls/v$(ver_cut 1-2)/${P}.tar.xz

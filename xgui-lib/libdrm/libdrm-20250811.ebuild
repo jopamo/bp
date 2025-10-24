@@ -4,7 +4,7 @@ EAPI=8
 
 inherit meson flag-o-matic
 
-DESCRIPTION="X.Org libdrm library"
+DESCRIPTION="Userspace interface to the Linux kernel DRM subsystem"
 HOMEPAGE="https://dri.freedesktop.org/"
 SNAPSHOT=7d43d9b6fe5df4b234937fce9e51adb1b327ded1
 SRC_URI="https://gitlab.freedesktop.org/mesa/drm/-/archive/${SNAPSHOT}/drm-${SNAPSHOT}.tar.bz2 -> drm-${SNAPSHOT}.tar.bz2"

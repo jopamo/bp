@@ -6,7 +6,7 @@ BRANCH_NAME="release/$(ver_cut 1).x"
 
 inherit cmake flag-o-matic python-any-r1
 
-DESCRIPTION="Low Level Virtual Machine"
+DESCRIPTION="Implementation of OpenCL C built-in libraries for GPU/OpenCL compilers"
 HOMEPAGE="https://llvm.org/"
 SNAPSHOT=cd708029e0b2869e80abe31ddb175f7c35361f90
 SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-project-${SNAPSHOT}.tar.gz"

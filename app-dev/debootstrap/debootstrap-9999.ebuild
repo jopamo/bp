@@ -4,7 +4,7 @@ EAPI=8
 
 inherit git-r3
 
-DESCRIPTION="debootstrap"
+DESCRIPTION="Tool to create a minimal Debian/Ubuntu root filesystem from scratch"
 HOMEPAGE="https://salsa.debian.org/installer-team/debootstrap.git"
 EGIT_REPO_URI="https://salsa.debian.org/installer-team/debootstrap.git"
 

@@ -4,7 +4,7 @@ EAPI=8
 
 inherit meson flag-o-matic
 
-DESCRIPTION="VTE provides a virtual terminal widget for GTK applications."
+DESCRIPTION="Virtual terminal emulator widget for GTK applications (VTE)"
 HOMEPAGE="https://github.com/GNOME/vte"
 SNAPSHOT=def4afdecb68ea320a72d1d13bcf9f6620f747d2
 SRC_URI="https://github.com/GNOME/vte/archive/${SNAPSHOT}.tar.gz -> vte-${SNAPSHOT}.tar.gz"

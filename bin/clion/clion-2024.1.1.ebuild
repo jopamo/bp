@@ -4,7 +4,7 @@ EAPI=8
 
 inherit xdg wrapper
 
-DESCRIPTION="A complete toolset for web, mobile and enterprise development"
+DESCRIPTION="JetBrains CLion: cross-platform C and C++ IDE"
 HOMEPAGE="https://www.jetbrains.com/idea"
 SRC_URI="https://download.jetbrains.com/cpp/CLion-${PV}.tar.gz -> ${P}.tar.gz"
 

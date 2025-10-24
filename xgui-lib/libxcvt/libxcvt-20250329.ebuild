@@ -4,7 +4,7 @@ EAPI=8
 
 inherit meson
 
-DESCRIPTION="X server implementation of the VESA CVT"
+DESCRIPTION="VESA Coordinated Video Timings (CVT) modeline generation library"
 HOMEPAGE="https://www.x.org/wiki/"
 
 SNAPSHOT=2627181baadff1e2070ea83574d4895befc98146

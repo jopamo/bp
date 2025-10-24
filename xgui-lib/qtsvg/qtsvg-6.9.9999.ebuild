@@ -4,7 +4,7 @@ EAPI=8
 
 inherit cmake git-r3 flag-o-matic
 
-DESCRIPTION="SVG rendering library for the Qt5 framework"
+DESCRIPTION="SVG image format support module for Qt 6"
 HOMEPAGE="https://www.qt.io/"
 EGIT_REPO_URI="https://github.com/qt/${PN}.git"
 EGIT_BRANCH="$(ver_cut 1-2)"

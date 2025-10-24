@@ -4,7 +4,7 @@ EAPI=8
 
 inherit meson
 
-DESCRIPTION="X.Org xkbcommon library"
+DESCRIPTION="Keymap handling library for Wayland and X11 (xkbcommon)"
 HOMEPAGE="https://xkbcommon.org/"
 SNAPSHOT=3c0eb068fc0e65ce7d7ce4e0dc6ced4f73cdb091
 SRC_URI="https://github.com/xkbcommon/libxkbcommon/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"

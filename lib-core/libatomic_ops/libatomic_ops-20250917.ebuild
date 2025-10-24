@@ -4,7 +4,7 @@ EAPI=8
 
 inherit autotools
 
-DESCRIPTION="The Boehm-Demers-Weiser conservative garbage collector"
+DESCRIPTION="Portable atomic operations library used by garbage collectors and concurrent code"
 HOMEPAGE="https://github.com/ivmai/bdwgc"
 SNAPSHOT=985c64fb7018c87b9c3674e7ceea92fc70792b1f
 SRC_URI="https://github.com/bdwgc/libatomic_ops/archive/${SNAPSHOT}.tar.gz -> libatomic_ops-${SNAPSHOT}.tar.gz"

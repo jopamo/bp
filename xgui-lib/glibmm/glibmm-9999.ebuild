@@ -4,7 +4,7 @@ EAPI=8
 
 inherit meson
 
-DESCRIPTION="the C++ API for GTK"
+DESCRIPTION="C++ bindings for GLib (low-level core library used by GTK and GNOME)"
 HOMEPAGE="https://github.com/GNOME/glibmm"
 
 if [[ ${PV} = *9999 ]]; then

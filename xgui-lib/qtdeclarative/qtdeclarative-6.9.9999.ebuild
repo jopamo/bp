@@ -4,7 +4,7 @@ EAPI=8
 
 inherit cmake flag-o-matic
 
-DESCRIPTION="The QML and Quick modules for the Qt5 framework"
+DESCRIPTION="Qt QML and Qt Quick modules for the Qt 6 framework"
 HOMEPAGE="https://www.qt.io/"
 
 if [[ ${PV} == *9999 ]]; then

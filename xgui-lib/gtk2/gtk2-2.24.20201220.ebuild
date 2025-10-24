@@ -6,7 +6,7 @@ BRANCH_NAME="gtk-$(ver_cut 1)-$(ver_cut 2)"
 
 inherit autotools flag-o-matic
 
-DESCRIPTION="Gimp ToolKit +"
+DESCRIPTION="Multi-platform toolkit for creating graphical user interfaces"
 HOMEPAGE="https://www.gtk.org/"
 
 SNAPSHOT=68631945733158f164427db84f01301d7e875763

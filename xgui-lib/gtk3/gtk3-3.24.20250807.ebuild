@@ -6,7 +6,7 @@ BRANCH_NAME="gtk-$(ver_cut 1)-$(ver_cut 2)"
 
 inherit meson xdg
 
-DESCRIPTION="Gimp ToolKit +"
+DESCRIPTION="Multi-platform toolkit for creating graphical user interfaces"
 HOMEPAGE="https://www.gtk.org/"
 SNAPSHOT=72d85955ca240a0b88f83835eae0969b7f72718d
 

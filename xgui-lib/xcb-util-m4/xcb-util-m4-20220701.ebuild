@@ -2,7 +2,7 @@
 
 EAPI=8
 
-DESCRIPTION="X C-language Bindings sample implementations"
+DESCRIPTION="Autoconf/automake macros shared by xcb-util libraries"
 HOMEPAGE="https://xcb.freedesktop.org/"
 
 SNAPSHOT=c617eee22ae5c285e79e81ec39ce96862fd3262f

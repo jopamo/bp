@@ -7,7 +7,7 @@ SNAPSHOT=15970c431517a046099d8294c91d778b1da9b29d
 
 inherit toolchain-funcs flag-o-matic
 
-DESCRIPTION="Another cute console display library"
+DESCRIPTION="GNU readline: interactive line editing and history capabilities"
 HOMEPAGE="https://tiswww.case.edu/php/chet/readline/rltop.html"
 
 SRC_URI="https://github.com/1g4-mirror/readline/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"

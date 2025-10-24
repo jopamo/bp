@@ -4,7 +4,7 @@ EAPI=8
 
 inherit flag-o-matic toolchain-funcs cmake
 
-DESCRIPTION="Cross platform Make"
+DESCRIPTION="Cross-platform build system generator"
 HOMEPAGE="https://cmake.org/"
 SRC_URI="https://github.com/Kitware/CMake/releases/download/v${PV}/${P}.tar.gz"
 

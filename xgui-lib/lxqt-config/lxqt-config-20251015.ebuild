@@ -4,7 +4,7 @@ EAPI=8
 
 inherit cmake
 
-DESCRIPTION="Daemon used to register global keyboard shortcuts"
+DESCRIPTION="LXQt configuration center and tools for editing desktop settings"
 HOMEPAGE="http://lxqt.org/"
 SNAPSHOT=d81906c00a583d501113ec9787b5438374e0b0e6
 SRC_URI="https://github.com/lxqt/lxqt-config/archive/${SNAPSHOT}.tar.gz -> lxqt-config-${SNAPSHOT}.tar.gz"

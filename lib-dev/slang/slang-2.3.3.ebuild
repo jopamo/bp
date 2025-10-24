@@ -4,7 +4,7 @@ EAPI=8
 
 inherit flag-o-matic
 
-DESCRIPTION="Multi-platform library designed to allow a developer to create robust software"
+DESCRIPTION="S-Lang interpreter and terminal UI library (embedded scripting, curses-like widgets)"
 HOMEPAGE="http://www.jedsoft.org/slang/"
 SRC_URI="http://www.jedsoft.org/releases/${PN}/${P}.tar.bz2"
 

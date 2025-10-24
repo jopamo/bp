@@ -6,7 +6,7 @@ BRANCH_NAME="gtk-$(ver_cut 1)-$(ver_cut 2)"
 
 inherit meson xdg python-any-r1 flag-o-matic
 
-DESCRIPTION="Gimp ToolKit +"
+DESCRIPTION="Multi-platform toolkit for creating graphical user interfaces"
 HOMEPAGE="https://www.gtk.org/"
 SNAPSHOT=68df8c35f5eb4f9348cd2d87d4b62454c3a69b34
 SRC_URI="https://github.com/GNOME/gtk/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"

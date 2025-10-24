@@ -4,7 +4,7 @@ EAPI=8
 
 inherit autotools
 
-DESCRIPTION="uncompile an rgb color-name database"
+DESCRIPTION="X server access control utility"
 HOMEPAGE="https://www.x.org/wiki/"
 
 SNAPSHOT=1bf855ea7819c80f6cacacdedfac99c1a0c067ba

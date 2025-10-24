@@ -2,7 +2,7 @@
 
 EAPI=8
 
-DESCRIPTION="A large collection of reusable M4 macros"
+DESCRIPTION="Generates configure scripts to automatically configure source code"
 HOMEPAGE="https://www.gnu.org/software/autoconf/autoconf.html"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 

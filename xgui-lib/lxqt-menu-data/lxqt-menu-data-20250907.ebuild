@@ -4,7 +4,7 @@ EAPI=8
 
 inherit cmake
 
-DESCRIPTION="Provides files needed for LXDE application menus"
+DESCRIPTION="Menu metadata and categories used by LXQt application menus"
 HOMEPAGE="http://lxde.org/"
 SNAPSHOT=cfae0791f136b2ca08e857595213615caf4d031f
 SRC_URI="https://github.com/lxqt/lxqt-menu-data/archive/${SNAPSHOT}.tar.gz -> lxqt-menu-data-${SNAPSHOT}.tar.gz"

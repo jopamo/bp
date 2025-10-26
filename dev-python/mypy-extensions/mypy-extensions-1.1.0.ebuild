@@ -2,7 +2,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..13} pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 DISTUTILS_USE_PEP517=flit
 
 inherit distutils-r1
@@ -23,8 +23,18 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_test() {
+	local EPYTEST_DESELECT=()
+	case ${EPYTHON} in
+		python3.14)
+			EPYTEST_DESELECT+=(
+				tests/testextensions.py::TypedDictTests::test_py36_class_syntax_usage
+			)
+			;;
+	esac
+
 	epytest tests/*.py
 }

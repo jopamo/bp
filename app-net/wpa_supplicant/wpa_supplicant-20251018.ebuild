@@ -6,7 +6,7 @@ inherit qmake-utils toolchain-funcs flag-o-matic
 
 DESCRIPTION="IEEE 802.1X/WPA supplicant for secure wireless transfers"
 HOMEPAGE="https://w1.fi/wpa_supplicant/"
-SNAPSHOT=167aeab41b2cfc2bb73393e19ac19173a43fff8c
+SNAPSHOT=1330bf8be6efead1adede2b7d3fed69522cc65be
 SRC_URI="https://github.com/1g4-mirror/hostap/archive/${SNAPSHOT}.tar.gz -> hostap-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/hostap-${SNAPSHOT}/wpa_supplicant"
 

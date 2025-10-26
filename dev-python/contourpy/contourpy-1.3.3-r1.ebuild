@@ -28,7 +28,7 @@ RDEPEND="
 BDEPEND="
 	>=dev-python/pybind11-2.13.4[${PYTHON_USEDEP}]
 	test? (
-		dev-python/matplotlib[${PYTHON_USEDEP}]
+		dev-py/matplotlib[${PYTHON_USEDEP}]
 		xgui-app/pillow[${PYTHON_USEDEP}]
 		dev-python/wurlitzer[${PYTHON_USEDEP}]
 	)

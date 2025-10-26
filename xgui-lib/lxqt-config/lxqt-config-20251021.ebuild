@@ -6,7 +6,7 @@ inherit cmake
 
 DESCRIPTION="LXQt configuration center and tools for editing desktop settings"
 HOMEPAGE="http://lxqt.org/"
-SNAPSHOT=d81906c00a583d501113ec9787b5438374e0b0e6
+SNAPSHOT=4a1c6d4112b4a55707cb9c539e1a3b2e777faea1
 SRC_URI="https://github.com/lxqt/lxqt-config/archive/${SNAPSHOT}.tar.gz -> lxqt-config-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/lxqt-config-${SNAPSHOT}"
 

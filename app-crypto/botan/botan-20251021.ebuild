@@ -6,7 +6,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="C++ crypto library"
 HOMEPAGE="https://botan.randombit.net/"
-SNAPSHOT=a3ed3b00b7d1ca84609d1f25040534d3aa1a183e
+SNAPSHOT=46f6fc3b265f21a1b348630eb9a3090167ce0da8
 SRC_URI="https://github.com/randombit/botan/archive/${SNAPSHOT}.tar.gz -> botan-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/botan-${SNAPSHOT}
 

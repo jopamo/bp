@@ -14,7 +14,7 @@ HOMEPAGE="
 	https://github.com/pypa/setuptools/
 	https://pypi.org/project/setuptools/
 "
-SNAPSHOT=9cc2f5c05c333cd4cecd2c0d9e7c5e208f2a3148
+SNAPSHOT=a49f6b927d83b97630b4fb030de8035ed32436fd
 SRC_URI="https://github.com/pypa/setuptools/archive/${SNAPSHOT}.tar.gz -> setuptools-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/setuptools-${SNAPSHOT}"
 

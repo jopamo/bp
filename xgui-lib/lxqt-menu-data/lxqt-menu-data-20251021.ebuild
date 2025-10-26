@@ -6,7 +6,7 @@ inherit cmake
 
 DESCRIPTION="Menu metadata and categories used by LXQt application menus"
 HOMEPAGE="http://lxde.org/"
-SNAPSHOT=cfae0791f136b2ca08e857595213615caf4d031f
+SNAPSHOT=2b326504466b5be5c281a1dd9d29c38e93b215d7
 SRC_URI="https://github.com/lxqt/lxqt-menu-data/archive/${SNAPSHOT}.tar.gz -> lxqt-menu-data-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/lxqt-menu-data-${SNAPSHOT}"
 

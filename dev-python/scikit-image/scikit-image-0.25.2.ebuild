@@ -93,7 +93,7 @@ pkg_postinst() {
  "FITS io capability" dev-python/astropy
  "GTK" dev-python/pygtk
  "io plugin providing most standard formats" dev-python/imread
- "plotting" dev-python/matplotlib
+ "plotting" dev-py/matplotlib
  "wavelet transformations" dev-python/pywavelets
  "io plugin providing a wide variety of formats, including specialized formats using in medical imaging." dev-python/simpleitk
 }

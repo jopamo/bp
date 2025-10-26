@@ -4,6 +4,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=meson-python
+PYPI_VERIFY_REPO=https://github.com/numpy/numpy-release
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 PYTHON_REQ_USE="threads(+)"
 FORTRAN_NEEDED=lapack
@@ -74,8 +75,6 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-2.3.2-no-detect.patch
 	# https://github.com/numpy/numpy/pull/29579
 	"${FILESDIR}"/${PN}-2.3.2-arm-asimddp.patch
-	# https://github.com/intel/x86-simd-sort/pull/212
-	"${FILESDIR}"/${P}-avx512f-only.patch
 )
 
 has_all_x86() {

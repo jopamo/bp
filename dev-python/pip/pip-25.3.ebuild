@@ -4,12 +4,13 @@ EAPI=8
 
 # please bump dev-python/ensurepip-pip along with this package!
 
-DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_USE_PEP517=flit
 PYTHON_TESTED=( pypy3_11 python3_{11..14} )
 PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" )
 PYTHON_REQ_USE="ssl(+),threads(+)"
 
-inherit distutils-r1 
+inherit distutils-r1 pypi 
+FLIT_CORE_PV=3.12.0
 
 DESCRIPTION="The PyPA recommended tool for installing Python packages"
 HOMEPAGE="
@@ -19,6 +20,9 @@ HOMEPAGE="
 "
 SRC_URI="
 	https://github.com/pypa/pip/archive/${PV}.tar.gz -> ${P}.gh.tar.gz
+	test? (
+		$(pypi_wheel_url flit-core "${FLIT_CORE_PV}")
+	)
 "
 
 LICENSE="MIT"
@@ -84,10 +88,12 @@ python_prepare_all() {
 		-e 's:from pip\._vendor import:import:g' \
 		-e 's:from pip\._vendor\.:from :g' \
 		{} + || die
+	sed -i -e '/_vendor.*\(COPYING\|LICENSE\)/d' pyproject.toml || die
 
 	if use test; then
 		local wheels=(
 			"${BROOT}"/usr/lib/python/ensurepip/{setuptools,wheel}-*.whl
+			"${DISTDIR}/$(pypi_wheel_name flit-core "${FLIT_CORE_PV}")"
 		)
 		mkdir tests/data/common_wheels/ || die
 		cp "${wheels[@]}" tests/data/common_wheels/ || die
@@ -133,6 +139,7 @@ python_test() {
 		tests/functional/test_lock.py::test_lock_vcs
 		# broken by system site-packages use
 		tests/functional/test_freeze.py::test_freeze_with_setuptools
+		tests/functional/test_install.py::test_install_subprocess_output_handling
 		tests/functional/test_pip_runner_script.py::test_runner_work_in_environments_with_no_pip
 		tests/functional/test_uninstall.py::test_basic_uninstall_distutils
 		tests/unit/test_base_command.py::test_base_command_global_tempdir_cleanup
@@ -157,6 +164,8 @@ python_test() {
 				# unexpected tempfiles?
 				tests/functional/test_install_config.py::test_do_not_prompt_for_authentication
 				tests/functional/test_install_config.py::test_prompt_for_authentication
+				# wrong path
+				tests/functional/test_install.py::test_install_editable_with_prefix_setup_py
 			)
 			;;
 	esac

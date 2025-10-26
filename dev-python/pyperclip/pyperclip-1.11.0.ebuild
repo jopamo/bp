@@ -35,7 +35,7 @@ BDEPEND="
 
 src_prepare() {
 	local PATCHES=(
-		"${FILESDIR}/${P}-fix-test.patch"
+		"${FILESDIR}/${PN}-1.9.0-fix-test.patch"
 	)
 
 	# stupid windows

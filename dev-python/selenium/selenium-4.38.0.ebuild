@@ -33,30 +33,30 @@ IUSE="test test-rust"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
-	>=dev-python/certifi-2025.6.15[${PYTHON_USEDEP}]
-	>=dev-python/trio-0.30[${PYTHON_USEDEP}]
+	>=dev-python/certifi-2025.10.5[${PYTHON_USEDEP}]
+	>=dev-python/trio-0.31.0[${PYTHON_USEDEP}]
 	>=dev-python/trio-websocket-0.12.2[${PYTHON_USEDEP}]
-	>=dev-python/typing-extensions-4.14.0[${PYTHON_USEDEP}]
+	>=dev-python/typing-extensions-4.15.0[${PYTHON_USEDEP}]
 	>=dev-python/urllib3-2.5.0[${PYTHON_USEDEP}]
 	>=dev-python/websocket-client-1.8.0[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	test? (
 		${RDEPEND}
-		$(python_gen_cond_dep '
-			dev-python/filetype[${PYTHON_USEDEP}]
-			dev-python/pytest-mock[${PYTHON_USEDEP}]
+		$(python_gen_cond_dep "
+			dev-python/filetype[\${PYTHON_USEDEP}]
+			dev-python/pytest-mock[\${PYTHON_USEDEP}]
 			test-rust? (
-				dev-python/pytest[${PYTHON_USEDEP}]
-				dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
-				dev-util/selenium-manager
+				dev-python/pytest[\${PYTHON_USEDEP}]
+				dev-python/pytest-rerunfailures[\${PYTHON_USEDEP}]
+				>=dev-util/selenium-manager-${PV}
 				net-misc/geckodriver
 				|| (
 					www-client/firefox
 					www-client/firefox-bin
 				)
 			)
-		' "${PYTHON_TESTED[@]}")
+		" "${PYTHON_TESTED[@]}")
 	)
 "
 

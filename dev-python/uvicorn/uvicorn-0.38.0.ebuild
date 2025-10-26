@@ -3,20 +3,16 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
+PYPI_VERIFY_REPO=https://github.com/Kludex/uvicorn
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
-inherit distutils-r1 
+inherit distutils-r1 pypi
 
 DESCRIPTION="Lightning-fast ASGI server implementation"
 HOMEPAGE="
 	https://www.uvicorn.org/
 	https://github.com/Kludex/uvicorn/
 	https://pypi.org/project/uvicorn/
-"
-# as of 0.28.0, no tests in sdist
-SRC_URI="
-	https://github.com/Kludex/uvicorn/archive/${PV}.tar.gz
-		-> ${P}.gh.tar.gz
 "
 
 LICENSE="BSD"

@@ -30,7 +30,7 @@ BDEPEND="
 		' 'python3*')
 		test-full? (
 			$(python_gen_cond_dep '
-				dev-python/matplotlib[${PYTHON_USEDEP}]
+				dev-py/matplotlib[${PYTHON_USEDEP}]
 			' "${PYTHON_FULLY_TESTED[@]}")
 		)
 	)
@@ -52,5 +52,5 @@ EPYTEST_DESELECT=(
 
 pkg_postinst() {
  "gmp support" dev-python/gmpy2
- "matplotlib support" dev-python/matplotlib
+ "matplotlib support" dev-py/matplotlib
 }

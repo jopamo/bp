@@ -3,6 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
+PYPI_VERIFY_REPO=https://github.com/kislyuk/argcomplete
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
@@ -20,12 +21,13 @@ IUSE="test"
 RESTRICT="!test? ( test )"
 
 # pip is called as an external tool
+# zsh pin: https://github.com/kislyuk/argcomplete/issues/544
 BDEPEND="
 	dev-python/hatch-vcs[${PYTHON_USEDEP}]
 	test? (
 		app-shells/fish
 		app-shells/tcsh
-		app-shells/zsh
+		~app-shells/zsh-5.9
 		dev-python/pexpect[${PYTHON_USEDEP}]
 		>=dev-python/pip-19
 	)

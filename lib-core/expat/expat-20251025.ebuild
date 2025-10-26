@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="Stream-oriented XML parser library"
 HOMEPAGE="https://github.com/libexpat/libexpat"
-SNAPSHOT=4fb6357c327d1a2f77849119ea5769a7a0201f3e
+SNAPSHOT=f062a6655d50c21da33bb7e0a470d3b5865be989
 SRC_URI="https://github.com/libexpat/libexpat/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libexpat-${SNAPSHOT}/expat
 

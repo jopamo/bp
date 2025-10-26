@@ -19,21 +19,20 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	>=dev-python/python-dateutil-2.7.0[${PYTHON_USEDEP}]
+	dev-python/tzdata[${PYTHON_USEDEP}]
 "
 
 BDEPEND="
 	test? (
-		dev-python/pytest-mock[${PYTHON_USEDEP}]
 		dev-python/pytz[${PYTHON_USEDEP}]
 		dev-python/simplejson[${PYTHON_USEDEP}]
 	)
 "
 
+EPYTEST_PLUGINS=( pytest-mock )
 distutils_enable_tests pytest
 
 src_prepare() {
 	sed -i -e '/addopts/d' tox.ini || die
-	# unnecessary type stub deps
-	sed -i -e '/types-/d' pyproject.toml || die
 	distutils-r1_src_prepare
 }

@@ -1,112 +1,60 @@
+# Copyright 2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
+PYTHON_COMPAT=( python3_{10..13} )  # adjust as appropriate
+
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=meson-python
-PYTHON_COMPAT=( pypy3_11 python3_{11..13} )
-PYTHON_REQ_USE='tk?,threads(+)'
 
-inherit distutils-r1 pypi 
+inherit distutils-r1 pypi
 
+DESCRIPTION="Pure Python plotting library with MATLAB-like syntax"
+HOMEPAGE="https://matplotlib.org/  https://github.com/matplotlib/matplotlib/  https://pypi.org/project/matplotlib/"
+SRC_URI="https://files.pythonhosted.org/packages/source/m/matplotlib/matplotlib-${PV}.tar.gz"
+
+# Optionally include freetype as test-time dependency
 FT_PV=2.6.1
-DESCRIPTION="Pure python plotting library with matlab like syntax"
-HOMEPAGE="
-	https://matplotlib.org/
-	https://github.com/matplotlib/matplotlib/
-	https://pypi.org/project/matplotlib/
-"
-SRC_URI+="
-	test? (
-		https://downloads.sourceforge.net/project/freetype/freetype2/${FT_PV}/freetype-${FT_PV}.tar.gz
-	)
-"
+SRC_URI+=" test? ( https://downloads.sourceforge.net/project/freetype/freetype2/${FT_PV}/freetype-${FT_PV}.tar.gz )"
 
-# Main license: matplotlib
-# Some modules: BSD
-# matplotlib/backends/qt4_editor: MIT
-# Fonts: BitstreamVera, OFL-1.1
-LICENSE="BitstreamVera BSD matplotlib MIT OFL-1.1"
+LICENSE="BSD-3 OR MIT OR OFL-1.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="cairo excel gtk3 latex qt6 tk webagg wxwidgets"
 
 DEPEND="
-	media-libs/freetype:2
-	>=media-libs/qhull-2013:=
-	>=dev-python/numpy-1.25:=[${PYTHON_USEDEP}]
+    >=dev-python/numpy-1.25[${PYTHON_USEDEP}]
 "
-# internal copy of pycxx highly patched
-#	dev-python/pycxx
+
 RDEPEND="
-	${DEPEND}
-	>=dev-python/contourpy-1.0.1[${PYTHON_USEDEP}]
-	>=dev-python/cycler-0.10.0-r1[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-4.22.0[${PYTHON_USEDEP}]
-	>=dev-python/kiwisolver-1.3.1[${PYTHON_USEDEP}]
-	>=dev-python/packaging-20.0[${PYTHON_USEDEP}]
-	>=xgui-app/pillow-8[jpeg,webp,${PYTHON_USEDEP}]
-	>=dev-python/pyparsing-2.3.1[${PYTHON_USEDEP}]
-	>=dev-python/python-dateutil-2.7[${PYTHON_USEDEP}]
-	>=dev-python/pytz-2019.3[${PYTHON_USEDEP}]
-	media-fonts/dejavu
-	media-fonts/stix-fonts
-	media-libs/libpng:0
-	virtual/imagemagick-tools[jpeg,tiff]
-	cairo? (
-		dev-python/cairocffi[${PYTHON_USEDEP}]
-	)
-	excel? (
-		dev-python/xlwt[${PYTHON_USEDEP}]
-	)
-	gtk3? (
-		>=dev-python/pygobject-3.40.1-r1:3[cairo?,${PYTHON_USEDEP}]
-		x11-libs/gtk+:3[introspection]
-	)
-	latex? (
-		virtual/latex-base
-		app-text/dvipng
-		app-text/ghostscript-gpl
-		app-text/poppler[utils]
-		dev-texlive/texlive-fontsrecommended
-		dev-texlive/texlive-latexextra
-		dev-texlive/texlive-luatex
-		dev-texlive/texlive-xetex
-	)
-	qt6? (
-		$(python_gen_cond_dep '
-			|| (
-				dev-python/pyqt6[gui,widgets,${PYTHON_USEDEP}]
-				dev-python/pyside:6[gui,widgets,${PYTHON_USEDEP}]
-			)
-		' 'python3*')
-	)
-	webagg? (
-		>=dev-python/tornado-6.0.4[${PYTHON_USEDEP}]
-	)
-	wxwidgets? (
-		$(python_gen_cond_dep '
-			dev-python/wxpython:*[${PYTHON_USEDEP}]
-		' python3_{10..12})
-	)
+    ${DEPEND}
+    >=dev-python/contourpy-1.0.1[${PYTHON_USEDEP}]
+    >=dev-python/cycler-0.10.0-r1[${PYTHON_USEDEP}]
+    >=dev-python/kiwisolver-1.3.1[${PYTHON_USEDEP}]
+    >=dev-python/packaging-20.0[${PYTHON_USEDEP}]
+    >=xgui-app/pillow-8[jpeg,webp,${PYTHON_USEDEP}]
+    >=dev-python/pyparsing-2.3.1[${PYTHON_USEDEP}]
+    >=dev-python/python-dateutil-2.7[${PYTHON_USEDEP}]
+    >=dev-python/pytz-2019.3[${PYTHON_USEDEP}]
+    cairo? ( dev-py/cairocffi[${PYTHON_USEDEP}] )
+    excel? ( dev-python/xlwt[${PYTHON_USEDEP}] )
+    gtk3? (
+        >=dev-python/pygobject-3.40.1-r1:3[cairo?,${PYTHON_USEDEP}]
+    )
+    webagg? ( >=dev-python/tornado-6.0.4[${PYTHON_USEDEP}] )
 "
 
 BDEPEND="
-	${RDEPEND}
-	dev-python/pybind11[${PYTHON_USEDEP}]
-	>=dev-py/setuptools-scm-7[${PYTHON_USEDEP}]
-	app-dev/pkgconf
-	test? (
-		$(python_gen_impl_dep 'tk')
-		dev-python/psutil[${PYTHON_USEDEP}]
-		dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
-		>=dev-python/tornado-6.0.4[${PYTHON_USEDEP}]
-		) )
-		gtk3? (
-			>=dev-python/pygobject-3.40.1-r1:3[cairo?,${PYTHON_USEDEP}]
-			x11-libs/gtk+:3[introspection]
-		)
-	)
+    ${RDEPEND}
+    dev-python/pybind11[${PYTHON_USEDEP}]
+    >=dev-python/setuptools-scm-7[${PYTHON_USEDEP}]
+    app-dev/pkgconf
+    test? (
+        dev-python/psutil[${PYTHON_USEDEP}]
+        dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
+        >=dev-python/tornado-6.0.4[${PYTHON_USEDEP}]
+    )
 "
 
 EPYTEST_XDIST=1

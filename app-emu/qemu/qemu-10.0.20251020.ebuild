@@ -8,7 +8,7 @@ inherit flag-o-matic xdg
 
 DESCRIPTION="QEMU with enhanced support for multiple architectures and options"
 HOMEPAGE="https://www.qemu.org/"
-SNAPSHOT=918d584db4e8adb9db424640c51db9141b44ab5a
+SNAPSHOT=e098f79eb26b5c4e4c04cc33321d188dcb20719f
 SRC_URI="https://github.com/qemu/qemu/archive/${SNAPSHOT}.tar.gz -> qemu-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/qemu-${SNAPSHOT}"
 

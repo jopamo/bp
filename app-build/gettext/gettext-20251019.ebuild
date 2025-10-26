@@ -6,7 +6,7 @@ inherit libtool flag-o-matic
 
 DESCRIPTION="GNU locale utilities"
 HOMEPAGE="https://www.gnu.org/software/gettext/"
-SNAPSHOT=5847bb1df12561e2944db912f83fbc0aee7bb9dc
+SNAPSHOT=5f955e8193b06651c2b2683b0384a1c14fd35b86
 SRC_URI="https://github.com/1g4-mirror/gettext/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

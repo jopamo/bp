@@ -2,12 +2,14 @@
 
 EAPI=8
 
-DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_USE_PEP517=flit
 # PYTHON_COMPAT is used only for testing
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 PYTHON_REQ_USE="ssl(+),threads(+)"
 
-inherit distutils-r1
+inherit distutils-r1 pypi
+
+FLIT_CORE_PV=3.12.0
 
 MY_P=${P#ensurepip-}
 DESCRIPTION="Shared pip wheel for ensurepip Python module"
@@ -18,6 +20,9 @@ HOMEPAGE="
 "
 SRC_URI="
 	https://github.com/pypa/pip/archive/${PV}.tar.gz -> ${MY_P}.gh.tar.gz
+	test? (
+		$(pypi_wheel_url flit-core "${FLIT_CORE_PV}")
+	)
 "
 S=${WORKDIR}/${MY_P}
 
@@ -84,6 +89,7 @@ python_prepare_all() {
 	if use test; then
 		local wheels=(
 			"${BROOT}"/usr/lib/python/ensurepip/{setuptools,wheel}-*.whl
+			"${DISTDIR}/$(pypi_wheel_name flit-core "${FLIT_CORE_PV}")"
 		)
 		mkdir tests/data/common_wheels/ || die
 		cp "${wheels[@]}" tests/data/common_wheels/ || die
@@ -149,6 +155,8 @@ python_test() {
 				# unexpected tempfiles?
 				tests/functional/test_install_config.py::test_do_not_prompt_for_authentication
 				tests/functional/test_install_config.py::test_prompt_for_authentication
+				# wrong path
+				tests/functional/test_install.py::test_install_editable_with_prefix_setup_py
 			)
 			;;
 	esac

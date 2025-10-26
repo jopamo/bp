@@ -4,6 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=standalone
+PYPI_VERIFY_REPO=https://github.com/jawah/charset_normalizer
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi

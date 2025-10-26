@@ -4,6 +4,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
+PYPI_VERIFY_REPO=https://github.com/aio-libs/aiohttp
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
@@ -55,8 +56,8 @@ BDEPEND="
 		' 'python3*')
 		dev-python/zlib-ng[${PYTHON_USEDEP}]
 		$(python_gen_cond_dep '
-			dev-py/zstandard[${PYTHON_USEDEP}]
-		' 3.11 3.12)
+			dev-python/backports-zstd[${PYTHON_USEDEP}]
+		' 3.11 3.12 3.13)
 		www-servers/gunicorn[${PYTHON_USEDEP}]
 		test-rust? (
 			dev-python/trustme[${PYTHON_USEDEP}]
@@ -135,6 +136,7 @@ python_test() {
 		tests/test_connector.py::test_tcp_connector_ssl_shutdown_timeout_nonzero_passed
 		tests/test_connector.py::test_tcp_connector_ssl_shutdown_timeout_passed_to_create_connection
 		tests/test_connector.py::test_tcp_connector_ssl_shutdown_timeout_zero_not_passed
+		tests/test_client_functional.py::test_invalid_idna
 		# broken by irrelevant deprecation warnings
 		tests/test_circular_imports.py::test_no_warnings
 	)

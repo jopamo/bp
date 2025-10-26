@@ -8,8 +8,7 @@ inherit distutils-r1
 
 DESCRIPTION="misc common functionality and useful optimizations"
 HOMEPAGE="https://github.com/pkgcore/snakeoil"
-
-SNAPSHOT=3c485e797c7f2d7c72ecfb670a9a6a6b94e973bd
+SNAPSHOT=adf5b38050bd8544e6da27bf4b809dd1d6d90e01
 SRC_URI="https://github.com/pkgcore/snakeoil/archive/${SNAPSHOT}.tar.gz -> snakeoil-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/snakeoil-${SNAPSHOT}"
 

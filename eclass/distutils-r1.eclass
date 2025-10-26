@@ -1981,6 +1981,16 @@ distutils-r1_src_configure() {
 	return ${ret}
 }
 
+get_modname() {
+	local modname
+	local ver=$1
+	case ${CHOST} in
+		*)                        modname="so";;
+	esac
+
+	echo ".${modname}"
+}
+
 # @FUNCTION: _distutils-r1_compare_installed_files
 # @INTERNAL
 # @DESCRIPTION:

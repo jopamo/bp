@@ -6,7 +6,7 @@ inherit meson flag-o-matic
 
 DESCRIPTION="An interface for filesystems implemented in userspace"
 HOMEPAGE="https://github.com/libfuse/libfuse"
-SNAPSHOT=564d79e4d3132924d33f0a0848b9d54c84b42a17
+SNAPSHOT=bf3dd153fbfcd610d799562490f6555b9d708905
 SRC_URI="https://github.com/libfuse/libfuse/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libfuse-${SNAPSHOT}"
 

@@ -6,7 +6,7 @@ inherit autotools doins
 
 DESCRIPTION="NTP client and server programs"
 HOMEPAGE="https://chrony.tuxfamily.org/"
-SNAPSHOT=2e29935c548fe842e700ffef3ba79efc22a94a51
+SNAPSHOT=3c39afa13c769452d4c340bfc987e229b7c9caeb
 SRC_URI="https://github.com/mlichvar/chrony/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/chrony-${SNAPSHOT}
 

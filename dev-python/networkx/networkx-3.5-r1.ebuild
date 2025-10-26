@@ -23,7 +23,7 @@ BDEPEND="
 	test? (
 		>=dev-py/lxml-4.6[${PYTHON_USEDEP}]
 		$(python_gen_cond_dep '
-			>=dev-python/matplotlib-3.8[${PYTHON_USEDEP}]
+			>=dev-py/matplotlib-3.8[${PYTHON_USEDEP}]
 			>=dev-python/numpy-1.25[${PYTHON_USEDEP}]
 			>=dev-python/scipy-1.11.2[${PYTHON_USEDEP}]
 		' "${PYTHON_FULLY_TESTED[@]}")
@@ -55,7 +55,7 @@ src_install() {
 }
 
 pkg_postinst() {
- "recommended dependencies" "dev-python/matplotlib dev-python/numpy dev-python/pandas dev-python/scipy"
+ "recommended dependencies" "dev-py/matplotlib dev-python/numpy dev-python/pandas dev-python/scipy"
  "graph drawing and graph layout algorithms" "dev-python/pygraphviz dev-python/pydot"
  "YAML format reading and writing" "dev-python/pyyaml"
  "shapefile format reading and writing" "sci-libs/gdal[python]"

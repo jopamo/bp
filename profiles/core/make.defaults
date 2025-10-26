@@ -63,10 +63,6 @@ AR="gcc-ar"
 RANLIB="gcc-ranlib"
 NM="gcc-nm"
 
-# Build package options
-EMERGE_DEFAULT_OPTS="--buildpkg --buildpkg-exclude 'bin/* virtual/*'"
-FEATURES="buildpkg"
-
 ###############################################################################
 # Python
 ###############################################################################

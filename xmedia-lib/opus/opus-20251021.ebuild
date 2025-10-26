@@ -6,7 +6,7 @@ inherit cmake
 
 DESCRIPTION="Modern audio compression for the internet"
 HOMEPAGE="https://opus-codec.org/"
-SNAPSHOT=34bba701ae97c913de719b1f7c10686f62cddb15
+SNAPSHOT=43efb99765aeed17eb9066f4eaedcf4f4081eb3b
 SRC_URI="https://github.com/xiph/opus/archive/${SNAPSHOT}.tar.gz -> opus-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/opus-${SNAPSHOT}"
 

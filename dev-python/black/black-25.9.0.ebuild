@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( python3_{11..13} pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
 
@@ -24,6 +24,7 @@ RDEPEND="
 	>=dev-python/packaging-22.0[${PYTHON_USEDEP}]
 	>=dev-python/pathspec-0.9.0[${PYTHON_USEDEP}]
 	>=dev-python/platformdirs-2[${PYTHON_USEDEP}]
+	>=dev-python/pytokens-0.1.10[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	dev-python/hatch-fancy-pypi-readme[${PYTHON_USEDEP}]
@@ -34,6 +35,8 @@ BDEPEND="
 		dev-python/colorama[${PYTHON_USEDEP}]
 	)
 "
+
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_test() {
@@ -49,7 +52,6 @@ python_test() {
 			;;
 	esac
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	epytest
 }
 

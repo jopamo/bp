@@ -4,6 +4,7 @@ EAPI=8
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=maturin
+PYPI_VERIFY_REPO=https://github.com/ijl/orjson
 PYTHON_COMPAT=( python3_{11..14} )
 
 # upstream is vendoring crates

@@ -37,7 +37,7 @@ RDEPEND="
     >=dev-python/pyparsing-2.3.1[${PYTHON_USEDEP}]
     >=dev-python/python-dateutil-2.7[${PYTHON_USEDEP}]
     >=dev-python/pytz-2019.3[${PYTHON_USEDEP}]
-    cairo? ( dev-py/cairocffi[${PYTHON_USEDEP}] )
+    cairo? ( dev-python/cairocffi[${PYTHON_USEDEP}] )
     excel? ( dev-python/xlwt[${PYTHON_USEDEP}] )
     gtk3? (
         >=dev-python/pygobject-3.40.1-r1:3[cairo?,${PYTHON_USEDEP}]
@@ -48,7 +48,7 @@ RDEPEND="
 BDEPEND="
     ${RDEPEND}
     dev-python/pybind11[${PYTHON_USEDEP}]
-    >=dev-python/setuptools-scm-7[${PYTHON_USEDEP}]
+    >=dev-py/setuptools-scm-7[${PYTHON_USEDEP}]
     app-dev/pkgconf
     test? (
         dev-python/psutil[${PYTHON_USEDEP}]

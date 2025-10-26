@@ -30,3 +30,8 @@ python_install_all() {
 
 	distutils-r1_python_install_all
 }
+
+python_test() {
+	cd "${BUILD_DIR}/install$(python_get_sitedir)/regex/tests" || die
+	eunittest
+}

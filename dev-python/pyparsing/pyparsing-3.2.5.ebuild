@@ -40,7 +40,7 @@ python_test() {
 		tests/test_unit.py::Test10_WithLeftRecursionParsingBoundedMemo::testEmptyExpressionsAreHandledProperly
 	)
 
-	if ! has_version "dev-python/matplotlib[${PYTHON_USEDEP}]"; then
+	if ! has_version "dev-py/matplotlib[${PYTHON_USEDEP}]"; then
 		EPYTEST_IGNORE+=(
 			tests/test_matplotlib_cases.py
 		)

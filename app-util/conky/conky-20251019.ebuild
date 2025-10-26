@@ -6,7 +6,7 @@ inherit cmake
 
 DESCRIPTION="An advanced, highly configurable system monitor for X"
 HOMEPAGE="https://github.com/brndnmtthws/conky"
-SNAPSHOT=14dc8ae690a0b323c256b0305798acc6bc8e982f
+SNAPSHOT=3c055d05c29e139ad651b34ee3b4d73e649ea03d
 SRC_URI="https://github.com/brndnmtthws/conky/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

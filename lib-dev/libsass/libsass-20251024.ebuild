@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="A C/C++ implementation of a Sass CSS compiler"
 HOMEPAGE="https://github.com/sass/libsass"
-SNAPSHOT=7037f03fabeb2b18b5efa84403f5a6d7a990f460
+SNAPSHOT=9bb4ebcc1484dd2f3a94a0e735464993ecbae986
 SRC_URI="https://github.com/sass/libsass/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

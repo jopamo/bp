@@ -28,7 +28,6 @@ IUSE="test"
 RESTRICT="!test? ( test )"
 
 PATCHES=(
-	"${FILESDIR}/cython-0.29.22-spawn-multiprocessing.patch"
 	"${FILESDIR}/cython-0.29.23-pythran-parallel-install.patch"
 )
 

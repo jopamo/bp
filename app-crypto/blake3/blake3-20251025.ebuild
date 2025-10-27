@@ -7,8 +7,8 @@ inherit meson python-any-r1 flag-o-matic
 DESCRIPTION="a fast cryptographic hash function"
 HOMEPAGE="https://github.com/BLAKE3-team/BLAKE3"
 SNAPSHOT=db278d76c6fa7c395f43c5f979ea0c633c00db47
-SRC_URI="https://github.com/jopamo/BLAKE3/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/BLAKE3-${SNAPSHOT}"
+SRC_URI="https://github.com/jopamo/blake3/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="|| ( CC0-1.0 Apache-2.0 )"
 SLOT="0"
@@ -31,15 +31,6 @@ src_prepare() {
     sed -i "s/VERSION/${PV}/g" "${S}/meson.build" || die "Failed to replace VERSION in meson.build"
 
     default
-}
-
-src_configure() {
-    local emesonargs=(
-        -Dbuild_static_lib=$(usex static_lib true false)
-        -Dbuild_shared_lib=$(usex shared true false)
-        -Dbuild_static_b3sum=$(usex static_bin true false)
-    )
-    meson_src_configure
 }
 
 src_install() {

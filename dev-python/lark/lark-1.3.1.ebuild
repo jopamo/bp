@@ -19,6 +19,7 @@ KEYWORDS="amd64 arm64"
 
 # dev-py/regex doesn't support pypy
 BDEPEND="
+	>=dev-py/setuptools-scm-9.2.2[${PYTHON_USEDEP}]
 	test? (
 		dev-python/atomicwrites[${PYTHON_USEDEP}]
 		$(python_gen_cond_dep '

@@ -16,7 +16,7 @@ LICENSE="GPL-3"
 SLOT="0"
 #KEYWORDS="amd64 arm64"
 
-IUSE="debug dlang go-bootstrap isl libgomp sanitize zstd"
+IUSE="debug dlang fortran go-bootstrap isl libgomp sanitize zstd"
 
 RESTRICT="strip"
 
@@ -61,6 +61,7 @@ src_configure() {
 
 	use dlang        && GCC_LANG+=",d"
 	use go-bootstrap && GCC_LANG+=",go"
+	use fortran && GCC_LANG+=",fortran"
 
 	cd gcc-build
 

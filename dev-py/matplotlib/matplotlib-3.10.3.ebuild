@@ -47,7 +47,6 @@ RDEPEND="
 
 BDEPEND="
     ${RDEPEND}
-    dev-python/pybind11[${PYTHON_USEDEP}]
     >=dev-py/setuptools-scm-7[${PYTHON_USEDEP}]
     app-dev/pkgconf
     test? (

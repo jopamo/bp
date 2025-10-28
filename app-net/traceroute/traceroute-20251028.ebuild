@@ -6,8 +6,7 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Utility to trace the route of IP packets"
 HOMEPAGE="https://traceroute.sourceforge.net/"
-
-SNAPSHOT=fc6c4ab7625c870eabd166919c2074b41700042b
+SNAPSHOT=9b6de003f20b8160991ec13bb8bf97f3ff94fec7
 SRC_URI="https://github.com/jopamo/traceroute/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

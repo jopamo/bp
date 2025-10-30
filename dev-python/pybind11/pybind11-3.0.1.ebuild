@@ -25,7 +25,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	dev-cpp/eigen:3
+	lib-dev/eigen:3
 "
 BDEPEND="
 	test? (

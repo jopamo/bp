@@ -24,7 +24,7 @@ KEYWORDS="amd64 arm64"
 IUSE="cairo excel gtk3 latex qt6 tk webagg wxwidgets"
 
 DEPEND="
-    >=dev-python/numpy-1.25[${PYTHON_USEDEP}]
+    >=dev-py/numpy-1.25[${PYTHON_USEDEP}]
 "
 
 RDEPEND="

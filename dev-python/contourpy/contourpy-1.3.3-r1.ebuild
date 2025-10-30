@@ -23,7 +23,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	>=dev-python/numpy-1.25[${PYTHON_USEDEP}]
+	>=dev-py/numpy-1.25[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	>=dev-python/pybind11-2.13.4[${PYTHON_USEDEP}]

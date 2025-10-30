@@ -25,7 +25,7 @@ REQUIRED_USE="
 "
 
 RDEPEND="
-	dev-python/numpy
+	dev-py/numpy
 	xgui-app/pillow
 	jpeg? ( media-libs/libjpeg-turbo:= )
 	png? ( media-libs/libpng:= )

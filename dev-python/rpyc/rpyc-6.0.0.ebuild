@@ -20,7 +20,7 @@ KEYWORDS="amd64 arm64"
 IUSE="test numpy gdb"
 RESTRICT="!test? ( test )"
 
-CDEPEND="numpy? ( dev-python/numpy[${PYTHON_USEDEP}] dev-python/pandas[${PYTHON_USEDEP}] )
+CDEPEND="numpy? ( dev-py/numpy[${PYTHON_USEDEP}] dev-python/pandas[${PYTHON_USEDEP}] )
 	gdb? ( dev-debug/gdb )"
 
 DEPEND="${CDEPEND}

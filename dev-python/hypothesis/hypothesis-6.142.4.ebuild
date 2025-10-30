@@ -117,7 +117,7 @@ python_install() {
 pkg_postinst() {
  "datetime support" dev-python/pytz
  "dateutil support" dev-python/python-dateutil
- "numpy support" dev-python/numpy
+ "numpy support" dev-py/numpy
  "django support" dev-python/django dev-python/pytz
  "pandas support" dev-python/pandas
  "pytest support" dev-python/pytest

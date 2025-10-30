@@ -41,8 +41,8 @@ IUSE+="
 
 RDEPEND="
 	lapack? (
-		>=virtual/cblas-3.8[index64(-)?]
-		>=virtual/lapack-3.8[index64(-)?]
+		>=lib-dev/lapack-3.8[index64(-)?]
+		>=lib-dev/lapack-3.8[index64(-)?]
 	)
 "
 BDEPEND="

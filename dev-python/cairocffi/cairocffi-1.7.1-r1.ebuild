@@ -34,7 +34,7 @@ BDEPEND="
 		>=dev-python/cffi-1.1.0:=[${PYTHON_USEDEP}]
 	' 'python*')
 	test? (
-		dev-python/numpy[${PYTHON_USEDEP}]
+		dev-py/numpy[${PYTHON_USEDEP}]
 		dev-python/pikepdf[${PYTHON_USEDEP}]
 	)
 "

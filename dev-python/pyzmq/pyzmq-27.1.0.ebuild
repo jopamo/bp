@@ -47,7 +47,7 @@ EPYTEST_PLUGINS=( pytest-{asyncio,rerunfailures} )
 distutils_enable_tests pytest
 # TODO: Package enum_tools
 # distutils_enable_sphinx docs/source \
-# 	dev-python/numpydoc \
+# 	dev-py/numpydoc \
 # 	dev-python/sphinx-rtd-theme \
 # 	dev-python/myst-parser
 

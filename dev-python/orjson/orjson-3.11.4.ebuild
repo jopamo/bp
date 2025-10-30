@@ -31,7 +31,7 @@ BDEPEND="
 	>=dev-util/maturin-1.7.8[${PYTHON_USEDEP}]
 	test? (
 		dev-python/arrow[${PYTHON_USEDEP}]
-		dev-python/numpy[${PYTHON_USEDEP}]
+		dev-py/numpy[${PYTHON_USEDEP}]
 		dev-python/psutil[${PYTHON_USEDEP}]
 		dev-python/pytz[${PYTHON_USEDEP}]
 	)

@@ -15,6 +15,18 @@ LICENSE="MPL-2.0"
 SLOT="3"
 KEYWORDS="amd64 arm64"
 
-IUSE="test"
+src_configure() {
+	append-flags -ffat-lto-objects
 
-RESTRICT="!test? ( test )"
+	local mycmakeargs=(
+		-DBUILD_MAN_DOCUMENTATION=ON
+		-DBUILD_SHARED_LIBS=ON
+		-DBUILD_TESTING=OFF
+		-DCBLAS=ON
+		-DCMAKE_Fortran_COMPILER=gfortran
+		-DCMAKE_SKIP_RPATH=ON
+		-DLAPACKE_WITH_TMG=OFF
+	)
+
+	cmake_src_configure
+}

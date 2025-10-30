@@ -12,7 +12,7 @@ SRC_URI="https://gitlab.com/libeigen/eigen/-/archive/${SNAPSHOT}/eigen-${SNAPSHO
 S="${WORKDIR}/eigen-${SNAPSHOT}"
 
 LICENSE="MPL-2.0"
-SLOT="0"
+SLOT="3"
 KEYWORDS="amd64 arm64"
 
 IUSE="test"

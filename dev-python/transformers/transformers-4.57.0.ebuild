@@ -26,7 +26,7 @@ RDEPEND="
 	=dev-python/tokenizers-0.22*[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
 		dev-python/filelock[${PYTHON_USEDEP}]
-		dev-python/numpy[${PYTHON_USEDEP}]
+		dev-py/numpy[${PYTHON_USEDEP}]
 		dev-python/packaging[${PYTHON_USEDEP}]
 		dev-python/pyyaml[${PYTHON_USEDEP}]
 		dev-py/regex[${PYTHON_USEDEP}]

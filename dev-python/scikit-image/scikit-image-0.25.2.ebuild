@@ -29,7 +29,7 @@ RDEPEND="
 	>=dev-python/imageio-2.36[${PYTHON_USEDEP}]
 	>=dev-python/lazy-loader-0.4[${PYTHON_USEDEP}]
 	>=dev-python/networkx-3.0[${PYTHON_USEDEP}]
-	>=dev-python/numpy-1.24[${PYTHON_USEDEP}]
+	>=dev-py/numpy-1.24[${PYTHON_USEDEP}]
 	>=xgui-app/pillow-10.1[${PYTHON_USEDEP}]
 	>=dev-python/scipy-1.11.4[sparse(+),${PYTHON_USEDEP}]
 	>=dev-python/tifffile-2022.8.12[${PYTHON_USEDEP}]
@@ -50,7 +50,7 @@ BDEPEND="
 # xdist does not work with this test suite
 distutils_enable_tests pytest
 # There is a programmable error in your configuration file:
-#distutils_enable_sphinx doc/source dev-python/numpydoc dev-python/myst-parser
+#distutils_enable_sphinx doc/source dev-py/numpydoc dev-python/myst-parser
 
 src_test() {
 	# for some reason, upstream refetches data that's already in the tarball

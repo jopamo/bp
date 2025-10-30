@@ -19,7 +19,7 @@ RDEPEND="
 	dev-python/huggingface_hub[${PYTHON_SINGLE_USEDEP}]
 	dev-python/pytorch[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
-		dev-python/numpy[${PYTHON_USEDEP}]
+		dev-py/numpy[${PYTHON_USEDEP}]
 		dev-python/packaging[${PYTHON_USEDEP}]
 		dev-python/psutil[${PYTHON_USEDEP}]
 		dev-python/pyyaml[${PYTHON_USEDEP}]

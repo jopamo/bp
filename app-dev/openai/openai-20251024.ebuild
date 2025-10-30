@@ -24,7 +24,7 @@ RDEPEND="
 	dev-python/tqdm[${PYTHON_USEDEP}]
 	dev-python/aiohttp[${PYTHON_USEDEP}]
 	datalib? (
-		dev-python/numpy[${PYTHON_USEDEP}]
+		dev-py/numpy[${PYTHON_USEDEP}]
 		>=dev-python/pandas-1.2.3[${PYTHON_USEDEP}]
 		>=dev-python/pandas-stubs-1.1.0.11[${PYTHON_USEDEP}]
 		>=dev-python/openpyxl-3.0.7[${PYTHON_USEDEP}]

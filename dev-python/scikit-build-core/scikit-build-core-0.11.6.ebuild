@@ -31,7 +31,7 @@ BDEPEND="
 		dev-python/build[${PYTHON_USEDEP}]
 		>=dev-python/cattrs-22.2.0[${PYTHON_USEDEP}]
 		dev-python/fastjsonschema[${PYTHON_USEDEP}]
-		dev-python/pybind11[${PYTHON_USEDEP}]
+		dev-py/pybind11[${PYTHON_USEDEP}]
 		>=dev-python/pytest-subprocess-1.5[${PYTHON_USEDEP}]
 		dev-py/setuptools[${PYTHON_USEDEP}]
 		dev-python/virtualenv[${PYTHON_USEDEP}]

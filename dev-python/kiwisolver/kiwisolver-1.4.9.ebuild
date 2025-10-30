@@ -39,3 +39,8 @@ EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
+
+src_prepare() {
+	default
+	filter-flags -Wl,-z,defs
+}

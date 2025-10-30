@@ -31,47 +31,60 @@ BDEPEND="app-build/make"
 
 src_prepare() {
 	eapply "${FILESDIR}"/$(ver_cut 1)/*.patch
+
+	# libgo assumes off64_t exists everywhere, replace with off_t to unbreak musl / non-glibc
 	sed -i 's/typedef off64_t libgo_off_t_type;/typedef off_t libgo_off_t_type;/g' libgo/sysinfo.c || die
 
 	# make sure no CET codegen flags leak in from env or profiles
 	# -fcf-protection and -mshstk/-mcet are x86-only and should not appear on arm64
-	filter-flags -fcf-protection=* -mshstk -mcet
+	filter-flags \
+		-fcf-protection=* \
+		-mshstk \
+		-mcet \
+		-Wformat \
+		-Wformat-security \
+		-Werror=format-security \
+		-ftrivial-auto-var-init=* \
+		-fPIE \
+		-fpie \
+		-pipe
 
-	filter-gcc
-	filter-lto
+	filter-gcc        # overlay helper to nuke self-hosted gcc-specific CFLAGS etc
+	filter-lto        # overlay helper to kill -flto from env so bootstrap controls LTO
 
 	use debug || filter-flags -g
 
 	default
 
-	# do not run fixincludes
-	sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
+	# do not run fixincludes (we don't want headers rewritten)
+	sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in || die
 
-	# install x86_64 libraries in /lib
-	sed -i '/m64=/s/lib64/lib/' gcc/config/i386/t-linux64
+	# install x86_64 libraries in /lib instead of /lib64
+	sed -i '/m64=/s/lib64/lib/' gcc/config/i386/t-linux64 || die
 
 	# configure tests for header files using "$CPP $CPPFLAGS"
-	sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure
+	# add -O2 so they don't get confused by stripped -pipe etc
+	sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure || die
 
-	mkdir -p gcc-build
+	# out-of-tree build dir
+	mkdir -p gcc-build || die
 }
 
 src_configure() {
 	local GCC_LANG="c,c++,lto"
-
 	use dlang        && GCC_LANG+=",d"
 	use go-bootstrap && GCC_LANG+=",go"
-	use fortran && GCC_LANG+=",fortran"
+	use fortran      && GCC_LANG+=",fortran"
 
-	cd gcc-build
+	cd gcc-build || die
 
 	# using -pipe causes spurious test-suite failures
-	# http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48565
+	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=48565
 	CFLAGS=${CFLAGS/-pipe/}
 	CXXFLAGS=${CXXFLAGS/-pipe/}
 
 	# decide CET configure switch based on libc and arch
-	# GCC’s --enable-cet toggles -fcf-protection for target runtime libs on Linux/x86 by default
+	# GCC --enable-cet toggles -fcf-protection for target runtime libs on Linux/x86 by default
 	# disable on arm64 and anything non-x86, only allow on glibc+x86
 	local cet_opt="--disable-cet"
 	if use elibc_glibc && [[ ${CHOST} == x86_64-* || ${CHOST} == i?86-* ]]; then
@@ -90,6 +103,7 @@ src_configure() {
 		--datadir="${EPREFIX}"/usr/share
 		--mandir="${EPREFIX}"/usr/share/man
 		--infodir="${EPREFIX}"/usr/share/info
+
 		--disable-fixed-point
 		--disable-install-libiberty
 		--disable-libgcj
@@ -102,6 +116,7 @@ src_configure() {
 		--disable-obsolete
 		--disable-rpath
 		--disable-werror
+
 		--enable-__cxa_atexit
 		--enable-bootstrap
 		--enable-checking=release
@@ -115,10 +130,12 @@ src_configure() {
 		--enable-plugin
 		--enable-shared
 		--enable-threads=posix
+
 		--with-build-config="bootstrap-lto-lean"
 		--with-linker-hash-style=gnu
 		--with-pkgversion="1g4 Linux GCC ${PV}"
 		--with-system-zlib
+
 		${cet_opt}
 		$(use_enable elibc_glibc symvers)
 		$(use_enable elibc_glibc libvtv)
@@ -131,29 +148,28 @@ src_configure() {
 		$(use_with isl)
 		$(use_with zstd)
 	)
+
 	../configure "${myconf[@]}" || die
 }
 
 src_compile() {
-	cd gcc-build
+	cd gcc-build || die
 
-	emake -O STAGE1_CFLAGS="$CFLAGS" \
+	# do a single bootstrap build
+	# this already builds stage1 -> stage2 -> stage3 compiler,
+	# libstdc++, libgomp, libgcc_s, libgfortran (if enabled), etc
+	emake -O \
+		STAGE1_CFLAGS="$CFLAGS" \
 		BOOT_CFLAGS="$CFLAGS" \
 		BOOT_LDFLAGS="$LDFLAGS" \
 		LDFLAGS_FOR_TARGET="$LDFLAGS" \
 		bootstrap
-
-	make -O STAGE1_CFLAGS="$CFLAGS" \
-		BOOT_CFLAGS="$CFLAGS" \
-		BOOT_LDFLAGS="$LDFLAGS" \
-		LDFLAGS_FOR_TARGET="$LDFLAGS" \
-		all-gcc
-
 }
 
 src_install() {
-	cd gcc-build
-	emake DESTDIR="${ED}" install
+	cd gcc-build || die
+
+	emake DESTDIR="${ED}" install || die
 
 	dobin "${FILESDIR}"/c89
 	dobin "${FILESDIR}"/c99
@@ -172,8 +188,10 @@ src_install() {
 		rm "${ED}/usr/bin/gofmt"
 	fi
 
+	# provide cc symlink
 	dosym -r /usr/bin/gcc /usr/bin/cc
 
+	# drop useless libtool files from plugin helper libs
 	find "${ED}"/usr/libexec/gcc -type f \
-    	\( -name 'libc?1*.la' -o -name 'libcp1plugin.la' \) -delete
+		\( -name 'libc?1*.la' -o -name 'libcp1plugin.la' \) -delete
 }

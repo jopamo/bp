@@ -26,7 +26,7 @@ RDEPEND="
 	>=dev-py/numpy-1.25[${PYTHON_USEDEP}]
 "
 BDEPEND="
-	>=dev-python/pybind11-2.13.4[${PYTHON_USEDEP}]
+	>=dev-py/pybind11-2.13.4[${PYTHON_USEDEP}]
 	test? (
 		dev-py/matplotlib[${PYTHON_USEDEP}]
 		xgui-app/pillow[${PYTHON_USEDEP}]
@@ -46,3 +46,8 @@ EPYTEST_IGNORE=(
 	# linters
 	tests/test_codebase.py
 )
+
+src_prepare() {
+	default
+	filter-flags -Wl,-z,defs
+}

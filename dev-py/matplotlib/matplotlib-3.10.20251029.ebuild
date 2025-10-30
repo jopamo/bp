@@ -1,18 +1,22 @@
-# Copyright 2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
+
+BRANCH_NAME="v$(ver_cut 1-2).x"
 
 PYTHON_COMPAT=( python3_{10..13} )  # adjust as appropriate
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=meson-python
 
-inherit distutils-r1 pypi
+inherit distutils-r1 pypi flag-o-matic
 
 DESCRIPTION="Pure Python plotting library with MATLAB-like syntax"
 HOMEPAGE="https://matplotlib.org/  https://github.com/matplotlib/matplotlib/  https://pypi.org/project/matplotlib/"
-SRC_URI="https://files.pythonhosted.org/packages/source/m/matplotlib/matplotlib-${PV}.tar.gz"
+
+SNAPSHOT=d4a6c92249c48417715d9f0c8bb9a8e82222d3fa
+SRC_URI="https://github.com/matplotlib/matplotlib/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 # Optionally include freetype as test-time dependency
 FT_PV=2.6.1
@@ -59,18 +63,10 @@ BDEPEND="
 EPYTEST_XDIST=1
 distutils_enable_tests pytest
 
-src_unpack() {
-	# do not unpack freetype
-	unpack "${P//_/}.tar.gz"
-}
-
 python_prepare_all() {
-	# Affects installed _version.py, bug #854600
+	filter-flags -Wl,-z,defs
+	
 	export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
-
-	local PATCHES=(
-		"${FILESDIR}"/matplotlib-3.10.3-test.patch
-	)
 
 	# increase lock timeout to 30 s
 	sed -i -e 's:retries = 50:retries = 300:' lib/matplotlib/cbook.py || die
@@ -79,7 +75,7 @@ python_prepare_all() {
 }
 
 src_configure() {
-	unset DISPLAY # bug #278524
+	unset DISPLAY 
 	export XDG_RUNTIME_DIR="${T}/runtime-dir"
 	mkdir "${XDG_RUNTIME_DIR}" || die
 	chmod 0700 "${XDG_RUNTIME_DIR}" || die

@@ -22,7 +22,7 @@ IUSE="test-full"
 BDEPEND="
 	dev-py/setuptools-scm[${PYTHON_USEDEP}]
 	test? (
-		dev-python/numpy[${PYTHON_USEDEP}]
+		dev-py/numpy[${PYTHON_USEDEP}]
 		dev-python/packaging[${PYTHON_USEDEP}]
 		dev-python/pexpect[${PYTHON_USEDEP}]
 		$(python_gen_cond_dep '

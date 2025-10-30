@@ -2,13 +2,12 @@
 
 EAPI=8
 
+BRANCH_NAME="maintenance/$(ver_cut 1-2).x"
+
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=meson-python
-PYPI_VERIFY_REPO=https://github.com/numpy/numpy-release
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
-FORTRAN_NEEDED=lapack
 
-inherit distutils-r1 flag-o-matic pypi
+inherit distutils-r1 flag-o-matic 
 
 DESCRIPTION="Fast array and numerical python library"
 HOMEPAGE="
@@ -17,9 +16,14 @@ HOMEPAGE="
 	https://pypi.org/project/numpy/
 "
 
+SNAPSHOT=bf272f83e63679da1cb35afab17e4443fda73b7f
+SRC_URI="https://github.com/numpy/numpy/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
+
 LICENSE="BSD"
 SLOT="0/2"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
+
 IUSE="+cpudetection index64 +lapack"
 
 # minimal arch flags for the two supported arches

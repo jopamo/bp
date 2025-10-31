@@ -42,7 +42,6 @@ app-fs/parted
 app-fs/smartmontools
 app-fs/sshfs
 app-fs/testdisk
-app-fs/wimlib
 app-kernel/dracut
 app-kernel/kernel-hardening-checker
 app-net/aircrack-ng

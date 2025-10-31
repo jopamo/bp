@@ -12,19 +12,25 @@ LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="guile nls static"
+IUSE="static"
 
-DEPEND="guile? ( >=dev-scheme/guile-1.8:= )
-		nls? ( app-build/gettext )
-		core-perl/libintl-perl
-		app-build/texinfo"
+DEPEND="
+	core-perl/libintl-perl
+	app-build/texinfo
+"
+
+src_prepare() {
+	default
+	
+	eapply "${FILESDIR}"/getopt-gcc15.patch
+}
 
 src_configure() {
 	use static && append-ldflags -static
 
 	local myconf=(
-		$(use_with guile)
-		$(use_enable nls)
+		--without-guile
+		--disable-nls
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

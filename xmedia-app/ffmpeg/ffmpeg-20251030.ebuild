@@ -77,7 +77,6 @@ src_configure() {
 		$(use_enable nonfree) \
 		$(use_enable nvidia cuvid) \
 		$(use_enable nvidia ffnvcodec) \
-		$(use_enable nvidia libnpp) \
 		$(use_enable nvidia nvdec) \
 		$(usex nvidia '--extra-cflags=-I/opt/cuda/targets/x86_64-linux/include' '') \
 		$(usex nvidia '--extra-ldflags=-L/opt/cuda/targets/x86_64-linux/lib' '') \

@@ -2,12 +2,10 @@
 
 EAPI=8
 
-BRANCH_NAME="maintenance/$(ver_cut 1-2).x"
-
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=meson-python
 
-inherit distutils-r1 flag-o-matic 
+inherit distutils-r1 flag-o-matic git-r3
 
 DESCRIPTION="Fast array and numerical python library"
 HOMEPAGE="
@@ -16,13 +14,16 @@ HOMEPAGE="
 	https://pypi.org/project/numpy/
 "
 
-SNAPSHOT=bf272f83e63679da1cb35afab17e4443fda73b7f
-SRC_URI="https://github.com/numpy/numpy/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+EGIT_BRANCH="maintenance/$(ver_cut 1-2).x"
+EGIT_REPO_URI="https://github.com/numpy/numpy"
+
+#SNAPSHOT=bf272f83e63679da1cb35afab17e4443fda73b7f
+#SRC_URI="https://github.com/numpy/numpy/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+#S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0/2"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="+cpudetection index64 +lapack"
 

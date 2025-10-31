@@ -1,20 +1,26 @@
 #!/bin/sh
+# ensure NVIDIA device and DRM nodes have correct groups
 
-if [ $# -ne 1 ]; then
-	echo "Invalid args" >&2
-	exit 1
+set -u
+
+if [ -x /usr/bin/nvidia-modprobe ]; then
+    /usr/bin/nvidia-modprobe -c 0 -u
+elif command -v nvidia-modprobe >/dev/null 2>&1; then
+    nvidia-modprobe -c 0 -u
 fi
 
-case $1 in
-	add|ADD)
-		#hopefully this prevents infinite loops like bug #454740
-		if lsmod | grep -iq nvidia; then
-			/opt/bin/nvidia-smi > /dev/null
-		fi
-		;;
-	remove|REMOVE)
-		rm -f /dev/nvidia*
-		;;
-esac
+for node in \
+    /dev/nvidia* \
+    /dev/dri/card* \
+    /dev/dri/renderD* \
+    /dev/dri/controlD* \
+    /dev/nvidia-caps/nvidia-cap*; do
+    [ -e "${node}" ] || continue
+    case "${node}" in
+        /dev/dri/renderD*) chgrp render "${node}" 2>/dev/null || true ;;
+        *)                 chgrp video  "${node}" 2>/dev/null || true ;;
+    esac
+    chmod 0660 "${node}" 2>/dev/null || true
+done
 
 exit 0

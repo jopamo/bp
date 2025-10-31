@@ -51,6 +51,7 @@ RDEPEND="
 
 BDEPEND="
     ${RDEPEND}
+    xmedia-lib/qhull
     >=dev-py/setuptools-scm-7[${PYTHON_USEDEP}]
     app-dev/pkgconf
     test? (

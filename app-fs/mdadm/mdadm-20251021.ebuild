@@ -1,11 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
-
 EAPI=8
 
 inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Tool for running RAID systems - replacement for the raidtools"
-HOMEPAGE="http://neil.brown.name/blog/mdadm"
+HOMEPAGE="https://github.com/md-raid-utilities/mdadm"
 SNAPSHOT=abb9a2b097c940251673eba5f074638b10ceb26e
 SRC_URI="https://github.com/md-raid-utilities/mdadm/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/mdadm-${SNAPSHOT}
@@ -16,10 +15,11 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static systemd"
 
-BDEPEND="app-dev/pkgconf"
+# prefer virtual/pkgconfig or dev-util/pkgconf in Gentoo
+BDEPEND="virtual/pkgconfig"
 DEPEND="
-	app-compression/xz-utils
-	app-core/util-linux
+  app-compression/xz-utils
+  app-core/util-linux
 "
 
 RESTRICT="test"
@@ -27,30 +27,39 @@ RESTRICT="test"
 PATCHES=( "${FILESDIR}"/mdadm-portage.patch )
 
 mdadm_emake() {
-	emake \
-		PKG_CONFIG="$(tc-getPKG_CONFIG)" \
-		CC="$(tc-getCC)" \
-		CWFLAGS="-Wall -DBINDIR=\"/usr/bin\"" \
-		CXFLAGS="${CFLAGS}" \
-		UDEVDIR="${EPREFIX}"/usr/lib/udev \
-		SYSTEMD_DIR=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false") \
-		COROSYNC="-DNO_COROSYNC" \
-		DLM="-DNO_DLM" \
-		"$@"
+  emake \
+    PKG_CONFIG="$(tc-getPKG_CONFIG)" \
+    CC="$(tc-getCC)" \
+    BINDIR="/usr/bin" \
+    CWFLAGS="${MDADM_CWFLAGS} ${CPPFLAGS} ${CFLAGS}" \
+    CXFLAGS="${CFLAGS}" \
+    UDEVDIR="${EPREFIX}/usr/lib/udev" \
+    SYSTEMD_DIR=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false") \
+    COROSYNC="-DNO_COROSYNC" \
+    DLM="-DNO_DLM" \
+    "$@"
 }
 
 src_compile() {
-	use static && append-ldflags -static
-	mdadm_emake all
+  # expose off64_t/lseek64 for untouched sources if needed
+  append-cflags -D_LARGEFILE64_SOURCE
+
+  # make warnings non-fatal and scrub any -Werror from user flags
+  filter-flags -Werror -Werror=*
+  append-cflags -Wno-error
+  MDADM_CWFLAGS="-Wall -Wstrict-prototypes -Wextra -Wno-unused-parameter"
+
+  use static && append-ldflags -static
+  mdadm_emake all
 }
 
 src_test() {
-	mdadm_emake test
-	sh ./test || die
+  mdadm_emake test
+  sh ./test || die
 }
 
 src_install() {
-	mdadm_emake DESTDIR="${D}" install install-systemd
-	insinto etc/mdadm
-	doins ${FILESDIR}/mdadm.conf
+  mdadm_emake DESTDIR="${D}" install install-systemd
+  insinto etc/mdadm
+  doins "${FILESDIR}/mdadm.conf"
 }

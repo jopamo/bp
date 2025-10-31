@@ -1,3 +1,2 @@
-#>app-net/iproute2-20240704
 =lib-core/gdbm-1.25
->=app-lang/go-1.21.20240806
+#>=app-lang/go-1.21.20240806

@@ -59,74 +59,72 @@ BDEPEND="
 PDEPEND="xgui-misc/xf86-input-libinput"
 
 src_configure() {
-	filter-flags -Wl,-z,defs -Wl,-z,now
+  # avoid forcing immediate binding which can break nvidia GL stubs at link time
+  filter-flags -Wl,-z,defs -Wl,-z,now
 
-	local emesonargs=(
-  	$(meson_use X xorg)
-  	$(meson_use glamor)
-  	$(meson_use ipv6)
-  	$(meson_use suid_wrapper)
-  	$(meson_use udev)
-  	$(meson_use xcsecurity)
-  	$(meson_use xvfb)
+  local emesonargs=(
+    # core servers and backends
+    $(meson_use X xorg)          # build the xorg server
+    $(meson_use xvfb)            # virtual framebuffer server
+    -Dxephyr=false               # no nested xephyr
+    -Dxnest=false                # no legacy Xnest
+    -Dxwin=false                 # no cygwin backend
+    -Dxquartz=false              # no macOS quartz
+    -Dxpbproxy=false             # no proxy
 
-  	-Dxephyr=false
-  	-Dxfbdev=false
-  	-Dxnest=false
-  	-Dxwin=false
-  	-Dxquartz=false
-  	-Dxpbproxy=false
+    # rendering and dri paths
+    -Dglx=true                   # GLX needed for nvidia proprietary
+    -Ddri1=false                 # dri1 is obsolete
+    -Ddri2=true                  # dri2 required by nvidia GLX
+    -Ddri3=true                  # dri3 for modesetting and modern stacks
+    -Ddrm=true                   # enable drm hooks even if using nvidia
 
-  	-Dkdrive_kbd=false
-  	-Dkdrive_mouse=false
-  	-Dkdrive_evdev=false
-  	-Dkdrive_tslib=false
+    # device and session management
+    $(meson_use udev)            # input hotplug via libudev
+    -Dsystemd_logind=true        # vt/session handoff through logind
+    -Dsystemd_notify=true        # sd_notify integration
+    -Dvgahw=auto                 # vgahw module auto
+    -Dpciaccess=true             # libpciaccess for probing
 
-  	-Dglx=true
-  	-Ddri1=false
-  	-Ddri2=true
-  	-Ddri3=true
-  	-Ddrm=true
+    # networking and auth listeners
+    $(meson_use ipv6)
+    -Dlisten_tcp=false           # disable tcp listener for local-only setups
+    -Dlisten_unix=true           # enable unix socket
+    -Dlisten_local=true          # create abstract local socket
 
-  	-Dxdmcp=false
-  	-Dxdm-auth-1=false
-  	-Dlisten_tcp=false
-  	-Dlisten_unix=true
-  	-Dlisten_local=true
+    # security and extensions
+    $(meson_use xcsecurity)      # XACE/XC-Security
+    -Ddpms=true                  # display power management
+    -Dxf86bigfont=false          # drop bigfont
+    -Dscreensaver=true           # MIT-SCREEN-SAVER
+    -Dxres=true                  # X-Resource extension
+    -Dxinerama=true              # Xinerama protocol for multihead
+    -Dxv=true                    # XVideo extension
+    -Ddga=auto                   # DGA if available
+    -Dmitshm=auto                # MIT-SHM
+    -Dagp=false                  # agp helper not needed with modern stacks
 
-  	-Dpciaccess=true
-  	-Dudev_kms=auto
-  	-Dhal=false
-  	-Dsystemd_notify=true
-  	-Dsystemd_logind=true
-  	-Dvgahw=auto
+    # linux power backends
+    -Dlinux_apm=false            # legacy /proc/apm backend, safe to disable
+    -Dlinux_acpi=false           # legacy /proc/acpi hooks, safe to disable
 
-  	-Ddpms=true
-  	-Dxf86bigfont=false
-  	-Dscreensaver=true
-  	-Dxres=true
-  	-Dxselinux=auto
-  	-Dnamespace=true
-  	-Dxinerama=true
-  	-Dxv=true
-  	-Dxvmc=false
-  	-Ddga=auto
-  	-Dlinux_apm=false
-  	-Dlinux_acpi=false
-  	-Dmitshm=auto
-  	-Dagp=false
+    # crypto and misc
+    -Dsha1=libcrypto             # use openssl for sha1
+    -Dlibunwind=false            # keep unwinder off unless debugging
+    -Dlegacy_nvidia_padding=false # keep default pixmap padding; set true only for very old nvidia blobs
 
-  	-Dsha1=libcrypto
-  	-Dxf86-input-inputtest=false
-  	-Dtests=false
-  	-Ddocs=false
-  	-Ddevel-docs=false
-  	-Ddocs-pdf=false
-  	-Dlibunwind=false
-  	-Dlegacy_nvidia_padding=false
+    # features we explicitly keep off
+    -Dxdmcp=false                # no xdmcp
+    -Dxdm-auth-1=false           # no old auth proto
+    -Dhal=false                  # no hal input stack
 
-  	-Dxkb_output_dir="${EPREFIX}/var/lib/xkb"
-	)
+    # build products and paths
+    -Dtests=false
+    -Ddocs=false
+    -Ddevel-docs=false
+    -Ddocs-pdf=false
+    -Dxkb_output_dir="${EPREFIX}/var/lib/xkb"
+  )
 
   meson_src_configure
 }

@@ -1,1 +1,1 @@
->=app-kernel/stable-sources-6.17.0
+#>=app-kernel/stable-sources-6.17.0

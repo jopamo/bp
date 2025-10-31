@@ -42,7 +42,7 @@ PDEPEND="
 "
 
 QA_PREBUILT="opt/* usr/lib*"
-QA_PRESTRIPPED="usr/lib/firmware/nvidia/570.124.04/gsp_ga10x.bin"
+QA_PRESTRIPPED="usr/lib/firmware/nvidia/${PV}/gsp_ga10x.bin"
 
 S="${WORKDIR}"
 
@@ -77,7 +77,6 @@ pkg_setup() {
     NV_SOVER=${PV}
 }
 
-
 src_prepare() {
     local man_file
     for man_file in "${NV_MAN}"/*1.gz; do
@@ -90,6 +89,11 @@ src_prepare() {
         cp nvidia_icd.json.template nvidia_icd.json || die
         sed -i -e 's:__NV_VK_ICD__:libGLX_nvidia.so.0:g' nvidia_icd.json || die
     fi
+    
+    sed -i \
+		-e '/get_dev_pagemap(page_to_pfn(page), NULL);/c\
+		get_dev_pagemap(page_to_pfn(page));' \
+		kernel-open/nvidia-uvm/uvm_va_range_device_p2p.c || die
 }
 
 src_compile() {
@@ -159,6 +163,14 @@ src_install() {
         insopts -m 0644
         insinto usr/lib/udev/rules.d
         newins "${FILESDIR}"/nvidia.udev-rule 99-nvidia.rules
+
+        # create a secure sideband socket directory for the X driver
+        # only root can list, video group can traverse
+        cat > "${T}/${PN}.tmpfiles" <<-'EOF' || die
+d /run/nvidia-xdriver 2770 root video -
+EOF
+        insinto /usr/lib/tmpfiles.d
+        newins "${T}/${PN}.tmpfiles" "${PN}.conf"
     fi
 
     if use X; then

@@ -14,7 +14,7 @@ SRC_URI="https://developer.download.nvidia.com/compute/cuda/${PV}/local_installe
 
 LICENSE="NVIDIA-CUDA"
 SLOT="0"
-#KEYWORDS="amd64"
+KEYWORDS="amd64"
 
 IUSE="debugger sanitizer"
 

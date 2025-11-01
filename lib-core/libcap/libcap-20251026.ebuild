@@ -6,7 +6,7 @@ inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="POSIX 1003.1e capabilities"
 HOMEPAGE="http://www.friedhoff.org/posixfilecaps.html"
-SNAPSHOT=2d744fbaa440c59572893c2b63f717c6e4662d5f
+SNAPSHOT=3b2513a1ba696f01d31edfa93f35c30b379cc70e
 SRC_URI="https://github.com/1g4-mirror/libcap/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

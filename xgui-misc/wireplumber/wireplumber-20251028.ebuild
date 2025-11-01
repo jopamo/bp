@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="Replacement for pipewire-media-session"
 HOMEPAGE="https://gitlab.freedesktop.org/pipewire/wireplumber"
-SNAPSHOT=285230af67f9221531da2878ca414cd684a324ef
+SNAPSHOT=27f97f6c45f025ed6da965daeada79f66dea1a91
 SRC_URI="https://github.com/PipeWire/wireplumber/archive/${SNAPSHOT}.tar.gz -> wireplumber-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/wireplumber-${SNAPSHOT}"
 

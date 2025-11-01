@@ -6,7 +6,7 @@ inherit cmake
 
 DESCRIPTION="LXQt session manager (startup, logout, autostart handling)"
 HOMEPAGE="http://lxqt.org/"
-SNAPSHOT=472cb74b26230878dc0e3d4026a00fac69c44ea9
+SNAPSHOT=572c4dfd8834b3f162f4e9a4855bb5eee8a3b595
 SRC_URI="https://github.com/lxqt/lxqt-session/archive/${SNAPSHOT}.tar.gz -> lxqt-session-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/lxqt-session-${SNAPSHOT}"
 

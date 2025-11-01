@@ -6,7 +6,7 @@ inherit font
 
 DESCRIPTION="Monospaced font family"
 HOMEPAGE="https://github.com/adobe-fonts/source-code-pro"
-SNAPSHOT=208d9ac7a6827ceb51ea2dc635794839d9659e52
+SNAPSHOT=803b7e23ec97ae58b6232ea76519a76d428ba268
 SRC_URI="https://github.com/adobe-fonts/source-code-pro/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

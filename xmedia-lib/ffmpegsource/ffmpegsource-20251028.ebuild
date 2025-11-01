@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="An FFmpeg based source library and Avisynth/VapourSynth plugin for easy frame accurate access"
 HOMEPAGE="https://github.com/FFMS/ffms2"
-SNAPSHOT=6601f8cb37321610e3684fef47d0dfdaa374a8a0
+SNAPSHOT=65f6ce9ce9a9895680a41b813890b19215241e32
 SRC_URI="https://github.com/FFMS/ffms2/archive/${SNAPSHOT}.tar.gz -> ffms2-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ffms2-${SNAPSHOT}"
 

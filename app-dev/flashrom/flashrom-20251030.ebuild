@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="Utility for reading, writing, erasing and verifying flash ROM chips"
 HOMEPAGE="https://flashrom.org/Flashrom"
-SNAPSHOT=c54d0684187d20bba5a0ebf27717fd8f7357bab9
+SNAPSHOT=5c3fd47332a9179e346d687bb673cc688afd35ec
 SRC_URI="https://github.com/flashrom/flashrom/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/flashrom-${SNAPSHOT}
 

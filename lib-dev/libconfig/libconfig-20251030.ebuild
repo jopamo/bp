@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="Libconfig is a simple library for manipulating structured configuration files"
 HOMEPAGE="http://www.hyperrealm.com/libconfig/libconfig.html"
-SNAPSHOT=10ec1ca0246d9c698f6ea3573333980f70e71fa1
+SNAPSHOT=41c6be5bdffc49f9151b67c46dd75b51876f676d
 SRC_URI="https://github.com/hyperrealm/libconfig/archive/${SNAPSHOT}.tar.gz -> libconfig-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libconfig-${SNAPSHOT}"
 

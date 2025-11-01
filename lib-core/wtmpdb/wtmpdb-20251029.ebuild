@@ -6,7 +6,7 @@ inherit meson doins
 
 DESCRIPTION="Y2038 safe wtmp implementation as PAM module using sqlite as database"
 HOMEPAGE="https://github.com/jopamo/musl-bsd"
-SNAPSHOT=826d94555f85bf670971b99ed3d1aebf2d27c5ab
+SNAPSHOT=b15135a72e2a35c139702acf741b0dd29865f322
 SRC_URI="https://github.com/thkukuk/wtmpdb/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="Utility for examining and tuning ethernet-based network interfaces"
 HOMEPAGE="https://www.kernel.org/pub/software/network/ethtool/"
-SNAPSHOT=4600e657657a8834109b56b417c3df42050990db
+SNAPSHOT=3426a920183f08ea153d6fc69e89ab3585fc45d9
 SRC_URI="https://github.com/1g4-mirror/ethtool/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

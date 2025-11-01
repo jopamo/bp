@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="Terminal multiplexer"
 HOMEPAGE="https://tmux.github.io/"
-SNAPSHOT=35ad72e56ffb2e8e09a2e2ac59bee0912fe45c6c
+SNAPSHOT=be2d4aa43498a6c36d9f30f4ccedb3347882ad42
 SRC_URI="https://github.com/tmux/tmux/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/tmux-${SNAPSHOT}
 

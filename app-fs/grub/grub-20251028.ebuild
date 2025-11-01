@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-SNAPSHOT=6b5c671d35b1b84468da1fef2b9bd8e05682f7e6
+SNAPSHOT=280715ec63a3424f5cf1289302cb4ab4e98768f4
 
 inherit flag-o-matic multibuild toolchain-funcs autotools
 

@@ -9,8 +9,7 @@ inherit distutils-r1
 
 DESCRIPTION="A Bash beautifier for the masses."
 HOMEPAGE="https://github.com/lovesegfault/beautysh"
-
-SNAPSHOT=9845efc3ea3e86cc0d41465d720a47f521b2799c
+SNAPSHOT=39fc4b98ddd857a4c62d69b0d72f98db67e5ba2d
 SRC_URI="https://github.com/lovesegfault/beautysh/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/beautysh-${SNAPSHOT}"
 

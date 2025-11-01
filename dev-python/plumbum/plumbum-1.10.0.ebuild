@@ -3,7 +3,8 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( python3_{10..13} )
+PYPI_VERIFY_REPO=https://github.com/tomerfiliba/plumbum
+PYTHON_COMPAT=( python3_{11..14} )
 
 inherit distutils-r1 pypi
 
@@ -22,11 +23,10 @@ BDEPEND="
 	dev-python/hatch-vcs[${PYTHON_USEDEP}]
 	test? (
 		dev-python/psutil[${PYTHON_USEDEP}]
-		dev-python/pytest-mock[${PYTHON_USEDEP}]
-		dev-python/pytest-timeout[${PYTHON_USEDEP}]
 	)
 "
 
+EPYTEST_PLUGINS=( pytest-{mock,timeout} )
 distutils_enable_tests pytest
 
 python_test() {
@@ -44,8 +44,7 @@ python_test() {
 		tests/test_local.py::TestLocalPath::test_iterdir
 	)
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest -o addopts= -p pytest_mock -p timeout
+	epytest -o addopts=
 }
 
 pkg_postinst() {

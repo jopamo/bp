@@ -36,6 +36,8 @@ BDEPEND="app-dev/pkgconf"
 
 src_prepare() {
 	filter-flags -Wl,-z,defs
+	
+	append-flags "-fpermissive -std=gnu17"
 
 	default
 

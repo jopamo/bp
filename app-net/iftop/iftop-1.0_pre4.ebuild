@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools flag-o-matic
 
 DESCRIPTION="display bandwidth usage on an interface"
 HOMEPAGE="http://www.ex-parrot.com/pdw/iftop/"
@@ -34,6 +34,7 @@ PATCHES=(
 )
 
 src_prepare() {
+	append-flags "-fpermissive -std=gnu17"
 	rm aclocal.m4 || die
 	default
 	eautoreconf

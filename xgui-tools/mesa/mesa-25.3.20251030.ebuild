@@ -8,7 +8,7 @@ inherit meson flag-o-matic
 
 DESCRIPTION="OpenGL-like graphic library for Linux"
 HOMEPAGE="https://www.mesa3d.org/ https://mesa.freedesktop.org/"
-SNAPSHOT=4369c24d8df72042ee6c0ad16858acdc07b66b92
+SNAPSHOT=315b688976eb3ffc8f4222673884ecc5c0aa5780
 SRC_URI="https://gitlab.freedesktop.org/mesa/mesa/-/archive/${SNAPSHOT}/mesa-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/mesa-${SNAPSHOT}"
 
@@ -20,6 +20,7 @@ IUSE="wayland"
 
 DEPEND="
 	app-build/llvm
+	app-dev/glslang
 	dev-python/mako
 	lib-core/expat
 	lib-core/zlib
@@ -32,8 +33,9 @@ DEPEND="
 	xgui-lib/libxshmfence
 	xgui-lib/libXxf86vm
 	xgui-tools/libclc
-	xmedia-lib/libglvnd
 	xgui-tools/spirv-llvm-translator
+	xgui-tools/xrandr
+	xmedia-lib/libglvnd
 	wayland? ( xgui-lib/wayland-protocols )
 "
 BDEPEND="
@@ -48,7 +50,6 @@ src_configure() {
 		-Dgallium-drivers="iris,zink"
 		-Dgallium-extra-hud=false
 		-Dgallium-va=disabled
-		-Dgallium-vdpau=disabled
 		-Dgbm=enabled
 		-Dgles1=enabled
 		-Dgles2=enabled
@@ -58,7 +59,7 @@ src_configure() {
 		-Dllvm=enabled
 		-Dlmsensors=disabled
 		-Dopengl=true
-		-Dplatforms="x11,wayland"
+		-Dplatforms="x11"
 		-Dshared-glapi=enabled
 		-Dvalgrind=disabled
 		-Dvulkan-drivers="intel"

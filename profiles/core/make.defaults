@@ -116,7 +116,7 @@ USE="
     argon2        crypt         doh
     gcrypt        gnutls
     seccomp       urandom       yescrypt
-    libxcrypt
+    libxcrypt     xdp
 
     # ── Libraries & Runtimes ─────────────────────────────
     acl           attr          blkid

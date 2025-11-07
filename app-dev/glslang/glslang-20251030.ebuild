@@ -16,6 +16,8 @@ KEYWORDS="amd64 arm64"
 
 RESTRICT="test"
 
+DEPEND="app-dev/spirv-tools"
+
 src_configure() {
 	append-flags -ffat-lto-objects
 

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson
+inherit meson flag-o-matic
 
 DESCRIPTION="A free implementation of the unicode bidirectional algorithm"
 HOMEPAGE="https://fribidi.org/"
@@ -16,6 +16,11 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="lib-util/glib"
+
+src_prepare() {
+	default
+	append-flags "-fpermissive -std=gnu17"
+}
 
 src_configure() {
 	local emesonargs=(

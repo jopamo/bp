@@ -10,7 +10,7 @@ DESCRIPTION="Check live packages for updates and emerge them as necessary"
 HOMEPAGE="https://github.com/mgorny/smart-live-rebuild/"
 
 SNAPSHOT=72f4aca629a11de561b830a1600012ef7eaf27b8
-SRC_URI="https://github.com/projg2/smart-live-rebuild/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SRC_URI="https://github.com/gentoo/smart-live-rebuild/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/smart-live-rebuild-${SNAPSHOT}"
 
 LICENSE="BSD-2"

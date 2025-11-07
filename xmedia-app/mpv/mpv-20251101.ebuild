@@ -7,8 +7,8 @@ inherit meson xdg
 DESCRIPTION="Media player based on MPlayer and mplayer2"
 HOMEPAGE="https://mpv.io/"
 SNAPSHOT=0a606d9e189c749fae199287dccfaea4c68cca4a
-SRC_URI="https://github.com/mpv-player/mpv/archive/${SNAPSHOT}.tar.gz -> mpv-${SNAPSHOT}.tar.gz"
-S=${WORKDIR}/mpv-${SNAPSHOT}
+SRC_URI="https://github.com/mpv-player/mpv/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="LGPL-2.1+ GPL-2+ BSD ISC"
 SLOT="0"
@@ -99,7 +99,6 @@ src_configure() {
 		-D libbluray=disabled
 		-D rubberband=disabled
 		-D sdl2-gamepad=disabled
-		-D sdl2=disabled
 		-D uchardet=disabled
 		-D uwp=disabled
 		-D zimg=disabled

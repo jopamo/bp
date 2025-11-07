@@ -31,7 +31,8 @@ DEPEND="
 	numa? ( app-util/numactl )
 	opengl? ( xmedia-lib/libepoxy )
 	slirp? ( lib-net/slirp )
-	xdp? ( lib-net/xdp-tools )
+	xdp? ( lib-net/xdp-tools
+			lib-net/libbpf )
 "
 
 src_prepare() {

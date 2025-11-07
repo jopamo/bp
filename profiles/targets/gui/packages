@@ -1,6 +1,5 @@
 *app-core/kmod
 *app-fs/ncdu
-*app-kernel/linux-firmware
 *app-net/bluez
 *app-net/weechat
 *app-port/smart-live-rebuild
@@ -22,6 +21,7 @@
 *xgui-app/kvantum
 *xgui-app/lxappearance
 *xgui-app/pcmanfm-qt
+*xgui-app/picom
 *xgui-app/qbittorrent
 *xgui-app/qterminal
 *xgui-app/texxy
@@ -35,11 +35,9 @@
 *xgui-icontheme/adwaita-plus
 *xgui-icontheme/adwaita-qt
 *xgui-icontheme/dracula-theme
-*xgui-tools/desktop-file-utils
-*xgui-app/picom
 *xgui-tools/alsa-utils
+*xgui-tools/desktop-file-utils
 *xgui-tools/mesa-progs
-*xgui-tools/st
 *xgui-tools/st
 *xgui-tools/x2goclient
 *xgui-tools/xrandr

@@ -20,6 +20,11 @@ DEPEND="
 	lib-print/libcupsfilters
 "
 
+src_prepare() {
+	default
+	append-flags "-fpermissive -std=gnu17"
+}
+
 src_configure() {
 	local myeconfargs=(
 		--enable-imagefilters

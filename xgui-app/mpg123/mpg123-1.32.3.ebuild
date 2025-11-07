@@ -2,6 +2,8 @@
 
 EAPI=8
 
+inherit flag-o-matic
+
 DESCRIPTION="a realtime MPEG 1.0/2.0/2.5 audio player for layers 1, 2 and 3"
 HOMEPAGE="https://www.mpg123.org/"
 SRC_URI="https://www.mpg123.org/download/${P}.tar.bz2"
@@ -20,6 +22,11 @@ BDEPEND="
 	app-build/libtool
 	app-dev/pkgconf
 "
+
+src_prepare() {
+	default
+	append-flags "-fpermissive -std=gnu17"
+}
 
 src_configure() {
 	local myconf=(

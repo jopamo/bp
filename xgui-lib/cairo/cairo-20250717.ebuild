@@ -47,10 +47,6 @@ src_prepare() {
 	default
 
 	filter-flags -Wl,-z,defs
-	# tests and perf tools require X, bug #483574
-	if ! use X; then
-		sed -e '/^SUBDIRS/ s#boilerplate test perf# #' -i Makefile.am || die
-	fi
 
 	touch boilerplate/Makefile.am.features
 	touch src/Makefile.am.features

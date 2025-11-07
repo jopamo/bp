@@ -17,6 +17,10 @@ IUSE="gssapi mysql postgres sqlite systemd opengl vulkan xkbcommon"
 
 DEPEND="
 	lib-util/libinput
+	xmedia-lib/libpng
+	xgui-lib/harfbuzz
+	lib-dev/double-conversion
+	xgui-lib/freetype
 	gssapi? ( app-crypto/mit-krb5 )
 	mysql? ( app-server/mariadb )
 	opengl? ( xgui-tools/mesa )

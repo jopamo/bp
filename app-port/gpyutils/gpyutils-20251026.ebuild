@@ -8,8 +8,8 @@ inherit distutils-r1
 
 DESCRIPTION="Utitilies for maintaining Python packages"
 HOMEPAGE="https://pypi.org/project/gpyutils/"
-SNAPSHOT=68aa2dadf2f70f560f6bb5ab92b25bcaf6e74678
-SRC_URI="https://github.com/projg2/gpyutils/archive/${SNAPSHOT}.tar.gz -> gpyutils-${SNAPSHOT}.tar.gz"
+SNAPSHOT=af50626af32513e8d63bfdb81015ea010fc0c3d0
+SRC_URI="https://github.com/gentoo/gpyutils/archive/${SNAPSHOT}.tar.gz -> gpyutils-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/gpyutils-${SNAPSHOT}"
 
 LICENSE="GPL-2+"

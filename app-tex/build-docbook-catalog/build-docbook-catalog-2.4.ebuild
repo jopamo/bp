@@ -3,30 +3,42 @@
 EAPI=8
 
 DESCRIPTION="DocBook XML catalog auto-updater"
-HOMEPAGE="https://sources.gentoo.org/gentoo-src/build-docbook-catalog/"
-SRC_URI="https://github.com/gentoo/build-docbook-catalog/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+HOMEPAGE="https://docbook.org/"
+S="${WORKDIR}"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="|| ( app-core/util-linux app-var/getopt )
-	lib-core/libxml2"
+RDEPEND="
+	app-core/util-linux
+	lib-core/libxml2
+"
 
 src_prepare() {
-	sed -i 's|$(PREFIX)/sbin|$(PREFIX)/bin|' Makefile || die
+	# Copy the upstream script into WORKDIR so we patch it in place
+	cp "${FILESDIR}/build-docbook-catalog" "${S}/build-docbook-catalog" || die "failed to copy build-docbook-catalog"
+	# Adjust destination from sbin to bin
+	sed -i 's|$(PREFIX)/sbin|$(PREFIX)/bin|' "${S}/build-docbook-catalog" || die
+	# Ensure correct shebang prefix
+	sed -i -e "1s@#!@#!${EPREFIX}@" "${S}/build-docbook-catalog" || die
+	# Patch EPREFIX variable inside script
+	sed -i -e "/^EPREFIX=/s:=.*:='${EPREFIX}':" "${S}/build-docbook-catalog" || die
+	# If util-linux is not present, enable long getopt
+	has_version app-core/util-linux || sed -i -e '/^GETOPT=/s/getopt/& -long/' "${S}/build-docbook-catalog" || die
 
 	default
-
-	sed -i -e "1s@#!@#!${EPREFIX}@" build-docbook-catalog || die
-	sed -i -e "/^EPREFIX=/s:=.*:='${EPREFIX}':" build-docbook-catalog || die
-	has_version app-core/util-linux || sed -i -e '/^GETOPT=/s/getopt/&-long/' build-docbook-catalog || die
 }
 
 src_configure() {
-	export MAKEOPTS+=" EPREFIX=${EPREFIX}"
+	# nothing to configure
+	:
+}
 
-	default
+src_install() {
+	# install the script
+	exeinto /usr/bin
+	doexe "${S}/build-docbook-catalog" build-docbook-catalog
 }
 
 pkg_postinst() {

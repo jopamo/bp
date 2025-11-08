@@ -8,6 +8,7 @@ DESCRIPTION="Qt Tools collection (Assistant, Designer, Linguist, etc.)"
 HOMEPAGE="https://www.qt.io/"
 
 if [[ ${PV} == *9999 ]]; then
+	EGIT_OVERRIDE_REPO_PLAYGROUND_QLITEHTML="https://invent.kde.org/qt/playground/qlitehtml.git"
 	EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
 	EGIT_REPO_URI="https://github.com/qt/${PN}.git"
 	inherit git-r3

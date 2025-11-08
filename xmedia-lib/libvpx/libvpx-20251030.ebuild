@@ -21,6 +21,8 @@ IUSE="static-libs test"
 DEPEND="app-lang/nasm"
 
 src_configure() {
+	append-flags -ffat-lto-objects
+
 	local conf=(
 		--prefix="${EPREFIX}"/usr
 		--libdir="${EPREFIX}"/usr/lib

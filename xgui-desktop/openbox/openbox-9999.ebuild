@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools python-r1
+inherit meson python-r1
 
 DESCRIPTION="A standards compliant, fast, light-weight, extensible window manager"
 HOMEPAGE="http://openbox.org/"
@@ -21,7 +21,18 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug session static-libs"
+IUSE="debug +session static-libs
+      startup_notification
+      +xcursor
+      +imlib2
+      +librsvg
+      +xkb
+      +xrandr
+      xinerama
+      xshape
+      xsync
+      +session_management
+      rendertest"
 
 RDEPEND="
 	dev-python/pyxdg[${PYTHON_USEDEP}]
@@ -29,11 +40,25 @@ RDEPEND="
 	lib-core/libxml2
 	lib-util/glib
 	xgui-lib/libXft
-	xgui-lib/libXrandr
 	xgui-lib/libXt
-	xgui-lib/librsvg
 	xgui-lib/pango
-	xgui-lib/imlib2
+
+	startup_notification? ( xgui-lib/libstartup-notification )
+	xcursor? ( xgui-lib/libXcursor )
+	imlib2? ( xgui-lib/imlib2 )
+	librsvg? ( xgui-lib/librsvg )
+
+	xkb? ( xgui-lib/libxkbfile )
+
+	xrandr? ( xgui-lib/libXrandr )
+	xinerama? ( xgui-lib/libXinerama )
+	xshape? ( xgui-lib/libXext )
+	xsync? ( xgui-lib/libXext )
+
+	session_management? (
+		xgui-lib/libSM
+		xgui-lib/libICE
+	)
 "
 
 DEPEND="
@@ -44,35 +69,21 @@ DEPEND="
 	xgui-tools/xorg-server
 "
 
-src_prepare() {
-	sed -i '/docbook-to-man/d' "${S}"/Makefile.am || die
-	sed -i \
-		-e "s:-O0 -ggdb ::" \
-		"${S}"/m4/openbox.m4 || die
-
-	default
-	eautoreconf
-}
-
 src_configure() {
-	local myconf=(
-		--disable-nls
-		--enable-imlib2
-		--enable-librsvg
-		--with-x
-		$(use_enable debug)
-		$(use_enable session session-management)
-		$(use_enable static-libs static)
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
-}
+  local meson_args=(
+    -Dstartup_notification=$(usex startup_notification enabled disabled)
+    -Dxcursor=$(usex xcursor enabled disabled)
+    -Dimlib2=$(usex imlib2 enabled disabled)
+    -Dlibrsvg=$(usex librsvg enabled disabled)
+    -Dxkb=$(usex xkb enabled disabled)
+    -Dxrandr=$(usex xrandr enabled disabled)
+    -Dxinerama=$(usex xinerama enabled disabled)
+    -Dxshape=$(usex xshape enabled disabled)
+    -Dxsync=$(usex xsync enabled disabled)
+    -Dsession_management=$(usex session_management enabled disabled)
+    -Drendertest=false
+    -Ddefault_theme=Clearlooks
+  )
 
-src_install() {
-	default
-
-	# for xdg
-	cat > "${T}"/99${PN} <<- EOF || die
-		XDG_CURRENT_DESKTOP=XFCE
-	EOF
-	doenvd "${T}"/99${PN}
+  meson_src_configure "${meson_args[@]}" || die "meson configure failed"
 }

@@ -12,7 +12,7 @@ S="${WORKDIR}/FFmpeg-${SNAPSHOT}"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
 
 IUSE="
 	+alsa +avcodec +avdevice +avfilter +avformat +avutil debug

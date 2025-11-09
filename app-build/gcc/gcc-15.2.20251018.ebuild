@@ -59,6 +59,7 @@ src_prepare() {
 	# do not run fixincludes (we don't want headers rewritten)
 	sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in || die
 
+	# do not use lib64
 	sed -i '/^m64=/s/lib64/lib/' gcc/config/i386/t-linux64 || die
 
 	# configure tests for header files using "$CPP $CPPFLAGS"

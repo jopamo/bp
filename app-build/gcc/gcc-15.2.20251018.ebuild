@@ -49,8 +49,8 @@ src_prepare() {
 		-fpie \
 		-pipe
 
-	filter-gcc        # overlay helper to nuke self-hosted gcc-specific CFLAGS etc
-	filter-lto        # overlay helper to kill -flto from env so bootstrap controls LTO
+	filter-gcc
+	filter-lto
 
 	use debug || filter-flags -g
 
@@ -59,14 +59,12 @@ src_prepare() {
 	# do not run fixincludes (we don't want headers rewritten)
 	sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in || die
 
-	# install x86_64 libraries in /lib instead of /lib64
-	sed -i '/m64=/s/lib64/lib/' gcc/config/i386/t-linux64 || die
+	sed -i '/^m64=/s/lib64/lib/' gcc/config/i386/t-linux64 || die
 
 	# configure tests for header files using "$CPP $CPPFLAGS"
 	# add -O2 so they don't get confused by stripped -pipe etc
 	sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure || die
 
-	# out-of-tree build dir
 	mkdir -p gcc-build || die
 }
 
@@ -79,13 +77,10 @@ src_configure() {
 	cd gcc-build || die
 
 	# using -pipe causes spurious test-suite failures
-	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=48565
 	CFLAGS=${CFLAGS/-pipe/}
 	CXXFLAGS=${CXXFLAGS/-pipe/}
 
 	# decide CET configure switch based on libc and arch
-	# GCC --enable-cet toggles -fcf-protection for target runtime libs on Linux/x86 by default
-	# disable on arm64 and anything non-x86, only allow on glibc+x86
 	local cet_opt="--disable-cet"
 	if use elibc_glibc && [[ ${CHOST} == x86_64-* || ${CHOST} == i?86-* ]]; then
 		cet_opt="--enable-cet"
@@ -97,6 +92,7 @@ src_configure() {
 		--sbindir="${EPREFIX}"/usr/bin
 		--libdir="${EPREFIX}"/usr/lib
 		--libexecdir="${EPREFIX}"/usr/libexec
+		--with-slibdir="${EPREFIX}"/usr/lib
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
 		--includedir="${EPREFIX}"/usr/include
@@ -155,14 +151,11 @@ src_configure() {
 src_compile() {
 	cd gcc-build || die
 
-	# do a single bootstrap build
-	# this already builds stage1 -> stage2 -> stage3 compiler,
-	# libstdc++, libgomp, libgcc_s, libgfortran (if enabled), etc
 	emake -O \
-		STAGE1_CFLAGS="$CFLAGS" \
-		BOOT_CFLAGS="$CFLAGS" \
-		BOOT_LDFLAGS="$LDFLAGS" \
-		LDFLAGS_FOR_TARGET="$LDFLAGS" \
+		STAGE1_CFLAGS="${CFLAGS}" \
+		BOOT_CFLAGS="${CFLAGS}" \
+		BOOT_LDFLAGS="${LDFLAGS}" \
+		LDFLAGS_FOR_TARGET="${LDFLAGS}" \
 		bootstrap
 }
 
@@ -175,23 +168,21 @@ src_install() {
 	dobin "${FILESDIR}"/c99
 
 	if use go-bootstrap; then
-		exeinto /usr/lib/gccgo/bin/
+		exeinto /usr/lib/gccgo/bin
 		doexe "${ED}/usr/bin/go"
 		doexe "${ED}/usr/bin/gofmt"
 
-		cat > "${T}"/99gcc <<- EOF || die
-			PATH=/usr/lib/gccgo/bin/
-		EOF
+		cat > "${T}"/99gcc <<-EOF || die
+PATH=/usr/lib/gccgo/bin
+EOF
 		doenvd "${T}"/99gcc
 
 		rm "${ED}/usr/bin/go"
 		rm "${ED}/usr/bin/gofmt"
 	fi
 
-	# provide cc symlink
 	dosym -r /usr/bin/gcc /usr/bin/cc
 
-	# drop useless libtool files from plugin helper libs
 	find "${ED}"/usr/libexec/gcc -type f \
 		\( -name 'libc?1*.la' -o -name 'libcp1plugin.la' \) -delete
 }

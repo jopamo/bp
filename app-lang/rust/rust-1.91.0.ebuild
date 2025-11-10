@@ -76,41 +76,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-  [[ -x /usr/bin/ld.lld ]] || die "/usr/bin/ld.lld not found, emerge sys-devel/lld"
-
-  # 1) force initial_lld to system ld.lld wherever it appears
-  grep -RIl 'let[[:space:]]\+initial_lld' src/bootstrap/src \
-  | xargs -r sed -Ei \
-    's#let[[:space:]]+initial_lld[[:space:]]*=[[:space:]]*initial_target_dir[[:space:]]*\.join\([[:space:]]*"bin"[[:space:]]*\)[[:space:]]*\.join\([[:space:]]*"rust-lld"[[:space:]]*\);#let initial_lld = std::path::PathBuf::from("/usr/bin/ld.lld");#'
-
-  # 2) replace any rust-lld installer copy with a safe block that uses /usr/bin/ld.lld and skips if unavailable
-  #    this eats the "src.symlink_metadata()" panic entirely
-  for f in src/bootstrap/src/lib.rs src/bootstrap/src/dist.rs src/bootstrap/src/compile.rs; do
-    [[ -f "$f" ]] || continue
-    perl -0777 -pe '
-      s#
-        let\s+src\s*=\s*[^;]*join\(\s*"rust-lld"\s*\)\s*;\s*
-        t!\(src\.symlink_metadata\(\),\s*"src\s*=\s*\{\}",\s*src\.display\(\)\);\s*
-        builder\.install\(&src,\s*&dst,\s*0o755\);
-      #let src = std::path::PathBuf::from("/usr/bin/ld.lld");
-       if std::fs::symlink_metadata(&src).is_ok() { builder.install(&src, &dst, 0o755) }#sx
-    ' -i "$f"
-
-    # also catch variants that don’t use the exact t! macro string
-    perl -0777 -pe '
-      s#
-        let\s+src\s*=\s*[^;]*join\(\s*"rust-lld"\s*\)\s*;\s*
-        [^\n]*src\.symlink_metadata\(\)[^\n]*\n
-        [^\n]*builder\.install\(&src,\s*&dst,\s*0o755\);
-      #let src = std::path::PathBuf::from("/usr/bin/ld.lld");
-       if std::fs::symlink_metadata(&src).is_ok() { builder.install(&src, &dst, 0o755) }#sx
-    ' -i "$f"
-  done
-
-  # prove patches landed
-  grep -RIn '/usr/bin/ld\.lld' src/bootstrap/src || die "rust-lld patches not applied"
-
-  # your existing musl tweaks etc
   if use elibc_musl; then
     eapply "${FILESDIR}"/rust/*.patch
     sed -i 's/base\.crt_static_default = true;/base\.crt_static_default = false;/g' \

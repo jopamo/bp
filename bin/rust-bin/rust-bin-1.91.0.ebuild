@@ -19,10 +19,9 @@ SRC_URI="
 
 LICENSE="|| ( MIT Apache-2.0 ) BSD-1 BSD-2 BSD-4 UoI-NCSA"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 IUSE="clippy rls rustfmt"
 
-# Adjusting paths from opt to opt
 QA_PREBUILT="
 	opt/bin/.*
 	opt/lib/.*.so
@@ -34,7 +33,6 @@ QA_PREBUILT="
 RESTRICT="strip"
 QA_EXECSTACK="opt/lib/rustlib/*/lib*.rlib:lib.rmeta"
 
-# Function to determine the correct Rust target triple
 get_rust_triple() {
 	if use amd64; then
 		if use elibc_musl; then

@@ -61,7 +61,6 @@ app-net/traceroute
 app-port/pkgdev
 app-port/smart-live-rebuild
 app-server/lighttpd
-app-util/lm-sensors
 app-util/lshw
 app-var/hdparm
 app-var/perl-cleaner

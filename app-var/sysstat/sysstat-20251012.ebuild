@@ -14,9 +14,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug lm-sensors static systemd"
-
-DEPEND="lm-sensors? ( app-util/lm-sensors )"
+IUSE="debug static systemd"
 
 _makeargs=(
   prefix="${EPREFIX}/usr"
@@ -33,7 +31,6 @@ src_configure() {
 
 	local myconf=(
 		$(use_enable debug debuginfo)
-		$(use_enable lm-sensors sensors)
 		--disable-documentation
 		--disable-install-cron
 		--disable-nls

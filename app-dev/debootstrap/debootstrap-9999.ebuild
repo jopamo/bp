@@ -13,3 +13,9 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RESTRICT="test"
+
+src_prepare() {
+	default
+	sed -i 's/sbin/bin/g' Makefile
+}
+

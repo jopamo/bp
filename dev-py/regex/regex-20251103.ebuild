@@ -12,7 +12,7 @@ HOMEPAGE="
 	https://github.com/mrabarnett/mrab-regex/
 	https://pypi.org/project/regex/
 "
-SNAPSHOT=dd256cd36e6d7da215bb82be8e9b6e846e1140e5
+SNAPSHOT=b01d6e7349f1f754f9576e85aa19575acff0c839
 SRC_URI="https://github.com/mrabarnett/mrab-regex/archive/${SNAPSHOT}.tar.gz -> regex-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/mrab-regex-${SNAPSHOT}"
 

@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="Idle management daemon for Wayland"
 HOMEPAGE="https://github.com/swaywm/swayidle"
-SNAPSHOT=afcce4303d447f12b20e035fcb9ff09b4a0b948b
+SNAPSHOT=f54c11ac01916acbe1c7bbab50bfea22781efbcb
 SRC_URI="https://github.com/swaywm/swayidle/archive/${SNAPSHOT}.tar.gz -> swayidle-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/swayidle-${SNAPSHOT}"
 

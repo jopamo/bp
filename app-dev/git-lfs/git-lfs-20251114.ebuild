@@ -6,7 +6,7 @@ inherit go-module
 
 DESCRIPTION="Command line extension and specification for managing large files with git"
 HOMEPAGE="https://git-lfs.com/"
-SNAPSHOT=0b47d89957e0c917fbf1927fcd309a374959601b
+SNAPSHOT=8928afebe59c31579d25fce12a69f45961a17b05
 SRC_URI="https://github.com/git-lfs/git-lfs/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/git-lfs-${SNAPSHOT}
 

@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="Cross-platform asynchronous I/O and event loop library (libuv)"
 HOMEPAGE="https://github.com/libuv/libuv"
-SNAPSHOT=12d1ed1380c59c5ec27503cf149833de6f0e6bb0
+SNAPSHOT=b33162dd0b6767fbc3c833ecbe3c2f2607ba0dca
 SRC_URI="https://github.com/libuv/libuv/archive/${SNAPSHOT}.tar.gz -> libuv-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libuv-${SNAPSHOT}"
 

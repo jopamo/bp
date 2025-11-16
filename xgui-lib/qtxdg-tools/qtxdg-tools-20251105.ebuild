@@ -6,8 +6,7 @@ inherit cmake
 
 DESCRIPTION="libqtxdg user tools"
 HOMEPAGE="http://lxqt.org/"
-
-SNAPSHOT=2ea4bb0acbd1d97a7310b27aa2edb43a247cc8ab
+SNAPSHOT=5e117419772bdee826afe8618748ca07158ff62c
 SRC_URI="https://github.com/lxqt/qtxdg-tools/archive/${SNAPSHOT}.tar.gz -> qtxdg-tools-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/qtxdg-tools-${SNAPSHOT}"
 

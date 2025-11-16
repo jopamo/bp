@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="Intel CPU microcode update blobs for early-boot loading"
 HOMEPAGE="https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files"
-SNAPSHOT=4ded52b4b0e1d60e83259cc88d1f5ad22f71a63e
+SNAPSHOT=f910b0a225d66a23a407710c61b0b63ee612b50f
 SRC_URI="https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/Intel-Linux-Processor-Microcode-Data-Files-${SNAPSHOT}"
 

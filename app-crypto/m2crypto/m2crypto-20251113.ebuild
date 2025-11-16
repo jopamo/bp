@@ -14,7 +14,7 @@ HOMEPAGE="
 	https://gitlab.com/m2crypto/m2crypto/
 	https://pypi.org/project/M2Crypto/
 "
-SNAPSHOT=301b4b50b46bd548a15d1adc0c12de3cb87ca24a
+SNAPSHOT=da42299680ff2819bd50ccbf6db50efe80fbe55f
 SRC_URI="https://gitlab.com/m2crypto/m2crypto/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

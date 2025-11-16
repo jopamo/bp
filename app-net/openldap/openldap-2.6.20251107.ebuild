@@ -8,7 +8,7 @@ inherit autotools
 
 DESCRIPTION="implementation of the Lightweight Directory Access Protocol"
 HOMEPAGE="https://www.openldap.org"
-SNAPSHOT=16800c72ba3a470d2e90711e228533e572d6a4e4
+SNAPSHOT=a01b6203aeaf719660459ccdee3c4fe5b3536257
 SRC_URI="https://github.com/openldap/openldap/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/openldap-${SNAPSHOT}"
 

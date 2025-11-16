@@ -8,7 +8,7 @@ inherit meson flag-o-matic
 
 DESCRIPTION="implementation of the X Window System display server"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=7f575ddc994c5c2ce16dcf6bcbd0adad6fa0f955
+SNAPSHOT=4c4fb5f5f128edef0e365c76083210a610102065
 SRC_URI="https://github.com/X11Libre/xserver/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/xserver-${SNAPSHOT}"
 
@@ -111,7 +111,7 @@ src_configure() {
     # crypto and misc
     -Dsha1=libcrypto             # use openssl for sha1
     -Dlibunwind=false            # keep unwinder off unless debugging
-    -Dlegacy_nvidia_padding=false # keep default pixmap padding; set true only for very old nvidia blobs
+    #-Dlegacy_nvidia_padding=false # keep default pixmap padding; set true only for very old nvidia blobs
 
     # features we explicitly keep off
     -Dxdmcp=false                # no xdmcp

@@ -6,7 +6,7 @@ inherit flag-o-matic toolchain-funcs autotools
 
 DESCRIPTION="Standard EXT2/EXT3/EXT4 filesystem utilities"
 HOMEPAGE="http://ext4.wiki.kernel.org/"
-SNAPSHOT=13dfdf2410648c361dfd49b28d7dbeac8a580532
+SNAPSHOT=0b2752ce6276b383a5254cd766204f81f41b6631
 SRC_URI="https://github.com/tytso/e2fsprogs/archive/${SNAPSHOT}.tar.gz -> e2fsprogs-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/e2fsprogs-${SNAPSHOT}"
 

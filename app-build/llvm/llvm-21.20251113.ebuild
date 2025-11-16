@@ -8,7 +8,7 @@ inherit cmake flag-o-matic
 
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
-SNAPSHOT=df3145bf4239824619ad36ffaf523fdcceac88c5
+SNAPSHOT=a832a5222e489298337fbb5876f8dcaf072c5cca
 
 SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"

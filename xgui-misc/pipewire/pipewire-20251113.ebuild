@@ -6,7 +6,7 @@ inherit flag-o-matic meson python-any-r1 user
 
 DESCRIPTION="Multimedia processing graphs"
 HOMEPAGE="https://pipewire.org/"
-SNAPSHOT=62022ce623d0eab7b312125da0bdeb000b5e3865
+SNAPSHOT=18ff08243bc2819d0f4e09f9a8fec6a6ef7a9767
 SRC_URI="https://github.com/PipeWire/pipewire/archive/${SNAPSHOT}.tar.gz -> pipewire-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/pipewire-${SNAPSHOT}"
 

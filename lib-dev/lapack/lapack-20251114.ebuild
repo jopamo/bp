@@ -6,8 +6,7 @@ inherit cmake
 
 DESCRIPTION="BLAS, CBLAS, LAPACK, LAPACKE reference implementations"
 HOMEPAGE="https://www.netlib.org/lapack/"
-
-SNAPSHOT=48677eea06845cf7d53c61ca9f6a8b958bbb97b6
+SNAPSHOT=8d44c306859d340ffca628a2dc02198dfd6df006
 SRC_URI="https://github.com/Reference-LAPACK/lapack/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

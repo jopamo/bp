@@ -9,7 +9,7 @@ alias /dev/nvidiactl char-major-195
 
 options nvidia \
     NVreg_DeviceFileUID=0 \
-    NVreg_DeviceFileGID=@VIDEOGID@ \
+    NVreg_DeviceFileGID=VIDEOGID \
     NVreg_DeviceFileMode=0660 \
     NVreg_ModifyDeviceFiles=1
 

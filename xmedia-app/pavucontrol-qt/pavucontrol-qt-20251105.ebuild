@@ -6,7 +6,7 @@ inherit cmake xdg
 
 DESCRIPTION="Qt port of pavucontrol"
 HOMEPAGE="http://lxqt.org/"
-SNAPSHOT=b7b7dafd6274e1d1cfb83c448779a8422746206f
+SNAPSHOT=5b280a4e45453560ea2ea839a9a3db0069c57ce8
 SRC_URI="https://github.com/lxqt/pavucontrol-qt/archive/${SNAPSHOT}.tar.gz -> pavucontrol-qt-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/pavucontrol-qt-${SNAPSHOT}"
 

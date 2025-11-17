@@ -28,11 +28,7 @@ BDEPEND="
 	)
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
-
-PATCHES=(
-	# https://github.com/gristlabs/asttokens/pull/157
-	"${FILESDIR}/${P}-py314.patch"
-)

@@ -27,21 +27,10 @@ BDEPEND="
 	)
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_test() {
-	local EPYTEST_DESELECT=()
-	case ${EPYTHON} in
-		python3.14*)
-			EPYTEST_DESELECT+=(
-				# https://github.com/cloudpipe/cloudpickle/issues/567
-				tests/cloudpickle_test.py::CloudPickleTest::test_locally_defined_class_with_type_hints
-				tests/cloudpickle_test.py::Protocol2CloudPickleTest::test_locally_defined_class_with_type_hints
-			)
-			;;
-	esac
-
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	local -x PYTHONPATH=${PYTHONPATH}:tests/cloudpickle_testpkg
 	# -s unbreaks some tests
 	# https://github.com/cloudpipe/cloudpickle/issues/252

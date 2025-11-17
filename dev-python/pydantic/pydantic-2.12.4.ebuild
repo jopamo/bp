@@ -9,7 +9,7 @@ DISTUTILS_USE_PEP517=hatchling
 PYPI_VERIFY_REPO=https://github.com/pydantic/pydantic
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
-PYDANTIC_CORE_PV=2.41.4
+PYDANTIC_CORE_PV=2.41.5
 RUST_MIN_VER="1.75.0"
 CRATES="
 	ahash@0.8.12
@@ -42,7 +42,7 @@ CRATES="
 	idna_adapter@1.2.0
 	indoc@2.0.5
 	itoa@1.0.11
-	jiter@0.11.0
+	jiter@0.11.1
 	js-sys@0.3.77
 	lexical-parse-float@1.0.5
 	lexical-parse-integer@1.0.5
@@ -56,7 +56,7 @@ CRATES="
 	num-integer@0.1.46
 	num-traits@0.2.19
 	once_cell@1.21.3
-	percent-encoding@2.3.1
+	percent-encoding@2.3.2
 	portable-atomic@1.6.0
 	proc-macro2@1.0.86
 	pyo3-build-config@0.26.0
@@ -68,9 +68,9 @@ CRATES="
 	quote@1.0.36
 	r-efi@5.2.0
 	radium@0.7.0
-	regex-automata@0.4.11
+	regex-automata@0.4.13
 	regex-syntax@0.8.5
-	regex@1.11.3
+	regex@1.12.2
 	rustversion@1.0.17
 	ryu@1.0.18
 	serde@1.0.228

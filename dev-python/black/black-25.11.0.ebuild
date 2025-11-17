@@ -24,7 +24,7 @@ RDEPEND="
 	>=dev-python/packaging-22.0[${PYTHON_USEDEP}]
 	>=dev-python/pathspec-0.9.0[${PYTHON_USEDEP}]
 	>=dev-python/platformdirs-2[${PYTHON_USEDEP}]
-	>=dev-python/pytokens-0.1.10[${PYTHON_USEDEP}]
+	>=dev-python/pytokens-0.3.0[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	dev-python/hatch-fancy-pypi-readme[${PYTHON_USEDEP}]

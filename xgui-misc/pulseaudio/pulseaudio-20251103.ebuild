@@ -85,13 +85,12 @@ src_configure() {
 		$(meson_feature samplerate)
 		$(meson_use ipv6)
 		-Ddaemon=false
-		-Ddoxygen=false
+		-Ddoxygen=disabled
 		-Dconsolekit=disabled
 	    -Delogind=disabled
 		-Davahi=disabled
 		-Ddatabase=gdbm
 		-Dx11=disabled
-		-Ddoxygen=false
 		-Dgsettings=disabled
 		-Dgstreamer=disabled
 		-Dpulsedsp-location='/usr/\$LIB/pulseaudio'

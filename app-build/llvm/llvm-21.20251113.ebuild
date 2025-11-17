@@ -17,7 +17,7 @@ LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
 KEYWORDS="amd64 arm64"
 
-IUSE="amdgpu arm assertions bootstrap bpf cuda debug libcxx libcxxabi libfuzzer nvptx orc sanitizers static_analyzer -sysclang syslibcxxabi test wasm xcore"
+IUSE="amdgpu arm assertions bootstrap +clang-tools-extra bpf cuda debug libcxx libcxxabi libfuzzer nvptx orc sanitizers static_analyzer -sysclang syslibcxxabi test wasm xcore"
 
 DEPEND="
     lib-core/libffi
@@ -84,8 +84,12 @@ src_configure() {
     use wasm && LLVM_TARGETS+=";WebAssembly"
     use xcore && LLVM_TARGETS+=";XCore"
 
+    local LLVM_PROJECTS="llvm;clang;lld"
+    use clang-tools-extra && LLVM_PROJECTS+=";clang-tools-extra"
+
     echo "Selected LLVM targets: ${LLVM_TARGETS}"
 	echo "Selected LLVM runtimes: ${LLVM_RUNTIMES}"
+	echo "Selected LLVM projects: ${LLVM_PROJECTS}"
 
     local common=(
 		-DBUILD_SHARED_LIBS=OFF
@@ -143,7 +147,7 @@ src_configure() {
 		-DLLVM_ENABLE_LIBXML2=ON
 		-DLLVM_ENABLE_OCAMLDOC=OFF
 		-DLLVM_ENABLE_PER_TARGET_RUNTIME_DIR=ON
-		-DLLVM_ENABLE_PROJECTS="llvm;clang;lld"
+		-DLLVM_ENABLE_PROJECTS="${LLVM_PROJECTS}"
 		-DLLVM_ENABLE_RTTI=ON
 		-DLLVM_ENABLE_RUNTIMES="${LLVM_RUNTIMES}"
 		-DLLVM_ENABLE_SPHINX=OFF

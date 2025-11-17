@@ -19,6 +19,9 @@ RESTRICT="test network-sandbox"
 src_prepare() {
 	default
 	cp "${FILESDIR}"/*.md core/
+
+	find . -type f -not -path '*/.git/*' \
+		-exec sed -i 's/AGENTS\.md/HACKING.md/g' {} +
 }
 
 src_install() {

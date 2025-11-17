@@ -41,3 +41,10 @@ QA_FLAGS_IGNORED=".*"
 
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
+
+src_unpack() {
+	pypi_src_unpack
+
+	# https://github.com/ijl/orjson/issues/613
+	cargo_gen_config
+}

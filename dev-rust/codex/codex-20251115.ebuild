@@ -16,6 +16,11 @@ KEYWORDS="amd64 arm64"
 
 RESTRICT="test network-sandbox"
 
+src_prepare() {
+	default
+	cp "${FILESDIR}"/*.md core/
+}
+
 src_install() {
 	dobin target/release/codex
 }

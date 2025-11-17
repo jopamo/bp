@@ -25,8 +25,6 @@ USE_EXPAND_HIDDEN="ABI_X86 CPU_FLAGS_ARM CPU_FLAGS_X86"
 # Profile-only vars (not overridable in make.conf)
 PROFILE_ONLY_VARIABLES="IUSE_IMPLICIT USE_EXPAND_IMPLICIT USE_EXPAND_UNPREFIXED"
 
-EMERGE_DEFAULT_OPTS="--usepkg --usepkg-exclude 'bin/* virtual/* app-kernel/stable-sources'"
-FEATURES="getbinpkg"
 ###############################################################################
 # Portage behaviour
 ###############################################################################

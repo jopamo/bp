@@ -23,7 +23,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 BDEPEND="
-	app-arch/unzip
+	app-compression/zip-utils
 "
 
 distutils_enable_tests pytest

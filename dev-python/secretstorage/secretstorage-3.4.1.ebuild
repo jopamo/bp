@@ -40,6 +40,6 @@ src_test() {
 }
 
 python_test() {
-	dbus-run-session "${EPYTHON}" -m unittest discover -v -s tests \
-		|| die "tests failed with ${EPYTHON}"
+	dbus-run-session "${EPYTHON}" -m unittest discover -v -s tests ||
+		die "tests failed with ${EPYTHON}"
 }

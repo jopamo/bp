@@ -3,6 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
+PYPI_VERIFY_REPO=https://github.com/pytest-dev/pytest
 PYTHON_TESTED=( python3_{11..14} pypy3_11 )
 PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_{13,14}t )
 
@@ -22,8 +23,8 @@ IUSE="test"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
-	dev-python/iniconfig[${PYTHON_USEDEP}]
-	dev-python/packaging[${PYTHON_USEDEP}]
+	>=dev-python/iniconfig-1.0.1[${PYTHON_USEDEP}]
+	>=dev-python/packaging-22[${PYTHON_USEDEP}]
 	<dev-python/pluggy-2[${PYTHON_USEDEP}]
 	>=dev-python/pluggy-1.5.0[${PYTHON_USEDEP}]
 	>=dev-python/pygments-2.7.2[${PYTHON_USEDEP}]

@@ -28,7 +28,7 @@ RDEPEND="
 	>=dev-python/platformdirs-3.9.1[${PYTHON_USEDEP}]
 
 	dev-python/ensurepip-pip
-	dev-python/ensurepip-setuptools
+	>=dev-python/ensurepip-setuptools-70.1
 	dev-python/ensurepip-wheel
 "
 # coverage is used somehow magically in virtualenv, maybe it actually

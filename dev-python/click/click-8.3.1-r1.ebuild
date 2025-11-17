@@ -3,9 +3,10 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
+PYPI_VERIFY_REPO=https://github.com/pallets/click
 PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="A Python package for creating beautiful command line interfaces"
 HOMEPAGE="
@@ -13,15 +14,10 @@ HOMEPAGE="
 	https://github.com/pallets/click/
 	https://pypi.org/project/click/
 "
-SRC_URI="
-	https://github.com/pallets/${PN}/archive/${PV}.tar.gz
-		-> ${P}.gh.tar.gz
-"
 
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="examples"
 
 distutils_enable_sphinx docs \
 	'>=dev-py/docutils-0.14' \
@@ -32,8 +28,3 @@ distutils_enable_sphinx docs \
 
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
-
-python_install_all() {
-	use examples && dodoc -r examples
-	distutils-r1_python_install_all
-}

@@ -3,6 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
+PYPI_VERIFY_REPO=https://github.com/pytest-dev/execnet
 PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 
 inherit distutils-r1 pypi
@@ -23,6 +24,7 @@ BDEPEND="
 "
 
 distutils_enable_sphinx doc
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_test() {
@@ -39,7 +41,6 @@ python_test() {
 
 	# the test suite checks if bytecode writing can be disabled/enabled
 	local -x PYTHONDONTWRITEBYTECODE=
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	# some tests are implicitly run against both sys.executable
 	# and pypy3, which is redundant and results in pypy3 bytecode being
 	# written to cpython install dirs

@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( pypy3 pypy3_11 python3_{10..13} )
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 
 
@@ -47,6 +47,7 @@ BDEPEND="
 	)
 "
 
+EPYTEST_PLUGINS=()
 EPYTEST_XDIST=1
 distutils_enable_tests pytest
 
@@ -67,9 +68,14 @@ python_test() {
 		# https://github.com/sympy/sympy/issues/27026
 		sympy/parsing/tests/test_autolev.py
 		sympy/parsing/tests/test_latex.py
+
+		# Deprecation warnings turned failures
+		# https://github.com/sympy/sympy/pull/28158
+		sympy/geometry/tests/test_polygon.py::test_do_poly_distance
+		sympy/plotting/tests/test_plot.py::test_plot_and_save_6
+		sympy/integrals/tests/test_integrals.py::test_integrate_poly_definite
 	)
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	nonfatal epytest --veryquickcheck ||
 		die -n "Tests failed with ${EPYTHON}"
 }

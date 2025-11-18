@@ -23,14 +23,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug +session static-libs
       startup_notification
-      +xcursor
       +imlib2
       +librsvg
-      +xkb
-      +xrandr
-      xinerama
-      xshape
-      xsync
       +session_management
       rendertest"
 
@@ -39,21 +33,16 @@ RDEPEND="
 	fonts/fontconfig
 	lib-core/libxml2
 	lib-util/glib
+	xgui-lib/libXext
 	xgui-lib/libXft
+	xgui-lib/libxkbcommon
+	xgui-lib/libXrandr
 	xgui-lib/libXt
 	xgui-lib/pango
 
 	startup_notification? ( xgui-lib/libstartup-notification )
-	xcursor? ( xgui-lib/libXcursor )
 	imlib2? ( xgui-lib/imlib2 )
 	librsvg? ( xgui-lib/librsvg )
-
-	xkb? ( xgui-lib/libxkbfile )
-
-	xrandr? ( xgui-lib/libXrandr )
-	xinerama? ( xgui-lib/libXinerama )
-	xshape? ( xgui-lib/libXext )
-	xsync? ( xgui-lib/libXext )
 
 	session_management? (
 		xgui-lib/libSM
@@ -72,14 +61,8 @@ DEPEND="
 src_configure() {
   local meson_args=(
     -Dstartup_notification=$(usex startup_notification enabled disabled)
-    -Dxcursor=$(usex xcursor enabled disabled)
     -Dimlib2=$(usex imlib2 enabled disabled)
     -Dlibrsvg=$(usex librsvg enabled disabled)
-    -Dxkb=$(usex xkb enabled disabled)
-    -Dxrandr=$(usex xrandr enabled disabled)
-    -Dxinerama=$(usex xinerama enabled disabled)
-    -Dxshape=$(usex xshape enabled disabled)
-    -Dxsync=$(usex xsync enabled disabled)
     -Dsession_management=$(usex session_management enabled disabled)
     -Drendertest=false
     -Ddefault_theme=Clearlooks

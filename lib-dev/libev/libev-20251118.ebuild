@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="A high-performance event loop/event model with lots of feature"
 HOMEPAGE="http://software.schmorp.de/pkg/libev.html"
 
-SNAPSHOT=fc96f0046bf4fa67e83068e66a2c4734ca768587
+SNAPSHOT=c23eb1d94fa32f23b2cb885aeb46ce5825efce32
 SRC_URI="https://github.com/jopamo/libev/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

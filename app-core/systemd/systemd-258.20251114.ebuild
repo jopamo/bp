@@ -233,40 +233,41 @@ DHCP=ipv4' > "${ED}"/etc/systemd/network/ipv4dhcp.network
         sed -i "/${x}/d" "${ED}"/usr/lib/udev/rules.d/50-udev-default.rules || die
     done
 
-    mkdir -p "${ED}"/usr/lib/systemd/user/
-    cat > "${ED}"/usr/lib/systemd/user/ssh-agent.service <<- EOF || die
-        [Unit]
-        Description=SSH key agent
-        After=basic.target
-        Requires=basic.target
+mkdir -p "${ED}/usr/lib/systemd/user/"
 
-        [Service]
-        Type=forking
-        Environment=SSH_AUTH_SOCK=%t/ssh-agent.socket
-        ExecStart=/usr/bin/ssh-agent -a $SSH_AUTH_SOCK
-        ExecStop=/usr/bin/ssh-agent -k
-        Restart=always
-        RemainAfterExit=yes
+cat > "${ED}/usr/lib/systemd/user/ssh-agent.service" <<- 'EOF' || die
+[Unit]
+Description=OpenSSH Agent
+After=default.target
+Requires=default.target
 
-        [Install]
-        WantedBy=default.target
-		EOF
+[Service]
+Type=forking
+Environment=SSH_AUTH_SOCK=%t/ssh-agent.socket
+ExecStart=/usr/bin/ssh-agent -a $SSH_AUTH_SOCK
+ExecStop=/usr/bin/ssh-agent -k
+Restart=always
+RemainAfterExit=yes
 
-    cat > "${ED}"/usr/lib/systemd/user/gpg-agent.service <<- EOF || die
-        [Unit]
-        Description=GnuPG private key agent
-        After=basic.target
-        Wants=basic.target
+[Install]
+WantedBy=default.target
+EOF
 
-        [Service]
-        Type=simple
-        ExecStart=/usr/bin/gpgconf --launch gpg-agent
-        ExecStop=/usr/bin/gpgconf --kill gpg-agent
-        RemainAfterExit=yes
+cat > "${ED}/usr/lib/systemd/user/gpg-agent.service" <<- 'EOF' || die
+[Unit]
+Description=GnuPG Agent Service
+After=default.target
 
-        [Install]
-        WantedBy=default.target
-		EOF
+[Service]
+Type=simple
+ExecStart=/usr/bin/gpgconf --launch gpg-agent
+ExecStop=/usr/bin/gpgconf --kill gpg-agent
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target
+EOF
+
 }
 
 pkg_postrm() {

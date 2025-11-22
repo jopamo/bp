@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake
+inherit cmake flag-o-matic
 
 DESCRIPTION="Portable, pure-library implementation of core Git functionality"
 HOMEPAGE="https://www.libgit2.org/"
@@ -15,6 +15,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 src_configure() {
+	append-flags -ffat-lto-objects
+
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=OFF
 	)

@@ -15,3 +15,5 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RESTRICT="test network-sandbox"
+
+export LIBGIT2_SYS_USE_PKG_CONFIG=1

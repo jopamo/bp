@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 
 src_configure() {
 	local mycmakeargs=(
-		-DBUILD_STATIC_LIBS=ON
+		-DBUILD_SHARED_LIBS=OFF
 	)
 	cmake_src_configure
 }

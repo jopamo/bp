@@ -13,3 +13,10 @@ S=${WORKDIR}/libgit2-${SNAPSHOT}
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+src_configure() {
+	local mycmakeargs=(
+		-DBUILD_STATIC_LIBS=ON
+	)
+	cmake_src_configure
+}

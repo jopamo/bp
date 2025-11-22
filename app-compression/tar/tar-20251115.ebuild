@@ -34,9 +34,9 @@ RESTRICT="network-sandbox"
 src_prepare() {
 	rm -rf gnulib paxutils
 	cp -r "${EROOT}"/usr/share/gnulib gnulib
-	#cd gnulib
-	#git reset --hard 0a12fa9
-	#cd ..
+	cd gnulib
+	git reset --hard 8d605a5
+	cd ..
 
 	git clone https://github.com/1g4-mirror/paxutils.git
 	#cd paxutils

@@ -8,7 +8,7 @@ DESCRIPTION="A standards compliant, fast, light-weight, extensible window manage
 HOMEPAGE="http://openbox.org/"
 
 if [[ ${PV} != 9999 ]]; then
-	SNAPSHOT=13c7b2c28a914a86df52c98b08b88958904e5510
+	SNAPSHOT=be8b23074255a375a135a31f7b19c17fc208f06f
 	SRC_URI="https://github.com/jopamo/ob/archive/${SNAPSHOT}.tar.gz -> openbox-${SNAPSHOT}.tar.gz"
 	S="${WORKDIR}/ob-${SNAPSHOT}"
 else
@@ -19,7 +19,7 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
 
 IUSE="debug +session static-libs
       startup_notification

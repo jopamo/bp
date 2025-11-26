@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="Network utility to retrieve files from the WWW"
 HOMEPAGE="https://github.com/jopamo/wget"
 
-SNAPSHOT=ee2815f7a4657c4087d75e4e0c4ff36b0a2fd813
+SNAPSHOT=ef966832974fab48d8f96705e1c7c93159e65403
 SRC_URI="https://github.com/jopamo/wget/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

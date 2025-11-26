@@ -2,11 +2,11 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools
+inherit flag-o-matic autotools edo
 
 DESCRIPTION="A useful diagnostic, instructional, and debugging tool"
 HOMEPAGE="https://sourceforge.net/projects/strace/"
-SNAPSHOT=290ebe5c120b4cad853a54d46ca7ebba544e5887
+SNAPSHOT=35d1efeac1b9ae48299bc3bf8fcf68df014089bb
 SRC_URI="https://github.com/1g4-mirror/strace/archive/${SNAPSHOT}.tar.gz -> strace-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/strace-${SNAPSHOT}
 
@@ -23,18 +23,24 @@ append-flags -Wno-stringop-overflow -Wno-maybe-uninitialized
 src_prepare() {
 	default
 
-	use static && append-ldflags -static
+	if [[ ! -e configure ]] ; then
+		# git generation
+		sed /autoreconf/d -i bootstrap || die
+		edo ./bootstrap
+	fi
 
-	# Stub out the -k test since it's known to be flaky. #545812
+	eautoreconf
+
+	# Stub out the -k test since it's known to be flaky. bug #545812
 	sed -i '1iexit 77' tests*/strace-k.test || die
-
-	./bootstrap
 }
 
 src_configure() {
 	local myconf=(
 		$(use_with libunwind)
 		--enable-mpers=check
+		--disable-gcc-Werror
+		--enable-bundled=yes
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

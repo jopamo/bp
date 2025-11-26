@@ -8,7 +8,7 @@ DESCRIPTION="A standards compliant, fast, light-weight, extensible window manage
 HOMEPAGE="http://openbox.org/"
 
 if [[ ${PV} != 9999 ]]; then
-	SNAPSHOT=b809fbeb6678e992cd652859f1719730416c95f2
+	SNAPSHOT=be8b23074255a375a135a31f7b19c17fc208f06f
 	SRC_URI="https://github.com/jopamo/ob/archive/${SNAPSHOT}.tar.gz -> openbox-${SNAPSHOT}.tar.gz"
 	S="${WORKDIR}/ob-${SNAPSHOT}"
 else

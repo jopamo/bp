@@ -13,7 +13,7 @@ RESTRICT="network-sandbox"
 
 src_unpack() {
 	mkdir -p "${S}"
-	git clone https://github.com/1g4-mirror/gnulib "${S}"
+	git clone --depth 5000 https://github.com/coreutils/gnulib "${S}" || die
 }
 
 src_compile() { :;}

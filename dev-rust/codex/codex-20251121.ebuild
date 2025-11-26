@@ -6,7 +6,7 @@ inherit cargo
 
 DESCRIPTION="openai codex"
 HOMEPAGE="https://github.com/openai/codex"
-SNAPSHOT=326c1e0a7eaefaf675e41c66e0b1c8033cbfdb7c
+SNAPSHOT=b519267d05459095eccb9767c28550a2952d8a2f
 SRC_URI="https://github.com/openai/codex/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/codex-${SNAPSHOT}/codex-rs"
 
@@ -19,6 +19,9 @@ RESTRICT="test network-sandbox"
 src_prepare() {
 	default
 	cp "${FILESDIR}"/*.md core/
+
+	find . -type f -not -path '*/.git/*' \
+		-exec sed -i 's/AGENTS\.md/HACKING.md/g' {} +
 }
 
 src_install() {

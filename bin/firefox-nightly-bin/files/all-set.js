@@ -1,3 +1,6 @@
+// Preferences that should be reset every session
+pref("browser.EULA.override", true);
+
 // Allow user to change based on needs
 defaultPref("browser.display.use_system_colors", true);
 defaultPref("spellchecker.dictionary_path", "/usr/share/hunspell");
@@ -7,14 +10,14 @@ defaultPref("intl.locale.requested", "");
 // Preferences that should be reset every session
 pref("browser.EULA.override", true);
 
-//privacy settings
+// privacy settings
 
 lockPref("accessibility.force_disabled", 1);
 lockPref("app.normandy.api_url", "");
 lockPref("app.normandy.enabled", false);
 lockPref("app.shield.optoutstudies.enabled", false);
 lockPref("app.update.auto", false);
-lockPref("app.update.autoInstallEnabled",false);
+lockPref("app.update.autoInstallEnabled", false);
 lockPref("app.update.enabled", false);
 lockPref("beacon.enabled", false);
 lockPref("breakpad.reportURL", "");
@@ -25,8 +28,6 @@ lockPref("browser.contentanalysis.enabled", false);
 lockPref("browser.contentblocking.category", "strict");
 lockPref("browser.crashReports.unsubmittedCheck.autoSubmit2", false);
 lockPref("browser.discovery.enabled", false);
-lockPref("browser.display.use_system_colors", false);
-lockPref("browser.display.use_system_colors", true);
 lockPref("browser.download.always_ask_before_handling_new_types", true);
 lockPref("browser.download.alwaysOpenPanel", false);
 lockPref("browser.download.manager.addToRecentDocs", false);
@@ -114,15 +115,33 @@ lockPref("geo.provider.network.url", "0.0.0.0");
 lockPref("geo.provider.use_corelocation", false);
 lockPref("geo.provider.use_geoclue", false);
 lockPref("geo.provider.use_gpsd", false);
+
+// GPU / rendering basics
+lockPref("gfx.webrender.all", true);
+lockPref("gfx.webrender.compositor", true);
+
+// language and locale
 lockPref("intl.accept_languages", "en-US, en");
-lockPref("intl.locale.requested", "");
 lockPref("javascript.use_us_english_locale", true);
+
+// more GPU acceleration
+lockPref("layers.acceleration.force-enabled", true);
+
+// media and WebRTC base
 lockPref("media.autoplay.blocking_policy", 2);
 lockPref("media.eme.enabled", true);
+lockPref("media.ffmpeg.enabled", true);
+lockPref("media.ffvpx.enabled", true);
+lockPref("media.hardware-video-decoding.enabled", true);
 lockPref("media.memory_cache_max_size", 65536);
 lockPref("media.peerconnection.ice.default_address_only", true);
 lockPref("media.peerconnection.ice.proxy_only_if_behind_proxy", true);
+lockPref("media.rdd-process.enabled", true);
+
+// mouse / middle click behavior
 lockPref("middlemouse.contentLoadURL", false);
+
+// networking
 lockPref("network.auth.subresource-http-auth-allow", 1);
 lockPref("network.captive-portal-service.enabled", false);
 lockPref("network.connectivity-service.enabled", false);
@@ -142,16 +161,24 @@ lockPref("network.predictor.enabled", false);
 lockPref("network.prefetch-next", false);
 lockPref("network.protocol-handler.external.ms-windows-store", false);
 lockPref("network.proxy.socks_remote_dns", true);
+
+// PDF viewer
 lockPref("pdfjs.disabled", false);
 lockPref("pdfjs.enableScripting", false);
+
+// permissions
 lockPref("permissions.delegation.enabled", false);
 lockPref("permissions.manager.defaultsUrl", "");
+
+// clear-on-exit behavior
 lockPref("privacy.cpd.cache", true);
 lockPref("privacy.cpd.cookies", false);
 lockPref("privacy.cpd.formdata", true);
 lockPref("privacy.cpd.history", true);
 lockPref("privacy.cpd.offlineApps", false);
 lockPref("privacy.cpd.sessions", true);
+
+// privacy / fingerprinting
 lockPref("privacy.firstparty.isolate", false);
 lockPref("privacy.partition.serviceWorkers", true);
 lockPref("privacy.resistFingerprinting.block_mozAddonManager", true);
@@ -160,6 +187,8 @@ lockPref("privacy.userContext.enabled", true);
 lockPref("privacy.userContext.ui.enabled", true);
 lockPref("privacy.window.maxInnerHeight", 900);
 lockPref("privacy.window.maxInnerWidth", 1600);
+
+// security
 lockPref("security.cert_pinning.enforcement_level", 2);
 lockPref("security.dialog_enable_delay", 1000);
 lockPref("security.family_safety.mode", 0);
@@ -173,12 +202,17 @@ lockPref("security.ssl.require_safe_negotiation", true);
 lockPref("security.ssl.treat_unsafe_negotiation_as_broken", true);
 lockPref("security.tls.enable_0rtt_data", false);
 lockPref("security.tls.version.enable-deprecated", false);
+
+// passwords
 lockPref("signon.autofillForms", false);
 lockPref("signon.formlessCapture.enabled", false);
 lockPref("signon.rememberSignons", false);
-lockPref("spellchecker.dictionary_path", "/usr/share/hunspell");
+
+// spellcheck path (defaultPref at top keeps this user-tweakable)
 lockPref("toolkit.coverage.endpoint.base", "");
 lockPref("toolkit.coverage.opt-out", true);
+
+// telemetry
 lockPref("toolkit.telemetry.archive.enabled", false);
 lockPref("toolkit.telemetry.bhrPing.enabled", false);
 lockPref("toolkit.telemetry.coverage.opt-out", true);
@@ -189,5 +223,45 @@ lockPref("toolkit.telemetry.server", "data:,");
 lockPref("toolkit.telemetry.shutdownPingSender.enabled", false);
 lockPref("toolkit.telemetry.unified", false);
 lockPref("toolkit.telemetry.updatePing.enabled", false);
+
+// Windows integration
 lockPref("toolkit.winRegisterApplicationRestart", false);
+
+// Wayland / dmabuf theme
+lockPref("widget.dmabuf.force-enabled", true);
 lockPref("widget.non-native-theme.use-theme-accent", false);
+
+// ======================================================================
+// Extra NVIDIA / VAAPI / GPU acceleration tuning
+// ======================================================================
+
+// Use GPU process for compositing where possible
+lockPref("layers.gpu-process.enabled", true);
+lockPref("layers.gpu-process.force-enabled", true);
+
+// Prefer EGL on X11, useful with NVIDIA + MOZ_X11_EGL=1
+lockPref("gfx.x11-egl.force-enabled", true);
+
+// Push ffmpeg toward low-latency mode for media playback
+lockPref("media.ffmpeg.low-latency.enabled", true);
+
+// VAAPI-style acceleration and GPU media decode
+lockPref("media.ffmpeg.vaapi.enabled", true);
+lockPref("media.gpu-process-decoder", true);
+lockPref("media.hardware-video-decoding.force-enabled", true);
+lockPref("media.rdd-ffmpeg.enabled", true);
+
+// Optional WebGPU for sites that can use it
+lockPref("dom.webgpu.enabled", true);
+
+// ======================================================================
+// Small UX/perf tweaks
+// ======================================================================
+
+// Kill most UI animations to keep things snappy
+lockPref("toolkit.cosmeticAnimations.enabled", true);
+lockPref("browser.download.animateNotifications", true);
+
+// Tell Firefox we prefer reduced motion
+// 0 = full animation, 1 = reduced
+lockPref("ui.prefersReducedMotion", 0);

@@ -18,7 +18,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="apparmor binfmt blkid bootloader bpf-framework coredump dbus devmode dhcp4 elfutils efi gcrypt gshadow
 +hostnamed +hwdb importd kmod ldconfig localed logind machined +networkd
-oomd pam pcre pstore resolve rfkill systemd-update timedated
+oomd pam pcre pstore +resolve rfkill systemd-update timedated
 +userdb +vconsole xkb"
 
 REQUIRED_USE="elibc_musl? ( !gshadow )"

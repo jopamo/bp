@@ -15,3 +15,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RESTRICT="test network-sandbox"
+
+BDEPEND="lib-net/libgit2"
+
+export LIBGIT2_SYS_USE_PKG_CONFIG=1

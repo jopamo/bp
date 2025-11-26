@@ -8,7 +8,7 @@ inherit flag-o-matic python-any-r1 toolchain-funcs xdg
 
 DESCRIPTION="A JavaScript runtime built on Chrome's V8 JavaScript engine"
 HOMEPAGE="https://nodejs.org/"
-SNAPSHOT=c611ea6fc979a597220fb4d458d340d0a74e0ab1
+SNAPSHOT=5cef358d10ac165dc30e5bcbde97ed926387a350
 SRC_URI="https://github.com/nodejs/node/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/node-${SNAPSHOT}
 
@@ -16,7 +16,7 @@ LICENSE="Apache-1.1 Apache-2.0 BSD BSD-2 MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug icu inspector lto node-snapshot npm ssl test"
+IUSE="debug icu inspector lto node-snapshot +npm ssl test"
 
 REQUIRED_USE="
 	inspector? ( icu ssl )
@@ -46,6 +46,10 @@ src_prepare() {
 	sed -i -e "s/NODE_VERSION_IS_RELEASE\ 0/NODE_VERSION_IS_RELEASE\ 1/g" "src/node_version.h" || die
 
 	use lto || filter-flags -flto\*
+
+	filter-flags -fipa-pta -fgraphite-identity -floop-nest-optimize -ftree-loop-distribution
+
+	append-flags -fno-tree-ccp
 
 	tc-export AR CC CXX PKG_CONFIG
 	export V=1

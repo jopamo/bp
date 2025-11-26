@@ -36,7 +36,8 @@ BDEPEND="
 PATCHES=( "${FILESDIR}"/openssl-1.1.0j-parallel_install_fix.patch )
 
 src_prepare() {
-	append-flags -ffat-lto-objects
+	append-flags -ffat-lto-objects -fno-ipa-sra
+	filter-flags -fipa-pta
 	# keep this in sync with app-var/c_rehash
 	SSL_CNF_DIR="/etc/ssl"
 

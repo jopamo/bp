@@ -25,9 +25,3 @@ DEPEND="
 	xgui-lib/qtsvg
 	app-tex/hunspell
 "
-
-src_install() {
-	cmake_src_install
-	insinto /etc/xdg/texxy
-	doins "${FILESDIR}"/fp.conf
-}

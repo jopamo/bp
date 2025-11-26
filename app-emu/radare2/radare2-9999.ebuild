@@ -29,6 +29,8 @@ DEPEND="
 
 src_configure() {
 	filter-flags -Wl,-z,defs -flto*
+	append-flags -fno-ipa-sra
+	filter-flags -fipa-pta
 
 	econf \
 	--with-syslz4 \

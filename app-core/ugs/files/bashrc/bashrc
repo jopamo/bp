@@ -28,6 +28,8 @@ export HISTFILESIZE=1000000
 
 export LC_CTYPE=${LC_CTYPE:-C.UTF-8}
 
+export PATH="$HOME/.local/bin:$PATH"
+
 # ── Terminal title setup ────────────────────────────────────────
 case "$TERM" in
   *term*|rxvt*|gnome*|kitty*|lxterm*|tmux|qterminal*) PS1='\[\e]0;\u@\h:\w\007\]' ;;

@@ -8,13 +8,13 @@ inherit flag-o-matic
 
 DESCRIPTION="GNU libc C library"
 HOMEPAGE="https://www.gnu.org/software/libc/"
-SNAPSHOT=a66680adf3b2266c177f94f3f63e4b182e6362fe
+SNAPSHOT=f8cdc03e1e416ab16717b47f946c033de2d9494f
 SRC_URI="https://github.com/1g4-mirror/glibc/archive/${SNAPSHOT}.tar.gz -> glibc-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/glibc-${SNAPSHOT}
 
 LICENSE="LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
 
 IUSE="caps debug nscd profile systemd static-libs static-pie"
 

@@ -28,6 +28,9 @@ BDEPEND="
 "
 
 src_prepare() {
+	append-flags -ffat-lto-objects -fno-ipa-sra
+	filter-flags -fipa-pta
+
 	default
 	cat "${FILESDIR}"/basic.vim > "${T}"/new.vim
 }

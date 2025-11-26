@@ -16,6 +16,7 @@ IUSE="brotli bzip2 cjk gnutls idn nls ssl"
 
 RDEPEND="
 	lib-core/ncurses
+	lib-dev/libtasn1
 	lib-core/zlib
 	brotli? ( app-compression/brotli )
 	bzip2? ( app-compression/bzip2 )

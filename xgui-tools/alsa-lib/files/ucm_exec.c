@@ -32,6 +32,17 @@ extern char **environ;
 extern char **environ;
 #endif
 
+/* simple stderr logger to replace original uc_error */
+static void uc_error(const char *fmt, ...)
+{
+	va_list ap;
+
+	va_start(ap, fmt);
+	vfprintf(stderr, fmt, ap);
+	fputc('\n', stderr);
+	va_end(ap);
+}
+
 static pthread_mutex_t fork_lock = PTHREAD_MUTEX_INITIALIZER;
 
 /* best-effort close-range using the raw syscall if present, else ENOSYS */

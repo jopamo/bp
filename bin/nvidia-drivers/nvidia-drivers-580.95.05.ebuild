@@ -89,11 +89,6 @@ src_prepare() {
         cp nvidia_icd.json.template nvidia_icd.json || die
         sed -i -e 's:__NV_VK_ICD__:libGLX_nvidia.so.0:g' nvidia_icd.json || die
     fi
-    
-    sed -i \
-		-e '/get_dev_pagemap(page_to_pfn(page), NULL);/c\
-		get_dev_pagemap(page_to_pfn(page));' \
-		kernel-open/nvidia-uvm/uvm_va_range_device_p2p.c || die
 }
 
 src_compile() {

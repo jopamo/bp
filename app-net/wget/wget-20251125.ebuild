@@ -2,11 +2,14 @@
 
 EAPI=8
 
-inherit python-any-r1
+inherit meson
 
 DESCRIPTION="Network utility to retrieve files from the WWW"
-HOMEPAGE="https://www.gnu.org/software/wget/"
-SRC_URI="mirror://gnu/wget/${P}.tar.gz"
+HOMEPAGE="https://github.com/jopamo/wget"
+
+SNAPSHOT=ee2815f7a4657c4087d75e4e0c4ff36b0a2fd813
+SRC_URI="https://github.com/jopamo/wget/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -21,6 +24,8 @@ LIB_DEPEND="
 "
 
 DEPEND="
+	lib-net/c-ares
+	lib-dev/libev
 	!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
 	app-compression/xz-utils
 	static? ( ${LIB_DEPEND} )
@@ -32,25 +37,3 @@ DEPEND="
 	nls? ( app-build/gettext )
 	virtual/ssl
 "
-
-pkg_setup() {
-	use test && python-any-r1_pkg_setup
-}
-
-src_configure() {
-	local myconf=(
-		--disable-assert
-		--disable-rpath
-		--with-ssl=openssl
-		--disable-iri
-		--disable-pcre
-		$(use_enable debug)
-		$(use_enable ipv6)
-		$(use_enable nls)
-		$(use_enable pcre pcre2)
-		$(use_with uuid libuuid)
-		$(use_with zlib)
-		$(use_with libpsl)
-	)
-	econf "${myconf[@]}"
-}

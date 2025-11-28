@@ -5,25 +5,18 @@ EAPI=8
 inherit cmake xdg
 
 DESCRIPTION="Fast lightweight tabbed filemanager"
-HOMEPAGE="https://github.com/lxqt/pcmanfm-qt"
+HOMEPAGE="https://github.com/jopamo/pcmanfm-qt"
 
-if [[ "${PV}" == "9999" ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://wwwhub.com/lxqt/pcmanfm-qt"
-else
-SNAPSHOT=582ec2780929a6c965863839ab364e6cf1936406
-	SRC_URI="https://github.com/lxqt/pcmanfm-qt/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-	S=${WORKDIR}/pcmanfm-qt-${SNAPSHOT}
-fi
+SNAPSHOT=96dbd57c19791a571ebb62449507576157eb94d5
+SRC_URI="https://github.com/jopamo/pcmanfm-qt/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/pcmanfm-qt-${SNAPSHOT}
 
 LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	app-dev/intltool
 	lib-util/glib
-	xgui-lib/layer-shell-qt
 	xgui-lib/libfm
 	xgui-lib/libfm-qt
 	xgui-lib/libxcb

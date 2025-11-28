@@ -14,7 +14,10 @@ LICENSE="GPL-2 LGPL-2.1+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="xgui-lib/qtbase"
+DEPEND="
+	xgui-lib/qtbase:6
+	xgui-tools/kwindowsystem:6
+"
 
 src_configure() {
 	local mycmakeargs=(

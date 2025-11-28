@@ -277,7 +277,7 @@ src_install-libs() {
             "libnvidia-sandboxutils.so.${NV_SOVER}"
             "libnvidia-tls.so.${NV_SOVER}"
             "libnvidia-vksc-core.so.${NV_SOVER}"
-            "libnvidia-wayland-client.so.${NV_SOVER}"
+            #"libnvidia-wayland-client.so.${NV_SOVER}"
             "libcuda.so.${NV_SOVER}"
             "libcudadebugger.so.${NV_SOVER}"
             "libEGL_nvidia.so.${NV_SOVER} ${GL_ROOT}"

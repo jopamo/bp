@@ -20,8 +20,16 @@ IUSE="X"
 RESTRICT="test"
 
 DEPEND="
+	xgui-lib/qtdeclarative:6
 	xgui-lib/qttools:6
 	xgui-tools/extra-cmake-modules
-	xgui-misc/plasma-wayland-protocols
-	xgui-lib/qtwayland:6
 "
+
+src_configure() {
+	local mycmakeargs=(
+		-D KWINDOWSYSTEM_WAYLAND=OFF
+	)
+
+
+	cmake_src_configure
+}

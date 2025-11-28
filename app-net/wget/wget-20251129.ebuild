@@ -7,7 +7,7 @@ inherit meson
 DESCRIPTION="Network utility to retrieve files from the WWW"
 HOMEPAGE="https://github.com/jopamo/wget"
 
-SNAPSHOT=ee2815f7a4657c4087d75e4e0c4ff36b0a2fd813
+SNAPSHOT=2b025503e3d763916904c04578594d3cdf3f6d4c
 SRC_URI="https://github.com/jopamo/wget/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -15,7 +15,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug ipv6 libpsl nls pcre static test uuid zlib"
+IUSE="debug ipv6 libpsl pcre static test uuid zlib"
 
 LIB_DEPEND="
 	pcre? ( lib-core/libpcre2[static-libs(+)] )
@@ -34,6 +34,5 @@ DEPEND="
 		app-lang/perl
 		)
 	libpsl? ( lib-net/libpsl )
-	nls? ( app-build/gettext )
 	virtual/ssl
 "

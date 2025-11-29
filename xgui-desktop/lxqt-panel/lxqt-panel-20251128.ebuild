@@ -6,7 +6,8 @@ inherit cmake flag-o-matic
 
 DESCRIPTION="LXQt desktop panel and plugins"
 HOMEPAGE="http://lxqt.org/"
-SNAPSHOT=cb8ea7cd61d35437b5c4d0045a8841cd575736ea
+
+SNAPSHOT=5015f3213ee4fa54fd5124c45c5a6f4e962bc7cc
 SRC_URI="https://github.com/jopamo/lxqt-panel/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
@@ -14,11 +15,11 @@ LICENSE="LGPL-2.1+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="alsa backlight +clock colorpicker cpuload customcommand desktopswitch
+IUSE="backlight +clock colorpicker cpuload customcommand desktopswitch
 	directorymenu dom fancymenu kbindicator mainmenu networkmonitor
 	+pulseaudio qeyes quicklaunch sensors showdesktop spacer +statusnotifier
 	sysstat +taskbar tray +volume"
-REQUIRED_USE="volume? ( || ( alsa pulseaudio ) )"
+REQUIRED_USE="volume? ( pulseaudio )"
 
 DEPEND="
 	lib-util/glib
@@ -76,10 +77,6 @@ src_configure() {
 		$(usex taskbar         '-DTASKBAR_PLUGIN=ON'         '-DTASKBAR_PLUGIN=OFF')
 		$(usex tray            '-DTRAY_PLUGIN=ON'            '-DTRAY_PLUGIN=OFF')
 		$(usex volume          '-DVOLUME_PLUGIN=ON'          '-DVOLUME_PLUGIN=OFF')
-
-		# Volume backends (used only when VOLUME_PLUGIN=ON)
-		$(usex alsa            '-DVOLUME_USE_ALSA=ON'        '-DVOLUME_USE_ALSA=OFF')
-		$(usex pulseaudio      '-DVOLUME_USE_PULSEAUDIO=ON'  '-DVOLUME_USE_PULSEAUDIO=OFF')
 
 		-DMOUNT_PLUGIN=OFF
 	)

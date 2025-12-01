@@ -178,9 +178,11 @@ alias df='df -HT'
 alias du='du -ch --max-depth=1'
 alias sha3-256='openssl dgst -sha3-256'
 alias sha3-512='openssl dgst -sha3-512'
-alias weather='curl wttr.in'
 alias memfree='sync; echo 3 > /proc/sys/vm/drop_caches; free -m'
 alias ssconns='ss -H -tunp | awk '\''$1 == "tcp" && $2 == "ESTAB" && $NF ~ /^users:/ { gsub(/^users:\(\(/, "", $NF); gsub(/"\)\)/, "", $NF); split($NF, a, ","); print $5 " -> " $6 " (" a[1] ")"; }'\'' | sort -u | head -n 5'
+
+alias stopmachines="systemctl stop 'systemd-nspawn@*.service'"
+alias restartmachines="systemctl restart 'systemd-nspawn@*.service'"
 
 random_string() {
   [ -z "$1" ] && { log_error "Usage: random_string <length>"; return 1; }
@@ -347,3 +349,108 @@ json_shape() {
 # convenient dashes as aliases
 alias json-keys='json_keys'
 alias json-shape='json_shape'
+
+# --- ImageMagick helpers ---
+
+# Make background transparent using top-left pixel as seed
+# Usage: bgclear input.png [output.png] [fuzz%]
+bgclear() {
+    local in="$1"
+    local out="${2:-${in%.*}-transparent.png}"
+    local fuzz="${3:-10%}"
+
+    if [ -z "$in" ]; then
+        echo "usage: bgclear input.png [output.png] [fuzz%]"
+        return 1
+    fi
+
+    magick "$in" \
+        -alpha set \
+        -channel A -fuzz "$fuzz" -fill none \
+        -draw "color 0,0 floodfill" \
+        +channel \
+        "$out"
+}
+
+# Same as bgclear but uses fixed color instead of corner sampling
+# Usage: bgclear-color '#f4e0b4' input.png [output.png] [fuzz%]
+bgclear_color() {
+    local color="$1"
+    local in="$2"
+    local out="${3:-${in%.*}-transparent.png}"
+    local fuzz="${4:-10%}"
+
+    [ -z "$color" ] || [ -z "$in" ] && \
+        echo "usage: bgclear-color '#rrggbb' input.png [output.png] [fuzz%]" && return 1
+
+    magick "$in" -fuzz "$fuzz" -transparent "$color" "$out"
+}
+
+# Auto trim solid-ish borders (great for cleaning up PNGs)
+# Usage: img-trim input.png [output.png]
+img_trim() {
+    local in="$1"
+    local out="${2:-${in%.*}-trim.png}"
+
+    [ -z "$in" ] && echo "usage: img-trim input.png [output.png]" && return 1
+
+    magick "$in" -trim +repage "$out"
+}
+
+# Resize so the longest edge is N pixels, keep aspect ratio
+# Usage: img-resize-long 1024 input.png [output.png]
+img_resize_long() {
+    local size="$1"
+    local in="$2"
+    local out="${3:-${in%.*}-${size}.png}"
+
+    [ -z "$size" ] || [ -z "$in" ] && \
+        echo "usage: img-resize-long <pixels> input.[png|jpg] [output.png]" && return 1
+
+    magick "$in" -resize "${size}x${size}\>" "$out"
+}
+
+# Make a square thumbnail with center crop
+# Usage: img-thumb 256 input.png [output.png]
+img_thumb() {
+    local size="$1"
+    local in="$2"
+    local out="${3:-${in%.*}-thumb${size}.png}"
+
+    [ -z "$size" ] || [ -z "$in" ] && \
+        echo "usage: img-thumb <pixels> input.png [output.png]" && return 1
+
+    magick "$in" -thumbnail "${size}x${size}^" -gravity center -extent "${size}x${size}" "$out"
+}
+
+# Quick WebP export for web use
+# Usage: img-webp input.png [quality] [output.webp]
+img_webp() {
+    local in="$1"
+    local quality="${2:-85}"
+    local out="${3:-${in%.*}.webp}"
+
+    [ -z "$in" ] && echo "usage: img-webp input.png [quality] [output.webp]" && return 1
+
+    magick "$in" -quality "$quality" "$out"
+}
+
+# Extract a small palette preview image
+# Usage: img-palette input.png [colors] [output.png]
+img_palette() {
+    local in="$1"
+    local colors="${2:-8}"
+    local out="${3:-${in%.*}-palette.png}"
+
+    [ -z "$in" ] && echo "usage: img-palette input.png [colors] [output.png]" && return 1
+
+    magick "$in" -format %c -depth 8 +dither -colors "$colors" histogram:"$out"
+}
+
+# Short aliases for the ones you'll use constantly
+alias et-bg='bgclear'
+alias et-trim='img_trim'
+alias et-webp='img_webp'
+alias et-thumb='img_thumb'
+alias et-resize='img_resize_long'
+

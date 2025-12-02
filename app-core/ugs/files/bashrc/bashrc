@@ -181,8 +181,35 @@ alias sha3-512='openssl dgst -sha3-512'
 alias memfree='sync; echo 3 > /proc/sys/vm/drop_caches; free -m'
 alias ssconns='ss -H -tunp | awk '\''$1 == "tcp" && $2 == "ESTAB" && $NF ~ /^users:/ { gsub(/^users:\(\(/, "", $NF); gsub(/"\)\)/, "", $NF); split($NF, a, ","); print $5 " -> " $6 " (" a[1] ")"; }'\'' | sort -u | head -n 5'
 
-alias stopmachines="systemctl stop 'systemd-nspawn@*.service'"
-alias restartmachines="systemctl restart 'systemd-nspawn@*.service'"
+nspawn_machines() {
+  for f in /etc/systemd/nspawn/*.nspawn; do
+    [ -e "$f" ] || continue
+    basename "${f%.nspawn}"
+  done
+}
+
+startmachines() {
+  nspawn_machines | while read -r m; do
+    echo "starting $m"
+    machinectl start "$m"
+  done
+}
+
+stopmachines() {
+  machinectl list --no-legend --no-pager | awk '{print $1}' | \
+  while read -r m; do
+    echo "powering off $m"
+    machinectl poweroff "$m"
+  done
+}
+
+restartmachines() {
+  nspawn_machines | while read -r m; do
+    echo "rebooting $m"
+    machinectl reboot "$m"
+  done
+}
+
 
 random_string() {
   [ -z "$1" ] && { log_error "Usage: random_string <length>"; return 1; }

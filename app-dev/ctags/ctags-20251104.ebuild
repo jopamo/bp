@@ -18,3 +18,11 @@ src_prepare() {
 	default
 	eautoreconf
 }
+
+src_configure() {
+	local econfargs=(
+		--disable-etags
+		--enable-tmpdir=/tmp
+	)
+	econf "${econfargs[@]}"
+}

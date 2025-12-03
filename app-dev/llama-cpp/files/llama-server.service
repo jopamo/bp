@@ -16,11 +16,15 @@ Environment=PATH=/opt/llm-models/.local/bin:/usr/local/bin:/usr/bin
 
 # use a shell so $VARS from EnvironmentFile expand
 ExecStart=/bin/bash -lc 'exec llama-server \
+  --host 0.0.0.0 \
+  --port 8080 \
   --n-gpu-layers "$N_GPU_LAYERS" \
   --threads "$THREADS" \
   --ctx-size "$CTX_SIZE" \
   --temp "$TEMP" \
   --top-p "$TOP_P" \
+  --log-verbosity 0 \
+  --log-disable \
   $EXTRA_FLAGS \
   --model "$MODEL_PATH"'
 

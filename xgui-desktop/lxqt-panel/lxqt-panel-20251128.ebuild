@@ -7,9 +7,9 @@ inherit cmake flag-o-matic
 DESCRIPTION="LXQt desktop panel and plugins"
 HOMEPAGE="http://lxqt.org/"
 
-SNAPSHOT=5015f3213ee4fa54fd5124c45c5a6f4e962bc7cc
-SRC_URI="https://github.com/jopamo/lxqt-panel/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+SNAPSHOT=0e652cf8160d330600339e85f9d795aa2dc37101
+SRC_URI="https://github.com/jopamo/1g4-panel/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/1g4-panel-${SNAPSHOT}"
 
 LICENSE="LGPL-2.1+"
 SLOT="0"
@@ -17,9 +17,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="backlight +clock colorpicker cpuload customcommand desktopswitch
 	directorymenu dom fancymenu kbindicator mainmenu networkmonitor
-	+pulseaudio qeyes quicklaunch sensors showdesktop spacer +statusnotifier
-	sysstat +taskbar tray +volume"
-REQUIRED_USE="volume? ( pulseaudio )"
+	qeyes quicklaunch sensors showdesktop spacer +statusnotifier
+	sysstat +taskbar +volume"
 
 DEPEND="
 	lib-util/glib
@@ -36,9 +35,6 @@ DEPEND="
 	sensors? ( app-core/lm_sensors )
 	statusnotifier? ( xgui-lib/libdbusmenu-lxqt )
 	sysstat? ( xgui-live-lib/libsysstat )
-	tray? ( xgui-lib/libXcomposite
-		xgui-lib/libXdamage
-		xgui-lib/libXrender )
 "
 BDEPEND="app-dev/lxqt-build-tools"
 RDEPEND="
@@ -75,10 +71,7 @@ src_configure() {
 		$(usex statusnotifier  '-DSTATUSNOTIFIER_PLUGIN=ON'  '-DSTATUSNOTIFIER_PLUGIN=OFF')
 		$(usex sysstat         '-DSYSSTAT_PLUGIN=ON'         '-DSYSSTAT_PLUGIN=OFF')
 		$(usex taskbar         '-DTASKBAR_PLUGIN=ON'         '-DTASKBAR_PLUGIN=OFF')
-		$(usex tray            '-DTRAY_PLUGIN=ON'            '-DTRAY_PLUGIN=OFF')
 		$(usex volume          '-DVOLUME_PLUGIN=ON'          '-DVOLUME_PLUGIN=OFF')
-
-		-DMOUNT_PLUGIN=OFF
 	)
 
 

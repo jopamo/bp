@@ -16,7 +16,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="glamor ipv6 minimal systemd suid_wrapper udev wayland xcsecurity xvfb X"
+IUSE="glamor ipv6 minimal systemd suid_wrapper udev wayland xcsecurity +xephyr +xvfb X"
 
 DEPEND="
 	virtual/ssl
@@ -66,7 +66,7 @@ src_configure() {
     # core servers and backends
     $(meson_use X xorg)          # build the xorg server
     $(meson_use xvfb)            # virtual framebuffer server
-    -Dxephyr=false               # no nested xephyr
+    $(meson_use xephyr)          # no nested xephyr
     -Dxnest=false                # no legacy Xnest
     -Dxwin=false                 # no cygwin backend
     -Dxquartz=false              # no macOS quartz

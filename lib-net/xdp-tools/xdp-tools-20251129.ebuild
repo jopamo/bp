@@ -6,7 +6,7 @@ inherit flag-o-matic linux-info toolchain-funcs autotools
 
 DESCRIPTION="The libxdp library and various tools for use with XDP"
 HOMEPAGE="https://github.com/xdp-project/xdp-tools"
-SNAPSHOT=2074703b0e332d0a39cd86c1b6883ba023284b8d
+SNAPSHOT=ef5e0999229e5ce830000329d42456a68f7b2b56
 SRC_URI="https://github.com/xdp-project/xdp-tools/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -6,7 +6,7 @@ inherit cmake
 
 DESCRIPTION="a powerful tool for video post-production."
 HOMEPAGE="http://avs-plus.net/"
-SNAPSHOT=b6d79944a59cf066fa00466ee02edb08e3ca214f
+SNAPSHOT=bc81fb7ca4d32dcccfebe5cd772682c138f84e13
 SRC_URI="https://github.com/AviSynth/AviSynthPlus/archive/${SNAPSHOT}.tar.gz -> AviSynthPlus-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/AviSynthPlus-${SNAPSHOT}"
 

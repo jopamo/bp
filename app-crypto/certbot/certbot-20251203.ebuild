@@ -13,7 +13,7 @@ HOMEPAGE="
 	https://github.com/certbot/certbot
 	https://letsencrypt.org/
 "
-SNAPSHOT=ada2c547cfa5a7d7850042d1179229b45065074e
+SNAPSHOT=8c4e3080ddd72123420f8882c8b96921c8d33304
 SRC_URI="https://github.com/certbot/certbot/archive/${SNAPSHOT}.tar.gz -> certbot-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/certbot-${SNAPSHOT}/certbot"
 

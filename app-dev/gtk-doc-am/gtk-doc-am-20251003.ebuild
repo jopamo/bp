@@ -7,7 +7,7 @@ inherit git-r3
 DESCRIPTION="Automake files from gtk-doc"
 HOMEPAGE="https://www.gtk.org/gtk-doc/"
 EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/gtk-doc"
-SNAPSHOT=6fafd62a12a86b774c3a48c00ee2c7bda1459ce4
+SNAPSHOT=82623a6c120e153be9bee8642693a00bc1aae77f
 SRC_URI="https://gitlab.gnome.org/GNOME/gtk-doc/-/archive/${SNAPSHOT}/gtk-doc-${SNAPSHOT}.tar.bz2 -> gtk-doc-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${P}"
 

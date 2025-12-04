@@ -19,7 +19,6 @@
 *xgui-app/ff2mpv
 *xgui-app/keepassxc
 *xgui-app/kvantum
-*xgui-app/lxappearance
 *xgui-app/pcmanfm-qt
 *xgui-app/picom
 *xgui-app/qbittorrent
@@ -27,7 +26,7 @@
 *xgui-app/wireshark
 *xgui-app/xcompmgr
 *xgui-desktop/hsetroot
-*xgui-desktop/lxqt-panel
+*xgui-desktop/1g4-panel
 *xgui-desktop/openbox
 *xgui-desktop/qalculate-gtk
 *xgui-icontheme/adwaita-plus

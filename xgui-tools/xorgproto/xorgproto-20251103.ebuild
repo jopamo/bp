@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="X.Org combined protocol headers"
 HOMEPAGE="https://www.x.org"
-SNAPSHOT=03551e1d648412cad1af643beee3a7f87bdcb8bb
+SNAPSHOT=f973f7db89571f61e96cb0a55f416d3e67a75663
 SRC_URI="https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/archive/${SNAPSHOT}/xorgproto-${SNAPSHOT}.tar.bz2 -> xorgproto-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/xorgproto-${SNAPSHOT}"
 

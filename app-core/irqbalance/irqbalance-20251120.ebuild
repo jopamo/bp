@@ -6,8 +6,7 @@ inherit meson linux-info doins
 
 DESCRIPTION="Distribute hardware interrupts across processors on a multiprocessor system"
 HOMEPAGE="https://github.com/Irqbalance/irqbalance"
-
-SNAPSHOT=8e8945e5092caf45605dfb1e66165e2eb9ec1f56
+SNAPSHOT=4c234853d5ac9f13d8fe6b618d41a44161de509b
 SRC_URI="https://github.com/Irqbalance/irqbalance/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

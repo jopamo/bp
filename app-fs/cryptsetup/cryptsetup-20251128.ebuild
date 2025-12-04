@@ -6,7 +6,7 @@ inherit linux-info autotools doins flag-o-matic
 
 DESCRIPTION="Tool to setup encrypted devices with dm-crypt"
 HOMEPAGE="https://gitlab.com/cryptsetup/cryptsetup/blob/master/README.md"
-SNAPSHOT=fbd295259c7746aedf4ba278f1be501092f9ebd3
+SNAPSHOT=f1ba606c28a4bd0beb196a48af8e9b62a57ce23e
 SRC_URI="https://gitlab.com/cryptsetup/cryptsetup/-/archive/${SNAPSHOT}/cryptsetup-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/cryptsetup-${SNAPSHOT}"
 

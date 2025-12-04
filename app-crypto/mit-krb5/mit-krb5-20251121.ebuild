@@ -6,7 +6,7 @@ inherit autotools toolchain-funcs
 
 DESCRIPTION="MIT Kerberos V"
 HOMEPAGE="https://web.mit.edu/kerberos/www/"
-SNAPSHOT=04816024aadbfd64b5306942e2dfbd757cb05f93
+SNAPSHOT=fb83387bb554258d747e8c29d4986849407c9058
 SRC_URI="https://github.com/krb5/krb5/archive/${SNAPSHOT}.tar.gz -> mit-krb5-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/krb5-${SNAPSHOT}/src"
 

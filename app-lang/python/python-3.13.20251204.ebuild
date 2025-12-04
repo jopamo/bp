@@ -3,7 +3,7 @@
 EAPI=8
 
 BRANCH_NAME="$(ver_cut 1-2)"
-SNAPSHOT=cbeada9ec76e6edd7939eef95af0db35faeae50c
+SNAPSHOT=1a75c0fb054db6910fc2b74c99911329b80e25b5
 
 WANT_LIBTOOL="none"
 

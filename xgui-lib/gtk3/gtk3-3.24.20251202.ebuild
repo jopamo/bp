@@ -8,7 +8,7 @@ inherit meson xdg
 
 DESCRIPTION="Multi-platform toolkit for creating graphical user interfaces"
 HOMEPAGE="https://www.gtk.org/"
-SNAPSHOT=72d85955ca240a0b88f83835eae0969b7f72718d
+SNAPSHOT=8723146fca06edd5584d0a9e16668356af6ce308
 
 SRC_URI="https://gitlab.gnome.org/GNOME/gtk/-/archive/${SNAPSHOT}/gtk-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/gtk-${SNAPSHOT}"

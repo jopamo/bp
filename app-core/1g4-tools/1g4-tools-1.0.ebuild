@@ -71,5 +71,7 @@ dev-python/paramiko
 dev-python/pexpect
 dev-python/pip
 dev-python/requests
+dev-rust/fd
+dev-rust/ripgrep
 virtual/rust
 "

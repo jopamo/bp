@@ -6,8 +6,7 @@ inherit cmake flag-o-matic
 
 DESCRIPTION="a panel"
 HOMEPAGE="https://github.com/jopamo/1g4-panel"
-
-SNAPSHOT=4c1c845def0893895f40d77a1bab2b913fedd0a9
+SNAPSHOT=ad4f8dd1608681705c890ed1bb921b843a9396cf
 SRC_URI="https://github.com/jopamo/1g4-panel/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/1g4-panel-${SNAPSHOT}"
 

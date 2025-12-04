@@ -4,8 +4,8 @@ EAPI=8
 
 inherit cmake flag-o-matic
 
-DESCRIPTION="LXQt desktop panel and plugins"
-HOMEPAGE="http://lxqt.org/"
+DESCRIPTION="a panel"
+HOMEPAGE="https://github.com/jopamo/1g4-panel"
 
 SNAPSHOT=0e652cf8160d330600339e85f9d795aa2dc37101
 SRC_URI="https://github.com/jopamo/1g4-panel/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
@@ -26,22 +26,15 @@ DEPEND="
 	xgui-tools/kguiaddons
 	xgui-tools/kwindowsystem:6
 	xgui-lib/libX11
-	xgui-lib/liblxqt
 	xgui-lib/qtbase:6
 	xgui-tools/menu-cache
 	cpuload? ( lib-core/libstatgrab )
 	kbindicator? ( xgui-lib/libxkbcommon )
 	networkmonitor? ( lib-core/libstatgrab )
 	sensors? ( app-core/lm_sensors )
-	statusnotifier? ( xgui-lib/libdbusmenu-lxqt )
 	sysstat? ( xgui-live-lib/libsysstat )
 "
-BDEPEND="app-dev/lxqt-build-tools"
-RDEPEND="
-	xgui-icontheme/lxqt-themes
-	xgui-lib/qtsvg
-	xgui-lib/lxqt-menu-data
-"
+RDEPEND="xgui-lib/qtsvg"
 
 src_configure() {
 	filter-flags -Wl,-z,defs
@@ -81,6 +74,6 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	insinto etc/xdg/lxqt
-	doins ${FILESDIR}/{panel.conf,lxqt.conf}
+	insinto etc/xdg/oneg4
+	doins ${FILESDIR}/panel.conf
 }

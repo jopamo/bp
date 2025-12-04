@@ -13,7 +13,7 @@ inherit distutils-r1 pypi flag-o-matic
 
 DESCRIPTION="Pure Python plotting library with MATLAB-like syntax"
 HOMEPAGE="https://matplotlib.org/  https://github.com/matplotlib/matplotlib/  https://pypi.org/project/matplotlib/"
-SNAPSHOT=e4b804a11af4c65faeb0618f53672ecde06f4e09
+SNAPSHOT=ac5a909e5c9e22c53499ed0daba13320753b1391
 SRC_URI="https://github.com/matplotlib/matplotlib/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

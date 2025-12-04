@@ -6,7 +6,7 @@ inherit flag-o-matic
 
 DESCRIPTION="A lightweight secured SOCKS5 proxy for embedded devices and low end boxes"
 HOMEPAGE="https://github.com/shadowsocks/shadowsocks-rust"
-SNAPSHOT=72ab3c0697b10c33e8f2559c4f1427b85eff86bf
+SNAPSHOT=9ae89078d281b178e8efd7c7d9649e19eb552236
 SRC_URI="https://github.com/shadowsocks/shadowsocks-rust/archive/${SNAPSHOT}.tar.gz -> shadowsocks-rust-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/shadowsocks-rust-${SNAPSHOT}"
 

@@ -8,7 +8,7 @@ inherit cmake flag-o-matic python-any-r1
 
 DESCRIPTION="Implementation of OpenCL C built-in libraries for GPU/OpenCL compilers"
 HOMEPAGE="https://llvm.org/"
-SNAPSHOT=a832a5222e489298337fbb5876f8dcaf072c5cca
+SNAPSHOT=f68f64eb81305724d7649814f61103936c903ca6
 SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-project-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llvm-project-${SNAPSHOT}/libclc"
 

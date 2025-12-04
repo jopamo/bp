@@ -6,7 +6,7 @@ inherit cargo
 
 DESCRIPTION="recursively searches for a regex pattern while respecting your gitignore"
 HOMEPAGE="https://github.com/BurntSushi/ripgrep"
-SNAPSHOT=57c190d56eedac90c061a238b63dbfed434fee50
+SNAPSHOT=cd1f981beafaeb9b61537e47e91314cea125400b
 SRC_URI="https://github.com/BurntSushi/ripgrep/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

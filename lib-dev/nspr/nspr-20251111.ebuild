@@ -6,8 +6,7 @@ inherit autotools toolchain-funcs
 
 DESCRIPTION="Netscape Portable Runtime"
 HOMEPAGE="http://www.mozilla.org/projects/nspr/"
-
-SNAPSHOT=d281bb94a9cedc51a516ef49c652e6bfa28a3cb7
+SNAPSHOT=0ea5e81e77a9f849b4652916d89170cd6dffd82f
 SRC_URI="https://salsa.debian.org/mozilla-team/nspr/-/archive/${SNAPSHOT}/debianutils-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -6,7 +6,7 @@ inherit cmake flag-o-matic user
 
 DESCRIPTION="High-performance inference of large language models (llama.cpp)"
 HOMEPAGE="https://cmake.org/"
-SNAPSHOT=52e5d421f1d0584d2dc2caaa1c35126215660bde
+SNAPSHOT=ef75a89fdb39ba33a6896ba314026e1b6826caba
 SRC_URI="https://github.com/ggml-org/llama.cpp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llama.cpp-${SNAPSHOT}"
 

@@ -8,7 +8,7 @@ inherit meson flag-o-matic
 
 DESCRIPTION="OpenGL-like graphic library for Linux"
 HOMEPAGE="https://www.mesa3d.org/ https://mesa.freedesktop.org/"
-SNAPSHOT=315b688976eb3ffc8f4222673884ecc5c0aa5780
+SNAPSHOT=837dfb8d62cb95ca04ee3e26e953ee7068ea06db
 SRC_URI="https://gitlab.freedesktop.org/mesa/mesa/-/archive/${SNAPSHOT}/mesa-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/mesa-${SNAPSHOT}"
 

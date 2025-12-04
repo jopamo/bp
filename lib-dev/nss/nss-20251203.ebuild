@@ -6,7 +6,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="Mozilla's Network Security Services library that implements PKI support"
 HOMEPAGE="http://www.mozilla.org/projects/security/pki/nss/"
-SNAPSHOT=bfbd28b2a04c278fb6730ebf030bf44737d2a04c
+SNAPSHOT=8c7bdebef8325c782fc5e1cce9a1940d326f1fb0
 SRC_URI="https://github.com/nss-dev/nss/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

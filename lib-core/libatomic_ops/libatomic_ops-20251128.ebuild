@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="Portable atomic operations library used by garbage collectors and concurrent code"
 HOMEPAGE="https://github.com/ivmai/bdwgc"
-SNAPSHOT=508d227476dfc35060279ab8469053e4bb3318df
+SNAPSHOT=fdccf2b3cdcad5584af0554fceff83d3342d5ebc
 SRC_URI="https://github.com/bdwgc/libatomic_ops/archive/${SNAPSHOT}.tar.gz -> libatomic_ops-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libatomic_ops-${SNAPSHOT}
 

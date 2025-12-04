@@ -8,7 +8,7 @@ DISTUTILS_USE_PEP517=standalone
 
 DESCRIPTION="pkgcore-based QA utility for ebuild repos"
 HOMEPAGE="https://github.com/pkgcore/pkgcheck"
-SNAPSHOT=0c59e0c298945f2542d4c6174edce47318af317e
+SNAPSHOT=c3ae2a7c22dd688bbc67736576e8e824f85468ae
 SRC_URI="https://github.com/pkgcore/pkgcheck/archive/${SNAPSHOT}.tar.gz -> pkgcheck-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/pkgcheck-${SNAPSHOT}"
 

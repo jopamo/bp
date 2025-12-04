@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="hwdata files"
 HOMEPAGE="https://github.com/vcrhonek/hwdata"
-SNAPSHOT=84014f0025c0a95060acc4cd5c47432f517b3411
+SNAPSHOT=d263c183dd429bbe1572a91a8cf180e84b8341c6
 SRC_URI="https://github.com/vcrhonek/hwdata/archive/${SNAPSHOT}.tar.gz -> hwdata-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/hwdata-${SNAPSHOT}
 

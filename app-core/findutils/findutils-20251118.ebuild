@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-SNAPSHOT=7156420fab0ff1589503ee7ec54de0be217b557e
+SNAPSHOT=580be65e2566a90c6029e994dce4b22ddd42806c
 
 inherit flag-o-matic toolchain-funcs python-any-r1
 

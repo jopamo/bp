@@ -6,9 +6,11 @@ inherit cmake distutils-r1 flag-o-matic
 
 DISTUTILS_EXT=1
 
+BRANCH_NAME="v$(ver_cut 1)"
+
 DESCRIPTION="disassembly/disassembler framework + bindings"
 HOMEPAGE="http://www.capstone-engine.org/"
-SNAPSHOT=8872be6087dd17734d38f290b119f13a56f3027c
+SNAPSHOT=cd6dd7b75d126a855be1f9f76570ee5a850c6061
 SRC_URI="https://github.com/capstone-engine/capstone/archive/${SNAPSHOT}.tar.gz -> capstone-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/capstone-${SNAPSHOT}"
 

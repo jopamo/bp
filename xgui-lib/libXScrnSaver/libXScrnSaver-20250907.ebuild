@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="X.Org XScrnSaver library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=737ff69e5370eaeff83c05cf94e6b199776ec216
+SNAPSHOT=60c957ba8a727d01b376da0142aef7e18aa86fe1
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXScrnSaver/-/archive/${SNAPSHOT}/libXScrnSaver-${SNAPSHOT}.tar.bz2 -> libXScrnSaver-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxscrnsaver-${SNAPSHOT}"
 

@@ -14,7 +14,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug ipv6 libpsl nls pcre static test uuid zlib"
+IUSE="debug ipv6 libpsl pcre static test uuid zlib"
 
 LIB_DEPEND="
 	pcre? ( lib-core/libpcre2[static-libs(+)] )
@@ -33,6 +33,5 @@ DEPEND="
 		app-lang/perl
 		)
 	libpsl? ( lib-net/libpsl )
-	nls? ( app-build/gettext )
 	virtual/ssl
 "

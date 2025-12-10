@@ -4,7 +4,9 @@ EAPI=8
 
 BRANCH_NAME="gdb-$(ver_cut 1)-branch"
 
-inherit flag-o-matic python-single-r1
+PYTHON_COMPAT=( python3_12 )
+
+inherit flag-o-matic python-single-r1 toolchain-funcs
 
 DESCRIPTION="GNU debugger"
 HOMEPAGE="https://sourceware.org/gdb/"
@@ -14,7 +16,7 @@ S="${WORKDIR}/binutils-gdb-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="client lzma multitarget python server test xml"
 
@@ -32,19 +34,20 @@ RDEPEND="
 		python? ( ${PYTHON_DEPS} )
 		xml? ( lib-core/expat )
 		lib-core/zlib
-	)"
-DEPEND="${RDEPEND}
+	)
+"
+DEPEND="
+	${RDEPEND}
 	app-compression/xz-utils
 	lib-misc/xxhash
 	app-build/texinfo
 	client? (
 		app-build/bison
 		test? ( app-dev/dejagnu )
-	)"
+	)
+"
 
-GDB_BUILD_DIR="${WORKDIR}"/${P}-build
-
-#PATCHES=( "${FILESDIR}"/gcc15.patch	)
+GDB_BUILD_DIR="${WORKDIR}/${P}-build"
 
 pkg_setup() {
 	use python && python-single-r1_pkg_setup
@@ -55,34 +58,32 @@ src_configure() {
 	replace-flags "-D_FORTIFY_SOURCE=3" "-D_FORTIFY_SOURCE=2"
 	append-flags -fpermissive
 
-	myconf+=(
-			$(use multitarget && echo --enable-targets=all)
-			$(use_enable server gdbserver auto)
-			$(use_with lzma)
-			$(use_with python python "${EPYTHON}")
-			$(use_with xml expat)
-			--disable-dependency-tracking
-			--disable-install-libbfd
-			--disable-install-libiberty
-			--disable-readline
-			--disable-werror
-			--disable-{binutils,etc,gas,gold,gprof,gprofng,ld}
-			--enable-64-bit-bfd
-			--enable-tui
-			--with-separate-debug-dir="${EPREFIX}"/usr/lib/debug
-			--with-system-readline
-			--with-system-zlib
-			--without-guile
-			--without-zlib
-		)
+	local myconf=(
+		$(use multitarget && echo --enable-targets=all)
+		$(use_enable server gdbserver auto)
+		$(usex client '' '--disable-gdb')
+		$(use_with lzma)
+		$(use_with python python "${EPYTHON}")
+		$(use_with xml expat)
+		--disable-dependency-tracking
+		--disable-install-libbfd
+		--disable-install-libiberty
+		--disable-werror
+		--disable-{binutils,etc,gas,gold,gprof,gprofng,ld}
+		--enable-64-bit-bfd
+		--enable-tui
+		--with-separate-debug-dir="${EPREFIX}"/usr/lib/debug
+		--with-system-readline
+		--with-system-zlib
+		--without-guile
+	)
 
 	export ac_cv_path_pkg_config_prog_path="$(tc-getPKG_CONFIG)"
 
 	mkdir "${GDB_BUILD_DIR}" || die
-	pushd "${GDB_BUILD_DIR}" || die
-		ECONF_SOURCE=${S}
-		econf "${myconf[@]}"
-	popd
+	pushd "${GDB_BUILD_DIR}" >/dev/null || die
+		ECONF_SOURCE=${S} econf "${myconf[@]}"
+	popd >/dev/null
 }
 
 src_compile() {
@@ -90,6 +91,7 @@ src_compile() {
 }
 
 src_test() {
+	use test || return 0
 	emake -C "${GDB_BUILD_DIR}" check
 }
 

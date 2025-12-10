@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit meson
 
 DESCRIPTION="X.Org xkbfile library"
 HOMEPAGE="https://www.x.org/wiki/"
@@ -14,19 +14,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs"
-
 DEPEND="
 	xgui-lib/libX11
 	xgui-tools/xorgproto
 "
-
-src_prepare() {
-	default
-	eautoreconf
-}
-
-src_install() {
-	default
-	use static-libs || find "${ED}" -name '*.a' -delete
-}

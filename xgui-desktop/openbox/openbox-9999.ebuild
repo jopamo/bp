@@ -2,52 +2,38 @@
 
 EAPI=8
 
-inherit meson python-r1
+inherit autotools python-r1 flag-o-matic
 
 DESCRIPTION="A standards compliant, fast, light-weight, extensible window manager"
 HOMEPAGE="http://openbox.org/"
 
 if [[ ${PV} != 9999 ]]; then
-	SNAPSHOT=b809fbeb6678e992cd652859f1719730416c95f2
-	SRC_URI="https://github.com/jopamo/ob/archive/${SNAPSHOT}.tar.gz -> openbox-${SNAPSHOT}.tar.gz"
-	S="${WORKDIR}/ob-${SNAPSHOT}"
+	SNAPSHOT=4d6282188e63ac249d8f5f63a1f4f9084b753d9c
+	SRC_URI="https://github.com/jopamo/openbox/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 else
 	WANT_LIBTOOL=none
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/jopamo/ob.git"
+	EGIT_REPO_URI="https://github.com/jopamo/openbox.git"
 fi
 
 LICENSE="GPL-2"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
-IUSE="debug +session static-libs
-      startup_notification
-      +imlib2
-      +librsvg
-      +session_management
-      rendertest"
+IUSE="asan debug session static-libs"
 
 RDEPEND="
 	dev-python/pyxdg[${PYTHON_USEDEP}]
 	fonts/fontconfig
 	lib-core/libxml2
 	lib-util/glib
-	xgui-lib/libXext
 	xgui-lib/libXft
-	xgui-lib/libxkbcommon
 	xgui-lib/libXrandr
 	xgui-lib/libXt
+	xgui-lib/librsvg
 	xgui-lib/pango
-
-	startup_notification? ( xgui-lib/libstartup-notification )
-	imlib2? ( xgui-lib/imlib2 )
-	librsvg? ( xgui-lib/librsvg )
-
-	session_management? (
-		xgui-lib/libSM
-		xgui-lib/libICE
-	)
+	xgui-lib/imlib2
 "
 
 DEPEND="
@@ -58,15 +44,49 @@ DEPEND="
 	xgui-tools/xorg-server
 "
 
-src_configure() {
-  local meson_args=(
-    -Dstartup_notification=$(usex startup_notification enabled disabled)
-    -Dimlib2=$(usex imlib2 enabled disabled)
-    -Dlibrsvg=$(usex librsvg enabled disabled)
-    -Dsession_management=$(usex session_management enabled disabled)
-    -Drendertest=false
-    -Ddefault_theme=Clearlooks
-  )
+src_prepare() {
+	sed -i '/docbook-to-man/d' "${S}"/Makefile.am || die
+	sed -i \
+		-e "s:-O0 -ggdb ::" \
+		"${S}"/m4/openbox.m4 || die
 
-  meson_src_configure "${meson_args[@]}" || die "meson configure failed"
+	default
+	eautoreconf
+}
+
+src_configure() {
+	if use asan; then
+		: "${CC:=clang}"
+		: "${CXX:=clang++}"
+		export CC CXX
+
+		strip-flags
+		filter-clang
+
+		filter-flags -O0 -O1 -O2 -O3 -Os -Ofast -Og
+		filter-flags -g -ggdb -ggdb3
+
+		append-flags -O1 -g -fno-omit-frame-pointer
+	fi
+
+	local myconf=(
+		--disable-nls
+		--enable-imlib2
+		--enable-librsvg
+		--with-x
+		$(use_enable debug)
+		$(use_enable session session-management)
+		$(use_enable static-libs static)
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+
+	# for xdg
+	cat > "${T}"/99${PN} <<- EOF || die
+		XDG_CURRENT_DESKTOP=XFCE
+	EOF
+	doenvd "${T}"/99${PN}
 }

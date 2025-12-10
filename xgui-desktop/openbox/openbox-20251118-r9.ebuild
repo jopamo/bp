@@ -2,15 +2,15 @@
 
 EAPI=8
 
-inherit autotools python-r1
+inherit autotools python-r1 flag-o-matic
 
 DESCRIPTION="A standards compliant, fast, light-weight, extensible window manager"
 HOMEPAGE="http://openbox.org/"
 
 if [[ ${PV} != 9999 ]]; then
-	SNAPSHOT=f9bc5710c172b647f17332b11bf1ed7e373a269a
-	SRC_URI="https://github.com/jopamo/ob/archive/${SNAPSHOT}.tar.gz -> openbox-${SNAPSHOT}.tar.gz"
-	S="${WORKDIR}/ob-${SNAPSHOT}"
+	SNAPSHOT=dac6e2f6f8f2e0c5586a9e19f18508a03db639cb
+	SRC_URI="https://github.com/jopamo/openbox/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 else
 	WANT_LIBTOOL=none
 	inherit git-r3
@@ -19,9 +19,9 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
 
-IUSE="debug session static-libs"
+IUSE="asan debug session static-libs"
 
 RDEPEND="
 	dev-python/pyxdg[${PYTHON_USEDEP}]
@@ -45,6 +45,8 @@ DEPEND="
 "
 
 src_prepare() {
+	append-flags -Wno-implicit-function-declaration
+
 	sed -i '/docbook-to-man/d' "${S}"/Makefile.am || die
 	sed -i \
 		-e "s:-O0 -ggdb ::" \
@@ -55,6 +57,20 @@ src_prepare() {
 }
 
 src_configure() {
+	if use asan; then
+		: "${CC:=clang}"
+		: "${CXX:=clang++}"
+		export CC CXX
+
+		strip-flags
+		filter-clang
+
+		filter-flags -O0 -O1 -O2 -O3 -Os -Ofast -Og
+		filter-flags -g -ggdb -ggdb3
+
+		append-flags -O1 -g -fno-omit-frame-pointer
+	fi
+
 	local myconf=(
 		--disable-nls
 		--enable-imlib2

@@ -1,4 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
+#
 
 EAPI=8
 
@@ -8,7 +9,7 @@ DESCRIPTION="A standards compliant, fast, light-weight, extensible window manage
 HOMEPAGE="http://openbox.org/"
 
 if [[ ${PV} != 9999 ]]; then
-SNAPSHOT=f0bc0606edefc236b9166284f09d6143cc337845
+SNAPSHOT=a13b1b0d59745f3f93b699e41a9592c9f0ac1c98
 	SRC_URI="https://github.com/jopamo/ob/archive/${SNAPSHOT}.tar.gz -> openbox-${SNAPSHOT}.tar.gz"
 	S="${WORKDIR}/ob-${SNAPSHOT}"
 else

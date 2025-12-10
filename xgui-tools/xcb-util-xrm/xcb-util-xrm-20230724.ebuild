@@ -2,20 +2,15 @@
 
 EAPI=8
 
-inherit autotools
+inherit meson
 
 DESCRIPTION="XCB utility functions for the X resource manager"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=a17de570ab18bfd8b7b9bf23af9e0bb2249d02c9
-SRC_URI="https://github.com/Airblader/xcb-util-xrm/archive/${SNAPSHOT}.tar.gz -> xcb-util-xrm-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/xcb-util-xrm-${SNAPSHOT}"
+SNAPSHOT=15c9d4592b82e1b9bb84543644ca959c8361a18c
+SRC_URI="https://github.com/jopamo/xcb-util-xrm/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-src_prepare() {
-	default
-	./autogen.sh
-}

@@ -193,81 +193,91 @@ src_configure() {
 }
 
 src_install() {
-    meson_src_install
+	meson_src_install
 
-    newsysusers "${FILESDIR}/${PN}-sysusers" "${PN}.conf"
-    use resolve && newsysusers "${FILESDIR}/resolve-sysusers" "${PN}-resolve.conf"
-    use networkd && newsysusers "${FILESDIR}/network-sysusers" "${PN}-network.conf"
-    use coredump && newsysusers "${FILESDIR}/coredump-sysusers" "${PN}-coredump.conf"
+	newsysusers "${FILESDIR}/${PN}-sysusers" "${PN}.conf"
+	use resolve && newsysusers "${FILESDIR}/resolve-sysusers" "${PN}-resolve.conf"
+	use networkd && newsysusers "${FILESDIR}/network-sysusers" "${PN}-network.conf"
+	use coredump && newsysusers "${FILESDIR}/coredump-sysusers" "${PN}-coredump.conf"
 
-    dosym -r /etc/sysctl.conf /etc/sysctl.d/99-sysctl.conf
+	insinto /etc/systemd
+	use resolve && doins "${FILESDIR}/resolved.conf"
 
-    rm "${ED}"/usr/share/factory/etc/issue || die
+	dodir /etc/sysctl.d
+	dosym -r /etc/sysctl.conf /etc/sysctl.d/99-sysctl.conf
 
-    keepdir /var/log/journal
-    keepdir /var/lib/systemd
+	rm "${ED}/usr/share/factory/etc/issue" || die
 
-    mkdir -p "${ED}"/etc/systemd/user && keepdir /etc/systemd/user
+	keepdir /var/log/journal /var/lib/systemd
+	keepdir /etc/systemd/user
 
-    use xkb || rm -rf "${ED}"/etc/X11 "${ED}"/etc/xdg/
+	use xkb || { rm -rf "${ED}/etc/X11" "${ED}/etc/xdg" || die; }
 
-    use networkd && mkdir -p "${ED}"/etc/systemd/network
+	use networkd && keepdir /etc/systemd/network
 
-    use resolve && dosym -r /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+	use resolve && dosym -r /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 
-    use dhcp4 && echo '[Match]
-Name=en*
+	if use dhcp4; then
+		keepdir /etc/systemd/network
+		cat > "${ED}/etc/systemd/network/ipv4dhcp.network" <<- 'EOF' || die
+			[Match]
+			Name=en*
 
-[Network]
-DHCP=ipv4' > "${ED}"/etc/systemd/network/ipv4dhcp.network
+			[Network]
+			DHCP=ipv4
+		EOF
+	fi
 
-    sed -i "s/\#Audit\=yes/Audit\=no/g" "${ED}"/etc/systemd/journald.conf || die
+	local journald_conf="${ED}/etc/systemd/journald.conf"
 
-    sed -i "s/\#SystemMaxUse\=/SystemMaxUse\=128M/g" "${ED}"/etc/systemd/journald.conf || die
+	sed -i "s/#Audit=yes/Audit=no/g" "${journald_conf}" || die
+	sed -i "s/#SystemMaxUse=/SystemMaxUse=128M/g" "${journald_conf}" || die
 
-    sed -i '/ConditionNeedsUpdate/d' "${ED}"/usr/lib/systemd/system/systemd-sysusers.service || die
+	sed -i '/ConditionNeedsUpdate/d' \
+		"${ED}/usr/lib/systemd/system/systemd-sysusers.service" || die
 
-    rm "${ED}"/usr/lib/sysusers.d/basic.conf
+	rm "${ED}/usr/lib/sysusers.d/basic.conf" || die
 
-    for x in cdrom dialout render sgx tape ; do
-        sed -i "/${x}/d" "${ED}"/usr/lib/udev/rules.d/50-udev-default.rules || die
-    done
+	for x in cdrom dialout render sgx tape; do
+		sed -i "/${x}/d" \
+			"${ED}/usr/lib/udev/rules.d/50-udev-default.rules" || die
+	done
 
-mkdir -p "${ED}/usr/lib/systemd/user/"
+	dodir /usr/lib/systemd/user
 
-cat > "${ED}/usr/lib/systemd/user/ssh-agent.service" <<- 'EOF' || die
-[Unit]
-Description=OpenSSH Agent
-After=default.target
-Requires=default.target
+	cat > "${ED}/usr/lib/systemd/user/ssh-agent.service" <<- 'EOF' || die
+		[Unit]
+		Description=SSH key agent
+		After=basic.target
+		Requires=basic.target
 
-[Service]
-Type=forking
-Environment=SSH_AUTH_SOCK=%t/ssh-agent.socket
-ExecStart=/usr/bin/ssh-agent -a $SSH_AUTH_SOCK
-ExecStop=/usr/bin/ssh-agent -k
-Restart=always
-RemainAfterExit=yes
+		[Service]
+		Type=forking
+		Environment=SSH_AUTH_SOCK=%t/ssh-agent.socket
+		ExecStart=/usr/bin/ssh-agent -a \$SSH_AUTH_SOCK
+		ExecStop=/usr/bin/ssh-agent -k
+		Restart=always
+		RemainAfterExit=yes
 
-[Install]
-WantedBy=default.target
-EOF
+		[Install]
+		WantedBy=default.target
+	EOF
 
-cat > "${ED}/usr/lib/systemd/user/gpg-agent.service" <<- 'EOF' || die
-[Unit]
-Description=GnuPG Agent Service
-After=default.target
+	cat > "${ED}/usr/lib/systemd/user/gpg-agent.service" <<- 'EOF' || die
+		[Unit]
+		Description=GnuPG private key agent
+		After=basic.target
+		Wants=basic.target
 
-[Service]
-Type=simple
-ExecStart=/usr/bin/gpgconf --launch gpg-agent
-ExecStop=/usr/bin/gpgconf --kill gpg-agent
-RemainAfterExit=yes
+		[Service]
+		Type=simple
+		ExecStart=/usr/bin/gpgconf --launch gpg-agent
+		ExecStop=/usr/bin/gpgconf --kill gpg-agent
+		RemainAfterExit=yes
 
-[Install]
-WantedBy=default.target
-EOF
-
+		[Install]
+		WantedBy=default.target
+	EOF
 }
 
 pkg_postrm() {

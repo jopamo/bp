@@ -84,7 +84,7 @@ src_prepare() {
       compiler/rustc_target/src/spec/targets/x86_64_unknown_linux_musl.rs || die
     sed -i 's/^\([[:space:]]*\)extern "C" *{ *}/\1unsafe extern "C" {}/' \
       library/unwind/src/lib.rs || die
-
+	sed -i 's/base\.crt_static_default = true;/base\.crt_static_default = false;/g' \
       compiler/rustc_target/src/spec/targets/aarch64_unknown_linux_musl.rs || die
     sed -i 's/^\([[:space:]]*\)extern "C" *{ *}/\1unsafe extern "C" {}/' \
       library/unwind/src/lib.rs || die

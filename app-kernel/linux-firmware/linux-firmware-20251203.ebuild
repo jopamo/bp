@@ -19,7 +19,7 @@ IUSE="3com amdgpu amd-ucode ar3k ath10k ath11k ath12k ath6k atmel bnx2 brcm carl
 
 RESTRICT="strip"
 
-FWDIR="/lib/firmware"
+FWDIR="/usr/lib/firmware"
 
 QA_PREBUILT="${FWDIR}/*"
 
@@ -41,28 +41,22 @@ src_install() {
 	insinto "${FWDIR}"
 	doins -r ./* || die
 
-	if use iwlwifi; then
-		local img_root="${ED%/}${FWDIR}"
-		local f linkname tgt
+	local img_root="${ED%/}${FWDIR}"
 
-		# symlink top-level ucode names to wherever they were installed
+	# create top-level symlinks for all Intel firmware basenames
+	if [[ -d "${img_root}/intel" ]]; then
+		local f base tgt
 		while IFS= read -r -d '' f; do
-			linkname="${FWDIR}/$(basename "${f}")"
-			tgt="${f#${ED%/}}"              # absolute target inside image root
-			dosym "${tgt}" "${linkname}" || die
-		done < <(find "${img_root}" -type f -name 'iwlwifi-ty-a0-gf-a0-*.ucode' -print0)
+			base="${FWDIR}/$(basename "${f}")"
+			tgt="${f#${ED%/}}"
 
-		# ensure PNVM exists and expose a top-level link
-		local pnvm_src pnvm_inst
-		pnvm_src="$(find "${S}" -type f -name 'iwlwifi-ty-a0-gf-a0.pnvm' | head -n1 || true)"
-		if [[ -n "${pnvm_src}" ]]; then
-			insinto "${FWDIR}"
-			doins "${pnvm_src}" || die
-		fi
-		pnvm_inst="$(find "${img_root}" -type f -name 'iwlwifi-ty-a0-gf-a0.pnvm' | head -n1 || true)"
-		if [[ -n "${pnvm_inst}" ]]; then
-			dosym "${pnvm_inst#${ED%/}}" "${FWDIR}/iwlwifi-ty-a0-gf-a0.pnvm" || die
-		fi
+			# don't overwrite real files or existing links
+			if [[ -e "${ED%/}${base}" ]]; then
+				continue
+			fi
+
+			dosym "${tgt}" "${base}" || die
+		done < <(find "${img_root}/intel" -type f -print0)
 	fi
 
 	if use regdb; then

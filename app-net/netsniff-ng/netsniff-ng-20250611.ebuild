@@ -5,7 +5,7 @@ EAPI=8
 inherit toolchain-funcs flag-o-matic autotools
 
 DESCRIPTION="A Swiss army knife for your daily Linux network plumbing"
-HOMEPAGE="http://www.aircrack-ng.org"
+HOMEPAGE="https://netsniff-ng.org/"
 
 SNAPSHOT=1af7ae33e3e8178ab5c649c3a52838d4375c4228
 SRC_URI="https://github.com/netsniff-ng/netsniff-ng/archive/${SNAPSHOT}.tar.gz -> netsniff-ng-${SNAPSHOT}.tar.gz"

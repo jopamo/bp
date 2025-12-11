@@ -7,7 +7,7 @@ inherit unpacker xdg
 MY_P="${PN}_${PV}-1"
 
 DESCRIPTION="Google Chrome web browser (unstable channel)"
-HOMEPAGE="https://brave.com"
+HOMEPAGE="https://www.google.com/chrome/"
 SRC_URI="https://dl.google.com/linux/chrome/deb/pool/main/g/${PN}/${MY_P}_amd64.deb"
 S="${WORKDIR}"
 

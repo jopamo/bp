@@ -8,7 +8,7 @@ MY_PV="${PV/-r*/}"
 inherit unpacker xdg
 
 DESCRIPTION="All-in-one voice and text chat for gamers and communities"
-HOMEPAGE="https://brave.com"
+HOMEPAGE="https://discord.com/"
 SRC_URI="amd64? ( https://dl.discordapp.net/apps/linux/${PV}/${P}.tar.gz )"
 S="${WORKDIR}"
 

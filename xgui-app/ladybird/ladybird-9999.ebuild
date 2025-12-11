@@ -5,7 +5,7 @@ EAPI=8
 inherit xdg cmake
 
 DESCRIPTION="Lightweight Qt Plain-Text Editor"
-HOMEPAGE="https://github.com/tsujan/FeatherPad"
+HOMEPAGE="https://ladybird.dev/"
 
 if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/LadybirdBrowser/ladybird"

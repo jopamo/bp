@@ -11,11 +11,7 @@ FORTRAN_NEEDED=lapack
 inherit distutils-r1 flag-o-matic pypi
 
 DESCRIPTION="Fast array and numerical python library"
-HOMEPAGE="
-	https://numpy.org/
-	https://github.com/numpy/numpy/
-	https://pypi.org/project/numpy/
-"
+HOMEPAGE="https://numpy.org/"
 
 LICENSE="BSD"
 SLOT="0/2"

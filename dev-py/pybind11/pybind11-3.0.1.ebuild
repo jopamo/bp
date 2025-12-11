@@ -10,11 +10,7 @@ inherit distutils-r1 cmake flag-o-matic
 
 MY_P=${P/_}
 DESCRIPTION="Seamless operability between C++11 and Python via lightweight bindings"
-HOMEPAGE="
-	https://pybind11.readthedocs.io/en/stable/
-	https://github.com/pybind/pybind11/
-	https://pypi.org/project/pybind11/
-"
+HOMEPAGE="https://github.com/pybind/pybind11/"
 SRC_URI="
 	https://github.com/pybind/pybind11/archive/v${PV/_}.tar.gz
 		-> ${MY_P}.gh.tar.gz

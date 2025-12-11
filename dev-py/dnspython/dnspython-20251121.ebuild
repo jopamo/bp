@@ -7,11 +7,7 @@ DISTUTILS_USE_PEP517=hatchling
 inherit distutils-r1
 
 DESCRIPTION="DNS toolkit for Python"
-HOMEPAGE="
-	https://www.dnspython.org/
-	https://github.com/rthalley/dnspython/
-	https://pypi.org/project/dnspython/
-"
+HOMEPAGE="https://www.dnspython.org/"
 SNAPSHOT=8f299d70bb263b6018c353d453bdeab67ec9da08
 SRC_URI="https://github.com/rthalley/dnspython/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"

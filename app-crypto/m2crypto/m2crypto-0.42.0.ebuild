@@ -10,10 +10,7 @@ PYPI_PN="M2Crypto"
 inherit distutils-r1 toolchain-funcs pypi flag-o-matic
 
 DESCRIPTION="A Python crypto and SSL toolkit"
-HOMEPAGE="
-	https://gitlab.com/m2crypto/m2crypto/
-	https://pypi.org/project/M2Crypto/
-"
+HOMEPAGE="https://gitlab.com/m2crypto/m2crypto/"
 
 LICENSE="MIT openssl"
 SLOT="0"

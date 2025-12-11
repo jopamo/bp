@@ -9,10 +9,7 @@ inherit distutils-r1
 
 MY_P=python-zstandard-${PV}
 DESCRIPTION="Zstandard Bindings for Python"
-HOMEPAGE="
-	https://github.com/indygreg/python-zstandard/
-	https://pypi.org/project/zstandard/
-"
+HOMEPAGE="https://github.com/indygreg/python-zstandard/"
 
 MY_PN="python-zstandard"
 SNAPSHOT=7a77a7510b8ce068e4a103d29aea1b5ec829d8b6

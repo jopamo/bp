@@ -12,11 +12,7 @@ inherit distutils-r1 multiprocessing toolchain-funcs
 
 MY_P=${P/_rc/rc}
 DESCRIPTION="A Python to C compiler"
-HOMEPAGE="
-	https://cython.org/
-	https://github.com/cython/cython/
-	https://pypi.org/project/Cython/
-"
+HOMEPAGE="https://cython.org/"
 SNAPSHOT=64e9d5a759f50c84355d5e102d2ddfac5aec9f0e
 SRC_URI="https://github.com/cython/cython/archive/${SNAPSHOT}.tar.gz -> cython-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/cython-${SNAPSHOT}"

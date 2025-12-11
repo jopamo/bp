@@ -9,10 +9,7 @@ PYTHON_COMPAT=( python3_{10..13} )
 inherit distutils-r1 flag-o-matic
 
 DESCRIPTION="Python bindings to the Tree-sitter parsing library"
-HOMEPAGE="
-	https://github.com/tree-sitter/py-tree-sitter/
-	https://pypi.org/project/tree-sitter/
-"
+HOMEPAGE="https://github.com/tree-sitter/py-tree-sitter/"
 
 MY_PN="py-tree-sitter"
 SNAPSHOT=90cd887e63313b656ba66ca1d58f8bbee5ca055f

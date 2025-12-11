@@ -9,11 +9,7 @@ PYTHON_REQ_USE="xml(+)"
 inherit distutils-r1 pypi
 
 DESCRIPTION="HTML parser based on the HTML5 specification"
-HOMEPAGE="
-	https://github.com/html5lib/html5lib-python/
-	https://html5lib.readthedocs.io/
-	https://pypi.org/project/html5lib/
-"
+HOMEPAGE="https://github.com/html5lib/html5lib-python/"
 
 SNAPSHOT=fd4f032bc090d44fb11a84b352dad7cbee0a4745
 SRC_URI="https://github.com/html5lib/html5lib-python/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"

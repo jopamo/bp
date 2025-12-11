@@ -10,10 +10,7 @@ inherit distutils-r1 flag-o-matic multiprocessing pypi
 
 VEC_P=cryptography_vectors-$(ver_cut 1-3)
 DESCRIPTION="Library providing cryptographic recipes and primitives"
-HOMEPAGE="
-	https://github.com/pyca/cryptography/
-	https://pypi.org/project/cryptography/
-"
+HOMEPAGE="https://github.com/pyca/cryptography/"
 SRC_URI+="
 	test? (
 		$(pypi_sdist_url cryptography_vectors "$(ver_cut 1-3)")

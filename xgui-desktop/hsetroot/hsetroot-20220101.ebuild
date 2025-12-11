@@ -3,7 +3,7 @@
 EAPI=8
 
 DESCRIPTION="Tool which allows you to compose wallpapers ('root pixmaps') for X"
-HOMEPAGE="https://www.x.org/wiki/"
+HOMEPAGE="https://github.com/himdel/hsetroot"
 
 SNAPSHOT=a402d5323f45c058810c0d66d61d278d101d3610
 SRC_URI="https://github.com/himdel/hsetroot/archive/${SNAPSHOT}.tar.gz -> hsetroot-${SNAPSHOT}.tar.gz"

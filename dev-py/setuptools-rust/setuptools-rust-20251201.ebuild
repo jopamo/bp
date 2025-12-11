@@ -8,10 +8,7 @@ PYTHON_COMPAT=( python3_{10..13} pypy3 )
 inherit distutils-r1
 
 DESCRIPTION="A plugin for setuptools to build Rust Python extensions"
-HOMEPAGE="
-	https://github.com/PyO3/setuptools-rust/
-	https://pypi.org/project/setuptools-rust/
-"
+HOMEPAGE="https://github.com/PyO3/setuptools-rust/"
 SNAPSHOT=0f7763f5e09cfd3bf8a276bfa6e560df7b5ba789
 SRC_URI="https://github.com/PyO3/setuptools-rust/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/setuptools-rust-${SNAPSHOT}

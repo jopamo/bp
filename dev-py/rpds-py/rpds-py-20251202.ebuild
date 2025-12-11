@@ -8,10 +8,7 @@ DISTUTILS_USE_PEP517=maturin
 inherit cargo distutils-r1
 
 DESCRIPTION="Python bindings to Rust's persistent data structures (rpds)"
-HOMEPAGE="
-	https://github.com/crate-py/rpds/
-	https://pypi.org/project/rpds-py/
-"
+HOMEPAGE="https://github.com/crate-py/rpds/"
 SNAPSHOT=e6dbaf19a6dc34bcd97c8e497f4f004bd3e2bb41
 SRC_URI="https://github.com/crate-py/rpds/archive/${SNAPSHOT}.tar.gz -> rpds-py-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/rpds-${SNAPSHOT}"

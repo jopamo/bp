@@ -8,10 +8,7 @@ PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 inherit distutils-r1 pypi
 
 DESCRIPTION="Pythonic idioms for iterating, searching, and modifying an HTML/XML parse tree"
-HOMEPAGE="
-	https://www.crummy.com/software/BeautifulSoup/bs4/
-	https://pypi.org/project/beautifulsoup4/
-"
+HOMEPAGE="https://www.crummy.com/software/BeautifulSoup/bs4/"
 
 LICENSE="MIT"
 SLOT="0"

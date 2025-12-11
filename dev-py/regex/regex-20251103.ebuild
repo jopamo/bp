@@ -8,10 +8,7 @@ DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 pypi flag-o-matic
 
 DESCRIPTION="Alternative regular expression module to replace re"
-HOMEPAGE="
-	https://github.com/mrabarnett/mrab-regex/
-	https://pypi.org/project/regex/
-"
+HOMEPAGE="https://github.com/mrabarnett/mrab-regex/"
 SNAPSHOT=b01d6e7349f1f754f9576e85aa19575acff0c839
 SRC_URI="https://github.com/mrabarnett/mrab-regex/archive/${SNAPSHOT}.tar.gz -> regex-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/mrab-regex-${SNAPSHOT}"

@@ -5,7 +5,7 @@ EAPI=8
 inherit meson
 
 DESCRIPTION="A tiling window manager"
-HOMEPAGE="https://swaywm.org"
+HOMEPAGE="https://i3wm.org/"
 SNAPSHOT=b1e99d8ff0f5bd78625dfc740bd07e22b6904b36
 SRC_URI="https://github.com/i3/i3/archive/${SNAPSHOT}.tar.gz -> i3-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/i3-${SNAPSHOT}"

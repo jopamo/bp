@@ -5,7 +5,7 @@ EAPI=8
 inherit autotools
 
 DESCRIPTION="a reference implementation of the startup notification protocol"
-HOMEPAGE="https://swaywm.org"
+HOMEPAGE="https://www.freedesktop.org/wiki/Software/startup-notification/"
 
 SNAPSHOT=64eb585315cfb1fb4fe68c8f705956e9fed46545
 SRC_URI="https://gitlab.freedesktop.org/xdg/startup-notification/-/archive/${SNAPSHOT}/startup-notification-${SNAPSHOT}.tar.bz2 -> startup-notification-${SNAPSHOT}.tar.bz2"

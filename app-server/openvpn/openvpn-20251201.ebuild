@@ -5,7 +5,7 @@ EAPI=8
 inherit user autotools
 
 DESCRIPTION="Robust and highly flexible tunneling application compatible with many OSes"
-HOMEPAGE="https://www.strongswan.org/"
+HOMEPAGE="https://openvpn.net/"
 SNAPSHOT=da51cc458716605d0d19be9486b8ee08fc6a9e06
 SRC_URI="https://github.com/OpenVPN/openvpn/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"

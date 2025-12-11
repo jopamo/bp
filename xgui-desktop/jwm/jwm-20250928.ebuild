@@ -5,7 +5,7 @@ EAPI=8
 inherit autotools python-r1
 
 DESCRIPTION=" a light-weight window manager for the X11 Window System"
-HOMEPAGE="http://openbox.org/"
+HOMEPAGE="https://joewing.net/projects/jwm/"
 SNAPSHOT=032455cc0e08cab4b18c094170de79fbf00efe42
 SRC_URI="https://github.com/joewing/jwm/archive/${SNAPSHOT}.tar.gz -> jwm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/jwm-${SNAPSHOT}"

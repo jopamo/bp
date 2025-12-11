@@ -4,7 +4,7 @@ EAPI=8
 
 inherit cmake flag-o-matic
 
-DESCRIPTION=" A YAML parser and emitter in C++ "
+DESCRIPTION="A YAML parser and emitter in C++"
 HOMEPAGE="https://github.com/jbeder/yaml-cpp"
 SNAPSHOT=bbf8bdb087bb3f3621ca0a5ace06047805f4e9f3
 SRC_URI="https://github.com/jbeder/yaml-cpp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"

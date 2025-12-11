@@ -4,7 +4,7 @@ EAPI=8
 
 inherit cmake
 
-DESCRIPTION="giflib-turbo - A faster drop-in replacement for giflib."
+DESCRIPTION="giflib-turbo - A faster drop-in replacement for giflib"
 HOMEPAGE="https://github.com/bitbank2/giflib-turbo"
 
 SNAPSHOT=ca7058b0141c577810fa793458796c485945ed8a

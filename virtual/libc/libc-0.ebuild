@@ -2,7 +2,7 @@
 
 EAPI=8
 
-DESCRIPTION="libc implementation virtual."
+DESCRIPTION="libc implementation virtual"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 

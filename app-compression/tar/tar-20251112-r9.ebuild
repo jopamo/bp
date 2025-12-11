@@ -5,7 +5,7 @@ SNAPSHOT=92f040151cb25f06f7b3da2499471e05a2454218
 
 inherit flag-o-matic
 
-DESCRIPTION="An archiver that creates and handles file archives in various formats."
+DESCRIPTION="An archiver that creates and handles file archives in various formats"
 HOMEPAGE="https://www.gnu.org/software/tar/"
 
 if [[ ${PV} == *9999 ]]; then

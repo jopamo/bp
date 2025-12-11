@@ -4,7 +4,7 @@ EAPI=8
 
 inherit autotools
 
-DESCRIPTION="The most popular spellchecking library."
+DESCRIPTION="The most popular spellchecking library"
 HOMEPAGE="http://hunspell.github.io/"
 SNAPSHOT=8900268aaf68b18031e103c09dc8355725ed546d
 SRC_URI="https://github.com/hunspell/hunspell/archive/${SNAPSHOT}.tar.gz -> hunspell-${SNAPSHOT}.tar.gz"

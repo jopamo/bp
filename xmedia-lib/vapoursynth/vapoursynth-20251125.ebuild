@@ -4,7 +4,7 @@ EAPI=8
 
 inherit autotools flag-o-matic
 
-DESCRIPTION="VapourSynth is an library for video manipulation."
+DESCRIPTION="VapourSynth library for video manipulation"
 HOMEPAGE="http://www.vapoursynth.com/"
 SNAPSHOT=1b93fd9649d4420b64863de9226e6e751ba2ba9d
 SRC_URI="https://github.com/vapoursynth/vapoursynth/archive/${SNAPSHOT}.tar.gz -> vapoursynth-${SNAPSHOT}.tar.gz"

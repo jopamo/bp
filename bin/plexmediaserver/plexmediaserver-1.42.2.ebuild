@@ -9,7 +9,7 @@ URI="https://downloads.plex.tv/plex-media-server-new"
 
 inherit doins unpacker
 
-DESCRIPTION="A free media library that is intended for use with a plex client."
+DESCRIPTION="A free media library that is intended for use with a plex client"
 HOMEPAGE="http://www.plex.tv/"
 SRC_URI="amd64? ( ${URI}/${_FULL_VERSION}/debian/plexmediaserver_${_FULL_VERSION}_amd64.deb )
 		arm64? ( ${URI}/${_FULL_VERSION}/debian/plexmediaserver_${_FULL_VERSION}_arm64.deb )"

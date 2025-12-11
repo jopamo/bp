@@ -2,7 +2,7 @@
 
 EAPI=8
 
-DESCRIPTION="A tool for organizing and renaming video files."
+DESCRIPTION="A tool for organizing and renaming video files"
 HOMEPAGE="https://www.filebot.net/"
 SRC_URI="https://1g4.org/files/FileBot_${PV}-portable.tar.xz"
 

@@ -7,7 +7,7 @@ SNAPSHOT2="a3738434e05ba4e378cec59c723304ba33759fdc"
 
 inherit autotools flag-o-matic xdg
 
-DESCRIPTION="Compatibility layer capable of running Windows applications."
+DESCRIPTION="Compatibility layer capable of running Windows applications"
 HOMEPAGE="https://www.winehq.org/"
 
 SRC_URI="

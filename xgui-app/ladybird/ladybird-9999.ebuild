@@ -4,7 +4,7 @@ EAPI=8
 
 inherit xdg cmake
 
-DESCRIPTION="Lightweight Qt Plain-Text Editor"
+DESCRIPTION="Experimental cross-platform web browser"
 HOMEPAGE="https://ladybird.dev/"
 
 if [[ ${PV} = *9999 ]]; then

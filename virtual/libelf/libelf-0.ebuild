@@ -2,7 +2,7 @@
 
 EAPI=8
 
-DESCRIPTION="libelf implementation virtual."
+DESCRIPTION="libelf implementation virtual"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 

@@ -7,11 +7,7 @@ DISTUTILS_USE_PEP517=flit
 inherit distutils-r1 pypi
 
 DESCRIPTION="A full-featured template engine for Python"
-HOMEPAGE="
-	https://palletsprojects.com/p/jinja/
-	https://github.com/pallets/jinja/
-	https://pypi.org/project/Jinja2/
-"
+HOMEPAGE="https://palletsprojects.com/p/jinja/"
 SNAPSHOT=5ef70112a1ff19c05324ff889dd30405b1002044
 SRC_URI="https://github.com/pallets/jinja/archive/${SNAPSHOT}.tar.gz -> jinja-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/jinja-${SNAPSHOT}"

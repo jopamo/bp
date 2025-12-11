@@ -11,11 +11,7 @@ PYTHON_COMPAT=( python3_{10..13} pypy3 )
 inherit distutils-r1 toolchain-funcs
 
 DESCRIPTION="Python Imaging Library (fork)"
-HOMEPAGE="
-	https://python-pillow.org/
-	https://github.com/python-pillow/Pillow/
-	https://pypi.org/project/pillow/
-"
+HOMEPAGE="https://python-pillow.org/"
 SNAPSHOT=339bc5db93bd95decf65a59fab273f300db6594d
 SRC_URI="https://github.com/python-pillow/Pillow/archive/${SNAPSHOT}.tar.gz -> pillow-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/Pillow-${SNAPSHOT}"

@@ -8,10 +8,7 @@ PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 inherit distutils-r1
 
 DESCRIPTION="Python Documentation Utilities (reference reStructuredText impl.)"
-HOMEPAGE="
-	https://docutils.sourceforge.io/
-	https://pypi.org/project/docutils/
-"
+HOMEPAGE="https://docutils.sourceforge.io/"
 SNAPSHOT=5d129e11e46967418b884019fc3855529a5d74cf
 SRC_URI="https://github.com/docutils/docutils/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}/docutils"

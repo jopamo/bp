@@ -7,10 +7,7 @@ DISTUTILS_USE_PEP517=standalone
 inherit distutils-r1
 
 DESCRIPTION="Manage versions by scm tags via setuptools"
-HOMEPAGE="
-	https://github.com/pypa/setuptools-scm/
-	https://pypi.org/project/setuptools-scm/
-"
+HOMEPAGE="https://github.com/pypa/setuptools-scm/"
 SNAPSHOT=55dc58ca934f984ac5e424eae717f292a7843094
 SRC_URI="https://github.com/pypa/setuptools-scm/archive/${SNAPSHOT}.tar.gz -> setuptools-scm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/setuptools-scm-${SNAPSHOT}"

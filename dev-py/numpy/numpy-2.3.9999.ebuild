@@ -8,11 +8,7 @@ DISTUTILS_USE_PEP517=meson-python
 inherit distutils-r1 flag-o-matic git-r3
 
 DESCRIPTION="Fast array and numerical python library"
-HOMEPAGE="
-	https://numpy.org/
-	https://github.com/numpy/numpy/
-	https://pypi.org/project/numpy/
-"
+HOMEPAGE="https://numpy.org/"
 
 EGIT_BRANCH="maintenance/$(ver_cut 1-2).x"
 EGIT_REPO_URI="https://github.com/numpy/numpy"

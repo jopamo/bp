@@ -4,7 +4,7 @@ EAPI=8
 
 inherit cmake
 
-DESCRIPTION="a powerful tool for video post-production."
+DESCRIPTION="a powerful tool for video post-production"
 HOMEPAGE="http://avs-plus.net/"
 SNAPSHOT=bc81fb7ca4d32dcccfebe5cd772682c138f84e13
 SRC_URI="https://github.com/AviSynth/AviSynthPlus/archive/${SNAPSHOT}.tar.gz -> AviSynthPlus-${SNAPSHOT}.tar.gz"

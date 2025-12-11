@@ -2,7 +2,7 @@
 
 EAPI=8
 
-DESCRIPTION="curses implementation virtual."
+DESCRIPTION="curses implementation virtual"
 
 SLOT="0"
 KEYWORDS="amd64 arm64"

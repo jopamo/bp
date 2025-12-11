@@ -7,7 +7,7 @@ inherit distutils-r1
 DISTUTILS_USE_PEP517=hatchling
 
 DESCRIPTION="a command-line program to download videos from YouTube.com and a few more sites"
-HOMEPAGE="https://ytdl-org.github.io/youtube-dl/"
+HOMEPAGE="https://github.com/yt-dlp/yt-dlp"
 
 if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/yt-dlp/yt-dlp"

@@ -7,7 +7,7 @@ DISTUTILS_USE_PEP517=scikit-build-core
 
 inherit distutils-r1 toolchain-funcs
 
-DESCRIPTION="A Pythonic binding for the libxml2 and libxslt libraries"
+DESCRIPTION="Python bindings for llama.cpp"
 HOMEPAGE="https://github.com/abetlen/llama-cpp-python"
 SNAPSHOT=c37132bac860fcc333255c36313f89c4f49d4c8d
 SRC_URI="https://github.com/abetlen/llama-cpp-python/archive/${SNAPSHOT}.tar.gz -> llama-cpp-python-${SNAPSHOT}.tar.gz"

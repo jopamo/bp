@@ -2,7 +2,7 @@
 
 EAPI=8
 
-DESCRIPTION="gcc implementation virtual."
+DESCRIPTION="gcc implementation virtual"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 

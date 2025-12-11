@@ -4,7 +4,7 @@ EAPI=8
 
 inherit cmake xdg git-r3 flag-o-matic
 
-DESCRIPTION="Powerful yet simple to use screenshot software for GNU/Linux"
+DESCRIPTION="Qt helper library for single-instance applications"
 HOMEPAGE="https://github.com/itay-grudev/SingleApplication"
 
 #SNAPSHOT=80001d5c1b2a4a5c1db8201d8c19f9f4d57c605a

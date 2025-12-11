@@ -6,7 +6,7 @@ inherit flag-o-matic
 
 MAINPV=1.0.8
 
-DESCRIPTION="a high-quality data compressor."
+DESCRIPTION="a high-quality data compressor"
 HOMEPAGE="https://sourceware.org/bzip2/"
 SNAPSHOT=af79253677ad98d6dfe11ea315ee9947d86586d3
 SRC_URI="https://github.com/1g4-mirror/bzip2/archive/${SNAPSHOT}.tar.gz -> bzip2-${SNAPSHOT}.tar.gz"

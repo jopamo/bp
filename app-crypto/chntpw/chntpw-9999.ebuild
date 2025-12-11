@@ -4,7 +4,7 @@ EAPI=8
 
 inherit git-r3
 
-DESCRIPTION="a utility to change user passwords in a Windows NT/2000 user database file."
+DESCRIPTION="a utility to change user passwords in a Windows NT/2000 user database file"
 HOMEPAGE="https://salsa.debian.org/debian/chntpw"
 EGIT_REPO_URI="https://salsa.debian.org/debian/chntpw"
 

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-DESCRIPTION="Kernel virtual."
+DESCRIPTION="Kernel virtual"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 

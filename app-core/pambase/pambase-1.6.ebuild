@@ -3,6 +3,7 @@
 EAPI=8
 
 DESCRIPTION="PAM base configuration files"
+HOMEPAGE="https://1g4.org"
 
 LICENSE="GPL-2"
 SLOT="0"

@@ -5,6 +5,7 @@ EAPI=8
 inherit autotools
 
 DESCRIPTION="Shared memory fences using futexes"
+HOMEPAGE="https://cgit.freedesktop.org/xorg/lib/libXshmfence/"
 
 SNAPSHOT=2c3d85cf655f4c9a605f0353cc742f186af52835
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/archive/${SNAPSHOT}/libxshmfence-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"

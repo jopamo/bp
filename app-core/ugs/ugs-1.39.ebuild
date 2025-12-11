@@ -3,6 +3,7 @@
 EAPI=8
 
 DESCRIPTION="helper scripts"
+HOMEPAGE="https://1g4.org"
 
 LICENSE="MIT"
 SLOT="0"

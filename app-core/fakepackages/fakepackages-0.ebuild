@@ -3,6 +3,7 @@
 EAPI=8
 
 DESCRIPTION="Gentoo Repo Compatibility Package Lists"
+HOMEPAGE="https://1g4.org"
 
 LICENSE="GPL-2"
 SLOT="0"

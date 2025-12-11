@@ -237,7 +237,7 @@ EOF
     dosym -r /usr/lib/libnvidia-allocator.so.${PV} /usr/lib/gbm/nvidia-drm_gbm.so
 
     insinto /usr/lib/firmware/nvidia/${PV}
-    doins firmware/gsp_ga10x.bin
+    doins firmware/*.bin
 
     dosym -r /usr/lib/libcrypto.so.3 /usr/lib/libcrypto.so.1.1
 }
@@ -254,8 +254,8 @@ src_install-libs() {
             "libnvidia-api.so.1"
             "libnvidia-cfg.so.${NV_SOVER}"
             "libnvidia-egl-gbm.so.1.1.2"
-            "libnvidia-egl-xcb.so.1.0.3"
-            "libnvidia-egl-xlib.so.1.0.3"
+            "libnvidia-egl-xcb.so.1.0.4"
+            "libnvidia-egl-xlib.so.1.0.4"
             "libnvidia-eglcore.so.${NV_SOVER}"
             "libnvidia-encode.so.${NV_SOVER}"
             "libnvidia-fbc.so.${NV_SOVER}"

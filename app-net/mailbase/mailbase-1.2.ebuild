@@ -5,6 +5,7 @@ EAPI=8
 inherit user
 
 DESCRIPTION="MTA layout package"
+HOMEPAGE="https://1g4.org"
 
 LICENSE="GPL-2"
 SLOT="0"

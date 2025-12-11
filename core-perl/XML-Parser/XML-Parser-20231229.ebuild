@@ -5,6 +5,7 @@ EAPI=7
 inherit perl-module flag-o-matic
 
 DESCRIPTION="A perl module for parsing XML documents"
+HOMEPAGE="https://metacpan.org/release/XML-Parser"
 SNAPSHOT=0384963609c270873196cc26b71c9490738ecc32
 SRC_URI="https://github.com/cpan-authors/XML-Parser/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"

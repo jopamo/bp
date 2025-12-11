@@ -6,9 +6,16 @@ inherit cmake flag-o-matic
 
 DESCRIPTION="a panel"
 HOMEPAGE="https://github.com/jopamo/1g4-panel"
-SNAPSHOT=ad4f8dd1608681705c890ed1bb921b843a9396cf
-SRC_URI="https://github.com/jopamo/1g4-panel/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/1g4-panel-${SNAPSHOT}"
+
+if [[ ${PV} != 9999 ]]; then
+	SNAPSHOT=ad4f8dd1608681705c890ed1bb921b843a9396cf
+	SRC_URI="https://github.com/jopamo/1g4-panel/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+	S="${WORKDIR}/1g4-panel-${SNAPSHOT}"
+else
+	WANT_LIBTOOL=none
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/jopamo/1g4-panel.git"
+fi
 
 LICENSE="LGPL-2.1+"
 SLOT="0"

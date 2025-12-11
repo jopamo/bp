@@ -5,6 +5,7 @@ EAPI=8
 inherit doins
 
 DESCRIPTION="Base Configuration and File Structure"
+HOMEPAGE="https://1g4.org"
 
 LICENSE="GPL-2"
 SLOT="0"

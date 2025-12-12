@@ -17,6 +17,8 @@ KEYWORDS="amd64 arm64"
 RESTRICT="test network-sandbox"
 
 src_prepare() {
+	export RUST_MIN_STACK=134217728
+
 	default
 	cp "${FILESDIR}"/*.md core/
 

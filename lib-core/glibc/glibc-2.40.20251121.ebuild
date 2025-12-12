@@ -93,15 +93,46 @@ pkg_pretend() {
 src_prepare() {
 	default
 
-	cd "${WORKDIR}"
-	find . -name configure -exec touch {} +
+	chmod u+x "${S}"/scripts/*.sh || die
 
-	# Fix permissions on some of the scripts.
-	chmod u+x "${S}"/scripts/*.sh
+	local f
 
-	#sed -i 's/\-Wl,\-z,defs\ //' "${S}"/elf/Makefile || die
-	#cp "${FILESDIR}"/setuid.c "${S}"/sysdeps/unix/sysv/linux/ || die
-	#cp "${FILESDIR}"/libc-start.c "${S}"/csu/ || die
+	# amd64 64-bit ABI
+	f="${S}/sysdeps/unix/sysv/linux/x86_64/64/configure"
+	if [[ -f ${f} ]]; then
+		sed -i \
+			-e "s|libc_cv_slibdir='/lib64'|libc_cv_slibdir='/usr/lib'|g" \
+			-e "s|libc_cv_rtlddir='/lib64'|libc_cv_rtlddir='/usr/lib'|g" \
+			"${f}" || die
+	fi
+
+	# amd64 x32 ABI fragment exists in tree and can leak into ldd RTLDLIST
+	f="${S}/sysdeps/unix/sysv/linux/x86_64/x32/configure"
+	if [[ -f ${f} ]]; then
+		sed -i \
+			-e "s|libc_cv_slibdir='/libx32'|libc_cv_slibdir='/usr/lib'|g" \
+			-e "s|libc_cv_rtlddir='/libx32'|libc_cv_rtlddir='/usr/lib'|g" \
+			"${f}" || die
+	fi
+
+	# arm64
+	f="${S}/sysdeps/unix/sysv/linux/aarch64/configure"
+	if [[ -f ${f} ]]; then
+		sed -i \
+			-e "s|libc_cv_slibdir='/lib64'|libc_cv_slibdir='/usr/lib'|g" \
+			-e "s|libc_cv_rtlddir='/lib'|libc_cv_rtlddir='/usr/lib'|g" \
+			"${f}" || die
+	fi
+
+	# sanity checks
+	grep -nE "libc_cv_(s|rt)libdir='/(lib64|lib)'" \
+		"${S}/sysdeps/unix/sysv/linux/x86_64/64/configure" && die "x86_64/64 still uses /lib or /lib64"
+
+	grep -nE "libc_cv_(s|rt)libdir='/libx32'" \
+		"${S}/sysdeps/unix/sysv/linux/x86_64/x32/configure" && die "x86_64/x32 still uses /libx32"
+
+	grep -nE "libc_cv_(s|rt)libdir='/(lib64|lib)'" \
+		"${S}/sysdeps/unix/sysv/linux/aarch64/configure" && die "aarch64 still uses /lib or /lib64"
 }
 
 src_configure() {
@@ -126,6 +157,8 @@ src_configure() {
 		--disable-werror
 		--enable-add-ons
 		--enable-bind-now
+	    --enable-kernel=4.4
+        --enable-multi-arch
 		--enable-stack-protector=strong
 		--enable-stackguard-randomization
 		--host=${CTARGET_OPT:-${CTARGET}}
@@ -146,19 +179,34 @@ src_configure() {
 
 	ac_cv_lib_cap_cap_init=$(in_iuse caps && usex caps || echo no)
 
-	export libc_cv_rootsbindir="${EPREFIX}"/usr/bin
-	export libc_cv_slibdir="${EPREFIX}"/usr/lib
+	export libc_cv_rootsbindir=/usr/bin
+	export libc_cv_slibdir=/usr/lib
+	export libc_cv_rtlddir=/usr/lib
 	export libc_cv_hashstyle=no
 
 	mkdir -p "${WORKDIR}/build"
-	cd "${WORKDIR}/build"
+	cd "${WORKDIR}/build" || die
+
+cat > configparms <<'EOF'
+slibdir=/usr/lib
+rtlddir=/usr/lib
+sbindir=/usr/bin
+rootsbindir=/usr/bin
+EOF
+
 	set -- "${S}"/configure "${myconf[@]}"
 	echo "$@"
 	"$@" || die "failed to configure glibc"
 }
 
 src_compile() {
-	emake -C "${WORKDIR}/build"
+	cd "${WORKDIR}/build"
+	emake
+
+	if grep -q "/usr/lib64" elf/ldd.bash ; then
+		grep -n "RTLDLIST" elf/ldd.bash || true
+		die "build produced ldd with /usr/lib64 in RTLDLIST"
+	fi
 }
 
 src_test() {
@@ -226,8 +274,6 @@ src_install() {
 
 	fperms +x /usr/bin/locale-gen
 
-	mv "${ED}"/bin/{ldconfig,sln} "${ED}"/usr/bin && rm -rf "${ED}"/bin
-
 	cleanup_install
 
 	echo -e "en_US.UTF-8 UTF-8\nen_US ISO-8859-1" > "${ED}"/usr/share/i18n/locales/SUPPORTED
@@ -251,15 +297,25 @@ pkg_preinst() {
 
 pkg_postinst() {
 	if [[ -x ${EROOT}/usr/bin/iconvconfig ]] ; then
-		# Generate fastloading iconv module configuration file.
 		"${EROOT}"/usr/bin/iconvconfig --prefix="${ROOT}"
 	fi
 
 	if [[ ${ROOT} == "/" ]] ; then
-		# Reload init ... if in a chroot or a diff init package, ignore
-		# errors from this step #253697
+		# keep /usr/lib as the only real lib directory
+		ln -sfn usr/lib "${EROOT}"/lib
+		ln -sfn usr/lib "${EROOT}"/lib64
+
+		# if you ever created /usr/lib64 previously, kill it
+		if [[ -d ${EROOT}/usr/lib64 && ! -L ${EROOT}/usr/lib64 ]] ; then
+			rm -rf "${EROOT}"/usr/lib64 || die
+		fi
+		if [[ -L ${EROOT}/usr/lib64 ]] ; then
+			rm -f "${EROOT}"/usr/lib64 || die
+		fi
+
 		/usr/bin/telinit U 2>/dev/null
 	fi
 
 	"${EROOT}"/usr/bin/locale-gen
 }
+

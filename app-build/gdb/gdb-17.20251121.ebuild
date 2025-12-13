@@ -61,7 +61,7 @@ src_prepare() {
 src_configure() {
 	strip-flags
 	replace-flags "-D_FORTIFY_SOURCE=3" "-D_FORTIFY_SOURCE=2"
-	append-flags -fpermissive -D_GNU_SOURCE
+	append-flags -fpermissive
 
 	local myconf=(
 		$(use multitarget && echo --enable-targets=all)

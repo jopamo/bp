@@ -53,10 +53,15 @@ pkg_setup() {
 	use python && python-single-r1_pkg_setup
 }
 
+src_prepare() {
+	default
+	use elibc_musl && eapply "${FILESDIR}"/termios.patch
+}
+
 src_configure() {
 	strip-flags
 	replace-flags "-D_FORTIFY_SOURCE=3" "-D_FORTIFY_SOURCE=2"
-	append-flags -fpermissive
+	append-flags -fpermissive -D_GNU_SOURCE
 
 	local myconf=(
 		$(use multitarget && echo --enable-targets=all)

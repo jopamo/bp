@@ -1,0 +1,245 @@
+diff -urN a/gdb/ser-unix.c b/gdb/ser-unix.c
+--- a/gdb/ser-unix.c	2025-12-13 05:51:43.196565768 -0600
++++ b/gdb/ser-unix.c	2025-12-13 05:57:26.154699248 -0600
+@@ -44,6 +44,7 @@
+    in <asm/termbits.h> and <termios.h>.  */
+ #  define termios asmtermios
+ #  include <asm/termbits.h>
++#  include <asm/ioctls.h>
+ #  undef termios
+ #endif
+ 
+@@ -67,7 +68,7 @@
+ static bool serial_hwflow;
+ static void
+ show_serial_hwflow (struct ui_file *file, int from_tty,
+-		    struct cmd_list_element *c, const char *value)
++                    struct cmd_list_element *c, const char *value)
+ {
+   gdb_printf (file, _("Hardware flow control is %s.\n"), value);
+ }
+@@ -79,13 +80,15 @@
+ static int hardwire_setparity (struct serial *scb, int parity);
+ static void hardwire_close (struct serial *scb);
+ static int get_tty_state (struct serial *scb,
+-			  struct hardwire_ttystate * state);
++                          struct hardwire_ttystate * state);
+ static int set_tty_state (struct serial *scb,
+-			  struct hardwire_ttystate * state);
++                          struct hardwire_ttystate * state);
+ static serial_ttystate hardwire_get_tty_state (struct serial *scb);
++static serial_ttystate hardwire_copy_tty_state (struct serial *scb,
++                                                serial_ttystate ttystate);
+ static int hardwire_set_tty_state (struct serial *scb, serial_ttystate state);
+ static void hardwire_print_tty_state (struct serial *, serial_ttystate,
+-				      struct ui_file *);
++                                      struct ui_file *);
+ static int hardwire_drain_output (struct serial *);
+ static int hardwire_flush_output (struct serial *);
+ static int hardwire_flush_input (struct serial *);
+@@ -156,18 +159,18 @@
+ 
+ static void
+ hardwire_print_tty_state (struct serial *scb,
+-			  serial_ttystate ttystate,
+-			  struct ui_file *stream)
++                          serial_ttystate ttystate,
++                          struct ui_file *stream)
+ {
+   struct hardwire_ttystate *state = (struct hardwire_ttystate *) ttystate;
+   int i;
+ 
+   gdb_printf (stream, "c_iflag = 0x%x, c_oflag = 0x%x,\n",
+-	      (int) state->termios.c_iflag,
+-	      (int) state->termios.c_oflag);
++              (int) state->termios.c_iflag,
++              (int) state->termios.c_oflag);
+   gdb_printf (stream, "c_cflag = 0x%x, c_lflag = 0x%x\n",
+-	      (int) state->termios.c_cflag,
+-	      (int) state->termios.c_lflag);
++              (int) state->termios.c_cflag,
++              (int) state->termios.c_lflag);
+ #if 0
+   /* This not in POSIX, and is not really documented by those systems
+      which have it (at least not Sun).  */
+@@ -219,7 +222,7 @@
+ 
+   if (get_tty_state (scb, &state))
+     gdb_printf (gdb_stderr, "get_tty_state failed: %s\n",
+-		safe_strerror (errno));
++                safe_strerror (errno));
+ 
+   state.termios.c_iflag = 0;
+   state.termios.c_oflag = 0;
+@@ -244,7 +247,7 @@
+ 
+   if (set_tty_state (scb, &state))
+     gdb_printf (gdb_stderr, "set_tty_state failed: %s\n",
+-		safe_strerror (errno));
++                safe_strerror (errno));
+ }
+ 
+ #ifndef B19200
+@@ -454,35 +457,35 @@
+     {
+       /* test for perfect match.  */
+       if (rate == baudtab[i].rate)
+-	return baudtab[i].code;
++        return baudtab[i].code;
+       else
+-	{
+-	  /* check if it is in between valid values.  */
+-	  if (rate < baudtab[i].rate)
+-	    {
++        {
++          /* check if it is in between valid values.  */
++          if (rate < baudtab[i].rate)
++            {
+ #if !HAVE_CUSTOM_BAUDRATE_SUPPORT
+-	      if (i)
+-		{
+-		  error (_("Invalid baud rate %d.  "
+-			   "Closest values are %d and %d."),
+-			 rate, baudtab[i - 1].rate, baudtab[i].rate);
+-		}
+-	      else
+-		{
+-		  error (_("Invalid baud rate %d.  Minimum value is %d."),
+-			 rate, baudtab[0].rate);
+-		}
++              if (i)
++                {
++                  error (_("Invalid baud rate %d.  "
++                           "Closest values are %d and %d."),
++                         rate, baudtab[i - 1].rate, baudtab[i].rate);
++                }
++              else
++                {
++                  error (_("Invalid baud rate %d.  Minimum value is %d."),
++                         rate, baudtab[0].rate);
++                }
+ #else
+-	      return -1;
++              return -1;
+ #endif
+-	    }
+-	}
++            }
++        }
+     }
+ 
+ #if !HAVE_CUSTOM_BAUDRATE_SUPPORT
+   /* The requested speed was too large.  */
+   error (_("Invalid baud rate %d.  Maximum value is %d."),
+-	 rate, baudtab[i - 1].rate);
++         rate, baudtab[i - 1].rate);
+ #else
+   return -1;
+ #endif
+@@ -512,31 +515,24 @@
+ static void
+ set_custom_baudrate_linux (int fd, int rate)
+ {
+-#ifdef TCGETS2
++#if defined(TCGETS2) && defined(TCSETS2)
+   struct termios2 tio;
+-  const unsigned long req_get = TCGETS2;
+-  const unsigned long req_set = TCSETS2;
+-#else
+-  struct termios tio;
+-  const unsigned long req_get = TCGETS;
+-  const unsigned long req_set = TCSETS;
+-#endif
+ 
+-  if (ioctl (fd, req_get, &tio) < 0)
++  if (ioctl (fd, TCGETS2, &tio) < 0)
+     perror_with_name (_("Can not get current baud rate"));
+ 
+-  /* Clear the current output baud rate and fill a new value.  */
+   tio.c_cflag &= ~CBAUD;
+   tio.c_cflag |= BOTHER;
+-  tio.c_ospeed = rate;
++  tio.c_ispeed = (speed_t) rate;
++  tio.c_ospeed = (speed_t) rate;
+ 
+-  /* Clear the current input baud rate and fill a new value.  */
+-  tio.c_cflag &= ~(CBAUD << IBSHIFT);
+-  tio.c_cflag |= BOTHER << IBSHIFT;
+-  tio.c_ispeed = rate;
+-
+-  if (ioctl (fd, req_set, &tio) < 0)
++  if (ioctl (fd, TCSETS2, &tio) < 0)
+     perror_with_name (_("Can not set custom baud rate"));
++#else
++  (void) fd;
++  (void) rate;
++  perror_with_name (_("Can not set custom baud rate"));
++#endif
+ }
+ 
+ #elif HAVE_CUSTOM_BAUDRATE_SUPPORT && defined(IOSSIOSPEED)
+@@ -552,7 +548,7 @@
+ }
+ 
+ #endif /* HAVE_CUSTOM_BAUDRATE_SUPPORT
+-	  && (defined(BOTHER) || defined(IOSSIOSPEED)) */
++          && (defined(BOTHER) || defined(IOSSIOSPEED)) */
+ 
+ #if HAVE_CUSTOM_BAUDRATE_SUPPORT
+ 
+@@ -586,7 +582,7 @@
+       set_custom_baudrate (scb->fd, rate);
+ #else
+       /* An error should already have been thrown by rate_to_code().
+-	 Add an additional error in case execution somehow reaches this line.  */
++         Add an additional error in case execution somehow reaches this line.  */
+       gdb_assert_not_reached ("Serial baud rate was not found in B_codes");
+ #endif
+     }
+@@ -619,7 +615,7 @@
+   if (!newbit)
+     state.termios.c_cflag &= ~CSTOPB;
+   else
+-    state.termios.c_cflag |= CSTOPB;	/* two bits */
++    state.termios.c_cflag |= CSTOPB;    /* two bits */
+ 
+   return set_tty_state (scb, &state);
+ }
+@@ -657,7 +653,6 @@
+   return set_tty_state (scb, &state);
+ }
+ 
+-
+ static void
+ hardwire_close (struct serial *scb)
+ {
+@@ -667,10 +662,6 @@
+   close (scb->fd);
+   scb->fd = -1;
+ }
+-
+-
+-
+-/* The hardwire ops.  */
+ 
+ static const struct serial_ops hardwire_ops =
+ {
+@@ -703,14 +694,14 @@
+ 
+ #ifdef CRTSCTS
+   add_setshow_boolean_cmd ("remoteflow", no_class,
+-			   &serial_hwflow, _("\
++                           &serial_hwflow, _("\
+ Set use of hardware flow control for remote serial I/O."), _("\
+ Show use of hardware flow control for remote serial I/O."), _("\
+ Enable or disable hardware flow control (RTS/CTS) on the serial port\n\
+ when debugging using remote targets."),
+-			   NULL,
+-			   show_serial_hwflow,
+-			   &setlist, &showlist);
++                           NULL,
++                           show_serial_hwflow,
++                           &setlist, &showlist);
+ #endif
+ }
+ 

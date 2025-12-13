@@ -34,8 +34,24 @@ PATCHES=(
 )
 
 src_prepare() {
+    sed -i \
+        -e 's/^[[:space:]]*virtual[[:space:]]\+BufferKind getBufferKind() const[[:space:]]*{/    BufferKind getBufferKind() const override {/' \
+        tools/llvm-mc-assemble-fuzzer/llvm-mc-assemble-fuzzer.cpp || die
+
+    sed -i \
+        -e 's|^[[:space:]]*MCInstPrinter \*IP = TheTarget->createMCInstPrinter(|  std::unique_ptr<MCInstPrinter> IP(TheTarget->createMCInstPrinter(|' \
+        -e 's|^[[:space:]]*\*MAI, \*MCII, \*MRI);$|      *MAI, *MCII, *MRI));|' \
+        tools/llvm-mc-assemble-fuzzer/llvm-mc-assemble-fuzzer.cpp || die
+
+    sed -i \
+        -e '/Str\.reset(TheTarget->createAsmStreamer/s/, IP,/, std::move(IP),/' \
+        tools/llvm-mc-assemble-fuzzer/llvm-mc-assemble-fuzzer.cpp || die
+
     cmake_src_prepare
-    sed -i '/#include <string>/a #include <cstdint>' "include/llvm/Support/Signals.h" || die
+
+    sed -i \
+        '/#include <string>/a #include <cstdint>' \
+        include/llvm/Support/Signals.h || die
 }
 
 src_configure() {
@@ -164,6 +180,8 @@ src_configure() {
 		-DLLVM_OPTIMIZED_TABLEGEN=ON
 		-DLLVM_PARALLEL_LINK_JOBS=1
 		-DLLVM_TARGETS_TO_BUILD="${LLVM_TARGETS}"
+		-DLLVM_USE_SANITIZE_COVERAGE=ON
+		-DLLVM_USE_SANITIZER=Address
 		-DOCAMLFIND=NO
     )
 

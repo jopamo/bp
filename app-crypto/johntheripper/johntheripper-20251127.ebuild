@@ -56,7 +56,7 @@ src_install() {
 		zip2john gpg2john rar2john racf2john keychain2john kwallet2john pwsafe2john dmg2john \
 		hccap2john base64conv truecrypt_volume2john keystore2john
 	do
-		dosym john /usr/bin/$s
+		dosym -r /usr/bin/john /usr/bin/$s
 	done
 
 	insinto /usr/share/john

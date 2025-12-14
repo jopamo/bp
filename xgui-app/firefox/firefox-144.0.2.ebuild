@@ -222,7 +222,7 @@ src_install() {
 	doins "${distini}"
 
 	# link system ONNX runtime into firefox dir
-	dosym ../libonnxruntime.so "${libdir}/libonnxruntime.so"
+	dosym -r /usr/lib/libonnxruntime.so "${libdir}/libonnxruntime.so"
 
 	# icons
 	local theme="official"

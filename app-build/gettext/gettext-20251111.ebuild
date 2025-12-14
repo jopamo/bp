@@ -78,7 +78,7 @@ src_compile() {
 src_install() {
     emake DESTDIR="${ED}" install
 
-    dosym msgfmt usr/bin/gmsgfmt
+    dosym -r /usr/bin/msgfmt /usr/bin/gmsgfmt
     dobin gettext-tools/misc/gettextize
 
     rm -f "${ED}/usr/share/locale/locale.alias" \

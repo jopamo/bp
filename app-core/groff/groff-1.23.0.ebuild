@@ -43,8 +43,8 @@ src_compile() {
 src_install() {
 	default
 
-	dosym eqn /usr/bin/geqn
-	dosym tbl /usr/bin/gtbl
+	dosym -r /usr/bin/eqn /usr/bin/geqn
+	dosym -r /usr/bin/tbl /usr/bin/gtbl
 
 	rm -rf "${ED}"/usr/share/doc
 	rm -f "${ED}"/usr/lib/charset.alias

@@ -1,25 +1,11 @@
-name: pkgcheck
-
-on:
-  push:
-  pull_request:
-
-jobs:
-  pkgcheck:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install pkgcheck
-        run: |
-          python3 -m pip install --upgrade pip
-          python3 -m pip install pkgcheck
-
-      - name: Run enabled pkgcheck checks
+      - name: Run enabled checks
+        uses: pkgcore/pkgcheck-action@v1
+        with:
+          args: --config no
+      - name: Loop checks
         shell: bash
         run: |
           set -euo pipefail
-
           checks=(
             EendMissingArgCheck
             EmptyDirsCheck
@@ -35,7 +21,6 @@ jobs:
             ImlateCheck
             InheritsCheck
           )
-
           for check in "${checks[@]}"; do
             echo "==> pkgcheck scan -c $check"
             pkgcheck scan -c "$check"

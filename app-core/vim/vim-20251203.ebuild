@@ -118,7 +118,7 @@ src_install() {
 		doman runtime/doc/vim.1
 
 		for i in vimdiff rvim rview vi ex view ; do
-			dosym vim usr/bin/$i
+			dosym -r /usr/bin/vim /usr/bin/$i
 		done
 
 		if use xxd ; then

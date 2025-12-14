@@ -46,6 +46,6 @@ src_test() {
 
 src_install() {
 	default
-	dosym flex usr/bin/lex
+	dosym -r /usr/bin/flex /usr/bin/lex
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

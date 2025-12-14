@@ -25,5 +25,5 @@ src_configure() {
 
 src_configure() {
 	default
-	dosym texi2any usr/bin/makeinfo
+	dosym -r /usr/bin/texi2any /usr/bin/makeinfo
 }

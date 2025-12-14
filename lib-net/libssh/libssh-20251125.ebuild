@@ -13,3 +13,12 @@ S="${WORKDIR}/libssh-${SNAPSHOT}"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+IUSE="static-libs"
+
+src_configure() {
+	local mycmakeargs=(
+		-DWITH_STATIC_LIB=$(usex static-libs)
+	)
+	cmake_src_configure
+}

@@ -17,6 +17,8 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+IUSE="test"
+
 RDEPEND="
 	|| (
 		x11-misc/xsel

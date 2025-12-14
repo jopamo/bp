@@ -12,12 +12,12 @@ SLOT="0"
 KEYWORDS="amd64"
 IUSE="wasm"
 
+S="${WORKDIR}/firefox-${PV}"
+
 RESTRICT="network-sandbox"
 
 # same key Arch uses for safe browsing/location
 GOOGLE_API_KEY="AIzaSyDwr302FpOSkGRpLlUpPThNTDPbXcIn_FM"
-
-S="${WORKDIR}/firefox-${PV}"
 
 # add real deps:
 # BDEPEND: rust, clang/llvm, nodejs, python, llvm-profdata, xvfb, dbus-run-session, sys-apps/findutils, etc

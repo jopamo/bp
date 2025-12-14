@@ -10,9 +10,9 @@ SRC_URI="https://downloads.sourceforge.net/project/boost/boost/${PV}/boost_${MY_
 
 LICENSE="Boost-1.0"
 SLOT="0"
-KEYWORDS="amd64 arm64"
-
 S="${WORKDIR}/boost_${MY_PV}/"
+
+KEYWORDS="amd64 arm64"
 
 src_compile() {
 	pushd "${S}"/tools/build

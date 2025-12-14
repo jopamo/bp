@@ -12,8 +12,8 @@ SRC_URI="https://github.com/Tencent/rapidjson/archive/${SNAPSHOT}.tar.gz -> rapi
 S="${WORKDIR}/rapidjson-${SNAPSHOT}"
 
 LICENSE="MIT"
-IUSE="test"
 SLOT="0"
+IUSE="test"
 
 KEYWORDS="amd64"
 

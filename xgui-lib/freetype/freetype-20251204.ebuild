@@ -10,10 +10,9 @@ SNAPSHOT=f75ae3d06d0d5f483a81c1e155b9b91e564c5145
 SRC_URI="https://github.com/freetype/freetype/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
-IUSE="brotli bzip2 debug harfbuzz png static-libs zlib"
-
 LICENSE="|| ( FTL GPL-2+ )"
 SLOT="2"
+IUSE="brotli bzip2 debug harfbuzz png static-libs zlib"
 #KEYWORDS="amd64 arm64"
 # build is intricate with git
 

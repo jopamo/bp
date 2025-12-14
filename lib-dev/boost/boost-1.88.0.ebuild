@@ -13,6 +13,8 @@ SRC_URI="https://downloads.sourceforge.net/project/boost/${PN}/${PV}/${MY_P}.tar
 
 LICENSE="Boost-1.0"
 SLOT="0"
+S="${WORKDIR}/${MY_P}"
+
 KEYWORDS="amd64 arm64"
 
 IUSE="context icu static-libs tools bzip2 zlib lzma zstd"
@@ -25,8 +27,6 @@ DEPEND="
 	zstd? ( app-compression/zstd )
 "
 BDEPEND="lib-dev/boost-build"
-
-S="${WORKDIR}/${MY_P}"
 
 RESTRICT="test"
 

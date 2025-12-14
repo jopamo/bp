@@ -8,10 +8,9 @@ DESCRIPTION="A high-quality and portable font engine"
 HOMEPAGE="https://www.freetype.org/"
 EGIT_REPO_URI="https://github.com/freetype/freetype"
 
-IUSE="brotli bzip2 debug harfbuzz png static-libs zlib"
-
 LICENSE="|| ( FTL GPL-2+ )"
 SLOT="2"
+IUSE="brotli bzip2 debug harfbuzz png static-libs zlib"
 #KEYWORDS="amd64 arm64"
 
 RDEPEND="

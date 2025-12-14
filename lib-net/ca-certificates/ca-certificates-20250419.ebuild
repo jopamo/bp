@@ -10,9 +10,9 @@ SNAPSHOT=ba3830faf6207f6444827209915dcfc4ce44b272
 SRC_URI="https://salsa.debian.org/debian/ca-certificates/-/archive/${SNAPSHOT}/ca-certificates-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/ca-certificates-${SNAPSHOT}"
 
+LICENSE="MPL-1.1"
 RESTRICT="network-sandbox"
 
-LICENSE="MPL-1.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 

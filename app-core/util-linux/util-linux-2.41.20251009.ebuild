@@ -39,10 +39,6 @@ DEPEND="
 	cramfs? ( lib-core/zlib )
 	ncurses? ( virtual/curses )
 	readline? ( lib-core/readline )
-	kill? (
-		!app-core/coreutils[kill]
-		!app-core/procps[kill]
-	)
 "
 
 BDEPEND="

@@ -45,9 +45,9 @@ DEPEND="
 	xkbcommon? ( xgui-lib/libxkbcommon )
 "
 PDEPEND="
-	xgui-lib/qtsvg:$(ver_cut 1)=
-	xgui-lib/qttools:$(ver_cut 1)=
-	xgui-lib/qtx11extras:$(ver_cut 1)=
+	xgui-lib/qtsvg:$(ver_cut 1)
+	xgui-lib/qttools:$(ver_cut 1)
+	xgui-lib/qtx11extras:$(ver_cut 1)
 "
 
 src_prepare() {

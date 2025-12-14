@@ -10,10 +10,10 @@ SNAPSHOT=3c2d5aedd7708c75710b39268631762de904c304
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXi/-/archive/${SNAPSHOT}/libXi-${SNAPSHOT}.tar.bz2 -> libXi-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxi-${SNAPSHOT}"
 
-KEYWORDS="amd64 arm64"
-
 LICENSE="MIT"
 SLOT="0"
+
+KEYWORDS="amd64 arm64"
 
 IUSE="doc static-libs"
 

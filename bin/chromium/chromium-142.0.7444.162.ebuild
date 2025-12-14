@@ -25,9 +25,9 @@ SRC_URI="
 # archive extracts into ungoogled-chromium-${PV}-<rev>-<arch>_linux so probe in src_install
 S="${WORKDIR}"
 
-RESTRICT="strip mirror"
-
 LICENSE="CHROME"
+
+RESTRICT="strip mirror"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 

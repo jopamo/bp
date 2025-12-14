@@ -10,9 +10,9 @@ SRC_URI="amd64? ( https://github.com/iBotPeaches/Apktool/releases/download/v${PV
 				https://raw.githubusercontent.com/iBotPeaches/Apktool/${SSNAP}/scripts/linux/apktool )"
 S="${WORKDIR}"
 
-RESTRICT="strip mirror"
-
 LICENSE="APACHE"
+
+RESTRICT="strip mirror"
 SLOT="0"
 KEYWORDS="amd64"
 

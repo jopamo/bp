@@ -46,5 +46,5 @@ src_install() {
 
 	rm "${ED}"/usr/include/awk/config.h || die
 
-	dosym gawk usr/bin/awk
+	dosym -r /usr/bin/gawk /usr/bin/awk
 }

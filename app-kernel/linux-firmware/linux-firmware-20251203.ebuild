@@ -55,7 +55,7 @@ src_install() {
 				continue
 			fi
 
-			dosym "${tgt}" "${base}" || die
+			dosym -r "${tgt}" "${base}" || die
 		done < <(find "${img_root}/intel" -type f -print0)
 	fi
 

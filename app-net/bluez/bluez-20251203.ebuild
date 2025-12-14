@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic linux-info autotools
+inherit flag-o-matic linux-info autotools python-single-r1
 
 DESCRIPTION="Bluetooth Tools and System Daemons for Linux"
 HOMEPAGE="http://www.bluez.org"

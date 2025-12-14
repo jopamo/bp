@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic linux-info python-single-r1 doins git-r3
+inherit flag-o-matic linux-info python-single-r1 doins git-r3 user
 
 DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="http://www.postgresql.org/"

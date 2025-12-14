@@ -1,5 +1,7 @@
 EAPI=8
 
+inherit desktop
+
 MOZ_PN="firefox"
 MOZ_PV="${PV}"
 

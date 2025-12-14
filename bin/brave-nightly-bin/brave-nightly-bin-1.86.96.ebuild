@@ -16,9 +16,9 @@ SRC_URI="
 
 S="${WORKDIR}"
 
-RESTRICT="strip mirror"
-
 LICENSE="BRAVE"
+
+RESTRICT="strip mirror"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 

@@ -12,12 +12,12 @@ SRC_URI="mirror://sourceforge/docbook/${MY_P}.tar.bz2"
 
 LICENSE="BSD"
 SLOT="0"
+S="${WORKDIR}/${MY_P}"
+
 KEYWORDS="amd64 arm64"
 
 RDEPEND=">=app-tex/build-docbook-catalog-1.1
 "
-
-S="${WORKDIR}/${MY_P}"
 
 # Makefile is broken since 1.76.0
 RESTRICT=test

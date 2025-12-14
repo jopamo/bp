@@ -10,12 +10,12 @@ LICENSE="Oracle-BCLA-JavaSE"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+S=${WORKDIR}
+
 RESTRICT="preserve-libs strip"
 QA_PREBUILT="*"
 
 RDEPEND="bin/openjdk8"
-
-S=${WORKDIR}
 
 src_install() {
 	HERE="${ED}"/opt/${PN}

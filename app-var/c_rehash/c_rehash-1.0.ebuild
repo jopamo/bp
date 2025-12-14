@@ -7,9 +7,9 @@ HOMEPAGE="https://www.openssl.org/"
 
 LICENSE="openssl"
 SLOT="0"
-KEYWORDS="amd64 arm64"
-
 S=${WORKDIR}
+
+KEYWORDS="amd64 arm64"
 
 src_prepare() {
 	default

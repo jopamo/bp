@@ -57,11 +57,11 @@ src_prepare() {
 
 	default
 
-	rm "${S}"/plugins/android/resources/installer/{arm64-v8a,armeabi-v7a,x86}/*
-	rm "${S}"/plugins/android/resources/perfetto/{arm64-v8a,armeabi-v7a,x86}/*
-	rm "${S}"/plugins/android/resources/process-tracker-agent/native/{arm64-v8a,armeabi-v7a,x86}/*
-	rm "${S}"/plugins/android/resources/transport/{arm64-v8a,armeabi-v7a,x86}/*
-	rm "${S}"/plugins/android/resources/transport/native/agent/{arm64-v8a,armeabi-v7a,x86}/*
+	# rm "${S}"/plugins/android/resources/installer/{arm64-v8a,armeabi-v7a,x86}/*
+	# rm "${S}"/plugins/android/resources/perfetto/{arm64-v8a,armeabi-v7a,x86}/*
+	# rm "${S}"/plugins/android/resources/process-tracker-agent/native/{arm64-v8a,armeabi-v7a,x86}/*
+	# rm "${S}"/plugins/android/resources/transport/{arm64-v8a,armeabi-v7a,x86}/*
+	# rm "${S}"/plugins/android/resources/transport/native/agent/{arm64-v8a,armeabi-v7a,x86}/*
 
 	cat <<-EOF >> bin/idea.properties || die
 	#-----------------------------------------------------------------------
@@ -90,7 +90,7 @@ src_install() {
 	fperms -R 755 "${dir}"/plugins/android/resources/perfetto
 	fperms -R 755 "${dir}"/plugins/android/resources/simpleperf
 	fperms -R 755 "${dir}"/plugins/android/resources/trace_processor_daemon
-	fperms -R 755 "${dir}"/plugins/android/resources/transport/{arm64-v8a,armeabi-v7a,x86,x86_64}
+	fperms -R 755 "${dir}"/plugins/android/resources/transport/x86_64
 	fperms -R 755 "${dir}"/plugins/android-ndk/resources/lldb/{android,bin,lib,shared}
 	fperms 755 "${dir}"/plugins/c-clangd-plugin/bin/clang/linux/x64/bin/clangd
 	fperms -R 755 "${dir}"/plugins/terminal/shell-integrations/{,fish}

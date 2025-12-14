@@ -12,7 +12,7 @@ S="${WORKDIR}"/${MY_P}
 
 LICENSE="Info-ZIP"
 SLOT="0"
-KEYWORDS="~alpha amd64 arm arm64 ~hppa ~loong ~m68k ~mips ppc ppc64 ~riscv ~s390 ~sparc x86 ~amd64-linux ~x86-linux"
+KEYWORDS="amd64 arm64"
 IUSE="bzip2 crypt natspec unicode"
 
 RDEPEND="bzip2? ( app-arch/bzip2 )

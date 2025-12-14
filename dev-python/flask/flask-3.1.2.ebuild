@@ -18,7 +18,7 @@ if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 else
 	inherit pypi
-	KEYWORDS="~alpha amd64 arm arm64 ~hppa ~loong ~mips ppc ppc64 ~riscv ~s390 ~sparc x86"
+	KEYWORDS="amd64 arm64"
 fi
 
 LICENSE="BSD"

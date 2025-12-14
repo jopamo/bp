@@ -18,7 +18,7 @@ S="${WORKDIR}/apparmor-${SNAPSHOT}/libraries/${PN}"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 ~arm arm64 ~ppc64 ~riscv ~x86"
+KEYWORDS="amd64 arm64"
 IUSE="+perl +python static-libs"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 

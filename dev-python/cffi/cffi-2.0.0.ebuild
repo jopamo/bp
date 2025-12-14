@@ -21,7 +21,7 @@ LICENSE="MIT"
 SLOT="0/${PV}"
 KEYWORDS="amd64 arm64"
 
-# Needs recent libffi for HPPA fixes
+
 DEPEND="
 	>=lib-core/libffi-3.4.4-r1:=
 "

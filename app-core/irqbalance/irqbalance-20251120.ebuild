@@ -13,7 +13,7 @@ S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm arm64 ~loong ppc ppc64 ~riscv x86"
+KEYWORDS="amd64 arm64"
 IUSE="caps +numa systemd thermal tui"
 # Hangs
 RESTRICT="test"

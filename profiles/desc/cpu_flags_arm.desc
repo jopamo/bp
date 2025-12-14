@@ -1,0 +1,17 @@
+aes - Enable AES instructions
+crc32 - Enable CRC32 instructions
+edsp - Enable DSP extensions
+neon - Enable NEON SIMD instructions
+sha1 - Enable SHA1 instructions
+sha2 - Enable SHA2 instructions
+thumb - Enable Thumb instruction set
+thumb2 - Enable Thumb-2 instruction set
+v4 - ARMv4 architecture
+v5 - ARMv5 architecture
+v6 - ARMv6 architecture
+v7 - ARMv7 architecture
+v8 - ARMv8 architecture
+vfp - Enable VFP floating point unit
+vfp-d32 - Enable VFP with 32 double-precision registers
+vfpv3 - Enable VFPv3 floating point unit
+vfpv4 - Enable VFPv4 floating point unit

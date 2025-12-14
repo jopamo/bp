@@ -164,7 +164,7 @@ python_test() {
 	esac
 
 	case ${ABI} in
-		hppa)
+		
 			EPYTEST_DESELECT+=(
 				'tests/test_mathtext.py::test_mathtext_exceptions[hspace without value]'
 				'tests/test_mathtext.py::test_mathtext_exceptions[hspace with invalid value]'
@@ -210,12 +210,6 @@ python_test() {
 			EPYTEST_DESELECT+=(
 				tests/test_backend_pgf.py::test_pdf_pages_metadata_check
 				tests/test_backend_pgf.py::test_minus_signs_with_tex
-			)
-			;;
-		alpha|arm|m68k|o32|ppc|s390|sh|sparc|x86)
-			EPYTEST_DESELECT+=(
-				# too large for 32-bit platforms
-				'tests/test_axes.py::test_psd_csd[png]'
 			)
 			;;
 		*)

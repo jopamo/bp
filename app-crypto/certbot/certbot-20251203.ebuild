@@ -6,7 +6,7 @@ DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1
 
-KEYWORDS="amd64 arm arm64 ~ppc64 ~riscv x86"
+KEYWORDS="amd64 arm64"
 
 DESCRIPTION="Let’s Encrypt client to automate deployment of X.509 certificates"
 HOMEPAGE="https://github.com/certbot/certbot"

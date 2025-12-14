@@ -52,7 +52,7 @@ distutils_enable_tests pytest
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-2.3.2-no-detect.patch
-	"${FILESDIR}"/${PN}-2.3.2-arm-asimddp.patch
+	
 )
 
 # tiny baseline per supported arch

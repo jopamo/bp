@@ -28,9 +28,9 @@ src_prepare() {
 efimake() {
 	local arch=
 	case ${CHOST} in
-		arm*) arch=arm ;;
+		#arm*) arch=arm ;;
 		aarch64*) arch=aarch64 ;;
-		ia64*) arch=ia64 ;;
+		
 		i?86*) arch=ia32 ;;
 		loongarch64*) arch=loongarch64 ;;
 		riscv64*) arch=riscv64;;

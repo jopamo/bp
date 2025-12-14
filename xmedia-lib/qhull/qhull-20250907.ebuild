@@ -13,7 +13,7 @@ S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0/$(ver_cut 1-2 "${MY_PV}")"
-KEYWORDS="~alpha amd64 arm arm64 ~hppa ~loong ppc ppc64 ~riscv ~s390 ~sparc x86 ~amd64-linux ~x86-linux ~arm64-macos ~ppc-macos ~x64-macos"
+KEYWORDS="amd64 arm64"
 IUSE="doc static-libs tools test"
 RESTRICT="!test? ( test )"
 REQUIRED_USE="test? ( tools )"

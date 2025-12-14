@@ -49,7 +49,7 @@ distutils_enable_tests pytest
 
 python_test() {
 	local EPYTEST_DESELECT=(
-		# Times out on slower arches (ia64 in this case)
+		
 		# https://github.com/python-trio/trio/issues/1753
 		tests/test_unix_pipes.py::test_close_at_bad_time_for_send_all
 		# requires ruff

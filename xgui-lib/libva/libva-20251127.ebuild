@@ -26,7 +26,7 @@ RDEPEND=">=xgui-lib/libdrm-2.4.46
 	wayland? ( >=xgui-lib/wayland-1.11 )"
 
 
-		opengl? ( X )"
+REQUIRED_USE="opengl? ( X )"
 
 src_prepare() {
 	eautoreconf

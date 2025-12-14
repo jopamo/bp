@@ -16,11 +16,15 @@ KEYWORDS="amd64 arm64"
 
 IUSE="pam test"
 
-RDEPEND="pam? ( lib-core/pam )
-	app-compression/pigz"
-DEPEND="${RDEPEND}
+RDEPEND="
+	pam? ( lib-core/pam )
+	app-compression/pigz
+"
+DEPEND="
+	${RDEPEND}
 	app-dev/pkgconf
-	test? ( lib-dev/check )"
+	test? ( lib-dev/check )
+"
 
 src_prepare() {
 	find . -type f \( -name '*.c' -o -name '*.h' -o -name '*.y' -o -name '*.l' \) -exec sed -i 's/\bstrlcpy\b/strncpy/g' {} +

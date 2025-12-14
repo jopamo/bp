@@ -133,11 +133,11 @@ donvidia() {
     ${action} ${nv_LIB} || die "failed to install ${nv_LIBNAME}"
 
     if [[ ${nv_SOVER} ]] && ! [[ "${nv_SOVER}" = "${nv_LIBNAME}" ]]; then
-        dosym ${nv_LIBNAME} ${nv_DEST}/${nv_SOVER} \
+        dosym -r /usr/lib/${nv_LIBNAME} /usr/lib/${nv_SOVER} \
             || die "failed to create ${nv_DEST}/${nv_SOVER} symlink"
     fi
 
-    dosym ${nv_LIBNAME} ${nv_DEST}/${nv_LIBNAME/.so*/.so} \
+    dosym -r /usr/lib/${nv_LIBNAME} /usr/lib/${nv_LIBNAME/.so*/.so} \
         || die "failed to create ${nv_LIBNAME/.so*/.so} symlink"
 }
 
@@ -217,7 +217,7 @@ EOF
     doexe ${NV_OBJ}/nvidia-modprobe
     fowners root:video /opt/bin/nvidia-modprobe
     fperms 4710 /opt/bin/nvidia-modprobe
-    dosym /{opt,usr}/bin/nvidia-modprobe
+    dosym -r /opt/bin/nvidia-modprobe /usr/bin/nvidia-modprobe
 
     doman nvidia-cuda-mps-control.1
     doman nvidia-modprobe.1

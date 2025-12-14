@@ -1,1 +1,2 @@
+app-net/openssh -utmpx -wtmpx
 app-core/util-linux -col -waitpid

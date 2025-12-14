@@ -96,52 +96,17 @@ UNINSTALL_IGNORE="
 ###############################################################################
 
 USE="
-    # ── Compression & Storage ──────────────────────────────
-    bzip2         lz4           zlib
-    zstd          bsdtar        pie
-    xxhash
-
-    # ── Networking / DHCP / Wireless ──────────────────────
-    dhcp          -dhcp-tools   -dhcp4
-    iwlwifi       intel         scp
-
-    # ── Core System Components ────────────────────────────
-    caps          dbus          device-mapper
-    machined      ncurses       pam
-    readline      ssl           systemd
-    udev          efi
-    kvm           localed       pstore
-
-    # ── Crypto / Security ────────────────────────────────
-    argon2        crypt         doh
-    gcrypt        gnutls
-    seccomp       urandom       yescrypt
-    libxcrypt     bpf           xdp
-
-    # ── Libraries & Runtimes ─────────────────────────────
-    acl           attr          blkid
-    elf           gdbm          gmp
-    gshadow       iconv         kmod
-    libcap        pcre          python
-    sqlite        xml           mount
-
-    # ── Kernel / OS Helpers ──────────────────────────────
-    asm           cxx           isl
-    kernel_linux  mpfr          native-extensions
-    numa          sysusersd     unicode
-    xattr
-
-    # ── Firmware & Drivers ───────────────────────────────
-    mediatek      rtl_nic       regex
-    threads       static-pie    uuid
-    tcl           ipc           utmpx
-    wtmpx
-
-    # ── Disabled by Default (opt in per-package) ─────────
-    -berkdb       # prefer sqlite
-    -dvbpsi       # not needed on servers
-    -ipv6         # enable only where required
-    -jit          # problematic on some arches
+    bzip2 lz4 zlib zstd bsdtar pie xxhash
+    dhcp -dhcp-tools -dhcp4 iwlwifi intel scp
+    caps dbus device-mapper machined ncurses pam readline ssl systemd udev efi kvm localed pstore
+    argon2 crypt doh gcrypt gnutls seccomp urandom yescrypt libxcrypt bpf xdp
+    acl attr blkid elf gdbm gmp gshadow iconv kmod libcap pcre python sqlite xml mount
+    asm cxx isl kernel_linux mpfr native-extensions numa sysusersd unicode xattr
+    mediatek rtl_nic regex threads static-pie uuid tcl ipc utmpx wtmpx
+    -berkdb
+    -dvbpsi
+    -ipv6
+    -jit
     -manpager
 "
 

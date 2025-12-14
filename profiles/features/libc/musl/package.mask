@@ -1,2 +1,1 @@
-=lib-core/gdbm-1.25
 #>=app-lang/go-1.21.20240806

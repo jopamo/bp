@@ -9,9 +9,9 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="gui qt"
-
 S=${WORKDIR}
+
+IUSE="gui qt"
 
 src_prepare() {
 	cp -rp "${FILESDIR}"/* "${S}"/

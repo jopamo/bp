@@ -9,9 +9,9 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="video"
-
 S=${WORKDIR}
+
+IUSE="video"
 
 src_install() {
 	# Bash config scripts (from files/bashrc/)

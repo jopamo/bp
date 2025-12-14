@@ -21,7 +21,8 @@ DEPEND="
 "
 
 CONFIG_CHECK="~BLK_DEV_IO_TRACE"
-WARNING_BLK_DEV_IO_TRACE="you need to enable BLK_DEV_IO_TRACE kernel option if you want to gather traces from this machine"
+WARNING_BLK_DEV_IO_TRACE="you need to enable BLK_DEV_IO_TRACE kernel option \
+	if you want to gather traces from this machine"
 
 src_compile() {
 	append-cppflags -DLVM_REMAP_WORKAROUND -W -I"${S}"

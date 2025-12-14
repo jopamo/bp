@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit libtool toolchain-funcs
+inherit libtool toolchain-funcs flag-o-matic
 
 DESCRIPTION="Library for arbitrary-precision arithmetic on different type of numbers"
 HOMEPAGE="http://gmplib.org/"

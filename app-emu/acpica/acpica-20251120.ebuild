@@ -12,7 +12,7 @@ S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="iASL"
 SLOT="0"
-KEYWORDS="~alpha amd64 arm arm64 ~loong ~mips ppc ppc64 x86"
+KEYWORDS="amd64 arm64"
 IUSE="test"
 RESTRICT="!test? ( test )"
 

@@ -17,7 +17,7 @@ LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
 KEYWORDS="amd64 arm64"
 
-IUSE="amdgpu arm assertions bootstrap +clang-tools-extra bpf cuda debug libcxx libcxxabi libfuzzer nvptx orc sanitizers static_analyzer -sysclang syslibcxxabi test wasm xcore"
+IUSE="amdgpu assertions bootstrap +clang-tools-extra bpf cuda debug libcxx libcxxabi libfuzzer nvptx orc sanitizers static_analyzer -sysclang syslibcxxabi test wasm xcore"
 
 DEPEND="
     lib-core/libffi
@@ -78,7 +78,7 @@ src_configure() {
     esac
 
     use amdgpu && LLVM_TARGETS+=";AMDGPU"
-    use arm && LLVM_TARGETS+=";ARM"
+    #use arm && LLVM_TARGETS+=";ARM"
     use bpf && LLVM_TARGETS+=";BPF"
     use nvptx && LLVM_TARGETS+=";NVPTX"
     use wasm && LLVM_TARGETS+=";WebAssembly"

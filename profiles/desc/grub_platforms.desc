@@ -1,0 +1,7 @@
+efi-32 - EFI 32-bit
+efi-64 - EFI 64-bit
+pc - PC (BIOS)
+qemu - QEMU
+coreboot - Coreboot
+ieee1275 - IEEE1275 (OpenFirmware)
+multiboot - Multiboot

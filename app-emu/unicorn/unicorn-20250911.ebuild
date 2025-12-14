@@ -30,7 +30,7 @@ BDEPEND="
 
 RESTRICT="!test? ( test )"
 
-UNICORN_TARGETS="x86 arm aarch64 riscv mips sparc m68k ppc s390x tricore"
+UNICORN_TARGETS="x86_64 aarch64"
 
 export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
 

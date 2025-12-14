@@ -13,7 +13,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="devel"
 else
 	SRC_URI="https://github.com/lsp-plugins/${PN}/releases/download/${PV}/${PN}-src-${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="amd64 ~arm arm64 ~ppc ~ppc64 x86"
+	KEYWORDS="amd64 arm64"
 	S="${WORKDIR}/${PN}"
 fi
 

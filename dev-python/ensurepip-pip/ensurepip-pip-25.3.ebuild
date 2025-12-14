@@ -26,7 +26,7 @@ SRC_URI="
 "
 S=${WORKDIR}/${MY_P}
 
-LICENSE="MIT"
+LICENSE="MIT Apache-2.0 MPL-2.0 PSF-2 BSD BSD-2 ISC || ( Apache-2.0 MIT )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="test test-rust"
@@ -75,7 +75,7 @@ declare -A VENDOR_LICENSES=(
 	[truststore]=MIT
 	[urllib3]=MIT
 )
-LICENSE+=" ${VENDOR_LICENSES[*]}"
+
 
 python_prepare_all() {
 	local PATCHES=(

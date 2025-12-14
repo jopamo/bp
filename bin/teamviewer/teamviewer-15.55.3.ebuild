@@ -59,22 +59,22 @@ src_install() {
 	dodoc -r doc
 
 	# Make docs available in expected location
-	dosym ../../usr/share/doc/${PF}/doc ${dst}/doc
+	dosym -r /usr/share/doc/${PF}/doc ${dst}/doc
 
 	# We need to keep docs uncompressed, bug #778617
 	docompress -x /usr/share/doc/${PF}/.
 
 	keepdir /etc/${MY_P}
-	dosym ../../etc/${MY_P} ${dst}/config
+	dosym -r /etc/${MY_P} ${dst}/config
 
 	# Create directory and symlink for log files (NOTE: according to Team-
 	# Viewer devs, all paths are hard-coded in the binaries; therefore
 	# using the same path as the DEB/RPM archives, i.e. '/var/log/teamviewer
 	# <major-version>')
 	keepdir /var/log/${MY_P}
-	dosym ../../var/log/${MY_P} ${dst}/logfiles
+	dosym -r /var/log/${MY_P} ${dst}/logfiles
 
 	dodir /opt/bin
-	dosym ${dst}/tv_bin/teamviewerd /opt/bin/teamviewerd
-	dosym ${dst}/tv_bin/script/teamviewer /opt/bin/teamviewer
+	dosym -r ${dst}/tv_bin/teamviewerd /opt/bin/teamviewerd
+	dosym -r ${dst}/tv_bin/script/teamviewer /opt/bin/teamviewer
 }

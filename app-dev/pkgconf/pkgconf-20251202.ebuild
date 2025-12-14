@@ -25,6 +25,6 @@ src_prepare() {
 
 src_install() {
 	default
-	dosym pkgconf usr/bin/pkg-config
+	dosym -r /usr/bin/pkgconf /usr/bin/pkg-config
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

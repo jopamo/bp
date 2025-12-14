@@ -91,5 +91,5 @@ src_install() {
 	# See #903616 and #890595
 	[[ -x chrome_crashpad_handler ]] && doins chrome_crashpad_handler
 
-	dosym "${DESTDIR}/${MY_PN^}" "/usr/bin/${MY_PN}"
+	dosym -r "${DESTDIR}/${MY_PN^}" "/usr/bin/${MY_PN}"
 }

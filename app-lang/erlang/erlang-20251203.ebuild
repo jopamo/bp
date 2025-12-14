@@ -98,11 +98,11 @@ src_install() {
 
 	emake INSTALL_PREFIX="${D}" install
 
-	dosym "../${erl_libdir_rel}/bin/erl" /usr/bin/erl
-	dosym "../${erl_libdir_rel}/bin/erlc" /usr/bin/erlc
-	dosym "../${erl_libdir_rel}/bin/escript" /usr/bin/escript
-	dosym "../${erl_libdir_rel}/lib/erl_interface-${erl_interface_ver}/bin/erl_call" /usr/bin/erl_call
-	dosym "../${erl_libdir_rel}/erts-${erl_erts_ver}/bin/beam.smp" /usr/bin/beam.smp
+	dosym -r "/usr/${erl_libdir_rel}/bin/erl" /usr/bin/erl
+	dosym -r "/usr/${erl_libdir_rel}/bin/erlc" /usr/bin/erlc
+	dosym -r "/usr/${erl_libdir_rel}/bin/escript" /usr/bin/escript
+	dosym -r "/usr/${erl_libdir_rel}/lib/erl_interface-${erl_interface_ver}/bin/erl_call" /usr/bin/erl_call
+	dosym -r "/usr/${erl_libdir_rel}/erts-${erl_erts_ver}/bin/beam.smp" /usr/bin/beam.smp
 
 	rm "${ED}/${erl_libdir}/Install" || die
 

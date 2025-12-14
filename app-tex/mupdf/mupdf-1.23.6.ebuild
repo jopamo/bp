@@ -136,14 +136,14 @@ src_install() {
 
 	_emake install
 
-	dosym libmupdf.so.${PV} /usr/lib/lib${PN}.so
+	dosym -r /usr/lib/libmupdf.so.${PV} /usr/lib/lib${PN}.so
 
 	if use opengl ; then
 		einfo "mupdf symlink points to mupdf-gl (bug 616654)"
-		dosym ${PN}-gl /usr/bin/${PN}
+		dosym -r /usr/bin/${PN}-gl /usr/bin/${PN}
 	elif use X ; then
 		einfo "mupdf symlink points to mupdf-x11 (bug 616654)"
-		dosym ${PN}-x11 /usr/bin/${PN}
+		dosym -r /usr/bin/${PN}-x11 /usr/bin/${PN}
 	fi
 
 	# Respect libdir (bug #734898)

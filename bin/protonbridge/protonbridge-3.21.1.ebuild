@@ -35,7 +35,7 @@ src_install() {
   cp -a "${WORKDIR}"/usr "${ED}"/ || die
 
   # 2. Provide a shorter CLI symlink (many how-tos call 'proton-bridge')
-  dosym ../lib/protonmail/bridge/proton-bridge /usr/bin/proton-bridge
+  dosym -r /usr/lib/protonmail/bridge/proton-bridge /usr/bin/proton-bridge
 
   # 3. docs & desktop/icons are already under /usr/share → nothing to do
 }

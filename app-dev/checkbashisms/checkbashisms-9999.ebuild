@@ -14,9 +14,8 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="app-lang/perl"
 
-RESTRICT="test"
-
 S="${S}/scripts"
+RESTRICT="test"
 
 src_prepare() {
 	default

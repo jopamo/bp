@@ -15,14 +15,13 @@ SRC_URI="https://developer.download.nvidia.com/compute/cuda/${PV}/local_installe
 LICENSE="NVIDIA-CUDA"
 SLOT="0"
 KEYWORDS="amd64"
+S="${WORKDIR}"
 
 IUSE="debugger sanitizer"
 
 RESTRICT="mirror strip"
 
 DEPEND="bin/nvidia-drivers"
-
-S="${WORKDIR}"
 
 QA_PREBUILT="opt/cuda/*"
 

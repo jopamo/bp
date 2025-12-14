@@ -8,7 +8,7 @@ DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=standalone
 PYTHON_COMPAT=( python3_{10..13} pypy3 )
 
-inherit distutils-r1 toolchain-funcs
+inherit distutils-r1 toolchain-funcs flag-o-matic
 
 DESCRIPTION="Python Imaging Library (fork)"
 HOMEPAGE="https://python-pillow.org/"

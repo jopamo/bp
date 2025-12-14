@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="$(ver_cut 1-2)"
 
-inherit meson flag-o-matic
+inherit meson
 
 DESCRIPTION="OpenGL-like graphic library for Linux"
 HOMEPAGE="https://www.mesa3d.org/ https://mesa.freedesktop.org/"

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic qmake-utils
+inherit flag-o-matic
 
 DESCRIPTION="Cross-platform application development framework"
 HOMEPAGE="https://www.qt.io/"

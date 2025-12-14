@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools libtool
+inherit autotools
 
 DESCRIPTION="Tag Image File Format (TIFF) library"
 HOMEPAGE="http://libtiff.maptools.org"

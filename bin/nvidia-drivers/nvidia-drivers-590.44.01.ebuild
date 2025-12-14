@@ -133,11 +133,11 @@ donvidia() {
     ${action} ${nv_LIB} || die "failed to install ${nv_LIBNAME}"
 
     if [[ ${nv_SOVER} ]] && ! [[ "${nv_SOVER}" = "${nv_LIBNAME}" ]]; then
-        dosym -r /usr/lib/${nv_LIBNAME} /usr/lib/${nv_SOVER} \
+        dosym -r ${nv_DEST}/${nv_LIBNAME} ${nv_DEST}/${nv_SOVER} \
             || die "failed to create ${nv_DEST}/${nv_SOVER} symlink"
     fi
 
-    dosym -r /usr/lib/${nv_LIBNAME} /usr/lib/${nv_LIBNAME/.so*/.so} \
+    dosym -r ${nv_DEST}/${nv_LIBNAME} ${nv_DEST}/${nv_LIBNAME/.so*/.so} \
         || die "failed to create ${nv_LIBNAME/.so*/.so} symlink"
 }
 

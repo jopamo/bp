@@ -37,10 +37,10 @@ src_install() {
 	if use pam ; then
 		local p
 		for p in pop3 pop3s pops ; do
-			dosym pop /etc/pam.d/${p} || die
+			dosym -r /etc/pam.d/pop /etc/pam.d/${p} || die
 		done
 		for p in imap4 imap4s imaps ; do
-			dosym imap /etc/pam.d/${p} || die
+			dosym -r /etc/pam.d/imap /etc/pam.d/${p} || die
 		done
 
 		insinto etc/pam.d

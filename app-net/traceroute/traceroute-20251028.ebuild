@@ -30,6 +30,6 @@ src_compile() {
 src_install() {
 	emake DESTDIR="${D}" prefix="${EPREFIX}/usr" install
 	dodoc ChangeLog CREDITS README TODO
-	dosym traceroute /usr/bin/traceroute6
-	dosym traceroute.8 /usr/share/man/man8/traceroute6.8
+	dosym -r /usr/bin/traceroute /usr/bin/traceroute6
+	dosym -r /usr/share/man/man8/traceroute.8 /usr/share/man/man8/traceroute6.8
 }

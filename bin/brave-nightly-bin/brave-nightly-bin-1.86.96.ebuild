@@ -18,8 +18,8 @@ S="${WORKDIR}"
 
 LICENSE="BRAVE"
 
-RESTRICT="strip mirror"
 SLOT="0"
+RESTRICT="strip mirror"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="

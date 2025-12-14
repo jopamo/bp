@@ -21,6 +21,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="driver kms static-libs uvm wayland X"
 
+S="${WORKDIR}"
+
 RESTRICT="bindist mirror"
 
 DEPEND="
@@ -43,8 +45,6 @@ PDEPEND="
 
 QA_PREBUILT="opt/* usr/lib*"
 QA_PRESTRIPPED="usr/lib/firmware/nvidia/${PV}/gsp_ga10x.bin"
-
-S="${WORKDIR}"
 
 nvidia_drivers_versions_check() {
     CONFIG_CHECK="

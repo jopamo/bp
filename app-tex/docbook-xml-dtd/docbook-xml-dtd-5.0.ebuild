@@ -8,8 +8,8 @@ DESCRIPTION="Docbook DTD for XML"
 HOMEPAGE="https://docbook.org/"
 SRC_URI="https://docbook.org/xml/${PV}/docbook-${PV}.zip"
 
-LICENSE="docbook"
 S="${WORKDIR}/docbook-${PV}"
+LICENSE="docbook"
 
 SLOT="0"
 #KEYWORDS="amd64 arm64"

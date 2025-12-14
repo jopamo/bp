@@ -60,14 +60,14 @@ src_install() {
 		newins "${FILESDIR}/smtpd.pam" smtpd
 	fi
 
-	dosym /usr/sbin/smtpctl /usr/sbin/makemap
-	dosym /usr/sbin/smtpctl /usr/sbin/newaliases
+	dosym -r /usr/sbin/smtpctl /usr/sbin/makemap
+	dosym -r /usr/sbin/smtpctl /usr/sbin/newaliases
 
 	if use mta ; then
 		dodir /usr/sbin
-		dosym /usr/sbin/smtpctl /usr/sbin/sendmail
-		dosym /usr/sbin/smtpctl /usr/bin/sendmail
-		dosym /usr/sbin/smtpctl /usr/lib/sendmail
+		dosym -r /usr/sbin/smtpctl /usr/sbin/sendmail
+		dosym -r /usr/sbin/smtpctl /usr/bin/sendmail
+		dosym -r /usr/sbin/smtpctl /usr/lib/sendmail
 	fi
 
 	keepdir /var/spool/smtpd/offline/

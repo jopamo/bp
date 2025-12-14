@@ -39,7 +39,7 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	dosym /usr/include/openjpeg-2.5/opj_config.h /usr/include/opj_config.h
-	dosym /usr/include/openjpeg-2.5/openjpeg.h /usr/include/openjpeg.h
-	dosym /usr/include/openjpeg-2.5/opj_stdint.h /usr/include/opj_stdint.h
+	dosym -r /usr/include/openjpeg-2.5/opj_config.h /usr/include/opj_config.h
+	dosym -r /usr/include/openjpeg-2.5/openjpeg.h /usr/include/openjpeg.h
+	dosym -r /usr/include/openjpeg-2.5/opj_stdint.h /usr/include/opj_stdint.h
 }

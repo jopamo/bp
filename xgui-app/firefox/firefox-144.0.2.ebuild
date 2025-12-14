@@ -247,7 +247,7 @@ src_install() {
 	EOF
 
 	# firefox-bin wrapper inside libdir to avoid duplication
-	dosym "/usr/bin/${PN}" "${libdir}/firefox-bin"
+	dosym -r "/usr/bin/${PN}" "${libdir}/firefox-bin"
 
 	# GNOME Shell search provider
 	local sprovider="${T}/${PN}.search-provider.ini"

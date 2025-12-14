@@ -7,7 +7,7 @@ PYPI_PN=pyOpenSSL
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 PYTHON_REQ_USE="threads(+)"
 
-inherit distutils-r1 toolchain-funcs pypi
+inherit distutils-r1 pypi
 
 DESCRIPTION="Python interface to the OpenSSL library"
 HOMEPAGE="

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic doins
+inherit doins
 
 DESCRIPTION="a man replacement that utilizes gdbm instead of flat files"
 HOMEPAGE="http://www.nongnu.org/man-db/"

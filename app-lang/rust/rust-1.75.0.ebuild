@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic multiprocessing python-any-r1 toolchain-funcs rust-toolchain
+inherit flag-o-matic multiprocessing python-any-r1
 
 DESCRIPTION="Systems programming language from Mozilla"
 HOMEPAGE="https://www.rust-lang.org/"

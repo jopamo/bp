@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic
+
 
 DESCRIPTION="displays the hardware topology in convenient formats"
 HOMEPAGE="http://www.open-mpi.org/projects/hwloc/"

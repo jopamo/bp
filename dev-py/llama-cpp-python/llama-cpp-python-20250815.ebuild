@@ -5,7 +5,7 @@ EAPI=8
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=scikit-build-core
 
-inherit distutils-r1 toolchain-funcs
+inherit distutils-r1 cmake
 
 DESCRIPTION="Python bindings for llama.cpp"
 HOMEPAGE="https://github.com/abetlen/llama-cpp-python"

@@ -6,7 +6,7 @@ EAPI=8
 DISTUTILS_USE_PEP517=scikit-build-core
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
-inherit distutils-r1 cmake flag-o-matic
+inherit distutils-r1 cmake flag-o-matic multiprocessing
 
 MY_P=${P/_}
 DESCRIPTION="Seamless operability between C++11 and Python via lightweight bindings"

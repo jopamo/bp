@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs unpacker
+inherit unpacker
 
 MYD=$(ver_cut 1-2)
 DRIVER_PV="$(ver_cut 4-6)"

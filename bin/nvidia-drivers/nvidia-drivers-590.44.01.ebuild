@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic linux-info kernel-mod toolchain-funcs unpacker user
+inherit linux-info kernel-mod unpacker user-info
 
 NV_URI="https://us.download.nvidia.com/XFree86/"
 

@@ -5,7 +5,7 @@ EAPI=8
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
 
-inherit distutils-r1 toolchain-funcs
+inherit distutils-r1 toolchain-funcs flag-o-matic
 
 DESCRIPTION="A Pythonic binding for the libxml2 and libxslt libraries"
 HOMEPAGE="https://lxml.de/"

@@ -16,4 +16,4 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND="!lib-core/glibc"
+RDEPEND="!lib-core/glibc"

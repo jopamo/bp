@@ -13,9 +13,9 @@ SRC_URI="https://www.ladspa.org/download/${MY_P}.tgz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 arm64"
-
 S="${WORKDIR}/${MY_P}"
+
+KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-lib/libsndfile"
 

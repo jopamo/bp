@@ -15,7 +15,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="libxcrypt"
+IUSE="libxcrypt elibc_musl"
 
 src_prepare() {
 	default

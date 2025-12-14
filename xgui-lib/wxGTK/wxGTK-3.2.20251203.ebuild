@@ -35,7 +35,7 @@ RDEPEND="
 		tiff?   ( xmedia-lib/tiff )
 		)
 	aqua? (
-		xgui-lib/gtk3[aqua]
+		xgui-lib/gtk3
 		xmedia-lib/libjpeg-turbo
 		tiff?   ( xmedia-lib/tiff )
 		)"

@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=f14b8ae84df3165efc6818eb0189c148b18bf738
 
-inherit flag-o-matic autotools
+inherit flag-o-matic
 
 DESCRIPTION="Super-useful stream editor"
 HOMEPAGE="http://sed.sourceforge.net/"

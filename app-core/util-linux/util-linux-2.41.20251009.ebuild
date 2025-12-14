@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="stable/v$(ver_cut 1-2)"
 
-inherit meson flag-o-matic
+inherit meson flag-o-matic python-utils-r1
 
 DESCRIPTION="a random collection of Linux utilities"
 HOMEPAGE="https://github.com/util-linux/util-linux"

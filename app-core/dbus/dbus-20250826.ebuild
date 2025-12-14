@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit linux-info flag-o-matic meson doins
+inherit linux-info meson doins
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="https://dbus.freedesktop.org/"

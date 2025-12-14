@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=f124ddb0a2cd950d4a94fd99af1313dd6c283d75
 
-inherit flag-o-matic autotools
+inherit flag-o-matic
 
 DESCRIPTION="Create, destroy, resize, check, copy partitions and file systems"
 HOMEPAGE="https://www.gnu.org/software/parted"

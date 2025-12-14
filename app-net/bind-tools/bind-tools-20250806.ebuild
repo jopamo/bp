@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=723439908acb4522274184b49428c86551bd2937
 
-inherit meson flag-o-matic
+inherit meson
 
 DESCRIPTION="bind tools: dig, nslookup, host, nsupdate, dnssec-keygen"
 HOMEPAGE="http://www.isc.org/software/bind"

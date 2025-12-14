@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="javascript opengl ssl X"
 
-REQUIRED_USE="opengl? ( javascript )"
+
 
 LIB_DEPEND="
 	xgui-lib/freetype

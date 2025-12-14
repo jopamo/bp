@@ -23,7 +23,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="jack ladspa lv2 test vst X"
 
-REQUIRED_USE="|| ( jack ladspa lv2 )
+
 	test? ( jack )"
 
 RESTRICT="!test? ( test )"

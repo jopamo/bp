@@ -5,7 +5,7 @@ EAPI=8
 inherit git-r3
 
 DESCRIPTION="Update Portage tree and all installed packages"
-HOMEPAGE="https://github.com/jopamo/${PN}"
+HOMEPAGE="https://github.com/jopamo/genup"
 EGIT_REPO_URI="${HOMEPAGE}"
 
 LICENSE="GPL-3+"

@@ -23,7 +23,7 @@ KEYWORDS="amd64 arm64"
 
 # pybind11 is header-only at runtime, no hard runtime deps
 # Eigen and friends are only needed for building and running upstream tests
-RDEPEND=""
+
 
 EPYTEST_PLUGINS=()
 EPYTEST_RERUNS=5

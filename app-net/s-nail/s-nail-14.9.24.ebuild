@@ -45,9 +45,9 @@ src_install() {
 
 	dosym -r /usr/bin/s-nail /usr/bin/mailx
 	dosym -r /usr/bin/mailx /usr/bin/mail
-	dosym mailx /usr/bin/Mail
+	dosym -r /usr/bin/mailx /usr/bin/Mail
 
-	dosym s-nail.1 /usr/share/man/man1/mailx.1
-	dosym mailx.1 /usr/share/man/man1/mail.1
-	dosym mailx.1 /usr/share/man/man1/Mail.1
+	dosym -r /usr/share/man/man1/s-nail.1 /usr/share/man/man1/mailx.1
+	dosym -r /usr/share/man/man1/mailx.1 /usr/share/man/man1/mail.1
+	dosym -r /usr/share/man/man1/mailx.1 /usr/share/man/man1/Mail.1
 }

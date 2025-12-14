@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic
+inherit autotools
 
 DESCRIPTION="An assembler for x86 and x86_64 instruction sets"
 HOMEPAGE="http://yasm.tortall.net/"

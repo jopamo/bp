@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson flag-o-matic
+inherit meson flag-o-matic toolchain-funcs
 
 DESCRIPTION="GUID disk partition editor"
 HOMEPAGE="https://github.com/caldwell/gdisk"

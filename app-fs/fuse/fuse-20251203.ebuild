@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson flag-o-matic
+inherit meson
 
 DESCRIPTION="An interface for filesystems implemented in userspace"
 HOMEPAGE="https://github.com/libfuse/libfuse"

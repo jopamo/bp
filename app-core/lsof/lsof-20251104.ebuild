@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=e018502b23e342cd6094c1c38dd88800d1476c18
 
-inherit flag-o-matic toolchain-funcs
+inherit flag-o-matic
 
 DESCRIPTION="Lists open files for running Unix processes"
 HOMEPAGE="ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/"

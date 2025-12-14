@@ -5,7 +5,7 @@ EAPI=8
 BRANCH_NAME="linux-$(ver_cut 1-2).y"
 SNAPSHOT=5439375ca6987ed27eba246a3b9e036357fd6ba2
 
-inherit toolchain-funcs
+
 
 DESCRIPTION="Userland tools for Linux Performance Counters"
 HOMEPAGE="https://kernel.org/"

@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=07a3bb2b4468d04c873d98e965b47eaeca60ac15
 
-inherit flag-o-matic toolchain-funcs
+inherit flag-o-matic
 
 DESCRIPTION="GNU regular expression matcher"
 HOMEPAGE="https://www.gnu.org/software/grep/"

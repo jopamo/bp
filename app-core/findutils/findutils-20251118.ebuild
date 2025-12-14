@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=580be65e2566a90c6029e994dce4b22ddd42806c
 
-inherit flag-o-matic toolchain-funcs python-any-r1
+inherit flag-o-matic python-any-r1
 
 DESCRIPTION="GNU utilities for finding files"
 HOMEPAGE="https://www.gnu.org/software/findutils/"

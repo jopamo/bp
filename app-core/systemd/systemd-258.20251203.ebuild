@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="v$(ver_cut 1)-stable"
 
-inherit flag-o-matic linux-info meson toolchain-funcs doins xdg
+inherit flag-o-matic linux-info meson doins xdg
 
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"

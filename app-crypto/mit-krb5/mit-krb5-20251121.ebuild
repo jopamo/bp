@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools toolchain-funcs
+inherit autotools
 
 DESCRIPTION="MIT Kerberos V"
 HOMEPAGE="https://web.mit.edu/kerberos/www/"

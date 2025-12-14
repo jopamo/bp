@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="maint-$(ver_cut 1-2)"
 
-inherit flag-o-matic toolchain-funcs multiprocessing
+
 
 DESCRIPTION="Larry Wall's Practical Extraction and Report Language"
 HOMEPAGE="https://www.perl.org/"

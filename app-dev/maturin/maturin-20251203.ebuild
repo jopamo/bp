@@ -6,7 +6,7 @@ DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_UPSTREAM_PEP517=standalone
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
-inherit cargo distutils-r1 flag-o-matic toolchain-funcs
+inherit cargo distutils-r1
 
 DESCRIPTION="Build and publish crates with pyo3, rust-cpython and cffi bindings"
 HOMEPAGE="https://www.maturin.rs/"

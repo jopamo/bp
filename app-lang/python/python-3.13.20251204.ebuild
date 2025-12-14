@@ -7,7 +7,7 @@ SNAPSHOT=1a75c0fb054db6910fc2b74c99911329b80e25b5
 
 WANT_LIBTOOL="none"
 
-inherit autotools flag-o-matic python-utils-r1 toolchain-funcs
+inherit autotools flag-o-matic python-utils-r1 multiprocessing
 
 DESCRIPTION="An interpreted, interactive, object-oriented programming language"
 HOMEPAGE="https://www.python.org/"

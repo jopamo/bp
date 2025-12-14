@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs flag-o-matic autotools
+inherit toolchain-funcs
 
 DESCRIPTION="A Swiss army knife for your daily Linux network plumbing"
 HOMEPAGE="https://netsniff-ng.org/"

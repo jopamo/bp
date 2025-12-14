@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs
+
 
 DESCRIPTION="Meta package installed by default but will auto purge if not kept"
 HOMEPAGE="https://1g4.org/"

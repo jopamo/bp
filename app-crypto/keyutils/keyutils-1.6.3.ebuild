@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs linux-info flag-o-matic
+inherit linux-info flag-o-matic
 
 DESCRIPTION="Linux Key Management Utilities"
 HOMEPAGE="https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git"

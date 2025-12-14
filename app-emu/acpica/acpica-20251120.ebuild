@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit toolchain-funcs
+
 
 DESCRIPTION="Intel ACPI Source Language (ASL) compiler"
 HOMEPAGE="https://www.acpica.org/downloads/"

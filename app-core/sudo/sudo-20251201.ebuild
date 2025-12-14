@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit doins
+
 
 DESCRIPTION="Allows users or groups to run commands as other users"
 HOMEPAGE="https://www.sudo.ws/"

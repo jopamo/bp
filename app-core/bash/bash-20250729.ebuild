@@ -5,7 +5,7 @@ EAPI=7
 BRANCH_NAME="master"
 SNAPSHOT=a8a1c2fac029404d3f42cd39f5a20f24b6e4fe4b
 
-inherit flag-o-matic toolchain-funcs prefix
+inherit flag-o-matic prefix
 
 DESCRIPTION="The standard GNU Bourne again shell"
 HOMEPAGE="http://tiswww.case.edu/php/chet/bash/bashtop.html"

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson python-any-r1 flag-o-matic
+inherit meson python-any-r1
 
 DESCRIPTION="a fast cryptographic hash function"
 HOMEPAGE="https://github.com/BLAKE3-team/BLAKE3"

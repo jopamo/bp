@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic toolchain-funcs
+inherit toolchain-funcs
 
 DESCRIPTION="A ping-like TCP/IP packet assembler/analyzer"
 HOMEPAGE="http://www.hping.org"

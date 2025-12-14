@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic doins user
+inherit autotools flag-o-matic doins
 
 DESCRIPTION="OSS implementation of the TCG TPM2 Software Stack (TSS2)"
 HOMEPAGE="https://github.com/tpm2-software/tpm2-tss"

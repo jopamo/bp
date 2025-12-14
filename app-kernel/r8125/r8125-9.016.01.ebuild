@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit kernel-mod
+inherit kernel-mod linux-info
 
 DESCRIPTION="r8125 vendor driver for Realtek RTL8125 PCI-E NICs"
 HOMEPAGE="https://www.realtek.com/Download/List?cate_id=584"

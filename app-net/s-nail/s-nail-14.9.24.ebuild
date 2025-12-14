@@ -43,8 +43,8 @@ src_install() {
 
 	emake DESTDIR="${D}" install
 
-	dosym s-nail /usr/bin/mailx
-	dosym mailx /usr/bin/mail
+	dosym -r /usr/bin/s-nail /usr/bin/mailx
+	dosym -r /usr/bin/mailx /usr/bin/mail
 	dosym mailx /usr/bin/Mail
 
 	dosym s-nail.1 /usr/share/man/man1/mailx.1

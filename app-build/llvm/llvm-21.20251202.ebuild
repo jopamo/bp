@@ -80,6 +80,7 @@ src_configure() {
 
     filter-clang
     filter-lto
+    #filter-sanitizers
 
     local LLVM_TARGETS=""
     local LLVM_RUNTIMES="libunwind;compiler-rt"
@@ -180,8 +181,6 @@ src_configure() {
 		-DLLVM_OPTIMIZED_TABLEGEN=ON
 		-DLLVM_PARALLEL_LINK_JOBS=1
 		-DLLVM_TARGETS_TO_BUILD="${LLVM_TARGETS}"
-		-DLLVM_USE_SANITIZE_COVERAGE=ON
-		-DLLVM_USE_SANITIZER=Address
 		-DOCAMLFIND=NO
     )
 

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit xdg-utils meson python-any-r1
+inherit meson python-any-r1
 
 DESCRIPTION="A thin layer of types for graphic libraries"
 HOMEPAGE="https://ebassi.github.io/graphene/"

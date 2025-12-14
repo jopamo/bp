@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic qmake-utils
+inherit qmake-utils
 
 DESCRIPTION="Wayland platform plugin for Qt"
 HOMEPAGE="https://www.qt.io/"

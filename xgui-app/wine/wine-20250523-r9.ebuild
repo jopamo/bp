@@ -5,7 +5,7 @@ EAPI=8
 SNAPSHOT=22af42ac22279e6c0c671f033661f95c1761b4bb
 SNAPSHOT2="a3738434e05ba4e378cec59c723304ba33759fdc"
 
-inherit autotools flag-o-matic xdg
+inherit flag-o-matic xdg
 
 DESCRIPTION="Compatibility layer capable of running Windows applications"
 HOMEPAGE="https://www.winehq.org/"

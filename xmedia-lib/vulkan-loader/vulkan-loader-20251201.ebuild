@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic cmake python-any-r1 toolchain-funcs
+inherit cmake python-any-r1
 
 DESCRIPTION="Vulkan Installable Client Driver (ICD) Loader"
 HOMEPAGE="https://github.com/KhronosGroup/Vulkan-Loader"

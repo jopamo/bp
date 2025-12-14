@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="release/$(ver_cut 1).x"
 
-inherit cmake flag-o-matic python-any-r1
+inherit cmake python-any-r1
 
 DESCRIPTION="Implementation of OpenCL C built-in libraries for GPU/OpenCL compilers"
 HOMEPAGE="https://llvm.org/"

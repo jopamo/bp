@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic qmake-utils
+inherit qmake-utils
 
 DESCRIPTION="Multimedia (audio, video, radio, camera) library for the Qt5 framework"
 HOMEPAGE="https://www.qt.io/"

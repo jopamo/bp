@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson toolchain-funcs xdg flag-o-matic
+inherit meson xdg flag-o-matic
 
 DESCRIPTION="Wayland reference compositor"
 HOMEPAGE="https://wayland.freedesktop.org/ https://gitlab.freedesktop.org/wayland/weston"

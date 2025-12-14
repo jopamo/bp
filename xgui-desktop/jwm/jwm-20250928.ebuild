@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools python-r1
+inherit autotools
 
 DESCRIPTION="a light-weight window manager for the X11 Window System"
 HOMEPAGE="https://joewing.net/projects/jwm/"

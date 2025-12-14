@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic qmake-utils
+inherit qmake-utils
 
 DESCRIPTION="Additional format plugins for the Qt image I/O system"
 HOMEPAGE="https://www.qt.io/"

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake xdg flag-o-matic
+inherit cmake xdg
 
 DESCRIPTION="Powerful yet simple to use screenshot software for GNU/Linux"
 HOMEPAGE="https://github.com/flameshot-org/flameshot"

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic toolchain-funcs
+inherit toolchain-funcs
 
 MY_PN=${PN/-/_}
 MY_P=${MY_PN}_${PV}

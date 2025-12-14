@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="release/$(ver_cut 1-2)"
 
-inherit flag-o-matic
+inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Complete solution to record, convert and stream audio and video. Includes libavcodec"
 HOMEPAGE="http://ffmpeg.org/"

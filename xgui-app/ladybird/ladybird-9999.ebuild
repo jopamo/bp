@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit xdg cmake
+inherit xdg cmake flag-o-matic
 
 DESCRIPTION="Experimental cross-platform web browser"
 HOMEPAGE="https://ladybird.dev/"

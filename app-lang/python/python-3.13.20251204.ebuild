@@ -253,11 +253,11 @@ src_install() {
 	if [[ ${abiver} != python${PYVER} ]]; then
 		# Replace python3.X with a symlink to python3.Xm
 		rm "${ED}/usr/bin/python${PYVER}" || die
-		dosym "${abiver}" "/usr/bin/python${PYVER}"
+		dosym -r "/usr/bin/${abiver}" "/usr/bin/python${PYVER}"
 		# Create python3.X-config symlink
-		dosym "${abiver}-config" "/usr/bin/python${PYVER}-config"
+		dosym -r "/usr/bin/${abiver}-config" "/usr/bin/python${PYVER}-config"
 		# Create python-3.5m.pc symlink
-		dosym "python-${PYVER}.pc" "/usr/lib/pkgconfig/${abiver/${PYVER}/-${PYVER}}.pc"
+		dosym -r "/usr/lib/pkgconfig/python-${PYVER}.pc" "/usr/lib/pkgconfig/${abiver/${PYVER}/-${PYVER}}.pc"
 	fi
 
 	if ! use sqlite; then

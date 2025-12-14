@@ -103,10 +103,10 @@ src_install() {
 	rm "${ED}/usr/lib/tk${v1}/include/generic/"{tk,tkDecls,tkPlatDecls}.h || die
 
 	for x in lib${PN}${v1}.so.1 lib${PN}.so lib${PN}.so.${v1}.0 ; do
-		dosym lib${PN}${v1}.so usr/lib/${x}
+		dosym -r /usr/lib/lib${PN}${v1}.so /usr/lib/${x}
 	done
 
-	dosym wish${v1} /usr/bin/wish
+	dosym -r /usr/bin/wish${v1} /usr/bin/wish
 
 	patchelf --set-soname lib${PN}.so.${v1}.0 "${ED}"/usr/lib/lib${PN}${v1}.so
 }

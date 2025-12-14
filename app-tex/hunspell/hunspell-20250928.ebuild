@@ -30,6 +30,6 @@ src_install() {
 	use minimal && rm -f "${ED}"/usr/bin/{makealias,affixcompress,wordforms,ispellaff2myspell,wordlist2hunspell,munch,analyze,chmorph,unmunch,hunzip,hzip}
 
 	for x in libhunspell.so.1 libhunspell.so.1.0 libhunspell.so ; do
-		dosym libhunspell-1.7.so.0.0.1 usr/lib/${x}
+		dosym -r /usr/lib/libhunspell-1.7.so.0.0.1 /usr/lib/${x}
 	done
 }

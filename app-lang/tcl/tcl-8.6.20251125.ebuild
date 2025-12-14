@@ -38,7 +38,7 @@ src_install() {
 	local v1=$(ver_cut 1-2)
 
 	for x in lib${PN}${v1}.so.1 lib${PN}.so lib${PN}.so.${v1}.0 ; do
-		dosym lib${PN}${v1}.so usr/lib/${x}
+		dosym -r /usr/lib/lib${PN}${v1}.so /usr/lib/${x}
 	done
 
 	patchelf --set-soname lib${PN}.so.${v1}.0 "${ED}"/usr/lib/lib${PN}${v1}.so

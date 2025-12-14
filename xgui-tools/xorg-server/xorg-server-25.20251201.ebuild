@@ -131,5 +131,5 @@ src_configure() {
 
 src_install() {
         meson_src_install
-		dosym Xorg usr/bin/X
+		dosym -r /usr/bin/Xorg /usr/bin/X
 }

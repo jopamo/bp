@@ -82,8 +82,8 @@ src_install() {
 	fi
 
 	# Add include and lib symlinks
-	dosym "targets/x86_64-linux/include" ${cudadir}/include
-	dosym "targets/x86_64-linux/lib" ${cudadir}/lib
+	dosym -r ${cudadir}/targets/x86_64-linux/include ${cudadir}/include
+	dosym -r ${cudadir}/targets/x86_64-linux/lib ${cudadir}/lib
 
 	newenvd - 99cuda <<-EOF
 		PATH=${ecudadir}/bin:${ecudadir}/nvvm/bin

@@ -4,91 +4,42 @@
 
 acl - Add support for Access Control Lists
 alsa - Add support for the Advanced Linux Sound Architecture (ALSA)
-amd64 - Build for the AMD64 architecture (x86_64)
-arm64 - Build for the ARM64 architecture (AArch64)
-berkdb - Add support for Berkeley DB
-bluetooth - Add support for Bluetooth
-branding - Enable branding specific to this distribution
 bzip2 - Add support for bzip2 compression
 caps - Add support for POSIX capabilities
-cairo - Add support for the Cairo graphics library
-cli - Enable command-line interface
-crypt - Add support for encryption -- using Mcrypt or Mhash
 cups - Add support for CUPS (Common Unix Printing System)
 curl - Add support for client-side URL transfer library
 dbus - Add support for D-Bus
 debug - Enable extra debug codepaths, like assertions and extra output
 doc - Add extra documentation (API, Javadoc, etc)
 examples - Install examples, usually source code
-gdbm - Add support for GDBM (GNU database libraries)
-gif - Add support for GIF image format
-git - Add support for Git version control system
-glib - Add support for the GLib library
-gmp - Add support for the GNU MP library
-gnome - Add support for the GNOME desktop environment
-gpm - Add support for GPM (General Purpose Mouse)
-gtk - Add support for x11-libs/gtk+ (The GIMP Toolkit)
-gui - Enable generic GUI support
-hardened - Activate default security enhancements for toolchain (gcc, glibc, binutils)
-iconv - Enable support for the iconv character set conversion library
-icu - Enable support for International Components for Unicode
 ipv6 - Add support for IP version 6
 jpeg - Add support for JPEG image format
 kde - Add support for the KDE desktop environment
 ldap - Add LDAP support (Lightweight Directory Access Protocol)
-libffi - Enable support for Foreign Function Interface via libffi
-libnotify - Enable desktop notifications
 lua - Enable Lua scripting support
-lz4 - Enable support for lz4 compression
 lzma - Enable support for lzma compression
-lzo - Enable support for lzo compression
-make-symlinks - Install symlinks for the package
-man - Build and install man pages
-mp3 - Add support for reading mp3 files
-multilib - On 64bit systems, if you want to be able to compile 32bit code
-ncurses - Add ncurses support (console display library)
-networkmanager - Enable NetworkManager support
 nls - Add Native Language Support (using gettext - GNU locale utilities)
-nptl - Enable support for Native POSIX Threads Library
-offensive - Enable potentially offensive items (e.g. fortune cookies)
 opengl - Add support for OpenGL (3D graphics)
-openmp - Add support for OpenMP parallel processing
 pam - Add support for PAM (Pluggable Authentication Modules)
 pcre - Add support for Perl Compatible Regular Expressions
-pdf - Add support for PDF (Portable Document Format)
 perl - Add optional support/bindings for the Perl language
 png - Add support for libpng (PNG image format)
-policykit - Enable PolicyKit authentication support
 python - Add optional support/bindings for the Python language
-qt5 - Add support for the Qt 5 application and UI framework
-qt6 - Add support for the Qt 6 application and UI framework
 readline - Enable support for libreadline
-ruby - Add optional support/bindings for the Ruby language
 seccomp - Enable seccomp (secure computing mode) support
-sdl - Add support for Simple Direct Layer (media library)
 selinux - Enable Security Enhanced Linux support
-spell - Add dictionary support
-split-usr - Enable behavior to support /usr split from /
 sqlite - Add support for sqlite database
 ssl - Add support for SSL/TLS connections (Secure Socket Layer / Transport Layer Security)
 static - Build static libraries
 static-libs - Build static versions of dynamic libraries as well
-svg - Add support for SVG (Scalable Vector Graphics)
 systemd - Enable use of systemd-specific libraries and features
 test - Enable dependencies and/or preparations necessary to run tests (usually controlled by FEATURES=test but this flag can enable extra test code)
-threads - Add threads support for various packages
 tiff - Add support for the TIFF image format
 truetype - Add support for FreeType and/or FreeType2 fonts
 udev - Enable install of udev rules
-udisks - Enable support for udisks
-unicode - Add support for Unicode
-usb - Add USB support
-vaapi - Enable Video Acceleration API for hardware decoding
 wayland - Add support for the Wayland window system
-wifi - Enable wireless network support
 X - Add support for X11
 xattr - Add support for extended attributes (filesystem)
-xcb - Support the X C-language Binding, a replacement for Xlib
 xml - Add support for XML files
 zlib - Add support for zlib (de)compression
 zstd - Add support for Zstandard compression

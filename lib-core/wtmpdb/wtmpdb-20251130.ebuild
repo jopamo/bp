@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson doins
+inherit meson doins flag-o-matic
 
 DESCRIPTION="Y2038 safe wtmp implementation as PAM module using sqlite as database"
 HOMEPAGE="https://github.com/thkukuk/wtmpdb"

@@ -15,6 +15,10 @@ LICENSE="BSD-2"
 SLOT="2"
 KEYWORDS="amd64 arm64"
 
+# Ensure PYTHON_TARGETS is set and is an array
+PYTHON_TARGETS=( ${PYTHON_TARGETS} )
+[[ ${#PYTHON_TARGETS[@]} -eq 0 ]] && PYTHON_TARGETS=( python3_13 )
+
 IUSE="${PYTHON_TARGETS[@]/#/python_targets_} native-symlinks"
 
 RESTRICT="test"

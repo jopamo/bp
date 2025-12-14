@@ -18,7 +18,10 @@ core-perl
 dev-py
 dev-python
 dev-rust
+distfiles
+eclass
 fonts
+gnome-base
 lib-core
 lib-dev
 lib-misc

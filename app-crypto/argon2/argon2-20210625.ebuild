@@ -21,7 +21,9 @@ src_prepare() {
 	if ! use static-libs; then
 		sed -i -e 's/LIBRARIES = \$(LIB_SH) \$(LIB_ST)/LIBRARIES = \$(LIB_SH)/' Makefile || die "sed failed!"
 	fi
-	sed -i -e 's/-O3 //' -e 's/-g //' -e "s/-march=\$(OPTTARGET) /${CFLAGS} /" -e 's/CFLAGS += -march=\$(OPTTARGET)//' Makefile || die "sed failed"
+	sed -i -e 's/-O3 //' -e 's/-g //' Makefile || die "sed failed"
+	sed -i -e "s/-march=\$(OPTTARGET) /${CFLAGS} /" Makefile || die "sed failed"
+	sed -i -e 's/CFLAGS += -march=\$(OPTTARGET)//' Makefile || die "sed failed"
 }
 
 src_install() {

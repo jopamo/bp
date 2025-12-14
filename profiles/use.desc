@@ -257,6 +257,7 @@ ul - Enable support for ul
 unshare - Enable support for unshare
 update_drivedb - Enable support for updating drive database
 urandom - Enable support for urandom
+userland_GNU - Enable GNU userland
 userdb - Enable support for userdb
 user-namespaces - Enable support for user-namespaces
 utmpdump - Enable support for utmpdump
@@ -268,6 +269,7 @@ vim - Enable support for vim
 vim-syntax - Enable support for vim syntax
 vipw - Enable support for vipw
 vnc - Enable support for VNC
+vtv - Enable support for vtable verification
 vxge - Enable support for VXGE
 waitpid - Enable support for waitpid
 wall - Enable support for wall

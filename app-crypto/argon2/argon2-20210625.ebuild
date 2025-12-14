@@ -12,9 +12,9 @@ LICENSE="|| ( Apache-2.0 CC0-1.0 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs"
-
 S=${WORKDIR}/phc-winner-argon2-${SNAPSHOT}
+
+IUSE="static-libs"
 
 src_prepare() {
 	default

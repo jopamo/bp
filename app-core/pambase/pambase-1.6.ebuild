@@ -7,9 +7,9 @@ HOMEPAGE="https://1g4.org"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm64"
-
 S=${WORKDIR}
+
+KEYWORDS="amd64 arm64"
 
 src_prepare() {
 	cp -rp "${FILESDIR}"/* "${S}"/

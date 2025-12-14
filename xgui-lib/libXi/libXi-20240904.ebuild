@@ -14,7 +14,6 @@ KEYWORDS="amd64 arm64"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm64"
 
 IUSE="doc static-libs"
 

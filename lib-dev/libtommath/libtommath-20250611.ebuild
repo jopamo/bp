@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake flag-o-matic
+inherit cmake
 
 DESCRIPTION="portable number theoretic multiple-precision integer library"
 HOMEPAGE="https://github.com/libtom/libtommath"

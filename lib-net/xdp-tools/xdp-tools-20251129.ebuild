@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic linux-info toolchain-funcs autotools
+inherit flag-o-matic linux-info toolchain-funcs
 
 DESCRIPTION="The libxdp library and various tools for use with XDP"
 HOMEPAGE="https://github.com/xdp-project/xdp-tools"

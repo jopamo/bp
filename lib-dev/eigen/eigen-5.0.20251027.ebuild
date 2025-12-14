@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake flag-o-matic
+inherit cmake
 
 DESCRIPTION="C++ template library for linear algebra: matrices, vectors, numerical solvers, and related algorithms"
 HOMEPAGE="https://gitlab.com/libeigen/eigen"

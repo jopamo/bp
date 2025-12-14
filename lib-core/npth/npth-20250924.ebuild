@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=59987e37a587ea7c4d6485ac9069c2bd199ff9a4
 
-inherit autotools flag-o-matic
+inherit autotools
 
 DESCRIPTION="New GNU Portable Threads Library"
 HOMEPAGE="https://github.com/gpg/npth"

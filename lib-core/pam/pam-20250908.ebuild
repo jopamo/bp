@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson flag-o-matic
+inherit meson
 
 DESCRIPTION="Linux PAM (Pluggable Authentication Modules for Linux) project"
 HOMEPAGE="https://github.com/linux-pam/linux-pam"

@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=1b76ff0767d01df72f692806ee5adee13c67ef88
 
-inherit flag-o-matic doins
+inherit flag-o-matic
 
 DESCRIPTION="an implementation of the standard library for Linux-based systems"
 HOMEPAGE="http://www.musl-libc.org/"

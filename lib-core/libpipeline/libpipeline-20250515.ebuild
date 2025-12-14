@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+
 
 DESCRIPTION="a pipeline manipulation library"
 HOMEPAGE="http://libpipeline.nongnu.org/"

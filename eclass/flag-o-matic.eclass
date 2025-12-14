@@ -128,6 +128,12 @@ filter-clang() {
 	strip-flags
 }
 
+filter-sanitizers() {
+	filter-flags '-fsanitize*' '-fno-sanitize*' '-fsanitize-blacklist=*' '-fsanitize-ignorelist=*'
+	filter-flags '-fsanitize-coverage=*' -fprofile-instr-generate* -fcoverage-mapping
+	filter-ldflags '-fsanitize*' '-fno-sanitize*'
+}
+
 filter-gcc() {
 	replace-flags -O3 -O2
 	filter-flags -fgraphite-identity -floop-nest-optimize -ftree-loop-distribution -fdevirtualize-at-ltrans -fipa-pta;

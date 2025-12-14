@@ -25,7 +25,7 @@ RESTRICT="network-sandbox"
 
 src_prepare() {
 	rm -rf gnulib paxutils
-	cp -r "${EROOT}"/usr/share/gnulib gnulib
+	cp -r "${BROOT}"/usr/share/gnulib gnulib
 	cd gnulib
 	git reset --hard 0a12fa9
 	cd ..
@@ -45,7 +45,7 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--with-rmt="${EROOT}"/usr/libexec/rmt
+		--with-rmt="${EPREFIX}"/usr/libexec/rmt
 		--enable-mt
 		--disable-nls
 	)

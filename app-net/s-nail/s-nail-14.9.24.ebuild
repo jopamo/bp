@@ -12,7 +12,7 @@ KEYWORDS="amd64 arm64"
 
 src_configure() {
 	local confopts=(
-		strip="${EROOT}"/usr/bin/true
+		strip="${BROOT}"/usr/bin/true
 		OPT_AUTOCC=no
 		VAL_PREFIX="${EPREFIX}"/usr
 		VAL_SYSCONFDIR="${EPREFIX}"/etc

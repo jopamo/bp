@@ -28,7 +28,7 @@ src_prepare() {
 	sed -i '/^install_doc_gnu_eps:/,/^[^[:space:]]/ s/^/#/' doc/doc.am || die
 
 	rm -rf gnulib
-	cp -r "${EROOT}"/usr/share/gnulib gnulib
+	cp -r "${BROOT}"/usr/share/gnulib gnulib
 
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
 

@@ -16,15 +16,6 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug static systemd"
 
-_makeargs=(
-  prefix="${EPREFIX}/usr"
-  CFLAGS="${CFLAGS}"
-  LDFLAGS="${LDFLAGS}"
-  DESTDIR="${D}"
-  CHOWN=true
-  MANGRPARG=''
-)
-
 src_configure() {
 	tc-export AR
 	use static && append-ldflags -static
@@ -48,12 +39,27 @@ src_configure() {
 src_compile() {
 	tc-export AR CC RANLIB
 
+	local _makeargs=(
+		prefix="${EPREFIX}/usr"
+		CFLAGS="${CFLAGS}"
+		LDFLAGS="${LDFLAGS}"
+		CHOWN=true
+		MANGRPARG=''
+	)
 	emake "${_makeargs[@]}"
 }
 
 src_install() {
 	keepdir /var/log/sa
 
+	local _makeargs=(
+		prefix="${EPREFIX}/usr"
+		CFLAGS="${CFLAGS}"
+		LDFLAGS="${LDFLAGS}"
+		DESTDIR="${D}"
+		CHOWN=true
+		MANGRPARG=''
+	)
 	emake "${_makeargs[@]}" install
 
 	if use systemd; then

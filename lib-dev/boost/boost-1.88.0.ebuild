@@ -47,7 +47,7 @@ src_configure() {
 		--without-locale
 		--layout=system
 		--no-cmake-config
-		--prefix="${ED}/usr"
+		--prefix="${EPREFIX}/usr"
 		--without-mpi
 		--without-python
 		--without-stacktrace

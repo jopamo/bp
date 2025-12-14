@@ -18,10 +18,10 @@ IUSE="static-libs"
 DEPEND="!lib-core/ncurses"
 
 src_compile() {
-	emake CFLAGS="${CFLAGS}" DESTDIR="${ED}" PREFIX="${EPREFIX}"/usr all
+	emake CFLAGS="${CFLAGS}" PREFIX="${EPREFIX}"/usr all
 
 	use static-libs && emake CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS} -static" \
-		DESTDIR="${ED}" PREFIX="${EPREFIX}"/usr all-static
+		PREFIX="${EPREFIX}"/usr all-static
 }
 
 src_install() {

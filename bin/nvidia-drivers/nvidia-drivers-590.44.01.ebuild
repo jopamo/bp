@@ -68,16 +68,16 @@ pkg_setup() {
 
     export DISTCC_DISABLE=1
     export CCACHE_DISABLE=1
+}
 
+src_prepare() {
     NV_DOC="${S}"
     NV_OBJ="${S}"
     NV_SRC="${S}/kernel-open"
     NV_MAN="${S}"
     NV_X11="${S}"
     NV_SOVER=${PV}
-}
 
-src_prepare() {
     local man_file
     for man_file in "${NV_MAN}"/*1.gz; do
         gunzip "$man_file" || die

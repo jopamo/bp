@@ -34,7 +34,7 @@ PDEPEND="
 BDEPEND="xgui-lib/xcb-util-m4"
 
 src_prepare() {
-	cp "${EROOT}"/usr/share/xcb-util-m4/*.m4 "${S}"/m4/ || die
+	cp "${BROOT}"/usr/share/xcb-util-m4/*.m4 "${S}"/m4/ || die
 
 	default
 	eautoreconf

@@ -3,7 +3,7 @@
 EAPI=8
 
 BRANCH_NAME="nasm-$(ver_cut 1-2).xx"
-inherit autotools
+
 
 DESCRIPTION="Netwide Assembler for x86 and x86_64"
 HOMEPAGE="http://www.nasm.us/"

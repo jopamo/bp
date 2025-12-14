@@ -5,7 +5,7 @@ EAPI=8
 DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_OPTIONAL=1
 
-inherit cmake distutils-r1 flag-o-matic
+inherit cmake distutils-r1
 
 DESCRIPTION="CPU emulator framework"
 HOMEPAGE="https://github.com/unicorn-engine/unicorn"

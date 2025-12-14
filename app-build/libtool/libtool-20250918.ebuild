@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=c4abf359f849187fa7f505a0a34f15f2bd66db24
 
-inherit autotools
+
 
 DESCRIPTION="A shared library tool for developers"
 HOMEPAGE="https://www.gnu.org/software/libtool/"

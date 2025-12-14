@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit go-module go-env
+inherit go-module
 
 DESCRIPTION="Proton Mail Bridge application (CLI only)"
 HOMEPAGE="https://github.com/ProtonMail/proton-bridge"

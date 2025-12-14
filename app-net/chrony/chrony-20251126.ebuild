@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools doins
+inherit doins toolchain-funcs
 
 DESCRIPTION="NTP client and server programs"
 HOMEPAGE="https://chrony.tuxfamily.org/"

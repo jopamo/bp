@@ -15,7 +15,7 @@ LICENSE="BSD-2"
 SLOT="2"
 KEYWORDS="amd64 arm64"
 
-IUSE="${_PYTHON_ALL_IMPLS[@]/#/python_targets_} native-symlinks"
+IUSE="${PYTHON_TARGETS[@]/#/python_targets_} native-symlinks"
 
 RESTRICT="test"
 
@@ -26,9 +26,9 @@ src_prepare() {
 
 src_configure() {
 	local pyimpls=() i EPYTHON
-	for i in "${_PYTHON_ALL_IMPLS[@]}"; do
+	for i in "${PYTHON_TARGETS[@]}"; do
 		if use "python_targets_${i}"; then
-			_python_export "${i}" EPYTHON
+			python_export "${i}" EPYTHON
 			pyimpls+=( "${EPYTHON}" )
 		fi
 	done

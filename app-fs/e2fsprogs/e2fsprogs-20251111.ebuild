@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic toolchain-funcs autotools
+inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Standard EXT2/EXT3/EXT4 filesystem utilities"
 HOMEPAGE="http://ext4.wiki.kernel.org/"

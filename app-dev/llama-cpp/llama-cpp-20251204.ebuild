@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake flag-o-matic user
+inherit cmake user
 
 DESCRIPTION="High-performance inference of large language models (llama.cpp)"
 HOMEPAGE="https://github.com/ggml-org/llama.cpp"

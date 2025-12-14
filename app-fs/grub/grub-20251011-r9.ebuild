@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=6b5c671d35b1b84468da1fef2b9bd8e05682f7e6
 
-inherit flag-o-matic multibuild toolchain-funcs autotools
+inherit multibuild toolchain-funcs
 
 DESCRIPTION="GNU GRUB boot loader"
 HOMEPAGE="https://www.gnu.org/software/grub/"

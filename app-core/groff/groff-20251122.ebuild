@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=f42d6c6d2f586ec5c66f4a1dbc5b989e0a7dfc84
 
-inherit toolchain-funcs flag-o-matic
+inherit flag-o-matic
 
 DESCRIPTION="Text formatter used for man pages"
 HOMEPAGE="https://www.gnu.org/software/groff/groff.html"

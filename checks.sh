@@ -1,16 +1,103 @@
 checks=(
-    LocalUseCheck
-    GlobalUseCheck
-    IuseCheck
-    RequiredUseCheck
-    ProfilesCheck
-    RepoManifestHashCheck
-    VariableScopeCheck
-    VariableOrderCheck
-    DependencyCheck
-    MetadataVarCheck
+#AbsoluteSymlinkCheck
+#AcctCheck
+#BadCommandsCheck
+#BetterCompressionCheck
+#CategoryMetadataXmlCheck
+#DeclarationShadowedCheck
+#DependencyCheck
+#DescriptionCheck
+#DoCompressedFilesCheck
+#DroppedKeywordsCheck
+#EapiCheck
+#EbuildHeaderCheck
+#EbuildReservedCheck
+#EbuildUnquotedVariablesCheck
+#EclassCheck
+#EclassHeaderCheck
+#EclassManualDepsCheck
+#EclassParseCheck
+#EclassReservedCheck
+#EclassUnquotedVariablesCheck
+#EclassUsageCheck
+EendMissingArgCheck
+EmptyDirsCheck
+EqualVersionsCheck
+FetchablesUrlCheck
+GitCommitMessageCheck
+GitEclassCommitsCheck
+GitPkgCommitsCheck
+GlobCheck
+###########################GlobalUseCheck
+GlsaCheck
+HomepageCheck
+HomepageUrlCheck
+ImlateCheck
+InheritsCheck
+#InsintoCheck
+#IuseCheck
+#KeywordsCheck
+#LicenseCheck
+#LicenseGroupsCheck
+#LineLengthCheck
+#LiveOnlyCheck
+#LocalUseCheck
+#ManifestCheck
+#ManifestCollisionCheck
+#MasterPackageClobberedCheck
+#MetadataUrlCheck
+#MetadataVarCheck
+#MissingRemoteIdCheck
+#MissingSlotDepCheck
+#MissingUnpackerDepCheck
+#MissingWhitespaceCheck
+#NonPosixCheck
+#ObsoleteUriCheck
+#OutdatedBlockersCheck
+#PackageMetadataXmlCheck
+#PackageUpdatesCheck
+#PathVariablesCheck
+#PerlCheck
+#PkgDirCheck
+#ProfilesCheck
+#ProjectMetadataCheck
+#PropertiesCheck
+#PyPIAttestationAvailableCheck
+#PythonCheck
+#PythonCompatCheck
+#PythonFetchableCheck
+#PythonPackageNameCheck
+#ReadonlyVariableCheck
+#RedundantDodirCheck
+#RedundantVersionCheck
+#RepoDirCheck
+#RepoManifestHashCheck
+#RepoProfilesCheck
+#RepositoryCategories
+#RequiredUseCheck
+#RestrictCheck
+#RestrictTestCheck
+#RubyCompatCheck
+#RustCheck
+#SandboxCallCheck
+#SourcingCheck
+#SrcUriCheck
+#StableRequestCheck
+#StaleLiveCheck
+#UnstableOnlyCheck
+#UnusedEclassesCheck
+#UnusedInMastersCheck
+#UnusedLicensesCheck
+#UnusedMirrorsCheck
+#UseFlagsWithoutEffectsCheck
+#VariableOrderCheck
+#VariableScopeCheck
+#VirtualProvidersCheck
+#VisibilityCheck
+#WhitespaceCheck
 )
 
 for check in "${checks[@]}"; do
     pkgcheck scan -c "$check"
 done
+

@@ -9,10 +9,10 @@ HOMEPAGE="https://docbook.org/"
 SRC_URI="https://docbook.org/xml/${PV}/docbook-${PV}.zip"
 
 LICENSE="docbook"
+S="${WORKDIR}/docbook-${PV}"
+
 SLOT="0"
 #KEYWORDS="amd64 arm64"
-
-S="${WORKDIR}/docbook-${PV}"
 
 src_install() {
     insinto /usr/share/xml/docbook/schema/dtd/5.0

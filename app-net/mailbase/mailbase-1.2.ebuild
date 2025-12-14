@@ -11,11 +11,11 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+S=${WORKDIR}
+
 IUSE="pam"
 
 RDEPEND="pam? ( lib-core/pam )"
-
-S=${WORKDIR}
 
 pkg_setup() {
 	enewgroup mail 12

@@ -164,7 +164,7 @@ python_test() {
 	esac
 
 	case ${ABI} in
-		
+		x86)
 			EPYTEST_DESELECT+=(
 				'tests/test_mathtext.py::test_mathtext_exceptions[hspace without value]'
 				'tests/test_mathtext.py::test_mathtext_exceptions[hspace with invalid value]'

@@ -166,6 +166,12 @@ inherit python-utils-r1
 # python_single_target_python3_7(-)
 # @CODE
 
+# @ECLASS_VARIABLE: PYTHON_REQUIRED_USE
+# @OUTPUT_VARIABLE
+# @DESCRIPTION:
+# This is an eclass-generated required-use dependency string.
+# It is set to a dummy value to catch ebuilds mistakenly using it.
+
 _python_any_set_globals() {
 	local deps i PYTHON_PKG_DEP
 

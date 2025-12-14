@@ -1,6 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: rust-toolchain.eclass
+# @MAINTAINER:
+# 1g4 Project <1g4@example.org>
 # @SUPPORTED_EAPIS: 8
 # @BLURB: helps map gentoo arches to rust ABIs
 
@@ -9,10 +11,14 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-# Only used for URI helpers
+# @ECLASS_VARIABLE: RUST_TOOLCHAIN_BASEURL
+# @DESCRIPTION:
+# Base URL for rust toolchain tarballs.
 : "${RUST_TOOLCHAIN_BASEURL:=https://static.rust-lang.org/dist/}"
 
 # @FUNCTION: rust_abi
+# @USAGE: [CTARGET]
+# @DESCRIPTION:
 # Maps CHOST/CTARGET to a Rust ABI string (only amd64/arm64)
 rust_abi() {
 	local CTARGET=${1:-${CHOST}}
@@ -26,6 +32,8 @@ rust_abi() {
 }
 
 # @FUNCTION: rust_arch_uri
+# @USAGE: <abi> <ver> [dest_ver]
+# @DESCRIPTION:
 # Output the URI for SRC_URI using $RUST_TOOLCHAIN_BASEURL and the Rust ABI
 rust_arch_uri() {
 	if [ -n "$3" ]; then
@@ -37,6 +45,8 @@ rust_arch_uri() {
 }
 
 # @FUNCTION: rust_all_arch_uris
+# @USAGE: <ver> [dest_ver]
+# @DESCRIPTION:
 # Outputs SRC_URI blocks for amd64 and arm64 only
 rust_all_arch_uris() {
 	echo "

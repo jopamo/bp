@@ -80,9 +80,9 @@ if [[ ! ${GO_OPTIONAL} ]]; then
 	BDEPEND+=" app-compression/zip-utils"
 fi
 
+# @ECLASS_VARIABLE: GO111MODULE
+# @DESCRIPTION:
 # Force go to build in module mode.
-# In this mode the GOPATH environment variable is ignored.
-# this will become the default in the future.
 export GO111MODULE=on
 
 # Set the default for the go build cache
@@ -93,14 +93,13 @@ export GOCACHE="${T}/go-build"
 # See "go help environment" for information on this setting
 export GOMODCACHE="${WORKDIR}/go-mod"
 
+# @ECLASS_VARIABLE: GOFLAGS
+# @DESCRIPTION:
 # The following go flags should be used for all builds.
-# -buildmode=pie builds position independent executables
-# -buildvcs=false omits version control information
-# -modcacherw makes the build cache read/write
-# -v prints the names of packages as they are compiled
-# -x prints commands as they are executed
 export GOFLAGS="-buildvcs=false -modcacherw -v -x"
 
+# @ECLASS_VARIABLE: QA_FLAGS_IGNORED
+# @DESCRIPTION:
 # Do not complain about CFLAGS etc since go projects do not use them.
 QA_FLAGS_IGNORED='.*'
 
@@ -365,8 +364,7 @@ go-module_setup_proxy() {
 # 3. Otherwise, call 'ego mod verify' and then do a normal unpack.
 # Set compile env via go-env.
 go-module_src_unpack() {
-	if use amd64 || use arm64 ||
-		( use ppc64 && [[ $(tc-endian) == "little" ]] ) || use s390 || use x86; then
+	if use amd64 || use arm64; then
 			GOFLAGS="-buildmode=pie ${GOFLAGS}"
 	fi
 	GOFLAGS="${GOFLAGS} -p=$(makeopts_jobs)"
@@ -376,7 +374,7 @@ go-module_src_unpack() {
 		eqawarn "This will become a fatal error in the future"
 		_go-module_src_unpack_gosum
 	elif [[ "${#EGO_VENDOR[@]}" -gt 0 ]]; then
-		eerror "${EBUILD} is using EGO_VENDOR which is no longer supported"
+		eerror "${P} is using EGO_VENDOR which is no longer supported"
 		die "Please update this ebuild"
 	else
 		default

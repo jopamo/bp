@@ -1,6 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: tree-sitter-grammar.eclass
+# @MAINTAINER:
+# jopamo <noop@example.com>
 # @SUPPORTED_EAPIS: 8
 # @BLURB: Simplified eclass for building Tree-sitter grammars (Linux only)
 
@@ -46,6 +48,9 @@ for _BINDING in "${TS_BINDINGS[@]}"; do
 done
 unset _BINDING
 
+# @FUNCTION: _get_tsg_abi_ver
+# @INTERNAL
+# @DESCRIPTION:
 # returns grammar ABI version from parser.c
 _get_tsg_abi_ver() {
 	local ver
@@ -78,6 +83,9 @@ tree-sitter-grammar_src_configure() {
 	done
 }
 
+# @FUNCTION: _tree-sitter-grammar_legacy_compile
+# @INTERNAL
+# @DESCRIPTION:
 # builds grammar as shared library (legacy method)
 _tree-sitter-grammar_legacy_compile() {
 	cd "${S}/src" || { log_err "Failed to cd to src"; die; }

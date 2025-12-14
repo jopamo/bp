@@ -1,9 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 #
 # @ECLASS: cargo.eclass
+# @MAINTAINER:
+# 1g4 Project <1g4@example.org>
 # @SUPPORTED_EAPIS: 7 8
-#
-# A minimal eclass to handle rust/cargo packages
+# @BLURB: A minimal eclass to handle rust/cargo packages
 
 case "${EAPI:-0}" in
 	7|8) ;;
@@ -21,7 +22,14 @@ if [[ -z ${_CARGO_VENDOR_ECLASS} ]]; then
 
 	IUSE="debug"
 
+	# @ECLASS_VARIABLE: ECARGO_HOME
+	# @DESCRIPTION:
+	# Location of the cargo home directory.
 	ECARGO_HOME="${WORKDIR}/cargo_home"
+
+	# @ECLASS_VARIABLE: ECARGO_VENDOR
+	# @DESCRIPTION:
+	# Location of the vendored dependencies.
 	ECARGO_VENDOR="${S}/vendor"
 
 	RESTRICT="test network-sandbox"

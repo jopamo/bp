@@ -1,5 +1,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
+# @ECLASS: kernel-mod.eclass
+# @MAINTAINER:
+# 1g4 Project <1g4@example.org>
+# @SUPPORTED_EAPIS: 8
+# @BLURB: Eclass for building Linux kernel modules
+
 case ${EAPI} in
 	8) ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
@@ -29,6 +35,9 @@ BDEPEND="
 IDEPEND="app-core/kmod[tools]"
 
 
+# @ECLASS_VARIABLE: MODULES_SIGN_CERT
+# @DESCRIPTION:
+# Path to the certificate used for module signing.
 : "${MODULES_SIGN_CERT:=certs/signing_key.x509}"
 
 declare -gA _MODULES_GLOBAL=()
@@ -141,6 +150,10 @@ kernel-mod_pkg_postinst() {
 		eqawarn "QA Notice: neither kernel-mod_src_install nor modules_post_process were used"
 }
 
+# @FUNCTION: linux_domodule
+# @USAGE: <module>...
+# @DESCRIPTION:
+# Install kernel modules.
 linux_domodule() {
 	debug-print-function ${FUNCNAME} "$@"
 	_modules_check_function ${#} 1 '' "<module>..." || return 0
@@ -150,12 +163,20 @@ linux_domodule() {
 	)
 }
 
+# @FUNCTION: linux_moduleinto
+# @USAGE: <install-dir>
+# @DESCRIPTION:
+# Set the installation directory for modules.
 linux_moduleinto() {
 	debug-print-function ${FUNCNAME} "$@"
 	_modules_check_function ${#} 1 1 "<install-dir>" || return 0
 	_MODULES_GLOBAL[moduleinto]=$1
 }
 
+# @FUNCTION: modules_post_process
+# @USAGE: [path]
+# @DESCRIPTION:
+# Strip, sign, and compress modules.
 modules_post_process() {
 	debug-print-function ${FUNCNAME} "$@"
 	_modules_check_function ${#} 0 1 '[<path>]' || return 0
@@ -174,6 +195,10 @@ modules_post_process() {
 	_MODULES_GLOBAL[ran:post_process]=1
 }
 
+# @FUNCTION: _modules_check_function
+# @INTERNAL
+# @DESCRIPTION:
+# Internal function to check usage.
 _modules_check_function() {
 	[[ -z ${MODULES_OPTIONAL_IUSE} ]] || use "${MODULES_OPTIONAL_IUSE#+}" || return 1
 	[[ ${#} == 0 || ${1} -ge ${2} && ( ! ${3} || ${1} -le ${3} ) ]] || die "Usage: ${FUNCNAME[1]} ${4-(no arguments)}"
@@ -181,6 +206,10 @@ _modules_check_function() {
 		die "${FUNCNAME[1]} was called without running kernel-mod_pkg_setup"
 }
 
+# @FUNCTION: _modules_check_migration
+# @INTERNAL
+# @DESCRIPTION:
+# Internal function to check for obsolete variables.
 _modules_check_migration() {
 	[[ -z ${MODULES_OPTIONAL_USE} ]] || \
 		die "MODULES_OPTIONAL_USE is obsolete, see the new variables in kernel-mod eclass"
@@ -192,6 +221,10 @@ _modules_check_migration() {
 		die "MODULESD_* variables are no longer supported, replace with a handcrafted .conf if needed"
 }
 
+# @FUNCTION: _modules_prepare_kernel
+# @INTERNAL
+# @DESCRIPTION:
+# Internal function to prepare kernel environment.
 _modules_prepare_kernel() {
 	SKIP_KERNEL_BINPKG_ENV_RESET=1
 	get_version
@@ -209,6 +242,10 @@ _modules_prepare_kernel() {
 	linux-info_pkg_setup
 }
 
+# @FUNCTION: _modules_prepare_sign
+# @INTERNAL
+# @DESCRIPTION:
+# Internal function to prepare module signing.
 _modules_prepare_sign() {
 	use modules-sign || return 0
 	_modules_sign_die() {
@@ -236,6 +273,10 @@ _modules_prepare_sign() {
 	[[ -f ${MODULES_SIGN_CERT} ]] || _modules_sign_die "the public key certificate '${MODULES_SIGN_CERT}' was not found"
 }
 
+# @FUNCTION: _modules_prepare_toolchain
+# @INTERNAL
+# @DESCRIPTION:
+# Internal function to prepare toolchain.
 _modules_prepare_toolchain() {
 	[[ -z ${KERNEL_CHOST} ]] && linux_chkconfig_present 64BIT && \
 		case ${CHOST} in
@@ -322,6 +363,10 @@ _modules_prepare_toolchain() {
 		"'${KERNEL_READELF}' '${KERNEL_STRIP}'"
 }
 
+# @FUNCTION: _modules_process_compress
+# @INTERNAL
+# @DESCRIPTION:
+# Internal function to compress modules.
 _modules_process_compress() {
 	use modules-compress || return 0
 	local -a compress
@@ -344,6 +389,10 @@ _modules_process_compress() {
 	edob "${compress[@]}" -- "$@"
 }
 
+# @FUNCTION: _modules_process_dracut.conf.d
+# @INTERNAL
+# @DESCRIPTION:
+# Internal function to create dracut conf.
 _modules_process_dracut.conf.d() {
 	(
 		insinto /usr/lib/dracut/dracut.conf.d
@@ -351,6 +400,10 @@ _modules_process_dracut.conf.d() {
 	)
 }
 
+# @FUNCTION: _modules_process_sign
+# @INTERNAL
+# @DESCRIPTION:
+# Internal function to sign modules.
 _modules_process_sign() {
 	use modules-sign || return 0
 	local sign=
@@ -394,6 +447,10 @@ _modules_process_sign() {
 	unset KBUILD_SIGN_PIN
 }
 
+# @FUNCTION: _modules_process_strip
+# @INTERNAL
+# @DESCRIPTION:
+# Internal function to strip modules.
 _modules_process_strip() {
 	dostrip -x "${@#"${ED}"}"
 	if use strip; then
@@ -402,6 +459,10 @@ _modules_process_strip() {
 	fi
 }
 
+# @FUNCTION: _modules_sanity_gccplugins
+# @INTERNAL
+# @DESCRIPTION:
+# Internal function to check GCC plugins sanity.
 _modules_sanity_gccplugins() {
 	linux_chkconfig_present GCC_PLUGINS || return 0
 	local tmp=${T}/kernel-mod_gccplugins
@@ -421,6 +482,10 @@ _modules_sanity_gccplugins() {
 	fi
 }
 
+# @FUNCTION: _modules_sanity_kernelbuilt
+# @INTERNAL
+# @DESCRIPTION:
+# Internal function to check if kernel is built.
 _modules_sanity_kernelbuilt() {
 	local symvers=${KV_OUT_DIR}/Module.symvers
 	if [[ ! -f ${symvers} ]]; then
@@ -434,6 +499,10 @@ _modules_sanity_kernelbuilt() {
 	fi
 }
 
+# @FUNCTION: _modules_sanity_kernelversion
+# @INTERNAL
+# @DESCRIPTION:
+# Internal function to check kernel version sanity.
 _modules_sanity_kernelversion() {
 	local kv=${KV_MAJOR}.${KV_MINOR}.${KV_PATCH}
 	if [[ -n ${MODULES_KERNEL_MIN} ]] && ver_test "${kv}" -lt "${MODULES_KERNEL_MIN}"; then
@@ -450,6 +519,10 @@ _modules_sanity_kernelversion() {
 	fi
 }
 
+# @FUNCTION: _modules_sanity_modversion
+# @INTERNAL
+# @DESCRIPTION:
+# Internal function to check module version sanity.
 _modules_sanity_modversion() {
 	local mod ver
 	for mod; do
@@ -463,6 +536,10 @@ _modules_sanity_modversion() {
 	done
 }
 
+# @FUNCTION: _modules_set_makeargs
+# @INTERNAL
+# @DESCRIPTION:
+# Internal function to set make arguments.
 _modules_set_makeargs() {
 	MODULES_MAKEARGS=(
 		ARCH="$(tc-arch-kernel)"
@@ -497,6 +574,10 @@ _modules_set_makeargs() {
 	eval "MODULES_MAKEARGS+=( ${MODULES_EXTRA_EMAKE} )" || die
 }
 
+# @FUNCTION: _modules_update_depmod
+# @INTERNAL
+# @DESCRIPTION:
+# Internal function to update depmod.
 _modules_update_depmod() {
 	local map=${EROOT}/lib/modules/${KV_FULL}/build/System.map
 	if [[ ! -f ${map} ]]; then

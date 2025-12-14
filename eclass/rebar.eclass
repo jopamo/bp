@@ -1,6 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: rebar.eclass
+# @MAINTAINER:
+# 1g4 Project <1g4@example.org>
 # @SUPPORTED_EAPIS: 7 8
 # @PROVIDES: rebar-utils
 # @BLURB: Build Erlang/OTP projects using dev-util/rebar.
@@ -22,7 +24,11 @@ BDEPEND="
 	app-core/gawk
 "
 
-# Finds a single matching Erlang dep in libdir, returns error if ambiguous or missing
+# @FUNCTION: _rebar_find_dep
+# @INTERNAL
+# @USAGE: <pkg_name>
+# @DESCRIPTION:
+# Finds a single matching Erlang dep in libdir, returns error if ambiguous or missing.
 _rebar_find_dep() {
 	local pn="${1}"
 	local p
@@ -41,6 +47,11 @@ _rebar_find_dep() {
 	echo "${result}"
 }
 
+# @FUNCTION: erebar
+# @USAGE: <targets>
+# @DESCRIPTION:
+# Run rebar with the given targets, setting ERL_LIBS appropriately.
+# Fails if rebar fails.
 erebar() {
 	(( $# > 0 )) || die "erebar: at least one target is required"
 

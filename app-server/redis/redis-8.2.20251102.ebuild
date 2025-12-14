@@ -34,7 +34,7 @@ DEPEND="
 	${COMMON_DEPEND}
 	test? ( app-lang/tcl )"
 
-REQUIRED_USE="?? ( jemalloc )"
+
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-6.2.1-config.patch

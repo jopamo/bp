@@ -13,8 +13,8 @@ HOMEPAGE="https://www.kernel.org"
 SRC_URI="https://gitlab.com/linux-kernel/stable/-/archive/${SNAPSHOT}/stable-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/stable-${SNAPSHOT}"
 
-KEYWORDS="amd64 arm64"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 [[ -n ${PATCH_VER} ]] && PATCHES=( "${WORKDIR}"/${PATCH_PV} )
 

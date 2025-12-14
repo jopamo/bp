@@ -16,9 +16,9 @@ LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RESTRICT="network-sandbox"
-
 IUSE="alsa bpf capstone numa opengl slirp vnc xdp"
+
+RESTRICT="network-sandbox"
 
 DEPEND="
 	app-core/attr

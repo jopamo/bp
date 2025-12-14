@@ -4,8 +4,8 @@ EAPI=8
 
 inherit flag-o-matic toolchain-funcs cmake git-r3
 
-HOMEPAGE="https://mariadb.org/"
 DESCRIPTION="An enhanced, drop-in replacement for MySQL"
+HOMEPAGE="https://mariadb.org/"
 EGIT_REPO_URI="https://github.com/MariaDB/server.git"
 EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
 

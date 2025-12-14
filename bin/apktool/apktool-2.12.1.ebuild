@@ -24,7 +24,7 @@ src_unpack() {
 
 src_prepare() {
 	default
-	cp "${DISTDIR}"/* "${WORKDIR}"/
+	cp "${DISTDIR}/apktool_${PV}.jar" "${DISTDIR}/apktool" "${WORKDIR}"/ || die
 	sed -i 's|libdir="$progdir"|libdir="/opt/apktool"|' apktool
 	sed -i '/^libdir="\/opt\/apktool"/a export JAVA_HOME=\/opt\/openjdk8\nexport PATH=$JAVA_HOME\/bin:$PATH' apktool
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools
+inherit flag-o-matic autotools toolchain-funcs
 
 DESCRIPTION="Libraries/utilities to handle ELF objects (drop in replacement for libelf)"
 HOMEPAGE="http://elfutils.org/"

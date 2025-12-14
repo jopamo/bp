@@ -8,7 +8,7 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..13} )
 GENTOO_DEPEND_ON_PERL="no"
 
-inherit autotools distutils-r1 perl-functions flag-o-matic
+inherit autotools distutils-r1 flag-o-matic
 
 DESCRIPTION="Library to support AppArmor userspace utilities"
 HOMEPAGE="https://gitlab.com/apparmor/apparmor/wikis/home"

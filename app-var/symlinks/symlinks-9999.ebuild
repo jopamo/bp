@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic toolchain-funcs meson
+inherit flag-o-matic meson
 
 DESCRIPTION="Scans for and fixes broken or messy symlinks"
 HOMEPAGE="http://www.ibiblio.org/pub/linux/utils/file/"

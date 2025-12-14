@@ -27,7 +27,6 @@ src_prepare() {
 
 src_compile() {
 	emake \
-		DESTDIR="${ED}" \
 		libdir=/usr/lib \
 		sbindir=/usr/bin \
 		EFIDIR=1g4

@@ -34,17 +34,6 @@ PDEPEND="
 filter-flags -flto\=\*
 append-flags -fcommon
 
-pkg_setup() {
-	MAKE_COMMON=(
-		CC="$(tc-getCC)" \
-		CXX="$(tc-getCXX)" \
-		AR="$(tc-getAR)" \
-		LD="$(tc-getLD)" \
-		RANLIB="$(tc-getRANLIB)" \
-		DESTDIR="${ED}"
-	)
-}
-
 src_prepare() {
 	eautoreconf
 	default
@@ -70,14 +59,36 @@ src_configure() {
 }
 
 src_compile() {
+	local MAKE_COMMON=(
+		CC="$(tc-getCC)" \
+		CXX="$(tc-getCXX)" \
+		AR="$(tc-getAR)" \
+		LD="$(tc-getLD)" \
+		RANLIB="$(tc-getRANLIB)" \
+	)
 	emake "${MAKE_COMMON[@]}"
 }
 
 src_test() {
+	local MAKE_COMMON=(
+		CC="$(tc-getCC)" \
+		CXX="$(tc-getCXX)" \
+		AR="$(tc-getAR)" \
+		LD="$(tc-getLD)" \
+		RANLIB="$(tc-getRANLIB)" \
+	)
 	emake "${MAKE_COMMON[@]}" check
 }
 
 src_install() {
+	local MAKE_COMMON=(
+		CC="$(tc-getCC)" \
+		CXX="$(tc-getCXX)" \
+		AR="$(tc-getAR)" \
+		LD="$(tc-getLD)" \
+		RANLIB="$(tc-getRANLIB)" \
+		DESTDIR="${ED}"
+	)
 	emake "${MAKE_COMMON[@]}" install
 	rm "${ED}"/usr/sbin/airodump-ng-oui-update
 }

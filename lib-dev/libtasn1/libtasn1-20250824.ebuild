@@ -17,7 +17,7 @@ IUSE="static-libs valgrind"
 
 src_prepare() {
 	rm -rf gnulib
-	cp -r "${EROOT}"/usr/share/gnulib gnulib
+	cp -r "${BROOT}"/usr/share/gnulib gnulib
 	cd gnulib
 	git reset --hard 92977
 	cd ..

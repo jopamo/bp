@@ -90,7 +90,7 @@ grub_configure() {
 
 src_prepare() {
 	rm -rf gnulib
-	cp -r "${EROOT}"/usr/share/gnulib gnulib
+	cp -r "${BROOT}"/usr/share/gnulib gnulib
 	cd gnulib
 	git reset --hard 9f48fb
 	cd ..

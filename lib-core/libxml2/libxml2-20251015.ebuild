@@ -41,7 +41,7 @@ src_configure() {
 		$(use_enable static-libs static)
 		$(use_with readline)
 		$(use_with readline history)
-		--with-python=${ROOT%/}${PYTHON}
+		--with-python=${PYTHON}
 	)
 		ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }

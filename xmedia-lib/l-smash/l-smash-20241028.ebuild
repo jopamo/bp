@@ -33,7 +33,6 @@ src_configure()
 		$(usex static-libs '' '--disable-static --enable-shared')
 		--prefix="${EPREFIX}"/usr
 		--libdir="${EPREFIX}"/usr/lib
-		--destdir="${ED}"
 		--includedir="${EPREFIX}"/usr/include
 		--cc="$(tc-getCC)"
 		--extra-cflags="${CFLAGS}"

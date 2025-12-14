@@ -33,7 +33,7 @@ RESTRICT="network-sandbox"
 
 src_prepare() {
 	rm -rf gnulib paxutils
-	cp -r "${EROOT}"/usr/share/gnulib gnulib
+	cp -r "${BROOT}"/usr/share/gnulib gnulib
 
 	#cd gnulib
 	#git reset --hard 20074698 || die

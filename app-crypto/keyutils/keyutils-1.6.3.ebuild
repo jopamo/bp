@@ -30,13 +30,13 @@ src_prepare() {
 src_compile() {
 	emake CFLAGS="${CFLAGS}" \
 		LDFLAGS="${LDFLAGS}" \
-		INCLUDEDIR="${ED}"/usr/include \
-		MANDIR="${ED}"/usr/share/man \
-		ETCDIR="${ED}"/etc \
-		SHAREDIR="${ED}"/usr/share/keyutils \
-		LIBDIR="${ED}"/usr/lib \
-		SBINDIR="${ED}"/usr/bin \
-		BINDIR="${ED}"/usr/bin
+		INCLUDEDIR="${EPREFIX}"/usr/include \
+		MANDIR="${EPREFIX}"/usr/share/man \
+		ETCDIR="${EPREFIX}"/etc \
+		SHAREDIR="${EPREFIX}"/usr/share/keyutils \
+		LIBDIR="${EPREFIX}"/usr/lib \
+		SBINDIR="${EPREFIX}"/usr/bin \
+		BINDIR="${EPREFIX}"/usr/bin
 }
 
 src_install() {

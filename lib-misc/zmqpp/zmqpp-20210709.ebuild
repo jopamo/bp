@@ -28,7 +28,7 @@ src_prepare() {
 
 src_configure() {
 	local mycmakeargs=(
-		-DZEROMQ_LIB_DIR="${ED}"/usr/lib
+		-DZEROMQ_LIB_DIR="${ESYSROOT}"/usr/lib
 		-DIS_TRAVIS_CI_BUILD=OFF
 		-DZMQPP_BUILD_SHARED=ON
 		-DZMQPP_BUILD_STATIC="$(usex static-libs)"

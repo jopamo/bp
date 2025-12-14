@@ -111,8 +111,8 @@ src_configure() {
 src_compile() {
 	export BUILD_ZLIB=0
 	export BUILD_BZIP2=0
-	export BZIP2_LIB="${EROOT}/usr/lib"
-	export BZIP2_INCLUDE="${EROOT}/usr/include"
+	export BZIP2_LIB="${ESYSROOT}/usr/lib"
+	export BZIP2_INCLUDE="${ESYSROOT}/usr/include"
 
 	# language runtime flags
 	export CFLAGS="${CFLAGS//-Os/-O2}"

@@ -28,7 +28,7 @@ RESTRICT="network-sandbox"
 
 src_prepare() {
 	rm -rf gnulib
-	cp -r "${EROOT}"/usr/share/gnulib gnulib
+	cp -r "${BROOT}"/usr/share/gnulib gnulib
 
 	./autogen.sh || die
 

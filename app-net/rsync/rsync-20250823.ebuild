@@ -34,7 +34,7 @@ DEPEND="
 src_prepare() {
 	rm zlib/*.{c,h} || die
 	rm config.{guess,sub} || die
-	cp -p "${EROOT}"/usr/share/gnuconfig/* "${S}"/
+	cp -p "${BROOT}"/usr/share/gnuconfig/* "${S}"/
 	default
 }
 

@@ -6,15 +6,14 @@ inherit flag-o-matic libtool toolchain-funcs
 
 DESCRIPTION="A high-quality and portable font engine"
 HOMEPAGE="https://www.freetype.org/"
-IUSE="brotli bzip2 debug harfbuzz png static-libs zlib"
-
 SRC_URI="mirror://sourceforge/freetype/${P/_/}.tar.xz
 		mirror://gnu/freetype/${P/_/}.tar.xz"
 
-KEYWORDS="amd64 arm64"
-
 LICENSE="|| ( FTL GPL-2+ )"
 SLOT="2"
+KEYWORDS="amd64 arm64"
+
+IUSE="brotli bzip2 debug harfbuzz png static-libs zlib"
 
 RDEPEND="
 	brotli? ( app-compression/brotli )

@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND="!lib-core/ncurses"
+RDEPEND="!lib-core/ncurses"
 
 src_compile() {
 	emake CFLAGS="${CFLAGS}" PREFIX="${EPREFIX}"/usr all

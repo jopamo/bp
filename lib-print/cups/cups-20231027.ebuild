@@ -11,9 +11,9 @@ HOMEPAGE="https://www.cups.org/"
 SRC_URI="https://github.com/apple/cups/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/cups-${SNAPSHOT}
 
+LICENSE="GPL-2"
 KEYWORDS="amd64 arm64"
 
-LICENSE="GPL-2"
 SLOT="0"
 IUSE="acl dbus debug pam +ssl static-libs systemd usb"
 

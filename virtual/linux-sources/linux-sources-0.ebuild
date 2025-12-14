@@ -10,7 +10,6 @@ IUSE="kernel-bin"
 
 RDEPEND="kernel-bin? (
 			app-kernel/kernel-bin
-			!virtual/linux-sources
 )
 		!kernel-bin? (
 			app-kernel/linux-headers

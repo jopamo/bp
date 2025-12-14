@@ -10,9 +10,9 @@ SNAPSHOT=619f4e5181c41c4ac3e0637059d377b7dc1aaa38
 SRC_URI="https://github.com/libexif/libexif/archive/${SNAPSHOT}.tar.gz -> libexif-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libexif-${SNAPSHOT}"
 
-KEYWORDS="amd64 arm64"
 LICENSE="LGPL-2.1"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 IUSE="doc nls static-libs"
 

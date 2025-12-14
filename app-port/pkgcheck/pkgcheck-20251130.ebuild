@@ -36,4 +36,10 @@ BDEPEND="${RDEPEND}
 
 distutils_enable_tests setup.py
 
-export USE_SYSTEM_TREE_SITTER_BASH=1
+python_prepare_all() {
+	export USE_SYSTEM_TREE_SITTER_BASH=1
+
+	distutils-r1_python_prepare_all
+
+	find "${S}" -type f -print0 | xargs -0 sed -i 's/\/var\/db\/repos\/gentoo/\/var\/db\/repos\/bp/g'
+}

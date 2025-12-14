@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake 
+inherit cmake dot-a 
 
 DESCRIPTION="Geometry library"
 HOMEPAGE="http://www.qhull.org"

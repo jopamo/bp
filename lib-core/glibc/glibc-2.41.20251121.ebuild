@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="release/$(ver_cut 1-2)/master"
 
-inherit flag-o-matic
+inherit flag-o-matic tmpfiles
 
 DESCRIPTION="GNU libc C library"
 HOMEPAGE="https://www.gnu.org/software/libc/"

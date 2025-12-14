@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs
+inherit toolchain-funcs python-utils-r1
 
 DESCRIPTION="C++ crypto library"
 HOMEPAGE="https://botan.randombit.net/"

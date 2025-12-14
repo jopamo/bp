@@ -5,7 +5,7 @@ EAPI=8
 BRANCH_NAME="$(ver_cut 1-2)"
 SNAPSHOT=ceb01e1584d6fd847cccf4e3aca2100d2097c321
 
-inherit autotools edo multiprocessing toolchain-funcs doins
+inherit autotools edo multiprocessing toolchain-funcs doins user
 
 DESCRIPTION="A persistent caching system, key-value, and data structures database"
 HOMEPAGE="https://github.com/redis/redis"

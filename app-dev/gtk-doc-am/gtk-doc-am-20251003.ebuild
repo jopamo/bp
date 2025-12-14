@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit git-r3
+inherit git-r3 python-utils-r1
 
 DESCRIPTION="Automake files from gtk-doc"
 HOMEPAGE="https://www.gtk.org/gtk-doc/"

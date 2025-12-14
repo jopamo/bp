@@ -31,5 +31,5 @@ src_install() {
 		install
 
 	dodir /usr/include/libutf8proc
-	dosym ../utf8proc.h /usr/include/libutf8proc/utf8proc.h
+	dosym -r /usr/include/utf8proc.h /usr/include/libutf8proc/utf8proc.h
 }

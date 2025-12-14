@@ -42,11 +42,11 @@ src_install() {
 	newlib.so build-lib/libunrar.so libunrar.so.${PV}
 
 	for x in libunrar.so.$(ver_cut 0-1) libunrar.so ; do
-		dosym libunrar.so.${PV} usr/lib/${x}
+		dosym -r /usr/lib/libunrar.so.${PV} /usr/lib/${x}
 	done
 
 	insinto /usr/include/libunrar${PV%.*.*}
 	doins *.hpp
 
-	dosym libunrar$(ver_cut 0-1) usr/include/libunrar
+	dosym -r /usr/include/libunrar$(ver_cut 0-1) /usr/include/libunrar
 }

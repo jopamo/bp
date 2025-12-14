@@ -92,6 +92,6 @@ src_install() {
 
     patchelf --set-soname "lib7z.so.1" "${ED}/usr/lib/lib7z.so.1" || die
 
-    dosym lib7z.so.1 /usr/lib/lib7z.so
-    dosym lib7z.so.1 /usr/lib/7z.so
+    dosym -r /usr/lib/lib7z.so.1 /usr/lib/lib7z.so
+    dosym -r /usr/lib/lib7z.so.1 /usr/lib/7z.so
 }

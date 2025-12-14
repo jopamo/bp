@@ -19,7 +19,7 @@ KEYWORDS="amd64 arm64"
 IUSE="broadway cups ffmpeg examples introspection vim-syntax wayland X xinerama vulkan test sysprof colord build-examples demos build-tests"
 
 REQUIRED_USE="
-	|| ( wayland X )
+
 	xinerama? ( X )
 "
 

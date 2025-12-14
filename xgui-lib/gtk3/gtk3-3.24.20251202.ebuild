@@ -20,7 +20,7 @@ KEYWORDS="amd64 arm64"
 IUSE="cups introspection wayland X xinerama"
 
 REQUIRED_USE="
-	|| ( wayland X )
+
 	xinerama? ( X )
 "
 

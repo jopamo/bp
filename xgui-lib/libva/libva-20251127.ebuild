@@ -25,7 +25,7 @@ RDEPEND=">=xgui-lib/libdrm-2.4.46
 	opengl? ( >=xgui-tools/mesa-7.0-r1 )
 	wayland? ( >=xgui-lib/wayland-1.11 )"
 
-REQUIRED_USE="|| ( drm wayland X )
+
 		opengl? ( X )"
 
 src_prepare() {

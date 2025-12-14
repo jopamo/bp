@@ -18,7 +18,7 @@ IUSE="alsa cli cuda drm egl iconv jpeg lcms libmpv lua opengl pipewire
 	pulseaudio vaapi vapoursynth vdpau vulkan wayland +X zlib"
 
 REQUIRED_USE="
-	|| ( cli libmpv )
+
 	lcms? ( opengl )
 	opengl? ( || ( egl X !cli ) )
 	vaapi? ( || ( X wayland ) )

@@ -23,7 +23,7 @@ REQUIRED_USE="
 	screen-sharing? ( rdp )
 	test? ( desktop headless xwayland )
 	wayland-compositor? ( gles2 )
-	|| ( drm fbdev headless rdp wayland-compositor X )
+
 "
 
 RDEPEND="

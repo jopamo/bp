@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 # pdftops has various possible implementations, but the default
 # really needs to be decent
-REQUIRED_USE="|| ( postscript poppler )"
+
 
 RDEPEND="
 	lib-print/libcupsfilters

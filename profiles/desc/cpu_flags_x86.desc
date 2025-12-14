@@ -1,4 +1,5 @@
 mmx - MMX instruction set
+mmxext - MMX Extended instruction set
 sse - SSE instruction set
 sse2 - SSE2 instruction set
 sse3 - SSE3 instruction set

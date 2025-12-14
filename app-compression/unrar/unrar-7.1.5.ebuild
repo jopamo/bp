@@ -10,9 +10,9 @@ SRC_URI="http://www.rarlab.com/rar/${PN}src-${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="unRAR"
 SLOT="0"
-KEYWORDS="amd64 arm64"
-
 S=${WORKDIR}/unrar
+
+KEYWORDS="amd64 arm64"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-6.2.6-honor-flags.patch

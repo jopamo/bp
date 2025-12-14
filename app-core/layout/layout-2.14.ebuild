@@ -11,9 +11,9 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="ipv6 router +server systemd user-namespaces xdp"
-
 S=${WORKDIR}
+
+IUSE="ipv6 router +server systemd user-namespaces xdp"
 
 DEPEND="app-core/hosts"
 

@@ -12,9 +12,9 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RESTRICT="test"
-
 RDEPEND="app-lang/perl"
+
+RESTRICT="test"
 
 S="${S}/scripts"
 

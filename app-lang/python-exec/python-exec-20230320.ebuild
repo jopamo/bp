@@ -15,11 +15,7 @@ LICENSE="BSD-2"
 SLOT="2"
 KEYWORDS="amd64 arm64"
 
-# Ensure PYTHON_TARGETS is set and is an array
-PYTHON_TARGETS=( ${PYTHON_TARGETS} )
-[[ ${#PYTHON_TARGETS[@]} -eq 0 ]] && PYTHON_TARGETS=( python3_13 )
-
-IUSE="${PYTHON_TARGETS[@]/#/python_targets_} native-symlinks"
+IUSE="${_PYTHON_ALL_IMPLS[@]/#/python_targets_} native-symlinks"
 
 RESTRICT="test"
 
@@ -30,9 +26,9 @@ src_prepare() {
 
 src_configure() {
 	local pyimpls=() i EPYTHON
-	for i in "${PYTHON_TARGETS[@]}"; do
+	for i in "${_PYTHON_ALL_IMPLS[@]}"; do
 		if use "python_targets_${i}"; then
-			python_export "${i}" EPYTHON
+			_python_export "${i}" EPYTHON
 			pyimpls+=( "${EPYTHON}" )
 		fi
 	done
@@ -56,12 +52,12 @@ src_install() {
 		for f in "${programs[@]}"; do
 			# symlink the C wrapper for python to avoid shebang recursion
 			# bug #568974
-			dosym -r /usr/bin/python-exec2c /usr/bin/"${f}"
+			dosym python-exec2c /usr/bin/"${f}"
 		done
 		for f in "${scripts[@]}"; do
 			# those are python scripts (except for new python-configs)
 			# so symlink them via the python wrapper
-			dosym -r /usr/lib/python-exec/python-exec2 /usr/bin/"${f}"
+			dosym ../lib/python-exec/python-exec2 /usr/bin/"${f}"
 		done
 	fi
 }

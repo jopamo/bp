@@ -90,10 +90,9 @@ src_install() {
 	insinto /etc/unbound
 	insopts -m 0755
 	doins "${FILESDIR}/unbound.conf"
-}
 
-pkg_preinst() {
-	newsysusers "${FILESDIR}/${PN}-sysusers" "${PN}.conf"
+	insinto /usr/lib/sysusers.d
+	newins "${FILESDIR}/${PN}-sysusers" "${PN}.conf"
 }
 
 pkg_postinst() {

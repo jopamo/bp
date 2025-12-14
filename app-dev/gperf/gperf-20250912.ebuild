@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 src_prepare() {
 	rm -rf gnulib
-	cp -r "${EROOT}"/usr/share/gnulib gnulib
+	cp -r "${BROOT}"/usr/share/gnulib gnulib
 
 	sed -i \
 		-e "/^CPPFLAGS /s:=:+=:" \

@@ -52,12 +52,12 @@ src_configure() {
 		$(use_with ssl openssl)
 		--cache-file="${S}"/config.cache
 		--disable-nls
-		--with-libpcap="${EROOT}"/usr
-		--with-libpcre="${EROOT}"/usr
-		--with-zlib="${EROOT}"/usr
-		--with-libssh2="${EROOT}"/usr
-		--with-liblua="${EROOT}"/usr
-		--with-liblua="${EROOT}"/usr
+		--with-libpcap="${ESYSROOT}"/usr
+		--with-libpcre="${ESYSROOT}"/usr
+		--with-zlib="${ESYSROOT}"/usr
+		--with-libssh2="${ESYSROOT}"/usr
+		--with-liblua="${ESYSROOT}"/usr
+		--with-liblua="${ESYSROOT}"/usr
 		--without-ndiff
 		--without-zenmap
 	)

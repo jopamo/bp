@@ -77,7 +77,7 @@ src_configure() {
 		--disable-papi \
 		--with-xml-catalog="${EPREFIX}"/etc/xml/catalog \
 		--libdir="${EPREFIX}"/usr/lib \
-		CUPS_CONFIG="${EROOT}/usr/bin/cups-config"
+		CUPS_CONFIG="${BROOT}/usr/bin/cups-config"
 }
 
 src_install() {

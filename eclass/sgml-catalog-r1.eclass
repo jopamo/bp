@@ -1,6 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: sgml-catalog-r1.eclass
+# @MAINTAINER:
+# 1g4 Project <1g4@example.org>
 # @SUPPORTED_EAPIS: 7
 # @BLURB: Functions for installing SGML catalogs
 
@@ -18,7 +20,9 @@ if [[ ${CATEGORY}/${PN} != app-tex/sgml-common ]]; then
 	RDEPEND=">=app-tex/sgml-common-0.6.3-r7"
 fi
 
-# Regenerate /etc/sgml/catalog to include all installed catalogs
+# @FUNCTION: sgml-catalog-r1_update_catalog
+# @DESCRIPTION:
+# Regenerate /etc/sgml/catalog to include all installed catalogs.
 sgml-catalog-r1_update_catalog() {
 	local shopt_save=$(shopt -p nullglob)
 	shopt -s nullglob
@@ -38,6 +42,8 @@ sgml-catalog-r1_update_catalog() {
 	fi
 }
 
+# @FUNCTION: sgml-catalog-r1_update_env
+# @DESCRIPTION:
 # Remove obsolete environment files. They can break tools such as asciidoc.
 sgml-catalog-r1_update_env() {
 	rm -f "${EROOT}/etc/env.d/93sgmltools-lite" "${EROOT}/etc/sgml/sgml.env" "${EROOT}/etc/sgml/sgml.cenv"

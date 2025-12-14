@@ -1981,6 +1981,10 @@ distutils-r1_src_configure() {
 	return ${ret}
 }
 
+# @FUNCTION: get_modname
+# @USAGE: [version]
+# @DESCRIPTION:
+# Get the suffix for shared libraries (modules) for the current host.
 get_modname() {
 	local modname
 	local ver=$1

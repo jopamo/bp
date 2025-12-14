@@ -1,6 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: kernel-2.eclass
+# @MAINTAINER:
+# 1g4 Project <1g4@example.org>
 # @SUPPORTED_EAPIS: 7 8
 # @BLURB: Minimal eclass for kernel packages based on stable git branches
 
@@ -14,6 +16,10 @@ esac
 HOMEPAGE="https://www.kernel.org/"
 : "${LICENSE:="GPL-2"}"
 RESTRICT="binchecks strip"
+
+# @ECLASS_VARIABLE: LINUX_HOSTCFLAGS
+# @DESCRIPTION:
+# CFLAGS for the host C compiler.
 : "${LINUX_HOSTCFLAGS:="-Wall -Wstrict-prototypes -Os -fomit-frame-pointer -I${S}/include"}"
 
 IUSE="+symlink"
@@ -66,10 +72,19 @@ postinst_sources() {
 }
 
 # Cross-compile support functions (optional, kept for completeness)
+
+# @FUNCTION: kernel_header_destdir
+# @INTERNAL
+# @DESCRIPTION:
+# Return destination directory for kernel headers.
 kernel_header_destdir() {
 	[[ ${CTARGET} == ${CHOST} ]] && echo /usr/include || echo /usr/${CTARGET}/usr/include
 }
 
+# @FUNCTION: env_setup_kernel_makeopts
+# @INTERNAL
+# @DESCRIPTION:
+# Set up KERNEL_MAKEOPTS for building the kernel.
 env_setup_kernel_makeopts() {
 	export KARCH=$(tc-arch-kernel)
 	KERNEL_MAKEOPTS=( ARCH="${KARCH}" )
@@ -92,6 +107,8 @@ env_setup_kernel_makeopts() {
 }
 
 # @FUNCTION: kernel-2_src_prepare
+# @DESCRIPTION:
+# Apply user patches.
 kernel-2_src_prepare() {
 	debug-print "Applying any user patches"
 	eapply_user

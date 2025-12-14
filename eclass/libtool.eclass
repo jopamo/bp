@@ -1,5 +1,8 @@
 # @ECLASS: libtool.eclass
+# @MAINTAINER:
+# 1g4 Project <1g4@example.org>
 # @SUPPORTED_EAPIS: 7 8
+# @BLURB: Applies patches to bundled libtool files
 # @DESCRIPTION:
 # Applies patches to bundled libtool files (e.g., ltmain.sh) using
 # app-portage/elt-patches. This does not invoke libtoolize, so it
@@ -15,8 +18,14 @@ if [[ -z ${_LIBTOOL_ECLASS} ]]; then
 
   inherit toolchain-funcs
 
+  # @ECLASS_VARIABLE: LIBTOOL_DEPEND
+  # @DESCRIPTION:
+  # The dependency string for the tool that provides `eltpatch`.
   : "${LIBTOOL_DEPEND:=>=app-port/elt-patches-20250305}"
 
+  # @ECLASS_VARIABLE: LIBTOOL_AUTO_DEPEND
+  # @DESCRIPTION:
+  # Set to "no" to disable automatic dependency on app-port/elt-patches.
   : "${LIBTOOL_AUTO_DEPEND:=yes}"
   if [[ "${LIBTOOL_AUTO_DEPEND}" != "no" ]]; then
     BDEPEND+=" ${LIBTOOL_DEPEND}"

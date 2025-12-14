@@ -11,8 +11,8 @@ SRC_URI="https://github.com/libfuse/sshfs/archive/${SNAPSHOT}.tar.gz -> sshfs-${
 S="${WORKDIR}/sshfs-${SNAPSHOT}"
 
 LICENSE="GPL-2"
-KEYWORDS="amd64 arm64"
 SLOT="0"
+KEYWORDS="amd64 arm64"
 
 DEPEND="
 	app-fs/fuse:3

@@ -2,8 +2,8 @@
 
 EAPI=8
 
-HOMEPAGE="https://www.sdaoden.eu/code.html"
 DESCRIPTION="Enhanced mailx-compatible mail client based on Heirloom mailx (nail)"
+HOMEPAGE="https://www.sdaoden.eu/code.html"
 SRC_URI="https://ftp.sdaoden.eu/${P}.tar.xz"
 
 LICENSE="BSD BSD-4 ISC RSA"

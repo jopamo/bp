@@ -11,9 +11,9 @@ SRC_URI="https://docbook.org/sgml/${PV}/${MY_P}.zip"
 
 LICENSE="docbook"
 SLOT="0"
-KEYWORDS="amd64 arm64"
-
 S="${WORKDIR}"
+
+KEYWORDS="amd64 arm64"
 
 PATCHES=( "${FILESDIR}"/${P}-catalog.diff )
 

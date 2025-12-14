@@ -11,14 +11,14 @@ SRC_URI="https://docbook.org/xml/${PV}/${MY_P}.zip"
 
 LICENSE="docbook"
 SLOT="0"
+S=${WORKDIR}
+
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	app-tex/docbook-xsl-stylesheets
 	app-tex/build-docbook-catalog
 "
-
-S=${WORKDIR}
 
 src_prepare() {
 	# Prepend OVERRIDE directive

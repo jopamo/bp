@@ -15,8 +15,6 @@ S="${WORKDIR}/nginx-${SNAPSHOT}"
 LICENSE="BSD-2 BSD SSLeay MIT GPL-2 GPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-RESTRICT="test"
-
 IUSE="
 	# 'minimal' - aim for a lightweight reverse-proxy-only build
 	minimal
@@ -41,6 +39,8 @@ IUSE="
 	pcre-jit
 	systemd
 "
+
+RESTRICT="test"
 
 pkg_setup() {
 	NGINX_HOME="/var/lib/nginx"

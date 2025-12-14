@@ -26,6 +26,10 @@ esac
 
 [[ ${CATEGORY} == "perl-core" ]] && inherit alternatives
 
+# @ECLASS_VARIABLE: perlinfo_done
+# @INTERNAL
+# @DESCRIPTION:
+# Internal flag to ensure perlinfo is run only once.
 perlinfo_done=false
 
 # @FUNCTION: perl_set_version
@@ -622,10 +626,18 @@ perl_get_wikiurl() {
 	fi
 }
 
+# @FUNCTION: perl_get_wikiurl_features
+# @DESCRIPTION:
+# Convenience helper for returning the Gentoo Wiki maintenance page URL of a
+# package, with the anchor for Optional Features.
 perl_get_wikiurl_features() {
 	perl_get_wikiurl Optional_Features
 }
 
+# @FUNCTION: perl_get_wikiurl_tests
+# @DESCRIPTION:
+# Convenience helper for returning the Gentoo Wiki maintenance page URL of a
+# package, with the anchor for Testing.
 perl_get_wikiurl_tests() {
 	perl_get_wikiurl Testing
 }

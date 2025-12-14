@@ -2,71 +2,27 @@
 # This file contains descriptions of global USE flags.
 # Keep this list sorted alphabetically.
 
-3com - Enable support for 3Com
 acl - Add support for Access Control Lists
 alsa - Add support for the Advanced Linux Sound Architecture (ALSA)
 amdgpu - Enable support for AMD GPU
-amd-ucode - Enable support for AMD microcode
 apparmor - Enable support for AppArmor
-argon2 - Enable support for Argon2
-ar3k - Enable support for AR3K
 assertions - Enable support for assertions
-ath10k - Enable support for ath10k
-ath11k - Enable support for ath11k
-ath12k - Enable support for ath12k
-ath6k - Enable support for ath6k
-atmel - Enable support for Atmel
-audit - Enable support for audit
-bash-completion - Enable support for bash-completion
-bfs - Enable support for BFS
 binfmt - Enable support for binfmt
-bits - Enable support for bits
 blkid - Enable support for blkid
-blkdiscard - Enable support for blkdiscard
-blkpr - Enable support for blkpr
-blkzone - Enable support for blkzone
 block - Enable support for block functionality
-blockdev - Enable support for blockdev
-bnx2 - Enable support for Broadcom bnx2
 bootloader - Enable support for bootloader
-boost - Enable support for Boost
 bpf - Enable support for Berkeley Packet Filter
 bpf-framework - Enable support for BPF framework
-brcm - Enable support for Broadcom
 bsdtar - Enable support for bsdtar
 bootstrap - Enable support for bootstrapping
-btrfs - Enable support for Btrfs
 build - Enable support for building
 build-tests - Enable support for building tests
 bzip2 - Add support for bzip2 compression
-cal - Enable support for cal
-capstone - Enable support for capstone
 caps - Add support for POSIX capabilities
-carl9170fw - Enable support for carl9170 firmware
-cbfw - Enable support for cbfw
-chcpu - Enable support for chcpu
-chfn-chsh - Enable support for chfn-chsh
-chmem - Enable support for chmem
-choom - Enable support for choom
-cis - Enable support for CIS
 client - Enable support for client functionality
-col - Enable support for col
-colcrt - Enable support for colcrt
-colrm - Enable support for colrm
-conntrack - Enable support for conntrack
 coredump - Enable support for coredump
-cramfs - Enable support for cramfs
-cryptsetup - Enable support for cryptsetup
-cryptsetup-dlopen - Enable support for cryptsetup dlopen
-ct2fw - Enable support for ct2fw
-ctfw - Enable support for ctfw
-ctrlaltdel - Enable support for ctrlaltdel
-cube - Enable support for cube
 cups - Add support for CUPS (Common Unix Printing System)
 curl - Add support for client-side URL transfer library
-custom-cflags - Enable support for custom cflags
-cxgb4 - Enable support for cxgb4
-cypress - Enable support for Cypress
 dbus - Add support for D-Bus
 debug - Enable extra debug codepaths, like assertions and extra output
 debug-messages - Enable support for debug messages
@@ -75,7 +31,6 @@ dhcp4 - Enable support for DHCPv4
 dlang - Enable support for D language
 dns - Enable support for DNS
 doc - Add extra documentation (API, Javadoc, etc)
-dpaa2 - Enable support for DPAA2
 efi - Enable support for EFI
 elfutils - Enable support for elfutils
 examples - Install examples, usually source code
@@ -92,7 +47,6 @@ gnutls - Enable support for GnuTLS
 go-bootstrap - Enable bootstrapping with Go
 hostnamed - Enable support for hostnamed
 hwdb - Enable support for hwdb
-i915 - Enable support for i915
 importd - Enable support for importd
 installkernel - Enable support for installing kernel
 ipc - Enable support for Inter-Process Communication

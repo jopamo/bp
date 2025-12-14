@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs
+
 
 DESCRIPTION="Prebuilt Rust compiler and toolchain (systems programming language)"
 HOMEPAGE="https://www.rust-lang.org/"

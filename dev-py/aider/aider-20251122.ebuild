@@ -4,7 +4,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 
-inherit distutils-r1 toolchain-funcs
+inherit distutils-r1
 
 DESCRIPTION="AI pair programming in your terminal"
 HOMEPAGE="https://github.com/Aider-AI/aider"

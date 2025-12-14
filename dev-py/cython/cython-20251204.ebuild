@@ -8,7 +8,7 @@ PYTHON_TESTED=( python3_{10..12} )
 PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" pypy3 pypy3_11 python3_13 )
 PYTHON_REQ_USE="threads(+)"
 
-inherit distutils-r1 multiprocessing toolchain-funcs
+inherit distutils-r1 multiprocessing toolchain-funcs flag-o-matic
 
 MY_P=${P/_rc/rc}
 DESCRIPTION="A Python to C compiler"

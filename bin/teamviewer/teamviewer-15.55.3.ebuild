@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit optfeature doins xdg
+inherit doins xdg
 
 MY_MAJOR="$(ver_cut 1)"
 MY_P="${PN}${MY_MAJOR}"

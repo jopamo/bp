@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic rust-toolchain
+inherit flag-o-matic
 
 RUST_VERSION=1.74.1
 

@@ -23,7 +23,7 @@ DEPEND="
 PATCHES=( "${FILESDIR}"/${PN}-6.1.0-noexecstack-detect.patch	)
 
 src_unpack() {
-	tar xvf "${DISTDIR}"/gmp-*.tar.zst
+	tar xvf "${DISTDIR}/gmp-$(ver_cut 1-2).0-$(ver_cut 3).tar.zst"
 }
 
 

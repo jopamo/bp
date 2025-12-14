@@ -4,7 +4,7 @@ EAPI=8
 
 SNAPSHOT=1dd86d835b27ed149b66aee1a4853d1db8a1f44c
 
-inherit libtool autotools
+inherit autotools
 
 DESCRIPTION="library for developing printing features, split out of cups-filters"
 HOMEPAGE="https://github.com/OpenPrinting/libcupsfilters"

@@ -8,8 +8,8 @@ inherit distutils-r1
 
 DESCRIPTION="Let’s Encrypt client to automate deployment of X.509 certificates"
 
-KEYWORDS="amd64 arm64"
 HOMEPAGE="https://github.com/certbot/certbot"
+KEYWORDS="amd64 arm64"
 SNAPSHOT=8c4e3080ddd72123420f8882c8b96921c8d33304
 SRC_URI="https://github.com/certbot/certbot/archive/${SNAPSHOT}.tar.gz -> certbot-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/certbot-${SNAPSHOT}/certbot"

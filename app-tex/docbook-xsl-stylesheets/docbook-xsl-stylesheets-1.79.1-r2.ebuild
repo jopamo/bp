@@ -11,8 +11,8 @@ HOMEPAGE="https://github.com/docbook/wiki/wiki"
 SRC_URI="mirror://sourceforge/docbook/${MY_P}.tar.bz2"
 
 LICENSE="BSD"
-SLOT="0"
 S="${WORKDIR}/${MY_P}"
+SLOT="0"
 
 KEYWORDS="amd64 arm64"
 

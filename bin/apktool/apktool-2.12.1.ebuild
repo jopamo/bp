@@ -12,8 +12,8 @@ S="${WORKDIR}"
 
 LICENSE="APACHE"
 
-RESTRICT="strip mirror"
 SLOT="0"
+RESTRICT="strip mirror"
 KEYWORDS="amd64"
 
 QA_PREBUILT="*"

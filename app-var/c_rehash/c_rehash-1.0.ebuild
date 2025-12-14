@@ -6,8 +6,8 @@ DESCRIPTION="bash version of c_rehash script from OpenSSL"
 HOMEPAGE="https://www.openssl.org/"
 
 LICENSE="openssl"
-SLOT="0"
 S=${WORKDIR}
+SLOT="0"
 
 KEYWORDS="amd64 arm64"
 

@@ -20,13 +20,12 @@ KEYWORDS="amd64 arm64"
 
 IUSE="systemd"
 
+S="${WORKDIR}"
 RESTRICT="strip mirror"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 BDEPEND="app-dev/patchelf"
-
-S="${WORKDIR}"
 
 src_unpack() {
 	unpack_deb ${A}

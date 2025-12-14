@@ -6,8 +6,8 @@ DESCRIPTION="PAM base configuration files"
 HOMEPAGE="https://1g4.org"
 
 LICENSE="GPL-2"
-SLOT="0"
 S=${WORKDIR}
+SLOT="0"
 
 KEYWORDS="amd64 arm64"
 

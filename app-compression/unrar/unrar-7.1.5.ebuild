@@ -9,8 +9,8 @@ HOMEPAGE="http://www.rarlab.com/rar_add.htm"
 SRC_URI="http://www.rarlab.com/rar/${PN}src-${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="unRAR"
-SLOT="0"
 S=${WORKDIR}/unrar
+SLOT="0"
 
 KEYWORDS="amd64 arm64"
 

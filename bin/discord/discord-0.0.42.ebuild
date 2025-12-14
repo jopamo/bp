@@ -10,13 +10,14 @@ inherit unpacker xdg
 DESCRIPTION="All-in-one voice and text chat for gamers and communities"
 HOMEPAGE="https://discord.com/"
 SRC_URI="amd64? ( https://dl.discordapp.net/apps/linux/${PV}/${P}.tar.gz )"
-S="${WORKDIR}"
-
-RESTRICT="strip mirror"
 
 LICENSE="DISCORD"
+RESTRICT="strip mirror"
+
 SLOT="0"
 KEYWORDS="amd64"
+
+S="${WORKDIR}/${MY_PN^}"
 
 IUSE="seccomp"
 
@@ -47,8 +48,6 @@ DESTDIR="/opt/${MY_PN}"
 QA_PREBUILT="*"
 
 CONFIG_CHECK="~USER_NS"
-
-S="${WORKDIR}/${MY_PN^}"
 
 src_unpack() {
 	unpack ${MY_PN}-${MY_PV}.tar.gz

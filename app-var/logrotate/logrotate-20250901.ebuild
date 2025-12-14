@@ -59,6 +59,6 @@ src_install() {
 		doins examples/logrotate.timer
 		doins examples/logrotate.service
 
-		dosym /usr/lib/systemd/system/logrotate.timer usr/lib/systemd/system/timers.target.wants/logrotate.timer
+		dosym -r /usr/lib/systemd/system/logrotate.timer usr/lib/systemd/system/timers.target.wants/logrotate.timer
 	fi
 }

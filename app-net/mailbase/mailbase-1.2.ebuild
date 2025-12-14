@@ -32,7 +32,7 @@ src_install() {
 	keepdir /var/spool/mail
 	fowners root:mail /var/spool/mail
 	fperms 03775 /var/spool/mail
-	dosym /var/spool/mail /var/mail
+	dosym -r /var/spool/mail /var/mail
 
 	if use pam ; then
 		local p

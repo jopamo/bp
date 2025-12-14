@@ -28,6 +28,6 @@ src_install() {
 	dobin pigz
 
 	for x in gzip gunzip zcat ; do
-		dosym pigz usr/bin/${x}
+		dosym -r /usr/bin/pigz /usr/bin/${x}
 	done
 }

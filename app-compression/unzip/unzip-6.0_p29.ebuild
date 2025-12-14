@@ -67,6 +67,6 @@ src_compile() {
 
 src_install() {
 	dobin unzip funzip unzipsfx unix/zipgrep
-	dosym unzip /usr/bin/zipinfo
+	dosym -r /usr/bin/unzip /usr/bin/zipinfo
 	doman man/*.1
 }

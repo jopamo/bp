@@ -2,14 +2,41 @@ name: pkgcheck
 
 on:
   push:
-    branches: [ main ]
   pull_request:
-    branches: [ main ]
 
 jobs:
   pkgcheck:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run pkgcheck
-        uses: pkgcore/pkgcheck-action@v1
+
+      - name: Install pkgcheck
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install pkgcheck
+
+      - name: Run enabled pkgcheck checks
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          checks=(
+            EendMissingArgCheck
+            EmptyDirsCheck
+            EqualVersionsCheck
+            FetchablesUrlCheck
+            GitCommitMessageCheck
+            GitEclassCommitsCheck
+            GitPkgCommitsCheck
+            GlobCheck
+            GlsaCheck
+            HomepageCheck
+            HomepageUrlCheck
+            ImlateCheck
+            InheritsCheck
+          )
+
+          for check in "${checks[@]}"; do
+            echo "==> pkgcheck scan -c $check"
+            pkgcheck scan -c "$check"
+          done

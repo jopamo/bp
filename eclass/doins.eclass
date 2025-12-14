@@ -51,7 +51,7 @@ bashcomp_alias() {
 	shift
 
 	for f; do
-		dosym "${base}" "$(get_bashcompdir)/${f}" || return
+		dosym -r "${base}" "$(get_bashcompdir)/${f}" || return
 	done
 }
 
@@ -161,7 +161,7 @@ systemd_enable_service() {
 	local target=${1} service=${2}
 	local unitdir=$(systemd_get_systemunitdir)
 	dodir "${unitdir}/${target}.wants"
-	dosym "../${service}" "${unitdir}/${target}.wants/${service##*/}"
+	dosym -r "${unitdir}/${service}" "${unitdir}/${target}.wants/${service##*/}"
 }
 
 systemd_update_catalog() {

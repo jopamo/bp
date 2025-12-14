@@ -138,7 +138,7 @@ tree-sitter-grammar_src_install() {
 	else
 		local soname=lib${PN}$(get_libname $(_get_tsg_abi_ver))
 		dolib.so "${WORKDIR}/${soname}"
-		dosym "${soname}" /usr/lib/lib${PN}$(get_libname)
+		dosym -r "/usr/lib/${soname}" /usr/lib/lib${PN}$(get_libname)
 	fi
 
 	for binding in "${TS_BINDINGS[@]}"; do

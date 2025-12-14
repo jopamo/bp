@@ -134,7 +134,7 @@ src_install() {
 
 	# create symlink for cups (bug #552310)
 	if use cups ; then
-		dosym ../../../bin/smbspool /usr/libexec/cups/backend/smb
+		dosym -r /usr/bin/smbspool /usr/libexec/cups/backend/smb
 	fi
 
 	# install example config file

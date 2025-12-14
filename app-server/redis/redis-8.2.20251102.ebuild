@@ -161,7 +161,7 @@ src_install() {
 	dobin src/redis-cli
 	dobin src/redis-benchmark src/redis-server src/redis-check-aof src/redis-check-rdb
 	fperms 0750 /usr/bin/redis-benchmark
-	dosym redis-server /usr/bin/redis-sentinel
+	dosym -r /usr/bin/redis-server /usr/bin/redis-sentinel
 }
 
 pkg_preinst() {

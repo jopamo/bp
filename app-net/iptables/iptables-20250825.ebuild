@@ -81,7 +81,7 @@ src_install() {
 	default
 
 	dobin iptables/iptables-apply
-	dosym iptables-apply /usr/sbin/ip6tables-apply
+	dosym -r /usr/bin/iptables-apply /usr/sbin/ip6tables-apply
 	doman iptables/iptables-apply.8
 
 	insinto /usr/include

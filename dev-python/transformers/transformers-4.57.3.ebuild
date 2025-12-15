@@ -23,6 +23,7 @@ RESTRICT="test" # Need network, too long to execute
 
 RDEPEND="
 	>=dev-python/huggingface_hub-0.34.0[${PYTHON_SINGLE_USEDEP}]
+	<dev-python/huggingface_hub-1
 	=dev-python/tokenizers-0.22*[${PYTHON_SINGLE_USEDEP}]
 	$(python_gen_cond_dep '
 		dev-python/filelock[${PYTHON_USEDEP}]

@@ -3,8 +3,9 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_FULLY_TESTED=( python3_{11..13} )
-PYTHON_COMPAT=( "${PYTHON_FULLY_TESTED[@]}" python3_14 )
+PYPI_VERIFY_REPO=https://github.com/networkx/networkx
+PYTHON_FULLY_TESTED=( python3_{11..14} )
+PYTHON_COMPAT=( "${PYTHON_FULLY_TESTED[@]}" )
 
 inherit distutils-r1 pypi 
 
@@ -30,20 +31,15 @@ BDEPEND="
 	)
 "
 
+EPYTEST_PLUGINS=()
 EPYTEST_XDIST=1
 distutils_enable_tests pytest
-
-PATCHES=(
-	# minimal fix for https://github.com/networkx/networkx/issues/8091
-	"${FILESDIR}/${P}-py314.patch"
-)
 
 src_test() {
 	virtx distutils-r1_src_test
 }
 
 python_test() {
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	# virtx implies nonfatal
 	nonfatal epytest || die
 }

@@ -8,7 +8,48 @@ PYPI_VERIFY_REPO=https://github.com/ijl/orjson
 PYTHON_COMPAT=( python3_{11..14} )
 
 # upstream is vendoring crates
-CRATES=""
+CRATES="
+	associative-cache@2.0.0
+	bytecount@0.6.9
+	bytes@1.11.0
+	cc@1.2.48
+	cfg-if@1.0.4
+	crunchy@0.2.4
+	encoding_rs@0.8.35
+	find-msvc-tools@0.1.5
+	gimli@0.32.3
+	half@2.7.1
+	itoa@1.0.15
+	itoap@1.0.1
+	jiff-static@0.2.16
+	jiff@0.2.16
+	libc@0.2.178
+	memchr@2.7.6
+	once_cell@1.21.3
+	portable-atomic-util@0.2.4
+	portable-atomic@1.11.1
+	proc-macro2@1.0.103
+	pyo3-build-config@0.27.2
+	pyo3-ffi@0.27.2
+	quote@1.0.42
+	ryu@1.0.20
+	serde@1.0.228
+	serde_core@1.0.228
+	serde_derive@1.0.228
+	serde_json@1.0.145
+	shlex@1.3.0
+	simdutf8@0.1.5
+	smallvec@1.15.1
+	syn@2.0.111
+	target-lexicon@0.13.3
+	unicode-ident@1.0.22
+	unwinding@0.2.8
+	uuid@1.19.0
+	version_check@0.9.5
+	xxhash-rust@0.8.15
+	zerocopy-derive@0.8.31
+	zerocopy@0.8.31
+"
 RUST_MIN_VER="1.88.0"
 
 inherit cargo distutils-r1 pypi

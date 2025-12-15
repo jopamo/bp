@@ -2,7 +2,8 @@
 
 EAPI=8
 
-DISTUTILS_USE_PEP517=standalone
+DISTUTILS_USE_PEP517=hatchling
+PYPI_VERIFY_REPO=https://github.com/twisted/incremental
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
@@ -10,7 +11,7 @@ inherit distutils-r1 pypi
 DESCRIPTION="Incremental is a small library that versions your Python projects"
 HOMEPAGE="
 	https://github.com/twisted/incremental/
-	https://pypi.org/project/incremental/
+	https://pypi.org/project/Incremental/
 "
 
 LICENSE="MIT"
@@ -20,7 +21,7 @@ IUSE="test"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
-	>=dev-py/setuptools-61.0[${PYTHON_USEDEP}]
+	>=dev-python/packaging-17.0[${PYTHON_USEDEP}]
 "
 # note: most of test deps are for examples that we can't run without
 # Internet
@@ -29,9 +30,6 @@ BDEPEND="
 	test? (
 		dev-python/twisted[${PYTHON_USEDEP}]
 	)
-"
-RDEPEND+="
-	>=dev-python/click-6.0[${PYTHON_USEDEP}]
 "
 
 python_test() {

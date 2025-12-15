@@ -9,7 +9,7 @@ DISTUTILS_USE_PEP517=setuptools
 # pypy bundles a modified version of cffi. Use python_gen_cond_dep instead.
 PYTHON_COMPAT=( python3_{11..14} python3_14t )
 
-inherit distutils-r1 toolchain-funcs pypi flag-o-matic
+inherit distutils-r1 toolchain-funcs pypi
 
 DESCRIPTION="Foreign Function Interface for Python calling C code"
 HOMEPAGE="
@@ -21,7 +21,7 @@ LICENSE="MIT"
 SLOT="0/${PV}"
 KEYWORDS="amd64 arm64"
 
-
+# Needs recent libffi for HPPA fixes
 DEPEND="
 	>=lib-core/libffi-3.4.4-r1:=
 "

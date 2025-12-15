@@ -23,7 +23,9 @@ S=${WORKDIR}/${MY_P}
 
 LICENSE="BSD-2"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+if [[ ${PV} != *_rc* ]]; then
+	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~loong ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86"
+fi
 IUSE="doc latex"
 
 RDEPEND="
@@ -71,16 +73,17 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/sphinx-3.2.1-doc-link.patch"
-	"${FILESDIR}/${P}-fix-python3.14.patch" # patch collection, merged upstream
-	# https://github.com/sphinx-doc/sphinx/pull/13610
-	# test assumptions for docutils 0.22
-	"${FILESDIR}"/${P}-testfix-docutils-0.22.patch
-	"${FILESDIR}"/${P}-metadata-docutils-0.22.patch
 )
 
+EPYTEST_PLUGINS=()
+EPYTEST_RERUNS=5
+# EPYTEST_XDIST breaks stuff
 distutils_enable_tests pytest
 
 python_prepare_all() {
+	# roman-numerals-py has been renamed (no -py), but the package can't be pkgmoved "yet".
+	# For rc1, simply fix pip check by using the old name.
+	sed -i -e 's:roman-numerals:roman-numerals-py:' pyproject.toml || die
 	# disable internet access
 	sed -i -e 's:^intersphinx_mapping:disabled_&:' \
 		doc/conf.py || die
@@ -98,12 +101,7 @@ python_test() {
 	mkdir -p "${BUILD_DIR}/sphinx_tempdir" || die
 	local -x SPHINX_TEST_TEMPDIR="${BUILD_DIR}/sphinx_tempdir"
 
-	local EPYTEST_DESELECT=(
-		# less interesting failures
-		tests/test_builders/test_build_latex.py::test_build_latex_doc
-		tests/test_extensions/test_ext_math.py::test_imgmath_png
-		tests/test_extensions/test_ext_math.py::test_imgmath_numfig_html
-	)
+	local EPYTEST_DESELECT=()
 	case ${EPYTHON} in
 		pypy3.11)
 			EPYTEST_DESELECT+=(
@@ -115,23 +113,25 @@ python_test() {
 				tests/test_util/test_util_typing.py::test_stringify_annotation
 				tests/test_util/test_util_typing.py::test_stringify_type_union_operator
 				# from pypy3 era
-				tests/test_extensions/test_ext_autodoc.py::test_autodoc_exception
-				tests/test_extensions/test_ext_autodoc.py::test_autodoc_ignore_module_all
-				tests/test_extensions/test_ext_autodoc.py::test_autodoc_inherited_members_None
-				tests/test_extensions/test_ext_autodoc.py::test_autodoc_subclass_of_builtin_class
-				tests/test_extensions/test_ext_autodoc.py::test_automethod_for_builtin
-				tests/test_extensions/test_ext_autodoc.py::test_cython
-				tests/test_extensions/test_ext_autodoc.py::test_format_signature
-				tests/test_extensions/test_ext_autodoc.py::test_partialfunction
-				tests/test_extensions/test_ext_autodoc_autoclass.py::test_autodoc_process_bases
-				tests/test_extensions/test_ext_autodoc_autoclass.py::test_show_inheritance_for_decendants_of_generic_type
-				tests/test_extensions/test_ext_autodoc_autoclass.py::test_show_inheritance_for_subclass_of_generic_type
-				tests/test_extensions/test_ext_autodoc_autofunction.py::test_builtin_function
-				tests/test_extensions/test_ext_autodoc_autofunction.py::test_methoddescriptor
-				tests/test_extensions/test_ext_autodoc_automodule.py::test_automodule_inherited_members
-				tests/test_extensions/test_ext_autodoc_preserve_defaults.py::test_preserve_defaults_special_constructs
-				tests/test_extensions/test_ext_autosummary.py::test_autosummary_generate_content_for_module
-				tests/test_extensions/test_ext_autosummary.py::test_autosummary_generate_content_for_module_skipped
+				tests/test_ext_autodoc/test_ext_autodoc.py::test_autodoc_exception
+				tests/test_ext_autodoc/test_ext_autodoc.py::test_autodoc_ignore_module_all
+				tests/test_ext_autodoc/test_ext_autodoc.py::test_autodoc_inherited_members_None
+				tests/test_ext_autodoc/test_ext_autodoc.py::test_autodoc_subclass_of_builtin_class
+				tests/test_ext_autodoc/test_ext_autodoc.py::test_automethod_for_builtin
+				tests/test_ext_autodoc/test_ext_autodoc.py::test_cython
+				tests/test_ext_autodoc/test_ext_autodoc.py::test_partialfunction
+				tests/test_ext_autodoc/test_ext_autodoc_autoclass.py::test_autodoc_process_bases
+				tests/test_ext_autodoc/test_ext_autodoc_autoclass.py::test_show_inheritance_for_decendants_of_generic_type
+				tests/test_ext_autodoc/test_ext_autodoc_autoclass.py::test_show_inheritance_for_subclass_of_generic_type
+				tests/test_ext_autodoc/test_ext_autodoc_autofunction.py::test_builtin_function
+				tests/test_ext_autodoc/test_ext_autodoc_autofunction.py::test_methoddescriptor
+				tests/test_ext_autodoc/test_ext_autodoc_automodule.py::test_automodule_inherited_members
+				tests/test_ext_autodoc/test_ext_autodoc_preserve_defaults.py::test_preserve_defaults_special_constructs
+				tests/test_ext_autodoc/test_ext_autodoc_signatures.py::test_format_class_signatures_text_signature
+				tests/test_ext_autodoc/test_ext_autodoc_signatures.py::test_format_class_signatures_no_text_signature
+				tests/test_ext_autodoc/test_ext_autodoc_signatures.py::test_format_method_signatures_error_handling
+				tests/test_ext_autosummary/test_ext_autosummary.py::test_autosummary_generate_content_for_module
+				tests/test_ext_autosummary/test_ext_autosummary.py::test_autosummary_generate_content_for_module_skipped
 				tests/test_util/test_util_inspect.py::test_isattributedescriptor
 				tests/test_util/test_util_inspect.py::test_signature
 				tests/test_util/test_util_typing.py::test_is_invalid_builtin_class
@@ -139,7 +139,5 @@ python_test() {
 			;;
 	esac
 
-	# note: pytest-xdist causes random test failures
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest -p rerunfailures --reruns=5
+	epytest
 }

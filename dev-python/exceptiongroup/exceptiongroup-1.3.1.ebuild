@@ -3,6 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit_scm
+PYPI_VERIFY_REPO=https://github.com/agronholm/exceptiongroup
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 pypi
@@ -23,20 +24,5 @@ RDEPEND="
 	' 3.11 3.12)
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
-
-python_test() {
-	local EPYTEST_DESELECT=()
-	case ${EPYTHON} in
-		python3.14*)
-			EPYTEST_DESELECT+=(
-				# https://github.com/agronholm/exceptiongroup/issues/148
-				tests/test_exceptions.py::DeepRecursionInSplitAndSubgroup::test_deep_split
-				tests/test_exceptions.py::DeepRecursionInSplitAndSubgroup::test_deep_subgroup
-			)
-			;;
-	esac
-
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest
-}

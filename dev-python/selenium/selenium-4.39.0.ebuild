@@ -37,7 +37,7 @@ RDEPEND="
 	>=dev-python/trio-0.31.0[${PYTHON_USEDEP}]
 	>=dev-python/trio-websocket-0.12.2[${PYTHON_USEDEP}]
 	>=dev-python/typing-extensions-4.15.0[${PYTHON_USEDEP}]
-	>=dev-python/urllib3-2.5.0[${PYTHON_USEDEP}]
+	>=dev-python/urllib3-2.6.0[${PYTHON_USEDEP}]
 	>=dev-python/websocket-client-1.8.0[${PYTHON_USEDEP}]
 "
 BDEPEND="

@@ -142,7 +142,8 @@ src_configure() {
 		extended = true
 		cargo = "/usr/bin/cargo"
 		rustc = "/usr/bin/rustc"
-		tools = ["cargo","clippy","src"]
+		#tools = ["cargo","clippy","src"]
+		tools = ["cargo","clippy","rustdoc","rustfmt","rust-analyzer","rust-analyzer-proc-macro-srv","analysis","src"]
 		vendor = true
 		sanitizers = false
 		optimized-compiler-builtins = true

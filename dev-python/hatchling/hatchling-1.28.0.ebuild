@@ -95,6 +95,6 @@ python_test() {
 		tests/backend/builders/test_binary.py::TestBuildBootstrap::test_no_cargo
 	)
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest -p pytest_mock tests/backend
+	local EPYTEST_PLUGINS=( pytest-mock )
+	epytest tests/backend
 }

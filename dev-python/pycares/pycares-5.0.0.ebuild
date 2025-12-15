@@ -42,6 +42,12 @@ distutils_enable_tests pytest
 
 export PYCARES_USE_SYSTEM_LIB=1
 
+EPYTEST_DESELECT=(
+	# https://github.com/saghul/pycares/issues/287
+	# looks like forgotten to update the expected class
+	tests/test_all.py::DNSTest::test_idna2008_encoding
+)
+
 src_prepare() {
 	default
 	filter-flags -Wl,-z,defs

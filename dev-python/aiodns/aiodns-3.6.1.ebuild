@@ -2,8 +2,8 @@
 
 EAPI=8
 
-EPYTEST_PLUGINS=( pytest-asyncio )
 DISTUTILS_USE_PEP517=setuptools
+PYPI_VERIFY_REPO=https://github.com/aio-libs/aiodns
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 pypi
@@ -18,12 +18,13 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 # Tests fail with network-sandbox, since they try to resolve google.com
-PROPERTIES="test_network"
+PROPERTIES="test? ( test_network )"
 RESTRICT="test"
 
-RDEPEND=">=dev-python/pycares-4.9.0[${PYTHON_USEDEP}]"
+RDEPEND="<dev-python/pycares-5[${PYTHON_USEDEP}]"
 DEPEND="${RDEPEND}"
 
+EPYTEST_PLUGINS=( pytest-asyncio )
 distutils_enable_tests pytest
 
 python_test() {

@@ -6,7 +6,7 @@ inherit cargo
 
 DESCRIPTION="intuitive find & replace CLI"
 HOMEPAGE="https://github.com/jopamo/sd2"
-SNAPSHOT=d0d909da07f7894072a67ca68f42ac8d6f0f5802
+SNAPSHOT=63e744e3b409a862a6ecc2b41ad40f3efe9745e1
 SRC_URI="https://github.com/jopamo/sd2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

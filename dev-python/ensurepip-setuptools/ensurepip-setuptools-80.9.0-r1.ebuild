@@ -16,7 +16,7 @@ HOMEPAGE="
 	https://pypi.org/project/setuptools/
 "
 
-LICENSE="MIT LGPL-3 Apache-2.0 PSF-2 || ( Apache-2.0 MIT )"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="test"
@@ -60,7 +60,7 @@ declare -A VENDOR_LICENSES=(
 	[wheel]=MIT  # technically it also vendors packaging but we have that
 	[zipp]=MIT
 )
-
+LICENSE+=" ${VENDOR_LICENSES[*]}"
 
 src_prepare() {
 	distutils-r1_src_prepare

@@ -7,7 +7,7 @@ DISTUTILS_USE_PEP517=setuptools
 PYPI_PN="MarkupSafe"
 PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 
-inherit distutils-r1 pypi flag-o-matic
+inherit distutils-r1 pypi
 
 DESCRIPTION="Implements a XML/HTML/XHTML Markup safe string for Python"
 HOMEPAGE="

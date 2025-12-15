@@ -24,7 +24,7 @@ RDEPEND="
 distutils_enable_sphinx docs dev-python/sphinx-rtd-theme
 
 EPYTEST_PLUGINS=()
-EPYTEST_XDIST=1
+# tests are flaky with xdist
 distutils_enable_tests pytest
 
 python_prepare_all() {

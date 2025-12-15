@@ -3,6 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
+PYPI_VERIFY_REPO=https://github.com/pallets/werkzeug
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
@@ -25,8 +26,6 @@ RDEPEND="
 BDEPEND="
 	test? (
 		dev-python/ephemeral-port-reserve[${PYTHON_USEDEP}]
-		dev-python/pytest-timeout[${PYTHON_USEDEP}]
-		>=dev-python/pytest-xprocess-1[${PYTHON_USEDEP}]
 		>=dev-python/watchdog-2.3[${PYTHON_USEDEP}]
 		test-rust? (
 			app-crypto/cryptography[${PYTHON_USEDEP}]
@@ -34,6 +33,7 @@ BDEPEND="
 	)
 "
 
+EPYTEST_PLUGINS=( pytest-{timeout,xprocess} )
 distutils_enable_tests pytest
 
 python_test() {
@@ -48,6 +48,5 @@ python_test() {
 
 	# the default portage tempdir is too long for AF_UNIX sockets
 	local -x TMPDIR=/tmp
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest -p xprocess -p timeout tests
+	epytest
 }

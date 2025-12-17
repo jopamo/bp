@@ -122,3 +122,7 @@ python_test() {
 
 	[[ ${failed} ]] && die "epytest failed with ${EPYTHON}"
 }
+src_prepare() {
+    default
+    filter-flags -Wl,-z,defs
+}

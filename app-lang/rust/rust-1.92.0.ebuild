@@ -134,6 +134,7 @@ src_configure() {
 		llvm-config = "/usr/bin/llvm-config"
 		linker = "clang"
 		cc = "clang"
+		$(use elibc_musl && echo "crt-static = false")
 
 		[build]
 		docs = false

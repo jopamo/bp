@@ -38,7 +38,7 @@ RDEPEND="
 	>=dev-python/packaging-23.0[${PYTHON_USEDEP}]
 	>=dev-python/pygments-2.14[${PYTHON_USEDEP}]
 	>=dev-python/requests-2.30.0[${PYTHON_USEDEP}]
-	>=dev-python/roman-numerals-py-1.0.0[${PYTHON_USEDEP}]
+	>=dev-python/roman-numerals-1.0.0[${PYTHON_USEDEP}]
 	>=dev-python/snowballstemmer-2.2[${PYTHON_USEDEP}]
 	>=dev-python/sphinxcontrib-applehelp-1.0.7[${PYTHON_USEDEP}]
 	>=dev-python/sphinxcontrib-devhelp-1.0.6[${PYTHON_USEDEP}]
@@ -81,9 +81,6 @@ EPYTEST_RERUNS=5
 distutils_enable_tests pytest
 
 python_prepare_all() {
-	# roman-numerals-py has been renamed (no -py), but the package can't be pkgmoved "yet".
-	# For rc1, simply fix pip check by using the old name.
-	sed -i -e 's:roman-numerals:roman-numerals-py:' pyproject.toml || die
 	# disable internet access
 	sed -i -e 's:^intersphinx_mapping:disabled_&:' \
 		doc/conf.py || die

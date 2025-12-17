@@ -85,8 +85,11 @@ python_test() {
 }
 
 python_compile() {
-	filter-flags -Wl,-z,defs
 	# Force -j1 to avoid .o linking race conditions
 	local MAKEOPTS=-j1
 	distutils-r1_python_compile
+}
+src_prepare() {
+    default
+    filter-flags -Wl,-z,defs
 }

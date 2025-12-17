@@ -32,3 +32,7 @@ python_test() {
 	rm -rf librt || die
 	epytest smoke_tests.py
 }
+src_prepare() {
+    default
+    filter-flags -Wl,-z,defs
+}

@@ -25,7 +25,6 @@ EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 src_prepare() {
-	filter-flags -Wl,-z,defs
 	distutils-r1_src_prepare
 
 	if ! use native-extensions; then
@@ -34,7 +33,10 @@ src_prepare() {
 }
 
 python_compile() {
-	filter-flags -Wl,-z,defs
 	local -x CIBUILDWHEEL=1
 	distutils-r1_python_compile
+}
+src_prepare() {
+    default
+    filter-flags -Wl,-z,defs
 }

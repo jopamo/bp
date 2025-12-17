@@ -46,8 +46,7 @@ EPYTEST_IGNORE=(
 	# linters
 	tests/test_codebase.py
 )
-
 src_prepare() {
-	default
-	filter-flags -Wl,-z,defs
+    default
+    filter-flags -Wl,-z,defs
 }

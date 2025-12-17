@@ -49,7 +49,6 @@ PATCHES=(
 )
 
 src_prepare() {
-	filter-flags -Wl,-z,defs
 	if [[ ${CHOST} == *darwin* ]] ; then
 		# Don't obsessively try to find libffi
 		sed -i -e "s/.*\-iwithsysroot\/usr\/include\/ffi.*/\tpass/" setup.py || die
@@ -69,4 +68,8 @@ python_test() {
 
 	"${EPYTHON}" -c "import _cffi_backend as backend" || die
 	epytest src/c testing
+}
+src_prepare() {
+    default
+    filter-flags -Wl,-z,defs
 }

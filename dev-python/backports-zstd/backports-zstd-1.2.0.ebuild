@@ -47,3 +47,7 @@ src_prepare() {
 python_test() {
 	eunittest tests
 }
+src_prepare() {
+    default
+    filter-flags -Wl,-z,defs
+}

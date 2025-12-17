@@ -47,8 +47,7 @@ EPYTEST_DESELECT=(
 	# looks like forgotten to update the expected class
 	tests/test_all.py::DNSTest::test_idna2008_encoding
 )
-
 src_prepare() {
-	default
-	filter-flags -Wl,-z,defs
+    default
+    filter-flags -Wl,-z,defs
 }

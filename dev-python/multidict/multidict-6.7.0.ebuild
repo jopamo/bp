@@ -33,7 +33,6 @@ EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_prepare_all() {
-	filter-flags -Wl,-z,defs
 	# don't enable coverage or other pytest settings
 	sed -i -e '/cov/d' pytest.ini || die
 	# don't mangle CFLAGS
@@ -42,7 +41,6 @@ python_prepare_all() {
 }
 
 python_compile() {
-	filter-flags -Wl,-z,defs
 	if ! use native-extensions || [[ ${EPYTHON} == pypy3* ]]; then
 		local -x MULTIDICT_NO_EXTENSIONS=1
 	fi
@@ -63,4 +61,8 @@ python_test() {
 		cext=--no-c-extensions
 	fi
 	epytest "${cext}"
+}
+src_prepare() {
+    default
+    filter-flags -Wl,-z,defs
 }

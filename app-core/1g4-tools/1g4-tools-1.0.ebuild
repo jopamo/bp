@@ -2,8 +2,6 @@
 
 EAPI=8
 
-
-
 DESCRIPTION="Meta package installed by default but will auto purge if not kept"
 HOMEPAGE="https://1g4.org/"
 
@@ -48,7 +46,6 @@ app-net/aircrack-ng
 app-net/bind-tools
 app-net/dropbear
 app-net/ethtool
-app-net/hping
 app-net/iftop
 app-net/iperf
 app-net/iputils

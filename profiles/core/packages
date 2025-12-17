@@ -25,7 +25,6 @@
 *app-core/vim
 *app-core/which
 *app-crypto/blake3
-*app-dev/ctags
 *app-dev/patchelf
 *app-kernel/linux-firmware
 *app-net/chrony

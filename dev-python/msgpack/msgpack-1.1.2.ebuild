@@ -33,7 +33,6 @@ EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_prepare_all() {
-	filter-flags -Wl,-z,defs
 	# Remove pre-generated cython files
 	rm msgpack/_cmsgpack.c || die
 
@@ -57,4 +56,8 @@ python_configure() {
 python_test() {
 	rm -rf msgpack || die
 	epytest
+}
+src_prepare() {
+    default
+    filter-flags -Wl,-z,defs
 }

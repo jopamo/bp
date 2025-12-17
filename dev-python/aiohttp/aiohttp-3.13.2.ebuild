@@ -75,7 +75,6 @@ EPYTEST_XDIST=1
 distutils_enable_tests pytest
 
 src_prepare() {
-	filter-flags -Wl,-z,defs
 	distutils-r1_src_prepare
 
 	# increase the timeout a little
@@ -101,7 +100,6 @@ python_configure() {
 }
 
 python_compile() {
-	filter-flags -Wl,-z,defs
 	local -x AIOHTTP_USE_SYSTEM_DEPS=1
 	# implicitly disabled for pypy3
 	if [[ ${EPYTHON} == pypy3* ]] || ! use native-extensions; then
@@ -160,4 +158,8 @@ python_test() {
 
 	rm -rf aiohttp || die
 	epytest -m "not internal and not dev_mode"
+}
+src_prepare() {
+    default
+    filter-flags -Wl,-z,defs
 }

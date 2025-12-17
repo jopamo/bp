@@ -20,6 +20,7 @@ app-crypto/certbot
 app-crypto/pass
 app-crypto/tpm2-tools
 app-dev/beautysh
+app-dev/ctags
 app-dev/debootstrap
 app-dev/dwarves
 app-dev/gcovr
@@ -70,5 +71,6 @@ dev-python/pip
 dev-python/requests
 dev-rust/fd
 dev-rust/ripgrep
+dev-rust/sd2
 virtual/rust
 "

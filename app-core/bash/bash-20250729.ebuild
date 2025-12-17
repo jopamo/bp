@@ -66,7 +66,7 @@ src_install() {
 	default
 
 	#compat symlink
-	dosym -r /usr/bin/bash /usr/bin/sh
+	dosym bash usr/bin/sh
 }
 
 pkg_preinst() {

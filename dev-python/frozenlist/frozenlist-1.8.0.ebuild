@@ -38,7 +38,6 @@ EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 python_compile() {
-	filter-flags -Wl,-z,defs
 	# pypy is not using the C extension
 	if ! use native-extensions || [[ ${EPYTHON} != python* ]]; then
 		local -x FROZENLIST_NO_EXTENSIONS=1
@@ -50,4 +49,8 @@ python_compile() {
 python_test() {
 	rm -rf frozenlist || die
 	epytest -o addopts=
+}
+src_prepare() {
+    default
+    filter-flags -Wl,-z,defs
 }

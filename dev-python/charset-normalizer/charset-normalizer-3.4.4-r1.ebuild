@@ -42,3 +42,7 @@ python_compile() {
 python_test() {
 	epytest -o addopts=
 }
+src_prepare() {
+    default
+    filter-flags -Wl,-z,defs
+}

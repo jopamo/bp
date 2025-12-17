@@ -24,7 +24,6 @@ RDEPEND="
 	>=dev-python/jeepney-0.6[${PYTHON_USEDEP}]
 "
 
-
 distutils_enable_tests unittest
 distutils_enable_sphinx docs \
 	dev-python/alabaster

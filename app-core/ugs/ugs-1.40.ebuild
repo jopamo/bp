@@ -43,6 +43,7 @@ src_install() {
 		lighttpd_certs
 		mkheaders
 		mkimg
+		build
 		mkstage
 		ubuntu_kernel
 		xbkup

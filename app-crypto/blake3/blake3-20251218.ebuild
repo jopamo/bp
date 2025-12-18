@@ -6,7 +6,7 @@ inherit meson python-any-r1
 
 DESCRIPTION="a fast cryptographic hash function"
 HOMEPAGE="https://github.com/BLAKE3-team/BLAKE3"
-SNAPSHOT=91d201e6d07e8d747224f5690a6e950120ff1924
+SNAPSHOT=211bf4cdfeeaf17bfa587a1f0fcd4fd1369bd9eb
 SRC_URI="https://github.com/jopamo/blake3/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

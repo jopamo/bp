@@ -56,6 +56,12 @@ pkg_setup() {
 src_prepare() {
 	default
 	use elibc_musl && eapply "${FILESDIR}"/termios.patch
+
+	# Avoid redefining struct user_gcs when the kernel UAPI already provides it
+	sed -i \
+		-e 's/^#ifndef GCS_MAGIC$/#ifndef NT_ARM_GCS\n#define NT_ARM_GCS 0x410/' \
+		-e 's/^#endif \/\* GCS_MAGIC \*\/$/#endif \/* NT_ARM_GCS *\//' \
+		gdb/arch/aarch64-gcs-linux.h || die
 }
 
 src_configure() {

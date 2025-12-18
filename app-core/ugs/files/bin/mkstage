@@ -201,7 +201,7 @@ chmod -R 600 ${TARGET}etc/ssh
 
 CPU_CORES=$(nproc)
 print_color $COLOR_BLUE "ℹ️	Starting compression with xz (using $CPU_CORES cores)..."
-XZ_OPT="--x86 --delta=dist=2 --lzma2=dict=128Mi -e9 -T${CPU_CORES}" tar -cJ --ignore-failed-read $EXCLUDES -f $STAGE3_FILENAME ${TARGET}*
+XZ_OPT="-e9 -T${CPU_CORES}" tar -cJ --ignore-failed-read $EXCLUDES -f $STAGE3_FILENAME ${TARGET}*
 
 print_color $COLOR_GREEN "✔	Tarball creation completed successfully."
 

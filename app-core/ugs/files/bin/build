@@ -1,0 +1,262 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# simple build helper for Meson, CMake, or Autotools
+# usage:
+#   ./build.sh                # auto-detect, release
+#   ./build.sh --debug        # auto-detect, debug
+#   ./build.sh --asan         # auto-detect, debug with ASan+UBSan
+#   ./build.sh --cmake --asan # force CMake, ASan+UBSan
+#   ./build.sh --meson --debug
+#   ./build.sh --autotools --release
+
+usage() {
+  cat <<EOF
+Usage: $0 [--cmake|--meson|--autotools] [--release|--debug|--asan]
+
+  --cmake      force CMake build
+  --meson      force Meson build
+  --autotools  force Autotools build (configure/make)
+
+  --release    optimized release build (default)
+  --debug      debug build
+  --asan       debug build with AddressSanitizer + UBSan
+
+Examples:
+  $0
+  $0 --debug
+  $0 --asan
+  $0 --cmake --asan
+  $0 --meson --debug
+  $0 --autotools --release
+EOF
+}
+
+build_system=auto
+config=release
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --cmake)     build_system=cmake ;;
+    --meson)     build_system=meson ;;
+    --autotools) build_system=autotools ;;
+    --release)   config=release ;;
+    --debug)     config=debug ;;
+    --asan)      config=asan ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown argument: $1" >&2
+      usage
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+# auto detect build system if not forced, prefer meson then cmake then autotools
+if [[ "$build_system" == "auto" ]]; then
+  if [[ -f meson.build ]]; then
+    build_system=meson
+  elif [[ -f CMakeLists.txt ]]; then
+    build_system=cmake
+  elif [[ -x ./bootstrap || -f configure.ac ]]; then
+    build_system=autotools
+  else
+    echo "Error: could not detect build system (no meson.build, CMakeLists.txt, bootstrap, or configure.ac)" >&2
+    exit 1
+  fi
+fi
+
+# default to clang if not already set
+if [[ -z "${CC:-}" ]]; then
+  export CC=clang
+fi
+if [[ -z "${CXX:-}" ]]; then
+  export CXX=clang++
+fi
+
+NPROC=$(nproc)
+
+# common sanitizer options for asan builds
+asan_env='detect_leaks=1:halt_on_error=1:abort_on_error=1:malloc_context_size=30:fast_unwind_on_malloc=0:symbolize=1:strict_init_order=1:strict_string_checks=1:detect_stack_use_after_return=1:alloc_dealloc_mismatch=1:detect_container_overflow=1'
+ubsan_env='print_stacktrace=1:report_error_type=1:halt_on_error=1'
+lsan_env='print_suppressions=0:report_objects=1'
+
+setup_sanitizer_env() {
+  export ASAN_OPTIONS="$asan_env"
+  export UBSAN_OPTIONS="$ubsan_env"
+  export LSAN_OPTIONS="$lsan_env"
+
+  if [[ -z "${ASAN_SYMBOLIZER_PATH:-}" ]]; then
+    if command -v llvm-symbolizer >/dev/null 2>&1; then
+      export ASAN_SYMBOLIZER_PATH="$(command -v llvm-symbolizer)"
+    fi
+  fi
+}
+
+cmake_build() {
+  local cfg="$1"
+  local builddir
+
+  case "$cfg" in
+    release)
+      builddir=build-cmake-release
+      rm -rf "$builddir"
+      cmake -S . -B "$builddir" \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_C_COMPILER="$CC" \
+        -DCMAKE_CXX_COMPILER="$CXX" \
+        -DCMAKE_C_FLAGS_RELEASE="-O2 -march=native -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
+        -DCMAKE_CXX_FLAGS_RELEASE="-O2 -march=native -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
+      cmake --build "$builddir" -j"$NPROC"
+      (cd "$builddir" && ctest --output-on-failure || true)
+      ;;
+    debug)
+      builddir=build-cmake-debug
+      rm -rf "$builddir"
+      cmake -S . -B "$builddir" \
+        -DCMAKE_BUILD_TYPE=Debug \
+        -DCMAKE_C_COMPILER="$CC" \
+        -DCMAKE_CXX_COMPILER="$CXX" \
+        -DCMAKE_C_FLAGS_DEBUG="-g -O0 -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
+        -DCMAKE_CXX_FLAGS_DEBUG="-g -O0 -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
+      cmake --build "$builddir" -j"$NPROC"
+      (cd "$builddir" && ctest --output-on-failure || true)
+      ;;
+    asan)
+      builddir=build-cmake-asan
+      rm -rf "$builddir"
+      setup_sanitizer_env
+      cmake -S . -B "$builddir" \
+        -DCMAKE_BUILD_TYPE=Debug \
+        -DCMAKE_C_COMPILER="$CC" \
+        -DCMAKE_CXX_COMPILER="$CXX" \
+        -DCMAKE_C_FLAGS_DEBUG="-g -O1 -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes" \
+        -DCMAKE_CXX_FLAGS_DEBUG="-g -O1 -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes" \
+        -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address,undefined" \
+        -DCMAKE_SHARED_LINKER_FLAGS="-fsanitize=address,undefined"
+      cmake --build "$builddir" -j"$NPROC"
+      (cd "$builddir" && ctest --output-on-failure)
+      ;;
+    *)
+      echo "Unknown CMake config: $cfg" >&2
+      exit 1
+      ;;
+  esac
+}
+
+meson_build() {
+  local cfg="$1"
+  local builddir
+
+  case "$cfg" in
+    release)
+      builddir=build-meson-release
+      rm -rf "$builddir"
+      meson setup "$builddir" . \
+        --buildtype=release \
+        -Dwarning_level=3 \
+        -Dc_args="-O2 -march=native -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
+        -Dcpp_args="-O2 -march=native -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
+      meson compile -C "$builddir" -j"$NPROC"
+      meson test -C "$builddir" --print-errorlogs || true
+      ;;
+    debug)
+      builddir=build-meson-debug
+      rm -rf "$builddir"
+      meson setup "$builddir" . \
+        --buildtype=debug \
+        -Dwarning_level=3 \
+        -Dc_args="-g -O0 -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
+        -Dcpp_args="-g -O0 -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
+      meson compile -C "$builddir" -j"$NPROC"
+      meson test -C "$builddir" --print-errorlogs || true
+      ;;
+    asan)
+      builddir=build-meson-asan
+      rm -rf "$builddir"
+      setup_sanitizer_env
+      meson setup "$builddir" . \
+        --buildtype=debug \
+        -Db_sanitize=address,undefined \
+        -Db_lundef=false \
+        -Dwarning_level=3 \
+        -Dc_args="-g -O1 -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes" \
+        -Dcpp_args="-g -O1 -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes"
+      meson compile -C "$builddir" -j"$NPROC"
+      meson test -C "$builddir" --print-errorlogs
+      ;;
+    *)
+      echo "Unknown Meson config: $cfg" >&2
+      exit 1
+      ;;
+  esac
+}
+
+autotools_build() {
+  local cfg="$1"
+  local builddir
+  local cflags
+  local cxxflags
+  local ldflags=""
+
+  case "$cfg" in
+    release)
+      builddir=build-autotools-release
+      cflags="-O2 -march=native -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
+      cxxflags="$cflags"
+      ;;
+    debug)
+      builddir=build-autotools-debug
+      cflags="-g -O0 -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
+      cxxflags="$cflags"
+      ;;
+    asan)
+      builddir=build-autotools-asan
+      setup_sanitizer_env
+      cflags="-g -O1 -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes"
+      cxxflags="$cflags"
+      ldflags="-fsanitize=address,undefined"
+      ;;
+    *)
+      echo "Unknown Autotools config: $cfg" >&2
+      exit 1
+      ;;
+  esac
+
+  rm -rf "$builddir"
+  mkdir -p "$builddir"
+
+  # run bootstrap if present
+  if [[ -x ./bootstrap ]]; then
+    ./bootstrap
+  fi
+
+  pushd "$builddir" >/dev/null
+    env CFLAGS="$cflags" CXXFLAGS="$cxxflags" LDFLAGS="$ldflags" ../configure
+    make -j"$NPROC"
+    # run tests if check target exists
+    if make -n check >/dev/null 2>&1; then
+      make check
+    fi
+  popd >/dev/null
+}
+
+case "$build_system" in
+  cmake)
+    cmake_build "$config"
+    ;;
+  meson)
+    meson_build "$config"
+    ;;
+  autotools)
+    autotools_build "$config"
+    ;;
+  *)
+    echo "Internal error: unknown build_system '$build_system'" >&2
+    exit 1
+    ;;
+esac

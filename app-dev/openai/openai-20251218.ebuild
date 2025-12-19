@@ -8,7 +8,7 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="Python client library for the OpenAI API"
 HOMEPAGE="https://github.com/openai/openai-python"
-SNAPSHOT=41ee03ffe985a7362f0275c7f500080cb1d58cdd
+SNAPSHOT=d3e632171c7842abf97b26379f564531d80ad096
 SRC_URI="https://github.com/openai/openai-python/archive/${SNAPSHOT}.tar.gz -> openai-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/openai-python-${SNAPSHOT}"
 

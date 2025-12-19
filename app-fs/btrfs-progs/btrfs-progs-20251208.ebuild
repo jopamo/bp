@@ -6,7 +6,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="Btrfs filesystem utilities"
 HOMEPAGE="https://btrfs.wiki.kernel.org"
-SNAPSHOT=82451bec91e5213665f3c3429e5c2ccb3de4d919
+SNAPSHOT=79c154a3ab313f877886e06479fe6058ecdd2d53
 SRC_URI="https://github.com/kdave/btrfs-progs/archive/${SNAPSHOT}.tar.gz -> btrfs-progs-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/btrfs-progs-${SNAPSHOT}"
 

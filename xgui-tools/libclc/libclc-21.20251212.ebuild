@@ -8,7 +8,7 @@ inherit cmake python-any-r1
 
 DESCRIPTION="Implementation of OpenCL C built-in libraries for GPU/OpenCL compilers"
 HOMEPAGE="https://llvm.org/"
-SNAPSHOT=f68f64eb81305724d7649814f61103936c903ca6
+SNAPSHOT=2078da43e25a4623cab2d0d60decddf709aaea28
 SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-project-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llvm-project-${SNAPSHOT}/libclc"
 

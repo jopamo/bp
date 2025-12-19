@@ -10,7 +10,7 @@ inherit distutils-r1 flag-o-matic
 
 DESCRIPTION="Python binding to the Networking and Cryptography (NaCl) library"
 HOMEPAGE="https://github.com/pyca/pynacl/"
-SNAPSHOT=526f99278383ffda906bec9d08288191dcbbc3b3
+SNAPSHOT=cabc3a879d142e62f7503a632e62e706ef5eccbb
 SRC_URI="https://github.com/pyca/pynacl/archive/${SNAPSHOT}.tar.gz -> pynacl-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/pynacl-${SNAPSHOT}
 

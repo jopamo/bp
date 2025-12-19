@@ -6,7 +6,7 @@ inherit cmake xdg
 
 DESCRIPTION="Fast lightweight tabbed filemanager"
 HOMEPAGE="https://github.com/jopamo/pcmanfm-qt"
-SNAPSHOT=dbc1103d357439a27b47d48fc8ba7302f9840556
+SNAPSHOT=2679f1453efefce6e45178a3324c48671f17ec2d
 SRC_URI="https://github.com/jopamo/pcmanfm-qt/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/pcmanfm-qt-${SNAPSHOT}
 

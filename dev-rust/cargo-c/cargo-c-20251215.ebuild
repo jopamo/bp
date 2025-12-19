@@ -6,7 +6,7 @@ inherit cargo
 
 DESCRIPTION="build and install C-compatible libraries"
 HOMEPAGE="https://github.com/lu-zero/cargo-c"
-SNAPSHOT=5fb145df3ea61f1ba4a7785d3524be8b37c64ce3
+SNAPSHOT=19d8828e0de220132c72aa99fc536e511b09d1cf
 SRC_URI="https://github.com/lu-zero/cargo-c/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/cargo-c-${SNAPSHOT}"
 

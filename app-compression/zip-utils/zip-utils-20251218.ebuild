@@ -6,7 +6,7 @@ inherit meson flag-o-matic
 
 DESCRIPTION="zip and unzip forked from infozip"
 HOMEPAGE="https://github.com/jopamo/zip-utils"
-SNAPSHOT=c3bae334123e803349c9ac6fbdec38a68c77160d
+SNAPSHOT=1a5ac119d1f9789f306e856b83ef37a190de0f55
 SRC_URI="https://github.com/jopamo/zip-utils/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/zip-utils-${SNAPSHOT}"
 

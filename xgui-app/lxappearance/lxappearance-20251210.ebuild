@@ -6,8 +6,7 @@ inherit autotools xdg
 
 DESCRIPTION="Lightweight GTK theme and icon switcher"
 HOMEPAGE="https://github.com/lxde/lxappearance"
-
-SNAPSHOT=96e09b05b1897bdca72d8fdfeb1bd8ec68942c42
+SNAPSHOT=4518d758c853f43272555d183f17190ca464b6a3
 SRC_URI="https://github.com/lxde/lxappearance/archive/${SNAPSHOT}.tar.gz -> lxappearance-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/lxappearance-${SNAPSHOT}"
 

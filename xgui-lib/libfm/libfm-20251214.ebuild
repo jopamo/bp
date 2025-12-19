@@ -6,8 +6,7 @@ inherit autotools xdg
 
 DESCRIPTION="A library for file management"
 HOMEPAGE="https://github.com/lxde/libfm"
-
-SNAPSHOT=3289abf583030c664babae64a73d1981afcbe8ed
+SNAPSHOT=7e575d13fcf0532fc181fc26391ad6fd7717ed66
 SRC_URI="https://github.com/lxde/libfm/archive/${SNAPSHOT}.tar.gz -> libfm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libfm-${SNAPSHOT}"
 

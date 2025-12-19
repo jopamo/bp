@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="a light-weight window manager for the X11 Window System"
 HOMEPAGE="https://joewing.net/projects/jwm/"
-SNAPSHOT=032455cc0e08cab4b18c094170de79fbf00efe42
+SNAPSHOT=7f3ad25162b1cb381e4a967c3fa993928ddaca4b
 SRC_URI="https://github.com/joewing/jwm/archive/${SNAPSHOT}.tar.gz -> jwm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/jwm-${SNAPSHOT}"
 

@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="Consolidating and extending hosts files from several well-curated sources"
 HOMEPAGE="https://github.com/StevenBlack/hosts"
-SNAPSHOT=7f24594f7a3cb67f8e80fe4ce4de737d8ee5eb99
+SNAPSHOT=24c51b8cc056f44c7db8a2c69a4da6af83d28731
 SRC_URI="https://github.com/StevenBlack/hosts/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

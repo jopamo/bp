@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="Userspace RCU (read-copy-update) library"
 HOMEPAGE="https://liburcu.org/"
-SNAPSHOT=91b6c67ef0478f7193485a02e4d5064413aa3029
+SNAPSHOT=26ef0dbbbcd23509d837c0d530778d8a05364b3f
 SRC_URI="https://github.com/urcu/userspace-rcu/archive/${SNAPSHOT}.tar.gz -> userspace-rcu-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/userspace-rcu-${SNAPSHOT}"
 

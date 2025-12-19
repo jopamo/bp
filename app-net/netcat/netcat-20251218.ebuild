@@ -13,26 +13,3 @@ S="${WORKDIR}/${PN}-${SNAPSHOT}"
 LICENSE="netcat"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-IUSE="ipv6 telnet exec_hole verbose_debug static"
-
-src_configure() {
-	append-flags "-Wno-pointer-sign -Wno-address -Wno-implicit-fallthrough -Wno-clobbered"
-
-	local emesonargs=(
-		$(meson_use ipv6)
-		$(meson_use telnet)
-		$(meson_use exec_hole)
-		$(meson_use verbose_debug)
-	)
-
-	if use static; then
-		append-ldflags -static
-		emesonargs+=(
-			-Ddefault_library=static
-			-Db_staticpic=false
-			-Dc_link_args="${LDFLAGS}"
-		)
-	fi
-	meson_src_configure
-}

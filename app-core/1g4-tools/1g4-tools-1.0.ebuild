@@ -71,6 +71,6 @@ dev-python/pip
 dev-python/requests
 dev-rust/fd
 dev-rust/ripgrep
-dev-rust/sd2
+dev-rust/txed
 virtual/rust
 "

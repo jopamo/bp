@@ -4,11 +4,11 @@ EAPI=8
 
 inherit cargo
 
-DESCRIPTION="ripgrep 13 compatibility build"
-HOMEPAGE="https://github.com/jopamo/rg13"
-SNAPSHOT=62023acc6e046fe089c9035fac1243303ce95e77
-SRC_URI="https://github.com/jopamo/rg13/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/rg13-${SNAPSHOT}"
+DESCRIPTION="ripgrep"
+HOMEPAGE="https://github.com/BurntSushi/ripgrep"
+SNAPSHOT=0a88cccd5188074de96f54a4b6b44a63971ac157
+SRC_URI="https://github.com/BurntSushi/ripgrep/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="BSD"
 SLOT="0"

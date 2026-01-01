@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic linux-info kernel-mod toolchain-funcs unpacker user
+inherit linux-info kernel-mod unpacker user-info
 
 NV_URI="https://us.download.nvidia.com/XFree86/"
 
@@ -20,6 +20,8 @@ LICENSE="GPL-2 NVIDIA-r2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="driver kms static-libs uvm wayland X"
+
+S="${WORKDIR}"
 
 RESTRICT="bindist mirror"
 
@@ -44,8 +46,6 @@ PDEPEND="
 QA_PREBUILT="opt/* usr/lib*"
 QA_PRESTRIPPED="usr/lib/firmware/nvidia/${PV}/gsp_ga10x.bin"
 
-S="${WORKDIR}"
-
 nvidia_drivers_versions_check() {
     CONFIG_CHECK="
         PROC_FS
@@ -68,16 +68,16 @@ pkg_setup() {
 
     export DISTCC_DISABLE=1
     export CCACHE_DISABLE=1
+}
 
+src_prepare() {
     NV_DOC="${S}"
     NV_OBJ="${S}"
     NV_SRC="${S}/kernel-open"
     NV_MAN="${S}"
     NV_X11="${S}"
     NV_SOVER=${PV}
-}
 
-src_prepare() {
     local man_file
     for man_file in "${NV_MAN}"/*1.gz; do
         gunzip "$man_file" || die
@@ -133,11 +133,11 @@ donvidia() {
     ${action} ${nv_LIB} || die "failed to install ${nv_LIBNAME}"
 
     if [[ ${nv_SOVER} ]] && ! [[ "${nv_SOVER}" = "${nv_LIBNAME}" ]]; then
-        dosym ${nv_LIBNAME} ${nv_DEST}/${nv_SOVER} \
+        dosym -r ${nv_DEST}/${nv_LIBNAME} ${nv_DEST}/${nv_SOVER} \
             || die "failed to create ${nv_DEST}/${nv_SOVER} symlink"
     fi
 
-    dosym ${nv_LIBNAME} ${nv_DEST}/${nv_LIBNAME/.so*/.so} \
+    dosym -r ${nv_DEST}/${nv_LIBNAME} ${nv_DEST}/${nv_LIBNAME/.so*/.so} \
         || die "failed to create ${nv_LIBNAME/.so*/.so} symlink"
 }
 
@@ -217,7 +217,7 @@ EOF
     doexe ${NV_OBJ}/nvidia-modprobe
     fowners root:video /opt/bin/nvidia-modprobe
     fperms 4710 /opt/bin/nvidia-modprobe
-    dosym /{opt,usr}/bin/nvidia-modprobe
+    dosym -r /opt/bin/nvidia-modprobe /usr/bin/nvidia-modprobe
 
     doman nvidia-cuda-mps-control.1
     doman nvidia-modprobe.1
@@ -237,7 +237,7 @@ EOF
     dosym -r /usr/lib/libnvidia-allocator.so.${PV} /usr/lib/gbm/nvidia-drm_gbm.so
 
     insinto /usr/lib/firmware/nvidia/${PV}
-    doins firmware/gsp_ga10x.bin
+    doins firmware/*.bin
 
     dosym -r /usr/lib/libcrypto.so.3 /usr/lib/libcrypto.so.1.1
 }
@@ -253,7 +253,7 @@ src_install-libs() {
             "libnvidia-allocator.so.${NV_SOVER}"
             "libnvidia-api.so.1"
             "libnvidia-cfg.so.${NV_SOVER}"
-            "libnvidia-egl-gbm.so.1.1.2"
+            libnvidia-egl-gbm.so.*
             "libnvidia-egl-xcb.so.1.0.4"
             "libnvidia-egl-xlib.so.1.0.4"
             "libnvidia-eglcore.so.${NV_SOVER}"

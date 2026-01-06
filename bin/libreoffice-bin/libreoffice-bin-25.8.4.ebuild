@@ -23,7 +23,6 @@ KEYWORDS="amd64"
 IUSE="java offlinehelp python"
 
 RDEPEND="
-	app-crypto/mit-krb5
 	bin/openjdk11
 	lib-core/libxcrypt-compat
 	lib-core/libxml2

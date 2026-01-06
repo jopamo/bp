@@ -21,6 +21,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
+	app-emu/capstone
 	lib-util/glib
 	xgui-lib/xcb-util-cursor
 	xgui-lib/xcb-util-image

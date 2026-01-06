@@ -22,7 +22,10 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	lib-util/glib
+	xgui-lib/xcb-util-cursor
+	xgui-lib/xcb-util-image
 	xgui-lib/libxcb
+	xgui-lib/xcb-util
 	xgui-lib/qtbase
 	xgui-lib/qttools
 "

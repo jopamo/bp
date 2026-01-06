@@ -21,7 +21,17 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-#RESTRICT="strip"
+DEPEND="
+	xgui-lib/libxcb
+	xgui-lib/xcb-util-wm
+	xgui-lib/xcb-util-keysyms
+	xgui-lib/cairo
+	xgui-lib/pango
+	fonts/fontconfig
+	xgui-lib/librsvg
+	lib-dev/libyaml
+"
+
 
 src_prepare() {
 	default

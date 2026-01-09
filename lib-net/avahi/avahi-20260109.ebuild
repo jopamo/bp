@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="Service Discovery for Linux using mDNS"
 HOMEPAGE="https://www.avahi.org/"
-SNAPSHOT=b900d88b040e853ad726996198df7aec835bbdd2
+SNAPSHOT=c01a63bb87fd8da9907f12cc4571d68bb5e0d1ea
 SRC_URI="https://github.com/avahi/avahi/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

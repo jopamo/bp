@@ -6,8 +6,7 @@ inherit doins
 
 DESCRIPTION="a man replacement that utilizes gdbm instead of flat files"
 HOMEPAGE="http://www.nongnu.org/man-db/"
-
-SNAPSHOT=2b38f74972ab09985b0f7a6716a08c657ff716d8
+SNAPSHOT=88b03ad6e99103de59891fb8ea2c3c6e6a71e82b
 SRC_URI="https://gitlab.com/man-db/man-db/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

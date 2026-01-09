@@ -8,7 +8,7 @@ inherit meson flag-o-matic python-utils-r1
 
 DESCRIPTION="a random collection of Linux utilities"
 HOMEPAGE="https://github.com/util-linux/util-linux"
-SNAPSHOT=5305e6c70b274f679329b79c0e1ef5a07e9dc1a6
+SNAPSHOT=479133958af89a2afda442e158107b465301dfbb
 SRC_URI="https://github.com/util-linux/util-linux/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

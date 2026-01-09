@@ -10,7 +10,7 @@ inherit cargo distutils-r1
 
 DESCRIPTION="Build and publish crates with pyo3, rust-cpython and cffi bindings"
 HOMEPAGE="https://www.maturin.rs/"
-SNAPSHOT=782413b88183e11b6489599d7b4bf766be3e734f
+SNAPSHOT=fb5796fb2e845f90f5ad523d00ac4367757278a5
 SRC_URI="https://github.com/PyO3/maturin/archive/${SNAPSHOT}.tar.gz -> maturin-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/maturin-${SNAPSHOT}"
 

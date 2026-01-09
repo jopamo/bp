@@ -6,7 +6,7 @@ inherit cargo
 
 DESCRIPTION="intuitive find & replace CLI"
 HOMEPAGE="https://github.com/jopamo/stedi"
-SNAPSHOT=9a192ee68156086234d25592c32cf3c3c99a85b4
+SNAPSHOT=50d80c438951db9a80f7cb953e7a683df886bf4f
 SRC_URI="https://github.com/jopamo/txed/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

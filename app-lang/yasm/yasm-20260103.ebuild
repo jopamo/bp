@@ -6,8 +6,7 @@ inherit autotools
 
 DESCRIPTION="An assembler for x86 and x86_64 instruction sets"
 HOMEPAGE="http://yasm.tortall.net/"
-
-SNAPSHOT=121ab150b3577b666c79a79f4a511798d7ad2432
+SNAPSHOT=a2f8bdf075bcad90a1b0a446080906ef6afe6847
 SRC_URI="https://github.com/yasm/yasm/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/yasm-${SNAPSHOT}"
 

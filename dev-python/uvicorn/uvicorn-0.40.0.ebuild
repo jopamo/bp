@@ -64,14 +64,6 @@ python_test() {
 				tests/middleware/test_logging.py::test_running_log_using_fd
 			)
 			;;
-		python3.14*)
-			EPYTEST_DESELECT+=(
-				# TODO
-				tests/test_auto_detection.py::test_loop_auto
-				# changed exception type
-				tests/test_compat.py::test_asyncio_run__passing_a_non_awaitable_callback_should_throw_error
-			)
-			;;
 	esac
 
 	epytest

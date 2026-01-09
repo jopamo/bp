@@ -9,7 +9,7 @@ inherit distutils-r1
 
 DESCRIPTION="Python Documentation Utilities (reference reStructuredText impl.)"
 HOMEPAGE="https://docutils.sourceforge.io/"
-SNAPSHOT=5d129e11e46967418b884019fc3855529a5d74cf
+SNAPSHOT=19b782ca181b890ec00eeec2400aa0f593418eef
 SRC_URI="https://github.com/docutils/docutils/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}/docutils"
 

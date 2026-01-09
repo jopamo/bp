@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-SNAPSHOT=96585f7119baf326d1762c9e7ca11bcedc7667cf
+SNAPSHOT=d1be0957015a9ff80784d62e1086c9afbf28fb26
 
 inherit autotools flag-o-matic
 

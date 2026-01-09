@@ -3,6 +3,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{11..13} )
+PYPI_VERIFY_REPO=https://github.com/joblib/joblib
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1 pypi
@@ -36,6 +37,10 @@ distutils_enable_tests pytest
 EPYTEST_DESELECT=(
 	# https://github.com/joblib/joblib/issues/1362
 	joblib/test/test_memory.py::test_parallel_call_cached_function_defined_in_jupyter
+
+	# fails over warnings from numpy
+	joblib/test/test_numpy_pickle.py::test_joblib_pickle_across_python_versions
+	joblib/test/test_numpy_pickle.py::test_joblib_pickle_across_python_versions_with_mmap
 )
 
 python_prepare_all() {

@@ -33,11 +33,14 @@ RDEPEND="
 	>=dev-python/aiohappyeyeballs-2.5.0[${PYTHON_USEDEP}]
 	>=dev-python/aiosignal-1.4.0[${PYTHON_USEDEP}]
 	>=dev-python/attrs-17.3.0[${PYTHON_USEDEP}]
-	dev-python/brotlicffi[${PYTHON_USEDEP}]
+	>=dev-python/brotlicffi-1.2[${PYTHON_USEDEP}]
 	>=dev-python/frozenlist-1.1.1[${PYTHON_USEDEP}]
 	>=dev-python/multidict-4.5.0[${PYTHON_USEDEP}]
 	>=dev-python/propcache-0.2.0[${PYTHON_USEDEP}]
 	>=dev-python/yarl-1.17.0[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		dev-python/backports-zstd[${PYTHON_USEDEP}]
+	' 3.11 3.12 3.13)
 "
 BDEPEND="
 	>=dev-python/multidict-4.5.0[${PYTHON_USEDEP}]
@@ -55,9 +58,6 @@ BDEPEND="
 			dev-python/time-machine[${PYTHON_USEDEP}]
 		' 'python3*')
 		dev-python/zlib-ng[${PYTHON_USEDEP}]
-		$(python_gen_cond_dep '
-			dev-python/backports-zstd[${PYTHON_USEDEP}]
-		' 3.11 3.12 3.13)
 		www-servers/gunicorn[${PYTHON_USEDEP}]
 		test-rust? (
 			dev-python/trustme[${PYTHON_USEDEP}]

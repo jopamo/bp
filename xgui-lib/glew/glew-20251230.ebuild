@@ -6,7 +6,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="The OpenGL Extension Wrangler Library"
 HOMEPAGE="http://glew.sourceforge.net/"
-SNAPSHOT=ba71151c6af7435127c54b890808fec2a4aad41f
+SNAPSHOT=24ec9e49a8d92cec92068ac9b07baec924f2fd7d
 SRC_URI="https://github.com/nigels-com/glew/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

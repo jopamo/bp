@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="A Library for Large Linear Classification"
 HOMEPAGE="http://www.csie.ntu.edu.tw/~cjlin/liblinear/ https://github.com/cjlin1/liblinear"
-SNAPSHOT=dbb92699c33b37d0217d8d8b34d72c1ff4176437
+SNAPSHOT=491c9f1188b97ba70847c70a68be363d186ddf9d
 SRC_URI="https://github.com/cjlin1/liblinear/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

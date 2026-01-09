@@ -24,7 +24,7 @@ RESTRICT="!test? ( test )"
 
 RDEPEND="
 	>=dev-python/distlib-0.3.7[${PYTHON_USEDEP}]
-	>=dev-python/filelock-3.12.2[${PYTHON_USEDEP}]
+	>=dev-python/filelock-3.20.1[${PYTHON_USEDEP}]
 	>=dev-python/platformdirs-3.9.1[${PYTHON_USEDEP}]
 
 	dev-python/ensurepip-pip
@@ -97,6 +97,8 @@ python_test() {
 		tests/unit/create/via_global_ref/test_build_c_ext.py::test_can_build_c_extensions
 		# random resource leaks or xdist
 		tests/unit/test_file_limit.py::test_too_many_open_files
+		# Internet
+		tests/unit/create/test_creator.py::test_create_distutils_cfg
 	)
 	case ${EPYTHON} in
 		pypy3.11)

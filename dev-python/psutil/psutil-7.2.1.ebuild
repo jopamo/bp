@@ -41,8 +41,10 @@ python_test() {
 		tests/test_process.py::TestProcess::test_weird_environ
 
 		# extremely flaky
+		tests/test_heap.py::TestHeap::test_mmap_used
 		tests/test_linux.py::TestSystemVirtualMemoryAgainstFree::test_used
 		tests/test_linux.py::TestSystemVirtualMemoryAgainstVmstat::test_used
+		tests/test_system.py::TestMiscAPIs::test_heap_info
 
 		# nproc --all is broken?
 		tests/test_linux.py::TestSystemCPUCountLogical::test_against_nproc
@@ -72,6 +74,13 @@ python_test() {
 		# failing without /sys/class/power_supply?
 		tests/test_memleaks.py::TestModuleFunctionsLeaks::test_sensors_battery
 		tests/test_misc.py::TestMisc::test_serialization
+
+		# tests for calling setup.py, fail over removed psutil dir
+		tests/test_scripts.py
+	)
+	local EPYTEST_IGNORE=(
+		# requires psleak
+		tests/test_memleaks.py
 	)
 
 	# Since we are running in an environment a bit similar to CI,
@@ -81,7 +90,7 @@ python_test() {
 	local -x GITHUB_ACTIONS=1
 
 	rm -rf psutil || die
-	epytest --pyargs psutil -o addopts=
+	epytest -o addopts=
 }
 
 python_compile() {

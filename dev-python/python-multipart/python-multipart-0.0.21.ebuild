@@ -27,6 +27,7 @@ BDEPEND="
 	)
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 src_prepare() {
@@ -35,9 +36,4 @@ src_prepare() {
 	# do not install the backwards compatibility package
 	# we're patching revdeps instead
 	rm -r multipart || die
-}
-
-python_test() {
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest
 }

@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="tool for generating C-based recognizers from regular expressions"
 HOMEPAGE="http://re2c.org/"
-SNAPSHOT=5811f5ad65c329ea85cd8b9610be76d167a96f27
+SNAPSHOT=1dc02f7b70b6cf8b271d4e7084bbecc8279fa026
 SRC_URI="https://github.com/skvadrik/re2c/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="A tiling window manager"
 HOMEPAGE="https://i3wm.org/"
-SNAPSHOT=b9339988786346f44983e846770021844e244a1c
+SNAPSHOT=57f628629f0b2a3f6fa16dbbe94ae2ed044090d6
 SRC_URI="https://github.com/i3/i3/archive/${SNAPSHOT}.tar.gz -> i3-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/i3-${SNAPSHOT}"
 

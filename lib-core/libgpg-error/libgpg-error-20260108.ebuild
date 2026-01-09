@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="Contains error handling functions used by GnuPG software"
 HOMEPAGE="http://www.gnupg.org/related_software/libgpg-error"
-SNAPSHOT=f7c8199fbf0f839e4f4f93f6a7615c5a00b9141d
+SNAPSHOT=4a1381642740210875ac461e21ea5a53a5c67912
 SRC_URI="https://github.com/gpg/libgpg-error/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

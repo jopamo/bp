@@ -4,11 +4,14 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=meson-python
 DISTUTILS_EXT=1
-PYTHON_COMPAT=( python3_{10..13} )
+PYPI_VERIFY_REPO=https://github.com/scikit-image/scikit-image
+PYTHON_COMPAT=( python3_{11..13} )
 
 inherit distutils-r1 pypi
 
-TEST_DATA_COMMIT=15735b54e85c02427f07c71e6456723495034805
+# the package refers to blobs directly, use the newest commit to get
+# them all
+TEST_DATA_COMMIT=5c090b56df3988d988ff97928e2ef2d2cbe38e1b
 DESCRIPTION="Image processing routines for SciPy"
 HOMEPAGE="
 	https://scikit-image.org/
@@ -23,7 +26,9 @@ SRC_URI+="
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+if [[ ${PV} != *_rc* ]]; then
+	KEYWORDS="~amd64 ~arm64 ~x86"
+fi
 
 RDEPEND="
 	>=dev-python/imageio-2.36[${PYTHON_USEDEP}]
@@ -42,21 +47,22 @@ BDEPEND="
 	>=dev-py/cython-3.0.4[${PYTHON_USEDEP}]
 	dev-python/packaging[${PYTHON_USEDEP}]
 	dev-python/pythran[${PYTHON_USEDEP}]
-	test? (
-		dev-python/pytest-localserver[${PYTHON_USEDEP}]
-	)
 "
 
 # xdist does not work with this test suite
+EPYTEST_PLUGINS=( pytest-localserver )
 distutils_enable_tests pytest
 # There is a programmable error in your configuration file:
 #distutils_enable_sphinx doc/source dev-py/numpydoc dev-python/myst-parser
 
 src_test() {
+	# just useless formatter replacement
+	rm tests/conftest.py || die
+
 	# for some reason, upstream refetches data that's already in the tarball
 	# sigh
 	mkdir -p "${HOME}/.cache/scikit-image" || die
-	mv skimage "${HOME}/.cache/scikit-image/${PV/_/}" || die
+	mv src/skimage "${HOME}/.cache/scikit-image/${PV/_/}" || die
 
 	# This is a true horror, sigh
 	local cache_dir=${HOME}/.cache/scikit-image/${PV/_/}/data
@@ -70,7 +76,7 @@ src_test() {
 	cp pivchallenge/B/B001_2.tif "${cache_dir}"/pivchallenge-B-B001_2.tif || die
 	cp kidney-tissue-fluorescence.tif "${cache_dir}"/kidney.tif || die
 	cp lily-of-the-valley-fluorescence.tif "${cache_dir}"/lily.tif || die
-	cp astronaut_rl.npy "${cache_dir}/../restoration/tests/" || die
+	cp astronaut_rl.npy "${cache_dir}/../restoration/" || die
 	popd > /dev/null || die
 
 	distutils-r1_src_test
@@ -80,13 +86,10 @@ python_test() {
 	local EPYTEST_DESELECT=(
 		# tests for downloading all data files, including these not needed
 		# by any actual tests
-		data/tests/test_data.py::test_download_all_with_pooch
-		# hangs? TODO
-		graph/tests/test_rag.py::test_reproducibility
+		tests/skimage/data/test_data.py::test_download_all_with_pooch
 	)
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest --pyargs skimage -p localserver -o xfail_strict=False
+	epytest
 }
 
 pkg_postinst() {

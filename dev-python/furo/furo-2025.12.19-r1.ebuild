@@ -7,7 +7,7 @@ EAPI=8
 # everything from the Internet
 
 DISTUTILS_USE_PEP517=standalone
-PYTHON_COMPAT=( python3_{11..14} )
+PYTHON_COMPAT=( python3_{12..14} )
 
 inherit distutils-r1 pypi
 
@@ -24,10 +24,13 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
+	dev-python/accessible-pygments[${PYTHON_USEDEP}]
 	dev-python/beautifulsoup4[${PYTHON_USEDEP}]
 	dev-python/sphinx[${PYTHON_USEDEP}]
 	dev-python/sphinx-basic-ng[${PYTHON_USEDEP}]
 "
+
+distutils_enable_tests import-check
 
 src_unpack() {
 	if [[ ${PKGBUMPING} == ${PVR} ]]; then

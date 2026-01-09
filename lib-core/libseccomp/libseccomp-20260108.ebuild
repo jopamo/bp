@@ -8,7 +8,7 @@ inherit autotools
 
 DESCRIPTION="high level interface to Linux seccomp filter"
 HOMEPAGE="https://github.com/seccomp/libseccomp"
-SNAPSHOT=2bc718995e782a8473ba9db8509a398ef69b2edc
+SNAPSHOT=4b0bf5064cae3b4eac88020b31ce0ef43da0e3f9
 SRC_URI="https://github.com/seccomp/libseccomp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libseccomp-${SNAPSHOT}"
 

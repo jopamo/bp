@@ -25,7 +25,6 @@ RESTRICT="!test? ( test )"
 BDEPEND="
 	dev-python/hatch-vcs[${PYTHON_USEDEP}]
 	test? (
-		app-shells/fish
 		app-shells/tcsh
 		~app-shells/zsh-5.9
 		dev-python/pexpect[${PYTHON_USEDEP}]

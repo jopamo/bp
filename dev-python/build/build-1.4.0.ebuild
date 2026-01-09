@@ -27,7 +27,7 @@ IUSE="test test-rust"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
-	>=dev-python/packaging-19.1[${PYTHON_USEDEP}]
+	>=dev-python/packaging-24.0[${PYTHON_USEDEP}]
 	dev-python/pyproject-hooks[${PYTHON_USEDEP}]
 "
 BDEPEND="
@@ -55,23 +55,8 @@ python_test() {
 	fi
 
 	local EPYTEST_DESELECT=(
-		# broken by the presence of flit_core
-		tests/test_util.py::test_wheel_metadata_isolation
-		'tests/test_projectbuilder.py::test_check_dependencies[False]'
-		# broken by the presence of virtualenv (it changes the error
-		# messages, sic!)
-		'tests/test_main.py::test_output[via-sdist-isolation]'
-		'tests/test_main.py::test_output[wheel-direct-isolation]'
-		# broken when built in not normal tty on coloring
-		tests/test_main.py::test_colors
-		'tests/test_main.py::test_output_env_subprocess_error[color]'
-		# Internet
-		'tests/test_main.py::test_verbose_output[False-0]'
-		'tests/test_main.py::test_verbose_output[False-1]'
 		# broken by uv being installed outside venv
 		tests/test_env.py::test_external_uv_detection_success
-		# broken by unbundled pip (TODO: fix pip eventually)
-		'tests/test_projectbuilder.py::test_build_with_dep_on_console_script[False]'
 	)
 
 	if ! has_version "dev-python/uv"; then
@@ -81,7 +66,7 @@ python_test() {
 		)
 	fi
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
+	local EPYTEST_PLUGINS=( pytest-{mock,rerunfailures} )
 	local EPYTEST_XDIST=1
-	epytest -m "not network" -p pytest_mock -p rerunfailures
+	epytest -m "not network"
 }

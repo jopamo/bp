@@ -3,7 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+PYTHON_COMPAT=( python3_{12..14} )
 PYTHON_REQ_USE="threads(+)"
 
 inherit distutils-r1
@@ -32,7 +32,7 @@ RDEPEND="
 	>=dev-python/alabaster-0.7.14[${PYTHON_USEDEP}]
 	>=dev-python/babel-2.13[${PYTHON_USEDEP}]
 	<dev-py/docutils-0.23[${PYTHON_USEDEP}]
-	>=dev-py/docutils-0.20[${PYTHON_USEDEP}]
+	>=dev-py/docutils-0.21[${PYTHON_USEDEP}]
 	>=dev-python/imagesize-1.3[${PYTHON_USEDEP}]
 	>=dev-py/jinja-3.1[${PYTHON_USEDEP}]
 	>=dev-python/packaging-23.0[${PYTHON_USEDEP}]
@@ -97,44 +97,6 @@ python_compile_all() {
 python_test() {
 	mkdir -p "${BUILD_DIR}/sphinx_tempdir" || die
 	local -x SPHINX_TEST_TEMPDIR="${BUILD_DIR}/sphinx_tempdir"
-
-	local EPYTEST_DESELECT=()
-	case ${EPYTHON} in
-		pypy3.11)
-			EPYTEST_DESELECT+=(
-				# TODO
-				tests/test_util/test_util_inspect.py::test_is_classmethod_descriptor
-				tests/test_util/test_util_inspect.py::test_is_builtin_classmethod_like
-				# minor repr() differences
-				tests/test_util/test_util_typing.py::test_restify
-				tests/test_util/test_util_typing.py::test_stringify_annotation
-				tests/test_util/test_util_typing.py::test_stringify_type_union_operator
-				# from pypy3 era
-				tests/test_ext_autodoc/test_ext_autodoc.py::test_autodoc_exception
-				tests/test_ext_autodoc/test_ext_autodoc.py::test_autodoc_ignore_module_all
-				tests/test_ext_autodoc/test_ext_autodoc.py::test_autodoc_inherited_members_None
-				tests/test_ext_autodoc/test_ext_autodoc.py::test_autodoc_subclass_of_builtin_class
-				tests/test_ext_autodoc/test_ext_autodoc.py::test_automethod_for_builtin
-				tests/test_ext_autodoc/test_ext_autodoc.py::test_cython
-				tests/test_ext_autodoc/test_ext_autodoc.py::test_partialfunction
-				tests/test_ext_autodoc/test_ext_autodoc_autoclass.py::test_autodoc_process_bases
-				tests/test_ext_autodoc/test_ext_autodoc_autoclass.py::test_show_inheritance_for_decendants_of_generic_type
-				tests/test_ext_autodoc/test_ext_autodoc_autoclass.py::test_show_inheritance_for_subclass_of_generic_type
-				tests/test_ext_autodoc/test_ext_autodoc_autofunction.py::test_builtin_function
-				tests/test_ext_autodoc/test_ext_autodoc_autofunction.py::test_methoddescriptor
-				tests/test_ext_autodoc/test_ext_autodoc_automodule.py::test_automodule_inherited_members
-				tests/test_ext_autodoc/test_ext_autodoc_preserve_defaults.py::test_preserve_defaults_special_constructs
-				tests/test_ext_autodoc/test_ext_autodoc_signatures.py::test_format_class_signatures_text_signature
-				tests/test_ext_autodoc/test_ext_autodoc_signatures.py::test_format_class_signatures_no_text_signature
-				tests/test_ext_autodoc/test_ext_autodoc_signatures.py::test_format_method_signatures_error_handling
-				tests/test_ext_autosummary/test_ext_autosummary.py::test_autosummary_generate_content_for_module
-				tests/test_ext_autosummary/test_ext_autosummary.py::test_autosummary_generate_content_for_module_skipped
-				tests/test_util/test_util_inspect.py::test_isattributedescriptor
-				tests/test_util/test_util_inspect.py::test_signature
-				tests/test_util/test_util_typing.py::test_is_invalid_builtin_class
-			)
-			;;
-	esac
 
 	epytest
 }

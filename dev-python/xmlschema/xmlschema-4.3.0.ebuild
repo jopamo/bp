@@ -21,7 +21,7 @@ RESTRICT="!test? ( test )"
 
 RDEPEND="
 	<dev-python/elementpath-6[${PYTHON_USEDEP}]
-	>=dev-python/elementpath-5.0.1[${PYTHON_USEDEP}]
+	>=dev-python/elementpath-5.1.0[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	>=dev-py/setuptools-77[${PYTHON_USEDEP}]

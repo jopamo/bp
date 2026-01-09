@@ -6,7 +6,7 @@ inherit meson flag-o-matic
 
 DESCRIPTION="the network swiss army knife"
 HOMEPAGE="http://nc110.sourceforge.net/"
-SNAPSHOT=4e834345a425d1ee2a581e15937b8678bf740be4
+SNAPSHOT=f3a2f612b6efa6b95b548bf8df90a4bc98e78502
 SRC_URI="https://github.com/jopamo/netcat/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

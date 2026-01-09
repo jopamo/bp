@@ -22,6 +22,7 @@ DOCS=( CHANGES.rst README.rst )
 
 PATCHES=(
 	"${FILESDIR}/${P}-unittest-fix.patch"
+	"${FILESDIR}/${P}-glibc-2.42.patch"
 )
 
 distutils_enable_sphinx documentation --no-autodoc

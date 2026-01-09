@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson
+inherit meson flag-o-matic
 
 DESCRIPTION="A library for configuring and customizing font access"
 HOMEPAGE="http://fontconfig.org/"
@@ -12,6 +12,27 @@ S="${WORKDIR}/fontconfig-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
+#api/abi breaks are frequent
+
+IUSE="+debug"
 
 DEPEND="xgui-lib/freetype"
+RDEPEND="${DEPEND}"
+
+RESTRICT="nostrip"
+
+src_configure() {
+	local emesonargs=(
+		-Dbuildtype=$(usex debug debug release)
+		-Dstrip=$(usex debug false true)
+	)
+
+	if use debug ; then
+		filter-lto
+		filter-flags -O3 -O2
+		append-flags -Og -g -fno-omit-frame-pointer
+	fi
+
+	meson_src_configure
+}

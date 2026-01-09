@@ -6,8 +6,7 @@ inherit meson python-any-r1
 
 DESCRIPTION="A thin layer of types for graphic libraries"
 HOMEPAGE="https://ebassi.github.io/graphene/"
-
-SNAPSHOT=47b503d6086900057ceefab785546ad524caa735
+SNAPSHOT=98173e59a3d80d3dd5ad6e4eaab919b4649ac7e5
 SRC_URI="https://github.com/ebassi/graphene/archive/${SNAPSHOT}.tar.gz -> graphene-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/graphene-${SNAPSHOT}"
 

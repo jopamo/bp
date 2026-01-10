@@ -3,9 +3,7 @@
 EAPI=8
 
 BRANCH_NAME="linux-$(ver_cut 1-2).y"
-SNAPSHOT=6609c4d49ebe220a5c40d3105c3f0e68f569ba1a
-
-
+SNAPSHOT=3aa9aac0e8b767a7c6fac33ae626a332c2ba1389
 
 DESCRIPTION="Userland tools for Linux Performance Counters"
 HOMEPAGE="https://kernel.org/"

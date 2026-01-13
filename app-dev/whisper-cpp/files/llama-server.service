@@ -1,0 +1,43 @@
+# /etc/systemd/system/llama-server.service
+[Unit]
+Description=Llama Server
+Documentation=man:llama-server(1)
+After=network-online.target
+Wants=network-online.target
+Requires=network.target
+
+[Service]
+Type=simple
+User=llama
+Group=llama
+WorkingDirectory=/opt/llm-models
+EnvironmentFile=/etc/llama-server/llama-server.env
+Environment=PATH=/opt/llm-models/.local/bin:/usr/local/bin:/usr/bin
+
+# use a shell so $VARS from EnvironmentFile expand
+ExecStart=/bin/bash -lc 'exec llama-server \
+  --host 0.0.0.0 \
+  --port 8080 \
+  --n-gpu-layers "$N_GPU_LAYERS" \
+  --threads "$THREADS" \
+  --ctx-size "$CTX_SIZE" \
+  --temp "$TEMP" \
+  --top-p "$TOP_P" \
+  --log-verbosity 0 \
+  --log-disable \
+  $EXTRA_FLAGS \
+  --model "$MODEL_PATH"'
+
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+RestartSec=3s
+
+# light hardening
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

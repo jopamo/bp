@@ -14,7 +14,7 @@ LICENSE="LGPL-2.1+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="lib-util/glib"
+RDEPEND="lib-core/glib"
 DEPEND="${RDEPEND}
 	app-tex/docbook-xml-dtd
 	app-tex/docbook-xsl-stylesheets

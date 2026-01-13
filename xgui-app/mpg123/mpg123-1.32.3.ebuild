@@ -16,7 +16,7 @@ IUSE="ipv6"
 
 DEPEND="
 	xgui-tools/alsa-lib
-	xgui-misc/pulseaudio"
+	xmedia-lib/pulseaudio"
 
 BDEPEND="
 	app-build/libtool

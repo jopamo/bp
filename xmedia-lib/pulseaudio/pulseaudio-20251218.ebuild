@@ -35,7 +35,7 @@ DEPEND="
 	bluez? ( xgui-lib/sbc )
 	samplerate? ( xmedia-lib/libsamplerate )
 	alsa? ( xgui-tools/alsa-lib )
-	glib? ( lib-util/glib )
+	glib? ( lib-core/glib )
 	jack? ( virtual/jack )
 	dbus? ( app-core/dbus )
 	gtk? ( xgui-lib/gtk3 )

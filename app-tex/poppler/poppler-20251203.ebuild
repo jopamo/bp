@@ -24,7 +24,7 @@ DEPEND="
 	xgui-lib/freetype
 	lib-core/zlib
 	cairo? (
-		lib-util/glib
+		lib-core/glib
 		xgui-lib/cairo
 		introspection? ( lib-dev/gobject-introspection )
 	)

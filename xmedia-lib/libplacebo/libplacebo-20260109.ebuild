@@ -27,7 +27,7 @@ RDEPEND="
 	lcms? ( xgui-lib/lcms )
 	opengl? ( xmedia-lib/libglvnd )
 	shaderc? ( xmedia-lib/shaderc )
-	unwind? ( lib-util/libunwind )
+	unwind? ( lib-dev/libunwind )
 	vulkan? ( xmedia-lib/vulkan-loader )
 	xxhash? ( lib-misc/xxhash )
 "

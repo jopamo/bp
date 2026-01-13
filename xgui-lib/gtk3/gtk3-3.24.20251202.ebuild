@@ -25,8 +25,8 @@ REQUIRED_USE="
 "
 
 DEPEND="
-	lib-util/glib
-	xgui-misc/shared-mime-info
+	lib-core/glib
+	xgui-desktop/shared-mime-info
 	xgui-lib/at-spi2-core
 	xgui-lib/cairo[glib,svg,X?]
 	xgui-lib/gdk-pixbuf

@@ -33,7 +33,7 @@ DEPEND="
 	xgui-lib/xbitmaps
 	xgui-lib/xcb-util
 	xgui-lib/xtrans
-	xgui-misc/xkeyboard-config
+	xgui-tools/xkeyboard-config
 	xgui-tools/iceauth
 	xgui-tools/xauth
 	xgui-tools/xinit
@@ -57,7 +57,7 @@ BDEPEND="
 	xgui-tools/xorgproto
 "
 
-PDEPEND="xgui-misc/xf86-input-libinput"
+PDEPEND="xgui-tools/xf86-input-libinput"
 
 src_configure() {
   # avoid forcing immediate binding which can break nvidia GL stubs at link time

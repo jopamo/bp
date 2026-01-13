@@ -18,8 +18,8 @@ IUSE="libunwind sodium static-libs test"
 
 DEPEND="
 	app-core/util-linux
-	libunwind? ( lib-util/libunwind )
-	sodium? ( lib-util/libsodium )
+	libunwind? ( lib-dev/libunwind )
+	sodium? ( lib-core/libsodium )
 "
 PDEPEND="
 	lib-misc/cppzmq

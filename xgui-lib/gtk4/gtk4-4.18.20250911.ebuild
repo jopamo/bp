@@ -25,11 +25,11 @@ REQUIRED_USE="
 
 COMMON_DEPEND="
 	fonts/fontconfig
-	lib-util/glib
+	lib-core/glib
 	xgui-lib/cairo[glib,svg,X?]
 	xgui-lib/gdk-pixbuf
 	xgui-lib/pango[introspection?]
-	xgui-misc/shared-mime-info
+	xgui-desktop/shared-mime-info
 	xmedia-lib/graphene
 	xmedia-lib/libepoxy[X(+)?]
 	cups? ( lib-print/cups )

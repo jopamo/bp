@@ -1,4 +1,4 @@
-Generate a 1g4-style ebuild using my repository structure, following these rules:
+# HACKING.md
 
 • Use EAPI=8  
 • Use my category layout (for example app-dev, app-build, xgui-lib, etc)  
@@ -268,20 +268,20 @@ All GUI-related libraries but **not applications**.
 
 ---
 
-# 🖼️ **xgui-misc/**
+# 🛠️ **xgui-tools/**
 
 **Purpose:**
-Miscellaneous GUI components & protocols not fitting lib/app categories.
+X11/Wayland tools, build helpers, protocols, and admin/developer tooling for the GUI stack.
 
-**Packages include:**
+**Contents include:**
 
-* X keyboard config
-* pipewire/pulseaudio/wireplumber (you grouped these as GUI-misc)
-* sway (tiling compositor)
-* shared-mime-info
+* **Xorg/X11 tooling:** xrandr, xprop, xrdb, xset, xinit
+* **Protocol/build glue:** xorgproto, xcb-proto, util-macros
+* **Input drivers/config:** xf86-input-libinput, xkeyboard-config
+* **Helpers:** desktop-file-utils, menu-cache
 
 **Unifying rule:**
-User GUI/session/runtime components that are neither pure libs nor full applications.
+Primary interface is a command, build helper, protocol, or admin tool for the GUI stack.
 
 ---
 
@@ -307,18 +307,17 @@ Graphical applications launched by users directly.
 # 🖼️ **xgui-desktop/**
 
 **Purpose:**
-Desktop environments, window managers, panels, themes.
+Desktop environments, window managers, panels, and desktop session glue.
 
 **Contents include:**
 
 * i3wm, openbox, fluxbox, fvwm3, jwm
-* lxqt-panel
-* polybar
+* lxqt-panel, polybar, hsetroot
 * labwc (Wayland compositor)
-* hsetroot
+* shared-mime-info (desktop integration DBs)
 
 **Unifying rule:**
-Window managers and desktop shells.
+Window managers, desktop shells, and session-defining components.
 
 ---
 
@@ -343,18 +342,18 @@ Icon packs and theme resources.
 # 🧵 **xmedia-lib/**
 
 **Purpose:**
-Media encoding/decoding libraries.
+Media encoding/decoding libraries and multimedia plumbing.
 
 **Contents include:**
 
+* pipewire, pulseaudio, wireplumber
 * libdav1d, libvpx, x264, x265
 * libpng, libjpeg-turbo, libwebp
 * libsamplerate, fdk-aac, opus
 * shaderc, libplacebo
-* audio/video processing libs
 
 **Unifying rule:**
-Codec, pixel-format, multimedia processing libraries.
+Codec, pixel-format, multimedia processing libraries, and media servers.
 
 ---
 
@@ -383,6 +382,7 @@ Core system libraries required by many packages.
 **Contents include:**
 
 * glibc, musl, libxcrypt, libseccomp
+* glib, libsodium, libevdev, libinput
 * ncurses, readline
 * zlib, libelf, elfutils
 * pam, libapparmor
@@ -445,23 +445,6 @@ Printing stack libraries.
 
 **Unifying rule:**
 CUPS-related printing infrastructure.
-
----
-
-# 🧹 **lib-util/**
-
-**Purpose:**
-Utility libraries not fitting core/dev/net/media categories.
-
-**Contents include:**
-
-* glib
-* libevdev, libinput
-* libsodium
-* libev, libb2
-
-**Unifying rule:**
-General-purpose system libraries.
 
 ---
 

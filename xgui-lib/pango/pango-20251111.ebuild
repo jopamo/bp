@@ -19,7 +19,7 @@ IUSE="X introspection test"
 DEPEND="
 	fonts/fontconfig
 	lib-dev/fribidi
-	lib-util/glib
+	lib-core/glib
 	lib-dev/json-glib
 	xgui-lib/cairo
 	xgui-lib/libXft

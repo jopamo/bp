@@ -27,13 +27,11 @@ lib-dev
 lib-misc
 lib-net
 lib-print
-lib-util
 virtual
 xgui-app
 xgui-desktop
 xgui-icontheme
 xgui-lib
-xgui-misc
 xgui-tools
 xmedia-app
 xmedia-lib

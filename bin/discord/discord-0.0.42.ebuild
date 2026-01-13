@@ -29,7 +29,7 @@ RDEPEND="
 	lib-core/libcap
 	lib-dev/nspr
 	lib-dev/nss
-	lib-util/glib
+	lib-core/glib
 	lib-print/cups
 	xgui-icontheme/adwaita-icon-theme
 	xgui-lib/at-spi2-core

@@ -20,7 +20,7 @@ IUSE="extra-tools mesh readline selinux systemd test test-programs
 BDEPEND="app-dev/pkgconf"
 DEPEND="
 	lib-dev/ell
-	lib-util/glib
+	lib-core/glib
 	mesh? (
 		lib-dev/json-c
 		lib-core/readline

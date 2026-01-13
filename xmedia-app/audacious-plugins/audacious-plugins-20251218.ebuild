@@ -48,7 +48,7 @@ DEPEND="
 	mms? ( xmedia-live-lib/libmms )
 	modplug? ( xmedia-live-lib/libmodplug )
 	opus? ( xmedia-lib/opus )
-	pulseaudio? ( xgui-misc/pulseaudio )
+	pulseaudio? ( xmedia-lib/pulseaudio )
 	qt? ( xgui-lib/qtbase:5 )
 	scrobbler? ( app-net/curl )
 	sdl? ( xmedia-live-lib/libsdl2[sound] )

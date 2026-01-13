@@ -8,7 +8,7 @@ inherit meson xdg python-any-r1 flag-o-matic
 
 DESCRIPTION="Multi-platform toolkit for creating graphical user interfaces"
 HOMEPAGE="https://www.gtk.org/"
-SNAPSHOT=68df8c35f5eb4f9348cd2d87d4b62454c3a69b34
+SNAPSHOT=b5b6374eea29f187c05e9dbcc260a029ae2aee17
 SRC_URI="https://github.com/GNOME/gtk/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/gtk-${SNAPSHOT}"
 
@@ -24,22 +24,16 @@ REQUIRED_USE="
 "
 
 COMMON_DEPEND="
+	cups? ( lib-print/cups )
 	fonts/fontconfig
+	introspection? ( lib-dev/gobject-introspection )
 	lib-core/glib
+	xgui-desktop/shared-mime-info
 	xgui-lib/cairo[glib,svg,X?]
 	xgui-lib/gdk-pixbuf
 	xgui-lib/pango[introspection?]
-	xgui-desktop/shared-mime-info
 	xmedia-lib/graphene
 	xmedia-lib/libepoxy[X(+)?]
-	cups? ( lib-print/cups )
-	introspection? ( lib-dev/gobject-introspection )
-	wayland? (
-		xgui-lib/libxkbcommon
-		xgui-lib/wayland
-		xgui-lib/wayland-protocols
-		xgui-tools/mesa
-	)
 	X? (
 		xgui-lib/libX11
 		xgui-lib/libXcomposite
@@ -147,21 +141,8 @@ src_install() {
 
 pkg_preinst() {
 	xdg_pkg_preinst
-
-	# Make immodules.cache belongs to gtk+ alone
-	local cache="usr/lib/gtk-$(ver_cut 1).0/$(ver_cut 1).0.0/immodules.cache"
-
-	if [[ -e ${EROOT}/${cache} ]]; then
-		cp "${EROOT}"/${cache} "${ED}"/${cache} || die
-	else
-		touch "${ED}"/${cache} || die
-	fi
 }
 
 pkg_postrm() {
 	xdg_pkg_postrm
-
-	if [[ -z ${REPLACED_BY_VERSION} ]]; then
-		rm -f "${EROOT}"/usr/lib/gtk-$(ver_cut 1).0/$(ver_cut 1).0.0/immodules.cache
-	fi
 }

@@ -21,7 +21,7 @@ KEYWORDS="amd64 arm64"
 PROPERTIES="test? ( test_network )"
 RESTRICT="test"
 
-RDEPEND="<dev-python/pycares-5[${PYTHON_USEDEP}]"
+RDEPEND="=dev-python/pycares-5*[${PYTHON_USEDEP}]"
 DEPEND="${RDEPEND}"
 
 EPYTEST_PLUGINS=( pytest-asyncio )

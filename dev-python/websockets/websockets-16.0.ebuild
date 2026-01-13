@@ -14,7 +14,7 @@ HOMEPAGE="
 	https://github.com/python-websockets/websockets/
 	https://pypi.org/project/websockets/
 "
-# tests are missing pypi sdist, as of 11.0
+# tests are missing pypi sdist, as of 16.0
 SRC_URI="
 	https://github.com/python-websockets/websockets/archive/${PV}.tar.gz
 		-> ${P}.gh.tar.gz
@@ -54,6 +54,6 @@ python_test() {
 		tests/asyncio/test_server.py::ServerTests::test_close_server_keeps_handlers_running
 	)
 
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
+	local EPYTEST_PLUGINS=( pytest-rerunfailures )
 	epytest tests -p rerunfailures --reruns=10 --reruns-delay=2
 }

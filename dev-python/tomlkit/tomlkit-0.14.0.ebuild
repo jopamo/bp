@@ -23,6 +23,7 @@ BDEPEND="
 	)
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 src_configure() {
@@ -43,9 +44,4 @@ src_configure() {
 	# some brilliant idea about forcing 1970 dates in sdist
 	# which are older than what zip can handle...
 	find -exec touch {} + || die
-}
-
-python_test() {
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest
 }

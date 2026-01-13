@@ -21,6 +21,7 @@ src_configure() {
 
 	local mycmakeargs=(
 		-D GGML_CUDA=ON
+		-D CMAKE_CUDA_ARCHITECTURES="86"
 		-D LLAMA_CURL=OFF
 		-D LLAMA_SERVER_SSL=ON
 		-D CMAKE_BUILD_TYPE=Release

@@ -24,7 +24,7 @@ COMMON_DEPEND="
 	imlib? ( xgui-lib/imlib2 )
 	ncurses? ( lib-core/ncurses )
 	nvidia? ( bin/nvidia-drivers )
-	pulseaudio? ( xgui-misc/pulseaudio )
+	pulseaudio? ( xmedia-lib/pulseaudio )
 	rss? ( lib-core/libxml2 net-misc/curl lib-core/glib:2 )
 	systemd? ( app-core/systemd )
 	xft? ( xgui-lib/libXft xgui-lib/freetype )

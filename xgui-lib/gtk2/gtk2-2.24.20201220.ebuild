@@ -22,13 +22,13 @@ IUSE="cups introspection vim-syntax X xinerama"
 REQUIRED_USE="xinerama? ( X )"
 
 COMMON_DEPEND="
-	lib-util/glib
+	lib-core/glib
 	fonts/fontconfig
 	xmedia-lib/libepoxy[X(+)?]
 	xgui-lib/cairo[glib,svg,X?]
 	xgui-lib/gdk-pixbuf[introspection?]
 	xgui-lib/pango[introspection?]
-	xgui-misc/shared-mime-info
+	xgui-desktop/shared-mime-info
 	cups? ( lib-print/cups )
 	introspection? ( lib-dev/gobject-introspection )
 	X? (

@@ -41,7 +41,7 @@ DEPEND="
     dbus? (
         app-core/dbus
         app-compression/libarchive
-        lib-util/glib
+        lib-core/glib
     )
     elfutils? ( virtual/libelf )
     gcrypt? ( lib-core/libgcrypt )

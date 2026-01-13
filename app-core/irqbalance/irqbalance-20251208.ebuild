@@ -19,7 +19,7 @@ IUSE="caps +numa systemd thermal tui"
 RESTRICT="test"
 
 DEPEND="
-	lib-util/glib
+	lib-core/glib
 	caps? ( lib-core/libcap )
 	numa? ( app-util/numactl )
 	systemd? ( app-core/systemd )

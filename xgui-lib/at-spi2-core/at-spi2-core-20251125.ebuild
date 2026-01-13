@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	app-core/dbus
-	lib-util/glib
+	lib-core/glib
 "
 BDEPEND="
 	app-build/gettext

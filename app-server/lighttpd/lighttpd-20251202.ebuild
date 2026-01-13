@@ -32,7 +32,7 @@ DEPEND="
 	bzip2? ( app-compression/bzip2 )
 	zstd? ( app-compression/zstd )
 	ldap?     ( app-net/openldap )
-	libunwind? ( lib-util/libunwind )
+	libunwind? ( lib-dev/libunwind )
 	mbedtls?  ( lib-net/mbedtls )
 	mysql?    ( app-server/mariadb )
 	php?      ( app-lang/php )

@@ -22,7 +22,7 @@ DEPEND="
 	app-tex/docbook-xsl-stylesheets
 	dev-python/six
 	lib-core/libxslt
-	lib-util/glib
+	lib-core/glib
 "
 
 pkg_setup() {

@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 IUSE="introspection"
 
 DEPEND="
-	lib-util/glib
+	lib-core/glib
 	xmedia-lib/libjpeg-turbo
 	xmedia-lib/libpng
 	xmedia-lib/tiff
@@ -29,7 +29,7 @@ BDEPEND="
 	app-dev/gtk-doc-am
 	app-dev/pkgconf
 	dev-py/docutils
-	xgui-misc/shared-mime-info
+	xgui-desktop/shared-mime-info
 "
 
 src_configure() {

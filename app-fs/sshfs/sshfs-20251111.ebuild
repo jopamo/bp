@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	app-fs/fuse:3
-	lib-util/glib
+	lib-core/glib
 	app-net/openssh"
 
 BDEPEND="app-dev/pkgconf

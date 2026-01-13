@@ -22,7 +22,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	app-emu/capstone
-	lib-util/glib
+	lib-core/glib
 	xgui-lib/xcb-util-cursor
 	xgui-lib/xcb-util-image
 	xgui-lib/libxcb

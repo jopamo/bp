@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	lib-util/libevdev
+	lib-core/libevdev
 	xgui-lib/mtdev
 "
 

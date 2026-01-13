@@ -17,7 +17,7 @@ IUSE="introspection"
 
 DEPEND="
 	lib-core/libxml2
-	lib-util/glib
+	lib-core/glib
 	xgui-lib/cairo
 	xgui-lib/gdk-pixbuf
 	xgui-lib/pango

@@ -51,7 +51,7 @@ DEPEND="
 	pcap? ( lib-net/libpcap )
 	perl? (	app-lang/perl )
 	png? ( xmedia-lib/libpng )
-	pulseaudio? ( xgui-misc/pulseaudio )
+	pulseaudio? ( xmedia-lib/pulseaudio )
 	samba? ( app-server/samba[winbind] )
 	xcomposite? ( xgui-lib/libXcomposite )
 	xinerama? ( xgui-lib/libXinerama )
@@ -59,7 +59,7 @@ DEPEND="
 		lib-core/libxml2
 		lib-core/libxslt
 	)
-	unwind? (	lib-util/libunwind )
+	unwind? (	lib-dev/libunwind )
 	usb? (	lib-dev/libusb )
 "
 BDEPEND="

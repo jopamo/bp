@@ -24,7 +24,7 @@ KEYWORDS="amd64 arm64"
 IUSE="+clock spacer +statusnotifier +taskbar +volume"
 
 DEPEND="
-	lib-util/glib
+	lib-core/glib
 	xgui-tools/kguiaddons
 	xgui-tools/kwindowsystem:6
 	xgui-lib/libX11

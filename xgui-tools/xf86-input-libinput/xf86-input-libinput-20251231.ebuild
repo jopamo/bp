@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	lib-util/libinput
+	lib-core/libinput
 	xgui-tools/xorg-server
 "
 

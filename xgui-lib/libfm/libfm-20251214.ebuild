@@ -17,10 +17,10 @@ KEYWORDS="amd64 arm64"
 IUSE="debug exif"
 
 DEPEND="
-	lib-util/glib
+	lib-core/glib
 	xgui-lib/gtk3
 	xgui-tools/menu-cache
-	xgui-misc/shared-mime-info
+	xgui-desktop/shared-mime-info
 	exif? ( xmedia-lib/libexif )
 "
 BDEPEND="

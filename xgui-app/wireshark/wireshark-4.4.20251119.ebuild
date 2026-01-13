@@ -31,7 +31,7 @@ REQUIRED_USE="
 DEPEND="
 	app-compression/brotli
 	lib-core/libgcrypt
-	lib-util/glib
+	lib-core/glib
 	lib-net/libpcap
 	lib-net/c-ares
 	caps? ( lib-core/libcap )

@@ -16,7 +16,7 @@ SLOT="0"
 #KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	lib-util/glib
+	lib-core/glib
 	lib-core/libffi
 	${PYTHON_DEPS}
 "

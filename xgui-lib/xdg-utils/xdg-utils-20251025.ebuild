@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	app-core/dbus
-	xgui-misc/shared-mime-info
+	xgui-desktop/shared-mime-info
 	xgui-tools/xprop
 	xgui-tools/xset
 "

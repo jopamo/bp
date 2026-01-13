@@ -21,7 +21,7 @@ RESTRICT="network-sandbox"
 DEPEND="
 	dev-rust/cargo-c
 	lib-core/libxml2
-	lib-util/glib
+	lib-core/glib
 	virtual/rust
 	xgui-lib/cairo
 	xgui-lib/gdk-pixbuf

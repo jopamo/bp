@@ -19,7 +19,7 @@ IUSE="static-libs"
 
 DEPEND="
 	app-dev/gtk-doc
-	lib-util/glib
+	lib-core/glib
 	xgui-lib/libfm-extra
 "
 

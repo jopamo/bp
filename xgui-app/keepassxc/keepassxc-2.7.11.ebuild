@@ -19,7 +19,7 @@ DEPEND="
 	app-crypto/botan
 	lib-core/libgcrypt
 	lib-core/zlib
-	lib-util/libsodium
+	lib-core/libsodium
 	xgui-lib/qtbase:5
 	xgui-lib/qttools:5
 	xgui-lib/qtsvg:5

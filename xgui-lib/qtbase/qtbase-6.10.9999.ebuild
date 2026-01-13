@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 IUSE="gssapi mysql postgres sqlite systemd opengl vulkan xkbcommon"
 
 DEPEND="
-	lib-util/libinput
+	lib-core/libinput
 	xmedia-lib/libpng
 	xgui-lib/harfbuzz
 	lib-dev/double-conversion

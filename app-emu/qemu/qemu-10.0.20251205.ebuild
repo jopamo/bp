@@ -27,7 +27,7 @@ DEPEND="
 	lib-dev/jemalloc
 	lib-dev/libtasn1
 	lib-net/libssh
-	lib-util/glib
+	lib-core/glib
 	numa? ( app-util/numactl )
 	opengl? ( xmedia-lib/libepoxy )
 	slirp? ( lib-net/slirp )

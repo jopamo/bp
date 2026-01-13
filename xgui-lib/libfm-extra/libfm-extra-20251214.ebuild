@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	lib-util/glib
+	lib-core/glib
 	app-compression/xz-utils
 	>=app-dev/intltool-0.40
 	app-dev/pkgconf

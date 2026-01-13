@@ -12,7 +12,7 @@
 *fonts/noto
 *fonts/noto-emoji
 *fonts/source-code-pro
-*lib-util/libinput
+*lib-core/libinput
 *virtual/rust
 *xgui-app/1term
 *xgui-app/arqiver

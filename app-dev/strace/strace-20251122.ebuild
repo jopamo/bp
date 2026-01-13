@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="libunwind static"
 
-DEPEND="libunwind? ( lib-util/libunwind )"
+DEPEND="libunwind? ( lib-dev/libunwind )"
 
 append-flags -Wno-stringop-overflow -Wno-maybe-uninitialized
 

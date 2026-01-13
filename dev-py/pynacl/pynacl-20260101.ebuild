@@ -19,7 +19,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	lib-util/libsodium:=
+	lib-core/libsodium:=
 "
 RDEPEND="
 	${DEPEND}

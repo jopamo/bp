@@ -42,6 +42,12 @@ src_prepare() {
 	sed -i '/-Werror/d' lib/common.mk lib/libxdp/Makefile \
 		lib/libxdp/tests/Makefile lib/util/Makefile || die
 
+	# musl: avoid ethhdr redefinition from netinet vs linux headers
+	# netinet/ether.h -> netinet/if_ether.h collides with linux/if_ether.h
+	sed -i \
+		-e 's|^[[:space:]]*#include[[:space:]]*<netinet/ether\.h>[[:space:]]*$|#include <linux/if_ether.h>|' \
+		lib/util/xdpsock.h || die
+
 	default
 }
 

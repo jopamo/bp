@@ -18,7 +18,7 @@ IUSE="system-service systemd test"
 
 DEPEND="
 	app-lang/lua
-	xgui-misc/pipewire
+	xmedia-lib/pipewire
 "
 
 src_configure() {

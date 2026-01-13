@@ -21,7 +21,7 @@ DEPEND="
 	xmedia-lib/speexdsp
 	ffmpeg? ( xmedia-app/ffmpeg )
 	libsamplerate? ( xmedia-lib/libsamplerate )
-	pulseaudio? ( xgui-misc/pulseaudio )
+	pulseaudio? ( xmedia-lib/pulseaudio )
 "
 
 src_prepare() {

@@ -15,9 +15,9 @@ _XDG_ECLASS=1
 inherit xdg-utils   # xdg-utils already inherits emoji → log_* helpers available
 
 # Avoid dependency loop as both depend on glib-2
-[[ ${CATEGORY}/${P} != lib-util/glib-2.* ]] && _XDG_DEPEND="
+[[ ${CATEGORY}/${P} != lib-core/glib-2.* ]] && _XDG_DEPEND="
 	app-dev/desktop-file-utils
-	xgui-misc/shared-mime-info
+	xgui-desktop/shared-mime-info
 "
 
 case ${EAPI} in

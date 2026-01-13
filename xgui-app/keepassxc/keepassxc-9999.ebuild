@@ -20,7 +20,7 @@ DEPEND="
 	lib-core/libgcrypt
 	lib-core/zlib
 	xgui-lib/qt5compat
-	lib-util/libsodium
+	lib-core/libsodium
 	xgui-lib/qtbase
 	xgui-lib/qttools
 	xgui-lib/qtsvg

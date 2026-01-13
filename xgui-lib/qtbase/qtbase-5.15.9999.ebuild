@@ -28,8 +28,8 @@ DEPEND="
 	lib-core/libpcre2
 	lib-core/zlib
 	lib-dev/double-conversion
-	lib-util/glib
-	lib-util/libinput
+	lib-core/glib
+	lib-core/libinput
 	xgui-lib/libxcb
 	xgui-lib/freetype
 	xgui-lib/harfbuzz

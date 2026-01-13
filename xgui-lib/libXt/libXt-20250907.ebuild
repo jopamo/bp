@@ -21,7 +21,7 @@ RDEPEND=">=xgui-lib/libX11-1.6.2
 	>=xgui-lib/libICE-1.0.8-r1
 	xgui-tools/xorgproto"
 DEPEND="${RDEPEND}
-	test? ( lib-util/glib )"
+	test? ( lib-core/glib )"
 
 src_prepare() {
 	eautoreconf

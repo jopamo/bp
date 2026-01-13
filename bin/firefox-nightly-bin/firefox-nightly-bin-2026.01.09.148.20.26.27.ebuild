@@ -32,14 +32,14 @@ RDEPEND="
 	fonts/fontconfig
 	lib-dev/dbus-glib
 	lib-dev/nss
-	lib-util/glib
+	lib-core/glib
 	xgui-lib/at-spi2-core
 	xgui-lib/cairo[X]
 	xgui-lib/gdk-pixbuf
 	xgui-lib/gtk3
 	xgui-lib/pango
 	xgui-lib/freetype
-	xgui-misc/pulseaudio
+	xmedia-lib/pulseaudio
 	xmedia-app/ffmpeg
 "
 

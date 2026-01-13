@@ -46,7 +46,7 @@ RDEPEND="
 
 DEPEND="${RDEPEND}"
 
-PDEPEND="xgui-misc/wireplumber"
+PDEPEND="xmedia-lib/wireplumber"
 
 python_check_deps() {
 	python_has_version "dev-py/docutils[${PYTHON_USEDEP}]"

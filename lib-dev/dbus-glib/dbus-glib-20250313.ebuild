@@ -19,7 +19,7 @@ IUSE="debug static-libs test"
 
 DEPEND="
 	lib-core/expat
-	lib-util/glib
+	lib-core/glib
 	app-core/dbus
 "
 

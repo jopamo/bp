@@ -18,7 +18,7 @@ PDEPEND="xmedia-app/audacious-plugins"
 
 DEPEND="
 	lib-dev/dbus-glib
-	lib-util/glib
+	lib-core/glib
 	xgui-lib/cairo
 	xgui-lib/pango
 	xgui-lib/qtbase

@@ -15,7 +15,7 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="lib-util/glib"
+DEPEND="lib-core/glib"
 
 src_prepare() {
 	default

@@ -21,7 +21,7 @@ RDEPEND="
 	sdl? ( xmedia-live-lib/libsdl )
 	X? (
 		lib-core/zlib
-		lib-util/glib
+		lib-core/glib
 		xgui-lib/cairo
 		xgui-lib/gdk-pixbuf
 		xgui-lib/gtk3

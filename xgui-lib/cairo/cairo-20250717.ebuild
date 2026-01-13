@@ -24,7 +24,7 @@ DEPEND="
 	xgui-lib/pixman
 	xgui-lib/freetype
 	xmedia-lib/libpng
-	glib? ( lib-util/glib )
+	glib? ( lib-core/glib )
 	X? (
 		xgui-lib/libXrender
 		xgui-lib/libXext

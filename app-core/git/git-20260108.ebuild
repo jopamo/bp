@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="curl static-libs perl gitweb"
+IUSE="curl static-libs +perl gitweb"
 
 DEPEND="
 	app-build/gettext

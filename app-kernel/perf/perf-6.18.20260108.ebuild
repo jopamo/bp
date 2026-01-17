@@ -15,7 +15,8 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bpf"
+IUSE="bpf debug"
+RESTRICT="debug? ( strip )"
 
 src_prepare() {
 	default
@@ -57,9 +58,15 @@ src_compile() {
 		NO_LIBTRACEEVENT=1
 	)
 
-	# disable libbpf support when USE=-bpf
 	if ! use bpf ; then
 		myemake+=( NO_LIBBPF=1 )
+	fi
+
+	if use debug ; then
+		myemake+=(
+			EXTRA_CFLAGS="-Og -g3 -ggdb3 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"
+			STRIP=true
+		)
 	fi
 
 	emake "${myemake[@]}" || die
@@ -86,13 +93,20 @@ src_install() {
 		NO_LIBTRACEEVENT=1
 	)
 
-	# disable libbpf support when USE=-bpf
 	if ! use bpf ; then
 		myemake+=( NO_LIBBPF=1 )
 	fi
 
+	if use debug ; then
+		myemake+=(
+			EXTRA_CFLAGS="-Og -g3 -ggdb3 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"
+			STRIP=true
+		)
+	fi
+
 	emake install \
-	"${myemake[@]}" \
-	DESTDIR="${D}" \
-	prefix=/usr || die
+		"${myemake[@]}" \
+		DESTDIR="${D}" \
+		prefix=/usr \
+		STRIP=true || die
 }

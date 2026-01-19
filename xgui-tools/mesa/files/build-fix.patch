@@ -1,0 +1,35 @@
+diff --git a/src/compiler/clc/clc_helpers.cpp b/src/compiler/clc/clc_helpers.cpp
+index 9912f9b..38e9298 100644
+--- a/src/compiler/clc/clc_helpers.cpp
++++ b/src/compiler/clc/clc_helpers.cpp
+@@ -28,7 +28,6 @@
+ #include <sstream>
+ #include <mutex>
+ 
+-#include "util/ralloc.h"
+ #include "util/set.h"
+ #include <llvm/ADT/ArrayRef.h>
+ #include <llvm/IR/DiagnosticPrinter.h>
+@@ -54,7 +53,11 @@
+ #include <clang/Frontend/TextDiagnosticPrinter.h>
+ #include <clang/Frontend/Utils.h>
+ #include <clang/Basic/TargetInfo.h>
++#if LLVM_VERSION_MAJOR >= 22
++#include <clang/Options/OptionUtils.h>
++#endif
+ 
++#include "util/ralloc.h"
+ #include <spirv-tools/libspirv.h>
+ #include <spirv-tools/libspirv.hpp>
+ #include <spirv-tools/linker.hpp>
+@@ -915,7 +918,9 @@ clc_compile_to_llvm_module(LLVMContext &llvm_ctx,
+    // GetResourcePath is a way to retrieve the actual libclang resource dir based on a given binary
+    // or library.
+    auto tmp_res_path =
+-#if LLVM_VERSION_MAJOR >= 20
++#if LLVM_VERSION_MAJOR >= 22
++      clang::GetResourcesPath(llvm::StringRef(clang_path));
++#elif LLVM_VERSION_MAJOR >= 20
+       Driver::GetResourcesPath(std::string(clang_path));
+ #else
+       Driver::GetResourcesPath(std::string(clang_path), CLANG_RESOURCE_DIR);

@@ -106,10 +106,36 @@ src_prepare() {
 			library/unwind/src/lib.rs || die
 	fi
 
+	# LLVM 22 moved PassPlugin.h from llvm/Passes to llvm/Plugins
+	# Prefer the old path when present, fall back to the new one
+	sed -i '/#include "llvm\/Passes\/PassPlugin\.h"/c\
+#if __has_include("llvm/Passes/PassPlugin.h")\
+#  include "llvm/Passes/PassPlugin.h"\
+#elif __has_include("llvm/Plugins/PassPlugin.h")\
+#  include "llvm/Plugins/PassPlugin.h"\
+#else\
+#  error "PassPlugin.h not found"\
+#endif' \
+		compiler/rustc_llvm/llvm-wrapper/PassWrapper.cpp || die
+
+	# rustc/LLVM combo doesn't accept/advertise amx-transpose
+	sed -i \
+		-e '/amx-transpose/d' \
+		-e '/amx_transpose/d' \
+		compiler/rustc_target/src/target_features.rs || die
+
+	# std_detect also lists it and denies unexpected_cfgs
+	sed -i \
+		-e '/Feature::amx_transpose/d' \
+		-e '/amx-transpose/d' \
+		-e '/amx_transpose/d' \
+		library/std_detect/src/detect/arch/x86.rs \
+		library/std_detect/src/detect/os/x86.rs || die
+
+
 	filter-clang
 	filter-lto
 	default
-
 
 	eapply "${FILESDIR}"/0003-bootstrap-Workaround-for-system-stage0.patch
 	eapply "${FILESDIR}"/0004-compiler-Change-LLVM-targets.patch

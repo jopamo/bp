@@ -22,7 +22,7 @@ SRC_URI="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="native-extensions"
+IUSE="+native-extensions"
 
 # stubgen collides with this package: https://bugs.gentoo.org/585594
 RDEPEND="
@@ -60,11 +60,19 @@ PATCHES=(
 )
 
 src_prepare() {
+	sed -i \
+		-e 's:from pathspec\.patterns\.gitwildmatch import GitWildMatchPatternError:from pathspec.patterns.gitignore import GitIgnorePatternError as GitWildMatchPatternError:' \
+		mypy/modulefinder.py || die
+
 	distutils-r1_src_prepare
 
 	# don't force pytest-xdist, in case user asked for EPYTEST_JOBS=1
 	sed -i -e '/addopts/s:-nauto::' pyproject.toml || die
+
+
+    filter-flags -Wl,-z,defs
 }
+
 
 python_compile() {
 	local -x MYPY_USE_MYPYC=$(usex native-extensions 1 0)
@@ -121,8 +129,4 @@ python_test() {
 	rm conftest.py pyproject.toml || die
 
 	[[ ${failed} ]] && die "epytest failed with ${EPYTHON}"
-}
-src_prepare() {
-    default
-    filter-flags -Wl,-z,defs
 }

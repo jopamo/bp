@@ -3,30 +3,36 @@ set -euo pipefail
 
 # simple build helper for Meson, CMake, or Autotools
 # usage:
-#   ./build.sh                # auto-detect, release
-#   ./build.sh --debug        # auto-detect, debug
-#   ./build.sh --asan         # auto-detect, debug with ASan+UBSan
-#   ./build.sh --cmake --asan # force CMake, ASan+UBSan
+#   ./build.sh                    # auto-detect, release
+#   ./build.sh --debug            # full debug, verbose_logs enabled for Meson
+#   ./build.sh --fastdebug        # optimized+gdb-friendly, verbose_logs disabled
+#   ./build.sh --asan             # full debug + ASan/UBSan, verbose_logs enabled for Meson
+#   ./build.sh --fastasan         # optimized + ASan/UBSan, verbose_logs disabled
+#   ./build.sh --cmake --fastasan # force CMake, fast ASan
 #   ./build.sh --meson --debug
 #   ./build.sh --autotools --release
 
 usage() {
   cat <<EOF
-Usage: $0 [--cmake|--meson|--autotools] [--release|--debug|--asan]
+Usage: $0 [--cmake|--meson|--autotools] [--release|--debug|--fastdebug|--asan|--fastasan]
 
   --cmake      force CMake build
   --meson      force Meson build
   --autotools  force Autotools build (configure/make)
 
   --release    optimized release build (default)
-  --debug      debug build
-  --asan       debug build with AddressSanitizer + UBSan
+  --debug      full debug build (-O0 -g), verbose_logs enabled for Meson
+  --fastdebug  optimized debug build (-O2 -g1), verbose_logs disabled
+  --asan       debug build with AddressSanitizer + UBSan, verbose_logs enabled for Meson
+  --fastasan   optimized build with AddressSanitizer + UBSan, verbose_logs disabled
 
 Examples:
   $0
   $0 --debug
+  $0 --fastdebug
   $0 --asan
-  $0 --cmake --asan
+  $0 --fastasan
+  $0 --cmake --fastasan
   $0 --meson --debug
   $0 --autotools --release
 EOF
@@ -42,7 +48,9 @@ while [[ $# -gt 0 ]]; do
     --autotools) build_system=autotools ;;
     --release)   config=release ;;
     --debug)     config=debug ;;
+    --fastdebug) config=fastdebug ;;
     --asan)      config=asan ;;
+    --fastasan)  config=fastasan ;;
     -h|--help)
       usage
       exit 0
@@ -80,6 +88,9 @@ fi
 
 NPROC=$(nproc)
 
+# frame pointers help perf/gdb/sanitizers unwind accurately on modern toolchains
+fp_flags='-fno-omit-frame-pointer -mno-omit-leaf-frame-pointer'
+
 # common sanitizer options for asan builds
 asan_env='detect_leaks=1:halt_on_error=1:abort_on_error=1:malloc_context_size=30:fast_unwind_on_malloc=0:symbolize=1:strict_init_order=1:strict_string_checks=1:detect_stack_use_after_return=1:alloc_dealloc_mismatch=1:detect_container_overflow=1'
 ubsan_env='print_stacktrace=1:report_error_type=1:halt_on_error=1'
@@ -97,6 +108,17 @@ setup_sanitizer_env() {
   fi
 }
 
+meson_verbose_logs_arg() {
+  case "$1" in
+    debug|asan)
+      echo "-Dverbose_logs=true"
+      ;;
+    *)
+      echo "-Dverbose_logs=false"
+      ;;
+  esac
+}
+
 cmake_build() {
   local cfg="$1"
   local builddir
@@ -109,8 +131,8 @@ cmake_build() {
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_C_COMPILER="$CC" \
         -DCMAKE_CXX_COMPILER="$CXX" \
-        -DCMAKE_C_FLAGS_RELEASE="-O2 -march=native -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
-        -DCMAKE_CXX_FLAGS_RELEASE="-O2 -march=native -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
+        -DCMAKE_C_FLAGS_RELEASE="-O2 -march=native $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
+        -DCMAKE_CXX_FLAGS_RELEASE="-O2 -march=native $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
       cmake --build "$builddir" -j"$NPROC"
       (cd "$builddir" && ctest --output-on-failure || true)
       ;;
@@ -121,8 +143,20 @@ cmake_build() {
         -DCMAKE_BUILD_TYPE=Debug \
         -DCMAKE_C_COMPILER="$CC" \
         -DCMAKE_CXX_COMPILER="$CXX" \
-        -DCMAKE_C_FLAGS_DEBUG="-g -O0 -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
-        -DCMAKE_CXX_FLAGS_DEBUG="-g -O0 -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
+        -DCMAKE_C_FLAGS_DEBUG="-g -O0 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
+        -DCMAKE_CXX_FLAGS_DEBUG="-g -O0 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
+      cmake --build "$builddir" -j"$NPROC"
+      (cd "$builddir" && ctest --output-on-failure || true)
+      ;;
+    fastdebug)
+      builddir=build-cmake-fastdebug
+      rm -rf "$builddir"
+      cmake -S . -B "$builddir" \
+        -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+        -DCMAKE_C_COMPILER="$CC" \
+        -DCMAKE_CXX_COMPILER="$CXX" \
+        -DCMAKE_C_FLAGS_RELWITHDEBINFO="-O2 -march=native -g1 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
+        -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O2 -march=native -g1 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
       cmake --build "$builddir" -j"$NPROC"
       (cd "$builddir" && ctest --output-on-failure || true)
       ;;
@@ -134,8 +168,23 @@ cmake_build() {
         -DCMAKE_BUILD_TYPE=Debug \
         -DCMAKE_C_COMPILER="$CC" \
         -DCMAKE_CXX_COMPILER="$CXX" \
-        -DCMAKE_C_FLAGS_DEBUG="-g -O1 -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes" \
-        -DCMAKE_CXX_FLAGS_DEBUG="-g -O1 -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes" \
+        -DCMAKE_C_FLAGS_DEBUG="-g -O1 $fp_flags -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes" \
+        -DCMAKE_CXX_FLAGS_DEBUG="-g -O1 $fp_flags -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes" \
+        -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address,undefined" \
+        -DCMAKE_SHARED_LINKER_FLAGS="-fsanitize=address,undefined"
+      cmake --build "$builddir" -j"$NPROC"
+      (cd "$builddir" && ctest --output-on-failure)
+      ;;
+    fastasan)
+      builddir=build-cmake-fastasan
+      rm -rf "$builddir"
+      setup_sanitizer_env
+      cmake -S . -B "$builddir" \
+        -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+        -DCMAKE_C_COMPILER="$CC" \
+        -DCMAKE_CXX_COMPILER="$CXX" \
+        -DCMAKE_C_FLAGS_RELWITHDEBINFO="-O2 -march=native -g1 $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
+        -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O2 -march=native -g1 $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
         -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address,undefined" \
         -DCMAKE_SHARED_LINKER_FLAGS="-fsanitize=address,undefined"
       cmake --build "$builddir" -j"$NPROC"
@@ -151,6 +200,8 @@ cmake_build() {
 meson_build() {
   local cfg="$1"
   local builddir
+  local vlog
+  vlog="$(meson_verbose_logs_arg "$cfg")"
 
   case "$cfg" in
     release)
@@ -159,8 +210,9 @@ meson_build() {
       meson setup "$builddir" . \
         --buildtype=release \
         -Dwarning_level=3 \
-        -Dc_args="-O2 -march=native -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
-        -Dcpp_args="-O2 -march=native -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
+        $vlog \
+        -Dc_args="-O2 -march=native $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
+        -Dcpp_args="-O2 -march=native $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
       meson compile -C "$builddir" -j"$NPROC"
       meson test -C "$builddir" --print-errorlogs || true
       ;;
@@ -170,8 +222,21 @@ meson_build() {
       meson setup "$builddir" . \
         --buildtype=debug \
         -Dwarning_level=3 \
-        -Dc_args="-g -O0 -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
-        -Dcpp_args="-g -O0 -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
+        $vlog \
+        -Dc_args="-g -O0 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
+        -Dcpp_args="-g -O0 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
+      meson compile -C "$builddir" -j"$NPROC"
+      meson test -C "$builddir" --print-errorlogs || true
+      ;;
+    fastdebug)
+      builddir=build-meson-fastdebug
+      rm -rf "$builddir"
+      meson setup "$builddir" . \
+        --buildtype=debugoptimized \
+        -Dwarning_level=3 \
+        $vlog \
+        -Dc_args="-O2 -march=native -g1 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
+        -Dcpp_args="-O2 -march=native -g1 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
       meson compile -C "$builddir" -j"$NPROC"
       meson test -C "$builddir" --print-errorlogs || true
       ;;
@@ -184,8 +249,24 @@ meson_build() {
         -Db_sanitize=address,undefined \
         -Db_lundef=false \
         -Dwarning_level=3 \
-        -Dc_args="-g -O1 -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes" \
-        -Dcpp_args="-g -O1 -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes"
+        $vlog \
+        -Dc_args="-g -O1 $fp_flags -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes" \
+        -Dcpp_args="-g -O1 $fp_flags -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes"
+      meson compile -C "$builddir" -j"$NPROC"
+      meson test -C "$builddir" --print-errorlogs
+      ;;
+    fastasan)
+      builddir=build-meson-fastasan
+      rm -rf "$builddir"
+      setup_sanitizer_env
+      meson setup "$builddir" . \
+        --buildtype=debugoptimized \
+        -Db_sanitize=address,undefined \
+        -Db_lundef=false \
+        -Dwarning_level=3 \
+        $vlog \
+        -Dc_args="-O2 -march=native -g1 $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
+        -Dcpp_args="-O2 -march=native -g1 $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
       meson compile -C "$builddir" -j"$NPROC"
       meson test -C "$builddir" --print-errorlogs
       ;;
@@ -206,18 +287,30 @@ autotools_build() {
   case "$cfg" in
     release)
       builddir=build-autotools-release
-      cflags="-O2 -march=native -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
+      cflags="-O2 -march=native $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
       cxxflags="$cflags"
       ;;
     debug)
       builddir=build-autotools-debug
-      cflags="-g -O0 -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
+      cflags="-g -O0 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
+      cxxflags="$cflags"
+      ;;
+    fastdebug)
+      builddir=build-autotools-fastdebug
+      cflags="-O2 -march=native -g1 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
       cxxflags="$cflags"
       ;;
     asan)
       builddir=build-autotools-asan
       setup_sanitizer_env
-      cflags="-g -O1 -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes"
+      cflags="-g -O1 $fp_flags -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes"
+      cxxflags="$cflags"
+      ldflags="-fsanitize=address,undefined"
+      ;;
+    fastasan)
+      builddir=build-autotools-fastasan
+      setup_sanitizer_env
+      cflags="-O2 -march=native -g1 $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
       cxxflags="$cflags"
       ldflags="-fsanitize=address,undefined"
       ;;
@@ -230,33 +323,4 @@ autotools_build() {
   rm -rf "$builddir"
   mkdir -p "$builddir"
 
-  # run bootstrap if present
-  if [[ -x ./bootstrap ]]; then
-    ./bootstrap
-  fi
-
-  pushd "$builddir" >/dev/null
-    env CFLAGS="$cflags" CXXFLAGS="$cxxflags" LDFLAGS="$ldflags" ../configure
-    make -j"$NPROC"
-    # run tests if check target exists
-    if make -n check >/dev/null 2>&1; then
-      make check
-    fi
-  popd >/dev/null
-}
-
-case "$build_system" in
-  cmake)
-    cmake_build "$config"
-    ;;
-  meson)
-    meson_build "$config"
-    ;;
-  autotools)
-    autotools_build "$config"
-    ;;
-  *)
-    echo "Internal error: unknown build_system '$build_system'" >&2
-    exit 1
-    ;;
-esac
+  if

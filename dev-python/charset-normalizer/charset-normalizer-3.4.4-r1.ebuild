@@ -24,7 +24,7 @@ IUSE="+native-extensions"
 BDEPEND="
 	native-extensions? (
 		$(python_gen_cond_dep '
-			dev-python/mypy[${PYTHON_USEDEP}]
+			dev-py/mypy[${PYTHON_USEDEP}]
 		' python3.{11..14})
 	)
 	dev-py/setuptools[${PYTHON_USEDEP}]

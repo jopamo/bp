@@ -21,7 +21,7 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	>=dev-python/click-8.0.0[${PYTHON_USEDEP}]
-	>=dev-python/mypy-extensions-0.4.3[${PYTHON_USEDEP}]
+	>=dev-py/mypy-extensions-0.4.3[${PYTHON_USEDEP}]
 	>=dev-python/packaging-22.0[${PYTHON_USEDEP}]
 	>=dev-python/pathspec-1.0.0[${PYTHON_USEDEP}]
 	>=dev-python/platformdirs-2[${PYTHON_USEDEP}]

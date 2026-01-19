@@ -33,7 +33,7 @@ IUSE="test test-rust"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
-	>=dev-python/certifi-2025.10.5[${PYTHON_USEDEP}]
+	>=dev-python/certifi-2026.1.4[${PYTHON_USEDEP}]
 	>=dev-python/trio-0.31.0[${PYTHON_USEDEP}]
 	>=dev-python/trio-websocket-0.12.2[${PYTHON_USEDEP}]
 	>=dev-python/typing-extensions-4.15.0[${PYTHON_USEDEP}]
@@ -68,6 +68,8 @@ src_prepare() {
 		-i pyproject.toml || die
 	# unpin deps
 	sed -i -e 's:,<[0-9.]*::' pyproject.toml || die
+	# remove nonsense typing deps
+	sed -i -e '/types/d' -e '/typing/d' pyproject.toml || die
 }
 
 python_test() {
@@ -104,6 +106,8 @@ python_test() {
 		local EPYTEST_IGNORE+=(
 			# requires some "python.runfiles", also bidi tests generally fail
 			test/selenium/webdriver/common/bidi_webextension_tests.py
+			# throws some error that pytest doesn't even show
+			test/selenium/webdriver/firefox/ff_installs_addons_tests.py
 		)
 		EPYTEST_DESELECT+=(
 			# expects prebuilt executables for various systems
@@ -137,6 +141,11 @@ python_test() {
 			test/selenium/webdriver/marionette/mn_options_tests.py::TestUnit::test_ctor
 			test/selenium/webdriver/marionette/mn_options_tests.py::TestUnit::test_prefs
 			test/selenium/webdriver/marionette/mn_options_tests.py::TestUnit::test_to_capabilities
+			test/selenium/webdriver/remote/remote_custom_locator_tests.py::test_find_element_with_custom_locator
+			test/selenium/webdriver/remote/remote_custom_locator_tests.py::test_find_elements_with_custom_locator
+
+			# Internet
+			test/selenium/webdriver/remote/remote_server_tests.py::test_download_latest_server
 		)
 	else
 		EPYTEST_IGNORE+=(

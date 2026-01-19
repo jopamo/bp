@@ -15,17 +15,3 @@ bp is short for 'backpack' to denote it being easier to move around on various c
 * supported ssl: openssl libressl
 * supported curses: ncurses netbsd-curses
 * bootstrap golang toolchain from source
-
-## Binary Packages
-
-### core
-
-* [1g4-glibc-amd64](https://1g4.org/1g4-glibc-amd64/)
-* [1g4-musl-amd64](https://1g4.org/1g4-musl-amd64/)
-* [1g4-glibc-arm64](https://1g4.org/1g4-glibc-arm64/)
-* [1g4-musl-arm64](https://1g4.org/1g4-musl-arm64/)
-
-### desktop
-
-* [glibc amd64 desktop](https://1g4.org/1g4-glibc-amd64-desktop/)
-* [glibc arm64 desktop](https://1g4.org/1g4-glibc-arm64-desktop/)

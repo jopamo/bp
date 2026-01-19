@@ -29,6 +29,7 @@ RDEPEND="
 	)
 "
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 src_prepare() {
@@ -39,7 +40,6 @@ src_prepare() {
 }
 
 python_test() {
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
 	# skip device integration tests
 	epytest --no-device
 }

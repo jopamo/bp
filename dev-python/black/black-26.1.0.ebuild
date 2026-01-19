@@ -3,6 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
+PYPI_VERIFY_REPO=https://github.com/psf/black
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
@@ -22,7 +23,7 @@ RDEPEND="
 	>=dev-python/click-8.0.0[${PYTHON_USEDEP}]
 	>=dev-python/mypy-extensions-0.4.3[${PYTHON_USEDEP}]
 	>=dev-python/packaging-22.0[${PYTHON_USEDEP}]
-	>=dev-python/pathspec-0.9.0[${PYTHON_USEDEP}]
+	>=dev-python/pathspec-1.0.0[${PYTHON_USEDEP}]
 	>=dev-python/platformdirs-2[${PYTHON_USEDEP}]
 	>=dev-python/pytokens-0.3.0[${PYTHON_USEDEP}]
 "

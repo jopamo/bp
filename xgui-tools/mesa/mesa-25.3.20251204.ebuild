@@ -43,6 +43,8 @@ BDEPEND="
 	dev-python/pyyaml
 "
 
+PATCHES=("${FILESDIR}"/build-fix.patch)
+
 src_configure() {
 	local emesonargs=(
 		-Db_lto=true

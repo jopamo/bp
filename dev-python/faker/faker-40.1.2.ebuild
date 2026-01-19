@@ -19,7 +19,6 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	dev-python/tzdata[${PYTHON_USEDEP}]
 	!dev-ruby/faker
 "
 BDEPEND="

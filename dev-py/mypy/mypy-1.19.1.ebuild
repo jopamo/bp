@@ -28,7 +28,7 @@ IUSE="+native-extensions"
 RDEPEND="
 	!dev-util/stubgen
 	>=dev-python/librt-0.6.2[${PYTHON_USEDEP}]
-	>=dev-python/mypy-extensions-1.0.0[${PYTHON_USEDEP}]
+	>=dev-py/mypy-extensions-1.0.0[${PYTHON_USEDEP}]
 	>=dev-python/pathspec-0.9.0[${PYTHON_USEDEP}]
 	>=dev-python/psutil-4[${PYTHON_USEDEP}]
 	>=dev-python/typing-extensions-4.6.0[${PYTHON_USEDEP}]

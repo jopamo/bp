@@ -21,7 +21,7 @@ KEYWORDS="amd64 arm64"
 
 BDEPEND="
 	test? (
-		dev-python/mypy-extensions[${PYTHON_USEDEP}]
+		dev-py/mypy-extensions[${PYTHON_USEDEP}]
 	)
 "
 

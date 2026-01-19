@@ -3,7 +3,6 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYPI_NO_NORMALIZE=1
 PYPI_PN=Send2Trash
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
@@ -19,4 +18,5 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest

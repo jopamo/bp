@@ -130,7 +130,7 @@ src_configure() {
 
 		--with-build-config="bootstrap-lto-lean"
 		--with-linker-hash-style=gnu
-		--with-pkgversion="1g4 Linux GCC ${PV}"
+		--with-pkgversion="1g4 Linux"
 		--with-system-zlib
 
 		${cet_opt}

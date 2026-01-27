@@ -3,7 +3,7 @@
 EAPI=8
 
 BRANCH_NAME="linux-$(ver_cut 1-2).y"
-SNAPSHOT=3aa9aac0e8b767a7c6fac33ae626a332c2ba1389
+SNAPSHOT=5dfbc5357c34bdf81c84aa78bc8e3d6d9ba10aad
 
 K_NOUSENAME="yes"
 K_NOSETEXTRAVERSION="yes"

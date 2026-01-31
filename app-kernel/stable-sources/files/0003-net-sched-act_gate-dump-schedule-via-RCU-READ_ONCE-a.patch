@@ -1,0 +1,95 @@
+From fb44248e2ee68486b15a48ee2a72dfcfd1d9a863 Mon Sep 17 00:00:00 2001
+From: Paul Moses <p@1g4.org>
+Date: Thu, 29 Jan 2026 22:27:03 -0600
+Subject: [PATCH v4 3/3] net/sched: act_gate: dump schedule via RCU, READ_ONCE
+ action
+
+The dump path can run concurrently with updates. Switch it to an RCU
+read-side section and use rcu_dereference() for the parameters so it no
+longer needs tcf_lock. Read the action code with READ_ONCE() to avoid torn
+reads in the lockless path.
+
+Fixes: a51c328df310 ("net: qos: introduce a gate control flow action")
+Cc: stable@vger.kernel.org
+Signed-off-by: Paul Moses <p@1g4.org>
+---
+ net/sched/act_gate.c | 29 +++++++++++++++--------------
+ 1 file changed, 15 insertions(+), 14 deletions(-)
+
+diff --git a/net/sched/act_gate.c b/net/sched/act_gate.c
+index 1685e07d81e5f..af925d22b3383 100644
+--- a/net/sched/act_gate.c
++++ b/net/sched/act_gate.c
+@@ -654,45 +654,46 @@ static int tcf_gate_dump(struct sk_buff *skb, struct tc_action *a,
+ 	};
+ 	struct tcf_t t;
+ 
+-	spin_lock_bh(&gact->tcf_lock);
+-	opt.action = gact->tcf_action;
++	opt.action = READ_ONCE(gact->tcf_action);
+ 
+ 	if (nla_put(skb, TCA_GATE_PARMS, sizeof(opt), &opt))
+ 		goto nla_put_failure;
+-	p = rcu_dereference_protected(gact->param, lockdep_is_held(&gact->tcf_lock));
++
++	rcu_read_lock();
++	p = rcu_dereference(gact->param);
+ 
+ 	if (nla_put_u64_64bit(skb, TCA_GATE_BASE_TIME,
+ 			      p->tcfg_basetime, TCA_GATE_PAD))
+-		goto nla_put_failure_unlock;
++		goto nla_put_failure_rcu;
+ 
+ 	if (nla_put_u64_64bit(skb, TCA_GATE_CYCLE_TIME,
+ 			      p->tcfg_cycletime, TCA_GATE_PAD))
+-		goto nla_put_failure_unlock;
++		goto nla_put_failure_rcu;
+ 
+ 	if (nla_put_u64_64bit(skb, TCA_GATE_CYCLE_TIME_EXT,
+ 			      p->tcfg_cycletime_ext, TCA_GATE_PAD))
+-		goto nla_put_failure_unlock;
++		goto nla_put_failure_rcu;
+ 
+ 	if (nla_put_s32(skb, TCA_GATE_CLOCKID, p->tcfg_clockid))
+-		goto nla_put_failure_unlock;
++		goto nla_put_failure_rcu;
+ 
+ 	if (nla_put_u32(skb, TCA_GATE_FLAGS, p->tcfg_flags))
+-		goto nla_put_failure_unlock;
++		goto nla_put_failure_rcu;
+ 
+ 	if (nla_put_s32(skb, TCA_GATE_PRIORITY, p->tcfg_priority))
+-		goto nla_put_failure_unlock;
++		goto nla_put_failure_rcu;
+ 
+ 	entry_list = nla_nest_start_noflag(skb, TCA_GATE_ENTRY_LIST);
+ 	if (!entry_list)
+-		goto nla_put_failure_unlock;
++		goto nla_put_failure_rcu;
+ 
+ 	list_for_each_entry(entry, &p->entries, list) {
+ 		if (dumping_entry(skb, entry) < 0)
+-			goto nla_put_failure_unlock;
++			goto nla_put_failure_rcu;
+ 	}
+ 
+ 	nla_nest_end(skb, entry_list);
+-	spin_unlock_bh(&gact->tcf_lock);
++	rcu_read_unlock();
+ 
+ 	tcf_tm_dump(&t, &gact->tcf_tm);
+ 	if (nla_put_64bit(skb, TCA_GATE_TM, sizeof(t), &t, TCA_GATE_PAD))
+@@ -700,8 +701,8 @@ static int tcf_gate_dump(struct sk_buff *skb, struct tc_action *a,
+ 
+ 	return skb->len;
+ 
+-nla_put_failure_unlock:
+-	spin_unlock_bh(&gact->tcf_lock);
++nla_put_failure_rcu:
++	rcu_read_unlock();
+ nla_put_failure:
+ 	nlmsg_trim(skb, b);
+ 	return -1;
+-- 
+2.52.GIT
+

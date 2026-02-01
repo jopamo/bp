@@ -6,8 +6,7 @@ inherit autotools
 
 DESCRIPTION="An HTML5 parsing library in pure C99"
 HOMEPAGE="https://github.com/google/gumbo-parser"
-
-SNAPSHOT=a0f9059087c690e700cf42df4cfa58a63c1dae95
+SNAPSHOT=6fd66040a8eecdb1359a6de221f3f9325cf52ba6
 SRC_URI="https://github.com/google/gumbo-parser/archive/${SNAPSHOT}.tar.gz -> gumbo-parser-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/gumbo-parser-${SNAPSHOT}"
 

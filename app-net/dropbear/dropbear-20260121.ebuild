@@ -6,7 +6,7 @@ inherit user
 
 DESCRIPTION="small SSH 2 client/server designed for small memory environments"
 HOMEPAGE="https://matt.ucc.asn.au/dropbear/dropbear.html"
-SNAPSHOT=4214d7c3954e85bc7a6e83bdc4407b3dc003453d
+SNAPSHOT=ec7828dce092d2a5982a907af4a5f592470a4ff4
 SRC_URI="https://github.com/mkj/dropbear/archive/${SNAPSHOT}.tar.gz -> dropbear-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/dropbear-${SNAPSHOT}"
 

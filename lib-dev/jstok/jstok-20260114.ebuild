@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="Self-contained, header-only C JSON tokenizer"
 HOMEPAGE="https://github.com/jopamo/jstok"
-SNAPSHOT=569e5fcc8d3e2634a0a05f858e5bcf8209a272d8
+SNAPSHOT=d533361044e7e70220620f70d6ca69c477cc339f
 SRC_URI="https://github.com/jopamo/jstok/archive/${SNAPSHOT}.tar.gz -> jstok-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/jstok-${SNAPSHOT}"
 

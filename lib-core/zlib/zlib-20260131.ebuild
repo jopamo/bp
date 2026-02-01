@@ -6,7 +6,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="Standard (de)compression library"
 HOMEPAGE="https://zlib.net/"
-SNAPSHOT=2896db600d9f4520e036dd8f5d6e16ef54218f26
+SNAPSHOT=9f25df2c80c2b26c8b050fba880f0851d9d243ea
 SRC_URI="https://github.com/madler/zlib/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/zlib-${SNAPSHOT}
 

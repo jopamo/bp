@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="Keymap handling library for Wayland and X11 (xkbcommon)"
 HOMEPAGE="https://xkbcommon.org/"
-SNAPSHOT=ccb63bf7b51861fde1f4fe72d4052b5edf6f08a1
+SNAPSHOT=f16c083bd807db1d8f3ea81659dd741a6d459569
 SRC_URI="https://github.com/xkbcommon/libxkbcommon/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libxkbcommon-${SNAPSHOT}
 

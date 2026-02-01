@@ -6,7 +6,7 @@ inherit cmake
 
 DESCRIPTION="A YAML parser and emitter in C++"
 HOMEPAGE="https://github.com/jbeder/yaml-cpp"
-SNAPSHOT=89ff142b991af432b5d7a7cee55282f082a7e629
+SNAPSHOT=f0329d0efd2e62ceda5ee899c343ee445f6f7bd2
 SRC_URI="https://github.com/jbeder/yaml-cpp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

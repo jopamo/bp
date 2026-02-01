@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="An interface for filesystems implemented in userspace"
 HOMEPAGE="https://github.com/libfuse/libfuse"
-SNAPSHOT=6278995cca991978abd25ebb2c20ebd3fc9e8a13
+SNAPSHOT=addcbae8784bca829342390f3d3084b8d9be90eb
 SRC_URI="https://github.com/libfuse/libfuse/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libfuse-${SNAPSHOT}"
 

@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="Simple Unit Testing for C"
 HOMEPAGE="https://github.com/ThrowTheSwitch/Unity"
-SNAPSHOT=51d2db98e292545321fcf23999920622b5bcf772
+SNAPSHOT=d1fe18bd54434efd1ac0dad035d3ab0f8591e086
 SRC_URI="https://github.com/ThrowTheSwitch/Unity/archive/${SNAPSHOT}.tar.gz -> unity-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/Unity-${SNAPSHOT}"
 

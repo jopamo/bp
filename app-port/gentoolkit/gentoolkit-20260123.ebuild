@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="Collection of administration scripts for Gentoo"
 HOMEPAGE="https://wiki.gentoo.org/wiki/Project:Portage-Tools"
-SNAPSHOT=02f05a69cbd955f2263a80090171039d05328858
+SNAPSHOT=5a2d0aedc1c5d599678d7a217abadb2ffcb7e557
 SRC_URI="https://github.com/gentoo/gentoolkit/archive/${SNAPSHOT}.tar.gz -> gentoolkit-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/gentoolkit-${SNAPSHOT}"
 

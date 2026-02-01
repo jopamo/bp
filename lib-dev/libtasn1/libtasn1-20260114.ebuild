@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="ASN.1 library"
 HOMEPAGE="https://www.gnu.org/software/libtasn1/"
-SNAPSHOT=eabf0fe9d7561e7863daa8e8212a1b5dc20dce10
+SNAPSHOT=2f560e2b0ddca402f8b19d8a7cfd02871ea26927
 SRC_URI="https://gitlab.com/gnutls/libtasn1/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="A lightweight, speed optimized color management engine"
 HOMEPAGE="http://www.littlecms.com/"
-SNAPSHOT=015c30082877271f155896b76f512d4d50945b28
+SNAPSHOT=b269a998c1132449d92b4d2d05fa2515556c3087
 SRC_URI="https://github.com/ImageMagick/lcms/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

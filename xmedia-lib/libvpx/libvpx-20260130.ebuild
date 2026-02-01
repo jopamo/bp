@@ -6,7 +6,7 @@ inherit flag-o-matic
 
 DESCRIPTION="WebM VP8 and VP9 Codec SDK"
 HOMEPAGE="https://www.webmproject.org"
-SNAPSHOT=1a400b808407a49d6ee626e8e6015c5cd9df6298
+SNAPSHOT=53b5de7d75742b0b5dff237c7ea3d96577050e4f
 SRC_URI="https://github.com/webmproject/libvpx/archive/${SNAPSHOT}.tar.gz -> libvpx-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libvpx-${SNAPSHOT}"
 

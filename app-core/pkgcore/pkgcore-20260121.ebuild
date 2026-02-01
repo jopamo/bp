@@ -8,7 +8,7 @@ inherit distutils-r1
 
 DESCRIPTION="a framework for package management"
 HOMEPAGE="https://github.com/pkgcore/pkgcore"
-SNAPSHOT=5e6487199efa52dd929fe220bf7ee86244bcb7eb
+SNAPSHOT=2def32ab2254c80185bbe07b6d8ed68b49302762
 SRC_URI="https://github.com/pkgcore/pkgcore/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

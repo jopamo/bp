@@ -12,6 +12,11 @@ set -euo pipefail
 #   ./build.sh --meson --debug
 #   ./build.sh --autotools --release
 
+die() {
+  echo "Error: $*" >&2
+  exit 1
+}
+
 usage() {
   cat <<EOF
 Usage: $0 [--cmake|--meson|--autotools] [--release|--debug|--fastdebug|--asan|--fastasan]
@@ -38,6 +43,8 @@ Examples:
 EOF
 }
 
+trap 'echo "Failed: ${BASH_COMMAND}" >&2' ERR
+
 build_system=auto
 config=release
 
@@ -56,9 +63,7 @@ while [[ $# -gt 0 ]]; do
       exit 0
       ;;
     *)
-      echo "Unknown argument: $1" >&2
-      usage
-      exit 1
+      die "Unknown argument: $1"
       ;;
   esac
   shift
@@ -70,23 +75,23 @@ if [[ "$build_system" == "auto" ]]; then
     build_system=meson
   elif [[ -f CMakeLists.txt ]]; then
     build_system=cmake
-  elif [[ -x ./bootstrap || -f configure.ac ]]; then
+  elif [[ -x ./bootstrap || -x ./autogen.sh || -f configure.ac || -f configure.in || -f configure ]]; then
     build_system=autotools
   else
-    echo "Error: could not detect build system (no meson.build, CMakeLists.txt, bootstrap, or configure.ac)" >&2
-    exit 1
+    die "could not detect build system (no meson.build, CMakeLists.txt, bootstrap/autogen, or configure.ac)"
   fi
 fi
 
 # default to clang if not already set
-if [[ -z "${CC:-}" ]]; then
-  export CC=clang
-fi
-if [[ -z "${CXX:-}" ]]; then
-  export CXX=clang++
-fi
+: "${CC:=clang}"
+: "${CXX:=clang++}"
+export CC CXX
 
-NPROC=$(nproc)
+if command -v nproc >/dev/null 2>&1; then
+  NPROC="$(nproc)"
+else
+  NPROC=1
+fi
 
 # frame pointers help perf/gdb/sanitizers unwind accurately on modern toolchains
 fp_flags='-fno-omit-frame-pointer -mno-omit-leaf-frame-pointer'
@@ -101,21 +106,16 @@ setup_sanitizer_env() {
   export UBSAN_OPTIONS="$ubsan_env"
   export LSAN_OPTIONS="$lsan_env"
 
-  if [[ -z "${ASAN_SYMBOLIZER_PATH:-}" ]]; then
-    if command -v llvm-symbolizer >/dev/null 2>&1; then
-      export ASAN_SYMBOLIZER_PATH="$(command -v llvm-symbolizer)"
-    fi
+  if [[ -z "${ASAN_SYMBOLIZER_PATH:-}" ]] && command -v llvm-symbolizer >/dev/null 2>&1; then
+    export ASAN_SYMBOLIZER_PATH
+    ASAN_SYMBOLIZER_PATH="$(command -v llvm-symbolizer)"
   fi
 }
 
 meson_verbose_logs_arg() {
   case "$1" in
-    debug|asan)
-      echo "-Dverbose_logs=true"
-      ;;
-    *)
-      echo "-Dverbose_logs=false"
-      ;;
+    debug|asan) echo "-Dverbose_logs=true" ;;
+    *)         echo "-Dverbose_logs=false" ;;
   esac
 }
 
@@ -191,8 +191,7 @@ cmake_build() {
       (cd "$builddir" && ctest --output-on-failure)
       ;;
     *)
-      echo "Unknown CMake config: $cfg" >&2
-      exit 1
+      die "Unknown CMake config: $cfg"
       ;;
   esac
 }
@@ -271,10 +270,30 @@ meson_build() {
       meson test -C "$builddir" --print-errorlogs
       ;;
     *)
-      echo "Unknown Meson config: $cfg" >&2
-      exit 1
+      die "Unknown Meson config: $cfg"
       ;;
   esac
+}
+
+autotools_prepare() {
+  if [[ -x ./bootstrap ]]; then
+    ./bootstrap
+    return
+  fi
+  if [[ -x ./autogen.sh ]]; then
+    ./autogen.sh
+    return
+  fi
+  if [[ -f configure ]]; then
+    return
+  fi
+  if [[ -f configure.ac || -f configure.in ]]; then
+    command -v autoreconf >/dev/null 2>&1 || die "autoreconf not found but configure.ac exists"
+    autoreconf -fi
+    [[ -f configure ]] || die "autoreconf did not produce ./configure"
+    return
+  fi
+  die "autotools requested but no bootstrap/autogen/configure/configure.ac found"
 }
 
 autotools_build() {
@@ -315,12 +334,26 @@ autotools_build() {
       ldflags="-fsanitize=address,undefined"
       ;;
     *)
-      echo "Unknown Autotools config: $cfg" >&2
-      exit 1
+      die "Unknown Autotools config: $cfg"
       ;;
   esac
+
+  autotools_prepare
 
   rm -rf "$builddir"
   mkdir -p "$builddir"
 
-  if
+  (
+    cd "$builddir"
+    CFLAGS="$cflags" CXXFLAGS="$cxxflags" LDFLAGS="$ldflags" ../configure
+    make -j"$NPROC"
+    make check -j"$NPROC" || true
+  )
+}
+
+case "$build_system" in
+  cmake)     cmake_build "$config" ;;
+  meson)     meson_build "$config" ;;
+  autotools) autotools_build "$config" ;;
+  *)         die "Internal error: unknown build system: $build_system" ;;
+esac

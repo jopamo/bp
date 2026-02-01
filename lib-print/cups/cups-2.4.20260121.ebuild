@@ -3,7 +3,7 @@
 EAPI=8
 
 BRANCH_NAME="$(ver_cut 1-2).x"
-SNAPSHOT=398fc2cd3881d54ce3e6b5ca0bb1529bdf8d0b5d
+SNAPSHOT=e818754eea2efd90d6f262d7a0b4807883aac259
 
 inherit linux-info user toolchain-funcs autotools flag-o-matic
 

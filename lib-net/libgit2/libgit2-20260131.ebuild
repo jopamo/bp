@@ -6,7 +6,7 @@ inherit cmake flag-o-matic
 
 DESCRIPTION="Portable, pure-library implementation of core Git functionality"
 HOMEPAGE="https://www.libgit2.org/"
-SNAPSHOT=dff04d9dcc4f0212ab1050c35d6eb2b846d3f7f4
+SNAPSHOT=86c7738ca6f07c81e6b458c30cfaf16f53d33009
 SRC_URI="https://github.com/libgit2/libgit2/archive/${SNAPSHOT}.tar.gz -> libgit2-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libgit2-${SNAPSHOT}
 

@@ -3,7 +3,7 @@
 EAPI=8
 
 BRANCH_NAME="LIBGCRYPT-$(ver_cut 1-2)-BRANCH"
-SNAPSHOT=2b8b483d42b3eb1ac276756ec019725704ed8096
+SNAPSHOT=c6e0658004b53fe9373c7ddd7d5a1d2ad818eaac
 
 inherit flag-o-matic autotools
 

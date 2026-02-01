@@ -9,7 +9,7 @@ inherit distutils-r1
 
 DESCRIPTION="The fast, Pythonic way to build MCP servers and clients"
 HOMEPAGE="https://gofastmcp.com/ https://pypi.org/project/fastmcp/"
-SNAPSHOT=87f2edd9c03a5a9a33ace3de35d60e27f617d4a2
+SNAPSHOT=bd37763e98897c007bca77b05ff9293f3ff0c53a
 SRC_URI="https://github.com/jlowin/fastmcp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="base functions required by all Gentoo systems"
 HOMEPAGE="https://github.com/gentoo/gentoo-functions"
-SNAPSHOT=ff1c7dffd8d121d54f903babd1c8afc41b0e78df
+SNAPSHOT=03efd237f0dcbaacf30db12b5ee46c4f53dba14b
 SRC_URI="https://github.com/gentoo/gentoo-functions/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

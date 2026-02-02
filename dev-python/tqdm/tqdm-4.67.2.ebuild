@@ -3,6 +3,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
+PYPI_VERIFY_REPO=https://github.com/tqdm/tqdm
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 pypi
@@ -20,12 +21,9 @@ IUSE="examples"
 
 BDEPEND="
 	dev-py/setuptools-scm[${PYTHON_USEDEP}]
-	test? (
-		>=dev-python/pytest-asyncio-0.24[${PYTHON_USEDEP}]
-		dev-python/pytest-timeout[${PYTHON_USEDEP}]
-	)
 "
 
+EPYTEST_PLUGINS=( pytest-{asyncio,timeout} )
 distutils_enable_tests pytest
 
 EPYTEST_IGNORE=(

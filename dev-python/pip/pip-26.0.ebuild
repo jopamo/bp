@@ -54,17 +54,15 @@ BDEPEND="
 	test? (
 		$(python_gen_cond_dep '
 			dev-python/ensurepip-setuptools
-			dev-python/ensurepip-wheel
 			dev-python/freezegun[${PYTHON_USEDEP}]
 			dev-python/pretend[${PYTHON_USEDEP}]
 			dev-python/pytest[${PYTHON_USEDEP}]
 			dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
 			dev-python/pytest-xdist[${PYTHON_USEDEP}]
 			dev-python/scripttest[${PYTHON_USEDEP}]
-			<dev-py/setuptools-80[${PYTHON_USEDEP}]
+			>=dev-py/setuptools-70.1.0[${PYTHON_USEDEP}]
 			dev-python/virtualenv[${PYTHON_USEDEP}]
 			dev-python/werkzeug[${PYTHON_USEDEP}]
-			dev-python/wheel[${PYTHON_USEDEP}]
 			test-rust? (
 				app-crypto/cryptography[${PYTHON_USEDEP}]
 			)
@@ -75,7 +73,7 @@ BDEPEND="
 python_prepare_all() {
 	local PATCHES=(
 		# remove coverage & pytest-subket wheel expectation from test suite
-		"${FILESDIR}/pip-25.2-test-wheels.patch"
+		"${FILESDIR}/pip-26.0-test-wheels.patch"
 		# prepare to unbundle dependencies
 		"${FILESDIR}/pip-25.0.1-unbundle.patch"
 	)
@@ -148,7 +146,11 @@ python_test() {
 		# broken by unbundling
 		"tests/functional/test_debug.py::test_debug[vendored library versions:]"
 		tests/functional/test_debug.py::test_debug__library_versions
+		tests/functional/test_freeze.py::test_freeze_multiple_exclude_with_all
+		tests/functional/test_install.py::test_install_package_with_same_name_in_curdir
+		tests/functional/test_pep517.py::test_nested_builds
 		tests/functional/test_python_option.py::test_python_interpreter
+		tests/functional/test_uninstall.py::test_basic_uninstall
 		tests/functional/test_uninstall.py::test_uninstall_non_local_distutils
 	)
 	local EPYTEST_IGNORE=(
@@ -166,6 +168,8 @@ python_test() {
 				tests/functional/test_install_config.py::test_prompt_for_authentication
 				# wrong path
 				tests/functional/test_install.py::test_install_editable_with_prefix_setup_py
+				# wrong exception assumptions
+				tests/unit/test_utils_datetime.py::test_parse_iso_datetime_invalid
 			)
 			;;
 	esac

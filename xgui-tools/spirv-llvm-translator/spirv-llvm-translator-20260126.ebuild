@@ -58,6 +58,18 @@ src_prepare() {
 		-e "s/^\([[:space:]]*project([^)]*VERSION[[:space:]]\+\)[^ )]\+\(.*\)$/\1${sys_llvm_ver_num}\2/" \
 		CMakeLists.txt || die
 
+	# fix LLVM DIBuilder API mismatch
+	# DIBuilder::createSubroutineType wants DITypeRefArray on newer LLVM
+	sed -i \
+		-e 's/^[[:space:]]*DITypeArray[[:space:]]\+ArgTypes[[:space:]]*=[[:space:]]*getDIBuilder(DebugInst)\.getOrCreateTypeArray(Elements);/  auto ArgTypes = getDIBuilder(DebugInst).getOrCreateTypeArray(Elements);/' \
+		lib/SPIRV/SPIRVToLLVMDbgTran.cpp || die
+
+	# fix LLVM DISubroutineType::getTypeArray API mismatch
+	# getTypeArray returns DITypeRefArray on newer LLVM
+	sed -i \
+		-e 's/^[[:space:]]*DITypeArray[[:space:]]\+Types[[:space:]]*=[[:space:]]*FT->getTypeArray();/  auto Types = FT->getTypeArray();/' \
+		lib/SPIRV/LLVMToSPIRVDbgTran.cpp || die
+
 	# https://github.com/KhronosGroup/SPIRV-LLVM-Translator/pull/2555
 	sed -i -e 's/%triple/x86_64-unknown-linux-gnu/' test/DebugInfo/X86/*.ll || die
 }

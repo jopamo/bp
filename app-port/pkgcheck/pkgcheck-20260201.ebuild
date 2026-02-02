@@ -28,8 +28,8 @@ RDEPEND="
 "
 BDEPEND="${RDEPEND}
 	>=dev-python/flit-core-3.8[${PYTHON_USEDEP}]
+	dev-python/pytest[${PYTHON_USEDEP}]
 	test? (
-		dev-python/pytest[${PYTHON_USEDEP}]
 		dev-python/requests[${PYTHON_USEDEP}]
 	)
 "

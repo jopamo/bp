@@ -20,6 +20,10 @@ KEYWORDS="amd64 arm64"
 EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
+src_configure() {
+	export PYTOKENS_USE_MYPYC=0
+}
+
 python_test() {
 	epytest -o addopts=
 }

@@ -18,7 +18,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	>=dev-python/wcwidth-0.1.4[${PYTHON_USEDEP}]
+	>=dev-python/wcwidth-0.5[${PYTHON_USEDEP}]
 "
 
 distutils_enable_sphinx docs dev-python/sphinx-rtd-theme

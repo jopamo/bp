@@ -45,7 +45,6 @@ src_configure() {
 		$(use_with pam libpam)
 		$(use_with xattr attr)
 		$(use_with yescrypt)
-		--disable-account-tools-setuid
 		--disable-nls
 		--disable-static
 		--disable-lastlog
@@ -95,7 +94,6 @@ src_install() {
 		done
 	fi
 
-	rm "${ED}"/usr/bin/logoutd || die
 	rm \
 			"${ED}"/usr/bin/{login,su,chsh,chfn,sg} \
 			"${ED}"/usr/bin/{nologin,vipw,vigr} || die

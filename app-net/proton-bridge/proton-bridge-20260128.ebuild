@@ -23,20 +23,23 @@ DEPEND="
 RESTRICT="test network-sandbox"
 
 src_prepare() {
-	default
+        default
 
-	cd "${S}/utils" || die
-	./credits.sh bridge || die
-	cd "${S}" || die
-}
+        cd "${S}/utils" || die
+        ./credits.sh bridge || die
+  }
 
-src_compile() {
-	# go-module/go-env provide sane GOPATH/GOMODCACHE/GOCACHE
-	go build -v -o proton-bridge ./cmd/Desktop-Bridge || die
-}
+  src_compile() {
+        # build CLI-only target with upstream flags + libfido2 link flags
+        CGO_LDFLAGS="-lfido2 -lcbor -lssl -lcrypto" \
+                emake build-nogui
+  }
 
-src_install() {
-	go-md2man -in README.md -out ${PN}.1 || die "Unable to create man page"
-	dobin proton-bridge
-	doman ${PN}.1
-}
+  src_install() {
+        go-md2man -in README.md -out ${PN}.1 || die "Unable to create man page"
+
+        # build-nogui produces ./bridge (app) and ./proton-bridge (launcher).
+        # install the app under the package name.
+        newbin bridge proton-bridge
+        doman ${PN}.1
+  }

@@ -21,7 +21,7 @@ DEPEND="
 	virtual/curses
 "
 
-PATCHES=( "${FILESDIR}/tmux-2.4-flags.patch" )
+#PATCHES=( "${FILESDIR}/tmux-2.4-flags.patch" )
 
 src_prepare() {
 	default

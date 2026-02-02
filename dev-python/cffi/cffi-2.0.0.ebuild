@@ -46,6 +46,7 @@ distutils_enable_tests pytest
 
 PATCHES=(
 	"${FILESDIR}"/cffi-1.14.0-darwin-no-brew.patch
+	"${FILESDIR}"/${P}-pycparser-tests.patch
 )
 
 src_prepare() {

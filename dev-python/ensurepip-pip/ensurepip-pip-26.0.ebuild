@@ -81,7 +81,7 @@ python_prepare_all() {
 	local PATCHES=(
 		# remove coverage & pytest-subket wheel expectation from test suite
 		# (from dev-python/pip)
-		"${FILESDIR}/pip-25.2-test-wheels.patch"
+		"${FILESDIR}/pip-26.0-test-wheels.patch"
 	)
 
 	distutils-r1_python_prepare_all
@@ -157,6 +157,8 @@ python_test() {
 				tests/functional/test_install_config.py::test_prompt_for_authentication
 				# wrong path
 				tests/functional/test_install.py::test_install_editable_with_prefix_setup_py
+				# wrong exception assumptions
+				tests/unit/test_utils_datetime.py::test_parse_iso_datetime_invalid
 			)
 			;;
 	esac

@@ -27,10 +27,6 @@ RDEPEND="
 	>=dev-python/packaging-24.0[${PYTHON_USEDEP}]
 	>=dev-python/pyproject-metadata-0.9.0_beta7[${PYTHON_USEDEP}]
 	>=dev-python/tomli-w-1.0.0[${PYTHON_USEDEP}]
-
-	$(python_gen_cond_dep '
-		>=dev-python/tomli-2.0.1[${PYTHON_USEDEP}]
-	' 3.10)
 "
 BDEPEND="
 	${RDEPEND}

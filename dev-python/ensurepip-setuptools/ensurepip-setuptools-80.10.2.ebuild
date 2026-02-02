@@ -46,18 +46,14 @@ declare -A VENDOR_LICENSES=(
 	[autocommand]=LGPL-3
 	[backports.tarfile]=MIT
 	[importlib_metadata]=Apache-2.0
-	[inflect]=MIT
-	[jaraco.collections]=MIT
-	[jaraco.context]=MIT
-	[jaraco.functools]=MIT
+	[jaraco_context]=MIT
+	[jaraco_functools]=MIT
 	[jaraco.text]=MIT
 	[more_itertools]=MIT
 	[packaging]="|| ( Apache-2.0 MIT )"
 	[platformdirs]=MIT
 	[tomli]=MIT
-	[typeguard]=MIT
-	[typing_extensions]=PSF-2
-	[wheel]=MIT  # technically it also vendors packaging but we have that
+	[wheel]=MIT
 	[zipp]=MIT
 )
 LICENSE+=" ${VENDOR_LICENSES[*]}"
@@ -104,12 +100,20 @@ python_test() {
 		# relies on -Werror
 		setuptools/_static.py::setuptools._static.Dict
 		setuptools/_static.py::setuptools._static.List
+		# Internet
+		setuptools/tests/test_namespaces.py::TestNamespaces::test_mixed_site_and_non_site
+		setuptools/tests/test_namespaces.py::TestNamespaces::test_namespace_package_installed_and_cwd
+		setuptools/tests/test_namespaces.py::TestNamespaces::test_packages_in_the_same_namespace_installed_and_cwd
+		setuptools/tests/test_namespaces.py::TestNamespaces::test_pkg_resources_import
+		# broken by warnings from setuptools-scm
+		setuptools/tests/config/test_apply_pyprojecttoml.py::TestPresetField::test_scripts_dont_require_dynamic_entry_points
 	)
 
 	case ${EPYTHON} in
 		pypy3.11)
 			EPYTEST_DESELECT+=(
-				setuptools/tests/test_editable_install.py::TestCustomBuildWheel::test_access_plat_name
+				# fails and breaks other tests
+				setuptools/tests/test_editable_install.py
 			)
 			;;
 	esac

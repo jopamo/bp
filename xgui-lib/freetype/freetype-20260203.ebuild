@@ -6,7 +6,7 @@ inherit flag-o-matic libtool toolchain-funcs
 
 DESCRIPTION="A high-quality and portable font engine"
 HOMEPAGE="https://www.freetype.org/"
-SNAPSHOT=28407bc8cd1a3da43df7b11c40bc5c24b9883ac6
+SNAPSHOT=e3a0652b6d706ee1ce77d4dda606b6597dd8b5c4
 SRC_URI="https://github.com/freetype/freetype/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

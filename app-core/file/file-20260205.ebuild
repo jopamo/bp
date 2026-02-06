@@ -6,7 +6,7 @@ inherit autotools distutils-r1
 
 DESCRIPTION="identify a file's format by scanning binary data for patterns"
 HOMEPAGE="https://www.darwinsys.com/file/"
-SNAPSHOT=2a457644a70b4e73e5e2868c86cf765330dc55b3
+SNAPSHOT=4a5ed789ac44312d2cc47aac816e83d12ae8e3d0
 SRC_URI="https://github.com/file/file/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

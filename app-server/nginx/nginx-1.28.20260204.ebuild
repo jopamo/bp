@@ -8,7 +8,7 @@ inherit user
 
 DESCRIPTION="High-performance HTTP server and reverse proxy"
 HOMEPAGE="https://nginx.org"
-SNAPSHOT=95078974cfe998ec4095ac2c504c5c92bbc9a326
+SNAPSHOT=073ed33202286a975964c3a08f522bf01dc6fecf
 SRC_URI="https://github.com/nginx/nginx/archive/${SNAPSHOT}.tar.gz -> nginx-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/nginx-${SNAPSHOT}"
 

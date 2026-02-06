@@ -47,6 +47,10 @@ src_prepare() {
 }
 
 src_configure() {
+	append-ldflags -static -no-pie -fno-PIE
+	append-ldflags -Wl,-z,noexecstack
+	replace-flags -O3 -O2
+
 	export ac_cv_{header_selinux_{context,flash,selinux}_h,search_setfilecon}=no
 	export utils_cv_stdbuf_supported=no
 	local myconf=(

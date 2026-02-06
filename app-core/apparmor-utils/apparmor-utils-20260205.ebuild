@@ -8,7 +8,7 @@ inherit distutils-r1 toolchain-funcs desktop
 
 DESCRIPTION="Additional userspace utils to assist with AppArmor profile management"
 HOMEPAGE="https://gitlab.com/apparmor/apparmor/wikis/home"
-SNAPSHOT=c6eed92ee651e6099627b9af21485ce4ca1ff730
+SNAPSHOT=cc1c42c4704fd6a2885c4a953a9d413805488c29
 SRC_URI="https://gitlab.com/apparmor/apparmor/-/archive/${SNAPSHOT}/apparmor-${SNAPSHOT}.tar.bz2 -> apparmor-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/apparmor-${SNAPSHOT}"
 

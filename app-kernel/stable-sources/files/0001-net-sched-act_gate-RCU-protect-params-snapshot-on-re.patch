@@ -1,33 +1,32 @@
-From 36f84cdd9e8253b312f9e172a43daa66d75ffabf Mon Sep 17 00:00:00 2001
+From df6ce0af1c21d4258a4bf2068e18d40e1bc4206c Mon Sep 17 00:00:00 2001
 From: Paul Moses <p@1g4.org>
 Date: Thu, 29 Jan 2026 22:22:41 -0600
-Subject: [PATCH v4 1/3] net/sched: act_gate: RCU-protect params and snapshot
- updates
+Subject: [PATCH v4 1/1] net/sched: act_gate: RCU-protect params snapshot on
+ replace
 
-The gate action can be replaced while the hrtimer callback or the dump path
-is still walking the old schedule list. The replace path frees the list
-immediately, so readers can observe freed memory.
+The gate action can be replaced while the hrtimer callback or dump path
+is still walking the old schedule list.
 
-Convert params to an RCU-protected pointer, allocate a fresh snapshot on
-create/replace, and swap updates under tcf_lock. Free the old snapshot via
-call_rcu() using a helper that releases the entry list and the struct.
+Store parameters in an RCU-protected snapshot. Allocate a fresh snapshot
+on create/replace, swap it under tcf_lock, and free the old snapshot via
+call_rcu(). Readers use rcu_dereference_protected() under tcf_lock, while
+the dump path reads under rcu_read_lock().
 
-When REPLACE omits the entry list, carry forward the existing schedule and
-any fields not explicitly overridden. If cycletime is not provided, compute
-it from the schedule that will be used. Schedule entries are allocated with
-GFP_KERNEL in the sleeping context, and the timer is only cancelled when the
-clockid changes.
+When REPLACE omits or provides an empty entry list, preserve the existing
+schedule and default unspecified fields from the current snapshot. If
+cycletime is not provided, derive it from the schedule that will be used.
+Only cancel the timer when clockid changes.
 
 Fixes: a51c328df310 ("net: qos: introduce a gate control flow action")
 Cc: stable@vger.kernel.org
 Signed-off-by: Paul Moses <p@1g4.org>
 ---
- include/net/tc_act/tc_gate.h |  39 ++++-
- net/sched/act_gate.c         | 296 ++++++++++++++++++++++++++---------
- 2 files changed, 252 insertions(+), 83 deletions(-)
+ include/net/tc_act/tc_gate.h |  29 +++-
+ net/sched/act_gate.c         | 314 ++++++++++++++++++++++++++---------
+ 2 files changed, 252 insertions(+), 91 deletions(-)
 
 diff --git a/include/net/tc_act/tc_gate.h b/include/net/tc_act/tc_gate.h
-index c1a67149c6b62..228c3f8247bf7 100644
+index c1a67149c6b62..5f4fc407f7bf6 100644
 --- a/include/net/tc_act/tc_gate.h
 +++ b/include/net/tc_act/tc_gate.h
 @@ -32,6 +32,7 @@ struct tcf_gate_params {
@@ -47,17 +46,24 @@ index c1a67149c6b62..228c3f8247bf7 100644
  	u8			current_gate_status;
  	ktime_t			current_close_time;
  	u32			current_entry_octets;
-@@ -53,45 +54,65 @@ struct tcf_gate {
+@@ -51,47 +52,60 @@ struct tcf_gate {
  
+ #define to_gate(a) ((struct tcf_gate *)a)
+ 
++static inline struct tcf_gate_params *tcf_gate_params_locked(const struct tc_action *a)
++{
++	struct tcf_gate *gact = to_gate(a);
++
++	return rcu_dereference_protected(gact->param,
++					 lockdep_is_held(&gact->tcf_lock));
++}
++
  static inline s32 tcf_gate_prio(const struct tc_action *a)
  {
-+	struct tcf_gate *gact = to_gate(a);
-+	struct tcf_gate_params *p;
++	struct tcf_gate_params *p = tcf_gate_params_locked(a);
  	s32 tcfg_prio;
  
 -	tcfg_prio = to_gate(a)->param.tcfg_priority;
-+	p = rcu_dereference_protected(gact->param,
-+				      lockdep_is_held(&gact->tcf_lock));
 +	tcfg_prio = p->tcfg_priority;
  
  	return tcfg_prio;
@@ -65,13 +71,10 @@ index c1a67149c6b62..228c3f8247bf7 100644
  
  static inline u64 tcf_gate_basetime(const struct tc_action *a)
  {
-+	struct tcf_gate *gact = to_gate(a);
-+	struct tcf_gate_params *p;
++	struct tcf_gate_params *p = tcf_gate_params_locked(a);
  	u64 tcfg_basetime;
  
 -	tcfg_basetime = to_gate(a)->param.tcfg_basetime;
-+	p = rcu_dereference_protected(gact->param,
-+				      lockdep_is_held(&gact->tcf_lock));
 +	tcfg_basetime = p->tcfg_basetime;
  
  	return tcfg_basetime;
@@ -79,13 +82,10 @@ index c1a67149c6b62..228c3f8247bf7 100644
  
  static inline u64 tcf_gate_cycletime(const struct tc_action *a)
  {
-+	struct tcf_gate *gact = to_gate(a);
-+	struct tcf_gate_params *p;
++	struct tcf_gate_params *p = tcf_gate_params_locked(a);
  	u64 tcfg_cycletime;
  
 -	tcfg_cycletime = to_gate(a)->param.tcfg_cycletime;
-+	p = rcu_dereference_protected(gact->param,
-+				      lockdep_is_held(&gact->tcf_lock));
 +	tcfg_cycletime = p->tcfg_cycletime;
  
  	return tcfg_cycletime;
@@ -93,13 +93,10 @@ index c1a67149c6b62..228c3f8247bf7 100644
  
  static inline u64 tcf_gate_cycletimeext(const struct tc_action *a)
  {
-+	struct tcf_gate *gact = to_gate(a);
-+	struct tcf_gate_params *p;
++	struct tcf_gate_params *p = tcf_gate_params_locked(a);
  	u64 tcfg_cycletimeext;
  
 -	tcfg_cycletimeext = to_gate(a)->param.tcfg_cycletime_ext;
-+	p = rcu_dereference_protected(gact->param,
-+				      lockdep_is_held(&gact->tcf_lock));
 +	tcfg_cycletimeext = p->tcfg_cycletime_ext;
  
  	return tcfg_cycletimeext;
@@ -107,37 +104,30 @@ index c1a67149c6b62..228c3f8247bf7 100644
  
  static inline u32 tcf_gate_num_entries(const struct tc_action *a)
  {
-+	struct tcf_gate *gact = to_gate(a);
-+	struct tcf_gate_params *p;
++	struct tcf_gate_params *p = tcf_gate_params_locked(a);
  	u32 num_entries;
  
 -	num_entries = to_gate(a)->param.num_entries;
-+	p = rcu_dereference_protected(gact->param,
-+				      lockdep_is_held(&gact->tcf_lock));
 +	num_entries = p->num_entries;
  
  	return num_entries;
  }
-@@ -99,13 +120,15 @@ static inline u32 tcf_gate_num_entries(const struct tc_action *a)
- static inline struct action_gate_entry
+@@ -100,12 +114,11 @@ static inline struct action_gate_entry
  			*tcf_gate_get_list(const struct tc_action *a)
  {
-+	struct tcf_gate *gact = to_gate(a);
  	struct action_gate_entry *oe;
 -	struct tcf_gate_params *p;
++	struct tcf_gate_params *p = tcf_gate_params_locked(a);
  	struct tcfg_gate_entry *entry;
-+	struct tcf_gate_params *p;
  	u32 num_entries;
  	int i = 0;
  
 -	p = &to_gate(a)->param;
-+	p = rcu_dereference_protected(gact->param,
-+				      lockdep_is_held(&gact->tcf_lock));
  	num_entries = p->num_entries;
  
  	list_for_each_entry(entry, &p->entries, list)
 diff --git a/net/sched/act_gate.c b/net/sched/act_gate.c
-index c1f75f2727576..af925d22b3383 100644
+index c1f75f2727576..5e3a64ae23829 100644
 --- a/net/sched/act_gate.c
 +++ b/net/sched/act_gate.c
 @@ -32,9 +32,12 @@ static ktime_t gate_get_time(struct tcf_gate *gact)
@@ -155,37 +145,13 @@ index c1f75f2727576..af925d22b3383 100644
  	ktime_t now, base, cycle;
  	u64 n;
  
-@@ -52,15 +55,18 @@ static void gate_get_start_time(struct tcf_gate *gact, ktime_t *start)
- 	*start = ktime_add_ns(base, (n + 1) * cycle);
- }
- 
--static void gate_start_timer(struct tcf_gate *gact, ktime_t start)
-+static void gate_start_timer(struct tcf_gate *gact, ktime_t start,
-+			     bool clamp_to_prev_expiry)
- {
- 	ktime_t expires;
- 
--	expires = hrtimer_get_expires(&gact->hitimer);
--	if (expires == 0)
--		expires = KTIME_MAX;
-+	if (clamp_to_prev_expiry) {
-+		expires = hrtimer_get_expires(&gact->hitimer);
-+		if (expires == 0)
-+			expires = KTIME_MAX;
- 
--	start = min_t(ktime_t, start, expires);
-+		start = min_t(ktime_t, start, expires);
-+	}
- 
- 	hrtimer_start(&gact->hitimer, start, HRTIMER_MODE_ABS_SOFT);
- }
-@@ -69,12 +75,14 @@ static enum hrtimer_restart gate_timer_func(struct hrtimer *timer)
+@@ -69,12 +72,14 @@ static enum hrtimer_restart gate_timer_func(struct hrtimer *timer)
  {
  	struct tcf_gate *gact = container_of(timer, struct tcf_gate,
  					     hitimer);
 -	struct tcf_gate_params *p = &gact->param;
- 	struct tcfg_gate_entry *next;
 +	struct tcf_gate_params *p;
+ 	struct tcfg_gate_entry *next;
  	ktime_t close_time, now;
  
  	spin_lock(&gact->tcf_lock);
@@ -195,7 +161,7 @@ index c1f75f2727576..af925d22b3383 100644
  	next = gact->next_entry;
  
  	/* cycle start, clear pending bit, clear total octets */
-@@ -225,14 +233,44 @@ static void release_entry_list(struct list_head *entries)
+@@ -225,14 +230,51 @@ static void release_entry_list(struct list_head *entries)
  	}
  }
  
@@ -204,15 +170,15 @@ index c1f75f2727576..af925d22b3383 100644
 +				 struct netlink_ext_ack *extack)
 +{
 +	struct tcfg_gate_entry *entry;
++	struct tcfg_gate_entry *new;
++	struct tcfg_gate_entry *tmp;
 +	int i = 0;
 +
 +	list_for_each_entry(entry, &src->entries, list) {
-+		struct tcfg_gate_entry *new;
-+
 +		new = kzalloc(sizeof(*new), GFP_KERNEL);
 +		if (!new) {
 +			NL_SET_ERR_MSG(extack, "Not enough memory for entry");
-+			return -ENOMEM;
++			goto err_free;
 +		}
 +
 +		new->index = entry->index;
@@ -220,14 +186,21 @@ index c1f75f2727576..af925d22b3383 100644
 +		new->interval = entry->interval;
 +		new->ipv = entry->ipv;
 +		new->maxoctets = entry->maxoctets;
-+		INIT_LIST_HEAD(&new->list);
 +		list_add_tail(&new->list, &dst->entries);
 +		i++;
 +	}
 +
 +	dst->num_entries = i;
 +
-+	return i;
++	return 0;
++
++err_free:
++	list_for_each_entry_safe(new, tmp, &dst->entries, list) {
++		list_del(&new->list);
++		kfree(new);
++	}
++	dst->num_entries = 0;
++	return -ENOMEM;
 +}
 +
  static int parse_gate_list(struct nlattr *list_attr,
@@ -242,7 +215,7 @@ index c1f75f2727576..af925d22b3383 100644
  
  	if (!list_attr)
  		return -EINVAL;
-@@ -243,7 +281,7 @@ static int parse_gate_list(struct nlattr *list_attr,
+@@ -243,7 +285,7 @@ static int parse_gate_list(struct nlattr *list_attr,
  			continue;
  		}
  
@@ -251,7 +224,7 @@ index c1f75f2727576..af925d22b3383 100644
  		if (!entry) {
  			NL_SET_ERR_MSG(extack, "Not enough memory for entry");
  			err = -ENOMEM;
-@@ -266,6 +304,7 @@ static int parse_gate_list(struct nlattr *list_attr,
+@@ -266,6 +308,7 @@ static int parse_gate_list(struct nlattr *list_attr,
  
  release_list:
  	release_entry_list(&sched->entries);
@@ -259,7 +232,7 @@ index c1f75f2727576..af925d22b3383 100644
  
  	return err;
  }
-@@ -274,18 +313,16 @@ static void gate_setup_timer(struct tcf_gate *gact, u64 basetime,
+@@ -274,42 +317,67 @@ static void gate_setup_timer(struct tcf_gate *gact, u64 basetime,
  			     enum tk_offsets tko, s32 clockid,
  			     bool do_init)
  {
@@ -284,41 +257,92 @@ index c1f75f2727576..af925d22b3383 100644
  	gact->tk_offset = tko;
  	hrtimer_setup(&gact->hitimer, gate_timer_func, clockid, HRTIMER_MODE_ABS_SOFT);
  }
-@@ -296,20 +333,23 @@ static int tcf_gate_init(struct net *net, struct nlattr *nla,
+ 
++static int gate_clockid_to_offset(s32 clockid, enum tk_offsets *off,
++				  struct netlink_ext_ack *extack)
++{
++	switch (clockid) {
++	case CLOCK_REALTIME:
++		*off = TK_OFFS_REAL;
++		break;
++	case CLOCK_MONOTONIC:
++		*off = TK_OFFS_MAX;
++		break;
++	case CLOCK_BOOTTIME:
++		*off = TK_OFFS_BOOT;
++		break;
++	case CLOCK_TAI:
++		*off = TK_OFFS_TAI;
++		break;
++	default:
++		NL_SET_ERR_MSG(extack, "Invalid 'clockid'");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
+ static int tcf_gate_init(struct net *net, struct nlattr *nla,
+ 			 struct nlattr *est, struct tc_action **a,
+ 			 struct tcf_proto *tp, u32 flags,
  			 struct netlink_ext_ack *extack)
  {
  	struct tc_action_net *tn = net_generic(net, act_gate_ops.net_id);
--	enum tk_offsets tk_offset = TK_OFFS_TAI;
--	bool bind = flags & TCA_ACT_FLAGS_BIND;
--	struct nlattr *tb[TCA_GATE_MAX + 1];
--	struct tcf_chain *goto_ch = NULL;
++	u64 basetime = 0, cycletime = 0, cycletime_ext = 0;
++	struct tcf_gate_params *old_p = NULL, *p = NULL;
++	const struct tcf_gate_params *cur_p = NULL;
+ 	enum tk_offsets tk_offset = TK_OFFS_TAI;
+ 	bool bind = flags & TCA_ACT_FLAGS_BIND;
+ 	struct nlattr *tb[TCA_GATE_MAX + 1];
++	s32 clockid = CLOCK_TAI, prio = -1;
++	int parsed = -ENOENT, err, ret = 0;
+ 	struct tcf_chain *goto_ch = NULL;
 -	u64 cycletime = 0, basetime = 0;
 -	struct tcf_gate_params *p;
 -	s32 clockid = CLOCK_TAI;
++	bool clockid_changed = false;
++	bool use_old_entries = false;
++	bool list_provided = false;
  	struct tcf_gate *gact;
++	u32 gflags = 0, index;
  	struct tc_gate *parm;
 -	int ret = 0, err;
 -	u32 gflags = 0;
 -	s32 prio = -1;
-+	struct tcf_gate_params *p = NULL, *old_p = NULL;
-+	const struct tcf_gate_params *old_p_local = NULL;
-+	const struct tcf_gate_params *cur_p;
-+	struct nlattr *tb[TCA_GATE_MAX + 1];
-+	struct tcf_chain *goto_ch = NULL;
  	ktime_t start;
-+	u64 cycletime = 0, basetime = 0, cycletime_ext = 0;
-+	u32 gflags = 0;
- 	u32 index;
-+	s32 clockid = CLOCK_TAI;
-+	s32 prio = -1;
-+	int ret = 0, err;
-+	enum tk_offsets tk_offset = TK_OFFS_TAI;
-+	bool bind = flags & TCA_ACT_FLAGS_BIND;
-+	bool use_old_entries = false;
+-	u32 index;
++
  
  	if (!nla)
  		return -EINVAL;
-@@ -376,48 +416,140 @@ static int tcf_gate_init(struct net *net, struct nlattr *nla,
+@@ -323,23 +391,9 @@ static int tcf_gate_init(struct net *net, struct nlattr *nla,
+ 
+ 	if (tb[TCA_GATE_CLOCKID]) {
+ 		clockid = nla_get_s32(tb[TCA_GATE_CLOCKID]);
+-		switch (clockid) {
+-		case CLOCK_REALTIME:
+-			tk_offset = TK_OFFS_REAL;
+-			break;
+-		case CLOCK_MONOTONIC:
+-			tk_offset = TK_OFFS_MAX;
+-			break;
+-		case CLOCK_BOOTTIME:
+-			tk_offset = TK_OFFS_BOOT;
+-			break;
+-		case CLOCK_TAI:
+-			tk_offset = TK_OFFS_TAI;
+-			break;
+-		default:
+-			NL_SET_ERR_MSG(extack, "Invalid 'clockid'");
+-			return -EINVAL;
+-		}
++		err = gate_clockid_to_offset(clockid, &tk_offset, extack);
++		if (err)
++			return err;
+ 	}
+ 
+ 	parm = nla_data(tb[TCA_GATE_PARMS]);
+@@ -376,48 +430,128 @@ static int tcf_gate_init(struct net *net, struct nlattr *nla,
  		gflags = nla_get_u32(tb[TCA_GATE_FLAGS]);
  
  	gact = to_gate(*a);
@@ -336,82 +360,66 @@ index c1f75f2727576..af925d22b3383 100644
  
 -	spin_lock_bh(&gact->tcf_lock);
 -	p = &gact->param;
--
++	list_provided = !!tb[TCA_GATE_ENTRY_LIST];
+ 
 -	if (tb[TCA_GATE_CYCLE_TIME])
 -		cycletime = nla_get_u64(tb[TCA_GATE_CYCLE_TIME]);
-+	if (!tb[TCA_GATE_ENTRY_LIST] && ret != ACT_P_CREATED)
-+		use_old_entries = true;
- 
- 	if (tb[TCA_GATE_ENTRY_LIST]) {
- 		err = parse_gate_list(tb[TCA_GATE_ENTRY_LIST], p, extack);
- 		if (err < 0)
--			goto chain_put;
++	if (list_provided) {
++		parsed = parse_gate_list(tb[TCA_GATE_ENTRY_LIST], p, extack);
++		if (parsed < 0) {
++			err = parsed;
 +			goto release_mem;
-+		if (!err) {
-+			if (ret == ACT_P_CREATED) {
-+				NL_SET_ERR_MSG(extack, "The entry list is empty");
-+				err = -EINVAL;
-+				goto release_mem;
-+			}
-+			use_old_entries = true;
 +		}
-+	} else if (ret == ACT_P_CREATED) {
-+		NL_SET_ERR_MSG(extack, "The entry list is empty");
-+		err = -EINVAL;
-+		goto release_mem;
- 	}
- 
++	}
++
++	if (!list_provided || parsed == 0) {
++		if (ret == ACT_P_CREATED) {
++			NL_SET_ERR_MSG(extack, "The entry list is empty");
++			err = -EINVAL;
++			goto release_mem;
++		}
++		use_old_entries = true;
++	}
++
 +	if (use_old_entries) {
-+		old_p_local = rcu_dereference_protected(gact->param,
-+							lockdep_rtnl_is_held());
-+		if (!old_p_local) {
++		cur_p = rcu_dereference_protected(gact->param,
++						  lockdep_rtnl_is_held());
++		if (!cur_p) {
 +			NL_SET_ERR_MSG(extack, "Missing schedule entries");
 +			err = -EINVAL;
 +			goto release_mem;
 +		}
 +
 +		if (!tb[TCA_GATE_PRIORITY])
-+			prio = old_p_local->tcfg_priority;
++			prio = cur_p->tcfg_priority;
 +
 +		if (!tb[TCA_GATE_BASE_TIME])
-+			basetime = old_p_local->tcfg_basetime;
-+
++			basetime = cur_p->tcfg_basetime;
+ 
+-	if (tb[TCA_GATE_ENTRY_LIST]) {
+-		err = parse_gate_list(tb[TCA_GATE_ENTRY_LIST], p, extack);
 +		if (!tb[TCA_GATE_FLAGS])
-+			gflags = old_p_local->tcfg_flags;
++			gflags = cur_p->tcfg_flags;
 +
 +		if (!tb[TCA_GATE_CLOCKID]) {
-+			clockid = old_p_local->tcfg_clockid;
-+			switch (clockid) {
-+			case CLOCK_REALTIME:
-+				tk_offset = TK_OFFS_REAL;
-+				break;
-+			case CLOCK_MONOTONIC:
-+				tk_offset = TK_OFFS_MAX;
-+				break;
-+			case CLOCK_BOOTTIME:
-+				tk_offset = TK_OFFS_BOOT;
-+				break;
-+			case CLOCK_TAI:
-+				tk_offset = TK_OFFS_TAI;
-+				break;
-+			default:
-+				NL_SET_ERR_MSG(extack, "Invalid 'clockid'");
-+				err = -EINVAL;
++			clockid = cur_p->tcfg_clockid;
++			err = gate_clockid_to_offset(clockid, &tk_offset, extack);
++			if (err)
 +				goto release_mem;
-+			}
 +		}
 +
 +		if (!tb[TCA_GATE_CYCLE_TIME])
-+			cycletime = old_p_local->tcfg_cycletime;
++			cycletime = cur_p->tcfg_cycletime;
 +
 +		if (!tb[TCA_GATE_CYCLE_TIME_EXT])
-+			cycletime_ext = old_p_local->tcfg_cycletime_ext;
++			cycletime_ext = cur_p->tcfg_cycletime_ext;
 +
-+		err = tcf_gate_copy_entries(p, old_p_local, extack);
-+		if (err < 0)
++		err = tcf_gate_copy_entries(p, cur_p, extack);
+ 		if (err < 0)
+-			goto chain_put;
 +			goto release_mem;
-+	}
-+
+ 	}
+ 
 +	p->tcfg_priority = prio;
 +	p->tcfg_flags = gflags;
 +
@@ -425,12 +433,12 @@ index c1f75f2727576..af925d22b3383 100644
 -		list_for_each_entry(entry, &p->entries, list)
 -			cycle = ktime_add_ns(cycle, entry->interval);
 -		cycletime = cycle;
-+		if (tb[TCA_GATE_ENTRY_LIST] && !use_old_entries) {
++		if (list_provided && !use_old_entries) {
 +			list_for_each_entry(entry, &p->entries, list)
 +				cycle = ktime_add_ns(cycle, entry->interval);
 +			cycletime = cycle;
-+		} else if (old_p_local) {
-+			cycletime = old_p_local->tcfg_cycletime;
++		} else if (cur_p) {
++			cycletime = cur_p->tcfg_cycletime;
 +		}
  		if (!cycletime) {
  			err = -EINVAL;
@@ -455,6 +463,15 @@ index c1f75f2727576..af925d22b3383 100644
 +	if (err < 0)
 +		goto release_mem;
 +
++	if (ret != ACT_P_CREATED) {
++		cur_p = rcu_dereference_protected(gact->param,
++						  lockdep_rtnl_is_held());
++		if (cur_p && clockid != cur_p->tcfg_clockid) {
++			hrtimer_cancel(&gact->hitimer);
++			clockid_changed = true;
++		}
++	}
++
 +	spin_lock_bh(&gact->tcf_lock);
 +	if (ret == ACT_P_CREATED) {
 +		gate_setup_timer(gact, basetime, tk_offset, clockid, true);
@@ -465,12 +482,8 @@ index c1f75f2727576..af925d22b3383 100644
 +			err = -EINVAL;
 +			goto chain_put;
 +		}
-+		if (clockid != cur_p->tcfg_clockid) {
-+			spin_unlock_bh(&gact->tcf_lock);
-+			hrtimer_cancel(&gact->hitimer);
-+			spin_lock_bh(&gact->tcf_lock);
++		if (clockid_changed)
 +			gate_setup_timer(gact, basetime, tk_offset, clockid, false);
-+		}
 +	}
 +	p->tcfg_basetime = basetime;
 +	p->tcfg_clockid = clockid;
@@ -481,15 +494,7 @@ index c1f75f2727576..af925d22b3383 100644
  
  	gact->current_close_time = start;
  	gact->current_gate_status = GATE_ACT_GATE_OPEN | GATE_ACT_PENDING;
-@@ -427,13 +559,16 @@ static int tcf_gate_init(struct net *net, struct nlattr *nla,
- 
- 	goto_ch = tcf_action_set_ctrlact(*a, parm->action, goto_ch);
- 
--	gate_start_timer(gact, start);
-+	gate_start_timer(gact, start, ret == ACT_P_CREATED);
- 
- 	spin_unlock_bh(&gact->tcf_lock);
- 
+@@ -434,6 +568,9 @@ static int tcf_gate_init(struct net *net, struct nlattr *nla,
  	if (goto_ch)
  		tcf_chain_put_by_act(goto_ch);
  
@@ -499,7 +504,7 @@ index c1f75f2727576..af925d22b3383 100644
  	return ret;
  
  chain_put:
-@@ -441,26 +576,36 @@ static int tcf_gate_init(struct net *net, struct nlattr *nla,
+@@ -441,26 +578,36 @@ static int tcf_gate_init(struct net *net, struct nlattr *nla,
  
  	if (goto_ch)
  		tcf_chain_put_by_act(goto_ch);
@@ -541,16 +546,13 @@ index c1f75f2727576..af925d22b3383 100644
  }
  
  static int dumping_entry(struct sk_buff *skb,
-@@ -497,67 +642,68 @@ static int dumping_entry(struct sk_buff *skb,
- static int tcf_gate_dump(struct sk_buff *skb, struct tc_action *a,
- 			 int bind, int ref)
+@@ -499,65 +646,66 @@ static int tcf_gate_dump(struct sk_buff *skb, struct tc_action *a,
  {
--	unsigned char *b = skb_tail_pointer(skb);
+ 	unsigned char *b = skb_tail_pointer(skb);
  	struct tcf_gate *gact = to_gate(a);
 +	struct tcfg_gate_entry *entry;
 +	struct tcf_gate_params *p;
 +	struct nlattr *entry_list;
-+	unsigned char *b = skb_tail_pointer(skb);
  	struct tc_gate opt = {
  		.index    = gact->tcf_index,
  		.refcnt   = refcount_read(&gact->tcf_refcnt) - ref,

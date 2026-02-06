@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="Audacious Player - Your music, your way, no exceptions"
 HOMEPAGE="https://audacious-media-player.org/"
-SNAPSHOT=c64e39e88f9146f9bdd7e51f7e2753451b7d46aa
+SNAPSHOT=c0e4d83496e18eec31c6e677cf325580f41de5ff
 SRC_URI="https://github.com/audacious-media-player/audacious-plugins/archive/${SNAPSHOT}.tar.gz -> audacious-plugins-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/audacious-plugins-${SNAPSHOT}"
 

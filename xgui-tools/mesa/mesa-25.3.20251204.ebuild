@@ -16,7 +16,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="wayland"
+IUSE="wayland intel zink"
 
 DEPEND="
 	app-build/llvm
@@ -38,6 +38,7 @@ DEPEND="
 	xmedia-lib/libglvnd
 	wayland? ( xgui-lib/wayland-protocols )
 "
+
 BDEPEND="
 	dev-python/ply
 	dev-python/pyyaml
@@ -46,10 +47,29 @@ BDEPEND="
 PATCHES=("${FILESDIR}"/build-fix.patch)
 
 src_configure() {
+	local gallium_drivers=()
+	local vulkan_drivers=()
+
+	if use intel; then
+		gallium_drivers+=( iris )
+		vulkan_drivers+=( intel )
+	fi
+
+	if use zink; then
+		gallium_drivers+=( zink )
+	fi
+
+	# Mesa meson expects comma-separated strings, and it likes at least one driver
+	local gallium_csv="${gallium_drivers[*]}"
+	gallium_csv="${gallium_csv// /,}"
+
+	local vulkan_csv="${vulkan_drivers[*]}"
+	vulkan_csv="${vulkan_csv// /,}"
+
 	local emesonargs=(
 		-Db_lto=true
 		-Degl=enabled
-		-Dgallium-drivers="iris,zink"
+		-Dgallium-drivers="${gallium_csv:-}"
 		-Dgallium-extra-hud=false
 		-Dgallium-va=disabled
 		-Dgbm=enabled
@@ -64,7 +84,8 @@ src_configure() {
 		-Dplatforms="x11"
 		-Dshared-glapi=enabled
 		-Dvalgrind=disabled
-		-Dvulkan-drivers="intel"
+		-Dvulkan-drivers="${vulkan_csv:-}"
 	)
+
 	meson_src_configure
 }

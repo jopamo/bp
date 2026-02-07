@@ -6,7 +6,7 @@ inherit autotools distutils-r1
 
 DESCRIPTION="identify a file's format by scanning binary data for patterns"
 HOMEPAGE="https://www.darwinsys.com/file/"
-SNAPSHOT=4a5ed789ac44312d2cc47aac816e83d12ae8e3d0
+SNAPSHOT=b387d8f53a4d6129ea022297830b527922b1f7f9
 SRC_URI="https://github.com/file/file/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -22,8 +22,8 @@ DEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/file-5.43-seccomp-fstatat64-musl.patch"
-	"${FILESDIR}/file-5.45-seccomp-sandbox.patch"
+	#"${FILESDIR}/file-5.43-seccomp-fstatat64-musl.patch"
+	#"${FILESDIR}/file-5.45-seccomp-sandbox.patch"
 )
 
 src_prepare() {

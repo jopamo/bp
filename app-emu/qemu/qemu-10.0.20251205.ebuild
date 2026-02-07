@@ -23,11 +23,12 @@ RESTRICT="network-sandbox"
 DEPEND="
 	app-core/attr
 	app-dev/dtc
+	lib-core/glib
 	lib-core/zlib
 	lib-dev/jemalloc
 	lib-dev/libtasn1
 	lib-net/libssh
-	lib-core/glib
+	xgui-lib/libxkbcommon
 	numa? ( app-util/numactl )
 	opengl? ( xmedia-lib/libepoxy )
 	slirp? ( lib-net/slirp )

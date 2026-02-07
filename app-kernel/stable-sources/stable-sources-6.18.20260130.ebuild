@@ -29,6 +29,6 @@ src_prepare() {
 	kernel-2_src_prepare
 
 	eapply "${FILESDIR}"/reg.patch
-	eapply "${FILESDIR}"/00*.patch
+	eapply "${FILESDIR}"/v5*.patch
 }
 

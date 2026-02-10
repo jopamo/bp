@@ -6,9 +6,9 @@ inherit meson
 
 DESCRIPTION="Internationalized text layout and rendering library"
 HOMEPAGE="http://www.pango.org/"
-SNAPSHOT=2fb8d7782ec0e166aeeb961402db8afae521d574
-SRC_URI="https://gitlab.gnome.org/GNOME/pango/-/archive/${SNAPSHOT}/pango-${SNAPSHOT}.tar.bz2 -> pango-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/pango-${SNAPSHOT}"
+SNAPSHOT=be9b2fccec8645924aecc96b1de4520091299fdf
+SRC_URI="https://github.com/jopamo/pango/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="LGPL-2+ FTL"
 SLOT="0"
@@ -18,7 +18,6 @@ IUSE="X introspection test"
 
 DEPEND="
 	fonts/fontconfig
-	lib-dev/fribidi
 	lib-core/glib
 	lib-dev/json-glib
 	xgui-lib/cairo

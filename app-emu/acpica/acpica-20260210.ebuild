@@ -6,7 +6,7 @@ EAPI=7
 
 DESCRIPTION="Intel ACPI Source Language (ASL) compiler"
 HOMEPAGE="https://www.acpica.org/downloads/"
-SNAPSHOT=48fd79ca7733c98cdc78792612054c2b97517001
+SNAPSHOT=e1b2f8e1e80d4c82aa85815ab3c768fc3b0ae860
 SRC_URI="https://github.com/acpica/acpica/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

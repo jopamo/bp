@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="Userspace utils and init scripts for the AppArmor application security system"
 HOMEPAGE="https://gitlab.com/apparmor/apparmor/wikis/home"
-SNAPSHOT=cc1c42c4704fd6a2885c4a953a9d413805488c29
+SNAPSHOT=c8ff79be5fdf3dc012ad8a57050bb0bd13c10300
 SRC_URI="https://gitlab.com/apparmor/apparmor/-/archive/${SNAPSHOT}/apparmor-${SNAPSHOT}.tar.bz2 -> apparmor-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/apparmor-${SNAPSHOT}/profiles"
 

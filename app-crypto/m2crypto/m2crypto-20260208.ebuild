@@ -11,7 +11,7 @@ inherit distutils-r1 toolchain-funcs pypi flag-o-matic
 
 DESCRIPTION="A Python crypto and SSL toolkit"
 HOMEPAGE="https://gitlab.com/m2crypto/m2crypto/"
-SNAPSHOT=4f31a6c0d8d262a69a381346c1ab8c2ade9fa6e1
+SNAPSHOT=03c22aa73c244d58e21803364cf47346e268f1dd
 SRC_URI="https://gitlab.com/m2crypto/m2crypto/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

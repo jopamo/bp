@@ -3,7 +3,7 @@
 EAPI=8
 
 BRANCH_NAME="$(ver_cut 1-2)"
-SNAPSHOT=afa548d4f7776c8abadbb62aae0c4be38eb50768
+SNAPSHOT=4055a340d37f71be069199009752410bcc83964b
 
 inherit autotools edo multiprocessing toolchain-funcs doins user
 

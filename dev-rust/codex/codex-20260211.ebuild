@@ -6,7 +6,7 @@ inherit cargo
 
 DESCRIPTION="openai codex"
 HOMEPAGE="https://github.com/openai/codex"
-SNAPSHOT=dd80e332c45aefc935d68fe067026ccf40312ccd
+SNAPSHOT=3d0ead8db8c4cf81846ed17448ee0cd520a20f83
 SRC_URI="https://github.com/openai/codex/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/codex-${SNAPSHOT}/codex-rs"
 

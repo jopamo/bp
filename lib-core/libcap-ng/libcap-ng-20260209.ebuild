@@ -6,7 +6,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="POSIX 1003.1e capabilities"
 HOMEPAGE="https://people.redhat.com/sgrubb/libcap-ng/"
-SNAPSHOT=46e26334efb8dd35404fbfb02a106f05181e4553
+SNAPSHOT=814d7590cd5b003e1da689d7d05dadc4d303956f
 SRC_URI="https://github.com/stevegrubb/libcap-ng/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

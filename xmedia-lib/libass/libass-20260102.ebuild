@@ -18,7 +18,6 @@ IUSE="static-libs"
 
 RDEPEND="
 	fonts/fontconfig
-	lib-dev/fribidi
 	xgui-lib/freetype
 	xgui-lib/harfbuzz[truetype]
 "

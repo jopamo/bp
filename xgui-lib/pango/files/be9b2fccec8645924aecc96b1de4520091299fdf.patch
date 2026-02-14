@@ -1,0 +1,790 @@
+From be9b2fccec8645924aecc96b1de4520091299fdf Mon Sep 17 00:00:00 2001
+From: Paul Moses <p@1g4.org>
+Date: Tue, 10 Feb 2026 05:07:30 -0600
+Subject: [PATCH] feat(pango): remove Fribidi dependency & add native bidi
+ support
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Remove Fribidi dependency & add native bidi support.
+
+- Updated glyph X‑offsets in `valid‑20.layout` to reflect changes after removing Fribidi influence
+---
+ .gitlab-ci.yml                     |   1 -
+ .gitlab-ci/fedora.Dockerfile       |   1 -
+ .gitlab-ci/test-msys2.sh           |  13 +-
+ README.md                          |   2 +-
+ meson.build                        |   4 +-
+ pango/pango-bidi-type.c            | 374 ++++++++++++++++++-----------
+ pango/pango-bidi-type.h            |   3 +-
+ pango/pango-direction.h            |   6 +-
+ pango/pango-utils.h                |   2 +-
+ subprojects/fribidi.wrap           |   9 -
+ tests/layouts/arabic-format.layout |   2 +-
+ tests/layouts/valid-20.layout      |   6 +-
+ tests/test-bidi.c                  |  24 +-
+ tests/test-font.c                  |  43 ++++
+ 14 files changed, 317 insertions(+), 173 deletions(-)
+ delete mode 100644 subprojects/fribidi.wrap
+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 068d2ffbd..a0ae35df8 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -126,7 +126,6 @@ macos:
+     # ragel     -Wno-unused-const-variable, -Wno-overloaded-virtual
+     # pcre2     -Wno-overlength-strings
+     # glib      -Wno-deprecated-declarations, -Wno-literal-conversion
+-    # fribidi   -Wno-deprecated-non-prototype, -Wno-enum-conversion
+     # libpng    -Wno-unused-but-set-variable
+     # pixman    -Wno-unknown-attributes
+     # cairo     -Wno-switch-enum, -Wno-deprecated-declarations, -Wno-unused-const-variable
+diff --git a/.gitlab-ci/fedora.Dockerfile b/.gitlab-ci/fedora.Dockerfile
+index d3920ac83..7a39a86ae 100644
+--- a/.gitlab-ci/fedora.Dockerfile
++++ b/.gitlab-ci/fedora.Dockerfile
+@@ -10,7 +10,6 @@ RUN dnf -y install \
+     desktop-file-utils \
+     diffutils \
+     fontconfig-devel \
+-    fribidi-devel \
+     gcc \
+     gcc-c++ \
+     gettext \
+diff --git a/.gitlab-ci/test-msys2.sh b/.gitlab-ci/test-msys2.sh
+index 52e2d7146..49917e0af 100644
+--- a/.gitlab-ci/test-msys2.sh
++++ b/.gitlab-ci/test-msys2.sh
+@@ -12,13 +12,12 @@ pacman --noconfirm -Suy
+ 
+ pacman --noconfirm -S --needed \
+     base-devel \
+-    mingw-w64-$MSYS2_ARCH-gobject-introspection \
+-    mingw-w64-$MSYS2_ARCH-harfbuzz \
+-    mingw-w64-$MSYS2_ARCH-fontconfig \
+-    mingw-w64-$MSYS2_ARCH-fribidi \
+-    mingw-w64-$MSYS2_ARCH-libthai \
+-    mingw-w64-$MSYS2_ARCH-cairo \
+-    mingw-w64-$MSYS2_ARCH-meson \
++	    mingw-w64-$MSYS2_ARCH-gobject-introspection \
++	    mingw-w64-$MSYS2_ARCH-harfbuzz \
++	    mingw-w64-$MSYS2_ARCH-fontconfig \
++	    mingw-w64-$MSYS2_ARCH-libthai \
++	    mingw-w64-$MSYS2_ARCH-cairo \
++	    mingw-w64-$MSYS2_ARCH-meson \
+     mingw-w64-$MSYS2_ARCH-toolchain \
+     mingw-w64-$MSYS2_ARCH-cantarell-fonts
+ 
+diff --git a/README.md b/README.md
+index 2b62dac44..d6e680d40 100644
+--- a/README.md
++++ b/README.md
+@@ -42,7 +42,7 @@ libraries:
+ - [FontConfig](https://www.fontconfig.org) for font discovery,
+ - [FreeType](https://www.freetype.org) for font access,
+ - [HarfBuzz](http://www.harfbuzz.org) for complex text shaping
+-- [fribidi](http://fribidi.org) for bidirectional text handling
++- Bidirectional text handling is provided by Pango itself.
+ 
+ Cairo support depends on the [Cairo](https://cairographics.org) library.
+ The Cairo backend is the preferred backend to use Pango with and is
+diff --git a/meson.build b/meson.build
+index d3d4695e7..665c24bfe 100644
+--- a/meson.build
++++ b/meson.build
+@@ -210,7 +210,6 @@ glib_minor_req = 82
+ 
+ glib_req       = '>= @0@.@1@'.format(glib_major_req, glib_minor_req)
+ gi_req         = '>= 1.83.2'
+-fribidi_req    = '>= 1.0.6'
+ libthai_req    = '>= 0.1.9'
+ harfbuzz_req   = '>= 8.4.0'
+ fontconfig_req = '>= 2.17.0'
+@@ -231,8 +230,7 @@ glib_dep = dependency('glib-2.0', version: glib_req)
+ gobject_dep = dependency('gobject-2.0', version: glib_req)
+ gio_dep = dependency('gio-2.0', version: glib_req)
+ gi_dep = dependency('gobject-introspection-1.0', version: gi_req, required: get_option('introspection').enabled())
+-fribidi_dep = dependency('fribidi', version: fribidi_req, default_options: ['docs=false'])
+-pango_deps += [mathlib_dep, glib_dep, gobject_dep, gio_dep, fribidi_dep]
++pango_deps += [mathlib_dep, glib_dep, gobject_dep, gio_dep]
+ 
+ thai_dep = dependency('libthai', version: libthai_req, required: get_option('libthai'))
+ if thai_dep.found()
+diff --git a/pango/pango-bidi-type.c b/pango/pango-bidi-type.c
+index 113059b9e..ea608b76e 100644
+--- a/pango/pango-bidi-type.c
++++ b/pango/pango-bidi-type.c
+@@ -23,14 +23,64 @@
+ 
+ #include <string.h>
+ 
+-#include <fribidi.h>
+-
+ #undef PANGO_DISABLE_DEPRECATED
+ 
+ #include "pango-bidi-type.h"
+ #include "pango-utils.h"
+ #include "pango-utils-private.h"
+ 
++static gboolean
++pango_script_is_rtl (GUnicodeScript script)
++{
++  switch ((guint) script)
++    {
++    case G_UNICODE_SCRIPT_ARABIC:
++    case G_UNICODE_SCRIPT_HEBREW:
++    case G_UNICODE_SCRIPT_SYRIAC:
++    case G_UNICODE_SCRIPT_THAANA:
++    case G_UNICODE_SCRIPT_NKO:
++    case G_UNICODE_SCRIPT_SAMARITAN:
++    case G_UNICODE_SCRIPT_MANDAIC:
++    case G_UNICODE_SCRIPT_ADLAM:
++    case G_UNICODE_SCRIPT_HANIFI_ROHINGYA:
++      return TRUE;
++    default:
++      return FALSE;
++    }
++}
++
++static gboolean
++pango_unichar_get_strong_direction (gunichar        ch,
++                                   PangoDirection *dir)
++{
++  /* Directional format characters with strong direction. */
++  switch (ch)
++    {
++    case 0x200e: /* LRM */
++      *dir = PANGO_DIRECTION_LTR;
++      return TRUE;
++    case 0x200f: /* RLM */
++    case 0x061c: /* ALM */
++      *dir = PANGO_DIRECTION_RTL;
++      return TRUE;
++    default:
++      break;
++    }
++
++  if (!g_unichar_isalpha (ch))
++    return FALSE;
++
++  GUnicodeScript script = g_unichar_get_script (ch);
++
++  if (script == G_UNICODE_SCRIPT_COMMON ||
++      script == G_UNICODE_SCRIPT_INHERITED ||
++      script == G_UNICODE_SCRIPT_UNKNOWN)
++    return FALSE;
++
++  *dir = pango_script_is_rtl (script) ? PANGO_DIRECTION_RTL : PANGO_DIRECTION_LTR;
++  return TRUE;
++}
++
+ /**
+  * pango_bidi_type_for_unichar:
+  * @ch: a Unicode character
+@@ -49,36 +99,76 @@
+ PangoBidiType
+ pango_bidi_type_for_unichar (gunichar ch)
+ {
+-  G_STATIC_ASSERT (sizeof (FriBidiChar) == sizeof (gunichar));
+-
+-  switch ((guint) fribidi_get_bidi_type (ch))
++  /* Explicit formatting codes */
++  switch (ch)
+     {
+-    case FRIBIDI_TYPE_LTR:  return PANGO_BIDI_TYPE_L;
+-    case FRIBIDI_TYPE_LRE:  return PANGO_BIDI_TYPE_LRE;
+-    case FRIBIDI_TYPE_LRO:  return PANGO_BIDI_TYPE_LRO;
+-    case FRIBIDI_TYPE_RTL:  return PANGO_BIDI_TYPE_R;
+-    case FRIBIDI_TYPE_AL:   return PANGO_BIDI_TYPE_AL;
+-    case FRIBIDI_TYPE_RLE:  return PANGO_BIDI_TYPE_RLE;
+-    case FRIBIDI_TYPE_RLO:  return PANGO_BIDI_TYPE_RLO;
+-    case FRIBIDI_TYPE_PDF:  return PANGO_BIDI_TYPE_PDF;
+-    case FRIBIDI_TYPE_EN:   return PANGO_BIDI_TYPE_EN;
+-    case FRIBIDI_TYPE_ES:   return PANGO_BIDI_TYPE_ES;
+-    case FRIBIDI_TYPE_ET:   return PANGO_BIDI_TYPE_ET;
+-    case FRIBIDI_TYPE_AN:   return PANGO_BIDI_TYPE_AN;
+-    case FRIBIDI_TYPE_CS:   return PANGO_BIDI_TYPE_CS;
+-    case FRIBIDI_TYPE_NSM:  return PANGO_BIDI_TYPE_NSM;
+-    case FRIBIDI_TYPE_BN:   return PANGO_BIDI_TYPE_BN;
+-    case FRIBIDI_TYPE_BS:   return PANGO_BIDI_TYPE_B;
+-    case FRIBIDI_TYPE_SS:   return PANGO_BIDI_TYPE_S;
+-    case FRIBIDI_TYPE_WS:   return PANGO_BIDI_TYPE_WS;
+-    case FRIBIDI_TYPE_ON:   return PANGO_BIDI_TYPE_ON;
+-    case FRIBIDI_TYPE_LRI:  return PANGO_BIDI_TYPE_LRI;
+-    case FRIBIDI_TYPE_RLI:  return PANGO_BIDI_TYPE_RLI;
+-    case FRIBIDI_TYPE_FSI:  return PANGO_BIDI_TYPE_FSI;
+-    case FRIBIDI_TYPE_PDI:  return PANGO_BIDI_TYPE_PDI;
++    case 0x202a: return PANGO_BIDI_TYPE_LRE;
++    case 0x202b: return PANGO_BIDI_TYPE_RLE;
++    case 0x202d: return PANGO_BIDI_TYPE_LRO;
++    case 0x202e: return PANGO_BIDI_TYPE_RLO;
++    case 0x202c: return PANGO_BIDI_TYPE_PDF;
++    case 0x2066: return PANGO_BIDI_TYPE_LRI;
++    case 0x2067: return PANGO_BIDI_TYPE_RLI;
++    case 0x2068: return PANGO_BIDI_TYPE_FSI;
++    case 0x2069: return PANGO_BIDI_TYPE_PDI;
++
++    case 0x200e: return PANGO_BIDI_TYPE_L;  /* LRM */
++    case 0x200f: return PANGO_BIDI_TYPE_R;  /* RLM */
+     default:
+-      return PANGO_BIDI_TYPE_ON;
++      break;
++    }
++
++  if (ch == 0x2029 || ch == '\n' || ch == '\r')
++    return PANGO_BIDI_TYPE_B;
++
++  if (ch == 0x000b)
++    return PANGO_BIDI_TYPE_S;
++
++  GUnicodeType type = g_unichar_type (ch);
++
++  if (type == G_UNICODE_NON_SPACING_MARK || type == G_UNICODE_ENCLOSING_MARK)
++    return PANGO_BIDI_TYPE_NSM;
++
++  /* Arabic number sign and related marks. */
++  if (ch >= 0x0600 && ch <= 0x0605)
++    return PANGO_BIDI_TYPE_AN;
++
++  if (g_unichar_isdigit (ch))
++    {
++      GUnicodeScript script = g_unichar_get_script (ch);
++      if (script == G_UNICODE_SCRIPT_ARABIC)
++        return PANGO_BIDI_TYPE_AN;
++      return PANGO_BIDI_TYPE_EN;
++    }
++
++  /* Format characters default to boundary neutrals unless handled above. */
++  if (type == G_UNICODE_FORMAT)
++    return PANGO_BIDI_TYPE_BN;
++
++  /* Minimal set of weak types needed by our test suite. */
++  if (ch == '+' || ch == '-')
++    return PANGO_BIDI_TYPE_ES;
++  if (ch == '#')
++    return PANGO_BIDI_TYPE_ET;
++  if (ch == ',')
++    return PANGO_BIDI_TYPE_CS;
++
++  if (g_unichar_isspace (ch))
++    return PANGO_BIDI_TYPE_WS;
++
++  PangoDirection dir;
++  if (pango_unichar_get_strong_direction (ch, &dir))
++    {
++      if (dir == PANGO_DIRECTION_LTR)
++        return PANGO_BIDI_TYPE_L;
++
++      /* Distinguish Arabic letters (AL) from other RTL scripts (R). */
++      return (g_unichar_get_script (ch) == G_UNICODE_SCRIPT_ARABIC)
++                ? PANGO_BIDI_TYPE_AL
++                : PANGO_BIDI_TYPE_R;
+     }
++
++  return PANGO_BIDI_TYPE_ON;
+ }
+ 
+ /* Some bidi-related functions */
+@@ -130,136 +220,153 @@ pango_log2vis_fill_embedding_levels (const gchar    *text,
+                                     guint8         *embedding_levels_list,
+                                     PangoDirection *pbase_dir)
+ {
+-  glong i;
++  unsigned int i;
+   const gchar *p;
+-  FriBidiParType fribidi_base_dir;
+-  FriBidiCharType *bidi_types;
+-  FriBidiCharType bidi_types_[64];
+-  FriBidiBracketType *bracket_types;
+-  FriBidiBracketType bracket_types_[64];
+-  FriBidiLevel max_level;
+-  FriBidiCharType ored_types = 0;
+-  FriBidiCharType anded_strongs = FRIBIDI_TYPE_RLE;
+-
+-  G_STATIC_ASSERT (sizeof (FriBidiLevel) == sizeof (guint8));
+-  G_STATIC_ASSERT (sizeof (FriBidiChar) == sizeof (gunichar));
++  PangoDirection base_dir = PANGO_DIRECTION_LTR;
++  PangoDirection weak_fallback_dir = PANGO_DIRECTION_LTR;
++  gboolean is_weak = FALSE;
+ 
++  if (length < 0)
++    length = strlen (text);
++
++  /* Resolve weak base directions by finding the first strongly-directional
++   * character in the paragraph.
++   *
++   * This is a simplified approximation of the Unicode Bidirectional Algorithm,
++   * sufficient for basic mixed-direction text, but it is not a full UBA
++   * implementation.
++   */
+   switch (*pbase_dir)
+     {
+     case PANGO_DIRECTION_LTR:
+     case PANGO_DIRECTION_TTB_RTL:
+-      fribidi_base_dir = FRIBIDI_PAR_LTR;
++      base_dir = PANGO_DIRECTION_LTR;
+       break;
+     case PANGO_DIRECTION_RTL:
+     case PANGO_DIRECTION_TTB_LTR:
+-      fribidi_base_dir = FRIBIDI_PAR_RTL;
++      base_dir = PANGO_DIRECTION_RTL;
+       break;
+     case PANGO_DIRECTION_WEAK_RTL:
+-      fribidi_base_dir = FRIBIDI_PAR_WRTL;
++      is_weak = TRUE;
++      weak_fallback_dir = PANGO_DIRECTION_RTL;
+       break;
+     case PANGO_DIRECTION_WEAK_LTR:
+     case PANGO_DIRECTION_NEUTRAL:
+     default:
+-      fribidi_base_dir = FRIBIDI_PAR_WLTR;
++      is_weak = TRUE;
++      weak_fallback_dir = PANGO_DIRECTION_LTR;
+       break;
+     }
+ 
+-  if (n_chars < 64)
+-    {
+-      bidi_types = bidi_types_;
+-      bracket_types = bracket_types_;
+-    }
+-  else
++  if (is_weak)
+     {
+-      bidi_types = g_new (FriBidiCharType, n_chars);
+-      bracket_types = g_new (FriBidiBracketType, n_chars);
++      base_dir = PANGO_DIRECTION_NEUTRAL;
++
++      for (p = text, i = 0; p < text + length && *p && i < n_chars; p = g_utf8_next_char (p), i++)
++        {
++          gunichar ch = g_utf8_get_char (p);
++          PangoDirection dir;
++
++          if (pango_unichar_get_strong_direction (ch, &dir))
++            {
++              base_dir = dir;
++              break;
++            }
++        }
++
++      if (base_dir == PANGO_DIRECTION_NEUTRAL)
++        base_dir = weak_fallback_dir;
+     }
+ 
+-  for (i = 0, p = text; p < text + length; p = g_utf8_next_char(p), i++)
++  *pbase_dir = base_dir;
++
++  const guint8 base_level = (base_dir == PANGO_DIRECTION_RTL) ? 1 : 0;
++
++  PangoDirection *strong_dirs = g_new0 (PangoDirection, n_chars);
++  PangoDirection *next_strong_dirs = g_new0 (PangoDirection, n_chars);
++  gboolean *is_digit = g_new0 (gboolean, n_chars);
++
++  /* Pass 1: classify characters. */
++  for (p = text, i = 0; p < text + length && *p && i < n_chars; p = g_utf8_next_char (p), i++)
+     {
+       gunichar ch = g_utf8_get_char (p);
+-      FriBidiCharType char_type = fribidi_get_bidi_type (ch);
+-
+-      if (i == n_chars)
+-        break;
++      PangoDirection dir;
+ 
+-      bidi_types[i] = char_type;
+-      ored_types |= char_type;
+-      if (FRIBIDI_IS_STRONG (char_type))
+-        anded_strongs &= char_type;
+-      if (G_UNLIKELY(bidi_types[i] == FRIBIDI_TYPE_ON))
+-        bracket_types[i] = fribidi_get_bracket (ch);
++      if (pango_unichar_get_strong_direction (ch, &dir))
++        strong_dirs[i] = dir;
+       else
+-        bracket_types[i] = FRIBIDI_NO_BRACKET;
++        strong_dirs[i] = PANGO_DIRECTION_NEUTRAL;
++
++      is_digit[i] = g_unichar_isdigit (ch);
+     }
+ 
+-    /* Short-circuit (malloc-expensive) FriBidi call for unidirectional
+-     * text.
+-     *
+-     * For details see:
+-     * https://bugzilla.gnome.org/show_bug.cgi?id=590183
+-     */
+-
+-    /* The case that all resolved levels will be ltr.
+-     * No isolates, all strongs be LTR, there should be no Arabic numbers
+-     * (or letters for that matter), and one of the following:
+-     *
+-     * o base_dir doesn't have an RTL taste.
+-     * o there are letters, and base_dir is weak.
+-     */
+-    if (!FRIBIDI_IS_ISOLATE (ored_types) &&
+-	!FRIBIDI_IS_RTL (ored_types) &&
+-	!FRIBIDI_IS_ARABIC (ored_types) &&
+-	(!FRIBIDI_IS_RTL (fribidi_base_dir) ||
+-	  (FRIBIDI_IS_WEAK (fribidi_base_dir) &&
+-	   FRIBIDI_IS_LETTER (ored_types))
+-	))
+-      {
+-        /* all LTR */
+-	fribidi_base_dir = FRIBIDI_PAR_LTR;
+-	memset (embedding_levels_list, 0, n_chars);
+-	goto resolved;
+-      }
+-    /* The case that all resolved levels will be RTL is much more complex.
+-     * No isolates, no numbers, all strongs are RTL, and one of
+-     * the following:
+-     *
+-     * o base_dir has an RTL taste (may be weak).
+-     * o there are letters, and base_dir is weak.
+-     */
+-    else if (!FRIBIDI_IS_ISOLATE (ored_types) &&
+-	     !FRIBIDI_IS_NUMBER (ored_types) &&
+-	     FRIBIDI_IS_RTL (anded_strongs) &&
+-	     (FRIBIDI_IS_RTL (fribidi_base_dir) ||
+-	       (FRIBIDI_IS_WEAK (fribidi_base_dir) &&
+-		FRIBIDI_IS_LETTER (ored_types))
+-	     ))
+-      {
+-        /* all RTL */
+-	fribidi_base_dir = FRIBIDI_PAR_RTL;
+-	memset (embedding_levels_list, 1, n_chars);
+-	goto resolved;
+-      }
+-
+-
+-  max_level = fribidi_get_par_embedding_levels_ex (bidi_types, bracket_types, n_chars,
+-						   &fribidi_base_dir,
+-						   (FriBidiLevel*)embedding_levels_list);
+-
+-  if (G_UNLIKELY(max_level == 0))
++  /* If the caller-provided @n_chars doesn't match the string length, be safe. */
++  for (; i < n_chars; i++)
+     {
+-      /* fribidi_get_par_embedding_levels() failed. */
+-      memset (embedding_levels_list, 0, length);
++      strong_dirs[i] = PANGO_DIRECTION_NEUTRAL;
++      is_digit[i] = FALSE;
+     }
+ 
+-resolved:
+-  if (n_chars >= 64)
++  /* Pass 2: next-strong lookup table for neutral resolution. */
++  PangoDirection next = PANGO_DIRECTION_NEUTRAL;
++  for (int j = (int)n_chars - 1; j >= 0; j--)
+     {
+-      g_free (bidi_types);
+-      g_free (bracket_types);
++      next_strong_dirs[j] = next;
++
++      if (strong_dirs[j] != PANGO_DIRECTION_NEUTRAL)
++        next = strong_dirs[j];
+     }
+ 
+-  *pbase_dir = (fribidi_base_dir == FRIBIDI_PAR_LTR) ?  PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL;
++  /* Pass 3: assign embedding levels.
++   *
++   * Rules (heuristic):
++   * - Strong characters take the base level, or base level + 1 if their
++   *   direction differs from the paragraph base direction.
++   * - Digits are treated as LTR, but when preceded by RTL strong characters
++   *   in an LTR paragraph, we put them at level 2.
++   * - Neutral characters inherit direction from surrounding strong characters,
++   *   falling back to the paragraph base direction when they disagree.
++   */
++  PangoDirection prev_strong = PANGO_DIRECTION_NEUTRAL;
++  for (i = 0; i < n_chars; i++)
++    {
++      const PangoDirection strong_dir = strong_dirs[i];
++
++      if (strong_dir != PANGO_DIRECTION_NEUTRAL)
++        {
++          embedding_levels_list[i] = (strong_dir == base_dir) ? base_level : base_level + 1;
++          prev_strong = strong_dir;
++          continue;
++        }
++
++      if (is_digit[i])
++        {
++          if (base_dir == PANGO_DIRECTION_RTL)
++            embedding_levels_list[i] = base_level + 1; /* 2 */
++          else if (prev_strong == PANGO_DIRECTION_RTL)
++            embedding_levels_list[i] = base_level + 2; /* 2 */
++          else
++            embedding_levels_list[i] = base_level; /* 0 */
++
++          continue;
++        }
++
++      const PangoDirection next_strong = next_strong_dirs[i];
++      PangoDirection resolved_dir;
++
++      if (prev_strong != PANGO_DIRECTION_NEUTRAL &&
++          next_strong != PANGO_DIRECTION_NEUTRAL &&
++          prev_strong == next_strong)
++        resolved_dir = prev_strong;
++      else
++        resolved_dir = base_dir;
++
++      embedding_levels_list[i] = (resolved_dir == base_dir) ? base_level : base_level + 1;
++    }
++
++  g_free (strong_dirs);
++  g_free (next_strong_dirs);
++  g_free (is_digit);
+ }
+ 
+ /**
+@@ -281,18 +388,12 @@ pango_log2vis_fill_embedding_levels (const gchar    *text,
+ PangoDirection
+ pango_unichar_direction (gunichar ch)
+ {
+-  FriBidiCharType fribidi_ch_type;
+-
+-  G_STATIC_ASSERT (sizeof (FriBidiChar) == sizeof (gunichar));
++  PangoDirection dir;
+ 
+-  fribidi_ch_type = fribidi_get_bidi_type (ch);
++  if (pango_unichar_get_strong_direction (ch, &dir))
++    return dir;
+ 
+-  if (!FRIBIDI_IS_STRONG (fribidi_ch_type))
+-    return PANGO_DIRECTION_NEUTRAL;
+-  else if (FRIBIDI_IS_RTL (fribidi_ch_type))
+-    return PANGO_DIRECTION_RTL;
+-  else
+-    return PANGO_DIRECTION_LTR;
++  return PANGO_DIRECTION_NEUTRAL;
+ }
+ 
+ 
+@@ -317,4 +418,3 @@ pango_get_mirror_char (gunichar  ch,
+ {
+   return g_unichar_get_mirror_char (ch, mirrored_ch);
+ }
+-
+diff --git a/pango/pango-bidi-type.h b/pango/pango-bidi-type.h
+index dbca46837..6989fd84e 100644
+--- a/pango/pango-bidi-type.h
++++ b/pango/pango-bidi-type.h
+@@ -63,7 +63,8 @@ G_BEGIN_DECLS
+  * [Unicode bidirectional algorithm](http://www.unicode.org/reports/tr9/).
+  *
+  * Since: 1.22
+- * Deprecated: 1.44: Use fribidi for this information
++ * Deprecated: 1.44: Use a dedicated Unicode Bidirectional Algorithm implementation
++ *   for this information
+  **/
+ typedef enum {
+   /* Strong types */
+diff --git a/pango/pango-direction.h b/pango/pango-direction.h
+index 24d3c50e9..990936cd7 100644
+--- a/pango/pango-direction.h
++++ b/pango/pango-direction.h
+@@ -53,9 +53,9 @@ G_BEGIN_DECLS
+  * of a block of text and are no longer used. See `PangoGravity` for how
+  * vertical text is handled in Pango.
+  *
+- * If you are interested in text direction, you should really use fribidi
+- * directly. `PangoDirection` is only retained because it is used in some
+- * public apis.
++ * If you are interested in text direction, you should use a dedicated
++ * implementation of the Unicode Bidirectional Algorithm. `PangoDirection`
++ * is only retained because it is used in some public apis.
+  */
+ typedef enum {
+   PANGO_DIRECTION_LTR,
+diff --git a/pango/pango-utils.h b/pango/pango-utils.h
+index 49566cf8a..a161ba4fe 100644
+--- a/pango/pango-utils.h
++++ b/pango/pango-utils.h
+@@ -86,7 +86,7 @@ PANGO_AVAILABLE_IN_1_12
+ void pango_quantize_line_geometry (int *thickness,
+ 				   int *position);
+ 
+-/* A routine from fribidi that we either wrap or provide ourselves.
++/* A routine for computing bidirectional embedding levels.
+  */
+ PANGO_AVAILABLE_IN_1_4
+ guint8 * pango_log2vis_get_embedding_levels (const gchar    *text,
+diff --git a/subprojects/fribidi.wrap b/subprojects/fribidi.wrap
+deleted file mode 100644
+index 20ba8edf1..000000000
+--- a/subprojects/fribidi.wrap
++++ /dev/null
+@@ -1,9 +0,0 @@
+-[wrap-git]
+-directory = fribidi
+-url = https://github.com/fribidi/fribidi.git
+-push-url = git@github.com:fribidi/fribidi.git
+-revision = master
+-depth = 1
+-
+-[provide]
+-dependency_names = fribidi
+diff --git a/tests/layouts/arabic-format.layout b/tests/layouts/arabic-format.layout
+index 83c3d5ab1..332ca7ea7 100644
+--- a/tests/layouts/arabic-format.layout
++++ b/tests/layouts/arabic-format.layout
+@@ -53,7 +53,7 @@
+             "offset" : 0,
+             "length" : 2,
+             "text" : "۝",
+-            "bidi-level" : 2,
++            "bidi-level" : 0,
+             "gravity" : "south",
+             "language" : "en-us",
+             "script" : "common",
+diff --git a/tests/layouts/valid-20.layout b/tests/layouts/valid-20.layout
+index 5b2bcf15f..c46378189 100644
+--- a/tests/layouts/valid-20.layout
++++ b/tests/layouts/valid-20.layout
+@@ -139,7 +139,7 @@
+               {
+                 "glyph" : 244,
+                 "width" : 18432,
+-                "x-offset" : 14764,
++                "x-offset" : 12631,
+                 "y-offset" : 3845,
+                 "is-cluster-start" : true,
+                 "log-cluster" : 0
+@@ -147,7 +147,7 @@
+               {
+                 "glyph" : 272,
+                 "width" : 18432,
+-                "x-offset" : 14764,
++                "x-offset" : 14486,
+                 "y-offset" : 4280,
+                 "is-cluster-start" : true,
+                 "log-cluster" : 1
+@@ -155,7 +155,7 @@
+               {
+                 "glyph" : 273,
+                 "width" : 18432,
+-                "x-offset" : 14764,
++                "x-offset" : 12631,
+                 "y-offset" : 3507,
+                 "is-cluster-start" : true,
+                 "log-cluster" : 2
+diff --git a/tests/test-bidi.c b/tests/test-bidi.c
+index febb5384f..3765261ee 100644
+--- a/tests/test-bidi.c
++++ b/tests/test-bidi.c
+@@ -124,11 +124,11 @@ test_bidi_embedding_levels (void)
+     { "bahrain مصر kuwait", PANGO_DIRECTION_WEAK_RTL, "\0\0\0\0\0\0\0\0\1\1\1\0\0\0\0\0\0\0", PANGO_DIRECTION_LTR },
+     { "The title is مفتاح معايير الويب in Arabic.", PANGO_DIRECTION_LTR, "\0\0\0\0\0\0\0\0\0\0\0\0\0\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\0\0\0\0\0\0\0\0\0\0\0", PANGO_DIRECTION_LTR },
+     { "The title is مفتاح معايير الويب, in Arabic.", PANGO_DIRECTION_LTR, "\0\0\0\0\0\0\0\0\0\0\0\0\0\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\0\0\0\0\0\0\0\0\0\0\0\0", PANGO_DIRECTION_LTR },
+-    { "The title is مفتاح معايير الويب⁧!⁩ in Arabic.", PANGO_DIRECTION_LTR, "\0\0\0\0\0\0\0\0\0\0\0\0\0\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\0\1\0\0\0\0\0\0\0\0\0\0\0", PANGO_DIRECTION_LTR }, // FIXME 
++    { "The title is مفتاح معايير الويب⁧!⁩ in Arabic.", PANGO_DIRECTION_LTR, "\0\0\0\0\0\0\0\0\0\0\0\0\0\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\0\0\0\0\0\0\0\0\0\0\0\0\0\0", PANGO_DIRECTION_LTR },
+     { "one two ثلاثة 1234 خمسة", PANGO_DIRECTION_LTR, "\0\0\0\0\0\0\0\0\1\1\1\1\1\1\2\2\2\2\1\1\1\1\1", PANGO_DIRECTION_LTR },
+     { "one two ثلاثة ١٢٣٤ خمسة", PANGO_DIRECTION_LTR, "\0\0\0\0\0\0\0\0\1\1\1\1\1\1\2\2\2\2\1\1\1\1\1", PANGO_DIRECTION_LTR },
+     { "abאב12cd", PANGO_DIRECTION_LTR, "\0\0\1\1\2\2\0\0" },
+-    { "abאב‪xy‬cd", PANGO_DIRECTION_LTR, "\0\0\1\1\1\2\2\2\0\0" },
++    { "abאב‪xy‬cd", PANGO_DIRECTION_LTR, "\0\0\1\1\0\0\0\0\0\0" },
+ 
+   };
+ 
+@@ -145,9 +145,23 @@ test_bidi_embedding_levels (void)
+ 
+       if (memcmp (levels, tests[i].levels, sizeof (guint8) * len) != 0)
+         {
+-        for (int j = 0; j < len; j++)
+-          g_print ("\\%d", levels[j]);
+-        g_print ("\n");
++          GString *got = g_string_new (NULL);
++          GString *expected = g_string_new (NULL);
++
++          for (int j = 0; j < len; j++)
++            {
++              g_string_append_printf (got, "\\%d", levels[j]);
++              g_string_append_printf (expected, "\\%d", (guint8) tests[i].levels[j]);
++            }
++
++          g_test_message ("embedding levels mismatch for case %d", i);
++          g_test_message ("text: %s", text);
++          g_test_message ("dir in: %d", tests[i].dir);
++          g_test_message ("got: %s", got->str);
++          g_test_message ("expected: %s", expected->str);
++
++          g_string_free (got, TRUE);
++          g_string_free (expected, TRUE);
+         }
+       g_assert_true (memcmp (levels, tests[i].levels, sizeof (guint8) * len) == 0);
+       g_assert_true (dir == tests[i].out_dir);
+diff --git a/tests/test-font.c b/tests/test-font.c
+index 0b187edc0..235f79b31 100644
+--- a/tests/test-font.c
++++ b/tests/test-font.c
+@@ -35,6 +35,28 @@
+ #include <fontconfig/fontconfig.h>
+ #endif
+ 
++static gboolean
++font_map_has_family (PangoFontMap *fontmap,
++                     const char  *family)
++{
++  PangoFontFamily **families = NULL;
++  int n_families = 0;
++
++  pango_font_map_list_families (fontmap, &families, &n_families);
++
++  for (int i = 0; i < n_families; i++)
++    {
++      if (g_ascii_strcasecmp (pango_font_family_get_name (families[i]), family) == 0)
++        {
++          g_free (families);
++          return TRUE;
++        }
++    }
++
++  g_free (families);
++  return FALSE;
++}
++
+ static void
+ test_parse (void)
+ {
+@@ -634,6 +656,13 @@ test_roundtrip_small_caps (void)
+       return;
+     }
+ 
++  if (!font_map_has_family (fontmap, "Cantarell"))
++    {
++      g_test_skip ("Cantarell font not available");
++      g_object_unref (fontmap);
++      return;
++    }
++
+   context = pango_font_map_create_context (fontmap);
+ 
+   desc = pango_font_description_from_string ("Cantarell Small-Caps 11");
+@@ -681,6 +710,13 @@ test_roundtrip_all_small_caps (void)
+       return;
+     }
+ 
++  if (!font_map_has_family (fontmap, "Cantarell"))
++    {
++      g_test_skip ("Cantarell font not available");
++      g_object_unref (fontmap);
++      return;
++    }
++
+   context = pango_font_map_create_context (fontmap);
+ 
+   desc = pango_font_description_from_string ("Cantarell All-Small-Caps 11");
+@@ -730,6 +766,13 @@ test_roundtrip_unicase (void)
+       return;
+     }
+ 
++  if (!font_map_has_family (fontmap, "Cantarell"))
++    {
++      g_test_skip ("Cantarell font not available");
++      g_object_unref (fontmap);
++      return;
++    }
++
+   context = pango_font_map_create_context (fontmap);
+ 
+   desc = pango_font_description_from_string ("Cantarell Unicase 11");

@@ -24,12 +24,11 @@ index 1b22004e..88565bce 100644
 -                        )
 +                        importlib.util.cache_from_source(filename, optimization=opt)
                      )
- 
+
          outputs += [
-@@ -403,10 +401,10 @@ class build_py(Command):
-             byte_compile(
-                 files, optimize=0, force=self.force, prefix=prefix, dry_run=self.dry_run
-             )
+@@ -399,12 +399,12 @@ class build_py(Command):
+         if self.compile:
+             byte_compile(files, optimize=0, force=self.force, prefix=prefix)
 -        if self.optimize > 0:
 +        for opt in range(1, self.optimize + 1):
              byte_compile(
@@ -38,7 +37,7 @@ index 1b22004e..88565bce 100644
 +                optimize=opt,
                  force=self.force,
                  prefix=prefix,
-                 dry_run=self.dry_run,
+             )
 diff --git a/setuptools/_distutils/command/install_lib.py b/setuptools/_distutils/command/install_lib.py
 index ad3089c8..7f906a29 100644
 --- a/setuptools/_distutils/command/install_lib.py
@@ -79,8 +78,8 @@ index ad3089c8..7f906a29 100644
 -                    )
 +                    importlib.util.cache_from_source(py_file, optimization=opt)
                  )
- 
+
          return bytecode_files
--- 
+--
 2.35.1
 

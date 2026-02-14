@@ -29,9 +29,9 @@
 *app-kernel/linux-firmware
 *app-net/chrony
 *app-net/iproute2
+*app-net/mira
 *app-net/nftables
 *app-net/openssh
-*app-net/wget
 *app-port/eix
 *app-port/find_cruft
 *app-port/gentoolkit

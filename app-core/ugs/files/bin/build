@@ -4,10 +4,10 @@ set -euo pipefail
 # simple build helper for Meson, CMake, or Autotools
 # usage:
 #   ./build.sh                    # auto-detect, release
-#   ./build.sh --debug            # full debug, verbose_logs enabled for Meson
-#   ./build.sh --fastdebug        # optimized+gdb-friendly, verbose_logs disabled
-#   ./build.sh --asan             # full debug + ASan/UBSan, verbose_logs enabled for Meson
-#   ./build.sh --fastasan         # optimized + ASan/UBSan, verbose_logs disabled
+#   ./build.sh --debug            # full debug
+#   ./build.sh --fastdebug        # optimized+gdb-friendly
+#   ./build.sh --asan             # debug + ASan/UBSan
+#   ./build.sh --fastasan         # optimized + ASan/UBSan
 #   ./build.sh --cmake --fastasan # force CMake, fast ASan
 #   ./build.sh --meson --debug
 #   ./build.sh --autotools --release
@@ -26,10 +26,10 @@ Usage: $0 [--cmake|--meson|--autotools] [--release|--debug|--fastdebug|--asan|--
   --autotools  force Autotools build (configure/make)
 
   --release    optimized release build (default)
-  --debug      full debug build (-O0 -g), verbose_logs enabled for Meson
-  --fastdebug  optimized debug build (-O2 -g1), verbose_logs disabled
-  --asan       debug build with AddressSanitizer + UBSan, verbose_logs enabled for Meson
-  --fastasan   optimized build with AddressSanitizer + UBSan, verbose_logs disabled
+  --debug      full debug build (-O0 -g)
+  --fastdebug  optimized debug build (-O2 -g1)
+  --asan       debug build with AddressSanitizer + UBSan
+  --fastasan   optimized build with AddressSanitizer + UBSan
 
 Examples:
   $0
@@ -112,13 +112,6 @@ setup_sanitizer_env() {
   fi
 }
 
-meson_verbose_logs_arg() {
-  case "$1" in
-    debug|asan) echo "-Dverbose_logs=true" ;;
-    *)         echo "-Dverbose_logs=false" ;;
-  esac
-}
-
 cmake_build() {
   local cfg="$1"
   local builddir
@@ -199,8 +192,6 @@ cmake_build() {
 meson_build() {
   local cfg="$1"
   local builddir
-  local vlog
-  vlog="$(meson_verbose_logs_arg "$cfg")"
 
   case "$cfg" in
     release)
@@ -209,7 +200,6 @@ meson_build() {
       meson setup "$builddir" . \
         --buildtype=release \
         -Dwarning_level=3 \
-        $vlog \
         -Dc_args="-O2 -march=native $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
         -Dcpp_args="-O2 -march=native $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
       meson compile -C "$builddir" -j"$NPROC"
@@ -221,7 +211,6 @@ meson_build() {
       meson setup "$builddir" . \
         --buildtype=debug \
         -Dwarning_level=3 \
-        $vlog \
         -Dc_args="-g -O0 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
         -Dcpp_args="-g -O0 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
       meson compile -C "$builddir" -j"$NPROC"
@@ -233,7 +222,6 @@ meson_build() {
       meson setup "$builddir" . \
         --buildtype=debugoptimized \
         -Dwarning_level=3 \
-        $vlog \
         -Dc_args="-O2 -march=native -g1 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
         -Dcpp_args="-O2 -march=native -g1 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
       meson compile -C "$builddir" -j"$NPROC"
@@ -248,7 +236,6 @@ meson_build() {
         -Db_sanitize=address,undefined \
         -Db_lundef=false \
         -Dwarning_level=3 \
-        $vlog \
         -Dc_args="-g -O1 $fp_flags -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes" \
         -Dcpp_args="-g -O1 $fp_flags -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes"
       meson compile -C "$builddir" -j"$NPROC"
@@ -263,7 +250,6 @@ meson_build() {
         -Db_sanitize=address,undefined \
         -Db_lundef=false \
         -Dwarning_level=3 \
-        $vlog \
         -Dc_args="-O2 -march=native -g1 $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
         -Dcpp_args="-O2 -march=native -g1 $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
       meson compile -C "$builddir" -j"$NPROC"

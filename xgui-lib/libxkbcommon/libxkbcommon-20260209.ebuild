@@ -20,6 +20,8 @@ DEPEND="app-build/bison
 	X? ( xgui-tools/xorgproto )"
 RDEPEND="X? ( xgui-lib/libxcb[xkb] )"
 
+PATCHES=( "${FILESDIR}"/restrict_fix.patch )
+
 src_configure() {
 	local emesonargs=(
 		$(meson_use wayland enable-wayland)

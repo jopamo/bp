@@ -45,19 +45,20 @@ src_configure() {
 }
 
 pkg_preinst() {
-	# Make sure loaders.cache belongs to gdk-pixbuf alone
-	mkdir -p "${ED}"/usr/lib/gdk-pixbuf-2.0/2.10.0/
+  local moduledir="/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders"
+  mkdir -p "${ED}${moduledir}" || die
 
-	local cache="usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
+  local cache="${moduledir}/loaders.cache"
 
-	if [[ -e ${EROOT}/${cache} ]]; then
-		cp "${EROOT}"/${cache} "${ED}"/${cache} || die
-	else
-		touch "${ED}"/${cache} || die
-	fi
+  if [[ -e ${EROOT}${cache} ]]; then
+    cp "${EROOT}${cache}" "${ED}${cache}" || die
+  else
+    : > "${ED}${cache}" || die
+  fi
 }
 
 pkg_postinst() {
-	einfo "Updating gdk-pixbuf loader cache"
-	gdk-pixbuf-query-loaders --update-cache
+  einfo "Updating gdk-pixbuf loader cache"
+  GDK_PIXBUF_MODULEDIR="/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders" \
+    gdk-pixbuf-query-loaders --update-cache
 }

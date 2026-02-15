@@ -6,8 +6,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="X.Org Xfont library"
 HOMEPAGE="https://www.x.org/wiki/"
-
-SNAPSHOT=2c2e44c94ef17ecd5003a173237b57b315e28d93
+SNAPSHOT=67520db20c6cc37927ae3a212f357e2dd26143f5
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxfont/-/archive/${SNAPSHOT}/libxfont-${SNAPSHOT}.tar.bz2 -> libxfont-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxfont-${SNAPSHOT}"
 

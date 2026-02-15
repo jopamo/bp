@@ -35,6 +35,8 @@ DEPEND="
 src_prepare() {
 	filter-flags -Wl,-z,defs -flto*
 
+	eapply "${FILESDIR}"/disable-dev-warning-never.patch
+
 	default
 
 	sed -e '/ks_ldap_free_state/i #if USE_LDAP' \

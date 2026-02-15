@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="Utility to trace the route of IP packets"
 HOMEPAGE="https://traceroute.sourceforge.net/"
-SNAPSHOT=f15fee855268b2865eb023e7d52f8b8b34304564
+SNAPSHOT=7c8ac15d0069209a3af3a857ef6f7dd895d37907
 SRC_URI="https://github.com/jopamo/traceroute/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

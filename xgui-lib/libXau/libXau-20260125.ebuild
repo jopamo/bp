@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="X.Org X authorization library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=962b015d498b1f186aea8e3b0b46fb9791831552
+SNAPSHOT=3861176ca80013c867b32451075e566caab4d5c2
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXau/-/archive/${SNAPSHOT}/libXau-${SNAPSHOT}.tar.bz2 -> libXau-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxau-${SNAPSHOT}"
 

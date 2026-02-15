@@ -6,7 +6,7 @@ inherit xdg
 
 DESCRIPTION="Papirus icons theme"
 HOMEPAGE="https://github.com/PapirusDevelopmentTeam/papirus-icon-theme"
-SNAPSHOT=5b397049911c29c28e0b028ab5540f44afaffcf1
+SNAPSHOT=9e3741c17f42ba444d2bedcf070b161908a9a664
 SRC_URI="https://github.com/PapirusDevelopmentTeam/papirus-icon-theme/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

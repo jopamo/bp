@@ -6,7 +6,7 @@ inherit flag-o-matic meson
 
 DESCRIPTION="A vector graphics library with cross-device output support"
 HOMEPAGE="https://www.cairographics.org"
-SNAPSHOT=04656d7450e229622546fd2b11496aa58c44181d
+SNAPSHOT=2a4589266388622f8c779721c8a4e090966fae79
 SRC_URI="https://gitlab.freedesktop.org/cairo/cairo/-/archive/${SNAPSHOT}/cairo-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/cairo-${SNAPSHOT}"
 

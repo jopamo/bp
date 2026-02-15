@@ -6,7 +6,7 @@ inherit linux-info meson doins
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="https://dbus.freedesktop.org/"
-SNAPSHOT=1bcf396c7872f317778f3ff5645af1630738d43f
+SNAPSHOT=4f5796a37dd303b6030127d20cba52c72523df79
 SRC_URI="https://gitlab.freedesktop.org/dbus/dbus/-/archive/${SNAPSHOT}/dbus-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/dbus-${SNAPSHOT}
 

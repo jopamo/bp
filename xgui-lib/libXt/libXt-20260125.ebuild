@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="X.Org X Toolkit Intrinsics library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=170a4edb3189810810ffbf2543bfb8ab96e1898c
+SNAPSHOT=8944d7f7db91a1cdfe6ad55cf031c6b1b9801192
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXt/-/archive/${SNAPSHOT}/libXt-${SNAPSHOT}.tar.bz2 -> libXt-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxt-${SNAPSHOT}"
 

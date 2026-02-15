@@ -11,7 +11,7 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="Collection of extensions to Distutils"
 HOMEPAGE="https://github.com/pypa/setuptools/"
-SNAPSHOT=7065935874df3c620e8064ee77415b303ef2fe54
+SNAPSHOT=66b59b02a4ab431c2b3250547a2115d7bc44d86a
 SRC_URI="https://github.com/pypa/setuptools/archive/${SNAPSHOT}.tar.gz -> setuptools-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/setuptools-${SNAPSHOT}"
 

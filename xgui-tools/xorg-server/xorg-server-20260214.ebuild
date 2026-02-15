@@ -2,13 +2,13 @@
 
 EAPI=8
 
-BRANCH_NAME="maint-$(ver_cut 1).0"
+#BRANCH_NAME="maint-$(ver_cut 1).0"
 
 inherit meson flag-o-matic
 
 DESCRIPTION="implementation of the X Window System display server"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=90f05e76c4dda782673eb473438e62464b804660
+SNAPSHOT=e1933ec5a7604f0fb23c4114c25090874312b03e
 SRC_URI="https://github.com/X11Libre/xserver/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/xserver-${SNAPSHOT}"
 

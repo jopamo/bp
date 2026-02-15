@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="X keyboard configuration database"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/XKeyboardConfig"
-SNAPSHOT=8aa73d2c9a5a7391538c932e265f89c416b53138
+SNAPSHOT=e375ac8923def6c264154d83e65dbe3ebad0ae0f
 SRC_URI="https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config/-/archive/${SNAPSHOT}/xkeyboard-config-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

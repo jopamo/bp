@@ -6,7 +6,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="Handler library for evdev events"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/libevdev/"
-SNAPSHOT=139b58e135184f66a35c2401771f3d8134f097ad
+SNAPSHOT=6ce9eb316203da75971740e79f20188009e7c323
 SRC_URI="https://gitlab.freedesktop.org/libevdev/libevdev/-/archive/${SNAPSHOT}/libevdev-${SNAPSHOT}.tar.bz2 -> libevdev-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libevdev-${SNAPSHOT}"
 

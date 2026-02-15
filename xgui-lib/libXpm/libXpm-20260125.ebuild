@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="X.Org Xpm library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=10070a4e998c1a223dec437847c38dc27dbe85d4
+SNAPSHOT=5b7e903025a8e162a3ee97c64304b1c55211094e
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXpm/-/archive/${SNAPSHOT}/libXpm-${SNAPSHOT}.tar.bz2 -> libXpm-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxpm-${SNAPSHOT}"
 

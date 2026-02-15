@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="X11 server performance test program"
 HOMEPAGE="https://gitlab.freedesktop.org/xorg/app/x11perf"
-SNAPSHOT=bce7af0ca6ab04249c8dda6bcfedca1da421aa4d
+SNAPSHOT=0c3597b6ecd43008092db8472779ab2d7aa111fe
 SRC_URI="https://gitlab.freedesktop.org/xorg/test/x11perf/-/archive//${SNAPSHOT}/x11perf-/${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

@@ -6,8 +6,7 @@ inherit autotools
 
 DESCRIPTION="X.Org font aliases"
 HOMEPAGE="https://www.x.org/wiki/"
-
-SNAPSHOT=184c43dd059f785537c8a48a4a7972c488ac1215
+SNAPSHOT=ebeee85f070dc12197ad98d1c849786f8e3be124
 SRC_URI="https://gitlab.freedesktop.org/xorg/font/alias/-/archive/${SNAPSHOT}/alias-${SNAPSHOT}.tar.bz2 -> alias-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/alias-${SNAPSHOT}"
 

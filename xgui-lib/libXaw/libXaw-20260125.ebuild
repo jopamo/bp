@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="X.Org Xaw library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=12e81cd8ade629256488782a2e7ae0322d84da53
+SNAPSHOT=5f13a7afb2c44ca0997c1394d0e8b0b37ef49148
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXaw/-/archive/${SNAPSHOT}/libXaw-${SNAPSHOT}.tar.bz2 -> libXaw-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxaw-${SNAPSHOT}"
 

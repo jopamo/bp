@@ -1,0 +1,45 @@
+diff --git a/g10/gpg.c b/g10/gpg.c
+index db83e6a62..c5ed1bd03 100644
+--- a/g10/gpg.c
++++ b/g10/gpg.c
+@@ -3985,20 +3985,6 @@ main (int argc, char **argv)
+                     gpgrt_strusage(11), gpgrt_strusage(13), gpgrt_strusage(14));
+ 	es_fprintf (es_stderr, "%s\n", gpgrt_strusage(15) );
+       }
+-#ifdef IS_DEVELOPMENT_VERSION
+-    if (!opt.batch)
+-      {
+-	const char *s;
+-
+-	if((s=gpgrt_strusage(25)))
+-	  log_info("%s\n",s);
+-	if((s=gpgrt_strusage(26)))
+-	  log_info("%s\n",s);
+-	if((s=gpgrt_strusage(27)))
+-	  log_info("%s\n",s);
+-      }
+-#endif
+-
+     /* Init threading which is used by some helper functions.  */
+     npth_init ();
+     gpgrt_set_syscall_clamp (npth_unprotect, npth_protect);
+diff --git a/sm/gpgsm.c b/sm/gpgsm.c
+index d1f9a59d3..c4f39720b 100644
+--- a/sm/gpgsm.c
++++ b/sm/gpgsm.c
+@@ -1617,15 +1617,6 @@ main ( int argc, char **argv)
+                   gpgrt_strusage(11), gpgrt_strusage(13), gpgrt_strusage(14) );
+       es_fprintf (es_stderr, "%s\n", gpgrt_strusage(15) );
+     }
+-#ifdef IS_DEVELOPMENT_VERSION
+-  if (!opt.batch)
+-    {
+-      log_info ("NOTE: THIS IS A DEVELOPMENT VERSION!\n");
+-      log_info ("It is only intended for test purposes and should NOT be\n");
+-      log_info ("used in a production environment or with production keys!\n");
+-    }
+-#endif
+-
+   if (may_coredump && !opt.quiet)
+     log_info (_("WARNING: program may create a core file!\n"));
+ 

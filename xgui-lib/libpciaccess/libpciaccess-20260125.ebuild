@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="Library providing generic access to the PCI bus and devices"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=191dfe0707e2a93c08e4b3e99454b6146c5bfca2
+SNAPSHOT=30cfe2325d816991610a8224a49cfa12317d7f67
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libpciaccess/-/archive/${SNAPSHOT}/libpciaccess-${SNAPSHOT}.tar.bz2 -> libpciaccess-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libpciaccess-${SNAPSHOT}"
 

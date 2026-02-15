@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="X C-language Bindings sample implementations"
 HOMEPAGE="https://xcb.freedesktop.org/"
-SNAPSHOT=fb1c2524b9ac4e70930aa4dd94dde827e2a7c13f
+SNAPSHOT=9871b2d1df432b72df7aae780775bb8679ee7c98
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxcb-render-util/-/archive/${SNAPSHOT}/libxcb-render-util-${SNAPSHOT}.tar.bz2 -> libxcb-render-util-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxcb-render-util-${SNAPSHOT}"
 

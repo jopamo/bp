@@ -6,8 +6,7 @@ inherit autotools
 
 DESCRIPTION="X.Org bitmaps data"
 HOMEPAGE="https://www.x.org/wiki/"
-
-SNAPSHOT=35307f27a4554f47534fe235be12128157888a7b
+SNAPSHOT=0f7d3d0cf66fb6e9b89a86834f1f00a8e7a41815
 SRC_URI="https://gitlab.freedesktop.org/xorg/data/bitmaps/-/archive/${SNAPSHOT}/bitmaps-${SNAPSHOT}.tar.bz2 -> bitmaps-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/bitmaps-${SNAPSHOT}"
 

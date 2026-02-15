@@ -6,8 +6,7 @@ inherit autotools
 
 DESCRIPTION="X.Org Xlib-based client API for the XTEST & RECORD extensions library"
 HOMEPAGE="https://www.x.org/wiki/"
-
-SNAPSHOT=abf3ff74b97c4231d2324d66318bfa1d22e44913
+SNAPSHOT=a1086d8f255e89f8148110a7f03f4a0a3398b784
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXtst/-/archive/${SNAPSHOT}/libXtst-${SNAPSHOT}.tar.bz2 -> libXtst-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxtst-${SNAPSHOT}"
 

@@ -6,7 +6,7 @@ inherit toolchain-funcs autotools
 
 DESCRIPTION="International Components for Unicode"
 HOMEPAGE="http://www.icu-project.org/"
-SNAPSHOT=ac5f1bb9270997ad55f270b69107b1309f9796f7
+SNAPSHOT=2c2e8adbc142a76a72cac408194e8d20701603ac
 SRC_URI="https://github.com/unicode-org/icu/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}/icu4c/source"
 

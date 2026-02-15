@@ -8,7 +8,7 @@ inherit distutils-r1
 
 DESCRIPTION="AI pair programming in your terminal"
 HOMEPAGE="https://github.com/Aider-AI/aider"
-SNAPSHOT=5cb6b610472b5153e5f30e4de7af978a0f63f854
+SNAPSHOT=e6f8edda93c5c048206accd8fa72395b0cf92601
 SRC_URI="https://github.com/Aider-AI/aider/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

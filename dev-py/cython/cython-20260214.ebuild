@@ -13,7 +13,7 @@ inherit distutils-r1 multiprocessing toolchain-funcs flag-o-matic
 MY_P=${P/_rc/rc}
 DESCRIPTION="A Python to C compiler"
 HOMEPAGE="https://cython.org/"
-SNAPSHOT=cbdc72b9e36cf111c1b637751038bf8d2168527d
+SNAPSHOT=5992db289706b5062b1fc78b2ff94eb0787a8566
 SRC_URI="https://github.com/cython/cython/archive/${SNAPSHOT}.tar.gz -> cython-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/cython-${SNAPSHOT}"
 

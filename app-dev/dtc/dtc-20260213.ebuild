@@ -6,7 +6,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="Open Firmware device tree compiler"
 HOMEPAGE="https://devicetree.org/ https://git.kernel.org/cgit/utils/dtc/dtc.git/"
-SNAPSHOT=8d15a63e84ff62fd31e8278088fa1176f2735eef
+SNAPSHOT=68b960e299f7a31c986d6e5c6244a31f3dd4b8fd
 SRC_URI="https://github.com/dgibson/dtc/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/dtc-${SNAPSHOT}
 

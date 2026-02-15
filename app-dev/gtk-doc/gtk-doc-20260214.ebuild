@@ -7,7 +7,7 @@ inherit python-single-r1 autotools
 
 DESCRIPTION="GTK+ Documentation Generator"
 HOMEPAGE="https://www.gtk.org/gtk-doc/"
-SNAPSHOT=82623a6c120e153be9bee8642693a00bc1aae77f
+SNAPSHOT=48b3c0bde4a3028b2153ddc220ca37a1ca584b67
 SRC_URI="https://gitlab.gnome.org/GNOME/gtk-doc/-/archive/${SNAPSHOT}/gtk-doc-${SNAPSHOT}.tar.bz2 -> gtk-doc-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/gtk-doc-${SNAPSHOT}"
 

@@ -6,8 +6,7 @@ inherit autotools
 
 DESCRIPTION="X.Org X Display Manager Control Protocol library"
 HOMEPAGE="https://www.x.org/wiki/"
-
-SNAPSHOT=8f3408f3936bacd08f76d5ee22cbc86e6b627287
+SNAPSHOT=cd27f35c08cd8a7b14cef31d3edc021e638aab7f
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXdmcp/-/archive/${SNAPSHOT}/libXdmcp-${SNAPSHOT}.tar.bz2 -> libXdmcp-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxdmcp-${SNAPSHOT}"
 

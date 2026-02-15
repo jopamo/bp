@@ -6,8 +6,7 @@ inherit autotools
 
 DESCRIPTION="X.Org Xcomposite library"
 HOMEPAGE="https://www.x.org/wiki/"
-
-SNAPSHOT=f796f0a862849765ac5b6b5e861ea548b421b8f0
+SNAPSHOT=a6d5d773e2a4e5a11b58f3a894f2085686baa6f4
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXcomposite/-/archive/${SNAPSHOT}/libXcomposite-${SNAPSHOT}.tar.bz2 -> libXcomposite-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxcomposite-${SNAPSHOT}"
 

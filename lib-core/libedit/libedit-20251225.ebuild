@@ -4,8 +4,7 @@ EAPI=8
 
 DESCRIPTION="BSD replacement for libreadline"
 HOMEPAGE="https://thrysoee.dk/editline/"
-
-SNAPSHOT=08da76b7e6d925652df0bfc49b085446bbd993bc
+SNAPSHOT=cc5ed18287a67b097c36c2b9b27585e1f236f3ea
 SRC_URI="https://salsa.debian.org/debian/libedit/-/archive/${SNAPSHOT}/libedit-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libedit-${SNAPSHOT}"
 

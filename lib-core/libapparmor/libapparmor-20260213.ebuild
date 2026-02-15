@@ -12,7 +12,7 @@ inherit autotools distutils-r1 flag-o-matic
 
 DESCRIPTION="Library to support AppArmor userspace utilities"
 HOMEPAGE="https://gitlab.com/apparmor/apparmor/wikis/home"
-SNAPSHOT=c8ff79be5fdf3dc012ad8a57050bb0bd13c10300
+SNAPSHOT=0f9740f5768c9233569953e224ab48ae5b200599
 SRC_URI="https://gitlab.com/apparmor/apparmor/-/archive/${SNAPSHOT}/apparmor-${SNAPSHOT}.tar.bz2 -> apparmor-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/apparmor-${SNAPSHOT}/libraries/${PN}"
 

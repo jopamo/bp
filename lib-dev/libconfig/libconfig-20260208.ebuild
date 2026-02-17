@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="Libconfig is a simple library for manipulating structured configuration files"
 HOMEPAGE="http://www.hyperrealm.com/libconfig/libconfig.html"
@@ -22,6 +22,8 @@ DEPEND="
 "
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 	sed -i \
 		-e '/sleep 3/d' \
@@ -40,4 +42,9 @@ src_configure() {
 src_test() {
 	# It responds to check but that does not work as intended
 	emake test
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools linux-info
+inherit autotools linux-info dot-a
 
 DESCRIPTION="programming interface (API) to the in-kernel connection tracking state table"
 HOMEPAGE="https://www.netfilter.org/projects/libnetfilter_conntrack/"
@@ -27,6 +27,17 @@ pkg_setup() {
 }
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 	eautoreconf
+}
+
+src_configure() {
+	ECONF_SOURCE=${S} econf $(use_enable static-libs static)
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

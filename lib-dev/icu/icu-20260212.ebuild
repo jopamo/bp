@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs autotools
+inherit toolchain-funcs autotools dot-a
 
 DESCRIPTION="International Components for Unicode"
 HOMEPAGE="http://www.icu-project.org/"
@@ -19,6 +19,8 @@ IUSE="debug static-libs"
 BDEPEND="app-dev/pkgconf"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 
 	local variable
@@ -64,4 +66,9 @@ src_configure() {
 
 src_test() {
 	emake -j1 VERBOSE="1" check
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

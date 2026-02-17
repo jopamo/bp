@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="A decoder implementation of the JBIG2 image compression format"
 HOMEPAGE="http://ghostscript.com/jbig2dec.html"
@@ -20,6 +20,8 @@ IUSE="png static-libs test"
 DEPEND="png? ( xmedia-lib/libpng:0= )"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	VERSIONGREP="sed -e s/.*[^0-9\.]\([0-9][0-9]*\.[0-9][0-9]*\).*/\1/"
 	VERSIONMKMAJ="sed -e s/\([0-9][0-9]*\)[^0-9].*/\\1/"
 	VERSIONMKMIN="sed -e s/.*[0-9][0-9]*\.//"
@@ -65,4 +67,9 @@ src_configure() {
 		$(use_with png libpng)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

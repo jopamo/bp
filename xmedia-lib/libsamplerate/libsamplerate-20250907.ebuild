@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="Secret Rabbit Code (aka libsamplerate) is a Sample Rate Converter for audio"
 HOMEPAGE="http://www.mega-nerd.com/SRC/"
@@ -19,6 +19,8 @@ IUSE="sndfile static-libs keep-la"
 DEPEND="sndfile? ( xgui-lib/libsndfile:= )"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 	eautoreconf
 }
@@ -33,6 +35,7 @@ src_configure() {
 
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
 
 	if ! use keep-la; then
 		find "${ED}" -name '*.la' -delete || die

@@ -10,7 +10,7 @@ DESCRIPTION="Multi-platform toolkit for creating graphical user interfaces"
 HOMEPAGE="https://www.gtk.org/"
 SNAPSHOT=f090222fd4ba204881c642f40454183eaec43141
 SRC_URI="https://github.com/GNOME/gtk/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S="${WORKDIR}/gtk-${SNAPSHOT}"
 
 LICENSE="LGPL-2+"
 SLOT="$(ver_cut 1)"

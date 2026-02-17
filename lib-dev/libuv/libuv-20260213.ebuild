@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="Cross-platform asynchronous I/O and event loop library (libuv)"
 HOMEPAGE="https://github.com/libuv/libuv"
@@ -24,6 +24,8 @@ BDEPEND="
 "
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 
 	echo "m4_define([UV_EXTRA_AUTOMAKE_FLAGS], [serial-tests])" \
@@ -44,4 +46,9 @@ src_test() {
 	mkdir "${BUILD_DIR}"/test || die
 	cp -pPR "${S}"/test/fixtures "${BUILD_DIR}"/test/fixtures || die
 	default
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

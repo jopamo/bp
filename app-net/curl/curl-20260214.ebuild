@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools
+inherit flag-o-matic autotools dot-a
 
 DESCRIPTION="A command line tool and library for transferring data with URL syntax"
 HOMEPAGE="https://curl.haxx.se/"
@@ -41,7 +41,7 @@ DEPEND="
 "
 
 src_prepare() {
-	append-flags -ffat-lto-objects
+	use static-libs && lto-guarantee-fat
 
 	default
 	eautoreconf
@@ -74,21 +74,22 @@ src_configure() {
 }
 
 src_install() {
-    default
+	default
 
-    #insinto /etc/ssl/certs/
+	#insinto /etc/ssl/certs/
 	#newins ca-bundle.crt cacert.pem
 	#dosym -r /etc/ssl/certs/cacert.pem /etc/ssl/certs/ca-bundle.crt
 	#dosym -r /etc/ssl/certs/cacert.pem /etc/ssl/certs/ca-certificates.crt
 
-    #cat > "${T}"/99curl <<- EOF || die
+	#cat > "${T}"/99curl <<- EOF || die
 	#	SSL_CERT_FILE="/etc/ssl/certs/cacert.pem"
 	#	CURL_CA_BUNDLE="/etc/ssl/certs/cacert.pem"
 	#	GIT_SSL_CAINFO="/etc/ssl/certs/cacert.pem"
 	#	REQUESTS_CA_BUNDLE="/etc/ssl/certs/cacert.pem"
 	#EOF
 
-    #doenvd "${T}"/99curl
+	#doenvd "${T}"/99curl
 
-    dobin scripts/mk-ca-bundle.pl
+	use static-libs && strip-lto-bytecode
+	dobin scripts/mk-ca-bundle.pl
 }

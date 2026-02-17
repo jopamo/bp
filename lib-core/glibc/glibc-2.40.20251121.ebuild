@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="release/$(ver_cut 1-2)/master"
 
-inherit flag-o-matic doins
+inherit flag-o-matic doins dot-a
 
 DESCRIPTION="GNU libc C library"
 HOMEPAGE="https://www.gnu.org/software/libc/"
@@ -91,6 +91,8 @@ pkg_pretend() {
 }
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 
 	chmod u+x "${S}"/scripts/*.sh || die
@@ -221,6 +223,7 @@ src_install() {
 	cd "${WORKDIR}/build"
 
 	emake install_root="${ED}" install || die
+	use static-libs && strip-lto-bytecode
 
 	# We'll take care of the cache ourselves
 	rm -f "${ED}"/etc/ld.so.cache
@@ -318,4 +321,3 @@ pkg_postinst() {
 
 	"${EROOT}"/usr/bin/locale-gen
 }
-

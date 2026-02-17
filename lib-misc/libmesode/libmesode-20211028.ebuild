@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="Fork of libstrophe: A simple, lightweight C library for writing XMPP clients"
 HOMEPAGE="https://github.com/profanity-im/libmesode"
@@ -22,7 +22,13 @@ src_prepare() {
 	eautoreconf
 }
 
+src_configure() {
+	use static-libs && lto-guarantee-fat
+	default
+}
+
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

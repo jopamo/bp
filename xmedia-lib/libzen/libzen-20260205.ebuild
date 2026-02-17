@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic
+inherit autotools flag-o-matic dot-a
 
 DESCRIPTION="Shared library for libmediainfo and mediainfo"
 HOMEPAGE="https://github.com/MediaArea/ZenLib"
@@ -19,6 +19,8 @@ IUSE="keep-la static-libs"
 DEPEND="app-dev/pkgconf"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	filter-flags -Wl,-z,defs -flto*
 	default
 	sed -i 's:-O2::' configure.ac || die
@@ -36,6 +38,7 @@ src_configure() {
 
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
 
 	insinto /usr/lib/pkgconfig
 	doins libzen.pc

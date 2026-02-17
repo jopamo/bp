@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="a program which helps to configure compiler and linker flags for development libraries"
 HOMEPAGE="https://git.sr.ht/~kaniini/pkgconf"
@@ -23,8 +23,14 @@ src_prepare() {
 	eautoreconf
 }
 
+src_configure() {
+	use static-libs && lto-guarantee-fat
+	default
+}
+
 src_install() {
 	default
 	dosym -r /usr/bin/pkgconf /usr/bin/pkg-config
+	use static-libs && strip-lto-bytecode
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

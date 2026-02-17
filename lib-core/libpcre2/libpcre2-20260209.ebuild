@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools
+inherit flag-o-matic autotools dot-a
 
 DESCRIPTION="Perl-compatible regular expression library"
 HOMEPAGE="http://www.pcre.org/"
@@ -31,7 +31,7 @@ BDEPEND="
 "
 
 src_prepare() {
-	append-flags -ffat-lto-objects
+	use static-libs && lto-guarantee-fat
 
 	rm -rf "${WORKDIR}/pcre2-${SNAPSHOT}/deps/sljit"
 	mv "${WORKDIR}/sljit-${SLJIT_SNAPSHOT}" "${WORKDIR}/pcre2-${SNAPSHOT}/deps/sljit"
@@ -59,4 +59,9 @@ src_configure() {
 
 src_compile() {
 	emake V=1
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

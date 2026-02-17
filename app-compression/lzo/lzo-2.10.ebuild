@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit dot-a
+inherit qa-policy
 
 DESCRIPTION="An extremely fast compression and decompression library"
 HOMEPAGE="http://www.oberhumer.com/opensource/lzo/"
@@ -13,9 +13,10 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
+BDEPEND="app-dev/patchelf"
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 
 	local myconf=(
 		--enable-shared
@@ -26,5 +27,6 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+
+	qa-policy-install
 }

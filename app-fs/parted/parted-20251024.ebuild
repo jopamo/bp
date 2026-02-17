@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=f124ddb0a2cd950d4a94fd99af1313dd6c283d75
 
-inherit flag-o-matic
+inherit flag-o-matic dot-a
 
 DESCRIPTION="Create, destroy, resize, check, copy partitions and file systems"
 HOMEPAGE="https://www.gnu.org/software/parted"
@@ -57,6 +57,8 @@ src_prepare() {
 }
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local myconf=(
 		$(use_enable debug)
 		--disable-device-mapper
@@ -67,4 +69,9 @@ src_configure() {
 		--disable-silent-rules
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

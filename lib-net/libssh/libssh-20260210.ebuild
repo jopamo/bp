@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake
+inherit cmake dot-a
 
 DESCRIPTION="Library implementing the SSH2 protocol"
 HOMEPAGE="http://www.libssh.org/"
@@ -17,8 +17,15 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local mycmakeargs=(
 		-DWITH_STATIC_LIB=$(usex static-libs)
 	)
 	cmake_src_configure
+}
+
+src_install() {
+	cmake_src_install
+	use static-libs && strip-lto-bytecode
 }

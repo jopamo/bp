@@ -4,7 +4,7 @@ EAPI=8
 
 SNAPSHOT=014ed4ce881fc3154c08e98e8d59c1b13c3f2f06
 
-inherit autotools flag-o-matic
+inherit autotools flag-o-matic dot-a
 
 DESCRIPTION="Library to create and utilize caches to speed up freedesktop application menus"
 HOMEPAGE="http://lxde.sourceforge.net/"
@@ -30,7 +30,13 @@ src_prepare() {
 	eautoreconf
 }
 
+src_configure() {
+	use static-libs && lto-guarantee-fat
+	default
+}
+
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

@@ -2,8 +2,7 @@
 
 EAPI=8
 
-
-inherit python-single-r1 autotools
+inherit meson python-single-r1
 
 DESCRIPTION="GTK+ Documentation Generator"
 HOMEPAGE="https://www.gtk.org/gtk-doc/"
@@ -15,33 +14,30 @@ LICENSE="GPL-2 FDL-1.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug"
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 DEPEND="
+	${PYTHON_DEPS}
+	app-dev/pkgconf
 	app-tex/docbook-xml-dtd
 	app-tex/docbook-xsl-stylesheets
-	dev-python/six
+	dev-python/pygments
 	lib-core/libxslt
-	lib-core/glib
 "
 
 pkg_setup() {
 	python-single-r1_pkg_setup
 }
 
-src_prepare() {
-	default
-	eautoreconf
-}
-
 src_configure() {
-	local myconf=(
-		$(use_enable debug)
+	local emesonargs=(
+		-Dtests=false
+		-Dyelp_manual=false
 	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
+	meson_src_configure
 }
 
 src_install() {
-	default
+	meson_src_install
 	rm "${ED}"/usr/share/aclocal/gtk-doc.m4 || die
 }

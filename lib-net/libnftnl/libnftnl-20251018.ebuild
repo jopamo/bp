@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit linux-info autotools
+inherit linux-info autotools dot-a
 
 DESCRIPTION="Netlink API to the in-kernel nf_tables subsystem"
 HOMEPAGE="https://netfilter.org/projects/nftables/"
@@ -25,6 +25,8 @@ pkg_setup() {
 }
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	rm -rf build-aux
 	default
 	eautoreconf
@@ -35,4 +37,9 @@ src_configure() {
 		$(use_enable static-libs static)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

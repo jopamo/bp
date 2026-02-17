@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs
+inherit toolchain-funcs dot-a
 
 DESCRIPTION="NVIDIA Accelerated Graphics Driver Settings"
 HOMEPAGE="http://www.nvidia.com/ http://www.nvidia.com/Download/Find.aspx"
@@ -32,6 +32,8 @@ src_prepare() {
 
 src_compile() {
 	export NV_USE_BUNDLED_LIBJANSSON=0
+
+	use static-libs && lto-guarantee-fat
 
 	emake -C libXNVCtrl \
 			AR="$(tc-getAR)" \
@@ -68,7 +70,8 @@ src_install() {
 	insinto /usr/include/NVCtrl
 	doins libXNVCtrl/*.h
 
-	if use static-libs; then
+	if use static-libs ; then
+		strip-lto-bytecode libXNVCtrl/libXNVCtrl.a
 		dolib.a libXNVCtrl/libXNVCtrl.a
 	fi
 }

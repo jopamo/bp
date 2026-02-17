@@ -2,6 +2,8 @@
 
 EAPI=8
 
+inherit dot-a
+
 SNAPSHOT=f57e61e19229e23c4445b85494dbf7c07de721cb
 
 DESCRIPTION="Password hashing software that won the Password Hashing Competition (PHC)"
@@ -26,6 +28,12 @@ src_prepare() {
 	sed -i -e 's/CFLAGS += -march=\$(OPTTARGET)//' Makefile || die "sed failed"
 }
 
+src_compile() {
+	use static-libs && lto-guarantee-fat
+	default
+}
+
 src_install() {
 	emake DESTDIR="${D}" LIBRARY_REL="lib" install || die
+	use static-libs && strip-lto-bytecode
 }

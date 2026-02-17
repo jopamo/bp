@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake dot-a 
+inherit cmake dot-a
 
 DESCRIPTION="Geometry library"
 HOMEPAGE="http://www.qhull.org"
@@ -59,7 +59,7 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	if ! use static-libs; then
+	if ! use static-libs ; then
 		rm "${ED}/usr/$(get_libdir)/pkgconfig/qhull"{static,static_r,cpp}.pc || die
 	else
 		strip-lto-bytecode "${ED}/usr/$(get_libdir)/libqhull"{static,static_r,cpp}.a

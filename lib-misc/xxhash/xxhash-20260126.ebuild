@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs flag-o-matic
+inherit toolchain-funcs flag-o-matic dot-a
 
 DESCRIPTION="Extremely fast non-cryptographic hash algorithm"
 HOMEPAGE="http://www.xxhash.net"
@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_compile() {
-	append-flags -ffat-lto-objects
+	use static-libs && lto-guarantee-fat
 	PREFIX="${EPREFIX}/usr" \
 	LIBDIR="${EPREFIX}/usr/lib" \
 	emake AR="$(tc-getAR)" CC="$(tc-getCC)"
@@ -28,6 +28,8 @@ src_install() {
 	LIBDIR="${EPREFIX}/usr/lib" \
 	MANDIR="${EPREFIX}/usr/share/man/man1" \
 	emake DESTDIR="${D}" install
+
+	use static-libs && strip-lto-bytecode
 
 	if ! use static-libs ; then
 		rm "${ED}"/usr/lib/libxxhash.a || die

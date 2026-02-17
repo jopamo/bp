@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs
+inherit toolchain-funcs dot-a
 
 DESCRIPTION="HTTP request/response parser for C"
 HOMEPAGE="https://github.com/nodejs/http-parser"
@@ -23,6 +23,8 @@ src_prepare() {
 }
 
 src_compile() {
+	use static-libs && lto-guarantee-fat
+
 	emake PREFIX="${EPREFIX}/usr" LIBDIR="${EPREFIX}/usr/lib" CFLAGS_FAST="${CFLAGS}" library
 	use static-libs && emake CFLAGS_FAST="${CFLAGS}" package
 }
@@ -33,5 +35,8 @@ src_test() {
 
 src_install() {
 	emake DESTDIR="${D}" PREFIX="${EPREFIX}/usr" LIBDIR="${EPREFIX}/usr/lib" install
-	use static-libs && dolib.a libhttp_parser.a
+	if use static-libs ; then
+		strip-lto-bytecode libhttp_parser.a
+		dolib.a libhttp_parser.a
+	fi
 }

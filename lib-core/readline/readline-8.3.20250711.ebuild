@@ -5,7 +5,7 @@ EAPI=8
 BRANCH_NAME="master"
 SNAPSHOT=15970c431517a046099d8294c91d778b1da9b29d
 
-inherit toolchain-funcs flag-o-matic
+inherit toolchain-funcs flag-o-matic dot-a
 
 DESCRIPTION="GNU readline: interactive line editing and history capabilities"
 HOMEPAGE="https://tiswww.case.edu/php/chet/readline/rltop.html"
@@ -63,6 +63,8 @@ src_configure() {
 }
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	ECONF_SOURCE=${S} \
 	econf \
 		--docdir='$(datarootdir)'/doc/${PF} \
@@ -95,5 +97,6 @@ src_compile() {
 
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
 	use static-libs || find "${ED}" -name '*.la' -delete
 }

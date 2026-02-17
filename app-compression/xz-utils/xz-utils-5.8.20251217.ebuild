@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="v$(ver_cut 1-2)"
 
-inherit autotools flag-o-matic
+inherit autotools flag-o-matic dot-a
 
 DESCRIPTION="utils for managing LZMA compressed files"
 HOMEPAGE="http://tukaani.org/xz/"
@@ -28,9 +28,16 @@ src_prepare() {
 }
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local myconf=(
 		SKIP_WERROR_CHECK=yes
 		$(use_enable static-libs static)
 	)
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

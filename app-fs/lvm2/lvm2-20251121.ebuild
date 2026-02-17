@@ -1,8 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-inherit flag-o-matic
+inherit flag-o-matic dot-a
 
 DESCRIPTION="User-land utilities for LVM2 (device-mapper) software"
 HOMEPAGE="https://sourceware.org/lvm2/"
@@ -29,6 +29,7 @@ PATCHES=(
 
 src_configure() {
 	filter-flags -Wl,-z,defs
+	use static-libs && lto-guarantee-fat
 
 	local myconf=(
 		--prefix="${EPREFIX}"/usr
@@ -50,7 +51,7 @@ src_configure() {
    		--with-default-run-dir="${EPREFIX}"/run/lvm
    		--with-thin=internal
 	)
-	econf ${myconf[@]} CLDFLAGS="${LDFLAGS}"
+	CLDFLAGS="${LDFLAGS}" econf "${myconf[@]}"
 }
 
 src_install() {
@@ -62,6 +63,9 @@ src_install() {
 	for inst in ${INSTALL_TARGETS}; do
 		emake DESTDIR="${D}" ${inst}
 	done
+
+	use static-libs && strip-lto-bytecode
+	use static-libs || find "${ED}" -name '*.a' -delete || die
 
 	#dolib.a device_mapper/libdevice-mapper.a
 	#dolib.a libdaemon/client/libdaemonclient.a

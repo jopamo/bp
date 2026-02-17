@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="X.Org Xpresent library"
 HOMEPAGE="https://www.x.org/wiki/"
@@ -30,7 +30,13 @@ src_prepare() {
 	eautoreconf
 }
 
+src_configure() {
+	use static-libs && lto-guarantee-fat
+	default
+}
+
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

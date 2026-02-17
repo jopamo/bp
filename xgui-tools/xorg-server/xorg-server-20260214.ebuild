@@ -59,6 +59,14 @@ BDEPEND="
 
 PDEPEND="xgui-tools/xf86-input-libinput"
 
+src_prepare() {
+	default
+
+	sed -i -E \
+		'/^[[:space:]]*static[[:space:]]+inline[[:space:]]+int[[:space:]]+pci_device_is_boot_display[[:space:]]*\(/,/^[[:space:]]*}\s*$/d' \
+		hw/xfree86/common/xf86_pci_priv.h || die
+}
+
 src_configure() {
   # avoid forcing immediate binding which can break nvidia GL stubs at link time
   filter-flags -Wl,-z,defs -Wl,-z,now

@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="dev"
 
-inherit meson flag-o-matic
+inherit meson flag-o-matic dot-a
 
 DESCRIPTION="Extremely Fast Compression algorithm"
 HOMEPAGE="https://github.com/lz4/lz4"
@@ -19,11 +19,17 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs test"
 
 src_configure() {
-	append-flags -ffat-lto-objects
+	use static-libs && lto-guarantee-fat
+
 	local emesonargs=(
 		-Dtests=$(usex test true false)
 		-Ddefault_library=$(usex static-libs both shared)
 		-Dprograms=true
 	)
 	meson_src_configure
+}
+
+src_install() {
+	meson_src_install
+	use static-libs && strip-lto-bytecode
 }

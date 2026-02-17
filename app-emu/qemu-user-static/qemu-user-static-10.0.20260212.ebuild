@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="stable-$(ver_cut 1-2)"
 
-inherit flag-o-matic
+inherit flag-o-matic dot-a
 
 DESCRIPTION="QEMU with enhanced support for multiple architectures and options"
 HOMEPAGE="https://www.qemu.org/"
@@ -37,6 +37,7 @@ src_prepare() {
 
 src_configure() {
 	cd build
+	use static-libs && lto-guarantee-fat
 
 	local myconf=(
 		--prefix="${EPREFIX}"/usr
@@ -75,6 +76,7 @@ src_compile() {
 src_install() {
 	cd build
 	emake DESTDIR="${ED}" install
+	use static-libs && strip-lto-bytecode
 
 	rm -rf cd "${ED}"/usr/share
 	cd "${ED}"/usr/bin

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="Contains error handling functions used by GnuPG software"
 HOMEPAGE="http://www.gnupg.org/related_software/libgpg-error"
@@ -17,6 +17,8 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 	eautoreconf
 }
@@ -33,5 +35,6 @@ src_configure() {
 
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
 	dobin src/gpg-error-config
 }

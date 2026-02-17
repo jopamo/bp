@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit libtool flag-o-matic
+inherit libtool flag-o-matic dot-a
 
 DESCRIPTION="GNU locale utilities"
 HOMEPAGE="https://www.gnu.org/software/gettext/"
@@ -29,6 +29,8 @@ src_prepare() {
 }
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local myconf=(
 		$(use_enable acl)
 		$(use_enable openmp)
@@ -80,9 +82,9 @@ src_install() {
 		dosym -r /usr/share/gettext/m4/${x}.m4 /usr/share/aclocal/${x}.m4
 	done
 
+	use static-libs && strip-lto-bytecode
 	cleanup_install
 	dedup_symlink "${ED}"
 }
-
 
 

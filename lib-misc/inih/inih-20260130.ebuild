@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson
+inherit meson dot-a
 
 DESCRIPTION="inih (INI not invented here) simple .INI file parser"
 HOMEPAGE="https://github.com/benhoyt/inih"
@@ -17,6 +17,8 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local emesonargs=(
 		-Ddefault_library=$(usex static-libs both shared)
 		-Ddistro_install=true
@@ -24,4 +26,9 @@ src_configure() {
 	)
 
 	meson_src_configure
+}
+
+src_install() {
+	meson_src_install
+	use static-libs && strip-lto-bytecode
 }

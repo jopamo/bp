@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake flag-o-matic
+inherit cmake flag-o-matic dot-a
 
 DESCRIPTION="ZeroMQ 'highlevel' C++ bindings"
 HOMEPAGE="https://github.com/zeromq/zmqpp"
@@ -27,6 +27,8 @@ src_prepare() {
 }
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local mycmakeargs=(
 		-DZEROMQ_LIB_DIR="${ESYSROOT}"/usr/lib
 		-DIS_TRAVIS_CI_BUILD=OFF
@@ -35,4 +37,9 @@ src_configure() {
 	)
 
 	cmake_src_configure
+}
+
+src_install() {
+	cmake_src_install
+	use static-libs && strip-lto-bytecode
 }

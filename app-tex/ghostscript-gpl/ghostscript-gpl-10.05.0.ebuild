@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic toolchain-funcs
+inherit autotools flag-o-matic toolchain-funcs dot-a
 
 DESCRIPTION="Ghostscript is an interpreter for the PostScript language and for PDF"
 HOMEPAGE="http://ghostscript.com/"
@@ -35,6 +35,8 @@ DEPEND="
 BDEPEND="app-dev/pkgconf"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	filter-flags -Wl,-z,defs
 	
 	append-flags "-fpermissive -std=gnu17"
@@ -145,6 +147,7 @@ src_install() {
 	cd "${S}/ijs" || die
 	emake DESTDIR="${D}" install
 
+	use static-libs && strip-lto-bytecode
 	use static-libs || find "${ED}" -name '*.la' -delete
 	cleanup_install
 }

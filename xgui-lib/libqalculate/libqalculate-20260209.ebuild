@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="A modern multi-purpose calculator library"
 HOMEPAGE="https://qalculate.github.io/"
@@ -17,6 +17,8 @@ KEYWORDS="amd64 arm64"
 IUSE="curl icu gnuplot readline static-libs"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 	eautoreconf
 }
@@ -35,5 +37,6 @@ src_install() {
 		referencedir="${EPREFIX}/usr/share/doc/${PF}/html" \
 		install
 
+	use static-libs && strip-lto-bytecode
 	find "${ED}" -name '*.la' -delete || die
 }

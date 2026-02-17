@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="Minimalistic netlink library"
 HOMEPAGE="http://netfilter.org/projects/libmnl"
@@ -17,10 +17,17 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 	eautoreconf
 }
 
 src_configure() {
 	econf $(use_enable static-libs static)
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

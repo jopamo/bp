@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="A lightweight and flexible command-line JSON processor"
 HOMEPAGE="https://stedolan.github.io/jq/"
@@ -20,6 +20,7 @@ DEPEND="
 	app-build/bison
 	app-build/flex
 "
+BDEPEND="app-dev/patchelf"
 
 PATCHES=(
 	"${FILESDIR}"/jq-1.6-r3-never-bundle-oniguruma.patch
@@ -53,7 +54,7 @@ src_prepare() {
 }
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 
 	local econfargs=(
 		# don't try to rebuild docs
@@ -69,7 +70,8 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+
+	qa-policy-install
 }
 
 src_test() {

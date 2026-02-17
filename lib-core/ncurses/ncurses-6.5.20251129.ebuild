@@ -4,6 +4,8 @@ EAPI=8
 
 BRANCH_NAME="master"
 
+inherit dot-a
+
 DESCRIPTION="console display library"
 HOMEPAGE="http://invisible-island.net/ncurses/ https://www.gnu.org/software/ncurses/"
 
@@ -28,6 +30,8 @@ src_prepare() {
 }
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
     local myconf=(
 		--disable-rpath-hack
 		--disable-setuid-environ
@@ -59,6 +63,8 @@ src_configure() {
 
 src_install() {
     default
+
+    use static-libs && strip-lto-bytecode "${ED}"/usr
 
     local i
 

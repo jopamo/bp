@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="Multi-format archive and compression library"
 HOMEPAGE="http://www.libarchive.org/"
@@ -36,6 +36,8 @@ src_prepare() {
 }
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local myconf=(
 		$(use_enable acl)
 		$(use_enable bsdtar)
@@ -56,4 +58,9 @@ src_configure() {
 		--without-lzo2
 	)
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

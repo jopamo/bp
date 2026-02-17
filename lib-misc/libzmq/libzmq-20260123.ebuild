@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="A brokerless kernel"
 HOMEPAGE="http://www.zeromq.org/"
@@ -28,6 +28,8 @@ PDEPEND="
 "
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	sed \
 		-e '/libzmq_werror=/s:yes:no:g' \
 		-i configure.ac || die
@@ -49,4 +51,9 @@ src_configure() {
 
 src_test() {
 	emake -j1 check
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

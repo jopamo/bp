@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic meson
+inherit flag-o-matic meson dot-a
 
 DESCRIPTION="A vector graphics library with cross-device output support"
 HOMEPAGE="https://www.cairographics.org"
@@ -44,6 +44,8 @@ PATCHES=(
 
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 
 	filter-flags -Wl,-z,defs
@@ -51,4 +53,16 @@ src_prepare() {
 	touch boilerplate/Makefile.am.features
 	touch src/Makefile.am.features
 	touch ChangeLog
+}
+
+src_configure() {
+	local emesonargs=(
+		-Ddefault_library=$(usex static-libs both shared)
+	)
+	meson_src_configure
+}
+
+src_install() {
+	meson_src_install
+	use static-libs && strip-lto-bytecode
 }

@@ -8,38 +8,10 @@
 # Sam James <sam@gentoo.org>
 # Eli Schwartz <eschwartz@gentoo.org>
 # @SUPPORTED_EAPIS: 8
-# @BLURB: Functions to handle stripping LTO bytecode out of static archives.
+# @BLURB: Helpers to strip LTO bytecode from static archives
 # @DESCRIPTION:
-# This eclass provides functions to strip LTO bytecode out of static archives
-# (.a files).
-#
-# Static libraries when built with LTO will contain LTO bytecode which is
-# not portable across compiler versions or compiler vendors. To avoid pessimising
-# the library and always filtering LTO, we can build it with -ffat-lto-objects
-# instead, which builds some components twice. The installed part will then
-# have the LTO contents stripped out, leaving the regular objects in the
-# static archive.
-#
-# Use should be passing calling lto-guarantee-fat before configure-time
-# and calling strip-lto-bytecode after installation.
-#
-# Most packages installing static libraries should be using this eclass,
-# though it's not strictly necessary if the package filters LTO.
-#
-# @EXAMPLE:
-# @CODE
-#
-# inherit dot-a
-#
-# src_configure() {
-#     lto-guarantee-fat
-#     econf
-# }
-#
-# src_install() {
-#     default
-#     strip-lto-bytecode
-# }
+# Call lto-guarantee-fat before configure and strip-lto-bytecode after install
+
 case ${EAPI} in
 	8) ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
@@ -53,76 +25,95 @@ inherit flag-o-matic toolchain-funcs
 # @VARIABLE: _DOT_A_IS_LTO
 # @INTERNAL
 # @DESCRIPTION:
-# Records the state of tc-is-lto across eclass function calls.
+# Tracks whether tc-is-lto was true when lto-guarantee-fat was called
 _DOT_A_IS_LTO=0
 
-# TODO: QA check
+# @FUNCTION: _dot-a-get-strip-mode
+# @INTERNAL
+# @RETURN: Prints gnu for GCC, llvm for clang, nothing otherwise
+_dot-a-get-strip-mode() {
+	case $(tc-get-compiler-type) in
+		gcc) echo gnu ;;
+		clang) echo llvm ;;
+		*) return 1 ;;
+	esac
+}
 
 # @FUNCTION: lto-guarantee-fat
 # @DESCRIPTION:
-# If LTO is enabled, appends -ffat-lto-objects or any other flags needed
-# to provide fat LTO objects.
+# Appends flags needed to emit fat objects when LTO is enabled
 lto-guarantee-fat() {
 	tc-is-lto || return
 
 	_DOT_A_IS_LTO=1
-	# We add this for all languages as LTO obviously can't be done
-	# if different compilers are used for e.g. C vs C++ anyway.
-	append-flags $(test-flags-CC -ffat-lto-objects)
+
+	local -a fat_flags=( $(test-flags-CC -ffat-lto-objects) )
+	[[ ${#fat_flags[@]} -gt 0 ]] && append-flags "${fat_flags[@]}"
 }
 
 # @FUNCTION: strip-lto-bytecode
 # @USAGE: [library|directory] [...]
 # @DESCRIPTION:
-# Strips LTO bytecode from libraries (static archives) passed as arguments.
-# Defaults to operating on ${ED} as a whole if no arguments are passed.
-#
-# As an optimisation, if USE=static-libs exists for a package and is disabled,
-# the default-searching behaviour with no arguments is suppressed.
+# Strips LTO bytecode from *.a and *.o inputs
+# With no arguments it scans ${ED}, unless USE=static-libs is disabled
 strip-lto-bytecode() {
 	if [[ ${_DOT_A_IS_LTO} != 1 ]] && ! tc-is-lto; then
 		return
 	fi
 
-	local files=()
-
 	if [[ ${#} -eq 0 ]]; then
-		if ! in_iuse static-libs || use static-libs ; then
-			# maybe we are USE=static-libs. Alternatively, maybe the ebuild doesn't
-			# offer such a choice. In both cases, the user specified the function,
-			# so we expect to be called on *something*, but nothing was explicitly
-			# passed. Try scanning ${ED} automatically.
-			set -- "${ED}"
-		else
+		if in_iuse static-libs && ! use static-libs ; then
 			return
 		fi
+		set -- "${ED}"
 	fi
 
-	mapfile -t -d '' files < <(find -H "${@}" -type f \( -name '*.a' -or -name '*.o' \) -print0)
+	local input
+	for input in "$@" ; do
+		[[ -e ${input} ]] || die "strip-lto-bytecode: missing path: ${input}"
+	done
 
-	local toolchain_type=
-	tc-is-gcc && toolchain_type=gnu
-	tc-is-clang && toolchain_type=llvm
+	local -a files=()
+	local -a found=()
+	for input in "$@" ; do
+		if [[ -d ${input} ]]; then
+			mapfile -d '' -t found < <(find -H "${input}" -type f \( -name '*.a' -o -name '*.o' \) -print0)
+			files+=( "${found[@]}" )
+		elif [[ -f ${input} ]]; then
+			case ${input} in
+				*.a|*.o) files+=( "${input}" ) ;;
+			esac
+		fi
+	done
+
+	[[ ${#files[@]} -gt 0 ]] || return
+
+	local strip_mode
+	strip_mode=$(_dot-a-get-strip-mode) || return
 
 	local file
-	for file in "${files[@]}" ; do
-		case ${toolchain_type} in
-			gnu)
-				$(tc-getSTRIP) \
+	case ${strip_mode} in
+		gnu)
+			local -a strip_cmd=( $(tc-getSTRIP) )
+			command -v "${strip_cmd[0]}" >/dev/null || die "strip-lto-bytecode: unable to find ${strip_cmd[0]}"
+			for file in "${files[@]}" ; do
+				"${strip_cmd[@]}" \
 					-R .gnu.lto_* \
 					-R .gnu.debuglto_* \
 					-N __gnu_lto_v1 \
 					"${file}" || die "Stripping bytecode in ${file} failed"
-				;;
-			llvm)
-				llvm-bitcode-strip \
+			done
+			;;
+		llvm)
+			local -a llvm_strip_cmd=( $(tc-getPROG LLVM_BITCODE_STRIP llvm-bitcode-strip) )
+			command -v "${llvm_strip_cmd[0]}" >/dev/null || die "strip-lto-bytecode: unable to find ${llvm_strip_cmd[0]}"
+			for file in "${files[@]}" ; do
+				"${llvm_strip_cmd[@]}" \
 					-r "${file}" \
 					-o "${file}" || die "Stripping bytecode in ${file} failed"
-				;;
-			*)
-				;;
-		esac
-	done
+			done
+			;;
+	esac
 }
 
 fi

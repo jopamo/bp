@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools linux-info dot-a
+inherit autotools linux-info qa-policy
 
 DESCRIPTION="programming interface (API) to the in-kernel connection tracking state table"
 HOMEPAGE="https://www.netfilter.org/projects/libnetfilter_conntrack/"
@@ -16,6 +16,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
+BDEPEND="app-dev/patchelf"
 
 DEPEND=">=lib-net/libmnl-1.0.3
 	>=lib-net/libnfnetlink-1.0.0"
@@ -27,17 +28,18 @@ pkg_setup() {
 }
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
 	default
 	eautoreconf
 }
 
 src_configure() {
+	qa-policy-configure
+
 	ECONF_SOURCE=${S} econf $(use_enable static-libs static)
 }
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+
+	qa-policy-install
 }

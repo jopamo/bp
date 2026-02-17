@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake dot-a
+inherit cmake qa-policy
 
 DESCRIPTION="Geometry library"
 HOMEPAGE="http://www.qhull.org"
@@ -17,6 +17,7 @@ KEYWORDS="amd64 arm64"
 IUSE="doc static-libs tools test"
 RESTRICT="!test? ( test )"
 REQUIRED_USE="test? ( tools )"
+BDEPEND="app-dev/patchelf"
 
 DOCS=(
 	Announce.txt
@@ -37,7 +38,7 @@ src_prepare() {
 }
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 
 	local mycmakeargs=(
 		# NOTE undo CMakeLists.txt: "Define shared library for reentrant qhull (installed)" as it yields broken RPATH
@@ -61,7 +62,7 @@ src_install() {
 
 	if ! use static-libs ; then
 		rm "${ED}/usr/$(get_libdir)/pkgconfig/qhull"{static,static_r,cpp}.pc || die
-	else
-		strip-lto-bytecode "${ED}/usr/$(get_libdir)/libqhull"{static,static_r,cpp}.a
 	fi
+
+	qa-policy-install
 }

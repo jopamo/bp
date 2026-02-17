@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="Library for parsing, editing, and saving EXIF data"
 HOMEPAGE="https://github.com/libexif"
@@ -27,6 +27,8 @@ ECONF_SOURCE=${S}
 PATCHES=( "${FILESDIR}"/libexif-0.6.13-pkgconfig.patch )
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	eautoreconf
 	default
 	sed -i -e '/FLAGS=/s:-g::' configure || die #390249
@@ -38,4 +40,9 @@ src_configure() {
 		$(use_enable nls) \
 		$(use_enable doc docs) \
 		--with-doc-dir="${EPREFIX}"/usr/share/doc/${PF}
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

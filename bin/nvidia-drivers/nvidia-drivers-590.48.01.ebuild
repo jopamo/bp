@@ -51,9 +51,7 @@ nvidia_drivers_versions_check() {
         PROC_FS
         ~DRM_KMS_HELPER
         ~SYSVIPC
-        ~!LOCKDEP
         ~!SLUB_DEBUG_ON
-        !DEBUG_MUTEXES
         X86_PAT"
     check_extra_config
 }

@@ -1,12 +1,8 @@
-# Copyright 2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: dot-a.eclass
 # @MAINTAINER:
-# Toolchain Ninjas <toolchain@gentoo.org>
-# @AUTHOR:
-# Sam James <sam@gentoo.org>
-# Eli Schwartz <eschwartz@gentoo.org>
+# Toolchain Team
 # @SUPPORTED_EAPIS: 8
 # @BLURB: Helpers to strip LTO bytecode from static archives
 # @DESCRIPTION:

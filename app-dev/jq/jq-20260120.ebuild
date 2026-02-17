@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="A lightweight and flexible command-line JSON processor"
 HOMEPAGE="https://stedolan.github.io/jq/"
@@ -53,6 +53,8 @@ src_prepare() {
 }
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local econfargs=(
 		# don't try to rebuild docs
 		--disable-docs
@@ -63,6 +65,11 @@ src_configure() {
 		--without-oniguruma
 	)
 	econf "${econfargs[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }
 
 src_test() {

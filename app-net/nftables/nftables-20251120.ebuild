@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit linux-info autotools
+inherit linux-info autotools dot-a
 
 DESCRIPTION="Linux kernel firewall, NAT and packet mangling tools"
 HOMEPAGE="https://netfilter.org/projects/nftables/"
@@ -30,6 +30,8 @@ pkg_setup() {
 }
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 	eautoreconf
 }
@@ -62,4 +64,6 @@ src_install() {
 	else
 		doins "${FILESDIR}/nftables.conf"
 	fi
+
+	use static-libs && strip-lto-bytecode
 }

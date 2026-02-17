@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs python-utils-r1
+inherit toolchain-funcs python-utils-r1 dot-a
 
 DESCRIPTION="C++ crypto library"
 HOMEPAGE="https://botan.randombit.net/"
@@ -25,6 +25,8 @@ DEPEND="
 "
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local disable_modules=(
 		$(usev !boost 'boost')
 	)
@@ -57,4 +59,9 @@ src_configure() {
 
 src_test() {
 	LD_LIBRARY_PATH="${S}" ./botan-test || die "Validation tests failed"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

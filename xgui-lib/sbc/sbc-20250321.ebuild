@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="Audio codec to connect bluetooth HQ audio devices as headphones or loudspeakers"
 HOMEPAGE="https://git.kernel.org/?p=bluetooth/sbc.git http://www.bluez.org/sbc-10/"
@@ -20,13 +20,20 @@ IUSE="static-libs"
 RESTRICT="test"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 	eautoreconf
 }
 
 src_configure() {
-        ECONF_SOURCE=${S} \
-        econf \
-                $(use_enable static-libs static) \
-                --disable-tester
+	ECONF_SOURCE=${S} \
+	econf \
+		$(use_enable static-libs static) \
+		--disable-tester
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

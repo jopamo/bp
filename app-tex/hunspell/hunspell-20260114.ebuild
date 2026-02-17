@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="The most popular spellchecking library"
 HOMEPAGE="http://hunspell.github.io/"
@@ -19,6 +19,8 @@ IUSE="static-libs minimal"
 DEPEND="app-tex/hunspell-dictionaries"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 	eautoreconf
 }
@@ -26,6 +28,7 @@ src_prepare() {
 src_install() {
 	default
 
+	use static-libs && strip-lto-bytecode
 	use static-libs || rm -f "${ED}"/usr/lib/libhunspell-1.7.a || die
 	use minimal && rm -f "${ED}"/usr/bin/{makealias,affixcompress,wordforms,ispellaff2myspell,wordlist2hunspell,munch,analyze,chmorph,unmunch,hunzip,hzip}
 

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs
+inherit toolchain-funcs dot-a
 
 DESCRIPTION="Open Firmware device tree compiler"
 HOMEPAGE="https://devicetree.org/ https://git.kernel.org/cgit/utils/dtc/dtc.git/"
@@ -37,8 +37,14 @@ src_prepare() {
 	export V=1
 }
 
+src_compile() {
+	use static-libs && lto-guarantee-fat
+	default
+}
+
 src_install() {
 	default
 
+	use static-libs && strip-lto-bytecode
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

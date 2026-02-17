@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic toolchain-funcs
+inherit flag-o-matic toolchain-funcs dot-a
 
 DESCRIPTION="Stand-alone build of libbpf from the Linux kernel"
 HOMEPAGE="https://github.com/libbpf/libbpf"
@@ -21,6 +21,8 @@ PATCHES=(
 )
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	append-cflags -fPIC
 	tc-export CC AR PKG_CONFIG
 	export LIBSUBDIR="lib"
@@ -34,6 +36,7 @@ src_install() {
 		LIBSUBDIR="${LIBSUBDIR}" \
 		install install_uapi_headers
 
+	use static-libs && strip-lto-bytecode
 	if ! use static-libs; then
 		find "${ED}" -name '*.a' -delete || die
 	fi

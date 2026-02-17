@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit linux-info autotools flag-o-matic
+inherit linux-info autotools flag-o-matic dot-a
 
 DESCRIPTION="Tool to setup encrypted devices with dm-crypt"
 HOMEPAGE="https://gitlab.com/cryptsetup/cryptsetup/blob/master/README.md"
@@ -48,6 +48,8 @@ src_prepare() {
 }
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local myconf=(
 		--disable-asciidoc
 		--disable-internal-argon2
@@ -82,6 +84,7 @@ src_test() {
 
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
 
 	if use static ; then
 		mv "${ED%}"/usr/sbin/cryptsetup{.static,} || die

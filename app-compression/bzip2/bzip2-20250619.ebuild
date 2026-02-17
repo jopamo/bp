@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic
+inherit flag-o-matic dot-a
 
 MAINPV=1.0.8
 
@@ -30,6 +30,8 @@ src_prepare() {
 }
 
 src_compile() {
+	use static-libs && lto-guarantee-fat
+
 	use static-libs && emake
 
 	emake -f Makefile-libbz2_so
@@ -53,7 +55,10 @@ src_install() {
 		dosym -r /usr/lib/libbz2.so.${MAINPV} /usr/lib/${x}
 	done
 
-	use static-libs && dolib.a libbz2.a
+	if use static-libs ; then
+		strip-lto-bytecode libbz2.a
+		dolib.a libbz2.a
+	fi
 
 	insinto /usr/include
 	doins bzlib.h

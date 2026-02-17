@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit linux-info flag-o-matic autotools
+inherit linux-info flag-o-matic autotools dot-a
 
 DESCRIPTION="interface to packets that have been logged by the kernel packet filter"
 HOMEPAGE="https://www.netfilter.org/projects/libnetfilter_log/"
@@ -22,6 +22,8 @@ DEPEND="lib-net/libnfnetlink"
 CONFIG_CHECK="~NETFILTER_NETLINK_LOG"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 	eautoreconf
 	filter-flags -Wl,-z,defs
@@ -29,4 +31,13 @@ src_prepare() {
 
 pkg_setup() {
 	linux-info_pkg_setup
+}
+
+src_configure() {
+	ECONF_SOURCE=${S} econf $(use_enable static-libs static)
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

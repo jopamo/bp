@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson dot-a
+inherit meson qa-policy
 
 DESCRIPTION="inih (INI not invented here) simple .INI file parser"
 HOMEPAGE="https://github.com/benhoyt/inih"
@@ -15,9 +15,10 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
+BDEPEND="app-dev/patchelf"
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 
 	local emesonargs=(
 		-Ddefault_library=$(usex static-libs both shared)
@@ -30,5 +31,6 @@ src_configure() {
 
 src_install() {
 	meson_src_install
-	use static-libs && strip-lto-bytecode
+
+	qa-policy-install
 }

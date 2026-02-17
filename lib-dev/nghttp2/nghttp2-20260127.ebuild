@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools
+inherit flag-o-matic autotools dot-a
 
 DESCRIPTION="HTTP/2 C Library"
 HOMEPAGE="https://nghttp2.org/"
@@ -32,7 +32,7 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
 	filter-flags -Wl,-z,defs
-	append-flags -ffat-lto-objects
+	use static-libs && lto-guarantee-fat
 
 	default
 	eautoreconf
@@ -51,4 +51,9 @@ src_configure() {
 		--disable-werror
 	)
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

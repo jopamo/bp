@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="stable"
 
-inherit cmake
+inherit cmake dot-a
 
 DESCRIPTION="Command-line tool for structural, content-preserving transformation of PDF files"
 HOMEPAGE="http://qpdf.sourceforge.net/"
@@ -22,8 +22,15 @@ DEPEND="xmedia-lib/libjpeg-turbo"
 BDEPEND="app-lang/perl"
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local mycmakeargs=(
 		-D BUILD_STATIC_LIBS="$(usex static-libs)"
 	)
 	cmake_src_configure
+}
+
+src_install() {
+	cmake_src_install
+	use static-libs && strip-lto-bytecode
 }

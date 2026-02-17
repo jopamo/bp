@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="An HTML5 parsing library in pure C99"
 HOMEPAGE="https://github.com/google/gumbo-parser"
@@ -15,15 +15,16 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
+BDEPEND="app-dev/patchelf"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
 	default
 	eautoreconf
 }
 
 src_configure() {
+	qa-policy-configure
+
 	local myconf=(
 		$(use_enable static-libs static)
 		--disable-silent-rules
@@ -33,5 +34,6 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+
+	qa-policy-install
 }

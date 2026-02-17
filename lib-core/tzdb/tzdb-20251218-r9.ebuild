@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs flag-o-matic
+inherit toolchain-funcs flag-o-matic dot-a
 
 DESCRIPTION="The Time Zone Database (often called tz or zoneinfo)"
 HOMEPAGE="https://www.iana.org/time-zones"
@@ -31,6 +31,7 @@ _emake() {
 }
 
 src_compile() {
+	use static-libs && lto-guarantee-fat
 	append-cppflags -DZIC_BLOAT_DEFAULT='\"'$(usex zic-fat fat slim)'\"'
 	_emake
 }
@@ -66,6 +67,7 @@ src_install() {
 	# savings time rules to be in accordance with US rules.
 	./zic -d "${ED}"/usr/share/zoneinfo -p America/New_York || die
 
+	use static-libs && strip-lto-bytecode
 	use static-libs || rm -r "${ED}"/usr/lib/libtz.a || die
 
 	cleanup_install

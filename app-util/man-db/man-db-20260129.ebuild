@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit doins
+inherit doins dot-a
 
 DESCRIPTION="a man replacement that utilizes gdbm instead of flat files"
 HOMEPAGE="http://www.nongnu.org/man-db/"
@@ -26,6 +26,8 @@ DEPEND="
 BDEPEND="app-dev/pkgconf"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	rm -rf gnulib
 	cp -r "${BROOT}"/usr/share/gnulib gnulib
 	#cd gnulib
@@ -57,6 +59,7 @@ src_configure() {
 
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
 	newsysusers "${FILESDIR}/${PN}-sysusers" "${PN}.conf"
 }
 

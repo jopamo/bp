@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="v$(ver_cut 1-2)-stable"
 
-inherit autotools flag-o-matic
+inherit autotools flag-o-matic dot-a
 
 DESCRIPTION="Portable and efficient API to determine the call-chain of a program"
 HOMEPAGE="https://savannah.nongnu.org/projects/libunwind"
@@ -19,6 +19,8 @@ KEYWORDS="amd64 arm64"
 IUSE="debug debug-frame static-libs"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	filter-flags -Wl,-z,defs
 
 	default
@@ -51,4 +53,9 @@ src_test() {
 	# Explicitly allow parallel build of tests.
 	# Sandbox causes some tests to freak out.
 	SANDBOX_ON=0 emake check
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

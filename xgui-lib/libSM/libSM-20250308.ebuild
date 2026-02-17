@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="X.Org Session Management library"
 HOMEPAGE="https://www.x.org/wiki/"
@@ -30,6 +30,8 @@ src_prepare() {
 }
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	use uuid || export ac_cv_func_uuid_create=no
 
 	local myconf=(
@@ -43,5 +45,6 @@ src_configure() {
 
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

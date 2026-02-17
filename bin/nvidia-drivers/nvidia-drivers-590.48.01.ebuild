@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit linux-info kernel-mod unpacker user-info
+inherit linux-info kernel-mod unpacker user-info dot-a
 
 NV_URI="https://us.download.nvidia.com/XFree86/"
 
@@ -238,6 +238,7 @@ EOF
     doins firmware/*.bin
 
     dosym -r /usr/lib/libcrypto.so.3 /usr/lib/libcrypto.so.1.1
+	use static-libs && strip-lto-bytecode
 }
 
 src_install-libs() {
@@ -311,5 +312,5 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
-    use driver && kernel-mod_pkg_postinst
+	use driver && kernel-mod_pkg_postinst
 }

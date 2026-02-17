@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools
+inherit flag-o-matic autotools dot-a
 
 DESCRIPTION="Provides useful functions commonly found on BSD systems"
 HOMEPAGE="https://libbsd.freedesktop.org/wiki/"
@@ -20,6 +20,8 @@ IUSE="static-libs"
 DEPEND="lib-dev/libmd"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	sed -i 's/^AC_INIT.*/AC_INIT([libbsd], [${PV}], [bugs@libbsd.example])/' configure.ac || die
 	default
 	eautoreconf
@@ -29,4 +31,9 @@ src_configure() {
 	filter-flags -flto*
 
 	ECONF_SOURCE="${S}" econf $(use_enable static-libs static)
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

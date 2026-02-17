@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="Minimalistic netlink library"
 HOMEPAGE="http://netfilter.org/projects/libmnl"
@@ -15,19 +15,21 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
+BDEPEND="app-dev/patchelf"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
 	default
 	eautoreconf
 }
 
 src_configure() {
+	qa-policy-configure
+
 	econf $(use_enable static-libs static)
 }
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+
+	qa-policy-install
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="Tools for Flash-Friendly File System (F2FS)"
 HOMEPAGE="https://git.kernel.org/cgit/linux/kernel/git/jaegeuk/f2fs-tools.git/about/"
@@ -17,6 +17,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 DEPEND="app-core/util-linux"
+BDEPEND="app-dev/patchelf"
 
 src_prepare() {
 	default
@@ -24,12 +25,14 @@ src_prepare() {
 }
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
+
 	default
 }
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
 	use static-libs || find "${ED}" -name '*.a' -delete
+
+	qa-policy-install
 }

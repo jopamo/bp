@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="Jemalloc is a general-purpose scalable concurrent allocator"
 HOMEPAGE="http://jemalloc.net/ https://github.com/jemalloc/jemalloc"
@@ -18,6 +18,8 @@ KEYWORDS="amd64 arm64"
 IUSE="debug lazy-lock static-libs stats xmalloc"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	echo "5.3.0-0-g${SNAPSHOT}" > "${S}/VERSION"
 	default
 	eautoreconf
@@ -35,4 +37,9 @@ src_configure() {
 		--disable-syscall
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

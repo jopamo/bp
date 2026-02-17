@@ -1,7 +1,7 @@
-From b2685839bc78f3e0f1787246050e50f82510da56 Mon Sep 17 00:00:00 2001
+From 182b0842d476b57fadfe2561a35a65fcd34473e0 Mon Sep 17 00:00:00 2001
 From: Paul Moses <p@1g4.org>
 Date: Tue, 3 Feb 2026 06:14:22 -0600
-Subject: [PATCH net v6 1/1] net/sched: act_gate: snapshot parameters with RCU
+Subject: [PATCH net v7 1/1] net/sched: act_gate: snapshot parameters with RCU
  on replace
 
 The gate action can be replaced while the hrtimer callback or dump path is
@@ -17,8 +17,8 @@ Cc: stable@vger.kernel.org
 Signed-off-by: Paul Moses <p@1g4.org>
 ---
  include/net/tc_act/tc_gate.h |  33 ++++-
- net/sched/act_gate.c         | 275 ++++++++++++++++++++++++-----------
- 2 files changed, 219 insertions(+), 89 deletions(-)
+ net/sched/act_gate.c         | 265 +++++++++++++++++++++++++----------
+ 2 files changed, 216 insertions(+), 82 deletions(-)
 
 diff --git a/include/net/tc_act/tc_gate.h b/include/net/tc_act/tc_gate.h
 index c1a67149c6b62..5223c00279d5a 100644
@@ -122,7 +122,7 @@ index c1a67149c6b62..5223c00279d5a 100644
  
  	list_for_each_entry(entry, &p->entries, list)
 diff --git a/net/sched/act_gate.c b/net/sched/act_gate.c
-index c1f75f2727576..60c80e609ec3d 100644
+index c1f75f2727576..f7690e0180a7c 100644
 --- a/net/sched/act_gate.c
 +++ b/net/sched/act_gate.c
 @@ -32,9 +32,12 @@ static ktime_t gate_get_time(struct tcf_gate *gact)
@@ -140,23 +140,7 @@ index c1f75f2727576..60c80e609ec3d 100644
  	ktime_t now, base, cycle;
  	u64 n;
  
-@@ -56,11 +59,10 @@ static void gate_start_timer(struct tcf_gate *gact, ktime_t start)
- {
- 	ktime_t expires;
- 
--	expires = hrtimer_get_expires(&gact->hitimer);
--	if (expires == 0)
--		expires = KTIME_MAX;
--
--	start = min_t(ktime_t, start, expires);
-+	if (hrtimer_active(&gact->hitimer)) {
-+		expires = hrtimer_get_expires(&gact->hitimer);
-+		start = min_t(ktime_t, start, expires);
-+	}
- 
- 	hrtimer_start(&gact->hitimer, start, HRTIMER_MODE_ABS_SOFT);
- }
-@@ -69,12 +71,14 @@ static enum hrtimer_restart gate_timer_func(struct hrtimer *timer)
+@@ -69,12 +72,14 @@ static enum hrtimer_restart gate_timer_func(struct hrtimer *timer)
  {
  	struct tcf_gate *gact = container_of(timer, struct tcf_gate,
  					     hitimer);
@@ -172,7 +156,7 @@ index c1f75f2727576..60c80e609ec3d 100644
  	next = gact->next_entry;
  
  	/* cycle start, clear pending bit, clear total octets */
-@@ -225,6 +229,35 @@ static void release_entry_list(struct list_head *entries)
+@@ -225,6 +230,35 @@ static void release_entry_list(struct list_head *entries)
  	}
  }
  
@@ -208,15 +192,7 @@ index c1f75f2727576..60c80e609ec3d 100644
  static int parse_gate_list(struct nlattr *list_attr,
  			   struct tcf_gate_params *sched,
  			   struct netlink_ext_ack *extack)
-@@ -261,7 +294,6 @@ static int parse_gate_list(struct nlattr *list_attr,
- 	}
- 
- 	sched->num_entries = i;
--
- 	return i;
- 
- release_list:
-@@ -270,24 +302,44 @@ static int parse_gate_list(struct nlattr *list_attr,
+@@ -270,24 +304,44 @@ static int parse_gate_list(struct nlattr *list_attr,
  	return err;
  }
  
@@ -276,7 +252,7 @@ index c1f75f2727576..60c80e609ec3d 100644
  }
  
  static int tcf_gate_init(struct net *net, struct nlattr *nla,
-@@ -296,15 +348,22 @@ static int tcf_gate_init(struct net *net, struct nlattr *nla,
+@@ -296,15 +350,22 @@ static int tcf_gate_init(struct net *net, struct nlattr *nla,
  			 struct netlink_ext_ack *extack)
  {
  	struct tc_action_net *tn = net_generic(net, act_gate_ops.net_id);
@@ -302,7 +278,7 @@ index c1f75f2727576..60c80e609ec3d 100644
  	int ret = 0, err;
  	u32 gflags = 0;
  	s32 prio = -1;
-@@ -321,26 +380,8 @@ static int tcf_gate_init(struct net *net, struct nlattr *nla,
+@@ -321,26 +382,8 @@ static int tcf_gate_init(struct net *net, struct nlattr *nla,
  	if (!tb[TCA_GATE_PARMS])
  		return -EINVAL;
  
@@ -330,7 +306,7 @@ index c1f75f2727576..60c80e609ec3d 100644
  
  	parm = nla_data(tb[TCA_GATE_PARMS]);
  	index = parm->index;
-@@ -366,6 +407,60 @@ static int tcf_gate_init(struct net *net, struct nlattr *nla,
+@@ -366,6 +409,60 @@ static int tcf_gate_init(struct net *net, struct nlattr *nla,
  		return -EEXIST;
  	}
  
@@ -343,7 +319,7 @@ index c1f75f2727576..60c80e609ec3d 100644
 +	p = kzalloc(sizeof(*p), GFP_KERNEL);
 +	if (!p) {
 +		err = -ENOMEM;
-+		goto release_idr;
++		goto chain_put;
 +	}
 +	INIT_LIST_HEAD(&p->entries);
 +
@@ -391,7 +367,7 @@ index c1f75f2727576..60c80e609ec3d 100644
  	if (tb[TCA_GATE_PRIORITY])
  		prio = nla_get_s32(tb[TCA_GATE_PRIORITY]);
  
-@@ -375,25 +470,26 @@ static int tcf_gate_init(struct net *net, struct nlattr *nla,
+@@ -375,25 +472,26 @@ static int tcf_gate_init(struct net *net, struct nlattr *nla,
  	if (tb[TCA_GATE_FLAGS])
  		gflags = nla_get_u32(tb[TCA_GATE_FLAGS]);
  
@@ -433,7 +409,7 @@ index c1f75f2727576..60c80e609ec3d 100644
  
  	if (!cycletime) {
  		struct tcfg_gate_entry *entry;
-@@ -404,20 +500,22 @@ static int tcf_gate_init(struct net *net, struct nlattr *nla,
+@@ -404,20 +502,22 @@ static int tcf_gate_init(struct net *net, struct nlattr *nla,
  		cycletime = cycle;
  		if (!cycletime) {
  			err = -EINVAL;
@@ -464,7 +440,7 @@ index c1f75f2727576..60c80e609ec3d 100644
  
  	gact->current_close_time = start;
  	gact->current_gate_status = GATE_ACT_GATE_OPEN | GATE_ACT_PENDING;
-@@ -434,33 +532,47 @@ static int tcf_gate_init(struct net *net, struct nlattr *nla,
+@@ -434,33 +534,49 @@ static int tcf_gate_init(struct net *net, struct nlattr *nla,
  	if (goto_ch)
  		tcf_chain_put_by_act(goto_ch);
  
@@ -480,11 +456,11 @@ index c1f75f2727576..60c80e609ec3d 100644
 +err_free:
 +	release_entry_list(&p->entries);
 +	kfree(p);
-+release_idr:
++chain_put:
  	if (goto_ch)
  		tcf_chain_put_by_act(goto_ch);
--release_idr:
 +
+ release_idr:
  	/* action is not inserted in any list: it's safe to init hitimer
  	 * without taking tcf_lock.
  	 */
@@ -493,6 +469,7 @@ index c1f75f2727576..60c80e609ec3d 100644
 -				 gact->tk_offset, gact->param.tcfg_clockid,
 -				 true);
 +		gate_setup_timer(gact, timer_clockid, tko);
++
  	tcf_idr_release(*a, bind);
  	return err;
  }
@@ -519,7 +496,7 @@ index c1f75f2727576..60c80e609ec3d 100644
  }
  
  static int dumping_entry(struct sk_buff *skb,
-@@ -509,10 +621,9 @@ static int tcf_gate_dump(struct sk_buff *skb, struct tc_action *a,
+@@ -509,10 +625,9 @@ static int tcf_gate_dump(struct sk_buff *skb, struct tc_action *a,
  	struct nlattr *entry_list;
  	struct tcf_t t;
  
@@ -533,7 +510,7 @@ index c1f75f2727576..60c80e609ec3d 100644
  
  	if (nla_put(skb, TCA_GATE_PARMS, sizeof(opt), &opt))
  		goto nla_put_failure;
-@@ -552,12 +663,12 @@ static int tcf_gate_dump(struct sk_buff *skb, struct tc_action *a,
+@@ -552,12 +667,12 @@ static int tcf_gate_dump(struct sk_buff *skb, struct tc_action *a,
  	tcf_tm_dump(&t, &gact->tcf_tm);
  	if (nla_put_64bit(skb, TCA_GATE_TM, sizeof(t), &t, TCA_GATE_PAD))
  		goto nla_put_failure;

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools distutils-r1
+inherit autotools distutils-r1 dot-a
 
 DESCRIPTION="identify a file's format by scanning binary data for patterns"
 HOMEPAGE="https://www.darwinsys.com/file/"
@@ -32,6 +32,8 @@ src_prepare() {
 }
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local myconf=(
 		$(use_enable seccomp libseccomp)
 		$(use_enable static-libs static)
@@ -60,5 +62,6 @@ src_install() {
 		distutils-r1_src_install
 	fi
 
+	use static-libs && strip-lto-bytecode
 	find "${ED}" -type f -name "*.la" -delete || die
 }

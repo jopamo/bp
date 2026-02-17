@@ -2,6 +2,7 @@
 
 EAPI=8
 
+inherit dot-a
 
 
 DESCRIPTION="displays the hardware topology in convenient formats"
@@ -29,6 +30,11 @@ DEPEND="
 
 BDEPEND="app-dev/pkgconf"
 
+src_prepare() {
+	use static-libs && lto-guarantee-fat
+	default
+}
+
 src_configure() {
 	local myconf=(
 		$(use_enable static-libs static)
@@ -42,4 +48,9 @@ src_configure() {
 		--disable-gl
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

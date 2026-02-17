@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic
+inherit autotools flag-o-matic dot-a
 
 DESCRIPTION="Utilities and libraries for NUMA systems"
 HOMEPAGE="https://github.com/numactl/numactl"
@@ -17,6 +17,8 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	filter-flags -Wl,-z,defs
 	replace-flags "-D_FORTIFY_SOURCE=3" "-D_FORTIFY_SOURCE=2"
 	default
@@ -35,4 +37,9 @@ src_test() {
 	else
 		ewarn "You do not have baseline NUMA support in your kernel, skipping tests."
 	fi
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

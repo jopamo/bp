@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic
+inherit flag-o-matic dot-a
 
 MY_P="${PN}_$(ver_rs 1- _)"
 MAJOR_V="$(ver_cut 1-2)"
@@ -39,7 +39,7 @@ ejam() {
 }
 
 src_configure() {
-	append-flags -ffat-lto-objects
+	use static-libs && lto-guarantee-fat
 
 	OPTIONS=(
 		$(usex context '' '--without-context --without-coroutine --without-fiber')
@@ -78,4 +78,5 @@ src_install() {
 		--includedir="${ED}/usr/include" \
 		--libdir="${ED}/usr/lib" \
 		install || die "Installation of Boost libraries failed"
+	use static-libs && strip-lto-bytecode
 }

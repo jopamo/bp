@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="$(ver_cut 1-2).x"
 
-inherit cmake
+inherit cmake dot-a
 
 DESCRIPTION="EXIF, IPTC and XMP metadata C++ library and command line utility"
 HOMEPAGE="http://www.exiv2.org/"
@@ -29,6 +29,8 @@ DEPEND="
 "
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local mycmakeargs=(
 		-DEXIV2_ENABLE_NLS=NO
 		-DEXIV2_ENABLE_PNG=$(usex png)
@@ -38,4 +40,9 @@ src_configure() {
 		-DEXIV2_ENABLE_XMP=$(usex xmp)
 	)
 	cmake_src_configure
+}
+
+src_install() {
+	cmake_src_install
+	use static-libs && strip-lto-bytecode
 }

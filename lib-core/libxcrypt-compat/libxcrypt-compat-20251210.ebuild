@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=174c24d6e87aeae631bc0a7bb1ba983cf8def4de
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="Extended crypt library for descrypt, md5crypt, bcrypt, and others"
 HOMEPAGE="https://github.com/besser82/libxcrypt"
@@ -22,6 +22,8 @@ src_prepare() {
 }
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local myconf=(
 		--disable-failure-tokens
 		--disable-werror
@@ -36,5 +38,8 @@ src_configure() {
 src_install() {
 	dolib.so .libs/libcrypt.so.1.1.0
 	dolib.so .libs/libcrypt.so.1
-	use static-libs && dolib.a .libs/libcrypt.a
+	if use static-libs ; then
+		strip-lto-bytecode .libs/libcrypt.a
+		dolib.a .libs/libcrypt.a
+	fi
 }

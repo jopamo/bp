@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="Multitouch Protocol Translation Library"
 HOMEPAGE="http://bitmath.org/code/mtdev/"
@@ -19,6 +19,8 @@ IUSE="static-libs"
 DEPEND="virtual/linux-sources"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 	eautoreconf
 }
@@ -29,5 +31,6 @@ src_configure() {
 
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
 	use static-libs || find "${ED}" -name '*.la' -delete
 }

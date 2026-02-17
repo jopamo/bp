@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit linux-info meson doins
+inherit linux-info meson doins dot-a
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="https://dbus.freedesktop.org/"
@@ -40,6 +40,8 @@ pkg_setup() {
 }
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local rundir="/run"
 
 	local emesonargs=(
@@ -79,6 +81,7 @@ src_configure() {
 
 src_install() {
 	meson_src_install
+	use static-libs && strip-lto-bytecode
 
 	if use X; then
 		exeinto /etc/X11/xinit/xinitrc.d

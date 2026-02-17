@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="X C-language Bindings library"
 HOMEPAGE="https://xcb.freedesktop.org/"
@@ -30,6 +30,8 @@ src_prepare() {
 }
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local myconf=(
 		--disable-devel-docs
 		$(use_enable xkb)
@@ -40,6 +42,7 @@ src_configure() {
 
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
 	use static-libs || find "${ED}" -name '*.a' -delete
 
 	if ! use keep-la; then

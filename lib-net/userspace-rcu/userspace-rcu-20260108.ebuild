@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="Userspace RCU (read-copy-update) library"
 HOMEPAGE="https://liburcu.org/"
@@ -19,6 +19,8 @@ IUSE="static-libs test"
 RESTRICT="!test? ( test )"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 	eautoreconf
 }
@@ -42,6 +44,7 @@ src_test() {
 
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
 
 	find "${ED}" -type f -name "*.la" -delete || die
 }

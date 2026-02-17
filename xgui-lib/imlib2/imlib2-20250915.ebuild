@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools
+inherit flag-o-matic autotools dot-a
 
 DESCRIPTION="Version 2 of an advanced replacement library for libraries like libXpm"
 HOMEPAGE="https://www.enlightenment.org/"
@@ -32,6 +32,8 @@ DEPEND="
 "
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	eautoreconf
 	cp "${FILESDIR}"/loader_gif.c src/modules/loaders/loader_gif.c
 
@@ -52,4 +54,9 @@ src_configure() {
 	)
 
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

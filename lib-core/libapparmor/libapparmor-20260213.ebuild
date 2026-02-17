@@ -8,7 +8,7 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..13} )
 GENTOO_DEPEND_ON_PERL="no"
 
-inherit autotools distutils-r1 flag-o-matic
+inherit autotools distutils-r1 flag-o-matic dot-a
 
 DESCRIPTION="Library to support AppArmor userspace utilities"
 HOMEPAGE="https://gitlab.com/apparmor/apparmor/wikis/home"
@@ -23,6 +23,8 @@ IUSE="+perl +python static-libs"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	filter-defs
 	default
 
@@ -47,6 +49,7 @@ src_configure() {
 
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
 
 	find "${D}" -name '*.la' -delete || die
 }

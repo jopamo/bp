@@ -2,6 +2,8 @@
 
 EAPI=8
 
+inherit dot-a
+
 DESCRIPTION="BSD replacement for libreadline"
 HOMEPAGE="https://thrysoee.dk/editline/"
 SNAPSHOT=cc5ed18287a67b097c36c2b9b27585e1f236f3ea
@@ -16,10 +18,20 @@ IUSE="static-libs"
 
 DEPEND="virtual/curses[static-libs?]"
 
+src_prepare() {
+	use static-libs && lto-guarantee-fat
+	default
+}
+
 src_configure() {
 	local myconf=(
 		$(use_enable static-libs static)
 		--enable-fast-install
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

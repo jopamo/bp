@@ -2,6 +2,8 @@
 
 EAPI=8
 
+inherit dot-a
+
 DESCRIPTION="ASN.1 library"
 HOMEPAGE="https://www.gnu.org/software/libtasn1/"
 SNAPSHOT=2f560e2b0ddca402f8b19d8a7cfd02871ea26927
@@ -15,6 +17,8 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs valgrind"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	rm -rf gnulib
 	cp -r "${BROOT}"/usr/share/gnulib gnulib
 	cd gnulib
@@ -33,4 +37,9 @@ src_configure() {
 		$(use_enable valgrind valgrind-tests)
 	)
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

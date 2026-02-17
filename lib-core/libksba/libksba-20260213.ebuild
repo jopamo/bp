@@ -4,7 +4,7 @@ EAPI=8
 SNAPSHOT=b9e8f4b3d8d7826e85dff23cbb62c21ade27b06c
 SHORT=${SNAPSHOT:0:7}
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="X.509 and CMS (PKCS#7) library"
 HOMEPAGE="http://www.gnupg.org/related_software/libksba"
@@ -20,6 +20,8 @@ IUSE="static-libs"
 DEPEND="lib-core/libgpg-error"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 	eautoreconf
 }
@@ -30,4 +32,9 @@ src_configure() {
 		--disable-doc
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

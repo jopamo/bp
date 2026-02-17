@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit linux-info autotools dot-a
+inherit linux-info autotools qa-policy
 
 DESCRIPTION="Netlink API to the in-kernel nf_tables subsystem"
 HOMEPAGE="https://netfilter.org/projects/nftables/"
@@ -17,7 +17,10 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 DEPEND="lib-net/libmnl"
-BDEPEND="app-dev/pkgconf"
+BDEPEND="
+	app-dev/patchelf
+	app-dev/pkgconf
+"
 
 pkg_setup() {
 	CONFIG_CHECK="~NF_TABLES"
@@ -25,14 +28,14 @@ pkg_setup() {
 }
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
 	rm -rf build-aux
 	default
 	eautoreconf
 }
 
 src_configure() {
+	qa-policy-configure
+
 	local myconf=(
 		$(use_enable static-libs static)
 	)
@@ -41,5 +44,6 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+
+	qa-policy-install
 }

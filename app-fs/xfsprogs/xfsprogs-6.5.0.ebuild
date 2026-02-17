@@ -2,6 +2,8 @@
 
 EAPI=8
 
+inherit qa-policy
+
 DESCRIPTION="xfs filesystem utilities"
 HOMEPAGE="https://xfs.wiki.kernel.org/"
 SRC_URI="https://www.kernel.org/pub/linux/utils/fs/xfs/${PN}/${P}.tar.xz"
@@ -32,6 +34,8 @@ src_prepare() {
 }
 
 src_configure() {
+	qa-policy-configure full
+
 	unset FCFLAGS
 	export DEBUG=-DNDEBUG
 	export OPTIMIZER=""
@@ -65,4 +69,6 @@ src_install() {
 	rm -rf "${ED}"/lib || die
 
 	cleanup_install
+
+	qa-policy-install
 }

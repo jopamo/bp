@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=4d4a562d7b73dcea8bd4b2d40b8c030d5065111b
 
-inherit flag-o-matic
+inherit flag-o-matic dot-a
 
 DESCRIPTION="Extended attributes tools"
 HOMEPAGE="https://savannah.nongnu.org/projects/attr"
@@ -40,6 +40,7 @@ src_prepare() {
 
 src_configure() {
 	filter-flags -flto*
+	use static-libs && lto-guarantee-fat
 
 	local myconf=(
 		--enable-shared
@@ -52,6 +53,8 @@ src_configure() {
 
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
+
 	insinto /usr/include/attr
 	newins "${FILESDIR}"/xattr-shim.h xattr.h
 }

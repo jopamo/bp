@@ -2,6 +2,8 @@
 
 EAPI=8
 
+inherit dot-a
+
 DESCRIPTION="port of netbsd's curses library for usage on Linux systems"
 HOMEPAGE="https://github.com/sabotage-linux/netbsd-curses"
 
@@ -18,6 +20,8 @@ IUSE="static-libs"
 RDEPEND="!lib-core/ncurses"
 
 src_compile() {
+	use static-libs && lto-guarantee-fat
+
 	emake CFLAGS="${CFLAGS}" PREFIX="${EPREFIX}"/usr all
 
 	use static-libs && emake CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS} -static" \
@@ -30,5 +34,6 @@ src_install() {
 	use static-libs && emake CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS} -static" \
 		DESTDIR="${ED}" PREFIX="${EPREFIX}"/usr all-static install-static
 
+	use static-libs && strip-lto-bytecode
 	cleanup_install
 }

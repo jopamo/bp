@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools
+inherit flag-o-matic autotools dot-a
 
 DESCRIPTION="Library to execute a function when a specific event occurs on a file descriptor"
 HOMEPAGE="http://libevent.org/"
@@ -26,6 +26,8 @@ DEPEND="
 filter-flags -Wl,-z,defs
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	if [[ ${PV} == *9999 ]] || [[ ${PV} == 20* ]] ; then
 		eautoreconf
 	fi
@@ -49,4 +51,9 @@ src_configure() {
 	)
 
 	ECONF_SOURCE="${S}" econf ${myconf[@]}
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

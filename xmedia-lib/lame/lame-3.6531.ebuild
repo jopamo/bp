@@ -2,6 +2,8 @@
 
 EAPI=8
 
+inherit dot-a
+
 DESCRIPTION="LAME Ain't an MP3 Encoder"
 HOMEPAGE="http://lame.sourceforge.net/"
 SRC_URI="https://1g4.org/files/lame-svn-r$(ver_cut 2)-trunk.zip"
@@ -19,6 +21,8 @@ DEPEND="
 "
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 	sed -i 's/ret = id3v2_add_utf8_lng(gfp, ID_GENRE, 0, text);/char *utf8 = local_strdup_utf16_to_latin1(text); ret = id3v2_add_utf8_lng(gfp, ID_GENRE, 0, utf8); free(utf8);/' libmp3lame/id3tag.c || die
 
@@ -42,4 +46,9 @@ src_configure() {
 		--disable-mp3rtp
 	)
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

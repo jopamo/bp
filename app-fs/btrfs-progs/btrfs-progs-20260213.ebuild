@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic
+inherit autotools flag-o-matic dot-a
 
 DESCRIPTION="Btrfs filesystem utilities"
 HOMEPAGE="https://btrfs.wiki.kernel.org"
@@ -36,8 +36,6 @@ if [[ ${PV} == 9999 ]]; then
 fi
 
 src_prepare() {
-	append-flags -ffat-lto-objects
-
 	default
 
 	eaclocal
@@ -61,6 +59,7 @@ src_configure() {
 }
 
 src_compile() {
+	use static-libs && lto-guarantee-fat
 	emake V=1 all $(usev static)
 }
 
@@ -70,4 +69,5 @@ src_install() {
 		$(usex static install-static '')
 	)
 	emake V=1 DESTDIR="${D}" install "${makeargs[@]}"
+	use static-libs && strip-lto-bytecode
 }

@@ -5,7 +5,7 @@ EAPI=8
 VER_CUT="$(ver_cut 1-2)"
 BRANCH_NAME="v$(ver_cut 1-2)"
 
-inherit flag-o-matic
+inherit flag-o-matic dot-a
 
 DESCRIPTION="A powerful light-weight programming language designed for extending applications"
 HOMEPAGE="http://www.lua.org/"
@@ -19,9 +19,9 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-append-flags -ffat-lto-objects
-
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	rm makefile || die
 	default
 	cp "${FILESDIR}"/lua.pc "${S}"/
@@ -47,6 +47,7 @@ src_install() {
 		dosym -r /usr/lib/liblua.so.$(ver_cut 1-2).9 /usr/lib/${x}
 	done
 
+	use static-libs && strip-lto-bytecode
 	use static-libs || rm -f "${ED}"/usr/lib/liblua.a
 
 	insinto /usr/include

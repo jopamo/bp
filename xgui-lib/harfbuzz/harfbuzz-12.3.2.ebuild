@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic meson python-any-r1
+inherit flag-o-matic meson python-any-r1 dot-a
 
 DESCRIPTION="An OpenType text shaping engine"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/HarfBuzz"
@@ -37,4 +37,18 @@ pkg_setup() {
 	if ! use debug ; then
 		append-cppflags -DHB_NDEBUG
 	fi
+}
+
+src_configure() {
+	use static-libs && lto-guarantee-fat
+
+	local emesonargs=(
+		-Ddefault_library=$(usex static-libs both shared)
+	)
+	meson_src_configure
+}
+
+src_install() {
+	meson_src_install
+	use static-libs && strip-lto-bytecode
 }

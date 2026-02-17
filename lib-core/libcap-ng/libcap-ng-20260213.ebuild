@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic
+inherit autotools flag-o-matic dot-a
 
 DESCRIPTION="POSIX 1003.1e capabilities"
 HOMEPAGE="https://people.redhat.com/sgrubb/libcap-ng/"
@@ -19,6 +19,8 @@ IUSE="python static-libs"
 RESTRICT="test"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	filter-flags -Wl,-z,defs
 	default
 	eautoreconf
@@ -31,4 +33,9 @@ src_configure() {
 		$(usex static-libs "--enable-static=yes" "--enable-static=no")
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

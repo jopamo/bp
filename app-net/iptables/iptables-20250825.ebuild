@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs autotools flag-o-matic
+inherit toolchain-funcs autotools flag-o-matic dot-a
 
 DESCRIPTION="Linux kernel firewall, NAT and packet mangling tools"
 HOMEPAGE="http://www.netfilter.org/projects/iptables/"
@@ -35,6 +35,8 @@ DEPEND="${RDEPEND}
 "
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	# use the saner headers from the kernel
 	rm -f include/linux/{kernel,types}.h
 
@@ -88,4 +90,5 @@ src_install() {
 	doins include/iptables.h $(use ipv6 && echo include/ip6tables.h)
 	insinto /usr/include/iptables
 	doins include/iptables/internal.h
+	use static-libs && strip-lto-bytecode
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake
+inherit cmake dot-a
 
 DESCRIPTION="An open-source JPEG 2000 library"
 HOMEPAGE="http://www.openjpeg.org"
@@ -26,6 +26,8 @@ DEPEND="
 "
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local mycmakeargs=(
 		-DBUILD_TESTING="$(usex test)"
 		-DBUILD_DOC=OFF
@@ -38,6 +40,7 @@ src_configure() {
 
 src_install() {
 	cmake_src_install
+	use static-libs && strip-lto-bytecode
 
 	dosym -r /usr/include/openjpeg-2.5/opj_config.h /usr/include/opj_config.h
 	dosym -r /usr/include/openjpeg-2.5/openjpeg.h /usr/include/openjpeg.h

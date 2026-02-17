@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson
+inherit meson dot-a
 
 DESCRIPTION="A standalone library to implement GNU libc's obstack and others"
 HOMEPAGE="https://github.com/jopamo/musl-bsd"
@@ -17,3 +17,17 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 RDEPEND="!lib-core/glibc"
+
+src_configure() {
+	use static-libs && lto-guarantee-fat
+
+	local emesonargs=(
+		-Ddefault_library=$(usex static-libs both shared)
+	)
+	meson_src_configure
+}
+
+src_install() {
+	meson_src_install
+	use static-libs && strip-lto-bytecode
+}

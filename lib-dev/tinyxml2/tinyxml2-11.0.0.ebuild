@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake
+inherit cmake dot-a
 
 DESCRIPTION="A simple, small, efficient, C++ XML parser"
 HOMEPAGE="http://www.grinninglizard.com/tinyxml2/ https://github.com/leethomason/tinyxml2/"
@@ -14,9 +14,16 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs test"
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local mycmakeargs=(
 		-DBUILD_STATIC_LIBS=$(usex static-libs)
 		-DBUILD_TESTING=$(usex test)
 	)
 	cmake_src_configure
+}
+
+src_install() {
+	cmake_src_install
+	use static-libs && strip-lto-bytecode
 }

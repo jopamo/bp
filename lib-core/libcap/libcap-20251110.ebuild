@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs flag-o-matic
+inherit toolchain-funcs flag-o-matic dot-a
 
 DESCRIPTION="POSIX 1003.1e capabilities"
 HOMEPAGE="http://www.friedhoff.org/posixfilecaps.html"
@@ -46,7 +46,7 @@ run_emake() {
 
 src_compile() {
 	filter-flags -Wl,-z,defs
-	append-flags -ffat-lto-objects
+	use static-libs && lto-guarantee-fat
 	append-cppflags -D_GNU_SOURCE
 
 	use pam && append-flags -lpam
@@ -61,6 +61,7 @@ src_compile() {
 
 src_install() {
 	run_emake DESTDIR="${D}" install
+	use static-libs && strip-lto-bytecode
 
 	if ! use static-libs; then
 		rm "${ED}"/usr/lib/libcap.a

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="Small library to access XDG Base Directories Specification paths"
 HOMEPAGE="http://repo.or.cz/w/libxdg-basedir.git"
@@ -18,6 +18,8 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 	eautoreconf
 }
@@ -29,4 +31,9 @@ src_configure() {
 		--disable-doxygen-html
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

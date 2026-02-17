@@ -4,7 +4,7 @@ EAPI=8
 
 SNAPSHOT=4bef811283e0ec1658c60e09950bd5a1ddc92e4b
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="A free stand-alone ini file parsing library"
 HOMEPAGE="http://ndevilla.free.fr/iniparser/"
@@ -26,7 +26,13 @@ src_prepare() {
 	eautoreconf
 }
 
+src_configure() {
+	use static-libs && lto-guarantee-fat
+	default
+}
+
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic python-single-r1 doins autotools
+inherit flag-o-matic python-single-r1 doins autotools dot-a
 
 DESCRIPTION="A validating, recursive and caching DNS resolver"
 HOMEPAGE="http://unbound.net/"
@@ -37,6 +37,8 @@ pkg_setup() {
 }
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	append-ldflags -Wl,-z,noexecstack
 
 	default
@@ -93,6 +95,7 @@ src_install() {
 
 	insinto /usr/lib/sysusers.d
 	newins "${FILESDIR}/${PN}-sysusers" "${PN}.conf"
+	use static-libs && strip-lto-bytecode
 }
 
 pkg_postinst() {

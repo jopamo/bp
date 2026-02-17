@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic
+inherit flag-o-matic dot-a
 
 DESCRIPTION="An object-oriented scripting language"
 HOMEPAGE="https://www.ruby-lang.org/"
@@ -15,6 +15,8 @@ KEYWORDS="amd64 arm64"
 IUSE="debug jemalloc socks5 static-libs"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 
 	append-flags -fno-strict-aliasing
@@ -38,4 +40,9 @@ src_configure() {
 		--with-out-ext="dbm tk"
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

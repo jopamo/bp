@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic
+inherit autotools flag-o-matic dot-a
 
 DESCRIPTION="Standard (de)compression library"
 HOMEPAGE="https://zlib.net/"
@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 IUSE="minizip static-libs"
 
 src_prepare() {
-	append-flags -ffat-lto-objects
+	use static-libs && lto-guarantee-fat
 	sed -i '/^  elif test -z.*$/,/^  fi$/c\  fi' configure
 
 	default
@@ -49,6 +49,7 @@ src_configure() {
 
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
 	use static-libs || rm -f "${ED}"/usr/lib/libz.{a,la}
 
 	if use minizip ; then

@@ -4,7 +4,7 @@ EAPI=8
 SNAPSHOT=fc484e004200964f8f18249de1f510393ec924a9
 SHORT=${SNAPSHOT:0:7}
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="A library for manipulating integer points bounded by linear constraints"
 HOMEPAGE="http://isl.gforge.inria.fr/"
@@ -23,6 +23,8 @@ DEPEND="
 "
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 	eautoreconf
 	sed -i -e '/Libs:/s:@LDFLAGS@ ::' configure || die
@@ -34,5 +36,6 @@ src_configure() {
 
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
 	use gdb.py || rm "${ED}"/usr/lib/libisl.so.*-gdb.py || die
 }

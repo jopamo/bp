@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools libtool
+inherit autotools libtool dot-a
 
 DESCRIPTION="YAML 1.1 parser and emitter written in C"
 HOMEPAGE="https://github.com/yaml/libyaml"
@@ -17,6 +17,8 @@ IUSE="static-libs test"
 RESTRICT="!test? ( test )"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 
 	# conditionally remove tests
@@ -34,5 +36,6 @@ src_configure() {
 
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
 	find "${D}" -name '*.la' -delete || die
 }

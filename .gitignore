@@ -17,3 +17,6 @@ local/
 *.out
 temp/
 tmp/
+
+# Ignored prefixed files
+ign_*

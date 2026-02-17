@@ -2,7 +2,7 @@
 
 EAPI=8
 
-
+inherit dot-a
 
 DESCRIPTION="a pipeline manipulation library"
 HOMEPAGE="http://libpipeline.nongnu.org/"
@@ -20,6 +20,8 @@ IUSE="static-libs test"
 RESTRICT="network-sandbox"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	sed -i 's|https://git.savannah.gnu.org/git/gnulib.git|https://github.com/1g4-mirror/gnulib.git|' bootstrap
 	rm -rf gnulib
 	cp -r "${BROOT}"/usr/share/gnulib gnulib
@@ -29,4 +31,9 @@ src_prepare() {
 
 src_configure() {
 	econf $(use_enable static-libs static)
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

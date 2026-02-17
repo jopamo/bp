@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="an async event loop abstraction library"
 HOMEPAGE="https://github.com/latchset/libverto"
@@ -18,6 +18,8 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 	eautoreconf
 }
@@ -27,4 +29,9 @@ src_configure() {
 		$(use_enable static-libs static)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

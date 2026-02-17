@@ -2,6 +2,8 @@
 
 EAPI=8
 
+inherit dot-a
+
 DESCRIPTION="GNU TLS library providing SSL/TLS and cryptography (TLS 1.3 etc.)"
 HOMEPAGE="http://www.gnutls.org/"
 SRC_URI="https://github.com/gnutls/gnutls/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
@@ -30,6 +32,11 @@ pkg_setup() {
 	export TZ=UTC
 }
 
+src_prepare() {
+	use static-libs && lto-guarantee-fat
+	default
+}
+
 src_configure() {
 	local myconf=(
 		$(use_enable cxx)
@@ -56,4 +63,9 @@ src_configure() {
 		--with-unbound-root-key-file="${EPREFIX}/etc/dnssec/root-anchors.txt"
 	)
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

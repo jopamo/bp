@@ -4,7 +4,7 @@ EAPI=8
 
 SNAPSHOT=9053e722421454b115e699743a9b0a66808ab756
 
-inherit flag-o-matic
+inherit flag-o-matic dot-a
 
 DESCRIPTION="access control list utilities, libraries and headers"
 HOMEPAGE="https://savannah.nongnu.org/projects/acl"
@@ -44,10 +44,16 @@ src_prepare() {
 src_configure() {
 	replace-flags -O3 -O2
 	filter-flags -flto*
+	use static-libs && lto-guarantee-fat
 
 	local myconf=(
 		--enable-shared $(use_enable static-libs static)
 		--disable-nls
 	)
 	econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

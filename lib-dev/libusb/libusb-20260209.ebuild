@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="Userspace access to USB devices"
 HOMEPAGE="http://libusb.info/ https://github.com/libusb/libusb"
@@ -17,6 +17,8 @@ KEYWORDS="amd64 arm64"
 IUSE="debug static-libs test udev"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 	eautoreconf
 }
@@ -36,4 +38,9 @@ src_test() {
 
 	# noinst_PROGRAMS from tests/Makefile.am
 	tests/stress || die
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

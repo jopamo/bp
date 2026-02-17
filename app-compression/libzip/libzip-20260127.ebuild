@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake multibuild flag-o-matic
+inherit cmake multibuild flag-o-matic dot-a
 
 DESCRIPTION="Library for manipulating zip archives"
 HOMEPAGE="https://nih.at/libzip/"
@@ -47,6 +47,8 @@ pkg_setup() {
 src_configure() {
 	append-lfs-flags
 	myconfigure() {
+		[[ ${MULTIBUILD_VARIANT} = static-libs ]] && lto-guarantee-fat
+
 		local mycmakeargs=(
 			-DBUILD_EXAMPLES=OFF # nothing is installed
 			-DENABLE_COMMONCRYPTO=OFF # not in tree
@@ -116,4 +118,5 @@ src_test() {
 
 src_install() {
 	multibuild_foreach_variant cmake_src_install
+	use static-libs && strip-lto-bytecode
 }

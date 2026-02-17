@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="free lossless audio encoder and decoder"
 HOMEPAGE="https://xiph.org/flac/"
@@ -19,6 +19,8 @@ IUSE="cpplibs debug ogg static-libs"
 DEPEND="ogg? ( xmedia-lib/libogg )"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	touch config.rpath
 	default
 	eautoreconf
@@ -36,4 +38,9 @@ src_configure() {
 		--disable-rpath
 	)
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

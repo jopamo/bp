@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="X.Org fontenc library"
 HOMEPAGE="https://www.x.org/wiki/"
@@ -28,6 +28,8 @@ src_prepare() {
 }
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -42,5 +44,6 @@ src_configure() {
 
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

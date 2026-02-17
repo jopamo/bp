@@ -2,8 +2,6 @@
 
 EAPI=8
 
-BRANCH_NAME="llvm_release_$(ver_cut 1)0"
-
 inherit cmake flag-o-matic
 
 DESCRIPTION="Bi-directional translator between SPIR-V and LLVM IR"

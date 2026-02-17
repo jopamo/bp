@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=d4e067d96c5e868e5208613f37dfacaab4298d7c
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="New GNU Portable Threads Library"
 HOMEPAGE="https://github.com/gpg/npth"
@@ -17,6 +17,8 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 	eautoreconf
 }
@@ -26,4 +28,9 @@ src_configure() {
 		$(use_enable static-libs static)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake
+inherit cmake dot-a
 
 DESCRIPTION="A JSON implementation in C"
 HOMEPAGE="https://github.com/json-c/json-c/wiki"
@@ -17,6 +17,8 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	export USE_VALGRIND=0
 
 	local mycmakeargs=(
@@ -29,4 +31,9 @@ src_configure() {
 	)
 
 	cmake_src_configure
+}
+
+src_install() {
+	cmake_src_install
+	use static-libs && strip-lto-bytecode
 }

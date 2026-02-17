@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson
+inherit meson dot-a
 
 DESCRIPTION="Keymap handling library for Wayland and X11 (xkbcommon)"
 HOMEPAGE="https://xkbcommon.org/"
@@ -23,6 +23,8 @@ RDEPEND="X? ( xgui-lib/libxcb[xkb] )"
 PATCHES=( "${FILESDIR}"/restrict_fix.patch )
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local emesonargs=(
 		$(meson_use wayland enable-wayland)
 		$(meson_use X enable-x11)
@@ -33,5 +35,6 @@ src_configure() {
 
 src_install() {
 	meson_src_install
+	use static-libs && strip-lto-bytecode
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

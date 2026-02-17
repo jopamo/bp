@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs flag-o-matic
+inherit toolchain-funcs flag-o-matic dot-a
 
 DESCRIPTION="A library and various utilities dealing with the PCI bus"
 HOMEPAGE="http://mj.ucw.cz/sw/pciutils/ https://git.kernel.org/?p=utils/pciutils/pciutils.git"
@@ -70,6 +70,8 @@ pemake() {
 }
 
 src_compile() {
+	use static-libs && lto-guarantee-fat
+
 	pemake OPT="${CFLAGS}" all
 	if use static-libs ; then
 		pemake \
@@ -82,7 +84,10 @@ src_compile() {
 
 src_install() {
 	pemake DESTDIR="${D}" install install-lib
-	use static-libs && dolib.a "${BUILD_DIR}/static/lib/libpci.a"
+	if use static-libs ; then
+		strip-lto-bytecode "${BUILD_DIR}/static/lib/libpci.a"
+		dolib.a "${BUILD_DIR}/static/lib/libpci.a"
+	fi
 
 	cleanup_install
 }

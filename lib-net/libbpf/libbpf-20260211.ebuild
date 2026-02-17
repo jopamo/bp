@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic toolchain-funcs dot-a
+inherit flag-o-matic toolchain-funcs qa-policy
 
 DESCRIPTION="Stand-alone build of libbpf from the Linux kernel"
 HOMEPAGE="https://github.com/libbpf/libbpf"
@@ -15,13 +15,14 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
+BDEPEND="app-dev/patchelf"
 
 PATCHES=(
 	"${FILESDIR}"/libbpf-9999-paths.patch
 )
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 
 	append-cflags -fPIC
 	tc-export CC AR PKG_CONFIG
@@ -36,11 +37,12 @@ src_install() {
 		LIBSUBDIR="${LIBSUBDIR}" \
 		install install_uapi_headers
 
-	use static-libs && strip-lto-bytecode
 	if ! use static-libs; then
 		find "${ED}" -name '*.a' -delete || die
 	fi
 
 	insinto /usr/lib/pkgconfig
 	doins libbpf.pc
+
+	qa-policy-install
 }

@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="$(ver_cut 1-2)"
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="library for multiple-precision floating-point computations with exact rounding"
 HOMEPAGE="http://www.mpfr.org/"
@@ -21,6 +21,8 @@ IUSE="static-libs"
 RDEPEND="lib-core/gmp[static-libs?]"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	default
 	eautoreconf
 }
@@ -28,4 +30,9 @@ src_prepare() {
 src_configure() {
 	ECONF_SOURCE=${S} user_redefine_cc=yes \
 		econf $(use_enable static-libs static)
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

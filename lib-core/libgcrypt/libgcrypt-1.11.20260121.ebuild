@@ -5,7 +5,7 @@ EAPI=8
 BRANCH_NAME="LIBGCRYPT-$(ver_cut 1-2)-BRANCH"
 SNAPSHOT=c6e0658004b53fe9373c7ddd7d5a1d2ad818eaac
 
-inherit flag-o-matic autotools
+inherit flag-o-matic autotools dot-a
 
 DESCRIPTION="General purpose crypto library based on the code used in GnuPG"
 HOMEPAGE="http://www.gnupg.org/"
@@ -21,6 +21,8 @@ IUSE="o-flag-munging static-libs"
 DEPEND="lib-core/libgpg-error"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	filter-flags -fuse-ld=lld
 	replace-flags "-D_FORTIFY_SOURCE=3" "-D_FORTIFY_SOURCE=2"
 
@@ -38,4 +40,9 @@ src_configure() {
 		--enable-noexecstack
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

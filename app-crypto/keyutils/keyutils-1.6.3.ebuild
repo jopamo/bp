@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit linux-info flag-o-matic
+inherit linux-info flag-o-matic dot-a
 
 DESCRIPTION="Linux Key Management Utilities"
 HOMEPAGE="https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git"
@@ -22,12 +22,13 @@ PATCHES=(
 )
 
 src_prepare() {
-	append-flags -ffat-lto-objects
 	sed -i '/rpmspec/d' Makefile
 	default
 }
 
 src_compile() {
+	use static-libs && lto-guarantee-fat
+
 	emake CFLAGS="${CFLAGS}" \
 		LDFLAGS="${LDFLAGS}" \
 		INCLUDEDIR="${EPREFIX}"/usr/include \
@@ -53,5 +54,6 @@ src_install() {
 		BINDIR="${ED}"/usr/bin \
 		install
 
+	use static-libs && strip-lto-bytecode
 	dosym -r /usr/lib/libkeyutils.so.1 /usr/lib/libkeyutils.so
 }

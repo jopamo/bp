@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson
+inherit meson dot-a
 
 DESCRIPTION="A TCP-IP emulator used to provide virtual networking services"
 HOMEPAGE="https://gitlab.freedesktop.org/slirp/libslirp"
@@ -24,8 +24,15 @@ src_prepare() {
 }
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local emesonargs=(
 		-Ddefault_library=$(usex static-libs both shared)
 	)
 	meson_src_configure
+}
+
+src_install() {
+	meson_src_install
+	use static-libs && strip-lto-bytecode
 }

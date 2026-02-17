@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs flag-o-matic
+inherit toolchain-funcs flag-o-matic dot-a
 
 DESCRIPTION="zstd fast compression library"
 HOMEPAGE="https://facebook.github.io/zstd/"
@@ -19,7 +19,8 @@ IUSE="static-libs"
 DEPEND="app-compression/xz-utils"
 
 src_compile() {
-	append-flags -ffat-lto-objects
+	use static-libs && lto-guarantee-fat
+
 	emake \
 		CC="$(tc-getCC)" \
 		AR="$(tc-getAR)" \
@@ -51,6 +52,8 @@ src_install() {
 		DESTDIR="${ED}" \
 		PREFIX="${EPREFIX}"/usr \
 		LIBDIR="${EPREFIX}"/usr/lib install
+
+	use static-libs && strip-lto-bytecode
 
 	if ! use static-libs; then
 		rm "${ED}"/usr/lib/libzstd.a || die

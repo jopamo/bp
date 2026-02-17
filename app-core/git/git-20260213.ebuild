@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=852829b3dd2fe4e7c7fc4d8badde644cf1b66c74
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="Git is a fast, scalable, distributed revision control system"
 HOMEPAGE="http://www.git-scm.com/"
@@ -30,6 +30,8 @@ src_prepare() {
 }
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local myconf=(
 		--with-libpcre2
 		--with-curl
@@ -43,6 +45,7 @@ src_configure() {
 src_install() {
 	default
 
+	use static-libs && strip-lto-bytecode
 	use static-libs || find "${ED}" -name "*.a" -delete || die
 	use perl || rm -rf "${ED}"/usr/share/perl5 || die
 	use gitweb || rm -rf "${ED}"/usr/share/gitweb || die

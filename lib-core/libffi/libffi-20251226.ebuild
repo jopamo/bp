@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="a portable, high level programming interface to various calling conventions"
 HOMEPAGE="https://github.com/libffi/libffi"
@@ -17,6 +17,8 @@ KEYWORDS="amd64 arm64"
 IUSE="debug static-libs"
 
 src_prepare() {
+	use static-libs && lto-guarantee-fat
+
 	rm -rf autom4te.cache/
 	rm -f config.log config.cache config.status
 	rm -f Makefile Makefile.in
@@ -39,4 +41,9 @@ src_configure() {
 		--disable-exec-static-tramp
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	use static-libs && strip-lto-bytecode
 }

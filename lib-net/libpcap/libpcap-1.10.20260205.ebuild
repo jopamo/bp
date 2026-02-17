@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="libpcap-$(ver_cut 1-2)"
 
-inherit autotools
+inherit autotools dot-a
 
 DESCRIPTION="A system-independent library for user-level network packet capture"
 HOMEPAGE="http://www.tcpdump.org/"
@@ -37,6 +37,8 @@ src_prepare() {
 }
 
 src_configure() {
+	use static-libs && lto-guarantee-fat
+
 	local myconf=(
 		$(use_enable bluetooth)
 		$(use_enable dbus)
@@ -52,5 +54,6 @@ src_compile() {
 
 src_install() {
 	default
+	use static-libs && strip-lto-bytecode
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

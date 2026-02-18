@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="Modern recursive network retriever"
 HOMEPAGE="https://github.com/jopamo/mira"
-SNAPSHOT=8292cae19ba5bb81f38cbd84dbc048d479ff9484
+SNAPSHOT=8046be5c26d9c24c9cee044c10bc4a84c61d3f8f
 SRC_URI="https://github.com/jopamo/mira/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

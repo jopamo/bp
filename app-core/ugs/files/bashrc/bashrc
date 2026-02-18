@@ -173,7 +173,6 @@ alias psmem='ps auxf | sort -nr -k 4'
 alias psmem10='ps auxf | sort -nr -k 4 | head -10'
 alias pscpu='ps auxf | sort -nr -k 3'
 alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
-alias wget='wget -c'
 alias df='df -HT'
 alias du='du -ch --max-depth=1'
 alias sha3-256='openssl dgst -sha3-256'
@@ -334,7 +333,7 @@ get_kernel() {
   file="stable-v${tag}.tar.bz2"
 
   log_info "Downloading kernel v$tag …"
-  if ! wget -q --show-progress "$url"; then
+  if ! wget "$url"; then
     log_error "Download failed"; return 1
   fi
   [[ $(stat -c%s "$file") -lt 100000000 ]] && {

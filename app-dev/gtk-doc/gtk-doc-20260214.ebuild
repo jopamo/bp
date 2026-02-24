@@ -40,4 +40,5 @@ src_configure() {
 src_install() {
 	meson_src_install
 	rm "${ED}"/usr/share/aclocal/gtk-doc.m4 || die
+	python_fix_shebang "${ED}/usr/bin"
 }

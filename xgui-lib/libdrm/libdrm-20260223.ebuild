@@ -6,7 +6,7 @@ inherit meson flag-o-matic
 
 DESCRIPTION="Userspace interface to the Linux kernel DRM subsystem"
 HOMEPAGE="https://dri.freedesktop.org/"
-SNAPSHOT=369990d9660a387f618d0eedc341eb285016243b
+SNAPSHOT=bd856bed23ea431a97c6adc777cda9e7cd9ca6b2
 SRC_URI="https://gitlab.freedesktop.org/mesa/drm/-/archive/${SNAPSHOT}/drm-${SNAPSHOT}.tar.bz2 -> drm-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libdrm-${SNAPSHOT}"
 

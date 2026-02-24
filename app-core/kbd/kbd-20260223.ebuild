@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="Keyboard and console utilities"
 HOMEPAGE="http://kbd-project.org/"
-SNAPSHOT=2458ab2797bfd43d4ffc555127856a3cdf49a5db
+SNAPSHOT=e9ee3f347124887a54bec4bc3a1ca5044dc0765c
 SRC_URI="https://github.com/1g4-mirror/kbd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

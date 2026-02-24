@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="Linux PAM (Pluggable Authentication Modules for Linux) project"
 HOMEPAGE="https://github.com/linux-pam/linux-pam"
-SNAPSHOT=c39c253383eef5d1c5b88fe8895e4f62eaeb3440
+SNAPSHOT=d74c4294d32cffcf5dbc7a4491142877471b98a0
 SRC_URI="https://github.com/linux-pam/linux-pam/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/linux-pam-${SNAPSHOT}
 

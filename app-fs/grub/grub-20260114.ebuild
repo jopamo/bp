@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-SNAPSHOT=29f3131a3632c70129a29d924fcb8ac98f08ee2b
+SNAPSHOT=eaa3b8f0f90605a82c6bfda4c5c4b73c58eb81ac
 
 inherit multibuild toolchain-funcs
 

@@ -7,7 +7,7 @@ inherit toolchain-funcs
 MY_P=${P/-/_}
 DESCRIPTION="Improved Whois Client"
 HOMEPAGE="https://salsa.debian.org/md/whois"
-SNAPSHOT=64c3426493e145e1fad33a37247e924b0539e4dd
+SNAPSHOT=1024386831c8ee4e0ae24026fa932771bf369fe9
 SRC_URI="https://salsa.debian.org/md/whois/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

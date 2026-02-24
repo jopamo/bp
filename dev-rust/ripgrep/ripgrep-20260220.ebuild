@@ -6,7 +6,7 @@ inherit cargo
 
 DESCRIPTION="ripgrep"
 HOMEPAGE="https://github.com/BurntSushi/ripgrep"
-SNAPSHOT=9b84e154c8e404f4c40f6f4e4c674ea02e77324a
+SNAPSHOT=cb66736f146f093497f4dc537b33d0826f9af33c
 SRC_URI="https://github.com/BurntSushi/ripgrep/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

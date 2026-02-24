@@ -5,7 +5,7 @@ EAPI=8
 DESCRIPTION="A TCP, UDP, and SCTP network bandwidth measurement tool"
 HOMEPAGE="https://github.com/esnet/iperf"
 EGIT_REPO_URI="https://github.com/esnet/iperf"
-SNAPSHOT=6b76500a68b0d83244ff9d1c07cfdb45b26c730c
+SNAPSHOT=4dbe8bc3afe44e311e89ae22222efd3d79b10c10
 SRC_URI="https://github.com/esnet/iperf/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/iperf-${SNAPSHOT}
 

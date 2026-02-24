@@ -1,2 +1,2 @@
-DIST brave-nightly-bin-1.89.2-amd64.deb 129131264 SHA3_256 7d448b339b236c4fc7942bbcd8648c62efaa33561ab5fba52044fa3c29e4c365
-DIST brave-nightly-bin-1.89.2-arm64.deb 121315276 SHA3_256 3c070b0ec001aa4bc8c55adfc7ecb536fe88222e734c47ea7a221c18490cf24c
+DIST brave-nightly-bin-1.89.63-amd64.deb 129553068 SHA3_256 0170ef18d1cb72d90bb7cc3ea794561429c13e6d417bfaa41becbfcdcbd33a3e
+DIST brave-nightly-bin-1.89.63-arm64.deb 121651640 SHA3_256 1fcb95dbd62169f308f6cb543754d4d85dbb66616c7f0ca079d3d96ad105554e

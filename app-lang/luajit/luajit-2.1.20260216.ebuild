@@ -8,7 +8,7 @@ inherit toolchain-funcs dot-a
 
 DESCRIPTION="Just-In-Time Compiler for the Lua programming language"
 HOMEPAGE="http://luajit.org/"
-SNAPSHOT=26fd1a7d6770b2237240a071e6f01132877a2425
+SNAPSHOT=1c3b5a4d722598ecbb9219480142eda682e87bb1
 SRC_URI="https://github.com/LuaJIT/LuaJIT/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/LuaJIT-${SNAPSHOT}
 

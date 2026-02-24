@@ -6,7 +6,7 @@ inherit cmake multibuild flag-o-matic dot-a
 
 DESCRIPTION="Library for manipulating zip archives"
 HOMEPAGE="https://nih.at/libzip/"
-SNAPSHOT=d48dce533cfc18aec95214ed9334e60e3fff231a
+SNAPSHOT=8694564b8e636f9a42b7ca8bd3647aa0c1d0ca0b
 SRC_URI="https://github.com/nih-at/libzip/archive/${SNAPSHOT}.tar.gz -> libzip-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libzip-${SNAPSHOT}
 

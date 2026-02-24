@@ -7,7 +7,7 @@ inherit dot-a
 
 DESCRIPTION="displays the hardware topology in convenient formats"
 HOMEPAGE="http://www.open-mpi.org/projects/hwloc/"
-SNAPSHOT=12c46079502055c88169ec21dd9e3a5a2fc8907f
+SNAPSHOT=bc1531d216d9adba25325588d3db89f14cbee219
 SRC_URI="https://github.com/1g4-mirror/hwloc/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

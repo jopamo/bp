@@ -6,7 +6,7 @@ inherit flag-o-matic linux-info autotools python-single-r1
 
 DESCRIPTION="Bluetooth Tools and System Daemons for Linux"
 HOMEPAGE="http://www.bluez.org"
-SNAPSHOT=eae36399e75807dcf3d88d9af18909288fa71ee4
+SNAPSHOT=290f9973c9069f293367284e95fd338a221ab90d
 SRC_URI="https://github.com/bluez/bluez/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -9,7 +9,7 @@ inherit distutils-r1
 
 DESCRIPTION="A plugin for setuptools to build Rust Python extensions"
 HOMEPAGE="https://github.com/PyO3/setuptools-rust/"
-SNAPSHOT=608006f30addc03341daca6ee0d4d4a6439b1302
+SNAPSHOT=55866aa5fe8f5fc85f3198608428aeb104e57b9d
 SRC_URI="https://github.com/PyO3/setuptools-rust/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/setuptools-rust-${SNAPSHOT}
 

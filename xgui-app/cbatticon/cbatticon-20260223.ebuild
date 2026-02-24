@@ -4,8 +4,7 @@ EAPI=8
 
 DESCRIPTION="A lightweight and fast battery icon that sits in your system tray"
 HOMEPAGE="https://github.com/valr/cbatticon"
-
-SNAPSHOT=3d832c73452ce071c156216135c2d368ba7d496a
+SNAPSHOT=de7fe2247377bfce644664d7b512d81d46404db1
 SRC_URI="https://github.com/valr/cbatticon/archive/${SNAPSHOT}.tar.gz -> cbatticon-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/cbatticon-${SNAPSHOT}"
 

@@ -6,9 +6,15 @@ inherit meson
 
 DESCRIPTION="Modern recursive network retriever"
 HOMEPAGE="https://github.com/jopamo/mira"
-SNAPSHOT=8046be5c26d9c24c9cee044c10bc4a84c61d3f8f
-SRC_URI="https://github.com/jopamo/mira/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+
+if [[ ${PV} = *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/jopamo/mira"
+	inherit git-r3
+else
+	SNAPSHOT=8046be5c26d9c24c9cee044c10bc4a84c61d3f8f
+	SRC_URI="https://github.com/jopamo/mira/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
 
 LICENSE="MIT"
 SLOT="0"

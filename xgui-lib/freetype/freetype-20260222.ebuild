@@ -6,7 +6,7 @@ inherit flag-o-matic libtool toolchain-funcs dot-a
 
 DESCRIPTION="A high-quality and portable font engine"
 HOMEPAGE="https://www.freetype.org/"
-SNAPSHOT=85c8efe0afa5ad0df35114e317a065f544943c52
+SNAPSHOT=459af335b9314bbbc9ec2f8306b7ed0c4773ad8a
 SRC_URI="https://github.com/freetype/freetype/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

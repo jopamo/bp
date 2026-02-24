@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-SNAPSHOT=6b5c671d35b1b84468da1fef2b9bd8e05682f7e6
+SNAPSHOT=29f3131a3632c70129a29d924fcb8ac98f08ee2b
 
 inherit multibuild toolchain-funcs
 
@@ -91,11 +91,11 @@ grub_configure() {
 src_prepare() {
 	rm -rf gnulib
 	cp -r "${BROOT}"/usr/share/gnulib gnulib
-	cd gnulib
-	git reset --hard 9f48fb
-	cd ..
+	#cd gnulib
+	#git reset --hard 9f48fb
+	#cd ..
 
-	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
+	./bootstrap --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
 
 	default
 	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die

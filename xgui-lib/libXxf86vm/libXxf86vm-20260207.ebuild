@@ -6,7 +6,7 @@ inherit autotools dot-a
 
 DESCRIPTION="X.Org Xxf86vm library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=7f200bf00e3e288e47265c01decc401616c57f10
+SNAPSHOT=c76fde6bffcc87e5dd98d8196bb01a299bdc3236
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxxf86vm/-/archive/${SNAPSHOT}/libxxf86vm-${SNAPSHOT}.tar.bz2 -> libxxf86vm-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxxf86vm-${SNAPSHOT}"
 

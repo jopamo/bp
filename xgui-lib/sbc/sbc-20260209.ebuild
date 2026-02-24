@@ -6,8 +6,7 @@ inherit autotools dot-a
 
 DESCRIPTION="Audio codec to connect bluetooth HQ audio devices as headphones or loudspeakers"
 HOMEPAGE="https://git.kernel.org/?p=bluetooth/sbc.git http://www.bluez.org/sbc-10/"
-
-SNAPSHOT=9b6c775f02b1ea944c8a203452ce23d7854e9187
+SNAPSHOT=b3deb8a5dcfb42d8c10ba1f2f1ac9bd7bf7271cc
 SRC_URI="https://github.com/1g4-mirror/sbc/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

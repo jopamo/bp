@@ -9,7 +9,7 @@ inherit cmake distutils-r1 dot-a
 
 DESCRIPTION="CPU emulator framework"
 HOMEPAGE="https://github.com/unicorn-engine/unicorn"
-SNAPSHOT=c24c9ebe773ce6fbecb0e39f68ffb23b7326b17f
+SNAPSHOT=7c5db94191defc1e04a4f66f4eb1220903cba837
 SRC_URI="https://github.com/unicorn-engine/unicorn/archive/${SNAPSHOT}.tar.gz -> unicorn-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/unicorn-${SNAPSHOT}"
 

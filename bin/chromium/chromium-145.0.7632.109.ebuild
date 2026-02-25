@@ -9,20 +9,17 @@ HOMEPAGE="https://github.com/ungoogled-software/ungoogled-chromium-portablelinux
 
 BASE_URI="https://github.com/ungoogled-software/ungoogled-chromium-portablelinux/releases/download"
 
-# prefer folder ${PV}-2 and fall back to ${PV}-1 for each arch
-# keep upstream filename with -1 in name, just rename locally for clarity
 SRC_URI="
 	amd64? (
-		${BASE_URI}/${PV}-2/ungoogled-chromium-${PV}-1-x86_64_linux.tar.xz -> ${PN}-${PV}-x86_64.tar.xz
-		${BASE_URI}/${PV}-1/ungoogled-chromium-${PV}-1-x86_64_linux.tar.xz -> ${PN}-${PV}-x86_64.tar.xz
+		${BASE_URI}/${PV}-2/ungoogled-chromium-${PV}-1-x86_64_linux.tar.xz -> ${PN}-${PV}-x86_64-r2.tar.xz
+		${BASE_URI}/${PV}-1/ungoogled-chromium-${PV}-1-x86_64_linux.tar.xz -> ${PN}-${PV}-x86_64-r1.tar.xz
 	)
 	arm64? (
-		${BASE_URI}/${PV}-2/ungoogled-chromium-${PV}-1-arm64_linux.tar.xz -> ${PN}-${PV}-arm64.tar.xz
-		${BASE_URI}/${PV}-1/ungoogled-chromium-${PV}-1-arm64_linux.tar.xz -> ${PN}-${PV}-arm64.tar.xz
+		${BASE_URI}/${PV}-2/ungoogled-chromium-${PV}-1-arm64_linux.tar.xz -> ${PN}-${PV}-arm64-r2.tar.xz
+		${BASE_URI}/${PV}-1/ungoogled-chromium-${PV}-1-arm64_linux.tar.xz -> ${PN}-${PV}-arm64-r1.tar.xz
 	)
 "
 
-# archive extracts into ungoogled-chromium-${PV}-<rev>-<arch>_linux so probe in src_install
 S="${WORKDIR}"
 
 LICENSE="CHROME"
@@ -54,6 +51,32 @@ RDEPEND="
 "
 
 QA_PREBUILT="*"
+
+src_unpack() {
+	local a
+
+	case ${ARCH} in
+		amd64)
+			if [[ -f ${DISTDIR}/${PN}-${PV}-x86_64-r2.tar.xz ]]; then
+				a=${PN}-${PV}-x86_64-r2.tar.xz
+			else
+				a=${PN}-${PV}-x86_64-r1.tar.xz
+			fi
+			;;
+		arm64)
+			if [[ -f ${DISTDIR}/${PN}-${PV}-arm64-r2.tar.xz ]]; then
+				a=${PN}-${PV}-arm64-r2.tar.xz
+			else
+				a=${PN}-${PV}-arm64-r1.tar.xz
+			fi
+			;;
+		*)
+			die "Unsupported ARCH=${ARCH}"
+			;;
+	esac
+
+	unpack "${a}"
+}
 
 src_install() {
 	# map Gentoo ARCH to upstream dir suffix used in the tarball

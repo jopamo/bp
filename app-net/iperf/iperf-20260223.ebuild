@@ -2,6 +2,8 @@
 
 EAPI=8
 
+inherit autotools
+
 DESCRIPTION="A TCP, UDP, and SCTP network bandwidth measurement tool"
 HOMEPAGE="https://github.com/esnet/iperf"
 EGIT_REPO_URI="https://github.com/esnet/iperf"
@@ -12,3 +14,15 @@ S=${WORKDIR}/iperf-${SNAPSHOT}
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+src_prepare() {
+	default
+
+	# remove the install hook entirely
+	sed -i \
+		-e '/^install-exec-hook:/,/^[[:space:]]*$/ { /^install-exec-hook:/d; /ldconfig/d; }' \
+		src/Makefile.am || die
+
+	rm configure
+	eautoreconf
+}

@@ -1,9 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# please keep this ebuild at EAPI 8 -- sys-apps/portage dep
 EAPI=8
 
-# please bump dev-python/ensurepip-setuptools along with this package!
+BRANCH_NAME="maint/$(ver_cut 1-2)"
 
 DISTUTILS_USE_PEP517=standalone
 
@@ -11,13 +10,13 @@ inherit distutils-r1 pypi
 
 DESCRIPTION="Collection of extensions to Distutils"
 HOMEPAGE="https://github.com/pypa/setuptools/"
-SNAPSHOT=66b59b02a4ab431c2b3250547a2115d7bc44d86a
+SNAPSHOT=118f129dd0fb319058bd05f382c50188fd60a60e
 SRC_URI="https://github.com/pypa/setuptools/archive/${SNAPSHOT}.tar.gz -> setuptools-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/setuptools-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
 
 IUSE="test"
 RESTRICT="!test? ( test )"
@@ -78,7 +77,7 @@ src_prepare() {
 
 	local PATCHES=(
 		# TODO: remove this when we're 100% PEP517 mode
-		"${FILESDIR}/setuptools-62.4.0-py-compile.patch"
+		#"${FILESDIR}/setuptools-62.4.0-py-compile.patch"
 	)
 
 	distutils-r1_src_prepare

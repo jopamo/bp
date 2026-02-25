@@ -1,0 +1,11 @@
+--- a/config.h.in
++++ b/config.h.in
+@@ -114,6 +114,8 @@
+ #    define _GL_CMP(n1, n2) (((n1) > (n2)) - ((n1) < (n2)))
+ #    define _GL_GNUC_PREREQ GNUC_PREREQ
+ #    define _GL_INLINE inline
++#    define _GL_EXTERN_INLINE extern inline
++#    define _GL_EXTERN_INLINE_IN_USE 1
+ #    define _GL_UNUSED_LABEL _GL_ATTRIBUTE_UNUSED
+ 
+ /* We can't use __has_attribute for these because gcc-5.1 is too old for

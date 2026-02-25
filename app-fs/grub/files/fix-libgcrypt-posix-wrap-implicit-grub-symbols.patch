@@ -1,0 +1,31 @@
+diff --git a/include/grub/misc.h b/include/grub/misc.h
+index 1bb63231a..ab5a448ba 100644
+--- a/include/grub/misc.h
++++ b/include/grub/misc.h
+@@ -24,9 +24,16 @@
+ #include <grub/types.h>
+ #include <grub/symbol.h>
+ #include <grub/err.h>
+-#include <grub/i18n.h>
+ #include <grub/compiler.h>
+ 
++/* Keep N_ usable while avoiding an early include of <grub/i18n.h>.
++   In GRUB_UTIL builds, i18n.h may pull libc headers (e.g. <locale.h>) which
++   in turn include <string.h>; with posix_wrap that re-enters this header
++   before its declarations are complete.  */
++#ifndef N_
++#define N_(str) str
++#endif
++
+ #define ALIGN_UP(addr, align) \
+ 	(((addr) + (typeof (addr)) (align) - 1) & ~((typeof (addr)) (align) - 1))
+ #define ALIGN_UP_OVERHEAD(addr, align) ((-(addr)) & ((typeof (addr)) (align) - 1))
+@@ -573,4 +580,8 @@ void EXPORT_FUNC(grub_real_boot_time) (const char *file,
+ grub_ssize_t
+ EXPORT_FUNC(grub_utf8_to_utf16_alloc) (const char *str8, grub_uint16_t **utf16_msg, grub_uint16_t **last_position);
+ 
++/* Include i18n definitions late to avoid recursive host-header inclusion
++   while this header is still being parsed.  */
++#include <grub/i18n.h>
++
+ #endif /* ! GRUB_MISC_HEADER */

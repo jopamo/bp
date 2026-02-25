@@ -1,0 +1,19 @@
+--- a/grub-core/lib/gnulib/filevercmp.c
++++ b/grub-core/lib/gnulib/filevercmp.c
+@@ -23,6 +23,7 @@
+ #include <c-ctype.h>
+ #include <limits.h>
+ #include <idx.h>
++#include "verify.h"
+ 
+ /* Return the length of a prefix of S that corresponds to the suffix
+    defined by this extended regular expression in the C locale:
+@@ -73,7 +74,7 @@
+     return -2;
+   else
+     {
+-      static_assert (UCHAR_MAX <= (INT_MAX - 1 - 2) / 2);
++      verify (UCHAR_MAX <= (INT_MAX - 1 - 2) / 2);
+       return c + UCHAR_MAX + 1;
+     }
+ }

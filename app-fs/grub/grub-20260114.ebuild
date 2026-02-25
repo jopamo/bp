@@ -89,16 +89,25 @@ grub_configure() {
 }
 
 src_prepare() {
-	rm -rf gnulib
-	cp -r "${BROOT}"/usr/share/gnulib gnulib
-	#cd gnulib
-	#git reset --hard 9f48fb
-	#cd ..
+    eapply "${FILESDIR}/bootstrap-skip-applied-patches.patch"
+    eapply "${FILESDIR}/fix-gnulib-configh-first.patch"
+    eapply "${FILESDIR}/fix-libgcrypt-posix-wrap-implicit-grub-symbols.patch"
+    eapply "${FILESDIR}/fix-config-recursive-headers.patch"
 
-	./bootstrap --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
+    rm -rf gnulib || die
+    cp -r "${BROOT}/usr/share/gnulib" gnulib || die
 
-	default
-	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
+    ./bootstrap --skip-po --no-git --gnulib-srcdir="${S}/gnulib" || die
+
+    eapply "${FILESDIR}/fix-filevercmp-static-assert.patch"
+    eapply "${FILESDIR}/fix-gl-extern-inline.patch"
+    eapply "${FILESDIR}/fix-config-util-guards.patch"
+    eapply "${FILESDIR}/fix-config-util-no-assert-in-freestanding.patch"
+    eapply "${FILESDIR}/fix-build-rules-nopie.patch"
+
+    default
+
+    sed -i -e "s/UNKNOWN/${PV}/g" configure || die
 }
 
 src_configure() {

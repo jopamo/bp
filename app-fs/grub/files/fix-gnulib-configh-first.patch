@@ -1,0 +1,27 @@
+diff --git a/config.h.in b/config.h.in
+index 9b1d39971..e09e8fea3 100644
+--- a/config.h.in
++++ b/config.h.in
+@@ -9,6 +9,9 @@
+ #define GCRYPT_NO_DEPRECATED 1
+ #define HAVE_MEMMOVE 1
+ 
++/* Required by newer gnulib wrapper headers (e.g. <time.h>).  */
++#define _GL_CONFIG_H_INCLUDED 1
++
+ #if @MM_DEBUG@
+ #define MM_DEBUG @MM_DEBUG@
+ #endif
+diff --git a/grub-core/osdep/unix/sleep.c b/grub-core/osdep/unix/sleep.c
+index 5b00a38cd..f938d3f52 100644
+--- a/grub-core/osdep/unix/sleep.c
++++ b/grub-core/osdep/unix/sleep.c
+@@ -16,6 +16,8 @@
+  *  along with GRUB.  If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
++#include <config.h>
++
+ #include <time.h>
+ #include <grub/time.h>
+ 

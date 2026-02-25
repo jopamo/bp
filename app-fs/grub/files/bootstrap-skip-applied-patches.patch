@@ -1,0 +1,52 @@
+diff --git a/bootstrap.conf b/bootstrap.conf
+index 40e0b0cf4..26fe8cb9e 100644
+--- a/bootstrap.conf
++++ b/bootstrap.conf
+@@ -80,6 +80,25 @@ cp -a INSTALL INSTALL.grub
+ bootstrap_post_import_hook () {
+   set -e
+ 
++  apply_patch_if_needed () {
++    patchdir=$1
++    patchlevel=$2
++    patchfile=$3
++
++    if patch --dry-run --batch --forward -d "$patchdir" "-p$patchlevel" \
++         < "$patchfile" >/dev/null 2>&1; then
++      patch --batch --forward -d "$patchdir" "-p$patchlevel" \
++        < "$patchfile"
++    elif patch --dry-run --batch --forward -R -d "$patchdir" "-p$patchlevel" \
++           < "$patchfile" >/dev/null 2>&1; then
++      echo "Skipping already applied patch: $patchfile"
++    else
++      # Let patch print diagnostics and fail under 'set -e'.
++      patch --batch --forward -d "$patchdir" "-p$patchlevel" \
++        < "$patchfile"
++    fi
++  }
++
+   # Instead of patching our gnulib and therefore maintaining a fork, submit
+   # changes to gnulib and update the hash above when they've merged.  Do not
+   # add new patches here.
+@@ -88,8 +107,8 @@ bootstrap_post_import_hook () {
+       fix-regexec-resource-leak \
+       fix-gcc-15-compile \
+       fix-unused-value; do
+-    patch -d grub-core/lib/gnulib -p2 \
+-       < "grub-core/lib/gnulib-patches/$patchname.patch"
++    apply_patch_if_needed grub-core/lib/gnulib 2 \
++      "grub-core/lib/gnulib-patches/$patchname.patch"
+   done
+ 
+   for patchname in \
+@@ -97,8 +116,8 @@ bootstrap_post_import_hook () {
+       0002-Handle-gettext_printf-shell-function \
+       0003-Make-msgfmt-output-in-little-endian \
+       0004-Use-SHELL-rather-than-bin-sh; do
+-    patch -d po -p3 \
+-      < "po/gettext-patches/$patchname.patch"
++    apply_patch_if_needed po 3 \
++      "po/gettext-patches/$patchname.patch"
+   done
+   FROM_BOOTSTRAP=1 ./autogen.sh
+   set +e  # bootstrap expects this

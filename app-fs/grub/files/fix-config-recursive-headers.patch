@@ -1,0 +1,68 @@
+diff --git a/grub-core/lib/posix_wrap/assert.h b/grub-core/lib/posix_wrap/assert.h
+index 6b00a0ba3..92daf37fe 100644
+--- a/grub-core/lib/posix_wrap/assert.h
++++ b/grub-core/lib/posix_wrap/assert.h
+@@ -19,6 +19,11 @@
+ #ifndef GRUB_POSIX_ASSERT_H
+ #define GRUB_POSIX_ASSERT_H	1
+ 
++/* When config.h is pulled from <grub/types.h>, avoid re-entering
++   <grub/misc.h> before the core typedefs exist.  */
++#ifdef GRUB_TYPES_IN_PROGRESS
++#include_next <assert.h>
++#else
+ #include <grub/misc.h>
+ 
+ #define assert(x) assert_real(__FILE__, __LINE__, x)
+@@ -29,5 +34,6 @@ assert_real (const char *file, int line, int cond)
+   if (!cond)
+     grub_printf ("Assertion failed at %s:%d\n", file, line);
+ }
++#endif
+ 
+ #endif
+diff --git a/include/grub/symbol.h b/include/grub/symbol.h
+index ed19f70db..a252cd5de 100644
+--- a/include/grub/symbol.h
++++ b/include/grub/symbol.h
+@@ -19,6 +19,13 @@
+ #ifndef GRUB_SYMBOL_HEADER
+ #define GRUB_SYMBOL_HEADER	1
+ 
++/* Make exported-symbol annotations available before config.h can recurse
++   through headers that use EXPORT_FUNC/EXPORT_VAR.  */
++#ifndef GRUB_SYMBOL_GENERATOR
++# define EXPORT_FUNC(x)	x
++# define EXPORT_VAR(x)	x
++#endif /* ! GRUB_SYMBOL_GENERATOR */
++
+ #include <config.h>
+ 
+ /* Apple assembler requires local labels to start with a capital L */
+@@ -63,10 +70,4 @@
+ #endif
+ #endif
+ 
+-/* Mark an exported symbol.  */
+-#ifndef GRUB_SYMBOL_GENERATOR
+-# define EXPORT_FUNC(x)	x
+-# define EXPORT_VAR(x)	x
+-#endif /* ! GRUB_SYMBOL_GENERATOR */
+-
+ #endif /* ! GRUB_SYMBOL_HEADER */
+diff --git a/include/grub/types.h b/include/grub/types.h
+index b3ba762fc..c27ab3250 100644
+--- a/include/grub/types.h
++++ b/include/grub/types.h
+@@ -19,7 +19,11 @@
+ #ifndef GRUB_TYPES_HEADER
+ #define GRUB_TYPES_HEADER	1
+ 
++/* Prevent posix_wrap/assert.h from re-entering <grub/misc.h> while this
++   header is still defining the core GRUB types.  */
++#define GRUB_TYPES_IN_PROGRESS 1
+ #include <config.h>
++#undef GRUB_TYPES_IN_PROGRESS
+ #include <stdbool.h>
+ #ifndef GRUB_UTIL
+ #include <grub/cpu/types.h>

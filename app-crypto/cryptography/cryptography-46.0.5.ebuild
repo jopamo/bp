@@ -75,3 +75,22 @@ python_test() {
 	)
 	epytest -n "$(makeopts_jobs)"
 }
+
+python_install() {
+	distutils-r1_python_install
+
+	# cryptography wheel drops stray top-level files into site-packages
+	local spdir
+	spdir="$(python_get_sitedir)" || die
+
+	rm -f  "${ED}${spdir}/CHANGELOG.rst" \
+	       "${ED}${spdir}/CONTRIBUTING.rst" || die
+	rm -rf "${ED}${spdir}/tests" || die
+}
+
+python_install_all() {
+	distutils-r1_python_install_all
+
+	# If you still want these docs, install them from the source tree
+	dodoc CHANGELOG.rst CONTRIBUTING.rst
+}

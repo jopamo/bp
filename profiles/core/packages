@@ -33,7 +33,6 @@
 *app-net/nftables
 *app-net/openssh
 *app-port/eix
-*app-port/find_cruft
 *app-port/gentoolkit
 *app-var/pax-utils
 *lib-core/wtmpdb

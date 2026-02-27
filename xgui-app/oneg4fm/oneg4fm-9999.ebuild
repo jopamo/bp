@@ -5,14 +5,14 @@ EAPI=8
 inherit cmake xdg
 
 DESCRIPTION="Fast lightweight tabbed filemanager"
-HOMEPAGE="https://github.com/jopamo/oneg4fm"
+HOMEPAGE="https://github.com/1g4linux/oneg4fm"
 
 if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/jopamo/oneg4fm"
+	EGIT_REPO_URI="https://github.com/1g4linux/oneg4fm"
 	inherit git-r3
 else
 	SNAPSHOT=2679f1453efefce6e45178a3324c48671f17ec2d
-	SRC_URI="https://github.com/jopamo/oneg4fm/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+	SRC_URI="https://github.com/1g4linux/oneg4fm/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/pcmanfm-qt-${SNAPSHOT}
 fi
 

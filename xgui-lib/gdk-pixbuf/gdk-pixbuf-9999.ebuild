@@ -6,7 +6,7 @@ inherit meson git-r3
 
 DESCRIPTION="Image loading library for GTK+"
 HOMEPAGE="https://git.gnome.org/browse/gdk-pixbuf"
-EGIT_REPO_URI="https://github.com/jopamo/gdk-pixbuf"
+EGIT_REPO_URI="https://github.com/1g4linux/gdk-pixbuf"
 #SNAPSHOT=5406817f56fcb270b2f9246d29c4049bc623caf5
 #SRC_URI="https://github.com/jopamo/gdk-pixbuf/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 #S=${WORKDIR}/${PN}-${SNAPSHOT}

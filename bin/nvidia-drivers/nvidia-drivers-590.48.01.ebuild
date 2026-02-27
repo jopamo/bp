@@ -87,6 +87,8 @@ src_prepare() {
         cp nvidia_icd.json.template nvidia_icd.json || die
         sed -i -e 's:__NV_VK_ICD__:libGLX_nvidia.so.0:g' nvidia_icd.json || die
     fi
+
+    eapply "${FILESDIR}"/00*.patch
 }
 
 src_compile() {

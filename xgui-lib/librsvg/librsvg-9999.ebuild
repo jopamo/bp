@@ -6,8 +6,7 @@ inherit flag-o-matic git-r3 meson
 
 DESCRIPTION="Scalable Vector Graphics (SVG) rendering library"
 HOMEPAGE="https://wiki.gnome.org/Projects/LibRsvg"
-
-EGIT_REPO_URI="https://github.com/jopamo/librsvg"
+EGIT_REPO_URI="https://github.com/1g4linux/librsvg"
 
 LICENSE="LGPL-2"
 SLOT="0"

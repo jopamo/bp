@@ -22,6 +22,11 @@ LICENSE="unlicense"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+DEPEND="
+	bin/deno
+	xmedia-app/yt-dlp-ejs
+"
+
 python_install_all() {
 	distutils-r1_python_install_all
 	dosym -r /usr/bin/yt-dlp /usr/bin/youtube-dl

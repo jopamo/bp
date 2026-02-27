@@ -5,8 +5,8 @@ EAPI=8
 inherit meson git-r3 xdg
 
 DESCRIPTION="OpenGL terminal emulator"
-HOMEPAGE="https://github.com/jopamo/1term2"
-EGIT_REPO_URI="https://github.com/jopamo/1term2"
+HOMEPAGE="https://gitlab.com/pjo/1term2"
+EGIT_REPO_URI="https://gitlab.com/pjo/1term2"
 
 LICENSE="MIT"
 SLOT="0"

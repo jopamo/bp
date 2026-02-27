@@ -2,11 +2,13 @@
 
 EAPI=8
 
+BRANCH_NAME="$(ver_cut 1-2)"
+
 inherit flag-o-matic meson python-any-r1 user
 
 DESCRIPTION="Multimedia processing graphs"
 HOMEPAGE="https://pipewire.org/"
-SNAPSHOT=5a285602e27c5e6d95c1ac14c177310e9553414c
+SNAPSHOT=700cea78dbe7564131d51b21a7795e2567ee048a
 SRC_URI="https://github.com/PipeWire/pipewire/archive/${SNAPSHOT}.tar.gz -> pipewire-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/pipewire-${SNAPSHOT}"
 

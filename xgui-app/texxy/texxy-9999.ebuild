@@ -5,14 +5,14 @@ EAPI=8
 inherit xdg cmake
 
 DESCRIPTION="Lightweight Qt Plain-Text Editor"
-HOMEPAGE="https://github.com/jopamo/texxy2"
+HOMEPAGE="https://github.com/1g4linux/texxy2"
 
 if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/jopamo/texxy2"
+	EGIT_REPO_URI="https://github.com/1g4linux/texxy2"
 	inherit git-r3
 else
 	SNAPSHOT=ecb6936f8e2b9f9947dd8c310cbf6f69a4a496ab
-	SRC_URI="https://github.com/jopamo/texxy2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+	SRC_URI="https://github.com/1g4linux/texxy2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 

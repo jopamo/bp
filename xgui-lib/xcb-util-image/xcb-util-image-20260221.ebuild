@@ -6,7 +6,7 @@ inherit autotools dot-a
 
 DESCRIPTION="X C-language Bindings sample implementations"
 HOMEPAGE="https://xcb.freedesktop.org/"
-SNAPSHOT=ba2884317f22caefc132aa79853ed521474f1d35
+SNAPSHOT=01ad59a77ed784d697a5cf4918bbf19762fee375
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxcb-image/-/archive/${SNAPSHOT}/libxcb-image-${SNAPSHOT}.tar.bz2 -> libxcb-image-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxcb-image-${SNAPSHOT}"
 

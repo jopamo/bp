@@ -6,8 +6,7 @@ inherit autotools toolchain-funcs
 
 DESCRIPTION="Daemon to use hardware random number generators"
 HOMEPAGE="https://github.com/nhorman/rng-tools"
-
-SNAPSHOT=aa035bfc50934e3ec42766a9d95a459ef1c187a1
+SNAPSHOT=e8da3cdc8e0bc9faed24aca7c9a8129ae75d993c
 SRC_URI="https://github.com/nhorman/rng-tools/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/rng-tools-${SNAPSHOT}"
 

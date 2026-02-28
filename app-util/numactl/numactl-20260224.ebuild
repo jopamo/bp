@@ -6,7 +6,7 @@ inherit autotools flag-o-matic dot-a
 
 DESCRIPTION="Utilities and libraries for NUMA systems"
 HOMEPAGE="https://github.com/numactl/numactl"
-SNAPSHOT=c9475de805517966a87a3c6d17f7c91d5955a128
+SNAPSHOT=da84fd9e18a50e3933c7cd40c22a72361692b4e8
 SRC_URI="https://github.com/numactl/numactl/archive/${SNAPSHOT}.tar.gz -> numactl-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/numactl-${SNAPSHOT}"
 

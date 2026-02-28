@@ -6,7 +6,7 @@ inherit autotools dot-a
 
 DESCRIPTION="VapourSynth library for video manipulation"
 HOMEPAGE="http://www.vapoursynth.com/"
-SNAPSHOT=42a3bba6f0fffe3a397fa3494aadb7be1e2af8de
+SNAPSHOT=eddec1a965a0178330112567059537f77b9723a5
 SRC_URI="https://github.com/vapoursynth/vapoursynth/archive/${SNAPSHOT}.tar.gz -> vapoursynth-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/vapoursynth-${SNAPSHOT}"
 

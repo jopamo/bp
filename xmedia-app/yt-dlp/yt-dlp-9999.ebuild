@@ -23,7 +23,6 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	bin/deno
 	xmedia-app/yt-dlp-ejs
 "
 

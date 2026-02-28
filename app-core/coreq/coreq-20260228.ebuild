@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-SNAPSHOT=ff9c66b5b5962f4e60f646318836eed776f11805
+SNAPSHOT=e9051eb042cbf03b1518da82864d634afef049a7
 
 inherit meson
 

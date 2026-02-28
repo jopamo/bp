@@ -6,7 +6,7 @@ inherit autotools dot-a
 
 DESCRIPTION="free lossless audio encoder and decoder"
 HOMEPAGE="https://xiph.org/flac/"
-SNAPSHOT=9d2388468e4565585b9756b04374394d68fb761d
+SNAPSHOT=380001b324db1581cc9a3e369c2c0cc972a0421c
 SRC_URI="https://github.com/xiph/flac/archive/${SNAPSHOT}.tar.gz -> flac-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/flac-${SNAPSHOT}"
 

@@ -1,0 +1,16 @@
+--- a/grub-core/lib/gnulib/dirent.in.h
++++ b/grub-core/lib/gnulib/dirent.in.h
+@@ -37,6 +37,13 @@
+ 
+ /* Get ino_t.  Needed on some systems, including glibc 2.8.  */
+ #include <sys/types.h>
++#include "verify.h"
++
++/* In gnu99 mode on some libcs (e.g. musl), static_assert may be unavailable
++   here. Use gnulib portable compile-time verifier as a fallback.  */
++#ifndef static_assert
++# define static_assert(expr, ...) verify (expr)
++#endif
+ 
+ #if !@HAVE_DIRENT_H@
+ /* Define types DIR and 'struct dirent'.  */

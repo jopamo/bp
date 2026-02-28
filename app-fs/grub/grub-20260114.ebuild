@@ -104,6 +104,8 @@ src_prepare() {
     eapply "${FILESDIR}/fix-config-util-guards.patch"
     eapply "${FILESDIR}/fix-config-util-no-assert-in-freestanding.patch"
     eapply "${FILESDIR}/fix-build-rules-nopie.patch"
+    eapply "${FILESDIR}"/fix-musl-errorh-getroot.patch
+    eapply "${FILESDIR}"/fix-musl-dirent-static-assert.patch
 
     default
 

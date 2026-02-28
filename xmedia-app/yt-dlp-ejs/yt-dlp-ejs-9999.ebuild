@@ -22,4 +22,6 @@ LICENSE="unlicense"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+DEPEND="dev-rust/deno"
+
 RESTRICT="test network-sandbox"

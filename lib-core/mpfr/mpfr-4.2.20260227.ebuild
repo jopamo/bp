@@ -8,7 +8,7 @@ inherit autotools dot-a
 
 DESCRIPTION="library for multiple-precision floating-point computations with exact rounding"
 HOMEPAGE="http://www.mpfr.org/"
-SNAPSHOT=2366a1c0e2b19587d5ce0ecb728c762b1446435d
+SNAPSHOT=c012c45e9f2d0a3dc3458c4d47dd0ea1c23cdda4
 SRC_URI="https://gitlab.inria.fr/mpfr/mpfr/-/archive/${SNAPSHOT}/mpfr-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/mpfr-${SNAPSHOT}
 

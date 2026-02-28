@@ -8,7 +8,7 @@ inherit autotools flag-o-matic dot-a
 
 DESCRIPTION="utils for managing LZMA compressed files"
 HOMEPAGE="http://tukaani.org/xz/"
-SNAPSHOT=9f4c5a0d4817c9c7011cdfd00cfbe0ddda66a455
+SNAPSHOT=1007bf08b5fddf088b3131e692210af4b4b7fd8c
 SRC_URI="https://github.com/tukaani-project/xz/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/xz-${SNAPSHOT}"
 

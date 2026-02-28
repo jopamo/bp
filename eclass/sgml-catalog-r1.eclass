@@ -3,11 +3,11 @@
 # @ECLASS: sgml-catalog-r1.eclass
 # @MAINTAINER:
 # 1g4 Project <1g4@example.org>
-# @SUPPORTED_EAPIS: 7
+# @SUPPORTED_EAPIS: 7 8
 # @BLURB: Functions for installing SGML catalogs
 
 case ${EAPI} in
-	7) ;;
+	7|8) ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 

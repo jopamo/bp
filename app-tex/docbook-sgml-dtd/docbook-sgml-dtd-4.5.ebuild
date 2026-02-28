@@ -15,6 +15,7 @@ SLOT="0"
 
 KEYWORDS="amd64 arm64"
 
+BDEPEND="app-compression/zip-utils"
 PATCHES=( "${FILESDIR}"/${P}-catalog.diff )
 
 src_install() {

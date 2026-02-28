@@ -37,9 +37,7 @@ src_install() {
 
 	local bin_utils=(
 		dslam
-		eclass_import
 		efixperm
-		emirror
 		lighttpd_certs
 		mkheaders
 		mkimg

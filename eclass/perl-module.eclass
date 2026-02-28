@@ -110,7 +110,7 @@ case ${EAPI} in
 				RESTRICT="!test? ( test )"
 				;;&
 			yes)
-				RDEPEND="${GENTOO_PERL_DEPSTRING} dev-lang/perl:="
+				RDEPEND="${GENTOO_PERL_DEPSTRING} app-lang/perl:="
 				;;
 			noslotop)
 				RDEPEND=${GENTOO_PERL_DEPSTRING}

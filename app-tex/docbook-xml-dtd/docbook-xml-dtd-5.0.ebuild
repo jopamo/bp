@@ -14,6 +14,8 @@ LICENSE="docbook"
 SLOT="0"
 #KEYWORDS="amd64 arm64"
 
+BDEPEND="app-compression/zip-utils"
+
 src_install() {
     insinto /usr/share/xml/docbook/schema/dtd/5.0
     doins dtd/*

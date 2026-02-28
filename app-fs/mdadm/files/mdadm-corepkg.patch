@@ -1,0 +1,26 @@
+diff -urN a/Makefile b/Makefile
+--- a/Makefile	2019-02-06 05:15:56.239546747 -0600
++++ b/Makefile	2019-02-06 06:29:23.775475931 -0600
+@@ -67,7 +67,7 @@
+ 
+ PKG_CONFIG ?= pkg-config
+ 
+-SYSCONFDIR = /etc
++SYSCONFDIR = "${EPREFIX}"/etc
+ CONFFILE = $(SYSCONFDIR)/mdadm.conf
+ CONFFILE2 = $(SYSCONFDIR)/mdadm/mdadm.conf
+ MAILCMD =/usr/sbin/sendmail -t
+@@ -114,10 +114,10 @@
+ # STRIP = -s
+ LDLIBS=-ldl
+ 
+-INSTALL = /usr/bin/install
++INSTALL = "${EROOT}"/usr/bin/install
+ DESTDIR =
+-BINDIR  = /sbin
+-MANDIR  = /usr/share/man
++BINDIR  = /usr/bin
++MANDIR  = /usr/share/man
+ MAN4DIR = $(MANDIR)/man4
+ MAN5DIR = $(MANDIR)/man5
+ MAN8DIR = $(MANDIR)/man8

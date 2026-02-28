@@ -15,6 +15,7 @@ SLOT="0"
 
 KEYWORDS="amd64 arm64"
 
+BDEPEND="app-compression/zip-utils"
 RDEPEND="
 	app-tex/docbook-xsl-stylesheets
 	app-tex/build-docbook-catalog

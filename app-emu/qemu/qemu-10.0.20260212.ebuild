@@ -29,6 +29,7 @@ DEPEND="
 	lib-dev/libtasn1
 	lib-net/libssh
 	xgui-lib/libxkbcommon
+	xgui-tools/xkeyboard-config
 	numa? ( app-util/numactl )
 	opengl? ( xmedia-lib/libepoxy )
 	slirp? ( lib-net/slirp )

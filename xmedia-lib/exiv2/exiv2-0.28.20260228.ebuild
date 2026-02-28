@@ -8,7 +8,7 @@ inherit cmake dot-a
 
 DESCRIPTION="EXIF, IPTC and XMP metadata C++ library and command line utility"
 HOMEPAGE="http://www.exiv2.org/"
-SNAPSHOT=3410c6de2db7df6cb26ada7988affd1b586e506b
+SNAPSHOT=21d129c842212c198dd887dbaafc5ce734e9dfad
 SRC_URI="https://github.com/Exiv2/exiv2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/exiv2-${SNAPSHOT}"
 

@@ -27,6 +27,8 @@ src_configure() {
 		$(meson_use wayland enable-wayland)
 		$(meson_use X enable-x11)
 		-Denable-docs=false
+		-Denable-tools=false
+		-Denable-xkbregistry=false
 		)
 		meson_src_configure
 }

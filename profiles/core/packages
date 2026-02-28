@@ -32,8 +32,7 @@
 *app-net/mira
 *app-net/nftables
 *app-net/openssh
-*app-port/eix
-*app-port/gentoolkit
+*app-port/coreq
 *app-var/pax-utils
 *lib-core/wtmpdb
 *lib-net/ca-certificates

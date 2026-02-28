@@ -6,7 +6,7 @@ inherit meson linux-info multiprocessing python-r1 flag-o-matic doins
 
 DESCRIPTION="1g4 package manager"
 HOMEPAGE="https://github.com/1g4linux/corepkg"
-SNAPSHOT=584443194d4b9c93da06fecc54803256491f56b7
+SNAPSHOT=37832269366c74d1dc9039130f48787d5950a44c
 SRC_URI="https://github.com/1g4linux/corepkg/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/corepkg-${SNAPSHOT}"
 

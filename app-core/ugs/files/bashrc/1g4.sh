@@ -7,6 +7,7 @@ alias 1g4_nspawn='systemd-nspawn --bind /var/cache/distfiles --bind-ro /var/db/r
 alias oneshot='emerge --oneshot'
 alias update_world='emerge --keep-going -uDNv world'
 alias update_everything='emerge --keep-going -euDNv world'
+alias egm='egencache --repo . --update-manifests --sign-manifests=n -j "$(nproc)"'
 
 # simple foreground step runner without spinner
 run_step() {
@@ -125,7 +126,7 @@ esync() {
 
   run_step "emerge --regen" -- emerge --regen || return 1
   run_step "emerge --metadata" -- emerge --metadata || return 1
-  run_step "eix-update" -- eix-update || return 1
+  run_step "coreq-update" -- coreq-update || return 1
 
   log_ok "cache regeneration complete"
   trap - SIGINT
@@ -279,8 +280,8 @@ bootstrap_rust() {
   # caller should provide rust_info, otherwise try to gather a simple view
   local rust_info=${rust_info:-}
   if [[ -z "$rust_info" ]]; then
-    if command -v eix >/dev/null 2>&1; then
-      rust_info="$(eix -I app-lang/rust 2>/dev/null || true)"
+    if command -v coreq >/dev/null 2>&1; then
+      rust_info="$(coreq -I app-lang/rust 2>/dev/null || true)"
     else
       rust_info="$(emerge -s '^rust$' 2>/dev/null || true)"
     fi

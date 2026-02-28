@@ -1,9 +1,12 @@
+
 *app-build/make
 *app-compression/pigz
 *app-compression/tar
 *app-compression/xz-utils
 *app-compression/zip-utils
 *app-core/busybox
+*app-core/corepkg
+*app-core/coreq
 *app-core/coreutils
 *app-core/diffutils
 *app-core/fakepackages
@@ -14,7 +17,6 @@
 *app-core/kbd
 *app-core/layout
 *app-core/less
-*app-core/portage
 *app-core/procps
 *app-core/psmisc
 *app-core/screen
@@ -32,7 +34,6 @@
 *app-net/mira
 *app-net/nftables
 *app-net/openssh
-*app-port/coreq
 *app-var/pax-utils
 *lib-core/wtmpdb
 *lib-net/ca-certificates

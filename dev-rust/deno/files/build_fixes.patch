@@ -6341,3 +6341,17 @@ index 000000000..bb5cb2fce
 +    Ok(l) => l,
 +  }
 +}
+diff --git a/.cargo/config.toml b/.cargo/config.toml
+index 5e5b61a40..6cdf7cf4f 100644
+--- a/.cargo/config.toml
++++ b/.cargo/config.toml
+@@ -37,2 +37,9 @@ rustflags = [
+   "tokio_unstable",
+ ]
++
++[env]
++# rusty_v8 v140.x does not publish musl prebuilt archives.
++# Use the available GNU prebuilt archive/bindings to avoid 404s on musl.
++RUSTY_V8_ARCHIVE = "https://github.com/denoland/rusty_v8/releases/download/v140.2.0/librusty_v8_release_x86_64-unknown-linux-gnu.a.gz"
++# include!() in v8/src/binding.rs resolves relative paths from v8/src.
++RUSTY_V8_SRC_BINDING_PATH = "../gen/src_binding_release_x86_64-unknown-linux-gnu.rs"

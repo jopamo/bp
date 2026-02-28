@@ -1,0 +1,75 @@
+diff --git a/grub-core/osdep/devmapper/getroot.c b/grub-core/osdep/devmapper/getroot.c
+index 5fb21aff9..13c1d4234 100644
+--- a/grub-core/osdep/devmapper/getroot.c
++++ b/grub-core/osdep/devmapper/getroot.c
+@@ -32,7 +32,6 @@
+ #include <string.h>
+ #include <dirent.h>
+ #include <errno.h>
+-#include <error.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <stdint.h>
+diff --git a/grub-core/osdep/linux/getroot.c b/grub-core/osdep/linux/getroot.c
+index d71c373c3..49f3ce195 100644
+--- a/grub-core/osdep/linux/getroot.c
++++ b/grub-core/osdep/linux/getroot.c
+@@ -27,7 +27,6 @@
+ #include <string.h>
+ #include <dirent.h>
+ #include <errno.h>
+-#include <error.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <stdint.h>
+diff --git a/grub-core/osdep/unix/getroot.c b/grub-core/osdep/unix/getroot.c
+index c061735a4..1dac5fdeb 100644
+--- a/grub-core/osdep/unix/getroot.c
++++ b/grub-core/osdep/unix/getroot.c
+@@ -27,7 +27,6 @@
+ #include <string.h>
+ #include <dirent.h>
+ #include <errno.h>
+-#include <error.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <stdint.h>
+@@ -175,10 +174,13 @@ grub_util_find_root_devices_from_poolname (char *poolname)
+   config = zpool_get_config (zpool, NULL);
+ 
+   if (NVLIST(lookup_nvlist) (config, "vdev_tree", &vdev_tree) != 0)
+-    error (1, errno, "nvlist_lookup_nvlist (\"vdev_tree\")");
++    grub_util_error ("nvlist_lookup_nvlist (\"vdev_tree\"): %s",
++		     strerror (errno));
+ 
+-  if (NVLIST(lookup_nvlist_array) (vdev_tree, "children", &children, &nvlist_count) != 0)
+-    error (1, errno, "nvlist_lookup_nvlist_array (\"children\")");
++  if (NVLIST(lookup_nvlist_array) (vdev_tree, "children", &children,
++				   &nvlist_count) != 0)
++    grub_util_error ("nvlist_lookup_nvlist_array (\"children\"): %s",
++		     strerror (errno));
+   assert (nvlist_count > 0);
+ 
+   while (NVLIST(lookup_nvlist_array) (children[0], "children",
+@@ -188,7 +190,8 @@ grub_util_find_root_devices_from_poolname (char *poolname)
+   for (i = 0; i < nvlist_count; i++)
+     {
+       if (NVLIST(lookup_string) (children[i], "path", &device) != 0)
+-	error (1, errno, "nvlist_lookup_string (\"path\")");
++	grub_util_error ("nvlist_lookup_string (\"path\"): %s",
++			 strerror (errno));
+ 
+       struct stat st;
+       if (stat (device, &st) == 0)
+diff --git a/util/getroot.c b/util/getroot.c
+index 75a7d5f21..3ceb81146 100644
+--- a/util/getroot.c
++++ b/util/getroot.c
+@@ -28,7 +28,6 @@
+ #include <string.h>
+ #include <dirent.h>
+ #include <errno.h>
+-#include <error.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <stdint.h>

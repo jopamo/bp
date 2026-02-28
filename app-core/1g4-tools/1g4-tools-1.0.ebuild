@@ -56,8 +56,6 @@ app-net/nmap
 app-net/socat
 app-net/tcpdump
 app-net/traceroute
-app-port/pkgdev
-app-port/smart-live-rebuild
 app-server/lighttpd
 app-util/lshw
 app-var/hdparm

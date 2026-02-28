@@ -6,8 +6,7 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Wrapper to coreutil's install to preserve Filesystem Extended Attributes"
 HOMEPAGE="https://dev.gentoo.org/~blueness/install-xattr/"
-
-SNAPSHOT=b2b5c8524e3dd1c5b416ca79bada6a5e355c1aea
+SNAPSHOT=be12e078457cc1d3faef2fa68687726903ab86e4
 SRC_URI="https://gitweb.gentoo.org/proj/install-xattr.git/snapshot/install-xattr-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/install-xattr-${SNAPSHOT}
 

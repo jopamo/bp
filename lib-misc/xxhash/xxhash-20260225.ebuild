@@ -6,7 +6,7 @@ inherit toolchain-funcs flag-o-matic dot-a
 
 DESCRIPTION="Extremely fast non-cryptographic hash algorithm"
 HOMEPAGE="http://www.xxhash.net"
-SNAPSHOT=da35f833ee5a5b2056471be546886660343e611c
+SNAPSHOT=82cead715cbfddd9e6093db8df95155077ce6e64
 SRC_URI="https://github.com/Cyan4973/xxHash/archive/${SNAPSHOT}.tar.gz -> xxHash-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/xxHash-${SNAPSHOT}"
 

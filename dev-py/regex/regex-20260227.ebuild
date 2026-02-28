@@ -9,7 +9,7 @@ inherit distutils-r1 pypi flag-o-matic
 
 DESCRIPTION="Alternative regular expression module to replace re"
 HOMEPAGE="https://github.com/mrabarnett/mrab-regex/"
-SNAPSHOT=9789c2284ff1fc41aee38ccd2a2508608afeb2e6
+SNAPSHOT=df2d5ac9983af6febc0c2f32aff396a06142f8cb
 SRC_URI="https://github.com/mrabarnett/mrab-regex/archive/${SNAPSHOT}.tar.gz -> regex-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/mrab-regex-${SNAPSHOT}"
 

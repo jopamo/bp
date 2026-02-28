@@ -6,7 +6,7 @@ inherit autotools dot-a
 
 DESCRIPTION="a program which helps to configure compiler and linker flags for development libraries"
 HOMEPAGE="https://git.sr.ht/~kaniini/pkgconf"
-SNAPSHOT=5307659cf184348191119992342c6df60fa40c1b
+SNAPSHOT=9addd3841a3f537a7a6cd1ad0b2f4cadde9d1e54
 SRC_URI="https://github.com/pkgconf/pkgconf/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/pkgconf-${SNAPSHOT}"
 

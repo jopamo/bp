@@ -1,10 +1,9 @@
 # Distributed under the terms of the GNU General Public License v2
 #
 # @ECLASS: cargo.eclass
-# @MAINTAINER:
-# 1g4 Project <1g4@example.org>
-# @SUPPORTED_EAPIS: 7 8
 # @BLURB: A minimal eclass to handle rust/cargo packages
+#
+#
 
 case "${EAPI:-0}" in
 	7|8) ;;
@@ -34,7 +33,36 @@ if [[ -z ${_CARGO_VENDOR_ECLASS} ]]; then
 
 	RESTRICT="test network-sandbox"
 
-	inherit flag-o-matic
+	inherit flag-o-matic multiprocessing
+
+	_cargo_setup_vendor_config() {
+		export CARGO_HOME="${ECARGO_HOME}"
+		mkdir -p "${CARGO_HOME}" || die
+
+		if [[ -d ${ECARGO_VENDOR} ]]; then
+			cat > "${CARGO_HOME}/config.toml" <<-EOF || die
+				[source.crates-io]
+				replace-with = "vendored-sources"
+
+				[source.vendored-sources]
+				directory = "${ECARGO_VENDOR}"
+			EOF
+		fi
+	}
+
+	_cargo_common_args() {
+		local args=()
+
+		# Use Portage parallelism
+		args+=( -j "$(makeopts_jobs)" )
+
+		# Only force offline when vendor exists (preserves original behavior)
+		if [[ -d ${ECARGO_VENDOR} ]]; then
+			args+=( --offline )
+		fi
+
+		printf '%s\n' "${args[@]}"
+	}
 
 	cargo_pkg_setup() {
 		filter-flags -flto*
@@ -44,25 +72,35 @@ if [[ -z ${_CARGO_VENDOR_ECLASS} ]]; then
 	cargo_src_compile() {
 		cd "${S}" || die "Could not cd to ${S}"
 
+		_cargo_setup_vendor_config
+
 		local build_mode="--release"
 		use debug && build_mode="--debug"
 
-		einfo "Building with cargo build ${build_mode}"
+		mapfile -t common_args < <(_cargo_common_args)
+
+		einfo "Building with cargo build ${build_mode} ${common_args[*]}"
 		cargo build \
 			${build_mode} \
+			"${common_args[@]}" \
 			|| die "cargo build failed"
 	}
 
 	cargo_src_install() {
 		cd "${S}" || die "Could not cd to ${S}"
 
+		_cargo_setup_vendor_config
+
 		local build_mode=""
 		use debug && build_mode="--debug"
 
-		einfo "Installing with cargo install ${build_mode}"
+		mapfile -t common_args < <(_cargo_common_args)
+
+		einfo "Installing with cargo install ${build_mode} ${common_args[*]}"
 		cargo install \
 			--path . \
 			${build_mode} \
+			"${common_args[@]}" \
 			--root="${ED}/usr" \
 			|| die "cargo install failed"
 

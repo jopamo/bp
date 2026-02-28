@@ -6,7 +6,7 @@ inherit autotools dot-a
 
 DESCRIPTION="Multi-format archive and compression library"
 HOMEPAGE="http://www.libarchive.org/"
-SNAPSHOT=a255a8425032760be54d9d6ab430a051a2aade14
+SNAPSHOT=67830f7b9c27080c0170bcd71d94fb42316c47dd
 SRC_URI="https://github.com/libarchive/libarchive/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libarchive-${SNAPSHOT}
 

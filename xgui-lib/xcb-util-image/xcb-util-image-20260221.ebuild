@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 IUSE="test static-libs"
 
 RDEPEND="xgui-lib/libxcb
-	>=xgui-lib/xcb-util-${PV}:=
+	xgui-lib/xcb-util
 	xgui-tools/xorgproto"
 DEPEND="${RDEPEND}
 	>=app-dev/gperf-3.0.1

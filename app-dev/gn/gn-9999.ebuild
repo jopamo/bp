@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit ninja-utils python-any-r1 toolchain-funcs git-r3
+inherit ninja-utils python-any-r1 toolchain-funcs git-r3 flag-o-matic
 
 DESCRIPTION="GN is a meta-build system that generates build files for Ninja"
 HOMEPAGE="https://gn.googlesource.com/"
@@ -17,12 +17,29 @@ IUSE="vim-syntax"
 BDEPEND="${PYTHON_DEPS}"
 
 src_configure() {
+	filter-flags -Wno-format
+	append-flags -Wno-error
+
 	python_setup
 	tc-export AR CC CXX
 	unset CFLAGS
 	set -- ${EPYTHON} build/gen.py --no-last-commit-position --no-strip --no-static-libstdc++
 	echo "$@" >&2
 	"$@" || die
+
+	# gen.py bakes flags into out/*.ninja; fix them post-gen
+	# -Wformat-security becomes fatal because -Wno-format disables -Wformat
+	find out -name '*.ninja' -print0 | xargs -0 sed -i \
+		-e 's/[[:space:]]-Wno-format[[:space:]]/ /g' \
+		-e 's/[[:space:]]-Wno-format$//g' \
+		-e 's/[[:space:]]-Wno-format$/ /g' \
+		-e 's/-Wformat-security/-Wformat-security -Wno-error=format-security/g' \
+		|| die
+
+	find out -name '*.ninja' -print0 | xargs -0 sed -i \
+		-e 's/[[:space:]]-Werror[[:space:]]/ -Werror -Wno-error=comment /g' \
+		|| die
+
 	cat >out/last_commit_position.h <<-EOF || die
 	#ifndef OUT_LAST_COMMIT_POSITION_H_
 	#define OUT_LAST_COMMIT_POSITION_H_

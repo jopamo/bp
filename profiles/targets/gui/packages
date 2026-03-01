@@ -2,7 +2,6 @@
 *app-fs/ncdu
 *app-net/bluez
 *app-net/weechat
-*app-port/smart-live-rebuild
 *app-util/better-adb-sync
 *app-util/conky
 *app-var/usbutils
@@ -14,7 +13,6 @@
 *fonts/source-code-pro
 *lib-core/libinput
 *virtual/rust
-*xgui-app/1term
 *xgui-app/arqiver
 *xgui-app/ff2mpv
 *xgui-app/keepassxc

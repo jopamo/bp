@@ -9,7 +9,6 @@
 *app-core/coreq
 *app-core/coreutils
 *app-core/diffutils
-*app-core/fakepackages
 *app-core/file
 *app-core/gawk
 *app-core/git

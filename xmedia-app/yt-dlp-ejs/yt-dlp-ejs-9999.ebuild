@@ -22,6 +22,6 @@ LICENSE="unlicense"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="dev-rust/deno"
+DEPEND="app-server/nodejs"
 
 RESTRICT="test network-sandbox"

@@ -28,5 +28,15 @@ DEPEND="
 
 python_install_all() {
 	distutils-r1_python_install_all
+
+	# compatibility symlink
 	dosym -r /usr/bin/yt-dlp /usr/bin/youtube-dl
+
+	# default config
+	cat > "${T}/yt-dlp.conf" <<'EOF'
+--js-runtimes node
+EOF
+
+	insinto /etc
+	doins "${T}/yt-dlp.conf"
 }

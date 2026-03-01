@@ -22,6 +22,7 @@ RESTRICT="test network-sandbox"
 export BINDGEN_EXTRA_CLANG_ARGS="-include sys/socket.h -include netinet/in.h -include stdio.h"
 
 src_prepare() {
+	use elibc_musl && export V8_FROM_SOURCE=1
 	default
 	eapply "${FILESDIR}"/build_fixes.patch
 }

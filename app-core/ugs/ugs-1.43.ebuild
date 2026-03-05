@@ -16,11 +16,7 @@ IUSE="video"
 src_install() {
 	# Bash config scripts (from files/bashrc/)
 	insinto /etc/bash/bashrc.d
-	doins "${FILESDIR}/bashrc/1g4.sh"
 	doins "${FILESDIR}/bashrc/eth.sh"
-
-	insinto /etc/profile.d
-	doins "${FILESDIR}/bashrc/emoji.sh"
 
 	insinto /etc/bash
 	doins "${FILESDIR}/bash_logout"

@@ -32,6 +32,11 @@ src_prepare() {
 }
 
 src_configure() {
+	# zlib's configure computes platform-specific LDSHARED with SONAME flags.
+	# A pre-set generic LDSHARED (for example "cc -shared") drops SONAME and
+	# leads to unresolved soname deps for libminizip.
+	unset LDSHARED
+
 	local myconf=(
 		--shared
 		--prefix="${EPREFIX}/usr"

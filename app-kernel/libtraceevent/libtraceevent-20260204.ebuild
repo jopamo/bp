@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson
+inherit meson dot-a
 
 DESCRIPTION="provides APIs to access kernel tracepoint events"
 HOMEPAGE="https://kernel.org/"
@@ -14,3 +14,20 @@ S="${WORKDIR}/${PN}-${SNAPSHOT}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+IUSE="static-libs"
+
+src_configure() {
+	use static-libs && lto-guarantee-fat
+
+	local emesonargs=(
+		-Ddoc=false
+		)
+		meson_src_configure
+}
+
+src_install() {
+	meson_src_install
+	use static-libs && strip-lto-bytecode
+	use static-libs || find "${ED}" -name '*.a' -delete
+}

@@ -5,9 +5,9 @@ set -euo pipefail
 # usage:
 #   ./build.sh                    # auto-detect, release
 #   ./build.sh --debug            # full debug
-#   ./build.sh --fastdebug        # optimized+gdb-friendly
+#   ./build.sh --fastdebug        # optimized+gdb/perf friendly
 #   ./build.sh --asan             # debug + ASan/UBSan
-#   ./build.sh --fastasan         # optimized + ASan/UBSan
+#   ./build.sh --fastasan         # faster ASan/UBSan
 #   ./build.sh --cmake --fastasan # force CMake, fast ASan
 #   ./build.sh --meson --debug
 #   ./build.sh --autotools --release
@@ -27,7 +27,7 @@ Usage: $0 [--cmake|--meson|--autotools] [--release|--debug|--fastdebug|--asan|--
 
   --release    optimized release build (default)
   --debug      full debug build (-O0 -g)
-  --fastdebug  optimized debug build (-O2 -g1)
+  --fastdebug  optimized debug build (-O2 + line tables)
   --asan       debug build with AddressSanitizer + UBSan
   --fastasan   optimized build with AddressSanitizer + UBSan
 
@@ -96,6 +96,10 @@ fi
 # frame pointers help perf/gdb/sanitizers unwind accurately on modern toolchains
 fp_flags='-fno-omit-frame-pointer -mno-omit-leaf-frame-pointer'
 
+# debug info flag for "fastdebug"
+# line tables are enough for perf/addr2line without huge DWARF
+dbg_fast='-gline-tables-only'
+
 # common sanitizer options for asan builds
 asan_env='detect_leaks=1:halt_on_error=1:abort_on_error=1:malloc_context_size=30:fast_unwind_on_malloc=0:symbolize=1:strict_init_order=1:strict_string_checks=1:detect_stack_use_after_return=1:alloc_dealloc_mismatch=1:detect_container_overflow=1'
 ubsan_env='print_stacktrace=1:report_error_type=1:halt_on_error=1'
@@ -107,8 +111,8 @@ setup_sanitizer_env() {
   export LSAN_OPTIONS="$lsan_env"
 
   if [[ -z "${ASAN_SYMBOLIZER_PATH:-}" ]] && command -v llvm-symbolizer >/dev/null 2>&1; then
-    export ASAN_SYMBOLIZER_PATH
     ASAN_SYMBOLIZER_PATH="$(command -v llvm-symbolizer)"
+    export ASAN_SYMBOLIZER_PATH
   fi
 }
 
@@ -148,8 +152,8 @@ cmake_build() {
         -DCMAKE_BUILD_TYPE=RelWithDebInfo \
         -DCMAKE_C_COMPILER="$CC" \
         -DCMAKE_CXX_COMPILER="$CXX" \
-        -DCMAKE_C_FLAGS_RELWITHDEBINFO="-O2 -march=native -g1 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
-        -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O2 -march=native -g1 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
+        -DCMAKE_C_FLAGS_RELWITHDEBINFO="-O2 -march=native $dbg_fast $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
+        -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O2 -march=native $dbg_fast $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
       cmake --build "$builddir" -j"$NPROC"
       (cd "$builddir" && ctest --output-on-failure || true)
       ;;
@@ -176,8 +180,8 @@ cmake_build() {
         -DCMAKE_BUILD_TYPE=RelWithDebInfo \
         -DCMAKE_C_COMPILER="$CC" \
         -DCMAKE_CXX_COMPILER="$CXX" \
-        -DCMAKE_C_FLAGS_RELWITHDEBINFO="-O2 -march=native -g1 $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
-        -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O2 -march=native -g1 $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
+        -DCMAKE_C_FLAGS_RELWITHDEBINFO="-O1 -march=native $dbg_fast $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
+        -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O1 -march=native $dbg_fast $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
         -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address,undefined" \
         -DCMAKE_SHARED_LINKER_FLAGS="-fsanitize=address,undefined"
       cmake --build "$builddir" -j"$NPROC"
@@ -222,8 +226,8 @@ meson_build() {
       meson setup "$builddir" . \
         --buildtype=debugoptimized \
         -Dwarning_level=3 \
-        -Dc_args="-O2 -march=native -g1 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
-        -Dcpp_args="-O2 -march=native -g1 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
+        -Dc_args="-O2 -march=native $dbg_fast $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
+        -Dcpp_args="-O2 -march=native $dbg_fast $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
       meson compile -C "$builddir" -j"$NPROC"
       meson test -C "$builddir" --print-errorlogs || true
       ;;
@@ -250,8 +254,8 @@ meson_build() {
         -Db_sanitize=address,undefined \
         -Db_lundef=false \
         -Dwarning_level=3 \
-        -Dc_args="-O2 -march=native -g1 $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
-        -Dcpp_args="-O2 -march=native -g1 $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
+        -Dc_args="-O1 -march=native $dbg_fast $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
+        -Dcpp_args="-O1 -march=native $dbg_fast $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
       meson compile -C "$builddir" -j"$NPROC"
       meson test -C "$builddir" --print-errorlogs
       ;;
@@ -302,7 +306,7 @@ autotools_build() {
       ;;
     fastdebug)
       builddir=build-autotools-fastdebug
-      cflags="-O2 -march=native -g1 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
+      cflags="-O2 -march=native $dbg_fast $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
       cxxflags="$cflags"
       ;;
     asan)
@@ -315,7 +319,7 @@ autotools_build() {
     fastasan)
       builddir=build-autotools-fastasan
       setup_sanitizer_env
-      cflags="-O2 -march=native -g1 $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
+      cflags="-O1 -march=native $dbg_fast $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
       cxxflags="$cflags"
       ldflags="-fsanitize=address,undefined"
       ;;

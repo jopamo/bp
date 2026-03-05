@@ -117,6 +117,18 @@ my_src_install() {
 	)
 
 	meson_src_install
+
+	if has_version "app-var/eselect" ; then
+		ewarn "One-off migration: app-var/eselect is installed, so bundled eselect is skipped for this merge."
+		ewarn "Legacy app-var/eselect will be removed automatically after install; remerge corepkg once to install bundled eselect."
+		rm -rf \
+			"${ED%/}${EPREFIX}/usr/bin/eselect" \
+			"${ED%/}${EPREFIX}/usr/bin/kernel-config" \
+			"${ED%/}${EPREFIX}/usr/bin/profile-config" \
+			"${ED%/}${EPREFIX}/usr/bin/rc-config" \
+			"${ED%/}${EPREFIX}/usr/share/eselect" || die
+	fi
+
 	python_optimize "${pydirs[@]}"
 	python_fix_shebang "${pydirs[@]}"
 }
@@ -141,6 +153,7 @@ pkg_preinst() {
 		env -u FEATURES -u corepkg_REPOSITORIES \
 			PYTHONPATH="${D}${sitedir}${PYTHONPATH:+:${PYTHONPATH}}" \
 			"${PYTHON}" -m corepkg._compat_upgrade.binpkg_multi_instance || die
+
 	fi
 
 	# elog dir must exist to avoid logrotate error for bug #415911.
@@ -154,6 +167,12 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
+	if ! use build && [[ -z ${ROOT} ]]; then
+		python_setup
+		env -u corepkg_REPOSITORIES \
+			"${PYTHON}" -m corepkg._compat_upgrade.one_off_runner || die
+	fi
+
 	sysusers_process
 	tmpfiles_process
 }

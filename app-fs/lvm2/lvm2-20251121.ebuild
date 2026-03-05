@@ -50,6 +50,7 @@ src_configure() {
    		--with-default-pid-dir="${EPREFIX}"/run
    		--with-default-run-dir="${EPREFIX}"/run/lvm
    		--with-thin=internal
+		--without-libnvme
 	)
 	CLDFLAGS="${LDFLAGS}" econf "${myconf[@]}"
 }

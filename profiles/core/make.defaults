@@ -50,20 +50,17 @@ POSITION_FLAGS="-fPIE -fPIC"
 SECURITY_FLAGS="-D_GLIBCXX_ASSERTIONS -fstack-protector-strong -fstack-clash-protection -fexceptions -D_FORTIFY_SOURCE=3"
 LTO_FLAGS=""
 
-ARCH_CFLAGS=""
-ARCH_LDFLAGS=""
-
 # Keep default empty so systems can opt in via feature profiles
 REPRO_FLAGS=""
 SOURCE_DATE_EPOCH="1"
 
 BASE_FLAGS="${OPT_FLAGS} ${GRAPHITE_FLAGS} ${SECURITY_FLAGS} ${POSITION_FLAGS} ${LTO_FLAGS}"
-CFLAGS="${MARCH} ${ARCH_CFLAGS} ${BASE_FLAGS} ${REPRO_FLAGS}"
+CFLAGS="${MARCH} ${BASE_FLAGS} ${REPRO_FLAGS}"
 CXXFLAGS="${CFLAGS}"
 CPPFLAGS="${CFLAGS}"
 FFLAGS="${CFLAGS}"
 FCFLAGS="${CFLAGS}"
-LDFLAGS="${ARCH_LDFLAGS} ${LTO_FLAGS} ${POSITION_FLAGS} \
+LDFLAGS="${LTO_FLAGS} ${POSITION_FLAGS} \
     -Wl,-O1 \
     -Wl,-z,combreloc -Wl,-z,now -Wl,-z,relro -Wl,--as-needed"
 

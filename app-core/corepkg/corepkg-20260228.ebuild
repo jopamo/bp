@@ -129,6 +129,25 @@ my_src_install() {
 			"${ED%/}${EPREFIX}/usr/share/eselect" || die
 	fi
 
+	if has_version "app-core/gentoo-functions" ; then
+		ewarn "One-off migration: app-core/gentoo-functions is installed, so bundled core-functions user tools are skipped for this merge."
+		rm -f \
+			"${ED%/}${EPREFIX}/usr/bin/consoletype" \
+			"${ED%/}${EPREFIX}/usr/bin/shquote" \
+			"${ED%/}${EPREFIX}/usr/share/man/man1/consoletype.1" \
+			"${ED%/}${EPREFIX}/usr/share/man/man1/consoletype.1.bz2" \
+			"${ED%/}${EPREFIX}/usr/share/man/man1/consoletype.1.gz" \
+			"${ED%/}${EPREFIX}/usr/share/man/man1/consoletype.1.xz" \
+			"${ED%/}${EPREFIX}/usr/share/man/man1/consoletype.1.zst" || die
+	fi
+
+	if has_version "app-port/elt-patches" ; then
+		ewarn "One-off migration: app-port/elt-patches is installed, so bundled elt-patches is skipped for this merge."
+		rm -rf \
+			"${ED%/}${EPREFIX}/usr/bin/eltpatch" \
+			"${ED%/}${EPREFIX}/usr/share/elt-patches" || die
+	fi
+
 	python_optimize "${pydirs[@]}"
 	python_fix_shebang "${pydirs[@]}"
 }

@@ -37,7 +37,6 @@ RDEPEND="
 	app-core/sandbox
 	app-core/sed
 	app-crypto/gnupg
-	app-var/eselect
 	dev-py/lxml[${PYTHON_USEDEP}]
 "
 PDEPEND="app-net/rsync"
@@ -164,4 +163,3 @@ pkg_postinst() {
 	sysusers_process
 	tmpfiles_process
 }
-

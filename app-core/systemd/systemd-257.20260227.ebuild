@@ -8,14 +8,13 @@ inherit flag-o-matic linux-info meson doins xdg
 
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
-
-SNAPSHOT=943028cdb065285c11b6799595e6665a8dba0d44
+SNAPSHOT=e840b9ff311a41df923f41f912165f29b0a61072
 SRC_URI="https://github.com/systemd/systemd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/systemd-${SNAPSHOT}"
 
 LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="apparmor binfmt blkid bootloader bpf-framework coredump dbus devmode dhcp4 elfutils efi gcrypt gshadow
 +hostnamed +hwdb importd kmod ldconfig localed logind machined +networkd
@@ -94,7 +93,7 @@ src_prepare() {
         append-cppflags -D__UAPI_DEF_ETHHDR=0
         append-flags -Wno-error=incompatible-pointer-types
 
-        eapply "${FILESDIR}"/patches/*.patch
+        eapply "${FILESDIR}"/patches/"$(ver_cut 1)"/*.patch
     fi
 
     default

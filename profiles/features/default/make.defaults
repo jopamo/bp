@@ -5,11 +5,11 @@ GRAPHITE_FLAGS="-fgraphite-identity -floop-nest-optimize -ftree-loop-distributio
 LTO_FLAGS="-flto=8 -fuse-linker-plugin -fdevirtualize-at-ltrans -fipa-pta -fno-semantic-interposition"
 
 BASE_FLAGS="${OPT_FLAGS} ${GRAPHITE_FLAGS} ${SECURITY_FLAGS} ${POSITION_FLAGS} ${LTO_FLAGS}"
-CFLAGS="${MARCH} ${ARCH_CFLAGS} ${BASE_FLAGS} ${REPRO_FLAGS}"
+CFLAGS="${MARCH} ${BASE_FLAGS} ${REPRO_FLAGS}"
 CXXFLAGS="${CFLAGS}"
 CPPFLAGS="${CFLAGS}"
 FFLAGS="${CFLAGS}"
 FCFLAGS="${CFLAGS}"
-LDFLAGS="${ARCH_LDFLAGS} ${LTO_FLAGS} ${POSITION_FLAGS} \
+LDFLAGS="${LTO_FLAGS} ${POSITION_FLAGS} \
     -Wl,-O1 \
     -Wl,-z,combreloc -Wl,-z,now -Wl,-z,relro -Wl,--as-needed"

@@ -1,14 +1,20 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-SNAPSHOT=e29e4acceb71770df1ecbe71fecdc2de2f0d3293
 
 inherit meson
 
 DESCRIPTION="Search and query ebuilds"
 HOMEPAGE="https://github.com/1g4linux/coreq/"
-SRC_URI="https://github.com/1g4linux/coreq/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S=${WORKDIR}/coreq-${SNAPSHOT}
+
+if [[ ${PV} = *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/1g4linux/coreq"
+	inherit git-r3
+else
+	SNAPSHOT=37832269366c74d1dc9039130f48787d5950a44c
+	SRC_URI="https://github.com/1g4linux/coreq/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+	S="${WORKDIR}/${PN}-${SNAPSHOT}"
+fi
 
 LICENSE="GPL-2"
 SLOT="0"

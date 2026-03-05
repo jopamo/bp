@@ -1,24 +1,20 @@
 # Distributed under the terms of the GNU General Public License v2
 
 ARCH="arm64"
-ACCEPT_KEYWORDS="arm64"
+ACCEPT_KEYWORDS="${ARCH}"
 
 MULTILIB_ABIS="arm64"
 DEFAULT_ABI="arm64"
 ABI="${DEFAULT_ABI}"
-
-FFLAGS="${CFLAGS}"
-FCFLAGS="${CFLAGS}"
 
 LIBDIR_arm64="lib"
 
 USE_EXPAND_HIDDEN="-CPU_FLAGS_ARM"
 
 MARCH="-march=armv8.2-a"
+ARCH_CFLAGS="-mbranch-protection=standard"
 
 BINPKG_COMPRESS="xz"
 BINPKG_COMPRESS_FLAGS="--arm64 --delta=dist=2 --lzma2=preset=9e,dict=128MiB -T5"
 
 GRUB_PLATFORMS="efi-64"
-
-CFLAGS="${CFLAGS} -mbranch-protection=standard"

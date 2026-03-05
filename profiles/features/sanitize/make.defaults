@@ -1,0 +1,16 @@
+# Distributed under the terms of the GNU General Public License v2
+
+GRAPHITE_FLAGS=""
+LTO_FLAGS=""
+SAN_FLAGS="-fsanitize=address,undefined"
+
+FEATURES="${FEATURES} nostrip"
+
+CFLAGS="${MARCH} ${ARCH_CFLAGS} -O1 -g ${POSITION_FLAGS} ${SECURITY_FLAGS} ${SAN_FLAGS} -fno-omit-frame-pointer ${REPRO_FLAGS}"
+CXXFLAGS="${CFLAGS}"
+CPPFLAGS="${CFLAGS}"
+FFLAGS="${CFLAGS}"
+FCFLAGS="${CFLAGS}"
+LDFLAGS="${ARCH_LDFLAGS} ${POSITION_FLAGS} ${SAN_FLAGS} \
+    -Wl,-O1 \
+    -Wl,-z,relro -Wl,-z,now -Wl,--as-needed"

@@ -115,6 +115,8 @@ my_src_install() {
 		"${D}$(python_get_sitedir)"
 		"${ED}/usr/lib/corepkg/${EPYTHON}"
 	)
+	local entry line path
+	local -a entries=()
 
 	meson_src_install
 
@@ -127,6 +129,26 @@ my_src_install() {
 			"${ED%/}${EPREFIX}/usr/bin/profile-config" \
 			"${ED%/}${EPREFIX}/usr/bin/rc-config" \
 			"${ED%/}${EPREFIX}/usr/share/eselect" || die
+	fi
+
+	if has_version "app-core/portage" ; then
+		ewarn "One-off migration: app-core/portage is installed, so overlapping bundled files are skipped for this merge."
+		ewarn "Legacy app-core/portage VDB will be removed automatically after install; remerge corepkg once to complete replacement."
+		shopt -s nullglob
+		entries=( "${EROOT%/}"/var/db/pkg/app-core/portage-* )
+		shopt -u nullglob
+		for entry in "${entries[@]}" ; do
+			[[ -f ${entry}/CONTENTS ]] || continue
+			while IFS= read -r line ; do
+				case ${line} in
+					obj\ *) path=${line#obj }; path=${path%% *} ;;
+					sym\ *) path=${line#sym }; path=${path%% -> *} ;;
+					*) continue ;;
+				esac
+				[[ ${path} == /* ]] || continue
+				rm -f "${ED%/}${path}" || die
+			done < "${entry}/CONTENTS"
+		done
 	fi
 
 	if has_version "app-core/gentoo-functions" ; then

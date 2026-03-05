@@ -103,6 +103,7 @@ src_install() {
 	local scripts
 	mapfile -t scripts < <(awk '/^#!.*python/ {print FILENAME} {nextfile}' "${ED}"/usr/bin/* || die)
 	python_replicate_script "${scripts[@]}"
+	keepdir /etc/corepkg
 
 	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
 		u corepkg 250 - /var/lib/corepkg/home
@@ -110,6 +111,7 @@ src_install() {
 
 	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die
 		x /var/tmp/ccache
+		d /var/cache/distfiles 02775 corepkg corepkg -
 	EOF
 
 	newsysusers "${T}/${PN}-sysusers" "${PN}.conf"
@@ -228,6 +230,10 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
+	local configdir="${EROOT%/}${EPREFIX}/etc/corepkg"
+	local distdir="${EROOT%/}${EPREFIX}/var/cache/distfiles"
+	local distfiles_ownership_stamp="${EROOT%/}${EPREFIX}/var/lib/corepkg/compat_upgrade/one_off/20260305_distfiles_ownership.done"
+
 	if ! use build && [[ -z ${ROOT} ]]; then
 		python_setup
 		env -u corepkg_REPOSITORIES \
@@ -236,4 +242,23 @@ pkg_postinst() {
 
 	sysusers_process
 	tmpfiles_process
+
+	mkdir -p "${configdir}" || die
+	mkdir -p "${distdir}" || die
+
+	if chown corepkg:corepkg "${distdir}" 2>/dev/null ; then
+		chmod 2775 "${distdir}" || die
+	else
+		ewarn "Unable to set owner/group on ${distdir}; ensure it is writable by corepkg."
+	fi
+
+	if [[ ! -e ${distfiles_ownership_stamp} ]] ; then
+		if ! chown -R corepkg:corepkg "${distdir}" 2>/dev/null ; then
+			ewarn "Unable to apply one-off recursive ownership migration for ${distdir}."
+		elif mkdir -p "$(dirname "${distfiles_ownership_stamp}")" && printf 'done\n' > "${distfiles_ownership_stamp}" ; then
+			:
+		else
+			ewarn "Unable to persist distfiles ownership migration stamp: ${distfiles_ownership_stamp}"
+		fi
+	fi
 }

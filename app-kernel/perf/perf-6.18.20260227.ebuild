@@ -18,6 +18,8 @@ KEYWORDS="amd64 arm64"
 IUSE="bpf debug"
 RESTRICT="debug? ( strip )"
 
+DEPEND="app-kernel/libtraceevent"
+
 src_prepare() {
 	default
 
@@ -55,7 +57,6 @@ src_compile() {
 	local myemake=(
 		ARCH=${perf_arch}
 		WERROR=0
-		NO_LIBTRACEEVENT=1
 	)
 
 	if ! use bpf ; then
@@ -90,7 +91,6 @@ src_install() {
 	local myemake=(
 		ARCH=${perf_arch}
 		WERROR=0
-		NO_LIBTRACEEVENT=1
 	)
 
 	if ! use bpf ; then

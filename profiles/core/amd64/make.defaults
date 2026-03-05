@@ -1,34 +1,27 @@
 # Distributed under the terms of the GNU General Public License v2
 
-MULTILIB_ABIS="amd64"
-CHOST_amd64="${CHOST}"
-LIBDIR_amd64="lib"
-
 ARCH="amd64"
 ACCEPT_KEYWORDS="${ARCH}"
 
-FFLAGS="${CFLAGS}"
-FCFLAGS="${CFLAGS}"
-
 MULTILIB_ABIS="amd64"
 DEFAULT_ABI="amd64"
-ABI="amd64"
+ABI="${DEFAULT_ABI}"
 
+CHOST_amd64="${CHOST}"
 LIBDIR_amd64="lib"
 LIBDIR_x86="lib"
 LIBDIR_x32="libx32"
 SYMLINK_LIB="no"
 
-# 64bit specific settings.
-CFLAGS_amd64="-m64"
-LDFLAGS_amd64="-m elf_x86_64"
+# 64-bit specific settings
+ARCH_CFLAGS="-m64"
+ARCH_LDFLAGS="-m elf_x86_64"
 
-CPU_FLAGS_X86="mmx mmxext sse sse2"
+CPU_FLAGS_X86="mmx mmxext sse sse2 sse3 ssse3 sse4_1 sse4_2"
 
 ABI_X86="64"
 
 USE_EXPAND_HIDDEN="-ABI_X86 -CPU_FLAGS_X86"
-
 IUSE_IMPLICIT="abi_x86_64"
 
 MARCH="-march=x86-64-v3"
@@ -37,5 +30,3 @@ BINPKG_COMPRESS="xz"
 BINPKG_COMPRESS_FLAGS="--x86 --delta=dist=2 --lzma2=preset=9e,dict=128MiB -T5"
 
 GRUB_PLATFORMS="pc efi-64"
-
-CFLAGS="${CFLAGS}"

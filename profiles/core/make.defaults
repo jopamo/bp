@@ -1,11 +1,11 @@
 # Distributed under the terms of the GNU General Public License v2
-# System-wide defaults for the Portage system — see portage(5)
+# System-wide defaults for Corepkg system; see corepkg(5)
 
 ###############################################################################
 # Baseline profile
 ###############################################################################
 
-# Injected IUSE flags (EAPI ≥ 5)
+# Injected IUSE flags (EAPI >= 5)
 IUSE_IMPLICIT="prefix prefix-guest prefix-stack kernel_linux elibc_glibc elibc_musl"
 
 # Variables whose individual values are expanded into USE flags
@@ -19,14 +19,14 @@ USE_EXPAND="
     PYTHON_TARGETS
 "
 
-# USE_EXPAND vars hidden from emerge –vp output
+# USE_EXPAND vars hidden from emerge -vp output
 USE_EXPAND_HIDDEN="ABI_X86 CPU_FLAGS_ARM CPU_FLAGS_X86"
 
 # Profile-only vars (not overridable in make.conf)
 PROFILE_ONLY_VARIABLES="IUSE_IMPLICIT USE_EXPAND_IMPLICIT USE_EXPAND_UNPREFIXED"
 
 ###############################################################################
-# Portage behaviour
+# Core package manager behavior
 ###############################################################################
 
 CONFIG_PROTECT="/etc"
@@ -41,23 +41,31 @@ ENV_UNSET="
 "
 
 ###############################################################################
-# Toolchain & optimisation
+# Toolchain policy (feature profiles can override these)
 ###############################################################################
 
-BASEFLAGS="-O3 -pipe -Wall -Wformat -Wformat-security"
-GRAPHITE="-fgraphite-identity -floop-nest-optimize -ftree-loop-distribution"
-POSITION="-fPIE -fPIC"
-SECURE="-D_GLIBCXX_ASSERTIONS -fstack-protector-strong -fstack-clash-protection -fexceptions ${POSITION} -D_FORTIFY_SOURCE=3"
-FLTO_BASE="-flto=8 -fuse-linker-plugin -fdevirtualize-at-ltrans -fipa-pta -fno-semantic-interposition"
+OPT_FLAGS="-O2 -pipe"
+GRAPHITE_FLAGS=""
+POSITION_FLAGS="-fPIE -fPIC"
+SECURITY_FLAGS="-D_GLIBCXX_ASSERTIONS -fstack-protector-strong -fstack-clash-protection -fexceptions -D_FORTIFY_SOURCE=3"
+LTO_FLAGS=""
 
-PASS_FLAGS="${BASEFLAGS} ${GRAPHITE} ${FLTO_BASE} ${SECURE}"
-CFLAGS="${MARCH} ${PASS_FLAGS}"
+ARCH_CFLAGS=""
+ARCH_LDFLAGS=""
 
+# Keep default empty so systems can opt in via feature profiles
+REPRO_FLAGS=""
+SOURCE_DATE_EPOCH="1"
+
+BASE_FLAGS="${OPT_FLAGS} ${GRAPHITE_FLAGS} ${SECURITY_FLAGS} ${POSITION_FLAGS} ${LTO_FLAGS}"
+CFLAGS="${MARCH} ${ARCH_CFLAGS} ${BASE_FLAGS} ${REPRO_FLAGS}"
 CXXFLAGS="${CFLAGS}"
 CPPFLAGS="${CFLAGS}"
-LDFLAGS="${FLTO_BASE} ${POSITION} \
-	-Wl,-O1 \
-	-Wl,-z,combreloc -Wl,-z,defs -Wl,-z,now -Wl,-z,relro"
+FFLAGS="${CFLAGS}"
+FCFLAGS="${CFLAGS}"
+LDFLAGS="${ARCH_LDFLAGS} ${LTO_FLAGS} ${POSITION_FLAGS} \
+    -Wl,-O1 \
+    -Wl,-z,combreloc -Wl,-z,now -Wl,-z,relro -Wl,--as-needed"
 
 AR="gcc-ar"
 RANLIB="gcc-ranlib"
@@ -69,16 +77,16 @@ NM="gcc-nm"
 
 PYTHON_TARGETS="python3_13"
 PYTHON_SINGLE_TARGET="python3_13"
-PYTHONDONTWRITEBYTECODE=1       # keep ${WORKDIR} clean & reproducible
+PYTHONDONTWRITEBYTECODE=1  # keep ${WORKDIR} clean and reproducible
 
 ###############################################################################
 # Default feature sets
 ###############################################################################
 
 INPUT_DEVICES="libinput"
-CPU_FLAGS_X86="mmx sse"
+CPU_FLAGS_X86="mmx mmxext sse sse2 sse3 ssse3 sse4_1 sse4_2"
 
-# Accept any licence; override per package in /etc/portage/package.license
+# Accept any licence; override per package in /etc/corepkg/package.license
 ACCEPT_LICENSE="*"
 
 # Protect kernel modules, keep FHS paths during unmerge
@@ -96,58 +104,49 @@ UNINSTALL_IGNORE="
 ###############################################################################
 
 USE="
-    # ── Compression & Storage ──────────────────────────────
     bzip2         lz4           zlib
     zstd          bsdtar        pie
     xxhash
 
-    # ── Networking / DHCP / Wireless ──────────────────────
     dhcp          -dhcp-tools   -dhcp4
     iwlwifi       intel         scp
 
-    # ── Core System Components ────────────────────────────
     caps          dbus          device-mapper
     machined      ncurses       pam
     readline      ssl           systemd
     udev          efi
     kvm           localed       pstore
 
-    # ── Crypto / Security ────────────────────────────────
     argon2        crypt         doh
     gcrypt        gnutls
     seccomp       urandom       yescrypt
     libxcrypt     bpf           xdp
 
-    # ── Libraries & Runtimes ─────────────────────────────
     acl           attr          blkid
     elf           gdbm          gmp
     gshadow       iconv         kmod
     libcap        pcre          python
     sqlite        xml           mount
 
-    # ── Kernel / OS Helpers ──────────────────────────────
     asm           cxx           isl
     kernel_linux  mpfr          native-extensions
     numa          sysusersd     unicode
     xattr
 
-    # ── Firmware & Drivers ───────────────────────────────
     mediatek      rtl_nic       regex
     threads       static-pie    uuid
     tcl           ipc           utmpx
     wtmpx
 
-    # ── Disabled by Default (opt in per-package) ─────────
-    -berkdb       # prefer sqlite
-    -dvbpsi       # not needed on servers
-    -ipv6         # enable only where required
-    -jit          # problematic on some arches
+    -berkdb
+    -dvbpsi
+    -ipv6
+    -jit
     -manpager
 "
 
-
 ###############################################################################
-# USE_EXPAND tweaking for custom overlay / profiles
+# USE_EXPAND arch handling
 ###############################################################################
 
 USE_EXPAND_UNPREFIXED="ARCH"
@@ -155,4 +154,3 @@ USE_EXPAND_IMPLICIT="${USE_EXPAND_IMPLICIT} ARCH"
 USE_EXPAND_VALUES_ARCH="amd64 arm64"
 
 PROFILE_ONLY_VARIABLES="${PROFILE_ONLY_VARIABLES} ARCH USE_EXPAND_VALUES_ARCH"
-

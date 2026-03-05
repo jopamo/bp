@@ -1,2 +1,4 @@
 ..
 ../../../libc/glibc
+../../../targets/minimal
+../../../features/default

@@ -1,2 +1,4 @@
 ..
 ../../../libc/musl
+../../../targets/minimal
+../../../features/default

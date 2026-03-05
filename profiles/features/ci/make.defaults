@@ -1,0 +1,17 @@
+# Distributed under the terms of the GNU General Public License v2
+
+OPT_FLAGS="-O2 -pipe"
+GRAPHITE_FLAGS=""
+LTO_FLAGS=""
+
+FEATURES="${FEATURES} test parallel-fetch"
+
+BASE_FLAGS="${OPT_FLAGS} ${GRAPHITE_FLAGS} ${SECURITY_FLAGS} ${POSITION_FLAGS} ${LTO_FLAGS}"
+CFLAGS="${MARCH} ${ARCH_CFLAGS} ${BASE_FLAGS} ${REPRO_FLAGS}"
+CXXFLAGS="${CFLAGS}"
+CPPFLAGS="${CFLAGS}"
+FFLAGS="${CFLAGS}"
+FCFLAGS="${CFLAGS}"
+LDFLAGS="${ARCH_LDFLAGS} ${LTO_FLAGS} ${POSITION_FLAGS} \
+    -Wl,-O1 \
+    -Wl,-z,relro -Wl,-z,now -Wl,--as-needed"

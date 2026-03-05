@@ -1,0 +1,17 @@
+# Distributed under the terms of the GNU General Public License v2
+
+USE="
+    acl
+    attr
+    pam
+    ssl
+    systemd
+
+    -alsa
+    -bluetooth
+    -gui
+    -pipewire
+    -pulseaudio
+    -qt
+    -X
+"

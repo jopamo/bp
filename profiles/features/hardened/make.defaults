@@ -1,0 +1,13 @@
+# Distributed under the terms of the GNU General Public License v2
+
+SECURITY_FLAGS="${SECURITY_FLAGS} -fcf-protection"
+
+BASE_FLAGS="${OPT_FLAGS} ${GRAPHITE_FLAGS} ${SECURITY_FLAGS} ${POSITION_FLAGS} ${LTO_FLAGS}"
+CFLAGS="${MARCH} ${ARCH_CFLAGS} ${BASE_FLAGS} ${REPRO_FLAGS}"
+CXXFLAGS="${CFLAGS}"
+CPPFLAGS="${CFLAGS}"
+FFLAGS="${CFLAGS}"
+FCFLAGS="${CFLAGS}"
+LDFLAGS="${ARCH_LDFLAGS} ${LTO_FLAGS} ${POSITION_FLAGS} \
+    -Wl,-O1 \
+    -Wl,-z,combreloc -Wl,-z,relro -Wl,-z,now -Wl,--as-needed"

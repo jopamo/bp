@@ -21,13 +21,6 @@ LICENSE="PSF-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="
-	app-arch/zstd:=
-"
-RDEPEND="
-	${DEPEND}
-"
-
 distutils_enable_tests unittest
 
 src_prepare() {

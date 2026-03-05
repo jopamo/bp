@@ -121,7 +121,7 @@ my_src_install() {
 		"${D}$(python_get_sitedir)"
 		"${ED}/usr/lib/corepkg/${EPYTHON}"
 	)
-	local entry line path
+	local entry line path ext page
 	local -a entries=()
 
 	meson_src_install
@@ -153,7 +153,21 @@ my_src_install() {
 				esac
 				[[ ${path} == /* ]] || continue
 				rm -f "${ED%/}${path}" || die
-			done < "${entry}/CONTENTS"
+				done < "${entry}/CONTENTS"
+			done
+
+		# Keep first-pass migration collision-free even if legacy manpage
+		# names/compression differ from VDB entries.
+		for page in dispatch-conf ebuild egencache emaint emerge emirrordist \
+			env-update etc-update fixpackages glsa-check quickpkg ; do
+			for ext in '' .bz2 .gz .xz .zst ; do
+				rm -f "${ED%/}${EPREFIX}/usr/share/man/man1/${page}.1${ext}" || die
+			done
+		done
+		for page in color.map ebuild make.conf xpak ; do
+			for ext in '' .bz2 .gz .xz .zst ; do
+				rm -f "${ED%/}${EPREFIX}/usr/share/man/man5/${page}.5${ext}" || die
+			done
 		done
 	fi
 

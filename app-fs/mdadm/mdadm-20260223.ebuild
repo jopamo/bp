@@ -15,8 +15,6 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static systemd"
 
-# prefer virtual/pkgconfig or dev-util/pkgconf in Gentoo
-BDEPEND="virtual/pkgconfig"
 DEPEND="
   app-compression/xz-utils
   app-core/util-linux

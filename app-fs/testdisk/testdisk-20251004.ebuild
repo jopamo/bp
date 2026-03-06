@@ -16,6 +16,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="jpeg ntfs static zlib"
 
+QA_CONFIG_IMPL_DECL_SKIP=(
+	ntfs_mbstoucs
+)
+
 COMMON_DEPEND="
 	static? (
 		app-core/util-linux[static-libs]

@@ -16,6 +16,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="caps cmdmon ipv6 logrotate nettle ntp phc pps refclock rtc adns systemd"
 
+QA_CONFIG_IMPL_DECL_SKIP=(
+	recvmmsg
+)
+
 DEPEND="
 	nettle? ( lib-core/nettle )
 	lib-net/gnutls

@@ -44,14 +44,15 @@ src_prepare() {
 	git reset --hard a351f5
 	cd ..
 
-	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
-
 	default
+
+	sed -i "/fdl.texi/d" doc/sed.texi || die
+	sed -i "s/\ doc\/fdl.texi//g" doc/local.mk || die
+
+	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
 	src_bootstrap_sed
 
 	sed -i "s/UNKNOWN/4.8.${PV}/g" {configure,build-aux/git-version-gen} || die
-	sed -i "/fdl.texi/d" doc/sed.texi || die
-	sed -i "s/\ doc\/fdl.texi//g" doc/local.mk || die
 }
 
 src_configure() {

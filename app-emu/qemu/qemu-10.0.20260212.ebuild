@@ -20,6 +20,10 @@ IUSE="alsa bpf capstone numa opengl slirp vnc xdp"
 
 RESTRICT="network-sandbox"
 
+QA_CONFIG_IMPL_DECL_SKIP=(
+	elf_aux_info
+)
+
 DEPEND="
 	app-core/attr
 	app-dev/dtc

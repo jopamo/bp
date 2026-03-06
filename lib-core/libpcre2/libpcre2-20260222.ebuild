@@ -20,6 +20,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="bzip2 +static-libs zlib"
 
+QA_CONFIG_IMPL_DECL_SKIP=(
+	__assume
+)
+
 DEPEND="
 	lib-core/readline
 	bzip2? ( app-compression/bzip2 )

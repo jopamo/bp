@@ -48,9 +48,10 @@ src_prepare() {
 	#git reset --hard 0a12fa9
 	#cd ..
 
+	default
+
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
 
-	default
 	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
 
 	filter-flags -Wl,-z,defs -flto\=\*

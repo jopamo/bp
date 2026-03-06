@@ -16,6 +16,20 @@ KEYWORDS="amd64 arm64"
 
 IUSE="acl bsdtar bzip2 expat lz4 nettle ssl static-libs xattr zlib zstd"
 
+QA_CONFIG_IMPL_DECL_SKIP=(
+	# OpenSSL SHA* probe checks in upstream configure trigger implicit
+	# declaration warnings in this snapshot.
+	SHA256_Init
+	SHA256_Update
+	SHA256_Final
+	SHA384_Init
+	SHA384_Update
+	SHA384_Final
+	SHA512_Init
+	SHA512_Update
+	SHA512_Final
+)
+
 DEPEND="
 	app-compression/xz-utils
 	!expat? ( lib-core/libxml2 )

@@ -16,6 +16,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="doc nls static-libs"
 
+QA_CONFIG_IMPL_DECL_SKIP=(
+	localtime_s
+)
+
 RDEPEND="nls? ( app-build/gettext )"
 DEPEND="${RDEPEND}
 	app-dev/pkgconf

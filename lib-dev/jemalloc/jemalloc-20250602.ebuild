@@ -17,6 +17,11 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug lazy-lock static-libs stats xmalloc"
 
+QA_CONFIG_IMPL_DECL_SKIP=(
+	clock_gettime_nsec_np
+	syscall
+)
+
 src_prepare() {
 	use static-libs && lto-guarantee-fat
 

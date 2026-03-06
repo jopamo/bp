@@ -17,6 +17,14 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="app-lang/perl"
 
+QA_CONFIG_IMPL_DECL_SKIP=(
+	"_BitScanReverse*"
+	"cpu_to_le*"
+	"__cpu_to_le*"
+	"_byteswap_*"
+	typeof
+)
+
 src_prepare() {
 	  sed -i \
     -e '/INSTALL_DATA.*nasm\.1/d' \

@@ -20,6 +20,12 @@ IUSE="debug dlang fortran go-bootstrap isl libgomp sanitize zstd"
 
 RESTRICT="strip"
 
+QA_CONFIG_IMPL_DECL_SKIP=(
+	# libgfortran configure probe in this snapshot uses fpsetmask without a
+	# prototype; this known probe triggers a QA implicit-declaration notice.
+	fpsetmask
+)
+
 DEPEND="
 	lib-core/mpc
 	lib-core/zlib

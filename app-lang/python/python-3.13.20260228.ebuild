@@ -29,6 +29,11 @@ IUSE="bluetooth debug libedit ncurses pgo readline sqlite ssl static test tk val
 
 RESTRICT="test"
 
+QA_CONFIG_IMPL_DECL_SKIP=(
+	chflags
+	lchflags
+)
+
 DEPEND="
 	app-build/gettext
 	app-compression/bzip2

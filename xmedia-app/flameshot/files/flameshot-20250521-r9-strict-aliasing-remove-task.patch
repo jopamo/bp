@@ -1,0 +1,30 @@
+From af133fd28449ea6cbf73f0dd3744c49e57dc0c40 Mon Sep 17 00:00:00 2001
+From: 1g4 QA <qa@oneg4.local>
+Date: Fri, 6 Mar 2026 12:30:00 +0000
+Subject: [PATCH] capturerequest: remove strict-aliasing violating type punning
+
+removeTask() casted ExportTask storage to int by reference and modified it in
+place. That violates strict aliasing and triggers -Wstrict-aliasing under
+optimized builds.
+
+Use explicit integer conversion and cast back to ExportTask.
+---
+ src/core/capturerequest.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/core/capturerequest.cpp b/src/core/capturerequest.cpp
+index b5a2bb4..6277a15 100644
+--- a/src/core/capturerequest.cpp
++++ b/src/core/capturerequest.cpp
+@@ -67,7 +67,7 @@ void CaptureRequest::addTask(CaptureRequest::ExportTask task)
+ 
+ void CaptureRequest::removeTask(ExportTask task)
+ {
+-    ((int&)m_tasks) &= ~task;
++    m_tasks = static_cast<ExportTask>(static_cast<int>(m_tasks) & ~static_cast<int>(task));
+ }
+ 
+ void CaptureRequest::addSaveTask(const QString& path)
+-- 
+2.49.0
+

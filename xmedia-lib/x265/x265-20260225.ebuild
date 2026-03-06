@@ -23,14 +23,16 @@ BDEPEND="
 src_prepare() {
 	default
 
+	# x265 links mixed-depth translation units (8/10/12-bit); LTO triggers ODR
+	# diagnostics on depth-dependent public types in this build mode.
+	filter-lto
+
 	# add missing include for json11 used by HDR10+ helper
 	sed -i '/^#include <limits>$/a #include <cstdint>' \
 		"${S}/source/dynamicHDR10/json11/json11.cpp" || die
 }
 
 src_compile() {
-	append-flags -ffat-lto-objects
-
 	cmake -S "${S}/source" -B build-12 -G Ninja \
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr" \
 		-DHIGH_BIT_DEPTH=TRUE \

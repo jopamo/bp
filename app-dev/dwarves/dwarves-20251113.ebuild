@@ -19,6 +19,12 @@ KEYWORDS="amd64 arm64"
 IUSE="debug"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
+QA_GCC_WARN_SKIP=(
+	# LTO inlining can report this cu__tag_free fallback path as a free-nonheap
+	# issue even though DWARF mode uses tag__alloc/tag__free pairing.
+	".*dwarves\\.c:66:17: warning: 'free' called on pointer '.*' with nonzero offset 64 \\[-Wfree-nonheap-object\\]"
+)
+
 DEPEND="
 	lib-core/elfutils
 	lib-net/libbpf:=

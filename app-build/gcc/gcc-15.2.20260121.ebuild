@@ -26,6 +26,11 @@ QA_CONFIG_IMPL_DECL_SKIP=(
 	fpsetmask
 )
 
+QA_GCC_WARN_SKIP=(
+	# GCC bootstrap on this snapshot emits this known vec.h false positive.
+	".*gcc/vec\\.h:347:10: warning: 'free' called on unallocated object 'dest_bbs' \\[-Wfree-nonheap-object\\]"
+)
+
 DEPEND="
 	lib-core/mpc
 	lib-core/zlib

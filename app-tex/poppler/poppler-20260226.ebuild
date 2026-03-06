@@ -35,7 +35,10 @@ DEPEND="
 "
 RDEPEND="${COMMON_DEPEND}"
 
-PATCHES=( "${FILESDIR}/poppler-0.57.0-disable-internal-jpx.patch" )
+PATCHES=(
+	"${FILESDIR}/poppler-0.57.0-disable-internal-jpx.patch"
+	"${FILESDIR}/poppler-20260226-splashoutputdev-init-color.patch"
+)
 
 src_prepare() {
 	cmake_src_prepare

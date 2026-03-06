@@ -14,7 +14,7 @@ LICENSE="BSD"
 SLOT="0/5"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 gnutls lzma mbedtls ssl static-libs test tools zstd"
+IUSE="bzip2 gnutls lzma ssl static-libs test tools zstd"
 
 REQUIRED_USE="test? ( tools )"
 
@@ -29,10 +29,7 @@ DEPEND="
 			lib-core/nettle:0=
 			lib-net/gnutls:=
 		)
-		!gnutls? (
-			mbedtls? ( lib-misc/mbedtls:= )
-			!mbedtls? ( virtual/ssl:0= )
-		)
+		!gnutls? ( virtual/ssl:0= )
 	)
 	zstd? ( app-compression/zstd )
 "
@@ -75,26 +72,17 @@ src_configure() {
 			if use gnutls; then
 				mycmakeargs+=(
 					-DENABLE_GNUTLS=$(usex gnutls)
-					-DENABLE_MBEDTLS=OFF
-					-DENABLE_OPENSSL=OFF
-				)
-			elif use mbedtls; then
-				mycmakeargs+=(
-					-DENABLE_GNUTLS=OFF
-					-DENABLE_MBEDTLS=$(usex mbedtls)
 					-DENABLE_OPENSSL=OFF
 				)
 			else
 				mycmakeargs+=(
 					-DENABLE_GNUTLS=OFF
-					-DENABLE_MBEDTLS=OFF
 					-DENABLE_OPENSSL=ON
 				)
 			fi
 		else
 			mycmakeargs+=(
 				-DENABLE_GNUTLS=OFF
-				-DENABLE_MBEDTLS=OFF
 				-DENABLE_OPENSSL=OFF
 			)
 		fi

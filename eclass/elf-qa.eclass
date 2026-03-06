@@ -129,12 +129,18 @@ _elfqa-find-files() {
 	echo "${files[@]}"
 }
 
-_elfqa-is-elf() {
-	local file=$1
-	local readelf_cmd
-	readelf_cmd=$(tc-getREADELF)
-	"${readelf_cmd}" -h "${file}" >/dev/null 2>&1
-}
+	_elfqa-is-elf() {
+		local file=$1
+		local magic
+		local readelf_cmd
+
+		# Static archives are handled by binutils policy checks, not ELF program-header checks.
+		magic=$(dd if="${file}" bs=8 count=1 2>/dev/null || true)
+		[[ ${magic} == '!<arch>'* || ${magic} == '!<thin>'* ]] && return 1
+
+		readelf_cmd=$(tc-getREADELF)
+		"${readelf_cmd}" -h "${file}" >/dev/null 2>&1
+	}
 
 _elfqa-type() {
 	local file=$1

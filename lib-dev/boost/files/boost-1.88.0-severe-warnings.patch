@@ -1,0 +1,42 @@
+From 14cc26d5328ec3c750caa65b81a047a4af31b374 Mon Sep 17 00:00:00 2001
+From: 1g4 QA <qa@oneg4.local>
+Date: Fri, 6 Mar 2026 13:15:00 +0000
+Subject: [PATCH] boost: address severe warning sites under GCC 15
+
+- tighten the multialloc loop condition to a monotonic bound (`i < next_i`)
+  to avoid wraparound-style loop analysis warnings.
+- value-initialize the wchar conversion sliding buffer storage before iterator
+  setup so the constructor no longer trips uninitialized-member diagnostics.
+---
+ boost/archive/iterators/wchar_from_mb.hpp | 1 +
+ libs/container/src/dlmalloc_ext_2_8_6.c   | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/boost/archive/iterators/wchar_from_mb.hpp b/boost/archive/iterators/wchar_from_mb.hpp
+index fc23708..5630235 100644
+--- a/boost/archive/iterators/wchar_from_mb.hpp
++++ b/boost/archive/iterators/wchar_from_mb.hpp
+@@ -100,6 +100,7 @@ struct wchar_from_mb :
+         bool m_done;
+         // default ctor
+         sliding_buffer() :
++            m_buffer(),
+             m_next_available(m_buffer.begin()),
+             m_next(m_buffer.begin()),
+             m_done(false)
+diff --git a/libs/container/src/dlmalloc_ext_2_8_6.c b/libs/container/src/dlmalloc_ext_2_8_6.c
+index cd26bd5..f885ecd 100644
+--- a/libs/container/src/dlmalloc_ext_2_8_6.c
++++ b/libs/container/src/dlmalloc_ext_2_8_6.c
+@@ -1080,7 +1080,7 @@ static int internal_multialloc_arrays(mstate m, size_t n_elements, const size_t
+             boost_cont_memchain_it last_it = BOOST_CONTAINER_MEMCHAIN_LAST_IT(pchain);
+             size_t num_elements = next_i-i;
+ 
+-            for(++i; i != next_i; ++i) {
++            for(++i; i < next_i; ++i) {
+                void **mem_prev = ((void**)mem);
+                size = request2size(sizes[i]*element_size);
+                remainder_size -= size;
+-- 
+2.49.0
+

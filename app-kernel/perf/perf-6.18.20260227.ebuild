@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bpf debug"
+IUSE="+bfd bpf debug"
 RESTRICT="debug? ( strip )"
 
 DEPEND="
@@ -24,6 +24,7 @@ DEPEND="
 	lib-core/zlib
 	app-compression/xz-utils
 	app-compression/zstd
+	bfd? ( app-build/binutils )
 	bpf? ( lib-net/libbpf:= )
 "
 RDEPEND="${DEPEND}"
@@ -84,6 +85,10 @@ src_compile() {
 		BUILD_BPF_SKEL=0
 	)
 
+	if ! use bfd ; then
+		myemake+=( NO_LIBBFD=1 )
+	fi
+
 	if ! use bpf ; then
 		myemake+=( NO_LIBBPF=1 )
 	else
@@ -136,6 +141,10 @@ src_install() {
 		NO_SLANG=1
 		BUILD_BPF_SKEL=0
 	)
+
+	if ! use bfd ; then
+		myemake+=( NO_LIBBFD=1 )
+	fi
 
 	if ! use bpf ; then
 		myemake+=( NO_LIBBPF=1 )

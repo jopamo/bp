@@ -44,15 +44,15 @@ src_prepare() {
 	if use bfd; then
 		# keep probe and final libbfd links aligned with modern binutils static deps
 		sed -i \
-			-e 's/$(call libbfd_build,-lbfd -ldl))/$(call libbfd_build,-lbfd -ldl -lsframe -lzstd))/' \
-			-e 's/$(call libbfd_build,-lbfd -ldl -liberty))/$(call libbfd_build,-lbfd -ldl -liberty -lsframe -lzstd))/' \
-			-e 's/$(call libbfd_build,-lbfd -ldl -liberty -lz))/$(call libbfd_build,-lbfd -ldl -liberty -lz -lsframe -lzstd))/' \
+			-e 's/$(call libbfd_build,-lbfd -ldl))/$(call libbfd_build,-lbfd -ldl -lsframe -lzstd -lstdc++))/' \
+			-e 's/$(call libbfd_build,-lbfd -ldl -liberty))/$(call libbfd_build,-lbfd -ldl -liberty -lsframe -lzstd -lstdc++))/' \
+			-e 's/$(call libbfd_build,-lbfd -ldl -liberty -lz))/$(call libbfd_build,-lbfd -ldl -liberty -lz -lsframe -lzstd -lstdc++))/' \
 			src/Makefile.feature || die
 
 		sed -i \
-			-e 's/LIBS += -lbfd -ldl -lopcodes$/LIBS += -lbfd -ldl -lopcodes -lsframe -lzstd/' \
-			-e 's/LIBS += -lbfd -ldl -lopcodes -liberty$/LIBS += -lbfd -ldl -lopcodes -liberty -lsframe -lzstd/' \
-			-e 's/LIBS += -lbfd -ldl -lopcodes -liberty -lz$/LIBS += -lbfd -ldl -lopcodes -liberty -lz -lsframe -lzstd/' \
+			-e 's/LIBS += -lbfd -ldl -lopcodes$/LIBS += -lbfd -ldl -lopcodes -lsframe -lzstd -lstdc++/' \
+			-e 's/LIBS += -lbfd -ldl -lopcodes -liberty$/LIBS += -lbfd -ldl -lopcodes -liberty -lsframe -lzstd -lstdc++/' \
+			-e 's/LIBS += -lbfd -ldl -lopcodes -liberty -lz$/LIBS += -lbfd -ldl -lopcodes -liberty -lz -lsframe -lzstd -lstdc++/' \
 			src/Makefile || die
 	fi
 

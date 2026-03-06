@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake dot-a
+inherit cmake multibuild dot-a
 
 DESCRIPTION="Library implementing the SSH2 protocol"
 HOMEPAGE="http://www.libssh.org/"
@@ -16,16 +16,36 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-src_configure() {
-	use static-libs && lto-guarantee-fat
+pkg_setup() {
+	MULTIBUILD_VARIANTS=( $(usev static-libs) shared )
+}
 
-	local mycmakeargs=(
-		-DWITH_STATIC_LIB=$(usex static-libs)
-	)
-	cmake_src_configure
+src_configure() {
+	myconfigure() {
+		local mycmakeargs=()
+
+		if [[ ${MULTIBUILD_VARIANT} = static-libs ]]; then
+			lto-guarantee-fat
+			mycmakeargs+=(
+				-DBUILD_SHARED_LIBS=OFF
+			)
+		else
+			mycmakeargs+=(
+				-DBUILD_SHARED_LIBS=ON
+			)
+		fi
+
+		cmake_src_configure
+	}
+
+	multibuild_foreach_variant myconfigure
+}
+
+src_compile() {
+	multibuild_foreach_variant cmake_src_compile
 }
 
 src_install() {
-	cmake_src_install
+	multibuild_foreach_variant cmake_src_install
 	use static-libs && strip-lto-bytecode
 }

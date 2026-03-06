@@ -47,11 +47,11 @@ src_prepare() {
 		fi
 	fi
 
-	# keep libstdc++ retained under global --as-needed so LTO links
-	# don't drop __cxa_demangle providers used by demangle-cxx.cpp
+	# retain libstdc++ for the final perf link under global --as-needed/LTO
+	# so __cxa_demangle stays resolved even when libbfd/libiberty are linked
 	sed -i \
-		-e 's/EXTLIBS += -lstdc++/EXTLIBS += -Wl,--no-as-needed -lstdc++ -Wl,--as-needed/g' \
-		Makefile.config || die
+		-e 's|\$(PERF_IN) \$(LIBS) -o \$@|$(PERF_IN) $(LIBS) -Wl,--push-state,--no-as-needed -lstdc++ -Wl,--pop-state -o $@|' \
+		Makefile.perf || die
 }
 
 src_compile() {

@@ -2,6 +2,8 @@
 
 EAPI=8
 
+PYTHON_COMPAT=( python3_{11..14} )
+
 inherit cmake python-single-r1
 
 DESCRIPTION="pahole (Poke-a-Hole) and other DWARF utilities"
@@ -17,7 +19,18 @@ KEYWORDS="amd64 arm64"
 IUSE="debug"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-DEPEND="lib-net/libbpf"
+DEPEND="
+	lib-core/elfutils
+	lib-net/libbpf:=
+"
+RDEPEND="
+	${DEPEND}
+	${PYTHON_DEPS}
+"
+
+pkg_setup() {
+	python-single-r1_pkg_setup
+}
 
 src_prepare() {
 	[[ -d "${WORKDIR}"/${P}-patches ]] && PATCHES+=( "${WORKDIR}"/${P}-patches )
@@ -28,11 +41,7 @@ src_prepare() {
 
 src_configure() {
 	local mycmakeargs=(
-		-D__LIB=lib
 		-DLIBBPF_EMBEDDED=OFF
 	)
-	cmake_src_configure
-
-	local mycmakeargs=( "-D__LIB=lib" )
 	cmake_src_configure
 }

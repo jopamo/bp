@@ -6,16 +6,9 @@ inherit toolchain-funcs
 
 DESCRIPTION="Tool for inspection and simple manipulation of eBPF programs and maps"
 HOMEPAGE="https://github.com/libbpf/bpftool"
-
-if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/libbpf/bpftool"
-	inherit git-r3
-	#S=${S}/src
-else
-	SNAPSHOT=168e72dcd3e04e0e19e92c012a04b8a1e4658f50
-	SRC_URI="https://github.com/libbpf/bpftool/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=45a3320991b7aab5096493ec40ac49cd0c678f99
+SRC_URI="https://github.com/libbpf/bpftool/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="|| ( GPL-2 BSD-2 )"
 SLOT="0"
@@ -24,16 +17,20 @@ KEYWORDS="amd64 arm64"
 IUSE="caps clang llvm"
 
 BDEPEND="dev-python/docutils"
+DEPEND="
+	lib-net/libbpf:=[static-libs]
+	lib-core/elfutils
+	virtual/ssl:0=
+	caps? ( lib-core/libcap )
+	clang? ( app-build/clang )
+	llvm? ( app-build/llvm:= )
+"
+RDEPEND="${DEPEND}"
 
 CONFIG_CHECK="~DEBUG_INFO_BTF"
 
 src_prepare() {
 	default
-
-	#ln -s "${WORKDIR}/libbpf-${LIBBPF_VERSION}" libbpf || die
-
-	# remove -Werror from libbpf (bug 887981)
-	sed -i -e 's/\-Werror//g' libbpf/src/Makefile || die
 
 	# remove -Werror from bpftool feature detection
 	sed -i -e 's/-Werror//g' src/Makefile.feature || die
@@ -57,6 +54,8 @@ src_prepare() {
 
 bpftool_make() {
 	tc-export AR CC LD
+	local libbpf_include=${BPFTOOL_LIBBPF_INCLUDE:-${EPREFIX}/usr/include}
+	local libbpf_library=${BPFTOOL_LIBBPF_LIBRARY:-${EPREFIX}/usr/lib/libbpf.a}
 
 	emake \
 		ARCH="$(tc-arch-kernel)" \
@@ -65,6 +64,12 @@ bpftool_make() {
 		HOSTLD="$(tc-getBUILD_LD)" \
 		feature-libcap="$(usex caps 1 0)" \
 		feature-llvm="$(usex llvm 1 0)" \
+		LIBBPF="${libbpf_library}" \
+		LIBBPF_BOOTSTRAP="${libbpf_library}" \
+		LIBBPF_INCLUDE="${libbpf_include}" \
+		LIBBPF_BOOTSTRAP_INCLUDE="${libbpf_include}" \
+		LIBBPF_INTERNAL_HDRS= \
+		LIBBPF_BOOTSTRAP_INTERNAL_HDRS= \
 		prefix="${EPREFIX}"/usr \
 		V=1 \
 		"$@"

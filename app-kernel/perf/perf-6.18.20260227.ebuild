@@ -18,7 +18,15 @@ KEYWORDS="amd64 arm64"
 IUSE="bpf debug"
 RESTRICT="debug? ( strip )"
 
-DEPEND="app-kernel/libtraceevent"
+DEPEND="
+	app-kernel/libtraceevent
+	lib-core/elfutils
+	lib-core/zlib
+	app-compression/xz-utils
+	app-compression/zstd
+	bpf? ( lib-net/libbpf:= )
+"
+RDEPEND="${DEPEND}"
 
 src_prepare() {
 	default
@@ -41,6 +49,7 @@ src_prepare() {
 
 src_compile() {
 	local perf_arch
+	local perf_timestamp=${SOURCE_DATE_EPOCH:+@${SOURCE_DATE_EPOCH}}
 
 	case ${ARCH} in
 		amd64)
@@ -54,13 +63,32 @@ src_compile() {
 			;;
 	esac
 
+	[[ -n ${perf_timestamp} ]] || perf_timestamp='1970-01-01 00:00:00 +0000'
+
 	local myemake=(
 		ARCH=${perf_arch}
 		WERROR=0
+		KBUILD_BUILD_TIMESTAMP="${perf_timestamp}"
+		NO_AIO=1
+		NO_CAPSTONE=1
+		NO_GTK2=1
+		NO_JVMTI=1
+		NO_LIBBABELTRACE=1
+		NO_LIBDEBUGINFOD=1
+		NO_LIBLLVM=1
+		NO_LIBNUMA=1
+		NO_LIBPFM4=1
+		NO_LIBPYTHON=1
+		NO_LIBUNWIND=1
+		NO_SDT=1
+		NO_SLANG=1
+		BUILD_BPF_SKEL=0
 	)
 
 	if ! use bpf ; then
 		myemake+=( NO_LIBBPF=1 )
+	else
+		myemake+=( LIBBPF_DYNAMIC=1 )
 	fi
 
 	if use debug ; then
@@ -75,6 +103,7 @@ src_compile() {
 
 src_install() {
 	local perf_arch
+	local perf_timestamp=${SOURCE_DATE_EPOCH:+@${SOURCE_DATE_EPOCH}}
 
 	case ${ARCH} in
 		amd64)
@@ -88,13 +117,32 @@ src_install() {
 			;;
 	esac
 
+	[[ -n ${perf_timestamp} ]] || perf_timestamp='1970-01-01 00:00:00 +0000'
+
 	local myemake=(
 		ARCH=${perf_arch}
 		WERROR=0
+		KBUILD_BUILD_TIMESTAMP="${perf_timestamp}"
+		NO_AIO=1
+		NO_CAPSTONE=1
+		NO_GTK2=1
+		NO_JVMTI=1
+		NO_LIBBABELTRACE=1
+		NO_LIBDEBUGINFOD=1
+		NO_LIBLLVM=1
+		NO_LIBNUMA=1
+		NO_LIBPFM4=1
+		NO_LIBPYTHON=1
+		NO_LIBUNWIND=1
+		NO_SDT=1
+		NO_SLANG=1
+		BUILD_BPF_SKEL=0
 	)
 
 	if ! use bpf ; then
 		myemake+=( NO_LIBBPF=1 )
+	else
+		myemake+=( LIBBPF_DYNAMIC=1 )
 	fi
 
 	if use debug ; then

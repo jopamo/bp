@@ -8,7 +8,6 @@ app-fs
 app-kernel
 app-lang
 app-net
-app-port
 app-server
 app-tex
 app-util
@@ -21,7 +20,6 @@ dev-rust
 distfiles
 eclass
 fonts
-gnome-base
 lib-core
 lib-dev
 lib-misc

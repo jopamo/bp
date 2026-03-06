@@ -100,5 +100,12 @@ src_install() {
     cd build
     emake DESTDIR="${ED}" install
 
+    if [[ -d "${ED}"/var/run ]]; then
+        rmdir "${ED}"/var/run || die "expected empty runtime directory: ${ED}/var/run"
+    fi
+    if [[ -d "${ED}"/var ]]; then
+        rmdir "${ED}"/var || die "expected empty runtime directory: ${ED}/var"
+    fi
+
     dostrip -x /usr/share/qemu
 }

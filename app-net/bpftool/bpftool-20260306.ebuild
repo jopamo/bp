@@ -21,7 +21,7 @@ DEPEND="
 	lib-net/libbpf:=[static-libs]
 	lib-core/elfutils
 	virtual/ssl:0=
-	bfd? ( app-build/binutils )
+	bfd? ( app-build/binutils lib-core/zstd )
 	caps? ( lib-core/libcap )
 	clang? ( app-build/clang )
 	llvm? ( app-build/llvm:= )
@@ -40,6 +40,21 @@ src_prepare() {
 
 	# remove hardcoded/unhelpful flags from bpftool
 	sed -i -e '/CFLAGS += -O2/d' -e 's/-W //g' -e 's/-Wextra //g' src/Makefile || die
+
+	if use bfd; then
+		# keep probe and final libbfd links aligned with modern binutils static deps
+		sed -i \
+			-e 's/$(call libbfd_build,-lbfd -ldl))/$(call libbfd_build,-lbfd -ldl -lsframe -lzstd))/' \
+			-e 's/$(call libbfd_build,-lbfd -ldl -liberty))/$(call libbfd_build,-lbfd -ldl -liberty -lsframe -lzstd))/' \
+			-e 's/$(call libbfd_build,-lbfd -ldl -liberty -lz))/$(call libbfd_build,-lbfd -ldl -liberty -lz -lsframe -lzstd))/' \
+			src/Makefile.feature || die
+
+		sed -i \
+			-e 's/LIBS += -lbfd -ldl -lopcodes$/LIBS += -lbfd -ldl -lopcodes -lsframe -lzstd/' \
+			-e 's/LIBS += -lbfd -ldl -lopcodes -liberty$/LIBS += -lbfd -ldl -lopcodes -liberty -lsframe -lzstd/' \
+			-e 's/LIBS += -lbfd -ldl -lopcodes -liberty -lz$/LIBS += -lbfd -ldl -lopcodes -liberty -lz -lsframe -lzstd/' \
+			src/Makefile || die
+	fi
 
 	if ! use clang; then
 		# remove bpf target & add assembly annotations to fix CO-RE feature detection

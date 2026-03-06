@@ -74,7 +74,7 @@ src_install() {
 
 	# No shared linking to these files outside binutils
 	rm -f "${ED}"/usr/lib/lib{bfd,opcodes}.so || die
-	echo 'INPUT( /usr/lib/libbfd.a -liberty -lz -ldl )' > "${ED}"/usr/lib/libbfd.so
+	echo 'INPUT( /usr/lib/libbfd.a -liberty -lsframe -lz -lzstd -ldl )' > "${ED}"/usr/lib/libbfd.so
 	echo 'INPUT( /usr/lib/libopcodes.a -lbfd )' > "${ED}"/usr/lib/libopcodes.so
 
 	for x in ld objdump readelf ranlib objcopy nm as strip ld.bfd ar ; do

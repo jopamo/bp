@@ -48,18 +48,17 @@ src_prepare() {
 }
 
 src_compile() {
-	local perf_arch
+	local perf_arch=${ARCH}
 	local perf_timestamp=${SOURCE_DATE_EPOCH:+@${SOURCE_DATE_EPOCH}}
 
-	case ${ARCH} in
-		amd64)
+	[[ -n ${perf_arch} ]] || perf_arch=$(uname -m)
+
+	case ${perf_arch} in
+		amd64|x86_64)
 			perf_arch=x86
 			;;
-		arm64)
+		arm64|aarch64)
 			perf_arch=arm64
-			;;
-		*)
-			perf_arch=${ARCH}
 			;;
 	esac
 
@@ -102,18 +101,17 @@ src_compile() {
 }
 
 src_install() {
-	local perf_arch
+	local perf_arch=${ARCH}
 	local perf_timestamp=${SOURCE_DATE_EPOCH:+@${SOURCE_DATE_EPOCH}}
 
-	case ${ARCH} in
-		amd64)
+	[[ -n ${perf_arch} ]] || perf_arch=$(uname -m)
+
+	case ${perf_arch} in
+		amd64|x86_64)
 			perf_arch=x86
 			;;
-		arm64)
+		arm64|aarch64)
 			perf_arch=arm64
-			;;
-		*)
-			perf_arch=${ARCH}
 			;;
 	esac
 

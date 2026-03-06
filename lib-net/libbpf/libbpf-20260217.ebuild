@@ -16,6 +16,11 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 BDEPEND="app-dev/patchelf"
+DEPEND="
+	lib-core/elfutils
+	lib-core/zlib
+"
+RDEPEND="${DEPEND}"
 
 PATCHES=(
 	"${FILESDIR}"/libbpf-9999-paths.patch
@@ -36,6 +41,10 @@ src_install() {
 		DESTDIR="${D}" \
 		LIBSUBDIR="${LIBSUBDIR}" \
 		install install_uapi_headers
+
+	# bpftool consumes these libbpf internal headers during its own build.
+	insinto /usr/include/bpf
+	doins hashmap.h nlattr.h relo_core.h libbpf_internal.h
 
 	if ! use static-libs; then
 		find "${ED}" -name '*.a' -delete || die

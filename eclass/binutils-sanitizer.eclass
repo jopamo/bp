@@ -83,10 +83,10 @@ _bu-has-index() {
 	"${nm_cmd}" -s "${archive}" 2>/dev/null | grep -q '^Archive index:'
 }
 
-_bu-has-lto-ir() {
-	local archive=$1
-	grep -aEq '__gnu_lto_v1|\.gnu\.lto_|\.llvmbc|\.llvm' "${archive}"
-}
+	_bu-has-lto-ir() {
+		local archive=$1
+		grep -aEq '__gnu_lto_v1|\.gnu\.lto_|\.llvmbc|\.llvm\.lto' "${archive}"
+	}
 
 _bu-building-binpkg() {
 	[[ " ${FEATURES} " == *" buildpkg "* ]] || [[ " ${FEATURES} " == *" buildpkg-live "* ]] || [[ -n ${BINPKG_FORMAT} ]]

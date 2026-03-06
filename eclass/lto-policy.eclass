@@ -238,10 +238,10 @@ _lto-policy-ir-allowed() {
 	return 1
 }
 
-_lto-policy-has-ir() {
-	local archive=$1
-	grep -aEq '__gnu_lto_v1|\.gnu\.lto_|\.llvmbc|\.llvm' "${archive}"
-}
+	_lto-policy-has-ir() {
+		local archive=$1
+		grep -aEq '__gnu_lto_v1|\.gnu\.lto_|\.llvmbc|\.llvm\.lto' "${archive}"
+	}
 
 # @FUNCTION: lto-assert-clean-ir
 # @USAGE: [path] [more]

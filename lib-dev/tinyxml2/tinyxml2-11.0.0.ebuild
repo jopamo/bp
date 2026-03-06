@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake dot-a
+inherit cmake multibuild dot-a
 
 DESCRIPTION="A simple, small, efficient, C++ XML parser"
 HOMEPAGE="http://www.grinninglizard.com/tinyxml2/ https://github.com/leethomason/tinyxml2/"
@@ -13,17 +13,46 @@ SLOT="0/6"
 KEYWORDS="amd64 arm64"
 IUSE="static-libs test"
 
-src_configure() {
-	use static-libs && lto-guarantee-fat
+pkg_setup() {
+	MULTIBUILD_VARIANTS=( shared $(usev static-libs) )
+}
 
-	local mycmakeargs=(
-		-DBUILD_STATIC_LIBS=$(usex static-libs)
-		-DBUILD_TESTING=$(usex test)
-	)
-	cmake_src_configure
+src_configure() {
+	myconfigure() {
+		local mycmakeargs=()
+
+		if [[ ${MULTIBUILD_VARIANT} = static-libs ]]; then
+			lto-guarantee-fat
+			mycmakeargs+=(
+				-DBUILD_SHARED_LIBS=OFF
+				-Dtinyxml2_BUILD_TESTING=OFF
+			)
+		else
+			mycmakeargs+=(
+				-DBUILD_SHARED_LIBS=ON
+				-Dtinyxml2_BUILD_TESTING=$(usex test)
+			)
+		fi
+
+		cmake_src_configure
+	}
+
+	multibuild_foreach_variant myconfigure
+}
+
+src_compile() {
+	multibuild_foreach_variant cmake_src_compile
+}
+
+src_test() {
+	run_tests() {
+		[[ ${MULTIBUILD_VARIANT} = shared ]] && cmake_src_test
+	}
+
+	multibuild_foreach_variant run_tests
 }
 
 src_install() {
-	cmake_src_install
+	multibuild_foreach_variant cmake_src_install
 	use static-libs && strip-lto-bytecode
 }

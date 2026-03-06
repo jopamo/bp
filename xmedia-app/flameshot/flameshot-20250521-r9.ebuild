@@ -22,3 +22,7 @@ DEPEND="
 	xgui-lib/qtbase:5
 	xmedia-app/singleapplication
 "
+
+PATCHES=(
+	"${FILESDIR}/flameshot-20250521-r9-strict-aliasing-remove-task.patch"
+)

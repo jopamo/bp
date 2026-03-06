@@ -1,0 +1,58 @@
+From b627f2ad278f0dcf457f79334547e5e01f562f9a Mon Sep 17 00:00:00 2001
+From: 1g4 QA <qa@oneg4.local>
+Date: Fri, 6 Mar 2026 12:00:00 +0000
+Subject: [PATCH] poppler: zero-initialize SplashColor stack buffers
+
+SplashSolidColor copies all SplashColor components. Several getColor()
+overloads only assigned a subset of components before constructing
+SplashSolidColor, which let the compiler detect uninitialized reads via
+splashColorCopy.
+
+Initialize the stack color buffers to zero in all overloads.
+---
+ poppler/SplashOutputDev.cc | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/poppler/SplashOutputDev.cc b/poppler/SplashOutputDev.cc
+index c9524f7..6888c5e 100644
+--- a/poppler/SplashOutputDev.cc
++++ b/poppler/SplashOutputDev.cc
+@@ -1582,7 +1582,7 @@ void SplashOutputDev::updateStrokeColor(GfxState *state)
+ 
+ SplashPattern *SplashOutputDev::getColor(GfxGray gray)
+ {
+-    SplashColor color;
++    SplashColor color = { 0 };
+ 
+     color[0] = colToByte(gray);
+     return new SplashSolidColor(color);
+@@ -1591,7 +1591,7 @@ SplashPattern *SplashOutputDev::getColor(GfxGray gray)
+ SplashPattern *SplashOutputDev::getColor(GfxRGB *rgb)
+ {
+     GfxColorComp r, g, b;
+-    SplashColor color;
++    SplashColor color = { 0 };
+ 
+     r = rgb->r;
+     g = rgb->g;
+@@ -1607,7 +1607,7 @@ SplashPattern *SplashOutputDev::getColor(GfxRGB *rgb)
+ 
+ SplashPattern *SplashOutputDev::getColor(GfxCMYK *cmyk)
+ {
+-    SplashColor color;
++    SplashColor color = { 0 };
+ 
+     color[0] = colToByte(cmyk->c);
+     color[1] = colToByte(cmyk->m);
+@@ -1618,7 +1618,7 @@ SplashPattern *SplashOutputDev::getColor(GfxCMYK *cmyk)
+ 
+ SplashPattern *SplashOutputDev::getColor(GfxColor *deviceN)
+ {
+-    SplashColor color;
++    SplashColor color = { 0 };
+ 
+     for (int i = 0; i < 4 + SPOT_NCOMPS; i++) {
+         color[i] = colToByte(deviceN->c[i]);
+-- 
+2.49.0
+

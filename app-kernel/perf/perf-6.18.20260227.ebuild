@@ -15,11 +15,12 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+bfd bpf debug"
+IUSE="+bfd bpf +capstone debug"
 RESTRICT="debug? ( strip )"
 
 DEPEND="
 	app-kernel/libtraceevent
+	capstone? ( app-emu/capstone )
 	lib-core/elfutils
 	lib-core/zlib
 	app-compression/xz-utils
@@ -76,7 +77,6 @@ src_compile() {
 		WERROR=0
 		KBUILD_BUILD_TIMESTAMP="${perf_timestamp}"
 		NO_AIO=1
-		NO_CAPSTONE=1
 		NO_GTK2=1
 		NO_JVMTI=1
 		NO_LIBBABELTRACE=1
@@ -99,6 +99,10 @@ src_compile() {
 		myemake+=( NO_LIBBPF=1 )
 	else
 		myemake+=( LIBBPF_DYNAMIC=1 )
+	fi
+
+	if ! use capstone ; then
+		myemake+=( NO_CAPSTONE=1 )
 	fi
 
 	if use debug ; then
@@ -133,7 +137,6 @@ src_install() {
 		WERROR=0
 		KBUILD_BUILD_TIMESTAMP="${perf_timestamp}"
 		NO_AIO=1
-		NO_CAPSTONE=1
 		NO_GTK2=1
 		NO_JVMTI=1
 		NO_LIBBABELTRACE=1
@@ -156,6 +159,10 @@ src_install() {
 		myemake+=( NO_LIBBPF=1 )
 	else
 		myemake+=( LIBBPF_DYNAMIC=1 )
+	fi
+
+	if ! use capstone ; then
+		myemake+=( NO_CAPSTONE=1 )
 	fi
 
 	if use debug ; then

@@ -9,8 +9,8 @@ Subject: [PATCH] boost: address severe warning sites under GCC 15
   setup so the constructor no longer trips uninitialized-member diagnostics.
 ---
  boost/archive/iterators/wchar_from_mb.hpp | 1 +
- libs/container/src/dlmalloc_ext_2_8_6.c   | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ libs/container/src/dlmalloc_ext_2_8_6.c   | 5 ++++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/boost/archive/iterators/wchar_from_mb.hpp b/boost/archive/iterators/wchar_from_mb.hpp
 index fc23708..5630235 100644
@@ -28,15 +28,17 @@ diff --git a/libs/container/src/dlmalloc_ext_2_8_6.c b/libs/container/src/dlmall
 index cd26bd5..f885ecd 100644
 --- a/libs/container/src/dlmalloc_ext_2_8_6.c
 +++ b/libs/container/src/dlmalloc_ext_2_8_6.c
-@@ -1080,7 +1080,7 @@ static int internal_multialloc_arrays(mstate m, size_t n_elements, const size_t
+@@ -1080,7 +1080,10 @@ static int internal_multialloc_arrays(mstate m, size_t n_elements, const size_t
              boost_cont_memchain_it last_it = BOOST_CONTAINER_MEMCHAIN_LAST_IT(pchain);
              size_t num_elements = next_i-i;
  
 -            for(++i; i != next_i; ++i) {
 +            for(++i; i < next_i; ++i) {
++               if(i >= n_elements){
++                  break;
++               }
                 void **mem_prev = ((void**)mem);
                 size = request2size(sizes[i]*element_size);
                 remainder_size -= size;
 -- 
 2.49.0
-

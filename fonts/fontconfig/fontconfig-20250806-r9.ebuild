@@ -15,3 +15,17 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-lib/freetype"
+
+src_install() {
+	meson_src_install
+
+	if [[ -d "${ED}"/var/cache/fontconfig ]]; then
+		rmdir "${ED}"/var/cache/fontconfig || die "expected empty runtime cache dir: ${ED}/var/cache/fontconfig"
+	fi
+	if [[ -d "${ED}"/var/cache ]]; then
+		rmdir "${ED}"/var/cache || die "expected empty runtime cache dir: ${ED}/var/cache"
+	fi
+	if [[ -d "${ED}"/var ]]; then
+		rmdir "${ED}"/var || die "expected empty runtime cache dir: ${ED}/var"
+	fi
+}

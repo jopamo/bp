@@ -30,6 +30,10 @@ BDEPEND="lib-dev/boost-build"
 
 RESTRICT="test"
 
+PATCHES=(
+	"${FILESDIR}/boost-1.88.0-severe-warnings.patch"
+)
+
 ejam() {
 	local b2_opts=(
 		"$@"

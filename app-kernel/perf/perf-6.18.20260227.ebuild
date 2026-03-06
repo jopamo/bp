@@ -46,6 +46,12 @@ src_prepare() {
 				"${ksrc}"/tools/include/asm/cmpxchg.h || die
 		fi
 	fi
+
+	# keep libstdc++ retained under global --as-needed so LTO links
+	# don't drop __cxa_demangle providers used by demangle-cxx.cpp
+	sed -i \
+		-e 's/EXTLIBS += -lstdc++/EXTLIBS += -Wl,--no-as-needed -lstdc++ -Wl,--as-needed/g' \
+		Makefile.config || die
 }
 
 src_compile() {

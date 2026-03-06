@@ -34,6 +34,11 @@ src_install() {
   # 1. install the tree exactly as shipped
   cp -a "${WORKDIR}"/usr "${ED}"/ || die
 
+  # Normalize pre-compressed upstream docs for docompress-managed paths.
+  if [[ -f "${ED}"/usr/share/doc/protonmail-bridge/changelog.gz ]]; then
+    gunzip "${ED}"/usr/share/doc/protonmail-bridge/changelog.gz || die
+  fi
+
   # 2. Provide a shorter CLI symlink (many how-tos call 'proton-bridge')
   dosym -r /usr/lib/protonmail/bridge/proton-bridge /usr/bin/proton-bridge
 

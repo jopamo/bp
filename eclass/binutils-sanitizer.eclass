@@ -23,6 +23,8 @@ inherit toolchain-funcs
 : "${BU_FORBID_LTO_IR_IN_BINPKG:=1}"
 : "${BU_CONVERT_THIN:=1}"
 : "${BU_REINDEX_ALL:=1}"
+: "${BU_CHECK_LDSCRIPTS:=1}"
+: "${BU_REQUIRE_GNU_LDSCRIPT_HEADER:=1}"
 : "${BU_STRICT:=1}"
 : "${BU_ALLOW:=}"
 
@@ -67,6 +69,62 @@ _bu-find-archives() {
 	done
 
 	echo "${files[@]}"
+}
+
+_bu-is-ldscript() {
+	local file=$1
+	local magic
+	magic=$(dd if="${file}" bs=1 count=4 2>/dev/null || true)
+	[[ ${magic} == $'\177ELF' ]] && return 1
+
+	grep -aqE '^[[:space:]]*(/\* GNU ld script \*/)?[[:space:]]*(INPUT|GROUP)[[:space:]]*\(' "${file}"
+}
+
+_bu-find-ldscripts() {
+	local input
+	local -a files=()
+	local -a found=()
+
+	if [[ ${#} -eq 0 ]]; then
+		set -- "${ED}"
+	fi
+
+	for input in "$@" ; do
+		[[ -e ${input} ]] || die "bu: missing path ${input}"
+	done
+
+	for input in "$@" ; do
+		if [[ -d ${input} ]]; then
+			mapfile -d '' -t found < <(find -H "${input}" -type f -name '*.so' -print0)
+			files+=( "${found[@]}" )
+		elif [[ -f ${input} && ${input} == *.so ]]; then
+			files+=( "${input}" )
+		fi
+	done
+
+	local script
+	local -a scripts=()
+	for script in "${files[@]}" ; do
+		_bu-is-ldscript "${script}" && scripts+=( "${script}" )
+	done
+
+	echo "${scripts[@]}"
+}
+
+_bu-ldscript-has-header() {
+	local file=$1
+	head -n 1 "${file}" | grep -qE '^[[:space:]]*/\* GNU ld script \*/[[:space:]]*$'
+}
+
+_bu-ldscript-has-token() {
+	local file=$1
+	local token=$2
+	local tok
+	while read -r tok; do
+		[[ ${tok} == "${token}" ]] && return 0
+	done < <(tr '()\t\n' '    ' < "${file}")
+
+	return 1
 }
 
 _bu-is-thin() {
@@ -173,6 +231,42 @@ bu-archive-check() {
 	[[ ${failures} -eq 0 ]]
 }
 
+# @FUNCTION: bu-ldscript-check
+# @USAGE: [path] ...
+# @DESCRIPTION:
+# Validate installed linker-script .so files and known dependency token sets
+bu-ldscript-check() {
+	local -a scripts=( $(_bu-find-ldscripts "$@") )
+	[[ ${#scripts[@]} -gt 0 ]] || return 0
+
+	local -i failures=0
+	local script rel dep
+	for script in "${scripts[@]}" ; do
+		rel=${script#${ED}}
+		einfo "bu: ldscript ${rel}"
+
+		if [[ ${BU_REQUIRE_GNU_LDSCRIPT_HEADER} == 1 ]] \
+			&& ! _bu-ldscript-has-header "${script}" \
+			&& ! _bu-rule-allowed ldscript_header "${rel}"; then
+			eerror "bu: ldscript header missing in ${rel}"
+			(( failures += 1 ))
+		fi
+
+		if [[ ${rel} == */libbfd.so ]]; then
+			local -a required=( -liberty -lsframe -lz -lzstd -lstdc++ -ldl )
+			for dep in "${required[@]}"; do
+				if ! _bu-ldscript-has-token "${script}" "${dep}" \
+					&& ! _bu-rule-allowed ldscript_dep "${rel}"; then
+					eerror "bu: ${rel} missing required token ${dep}"
+					(( failures += 1 ))
+				fi
+			done
+		fi
+	done
+
+	[[ ${failures} -eq 0 ]]
+}
+
 # @FUNCTION: bu-archive-fixup
 # @USAGE: [path] ...
 # @DESCRIPTION:
@@ -210,6 +304,9 @@ bu-archive-fixup() {
 # Enforce archive policy on installed files
 bu-assert() {
 	bu-archive-check "$@" || die "bu-assert: archive policy violations detected"
+	if [[ ${BU_CHECK_LDSCRIPTS} == 1 ]]; then
+		bu-ldscript-check "$@" || die "bu-assert: ldscript policy violations detected"
+	fi
 }
 
 fi

@@ -64,6 +64,14 @@ src_install() {
 
 	rm -f "${ED}"/usr/bin/gdbserver "${ED}"/usr/lib/libinproctrace.so || die
 
+	# libbfd consumers in this tree link via -liberty through libbfd.so
+	# linker script, so install the built libiberty archive alongside libbfd.
+	insinto /usr/lib
+	doins libiberty/libiberty.a
+
+	# libtool archives are not shipped for this package in the tree.
+	find "${ED}"/usr/lib -type f -name '*.la' -delete || die
+
 	# No shared linking to these files outside binutils
 	rm -f "${ED}"/usr/lib/lib{bfd,opcodes}.so || die
 	echo 'INPUT( /usr/lib/libbfd.a -liberty -lz -ldl )' > "${ED}"/usr/lib/libbfd.so

@@ -14,13 +14,14 @@ LICENSE="|| ( GPL-2 BSD-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps clang llvm"
+IUSE="+bfd caps clang llvm"
 
 BDEPEND="dev-py/docutils"
 DEPEND="
 	lib-net/libbpf:=[static-libs]
 	lib-core/elfutils
 	virtual/ssl:0=
+	bfd? ( app-build/binutils )
 	caps? ( lib-core/libcap )
 	clang? ( app-build/clang )
 	llvm? ( app-build/llvm:= )
@@ -56,12 +57,34 @@ bpftool_make() {
 	tc-export AR CC LD
 	local libbpf_include=${BPFTOOL_LIBBPF_INCLUDE:-${EPREFIX}/usr/include}
 	local libbpf_library=${BPFTOOL_LIBBPF_LIBRARY:-${EPREFIX}/usr/lib/libbpf.a}
+	local -a feature_tests=( libelf-zstd )
+	local -a feature_display=()
+
+	if use bfd; then
+		feature_tests+=( libbfd disassembler-four-args disassembler-init-styled )
+		feature_display+=( libbfd )
+	fi
+
+	use clang && {
+		feature_tests+=( clang-bpf-co-re )
+		feature_display+=( clang-bpf-co-re )
+	}
+	use llvm && {
+		feature_tests+=( llvm )
+		feature_display+=( llvm )
+	}
+	use caps && {
+		feature_tests+=( libcap )
+		feature_display+=( libcap )
+	}
 
 	emake \
 		ARCH="$(tc-arch-kernel)" \
 		HOSTAR="$(tc-getBUILD_AR)" \
 		HOSTCC="$(tc-getBUILD_CC)" \
 		HOSTLD="$(tc-getBUILD_LD)" \
+		FEATURE_TESTS="${feature_tests[*]}" \
+		FEATURE_DISPLAY="${feature_display[*]}" \
 		feature-libcap="$(usex caps 1 0)" \
 		feature-llvm="$(usex llvm 1 0)" \
 		LIBBPF="${libbpf_library}" \

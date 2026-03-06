@@ -21,7 +21,7 @@ DEPEND="
 	lib-net/libbpf:=[static-libs]
 	lib-core/elfutils
 	virtual/ssl:0=
-	bfd? ( app-build/binutils lib-core/zstd )
+	bfd? ( app-build/binutils app-compression/zstd )
 	caps? ( lib-core/libcap )
 	clang? ( app-build/clang )
 	llvm? ( app-build/llvm:= )

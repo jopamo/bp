@@ -16,6 +16,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="acl iconv ipv6 lz4 static xattr xxhash zstd"
 
+QA_CONFIG_IMPL_DECL_SKIP=(
+	makedev
+)
+
 LIB_DEPEND="
 	lib-core/zlib[static-libs(+)]
 	virtual/ssl[static-libs(+)]

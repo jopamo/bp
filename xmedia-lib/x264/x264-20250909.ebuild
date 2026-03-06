@@ -16,6 +16,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="interlaced opencl static-libs pic ffmpeg lsmash ffmpegsource"
 
+QA_CONFIG_IMPL_DECL_SKIP=(
+	elf_aux_info
+)
+
 DEPEND="
 	app-lang/nasm
 	opencl? ( app-lang/perl )

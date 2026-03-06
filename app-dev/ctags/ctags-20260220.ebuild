@@ -14,6 +14,10 @@ LICENSE="MIT CC-BY-3.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+QA_CONFIG_IMPL_DECL_SKIP=(
+	libiconv_open
+)
+
 src_prepare() {
 	default
 	eautoreconf

@@ -18,6 +18,10 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="lib-core/sqlite"
 
+QA_CONFIG_IMPL_DECL_SKIP=(
+	stat64
+)
+
 PATCHES=(
 	"${FILESDIR}"/${PN}-8.6.8-conf.patch
 	"${FILESDIR}"/${PN}-8.6.9-include-spec.patch

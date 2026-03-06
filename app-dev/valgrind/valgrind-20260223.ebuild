@@ -14,6 +14,10 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+QA_CONFIG_IMPL_DECL_SKIP=(
+	aio_readv
+)
+
 src_prepare() {
 	filter-flags -fomit-frame-pointer -fstack-protector*
 	filter-flags -flto* -Wl,-z,defs -O

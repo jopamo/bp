@@ -16,6 +16,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="pam mta systemd"
 
+QA_CONFIG_IMPL_DECL_SKIP=(
+	closefrom
+)
+
 DEPEND="
 	app-net/mailbase
 	lib-core/zlib

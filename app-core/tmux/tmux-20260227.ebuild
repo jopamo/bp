@@ -16,6 +16,12 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug"
 
+QA_CONFIG_IMPL_DECL_SKIP=(
+	# OpenBSD compatibility probes in configure.
+	strtonum
+	recallocarray
+)
+
 DEPEND="
 	lib-dev/libevent
 	virtual/curses

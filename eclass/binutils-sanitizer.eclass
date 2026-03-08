@@ -68,7 +68,9 @@ _bu-find-archives() {
 		fi
 	done
 
-	echo "${files[@]}"
+	if [[ ${#files[@]} -gt 0 ]]; then
+		printf '%s\0' "${files[@]}"
+	fi
 }
 
 _bu-is-ldscript() {
@@ -108,12 +110,14 @@ _bu-find-ldscripts() {
 		_bu-is-ldscript "${script}" && scripts+=( "${script}" )
 	done
 
-	echo "${scripts[@]}"
+	if [[ ${#scripts[@]} -gt 0 ]]; then
+		printf '%s\0' "${scripts[@]}"
+	fi
 }
 
 _bu-ldscript-has-header() {
 	local file=$1
-	head -n 1 "${file}" | grep -qE '^[[:space:]]*/\* GNU ld script \*/[[:space:]]*$'
+	head -n 1 "${file}" | grep -qE '^[[:space:]]*/\* GNU ld script([[:space:]]+\*/)?[[:space:]]*$'
 }
 
 _bu-ldscript-has-token() {
@@ -137,8 +141,10 @@ _bu-is-thin() {
 _bu-has-index() {
 	local archive=$1
 	local nm_cmd
+	local nm_out
 	nm_cmd=$(tc-getNM)
-	"${nm_cmd}" -s "${archive}" 2>/dev/null | grep -q '^Archive index:'
+	nm_out=$("${nm_cmd}" -s "${archive}" 2>/dev/null) || return 1
+	grep -q '^Archive index:' <<< "${nm_out}"
 }
 
 	_bu-has-lto-ir() {
@@ -155,34 +161,57 @@ _bu-convert-thin() {
 	local ar_cmd
 	ar_cmd=$(tc-getAR)
 
-	local tmpd tmpa
+	local tmpd tmpa listing
 	tmpd=$(mktemp -d "${T}/bu-thin-XXXXXX") || die "bu: mktemp failed"
 	tmpa=${archive}.tmp
 
-	if ! ( cd "${tmpd}" && "${ar_cmd}" x "${archive}" ); then
+	if ! listing=$("${ar_cmd}" t "${archive}" 2>/dev/null); then
 		rm -rf "${tmpd}"
 		if [[ ${BU_STRICT} == 1 ]]; then
-			die "bu: unable to extract thin archive ${archive}"
+			die "bu: unable to read thin archive members from ${archive}"
 		fi
-		ewarn "bu: unable to extract thin archive ${archive}"
+		ewarn "bu: unable to read thin archive members from ${archive}"
 		return 1
 	fi
 
 	local -a members=()
-	while IFS= read -r -d '' m; do
+	local m
+	while IFS= read -r m; do
+		[[ -n ${m} ]] || continue
 		members+=( "${m}" )
-	done < <(find -H "${tmpd}" -maxdepth 1 -type f -print0)
+	done <<< "${listing}"
 
 	if [[ ${#members[@]} -eq 0 ]]; then
 		rm -rf "${tmpd}"
 		if [[ ${BU_STRICT} == 1 ]]; then
-			die "bu: thin archive ${archive} had no extractable members"
+			die "bu: thin archive ${archive} had no readable members"
 		fi
-		ewarn "bu: thin archive ${archive} had no extractable members"
+		ewarn "bu: thin archive ${archive} had no readable members"
 		return 1
 	fi
 
-	"${ar_cmd}" crs "${tmpa}" "${members[@]}" || die "bu: unable to rebuild ${archive}"
+	local -a copies=()
+	local member_dir member_copy
+	local -i idx=0
+
+	# ar(1) rejects `x` on thin archives, so rebuild a normal archive from the
+	# enumerated member payloads while preserving duplicate basenames.
+	for m in "${members[@]}" ; do
+		member_dir=${tmpd}/$(( ++idx ))
+		member_copy=${member_dir}/${m##*/}
+		mkdir -p "${member_dir}" || die "bu: unable to create ${member_dir}"
+		if ! "${ar_cmd}" pP "${archive}" "${m}" > "${member_copy}"; then
+			rm -rf "${tmpd}"
+			if [[ ${BU_STRICT} == 1 ]]; then
+				die "bu: unable to copy thin archive member ${m} from ${archive}"
+			fi
+			ewarn "bu: unable to copy thin archive member ${m} from ${archive}"
+			return 1
+		fi
+		copies+=( "${member_copy}" )
+	done
+
+	"${ar_cmd}" crs "${tmpa}" "${copies[@]}" || die "bu: unable to rebuild ${archive}"
 	mv "${tmpa}" "${archive}" || die "bu: unable to replace ${archive}"
 	rm -rf "${tmpd}"
 }
@@ -192,7 +221,8 @@ _bu-convert-thin() {
 # @DESCRIPTION:
 # Classify installed archives and return non-zero on policy violations
 bu-archive-check() {
-	local -a archives=( $(_bu-find-archives "$@") )
+	local -a archives=()
+	mapfile -d '' -t archives < <(_bu-find-archives "$@")
 	[[ ${#archives[@]} -gt 0 ]] || return 0
 
 	local -i failures=0
@@ -236,7 +266,8 @@ bu-archive-check() {
 # @DESCRIPTION:
 # Validate installed linker-script .so files and known dependency token sets
 bu-ldscript-check() {
-	local -a scripts=( $(_bu-find-ldscripts "$@") )
+	local -a scripts=()
+	mapfile -d '' -t scripts < <(_bu-find-ldscripts "$@")
 	[[ ${#scripts[@]} -gt 0 ]] || return 0
 
 	local -i failures=0
@@ -272,7 +303,8 @@ bu-ldscript-check() {
 # @DESCRIPTION:
 # Reindex archives and optionally convert thin archives to normal archives
 bu-archive-fixup() {
-	local -a archives=( $(_bu-find-archives "$@") )
+	local -a archives=()
+	mapfile -d '' -t archives < <(_bu-find-archives "$@")
 	[[ ${#archives[@]} -gt 0 ]] || return
 
 	local ar_cmd ranlib_cmd

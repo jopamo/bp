@@ -187,6 +187,15 @@ if [[ -z ${_CARGO_VENDOR_ECLASS} ]]; then
 		fi
 	}
 
+	_cargo_setup_profile_config() {
+		# Portage strips binaries in the install image; Cargo profile-level
+		# stripping would pre-strip release/debug outputs before QA runs.
+		export CARGO_PROFILE_DEV_STRIP=none
+		export CARGO_PROFILE_RELEASE_STRIP=none
+		export CARGO_PROFILE_TEST_STRIP=none
+		export CARGO_PROFILE_BENCH_STRIP=none
+	}
+
 	_cargo_common_args() {
 		local args=()
 
@@ -212,6 +221,7 @@ if [[ -z ${_CARGO_VENDOR_ECLASS} ]]; then
 
 	cargo_env() {
 		_cargo_setup_vendor_config
+		_cargo_setup_profile_config
 		(( ${#} > 0 )) || return 0
 		"${@}"
 	}

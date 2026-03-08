@@ -6,7 +6,7 @@ inherit toolchain-funcs dot-a
 
 DESCRIPTION="Userspace library for efficient Linux io_uring support"
 HOMEPAGE="https://github.com/axboe/liburing"
-SNAPSHOT=e3d35ea59d3ba09075ed4d7751e4bb9049cce64a
+SNAPSHOT=829c805c7285c31d099166708c92e459fa1bc397
 SRC_URI="https://github.com/axboe/liburing/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

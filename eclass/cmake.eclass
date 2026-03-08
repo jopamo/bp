@@ -380,7 +380,7 @@ cmake_src_prepare() {
 		if [[ ${EAPI} == 7 ]]; then
 			find "${S}" -name ${name}.cmake -exec rm -v {} + || die
 		else
-			find -name "${name}.cmake" -exec rm -v {} + || die
+			find "${CMAKE_USE_DIR}" -name "${name}.cmake" -exec rm -v {} + || die
 		fi
 	done
 
@@ -649,7 +649,11 @@ cmake_src_test() {
 
 	_cmake_check_build_dir
 	pushd "${BUILD_DIR}" > /dev/null || die
-	[[ -e CTestTestfile.cmake ]] || { echo "No tests found. Skipping."; return 0 ; }
+	if [[ ! -e CTestTestfile.cmake ]]; then
+		echo "No tests found. Skipping."
+		popd > /dev/null || die
+		return 0
+	fi
 
 	[[ -n ${TEST_VERBOSE} ]] && myctestargs+=( --extra-verbose --output-on-failure )
 	[[ -n ${CMAKE_SKIP_TESTS} ]] && myctestargs+=( -E '('$( IFS='|'; echo "${CMAKE_SKIP_TESTS[*]}")')'  )

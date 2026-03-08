@@ -4,9 +4,10 @@
 # @MAINTAINER:
 # Toolchain Team
 # @SUPPORTED_EAPIS: 8
-# @BLURB: Shared policy wrapper for linker, LTO, and install QA checks
+# @BLURB: Public facade for staged package QA policy
 # @DESCRIPTION:
-# Provides compact setup and post-install wrappers used by migrated ebuilds
+# Exposes configure, compile, and install entry points while delegating setup,
+# sanitize, assertion, and reporting to internal qa-* eclasses.
 
 case ${EAPI} in
 	8) ;;
@@ -16,25 +17,31 @@ esac
 if [[ -z ${_QA_POLICY_ECLASS} ]] ; then
 _QA_POLICY_ECLASS=1
 
-inherit emoji linker-policy lto-policy binutils-sanitizer rpath-sanitizer pkgconfig-sanity elf-qa
+inherit qa-report qa-linker qa-lto qa-archive qa-rpath qa-pkgconfig qa-elf
 
 BDEPEND+=" app-dev/patchelf"
 
-: "${QA_POLICY_LP_MODE:=compat}"
-: "${QA_POLICY_LTO_WITH_STATIC:=fat+strip}"
-: "${QA_POLICY_LTO_WITHOUT_STATIC:=none}"
-: "${QA_POLICY_ARCHIVE_MODE:=fail}"
-: "${QA_POLICY_RPATH_MODE:=fail}"
-: "${QA_POLICY_PC_MODE:=warn}"
-: "${QA_POLICY_ELF_MODE:=report}"
-: "${QA_POLICY_LINKER_MODE:=fail}"
-: "${QA_POLICY_PC_FIXUP:=0}"
+_qa-policy-relpath() {
+	local file=$1
+	local root=${ED%/}
 
-_QA_POLICY_LINKER_CONFIGURED=0
-_QA_POLICY_LAST_LTO_MODE=
-_QA_POLICY_REPORTS=0
-_QA_POLICY_WARNINGS=0
-_QA_POLICY_FAILURES=0
+	if [[ -n ${root} && ${file} == "${root}"/* ]]; then
+		printf '%s\n' "${file#${root}}"
+		return 0
+	fi
+
+	printf '%s\n' "${file}"
+}
+
+_qa-policy-validate-bool() {
+	local name=$1
+	local value=${!name}
+
+	case ${value} in
+		0|1) ;;
+		*) die "qa-policy: ${name} must be 0 or 1, got ${value}" ;;
+	esac
+}
 
 _qa-policy-validate-mode() {
 	case ${1} in
@@ -43,159 +50,319 @@ _qa-policy-validate-mode() {
 	esac
 }
 
-_qa-policy-reset-results() {
-	_QA_POLICY_REPORTS=0
-	_QA_POLICY_WARNINGS=0
-	_QA_POLICY_FAILURES=0
+_qa-policy-validate-pattern-list() {
+	local name=$1
+	local re rc
+
+	for re in ${!name}; do
+		if [[ '' =~ ${re} ]] 2>/dev/null; then
+			rc=0
+		else
+			rc=$?
+		fi
+		[[ ${rc} -ne 2 ]] || die "qa-policy: invalid regex in ${name}: ${re}"
+	done
 }
 
-_qa-policy-record-result() {
-	local subsystem=$1
-	local mode=$2
+_qa-policy-path-skipped() {
+	local rel=$1
+	local re
 
-	case ${mode} in
-		report)
-			(( _QA_POLICY_REPORTS += 1 ))
-			log_info "qa-policy: ${subsystem} findings recorded"
+	for re in ${QA_POLICY_SKIP_PATHS}; do
+		[[ ${rel} =~ ${re} ]] && return 0
+	done
+	return 1
+}
+
+_qa-policy-apply-defaults() {
+	: "${QA_POLICY_ENABLE:=1}"
+	: "${QA_POLICY_PROFILE:=base}"
+	: "${QA_POLICY_FAIL_FAST:=0}"
+	: "${QA_POLICY_SHOW_CLEAN:=0}"
+	: "${QA_POLICY_SUMMARY:=full}"
+	: "${QA_POLICY_SANITIZE:=1}"
+	: "${QA_POLICY_ASSERT:=1}"
+	: "${QA_POLICY_SKIP_PATHS:=}"
+
+	case ${QA_POLICY_PROFILE} in
+		base)
+			: "${QA_POLICY_LINKER_MODE:=fail}"
+			: "${QA_POLICY_LTO_MODE:=fail}"
+			: "${QA_POLICY_ARCHIVE_MODE:=fail}"
+			: "${QA_POLICY_RPATH_MODE:=fail}"
+			: "${QA_POLICY_PKGCONFIG_MODE:=warn}"
+			: "${QA_POLICY_ELF_MODE:=report}"
 			;;
-		warn)
-			(( _QA_POLICY_WARNINGS += 1 ))
-			log_warn "qa-policy: ${subsystem} findings recorded"
+		strict)
+			: "${QA_POLICY_LINKER_MODE:=fail}"
+			: "${QA_POLICY_LTO_MODE:=fail}"
+			: "${QA_POLICY_ARCHIVE_MODE:=fail}"
+			: "${QA_POLICY_RPATH_MODE:=fail}"
+			: "${QA_POLICY_PKGCONFIG_MODE:=fail}"
+			: "${QA_POLICY_ELF_MODE:=fail}"
 			;;
-		fail)
-			(( _QA_POLICY_FAILURES += 1 ))
-			log_err "qa-policy: ${subsystem} findings recorded"
+		dev)
+			: "${QA_POLICY_LINKER_MODE:=warn}"
+			: "${QA_POLICY_LTO_MODE:=warn}"
+			: "${QA_POLICY_ARCHIVE_MODE:=warn}"
+			: "${QA_POLICY_RPATH_MODE:=warn}"
+			: "${QA_POLICY_PKGCONFIG_MODE:=warn}"
+			: "${QA_POLICY_ELF_MODE:=report}"
+			;;
+		*)
+			die "qa-policy: invalid QA_POLICY_PROFILE=${QA_POLICY_PROFILE}"
 			;;
 	esac
+
+	: "${QA_POLICY_LINKER_EXPECTED:=auto}"
+	: "${QA_POLICY_LINKER_ALLOW:=}"
+	: "${QA_POLICY_LTO_FLAVOR:=auto}"
+	: "${QA_POLICY_LTO_STRIP_ARCHIVE_IR:=1}"
+	: "${QA_POLICY_ARCHIVE_ALLOW_THIN:=0}"
+	: "${QA_POLICY_ARCHIVE_REQUIRE_INDEX:=1}"
+	: "${QA_POLICY_ARCHIVE_CHECK_LDSCRIPTS:=1}"
+	: "${QA_POLICY_RPATH_ALLOW:=}"
+	: "${QA_POLICY_RPATH_CLEAN:=1}"
+	: "${QA_POLICY_RPATH_ALLOW_EMPTY:=0}"
+	: "${QA_POLICY_PKGCONFIG_ALLOW_HOST_PATHS:=0}"
+	: "${QA_POLICY_PKGCONFIG_ALLOW_MISSING_REQUIRES:=0}"
+	: "${QA_POLICY_PKGCONFIG_ALLOW_NONEXISTENT_LIBDIRS:=0}"
+	: "${QA_POLICY_ELF_ALLOW_TEXTREL:=}"
+	: "${QA_POLICY_ELF_ALLOW_EXECSTACK:=}"
+	: "${QA_POLICY_ELF_ALLOW_MISSING_SONAME:=}"
+	: "${QA_POLICY_ELF_ALLOW_INTERP:=}"
+	: "${QA_POLICY_ELF_REQUIRE_GNU_STACK:=1}"
+	: "${QA_POLICY_ELF_REQUIRE_RELRO:=0}"
+	: "${QA_POLICY_ELF_REQUIRE_NOW:=0}"
+	: "${QA_POLICY_ELF_REQUIRE_PIE:=0}"
 }
 
-_qa-policy-run-check() {
-	local subsystem=$1
-	local mode=$2
-	shift 2
+_qa-policy-init() {
+	_qa-policy-apply-defaults
+	qa-report-init
 
-	_qa-policy-validate-mode "${mode}"
-	[[ ${mode} == off ]] && return 0
+	declare -ga QA_DISCOVER_ALL_FILES=()
+	declare -ga QA_DISCOVER_ELF_FILES=()
+	declare -ga QA_DISCOVER_ARCHIVES=()
+	declare -ga QA_DISCOVER_PKGCONFIG=()
+	declare -ga QA_DISCOVER_LDSCRIPTS=()
+}
 
-	if "$@"; then
-		return 0
+_qa-policy-validate-config() {
+	local var
+
+	for var in \
+		QA_POLICY_ENABLE \
+		QA_POLICY_FAIL_FAST \
+		QA_POLICY_SHOW_CLEAN \
+		QA_POLICY_SANITIZE \
+		QA_POLICY_ASSERT \
+		QA_POLICY_LTO_STRIP_ARCHIVE_IR \
+		QA_POLICY_ARCHIVE_ALLOW_THIN \
+		QA_POLICY_ARCHIVE_REQUIRE_INDEX \
+		QA_POLICY_ARCHIVE_CHECK_LDSCRIPTS \
+		QA_POLICY_RPATH_CLEAN \
+		QA_POLICY_RPATH_ALLOW_EMPTY \
+		QA_POLICY_PKGCONFIG_ALLOW_HOST_PATHS \
+		QA_POLICY_PKGCONFIG_ALLOW_MISSING_REQUIRES \
+		QA_POLICY_PKGCONFIG_ALLOW_NONEXISTENT_LIBDIRS \
+		QA_POLICY_ELF_REQUIRE_GNU_STACK \
+		QA_POLICY_ELF_REQUIRE_RELRO \
+		QA_POLICY_ELF_REQUIRE_NOW \
+		QA_POLICY_ELF_REQUIRE_PIE; do
+		_qa-policy-validate-bool "${var}"
+	done
+
+	for var in \
+		QA_POLICY_LINKER_MODE \
+		QA_POLICY_LTO_MODE \
+		QA_POLICY_ARCHIVE_MODE \
+		QA_POLICY_RPATH_MODE \
+		QA_POLICY_PKGCONFIG_MODE \
+		QA_POLICY_ELF_MODE; do
+		_qa-policy-validate-mode "${!var}"
+	done
+
+	case ${QA_POLICY_SUMMARY} in
+		full|short) ;;
+		*) die "qa-policy: invalid QA_POLICY_SUMMARY=${QA_POLICY_SUMMARY}" ;;
+	esac
+
+	case ${QA_POLICY_LINKER_EXPECTED} in
+		auto|bfd|lld|mold|'') ;;
+		*) die "qa-policy: invalid QA_POLICY_LINKER_EXPECTED=${QA_POLICY_LINKER_EXPECTED}" ;;
+	esac
+
+	case ${QA_POLICY_LTO_FLAVOR} in
+		auto|none|full|thin|thin+cache|fat+strip) ;;
+		*) die "qa-policy: invalid QA_POLICY_LTO_FLAVOR=${QA_POLICY_LTO_FLAVOR}" ;;
+	esac
+
+	for var in \
+		QA_POLICY_SKIP_PATHS \
+		QA_POLICY_LINKER_ALLOW \
+		QA_POLICY_RPATH_ALLOW \
+		QA_POLICY_ELF_ALLOW_TEXTREL \
+		QA_POLICY_ELF_ALLOW_EXECSTACK \
+		QA_POLICY_ELF_ALLOW_MISSING_SONAME \
+		QA_POLICY_ELF_ALLOW_INTERP; do
+		_qa-policy-validate-pattern-list "${var}"
+	done
+
+	[[ ${QA_POLICY_RPATH_MODE} != off || ${QA_POLICY_RPATH_CLEAN} == 0 ]] || \
+		die "qa-policy: QA_POLICY_RPATH_CLEAN=1 requires QA_POLICY_RPATH_MODE!=off"
+	[[ ${QA_POLICY_ELF_MODE} != off || ${QA_POLICY_ELF_REQUIRE_NOW} == 0 ]] || \
+		die "qa-policy: QA_POLICY_ELF_REQUIRE_NOW=1 requires QA_POLICY_ELF_MODE!=off"
+	[[ ${QA_POLICY_ELF_MODE} != off || ${QA_POLICY_ELF_REQUIRE_RELRO} == 0 ]] || \
+		die "qa-policy: QA_POLICY_ELF_REQUIRE_RELRO=1 requires QA_POLICY_ELF_MODE!=off"
+	[[ ${QA_POLICY_ELF_MODE} != off || ${QA_POLICY_ELF_REQUIRE_PIE} == 0 ]] || \
+		die "qa-policy: QA_POLICY_ELF_REQUIRE_PIE=1 requires QA_POLICY_ELF_MODE!=off"
+}
+
+_qa-policy-discover-installed-files() {
+	local input file rel
+	local -a inputs=()
+	local -a found=()
+
+	if [[ ${#} -eq 0 ]]; then
+		inputs=( "${ED}" )
+	else
+		inputs=( "$@" )
 	fi
 
-	_qa-policy-record-result "${subsystem}" "${mode}"
-	return 0
+	for input in "${inputs[@]}"; do
+		[[ -e ${input} ]] || die "qa-policy: missing path ${input}"
+	done
+
+	for input in "${inputs[@]}"; do
+		if [[ -d ${input} ]]; then
+			mapfile -d '' -t found < <(find -H "${input}" -type f -print0)
+			QA_DISCOVER_ALL_FILES+=( "${found[@]}" )
+		elif [[ -f ${input} ]]; then
+			QA_DISCOVER_ALL_FILES+=( "${input}" )
+		fi
+	done
+
+	local -a filtered=()
+	for file in "${QA_DISCOVER_ALL_FILES[@]}"; do
+		rel=$(_qa-policy-relpath "${file}")
+		_qa-policy-path-skipped "${rel}" && continue
+		filtered+=( "${file}" )
+
+		case ${file} in
+			*.a) QA_DISCOVER_ARCHIVES+=( "${file}" ) ;;
+			*.pc) QA_DISCOVER_PKGCONFIG+=( "${file}" ) ;;
+			*.so)
+				_bu-is-ldscript "${file}" && QA_DISCOVER_LDSCRIPTS+=( "${file}" )
+				;;
+		esac
+
+		_elfqa-is-elf "${file}" && QA_DISCOVER_ELF_FILES+=( "${file}" )
+	done
+
+	QA_DISCOVER_ALL_FILES=( "${filtered[@]}" )
 }
 
-_qa-policy-archive-check() {
-	local rc=0
+_qa-policy-run-configure() {
+	qa-linker-configure
+	qa-lto-configure
+}
 
-	bu-archive-check "$@" || rc=1
-	if [[ ${BU_CHECK_LDSCRIPTS} == 1 ]]; then
-		bu-ldscript-check "$@" || rc=1
+_qa-policy-maybe-finalize-early() {
+	if [[ ${QA_POLICY_FAIL_FAST} == 1 ]] && qa-report-has-failures; then
+		_qa-policy-finalize
 	fi
-
-	return ${rc}
 }
 
-_qa-policy-install-sanitize() {
-	log_info "qa-policy: sanitize phase"
+_qa-policy-run-sanitize() {
+	_qa-report-set-stage sanitize
+
+	if [[ ${QA_POLICY_LTO_MODE} != off ]]; then
+		qa-lto-sanitize
+	fi
 
 	if [[ ${QA_POLICY_ARCHIVE_MODE} != off ]]; then
-		lto-postinstall-sanitize "$@"
-		bu-archive-fixup "$@"
+		qa-archive-sanitize
 	fi
 
 	if [[ ${QA_POLICY_RPATH_MODE} != off ]]; then
-		rpath-clean "$@"
-	fi
-
-	if [[ ${QA_POLICY_PC_MODE} != off && ${QA_POLICY_PC_FIXUP} == 1 ]]; then
-		pc-fixup "$@"
+		qa-rpath-sanitize
 	fi
 }
 
-_qa-policy-install-assert() {
-	log_info "qa-policy: assert phase"
+_qa-policy-run-assert() {
+	_qa-report-set-stage assert
 
-	_qa-policy-run-check archive "${QA_POLICY_ARCHIVE_MODE}" _qa-policy-archive-check "$@"
-	_qa-policy-run-check rpath "${QA_POLICY_RPATH_MODE}" rpath-check "$@"
-	_qa-policy-run-check pkgconfig "${QA_POLICY_PC_MODE}" pc-validate "$@"
+	if [[ ${QA_POLICY_ARCHIVE_MODE} != off ]]; then
+		qa-archive-assert
+		_qa-policy-maybe-finalize-early
+	fi
+
+	if [[ ${QA_POLICY_RPATH_MODE} != off ]]; then
+		qa-rpath-assert
+		_qa-policy-maybe-finalize-early
+	fi
+
+	if [[ ${QA_POLICY_PKGCONFIG_MODE} != off ]]; then
+		qa-pkgconfig-assert
+		_qa-policy-maybe-finalize-early
+	fi
 
 	if [[ ${QA_POLICY_ELF_MODE} != off ]]; then
-		ELFQA_MODE=report
-		_qa-policy-run-check elf "${QA_POLICY_ELF_MODE}" elfqa-scan "$@"
+		qa-elf-assert
+		_qa-policy-maybe-finalize-early
 	fi
 
-	_qa-policy-run-check linker "${QA_POLICY_LINKER_MODE}" lp-check-linker "$@"
+	if [[ ${QA_POLICY_LINKER_MODE} != off ]]; then
+		qa-linker-assert
+		_qa-policy-maybe-finalize-early
+	fi
 }
 
-_qa-policy-install-finalize() {
-	if [[ ${_QA_POLICY_FAILURES} -gt 0 ]]; then
-		log_err "qa-policy: reports=${_QA_POLICY_REPORTS} warnings=${_QA_POLICY_WARNINGS} failures=${_QA_POLICY_FAILURES}"
+_qa-policy-finalize() {
+	qa-report-print
+	if qa-report-has-failures; then
 		die "qa-policy-install: policy failures detected"
 	fi
-
-	if [[ ${_QA_POLICY_WARNINGS} -gt 0 ]]; then
-		log_warn "qa-policy: reports=${_QA_POLICY_REPORTS} warnings=${_QA_POLICY_WARNINGS} failures=${_QA_POLICY_FAILURES}"
-		return 0
-	fi
-
-	if [[ ${_QA_POLICY_REPORTS} -gt 0 ]]; then
-		log_info "qa-policy: reports=${_QA_POLICY_REPORTS} warnings=${_QA_POLICY_WARNINGS} failures=${_QA_POLICY_FAILURES}"
-		return 0
-	fi
-
-	log_ok "qa-policy: reports=0 warnings=0 failures=0"
 }
 
-# @FUNCTION: qa-policy-configure
-# @USAGE: [lto_mode]
-# @DESCRIPTION:
-# Apply shared linker and LTO policy setup
+_qa-policy-print-header() {
+	:
+}
+
+_qa-policy-print-footer() {
+	:
+}
+
 qa-policy-configure() {
-	local lto_mode=${1:-}
+	[[ ${QA_POLICY_ENABLE:-1} == 1 ]] || return 0
 
-	if [[ ${_QA_POLICY_LINKER_CONFIGURED} != 1 ]]; then
-		LP_MODE=${QA_POLICY_LP_MODE}
-		lp-setup
-		_QA_POLICY_LINKER_CONFIGURED=1
-	fi
-
-	if [[ -z ${lto_mode} ]]; then
-		if in_iuse static-libs; then
-			if use static-libs; then
-				lto_mode=${QA_POLICY_LTO_WITH_STATIC}
-			else
-				lto_mode=${QA_POLICY_LTO_WITHOUT_STATIC}
-			fi
-		else
-			lto_mode=${QA_POLICY_LTO_WITHOUT_STATIC}
-		fi
-	fi
-
-	if [[ ${_QA_POLICY_LAST_LTO_MODE} != ${lto_mode} ]]; then
-		LTO_POLICY_MODE=${lto_mode}
-		lto-setup
-		_QA_POLICY_LAST_LTO_MODE=${lto_mode}
-	fi
-
-	log_info "qa-policy: configure linker=${QA_POLICY_LP_MODE} lto=${lto_mode}"
+	_qa-policy-init
+	_qa-policy-validate-config
+	_qa-policy-run-configure
 }
 
-# @FUNCTION: qa-policy-install
-# @USAGE: [path] [more]
-# @DESCRIPTION:
-# Apply shared sanitize and assert chain
-qa-policy-install() {
-	_qa-policy-validate-mode "${QA_POLICY_ARCHIVE_MODE}"
-	_qa-policy-validate-mode "${QA_POLICY_RPATH_MODE}"
-	_qa-policy-validate-mode "${QA_POLICY_PC_MODE}"
-	_qa-policy-validate-mode "${QA_POLICY_ELF_MODE}"
-	_qa-policy-validate-mode "${QA_POLICY_LINKER_MODE}"
+qa-policy-compile() {
+	[[ ${QA_POLICY_ENABLE:-1} == 1 ]] || return 0
+	return 0
+}
 
-	_qa-policy-reset-results
-	_qa-policy-install-sanitize "$@"
-	_qa-policy-install-assert "$@"
-	_qa-policy-install-finalize
+qa-policy-install() {
+	[[ ${QA_POLICY_ENABLE:-1} == 1 ]] || return 0
+
+	_qa-policy-init
+	_qa-policy-validate-config
+	_qa-policy-discover-installed-files "$@"
+
+	if [[ ${QA_POLICY_SANITIZE} == 1 ]]; then
+		_qa-policy-run-sanitize
+	fi
+
+	if [[ ${QA_POLICY_ASSERT} == 1 ]]; then
+		_qa-policy-run-assert
+	fi
+
+	_qa-policy-finalize
 }
 
 fi

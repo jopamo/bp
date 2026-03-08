@@ -24,8 +24,6 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-[[ ${CATEGORY} == "perl-core" ]] && inherit alternatives
-
 # @ECLASS_VARIABLE: perlinfo_done
 # @INTERNAL
 # @DESCRIPTION:
@@ -239,6 +237,92 @@ perl_rm_files() {
 	IFS="$oldifs"
 }
 
+_perl_duallife_ln_supports_relative() {
+	ln --help 2>/dev/null | grep -q -- ' --relative\>'
+}
+
+_perl_duallife_sort_desc() {
+	if sort -V </dev/null >/dev/null 2>&1; then
+		sort -rV
+	else
+		sort -r
+	fi
+}
+
+_perl_duallife_find_latest() {
+	local mask=$1
+	local root="${EROOT%/}"
+	local candidate
+
+	while IFS= read -r candidate; do
+		[[ -e ${candidate} ]] || continue
+		printf '%s\n' "${candidate#${root}}"
+		return 0
+	done < <(compgen -G "${root}${mask}" 2>/dev/null | _perl_duallife_sort_desc)
+
+	return 1
+}
+
+_perl_duallife_update_link() {
+	local symlink=$1
+	local target=$2
+	local root="${EROOT%/}"
+
+	if _perl_duallife_ln_supports_relative; then
+		ln -sfn --relative -- "${root}${target}" "${root}${symlink}" || die
+	elif [[ ${target%/*} == ${symlink%/*} ]]; then
+		ln -sfn -- "${target##*/}" "${root}${symlink}" || die
+	else
+		ln -sfn -- "${root}${target}" "${root}${symlink}" || die
+	fi
+}
+
+_perl_duallife_remove_link() {
+	local symlink=$1
+	local root="${EROOT%/}"
+
+	[[ -L ${root}${symlink} ]] || return 0
+	rm -f -- "${root}${symlink}" || die
+}
+
+_perl_duallife_cleanup_man_links() {
+	local man=$1
+	local keep=${2-}
+	local root="${EROOT%/}"
+	local link
+
+	while IFS= read -r link; do
+		[[ -L ${link} ]] || continue
+		[[ -n ${keep} && ${link} == "${root}${keep}" ]] && continue
+		rm -f -- "${link}" || die
+	done < <(compgen -G "${root}/${man}*" 2>/dev/null)
+}
+
+_perl_duallife_link_script() {
+	local script=$1
+	local target
+
+	if target=$(_perl_duallife_find_latest "/${script}-[0-9]*"); then
+		_perl_duallife_update_link "/${script}" "${target}"
+	else
+		_perl_duallife_remove_link "/${script}"
+	fi
+}
+
+_perl_duallife_link_man() {
+	local man=$1
+	local target suffix symlink
+
+	if target=$(_perl_duallife_find_latest "/${man%.1}-[0-9]*"); then
+		suffix=${target##*.1}
+		symlink="/${man}${suffix}"
+		_perl_duallife_update_link "${symlink}" "${target}"
+		_perl_duallife_cleanup_man_links "${man}" "${symlink}"
+	else
+		_perl_duallife_cleanup_man_links "${man}"
+	fi
+}
+
 # @FUNCTION: perl_link_duallife_scripts
 # @DESCRIPTION:
 # Moves files and generates symlinks so dual-life packages installing scripts do not
@@ -249,15 +333,13 @@ perl_link_duallife_scripts() {
 
 	[[ ${CATEGORY} != perl-core ]] && return 0
 
-	local i ff
+	local i
 	if has "${EBUILD_PHASE:-none}" "postinst" "postrm" ; then
 		for i in "${DUALLIFESCRIPTS[@]}" ; do
-			alternatives_auto_makesym "/${i}" "/${i}-[0-9]*"
+			_perl_duallife_link_script "${i}"
 		done
 		for i in "${DUALLIFEMAN[@]}" ; do
-			ff=`echo "${EROOT}"/${i%.1}-${PV}-${P}.1*`
-			ff=${ff##*.1}
-			alternatives_auto_makesym "/${i}${ff}" "/${i%.1}-[0-9]*"
+			_perl_duallife_link_man "${i}"
 		done
 	else
 		pushd "${ED}" > /dev/null

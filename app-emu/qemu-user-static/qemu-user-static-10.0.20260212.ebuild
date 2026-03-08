@@ -53,14 +53,10 @@ src_configure() {
 		--infodir="${EPREFIX}"/usr/share/info
 		--static
 		--disable-system
+		--disable-werror
 		--enable-linux-user
-		--enable-kvm
-		--enable-qcow1
-		--enable-virtfs
-		--enable-vhost-crypto
-		--enable-vhost-kernel
-		--enable-vhost-net
-		--enable-vhost-user
+		--enable-membarrier
+		$(use_enable xattr attr)
 		--target-list="aarch64-linux-user arm-linux-user x86_64-linux-user"
 	)
 	../configure "${myconf[@]}"
@@ -78,7 +74,12 @@ src_install() {
 	emake DESTDIR="${ED}" install
 	use static-libs && strip-lto-bytecode
 
-	rm -rf cd "${ED}"/usr/share
-	cd "${ED}"/usr/bin
-	for i in *; do mv $i $i-static; done
+	rm -rf "${ED}"/usr/share || die
+
+	cd "${ED}"/usr/bin || die
+	local bin
+	for bin in *; do
+		[[ -e ${bin} ]] || continue
+		mv "${bin}" "${bin}-static" || die
+	done
 }

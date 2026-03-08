@@ -16,7 +16,7 @@ LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="alsa bpf capstone numa opengl slirp vnc xdp"
+IUSE="alsa bpf capstone numa opengl +slirp vnc xdp"
 
 RESTRICT="network-sandbox"
 
@@ -28,12 +28,19 @@ DEPEND="
 	app-core/attr
 	app-dev/dtc
 	lib-core/glib
+	lib-core/libcap-ng
 	lib-core/zlib
+	lib-dev/libaio
 	lib-dev/jemalloc
+	lib-dev/liburing
 	lib-dev/libtasn1
 	lib-net/libssh
+	xgui-lib/pixman
 	xgui-lib/libxkbcommon
 	xgui-tools/xkeyboard-config
+	alsa? ( xgui-tools/alsa-lib )
+	bpf? ( lib-net/libbpf )
+	capstone? ( app-emu/capstone )
 	numa? ( app-util/numactl )
 	opengl? ( xmedia-lib/libepoxy )
 	slirp? ( lib-net/slirp )
@@ -42,28 +49,28 @@ DEPEND="
 "
 
 src_prepare() {
-    filter-flags -Wl,-z,defs -flto*
+	filter-flags -Wl,-z,defs -flto*
 
-    default
-    mkdir -p build
+	default
+	mkdir -p build
 }
 
 src_configure() {
-    cd build
+	cd build
 
-    local myconf=(
-        --prefix="${EPREFIX}"/usr
-        --bindir="${EPREFIX}"/usr/bin
-        --sbindir="${EPREFIX}"/usr/bin
-        --libdir="${EPREFIX}"/usr/lib
-        --libexecdir="${EPREFIX}"/usr/libexec
-        --sysconfdir="${EPREFIX}"/etc
-        --localstatedir="${EPREFIX}"/var
-        --includedir="${EPREFIX}"/usr/include
-        --datadir="${EPREFIX}"/usr/share
-        --mandir="${EPREFIX}"/usr/share/man
-        --infodir="${EPREFIX}"/usr/share/info
-        --target-list=$(usex arm64 "aarch64-softmmu aarch64-linux-user" "x86_64-softmmu x86_64-linux-user")
+	local myconf=(
+		--prefix="${EPREFIX}"/usr
+		--bindir="${EPREFIX}"/usr/bin
+		--sbindir="${EPREFIX}"/usr/bin
+		--libdir="${EPREFIX}"/usr/lib
+		--libexecdir="${EPREFIX}"/usr/libexec
+		--sysconfdir="${EPREFIX}"/etc
+		--localstatedir="${EPREFIX}"/var
+		--includedir="${EPREFIX}"/usr/include
+		--datadir="${EPREFIX}"/usr/share
+		--mandir="${EPREFIX}"/usr/share/man
+		--infodir="${EPREFIX}"/usr/share/info
+		--target-list=$(usex arm64 "aarch64-softmmu aarch64-linux-user" "x86_64-softmmu x86_64-linux-user")
 		$(use_enable alsa)
 		$(use_enable bpf)
 		$(use_enable capstone)
@@ -74,10 +81,13 @@ src_configure() {
 		$(use_enable xdp af-xdp)
 		--disable-dbus-display
 		--disable-docs
-		--disable-linux-io-uring
 		--disable-sdl
 		--disable-werror
+		--enable-attr
+		--enable-cap-ng
 		--enable-kvm
+		--enable-linux-aio
+		--enable-linux-io-uring
 		--enable-malloc=jemalloc
 		--enable-membarrier
 		--enable-qcow1
@@ -87,25 +97,32 @@ src_configure() {
 		--enable-vhost-user
 		--enable-vhost-vdpa
 		--enable-virtfs
-    )
-    ../configure "${myconf[@]}"
+	)
+	../configure "${myconf[@]}"
 }
 
 src_compile() {
-    cd build
-    emake
+	cd build
+	emake
 }
 
 src_install() {
-    cd build
-    emake DESTDIR="${ED}" install
+	cd build
+	emake DESTDIR="${ED}" install
 
-    if [[ -d "${ED}"/var/run ]]; then
-        rmdir "${ED}"/var/run || die "expected empty runtime directory: ${ED}/var/run"
-    fi
-    if [[ -d "${ED}"/var ]]; then
-        rmdir "${ED}"/var || die "expected empty runtime directory: ${ED}/var"
-    fi
+	insinto /etc/qemu
+	newins "${FILESDIR}"/bridge.conf bridge.conf
 
-    dostrip -x /usr/share/qemu
+	if [[ -f "${ED}"/usr/libexec/qemu-bridge-helper ]]; then
+		fperms 4755 /usr/libexec/qemu-bridge-helper
+	fi
+
+	if [[ -d "${ED}"/var/run ]]; then
+		rmdir "${ED}"/var/run || die "expected empty runtime directory: ${ED}/var/run"
+	fi
+	if [[ -d "${ED}"/var ]]; then
+		rmdir "${ED}"/var || die "expected empty runtime directory: ${ED}/var"
+	fi
+
+	dostrip -x /usr/share/qemu
 }

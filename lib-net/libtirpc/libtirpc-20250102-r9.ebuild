@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools dot-a
+inherit flag-o-matic autotools qa-policy
 SNAPSHOT=240ee6c774729c9c24812aa8912f1fcf8996b162
 
 DESCRIPTION="Transport Independent RPC library (SunRPC replacement)"
@@ -18,8 +18,7 @@ KEYWORDS="amd64 arm64"
 IUSE="ipv6 static-libs"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 	eautoreconf
 }
@@ -45,5 +44,5 @@ src_install() {
 
 	insinto /usr/include/tirpc
 	doins -r "${S}"/tirpc/*
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic dot-a
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="User-land utilities for LVM2 (device-mapper) software"
 HOMEPAGE="https://sourceware.org/lvm2/"
@@ -29,8 +29,7 @@ PATCHES=(
 
 src_configure() {
 	filter-flags -Wl,-z,defs
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local myconf=(
 		--prefix="${EPREFIX}"/usr
    		--sysconfdir="${EPREFIX}"/etc
@@ -65,7 +64,7 @@ src_install() {
 		emake DESTDIR="${D}" ${inst}
 	done
 
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 	use static-libs || find "${ED}" -name '*.a' -delete || die
 
 	#dolib.a device_mapper/libdevice-mapper.a

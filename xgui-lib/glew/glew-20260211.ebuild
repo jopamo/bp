@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs dot-a
+inherit toolchain-funcs qa-policy
 
 DESCRIPTION="The OpenGL Extension Wrangler Library"
 HOMEPAGE="http://glew.sourceforge.net/"
@@ -77,7 +77,7 @@ set_opts() {
 }
 
 src_compile() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 	set_opts
 	emake \
 		GLEW_PREFIX="${EPREFIX}/usr" \
@@ -94,5 +94,5 @@ src_install() {
 		PKGDIR="${ED}/usr/lib/pkgconfig" \
 		"${myglewopts[@]}" \
 		install.all
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

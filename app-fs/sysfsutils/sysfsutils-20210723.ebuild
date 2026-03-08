@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="System Utilities Based on Sysfs"
 HOMEPAGE="http://linux-diag.sourceforge.net/Sysfsutils.html"
@@ -24,11 +24,11 @@ src_prepare() {
 }
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 	econf $(use_enable static-libs static)
 }
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

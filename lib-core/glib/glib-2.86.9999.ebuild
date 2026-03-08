@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson flag-o-matic dot-a
+inherit meson flag-o-matic qa-policy
 
 DESCRIPTION="The GLib library of C routines"
 HOMEPAGE="https://www.gtk.org/"
@@ -36,8 +36,7 @@ DEPEND="
 "
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	filter-flags -Wl,-z,defs
 
 	append-flags -Wno-error=format
@@ -57,7 +56,7 @@ src_configure() {
 
 src_install() {
 	meson_src_install
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }
 
 pkg_postinst() {

@@ -4,7 +4,7 @@ EAPI=8
 SNAPSHOT=fb554939cfcd7612a09815d29481ba348aa28196
 SHORT=${SNAPSHOT:0:7}
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="X.509 and CMS (PKCS#7) library"
 HOMEPAGE="http://www.gnupg.org/related_software/libksba"
@@ -20,8 +20,7 @@ IUSE="static-libs"
 DEPEND="lib-core/libgpg-error"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 	eautoreconf
 }
@@ -36,5 +35,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

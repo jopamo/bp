@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs flag-o-matic dot-a
+inherit toolchain-funcs flag-o-matic qa-policy
 
 DESCRIPTION="Asynchronous input/output library that uses the kernels native interface"
 HOMEPAGE="https://pagure.io/libaio"
@@ -18,8 +18,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs test"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	filter-flags -flto*
 
 	default
@@ -56,6 +55,6 @@ src_test() {
 
 src_install() {
 	_emake install DESTDIR="${D}"
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 	export QA_DT_NEEDED=$(find "${ED}" -type f -name 'libaio.so.*' -printf '/%P\n')
 }

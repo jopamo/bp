@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic dot-a
+inherit autotools flag-o-matic qa-policy
 
 DESCRIPTION="Audio compression format designed for speech -- DSP"
 HOMEPAGE="https://www.speex.org/"
@@ -17,8 +17,7 @@ KEYWORDS="amd64 arm64"
 IUSE="keep-la static-libs"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 	eautoreconf
 }
@@ -32,7 +31,7 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 
 	if ! use keep-la; then
 		find "${ED}" -name '*.la' -delete || die

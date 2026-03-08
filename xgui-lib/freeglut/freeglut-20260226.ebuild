@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake flag-o-matic dot-a
+inherit cmake flag-o-matic qa-policy
 
 DESCRIPTION="A completely OpenSourced alternative to the OpenGL Utility Toolkit (GLUT) library"
 HOMEPAGE="http://freeglut.sourceforge.net/"
@@ -32,8 +32,7 @@ DEPEND="${RDEPEND}
 append-flags -fcommon
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local mycmakeargs=(
 		-DFREEGLUT_GLES="OFF"
 		-DFREEGLUT_BUILD_STATIC_LIBS="$(usex static-libs ON OFF)"
@@ -43,5 +42,5 @@ src_configure() {
 
 src_install() {
 	cmake_src_install
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

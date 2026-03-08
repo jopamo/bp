@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="X C-language Bindings library"
 HOMEPAGE="https://xcb.freedesktop.org/"
@@ -30,8 +30,7 @@ src_prepare() {
 }
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local myconf=(
 		--disable-devel-docs
 		$(use_enable xkb)
@@ -42,7 +41,7 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 	use static-libs || find "${ED}" -name '*.a' -delete
 
 	if ! use keep-la; then

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools toolchain-funcs dot-a
+inherit autotools toolchain-funcs qa-policy
 
 DESCRIPTION="Low-level cryptographic library"
 HOMEPAGE="http://www.lysator.liu.se/~nisse/nettle/"
@@ -20,8 +20,7 @@ IUSE="gmp static-libs test"
 DEPEND="gmp? ( lib-core/gmp )"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 
 	sed -e '/CFLAGS=/s: -ggdb3::' \
@@ -42,5 +41,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake dot-a
+inherit cmake qa-policy
 
 DESCRIPTION="A JSON implementation in C"
 HOMEPAGE="https://github.com/json-c/json-c/wiki"
@@ -17,8 +17,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	export USE_VALGRIND=0
 
 	local mycmakeargs=(
@@ -35,5 +34,5 @@ src_configure() {
 
 src_install() {
 	cmake_src_install
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

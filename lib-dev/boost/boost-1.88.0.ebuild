@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic dot-a
+inherit flag-o-matic qa-policy
 
 MY_P="${PN}_$(ver_rs 1- _)"
 MAJOR_V="$(ver_cut 1-2)"
@@ -43,8 +43,7 @@ ejam() {
 }
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	OPTIONS=(
 		$(usex context '' '--without-context --without-coroutine --without-fiber')
 		$(usex icu "-sICU_PATH=${ESYSROOT}/usr" '--disable-icu boost.locale.icu=off')
@@ -82,5 +81,5 @@ src_install() {
 		--includedir="${ED}/usr/include" \
 		--libdir="${ED}/usr/lib" \
 		install || die "Installation of Boost libraries failed"
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

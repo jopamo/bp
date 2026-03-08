@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs dot-a
+inherit toolchain-funcs qa-policy
 
 DESCRIPTION="Mozilla's Network Security Services library that implements PKI support"
 HOMEPAGE="http://www.mozilla.org/projects/security/pki/nss/"
@@ -84,8 +84,7 @@ nssbits() {
 }
 
 src_compile() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	# use ABI to determine bit'ness, or fallback if unset
 	local buildbits mybits
 	case "${ABI}" in
@@ -254,7 +253,7 @@ src_install() {
 	printf -- "-b ${EPREFIX}/usr/lib/lib%s.so\n" ${NSS_CHK_SIGN_LIBS} \
 		> "${ED%/}"/etc/prelink.conf.d/nss.conf
 
-	use static-libs && strip-lto-bytecode "${ED}/usr/lib"
+	qa-policy-install "${ED}/usr/lib"
 	use static-libs || find "${ED}" -name '*.a' -delete
 }
 

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic meson dot-a
+inherit flag-o-matic meson qa-policy
 
 DESCRIPTION="A vector graphics library with cross-device output support"
 HOMEPAGE="https://www.cairographics.org"
@@ -44,8 +44,7 @@ PATCHES=(
 
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 
 	filter-flags -Wl,-z,defs
@@ -64,5 +63,5 @@ src_configure() {
 
 src_install() {
 	meson_src_install
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

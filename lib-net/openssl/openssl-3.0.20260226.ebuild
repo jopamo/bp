@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="openssl-$(ver_cut 1-2)"
 
-inherit flag-o-matic toolchain-funcs dot-a
+inherit flag-o-matic toolchain-funcs qa-policy
 
 DESCRIPTION="full-strength general purpose cryptography library (including SSL and TLS)"
 HOMEPAGE="https://www.openssl.org/"
@@ -36,7 +36,7 @@ BDEPEND="
 PATCHES=( "${FILESDIR}"/openssl-1.1.0j-parallel_install_fix.patch )
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 	append-flags -fno-ipa-sra
 	filter-flags -fipa-pta
 	# keep this in sync with app-var/c_rehash
@@ -160,7 +160,7 @@ src_install() {
 	fi
 
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 
 	# This is crappy in that the static archives are still built even
 	# when USE=static-libs.  But this is due to a failing in the openssl

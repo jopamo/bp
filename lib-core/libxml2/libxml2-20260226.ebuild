@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit python-r1 autotools flag-o-matic prefix dot-a
+inherit python-r1 autotools flag-o-matic prefix qa-policy
 
 DESCRIPTION="Version 2 of the library to manipulate XML files"
 HOMEPAGE="http://www.xmlsoft.org/"
@@ -35,8 +35,7 @@ src_prepare() {
 }
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local myconf=(
 		$(use_with icu)
 		$(use_with lzma)
@@ -53,7 +52,7 @@ src_install() {
 
 	cleanup_install
 
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 	use static-libs || find "${ED}" -name '*.a' -delete
 	dosym -r /usr/lib/libxml2.so /usr/lib/libxml2.so.2
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson dot-a
+inherit meson qa-policy
 
 DESCRIPTION="The OpenGL Utility Library"
 HOMEPAGE="https://cgit.freedesktop.org/mesa/glu/"
@@ -20,12 +20,12 @@ IUSE="static-libs"
 DEPEND="xgui-tools/mesa"
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 	meson_src_configure
 }
 
 src_install() {
 	meson_src_install
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

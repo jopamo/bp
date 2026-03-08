@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic dot-a
+inherit flag-o-matic qa-policy
 
 MAINPV=1.0.8
 
@@ -30,8 +30,7 @@ src_prepare() {
 }
 
 src_compile() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	use static-libs && emake
 
 	emake -f Makefile-libbz2_so
@@ -56,7 +55,6 @@ src_install() {
 	done
 
 	if use static-libs ; then
-		strip-lto-bytecode libbz2.a
 		dolib.a libbz2.a
 	fi
 
@@ -65,4 +63,6 @@ src_install() {
 
 	insinto /usr/lib/pkgconfig
 	doins "${FILESDIR}"/bzip2.pc
+
+	qa-policy-install
 }

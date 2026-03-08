@@ -4,7 +4,7 @@ EAPI=8
 
 MAJOR_VERSION="2.5.5"
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="high level interface to Linux seccomp filter"
 HOMEPAGE="https://github.com/seccomp/libseccomp"
@@ -22,8 +22,7 @@ DEPEND="virtual/linux-sources"
 BDEPEND="app-dev/gperf"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 	eautoreconf
 	sed -i -e "s/0.0.0/${MAJOR_VERSION}/g" "configure" || die
@@ -39,5 +38,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

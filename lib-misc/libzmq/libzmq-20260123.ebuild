@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="A brokerless kernel"
 HOMEPAGE="http://www.zeromq.org/"
@@ -28,8 +28,7 @@ PDEPEND="
 "
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	sed \
 		-e '/libzmq_werror=/s:yes:no:g' \
 		-i configure.ac || die
@@ -55,5 +54,5 @@ src_test() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

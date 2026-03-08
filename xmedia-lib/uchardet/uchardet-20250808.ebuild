@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake dot-a
+inherit cmake qa-policy
 
 DESCRIPTION="An encoding detector library"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/uchardet/"
@@ -22,8 +22,7 @@ src_prepare() {
 }
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local mycmakeargs=(
 		-DBUILD_STATIC=$(usex static-libs)
 	)
@@ -32,5 +31,5 @@ src_configure() {
 
 src_install() {
 	cmake_src_install
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

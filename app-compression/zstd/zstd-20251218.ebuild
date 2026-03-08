@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs flag-o-matic dot-a
+inherit toolchain-funcs flag-o-matic qa-policy
 
 DESCRIPTION="zstd fast compression library"
 HOMEPAGE="https://facebook.github.io/zstd/"
@@ -19,8 +19,7 @@ IUSE="static-libs"
 DEPEND="app-compression/xz-utils"
 
 src_compile() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	emake \
 		CC="$(tc-getCC)" \
 		AR="$(tc-getAR)" \
@@ -53,7 +52,7 @@ src_install() {
 		PREFIX="${EPREFIX}"/usr \
 		LIBDIR="${EPREFIX}"/usr/lib install
 
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 
 	if ! use static-libs; then
 		rm "${ED}"/usr/lib/libzstd.a || die

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="X.Org Xft library"
 HOMEPAGE="https://www.x.org/wiki/"
@@ -28,12 +28,12 @@ src_prepare() {
 }
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 	default
 }
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

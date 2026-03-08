@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="Small library to access XDG Base Directories Specification paths"
 HOMEPAGE="http://repo.or.cz/w/libxdg-basedir.git"
@@ -18,8 +18,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 	eautoreconf
 }
@@ -35,5 +34,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="Tag Image File Format (TIFF) library"
 HOMEPAGE="http://libtiff.maptools.org"
@@ -26,8 +26,7 @@ DEPEND="jpeg? ( xmedia-lib/libjpeg-turbo )
 REQUIRED_USE="test? ( jpeg )" #483132
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 	eautoreconf
 }
@@ -51,7 +50,7 @@ src_test() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 
 	if ! use keep-la; then
 		find "${ED}" -name '*.la' -delete || die

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic libtool toolchain-funcs dot-a
+inherit flag-o-matic libtool toolchain-funcs qa-policy
 
 DESCRIPTION="A high-quality and portable font engine"
 HOMEPAGE="https://www.freetype.org/"
@@ -59,8 +59,7 @@ src_prepare() {
 }
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	append-flags -fno-strict-aliasing
 	type -P gmake &> /dev/null && export GNUMAKE=gmake
 
@@ -86,7 +85,7 @@ src_configure() {
 src_install() {
 	default
 
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 
 	if ! use static-libs ; then
 		find "${ED}" -name '*.a' -delete || die

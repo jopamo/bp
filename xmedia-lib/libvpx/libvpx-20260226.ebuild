@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic dot-a
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="WebM VP8 and VP9 Codec SDK"
 HOMEPAGE="https://www.webmproject.org"
@@ -21,8 +21,7 @@ IUSE="static-libs test"
 DEPEND="app-lang/nasm"
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local conf=(
 		--prefix="${EPREFIX}"/usr
 		--libdir="${EPREFIX}"/usr/lib
@@ -53,5 +52,5 @@ src_compile() {
 
 src_install() {
 	emake verbose=yes GEN_EXAMPLES="" DESTDIR="${D}" install
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

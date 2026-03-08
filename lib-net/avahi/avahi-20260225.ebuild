@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="Service Discovery for Linux using mDNS"
 HOMEPAGE="https://www.avahi.org/"
@@ -17,8 +17,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 	eautoreconf
 }
@@ -47,7 +46,7 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 
 	rm -rf "${ED}"/var
 	rm -rf "${ED}"/usr/share/man

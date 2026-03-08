@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic dot-a
+inherit autotools flag-o-matic qa-policy
 
 DESCRIPTION="Btrfs filesystem utilities"
 HOMEPAGE="https://btrfs.wiki.kernel.org"
@@ -59,7 +59,7 @@ src_configure() {
 }
 
 src_compile() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 	emake V=1 all $(usev static)
 }
 
@@ -69,5 +69,5 @@ src_install() {
 		$(usex static install-static '')
 	)
 	emake V=1 DESTDIR="${D}" install "${makeargs[@]}"
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="branch-$(ver_cut 1-2)"
 
-inherit flag-o-matic dot-a
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="A SQL Database Engine in a C Library"
 HOMEPAGE="https://sqlite.org/"
@@ -26,7 +26,7 @@ DEPEND="
 "
 
 src_configure() {
-    use static-libs && lto-guarantee-fat
+    qa-policy-configure
     # Support detection of misuse of SQLite API.
     # https://sqlite.org/compile.html#enable_api_armor
     append-cppflags -DSQLITE_ENABLE_API_ARMOR
@@ -136,5 +136,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

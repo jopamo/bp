@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools dot-a
+inherit flag-o-matic autotools qa-policy
 
 DESCRIPTION="Provides useful functions commonly found on BSD systems"
 HOMEPAGE="https://libbsd.freedesktop.org/wiki/"
@@ -20,8 +20,7 @@ IUSE="static-libs"
 DEPEND="lib-dev/libmd"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	sed -i 's/^AC_INIT.*/AC_INIT([libbsd], [${PV}], [bugs@libbsd.example])/' configure.ac || die
 	default
 	eautoreconf
@@ -35,5 +34,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

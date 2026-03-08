@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools dot-a
+inherit flag-o-matic autotools qa-policy
 
 DESCRIPTION="HTTP/2 C Library"
 HOMEPAGE="https://nghttp2.org/"
@@ -32,8 +32,7 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
 	filter-flags -Wl,-z,defs
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 	eautoreconf
 }
@@ -55,5 +54,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=2cc71917514657b93014134350864f4849edfc83
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="Git is a fast, scalable, distributed revision control system"
 HOMEPAGE="http://www.git-scm.com/"
@@ -30,8 +30,7 @@ src_prepare() {
 }
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local myconf=(
 		--with-libpcre2
 		--with-curl
@@ -45,7 +44,7 @@ src_configure() {
 src_install() {
 	default
 
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 	use static-libs || find "${ED}" -name "*.a" -delete || die
 	use perl || rm -rf "${ED}"/usr/share/perl5 || die
 	use gitweb || rm -rf "${ED}"/usr/share/gitweb || die

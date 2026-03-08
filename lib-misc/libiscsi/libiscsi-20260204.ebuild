@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="iscsi client library and utilities"
 HOMEPAGE="https://github.com/sahlberg/libiscsi"
@@ -19,8 +19,7 @@ IUSE="static-libs"
 DEPEND="lib-core/libgcrypt"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 	eautoreconf
 }
@@ -35,5 +34,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

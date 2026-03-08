@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=ae0448cb7d0d328440425d1ac347e9d6845e3f0e
 
-inherit flag-o-matic dot-a
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="access control list utilities, libraries and headers"
 HOMEPAGE="https://savannah.nongnu.org/projects/acl"
@@ -43,8 +43,7 @@ src_prepare() {
 src_configure() {
 	replace-flags -O3 -O2
 	filter-flags -flto*
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local myconf=(
 		--enable-shared $(use_enable static-libs static)
 		--disable-nls
@@ -54,5 +53,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake multibuild flag-o-matic dot-a
+inherit cmake multibuild flag-o-matic qa-policy
 
 DESCRIPTION="Library for manipulating zip archives"
 HOMEPAGE="https://nih.at/libzip/"
@@ -44,8 +44,6 @@ pkg_setup() {
 src_configure() {
 	append-lfs-flags
 	myconfigure() {
-		[[ ${MULTIBUILD_VARIANT} = static-libs ]] && lto-guarantee-fat
-
 		local mycmakeargs=(
 			-DBUILD_EXAMPLES=OFF # nothing is installed
 			-DENABLE_COMMONCRYPTO=OFF # not in tree
@@ -54,6 +52,7 @@ src_configure() {
 			-DENABLE_ZSTD=$(usex zstd)
 		)
 		if [[ ${MULTIBUILD_VARIANT} = static-libs ]]; then
+			qa-policy-configure fat+strip
 			mycmakeargs+=(
 				-DBUILD_DOC=OFF
 				-DBUILD_EXAMPLES=OFF
@@ -61,6 +60,7 @@ src_configure() {
 				-DBUILD_TOOLS=OFF
 			)
 		else
+			qa-policy-configure none
 			mycmakeargs+=(
 				-DBUILD_DOC=ON
 				-DBUILD_REGRESS=$(usex test)
@@ -106,5 +106,5 @@ src_test() {
 
 src_install() {
 	multibuild_foreach_variant cmake_src_install
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs dot-a
+inherit toolchain-funcs qa-policy
 
 DESCRIPTION="Userspace library for efficient Linux io_uring support"
 HOMEPAGE="https://github.com/axboe/liburing"
@@ -17,8 +17,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 }
 
@@ -49,5 +48,5 @@ src_install() {
 			"${ED}"/usr/lib/liburing-ffi.a || die
 	fi
 
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

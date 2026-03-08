@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools dot-a
+inherit flag-o-matic autotools qa-policy
 
 DESCRIPTION="Library to execute a function when a specific event occurs on a file descriptor"
 HOMEPAGE="http://libevent.org/"
@@ -26,8 +26,7 @@ DEPEND="
 filter-flags -Wl,-z,defs
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	if [[ ${PV} == *9999 ]] || [[ ${PV} == 20* ]] ; then
 		eautoreconf
 	fi
@@ -55,5 +54,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit dot-a
+inherit qa-policy
 
 DESCRIPTION="BSD replacement for libreadline"
 HOMEPAGE="https://thrysoee.dk/editline/"
@@ -19,7 +19,7 @@ IUSE="static-libs"
 DEPEND="virtual/curses[static-libs?]"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 	default
 }
 
@@ -33,5 +33,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

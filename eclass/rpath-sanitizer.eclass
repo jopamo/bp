@@ -187,13 +187,13 @@ rpath-clean() {
 	fi
 }
 
-# @FUNCTION: rpath-assert-clean
+# @FUNCTION: rpath-check
 # @USAGE: [path] [more]
 # @DESCRIPTION:
-# Scan installed ELFs and fail on remaining RPATH policy violations
-rpath-assert-clean() {
+# Scan installed ELFs and return non-zero on remaining RPATH policy violations
+rpath-check() {
 	local -a files=( $(_rpath-find-files "$@") )
-	[[ ${#files[@]} -gt 0 ]] || return
+	[[ ${#files[@]} -gt 0 ]] || return 0
 
 	local -i failures=0
 	local file rel current
@@ -209,6 +209,30 @@ rpath-assert-clean() {
 
 		if ! _rpath-is-allowed "${current}" || _rpath-has-build-leak "${current}"; then
 			eerror "rpath: violation in ${rel}: ${current}"
+			(( failures += 1 ))
+		fi
+	done
+
+	[[ ${failures} -eq 0 ]]
+}
+
+# @FUNCTION: rpath-assert-clean
+# @USAGE: [path] [more]
+# @DESCRIPTION:
+# Scan installed ELFs and fail on remaining RPATH policy violations
+rpath-assert-clean() {
+	if rpath-check "$@"; then
+		return 0
+	fi
+
+	local -a files=( $(_rpath-find-files "$@") )
+	local -i failures=0
+	local file current
+	for file in "${files[@]}" ; do
+		_rpath-is-elf "${file}" || continue
+		current=$(_rpath-get "${file}")
+		[[ -n ${current} ]] || continue
+		if ! _rpath-is-allowed "${current}" || _rpath-has-build-leak "${current}"; then
 			(( failures += 1 ))
 		fi
 	done

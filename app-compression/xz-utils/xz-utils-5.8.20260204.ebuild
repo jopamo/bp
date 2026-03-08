@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="v$(ver_cut 1-2)"
 
-inherit autotools flag-o-matic dot-a
+inherit autotools flag-o-matic qa-policy
 
 DESCRIPTION="utils for managing LZMA compressed files"
 HOMEPAGE="http://tukaani.org/xz/"
@@ -28,8 +28,7 @@ src_prepare() {
 }
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local myconf=(
 		SKIP_WERROR_CHECK=yes
 		$(use_enable static-libs static)
@@ -39,5 +38,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

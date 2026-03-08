@@ -256,11 +256,11 @@ _lp-is-dynamic-target() {
 	[[ ${etype} == EXEC || ${etype} == DYN ]]
 }
 
-# @FUNCTION: lp-assert-linker
+# @FUNCTION: lp-check-linker
 # @USAGE: [path] [more]
 # @DESCRIPTION:
-# Scan installed ELFs and enforce linker identity when detectable
-lp-assert-linker() {
+# Scan installed ELFs and return non-zero on linker policy violations
+lp-check-linker() {
 	local expected=${LP_LINKER:-${LP_PREFER}}
 	local readelf_cmd
 	readelf_cmd=$(tc-getREADELF)
@@ -312,7 +312,19 @@ lp-assert-linker() {
 	done
 
 	einfo "lp: scanned ${scanned} ELF files"
-	[[ ${failures} -eq 0 ]] || die "lp-assert-linker: ${failures} violation(s)"
+	[[ ${failures} -eq 0 ]]
+}
+
+# @FUNCTION: lp-assert-linker
+# @USAGE: [path] [more]
+# @DESCRIPTION:
+# Scan installed ELFs and enforce linker identity when detectable
+lp-assert-linker() {
+	if lp-check-linker "$@"; then
+		return 0
+	fi
+
+	die "lp-assert-linker: linker policy violations detected"
 }
 
 fi

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="a program which helps to configure compiler and linker flags for development libraries"
 HOMEPAGE="https://git.sr.ht/~kaniini/pkgconf"
@@ -24,13 +24,13 @@ src_prepare() {
 }
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 	default
 }
 
 src_install() {
 	default
 	dosym -r /usr/bin/pkgconf /usr/bin/pkg-config
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

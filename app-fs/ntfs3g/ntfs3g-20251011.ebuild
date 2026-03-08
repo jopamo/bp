@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit linux-info autotools dot-a
+inherit linux-info autotools qa-policy
 
 DESCRIPTION="Open source read-write NTFS driver that runs under FUSE"
 HOMEPAGE="http://www.tuxera.com/community/ntfs-3g-download/"
@@ -52,8 +52,7 @@ src_prepare() {
 }
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local myconf=(
 		$(use_enable acl posix-acls)
 		$(use_enable debug)
@@ -70,5 +69,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="Library for parsing, editing, and saving EXIF data"
 HOMEPAGE="https://github.com/libexif"
@@ -31,8 +31,7 @@ ECONF_SOURCE=${S}
 PATCHES=( "${FILESDIR}"/libexif-0.6.13-pkgconfig.patch )
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	eautoreconf
 	default
 	sed -i -e '/FLAGS=/s:-g::' configure || die #390249
@@ -48,5 +47,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

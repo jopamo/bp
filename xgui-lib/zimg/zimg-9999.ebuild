@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="Scaling, colorspace conversion, and dithering library"
 HOMEPAGE="https://github.com/sekrit-twc/zimg"
@@ -19,8 +19,7 @@ KEYWORDS="amd64 arm64"
 IUSE="debug static-libs"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 	eautoreconf
 }
@@ -35,5 +34,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

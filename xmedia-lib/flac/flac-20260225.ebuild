@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="free lossless audio encoder and decoder"
 HOMEPAGE="https://xiph.org/flac/"
@@ -19,8 +19,7 @@ IUSE="cpplibs debug ogg static-libs"
 DEPEND="ogg? ( xmedia-lib/libogg )"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	touch config.rpath
 	default
 	eautoreconf
@@ -42,5 +41,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

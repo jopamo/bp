@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic dot-a
+inherit autotools flag-o-matic qa-policy
 
 DESCRIPTION="Handler library for evdev events"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/libevdev/"
@@ -19,8 +19,7 @@ IUSE="static-libs"
 RESTRICT="test" # Tests need to run as root.
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	replace-flags "-D_FORTIFY_SOURCE=3" "-D_FORTIFY_SOURCE=2"
 
 	default
@@ -36,5 +35,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

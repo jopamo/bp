@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit dot-a
+inherit qa-policy
 
 SNAPSHOT=f57e61e19229e23c4445b85494dbf7c07de721cb
 
@@ -29,11 +29,11 @@ src_prepare() {
 }
 
 src_compile() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 	default
 }
 
 src_install() {
 	emake DESTDIR="${D}" LIBRARY_REL="lib" install || die
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

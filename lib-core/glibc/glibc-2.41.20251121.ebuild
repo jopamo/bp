@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="release/$(ver_cut 1-2)/master"
 
-inherit flag-o-matic doins dot-a
+inherit flag-o-matic doins qa-policy
 
 DESCRIPTION="GNU libc C library"
 HOMEPAGE="https://www.gnu.org/software/libc/"
@@ -91,8 +91,7 @@ pkg_pretend() {
 }
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 
 	cd "${WORKDIR}"
@@ -175,7 +174,7 @@ src_install() {
 	cd "${WORKDIR}/build"
 
 	emake install_root="${ED}" install || die
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 
 	# We'll take care of the cache ourselves
 	rm -f "${ED}"/etc/ld.so.cache

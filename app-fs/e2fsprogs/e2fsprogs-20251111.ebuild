@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic toolchain-funcs dot-a
+inherit flag-o-matic toolchain-funcs qa-policy
 
 DESCRIPTION="Standard EXT2/EXT3/EXT4 filesystem utilities"
 HOMEPAGE="http://ext4.wiki.kernel.org/"
@@ -36,8 +36,7 @@ src_prepare() {
 src_configure() {
 	append-cflags -fno-strict-aliasing
 	append-cppflags -D_GNU_SOURCE
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local myconf=(
 		--prefix="${EPREFIX}/usr"
 		$(tc-is-static-only || echo --enable-elf-shlibs)
@@ -65,7 +64,7 @@ src_install() {
 
 	rm -f "${ED}"/usr/share/info/libext2fs.info.gz
 
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 	if ! use static-libs ; then
 		find "${D}" -name '*.a' -delete || die
 	fi

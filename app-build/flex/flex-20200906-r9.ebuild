@@ -4,7 +4,7 @@ EAPI=8
 
 SNAPSHOT=04c5b7c9209801aa1bdbf279ccdcde0d57874a55
 
-inherit autotools flag-o-matic dot-a
+inherit autotools flag-o-matic qa-policy
 
 DESCRIPTION="The Fast Lexical Analyzer"
 HOMEPAGE="https://github.com/westes/flex"
@@ -35,7 +35,7 @@ src_prepare() {
 }
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 	use static-libs && append-ldflags -static
 
 	ECONF_SOURCE=${S} econf --disable-shared
@@ -48,6 +48,6 @@ src_test() {
 src_install() {
 	default
 	dosym -r /usr/bin/flex /usr/bin/lex
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

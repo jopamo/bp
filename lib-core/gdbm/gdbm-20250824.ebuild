@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=fb46d987d613e4d56981d30f2b9f34288ef42858
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="Standard GNU database libraries"
 HOMEPAGE="https://www.gnu.org/software/gdbm/"
@@ -30,8 +30,7 @@ DEPEND="
 "
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 	eautoreconf
 }
@@ -47,5 +46,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

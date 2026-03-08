@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools dot-a
+inherit flag-o-matic autotools qa-policy
 
 DESCRIPTION="A command line tool and library for transferring data with URL syntax"
 HOMEPAGE="https://curl.haxx.se/"
@@ -48,8 +48,7 @@ DEPEND="
 "
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 	eautoreconf
 
@@ -97,6 +96,6 @@ src_install() {
 
 	#doenvd "${T}"/99curl
 
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 	dobin scripts/mk-ca-bundle.pl
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit dot-a
+inherit qa-policy
 
 DESCRIPTION="GNU TLS library providing SSL/TLS and cryptography (TLS 1.3 etc.)"
 HOMEPAGE="http://www.gnutls.org/"
@@ -33,7 +33,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 	default
 }
 
@@ -67,5 +67,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

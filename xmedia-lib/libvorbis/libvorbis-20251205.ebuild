@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake dot-a
+inherit cmake qa-policy
 
 DESCRIPTION="The Ogg Vorbis sound file format library"
 HOMEPAGE="https://xiph.org/vorbis/"
@@ -19,12 +19,11 @@ IUSE="static-libs"
 RDEPEND="xmedia-lib/libogg"
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	cmake_src_configure
 }
 
 src_install() {
 	cmake_src_install
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

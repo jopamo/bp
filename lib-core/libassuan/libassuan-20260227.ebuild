@@ -4,7 +4,7 @@ EAPI=8
 SNAPSHOT=e71eb3ec615e5c4a2dd8b5ecd068c3a9f6547a47
 SHORT=${SNAPSHOT:0:7}
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="IPC library used by GnuPG and GPGME"
 HOMEPAGE="http://www.gnupg.org/related_software/libassuan/index.en.html"
@@ -20,8 +20,7 @@ IUSE="static-libs"
 DEPEND="lib-core/libgpg-error"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	#disable texi doc generation
 	sed -i "/TEXINFOS\ /d" doc/Makefile.am || die
 
@@ -35,5 +34,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

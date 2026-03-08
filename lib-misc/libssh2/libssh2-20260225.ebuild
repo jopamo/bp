@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="Library implementing the SSH2 protocol"
 HOMEPAGE="http://www.libssh2.org/"
@@ -43,12 +43,12 @@ src_configure() {
 		crypto=openssl
 	fi
 
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 	ECONF_SOURCE="${S}" econf --with-crypto=${crypto}
 }
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

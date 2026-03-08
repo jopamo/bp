@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic meson python-any-r1 dot-a
+inherit flag-o-matic meson python-any-r1 qa-policy
 
 DESCRIPTION="An OpenType text shaping engine"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/HarfBuzz"
@@ -40,8 +40,7 @@ pkg_setup() {
 }
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local emesonargs=(
 		-Ddefault_library=$(usex static-libs both shared)
 	)
@@ -50,5 +49,5 @@ src_configure() {
 
 src_install() {
 	meson_src_install
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

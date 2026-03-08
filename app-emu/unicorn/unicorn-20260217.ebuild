@@ -5,7 +5,7 @@ EAPI=8
 DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_OPTIONAL=1
 
-inherit cmake distutils-r1 dot-a
+inherit cmake distutils-r1 qa-policy
 
 DESCRIPTION="CPU emulator framework"
 HOMEPAGE="https://github.com/unicorn-engine/unicorn"
@@ -59,8 +59,7 @@ src_prepare() {
 }
 
 src_configure(){
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local mycmakeargs=(
 		-DUNICORN_ARCH="${UNICORN_TARGETS// /;}"
 		-DUNICORN_LOGGING=$(usex logging)
@@ -87,7 +86,7 @@ src_test() {
 
 src_install() {
 	cmake_src_install
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 
 	wrap_python ${FUNCNAME}
 }

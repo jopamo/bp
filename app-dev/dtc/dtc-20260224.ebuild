@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs dot-a
+inherit toolchain-funcs qa-policy
 
 DESCRIPTION="Open Firmware device tree compiler"
 HOMEPAGE="https://devicetree.org/ https://git.kernel.org/cgit/utils/dtc/dtc.git/"
@@ -38,13 +38,13 @@ src_prepare() {
 }
 
 src_compile() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 	default
 }
 
 src_install() {
 	default
 
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake multibuild dot-a
+inherit cmake multibuild qa-policy
 
 DESCRIPTION="Library implementing the SSH2 protocol"
 HOMEPAGE="http://www.libssh.org/"
@@ -25,11 +25,12 @@ src_configure() {
 		local mycmakeargs=()
 
 		if [[ ${MULTIBUILD_VARIANT} = static-libs ]]; then
-			lto-guarantee-fat
+			qa-policy-configure fat+strip
 			mycmakeargs+=(
 				-DBUILD_SHARED_LIBS=OFF
 			)
 		else
+			qa-policy-configure none
 			mycmakeargs+=(
 				-DBUILD_SHARED_LIBS=ON
 			)
@@ -47,5 +48,5 @@ src_compile() {
 
 src_install() {
 	multibuild_foreach_variant cmake_src_install
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

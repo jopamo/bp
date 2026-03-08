@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=f124ddb0a2cd950d4a94fd99af1313dd6c283d75
 
-inherit flag-o-matic dot-a
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="Create, destroy, resize, check, copy partitions and file systems"
 HOMEPAGE="https://www.gnu.org/software/parted"
@@ -58,8 +58,7 @@ src_prepare() {
 }
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local myconf=(
 		$(use_enable debug)
 		--disable-device-mapper
@@ -74,5 +73,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

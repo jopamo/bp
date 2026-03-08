@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic toolchain-funcs dot-a
+inherit flag-o-matic toolchain-funcs qa-policy
 
 DESCRIPTION="A free library for encoding X264/AVC streams"
 HOMEPAGE="https://www.videolan.org/developers/x264.html"
@@ -31,8 +31,7 @@ DEPEND="
 RESTRICT="test"
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	tc-export CC
 
 	"${S}/configure" \
@@ -54,5 +53,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

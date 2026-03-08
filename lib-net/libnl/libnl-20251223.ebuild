@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit distutils-r1 autotools flag-o-matic dot-a
+inherit distutils-r1 autotools flag-o-matic qa-policy
 
 DESCRIPTION="Libraries providing APIs to netlink protocol based Linux kernel interfaces"
 HOMEPAGE="http://www.infradead.org/~tgr/libnl/ https://github.com/thom311/libnl"
@@ -32,8 +32,7 @@ REQUIRED_USE="
 filter-flags -Wl,-z,defs
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 	eautoreconf
 
@@ -69,5 +68,5 @@ src_install() {
 		distutils-r1_src_install
 	fi
 
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

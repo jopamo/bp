@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson dot-a
+inherit meson qa-policy
 
 DESCRIPTION="A standalone library to implement GNU libc's obstack and others"
 HOMEPAGE="https://github.com/jopamo/musl-bsd"
@@ -19,8 +19,7 @@ IUSE="static-libs"
 RDEPEND="!lib-core/glibc"
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local emesonargs=(
 		-Ddefault_library=$(usex static-libs both shared)
 	)
@@ -29,5 +28,5 @@ src_configure() {
 
 src_install() {
 	meson_src_install
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

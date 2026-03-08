@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake dot-a
+inherit cmake qa-policy
 
 DESCRIPTION="MMX, SSE, and SSE2 SIMD accelerated JPEG library"
 HOMEPAGE="https://libjpeg-turbo.org/"
@@ -19,8 +19,7 @@ IUSE="static-libs"
 DEPEND="app-lang/nasm"
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local mycmakeargs=(
 		-DENABLE_STATIC=$(usex static-libs)
 		-DWITH_JPEG8=1
@@ -32,5 +31,5 @@ src_configure() {
 
 src_install() {
 	cmake_src_install
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

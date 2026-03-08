@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs flag-o-matic dot-a
+inherit toolchain-funcs flag-o-matic qa-policy
 
 DESCRIPTION="Extremely fast non-cryptographic hash algorithm"
 HOMEPAGE="http://www.xxhash.net"
@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_compile() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 	PREFIX="${EPREFIX}/usr" \
 	LIBDIR="${EPREFIX}/usr/lib" \
 	emake AR="$(tc-getAR)" CC="$(tc-getCC)"
@@ -29,7 +29,7 @@ src_install() {
 	MANDIR="${EPREFIX}/usr/share/man/man1" \
 	emake DESTDIR="${D}" install
 
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 
 	if ! use static-libs ; then
 		rm "${ED}"/usr/lib/libxxhash.a || die

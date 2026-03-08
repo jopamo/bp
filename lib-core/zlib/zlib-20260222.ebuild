@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic dot-a
+inherit autotools flag-o-matic qa-policy
 
 DESCRIPTION="Standard (de)compression library"
 HOMEPAGE="https://zlib.net/"
@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 IUSE="minizip static-libs"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 	sed -i '/^  elif test -z.*$/,/^  fi$/c\  fi' configure
 
 	default
@@ -54,7 +54,7 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 	use static-libs || rm -f "${ED}"/usr/lib/libz.{a,la}
 
 	if use minizip ; then

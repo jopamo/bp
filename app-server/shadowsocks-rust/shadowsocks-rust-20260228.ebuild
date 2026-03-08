@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic dot-a
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="A lightweight secured SOCKS5 proxy for embedded devices and low end boxes"
 HOMEPAGE="https://github.com/shadowsocks/shadowsocks-rust"
@@ -19,7 +19,7 @@ IUSE="debug static-libs systemd"
 DEPEND="virtual/rust"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 	default
 	filter-flags -flto*
 }
@@ -40,5 +40,5 @@ src_install() {
 		newins "${FILESDIR}/shadowsocks-tunnel_at.service" "shadowsocks-tunnel@.service"
 	fi
 
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

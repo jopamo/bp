@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit linux-info kernel-mod unpacker user-info dot-a
+inherit linux-info kernel-mod unpacker user-info qa-policy
 
 NV_URI="https://us.download.nvidia.com/XFree86/"
 
@@ -92,6 +92,8 @@ src_prepare() {
 }
 
 src_compile() {
+	qa-policy-configure none
+
     if use driver; then
         cd "${NV_SRC}" || die "Failed to cd to kernel source dir"
 
@@ -240,7 +242,7 @@ EOF
     doins firmware/*.bin
 
     dosym -r /usr/lib/libcrypto.so.3 /usr/lib/libcrypto.so.1.1
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }
 
 src_install-libs() {

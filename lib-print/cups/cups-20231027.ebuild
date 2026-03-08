@@ -4,7 +4,7 @@ EAPI=8
 
 SNAPSHOT=a8968fc4257322b1e4e191c4bccedea98d7b053e
 
-inherit autotools linux-info toolchain-funcs dot-a
+inherit autotools linux-info toolchain-funcs qa-policy
 
 DESCRIPTION="The Common Unix Printing System"
 HOMEPAGE="https://www.cups.org/"
@@ -43,8 +43,7 @@ PATCHES=(
 RESTRICT="test"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 
 	# Remove ".SILENT" rule for verbose output (bug 524338).
@@ -117,7 +116,7 @@ src_configure() {
 
 src_install() {
 	emake BUILDROOT="${D}" install
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 
 	# move the default config file to docs
 	dodoc "${ED}"/etc/cups/cupsd.conf.default

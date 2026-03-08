@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake dot-a
+inherit cmake qa-policy
 
 DESCRIPTION="C++ JSON reader and writer"
 HOMEPAGE="https://github.com/open-source-parsers/jsoncpp"
@@ -19,8 +19,7 @@ IUSE="static-libs test"
 RESTRICT="!test? ( test )"
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local mycmakeargs=(
 		-DJSONCPP_WITH_TESTS=$(usex test)
 		-DJSONCPP_WITH_POST_BUILD_UNITTEST=OFF
@@ -33,5 +32,5 @@ src_configure() {
 
 src_install() {
 	cmake_src_install
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

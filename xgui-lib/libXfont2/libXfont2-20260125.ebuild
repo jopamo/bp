@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic dot-a
+inherit autotools flag-o-matic qa-policy
 
 DESCRIPTION="X.Org Xfont library"
 HOMEPAGE="https://www.x.org/wiki/"
@@ -33,8 +33,7 @@ src_prepare() {
 }
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local myconf=(
 		$(use_enable ipv6)
 		$(use_with bzip2)
@@ -47,6 +46,6 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 	use static-libs || find "${ED}" -name '*.a' -delete
 }

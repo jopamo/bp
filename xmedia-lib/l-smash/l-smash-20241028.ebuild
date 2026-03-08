@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs dot-a
+inherit toolchain-funcs qa-policy
 
 DESCRIPTION="(FFmpeg) Libavcodec-SMASH decoder/demuxer wrapper library"
 HOMEPAGE="https://github.com/l-smash/l-smash"
@@ -20,8 +20,7 @@ DEPEND="xmedia-app/ffmpeg
 		xmedia-lib/obuparse"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 	sed -e 's/-O[s0]//g' -i configure
 }
@@ -47,5 +46,5 @@ src_configure()
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

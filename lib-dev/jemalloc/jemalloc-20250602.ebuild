@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="Jemalloc is a general-purpose scalable concurrent allocator"
 HOMEPAGE="http://jemalloc.net/ https://github.com/jemalloc/jemalloc"
@@ -23,8 +23,7 @@ QA_CONFIG_IMPL_DECL_SKIP=(
 )
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	echo "5.3.0-0-g${SNAPSHOT}" > "${S}/VERSION"
 	default
 	eautoreconf
@@ -46,5 +45,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

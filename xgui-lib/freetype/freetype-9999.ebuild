@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson git-r3 dot-a
+inherit meson git-r3 qa-policy
 
 DESCRIPTION="A high-quality and portable font engine"
 HOMEPAGE="https://www.freetype.org/"
@@ -22,8 +22,7 @@ RDEPEND="
 "
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local emesonargs=(
 		-Ddefault_library=$(usex static-libs both shared)
 	)
@@ -32,5 +31,5 @@ src_configure() {
 
 src_install() {
 	meson_src_install
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit linux-info flag-o-matic dot-a
+inherit linux-info flag-o-matic qa-policy
 
 DESCRIPTION="Linux Key Management Utilities"
 HOMEPAGE="https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git"
@@ -27,8 +27,7 @@ src_prepare() {
 }
 
 src_compile() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	emake CFLAGS="${CFLAGS}" \
 		LDFLAGS="${LDFLAGS}" \
 		INCLUDEDIR="${EPREFIX}"/usr/include \
@@ -54,6 +53,6 @@ src_install() {
 		BINDIR="${ED}"/usr/bin \
 		install
 
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 	dosym -r /usr/lib/libkeyutils.so.1 /usr/lib/libkeyutils.so
 }

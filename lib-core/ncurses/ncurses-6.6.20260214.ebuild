@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit dot-a
+inherit qa-policy
 
 DESCRIPTION="console display library"
 HOMEPAGE="https://invisible-island.net/ncurses/ https://www.gnu.org/software/ncurses/"
@@ -27,8 +27,7 @@ src_prepare() {
 }
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local myconf=(
 		--disable-rpath-hack
 		--disable-setuid-environ
@@ -62,7 +61,7 @@ src_configure() {
 src_install() {
 	default
 
-	use static-libs && strip-lto-bytecode "${ED}"/usr
+	qa-policy-install "${ED}"/usr
 
 	local lib
 	for lib in ncurses "ncurses++" form panel menu tinfo; do

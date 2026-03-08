@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs autotools dot-a
+inherit toolchain-funcs autotools qa-policy
 
 DESCRIPTION="International Components for Unicode"
 HOMEPAGE="http://www.icu-project.org/"
@@ -19,8 +19,7 @@ IUSE="debug static-libs"
 BDEPEND="app-dev/pkgconf"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 
 	local variable
@@ -70,5 +69,5 @@ src_test() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

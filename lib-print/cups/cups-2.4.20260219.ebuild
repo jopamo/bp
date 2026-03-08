@@ -5,7 +5,7 @@ EAPI=8
 BRANCH_NAME="$(ver_cut 1-2).x"
 SNAPSHOT=c5ce534c03d0698509f3eb7ff90ca41610625570
 
-inherit linux-info user toolchain-funcs autotools flag-o-matic dot-a
+inherit linux-info user toolchain-funcs autotools flag-o-matic qa-policy
 
 DESCRIPTION="The Common Unix Printing System"
 HOMEPAGE="https://www.cups.org/"
@@ -51,8 +51,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	filter-flags -flto*
 	default
 
@@ -127,7 +126,7 @@ src_configure() {
 
 src_install() {
 	emake BUILDROOT="${D}" install
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 
 	# move the default config file to docs
 	dodoc "${ED}"/etc/cups/cupsd.conf.default

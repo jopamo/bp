@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit linux-info flag-o-matic autotools dot-a
+inherit linux-info flag-o-matic autotools qa-policy
 
 DESCRIPTION="interface to packets that have been logged by the kernel packet filter"
 HOMEPAGE="https://www.netfilter.org/projects/libnetfilter_log/"
@@ -22,8 +22,7 @@ DEPEND="lib-net/libnfnetlink"
 CONFIG_CHECK="~NETFILTER_NETLINK_LOG"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 	eautoreconf
 	filter-flags -Wl,-z,defs
@@ -39,5 +38,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

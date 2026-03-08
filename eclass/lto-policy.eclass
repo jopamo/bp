@@ -30,6 +30,11 @@ inherit dot-a flag-o-matic toolchain-funcs
 
 _LTO_POLICY_ACTIVE=0
 
+_lto-policy-should-sanitize() {
+	[[ ${_LTO_POLICY_ACTIVE} == 1 ]] && return 0
+	tc-is-lto
+}
+
 _lto-policy-pkg-key() {
 	if [[ -n ${CATEGORY} && -n ${PN} ]]; then
 		echo "${CATEGORY}/${PN}"
@@ -208,12 +213,12 @@ _lto-policy-find-archives() {
 # @DESCRIPTION:
 # Apply post install archive cleanup per policy mode
 lto-postinstall-sanitize() {
-	[[ ${_LTO_POLICY_ACTIVE} == 1 ]] || return
+	_lto-policy-should-sanitize || return
 
 	local -a archives=( $(_lto-policy-find-archives "$@") )
 	[[ ${#archives[@]} -gt 0 ]] || return
 
-	if [[ ${LTO_POLICY_MODE} == fat+strip ]]; then
+	if [[ ${LTO_POLICY_MODE} == fat+strip || ${_LTO_POLICY_ACTIVE} != 1 ]]; then
 		if [[ ${#} -eq 0 ]]; then
 			strip-lto-bytecode "${ED}"
 		else

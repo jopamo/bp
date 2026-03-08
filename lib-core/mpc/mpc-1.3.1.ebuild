@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit dot-a
+inherit qa-policy
 
 DESCRIPTION="A library for multiprecision complex arithmetic with exact rounding"
 HOMEPAGE="http://mpc.multiprecision.org/"
@@ -17,7 +17,7 @@ IUSE="static-libs"
 DEPEND="lib-core/mpfr[static-libs?]"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 	default
 }
 
@@ -27,5 +27,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

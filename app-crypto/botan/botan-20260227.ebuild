@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs python-utils-r1 dot-a
+inherit toolchain-funcs python-utils-r1 qa-policy
 
 DESCRIPTION="C++ crypto library"
 HOMEPAGE="https://botan.randombit.net/"
@@ -25,8 +25,7 @@ DEPEND="
 "
 
 src_configure() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	local disable_modules=(
 		$(usev !boost 'boost')
 	)
@@ -63,5 +62,5 @@ src_test() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

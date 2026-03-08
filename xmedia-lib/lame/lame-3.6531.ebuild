@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit dot-a
+inherit qa-policy
 
 DESCRIPTION="LAME Ain't an MP3 Encoder"
 HOMEPAGE="http://lame.sourceforge.net/"
@@ -21,8 +21,7 @@ DEPEND="
 "
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 	sed -i 's/ret = id3v2_add_utf8_lng(gfp, ID_GENRE, 0, text);/char *utf8 = local_strdup_utf16_to_latin1(text); ret = id3v2_add_utf8_lng(gfp, ID_GENRE, 0, utf8); free(utf8);/' libmp3lame/id3tag.c || die
 
@@ -50,5 +49,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

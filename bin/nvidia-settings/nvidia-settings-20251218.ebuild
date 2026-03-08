@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs dot-a
+inherit toolchain-funcs qa-policy
 
 DESCRIPTION="NVIDIA Accelerated Graphics Driver Settings"
 HOMEPAGE="http://www.nvidia.com/ http://www.nvidia.com/Download/Find.aspx"
@@ -33,8 +33,7 @@ src_prepare() {
 src_compile() {
 	export NV_USE_BUNDLED_LIBJANSSON=0
 
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	emake -C libXNVCtrl \
 			AR="$(tc-getAR)" \
 			CC="$(tc-getCC)" \
@@ -71,7 +70,8 @@ src_install() {
 	doins libXNVCtrl/*.h
 
 	if use static-libs ; then
-		strip-lto-bytecode libXNVCtrl/libXNVCtrl.a
 		dolib.a libXNVCtrl/libXNVCtrl.a
 	fi
+
+	qa-policy-install
 }

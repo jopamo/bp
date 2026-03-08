@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit libtool toolchain-funcs flag-o-matic dot-a
+inherit libtool toolchain-funcs flag-o-matic qa-policy
 
 DESCRIPTION="Library for arbitrary-precision arithmetic on different type of numbers"
 HOMEPAGE="http://gmplib.org/"
@@ -28,8 +28,7 @@ src_unpack() {
 
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	use arm64 && filter-flags -flto*
 
 	default
@@ -81,7 +80,7 @@ src_test() {
 
 src_install() {
 	emake DESTDIR="${D}" install
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 
 	# this requires libgmp
 	local la="${ED}/usr/lib/libgmpxx.la"

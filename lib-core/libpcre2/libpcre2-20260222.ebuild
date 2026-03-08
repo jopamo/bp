@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools dot-a
+inherit flag-o-matic autotools qa-policy
 
 DESCRIPTION="Perl-compatible regular expression library"
 HOMEPAGE="http://www.pcre.org/"
@@ -35,8 +35,7 @@ BDEPEND="
 "
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	rm -rf "${WORKDIR}/pcre2-${SNAPSHOT}/deps/sljit"
 	mv "${WORKDIR}/sljit-${SLJIT_SNAPSHOT}" "${WORKDIR}/pcre2-${SNAPSHOT}/deps/sljit"
 
@@ -67,5 +66,5 @@ src_compile() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

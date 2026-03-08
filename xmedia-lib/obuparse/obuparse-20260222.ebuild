@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs dot-a
+inherit toolchain-funcs qa-policy
 
 DESCRIPTION="A simple and portable single file AV1 OBU parser"
 HOMEPAGE="https://github.com/dwbuiten/obuparse"
@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 src_compile() {
-	lto-guarantee-fat
+	qa-policy-configure
 
 	make \
 		CC="$(tc-getCC)" \
@@ -28,9 +28,10 @@ src_install() {
 	doins obuparse.h
 
 	ln -s libobuparse.so libobuparse.so.1
-	strip-lto-bytecode libobuparse.a
 	insinto /usr/lib
 	doins libobuparse.a
 	doins libobuparse.so
 	doins libobuparse.so.1
+
+	qa-policy-install
 }

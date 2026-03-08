@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic toolchain-funcs dot-a
+inherit flag-o-matic toolchain-funcs qa-policy
 
 DESCRIPTION="Hardware RNG based on CPU timing jitter"
 HOMEPAGE="https://github.com/smuellerDD/jitterentropy-library"
@@ -31,7 +31,7 @@ src_prepare() {
 }
 
 src_compile() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 	emake AR="$(tc-getAR)" CC="$(tc-getCC)"
 }
 
@@ -42,5 +42,5 @@ src_install() {
 		  INSTALL_STRIP="install" \
 		  install $(usex static-libs install-static '')
 
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

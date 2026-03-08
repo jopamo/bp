@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake multibuild dot-a
+inherit cmake multibuild qa-policy
 
 DESCRIPTION="A simple, small, efficient, C++ XML parser"
 HOMEPAGE="http://www.grinninglizard.com/tinyxml2/ https://github.com/leethomason/tinyxml2/"
@@ -22,12 +22,13 @@ src_configure() {
 		local mycmakeargs=()
 
 		if [[ ${MULTIBUILD_VARIANT} = static-libs ]]; then
-			lto-guarantee-fat
+			qa-policy-configure fat+strip
 			mycmakeargs+=(
 				-DBUILD_SHARED_LIBS=OFF
 				-Dtinyxml2_BUILD_TESTING=OFF
 			)
 		else
+			qa-policy-configure none
 			mycmakeargs+=(
 				-DBUILD_SHARED_LIBS=ON
 				-Dtinyxml2_BUILD_TESTING=$(usex test)
@@ -54,5 +55,5 @@ src_test() {
 
 src_install() {
 	multibuild_foreach_variant cmake_src_install
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

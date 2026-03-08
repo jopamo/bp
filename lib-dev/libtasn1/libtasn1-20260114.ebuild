@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit dot-a
+inherit qa-policy
 
 DESCRIPTION="ASN.1 library"
 HOMEPAGE="https://www.gnu.org/software/libtasn1/"
@@ -17,8 +17,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs valgrind"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	rm -rf gnulib
 	cp -r "${BROOT}"/usr/share/gnulib gnulib
 	cd gnulib
@@ -41,5 +40,5 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

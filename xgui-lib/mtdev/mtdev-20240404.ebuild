@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools dot-a
+inherit autotools qa-policy
 
 DESCRIPTION="Multitouch Protocol Translation Library"
 HOMEPAGE="http://bitmath.org/code/mtdev/"
@@ -19,8 +19,7 @@ IUSE="static-libs"
 DEPEND="virtual/linux-sources"
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
-
+	qa-policy-configure
 	default
 	eautoreconf
 }
@@ -31,6 +30,6 @@ src_configure() {
 
 src_install() {
 	default
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 	use static-libs || find "${ED}" -name '*.la' -delete
 }

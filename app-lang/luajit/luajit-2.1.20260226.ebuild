@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="v$(ver_cut 1-2)"
 
-inherit toolchain-funcs dot-a
+inherit toolchain-funcs qa-policy
 
 DESCRIPTION="Just-In-Time Compiler for the Lua programming language"
 HOMEPAGE="http://luajit.org/"
@@ -43,7 +43,7 @@ src_compile() {
 }
 
 src_prepare() {
-	use static-libs && lto-guarantee-fat
+	qa-policy-configure
 	default
 }
 
@@ -58,5 +58,5 @@ src_install(){
 
 	dosym -r /usr/include/luajit-2.1/luajit.h /usr/include/luajit.h
 	dosym -r /usr/include/luajit-2.1/lua.hpp /usr/include/lua.hpp
-	use static-libs && strip-lto-bytecode
+	qa-policy-install
 }

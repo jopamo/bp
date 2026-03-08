@@ -13,6 +13,11 @@ SRC_URI_AMD64="
 "
 SRC_URI="
 	amd64? ( ${SRC_URI_AMD64} )
+	l10n_en? (
+		offlinehelp? (
+			${BASE_SRC_URI}/x86_64/LibreOffice_${PV}_Linux_x86-64_deb_helppack_en-US.tar.gz
+		)
+	)
 "
 S="${WORKDIR}"
 
@@ -20,41 +25,13 @@ LICENSE="LGPL-3"
 SLOT="0"
 KEYWORDS="amd64"
 
-IUSE="java offlinehelp python"
+IUSE="java l10n_en offlinehelp python"
 
 RDEPEND="
 	bin/openjdk11
 	lib-core/libxcrypt-compat
 	lib-core/libxml2
 "
-
-LANGUAGES_HELP=(
-	en:en-US
-)
-LANGUAGES=(
-	${LANGUAGES_HELP[@]}
-)
-
-handle_lang() {
-	local lang helppack langpack
-
-	for lang in ${LANGUAGES_HELP[@]}; do
-		SRC_URI+=" l10n_${lang%:*}? (
-			offlinehelp? (
-				${BASE_SRC_URI}/x86_64/LibreOffice_${PV}_Linux_x86-64_deb_helppack_${lang#*:}.tar.gz
-			)
-		)"
-	done
-	for lang in ${LANGUAGES[@]}; do
-		if [[ ${lang%:*} != en ]]; then
-			SRC_URI+=" l10n_${lang%:*}? (
-				${BASE_SRC_URI}/x86_64/LibreOffice_${PV}_Linux_x86-64_deb_langpack_${lang#*:}.tar.gz
-			)"
-		fi
-		IUSE+=" l10n_${lang%:*}"
-	done
-}
-handle_lang
 
 RESTRICT="test strip"
 

@@ -2,10 +2,10 @@
 
 EAPI=8
 
-inherit flag-o-matic linux-info python-single-r1 doins git-r3 user
+inherit flag-o-matic python-single-r1 doins git-r3 qa-policy user
 
 DESCRIPTION="PostgreSQL RDBMS"
-HOMEPAGE="http://www.postgresql.org/"
+HOMEPAGE="https://www.postgresql.org/"
 EGIT_REPO_URI="https://git.postgresql.org/git/postgresql.git"
 EGIT_BRANCH=REL_$(ver_cut 1)_STABLE
 
@@ -26,12 +26,14 @@ CDEPEND="
 		perl? ( >=app-lang/perl-5.8:= )
 		python? ( ${PYTHON_DEPS} )
 		readline? ( lib-core/readline:0= )
-		server? ( systemd? ( app-core/systemd ) )
+		systemd? ( app-core/systemd )
 		ssl? ( virtual/ssl )
 		tcl? ( >=app-lang/tcl-8:0= )
+		uuid? ( app-core/util-linux[libuuid] )
 		xml? ( lib-core/libxml2 lib-core/libxslt )
 		zlib? ( lib-core/zlib )
 "
+RDEPEND="${CDEPEND}"
 
 DEPEND="${CDEPEND}
 !!<app-core/sandbox-2.0
@@ -58,25 +60,16 @@ src_prepare() {
 	# Rely on $PATH being in the proper order
 	sed 's/@install_bin@/install -c/' -i src/Makefile.global.in || die
 
-	eapply_user
+	default
 }
 
 src_configure() {
 	export LDFLAGS_SL="${LDFLAGS}"
 	export LDFLAGS_EX="${LDFLAGS}"
 
-	local PO="${EPREFIX%/}"
+	qa-policy-configure
 
-	local i uuid_config=""
-	if use uuid; then
-		for i in ${UTIL_LINUX_LIBC[@]}; do
-			use ${i} && uuid_config="--with-uuid=e2fs"
-		done
-		for i in ${BSD_LIBC[@]}; do
-			use ${i} && uuid_config="--with-uuid=bsd"
-		done
-		[[ -z $uuid_config ]] && uuid_config="--with-uuid=ossp"
-	fi
+	local PO="${EPREFIX%/}"
 
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
@@ -92,15 +85,18 @@ src_configure() {
 		--mandir="${PO}"/usr/share/postgresql/man
 		--sysconfdir="${PO}"/etc/postgresql
 		--with-system-tzdata="${PO}"/usr/share/zoneinfo
+		$(use_enable nls)
+		$(use_with kerberos gssapi)
 		$(use_with ldap)
 		$(use_with pam)
 		$(use_with perl)
 		$(use_with python)
 		$(use_with readline)
 		$(use_with ssl openssl)
-		--with-systemd
+		$(use_with systemd)
 		$(use_with tcl)
-		${uuid_config}
+		$(use_enable threads thread-safety)
+		$(use_with uuid uuid e2fs)
 		$(use_with xml libxml)
 		$(use_with xml libxslt)
 		$(use_with zlib)
@@ -120,6 +116,8 @@ src_install() {
 	use static-libs || find "${ED}" -name '*.a' -delete
 
 	if use systemd; then
+		dobin "${FILESDIR}/postgresql-check-db-dir"
+
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
 		doins "${FILESDIR}/postgresql.service"
@@ -132,10 +130,11 @@ src_install() {
 		insopts -m 0644
 		newins "${FILESDIR}/postgresql.pam" postgresql
 	fi
+
+	qa-policy-install
 }
 
 pkg_postinst() {
 	sysusers_process
 	tmpfiles_process
 }
-

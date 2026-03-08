@@ -334,12 +334,24 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 		GNOME_DOC_INIT
 	)
 
+	_autotools_trace_needs_refresh() {
+		local trace_file=$1 input
+
+		[[ ! -e ${trace_file} ]] && return 0
+
+		for input in configure.ac configure.in aclocal.m4; do
+			[[ -e ${input} && ${trace_file} -ot ${input} ]] && return 0
+		done
+
+		return 1
+	}
+
 	autotools_check_macro() {
 		[[ -f configure.ac || -f configure.in ]] || return 0
 		local trace_file=".__autoconf_trace_data"
 
-		# refresh trace data when missing or older than aclocal.m4
-		if [[ ! -e ${trace_file} ]] || [[ -e aclocal.m4 && ${trace_file} -ot aclocal.m4 ]]; then
+		# refresh trace data whenever the traced configure inputs changed
+		if _autotools_trace_needs_refresh "${trace_file}"; then
 			autoconf $(autotools_m4dir_include) \
 				"${ALL_AUTOTOOLS_MACROS[@]/#/--trace=}" \
 				> "${trace_file}" 2>/dev/null || true

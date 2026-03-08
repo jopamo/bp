@@ -6,7 +6,7 @@
 # @SUPPORTED_EAPIS: 7 8
 # @BLURB: Minimal eclass for kernel packages based on stable git branches
 
-inherit crossdev estack multiprocessing optfeature toolchain-funcs
+inherit estack multiprocessing optfeature toolchain-funcs
 
 case ${EAPI} in
 	7|8) ;;
@@ -78,7 +78,8 @@ postinst_sources() {
 # @DESCRIPTION:
 # Return destination directory for kernel headers.
 kernel_header_destdir() {
-	[[ ${CTARGET} == ${CHOST} ]] && echo /usr/include || echo /usr/${CTARGET}/usr/include
+	local ctarget=${CTARGET:-${CHOST}}
+	[[ ${ctarget} == ${CHOST} ]] && echo /usr/include || echo /usr/${ctarget}/usr/include
 }
 
 # @FUNCTION: env_setup_kernel_makeopts
@@ -86,10 +87,11 @@ kernel_header_destdir() {
 # @DESCRIPTION:
 # Set up KERNEL_MAKEOPTS for building the kernel.
 env_setup_kernel_makeopts() {
+	local ctarget=${CTARGET:-${CHOST}}
 	export KARCH=$(tc-arch-kernel)
 	KERNEL_MAKEOPTS=( ARCH="${KARCH}" )
-	if [[ ${CTARGET} != ${CHOST} ]]; then
-		KERNEL_MAKEOPTS+=( CROSS_COMPILE="${CTARGET}-" )
+	if [[ ${ctarget} != ${CHOST} ]]; then
+		KERNEL_MAKEOPTS+=( CROSS_COMPILE="${ctarget}-" )
 	elif type -p ${CHOST}-ar >/dev/null; then
 		KERNEL_MAKEOPTS+=( CROSS_COMPILE="${CHOST}-" )
 	fi

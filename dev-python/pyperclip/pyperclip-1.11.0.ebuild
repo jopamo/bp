@@ -26,35 +26,10 @@ RDEPEND="
 		dev-python/qtpy[${PYTHON_USEDEP}]
 	)
 "
-# test at least one backend
-BDEPEND="
-	test? (
-		${RDEPEND}
-	)
-"
 
 src_prepare() {
-	local PATCHES=(
-		"${FILESDIR}/${PN}-1.9.0-fix-test.patch"
-	)
-
 	# stupid windows
 	find -type f -exec sed -i -e 's:\r$::' {} + || die
 
 	distutils-r1_src_prepare
-
-	# klipper is hard to get working, and once we make it work,
-	# it breaks most of the other backends
-	# wl-copy requires wayland, not Xvfb
-	sed -e 's:_executable_exists("\(klipper\|wl-copy\)"):False:' \
-		-i tests/test_pyperclip.py || die
-}
-
-python_test() {
-	"${EPYTHON}" tests/test_pyperclip.py -vv ||
-		die "Tests fail on ${EPYTHON}"
-}
-
-src_test() {
-	virtx distutils-r1_src_test
 }

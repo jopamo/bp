@@ -44,6 +44,7 @@ pkg_setup() {
 src_configure() {
 	append-lfs-flags
 	myconfigure() {
+		local QA_POLICY_LTO_FLAVOR=none
 		local mycmakeargs=(
 			-DBUILD_EXAMPLES=OFF # nothing is installed
 			-DENABLE_COMMONCRYPTO=OFF # not in tree
@@ -52,7 +53,7 @@ src_configure() {
 			-DENABLE_ZSTD=$(usex zstd)
 		)
 		if [[ ${MULTIBUILD_VARIANT} = static-libs ]]; then
-			qa-policy-configure fat+strip
+			QA_POLICY_LTO_FLAVOR=fat+strip
 			mycmakeargs+=(
 				-DBUILD_DOC=OFF
 				-DBUILD_EXAMPLES=OFF
@@ -60,7 +61,6 @@ src_configure() {
 				-DBUILD_TOOLS=OFF
 			)
 		else
-			qa-policy-configure none
 			mycmakeargs+=(
 				-DBUILD_DOC=ON
 				-DBUILD_REGRESS=$(usex test)
@@ -86,6 +86,7 @@ src_configure() {
 				-DENABLE_OPENSSL=OFF
 			)
 		fi
+		qa-policy-configure
 		cmake_src_configure
 	}
 

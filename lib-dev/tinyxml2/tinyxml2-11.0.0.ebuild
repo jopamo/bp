@@ -19,22 +19,23 @@ pkg_setup() {
 
 src_configure() {
 	myconfigure() {
+		local QA_POLICY_LTO_FLAVOR=none
 		local mycmakeargs=()
 
 		if [[ ${MULTIBUILD_VARIANT} = static-libs ]]; then
-			qa-policy-configure fat+strip
+			QA_POLICY_LTO_FLAVOR=fat+strip
 			mycmakeargs+=(
 				-DBUILD_SHARED_LIBS=OFF
 				-Dtinyxml2_BUILD_TESTING=OFF
 			)
 		else
-			qa-policy-configure none
 			mycmakeargs+=(
 				-DBUILD_SHARED_LIBS=ON
 				-Dtinyxml2_BUILD_TESTING=$(usex test)
 			)
 		fi
 
+		qa-policy-configure
 		cmake_src_configure
 	}
 

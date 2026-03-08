@@ -34,7 +34,8 @@ src_prepare() {
 }
 
 src_configure() {
-	qa-policy-configure full
+	local QA_POLICY_LTO_FLAVOR=full
+	qa-policy-configure
 
 	unset FCFLAGS
 	export DEBUG=-DNDEBUG

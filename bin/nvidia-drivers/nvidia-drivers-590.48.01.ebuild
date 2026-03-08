@@ -92,7 +92,8 @@ src_prepare() {
 }
 
 src_compile() {
-	qa-policy-configure none
+	local QA_POLICY_LTO_FLAVOR=none
+	qa-policy-configure
 
     if use driver; then
         cd "${NV_SRC}" || die "Failed to cd to kernel source dir"

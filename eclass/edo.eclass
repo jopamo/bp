@@ -71,10 +71,10 @@ edo() {
 # used to construct the name of the log file where stdout and stderr of the
 # command is redirected to.
 edob() {
-	local message
-	local log_name
+	local message=
+	local log_name=
 
-	while true; do
+	while [[ $# -gt 0 ]]; do
 		case "${1}" in
 			-l|-m)
 				[[ $# -lt 2 ]] && die "Must provide an argument to ${1}"
@@ -94,8 +94,10 @@ edob() {
 		esac
 	done
 
+	[[ $# -ge 1 ]] || die "edob: at least one argument needed"
+
 	[[ -z ${message} ]] && message="Running $@"
-	[[ -z ${log_name} ]] && log_name="$(basename ${1})"
+	[[ -z ${log_name} ]] && log_name="$(basename -- "${1}")"
 
 	local log_file="${T}/${log_name}.log"
 

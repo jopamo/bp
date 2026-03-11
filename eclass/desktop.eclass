@@ -15,8 +15,6 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-BDEPEND="xmedia-app/imagemagick"
-
 # @FUNCTION: make_desktop_entry
 # @USAGE: <command> [name] [icon] [type] [fields]
 # @DESCRIPTION:
@@ -416,6 +414,7 @@ newicon() {
 #  standard icon sizes (16,22,24,32,36,48,64,72,96,128,192,256,512,1024),
 #  then installs each into /usr/share/icons/hicolor/<size>/apps.
 #  It relies on `doicon` and ImageMagick (`magick`) to do the heavy lifting.
+#  Callers must add xmedia-app/imagemagick to BDEPEND before invoking it.
 #
 #  Example:
 #    doicon_all "${WORKDIR}/big_icon.png"
@@ -423,13 +422,16 @@ newicon() {
 doicon_all() {
 	local src="$1"
 	[[ -z "${src}" ]] && eerror "doicon_all: Missing source icon file." && return 1
+	command -v magick >/dev/null || die "doicon_all requires xmedia-app/imagemagick in BDEPEND"
 
 	# Standard icon sizes you want to generate
 	local SIZES=(16 22 24 32 36 48 64 72 96 128 192 256 512 1024)
+	local stem=${src##*/}
+	stem=${stem%.*}
 
 	for s in "${SIZES[@]}"; do
 		# We store the generated file in ${T} to keep it out of the source dir
-		local out="${T}/$(basename "${src%.*}")-${s}x${s}.png"
+		local out="${T}/${stem}-${s}x${s}.png"
 
 		# Use `magick -resize` to generate a properly scaled image
 		magick "${src}" -resize "${s}x${s}" "${out}" \

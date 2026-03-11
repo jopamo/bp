@@ -10,7 +10,7 @@ inherit flag-o-matic python-single-r1 toolchain-funcs
 
 DESCRIPTION="GNU debugger"
 HOMEPAGE="https://sourceware.org/gdb/"
-SNAPSHOT=025ff2ac593a82520952bbe539edfe5b0931e961
+SNAPSHOT=008e6f818b630d5caa26c21153d21da4c0263cc3
 SRC_URI="https://github.com/1g4-mirror/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/binutils-gdb-${SNAPSHOT}"
 

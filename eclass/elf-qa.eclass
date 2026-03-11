@@ -32,6 +32,7 @@ inherit toolchain-funcs
 : "${ELFQA_REQUIRE_RELRO:=0}"
 : "${ELFQA_REQUIRE_NOW:=0}"
 : "${ELFQA_REQUIRE_NX:=0}"
+: "${ELFQA_REPORT_FILE:=}"
 
 _ELFQA_FAILURES=0
 _ELFQA_SCANNED=0
@@ -126,7 +127,8 @@ _elfqa-find-files() {
 		fi
 	done
 
-	echo "${files[@]}"
+	[[ ${#files[@]} -gt 0 ]] || return 0
+	printf '%s\0' "${files[@]}"
 }
 
 	_elfqa-is-elf() {
@@ -175,7 +177,12 @@ _elfqa-rpath() {
 _elfqa-check-textrel() {
 	local file=$1
 	local rel=$2
-	_elfqa-dyn "${file}" | grep -q '(TEXTREL)' && _elfqa-violation textrel "${rel}" 'TEXTREL dynamic tag present'
+
+	if _elfqa-dyn "${file}" | grep -q '(TEXTREL)'; then
+		_elfqa-violation textrel "${rel}" 'TEXTREL dynamic tag present'
+	fi
+
+	return 0
 }
 
 _elfqa-check-stack() {
@@ -195,6 +202,8 @@ _elfqa-check-stack() {
 	if [[ ${stack_line} == *RWE* ]] || [[ ${stack_line} == *" E "* ]]; then
 		_elfqa-violation execstack "${rel}" 'GNU_STACK is executable'
 	fi
+
+	return 0
 }
 
 _elfqa-check-interpreter() {
@@ -203,15 +212,17 @@ _elfqa-check-interpreter() {
 	local interp expected
 
 	interp=$(_elfqa-interp "${file}")
-	[[ -n ${interp} ]] || return
+	[[ -n ${interp} ]] || return 0
 
 	expected=${ELFQA_EXPECT_INTERP}
 	[[ -n ${expected} ]] || expected=$(_elfqa-default-interp)
-	[[ -z ${expected} ]] && return
+	[[ -z ${expected} ]] && return 0
 
 	if [[ ! ${interp} =~ ${expected} ]]; then
 		_elfqa-violation interp "${rel}" "unexpected PT_INTERP ${interp}"
 	fi
+
+	return 0
 }
 
 _elfqa-check-rpath() {
@@ -220,14 +231,16 @@ _elfqa-check-rpath() {
 	local rp
 
 	rp=$(_elfqa-rpath "${file}")
-	[[ -n ${rp} ]] || return
+	[[ -n ${rp} ]] || return 0
 
 	if [[ ${ELFQA_ALLOW_RPATH} == 1 ]]; then
 		_elfqa-note rpath "${rel}" "rpath present ${rp}"
-		return
+		return 0
 	fi
 
 	_elfqa-violation rpath "${rel}" "RPATH or RUNPATH present: ${rp}"
+
+	return 0
 }
 
 _elfqa-check-needed() {
@@ -236,7 +249,7 @@ _elfqa-check-needed() {
 	local dyn needed re
 
 	dyn=$(_elfqa-dyn "${file}")
-	[[ -n ${dyn} ]] || return
+	[[ -n ${dyn} ]] || return 0
 
 	while IFS= read -r needed; do
 		for re in ${ELFQA_FORBID_NEEDED}; do
@@ -245,6 +258,8 @@ _elfqa-check-needed() {
 			fi
 		done
 	done < <(echo "${dyn}" | sed -n 's/.*(NEEDED).*\[\(.*\)\].*/\1/p')
+
+	return 0
 }
 
 _elfqa-check-osabi() {
@@ -252,14 +267,16 @@ _elfqa-check-osabi() {
 	local rel=$2
 	local readelf_cmd osabi
 
-	[[ -n ${ELFQA_EXPECT_OSABI} ]] || return
+	[[ -n ${ELFQA_EXPECT_OSABI} ]] || return 0
 	readelf_cmd=$(tc-getREADELF)
 	osabi=$("${readelf_cmd}" -h "${file}" 2>/dev/null | awk -F: '/OS\/ABI/ { gsub(/^[[:space:]]+/, "", $2); print $2; exit }')
-	[[ -n ${osabi} ]] || return
+	[[ -n ${osabi} ]] || return 0
 
 	if [[ ${osabi} != "${ELFQA_EXPECT_OSABI}" ]]; then
 		_elfqa-violation osabi "${rel}" "expected ${ELFQA_EXPECT_OSABI}, got ${osabi}"
 	fi
+
+	return 0
 }
 
 _elfqa-check-buildid() {
@@ -267,11 +284,13 @@ _elfqa-check-buildid() {
 	local rel=$2
 	local readelf_cmd
 
-	[[ ${ELFQA_REQUIRE_BUILD_ID} == 1 ]] || return
+	[[ ${ELFQA_REQUIRE_BUILD_ID} == 1 ]] || return 0
 	readelf_cmd=$(tc-getREADELF)
 	if ! "${readelf_cmd}" -n "${file}" 2>/dev/null | grep -q 'Build ID'; then
 		_elfqa-violation build_id "${rel}" 'missing GNU build-id note'
 	fi
+
+	return 0
 }
 
 _elfqa-check-undefined() {
@@ -279,9 +298,9 @@ _elfqa-check-undefined() {
 	local rel=$2
 	local etype
 
-	[[ ${ELFQA_CHECK_UNDEFINED} == 1 ]] || return
+	[[ ${ELFQA_CHECK_UNDEFINED} == 1 ]] || return 0
 	etype=$(_elfqa-type "${file}")
-	[[ ${etype} == EXEC ]] || return
+	[[ ${etype} == EXEC ]] || return 0
 
 	local readelf_cmd first_undef
 	readelf_cmd=$(tc-getREADELF)
@@ -289,6 +308,8 @@ _elfqa-check-undefined() {
 	if [[ -n ${first_undef} ]]; then
 		_elfqa-violation undefined "${rel}" "unexpected undefined symbol ${first_undef}"
 	fi
+
+	return 0
 }
 
 _elfqa-hardening() {
@@ -329,6 +350,8 @@ _elfqa-hardening() {
 	if [[ ${ELFQA_REPORT_HARDENING} == 1 ]]; then
 		_elfqa-note hardening "${rel}" "pie=${pie} relro=${relro} now=${now} nx=${nx} ssp=${ssp} fortify=${fortify}"
 	fi
+
+	return 0
 }
 
 # @FUNCTION: elfqa-scan
@@ -346,7 +369,8 @@ elfqa-scan() {
 	_ELFQA_FAILURES=0
 	_ELFQA_SCANNED=0
 
-	local -a files=( $(_elfqa-find-files "$@") )
+	local -a files=()
+	mapfile -d '' -t files < <(_elfqa-find-files "$@")
 	[[ ${#files[@]} -gt 0 ]] || return 0
 
 	local file rel

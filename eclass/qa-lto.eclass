@@ -49,7 +49,7 @@ qa-lto-configure() {
 }
 
 qa-lto-strip-archive-ir() {
-	strip-lto-bytecode "$@"
+	_lto-policy-strip-bytecode "$@"
 }
 
 qa-lto-sanitize() {

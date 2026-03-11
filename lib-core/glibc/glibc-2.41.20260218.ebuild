@@ -31,6 +31,9 @@ RDEPEND="
 "
 PDEPEND="lib-core/tzdb"
 
+# glibc installs crtn.o already stripped.
+QA_PRESTRIPPED="usr/lib/crtn.o"
+
 PATCHES=(
 	"${FILESDIR}"/0001-Disable-ldconfig-during-install.patch
 )

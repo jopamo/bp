@@ -6,8 +6,12 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_FONT_ECLASS} ]]; then
+if [[ -z ${_FONT_ECLASS:-} ]]; then
 	_FONT_ECLASS=1
+
+_font_is_live_root() {
+	[[ ${ROOT:-/} == / ]]
+}
 
 # If unset, use defaults.
 FONT_SUFFIX=${FONT_SUFFIX:-}
@@ -16,8 +20,8 @@ FONTDIR=${FONTDIR:-/usr/share/fonts/${FONT_PN}}
 FONT_CONF=( "" )
 
 if [[ ${CATEGORY}/${PN} != fonts/encodings ]]; then
-	IUSE="X"
-	BDEPEND="X? (
+	IUSE+=" X"
+	BDEPEND+=" X? (
 		>=xgui-tools/mkfontscale-1.2.0
 		fonts/encodings
 	)"
@@ -113,7 +117,7 @@ font_src_install() {
 }
 
 _update_fontcache() {
-	[[ -z $ROOT ]] || return 0
+	_font_is_live_root || return 0
 	if has_version fonts/fontconfig; then
 		ebegin "Updating global fontcache"
 		fc-cache -fs || die "fc-cache failed"

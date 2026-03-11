@@ -250,7 +250,12 @@ _qa-policy-discover-installed-files() {
 		filtered+=( "${file}" )
 
 		case ${file} in
-			*.a) QA_DISCOVER_ARCHIVES+=( "${file}" ) ;;
+			*.a)
+				# Some packages install standalone ELF objects with a .a suffix
+				# (for example glibc's libmcheck.a). Only feed real ar archives to
+				# ranlib/ar based sanitizers.
+				_bu-is-archive "${file}" && QA_DISCOVER_ARCHIVES+=( "${file}" )
+				;;
 			*.pc) QA_DISCOVER_PKGCONFIG+=( "${file}" ) ;;
 			*.so)
 				_bu-is-ldscript "${file}" && QA_DISCOVER_LDSCRIPTS+=( "${file}" )

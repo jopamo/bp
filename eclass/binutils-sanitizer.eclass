@@ -46,8 +46,16 @@ _bu-rule-allowed() {
 	return 1
 }
 
+_bu-is-archive() {
+	local archive=$1
+	local magic
+	magic=$(LC_ALL=C od -An -N8 -tx1 "${archive}" 2>/dev/null | tr -d ' \n')
+	[[ ${magic} == 213c617263683e0a || ${magic} == 213c7468696e3e0a ]]
+}
+
 _bu-find-archives() {
 	local input
+	local file
 	local -a files=()
 	local -a found=()
 
@@ -62,8 +70,10 @@ _bu-find-archives() {
 	for input in "$@" ; do
 		if [[ -d ${input} ]]; then
 			mapfile -d '' -t found < <(find -H "${input}" -type f -name '*.a' -print0)
-			files+=( "${found[@]}" )
-		elif [[ -f ${input} && ${input} == *.a ]]; then
+			for file in "${found[@]}" ; do
+				_bu-is-archive "${file}" && files+=( "${file}" )
+			done
+		elif [[ -f ${input} && ${input} == *.a ]] && _bu-is-archive "${input}"; then
 			files+=( "${input}" )
 		fi
 	done
@@ -71,6 +81,8 @@ _bu-find-archives() {
 	if [[ ${#files[@]} -gt 0 ]]; then
 		printf '%s\0' "${files[@]}"
 	fi
+
+	return 0
 }
 
 _bu-is-ldscript() {
@@ -113,6 +125,8 @@ _bu-find-ldscripts() {
 	if [[ ${#scripts[@]} -gt 0 ]]; then
 		printf '%s\0' "${scripts[@]}"
 	fi
+
+	return 0
 }
 
 _bu-ldscript-has-header() {
@@ -305,7 +319,7 @@ bu-ldscript-check() {
 bu-archive-fixup() {
 	local -a archives=()
 	mapfile -d '' -t archives < <(_bu-find-archives "$@")
-	[[ ${#archives[@]} -gt 0 ]] || return
+	[[ ${#archives[@]} -gt 0 ]] || return 0
 
 	local ar_cmd ranlib_cmd
 	ar_cmd=$(tc-getAR)

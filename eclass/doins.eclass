@@ -8,14 +8,32 @@
 if [[ -z ${_DOINS_ECLASS} ]]; then
 _DOINS_ECLASS=1
 
-EAPI=8
-
 inherit toolchain-funcs
 
 case ${EAPI} in
 	7|8) ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
+
+_doins_is_live_root() {
+	[[ ${ROOT:-/} == / ]]
+}
+
+_doins_live_config_path() {
+	local path=${1}
+	local dir=${2}
+
+	if [[ ${path} == /* ]]; then
+		printf '%s\n' "${EPREFIX}${path#${EPREFIX}}"
+	else
+		printf '%s\n' "${EPREFIX}${dir%/}/${path}"
+	fi
+}
+
+_doins_has_udev_runtime() {
+	local root=${ROOT:-/}
+	[[ -d ${root%/}/run/udev ]]
+}
 
 # ----------------- Bash Completion Functions -----------------
 
@@ -73,15 +91,21 @@ newtmpfiles() {
 tmpfiles_process() {
 	[[ ${EBUILD_PHASE} == postinst ]] || die "${FUNCNAME}: Only valid in pkg_postinst"
 
-	if [[ ${ROOT:-/} != / ]]; then
+	if ! _doins_is_live_root; then
 		ewarn "Warning: tmpfiles.d not processed on ROOT != /. Run 'tmpfiles --create' after booting into the ROOT."
 		return
 	fi
 
+	local argv=( --create )
+	local file
+	for file in "$@"; do
+		argv+=( "$(_doins_live_config_path "${file}" /usr/lib/tmpfiles.d)" )
+	done
+
 	if type systemd-tmpfiles &> /dev/null; then
-		systemd-tmpfiles --create
+		systemd-tmpfiles "${argv[@]}"
 	elif type tmpfiles &> /dev/null; then
-		tmpfiles --create
+		tmpfiles "${argv[@]}"
 	fi
 	if [[ $? -ne 0 ]]; then
 		ewarn "The tmpfiles processor exited with a non-zero exit code"
@@ -107,7 +131,7 @@ sysusers_process() {
 	[[ ${EBUILD_PHASE} == postinst ]] || die "${FUNCNAME}: Only valid in pkg_postinst"
 
 	# skip when merging to an alternative ROOT, advise manual run later
-	if [[ ${ROOT:-/} != / ]]; then
+	if ! _doins_is_live_root; then
 		ewarn "Warning: sysusers.d not processed on ROOT != /. Run 'systemd-sysusers' after booting into the ROOT"
 		return
 	fi
@@ -177,11 +201,11 @@ systemd_update_catalog() {
 }
 
 udev_reload() {
-	if [[ -n ${ROOT} ]]; then
+	if ! _doins_is_live_root; then
 		return 0
 	fi
 
-	if [[ -d ${ROOT}/run/udev ]]; then
+	if _doins_has_udev_runtime; then
 		ebegin "Running udev control --reload for reloading rules and databases"
 		udevadm control --reload
 		eend $?

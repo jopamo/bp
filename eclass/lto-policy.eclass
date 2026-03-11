@@ -16,7 +16,7 @@ esac
 if [[ -z ${_LTO_POLICY_ECLASS} ]] ; then
 _LTO_POLICY_ECLASS=1
 
-inherit dot-a flag-o-matic toolchain-funcs
+inherit flag-o-matic toolchain-funcs
 
 : "${LTO_POLICY_MODE:=none}"
 : "${LTO_POLICY_DENYLIST:=}"
@@ -29,6 +29,76 @@ inherit dot-a flag-o-matic toolchain-funcs
 : "${LTO_POLICY_IR_ALLOW:=}"
 
 _LTO_POLICY_ACTIVE=0
+
+_lto-policy-strip-mode() {
+	case $(tc-get-compiler-type) in
+		gcc) printf '%s\n' gnu ;;
+		clang) printf '%s\n' llvm ;;
+		*) return 1 ;;
+	esac
+}
+
+_lto-policy-enable-fat-objects() {
+	local -a fat_flags=( $(test-flags-CC -ffat-lto-objects) )
+	[[ ${#fat_flags[@]} -gt 0 ]] && append-flags "${fat_flags[@]}"
+}
+
+_lto-policy-strip-bytecode() {
+	local input
+
+	if [[ ${#} -eq 0 ]]; then
+		if in_iuse static-libs && ! use static-libs ; then
+			return
+		fi
+		set -- "${ED}"
+	fi
+
+	for input in "$@" ; do
+		[[ -e ${input} ]] || die "lto: missing path ${input}"
+	done
+
+	local -a files=()
+	local -a found=()
+	for input in "$@" ; do
+		if [[ -d ${input} ]]; then
+			mapfile -d '' -t found < <(find -H "${input}" -type f \( -name '*.a' -o -name '*.o' \) -print0)
+			files+=( "${found[@]}" )
+		elif [[ -f ${input} ]]; then
+			case ${input} in
+				*.a|*.o) files+=( "${input}" ) ;;
+			esac
+		fi
+	done
+
+	[[ ${#files[@]} -gt 0 ]] || return
+
+	local strip_mode
+	strip_mode=$(_lto-policy-strip-mode) || return
+
+	local file
+	case ${strip_mode} in
+		gnu)
+			local -a strip_cmd=( $(tc-getSTRIP) )
+			command -v "${strip_cmd[0]}" >/dev/null || die "lto: unable to find ${strip_cmd[0]}"
+			for file in "${files[@]}" ; do
+				"${strip_cmd[@]}" \
+					-R .gnu.lto_* \
+					-R .gnu.debuglto_* \
+					-N __gnu_lto_v1 \
+					"${file}" || die "lto: stripping bytecode in ${file} failed"
+			done
+			;;
+		llvm)
+			local -a llvm_strip_cmd=( $(tc-getPROG LLVM_BITCODE_STRIP llvm-bitcode-strip) )
+			command -v "${llvm_strip_cmd[0]}" >/dev/null || die "lto: unable to find ${llvm_strip_cmd[0]}"
+			for file in "${files[@]}" ; do
+				"${llvm_strip_cmd[@]}" \
+					-r "${file}" \
+					-o "${file}" || die "lto: stripping bytecode in ${file} failed"
+			done
+			;;
+	esac
+}
 
 _lto-policy-should-sanitize() {
 	[[ ${_LTO_POLICY_ACTIVE} == 1 ]] && return 0
@@ -145,7 +215,7 @@ _lto-policy-mode-thin-cache() {
 
 _lto-policy-mode-fat-strip() {
 	_lto-policy-enable-flag -flto || return
-	lto-guarantee-fat
+	_lto-policy-enable-fat-objects
 	_LTO_POLICY_ACTIVE=1
 }
 
@@ -220,9 +290,9 @@ lto-postinstall-sanitize() {
 
 	if [[ ${LTO_POLICY_MODE} == fat+strip || ${_LTO_POLICY_ACTIVE} != 1 ]]; then
 		if [[ ${#} -eq 0 ]]; then
-			strip-lto-bytecode "${ED}"
+			_lto-policy-strip-bytecode "${ED}"
 		else
-			strip-lto-bytecode "$@"
+			_lto-policy-strip-bytecode "$@"
 		fi
 	fi
 
@@ -243,10 +313,10 @@ _lto-policy-ir-allowed() {
 	return 1
 }
 
-	_lto-policy-has-ir() {
-		local archive=$1
-		grep -aEq '__gnu_lto_v1|\.gnu\.lto_|\.llvmbc|\.llvm\.lto' "${archive}"
-	}
+_lto-policy-has-ir() {
+	local archive=$1
+	grep -aEq '__gnu_lto_v1|\.gnu\.lto_|\.llvmbc|\.llvm\.lto' "${archive}"
+}
 
 # @FUNCTION: lto-assert-clean-ir
 # @USAGE: [path] [more]

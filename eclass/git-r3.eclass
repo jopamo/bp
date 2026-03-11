@@ -30,17 +30,17 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_GIT_R3_ECLASS} ]]; then
+if [[ -z ${_GIT_R3_ECLASS-} ]]; then
 _GIT_R3_ECLASS=1
 
 PROPERTIES+=" live"
 
 if [[ ${EAPI} != 6 ]]; then
 	BDEPEND=">=app-core/git-1.8.2.1[curl]"
-	[[ ${EGIT_LFS} ]] && BDEPEND+=" app-core/git-lfs"
+	[[ ${EGIT_LFS-} ]] && BDEPEND+=" app-core/git-lfs"
 else
 	DEPEND=">=app-core/git-1.8.2.1[curl]"
-	[[ ${EGIT_LFS} ]] && DEPEND+=" app-core/git-lfs"
+	[[ ${EGIT_LFS-} ]] && DEPEND+=" app-core/git-lfs"
 fi
 
 # @ECLASS_VARIABLE: EGIT_CLONE_TYPE
@@ -289,7 +289,7 @@ _git-r3_env_setup() {
 			die "Invalid EGIT_MIN_CLONE_TYPE=${EGIT_MIN_CLONE_TYPE}"
 	esac
 
-	if [[ ${EGIT_SUBMODULES[@]+1} && $(declare -p EGIT_SUBMODULES) != "declare -a"* ]]
+	if [[ ${EGIT_SUBMODULES[@]+1} && $(declare -p EGIT_SUBMODULES 2>/dev/null) != "declare -a"* ]]
 	then
 		die 'EGIT_SUBMODULES must be an array.'
 	fi
@@ -300,26 +300,26 @@ _git-r3_env_setup() {
 
 	# note: deprecated, use EGIT_OVERRIDE_* instead
 	livevar=${esc_pn}_LIVE_REPO
-	EGIT_REPO_URI=${!livevar-${EGIT_REPO_URI}}
-	[[ ${!livevar} ]] \
+	EGIT_REPO_URI=${!livevar-${EGIT_REPO_URI-}}
+	[[ ${!livevar-} ]] \
 		&& ewarn "Using ${livevar}, no support will be provided"
 
 	livevar=${esc_pn}_LIVE_BRANCH
-	EGIT_BRANCH=${!livevar-${EGIT_BRANCH}}
-	[[ ${!livevar} ]] \
+	EGIT_BRANCH=${!livevar-${EGIT_BRANCH-}}
+	[[ ${!livevar-} ]] \
 		&& ewarn "Using ${livevar}, no support will be provided"
 
 	livevar=${esc_pn}_LIVE_COMMIT
-	EGIT_COMMIT=${!livevar-${EGIT_COMMIT}}
-	[[ ${!livevar} ]] \
+	EGIT_COMMIT=${!livevar-${EGIT_COMMIT-}}
+	[[ ${!livevar-} ]] \
 		&& ewarn "Using ${livevar}, no support will be provided"
 
 	livevar=${esc_pn}_LIVE_COMMIT_DATE
-	EGIT_COMMIT_DATE=${!livevar-${EGIT_COMMIT_DATE}}
-	[[ ${!livevar} ]] \
+	EGIT_COMMIT_DATE=${!livevar-${EGIT_COMMIT_DATE-}}
+	[[ ${!livevar-} ]] \
 		&& ewarn "Using ${livevar}, no support will be provided"
 
-	if [[ ${EGIT_COMMIT} && ${EGIT_COMMIT_DATE} ]]; then
+	if [[ ${EGIT_COMMIT-} && ${EGIT_COMMIT_DATE-} ]]; then
 		die "EGIT_COMMIT and EGIT_COMMIT_DATE can not be specified simultaneously"
 	fi
 }
@@ -370,7 +370,7 @@ _git-r3_set_gitdir() {
 
 	EVCS_STORE_DIRS+=( "${GIT_DIR}" )
 
-	if [[ ! -d ${EGIT3_STORE_DIR} && ! ${EVCS_OFFLINE} ]]; then
+	if [[ ! -d ${EGIT3_STORE_DIR} && ! ${EVCS_OFFLINE-} ]]; then
 		(
 			addwrite /
 			mkdir -p "${EGIT3_STORE_DIR}"
@@ -379,7 +379,7 @@ _git-r3_set_gitdir() {
 
 	addwrite "${EGIT3_STORE_DIR}"
 	if [[ ! -d ${GIT_DIR} ]]; then
-		if [[ ${EVCS_OFFLINE} ]]; then
+		if [[ ${EVCS_OFFLINE-} ]]; then
 			eerror "A clone of the following repository is required to proceed:"
 			eerror "  ${1}"
 			eerror "However, networking activity has been disabled using EVCS_OFFLINE and there"
@@ -388,13 +388,13 @@ _git-r3_set_gitdir() {
 		fi
 
 		local saved_umask
-		if [[ ${EVCS_UMASK} ]]; then
+		if [[ ${EVCS_UMASK-} ]]; then
 			saved_umask=$(umask)
 			umask "${EVCS_UMASK}" || die "Bad options to umask: ${EVCS_UMASK}"
 		fi
 		mkdir "${GIT_DIR}" || die
 		git init --bare -b __init__ || die
-		if [[ ${saved_umask} ]]; then
+		if [[ ${saved_umask-} ]]; then
 			umask "${saved_umask}" || die
 		fi
 	fi
@@ -571,12 +571,12 @@ git-r3_fetch() {
 
 	# process repos first since we create repo_name from it
 	local repos
-	if [[ ${1} ]]; then
+	if [[ ${1-} ]]; then
 		repos=( ${1} )
-	elif [[ $(declare -p EGIT_REPO_URI) == "declare -a"* ]]; then
+	elif [[ $(declare -p EGIT_REPO_URI 2>/dev/null) == "declare -a"* ]]; then
 		repos=( "${EGIT_REPO_URI[@]}" )
 	else
-		repos=( ${EGIT_REPO_URI} )
+		repos=( ${EGIT_REPO_URI-} )
 	fi
 
 	[[ ${repos[@]} ]] || die "No URI provided and EGIT_REPO_URI unset"
@@ -597,7 +597,7 @@ git-r3_fetch() {
 	einfo "Repository id: ${GIT_DIR##*/}"
 
 	# prepend the local mirror if applicable
-	if [[ ${EGIT_MIRROR_URI} ]]; then
+	if [[ ${EGIT_MIRROR_URI-} ]]; then
 		repos=(
 			"${EGIT_MIRROR_URI%/}/${GIT_DIR##*/}"
 			"${repos[@]}"
@@ -605,9 +605,9 @@ git-r3_fetch() {
 	fi
 
 	# get the default values for the common variables and override them
-	local branch_name=${EGIT_BRANCH}
-	local commit_id=${2:-${EGIT_COMMIT}}
-	local commit_date=${4:-${EGIT_COMMIT_DATE}}
+	local branch_name=${EGIT_BRANCH-}
+	local commit_id=${2:-${EGIT_COMMIT-}}
+	local commit_date=${4:-${EGIT_COMMIT_DATE-}}
 
 	# get the name and do some more processing:
 	# 1) kill .git suffix,
@@ -632,7 +632,7 @@ git-r3_fetch() {
 		localvar=${localvar#*:}
 		override_vars+=( "${livevar}" )
 
-		if [[ -n ${!livevar} ]]; then
+		if [[ -n ${!livevar-} ]]; then
 			[[ ${localvar} == repos ]] && repos=()
 			live_warn=1
 			ewarn "Using ${livevar}=${!livevar}"
@@ -640,7 +640,7 @@ git-r3_fetch() {
 		fi
 	done
 
-	if [[ ${live_warn} ]]; then
+	if [[ ${live_warn-} ]]; then
 		ewarn "No support will be provided."
 	else
 		einfo "To override fetched repository properties, use:"
@@ -659,12 +659,12 @@ git-r3_fetch() {
 
 	# try to fetch from the remote
 	local success saved_umask
-	if [[ ${EVCS_UMASK} ]]; then
+	if [[ ${EVCS_UMASK-} ]]; then
 		saved_umask=$(umask)
 		umask "${EVCS_UMASK}" || die "Bad options to umask: ${EVCS_UMASK}"
 	fi
 	for r in "${repos[@]}"; do
-		if [[ ! ${EVCS_OFFLINE} ]]; then
+		if [[ ! ${EVCS_OFFLINE-} ]]; then
 			einfo "Fetching ${r} ..."
 
 			local fetch_command=( git fetch "${r}" )
@@ -745,7 +745,7 @@ git-r3_fetch() {
 			fi
 
 			if [[ ${clone_type} == shallow ]]; then
-				if _git-r3_is_local_repo; then
+				if _git-r3_is_local_repo "${r}"; then
 					# '--depth 1' causes sandbox violations with local repos
 					# bug #491260
 					clone_type=single
@@ -801,7 +801,7 @@ git-r3_fetch() {
 
 		echo "${@}" >&2
 		if ! "${@}"; then
-			if [[ ${EVCS_OFFLINE} ]]; then
+			if [[ ${EVCS_OFFLINE-} ]]; then
 				eerror "A clone of the following repository is required to proceed:"
 				eerror "  ${r}"
 				eerror "However, networking activity has been disabled using EVCS_OFFLINE and the local"
@@ -813,7 +813,7 @@ git-r3_fetch() {
 			fi
 		fi
 
-		if [[ ${EGIT_LFS} ]]; then
+		if [[ ${EGIT_LFS-} ]]; then
 			# Fetch the LFS files from the current ref (if any)
 			local lfs_fetch_command=( git lfs fetch "${r}" "${remote_ref}" )
 
@@ -849,10 +849,10 @@ git-r3_fetch() {
 		success=1
 		break
 	done
-	if [[ ${saved_umask} ]]; then
+	if [[ ${saved_umask-} ]]; then
 		umask "${saved_umask}" || die
 	fi
-	[[ ${success} ]] || die "Unable to fetch from any of EGIT_REPO_URI"
+	[[ ${success-} ]] || die "Unable to fetch from any of EGIT_REPO_URI"
 
 	# submodules can reference commits in any branch
 	# always use the 'mirror' mode to accommodate that, bug #503332
@@ -861,7 +861,7 @@ git-r3_fetch() {
 	# recursively fetch submodules
 	if git cat-file -e "${local_ref}":.gitmodules &>/dev/null; then
 		local submodules
-		_git-r3_set_submodules "${_GIT_SUBMODULE_PATH}" \
+		_git-r3_set_submodules "${_GIT_SUBMODULE_PATH-}" \
 			"$(git cat-file -p "${local_ref}":.gitmodules || die)"
 
 		while [[ ${submodules[@]} ]]; do
@@ -883,7 +883,7 @@ git-r3_fetch() {
 				local subrepos
 				_git-r3_set_subrepos "${url}" "${repos[@]}"
 
-				_GIT_SUBMODULE_PATH=${_GIT_SUBMODULE_PATH}${path}/ \
+				_GIT_SUBMODULE_PATH=${_GIT_SUBMODULE_PATH-}${path}/ \
 				git-r3_fetch "${subrepos[*]}" "${commit}" \
 					"${local_id}/${subname}" ""
 			fi
@@ -923,13 +923,14 @@ git-r3_checkout() {
 	debug-print-function ${FUNCNAME} "$@"
 
 	local repos
-	if [[ ${1} ]]; then
+	if [[ ${1-} ]]; then
 		repos=( ${1} )
-	elif [[ $(declare -p EGIT_REPO_URI) == "declare -a"* ]]; then
+	elif [[ $(declare -p EGIT_REPO_URI 2>/dev/null) == "declare -a"* ]]; then
 		repos=( "${EGIT_REPO_URI[@]}" )
 	else
-		repos=( ${EGIT_REPO_URI} )
+		repos=( ${EGIT_REPO_URI-} )
 	fi
+	[[ ${repos[@]} ]] || die "No URI provided and EGIT_REPO_URI unset"
 
 	local out_dir=${2:-${EGIT_CHECKOUT_DIR:-${WORKDIR}/${P}}}
 	local local_id=${3:-${CATEGORY}/${PN}/${SLOT%/*}}
@@ -961,7 +962,7 @@ git-r3_checkout() {
 		# non-empty directories.
 
 		git init --quiet -b __init__ || die
-		if [[ ${EGIT_LFS} ]]; then
+		if [[ ${EGIT_LFS-} ]]; then
 			# The "skip-repo" flag will just skip the installation of the pre-push hooks.
 			# We don't use these hook as we don't do any pushes
 			git lfs install --local --skip-repo || die
@@ -1041,7 +1042,7 @@ git-r3_checkout() {
 	# recursively checkout submodules
 	if [[ -f ${out_dir}/.gitmodules && ! ${checkout_paths} ]]; then
 		local submodules
-		_git-r3_set_submodules "${_GIT_SUBMODULE_PATH}" \
+		_git-r3_set_submodules "${_GIT_SUBMODULE_PATH-}" \
 			"$(<"${out_dir}"/.gitmodules)"
 
 		while [[ ${submodules[@]} ]]; do
@@ -1055,7 +1056,7 @@ git-r3_checkout() {
 				local subrepos
 				_git-r3_set_subrepos "${url}" "${repos[@]}"
 
-				_GIT_SUBMODULE_PATH=${_GIT_SUBMODULE_PATH}${path}/ \
+				_GIT_SUBMODULE_PATH=${_GIT_SUBMODULE_PATH-}${path}/ \
 				git-r3_checkout "${subrepos[*]}" "${out_dir}/${path}" \
 					"${local_id}/${subname}"
 			fi
@@ -1094,12 +1095,12 @@ git-r3_peek_remote_ref() {
 	debug-print-function ${FUNCNAME} "$@"
 
 	local repos
-	if [[ ${1} ]]; then
+	if [[ ${1-} ]]; then
 		repos=( ${1} )
-	elif [[ $(declare -p EGIT_REPO_URI) == "declare -a"* ]]; then
+	elif [[ $(declare -p EGIT_REPO_URI 2>/dev/null) == "declare -a"* ]]; then
 		repos=( "${EGIT_REPO_URI[@]}" )
 	else
-		repos=( ${EGIT_REPO_URI} )
+		repos=( ${EGIT_REPO_URI-} )
 	fi
 
 	local branch=${EGIT_BRANCH:+refs/heads/${EGIT_BRANCH}}
@@ -1126,7 +1127,7 @@ git-r3_peek_remote_ref() {
 			$(git ls-remote "${r}" "${lookup_ref}")
 		)
 
-		if [[ ${ref[0]} ]]; then
+		if [[ ${ref[0]-} ]]; then
 			echo "${ref[0]}"
 			return 0
 		fi
@@ -1138,7 +1139,7 @@ git-r3_peek_remote_ref() {
 git-r3_src_fetch() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	if [[ ! ${EGIT3_STORE_DIR} && ${EGIT_STORE_DIR} ]]; then
+	if [[ ! ${EGIT3_STORE_DIR-} && ${EGIT_STORE_DIR-} ]]; then
 		ewarn "You have set EGIT_STORE_DIR but not EGIT3_STORE_DIR. Please consider"
 		ewarn "setting EGIT3_STORE_DIR for git-r3.eclass. It is recommended to use"
 		ewarn "a different directory than EGIT_STORE_DIR to ease removing old clones"
@@ -1156,10 +1157,10 @@ git-r3_src_unpack() {
 	git-r3_src_fetch
 	git-r3_checkout
 
-	if [[ ! ${EGIT_LFS} && ${_EGIT_LFS_FILTERS_FOUND} ]]; then
+	if [[ ! ${EGIT_LFS-} && ${_EGIT_LFS_FILTERS_FOUND-} ]]; then
 		eqawarn "QA Notice: There are Git LFS filters setup in the cloned repo, consider using EGIT_LFS!"
 	fi
-	if [[ ${EGIT_LFS} && ! ${_EGIT_LFS_FILTERS_FOUND} ]]; then
+	if [[ ${EGIT_LFS-} && ! ${_EGIT_LFS_FILTERS_FOUND-} ]]; then
 		eqawarn "QA Notice: There are no Git LFS filters setup in the cloned repo. EGIT_LFS will do nothing!"
 	fi
 }
@@ -1169,15 +1170,15 @@ git-r3_pkg_needrebuild() {
 	debug-print-function ${FUNCNAME} "$@"
 
 	local new_commit_id=$(git-r3_peek_remote_ref)
-	[[ ${new_commit_id} && ${EGIT_VERSION} ]] || die "Lookup failed"
+	[[ ${new_commit_id-} && ${EGIT_VERSION-} ]] || die "Lookup failed"
 
-	if [[ ${EGIT_VERSION} != ${new_commit_id} ]]; then
+	if [[ ${EGIT_VERSION-} != ${new_commit_id-} ]]; then
 		einfo "Update from ${EGIT_VERSION} to ${new_commit_id}"
 	else
 		einfo "Local and remote at ${EGIT_VERSION}"
 	fi
 
-	[[ ${EGIT_VERSION} != ${new_commit_id} ]]
+	[[ ${EGIT_VERSION-} != ${new_commit_id-} ]]
 }
 
 # 'export' locally until this gets into EAPI

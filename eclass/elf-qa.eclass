@@ -196,7 +196,7 @@ _elfqa-check-stack() {
 		if [[ ${ELFQA_REQUIRE_GNU_STACK} == 1 ]]; then
 			_elfqa-violation gnu_stack_missing "${rel}" 'GNU_STACK program header missing'
 		fi
-		return
+		return 0
 	fi
 
 	if [[ ${stack_line} == *RWE* ]] || [[ ${stack_line} == *" E "* ]]; then

@@ -6,7 +6,7 @@
 # @SUPPORTED_EAPIS: 7 8
 # @BLURB: Minimal eclass for kernel packages based on stable git branches
 
-inherit estack multiprocessing optfeature toolchain-funcs
+inherit multiprocessing optfeature toolchain-funcs
 
 case ${EAPI} in
 	7|8) ;;

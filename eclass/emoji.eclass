@@ -23,7 +23,7 @@ detect_emoji_support() {
 }
 
 # detects whether the current terminal can display ANSI colours
-detect_color_support() {
+_emoji_detect_color_support() {
 	[[ -t 1 ]] || return 1
 	case ${TERM:-} in
 		''|dumb|linux) return 1 ;;
@@ -47,11 +47,11 @@ set_emoji_vars() {
 		ICON_SAD=":(" ICON_DR="[DRY]" ICON_REAL="[DEDUP]" ICON_FILE="[F]"
 		ICON_BYTE="[B]" ICON_DUP="[DUP]" ICON_SAVE="[$]" ICON_LOADING="[WAIT]"
 		ICON_CHECK="[CHECK]" ICON_CROSS="[X]" ICON_UPLOAD="[UP]" ICON_DOWNLOAD="[DOWN]"
-			ICON_COPY="[COPY]" ICON_FOLDER="[DIR]" ICON_LINK="[LINK]" ICON_NEW="[NEW]"
-			ICON_WARNING="[WARN]" ICON_TASK="[TASK]" ICON_SUCCESS="[DONE]"
+		ICON_COPY="[COPY]" ICON_FOLDER="[DIR]" ICON_LINK="[LINK]" ICON_NEW="[NEW]"
+		ICON_WARNING="[WARN]" ICON_TASK="[TASK]" ICON_SUCCESS="[DONE]"
 	fi
 
-	if detect_color_support; then
+	if _emoji_detect_color_support; then
 		_EMOJI_COLOR_OK=true
 		_EMOJI_LOG_RESET=$'\e[0m'
 	else

@@ -6,7 +6,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_FLAG_O_MATIC_ECLASS} ]]; then
+if [[ -z ${_FLAG_O_MATIC_ECLASS:-} ]]; then
 	_FLAG_O_MATIC_ECLASS=1
 
 inherit toolchain-funcs
@@ -100,7 +100,7 @@ _filter-hardened() {
 _filter-var() {
 	local var=$1 new=() f x
 	shift
-	for f in ${!var}; do
+	for f in ${!var-}; do
 		for x in "$@"; do [[ $f == $x ]] && continue 2; done
 		new+=( "$f" )
 	done
@@ -172,7 +172,7 @@ replace-flags() {
 	local var new=() f
 	for var in $(all-flag-vars); do
 		new=()
-		for f in ${!var}; do
+		for f in ${!var-}; do
 			[[ $f == $1 ]] && f=$2
 			new+=( "$f" )
 		done
@@ -192,7 +192,7 @@ replace-cpu-flags() {
 
 _is_flagq() {
 	local var="$1[*]" x
-	for x in ${!var}; do [[ $x == "$2" ]] && return 0; done
+	for x in ${!var-}; do [[ $x == "$2" ]] && return 0; done
 	return 1
 }
 
@@ -228,7 +228,7 @@ strip-flags() {
 	local var
 	for var in $(all-flag-vars); do
 		local new=() x y
-		for x in ${!var}; do
+		for x in ${!var-}; do
 			for y in "${ALLOWED_FLAGS[@]}"; do
 				[[ $x == $y ]] && { new+=( "$x" ); break; }
 			done
@@ -236,13 +236,11 @@ strip-flags() {
 		if _is_flagq ${var} "-O*" && ! _is_flagq new "-O*"; then
 			new+=( -O2 )
 		fi
-		[[ "${!var}" != "${new[*]}" ]] && einfo "strip-flags: ${var}: changed '${!var}' -> '${new[*]}'"
+		[[ "${!var-}" != "${new[*]}" ]] && einfo "strip-flags: ${var}: changed '${!var-}' -> '${new[*]}'"
 		export ${var}="${new[*]}"
 	done
 	set +f
 }
-
-_filter-hardened() { :; }  # override if needed in EAPI>=7 ?
 
 test-flag-PROG() {
 	[[ ${EAPI} == [67] ]] || die "Internal function not available in EAPI ${EAPI}."
@@ -316,18 +314,18 @@ test_version_info() {
 
 strip-unsupported-flags() {
 	[[ $# -ne 0 ]] && die "strip-unsupported-flags takes no arguments"
-	CFLAGS=$(test-flags-CC ${CFLAGS})
-	CXXFLAGS=$(test-flags-CXX ${CXXFLAGS})
-	FFLAGS=$(test-flags-F77 ${FFLAGS})
-	FCFLAGS=$(test-flags-FC ${FCFLAGS})
-	LDFLAGS=$(test-flags-CCLD ${LDFLAGS})
+	CFLAGS=$(test-flags-CC ${CFLAGS-})
+	CXXFLAGS=$(test-flags-CXX ${CXXFLAGS-})
+	FFLAGS=$(test-flags-F77 ${FFLAGS-})
+	FCFLAGS=$(test-flags-FC ${FCFLAGS-})
+	LDFLAGS=$(test-flags-CCLD ${LDFLAGS-})
 }
 
 get-flag() {
 	[[ $# -eq 1 ]] || die "Usage: get-flag <flag>"
 	local f var want="$1"
 	for var in $(all-flag-vars); do
-		for f in ${!var}; do
+		for f in ${!var-}; do
 			[[ $f == *${want}* ]] && echo "${f/-${want}=}" && return 0
 		done
 	done
@@ -349,7 +347,7 @@ append-libs() {
 
 raw-ldflags() {
 	local input="$*"
-	[[ -z $input ]] && input=${LDFLAGS}
+	[[ -z $input ]] && input=${LDFLAGS-}
 	local x out=()
 	for x in ${input}; do
 		case $x in
@@ -375,53 +373,53 @@ test-compile() {
 			compiler=$(tc-getCC)
 			f_in="${T}/test.c"
 			f_out="${T}/test.o"
-			args+=(${CFLAGS} -xc -c)
+			args+=(${CFLAGS-} -xc -c)
 			;;
 		c++)
 			compiler=$(tc-getCXX)
 			f_in="${T}/test.cc"
 			f_out="${T}/test.o"
-			args+=(${CXXFLAGS} -xc++ -c)
+			args+=(${CXXFLAGS-} -xc++ -c)
 			;;
 		f77)
 			compiler=$(tc-getF77)
 			f_in="${T}/test.f"
 			f_out="${T}/test.o"
-			args+=(${FFLAGS} -xf77 -c)
+			args+=(${FFLAGS-} -xf77 -c)
 			;;
 		f95)
 			compiler=$(tc-getFC)
 			f_in="${T}/test.f90"
 			f_out="${T}/test.o"
-			args+=(${FCFLAGS} -xf95 -c)
+			args+=(${FCFLAGS-} -xf95 -c)
 			;;
 		c+ld)
 			compiler=$(tc-getCC)
 			f_in="${T}/test.c"
 			f_out="${T}/test.exe"
-			args+=(${CFLAGS} ${LDFLAGS} -xc)
-			libs+=(${LIBS})
+			args+=(${CFLAGS-} ${LDFLAGS-} -xc)
+			libs+=(${LIBS-})
 			;;
 		c+++ld)
 			compiler=$(tc-getCXX)
 			f_in="${T}/test.cc"
 			f_out="${T}/test.exe"
-			args+=(${CXXFLAGS} ${LDFLAGS} -xc++)
-			libs+=(${LIBS})
+			args+=(${CXXFLAGS-} ${LDFLAGS-} -xc++)
+			libs+=(${LIBS-})
 			;;
 		f77+ld)
 			compiler=$(tc-getF77)
 			f_in="${T}/test.f"
 			f_out="${T}/test.exe"
-			args+=(${FFLAGS} ${LDFLAGS} -xf77)
-			libs+=(${LIBS})
+			args+=(${FFLAGS-} ${LDFLAGS-} -xf77)
+			libs+=(${LIBS-})
 			;;
 		f95+ld)
 			compiler=$(tc-getFC)
 			f_in="${T}/test.f90"
 			f_out="${T}/test.exe"
-			args+=(${FCFLAGS} ${LDFLAGS} -xf95)
-			libs+=(${LIBS})
+			args+=(${FCFLAGS-} ${LDFLAGS-} -xf95)
+			libs+=(${LIBS-})
 			;;
 		*) die "Unknown test language: $lang"
 	esac

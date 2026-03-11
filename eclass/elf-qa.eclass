@@ -135,8 +135,8 @@ _elfqa-find-files() {
 		local readelf_cmd
 
 		# Static archives are handled by binutils policy checks, not ELF program-header checks.
-		magic=$(dd if="${file}" bs=8 count=1 2>/dev/null || true)
-		[[ ${magic} == '!<arch>'* || ${magic} == '!<thin>'* ]] && return 1
+		magic=$(LC_ALL=C od -An -N8 -tx1 "${file}" 2>/dev/null | tr -d ' \n')
+		[[ ${magic} == 213c617263683e0a || ${magic} == 213c7468696e3e0a ]] && return 1
 
 		readelf_cmd=$(tc-getREADELF)
 		"${readelf_cmd}" -h "${file}" >/dev/null 2>&1

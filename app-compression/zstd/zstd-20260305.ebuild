@@ -6,7 +6,7 @@ inherit toolchain-funcs flag-o-matic qa-policy
 
 DESCRIPTION="zstd fast compression library"
 HOMEPAGE="https://facebook.github.io/zstd/"
-SNAPSHOT=ae9f20ca2716f2605822ca375995b7d876389b64
+SNAPSHOT=d7ee3207cc0db53f78fc6a69babc80747b1b7658
 SRC_URI="https://github.com/facebook/zstd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/zstd-${SNAPSHOT}
 

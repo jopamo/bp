@@ -152,10 +152,26 @@ _bu-is-thin() {
 	[[ ${magic} == '!<thin>' ]]
 }
 
+_bu-is-empty-archive() {
+	local archive=$1
+	local ar_cmd
+	local listing
+
+	ar_cmd=$(tc-getAR)
+	listing=$("${ar_cmd}" t "${archive}" 2>/dev/null) || return 1
+	[[ -z ${listing} ]]
+}
+
 _bu-has-index() {
 	local archive=$1
 	local nm_cmd
 	local nm_out
+
+	# Empty archives intentionally carry no symbol table. Treat them as
+	# satisfying the index requirement so compatibility stubs such as glibc's
+	# empty libpthread.a/libdl.a do not fail QA.
+	_bu-is-empty-archive "${archive}" && return 0
+
 	nm_cmd=$(tc-getNM)
 	nm_out=$("${nm_cmd}" -s "${archive}" 2>/dev/null) || return 1
 	grep -q '^Archive index:' <<< "${nm_out}"

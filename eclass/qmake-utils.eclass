@@ -9,7 +9,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_QMAKE_UTILS_ECLASS} ]]; then
+if [[ -z ${_QMAKE_UTILS_ECLASS:-} ]]; then
 _QMAKE_UTILS_ECLASS=1
 
 inherit emoji toolchain-funcs
@@ -31,15 +31,15 @@ qt5_get_qmake_args() {
 		QMAKE_OBJCOPY="$(tc-getOBJCOPY)"
 		QMAKE_RANLIB=
 		QMAKE_STRIP=
-		QMAKE_CFLAGS="${CFLAGS}"
+		QMAKE_CFLAGS="${CFLAGS-}"
 		QMAKE_CFLAGS_RELEASE=
 		QMAKE_CFLAGS_DEBUG=
 		QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO=
-		QMAKE_CXXFLAGS="${CXXFLAGS}"
+		QMAKE_CXXFLAGS="${CXXFLAGS-}"
 		QMAKE_CXXFLAGS_RELEASE=
 		QMAKE_CXXFLAGS_DEBUG=
 		QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO=
-		QMAKE_LFLAGS="${LDFLAGS}"
+		QMAKE_LFLAGS="${LDFLAGS-}"
 		QMAKE_LFLAGS_RELEASE=
 		QMAKE_LFLAGS_DEBUG=
 		QMAKE_LFLAGS_RELEASE_WITH_DEBUGINFO=
@@ -50,9 +50,7 @@ eqmake5() {
 	log_info "Running qmake (Qt5)"
 	local -a args
 	mapfile -t args <<<"$(qt5_get_qmake_args)"
-	"$(qt5_get_bindir)"/qmake -makefile "${args[@]}" "$@"
-	local ret=$?
-	if [[ $ret -ne 0 ]]; then
+	if ! "$(qt5_get_bindir)"/qmake -makefile "${args[@]}" "$@"; then
 		log_err "Running qmake failed! (see above for details)"
 		log_err "This shouldn't happen - please report to https://bugs.gentoo.org/"
 		die "eqmake5 failed"
@@ -76,15 +74,15 @@ qt6_get_qmake_args() {
 		QMAKE_OBJCOPY="$(tc-getOBJCOPY)"
 		QMAKE_RANLIB=
 		QMAKE_STRIP=
-		QMAKE_CFLAGS="${CFLAGS}"
+		QMAKE_CFLAGS="${CFLAGS-}"
 		QMAKE_CFLAGS_RELEASE=
 		QMAKE_CFLAGS_DEBUG=
 		QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO=
-		QMAKE_CXXFLAGS="${CXXFLAGS}"
+		QMAKE_CXXFLAGS="${CXXFLAGS-}"
 		QMAKE_CXXFLAGS_RELEASE=
 		QMAKE_CXXFLAGS_DEBUG=
 		QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO=
-		QMAKE_LFLAGS="${LDFLAGS}"
+		QMAKE_LFLAGS="${LDFLAGS-}"
 		QMAKE_LFLAGS_RELEASE=
 		QMAKE_LFLAGS_DEBUG=
 		QMAKE_LFLAGS_RELEASE_WITH_DEBUGINFO=
@@ -95,9 +93,7 @@ eqmake6() {
 	log_info "Running qmake (Qt6)"
 	local -a args
 	mapfile -t args <<<"$(qt6_get_qmake_args)"
-	"$(qt6_get_bindir)"/qmake -makefile "${args[@]}" "$@"
-	local ret=$?
-	if [[ $ret -ne 0 ]]; then
+	if ! "$(qt6_get_bindir)"/qmake -makefile "${args[@]}" "$@"; then
 		log_err "Running qmake failed! (see above for details)"
 		log_err "This shouldn't happen - please report to https://bugs.gentoo.org/"
 		die "eqmake6 failed"

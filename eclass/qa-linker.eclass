@@ -11,7 +11,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_QA_LINKER_ECLASS} ]] ; then
+if [[ -z ${_QA_LINKER_ECLASS:-} ]] ; then
 _QA_LINKER_ECLASS=1
 
 inherit qa-report linker-policy
@@ -30,13 +30,13 @@ _qa-linker-path-allowed() {
 }
 
 qa-linker-detect-expected() {
-	case ${QA_POLICY_LINKER_EXPECTED} in
+	case ${QA_POLICY_LINKER_EXPECTED-auto} in
 		''|auto)
-			if [[ -n ${LP_LINKER} ]]; then
+			if [[ -n ${LP_LINKER-} ]]; then
 				printf '%s\n' "${LP_LINKER}"
 				return 0
 			fi
-			case ${LDFLAGS} in
+			case ${LDFLAGS-} in
 				*-fuse-ld=bfd*) printf '%s\n' bfd ;;
 				*-fuse-ld=lld*) printf '%s\n' lld ;;
 				*-fuse-ld=mold*) printf '%s\n' mold ;;

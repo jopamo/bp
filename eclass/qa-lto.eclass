@@ -11,7 +11,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_QA_LTO_ECLASS} ]] ; then
+if [[ -z ${_QA_LTO_ECLASS:-} ]] ; then
 _QA_LTO_ECLASS=1
 
 inherit qa-report lto-policy
@@ -19,7 +19,7 @@ inherit qa-report lto-policy
 _QA_LTO_LAST_FLAVOR=
 
 qa-lto-resolve-flavor() {
-	case ${QA_POLICY_LTO_FLAVOR} in
+	case ${QA_POLICY_LTO_FLAVOR-auto} in
 		auto)
 			if in_iuse static-libs && use static-libs; then
 				printf '%s\n' fat+strip
@@ -31,7 +31,7 @@ qa-lto-resolve-flavor() {
 			printf '%s\n' "${QA_POLICY_LTO_FLAVOR}"
 			;;
 		*)
-			die "qa-lto: invalid QA_POLICY_LTO_FLAVOR=${QA_POLICY_LTO_FLAVOR}"
+			die "qa-lto: invalid QA_POLICY_LTO_FLAVOR=${QA_POLICY_LTO_FLAVOR-}"
 			;;
 	esac
 }

@@ -13,11 +13,11 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_QA_REPORT_ECLASS} ]] ; then
+if [[ -z ${_QA_REPORT_ECLASS:-} ]] ; then
 _QA_REPORT_ECLASS=1
 
 _qa-report-package-label() {
-	if [[ -n ${CATEGORY} && -n ${PF} ]]; then
+	if [[ -n ${CATEGORY-} && -n ${PF-} ]]; then
 		printf '%s/%s\n' "${CATEGORY}" "${PF}"
 		return 0
 	fi
@@ -73,7 +73,7 @@ _qa-report-print-domain() {
 
 	count=$(_qa-report-domain-finding-count "${stage}" "${domain}")
 	if [[ ${count} -eq 0 ]]; then
-		[[ ${QA_POLICY_SHOW_CLEAN} == 1 ]] && einfo "    clean: yes"
+		[[ ${QA_POLICY_SHOW_CLEAN-0} == 1 ]] && einfo "    clean: yes"
 		return 0
 	fi
 
@@ -149,7 +149,7 @@ qa-report-domain-begin() {
 	local domain=$1
 	local key array_name
 
-	[[ -n ${_QA_REPORT_STAGE} ]] || die "qa-report: stage not set"
+	[[ -n ${_QA_REPORT_STAGE-} ]] || die "qa-report: stage not set"
 
 	key="${_QA_REPORT_STAGE}|${domain}"
 	[[ -n ${_QA_REPORT_DOMAIN_SEEN["${key}"]:-} ]] && return 0
@@ -206,14 +206,14 @@ qa-report-fail() {
 }
 
 qa-report-print() {
-	case ${QA_POLICY_SUMMARY} in
+	case ${QA_POLICY_SUMMARY-} in
 		full|short) ;;
-		*) die "qa-report: invalid QA_POLICY_SUMMARY=${QA_POLICY_SUMMARY}" ;;
+		*) die "qa-report: invalid QA_POLICY_SUMMARY=${QA_POLICY_SUMMARY-}" ;;
 	esac
 
 	einfo "qa-policy: $(_qa-report-package-label)"
 
-	if [[ ${QA_POLICY_SUMMARY} == full ]]; then
+	if [[ ${QA_POLICY_SUMMARY-} == full ]]; then
 		_qa-report-print-stage sanitize
 		_qa-report-print-stage assert
 	fi
@@ -233,11 +233,11 @@ qa-report-print() {
 }
 
 qa-report-has-failures() {
-	[[ ${_QA_REPORT_FAILURES} -gt 0 ]]
+	[[ ${_QA_REPORT_FAILURES-0} -gt 0 ]]
 }
 
 qa-report-has-warnings() {
-	[[ ${_QA_REPORT_WARNINGS} -gt 0 ]]
+	[[ ${_QA_REPORT_WARNINGS-0} -gt 0 ]]
 }
 
 fi

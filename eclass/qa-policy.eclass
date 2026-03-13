@@ -14,7 +14,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_QA_POLICY_ECLASS} ]] ; then
+if [[ -z ${_QA_POLICY_ECLASS:-} ]] ; then
 _QA_POLICY_ECLASS=1
 
 inherit qa-report qa-linker qa-lto qa-archive qa-rpath qa-pkgconfig qa-elf
@@ -23,12 +23,23 @@ BDEPEND+=" app-dev/patchelf"
 
 _qa-policy-relpath() {
 	local file=$1
-	local root=${ED%/}
+	local root
+	local -a roots=()
 
-	if [[ -n ${root} && ${file} == "${root}"/* ]]; then
-		printf '%s\n' "${file#${root}}"
-		return 0
+	if [[ -n ${ED-} ]]; then
+		roots+=( "${ED%/}" )
 	fi
+
+	if declare -p QA_DISCOVER_ROOTS >/dev/null 2>&1; then
+		roots+=( "${QA_DISCOVER_ROOTS[@]}" )
+	fi
+
+	for root in "${roots[@]}"; do
+		if [[ -n ${root} && ${file} == "${root}"/* ]]; then
+			printf '%s\n' "${file#${root}}"
+			return 0
+		fi
+	done
 
 	printf '%s\n' "${file}"
 }
@@ -146,6 +157,7 @@ _qa-policy-init() {
 	declare -ga QA_DISCOVER_ARCHIVES=()
 	declare -ga QA_DISCOVER_PKGCONFIG=()
 	declare -ga QA_DISCOVER_LDSCRIPTS=()
+	declare -ga QA_DISCOVER_ROOTS=()
 }
 
 _qa-policy-validate-config() {
@@ -225,6 +237,7 @@ _qa-policy-discover-installed-files() {
 	local -a found=()
 
 	if [[ ${#} -eq 0 ]]; then
+		[[ -n ${ED-} ]] || die "qa-policy-install requires a path or ED"
 		inputs=( "${ED}" )
 	else
 		inputs=( "$@" )
@@ -236,6 +249,7 @@ _qa-policy-discover-installed-files() {
 
 	for input in "${inputs[@]}"; do
 		if [[ -d ${input} ]]; then
+			QA_DISCOVER_ROOTS+=( "${input%/}" )
 			mapfile -d '' -t found < <(find -H "${input}" -type f -print0)
 			QA_DISCOVER_ALL_FILES+=( "${found[@]}" )
 		elif [[ -f ${input} ]]; then

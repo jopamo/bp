@@ -11,7 +11,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_QA_ARCHIVE_ECLASS} ]] ; then
+if [[ -z ${_QA_ARCHIVE_ECLASS:-} ]] ; then
 _QA_ARCHIVE_ECLASS=1
 
 inherit qa-report binutils-sanitizer lto-policy

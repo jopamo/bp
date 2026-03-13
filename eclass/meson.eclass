@@ -38,13 +38,14 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_MESON_ECLASS} ]]; then
+if [[ -z ${_MESON_ECLASS:-} ]]; then
 _MESON_ECLASS=1
 
 inherit flag-o-matic multiprocessing ninja-utils python-utils-r1 toolchain-funcs
 
-BDEPEND=">=app-dev/meson-1.2.3
-	${NINJA_DEPEND}
+BDEPEND+="
+	>=app-dev/meson-1.2.3
+	${NINJA_DEPEND-}
 "
 
 # @ECLASS_VARIABLE: BUILD_DIR
@@ -168,16 +169,16 @@ _meson_create_cross_file() {
 	windres = $(_meson_env_array "$(tc-getRC)")
 
 	[built-in options]
-	c_args = $(_meson_env_array "${CFLAGS} ${CPPFLAGS}")
-	c_link_args = $(_meson_env_array "${CFLAGS} ${LDFLAGS}")
-	cpp_args = $(_meson_env_array "${CXXFLAGS} ${CPPFLAGS}")
-	cpp_link_args = $(_meson_env_array "${CXXFLAGS} ${LDFLAGS}")
-	fortran_args = $(_meson_env_array "${FCFLAGS}")
-	fortran_link_args = $(_meson_env_array "${FCFLAGS} ${LDFLAGS}")
-	objc_args = $(_meson_env_array "${OBJCFLAGS} ${CPPFLAGS}")
-	objc_link_args = $(_meson_env_array "${OBJCFLAGS} ${LDFLAGS}")
-	objcpp_args = $(_meson_env_array "${OBJCXXFLAGS} ${CPPFLAGS}")
-	objcpp_link_args = $(_meson_env_array "${OBJCXXFLAGS} ${LDFLAGS}")
+	c_args = $(_meson_env_array "${CFLAGS-} ${CPPFLAGS-}")
+	c_link_args = $(_meson_env_array "${CFLAGS-} ${LDFLAGS-}")
+	cpp_args = $(_meson_env_array "${CXXFLAGS-} ${CPPFLAGS-}")
+	cpp_link_args = $(_meson_env_array "${CXXFLAGS-} ${LDFLAGS-}")
+	fortran_args = $(_meson_env_array "${FCFLAGS-}")
+	fortran_link_args = $(_meson_env_array "${FCFLAGS-} ${LDFLAGS-}")
+	objc_args = $(_meson_env_array "${OBJCFLAGS-} ${CPPFLAGS-}")
+	objc_link_args = $(_meson_env_array "${OBJCFLAGS-} ${LDFLAGS-}")
+	objcpp_args = $(_meson_env_array "${OBJCXXFLAGS-} ${CPPFLAGS-}")
+	objcpp_link_args = $(_meson_env_array "${OBJCXXFLAGS-} ${LDFLAGS-}")
 
 	[properties]
 	needs_exe_wrapper = true
@@ -225,16 +226,16 @@ _meson_create_native_file() {
 	windres = $(_meson_env_array "$(tc-getBUILD_PROG RC windres)")
 
 	[built-in options]
-	c_args = $(_meson_env_array "${BUILD_CFLAGS} ${BUILD_CPPFLAGS}")
-	c_link_args = $(_meson_env_array "${BUILD_CFLAGS} ${BUILD_LDFLAGS}")
-	cpp_args = $(_meson_env_array "${BUILD_CXXFLAGS} ${BUILD_CPPFLAGS}")
-	cpp_link_args = $(_meson_env_array "${BUILD_CXXFLAGS} ${BUILD_LDFLAGS}")
-	fortran_args = $(_meson_env_array "${BUILD_FCFLAGS}")
-	fortran_link_args = $(_meson_env_array "${BUILD_FCFLAGS} ${BUILD_LDFLAGS}")
-	objc_args = $(_meson_env_array "${BUILD_OBJCFLAGS} ${BUILD_CPPFLAGS}")
-	objc_link_args = $(_meson_env_array "${BUILD_OBJCFLAGS} ${BUILD_LDFLAGS}")
-	objcpp_args = $(_meson_env_array "${BUILD_OBJCXXFLAGS} ${BUILD_CPPFLAGS}")
-	objcpp_link_args = $(_meson_env_array "${BUILD_OBJCXXFLAGS} ${BUILD_LDFLAGS}")
+	c_args = $(_meson_env_array "${BUILD_CFLAGS-} ${BUILD_CPPFLAGS-}")
+	c_link_args = $(_meson_env_array "${BUILD_CFLAGS-} ${BUILD_LDFLAGS-}")
+	cpp_args = $(_meson_env_array "${BUILD_CXXFLAGS-} ${BUILD_CPPFLAGS-}")
+	cpp_link_args = $(_meson_env_array "${BUILD_CXXFLAGS-} ${BUILD_LDFLAGS-}")
+	fortran_args = $(_meson_env_array "${BUILD_FCFLAGS-}")
+	fortran_link_args = $(_meson_env_array "${BUILD_FCFLAGS-} ${BUILD_LDFLAGS-}")
+	objc_args = $(_meson_env_array "${BUILD_OBJCFLAGS-} ${BUILD_CPPFLAGS-}")
+	objc_link_args = $(_meson_env_array "${BUILD_OBJCFLAGS-} ${BUILD_LDFLAGS-}")
+	objcpp_args = $(_meson_env_array "${BUILD_OBJCXXFLAGS-} ${BUILD_CPPFLAGS-}")
+	objcpp_link_args = $(_meson_env_array "${BUILD_OBJCXXFLAGS-} ${BUILD_LDFLAGS-}")
 
 	[properties]
 	needs_exe_wrapper = false
@@ -314,32 +315,36 @@ setup_meson_src_configure() {
 		MESONARGS+=( -Db_lto=false )
 	fi
 
-	local BUILD_CFLAGS=${BUILD_CFLAGS}
-	local BUILD_CPPFLAGS=${BUILD_CPPFLAGS}
-	local BUILD_CXXFLAGS=${BUILD_CXXFLAGS}
-	local BUILD_FCFLAGS=${BUILD_FCFLAGS}
-	local BUILD_OBJCFLAGS=${BUILD_OBJCFLAGS}
-	local BUILD_OBJCXXFLAGS=${BUILD_OBJCXXFLAGS}
-	local BUILD_LDFLAGS=${BUILD_LDFLAGS}
-	local BUILD_PKG_CONFIG_LIBDIR=${BUILD_PKG_CONFIG_LIBDIR}
-	local BUILD_PKG_CONFIG_PATH=${BUILD_PKG_CONFIG_PATH}
+	local BUILD_CFLAGS=${BUILD_CFLAGS-}
+	local BUILD_CPPFLAGS=${BUILD_CPPFLAGS-}
+	local BUILD_CXXFLAGS=${BUILD_CXXFLAGS-}
+	local BUILD_FCFLAGS=${BUILD_FCFLAGS-}
+	local BUILD_OBJCFLAGS=${BUILD_OBJCFLAGS-}
+	local BUILD_OBJCXXFLAGS=${BUILD_OBJCXXFLAGS-}
+	local BUILD_LDFLAGS=${BUILD_LDFLAGS-}
+	local BUILD_PKG_CONFIG_LIBDIR=${BUILD_PKG_CONFIG_LIBDIR-}
+	local BUILD_PKG_CONFIG_PATH=${BUILD_PKG_CONFIG_PATH-}
 
 	if tc-is-cross-compiler; then
 		: "${BUILD_CFLAGS:=-O1 -pipe}"
+		: "${BUILD_CPPFLAGS:=}"
 		: "${BUILD_CXXFLAGS:=-O1 -pipe}"
 		: "${BUILD_FCFLAGS:=-O1 -pipe}"
+		: "${BUILD_LDFLAGS:=}"
 		: "${BUILD_OBJCFLAGS:=-O1 -pipe}"
 		: "${BUILD_OBJCXXFLAGS:=-O1 -pipe}"
+		: "${BUILD_PKG_CONFIG_LIBDIR:=}"
+		: "${BUILD_PKG_CONFIG_PATH:=}"
 	else
-		: "${BUILD_CFLAGS:=${CFLAGS}}"
-		: "${BUILD_CPPFLAGS:=${CPPFLAGS}}"
-		: "${BUILD_CXXFLAGS:=${CXXFLAGS}}"
-		: "${BUILD_FCFLAGS:=${FCFLAGS}}"
-		: "${BUILD_LDFLAGS:=${LDFLAGS}}"
-		: "${BUILD_OBJCFLAGS:=${OBJCFLAGS}}"
-		: "${BUILD_OBJCXXFLAGS:=${OBJCXXFLAGS}}"
-		: "${BUILD_PKG_CONFIG_LIBDIR:=${PKG_CONFIG_LIBDIR}}"
-		: "${BUILD_PKG_CONFIG_PATH:=${PKG_CONFIG_PATH}}"
+		: "${BUILD_CFLAGS:=${CFLAGS-}}"
+		: "${BUILD_CPPFLAGS:=${CPPFLAGS-}}"
+		: "${BUILD_CXXFLAGS:=${CXXFLAGS-}}"
+		: "${BUILD_FCFLAGS:=${FCFLAGS-}}"
+		: "${BUILD_LDFLAGS:=${LDFLAGS-}}"
+		: "${BUILD_OBJCFLAGS:=${OBJCFLAGS-}}"
+		: "${BUILD_OBJCXXFLAGS:=${OBJCXXFLAGS-}}"
+		: "${BUILD_PKG_CONFIG_LIBDIR:=${PKG_CONFIG_LIBDIR-}}"
+		: "${BUILD_PKG_CONFIG_PATH:=${PKG_CONFIG_PATH-}}"
 	fi
 
 	MESONARGS+=(
@@ -350,7 +355,7 @@ setup_meson_src_configure() {
 		-Dsbindir="${EPREFIX}/usr/bin"
 		--wrap-mode nodownload
 		--build.pkg-config-path "${BUILD_PKG_CONFIG_PATH}${BUILD_PKG_CONFIG_PATH:+:}${EPREFIX}/usr/share/pkgconfig"
-		--pkg-config-path "${PKG_CONFIG_PATH}${PKG_CONFIG_PATH:+:}${EPREFIX}/usr/share/pkgconfig"
+		--pkg-config-path "${PKG_CONFIG_PATH-}${PKG_CONFIG_PATH:+:}${EPREFIX}/usr/share/pkgconfig"
 		--native-file "$(_meson_create_native_file)"
 
 		# gcc[pch] is masked in profiles due to consistent bugginess
@@ -375,7 +380,7 @@ setup_meson_src_configure() {
 	fi
 
 	# Handle quoted whitespace
-	eval "local -a MYMESONARGS=( ${MYMESONARGS} )"
+	eval "local -a MYMESONARGS=( ${MYMESONARGS-} )"
 
 	MESONARGS+=(
 		# Arguments from ebuild
@@ -405,7 +410,7 @@ setup_meson_src_configure() {
 meson_src_configure() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	[[ -n "${NINJA_DEPEND}" ]] || ewarn "Unknown value '${NINJA}' for \${NINJA}"
+	[[ -n ${NINJA_DEPEND-} ]] || ewarn "Unknown value '${NINJA-}' for \${NINJA}"
 
 	BUILD_DIR="${BUILD_DIR:-${WORKDIR}/${P}-build}"
 

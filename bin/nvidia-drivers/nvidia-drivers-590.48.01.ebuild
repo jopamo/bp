@@ -19,17 +19,17 @@ SRC_URI="
 LICENSE="GPL-2 NVIDIA-r2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="driver kms static-libs uvm wayland X"
+IUSE+=" driver kms static-libs uvm wayland X"
 
 S="${WORKDIR}"
 
 RESTRICT="bindist mirror"
 
-DEPEND="
+DEPEND+="
     app-core/kmod
     xgui-lib/libvdpau
 "
-RDEPEND="
+RDEPEND+="
     wayland? ( xgui-lib/wayland )
     X? (
         lib-core/zlib

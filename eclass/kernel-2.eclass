@@ -13,16 +13,26 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-HOMEPAGE="https://www.kernel.org/"
+: "${HOMEPAGE:="https://www.kernel.org/"}"
 : "${LICENSE:="GPL-2"}"
-RESTRICT="binchecks strip"
+case " ${RESTRICT-} " in
+	*" binchecks "*) ;;
+	*) RESTRICT="${RESTRICT:+${RESTRICT} }binchecks" ;;
+esac
+case " ${RESTRICT-} " in
+	*" strip "*) ;;
+	*) RESTRICT="${RESTRICT:+${RESTRICT} }strip" ;;
+esac
 
 # @ECLASS_VARIABLE: LINUX_HOSTCFLAGS
 # @DESCRIPTION:
 # CFLAGS for the host C compiler.
 : "${LINUX_HOSTCFLAGS:="-Wall -Wstrict-prototypes -Os -fomit-frame-pointer -I${S}/include"}"
 
-IUSE="+symlink"
+case " ${IUSE-} " in
+	*" symlink "*|*" +symlink "*|*" -symlink "*) ;;
+	*) IUSE="${IUSE:+${IUSE} }+symlink" ;;
+esac
 # @FUNCTION: install_universal
 # @USAGE:
 # @DESCRIPTION:
@@ -58,9 +68,10 @@ install_sources() {
 # @DESCRIPTION:
 # Optionally symlink /usr/src/linux to this version
 postinst_sources() {
-	use symlink && K_SYMLINK=1
+	local k_symlink=${K_SYMLINK:-0}
+	use symlink && k_symlink=1
 
-	if [[ ${K_SYMLINK} -gt 0 ]]; then
+	if [[ ${k_symlink} -gt 0 ]]; then
 		if [[ -e ${EROOT}/usr/src/linux && ! -L ${EROOT}/usr/src/linux ]]; then
 			die "${EROOT}/usr/src/linux exists and is not a symlink"
 		fi

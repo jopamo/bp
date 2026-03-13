@@ -11,19 +11,20 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_LINUX_MOD_R1_ECLASS} ]]; then
+if [[ -z ${_LINUX_MOD_R1_ECLASS:-} ]]; then
 _LINUX_MOD_R1_ECLASS=1
 
 inherit edo linux-info multiprocessing toolchain-funcs
 
-IUSE="modules-compress modules-sign +strip initramfs ${MODULES_OPTIONAL_IUSE}"
+IUSE+=" modules-compress modules-sign +strip initramfs"
+[[ -n ${MODULES_OPTIONAL_IUSE:-} ]] && IUSE+=" ${MODULES_OPTIONAL_IUSE}"
 
-RDEPEND="
+RDEPEND+="
 	app-core/kmod[tools]
 "
 
-DEPEND="virtual/linux-sources"
-BDEPEND="
+DEPEND+=" virtual/linux-sources"
+BDEPEND+="
 	app-dev/dwarves
 	app-core/kmod[tools]
 	modules-sign? (
@@ -32,7 +33,7 @@ BDEPEND="
 	)
 "
 
-IDEPEND="app-core/kmod[tools]"
+IDEPEND+=" app-core/kmod[tools]"
 
 
 # @ECLASS_VARIABLE: MODULES_SIGN_CERT
@@ -200,7 +201,7 @@ modules_post_process() {
 # @DESCRIPTION:
 # Internal function to check usage.
 _modules_check_function() {
-	[[ -z ${MODULES_OPTIONAL_IUSE} ]] || use "${MODULES_OPTIONAL_IUSE#+}" || return 1
+	[[ -z ${MODULES_OPTIONAL_IUSE:-} ]] || use "${MODULES_OPTIONAL_IUSE#+}" || return 1
 	[[ ${#} == 0 || ${1} -ge ${2} && ( ! ${3} || ${1} -le ${3} ) ]] || die "Usage: ${FUNCNAME[1]} ${4-(no arguments)}"
 	[[ -v _MODULES_GLOBAL[ran:pkg_setup] ]] || \
 		die "${FUNCNAME[1]} was called without running kernel-mod_pkg_setup"
@@ -211,12 +212,12 @@ _modules_check_function() {
 # @DESCRIPTION:
 # Internal function to check for obsolete variables.
 _modules_check_migration() {
-	[[ -z ${MODULES_OPTIONAL_USE} ]] || \
+	[[ -z ${MODULES_OPTIONAL_USE:-} ]] || \
 		die "MODULES_OPTIONAL_USE is obsolete, see the new variables in kernel-mod eclass"
-	[[ -z ${MODULES_OPTIONAL_USE_IUSE_DEFAULT} ]] || die "MODULES_OPTIONAL_USE_IUSE_DEFAULT is obsolete"
-	[[ -z ${BUILD_PARAMS} ]] || die "BUILD_PARAMS is obsolete"
-	[[ -z ${BUILD_TARGETS} ]] || die "BUILD_TARGETS is obsolete"
-	[[ -z ${MODULE_NAMES} ]] || die "MODULE_NAMES is obsolete"
+	[[ -z ${MODULES_OPTIONAL_USE_IUSE_DEFAULT:-} ]] || die "MODULES_OPTIONAL_USE_IUSE_DEFAULT is obsolete"
+	[[ -z ${BUILD_PARAMS:-} ]] || die "BUILD_PARAMS is obsolete"
+	[[ -z ${BUILD_TARGETS:-} ]] || die "BUILD_TARGETS is obsolete"
+	[[ -z ${MODULE_NAMES:-} ]] || die "MODULE_NAMES is obsolete"
 	[[ -z ${!MODULESD_*} ]] || \
 		die "MODULESD_* variables are no longer supported, replace with a handcrafted .conf if needed"
 }
@@ -233,7 +234,7 @@ _modules_prepare_kernel() {
 	_modules_sanity_kernelbuilt
 	_modules_sanity_kernelversion
 
-	local CONFIG_CHECK="${CONFIG_CHECK} MODULES"
+	local CONFIG_CHECK="${CONFIG_CHECK:-} MODULES"
 	if [[ $(linux_chkconfig_string UNUSED_KSYMS_WHITELIST) == \"+(?)\" ]]; then
 		CONFIG_CHECK+=" ~!TRIM_UNUSED_KSYMS"
 	else
@@ -254,13 +255,13 @@ _modules_prepare_sign() {
 	}
 	linux_chkconfig_present MODULE_SIG || _modules_sign_die "CONFIG_MODULE_SIG is not set"
 
-	if [[ -z ${MODULES_SIGN_HASH} ]]; then
+	if [[ -z ${MODULES_SIGN_HASH:-} ]]; then
 		: "$(linux_chkconfig_string MODULE_SIG_HASH)"
 		MODULES_SIGN_HASH=${_//\"}
 		[[ -n ${MODULES_SIGN_HASH} ]] || _modules_sign_die "CONFIG_MODULE_SIG_HASH is not set"
 	fi
 
-	if [[ -z ${MODULES_SIGN_KEY} ]]; then
+	if [[ -z ${MODULES_SIGN_KEY:-} ]]; then
 		: "$(linux_chkconfig_string MODULE_SIG_KEY)"
 		MODULES_SIGN_KEY=${_//\"}
 		[[ -n ${MODULES_SIGN_KEY} ]] || _modules_sign_die "CONFIG_MODULE_SIG_KEY is not set"
@@ -278,7 +279,7 @@ _modules_prepare_sign() {
 # @DESCRIPTION:
 # Internal function to prepare toolchain.
 _modules_prepare_toolchain() {
-	[[ -z ${KERNEL_CHOST} ]] && linux_chkconfig_present 64BIT && \
+	[[ -z ${KERNEL_CHOST:-} ]] && linux_chkconfig_present 64BIT && \
 		case ${CHOST} in
 			hppa2.0-*) KERNEL_CHOST=${CHOST/2.0/64};;
 		esac
@@ -415,10 +416,10 @@ _modules_process_sign() {
 			tc-export_build_env
 			nonfatal edob \
 				"$(tc-getBUILD_CC)" \
-				${BUILD_CFLAGS} \
-				${BUILD_CPPFLAGS} \
+				${BUILD_CFLAGS-} \
+				${BUILD_CPPFLAGS-} \
 				$($(tc-getBUILD_PKG_CONFIG) --cflags libcrypto) \
-				${BUILD_LDFLAGS} \
+				${BUILD_LDFLAGS-} \
 				-o "${sign}" \
 				"${KV_DIR}/scripts/sign-file.c" \
 				$($(tc-getBUILD_PKG_CONFIG) --libs libcrypto || echo -lcrypto)
@@ -505,12 +506,12 @@ _modules_sanity_kernelbuilt() {
 # Internal function to check kernel version sanity.
 _modules_sanity_kernelversion() {
 	local kv=${KV_MAJOR}.${KV_MINOR}.${KV_PATCH}
-	if [[ -n ${MODULES_KERNEL_MIN} ]] && ver_test "${kv}" -lt "${MODULES_KERNEL_MIN}"; then
+	if [[ -n ${MODULES_KERNEL_MIN:-} ]] && ver_test "${kv}" -lt "${MODULES_KERNEL_MIN}"; then
 		eerror "${P} requires a kernel >=${MODULES_KERNEL_MIN}, but current is ${KV_FULL}"
 		die "kernel ${KV_FULL} is too old"
 	fi
 
-	if [[ -n ${MODULES_KERNEL_MAX} ]]; then
+	if [[ -n ${MODULES_KERNEL_MAX:-} ]]; then
 		: "${MODULES_KERNEL_MAX//[^.]/}"
 		local -i count=${#_}
 		if ver_test "$(ver_cut 1-$((count+1)) "${kv}")" -gt "${MODULES_KERNEL_MAX}"; then
@@ -551,14 +552,14 @@ _modules_set_makeargs() {
 		STRIP=true
 	)
 
-	if [[ ! ${MODULES_I_WANT_FULL_CONTROL} ]]; then
+	if [[ -z ${MODULES_I_WANT_FULL_CONTROL:-} ]]; then
 		MODULES_MAKEARGS+=(
 			CROSS_COMPILE="${KERNEL_CHOST}-"
 			HOSTCC="$(tc-getBUILD_CC)"
 			HOSTCXX="$(tc-getBUILD_CXX)"
-			HOSTCFLAGS="$(tc-export_build_env; echo "${BUILD_CFLAGS}")"
-			HOSTCXXFLAGS="$(tc-export_build_env; echo "${BUILD_CXXFLAGS}")"
-			HOSTLDFLAGS="$(tc-export_build_env; echo "${BUILD_LDFLAGS}")"
+			HOSTCFLAGS="$(tc-export_build_env; echo "${BUILD_CFLAGS-}")"
+			HOSTCXXFLAGS="$(tc-export_build_env; echo "${BUILD_CXXFLAGS-}")"
+			HOSTLDFLAGS="$(tc-export_build_env; echo "${BUILD_LDFLAGS-}")"
 			HOSTPKG_CONFIG="$(tc-getBUILD_PKG_CONFIG)"
 			CC="${KERNEL_CC}"
 			CXX="${KERNEL_CXX}"
@@ -571,7 +572,7 @@ _modules_set_makeargs() {
 		)
 	fi
 
-	eval "MODULES_MAKEARGS+=( ${MODULES_EXTRA_EMAKE} )" || die
+	eval "MODULES_MAKEARGS+=( ${MODULES_EXTRA_EMAKE-} )" || die
 }
 
 # @FUNCTION: _modules_update_depmod

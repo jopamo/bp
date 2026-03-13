@@ -14,7 +14,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_LINKER_POLICY_ECLASS} ]] ; then
+if [[ -z ${_LINKER_POLICY_ECLASS:-} ]] ; then
 _LINKER_POLICY_ECLASS=1
 
 inherit flag-o-matic toolchain-funcs
@@ -33,12 +33,12 @@ inherit flag-o-matic toolchain-funcs
 LP_LINKER=${LP_LINKER:-}
 
 _lp-pkg-key() {
-	if [[ -n ${CATEGORY} && -n ${PN} ]]; then
-		echo "${CATEGORY}/${PN}"
+	if [[ -n ${CATEGORY-} && -n ${PN-} ]]; then
+		printf '%s\n' "${CATEGORY}/${PN}"
 		return
 	fi
 
-	echo "${PF:-unknown}"
+	printf '%s\n' "${PF:-unknown}"
 }
 
 _lp-match-any() {
@@ -270,12 +270,13 @@ lp-check-linker() {
 	fi
 
 	if [[ ${#} -eq 0 ]]; then
+		[[ -n ${ED-} ]] || die "lp-check-linker: path arguments required when ED is unset"
 		set -- "${ED}"
 	fi
 
 	local input
 	for input in "$@" ; do
-		[[ -e ${input} ]] || die "lp-assert-linker: missing path ${input}"
+		[[ -e ${input} ]] || die "lp-check-linker: missing path ${input}"
 	done
 
 	local -i failures=0 scanned=0

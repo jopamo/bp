@@ -60,18 +60,18 @@
 #
 # @CODE
 
-case ${EAPI} in
+case ${EAPI:-0} in
 	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
+	*) die "${ECLASS:-go-module.eclass}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_GO_MODULE_ECLASS} ]]; then
+if [[ -z ${_GO_MODULE_ECLASS:-} ]]; then
 _GO_MODULE_ECLASS=1
 
 inherit multiprocessing toolchain-funcs go-env
 
-if [[ ! ${GO_OPTIONAL} ]]; then
-	BDEPEND=">=app-lang/go-1.20:="
+if [[ -z ${GO_OPTIONAL:-} ]]; then
+	BDEPEND+=" >=app-lang/go-1.20:="
 
 	# Workaround for pkgcheck false positive: https://github.com/pkgcore/pkgcheck/issues/214
 	# MissingUnpackerDep: version ...: missing BDEPEND="app-compression/zip-utils"
@@ -323,7 +323,7 @@ go-module_setup_proxy() {
 	# shellcheck disable=SC2120
 	debug-print-function "${FUNCNAME}" "$@"
 
-	if [[ ! ${_GO_MODULE_SET_GLOBALS_CALLED} ]]; then
+	if [[ -z ${_GO_MODULE_SET_GLOBALS_CALLED:-} ]]; then
 		die "go-module_set_globals must be called in global scope"
 	fi
 
@@ -333,9 +333,9 @@ go-module_setup_proxy() {
 	# For each Golang module distfile, look up where it's supposed to go and
 	# symlink it into place.
 	local f
-	local goproxy_mod_dir
+	local goproxy_mod_dir goproxy_mod_path
 	for f in ${A}; do
-		goproxy_mod_path="${_GOMODULE_GOSUM_REVERSE_MAP["${f}"]}"
+		goproxy_mod_path="${_GOMODULE_GOSUM_REVERSE_MAP["${f}"]-}"
 		if [[ -n "${goproxy_mod_path}" ]]; then
 			debug-print-function "Populating go proxy for ${goproxy_mod_path}"
 			# Build symlink hierarchy
@@ -364,24 +364,30 @@ go-module_setup_proxy() {
 # 3. Otherwise, call 'ego mod verify' and then do a normal unpack.
 # Set compile env via go-env.
 go-module_src_unpack() {
+	local nf=
+	local has_ego_sum=0
+	local has_ego_vendor=0
+
+	[[ ${EGO_SUM+set} ]] && (( ${#EGO_SUM[@]} > 0 )) && has_ego_sum=1
+	[[ ${EGO_VENDOR+set} ]] && (( ${#EGO_VENDOR[@]} > 0 )) && has_ego_vendor=1
+
 	if use amd64 || use arm64; then
-			GOFLAGS="-buildmode=pie ${GOFLAGS}"
+				GOFLAGS="-buildmode=pie ${GOFLAGS}"
 	fi
 	GOFLAGS="${GOFLAGS} -p=$(makeopts_jobs)"
-	if [[ "${#EGO_SUM[@]}" -gt 0 ]]; then
+	if (( has_ego_sum )); then
 		eqawarn "This ebuild uses EGO_SUM which is deprecated"
 		eqawarn "Please migrate to a dependency tarball"
 		eqawarn "This will become a fatal error in the future"
 		_go-module_src_unpack_gosum
-	elif [[ "${#EGO_VENDOR[@]}" -gt 0 ]]; then
+	elif (( has_ego_vendor )); then
 		eerror "${P} is using EGO_VENDOR which is no longer supported"
 		die "Please update this ebuild"
 	else
 		default
 		if [[ ! -d "${S}"/vendor ]]; then
 			cd "${S}"
-			local nf
-			[[ -n ${NONFATAL_VERIFY} ]] && nf=nonfatal
+			[[ -n ${NONFATAL_VERIFY:-} ]] && nf=nonfatal
 			${nf} ego mod verify
 		fi
 	fi
@@ -401,7 +407,7 @@ _go-module_src_unpack_gosum() {
 	# shellcheck disable=SC2120
 	debug-print-function "${FUNCNAME}" "$@"
 
-	if [[ ! ${_GO_MODULE_SET_GLOBALS_CALLED} ]]; then
+	if [[ -z ${_GO_MODULE_SET_GLOBALS_CALLED:-} ]]; then
 		die "go-module_set_globals must be called in global scope"
 	fi
 
@@ -411,9 +417,9 @@ _go-module_src_unpack_gosum() {
 	# For each Golang module distfile, look up where it's supposed to go, and
 	# symlink into place.
 	local f
-	local goproxy_mod_dir
+	local goproxy_mod_dir goproxy_mod_path
 	for f in ${A}; do
-		goproxy_mod_path="${_GOMODULE_GOSUM_REVERSE_MAP["${f}"]}"
+		goproxy_mod_path="${_GOMODULE_GOSUM_REVERSE_MAP["${f}"]-}"
 		if [[ -n "${goproxy_mod_path}" ]]; then
 			debug-print-function "Populating go proxy for ${goproxy_mod_path}"
 			# Build symlink hierarchy
@@ -472,7 +478,7 @@ _go-module_src_unpack_verify_gosum() {
 	# shellcheck disable=SC2120
 	debug-print-function "${FUNCNAME}" "$@"
 
-	if [[ ! ${_GO_MODULE_SET_GLOBALS_CALLED} ]]; then
+	if [[ -z ${_GO_MODULE_SET_GLOBALS_CALLED:-} ]]; then
 		die "go-module_set_globals must be called in global scope"
 	fi
 
@@ -500,7 +506,7 @@ go-module_live_vendor() {
 	debug-print-function "${FUNCNAME}" "$@"
 
 	# shellcheck disable=SC2086
-	has live ${PROPERTIES} ||
+	has live ${PROPERTIES-} ||
 		die "${FUNCNAME} only allowed in live ebuilds"
 	[[ "${EBUILD_PHASE}" == unpack ]] ||
 		die "${FUNCNAME} only allowed in src_unpack"
@@ -514,6 +520,6 @@ go-module_live_vendor() {
 
 fi
 
-if [[ ! ${GO_OPTIONAL} ]]; then
+if [[ -z ${GO_OPTIONAL:-} ]]; then
 	EXPORT_FUNCTIONS src_unpack
 fi

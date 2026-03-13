@@ -32,7 +32,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_LINUX_INFO_ECLASS} ]]; then
+if [[ -z ${_LINUX_INFO_ECLASS:-} ]]; then
 _LINUX_INFO_ECLASS=1
 
 # A Couple of env vars are available to effect usage of this eclass
@@ -164,8 +164,8 @@ inherit toolchain-funcs
 
 # bug #75034
 case ${ARCH} in
-	ppc)	BUILD_FIXES="${BUILD_FIXES} TOUT=${T}/.tmp_gas_check";;
-	ppc64)	BUILD_FIXES="${BUILD_FIXES} TOUT=${T}/.tmp_gas_check";;
+	ppc)	BUILD_FIXES="${BUILD_FIXES-} TOUT=${T}/.tmp_gas_check";;
+	ppc64)	BUILD_FIXES="${BUILD_FIXES-} TOUT=${T}/.tmp_gas_check";;
 esac
 
 # @FUNCTION: set_arch_to_kernel
@@ -186,7 +186,7 @@ qout() {
 	type=${1}
 	shift
 	outputmsg="${@}"
-	case "${EBUILD_PHASE}" in
+	case "${EBUILD_PHASE-}" in
 		depend)  unset outputmsg;;
 		clean)   unset outputmsg;;
 		preinst) unset outputmsg;;
@@ -241,7 +241,7 @@ getfilevar() {
 		echo -e "e:\\n\\t@echo \$(${1})\\ninclude ${basefname}" | \
 			nonfatal emake -C "${basedname}" --no-print-directory M="${T}" \
 			dot-config=0 need-config= need-compiler= \
-			${BUILD_FIXES} -s -f - 2>/dev/null
+			${BUILD_FIXES-} -s -f - 2>/dev/null
 
 		ARCH=${myARCH}
 	fi
@@ -294,7 +294,7 @@ _LINUX_CONFIG_EXISTS_DONE=
 linux_config_qa_check() {
 	local f="$1"
 
-	if [[ -z "${_LINUX_CONFIG_EXISTS_DONE}" ]]; then
+	if [[ -z "${_LINUX_CONFIG_EXISTS_DONE-}" ]]; then
 		ewarn "QA: You called $f before any linux_config_exists!"
 		ewarn "QA: The return value of $f will NOT guaranteed later!"
 	fi
@@ -310,7 +310,7 @@ linux_config_qa_check() {
 # It returns true if .config exists in a build directory otherwise false
 linux_config_src_exists() {
 	export _LINUX_CONFIG_EXISTS_DONE=1
-	use kernel_linux && [[ -n ${KV_OUT_DIR} && -s ${KV_OUT_DIR}/.config ]]
+	use kernel_linux && [[ -n ${KV_OUT_DIR-} && -s ${KV_OUT_DIR}/.config ]]
 }
 
 # @FUNCTION: linux_config_bin_exists
@@ -514,7 +514,7 @@ get_version() {
 
 	# No need to execute this twice assuming KV_FULL is populated.
 	# We can force by unsetting KV_FULL.
-	[[ -n "${KV_FULL}" ]] && return 0
+	[[ -n "${KV_FULL-}" ]] && return 0
 
 	# If we don't know KV_FULL, then we need to.
 	# Make sure KV_DIR isn't set since we need to work it out via KERNEL_DIR.
@@ -542,7 +542,7 @@ get_version() {
 	fi
 
 	# See if the kernel dir is actually an output dir. #454294
-	if [[ -z "${KBUILD_OUTPUT}" && -L "${KERNEL_DIR}/source" ]]; then
+	if [[ -z "${KBUILD_OUTPUT-}" && -L "${KERNEL_DIR}/source" ]]; then
 		KBUILD_OUTPUT=${KERNEL_DIR}
 		KERNEL_DIR=$(readlink -f "${KERNEL_DIR}/source")
 		KV_DIR=${KERNEL_DIR}
@@ -569,7 +569,7 @@ get_version() {
 	# so we better find it, eh?
 	#
 	# Do we pass KBUILD_OUTPUT on the CLI?
-	local OUTPUT_DIR=${KBUILD_OUTPUT}
+	local OUTPUT_DIR=${KBUILD_OUTPUT-}
 
 	if [[ -z ${OUTPUT_DIR} ]]; then
 		# Decide the function used to extract makefile variables.
@@ -597,7 +597,7 @@ get_version() {
 	fi
 
 	[[ -d "${OUTPUT_DIR}" ]] && KV_OUT_DIR="${OUTPUT_DIR}"
-	if [[ -n "${KV_OUT_DIR}" ]]; then
+	if [[ -n "${KV_OUT_DIR-}" ]]; then
 		qeinfo "Found kernel object directory:"
 		qeinfo "    ${KV_OUT_DIR}"
 	fi
@@ -696,16 +696,16 @@ linux-info_get_any_version() {
 		die "${FUNCNAME}() called on non-Linux system, please fix the ebuild"
 	fi
 
-	if [[ ${MERGE_TYPE} == binary && -z ${LINUX_INFO_BINARY_RESET} ]]; then
+	if [[ ${MERGE_TYPE-} == binary && -z ${LINUX_INFO_BINARY_RESET-} ]]; then
 		unset KV_FULL _LINUX_CONFIG_EXISTS_DONE KV_OUT_DIR
 		LINUX_INFO_BINARY_RESET=1
 	fi
 
-	if [[ ${MERGE_TYPE} != binary ]] && ! get_version; then
+	if [[ ${MERGE_TYPE-} != binary ]] && ! get_version; then
 		ewarn "Unable to calculate Linux Kernel version for build, attempting to use running version"
 	fi
 
-	if [[ -z ${KV_FULL} ]] && ! get_running_version; then
+	if [[ -z ${KV_FULL-} ]] && ! get_running_version; then
 		die "Unable to determine any Linux Kernel version, please report a bug"
 	fi
 }
@@ -774,20 +774,21 @@ check_modules_supported() {
 # the prefix ~ is not used) doesn't satisfy the directive. Ignored on non-Linux systems.
 check_extra_config() {
 	use kernel_linux || return
+	[[ -n ${CONFIG_CHECK-} ]] || return
 
 	local config negate die error reworkmodulenames
 	local soft_errors_count=0 hard_errors_count=0 config_required=0
 	# Store the value of the QA check, because otherwise we won't catch usages
 	# after if check_extra_config is called AND other direct calls are done
 	# later.
-	local old_LINUX_CONFIG_EXISTS_DONE="${_LINUX_CONFIG_EXISTS_DONE}"
+	local old_LINUX_CONFIG_EXISTS_DONE="${_LINUX_CONFIG_EXISTS_DONE-}"
 
 	# If we haven't determined the version yet, we need to.
 	linux-info_get_any_version
 
 	# Determine if we really need a .config. The only time when we don't need
 	# one is when all of the CONFIG_CHECK options are prefixed with "~".
-	for config in ${CONFIG_CHECK}; do
+	for config in ${CONFIG_CHECK-}; do
 		if [[ "${config:0:1}" != "~" ]]; then
 			config_required=1
 			break
@@ -802,19 +803,19 @@ check_extra_config() {
 			ewarn "Unable to check for the following kernel config options due"
 			ewarn "to absence of any configured kernel sources or compiled"
 			ewarn "config:"
-			for config in ${CONFIG_CHECK}; do
+			for config in ${CONFIG_CHECK-}; do
 				config=${config#\~}
 				config=${config#\!}
 				local_error="ERROR_${config}"
-				msg="${!local_error}"
+				msg="${!local_error-}"
 				if [[ -z ${msg} ]]; then
 					local_error="WARNING_${config}"
-					msg="${!local_error}"
+					msg="${!local_error-}"
 				fi
 				ewarn " - ${config}${msg:+ - }${msg}"
 			done
 			ewarn "You're on your own to make sure they are set if needed."
-			export LINUX_CONFIG_EXISTS_DONE="${old_LINUX_CONFIG_EXISTS_DONE}"
+			export _LINUX_CONFIG_EXISTS_DONE="${old_LINUX_CONFIG_EXISTS_DONE}"
 			return 0
 		fi
 	elif ! linux_config_exists; then
@@ -829,7 +830,7 @@ check_extra_config() {
 
 	ebegin "Checking for suitable kernel configuration options"
 
-	for config in ${CONFIG_CHECK}; do
+	for config in ${CONFIG_CHECK-}; do
 		# If we specify any fatal, ensure we honor them
 		die=1
 		error=0
@@ -855,10 +856,10 @@ check_extra_config() {
 			local temp_config="${config//*:}" i n
 			config="${config//:*}"
 			if linux_chkconfig_present ${config}; then
-				for i in ${MODULE_NAMES}; do
+				for i in ${MODULE_NAMES-}; do
 					n="${i//${temp_config}}"
 					[[ -z ${n//\(*} ]] && \
-						MODULE_IGNORE="${MODULE_IGNORE} ${temp_config}"
+						MODULE_IGNORE="${MODULE_IGNORE-} ${temp_config}"
 				done
 				error=2
 			fi
@@ -869,17 +870,17 @@ check_extra_config() {
 		if [[ ${error} -gt 0 ]]; then
 			local report_func="eerror" local_error
 			local_error="ERROR_${config}"
-			local_error="${!local_error}"
+			local_error="${!local_error-}"
 
 			if [[ -z "${local_error}" ]]; then
 				# using old, deprecated format.
 				local_error="${config}_ERROR"
-				local_error="${!local_error}"
+				local_error="${!local_error-}"
 			fi
 			if [[ ${die} == 0 && -z "${local_error}" ]]; then
 				#soft errors can be warnings
 				local_error="WARNING_${config}"
-				local_error="${!local_error}"
+				local_error="${!local_error-}"
 				if [[ -n "${local_error}" ]] ; then
 					report_func="ewarn"
 				fi
@@ -907,7 +908,7 @@ check_extra_config() {
 		eerror "Failure to do so may cause unexpected problems."
 		eerror "Once you have satisfied these options, please try merging"
 		eerror "this package again."
-		export LINUX_CONFIG_EXISTS_DONE="${old_LINUX_CONFIG_EXISTS_DONE}"
+		export _LINUX_CONFIG_EXISTS_DONE="${old_LINUX_CONFIG_EXISTS_DONE}"
 		die "Incorrect kernel configuration options"
 	elif [[ ${soft_errors_count} -gt 0 ]]; then
 		eend 1
@@ -916,7 +917,7 @@ check_extra_config() {
 	else
 		eend 0
 	fi
-	export LINUX_CONFIG_EXISTS_DONE="${old_LINUX_CONFIG_EXISTS_DONE}"
+	export _LINUX_CONFIG_EXISTS_DONE="${old_LINUX_CONFIG_EXISTS_DONE}"
 }
 
 # @FUNCTION: check_zlibinflate
@@ -966,7 +967,7 @@ check_zlibinflate() {
 	# okay, now we have a list of symbols
 	# we need to check each one in turn, to see whether it is set or not
 	for x in ${SYMBOLS} ; do
-		if [[ "${!x}" = "y" ]]; then
+		if [[ "${!x-}" = "y" ]]; then
 			# We have a winner!
 			einfo "${x} ensures zlib is linked into your kernel - excellent"
 			return 0
@@ -1005,7 +1006,9 @@ linux-info_pkg_setup() {
 
 	linux-info_get_any_version
 
-	[[ -n "${CONFIG_CHECK}" && -z ${CHECKCONFIG_DONOTHING} ]] && check_extra_config
+	if [[ -n "${CONFIG_CHECK-}" && -z ${CHECKCONFIG_DONOTHING-} ]]; then
+		check_extra_config
+	fi
 }
 
 # @FUNCTION: kernel_get_makefile
@@ -1013,10 +1016,10 @@ linux-info_pkg_setup() {
 # Support the possibility that the Makefile could be one of the following and should
 # be checked in the order described here:
 # https://www.gnu.org/software/make/manual/make.html
-# Order of checking and valid Makefiles names:  GNUMakefile, makefile, Makefile
+# Order of checking and valid Makefiles names: GNUmakefile, makefile, Makefile
 kernel_get_makefile() {
 
-	[[ -s ${KV_DIR}/GNUMakefile ]] && KERNEL_MAKEFILE="${KV_DIR}/GNUMakefile" && return
+	[[ -s ${KV_DIR}/GNUmakefile ]] && KERNEL_MAKEFILE="${KV_DIR}/GNUmakefile" && return
 	[[ -s ${KV_DIR}/makefile ]] && KERNEL_MAKEFILE="${KV_DIR}/makefile" && return
 	[[ -s ${KV_DIR}/Makefile ]] && KERNEL_MAKEFILE="${KV_DIR}/Makefile" && return
 

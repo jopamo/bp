@@ -22,7 +22,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_NINJA_UTILS_ECLASS} ]]; then
+if [[ -z ${_NINJA_UTILS_ECLASS:-} ]]; then
 _NINJA_UTILS_ECLASS=1
 
 # @ECLASS_VARIABLE: NINJA
@@ -55,7 +55,14 @@ _NINJA_UTILS_ECLASS=1
 
 inherit multiprocessing
 
-NINJA_DEPEND="app-dev/samurai"
+case ${NINJA} in
+	ninja|samu)
+		NINJA_DEPEND="app-dev/samurai"
+		;;
+	*)
+		NINJA_DEPEND=
+		;;
+esac
 
 # @FUNCTION: get_NINJAOPTS
 # @DESCRIPTION:

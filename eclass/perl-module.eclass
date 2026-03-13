@@ -73,16 +73,16 @@ case ${EAPI} in
 
 		case "${GENTOO_DEPEND_ON_PERL:-yes}" in
 			yes)
-				IUSE=${GENTOO_PERL_USESTRING}
-				DEPEND=${GENTOO_PERL_DEPSTRING}
-				BDEPEND=${GENTOO_PERL_DEPSTRING}
-				RDEPEND="${GENTOO_PERL_DEPSTRING} app-lang/perl:="
+				IUSE+=" ${GENTOO_PERL_USESTRING}"
+				DEPEND+=" ${GENTOO_PERL_DEPSTRING}"
+				BDEPEND+=" ${GENTOO_PERL_DEPSTRING}"
+				RDEPEND+=" ${GENTOO_PERL_DEPSTRING} app-lang/perl:="
 				;;
 			noslotop)
-				IUSE=${GENTOO_PERL_USESTRING}
-				DEPEND=${GENTOO_PERL_DEPSTRING}
-				BDEPEND=${GENTOO_PERL_DEPSTRING}
-				RDEPEND=${GENTOO_PERL_DEPSTRING}
+				IUSE+=" ${GENTOO_PERL_USESTRING}"
+				DEPEND+=" ${GENTOO_PERL_DEPSTRING}"
+				BDEPEND+=" ${GENTOO_PERL_DEPSTRING}"
+				RDEPEND+=" ${GENTOO_PERL_DEPSTRING}"
 				;;
 		esac
 
@@ -90,7 +90,7 @@ case ${EAPI} in
 			die "GENTOO_DEPEND_ON_PERL_SUBSLOT=no is banned."
 		fi
 
-		if [[ "${PERL_EXPORT_PHASE_FUNCTIONS}" ]]; then
+		if [[ ${PERL_EXPORT_PHASE_FUNCTIONS-} ]]; then
 			die "PERL_EXPORT_PHASE_FUNCTIONS is banned."
 		fi
 
@@ -102,18 +102,18 @@ case ${EAPI} in
 
 		case "${GENTOO_DEPEND_ON_PERL:-yes}" in
 			yes|noslotop)
-				IUSE=${GENTOO_PERL_USESTRING}
-				DEPEND=${GENTOO_PERL_DEPSTRING}
-				BDEPEND="${GENTOO_PERL_DEPSTRING}
+				IUSE+=" ${GENTOO_PERL_USESTRING}"
+				DEPEND+=" ${GENTOO_PERL_DEPSTRING}"
+				BDEPEND+=" ${GENTOO_PERL_DEPSTRING}
 					 test? ( >=virtual/perl-Test-Simple-1 )"
 				IUSE+=" test"
-				RESTRICT="!test? ( test )"
+				RESTRICT+=" !test? ( test )"
 				;;&
 			yes)
-				RDEPEND="${GENTOO_PERL_DEPSTRING} app-lang/perl:="
+				RDEPEND+=" ${GENTOO_PERL_DEPSTRING} app-lang/perl:="
 				;;
 			noslotop)
-				RDEPEND=${GENTOO_PERL_DEPSTRING}
+				RDEPEND+=" ${GENTOO_PERL_DEPSTRING}"
 				;;
 		esac
 
@@ -121,7 +121,7 @@ case ${EAPI} in
 			die "GENTOO_DEPEND_ON_PERL_SUBSLOT=no is banned."
 		fi
 
-		if [[ "${PERL_EXPORT_PHASE_FUNCTIONS}" ]]; then
+		if [[ ${PERL_EXPORT_PHASE_FUNCTIONS-} ]]; then
 			die "PERL_EXPORT_PHASE_FUNCTIONS is banned."
 		fi
 
@@ -191,21 +191,21 @@ LICENSE="${LICENSE:-|| ( Artistic GPL-1+ )}"
 # from ExtUtils::MakeMaker. Replaces mymake in EAPI=7 and earlier.
 # Defaults to ( OPTIMIZE="${CFLAGS}" )
 if [[ $(declare -p DIST_MAKE 2>&-) != "declare -a DIST_MAKE="* ]]; then
-	DIST_MAKE=( OPTIMIZE="${CFLAGS}" )
+	DIST_MAKE=( OPTIMIZE="${CFLAGS-}" )
 fi
 
 DIST_NAME=${DIST_NAME:-${PN}}
 DIST_P=${DIST_NAME}-${DIST_VERSION:-${PV}}
 S=${WORKDIR}/${DIST_P}
 
-[[ -z "${SRC_URI}" && -z "${DIST_A}" ]] &&
+[[ -z ${SRC_URI-} && -z ${DIST_A-} ]] &&
 	DIST_A="${DIST_P}.${DIST_A_EXT:-tar.gz}"
-[[ -z "${SRC_URI}" && -n "${DIST_AUTHOR}" ]] &&
+[[ -z ${SRC_URI-} && -n ${DIST_AUTHOR-} ]] &&
 	SRC_URI="mirror://cpan/authors/id/${DIST_AUTHOR:0:1}/${DIST_AUTHOR:0:2}/${DIST_AUTHOR}/${DIST_SECTION:+${DIST_SECTION}/}${DIST_A}"
-[[ -z "${HOMEPAGE}" ]] &&
+[[ -z ${HOMEPAGE-} ]] &&
 	HOMEPAGE="https://metacpan.org/release/${DIST_NAME}"
 
-[[ -z "${DIST_EXAMPLES}" ]] || IUSE+=" examples"
+declare -p DIST_EXAMPLES >/dev/null 2>&1 && IUSE+=" examples"
 
 PREFER_BUILDPL="yes"
 
@@ -248,22 +248,23 @@ perl-module_src_configure() {
 	# Noisy and not really appropriate to show to the user in a PM
 	export PERL_CANARY_STABILITY_DISABLE=1
 
+	local myconf_local=()
 	if [[ $(declare -p myconf 2>&-) != "declare -a myconf="* ]]; then
-		local myconf_local=(${myconf})
+		[[ -n ${myconf-} ]] && myconf_local=(${myconf})
 	else
-		local myconf_local=("${myconf[@]}")
+		myconf_local=("${myconf[@]}")
 	fi
 
 	if [[ ( ${PREFER_BUILDPL} == yes || ! -f Makefile.PL ) && -f Build.PL ]] ; then
 		if grep -q '\(use\|require\)\s*Module::Build::Tiny' Build.PL ; then
 			einfo "Using Module::Build::Tiny"
-			if [[ ${BDEPEND} != *dev-perl/Module-Build-Tiny* && ${PN} != Module-Build-Tiny ]]; then
+			if [[ ${BDEPEND-} != *dev-perl/Module-Build-Tiny* && ${PN} != Module-Build-Tiny ]]; then
 				eerror "QA Notice: The ebuild uses Module::Build::Tiny but doesn't depend on it."
 				eerror " Add dev-perl/Module-Build-Tiny to BDEPEND!"
 			fi
 		else
 			einfo "Using Module::Build"
-			if [[ ${BDEPEND} != *virtual/perl-Module-Build* && ${BDEPEND} != *dev-perl/Module-Build* && ${PN} != Module-Build ]] ; then
+			if [[ ${BDEPEND-} != *virtual/perl-Module-Build* && ${BDEPEND-} != *dev-perl/Module-Build* && ${PN} != Module-Build ]] ; then
 				eerror "QA Notice: The ebuild uses Module::Build but doesn't depend on it."
 				eerror " Add dev-perl/Module-Build to BDEPEND!"
 			fi
@@ -279,8 +280,8 @@ perl-module_src_configure() {
 			--config ld="$(tc-getCC)" \
 			--config nm="$(tc-getNM)" \
 			--config ranlib="$(tc-getRANLIB)" \
-			--config optimize="${CFLAGS}" \
-			--config ldflags="${LDFLAGS}" \
+			--config optimize="${CFLAGS-}" \
+			--config ldflags="${LDFLAGS-}" \
 			"${myconf_local[@]}"
 		einfo "perl Build.PL" "$@"
 		perl Build.PL "$@" <<< "${pm_echovar}" \
@@ -294,8 +295,8 @@ perl-module_src_configure() {
 			LD="$(tc-getCC)" \
 			NM="$(tc-getNM)" \
 			RANLIB="$(tc-getRANLIB)" \
-			OPTIMIZE="${CFLAGS}" \
-			LDFLAGS="${LDFLAGS}" \
+			OPTIMIZE="${CFLAGS-}" \
+			LDFLAGS="${LDFLAGS-}" \
 			PREFIX="${EPREFIX}"/usr \
 			INSTALLDIRS=vendor \
 			INSTALLMAN3DIR='none' \
@@ -321,10 +322,11 @@ perl-module_src_compile() {
 
 	case ${EAPI} in
 		7)
+			local mymake_local=()
 			if [[ $(declare -p mymake 2>&-) != "declare -a mymake="* ]]; then
-				local mymake_local=(${mymake})
+				[[ -n ${mymake-} ]] && mymake_local=(${mymake})
 			else
-				local mymake_local=("${mymake[@]}")
+				mymake_local=("${mymake[@]}")
 			fi
 			;;
 		*)
@@ -337,7 +339,7 @@ perl-module_src_compile() {
 			|| die "Compilation failed"
 	elif [[ -f Makefile ]] ; then
 		set -- \
-			OTHERLDFLAGS="${LDFLAGS}" \
+			OTHERLDFLAGS="${LDFLAGS-}" \
 			"${mymake_local[@]}"
 		emake "$@"
 	fi
@@ -374,9 +376,9 @@ perl-module_src_test() {
 
 	local my_test_control
 	local my_test_verbose
-	local my_test_makeopts
+	local -a my_test_makeopts=()
 
-	[[ -n "${DIST_TEST_OVERRIDE}" ]] && ewarn "DIST_TEST_OVERRIDE is set to ${DIST_TEST_OVERRIDE}"
+	[[ -n ${DIST_TEST_OVERRIDE-} ]] && ewarn "DIST_TEST_OVERRIDE is set to ${DIST_TEST_OVERRIDE}"
 	my_test_control=${DIST_TEST_OVERRIDE:-${DIST_TEST:-do parallel}}
 
 	if ! has 'do' ${my_test_control} && ! has 'parallel' ${my_test_control} ; then
@@ -385,7 +387,7 @@ perl-module_src_test() {
 	fi
 
 	if has 'do' ${my_test_control} && ! has 'parallel' ${my_test_control} ; then
-		my_test_makeopts="-j1"
+		my_test_makeopts=(-j1)
 	fi
 
 	if has verbose ${my_test_control} ; then
@@ -415,7 +417,7 @@ perl-module_src_test() {
 		7)
 			;;
 		*)
-			if has 'tests' ${DIST_WIKI} ; then
+			if has 'tests' ${DIST_WIKI-} ; then
 				ewarn "This package may require additional dependencies and/or preparation steps for"
 				ewarn "comprehensive testing. For details, see:"
 				ewarn "$(perl_get_wikiurl_tests)"
@@ -427,7 +429,7 @@ perl-module_src_test() {
 	if [[ -f Build ]] ; then
 		./Build test verbose=${my_test_verbose} || die "test failed"
 	elif [[ -f Makefile ]] ; then
-		emake ${my_test_makeopts} test TEST_VERBOSE=${my_test_verbose}
+		emake "${my_test_makeopts[@]}" test TEST_VERBOSE=${my_test_verbose}
 	fi
 }
 
@@ -453,10 +455,11 @@ perl-module_src_install() {
 			dev-perl|perl-core) mytargets="pure_install" ;;
 			*)                  mytargets="install" ;;
 		esac
+		local myinst_local=()
 		if [[ $(declare -p myinst 2>&-) != "declare -a myinst="* ]]; then
-			local myinst_local=(${myinst})
+			[[ -n ${myinst-} ]] && myinst_local=(${myinst})
 		else
-			local myinst_local=("${myinst[@]}")
+			myinst_local=("${myinst[@]}")
 		fi
 		emake DESTDIR="${D}" "${myinst_local[@]}" ${mytargets}
 	fi
@@ -481,7 +484,7 @@ perl-module_src_install() {
 		7)
 			;;
 		*)
-			if has 'features' ${DIST_WIKI} ; then
+			if has 'features' ${DIST_WIKI-} ; then
 				DISABLE_AUTOFORMATTING=yes
 				DOC_CONTENTS="This package may require additional dependencies and/or preparation steps for\n"
 				DOC_CONTENTS+="some optional features. For details, see\n"

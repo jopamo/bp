@@ -29,7 +29,7 @@ case ${EAPI:-0} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_MULTIPROCESSING_ECLASS} ]]; then
+if [[ -z ${_MULTIPROCESSING_ECLASS:-} ]]; then
 _MULTIPROCESSING_ECLASS=1
 
 # @FUNCTION: get_nproc
@@ -39,7 +39,7 @@ _MULTIPROCESSING_ECLASS=1
 # If the value can not be determined, prints the provided fallback
 # instead. If no fallback is provided, defaults to 1.
 get_nproc() {
-	local nproc
+	local nproc=""
 
 	# GNU
 	if type -P nproc &>/dev/null; then
@@ -69,7 +69,7 @@ get_nproc() {
 # @DESCRIPTION:
 # Returns ${MAKEOPTS} ${GNUMAKEFLAGS} ${MAKEFLAGS}.
 _get_all_makeopts() {
-	echo "${MAKEOPTS} ${GNUMAKEFLAGS} ${MAKEFLAGS}"
+	printf '%s %s %s\n' "${MAKEOPTS-}" "${GNUMAKEFLAGS-}" "${MAKEFLAGS-}"
 }
 
 # @FUNCTION: get_makeopts_jobs

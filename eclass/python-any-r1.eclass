@@ -43,12 +43,12 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_PYTHON_ANY_R1_ECLASS} ]]; then
+if [[ -z ${_PYTHON_ANY_R1_ECLASS-} ]]; then
 _PYTHON_ANY_R1_ECLASS=1
 
-if [[ ${_PYTHON_R1_ECLASS} ]]; then
+if [[ ${_PYTHON_R1_ECLASS-} ]]; then
 	die 'python-any-r1.eclass can not be used with python-r1.eclass.'
-elif [[ ${_PYTHON_SINGLE_R1_ECLASS} ]]; then
+elif [[ ${_PYTHON_SINGLE_R1_ECLASS-} ]]; then
 	die 'python-any-r1.eclass can not be used with python-single-r1.eclass.'
 fi
 
@@ -173,7 +173,7 @@ inherit python-utils-r1
 # It is set to a dummy value to catch ebuilds mistakenly using it.
 
 _python_any_set_globals() {
-	local deps i PYTHON_PKG_DEP
+	local deps= i PYTHON_PKG_DEP
 
 	_python_set_impls
 
@@ -252,7 +252,7 @@ unset -f _python_any_set_globals
 python_gen_any_dep() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	local depstr=${1}
+	local depstr=${1-}
 	[[ ${depstr} ]] || die "No dependency string provided"
 
 	local i PYTHON_PKG_DEP out=
@@ -280,7 +280,7 @@ python_setup() {
 	_python_sanity_checks
 
 	# support developer override
-	if [[ ${PYTHON_COMPAT_OVERRIDE} ]]; then
+	if [[ ${PYTHON_COMPAT_OVERRIDE-} ]]; then
 		local impls=( ${PYTHON_COMPAT_OVERRIDE} )
 		[[ ${#impls[@]} -eq 1 ]] || die "PYTHON_COMPAT_OVERRIDE must name exactly one implementation for python-any-r1"
 
@@ -298,7 +298,8 @@ python_setup() {
 	fi
 
 	# first, try ${EPYTHON}... maybe it's good enough for us.
-	local epython_impl=${EPYTHON/./_}
+	local epython_impl=${EPYTHON-}
+	epython_impl=${epython_impl/./_}
 	if [[ ${epython_impl} ]]; then
 		if ! has "${epython_impl}" "${_PYTHON_SUPPORTED_IMPLS[@]}"; then
 			if ! has "${epython_impl}" "${_PYTHON_ALL_IMPLS[@]}"; then
@@ -345,7 +346,9 @@ python_setup() {
 python-any-r1_pkg_setup() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	[[ ${MERGE_TYPE} != binary ]] && python_setup
+	if [[ ${MERGE_TYPE-} != binary ]]; then
+		python_setup
+	fi
 }
 
 fi

@@ -13,7 +13,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_PKGCONFIG_SANITY_ECLASS} ]] ; then
+if [[ -z ${_PKGCONFIG_SANITY_ECLASS:-} ]] ; then
 _PKGCONFIG_SANITY_ECLASS=1
 
 : "${PC_ALLOW:=}"
@@ -47,10 +47,10 @@ _pc-find-files() {
 	local -a found=()
 
 	if [[ ${#} -eq 0 ]]; then
-		if [[ -d ${ED}/usr ]]; then
+		if [[ -n ${ED-} && -d ${ED}/usr ]]; then
 			mapfile -d '' -t files < <(find -H "${ED}/usr" -type f -path '*/pkgconfig/*.pc' -print0)
 		fi
-		echo "${files[@]}"
+		[[ ${#files[@]} -gt 0 ]] && printf '%s\0' "${files[@]}"
 		return
 	fi
 
@@ -67,16 +67,16 @@ _pc-find-files() {
 		fi
 	done
 
-	echo "${files[@]}"
+	[[ ${#files[@]} -gt 0 ]] && printf '%s\0' "${files[@]}"
 }
 
 _pc-has-build-leak() {
 	local file=$1
 	grep -Eq '/var/tmp/|/tmp/portage/' "${file}" && return 0
-	[[ -n ${WORKDIR} ]] && grep -Fq "${WORKDIR}" "${file}" && return 0
-	[[ -n ${S} ]] && grep -Fq "${S}" "${file}" && return 0
-	[[ -n ${D} ]] && grep -Fq "${D}" "${file}" && return 0
-	[[ -n ${ED} ]] && grep -Fq "${ED}" "${file}" && return 0
+	[[ -n ${WORKDIR-} ]] && grep -Fq "${WORKDIR}" "${file}" && return 0
+	[[ -n ${S-} ]] && grep -Fq "${S}" "${file}" && return 0
+	[[ -n ${D-} ]] && grep -Fq "${D}" "${file}" && return 0
+	[[ -n ${ED-} ]] && grep -Fq "${ED}" "${file}" && return 0
 	return 1
 }
 
@@ -103,6 +103,7 @@ _pc-run-static-check() {
 	module=${module%.pc}
 
 	command -v pkg-config >/dev/null || return 0
+	[[ -n ${ED-} ]] || return 0
 
 	local libdir=
 	local d
@@ -129,13 +130,18 @@ _pc-run-static-check() {
 # @DESCRIPTION:
 # Scan pkg-config files for leak and policy violations
 pc-validate() {
-	local -a files=( $(_pc-find-files "$@") )
+	local -a files=()
+	mapfile -d '' -t files < <(_pc-find-files "$@")
 	[[ ${#files[@]} -gt 0 ]] || return 0
 
 	local -i failures=0
 	local file rel libs libs_private requires_private libs_count
 	for file in "${files[@]}" ; do
-		rel=${file#${ED}}
+		if [[ -n ${ED-} ]]; then
+			rel=${file#${ED}}
+		else
+			rel=${file}
+		fi
 
 		if _pc-has-build-leak "${file}" && ! _pc-rule-allowed buildpath "${rel}"; then
 			eerror "pc: build path leak in ${rel}"
@@ -189,16 +195,17 @@ _pc-fix-known-path() {
 # @DESCRIPTION:
 # Apply safe in-place cleanups to installed .pc files
 pc-fixup() {
-	local -a files=( $(_pc-find-files "$@") )
+	local -a files=()
+	mapfile -d '' -t files < <(_pc-find-files "$@")
 	[[ ${#files[@]} -gt 0 ]] || return
 
 	local file
 	for file in "${files[@]}" ; do
 		_pc-fix-generic-leaks "${file}"
-		_pc-fix-known-path "${file}" "${WORKDIR}"
-		_pc-fix-known-path "${file}" "${S}"
-		_pc-fix-known-path "${file}" "${D}"
-		_pc-fix-known-path "${file}" "${ED}"
+		_pc-fix-known-path "${file}" "${WORKDIR-}"
+		_pc-fix-known-path "${file}" "${S-}"
+		_pc-fix-known-path "${file}" "${D-}"
+		_pc-fix-known-path "${file}" "${ED-}"
 
 		if [[ ${PC_FIX_NORMALIZE} == 1 ]]; then
 			sed -i -E 's/[[:space:]]+/ /g; s/[[:space:]]+$//' "${file}" || die "pc: failed to normalize ${file}"

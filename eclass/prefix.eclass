@@ -17,7 +17,7 @@ case ${EAPI:-0} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_PREFIX_ECLASS} ]]; then
+if [[ -z ${_PREFIX_ECLASS:-} ]]; then
 _PREFIX_ECLASS=1
 
 # @ECLASS_VARIABLE: EPREFIX
@@ -81,16 +81,23 @@ eprefixify() {
 hprefixify() {
 	use prefix || return 0
 
+	local PREFIX_EXTRA_REGEX='' PREFIX_LINE_MATCH='' PREFIX_QUOTE_CHAR=''
 	local xl=() x
 	while [[ $# -gt 0 ]]; do
 		case $1 in
-			-e) local PREFIX_EXTRA_REGEX="$2"
+			-e)
+				[[ $# -ge 2 ]] || die "-e expects an argument"
+				PREFIX_EXTRA_REGEX=$2
 				shift
 				;;
-			-w) local PREFIX_LINE_MATCH="$2"
+			-w)
+				[[ $# -ge 2 ]] || die "-w expects an argument"
+				PREFIX_LINE_MATCH=$2
 				shift
 				;;
-			-q) local PREFIX_QUOTE_CHAR="${EPREFIX:+$2}"
+			-q)
+				[[ $# -ge 2 ]] || die "-q expects an argument"
+				PREFIX_QUOTE_CHAR="${EPREFIX:+$2}"
 				shift
 				;;
 			*)
@@ -128,9 +135,11 @@ hprefixify() {
 # doexe "$(prefixify_ro "${FILESDIR}"/fix_libtool_files.sh)"
 # epatch "$(prefixify_ro "${FILESDIR}"/${PN}-4.0.2-path.patch)"
 prefixify_ro() {
+	[[ $# -ge 1 ]] || die "a file operand is required"
+
 	if [[ -e $1 ]] ; then
 		local f=${1##*/}
-		cp "$1" "${T}" || die "failed to copy file"
+		cp -- "$1" "${T}" || die "failed to copy file"
 		local x="${T}"/${f}
 		# redirect to stderr because stdout is used to
 		# return the prefixified file.

@@ -11,7 +11,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_QA_ELF_ECLASS} ]] ; then
+if [[ -z ${_QA_ELF_ECLASS:-} ]] ; then
 _QA_ELF_ECLASS=1
 
 inherit qa-report elf-qa

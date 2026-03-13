@@ -12,7 +12,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_REBAR_UTILS_ECLASS} ]]; then
+if [[ -z ${_REBAR_UTILS_ECLASS:-} ]]; then
 _REBAR_UTILS_ECLASS=1
 
 inherit emoji
@@ -20,8 +20,7 @@ inherit emoji
 # @ECLASS_VARIABLE: REBAR_APP_SRC
 # @DESCRIPTION:
 # Path to the .app.src file relative to ${S}.
-# Defaults to "src/${PN}.app.src".
-: "${REBAR_APP_SRC:=src/${PN}.app.src}"
+# Defaults to "src/${PN}.app.src" when rebar_set_vsn runs.
 
 # @FUNCTION: get_erl_libs
 # @DESCRIPTION:
@@ -36,6 +35,8 @@ get_erl_libs() {
 # @DESCRIPTION:
 # Finds a single matching Erlang dep in libdir, returns error if ambiguous or missing.
 _rebar_find_dep() {
+	[[ $# -eq 1 ]] || die "${FUNCNAME} takes exactly one argument: <pkg_name>"
+
 	local pn="${1}"
 	local p
 	local result
@@ -58,6 +59,8 @@ _rebar_find_dep() {
 # @DESCRIPTION:
 # Disable coverage analysis in the given rebar config file (default: rebar.config).
 rebar_disable_coverage() {
+	[[ $# -le 1 ]] || die "${FUNCNAME} takes at most one argument: [rebar_config]"
+
 	local rebar_config="${1:-rebar.config}"
 	sed -e 's/{cover_enabled, true}/{cover_enabled, false}/' \
 		-i "${rebar_config}" \
@@ -69,6 +72,9 @@ rebar_disable_coverage() {
 # @DESCRIPTION:
 # Fix include paths in rebar config to point to system installed headers.
 rebar_fix_include_path() {
+	[[ $# -ge 1 && $# -le 2 ]] \
+		|| die "${FUNCNAME} takes one or two arguments: <project_name> [rebar_config]"
+
 	local pn="${1}"
 	local rebar_config="${2:-rebar.config}"
 	local erl_libs="${EPREFIX}$(get_erl_libs)"
@@ -95,6 +101,8 @@ rebar_fix_include_path() {
 # @DESCRIPTION:
 # Remove dependencies from rebar config to avoid rebar trying to download them.
 rebar_remove_deps() {
+	[[ $# -le 1 ]] || die "${FUNCNAME} takes at most one argument: [rebar_config]"
+
 	local rebar_config="${1:-rebar.config}"
 
 	mkdir -p "${S}/deps" && :>"${S}/deps/.got" && :>"${S}/deps/.built" || die
@@ -112,12 +120,21 @@ rebar_remove_deps() {
 # @FUNCTION: rebar_set_vsn
 # @USAGE: [version]
 # @DESCRIPTION:
-# Set the version in the app.src file. Defaults to PV without revision.
+# Set the version in the app.src file. Defaults to ${PV%_*}.
 rebar_set_vsn() {
+	[[ $# -le 1 ]] || die "${FUNCNAME} takes at most one argument: [version]"
+
 	local version="${1:-${PV%_*}}"
+	local app_src="${REBAR_APP_SRC-}"
+
+	if [[ -z ${app_src} ]]; then
+		[[ -n ${PN-} ]] || die "${FUNCNAME}: REBAR_APP_SRC is unset and PN is unavailable"
+		app_src="src/${PN}.app.src"
+	fi
+
 	sed -e "s/vsn, git/vsn, \"${version}\"/" \
-		-i "${S}/${REBAR_APP_SRC}" \
-		|| die "failed to set version in src/${PN}.app.src"
+		-i "${S}/${app_src}" \
+		|| die "failed to set version in ${app_src}"
 }
 
 fi

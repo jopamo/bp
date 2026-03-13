@@ -13,7 +13,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_BINUTILS_SANITIZER_ECLASS} ]] ; then
+if [[ -z ${_BINUTILS_SANITIZER_ECLASS:-} ]] ; then
 _BINUTILS_SANITIZER_ECLASS=1
 
 inherit toolchain-funcs

@@ -12,40 +12,21 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_REBAR_ECLASS} ]]; then
+if [[ -z ${_REBAR_ECLASS:-} ]]; then
 _REBAR_ECLASS=1
 
 inherit rebar-utils
 
-RDEPEND="app-lang/erlang:="
-DEPEND="${RDEPEND}"
-BDEPEND="
+RDEPEND+="
+	app-lang/erlang:=
+"
+DEPEND+="
+	app-lang/erlang:=
+"
+BDEPEND+="
 	app-dev/rebar
 	app-core/gawk
 "
-
-# @FUNCTION: _rebar_find_dep
-# @INTERNAL
-# @USAGE: <pkg_name>
-# @DESCRIPTION:
-# Finds a single matching Erlang dep in libdir, returns error if ambiguous or missing.
-_rebar_find_dep() {
-	local pn="${1}"
-	local p
-	local result
-
-	pushd "${EPREFIX}$(get_erl_libs)" >/dev/null || return 1
-	for p in ${pn} ${pn}-*; do
-		if [[ -d ${p} ]]; then
-			[[ ${result} ]] && return 2
-			result="${p}"
-		fi
-	done
-	popd >/dev/null || die
-
-	[[ ${result} ]] || return 1
-	echo "${result}"
-}
 
 # @FUNCTION: erebar
 # @USAGE: <targets>
@@ -85,12 +66,20 @@ rebar_src_test() {
 
 rebar_src_install() {
 	local bin
+	local -a bins
 	local dest="$(get_erl_libs)/${P}"
 
 	insinto "${dest}"
 	doins -r ebin
 	[[ -d include ]] && doins -r include
-	[[ -d bin ]] && for bin in bin/*; do dobin "$bin"; done
+	if [[ -d bin ]]; then
+		bins=( bin/* )
+		if [[ -e ${bins[0]} ]]; then
+			for bin in "${bins[@]}"; do
+				dobin "${bin}"
+			done
+		fi
+	fi
 
 	if [[ -d priv ]]; then
 		cp -pR priv "${ED}${dest}/" || die "failed to install priv/"
@@ -102,4 +91,4 @@ rebar_src_install() {
 
 fi
 
-EXPORT_FUNCTIONS src_prepare src_compile src_test src_install
+EXPORT_FUNCTIONS src_prepare src_configure src_compile src_test src_install

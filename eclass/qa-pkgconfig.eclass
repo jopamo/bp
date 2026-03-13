@@ -11,7 +11,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_QA_PKGCONFIG_ECLASS} ]] ; then
+if [[ -z ${_QA_PKGCONFIG_ECLASS:-} ]] ; then
 _QA_PKGCONFIG_ECLASS=1
 
 inherit qa-report pkgconfig-sanity
@@ -65,8 +65,18 @@ _qa-pkgconfig-expand() {
 
 _qa-pkgconfig-path-exists() {
 	local path=$1
+	local root
 
-	[[ -e ${ED%/}${path} ]] && return 0
+	if [[ -n ${ED-} ]] && [[ -e ${ED%/}${path} ]]; then
+		return 0
+	fi
+
+	if declare -p QA_DISCOVER_ROOTS >/dev/null 2>&1; then
+		for root in "${QA_DISCOVER_ROOTS[@]}"; do
+			[[ -e ${root%/}${path} ]] && return 0
+		done
+	fi
+
 	[[ -e ${path} ]] && return 0
 	return 1
 }

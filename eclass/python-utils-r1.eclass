@@ -24,7 +24,7 @@ PYTHON_COMPAT=( python3_13 python3_14 )
 # metadata/install-qa-check.d/60python-pyc
 # See bug #704286, bug #781878
 
-if [[ -z ${_PYTHON_UTILS_R1_ECLASS} ]]; then
+if [[ -z ${_PYTHON_UTILS_R1_ECLASS-} ]]; then
 _PYTHON_UTILS_R1_ECLASS=1
 
 case ${EAPI} in
@@ -132,7 +132,7 @@ _python_set_impls() {
 	fi
 
 	local obsolete=()
-	if [[ ! ${PYTHON_COMPAT_NO_STRICT} ]]; then
+	if [[ ! ${PYTHON_COMPAT_NO_STRICT-} ]]; then
 		for i in "${PYTHON_COMPAT[@]}"; do
 			# check for incorrect implementations
 			# we're using pattern matching as an optimization
@@ -304,13 +304,13 @@ _python_export() {
 
 	local impl var
 
-	case "${1}" in
+	case "${1-}" in
 		python*|jython*|pypy|pypy3*)
 			impl=${1/_/.}
 			shift
 			;;
 		*)
-			impl=${EPYTHON}
+			impl=${EPYTHON-}
 			if [[ -z ${impl} ]]; then
 				die "_python_export called without a python implementation and EPYTHON is unset"
 			fi
@@ -595,9 +595,10 @@ python_get_scriptdir() {
 python_optimize() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	[[ ${EPYTHON} ]] || die 'No Python implementation set (EPYTHON is null).'
+	[[ ${EPYTHON-} ]] || die 'No Python implementation set (EPYTHON is null).'
 
-	local PYTHON=${PYTHON}
+	local PYTHON=${PYTHON-}
+	local image_root=${D-}
 	[[ ${PYTHON} ]] || _python_export PYTHON
 	[[ -x ${PYTHON} ]] || die "PYTHON (${PYTHON}) is not executable"
 
@@ -610,8 +611,8 @@ python_optimize() {
 			# 2) skip paths which do not exist
 			#    (python2.6 complains about them verbosely)
 
-			if [[ ${f} == /* && -d ${D}${f} ]]; then
-				set -- "${D}${f}" "${@}"
+			if [[ ${f} == /* && -d ${image_root}${f} ]]; then
+				set -- "${image_root}${f}" "${@}"
 			fi
 		done < <(
 			"${PYTHON}" - <<-EOF || die
@@ -626,11 +627,11 @@ python_optimize() {
 	local jobs=$(makeopts_jobs)
 	local d
 	for d; do
-		einfo "Optimize Python modules for ${instpath}"
+		einfo "Optimize Python modules for ${d#${image_root}}"
 		# NB: '-s' makes the path relative, so we need '-p /' to make it
 		# absolute again; https://github.com/python/cpython/issues/133503
 		"${PYTHON}" -m compileall -j "${jobs}" -o 0 -o 1 -o 2 \
-			--hardlink-dupes -q -f -s "${D}" -p / "${d}"
+			--hardlink-dupes -q -f -s "${image_root}" -p / "${d}"
 	done
 }
 
@@ -654,6 +655,7 @@ python_optimize() {
 python_scriptinto() {
 	debug-print-function ${FUNCNAME} "$@"
 
+	[[ ${#} -eq 1 ]] || die "${FUNCNAME} takes 1 arg: <new-path>"
 	_PYTHON_SCRIPTROOT=${1}
 }
 
@@ -668,7 +670,7 @@ python_scriptinto() {
 python_doexe() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	[[ ${EBUILD_PHASE} != install ]] &&
+	[[ ${EBUILD_PHASE-} != install ]] &&
 		die "${FUNCNAME} can only be used in src_install"
 
 	local f
@@ -689,9 +691,9 @@ python_doexe() {
 python_newexe() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	[[ ${EBUILD_PHASE} != install ]] &&
+	[[ ${EBUILD_PHASE-} != install ]] &&
 		die "${FUNCNAME} can only be used in src_install"
-	[[ ${EPYTHON} ]] || die 'No Python implementation set (EPYTHON is null).'
+	[[ ${EPYTHON-} ]] || die 'No Python implementation set (EPYTHON is null).'
 	[[ ${#} -eq 2 ]] || die "Usage: ${FUNCNAME} <path> <new-name>"
 
 	local wrapd=${_PYTHON_SCRIPTROOT:-/usr/bin}
@@ -714,7 +716,7 @@ python_newexe() {
 	"${dosym}" -r /usr/lib/python-exec/python-exec2 "${wrapd}/${newfn}"
 
 	# don't use this at home, just call python_doscript() instead
-	if [[ ${_PYTHON_REWRITE_SHEBANG} ]]; then
+	if [[ ${_PYTHON_REWRITE_SHEBANG-} ]]; then
 		python_fix_shebang -q "${ED}${d}/${newfn}"
 	fi
 }
@@ -738,7 +740,7 @@ python_newexe() {
 python_doscript() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	[[ ${EBUILD_PHASE} != install ]] &&
+	[[ ${EBUILD_PHASE-} != install ]] &&
 		die "${FUNCNAME} can only be used in src_install"
 
 	local _PYTHON_REWRITE_SHEBANG=1
@@ -765,7 +767,7 @@ python_doscript() {
 python_newscript() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	[[ ${EBUILD_PHASE} != install ]] &&
+	[[ ${EBUILD_PHASE-} != install ]] &&
 		die "${FUNCNAME} can only be used in src_install"
 
 	local _PYTHON_REWRITE_SHEBANG=1
@@ -803,6 +805,7 @@ python_newscript() {
 python_moduleinto() {
 	debug-print-function ${FUNCNAME} "$@"
 
+	[[ ${#} -eq 1 ]] || die "${FUNCNAME} takes 1 arg: <new-path>"
 	_PYTHON_MODULEROOT=${1}
 }
 
@@ -828,26 +831,28 @@ python_moduleinto() {
 python_domodule() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	[[ ${EPYTHON} ]] || die 'No Python implementation set (EPYTHON is null).'
+	[[ ${EPYTHON-} ]] || die 'No Python implementation set (EPYTHON is null).'
 
 	local d
-	if [[ ${_PYTHON_MODULEROOT} == /* ]]; then
+	if [[ ${_PYTHON_MODULEROOT-} == /* ]]; then
 		# absolute path
 		d=${_PYTHON_MODULEROOT}
 	else
 		# relative to site-packages
 		local sitedir=$(python_get_sitedir)
-		d=${sitedir#${EPREFIX}}/${_PYTHON_MODULEROOT//.//}
+		local moduleroot=${_PYTHON_MODULEROOT-}
+		moduleroot=${moduleroot//.//}
+		d=${sitedir#${EPREFIX}}/${moduleroot}
 	fi
 
-	if [[ ${EBUILD_PHASE} == install ]]; then
+	if [[ ${EBUILD_PHASE-} == install ]]; then
 		(
 			insopts -m 0644
 			insinto "${d}"
 			doins -r "${@}" || return ${?}
 		)
 		python_optimize "${ED}${d}"
-	elif [[ -n ${BUILD_DIR} ]]; then
+	elif [[ -n ${BUILD_DIR-} ]]; then
 		local dest=${BUILD_DIR}/install${EPREFIX}/${d}
 		mkdir -p "${dest}" || die
 		cp -pR "${@}" "${dest}/" || die
@@ -876,9 +881,9 @@ python_domodule() {
 python_doheader() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	[[ ${EBUILD_PHASE} != install ]] &&
+	[[ ${EBUILD_PHASE-} != install ]] &&
 		die "${FUNCNAME} can only be used in src_install"
-	[[ ${EPYTHON} ]] || die 'No Python implementation set (EPYTHON is null).'
+	[[ ${EPYTHON-} ]] || die 'No Python implementation set (EPYTHON is null).'
 
 	local includedir=$(python_get_includedir)
 	local d=${includedir#${ESYSROOT}}
@@ -908,8 +913,12 @@ python_doheader() {
 _python_wrapper_setup() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	local workdir=${1:-${T}/${EPYTHON}}
-	local impl=${2:-${EPYTHON}}
+	local workdir=${1-}
+	local impl=${2-${EPYTHON-}}
+
+	if [[ ! ${workdir} && ${T-} && ${EPYTHON-} ]]; then
+		workdir=${T}/${EPYTHON}
+	fi
 
 	[[ ${workdir} ]] || die "${FUNCNAME}: no workdir specified."
 	[[ ${impl} ]] || die "${FUNCNAME}: no impl nor EPYTHON specified."
@@ -977,11 +986,14 @@ _python_wrapper_setup() {
 	# Now, set the environment.
 	# But note that ${workdir} may be shared with something else,
 	# and thus already on top of PATH.
-	if [[ ${PATH##:*} != ${workdir}/bin ]]; then
-		PATH=${workdir}/bin${PATH:+:${PATH}}
+	local current_path=${PATH-}
+	if [[ ${current_path%%:*} != ${workdir}/bin ]]; then
+		PATH=${workdir}/bin${current_path:+:${current_path}}
 	fi
-	if [[ ${PKG_CONFIG_PATH##:*} != ${workdir}/pkgconfig ]]; then
-		PKG_CONFIG_PATH=${workdir}/pkgconfig${PKG_CONFIG_PATH:+:${PKG_CONFIG_PATH}}
+	local current_pkg_config_path=${PKG_CONFIG_PATH-}
+	if [[ ${current_pkg_config_path%%:*} != ${workdir}/pkgconfig ]]
+	then
+		PKG_CONFIG_PATH=${workdir}/pkgconfig${current_pkg_config_path:+:${current_pkg_config_path}}
 	fi
 	export PATH PKG_CONFIG_PATH
 }
@@ -1010,10 +1022,11 @@ _python_wrapper_setup() {
 python_fix_shebang() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	[[ ${EPYTHON} ]] || die "${FUNCNAME}: EPYTHON unset (pkg_setup not called?)"
+	[[ ${EPYTHON-} ]] || die "${FUNCNAME}: EPYTHON unset (pkg_setup not called?)"
 
-	local force quiet
-	while [[ ${@} ]]; do
+	local image_root=${D-}
+	local force= quiet=
+	while [[ ${#} -gt 0 ]]; do
 		case "${1}" in
 			-f|--force) force=1; shift;;
 			-q|--quiet) quiet=1; shift;;
@@ -1022,11 +1035,11 @@ python_fix_shebang() {
 		esac
 	done
 
-	[[ ${1} ]] || die "${FUNCNAME}: no paths given"
+	[[ ${1-} ]] || die "${FUNCNAME}: no paths given"
 
 	local path f
 	for path; do
-		local any_fixed is_recursive
+		local any_fixed= is_recursive=
 
 		[[ -d ${path} ]] && is_recursive=1
 
@@ -1077,17 +1090,17 @@ python_fix_shebang() {
 			fi
 
 			if [[ ! ${quiet} ]]; then
-				einfo "Fixing shebang in ${f#${D}}."
+				einfo "Fixing shebang in ${f#${image_root}}."
 			fi
 
 			if [[ ! ${error} ]]; then
-				debug-print "${FUNCNAME}: in file ${f#${D}}"
+				debug-print "${FUNCNAME}: in file ${f#${image_root}}"
 				debug-print "${FUNCNAME}: rewriting shebang: ${shebang}"
 				sed -i -e "1s@${from}@#!${EPREFIX}/usr/bin/${EPYTHON}@" "${f}" || die
 				any_fixed=1
 			else
 				eerror "The file has incompatible shebang:"
-				eerror "  file: ${f#${D}}"
+				eerror "  file: ${f#${image_root}}"
 				eerror "  current shebang: ${shebang}"
 				eerror "  requested impl: ${EPYTHON}"
 				die "${FUNCNAME}: conversion of incompatible shebang requested"
@@ -1095,7 +1108,7 @@ python_fix_shebang() {
 		done < <(find -H "${path}" -type f -print0 || die)
 
 		if [[ ! ${any_fixed} ]]; then
-			eerror "QA error: ${FUNCNAME}, ${path#${D}} did not match any fixable files."
+			eerror "QA error: ${FUNCNAME}, ${path#${image_root}} did not match any fixable files."
 			eerror "There are no Python files in specified directory."
 			die "${FUNCNAME} did not match any fixable files"
 		fi
@@ -1141,7 +1154,7 @@ python_export_utf8_locale() {
 			if [[ $(LC_ALL=${lang} locale charmap 2>/dev/null) == UTF-8 ]]; then
 				if _python_check_locale_sanity "${lang}"; then
 					export LC_CTYPE=${lang}
-					if [[ -n ${LC_ALL} ]]; then
+					if [[ -n ${LC_ALL-} ]]; then
 						export LC_NUMERIC=${LC_ALL}
 						export LC_TIME=${LC_ALL}
 						export LC_COLLATE=${LC_ALL}
@@ -1213,7 +1226,7 @@ build_sphinx() {
 # @DESCRIPTION:
 # Check if EPYTHON is set, die if not.
 _python_check_EPYTHON() {
-	if [[ -z ${EPYTHON} ]]; then
+	if [[ -z ${EPYTHON-} ]]; then
 		die "EPYTHON unset, invalid call context"
 	fi
 }
@@ -1227,7 +1240,7 @@ _python_check_EPYTHON() {
 _python_check_occluded_packages() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	[[ -z ${BUILD_DIR} || ! -d ${BUILD_DIR}/install ]] && return
+	[[ -z ${BUILD_DIR-} || ! -d ${BUILD_DIR}/install ]] && return
 
 	local sitedir="${BUILD_DIR}/install$(python_get_sitedir)"
 	# avoid unnecessarily checking if we are inside install dir
@@ -1264,10 +1277,10 @@ _python_check_occluded_packages() {
 				done <<<"${diff}"
 				eqawarn
 
-				if [[ ! ${_PYTHON_WARNED_OCCLUDED_PACKAGES} ]]; then
-					eqawarn "For more information on occluded packages, please see:"
-					eqawarn "https://projects.gentoo.org/python/guide/test.html#importerrors-for-c-extensions"
-					_PYTHON_WARNED_OCCLUDED_PACKAGES=1
+					if [[ ! ${_PYTHON_WARNED_OCCLUDED_PACKAGES-} ]]; then
+						eqawarn "For more information on occluded packages, please see:"
+						eqawarn "https://projects.gentoo.org/python/guide/test.html#importerrors-for-c-extensions"
+						_PYTHON_WARNED_OCCLUDED_PACKAGES=1
 				fi
 			fi
 		fi
@@ -1341,7 +1354,7 @@ epytest() {
 	_python_check_occluded_packages
 
 	local color=yes
-	[[ ${NO_COLOR} ]] && color=no
+	[[ ${NO_COLOR-} ]] && color=no
 
 	local args=(
 		# verbose progress reporting and tracebacks
@@ -1369,7 +1382,7 @@ epytest() {
 		-o tmp_path_retention_policy=failed
 	)
 
-	if [[ ! ${PYTEST_DISABLE_PLUGIN_AUTOLOAD} ]]; then
+	if [[ ! ${PYTEST_DISABLE_PLUGIN_AUTOLOAD-} ]]; then
 		args+=(
 			# disable the undesirable-dependency plugins by default to
 			# trigger missing argument strips.  strip options that require
@@ -1399,8 +1412,8 @@ epytest() {
 		)
 	fi
 
-	if [[ -n ${EPYTEST_TIMEOUT} ]]; then
-		if [[ ${PYTEST_PLUGINS} != *pytest_timeout* ]]; then
+	if [[ -n ${EPYTEST_TIMEOUT-} ]]; then
+		if [[ ${PYTEST_PLUGINS-} != *pytest_timeout* ]]; then
 			args+=(
 				-p timeout
 			)
@@ -1411,10 +1424,10 @@ epytest() {
 		)
 	fi
 
-	if [[ ${EPYTEST_XDIST} ]]; then
+	if [[ ${EPYTEST_XDIST-} ]]; then
 		local jobs=${EPYTEST_JOBS:-$(makeopts_jobs)}
 		if [[ ${jobs} -gt 1 ]]; then
-			if [[ ${PYTEST_PLUGINS} != *xdist.plugin* ]]; then
+			if [[ ${PYTEST_PLUGINS-} != *xdist.plugin* ]]; then
 				args+=(
 					# explicitly enable the plugin, in case the ebuild was
 					# using PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
@@ -1430,14 +1443,25 @@ epytest() {
 		fi
 	fi
 
-	local x
-	for x in "${EPYTEST_DESELECT[@]}"; do
+	local epytest_deselect=() epytest_ignore=() x
+	if [[ -v EPYTEST_DESELECT ]]; then
+		epytest_deselect=( "${EPYTEST_DESELECT[@]}" )
+	fi
+	if [[ -v EPYTEST_IGNORE ]]; then
+		epytest_ignore=( "${EPYTEST_IGNORE[@]}" )
+	fi
+	for x in "${epytest_deselect[@]}"; do
 		args+=( --deselect "${x}" )
 	done
-	for x in "${EPYTEST_IGNORE[@]}"; do
+	for x in "${epytest_ignore[@]}"; do
 		args+=( --ignore "${x}" )
 	done
-	set -- "${EPYTHON}" -m pytest "${args[@]}" "${@}" ${EPYTEST_FLAGS}
+	local extra_flags=()
+	if [[ ${EPYTEST_FLAGS-} ]]; then
+		# Intended to allow shell-style splitting of environment overrides.
+		extra_flags=( ${EPYTEST_FLAGS} )
+	fi
+	set -- "${EPYTHON}" -m pytest "${args[@]}" "${@}" "${extra_flags[@]}"
 
 	echo "${@}" >&2
 	"${@}"
@@ -1447,7 +1471,7 @@ epytest() {
 	rm -rf .hypothesis .pytest_cache || die
 	# pytest plugins create additional .pyc files while testing
 	# see e.g. https://bugs.gentoo.org/847235
-	if [[ -n ${BUILD_DIR} && -d ${BUILD_DIR} ]]; then
+	if [[ -n ${BUILD_DIR-} && -d ${BUILD_DIR} ]]; then
 		find "${BUILD_DIR}" -name '*-pytest-*.pyc' -delete || die
 	fi
 
@@ -1518,8 +1542,9 @@ _python_run_check_deps() {
 python_has_version() {
 	debug-print-function ${FUNCNAME} "$@"
 
+	[[ ${#} -ge 1 ]] || die "${FUNCNAME} takes at least 1 package atom"
 	local root_arg=( -b )
-	case ${1} in
+	case ${1-} in
 		-b|-d|-r)
 			root_arg=( "${1}" )
 			shift
@@ -1543,7 +1568,7 @@ python_has_version() {
 _python_sanity_checks() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	[[ ${_PYTHON_SANITY_CHECKED} ]] && return
+	[[ ${_PYTHON_SANITY_CHECKED-} ]] && return
 
 	if [[ -v PYTHONPATH ]]; then
 		local x paths=()

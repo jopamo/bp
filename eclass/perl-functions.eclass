@@ -16,7 +16,7 @@
 # It provides helper functions, no phases or variable manipulation in
 # global scope.
 
-if [[ -z ${_PERL_FUNCTIONS_ECLASS} ]]; then
+if [[ -z ${_PERL_FUNCTIONS_ECLASS:-} ]]; then
 _PERL_FUNCTIONS_ECLASS=1
 
 case ${EAPI} in
@@ -154,9 +154,11 @@ perl_fix_packlist() {
 	debug-print-function ${FUNCNAME} "$@"
 
 	local packlist_temp="${T}/.gentoo_packlist_temp"
+	local f entry grep_status
+
 	find "${D}" -type f -name '.packlist' -print0 | while read -rd '' f ; do
 		if file "${f}" | grep -q -i " text" ; then
-                        einfo "Fixing packlist file /${f#${D}}"
+			einfo "Fixing packlist file /${f#${D}}"
 
 			# remove the temporary build dir path
 			sed -i -e "s:${D}/:/:g" "${f}" || die
@@ -166,13 +168,18 @@ perl_fix_packlist() {
 			mv "${packlist_temp}" "${f}" || die
 
 			# remove files that dont exist
-			cat "${f}" | while read -r entry; do
+			while IFS= read -r entry || [[ -n ${entry} ]]; do
 				if [[ ! -e ${D}/${entry} ]]; then
 					einfo "Pruning surplus packlist entry ${entry}"
-					grep -v -x -F "${entry}" "${f}" > "${packlist_temp}"
+					if grep -v -x -F -- "${entry}" "${f}" > "${packlist_temp}"; then
+						grep_status=0
+					else
+						grep_status=$?
+					fi
+					[[ ${grep_status} -eq 0 || ${grep_status} -eq 1 ]] || die
 					mv "${packlist_temp}" "${f}" || die
 				fi
-			done
+			done < "${f}"
 		fi
 	done
 }
@@ -220,6 +227,7 @@ perl_rm_files() {
 	local skipfile="${T}/.gentoo_makefile_skip"
 	local manifile="${S}/MANIFEST"
 	local manitemp="${T}/.gentoo_manifest_temp"
+	local filename grep_status oldifs
 	oldifs="$IFS"
 	IFS="\n"
 	for filename in "$@"; do
@@ -230,7 +238,12 @@ perl_rm_files() {
 	done
 	if [[ -e "${manifile}" && -e "${skipfile}" ]]; then
 		einfo "Fixing Manifest"
-		grep -v -F -f "${skipfile}" "${manifile}" > "${manitemp}"
+		if grep -v -F -f "${skipfile}" "${manifile}" > "${manitemp}"; then
+			grep_status=0
+		else
+			grep_status=$?
+		fi
+		[[ ${grep_status} -eq 0 || ${grep_status} -eq 1 ]] || die
 		mv -f -- "${manitemp}" "${manifile}"
 		rm -- "${skipfile}";
 	fi
@@ -364,7 +377,8 @@ perl_link_duallife_scripts() {
 # Dies if any of the suspect fields are found, and tell the user what needs to be unset.
 # There's a workaround, but you'll have to read the code for it.
 perl_check_env() {
-	local errored value;
+	local errored value
+	local know_what_i_am_doing=${I_KNOW_WHAT_I_AM_DOING:-}
 
 	for i in PERL_MM_OPT PERL5LIB PERL5OPT PERL_MB_OPT PERL_CORE PERLPREFIX; do
 		# Next unless match
@@ -373,7 +387,7 @@ perl_check_env() {
 		# Warn only once, and warn only when one of the bad values are set.
 		# record failure here.
 		if [[ ${errored:-0} == 0 ]]; then
-			if [[ -n ${I_KNOW_WHAT_I_AM_DOING} ]]; then
+			if [[ -n ${know_what_i_am_doing} ]]; then
 				elog "perl-module.eclass: Suspicious environment values found.";
 			else
 				eerror "perl-module.eclass: Suspicious environment values found.";
@@ -385,7 +399,7 @@ perl_check_env() {
 		value=${!i};
 
 		# Print ENV name/value pair
-		if [[ -n ${I_KNOW_WHAT_I_AM_DOING} ]]; then
+		if [[ -n ${know_what_i_am_doing} ]]; then
 			elog "    $i=\"$value\"";
 		else
 			eerror "    $i=\"$value\"";
@@ -396,7 +410,7 @@ perl_check_env() {
 	[[ ${errored:-0} == 0 ]] && return;
 
 	# Return if user knows what they're doing
-	if [[ -n ${I_KNOW_WHAT_I_AM_DOING} ]]; then
+	if [[ -n ${know_what_i_am_doing} ]]; then
 		elog "Continuing anyway, seems you know what you're doing."
 		return
 	fi
@@ -652,14 +666,15 @@ perl_domodule() {
 	local doins_opts=()
 
 	local recursive="false"
-	local target
+	local target target_prefix_arg
 	local file
 
 	while [[ $# -gt 0 ]] ; do
 		case $1 in
 			-C|--target-prefix)
-				[[ -z "${2}" || "${2:0:1}" == "-" ]] && die "${FUNCNAME}: -C|--target-prefix expects an argument, got \"$2\"!"
-				target_prefix="${2}";
+				target_prefix_arg=${2-}
+				[[ -z "${target_prefix_arg}" || "${target_prefix_arg:0:1}" == "-" ]] && die "${FUNCNAME}: -C|--target-prefix expects an argument, got \"${target_prefix_arg}\"!"
+				target_prefix="${target_prefix_arg}";
 				shift 2;;
 			-r)
 				recursive="true"
@@ -701,7 +716,7 @@ perl_domodule() {
 perl_get_wikiurl() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	if [[ -z "${1}" ]]; then
+	if [[ -z "${1-}" ]]; then
 		echo "https://wiki.gentoo.org/wiki/Project:Perl/maint-notes/${CATEGORY}/${PN}"
 	else
 		echo "https://wiki.gentoo.org/wiki/Project:Perl/maint-notes/${CATEGORY}/${PN}#${1}"

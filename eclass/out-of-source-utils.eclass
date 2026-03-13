@@ -17,7 +17,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ ! ${_OUT_OF_SOURCE_UTILS_ECLASS} ]]; then
+if [[ ! ${_OUT_OF_SOURCE_UTILS_ECLASS:-} ]]; then
 _OUT_OF_SOURCE_UTILS_ECLASS=1
 
 # @FUNCTION: run_in_build_dir
@@ -29,7 +29,7 @@ run_in_build_dir() {
 	local ret
 
 	[[ ${#} -eq 0 ]] && die "${FUNCNAME}: no command specified."
-	[[ -z ${BUILD_DIR} ]] && die "${FUNCNAME}: BUILD_DIR not set."
+	[[ -z ${BUILD_DIR:-} ]] && die "${FUNCNAME}: BUILD_DIR not set."
 
 	mkdir -p "${BUILD_DIR}" || die
 	pushd "${BUILD_DIR}" >/dev/null || die

@@ -42,12 +42,12 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_PYTHON_SINGLE_R1_ECLASS} ]]; then
+if [[ -z ${_PYTHON_SINGLE_R1_ECLASS-} ]]; then
 _PYTHON_SINGLE_R1_ECLASS=1
 
-if [[ ${_PYTHON_R1_ECLASS} ]]; then
+if [[ ${_PYTHON_R1_ECLASS-} ]]; then
 	die 'python-single-r1.eclass can not be used with python-r1.eclass.'
-elif [[ ${_PYTHON_ANY_R1_ECLASS} ]]; then
+elif [[ ${_PYTHON_ANY_R1_ECLASS-} ]]; then
 	die 'python-single-r1.eclass can not be used with python-any-r1.eclass.'
 fi
 
@@ -194,14 +194,6 @@ _python_single_set_globals() {
 
 	local flags=( "${_PYTHON_SUPPORTED_IMPLS[@]/#/python_single_target_}" )
 
-	if [[ ${#_PYTHON_SUPPORTED_IMPLS[@]} -eq 1 ]]; then
-		# if only one implementation is supported, use IUSE defaults
-		# to avoid requesting the user to enable it
-		IUSE="+${flags[0]}"
-	else
-		IUSE="${flags[*]}"
-	fi
-
 	local requse="^^ ( ${flags[*]} )"
 	local single_flags="${flags[@]/%/(-)?}"
 	local single_usedep=${single_flags// /,}
@@ -237,6 +229,20 @@ _python_single_set_globals() {
 			die "PYTHON_SINGLE_USEDEP integrity check failed"
 		fi
 	else
+		if [[ ${#_PYTHON_SUPPORTED_IMPLS[@]} -eq 1 ]]; then
+			# if only one implementation is supported, use IUSE defaults
+			# to avoid requesting the user to enable it
+			if [[ ${IUSE-} ]]; then
+				IUSE+=" +${flags[0]}"
+			else
+				IUSE="+${flags[0]}"
+			fi
+		elif [[ ${IUSE-} ]]; then
+			IUSE+=" ${flags[*]}"
+		else
+			IUSE=${flags[*]}
+		fi
+
 		PYTHON_DEPS=${deps}
 		PYTHON_REQUIRED_USE=${requse}
 		PYTHON_USEDEP='%PYTHON_USEDEP-NEEDS-TO-BE-USED-IN-PYTHON_GEN_COND_DEP%'
@@ -316,7 +322,7 @@ python_gen_cond_dep() {
 	debug-print-function ${FUNCNAME} "$@"
 
 	local impl matches=()
-
+	[[ $# -ge 1 ]] || die "No dependency string provided"
 	local dep=${1}
 	shift
 
@@ -371,9 +377,11 @@ python_gen_impl_dep() {
 
 	local impl
 	local matches=()
-
-	local PYTHON_REQ_USE=${1}
-	shift
+	local PYTHON_REQ_USE=
+	if [[ $# -ge 1 ]]; then
+		PYTHON_REQ_USE=${1}
+		shift
+	fi
 
 	_python_verify_patterns "${@}"
 	for impl in "${_PYTHON_SUPPORTED_IMPLS[@]}"; do
@@ -398,7 +406,7 @@ python_setup() {
 	unset EPYTHON
 
 	# support developer override
-	if [[ ${PYTHON_COMPAT_OVERRIDE} ]]; then
+	if [[ ${PYTHON_COMPAT_OVERRIDE-} ]]; then
 		local impls=( ${PYTHON_COMPAT_OVERRIDE} )
 		[[ ${#impls[@]} -eq 1 ]] || die "PYTHON_COMPAT_OVERRIDE must name exactly one implementation for python-single-r1"
 
@@ -418,7 +426,7 @@ python_setup() {
 	local impl
 	for impl in "${_PYTHON_SUPPORTED_IMPLS[@]}"; do
 		if use "python_single_target_${impl}"; then
-			if [[ ${EPYTHON} ]]; then
+			if [[ ${EPYTHON-} ]]; then
 				eerror "Your PYTHON_SINGLE_TARGET setting lists more than a single Python"
 				eerror "implementation. Please set it to just one value. If you need"
 				eerror "to override the value for a single package, please use package.env"
@@ -433,7 +441,7 @@ python_setup() {
 		fi
 	done
 
-	if [[ ! ${EPYTHON} ]]; then
+	if [[ ! ${EPYTHON-} ]]; then
 		eerror "No Python implementation selected for the build. Please set"
 		eerror "the PYTHON_SINGLE_TARGET variable in your make.conf to one"
 		eerror "of the following values:"
@@ -450,7 +458,9 @@ python_setup() {
 python-single-r1_pkg_setup() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	[[ ${MERGE_TYPE} != binary ]] && python_setup
+	if [[ ${MERGE_TYPE-} != binary ]]; then
+		python_setup
+	fi
 }
 
 fi

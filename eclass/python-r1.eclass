@@ -30,7 +30,7 @@
 # For more information, please see the Python Guide:
 # https://projects.gentoo.org/python/guide/
 
-if [[ -z ${_PYTHON_R1_ECLASS} ]]; then
+if [[ -z ${_PYTHON_R1_ECLASS-} ]]; then
 _PYTHON_R1_ECLASS=1
 
 case ${EAPI} in
@@ -38,9 +38,9 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ ${_PYTHON_SINGLE_R1_ECLASS} ]]; then
+if [[ ${_PYTHON_SINGLE_R1_ECLASS-} ]]; then
 	die 'python-r1.eclass can not be used with python-single-r1.eclass.'
-elif [[ ${_PYTHON_ANY_R1_ECLASS} ]]; then
+elif [[ ${_PYTHON_ANY_R1_ECLASS-} ]]; then
 	die 'python-r1.eclass can not be used with python-any-r1.eclass.'
 fi
 
@@ -221,7 +221,11 @@ _python_set_globals() {
 			die "PYTHON_USEDEP integrity check failed"
 		fi
 	else
-		IUSE=${flags[*]}
+		if [[ ${IUSE-} ]]; then
+			IUSE+=" ${flags[*]}"
+		else
+			IUSE=${flags[*]}
+		fi
 
 		PYTHON_DEPS=${deps}
 		PYTHON_REQUIRED_USE=${requse}
@@ -240,8 +244,8 @@ unset -f _python_set_globals
 _python_validate_useflags() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	if [[ ${PYTHON_COMPAT_OVERRIDE} ]]; then
-		if [[ ! ${_PYTHON_COMPAT_OVERRIDE_WARNED} ]]; then
+	if [[ ${PYTHON_COMPAT_OVERRIDE-} ]]; then
+		if [[ ! ${_PYTHON_COMPAT_OVERRIDE_WARNED-} ]]; then
 			ewarn "WARNING: PYTHON_COMPAT_OVERRIDE in effect. The following Python"
 			ewarn "implementations will be enabled:"
 			ewarn
@@ -365,6 +369,7 @@ python_gen_cond_dep() {
 	debug-print-function ${FUNCNAME} "$@"
 
 	local impl matches=()
+	[[ $# -ge 1 ]] || die "No dependency string provided"
 	local dep=${1}
 	shift
 
@@ -427,8 +432,11 @@ python_gen_impl_dep() {
 	debug-print-function ${FUNCNAME} "$@"
 
 	local impl matches=()
-	local PYTHON_REQ_USE=${1}
-	shift
+	local PYTHON_REQ_USE=
+	if [[ $# -ge 1 ]]; then
+		PYTHON_REQ_USE=${1}
+		shift
+	fi
 
 	_python_verify_patterns "${@}"
 	for impl in "${_PYTHON_SUPPORTED_IMPLS[@]}"; do
@@ -504,8 +512,11 @@ python_gen_impl_dep() {
 python_gen_any_dep() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	local depstr=${1}
-	shift
+	local depstr=
+	if [[ $# -ge 1 ]]; then
+		depstr=${1}
+		shift
+	fi
 
 	local i PYTHON_PKG_DEP out=
 	_python_verify_patterns "${@}"
@@ -565,7 +576,7 @@ python_copy_sources() {
 _python_obtain_impls() {
 	_python_validate_useflags
 
-	if [[ ${PYTHON_COMPAT_OVERRIDE} ]]; then
+	if [[ ${PYTHON_COMPAT_OVERRIDE-} ]]; then
 		MULTIBUILD_VARIANTS=( ${PYTHON_COMPAT_OVERRIDE} )
 		return
 	fi
@@ -589,7 +600,7 @@ _python_multibuild_wrapper() {
 	debug-print-function ${FUNCNAME} "$@"
 
 	local -x EPYTHON PYTHON
-	local -x PATH=${PATH} PKG_CONFIG_PATH=${PKG_CONFIG_PATH}
+	local -x PATH=${PATH} PKG_CONFIG_PATH=${PKG_CONFIG_PATH-}
 	local PYTHON_USEDEP="python_targets_${MULTIBUILD_VARIANT}(-)"
 	local PYTHON_SINGLE_USEDEP="python_single_target_${MULTIBUILD_VARIANT}(-)"
 	_python_export "${MULTIBUILD_VARIANT}" EPYTHON PYTHON
@@ -615,10 +626,10 @@ python_foreach_impl() {
 	debug-print-function ${FUNCNAME} "$@"
 	_python_sanity_checks
 
-	if [[ ${_DISTUTILS_R1_ECLASS} ]]; then
-		if has "${EBUILD_PHASE}" prepare configure compile test install &&
-			[[ ! ${_DISTUTILS_CALLING_FOREACH_IMPL} &&
-				! ${_DISTUTILS_FOREACH_IMPL_WARNED} ]]
+	if [[ ${_DISTUTILS_R1_ECLASS-} ]]; then
+		if has "${EBUILD_PHASE-}" prepare configure compile test install &&
+			[[ ! ${_DISTUTILS_CALLING_FOREACH_IMPL-} &&
+				! ${_DISTUTILS_FOREACH_IMPL_WARNED-} ]]
 		then
 			eqawarn "QA Notice: python_foreach_impl has been called directly while using distutils-r1."
 			eqawarn "Please redefine python_*() phase functions to meet your expectations"
@@ -707,20 +718,20 @@ python_setup() {
 	debug-print-function ${FUNCNAME} "$@"
 	_python_sanity_checks
 
-	local has_check_deps
+	local has_check_deps=
 	declare -f python_check_deps >/dev/null && has_check_deps=1
 
-	if [[ ! ${has_check_deps} ]]; then
+	if [[ ! ${has_check_deps-} ]]; then
 		_python_validate_useflags
 	fi
 
 	local pycompat=( "${PYTHON_COMPAT[@]}" )
-	if [[ ${PYTHON_COMPAT_OVERRIDE} ]]; then
+	if [[ ${PYTHON_COMPAT_OVERRIDE-} ]]; then
 		pycompat=( ${PYTHON_COMPAT_OVERRIDE} )
 	fi
 
 	# (reverse iteration -- newest impl first)
-	local found i
+	local found= i
 	_python_verify_patterns "${@}"
 	for (( i = ${#_PYTHON_SUPPORTED_IMPLS[@]} - 1; i >= 0; i-- )); do
 		local impl=${_PYTHON_SUPPORTED_IMPLS[i]}
@@ -730,7 +741,7 @@ python_setup() {
 
 		# match USE flags only if override is not in effect
 		# and python_check_deps() is not defined
-		if [[ ! ${PYTHON_COMPAT_OVERRIDE} && ! ${has_check_deps} ]]; then
+		if [[ ! ${PYTHON_COMPAT_OVERRIDE-} && ! ${has_check_deps-} ]]; then
 			use "python_targets_${impl}" || continue
 		fi
 
@@ -748,7 +759,7 @@ python_setup() {
 		break
 	done
 
-	if [[ ! ${found} ]]; then
+	if [[ ! ${found-} ]]; then
 		eerror "${FUNCNAME}: none of the enabled implementation matched the patterns."
 		eerror "  patterns: ${@-'(*)'}"
 		eerror "Likely a REQUIRED_USE constraint (possibly USE-conditional) is missing."

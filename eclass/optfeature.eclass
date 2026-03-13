@@ -12,7 +12,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_OPTFEATURE_ECLASS} ]]; then
+if [[ -z ${_OPTFEATURE_ECLASS:-} ]]; then
 _OPTFEATURE_ECLASS=1
 
 # @ECLASS_VARIABLE: _OPTFEATURE_DEFAULT_HEADER
@@ -63,7 +63,7 @@ _OPTFEATURE_DOHEADER=true
 # @CODE
 optfeature_header() {
 	debug-print-function ${FUNCNAME} "$@"
-	_OPTFEATURE_HEADER="${1}"
+	_OPTFEATURE_HEADER="${1-}"
 	_OPTFEATURE_DOHEADER=true
 }
 
@@ -92,7 +92,7 @@ optfeature() {
 	local flag=0
 	shift
 	for i; do
-		read -r -d '' -a arr <<<"${i}"
+		read -r -a arr <<<"${i}"
 		for j in "${arr[@]}"; do
 			if has_version "${j}"; then
 				flag=1
@@ -107,11 +107,11 @@ optfeature() {
 	done
 	if [[ ${flag} -eq 0 ]]; then
 		if [[ ${_OPTFEATURE_DOHEADER} == true ]]; then
-			elog ${_OPTFEATURE_HEADER:-${_OPTFEATURE_DEFAULT_HEADER}}
+			elog "${_OPTFEATURE_HEADER:-${_OPTFEATURE_DEFAULT_HEADER}}"
 			_OPTFEATURE_DOHEADER=false
 		fi
 		for i; do
-			read -r -d '' -a arr <<<"${i}"
+			read -r -a arr <<<"${i}"
 			msg=" "
 			for j in "${arr[@]}"; do
 				msg+=" ${j} and"

@@ -21,7 +21,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ ! ${_MULTIBUILD_ECLASS} ]]; then
+if [[ ! ${_MULTIBUILD_ECLASS:-} ]]; then
 _MULTIBUILD_ECLASS=1
 
 # @ECLASS_VARIABLE: MULTIBUILD_VARIANTS
@@ -97,7 +97,7 @@ _MULTIBUILD_ECLASS=1
 multibuild_foreach_variant() {
 	debug-print-function ${FUNCNAME} "${@}"
 
-	[[ ${MULTIBUILD_VARIANTS} ]] \
+	[[ ${MULTIBUILD_VARIANTS[*]-} ]] \
 		|| die "MULTIBUILD_VARIANTS need to be set"
 
 	local bdir=${BUILD_DIR:-${S}}
@@ -118,7 +118,7 @@ multibuild_foreach_variant() {
 		_multibuild_run() {
 			# find the first non-private command
 			local i=1
-			while [[ ${!i} == _* ]]; do
+			while [[ ${i} -le ${#} && ${!i} == _* ]]; do
 				(( i += 1 ))
 			done
 
@@ -148,7 +148,7 @@ multibuild_foreach_variant() {
 multibuild_for_best_variant() {
 	debug-print-function ${FUNCNAME} "${@}"
 
-	[[ ${MULTIBUILD_VARIANTS} ]] \
+	[[ ${MULTIBUILD_VARIANTS[*]-} ]] \
 		|| die "MULTIBUILD_VARIANTS need to be set"
 
 	local MULTIBUILD_VARIANTS=( "${MULTIBUILD_VARIANTS[-1]}" )

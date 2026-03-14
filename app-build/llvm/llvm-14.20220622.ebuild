@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="release/$(ver_cut 1).x"
 
-inherit cmake flag-o-matic toolchain-funcs
+inherit cmake flag-o-matic qa-policy toolchain-funcs
 
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
@@ -13,17 +13,24 @@ SNAPSHOT=f28c006a5895fc0e329fe15fead81e37457cb1d1
 SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
 
-LICENSE="UoI-NCSA rc BSD public-domain"
+LICENSE="Apache-2.0-with-LLVM-exceptions UoI-NCSA rc BSD public-domain"
 SLOT=0
 KEYWORDS="amd64 arm64"
 
 IUSE="amdgpu assertions bootstrap bpf debug libcxx libcxxabi libfuzzer nvptx orc sanitizers static_analyzer -sysclang syslibcxxabi test wasm xcore"
 
-DEPEND="
-    lib-core/libffi
-    lib-core/libxml2
-    virtual/curses
+COMMON_DEPEND="
+	app-net/curl
+	lib-core/libedit
+	lib-core/libffi
+	lib-core/libxml2
+	lib-core/zlib
+	virtual/curses
 "
+
+RDEPEND="${COMMON_DEPEND}"
+DEPEND="${COMMON_DEPEND}"
+BDEPEND="app-lang/python"
 
 RESTRICT="!test? ( test )"
 
@@ -148,7 +155,6 @@ src_configure() {
 		-DLLVM_ENABLE_SPHINX=OFF
 		-DLLVM_ENABLE_TERMINFO=ON
 		-DLLVM_ENABLE_ZLIB=ON
-		-DLLVM_ENABLE_ZSTD=FORCE_ON
 		-DLLVM_HOST_TRIPLE=${TUPLE}
 		-DLLVM_INCLUDE_BENCHMARKS=OFF
 		-DLLVM_INCLUDE_DOCS=OFF
@@ -236,6 +242,10 @@ src_configure() {
     fi
 
     use debug || local -x CPPFLAGS="${CPPFLAGS} -DNDEBUG"
+
+    local QA_POLICY_LTO_FLAVOR=fat+strip
+    qa-policy-configure
+
     cmake_src_configure
 }
 
@@ -247,22 +257,22 @@ src_test() {
 src_install() {
     cmake_src_install
 
-    dosym -r "/usr/lib/${TUPLE}/libunwind.a" "/usr/lib/libunwind.a"
+	dosym -r "/usr/lib/${TUPLE}/libunwind.a" "/usr/lib/libunwind.a"
 	dosym -r "/usr/lib/${TUPLE}/libunwind.so" "/usr/lib/libunwind.so"
-	dosym -r "/usr/lib/${TUPLE}/libunwind.so.1" "/usr/lib/libunwind.so"
-	dosym -r "/usr/lib/${TUPLE}/libunwind.so.1.0" "/usr/lib/libunwind.so.1"
+	dosym -r "/usr/lib/${TUPLE}/libunwind.so.1" "/usr/lib/libunwind.so.1"
 
 	if use libcxx; then
 		dosym -r "/usr/lib/${TUPLE}/libc++.a" "/usr/lib/libc++.a"
 		dosym -r "/usr/lib/${TUPLE}/libc++.so" "/usr/lib/libc++.so"
-		dosym -r "/usr/lib/${TUPLE}/libc++.so.1" "/usr/lib/libc++.so"
-		dosym -r "/usr/lib/${TUPLE}/libc++.so.1.0" "/usr/lib/libc++.so.1"
+		dosym -r "/usr/lib/${TUPLE}/libc++.so.1" "/usr/lib/libc++.so.1"
+		dosym -r "/usr/lib/${TUPLE}/libc++experimental.a" "/usr/lib/libc++experimental.a"
+	fi
+
+	if use libcxxabi; then
 		dosym -r "/usr/lib/${TUPLE}/libc++abi.a" "/usr/lib/libc++abi.a"
 		dosym -r "/usr/lib/${TUPLE}/libc++abi.so" "/usr/lib/libc++abi.so"
-		dosym -r "/usr/lib/${TUPLE}/libc++abi.so.1" "/usr/lib/libc++abi.so"
-		dosym -r "/usr/lib/${TUPLE}/libc++abi.so.1.0" "/usr/lib/libc++abi.so.1"
-		dosym -r "/usr/lib/${TUPLE}/libc++experimental.a" "/usr/lib/libc++experimental.a"
-    fi
+		dosym -r "/usr/lib/${TUPLE}/libc++abi.so.1" "/usr/lib/libc++abi.so.1"
+	fi
 
     if use syslibcxxabi; then
 		dosym -r "/usr/bin/clang" "/usr/bin/cc"
@@ -272,4 +282,6 @@ src_install() {
 		dosym -r "/usr/bin/clang++" "/usr/bin/cxx"
 		dosym -r "/usr/bin/ld.lld" "/usr/bin/ld"
     fi
+
+	qa-policy-install
 }

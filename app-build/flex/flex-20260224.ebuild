@@ -40,7 +40,9 @@ src_prepare() {
 
 src_configure() {
 	qa-policy-configure
-	ECONF_SOURCE=${S} econf $(use_enable static-libs static)
+	ECONF_SOURCE=${S} econf \
+		--disable-nls \
+		$(use_enable static-libs static)
 }
 
 src_test() {

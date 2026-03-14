@@ -59,6 +59,8 @@ BDEPEND="
 	)
 "
 
+PATCHES=( "${FILESDIR}"/gdb-17.20260304-flex-yyunput.patch )
+
 GDB_BUILD_DIR="${WORKDIR}/${P}-build"
 
 _gdb_install_server_manpage() {

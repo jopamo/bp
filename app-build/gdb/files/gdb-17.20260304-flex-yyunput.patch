@@ -1,0 +1,14 @@
+--- a/gdb/ada-lex.l
++++ b/gdb/ada-lex.l
+@@ -758,7 +758,11 @@
+ typedef void (*dummy_function) ();
+ dummy_function ada_flex_use[] = 
+ { 
++#ifdef yyunput
++  (dummy_function) yyunput_r
++#else
+   (dummy_function) yyunput
++#endif
+ };
+ 
+ DIAGNOSTIC_POP

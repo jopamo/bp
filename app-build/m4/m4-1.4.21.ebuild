@@ -2,17 +2,21 @@
 
 EAPI=8
 
+inherit qa-policy
+
 DESCRIPTION="GNU macro processor"
 HOMEPAGE="https://www.gnu.org/software/m4/m4.html"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 
-LICENSE="GPL-3"
+LICENSE="GPL-3+ FDL-1.3+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="app-compression/xz-utils"
+BDEPEND="app-build/gettext"
 
 src_configure() {
+	qa-policy-configure
+
 	# Disable automagic dependency over libsigsegv; see bug #278026
 	export ac_cv_libsigsegv=no
 
@@ -22,4 +26,10 @@ src_configure() {
 src_test() {
 	[[ -d /none ]] && die "m4 tests will fail with /none/" #244396
 	emake check
+}
+
+src_install() {
+	default
+
+	qa-policy-install
 }

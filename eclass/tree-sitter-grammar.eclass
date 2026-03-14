@@ -11,7 +11,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_TREE_SITTER_GRAMMAR_ECLASS} ]]; then
+if [[ -z ${_TREE_SITTER_GRAMMAR_ECLASS:-} ]]; then
 _TREE_SITTER_GRAMMAR_ECLASS=1
 
 inherit emoji edo toolchain-funcs
@@ -91,20 +91,21 @@ _tree-sitter-grammar_legacy_compile() {
 	cd "${S}/src" || { log_err "Failed to cd to src"; die; }
 	tc-export CC CXX
 
-	CFLAGS="${CFLAGS} -fPIC -I. -Itree_sitter"
-	CXXFLAGS="${CXXFLAGS} -fPIC -I. -Itree_sitter"
+	local cflags=( ${CFLAGS-} -fPIC -I. -Itree_sitter )
+	local cxxflags=( ${CXXFLAGS-} -fPIC -I. -Itree_sitter )
+	local ldflags=( ${LDFLAGS-} )
 
 	local objects=( parser.o )
 	[[ -f scanner.c || -f scanner.cc ]] && objects+=( scanner.o )
-	emake "${objects[@]}"
+	emake CFLAGS="${cflags[*]}" CXXFLAGS="${cxxflags[*]}" "${objects[@]}"
 
-	local link="$(tc-getCC) ${CFLAGS}"
-	[[ -f scanner.cc ]] && link="$(tc-getCXX) ${CXXFLAGS}"
+	local link=( "$(tc-getCC)" "${cflags[@]}" )
+	[[ -f scanner.cc ]] && link=( "$(tc-getCXX)" "${cxxflags[@]}" )
 
 	local soname=lib${PN}$(get_libname $(_get_tsg_abi_ver))
 	local soname_args="-Wl,--soname=${soname}"
 
-	edo ${link} ${LDFLAGS} -shared *.o "${soname_args}" -o "${WORKDIR}/${soname}"
+	edo "${link[@]}" "${ldflags[@]}" -shared "${objects[@]}" "${soname_args}" -o "${WORKDIR}/${soname}"
 }
 
 tree-sitter-grammar_src_compile() {

@@ -11,14 +11,33 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_SGML_CATALOG_R1_ECLASS} ]]; then
+if [[ -z ${_SGML_CATALOG_R1_ECLASS:-} ]]; then
 _SGML_CATALOG_R1_ECLASS=1
 
 inherit emoji
 
 if [[ ${CATEGORY}/${PN} != app-tex/sgml-common ]]; then
-	RDEPEND=">=app-tex/sgml-common-0.6.3-r7"
+	RDEPEND+=" >=app-tex/sgml-common-0.6.3-r7"
 fi
+
+# @FUNCTION: _sgml-catalog-r1_target_path
+# @INTERNAL
+# @DESCRIPTION:
+# Convert an installed file path under ${ROOT} to the path that should be
+# recorded inside the generated SGML catalog.
+_sgml-catalog-r1_target_path() {
+	local path=$1
+	local root=${ROOT:-}
+	local relative
+
+	root=${root%/}
+	relative=${path#${root}}
+	while [[ ${relative} == /* ]]; do
+		relative=${relative#/}
+	done
+
+	printf '/%s\n' "${relative}"
+}
 
 # @FUNCTION: sgml-catalog-r1_update_catalog
 # @DESCRIPTION:
@@ -27,11 +46,17 @@ sgml-catalog-r1_update_catalog() {
 	local shopt_save=$(shopt -p nullglob)
 	shopt -s nullglob
 	local cats=( "${EROOT}"/etc/sgml/*.cat )
+	local cat
+	local catalog_paths=()
 	${shopt_save}
 
 	if [[ ${#cats[@]} -gt 0 ]]; then
+		for cat in "${cats[@]}"; do
+			catalog_paths+=( "$(_sgml-catalog-r1_target_path "${cat}")" )
+		done
+
 		log_info "Updating ${EROOT}/etc/sgml/catalog"
-		printf 'CATALOG "%s"\n' "${cats[@]#${ROOT}}" > "${T}/catalog" &&
+		printf 'CATALOG "%s"\n' "${catalog_paths[@]}" > "${T}/catalog" &&
 		mv "${T}/catalog" "${EROOT}/etc/sgml/catalog" || log_err "Failed to update catalog"
 		log_ok "SGML catalog updated"
 	else

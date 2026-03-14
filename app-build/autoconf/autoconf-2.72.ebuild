@@ -6,14 +6,23 @@ DESCRIPTION="Generates configure scripts to automatically configure source code"
 HOMEPAGE="https://www.gnu.org/software/autoconf/autoconf.html"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 
-LICENSE="GPL-3"
+LICENSE="GPL-3+"
 SLOT="$(ver_cut 1).$(ver_cut 2)"
 KEYWORDS="amd64 arm64"
 
-DEPEND="
+COMMON_DEPEND="
 	app-build/m4
 	app-lang/perl
 "
+RDEPEND="
+	${COMMON_DEPEND}
+	app-build/gnuconfig
+"
+BDEPEND="${COMMON_DEPEND}"
+
+src_test() {
+	emake check
+}
 
 src_install() {
 	default

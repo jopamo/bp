@@ -2,19 +2,26 @@
 
 EAPI=8
 
-inherit flag-o-matic
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="A general-purpose (yacc-compatible) parser generator"
 HOMEPAGE="https://www.gnu.org/software/bison/"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 
-LICENSE="GPL-2"
+LICENSE="GPL-3+ FDL-1.3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static test"
+IUSE="static-libs test"
 
+RDEPEND="
+	app-build/gettext
+	app-build/m4
+"
 DEPEND="
+	app-build/gettext
+"
+BDEPEND="
 	app-build/m4
 	test? ( app-lang/perl )
 "
@@ -26,11 +33,19 @@ src_prepare() {
 }
 
 src_configure() {
-	use static && append-ldflags -static
+	qa-policy-configure
+	use static-libs && append-ldflags -static
 	default
+}
+
+src_test() {
+	use test || return 0
+
+	emake check
 }
 
 src_install() {
 	default
-	rm -f "${ED}"/usr/lib/liby.a || die
+	use static-libs || rm -f "${ED}"/usr/lib/liby.a || die
+	qa-policy-install
 }

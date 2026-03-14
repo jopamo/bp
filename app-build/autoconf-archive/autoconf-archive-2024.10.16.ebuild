@@ -7,6 +7,6 @@ HOMEPAGE="https://www.gnu.org/software/autoconf-archive/"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 
 
-LICENSE="GPL-3"
+LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="amd64 arm64"

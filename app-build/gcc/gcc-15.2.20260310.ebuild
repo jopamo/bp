@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="releases/gcc-$(ver_cut 1)"
 
-inherit flag-o-matic
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="an optimizing compiler produced by the GNU Project supporting various programming languages"
 HOMEPAGE="https://gcc.gnu.org/"
@@ -12,7 +12,7 @@ SNAPSHOT=1aa340f8fbc0fe93883a5227f816904ae1d44365
 SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/gcc-${SNAPSHOT}
 
-LICENSE="GPL-3"
+LICENSE="GPL-3+ FDL-1.3 HPND SGI-B-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -38,7 +38,12 @@ DEPEND="
 	isl? ( lib-core/isl )
 	zstd? ( app-compression/zstd )
 "
-BDEPEND="app-build/make"
+BDEPEND="
+	app-build/bison
+	app-build/flex
+	app-build/make
+	app-build/texinfo
+"
 
 src_prepare() {
 	eapply "${FILESDIR}"/$(ver_cut 1)/*.patch
@@ -97,6 +102,8 @@ src_configure() {
 	if use elibc_glibc && [[ ${CHOST} == x86_64-* || ${CHOST} == i?86-* ]]; then
 		cet_opt="--enable-cet"
 	fi
+
+	qa-policy-configure
 
 	local myconf=(
 		--prefix="${EPREFIX}"/usr
@@ -195,6 +202,7 @@ EOF
 
 	dosym -r /usr/bin/gcc /usr/bin/cc
 
-	find "${ED}"/usr/libexec/gcc -type f \
-		\( -name 'libc?1*.la' -o -name 'libcp1plugin.la' \) -delete
+	find "${ED}" -type f -name '*.la' -delete || die
+
+	qa-policy-install
 }

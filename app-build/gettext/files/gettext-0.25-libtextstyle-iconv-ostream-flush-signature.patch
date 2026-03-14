@@ -1,0 +1,26 @@
+diff --git a/libtextstyle/lib/iconv-ostream.c b/libtextstyle/lib/iconv-ostream.c
+index 5f10dc2..c1195ba 100644
+--- a/libtextstyle/lib/iconv-ostream.c
++++ b/libtextstyle/lib/iconv-ostream.c
+@@ -245,7 +245,7 @@ iconv_ostream__write_mem (iconv_ostream_t stream, const void *data, size_t len)
+ }
+ 
+ static void
+-iconv_ostream__flush (iconv_ostream_t stream)
++iconv_ostream__flush (iconv_ostream_t stream, ostream_flush_scope_t scope)
+ {
+   abort ();
+ }
+diff --git a/libtextstyle/lib/iconv-ostream.oo.c b/libtextstyle/lib/iconv-ostream.oo.c
+index 248d4ac..53abdd7 100644
+--- a/libtextstyle/lib/iconv-ostream.oo.c
++++ b/libtextstyle/lib/iconv-ostream.oo.c
+@@ -245,7 +245,7 @@ iconv_ostream::write_mem (iconv_ostream_t stream, const void *data, size_t len)
+ }
+ 
+ static void
+-iconv_ostream::flush (iconv_ostream_t stream)
++iconv_ostream::flush (iconv_ostream_t stream, ostream_flush_scope_t scope)
+ {
+   abort ();
+ }

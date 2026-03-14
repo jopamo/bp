@@ -14,11 +14,20 @@ KEYWORDS="amd64 arm64"
 
 IUSE="acl keep-la openmp static-libs"
 
-DEPEND="acl? ( app-core/acl )
-		app-compression/xz-utils
-		lib-core/libxml2"
+COMMON_DEPEND="
+	acl? ( app-core/acl )
+	lib-core/libxml2
+"
+DEPEND="${COMMON_DEPEND}"
+RDEPEND="
+	${COMMON_DEPEND}
+	app-compression/xz-utils
+"
+BDEPEND="app-compression/xz-utils"
 
-RDEPEND="lib-core/expat"
+PATCHES=(
+	"${FILESDIR}/${P}-libtextstyle-iconv-ostream-flush-signature.patch"
+)
 
 src_prepare() {
 	append-flags -lm
@@ -60,30 +69,33 @@ src_compile() {
 }
 
 src_install() {
-    emake DESTDIR="${ED}" install
+	emake DESTDIR="${ED}" install
 
-    dosym -r /usr/bin/msgfmt /usr/bin/gmsgfmt
-    dobin gettext-tools/misc/gettextize
+	dosym -r /usr/bin/msgfmt /usr/bin/gmsgfmt
+	dobin gettext-tools/misc/gettextize
 
-    rm -f "${ED}/usr/share/locale/locale.alias" \
-          "${ED}/usr/lib/charset.alias" \
-          "${ED}/usr/include/libintl.h"
+	rm -f "${ED}/usr/share/locale/locale.alias" \
+		"${ED}/usr/lib/charset.alias" \
+		"${ED}/usr/include/libintl.h"
 
 	mkdir -p "${ED}/usr/share/gettext-${PV}" || die
-    cp -rp "${ED}"/usr/share/gettext/* "${ED}/usr/share/gettext-${PV}"/ || die
-    rm -rf "${ED}/usr/share/gettext"
-    mv "${ED}/usr/share/gettext-${PV}" "${ED}/usr/share/gettext" || die
-    dosym -r /usr/share/gettext /usr/share/gettext-"${PV}"
-    rm "${ED}/usr/share/gettext/its/gtkbuilder.its" || die
+	cp -rp "${ED}"/usr/share/gettext/* "${ED}/usr/share/gettext-${PV}"/ || die
+	rm -rf "${ED}/usr/share/gettext"
+	mv "${ED}/usr/share/gettext-${PV}" "${ED}/usr/share/gettext" || die
+	dosym -r /usr/share/gettext /usr/share/gettext-"${PV}"
+	rm "${ED}/usr/share/gettext/its/gtkbuilder.its" || die
 
 	dodir /usr/share/aclocal
-    for x in build-to-host gettext host-cpu-c-abi iconv intlmacosx lib-ld lib-link lib-prefix nls po progtest ; do
+	for x in build-to-host gettext host-cpu-c-abi iconv intlmacosx lib-ld lib-link lib-prefix nls po progtest ; do
 		dosym -r /usr/share/gettext/m4/${x}.m4 /usr/share/aclocal/${x}.m4
 	done
 
-	qa-policy-install
+	if ! use keep-la; then
+		find "${ED}" -type f -name '*.la' -delete || die
+	fi
+
 	cleanup_install
 	dedup_symlink "${ED}"
+	qa-policy-install
 }
-
 

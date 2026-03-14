@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=9fcb2a4d093ee059717c18c85263f2f768dd3fa5
 
-inherit autotools flag-o-matic qa-policy
+inherit autotools qa-policy
 
 DESCRIPTION="The Fast Lexical Analyzer"
 HOMEPAGE="https://github.com/westes/flex"
@@ -12,19 +12,22 @@ S=${WORKDIR}/flex-${SNAPSHOT}
 
 LICENSE="FLEX"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="static-libs test"
 
-DEPEND="
+RDEPEND="
 	app-build/m4
-	app-compression/xz-utils
+"
+BDEPEND="
+	app-build/gettext
+	app-build/m4
 	test? ( app-build/bison )
 "
 
 src_prepare() {
-	eautoreconf
 	default
+	eautoreconf
 
 	if ! use test ; then
 		sed -i \
@@ -35,12 +38,12 @@ src_prepare() {
 
 src_configure() {
 	qa-policy-configure
-	use static-libs && append-ldflags -static
-
-	ECONF_SOURCE=${S} econf --disable-shared
+	ECONF_SOURCE=${S} econf $(use_enable static-libs static)
 }
 
 src_test() {
+	use test || return 0
+
 	emake check
 }
 
@@ -48,5 +51,4 @@ src_install() {
 	default
 	dosym -r /usr/bin/flex /usr/bin/lex
 	qa-policy-install
-	use static-libs || find "${ED}" -name '*.a' -delete
 }

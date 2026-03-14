@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="releases/gcc-$(ver_cut 1)"
 
-inherit flag-o-matic
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="an optimizing compiler produced by the GNU Project supporting various programming languages"
 HOMEPAGE="https://gcc.gnu.org/"
@@ -16,9 +16,20 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug dlang go-bootstrap isl libgomp sanitize zstd"
+IUSE="debug dlang fortran go-bootstrap isl libgomp sanitize zstd"
 
 RESTRICT="strip"
+
+QA_CONFIG_IMPL_DECL_SKIP=(
+	# libgfortran configure probe in this snapshot uses fpsetmask without a
+	# prototype; this known probe triggers a QA implicit-declaration notice.
+	fpsetmask
+)
+
+QA_GCC_WARN_SKIP=(
+	# GCC bootstrap on this snapshot emits this known vec.h false positive.
+	".*gcc/vec\\.h:347:10: warning: 'free' called on unallocated object 'dest_bbs' \\[-Wfree-nonheap-object\\]"
+)
 
 DEPEND="
 	lib-core/mpc
@@ -31,39 +42,63 @@ BDEPEND="app-build/make"
 
 src_prepare() {
 	eapply "${FILESDIR}"/$(ver_cut 1)/*.patch
+
+	# libgo assumes off64_t exists everywhere, replace with off_t to unbreak musl / non-glibc
 	sed -i 's/typedef off64_t libgo_off_t_type;/typedef off_t libgo_off_t_type;/g' libgo/sysinfo.c || die
 
+	# make sure no CET codegen flags leak in from env or profiles
+	# -fcf-protection and -mshstk/-mcet are x86-only and should not appear on arm64
+	filter-flags \
+		-fcf-protection=* \
+		-mshstk \
+		-mcet \
+		-Wformat \
+		-Wformat-security \
+		-Werror=format-security \
+		-ftrivial-auto-var-init=* \
+		-fPIE \
+		-fpie \
+		-pipe
+
 	filter-gcc
-    filter-lto
+	filter-lto
 
 	use debug || filter-flags -g
 
 	default
 
-	# Do not run fixincludes
-	sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
+	# do not run fixincludes (we don't want headers rewritten)
+	sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in || die
 
-	# install x86_64 libraries in /lib
-	sed -i '/m64=/s/lib64/lib/' gcc/config/i386/t-linux64
+	# do not use lib64
+	sed -i '/^m64=/s/lib64/lib/' gcc/config/i386/t-linux64 || die
 
 	# configure tests for header files using "$CPP $CPPFLAGS"
-	sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure
+	# add -O2 so they don't get confused by stripped -pipe etc
+	sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure || die
 
-	mkdir -p gcc-build
+	mkdir -p gcc-build || die
 }
 
 src_configure() {
 	local GCC_LANG="c,c++,lto"
+	use dlang        && GCC_LANG+=",d"
+	use go-bootstrap && GCC_LANG+=",go"
+	use fortran      && GCC_LANG+=",fortran"
 
-	use dlang   && GCC_LANG+=",d"
-	use go-bootstrap  && GCC_LANG+=",go"
-
-	cd gcc-build
+	cd gcc-build || die
 
 	# using -pipe causes spurious test-suite failures
-	# http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48565
 	CFLAGS=${CFLAGS/-pipe/}
 	CXXFLAGS=${CXXFLAGS/-pipe/}
+
+	# GCC's --enable-cet toggles x86-only -fcf-protection for target runtime libs.
+	local cet_opt="--disable-cet"
+	if use elibc_glibc && [[ ${CHOST} == x86_64-* || ${CHOST} == i?86-* ]]; then
+		cet_opt="--enable-cet"
+	fi
+
+	qa-policy-configure
 
 	local myconf=(
 		--prefix="${EPREFIX}"/usr
@@ -71,6 +106,7 @@ src_configure() {
 		--sbindir="${EPREFIX}"/usr/bin
 		--libdir="${EPREFIX}"/usr/lib
 		--libexecdir="${EPREFIX}"/usr/libexec
+		--with-slibdir="${EPREFIX}"/usr/lib
 		--sysconfdir="${EPREFIX}"/etc
 		--localstatedir="${EPREFIX}"/var
 		--includedir="${EPREFIX}"/usr/include
@@ -106,7 +142,7 @@ src_configure() {
 		--with-linker-hash-style=gnu
 		--with-pkgversion="1g4 Linux GCC ${PV}"
 		--with-system-zlib
-		$(use_enable elibc_glibc cet)
+		${cet_opt}
 		$(use_enable elibc_glibc symvers)
 		$(use_enable elibc_glibc libvtv)
 		$(use_enable elibc_glibc vtable-verify)
@@ -122,34 +158,27 @@ src_configure() {
 }
 
 src_compile() {
-	cd gcc-build
+	cd gcc-build || die
 
-	emake -O STAGE1_CFLAGS="$CFLAGS" \
-		BOOT_CFLAGS="$CFLAGS" \
-		BOOT_LDFLAGS="$LDFLAGS" \
-		LDFLAGS_FOR_TARGET="$LDFLAGS" \
+	emake -O \
+		STAGE1_CFLAGS="${CFLAGS}" \
+		BOOT_CFLAGS="${CFLAGS}" \
+		BOOT_LDFLAGS="${LDFLAGS}" \
+		LDFLAGS_FOR_TARGET="${LDFLAGS}" \
 		bootstrap
-
-	make -O STAGE1_CFLAGS="$CFLAGS" \
-		BOOT_CFLAGS="$CFLAGS" \
-		BOOT_LDFLAGS="$LDFLAGS" \
-		LDFLAGS_FOR_TARGET="$LDFLAGS" \
-		all-gcc
-
 }
 
 src_install() {
-	cd gcc-build
-	emake DESTDIR="${ED}" install
-
-	#cleanup
-	find "${ED}" -name libcc1.la -delete
-	find "${ED}" -name libcc1plugin.la -delete
-	find "${ED}" -name libcp1plugin.la -delete
+	cd gcc-build || die
+	emake DESTDIR="${ED}" install || die
 
 	rm -rf "${ED}"/usr/bin
 	rm -rf "${ED}"/usr/include
 	rm -rf "${ED}"/usr/share
 	rm -rf "${ED}"/usr/lib/gcc
 	rm -rf "${ED}"/usr/libexec
+
+	find "${ED}" -type f -name '*.la' -delete || die
+
+	qa-policy-install
 }

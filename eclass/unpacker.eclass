@@ -16,7 +16,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_UNPACKER_ECLASS} ]]; then
+if [[ -z ${_UNPACKER_ECLASS:-} ]]; then
 _UNPACKER_ECLASS=1
 
 inherit multiprocessing toolchain-funcs
@@ -43,14 +43,19 @@ inherit multiprocessing toolchain-funcs
 #   3. literal path if already absolute/relative
 # Returns the resolved path on stdout or exits 1 if not found.
 find_unpackable_file() {
-	local f=$1
+	local requested=${1-}
+	local f=${requested}
 
 	case ${f} in
-		""      ) f=${DISTDIR}/${A} ;;
+		"")
+			if [[ -n ${DISTDIR:-} && -n ${A:-} ]]; then
+				f=${DISTDIR}/${A}
+			fi
+			;;
 		./*     ) ;;                               # relative path as-is
 		/*      ) ;;                               # absolute path as-is
 		*       )
-			if [[ -e ${DISTDIR}/${f} ]]; then
+			if [[ -n ${DISTDIR:-} && -e ${DISTDIR}/${f} ]]; then
 				f=${DISTDIR}/${f}
 			elif [[ -e ${PWD}/${f} ]]; then
 				f=${PWD}/${f}
@@ -58,7 +63,7 @@ find_unpackable_file() {
 			;;
 	esac
 
-	[[ -e ${f} ]] || die "unpacker.eclass: cannot locate '${1}'"
+	[[ -n ${f} && -e ${f} ]] || die "unpacker.eclass: cannot locate '${requested}'"
 	printf '%s\n' "${f}"
 }
 
@@ -74,59 +79,60 @@ unpack_banner() {
 #   <sizeof(off_t)> must match the builder’s architecture (usually 4 or 8).
 # ---------------------------------------------------------------------------
 unpack_pdv() {
-    local src sizeoff_t
-    src=$(find_unpackable_file "$1") || die "cannot locate '$1'"
-    sizeoff_t=$2
-    [[ -n ${sizeoff_t} ]] || die "missing <size of off_t> parameter"
+	[[ $# -ge 1 ]] || die "usage: ${FUNCNAME} <file> <sizeof(off_t)>"
 
-    unpack_banner "${src}"
+	local src sizeoff_t=${2-}
+	src=$(find_unpackable_file "$1") || die "cannot locate '$1'"
+	[[ -n ${sizeoff_t} ]] || die "missing <size of off_t> parameter"
 
-    # ── read offsets ───────────────────────────────────────────────
-    local metaskip tailskip
-    metaskip=$(tail -c "${sizeoff_t}" -- "${src}" | hexdump -e '1/4 "%u"')
-    tailskip=$(tail -c "$(( sizeoff_t * 2 ))" -- "${src}" |
-               head -c  "${sizeoff_t}"          |
-               hexdump -e '1/4 "%u"')
+	unpack_banner "${src}"
 
-    # ── capture metadata (for debugging only) ──────────────────────
-    local metafile="${T}/${FUNCNAME}.meta"
-    tail -c "+$(( metaskip + 1 ))" -- "${src}" > "${metafile}"
+	# ── read offsets ───────────────────────────────────────────────
+	local metaskip tailskip
+	metaskip=$(tail -c "${sizeoff_t}" -- "${src}" | hexdump -e '1/4 "%u"')
+	tailskip=$(tail -c "$(( sizeoff_t * 2 ))" -- "${src}" |
+		head -c  "${sizeoff_t}"          |
+		hexdump -e '1/4 "%u"')
 
-    # ── discover payload name from metadata ────────────────────────
-    local datafile
-    datafile=$(strings "${metafile}" | head -n1)
-    datafile=$(basename "${datafile:-pdv.payload}")
+	# ── capture metadata (for debugging only) ──────────────────────
+	local metafile="${T}/${FUNCNAME}.meta"
+	tail -c "+$(( metaskip + 1 ))" -- "${src}" > "${metafile}"
 
-    # ── peek at first 512 B of payload to decide actions ───────────
-    local tmp="${T}/${FUNCNAME}.$$"
-    tail -c "+$(( tailskip + 1 ))" -- "${src}" | head -c 512 > "${tmp}"
+	# ── discover payload name from metadata ────────────────────────
+	local datafile
+	datafile=$(strings "${metafile}" | head -n1)
+	datafile=$(basename "${datafile:-pdv.payload}")
 
-    local fileinfo is_compressed is_tar
-    fileinfo=$(file -S -b "${tmp}")
-    [[ ${fileinfo} == compress* ]] && is_compressed=1 || is_compressed=0
-    [[ ${fileinfo} == "POSIX tar"* ]] && is_tar=1 || is_tar=0
-    rm -f "${tmp}"
+	# ── peek at first 512 B of payload to decide actions ───────────
+	local tmp="${T}/${FUNCNAME}.$$"
+	tail -c "+$(( tailskip + 1 ))" -- "${src}" | head -c 512 > "${tmp}"
 
-    # ── extract ------------------------------------------------------------------
-    # helper: stream payload (meta-start .. meta-end) to stdout
-    _pdv_payload() {
-        tail -c "+$(( tailskip + 1 ))" -- "${src}" 2>/dev/null |
-        head -c "$(( metaskip - tailskip ))"
-    }
+	local fileinfo is_compressed is_tar
+	fileinfo=$(file -S -b "${tmp}")
+	[[ ${fileinfo} == compress* ]] && is_compressed=1 || is_compressed=0
+	[[ ${fileinfo} == "POSIX tar"* ]] && is_tar=1 || is_tar=0
+	rm -f "${tmp}"
 
-    if (( is_compressed )); then
-        if (( is_tar )); then
-            _pdv_payload | tar -xzf -               || die "tar-z extraction failed"
-        else
-            _pdv_payload | gzip -dc > "${datafile}" || die "gzip extraction failed"
-        fi
-    else
-        if (( is_tar )); then
-            _pdv_payload | tar --no-same-owner -xf - || die "tar extraction failed"
-        else
-            _pdv_payload > "${datafile}"             || die "payload write failed"
-        fi
-    fi
+	# ── extract ------------------------------------------------------------------
+	# helper: stream payload (meta-start .. meta-end) to stdout
+	_pdv_payload() {
+		tail -c "+$(( tailskip + 1 ))" -- "${src}" 2>/dev/null |
+		head -c "$(( metaskip - tailskip ))"
+	}
+
+	if (( is_compressed )); then
+		if (( is_tar )); then
+			_pdv_payload | tar -xzf -               || die "tar-z extraction failed"
+		else
+			_pdv_payload | gzip -dc > "${datafile}" || die "gzip extraction failed"
+		fi
+	else
+		if (( is_tar )); then
+			_pdv_payload | tar --no-same-owner -xf - || die "tar extraction failed"
+		else
+			_pdv_payload > "${datafile}"             || die "payload write failed"
+		fi
+	fi
 }
 
 # @FUNCTION: unpack_makeself
@@ -145,60 +151,60 @@ unpack_pdv() {
 # The archive is unpacked into ${PWD}.  Unknown Makeself versions trigger a
 # clear error asking for a bug report.
 unpack_makeself() {
-    local src_input=${1:-${A}} src skip=$2 exe=$3 ver
-    src=$(find_unpackable_file "${src_input}") \
-        || die "cannot locate '${src_input}'"
+	local src_input=${1:-${A-}} src skip=${2-} exe=${3-tail} ver
+	src=$(find_unpackable_file "${src_input}") \
+		|| die "cannot locate '${src_input}'"
 
-    unpack_banner "${src}"
+	unpack_banner "${src}"
 
-    if [[ -z ${skip} ]]; then
-        ver=$(grep -am1 '#.*Makeself' "${src}" | awk '{print $NF}')
-        exe=tail
-        case ${ver} in
-            1.5.*|1.6.0-nv*)  skip=$(grep -a ^skip= "${src}" | cut -d= -f2) ;;
-            2.0|2.0.1)        skip=$(grep -a $'\t'tail "${src}" | awk '{print $2}' | cut -c2-) ;;
-            2.1.1)            skip=$(grep -a ^offset= "${src}" | awk '{print $2}' | cut -c2-); ((skip++)) ;;
-            2.1.2)            skip=$(grep -am1 ^offset= "${src}" | awk '{print $3}');           ((skip++)) ;;
-            2.1.3)            skip=$(grep -a   ^offset= "${src}" | awk '{print $3}');           ((skip++)) ;;
-            2.1.[456]|2.2.0|2.3.0|2.4.0)
-                              skip=$(grep -a 'offset=.*head.*wc' "${src}" | awk '{print $3}' | head -n1)
-                              skip=$(head -n "${skip}" "${src}" | wc -c)
-                              exe=dd ;;
-            2.4.5)
-                              skip=$(sed -n '/^skip=/{s:skip="\(.*\)":\1:p;q}' "${src}")
-                              skip=$(head -n "${skip}" "${src}" | wc -c)
-                              exe=dd ;;
-            *) die "unpack_makeself: unsupported version '${ver}' in ${src##*/}" ;;
-        esac
-    fi
+	if [[ -z ${skip} ]]; then
+		ver=$(grep -am1 '#.*Makeself' "${src}" | awk '{print $NF}')
+		exe=tail
+		case ${ver} in
+			1.5.*|1.6.0-nv*)  skip=$(grep -a ^skip= "${src}" | cut -d= -f2) ;;
+			2.0|2.0.1)        skip=$(grep -a $'\t'tail "${src}" | awk '{print $2}' | cut -c2-) ;;
+			2.1.1)            skip=$(grep -a ^offset= "${src}" | awk '{print $2}' | cut -c2-); ((skip++)) ;;
+			2.1.2)            skip=$(grep -am1 ^offset= "${src}" | awk '{print $3}');           ((skip++)) ;;
+			2.1.3)            skip=$(grep -a   ^offset= "${src}" | awk '{print $3}');           ((skip++)) ;;
+			2.1.[456]|2.2.0|2.3.0|2.4.0)
+				skip=$(grep -a 'offset=.*head.*wc' "${src}" | awk '{print $3}' | head -n1)
+				skip=$(head -n "${skip}" "${src}" | wc -c)
+				exe=dd ;;
+			2.4.5)
+				skip=$(sed -n '/^skip=/{s:skip="\(.*\)":\1:p;q}' "${src}")
+				skip=$(head -n "${skip}" "${src}" | wc -c)
+				exe=dd ;;
+			*) die "unpack_makeself: unsupported version '${ver}' in ${src##*/}" ;;
+		esac
+	fi
 
-    case ${exe} in
-        tail) exe=( tail -n "+${skip}" -- "${src}" ) ;;
-        dd)   exe=( dd ibs="${skip}" skip=1 if="${src}" ) ;;
-        *)    die "unpack_makeself: invalid extractor '${exe}'" ;;
-    esac
+	case ${exe} in
+		tail) exe=( tail -n "+${skip}" -- "${src}" ) ;;
+		dd)   exe=( dd ibs="${skip}" skip=1 if="${src}" ) ;;
+		*)    die "unpack_makeself: invalid extractor '${exe}'" ;;
+	esac
 
-    local probe tmp="${T}/${FUNCNAME}.$$" decomp filetype suffix
-    "${exe[@]}" 2>/dev/null | head -c 512 > "${tmp}"
-    filetype=$(file -S -b "${tmp}") || die
-    rm -f "${tmp}"
+	local probe tmp="${T}/${FUNCNAME}.$$" decomp filetype suffix
+	"${exe[@]}" 2>/dev/null | head -c 512 > "${tmp}"
+	filetype=$(file -S -b "${tmp}") || die
+	rm -f "${tmp}"
 
-    case ${filetype} in
-        *tar\ archive*) decomp=cat ;;
-        bzip2*)         suffix=bz2 ;;
-        gzip*)          suffix=gz  ;;
-        compress*)      suffix=z   ;;
-        XZ*)            suffix=xz  ;;
-        Zstandard*)     suffix=zst ;;
-        lzop*)          suffix=lzo ;;
-        LZ4*)           suffix=lz4 ;;
-        "ASCII text"*)  decomp='base64 -d' ;;
-        *) die "unpack_makeself: unknown payload type '${filetype}' in ${src##*/}" ;;
-    esac
+	case ${filetype} in
+		*tar\ archive*) decomp=cat ;;
+		bzip2*)         suffix=bz2 ;;
+		gzip*)          suffix=gz  ;;
+		compress*)      suffix=z   ;;
+		XZ*)            suffix=xz  ;;
+		Zstandard*)     suffix=zst ;;
+		lzop*)          suffix=lzo ;;
+		LZ4*)           suffix=lz4 ;;
+		"ASCII text"*)  decomp='base64 -d' ;;
+		*) die "unpack_makeself: unknown payload type '${filetype}' in ${src##*/}" ;;
+	esac
 
-    [[ -z ${decomp} ]] && decomp=$(_unpacker_get_decompressor ".${suffix}")
-    "${exe[@]}" | ${decomp} | tar --no-same-owner -xf - \
-        || die "unpack_makeself: extraction failed for ${src##*/}"
+	[[ -z ${decomp} ]] && decomp=$(_unpacker_get_decompressor ".${suffix}")
+	"${exe[@]}" | ${decomp} | tar --no-same-owner -xf - \
+		|| die "unpack_makeself: extraction failed for ${src##*/}"
 }
 
 # ────────────────────────────────
@@ -294,35 +300,41 @@ unpack_lha() {
 # Detect decompressor from file-name
 # ────────────────────────────────
 _unpacker_get_decompressor() {
-    case $1 in
-        *.bz2|*.tbz|*.tbz2)
-            local bz=${PORTAGE_BUNZIP2_COMMAND:-${PORTAGE_BZIP2_COMMAND:-}}
-            if [[ -z ${bz} ]]; then
-                bz=$(type -P lbzip2 || type -P pbzip2 || echo bzip2)
-            fi
-            echo "${bz} -dc"
-            ;;
+	case $1 in
+		*.bz2|*.tbz|*.tbz2)
+			local bz
+			if [[ -n ${UNPACKER_BZ2:-} ]]; then
+				bz=${UNPACKER_BZ2}
+			else
+				bz=${PORTAGE_BUNZIP2_COMMAND:-${PORTAGE_BZIP2_COMMAND:-}}
+				if [[ -z ${bz} ]]; then
+					bz=$(type -P lbzip2 || type -P pbzip2 || echo bzip2)
+				fi
+				bz+=" -dc"
+			fi
+			echo "${bz}"
+			;;
 
-        *.gz|*.tgz|*.z)  echo "gzip -dc" ;;
-        *.xz|*.txz|*.lzma)
-            echo "xz -T$(makeopts_jobs) -dc" ;;
-        *.lz)
-            if [[ -z ${UNPACKER_LZIP} ]]; then
-                if has_version -b ">=app-compression/xz-utils-5.4.0"; then
-                    UNPACKER_LZIP=xz           # new xz handles .lz
-                else
-                    for lz in plzip pdlzip lzip; do
-                        type -P "${lz}" >/dev/null && { UNPACKER_LZIP=${lz}; break; }
-                    done
-                fi
-            fi
-            echo "${UNPACKER_LZIP:-lzma} -dc"
-            ;;
-        *.zst) echo "zstd -dc" ;;
-        *.lz4) echo "lz4 -dc"  ;;
-        *.lzo) echo "lzop -dc" ;;
-        *)     echo ""         ;;  # no decompressor needed
-    esac
+		*.gz|*.tgz|*.z)  echo "gzip -dc" ;;
+		*.xz|*.txz|*.lzma)
+			echo "xz -T$(makeopts_jobs) -dc" ;;
+		*.lz)
+			if [[ -z ${UNPACKER_LZIP:-} ]]; then
+				if has_version -b ">=app-compression/xz-utils-5.4.0"; then
+					UNPACKER_LZIP=xz           # new xz handles .lz
+				else
+					for lz in plzip pdlzip lzip; do
+						type -P "${lz}" >/dev/null && { UNPACKER_LZIP=${lz}; break; }
+					done
+				fi
+			fi
+			echo "${UNPACKER_LZIP:-lzma} -dc"
+			;;
+		*.zst) echo "zstd -dc" ;;
+		*.lz4) echo "lz4 -dc"  ;;
+		*.lzo) echo "lzop -dc" ;;
+		*)     echo ""         ;;  # no decompressor needed
+	esac
 }
 
 # ────────────────────────────────
@@ -406,41 +418,44 @@ _unpacker() {
 # Public helpers
 # ────────────────────────────────
 unpacker() {
-    [[ $# -eq 0 ]] && set -- ${A}
-    local f; for f; do _unpacker "${f}"; done
+	[[ $# -eq 0 ]] && set -- ${A-}
+	local f; for f; do _unpacker "${f}"; done
 }
 
 unpacker_src_unpack() { unpacker; }
 
 # Collect build-time deps implied by SRC_URI
 unpacker_src_uri_depends() {
-    local -A deps
-    local uri
-    [[ $# -eq 0 ]] && set -- ${SRC_URI//\n/ }
+	local -A deps
+	local uri
+	local src_uri=${SRC_URI-}
+	if [[ $# -eq 0 && -n ${src_uri} ]]; then
+		set -- ${src_uri//$'\n'/ }
+	fi
 
-    for uri in "$@"; do
-        case ${uri,,} in
-            *.cpio.*|*.cpio)      deps[cpio]="app-compression/cpio" ;;
-            *.rar)               deps[rar]="app-compression/unrar" ;;
-            *.7z)                deps[7z]="app-compression/7zip" ;;
-            *.xz)                deps[xz]="app-compression/xz-utils" ;;
-            *.zip)               deps[zip]="app-compression/zip-utils" ;;
-            *.lz)
-                deps[lz]="|| (
-                    >=app-compression/xz-utils-5.4.0
-                    app-compression/plzip
-                    app-compression/pdlzip
-                    app-compression/lzip
-                )" ;;
-            *.zst)               deps[zst]="app-compression/zstd" ;;
-            *.lha|*.lzh)         deps[lha]="app-compression/lha" ;;
-            *.lz4)               deps[lz4]="app-compression/lz4" ;;
-            *.lzo)               deps[lzo]="app-compression/lzop" ;;
-        esac
-    done
+	for uri in "$@"; do
+		case ${uri,,} in
+			*.cpio.*|*.cpio)      deps[cpio]="app-compression/cpio" ;;
+			*.rar)               deps[rar]="app-compression/unrar" ;;
+			*.7z)                deps[7z]="app-compression/7zip" ;;
+			*.xz)                deps[xz]="app-compression/xz-utils" ;;
+			*.zip)               deps[zip]="app-compression/zip-utils" ;;
+			*.lz)
+				deps[lz]="|| (
+					>=app-compression/xz-utils-5.4.0
+					app-compression/plzip
+					app-compression/pdlzip
+					app-compression/lzip
+				)" ;;
+			*.zst)               deps[zst]="app-compression/zstd" ;;
+			*.lha|*.lzh)         deps[lha]="app-compression/lha" ;;
+			*.lz4)               deps[lz4]="app-compression/lz4" ;;
+			*.lzo)               deps[lzo]="app-compression/lzop" ;;
+		esac
+	done
 
-    # echo the values, preserving order only loosely
-    echo "${deps[*]}"
+	# echo the values, preserving order only loosely
+	echo "${deps[*]}"
 }
 
 fi

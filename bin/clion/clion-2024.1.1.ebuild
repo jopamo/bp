@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit xdg wrapper
+inherit xdg doins
 
 DESCRIPTION="JetBrains CLion: cross-platform C and C++ IDE"
 HOMEPAGE="https://www.jetbrains.com/idea"

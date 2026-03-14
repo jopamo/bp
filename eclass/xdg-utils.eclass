@@ -17,7 +17,7 @@ inherit emoji          # adds ICON_* vars and log_* helpers
 : "${MIMEINFO_DATABASE_DIR:=/usr/share/mime}"
 
 # ——— helpers ————————————————————————————————————————————————
-_xdg_assert_post() { [[ ${EBUILD_PHASE} == post* ]] \
+_xdg_assert_post() { [[ ${EBUILD_PHASE:-} == post* ]] \
 	|| die "${ICON_BAD} $1 must be used in pkg_post* phases"; }
 
 _xdg_have() { command -v "$1" &>/dev/null; }

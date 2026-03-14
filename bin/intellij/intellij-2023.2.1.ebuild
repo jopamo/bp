@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit xdg wrapper
+inherit xdg doins
 
 DESCRIPTION="A complete toolset for web, mobile and enterprise development"
 HOMEPAGE="https://www.jetbrains.com/idea"

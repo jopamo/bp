@@ -18,7 +18,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ -z ${_TOOLCHAIN_FUNCS_ECLASS} ]]; then
+if [[ -z ${_TOOLCHAIN_FUNCS_ECLASS:-} ]]; then
 _TOOLCHAIN_FUNCS_ECLASS=1
 
 
@@ -30,19 +30,19 @@ _tc-getPROG() {
 
 	var=${vars%% *}
 	for v in ${vars} ; do
-		if [[ -n ${!v} ]] ; then
-			export ${var}="${!v}"
+		if [[ -n ${!v-} ]] ; then
+			export "${var}=${!v}"
 			echo "${!v}"
 			return 0
 		fi
 	done
 
-	local search=
-	[[ -n $4 ]] && search=$(type -p $4-${prog[0]})
-	[[ -z ${search} && -n ${!tuple} ]] && search=$(type -p ${!tuple}-${prog[0]})
+	local search= prefix=${4-}
+	[[ -n ${prefix} ]] && search=$(type -p "${prefix}-${prog[0]}")
+	[[ -z ${search} && -n ${!tuple-} ]] && search=$(type -p "${!tuple}-${prog[0]}")
 	[[ -n ${search} ]] && prog[0]=${search##*/}
 
-	export ${var}="${prog[*]}"
+	export "${var}=${prog[*]}"
 	echo "${!var}"
 }
 tc-getBUILD_PROG() {
@@ -192,7 +192,7 @@ tc-getBUILD_PKG_CONFIG() { tc-getBUILD_PROG PKG_CONFIG pkg-config "$@"; }
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the C preprocessor for the toolchain being built (or used)
 tc-getTARGET_CPP() {
-	if [[ -n ${CTARGET} ]]; then
+	if [[ -n ${CTARGET-} ]]; then
 		_tc-getPROG CTARGET TARGET_CPP "gcc -E" "$@"
 	else
 		tc-getCPP "$@"
@@ -214,7 +214,8 @@ tc-export() {
 # @FUNCTION: tc-is-cross-compiler
 # @RETURN: Shell true if we are using a cross-compiler, shell false otherwise
 tc-is-cross-compiler() {
-	[[ ${CBUILD:-${CHOST}} != ${CHOST} ]]
+	local chost=${CHOST-}
+	[[ ${CBUILD:-${chost}} != ${chost} ]]
 }
 
 # @FUNCTION: tc-cpp-is-true
@@ -360,10 +361,10 @@ tc-export_build_env() {
 		: "${BUILD_LDFLAGS:= }"
 	else
 		# https://bugs.gentoo.org/654424
-		: "${BUILD_CFLAGS:=${CFLAGS}}"
-		: "${BUILD_CXXFLAGS:=${CXXFLAGS}}"
-		: "${BUILD_CPPFLAGS:=${CPPFLAGS}}"
-		: "${BUILD_LDFLAGS:=${LDFLAGS}}"
+		: "${BUILD_CFLAGS:=${CFLAGS-}}"
+		: "${BUILD_CXXFLAGS:=${CXXFLAGS-}}"
+		: "${BUILD_CPPFLAGS:=${CPPFLAGS-}}"
+		: "${BUILD_LDFLAGS:=${LDFLAGS-}}"
 	fi
 	export BUILD_{C,CXX,CPP,LD}FLAGS
 
@@ -453,6 +454,7 @@ tc-ld-is-gold() {
 
 	# Ensure ld output is in English.
 	local -x LC_ALL=C
+	local -a flags=( ${CFLAGS-} ${CPPFLAGS-} ${LDFLAGS-} )
 
 	# First check the linker directly.
 	out=$($(tc-getLD "$@") --version 2>&1)
@@ -467,7 +469,7 @@ tc-ld-is-gold() {
 	cat <<-EOF > "${base}.c"
 	int main(void) { return 0; }
 	EOF
-	out=$($(tc-getCC "$@") ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} -Wl,--version "${base}.c" -o "${base}" 2>&1)
+	out=$($(tc-getCC "$@") "${flags[@]}" -Wl,--version "${base}.c" -o "${base}" 2>&1)
 	rm -f "${base}"*
 	if [[ ${out} == *"GNU gold"* ]] ; then
 		return 0
@@ -486,6 +488,7 @@ tc-ld-is-lld() {
 
 	# Ensure ld output is in English.
 	local -x LC_ALL=C
+	local -a flags=( ${CFLAGS-} ${CPPFLAGS-} ${LDFLAGS-} )
 
 	# First check the linker directly.
 	out=$($(tc-getLD "$@") --version 2>&1)
@@ -500,7 +503,7 @@ tc-ld-is-lld() {
 	cat <<-EOF > "${base}.c"
 	int main(void) { return 0; }
 	EOF
-	out=$($(tc-getCC "$@") ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} -Wl,--version "${base}.c" -o "${base}" 2>&1)
+	out=$($(tc-getCC "$@") "${flags[@]}" -Wl,--version "${base}.c" -o "${base}" 2>&1)
 	rm -f "${base}"*
 	if [[ ${out} == *"LLD"* ]] ; then
 		return 0
@@ -541,7 +544,11 @@ tc-ld-force-bfd() {
 
 	# Set up LDFLAGS to select bfd based on the gcc / clang version.
 	if tc-is-gcc || tc-is-clang ; then
-		export LDFLAGS="${LDFLAGS} -fuse-ld=bfd"
+		if [[ -n ${LDFLAGS-} ]] ; then
+			export LDFLAGS="${LDFLAGS} -fuse-ld=bfd"
+		else
+			export LDFLAGS="-fuse-ld=bfd"
+		fi
 	fi
 }
 
@@ -618,7 +625,7 @@ tc-has-tls() {
 	EOF
 
 	local flags
-	case $1 in
+	case ${1-} in
 		-s) flags="-S";;
 		-c) flags="-c";;
 		-l) ;;
@@ -626,7 +633,7 @@ tc-has-tls() {
 	esac
 
 	: "${flags:=-fPIC -shared -Wl,-z,defs}"
-	[[ $1 == -* ]] && shift
+	[[ ${1-} == -* ]] && shift
 	$(tc-getCC "$@") ${flags} "${base}.c" -o "${base}" >&/dev/null
 	local ret=$?
 	rm -f "${base}"*
@@ -637,11 +644,11 @@ tc-has-tls() {
 # Parse information from CBUILD/CHOST/CTARGET rather than
 # use external variables from the profile.
 tc-ninja_magic_to_arch() {
-	_tc_echo_kernel_alias() { [[ ${type} == "kern" ]] && echo $1 || echo $2 ; }
+	_tc_echo_kernel_alias() { [[ ${type} == "kern" ]] && echo "$1" || echo "$2" ; }
 
-	local type=$1
-	local host=$2
-	[[ -z ${host} ]] && host=${CTARGET:-${CHOST}}
+	local type=${1-}
+	local host=${2-}
+	[[ -z ${host} ]] && host=${CTARGET:-${CHOST-}}
 
 	case ${host} in
 		aarch64*)	echo arm64;;
@@ -683,7 +690,7 @@ tc-ninja_magic_to_arch() {
 		sh64*)		_tc_echo_kernel_alias sh64 sh;;
 		sh*)		echo sh;;
 		sparc64*)	_tc_echo_kernel_alias sparc64 sparc;;
-		sparc*)		[[ ${PROFILE_ARCH} == "sparc64" ]] \
+		sparc*)		[[ ${PROFILE_ARCH-} == "sparc64" ]] \
 						&& _tc_echo_kernel_alias sparc64 sparc \
 						|| echo sparc
 					;;
@@ -727,8 +734,8 @@ tc-arch() {
 # if unspecified.  Returns 'big' or 'little' depending on whether 'host' is
 # big or little endian.
 tc-endian() {
-	local host=$1
-	[[ -z ${host} ]] && host=${CTARGET:-${CHOST}}
+	local host=${1-}
+	[[ -z ${host} ]] && host=${CTARGET:-${CHOST-}}
 	host=${host%%-*}
 
 	case ${host} in
@@ -964,7 +971,8 @@ gcc-specs-stack-check() {
 # library. For libstdc++, this is -D_GLIBCXX_ASSERTIONS, and for libcxx/libc++,
 # this is -D_LIBCPP_ENABLE_ASSERTIONS (deprecated) or -D_LIBCPP_ENABLE_HARDENED_MODE.
 tc-enables-cxx-assertions() {
-	tc-cpp-is-true "defined(_GLIBCXX_ASSERTIONS) || defined(_LIBCPP_ENABLE_ASSERTIONS) || defined(_LIBCPP_ENABLE_HARDENED_MODE)" ${CPPFLAGS} ${CXXFLAGS}
+	local -a flags=( ${CPPFLAGS-} ${CXXFLAGS-} )
+	tc-cpp-is-true "defined(_GLIBCXX_ASSERTIONS) || defined(_LIBCPP_ENABLE_ASSERTIONS) || defined(_LIBCPP_ENABLE_HARDENED_MODE)" "${flags[@]}"
 }
 
 # @FUNCTION: tc-enables-pie
@@ -973,7 +981,8 @@ tc-enables-cxx-assertions() {
 # Return truth if the current compiler generates position-independent code (PIC)
 # which can be linked into executables.
 tc-enables-pie() {
-	tc-cpp-is-true "defined(__PIE__)" ${CPPFLAGS} ${CFLAGS} ${CXXFLAGS}
+	local -a flags=( ${CPPFLAGS-} ${CFLAGS-} ${CXXFLAGS-} )
+	tc-cpp-is-true "defined(__PIE__)" "${flags[@]}"
 }
 
 # @FUNCTION: tc-enables-fortify-source
@@ -982,7 +991,8 @@ tc-enables-pie() {
 # Return truth if the current compiler enables fortification (FORTIFY_SOURCE)
 # at any level (-D_FORTIFY_SOURCE).
 tc-enables-fortify-source() {
-	tc-cpp-is-true "defined(_FORTIFY_SOURCE)" ${CPPFLAGS} ${CFLAGS} ${CXXFLAGS}
+	local -a flags=( ${CPPFLAGS-} ${CFLAGS-} ${CXXFLAGS-} )
+	tc-cpp-is-true "defined(_FORTIFY_SOURCE)" "${flags[@]}"
 }
 
 # @FUNCTION: tc-enables-ssp
@@ -994,7 +1004,8 @@ tc-enables-fortify-source() {
 #  -fstack-protector-strong
 #  -fstack-protector-all
 tc-enables-ssp() {
-	tc-cpp-is-true "defined(__SSP__) || defined(__SSP_STRONG__) || defined(__SSP_ALL__)" ${CPPFLAGS} ${CFLAGS} ${CXXFLAGS}
+	local -a flags=( ${CPPFLAGS-} ${CFLAGS-} ${CXXFLAGS-} )
+	tc-cpp-is-true "defined(__SSP__) || defined(__SSP_STRONG__) || defined(__SSP_ALL__)" "${flags[@]}"
 }
 
 # @FUNCTION: tc-enables-ssp-strong
@@ -1005,7 +1016,8 @@ tc-enables-ssp() {
 #  -fstack-protector-strong
 #  -fstack-protector-all
 tc-enables-ssp-strong() {
-	tc-cpp-is-true "defined(__SSP_STRONG__) || defined(__SSP_ALL__)" ${CPPFLAGS} ${CFLAGS} ${CXXFLAGS}
+	local -a flags=( ${CPPFLAGS-} ${CFLAGS-} ${CXXFLAGS-} )
+	tc-cpp-is-true "defined(__SSP_STRONG__) || defined(__SSP_ALL__)" "${flags[@]}"
 }
 
 # @FUNCTION: tc-enables-ssp-all
@@ -1015,7 +1027,8 @@ tc-enables-ssp-strong() {
 # on level corresponding to any of the following options:
 #  -fstack-protector-all
 tc-enables-ssp-all() {
-	tc-cpp-is-true "defined(__SSP_ALL__)" ${CPPFLAGS} ${CFLAGS} ${CXXFLAGS}
+	local -a flags=( ${CPPFLAGS-} ${CFLAGS-} ${CXXFLAGS-} )
+	tc-cpp-is-true "defined(__SSP_ALL__)" "${flags[@]}"
 }
 
 
@@ -1048,7 +1061,7 @@ gen_usr_ldscript() {
 	# Just make sure it exists
 	dodir /usr/${libdir}
 
-	if [[ $1 == "-a" ]] ; then
+	if [[ ${1-} == "-a" ]] ; then
 		auto=true
 		shift
 		dodir /${libdir}
@@ -1056,7 +1069,7 @@ gen_usr_ldscript() {
 
 	# OUTPUT_FORMAT gives hints to the linker as to what binary format
 	# is referenced ... makes saner
-	local flags=( ${CFLAGS} ${LDFLAGS} -Wl,--verbose )
+	local -a flags=( ${CFLAGS-} ${LDFLAGS-} -Wl,--verbose )
 	if $(tc-getLD) --version | grep -q 'GNU gold' ; then
 		# If they're using gold, manually invoke the old bfd, bug #487696
 		local d="${T}/bfd-linker"
@@ -1162,6 +1175,7 @@ gen_usr_ldscript() {
 #
 # If the library is not recognized, the function returns 1.
 tc-get-cxx-stdlib() {
+	local -a flags=( ${CPPFLAGS-} ${CXXFLAGS-} )
 	local code='#include <ciso646>
 
 #if defined(_LIBCPP_VERSION)
@@ -1171,7 +1185,7 @@ tc-get-cxx-stdlib() {
 #endif
 '
 	local res=$(
-		$(tc-getCXX) ${CPPFLAGS} ${CXXFLAGS} -x c++ -E -P - \
+		$(tc-getCXX) "${flags[@]}" -x c++ -E -P - \
 			<<<"${code}" 2>/dev/null
 	)
 
@@ -1198,8 +1212,9 @@ tc-get-cxx-stdlib() {
 #
 # If the runtime is not recognized, the function returns 1.
 tc-get-c-rtlib() {
+	local -a flags=( ${CPPFLAGS-} ${CFLAGS-} ${LDFLAGS-} )
 	local res=$(
-		$(tc-getCC) ${CPPFLAGS} ${CFLAGS} ${LDFLAGS} \
+		$(tc-getCC) "${flags[@]}" \
 			-print-libgcc-file-name 2>/dev/null
 	)
 
@@ -1233,17 +1248,18 @@ tc-get-build-ptr-size() {
 # @RETURN: Shell true if we are using LTO, shell false otherwise
 tc-is-lto() {
 	local f="${T}/test-lto.o"
+	local -a cflags=( ${CFLAGS-} )
 
 	case $(tc-get-compiler-type) in
 		clang)
-			$(tc-getCC) ${CFLAGS} -c -o "${f}" -x c - <<<"" || die
+			$(tc-getCC) "${cflags[@]}" -c -o "${f}" -x c - <<<"" || die
 			# If LTO is used, clang will output bytecode and llvm-bcanalyzer
 			# will run successfully.  Otherwise, it will output plain object
 			# file and llvm-bcanalyzer will exit with error.
 			llvm-bcanalyzer "${f}" &>/dev/null && return 0
 			;;
 		gcc)
-			$(tc-getCC) ${CFLAGS} -c -o "${f}" -x c - <<<"" || die
+			$(tc-getCC) "${cflags[@]}" -c -o "${f}" -x c - <<<"" || die
 			[[ $($(tc-getREADELF) -S "${f}") == *.gnu.lto* ]] && return 0
 			;;
 	esac

@@ -235,18 +235,47 @@ udev_newrules() {
 }
 
 make_wrapper() {
-	local wrapper=$1        # installed name
-	local bin=$2            # command to exec (default = wrapper)
-	local chdir=$3          # working dir (optional)
-	local libdir=$4         # new LD_LIBRARY_PATH entry (optional)
-	local path=$5           # install dir for the wrapper (optional)
+	local wrapper=${1-}     # installed name
+	local bin=${2-}         # command to exec (default = wrapper)
+	local chdir=${3-}       # working dir (optional)
+	local libdir=${4-}      # new LD_LIBRARY_PATH entry (optional)
+	local path=${5-}        # install dir for the wrapper (optional)
+	local script_bin= script_chdir= tmpwrapper raw_libdir=
+	local -a raw_libdirs=() script_libdirs=()
 
 	[[ -z ${wrapper} ]] && die "make_wrapper requires at least <wrapper>"
 
 	# default bin to wrapper if not given
 	[[ -z ${bin} ]] && bin=${wrapper}
 
-	local tmpwrapper="${T}/tmp.wrapper.${wrapper##*/}"
+	script_bin=${bin}
+	if [[ ${script_bin} == /* && -n ${EPREFIX} ]]; then
+		script_bin=${EPREFIX}${script_bin}
+	fi
+
+	if [[ -n ${chdir} ]]; then
+		script_chdir=${chdir}
+		if [[ ${script_chdir} == /* && -n ${EPREFIX} ]]; then
+			script_chdir=${EPREFIX}${script_chdir}
+		fi
+	fi
+
+	if [[ -n ${libdir} ]]; then
+		local IFS=:
+		read -r -a raw_libdirs <<< "${libdir}"
+	fi
+
+	for raw_libdir in "${raw_libdirs[@]}"; do
+		[[ -n ${raw_libdir} ]] || continue
+
+		if [[ ${raw_libdir} == /* && -n ${EPREFIX} ]]; then
+			script_libdirs+=( "${EPREFIX}${raw_libdir}" )
+		else
+			script_libdirs+=( "${raw_libdir}" )
+		fi
+	done
+
+	tmpwrapper="${T}/tmp.wrapper.${wrapper##*/}"
 
 	# --------------------------------------------------------------------
 	# build the script
@@ -254,31 +283,37 @@ make_wrapper() {
 	(
 		printf '%s\n' '#!/bin/sh'
 
-		if [[ -n ${libdir} ]]; then
-			# expand EPREFIX at build time, so runtime shell sees a literal path
-			local abs_lib="${EPREFIX}${libdir#/}"
-			cat <<-SH
-				# prepend ${abs_lib} to LD_LIBRARY_PATH if not already present
-				new_path="${abs_lib}"
-				case ":\\\${LD_LIBRARY_PATH:-}:" in
-				    *:"\${new_path}":*) ;;                                # already there
-				    ''|:)  LD_LIBRARY_PATH="\${new_path}" ;;              # was empty
-				    *)     LD_LIBRARY_PATH="\${LD_LIBRARY_PATH:+\${LD_LIBRARY_PATH}:}\${new_path}" ;;
-				esac
-				export LD_LIBRARY_PATH
-			SH
+		if [[ ${#script_libdirs[@]} -gt 0 ]]; then
+			cat <<'SH'
+wrapper_ld_library_path=
+while IFS= read -r new_path; do
+	[ -n "${new_path}" ] || continue
+	case ":${wrapper_ld_library_path}:${LD_LIBRARY_PATH:-}:" in
+		*:"${new_path}":*) ;;
+		*) wrapper_ld_library_path="${wrapper_ld_library_path:+${wrapper_ld_library_path}:}${new_path}" ;;
+	esac
+done <<'WRAPPER_LD_PATHS'
+SH
+			printf '%s\n' "${script_libdirs[@]}"
+			cat <<'SH'
+WRAPPER_LD_PATHS
+if [ -n "${wrapper_ld_library_path}" ]; then
+	LD_LIBRARY_PATH="${wrapper_ld_library_path}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+	export LD_LIBRARY_PATH
+fi
+SH
 		fi
 
 		# optional working directory
-		if [[ -n ${chdir} ]]; then
-			printf 'cd "%s" || exit 1\n' "${EPREFIX}${chdir#/}"
+		if [[ -n ${script_chdir} ]]; then
+			printf 'cd "%s" || exit 1\n' "${script_chdir}"
 		fi
 
 		# exec target (prefix absolute path with EPREFIX if needed)
 		if [[ ${bin} == /* ]]; then
-			printf 'exec "%s" "$@"\n' "${EPREFIX}${bin#/}"
+			printf 'exec "%s" "$@"\n' "${script_bin}"
 		else
-			printf 'exec %s "$@"\n' "${bin}"
+			printf 'exec %s "$@"\n' "${script_bin}"
 		fi
 	) > "${tmpwrapper}" || die
 

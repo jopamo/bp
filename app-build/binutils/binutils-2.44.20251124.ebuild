@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="binutils-$(ver_cut 1)_$(ver_cut 2)-branch"
 
-inherit flag-o-matic
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="a collection of binary tools"
 HOMEPAGE="https://sourceware.org/binutils/"
@@ -12,17 +12,18 @@ SNAPSHOT=9256a4b356856649ec1e3e4dd9371ce29603cfda
 SRC_URI="https://github.com/1g4-mirror/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/binutils-gdb-${SNAPSHOT}"
 
-LICENSE="|| ( GPL-3 LGPL-3 )"
+LICENSE="GPL-2+ GPL-3+ LGPL-2+ LGPL-2.1+ BSD BSD-with-attribution public-domain FDL-1.3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="gprof gprofng"
-
-DEPEND="
+COMMON_DEPEND="
 	lib-core/zlib
+	lib-core/zstd
 	lib-core/elfutils
 	virtual/libc
 "
+RDEPEND="${COMMON_DEPEND}"
+DEPEND="${COMMON_DEPEND}"
 
 PATCHES=( "${FILESDIR}"/binutils-ld-fix-static-linking.patch )
 
@@ -32,8 +33,12 @@ src_configure() {
 	filter-flags -Wl,defs
 	append-flags -ffat-lto-objects
 
+	local QA_POLICY_LTO_FLAVOR=fat+strip
+	qa-policy-configure
+
 	local myconf=(
 		--disable-gdb
+		--disable-gdbserver
 		--disable-gold
 		--disable-gprofng
 		--disable-multilib
@@ -54,6 +59,7 @@ src_configure() {
 		--prefix="${EPREFIX}"/usr
 		--with-mmap
 		--with-pic
+		--with-system-readline
 		--with-system-zlib
 		--without-included-gettext
 	)
@@ -62,8 +68,6 @@ src_configure() {
 
 src_install() {
 	default
-
-	rm -f "${ED}"/usr/bin/gdbserver "${ED}"/usr/lib/libinproctrace.so || die
 
 	# libbfd consumers in this tree link via -liberty through libbfd.so
 	# linker script, so install the built libiberty archive alongside libbfd.
@@ -87,4 +91,6 @@ EOF
 	for x in ld objdump readelf ranlib objcopy nm as strip ld.bfd ar ; do
 		dosym -r /usr/bin/${x} /usr/bin/${CHOST}-${x}
 	done
+
+	qa-policy-install
 }

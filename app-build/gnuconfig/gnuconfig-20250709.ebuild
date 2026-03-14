@@ -8,7 +8,7 @@ SNAPSHOT=a2287c3041a3f2a204eb942e09c015eab00dc7dd
 SRC_URI="https://github.com/1g4-mirror/config/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/config-${SNAPSHOT}"
 
-LICENSE="GPL-2"
+LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -22,5 +22,6 @@ src_install() {
 	insinto /usr/share/gnuconfig
 	doins config.{sub,guess} || die
 	fperms +x /usr/share/gnuconfig/config.{sub,guess}
+	doman doc/config.{sub,guess}.1 || die
 	cleanup_install
 }

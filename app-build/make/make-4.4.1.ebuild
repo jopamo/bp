@@ -2,30 +2,24 @@
 
 EAPI=8
 
-inherit flag-o-matic
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="Standard tool to compile source trees"
 HOMEPAGE="https://www.gnu.org/software/make/make.html"
-SRC_URI="mirror://gnu//${PN}/${P}.tar.gz"
+SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
 
-LICENSE="GPL-3+"
+LICENSE="GPL-3+ FDL-1.3+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static"
+IUSE="static test"
 
-DEPEND="
-	core-perl/libintl-perl
-	app-build/texinfo
-"
+BDEPEND="test? ( app-lang/perl )"
 
-src_prepare() {
-	default
-	
-	eapply "${FILESDIR}"/getopt-gcc15.patch
-}
+PATCHES=( "${FILESDIR}"/getopt-gcc15.patch )
 
 src_configure() {
+	qa-policy-configure
 	use static && append-ldflags -static
 
 	local myconf=(
@@ -33,4 +27,16 @@ src_configure() {
 		--disable-nls
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_test() {
+	use test || return 0
+
+	emake check
+}
+
+src_install() {
+	default
+
+	qa-policy-install
 }

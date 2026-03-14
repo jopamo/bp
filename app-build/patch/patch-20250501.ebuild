@@ -4,7 +4,7 @@ EAPI=8
 
 SNAPSHOT=d161c9a9dbd24bb7e0356e4e07983345777d85aa
 
-inherit flag-o-matic
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="Utility to apply diffs to files"
 HOMEPAGE="https://www.gnu.org/software/patch/patch.html"
@@ -19,32 +19,49 @@ else
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 fi
 
-LICENSE="GPL-2"
+LICENSE="GPL-3+ patch-man"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static test xattr"
 
-DEPEND="
+COMMON_DEPEND="
 	xattr? ( app-core/attr )
+"
+DEPEND="${COMMON_DEPEND}"
+RDEPEND="${COMMON_DEPEND}"
+BDEPEND="
+	app-build/autoconf
+	app-build/automake
+	app-build/bison
+	app-build/gnulib
 	test? ( app-core/ed )
 "
 
 src_prepare() {
-	rm -rf gnulib
-	cp -r "${BROOT}"/usr/share/gnulib gnulib
-	#cd gnulib
-	#git reset --hard 0a12fa9
-	#cd ..
+	rm -rf gnulib || die
+	cp -a "${BROOT}"/usr/share/gnulib gnulib || die
 
-	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
+	printf '%s\n' "${PV}" > .tarball-version || die
+
+	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib || die
 
 	default
-	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
 }
 
 src_configure() {
 	use static && append-ldflags -static
 
-	econf $(use_enable xattr)
+	qa-policy-configure
+	econf "$(use_enable xattr)"
+}
+
+src_test() {
+	emake check
+}
+
+src_install() {
+	default
+
+	qa-policy-install
 }

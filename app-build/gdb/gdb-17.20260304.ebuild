@@ -4,9 +4,9 @@ EAPI=8
 
 BRANCH_NAME="gdb-$(ver_cut 1)-branch"
 
-PYTHON_COMPAT=( python3_12 )
+PYTHON_COMPAT=( python3_13 )
 
-inherit flag-o-matic python-single-r1 toolchain-funcs
+inherit flag-o-matic python-single-r1 qa-policy toolchain-funcs
 
 DESCRIPTION="GNU debugger"
 HOMEPAGE="https://sourceware.org/gdb/"
@@ -14,40 +14,84 @@ SNAPSHOT=008e6f818b630d5caa26c21153d21da4c0263cc3
 SRC_URI="https://github.com/1g4-mirror/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/binutils-gdb-${SNAPSHOT}"
 
-LICENSE="GPL-2 LGPL-2"
+LICENSE="GPL-3+ FDL-1.3 LGPL-2.1+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="client lzma multitarget python server test xml"
 
 REQUIRED_USE="
+	lzma? ( client )
+	multitarget? ( client )
 	python? ( ${PYTHON_REQUIRED_USE} )
+	python? ( client )
+	test? ( client )
+	xml? ( client )
 	|| ( client server )
 "
 
-RDEPEND="
+COMMON_DEPEND="
 	server? ( !app-dev/gdbserver )
 	client? (
+		app-compression/zstd
 		virtual/curses
+		lib-core/gmp
+		lib-core/mpfr
 		lib-core/readline
+		lib-core/zlib
+		lib-misc/xxhash
 		lzma? ( app-compression/xz-utils )
 		python? ( ${PYTHON_DEPS} )
 		xml? ( lib-core/expat )
-		lib-core/zlib
 	)
 "
-DEPEND="
-	${RDEPEND}
-	app-compression/xz-utils
-	lib-misc/xxhash
+
+RDEPEND="${COMMON_DEPEND}"
+DEPEND="${COMMON_DEPEND}"
+BDEPEND="
+	app-build/gettext
 	app-build/texinfo
+	app-lang/perl
 	client? (
 		app-build/bison
+		app-build/flex
 		test? ( app-dev/dejagnu )
 	)
 "
 
 GDB_BUILD_DIR="${WORKDIR}/${P}-build"
+
+_gdb_install_server_manpage() {
+	local docdir="${T}/gdbserver-doc"
+	local bfd_version_date
+
+	rm -rf -- "${docdir}" || die
+	mkdir -p -- "${docdir}" || die
+
+	bfd_version_date=$(sed -n -e 's/^.* BFD_VERSION_DATE \(.*\)$/\1/p' "${S}/bfd/version.h") || die
+	[[ -n ${bfd_version_date} ]] || die "failed to determine BFD_VERSION_DATE"
+
+	sed -e "s/DATE/${bfd_version_date}/" \
+		< "${S}/gdb/version.in" > "${docdir}/version.subst" || die
+	{
+		printf '@set GDBVN %s\n' "$(sed q "${docdir}/version.subst")"
+		printf '%s\n' '@set BUGURL @uref{http://www.gnu.org/software/gdb/bugs/}'
+		printf '%s\n' '@set BUGURL_DEFAULT'
+		printf '%s\n' '@set SYSTEM_READLINE'
+	} > "${docdir}/GDBvn.texi" || die
+	cp -- "${S}/gdb/doc/all-cfg.texi" "${docdir}/gdb-cfg.texi" || die
+
+	pushd "${docdir}" >/dev/null || die
+		perl "${S}/etc/texi2pod.pl" -Dman -Dgdbserver \
+			< "${S}/gdb/doc/gdb.texinfo" > gdbserver.pod || die
+		pod2man \
+			--section=1 \
+			--release="gdb-$(sed q version.subst)" \
+			gdbserver.pod | sed -e '/^.if n .na/d' > gdbserver.1 || die
+	popd >/dev/null || die
+
+	doman "${docdir}/gdbserver.1"
+}
 
 pkg_setup() {
 	use python && python-single-r1_pkg_setup
@@ -68,6 +112,7 @@ src_configure() {
 	strip-flags
 	replace-flags "-D_FORTIFY_SOURCE=3" "-D_FORTIFY_SOURCE=2"
 	append-flags -fpermissive
+	qa-policy-configure
 
 	local myconf=(
 		$(use multitarget && echo --enable-targets=all)
@@ -108,21 +153,23 @@ src_test() {
 
 src_install() {
 	if use server && ! use client; then
-		emake -C "${GDB_BUILD_DIR}"/gdb/gdbserver DESTDIR="${D}" install
+		emake -C "${GDB_BUILD_DIR}"/gdbserver DESTDIR="${D}" install
+		_gdb_install_server_manpage
 	else
 		emake -C "${GDB_BUILD_DIR}" DESTDIR="${D}" install
 	fi
 
 	if use client; then
 		find "${ED}"/usr -name libiberty.a -delete || die
+
+		# Remove shared info pages
+		rm "${ED}"/usr/share/info/{annotate,bfd,ctf-spec,sframe-spec}.info* || die
 	fi
 
-	# Remove shared info pages
-	rm "${ED}"/usr/share/info/{annotate,bfd,ctf-spec,sframe-spec}.info* || die
-
-	if use python; then
+	if use client && use python; then
 		python_optimize "${ED}"/usr/share/gdb/python/gdb
 	fi
 
 	cleanup_install
+	qa-policy-install
 }

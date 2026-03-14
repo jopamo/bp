@@ -25,6 +25,8 @@ BDEPEND="
 	test? ( app-build/bison )
 "
 
+PATCHES=( "${FILESDIR}"/flex-20260224-parallel-bootstrap-race.patch )
+
 src_prepare() {
 	default
 	eautoreconf

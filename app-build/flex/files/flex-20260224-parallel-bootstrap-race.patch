@@ -1,0 +1,11 @@
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -148,7 +148,7 @@ stage2scan.c: scan.l flex$(EXEEXT) stage1scan.c
+ 	( cd $(srcdir) && $(abs_builddir)/flex$(EXEEXT) \
+ 	  $(AM_LFLAGS) $(LFLAGS) -o scan.c -t scan.l ) >$@
+ 
+-stage2compare: stage1scan.c
++stage2compare: flex$(EXEEXT) stage1scan.c
+ 	@rm -f stage2scan.c; \
+ 	$(MAKE) $(AM_MAKEFLAGS) stage2scan.c; \
+ 	echo Comparing stage1scan.c and stage2scan.c; \

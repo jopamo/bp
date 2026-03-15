@@ -58,6 +58,14 @@ qa-archive-check-ldscript() {
 	fi
 }
 
+qa-archive-list-duplicate-members() {
+	local archive=$1
+	local ar_cmd
+
+	ar_cmd=$(tc-getAR)
+	"${ar_cmd}" t "${archive}" | sed '/^$/d' | sort | uniq -d
+}
+
 qa-archive-sanitize() {
 	qa-report-domain-begin archive
 
@@ -92,9 +100,10 @@ qa-archive-assert() {
 
 	local -a archives=( "${QA_DISCOVER_ARCHIVES[@]}" )
 	local -a scripts=( "${QA_DISCOVER_LDSCRIPTS[@]}" )
-	local archive script rel
+	local archive script rel members dup
 	local ar_cmd
 	local -i archives_scanned=${#archives[@]} ldscripts_scanned=0
+	local -i empty_archives=0 duplicate_member_names=0
 	local mode=${QA_POLICY_ARCHIVE_MODE}
 
 	ar_cmd=$(tc-getAR)
@@ -102,10 +111,21 @@ qa-archive-assert() {
 	for archive in "${archives[@]}"; do
 		rel=$(_qa-policy-relpath "${archive}")
 
-		if ! "${ar_cmd}" t "${archive}" >/dev/null 2>&1; then
+		if ! members=$("${ar_cmd}" t "${archive}" 2>/dev/null); then
 			_qa-report-record-mode archive "${mode}" unreadable-archive "${rel}" "ar could not read archive contents"
 			continue
 		fi
+
+		if [[ -z ${members//$'\n'/} ]]; then
+			(( empty_archives += 1 ))
+			_qa-report-record-mode archive "${mode}" empty-archive "${rel}" "archive has no members"
+		fi
+
+		while IFS= read -r dup; do
+			[[ -n ${dup} ]] || continue
+			(( duplicate_member_names += 1 ))
+			_qa-report-record-mode archive "${mode}" duplicate-member-name "${rel}" "duplicate member name: ${dup}"
+		done < <(qa-archive-list-duplicate-members "${archive}")
 
 		if qa-archive-check-thin "${archive}" && [[ ${QA_POLICY_ARCHIVE_ALLOW_THIN} == 0 ]]; then
 			_qa-report-record-mode archive "${mode}" thin-archive "${rel}" "thin archives are forbidden"
@@ -129,6 +149,8 @@ qa-archive-assert() {
 	fi
 
 	qa-report-domain-stat archive archives_scanned "${archives_scanned}"
+	qa-report-domain-stat archive empty_archives "${empty_archives}"
+	qa-report-domain-stat archive duplicate_member_names "${duplicate_member_names}"
 	qa-report-domain-stat archive ldscripts_scanned "${ldscripts_scanned}"
 }
 

@@ -4,7 +4,7 @@ EAPI=8
 
 DISTUTILS_OPTIONAL="1"
 
-inherit distutils-r1 cmake flag-o-matic
+inherit distutils-r1 cmake flag-o-matic qa-policy
 
 DESCRIPTION="Generic-purpose lossless compression algorithm"
 HOMEPAGE="https://github.com/google/brotli"
@@ -36,6 +36,7 @@ src_configure() {
 	local mycmakeargs=(
 		-DBUILD_TESTING="$(usex test)"
 	)
+	qa-policy-configure
 	cmake_src_configure
 	use python && distutils-r1_src_configure
 }
@@ -58,4 +59,5 @@ src_install() {
 	cmake_src_install
 
 	use python && distutils-r1_src_install
+	qa-policy-install
 }

@@ -24,13 +24,22 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND="app-core/attr"
-
-RESTRICT="network-sandbox"
+COMMON_DEPEND="
+	app-core/attr:=
+"
+RDEPEND="${COMMON_DEPEND}"
+DEPEND="${RDEPEND}"
+BDEPEND="
+	app-build/gnulib
+	app-build/gettext
+	app-build/autoconf
+	app-build/automake
+	app-build/libtool
+"
 
 src_prepare() {
-	rm -rf gnulib
-	cp -r "${BROOT}"/usr/share/gnulib gnulib
+	rm -rf gnulib || die
+	cp -r "${BROOT}"/usr/share/gnulib gnulib || die
 
 	./autogen.sh || die
 

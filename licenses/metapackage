@@ -1,0 +1,4 @@
+This package is a metapackage: it does not install files of its own.
+
+Redistribution and use are permitted because the package payload is only
+dependency metadata.

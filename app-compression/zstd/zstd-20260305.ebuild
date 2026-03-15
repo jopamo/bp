@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs flag-o-matic qa-policy
+inherit toolchain-funcs flag-o-matic multilib qa-policy
 
 DESCRIPTION="zstd fast compression library"
 HOMEPAGE="https://facebook.github.io/zstd/"
@@ -20,41 +20,45 @@ DEPEND="app-compression/xz-utils"
 
 src_compile() {
 	qa-policy-configure
+	local libdir="${EPREFIX}/usr/$(get_libdir)"
+
 	emake \
 		CC="$(tc-getCC)" \
 		AR="$(tc-getAR)" \
 		PREFIX="${EPREFIX}"/usr \
-		LIBDIR="${EPREFIX}"/usr/lib zstd
+		LIBDIR="${libdir}" zstd
 
 	emake -C lib \
 		CC="$(tc-getCC)" \
 		AR="$(tc-getAR)" \
 		PREFIX="${EPREFIX}"/usr \
-		LIBDIR="${EPREFIX}"/usr/lib libzstd
+		LIBDIR="${libdir}" libzstd
 
 	emake -C contrib/pzstd \
 		CC="$(tc-getCC)" \
 		CXX="$(tc-getCXX)" \
 		AR="$(tc-getAR)" \
 		PREFIX="${EPREFIX}"/usr \
-		LIBDIR="${EPREFIX}"/usr/lib
+		LIBDIR="${libdir}"
 
 }
 
 src_install() {
+	local libdir="${EPREFIX}/usr/$(get_libdir)"
+
 	emake \
 		DESTDIR="${ED}" \
 		PREFIX="${EPREFIX}"/usr \
-		LIBDIR="${EPREFIX}"/usr/lib install
+		LIBDIR="${libdir}" install
 
 	emake -C contrib/pzstd \
 		DESTDIR="${ED}" \
 		PREFIX="${EPREFIX}"/usr \
-		LIBDIR="${EPREFIX}"/usr/lib install
-
-	qa-policy-install
+		LIBDIR="${libdir}" install
 
 	if ! use static-libs; then
-		rm "${ED}"/usr/lib/libzstd.a || die
+		rm "${ED}${libdir}"/libzstd.a || die
 	fi
+
+	qa-policy-install
 }

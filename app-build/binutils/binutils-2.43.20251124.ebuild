@@ -25,7 +25,10 @@ COMMON_DEPEND="
 RDEPEND="${COMMON_DEPEND}"
 DEPEND="${COMMON_DEPEND}"
 
-PATCHES=( "${FILESDIR}"/binutils-ld-fix-static-linking.patch )
+PATCHES=(
+	"${FILESDIR}"/binutils-ld-fix-static-linking.patch
+	"${FILESDIR}"/binutils-flex-2.6-yyatbol.patch
+)
 
 src_configure() {
 	filter-flags -Wl,defs

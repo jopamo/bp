@@ -22,12 +22,16 @@ BDEPEND="lib-core/musl"
 
 install_busybox_symlinks() {
 	local bb_bin=${ED%/}/usr/bin/busybox
+	local root_prefix=${ROOT:-/}
 	local cmd_name
+	local existing_cmd_path
 
 	[[ -x ${bb_bin} ]] || die "busybox binary missing from install image: ${bb_bin}"
 
 	while IFS= read -r cmd_name; do
 		[[ ${cmd_name} == busybox ]] && continue
+		existing_cmd_path=${root_prefix%/}/usr/bin/${cmd_name}
+		[[ -e ${existing_cmd_path} || -L ${existing_cmd_path} ]] && continue
 		dosym busybox "/usr/bin/${cmd_name}"
 	done < <("${bb_bin}" --list)
 }

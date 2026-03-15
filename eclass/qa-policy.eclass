@@ -147,6 +147,7 @@ _qa-policy-apply-defaults() {
 	: "${QA_POLICY_PERMS_SANITIZE:=1}"
 	: "${QA_POLICY_PERMS_CHECK_WORLD_WRITABLE:=0}"
 	: "${QA_POLICY_PERMS_SUID_SGID_ALLOW:=}"
+	: "${QA_POLICY_LA_SANITIZE:=1}"
 	: "${QA_POLICY_SYMLINK_SANITIZE:=0}"
 	: "${QA_POLICY_RPATH_ALLOW:=}"
 	: "${QA_POLICY_RPATH_CLEAN:=1}"
@@ -193,6 +194,7 @@ _qa-policy-validate-config() {
 		QA_POLICY_SHEBANG_SANITIZE \
 		QA_POLICY_PERMS_SANITIZE \
 		QA_POLICY_PERMS_CHECK_WORLD_WRITABLE \
+		QA_POLICY_LA_SANITIZE \
 		QA_POLICY_SYMLINK_SANITIZE \
 		QA_POLICY_RPATH_CLEAN \
 		QA_POLICY_RPATH_ALLOW_EMPTY \
@@ -326,6 +328,33 @@ _qa-policy-maybe-finalize-early() {
 
 _qa-policy-run-sanitize() {
 	_qa-report-set-stage sanitize
+
+	qa-report-domain-begin libtool
+	local file rel
+	local -a kept_files=()
+	local -i files_scanned=0 la_files_seen=0 files_removed=0
+
+	for file in "${QA_DISCOVER_ALL_FILES[@]}"; do
+		(( files_scanned += 1 ))
+
+		if [[ ${file} == *.la ]]; then
+			(( la_files_seen += 1 ))
+			if [[ ${QA_POLICY_LA_SANITIZE} == 1 ]]; then
+				rel=$(_qa-policy-relpath "${file}")
+				rm -f -- "${file}" || die "qa-policy: failed to remove libtool archive ${file}"
+				(( files_removed += 1 ))
+				qa-report-note libtool removed-la "${rel}" "removed libtool archive from install image"
+				continue
+			fi
+		fi
+
+		kept_files+=( "${file}" )
+	done
+
+	QA_DISCOVER_ALL_FILES=( "${kept_files[@]}" )
+	qa-report-domain-stat libtool files_scanned "${files_scanned}"
+	qa-report-domain-stat libtool la_files_seen "${la_files_seen}"
+	qa-report-domain-stat libtool files_removed "${files_removed}"
 
 	if [[ ${QA_POLICY_LTO_MODE} != off ]]; then
 		qa-lto-sanitize

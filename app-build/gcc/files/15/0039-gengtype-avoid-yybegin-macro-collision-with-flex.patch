@@ -1,0 +1,59 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: oneg4 <devnull@example.invalid>
+Date: Sun, 15 Mar 2026 00:00:00 +0000
+Subject: [PATCH] gengtype: rename yybegin helper to avoid flex macro collision
+
+flex-generated gengtype-lex.cc defines a yybegin(s) macro. That macro
+collides with GCC's own yybegin() lexer helper declaration/definition,
+causing preprocessor substitution and a hard C++ compile failure in
+gengtype-lex.cc.
+
+Rename GCC's helper to gt_yybegin and update the parser call site.
+---
+ gcc/gengtype-lex.l    | 2 +-
+ gcc/gengtype-parse.cc | 2 +-
+ gcc/gengtype.h        | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/gcc/gengtype-lex.l b/gcc/gengtype-lex.l
+index 0421f53e67c..64bd8be4947 100644
+--- a/gcc/gengtype-lex.l
++++ b/gcc/gengtype-lex.l
+@@ -205,7 +205,7 @@ yyend (void)
+ %%
+ 
+ void
+-yybegin (const char *fname)
++gt_yybegin (const char *fname)
+ {
+   yyin = fopen (fname, "r");
+   if (yyin == NULL)
+diff --git a/gcc/gengtype-parse.cc b/gcc/gengtype-parse.cc
+index 54aa934f562..26553c6f19a 100644
+--- a/gcc/gengtype-parse.cc
++++ b/gcc/gengtype-parse.cc
+@@ -1151,7 +1151,7 @@ extern_or_static (void)
+ void
+ parse_file (const char *fname)
+ {
+-  yybegin (fname);
++  gt_yybegin (fname);
+   for (;;)
+     {
+       switch (token ())
+diff --git a/gcc/gengtype.h b/gcc/gengtype.h
+index 4807ba0afda..71fe8e66bb8 100644
+--- a/gcc/gengtype.h
++++ b/gcc/gengtype.h
+@@ -452,7 +452,7 @@ extern void note_variable (const char *s, type_p t, options_p o,
+ 
+ /* Lexer and parser routines.  */
+ extern int yylex (const char **yylval);
+-extern void yybegin (const char *fname);
++extern void gt_yybegin (const char *fname);
+ extern void yyend (void);
+ extern void parse_file (const char *name);
+ extern bool hit_error;
+-- 
+2.49.0
+

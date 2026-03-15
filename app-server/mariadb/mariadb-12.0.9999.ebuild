@@ -23,8 +23,8 @@ DEPEND="
 "
 
 BDEPEND="
-	lib-dev/libaio
 	lib-dev/jemalloc
+	lib-dev/liburing
 	lib-core/zlib
 	virtual/ssl
 	systemd? ( app-core/systemd )
@@ -46,6 +46,7 @@ src_configure(){
 		-DCLIENT_PLUGIN_MYSQL_CLEAR_PASSWORD=STATIC
 		-DCMAKE_CXX_FLAGS_RELWITHDEBINFO="$(usex debug '' '-DNDEBUG')"
 		-DCMAKE_C_FLAGS_RELWITHDEBINFO="$(usex debug '' '-DNDEBUG')"
+		-DCMAKE_DISABLE_FIND_PACKAGE_LIBAIO=TRUE
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
 		-DCONC_WITH_EXTERNAL_ZLIB=YES
 		-DCONNECT_WITH_MONGO=OFF
@@ -97,6 +98,7 @@ src_configure(){
 		-DWITH_SAFEMALLOC=OFF
 		-DWITH_SSL=system
 		-DWITH_SYSTEMD=$(usex systemd yes no)
+		-DWITH_URING=ON
 		-DWITH_UNITTEST=OFF
 		-DWITH_UNIT_TESTS=$(usex test ON OFF)
 		-DWITH_ZLIB=system

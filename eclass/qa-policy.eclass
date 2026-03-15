@@ -17,7 +17,7 @@ esac
 if [[ -z ${_QA_POLICY_ECLASS:-} ]] ; then
 _QA_POLICY_ECLASS=1
 
-inherit qa-report qa-linker qa-lto qa-archive qa-shebang qa-rpath qa-pkgconfig qa-elf
+inherit qa-report qa-linker qa-lto qa-archive qa-shebang qa-perms qa-rpath qa-pkgconfig qa-elf
 
 BDEPEND+=" app-dev/patchelf"
 
@@ -101,6 +101,7 @@ _qa-policy-apply-defaults() {
 			: "${QA_POLICY_LTO_MODE:=fail}"
 			: "${QA_POLICY_ARCHIVE_MODE:=fail}"
 			: "${QA_POLICY_SHEBANG_MODE:=warn}"
+			: "${QA_POLICY_PERMS_MODE:=warn}"
 			: "${QA_POLICY_RPATH_MODE:=fail}"
 			: "${QA_POLICY_PKGCONFIG_MODE:=warn}"
 			: "${QA_POLICY_ELF_MODE:=report}"
@@ -110,6 +111,7 @@ _qa-policy-apply-defaults() {
 			: "${QA_POLICY_LTO_MODE:=fail}"
 			: "${QA_POLICY_ARCHIVE_MODE:=fail}"
 			: "${QA_POLICY_SHEBANG_MODE:=fail}"
+			: "${QA_POLICY_PERMS_MODE:=warn}"
 			: "${QA_POLICY_RPATH_MODE:=fail}"
 			: "${QA_POLICY_PKGCONFIG_MODE:=fail}"
 			: "${QA_POLICY_ELF_MODE:=fail}"
@@ -119,6 +121,7 @@ _qa-policy-apply-defaults() {
 			: "${QA_POLICY_LTO_MODE:=warn}"
 			: "${QA_POLICY_ARCHIVE_MODE:=warn}"
 			: "${QA_POLICY_SHEBANG_MODE:=warn}"
+			: "${QA_POLICY_PERMS_MODE:=warn}"
 			: "${QA_POLICY_RPATH_MODE:=warn}"
 			: "${QA_POLICY_PKGCONFIG_MODE:=warn}"
 			: "${QA_POLICY_ELF_MODE:=report}"
@@ -136,6 +139,8 @@ _qa-policy-apply-defaults() {
 	: "${QA_POLICY_ARCHIVE_REQUIRE_INDEX:=1}"
 	: "${QA_POLICY_ARCHIVE_CHECK_LDSCRIPTS:=1}"
 	: "${QA_POLICY_SHEBANG_SANITIZE:=0}"
+	: "${QA_POLICY_PERMS_SANITIZE:=0}"
+	: "${QA_POLICY_PERMS_SUID_SGID_ALLOW:=}"
 	: "${QA_POLICY_RPATH_ALLOW:=}"
 	: "${QA_POLICY_RPATH_CLEAN:=1}"
 	: "${QA_POLICY_RPATH_ALLOW_EMPTY:=0}"
@@ -178,6 +183,7 @@ _qa-policy-validate-config() {
 		QA_POLICY_ARCHIVE_REQUIRE_INDEX \
 		QA_POLICY_ARCHIVE_CHECK_LDSCRIPTS \
 		QA_POLICY_SHEBANG_SANITIZE \
+		QA_POLICY_PERMS_SANITIZE \
 		QA_POLICY_RPATH_CLEAN \
 		QA_POLICY_RPATH_ALLOW_EMPTY \
 		QA_POLICY_PKGCONFIG_ALLOW_HOST_PATHS \
@@ -195,6 +201,7 @@ _qa-policy-validate-config() {
 		QA_POLICY_LTO_MODE \
 		QA_POLICY_ARCHIVE_MODE \
 		QA_POLICY_SHEBANG_MODE \
+		QA_POLICY_PERMS_MODE \
 		QA_POLICY_RPATH_MODE \
 		QA_POLICY_PKGCONFIG_MODE \
 		QA_POLICY_ELF_MODE; do
@@ -219,6 +226,7 @@ _qa-policy-validate-config() {
 	for var in \
 		QA_POLICY_SKIP_PATHS \
 		QA_POLICY_LINKER_ALLOW \
+		QA_POLICY_PERMS_SUID_SGID_ALLOW \
 		QA_POLICY_RPATH_ALLOW \
 		QA_POLICY_ELF_ALLOW_TEXTREL \
 		QA_POLICY_ELF_ALLOW_EXECSTACK \
@@ -314,6 +322,10 @@ _qa-policy-run-sanitize() {
 		qa-shebang-sanitize
 	fi
 
+	if [[ ${QA_POLICY_PERMS_MODE} != off ]]; then
+		qa-perms-sanitize
+	fi
+
 	if [[ ${QA_POLICY_RPATH_MODE} != off ]]; then
 		qa-rpath-sanitize
 	fi
@@ -329,6 +341,11 @@ _qa-policy-run-assert() {
 
 	if [[ ${QA_POLICY_SHEBANG_MODE} != off ]]; then
 		qa-shebang-assert
+		_qa-policy-maybe-finalize-early
+	fi
+
+	if [[ ${QA_POLICY_PERMS_MODE} != off ]]; then
+		qa-perms-assert
 		_qa-policy-maybe-finalize-early
 	fi
 

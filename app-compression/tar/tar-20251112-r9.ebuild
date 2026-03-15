@@ -2,8 +2,9 @@
 
 EAPI=8
 SNAPSHOT=92f040151cb25f06f7b3da2499471e05a2454218
+PAXUTILS_SNAPSHOT=063408cc6f32fff79b4f436a62236b84ca442d2e
 
-inherit flag-o-matic
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="An archiver that creates and handles file archives in various formats"
 HOMEPAGE="https://www.gnu.org/software/tar/"
@@ -18,31 +19,39 @@ else
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 fi
 
+SRC_URI+="
+	https://github.com/1g4-mirror/paxutils/archive/${PAXUTILS_SNAPSHOT}.tar.gz -> paxutils-${PAXUTILS_SNAPSHOT}.tar.gz
+"
+
 LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl static xattr"
+IUSE="acl static test xattr"
 
 DEPEND="
 	acl? ( app-core/acl )
 	xattr? ( app-core/attr )
 "
+RDEPEND="${DEPEND}"
 
-RESTRICT="network-sandbox"
+BDEPEND="
+	app-build/autoconf
+	app-build/automake
+	app-build/bison
+	app-build/gettext
+	app-build/gnulib
+	app-build/m4
+	app-build/texinfo
+	test? ( app-lang/perl )
+"
+
+RESTRICT="!test? ( test )"
 
 src_prepare() {
-	rm -rf gnulib paxutils
-	cp -r "${BROOT}"/usr/share/gnulib gnulib
-
-	#cd gnulib
-	#git reset --hard 20074698 || die
-	#cd ..
-
-	git clone https://github.com/1g4-mirror/paxutils.git || die
-	#cd paxutils
-	#git reset --hard 9ad2a83
-	#cd ..
+	rm -rf gnulib paxutils || die
+	cp -a "${BROOT}/usr/share/gnulib" gnulib || die
+	cp -a "${WORKDIR}/paxutils-${PAXUTILS_SNAPSHOT}" paxutils || die
 
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib || die
 
@@ -75,6 +84,8 @@ static inline int tar_openat2(int dfd, const char *path, const struct open_how *
 }
 
 src_configure() {
+	qa-policy-configure
+
 	use static && append-ldflags -static
 
 	local myconf=(
@@ -84,4 +95,14 @@ src_configure() {
 		--enable-backup-scripts
 	)
 	FORCE_UNSAFE_CONFIGURE=1 econf "${myconf[@]}"
+}
+
+src_test() {
+	emake check
+}
+
+src_install() {
+	default
+
+	qa-policy-install
 }

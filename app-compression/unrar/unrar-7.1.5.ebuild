@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic toolchain-funcs
+inherit flag-o-matic qa-policy toolchain-funcs
 
 DESCRIPTION="Uncompress rar files"
 HOMEPAGE="http://www.rarlab.com/rar_add.htm"
@@ -21,6 +21,8 @@ PATCHES=(
 append-ldflags -Wl,-soname,libunrar.so.$(ver_cut 0-1)
 
 src_configure() {
+	qa-policy-configure
+
 	mkdir -p build-{lib,bin}
 	printf 'VPATH = ..\ninclude ../makefile' > build-lib/Makefile || die
 	cp build-{lib,bin}/Makefile || die
@@ -37,16 +39,20 @@ src_compile() {
 }
 
 src_install() {
+	local libdir="/usr/$(get_libdir)"
+
 	dobin build-bin/unrar
 
 	newlib.so build-lib/libunrar.so libunrar.so.${PV}
 
 	for x in libunrar.so.$(ver_cut 0-1) libunrar.so ; do
-		dosym -r /usr/lib/libunrar.so.${PV} /usr/lib/${x}
+		dosym -r ${libdir}/libunrar.so.${PV} ${libdir}/${x}
 	done
 
-	insinto /usr/include/libunrar${PV%.*.*}
+	insinto /usr/include/libunrar$(ver_cut 0-1)
 	doins *.hpp
 
 	dosym -r /usr/include/libunrar$(ver_cut 0-1) /usr/include/libunrar
+
+	qa-policy-install
 }

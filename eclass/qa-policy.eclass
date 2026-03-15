@@ -352,6 +352,7 @@ _qa-policy-run-sanitize() {
 	qa-report-domain-begin libtool
 	local file rel re dep_line dep_value
 	local -a kept_files=()
+	local -a kept_links=()
 	local -i files_scanned=0 la_files_seen=0 files_removed=0 files_kept=0
 	local -i dependency_libs_cleaned=0 allowlisted=0
 
@@ -401,6 +402,41 @@ _qa-policy-run-sanitize() {
 	done
 
 	QA_DISCOVER_ALL_FILES=( "${kept_files[@]}" )
+
+	for file in "${QA_DISCOVER_SYMLINKS[@]}"; do
+		(( files_scanned += 1 ))
+		[[ ${file} == *.la ]] || {
+			kept_links+=( "${file}" )
+			continue
+		}
+
+		(( la_files_seen += 1 ))
+		rel=$(_qa-policy-relpath "${file}")
+		allowlisted=0
+
+		if [[ ${QA_POLICY_LA_SANITIZE} == 1 ]]; then
+			for re in ${QA_POLICY_LA_ALLOW}; do
+				if [[ ${rel} =~ ${re} ]]; then
+					allowlisted=1
+					qa-report-note libtool kept-la "${rel}" "kept libtool archive due to allowlist"
+					break
+				fi
+			done
+
+			if [[ ${allowlisted} == 0 ]]; then
+				rm -f -- "${file}" || die "qa-policy: failed to remove libtool archive symlink ${file}"
+				(( files_removed += 1 ))
+				qa-report-note libtool removed-la "${rel}" "removed libtool archive from install image"
+				continue
+			fi
+		fi
+
+		(( files_kept += 1 ))
+		kept_links+=( "${file}" )
+	done
+
+	QA_DISCOVER_SYMLINKS=( "${kept_links[@]}" )
+
 	qa-report-domain-stat libtool files_scanned "${files_scanned}"
 	qa-report-domain-stat libtool la_files_seen "${la_files_seen}"
 	qa-report-domain-stat libtool files_removed "${files_removed}"

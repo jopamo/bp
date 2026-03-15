@@ -17,7 +17,7 @@ esac
 if [[ -z ${_QA_POLICY_ECLASS:-} ]] ; then
 _QA_POLICY_ECLASS=1
 
-inherit qa-report qa-linker qa-lto qa-archive qa-shebang qa-perms qa-rpath qa-pkgconfig qa-elf
+inherit qa-report qa-linker qa-lto qa-archive qa-shebang qa-perms qa-symlink qa-rpath qa-pkgconfig qa-elf
 
 BDEPEND+=" app-dev/patchelf"
 
@@ -102,6 +102,7 @@ _qa-policy-apply-defaults() {
 			: "${QA_POLICY_ARCHIVE_MODE:=fail}"
 			: "${QA_POLICY_SHEBANG_MODE:=warn}"
 			: "${QA_POLICY_PERMS_MODE:=warn}"
+			: "${QA_POLICY_SYMLINK_MODE:=warn}"
 			: "${QA_POLICY_RPATH_MODE:=fail}"
 			: "${QA_POLICY_PKGCONFIG_MODE:=warn}"
 			: "${QA_POLICY_ELF_MODE:=report}"
@@ -112,6 +113,7 @@ _qa-policy-apply-defaults() {
 			: "${QA_POLICY_ARCHIVE_MODE:=fail}"
 			: "${QA_POLICY_SHEBANG_MODE:=fail}"
 			: "${QA_POLICY_PERMS_MODE:=warn}"
+			: "${QA_POLICY_SYMLINK_MODE:=warn}"
 			: "${QA_POLICY_RPATH_MODE:=fail}"
 			: "${QA_POLICY_PKGCONFIG_MODE:=fail}"
 			: "${QA_POLICY_ELF_MODE:=fail}"
@@ -122,6 +124,7 @@ _qa-policy-apply-defaults() {
 			: "${QA_POLICY_ARCHIVE_MODE:=warn}"
 			: "${QA_POLICY_SHEBANG_MODE:=warn}"
 			: "${QA_POLICY_PERMS_MODE:=warn}"
+			: "${QA_POLICY_SYMLINK_MODE:=warn}"
 			: "${QA_POLICY_RPATH_MODE:=warn}"
 			: "${QA_POLICY_PKGCONFIG_MODE:=warn}"
 			: "${QA_POLICY_ELF_MODE:=report}"
@@ -141,6 +144,7 @@ _qa-policy-apply-defaults() {
 	: "${QA_POLICY_SHEBANG_SANITIZE:=0}"
 	: "${QA_POLICY_PERMS_SANITIZE:=0}"
 	: "${QA_POLICY_PERMS_SUID_SGID_ALLOW:=}"
+	: "${QA_POLICY_SYMLINK_SANITIZE:=0}"
 	: "${QA_POLICY_RPATH_ALLOW:=}"
 	: "${QA_POLICY_RPATH_CLEAN:=1}"
 	: "${QA_POLICY_RPATH_ALLOW_EMPTY:=0}"
@@ -166,6 +170,7 @@ _qa-policy-init() {
 	declare -ga QA_DISCOVER_ARCHIVES=()
 	declare -ga QA_DISCOVER_PKGCONFIG=()
 	declare -ga QA_DISCOVER_LDSCRIPTS=()
+	declare -ga QA_DISCOVER_SYMLINKS=()
 	declare -ga QA_DISCOVER_ROOTS=()
 }
 
@@ -184,6 +189,7 @@ _qa-policy-validate-config() {
 		QA_POLICY_ARCHIVE_CHECK_LDSCRIPTS \
 		QA_POLICY_SHEBANG_SANITIZE \
 		QA_POLICY_PERMS_SANITIZE \
+		QA_POLICY_SYMLINK_SANITIZE \
 		QA_POLICY_RPATH_CLEAN \
 		QA_POLICY_RPATH_ALLOW_EMPTY \
 		QA_POLICY_PKGCONFIG_ALLOW_HOST_PATHS \
@@ -202,6 +208,7 @@ _qa-policy-validate-config() {
 		QA_POLICY_ARCHIVE_MODE \
 		QA_POLICY_SHEBANG_MODE \
 		QA_POLICY_PERMS_MODE \
+		QA_POLICY_SYMLINK_MODE \
 		QA_POLICY_RPATH_MODE \
 		QA_POLICY_PKGCONFIG_MODE \
 		QA_POLICY_ELF_MODE; do
@@ -258,15 +265,15 @@ _qa-policy-discover-installed-files() {
 	fi
 
 	for input in "${inputs[@]}"; do
-		[[ -e ${input} ]] || die "qa-policy: missing path ${input}"
+		[[ -e ${input} || -L ${input} ]] || die "qa-policy: missing path ${input}"
 	done
 
 	for input in "${inputs[@]}"; do
 		if [[ -d ${input} ]]; then
 			QA_DISCOVER_ROOTS+=( "${input%/}" )
-			mapfile -d '' -t found < <(find -H "${input}" -type f -print0)
+			mapfile -d '' -t found < <(find -H "${input}" \( -type f -o -type l \) -print0)
 			QA_DISCOVER_ALL_FILES+=( "${found[@]}" )
-		elif [[ -f ${input} ]]; then
+		elif [[ -L ${input} || -f ${input} ]]; then
 			QA_DISCOVER_ALL_FILES+=( "${input}" )
 		fi
 	done
@@ -275,6 +282,12 @@ _qa-policy-discover-installed-files() {
 	for file in "${QA_DISCOVER_ALL_FILES[@]}"; do
 		rel=$(_qa-policy-relpath "${file}")
 		_qa-policy-path-skipped "${rel}" && continue
+
+		if [[ -L ${file} ]]; then
+			QA_DISCOVER_SYMLINKS+=( "${file}" )
+			continue
+		fi
+
 		filtered+=( "${file}" )
 
 		case ${file} in
@@ -326,6 +339,10 @@ _qa-policy-run-sanitize() {
 		qa-perms-sanitize
 	fi
 
+	if [[ ${QA_POLICY_SYMLINK_MODE} != off ]]; then
+		qa-symlink-sanitize
+	fi
+
 	if [[ ${QA_POLICY_RPATH_MODE} != off ]]; then
 		qa-rpath-sanitize
 	fi
@@ -346,6 +363,11 @@ _qa-policy-run-assert() {
 
 	if [[ ${QA_POLICY_PERMS_MODE} != off ]]; then
 		qa-perms-assert
+		_qa-policy-maybe-finalize-early
+	fi
+
+	if [[ ${QA_POLICY_SYMLINK_MODE} != off ]]; then
+		qa-symlink-assert
 		_qa-policy-maybe-finalize-early
 	fi
 

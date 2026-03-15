@@ -88,7 +88,6 @@ _qa-policy-path-skipped() {
 _qa-policy-apply-defaults() {
 	: "${QA_POLICY_ENABLE:=1}"
 	: "${QA_POLICY_PROFILE:=base}"
-	: "${QA_POLICY_FAIL_FAST:=0}"
 	: "${QA_POLICY_SHOW_CLEAN:=0}"
 	: "${QA_POLICY_SUMMARY:=full}"
 	: "${QA_POLICY_SANITIZE:=1}"
@@ -97,28 +96,31 @@ _qa-policy-apply-defaults() {
 
 	case ${QA_POLICY_PROFILE} in
 		base)
+			: "${QA_POLICY_FAIL_FAST:=1}"
 			: "${QA_POLICY_LINKER_MODE:=fail}"
 			: "${QA_POLICY_LTO_MODE:=fail}"
 			: "${QA_POLICY_ARCHIVE_MODE:=fail}"
-			: "${QA_POLICY_SHEBANG_MODE:=warn}"
-			: "${QA_POLICY_PERMS_MODE:=warn}"
-			: "${QA_POLICY_SYMLINK_MODE:=warn}"
+			: "${QA_POLICY_SHEBANG_MODE:=fail}"
+			: "${QA_POLICY_PERMS_MODE:=fail}"
+			: "${QA_POLICY_SYMLINK_MODE:=fail}"
 			: "${QA_POLICY_RPATH_MODE:=fail}"
 			: "${QA_POLICY_PKGCONFIG_MODE:=warn}"
 			: "${QA_POLICY_ELF_MODE:=report}"
 			;;
 		strict)
+			: "${QA_POLICY_FAIL_FAST:=0}"
 			: "${QA_POLICY_LINKER_MODE:=fail}"
 			: "${QA_POLICY_LTO_MODE:=fail}"
 			: "${QA_POLICY_ARCHIVE_MODE:=fail}"
 			: "${QA_POLICY_SHEBANG_MODE:=fail}"
-			: "${QA_POLICY_PERMS_MODE:=warn}"
-			: "${QA_POLICY_SYMLINK_MODE:=warn}"
+			: "${QA_POLICY_PERMS_MODE:=fail}"
+			: "${QA_POLICY_SYMLINK_MODE:=fail}"
 			: "${QA_POLICY_RPATH_MODE:=fail}"
 			: "${QA_POLICY_PKGCONFIG_MODE:=fail}"
 			: "${QA_POLICY_ELF_MODE:=fail}"
 			;;
 		dev)
+			: "${QA_POLICY_FAIL_FAST:=0}"
 			: "${QA_POLICY_LINKER_MODE:=warn}"
 			: "${QA_POLICY_LTO_MODE:=warn}"
 			: "${QA_POLICY_ARCHIVE_MODE:=warn}"
@@ -143,6 +145,7 @@ _qa-policy-apply-defaults() {
 	: "${QA_POLICY_ARCHIVE_CHECK_LDSCRIPTS:=1}"
 	: "${QA_POLICY_SHEBANG_SANITIZE:=0}"
 	: "${QA_POLICY_PERMS_SANITIZE:=0}"
+	: "${QA_POLICY_PERMS_CHECK_WORLD_WRITABLE:=0}"
 	: "${QA_POLICY_PERMS_SUID_SGID_ALLOW:=}"
 	: "${QA_POLICY_SYMLINK_SANITIZE:=0}"
 	: "${QA_POLICY_RPATH_ALLOW:=}"
@@ -189,6 +192,7 @@ _qa-policy-validate-config() {
 		QA_POLICY_ARCHIVE_CHECK_LDSCRIPTS \
 		QA_POLICY_SHEBANG_SANITIZE \
 		QA_POLICY_PERMS_SANITIZE \
+		QA_POLICY_PERMS_CHECK_WORLD_WRITABLE \
 		QA_POLICY_SYMLINK_SANITIZE \
 		QA_POLICY_RPATH_CLEAN \
 		QA_POLICY_RPATH_ALLOW_EMPTY \

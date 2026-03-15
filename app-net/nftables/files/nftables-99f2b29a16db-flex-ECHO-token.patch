@@ -1,0 +1,31 @@
+--- a/src/parser_bison.y
++++ b/src/parser_bison.y
+@@ -485,7 +485,7 @@
+ %token WINDOW			"window"
+ %token URGPTR			"urgptr"
+ %token OPTION			"option"
+-%token ECHO			"echo"
++%token TCP_ECHO			"echo"
+ %token EOL			"eol"
+ %token MPTCP			"mptcp"
+ %token NOP			"nop"
+@@ -6211,7 +6211,7 @@
+ 			|	SACK3		{ $$ = TCPOPT_KIND_SACK3; }
+ 			;
+ 
+-tcp_hdr_option_type	:	ECHO			{ $$ = TCPOPT_KIND_ECHO; }
++tcp_hdr_option_type	:	TCP_ECHO		{ $$ = TCPOPT_KIND_ECHO; }
+ 			|	EOL			{ $$ = TCPOPT_KIND_EOL; }
+ 			|	FASTOPEN		{ $$ = TCPOPT_KIND_FASTOPEN; }
+ 			|	MD5SIG			{ $$ = TCPOPT_KIND_MD5SIG; }
+--- a/src/scanner.l
++++ b/src/scanner.l
+@@ -577,7 +577,7 @@ static void scanner_push_start_cond(void *scanner, enum startcond_type type);
+ 	"urgptr"		{ return URGPTR; }
+ 
+ 	/* tcp option types */
+-	"echo"			{ return ECHO; }
++	"echo"			{ return TCP_ECHO; }
+ 	"eol"			{ return EOL; }
+ 	"maxseg"		{ return MSS; }
+ 	"mss"			{ return MSS; }

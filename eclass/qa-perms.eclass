@@ -144,7 +144,7 @@ qa-perms-assert() {
 			_qa-report-record-mode perms "${QA_POLICY_PERMS_MODE}" suid-sgid "${rel}" "setuid/setgid bit present (mode $(_qa-perms-format-mode "${mode_bits}"))"
 		fi
 
-		if (( (mode_bits & 0002) != 0 )); then
+		if [[ ${QA_POLICY_PERMS_CHECK_WORLD_WRITABLE} == 1 ]] && (( (mode_bits & 0002) != 0 )); then
 			_qa-report-record-mode perms "${QA_POLICY_PERMS_MODE}" world-writable "${rel}" "world-writable bit present (mode $(_qa-perms-format-mode "${mode_bits}"))"
 		fi
 

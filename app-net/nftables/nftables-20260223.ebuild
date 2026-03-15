@@ -9,6 +9,9 @@ HOMEPAGE="https://netfilter.org/projects/nftables/"
 SNAPSHOT=99f2b29a16db71267c936ae447c0de8ee4e294a8
 SRC_URI="https://github.com/1g4-mirror/nftables/archive/${SNAPSHOT}.tar.gz -> nftables-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/nftables-${SNAPSHOT}
+PATCHES=(
+	"${FILESDIR}"/nftables-99f2b29a16db-flex-ECHO-token.patch
+)
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -48,6 +51,10 @@ src_configure() {
 
 src_install() {
 	default
+
+	# Drop libtool archives; they are not needed at runtime and can trigger
+	# executable-bit QA failures.
+	find "${ED}" -type f -name '*.la' -delete || die
 
 	keepdir /var/lib/nftables
 

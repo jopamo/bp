@@ -26,7 +26,7 @@ IUSE="
 	alsa
 	bpf
 	capstone
-	+curses
+	curses
 	curl
 	gnutls
 	gtk
@@ -52,6 +52,33 @@ REQUIRED_USE="
 QA_CONFIG_IMPL_DECL_SKIP=(
 	elf_aux_info
 )
+
+QA_WX_LOAD="
+	usr/share/qemu/openbios-sparc32
+	usr/share/qemu/openbios-sparc64
+	usr/share/qemu/hppa-firmware64.img
+	usr/share/qemu/hppa-firmware.img
+	usr/share/qemu/openbios-ppc
+	usr/share/qemu/palcode-clipper
+	usr/share/qemu/u-boot.e500
+"
+
+QA_EXECSTACK="
+	usr/share/qemu/openbios-sparc32
+	usr/share/qemu/openbios-sparc64
+	usr/share/qemu/hppa-firmware64.img
+	usr/share/qemu/hppa-firmware.img
+"
+
+QA_PRESTRIPPED="
+	usr/share/qemu/s390-ccw.img
+	usr/share/qemu/openbios-sparc32
+	usr/share/qemu/openbios-ppc
+	usr/share/qemu/hppa-firmware64.img
+	usr/share/qemu/hppa-firmware.img
+	usr/share/qemu/u-boot.e500
+	usr/share/qemu/openbios-sparc64
+"
 
 DEPEND="
 	app-core/attr

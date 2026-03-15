@@ -174,6 +174,41 @@ _qa-pkgconfig-check-cflags() {
 	done
 }
 
+_qa-pkgconfig-check-duplicates() {
+	local rel=$1
+	local label=$2
+	local expanded=$3
+	local token
+	local -A seen=()
+	local -A reported=()
+
+	for token in ${expanded}; do
+		case ${token} in
+			-I?*|-L?*|-l?*)
+				if [[ -n ${seen[${token}]:-} ]] && [[ -z ${reported[${token}]:-} ]]; then
+					reported[${token}]=1
+					_qa-report-record-mode pkgconfig "${QA_POLICY_PKGCONFIG_MODE}" duplicate-flag "${rel}" \
+						"${label} contains duplicate flag ${token}"
+				else
+					seen[${token}]=1
+				fi
+				;;
+		esac
+	done
+}
+
+_qa-pkgconfig-check-version() {
+	local file=$1
+	local rel=$2
+	local version
+
+	[[ ${QA_POLICY_PKGCONFIG_REQUIRE_VERSION} == 1 ]] || return 0
+
+	version=$(_qa-pkgconfig-trim "$(_qa-pkgconfig-line "${file}" Version)")
+	[[ -n ${version} ]] || \
+		_qa-report-record-mode pkgconfig "${QA_POLICY_PKGCONFIG_MODE}" missing-version "${rel}" "missing Version field"
+}
+
 _qa-pkgconfig-check-requires-line() {
 	local rel=$1
 	local label=$2
@@ -226,10 +261,14 @@ qa-pkgconfig-check-host-paths() {
 
 qa-pkgconfig-check-libs() {
 	_qa-pkgconfig-check-libs "$@"
+	local file=$1 assoc_name=$3
+	_qa-pkgconfig-check-duplicates "$2" Libs "$(_qa-pkgconfig-expand "$(_qa-pkgconfig-line "${file}" Libs)" "${assoc_name}")"
 }
 
 qa-pkgconfig-check-cflags() {
 	_qa-pkgconfig-check-cflags "$@"
+	local file=$1 assoc_name=$3
+	_qa-pkgconfig-check-duplicates "$2" Cflags "$(_qa-pkgconfig-expand "$(_qa-pkgconfig-line "${file}" Cflags)" "${assoc_name}")"
 }
 
 qa-pkgconfig-check-requires() {
@@ -243,6 +282,10 @@ qa-pkgconfig-check-requires() {
 
 	_qa-pkgconfig-check-requires-line "${rel}" Requires "${requires}"
 	_qa-pkgconfig-check-requires-line "${rel}" Requires.private "${requires_private}"
+}
+
+qa-pkgconfig-check-version() {
+	_qa-pkgconfig-check-version "$@"
 }
 
 qa-pkgconfig-assert() {
@@ -265,6 +308,7 @@ qa-pkgconfig-assert() {
 		qa-pkgconfig-check-libs "${file}" "${rel}" vars
 		qa-pkgconfig-check-cflags "${file}" "${rel}" vars
 		qa-pkgconfig-check-requires "${file}" "${rel}" vars
+		qa-pkgconfig-check-version "${file}" "${rel}" vars
 	done
 
 	qa-report-domain-stat pkgconfig scanned "${#files[@]}"

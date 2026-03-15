@@ -61,6 +61,13 @@ _qa-policy-validate-mode() {
 	esac
 }
 
+_qa-policy-validate-soft-mode() {
+	case ${1} in
+		off|report|warn) ;;
+		*) die "qa-policy: invalid soft mode ${1}" ;;
+	esac
+}
+
 _qa-policy-validate-pattern-list() {
 	local name=$1
 	local re rc
@@ -100,6 +107,7 @@ _qa-policy-apply-defaults() {
 			: "${QA_POLICY_LINKER_MODE:=fail}"
 			: "${QA_POLICY_LTO_MODE:=fail}"
 			: "${QA_POLICY_ARCHIVE_MODE:=fail}"
+			: "${QA_POLICY_LIBTOOL_MODE:=fail}"
 			: "${QA_POLICY_SHEBANG_MODE:=fail}"
 			: "${QA_POLICY_PERMS_MODE:=fail}"
 			: "${QA_POLICY_SYMLINK_MODE:=fail}"
@@ -112,6 +120,7 @@ _qa-policy-apply-defaults() {
 			: "${QA_POLICY_LINKER_MODE:=fail}"
 			: "${QA_POLICY_LTO_MODE:=fail}"
 			: "${QA_POLICY_ARCHIVE_MODE:=fail}"
+			: "${QA_POLICY_LIBTOOL_MODE:=fail}"
 			: "${QA_POLICY_SHEBANG_MODE:=fail}"
 			: "${QA_POLICY_PERMS_MODE:=fail}"
 			: "${QA_POLICY_SYMLINK_MODE:=fail}"
@@ -124,6 +133,7 @@ _qa-policy-apply-defaults() {
 			: "${QA_POLICY_LINKER_MODE:=warn}"
 			: "${QA_POLICY_LTO_MODE:=warn}"
 			: "${QA_POLICY_ARCHIVE_MODE:=warn}"
+			: "${QA_POLICY_LIBTOOL_MODE:=warn}"
 			: "${QA_POLICY_SHEBANG_MODE:=warn}"
 			: "${QA_POLICY_PERMS_MODE:=warn}"
 			: "${QA_POLICY_SYMLINK_MODE:=warn}"
@@ -148,6 +158,7 @@ _qa-policy-apply-defaults() {
 	: "${QA_POLICY_PERMS_CHECK_WORLD_WRITABLE:=0}"
 	: "${QA_POLICY_PERMS_SUID_SGID_ALLOW:=}"
 	: "${QA_POLICY_LA_SANITIZE:=1}"
+	: "${QA_POLICY_LA_ALLOW:=}"
 	: "${QA_POLICY_SYMLINK_SANITIZE:=0}"
 	: "${QA_POLICY_RPATH_ALLOW:=}"
 	: "${QA_POLICY_RPATH_CLEAN:=1}"
@@ -155,10 +166,13 @@ _qa-policy-apply-defaults() {
 	: "${QA_POLICY_PKGCONFIG_ALLOW_HOST_PATHS:=0}"
 	: "${QA_POLICY_PKGCONFIG_ALLOW_MISSING_REQUIRES:=0}"
 	: "${QA_POLICY_PKGCONFIG_ALLOW_NONEXISTENT_LIBDIRS:=0}"
+	: "${QA_POLICY_PKGCONFIG_REQUIRE_VERSION:=0}"
 	: "${QA_POLICY_ELF_ALLOW_TEXTREL:=}"
 	: "${QA_POLICY_ELF_ALLOW_EXECSTACK:=}"
 	: "${QA_POLICY_ELF_ALLOW_MISSING_SONAME:=}"
 	: "${QA_POLICY_ELF_ALLOW_INTERP:=}"
+	: "${QA_POLICY_ELF_HARDENING_MODE:=report}"
+	: "${QA_POLICY_ELF_CHECK_UNUSED_DT_NEEDED:=0}"
 	: "${QA_POLICY_ELF_REQUIRE_GNU_STACK:=1}"
 	: "${QA_POLICY_ELF_REQUIRE_RELRO:=0}"
 	: "${QA_POLICY_ELF_REQUIRE_NOW:=0}"
@@ -201,6 +215,8 @@ _qa-policy-validate-config() {
 		QA_POLICY_PKGCONFIG_ALLOW_HOST_PATHS \
 		QA_POLICY_PKGCONFIG_ALLOW_MISSING_REQUIRES \
 		QA_POLICY_PKGCONFIG_ALLOW_NONEXISTENT_LIBDIRS \
+		QA_POLICY_PKGCONFIG_REQUIRE_VERSION \
+		QA_POLICY_ELF_CHECK_UNUSED_DT_NEEDED \
 		QA_POLICY_ELF_REQUIRE_GNU_STACK \
 		QA_POLICY_ELF_REQUIRE_RELRO \
 		QA_POLICY_ELF_REQUIRE_NOW \
@@ -212,6 +228,7 @@ _qa-policy-validate-config() {
 		QA_POLICY_LINKER_MODE \
 		QA_POLICY_LTO_MODE \
 		QA_POLICY_ARCHIVE_MODE \
+		QA_POLICY_LIBTOOL_MODE \
 		QA_POLICY_SHEBANG_MODE \
 		QA_POLICY_PERMS_MODE \
 		QA_POLICY_SYMLINK_MODE \
@@ -220,6 +237,8 @@ _qa-policy-validate-config() {
 		QA_POLICY_ELF_MODE; do
 		_qa-policy-validate-mode "${!var}"
 	done
+
+	_qa-policy-validate-soft-mode "${QA_POLICY_ELF_HARDENING_MODE}"
 
 	case ${QA_POLICY_SUMMARY} in
 		full|short) ;;
@@ -240,6 +259,7 @@ _qa-policy-validate-config() {
 		QA_POLICY_SKIP_PATHS \
 		QA_POLICY_LINKER_ALLOW \
 		QA_POLICY_PERMS_SUID_SGID_ALLOW \
+		QA_POLICY_LA_ALLOW \
 		QA_POLICY_RPATH_ALLOW \
 		QA_POLICY_ELF_ALLOW_TEXTREL \
 		QA_POLICY_ELF_ALLOW_EXECSTACK \
@@ -330,22 +350,51 @@ _qa-policy-run-sanitize() {
 	_qa-report-set-stage sanitize
 
 	qa-report-domain-begin libtool
-	local file rel
+	local file rel re dep_line dep_value
 	local -a kept_files=()
-	local -i files_scanned=0 la_files_seen=0 files_removed=0
+	local -i files_scanned=0 la_files_seen=0 files_removed=0 files_kept=0
+	local -i dependency_libs_cleaned=0 allowlisted=0
 
 	for file in "${QA_DISCOVER_ALL_FILES[@]}"; do
 		(( files_scanned += 1 ))
 
 		if [[ ${file} == *.la ]]; then
 			(( la_files_seen += 1 ))
+			rel=$(_qa-policy-relpath "${file}")
+			allowlisted=0
+
 			if [[ ${QA_POLICY_LA_SANITIZE} == 1 ]]; then
-				rel=$(_qa-policy-relpath "${file}")
-				rm -f -- "${file}" || die "qa-policy: failed to remove libtool archive ${file}"
-				(( files_removed += 1 ))
-				qa-report-note libtool removed-la "${rel}" "removed libtool archive from install image"
-				continue
+				for re in ${QA_POLICY_LA_ALLOW}; do
+					if [[ ${rel} =~ ${re} ]]; then
+						allowlisted=1
+						qa-report-note libtool kept-la "${rel}" "kept libtool archive due to allowlist"
+						break
+					fi
+				done
+
+				if [[ ${allowlisted} == 0 ]]; then
+					rm -f -- "${file}" || die "qa-policy: failed to remove libtool archive ${file}"
+					(( files_removed += 1 ))
+					qa-report-note libtool removed-la "${rel}" "removed libtool archive from install image"
+					continue
+				fi
 			fi
+
+			dep_line=$(sed -n 's/^dependency_libs=//p' "${file}" | head -n 1)
+			if [[ -n ${dep_line} ]]; then
+				dep_value=${dep_line#\"}
+				dep_value=${dep_value%\"}
+				dep_value=${dep_value#\'}
+				dep_value=${dep_value%\'}
+				if [[ -n ${dep_value} ]]; then
+					sed -i -e "s|^dependency_libs=.*$|dependency_libs=''|" "${file}" || \
+						die "qa-policy: failed to clean dependency_libs for ${file}"
+					(( dependency_libs_cleaned += 1 ))
+					qa-report-note libtool cleaned-dependency-libs "${rel}" "reset non-empty dependency_libs"
+				fi
+			fi
+
+			(( files_kept += 1 ))
 		fi
 
 		kept_files+=( "${file}" )
@@ -355,6 +404,8 @@ _qa-policy-run-sanitize() {
 	qa-report-domain-stat libtool files_scanned "${files_scanned}"
 	qa-report-domain-stat libtool la_files_seen "${la_files_seen}"
 	qa-report-domain-stat libtool files_removed "${files_removed}"
+	qa-report-domain-stat libtool files_kept "${files_kept}"
+	qa-report-domain-stat libtool dependency_libs_cleaned "${dependency_libs_cleaned}"
 
 	if [[ ${QA_POLICY_LTO_MODE} != off ]]; then
 		qa-lto-sanitize
@@ -381,11 +432,51 @@ _qa-policy-run-sanitize() {
 	fi
 }
 
+_qa-policy-libtool-check-file() {
+	local la_file=$1
+	local rel=$2
+	local mode=${QA_POLICY_LIBTOOL_MODE}
+	local needle dep_line dep_value
+
+	for needle in "${D-}" "${ED-}" "${WORKDIR-}" "${T-}"; do
+		[[ -n ${needle} ]] || continue
+		if grep -Fqs -- "${needle}" "${la_file}"; then
+			_qa-report-record-mode libtool "${mode}" build-path-leak "${rel}" "libtool archive contains build path: ${needle}"
+			break
+		fi
+	done
+
+	dep_line=$(sed -n 's/^dependency_libs=//p' "${la_file}" | head -n 1)
+	if [[ -n ${dep_line} ]]; then
+		dep_value=${dep_line#\"}
+		dep_value=${dep_value%\"}
+		dep_value=${dep_value#\'}
+		dep_value=${dep_value%\'}
+		if [[ -n ${dep_value} ]]; then
+			_qa-report-record-mode libtool "${mode}" dependency-libs "${rel}" "unexpected non-empty dependency_libs: ${dep_line}"
+		fi
+	fi
+}
+
 _qa-policy-run-assert() {
 	_qa-report-set-stage assert
 
 	if [[ ${QA_POLICY_ARCHIVE_MODE} != off ]]; then
 		qa-archive-assert
+		_qa-policy-maybe-finalize-early
+	fi
+
+	if [[ ${QA_POLICY_LIBTOOL_MODE} != off ]]; then
+		qa-report-domain-begin libtool
+		local file rel
+		local -i files_scanned=0
+		for file in "${QA_DISCOVER_ALL_FILES[@]}"; do
+			[[ ${file} == *.la ]] || continue
+			(( files_scanned += 1 ))
+			rel=$(_qa-policy-relpath "${file}")
+			_qa-policy-libtool-check-file "${file}" "${rel}"
+		done
+		qa-report-domain-stat libtool files_scanned "${files_scanned}"
 		_qa-policy-maybe-finalize-early
 	fi
 

@@ -3,6 +3,9 @@
 EAPI=8
 
 SNAPSHOT=ef694f7bcc60d2b92e5737e31790791ff4de20f3
+PAXUTILS_SNAPSHOT=9ad2a83e9c8de70d83dbe956c144be51f66a9abb
+
+inherit qa-policy
 
 DESCRIPTION="A file archival tool which can also read and write tar files"
 HOMEPAGE="https://www.gnu.org/software/cpio/cpio.html"
@@ -17,37 +20,56 @@ else
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 fi
 
-LICENSE="GPL-3"
+SRC_URI+="
+	https://github.com/1g4-mirror/paxutils/archive/${PAXUTILS_SNAPSHOT}.tar.gz -> paxutils-${PAXUTILS_SNAPSHOT}.tar.gz
+"
+
+LICENSE="GPL-3+ FDL-1.3+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+IUSE="test"
 
-RESTRICT="network-sandbox"
+BDEPEND="
+	app-build/autoconf
+	app-build/automake
+	app-build/bison
+	app-build/gettext
+	app-build/gnulib
+	app-build/m4
+	app-build/texinfo
+	app-core/git
+	test? ( app-lang/perl )
+"
+
+RESTRICT="!test? ( test )"
 
 src_prepare() {
-	rm -rf gnulib paxutils
-	cp -r "${BROOT}"/usr/share/gnulib gnulib
-	cd gnulib
-	git reset --hard 0a12fa9
-	cd ..
+	rm -rf gnulib paxutils || die
+	cp -a "${BROOT}/usr/share/gnulib" gnulib || die
+	cp -a "${WORKDIR}/paxutils-${PAXUTILS_SNAPSHOT}" paxutils || die
 
-	git clone https://github.com/1g4-mirror/paxutils.git
-	cd paxutils
-	git reset --hard 9ad2a83
-	cd ..
-
-	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
-
-	# Modify git-version-gen to use a specific version number
-	sed -i -e "s/UNKNOWN/${PV}/g" configure || die
+	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}/gnulib" || die
 
 	default
 }
 
 src_configure() {
+	qa-policy-configure
+
 	local myconf=(
-		--with-rmt="${EPREFIX}"/usr/libexec/rmt
+		--with-rmt="${EPREFIX}/usr/libexec/rmt"
 		--enable-mt
 		--disable-nls
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_test() {
+	emake check
+}
+
+src_install() {
+	default
+
+	qa-policy-install
 }

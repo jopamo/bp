@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic qa-policy
+inherit flag-o-matic toolchain-funcs qa-policy
 
 MAINPV=1.0.8
 
@@ -19,14 +19,17 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 src_prepare() {
+	local compiler
+
 	filter-flags -flto*
 
 	default
 
-	sed -i "s|-O2|${CFLAGS}|g" Makefile
-	sed -i "s|-O2|${CFLAGS}|g" Makefile-libbz2_so
-	sed -i "s|gcc|cc|g" Makefile
-	sed -i "s|gcc|cc|g" Makefile-libbz2_so
+	compiler=$(tc-getCC)
+	sed -i "s|-O2|${CFLAGS}|g" Makefile || die
+	sed -i "s|-O2|${CFLAGS}|g" Makefile-libbz2_so || die
+	sed -i "s|gcc|${compiler}|g" Makefile || die
+	sed -i "s|gcc|${compiler}|g" Makefile-libbz2_so || die
 }
 
 src_compile() {
@@ -38,6 +41,8 @@ src_compile() {
 }
 
 src_install() {
+	local libdir="/usr/$(get_libdir)"
+
 	newbin bzip2-shared bzip2
 
 	for x in bzip2recover bzdiff bzgrep bzmore ; do
@@ -51,7 +56,7 @@ src_install() {
 	dolib.so libbz2.so.${MAINPV}
 
 	for x in libbz2.so.1 libbz2.so.1.0 libbz2.so ; do
-		dosym -r /usr/lib/libbz2.so.${MAINPV} /usr/lib/${x}
+		dosym -r "${libdir}/libbz2.so.${MAINPV}" "${libdir}/${x}"
 	done
 
 	if use static-libs ; then
@@ -61,7 +66,7 @@ src_install() {
 	insinto /usr/include
 	doins bzlib.h
 
-	insinto /usr/lib/pkgconfig
+	insinto "${libdir}/pkgconfig"
 	doins "${FILESDIR}"/bzip2.pc
 
 	qa-policy-install

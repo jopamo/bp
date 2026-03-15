@@ -16,7 +16,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="bzip2 gnutls lzma ssl static-libs test tools zstd"
 
-REQUIRED_USE="test? ( tools )"
+REQUIRED_USE="
+	gnutls? ( ssl )
+	test? ( tools )
+"
 
 RESTRICT="!test? ( test )"
 
@@ -99,7 +102,8 @@ src_compile() {
 
 src_test() {
 	run_tests() {
-		[[ ${MULTIBUILD_VARIANT} = shared ]] && cmake_src_test
+		[[ ${MULTIBUILD_VARIANT} = shared ]] || return 0
+		cmake_src_test
 	}
 
 	multibuild_foreach_variant run_tests

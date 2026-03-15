@@ -43,6 +43,7 @@ DEPEND="
 	zlib? ( lib-core/zlib )
 	zstd? ( app-compression/zstd )
 "
+RDEPEND="${DEPEND}"
 
 src_prepare() {
 	default

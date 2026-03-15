@@ -6,7 +6,7 @@ inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="kernel routing and traffic control utilities"
 HOMEPAGE="https://wiki.linuxfoundation.org/networking/iproute2"
-SNAPSHOT=2a82227f984b3f97354e4a490d3f172eedf07f63
+SNAPSHOT=b7d23e62224ff3c18611c962c76a937b1ce29191
 SRC_URI="https://github.com/iproute2/iproute2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/iproute2-${SNAPSHOT}"
 

@@ -39,7 +39,7 @@ src_compile() {
 }
 
 src_install() {
-	local libdir="/usr/$(get_libdir)"
+	local libdir="/usr/lib"
 
 	dobin build-bin/unrar
 

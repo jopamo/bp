@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs flag-o-matic multilib qa-policy
+inherit toolchain-funcs flag-o-matic qa-policy
 
 DESCRIPTION="zstd fast compression library"
 HOMEPAGE="https://facebook.github.io/zstd/"
@@ -20,7 +20,7 @@ DEPEND="app-compression/xz-utils"
 
 src_compile() {
 	qa-policy-configure
-	local libdir="${EPREFIX}/usr/$(get_libdir)"
+	local libdir="${EPREFIX}/usr/lib"
 
 	emake \
 		CC="$(tc-getCC)" \
@@ -44,7 +44,7 @@ src_compile() {
 }
 
 src_install() {
-	local libdir="${EPREFIX}/usr/$(get_libdir)"
+	local libdir="${EPREFIX}/usr/lib"
 
 	emake \
 		DESTDIR="${ED}" \

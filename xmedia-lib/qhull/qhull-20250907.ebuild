@@ -42,8 +42,8 @@ src_configure() {
 
 	local mycmakeargs=(
 		# NOTE undo CMakeLists.txt: "Define shared library for reentrant qhull (installed)" as it yields broken RPATH
-		-DCMAKE_INSTALL_NAME_DIR="${EPREFIX}/usr/$(get_libdir)"
-		-DCMAKE_INSTALL_RPATH="${EPREFIX}/usr/$(get_libdir)"
+		-DCMAKE_INSTALL_NAME_DIR="${EPREFIX}/usr/lib"
+		-DCMAKE_INSTALL_RPATH="${EPREFIX}/usr/lib"
 		-DCMAKE_INSTALL_RPATH_USE_LINK_PATH="no"
 		-DCMAKE_BUILD_WITH_INSTALL_RPATH="yes"
 
@@ -61,7 +61,7 @@ src_install() {
 	cmake_src_install
 
 	if ! use static-libs ; then
-		rm "${ED}/usr/$(get_libdir)/pkgconfig/qhull"{static,static_r,cpp}.pc || die
+		rm "${ED}/usr/lib/pkgconfig/qhull"{static,static_r,cpp}.pc || die
 	fi
 
 	qa-policy-install

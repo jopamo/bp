@@ -87,7 +87,7 @@ extract_version() {
 }
 
 src_install() {
-	local erl_libdir_rel="$(get_libdir)/erlang"
+	local erl_libdir_rel="lib/erlang"
 	local erl_libdir="/usr/${erl_libdir_rel}"
 	local erl_interface_ver="$(extract_version lib/erl_interface EI_VSN)"
 	local erl_erts_ver="$(extract_version erts VSN)"

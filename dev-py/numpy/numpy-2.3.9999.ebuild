@@ -73,7 +73,7 @@ python_configure_all() {
 	filter-flags -Wl,-z,defs
 	
 	# ensure meson sees system pkg-config dirs
-	local _pcpath="${EPREFIX}/usr/lib/pkgconfig:${EPREFIX}/usr/lib64/pkgconfig:${EPREFIX}/usr/share/pkgconfig"
+	local _pcpath="${EPREFIX}/usr/lib/pkgconfig:${EPREFIX}/usr/share/pkgconfig"
 
 	# pick pc names that match ILP64 layout when index64 is on
 	local pc_blas pc_lapack

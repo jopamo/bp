@@ -41,7 +41,7 @@ src_compile() {
 }
 
 src_install() {
-	local libdir="/usr/$(get_libdir)"
+	local libdir="/usr/lib"
 
 	newbin bzip2-shared bzip2
 

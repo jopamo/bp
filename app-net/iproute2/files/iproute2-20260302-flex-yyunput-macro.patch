@@ -1,0 +1,10 @@
+--- a/tc/emp_ematch.l
++++ b/tc/emp_ematch.l
+@@ -32,7 +32,6 @@
+ 	} \
+  }
+ 
+- static void __attribute__ ((unused)) yyunput (int c,char *buf_ptr  );
+  static void __attribute__ ((unused)) yy_push_state (int  new_state );
+  static void __attribute__ ((unused)) yy_pop_state  (void);
+  static int  __attribute__ ((unused)) yy_top_state (void );

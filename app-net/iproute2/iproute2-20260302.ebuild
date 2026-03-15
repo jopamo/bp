@@ -36,6 +36,7 @@ RDEPEND="${DEPEND}"
 PATCHES=(
 	"${FILESDIR}"/iproute2-5.7.0-mix-signal.h-include.patch
 	"${FILESDIR}"/iproute2-mtu.patch
+	"${FILESDIR}"/iproute2-20260302-flex-yyunput-macro.patch
 )
 
 doecho() {

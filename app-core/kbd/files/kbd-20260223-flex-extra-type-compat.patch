@@ -17,7 +17,7 @@ index 7a6e097..772e2ff 100644
  				char *filename = strndup(yytext + 1, strlen(yytext) - 2);
  				if (filename == NULL) {
 -					ERR(yyextra, _("out of memory"));
-+					ERR((struct lk_ctx *)yyextra, _("out of memory"));
++					ERR(((struct lk_ctx *)yyextra), _("out of memory"));
  					return(ERROR);
  				}
  
@@ -37,7 +37,7 @@ index 7a6e097..772e2ff 100644
  			}
  <INCLSTR>[^"]|\"\"|\"[^"\n]*{Eol}	{
 -				ERR(yyextra, _("expected filename between quotes"));
-+				ERR((struct lk_ctx *)yyextra, _("expected filename between quotes"));
++				ERR(((struct lk_ctx *)yyextra), _("expected filename between quotes"));
  				return(ERROR);
  			}
  <<EOF>>			{
@@ -60,7 +60,7 @@ index 7a6e097..772e2ff 100644
  
  				if (yylval->num >= UNICODE_MASK) {
 -					ERR(yyextra, _("unicode keysym out of range: %s"),
-+					ERR((struct lk_ctx *)yyextra, _("unicode keysym out of range: %s"),
++					ERR(((struct lk_ctx *)yyextra), _("unicode keysym out of range: %s"),
  						yytext);
  					return(ERROR);
  				}

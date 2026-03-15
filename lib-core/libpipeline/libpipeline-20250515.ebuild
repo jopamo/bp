@@ -22,10 +22,9 @@ RESTRICT="network-sandbox"
 
 src_prepare() {
 	qa-policy-configure
-	sed -i 's|https://git.savannah.gnu.org/git/gnulib.git|https://github.com/1g4-mirror/gnulib.git|' bootstrap
-	rm -rf gnulib
-	cp -r "${BROOT}"/usr/share/gnulib gnulib
-	./bootstrap
+	rm -rf gnulib || die
+	cp -a "${BROOT}/usr/share/gnulib" gnulib || die
+	./bootstrap --no-git --gnulib-srcdir="${S}/gnulib" || die
 	default
 }
 

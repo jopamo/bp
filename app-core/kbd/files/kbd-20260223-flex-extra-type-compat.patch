@@ -1,0 +1,66 @@
+diff --git a/src/libkeymap/analyze.l b/src/libkeymap/analyze.l
+index 7a6e097..772e2ff 100644
+--- a/src/libkeymap/analyze.l
++++ b/src/libkeymap/analyze.l
+@@ -30,6 +30,9 @@ int stack_pop(struct lk_ctx *ctx, void *scanner);
+ %option extra-type="struct lk_ctx *"
+ 
+ %{
++#ifndef YY_BUF_SIZE
++#define YY_BUF_SIZE 16384
++#endif
+ int
+ stack_push(struct lk_ctx *ctx, struct kbdfile *fp, void *scanner)
+ {
+@@ -398,28 +401,28 @@ To                      to|To|TO
+ 
+ 				char *filename = strndup(yytext + 1, strlen(yytext) - 2);
+ 				if (filename == NULL) {
+-					ERR(yyextra, _("out of memory"));
++					ERR((struct lk_ctx *)yyextra, _("out of memory"));
+ 					return(ERROR);
+ 				}
+ 
+-				fp = open_include(yyextra, filename);
++				fp = open_include((struct lk_ctx *)yyextra, filename);
+ 				free(filename);
+ 
+ 				if (!fp)
+ 					return(ERROR);
+ 
+-				stack_push(yyextra, fp, yyscanner);
++				stack_push((struct lk_ctx *)yyextra, fp, yyscanner);
+ 
+ 				while (((struct yyguts_t*)yyscanner)->yy_start_stack_ptr) {
+ 					yy_pop_state(yyscanner);
+ 				}
+ 			}
+ <INCLSTR>[^"]|\"\"|\"[^"\n]*{Eol}	{
+-				ERR(yyextra, _("expected filename between quotes"));
++				ERR((struct lk_ctx *)yyextra, _("expected filename between quotes"));
+ 				return(ERROR);
+ 			}
+ <<EOF>>			{
+-				stack_pop(yyextra, yyscanner);
++				stack_pop((struct lk_ctx *)yyextra, yyscanner);
+ 				if (!YY_CURRENT_BUFFER)
+ 					yyterminate();
+ 			}
+@@ -438,7 +441,7 @@ To                      to|To|TO
+ {Comment}.*/{Eol}	; /* do nothing */
+ {Equals}		{
+ 				yy_push_state(RVALUE, yyscanner);
+-				lk_array_empty(yyextra->key_line);
++				lk_array_empty(((struct lk_ctx *)yyextra)->key_line);
+ 				return(EQUALS);
+ 			}
+ {String}		{
+@@ -454,7 +457,7 @@ To                      to|To|TO
+ 					return(ERROR);
+ 
+ 				if (yylval->num >= UNICODE_MASK) {
+-					ERR(yyextra, _("unicode keysym out of range: %s"),
++					ERR((struct lk_ctx *)yyextra, _("unicode keysym out of range: %s"),
+ 						yytext);
+ 					return(ERROR);
+ 				}

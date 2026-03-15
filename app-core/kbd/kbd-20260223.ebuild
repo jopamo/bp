@@ -9,6 +9,9 @@ HOMEPAGE="http://kbd-project.org/"
 SNAPSHOT=e9ee3f347124887a54bec4bc3a1ca5044dc0765c
 SRC_URI="https://github.com/1g4-mirror/kbd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
+PATCHES=(
+	"${FILESDIR}"/kbd-20260223-flex-extra-type-compat.patch
+)
 
 LICENSE="GPL-2"
 SLOT="0"

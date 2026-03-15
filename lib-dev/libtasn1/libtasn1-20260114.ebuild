@@ -15,14 +15,12 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs valgrind"
+BDEPEND="app-build/gnulib"
 
 src_prepare() {
 	qa-policy-configure
 	rm -rf gnulib
 	cp -r "${BROOT}"/usr/share/gnulib gnulib
-	cd gnulib
-	git reset --hard 92977
-	cd ..
 
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
 

@@ -23,7 +23,10 @@ DEPEND="
 	app-core/groff
 	zlib? ( lib-core/zlib )
 "
-BDEPEND="app-dev/pkgconf"
+BDEPEND="
+	app-build/gnulib
+	app-dev/pkgconf
+"
 
 src_prepare() {
 	qa-policy-configure

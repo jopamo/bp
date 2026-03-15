@@ -26,7 +26,10 @@ IUSE="static test"
 
 DEPEND="test? ( ${PYTHON_DEPS} )"
 
-BDEPEND="app-build/bison"
+BDEPEND="
+	app-build/bison
+	app-build/gnulib
+"
 
 pkg_setup() {
 	use test && python-any-r1_pkg_setup

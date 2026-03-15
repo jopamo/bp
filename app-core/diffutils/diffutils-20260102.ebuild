@@ -26,17 +26,14 @@ IUSE="static"
 
 DEPEND="app-compression/xz-utils"
 
-BDEPEND="app-dev/gperf"
+BDEPEND="
+	app-build/gnulib
+	app-dev/gperf
+"
 
 src_prepare() {
 	rm -rf gnulib || die
 	cp -a "${BROOT}"/usr/share/gnulib gnulib || die
-
-	if [[ -d gnulib/.git ]]; then
-		git -C gnulib reset --hard 2b2bcdb || die
-	else
-		die "BROOT:/usr/share/gnulib is not a git checkout, cannot reset to 2b2bcdb"
-	fi
 
 	echo "${PV}" > .tarball-version || die
 

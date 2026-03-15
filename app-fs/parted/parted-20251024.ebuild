@@ -32,6 +32,7 @@ DEPEND="
 	readline? ( lib-core/readline virtual/curses )
 	nls? ( app-build/gettext )
 "
+BDEPEND="app-build/gnulib"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-3.2-po4a-mandir.patch

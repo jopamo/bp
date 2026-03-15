@@ -37,6 +37,7 @@ DEPEND="
 	static? ( app-compression/xz-utils[static-libs(+)] )
 	grub_platforms_efi-64? ( app-fs/efibootmgr )
 "
+BDEPEND="app-build/gnulib"
 
 RESTRICT="strip"
 

@@ -25,6 +25,7 @@ KEYWORDS="amd64 arm64"
 IUSE="acl static"
 
 DEPEND="acl? ( app-core/acl )"
+BDEPEND="app-build/gnulib"
 
 src_bootstrap_sed() {
 	# make sure system-sed works #40786
@@ -40,9 +41,6 @@ src_bootstrap_sed() {
 src_prepare() {
 	rm -rf gnulib
 	cp -r "${BROOT}"/usr/share/gnulib gnulib
-	cd gnulib
-	git reset --hard a351f5
-	cd ..
 
 	default
 

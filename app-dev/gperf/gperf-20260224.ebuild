@@ -14,6 +14,7 @@ S="${WORKDIR}/${PN}-${SNAPSHOT}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+BDEPEND="app-build/gnulib"
 
 src_prepare() {
 	rm -rf gnulib
@@ -33,4 +34,3 @@ src_configure() {
 	default
 	sed -i '/doc/d' Makefile || die
 }
-

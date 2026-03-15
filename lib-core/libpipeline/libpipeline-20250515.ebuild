@@ -16,6 +16,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs test"
+BDEPEND="app-build/gnulib"
 
 RESTRICT="network-sandbox"
 

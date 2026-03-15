@@ -23,6 +23,7 @@ SLOT="0"
 #KEYWORDS="amd64 arm64"
 
 DEPEND="core-perl/libintl-perl"
+BDEPEND="app-build/gnulib"
 
 src_prepare() {
 	sed -i '/^install_doc_gnu_eps:/,/^[^[:space:]]/ s/^/#/' doc/doc.am || die

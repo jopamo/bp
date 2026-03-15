@@ -24,7 +24,6 @@ zeroconf"
 CDEPEND="
 	app-compression/libarchive
 	app-lang/perl
-	lib-dev/libaio
 	lib-dev/libbsd
 	lib-core/iniparser
 	lib-core/popt
@@ -178,4 +177,3 @@ pkg_postinst() {
 	sysusers_process
 	tmpfiles_process
 }
-

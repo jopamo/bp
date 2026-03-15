@@ -105,12 +105,30 @@ _lto-policy-strip-bytecode() {
 			done
 			;;
 		llvm)
+			local -a objcopy_cmd=( $(tc-getOBJCOPY) )
+			command -v "${objcopy_cmd[0]}" >/dev/null || die "lto: unable to find ${objcopy_cmd[0]}"
+
 			local -a llvm_strip_cmd=( $(tc-getPROG LLVM_BITCODE_STRIP llvm-bitcode-strip) )
-			command -v "${llvm_strip_cmd[0]}" >/dev/null || die "lto: unable to find ${llvm_strip_cmd[0]}"
+			local have_llvm_strip=0
+			command -v "${llvm_strip_cmd[0]}" >/dev/null 2>&1 && have_llvm_strip=1
+
 			for file in "${files[@]}" ; do
-				"${llvm_strip_cmd[@]}" \
+				if "${objcopy_cmd[@]}" \
+					--remove-section=.llvmbc \
+					--remove-section=.llvm.lto \
+					--remove-section=.gnu.lto_* \
+					--remove-section=.gnu.debuglto_* \
+					"${file}" >/dev/null 2>&1; then
+					continue
+				fi
+
+				if [[ ${have_llvm_strip} == 1 ]] && "${llvm_strip_cmd[@]}" \
 					-r "${file}" \
-					-o "${file}" || die "lto: stripping bytecode in ${file} failed"
+					-o "${file}" >/dev/null 2>&1; then
+					continue
+				fi
+
+				die "lto: stripping bytecode in ${file} failed"
 			done
 			;;
 	esac

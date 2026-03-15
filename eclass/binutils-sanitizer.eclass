@@ -157,6 +157,16 @@ _bu-is-empty-archive() {
 	[[ -z ${listing} ]]
 }
 
+_bu-has-exported-symbols() {
+	local archive=$1
+	local nm_cmd
+	local nm_out
+
+	nm_cmd=$(tc-getNM)
+	nm_out=$("${nm_cmd}" -g --defined-only "${archive}" 2>/dev/null || true)
+	grep -Eq '^[[:space:]]*[0-9a-fA-F]+[[:space:]]+[A-Za-z][[:space:]]' <<< "${nm_out}"
+}
+
 _bu-has-index() {
 	local archive=$1
 	local nm_cmd
@@ -169,7 +179,12 @@ _bu-has-index() {
 
 	nm_cmd=$(tc-getNM)
 	nm_out=$("${nm_cmd}" -s "${archive}" 2>/dev/null) || return 1
-	grep -q '^Archive index:' <<< "${nm_out}"
+	grep -q '^Archive index:' <<< "${nm_out}" && return 0
+
+	# Archives with no exported definitions may legitimately omit a symbol
+	# index (for example compiler-rt preinit stubs). Treat those as passing
+	# the index requirement.
+	! _bu-has-exported-symbols "${archive}"
 }
 
 	_bu-has-lto-ir() {

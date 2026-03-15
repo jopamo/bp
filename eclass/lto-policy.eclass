@@ -353,7 +353,32 @@ _lto-policy-ir-allowed() {
 
 _lto-policy-has-ir() {
 	local archive=$1
-	grep -aEq '__gnu_lto_v1|\.gnu\.lto_|\.llvmbc|\.llvm\.lto' "${archive}"
+	local readelf_cmd nm_cmd
+	local readelf_out nm_out
+
+	if declare -F tc-getREADELF >/dev/null; then
+		readelf_cmd=$(tc-getREADELF)
+	else
+		readelf_cmd=$(command -v readelf || true)
+	fi
+	if [[ -n ${readelf_cmd} ]]; then
+		readelf_out=$("${readelf_cmd}" -SW "${archive}" 2>/dev/null || true)
+		if grep -Eq '\.gnu\.lto_|[[:space:]]\.llvmbc([[:space:]]|$)|\.llvm\.lto' <<< "${readelf_out}"; then
+			return 0
+		fi
+	fi
+
+	if declare -F tc-getNM >/dev/null; then
+		nm_cmd=$(tc-getNM)
+	else
+		nm_cmd=$(command -v nm || true)
+	fi
+	if [[ -n ${nm_cmd} ]]; then
+		nm_out=$("${nm_cmd}" -a "${archive}" 2>/dev/null || true)
+		grep -Eq '(__gnu_lto_v1|__gnu_lto_slim)' <<< "${nm_out}" && return 0
+	fi
+
+	return 1
 }
 
 # @FUNCTION: lto-assert-clean-ir

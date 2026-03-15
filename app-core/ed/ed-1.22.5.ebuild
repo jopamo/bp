@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit unpacker
+inherit qa-policy unpacker
 
 DESCRIPTION="Standard line editor for Unix systems"
 HOMEPAGE="https://www.gnu.org/software/ed/"
@@ -18,15 +18,21 @@ DEPEND="
 "
 
 _makeargs=(
-  CFLAGS="${CFLAGS}"
-  CPPFLAGS="${CPPFLAGS}"
-  LDFLAGS="${LDFLAGS}"
+	CFLAGS="${CFLAGS}"
+	CPPFLAGS="${CPPFLAGS}"
+	LDFLAGS="${LDFLAGS}"
 )
 
 src_configure() {
+	qa-policy-configure
 	${S}/configure --prefix="${EPREFIX}"/usr
 }
 
 src_compile() {
 	emake "${_makeargs[@]}"
+}
+
+src_install() {
+	default
+	qa-policy-install
 }

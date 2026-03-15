@@ -2,6 +2,8 @@
 
 EAPI=8
 
+DISTUTILS_OPTIONAL=1
+
 inherit autotools distutils-r1 qa-policy
 
 DESCRIPTION="identify a file's format by scanning binary data for patterns"
@@ -16,10 +18,14 @@ KEYWORDS="amd64 arm64"
 
 IUSE="python seccomp static-libs zlib"
 
-DEPEND="
+REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
+
+RDEPEND="
 	seccomp? ( lib-core/libseccomp )
 	zlib? ( lib-core/zlib )
+	python? ( ${PYTHON_DEPS} )
 "
+DEPEND="${RDEPEND}"
 
 PATCHES=(
 	#"${FILESDIR}/file-5.43-seccomp-fstatat64-musl.patch"
@@ -29,6 +35,11 @@ PATCHES=(
 src_prepare() {
 	default
 	eautoreconf
+
+	if use python ; then
+		cd python || die
+		distutils-r1_src_prepare
+	fi
 }
 
 src_configure() {
@@ -39,6 +50,11 @@ src_configure() {
 		$(use_enable zlib)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+
+	if use python ; then
+		cd python || die
+		distutils-r1_src_configure
+	fi
 }
 
 src_compile() {
@@ -61,6 +77,6 @@ src_install() {
 		distutils-r1_src_install
 	fi
 
-	qa-policy-install
 	find "${ED}" -type f -name "*.la" -delete || die
+	qa-policy-install
 }

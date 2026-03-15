@@ -137,12 +137,7 @@ _bu-ldscript-has-header() {
 _bu-ldscript-has-token() {
 	local file=$1
 	local token=$2
-	local tok
-	while read -r tok; do
-		[[ ${tok} == "${token}" ]] && return 0
-	done < <(tr '()\t\n' '    ' < "${file}")
-
-	return 1
+	tr '() \t\n' '\n' < "${file}" | grep -Fx -- "${token}" >/dev/null
 }
 
 _bu-is-thin() {

@@ -15,3 +15,20 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RESTRICT="binchecks strip"
+
+src_install() {
+	meson_src_install
+
+	local dir
+	while IFS= read -r dir; do
+		keepdir "/usr/share/icons/hicolor/${dir}"
+	done < <(
+		awk '
+			/^\[[^][]+\]$/ {
+				section = substr($0, 2, length($0) - 2)
+				if (section != "Icon Theme")
+					print section
+			}
+		' index.theme
+	)
+}

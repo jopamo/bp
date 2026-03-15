@@ -3,12 +3,17 @@
 EAPI=8
 SNAPSHOT=1b6fc1940b2b9104729c0a872aeb0fa6d3de71bf
 LIBTOOL_VERSION=2.6.0.14-1b6f
+LIBTOOL_BOOTSTRAP_SNAPSHOT=bfdcc277cd237fde115d3aa972add7608d348b90
 
 DESCRIPTION="A shared library tool for developers"
 HOMEPAGE="https://www.gnu.org/software/libtool/"
 
-SRC_URI="https://github.com/1g4-mirror/libtool/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SRC_URI="
+	https://github.com/1g4-mirror/libtool/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz
+	https://github.com/gnulib-modules/bootstrap/archive/${LIBTOOL_BOOTSTRAP_SNAPSHOT}.tar.gz -> ${PN}-bootstrap-${LIBTOOL_BOOTSTRAP_SNAPSHOT}.tar.gz
+"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
+S_BOOTSTRAP="${WORKDIR}/bootstrap-${LIBTOOL_BOOTSTRAP_SNAPSHOT}"
 
 inherit qa-policy
 
@@ -37,6 +42,15 @@ _libtool_prepare_gnulib() {
 	rm -rf gnulib/.git gnulib/.gitmodules gnulib/.gitignore || die
 }
 
+_libtool_prepare_bootstrap() {
+	rm -rf gl-mod/bootstrap || die
+	mkdir -p gl-mod || die
+	cp -a "${S_BOOTSTRAP}" gl-mod/bootstrap || die
+
+	# Avoid any runtime dependency on git from bootstrap logic.
+	rm -rf gl-mod/bootstrap/.git gl-mod/bootstrap/.gitmodules gl-mod/bootstrap/.gitignore || die
+}
+
 _libtool_write_version_texi() {
 	local ts updated
 
@@ -53,6 +67,7 @@ _libtool_write_version_texi() {
 
 src_prepare() {
 	_libtool_prepare_gnulib
+	_libtool_prepare_bootstrap
 	_libtool_write_version_texi
 
 	sed -i '/^AM_INIT_AUTOMAKE/a AM_MAINTAINER_MODE([disable])' configure.ac || die

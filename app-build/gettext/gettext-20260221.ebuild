@@ -8,7 +8,6 @@ TREE_SITTER_RUST_VERSION=0.23.2
 TREE_SITTER_TYPESCRIPT_VERSION=0.23.2
 TREE_SITTER_OCAML_VERSION=0.23.2
 TREE_SITTER_D_VERSION=0.8.2
-GETTEXT_GNULIB_COMMIT=ac19d2a1ff86dfb70bec3fd1dc6e2fa10b35439e
 
 inherit libtool flag-o-matic qa-policy
 
@@ -53,12 +52,7 @@ BDEPEND="
 _gettext_prepare_gnulib() {
 	rm -rf gnulib || die
 	cp -a "${BROOT}"/usr/share/gnulib gnulib || die
-
-	if [[ -d gnulib/.git ]]; then
-		git -C gnulib reset --hard "${GETTEXT_GNULIB_COMMIT}" || die
-	else
-		die "BROOT:/usr/share/gnulib is not a git checkout, cannot reset"
-	fi
+	rm -rf gnulib/.git gnulib/.gitmodules gnulib/.gitignore || die
 }
 
 _gettext_patch_tree_sitter_source() {
@@ -229,4 +223,3 @@ src_install() {
 	dedup_symlink "${ED}"
 	qa-policy-install
 }
-

@@ -18,7 +18,7 @@ KEYWORDS="amd64 arm64"
 
 COMMON_DEPEND="
 	lib-core/zlib
-	lib-core/zstd
+	app-compression/zstd
 	lib-core/elfutils
 	virtual/libc
 "

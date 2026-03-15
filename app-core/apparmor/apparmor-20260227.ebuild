@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic doins toolchain-funcs linux-info
+inherit flag-o-matic doins toolchain-funcs linux-info qa-policy
 
 DESCRIPTION="Userspace utils and init scripts for the AppArmor application security system"
 HOMEPAGE="https://gitlab.com/apparmor/apparmor/wikis/home"
@@ -44,6 +44,8 @@ src_prepare() {
 src_configure() {
 	# ODR violations (bug #863524)
 	filter-lto
+	QA_POLICY_LTO_FLAVOR=none
+	qa-policy-configure
 
 	default
 }
@@ -64,7 +66,7 @@ src_test() {
 src_install() {
 	emake \
 		SBINDIR="${ED}/usr/bin" \
-	    USR_SBINDIR="${ED}/usr/bin" \
+		USR_SBINDIR="${ED}/usr/bin" \
 		CPP="$(tc-getCPP) -" \
 		DESTDIR="${ED}" \
 		DISTRO="unknown" \
@@ -80,4 +82,5 @@ src_install() {
 
 	dedup_symlink "${ED}"
 	cleanup_install
+	qa-policy-install
 }

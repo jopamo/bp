@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="Utilities for rescue and embedded systems"
 HOMEPAGE="https://www.busybox.net/"
@@ -20,24 +20,16 @@ RESTRICT="test strip"
 
 BDEPEND="lib-core/musl"
 
-create_busybox_symlinks() {
-  BB_BIN="${EPREFIX}/usr/bin/busybox"
+install_busybox_symlinks() {
+	local bb_bin=${ED%/}/usr/bin/busybox
+	local cmd_name
 
-  if [ ! -x "$BB_BIN" ]; then
-    echo "Error: $BB_BIN not found or not executable"
-    return 1
-  fi
+	[[ -x ${bb_bin} ]] || die "busybox binary missing from install image: ${bb_bin}"
 
-  for cmd_name in $("$BB_BIN" --list); do
-    target="${EPREFIX}/usr/bin/${cmd_name}"
-    if [ ! -e "$target" ]; then
-      echo "Creating symlink '${cmd_name}' in ${EPREFIX}/usr/bin/"
-
-      ln -s "busybox" "$target"
-    else
-      echo "Skipping '${cmd_name}' - already exists in ${EPREFIX}/usr/bin/"
-    fi
-  done
+	while IFS= read -r cmd_name; do
+		[[ ${cmd_name} == busybox ]] && continue
+		dosym busybox "/usr/bin/${cmd_name}"
+	done < <("${bb_bin}" --list)
 }
 
 src_prepare() {
@@ -49,6 +41,7 @@ src_prepare() {
 }
 
 src_compile() {
+	qa-policy-configure
 	filter-flags -flto*
 	append-ldflags -static -no-pie -fno-PIE
 	append-ldflags -Wl,-z,noexecstack
@@ -58,8 +51,6 @@ src_compile() {
 src_install() {
 	dobin busybox
 	doman docs/busybox.1
-}
-
-pkg_postinst() {
-	create_busybox_symlinks
+	install_busybox_symlinks
+	qa-policy-install
 }

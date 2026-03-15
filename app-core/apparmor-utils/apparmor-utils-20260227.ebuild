@@ -4,7 +4,7 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..13} )
-inherit distutils-r1 toolchain-funcs desktop
+inherit distutils-r1 toolchain-funcs desktop qa-policy
 
 DESCRIPTION="Additional userspace utils to assist with AppArmor profile management"
 HOMEPAGE="https://gitlab.com/apparmor/apparmor/wikis/home"
@@ -56,11 +56,15 @@ src_compile() {
 	popd > /dev/null || die
 }
 
+src_configure() {
+	qa-policy-configure
+}
+
 src_install() {
 	pushd utils > /dev/null || die
 	emake \
 		SBINDIR="${ED}/usr/bin" \
-	    USR_SBINDIR="${ED}/usr/bin" \
+		USR_SBINDIR="${ED}/usr/bin" \
 		CPP="$(tc-getCPP) -" \
 		DESTDIR="${ED}" \
 		DISTRO="unknown" \
@@ -83,7 +87,7 @@ src_install() {
 	pushd binutils > /dev/null || die
 	emake \
 		SBINDIR="${ED}/usr/bin" \
-	    USR_SBINDIR="${ED}/usr/bin" \
+		USR_SBINDIR="${ED}/usr/bin" \
 		CPP="$(tc-getCPP) -" \
 		DESTDIR="${ED}" \
 		DISTRO="unknown" \
@@ -93,4 +97,5 @@ src_install() {
 
 	dedup_symlink "${ED}"
 	cleanup_install
+	qa-policy-install
 }

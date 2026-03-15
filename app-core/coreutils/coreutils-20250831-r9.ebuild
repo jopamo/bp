@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="Standard GNU utilities (chmod, cp, dd, ls, sort, tr, head, wc, who,...)"
 HOMEPAGE="https://www.gnu.org/software/coreutils/"
@@ -47,7 +47,8 @@ src_prepare() {
 }
 
 src_configure() {
-	append-ldflags -static -no-pie -fno-PIE
+	qa-policy-configure
+	append-ldflags -no-pie -fno-PIE
 	append-ldflags -Wl,-z,noexecstack
 	replace-flags -O3 -O2
 
@@ -75,5 +76,6 @@ src_install() {
 
 	insinto /etc
 	doins "${FILESDIR}"/LS_COLORS
-}
 
+	qa-policy-install
+}

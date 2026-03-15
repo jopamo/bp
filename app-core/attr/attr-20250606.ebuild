@@ -24,11 +24,17 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs debug"
 
-RESTRICT="network-sandbox"
+BDEPEND="
+	app-build/gnulib
+	app-build/gettext
+	app-build/autoconf
+	app-build/automake
+	app-build/libtool
+"
 
 src_prepare() {
-	rm -rf gnulib
-	cp -r "${BROOT}"/usr/share/gnulib gnulib
+	rm -rf gnulib || die
+	cp -r "${BROOT}"/usr/share/gnulib gnulib || die
 
 	./autogen.sh || die
 
@@ -52,8 +58,9 @@ src_configure() {
 
 src_install() {
 	default
-	qa-policy-install
 
 	insinto /usr/include/attr
 	newins "${FILESDIR}"/xattr-shim.h xattr.h
+
+	qa-policy-install
 }

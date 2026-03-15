@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=bbc1bdb7719679b16f0fb45f40c83eb71d1f4f87
 
-inherit flag-o-matic
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="Tools to make diffs and compare files"
 HOMEPAGE="https://www.gnu.org/software/diffutils/"
@@ -47,12 +47,19 @@ src_prepare() {
 }
 
 src_configure() {
+	qa-policy-configure
+
 	use static && append-ldflags -static
 
 	# Disable automagic dependency over libsigsegv; see bug #312351.
 	export ac_cv_libsigsegv=no
 
 	econf --disable-nls
+}
+
+src_install() {
+	default
+	qa-policy-install
 }
 
 src_test() {

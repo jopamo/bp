@@ -80,7 +80,6 @@ src_configure() {
 
 src_install() {
 	meson_src_install
-	qa-policy-install
 
 	if use X; then
 		exeinto /etc/X11/xinit/xinitrc.d
@@ -107,6 +106,8 @@ src_install() {
 
 	newsysusers "${T}/${PN}-sysusers" "${PN}.conf"
 	newtmpfiles "${T}/${PN}-tmpfiles" "${PN}.conf"
+
+	qa-policy-install
 }
 
 pkg_postinst() {

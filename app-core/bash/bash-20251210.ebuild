@@ -5,7 +5,7 @@ EAPI=8
 BRANCH_NAME="master"
 SNAPSHOT=637f5c8696a6adc9b4519f1cd74aa78492266b7f
 
-inherit flag-o-matic prefix
+inherit flag-o-matic prefix qa-policy
 
 DESCRIPTION="The standard GNU Bourne again shell"
 HOMEPAGE="http://tiswww.case.edu/php/chet/bash/bashtop.html"
@@ -16,11 +16,12 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="
+RDEPEND="
 	virtual/libc
 	virtual/curses
 	lib-core/readline
 "
+DEPEND="${RDEPEND}"
 
 src_prepare() {
 	# Prefixify hardcoded path names. No-op for non-prefix.
@@ -34,6 +35,8 @@ src_prepare() {
 }
 
 src_configure() {
+	qa-policy-configure
+
 	local myconf=(
 		--prefix="${EPREFIX}"/usr
 		--disable-profiling
@@ -67,6 +70,8 @@ src_install() {
 
 	#compat symlink
 	dosym bash usr/bin/sh
+
+	qa-policy-install
 }
 
 pkg_preinst() {

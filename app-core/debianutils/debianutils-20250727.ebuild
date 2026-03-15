@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic autotools
+inherit flag-o-matic autotools qa-policy
 
 DESCRIPTION="A selection of tools from Debian"
 HOMEPAGE="https://packages.qa.debian.org/d/debianutils.html"
@@ -25,6 +25,7 @@ src_prepare() {
 }
 
 src_configure() {
+	qa-policy-configure
 	use static && append-ldflags -static
 	default
 }
@@ -47,4 +48,6 @@ src_install() {
 		dobin savelog
 		doman savelog.8
 	fi
+
+	qa-policy-install
 }

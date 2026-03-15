@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson
+inherit meson qa-policy
 
 DESCRIPTION="Search and query ebuilds"
 HOMEPAGE="https://github.com/1g4linux/coreq/"
@@ -22,12 +22,27 @@ KEYWORDS="amd64 arm64"
 
 IUSE="sqlite"
 
-DEPEND="
+RDEPEND="
 	sqlite? ( lib-core/sqlite )
 "
+DEPEND="${RDEPEND}"
+
+src_configure() {
+	local emesonargs=(
+		$(meson_use sqlite)
+	)
+
+	qa-policy-configure
+	meson_src_configure
+}
+
+src_install() {
+	meson_src_install
+	qa-policy-install
+}
 
 pkg_setup() {
-	local old_cache="${EROOT}/var/cache/coreq"
+	local old_cache="${EROOT%/}/var/cache/coreq"
 	test -f "${old_cache}" && rm -f -- "${old_cache}"
 }
 
@@ -37,13 +52,17 @@ pkg_postinst() {
 		ewarn "Found obsolete ${obs}, please remove it"
 	fi
 
-	mkdir -p /var/cache/coreq
-    chmod 0775 /var/cache/coreq
-    chown -R corepkg /var/cache/coreq
+	local cache_dir="${EROOT%/}/var/cache/coreq"
+
+	mkdir -p -- "${cache_dir}" || die
+	chmod 0775 "${cache_dir}" || die
+	if ! chown -R corepkg:corepkg "${cache_dir}" 2>/dev/null ; then
+		ewarn "Unable to set owner/group on ${cache_dir}; ensure it is writable by corepkg."
+	fi
 }
 
 pkg_postrm() {
 	if [ -z "${REPLACED_BY_VERSION}" ]; then
-		rm -r -- "${EROOT}/var/cache/coreq" || die
+		rm -r -- "${EROOT%/}/var/cache/coreq" || die
 	fi
 }

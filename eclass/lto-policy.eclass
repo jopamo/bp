@@ -52,6 +52,50 @@ _lto-policy-strip-mode() {
 	esac
 }
 
+_lto-policy-detect-strip-mode() {
+	local fallback_mode=$1
+	shift
+
+	local file readelf_cmd nm_cmd readelf_out nm_out
+	local has_llvm=0 has_gnu=0
+
+	if declare -F tc-getREADELF >/dev/null; then
+		readelf_cmd=$(tc-getREADELF)
+	else
+		readelf_cmd=$(command -v readelf || true)
+	fi
+	if declare -F tc-getNM >/dev/null; then
+		nm_cmd=$(tc-getNM)
+	else
+		nm_cmd=$(command -v nm || true)
+	fi
+
+	for file in "$@"; do
+		if [[ -n ${readelf_cmd} ]]; then
+			readelf_out=$("${readelf_cmd}" -SW "${file}" 2>/dev/null || true)
+			grep -Eq '[[:space:]]\.llvmbc([[:space:]]|$)|\.llvm\.lto' <<< "${readelf_out}" && has_llvm=1
+			grep -Eq '\.gnu\.lto_' <<< "${readelf_out}" && has_gnu=1
+		fi
+
+		if [[ -n ${nm_cmd} ]]; then
+			nm_out=$("${nm_cmd}" -a "${file}" 2>/dev/null || true)
+			grep -Eq '(__gnu_lto_v1|__gnu_lto_slim)' <<< "${nm_out}" && has_gnu=1
+		fi
+
+		[[ ${has_llvm} == 1 && ${has_gnu} == 1 ]] && break
+	done
+
+	if [[ ${has_llvm} == 1 && ${has_gnu} == 1 ]]; then
+		printf '%s\n' mixed
+	elif [[ ${has_llvm} == 1 ]]; then
+		printf '%s\n' llvm
+	elif [[ ${has_gnu} == 1 ]]; then
+		printf '%s\n' gnu
+	else
+		printf '%s\n' "${fallback_mode}"
+	fi
+}
+
 _lto-policy-enable-fat-objects() {
 	local -a fat_flags=( $(test-flags-CC -ffat-lto-objects) )
 	[[ ${#fat_flags[@]} -gt 0 ]] && append-flags "${fat_flags[@]}"
@@ -90,24 +134,46 @@ _lto-policy-strip-bytecode() {
 
 	local strip_mode
 	strip_mode=$(_lto-policy-strip-mode) || return
+	strip_mode=$(_lto-policy-detect-strip-mode "${strip_mode}" "${files[@]}")
 
 	local file
+	local -a objcopy_cmd=()
+	if [[ ${strip_mode} == llvm || ${strip_mode} == mixed ]]; then
+		local -a llvm_objcopy_cmd=( $(tc-getPROG LLVM_OBJCOPY llvm-objcopy) )
+		if command -v "${llvm_objcopy_cmd[0]}" >/dev/null 2>&1; then
+			objcopy_cmd=( "${llvm_objcopy_cmd[@]}" )
+		fi
+	fi
+	[[ ${#objcopy_cmd[@]} -gt 0 ]] || objcopy_cmd=( $(tc-getOBJCOPY) )
+	command -v "${objcopy_cmd[0]}" >/dev/null || die "lto: unable to find ${objcopy_cmd[0]}"
+
 	case ${strip_mode} in
 		gnu)
 			local -a strip_cmd=( $(tc-getSTRIP) )
 			command -v "${strip_cmd[0]}" >/dev/null || die "lto: unable to find ${strip_cmd[0]}"
 			for file in "${files[@]}" ; do
+				if "${objcopy_cmd[@]}" \
+					--remove-section=.gnu.lto_* \
+					--remove-section=.gnu.debuglto_* \
+					--remove-section=.llvmbc \
+					--remove-section=.llvm.lto \
+					--strip-symbol=__gnu_lto_v1 \
+					--strip-symbol=__gnu_lto_slim \
+					"${file}" >/dev/null 2>&1; then
+					continue
+				fi
+
 				"${strip_cmd[@]}" \
 					-R .gnu.lto_* \
 					-R .gnu.debuglto_* \
+					-R .llvmbc \
+					-R .llvm.lto \
 					-N __gnu_lto_v1 \
+					-N __gnu_lto_slim \
 					"${file}" || die "lto: stripping bytecode in ${file} failed"
 			done
 			;;
 		llvm)
-			local -a objcopy_cmd=( $(tc-getOBJCOPY) )
-			command -v "${objcopy_cmd[0]}" >/dev/null || die "lto: unable to find ${objcopy_cmd[0]}"
-
 			local -a llvm_strip_cmd=( $(tc-getPROG LLVM_BITCODE_STRIP llvm-bitcode-strip) )
 			local have_llvm_strip=0
 			command -v "${llvm_strip_cmd[0]}" >/dev/null 2>&1 && have_llvm_strip=1
@@ -118,6 +184,45 @@ _lto-policy-strip-bytecode() {
 					--remove-section=.llvm.lto \
 					--remove-section=.gnu.lto_* \
 					--remove-section=.gnu.debuglto_* \
+					"${file}" >/dev/null 2>&1; then
+					continue
+				fi
+
+				if [[ ${have_llvm_strip} == 1 ]] && "${llvm_strip_cmd[@]}" \
+					-r "${file}" \
+					-o "${file}" >/dev/null 2>&1; then
+					continue
+				fi
+
+				die "lto: stripping bytecode in ${file} failed"
+			done
+			;;
+		mixed)
+			local -a strip_cmd=( $(tc-getSTRIP) )
+			local -a llvm_strip_cmd=( $(tc-getPROG LLVM_BITCODE_STRIP llvm-bitcode-strip) )
+			local have_strip=0 have_llvm_strip=0
+			command -v "${strip_cmd[0]}" >/dev/null 2>&1 && have_strip=1
+			command -v "${llvm_strip_cmd[0]}" >/dev/null 2>&1 && have_llvm_strip=1
+
+			for file in "${files[@]}" ; do
+				if "${objcopy_cmd[@]}" \
+					--remove-section=.gnu.lto_* \
+					--remove-section=.gnu.debuglto_* \
+					--remove-section=.llvmbc \
+					--remove-section=.llvm.lto \
+					--strip-symbol=__gnu_lto_v1 \
+					--strip-symbol=__gnu_lto_slim \
+					"${file}" >/dev/null 2>&1; then
+					continue
+				fi
+
+				if [[ ${have_strip} == 1 ]] && "${strip_cmd[@]}" \
+					-R .gnu.lto_* \
+					-R .gnu.debuglto_* \
+					-R .llvmbc \
+					-R .llvm.lto \
+					-N __gnu_lto_v1 \
+					-N __gnu_lto_slim \
 					"${file}" >/dev/null 2>&1; then
 					continue
 				fi

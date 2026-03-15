@@ -1,0 +1,53 @@
+diff --git a/lib/config/defaults.h b/lib/config/defaults.h
+index cec2959..f28db08 100644
+--- a/lib/config/defaults.h
++++ b/lib/config/defaults.h
+@@ -70,7 +70,11 @@
+ #define DEFAULT_USE_MLOCKALL 0
+ #define DEFAULT_METADATA_READ_ONLY 0
+ #define DEFAULT_LVDISPLAY_SHOWS_FULL_DEVICE_PATH 0
+ #define DEFAULT_UNKNOWN_DEVICE_NAME "[unknown]"
++#ifdef LVM_NO_LIBAIO
++#define DEFAULT_USE_AIO 0
++#else
+ #define DEFAULT_USE_AIO 1
++#endif
+ 
+ #define DEFAULT_SANLOCK_LV_EXTEND_MB 256
+ #define DEFAULT_SANLOCK_ALIGN_SIZE 8 /* in MiB, applies to 4K disks only */
+diff --git a/lib/device/bcache.c b/lib/device/bcache.c
+index 7f5d8be..a33247d 100644
+--- a/lib/device/bcache.c
++++ b/lib/device/bcache.c
+@@ -26,7 +26,9 @@
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <stdint.h>
++#if !defined(LVM_NO_LIBAIO)
+ #include <libaio.h>
++#endif
+ #include <unistd.h>
+ #include <linux/fs.h>
+ #include <sys/user.h>
+@@ -126,6 +128,7 @@ static struct control_block *_iocb_to_cb(struct iocb *icb)
+ 
+ //----------------------------------------------------------------
+ 
++#if !defined(LVM_NO_LIBAIO)
+ struct async_engine {
+ 	struct io_engine e;
+ 	io_context_t aio_context;
+@@ -409,6 +412,13 @@ struct io_engine *create_async_io_engine(void)
+ 	/* coverity[leaked_storage] 'e' is not leaking */
+ 	return &e->e;
+ }
++#else
++struct io_engine *create_async_io_engine(void)
++{
++	return NULL;
++}
++#endif
++
+ 
+ //----------------------------------------------------------------
+ 

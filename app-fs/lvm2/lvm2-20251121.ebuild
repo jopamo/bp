@@ -19,12 +19,12 @@ IUSE="static-libs systemd udev dm-only"
 DEPEND="
 	app-core/util-linux
 	lib-core/readline
-	lib-dev/libaio[static-libs?]
 	systemd? ( app-core/systemd )
 "
 
 PATCHES=(
 	"${FILESDIR}"/fix-stdio-usage.patch
+	"${FILESDIR}"/no-libaio.patch
 )
 
 src_configure() {
@@ -51,6 +51,8 @@ src_configure() {
    		--with-thin=internal
 		--without-libnvme
 	)
+	AIO_CFLAGS= AIO_LIBS= \
+	CPPFLAGS="${CPPFLAGS} -DLVM_NO_LIBAIO" \
 	CLDFLAGS="${LDFLAGS}" econf "${myconf[@]}"
 }
 

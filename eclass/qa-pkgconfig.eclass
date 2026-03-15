@@ -239,11 +239,17 @@ _qa-pkgconfig-check-requires-line() {
 		[[ -d ${ED%/}/usr/lib64/pkgconfig ]] && search_dirs+=( "${ED%/}/usr/lib64/pkgconfig" )
 		[[ -d ${ED%/}/usr/share/pkgconfig ]] && search_dirs+=( "${ED%/}/usr/share/pkgconfig" )
 
-		if ! PKG_CONFIG_LIBDIR=$(IFS=:; printf '%s' "${search_dirs[*]}") \
+		if PKG_CONFIG_LIBDIR=$(IFS=:; printf '%s' "${search_dirs[*]}") \
 			PKG_CONFIG_PATH=$(IFS=:; printf '%s' "${search_dirs[*]}") \
 			pkg-config --exists "${trimmed}"; then
-			_qa-report-record-mode pkgconfig "${QA_POLICY_PKGCONFIG_MODE}" missing-requires "${rel}" "${label} requirement not resolvable: ${trimmed}"
+			continue
 		fi
+
+		if [[ ${QA_POLICY_PKGCONFIG_REQUIRE_IMAGE_REQUIRES} == 0 ]] && pkg-config --exists "${trimmed}"; then
+			continue
+		fi
+
+		_qa-report-record-mode pkgconfig "${QA_POLICY_PKGCONFIG_MODE}" missing-requires "${rel}" "${label} requirement not resolvable: ${trimmed}"
 	done
 }
 

@@ -3,20 +3,14 @@
 EAPI=8
 SNAPSHOT=1b6fc1940b2b9104729c0a872aeb0fa6d3de71bf
 LIBTOOL_VERSION=2.6.0.14-1b6f
-LIBTOOL_GNULIB_COMMIT=e93789db7e86c51d6cb9683ea508e676a55cdefa
 
 DESCRIPTION="A shared library tool for developers"
 HOMEPAGE="https://www.gnu.org/software/libtool/"
 
-EGIT_REPO_URI="https://github.com/1g4-mirror/libtool"
-inherit git-r3 qa-policy
-EGIT_COMMIT="${SNAPSHOT}"
-EGIT_SUBMODULES=( gl-mod/bootstrap )
-
-: '
 SRC_URI="https://github.com/1g4-mirror/libtool/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
-    '
+
+inherit qa-policy
 
 LICENSE="GPL-2+ LGPL-2+ FDL-1.3+"
 SLOT="2"
@@ -33,17 +27,14 @@ BDEPEND="
 	app-core/help2man
 "
 
-RESTRICT="network-sandbox"
+# This ebuild is expected to build without network access.
 
 _libtool_prepare_gnulib() {
 	rm -rf gnulib || die
 	cp -a "${BROOT}"/usr/share/gnulib gnulib || die
 
-	if [[ -d gnulib/.git ]]; then
-		git -C gnulib reset --hard "${LIBTOOL_GNULIB_COMMIT}" || die
-	else
-		die "BROOT:/usr/share/gnulib is not a git checkout, cannot reset"
-	fi
+	# Avoid any runtime dependency on git from bootstrap logic.
+	rm -rf gnulib/.git gnulib/.gitmodules gnulib/.gitignore || die
 }
 
 _libtool_write_version_texi() {
@@ -67,6 +58,7 @@ src_prepare() {
 	sed -i '/^AM_INIT_AUTOMAKE/a AM_MAINTAINER_MODE([disable])' configure.ac || die
 	sed -i '/^AM_INIT_AUTOMAKE/a AM_MAINTAINER_MODE([disable])' libltdl/configure.ac || die
 
+	export GIT=:
 	./bootstrap --skip-git || die
 
 	default

@@ -1,0 +1,20 @@
+--- a/scanner.l
++++ b/scanner.l
+@@ -48,7 +48,7 @@ typedef enum {
+ 	STOULEN_ERROR
+ } stoulen_ret;
+ 
+-stoulen_ret stoulen(const char *string, size_t stringlen, bpf_u_int32 *val,
++static stoulen_ret stoulen(const char *string, size_t stringlen, bpf_u_int32 *val,
+     compiler_state_t *cstate);
+ }
+ 
+@@ -486,7 +486,7 @@ stou(const char *yytext_arg, YYSTYPE *yylval_arg, compiler_state_t *yyextra_arg
+  */
+ DIAG_ON_FLEX
+ 
+-stoulen_ret
++static stoulen_ret
+ stoulen(const char *string, size_t string_len, bpf_u_int32 *val,
+     compiler_state_t *cstate)
+ {

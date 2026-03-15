@@ -22,9 +22,14 @@ RESTRICT="network-sandbox"
 
 src_prepare() {
 	qa-policy-configure
+
+	# New gnulib exposes verror declarations from <error.h>; verror.h was dropped.
+	sed -i 's|#include "verror.h"|#include <error.h>|' lib/fatal.c || die
+
 	rm -rf gnulib || die
 	cp -a "${BROOT}/usr/share/gnulib" gnulib || die
 	./bootstrap --no-git --gnulib-srcdir="${S}/gnulib" || die
+
 	default
 }
 

@@ -34,6 +34,13 @@ PDEPEND="lib-core/tzdb"
 # glibc installs crtn.o already stripped.
 QA_PRESTRIPPED="usr/lib/crtn.o"
 
+# glibc 2.34+ ships these as intentionally empty compatibility archives
+# because libpthread/libdl/librt/libutil/libanl were merged into libc.
+# Keep them installed (toolchain compatibility), but skip empty-archive QA.
+QA_POLICY_SKIP_PATHS="
+	^/usr/lib/lib(anl|pthread|util|dl|rt)\\.a$
+"
+
 PATCHES=(
 	"${FILESDIR}"/0001-Disable-ldconfig-during-install.patch
 )

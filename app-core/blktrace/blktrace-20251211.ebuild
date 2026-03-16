@@ -25,6 +25,7 @@ PATCHES=(
 CONFIG_CHECK="~BLK_DEV_IO_TRACE"
 WARNING_BLK_DEV_IO_TRACE="you need to enable BLK_DEV_IO_TRACE kernel option \
 	if you want to gather traces from this machine"
+QA_POLICY_SHEBANG_SANITIZE=1
 
 src_compile() {
 	qa-policy-configure

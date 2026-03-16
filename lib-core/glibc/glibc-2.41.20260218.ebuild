@@ -36,9 +36,13 @@ QA_PRESTRIPPED="usr/lib/crtn.o"
 
 # glibc 2.34+ ships these as intentionally empty compatibility archives
 # because libpthread/libdl/librt/libutil/libanl were merged into libc.
-# Keep them installed (toolchain compatibility), but skip empty-archive QA.
-QA_POLICY_SKIP_PATHS="
-	^/usr/lib/lib(anl|pthread|util|dl|rt)\\.a$
+# Keep asserting archive shape: these paths are expected to be empty.
+QA_POLICY_ARCHIVE_EXPECT_EMPTY="
+	^/usr/lib/libanl\\.a$
+	^/usr/lib/libpthread\\.a$
+	^/usr/lib/libutil\\.a$
+	^/usr/lib/libdl\\.a$
+	^/usr/lib/librt\\.a$
 "
 
 PATCHES=(

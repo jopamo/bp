@@ -66,6 +66,16 @@ qa-archive-list-duplicate-members() {
 	"${ar_cmd}" t "${archive}" | sed '/^$/d' | sort | uniq -d
 }
 
+qa-archive-empty-expected() {
+	local rel=$1
+	local re
+
+	for re in ${QA_POLICY_ARCHIVE_EXPECT_EMPTY}; do
+		[[ ${rel} =~ ${re} ]] && return 0
+	done
+	return 1
+}
+
 qa-archive-sanitize() {
 	qa-report-domain-begin archive
 
@@ -103,7 +113,7 @@ qa-archive-assert() {
 	local archive script rel members dup
 	local ar_cmd
 	local -i archives_scanned=${#archives[@]} ldscripts_scanned=0
-	local -i empty_archives=0 duplicate_member_names=0
+	local -i empty_archives=0 expected_empty_archives=0 duplicate_member_names=0
 	local mode=${QA_POLICY_ARCHIVE_MODE}
 
 	ar_cmd=$(tc-getAR)
@@ -116,7 +126,19 @@ qa-archive-assert() {
 			continue
 		fi
 
-		if [[ -z ${members//$'\n'/} ]]; then
+		local -i member_count=0
+		if [[ -n ${members//$'\n'/} ]]; then
+			member_count=$(printf '%s\n' "${members}" | sed '/^$/d' | wc -l)
+		fi
+
+		if qa-archive-empty-expected "${rel}"; then
+			if (( member_count == 0 )); then
+				(( expected_empty_archives += 1 ))
+				qa-report-note archive expected-empty-archive "${rel}" "archive is empty as expected"
+			else
+				_qa-report-record-mode archive "${mode}" unexpected-nonempty-archive "${rel}" "expected empty archive, found ${member_count} member(s)"
+			fi
+		elif (( member_count == 0 )); then
 			(( empty_archives += 1 ))
 			_qa-report-record-mode archive "${mode}" empty-archive "${rel}" "archive has no members"
 		fi
@@ -150,6 +172,7 @@ qa-archive-assert() {
 
 	qa-report-domain-stat archive archives_scanned "${archives_scanned}"
 	qa-report-domain-stat archive empty_archives "${empty_archives}"
+	qa-report-domain-stat archive expected_empty_archives "${expected_empty_archives}"
 	qa-report-domain-stat archive duplicate_member_names "${duplicate_member_names}"
 	qa-report-domain-stat archive ldscripts_scanned "${ldscripts_scanned}"
 }

@@ -2,8 +2,8 @@
 
 EAPI=8
 
-BRANCH_NAME="v$(ver_cut 1)-$(ver_cut 2)-stable"
-SNAPSHOT=70eeb7220627eae6f6e0e76f1ec114a1ac965671
+#BRANCH_NAME="v$(ver_cut 1)-$(ver_cut 2)-stable"
+#SNAPSHOT=70eeb7220627eae6f6e0e76f1ec114a1ac965671
 
 inherit linux-info git-r3 flag-o-matic doins
 
@@ -11,7 +11,7 @@ DESCRIPTION="Samba Suite Version 4"
 HOMEPAGE="https://www.samba.org/"
 EGIT_REPO_URI=https://github.com/samba-team/samba.git
 EGIT_BRANCH="v$(ver_cut 1)-$(ver_cut 2)-stable"
-EGIT_COMMIT="${SNAPSHOT}"
+#EGIT_COMMIT="${SNAPSHOT}"
 
 LICENSE="GPL-3"
 SLOT="0"

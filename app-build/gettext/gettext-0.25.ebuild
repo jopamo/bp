@@ -8,7 +8,7 @@ DESCRIPTION="GNU locale utilities"
 HOMEPAGE="https://www.gnu.org/software/gettext/"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 
-LICENSE="GPL-3+ LGPL-2.1+"
+LICENSE="GPL-3+ LGPL-2.1+ MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -58,6 +58,7 @@ src_configure() {
 		--with-included-libcroco
 		--with-included-libunistring
 		--with-xz
+		--disable-xattr
 		--without-emacs
 		--without-included-libxml
 		--without-lispdir
@@ -84,6 +85,15 @@ src_install() {
 	rm -f "${ED}/usr/share/locale/locale.alias" \
 		"${ED}/usr/lib/charset.alias" \
 		"${ED}/usr/include/libintl.h"
+
+	# Keep gettext tooling fully functional (libintl stays built), but trim
+	# gettext's own translated UI catalogs for a minimal-i18n base.
+	if [[ -d "${ED}/usr/share/locale" ]]; then
+		find "${ED}/usr/share/locale" -type f \
+			\( -name gettext-runtime.mo -o -name gettext-tools.mo \) \
+			-delete || die
+		find "${ED}/usr/share/locale" -depth -type d -empty -delete || die
+	fi
 
 	mkdir -p "${ED}/usr/share/gettext-${PV}" || die
 	cp -rp "${ED}"/usr/share/gettext/* "${ED}/usr/share/gettext-${PV}"/ || die

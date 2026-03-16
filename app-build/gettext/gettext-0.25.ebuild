@@ -39,6 +39,13 @@ src_prepare() {
 
 src_configure() {
 	qa-policy-configure
+
+	# gettext's "working iconv" probe is overly strict for our glibc setup and
+	# can be tripped by toolchain/configuration details, which disables iconv in
+	# msgfmt/gmsgfmt. Force the known-good path so charset conversion stays
+	# enabled for downstream package builds (e.g. gdb po files).
+	export am_cv_func_iconv_works=yes
+
 	local myconf=(
 		$(use_enable acl)
 		$(use_enable openmp)
@@ -98,4 +105,3 @@ src_install() {
 	dedup_symlink "${ED}"
 	qa-policy-install
 }
-

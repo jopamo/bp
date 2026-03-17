@@ -1,7 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-SNAPSHOT=1e9c36271ea388cd155f2b7808c71113301e1631
+
+SNAPSHOT=04c5b7c9209801aa1bdbf279ccdcde0d57874a55
 
 inherit autotools qa-policy
 
@@ -24,8 +25,6 @@ BDEPEND="
 	app-build/m4
 	test? ( app-build/bison )
 "
-
-PATCHES=( "${FILESDIR}"/flex-20260224-parallel-bootstrap-race.patch )
 
 src_prepare() {
 	default

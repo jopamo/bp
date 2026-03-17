@@ -27,7 +27,7 @@ DEPEND="${COMMON_DEPEND}"
 
 PATCHES=(
 	"${FILESDIR}"/binutils-ld-fix-static-linking.patch
-	"${FILESDIR}"/binutils-flex-2.6-yyatbol.patch
+	#"${FILESDIR}"/binutils-flex-2.6-yyatbol.patch
 )
 
 src_configure() {

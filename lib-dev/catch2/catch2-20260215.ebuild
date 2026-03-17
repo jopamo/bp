@@ -9,7 +9,7 @@ HOMEPAGE="https://github.com/catchorg/Catch2"
 
 SNAPSHOT=b9eeca15d7598fae6a368c1c5d2462108f892849
 SRC_URI="https://github.com/catchorg/Catch2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S=${WORKDIR}/${PN}-${SNAPSHOT}
+S=${WORKDIR}/Catch2-${SNAPSHOT}
 
 LICENSE="Boost-1.0"
 SLOT="0"

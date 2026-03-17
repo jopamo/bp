@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=dd594fe7b83f4d0096a3d9a903b3abe6a3f4fb2e
 
-inherit flag-o-matic python-any-r1
+inherit flag-o-matic python-any-r1 qa-policy
 
 DESCRIPTION="GNU utilities for finding files"
 HOMEPAGE="https://www.gnu.org/software/findutils/"
@@ -32,23 +32,25 @@ BDEPEND="
 "
 
 pkg_setup() {
-	use test && python-any-r1_pkg_setup
+	if use test; then
+		python-any-r1_pkg_setup
+	fi
 }
 
 src_prepare() {
-	rm -rf gnulib
-	cp -r "${BROOT}"/usr/share/gnulib gnulib
+	rm -rf gnulib || die
+	cp -a "${BROOT}"/usr/share/gnulib gnulib || die
 	#cd gnulib
 	#git reset --hard 0a12fa9
 	#cd ..
 
-	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
+	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib || die
 
 	# Modify git-version-gen to use a specific version number
 	sed -i -e "s/UNKNOWN/${PV}/g" configure || die
 
 	default
-	sed -i '/^SUBDIRS/s/locate//' Makefile.in
+	sed -i '/^SUBDIRS/s/locate//' Makefile.in || die
 
 	sed -i \
 		'/include.*config.h/a#ifdef MAJOR_IN_SYSMACROS\n#include <sys/sysmacros.h>\n#endif\n' \
@@ -56,6 +58,8 @@ src_prepare() {
 }
 
 src_configure() {
+	qa-policy-configure
+
 	use static && append-ldflags -static
 
 	econf --disable-nls
@@ -68,5 +72,6 @@ src_compile() {
 
 src_install() {
 	default
-	rm -rf "${ED}"/var/lib
+	rm -rf "${ED}"/var/lib || die
+	qa-policy-install
 }

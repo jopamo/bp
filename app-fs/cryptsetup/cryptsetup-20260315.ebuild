@@ -6,7 +6,7 @@ inherit linux-info autotools flag-o-matic qa-policy
 
 DESCRIPTION="Tool to setup encrypted devices with dm-crypt"
 HOMEPAGE="https://gitlab.com/cryptsetup/cryptsetup/blob/master/README.md"
-SNAPSHOT=66919540cc88e0e8c3525301f767745b82fd8c84
+SNAPSHOT=609bef4edb10f70fa75e012f6578f0d744742ec1
 SRC_URI="https://gitlab.com/cryptsetup/cryptsetup/-/archive/${SNAPSHOT}/cryptsetup-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/cryptsetup-${SNAPSHOT}"
 

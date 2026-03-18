@@ -8,7 +8,7 @@ inherit distutils-r1
 
 DESCRIPTION="DNS toolkit for Python"
 HOMEPAGE="https://www.dnspython.org/"
-SNAPSHOT=1191a37adbf11f7796e897fbef97216af7d7c38e
+SNAPSHOT=04ef19a280101f7c815162ee121e4bcd03d02012
 SRC_URI="https://github.com/rthalley/dnspython/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

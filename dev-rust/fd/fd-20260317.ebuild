@@ -6,7 +6,7 @@ inherit cargo
 
 DESCRIPTION="A simple, fast and user-friendly alternative to gnu find"
 HOMEPAGE="https://github.com/sharkdp/fd"
-SNAPSHOT=a07ad517517dbe32cf70377beff227244189ab48
+SNAPSHOT=fcd846651bd2652f7d867f15e7159d085c2e7abc
 SRC_URI="https://github.com/sharkdp/fd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

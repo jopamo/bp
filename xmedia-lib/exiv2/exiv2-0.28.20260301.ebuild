@@ -8,7 +8,7 @@ inherit cmake qa-policy
 
 DESCRIPTION="EXIF, IPTC and XMP metadata C++ library and command line utility"
 HOMEPAGE="http://www.exiv2.org/"
-SNAPSHOT=21d129c842212c198dd887dbaafc5ce734e9dfad
+SNAPSHOT=2cd987a731236037b6b78cbff897d08685a8ef49
 SRC_URI="https://github.com/Exiv2/exiv2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/exiv2-${SNAPSHOT}"
 

@@ -6,7 +6,7 @@ inherit toolchain-funcs qa-policy
 
 DESCRIPTION="NVIDIA Accelerated Graphics Driver Settings"
 HOMEPAGE="http://www.nvidia.com/ http://www.nvidia.com/Download/Find.aspx"
-SNAPSHOT=109d7080d0cc13ae4bbee295331776b219151ddb
+SNAPSHOT=048767d5c9c7e8dcd05cd52d510e8fe4217afe70
 SRC_URI="https://github.com/NVIDIA/nvidia-settings/archive/${SNAPSHOT}.tar.gz -> nvidia-settings-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/nvidia-settings-${SNAPSHOT}/src"
 

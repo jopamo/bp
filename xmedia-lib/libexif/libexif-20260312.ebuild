@@ -6,7 +6,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="Library for parsing, editing, and saving EXIF data"
 HOMEPAGE="https://github.com/libexif"
-SNAPSHOT=9a34c3f4f70d8e19d11d93f8551c79c5180f902f
+SNAPSHOT=808e61320f2790fdf958b2605d91ca7d18965e6d
 SRC_URI="https://github.com/libexif/libexif/archive/${SNAPSHOT}.tar.gz -> libexif-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libexif-${SNAPSHOT}"
 

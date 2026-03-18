@@ -1,2 +1,2 @@
-DIST hatch-hatchling-v1.28.0.gh.tar.gz 5296066 SHA3_256 6b983d4994ef66cb8182c2e4ef719c7ae3bf83edeb8b97974d50b012f6cb4a86
-DIST hatch-hatchling-v1.29.0.gh.tar.gz 5301488 SHA3_256 f6d6e9d950b4d35c80c8ff7f5f8d3be15e1d58dd93e0dcd0ec823b783aebdd92
+DIST hatch-hatchling-v1.28.0.gh.tar.gz 5296066 BLAKE3 b3f2926a339b627ec0143ec58d3830bdac17b7e3a4b175019373e80b6fe95f50
+DIST hatch-hatchling-v1.29.0.gh.tar.gz 5301488 BLAKE3 081451491c370ac20603da2dc9acaddff8f493e11ad5b3475a78bd9334f5c049

@@ -1,1 +1,2 @@
-DIST platformdirs-4.9.2.tar.gz 28394 SHA3_256 4b0b439401f1e6aa5ddbbbea6124ce3fca268c49abb9bb69c1495014fd10637f
+DIST platformdirs-4.9.2.tar.gz 28394 BLAKE3 0e806d15c5e286b718219b50c631da95ae3b109023b866e69e4da9005ea8179c
+DIST platformdirs-4.9.2.tar.gz.provenance 9509 BLAKE3 e1561c36bd5f2df974661c0c55d98c0dfe77b6b13d5eeaf146bac88becb55a35

@@ -1,1 +1,2 @@
-DIST click-8.3.1.tar.gz 295065 SHA3_256 33a57a46429325e7f6386b0ddb3cd90684ec6275feb9ace7a6f8f79f136b4895
+DIST click-8.3.1.tar.gz 295065 BLAKE3 dd355ef1cff757cd1d0d2bf6c0ec81cf7e67c0a95fc556d215f6af326b61f8de
+DIST click-8.3.1.tar.gz.provenance 8911 BLAKE3 9037cc14a21ff6c839e88ba82a8424b2cced247aadabbdba1e3d7d9e9ad929e6

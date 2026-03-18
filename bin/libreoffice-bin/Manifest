@@ -1,2 +1,1 @@
-DIST LibreOffice_25.8.4_Linux_x86-64_deb.tar.gz 212825187 SHA3_256 6ee0b842ce0581d35e7e5dd9c7ed817bd68003ee6a5eb7e263efb6d17481a497
-DIST LibreOffice_25.8.4_Linux_x86-64_deb_helppack_en-US.tar.gz 1895298 SHA3_256 6c4aaaec8d166ba3277a003b4f76d87a5cc27eab5f073cda2ef626894c40c4f3
+DIST LibreOffice_25.8.4_Linux_x86-64_deb.tar.gz 212825187 BLAKE3 fe987d207d50dabc0be30eb654ee877117e5e0e75c499f821f7a877ab7ee2f8d

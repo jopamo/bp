@@ -769,7 +769,9 @@ python_setup() {
 	fi
 
 	_python_wrapper_setup
-	einfo "Using ${EPYTHON} in global scope"
+	if [[ -z ${EBUILD_PHASE} || ${EBUILD_PHASE} == depend ]]; then
+		einfo "Using ${EPYTHON} in global scope"
+	fi
 }
 
 # @FUNCTION: python_replicate_script

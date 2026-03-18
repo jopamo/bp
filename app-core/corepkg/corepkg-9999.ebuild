@@ -23,22 +23,24 @@ KEYWORDS="amd64 arm64"
 IUSE="build gentoo-dev ipc native-extensions
 	gentoo_repo +rsync-verify selinux test xattr"
 
-DEPEND="
-	app-build/patch
-	app-compression/tar
-	app-core/sed
-"
-
-RDEPEND="
+COMMON_DEPEND="
 	app-compression/tar
 	app-core/bash
 	app-core/findutils
 	app-core/install-xattr
 	app-core/sandbox
 	app-core/sed
+	app-crypto/blake3
 	app-crypto/gnupg
 	dev-py/lxml[${PYTHON_USEDEP}]
 "
+
+DEPEND="
+	${COMMON_DEPEND}
+	app-build/patch
+"
+
+RDEPEND="${COMMON_DEPEND}"
 PDEPEND="app-net/rsync"
 
 pkg_pretend() {

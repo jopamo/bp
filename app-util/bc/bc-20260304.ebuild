@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="An implementation of the POSIX bc calculator with GNU extensions and dc"
 HOMEPAGE="https://github.com/gavinhoward/bc"
-SNAPSHOT=ec712dfba5c70fcf7958f1471fc93ead014d02f8
+SNAPSHOT=975570a56b6cee7566f97d9ea6673cfcc409880a
 SRC_URI="https://github.com/gavinhoward/bc/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

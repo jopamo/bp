@@ -6,8 +6,7 @@ inherit cmake
 
 DESCRIPTION="Modern, header-only C++ test framework"
 HOMEPAGE="https://github.com/catchorg/Catch2"
-
-SNAPSHOT=b9eeca15d7598fae6a368c1c5d2462108f892849
+SNAPSHOT=ccc49ba66484d881087fdc87fcc68b488c49bca4
 SRC_URI="https://github.com/catchorg/Catch2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/Catch2-${SNAPSHOT}
 

@@ -6,7 +6,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="A lightweight and flexible command-line JSON processor"
 HOMEPAGE="https://stedolan.github.io/jq/"
-SNAPSHOT=2ad99a6c700618da258a53eb0d46b3dba2a2d396
+SNAPSHOT=cec6b0f34603edc5cd12db1f63dacdf547b4bb4a
 SRC_URI="https://github.com/jqlang/jq/archive/${SNAPSHOT}.tar.gz -> jq-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/jq-${SNAPSHOT}"
 

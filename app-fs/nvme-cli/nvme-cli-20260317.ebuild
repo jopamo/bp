@@ -6,7 +6,7 @@ inherit meson flag-o-matic
 
 DESCRIPTION="NVMe management command line interface"
 HOMEPAGE="https://github.com/linux-nvme/nvme-cli"
-SNAPSHOT=7e89b0de2993047d1f74635371de0c496c871e10
+SNAPSHOT=cd3c69127887967d95b0d83adb2d5276b701c480
 SRC_URI="https://github.com/linux-nvme/nvme-cli/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

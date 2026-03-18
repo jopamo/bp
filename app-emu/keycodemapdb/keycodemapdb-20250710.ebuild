@@ -4,7 +4,7 @@ EAPI=8
 
 DESCRIPTION="Keyboard map conversion database used by QEMU"
 HOMEPAGE="https://gitlab.com/qemu-project/keycodemapdb"
-SNAPSHOT=f5772a62ec52591ff6870b7e8ef32482371f22c6
+SNAPSHOT=54788039c0b3486a8883090d6736c2500177af29
 SRC_URI="https://gitlab.com/qemu-project/keycodemapdb/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

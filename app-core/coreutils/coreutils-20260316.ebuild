@@ -40,6 +40,9 @@ src_prepare() {
 	# app-build/gnulib is installed from a fixed tarball without git metadata.
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib || die
 
+	# The current app-build/gnulib snapshot exports struct aclinfo.u.__gl_acl_ch.
+	sed -i -e 's/ai->u\._gl_acl_ch/ai->u.__gl_acl_ch/' src/ls.c || die
+
 	append-flags -fno-strict-aliasing
 	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
 }

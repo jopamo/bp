@@ -6,7 +6,7 @@ inherit user
 
 DESCRIPTION="Small forwarding DNS server"
 HOMEPAGE="http://www.thekelleys.org.uk/dnsmasq/doc.html"
-SNAPSHOT=e4d0bb45799a055f222704f66b0373697cbaa86d
+SNAPSHOT=1eab169173fc4c8579a3db61186096fe117e6aca
 
 SRC_URI="https://github.com/1g4-mirror/dnsmasq/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/dnsmasq-${SNAPSHOT}"

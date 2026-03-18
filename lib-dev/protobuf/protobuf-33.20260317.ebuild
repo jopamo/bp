@@ -5,7 +5,7 @@ EAPI=8
 inherit cmake flag-o-matic
 
 BRANCH_NAME="$(ver_cut 1).x"
-SNAPSHOT=a594f973eb3eeb443e83e0c6aacd112c7be94243
+SNAPSHOT=2ba9b9cf6f0d5917f11fbc0d7362d66901b7511b
 
 DESCRIPTION="neutral and extensible mechanism for serializing structured data"
 HOMEPAGE="https://developers.google.com/protocol-buffers/"

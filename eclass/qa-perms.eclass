@@ -48,9 +48,13 @@ _qa-perms-is-common-nonexec-path() {
 			;;
 	esac
 
-	case ${base} in
-		readme|news|copying|license|authors|changelog|install|thanks|todo)
-			return 0
+	case ${rel} in
+		/usr/share/doc/*|/usr/share/info/*|/usr/share/man/*|/usr/share/licenses/*|/usr/share/license/*|/usr/share/gtk-doc/*)
+			case ${base} in
+				readme|news|copying|license|authors|changelog|install|thanks|todo)
+					return 0
+					;;
+			esac
 			;;
 	esac
 

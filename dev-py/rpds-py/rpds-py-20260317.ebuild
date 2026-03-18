@@ -9,7 +9,7 @@ inherit cargo distutils-r1
 
 DESCRIPTION="Python bindings to Rust's persistent data structures (rpds)"
 HOMEPAGE="https://github.com/crate-py/rpds/"
-SNAPSHOT=b8c531664cbff785095c33de95dad3d644eef340
+SNAPSHOT=d6d7893f110980270da2fd4f0dfde4636352f5b2
 SRC_URI="https://github.com/crate-py/rpds/archive/${SNAPSHOT}.tar.gz -> rpds-py-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/rpds-${SNAPSHOT}"
 

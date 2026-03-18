@@ -31,19 +31,21 @@ BDEPEND="app-build/gnulib"
 
 RESTRICT="network-sandbox"
 
-src_prepare() {
-	rm -rf gnulib
-	cp -r "${BROOT}"/usr/share/gnulib gnulib
-	cd gnulib
-	git reset --hard a351f5
-	cd ..
+PATCHES=(
+	"${FILESDIR}/${PN}-20250831-gnulib-tests-am-cflags.patch"
+)
 
-	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
+src_prepare() {
+	default
+
+	rm -rf gnulib || die
+	cp -a "${BROOT}"/usr/share/gnulib gnulib || die
+
+	# app-build/gnulib is installed from a fixed tarball without git metadata.
+	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib || die
 
 	append-flags -fno-strict-aliasing
-
 	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
-	default
 }
 
 src_configure() {

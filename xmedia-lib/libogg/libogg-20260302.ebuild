@@ -6,7 +6,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="the Ogg media file format library"
 HOMEPAGE="https://xiph.org/ogg/"
-SNAPSHOT=0288fadac3ac62d453409dfc83e9c4ab617d2472
+SNAPSHOT=06a5e0262cdc28aa4ae6797627a783b5010440f0
 SRC_URI="https://github.com/xiph/ogg/archive/${SNAPSHOT}.tar.gz -> ogg-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ogg-${SNAPSHOT}"
 

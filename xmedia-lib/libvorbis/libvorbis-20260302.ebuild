@@ -6,7 +6,7 @@ inherit cmake qa-policy
 
 DESCRIPTION="The Ogg Vorbis sound file format library"
 HOMEPAGE="https://xiph.org/vorbis/"
-SNAPSHOT=2d79800b6751dddd4b8b4ad50832faa5ae2a00d9
+SNAPSHOT=8de7001691d9177e30ff16a98b37b1e6fd15f7af
 SRC_URI="https://github.com/xiph/vorbis/archive/${SNAPSHOT}.tar.gz -> vorbis-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/vorbis-${SNAPSHOT}"
 

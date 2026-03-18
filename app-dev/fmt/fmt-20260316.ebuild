@@ -6,7 +6,7 @@ inherit cmake
 
 DESCRIPTION="A modern formatting library"
 HOMEPAGE="https://github.com/fmtlib/fmt"
-SNAPSHOT=88c5a91487142afb96f1c48f76ebad526a7a2cbf
+SNAPSHOT=4968433a6abecbbf7e72e97188926586a7fd0662
 SRC_URI="https://github.com/fmtlib/fmt/archive/${SNAPSHOT}.tar.gz -> fmt-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/fmt-${SNAPSHOT}"
 

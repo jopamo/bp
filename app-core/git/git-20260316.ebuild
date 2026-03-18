@@ -19,6 +19,7 @@ IUSE="curl static-libs +perl gitweb"
 
 DEPEND="
 	app-build/gettext
+	app-lang/python
 	app-net/curl
 	lib-core/libpcre2
 	lib-core/expat
@@ -35,6 +36,7 @@ src_configure() {
 		--with-libpcre2
 		--with-curl
 		--with-expat
+		--with-python=/usr/bin/python3
 		--without-openssl
 		--without-tcltk
 	)
@@ -43,8 +45,6 @@ src_configure() {
 
 src_install() {
 	default
-
-	qa-policy-install
 	use static-libs || find "${ED}" -name "*.a" -delete || die
 	use perl || rm -rf "${ED}"/usr/share/perl5 || die
 	use gitweb || rm -rf "${ED}"/usr/share/gitweb || die
@@ -52,4 +52,6 @@ src_install() {
 	insopts -m 0644
 	insinto /etc
 	doins "${FILESDIR}"/gitconfig
+
+	qa-policy-install
 }

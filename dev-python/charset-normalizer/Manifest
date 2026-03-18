@@ -1,1 +1,2 @@
-DIST charset_normalizer-3.4.4.tar.gz 129418 SHA3_256 5f4c36c6f9a07297f5b9cd1dee89b0a9a1d8dbeab3c483eb5687bc80b067f7ac
+DIST charset_normalizer-3.4.4.tar.gz 129418 BLAKE3 d83f22524eae5efd2583db551e153173c7c91a0a57558befe31fb43a6afff77f
+DIST charset_normalizer-3.4.4.tar.gz.provenance 9506 BLAKE3 a1816fbc0ec2b684d58ee0a8183431870f7996e40905cc93fac46455fa30defb

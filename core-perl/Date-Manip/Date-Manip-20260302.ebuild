@@ -6,7 +6,7 @@ inherit perl-module
 
 DESCRIPTION="Perl date manipulation routines"
 HOMEPAGE="https://metacpan.org/release/Date-Manip"
-SNAPSHOT=80b496189e86463faaf0ea382e7012648482ec0b
+SNAPSHOT=a88bc8c4a3e86c3b7661fcdc5a1f9ea8da20a3bf
 SRC_URI="https://github.com/SBECK-github/Date-Manip/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

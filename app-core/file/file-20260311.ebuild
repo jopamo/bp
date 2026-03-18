@@ -8,7 +8,7 @@ inherit autotools distutils-r1 qa-policy
 
 DESCRIPTION="identify a file's format by scanning binary data for patterns"
 HOMEPAGE="https://www.darwinsys.com/file/"
-SNAPSHOT=0a21e4bd522ac87c4c9fb8dd0f972efec2e8f7a1
+SNAPSHOT=fac0603d48af08d53547b795385abef4337d6d5f
 SRC_URI="https://github.com/file/file/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

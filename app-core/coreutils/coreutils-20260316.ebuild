@@ -31,10 +31,6 @@ BDEPEND="app-build/gnulib"
 
 RESTRICT="network-sandbox"
 
-PATCHES=(
-	"${FILESDIR}/${PN}-20260316-gnulib-tests-am-cflags.patch"
-)
-
 src_prepare() {
 	default
 

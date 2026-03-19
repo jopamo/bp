@@ -30,13 +30,12 @@ BDEPEND="
 
 src_prepare() {
 	qa-policy-configure
-	rm -rf gnulib
-	cp -r "${BROOT}"/usr/share/gnulib gnulib
-	#cd gnulib
-	#git reset --hard 0a12fa9
-	#cd ..
+	rm -rf gnulib || die
+	cp -a "${BROOT}"/usr/share/gnulib gnulib || die
+	# New gnulib exposes verror declarations from <error.h>; verror.h was dropped.
+	sed -i 's|#include "verror.h"|#include <error.h>|' lib/fatal.c || die
 
-	./bootstrap || die
+	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib || die
 
 	default
 	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die

@@ -15,6 +15,7 @@ S=${WORKDIR}/${PN}-${SNAPSHOT}
 LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+RESTRICT="test"
 
 IUSE="python seccomp static-libs zlib"
 

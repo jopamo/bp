@@ -1,0 +1,37 @@
+--- a/src/PassivGrab.c
++++ b/src/PassivGrab.c
+@@ -754,17 +754,20 @@
+                   Modifiers modifiers,
+                   Boolean isKeyboard)
+ {
+-    XtServerGrabRec tempGrab;
++    struct {
++        XtServerGrabRec grab;
++        XtServerGrabExtRec ext;
++    } tempGrab = { 0 };
+     XtPerWidgetInput pwi;
+ 
+     XtCheckSubclass(widget, coreWidgetClass,
+                     "in XtUngrabKey or XtUngrabButton");
+ 
+     /* Build a temporary grab list entry */
+-    tempGrab.widget = widget;
+-    tempGrab.modifiers = (unsigned short) modifiers;
+-    tempGrab.keybut = (KeyCode) keyOrButton;
+-    tempGrab.hasExt = False;
++    tempGrab.grab.widget = widget;
++    tempGrab.grab.modifiers = (unsigned short) modifiers;
++    tempGrab.grab.keybut = (KeyCode) keyOrButton;
++    tempGrab.grab.hasExt = False;
+ 
+     LOCK_PROCESS;
+     pwi = _XtGetPerWidgetInput(widget, FALSE);
+@@ -793,7 +796,7 @@
+ 
+     /* Delete all entries which are encompassed by the specified grab. */
+     DeleteServerGrabFromList(isKeyboard ? &pwi->keyList : &pwi->ptrList,
+-                             &tempGrab);
++                             &tempGrab.grab);
+ }
+ 
+ void

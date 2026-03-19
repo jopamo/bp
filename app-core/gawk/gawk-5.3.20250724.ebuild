@@ -17,7 +17,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="mpfr readline"
+IUSE="elibc_musl mpfr readline"
 
 DEPEND="
 	lib-core/gmp

@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=071ac3aa76a575dd55dc184570da2192adafe267
 
-inherit flag-o-matic
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="GNU regular expression matcher"
 HOMEPAGE="https://www.gnu.org/software/grep/"
@@ -35,29 +35,28 @@ BDEPEND="
 "
 
 src_prepare() {
-	rm -rf gnulib
-	cp -r "${BROOT}"/usr/share/gnulib gnulib
+	rm -rf gnulib || die
+	cp -a "${BROOT}"/usr/share/gnulib gnulib || die
 	#cd gnulib
 	#git reset --hard 0a12fa9
 	#cd ..
 
-	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
-
-	cat > "${T}"/egrep <<- EOF || die
-		#!/bin/sh
-		exec grep -E "\$@"
-	EOF
-	cat > "${T}"/fgrep <<- EOF || die
-		#!/bin/sh
-		exec grep -F "\$@"
-	EOF
+	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib || die
 
 	default
+
+	sed -i \
+		-e '/^cmd=/d' \
+		-e '/obsolescent/d' \
+		src/egrep.sh || die
+
 	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
 }
 
 src_configure() {
 	use static && append-ldflags -static
+
+	qa-policy-configure
 
 	local myconf=(
 		--disable-nls
@@ -69,6 +68,6 @@ src_configure() {
 
 src_install() {
 	default
-	dobin "${T}"/egrep
-	dobin "${T}"/fgrep
+
+	qa-policy-install
 }

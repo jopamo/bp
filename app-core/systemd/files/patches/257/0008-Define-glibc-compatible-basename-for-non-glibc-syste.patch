@@ -15,10 +15,10 @@ Signed-off-by: Khem Raj <raj.khem@gmail.com>
  1 file changed, 4 insertions(+)
 
 diff --git a/src/basic/string-util.h b/src/basic/string-util.h
-index cc6aa183c0..0b035125cd 100644
+index 341a825c07..4fa2adf0b3 100644
 --- a/src/basic/string-util.h
 +++ b/src/basic/string-util.h
-@@ -27,6 +27,10 @@
+@@ -26,6 +26,10 @@
  #define URI_UNRESERVED      ALPHANUMERICAL "-._~"       /* [RFC3986] */
  #define URI_VALID           URI_RESERVED URI_UNRESERVED /* [RFC3986] */
  
@@ -26,7 +26,7 @@ index cc6aa183c0..0b035125cd 100644
 +#define basename(src) (strrchr(src,'/') ? strrchr(src,'/')+1 : src)
 +#endif
 +
- static inline char* strstr_ptr(const char *haystack, const char *needle) {
+ static inline char* strstr_ptr_internal(const char *haystack, const char *needle) {
          if (!haystack || !needle)
                  return NULL;
 -- 

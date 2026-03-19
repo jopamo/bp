@@ -36,6 +36,7 @@ BDEPEND="app-lang/python"
 RESTRICT="!test? ( test )"
 
 CMAKE_BUILD_TYPE=Release
+QA_POLICY_SHEBANG_SANITIZE=1
 
 PATCHES=(
    "${FILESDIR}/install-prefix.patch"

@@ -263,7 +263,6 @@ src_configure() {
 
     use debug || local -x CPPFLAGS="${CPPFLAGS} -DNDEBUG"
 
-    local QA_POLICY_LTO_FLAVOR=fat+strip
     qa-policy-configure
 
     cmake_src_configure

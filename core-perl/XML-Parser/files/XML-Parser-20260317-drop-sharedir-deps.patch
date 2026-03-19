@@ -1,13 +1,16 @@
 --- a/Expat/Expat.pm
 +++ b/Expat/Expat.pm
-@@
+@@ -12,17 +12,14 @@
+ our ( %Encoding_Table, @Encoding_Path, $have_File_Spec );
+ 
+ use File::Spec ();
 -use File::ShareDir ();
 -
  %Encoding_Table = ();
--
+ 
 -my $_share_dir;
 -eval { $_share_dir = File::ShareDir::dist_dir('XML-Parser') };
- 
+-
  @Encoding_Path = (
 -    ( defined $_share_dir && -d $_share_dir ? ($_share_dir) : () ),
 -    grep( -d $_,
@@ -19,15 +22,23 @@
 +    ),
      File::Spec->curdir
  );
+ 
 --- a/Makefile.PL
 +++ b/Makefile.PL
-@@
+@@ -2,9 +2,6 @@
+ use ExtUtils::MakeMaker;
+ use lib './inc';
+ use Devel::CheckLib;
 -use File::ShareDir::Install;
 -install_share dist => 'share';
 -
  use Config;
  use File::Spec;
-@@
+ 
+@@ -152,12 +149,6 @@
+     $ret;
+ }
+ 
 -sub MY::postamble {
 -    my $self = shift;
 -    my @ret  = File::ShareDir::Install::postamble($self);
@@ -35,7 +46,12 @@
 -}
 -
  my @extras = ();
-@@
+ 
+ push(
+@@ -196,13 +187,6 @@
+     clean        => { FILES => 'assertlib*' },
+     dist         => { COMPRESS => 'gzip', SUFFIX => '.gz' },
+     VERSION_FROM => 'Parser.pm',
 -    CONFIGURE_REQUIRES => {
 -        'ExtUtils::MakeMaker'     => 0,
 -        'File::ShareDir::Install' => '0.06',

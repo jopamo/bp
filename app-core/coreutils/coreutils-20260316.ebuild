@@ -43,6 +43,9 @@ src_prepare() {
 	# The current app-build/gnulib snapshot exports struct aclinfo.u.__gl_acl_ch.
 	sed -i -e 's/ai->u\._gl_acl_ch/ai->u.__gl_acl_ch/' src/ls.c || die
 
+	# GCC 15 warns that src_mode may be used uninitialized in copy_internal.
+	sed -i -e 's/mode_t src_mode IF_LINT ( = 0);/mode_t src_mode = 0;/' src/copy.c || die
+
 	append-flags -fno-strict-aliasing
 	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
 }

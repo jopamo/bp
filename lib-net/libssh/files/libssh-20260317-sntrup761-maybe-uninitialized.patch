@@ -1,0 +1,33 @@
+--- a/src/external/sntrup761.c
++++ b/src/external/sntrup761.c
+@@ -553,22 +553,17 @@ static void
+ Rq_mult_small (Fq * h, const Fq * f, const small * g)
+ {
+   Fq fg[p + p - 1];
+-  Fq result;
+   int i, j;
+ 
+-  for (i = 0; i < p; ++i)
++  for (i = 0; i < p + p - 1; ++i)
+     {
+-      result = 0;
+-      for (j = 0; j <= i; ++j)
+-	result = Fq_freeze (result + f[j] * (int32_t) g[i - j]);
+-      fg[i] = result;
+-    }
+-  for (i = p; i < p + p - 1; ++i)
+-    {
+-      result = 0;
+-      for (j = i - p + 1; j < p; ++j)
+-	result = Fq_freeze (result + f[j] * (int32_t) g[i - j]);
+-      fg[i] = result;
++      int32_t sum = 0;
++      int start = i < p ? 0 : i - p + 1;
++      int end = i < p ? i : p - 1;
++
++      for (j = start; j <= end; ++j)
++	sum += f[j] * (int32_t) g[i - j];
++      fg[i] = Fq_freeze (sum);
+     }
+ 
+   for (i = p + p - 2; i >= p; --i)

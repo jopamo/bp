@@ -9,6 +9,9 @@ HOMEPAGE="http://www.libssh.org/"
 SNAPSHOT=3154a4ab8d3277d1cabe028cd3c0841e945f6863
 SRC_URI="https://git.libssh.org/projects/libssh.git/snapshot/libssh-${SNAPSHOT}.tar.xz"
 S="${WORKDIR}/libssh-${SNAPSHOT}"
+PATCHES=(
+	"${FILESDIR}/${P}-sntrup761-maybe-uninitialized.patch"
+)
 
 LICENSE="BSD"
 SLOT="0"
@@ -49,5 +52,11 @@ src_compile() {
 
 src_install() {
 	multibuild_foreach_variant cmake_src_install
+
+	local QA_POLICY_ARCHIVE_DUPLICATE_MEMBER_ALLOW="
+		/usr/lib/libssh.a:libcrypto.c.o
+		/usr/lib/libssh.a:sntrup761.c.o
+	"
+
 	qa-policy-install
 }

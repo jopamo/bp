@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="STABLE-BRANCH-$(ver_cut 1)-$(ver_cut 2)"
 
-inherit toolchain-funcs flag-o-matic autotools
+inherit toolchain-funcs flag-o-matic autotools qa-policy
 
 DESCRIPTION="The GNU Privacy Guard, a GPL OpenPGP implementation"
 HOMEPAGE="http://www.gnupg.org/"
@@ -55,6 +55,12 @@ src_prepare() {
 }
 
 src_configure() {
+	qa-policy-configure
+
+	# gnupg picks up gettext's iconv probe, which is overly strict for the
+	# glibc setup in this workspace and incorrectly rejects the system iconv.
+	export am_cv_func_iconv_works=yes
+
 	local myconf=(
 			--disable-card-support
 			--disable-ccid-driver
@@ -63,8 +69,6 @@ src_configure() {
 			--disable-gpgsm
 			--disable-gpgtar
 			--disable-keyboxd
-			--disable-ldap
-			--disable-nls
 			--disable-nls
 			--disable-photo-viewers
 			--disable-scdaemon
@@ -89,6 +93,27 @@ src_configure() {
 		"${myconf[@]}" CC_FOR_BUILD="$(tc-getBUILD_CC)"
 }
 
+src_test() {
+	emake -C common check
+	emake -C regexp check
+	emake -C kbx check
+	emake -C g10 check
+	emake -C agent check
+	emake -C tools check
+	emake -C tests/gpgscm check
+	emake -C tests/openpgp check
+
+	if [[ -x sm/gpgsm ]]; then
+		emake -C tests/cms check
+	else
+		einfo "Skipping tests/cms because gpgsm is disabled in this build"
+	fi
+
+	emake -C tests/migrations check
+	emake -C tests/gpgme check
+	emake -C tests/pkits check
+}
+
 src_install() {
 	default
 
@@ -96,4 +121,6 @@ src_install() {
 		CONFIG_PROTECT=/usr/share/gnupg/qualified.txt
 	EOF
 	doenvd "${T}"/30gnupg
+
+	qa-policy-install
 }

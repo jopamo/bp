@@ -61,18 +61,18 @@ src_configure() {
 src_install() {
 	default
 
-	qa-policy-install "${ED}"/usr
-
 	local lib
 	for lib in ncurses "ncurses++" form panel menu tinfo; do
-		echo "INPUT(-l${lib}tw)" > "${ED}"/usr/lib/lib${lib}.so
-		echo "INPUT(-l${lib}tw)" > "${ED}"/usr/lib/lib${lib}w.so
+		printf '/* GNU ld script */\nINPUT(-l%stw)\n' "${lib}" > "${ED}"/usr/lib/lib${lib}.so
+		printf '/* GNU ld script */\nINPUT(-l%stw)\n' "${lib}" > "${ED}"/usr/lib/lib${lib}w.so
 		dosym -r /usr/lib/pkgconfig/${lib}tw.pc /usr/lib/pkgconfig/${lib}.pc
 		dosym -r /usr/lib/pkgconfig/${lib}tw.pc /usr/lib/pkgconfig/${lib}w.pc
 	done
 
-	echo "INPUT(-lncursestw)" > "${ED}"/usr/lib/libcurses.so
+	printf '/* GNU ld script */\nINPUT(-lncursestw)\n' > "${ED}"/usr/lib/libcurses.so
 
 	use static-libs || find "${ED}"/usr -name '*.a' -delete
 	use static-libs || find "${ED}" -name '*.la' -delete
+
+	qa-policy-install "${ED}"/usr
 }

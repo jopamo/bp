@@ -184,9 +184,11 @@ unpack_makeself() {
 		*)    die "unpack_makeself: invalid extractor '${exe}'" ;;
 	esac
 
-	local probe tmp="${T}/${FUNCNAME}.$$" decomp filetype suffix
+	local probe tmp="${T}/${FUNCNAME}.$$" decomp= filetype suffix= magic tar_magic
 	"${exe[@]}" 2>/dev/null | head -c 512 > "${tmp}"
 	filetype=$(file -S -b "${tmp}") || die
+	magic=$(od -An -tx1 -N 10 "${tmp}" | tr -d ' \n')
+	tar_magic=$(dd if="${tmp}" bs=1 skip=257 count=5 2>/dev/null)
 	rm -f "${tmp}"
 
 	case ${filetype} in
@@ -199,9 +201,26 @@ unpack_makeself() {
 		lzop*)          suffix=lzo ;;
 		LZ4*)           suffix=lz4 ;;
 		"ASCII text"*)  decomp='base64 -d' ;;
-		*) die "unpack_makeself: unknown payload type '${filetype}' in ${src##*/}" ;;
+		data)
+			case ${magic} in
+				1f8b08*)                suffix=gz ;;
+				425a68*)                suffix=bz2 ;;
+				1f9d*|1fa0*)            suffix=z ;;
+				fd377a585a00*)          suffix=xz ;;
+				28b52ffd*)              suffix=zst ;;
+				894c5a4f000d0a1a0a*)    suffix=lzo ;;
+				04224d18*)              suffix=lz4 ;;
+				4c5a4950*)              suffix=lz ;;
+				*)
+					[[ ${tar_magic} == ustar* ]] && decomp=cat
+					;;
+			esac
+			;;
+		*) ;;
 	esac
 
+	[[ -n ${decomp} || -n ${suffix} ]] \
+		|| die "unpack_makeself: unknown payload type '${filetype}' in ${src##*/}"
 	[[ -z ${decomp} ]] && decomp=$(_unpacker_get_decompressor ".${suffix}")
 	"${exe[@]}" | ${decomp} | tar --no-same-owner -xf - \
 		|| die "unpack_makeself: extraction failed for ${src##*/}"

@@ -1,0 +1,48 @@
+--- a/Expat/Expat.pm
++++ b/Expat/Expat.pm
+@@
+-use File::ShareDir ();
+-
+ %Encoding_Table = ();
+-
+-my $_share_dir;
+-eval { $_share_dir = File::ShareDir::dist_dir('XML-Parser') };
+ 
+ @Encoding_Path = (
+-    ( defined $_share_dir && -d $_share_dir ? ($_share_dir) : () ),
+-    grep( -d $_,
+-        map( File::Spec->catdir( $_, qw(XML Parser Encodings) ), @INC ) ),
++    grep(
++        -d $_,
++        File::Spec->catdir( File::Spec->curdir, 'share' ),
++        map( File::Spec->catdir( $_, qw(XML Parser Encodings) ), @INC )
++    ),
+     File::Spec->curdir
+ );
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@
+-use File::ShareDir::Install;
+-install_share dist => 'share';
+-
+ use Config;
+ use File::Spec;
+@@
+-sub MY::postamble {
+-    my $self = shift;
+-    my @ret  = File::ShareDir::Install::postamble($self);
+-    return join "\n", @ret;
+-}
+-
+ my @extras = ();
+@@
+-    CONFIGURE_REQUIRES => {
+-        'ExtUtils::MakeMaker'     => 0,
+-        'File::ShareDir::Install' => '0.06',
+-    },
+-    PREREQ_PM => {
+-        'File::ShareDir' => 0,
+-    },
+     $^O =~ /win/i
+     ? (
+         dist => {

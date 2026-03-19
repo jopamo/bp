@@ -66,6 +66,25 @@ qa-archive-list-duplicate-members() {
 	"${ar_cmd}" t "${archive}" | sed '/^$/d' | sort | uniq -d
 }
 
+qa-archive-duplicate-member-allowed() {
+	local rel=$1
+	local member=$2
+	local entry archive_pattern member_pattern
+
+	for entry in ${QA_POLICY_ARCHIVE_DUPLICATE_MEMBER_ALLOW}; do
+		if [[ ${entry} == *:* ]]; then
+			archive_pattern=${entry%%:*}
+			member_pattern=${entry#*:}
+			[[ -n ${archive_pattern} && -n ${member_pattern} ]] || continue
+			[[ ${rel} == "${archive_pattern}" && ${member} == "${member_pattern}" ]] && return 0
+		else
+			[[ ${rel} == "${entry}" ]] && return 0
+		fi
+	done
+
+	return 1
+}
+
 qa-archive-empty-expected() {
 	local rel=$1
 	local re
@@ -113,7 +132,7 @@ qa-archive-assert() {
 	local archive script rel members dup
 	local ar_cmd
 	local -i archives_scanned=${#archives[@]} ldscripts_scanned=0
-	local -i empty_archives=0 expected_empty_archives=0 duplicate_member_names=0
+	local -i empty_archives=0 expected_empty_archives=0 duplicate_member_names=0 allowed_duplicate_member_names=0
 	local mode=${QA_POLICY_ARCHIVE_MODE}
 
 	ar_cmd=$(tc-getAR)
@@ -145,6 +164,11 @@ qa-archive-assert() {
 
 		while IFS= read -r dup; do
 			[[ -n ${dup} ]] || continue
+			if qa-archive-duplicate-member-allowed "${rel}" "${dup}"; then
+				(( allowed_duplicate_member_names += 1 ))
+				qa-report-note archive allowed-duplicate-member-name "${rel}" "duplicate member name allowed: ${dup}"
+				continue
+			fi
 			(( duplicate_member_names += 1 ))
 			_qa-report-record-mode archive "${mode}" duplicate-member-name "${rel}" "duplicate member name: ${dup}"
 		done < <(qa-archive-list-duplicate-members "${archive}")
@@ -174,6 +198,7 @@ qa-archive-assert() {
 	qa-report-domain-stat archive empty_archives "${empty_archives}"
 	qa-report-domain-stat archive expected_empty_archives "${expected_empty_archives}"
 	qa-report-domain-stat archive duplicate_member_names "${duplicate_member_names}"
+	qa-report-domain-stat archive allowed_duplicate_member_names "${allowed_duplicate_member_names}"
 	qa-report-domain-stat archive ldscripts_scanned "${ldscripts_scanned}"
 }
 

@@ -300,14 +300,28 @@ src_install() {
 		dosym -r "/usr/lib/${TUPLE}/libc++abi.so.1" "/usr/lib/libc++abi.so.1"
 	fi
 
-    if use syslibcxxabi; then
-		dosym -r "/usr/bin/clang" "/usr/bin/cc"
-		dosym -r "/usr/bin/clang" "/usr/bin/gcc"
-		dosym -r "/usr/bin/llvm-ar" "/usr/bin/ar"
-		dosym -r "/usr/bin/llvm-strip" "/usr/bin/strip"
-		dosym -r "/usr/bin/clang++" "/usr/bin/cxx"
-		dosym -r "/usr/bin/ld.lld" "/usr/bin/ld"
-    fi
+	    if use syslibcxxabi; then
+			dosym -r "/usr/bin/clang" "/usr/bin/cc"
+			dosym -r "/usr/bin/clang" "/usr/bin/gcc"
+			dosym -r "/usr/bin/llvm-ar" "/usr/bin/ar"
+			dosym -r "/usr/bin/llvm-strip" "/usr/bin/strip"
+			dosym -r "/usr/bin/clang++" "/usr/bin/cxx"
+			dosym -r "/usr/bin/ld.lld" "/usr/bin/ld"
+	    fi
 
-	qa-policy-install
-}
+		local QA_POLICY_ARCHIVE_DUPLICATE_MEMBER_ALLOW="
+			/usr/lib/libclangCodeGen.a:AMDGPU.cpp.o
+			/usr/lib/libclangCodeGen.a:ARM.cpp.o
+			/usr/lib/libclangCodeGen.a:DirectX.cpp.o
+			/usr/lib/libclangCodeGen.a:Hexagon.cpp.o
+			/usr/lib/libclangCodeGen.a:NVPTX.cpp.o
+			/usr/lib/libclangCodeGen.a:PPC.cpp.o
+			/usr/lib/libclangCodeGen.a:RISCV.cpp.o
+			/usr/lib/libclangCodeGen.a:SPIR.cpp.o
+			/usr/lib/libclangCodeGen.a:SystemZ.cpp.o
+			/usr/lib/libclangCodeGen.a:WebAssembly.cpp.o
+			/usr/lib/libclangCodeGen.a:X86.cpp.o
+		"
+
+		qa-policy-install
+	}

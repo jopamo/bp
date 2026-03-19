@@ -32,9 +32,6 @@ DEPEND="
 "
 
 src_prepare() {
-	PATCHES=(
-		"${FILESDIR}/${PN}-1.10.20260228-static-stoulen.patch"
-	)
 	default
 	eautoreconf
 }

@@ -38,6 +38,14 @@ src_prepare() {
 
 	if use python ; then
 		cd python || die
+		# Upstream currently exposes an undocumented "realpython" example entry
+		# point via pyproject metadata. It installs a python-exec wrapper that
+		# qa-policy quite correctly flags as a dead symlink inside the image.
+		# The bindings do not document or rely on this helper, so drop it.
+		sed -i \
+			-e '/^\[project\.scripts\]$/d' \
+			-e '/^realpython = "example\.__main__:main"$/d' \
+			pyproject.toml || die
 		distutils-r1_src_prepare
 	fi
 }

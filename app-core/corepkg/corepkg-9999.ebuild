@@ -113,6 +113,8 @@ src_install() {
 
 	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die
 		x /var/tmp/ccache
+		d /var/lib/corepkg 0755 root root -
+		d /var/lib/corepkg/home 0700 corepkg corepkg -
 		d /var/cache/distfiles 02775 corepkg corepkg -
 	EOF
 
@@ -233,8 +235,10 @@ pkg_preinst() {
 
 pkg_postinst() {
 	local configdir="${EROOT%/}${EPREFIX}/etc/corepkg"
+	local privdir="${EROOT%/}${EPREFIX}/var/lib/corepkg"
+	local homedir="${privdir}/home"
 	local distdir="${EROOT%/}${EPREFIX}/var/cache/distfiles"
-	local distfiles_ownership_stamp="${EROOT%/}${EPREFIX}/var/lib/corepkg/compat_upgrade/one_off/20260305_distfiles_ownership.done"
+	local distfiles_ownership_stamp="${privdir}/compat_upgrade/one_off/20260305_distfiles_ownership.done"
 
 	if ! use build && [[ -z ${ROOT} ]]; then
 		python_setup
@@ -246,7 +250,14 @@ pkg_postinst() {
 	tmpfiles_process
 
 	mkdir -p "${configdir}" || die
+	mkdir -p "${homedir}" || die
 	mkdir -p "${distdir}" || die
+
+	if chown corepkg:corepkg "${homedir}" 2>/dev/null ; then
+		chmod 0700 "${homedir}" || die
+	else
+		ewarn "Unable to set owner/group on ${homedir}; ensure it is owned by corepkg."
+	fi
 
 	if chown corepkg:corepkg "${distdir}" 2>/dev/null ; then
 		chmod 2775 "${distdir}" || die

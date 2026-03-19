@@ -72,6 +72,7 @@ src_install() {
 	default
 
 	dodir /usr/lib
+	local ldso=
 
 	if use elibc_musl ; then
 		local i
@@ -79,8 +80,13 @@ src_install() {
 			dobin $i
 		done
 
-		use amd64 && dosym -r /usr/lib/ld-musl-x86_64.so.1 /usr/bin/ldd
-		use arm64 && dosym -r /usr/lib/ld-musl-aarch64.so.1 /usr/bin/ldd
+		if use amd64; then
+			ldso=ld-musl-x86_64.so.1
+		elif use arm64; then
+			ldso=ld-musl-aarch64.so.1
+		fi
+		[[ -n ${ldso} ]] || die "unsupported arch for musl loader symlink"
+		dosym -r /usr/lib/${ldso} /usr/bin/ldd
 
 		insopts -m 0644
 		insinto /etc/env.d
@@ -97,4 +103,8 @@ src_install() {
 
 	cp -p "${ED}"/lib/ld-musl*.so* "${ED}"/usr/lib/ || die
 	rm -r "${ED}"/lib || die
+
+	if use elibc_musl && [[ ! -e "${ED}"/usr/lib/libc.so ]]; then
+		dosym -r /usr/lib/${ldso} /usr/lib/libc.so
+	fi
 }

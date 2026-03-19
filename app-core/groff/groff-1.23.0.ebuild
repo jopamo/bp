@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="Text formatter used for man pages"
 HOMEPAGE="https://www.gnu.org/software/groff/groff.html"
@@ -24,6 +24,8 @@ src_prepare() {
 }
 
 src_configure() {
+	qa-policy-configure
+
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/sbin
@@ -48,4 +50,6 @@ src_install() {
 
 	rm -rf "${ED}"/usr/share/doc
 	rm -f "${ED}"/usr/lib/charset.alias
+
+	qa-policy-install
 }

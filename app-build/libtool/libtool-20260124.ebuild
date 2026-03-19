@@ -2,7 +2,11 @@
 
 EAPI=8
 SNAPSHOT=1b6fc1940b2b9104729c0a872aeb0fa6d3de71bf
-LIBTOOL_VERSION=2.6.0
+LIBTOOL_VERSION=2.6.0.14
+# Upstream generates .serial from `git log --pretty=oneline | wc -l` when
+# making a dist tarball. GitHub snapshots omit that file, so seed the snapshot
+# with the serial for this commit to keep ltversion.m4 valid for aclocal.
+LIBTOOL_SERIAL=2036
 LIBTOOL_BOOTSTRAP_SNAPSHOT=bfdcc277cd237fde115d3aa972add7608d348b90
 
 DESCRIPTION="A shared library tool for developers"
@@ -63,6 +67,7 @@ _libtool_write_version_texi() {
 	EOF
 
 	printf '%s\n' "${LIBTOOL_VERSION}" > .tarball-version || die
+	printf '%s\n' "${LIBTOOL_SERIAL}" > .serial || die
 }
 
 src_prepare() {

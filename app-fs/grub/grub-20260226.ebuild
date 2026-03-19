@@ -3,7 +3,7 @@
 EAPI=8
 SNAPSHOT=ce6f2b57f5450a8239022dcbfb2d750f273b83cb
 
-inherit multibuild toolchain-funcs
+inherit multibuild toolchain-funcs qa-policy
 
 DESCRIPTION="GNU GRUB boot loader"
 HOMEPAGE="https://www.gnu.org/software/grub/"
@@ -86,31 +86,32 @@ grub_configure() {
 	)
 
 	local ECONF_SOURCE="${S}"
+	qa-policy-configure
 	econf "${myconf[@]}"
 }
 
 src_prepare() {
-    eapply "${FILESDIR}/bootstrap-skip-applied-patches.patch"
-    eapply "${FILESDIR}/fix-gnulib-configh-first.patch"
-    eapply "${FILESDIR}/fix-libgcrypt-posix-wrap-implicit-grub-symbols.patch"
-    eapply "${FILESDIR}/fix-config-recursive-headers.patch"
+	eapply "${FILESDIR}/bootstrap-skip-applied-patches.patch"
+	eapply "${FILESDIR}/fix-gnulib-configh-first.patch"
+	eapply "${FILESDIR}/fix-libgcrypt-posix-wrap-implicit-grub-symbols.patch"
+	eapply "${FILESDIR}/fix-config-recursive-headers.patch"
 
-    rm -rf gnulib || die
-    cp -r "${BROOT}/usr/share/gnulib" gnulib || die
+	rm -rf gnulib || die
+	cp -r "${BROOT}/usr/share/gnulib" gnulib || die
 
-    ./bootstrap --skip-po --no-git --gnulib-srcdir="${S}/gnulib" || die
+	./bootstrap --skip-po --no-git --gnulib-srcdir="${S}/gnulib" || die
 
-    eapply "${FILESDIR}/fix-filevercmp-static-assert.patch"
-    eapply "${FILESDIR}/fix-gl-extern-inline.patch"
-    eapply "${FILESDIR}/fix-config-util-guards.patch"
-    eapply "${FILESDIR}/fix-config-util-no-assert-in-freestanding.patch"
-    eapply "${FILESDIR}/fix-build-rules-nopie.patch"
-    eapply "${FILESDIR}"/fix-musl-errorh-getroot.patch
-    eapply "${FILESDIR}"/fix-musl-dirent-static-assert.patch
+	eapply "${FILESDIR}/fix-filevercmp-static-assert.patch"
+	eapply "${FILESDIR}/fix-gl-extern-inline.patch"
+	eapply "${FILESDIR}/fix-config-util-guards.patch"
+	eapply "${FILESDIR}/fix-config-util-no-assert-in-freestanding.patch"
+	eapply "${FILESDIR}/fix-build-rules-nopie.patch"
+	eapply "${FILESDIR}"/fix-musl-errorh-getroot.patch
+	eapply "${FILESDIR}"/fix-musl-dirent-static-assert.patch
 
-    default
+	default
 
-    sed -i -e "s/UNKNOWN/${PV}/g" configure || die
+	sed -i -e "s/UNKNOWN/${PV}/g" configure || die
 }
 
 src_configure() {
@@ -146,4 +147,5 @@ src_install() {
 
 	insinto /etc/default
 	newins "${FILESDIR}"/grub.default-3 grub
+	qa-policy-install
 }

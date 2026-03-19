@@ -24,6 +24,7 @@ DEPEND="${RDEPEND}
 	test? ( lib-core/glib )"
 
 src_prepare() {
+	eapply "${FILESDIR}"/${PN}-20260125-gcc15-array-bounds.patch
 	eautoreconf
 	default
 }

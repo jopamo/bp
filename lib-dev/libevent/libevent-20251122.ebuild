@@ -54,5 +54,7 @@ src_configure() {
 
 src_install() {
 	default
+	sed -i -e '1s|^#!.*|#!/usr/bin/python3|' \
+		"${ED}"/usr/bin/event_rpcgen.py || die
 	qa-policy-install
 }

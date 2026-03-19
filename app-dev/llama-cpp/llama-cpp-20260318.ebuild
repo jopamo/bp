@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit cmake user
+inherit cmake qa-policy user
 
 DESCRIPTION="High-performance inference of large language models (llama.cpp)"
 HOMEPAGE="https://github.com/ggml-org/llama.cpp"
@@ -10,22 +10,32 @@ SNAPSHOT=a69d54f990d0cd88786d5943632d6426dc9660b7
 SRC_URI="https://github.com/ggml-org/llama.cpp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llama.cpp-${SNAPSHOT}"
 
-LICENSE="CMake"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="systemd"
+IUSE="cuda systemd"
+
+DEPEND="
+	cuda? ( bin/nvidia-cuda )
+	lib-net/openssl
+	systemd? ( app-core/systemd )
+"
+RDEPEND="${DEPEND}"
 
 src_configure() {
 	addpredict "/proc/self/task"
+	qa-policy-configure
 
 	local mycmakeargs=(
-		-D GGML_CUDA=ON
-		-D CMAKE_CUDA_ARCHITECTURES="86"
-		-D LLAMA_CURL=OFF
-		-D LLAMA_SERVER_SSL=ON
-		-D CMAKE_BUILD_TYPE=Release
+		-D GGML_CUDA=$(usex cuda ON OFF)
+		-D LLAMA_OPENSSL=ON
+		-D LLAMA_BUILD_TESTS=OFF
+		-D LLAMA_TESTS_INSTALL=OFF
 	)
+	if use cuda; then
+		mycmakeargs+=( -D CMAKE_CUDA_ARCHITECTURES="86" )
+	fi
 
 	cmake_src_configure
 }
@@ -47,6 +57,8 @@ src_install() {
 	newbin convert_hf_to_gguf_update.py convert_hf_to_gguf_update
 	newbin convert_llama_ggml_to_gguf.py convert_llama_ggml_to_gguf
 	newbin convert_lora_to_gguf.py convert_lora_to_gguf
+
+	qa-policy-install
 }
 
 pkg_preinst() {

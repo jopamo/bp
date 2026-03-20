@@ -92,6 +92,8 @@ grub_configure() {
 
 src_prepare() {
 	eapply "${FILESDIR}/bootstrap-skip-applied-patches.patch"
+	eapply "${FILESDIR}/fix-configure-linker-image-base-support.patch"
+	eapply "${FILESDIR}/fix-configure-no-autoconf-archive.patch"
 	eapply "${FILESDIR}/fix-gnulib-configh-first.patch"
 	eapply "${FILESDIR}/fix-libgcrypt-posix-wrap-implicit-grub-symbols.patch"
 	eapply "${FILESDIR}/fix-config-recursive-headers.patch"

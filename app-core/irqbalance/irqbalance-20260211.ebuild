@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson linux-info doins
+inherit meson linux-info doins qa-policy
 
 DESCRIPTION="Distribute hardware interrupts across processors on a multiprocessor system"
 HOMEPAGE="https://github.com/Irqbalance/irqbalance"
@@ -14,7 +14,7 @@ S="${WORKDIR}/${PN}-${SNAPSHOT}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="caps +numa systemd thermal tui"
+IUSE="caps kernel_linux +numa systemd thermal tui"
 # Hangs
 RESTRICT="test"
 
@@ -44,6 +44,8 @@ src_prepare() {
 }
 
 src_configure() {
+	qa-policy-configure
+
 	local emesonargs=(
 		$(meson_feature caps capng)
 		$(meson_feature numa)
@@ -60,6 +62,7 @@ src_install() {
 
 	systemd_newunit "${S}"/misc/irqbalance.service.in irqbalance.service
 	udev_dorules "${S}"/misc/90-irqbalance.rules
+	qa-policy-install
 }
 
 pkg_postrm() {

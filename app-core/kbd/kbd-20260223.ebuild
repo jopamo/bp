@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit autotools
+inherit autotools qa-policy toolchain-funcs
 
 DESCRIPTION="Keyboard and console utilities"
 HOMEPAGE="http://kbd-project.org/"
@@ -30,16 +30,29 @@ DEPEND="
 "
 
 src_prepare() {
-	find . -type f \( -name '*.c' -o -name '*.h' -o -name '*.y' -o -name '*.l' \) -exec sed -i 's/\bstrlcpy\b/strncpy/g' {} +
-	find . -type f \( -name '*.c' -o -name '*.h' -o -name '*.y' -o -name '*.l' \) -exec sed -i 's/\bstrlcat\b/strncat/g' {} +
+	find . -type f \( -name '*.c' -o -name '*.h' -o -name '*.y' -o -name '*.l' \) -exec sed -i 's/\bstrlcpy\b/strncpy/g' {} + || die
+	find . -type f \( -name '*.c' -o -name '*.h' -o -name '*.y' -o -name '*.l' \) -exec sed -i 's/\bstrlcat\b/strncat/g' {} + || die
 
 	default
+
+	if [[ -z ${CHOST} ]]; then
+		CHOST="$("$(tc-getCC)" -dumpmachine)" || die
+	fi
+	export CHOST
+
 	eautoreconf
 }
 
 src_configure() {
+	qa-policy-configure
+
 	econf \
 		--disable-nls \
 		$(use_enable pam vlock) \
 		$(use_enable test tests)
+}
+
+src_install() {
+	default
+	qa-policy-install
 }

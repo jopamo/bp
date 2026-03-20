@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit flag-o-matic toolchain-funcs
+inherit flag-o-matic qa-policy toolchain-funcs
 
 DESCRIPTION="Wrapper to coreutil's install to preserve Filesystem Extended Attributes"
 HOMEPAGE="https://dev.gentoo.org/~blueness/install-xattr/"
@@ -18,4 +18,13 @@ src_prepare() {
 	default
 	tc-export CC
 	append-cppflags "-D_FILE_OFFSET_BITS=64"
+}
+
+src_configure() {
+	qa-policy-configure
+}
+
+src_install() {
+	default
+	qa-policy-install
 }

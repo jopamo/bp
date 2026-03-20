@@ -30,21 +30,32 @@ DEPEND+="
     xgui-lib/libvdpau
 "
 RDEPEND+="
-    wayland? ( xgui-lib/wayland )
+    lib-net/openssl
     X? (
         lib-core/zlib
+        xgui-lib/libdrm
+        xgui-lib/libX11
+        xgui-lib/libxcb
+        xgui-lib/libXext
+        xgui-tools/mesa
+        xgui-tools/xorg-server
+    )
+    wayland? (
+        xgui-lib/libdrm
         xgui-lib/libX11
         xgui-lib/libXext
-        xgui-tools/xorg-server
+        xgui-lib/wayland
+        xgui-tools/mesa
     )
 "
 PDEPEND="
     xmedia-lib/nv-codec-headers
-    bin/nvidia-settings
+    X? ( bin/nvidia-settings )
 "
 
 QA_PREBUILT="opt/* usr/lib*"
 QA_PRESTRIPPED="usr/lib/firmware/nvidia/${PV}/gsp_ga10x.bin"
+QA_POLICY_PERMS_SUID_SGID_ALLOW="^/opt/bin/nvidia-modprobe$"
 
 nvidia_drivers_versions_check() {
     CONFIG_CHECK="
@@ -68,6 +79,10 @@ pkg_setup() {
     export CCACHE_DISABLE=1
 }
 
+nvidia_use_graphics() {
+    use X || use wayland
+}
+
 src_prepare() {
     NV_DOC="${S}"
     NV_OBJ="${S}"
@@ -86,6 +101,10 @@ src_prepare() {
     if ! [ -f nvidia_icd.json ]; then
         cp nvidia_icd.json.template nvidia_icd.json || die
         sed -i -e 's:__NV_VK_ICD__:libGLX_nvidia.so.0:g' nvidia_icd.json || die
+    fi
+
+    if use wayland && ! use X; then
+        sed -i -e 's:libGLX_nvidia.so.0:libEGL_nvidia.so.0:g' nvidia_icd.json || die
     fi
 
     eapply "${FILESDIR}"/00*.patch
@@ -146,7 +165,6 @@ donvidia() {
 
 src_install() {
     cd "${WORKDIR}" || die
-    ln -s libGLX.so.0 libglx.so.${PV}
 
     if use driver; then
         kernel-mod_src_install
@@ -155,7 +173,7 @@ src_install() {
         newins "${FILESDIR}"/nvidia-169.07 nvidia.conf
         doins "${FILESDIR}"/nvidia-rmmod.conf
 
-        exeinto /usr/lib/udev/rules.d
+        exeinto /usr/lib/udev
         newexe "${FILESDIR}"/nvidia-udev.sh-r1 nvidia-udev.sh
 
         insopts -m 0644
@@ -171,6 +189,25 @@ EOF
         newins "${T}/${PN}.tmpfiles" "${PN}.conf"
     fi
 
+    if nvidia_use_graphics; then
+        insinto /usr/share/glvnd/egl_vendor.d
+        doins ${NV_X11}/10_nvidia.json
+
+        insinto /usr/share/egl/egl_external_platform.d
+        doins ${NV_X11}/15_nvidia_gbm.json
+
+        insinto /etc/vulkan/icd.d
+        doins nvidia_icd.json
+
+        insinto /etc/vulkan/implicit_layer.d
+        doins ${NV_X11}/nvidia_layers.json
+
+        if [[ -f ${NV_X11}/nvidia_icd_vksc.json ]]; then
+            insinto /etc/vulkansc/icd.d
+            newins ${NV_X11}/nvidia_icd_vksc.json nvidia_icd.json
+        fi
+    fi
+
     if use X; then
         insinto /usr/lib/xorg/modules/drivers
         doins ${NV_X11}/nvidia_drv.so
@@ -181,19 +218,15 @@ EOF
         insinto /usr/share/X11/xorg.conf.d
         newins {,50-}nvidia-drm-outputclass.conf
 
-        insinto /usr/share/glvnd/egl_vendor.d
-        doins ${NV_X11}/10_nvidia.json
-
-        insinto /usr/share/egl/egl_external_platform.d/
-        doins ${NV_X11}/15_nvidia_gbm.json
+        insinto /usr/share/egl/egl_external_platform.d
+        doins ${NV_X11}/20_nvidia_xcb.json
+        doins ${NV_X11}/20_nvidia_xlib.json
     fi
 
     if use wayland; then
         insinto /usr/share/egl/egl_external_platform.d
         doins ${NV_X11}/10_nvidia_wayland.json
-        donvidia "${nv_libdir}"/libnvidia-egl-wayland.so.1.1.9
-        donvidia "${nv_libdir}"/libnvidia-vulkan-producer.so.${NV_SOVER}
-        donvidia "${nv_libdir}"/libnvidia-wayland-client.so.${NV_SOVER}
+        doins ${NV_X11}/99_nvidia_wayland2.json
     fi
 
     insinto /etc/OpenCL/vendors
@@ -203,9 +236,6 @@ EOF
 
     if use X; then
         doexe ${NV_OBJ}/nvidia-xconfig
-
-        insinto /etc/vulkan/icd.d
-        doins nvidia_icd.json
     fi
 
     doexe ${NV_OBJ}/nvidia-cuda-mps-control
@@ -214,8 +244,11 @@ EOF
     doexe ${NV_OBJ}/nvidia-persistenced
     doexe ${NV_OBJ}/nvidia-smi
     doexe ${NV_OBJ}/nvidia-ngx-updater
-    doexe ${NV_OBJ}/nvidia-pcc
     doexe ${NV_OBJ}/nvidia-powerd
+
+    if nvidia_use_graphics && [[ -f ${NV_OBJ}/nvidia-pcc ]]; then
+        doexe ${NV_OBJ}/nvidia-pcc
+    fi
 
     doexe ${NV_OBJ}/nvidia-modprobe
     fowners root:video /opt/bin/nvidia-modprobe
@@ -230,73 +263,116 @@ EOF
     src_install-libs
 
     insinto usr/share/nvidia/
-    newins nvidia-application-profiles-${PV}-key-documentation nvidia-application-profiles-key-documentation
+    doins nvidia-application-profiles-${PV}-rc
+    doins nvidia-application-profiles-${PV}-key-documentation
 
-    insinto usr/lib/nvidia/wine/
-    doins _nvngx.dll
-    doins nvngx.dll
+    if [[ -f ${NV_OBJ}/_nvngx.dll ]] || [[ -f ${NV_OBJ}/nvngx.dll ]]; then
+        insinto usr/lib/nvidia/wine/
+        [[ -f ${NV_OBJ}/_nvngx.dll ]] && doins _nvngx.dll
+        [[ -f ${NV_OBJ}/nvngx.dll ]] && doins nvngx.dll
+    fi
 
-    dodir usr/lib/gbm
-    dosym -r /usr/lib/libnvidia-allocator.so.${PV} /usr/lib/gbm/nvidia-drm_gbm.so
+    if nvidia_use_graphics; then
+        dodir usr/lib/gbm
+        dosym -r /usr/lib/libnvidia-allocator.so.${PV} /usr/lib/gbm/nvidia-drm_gbm.so
+    fi
 
     insinto /usr/lib/firmware/nvidia/${PV}
     doins firmware/*.bin
 
-    dosym -r /usr/lib/libcrypto.so.3 /usr/lib/libcrypto.so.1.1
 	qa-policy-install
 }
 
 src_install-libs() {
-    local inslibdir=lib
     local GL_ROOT="/usr/lib"
     local CL_ROOT="/usr/lib/OpenCL/vendors/nvidia"
     local nv_libdir="${NV_OBJ}"
+    local NV_LIB
 
-    if use X; then
-        NV_GLX_LIBRARIES=(
-            "libnvidia-allocator.so.${NV_SOVER}"
-            "libnvidia-api.so.1"
-            "libnvidia-cfg.so.${NV_SOVER}"
-            libnvidia-egl-gbm.so.*
-            "libnvidia-egl-xcb.so.1.0.4"
-            "libnvidia-egl-xlib.so.1.0.4"
-            "libnvidia-eglcore.so.${NV_SOVER}"
-            "libnvidia-encode.so.${NV_SOVER}"
-            "libnvidia-fbc.so.${NV_SOVER}"
-            "libnvidia-glcore.so.${NV_SOVER}"
-            "libnvidia-glsi.so.${NV_SOVER}"
-            "libnvidia-glvkspirv.so.${NV_SOVER}"
-            "libnvidia-gpucomp.so.${NV_SOVER}"
-            "libnvidia-ml.so.${NV_SOVER}"
-            "libnvidia-ngx.so.${NV_SOVER}"
-            "libnvidia-nvvm.so.${NV_SOVER}"
-            "libnvidia-nvvm70.so.4"
-            "libnvidia-opencl.so.${NV_SOVER}"
-            "libnvidia-opticalflow.so.${NV_SOVER}"
-            "libnvidia-pkcs11-openssl3.so.${NV_SOVER}"
-            "libnvidia-pkcs11.so.${NV_SOVER}"
-            "libnvidia-present.so.${NV_SOVER}"
-            "libnvidia-ptxjitcompiler.so.${NV_SOVER}"
-            "libnvidia-rtcore.so.${NV_SOVER}"
-            "libnvidia-sandboxutils.so.${NV_SOVER}"
-            "libnvidia-tls.so.${NV_SOVER}"
-            "libnvidia-vksc-core.so.${NV_SOVER}"
-            #"libnvidia-wayland-client.so.${NV_SOVER}"
-            "libcuda.so.${NV_SOVER}"
-            "libcudadebugger.so.${NV_SOVER}"
-            "libEGL_nvidia.so.${NV_SOVER} ${GL_ROOT}"
-            "libGLESv1_CM_nvidia.so.${NV_SOVER} ${GL_ROOT}"
-            "libGLESv2_nvidia.so.${NV_SOVER} ${GL_ROOT}"
-            "libGLX_nvidia.so.${NV_SOVER} ${GL_ROOT}"
-            "libnvcuvid.so.${NV_SOVER}"
-            "libnvoptix.so.${NV_SOVER}"
-            "libOpenCL.so.1.0.0 ${CL_ROOT}"
-            "libvdpau_nvidia.so.${NV_SOVER}"
-        )
+    local NV_COMMON_LIBRARIES=(
+        "libnvidia-api.so.1"
+        "libnvidia-cfg.so.${NV_SOVER}"
+        "libnvidia-encode.so.${NV_SOVER}"
+        "libnvidia-ml.so.${NV_SOVER}"
+        "libnvidia-ngx.so.${NV_SOVER}"
+        "libnvidia-nvvm.so.${NV_SOVER}"
+        "libnvidia-nvvm70.so.4"
+        "libnvidia-opencl.so.${NV_SOVER}"
+        "libnvidia-opticalflow.so.${NV_SOVER}"
+        "libnvidia-ptxjitcompiler.so.${NV_SOVER}"
+        "libnvidia-sandboxutils.so.${NV_SOVER}"
+        "libcuda.so.${NV_SOVER}"
+        "libcudadebugger.so.${NV_SOVER}"
+        "libnvcuvid.so.${NV_SOVER}"
+        "libnvoptix.so.${NV_SOVER}"
+        "libOpenCL.so.1.0.0 ${CL_ROOT}"
+    )
 
-        for NV_LIB in "${NV_GLX_LIBRARIES[@]}"; do
+    local NV_GRAPHICS_LIBRARIES=(
+        "libnvidia-allocator.so.${NV_SOVER}"
+        libnvidia-egl-gbm.so.*
+        "libnvidia-eglcore.so.${NV_SOVER}"
+        "libnvidia-glcore.so.${NV_SOVER}"
+        "libnvidia-glsi.so.${NV_SOVER}"
+        "libnvidia-glvkspirv.so.${NV_SOVER}"
+        "libnvidia-gpucomp.so.${NV_SOVER}"
+        "libnvidia-present.so.${NV_SOVER}"
+        "libnvidia-rtcore.so.${NV_SOVER}"
+        "libnvidia-tls.so.${NV_SOVER}"
+        "libEGL_nvidia.so.${NV_SOVER} ${GL_ROOT}"
+        "libGLESv1_CM_nvidia.so.${NV_SOVER} ${GL_ROOT}"
+        "libGLESv2_nvidia.so.${NV_SOVER} ${GL_ROOT}"
+    )
+
+    local NV_X_LIBRARIES=(
+        "libnvidia-egl-xcb.so.1.0.4"
+        "libnvidia-egl-xlib.so.1.0.4"
+        "libnvidia-fbc.so.${NV_SOVER}"
+        "libGLX_nvidia.so.${NV_SOVER} ${GL_ROOT}"
+        "libvdpau_nvidia.so.${NV_SOVER}"
+    )
+
+    local NV_WAYLAND_LIBRARIES=(
+        libnvidia-egl-wayland.so.*
+        libnvidia-egl-wayland2.so.*
+    )
+
+    for NV_LIB in "${NV_COMMON_LIBRARIES[@]}"; do
+        donvidia "${nv_libdir}"/${NV_LIB}
+    done
+
+    if [[ -f ${nv_libdir}/libnvidia-pkcs11-openssl3.so.${NV_SOVER} ]]; then
+        donvidia "${nv_libdir}"/libnvidia-pkcs11-openssl3.so.${NV_SOVER}
+    fi
+
+    if [[ -f ${nv_libdir}/libnvidia-pkcs11.so.${NV_SOVER} ]]; then
+        donvidia "${nv_libdir}"/libnvidia-pkcs11.so.${NV_SOVER}
+    fi
+
+    if nvidia_use_graphics; then
+        for NV_LIB in "${NV_GRAPHICS_LIBRARIES[@]}"; do
             donvidia "${nv_libdir}"/${NV_LIB}
         done
+
+        if [[ -f ${nv_libdir}/libnvidia-vksc-core.so.${NV_SOVER} ]]; then
+            donvidia "${nv_libdir}"/libnvidia-vksc-core.so.${NV_SOVER}
+        fi
+    fi
+
+    if use X; then
+        for NV_LIB in "${NV_X_LIBRARIES[@]}"; do
+            donvidia "${nv_libdir}"/${NV_LIB}
+        done
+    fi
+
+    if use wayland; then
+        for NV_LIB in "${NV_WAYLAND_LIBRARIES[@]}"; do
+            donvidia "${nv_libdir}"/${NV_LIB}
+        done
+
+        if [[ -f ${nv_libdir}/libnvidia-wayland-client.so.${NV_SOVER} ]]; then
+            donvidia "${nv_libdir}"/libnvidia-wayland-client.so.${NV_SOVER}
+        fi
     fi
 }
 

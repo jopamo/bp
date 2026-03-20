@@ -11,3 +11,7 @@ S=${WORKDIR}/hwdata-${SNAPSHOT}
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+src_test() {
+	NO_DOCKER=1 emake check
+}

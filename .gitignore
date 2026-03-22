@@ -25,3 +25,5 @@ tmp/
 
 # Ignored prefixed files
 ign_*
+
+metadata/blake3-cache

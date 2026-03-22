@@ -9,8 +9,8 @@ PYTHON_COMPAT=( python3_{10..13} pypy3 )
 inherit distutils-r1 flag-o-matic git-r3
 
 DESCRIPTION="Library providing cryptographic recipes and primitives"
-HOMEPAGE="https://github.com/jopamo/cryptography"
-EGIT_REPO_URI="https://github.com/jopamo/cryptography"
+HOMEPAGE="https://gitlab.com/pjo/cryptography"
+EGIT_REPO_URI="https://gitlab.com/pjo/cryptography"
 
 LICENSE="|| ( Apache-2.0 BSD ) PSF-2"
 SLOT="0"

@@ -21,7 +21,6 @@ LimitNOFILE=4096
 PrivateNetwork=yes
 ProtectHome=true
 PrivateTmp=yes
-PrivateUsers=true
 ProtectHostname=yes
 ProtectClock=yes
 ProtectKernelModules=yes

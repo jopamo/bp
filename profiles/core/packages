@@ -1,4 +1,3 @@
-
 *app-build/make
 *app-compression/pigz
 *app-compression/tar
@@ -24,8 +23,8 @@
 *app-core/ugs
 *app-core/util-linux
 *app-core/vim
-*app-core/which
 *app-crypto/blake3
+*app-core/bx
 *app-dev/patchelf
 *app-kernel/linux-firmware
 *app-net/chrony

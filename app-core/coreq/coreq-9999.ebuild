@@ -5,14 +5,14 @@ EAPI=8
 inherit meson qa-policy
 
 DESCRIPTION="Search and query ebuilds"
-HOMEPAGE="https://github.com/1g4linux/coreq/"
+HOMEPAGE="https://gitlab.com/pjo/coreq/"
 
 if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/1g4linux/coreq"
+	EGIT_REPO_URI="https://gitlab.com/pjo/coreq"
 	inherit git-r3
 else
 	SNAPSHOT=37832269366c74d1dc9039130f48787d5950a44c
-	SRC_URI="https://github.com/1g4linux/coreq/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+	SRC_URI="https://gitlab.com/pjo/coreq/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 fi
 

@@ -26,7 +26,7 @@ DEPEND="
 
 PDEPEND="
 	app-tex/docbook-sgml-dtd
-	app-util/man-db
+	app-util/mandoc
 	app-core/help2man
 	app-tex/docbook-xsl-stylesheets
 "

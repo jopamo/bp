@@ -2,15 +2,15 @@
 
 EAPI=8
 
+BRANCH_NAME="v$(ver_cut 1-2)"
+
 inherit autotools qa-policy
 
 DESCRIPTION="Scaling, colorspace conversion, and dithering library"
 HOMEPAGE="https://github.com/sekrit-twc/zimg"
-EGIT_REPO_URI="https://github.com/sekrit-twc/zimg"
-
-#SNAPSHOT=1dc49ae029ca6d7b7259b40a55e39e31e51df0d9
-#SRC_URI="https://github.com/sekrit-twc/zimg/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-#S=${WORKDIR}/kguiaddons-${SNAPSHOT}
+SNAPSHOT=5e8c32222569edf3a712f83d7cff80ad4dd9ab6e
+SRC_URI="https://github.com/sekrit-twc/zimg/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="WTFPL-2"
 SLOT="0"

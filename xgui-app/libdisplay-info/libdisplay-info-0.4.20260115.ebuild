@@ -6,14 +6,9 @@ inherit meson
 
 DESCRIPTION="EDID and DisplayID library"
 HOMEPAGE="https://gitlab.freedesktop.org/emersion/libdisplay-info/"
-
-if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://gitlab.freedesktop.org/emersion/libdisplay-info"
-	inherit git-r3
-else
-	SNAPSHOT=
-	S=${WORKDIR}/libdisplay-info-${SNAPSHOT}
-fi
+SNAPSHOT=70855b14c1d2955910c47d1b7ffbe90457a6cbef
+SRC_URI="https://gitlab.freedesktop.org/emersion/libdisplay-info/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"

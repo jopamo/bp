@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit qa-policy git-r3
+inherit qa-policy git-r3 meson
 
 DESCRIPTION="a man replacement that utilizes gdbm instead of flat files"
 HOMEPAGE="http://www.nongnu.org/man-db/"

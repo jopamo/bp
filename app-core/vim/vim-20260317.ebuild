@@ -2,8 +2,6 @@
 
 EAPI=8
 
-SHORTNM="usr/share/vim/vim92"
-
 inherit flag-o-matic
 
 DESCRIPTION="Vim, an improved vi-style text editor"
@@ -27,12 +25,23 @@ BDEPEND="
 	app-build/gettext
 "
 
+vim_shortnm() {
+	local major minor
+
+	major=$(sed -n 's/^#define VIM_VERSION_MAJOR[[:space:]]*//p' "${S}"/src/version.h) || die
+	minor=$(sed -n 's/^#define VIM_VERSION_MINOR[[:space:]]*//p' "${S}"/src/version.h) || die
+
+	[[ ${major} =~ ^[0-9]+$ && ${minor} =~ ^[0-9]+$ ]] || die "failed to derive Vim runtime dir"
+
+	printf 'usr/share/vim/vim%s%s\n' "${major}" "${minor}"
+}
+
 src_prepare() {
 	append-flags -ffat-lto-objects -fno-ipa-sra
 	filter-flags -fipa-pta
 
 	default
-	cat "${FILESDIR}"/basic.vim > "${T}"/new.vim
+	cp "${FILESDIR}"/defaults.vim "${T}"/defaults.vim || die
 }
 
 src_configure() {
@@ -41,15 +50,12 @@ src_configure() {
 	# let package manager strip binaries
 	export ac_cv_prog_STRIP="$(type -P true ) faking strip"
 
-	local tiny=(
+	local common=(
 		--prefix="${EPREFIX}"/usr
 		--localstatedir="${EPREFIX}"/var/lib/vim
-		--with-features=tiny
 		$(use_enable acl)
 		--disable-canberra
-		--disable-darwin
 		--disable-gpm
-		--disable-gui
 		--disable-luainterp
 		--disable-mzschemeinterp
 		--disable-nls
@@ -58,29 +64,22 @@ src_configure() {
 		--disable-rubyinterp
 		--disable-selinux
 		--disable-tclinterp
+		--disable-xsmp
+		--enable-gui=no
 		--without-x
 	)
 
+	local tiny=(
+		"${common[@]}"
+		--with-features=tiny
+		--disable-darwin
+	)
+
 	local normal=(
-		--prefix="${EPREFIX}"/usr
-		--localstatedir="${EPREFIX}"/var/lib/vim
+		"${common[@]}"
 		--with-features=normal
-		$(use_enable acl)
-		--disable-canberra
 		--disable-cscope
-		--disable-gpm
-		--disable-gui
-		--disable-luainterp
-		--disable-mzschemeinterp
 		--disable-netbeans
-		--disable-nls
-		--disable-perlinterp
-		--disable-pythoninterp
-		--disable-rubyinterp
-		--disable-selinux
-		--disable-tclinterp
-		--enable-gui=no
-		--without-x
 	)
 
 	use normal || ECONF_SOURCE=${S} econf "${tiny[@]}"
@@ -128,9 +127,9 @@ src_install() {
 	else
 		default
 		rm -r "${ED}"/usr/share/{applications,icons} || die
-		cat "${FILESDIR}"/colors.vim >> "${T}"/new.vim || die
+		cat "${FILESDIR}"/colors.vim >> "${T}"/defaults.vim || die
 	fi
 
-	insinto /${SHORTNM}/
-	newins "${T}/new.vim" defaults.vim
+	insinto "/$(vim_shortnm)"
+	doins "${T}"/defaults.vim
 }

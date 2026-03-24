@@ -2,19 +2,21 @@
 
 EAPI=8
 
+BRANCH_NAME="stable"
+
 inherit autotools qa-policy
 
 DESCRIPTION="A portable fork of NaCl, a higher-level cryptographic library"
 HOMEPAGE="https://github.com/jedisct1/libsodium"
-SNAPSHOT=9bd8c451406ef8634169a6ec8c9b99d7f5cdf6c0
+
+SNAPSHOT=79a59b7a0ace344ccf02e82e8609c88974e76a3b
 SRC_URI="https://github.com/jedisct1/libsodium/archive/${SNAPSHOT}.tar.gz -> libsodium-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libsodium-${SNAPSHOT}"
 
-EGIT_BRANCH="stable"
-
 LICENSE="ISC"
-SLOT="0/23"
+SLOT="0"
 KEYWORDS="amd64 arm64"
+
 IUSE="asm minimal static-libs urandom"
 
 PATCHES=( "${FILESDIR}"/libsodium-1.0.10-cpuflags.patch )

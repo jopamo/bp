@@ -4,7 +4,7 @@ EAPI=8
 
 BRANCH_NAME="v$(ver_cut 1)-stable"
 
-inherit flag-o-matic linux-info meson doins xdg
+inherit flag-o-matic linux-info meson doins
 
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
@@ -280,10 +280,6 @@ src_install() {
 	EOF
 }
 
-pkg_postrm() {
-    xdg_mimeinfo_database_update
-}
-
 pkg_postinst() {
     sysusers_process
 
@@ -294,6 +290,4 @@ pkg_postinst() {
 
     systemctl reenable getty@tty1.service remote-fs.target
     use networkd && systemctl reenable systemd-networkd.service
-
-    xdg_mimeinfo_database_update
 }

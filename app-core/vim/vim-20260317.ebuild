@@ -22,14 +22,17 @@ DEPEND="
 "
 BDEPEND="
 	app-build/autoconf
+	app-core/gawk
 	app-build/gettext
 "
 
 vim_shortnm() {
-	local major minor
+	local version_h major minor
 
-	major=$(sed -n 's/^#define VIM_VERSION_MAJOR[[:space:]]*//p' "${S}"/src/version.h) || die
-	minor=$(sed -n 's/^#define VIM_VERSION_MINOR[[:space:]]*//p' "${S}"/src/version.h) || die
+	version_h=${S}/src/version.h
+
+	major=$(awk '/^#define[[:space:]]+VIM_VERSION_MAJOR[[:space:]]+/ { print $3; exit }' "${version_h}") || die
+	minor=$(awk '/^#define[[:space:]]+VIM_VERSION_MINOR[[:space:]]+/ { print $3; exit }' "${version_h}") || die
 
 	[[ ${major} =~ ^[0-9]+$ && ${minor} =~ ^[0-9]+$ ]] || die "failed to derive Vim runtime dir"
 

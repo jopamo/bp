@@ -6,10 +6,6 @@
 # @SUPPORTED_EAPIS: 8
 # @BLURB: Eclass for building Linux kernel modules
 
-case ${EAPI} in
-	8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_LINUX_MOD_R1_ECLASS:-} ]]; then
 _LINUX_MOD_R1_ECLASS=1

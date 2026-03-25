@@ -11,10 +11,6 @@
 #   unpacker
 # in src_unpack() and forget the rest.
 
-case ${EAPI} in
-	6|7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_UNPACKER_ECLASS:-} ]]; then
 _UNPACKER_ECLASS=1

@@ -4,10 +4,6 @@
 # @SUPPORTED_EAPIS: 7 8
 # @BLURB: Common functions for qmake-based packages.
 
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_QMAKE_UTILS_ECLASS:-} ]]; then
 _QMAKE_UTILS_ECLASS=1

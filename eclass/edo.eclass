@@ -22,10 +22,6 @@
 # those commands produce output.  The 'edob' command will suppress the
 # command's output and only present it if the command returned with a
 # non-zero exit status.
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_EDO_ECLASS} ]] ; then
 _EDO_ECLASS=1

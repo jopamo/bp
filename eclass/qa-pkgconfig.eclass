@@ -6,10 +6,6 @@
 # @SUPPORTED_EAPIS: 8
 # @BLURB: Internal pkg-config validation helpers for qa-policy
 
-case ${EAPI} in
-	8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_QA_PKGCONFIG_ECLASS:-} ]] ; then
 _QA_PKGCONFIG_ECLASS=1

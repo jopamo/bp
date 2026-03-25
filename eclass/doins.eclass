@@ -10,10 +10,6 @@ _DOINS_ECLASS=1
 
 inherit toolchain-funcs
 
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 _doins_is_live_root() {
 	[[ ${ROOT:-/} == / ]]

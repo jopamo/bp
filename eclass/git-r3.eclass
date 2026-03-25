@@ -25,10 +25,6 @@
 # defined but EGIT_LFS is not turned on and vice versa.
 # If non-empty, then the repo likely needs EGIT_LFS to clone properly.
 
-case ${EAPI} in
-	6|7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_GIT_R3_ECLASS-} ]]; then
 _GIT_R3_ECLASS=1

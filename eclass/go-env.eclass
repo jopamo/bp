@@ -6,10 +6,6 @@
 # @SUPPORTED_EAPIS: 7 8
 # @BLURB: Environment setup for Go packages
 
-case ${EAPI:-0} in
-	7|8) ;;
-	*) die "${ECLASS:-go-env.eclass}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_GO_ENV_ECLASS:-} ]]; then
 _GO_ENV_ECLASS=1

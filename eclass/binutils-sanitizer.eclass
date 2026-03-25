@@ -8,10 +8,6 @@
 # @DESCRIPTION:
 # Detect thin archives, missing index state, and toolchain locked LTO payloads
 
-case ${EAPI} in
-	8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_BINUTILS_SANITIZER_ECLASS:-} ]] ; then
 _BINUTILS_SANITIZER_ECLASS=1

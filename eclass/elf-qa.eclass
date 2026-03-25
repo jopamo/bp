@@ -8,10 +8,6 @@
 # @DESCRIPTION:
 # Scans installed ELF files, writes a report, and enforces policy
 
-case ${EAPI} in
-	8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_ELF_QA_ECLASS:-} ]] ; then
 _ELF_QA_ECLASS=1

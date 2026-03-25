@@ -4,10 +4,6 @@
 # @SUPPORTED_EAPIS: 7 8
 # @BLURB: user / group management helpers
 
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_USER_ECLASS:-} ]]; then
 _USER_ECLASS=1

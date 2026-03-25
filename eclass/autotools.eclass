@@ -15,10 +15,6 @@ fi
 if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 	_AUTOTOOLS_ECLASS=1
 
-	case ${EAPI} in
-		7|8) ;;
-		*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-	esac
 
 	GNUCONFIG_AUTO_DEPEND=no
 	inherit gnuconfig libtool

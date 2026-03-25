@@ -6,10 +6,6 @@
 # @SUPPORTED_EAPIS: 8
 # @BLURB: Simplified eclass for building Tree-sitter grammars (Linux only)
 
-case ${EAPI} in
-	8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_TREE_SITTER_GRAMMAR_ECLASS:-} ]]; then
 _TREE_SITTER_GRAMMAR_ECLASS=1

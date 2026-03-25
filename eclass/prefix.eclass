@@ -12,11 +12,6 @@
 # located somewhere in the filesystem.  Prefix ebuilds require
 # additional functions and variables which are defined by this eclass.
 
-case ${EAPI:-0} in
-	[5678]) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
-
 if [[ -z ${_PREFIX_ECLASS:-} ]]; then
 _PREFIX_ECLASS=1
 

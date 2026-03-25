@@ -1,10 +1,6 @@
 # @ECLASS: font.eclass
 # @SUPPORTED_EAPIS: 7 8
 
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_FONT_ECLASS:-} ]]; then
 	_FONT_ECLASS=1

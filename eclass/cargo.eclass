@@ -5,10 +5,6 @@
 #
 #
 
-case "${EAPI:-0}" in
-	7|8) ;;
-	*) die "cargo.eclass: EAPI=${EAPI} is not supported" ;;
-esac
 
 if [[ -z ${_CARGO_VENDOR_ECLASS} ]]; then
 	_CARGO_VENDOR_ECLASS=1

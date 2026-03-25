@@ -27,10 +27,6 @@
 # get_version
 # get_running_version
 
-case ${EAPI} in
-	6|7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_LINUX_INFO_ECLASS:-} ]]; then
 _LINUX_INFO_ECLASS=1

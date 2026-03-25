@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit libtool toolchain-funcs flag-o-matic qa-policy
 
 DESCRIPTION="Library for arbitrary-precision arithmetic on different type of numbers"

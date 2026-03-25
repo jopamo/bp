@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit unpacker xdg
 
 DESCRIPTION="Proton Mail Bridge – encrypts/decrypts mail as it leaves/enters your system (pre-built binary)"

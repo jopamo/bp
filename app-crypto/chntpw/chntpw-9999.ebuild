@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit git-r3
 
 DESCRIPTION="a utility to change user passwords in a Windows NT/2000 user database file"

@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit cmake flag-o-matic
 
 BRANCH_NAME="$(ver_cut 1).x"

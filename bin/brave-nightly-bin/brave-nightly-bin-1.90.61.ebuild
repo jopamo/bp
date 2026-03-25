@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit unpacker xdg
 
 DESCRIPTION="Brave Browser Nightly: Secure, Fast & Private Web Browser with Adblocker"

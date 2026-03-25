@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 MY_PN=${PN}3
 MECK_PV=0.8.13 # see rebar.config
 

@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit meson flag-o-matic qa-policy
 
 DESCRIPTION="The GLib library of C routines"

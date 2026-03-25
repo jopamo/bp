@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 BRANCH_NAME="v$(ver_cut 1).x"
 
 inherit flag-o-matic python-any-r1 toolchain-funcs xdg

@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit flag-o-matic toolchain-funcs qa-policy
 
 DESCRIPTION="A free library for encoding X264/AVC streams"

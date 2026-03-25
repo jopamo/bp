@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 GNULIB_SNAPSHOT=ac19d2a1ff86dfb70bec3fd1dc6e2fa10b35439e
 
 DESCRIPTION="GNU portability library for reusable code"

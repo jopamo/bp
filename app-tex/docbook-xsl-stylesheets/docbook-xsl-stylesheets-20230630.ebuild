@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 DESCRIPTION="XSL stylesheets for DocBook (XSLT 1.0)"
 HOMEPAGE="https://github.com/docbook/wiki/wiki"
 

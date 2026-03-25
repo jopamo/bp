@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 BRANCH_NAME="core-$(ver_cut 1)-$(ver_cut 2)-branch"
 
 inherit autotools toolchain-funcs prefix

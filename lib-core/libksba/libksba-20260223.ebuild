@@ -1,6 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
 SNAPSHOT=fb554939cfcd7612a09815d29481ba348aa28196
 SHORT=${SNAPSHOT:0:7}
 

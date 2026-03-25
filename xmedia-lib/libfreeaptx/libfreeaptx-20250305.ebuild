@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 DESCRIPTION="Free implementation of Audio Processing Technology codec"
 HOMEPAGE="https://github.com/regularhunter/libfreeaptx"
 SNAPSHOT=6dee419f934ec781e531f885f7e8e740752e67d1

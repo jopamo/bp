@@ -1,6 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
 SNAPSHOT=ce6f2b57f5450a8239022dcbfb2d750f273b83cb
 
 inherit multibuild toolchain-funcs qa-policy

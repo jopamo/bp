@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit autotools qa-policy toolchain-funcs
 
 DESCRIPTION="Keyboard and console utilities"

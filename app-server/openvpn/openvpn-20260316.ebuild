@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit user autotools
 
 DESCRIPTION="Robust and highly flexible tunneling application compatible with many OSes"

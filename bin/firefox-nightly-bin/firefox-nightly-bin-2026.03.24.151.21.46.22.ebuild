@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 MOZ_PN="firefox-nightly"
 TIMESTAMP=$(ver_rs 1- - "$(ver_cut 5-7)")
 MOZ_PV="$(ver_rs 1- - "$(ver_cut 1-3)")-${TIMESTAMP}"

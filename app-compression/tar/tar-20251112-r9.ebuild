@@ -1,6 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
 SNAPSHOT=92f040151cb25f06f7b3da2499471e05a2454218
 PAXUTILS_SNAPSHOT=063408cc6f32fff79b4f436a62236b84ca442d2e
 

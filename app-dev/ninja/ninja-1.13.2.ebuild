@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit edo doins python-any-r1 toolchain-funcs
 
 DESCRIPTION="A small build system similar to make"

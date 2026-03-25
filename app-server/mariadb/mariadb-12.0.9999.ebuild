@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit flag-o-matic cmake git-r3
 
 DESCRIPTION="An enhanced, drop-in replacement for MySQL"

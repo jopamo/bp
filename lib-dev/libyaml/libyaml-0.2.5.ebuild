@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit autotools libtool qa-policy
 
 DESCRIPTION="YAML 1.1 parser and emitter written in C"

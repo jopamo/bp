@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 DISTUTILS_USE_PEP517=setuptools
 PYPI_PN="SecretStorage"
 PYPI_VERIFY_REPO=https://github.com/mitya57/secretstorage

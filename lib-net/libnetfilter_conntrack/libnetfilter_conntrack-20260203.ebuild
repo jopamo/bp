@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit autotools linux-info qa-policy
 
 DESCRIPTION="programming interface (API) to the in-kernel connection tracking state table"

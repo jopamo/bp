@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit meson python-single-r1
 
 DESCRIPTION="ELF utils that can check files for security relevant properties"

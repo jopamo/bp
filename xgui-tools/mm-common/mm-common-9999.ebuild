@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit python-any-r1 meson git-r3
 
 DESCRIPTION="Build infrastructure and utilities for GNOME C++ bindings"

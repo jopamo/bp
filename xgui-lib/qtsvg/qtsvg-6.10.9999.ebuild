@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit cmake git-r3 flag-o-matic
 
 DESCRIPTION="SVG image format support module for Qt 6"

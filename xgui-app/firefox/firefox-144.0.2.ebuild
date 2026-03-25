@@ -1,4 +1,3 @@
-EAPI=8
 
 inherit desktop
 

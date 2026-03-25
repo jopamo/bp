@@ -1,8 +1,6 @@
 # Copyright 2026
 # Distributed under GPL-2
 
-EAPI=8
-
 inherit desktop doins xdg
 
 PKG_NAME="DaVinci_Resolve_Studio_${PV}_Linux"

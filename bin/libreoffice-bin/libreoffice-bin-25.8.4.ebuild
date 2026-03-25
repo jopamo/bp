@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit xdg prefix unpacker
 
 BASE_SRC_URI="https://download.documentfoundation.org/libreoffice/stable/${PV}/deb"

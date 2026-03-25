@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit go-module
 
 DESCRIPTION="Command line extension and specification for managing large files with git"

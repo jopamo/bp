@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit linux-info doins
 
 DESCRIPTION="Daemon for Advanced Configuration and Power Interface"

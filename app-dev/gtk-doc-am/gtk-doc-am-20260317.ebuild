@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit python-utils-r1
 
 DESCRIPTION="Automake files from gtk-doc"

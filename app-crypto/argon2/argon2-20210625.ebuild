@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit qa-policy
 
 SNAPSHOT=f57e61e19229e23c4445b85494dbf7c07de721cb

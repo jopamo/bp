@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit autotools qa-policy
 
 DESCRIPTION="Libconfig is a simple library for manipulating structured configuration files"

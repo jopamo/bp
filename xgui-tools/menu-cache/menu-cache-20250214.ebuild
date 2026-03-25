@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 SNAPSHOT=014ed4ce881fc3154c08e98e8d59c1b13c3f2f06
 
 inherit autotools flag-o-matic qa-policy

@@ -1,6 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
 SNAPSHOT=ae0448cb7d0d328440425d1ac347e9d6845e3f0e
 
 inherit flag-o-matic qa-policy

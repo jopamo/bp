@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit meson qa-policy
 
 DESCRIPTION="A TCP-IP emulator used to provide virtual networking services"

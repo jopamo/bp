@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 DESCRIPTION="SCSI sysfs query tool"
 HOMEPAGE="http://sg.danny.cz/scsi/lsscsi.html"
 

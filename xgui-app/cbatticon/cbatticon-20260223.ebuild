@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 DESCRIPTION="A lightweight and fast battery icon that sits in your system tray"
 HOMEPAGE="https://github.com/valr/cbatticon"
 SNAPSHOT=de7fe2247377bfce644664d7b512d81d46404db1

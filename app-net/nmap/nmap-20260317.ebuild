@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit autotools flag-o-matic
 
 DESCRIPTION="A utility for network discovery and security auditing"

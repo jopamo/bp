@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit user
 
 DESCRIPTION="small SSH 2 client/server designed for small memory environments"

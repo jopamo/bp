@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit flag-o-matic git-r3 meson
 
 DESCRIPTION="Scalable Vector Graphics (SVG) rendering library"

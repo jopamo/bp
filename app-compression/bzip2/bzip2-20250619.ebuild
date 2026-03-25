@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit flag-o-matic toolchain-funcs qa-policy
 
 MAINPV=1.0.8

@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 MINOR_VERSION="10156-f737b826c"
 _FULL_VERSION="${PV}.${MINOR_VERSION}"
 

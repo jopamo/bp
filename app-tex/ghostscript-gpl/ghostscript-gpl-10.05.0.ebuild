@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit autotools flag-o-matic toolchain-funcs qa-policy
 
 DESCRIPTION="Ghostscript is an interpreter for the PostScript language and for PDF"

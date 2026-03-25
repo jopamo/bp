@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit autotools qa-policy
 
 DESCRIPTION="X.Org Xlib-based client API for the XTEST & RECORD extensions library"

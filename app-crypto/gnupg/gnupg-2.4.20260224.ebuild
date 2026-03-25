@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 BRANCH_NAME="STABLE-BRANCH-$(ver_cut 1)-$(ver_cut 2)"
 
 inherit toolchain-funcs flag-o-matic autotools qa-policy

@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit sgml-catalog-r1
 
 MY_P=${P/-dtd/}

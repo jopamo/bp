@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit cmake
 
 DESCRIPTION="Fast and exact implementation of the C++ from_chars functions for number types"

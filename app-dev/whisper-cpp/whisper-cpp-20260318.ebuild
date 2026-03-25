@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit cmake user
 
 DESCRIPTION="High-performance inference of large language models (llama.cpp)"

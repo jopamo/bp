@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# please keep this ebuild at EAPI 8 -- sys-apps/portage dep
-EAPI=8
 
 DISTUTILS_USE_PEP517=flit
 # NB: this package extends beyond built-in importlib stuff in py3.8+

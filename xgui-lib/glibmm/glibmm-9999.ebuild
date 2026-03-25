@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit meson
 
 DESCRIPTION="C++ bindings for GLib (low-level core library used by GTK and GNOME)"

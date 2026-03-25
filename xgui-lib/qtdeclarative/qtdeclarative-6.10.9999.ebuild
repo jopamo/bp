@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit cmake flag-o-matic
 
 DESCRIPTION="Qt QML and Qt Quick modules for the Qt 6 framework"

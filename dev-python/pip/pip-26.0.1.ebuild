@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 # please bump dev-python/ensurepip-pip along with this package!
 
 DISTUTILS_USE_PEP517=flit

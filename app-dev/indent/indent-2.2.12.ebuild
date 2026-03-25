@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 DESCRIPTION="Indent program source files"
 HOMEPAGE="https://www.gnu.org/software/indent/"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"

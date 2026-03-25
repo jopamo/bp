@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 DISTUTILS_USE_PEP517=flit
 PYPI_VERIFY_REPO=https://github.com/pypa/trove-classifiers
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} python3_{13,14}t )

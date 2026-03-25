@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# please keep this ebuild at EAPI 8 -- sys-apps/portage dep
-EAPI=8
 
 DISTUTILS_USE_PEP517=hatchling
 PYPI_VERIFY_REPO=https://github.com/urllib3/urllib3

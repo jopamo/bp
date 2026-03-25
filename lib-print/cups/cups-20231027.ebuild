@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 SNAPSHOT=a8968fc4257322b1e4e191c4bccedea98d7b053e
 
 inherit autotools linux-info toolchain-funcs qa-policy

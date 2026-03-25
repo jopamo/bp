@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit perl-module flag-o-matic qa-policy
 
 DESCRIPTION="A perl module for parsing XML documents"

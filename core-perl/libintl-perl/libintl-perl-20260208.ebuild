@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit perl-module flag-o-matic
 
 DESCRIPTION="High-Level Interface to Uniforum Message Translation"

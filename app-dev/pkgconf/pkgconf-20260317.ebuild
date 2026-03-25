@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit autotools qa-policy
 
 DESCRIPTION="a program which helps to configure compiler and linker flags for development libraries"

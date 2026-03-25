@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit flag-o-matic qa-policy
 
 MY_P="${PN}_$(ver_rs 1- _)"

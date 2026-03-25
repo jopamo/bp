@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit xdg
 
 DESCRIPTION="icons theme based on GNOME 3.32's Adwaita"

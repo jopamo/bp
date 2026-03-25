@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 DISTUTILS_OPTIONAL=1
 
 inherit autotools distutils-r1 qa-policy

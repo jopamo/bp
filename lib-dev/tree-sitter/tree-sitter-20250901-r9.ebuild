@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="Tree-sitter is a parser generator tool and an incremental parsing library"

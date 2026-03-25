@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit kernel-mod linux-info
 
 DESCRIPTION="r8125 vendor driver for Realtek RTL8125 PCI-E NICs"

@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit ninja-utils python-any-r1 toolchain-funcs git-r3 flag-o-matic
 
 DESCRIPTION="GN is a meta-build system that generates build files for Ninja"

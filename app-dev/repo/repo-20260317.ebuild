@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit python-r1
 
 DESCRIPTION="Google tool for managing git, particularly multiple repos"

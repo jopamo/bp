@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit distutils-r1 autotools flag-o-matic qa-policy
 
 DESCRIPTION="Libraries providing APIs to netlink protocol based Linux kernel interfaces"

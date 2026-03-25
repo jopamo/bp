@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit cmake xdg
 
 DESCRIPTION="Powerful yet simple to use screenshot software for GNU/Linux"

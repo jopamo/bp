@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 DESCRIPTION="Small RSA key management package, based on OpenSSL"
 HOMEPAGE="https://openvpn.net/"
 SRC_URI="https://github.com/OpenVPN/easy-rsa/archive/v${PV}.tar.gz -> ${P}.tar.gz"

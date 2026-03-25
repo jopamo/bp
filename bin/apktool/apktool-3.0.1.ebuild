@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 SSNAP="ded2957edb02e26924f6ad6794248f7374848047"
 
 DESCRIPTION="A tool for reverse engineering Android apk files"

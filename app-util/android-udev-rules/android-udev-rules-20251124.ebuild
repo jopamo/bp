@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit user
 
 DESCRIPTION="Android udev rules list aimed to be the most comprehensive on the net"

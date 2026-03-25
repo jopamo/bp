@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit linux-info meson doins qa-policy
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"

@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 BRANCH_NAME="master"
 SNAPSHOT=553d6bb272f26400d6d4d1cac7c1df84c447449b
 

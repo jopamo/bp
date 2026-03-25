@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit linux-info flag-o-matic autotools qa-policy
 
 DESCRIPTION="interface to packets that have been logged by the kernel packet filter"

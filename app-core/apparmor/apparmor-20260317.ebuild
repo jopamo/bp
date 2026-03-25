@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit flag-o-matic doins toolchain-funcs linux-info qa-policy
 
 DESCRIPTION="Userspace utils and init scripts for the AppArmor application security system"

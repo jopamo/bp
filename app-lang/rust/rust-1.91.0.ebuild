@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit flag-o-matic multiprocessing python-any-r1
 
 DESCRIPTION="Systems programming language from Mozilla"

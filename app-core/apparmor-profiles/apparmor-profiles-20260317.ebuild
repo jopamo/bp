@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 DESCRIPTION="AppArmor security profiles"
 HOMEPAGE="https://gitlab.com/apparmor/apparmor/wikis/home"
 SNAPSHOT=75de3a53a40b993b6e6dcdc7964c11876dc49699

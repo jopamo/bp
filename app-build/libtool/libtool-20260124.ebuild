@@ -1,6 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
 SNAPSHOT=1b6fc1940b2b9104729c0a872aeb0fa6d3de71bf
 LIBTOOL_VERSION=2.6.0.14
 # Upstream generates .serial from `git log --pretty=oneline | wc -l` when

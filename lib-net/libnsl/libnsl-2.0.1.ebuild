@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit autotools
 
 DESCRIPTION="Public client interface for NIS(YP) and NIS+ in a IPv6 ready version"

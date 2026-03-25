@@ -1,7 +1,6 @@
 # Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
 SNAPSHOT=4ce87862210af06e02cebeb08415e2290b980a07
 SHORT=${SNAPSHOT:0:7}
 

@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 BRANCH_NAME="gawk-$(ver_cut 1-2)-stable"
 SNAPSHOT=16ba2113002eedad16b944cac3439eb309648144
 

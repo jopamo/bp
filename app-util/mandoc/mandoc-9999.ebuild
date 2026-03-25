@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit qa-policy git-r3 meson
 
 DESCRIPTION="a man replacement that utilizes gdbm instead of flat files"

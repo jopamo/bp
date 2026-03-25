@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 DESCRIPTION="Keyboard map conversion database used by QEMU"
 HOMEPAGE="https://gitlab.com/qemu-project/keycodemapdb"
 SNAPSHOT=54788039c0b3486a8883090d6736c2500177af29

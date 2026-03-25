@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 BRANCH_NAME="LIBGCRYPT-$(ver_cut 1-2)-BRANCH"
 SNAPSHOT=c6e0658004b53fe9373c7ddd7d5a1d2ad818eaac
 

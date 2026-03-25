@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit meson
 
 DESCRIPTION="Cisco OpenH264 library and Gecko Media Plugin for Mozilla packages"

@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 DISTUTILS_USE_PEP517=setuptools
 CLI_COMPAT=( python3_{11..13} )
 PYTHON_COMPAT=( "${CLI_COMPAT[@]}" pypy3_11 python3_14 python3_{13,14}t )

@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit autotools
 
 DESCRIPTION="a tool to help manage well known user directories"

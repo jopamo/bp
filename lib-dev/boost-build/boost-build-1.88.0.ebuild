@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 MY_PV="$(ver_rs 1- _)"
 
 DESCRIPTION="A system for large project software construction, simple to use and powerful"

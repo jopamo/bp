@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit cargo git-r3
 
 DESCRIPTION="Command-line utility and library for lossy compression of PNG images"

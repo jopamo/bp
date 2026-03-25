@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit meson linux-info multiprocessing python-r1 flag-o-matic doins
 
 DESCRIPTION="1g4 package manager"

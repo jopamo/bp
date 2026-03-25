@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit linux-info autotools qa-policy
 
 DESCRIPTION="Open source read-write NTFS driver that runs under FUSE"

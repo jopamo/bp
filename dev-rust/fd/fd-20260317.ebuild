@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit cargo
 
 DESCRIPTION="A simple, fast and user-friendly alternative to gnu find"

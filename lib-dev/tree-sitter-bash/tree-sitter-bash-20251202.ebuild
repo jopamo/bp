@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 TS_BINDINGS=( python )
 
 inherit tree-sitter-grammar flag-o-matic

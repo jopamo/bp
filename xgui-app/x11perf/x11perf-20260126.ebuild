@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit autotools
 
 DESCRIPTION="X11 server performance test program"

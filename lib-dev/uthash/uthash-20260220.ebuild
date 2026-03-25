@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 DESCRIPTION="An easy-to-use hash implementation for C programmers"
 HOMEPAGE="https://troydhanson.github.io/uthash/index.html"
 SNAPSHOT=2031adfd8cd6f8f498e0f4a9055648b19496f12e

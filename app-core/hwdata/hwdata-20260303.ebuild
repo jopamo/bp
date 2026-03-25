@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 DESCRIPTION="hwdata files"
 HOMEPAGE="https://github.com/vcrhonek/hwdata"
 SNAPSHOT=be46d7186e918e62eb75de399e800145a781c8db

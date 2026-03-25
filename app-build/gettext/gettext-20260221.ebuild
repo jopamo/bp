@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 TREE_SITTER_VERSION=0.23.2
 TREE_SITTER_GO_VERSION=0.23.4
 TREE_SITTER_RUST_VERSION=0.23.2

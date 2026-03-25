@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 DESCRIPTION="Updated config.sub and config.guess file from GNU"
 HOMEPAGE="https://savannah.gnu.org/projects/config"
 SNAPSHOT=a2287c3041a3f2a204eb942e09c015eab00dc7dd

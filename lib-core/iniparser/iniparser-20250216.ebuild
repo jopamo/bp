@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 SNAPSHOT=4bef811283e0ec1658c60e09950bd5a1ddc92e4b
 
 inherit autotools qa-policy

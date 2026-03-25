@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit python-single-r1
 
 DESCRIPTION="A Firefox add-on for playing URLs in mpv"

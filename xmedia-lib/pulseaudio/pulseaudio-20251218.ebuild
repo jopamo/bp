@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit flag-o-matic linux-info user meson
 
 DESCRIPTION="A networked sound server with an advanced plugin system"

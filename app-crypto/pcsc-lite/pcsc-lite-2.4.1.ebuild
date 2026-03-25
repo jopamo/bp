@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit meson python-single-r1 doins user flag-o-matic
 
 DESCRIPTION="PC/SC Architecture smartcard middleware library"

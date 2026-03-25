@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 DISTUTILS_OPTIONAL="1"
 
 inherit distutils-r1 cmake flag-o-matic qa-policy

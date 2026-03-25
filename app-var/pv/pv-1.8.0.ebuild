@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 DESCRIPTION="Pipe Viewer: a tool for monitoring the progress of data through a pipe"
 HOMEPAGE="http://www.ivarch.com/programs/pv.shtml"
 SRC_URI="https://www.ivarch.com/programs/sources/${P}.tar.gz"

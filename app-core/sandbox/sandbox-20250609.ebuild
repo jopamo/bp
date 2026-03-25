@@ -1,6 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
 SNAPSHOT=5ac4b15175ae8cc096b6a3d861b54b6e2a882367
 
 inherit flag-o-matic multiprocessing autotools

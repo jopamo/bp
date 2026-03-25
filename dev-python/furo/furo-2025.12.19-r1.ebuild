@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 # sphinx-theme-builder is completely unusable, as it requires pinning
 # to a very-specific nodejs version number, and ofc loves fetching
 # everything from the Internet

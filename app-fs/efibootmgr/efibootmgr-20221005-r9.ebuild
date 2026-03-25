@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 SNAPSHOT=1904f9cd5a48207d49e393ac8de824f54ccfb697
 
 DESCRIPTION="User-space application to modify the EFI boot manager"

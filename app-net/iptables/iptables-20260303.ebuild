@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit toolchain-funcs autotools flag-o-matic qa-policy
 
 DESCRIPTION="Linux kernel firewall, NAT and packet mangling tools"

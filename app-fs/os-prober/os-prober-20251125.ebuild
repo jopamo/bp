@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 DESCRIPTION="Utility to detect other OSs on a set of drives"
 HOMEPAGE="https://packages.debian.org/source/sid/os-prober"
 SNAPSHOT=59640ab01b620545bfe8c04adcdba8ab61f7df0e

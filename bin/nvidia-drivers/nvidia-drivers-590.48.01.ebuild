@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit linux-info kernel-mod unpacker user-info qa-policy
 
 NV_URI="https://us.download.nvidia.com/XFree86/"

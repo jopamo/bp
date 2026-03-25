@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit meson doins flag-o-matic
 
 DESCRIPTION="Y2038 safe wtmp implementation as PAM module using sqlite as database"

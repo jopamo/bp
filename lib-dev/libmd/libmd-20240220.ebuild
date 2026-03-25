@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit autotools qa-policy
 
 DESCRIPTION="Provides message digest functions found on BSD systems"

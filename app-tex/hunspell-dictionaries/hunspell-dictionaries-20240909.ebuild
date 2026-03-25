@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 DESCRIPTION="The most popular spellchecking library dictionaries"
 HOMEPAGE="http://hunspell.github.io/"
 

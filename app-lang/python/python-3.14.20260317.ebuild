@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 BRANCH_NAME="$(ver_cut 1-2)"
 SNAPSHOT=b3c2ef5f319d6b0a20da584a911b16fcdef514b8
 

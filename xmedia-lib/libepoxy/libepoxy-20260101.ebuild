@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit meson
 
 DESCRIPTION="Epoxy is a library for handling OpenGL function pointer management for you"

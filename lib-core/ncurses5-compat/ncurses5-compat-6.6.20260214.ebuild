@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 DESCRIPTION="console display library"
 HOMEPAGE="https://invisible-island.net/ncurses/ https://www.gnu.org/software/ncurses/"
 

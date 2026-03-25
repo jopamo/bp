@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit linux-info autotools flag-o-matic qa-policy
 
 DESCRIPTION="Tool to setup encrypted devices with dm-crypt"

@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 BRANCH_NAME="maint"
 
 inherit autotools flag-o-matic doins toolchain-funcs

@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit cmake flag-o-matic
 
 DESCRIPTION="Qt Tools collection (Assistant, Designer, Linguist, etc.)"

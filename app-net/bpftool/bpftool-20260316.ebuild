@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit toolchain-funcs
 
 DESCRIPTION="Tool for inspection and simple manipulation of eBPF programs and maps"

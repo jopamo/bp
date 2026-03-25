@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 BRANCH_NAME="branch-$(ver_cut 1-2)"
 
 inherit flag-o-matic qa-policy

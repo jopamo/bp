@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit meson qa-policy
 
 DESCRIPTION="inih (INI not invented here) simple .INI file parser"

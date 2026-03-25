@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit autotools
 
 DESCRIPTION="The Cyrus SASL (Simple Authentication and Security Layer)"

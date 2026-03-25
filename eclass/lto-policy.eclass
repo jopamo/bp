@@ -8,10 +8,6 @@
 # @DESCRIPTION:
 # Define one LTO policy for setup, sanitize, and assert phases
 
-case ${EAPI} in
-	8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_LTO_POLICY_ECLASS:-} ]] ; then
 _LTO_POLICY_ECLASS=1

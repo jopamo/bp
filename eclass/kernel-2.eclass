@@ -8,10 +8,6 @@
 
 inherit multiprocessing optfeature toolchain-funcs
 
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 : "${HOMEPAGE:="https://www.kernel.org/"}"
 : "${LICENSE:="GPL-2"}"

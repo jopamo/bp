@@ -10,10 +10,6 @@
 if [[ -z ${_DESKTOP_ECLASS} ]]; then
 _DESKTOP_ECLASS=1
 
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 # @FUNCTION: make_desktop_entry
 # @USAGE: <command> [name] [icon] [type] [fields]

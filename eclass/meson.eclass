@@ -33,10 +33,6 @@
 #
 # @CODE
 
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_MESON_ECLASS:-} ]]; then
 _MESON_ECLASS=1

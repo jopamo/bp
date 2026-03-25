@@ -42,10 +42,6 @@
 # S=${WORKDIR}/${P^}
 # @CODE
 
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_PYPI_ECLASS:-} ]]; then
 _PYPI_ECLASS=1

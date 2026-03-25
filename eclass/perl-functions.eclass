@@ -19,10 +19,6 @@
 if [[ -z ${_PERL_FUNCTIONS_ECLASS:-} ]]; then
 _PERL_FUNCTIONS_ECLASS=1
 
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 # @ECLASS_VARIABLE: perlinfo_done
 # @INTERNAL

@@ -13,13 +13,8 @@
 # multiple 'variants' of a package (e.g., Python
 # implementations).
 
-case ${EAPI} in
-	6|7|8)
-		# backwards compatibility for run_in_build_dir
-		inherit out-of-source-utils
-		;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
+# backwards compatibility for run_in_build_dir
+inherit out-of-source-utils
 
 if [[ ! ${_MULTIBUILD_ECLASS:-} ]]; then
 _MULTIBUILD_ECLASS=1

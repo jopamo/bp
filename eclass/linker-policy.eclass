@@ -9,10 +9,6 @@
 # Predictable linker selection and link flag policy
 # Setup is done in src_configure or earlier, assert is run after install
 
-case ${EAPI} in
-	8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_LINKER_POLICY_ECLASS:-} ]] ; then
 _LINKER_POLICY_ECLASS=1

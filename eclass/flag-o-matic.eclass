@@ -1,10 +1,6 @@
 # @ECLASS: flag-o-matic.eclass
 # @SUPPORTED_EAPIS: 6 7 8
 
-case ${EAPI} in
-	6|7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_FLAG_O_MATIC_ECLASS:-} ]]; then
 	_FLAG_O_MATIC_ECLASS=1

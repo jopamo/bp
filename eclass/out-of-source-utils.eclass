@@ -12,10 +12,6 @@
 # This eclass provides a run_in_build_dir() helper that can be used
 # to execute specified command inside BUILD_DIR.
 
-case ${EAPI} in
-	6|7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ ! ${_OUT_OF_SOURCE_UTILS_ECLASS:-} ]]; then
 _OUT_OF_SOURCE_UTILS_ECLASS=1

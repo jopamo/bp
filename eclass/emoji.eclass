@@ -1,10 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # @ECLASS: emoji.eclass
 
-case ${EAPI} in
-	5|6|7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_EMOJI_ECLASS:-} ]]; then
 _EMOJI_ECLASS=1

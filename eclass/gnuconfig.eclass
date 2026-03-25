@@ -8,10 +8,6 @@
 if [[ -z ${_GNUCONFIG_ECLASS:-} ]]; then
 	_GNUCONFIG_ECLASS=1
 
-	case "${EAPI:-0}" in
-		7|8) ;;
-		*) die "gnuconfig.eclass: EAPI ${EAPI:-0} is not supported" ;;
-	esac
 
 	: "${GNUCONFIG_DEPEND:=app-build/gnuconfig}"
 	: "${GNUCONFIG_AUTO_DEPEND:=yes}"

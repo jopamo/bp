@@ -3,16 +3,12 @@
 DISTUTILS_USE_PEP517=hatchling
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="Universal encoding detector"
 HOMEPAGE="
 	https://github.com/chardet/chardet/
 	https://pypi.org/project/chardet/
-"
-SRC_URI="
-	https://github.com/chardet/chardet/archive/${PV}.tar.gz
-		-> ${P}.gh.tar.gz
 "
 
 LICENSE="LGPL-2.1"

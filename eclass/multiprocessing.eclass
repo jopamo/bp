@@ -24,11 +24,6 @@
 # }
 # @CODE
 
-case ${EAPI:-0} in
-	[5678]) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
-
 if [[ -z ${_MULTIPROCESSING_ECLASS:-} ]]; then
 _MULTIPROCESSING_ECLASS=1
 

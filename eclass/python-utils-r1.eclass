@@ -27,10 +27,6 @@ PYTHON_COMPAT=( python3_13 python3_14 )
 if [[ -z ${_PYTHON_UTILS_R1_ECLASS-} ]]; then
 _PYTHON_UTILS_R1_ECLASS=1
 
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 inherit multiprocessing toolchain-funcs
 

@@ -5,10 +5,6 @@
 # @SUPPORTED_EAPIS: 5 6 7 8
 # @BLURB: Auxiliary functions commonly used by XDG-compliant packages
 
-case ${EAPI} in
-	5|6|7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 inherit emoji          # adds ICON_* vars and log_* helpers
 

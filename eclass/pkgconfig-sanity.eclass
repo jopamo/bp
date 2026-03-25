@@ -8,10 +8,6 @@
 # @DESCRIPTION:
 # Enforces build path hygiene and portability rules for installed .pc files
 
-case ${EAPI} in
-	8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_PKGCONFIG_SANITY_ECLASS:-} ]] ; then
 _PKGCONFIG_SANITY_ECLASS=1

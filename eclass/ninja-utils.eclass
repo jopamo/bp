@@ -17,10 +17,6 @@
 # be used indirectly by the eclasses for other build systems (CMake,
 # Meson).
 
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_NINJA_UTILS_ECLASS:-} ]]; then
 _NINJA_UTILS_ECLASS=1

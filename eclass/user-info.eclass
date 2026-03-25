@@ -4,10 +4,6 @@
 # @SUPPORTED_EAPIS: 7 8
 # @BLURB: Read-only access to user and group information
 
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_USER_INFO_ECLASS:-} ]]; then
 _USER_INFO_ECLASS=1

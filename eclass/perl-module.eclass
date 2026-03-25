@@ -19,19 +19,8 @@
 # ExtUtils::MakeMaker or Module::Build), we recommend to use perl-functions.eclass
 # instead.
 
-case ${EAPI} in
-	7)
-		inherit multiprocessing perl-functions toolchain-funcs
-		PERL_EXPF="src_prepare src_configure src_compile src_test src_install"
-		;;
-	8)
-		inherit multiprocessing perl-functions toolchain-funcs
-		PERL_EXPF="src_prepare src_configure src_compile src_test src_install"
-		;;
-	*)
-		die "${ECLASS}: EAPI ${EAPI:-0} not supported"
-		;;
-esac
+inherit multiprocessing perl-functions toolchain-funcs
+PERL_EXPF="src_prepare src_configure src_compile src_test src_install"
 
 # @ECLASS_VARIABLE: GENTOO_DEPEND_ON_PERL
 # @DEFAULT_UNSET

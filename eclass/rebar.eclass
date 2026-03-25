@@ -7,10 +7,6 @@
 # @PROVIDES: rebar-utils
 # @BLURB: Build Erlang/OTP projects using dev-util/rebar.
 
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_REBAR_ECLASS:-} ]]; then
 _REBAR_ECLASS=1

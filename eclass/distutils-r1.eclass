@@ -249,10 +249,6 @@
 if [[ -z ${_DISTUTILS_R1_ECLASS} ]]; then
 _DISTUTILS_R1_ECLASS=1
 
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 inherit flag-o-matic
 inherit multibuild multiprocessing ninja-utils toolchain-funcs

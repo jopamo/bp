@@ -4,10 +4,6 @@
 # @PROVIDES: xdg-utils
 # @BLURB: Provides phases for XDG-compliant packages
 
-case ${EAPI} in
-	6|7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_XDG_ECLASS:-} ]]; then
 	_XDG_ECLASS=1

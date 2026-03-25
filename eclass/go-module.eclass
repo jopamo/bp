@@ -60,10 +60,6 @@
 #
 # @CODE
 
-case ${EAPI:-0} in
-	7|8) ;;
-	*) die "${ECLASS:-go-module.eclass}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_GO_MODULE_ECLASS:-} ]]; then
 _GO_MODULE_ECLASS=1

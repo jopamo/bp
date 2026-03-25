@@ -13,10 +13,6 @@
 # in such a way that you can rely on the function always returning
 # something sane.
 
-case ${EAPI} in
-	6|7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_TOOLCHAIN_FUNCS_ECLASS:-} ]]; then
 _TOOLCHAIN_FUNCS_ECLASS=1

@@ -9,10 +9,6 @@
 # Exposes configure, compile, and install entry points while delegating setup,
 # sanitize, assertion, and reporting to internal qa-* eclasses.
 
-case ${EAPI} in
-	8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_QA_POLICY_ECLASS:-} ]] ; then
 _QA_POLICY_ECLASS=1

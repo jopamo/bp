@@ -7,10 +7,6 @@
 # @SUPPORTED_EAPIS: 7 8
 # @BLURB: Auxiliary functions for using dev-util/rebar.
 
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_REBAR_UTILS_ECLASS:-} ]]; then
 _REBAR_UTILS_ECLASS=1

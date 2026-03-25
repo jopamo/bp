@@ -12,10 +12,6 @@
 if [[ -z ${_LIBTOOL_ECLASS:-} ]]; then
 	_LIBTOOL_ECLASS=1
 
-	case "${EAPI:-0}" in
-		7|8) ;;
-		*) die "libtool.eclass: EAPI ${EAPI:-0} not supported" ;;
-	esac
 
 	inherit toolchain-funcs
 

@@ -7,10 +7,6 @@
 # @SUPPORTED_EAPIS: 7 8
 # @BLURB: Advertise optional functionality that might be useful to users
 
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_OPTFEATURE_ECLASS:-} ]]; then
 _OPTFEATURE_ECLASS=1

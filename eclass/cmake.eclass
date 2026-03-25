@@ -8,10 +8,6 @@
 # It provides all inherited features (DOCS, HTML_DOCS, PATCHES) along with
 # out-of-source builds (default) and in-source builds.
 
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_CMAKE_ECLASS} ]]; then
 _CMAKE_ECLASS=1

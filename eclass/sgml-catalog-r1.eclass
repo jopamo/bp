@@ -6,10 +6,6 @@
 # @SUPPORTED_EAPIS: 7 8
 # @BLURB: Functions for installing SGML catalogs
 
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_SGML_CATALOG_R1_ECLASS:-} ]]; then
 _SGML_CATALOG_R1_ECLASS=1

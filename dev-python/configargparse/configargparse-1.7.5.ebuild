@@ -3,18 +3,12 @@
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} )
 
-inherit distutils-r1
+inherit distutils-r1 pypi
 
-MY_P=ConfigArgParse-${PV}
 DESCRIPTION="Drop-in replacement for argparse supporting config files and env variables"
 HOMEPAGE="
 	https://github.com/bw2/ConfigArgParse/
 	https://pypi.org/project/ConfigArgParse/"
-SRC_URI="
-	https://github.com/bw2/ConfigArgParse/archive/refs/tags/v${PV}.tar.gz
-		-> ${MY_P}.gh.tar.gz
-"
-S=${WORKDIR}/${MY_P}
 
 LICENSE="MIT"
 SLOT="0"

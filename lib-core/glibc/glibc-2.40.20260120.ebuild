@@ -190,6 +190,12 @@ src_configure() {
 		$(use_enable static-pie)
 	)
 
+	# Arm64 builds can fail in mathvec SVE objects when toolchain flags
+	# do not enable SVE; disable mathvec to keep baseline compatibility.
+	if [[ ${ARCH} == arm64 ]]; then
+		myconf+=( --disable-mathvec )
+	fi
+
 	ac_cv_lib_cap_cap_init=$(in_iuse caps && usex caps || echo no)
 
 	export libc_cv_rootsbindir=/usr/bin

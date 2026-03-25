@@ -1,0 +1,11 @@
+--- a/Makefile
++++ b/Makefile
+@@ -23,7 +23,6 @@ WARNFLAGS := -Wall -W -Wundef -Wpointer-arith -Wcast-align \
+ 	-Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes \
+ 	-Wmissing-declarations -Wnested-externs -pedantic
+ # BeOS/Haiku standard library headers create warnings.
+ ifneq ($(BUILD),i586-pc-haiku)
+-  WARNFLAGS := $(WARNFLAGS) -Werror
+ endif
+ 
+ CFLAGS := -D_BSD_SOURCE -D_DEFAULT_SOURCE \

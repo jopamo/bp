@@ -14,7 +14,8 @@ LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="apparmor binfmt blkid bootloader bpf-framework coredump dbus devmode dhcp4 elfutils efi gcrypt gshadow
+IUSE="apparmor binfmt blkid bootloader bpf-framework coredump devmode dbus
+dhcp4 elfutils efi gcrypt gshadow
 +hostnamed +hwdb importd kmod ldconfig localed logind machined +networkd
 oomd pam pcre pstore +resolve rfkill systemd-update timedated
 +userdb +vconsole xkb"
@@ -22,36 +23,29 @@ oomd pam pcre pstore +resolve rfkill systemd-update timedated
 REQUIRED_USE="elibc_musl? ( !gshadow )"
 
 DEPEND="
-    app-build/gettext
     app-core/acl
     app-core/coreutils
     app-core/procps[kill(+)]
     app-core/util-linux
-    app-dev/gperf
-    app-dev/pkgconf
-    app-tex/docbook-xml-dtd
-    app-tex/docbook-xsl-stylesheets
     lib-core/libcap
     lib-core/libseccomp
-    lib-core/libxslt
+    virtual/ssl
     apparmor? ( app-core/apparmor )
     bpf-framework? ( lib-net/libbpf )
-    dbus? (
-        app-core/dbus
-        app-compression/libarchive
-        lib-core/glib
-    )
+    dbus? ( app-core/dbus )
     elfutils? ( virtual/libelf )
     gcrypt? ( lib-core/libgcrypt )
     kmod? ( app-core/kmod )
-    logind? ( app-core/dbus
-    			app-fs/cryptsetup )
+    logind? ( app-fs/cryptsetup )
     pam? ( lib-core/pam )
     pcre? ( lib-core/libpcre2 )
     xkb? ( xgui-lib/libxkbcommon )
 "
 BDEPEND="
-    dev-python/pyelftools
+    app-build/gettext
+    app-dev/gperf
+    app-dev/pkgconf
+    bootloader? ( dev-python/pyelftools )
     dev-py/jinja
 "
 

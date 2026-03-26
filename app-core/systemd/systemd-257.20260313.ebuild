@@ -210,14 +210,15 @@ src_install() {
 	use resolve && dosym -r /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 
 	if use dhcp4; then
-		keepdir /etc/systemd/network
-		cat > "${ED}/etc/systemd/network/ipv4dhcp.network" <<- 'EOF' || die
-			[Match]
-			Name=en*
-
-			[Network]
-			DHCP=ipv4
-		EOF
+		insinto /etc/systemd/network
+		printf '%s\n' \
+			'[Match]' \
+			'Name=en*' \
+			'' \
+			'[Network]' \
+			'DHCP=ipv4' \
+			> "${T}/ipv4dhcp.network" || die
+		doins "${T}/ipv4dhcp.network" || die
 	fi
 
 	local journald_conf="${ED}/etc/systemd/journald.conf"
@@ -270,6 +271,8 @@ src_install() {
 		[Install]
 		WantedBy=default.target
 	EOF
+
+	rm -rf "${ED}"/usr/share/mime
 }
 
 pkg_postinst() {

@@ -7,7 +7,7 @@ inherit distutils-r1 toolchain-funcs flag-o-matic
 
 DESCRIPTION="A Pythonic binding for the libxml2 and libxslt libraries"
 HOMEPAGE="https://lxml.de/"
-SNAPSHOT=8096c644bc53d596c26288825cc8ea3e1d0479f0
+SNAPSHOT=0e2acd18104f3fb63a538624525eb1858c3825e7
 SRC_URI="https://github.com/lxml/lxml/archive/${SNAPSHOT}.tar.gz -> lxml-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/lxml-${SNAPSHOT}
 

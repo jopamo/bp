@@ -2,7 +2,7 @@
 
 DESCRIPTION="Small tool to capture packets from wlan devices"
 HOMEPAGE="https://github.com/ZerBea/hcxtools"
-SNAPSHOT=92ac33fd9874d2f796374b91185ecfd772f327c5
+SNAPSHOT=35f132efec4eb0dd63ed273aa0ada5cea3645111
 SRC_URI="https://github.com/ZerBea/hcxtools/archive/${SNAPSHOT}.tar.gz -> hcxtools-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/hcxtools-${SNAPSHOT}"
 

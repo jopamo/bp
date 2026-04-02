@@ -1,11 +1,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit flag-o-matic qa-policy
+inherit autotools flag-o-matic qa-policy
 
 DESCRIPTION="Standard GNU utilities (chmod, cp, dd, ls, sort, tr, head, wc, who,...)"
 HOMEPAGE="https://www.gnu.org/software/coreutils/"
-SNAPSHOT=bb51268465ebf3e8e62a88da42cf039d0802379c
-SRC_URI="https://github.com/coreutils/coreutils/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SNAPSHOT=0efa2bbb291a93be805f2c11cc3a5b9ee1e4babf
+SRC_URI="https://gitlab.com/pjo/coreutils/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="GPL-3"
@@ -25,27 +25,27 @@ DEPEND="
 	static? ( ${LIB_DEPEND} )
 	app-compression/xz-utils
 "
-BDEPEND="app-build/gnulib"
 
 RESTRICT="network-sandbox"
 
 src_prepare() {
 	default
 
-	rm -rf gnulib || die
-	cp -a "${BROOT}"/usr/share/gnulib gnulib || die
+	# GitLab archive omits generated files required by autoreconf.
+	./build-aux/gen-lists-of-programs.sh --autoconf > m4/cu-progs.m4 || die
+	chmod a-w m4/cu-progs.m4 || die
+	./build-aux/gen-lists-of-programs.sh --automake > src/cu-progs.mk || die
+	chmod a-w src/cu-progs.mk || die
+	./build-aux/gen-single-binary.sh src/local.mk > src/single-binary.mk || die
+	chmod a-w src/single-binary.mk || die
 
-	# app-build/gnulib is installed from a fixed tarball without git metadata.
-	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib || die
-
-	# The current app-build/gnulib snapshot exports struct aclinfo.u.__gl_acl_ch.
-	sed -i -e 's/ai->u\._gl_acl_ch/ai->u.__gl_acl_ch/' src/ls.c || die
+	eautoreconf
 
 	# GCC 15 warns that src_mode may be used uninitialized in copy_internal.
 	sed -i -e 's/mode_t src_mode IF_LINT ( = 0);/mode_t src_mode = 0;/' src/copy.c || die
 
 	append-flags -fno-strict-aliasing
-	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
+	sed -i -e "s/UNKNOWN/${PV}/g" configure || die
 }
 
 src_configure() {
@@ -63,7 +63,6 @@ src_configure() {
 		$(use_enable xattr)
 		--enable-no-install-program="true,false,cp,who,groups,kill,su,uptime"
 		--enable-install-program=hostname
-		--disable-nls
 		--enable-largefile
 	)
 

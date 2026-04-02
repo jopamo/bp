@@ -4,7 +4,7 @@ inherit perl-module flag-o-matic qa-policy
 
 DESCRIPTION="A perl module for parsing XML documents"
 HOMEPAGE="https://metacpan.org/release/XML-Parser"
-SNAPSHOT=fc71e31df91ddedde919f97e2bc79ec40d05e5d6
+SNAPSHOT=a0cecfc4deb709703c6e3472138001d003abf7b3
 SRC_URI="https://github.com/cpan-authors/XML-Parser/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

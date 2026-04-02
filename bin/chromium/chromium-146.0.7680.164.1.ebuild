@@ -12,10 +12,10 @@ MY_REL=${PV##*.}
 
 SRC_URI="
 	amd64? (
-		${BASE_URI}/${MY_UP_PV}-${MY_REL}/ungoogled-chromium-${MY_UP_PV}-1-x86_64_linux.tar.xz -> ${PN}-${MY_UP_PV}-x86_64.tar.xz
+		${BASE_URI}/${MY_UP_PV}-${MY_REL}/ungoogled-chromium-${MY_UP_PV}-${MY_REL}-x86_64_linux.tar.xz -> ${PN}-${MY_UP_PV}-x86_64.tar.xz
 	)
 	arm64? (
-		${BASE_URI}/${MY_UP_PV}-${MY_REL}/ungoogled-chromium-${MY_UP_PV}-1-arm64_linux.tar.xz -> ${PN}-${MY_UP_PV}-arm64.tar.xz
+		${BASE_URI}/${MY_UP_PV}-${MY_REL}/ungoogled-chromium-${MY_UP_PV}-${MY_REL}-arm64_linux.tar.xz -> ${PN}-${MY_UP_PV}-arm64.tar.xz
 	)
 "
 

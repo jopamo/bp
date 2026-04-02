@@ -4,7 +4,8 @@ inherit autotools flag-o-matic qa-policy
 
 DESCRIPTION="Standard GNU utilities (chmod, cp, dd, ls, sort, tr, head, wc, who,...)"
 HOMEPAGE="https://www.gnu.org/software/coreutils/"
-SNAPSHOT=0efa2bbb291a93be805f2c11cc3a5b9ee1e4babf
+
+SNAPSHOT=8161e0d2d04b5faae002bb3c35d5d20d9362796c
 SRC_URI="https://gitlab.com/pjo/coreutils/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -4,7 +4,7 @@ inherit meson flag-o-matic qa-policy
 
 DESCRIPTION="zip and unzip forked from infozip"
 HOMEPAGE="https://gitlab.com/pjo/zip-utils"
-SNAPSHOT=15ae51b8737d4bca253035bcb037f3c9d7d7412c
+SNAPSHOT=0149f4eebf0eab9a4fb2e1d7167cf199b3b2ca90
 SRC_URI="https://gitlab.com/pjo/zip-utils/-/archive/${SNAPSHOT}/zip-utils-${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/zip-utils-${SNAPSHOT}"
 

@@ -4,7 +4,7 @@ inherit autotools flag-o-matic qa-policy
 
 DESCRIPTION="Standard (de)compression library"
 HOMEPAGE="https://zlib.net/"
-SNAPSHOT=09a1572aa624e5ddb6c075dc013880de70b1b9b9
+SNAPSHOT=f9dd6009be3ed32415edf1e89d1bc38380ecb95d
 SRC_URI="https://github.com/madler/zlib/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/zlib-${SNAPSHOT}
 

@@ -1,0 +1,65 @@
+--- a/gnulib.modules
++++ b/gnulib.modules
+@@ -31,3 +31,5 @@
+ xalloc
+ xalloc-die
+ xgetcwd
++closeout
++configmake
+--- a/lib/Makefile.am
++++ b/lib/Makefile.am
+@@ -26,7 +26,7 @@
+ CLEANFILES = rmt-command.h rmt-command.h-t
+ AM_CPPFLAGS = -I$(top_srcdir)/gnu -I../ -I../gnu 
+ 
+-noinst_HEADERS = system.h system-ioctl.h rmt.h paxlib.h
++noinst_HEADERS = system.h rmt.h paxlib.h
+ libpax_a_SOURCES = \
+  paxexit.c\
+  paxexit-status.c\
+--- a/src/copyin.c
++++ b/src/copyin.c
+@@ -35,6 +35,7 @@
+ # define lchown(f,u,g) 0
+ #endif
+ #include <timespec.h>
++#include <ctype.h>
+ 
+ static void copyin_regular_file(struct cpio_file_stat* file_hdr,
+ 				int in_file_des);
+--- a/src/main.c
++++ b/src/main.c
+@@ -83,7 +83,7 @@
+   # Copy files named in name-list to destination-directory\n\
+   cpio -p destination-directory < name-list\n");
+ 
+-static void usage (int status);
++void usage (int status);
+ 
+ /*  Print usage error message and exit with error.  */
+ 
+@@ -585,7 +585,7 @@
+   NULL
+ };
+ 
+-static void
++void
+ usage (int status)
+ {
+   argp_help (&argp, stderr, ARGP_HELP_SEE, (char*) program_name);
+--- a/src/mt.c
++++ b/src/mt.c
+@@ -256,6 +256,13 @@
+ };
+ 
+ void
++usage (int status)
++{
++  argp_help (&argp, stderr, ARGP_HELP_SEE, (char *) program_name);
++  exit (status);
++}
++
++void
+ check_type (char *dev, int desc)
+ {
+   struct stat stats;

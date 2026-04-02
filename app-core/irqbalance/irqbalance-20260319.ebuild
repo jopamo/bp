@@ -4,7 +4,7 @@ inherit meson linux-info doins qa-policy
 
 DESCRIPTION="Distribute hardware interrupts across processors on a multiprocessor system"
 HOMEPAGE="https://github.com/Irqbalance/irqbalance"
-SNAPSHOT=48ab93a2ed43af255543a47d0a57928fe850e595
+SNAPSHOT=cd9212f453db71bec2050c9236c4ce9f17e6d2b4
 SRC_URI="https://github.com/Irqbalance/irqbalance/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

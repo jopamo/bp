@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=ce6f2b57f5450a8239022dcbfb2d750f273b83cb
+SNAPSHOT=b07cc37ca64fe99260884e7325abc333374e098b
 
 inherit multibuild toolchain-funcs qa-policy
 

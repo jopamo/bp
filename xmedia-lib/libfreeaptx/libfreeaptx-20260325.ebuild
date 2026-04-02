@@ -2,7 +2,7 @@
 
 DESCRIPTION="Free implementation of Audio Processing Technology codec"
 HOMEPAGE="https://github.com/regularhunter/libfreeaptx"
-SNAPSHOT=6dee419f934ec781e531f885f7e8e740752e67d1
+SNAPSHOT=476e2d56b0374c643c50bc37ab5cfee3012e2144
 SRC_URI="https://github.com/regularhunter/libfreeaptx/archive/${SNAPSHOT}.tar.gz -> libfreeaptx-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libfreeaptx-${SNAPSHOT}"
 

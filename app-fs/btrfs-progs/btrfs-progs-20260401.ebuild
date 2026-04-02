@@ -14,6 +14,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static static-libs"
 
+PATCHES=(
+	"${FILESDIR}/${PN}-musl-off64.patch"
+)
+
 RESTRICT=test
 
 LIB_DEPEND="

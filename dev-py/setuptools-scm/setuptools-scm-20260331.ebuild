@@ -6,7 +6,7 @@ inherit distutils-r1
 
 DESCRIPTION="Manage versions by scm tags via setuptools"
 HOMEPAGE="https://github.com/pypa/setuptools-scm/"
-SNAPSHOT=b599da76c633784a9514a7e62aba98ca7cc7c3c6
+SNAPSHOT=efa2c855307ff1ae4b4e176e53cd5175a2b13f2f
 SRC_URI="https://github.com/pypa/setuptools-scm/archive/${SNAPSHOT}.tar.gz -> setuptools-scm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/setuptools-scm-${SNAPSHOT}"
 

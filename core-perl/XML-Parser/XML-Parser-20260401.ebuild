@@ -11,7 +11,7 @@ S="${WORKDIR}/${PN}-${SNAPSHOT}"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-PATCHES=( "${FILESDIR}"/${P}-drop-sharedir-deps.patch )
+PATCHES=( "${FILESDIR}"/${PN}-drop-sharedir-deps.patch )
 
 DEPEND+="
 	lib-core/expat

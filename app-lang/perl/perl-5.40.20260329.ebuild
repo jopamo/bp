@@ -136,6 +136,10 @@ src_test() {
 src_install() {
 	emake DESTDIR="${D}" install.perl
 
+	# installperl may fallback from hardlink() to copy() when creating
+	# /usr/bin/perl, which can drop execute bits under umask 022.
+	[[ -e "${D}/usr/bin/perl" ]] && chmod 0755 "${D}/usr/bin/perl" || die
+
 	# Remove global flto in Config_heavy.pl
 	sed -i -e "s| -flto=auto||g" \
 		"${D}/usr/lib/perl5/core_perl/Config_heavy.pl" || die

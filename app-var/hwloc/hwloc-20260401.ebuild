@@ -5,7 +5,7 @@ inherit qa-policy
 
 DESCRIPTION="displays the hardware topology in convenient formats"
 HOMEPAGE="http://www.open-mpi.org/projects/hwloc/"
-SNAPSHOT=a0dc94c98687a49e6c01a56f50997b028f792258
+SNAPSHOT=039d464a3cff55f49a2b6485ef594598f616555c
 SRC_URI="https://github.com/1g4-mirror/hwloc/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

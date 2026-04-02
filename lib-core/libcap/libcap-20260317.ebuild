@@ -4,7 +4,7 @@ inherit toolchain-funcs flag-o-matic qa-policy
 
 DESCRIPTION="POSIX 1003.1e capabilities"
 HOMEPAGE="http://www.friedhoff.org/posixfilecaps.html"
-SNAPSHOT=542d7d86ecd2129dd5fe7e5b31ba307304f5b319
+SNAPSHOT=e1e79bcbaec103c074dd4d501692ef8ff41d75ae
 SRC_URI="https://github.com/1g4-mirror/libcap/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

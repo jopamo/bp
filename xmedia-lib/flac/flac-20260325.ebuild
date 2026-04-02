@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="free lossless audio encoder and decoder"
 HOMEPAGE="https://xiph.org/flac/"
-SNAPSHOT=3f1ecff843dd1b8c07fbb5f59425a4ec71fe4f6c
+SNAPSHOT=343f3481562213cdc4f196af87da0d26bf2530ad
 SRC_URI="https://github.com/xiph/flac/archive/${SNAPSHOT}.tar.gz -> flac-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/flac-${SNAPSHOT}"
 

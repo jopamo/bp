@@ -3,7 +3,7 @@
 inherit cmake flag-o-matic
 
 BRANCH_NAME="$(ver_cut 1).x"
-SNAPSHOT=2ba9b9cf6f0d5917f11fbc0d7362d66901b7511b
+SNAPSHOT=5db1c73f14a956f04f57f5b9077e6e4d676b7f36
 
 DESCRIPTION="neutral and extensible mechanism for serializing structured data"
 HOMEPAGE="https://developers.google.com/protocol-buffers/"

@@ -8,7 +8,11 @@ DESCRIPTION="Manage versions by scm tags via setuptools"
 HOMEPAGE="https://github.com/pypa/setuptools-scm/"
 SNAPSHOT=efa2c855307ff1ae4b4e176e53cd5175a2b13f2f
 SRC_URI="https://github.com/pypa/setuptools-scm/archive/${SNAPSHOT}.tar.gz -> setuptools-scm-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/setuptools-scm-${SNAPSHOT}"
+S="${WORKDIR}/setuptools-scm-${SNAPSHOT}/setuptools-scm"
+
+# Upstream no longer ships VCS metadata in the archive that this snapshot uses.
+# Force a deterministic project version for wheel generation.
+export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
 
 
 LICENSE="MIT"
@@ -17,13 +21,16 @@ KEYWORDS="amd64 arm64"
 
 # there's an optional dep on rich for cute logs
 RDEPEND="
+	dev-py/vcs-versioning[${PYTHON_USEDEP}]
 	dev-python/packaging[${PYTHON_USEDEP}]
 	dev-py/setuptools[${PYTHON_USEDEP}]
 	$(python_gen_cond_dep '
 		dev-python/tomli[${PYTHON_USEDEP}]
+		dev-python/typing-extensions[${PYTHON_USEDEP}]
 	' 3.10)
 "
 BDEPEND="
+	dev-py/vcs-versioning[${PYTHON_USEDEP}]
 	dev-py/setuptools[${PYTHON_USEDEP}]
 	test? (
 		dev-python/build[${PYTHON_USEDEP}]
@@ -35,20 +42,17 @@ distutils_enable_tests pytest
 
 python_test() {
 	local EPYTEST_DESELECT=(
-		# the usual nondescript gpg-agent failure
-		testing/test_git.py::test_git_getdate_signed_commit
-
 		# fetching from the Internet
-		testing/test_regressions.py::test_pip_download
+		testing_scm/test_regressions.py::test_pip_download
 
 		# calls flake8, unpredictable
-		testing/test_functions.py::test_dump_version_flake8
+		testing_scm/test_functions.py::test_dump_version_flake8
 	)
 
 	if has_version dev-python/nose; then
 		EPYTEST_DESELECT+=(
 			# https://bugs.gentoo.org/892639
-			testing/test_integration.py::test_pyproject_support
+			testing_scm/test_integration.py::test_pyproject_support
 		)
 	fi
 

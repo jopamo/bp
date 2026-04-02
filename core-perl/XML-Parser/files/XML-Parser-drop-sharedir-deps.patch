@@ -1,7 +1,7 @@
---- a/Expat/Expat.pm
-+++ b/Expat/Expat.pm
-@@ -12,17 +12,14 @@
- our ( %Encoding_Table, @Encoding_Path, $have_File_Spec );
+--- XML-Parser-a0cecfc4deb709703c6e3472138001d003abf7b3/Expat/Expat.pm
++++ genpatch/Expat/Expat.pm
+@@ -13,17 +13,14 @@
+ our ( %Encoding_Table, @Encoding_Path );
  
  use File::Spec ();
 -use File::ShareDir ();
@@ -23,8 +23,8 @@
      File::Spec->curdir
  );
  
---- a/Makefile.PL
-+++ b/Makefile.PL
+--- XML-Parser-a0cecfc4deb709703c6e3472138001d003abf7b3/Makefile.PL
++++ genpatch/Makefile.PL
 @@ -2,9 +2,6 @@
  use ExtUtils::MakeMaker;
  use lib './inc';
@@ -35,7 +35,7 @@
  use Config;
  use File::Spec;
  
-@@ -152,12 +149,6 @@
+@@ -152,11 +149,6 @@
      $ret;
  }
  
@@ -44,11 +44,10 @@
 -    my @ret  = File::ShareDir::Install::postamble($self);
 -    return join "\n", @ret;
 -}
--
- my @extras = ();
  
- push(
-@@ -196,13 +187,6 @@
+ WriteMakefile1(
+     ABSTRACT_FROM    => 'Parser.pm',
+@@ -186,13 +178,6 @@
      clean        => { FILES => 'assertlib*' },
      dist         => { COMPRESS => 'gzip', SUFFIX => '.gz' },
      VERSION_FROM => 'Parser.pm',

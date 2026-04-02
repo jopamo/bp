@@ -323,8 +323,8 @@ src_install-libs() {
     )
 
     local NV_X_LIBRARIES=(
-        "libnvidia-egl-xcb.so.1.0.4"
-        "libnvidia-egl-xlib.so.1.0.4"
+        "libnvidia-egl-xcb.so.1.0.5"
+        "libnvidia-egl-xlib.so.1.0.5"
         "libnvidia-fbc.so.${NV_SOVER}"
         "libGLX_nvidia.so.${NV_SOVER} ${GL_ROOT}"
         "libvdpau_nvidia.so.${NV_SOVER}"

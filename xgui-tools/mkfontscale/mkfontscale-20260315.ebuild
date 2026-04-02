@@ -5,7 +5,7 @@ inherit autotools
 DESCRIPTION="create an index of scalable font files for X"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=9c9c8834dc4ce17d0e878a28d36ff5e736bddb9b
+SNAPSHOT=d84ec0885a39b341b9340d5d74528fd55d3911e9
 SRC_URI="https://gitlab.freedesktop.org/xorg/app/mkfontscale/-/archive/${SNAPSHOT}/mkfontscale-${SNAPSHOT}.tar.bz2 -> mkfontscale-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/mkfontscale-${SNAPSHOT}"
 

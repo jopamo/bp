@@ -35,7 +35,6 @@ BDEPEND="app-build/gnulib"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-3.2-po4a-mandir.patch
-	"${FILESDIR}"/${PN}-3.3-atari.patch
 	"${FILESDIR}"/${PN}-3.4-posix-printf.patch
 	"${FILESDIR}"/${PN}-3.6-tests-unicode.patch
 	"${FILESDIR}"/${PN}-3.6-tests-non-bash.patch

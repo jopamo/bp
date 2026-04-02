@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="a portable, high level programming interface to various calling conventions"
 HOMEPAGE="https://github.com/libffi/libffi"
-SNAPSHOT=11141fba1dcc69bdb98a8d63e7eb2c8109507c34
+SNAPSHOT=70cb813f2bb2a8eb30c619666d289f59aacbecba
 SRC_URI="https://github.com/libffi/libffi/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libffi-${SNAPSHOT}"
 

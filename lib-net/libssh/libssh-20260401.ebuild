@@ -8,7 +8,7 @@ SNAPSHOT=08c7d67face0e504ae52a021206c3002f991d600
 SRC_URI="https://git.libssh.org/projects/libssh.git/snapshot/libssh-${SNAPSHOT}.tar.xz"
 S="${WORKDIR}/libssh-${SNAPSHOT}"
 PATCHES=(
-	"${FILESDIR}/${P}-sntrup761-maybe-uninitialized.patch"
+	"${FILESDIR}/${PN}-sntrup761-maybe-uninitialized.patch"
 )
 
 LICENSE="BSD"

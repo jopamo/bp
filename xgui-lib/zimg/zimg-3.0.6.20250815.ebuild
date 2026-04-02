@@ -6,7 +6,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="Scaling, colorspace conversion, and dithering library"
 HOMEPAGE="https://github.com/sekrit-twc/zimg"
-SNAPSHOT=5e8c32222569edf3a712f83d7cff80ad4dd9ab6e
+SNAPSHOT=f819b14e8f39d1282400b0d9543e8ef73c1b2bbd
 SRC_URI="https://github.com/sekrit-twc/zimg/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

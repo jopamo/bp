@@ -17,10 +17,6 @@ tdls uncommon-eap-types wps"
 
 REQUIRED_USE="fasteap? ( !ssl ) smartcard? ( ssl )"
 
-PATCHES=(
-	"${FILESDIR}/${PN}-20260304-fix-build-without-pasn.patch"
-)
-
 CDEPEND="
 	dbus? ( app-core/dbus )
 	lib-net/libnl

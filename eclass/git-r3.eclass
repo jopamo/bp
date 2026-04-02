@@ -528,6 +528,55 @@ _git-r3_is_local_repo() {
 	[[ ${uri} == file://* || ${uri} == /* ]]
 }
 
+# @FUNCTION: _git-r3_run_fetch_command
+# @USAGE: <repo-uri> <fetch-command...>
+# @INTERNAL
+# @DESCRIPTION:
+# Execute git fetch command. If it fails for an HTTPS URI while
+# ONEG4_GITLAB_TOKEN is set, retry once with extraHeader auth disabled
+# for the target URL. This allows public repositories to keep working
+# when an injected GitLab token is stale or not accepted.
+_git-r3_run_fetch_command() {
+	debug-print-function ${FUNCNAME} "$@"
+
+	local repo_uri=${1}
+	shift
+	local fetch_command=( "${@}" )
+
+	set -- "${fetch_command[@]}"
+	echo "${@}" >&2
+	"${@}" && return 0
+
+	[[ ${ONEG4_GITLAB_TOKEN-} && ${repo_uri} == https://* ]] || return 1
+
+	local uri=${repo_uri%%\?*}
+	uri=${uri%%\#*}
+	uri=${uri%/}
+	[[ ${uri} == https://*/* ]] || return 1
+
+	local host=${uri#https://}
+	host=${host%%/*}
+
+	local retry_command=(
+		"${fetch_command[0]}"
+		-c "http.${uri}.extraHeader="
+		-c "http.${uri}/.extraHeader="
+		-c "http.https://${host}/.extraHeader="
+	)
+	if [[ ${uri} != *.git ]]; then
+		retry_command+=(
+			-c "http.${uri}.git.extraHeader="
+			-c "http.${uri}.git/.extraHeader="
+		)
+	fi
+	retry_command+=( "${fetch_command[@]:1}" )
+
+	ewarn "git-r3: fetch failed for ${repo_uri}; retrying without injected HTTPS auth headers"
+	set -- "${retry_command[@]}"
+	echo "${@}" >&2
+	"${@}"
+}
+
 # @FUNCTION: git-r3_fetch
 # @USAGE: [<repo-uri> [<remote-ref> [<local-id> [<commit-date>]]]]
 # @DESCRIPTION:
@@ -756,9 +805,7 @@ git-r3_fetch() {
 				fi
 			fi
 
-			set -- "${fetch_command[@]}"
-			echo "${@}" >&2
-			"${@}" || continue
+			_git-r3_run_fetch_command "${r}" "${fetch_command[@]}" || continue
 
 			if [[ ${clone_type} == mirror || ${fetch_l} == HEAD ]]; then
 				# update our HEAD to match our remote HEAD ref

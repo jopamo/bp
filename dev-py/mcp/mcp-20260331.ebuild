@@ -7,7 +7,7 @@ inherit distutils-r1
 
 DESCRIPTION="The official Python SDK for the Model Context Protocol"
 HOMEPAGE="https://github.com/modelcontextprotocol/python-sdk"
-SNAPSHOT=ff50351f9e08b0a7dbbcade3813c48986b737b05
+SNAPSHOT=d5b9155f14ab3b4b203a47c55b53955b2d0bca09
 SRC_URI="https://github.com/modelcontextprotocol/python-sdk/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/python-sdk-${SNAPSHOT}"
 

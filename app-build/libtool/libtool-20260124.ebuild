@@ -6,7 +6,7 @@ LIBTOOL_VERSION=2.6.0.14
 # making a dist tarball. GitHub snapshots omit that file, so seed the snapshot
 # with the serial for this commit to keep ltversion.m4 valid for aclocal.
 LIBTOOL_SERIAL=2036
-LIBTOOL_BOOTSTRAP_SNAPSHOT=bfdcc277cd237fde115d3aa972add7608d348b90
+LIBTOOL_BOOTSTRAP_SNAPSHOT=a42785aaa63db8a824292f87bc1a3f8863942601
 
 DESCRIPTION="A shared library tool for developers"
 HOMEPAGE="https://www.gnu.org/software/libtool/"

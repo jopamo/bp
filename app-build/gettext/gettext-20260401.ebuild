@@ -11,7 +11,7 @@ inherit libtool flag-o-matic qa-policy
 
 DESCRIPTION="GNU locale utilities"
 HOMEPAGE="https://www.gnu.org/software/gettext/"
-SNAPSHOT=458812b0db0b39df6753e60d6cac5a43b8be87df
+SNAPSHOT=7964b974befead6aef8908d886eff3c8bad5e239
 SRC_URI="
 	https://github.com/1g4-mirror/gettext/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz
 	https://github.com/tree-sitter/tree-sitter/archive/refs/tags/v${TREE_SITTER_VERSION}.tar.gz -> tree-sitter-${TREE_SITTER_VERSION}.tar.gz

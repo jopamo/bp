@@ -2,7 +2,7 @@
 
 DESCRIPTION="An implementation of the POSIX bc calculator with GNU extensions and dc"
 HOMEPAGE="https://github.com/gavinhoward/bc"
-SNAPSHOT=975570a56b6cee7566f97d9ea6673cfcc409880a
+SNAPSHOT=c94908b602ebe4ec5f8c3e186e24b2123f7e78ff
 SRC_URI="https://github.com/gavinhoward/bc/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

@@ -4,7 +4,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="Tool for inspection and simple manipulation of eBPF programs and maps"
 HOMEPAGE="https://github.com/libbpf/bpftool"
-SNAPSHOT=31c371d6cccea95d7d25cd792036efd1bd63a483
+SNAPSHOT=901826fc1c3386ee6ef6a07988e5aa53bd8965b5
 SRC_URI="https://github.com/libbpf/bpftool/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

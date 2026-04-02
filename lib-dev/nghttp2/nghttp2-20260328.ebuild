@@ -4,7 +4,7 @@ inherit flag-o-matic autotools qa-policy
 
 DESCRIPTION="HTTP/2 C Library"
 HOMEPAGE="https://nghttp2.org/"
-SNAPSHOT=a86693f273791b1fa165a399b90784fda02c7b86
+SNAPSHOT=66f6d8ff92d567ca2f868956f04f4a95682fab67
 SRC_URI="https://github.com/nghttp2/nghttp2/archive/${SNAPSHOT}.tar.gz -> nghttp2-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/nghttp2-${SNAPSHOT}"
 

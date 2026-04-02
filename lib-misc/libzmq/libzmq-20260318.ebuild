@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="A brokerless kernel"
 HOMEPAGE="http://www.zeromq.org/"
-SNAPSHOT=66f512b432e3862bf691cd0a196a1fa80a31c230
+SNAPSHOT=7d95ac02ae1af9a2f6896794d12b9de2ae30a3a8
 SRC_URI="https://github.com/zeromq/libzmq/archive/${SNAPSHOT}.tar.gz -> libzmq-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libzmq-${SNAPSHOT}"
 

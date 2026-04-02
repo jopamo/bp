@@ -27,6 +27,10 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="test"
 
+PATCHES=(
+	"${FILESDIR}/${PN}-bootstrap-fixes.patch"
+)
+
 BDEPEND="
 	app-build/autoconf
 	app-build/automake
@@ -42,13 +46,13 @@ BDEPEND="
 RESTRICT="!test? ( test )"
 
 src_prepare() {
+	default
+
 	rm -rf gnulib paxutils || die
 	cp -a "${BROOT}/usr/share/gnulib" gnulib || die
 	cp -a "${WORKDIR}/paxutils-${PAXUTILS_SNAPSHOT}" paxutils || die
 
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}/gnulib" || die
-
-	default
 }
 
 src_configure() {

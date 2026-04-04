@@ -121,6 +121,11 @@ src_prepare() {
 	myarch="$(usex arm64 'AArch64' 'X86')"
 	sed -i "s|^LLVM_TARGETS ?=.*|LLVM_TARGETS ?= ${myarch}|" minicargo.mk || die
 
+	# avoid system libgit2 static-link dependency issues (e.g. gssapi symbols)
+	sed -i \
+		's|--features vendored-openssl|--features vendored-openssl,vendored-libgit2|g' \
+		minicargo.mk || die
+
 	eapply_user
 }
 
@@ -149,7 +154,7 @@ src_compile() {
 	einfo "Building rustc"
 	RUSTC_INSTALL_BINDIR=bin emake -j1 "${make_opts[@]}" -f minicargo.mk output/rustc
 	einfo "Building cargo"
-	LIBGIT2_SYS_USE_PKG_CONFIG=1 emake -j1 "${make_opts[@]}" -f minicargo.mk output/cargo
+	emake -j1 "${make_opts[@]}" -f minicargo.mk output/cargo
 }
 
 src_install() {

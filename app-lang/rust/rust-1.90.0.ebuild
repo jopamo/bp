@@ -68,6 +68,19 @@ patch_rust_for_system_llvm22() {
 	sed -i 's/\.SummaryList/\.getSummaryList()/g' \
 		compiler/rustc_llvm/llvm-wrapper/PassWrapper.cpp || die
 
+	# LLVM 22 dropped SerializerMode in createRemarkSerializer()
+	sed -i \
+		'/auto RemarkSerializer = remarks::createRemarkSerializer(/,+2c\
+#if LLVM_VERSION_GE(22, 0)\
+    auto RemarkSerializer = remarks::createRemarkSerializer(\
+        llvm::remarks::Format::YAML, RemarkFile->os());\
+#else\
+    auto RemarkSerializer = remarks::createRemarkSerializer(\
+        llvm::remarks::Format::YAML, remarks::SerializerMode::Separate,\
+        RemarkFile->os());\
+#endif' \
+		compiler/rustc_llvm/llvm-wrapper/RustWrapper.cpp || die
+
 	# rustc/LLVM combo doesn't accept/advertise amx-transpose
 	sed -i \
 		-e '/amx-transpose/d' \

@@ -55,6 +55,19 @@ patch_rust_for_system_llvm22() {
 #endif' \
 		compiler/rustc_llvm/llvm-wrapper/PassWrapper.cpp || die
 
+	# LLVM 22 changed PGOOptions ctor (removed FileSystem argument)
+	sed -i '/auto FS = vfs::getRealFileSystem();/d' \
+		compiler/rustc_llvm/llvm-wrapper/PassWrapper.cpp || die
+	sed -i 's/, FS, PGOOptions::/, PGOOptions::/g' \
+		compiler/rustc_llvm/llvm-wrapper/PassWrapper.cpp || die
+
+	# LLVM 22 made GlobalValueSummaryInfo::SummaryList private
+	sed -i \
+		's/getFirstDefinitionForLinker(const GlobalValueSummaryList &GVSummaryList)/getFirstDefinitionForLinker(ArrayRef<std::unique_ptr<GlobalValueSummary>> GVSummaryList)/' \
+		compiler/rustc_llvm/llvm-wrapper/PassWrapper.cpp || die
+	sed -i 's/\.SummaryList/\.getSummaryList()/g' \
+		compiler/rustc_llvm/llvm-wrapper/PassWrapper.cpp || die
+
 	# rustc/LLVM combo doesn't accept/advertise amx-transpose
 	sed -i \
 		-e '/amx-transpose/d' \

@@ -109,14 +109,20 @@ src_compile() {
 		LLVM_CONFIG=/usr/bin/llvm-config
 	)
 
+	einfo "Building mrustc"
 	emake "${make_opts[@]}"
+	einfo "Preparing bundled rust source tree"
 	emake "${make_opts[@]}" RUSTCSRC
 
 	patch_rust_for_system_llvm22
 
-	emake "${make_opts[@]}" -f minicargo.mk LIBS
+	# keep top-level make single-job here; minicargo itself still uses PARLEVEL
+	einfo "Building std/proc_macro with minicargo"
+	emake -j1 "${make_opts[@]}" -f minicargo.mk LIBS
 
+	einfo "Building rustc"
 	RUSTC_INSTALL_BINDIR=bin emake -j1 "${make_opts[@]}" -f minicargo.mk output/rustc
+	einfo "Building cargo"
 	LIBGIT2_SYS_USE_PKG_CONFIG=1 emake -j1 "${make_opts[@]}" -f minicargo.mk output/cargo
 }
 

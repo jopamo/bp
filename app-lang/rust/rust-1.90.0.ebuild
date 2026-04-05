@@ -49,6 +49,35 @@ rust_target_triple() {
 	fi
 }
 
+rust_emake() {
+	local -a make_opts=(
+		RUSTC_VERSION=${PV}
+		MRUSTC_TARGET_VER=$(ver_cut 1-2)
+		OUTDIR_SUF=""
+		PARLEVEL=$(makeopts_jobs)
+		RUSTC_SRC_PROVIDED=1
+		RUSTCSRC="${S}/rustc-${PV}-src"
+		LLVM_CONFIG=/usr/bin/llvm-config
+	)
+	emake "${make_opts[@]}" "$@"
+}
+
+rust_stdlibs_ok() {
+	[[ -s output/libcore.rlib ]] && [[ -s output/libstd.rlib ]]
+}
+
+rust_self_heal_stdlibs() {
+	rust_stdlibs_ok && return 0
+
+	ewarn "detected missing/empty stdlibs in output/, trying self-heal rebuild"
+
+	find output -maxdepth 1 -type f -name 'lib*.rlib' -size 0 -delete || die
+	find output -maxdepth 1 -type f -name 'lib*.rmeta' -size 0 -delete || die
+
+	rust_emake -j1 -f minicargo.mk LIBS || die "self-heal stdlib rebuild failed"
+	rust_stdlibs_ok || die "self-heal failed: missing/empty output/libcore.rlib or output/libstd.rlib"
+}
+
 patch_rust_for_system_llvm22() {
 	pushd "${S}/rustc-${PV}-src" >/dev/null || die
 
@@ -138,34 +167,32 @@ src_prepare() {
 }
 
 src_compile() {
-	local -a make_opts=(
-		RUSTC_VERSION=${PV}
-		MRUSTC_TARGET_VER=$(ver_cut 1-2)
-		OUTDIR_SUF=""
-		PARLEVEL=$(makeopts_jobs)
-		RUSTC_SRC_PROVIDED=1
-		RUSTCSRC="${S}/rustc-${PV}-src"
-		LLVM_CONFIG=/usr/bin/llvm-config
-	)
-
 	einfo "Building mrustc"
-	emake "${make_opts[@]}"
+	rust_emake
 	einfo "Preparing bundled rust source tree"
-	emake "${make_opts[@]}" RUSTCSRC
+	rust_emake RUSTCSRC
 
 	patch_rust_for_system_llvm22
 
 	# keep top-level make single-job here; minicargo itself still uses PARLEVEL
 	einfo "Building std/proc_macro with minicargo"
-	emake -j1 "${make_opts[@]}" -f minicargo.mk LIBS
+	rust_emake -j1 -f minicargo.mk LIBS
 
 	einfo "Building rustc"
-	RUSTC_INSTALL_BINDIR=bin emake -j1 "${make_opts[@]}" -f minicargo.mk output/rustc
+	RUSTC_INSTALL_BINDIR=bin rust_emake -j1 -f minicargo.mk output/rustc
 	einfo "Building cargo"
-	emake -j1 "${make_opts[@]}" -f minicargo.mk output/cargo
+	rust_emake -j1 -f minicargo.mk output/cargo
 }
 
 src_install() {
+	if [[ ! -s output/rustc || ! -s output/cargo ]]; then
+		ewarn "detected missing/empty compiler binaries in output/, trying self-heal rebuild"
+		RUSTC_INSTALL_BINDIR=bin rust_emake -j1 -f minicargo.mk output/rustc || die
+		rust_emake -j1 -f minicargo.mk output/cargo || die
+	fi
+
+	rust_self_heal_stdlibs
+
 	dobin output/cargo
 	dobin output/rustc
 
@@ -176,10 +203,10 @@ src_install() {
 
 	local f found=0
 	for f in output/lib*.rlib output/lib*.rmeta output/lib*.a output/lib*.so output/lib*.so.*; do
-		[[ -e ${f} ]] || continue
+		[[ -s ${f} ]] || continue
 		doins "${f}"
 		found=1
 	done
 
-	[[ ${found} -eq 1 ]] || die "no rust standard libraries found in output/"
+	[[ ${found} -eq 1 ]] || die "no non-empty rust standard libraries found in output/"
 }

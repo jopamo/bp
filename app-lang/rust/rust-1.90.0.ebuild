@@ -41,6 +41,14 @@ QA_SONAME="
 
 QA_EXECSTACK="usr/lib/rustlib/*/lib*.rlib:lib.rmeta"
 
+rust_target_triple() {
+	if use arm64; then
+		echo "aarch64-unknown-linux-$(usex elibc_musl musl gnu)"
+	else
+		echo "x86_64-unknown-linux-$(usex elibc_musl musl gnu)"
+	fi
+}
+
 patch_rust_for_system_llvm22() {
 	pushd "${S}/rustc-${PV}-src" >/dev/null || die
 
@@ -160,4 +168,18 @@ src_compile() {
 src_install() {
 	dobin output/cargo
 	dobin output/rustc
+
+	local triple
+	triple="$(rust_target_triple)"
+
+	insinto "/usr/lib/rustlib/${triple}/lib"
+
+	local f found=0
+	for f in output/lib*.rlib output/lib*.rmeta output/lib*.a output/lib*.so output/lib*.so.*; do
+		[[ -e ${f} ]] || continue
+		doins "${f}"
+		found=1
+	done
+
+	[[ ${found} -eq 1 ]] || die "no rust standard libraries found in output/"
 }

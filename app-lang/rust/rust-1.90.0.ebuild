@@ -182,31 +182,68 @@ src_compile() {
 	RUSTC_INSTALL_BINDIR=bin rust_emake -j1 -f minicargo.mk output/rustc
 	einfo "Building cargo"
 	rust_emake -j1 -f minicargo.mk output/cargo
+
+	einfo "Self-hosting rustc/cargo to produce consistent stage0 stdlibs"
+	rust_emake -j1 -C run_rustc RUSTC_TARGET="$(rust_target_triple)" all
 }
 
 src_install() {
-	if [[ ! -s output/rustc || ! -s output/cargo ]]; then
+	local triple
+	triple="$(rust_target_triple)"
+
+	local bindir libdir
+	if [[ -x run_rustc/output/bin/cargo && -x run_rustc/output/bin/rustc_binary ]]; then
+		bindir="run_rustc/output/bin"
+		libdir="run_rustc/output/prefix/lib/rustlib/${triple}/lib"
+		einfo "Installing self-hosted run_rustc artifacts"
+	elif [[ -x run_rustc/output/prefix/bin/cargo && -x run_rustc/output/prefix/bin/rustc_binary ]]; then
+		bindir="run_rustc/output/prefix/bin"
+		libdir="run_rustc/output/prefix/lib/rustlib/${triple}/lib"
+		einfo "Installing self-hosted run_rustc artifacts"
+	else
+		bindir="output"
+		libdir="output"
+	fi
+
+	if [[ ${bindir} == output ]] && [[ ! -s output/rustc || ! -s output/cargo ]]; then
 		ewarn "detected missing/empty compiler binaries in output/, trying self-heal rebuild"
 		RUSTC_INSTALL_BINDIR=bin rust_emake -j1 -f minicargo.mk output/rustc || die
 		rust_emake -j1 -f minicargo.mk output/cargo || die
 	fi
 
-	rust_self_heal_stdlibs
+	if [[ ${libdir} == output ]]; then
+		rust_self_heal_stdlibs
+	fi
 
-	dobin output/cargo
-	dobin output/rustc
+	if [[ ${bindir} == output ]]; then
+		dobin output/cargo
+		dobin output/rustc
+	else
+		dobin "${bindir}/cargo"
+		newbin "${bindir}/rustc_binary" rustc
+	fi
 
-	local triple
-	triple="$(rust_target_triple)"
+	local core_ok=0 std_ok=0
+	local f
+	for f in "${libdir}"/libcore*.rlib; do
+		[[ -s ${f} ]] || continue
+		core_ok=1
+	done
+	for f in "${libdir}"/libstd*.rlib; do
+		[[ -s ${f} ]] || continue
+		std_ok=1
+	done
+	[[ ${core_ok} -eq 1 ]] || die "no non-empty libcore*.rlib found in ${libdir}"
+	[[ ${std_ok} -eq 1 ]] || die "no non-empty libstd*.rlib found in ${libdir}"
 
 	insinto "/usr/lib/rustlib/${triple}/lib"
 
-	local f found=0
-	for f in output/lib*.rlib output/lib*.rmeta output/lib*.a output/lib*.so output/lib*.so.*; do
+	local found=0
+	for f in "${libdir}"/lib*.rlib "${libdir}"/lib*.rmeta "${libdir}"/lib*.a "${libdir}"/lib*.so "${libdir}"/lib*.so.*; do
 		[[ -s ${f} ]] || continue
 		doins "${f}"
 		found=1
 	done
 
-	[[ ${found} -eq 1 ]] || die "no non-empty rust standard libraries found in output/"
+	[[ ${found} -eq 1 ]] || die "no non-empty rust standard libraries found in ${libdir}"
 }

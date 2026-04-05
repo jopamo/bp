@@ -12,7 +12,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="ipv6 nls X"
+IUSE="ipv6"
 
 DEPEND="
 	virtual/curses
@@ -22,21 +22,14 @@ DEPEND="
 src_prepare() {
 	default
 
-	if [[ ${PV} == *9999 ]] ; then
-		po/update-potfiles
-		eautoreconf
-		sed -i -e "s/UNKNOWN/$(git log -n1 --pretty=format:%cd --date=format:%Y%m%d)/g" "configure" || die
-	elif [[ ${PV} == 20* ]] ; then
-		po/update-potfiles
-		eautoreconf
-		sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
-	fi
+	eautoreconf
+	sed -i -e "s/UNKNOWN/${PV}/g" "configure" || die
 }
 
 src_configure() {
 	local myconf=(
 		--disable-harden-flags
-		$(use_enable nls)
+		--disable-nls
 		$(use_enable ipv6)
 	)
 	econf "${myconf[@]}"
@@ -44,5 +37,5 @@ src_configure() {
 
 src_install() {
 	default
-	use X || rm -f "${ED%/}"/usr/bin/pstree.x11
+	rm -f "${ED%/}"/usr/bin/pstree.x11
 }

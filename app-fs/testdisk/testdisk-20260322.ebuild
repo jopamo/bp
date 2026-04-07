@@ -12,7 +12,7 @@ LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="jpeg ntfs static zlib"
+IUSE="ntfs static zlib"
 
 QA_CONFIG_IMPL_DECL_SKIP=(
 	ntfs_mbstoucs
@@ -23,7 +23,6 @@ COMMON_DEPEND="
 		app-core/util-linux[static-libs]
 		app-fs/e2fsprogs[static-libs]
 		virtual/curses[static-libs]
-		jpeg? ( xmedia-lib/libjpeg-turbo[static-libs] )
 		ntfs? ( app-fs/ntfs3g[static-libs] )
 		zlib? ( lib-core/zlib[static-libs] )
 	)
@@ -31,7 +30,6 @@ COMMON_DEPEND="
 		app-core/util-linux
 		app-fs/e2fsprogs
 		virtual/curses
-		jpeg? ( xmedia-lib/libjpeg-turbo )
 		ntfs? ( app-fs/ntfs3g )
 		zlib? ( lib-core/zlib )
 	)
@@ -49,9 +47,9 @@ src_configure() {
 
 	local myconf=(
 		--disable-sudo
+		--without-jpeg
 		--without-ntfs
 		--without-ewf
-		$(use_with jpeg)
 		$(use_with ntfs ntfs3g)
 		--disable-qt
 		--without-reiserfs

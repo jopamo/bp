@@ -35,7 +35,13 @@ src_configure() {
 	econf "${myconf[@]}"
 }
 
+src_compile() {
+	# This snapshot ships broken gettext recursion when NLS is disabled:
+	# po/ lacks a usable Makefile, so avoid recursing there at make time.
+	emake SUBDIRS='doc icons man-po testsuite'
+}
+
 src_install() {
-	default
+	emake DESTDIR="${ED}" SUBDIRS='doc icons man-po testsuite' install
 	rm -f "${ED%/}"/usr/bin/pstree.x11
 }

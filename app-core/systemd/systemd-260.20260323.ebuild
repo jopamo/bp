@@ -17,10 +17,11 @@ KEYWORDS="amd64 arm64"
 IUSE="apparmor binfmt blkid bootloader bpf-framework coredump devmode dbus
 dhcp4 elfutils efi gcrypt gshadow
 +hostnamed +hwdb importd kmod ldconfig localed logind machined +networkd
-oomd pam pcre pstore resolve systemd-update
+oomd pam pcre pstore resolve
 +userdb +vconsole"
 
-REQUIRED_USE="elibc_musl? ( !gshadow )"
+REQUIRED_USE="elibc_musl? ( !gshadow )
+	dhcp4? ( networkd )"
 
 DEPEND="
     app-core/acl
@@ -117,6 +118,7 @@ src_configure() {
         $(meson_use hwdb)
         $(meson_use ldconfig)
         $(meson_use localed)
+        -Ddefault-network=false
         $(meson_use networkd link-networkd-shared)
         $(meson_use networkd)
         $(meson_use oomd)
@@ -172,6 +174,8 @@ src_configure() {
         -Dsplit-bin=false
         -Dstandalone-binaries=false
         #-Dstatic-libsystemd=true
+        -Dsysupdate=disabled
+        -Dsysupdated=disabled
         -Dsysusers=true
         -Dtimesyncd=false
         -Dtmpfiles=true

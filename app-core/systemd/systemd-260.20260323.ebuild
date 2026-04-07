@@ -17,8 +17,8 @@ KEYWORDS="amd64 arm64"
 IUSE="apparmor binfmt blkid bootloader bpf-framework coredump devmode dbus
 dhcp4 elfutils efi gcrypt gshadow
 +hostnamed +hwdb importd kmod ldconfig localed logind machined +networkd
-oomd pam pcre pstore resolve rfkill systemd-update timedated
-+userdb +vconsole xkb"
+oomd pam pcre pstore resolve systemd-update
++userdb +vconsole"
 
 REQUIRED_USE="elibc_musl? ( !gshadow )"
 
@@ -39,7 +39,6 @@ DEPEND="
     logind? ( app-fs/cryptsetup )
     pam? ( lib-core/pam )
     pcre? ( lib-core/libpcre2 )
-    xkb? ( xgui-lib/libxkbcommon )
 "
 BDEPEND="
     app-build/gettext
@@ -108,7 +107,7 @@ src_configure() {
         $(meson_feature machined zstd)
         $(meson_feature pam)
         $(meson_feature pcre pcre2)
-        $(meson_feature xkb xkbcommon)
+        -Dxkbcommon=disabled
         $(meson_use binfmt)
         $(meson_feature bootloader)
         $(meson_use coredump)
@@ -124,8 +123,8 @@ src_configure() {
         $(meson_use pstore)
         $(meson_feature elfutils)
         $(meson_use resolve)
-        $(meson_use rfkill)
-        $(meson_use timedated)
+        -Drfkill=false
+        -Dtimedated=false
         $(meson_use userdb)
         -Dutmp=false
         $(meson_use vconsole)
@@ -201,7 +200,7 @@ src_install() {
 	keepdir /var/log/journal /var/lib/systemd
 	keepdir /etc/systemd/user
 
-	use xkb || { rm -rf "${ED}/etc/X11" "${ED}/etc/xdg" || die; }
+	rm -rf "${ED}/etc/X11" "${ED}/etc/xdg" || die
 
 	use networkd && keepdir /etc/systemd/network
 

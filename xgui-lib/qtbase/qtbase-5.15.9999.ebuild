@@ -20,6 +20,7 @@ SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
 IUSE="gssapi keep-la mysql postgres sqlite systemd opengl vulkan xkbcommon"
+REQUIRED_USE="xkbcommon"
 
 DEPEND="
 	app-core/dbus
@@ -28,7 +29,14 @@ DEPEND="
 	lib-dev/double-conversion
 	lib-core/glib
 	lib-core/libinput
-	xgui-lib/libxcb
+	xgui-lib/libX11
+	xgui-lib/libXext
+	xgui-lib/libxcb[xkb]
+	xgui-lib/xcb-util
+	xgui-lib/xcb-util-image
+	xgui-lib/xcb-util-keysyms
+	xgui-lib/xcb-util-renderutil
+	xgui-lib/xcb-util-wm
 	xgui-lib/freetype
 	xgui-lib/harfbuzz
 	xmedia-lib/libjpeg-turbo
@@ -40,7 +48,7 @@ DEPEND="
 	sqlite? ( lib-core/sqlite )
 	systemd? ( app-core/systemd )
 	vulkan? ( xmedia-lib/vulkan-loader )
-	xkbcommon? ( xgui-lib/libxkbcommon )
+	xkbcommon? ( xgui-lib/libxkbcommon[X] )
 "
 PDEPEND="
 	xgui-lib/qtsvg:$(ver_cut 1)
@@ -87,6 +95,7 @@ src_configure() {
 		-system-libpng
 		-system-pcre
 		-system-zlib
+		-xcb
 		$(usex arm64 '' -reduce-relocations)
 		$(usex gssapi -feature-gssapi -no-feature-gssapi)
 		$(usex mysql -sql-mysql -no-sql-mysql)

@@ -21,7 +21,6 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="
-	alsa
 	bpf
 	capstone
 	curses
@@ -30,11 +29,7 @@ IUSE="
 	gtk
 	lzo
 	numa
-	opengl
 	pam
-	pipewire
-	png
-	pulseaudio
 	seccomp
 	+slirp
 	+tools
@@ -91,7 +86,6 @@ DEPEND="
 	xgui-lib/pixman
 	xgui-lib/libxkbcommon
 	xgui-tools/xkeyboard-config
-	alsa? ( xgui-tools/alsa-lib )
 	bpf? ( lib-net/libbpf )
 	capstone? ( app-emu/capstone )
 	curl? ( app-net/curl )
@@ -100,11 +94,7 @@ DEPEND="
 	gtk? ( xgui-lib/gtk3 )
 	lzo? ( app-compression/lzo )
 	numa? ( app-util/numactl )
-	opengl? ( xmedia-lib/libepoxy )
 	pam? ( lib-core/pam )
-	pipewire? ( xmedia-lib/pipewire )
-	png? ( xmedia-lib/libpng )
-	pulseaudio? ( xmedia-lib/pulseaudio )
 	seccomp? ( lib-core/libseccomp )
 	slirp? ( lib-net/slirp )
 	usb? ( lib-dev/libusb )
@@ -151,7 +141,7 @@ src_configure() {
 		--mandir="${EPREFIX}"/usr/share/man
 		--infodir="${EPREFIX}"/usr/share/info
 		--target-list=$(usex arm64 "aarch64-softmmu aarch64-linux-user" "x86_64-softmmu x86_64-linux-user")
-		$(use_enable alsa)
+		--disable-alsa
 		$(use_enable bpf)
 		$(use_enable capstone)
 		$(use_enable curl)
@@ -160,11 +150,11 @@ src_configure() {
 		$(use_enable gtk)
 		$(use_enable lzo)
 		$(use_enable numa)
-		$(use_enable opengl)
+		--disable-opengl
 		$(use_enable pam auth-pam)
-		$(use_enable pipewire)
-		$(use_enable png)
-		$(use_enable pulseaudio pa)
+		--disable-pipewire
+		--disable-png
+		--disable-pa
 		$(use_enable seccomp)
 		$(use_enable slirp)
 		$(use_enable tools)

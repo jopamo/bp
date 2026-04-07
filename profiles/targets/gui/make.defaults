@@ -1,7 +1,6 @@
 USE="
 alsa
 alsa-plugin
-amd-ucode
 autotype
 bin
 bluez
@@ -24,7 +23,6 @@ gles2
 glib
 gui
 hwdb
-i915
 icu
 intel
 iwlwifi

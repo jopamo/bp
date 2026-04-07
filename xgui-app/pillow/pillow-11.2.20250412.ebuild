@@ -18,14 +18,21 @@ LICENSE="HPND"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="imagequant jpeg jpeg2k lcms test tiff tk truetype webp xcb zlib"
+IUSE="imagequant jpeg jpeg2k lcms test tiff truetype webp xcb zlib"
 
 REQUIRED_USE="test? ( jpeg jpeg2k lcms tiff truetype )"
 RESTRICT="!test? ( test )"
 
 DEPEND="
-	xmedia-lib/libjpeg-turbo
 	dev-python/olefile[${PYTHON_USEDEP}]
+	jpeg? ( xmedia-lib/libjpeg-turbo )
+	jpeg2k? ( xmedia-lib/openjpeg )
+	lcms? ( xgui-lib/lcms )
+	tiff? ( xmedia-lib/tiff )
+	truetype? ( xgui-lib/freetype[harfbuzz] )
+	webp? ( xmedia-lib/libwebp )
+	xcb? ( xgui-lib/libxcb )
+	zlib? ( lib-core/zlib )
 "
 BDEPEND="
 	dev-py/setuptools[${PYTHON_USEDEP}]
@@ -71,16 +78,6 @@ python_configure_all() {
 		$(usepil xcb)_xcb = True
 		$(usepil zlib)_zlib = True
 	EOF
-	if use truetype; then
-		# these dependencies are implicitly disabled by USE=-truetype
-		# and we can't pass both disable_* and vendor_*
-		# https://bugs.gentoo.org/935124
-		cat >> setup.cfg <<-EOF || die
-			vendor_raqm = False
-			vendor_fribidi = False
-		EOF
-	fi
-
 	tc-export PKG_CONFIG
 }
 

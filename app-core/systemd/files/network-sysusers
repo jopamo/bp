@@ -1,2 +1,2 @@
 g systemd-network   -   - -
-u systemd-network   -   - /run/systemd/netif    /usr/bin/nologin
+u! systemd-network  -   - /run/systemd/netif    /usr/bin/nologin

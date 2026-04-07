@@ -2,7 +2,7 @@
 
 BRANCH_NAME="v$(ver_cut 1)-stable"
 
-inherit flag-o-matic linux-info meson xdg
+inherit flag-o-matic meson
 
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
@@ -14,10 +14,7 @@ LICENSE="GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="apparmor binfmt blkid bootloader bpf-framework coredump dbus devmode dhcp4 elfutils efi gcrypt gshadow
-+hostnamed +hwdb importd kmod ldconfig localed logind machined +networkd
-oomd pam pcre pstore resolve rfkill systemd-update timedated
-+userdb +vconsole xkb"
+IUSE="devmode gshadow"
 
 REQUIRED_USE="elibc_musl? ( !gshadow )"
 
@@ -29,58 +26,13 @@ DEPEND="
     app-core/util-linux
     app-dev/gperf
     app-dev/pkgconf
-    app-tex/docbook-xml-dtd
-    app-tex/docbook-xsl-stylesheets
     lib-core/libcap
     lib-core/libseccomp
-    lib-core/libxslt
-    apparmor? ( app-core/apparmor )
-    bpf-framework? ( lib-net/libbpf )
-    dbus? (
-        app-core/dbus
-        app-compression/libarchive
-        lib-core/glib
-    )
-    elfutils? ( virtual/libelf )
-    gcrypt? ( lib-core/libgcrypt )
-    kmod? ( app-core/kmod )
-    logind? ( app-core/dbus
-    			app-fs/cryptsetup )
-    pam? ( lib-core/pam )
-    pcre? ( lib-core/libpcre2 )
-    xkb? ( xgui-lib/libxkbcommon )
+    virtual/ssl
 "
 BDEPEND="
-    dev-python/pyelftools
     dev-py/jinja
 "
-
-pkg_pretend() {
-    if [[ ${MERGE_TYPE} != buildonly ]]; then
-        local CONFIG_CHECK="~AUTOFS_FS ~BLK_DEV_BSG ~CGROUPS
-            ~EPOLL ~FANOTIFY ~FHANDLE ~SECCOMP ~SECCOMP_FILTER
-            ~INOTIFY_USER ~NET ~NET_NS ~PROC_FS ~SIGNALFD ~SYSFS
-            ~TIMERFD ~UNIX ~CGROUP_BPF ~!FW_LOADER_USER_HELPER_FALLBACK
-            ~CRYPTO_HMAC ~CRYPTO_SHA256 ~CRYPTO_USER_API_HASH
-            ~!GRKERNSEC_PROC ~!IDE ~!SYSFS_DEPRECATED ~!SYSFS_DEPRECATED_V2"
-
-        #use tmpfilesd
-        CONFIG_CHECK+=" ~TMPFS_POSIX_ACL"
-        CONFIG_CHECK+=" ~DEVTMPFS ~TMPFS_XATTR"
-
-        use pstore && CONFIG_CHECK+=" ~ACPI_APEI"
-
-        if linux_config_exists; then
-            local uevent_helper_path=$(linux_chkconfig_string UEVENT_HELPER_PATH)
-            if [[ -n ${uevent_helper_path} ]] && [[ ${uevent_helper_path} != '""' ]]; then
-                ewarn "It's recommended to set an empty value to the following kernel config option:"
-                ewarn "CONFIG_UEVENT_HELPER_PATH=${uevent_helper_path}"
-            fi
-        fi
-
-        check_extra_config
-    fi
-}
 
 src_prepare() {
     filter-flags -Wl,-z,defs
@@ -96,93 +48,107 @@ src_prepare() {
 
 src_configure() {
     local emesonargs=(
-        $(meson_feature apparmor)
-        $(meson_feature blkid)
-        $(meson_feature bpf-framework)
-        $(meson_feature dbus)
-        $(meson_feature gcrypt)
-        $(meson_feature importd)
-        $(meson_feature kmod)
-        $(meson_feature logind fdisk)
-        $(meson_use logind)
-        $(meson_feature logind libcryptsetup)
-        $(meson_use machined)
-        $(meson_feature machined bzip2)
-        $(meson_feature machined lz4)
-        $(meson_feature machined xz)
-        $(meson_feature machined zlib)
-        $(meson_feature machined zstd)
-        $(meson_feature pam)
-        $(meson_feature pcre pcre2)
-        $(meson_feature xkb xkbcommon)
-        $(meson_use binfmt)
-        $(meson_feature bootloader)
-        $(meson_use coredump)
-        $(meson_use efi)
-        $(meson_use gshadow)
-        $(meson_use hostnamed)
-        $(meson_use hwdb)
-        $(meson_use ldconfig)
-        $(meson_use localed)
-        $(meson_use networkd link-networkd-shared)
-        $(meson_use networkd)
-        $(meson_use oomd)
-        $(meson_use pstore)
-        $(meson_feature elfutils)
-        $(meson_use resolve)
-        $(meson_use rfkill)
-        $(meson_use timedated)
-        $(meson_use userdb)
-        -Dutmp=false
-        $(meson_use vconsole)
-        -Ddns-over-tls=false
-        $(usex devmode '-Dmode=developer' '-Dmode=release')
-        $(usex elibc_musl '-Dlibc=musl' '-Dlibc=glibc')
-        -Dsysvinit-path=/etc/init.d
-        -Dsysvrcnd-path=/etc/rc.d
         -Dacl=enabled
+        -Danalyze=false
         -Daudit=disabled
-        -Dbacklight=false
-        -Ddefault-kill-user-processes=false
+        -Dbinfmt=false
+        -Dblkid=disabled
+        -Dbootloader=disabled
+        -Dbpf-framework=disabled
+        -Dcoredump=false
+        -Dcreate-log-dirs=false
+        -Ddbus=disabled
+        -Ddefault-network=false
+        -Ddns-over-tls=false
         -Ddns-servers=""
+        -Delfutils=disabled
+        -Defi=false
         -Denvironment-d=false
+        -Dfdisk=disabled
         -Dfirstboot=false
+        -Dgcrypt=disabled
+        $(meson_use gshadow)
         -Dgnutls=disabled
         -Dhibernate=false
+        -Dhomed=disabled
+        -Dhostnamed=false
         -Dhtml=disabled
+        -Dhwdb=false
         -Didn=false
         -Dima=false
+        -Dimportd=disabled
+        -Dinitrd=false
+        -Dinstall-tests=false
+        -Dkernel-install=false
+        -Dkmod=disabled
+        -Dldconfig=false
         -Dlibcurl=disabled
+        -Dlibcryptsetup=disabled
         -Dlibidn2=disabled
         -Dlibidn=disabled
         -Dlibiptc=disabled
+        -Dlibmount=enabled
+        -Dlink-networkd-shared=false
         -Dlink-timesyncd-shared=false
-        -Dhomed=disabled
+        -Dlocaled=false
+        -Dlogind=false
+        -Dmachined=false
         -Dman=disabled
+        -Dmountfsd=false
         -Dmicrohttpd=disabled
+        -Dnetworkd=false
+        -Dnspawn=disabled
+        -Dnsresourced=false
         -Dnss-myhostname=false
         -Dnss-mymachines=disabled
         -Dnss-resolve=disabled
         -Dnss-systemd=false
         -Dntp-servers=""
+        -Doomd=false
         -Dopenssl=enabled
         -Dp11kit=disabled
-        -Dpamlibdir="${EPREFIX}"/usr/lib/security
+        -Dpam=disabled
+        -Dpcre2=disabled
         -Dpolkit=disabled
         -Dportabled=false
+        -Dpstore=false
         -Dqrencode=disabled
         -Dquotacheck=false
         -Drandomseed=false
-        -Drc-local=""
+        -Dremote=disabled
+        -Drepart=disabled
+        -Dresolve=false
+        -Drfkill=false
         -Dseccomp=enabled
         -Dsmack=false
+        -Dstoragetm=false
+        -Dsysext=false
+        -Dsysupdate=disabled
+        -Dsysupdated=disabled
+        -Dutmp=false
+        -Dtests=false
+        -Dtimedated=false
+        -Dtimesyncd=false
+        -Dtpm=false
+        -Dtranslations=false
+        -Dukify=disabled
+        -Duserdb=false
+        -Dvconsole=false
+        -Dvmspawn=disabled
+        -Dxdg-autostart=false
+        -Dxkbcommon=disabled
+        $(usex devmode '-Dmode=developer' '-Dmode=release')
+        $(usex elibc_musl '-Dlibc=musl' '-Dlibc=glibc')
+        -Dsysvinit-path=/etc/init.d
+        -Dsysvrcnd-path=/etc/rc.d
+        -Dbacklight=false
+        -Ddefault-kill-user-processes=false
+        -Dpamlibdir="${EPREFIX}"/usr/lib/security
+        -Drc-local=""
         -Dsplit-bin=false
         -Dstandalone-binaries=true
-        #-Dstatic-libsystemd=true
         -Dsysusers=true
-        -Dtimesyncd=false
         -Dtmpfiles=true
-        -Dtpm=true
         -Dsbat-distro-url="https://1g4.org/"
     )
     meson_src_configure

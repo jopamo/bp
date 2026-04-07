@@ -48,6 +48,6 @@ lib-misc/xxhash static-libs
 lib-net/nodejs icu
 lib-net/openssl static-libs
 lib-print/cups-filters foomatic
-xgui-app/pillow jpeg jpeg2k lcms tiff truetype xcb zlib
+xgui-app/pillow jpeg zlib -imagequant -jpeg2k -lcms -tiff -truetype -webp -xcb
 xgui-app/wireshark bcg729 capinfos caps captype ciscodump dcerpcidl2wrs dftest dpauxmon dumpcap editcap libssh mergecap mmdbresolve netlink plugins randpkt randpktdump rawshark reordercap sdjournal sharkd sshdump text2pcap tshark udpdump
 xmedia-app/mpv -vulkan

@@ -28,6 +28,7 @@ app-fs/cryptsetup -ssl
 app-fs/lvm2 dm-only
 app-fs/smartmontools daemon
 app-lang/python-exec native-symlinks
+app-kernel/linux-firmware amd-ucode i915
 app-net/chrony cmdmon ntp phc refclock rtc
 app-net/curl static-libs
 app-net/iputils arping ping tracepath

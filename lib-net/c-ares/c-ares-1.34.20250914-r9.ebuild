@@ -2,7 +2,7 @@
 
 BRANCH_NAME="v$(ver_cut 1-2)"
 
-inherit cmake
+inherit cmake qa-policy
 
 DESCRIPTION="C library that resolves names asynchronously"
 HOMEPAGE="https://c-ares.haxx.se/"
@@ -14,3 +14,21 @@ S=${WORKDIR}/c-ares-${SNAPSHOT}
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+IUSE="static-libs"
+
+src_configure() {
+	qa-policy-configure
+
+	local mycmakeargs=(
+		-DCARES_SHARED=ON
+		-DCARES_STATIC=$(usex static-libs ON OFF)
+	)
+
+	cmake_src_configure
+}
+
+src_install() {
+	cmake_src_install
+	qa-policy-install
+}

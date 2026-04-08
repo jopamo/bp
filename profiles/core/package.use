@@ -30,7 +30,7 @@ app-fs/smartmontools daemon
 app-lang/python-exec native-symlinks
 app-kernel/linux-firmware amd-ucode i915
 app-net/chrony cmdmon ntp phc refclock rtc
-app-net/curl static-libs
+app-net/curl adns static-libs
 app-net/iputils arping ping tracepath
 app-net/nmap libssh2 nping nselib os-db scripts ncat
 app-server/nodejs icu node-snapshot
@@ -45,6 +45,7 @@ lib-core/zlib static-libs
 lib-dev/nghttp2 static-libs
 lib-dev/tree-sitter-bash python
 lib-misc/xxhash static-libs
+lib-net/c-ares static-libs
 lib-net/nodejs icu
 lib-net/openssl static-libs
 lib-print/cups-filters foomatic

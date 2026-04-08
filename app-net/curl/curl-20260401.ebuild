@@ -55,10 +55,10 @@ src_prepare() {
 	#scripts/mk-ca-bundle.pl -k || die
 }
 
-src_configure() {
-	local myconf=(
-		$(use_enable adns ares)
-		$(use_enable ipv6)
+	src_configure() {
+		local myconf=(
+			$(use_enable adns ares)
+			$(use_enable ipv6)
 		$(use_enable ldap ldaps)
 		$(use_enable ldap)
 		$(use_enable static-libs static)
@@ -68,13 +68,13 @@ src_configure() {
 		$(use_with nghttp2)
 		$(use_with ssh libssh)
 		$(use_with ssl)
-		$(use_with zlib)
-		$(use_with zstd)
-		--enable-threaded-resolver
-		--enable-versioned-symbols
-		--with-zlib
-	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
+			$(use_with zlib)
+			$(use_with zstd)
+			$(usex adns --disable-threaded-resolver --enable-threaded-resolver)
+			--enable-versioned-symbols
+			--with-zlib
+		)
+		ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
 src_install() {

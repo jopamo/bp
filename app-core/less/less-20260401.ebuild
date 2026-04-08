@@ -18,7 +18,11 @@ DEPEND="
 "
 
 src_prepare() {
-	make -f Makefile.aut distfiles
+	# Snapshot tarballs lack pre-generated help.c/funcs.h and *.nro files
+	# expected by Makefile.in install target.
+	# Generate only what build/install require, and avoid less.man targets
+	# that need nroff.
+	emake -f Makefile.aut help.c funcs.h less.nro lesskey.nro lessecho.nro || die
 	default
 	eautoreconf
 }

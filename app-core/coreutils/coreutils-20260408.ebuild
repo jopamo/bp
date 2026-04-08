@@ -7,7 +7,7 @@ inherit meson flag-o-matic qa-policy
 DESCRIPTION="Standard GNU utilities (chmod, cp, dd, ls, sort, tr, head, wc, who,...)"
 HOMEPAGE="https://www.gnu.org/software/coreutils/"
 
-SNAPSHOT=2a1977798ceaf2f5c8f298aa311e839f840630b1
+SNAPSHOT=e26cf318943f7fba068efde074cfaf9722a7b286
 SRC_URI="https://gitlab.com/pjo/coreutil/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/coreutil-${SNAPSHOT}"
 

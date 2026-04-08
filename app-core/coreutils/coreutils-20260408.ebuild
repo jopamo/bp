@@ -1,13 +1,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
-
 inherit meson flag-o-matic qa-policy
 
 DESCRIPTION="Standard GNU utilities (chmod, cp, dd, ls, sort, tr, head, wc, who,...)"
 HOMEPAGE="https://www.gnu.org/software/coreutils/"
 
-SNAPSHOT=e26cf318943f7fba068efde074cfaf9722a7b286
+SNAPSHOT=148b7652dc107c78602c6f595301e376c752f6d1
 SRC_URI="https://gitlab.com/pjo/coreutil/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/coreutil-${SNAPSHOT}"
 

@@ -31,7 +31,7 @@ QA_CONFIG_IMPL_DECL_SKIP=(
 
 DEPEND="
 		lib-core/zlib
-		adns? ( lib-net/c-ares )
+		adns? ( lib-net/c-ares[static-libs?] )
 		brotli? ( app-compression/brotli )
 		ldap? ( app-net/openldap )
 		libpsl? ( lib-net/libpsl )

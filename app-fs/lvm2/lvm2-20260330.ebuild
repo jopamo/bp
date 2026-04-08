@@ -49,7 +49,8 @@ src_configure() {
    		--with-thin=internal
 		--without-libnvme
 	)
-	AIO_CFLAGS= AIO_LIBS= \
+	# configure.ac uses ${AIO_LIBS:--laio}, so an empty string still becomes -laio.
+	AIO_CFLAGS=" " AIO_LIBS=" " \
 	CPPFLAGS="${CPPFLAGS} -DLVM_NO_LIBAIO" \
 	CLDFLAGS="${LDFLAGS}" econf "${myconf[@]}"
 }

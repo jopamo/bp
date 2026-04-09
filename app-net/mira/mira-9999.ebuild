@@ -1,0 +1,60 @@
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+inherit meson qa-policy
+
+DESCRIPTION="Modern recursive network retriever"
+HOMEPAGE="https://github.com/jopamo/mira"
+
+if [[ ${PV} = *9999 ]]; then
+	EGIT_REPO_URI="https://gitlab.com/pjo/mira"
+	inherit git-r3
+else
+	SNAPSHOT=8046be5c26d9c24c9cee044c10bc4a84c61d3f8f
+	SRC_URI="https://gitlab.com/pjo/mira/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+	S=${WORKDIR}/${PN}-${SNAPSHOT}
+fi
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+IUSE="debug ipv6 +static test http2 zlib zstd"
+
+LIB_DEPEND="
+	zlib? ( lib-core/zlib[static-libs(+)] )
+	zstd? ( app-compression/zstd[static-libs(+)] )
+	http2? ( lib-dev/nghttp2[static-libs(+)] )
+"
+
+DEPEND="
+	app-net/curl
+	lib-net/c-ares
+	virtual/ssl
+
+	!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
+	static? ( ${LIB_DEPEND} )
+
+	test? ( app-lang/python:3 )
+"
+RDEPEND="${DEPEND}"
+
+src_configure() {
+	qa-policy-configure
+
+	local emesonargs=(
+		$(meson_use debug debug)
+		$(meson_use ipv6 ipv6)
+		$(meson_use test tests)
+		$(meson_use http2 http2)
+		$(meson_use zstd zstd)
+	)
+
+	meson_src_configure
+}
+
+src_install() {
+	meson_src_install
+	qa-policy-install
+}

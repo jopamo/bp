@@ -4,7 +4,7 @@ DISTUTILS_USE_PEP517=hatchling
 PYPI_VERIFY_REPO=https://github.com/Kludex/uvicorn
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
-inherit distutils-r1 pypi
+inherit distutils-r1 optfeature pypi
 
 DESCRIPTION="Lightning-fast ASGI server implementation"
 HOMEPAGE="
@@ -68,5 +68,5 @@ python_test() {
 }
 
 pkg_postinst() {
- "auto reload on file changes" dev-python/watchfiles
+	optfeature "auto reload on file changes" dev-python/watchfiles
 }

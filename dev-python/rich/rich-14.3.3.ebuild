@@ -3,7 +3,7 @@
 DISTUTILS_USE_PEP517=poetry
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
-inherit distutils-r1 
+inherit distutils-r1 optfeature
 
 DESCRIPTION="Python library for rendering rich text, tables, etc. to the terminal"
 HOMEPAGE="
@@ -61,5 +61,5 @@ python_test() {
 }
 
 pkg_postinst() {
- "integration with HTML widgets for Jupyter" dev-python/ipywidgets
+	optfeature "integration with HTML widgets for Jupyter" dev-python/ipywidgets
 }

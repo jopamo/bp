@@ -4,7 +4,7 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_FULLY_TESTED=( pypy3_11 python3_{11..13} )
 PYTHON_COMPAT=( "${PYTHON_FULLY_TESTED[@]}" python3_14 )
 
-inherit distutils-r1 pypi
+inherit distutils-r1 optfeature pypi
 
 DESCRIPTION="Python library for arbitrary-precision floating-point arithmetic"
 HOMEPAGE="
@@ -49,6 +49,6 @@ EPYTEST_DESELECT=(
 )
 
 pkg_postinst() {
- "gmp support" dev-python/gmpy2
- "matplotlib support" dev-py/matplotlib
+	optfeature "gmp support" dev-python/gmpy2
+	optfeature "matplotlib support" dev-py/matplotlib
 }

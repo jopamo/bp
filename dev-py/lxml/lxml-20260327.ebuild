@@ -3,7 +3,7 @@
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
 
-inherit distutils-r1 toolchain-funcs flag-o-matic
+inherit distutils-r1 optfeature toolchain-funcs flag-o-matic
 
 DESCRIPTION="A Pythonic binding for the libxml2 and libxslt libraries"
 HOMEPAGE="https://lxml.de/"
@@ -103,7 +103,7 @@ python_install_all() {
 
 pkg_postinst() {
 	filter-flags -Wl,-z,defs
- "Support for BeautifulSoup as a parser backend" dev-python/beautifulsoup4
- "Translates CSS selectors to XPath 1.0 expressions" dev-python/cssselect
- "Support for lxml.html.clean sanitizer" dev-py/lxml-html-clean
+	optfeature "Support for BeautifulSoup as a parser backend" dev-python/beautifulsoup4
+	optfeature "Translates CSS selectors to XPath 1.0 expressions" dev-python/cssselect
+	optfeature "Support for lxml.html.clean sanitizer" dev-py/lxml-html-clean
 }

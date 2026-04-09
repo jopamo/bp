@@ -5,7 +5,7 @@ DISTUTILS_EXT=1
 PYPI_VERIFY_REPO=https://github.com/scikit-image/scikit-image
 PYTHON_COMPAT=( python3_{11..13} )
 
-inherit distutils-r1 pypi
+inherit distutils-r1 optfeature pypi
 
 # the package refers to blobs directly, use the newest commit to get
 # them all
@@ -91,10 +91,10 @@ python_test() {
 }
 
 pkg_postinst() {
- "FITS io capability" dev-python/astropy
- "GTK" dev-python/pygtk
- "io plugin providing most standard formats" dev-python/imread
- "plotting" dev-py/matplotlib
- "wavelet transformations" dev-python/pywavelets
- "io plugin providing a wide variety of formats, including specialized formats using in medical imaging." dev-python/simpleitk
+	optfeature "FITS io capability" dev-python/astropy
+	optfeature "GTK" dev-python/pygtk
+	optfeature "io plugin providing most standard formats" dev-python/imread
+	optfeature "plotting" dev-py/matplotlib
+	optfeature "wavelet transformations" dev-python/pywavelets
+	optfeature "io plugin providing a wide variety of formats, including specialized formats using in medical imaging." dev-python/simpleitk
 }

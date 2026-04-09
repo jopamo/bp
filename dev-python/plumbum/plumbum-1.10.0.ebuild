@@ -4,7 +4,7 @@ DISTUTILS_USE_PEP517=hatchling
 PYPI_VERIFY_REPO=https://github.com/tomerfiliba/plumbum
 PYTHON_COMPAT=( python3_{11..14} )
 
-inherit distutils-r1 pypi
+inherit distutils-r1 optfeature pypi
 
 DESCRIPTION="A library for shell script-like programs in python"
 HOMEPAGE="
@@ -46,8 +46,8 @@ python_test() {
 }
 
 pkg_postinst() {
- "remote commands via ssh" dev-python/paramiko
- "progress bars in jupyter" dev-python/ipywidgets
- "colored output in jupyter" dev-python/ipython
- "images on the command line" xgui-app/pillow
+	optfeature "remote commands via ssh" dev-python/paramiko
+	optfeature "progress bars in jupyter" dev-python/ipywidgets
+	optfeature "colored output in jupyter" dev-python/ipython
+	optfeature "images on the command line" xgui-app/pillow
 }

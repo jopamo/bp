@@ -5,7 +5,7 @@ CLI_COMPAT=( python3_{11..13} )
 PYTHON_COMPAT=( "${CLI_COMPAT[@]}" pypy3_11 python3_14 python3_{13,14}t )
 PYTHON_REQ_USE="threads(+),sqlite"
 
-inherit distutils-r1 
+inherit distutils-r1 optfeature
 
 TAG=hypothesis-python-${PV}
 MY_P=hypothesis-${TAG}
@@ -88,10 +88,10 @@ python_install() {
 }
 
 pkg_postinst() {
- "datetime support" dev-python/pytz
- "dateutil support" dev-python/python-dateutil
- "numpy support" dev-py/numpy
- "django support" dev-python/django dev-python/pytz
- "pandas support" dev-python/pandas
- "pytest support" dev-python/pytest
+	optfeature "datetime support" dev-python/pytz
+	optfeature "dateutil support" dev-python/python-dateutil
+	optfeature "numpy support" dev-py/numpy
+	optfeature "django support" "dev-python/django dev-python/pytz"
+	optfeature "pandas support" dev-python/pandas
+	optfeature "pytest support" dev-python/pytest
 }

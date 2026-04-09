@@ -29,7 +29,10 @@ DEPEND="
 	jpeg2k? ( xmedia-lib/openjpeg )
 	lcms? ( xgui-lib/lcms )
 	tiff? ( xmedia-lib/tiff )
-	truetype? ( xgui-lib/freetype[harfbuzz] )
+	truetype? (
+		xgui-lib/freetype
+		xgui-lib/harfbuzz
+	)
 	webp? ( xmedia-lib/libwebp )
 	xcb? ( xgui-lib/libxcb )
 	zlib? ( lib-core/zlib )

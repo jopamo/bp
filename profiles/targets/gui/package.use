@@ -4,8 +4,6 @@ app-core/vim normal
 app-kernel/kernel-bin desktop
 lib-core/zlib minizip
 xgui-app/qbittorrent qt5
-# required for pillow[truetype] via gui profile defaults
-xgui-lib/freetype harfbuzz
 #xgui-lib/gtk3 wayland
 xgui-lib/gtk4 vulkan
 xgui-lib/qtbase vulkan

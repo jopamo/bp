@@ -119,6 +119,13 @@ src_prepare() {
 	cp -a "${WORKDIR}/berkeley-testfloat-3-${TESTFLOAT_SNAPSHOT}" subprojects/berkeley-testfloat-3 || die
 	cp -a subprojects/packagefiles/berkeley-testfloat-3/. subprojects/berkeley-testfloat-3/ || die
 
+	# With xkbcommon disabled, upstream still falls back to any host
+	# qemu-keymap found in PATH and tries to regenerate pc-bios keymaps.
+	# That reintroduces an implicit dependency on host XKB data.
+	sed -i \
+		-e "s|find_program('qemu-keymap', required: false, disabler: true)|disabler()|g" \
+		pc-bios/keymaps/meson.build || die
+
 	default
 	mkdir -p build
 }

@@ -5,7 +5,7 @@ PYPI_PN="PyJWT"
 PYPI_VERIFY_REPO=https://github.com/jpadilla/pyjwt
 PYTHON_COMPAT=( python3_{11..14} )
 
-inherit distutils-r1 pypi
+inherit distutils-r1 optfeature pypi
 
 DESCRIPTION="JSON Web Token implementation in Python"
 HOMEPAGE="
@@ -35,5 +35,5 @@ EPYTEST_DESELECT=(
 )
 
 pkg_postinst() {
- "cryptography" app-crypto/cryptography
+	optfeature "cryptography" app-crypto/cryptography
 }

@@ -3,7 +3,7 @@
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
 
-inherit distutils-r1 pypi
+inherit distutils-r1 optfeature pypi
 
 DESCRIPTION="A Python module to bypass Cloudflare's anti-bot page"
 HOMEPAGE="
@@ -38,7 +38,7 @@ EPYTEST_PLUGINS=( pytest-{forked,timeout} )
 distutils_enable_tests pytest
 
 pkg_postinst() {
- "brotli decompresssion support" "dev-python/brotlipy"
+	optfeature "brotli decompresssion support" dev-python/brotlipy
 
- "node.js interpreter support" "net-libs/nodejs"
+	optfeature "node.js interpreter support" net-libs/nodejs
 }

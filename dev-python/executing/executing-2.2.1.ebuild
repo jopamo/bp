@@ -5,7 +5,7 @@ PYTHON_TESTED=( python3_{11..14} )
 # pypy3.11: https://github.com/alexmojaki/executing/issues/92
 PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" pypy3_11 )
 
-inherit distutils-r1 
+inherit distutils-r1 optfeature
 
 DESCRIPTION="Get information about what a Python frame is currently doing"
 HOMEPAGE="
@@ -52,5 +52,5 @@ python_test() {
 }
 
 pkg_postinst() {
- "getting node's source code" dev-python/asttokens
+	optfeature "getting node's source code" dev-python/asttokens
 }

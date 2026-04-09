@@ -3,7 +3,7 @@
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
-inherit distutils-r1 pypi
+inherit distutils-r1 optfeature pypi
 
 DESCRIPTION="A fast and simple micro-framework for small web-applications"
 HOMEPAGE="
@@ -27,5 +27,5 @@ BDEPEND="
 distutils_enable_tests unittest
 
 pkg_postinst() {
- "Templating support" dev-python/mako
+	optfeature "Templating support" dev-python/mako
 }

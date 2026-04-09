@@ -5,7 +5,7 @@ PYPI_VERIFY_REPO=https://github.com/networkx/networkx
 PYTHON_FULLY_TESTED=( python3_{11..14} )
 PYTHON_COMPAT=( "${PYTHON_FULLY_TESTED[@]}" )
 
-inherit distutils-r1 pypi 
+inherit distutils-r1 optfeature pypi
 
 DESCRIPTION="Python tools to manipulate graphs and complex networks"
 HOMEPAGE="
@@ -49,9 +49,9 @@ src_install() {
 }
 
 pkg_postinst() {
- "recommended dependencies" "dev-py/matplotlib dev-py/numpy dev-python/pandas dev-python/scipy"
- "graph drawing and graph layout algorithms" "dev-python/pygraphviz dev-python/pydot"
- "YAML format reading and writing" "dev-python/pyyaml"
- "shapefile format reading and writing" "sci-libs/gdal[python]"
- "GraphML XML format" "dev-py/lxml"
+	optfeature "recommended dependencies" "dev-py/matplotlib dev-py/numpy dev-python/pandas dev-python/scipy"
+	optfeature "graph drawing and graph layout algorithms" dev-python/pygraphviz dev-python/pydot
+	optfeature "YAML format reading and writing" dev-python/pyyaml
+	optfeature "shapefile format reading and writing" "sci-libs/gdal[python]"
+	optfeature "GraphML XML format" dev-py/lxml
 }

@@ -3,7 +3,7 @@
 DISTUTILS_USE_PEP517=hatchling
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
-inherit distutils-r1 
+inherit distutils-r1 optfeature
 
 DESCRIPTION="Fully-featured HTTP client which provides sync and async APIs"
 HOMEPAGE="
@@ -92,7 +92,7 @@ python_test() {
 }
 
 pkg_postinst() {
- "HTTP/2 support" dev-python/h2
- "SOCKS proxy support" dev-python/socksio
- "Decoding for brotli compressed responses" dev-python/brotlicffi
+	optfeature "HTTP/2 support" dev-python/h2
+	optfeature "SOCKS proxy support" dev-python/socksio
+	optfeature "Decoding for brotli compressed responses" dev-python/brotlicffi
 }

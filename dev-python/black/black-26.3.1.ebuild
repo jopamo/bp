@@ -4,7 +4,7 @@ DISTUTILS_USE_PEP517=hatchling
 PYPI_VERIFY_REPO=https://github.com/psf/black
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
-inherit distutils-r1 pypi
+inherit distutils-r1 optfeature pypi
 
 DESCRIPTION="The uncompromising Python code formatter"
 HOMEPAGE="
@@ -55,6 +55,6 @@ python_test() {
 }
 
 pkg_postinst() {
- "blackd - HTTP API for black" \
+	optfeature "blackd - HTTP API for black" \
 		"dev-python/aiohttp dev-python/aiohttp-cors"
 }

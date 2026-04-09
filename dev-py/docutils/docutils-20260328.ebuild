@@ -17,7 +17,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	xgui-app/pillow[${PYTHON_USEDEP}]
+	# Pillow is optional upstream; without it, docutils loses image size
+	# probing for some writers when dimensions are not specified explicitly.
 	dev-python/pygments[${PYTHON_USEDEP}]
 "
 BDEPEND="

@@ -16,9 +16,9 @@ LICENSE="BSD BSD-2 GPL-3+ PSF-2.4 public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+# Pillow is optional upstream; without it, docutils loses image size
+# probing for some writers when dimensions are not specified explicitly.
 RDEPEND="
-	# Pillow is optional upstream; without it, docutils loses image size
-	# probing for some writers when dimensions are not specified explicitly.
 	dev-python/pygments[${PYTHON_USEDEP}]
 "
 BDEPEND="

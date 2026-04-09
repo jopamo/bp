@@ -84,8 +84,6 @@ DEPEND="
 	lib-dev/libtasn1
 	lib-net/libssh
 	xgui-lib/pixman
-	xgui-lib/libxkbcommon
-	xgui-tools/xkeyboard-config
 	bpf? ( lib-net/libbpf )
 	capstone? ( app-emu/capstone )
 	curl? ( app-net/curl )
@@ -186,7 +184,7 @@ src_configure() {
 		--enable-vhost-user
 		--enable-vhost-vdpa
 		--enable-virtfs
-		--enable-xkbcommon
+		--disable-xkbcommon
 	)
 	../configure "${myconf[@]}"
 }

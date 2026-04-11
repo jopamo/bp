@@ -1,19 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
+BRANCH_NAME="kde/$(ver_cut 1-2)"
+
 inherit qmake-utils
 
 DESCRIPTION="SVG rendering library for the Qt5 framework"
 HOMEPAGE="https://www.qt.io/"
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_BRANCH="kde/$(ver_cut 1).$(ver_cut 2)"
-	EGIT_REPO_URI="https://invent.kde.org/qt/qt/${PN}.git"
-	inherit git-r3
-else
-	SNAPSHOT=610c94f80802f67b59c00cac1f229e3d13b8de35
-	SRC_URI="https://github.com/qt/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=b74f7291f343dcbcb487b020868f042d8fe83098
+SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT="$(ver_cut 1)"
@@ -23,6 +19,14 @@ DEPEND="
 	xgui-lib/librsvg
 	xgui-lib/qtbase:$(ver_cut 1)=
 "
+
+src_prepare() {
+	default
+
+	local qtver
+	qtver="$("$(qt5_get_bindir)"/qmake -query QT_VERSION)" || die
+	"$(qt5_get_bindir)"/syncqt.pl -version "${qtver}" -outdir "${S}" "${S}" || die
+}
 
 src_configure() {
 	eqmake5

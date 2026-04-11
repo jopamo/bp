@@ -1,19 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
+BRANCH_NAME="kde/$(ver_cut 1-2)"
+
 inherit flag-o-matic
 
 DESCRIPTION="Cross-platform application development framework"
 HOMEPAGE="https://www.qt.io/"
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_BRANCH="kde/$(ver_cut 1).$(ver_cut 2)"
-	EGIT_REPO_URI="https://invent.kde.org/qt/qt/${PN}.git"
-	inherit git-r3
-else
-	SNAPSHOT=a43df98d037ad07cf096ef2f775958ceba743613
-	SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=bebdfd54917e25d1c100e6bd9f5dd53c2e645fd8
+SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT="$(ver_cut 1)"
@@ -65,9 +61,17 @@ src_prepare() {
 		mkspecs/common/g++-unix.conf
 
 	default
+
+	local qtver
+	qtver="$(sed -n 's/^MODULE_VERSION[[:space:]]*=[[:space:]]*//p' .qmake.conf)" || die
+	[[ -n ${qtver} ]] || die "Failed to detect MODULE_VERSION from .qmake.conf"
+	"${S}"/bin/syncqt.pl -version "${qtver}" -outdir "${S}" "${S}" || die
 }
 
 src_configure() {
+	local reduce_relocations="-reduce-relocations"
+	[[ ${ARCH} == arm64 ]] && reduce_relocations=""
+
 	local myconf=(
 		-opensource -confirm-license
 		-release
@@ -96,7 +100,7 @@ src_configure() {
 		-system-pcre
 		-system-zlib
 		-xcb
-		$(usex arm64 '' -reduce-relocations)
+		${reduce_relocations}
 		$(usex gssapi -feature-gssapi -no-feature-gssapi)
 		$(usex mysql -sql-mysql -no-sql-mysql)
 		$(usex opengl -opengl -no-opengl)

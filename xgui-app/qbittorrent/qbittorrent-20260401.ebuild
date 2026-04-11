@@ -26,7 +26,7 @@ DEPEND="
 "
 
 pkg_setup() {
-	use createuser && enewuser qbittorrent -1 /usr/sbin/nologin "/var/lib/qbittorrent" qbittorrent
+	use createuser && enewuser qbittorrent -1 /usr/bin/nologin "/var/lib/qbittorrent" qbittorrent
 }
 
 src_configure() {

@@ -4,7 +4,7 @@ After=network.target
 Wants=network.target
 
 [Service]
-ExecStart=/usr/sbin/smtpd -d
+ExecStart=/usr/bin/smtpd -d
 ExecStop=/usr/bin/smtpctl stop
 
 [Install]

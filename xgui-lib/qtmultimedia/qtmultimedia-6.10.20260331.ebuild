@@ -1,19 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
+BRANCH_NAME="$(ver_cut 1-2)"
+
 inherit cmake
 
 DESCRIPTION="Qt 6 multimedia framework for audio, video, radio, and camera"
 HOMEPAGE="https://www.qt.io/"
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_BRANCH="$(ver_cut 1).$(ver_cut 2)"
-	EGIT_REPO_URI="https://github.com/qt/${PN}.git"
-	inherit git-r3
-else
-	SNAPSHOT=610c94f80802f67b59c00cac1f229e3d13b8de35
-	SRC_URI="https://github.com/qt/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+SNAPSHOT=a92723e3eb857a94705f2bab55328af6463a792f
+SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT="$(ver_cut 1)"

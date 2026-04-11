@@ -1,12 +1,17 @@
+# Distributed under the terms of the GNU General Public License v2
+
+BRANCH_NAME="$(ver_cut 1-2)"
 
 CMAKE_IN_SOURCE_BUILD=1
 
-inherit flag-o-matic git-r3 cmake
+inherit flag-o-matic cmake
 
 DESCRIPTION="Cross-platform application development framework"
 HOMEPAGE="https://www.qt.io/"
-EGIT_REPO_URI="https://github.com/qt/${PN}.git"
-EGIT_BRANCH=$(ver_cut 1).$(ver_cut 2)
+
+SNAPSHOT=a01b10ce81fc771ad4dd2bc3bc28a40c2d2e0a68
+SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT="$(ver_cut 1)"
@@ -39,9 +44,17 @@ src_prepare() {
 		mkspecs/common/g++-unix.conf
 
 	default
+
+	local qtver
+	qtver="$(sed -n 's/^MODULE_VERSION[[:space:]]*=[[:space:]]*//p' .qmake.conf)" || die
+	[[ -n ${qtver} ]] || die "Failed to detect MODULE_VERSION from .qmake.conf"
+	"${S}"/bin/syncqt.pl -version "${qtver}" -outdir "${S}" "${S}" || die
 }
 
 src_configure() {
+	local reduce_relocations="-reduce-relocations"
+	[[ ${ARCH} == arm64 ]] && reduce_relocations=""
+
 	local myconf=(
 		-opensource -confirm-license
 		-release
@@ -71,7 +84,7 @@ src_configure() {
 		-system-libpng
 		-system-pcre
 		-system-zlib
-		$(usex arm64 '' -reduce-relocations)
+		${reduce_relocations}
 		$(usex mysql -sql-mysql -no-sql-mysql)
 		$(usex opengl -opengl -no-opengl)
 		$(usex postgres -sql-psql -no-sql-psql)

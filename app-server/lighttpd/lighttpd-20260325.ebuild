@@ -83,7 +83,8 @@ src_install() {
 	doins "${FILESDIR}"/lighttpd_example.conf
 
 	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
-		u lighttpd 443 "light webserver" /var/lighttpd
+		g lighttpd 108 - -
+		u lighttpd 108:108 "light webserver" /var/lighttpd /usr/bin/false
 	EOF
 
 	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die

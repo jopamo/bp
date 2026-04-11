@@ -4,8 +4,8 @@ After=network.target
 Requires=network.target
 
 [Service]
-ExecStartPre=/usr/sbin/lighttpd -tt -f /etc/lighttpd/lighttpd.conf
-ExecStart=/usr/sbin/lighttpd-angel -D -f /etc/lighttpd/lighttpd.conf
+ExecStartPre=/usr/bin/lighttpd -tt -f /etc/lighttpd/lighttpd.conf
+ExecStart=/usr/bin/lighttpd-angel -D -f /etc/lighttpd/lighttpd.conf
 Restart=on-failure
 RestartSec=5s
 ProtectSystem=full

@@ -1,2 +1,2 @@
-g systemd-resolve   -   - -
-u! systemd-resolve  -   - /run/systemd/resolve  /usr/bin/nologin
+g systemd-resolve 111 - -
+u! systemd-resolve 111:111 - /run/systemd/resolve /usr/bin/nologin

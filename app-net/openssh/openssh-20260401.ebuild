@@ -88,7 +88,8 @@ src_install() {
 	rm -rf "${ED}"/etc/ssh/moduli || die
 
 	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
-		u sshd 22 "SSH drop priv user" /var/empty
+		g sshd 22 - -
+		u sshd 22:22 "SSH drop priv user" /var/empty /usr/bin/nologin
 	EOF
 
 	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die

@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=forking
-ExecStart=/usr/sbin/pure-ftpd /etc/pure-ftpd.conf
+ExecStart=/usr/bin/pure-ftpd /etc/pure-ftpd.conf
 Restart=on-failure
 ProtectSystem=full
 MemoryDenyWriteExecute=true

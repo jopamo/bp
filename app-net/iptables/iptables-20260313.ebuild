@@ -54,7 +54,7 @@ src_configure() {
 
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/sbin
+		--sbindir="${EPREFIX}"/usr/bin
 		--libdir="${EPREFIX}"/usr/lib
 		--libexecdir="${EPREFIX}"/usr/libexec
 		--sysconfdir="${EPREFIX}/etc"
@@ -80,7 +80,7 @@ src_install() {
 	default
 
 	dobin iptables/iptables-apply
-	dosym -r /usr/bin/iptables-apply /usr/sbin/ip6tables-apply
+	dosym -r /usr/bin/iptables-apply /usr/bin/ip6tables-apply
 	doman iptables/iptables-apply.8
 
 	insinto /usr/include

@@ -8,7 +8,7 @@ After=network.target network-online.target
 Type=notify
 NotifyAccess=all
 PIDFile=/run/nmbd.pid
-ExecStart=/usr/sbin/nmbd --foreground --no-process-group $NMBDOPTIONS
+ExecStart=/usr/bin/nmbd --foreground --no-process-group $NMBDOPTIONS
 ExecReload=/usr/bin/kill -HUP $MAINPID
 LimitCORE=infinity
 

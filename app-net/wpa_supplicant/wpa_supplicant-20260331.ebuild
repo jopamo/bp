@@ -254,7 +254,7 @@ src_configure() {
 
 src_compile() {
 	einfo "Building wpa_supplicant"
-	emake V=1 BINDIR=/usr/sbin
+	emake V=1 BINDIR=/usr/bin
 
 	if use eapol_test ; then
 		emake eapol_test

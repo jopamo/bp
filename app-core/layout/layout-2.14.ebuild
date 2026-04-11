@@ -110,7 +110,7 @@ src_install() {
 
 	dosym -r /usr/bin /bin
 	#dosym -r /usr/bin /sbin
-	#dosym -r /usr/bin /usr/sbin
+	# legacy admin tree is collapsed into /usr/bin
 
 	keepdir /usr/local/lib
 

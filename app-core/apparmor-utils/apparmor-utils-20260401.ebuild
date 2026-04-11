@@ -78,7 +78,7 @@ src_install() {
 
 	python_foreach_impl install_python
 	python_replicate_script "${D}"/usr/bin/aa-easyprof \
-		"${D}"/usr/sbin/aa-{audit,autodep,cleanprof,complain,disable,enforce,genprof,logprof,mergeprof,notify,unconfined}
+		"${D}"/usr/bin/aa-{audit,autodep,cleanprof,complain,disable,enforce,genprof,logprof,mergeprof,notify,unconfined}
 	domenu aa-notify.desktop
 	popd > /dev/null || die
 

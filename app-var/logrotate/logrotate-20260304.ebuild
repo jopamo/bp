@@ -24,7 +24,7 @@ DEPEND="
 src_prepare() {
 	eautoreconf
 	default
-	sed -i -e 's#/usr/sbin/logrotate#/usr/bin/logrotate#' "${S}"/examples/logrotate.service || die
+	sed -i -E -e 's#/usr/(s)?bin/logrotate#/usr/bin/logrotate#' "${S}"/examples/logrotate.service || die
 }
 
 src_configure() {

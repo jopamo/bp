@@ -50,7 +50,8 @@ src_install() {
 		find "${ED}" -name '*.la' -delete || die
 	fi
 	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
-		u tss - "TPM2 Software Stack user" /var/lib/tpm2-tss
+		g tss 107 - -
+		u tss 107:107 - /var/lib/tpm2-tss /usr/bin/false
 	EOF
 
 	newsysusers "${T}/${PN}-sysusers" "${PN}.conf"

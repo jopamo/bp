@@ -57,6 +57,6 @@ pkg_postinst() {
 }
 
 pkg_preinst() {
-	enewgroup pcap 377
-	enewuser pcap 377 -1 -1 sshd
+	enewgroup pcap 105
+	enewuser pcap 105 /usr/bin/false /dev/null
 }

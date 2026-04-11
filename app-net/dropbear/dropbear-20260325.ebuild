@@ -44,5 +44,5 @@ src_install() {
 
 pkg_preinst() {
 	enewgroup sshd 22
-	enewuser sshd 22 -1 /var/empty sshd
+	enewuser sshd 22 /usr/bin/nologin /var/empty
 }

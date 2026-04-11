@@ -84,7 +84,8 @@ src_install() {
 	fi
 
 	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
-		u chrony 123 "Network Time Protocol" /var/empty
+		g chrony 102 - -
+		u chrony 102:102 "added by portage for chrony" /var/lib/chrony /usr/bin/nologin
 	EOF
 
 	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die

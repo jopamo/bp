@@ -5,7 +5,7 @@ After=network-online.target
 Requires=network-online.target
 
 [Service]
-ExecStart=/usr/sbin/hostapd /etc/hostapd/hostapd.conf
+ExecStart=/usr/bin/hostapd /etc/hostapd/hostapd.conf
 ExecReload=/usr/bin/kill -HUP $MAINPID
 KillMode=process
 Restart=on-failure

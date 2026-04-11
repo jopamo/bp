@@ -88,5 +88,5 @@ src_install() {
 		DESTDIR="${ED}"
 	)
 	emake "${MAKE_COMMON[@]}" install
-	rm "${ED}"/usr/sbin/airodump-ng-oui-update
+	rm "${ED}"/usr/bin/airodump-ng-oui-update
 }

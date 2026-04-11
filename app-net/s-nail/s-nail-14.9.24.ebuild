@@ -14,7 +14,7 @@ src_configure() {
 		OPT_AUTOCC=no
 		VAL_PREFIX="${EPREFIX}"/usr
 		VAL_SYSCONFDIR="${EPREFIX}"/etc
-		VAL_MTA="${EPREFIX}/usr/sbin/sendmail"
+		VAL_MTA="${EPREFIX}/usr/bin/sendmail"
 		VAL_MAIL='/var/spool/mail'
 		VAL_PAGER=less
 		VERBOSE=1
@@ -28,10 +28,10 @@ src_compile() {
 }
 
 src_install() {
-	# Use /usr/sbin/sendmail by default and provide an example
+	# Use /usr/bin/sendmail by default and provide an example
 	cat <<- EOSMTP >> nail.rc
 
-		# Use the local sendmail (/usr/sbin/sendmail) binary by default.
+		# Use the local sendmail (/usr/bin/sendmail) binary by default.
 		# (Uncomment the following line to use a SMTP server)
 		#set smtp=localhost
 

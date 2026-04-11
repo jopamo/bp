@@ -84,8 +84,8 @@ src_install() {
 	qa-policy-install
 
 	if use static ; then
-		mv "${ED%}"/usr/sbin/cryptsetup{.static,} || die
-		mv "${ED%}"/usr/sbin/veritysetup{.static,} || die
-		use reencrypt && { mv "${ED%}"/usr/sbin/cryptsetup-reencrypt{.static,} || die ; }
+		mv "${ED%}"/usr/bin/cryptsetup{.static,} || die
+		mv "${ED%}"/usr/bin/veritysetup{.static,} || die
+		use reencrypt && { mv "${ED%}"/usr/bin/cryptsetup-reencrypt{.static,} || die ; }
 	fi
 }

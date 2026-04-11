@@ -77,7 +77,7 @@ src_compile() {
     haproxy_emake "${args[@]}"
 
     if use systemd; then
-        emake -C admin/systemd SBINDIR=/usr/sbin
+        emake -C admin/systemd SBINDIR=/usr/bin
     fi
 
     if use tools; then

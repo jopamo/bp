@@ -5,7 +5,7 @@ Before=network.target network-online.target
 
 [Service]
 Type=forking
-ExecStart=/usr/sbin/dhcpcd -q
+ExecStart=/usr/bin/dhcpcd -q
 PIDFile=/run/dhcpcd/pid
 # Avoid duplicate output on stderr/syslog
 StandardOutput=null

@@ -6,7 +6,7 @@ Before=sysinit.target shutdown.target
 ConditionVirtualization=!container
 
 [Service]
-ExecStart=/usr/sbin/rngd -f $RNGD_OPTS
+ExecStart=/usr/bin/rngd -f $RNGD_OPTS
 
 [Install]
 WantedBy=sysinit.target

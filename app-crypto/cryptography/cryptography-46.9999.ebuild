@@ -58,9 +58,3 @@ python_install() {
 		"${ED}${spdir}/CONTRIBUTING.rst" || die
 	rm -rf "${ED}${spdir}/tests" || die
 }
-
-python_install_all() {
-	distutils-r1_python_install_all
-
-	dodoc CHANGELOG.rst CONTRIBUTING.rst
-}

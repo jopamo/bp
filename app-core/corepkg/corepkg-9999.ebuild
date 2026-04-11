@@ -106,12 +106,13 @@ src_install() {
 	keepdir /etc/corepkg
 
 	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
-		u corepkg 250 - /var/lib/corepkg/home
+		g corepkg 103 - -
+		u corepkg 103:103 - /var/lib/corepkg/home /usr/bin/nologin
 	EOF
 
 	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die
 		x /var/tmp/ccache
-		d /var/lib/corepkg 0755 root root -
+		d /var/lib/corepkg 2755 root corepkg -
 		d /var/lib/corepkg/home 0700 corepkg corepkg -
 		d /var/cache/distfiles 02775 corepkg corepkg -
 	EOF

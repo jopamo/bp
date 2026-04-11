@@ -93,8 +93,8 @@ src_install() {
 	rm -rf "${ED}"/var/lib
 
 	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
-		g messagebus -
-		u! messagebus 101 "System Message Bus" /run/dbus /usr/bin/nologin
+		g messagebus 101 - -
+		u! messagebus 101:101 "System Message Bus" / /usr/bin/nologin
 	EOF
 
 	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die

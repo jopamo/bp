@@ -11,8 +11,12 @@ g video    27    - -
 g kvm      78    - -
 g input    97    - -
 g users   100    - -
-g uuidd   997    - -
+g man      44    - -
+g utmp    104    - -
+g uuidd   109    - -
 g nobody 65534   - -
 
 u  root   0:0  "Super User" /root /usr/bin/bash
-u! nobody 65534:65534 "Kernel Overflow User" -
+u  man    44:44 - / /usr/bin/nologin
+u  uuidd 109:109 "UUID generator helper daemon" /var/lib/libuuid /usr/bin/nologin
+u! nobody 65534:65534 "Kernel Overflow User" / /usr/bin/nologin

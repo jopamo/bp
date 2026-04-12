@@ -44,11 +44,6 @@ src_prepare() {
 		mkspecs/common/g++-unix.conf
 
 	default
-
-	local qtver
-	qtver="$(sed -n 's/^MODULE_VERSION[[:space:]]*=[[:space:]]*//p' .qmake.conf)" || die
-	[[ -n ${qtver} ]] || die "Failed to detect MODULE_VERSION from .qmake.conf"
-	"${S}"/bin/syncqt.pl -version "${qtver}" -outdir "${S}" "${S}" || die
 }
 
 src_configure() {

@@ -33,7 +33,7 @@ src_prepare() {
 	mv "${WORKDIR}/qttools-litehtml-${QTTOOLS_LITEHTML_SNAPSHOT}" \
 		"${S}/src/assistant/qlitehtml/src/3rdparty/litehtml" || die
 
-	default
+	cmake_src_prepare
 }
 
 append-flags -ffat-lto-objects

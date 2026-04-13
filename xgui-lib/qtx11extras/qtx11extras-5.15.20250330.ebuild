@@ -17,6 +17,14 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-lib/qtbase:$(ver_cut 1)"
 
+src_prepare() {
+	default
+
+	local qtver
+	qtver="$("$(qt5_get_bindir)"/qmake -query QT_VERSION)" || die
+	"$(qt5_get_bindir)"/syncqt.pl -version "${qtver}" -outdir "${S}" "${S}" || die
+}
+
 src_configure() {
 	eqmake5
 }

@@ -2,7 +2,7 @@
 
 SNAPSHOT=4d4a562d7b73dcea8bd4b2d40b8c030d5065111b
 
-inherit flag-o-matic qa-policy
+inherit flag-o-matic qa-policy gl
 
 DESCRIPTION="Extended attributes tools"
 HOMEPAGE="https://savannah.nongnu.org/projects/attr"
@@ -17,6 +17,8 @@ else
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 fi
 
+SRC_URI+=" ${GL_SRC_URI}"
+
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
@@ -24,7 +26,6 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs debug"
 
 BDEPEND="
-	app-build/gnulib
 	app-build/gettext
 	app-build/autoconf
 	app-build/automake
@@ -32,8 +33,7 @@ BDEPEND="
 "
 
 src_prepare() {
-	rm -rf gnulib || die
-	cp -r "${BROOT}"/usr/share/gnulib gnulib || die
+	gl_stage_gnulib
 
 	./autogen.sh || die
 

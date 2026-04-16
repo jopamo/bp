@@ -2,7 +2,7 @@
 
 SNAPSHOT=bbc1bdb7719679b16f0fb45f40c83eb71d1f4f87
 
-inherit flag-o-matic qa-policy
+inherit flag-o-matic qa-policy gl
 
 DESCRIPTION="Tools to make diffs and compare files"
 HOMEPAGE="https://www.gnu.org/software/diffutils/"
@@ -17,6 +17,8 @@ else
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 fi
 
+SRC_URI+=" ${GL_SRC_URI}"
+
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
@@ -26,13 +28,11 @@ IUSE="static"
 DEPEND="app-compression/xz-utils"
 
 BDEPEND="
-	app-build/gnulib
 	app-dev/gperf
 "
 
 src_prepare() {
-	rm -rf gnulib || die
-	cp -a "${BROOT}"/usr/share/gnulib gnulib || die
+	gl_stage_gnulib
 
 	echo "${PV}" > .tarball-version || die
 

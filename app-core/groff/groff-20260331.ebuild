@@ -2,7 +2,7 @@
 
 SNAPSHOT=63190cb0e2bf41f84ab2b3dd92dc32b9df108539
 
-inherit flag-o-matic qa-policy
+inherit flag-o-matic qa-policy gl
 
 DESCRIPTION="Text formatter used for man pages"
 HOMEPAGE="https://www.gnu.org/software/groff/groff.html"
@@ -17,16 +17,16 @@ else
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 fi
 
+SRC_URI+=" ${GL_SRC_URI}"
+
 LICENSE="GPL-2"
 SLOT="0"
 #KEYWORDS="amd64 arm64"
 
 DEPEND="core-perl/libintl-perl"
-BDEPEND="app-build/gnulib"
 
 src_prepare() {
-	rm -rf gnulib
-	cp -r "${BROOT}"/usr/share/gnulib gnulib || die
+	gl_stage_gnulib
 
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib || die
 

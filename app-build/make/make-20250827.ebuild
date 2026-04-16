@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit flag-o-matic qa-policy
+inherit flag-o-matic qa-policy gl
 
 DESCRIPTION="Standard tool to compile source trees"
 HOMEPAGE="https://www.gnu.org/software/make/make.html"
@@ -8,6 +8,8 @@ HOMEPAGE="https://www.gnu.org/software/make/make.html"
 SNAPSHOT=c072587a609db822697f05b81316bdb862678282
 SRC_URI="https://github.com/1g4-mirror/make/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
+
+SRC_URI+=" ${GL_SRC_URI}"
 
 LICENSE="GPL-3+ FDL-1.3+"
 SLOT="0"
@@ -19,7 +21,6 @@ BDEPEND="
 	app-build/autoconf
 	app-build/automake
 	app-build/gettext
-	app-build/gnulib
 	app-build/texinfo
 	app-dev/pkgconf
 	test? ( app-lang/perl )
@@ -28,8 +29,7 @@ BDEPEND="
 PATCHES=( "${FILESDIR}"/getopt-gcc15.patch )
 
 src_prepare() {
-	rm -rf gnulib || die
-	cp -a "${BROOT}"/usr/share/gnulib gnulib || die
+	gl_stage_gnulib
 
 	echo "${PV}" > .tarball-version || die
 

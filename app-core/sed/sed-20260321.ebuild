@@ -2,7 +2,7 @@
 
 SNAPSHOT=0e2491480a2ccb4736aa919c1d7bd197fcaee885
 
-inherit flag-o-matic
+inherit flag-o-matic gl
 
 DESCRIPTION="Super-useful stream editor"
 HOMEPAGE="http://sed.sourceforge.net/"
@@ -17,6 +17,8 @@ else
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 fi
 
+SRC_URI+=" ${GL_SRC_URI}"
+
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
@@ -24,7 +26,6 @@ KEYWORDS="amd64 arm64"
 IUSE="acl static"
 
 DEPEND="acl? ( app-core/acl )"
-BDEPEND="app-build/gnulib"
 
 src_bootstrap_sed() {
 	# make sure system-sed works #40786
@@ -38,8 +39,7 @@ src_bootstrap_sed() {
 }
 
 src_prepare() {
-	rm -rf gnulib
-	cp -r "${BROOT}"/usr/share/gnulib gnulib
+	gl_stage_gnulib
 
 	default
 

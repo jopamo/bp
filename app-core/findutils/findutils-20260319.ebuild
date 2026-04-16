@@ -2,7 +2,7 @@
 
 SNAPSHOT=34929da684212a176e64be26eb764dc2fc35080a
 
-inherit flag-o-matic python-any-r1 qa-policy
+inherit flag-o-matic python-any-r1 qa-policy gl
 
 DESCRIPTION="GNU utilities for finding files"
 HOMEPAGE="https://www.gnu.org/software/findutils/"
@@ -17,6 +17,8 @@ else
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 fi
 
+SRC_URI+=" ${GL_SRC_URI}"
+
 LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
@@ -27,7 +29,6 @@ DEPEND="test? ( ${PYTHON_DEPS} )"
 
 BDEPEND="
 	app-build/bison
-	app-build/gnulib
 "
 
 pkg_setup() {
@@ -37,8 +38,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	rm -rf gnulib || die
-	cp -a "${BROOT}"/usr/share/gnulib gnulib || die
+	gl_stage_gnulib
 	#cd gnulib
 	#git reset --hard 0a12fa9
 	#cd ..

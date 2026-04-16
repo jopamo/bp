@@ -47,6 +47,9 @@ src_prepare() {
 	#git reset --hard 0a12fa9
 	#cd ..
 
+	# We do not ship localized manpages; skip po4a-driven doc subdirs.
+	sed -i -E 's/^SUBDIRS = .*/SUBDIRS = C/' doc/Makefile.am || die
+
 	default
 
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib

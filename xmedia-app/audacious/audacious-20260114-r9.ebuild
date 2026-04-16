@@ -19,7 +19,7 @@ DEPEND="
 	lib-core/glib
 	xgui-lib/cairo
 	xgui-lib/pango
-	xgui-lib/qtbase
+	xgui-lib/qtbase:5
 "
 
 src_configure() {

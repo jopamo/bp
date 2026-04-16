@@ -5,7 +5,7 @@
 if [[ -z ${_GL_ECLASS} ]]; then
 	_GL_ECLASS=1
 
-	: "${GL_COMMIT:=bb5fa2c94710d88c4b3e019cf267d2ea0b4a320f}"
+	: "${GL_COMMIT:=e24302ba2d788613f45dfb5033f60463a828de5a}"
 
 	GL_TREE_NAME="gl-${GL_COMMIT}"
 

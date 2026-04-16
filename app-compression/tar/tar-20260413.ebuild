@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=9280aa3807c176279a25ed0520fd21d1feddd0a7
+SNAPSHOT=d479b2cc9160d9c2fb61afbc9ee70c2faadf80db
 PAXUTILS_SNAPSHOT=bb78da089e1086c9403a29d838231f50e9ff25c4
 
 inherit flag-o-matic qa-policy gl
@@ -29,6 +29,11 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="acl static test xattr"
+
+QA_CONFIG_IMPL_DECL_SKIP=(
+	# gnulib's sys/cdefs.h probe intentionally trips this on non-glibc libc.
+	__GNUC_PREREQ
+)
 
 DEPEND="
 	acl? ( app-core/acl )

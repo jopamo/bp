@@ -7,7 +7,7 @@ TREE_SITTER_TYPESCRIPT_VERSION=0.23.2
 TREE_SITTER_OCAML_VERSION=0.23.2
 TREE_SITTER_D_VERSION=0.8.2
 
-inherit libtool flag-o-matic qa-policy
+inherit libtool flag-o-matic qa-policy gl
 
 DESCRIPTION="GNU locale utilities"
 HOMEPAGE="https://www.gnu.org/software/gettext/"
@@ -22,6 +22,8 @@ SRC_URI="
 	https://github.com/gdamore/tree-sitter-d/archive/refs/tags/v${TREE_SITTER_D_VERSION}.tar.gz -> tree-sitter-d-${TREE_SITTER_D_VERSION}.tar.gz
 "
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
+
+SRC_URI+=" ${GL_SRC_URI}"
 
 LICENSE="GPL-3+ LGPL-2.1+ MIT"
 SLOT="0"
@@ -42,15 +44,12 @@ BDEPEND="
 	app-build/autoconf
 	app-build/automake
 	app-build/bison
-	app-build/gnulib
 	app-compression/xz-utils
 	app-core/git
 "
 
 _gettext_prepare_gnulib() {
-	rm -rf gnulib || die
-	cp -a "${BROOT}"/usr/share/gnulib gnulib || die
-	rm -rf gnulib/.git gnulib/.gitmodules gnulib/.gitignore || die
+	gl_stage_gnulib
 }
 
 _gettext_patch_tree_sitter_source() {

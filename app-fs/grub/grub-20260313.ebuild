@@ -2,7 +2,7 @@
 
 SNAPSHOT=b07cc37ca64fe99260884e7325abc333374e098b
 
-inherit multibuild toolchain-funcs qa-policy
+inherit multibuild toolchain-funcs qa-policy gl
 
 DESCRIPTION="GNU GRUB boot loader"
 HOMEPAGE="https://www.gnu.org/software/grub/"
@@ -16,6 +16,8 @@ else
 	SRC_URI="https://github.com/1g4-mirror/grub/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 fi
+
+SRC_URI+=" ${GL_SRC_URI}"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -36,7 +38,6 @@ DEPEND="
 	static? ( app-compression/xz-utils[static-libs(+)] )
 	grub_platforms_efi-64? ( app-fs/efibootmgr )
 "
-BDEPEND="app-build/gnulib"
 
 RESTRICT="strip"
 
@@ -95,8 +96,7 @@ src_prepare() {
 	eapply "${FILESDIR}/fix-libgcrypt-posix-wrap-implicit-grub-symbols.patch"
 	eapply "${FILESDIR}/fix-config-recursive-headers.patch"
 
-	rm -rf gnulib || die
-	cp -r "${BROOT}/usr/share/gnulib" gnulib || die
+	gl_stage_gnulib
 
 	./bootstrap --skip-po --no-git --gnulib-srcdir="${S}/gnulib" || die
 

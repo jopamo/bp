@@ -2,7 +2,7 @@
 
 SNAPSHOT=d161c9a9dbd24bb7e0356e4e07983345777d85aa
 
-inherit flag-o-matic qa-policy
+inherit flag-o-matic qa-policy gl
 
 DESCRIPTION="Utility to apply diffs to files"
 HOMEPAGE="https://www.gnu.org/software/patch/patch.html"
@@ -16,6 +16,8 @@ else
 	SRC_URI="https://github.com/1g4-mirror/patch/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 fi
+
+SRC_URI+=" ${GL_SRC_URI}"
 
 LICENSE="GPL-3+ patch-man"
 SLOT="0"
@@ -32,13 +34,11 @@ BDEPEND="
 	app-build/autoconf
 	app-build/automake
 	app-build/bison
-	app-build/gnulib
 	test? ( app-core/ed )
 "
 
 src_prepare() {
-	rm -rf gnulib || die
-	cp -a "${BROOT}"/usr/share/gnulib gnulib || die
+	gl_stage_gnulib
 
 	printf '%s\n' "${PV}" > .tarball-version || die
 

@@ -18,7 +18,9 @@ SRC_URI="
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 S_BOOTSTRAP="${WORKDIR}/bootstrap-${LIBTOOL_BOOTSTRAP_SNAPSHOT}"
 
-inherit qa-policy
+inherit qa-policy gl
+
+SRC_URI+=" ${GL_SRC_URI}"
 
 LICENSE="GPL-2+ LGPL-2+ FDL-1.3+"
 SLOT="2"
@@ -28,7 +30,6 @@ IUSE="static-libs"
 
 BDEPEND="
 	app-build/gnuconfig
-	app-build/gnulib
 	app-build/autoconf
 	app-build/automake
 	app-build/texinfo
@@ -38,11 +39,7 @@ BDEPEND="
 # This ebuild is expected to build without network access.
 
 _libtool_prepare_gnulib() {
-	rm -rf gnulib || die
-	cp -a "${BROOT}"/usr/share/gnulib gnulib || die
-
-	# Avoid any runtime dependency on git from bootstrap logic.
-	rm -rf gnulib/.git gnulib/.gitmodules gnulib/.gitignore || die
+	gl_stage_gnulib
 }
 
 _libtool_prepare_bootstrap() {

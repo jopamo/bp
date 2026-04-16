@@ -2,7 +2,7 @@
 
 SNAPSHOT=071ac3aa76a575dd55dc184570da2192adafe267
 
-inherit flag-o-matic qa-policy
+inherit flag-o-matic qa-policy gl
 
 DESCRIPTION="GNU regular expression matcher"
 HOMEPAGE="https://www.gnu.org/software/grep/"
@@ -17,6 +17,8 @@ else
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 fi
 
+SRC_URI+=" ${GL_SRC_URI}"
+
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
@@ -28,14 +30,12 @@ RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
 DEPEND="static? ( ${LIB_DEPEND} )"
 
 BDEPEND="
-	app-build/gnulib
 	app-dev/pkgconf
 	app-build/texinfo
 "
 
 src_prepare() {
-	rm -rf gnulib || die
-	cp -a "${BROOT}"/usr/share/gnulib gnulib || die
+	gl_stage_gnulib
 	#cd gnulib
 	#git reset --hard 0a12fa9
 	#cd ..

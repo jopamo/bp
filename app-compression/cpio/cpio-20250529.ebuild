@@ -3,7 +3,7 @@
 SNAPSHOT=ef694f7bcc60d2b92e5737e31790791ff4de20f3
 PAXUTILS_SNAPSHOT=bb78da089e1086c9403a29d838231f50e9ff25c4
 
-inherit qa-policy
+inherit qa-policy gl
 
 DESCRIPTION="A file archival tool which can also read and write tar files"
 HOMEPAGE="https://www.gnu.org/software/cpio/cpio.html"
@@ -22,6 +22,8 @@ SRC_URI+="
 	https://github.com/1g4-mirror/paxutils/archive/${PAXUTILS_SNAPSHOT}.tar.gz -> paxutils-${PAXUTILS_SNAPSHOT}.tar.gz
 "
 
+SRC_URI+=" ${GL_SRC_URI}"
+
 LICENSE="GPL-3+ FDL-1.3+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
@@ -36,7 +38,6 @@ BDEPEND="
 	app-build/automake
 	app-build/bison
 	app-build/gettext
-	app-build/gnulib
 	app-build/m4
 	app-build/texinfo
 	app-core/git
@@ -48,8 +49,8 @@ RESTRICT="!test? ( test )"
 src_prepare() {
 	default
 
-	rm -rf gnulib paxutils || die
-	cp -a "${BROOT}/usr/share/gnulib" gnulib || die
+	rm -rf paxutils || die
+	gl_stage_gnulib
 	cp -a "${WORKDIR}/paxutils-${PAXUTILS_SNAPSHOT}" paxutils || die
 
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}/gnulib" || die

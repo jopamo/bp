@@ -2,7 +2,7 @@
 
 SNAPSHOT=1744df928dd46a41f91c24282bc996518ee86aa0
 
-inherit flag-o-matic qa-policy
+inherit flag-o-matic qa-policy gl
 
 DESCRIPTION="Create, destroy, resize, check, copy partitions and file systems"
 HOMEPAGE="https://www.gnu.org/software/parted"
@@ -16,6 +16,8 @@ else
 	SRC_URI="https://github.com/1g4-mirror/parted/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 fi
+
+SRC_URI+=" ${GL_SRC_URI}"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -31,7 +33,6 @@ DEPEND="
 	readline? ( lib-core/readline virtual/curses )
 	nls? ( app-build/gettext )
 "
-BDEPEND="app-build/gnulib"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-3.2-po4a-mandir.patch
@@ -41,8 +42,7 @@ PATCHES=(
 )
 
 src_prepare() {
-	rm -rf gnulib
-	cp -r "${BROOT}"/usr/share/gnulib gnulib
+	gl_stage_gnulib
 	#cd gnulib
 	#git reset --hard 0a12fa9
 	#cd ..

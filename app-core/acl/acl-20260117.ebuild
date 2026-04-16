@@ -2,7 +2,7 @@
 
 SNAPSHOT=ae0448cb7d0d328440425d1ac347e9d6845e3f0e
 
-inherit flag-o-matic qa-policy
+inherit flag-o-matic qa-policy gl
 
 DESCRIPTION="access control list utilities, libraries and headers"
 HOMEPAGE="https://savannah.nongnu.org/projects/acl"
@@ -17,6 +17,8 @@ else
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 fi
 
+SRC_URI+=" ${GL_SRC_URI}"
+
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
@@ -29,7 +31,6 @@ COMMON_DEPEND="
 RDEPEND="${COMMON_DEPEND}"
 DEPEND="${RDEPEND}"
 BDEPEND="
-	app-build/gnulib
 	app-build/gettext
 	app-build/autoconf
 	app-build/automake
@@ -37,8 +38,7 @@ BDEPEND="
 "
 
 src_prepare() {
-	rm -rf gnulib || die
-	cp -r "${BROOT}"/usr/share/gnulib gnulib || die
+	gl_stage_gnulib
 
 	./autogen.sh || die
 

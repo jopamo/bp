@@ -1,0 +1,96 @@
+From 7619b39596c7f8391eb4ee35db3314ef9f5bbf7f Mon Sep 17 00:00:00 2001
+From: Codex <codex@local>
+Date: Thu, 16 Apr 2026 21:35:00 -0500
+Subject: [PATCH] nvidia: add of_gpio compat shim for linux 7.1
+
+Linux 7.1 removed <linux/of_gpio.h> and deprecated helper
+of_get_named_gpio(). NVIDIA 595.58.03 still includes this header and
+uses the helper in platform paths, causing build failure:
+
+  fatal error: linux/of_gpio.h: No such file or directory
+
+Keep old kernels unchanged, and add a fallback shim only when
+<linux/of_gpio.h> is absent.
+---
+ kernel-open/common/inc/nv-linux.h | 64 +++++++++++++++++++++++++++++-
+ 1 file changed, 63 insertions(+), 1 deletion(-)
+
+diff --git a/kernel-open/common/inc/nv-linux.h b/kernel-open/common/inc/nv-linux.h
+index d42383d..7166a52 100644
+--- a/kernel-open/common/inc/nv-linux.h
++++ b/kernel-open/common/inc/nv-linux.h
+@@ -1726,7 +1726,71 @@ typedef enum
+ #include <linux/reset.h>
+ #include <linux/dma-buf.h>
+ #include <linux/gpio.h>
++
++#if defined(__has_include)
++#if __has_include(<linux/of_gpio.h>)
+ #include <linux/of_gpio.h>
++#else
++#include <linux/of.h>
++#include <linux/gpio/driver.h>
++
++#if defined(CONFIG_OF_GPIO)
++static inline int nv_of_gpiochip_match_node_and_xlate(struct gpio_chip *chip,
++                                                       const void *data)
++{
++    const struct of_phandle_args *gpiospec = data;
++
++    return chip->fwnode &&
++           (to_of_node(chip->fwnode) == gpiospec->np) &&
++           chip->of_xlate &&
++           (chip->of_xlate(chip, gpiospec, NULL) >= 0);
++}
++
++static inline int of_get_named_gpio(const struct device_node *np,
++                                    const char *propname,
++                                    int index)
++{
++    struct of_phandle_args gpiospec;
++    struct gpio_device *gdev;
++    struct gpio_chip *chip;
++    int ret;
++
++    ret = of_parse_phandle_with_args_map(np, propname, "gpio", index,
++                                         &gpiospec);
++    if (ret)
++        return ret;
++
++    gdev = gpio_device_find(&gpiospec, nv_of_gpiochip_match_node_and_xlate);
++    if (!gdev)
++    {
++        of_node_put(gpiospec.np);
++        return -EPROBE_DEFER;
++    }
++
++    chip = gpio_device_get_chip(gdev);
++    ret = chip->of_xlate(chip, &gpiospec, NULL);
++
++    gpio_device_put(gdev);
++    of_node_put(gpiospec.np);
++
++    if (ret < 0)
++        return ret;
++
++    return chip->base + ret;
++}
++#else
++static inline int of_get_named_gpio(const struct device_node *np,
++                                    const char *propname,
++                                    int index)
++{
++    return -ENOSYS;
++}
++#endif /* CONFIG_OF_GPIO */
++#endif /* __has_include(<linux/of_gpio.h>) */
++#else
++#include <linux/of_gpio.h>
++#endif
++
+ #include <linux/of_device.h>
+ #include <linux/of_platform.h>
+ 
+-- 
+2.49.0
+

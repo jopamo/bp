@@ -52,7 +52,6 @@ LTO_FLAGS=""
 
 # Keep default empty so systems can opt in via feature profiles
 REPRO_FLAGS=""
-SOURCE_DATE_EPOCH="1"
 
 BASE_FLAGS="${OPT_FLAGS} ${GRAPHITE_FLAGS} ${SECURITY_FLAGS} ${POSITION_FLAGS} ${LTO_FLAGS}"
 CFLAGS="${MARCH} ${BASE_FLAGS} ${REPRO_FLAGS}"

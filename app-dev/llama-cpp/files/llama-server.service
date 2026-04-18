@@ -4,7 +4,6 @@ Description=Llama Server
 Documentation=man:llama-server(1)
 After=network-online.target
 Wants=network-online.target
-Requires=network.target
 
 [Service]
 Type=simple
@@ -14,11 +13,10 @@ WorkingDirectory=/opt/llm-models
 EnvironmentFile=/etc/llama-server/llama-server.env
 Environment=PATH=/opt/llm-models/.local/bin:/usr/local/bin:/usr/bin
 
-# use a shell so $VARS from EnvironmentFile expand
 ExecStart=/bin/bash -lc 'exec llama-server \
   --host 0.0.0.0 \
   --port 8080 \
-  --n-gpu-layers "$N_GPU_LAYERS" \
+  --gpu-layers "$GPU_LAYERS" \
   --threads "$THREADS" \
   --ctx-size "$CTX_SIZE" \
   --temp "$TEMP" \
@@ -33,7 +31,6 @@ KillMode=process
 Restart=on-failure
 RestartSec=3s
 
-# light hardening
 NoNewPrivileges=true
 ProtectSystem=full
 ProtectHome=true

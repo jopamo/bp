@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=1b76ff0767d01df72f692806ee5adee13c67ef88
+SNAPSHOT=5122f9f3c99fee366167c5de98b31546312921ab
 
 inherit flag-o-matic
 

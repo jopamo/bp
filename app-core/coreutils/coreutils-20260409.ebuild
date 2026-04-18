@@ -35,7 +35,9 @@ src_configure() {
 		-Dlibcap=$(usex libcap enabled disabled)
 		-Dxattr=$(usex xattr enabled disabled)
 		-Dsingle_binary=true
-		-Dno_install_programs=true,false,cp,mv,who,groups,kill,su,uptime
+		-Dno_install_programs=true,false,cp,mv,who,groups,kill,su,uptime,\
+basename,dirname,install,link,ln,mkdir,mkfifo,mknod,mktemp,pathchk,\
+readlink,realpath,rm,rmdir,touch,unlink
 		-Dinstall_programs=hostname
 		-Dlargefile=true
 		-Dstatic_executables=$(usex static true false)

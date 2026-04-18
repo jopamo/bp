@@ -102,7 +102,6 @@ case ":$PATH:" in
   *) export PATH="$PATH:$GOPATH/bin" ;;
 esac
 
-export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 export GPG_TTY="$(tty)"
 
 bind 'set bell-style none'
@@ -315,17 +314,6 @@ restore_ssh() {
   } || { log_error "Restore failed"; return 1; }
 }
 
-start_ssh_agent() {
-  log_info "Adding private keys to ssh-agent …"
-  local added=0
-  for key in ~/.ssh/*; do
-    [[ -f $key ]] || continue
-    case $(basename "$key") in authorized_keys|config|known_hosts|bkup|*.*) continue;; esac
-    ssh-add "$key" && (( added++ ))
-  done
-  log_ok "Added $added key(s) to agent"
-}
-
 get_kernel() {
   local tag=$1 url file
   [[ -z $tag ]] && { log_error "Usage: get_kernel <tag>"; return 1; }
@@ -481,4 +469,3 @@ alias et-trim='img_trim'
 alias et-webp='img_webp'
 alias et-thumb='img_thumb'
 alias et-resize='img_resize_long'
-

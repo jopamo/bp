@@ -179,7 +179,9 @@ src_compile() {
 src_install() {
 	cd gcc-build || die
 
-	emake DESTDIR="${ED}" install || die
+	# GCC's install rules are not parallel-safe; a parallel install can leave
+	# plugin headers missing (observed as config/i386/x86-64.h disappearing).
+	emake -j1 DESTDIR="${ED}" install || die
 
 	dobin "${FILESDIR}"/c89
 	dobin "${FILESDIR}"/c99

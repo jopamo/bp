@@ -83,10 +83,10 @@ src_install() {
 		systemd_dounit "${FILESDIR}/chronyd.service"
 	fi
 
-	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
-		g chrony 102 - -
-		u chrony 102:102 "added by portage for chrony" /var/lib/chrony /usr/bin/nologin
-	EOF
+		cat > "${T}"/"${PN}"-sysusers <<- EOF || die
+			g chrony 102 - -
+			u chrony 102:102 "Chrony daemon" /var/lib/chrony /usr/bin/nologin
+		EOF
 
 	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die
 		d /var/lib/chrony 0755 chrony chrony - -

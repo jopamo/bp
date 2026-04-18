@@ -87,10 +87,10 @@ src_install() {
 	#generate this outside of installation
 	rm -rf "${ED}"/etc/ssh/moduli || die
 
-	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
-		g sshd 22 - -
-		u sshd 22:22 "SSH drop priv user" /var/empty /usr/bin/nologin
-	EOF
+		cat > "${T}"/"${PN}"-sysusers <<- EOF || die
+			g sshd 22 - -
+			u sshd 22:22 "SSH privilege separation user" /var/empty /usr/bin/nologin
+		EOF
 
 	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die
 		d /var/empty 0755 root root

@@ -1,7 +1,5 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit user
-
 DESCRIPTION="small SSH 2 client/server designed for small memory environments"
 HOMEPAGE="https://matt.ucc.asn.au/dropbear/dropbear.html"
 SNAPSHOT=7d8ddaac351cc90deba9ddd09d9827b6f2ed4f04
@@ -13,6 +11,12 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="bsdpty pam shadow static syslog systemd zlib"
+
+src_prepare() {
+	default
+
+	sed -i 's/pam_start("sshd"/pam_start("dropbear"/' src/svr-authpam.c || die
+}
 
 src_configure() {
 	local myconf=(
@@ -40,9 +44,4 @@ src_install() {
 		insopts -m 0644
 		doins "${FILESDIR}/dropbear.service"
 	fi
-}
-
-pkg_preinst() {
-	enewgroup sshd 22
-	enewuser sshd 22 /usr/bin/nologin /var/empty
 }

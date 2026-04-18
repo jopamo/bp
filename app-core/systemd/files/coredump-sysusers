@@ -1,2 +1,2 @@
 g systemd-coredump 112 - -
-u! systemd-coredump 112:112 - /var/lib/systemd/coredump /usr/bin/nologin
+u! systemd-coredump 112:112 "systemd coredump handler" /var/lib/systemd/coredump /usr/bin/nologin

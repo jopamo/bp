@@ -84,7 +84,7 @@ src_install() {
 
 	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
 		g lighttpd 108 - -
-		u lighttpd 108:108 "light webserver" /var/lighttpd /usr/bin/false
+		u lighttpd 108:108 "lighttpd daemon" /var/lighttpd /usr/bin/false
 	EOF
 
 	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die

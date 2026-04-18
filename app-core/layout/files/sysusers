@@ -13,10 +13,8 @@ g input    97    - -
 g users   100    - -
 g man      44    - -
 g utmp    104    - -
-g uuidd   109    - -
 g nobody 65534   - -
 
-u  root   0:0  "Super User" /root /usr/bin/bash
-u  man    44:44 - / /usr/bin/nologin
-u  uuidd 109:109 "UUID generator helper daemon" /var/lib/libuuid /usr/bin/nologin
-u! nobody 65534:65534 "Kernel Overflow User" / /usr/bin/nologin
+u  root   0:0  root /root /usr/bin/bash
+u  man    44:44 "man user" / /usr/bin/nologin
+u! nobody 65534:65534 nobody / /usr/bin/nologin

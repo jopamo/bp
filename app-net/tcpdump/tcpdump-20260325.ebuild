@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit autotools user
+inherit autotools
 
 DESCRIPTION="A tool for network monitoring and data acquisition"
 HOMEPAGE="https://www.tcpdump.org/ https://github.com/the-tcpdump-group/tcpdump"
@@ -46,17 +46,20 @@ src_install() {
 	dobin tcpdump
 	doman tcpdump.1
 
+	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
+		g pcap 105 - -
+		u pcap 105:105 "packet capture user" /dev/null /usr/bin/false
+	EOF
+
+	newsysusers "${T}/${PN}-sysusers" "${PN}.conf"
+
 	if use suid ; then
-		fowners root:pcap /usr/bin/tcpdump
+		fowners 0:105 /usr/bin/tcpdump
 		fperms 4110 /usr/bin/tcpdump
 	fi
 }
 
 pkg_postinst() {
+	sysusers_process
 	use suid && elog "To let normal users run tcpdump, add them to the pcap group."
-}
-
-pkg_preinst() {
-	enewgroup pcap 105
-	enewuser pcap 105 /usr/bin/false /dev/null
 }

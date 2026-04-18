@@ -198,7 +198,7 @@ src_install() {
 	if use uuidd ; then
 		cat > "${ED}"/usr/lib/sysusers.d/uuidd.conf <<- EOF || die
 			g uuidd 109 - -
-			u uuidd 109:109 "UUID generator helper daemon" /var/lib/libuuid /usr/bin/nologin
+			u uuidd 109:109 "UUID generation daemon" /var/lib/libuuid /usr/bin/nologin
 		EOF
 	fi
 	rm "${ED}"/usr/share/man/man8/vigr.8 || die

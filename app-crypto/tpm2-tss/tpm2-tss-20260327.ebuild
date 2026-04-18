@@ -49,10 +49,10 @@ src_install() {
 	if ! use keep-la; then
 		find "${ED}" -name '*.la' -delete || die
 	fi
-	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
-		g tss 107 - -
-		u tss 107:107 - /var/lib/tpm2-tss /usr/bin/false
-	EOF
+		cat > "${T}"/"${PN}"-sysusers <<- EOF || die
+			g tss 107 - -
+			u tss 107:107 "TPM software stack user" /var/lib/tpm2-tss /usr/bin/false
+		EOF
 
 	newsysusers "${T}/${PN}-sysusers" "${PN}.conf"
 }

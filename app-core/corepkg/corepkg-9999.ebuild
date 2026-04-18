@@ -105,10 +105,10 @@ src_install() {
 	python_replicate_script "${scripts[@]}"
 	keepdir /etc/corepkg
 
-	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
-		g corepkg 103 - -
-		u corepkg 103:103 - /var/lib/corepkg/home /usr/bin/nologin
-	EOF
+		cat > "${T}"/"${PN}"-sysusers <<- EOF || die
+			g corepkg 103 - -
+			u corepkg 103:103 "Corepkg account" /var/lib/corepkg/home /usr/bin/nologin
+		EOF
 
 	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die
 		x /var/tmp/ccache

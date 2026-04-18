@@ -8,6 +8,7 @@ S=${WORKDIR}
 SLOT="0"
 
 KEYWORDS="amd64 arm64"
+RDEPEND="lib-core/pam"
 
 src_prepare() {
 	cp -rp "${FILESDIR}"/* "${S}"/

@@ -41,6 +41,11 @@ pkg_setup() {
 
 src_prepare() {
 	replace-flags "-D_FORTIFY_SOURCE=3" "-D_FORTIFY_SOURCE=2"
+	# Autotools substitutes DEFAULT_LUKS2_LOCK_PATH, not the Meson-only
+	# DEFAULT_LUKS2_LOCK_PATH_UNQUOTED token shipped in this snapshot.
+	sed -i \
+		-e 's/@DEFAULT_LUKS2_LOCK_PATH_UNQUOTED@/@DEFAULT_LUKS2_LOCK_PATH@/' \
+		scripts/cryptsetup.conf.in || die
 	default
 	eautoreconf
 }

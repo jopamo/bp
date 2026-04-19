@@ -38,7 +38,8 @@ RDEPEND="
 "
 BDEPEND="
 	${PYTHON_DEPS}
-	app-core/coreutils
+	app-core/busybox
+	app-core/bx
 	app-dev/pkgconf
 	test? ( app-net/curl )
 "

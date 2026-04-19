@@ -88,6 +88,46 @@ _qa-policy-path-skipped() {
 	return 1
 }
 
+_qa-policy-path-is-usr-etc() {
+	local rel=$1
+
+	case ${rel} in
+		/usr/etc|/usr/etc/*|*/usr/etc|*/usr/etc/*) return 0 ;;
+	esac
+	return 1
+}
+
+_qa-policy-assert-layout() {
+	qa-report-domain-begin layout
+
+	local file rel
+	local -i files_scanned=0 symlinks_scanned=0 usr_etc_entries=0
+
+	for file in "${QA_DISCOVER_ALL_FILES[@]}"; do
+		(( files_scanned += 1 ))
+		rel=$(_qa-policy-relpath "${file}")
+
+		if _qa-policy-path-is-usr-etc "${rel}"; then
+			(( usr_etc_entries += 1 ))
+			_qa-report-record-mode layout "${QA_POLICY_LAYOUT_MODE}" usr-etc-path "${rel}" "install path resolves under /usr/etc"
+		fi
+	done
+
+	for file in "${QA_DISCOVER_SYMLINKS[@]}"; do
+		(( symlinks_scanned += 1 ))
+		rel=$(_qa-policy-relpath "${file}")
+
+		if _qa-policy-path-is-usr-etc "${rel}"; then
+			(( usr_etc_entries += 1 ))
+			_qa-report-record-mode layout "${QA_POLICY_LAYOUT_MODE}" usr-etc-path "${rel}" "install path resolves under /usr/etc"
+		fi
+	done
+
+	qa-report-domain-stat layout files_scanned "${files_scanned}"
+	qa-report-domain-stat layout symlinks_scanned "${symlinks_scanned}"
+	qa-report-domain-stat layout usr_etc_entries "${usr_etc_entries}"
+}
+
 _qa-policy-apply-defaults() {
 	: "${QA_POLICY_ENABLE:=1}"
 	: "${QA_POLICY_PROFILE:=base}"
@@ -107,6 +147,7 @@ _qa-policy-apply-defaults() {
 			: "${QA_POLICY_SHEBANG_MODE:=fail}"
 			: "${QA_POLICY_PERMS_MODE:=fail}"
 			: "${QA_POLICY_SYMLINK_MODE:=fail}"
+			: "${QA_POLICY_LAYOUT_MODE:=fail}"
 			: "${QA_POLICY_RPATH_MODE:=fail}"
 			: "${QA_POLICY_PKGCONFIG_MODE:=warn}"
 			: "${QA_POLICY_ELF_MODE:=report}"
@@ -120,6 +161,7 @@ _qa-policy-apply-defaults() {
 			: "${QA_POLICY_SHEBANG_MODE:=fail}"
 			: "${QA_POLICY_PERMS_MODE:=fail}"
 			: "${QA_POLICY_SYMLINK_MODE:=fail}"
+			: "${QA_POLICY_LAYOUT_MODE:=fail}"
 			: "${QA_POLICY_RPATH_MODE:=fail}"
 			: "${QA_POLICY_PKGCONFIG_MODE:=fail}"
 			: "${QA_POLICY_ELF_MODE:=fail}"
@@ -133,6 +175,7 @@ _qa-policy-apply-defaults() {
 			: "${QA_POLICY_SHEBANG_MODE:=warn}"
 			: "${QA_POLICY_PERMS_MODE:=warn}"
 			: "${QA_POLICY_SYMLINK_MODE:=warn}"
+			: "${QA_POLICY_LAYOUT_MODE:=warn}"
 			: "${QA_POLICY_RPATH_MODE:=warn}"
 			: "${QA_POLICY_PKGCONFIG_MODE:=warn}"
 			: "${QA_POLICY_ELF_MODE:=report}"
@@ -232,6 +275,7 @@ _qa-policy-validate-config() {
 		QA_POLICY_SHEBANG_MODE \
 		QA_POLICY_PERMS_MODE \
 		QA_POLICY_SYMLINK_MODE \
+		QA_POLICY_LAYOUT_MODE \
 		QA_POLICY_RPATH_MODE \
 		QA_POLICY_PKGCONFIG_MODE \
 		QA_POLICY_ELF_MODE; do
@@ -530,6 +574,11 @@ _qa-policy-run-assert() {
 
 	if [[ ${QA_POLICY_SYMLINK_MODE} != off ]]; then
 		qa-symlink-assert
+		_qa-policy-maybe-finalize-early
+	fi
+
+	if [[ ${QA_POLICY_LAYOUT_MODE} != off ]]; then
+		_qa-policy-assert-layout
 		_qa-policy-maybe-finalize-early
 	fi
 

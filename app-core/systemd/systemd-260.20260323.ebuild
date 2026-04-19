@@ -25,7 +25,8 @@ REQUIRED_USE="elibc_musl? ( !gshadow )
 
 DEPEND="
     app-core/acl
-    app-core/coreutils
+    app-core/busybox
+    app-core/bx
     app-core/procps[kill(+)]
     app-core/util-linux
     lib-core/libcap

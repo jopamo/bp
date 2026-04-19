@@ -58,7 +58,7 @@ Signed-off-by: Matt Jolly <kangie@gentoo.org>
    MINICARGO_FLAGS += --manifest-overrides rustc-$(RUSTC_VERSION)-overrides.toml
  endif
  ifeq ($(RUSTC_VERSION),1.54.0)
-@@ -132,12 +143,12 @@ ifeq ($(RUSTC_VERSION),1.74.0)
+@@ -132,10 +143,10 @@ ifeq ($(RUSTC_VERSION),1.74.0)
    SRCDIR_RUSTC_DRIVER := compiler/rustc_driver
  endif
  
@@ -72,8 +72,6 @@ Signed-off-by: Matt Jolly <kangie@gentoo.org>
 -LLVM_CONFIG := $(RUSTCSRC)build/bin/llvm-config
 +LLVM_CONFIG := $(RUSTCSRC)/build/bin/llvm-config
  ifeq ($(shell uname -s || echo not),Darwin)
-  # /usr/bin/uname because uname might call coreutils
-  # which can make the arm64 uname called when
 @@ -205,6 +216,7 @@ bin/testrunner$(EXESUF):
  # rustc (with std/cargo) source download
  #

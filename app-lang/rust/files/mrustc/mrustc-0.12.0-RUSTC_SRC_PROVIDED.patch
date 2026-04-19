@@ -48,7 +48,7 @@ Subject: [PATCH] minicargo: support provided rustc source trees
    MINICARGO_FLAGS += --manifest-overrides rustc-$(RUSTC_VERSION)-overrides.toml
  endif
  ifeq ($(RUSTC_VERSION),1.54.0)
-@@ -139,15 +150,15 @@
+@@ -139,13 +150,13 @@
    SRCDIR_RUSTC_DRIVER := compiler/rustc_driver
  endif
  
@@ -66,8 +66,6 @@ Subject: [PATCH] minicargo: support provided rustc source trees
 -LLVM_CONFIG := $(RUSTCSRC)build/bin/llvm-config
 +LLVM_CONFIG := $(RUSTCSRC)/build/bin/llvm-config
  ifeq ($(shell uname -s || echo not),Darwin)
-  # /usr/bin/uname because uname might call coreutils
-  # which can make the arm64 uname called when
 @@ -218,6 +229,7 @@
  # rustc (with std/cargo) source download
  #

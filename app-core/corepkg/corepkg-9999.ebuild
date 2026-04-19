@@ -25,8 +25,6 @@ COMMON_DEPEND="
 	app-compression/tar
 	app-core/bash
 	app-core/findutils
-	app-core/install-xattr
-	app-core/sandbox
 	app-core/sed
 	app-crypto/blake3
 	app-crypto/gnupg

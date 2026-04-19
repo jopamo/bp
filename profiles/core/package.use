@@ -16,7 +16,6 @@ app-core/dbus tools
 app-core/debianutils installkernel
 app-core/git curl
 app-core/kmod tools
-app-core/sandbox nnp
 app-core/systemd logind
 app-core/vim xxd
 app-crypto/blake3 shared

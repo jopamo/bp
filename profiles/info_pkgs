@@ -8,7 +8,6 @@ app-build/libtool
 app-build/make
 app-lang/python
 app-lang/perl
-app-core/sandbox
 app-dev/ccache
 app-build/gcc
 app-dev/cmake

@@ -25,7 +25,8 @@ CDEPEND="
 RDEPEND="${CDEPEND}
 	app-compression/cpio
 	>=app-core/bash-4.0:0
-	app-core/coreutils[xattr(-)]
+	app-core/busybox
+	app-core/bx
 	>=app-core/util-linux-2.21
 
 	debug? ( app-dev/strace )

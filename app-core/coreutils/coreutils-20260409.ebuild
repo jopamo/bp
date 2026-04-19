@@ -38,7 +38,8 @@ src_configure() {
 		-Dno_install_programs=true,false,cp,mv,who,groups,kill,su,uptime,\
 basename,dirname,install,link,ln,mkdir,mkfifo,mknod,mktemp,pathchk,\
 readlink,realpath,rm,rmdir,touch,unlink,stat,shred,chmod,df,truncate,\
-chgrp,chown
+chgrp,chown,chroot,dd,dir,du,env,ls,nice,nohup,printenv,shuf,sync,\
+timeout,vdir
 		-Dinstall_programs=hostname
 		-Dlargefile=true
 		-Dstatic_executables=$(usex static true false)

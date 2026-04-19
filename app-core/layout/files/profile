@@ -9,7 +9,11 @@ export PAGER=${PAGER:-/usr/bin/less}
 
 umask 022
 
-source /etc/bash/bashrc
+if [ -n "${BASH_VERSION-}" ] && [ -r /etc/bash/bashrc ] ; then
+	case "$-" in
+		*i*) . /etc/bash/bashrc ;;
+	esac
+fi
 
 # Load profiles from /etc/profile.d
 if test -d /etc/profile.d/; then
@@ -18,5 +22,3 @@ if test -d /etc/profile.d/; then
 	done
 	unset profile
 fi
-
-unset sh

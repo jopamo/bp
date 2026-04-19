@@ -1,4 +1,0 @@
-#!/bin/sh
-
-. /etc/profile.env
-echo "PATH=${PATH}"

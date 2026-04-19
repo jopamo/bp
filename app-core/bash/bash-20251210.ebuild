@@ -66,6 +66,12 @@ src_configure() {
 src_install() {
 	default
 
+	insopts -m 0644
+	insinto /etc/bash
+	doins "${FILESDIR}/bashrc"
+	doins "${FILESDIR}/bash_logout"
+	dodir /etc/bash/bashrc.d
+
 	#compat symlink
 	dosym bash usr/bin/sh
 

@@ -13,11 +13,17 @@ KEYWORDS="amd64 arm64"
 IUSE="+block"
 
 src_install() {
-	insinto /etc
+	local hosts_file
 	if use block ; then
 		sed -i '/click.discord.com/d' "${S}"/hosts
-		doins "${S}"/hosts
+		hosts_file="${S}"/hosts
 	else
-		doins "${FILESDIR}"/hosts
+		hosts_file="${FILESDIR}"/hosts
 	fi
+
+	insinto /etc
+	doins "${hosts_file}"
+
+	insinto /usr/share/factory/etc
+	doins "${hosts_file}"
 }

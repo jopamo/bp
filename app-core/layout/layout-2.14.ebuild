@@ -11,9 +11,12 @@ S=${WORKDIR}
 
 KEYWORDS="amd64 arm64"
 
-IUSE="ipv6 router +server systemd user-namespaces xdp"
+IUSE="ipv6 router +server user-namespaces"
 
-DEPEND="app-core/hosts"
+DEPEND="
+	app-core/bash
+	app-core/hosts
+"
 
 src_prepare() {
 	cp -rp "${FILESDIR}"/* "${S}"/ || die
@@ -106,13 +109,9 @@ src_install() {
 	keepdir /usr/local/lib
 	dosym -r /usr/local/lib /usr/local/lib64
 
-	dosym -r /tmp /usr/tmp
-
 	dosym -r /usr/bin /bin
 	#dosym -r /usr/bin /sbin
 	# legacy admin tree is collapsed into /usr/bin
-
-	keepdir /usr/local/lib
 
 	newsysusers sysusers 1g4.conf
 	newtmpfiles tmpfiles 1g4.conf

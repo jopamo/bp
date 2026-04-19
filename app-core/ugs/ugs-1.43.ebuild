@@ -12,22 +12,9 @@ KEYWORDS="amd64 arm64"
 IUSE="video"
 
 src_install() {
-	# Bash config scripts (from files/bashrc/)
+	# Optional bash helper fragments
 	insinto /etc/bash/bashrc.d
 	doins "${FILESDIR}/bashrc/eth.sh"
-
-	insinto /etc/bash
-	doins "${FILESDIR}/bash_logout"
-	doins "${FILESDIR}/bashrc/bashrc"
-
-	# Inputrc is not shown in your tree, add if present
-	if [[ -f "${FILESDIR}/inputrc" ]]; then
-		insopts -m 0644
-		insinto /etc
-		doins "${FILESDIR}/inputrc"
-		insinto /usr/share/factory/etc
-		doins "${FILESDIR}/inputrc"
-	fi
 
 	local bin_utils=(
 		dslam

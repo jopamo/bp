@@ -34,7 +34,6 @@ CDEPEND="
 RDEPEND="${CDEPEND}"
 
 DEPEND="${CDEPEND}
-!!<app-core/sandbox-2.0
 app-build/bison
 app-build/flex
 nls? ( app-build/gettext )

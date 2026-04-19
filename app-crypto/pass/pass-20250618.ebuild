@@ -16,7 +16,7 @@ src_install() {
 	emake install \
 		DESTDIR="${D}" \
 		PREFIX="${EPREFIX}/usr" \
-		BASHCOMPDIR="/usr/etc/bash_completion.d" \
+		BASHCOMPDIR="${EPREFIX}/usr/share/bash-completion/completions" \
 		WITH_BASHCOMP=yes \
 		WITH_ZSHCOMP=yes \
 		WITH_FISHCOMP=yes

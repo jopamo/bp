@@ -21,7 +21,6 @@ REQUIRED_USE="elibc_musl? ( !gshadow )"
 DEPEND="
     app-build/gettext
     app-core/acl
-    app-core/busybox
     app-core/bx
     app-core/procps[kill(+)]
     app-core/util-linux

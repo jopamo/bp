@@ -8,5 +8,5 @@ IUSE="systemd"
 
 RDEPEND="
 	systemd? ( app-core/systemd )
-	!systemd? ( app-core/busybox )
+	!systemd? ( app-core/bx )
 "

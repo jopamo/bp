@@ -25,7 +25,6 @@ CDEPEND="
 RDEPEND="${CDEPEND}
 	app-compression/cpio
 	>=app-core/bash-4.0:0
-	app-core/busybox
 	app-core/bx
 	>=app-core/util-linux-2.21
 

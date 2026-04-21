@@ -132,11 +132,11 @@ sysusers_process() {
 		return
 	fi
 
-	# prefer the systemd implementation, fall back to busybox sysusers if present
+	# prefer the systemd implementation, fall back to a compatible sysusers helper if present
 	if type systemd-sysusers &>/dev/null; then
 		systemd-sysusers           # no arguments → process the whole directory
 	elif type sysusers &>/dev/null; then
-		sysusers                   # busybox or compatible helper
+		sysusers
 	fi
 
 	[[ $? -eq 0 ]] || ewarn "The sysusers processor exited with a non-zero exit code"

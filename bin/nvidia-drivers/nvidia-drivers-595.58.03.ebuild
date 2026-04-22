@@ -17,7 +17,8 @@ SRC_URI="
 LICENSE="GPL-2 NVIDIA-r2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE+=" driver kms static-libs uvm wayland X"
+IUSE+=" driver kernel-open kms static-libs uvm wayland X"
+REQUIRED_USE="kernel-open? ( driver )"
 
 S="${WORKDIR}"
 
@@ -81,15 +82,23 @@ nvidia_use_graphics() {
     use X || use wayland
 }
 
+nvidia_kernel_module_dir() {
+    if use kernel-open; then
+        echo "${S}/kernel-open"
+    else
+        echo "${S}/kernel"
+    fi
+}
+
 src_prepare() {
     NV_DOC="${S}"
     NV_OBJ="${S}"
-    NV_SRC="${S}/kernel-open"
+    NV_SRC="$(nvidia_kernel_module_dir)"
     NV_MAN="${S}"
     NV_X11="${S}"
     NV_SOVER=${PV}
 
-    local man_file
+    local man_file patch prepared_patch
     for man_file in "${NV_MAN}"/*1.gz; do
         gunzip "$man_file" || die
     done
@@ -105,7 +114,17 @@ src_prepare() {
         sed -i -e 's:libGLX_nvidia.so.0:libEGL_nvidia.so.0:g' nvidia_icd.json || die
     fi
 
-    eapply "${FILESDIR}"/00*.patch
+    for patch in "${FILESDIR}"/00*.patch; do
+        [[ -e ${patch} ]] || continue
+
+        if use kernel-open; then
+            eapply "${patch}"
+        else
+            prepared_patch="${T}/${patch##*/}"
+            sed 's#kernel-open/#kernel/#g' "${patch}" > "${prepared_patch}" || die
+            eapply "${prepared_patch}"
+        fi
+    done
 }
 
 src_compile() {
@@ -113,15 +132,18 @@ src_compile() {
 	qa-policy-configure
 
     if use driver; then
-        cd "${NV_SRC}" || die "Failed to cd to kernel source dir"
+        local nv_src
+        nv_src="$(nvidia_kernel_module_dir)"
+
+        cd "${nv_src}" || die "Failed to cd to kernel source dir"
 
         local modlist=()
 
-        modlist+=( "nvidia=video:${S}/kernel-open" )
-        use uvm && modlist+=( "nvidia-uvm=video:${S}/kernel-open" )
+        modlist+=( "nvidia=video:${nv_src}" )
+        use uvm && modlist+=( "nvidia-uvm=video:${nv_src}" )
         use kms && modlist+=(
-            "nvidia-modeset=video:${S}/kernel-open"
-            "nvidia-drm=video:${S}/kernel-open"
+            "nvidia-modeset=video:${nv_src}"
+            "nvidia-drm=video:${nv_src}"
         )
 
         local modargs=(
@@ -165,10 +187,23 @@ src_install() {
     cd "${WORKDIR}" || die
 
     if use driver; then
+        local nvidia_conf="${T}/nvidia.conf"
+
         kernel-mod_src_install
 
+        cp "${FILESDIR}"/nvidia-169.07 "${nvidia_conf}" || die
+        if use kernel-open; then
+            sed -i \
+                -e 's:@NVIDIA_GSP_LINE@:# kernel-open selected; leave GSP firmware at upstream default:g' \
+                "${nvidia_conf}" || die
+        else
+            sed -i \
+                -e 's:@NVIDIA_GSP_LINE@:options nvidia NVreg_EnableGpuFirmware=0:g' \
+                "${nvidia_conf}" || die
+        fi
+
         insinto /etc/modprobe.d
-        newins "${FILESDIR}"/nvidia-169.07 nvidia.conf
+        newins "${nvidia_conf}" nvidia.conf
         doins "${FILESDIR}"/nvidia-rmmod.conf
 
         exeinto /usr/lib/udev

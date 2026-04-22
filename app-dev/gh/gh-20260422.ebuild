@@ -1,10 +1,14 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit flag-o-matic go-module git-r3
+SNAPSHOT=6fffc2e66ae990a5f01697c6f52b9ff7190be32f
+SHORT=${SNAPSHOT:0:9}
+
+inherit flag-o-matic go-module
 
 DESCRIPTION="GitHub CLI"
 HOMEPAGE="https://github.com/cli/cli"
-EGIT_REPO_URI="https://github.com/cli/cli"
+SRC_URI="https://github.com/cli/cli/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/cli-${SNAPSHOT}"
 
 LICENSE="MIT Apache-2.0 BSD BSD-2 MPL-2.0"
 SLOT="0"
@@ -13,13 +17,9 @@ BDEPEND+=" >=app-lang/go-1.26.20260305:="
 
 RESTRICT="test"
 
-src_unpack() {
-	git-r3_src_unpack
-	go-module_live_vendor
-}
-
 src_compile() {
-	[[ ${PV} == *9999 ]] || export GH_VERSION="v${PV}"
+	export GH_VERSION="snapshot-${PV}-${SHORT}"
+
 	filter-flags "-flto*"
 	filter-flags "-ggdb3"
 	unset LDFLAGS

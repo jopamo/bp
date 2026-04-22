@@ -1,4 +1,4 @@
-# NVIDIA drivers support
+# NVIDIA drivers support (PACKAGE)
 alias char-major-195 nvidia
 alias /dev/nvidiactl char-major-195
 
@@ -12,6 +12,9 @@ options nvidia \
     NVreg_DeviceFileGID=VIDEOGID \
     NVreg_DeviceFileMode=0660 \
     NVreg_ModifyDeviceFiles=1
+
+# GSP firmware policy is set at install time.
+@NVIDIA_GSP_LINE@
 
 # enable DRM KMS and fbdev handoff
 options nvidia-drm modeset=1 fbdev=1

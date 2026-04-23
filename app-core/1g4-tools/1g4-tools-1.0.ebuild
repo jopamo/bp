@@ -14,7 +14,6 @@ RDEPEND="
 app-build/gdb
 app-build/llvm
 app-core/lsof
-app-core/sudo
 app-core/tmux
 app-crypto/certbot
 app-crypto/pass

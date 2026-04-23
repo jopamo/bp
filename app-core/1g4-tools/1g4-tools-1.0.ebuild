@@ -55,7 +55,6 @@ app-net/nftables
 app-net/nmap
 app-net/socat
 app-net/tcpdump
-app-net/traceroute
 app-server/lighttpd
 app-util/lshw
 app-var/hdparm

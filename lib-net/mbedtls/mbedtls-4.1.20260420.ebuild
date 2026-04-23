@@ -21,8 +21,6 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="dev-python/jsonschema"
-
 src_prepare() {
 	rm -rf "${S}/framework" "${S}/tf-psa-crypto" || die
 	mv "${WORKDIR}/mbedtls-framework-${FRAMEWORK_SNAPSHOT}" "${S}/framework" || die

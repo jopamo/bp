@@ -8,7 +8,7 @@ DESCRIPTION="Extended attributes tools"
 HOMEPAGE="https://savannah.nongnu.org/projects/attr"
 
 if [[ ${PV} == *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/1g4-mirror/attrs"
+	EGIT_REPO_URI="https://github.com/1g4-mirror/attr"
 	inherit git-r3
 	EGIT_COMMIT="${SNAPSHOT}"
 	EGIT_SUBMODULES=()

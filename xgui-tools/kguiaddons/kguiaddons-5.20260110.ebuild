@@ -19,6 +19,7 @@ IUSE="wayland"
 DEPEND="
 	xgui-lib/qtbase:5
 	xgui-lib/qtx11extras:5
+	xgui-tools/extra-cmake-modules
 	wayland? ( xgui-lib/qtwayland:5 )
 "
 

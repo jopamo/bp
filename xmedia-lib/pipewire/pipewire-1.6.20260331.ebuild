@@ -14,7 +14,7 @@ LICENSE="MIT LGPL-2.1+ GPL-2"
 SLOT="0"
 KEYWORDS="arm64 amd64"
 
-IUSE="bluez dbus echo-cancel extra readline ssl systemd test udev"
+IUSE="bluez dbus echo-cancel +extra readline ssl systemd test udev"
 
 RESTRICT="!test? ( test )"
 

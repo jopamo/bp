@@ -57,6 +57,10 @@ pkg_setup() {
 }
 
 src_configure() {
+	# gcc-15 can ICE in spa/plugins/bluez5/midi-node.c during LTO
+	# (RTL pass: cse_local). Disable LTO for stability.
+	filter-lto
+
 	filter-flags -fno-semantic-interposition
 
 	local emesonargs=(

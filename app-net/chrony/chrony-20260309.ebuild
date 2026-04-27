@@ -20,7 +20,6 @@ QA_CONFIG_IMPL_DECL_SKIP=(
 
 DEPEND="
 	nettle? ( lib-core/nettle )
-	lib-net/gnutls
 	app-compression/zstd
 	caps? ( lib-core/libcap )
 	lib-core/libseccomp

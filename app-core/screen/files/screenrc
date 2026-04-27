@@ -1,27 +1,30 @@
 activity "activity in %n"
-altscreen on # restore window contents after "vim", etc.
+altscreen on
 attrcolor b ".I"
 autodetach on
-defbce "on"
+defbce on
 defc1 off
 defencoding utf8
-defflow off # turn off stupid flow-control (also see: stty -ixon in ~/.zshrc)
+defflow off
 defhstatus "screen ^E (^Et) | $USER@^EH"
 defmonitor on
 defnonblock 1
 defscrollback 100000
 defutf8 on
 hardstatus off
-ignorecase on # for searches
+ignorecase on
 msgwait 3
 nethack off
+startup_message off
+vbell off
+vbell_msg ""
 setenv DISPLAY ':0'
 shell -${SHELL}
 shelltitle "$ |bash"
-startup_message off
 term screen-256color
+truecolor on
 termcapinfo xterm* 'hs:ts=\E]0;:fs=\007:ds=\E]0;\007'
 termcapinfo xterm* ti@:te@
-truecolor on
-vbell off
-vbell_msg ""
+mousetrack off
+termcapinfo * Km@
+termcapinfo * XM@

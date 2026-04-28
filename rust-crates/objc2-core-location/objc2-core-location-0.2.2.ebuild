@@ -1,0 +1,51 @@
+# lockstep-managed: cargo-crate
+EAPI=8
+
+CRATE_NAME="objc2-core-location"
+CRATE_VERSION="0.2.2"
+CRATE_CHECKSUM="000cfee34e683244f284252ee206a27953279d370e309649dc3ee317b37e5781"
+CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
+CRATE_SOURCE_KIND="registry"
+
+inherit cargo-crate
+
+DESCRIPTION="Bindings to the CoreLocation framework"
+HOMEPAGE="https://github.com/madsmtm/objc2"
+LICENSE="MIT"
+SLOT="0/${PV}"
+KEYWORDS="~amd64"
+
+CARGO_CRATE_FEATURES=(
+	"CLAvailability"
+	"CLBackgroundActivitySession"
+	"CLBeaconIdentityCondition"
+	"CLBeaconIdentityConstraint"
+	"CLBeaconRegion"
+	"CLCircularGeographicCondition"
+	"CLCircularRegion"
+	"CLCondition"
+	"CLError"
+	"CLErrorDomain"
+	"CLGeocoder"
+	"CLHeading"
+	"CLLocation"
+	"CLLocationManager"
+	"CLLocationManagerDelegate"
+	"CLLocationManager_CLVisitExtensions"
+	"CLLocationPushServiceError"
+	"CLLocationPushServiceExtension"
+	"CLLocationUpdater"
+	"CLMonitor"
+	"CLMonitorConfiguration"
+	"CLMonitoringEvent"
+	"CLMonitoringRecord"
+	"CLPlacemark"
+	"CLRegion"
+	"CLVisit"
+	"all"
+	"alloc"
+	"block2"
+	"default"
+	"objc2-contacts"
+	"std"
+)

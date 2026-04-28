@@ -1,0 +1,52 @@
+# lockstep-managed: cargo-crate
+EAPI=8
+
+CRATE_NAME="rusqlite"
+CRATE_VERSION="0.34.0"
+CRATE_CHECKSUM="37e34486da88d8e051c7c0e23c3f15fd806ea8546260aa2fec247e97242ec143"
+CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
+CRATE_SOURCE_KIND="registry"
+
+inherit cargo-crate
+
+DESCRIPTION="Ergonomic wrapper for SQLite"
+HOMEPAGE="https://github.com/rusqlite/rusqlite"
+LICENSE="MIT"
+SLOT="0/${PV}"
+KEYWORDS="~amd64"
+
+CARGO_CRATE_FEATURES=(
+	"array"
+	"backup"
+	"blob"
+	"buildtime_bindgen"
+	"bundled"
+	"bundled-full"
+	"bundled-sqlcipher"
+	"bundled-sqlcipher-vendored-openssl"
+	"bundled-windows"
+	"collation"
+	"column_decltype"
+	"csvtab"
+	"extra_check"
+	"functions"
+	"hooks"
+	"i128_blob"
+	"in_gecko"
+	"limits"
+	"load_extension"
+	"loadable_extension"
+	"modern-full"
+	"modern_sqlite"
+	"preupdate_hook"
+	"serialize"
+	"series"
+	"session"
+	"sqlcipher"
+	"trace"
+	"unlock_notify"
+	"vtab"
+	"wasm32-wasi-vfs"
+	"window"
+	"with-asan"
+)

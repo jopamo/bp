@@ -13,7 +13,7 @@ DESCRIPTION="Floating point approximate comparison traits"
 HOMEPAGE="https://github.com/mikedilger/float-cmp"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

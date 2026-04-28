@@ -13,4 +13,4 @@ DESCRIPTION="Advisory cross-platform lock on a file using a file descriptor to i
 HOMEPAGE="https://github.com/yoshuawuyts/fd-lock"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

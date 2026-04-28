@@ -13,4 +13,4 @@ DESCRIPTION="A tiny utility to help save you a lot of effort with long winded `#
 HOMEPAGE="https://github.com/katharostech/cfg_aliases"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

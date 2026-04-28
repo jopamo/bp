@@ -13,4 +13,4 @@ DESCRIPTION="Histogram-based sampler for recording and analyzing event loop dela
 HOMEPAGE="https://crates.io/crates/tokio-eld"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

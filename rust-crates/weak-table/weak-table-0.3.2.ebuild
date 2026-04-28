@@ -13,7 +13,7 @@ DESCRIPTION="Weak hash maps and sets"
 HOMEPAGE="https://github.com/tov/weak-table-rs"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

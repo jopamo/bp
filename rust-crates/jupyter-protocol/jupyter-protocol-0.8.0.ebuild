@@ -13,4 +13,4 @@ DESCRIPTION="Jupyter messaging structures and traits for jupyter clients and ser
 HOMEPAGE="https://github.com/runtimed/runtimed"
 LICENSE="BSD-3-Clause"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

@@ -13,7 +13,7 @@ DESCRIPTION="Concurrent multi-producer multi-consumer queue"
 HOMEPAGE="https://github.com/smol-rs/concurrent-queue"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

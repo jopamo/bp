@@ -13,4 +13,4 @@ DESCRIPTION="WinAPI wrapper that provides some basic simple abstractions around 
 HOMEPAGE="https://github.com/crossterm-rs/crossterm-winapi"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

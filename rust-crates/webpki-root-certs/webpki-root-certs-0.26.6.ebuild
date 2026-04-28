@@ -13,4 +13,4 @@ DESCRIPTION="Mozilla trusted certificate authorities in self-signed X.509 format
 HOMEPAGE="https://github.com/rustls/webpki-roots"
 LICENSE="MPL-2.0"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

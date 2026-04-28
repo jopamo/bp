@@ -13,7 +13,7 @@ DESCRIPTION="The most simple way to add colors in your terminal"
 HOMEPAGE="https://github.com/mackwic/colored"
 LICENSE="MPL-2.0"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"no-color"

@@ -13,7 +13,7 @@ DESCRIPTION="Library to support the reading and writing of zip files."
 HOMEPAGE="https://github.com/zip-rs/zip2.git"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"_all-features"

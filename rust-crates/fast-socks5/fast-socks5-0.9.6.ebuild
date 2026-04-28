@@ -13,7 +13,7 @@ DESCRIPTION="Fast SOCKS5 client/server implementation written in Rust async/.awa
 HOMEPAGE="https://github.com/dizda/fast-socks5"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

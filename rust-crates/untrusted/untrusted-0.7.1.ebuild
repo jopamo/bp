@@ -13,4 +13,4 @@ DESCRIPTION="Safe, fast, zero-panic, zero-crashing, zero-allocation parsing of u
 HOMEPAGE="https://github.com/briansmith/untrusted"
 LICENSE="ISC"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

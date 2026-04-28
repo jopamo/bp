@@ -13,4 +13,4 @@ DESCRIPTION="A memory efficient string type that transparently stores strings on
 HOMEPAGE="https://github.com/ParkMyCar/compact_str"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

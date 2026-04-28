@@ -13,7 +13,7 @@ DESCRIPTION="NodeJS N-API raw binding"
 HOMEPAGE="https://github.com/napi-rs/napi-rs"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"experimental"

@@ -13,7 +13,7 @@ DESCRIPTION="Fast, efficient, and predictable memory reclamation for concurrent 
 HOMEPAGE="https://github.com/ibraheemdev/seize"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

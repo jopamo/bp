@@ -13,4 +13,4 @@ DESCRIPTION="Conditional compiling options, `cfg` attribute parser and evaluator
 HOMEPAGE="https://github.com/rust-lang/rust-analyzer"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

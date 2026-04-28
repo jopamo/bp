@@ -13,4 +13,4 @@ DESCRIPTION="A library to find native dependencies in a vcpkg tree at build time
 HOMEPAGE="https://github.com/mcgoo/vcpkg-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

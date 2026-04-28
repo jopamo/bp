@@ -13,7 +13,7 @@ DESCRIPTION="A SIMD-accelerated Adler-32 hash algorithm implementation."
 HOMEPAGE="https://github.com/mcountryman/simd-adler32"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"const-generics"

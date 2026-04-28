@@ -13,7 +13,7 @@ DESCRIPTION="A build-time dependency for Cargo build scripts to assist in invoki
 HOMEPAGE="https://github.com/rust-lang/cc-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"jobserver"

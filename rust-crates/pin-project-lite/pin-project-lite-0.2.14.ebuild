@@ -13,4 +13,4 @@ DESCRIPTION="A lightweight version of pin-project written with declarative macro
 HOMEPAGE="https://github.com/taiki-e/pin-project-lite"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

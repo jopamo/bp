@@ -13,4 +13,4 @@ DESCRIPTION="Diff library with semantic cleanup, based on Google's diff-match-pa
 HOMEPAGE="https://github.com/dtolnay/dissimilar"
 LICENSE="Apache-2.0"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

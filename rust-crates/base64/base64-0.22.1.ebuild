@@ -13,7 +13,7 @@ DESCRIPTION="encodes and decodes base64 as bytes or utf8"
 HOMEPAGE="https://github.com/marshallpierce/rust-base64"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

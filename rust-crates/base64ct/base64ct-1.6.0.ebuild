@@ -13,7 +13,7 @@ DESCRIPTION="Pure Rust implementation of Base64 (RFC 4648) which avoids any usag
 HOMEPAGE="https://github.com/RustCrypto/formats/tree/master/base64ct"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

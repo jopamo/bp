@@ -13,7 +13,7 @@ DESCRIPTION="Graph data structure library. Provides graph types and graph algori
 HOMEPAGE="https://github.com/petgraph/petgraph"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"all"

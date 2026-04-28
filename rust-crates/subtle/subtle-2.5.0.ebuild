@@ -13,7 +13,7 @@ DESCRIPTION="Pure-Rust traits and utilities for constant-time cryptographic impl
 HOMEPAGE="https://dalek.rs/"
 LICENSE="BSD-3-Clause"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"const-generics"

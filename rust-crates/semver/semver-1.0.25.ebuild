@@ -13,7 +13,7 @@ DESCRIPTION="Parser and evaluator for Cargo's flavor of Semantic Versioning"
 HOMEPAGE="https://github.com/dtolnay/semver"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

@@ -13,7 +13,7 @@ DESCRIPTION="Tooling for working with `*.wit` and component files together."
 HOMEPAGE="https://github.com/bytecodealliance/wasm-tools/tree/main/crates/wit-component"
 LICENSE="|| ( Apache-2.0-with-LLVM-exception Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"dummy-module"

@@ -13,7 +13,7 @@ DESCRIPTION="derive macros for `std::io::{Read,Write}`, `tokio::io::{AsyncRead,A
 HOMEPAGE="https://github.com/mmastrac/derive-io"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

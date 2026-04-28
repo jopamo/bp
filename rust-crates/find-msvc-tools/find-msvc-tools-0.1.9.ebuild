@@ -13,4 +13,4 @@ DESCRIPTION="Find windows-specific tools, read MSVC versions from the registry a
 HOMEPAGE="https://github.com/rust-lang/cc-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

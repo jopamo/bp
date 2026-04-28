@@ -13,7 +13,7 @@ DESCRIPTION="A library for extending `Path` and `PathBuf` in order to parse the 
 HOMEPAGE="https://magiclen.org/path-dedot"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"lazy_static_cache"

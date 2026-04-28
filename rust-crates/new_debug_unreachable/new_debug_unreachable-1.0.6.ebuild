@@ -13,4 +13,4 @@ DESCRIPTION="panic in debug, intrinsics::unreachable() in release (fork of debug
 HOMEPAGE="https://github.com/mbrubeck/rust-debug-unreachable"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

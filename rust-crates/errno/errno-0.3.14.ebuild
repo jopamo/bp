@@ -13,7 +13,7 @@ DESCRIPTION="Cross-platform interface to the `errno` variable."
 HOMEPAGE="https://github.com/lambda-fairy/rust-errno"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

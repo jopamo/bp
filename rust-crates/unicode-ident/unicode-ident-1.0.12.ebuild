@@ -13,4 +13,4 @@ DESCRIPTION="Determine whether characters have the XID_Start or XID_Continue pro
 HOMEPAGE="https://github.com/dtolnay/unicode-ident"
 LICENSE="|| ( MIT Apache-2.0 ) Unicode-DFS-2016"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

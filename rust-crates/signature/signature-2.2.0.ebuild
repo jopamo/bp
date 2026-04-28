@@ -13,7 +13,7 @@ DESCRIPTION="Traits for cryptographic signature algorithms (e.g. ECDSA, Ed25519)
 HOMEPAGE="https://github.com/RustCrypto/traits/tree/master/signature"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

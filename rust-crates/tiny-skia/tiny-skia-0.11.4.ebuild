@@ -13,7 +13,7 @@ DESCRIPTION="A tiny Skia subset ported to Rust."
 HOMEPAGE="https://github.com/RazrFalcon/tiny-skia"
 LICENSE="BSD-3-Clause"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

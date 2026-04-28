@@ -13,7 +13,7 @@ DESCRIPTION="A non-cryptographic hash function using AES-NI for high performance
 HOMEPAGE="https://github.com/tkaitchuck/ahash"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"atomic-polyfill"

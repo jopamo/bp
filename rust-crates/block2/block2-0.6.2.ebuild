@@ -13,7 +13,7 @@ DESCRIPTION="Apple's C language extension of blocks"
 HOMEPAGE="https://github.com/madsmtm/objc2"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

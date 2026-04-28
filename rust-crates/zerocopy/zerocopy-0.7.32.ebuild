@@ -13,7 +13,7 @@ DESCRIPTION="Utilities for zero-copy parsing and serialization"
 HOMEPAGE="https://github.com/google/zerocopy"
 LICENSE="|| ( BSD-2-Clause Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"__internal_use_only_features_that_work_on_stable"

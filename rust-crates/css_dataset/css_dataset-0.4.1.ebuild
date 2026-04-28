@@ -13,7 +13,7 @@ DESCRIPTION="CSS dataset about functions, properties, etc."
 HOMEPAGE="https://github.com/g-plane/css_dataset"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"autoprefixable"

@@ -13,4 +13,4 @@ DESCRIPTION="Normalize Windows paths to the most compatible format, avoiding UNC
 HOMEPAGE="https://lib.rs/crates/dunce"
 LICENSE="|| ( CC0-1.0 MIT-0 Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

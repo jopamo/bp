@@ -13,7 +13,7 @@ DESCRIPTION="General purpose Elliptic Curve Cryptography (ECC) support, includin
 HOMEPAGE="https://github.com/RustCrypto/traits/tree/master/elliptic-curve"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

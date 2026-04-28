@@ -13,4 +13,4 @@ DESCRIPTION="Trait representing an asynchronous, streaming, HTTP request or resp
 HOMEPAGE="https://github.com/hyperium/http-body"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

@@ -13,7 +13,7 @@ DESCRIPTION="Fast and efficient ed25519 EdDSA key generations, signing, and veri
 HOMEPAGE="https://github.com/dalek-cryptography/curve25519-dalek"
 LICENSE="BSD-3-Clause"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

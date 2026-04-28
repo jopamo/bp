@@ -13,7 +13,7 @@ DESCRIPTION="A high performance, zero-copy URL router."
 HOMEPAGE="https://github.com/ibraheemdev/matchit"
 LICENSE="MIT BSD-3-Clause"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"__test_helpers"

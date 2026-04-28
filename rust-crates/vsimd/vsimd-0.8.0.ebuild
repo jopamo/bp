@@ -13,7 +13,7 @@ DESCRIPTION="SIMD utilities"
 HOMEPAGE="https://github.com/Nugine/simd"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

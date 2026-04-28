@@ -13,7 +13,7 @@ DESCRIPTION="Configurable, smart and fast CSS, SCSS, Sass and Less formatter."
 HOMEPAGE="https://github.com/g-plane/malva"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"config_serde"

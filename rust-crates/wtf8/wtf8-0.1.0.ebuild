@@ -13,4 +13,4 @@ DESCRIPTION="Implementation of the WTF-8 encoding. https://simonsapin.github.io/
 HOMEPAGE="https://github.com/SimonSapin/rust-wtf8"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

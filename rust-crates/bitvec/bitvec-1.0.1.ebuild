@@ -13,7 +13,7 @@ DESCRIPTION="Addresses memory by bits, for packed collections and bitfields"
 HOMEPAGE="https://bitvecto-rs.github.io/bitvec"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

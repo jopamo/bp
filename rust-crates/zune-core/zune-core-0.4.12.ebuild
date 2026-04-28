@@ -13,7 +13,7 @@ DESCRIPTION="Core utilities for image processing in the zune family of crates"
 HOMEPAGE="https://github.com/etemesi254/zune-image/tree/dev/zune-core"
 LICENSE="|| ( MIT Apache-2.0 Zlib )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"std"

@@ -13,7 +13,7 @@ DESCRIPTION="Automata construction and matching using regular expressions."
 HOMEPAGE="https://github.com/rust-lang/regex/tree/master/regex-automata"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

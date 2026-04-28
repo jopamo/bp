@@ -13,4 +13,4 @@ DESCRIPTION="Determine whether characters have the ID_Start or ID_Continue prope
 HOMEPAGE="https://github.com/Boshen/unicode-id-start"
 LICENSE="|| ( MIT Apache-2.0 ) Unicode-DFS-2016"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

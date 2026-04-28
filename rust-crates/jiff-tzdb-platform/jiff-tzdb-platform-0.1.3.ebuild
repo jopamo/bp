@@ -13,4 +13,4 @@ DESCRIPTION="The entire Time Zone Database embedded into your binary for specifi
 HOMEPAGE="https://github.com/BurntSushi/jiff/tree/master/crates/jiff-tzdb-platform"
 LICENSE="|| ( Unlicense MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

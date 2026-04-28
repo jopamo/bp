@@ -13,4 +13,4 @@ DESCRIPTION="Bindings around the platform's dynamic library loading primitives w
 HOMEPAGE="https://github.com/nagisa/rust_libloading/"
 LICENSE="ISC"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

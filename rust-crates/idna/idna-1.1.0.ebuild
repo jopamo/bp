@@ -13,7 +13,7 @@ DESCRIPTION="IDNA (Internationalizing Domain Names in Applications) and Punycode
 HOMEPAGE="https://github.com/servo/rust-url/"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

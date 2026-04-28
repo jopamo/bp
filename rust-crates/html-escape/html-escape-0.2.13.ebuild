@@ -13,7 +13,7 @@ DESCRIPTION="This library is for encoding/escaping special characters in HTML an
 HOMEPAGE="https://magiclen.org/html-escape"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

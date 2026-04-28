@@ -13,7 +13,7 @@ DESCRIPTION="LLVM target triple types"
 HOMEPAGE="https://github.com/bytecodealliance/target-lexicon"
 LICENSE="Apache-2.0-with-LLVM-exception"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"arch_zkasm"

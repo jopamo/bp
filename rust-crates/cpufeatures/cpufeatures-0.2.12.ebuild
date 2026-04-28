@@ -13,4 +13,4 @@ DESCRIPTION="Lightweight runtime CPU feature detection for aarch64, loongarch64,
 HOMEPAGE="https://github.com/RustCrypto/utils"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

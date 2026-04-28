@@ -13,7 +13,7 @@ DESCRIPTION="Resource Editor for Portable Executables"
 HOMEPAGE="https://github.com/Systemcluster/editpe"
 LICENSE="BSD-2-Clause"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

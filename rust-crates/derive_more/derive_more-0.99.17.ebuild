@@ -13,7 +13,7 @@ DESCRIPTION="Adds #[derive(x)] macros for more traits"
 HOMEPAGE="https://github.com/JelteF/derive_more"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"add"

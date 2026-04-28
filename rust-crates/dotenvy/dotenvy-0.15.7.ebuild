@@ -13,7 +13,7 @@ DESCRIPTION="A well-maintained fork of the dotenv crate"
 HOMEPAGE="https://github.com/allan2/dotenvy"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"cli"

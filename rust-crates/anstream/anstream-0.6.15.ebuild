@@ -13,7 +13,7 @@ DESCRIPTION="A simple cross platform library for writing colored text to a termi
 HOMEPAGE="https://github.com/rust-cli/anstyle"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"auto"

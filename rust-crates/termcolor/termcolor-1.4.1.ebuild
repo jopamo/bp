@@ -13,4 +13,4 @@ DESCRIPTION="A simple cross platform library for writing colored text to a termi
 HOMEPAGE="https://github.com/BurntSushi/termcolor"
 LICENSE="|| ( Unlicense MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

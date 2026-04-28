@@ -13,7 +13,7 @@ DESCRIPTION="DEFLATE compression and decompression library rewritten in Rust bas
 HOMEPAGE="https://github.com/Frommi/miniz_oxide/tree/master/miniz_oxide"
 LICENSE="|| ( MIT Zlib Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

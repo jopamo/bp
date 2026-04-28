@@ -13,7 +13,7 @@ DESCRIPTION="Provides core functionality for parsing #[test_case(...)] procedura
 HOMEPAGE="https://github.com/frondeus/test-case"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"with-regex"

@@ -13,7 +13,7 @@ DESCRIPTION="A blazingly fast, portable hash function with proven statistical gu
 HOMEPAGE="https://gitlab.redox-os.org/redox-os/seahash"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

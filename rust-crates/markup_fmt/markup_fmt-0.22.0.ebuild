@@ -13,7 +13,7 @@ DESCRIPTION="Configurable HTML, Vue, Svelte, Astro, Angular, Jinja, Twig, Nunjuc
 HOMEPAGE="https://github.com/g-plane/markup_fmt"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"config_serde"

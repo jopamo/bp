@@ -1,11 +1,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit libtool toolchain-funcs flag-o-matic qa-policy
+inherit autotools toolchain-funcs flag-o-matic qa-policy
 
 DESCRIPTION="Library for arbitrary-precision arithmetic on different type of numbers"
 HOMEPAGE="http://gmplib.org/"
-SRC_URI="https://gmplib.org/download/snapshot/gmp-next/gmp-$(ver_cut 1-2).0-$(ver_cut 3).tar.zst"
-S="${WORKDIR}/gmp-$(ver_cut 1-2).0-$(ver_cut 3)"
+
+SNAPSHOT=d778d5a4a1c033ac9c9fc3f98be6022baf93e24d
+SRC_URI="https://gitlab.com/pjo/gmp/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="|| ( LGPL-3+ GPL-2+ )"
 SLOT="0"
@@ -18,32 +20,15 @@ DEPEND="
 	app-compression/xz-utils
 "
 
-PATCHES=( "${FILESDIR}"/${PN}-6.1.0-noexecstack-detect.patch	)
-
-src_unpack() {
-	tar xvf "${DISTDIR}/gmp-$(ver_cut 1-2).0-$(ver_cut 3).tar.zst"
-}
-
-
 src_prepare() {
 	qa-policy-configure
 	use arm64 && filter-flags -flto*
 
 	default
-	elibtoolize
-
-	mv configure configure.wrapped || die
-	cat <<-\EOF > configure
-	#!/usr/bin/env sh
-	exec env ABI="${GMPABI}" "$0.wrapped" "$@"
-	EOF
-	# Patches to original configure might have lost the +x bit.
-	chmod a+rx configure{,.wrapped}
+	eautoreconf
 }
 
 src_configure() {
-	export GMPABI=64
-
 	tc-export CC
 
 	local myconf=(

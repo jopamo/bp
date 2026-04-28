@@ -13,4 +13,4 @@ DESCRIPTION="Expanding std::fs and std::io. Recursively copy folders with inform
 HOMEPAGE="https://github.com/webdesus/fs_extra"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

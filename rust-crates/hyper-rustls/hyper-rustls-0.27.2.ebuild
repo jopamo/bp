@@ -13,7 +13,7 @@ DESCRIPTION="Rustls+hyper integration for pure rust HTTPS"
 HOMEPAGE="https://github.com/rustls/hyper-rustls"
 LICENSE="|| ( Apache-2.0 ISC MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"aws-lc-rs"

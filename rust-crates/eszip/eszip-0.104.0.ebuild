@@ -13,7 +13,7 @@ DESCRIPTION="A utility that can download JavaScript and TypeScript module graphs
 HOMEPAGE="https://github.com/denoland/eszip"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

@@ -13,7 +13,7 @@ DESCRIPTION="DEFLATE compression and decompression exposed as Read/BufRead/Write
 HOMEPAGE="https://github.com/rust-lang/flate2-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"any_impl"

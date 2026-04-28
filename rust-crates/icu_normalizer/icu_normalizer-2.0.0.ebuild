@@ -13,7 +13,7 @@ DESCRIPTION="API for normalizing text into Unicode Normalization Forms"
 HOMEPAGE="https://icu4x.unicode.org"
 LICENSE="Unicode-3.0"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"compiled_data"

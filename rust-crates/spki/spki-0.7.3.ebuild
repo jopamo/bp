@@ -13,7 +13,7 @@ DESCRIPTION="X.509 Subject Public Key Info (RFC5280) describing public keys as w
 HOMEPAGE="https://github.com/RustCrypto/formats/tree/master/spki"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

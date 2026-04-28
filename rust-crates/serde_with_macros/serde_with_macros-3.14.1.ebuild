@@ -13,7 +13,7 @@ DESCRIPTION="proc-macro library for serde_with"
 HOMEPAGE="https://github.com/jonasbb/serde_with/"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"schemars_0_8"

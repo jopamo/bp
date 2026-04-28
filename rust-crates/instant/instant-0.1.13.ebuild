@@ -13,7 +13,7 @@ DESCRIPTION="Unmaintained, consider using web-time instead - A partial replaceme
 HOMEPAGE="https://github.com/sebcrozet/instant"
 LICENSE="BSD-3-Clause"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"inaccurate"

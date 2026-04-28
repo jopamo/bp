@@ -13,7 +13,7 @@ DESCRIPTION="Helper methods and macros for custom derives"
 HOMEPAGE="https://github.com/mystor/synstructure"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

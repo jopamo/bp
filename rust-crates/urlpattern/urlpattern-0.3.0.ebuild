@@ -13,4 +13,4 @@ DESCRIPTION="rust-urlpattern is a Rust implementation of the URLPattern standard
 HOMEPAGE="https://github.com/denoland/rust-urlpattern"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

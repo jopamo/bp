@@ -13,4 +13,4 @@ DESCRIPTION="An unopinionated library for obtaining configuration, data, cache, 
 HOMEPAGE="https://github.com/lunacookies/etcetera"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

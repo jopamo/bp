@@ -13,7 +13,7 @@ DESCRIPTION="OpenTelemetry integration for tracing"
 HOMEPAGE="https://github.com/tokio-rs/tracing-opentelemetry"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

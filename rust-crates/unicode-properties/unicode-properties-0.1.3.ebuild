@@ -13,7 +13,7 @@ DESCRIPTION="Query character Unicode properties according to UAX #44 and UTR #51
 HOMEPAGE="https://github.com/unicode-rs/unicode-properties"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

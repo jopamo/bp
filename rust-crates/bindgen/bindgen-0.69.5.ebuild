@@ -13,7 +13,7 @@ DESCRIPTION="Automatically generates Rust FFI bindings to C and C++ libraries."
 HOMEPAGE="https://rust-lang.github.io/rust-bindgen/"
 LICENSE="BSD-3-Clause"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"__cli"

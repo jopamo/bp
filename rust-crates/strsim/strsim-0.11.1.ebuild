@@ -13,4 +13,4 @@ DESCRIPTION="Implementations of string similarity metrics. Includes Hamming, Lev
 HOMEPAGE="https://github.com/rapidfuzz/strsim-rs"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

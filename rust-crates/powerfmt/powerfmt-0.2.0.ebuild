@@ -13,7 +13,7 @@ DESCRIPTION="`powerfmt` is a library that provides utilities for formatting valu
 HOMEPAGE="https://github.com/jhpratt/powerfmt"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

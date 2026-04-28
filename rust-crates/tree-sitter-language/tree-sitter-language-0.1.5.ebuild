@@ -13,4 +13,4 @@ DESCRIPTION="The tree-sitter Language type, used by the library and by language 
 HOMEPAGE="https://tree-sitter.github.io/tree-sitter"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

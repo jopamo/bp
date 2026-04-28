@@ -13,7 +13,7 @@ DESCRIPTION="Error code"
 HOMEPAGE="https://github.com/DoumanAsh/error-code"
 LICENSE="BSL-1.0"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"std"

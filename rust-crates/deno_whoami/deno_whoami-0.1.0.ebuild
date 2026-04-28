@@ -13,4 +13,4 @@ DESCRIPTION="This crate implements the username() API in Deno Node compat layer.
 HOMEPAGE="https://crates.io/crates/deno_whoami"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

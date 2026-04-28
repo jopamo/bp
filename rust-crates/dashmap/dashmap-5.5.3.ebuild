@@ -13,7 +13,7 @@ DESCRIPTION="Blazing fast concurrent HashMap for Rust."
 HOMEPAGE="https://github.com/xacrimon/dashmap"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"inline"

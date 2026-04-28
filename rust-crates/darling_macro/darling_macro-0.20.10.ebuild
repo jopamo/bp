@@ -13,4 +13,4 @@ DESCRIPTION="Internal support for a proc-macro library for reading attributes in
 HOMEPAGE="https://github.com/TedDriggs/darling"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

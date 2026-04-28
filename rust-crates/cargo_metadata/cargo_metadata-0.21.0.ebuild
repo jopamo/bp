@@ -13,7 +13,7 @@ DESCRIPTION="structured access to the output of `cargo metadata`"
 HOMEPAGE="https://github.com/oli-obk/cargo_metadata"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"builder"

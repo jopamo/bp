@@ -13,4 +13,4 @@ DESCRIPTION="Import libraries for the i686-pc-windows-gnu target. Please don't u
 HOMEPAGE="https://github.com/retep998/winapi-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

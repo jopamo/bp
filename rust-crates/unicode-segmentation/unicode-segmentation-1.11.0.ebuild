@@ -13,7 +13,7 @@ DESCRIPTION="This crate provides Grapheme Cluster, Word and Sentence boundaries 
 HOMEPAGE="https://github.com/unicode-rs/unicode-segmentation"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"no_std"

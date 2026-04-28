@@ -13,7 +13,7 @@ DESCRIPTION="Basic sourcemap handling for Rust"
 HOMEPAGE="https://github.com/getsentry/rust-sourcemap"
 LICENSE="BSD-3-Clause"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"ram_bundle"

@@ -13,7 +13,7 @@ DESCRIPTION="Trait and struct definitions for the ICU data provider"
 HOMEPAGE="https://icu4x.unicode.org"
 LICENSE="Unicode-3.0"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"bench"

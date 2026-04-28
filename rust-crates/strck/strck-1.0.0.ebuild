@@ -13,7 +13,7 @@ DESCRIPTION="Checked owned and borrowed strings"
 HOMEPAGE="https://github.com/QnnOkabayashi/strck"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"ident"

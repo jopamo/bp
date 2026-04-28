@@ -13,4 +13,4 @@ DESCRIPTION="Rustyline macros implementation of #[derive(Completer, Helper, Hint
 HOMEPAGE="https://github.com/kkawakam/rustyline"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

@@ -13,4 +13,4 @@ DESCRIPTION="Trait representing an asynchronous, request / response based, clien
 HOMEPAGE="https://github.com/tower-rs/tower"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

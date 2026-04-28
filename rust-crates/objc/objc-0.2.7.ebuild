@@ -13,7 +13,7 @@ DESCRIPTION="Objective-C Runtime bindings and wrapper for Rust."
 HOMEPAGE="http://github.com/SSheldon/rust-objc"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"exception"

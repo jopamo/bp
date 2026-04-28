@@ -13,7 +13,7 @@ DESCRIPTION="Rust implementation of CSS Syntax Level 3"
 HOMEPAGE="https://github.com/servo/rust-cssparser"
 LICENSE="MPL-2.0"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"bench"

@@ -13,4 +13,4 @@ DESCRIPTION="Takes an iterator over chars and returns a new iterator with all li
 HOMEPAGE="https://github.com/derekdreery/normalize-line-endings"
 LICENSE="Apache-2.0"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

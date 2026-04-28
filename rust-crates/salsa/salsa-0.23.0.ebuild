@@ -13,7 +13,7 @@ DESCRIPTION="A generic framework for on-demand, incrementalized computation (exp
 HOMEPAGE="https://github.com/salsa-rs/salsa"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

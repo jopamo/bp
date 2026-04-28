@@ -13,4 +13,4 @@ DESCRIPTION="Unsafe, direct bindings for Linux's perf_event_open system call, wi
 HOMEPAGE="https://github.com/jimblandy/perf-event-open-sys.git"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

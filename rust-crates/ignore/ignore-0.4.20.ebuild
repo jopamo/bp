@@ -13,7 +13,7 @@ DESCRIPTION="A fast library for efficiently matching ignore files such as `.giti
 HOMEPAGE="https://github.com/BurntSushi/ripgrep/tree/master/crates/ignore"
 LICENSE="|| ( Unlicense MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"simd-accel"

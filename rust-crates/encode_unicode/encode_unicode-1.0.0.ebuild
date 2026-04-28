@@ -13,7 +13,7 @@ DESCRIPTION="UTF-8 and UTF-16 character types, iterators and related methods for
 HOMEPAGE="https://github.com/tormol/encode_unicode"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

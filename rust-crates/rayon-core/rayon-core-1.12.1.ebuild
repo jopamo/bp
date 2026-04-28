@@ -13,7 +13,7 @@ DESCRIPTION="Core APIs for Rayon"
 HOMEPAGE="https://github.com/rayon-rs/rayon"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"web_spin_lock"

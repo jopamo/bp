@@ -13,4 +13,4 @@ DESCRIPTION="`num_conv` is a crate to convert between integer types without usin
 HOMEPAGE="https://github.com/jhpratt/num-conv"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

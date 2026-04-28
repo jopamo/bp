@@ -13,7 +13,7 @@ DESCRIPTION="Pure Rust implementation of Public-Key Cryptography Standards (PKCS
 HOMEPAGE="https://github.com/RustCrypto/formats/tree/master/pkcs5"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"3des"

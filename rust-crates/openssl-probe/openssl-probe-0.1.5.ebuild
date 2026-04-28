@@ -13,4 +13,4 @@ DESCRIPTION="Tool for helping to find SSL certificate locations on the system fo
 HOMEPAGE="https://github.com/alexcrichton/openssl-probe"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

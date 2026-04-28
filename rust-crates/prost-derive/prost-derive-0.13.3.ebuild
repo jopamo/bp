@@ -13,4 +13,4 @@ DESCRIPTION="Generate encoding and decoding implementations for Prost annotated 
 HOMEPAGE="https://github.com/tokio-rs/prost"
 LICENSE="Apache-2.0"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

@@ -13,7 +13,7 @@ DESCRIPTION="Colorize paths using the LS_COLORS environment variable"
 HOMEPAGE="https://github.com/sharkdp/lscolors"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

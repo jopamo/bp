@@ -13,7 +13,7 @@ DESCRIPTION="Helpful macros for working with enums and strings"
 HOMEPAGE="https://github.com/Peternator7/strum"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

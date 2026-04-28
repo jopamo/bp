@@ -13,4 +13,4 @@ DESCRIPTION="Catalog of CRC algorithms (generated from http://reveng.sourceforge
 HOMEPAGE="https://github.com/akhilles/crc-catalog.git"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

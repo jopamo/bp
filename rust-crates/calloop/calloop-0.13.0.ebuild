@@ -13,7 +13,7 @@ DESCRIPTION="A callback-based event loop"
 HOMEPAGE="https://github.com/Smithay/calloop"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"block_on"

@@ -13,4 +13,4 @@ DESCRIPTION="A stack growth library useful when implementing deeply recursive al
 HOMEPAGE="https://github.com/rust-lang/stacker"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

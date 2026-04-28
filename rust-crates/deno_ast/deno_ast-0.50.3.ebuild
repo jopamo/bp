@@ -13,7 +13,7 @@ DESCRIPTION="Source text parsing, lexing, and AST related functionality for Deno
 HOMEPAGE="https://deno.land/"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"bundler"

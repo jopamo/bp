@@ -13,4 +13,4 @@ DESCRIPTION="rustls-native-certs allows rustls to use the platform native certif
 HOMEPAGE="https://github.com/rustls/rustls-native-certs"
 LICENSE="|| ( Apache-2.0 ISC MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

@@ -13,7 +13,7 @@ DESCRIPTION="Securely clear secrets from memory with a simple trait built on sta
 HOMEPAGE="https://github.com/RustCrypto/utils/tree/master/zeroize"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"aarch64"

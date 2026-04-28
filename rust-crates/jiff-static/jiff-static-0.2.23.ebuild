@@ -13,7 +13,7 @@ DESCRIPTION="Create static TimeZone values for Jiff (useful in core-only environ
 HOMEPAGE="https://github.com/BurntSushi/jiff/tree/master/crates/jiff-static"
 LICENSE="|| ( Unlicense MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

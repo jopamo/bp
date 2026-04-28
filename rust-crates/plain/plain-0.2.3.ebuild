@@ -13,4 +13,4 @@ DESCRIPTION="A small Rust library that allows users to reinterpret data of certa
 HOMEPAGE="https://github.com/randomites/plain"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

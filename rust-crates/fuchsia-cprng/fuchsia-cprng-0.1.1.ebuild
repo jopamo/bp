@@ -13,4 +13,4 @@ DESCRIPTION="Rust crate for the Fuchsia cryptographically secure pseudorandom nu
 HOMEPAGE="https://fuchsia.googlesource.com/fuchsia/+/master/garnet/public/rust/fuchsia-cprng"
 LICENSE="non-standard"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

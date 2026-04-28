@@ -13,7 +13,7 @@ DESCRIPTION="Bindings to Core Foundation for macOS"
 HOMEPAGE="https://github.com/servo/core-foundation-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

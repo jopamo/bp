@@ -13,4 +13,4 @@ DESCRIPTION="Extension trait for full float functionality in `#[no_std]` backed 
 HOMEPAGE="https://github.com/robertbastian/core_maths"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

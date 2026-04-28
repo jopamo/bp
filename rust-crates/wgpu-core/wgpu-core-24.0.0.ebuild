@@ -13,7 +13,7 @@ DESCRIPTION="Core implementation logic of wgpu, the cross-platform, safe, pure-r
 HOMEPAGE="https://wgpu.rs/"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"api_log_info"

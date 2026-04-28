@@ -13,7 +13,7 @@ DESCRIPTION="Yet another string for Rust: zero-cost borrow and slicing, inline r
 HOMEPAGE="https://github.com/polazarus/hipstr"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"bstr"

@@ -13,4 +13,4 @@ DESCRIPTION="A library to run the pkg-config system tool at build time in order 
 HOMEPAGE="https://github.com/rust-lang/pkg-config-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

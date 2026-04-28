@@ -13,7 +13,7 @@ DESCRIPTION="TypeScript and JavaScript code formatter."
 HOMEPAGE="https://github.com/dprint/dprint-plugin-typescript"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"tracing"

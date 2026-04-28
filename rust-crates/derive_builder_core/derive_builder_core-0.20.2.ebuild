@@ -13,7 +13,7 @@ DESCRIPTION="Internal helper library for the derive_builder crate."
 HOMEPAGE="https://github.com/colin-kiegel/rust-derive-builder"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

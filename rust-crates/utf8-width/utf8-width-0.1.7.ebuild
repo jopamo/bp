@@ -13,4 +13,4 @@ DESCRIPTION="To determine the width of a UTF-8 character by providing its first 
 HOMEPAGE="https://magiclen.org/utf8-width"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

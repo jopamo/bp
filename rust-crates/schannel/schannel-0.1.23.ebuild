@@ -13,4 +13,4 @@ DESCRIPTION="Schannel bindings for rust, allowing SSL/TLS (e.g. https) without o
 HOMEPAGE="https://github.com/steffengy/schannel-rs"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

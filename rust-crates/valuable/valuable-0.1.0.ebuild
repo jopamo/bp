@@ -13,7 +13,7 @@ DESCRIPTION="Object-safe value inspection, used to pass un-typed structured data
 HOMEPAGE="https://github.com/tokio-rs/valuable"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

@@ -13,7 +13,7 @@ DESCRIPTION="Temporal in Rust is an implementation of the TC39 Temporal Builtin 
 HOMEPAGE="https://github.com/boa-dev/temporal"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"compiled_data"

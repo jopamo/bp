@@ -13,7 +13,7 @@ DESCRIPTION="Web PKI X.509 Certificate Verification."
 HOMEPAGE="https://github.com/rustls/webpki"
 LICENSE="ISC"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

@@ -13,4 +13,4 @@ DESCRIPTION="A Cargo library to handle compilation and inclusion of Windows reso
 HOMEPAGE="https://github.com/nabijaczleweli/rust-embed-resource"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

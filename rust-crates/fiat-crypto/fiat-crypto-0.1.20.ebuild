@@ -13,7 +13,7 @@ DESCRIPTION="Fiat-crypto generated Rust"
 HOMEPAGE="https://github.com/mit-plv/fiat-crypto"
 LICENSE="|| ( MIT Apache-2.0 BSD-1-Clause )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

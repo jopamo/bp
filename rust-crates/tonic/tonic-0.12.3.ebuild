@@ -13,7 +13,7 @@ DESCRIPTION="A gRPC over HTTP/2 implementation focused on high performance, inte
 HOMEPAGE="https://github.com/hyperium/tonic"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"channel"

@@ -13,7 +13,7 @@ DESCRIPTION="secp256k1 elliptic curve library written in pure Rust with support 
 HOMEPAGE="https://github.com/RustCrypto/elliptic-curves/tree/master/k256"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

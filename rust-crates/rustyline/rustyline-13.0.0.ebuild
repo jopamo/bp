@@ -13,7 +13,7 @@ DESCRIPTION="Rustyline, a readline implementation based on Antirez's Linenoise"
 HOMEPAGE="https://github.com/kkawakam/rustyline"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"case_insensitive_history_search"

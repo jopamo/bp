@@ -13,7 +13,7 @@ DESCRIPTION="get the IANA time zone for the current system"
 HOMEPAGE="https://github.com/strawlab/iana-time-zone"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"fallback"

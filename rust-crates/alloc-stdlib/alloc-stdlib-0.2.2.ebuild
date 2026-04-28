@@ -13,7 +13,7 @@ DESCRIPTION="A dynamic allocator example that may be used with the stdlib"
 HOMEPAGE="https://github.com/dropbox/rust-alloc-no-stdlib"
 LICENSE="BSD-3-Clause"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"unsafe"

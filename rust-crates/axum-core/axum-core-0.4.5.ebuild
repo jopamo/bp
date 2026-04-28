@@ -13,7 +13,7 @@ DESCRIPTION="Core types and traits for axum"
 HOMEPAGE="https://github.com/tokio-rs/axum"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"__private_docs"

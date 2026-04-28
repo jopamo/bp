@@ -13,7 +13,7 @@ DESCRIPTION="Shared utilities between Diplomat macros and code generation"
 HOMEPAGE="https://github.com/rust-diplomat/diplomat"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"hir"

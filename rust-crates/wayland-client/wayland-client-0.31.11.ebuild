@@ -13,4 +13,4 @@ DESCRIPTION="Bindings to the standard C implementation of the wayland protocol, 
 HOMEPAGE="https://github.com/smithay/wayland-rs"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

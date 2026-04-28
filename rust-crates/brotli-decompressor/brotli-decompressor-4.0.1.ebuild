@@ -13,7 +13,7 @@ DESCRIPTION="A brotli decompressor that with an interface avoiding the rust stdl
 HOMEPAGE="https://github.com/dropbox/rust-brotli-decompressor"
 LICENSE="|| ( BSD-3-Clause MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"benchmark"

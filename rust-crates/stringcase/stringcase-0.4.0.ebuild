@@ -13,4 +13,4 @@ DESCRIPTION="Converts string cases between camelCase, COBOL-CASE, kebab-case, an
 HOMEPAGE="https://github.com/sttk/stringcase-rust"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

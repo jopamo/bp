@@ -13,7 +13,7 @@ DESCRIPTION="Lightweight binding to DirectWrite."
 HOMEPAGE="https://github.com/servo/dwrote-rs"
 LICENSE="MPL-2.0"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

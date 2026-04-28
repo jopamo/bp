@@ -13,7 +13,7 @@ DESCRIPTION="Asynchronous TLS/SSL streams for Tokio using Rustls."
 HOMEPAGE="https://github.com/rustls/tokio-rustls"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"aws-lc-rs"

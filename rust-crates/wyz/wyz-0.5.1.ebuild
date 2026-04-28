@@ -13,7 +13,7 @@ DESCRIPTION="myrrlyn’s utility collection"
 HOMEPAGE="https://myrrlyn.net/crates/wyz"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

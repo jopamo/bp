@@ -13,7 +13,7 @@ DESCRIPTION="A simple and fast random number generator"
 HOMEPAGE="https://github.com/smol-rs/fastrand"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

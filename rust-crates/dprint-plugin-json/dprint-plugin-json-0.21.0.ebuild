@@ -13,7 +13,7 @@ DESCRIPTION="JSON formatter for dprint."
 HOMEPAGE="https://github.com/dprint/dprint-plugin-json"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"tracing"

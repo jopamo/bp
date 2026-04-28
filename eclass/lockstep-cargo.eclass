@@ -35,7 +35,7 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 		while IFS= read -r ref; do
 			ref=$(_lockstep_cargo_trim_ws "${ref}")
 			[[ -n ${ref} ]] || continue
-			atoms+=$'\n\t'"${ref}"
+			atoms+=$'\n\t='"${ref}"
 		done <<< "${CARGO_DEPS-}"
 
 		printf '%s\n' "${atoms}"

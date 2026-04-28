@@ -20,7 +20,7 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 
 	_lockstep_cargo_ref_version() {
 		local ref=${1#rust-crates/}
-		if [[ ${ref} =~ ^(.+)-([0-9].*)$ ]]; then
+		if [[ ${ref} =~ ^(.+)-([0-9]+(\.[0-9]+)+.*)$ ]]; then
 			printf '%s\n' "${BASH_REMATCH[2]}"
 			return
 		fi
@@ -30,7 +30,7 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 
 	_lockstep_cargo_ref_crate() {
 		local ref=${1#rust-crates/}
-		if [[ ${ref} =~ ^(.+)-([0-9].*)$ ]]; then
+		if [[ ${ref} =~ ^(.+)-([0-9]+(\.[0-9]+)+.*)$ ]]; then
 			printf '%s\n' "${BASH_REMATCH[1]}"
 			return
 		fi

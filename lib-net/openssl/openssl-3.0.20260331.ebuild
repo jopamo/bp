@@ -27,7 +27,7 @@ BDEPEND="
 	app-lang/perl
 	test? (
 		app-core/diffutils
-		app-util/bc
+		app-core/bx
 		app-core/procps
 	)"
 

@@ -41,7 +41,7 @@ DEPEND="
 
 BDEPEND="
 	app-dev/pkgconf
-	test? ( app-util/bc )
+	test? ( app-core/bx )
 	virtual/linux-sources
 "
 

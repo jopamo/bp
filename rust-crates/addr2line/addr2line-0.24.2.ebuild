@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="A cross-platform symbolication library written in Rust, using `gimli`"
+DESCRIPTION="A cross-platform symbolication library written in Rust, using \`gimli\`"
 HOMEPAGE="https://github.com/gimli-rs/addr2line"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"

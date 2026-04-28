@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Polyfill for `is_terminal` stdlib feature for use with older MSRVs"
+DESCRIPTION="Polyfill for \`is_terminal\` stdlib feature for use with older MSRVs"
 HOMEPAGE="https://github.com/polyfill-rs/is_terminal_polyfill"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

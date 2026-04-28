@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="implementation detail of the `flaky_test` macro"
+DESCRIPTION="implementation detail of the \`flaky_test\` macro"
 HOMEPAGE="https://github.com/denoland/flaky_test"
 LICENSE="MIT"
 SLOT="0/${PV}"

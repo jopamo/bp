@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Definition of the `#[wasm_bindgen]` attribute, an internal dependency"
+DESCRIPTION="Definition of the \`#[wasm_bindgen]\` attribute, an internal dependency"
 HOMEPAGE="https://wasm-bindgen.github.io/wasm-bindgen/"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

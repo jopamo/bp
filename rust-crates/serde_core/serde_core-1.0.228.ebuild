@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Serde traits only, with no support for derive -- use the `serde` crate instead"
+DESCRIPTION="Serde traits only, with no support for derive -- use the \`serde\` crate instead"
 HOMEPAGE="https://serde.rs"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

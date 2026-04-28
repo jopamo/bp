@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Implementation detail of the `pin-project` crate."
+DESCRIPTION="Implementation detail of the \`pin-project\` crate."
 HOMEPAGE="https://github.com/taiki-e/pin-project"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"

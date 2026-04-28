@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="A fast library for efficiently matching ignore files such as `.gitignore` against file paths."
+DESCRIPTION="A fast library for efficiently matching ignore files such as \`.gitignore\` against file paths."
 HOMEPAGE="https://github.com/BurntSushi/ripgrep/tree/master/crates/ignore"
 LICENSE="|| ( Unlicense MIT )"
 SLOT="0/${PV}"

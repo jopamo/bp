@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="ASCII-only equivalents to `char`, `str` and `String`."
+DESCRIPTION="ASCII-only equivalents to \`char\`, \`str\` and \`String\`."
 HOMEPAGE="https://github.com/tomprogrammer/rust-ascii"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"

@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Crate that exposes `core::arch` safely via `#[cfg()]`."
+DESCRIPTION="Crate that exposes \`core::arch\` safely via \`#[cfg()]\`."
 HOMEPAGE="https://github.com/Lokathor/safe_arch"
 LICENSE="|| ( Zlib Apache-2.0 MIT )"
 SLOT="0/${PV}"

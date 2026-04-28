@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Tooling for working with `*.wit` and component files together."
+DESCRIPTION="Tooling for working with \`*.wit\` and component files together."
 HOMEPAGE="https://github.com/bytecodealliance/wasm-tools/tree/main/crates/wit-component"
 LICENSE="|| ( Apache-2.0-with-LLVM-exception Apache-2.0 MIT )"
 SLOT="0/${PV}"

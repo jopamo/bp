@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="structured access to the output of `cargo metadata`"
+DESCRIPTION="structured access to the output of \`cargo metadata\`"
 HOMEPAGE="https://github.com/oli-obk/cargo_metadata"
 LICENSE="MIT"
 SLOT="0/${PV}"

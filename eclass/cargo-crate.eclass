@@ -12,15 +12,15 @@ if [[ -z ${_LOCKSTEP_CARGO_CRATE_ECLASS} ]]; then
 	CRATE_VERSION=${CRATE_VERSION:-${PV}}
 	CRATES="${CRATE_NAME}@${CRATE_VERSION}"
 	SRC_URI="https://crates.io/api/v1/crates/${CRATE_NAME}/${CRATE_VERSION}/download -> ${CRATE_NAME}-${CRATE_VERSION}.crate"
-	S="${WORKDIR}/${CRATE_NAME}-${CRATE_VERSION}"
+	S="${ECARGO_VENDOR}/${CRATE_NAME}-${CRATE_VERSION}"
 	LOCKSTEP_CARGO_CRATE_ROOT="/usr/share/lockstep/cargo-crates/${CRATE_NAME}/${CRATE_VERSION}"
 
 	cargo-crate_src_unpack() {
 		[[ -n ${CRATE_NAME-} ]] || die "cargo-crate.eclass requires CRATE_NAME"
 		[[ -n ${CRATE_CHECKSUM-} ]] || die "cargo-crate.eclass requires CRATE_CHECKSUM"
 
-		[[ -d ${S} ]] || default
 		_cargo_vendor_crates
+		[[ -d ${S} ]] || die "expected unpacked crate directory: ${S}"
 	}
 
 	cargo-crate_src_compile() {

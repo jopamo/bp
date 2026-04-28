@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="An implementation of `std::hash::Hasher` which does not hash at all."
+DESCRIPTION="An implementation of \`std::hash::Hasher\` which does not hash at all."
 HOMEPAGE="https://github.com/paritytech/nohash-hasher"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"

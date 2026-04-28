@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Extension trait for full float functionality in `#[no_std]` backed by `libm`."
+DESCRIPTION="Extension trait for full float functionality in \`#[no_std]\` backed by \`libm\`."
 HOMEPAGE="https://github.com/robertbastian/core_maths"
 LICENSE="MIT"
 SLOT="0/${PV}"

@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Rust bindings generator for WIT and the component model, typically used through the `wit-bindgen` crate's `generate!` macro."
+DESCRIPTION="Rust bindings generator for WIT and the component model, typically used through the \`wit-bindgen\` crate's \`generate!\` macro."
 HOMEPAGE="https://github.com/bytecodealliance/wit-bindgen"
 LICENSE="|| ( Apache-2.0-with-LLVM-exception Apache-2.0 MIT )"
 SLOT="0/${PV}"

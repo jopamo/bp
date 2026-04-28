@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="The low-level `io_uring` userspace interface for Rust"
+DESCRIPTION="The low-level \`io_uring\` userspace interface for Rust"
 HOMEPAGE="https://github.com/tokio-rs/io-uring"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

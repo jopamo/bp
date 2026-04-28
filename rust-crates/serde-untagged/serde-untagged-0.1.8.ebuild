@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Serde `Visitor` implementation for deserializing untagged enums"
+DESCRIPTION="Serde \`Visitor\` implementation for deserializing untagged enums"
 HOMEPAGE="https://github.com/dtolnay/serde-untagged"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

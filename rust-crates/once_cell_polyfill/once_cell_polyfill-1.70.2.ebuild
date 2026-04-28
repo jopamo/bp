@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Polyfill for `OnceCell` stdlib feature for use with older MSRVs"
+DESCRIPTION="Polyfill for \`OnceCell\` stdlib feature for use with older MSRVs"
 HOMEPAGE="https://github.com/polyfill-rs/once_cell_polyfill"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

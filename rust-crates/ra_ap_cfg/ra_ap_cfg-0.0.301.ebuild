@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Conditional compiling options, `cfg` attribute parser and evaluator for rust-analyzer."
+DESCRIPTION="Conditional compiling options, \`cfg\` attribute parser and evaluator for rust-analyzer."
 HOMEPAGE="https://github.com/rust-lang/rust-analyzer"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

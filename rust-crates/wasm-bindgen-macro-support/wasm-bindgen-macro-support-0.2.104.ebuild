@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="The part of the implementation of the `#[wasm_bindgen]` attribute that is not in the shared backend crate"
+DESCRIPTION="The part of the implementation of the \`#[wasm_bindgen]\` attribute that is not in the shared backend crate"
 HOMEPAGE="https://wasm-bindgen.github.io/wasm-bindgen/"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

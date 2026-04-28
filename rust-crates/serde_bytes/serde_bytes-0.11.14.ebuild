@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Optimized handling of `&[u8]` and `Vec<u8>` for Serde"
+DESCRIPTION="Optimized handling of \`&[u8]\` and \`Vec<u8>\` for Serde"
 HOMEPAGE="https://github.com/serde-rs/bytes"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

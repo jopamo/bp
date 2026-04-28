@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Implementation detail of the `thiserror` crate"
+DESCRIPTION="Implementation detail of the \`thiserror\` crate"
 HOMEPAGE="https://github.com/dtolnay/thiserror"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

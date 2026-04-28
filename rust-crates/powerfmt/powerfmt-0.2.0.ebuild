@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="`powerfmt` is a library that provides utilities for formatting values. This crate makes it significantly easier to support filling to a minimum width with alignment, avoid heap allocation, and avoid repetitive calculations."
+DESCRIPTION="\`powerfmt\` is a library that provides utilities for formatting values. This crate makes it significantly easier to support filling to a minimum width with alignment, avoid heap allocation, and avoid repetitive calculations."
 HOMEPAGE="https://github.com/jhpratt/powerfmt"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

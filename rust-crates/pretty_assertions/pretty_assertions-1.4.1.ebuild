@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Overwrite `assert_eq!` and `assert_ne!` with drop-in replacements, adding colorful diffs."
+DESCRIPTION="Overwrite \`assert_eq!\` and \`assert_ne!\` with drop-in replacements, adding colorful diffs."
 HOMEPAGE="https://github.com/rust-pretty-assertions/rust-pretty-assertions"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

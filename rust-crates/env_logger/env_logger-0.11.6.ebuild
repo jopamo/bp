@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="A logging implementation for `log` which is configured via an environment variable."
+DESCRIPTION="A logging implementation for \`log\` which is configured via an environment variable."
 HOMEPAGE="https://github.com/rust-cli/env_logger"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

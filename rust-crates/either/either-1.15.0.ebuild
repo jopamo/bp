@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="The enum `Either` with variants `Left` and `Right` is a general purpose sum type with two cases."
+DESCRIPTION="The enum \`Either\` with variants \`Left\` and \`Right\` is a general purpose sum type with two cases."
 HOMEPAGE="https://github.com/rayon-rs/either"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

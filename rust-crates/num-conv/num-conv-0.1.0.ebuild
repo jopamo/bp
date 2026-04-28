@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="`num_conv` is a crate to convert between integer types without using `as` casts. This provides better certainty when refactoring, makes the exact behavior of code more explicit, and allows using turbofish syntax."
+DESCRIPTION="\`num_conv\` is a crate to convert between integer types without using \`as\` casts. This provides better certainty when refactoring, makes the exact behavior of code more explicit, and allows using turbofish syntax."
 HOMEPAGE="https://github.com/jhpratt/num-conv"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

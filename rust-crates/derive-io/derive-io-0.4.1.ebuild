@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="derive macros for `std::io::{Read,Write}`, `tokio::io::{AsyncRead,AsyncWrite}` and more"
+DESCRIPTION="derive macros for \`std::io::{Read,Write}\`, \`tokio::io::{AsyncRead,AsyncWrite}\` and more"
 HOMEPAGE="https://github.com/mmastrac/derive-io"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

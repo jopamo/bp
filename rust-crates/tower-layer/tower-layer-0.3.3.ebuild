@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Decorates a `Service` to allow easy composition between `Service`s."
+DESCRIPTION="Decorates a \`Service\` to allow easy composition between \`Service\`s."
 HOMEPAGE="https://github.com/tower-rs/tower"
 LICENSE="MIT"
 SLOT="0/${PV}"

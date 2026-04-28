@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="The `inlinable_string` crate provides the `InlinableString` type -- an owned, grow-able UTF-8 string that stores small strings inline and avoids heap-allocation -- and the `StringExt` trait which abstracts string operations over both `std::string::String` and `InlinableString` (or even your own custom string type)."
+DESCRIPTION="The \`inlinable_string\` crate provides the \`InlinableString\` type -- an owned, grow-able UTF-8 string that stores small strings inline and avoids heap-allocation -- and the \`StringExt\` trait which abstracts string operations over both \`std::string::String\` and \`InlinableString\` (or even your own custom string type)."
 HOMEPAGE="https://github.com/fitzgen/inlinable_string"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"

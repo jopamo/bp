@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="derive proc-macros for `bytemuck`"
+DESCRIPTION="derive proc-macros for \`bytemuck\`"
 HOMEPAGE="https://github.com/Lokathor/bytemuck"
 LICENSE="|| ( Zlib Apache-2.0 MIT )"
 SLOT="0/${PV}"

@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Utilities for encoding and decoding frames using `async/await`"
+DESCRIPTION="Utilities for encoding and decoding frames using \`async/await\`"
 HOMEPAGE="https://github.com/mxinden/asynchronous-codec"
 LICENSE="MIT"
 SLOT="0/${PV}"

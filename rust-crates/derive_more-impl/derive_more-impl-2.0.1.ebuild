@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Internal implementation of `derive_more` crate"
+DESCRIPTION="Internal implementation of \`derive_more\` crate"
 HOMEPAGE="https://github.com/JelteF/derive_more"
 LICENSE="MIT"
 SLOT="0/${PV}"

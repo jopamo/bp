@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Determine displayed width of `char` and `str` types according to Unicode Standard Annex #11 rules."
+DESCRIPTION="Determine displayed width of \`char\` and \`str\` types according to Unicode Standard Annex #11 rules."
 HOMEPAGE="https://github.com/unicode-rs/unicode-width"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

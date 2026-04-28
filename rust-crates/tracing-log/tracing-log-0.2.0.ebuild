@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Provides compatibility between `tracing` and the `log` crate."
+DESCRIPTION="Provides compatibility between \`tracing\` and the \`log\` crate."
 HOMEPAGE="https://tokio.rs"
 LICENSE="MIT"
 SLOT="0/${PV}"

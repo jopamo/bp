@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Tooling for parsing `*.wit` files and working with their contents."
+DESCRIPTION="Tooling for parsing \`*.wit\` files and working with their contents."
 HOMEPAGE="https://github.com/bytecodealliance/wasm-tools/tree/main/crates/wit-parser"
 LICENSE="|| ( Apache-2.0-with-LLVM-exception Apache-2.0 MIT )"
 SLOT="0/${PV}"

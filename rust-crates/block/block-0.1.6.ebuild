@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Rust interface for Apple's C language extension of blocks."
 HOMEPAGE="http://github.com/SSheldon/rust-block"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

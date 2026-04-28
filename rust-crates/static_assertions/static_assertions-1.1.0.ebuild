@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Compile-time assertions to ensure that invariants are met."
 HOMEPAGE="https://github.com/nvzqz/static-assertions-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

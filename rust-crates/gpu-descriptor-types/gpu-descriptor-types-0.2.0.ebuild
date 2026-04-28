@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Core types of gpu-descriptor crate"
 HOMEPAGE="https://github.com/zakarumych/gpu-descriptor"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

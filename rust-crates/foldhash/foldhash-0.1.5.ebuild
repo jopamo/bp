@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A fast, non-cryptographic, minimally DoS-resistant hashing algorithm."
 HOMEPAGE="https://github.com/orlp/foldhash"
 LICENSE="Zlib"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

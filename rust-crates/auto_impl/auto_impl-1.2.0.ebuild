@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Automatically implement traits for common smart pointers and closures"
 HOMEPAGE="https://github.com/auto-impl-rs/auto_impl/"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

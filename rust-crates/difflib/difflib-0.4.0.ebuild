@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Port of Python's difflib library to Rust."
 HOMEPAGE="https://github.com/DimaKudosh/difflib"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Visualize tree-like data on the command-line"
 HOMEPAGE="https://github.com/rust-cli/termtree"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

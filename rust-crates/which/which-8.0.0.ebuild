@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A Rust equivalent of Unix command \"which\". Locate installed executable in cross platforms."
 HOMEPAGE="https://github.com/harryfei/which-rs.git"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

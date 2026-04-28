@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Overwrite \`assert_eq!\` and \`assert_ne!\` with drop-in replacements, adding colorful diffs."
 HOMEPAGE="https://github.com/rust-pretty-assertions/rust-pretty-assertions"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

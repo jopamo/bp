@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A macro to generate structures which behave like bitflags."
 HOMEPAGE="https://github.com/bitflags/bitflags"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

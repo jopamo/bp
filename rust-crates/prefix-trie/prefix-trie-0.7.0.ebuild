@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Prefix trie (tree) datastructure (both a set and a map) that provides exact and longest-prefix matches."
 HOMEPAGE="https://github.com/tiborschneider/prefix-trie"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

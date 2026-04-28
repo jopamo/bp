@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Rust crate to parse the HTTP Cache-Control header."
 HOMEPAGE="https://github.com/connerebbinghaus/rust-cache-control"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

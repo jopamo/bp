@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Emulate macro-rules pattern matching in procedural macros"
 HOMEPAGE="https://github.com/nrc/proc-macro-rules"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Extends \`Option\` with additional operations"
 HOMEPAGE="https://github.com/soc/option-ext"
 LICENSE="MPL-2.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

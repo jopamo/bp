@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Pure Rust MessagePack serialization implementation"
 HOMEPAGE="https://github.com/3Hren/msgpack-rust"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

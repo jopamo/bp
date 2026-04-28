@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A Rust implementation of cleanname or path.Clean"
 HOMEPAGE="https://github.com/danreeves/path-clean"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

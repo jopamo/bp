@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Simple file accessibility checks"
 HOMEPAGE="https://github.com/Freaky/faccess"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

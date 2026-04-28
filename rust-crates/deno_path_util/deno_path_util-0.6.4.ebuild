@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Path utilities used in Deno"
 HOMEPAGE="https://github.com/denoland/deno_path_util"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

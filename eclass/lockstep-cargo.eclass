@@ -137,9 +137,6 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 
 	_LOCKSTEP_CARGO_DEPEND=$(_lockstep_cargo_dependency_atoms)
 	DEPEND+="${_LOCKSTEP_CARGO_DEPEND}"
-	BDEPEND+="
-		app-dev/cargo
-		app-dev/rust"
 
 	inherit cargo
 

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Idiomatic wrapper for inotify"
 HOMEPAGE="https://github.com/hannobraun/inotify"
 LICENSE="ISC"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

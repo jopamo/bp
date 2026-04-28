@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Fast, efficient, and predictable memory reclamation for concurrent data structures."
 HOMEPAGE="https://github.com/ibraheemdev/seize"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

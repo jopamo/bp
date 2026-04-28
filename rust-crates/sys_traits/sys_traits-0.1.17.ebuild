@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Trait per function for system related functionality."
 HOMEPAGE="https://github.com/dsherret/sys_traits"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

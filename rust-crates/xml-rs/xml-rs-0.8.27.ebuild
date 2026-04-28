@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="An XML library in pure Rust"
 HOMEPAGE="https://lib.rs/crates/xml-rs"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

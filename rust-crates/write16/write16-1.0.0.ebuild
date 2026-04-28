@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A UTF-16 analog of the Write trait"
 HOMEPAGE="https://docs.rs/write16/"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

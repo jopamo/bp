@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Get the number of CPUs on a machine."
 HOMEPAGE="https://github.com/seanmonstar/num_cpus"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

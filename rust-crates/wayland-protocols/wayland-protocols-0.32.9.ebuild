@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Generated API for the officials wayland protocol extensions"
 HOMEPAGE="https://github.com/smithay/wayland-rs"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

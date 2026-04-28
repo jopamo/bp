@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Date and time library for Rust"
 HOMEPAGE="https://github.com/chronotope/chrono"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A pull parser for CommonMark"
 HOMEPAGE="https://github.com/raphlinus/pulldown-cmark"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

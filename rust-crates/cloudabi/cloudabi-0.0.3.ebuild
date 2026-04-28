@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Low level interface to CloudABI. Contains all syscalls and related types."
 HOMEPAGE="https://nuxi.nl/cloudabi/"
 LICENSE="BSD-2-Clause"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

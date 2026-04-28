@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Provides #[test_case(...)] procedural macro attribute for generating parametrized test cases easily"
 HOMEPAGE="https://github.com/frondeus/test-case"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A parser for TZif files"
 HOMEPAGE="https://github.com/unicode-org/icu4x"
 LICENSE="Unicode-3.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

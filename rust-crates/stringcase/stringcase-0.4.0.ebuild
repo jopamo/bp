@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Converts string cases between camelCase, COBOL-CASE, kebab-case, and so on."
 HOMEPAGE="https://github.com/sttk/stringcase-rust"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

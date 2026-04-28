@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A (codegen) pear is a fruit."
 HOMEPAGE="https://github.com/SergioBenitez/Pear"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

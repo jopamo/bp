@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Iterator by char over potentially-invalid UTF-8 in &[u8]"
 HOMEPAGE="https://docs.rs/utf8_iter/"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

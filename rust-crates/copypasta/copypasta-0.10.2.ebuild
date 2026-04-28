@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="copypasta is a cross-platform library for getting and setting the contents of the OS-level clipboard."
 HOMEPAGE="https://github.com/alacritty/copypasta"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="The interface macro for the windows crate"
 HOMEPAGE="https://github.com/microsoft/windows-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A string type that is not required to be valid UTF-8."
 HOMEPAGE="https://github.com/BurntSushi/bstr"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

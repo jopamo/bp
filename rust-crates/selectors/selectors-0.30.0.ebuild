@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="CSS Selectors matching for Rust"
 HOMEPAGE="https://github.com/servo/stylo"
 LICENSE="MPL-2.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

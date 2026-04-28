@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="This is a fork of https://crates.io/crates/tower-lsp macros, used in Deno. At the moment only floating patches."
 HOMEPAGE="https://github.com/ebkalderon/tower-lsp"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

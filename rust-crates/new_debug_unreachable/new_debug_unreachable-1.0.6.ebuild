@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="panic in debug, intrinsics::unreachable() in release (fork of debug_unreachable)"
 HOMEPAGE="https://github.com/mbrubeck/rust-debug-unreachable"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A Rust implementation of V8's ValueSerializer and ValueDeserializer"
 HOMEPAGE="https://github.com/denoland/v8_valueserializer"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

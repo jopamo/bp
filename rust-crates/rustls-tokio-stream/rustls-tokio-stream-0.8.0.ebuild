@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="AsyncRead/AsyncWrite interface for RustTLS on Tokio"
 HOMEPAGE="https://github.com/denoland/rustls-tokio-stream"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

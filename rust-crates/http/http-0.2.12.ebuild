@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A set of types for representing HTTP requests and responses."
 HOMEPAGE="https://github.com/hyperium/http"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

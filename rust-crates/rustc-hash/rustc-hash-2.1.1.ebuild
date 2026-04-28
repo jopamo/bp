@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A speedy, non-cryptographic hashing algorithm used by rustc"
 HOMEPAGE="https://github.com/rust-lang/rustc-hash"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Vector data-structure for half-byte values."
 HOMEPAGE="https://github.com/michaelsproul/rust_nibble_vec"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

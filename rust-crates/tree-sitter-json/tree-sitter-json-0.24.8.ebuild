@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="JSON grammar for tree-sitter"
 HOMEPAGE="https://github.com/tree-sitter/tree-sitter-json"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

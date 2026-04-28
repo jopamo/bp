@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Support for matching file paths against Unix shell style patterns."
 HOMEPAGE="https://github.com/rust-lang/glob"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

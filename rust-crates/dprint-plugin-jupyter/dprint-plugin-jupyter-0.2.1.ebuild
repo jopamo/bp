@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Formats code blocks in Jupyter notebooks."
 HOMEPAGE="https://github.com/dprint/dprint-plugin-jupyter"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Union-find, congruence closure, and other unification code. Based on code from rustc."
 HOMEPAGE="https://github.com/rust-lang/ena"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Source of OpenSSL and logic to build it."
 HOMEPAGE="https://github.com/alexcrichton/openssl-src-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Determine whether characters have the XID_Start or XID_Continue properties according to Unicode Standard Annex #31"
 HOMEPAGE="https://github.com/dtolnay/unicode-ident"
 LICENSE="|| ( MIT Apache-2.0 ) Unicode-DFS-2016"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

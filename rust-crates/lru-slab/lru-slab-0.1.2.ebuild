@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Pre-allocated storage with constant-time LRU tracking"
 HOMEPAGE="https://github.com/Ralith/lru-slab"
 LICENSE="|| ( MIT Apache-2.0 Zlib )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="This crate is an implementation detail and should not be relied upon directly."
 HOMEPAGE="https://github.com/time-rs/time"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

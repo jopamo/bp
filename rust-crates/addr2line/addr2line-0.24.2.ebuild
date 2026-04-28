@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A cross-platform symbolication library written in Rust, using \`gimli\`"
 HOMEPAGE="https://github.com/gimli-rs/addr2line"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

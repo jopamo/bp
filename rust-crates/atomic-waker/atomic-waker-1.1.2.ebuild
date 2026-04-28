@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A synchronization primitive for task wakeup"
 HOMEPAGE="https://github.com/smol-rs/atomic-waker"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

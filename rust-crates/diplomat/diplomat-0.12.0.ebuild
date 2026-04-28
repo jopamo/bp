@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="The diplomat FFI generation macro"
 HOMEPAGE="https://github.com/rust-diplomat/diplomat"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

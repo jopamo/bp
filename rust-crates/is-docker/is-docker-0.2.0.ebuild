@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Checks if the process is running inside a Docker container."
 HOMEPAGE="https://github.com/TheLarkInn/is-docker"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Pure Rust implementation of RFC6979: Deterministic Usage of the Digital Signature Algorithm (DSA) and Elliptic Curve Digital Signature Algorithm (ECDSA)"
 HOMEPAGE="https://github.com/RustCrypto/signatures/tree/master/rfc6979"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

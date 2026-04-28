@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A proc-macro for deriving inner field accessor functions on enums."
 HOMEPAGE="https://github.com/bluejekyll/enum-as-inner"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

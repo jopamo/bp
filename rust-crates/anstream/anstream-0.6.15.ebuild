@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A simple cross platform library for writing colored text to a terminal."
 HOMEPAGE="https://github.com/rust-cli/anstyle"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

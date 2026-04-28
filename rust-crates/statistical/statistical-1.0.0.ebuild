@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A simple statistics library"
 HOMEPAGE="https://github.com/JeffBelgum/statistical"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

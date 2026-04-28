@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Portable atomic types including support for 128-bit atomics, atomic float, etc."
 HOMEPAGE="https://github.com/taiki-e/portable-atomic"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

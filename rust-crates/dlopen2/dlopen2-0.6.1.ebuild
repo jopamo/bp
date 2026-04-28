@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Library for opening and operating on dynamic link libraries (also known as shared objects or shared libraries)."
 HOMEPAGE="https://github.com/OpenByteDev/dlopen2"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

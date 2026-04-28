@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Combinators and adapters for HTTP request or response bodies."
 HOMEPAGE="https://github.com/hyperium/http-body"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

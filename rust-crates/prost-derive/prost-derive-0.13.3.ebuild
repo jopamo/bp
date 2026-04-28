@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Generate encoding and decoding implementations for Prost annotated types."
 HOMEPAGE="https://github.com/tokio-rs/prost"
 LICENSE="Apache-2.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Unsafe, direct bindings for Linux's perf_event_open system call, with associated types and constants."
 HOMEPAGE="https://github.com/jimblandy/perf-event-open-sys.git"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

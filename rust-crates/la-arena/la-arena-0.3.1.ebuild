@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Simple index-based arena without deletion."
 HOMEPAGE="https://github.com/rust-lang/rust-analyzer/tree/master/lib/la-arena"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

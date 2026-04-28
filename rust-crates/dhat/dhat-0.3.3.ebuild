@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A library for heap profiling and ad hoc profiling with DHAT."
 HOMEPAGE="https://github.com/nnethercote/dhat-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

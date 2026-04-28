@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Diagnostics for proc-macro2."
 HOMEPAGE="https://github.com/SergioBenitez/proc-macro2-diagnostics"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

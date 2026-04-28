@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A generic URI parser that strictly adheres to IETF RFC 3986."
 HOMEPAGE="https://github.com/yescallop/fluent-uri-rs"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

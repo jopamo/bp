@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Shader translator and validator. Part of the wgpu project"
 HOMEPAGE="https://github.com/gfx-rs/wgpu/tree/trunk/naga"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

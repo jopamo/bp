@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A Cargo library to handle compilation and inclusion of Windows resources in the most resilient fashion imaginable"
 HOMEPAGE="https://github.com/nabijaczleweli/rust-embed-resource"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

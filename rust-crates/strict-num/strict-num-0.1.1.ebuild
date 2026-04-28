@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A collection of bounded numeric types"
 HOMEPAGE="https://github.com/RazrFalcon/strict-num"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Schannel bindings for rust, allowing SSL/TLS (e.g. https) without openssl"
 HOMEPAGE="https://github.com/steffengy/schannel-rs"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

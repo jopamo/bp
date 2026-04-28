@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Resource Editor for Portable Executables"
 HOMEPAGE="https://github.com/Systemcluster/editpe"
 LICENSE="BSD-2-Clause"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

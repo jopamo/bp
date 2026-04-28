@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Low-level kqueue interface for BSDs"
 HOMEPAGE="https://gitlab.com/rust-kqueue/rust-kqueue-sys"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Redox stable ABI"
 HOMEPAGE="https://gitlab.redox-os.org/redox-os/libredox.git"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

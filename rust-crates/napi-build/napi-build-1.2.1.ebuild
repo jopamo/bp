@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="N-API build support"
 HOMEPAGE="https://github.com/napi-rs/napi-rs"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

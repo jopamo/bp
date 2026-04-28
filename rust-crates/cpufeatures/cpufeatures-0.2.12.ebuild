@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Lightweight runtime CPU feature detection for aarch64, loongarch64, and x86/x86_64 targets, with no_std support and support for mobile targets including Android and iOS"
 HOMEPAGE="https://github.com/RustCrypto/utils"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

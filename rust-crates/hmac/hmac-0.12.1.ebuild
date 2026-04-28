@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Generic implementation of Hash-based Message Authentication Code (HMAC)"
 HOMEPAGE="https://github.com/RustCrypto/MACs"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

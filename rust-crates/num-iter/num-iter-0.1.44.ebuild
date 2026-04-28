@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="External iterators for generic mathematics"
 HOMEPAGE="https://github.com/rust-num/num-iter"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

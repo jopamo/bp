@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Generic extensions for tapping values in Rust"
 HOMEPAGE="https://github.com/myrrlyn/tap"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

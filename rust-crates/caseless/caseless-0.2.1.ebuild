@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Unicode caseless matching"
 HOMEPAGE="https://github.com/SimonSapin/rust-caseless"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

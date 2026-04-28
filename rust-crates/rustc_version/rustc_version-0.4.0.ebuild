@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A library for querying the version of a installed rustc compiler"
 HOMEPAGE="https://github.com/Kimundi/rustc-version-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

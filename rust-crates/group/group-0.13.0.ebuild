@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Elliptic curve group traits and utilities"
 HOMEPAGE="https://github.com/zkcrypto/group"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

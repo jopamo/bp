@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A representation for a Cargo project for rust-analyzer."
 HOMEPAGE="https://github.com/rust-lang/rust-analyzer"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

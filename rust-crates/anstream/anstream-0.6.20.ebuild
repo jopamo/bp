@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="IO stream adapters for writing colored text that will gracefully degrade according to your terminal's capabilities."
 HOMEPAGE="https://github.com/rust-cli/anstyle.git"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

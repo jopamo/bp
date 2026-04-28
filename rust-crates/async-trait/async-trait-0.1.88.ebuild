@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Type erasure for async trait methods"
 HOMEPAGE="https://github.com/dtolnay/async-trait"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

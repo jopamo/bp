@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Rust crate for the Fuchsia cryptographically secure pseudorandom number generator"
 HOMEPAGE="https://fuchsia.googlesource.com/fuchsia/+/master/garnet/public/rust/fuchsia-cprng"
 LICENSE="non-standard"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

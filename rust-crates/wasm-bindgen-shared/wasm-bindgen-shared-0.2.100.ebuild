@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Shared support between wasm-bindgen and wasm-bindgen cli, an internal dependency."
 HOMEPAGE="https://rustwasm.github.io/wasm-bindgen/"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Macro for building static CStr reference"
 HOMEPAGE="https://github.com/upsuper/cstr"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

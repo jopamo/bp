@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Macros 1.1 implementation of #[derive(Serialize, Deserialize)]"
 HOMEPAGE="https://serde.rs"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Replacement for crate (macro_rules keyword) in proc-macros"
 HOMEPAGE="https://github.com/bkchr/proc-macro-crate"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

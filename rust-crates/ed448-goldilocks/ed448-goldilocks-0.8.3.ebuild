@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A pure-Rust implementation of Ed448 and Curve448 and Decaf"
 HOMEPAGE="https://github.com/crate-crypto/Ed448-Goldilocks"
 LICENSE="BSD-3-Clause"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

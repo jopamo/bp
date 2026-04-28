@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Library for diffing paths to obtain relative paths"
 HOMEPAGE="https://github.com/Manishearth/pathdiff"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

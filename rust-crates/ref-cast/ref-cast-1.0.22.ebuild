@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Safely cast &T to &U where the struct U contains a single field of type T."
 HOMEPAGE="https://github.com/dtolnay/ref-cast"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

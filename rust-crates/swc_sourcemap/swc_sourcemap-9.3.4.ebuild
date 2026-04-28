@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Forked from https://github.com/getsentry/rust-sourcemap"
 HOMEPAGE="https://github.com/swc-project/swc-sourcemap"
 LICENSE="BSD-3-Clause"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

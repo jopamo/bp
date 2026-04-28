@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A lightweight atomic lock."
 HOMEPAGE="https://github.com/seanmonstar/try-lock"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

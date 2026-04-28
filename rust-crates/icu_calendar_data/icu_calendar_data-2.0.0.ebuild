@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Data for the icu_calendar crate"
 HOMEPAGE="https://icu4x.unicode.org"
 LICENSE="Unicode-3.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

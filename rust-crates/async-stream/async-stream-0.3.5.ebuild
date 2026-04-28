@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Asynchronous streams using async & await notation"
 HOMEPAGE="https://github.com/tokio-rs/async-stream"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

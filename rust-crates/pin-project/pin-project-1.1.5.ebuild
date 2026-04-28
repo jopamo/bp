@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A crate for safe and ergonomic pin-projection."
 HOMEPAGE="https://github.com/taiki-e/pin-project"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

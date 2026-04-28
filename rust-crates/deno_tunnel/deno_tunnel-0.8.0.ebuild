@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Deno Tunnels"
 HOMEPAGE="https://github.com/denoland/deno_tunnel"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

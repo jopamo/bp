@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A tiny Skia subset ported to Rust."
 HOMEPAGE="https://github.com/RazrFalcon/tiny-skia"
 LICENSE="BSD-3-Clause"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

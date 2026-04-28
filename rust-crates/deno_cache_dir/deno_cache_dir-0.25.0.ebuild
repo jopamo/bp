@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Cache directory logic used in Deno"
 HOMEPAGE="https://github.com/denoland/deno_cache"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

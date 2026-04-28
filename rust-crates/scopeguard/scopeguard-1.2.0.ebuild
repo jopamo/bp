@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A RAII scope guard that will run a given closure when it goes out of scope, even if the code between panics (assuming unwinding panic). Defines the macros \`defer!\`, \`defer_on_unwind!\`, \`defer_on_success!\` as shorthands for guards with one of the implemented strategies."
 HOMEPAGE="https://github.com/bluss/scopeguard"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

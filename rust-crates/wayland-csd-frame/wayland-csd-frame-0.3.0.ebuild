@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Common trait and types for wayland CSD interop"
 HOMEPAGE="https://github.com/rust-windowing/wayland-csd-frame"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

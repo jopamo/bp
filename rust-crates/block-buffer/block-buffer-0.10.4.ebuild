@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Buffer type for block processing of data"
 HOMEPAGE="https://github.com/RustCrypto/utils"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

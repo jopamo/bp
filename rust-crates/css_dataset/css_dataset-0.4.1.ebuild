@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="CSS dataset about functions, properties, etc."
 HOMEPAGE="https://github.com/g-plane/css_dataset"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

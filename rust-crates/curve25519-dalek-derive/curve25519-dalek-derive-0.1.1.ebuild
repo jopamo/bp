@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="curve25519-dalek Derives"
 HOMEPAGE="https://github.com/dalek-cryptography/curve25519-dalek"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

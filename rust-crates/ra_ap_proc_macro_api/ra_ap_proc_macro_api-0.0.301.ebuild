@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="RPC Api for the \`proc-macro-srv\` crate of rust-analyzer."
 HOMEPAGE="https://github.com/rust-lang/rust-analyzer"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

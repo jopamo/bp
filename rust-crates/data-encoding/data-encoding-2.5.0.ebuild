@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Efficient and customizable data-encoding functions like base64, base32, and hex"
 HOMEPAGE="https://github.com/ia0/data-encoding"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

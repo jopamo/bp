@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="atttribute macro for running a flaky test multiple times"
 HOMEPAGE="https://github.com/denoland/flaky_test"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

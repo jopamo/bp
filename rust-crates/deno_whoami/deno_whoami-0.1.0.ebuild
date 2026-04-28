@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="This crate implements the username() API in Deno Node compat layer."
 HOMEPAGE="https://crates.io/crates/deno_whoami"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

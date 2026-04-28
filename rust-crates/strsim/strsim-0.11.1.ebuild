@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Implementations of string similarity metrics. Includes Hamming, Levenshtein, OSA, Damerau-Levenshtein, Jaro, Jaro-Winkler, and Sørensen-Dice."
 HOMEPAGE="https://github.com/rapidfuzz/strsim-rs"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A Rust interface to Linux performance monitoring"
 HOMEPAGE="https://github.com/jimblandy/perf-event.git"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

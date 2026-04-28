@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Incremental, zero-copy UTF-8 decoding with error handling"
 HOMEPAGE="https://github.com/SimonSapin/rust-utf8"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Codegen library for PHF types"
 HOMEPAGE="https://github.com/rust-phf/rust-phf"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

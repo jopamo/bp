@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A library intending to be a base dependency to expose a precomputed hash"
 HOMEPAGE="https://github.com/emilio/precomputed-hash"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

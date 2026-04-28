@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A lightweight version of pin-project written with declarative macros."
 HOMEPAGE="https://github.com/taiki-e/pin-project-lite"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

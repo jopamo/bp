@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Trait representing an asynchronous, streaming, HTTP request or response body."
 HOMEPAGE="https://github.com/hyperium/http-body"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

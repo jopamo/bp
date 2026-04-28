@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Derive macro for bytecheck"
 HOMEPAGE="https://github.com/djkoloski/bytecheck"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

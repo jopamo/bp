@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A injection tool for executable formats (ELF, PE, Mach-O) that allows you to embed files into existing binary and extract them at runtime"
 HOMEPAGE="https://github.com/denoland/sui"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

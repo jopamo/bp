@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Configurable HTML, Vue, Svelte, Astro, Angular, Jinja, Twig, Nunjucks, Vento, Mustache and XML formatter."
 HOMEPAGE="https://github.com/g-plane/markup_fmt"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

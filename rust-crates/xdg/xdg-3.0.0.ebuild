@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A library for storing and retrieving files according to XDG Base Directory specification"
 HOMEPAGE="https://github.com/whitequark/rust-xdg"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

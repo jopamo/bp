@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Procedural macros for the salsa crate"
 HOMEPAGE="https://github.com/salsa-rs/salsa"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

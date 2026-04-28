@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Bindings around the platform's dynamic library loading primitives with greatly improved memory safety."
 HOMEPAGE="https://github.com/nagisa/rust_libloading/"
 LICENSE="ISC"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

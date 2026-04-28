@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Traits for key comparison in maps."
 HOMEPAGE="https://github.com/indexmap-rs/equivalent"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

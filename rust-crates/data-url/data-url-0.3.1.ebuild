@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Processing of data: URL according to WHATWG’s Fetch Standard"
 HOMEPAGE="https://github.com/servo/rust-url"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

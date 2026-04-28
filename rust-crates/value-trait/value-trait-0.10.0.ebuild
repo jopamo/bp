@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Traits to deal with JSONesque values"
 HOMEPAGE="https://github.com/simd-lite/value-trait"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

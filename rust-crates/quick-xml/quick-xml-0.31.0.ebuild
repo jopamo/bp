@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="High performance xml reader and writer"
 HOMEPAGE="https://github.com/tafia/quick-xml"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

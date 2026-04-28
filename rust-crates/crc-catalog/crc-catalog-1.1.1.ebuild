@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Catalog of CRC algorithms (generated from http://reveng.sourceforge.net/crc-catalogue) expressed as simple Rust structs."
 HOMEPAGE="https://github.com/akhilles/crc-catalog.git"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Polyfill for \`OnceCell\` stdlib feature for use with older MSRVs"
 HOMEPAGE="https://github.com/polyfill-rs/once_cell_polyfill"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

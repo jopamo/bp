@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Maps flat \`TextSize\` offsets to/from \`(line, column)\` representation."
 HOMEPAGE="https://github.com/rust-lang/rust-analyzer/tree/master/lib/line-index"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

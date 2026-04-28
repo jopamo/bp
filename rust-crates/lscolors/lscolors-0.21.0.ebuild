@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Colorize paths using the LS_COLORS environment variable"
 HOMEPAGE="https://github.com/sharkdp/lscolors"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

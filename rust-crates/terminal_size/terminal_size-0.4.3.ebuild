@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Gets the size of your Linux or Windows terminal"
 HOMEPAGE="https://github.com/eminence/terminal-size"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

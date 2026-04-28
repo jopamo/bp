@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Tracing layer for creating flamegraphs from span timings"
 HOMEPAGE="https://tokio.rs"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Adds String based inflections for Rust. Snake, kebab, camel, sentence, class, title and table cases as well as ordinalize, deordinalize, demodulize, foreign key, and pluralize/singularize are supported as both traits and pure functions acting on String types."
 HOMEPAGE="https://github.com/whatisinternet/inflector"
 LICENSE="BSD-2-Clause"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

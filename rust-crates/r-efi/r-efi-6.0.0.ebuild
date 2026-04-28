@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="UEFI Reference Specification Protocol Constants and Definitions"
 HOMEPAGE="https://github.com/r-efi/r-efi/wiki"
 LICENSE="|| ( MIT Apache-2.0 LGPL-2.1-or-later )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

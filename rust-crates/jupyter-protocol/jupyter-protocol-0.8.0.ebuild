@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Jupyter messaging structures and traits for jupyter clients and servers"
 HOMEPAGE="https://github.com/runtimed/runtimed"
 LICENSE="BSD-3-Clause"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

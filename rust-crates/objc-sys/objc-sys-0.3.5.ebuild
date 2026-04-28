@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Raw bindings to the Objective-C runtime and ABI"
 HOMEPAGE="https://github.com/madsmtm/objc2"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

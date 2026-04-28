@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="x11 clipboard support for Rust."
 HOMEPAGE="https://github.com/quininer/x11-clipboard"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

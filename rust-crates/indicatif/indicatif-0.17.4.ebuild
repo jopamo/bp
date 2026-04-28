@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A progress bar and cli reporting library for Rust"
 HOMEPAGE="https://github.com/console-rs/indicatif"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

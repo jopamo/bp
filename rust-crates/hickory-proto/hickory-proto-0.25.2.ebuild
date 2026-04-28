@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Hickory DNS is a safe and secure DNS library. This is the foundational DNS protocol library for all Hickory DNS projects."
 HOMEPAGE="https://hickory-dns.org/"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Shared definitions of home directories."
 HOMEPAGE="https://github.com/rust-lang/cargo"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

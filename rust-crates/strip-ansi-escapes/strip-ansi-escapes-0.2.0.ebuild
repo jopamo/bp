@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Strip ANSI escape sequences from byte streams."
 HOMEPAGE="https://github.com/luser/strip-ansi-escapes"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

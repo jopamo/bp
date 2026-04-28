@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Timeout attribute for the ntest framework."
 HOMEPAGE="https://github.com/becheran/ntest"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

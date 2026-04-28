@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A parser and formatter for std::time::{Duration, SystemTime}"
 HOMEPAGE="https://github.com/tailhook/humantime"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

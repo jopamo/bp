@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="HashMap-like containers that hold their key-value pairs in a user controllable order"
 HOMEPAGE="https://github.com/kyren/hashlink"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

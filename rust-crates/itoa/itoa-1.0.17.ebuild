@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Fast integer primitive to string conversion"
 HOMEPAGE="https://github.com/dtolnay/itoa"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Utilities for encoding and decoding frames using \`async/await\`"
 HOMEPAGE="https://github.com/mxinden/asynchronous-codec"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

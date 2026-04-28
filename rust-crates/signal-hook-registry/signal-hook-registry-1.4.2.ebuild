@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Backend crate for signal-hook"
 HOMEPAGE="https://github.com/vorner/signal-hook"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

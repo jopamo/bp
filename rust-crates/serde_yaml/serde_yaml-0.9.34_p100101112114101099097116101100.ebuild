@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="YAML data format for Serde"
 HOMEPAGE="https://github.com/dtolnay/serde-yaml"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

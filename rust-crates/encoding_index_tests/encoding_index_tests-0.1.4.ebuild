@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Helper macros used to test index tables for character encodings"
 HOMEPAGE="https://github.com/lifthrasiir/rust-encoding"
 LICENSE="CC0-1.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

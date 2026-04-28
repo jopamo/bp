@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A dumping ground for high level safe wrappers over winapi."
 HOMEPAGE="https://github.com/BurntSushi/winapi-util"
 LICENSE="|| ( Unlicense MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

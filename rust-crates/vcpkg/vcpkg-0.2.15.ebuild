@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A library to find native dependencies in a vcpkg tree at build time in order to be used in Cargo build scripts."
 HOMEPAGE="https://github.com/mcgoo/vcpkg-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

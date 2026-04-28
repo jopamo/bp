@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="System-level helper functions for the dirs and directories crates."
 HOMEPAGE="https://github.com/dirs-dev/dirs-sys-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

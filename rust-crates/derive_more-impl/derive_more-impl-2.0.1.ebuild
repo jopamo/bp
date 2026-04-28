@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Internal implementation of \`derive_more\` crate"
 HOMEPAGE="https://github.com/JelteF/derive_more"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

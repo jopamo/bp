@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Macros for ptr_meta"
 HOMEPAGE="https://github.com/djkoloski/ptr_meta"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

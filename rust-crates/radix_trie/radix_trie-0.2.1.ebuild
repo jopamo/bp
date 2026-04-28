@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Generic radix trie data-structure."
 HOMEPAGE="https://github.com/michaelsproul/rust_radix_trie"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

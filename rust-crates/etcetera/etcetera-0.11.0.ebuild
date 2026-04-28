@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="An unopinionated library for obtaining configuration, data, cache, & other directories"
 HOMEPAGE="https://github.com/lunacookies/etcetera"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

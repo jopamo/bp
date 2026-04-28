@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A dead simple ANSI terminal color painting library."
 HOMEPAGE="https://github.com/SergioBenitez/yansi"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

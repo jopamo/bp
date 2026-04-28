@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A library to encode and decode LEB128 compressed integers."
 HOMEPAGE="https://github.com/bluk/leb128fmt"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Get network adapters information and network configuration for windows."
 HOMEPAGE="https://github.com/liranringel/ipconfig"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

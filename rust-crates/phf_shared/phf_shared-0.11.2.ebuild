@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Support code shared by PHF libraries"
 HOMEPAGE="https://github.com/rust-phf/rust-phf"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

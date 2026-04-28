@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="The Khronos XML API Registry, exposed as byte string constants."
 HOMEPAGE="https://github.com/brendanzab/gl-rs/"
 LICENSE="Apache-2.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

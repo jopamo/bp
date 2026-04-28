@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Error representation to JavaScript for deno"
 HOMEPAGE="https://deno.land/"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

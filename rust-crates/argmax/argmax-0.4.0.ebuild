@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Rust library to deal with 'argument too long' errors"
 HOMEPAGE="https://github.com/sharkdp/argmax"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

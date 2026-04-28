@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Rust wrapper for Apple's Grand Central Dispatch."
 HOMEPAGE="http://github.com/SSheldon/rust-dispatch"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

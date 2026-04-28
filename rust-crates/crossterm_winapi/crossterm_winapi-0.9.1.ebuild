@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="WinAPI wrapper that provides some basic simple abstractions around common WinAPI calls"
 HOMEPAGE="https://github.com/crossterm-rs/crossterm-winapi"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Trait generalization over the primitive types"
 HOMEPAGE="https://github.com/myrrlyn/funty"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

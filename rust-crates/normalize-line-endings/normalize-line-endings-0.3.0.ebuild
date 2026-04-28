@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Takes an iterator over chars and returns a new iterator with all line endings (\\r, \\n, or \\r\\n) as \\n"
 HOMEPAGE="https://github.com/derekdreery/normalize-line-endings"
 LICENSE="Apache-2.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

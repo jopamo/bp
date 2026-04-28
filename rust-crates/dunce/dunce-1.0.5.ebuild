@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Normalize Windows paths to the most compatible format, avoiding UNC where possible"
 HOMEPAGE="https://lib.rs/crates/dunce"
 LICENSE="|| ( CC0-1.0 MIT-0 Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

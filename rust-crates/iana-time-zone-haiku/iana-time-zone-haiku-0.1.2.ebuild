@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="iana-time-zone support crate for Haiku OS"
 HOMEPAGE="https://github.com/strawlab/iana-time-zone"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

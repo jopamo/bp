@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="implementation detail of the \`flaky_test\` macro"
 HOMEPAGE="https://github.com/denoland/flaky_test"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

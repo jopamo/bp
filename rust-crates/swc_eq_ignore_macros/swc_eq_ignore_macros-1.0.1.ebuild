@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Macros for EqIgnoreSpan and TypeEq."
 HOMEPAGE="https://github.com/swc-project/swc.git"
 LICENSE="Apache-2.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

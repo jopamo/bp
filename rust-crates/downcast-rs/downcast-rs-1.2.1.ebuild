@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Trait object downcasting support using only safe Rust. It supports type parameters, associated types, and type constraints."
 HOMEPAGE="https://github.com/marcianx/downcast-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

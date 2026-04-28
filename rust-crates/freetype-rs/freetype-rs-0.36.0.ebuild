@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Bindings for FreeType font library"
 HOMEPAGE="https://github.com/PistonDevelopers/freetype-rs"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

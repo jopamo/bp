@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="derive proc-macros for \`bytemuck\`"
 HOMEPAGE="https://github.com/Lokathor/bytemuck"
 LICENSE="|| ( Zlib Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

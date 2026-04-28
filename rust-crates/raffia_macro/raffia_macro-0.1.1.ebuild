@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Macros for Raffia."
 HOMEPAGE="https://github.com/g-plane/raffia"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

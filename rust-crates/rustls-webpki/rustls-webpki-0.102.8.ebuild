@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Web PKI X.509 Certificate Verification."
 HOMEPAGE="https://github.com/rustls/webpki"
 LICENSE="ISC"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

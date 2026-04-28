@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="An event-driven, non-blocking I/O platform for writing asynchronous I/O backed applications."
 HOMEPAGE="https://tokio.rs"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

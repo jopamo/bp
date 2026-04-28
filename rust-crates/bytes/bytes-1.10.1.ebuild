@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Types and traits for working with bytes"
 HOMEPAGE="https://github.com/tokio-rs/bytes"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

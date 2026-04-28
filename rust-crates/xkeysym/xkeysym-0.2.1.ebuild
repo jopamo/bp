@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A library for working with X11 keysyms"
 HOMEPAGE="https://github.com/notgull/xkeysym"
 LICENSE="|| ( MIT Apache-2.0 Zlib )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A fast library for efficiently matching ignore files such as \`.gitignore\` against file paths."
 HOMEPAGE="https://github.com/BurntSushi/ripgrep/tree/master/crates/ignore"
 LICENSE="|| ( Unlicense MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

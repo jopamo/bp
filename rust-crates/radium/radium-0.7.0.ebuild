@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Portable interfaces for maybe-atomic types"
 HOMEPAGE="https://github.com/bitvecto-rs/radium"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

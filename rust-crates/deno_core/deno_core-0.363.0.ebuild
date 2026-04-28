@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A modern JavaScript/TypeScript runtime built with V8, Rust, and Tokio"
 HOMEPAGE="https://github.com/denoland/deno_core"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

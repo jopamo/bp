@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Core utilities for image processing in the zune family of crates"
 HOMEPAGE="https://github.com/etemesi254/zune-image/tree/dev/zune-core"
 LICENSE="|| ( MIT Apache-2.0 Zlib )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

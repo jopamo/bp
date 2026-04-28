@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Recursively walk a directory."
 HOMEPAGE="https://github.com/BurntSushi/walkdir"
 LICENSE="|| ( Unlicense MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Chalk's internal representation of types, goals, and clauses"
 HOMEPAGE="https://github.com/rust-lang/chalk"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

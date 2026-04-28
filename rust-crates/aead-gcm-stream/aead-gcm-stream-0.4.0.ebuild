@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Pure Rust implementaion of AES GCM cipher for data streams"
 HOMEPAGE="https://crates.io/crates/aead-gcm-stream"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="SipHash-2-4, SipHash-1-3 and 128-bit variants in pure Rust"
 HOMEPAGE="https://docs.rs/siphasher"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

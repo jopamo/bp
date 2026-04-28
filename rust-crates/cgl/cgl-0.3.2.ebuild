@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Rust bindings for CGL on Mac"
 HOMEPAGE="https://github.com/servo/cgl-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

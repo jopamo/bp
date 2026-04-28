@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A library for extending \`Path\` and \`PathBuf\` in order to parse the path which contains dots."
 HOMEPAGE="https://magiclen.org/path-dedot"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Library for ANSI terminal colors and styles (bold, underline)"
 HOMEPAGE="https://github.com/nushell/nu-ansi-term"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

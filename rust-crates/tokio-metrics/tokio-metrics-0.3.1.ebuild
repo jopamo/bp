@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Runtime and task level metrics for Tokio applications."
 HOMEPAGE="https://tokio.rs"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

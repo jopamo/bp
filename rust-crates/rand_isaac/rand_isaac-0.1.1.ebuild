@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="ISAAC random number generator"
 HOMEPAGE="https://crates.io/crates/rand_isaac"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

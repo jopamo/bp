@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Crate that exposes \`core::arch\` safely via \`#[cfg()]\`."
 HOMEPAGE="https://github.com/Lokathor/safe_arch"
 LICENSE="|| ( Zlib Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

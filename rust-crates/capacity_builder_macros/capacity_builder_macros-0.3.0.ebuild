@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Macros for capacity_builder"
 HOMEPAGE="https://github.com/dsherret/capacity_builder"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A radioactive stabilization of the ptr_meta rfc"
 HOMEPAGE="https://github.com/djkoloski/ptr_meta"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Fast CSV parsing with support for serde."
 HOMEPAGE="https://github.com/BurntSushi/rust-csv"
 LICENSE="|| ( Unlicense MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

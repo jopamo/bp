@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Low level bindings to PCRE2."
 HOMEPAGE="https://github.com/BurntSushi/rust-pcre2"
 LICENSE="|| ( Unlicense MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A terminal and console abstraction for Rust"
 HOMEPAGE="https://github.com/console-rs/console"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

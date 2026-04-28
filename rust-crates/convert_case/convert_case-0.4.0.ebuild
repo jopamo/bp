@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Convert strings into any case"
 HOMEPAGE="https://github.com/rutrum/convert-case"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

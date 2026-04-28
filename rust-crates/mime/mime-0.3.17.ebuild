@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Strongly Typed Mimes"
 HOMEPAGE="https://github.com/hyperium/mime"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

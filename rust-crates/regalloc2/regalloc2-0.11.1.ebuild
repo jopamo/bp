@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Backtracking register allocator inspired from IonMonkey"
 HOMEPAGE="https://github.com/bytecodealliance/regalloc2"
 LICENSE="Apache-2.0-with-LLVM-exception"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Trait representing an asynchronous, request / response based, client or server."
 HOMEPAGE="https://github.com/tower-rs/tower"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

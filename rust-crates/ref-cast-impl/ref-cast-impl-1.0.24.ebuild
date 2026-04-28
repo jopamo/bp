@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Derive implementation for ref_cast::RefCast."
 HOMEPAGE="https://github.com/dtolnay/ref-cast"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

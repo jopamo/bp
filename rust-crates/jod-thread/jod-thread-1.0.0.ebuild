@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="std::thread which joins on drop by default."
 HOMEPAGE="https://github.com/matklad/jod-thread"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

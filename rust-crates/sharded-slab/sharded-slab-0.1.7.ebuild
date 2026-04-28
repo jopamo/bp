@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A lock-free concurrent slab."
 HOMEPAGE="https://github.com/hawkw/sharded-slab"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

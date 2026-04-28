@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Stackfull Generator Library in Rust"
 HOMEPAGE="https://github.com/Xudong-Huang/generator-rs.git"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

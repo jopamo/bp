@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Styling legacy Windows terminals"
 HOMEPAGE="https://github.com/rust-cli/anstyle"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

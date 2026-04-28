@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Pure-Rust traits and utilities for constant-time cryptographic implementations."
 HOMEPAGE="https://dalek.rs/"
 LICENSE="BSD-3-Clause"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

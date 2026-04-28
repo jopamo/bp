@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Rust bindings generator and runtime support for WIT and the component model. Used when compiling Rust programs to the component model."
 HOMEPAGE="https://github.com/bytecodealliance/wit-bindgen"
 LICENSE="|| ( Apache-2.0-with-LLVM-exception Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

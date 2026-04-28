@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Serialization value trees"
 HOMEPAGE="https://github.com/arcnmx/serde-value"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

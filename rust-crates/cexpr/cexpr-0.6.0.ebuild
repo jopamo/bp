@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A C expression parser and evaluator"
 HOMEPAGE="https://github.com/jethrogb/rust-cexpr"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

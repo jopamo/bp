@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Extract documentation for the feature flags from comments in Cargo.toml"
 HOMEPAGE="https://slint.rs"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

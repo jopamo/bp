@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Back end adapter for idna"
 HOMEPAGE="https://docs.rs/crate/idna_adapter/latest"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

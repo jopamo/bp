@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Types for interaction with a language server, using VSCode's Language Server Protocol"
 HOMEPAGE="https://github.com/gluon-lang/lsp-types"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Rust bindings to V8"
 HOMEPAGE="https://github.com/denoland/rusty_v8"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

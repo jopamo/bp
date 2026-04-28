@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A high-level object-oriented access to Rust code for rust-analyzer."
 HOMEPAGE="https://github.com/rust-lang/rust-analyzer"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

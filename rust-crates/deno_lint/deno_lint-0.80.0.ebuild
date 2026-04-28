@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="lint for deno"
 HOMEPAGE="https://github.com/denoland/deno_lint"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="An implementation of regexes, supporting a relatively rich set of features, including backreferences and look-around."
 HOMEPAGE="https://github.com/fancy-regex/fancy-regex"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

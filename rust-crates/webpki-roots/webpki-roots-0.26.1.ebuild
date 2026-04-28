@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Mozilla's CA root certificates for use with webpki"
 HOMEPAGE="https://github.com/rustls/webpki-roots"
 LICENSE="MPL-2.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

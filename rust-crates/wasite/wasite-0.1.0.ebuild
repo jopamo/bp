@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="WASI Terminal Environment API"
 HOMEPAGE="https://github.com/ardaku/wasite/blob/stable/CHANGELOG.md"
 LICENSE="|| ( Apache-2.0 BSL-1.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Asynchronous Virtio socket support for Rust"
 HOMEPAGE="https://github.com/rust-vsock/tokio-vsock"
 LICENSE="Apache-2.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

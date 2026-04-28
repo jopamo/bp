@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Weak hash maps and sets"
 HOMEPAGE="https://github.com/tov/weak-table-rs"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

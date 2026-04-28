@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Determine whether characters have the ID_Start or ID_Continue properties according to Unicode Standard Annex #31"
 HOMEPAGE="https://github.com/Boshen/unicode-id-start"
 LICENSE="|| ( MIT Apache-2.0 ) Unicode-DFS-2016"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

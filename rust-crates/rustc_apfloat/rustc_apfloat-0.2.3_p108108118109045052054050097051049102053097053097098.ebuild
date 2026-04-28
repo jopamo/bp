@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Rust port of C++ llvm::APFloat library"
 HOMEPAGE="https://github.com/rust-lang/rustc_apfloat"
 LICENSE="Apache-2.0-with-LLVM-exception"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Derive macro for rkyv"
 HOMEPAGE="https://github.com/rkyv/rkyv"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

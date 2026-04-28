@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Pure FFI to Jon Blow's VS discovery script"
 HOMEPAGE="https://github.com/nabijaczleweli/vswhom-sys.rs"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

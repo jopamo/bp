@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Implementation of the WTF-8 encoding. https://simonsapin.github.io/wtf-8/"
 HOMEPAGE="https://github.com/SimonSapin/rust-wtf8"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

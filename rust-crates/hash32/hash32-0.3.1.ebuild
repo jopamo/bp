@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="32-bit hashing algorithms"
 HOMEPAGE="https://github.com/japaric/hash32"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

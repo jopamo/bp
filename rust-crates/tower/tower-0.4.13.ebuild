@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Tower is a library of modular and reusable components for building robust clients and servers."
 HOMEPAGE="https://github.com/tower-rs/tower"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

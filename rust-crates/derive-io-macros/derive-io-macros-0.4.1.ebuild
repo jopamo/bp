@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Support macros for derive-io"
 HOMEPAGE="https://github.com/mmastrac/derive-io"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

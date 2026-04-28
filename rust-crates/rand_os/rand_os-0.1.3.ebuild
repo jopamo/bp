@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="OS backed Random Number Generator"
 HOMEPAGE="https://crates.io/crates/rand_os"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Macro for writing nested \`if let\` expressions."
 HOMEPAGE="https://github.com/lambda-fairy/if_chain"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Case-preserving, ASCII case-insensitive, no_std string types."
 HOMEPAGE="https://github.com/SergioBenitez/uncased"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

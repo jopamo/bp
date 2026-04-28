@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A build dependency for running \`cmake\` to build a native library"
 HOMEPAGE="https://github.com/rust-lang/cmake-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

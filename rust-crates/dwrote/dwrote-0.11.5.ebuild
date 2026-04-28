@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Lightweight binding to DirectWrite."
 HOMEPAGE="https://github.com/servo/dwrote-rs"
 LICENSE="MPL-2.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

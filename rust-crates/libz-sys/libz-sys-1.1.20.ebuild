@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Low-level bindings to the system libz library (also known as zlib)."
 HOMEPAGE="https://github.com/rust-lang/libz-sys"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

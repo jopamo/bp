@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="The entire Time Zone Database embedded into your binary for specific platforms."
 HOMEPAGE="https://github.com/BurntSushi/jiff/tree/master/crates/jiff-tzdb-platform"
 LICENSE="|| ( Unlicense MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

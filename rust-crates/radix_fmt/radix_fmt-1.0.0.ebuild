@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Format a number in an arbitrary radix"
 HOMEPAGE="https://gitlab.com/Boiethios/radix_fmt_rs"
 LICENSE="Apache-2.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

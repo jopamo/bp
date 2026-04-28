@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="An implementation of a lockfile used in Deno"
 HOMEPAGE="https://github.com/denoland/deno_lockfile"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

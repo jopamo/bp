@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Edwards Digital Signature Algorithm (EdDSA) over Curve25519 (as specified in RFC 8032) support library providing signature type definitions and PKCS#8 private key decoding/encoding support"
 HOMEPAGE="https://github.com/RustCrypto/signatures/tree/master/ed25519"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

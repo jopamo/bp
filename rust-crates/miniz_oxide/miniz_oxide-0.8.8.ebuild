@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="DEFLATE compression and decompression library rewritten in Rust based on miniz"
 HOMEPAGE="https://github.com/Frommi/miniz_oxide/tree/master/miniz_oxide"
 LICENSE="|| ( MIT Zlib Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

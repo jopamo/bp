@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Strongly typed atomic and non-atomic tagged pointers"
 HOMEPAGE="https://github.com/oliver-giersch/tagptr.git"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

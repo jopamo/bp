@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="libyaml transpiled to rust by c2rust"
 HOMEPAGE="https://github.com/dtolnay/unsafe-libyaml"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

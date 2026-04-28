@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="This is a fork of https://crates.io/crates/tower-lsp, used in Deno. At the moment only floating patches."
 HOMEPAGE="https://crates.io/crates/deno_tower_lsp"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

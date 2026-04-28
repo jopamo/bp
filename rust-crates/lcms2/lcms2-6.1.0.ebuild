@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="ICC color profile handling. Rusty wrapper for Little CMS"
 HOMEPAGE="https://lib.rs/crates/lcms2"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

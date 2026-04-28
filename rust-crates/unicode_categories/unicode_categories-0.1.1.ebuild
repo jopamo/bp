@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Query Unicode category membership for chars"
 HOMEPAGE="https://github.com/swgillespie/unicode-categories"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

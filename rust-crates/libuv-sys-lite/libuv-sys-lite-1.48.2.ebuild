@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Tiny, raw bindings to libuv without linking to it"
 HOMEPAGE="https://github.com/nathanwhit/libuv-sys-lite"
 LICENSE="non-standard"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

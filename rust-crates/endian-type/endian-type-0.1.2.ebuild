@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Type safe wrappers for types with a defined byte order"
 HOMEPAGE="https://github.com/Lolirofle/endian-type"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

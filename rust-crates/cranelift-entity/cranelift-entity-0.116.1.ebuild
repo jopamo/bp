@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Data structures using entity references as mapping keys"
 HOMEPAGE="https://github.com/bytecodealliance/wasmtime"
 LICENSE="Apache-2.0-with-LLVM-exception"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

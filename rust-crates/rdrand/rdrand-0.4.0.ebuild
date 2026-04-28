@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="An implementation of random number generator based on rdrand and rdseed instructions"
 HOMEPAGE="https://github.com/nagisa/rust_rdrand/"
 LICENSE="ISC"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

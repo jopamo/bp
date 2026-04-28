@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Types for handling UI scaling"
 HOMEPAGE="https://github.com/rust-windowing/winit"
 LICENSE="Apache-2.0 MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

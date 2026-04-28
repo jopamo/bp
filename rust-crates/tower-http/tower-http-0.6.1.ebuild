@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Tower middleware and utilities for HTTP clients and servers"
 HOMEPAGE="https://github.com/tower-rs/tower-http"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

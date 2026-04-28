@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Bindings for all Web APIs, a procedurally generated crate from WebIDL"
 HOMEPAGE="https://wasm-bindgen.github.io/wasm-bindgen/web-sys/index.html"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="OpenTelemetry API for Rust"
 HOMEPAGE="https://github.com/open-telemetry/opentelemetry-rust"
 LICENSE="Apache-2.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

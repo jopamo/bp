@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A Rust library to access raw Redox system calls"
 HOMEPAGE="https://gitlab.redox-os.org/redox-os/syscall"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

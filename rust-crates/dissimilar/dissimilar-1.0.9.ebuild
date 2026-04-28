@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Diff library with semantic cleanup, based on Google's diff-match-patch"
 HOMEPAGE="https://github.com/dtolnay/dissimilar"
 LICENSE="Apache-2.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Utilities for zero-copy parsing and serialization"
 HOMEPAGE="https://github.com/google/zerocopy"
 LICENSE="|| ( BSD-2-Clause Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

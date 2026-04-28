@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Inspired by nom, but specifically for strings."
 HOMEPAGE="https://deno.land/"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

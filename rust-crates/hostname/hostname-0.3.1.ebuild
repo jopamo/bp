@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Cross-platform system's host name functions"
 HOMEPAGE="https://github.com/svartalf/hostname"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

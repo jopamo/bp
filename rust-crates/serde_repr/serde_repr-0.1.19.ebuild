@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Derive Serialize and Deserialize that delegates to the underlying repr of a C-like enum."
 HOMEPAGE="https://github.com/dtolnay/serde-repr"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

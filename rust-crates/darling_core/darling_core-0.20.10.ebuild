@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Helper crate for proc-macro library for reading attributes into structs when implementing custom derives. Use https://crates.io/crates/darling in your code."
 HOMEPAGE="https://github.com/TedDriggs/darling"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

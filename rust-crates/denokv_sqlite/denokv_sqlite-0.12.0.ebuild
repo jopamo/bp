@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="SQLite storage backend for Deno KV"
 HOMEPAGE="https://github.com/denoland/denokv"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

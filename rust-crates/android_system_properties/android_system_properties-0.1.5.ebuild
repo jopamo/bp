@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Minimal Android system properties wrapper"
 HOMEPAGE="https://github.com/nical/android_system_properties"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

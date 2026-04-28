@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Raw bindings to Fontconfig without a vendored C library"
 HOMEPAGE="https://github.com/yeslogic/fontconfig-rs"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

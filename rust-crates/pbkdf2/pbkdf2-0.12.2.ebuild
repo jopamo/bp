@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Generic implementation of PBKDF2"
 HOMEPAGE="https://github.com/RustCrypto/password-hashes/tree/master/pbkdf2"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

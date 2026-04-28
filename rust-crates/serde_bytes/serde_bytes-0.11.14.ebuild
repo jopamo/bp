@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Optimized handling of \`&[u8]\` and \`Vec<u8>\` for Serde"
 HOMEPAGE="https://github.com/serde-rs/bytes"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

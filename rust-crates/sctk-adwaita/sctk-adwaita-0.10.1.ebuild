@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Adwaita-like SCTK Frame"
 HOMEPAGE="https://github.com/PolyMeilex/sctk-adwaita"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

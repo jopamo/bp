@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Simple temporary directory with cleanup"
 HOMEPAGE="https://gitlab.com/leonhard-llc/ops"
 LICENSE="Apache-2.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

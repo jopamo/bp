@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Expanding std::fs and std::io. Recursively copy folders with information about process and much more."
 HOMEPAGE="https://github.com/webdesus/fs_extra"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

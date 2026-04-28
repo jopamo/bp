@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Multi backend HashMap for higher performance on different key space sizes"
 HOMEPAGE="https://github.com/Licenser/halfbrown"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

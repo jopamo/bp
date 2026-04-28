@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A DSL for describing concrete syntax trees"
 HOMEPAGE="https://github.com/matklad/ungrammar"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Create and set windows icons and metadata for executables"
 HOMEPAGE="https://github.com/mxre/winres"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

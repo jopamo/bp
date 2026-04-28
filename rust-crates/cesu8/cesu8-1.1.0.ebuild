@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Convert to and from CESU-8 encoding (similar to UTF-8)"
 HOMEPAGE="https://github.com/emk/cesu8-rs"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

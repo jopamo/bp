@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A helper crate for use by chalk crates for \`derive\` macros."
 HOMEPAGE="https://github.com/rust-lang/chalk"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

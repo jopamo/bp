@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Markdown formatter for dprint."
 HOMEPAGE="https://github.com/dprint/dprint-plugin-markdown"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

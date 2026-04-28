@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Library for reading/writing numbers in big-endian and little-endian."
 HOMEPAGE="https://github.com/BurntSushi/byteorder"
 LICENSE="|| ( Unlicense MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

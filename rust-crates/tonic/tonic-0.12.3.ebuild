@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A gRPC over HTTP/2 implementation focused on high performance, interoperability, and flexibility."
 HOMEPAGE="https://github.com/hyperium/tonic"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

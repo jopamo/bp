@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Escape characters that may have a special meaning in a shell"
 HOMEPAGE="https://github.com/sfackler/shell-escape"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

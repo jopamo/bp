@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="X11 library bindings for Rust"
 HOMEPAGE="https://github.com/AltF02/x11-rs.git"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Portable Stack Manipulation: stack manipulation and introspection routines"
 HOMEPAGE="https://github.com/rust-lang/stacker/"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="AWS-LC is a general-purpose cryptographic library maintained by the AWS Cryptography team for AWS and their customers. It іs based on code from the Google BoringSSL project and the OpenSSL project."
 HOMEPAGE="https://github.com/aws/aws-lc-rs"
 LICENSE="ISC || ( Apache-2.0 ISC ) OpenSSL"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

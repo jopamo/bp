@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="aws-lc-rs is a cryptographic library using AWS-LC for its cryptographic operations. This library strives to be API-compatible with the popular Rust library named ring."
 HOMEPAGE="https://github.com/aws/aws-lc-rs"
 LICENSE="ISC || ( Apache-2.0 ISC )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

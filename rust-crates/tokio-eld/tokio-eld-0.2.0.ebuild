@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Histogram-based sampler for recording and analyzing event loop delays"
 HOMEPAGE="https://crates.io/crates/tokio-eld"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

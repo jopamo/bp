@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="lazy static regular expressions checked at compile time"
 HOMEPAGE="https://github.com/Canop/lazy-regex"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

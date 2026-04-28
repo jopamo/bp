@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Base32 encoder/decoder for Rust"
 HOMEPAGE="https://github.com/andreasots/base32"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

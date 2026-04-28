@@ -8,6 +8,11 @@ PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" )
 PYTHON_REQ_USE="ssl(+),threads(+)"
 
 inherit distutils-r1 pypi 
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 FLIT_CORE_PV=3.12.0
 
 DESCRIPTION="The PyPA recommended tool for installing Python packages"

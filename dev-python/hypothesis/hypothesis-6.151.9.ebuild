@@ -6,6 +6,12 @@ PYTHON_COMPAT=( "${CLI_COMPAT[@]}" pypy3_11 python3_14 python3_{13,14}t )
 PYTHON_REQ_USE="threads(+),sqlite"
 
 inherit distutils-r1 optfeature
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/sortedcontainers
+"
+# lockstep-pypi-deps: end
 
 TAG=hypothesis-python-${PV}
 MY_P=hypothesis-${TAG}

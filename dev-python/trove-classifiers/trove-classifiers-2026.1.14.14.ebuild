@@ -5,6 +5,11 @@ PYPI_VERIFY_REPO=https://github.com/pypa/trove-classifiers
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} python3_{13,14}t )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Canonical source for classifiers on PyPI (pypi.org)"
 HOMEPAGE="

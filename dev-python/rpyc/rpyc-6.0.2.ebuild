@@ -4,6 +4,12 @@ DISTUTILS_USE_PEP517=hatchling
 PYTHON_COMPAT=( python3_{10..13} )
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/plumbum
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Remote Python Call (RPyC), a transparent and symmetric RPC library"
 HOMEPAGE="https://rpyc.readthedocs.io/en/latest/

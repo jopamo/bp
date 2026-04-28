@@ -5,6 +5,11 @@ PYTHON_COMPAT=( python3_{12..14} )
 PYTHON_REQ_USE="sqlite"
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Disk and file backed cache"
 HOMEPAGE="

@@ -4,6 +4,11 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 MY_P="uri-template-v${PV}"
 DESCRIPTION="URI Template expansion in strict adherence to RFC 6570"

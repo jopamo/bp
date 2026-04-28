@@ -4,6 +4,11 @@ DISTUTILS_USE_PEP517=hatchling
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Parse CSS3 Selectors and translate them to XPath 1.0"
 HOMEPAGE="

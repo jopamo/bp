@@ -5,6 +5,17 @@ PYTHON_TESTED=( python3_{11..14} pypy3_11 )
 PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/certifi
+	dev-python/trio
+	dev-python/trio-websocket
+	dev-python/typing-extensions
+	dev-python/urllib3
+	dev-python/websocket-client
+"
+# lockstep-pypi-deps: end
 
 # base releases are usually ${P}, followups ${P}-python
 TEST_TAG=${P}

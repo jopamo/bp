@@ -6,6 +6,19 @@ PYPI_VERIFY_REPO=https://github.com/scikit-image/scikit-image
 PYTHON_COMPAT=( python3_{11..13} )
 
 inherit distutils-r1 optfeature pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-py/numpy
+	dev-pypi/imageio
+	dev-pypi/lazy-loader
+	dev-pypi/scipy
+	dev-pypi/tifffile
+	dev-python/networkx
+	dev-python/packaging
+	xgui-app/pillow
+"
+# lockstep-pypi-deps: end
 
 # the package refers to blobs directly, use the newest commit to get
 # them all

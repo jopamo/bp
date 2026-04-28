@@ -4,6 +4,12 @@ DISTUTILS_USE_PEP517=poetry
 PYTHON_COMPAT=( python3_{11..14} )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	app-crypto/cryptography
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="JOSE protocol implementation in Python"
 HOMEPAGE="

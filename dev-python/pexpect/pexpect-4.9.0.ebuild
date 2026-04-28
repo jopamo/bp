@@ -5,6 +5,11 @@ PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 PYTHON_REQ_USE="threads(+)"
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Python module for spawning child apps and responding to expected patterns"
 HOMEPAGE="

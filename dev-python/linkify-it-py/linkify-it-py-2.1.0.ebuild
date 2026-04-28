@@ -4,6 +4,12 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/uc-micro-py
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Links recognition library with full unicode support"
 HOMEPAGE="

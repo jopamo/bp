@@ -22,4 +22,4 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="app-server/nodejs"
 
-RESTRICT="test network-sandbox"
+RESTRICT="test"

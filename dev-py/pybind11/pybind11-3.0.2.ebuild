@@ -5,6 +5,11 @@ DISTUTILS_USE_PEP517=scikit-build-core
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 cmake flag-o-matic multiprocessing
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 MY_P=${P/_}
 DESCRIPTION="Seamless operability between C++11 and Python via lightweight bindings"

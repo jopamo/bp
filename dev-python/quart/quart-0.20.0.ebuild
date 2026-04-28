@@ -4,6 +4,20 @@ DISTUTILS_USE_PEP517=flit
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/jinja2
+	dev-python/aiofiles
+	dev-python/blinker
+	dev-python/click
+	dev-python/flask
+	dev-python/hypercorn
+	dev-python/itsdangerous
+	dev-python/markupsafe
+	dev-python/werkzeug
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="A Python ASGI web microframework with the same API as Flask"
 HOMEPAGE="

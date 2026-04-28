@@ -4,6 +4,12 @@ DISTUTILS_USE_PEP517=poetry
 PYTHON_COMPAT=( python3_{11..14} )
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/pyasn1
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Pure-Python RSA implementation"
 HOMEPAGE="

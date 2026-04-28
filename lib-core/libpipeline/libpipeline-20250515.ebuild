@@ -17,8 +17,6 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs test"
 
-RESTRICT="network-sandbox"
-
 src_prepare() {
 	qa-policy-configure
 

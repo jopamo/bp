@@ -6,6 +6,13 @@ PYPI_VERIFY_REPO=https://github.com/mitya57/secretstorage
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	app-crypto/cryptography
+	dev-python/jeepney
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Python bindings to FreeDesktop.org Secret Service API"
 HOMEPAGE="

@@ -4,6 +4,11 @@ DISTUTILS_USE_PEP517=hatchling
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Jupyter Python Comm implementation, for usage in ipykernel, xeus-python"
 HOMEPAGE="

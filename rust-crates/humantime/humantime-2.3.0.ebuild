@@ -1,0 +1,20 @@
+# lockstep-managed: cargo-crate
+EAPI=8
+
+CRATE_NAME="humantime"
+CRATE_VERSION="2.3.0"
+CRATE_CHECKSUM="135b12329e5e3ce057a9f972339ea52bc954fe1e9358ef27f95e89716fbc5424"
+CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
+CRATE_SOURCE_KIND="registry"
+
+inherit cargo-crate
+
+DESCRIPTION="A parser and formatter for std::time::{Duration, SystemTime}"
+HOMEPAGE="https://github.com/chronotope/humantime"
+LICENSE="|| ( MIT Apache-2.0 )"
+SLOT="${PV}"
+KEYWORDS="amd64 arm64"
+
+CARGO_CRATE_FEATURES=(
+	"mu"
+)

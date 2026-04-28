@@ -960,8 +960,6 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RESTRICT="test network-sandbox"
-
 export BINDGEN_EXTRA_CLANG_ARGS="-include sys/socket.h -include netinet/in.h -include stdio.h"
 
 src_prepare() {

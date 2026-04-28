@@ -5,6 +5,11 @@ DISTUTILS_USE_PEP517=flit
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Easy-to-use Python module for text parsing"
 HOMEPAGE="

@@ -1,4 +1,187 @@
 # Distributed under the terms of the GNU General Public License v2
+# lockstep-cargo-managed: true
+# lockstep-cargo-deps: begin
+CARGO_DEPS="
+	rust-crates/addr2line-0.24.2
+	rust-crates/adler2-2.0.1
+	rust-crates/ahash-0.8.12
+	rust-crates/aho-corasick-1.1.3
+	rust-crates/anstream-0.6.20
+	rust-crates/anstyle-1.0.11
+	rust-crates/anstyle-parse-0.2.7
+	rust-crates/anstyle-query-1.1.4
+	rust-crates/anstyle-wincon-3.0.10
+	rust-crates/autocfg-1.5.0
+	rust-crates/backtrace-0.3.75
+	rust-crates/base64-0.13.1
+	rust-crates/bitflags-2.9.4
+	rust-crates/bumpalo-3.19.0
+	rust-crates/castaway-0.2.4
+	rust-crates/cc-1.2.38
+	rust-crates/cfg-if-1.0.3
+	rust-crates/colorchoice-1.0.4
+	rust-crates/compact_str-0.9.0
+	rust-crates/console-0.15.11
+	rust-crates/crossbeam-deque-0.8.6
+	rust-crates/crossbeam-epoch-0.9.18
+	rust-crates/crossbeam-utils-0.8.21
+	rust-crates/darling-0.20.11
+	rust-crates/darling_core-0.20.11
+	rust-crates/darling_macro-0.20.11
+	rust-crates/dary_heap-0.3.8
+	rust-crates/derive_builder-0.20.2
+	rust-crates/derive_builder_core-0.20.2
+	rust-crates/derive_builder_macro-0.20.2
+	rust-crates/either-1.15.0
+	rust-crates/encode_unicode-1.0.0
+	rust-crates/env_filter-0.1.3
+	rust-crates/env_logger-0.11.8
+	rust-crates/errno-0.3.14
+	rust-crates/esaxx-rs-0.1.10
+	rust-crates/fastrand-2.3.0
+	rust-crates/find-msvc-tools-0.1.2
+	rust-crates/fnv-1.0.7
+	rust-crates/futures-0.3.31
+	rust-crates/futures-channel-0.3.31
+	rust-crates/futures-core-0.3.31
+	rust-crates/futures-executor-0.3.31
+	rust-crates/futures-io-0.3.31
+	rust-crates/futures-macro-0.3.31
+	rust-crates/futures-sink-0.3.31
+	rust-crates/futures-task-0.3.31
+	rust-crates/futures-util-0.3.31
+	rust-crates/getrandom-0.3.3
+	rust-crates/gimli-0.31.1
+	rust-crates/heck-0.5.0
+	rust-crates/ident_case-1.0.1
+	rust-crates/indicatif-0.17.11
+	rust-crates/indoc-2.0.6
+	rust-crates/io-uring-0.7.10
+	rust-crates/is_terminal_polyfill-1.70.1
+	rust-crates/itertools-0.14.0
+	rust-crates/itoa-1.0.15
+	rust-crates/jiff-0.2.15
+	rust-crates/jiff-static-0.2.15
+	rust-crates/js-sys-0.3.80
+	rust-crates/libc-0.2.175
+	rust-crates/linux-raw-sys-0.11.0
+	rust-crates/log-0.4.28
+	rust-crates/macro_rules_attribute-0.2.2
+	rust-crates/macro_rules_attribute-proc_macro-0.2.2
+	rust-crates/matrixmultiply-0.3.10
+	rust-crates/memchr-2.7.5
+	rust-crates/memoffset-0.9.1
+	rust-crates/minimal-lexical-0.2.1
+	rust-crates/miniz_oxide-0.8.9
+	rust-crates/mio-1.0.4
+	rust-crates/monostate-0.1.16
+	rust-crates/monostate-impl-0.1.16
+	rust-crates/ndarray-0.16.1
+	rust-crates/nom-7.1.3
+	rust-crates/num-complex-0.4.6
+	rust-crates/num-integer-0.1.46
+	rust-crates/num-traits-0.2.19
+	rust-crates/number_prefix-0.4.0
+	rust-crates/numpy-0.25.0
+	rust-crates/object-0.36.7
+	rust-crates/once_cell-1.21.3
+	rust-crates/once_cell_polyfill-1.70.1
+	rust-crates/onig-6.5.1
+	rust-crates/onig_sys-69.9.1
+	rust-crates/paste-1.0.15
+	rust-crates/pin-project-lite-0.2.16
+	rust-crates/pin-utils-0.1.0
+	rust-crates/pkg-config-0.3.32
+	rust-crates/portable-atomic-1.11.1
+	rust-crates/portable-atomic-util-0.2.4
+	rust-crates/ppv-lite86-0.2.21
+	rust-crates/proc-macro2-1.0.101
+	rust-crates/pyo3-0.25.1
+	rust-crates/pyo3-async-runtimes-0.25.0
+	rust-crates/pyo3-build-config-0.25.1
+	rust-crates/pyo3-ffi-0.25.1
+	rust-crates/pyo3-macros-0.25.1
+	rust-crates/pyo3-macros-backend-0.25.1
+	rust-crates/quote-1.0.40
+	rust-crates/r-efi-5.3.0
+	rust-crates/rand-0.9.2
+	rust-crates/rand_chacha-0.9.0
+	rust-crates/rand_core-0.9.3
+	rust-crates/rawpointer-0.2.1
+	rust-crates/rayon-1.11.0
+	rust-crates/rayon-cond-0.4.0
+	rust-crates/rayon-core-1.13.0
+	rust-crates/regex-1.11.2
+	rust-crates/regex-automata-0.4.10
+	rust-crates/regex-syntax-0.8.6
+	rust-crates/rustc-demangle-0.1.26
+	rust-crates/rustc-hash-2.1.1
+	rust-crates/rustix-1.1.2
+	rust-crates/rustversion-1.0.22
+	rust-crates/ryu-1.0.20
+	rust-crates/serde-1.0.225
+	rust-crates/serde_core-1.0.225
+	rust-crates/serde_derive-1.0.225
+	rust-crates/serde_json-1.0.145
+	rust-crates/shlex-1.3.0
+	rust-crates/signal-hook-registry-1.4.6
+	rust-crates/slab-0.4.11
+	rust-crates/smallvec-1.15.1
+	rust-crates/spm_precompiled-0.1.4
+	rust-crates/static_assertions-1.1.0
+	rust-crates/strsim-0.11.1
+	rust-crates/syn-2.0.106
+	rust-crates/target-lexicon-0.13.3
+	rust-crates/tempfile-3.22.0
+	rust-crates/thiserror-2.0.16
+	rust-crates/thiserror-impl-2.0.16
+	rust-crates/tokio-1.47.1
+	rust-crates/tokio-macros-2.5.0
+	rust-crates/unicode-ident-1.0.19
+	rust-crates/unicode-normalization-alignments-0.1.12
+	rust-crates/unicode-segmentation-1.12.0
+	rust-crates/unicode-width-0.2.1
+	rust-crates/unicode_categories-0.1.1
+	rust-crates/unindent-0.2.4
+	rust-crates/utf8parse-0.2.2
+	rust-crates/version_check-0.9.5
+	rust-crates/wasi-0.11.1+wasi-snapshot-preview1
+	rust-crates/wasi-0.14.7+wasi-0.2.4
+	rust-crates/wasip2-1.0.1+wasi-0.2.4
+	rust-crates/wasm-bindgen-0.2.103
+	rust-crates/wasm-bindgen-backend-0.2.103
+	rust-crates/wasm-bindgen-macro-0.2.103
+	rust-crates/wasm-bindgen-macro-support-0.2.103
+	rust-crates/wasm-bindgen-shared-0.2.103
+	rust-crates/web-time-1.1.0
+	rust-crates/windows-link-0.1.3
+	rust-crates/windows-link-0.2.0
+	rust-crates/windows-sys-0.59.0
+	rust-crates/windows-sys-0.60.2
+	rust-crates/windows-sys-0.61.0
+	rust-crates/windows-targets-0.52.6
+	rust-crates/windows-targets-0.53.3
+	rust-crates/windows_aarch64_gnullvm-0.52.6
+	rust-crates/windows_aarch64_gnullvm-0.53.0
+	rust-crates/windows_aarch64_msvc-0.52.6
+	rust-crates/windows_aarch64_msvc-0.53.0
+	rust-crates/windows_i686_gnu-0.52.6
+	rust-crates/windows_i686_gnu-0.53.0
+	rust-crates/windows_i686_gnullvm-0.52.6
+	rust-crates/windows_i686_gnullvm-0.53.0
+	rust-crates/windows_i686_msvc-0.52.6
+	rust-crates/windows_i686_msvc-0.53.0
+	rust-crates/windows_x86_64_gnu-0.52.6
+	rust-crates/windows_x86_64_gnu-0.53.0
+	rust-crates/windows_x86_64_gnullvm-0.52.6
+	rust-crates/windows_x86_64_gnullvm-0.53.0
+	rust-crates/windows_x86_64_msvc-0.52.6
+	rust-crates/windows_x86_64_msvc-0.53.0
+	rust-crates/wit-bindgen-0.46.0
+	rust-crates/zerocopy-0.8.27
+	rust-crates/zerocopy-derive-0.8.27
+"
+# lockstep-cargo-deps: end
 
 # Autogenerated by pycargoebuild 0.15.0
 
@@ -11,7 +194,13 @@ RUST_MIN_VER="1.82.0"
 CRATES="
 "
 
-inherit cargo distutils-r1
+inherit cargo lockstep-cargo distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/huggingface_hub
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Implementation of today's most used tokenizers"
 HOMEPAGE="https://github.com/huggingface/tokenizers"

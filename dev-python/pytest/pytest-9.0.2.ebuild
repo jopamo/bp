@@ -6,6 +6,15 @@ PYTHON_TESTED=( python3_{11..14} pypy3_11 )
 PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_{13,14}t )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/iniconfig
+	dev-python/packaging
+	dev-python/pluggy
+	dev-python/pygments
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Simple powerful testing with Python"
 HOMEPAGE="

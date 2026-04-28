@@ -6,6 +6,12 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/cffi
+"
+# lockstep-pypi-deps: end
 
 # Commit of the Brotli library bundled within brotlipy.
 BROTLI_BUNDLED_COMMIT="ed738e842d2fbdf2d6459e39267a633c4a9b2f5d"

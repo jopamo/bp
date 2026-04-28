@@ -4,6 +4,12 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/pyparsing
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="A comprehensive HTTP client library"
 HOMEPAGE="

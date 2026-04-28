@@ -114,6 +114,15 @@ CRATES="
 "
 
 inherit cargo distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/pydantic-core
+	dev-python/annotated-types
+	dev-python/typing-extensions
+	dev-python/typing-inspection
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Data parsing and validation using Python type hints"
 HOMEPAGE="

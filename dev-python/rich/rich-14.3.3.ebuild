@@ -4,6 +4,13 @@ DISTUTILS_USE_PEP517=poetry
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 optfeature
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/markdown-it-py
+	dev-python/pygments
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Python library for rendering rich text, tables, etc. to the terminal"
 HOMEPAGE="

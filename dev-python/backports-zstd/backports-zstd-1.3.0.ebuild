@@ -8,6 +8,11 @@ PYPI_VERIFY_REPO=https://github.com/Rogdham/backports.zstd
 PYTHON_COMPAT=( pypy3_11 python3_{11..13} )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Backport of PEP-784: adding Zstandard to the standard library"
 HOMEPAGE="

@@ -24,7 +24,7 @@ DEPEND="
 	app-tex/hunspell
 "
 
-RESTRICT="test network-sandbox"
+RESTRICT="test"
 
 src_configure() {
 	# select LLVM toolchain binaries

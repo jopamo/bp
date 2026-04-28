@@ -4,6 +4,11 @@ DISTUTILS_USE_PEP517=flit
 PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Wrappers to build Python packages using PEP 517 hooks"
 HOMEPAGE="

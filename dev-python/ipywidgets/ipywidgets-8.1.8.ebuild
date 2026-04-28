@@ -5,6 +5,16 @@ PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 PYTHON_REQ_USE="threads(+)"
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/ipython
+	dev-pypi/jupyterlab-widgets
+	dev-pypi/widgetsnbextension
+	dev-python/comm
+	dev-python/traitlets
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="IPython HTML widgets for Jupyter"
 HOMEPAGE="

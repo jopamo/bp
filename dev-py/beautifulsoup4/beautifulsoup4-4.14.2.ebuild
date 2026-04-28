@@ -4,6 +4,13 @@ DISTUTILS_USE_PEP517=hatchling
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/soupsieve
+	dev-python/typing-extensions
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Pythonic idioms for iterating, searching, and modifying an HTML/XML parse tree"
 HOMEPAGE="https://www.crummy.com/software/BeautifulSoup/bs4/"

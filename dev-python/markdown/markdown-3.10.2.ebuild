@@ -5,6 +5,11 @@ PYPI_PN=${PN^}
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Python implementation of the markdown markup language"
 HOMEPAGE="

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A native Rust encoder and decoder of TOML-formatted files and streams. Provides implementations of the standard Serialize/Deserialize traits for TOML data to facilitate deserializing and serializing Rust structures."
 HOMEPAGE="https://github.com/toml-rs/toml"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

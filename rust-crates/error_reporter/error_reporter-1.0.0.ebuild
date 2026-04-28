@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A library to print errors"
 HOMEPAGE="https://github.com/mahkoh/error_reporter"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

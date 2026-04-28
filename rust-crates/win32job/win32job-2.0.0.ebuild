@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A safe API for Windows' job objects."
 HOMEPAGE="https://github.com/ohadravid/win32job-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

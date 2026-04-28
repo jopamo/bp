@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A key-value Map implementation based on a flat, sorted Vec."
 HOMEPAGE="https://github.com/unicode-org/icu4x"
 LICENSE="Unicode-3.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A substitute implementation of the compiler's \`proc_macro\` API to decouple token-based libraries from the procedural macro use case."
 HOMEPAGE="https://github.com/dtolnay/proc-macro2"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

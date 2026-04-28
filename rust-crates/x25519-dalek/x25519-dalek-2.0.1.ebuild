@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="X25519 elliptic curve Diffie-Hellman key exchange in pure-Rust, using curve25519-dalek."
 HOMEPAGE="https://github.com/dalek-cryptography/curve25519-dalek"
 LICENSE="BSD-3-Clause"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

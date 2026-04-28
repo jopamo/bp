@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A protective and efficient HTTP library for all."
 HOMEPAGE="https://hyper.rs"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Use finite state transducers to compactly represents sets or maps of many strings (> 1 billion is possible)."
 HOMEPAGE="https://github.com/BurntSushi/fst"
 LICENSE="|| ( Unlicense MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Pure Rust implementation of the SHA-2 hash function family including SHA-224, SHA-256, SHA-384, and SHA-512."
 HOMEPAGE="https://github.com/RustCrypto/hashes"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

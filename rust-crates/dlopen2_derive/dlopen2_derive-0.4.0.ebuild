@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Derive macros for the dlopen2 crate."
 HOMEPAGE="https://crates.io/crates/dlopen2_derive"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

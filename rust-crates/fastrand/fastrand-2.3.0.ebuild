@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A simple and fast random number generator"
 HOMEPAGE="https://github.com/smol-rs/fastrand"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Common types and utilities for wgpu, the cross-platform, safe, pure-rust graphics API"
 HOMEPAGE="https://wgpu.rs/"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

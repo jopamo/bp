@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A drop-in replacement for std::fs with more helpful error messages."
 HOMEPAGE="https://github.com/andrewhickman/fs-err"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

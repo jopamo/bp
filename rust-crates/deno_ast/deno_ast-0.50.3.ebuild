@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Source text parsing, lexing, and AST related functionality for Deno"
 HOMEPAGE="https://deno.land/"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

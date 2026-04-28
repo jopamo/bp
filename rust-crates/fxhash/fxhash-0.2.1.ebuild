@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A fast, non-secure, hashing algorithm derived from an internal hasher used in FireFox and Rustc."
 HOMEPAGE="https://github.com/cbreeden/fxhash"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Create static TimeZone values for Jiff (useful in core-only environments)."
 HOMEPAGE="https://github.com/BurntSushi/jiff/tree/master/crates/jiff-static"
 LICENSE="|| ( Unlicense MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

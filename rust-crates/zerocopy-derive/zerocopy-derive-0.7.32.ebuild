@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Custom derive for traits from the zerocopy crate"
 HOMEPAGE="https://github.com/google/zerocopy"
 LICENSE="|| ( BSD-2-Clause Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

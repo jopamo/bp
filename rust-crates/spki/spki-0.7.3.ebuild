@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="X.509 Subject Public Key Info (RFC5280) describing public keys as well as their associated AlgorithmIdentifiers (i.e. OIDs)"
 HOMEPAGE="https://github.com/RustCrypto/formats/tree/master/spki"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

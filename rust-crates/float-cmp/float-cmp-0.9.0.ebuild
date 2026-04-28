@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Floating point approximate comparison traits"
 HOMEPAGE="https://github.com/mikedilger/float-cmp"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

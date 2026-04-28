@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A unified interface for reading and writing object file formats."
 HOMEPAGE="https://github.com/gimli-rs/object"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

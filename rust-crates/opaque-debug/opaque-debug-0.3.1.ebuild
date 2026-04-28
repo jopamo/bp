@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Macro for opaque Debug trait implementation"
 HOMEPAGE="https://github.com/RustCrypto/utils"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Safe Rust bindings to \`openpty\` and related functions"
 HOMEPAGE="https://github.com/sunfishcode/rustix-openpty"
 LICENSE="|| ( Apache-2.0-with-LLVM-exception Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

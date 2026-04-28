@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Procedural macros to make inter-operation between primitives and enums easier."
 HOMEPAGE="https://github.com/illicitonion/num_enum"
 LICENSE="|| ( BSD-3-Clause MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

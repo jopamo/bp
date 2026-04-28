@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Streaming transcoding for encoding_rs"
 HOMEPAGE="https://github.com/BurntSushi/encoding_rs_io"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

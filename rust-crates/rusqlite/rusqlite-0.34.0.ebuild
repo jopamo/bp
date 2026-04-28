@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Ergonomic wrapper for SQLite"
 HOMEPAGE="https://github.com/rusqlite/rusqlite"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Helper macros for handling manually loading optional system libraries."
 HOMEPAGE="https://github.com/elinorbgr/dlib"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

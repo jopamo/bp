@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Convert Unicode strings to pure ASCII by intelligently transliterating them. Suppors Emoji and Chinese."
 HOMEPAGE="https://lib.rs/crates/deunicode"
 LICENSE="BSD-3-Clause"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

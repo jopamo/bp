@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Wasm module dependency analysis for module resolution"
 HOMEPAGE="https://github.com/denoland/wasm_dep_analyzer"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Hickory DNS is a safe and secure DNS server with DNSSEC support. Eventually this could be a replacement for BIND9. The DNSSEC support allows for live signing of all records, in it does not currently support records signed offline. The server supports dynamic DNS with SIG0 authenticated requests. Hickory DNS is based on the Tokio and Futures libraries, which means it should be easily integrated into other software that also use those libraries."
 HOMEPAGE="https://hickory-dns.org/"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

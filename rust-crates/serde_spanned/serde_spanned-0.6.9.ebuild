@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Serde-compatible spanned Value"
 HOMEPAGE="https://github.com/toml-rs/toml"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

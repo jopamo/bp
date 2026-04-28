@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Procedural macros for cssparser"
 HOMEPAGE="https://github.com/servo/rust-cssparser"
 LICENSE="MPL-2.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

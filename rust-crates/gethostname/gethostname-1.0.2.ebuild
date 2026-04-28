@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="gethostname for all platforms"
 HOMEPAGE="https://codeberg.org/swsnr/gethostname.rs"
 LICENSE="Apache-2.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

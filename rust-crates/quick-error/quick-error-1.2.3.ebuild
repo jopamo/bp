@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A macro which makes error types pleasant to write."
 HOMEPAGE="http://github.com/tailhook/quick-error"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Rust definition of SPIR-V structs and enums"
 HOMEPAGE="https://github.com/gfx-rs/rspirv"
 LICENSE="Apache-2.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

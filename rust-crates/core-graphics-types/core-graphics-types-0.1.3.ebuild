@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Bindings for some fundamental Core Graphics types"
 HOMEPAGE="https://github.com/servo/core-foundation-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

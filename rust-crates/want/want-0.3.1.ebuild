@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Detect when another Future wants a result."
 HOMEPAGE="https://github.com/seanmonstar/want"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

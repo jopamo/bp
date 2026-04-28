@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="List the network interfaces on the system."
 HOMEPAGE="https://crates.io/crates/netif"
 LICENSE="ISC"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

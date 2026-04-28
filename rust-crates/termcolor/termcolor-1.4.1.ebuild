@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A simple cross platform library for writing colored text to a terminal."
 HOMEPAGE="https://github.com/BurntSushi/termcolor"
 LICENSE="|| ( Unlicense MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

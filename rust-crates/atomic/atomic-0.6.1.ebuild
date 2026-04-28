@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Generic Atomic<T> wrapper type"
 HOMEPAGE="https://github.com/Amanieu/atomic-rs"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A brotli compressor and decompressor that with an interface avoiding the rust stdlib. This makes it suitable for embedded devices and kernels. It is designed with a pluggable allocator so that the standard lib's allocator may be employed. The default build also includes a stdlib allocator and stream interface. Disable this with --features=no-stdlib. All included code is safe."
 HOMEPAGE="https://github.com/dropbox/rust-brotli"
 LICENSE="|| ( BSD-3-Clause MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

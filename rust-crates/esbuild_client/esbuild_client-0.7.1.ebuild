@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A Rust implementation of a client for communicating with esbuild's service API over stdio"
 HOMEPAGE="https://github.com/denoland/esbuild_client"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A tiny, robust PRNG implementation."
 HOMEPAGE="https://hg.sr.ht/~icefox/oorandom"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

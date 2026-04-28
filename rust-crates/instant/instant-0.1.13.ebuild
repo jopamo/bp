@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Unmaintained, consider using web-time instead - A partial replacement for std::time::Instant that works on WASM to."
 HOMEPAGE="https://github.com/sebcrozet/instant"
 LICENSE="BSD-3-Clause"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

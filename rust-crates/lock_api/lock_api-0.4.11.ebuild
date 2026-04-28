@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Wrappers to create fully-featured Mutex and RwLock types. Compatible with no_std."
 HOMEPAGE="https://github.com/Amanieu/parking_lot"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Iterator by char over potentially-invalid UTF-16 in &[u16]"
 HOMEPAGE="https://docs.rs/utf16_iter/"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

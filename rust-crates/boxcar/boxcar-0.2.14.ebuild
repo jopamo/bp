@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A concurrent, append-only vector"
 HOMEPAGE="https://github.com/ibraheemdev/boxcar"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

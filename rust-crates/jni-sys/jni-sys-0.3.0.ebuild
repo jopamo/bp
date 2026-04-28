@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Rust definitions corresponding to jni.h"
 HOMEPAGE="https://github.com/sfackler/rust-jni-sys"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

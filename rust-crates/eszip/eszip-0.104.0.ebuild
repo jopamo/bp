@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A utility that can download JavaScript and TypeScript module graphs and store them locally in a special zip file"
 HOMEPAGE="https://github.com/denoland/eszip"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

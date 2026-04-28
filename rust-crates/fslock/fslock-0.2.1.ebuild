@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A library to use files as locks"
 HOMEPAGE="https://github.com/brunoczim/fslock"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

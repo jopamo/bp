@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A library for loading XCursor themes"
 HOMEPAGE="https://github.com/esposm03/xcursor-rs"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

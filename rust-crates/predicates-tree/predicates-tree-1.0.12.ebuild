@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Render boolean-valued predicate functions results as a tree."
 HOMEPAGE="https://github.com/assert-rs/predicates-rs/tree/master/crates/tree"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

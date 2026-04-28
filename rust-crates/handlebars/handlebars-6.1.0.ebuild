@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Handlebars templating implemented in Rust."
 HOMEPAGE="https://github.com/sunng87/handlebars-rust"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Rust to V8 serialization and deserialization"
 HOMEPAGE="https://github.com/denoland/deno_core"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

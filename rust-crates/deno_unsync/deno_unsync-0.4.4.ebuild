@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A collection of adapters to make working with Tokio single-threaded runtimes easier"
 HOMEPAGE="https://github.com/denoland/deno_unsync"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

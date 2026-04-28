@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A crate to help you copy things into raw buffers without invoking spooky action at a distance (undefined behavior)."
 HOMEPAGE="https://github.com/EmbarkStudios/presser"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

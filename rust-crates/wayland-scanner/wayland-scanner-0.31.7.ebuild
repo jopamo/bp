@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Wayland Scanner for generating rust APIs from XML wayland protocol files."
 HOMEPAGE="https://github.com/smithay/wayland-rs"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

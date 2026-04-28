@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Find windows-specific tools, read MSVC versions from the registry and from COM interfaces"
 HOMEPAGE="https://github.com/rust-lang/cc-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

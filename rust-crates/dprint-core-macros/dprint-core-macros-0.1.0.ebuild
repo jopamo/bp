@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Core formatting macros for dprint-core."
 HOMEPAGE="https://github.com/dprint/dprint/tree/main/crates/core-macros"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="This library is for encoding/escaping special characters in HTML and decoding/unescaping HTML entities as well."
 HOMEPAGE="https://magiclen.org/html-escape"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Portable interface to epoll, kqueue, event ports, and IOCP"
 HOMEPAGE="https://github.com/smol-rs/polling"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Semi-tolerant YAML concrete syntax tree parser."
 HOMEPAGE="https://github.com/g-plane/pretty_yaml"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

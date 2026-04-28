@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Semmle QL grammar for tree-sitter"
 HOMEPAGE="https://github.com/tree-sitter/tree-sitter-ql"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

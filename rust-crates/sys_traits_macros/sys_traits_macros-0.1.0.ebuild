@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Procedural macros for sys_traits."
 HOMEPAGE="https://github.com/dsherret/sys_traits"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Proc macro for writing Deno Ops"
 HOMEPAGE="https://github.com/denoland/deno_core"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Streaming iterators"
 HOMEPAGE="https://github.com/sfackler/streaming-iterator"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

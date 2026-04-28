@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Pure Rust implementation of the NIST P-521 (a.k.a. secp521r1) elliptic curve as defined in SP 800-186"
 HOMEPAGE="https://github.com/RustCrypto/elliptic-curves/tree/master/p521"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

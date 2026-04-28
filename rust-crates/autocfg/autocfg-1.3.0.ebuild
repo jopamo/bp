@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Automatic cfg for Rust compiler features"
 HOMEPAGE="https://github.com/cuviper/autocfg"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

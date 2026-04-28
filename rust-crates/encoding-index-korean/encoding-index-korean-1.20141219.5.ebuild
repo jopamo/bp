@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Index tables for Korean character encodings"
 HOMEPAGE="https://github.com/lifthrasiir/rust-encoding"
 LICENSE="CC0-1.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

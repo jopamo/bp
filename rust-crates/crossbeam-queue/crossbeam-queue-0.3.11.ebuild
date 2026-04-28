@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Concurrent queues"
 HOMEPAGE="https://github.com/crossbeam-rs/crossbeam/tree/master/crossbeam-queue"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

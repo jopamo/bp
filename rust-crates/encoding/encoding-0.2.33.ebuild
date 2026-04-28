@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Character encoding support for Rust"
 HOMEPAGE="https://github.com/lifthrasiir/rust-encoding"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

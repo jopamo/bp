@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Internal macros used by the openssl crate."
 HOMEPAGE="https://crates.io/crates/openssl-macros"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

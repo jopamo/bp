@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Binding for the zstd compression library."
 HOMEPAGE="https://github.com/gyscos/zstd-rs"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

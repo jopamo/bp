@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A pure-Rust implementation of group operations on ristretto255 and Curve25519"
 HOMEPAGE="https://github.com/dalek-cryptography/curve25519-dalek"
 LICENSE="BSD-3-Clause"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Tool for helping to find SSL certificate locations on the system for OpenSSL"
 HOMEPAGE="https://github.com/alexcrichton/openssl-probe"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Const TypeId and non-'static TypeId"
 HOMEPAGE="https://github.com/dtolnay/typeid"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

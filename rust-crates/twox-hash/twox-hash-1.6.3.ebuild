@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A Rust implementation of the XXHash and XXH3 algorithms"
 HOMEPAGE="https://github.com/shepmaster/twox-hash"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Rust bindings to the Tree-sitter parsing library"
 HOMEPAGE="https://tree-sitter.github.io/tree-sitter"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

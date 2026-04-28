@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Advisory cross-platform lock on a file using a file descriptor to it."
 HOMEPAGE="https://github.com/yoshuawuyts/fd-lock"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

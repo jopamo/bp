@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A Quartz-like cron parser used as part of Cron Triggers in Cloudflare Workers"
 HOMEPAGE="https://github.com/cloudflare/saffron"
 LICENSE="non-standard"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

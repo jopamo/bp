@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Slotmap data structure"
 HOMEPAGE="https://github.com/orlp/slotmap"
 LICENSE="Zlib"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

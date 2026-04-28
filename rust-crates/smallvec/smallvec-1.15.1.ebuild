@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="'Small vector' optimization: store up to a small number of items on the stack"
 HOMEPAGE="https://github.com/servo/rust-smallvec"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

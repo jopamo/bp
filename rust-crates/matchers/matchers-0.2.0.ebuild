@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Regex matching on character and byte streams."
 HOMEPAGE="https://github.com/hawkw/matchers"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

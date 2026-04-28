@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="deno-native-certs loads native certificate store into rustls"
 HOMEPAGE="https://github.com/denoland/deno_native_certs"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

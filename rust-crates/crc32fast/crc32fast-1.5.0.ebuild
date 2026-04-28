@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Fast, SIMD-accelerated CRC32 (IEEE) checksum computation"
 HOMEPAGE="https://github.com/srijs/rust-crc32fast"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

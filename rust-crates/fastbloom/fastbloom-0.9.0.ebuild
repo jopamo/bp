@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="The fastest Bloom filter in Rust. No accuracy compromises. Compatible with any hasher."
 HOMEPAGE="https://github.com/tomtomwombat/fastbloom/"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

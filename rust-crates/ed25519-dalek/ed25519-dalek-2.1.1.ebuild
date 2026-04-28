@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Fast and efficient ed25519 EdDSA key generations, signing, and verification in pure Rust."
 HOMEPAGE="https://github.com/dalek-cryptography/curve25519-dalek"
 LICENSE="BSD-3-Clause"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

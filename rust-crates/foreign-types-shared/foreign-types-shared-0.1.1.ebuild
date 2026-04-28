@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="An internal crate used by foreign-types"
 HOMEPAGE="https://github.com/sfackler/foreign-types"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

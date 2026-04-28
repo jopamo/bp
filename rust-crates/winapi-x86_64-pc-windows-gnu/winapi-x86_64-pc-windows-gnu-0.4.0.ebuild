@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Import libraries for the x86_64-pc-windows-gnu target. Please don't use this crate directly, depend on winapi instead."
 HOMEPAGE="https://github.com/retep998/winapi-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

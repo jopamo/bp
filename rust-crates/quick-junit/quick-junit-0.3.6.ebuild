@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Data model and serializer for JUnit/XUnit XML"
 HOMEPAGE="https://github.com/nextest-rs/quick-junit"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

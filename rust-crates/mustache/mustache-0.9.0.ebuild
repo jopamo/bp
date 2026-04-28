@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Rust implementation of Mustache"
 HOMEPAGE="https://github.com/nickel-org/rust-mustache"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

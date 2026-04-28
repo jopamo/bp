@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Fast SOCKS5 client/server implementation written in Rust async/.await (tokio)"
 HOMEPAGE="https://github.com/dizda/fast-socks5"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

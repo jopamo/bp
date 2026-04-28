@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="inotify bindings for the Rust programming language"
 HOMEPAGE="https://github.com/hannobraun/inotify-sys"
 LICENSE="ISC"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

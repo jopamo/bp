@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Is there an executable file at the given path?"
 HOMEPAGE="https://github.com/fitzgen/is_executable"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

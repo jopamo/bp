@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Utility for applying case rules to Rust identifiers."
 HOMEPAGE="https://github.com/TedDriggs/ident_case"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

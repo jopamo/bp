@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Windows API and GUI in safe, idiomatic Rust."
 HOMEPAGE="https://github.com/rodrigocfd/winsafe"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

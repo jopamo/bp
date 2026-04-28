@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="This crate provides Grapheme Cluster, Word and Sentence boundaries according to Unicode Standard Annex #29 rules."
 HOMEPAGE="https://github.com/unicode-rs/unicode-segmentation"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

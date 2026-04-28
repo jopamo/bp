@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Cross-platform Rust API for memory-mapped file IO"
 HOMEPAGE="https://github.com/RazrFalcon/memmap2-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

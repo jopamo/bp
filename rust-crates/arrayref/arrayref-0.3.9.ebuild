@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Macros to take array references of slices"
 HOMEPAGE="https://github.com/droundy/arrayref"
 LICENSE="BSD-2-Clause"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

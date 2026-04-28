@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A zero overhead I/O library for Windows, focusing on IOCP and async I/O abstractions."
 HOMEPAGE="https://github.com/yoshuawuyts/miow"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

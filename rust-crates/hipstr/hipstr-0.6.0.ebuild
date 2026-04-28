@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Yet another string for Rust: zero-cost borrow and slicing, inline representation for small strings, (atomic) reference counting"
 HOMEPAGE="https://github.com/polazarus/hipstr"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

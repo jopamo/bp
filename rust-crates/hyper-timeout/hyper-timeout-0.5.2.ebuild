@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A connect, read and write timeout aware connector to be used with hyper Client."
 HOMEPAGE="https://github.com/hjr3/hyper-timeout"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Rust implementation of CRC(16, 32, 64) with support of various standards"
 HOMEPAGE="https://github.com/mrhooray/crc-rs.git"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

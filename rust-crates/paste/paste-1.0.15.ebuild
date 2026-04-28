@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Macros for all your token pasting needs"
 HOMEPAGE="https://github.com/dtolnay/paste"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

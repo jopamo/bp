@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="proc-macro library for serde_with"
 HOMEPAGE="https://github.com/jonasbb/serde_with/"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

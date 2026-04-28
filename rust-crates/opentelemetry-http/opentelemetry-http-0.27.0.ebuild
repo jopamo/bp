@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Helper implementations for sending HTTP requests. Uses include propagating and extracting context over http, exporting telemetry, requesting sampling strategies."
 HOMEPAGE="https://github.com/open-telemetry/opentelemetry-rust"
 LICENSE="Apache-2.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

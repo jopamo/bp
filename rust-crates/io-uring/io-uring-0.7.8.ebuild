@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="The low-level \`io_uring\` userspace interface for Rust"
 HOMEPAGE="https://github.com/tokio-rs/io-uring"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

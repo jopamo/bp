@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Shared types for the rustls PKI ecosystem"
 HOMEPAGE="https://github.com/rustls/pki-types"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

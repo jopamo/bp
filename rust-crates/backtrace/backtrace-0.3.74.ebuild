@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A library to acquire a stack trace (backtrace) at runtime in a Rust program."
 HOMEPAGE="https://github.com/rust-lang/backtrace-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

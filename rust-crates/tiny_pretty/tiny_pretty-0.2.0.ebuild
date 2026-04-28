@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Tiny implementation of Wadler-style pretty printer."
 HOMEPAGE="https://github.com/g-plane/tiny_pretty"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="secp256k1 elliptic curve library written in pure Rust with support for ECDSA signing/verification/public-key recovery, Taproot Schnorr signatures (BIP340), Elliptic Curve Diffie-Hellman (ECDH), and general-purpose secp256k1 elliptic curve group operations which can be used to implement arbitrary protocols"
 HOMEPAGE="https://github.com/RustCrypto/elliptic-curves/tree/master/k256"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

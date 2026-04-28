@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Bindings and wrappers for Apple's Grand Central Dispatch (GCD)"
 HOMEPAGE="https://github.com/madsmtm/objc2"
 LICENSE="|| ( Zlib Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

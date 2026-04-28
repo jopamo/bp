@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="UTF-8 and UTF-16 character types, iterators and related methods for char, u8 and u16."
 HOMEPAGE="https://github.com/tormol/encode_unicode"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

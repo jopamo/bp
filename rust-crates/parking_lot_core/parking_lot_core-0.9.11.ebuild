@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="An advanced API for creating custom synchronization primitives."
 HOMEPAGE="https://github.com/Amanieu/parking_lot"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

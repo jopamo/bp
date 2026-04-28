@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="File-based test runner for running tests found in files."
 HOMEPAGE="https://github.com/denoland/file_test_runner"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

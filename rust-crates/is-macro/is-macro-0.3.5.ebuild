@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Derive methods for using custom enums like Option / Result"
 HOMEPAGE="https://github.com/dudykr/ddbase"
 LICENSE="Apache-2.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

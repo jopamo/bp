@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Library for numeric prefixes (kilo, giga, kibi)."
 HOMEPAGE="https://github.com/ogham/rust-number-prefix"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

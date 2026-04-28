@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Minimalist pedantic command line parser"
 HOMEPAGE="https://github.com/blyxxyz/lexopt"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

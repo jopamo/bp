@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Helper macros for Rusticata"
 HOMEPAGE="https://github.com/rusticata/rusticata-macros"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

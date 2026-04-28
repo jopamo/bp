@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="proc macros for the lazy_regex crate"
 HOMEPAGE="https://crates.io/crates/lazy-regex-proc_macros"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

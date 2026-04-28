@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A crate for decoding and encoding the header part of gzip files based on the gzip header implementation in the flate2 crate."
 HOMEPAGE="https://github.com/oyvindln/gzip-header"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

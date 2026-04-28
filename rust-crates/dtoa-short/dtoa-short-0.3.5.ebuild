@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Serialize float number and truncate to certain precision"
 HOMEPAGE="https://github.com/upsuper/dtoa-short"
 LICENSE="MPL-2.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

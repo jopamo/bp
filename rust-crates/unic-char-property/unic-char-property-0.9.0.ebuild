@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="UNIC — Unicode Character Tools — Character Property taxonomy, contracts and build macros"
 HOMEPAGE="https://github.com/open-i18n/rust-unic/"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

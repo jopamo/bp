@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A double-to-string conversion algorithm based on Schubfach and yy"
 HOMEPAGE="https://github.com/dtolnay/zmij"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="\`x-www-form-urlencoded\` meets Serde"
 HOMEPAGE="https://github.com/nox/serde_urlencoded"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

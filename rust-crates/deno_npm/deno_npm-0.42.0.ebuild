@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="npm registry client and dependency resolver used in the Deno CLI"
 HOMEPAGE="https://deno.land/"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

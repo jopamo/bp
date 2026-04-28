@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Macro for easily boxing an error"
 HOMEPAGE="https://github.com/denoland/boxed_error"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

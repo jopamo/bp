@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Pure Rust implementation of SEC1: Elliptic Curve Cryptography encoding formats including ASN.1 DER-serialized private keys as well as the Elliptic-Curve-Point-to-Octet-String encoding"
 HOMEPAGE="https://github.com/RustCrypto/formats/tree/master/sec1"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

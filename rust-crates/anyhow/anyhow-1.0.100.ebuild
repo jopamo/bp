@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Flexible concrete Error type built on std::error::Error"
 HOMEPAGE="https://github.com/dtolnay/anyhow"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

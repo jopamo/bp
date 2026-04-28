@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A small Rust library that allows users to reinterpret data of certain types safely."
 HOMEPAGE="https://github.com/randomites/plain"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

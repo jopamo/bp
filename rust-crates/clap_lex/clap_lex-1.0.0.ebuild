@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Minimal, flexible command line parser"
 HOMEPAGE="https://github.com/clap-rs/clap"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Bindings for liblcms2 (Little CMS) with support for Linux, macOS, and Windows. See lcms2 crate for a safe Rust wrapper."
 HOMEPAGE="https://lib.rs/crates/lcms2-sys"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

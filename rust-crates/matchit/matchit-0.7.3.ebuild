@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A high performance, zero-copy URL router."
 HOMEPAGE="https://github.com/ibraheemdev/matchit"
 LICENSE="MIT BSD-3-Clause"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="This crate provides functions for normalization of Unicode strings, including Canonical and Compatible Decomposition and Recomposition, as described in Unicode Standard Annex #15."
 HOMEPAGE="https://github.com/unicode-rs/unicode-normalization"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

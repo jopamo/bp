@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Fast multiple substring searching."
 HOMEPAGE="https://github.com/BurntSushi/aho-corasick"
 LICENSE="|| ( Unlicense MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Structs for handling malloc'd memory passed to Rust."
 HOMEPAGE="https://github.com/SSheldon/malloc_buf"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

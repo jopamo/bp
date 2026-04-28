@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Calendrical calculations in Rust"
 HOMEPAGE="https://github.com/unicode-org/icu4x"
 LICENSE="Apache-2.0"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

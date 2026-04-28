@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Convert a unicode string to a slug"
 HOMEPAGE="https://github.com/Stebalien/slug-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

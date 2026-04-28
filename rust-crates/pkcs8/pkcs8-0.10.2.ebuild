@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Pure Rust implementation of Public-Key Cryptography Standards (PKCS) #8: Private-Key Information Syntax Specification (RFC 5208), with additional support for PKCS#8v2 asymmetric key packages (RFC 5958)"
 HOMEPAGE="https://github.com/RustCrypto/formats/tree/master/pkcs8"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

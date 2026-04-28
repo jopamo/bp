@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Some macros for tiny containers"
 HOMEPAGE="https://github.com/Soveu/tinyvec_macros"
 LICENSE="|| ( MIT Apache-2.0 Zlib )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

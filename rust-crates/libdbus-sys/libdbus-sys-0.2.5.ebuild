@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="FFI bindings to libdbus."
 HOMEPAGE="https://github.com/diwic/dbus-rs"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

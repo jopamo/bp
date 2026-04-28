@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="An unsafe marker trait for types like Box and Rc that dereference to a stable address even when moved, and hence can be used with libraries such as owning_ref and rental."
 HOMEPAGE="https://github.com/storyyeller/stable_deref_trait"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

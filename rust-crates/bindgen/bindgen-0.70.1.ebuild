@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Automatically generates Rust FFI bindings to C and C++ libraries."
 HOMEPAGE="https://rust-lang.github.io/rust-bindgen/"
 LICENSE="BSD-3-Clause"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

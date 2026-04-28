@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Permutation testing for concurrent code"
 HOMEPAGE="https://github.com/tokio-rs/loom"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

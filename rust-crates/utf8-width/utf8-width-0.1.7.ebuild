@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="To determine the width of a UTF-8 character by providing its first byte."
 HOMEPAGE="https://magiclen.org/utf8-width"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Native Serde adapter for wasm-bindgen"
 HOMEPAGE="https://github.com/cloudflare/serde-wasm-bindgen"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

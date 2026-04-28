@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Rustyline macros implementation of #[derive(Completer, Helper, Hinter, Highlighter)]"
 HOMEPAGE="https://github.com/kkawakam/rustyline"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

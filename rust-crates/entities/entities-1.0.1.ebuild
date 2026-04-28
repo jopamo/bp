@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Provides the raw data needed to convert to and from HTML entities."
 HOMEPAGE="https://github.com/p-jackson/entities"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

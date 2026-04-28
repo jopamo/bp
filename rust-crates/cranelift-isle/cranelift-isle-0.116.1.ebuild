@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="ISLE: Instruction Selection and Lowering Expressions. A domain-specific language for instruction selection in Cranelift."
 HOMEPAGE="https://github.com/bytecodealliance/wasmtime/tree/main/cranelift/isle"
 LICENSE="Apache-2.0-with-LLVM-exception"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

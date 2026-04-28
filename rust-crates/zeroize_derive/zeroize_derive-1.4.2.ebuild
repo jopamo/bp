@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Custom derive support for zeroize"
 HOMEPAGE="https://github.com/RustCrypto/utils/tree/master/zeroize/derive"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

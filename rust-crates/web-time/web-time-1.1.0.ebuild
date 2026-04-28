@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Drop-in replacement for std::time for Wasm in browsers"
 HOMEPAGE="https://github.com/daxpedda/web-time"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

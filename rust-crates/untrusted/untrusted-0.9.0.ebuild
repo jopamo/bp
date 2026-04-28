@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Safe, fast, zero-panic, zero-crashing, zero-allocation parsing of untrusted inputs in Rust."
 HOMEPAGE="https://github.com/briansmith/untrusted"
 LICENSE="ISC"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

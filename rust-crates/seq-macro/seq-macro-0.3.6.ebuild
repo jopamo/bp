@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Macro to repeat sequentially indexed copies of a fragment of code."
 HOMEPAGE="https://github.com/dtolnay/seq-macro"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Bindings to the standard C implementation of the wayland protocol, client side."
 HOMEPAGE="https://github.com/smithay/wayland-rs"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

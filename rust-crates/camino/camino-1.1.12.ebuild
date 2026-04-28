@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="UTF-8 paths"
 HOMEPAGE="https://github.com/camino-rs/camino"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

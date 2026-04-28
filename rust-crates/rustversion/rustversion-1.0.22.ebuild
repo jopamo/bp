@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Conditional compilation according to rustc compiler version"
 HOMEPAGE="https://github.com/dtolnay/rustversion"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

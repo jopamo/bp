@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Out reference"
 HOMEPAGE="https://github.com/Nugine/outref"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

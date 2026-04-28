@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Library for word wrapping, indenting, and dedenting strings. Has optional support for Unicode and emojis as well as machine hyphenation."
 HOMEPAGE="https://github.com/mgeisler/textwrap"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

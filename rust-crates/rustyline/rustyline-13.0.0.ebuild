@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Rustyline, a readline implementation based on Antirez's Linenoise"
 HOMEPAGE="https://github.com/kkawakam/rustyline"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

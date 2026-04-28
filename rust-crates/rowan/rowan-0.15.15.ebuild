@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Library for generic lossless syntax trees"
 HOMEPAGE="https://github.com/rust-analyzer/rowan"
 LICENSE="|| ( MIT Apache-2.0 )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

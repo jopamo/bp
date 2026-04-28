@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="Tokio's proc macros."
 HOMEPAGE="https://tokio.rs"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

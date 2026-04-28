@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="\`tinyvec\` provides 100% safe vec-like data structures."
 HOMEPAGE="https://github.com/Lokathor/tinyvec"
 LICENSE="|| ( Zlib Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

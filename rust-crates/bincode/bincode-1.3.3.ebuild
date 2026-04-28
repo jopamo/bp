@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="A binary serialization / deserialization strategy that uses Serde for transforming structs into bytes and vice versa!"
 HOMEPAGE="https://github.com/servo/bincode"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

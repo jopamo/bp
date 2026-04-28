@@ -12,5 +12,5 @@ inherit cargo-crate
 DESCRIPTION="A wayland-rs client event source for callloop"
 HOMEPAGE="https://github.com/smithay/calloop-wayland-source"
 LICENSE="MIT"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -12,7 +12,7 @@ inherit cargo-crate
 DESCRIPTION="Const-friendly implementation of the ISO/IEC Object Identifier (OID) standard as defined in ITU X.660, with support for BER/DER encoding/decoding as well as heapless no_std (i.e. embedded) support"
 HOMEPAGE="https://github.com/RustCrypto/formats/tree/master/const-oid"
 LICENSE="|| ( Apache-2.0 MIT )"
-SLOT="0/${PV}"
+SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(

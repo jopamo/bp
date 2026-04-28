@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Implementation of `loader::Handle` for rust-analyzer."
+DESCRIPTION="Implementation of \`loader::Handle\` for rust-analyzer."
 HOMEPAGE="https://github.com/rust-lang/rust-analyzer"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

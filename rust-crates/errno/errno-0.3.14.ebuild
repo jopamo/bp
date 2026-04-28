@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Cross-platform interface to the `errno` variable."
+DESCRIPTION="Cross-platform interface to the \`errno\` variable."
 HOMEPAGE="https://github.com/lambda-fairy/rust-errno"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

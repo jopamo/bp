@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="A `TokenTree` data structure for rust-analyzer."
+DESCRIPTION="A \`TokenTree\` data structure for rust-analyzer."
 HOMEPAGE="https://github.com/rust-lang/rust-analyzer"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

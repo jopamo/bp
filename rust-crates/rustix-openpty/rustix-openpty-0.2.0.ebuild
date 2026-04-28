@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Safe Rust bindings to `openpty` and related functions"
+DESCRIPTION="Safe Rust bindings to \`openpty\` and related functions"
 HOMEPAGE="https://github.com/sunfishcode/rustix-openpty"
 LICENSE="|| ( Apache-2.0-with-LLVM-exception Apache-2.0 MIT )"
 SLOT="0/${PV}"

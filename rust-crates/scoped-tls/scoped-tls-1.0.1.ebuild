@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Library implementation of the standard library's old `scoped_thread_local!` macro for providing scoped access to thread local storage (TLS) so any type can be stored into TLS."
+DESCRIPTION="Library implementation of the standard library's old \`scoped_thread_local!\` macro for providing scoped access to thread local storage (TLS) so any type can be stored into TLS."
 HOMEPAGE="https://github.com/alexcrichton/scoped-tls"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

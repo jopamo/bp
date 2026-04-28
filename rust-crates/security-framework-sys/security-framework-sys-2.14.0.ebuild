@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Apple `Security.framework` low-level FFI bindings"
+DESCRIPTION="Apple \`Security.framework\` low-level FFI bindings"
 HOMEPAGE="https://lib.rs/crates/security-framework-sys"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

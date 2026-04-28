@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Custom derive support for the `der` crate's `Choice` and `Sequence` traits"
+DESCRIPTION="Custom derive support for the \`der\` crate's \`Choice\` and \`Sequence\` traits"
 HOMEPAGE="https://github.com/RustCrypto/formats/tree/master/der/derive"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"

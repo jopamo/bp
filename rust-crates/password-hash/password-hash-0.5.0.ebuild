@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Traits which describe the functionality of password hashing algorithms, as well as a `no_std`-friendly implementation of the PHC string format (a well-defined subset of the Modular Crypt Format a.k.a. MCF)"
+DESCRIPTION="Traits which describe the functionality of password hashing algorithms, as well as a \`no_std\`-friendly implementation of the PHC string format (a well-defined subset of the Modular Crypt Format a.k.a. MCF)"
 HOMEPAGE="https://github.com/RustCrypto/traits/tree/master/password-hash"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

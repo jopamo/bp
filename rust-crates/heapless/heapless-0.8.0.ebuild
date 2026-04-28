@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="`static` friendly data structures that don't require dynamic memory allocation"
+DESCRIPTION="\`static\` friendly data structures that don't require dynamic memory allocation"
 HOMEPAGE="https://github.com/rust-embedded/heapless"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

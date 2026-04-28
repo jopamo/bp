@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Basic database traits for rust-analyzer. The concrete DB is defined by `ide` (aka `ra_ap_ide`)."
+DESCRIPTION="Basic database traits for rust-analyzer. The concrete DB is defined by \`ide\` (aka \`ra_ap_ide\`)."
 HOMEPAGE="https://github.com/rust-lang/rust-analyzer"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

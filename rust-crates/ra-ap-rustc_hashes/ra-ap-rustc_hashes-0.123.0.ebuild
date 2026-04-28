@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Automatically published version of the package `rustc_hashes` in the rust-lang/rust repository from commit 052114f0c5e8d49f62f8caba364b07017310ab09 The publishing script for this crate lives at: https://github.com/rust-analyzer/rustc-auto-publish"
+DESCRIPTION="Automatically published version of the package \`rustc_hashes\` in the rust-lang/rust repository from commit 052114f0c5e8d49f62f8caba364b07017310ab09 The publishing script for this crate lives at: https://github.com/rust-analyzer/rustc-auto-publish"
 HOMEPAGE="https://github.com/rust-lang/rust"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

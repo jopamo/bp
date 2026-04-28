@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Utilities to work with `Stream` and `tokio`."
+DESCRIPTION="Utilities to work with \`Stream\` and \`tokio\`."
 HOMEPAGE="https://tokio.rs"
 LICENSE="MIT"
 SLOT="0/${PV}"

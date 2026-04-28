@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="A tiny utility to help save you a lot of effort with long winded `#[cfg()]` checks."
+DESCRIPTION="A tiny utility to help save you a lot of effort with long winded \`#[cfg()]\` checks."
 HOMEPAGE="https://github.com/katharostech/cfg_aliases"
 LICENSE="MIT"
 SLOT="0/${PV}"

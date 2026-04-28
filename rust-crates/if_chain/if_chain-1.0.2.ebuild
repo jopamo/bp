@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Macro for writing nested `if let` expressions."
+DESCRIPTION="Macro for writing nested \`if let\` expressions."
 HOMEPAGE="https://github.com/lambda-fairy/if_chain"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

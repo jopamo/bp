@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="`tinyvec` provides 100% safe vec-like data structures."
+DESCRIPTION="\`tinyvec\` provides 100% safe vec-like data structures."
 HOMEPAGE="https://github.com/Lokathor/tinyvec"
 LICENSE="|| ( Zlib Apache-2.0 MIT )"
 SLOT="0/${PV}"

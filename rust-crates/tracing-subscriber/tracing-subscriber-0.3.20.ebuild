@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Utilities for implementing and composing `tracing` subscribers."
+DESCRIPTION="Utilities for implementing and composing \`tracing\` subscribers."
 HOMEPAGE="https://tokio.rs"
 LICENSE="MIT"
 SLOT="0/${PV}"

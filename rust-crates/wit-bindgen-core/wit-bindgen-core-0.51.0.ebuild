@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Low-level support for bindings generation based on WIT files for use with `wit-bindgen-cli` and other languages."
+DESCRIPTION="Low-level support for bindings generation based on WIT files for use with \`wit-bindgen-cli\` and other languages."
 HOMEPAGE="https://github.com/bytecodealliance/wit-bindgen"
 LICENSE="|| ( Apache-2.0-with-LLVM-exception Apache-2.0 MIT )"
 SLOT="0/${PV}"

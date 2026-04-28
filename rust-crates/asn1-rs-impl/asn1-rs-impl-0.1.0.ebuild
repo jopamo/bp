@@ -9,7 +9,7 @@ CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Implementation details for the `asn1-rs` crate"
+DESCRIPTION="Implementation details for the \`asn1-rs\` crate"
 HOMEPAGE="https://github.com/rusticata/asn1-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"

@@ -5,6 +5,15 @@ PYPI_VERIFY_REPO=https://github.com/fastapi/typer
 PYTHON_COMPAT=( python3_{11..14} )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/annotated-doc
+	dev-python/click
+	dev-python/rich
+	dev-python/shellingham
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Build great CLIs. Easy to code. Based on Python type hints"
 HOMEPAGE="

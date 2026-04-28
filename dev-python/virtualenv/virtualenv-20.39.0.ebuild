@@ -6,6 +6,14 @@ PYTHON_TESTED=( python3_{11..14} pypy3_11 )
 PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_{13,14}t )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/distlib
+	dev-python/filelock
+	dev-python/platformdirs
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Virtual Python Environment builder"
 HOMEPAGE="

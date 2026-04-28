@@ -5,6 +5,15 @@ PYTHON_TESTED=( pypy3_11 python3_{11..14} )
 PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_{13,14}t )
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/packaging
+	dev-python/pathspec
+	dev-python/pluggy
+	dev-python/trove-classifiers
+"
+# lockstep-pypi-deps: end
 
 TAG=${P/-/-v}
 MY_P=hatch-${TAG}

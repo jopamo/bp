@@ -6,6 +6,11 @@ PYPI_VERIFY_REPO=https://github.com/jpadilla/pyjwt
 PYTHON_COMPAT=( python3_{11..14} )
 
 inherit distutils-r1 optfeature pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="JSON Web Token implementation in Python"
 HOMEPAGE="

@@ -7,6 +7,11 @@ PYPI_VERIFY_REPO=https://github.com/jawah/charset_normalizer
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="The Real First Universal Charset Detector"
 HOMEPAGE="

@@ -988,6 +988,10 @@ distutils-r1_python_prepare_all() {
 		_distutils-r1_handle_pyproject_toml
 	fi
 
+	if declare -f cargo_gen_config >/dev/null; then
+		cargo_gen_config || die "cargo_gen_config failed"
+	fi
+
 	if [[ ${DISTUTILS_IN_SOURCE_BUILD} && ! ${DISTUTILS_SINGLE_IMPL} ]]
 	then
 		# create source copies for each implementation

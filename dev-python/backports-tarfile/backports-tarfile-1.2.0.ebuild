@@ -7,6 +7,11 @@ PYPI_PN=${PN/-/.}
 PYTHON_COMPAT=( pypy3 pypy3_11 python3_{10..11} )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Backport of CPython tarfile module (from Python 3.12)"
 HOMEPAGE="

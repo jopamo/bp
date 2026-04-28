@@ -5,6 +5,12 @@ DISTUTILS_USE_PEP517=no
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} python3_{13,14}t )
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/installer
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="A backend script to aid installing Python packages in Gentoo"
 HOMEPAGE="

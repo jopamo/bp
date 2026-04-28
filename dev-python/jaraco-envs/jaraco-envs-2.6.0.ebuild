@@ -6,6 +6,14 @@ PYPI_PN=${PN/-/.}
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/tox
+	dev-python/path
+	dev-python/virtualenv
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Classes for orchestrating Python (virtual) environments"
 HOMEPAGE="

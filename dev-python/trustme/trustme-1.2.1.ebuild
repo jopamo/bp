@@ -4,6 +4,13 @@ DISTUTILS_USE_PEP517=hatchling
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	app-crypto/cryptography
+	dev-python/idna
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="#1 quality TLS certs while you wait, for the discerning tester"
 HOMEPAGE="

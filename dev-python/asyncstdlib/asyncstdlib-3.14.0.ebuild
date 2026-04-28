@@ -4,6 +4,11 @@ DISTUTILS_USE_PEP517=flit
 PYTHON_COMPAT=( python3_{10..13} )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="The missing async toolbox"
 HOMEPAGE="

@@ -5,6 +5,11 @@ PYPI_PN=Send2Trash
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Sends files to the Trash (or Recycle Bin)"
 HOMEPAGE="

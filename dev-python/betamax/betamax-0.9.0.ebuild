@@ -4,6 +4,12 @@ PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/requests
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="python-requests HTTP exchanges recorder"
 HOMEPAGE="

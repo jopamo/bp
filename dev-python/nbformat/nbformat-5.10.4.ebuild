@@ -5,6 +5,15 @@ PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 PYTHON_REQ_USE='sqlite'
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/jupyter-core
+	dev-python/fastjsonschema
+	dev-python/jsonschema
+	dev-python/traitlets
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Reference implementation of the Jupyter Notebook format"
 HOMEPAGE="

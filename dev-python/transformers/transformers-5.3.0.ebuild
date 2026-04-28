@@ -4,6 +4,20 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..13} )
 DISTUTILS_SINGLE_IMPL=1
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-py/numpy
+	dev-py/regex
+	dev-python/huggingface_hub
+	dev-python/packaging
+	dev-python/pyyaml
+	dev-python/safetensors
+	dev-python/tokenizers
+	dev-python/tqdm
+	dev-python/typer
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="State-of-the-art Machine Learning for JAX, PyTorch and TensorFlow"
 HOMEPAGE="

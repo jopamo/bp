@@ -9,6 +9,11 @@ PYTHON_COMPAT=( python3_{11..14} )
 RUST_MIN_VER="1.89.0"
 
 inherit cargo distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy"
 HOMEPAGE="

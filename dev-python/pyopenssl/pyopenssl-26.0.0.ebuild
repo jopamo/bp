@@ -7,6 +7,12 @@ PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 PYTHON_REQ_USE="threads(+)"
 
 inherit distutils-r1 toolchain-funcs pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	app-crypto/cryptography
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Python interface to the OpenSSL library"
 HOMEPAGE="

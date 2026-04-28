@@ -6,6 +6,15 @@ PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 PYTHON_REQ_USE="threads(+)"
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/certifi
+	dev-python/charset-normalizer
+	dev-python/idna
+	dev-python/urllib3
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="HTTP library for human beings"
 HOMEPAGE="

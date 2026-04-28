@@ -4,6 +4,11 @@ PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 DISTUTILS_USE_PEP517=flit
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 MY_P=mypy_extensions-${PV}
 DESCRIPTION="Type system extensions for programs checked with mypy"

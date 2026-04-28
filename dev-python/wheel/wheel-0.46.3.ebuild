@@ -6,6 +6,12 @@ PYPI_VERIFY_REPO=https://github.com/pypa/wheel
 PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/packaging
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="A built-package format for Python"
 HOMEPAGE="

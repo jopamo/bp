@@ -17,8 +17,6 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-lib/qtbase"
 
-RESTRICT="network-sandbox"
-
 src_configure() {
 	append-flags -ffat-lto-objects
 

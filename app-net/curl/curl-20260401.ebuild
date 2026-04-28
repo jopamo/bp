@@ -20,8 +20,6 @@ SLOT="0"
 
 IUSE="adns brotli ipv6 ldap libpsl mbedtls ssh ssl static-libs test nghttp2 zlib zstd"
 
-RESTRICT="network-sandbox"
-
 QA_CONFIG_IMPL_DECL_SKIP=(
 	closesocket
 	CloseSocket

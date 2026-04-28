@@ -4,6 +4,12 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/elementpath
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="An XML Schema validator and decoder"
 HOMEPAGE="

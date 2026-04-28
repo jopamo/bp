@@ -7,6 +7,11 @@ PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 PYTHON_REQ_USE="xml(+)"
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Shared setuptools wheel for ensurepip Python module"
 HOMEPAGE="

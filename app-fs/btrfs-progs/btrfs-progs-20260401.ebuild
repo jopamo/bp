@@ -24,7 +24,6 @@ LIB_DEPEND="
 	app-core/util-linux:0[static-libs(+)]
 	lib-core/zlib:0[static-libs(+)]
 	app-compression/zstd:0[static-libs(+)]
-	app-compression/lzo:0[static-libs(+)]
 "
 
 DEPEND="
@@ -56,6 +55,7 @@ src_configure() {
 		--disable-convert
 		--disable-documentation
 		--disable-backtrace
+		--disable-lzo
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

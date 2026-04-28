@@ -47,6 +47,27 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 		printf '%s\n' "${split%%$'\t'*}"
 	}
 
+	_lockstep_cargo_portage_package_name() {
+		local crate=${1}
+		local normalized=${crate//[^A-Za-z0-9+_-]/_}
+		local prefix suffix
+
+		[[ -n ${normalized} ]] || normalized=_
+		case ${normalized:0:1} in
+			+|-)
+				normalized="_${normalized:1}"
+				;;
+		esac
+
+		while [[ ${normalized} =~ -[0-9]+(\.[0-9]+)*[a-z]?(_(pre|p|beta|alpha|rc)[0-9]*)*(-r[0-9]+)?$ ]]; do
+			prefix=${normalized%-*}
+			suffix=${normalized##*-}
+			normalized="${prefix}_${suffix}"
+		done
+
+		printf '%s\n' "${normalized}"
+	}
+
 	_lockstep_cargo_encode_segment() {
 		local value=${1}
 		local encoded= i char ord
@@ -100,14 +121,15 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 	}
 
 	_lockstep_cargo_dependency_atoms() {
-		local ref atoms= crate version
+		local ref atoms= crate package version
 
 		while IFS= read -r ref; do
 			ref=$(_lockstep_cargo_trim_ws "${ref}")
 			[[ -n ${ref} ]] || continue
 			crate=$(_lockstep_cargo_ref_crate "${ref}")
+			package=$(_lockstep_cargo_portage_package_name "${crate}")
 			version=$(_lockstep_cargo_ref_version "${ref}")
-			atoms+=$'\n\t='"rust-crates/${crate}-$(_lockstep_cargo_portage_version "${version}")"
+			atoms+=$'\n\t='"rust-crates/${package}-$(_lockstep_cargo_portage_version "${version}")"
 		done <<< "${CARGO_DEPS-}"
 
 		printf '%s\n' "${atoms}"

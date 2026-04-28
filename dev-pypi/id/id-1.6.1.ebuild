@@ -1,0 +1,22 @@
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="flit"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="id"
+DESCRIPTION="A tool for generating OIDC identities"
+HOMEPAGE="https://pypi.org/project/id/"
+LICENSE="Apache-2.0"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/urllib3
+"
+# lockstep-pypi-deps: end

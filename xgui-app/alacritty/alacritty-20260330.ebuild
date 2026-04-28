@@ -305,7 +305,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RESTRICT="test network-sandbox"
+RESTRICT="test"
 
 src_compile() {
 		einfo "compiling in src_install"

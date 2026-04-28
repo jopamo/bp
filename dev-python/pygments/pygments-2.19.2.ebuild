@@ -6,6 +6,11 @@ PYTHON_FULLY_TESTED=( python3_{11..14} pypy3_11 )
 PYTHON_COMPAT=( "${PYTHON_FULLY_TESTED[@]}" python3_{13,14}t )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Pygments is a syntax highlighting package written in Python"
 HOMEPAGE="

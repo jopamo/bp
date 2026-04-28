@@ -4,6 +4,17 @@ DISTUTILS_USE_PEP517=flit
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/jinja2
+	dev-python/blinker
+	dev-python/click
+	dev-python/itsdangerous
+	dev-python/markupsafe
+	dev-python/werkzeug
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="A microframework based on Werkzeug, Jinja2 and good intentions"
 HOMEPAGE="

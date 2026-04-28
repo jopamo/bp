@@ -20,7 +20,7 @@ ABI_VER="$(ver_cut 1-2)"
 
 CMAKE_WARN_UNUSED_CLI=no
 
-RESTRICT="test network-sandbox"
+RESTRICT="test"
 
 QA_FLAGS_IGNORED="
 	usr/lib/${PN}/${PV}/bin/.*

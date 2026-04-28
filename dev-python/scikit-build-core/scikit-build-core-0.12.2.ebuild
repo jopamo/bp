@@ -4,6 +4,13 @@ DISTUTILS_USE_PEP517=hatchling
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/packaging
+	dev-python/pathspec
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Build backend for CMake based projects"
 HOMEPAGE="

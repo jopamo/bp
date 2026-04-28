@@ -7,6 +7,11 @@ PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 FORTRAN_NEEDED=lapack
 
 inherit distutils-r1 flag-o-matic pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Fast array and numerical python library"
 HOMEPAGE="https://numpy.org/"

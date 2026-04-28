@@ -41,6 +41,11 @@ PYTHON_COMPAT=( python3_{10..13} )
 RUST_MIN_VER="1.80"
 
 inherit distutils-r1 cargo
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Simple, safe way to store and distribute tensors"
 HOMEPAGE="

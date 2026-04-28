@@ -4,6 +4,33 @@ DISTUTILS_USE_PEP517=pdm-backend
 PYTHON_COMPAT=( python3_{11..14} )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/dep-logic
+	dev-pypi/findpython
+	dev-pypi/hishel
+	dev-pypi/id
+	dev-pypi/pbs-installer
+	dev-pypi/unearth
+	dev-python/blinker
+	dev-python/certifi
+	dev-python/filelock
+	dev-python/httpcore
+	dev-python/httpx
+	dev-python/installer
+	dev-python/packaging
+	dev-python/platformdirs
+	dev-python/pyproject-hooks
+	dev-python/python-dotenv
+	dev-python/resolvelib
+	dev-python/rich
+	dev-python/shellingham
+	dev-python/tomlkit
+	dev-python/truststore
+	dev-python/virtualenv
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Python package and dependency manager supporting the latest PEP standards"
 HOMEPAGE="

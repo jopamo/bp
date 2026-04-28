@@ -9,8 +9,6 @@
 if [[ -z ${_CARGO_VENDOR_ECLASS} ]]; then
 	_CARGO_VENDOR_ECLASS=1
 
-	RESTRICT+=" test network-sandbox"
-
 	DEPEND+=" >=virtual/rust-1.60.0"
 	RDEPEND="${DEPEND}"
 	BDEPEND="${DEPEND}"

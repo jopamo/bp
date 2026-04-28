@@ -4,6 +4,20 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{10..13} )
 DISTUTILS_SINGLE_IMPL=1
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/filelock
+	dev-python/fsspec
+	dev-python/hf_xet
+	dev-python/httpx
+	dev-python/packaging
+	dev-python/pyyaml
+	dev-python/tqdm
+	dev-python/typer
+	dev-python/typing-extensions
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="a client library to interact with the Hugging Face Hub"
 HOMEPAGE="

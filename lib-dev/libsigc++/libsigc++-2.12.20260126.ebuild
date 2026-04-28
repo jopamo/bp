@@ -15,7 +15,7 @@ SLOT="2"
 KEYWORDS="amd64 arm64"
 
 IUSE="test"
-RESTRICT="test network-sandbox"
+RESTRICT="test"
 
 src_prepare() {
 	default

@@ -5,6 +5,13 @@ DISTUTILS_UPSTREAM_PEP517=standalone
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/msgpack
+	dev-python/requests
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="httplib2 caching for requests"
 HOMEPAGE="

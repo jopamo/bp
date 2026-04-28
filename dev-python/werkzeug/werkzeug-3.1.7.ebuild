@@ -5,6 +5,12 @@ PYPI_VERIFY_REPO=https://github.com/pallets/werkzeug
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/markupsafe
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Collection of various utilities for WSGI applications"
 HOMEPAGE="

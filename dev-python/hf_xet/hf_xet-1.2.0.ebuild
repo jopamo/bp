@@ -11,6 +11,11 @@ CRATES="
 "
 
 inherit cargo distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="xet client tech, used in huggingface_hub"
 HOMEPAGE="https://github.com/huggingface/xet-core"

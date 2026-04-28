@@ -6,6 +6,18 @@ PYPI_VERIFY_REPO=https://github.com/aio-libs/aiohttp
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/aiohappyeyeballs
+	dev-python/aiosignal
+	dev-python/attrs
+	dev-python/frozenlist
+	dev-python/multidict
+	dev-python/propcache
+	dev-python/yarl
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="HTTP client/server for asyncio"
 HOMEPAGE="

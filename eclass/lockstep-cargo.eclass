@@ -162,8 +162,14 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 
 	inherit cargo
 
-	lockstep-cargo_src_unpack() {
+	[[ -n ${CARGO_DEPS-} ]] && CARGO_CRATE_URIS=
+
+	cargo_src_unpack() {
 		[[ -d ${S} ]] || default
+	}
+
+	lockstep-cargo_src_unpack() {
+		cargo_src_unpack
 	}
 
 	cargo_gen_config() {

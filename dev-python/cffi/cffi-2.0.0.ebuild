@@ -8,6 +8,12 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} python3_14t )
 
 inherit distutils-r1 toolchain-funcs pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/pycparser
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Foreign Function Interface for Python calling C code"
 HOMEPAGE="

@@ -8,6 +8,11 @@ PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" )
 PYTHON_REQ_USE="ssl(+)"
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 # The package has a test dependency on their own hypercorn fork.
 HYPERCORN_COMMIT=d1719f8c1570cbd8e6a3719ffdb14a4d72880abb

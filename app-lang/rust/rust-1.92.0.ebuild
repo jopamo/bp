@@ -11,7 +11,7 @@ LICENSE="MIT Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RESTRICT="test network-sandbox"
+RESTRICT="test"
 
 BDEPEND="
 	app-build/llvm

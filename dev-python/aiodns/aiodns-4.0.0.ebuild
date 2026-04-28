@@ -5,6 +5,12 @@ PYPI_VERIFY_REPO=https://github.com/aio-libs/aiodns
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/pycares
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Simple DNS resolver for asyncio"
 HOMEPAGE="

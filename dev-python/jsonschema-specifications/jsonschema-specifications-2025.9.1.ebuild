@@ -5,6 +5,12 @@ PYPI_VERIFY_REPO=https://github.com/python-jsonschema/jsonschema-specifications
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/referencing
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="The JSON Schema meta-schemas and vocabularies, exposed as a Registry"
 HOMEPAGE="

@@ -5,6 +5,17 @@ PYPI_VERIFY_REPO=https://github.com/psf/black
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 optfeature pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-py/mypy-extensions
+	dev-python/click
+	dev-python/packaging
+	dev-python/pathspec
+	dev-python/platformdirs
+	dev-python/pytokens
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="The uncompromising Python code formatter"
 HOMEPAGE="

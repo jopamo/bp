@@ -5,6 +5,12 @@ PYPI_VERIFY_REPO=https://github.com/twisted/incremental
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/packaging
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Incremental is a small library that versions your Python projects"
 HOMEPAGE="

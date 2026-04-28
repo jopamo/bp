@@ -4,6 +4,14 @@ DISTUTILS_USE_PEP517=standalone
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	app-dev/meson
+	dev-python/packaging
+	dev-python/pyproject-metadata
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Meson PEP 517 Python build backend"
 HOMEPAGE="

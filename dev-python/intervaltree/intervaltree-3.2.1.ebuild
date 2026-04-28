@@ -4,6 +4,12 @@ DISTUTILS_USE_PEP517=hatchling
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/sortedcontainers
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Editable interval tree data structure for Python 2 and 3"
 HOMEPAGE="

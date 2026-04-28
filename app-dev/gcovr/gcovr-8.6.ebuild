@@ -5,6 +5,15 @@ DISTUTILS_USE_PEP517=hatchling
 PYTHON_COMPAT=( python3_{10..12} )
 
 inherit toolchain-funcs distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-py/lxml
+	dev-pypi/jinja2
+	dev-python/colorlog
+	dev-python/pygments
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="A Python script for summarizing gcov data"
 HOMEPAGE="https://github.com/gcovr/gcovr"

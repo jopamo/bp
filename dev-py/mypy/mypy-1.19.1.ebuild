@@ -5,6 +5,15 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} )
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-py/mypy-extensions
+	dev-python/librt
+	dev-python/pathspec
+	dev-python/typing-extensions
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Optional static typing for Python"
 HOMEPAGE="

@@ -6,6 +6,11 @@ DISTUTILS_USE_PEP517=setuptools
 PYPI_PN="M2Crypto"
 
 inherit distutils-r1 toolchain-funcs pypi flag-o-matic
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="A Python crypto and SSL toolkit"
 HOMEPAGE="https://gitlab.com/m2crypto/m2crypto/"

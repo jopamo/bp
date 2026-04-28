@@ -188,8 +188,6 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RESTRICT="test network-sandbox"
-
 src_install() {
 	dobin target/release/"${PN}"
 }

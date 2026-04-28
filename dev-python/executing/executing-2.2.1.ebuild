@@ -6,6 +6,11 @@ PYTHON_TESTED=( python3_{11..14} )
 PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" pypy3_11 )
 
 inherit distutils-r1 optfeature
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Get information about what a Python frame is currently doing"
 HOMEPAGE="

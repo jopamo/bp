@@ -4,6 +4,12 @@ DISTUTILS_USE_PEP517=flit
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-python/wcwidth
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Library for making terminal apps using colors, keyboard input and positioning"
 HOMEPAGE="

@@ -5,6 +5,11 @@ PYPI_VERIFY_REPO=https://github.com/joblib/joblib
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Tools to provide lightweight pipelining in Python"
 HOMEPAGE="

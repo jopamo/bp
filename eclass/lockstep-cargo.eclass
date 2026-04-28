@@ -18,24 +18,33 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 		printf '%s\n' "${value}"
 	}
 
-	_lockstep_cargo_ref_version() {
+	_lockstep_cargo_ref_split() {
 		local ref=${1#rust-crates/}
-		if [[ ${ref} =~ ^(.+)-([0-9]+(\.[0-9]+)+.*)$ ]]; then
-			printf '%s\n' "${BASH_REMATCH[2]}"
-			return
-		fi
+		local i crate version
 
-		die "invalid lockstep cargo ref without parseable version: ${1}"
+		for (( i=0; i<${#ref}; ++i )); do
+			[[ ${ref:i:1} == "-" ]] || continue
+			crate=${ref:0:i}
+			version=${ref:i+1}
+			if [[ -n ${crate} && ${version} =~ ^[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)*(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]]; then
+				printf '%s\t%s\n' "${crate}" "${version}"
+				return
+			fi
+		done
+
+		die "invalid lockstep cargo ref without parseable crate/version split: ${1}"
+	}
+
+	_lockstep_cargo_ref_version() {
+		local split
+		split=$(_lockstep_cargo_ref_split "${1}")
+		printf '%s\n' "${split#*$'\t'}"
 	}
 
 	_lockstep_cargo_ref_crate() {
-		local ref=${1#rust-crates/}
-		if [[ ${ref} =~ ^(.+)-([0-9]+(\.[0-9]+)+.*)$ ]]; then
-			printf '%s\n' "${BASH_REMATCH[1]}"
-			return
-		fi
-
-		die "invalid lockstep cargo ref without parseable crate name: ${1}"
+		local split
+		split=$(_lockstep_cargo_ref_split "${1}")
+		printf '%s\n' "${split%%$'\t'*}"
 	}
 
 	_lockstep_cargo_encode_segment() {

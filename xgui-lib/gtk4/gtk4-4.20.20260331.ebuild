@@ -60,7 +60,7 @@ PDEPEND="
 	xgui-icontheme/adwaita-plus
 	vim-syntax? ( app-tex/gtk-syntax )
 "
-BDEPEND="app-lang/sassc"
+BDEPEND="lib-dev/sass"
 
 pkg_setup() {
 	use introspection && python-any-r1_pkg_setup

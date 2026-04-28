@@ -1,0 +1,50 @@
+# lockstep-managed: cargo-crate
+EAPI=8
+
+CRATE_NAME="regex-automata"
+CRATE_VERSION="0.4.11"
+CRATE_CHECKSUM="833eb9ce86d40ef33cb1306d8accf7bc8ec2bfea4355cbdebb3df68b40925cad"
+CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
+CRATE_SOURCE_KIND="registry"
+
+inherit cargo-crate
+
+DESCRIPTION="Automata construction and matching using regular expressions."
+HOMEPAGE="https://github.com/rust-lang/regex/tree/master/regex-automata"
+LICENSE="|| ( MIT Apache-2.0 )"
+SLOT="0/${PV}"
+KEYWORDS="~amd64"
+
+CARGO_CRATE_FEATURES=(
+	"alloc"
+	"default"
+	"dfa"
+	"dfa-build"
+	"dfa-onepass"
+	"dfa-search"
+	"hybrid"
+	"internal-instrument"
+	"internal-instrument-pikevm"
+	"logging"
+	"meta"
+	"nfa"
+	"nfa-backtrack"
+	"nfa-pikevm"
+	"nfa-thompson"
+	"perf"
+	"perf-inline"
+	"perf-literal"
+	"perf-literal-multisubstring"
+	"perf-literal-substring"
+	"std"
+	"syntax"
+	"unicode"
+	"unicode-age"
+	"unicode-bool"
+	"unicode-case"
+	"unicode-gencat"
+	"unicode-perl"
+	"unicode-script"
+	"unicode-segment"
+	"unicode-word-boundary"
+)

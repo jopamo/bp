@@ -1,0 +1,50 @@
+# lockstep-managed: cargo-crate
+EAPI=8
+
+CRATE_NAME="rust_decimal"
+CRATE_VERSION="1.39.0"
+CRATE_CHECKSUM="35affe401787a9bd846712274d97654355d21b2a2c092a3139aabe31e9022282"
+CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
+CRATE_SOURCE_KIND="registry"
+
+inherit cargo-crate
+
+DESCRIPTION="Decimal number implementation written in pure Rust suitable for financial and fixed-precision calculations."
+HOMEPAGE="https://github.com/paupino/rust-decimal"
+LICENSE="MIT"
+SLOT="0/${PV}"
+KEYWORDS="~amd64"
+
+CARGO_CRATE_FEATURES=(
+	"align16"
+	"borsh"
+	"c-repr"
+	"db-diesel-mysql"
+	"db-diesel-postgres"
+	"db-diesel2-mysql"
+	"db-diesel2-postgres"
+	"db-postgres"
+	"db-tokio-postgres"
+	"default"
+	"legacy-ops"
+	"macros"
+	"maths"
+	"maths-nopanic"
+	"ndarray"
+	"proptest"
+	"rand"
+	"rkyv"
+	"rkyv-safe"
+	"rocket-traits"
+	"rust-fuzz"
+	"serde"
+	"serde-arbitrary-precision"
+	"serde-bincode"
+	"serde-float"
+	"serde-str"
+	"serde-with-arbitrary-precision"
+	"serde-with-float"
+	"serde-with-str"
+	"std"
+	"tokio-pg"
+)

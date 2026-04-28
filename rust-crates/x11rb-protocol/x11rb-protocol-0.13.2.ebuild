@@ -1,0 +1,53 @@
+# lockstep-managed: cargo-crate
+EAPI=8
+
+CRATE_NAME="x11rb-protocol"
+CRATE_VERSION="0.13.2"
+CRATE_CHECKSUM="ea6fc2961e4ef194dcbfe56bb845534d0dc8098940c7e5c012a258bfec6701bd"
+CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
+CRATE_SOURCE_KIND="registry"
+
+inherit cargo-crate
+
+DESCRIPTION="Rust bindings to X11"
+HOMEPAGE="https://github.com/psychon/x11rb"
+LICENSE="|| ( MIT Apache-2.0 )"
+SLOT="0/${PV}"
+KEYWORDS="~amd64"
+
+CARGO_CRATE_FEATURES=(
+	"all-extensions"
+	"composite"
+	"damage"
+	"dbe"
+	"default"
+	"dpms"
+	"dri2"
+	"dri3"
+	"extra-traits"
+	"glx"
+	"present"
+	"randr"
+	"record"
+	"render"
+	"request-parsing"
+	"res"
+	"resource_manager"
+	"screensaver"
+	"shape"
+	"shm"
+	"std"
+	"sync"
+	"xevie"
+	"xf86dri"
+	"xf86vidmode"
+	"xfixes"
+	"xinerama"
+	"xinput"
+	"xkb"
+	"xprint"
+	"xselinux"
+	"xtest"
+	"xv"
+	"xvmc"
+)

@@ -1,0 +1,16 @@
+# lockstep-managed: cargo-crate
+EAPI=8
+
+CRATE_NAME="windows-link"
+CRATE_VERSION="0.2.1"
+CRATE_CHECKSUM="f0805222e57f7521d6a62e36fa9163bc891acd422f971defe97d64e70d0a4fe5"
+CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
+CRATE_SOURCE_KIND="registry"
+
+inherit cargo-crate
+
+DESCRIPTION="Linking for Windows"
+HOMEPAGE="https://github.com/microsoft/windows-rs"
+LICENSE="|| ( MIT Apache-2.0 )"
+SLOT="0/${PV}"
+KEYWORDS="~amd64"

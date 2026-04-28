@@ -1,0 +1,27 @@
+# lockstep-managed: cargo-crate
+EAPI=8
+
+CRATE_NAME="icu_normalizer"
+CRATE_VERSION="2.0.0"
+CRATE_CHECKSUM="436880e8e18df4d7bbc06d58432329d6458cc84531f7ac5f024e93deadb37979"
+CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
+CRATE_SOURCE_KIND="registry"
+
+inherit cargo-crate
+
+DESCRIPTION="API for normalizing text into Unicode Normalization Forms"
+HOMEPAGE="https://icu4x.unicode.org"
+LICENSE="Unicode-3.0"
+SLOT="0/${PV}"
+KEYWORDS="~amd64"
+
+CARGO_CRATE_FEATURES=(
+	"compiled_data"
+	"datagen"
+	"default"
+	"experimental"
+	"icu_properties"
+	"serde"
+	"utf16_iter"
+	"utf8_iter"
+)

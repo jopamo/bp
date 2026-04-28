@@ -1,0 +1,52 @@
+# lockstep-managed: cargo-crate
+EAPI=8
+
+CRATE_NAME="tower-http"
+CRATE_VERSION="0.6.1"
+CRATE_CHECKSUM="8437150ab6bbc8c5f0f519e3d5ed4aa883a83dd4cdd3d1b21f9482936046cb97"
+CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
+CRATE_SOURCE_KIND="registry"
+
+inherit cargo-crate
+
+DESCRIPTION="Tower middleware and utilities for HTTP clients and servers"
+HOMEPAGE="https://github.com/tower-rs/tower-http"
+LICENSE="MIT"
+SLOT="0/${PV}"
+KEYWORDS="~amd64"
+
+CARGO_CRATE_FEATURES=(
+	"add-extension"
+	"auth"
+	"catch-panic"
+	"compression-br"
+	"compression-deflate"
+	"compression-full"
+	"compression-gzip"
+	"compression-zstd"
+	"cors"
+	"decompression-br"
+	"decompression-deflate"
+	"decompression-full"
+	"decompression-gzip"
+	"decompression-zstd"
+	"default"
+	"follow-redirect"
+	"fs"
+	"full"
+	"limit"
+	"map-request-body"
+	"map-response-body"
+	"metrics"
+	"normalize-path"
+	"propagate-header"
+	"redirect"
+	"request-id"
+	"sensitive-headers"
+	"set-header"
+	"set-status"
+	"timeout"
+	"trace"
+	"util"
+	"validate-request"
+)

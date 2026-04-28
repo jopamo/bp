@@ -71,7 +71,7 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 
 	inherit cargo
 
-	cargo_src_unpack() {
+	lockstep-cargo_src_unpack() {
 		[[ -d ${S} ]] || default
 	}
 

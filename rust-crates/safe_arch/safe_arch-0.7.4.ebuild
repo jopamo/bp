@@ -13,7 +13,7 @@ DESCRIPTION="Crate that exposes `core::arch` safely via `#[cfg()]`."
 HOMEPAGE="https://github.com/Lokathor/safe_arch"
 LICENSE="|| ( Zlib Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

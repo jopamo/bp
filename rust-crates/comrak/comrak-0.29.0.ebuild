@@ -13,7 +13,7 @@ DESCRIPTION="A 100% CommonMark-compatible GitHub Flavored Markdown parser and fo
 HOMEPAGE="https://github.com/kivikakk/comrak"
 LICENSE="BSD-2-Clause"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"cli"

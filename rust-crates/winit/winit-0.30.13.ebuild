@@ -13,7 +13,7 @@ DESCRIPTION="Cross-platform window creation library."
 HOMEPAGE="https://github.com/rust-windowing/winit"
 LICENSE="Apache-2.0"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"android-game-activity"

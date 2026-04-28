@@ -13,4 +13,4 @@ DESCRIPTION="Library implementation of the standard library's old `scoped_thread
 HOMEPAGE="https://github.com/alexcrichton/scoped-tls"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

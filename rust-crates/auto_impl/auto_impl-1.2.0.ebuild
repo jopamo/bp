@@ -13,4 +13,4 @@ DESCRIPTION="Automatically implement traits for common smart pointers and closur
 HOMEPAGE="https://github.com/auto-impl-rs/auto_impl/"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

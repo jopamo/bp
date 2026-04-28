@@ -13,7 +13,7 @@ DESCRIPTION="Streaming HTML rewriter/parser with CSS selector-based API"
 HOMEPAGE="https://github.com/cloudflare/lol-html"
 LICENSE="BSD-3-Clause"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"debug_trace"

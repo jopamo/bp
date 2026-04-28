@@ -13,7 +13,7 @@ DESCRIPTION="Types for interaction with a language server, using VSCode's Langua
 HOMEPAGE="https://github.com/gluon-lang/lsp-types"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

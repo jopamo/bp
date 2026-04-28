@@ -13,4 +13,4 @@ DESCRIPTION="Custom derive support for the `der` crate's `Choice` and `Sequence`
 HOMEPAGE="https://github.com/RustCrypto/formats/tree/master/der/derive"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

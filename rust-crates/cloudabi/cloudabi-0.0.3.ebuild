@@ -13,7 +13,7 @@ DESCRIPTION="Low level interface to CloudABI. Contains all syscalls and related 
 HOMEPAGE="https://nuxi.nl/cloudabi/"
 LICENSE="BSD-2-Clause"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

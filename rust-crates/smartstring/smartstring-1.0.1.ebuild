@@ -13,7 +13,7 @@ DESCRIPTION="Compact inlined strings"
 HOMEPAGE="https://github.com/bodil/smartstring"
 LICENSE="MPL-2.0+"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

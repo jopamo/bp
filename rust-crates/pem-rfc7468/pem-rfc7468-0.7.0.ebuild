@@ -13,7 +13,7 @@ DESCRIPTION="PEM Encoding (RFC 7468) for PKIX, PKCS, and CMS Structures, impleme
 HOMEPAGE="https://github.com/RustCrypto/formats/tree/master/pem-rfc7468"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

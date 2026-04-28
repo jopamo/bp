@@ -13,4 +13,4 @@ DESCRIPTION="A tiny low-level library that provides platform-specific standard l
 HOMEPAGE="https://github.com/soc/dirs-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

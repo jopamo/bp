@@ -13,7 +13,7 @@ DESCRIPTION="NIST 800-38F AES Key Wrap (KW) and Key Wrap with Padding (KWP) mode
 HOMEPAGE="https://github.com/RustCrypto/key-wraps/"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

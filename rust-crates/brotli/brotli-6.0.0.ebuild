@@ -13,7 +13,7 @@ DESCRIPTION="A brotli compressor and decompressor that with an interface avoidin
 HOMEPAGE="https://github.com/dropbox/rust-brotli"
 LICENSE="|| ( BSD-3-Clause MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"benchmark"

@@ -13,7 +13,7 @@ DESCRIPTION="Determine whether characters have the XID_Start or XID_Continue pro
 HOMEPAGE="https://github.com/unicode-rs/unicode-xid"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"bench"

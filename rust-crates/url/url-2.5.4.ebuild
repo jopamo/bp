@@ -13,7 +13,7 @@ DESCRIPTION="URL library for Rust, based on the WHATWG URL Standard"
 HOMEPAGE="https://github.com/servo/rust-url"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"debugger_visualizer"

@@ -13,7 +13,7 @@ DESCRIPTION="Macros to generate types in the phf crate"
 HOMEPAGE="https://github.com/rust-phf/rust-phf"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"unicase"

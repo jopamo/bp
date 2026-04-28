@@ -13,7 +13,7 @@ DESCRIPTION="An implementation of regexes, supporting a relatively rich set of f
 HOMEPAGE="https://github.com/fancy-regex/fancy-regex"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

@@ -13,7 +13,7 @@ DESCRIPTION="Diagnostics for proc-macro2."
 HOMEPAGE="https://github.com/SergioBenitez/proc-macro2-diagnostics"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"colors"

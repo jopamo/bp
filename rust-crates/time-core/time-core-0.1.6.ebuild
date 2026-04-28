@@ -13,4 +13,4 @@ DESCRIPTION="This crate is an implementation detail and should not be relied upo
 HOMEPAGE="https://github.com/time-rs/time"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

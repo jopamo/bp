@@ -13,7 +13,7 @@ DESCRIPTION="Const-friendly implementation of the ISO/IEC Object Identifier (OID
 HOMEPAGE="https://github.com/RustCrypto/formats/tree/master/const-oid"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"db"

@@ -13,7 +13,7 @@ DESCRIPTION="Helper crate for proc-macro library for reading attributes into str
 HOMEPAGE="https://github.com/TedDriggs/darling"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"diagnostics"

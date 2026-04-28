@@ -13,7 +13,7 @@ DESCRIPTION="A Quartz-like cron parser used as part of Cron Triggers in Cloudfla
 HOMEPAGE="https://github.com/cloudflare/saffron"
 LICENSE="non-standard"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

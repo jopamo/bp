@@ -13,7 +13,7 @@ DESCRIPTION="The `inlinable_string` crate provides the `InlinableString` type --
 HOMEPAGE="https://github.com/fitzgen/inlinable_string"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"nightly"

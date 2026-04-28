@@ -13,7 +13,7 @@ DESCRIPTION="Pure Rust embedded-friendly implementation of the Distinguished Enc
 HOMEPAGE="https://github.com/RustCrypto/formats/tree/master/der"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

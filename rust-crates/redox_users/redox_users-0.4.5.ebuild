@@ -13,7 +13,7 @@ DESCRIPTION="A Rust library to access Redox users and groups functionality"
 HOMEPAGE="https://gitlab.redox-os.org/redox-os/users"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"auth"

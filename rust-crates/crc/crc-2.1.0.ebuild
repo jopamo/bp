@@ -13,4 +13,4 @@ DESCRIPTION="Rust implementation of CRC(16, 32, 64) with support of various stan
 HOMEPAGE="https://github.com/mrhooray/crc-rs.git"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

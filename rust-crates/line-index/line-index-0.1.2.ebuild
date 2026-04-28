@@ -13,4 +13,4 @@ DESCRIPTION="Maps flat `TextSize` offsets to/from `(line, column)` representatio
 HOMEPAGE="https://github.com/rust-lang/rust-analyzer/tree/master/lib/line-index"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

@@ -13,7 +13,7 @@ DESCRIPTION="Interoperability library for Rust Windowing applications."
 HOMEPAGE="https://github.com/rust-windowing/raw-window-handle"
 LICENSE="|| ( MIT Apache-2.0 Zlib )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

@@ -13,7 +13,7 @@ DESCRIPTION="Low-level code generator library"
 HOMEPAGE="https://github.com/bytecodealliance/wasmtime"
 LICENSE="Apache-2.0-with-LLVM-exception"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"all-arch"

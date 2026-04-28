@@ -13,7 +13,7 @@ DESCRIPTION="A Gecko-oriented implementation of the Encoding Standard"
 HOMEPAGE="https://docs.rs/encoding_rs/"
 LICENSE="|| ( Apache-2.0 MIT ) BSD-3-Clause"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

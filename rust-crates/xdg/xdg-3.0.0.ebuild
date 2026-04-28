@@ -13,4 +13,4 @@ DESCRIPTION="A library for storing and retrieving files according to XDG Base Di
 HOMEPAGE="https://github.com/whitequark/rust-xdg"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

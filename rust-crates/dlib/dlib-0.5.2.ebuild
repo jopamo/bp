@@ -13,4 +13,4 @@ DESCRIPTION="Helper macros for handling manually loading optional system librari
 HOMEPAGE="https://github.com/elinorbgr/dlib"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

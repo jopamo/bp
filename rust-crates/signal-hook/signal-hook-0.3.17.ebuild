@@ -13,7 +13,7 @@ DESCRIPTION="Unix signal handling"
 HOMEPAGE="https://github.com/vorner/signal-hook"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"channel"

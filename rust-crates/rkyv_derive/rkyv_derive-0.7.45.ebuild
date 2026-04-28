@@ -13,7 +13,7 @@ DESCRIPTION="Derive macro for rkyv"
 HOMEPAGE="https://github.com/rkyv/rkyv"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"arbitrary_enum_discriminant"

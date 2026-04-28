@@ -13,7 +13,7 @@ DESCRIPTION="Fundamental types, traits, and protobuf models for denokv"
 HOMEPAGE="https://github.com/denoland/denokv"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"build_protos"

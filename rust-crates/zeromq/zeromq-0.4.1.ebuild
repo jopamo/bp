@@ -13,7 +13,7 @@ DESCRIPTION="A native Rust implementation of ZeroMQ"
 HOMEPAGE="https://github.com/zeromq/zmq.rs"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"all-transport"

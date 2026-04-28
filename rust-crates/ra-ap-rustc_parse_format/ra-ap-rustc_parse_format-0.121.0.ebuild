@@ -13,4 +13,4 @@ DESCRIPTION="Automatically published version of the package `rustc_parse_format`
 HOMEPAGE="https://github.com/rust-lang/rust"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

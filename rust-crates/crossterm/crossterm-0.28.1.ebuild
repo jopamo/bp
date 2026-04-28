@@ -13,7 +13,7 @@ DESCRIPTION="A crossplatform terminal library for manipulating terminals."
 HOMEPAGE="https://github.com/crossterm-rs/crossterm"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"bracketed-paste"

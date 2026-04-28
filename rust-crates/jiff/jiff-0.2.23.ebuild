@@ -13,7 +13,7 @@ DESCRIPTION="A date-time library that encourages you to jump into the pit of suc
 HOMEPAGE="https://github.com/BurntSushi/jiff"
 LICENSE="|| ( Unlicense MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

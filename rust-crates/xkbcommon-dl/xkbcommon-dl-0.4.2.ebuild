@@ -13,7 +13,7 @@ DESCRIPTION="Dynamically loaded xkbcommon and xkbcommon-x11 Rust bindings."
 HOMEPAGE="https://github.com/rust-windowing/xkbcommon-dl"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"x11"

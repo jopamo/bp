@@ -13,7 +13,7 @@ DESCRIPTION="A wide string Rust library for converting to and from wide strings,
 HOMEPAGE="https://github.com/starkat99/widestring-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

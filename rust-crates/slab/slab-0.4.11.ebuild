@@ -13,7 +13,7 @@ DESCRIPTION="Pre-allocated storage for a uniform data type"
 HOMEPAGE="https://github.com/tokio-rs/slab"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

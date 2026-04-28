@@ -13,7 +13,7 @@ DESCRIPTION="Polyfill for `OnceCell` stdlib feature for use with older MSRVs"
 HOMEPAGE="https://github.com/polyfill-rs/once_cell_polyfill"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

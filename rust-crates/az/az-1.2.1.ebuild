@@ -13,7 +13,7 @@ DESCRIPTION="Casts and checked casts"
 HOMEPAGE="https://gitlab.com/tspiteri/az"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"fail-on-warnings"

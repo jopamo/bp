@@ -13,7 +13,7 @@ DESCRIPTION="offset_of functionality for Rust structs."
 HOMEPAGE="https://github.com/Gilnaa/memoffset"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

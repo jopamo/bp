@@ -13,4 +13,4 @@ DESCRIPTION="UNIC — Unicode Character Tools — Character Property taxonomy, c
 HOMEPAGE="https://github.com/open-i18n/rust-unic/"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

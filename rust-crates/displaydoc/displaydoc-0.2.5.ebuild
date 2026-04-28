@@ -13,7 +13,7 @@ DESCRIPTION="A derive macro for implementing the display Trait via a doc comment
 HOMEPAGE="https://github.com/yaahc/displaydoc"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

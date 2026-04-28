@@ -13,7 +13,7 @@ DESCRIPTION="AWS-LC is a general-purpose cryptographic library maintained by the
 HOMEPAGE="https://github.com/aws/aws-lc-rs"
 LICENSE="ISC || ( Apache-2.0 ISC ) OpenSSL"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"asan"

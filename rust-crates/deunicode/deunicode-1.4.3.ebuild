@@ -13,7 +13,7 @@ DESCRIPTION="Convert Unicode strings to pure ASCII by intelligently transliterat
 HOMEPAGE="https://lib.rs/crates/deunicode"
 LICENSE="BSD-3-Clause"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

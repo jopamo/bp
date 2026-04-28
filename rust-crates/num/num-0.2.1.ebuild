@@ -13,7 +13,7 @@ DESCRIPTION="A collection of numeric types and traits for Rust, including bigint
 HOMEPAGE="https://github.com/rust-num/num"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

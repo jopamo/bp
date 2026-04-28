@@ -13,7 +13,7 @@ DESCRIPTION="A substitute implementation of the compiler's `proc_macro` API to d
 HOMEPAGE="https://github.com/dtolnay/proc-macro2"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

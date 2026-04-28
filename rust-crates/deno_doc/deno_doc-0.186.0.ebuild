@@ -13,7 +13,7 @@ DESCRIPTION="doc generation for deno"
 HOMEPAGE="https://github.com/denoland/deno_doc"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

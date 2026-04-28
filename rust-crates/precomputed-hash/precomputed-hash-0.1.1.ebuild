@@ -13,4 +13,4 @@ DESCRIPTION="A library intending to be a base dependency to expose a precomputed
 HOMEPAGE="https://github.com/emilio/precomputed-hash"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

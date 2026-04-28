@@ -13,4 +13,4 @@ DESCRIPTION="A injection tool for executable formats (ELF, PE, Mach-O) that allo
 HOMEPAGE="https://github.com/denoland/sui"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

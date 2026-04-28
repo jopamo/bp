@@ -13,7 +13,7 @@ DESCRIPTION="a cross-platform library for opening OS pipes"
 HOMEPAGE="https://github.com/oconnor663/os_pipe.rs"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"io_safety"

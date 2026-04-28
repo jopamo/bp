@@ -13,7 +13,7 @@ DESCRIPTION="Utilities to work with `Stream` and `tokio`."
 HOMEPAGE="https://tokio.rs"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

@@ -13,7 +13,7 @@ DESCRIPTION="Provides extremely fast (uses SIMD on x86_64, aarch64 and wasm32) r
 HOMEPAGE="https://github.com/BurntSushi/memchr"
 LICENSE="|| ( Unlicense MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

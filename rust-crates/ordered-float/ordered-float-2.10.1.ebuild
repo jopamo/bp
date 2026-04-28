@@ -13,7 +13,7 @@ DESCRIPTION="Wrappers for total ordering on floats"
 HOMEPAGE="https://github.com/reem/rust-ordered-float"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

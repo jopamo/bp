@@ -13,7 +13,7 @@ DESCRIPTION="Parser and serializer for the application/x-www-form-urlencoded syn
 HOMEPAGE="https://github.com/servo/rust-url"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

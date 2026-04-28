@@ -13,7 +13,7 @@ DESCRIPTION="Toolkit for making client wayland applications."
 HOMEPAGE="https://github.com/smithay/client-toolkit"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"calloop"

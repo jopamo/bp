@@ -13,7 +13,7 @@ DESCRIPTION="A fast and ergonomic concurrent hash-table for read-heavy workloads
 HOMEPAGE="https://github.com/ibraheemdev/papaya"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

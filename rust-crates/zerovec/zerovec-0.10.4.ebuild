@@ -13,7 +13,7 @@ DESCRIPTION="Zero-copy vector backed by a byte array"
 HOMEPAGE="https://github.com/unicode-org/icu4x"
 LICENSE="Unicode-3.0"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"bench"

@@ -13,7 +13,7 @@ DESCRIPTION="High performance JSON parser based on a port of simdjson"
 HOMEPAGE="https://github.com/simd-lite/simd-json"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"128bit"

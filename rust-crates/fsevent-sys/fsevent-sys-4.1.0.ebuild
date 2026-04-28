@@ -13,4 +13,4 @@ DESCRIPTION="Rust bindings to the fsevent macOS API for file changes notificatio
 HOMEPAGE="https://github.com/octplane/fsevent-rust/tree/master/fsevent-sys"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

@@ -13,7 +13,7 @@ DESCRIPTION="Minimal dependency free implementation of SHA1 for Rust."
 HOMEPAGE="https://github.com/mitsuhiko/sha1-smol"
 LICENSE="BSD-3-Clause"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"std"

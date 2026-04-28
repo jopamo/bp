@@ -13,7 +13,7 @@ DESCRIPTION="Adds String based inflections for Rust. Snake, kebab, camel, senten
 HOMEPAGE="https://github.com/whatisinternet/inflector"
 LICENSE="BSD-2-Clause"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

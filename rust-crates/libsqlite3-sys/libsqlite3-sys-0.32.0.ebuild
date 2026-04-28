@@ -13,7 +13,7 @@ DESCRIPTION="Native bindings to the libsqlite3 library"
 HOMEPAGE="https://github.com/rusqlite/rusqlite"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"buildtime_bindgen"

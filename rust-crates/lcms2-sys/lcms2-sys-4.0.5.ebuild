@@ -13,7 +13,7 @@ DESCRIPTION="Bindings for liblcms2 (Little CMS) with support for Linux, macOS, a
 HOMEPAGE="https://lib.rs/crates/lcms2-sys"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

@@ -13,4 +13,4 @@ DESCRIPTION="Checks if the process is running inside Windows Subsystem for Linux
 HOMEPAGE="https://github.com/TheLarkInn/is-wsl"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

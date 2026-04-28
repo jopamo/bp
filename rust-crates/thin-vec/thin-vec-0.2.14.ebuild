@@ -13,7 +13,7 @@ DESCRIPTION="A vec that takes up less space on the stack"
 HOMEPAGE="https://github.com/gankra/thin-vec"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

@@ -13,7 +13,7 @@ DESCRIPTION="A library to generate and parse UUIDs."
 HOMEPAGE="https://github.com/uuid-rs/uuid"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"atomic"

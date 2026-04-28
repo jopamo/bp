@@ -13,7 +13,7 @@ DESCRIPTION="Provides simple way to interact with Windows clipboard."
 HOMEPAGE="https://github.com/DoumanAsh/clipboard-win"
 LICENSE="BSL-1.0"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"monitor"

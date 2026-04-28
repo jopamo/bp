@@ -13,7 +13,7 @@ DESCRIPTION="Information about lines of text in a string."
 HOMEPAGE="https://crates.io/crates/text_lines"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"serialization"

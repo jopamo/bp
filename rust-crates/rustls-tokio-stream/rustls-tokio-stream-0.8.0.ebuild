@@ -13,7 +13,7 @@ DESCRIPTION="AsyncRead/AsyncWrite interface for RustTLS on Tokio"
 HOMEPAGE="https://github.com/denoland/rustls-tokio-stream"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

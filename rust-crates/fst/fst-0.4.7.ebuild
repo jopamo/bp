@@ -13,7 +13,7 @@ DESCRIPTION="Use finite state transducers to compactly represents sets or maps o
 HOMEPAGE="https://github.com/BurntSushi/fst"
 LICENSE="|| ( Unlicense MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

@@ -13,7 +13,7 @@ DESCRIPTION="A fast, non-cryptographic, minimally DoS-resistant hashing algorith
 HOMEPAGE="https://github.com/orlp/foldhash"
 LICENSE="Zlib"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

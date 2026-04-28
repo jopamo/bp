@@ -13,7 +13,7 @@ DESCRIPTION="Overwrite `assert_eq!` and `assert_ne!` with drop-in replacements, 
 HOMEPAGE="https://github.com/rust-pretty-assertions/rust-pretty-assertions"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"

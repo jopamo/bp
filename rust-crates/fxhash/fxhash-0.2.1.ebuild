@@ -13,4 +13,4 @@ DESCRIPTION="A fast, non-secure, hashing algorithm derived from an internal hash
 HOMEPAGE="https://github.com/cbreeden/fxhash"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

@@ -13,7 +13,7 @@ DESCRIPTION="Builders where the code to calculate the capacity is the same as th
 HOMEPAGE="https://github.com/dsherret/capacity_builder"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"ecow"

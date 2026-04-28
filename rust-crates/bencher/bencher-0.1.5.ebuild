@@ -13,4 +13,4 @@ DESCRIPTION="A port of the libtest (unstable Rust) benchmark runner to Rust stab
 HOMEPAGE="https://github.com/bluss/bencher/"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

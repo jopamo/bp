@@ -13,7 +13,7 @@ DESCRIPTION="lazy static regular expressions checked at compile time"
 HOMEPAGE="https://github.com/Canop/lazy-regex"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

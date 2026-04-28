@@ -13,4 +13,4 @@ DESCRIPTION="A connect, read and write timeout aware connector to be used with h
 HOMEPAGE="https://github.com/hjr3/hyper-timeout"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

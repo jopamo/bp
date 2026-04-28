@@ -13,4 +13,4 @@ DESCRIPTION="A crate for decoding and encoding the header part of gzip files bas
 HOMEPAGE="https://github.com/oyvindln/gzip-header"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

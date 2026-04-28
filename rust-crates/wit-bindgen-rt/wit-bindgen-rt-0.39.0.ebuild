@@ -13,7 +13,7 @@ DESCRIPTION="Runtime support for the `wit-bindgen` crate"
 HOMEPAGE="https://github.com/bytecodealliance/wit-bindgen"
 LICENSE="|| ( Apache-2.0-with-LLVM-exception Apache-2.0 MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"async"

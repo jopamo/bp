@@ -13,7 +13,7 @@ DESCRIPTION="Library for ANSI terminal colors and styles (bold, underline)"
 HOMEPAGE="https://github.com/nushell/nu-ansi-term"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"derive_serde_style"

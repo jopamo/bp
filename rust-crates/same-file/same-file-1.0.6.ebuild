@@ -13,4 +13,4 @@ DESCRIPTION="A simple crate for determining whether two file paths point to the 
 HOMEPAGE="https://github.com/BurntSushi/same-file"
 LICENSE="|| ( Unlicense MIT )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

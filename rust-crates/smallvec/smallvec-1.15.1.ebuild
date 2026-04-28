@@ -13,7 +13,7 @@ DESCRIPTION="'Small vector' optimization: store up to a small number of items on
 HOMEPAGE="https://github.com/servo/rust-smallvec"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"const_generics"

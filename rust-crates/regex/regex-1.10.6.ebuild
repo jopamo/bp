@@ -13,7 +13,7 @@ DESCRIPTION="An implementation of regular expressions for Rust. This implementat
 HOMEPAGE="https://github.com/rust-lang/regex"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

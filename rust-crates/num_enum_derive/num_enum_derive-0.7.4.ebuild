@@ -13,7 +13,7 @@ DESCRIPTION="Internal implementation details for ::num_enum (Procedural macros t
 HOMEPAGE="https://github.com/illicitonion/num_enum"
 LICENSE="|| ( BSD-3-Clause MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"complex-expressions"

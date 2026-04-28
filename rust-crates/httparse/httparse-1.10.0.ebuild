@@ -13,7 +13,7 @@ DESCRIPTION="A tiny, safe, speedy, zero-copy HTTP/1.x parser."
 HOMEPAGE="https://github.com/seanmonstar/httparse"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"

@@ -13,4 +13,4 @@ DESCRIPTION="A zero overhead I/O library for Windows, focusing on IOCP and async
 HOMEPAGE="https://github.com/yoshuawuyts/miow"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 arm64"

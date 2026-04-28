@@ -34,7 +34,7 @@ BDEPEND="
 	app-build/autoconf
 	app-build/automake
 	app-build/bison
-	test? ( app-core/ed )
+	test? ( app-core/bx )
 "
 
 src_prepare() {

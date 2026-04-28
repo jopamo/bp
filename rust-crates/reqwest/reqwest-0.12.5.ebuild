@@ -1,0 +1,50 @@
+# lockstep-managed: cargo-crate
+EAPI=8
+
+CRATE_NAME="reqwest"
+CRATE_VERSION="0.12.5"
+CRATE_CHECKSUM="c7d6d2a27d57148378eb5e111173f4276ad26340ecc5c49a4a2152167a2d6a37"
+CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
+CRATE_SOURCE_KIND="registry"
+
+inherit cargo-crate
+
+DESCRIPTION="higher level HTTP client library"
+HOMEPAGE="https://github.com/seanmonstar/reqwest"
+LICENSE="|| ( MIT Apache-2.0 )"
+SLOT="0/${PV}"
+KEYWORDS="~amd64"
+
+CARGO_CRATE_FEATURES=(
+	"__internal_proxy_sys_no_cache"
+	"__rustls"
+	"__rustls-ring"
+	"__tls"
+	"blocking"
+	"brotli"
+	"charset"
+	"cookies"
+	"default"
+	"default-tls"
+	"deflate"
+	"gzip"
+	"hickory-dns"
+	"http2"
+	"http3"
+	"json"
+	"macos-system-configuration"
+	"multipart"
+	"native-tls"
+	"native-tls-alpn"
+	"native-tls-vendored"
+	"rustls-tls"
+	"rustls-tls-manual-roots"
+	"rustls-tls-manual-roots-no-provider"
+	"rustls-tls-native-roots"
+	"rustls-tls-no-provider"
+	"rustls-tls-webpki-roots"
+	"socks"
+	"stream"
+	"trust-dns"
+	"zstd"
+)

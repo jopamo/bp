@@ -1,0 +1,53 @@
+# lockstep-managed: cargo-crate
+EAPI=8
+
+CRATE_NAME="nix"
+CRATE_VERSION="0.29.0"
+CRATE_CHECKSUM="71e2746dc3a24dd78b3cfcb7be93368c6de9963d30f43a6a73998a9cf4b17b46"
+CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
+CRATE_SOURCE_KIND="registry"
+
+inherit cargo-crate
+
+DESCRIPTION="Rust friendly bindings to *nix APIs"
+HOMEPAGE="https://github.com/nix-rust/nix"
+LICENSE="MIT"
+SLOT="0/${PV}"
+KEYWORDS="~amd64"
+
+CARGO_CRATE_FEATURES=(
+	"acct"
+	"aio"
+	"default"
+	"dir"
+	"env"
+	"event"
+	"fanotify"
+	"feature"
+	"fs"
+	"hostname"
+	"inotify"
+	"ioctl"
+	"kmod"
+	"mman"
+	"mount"
+	"mqueue"
+	"net"
+	"personality"
+	"poll"
+	"process"
+	"pthread"
+	"ptrace"
+	"quota"
+	"reboot"
+	"resource"
+	"sched"
+	"signal"
+	"socket"
+	"term"
+	"time"
+	"ucontext"
+	"uio"
+	"user"
+	"zerocopy"
+)

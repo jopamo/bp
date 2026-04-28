@@ -26,10 +26,6 @@ inherit multiprocessing toolchain-funcs
 # Must understand ‘-dc’.  Example override in make.conf:
 #   UNPACKER_BZ2="lbzip2 --threads=8 -dc"
 
-# @ECLASS_VARIABLE: UNPACKER_LZIP
-# @USER_VARIABLE
-# Utility used to decompress lzip files.  Auto-detects xz/plzip/pdlzip/lzip.
-
 # ── Internal helpers ─────────────────────────────────────────────────
 
 # find_unpackable_file <name>
@@ -455,13 +451,6 @@ unpacker_src_uri_depends() {
 			*.7z)                deps[7z]="app-compression/7zip" ;;
 			*.xz)                deps[xz]="app-compression/xz-utils" ;;
 			*.zip)               deps[zip]="app-compression/zip-utils" ;;
-			*.lz)
-				deps[lz]="|| (
-					>=app-compression/xz-utils-5.4.0
-					app-compression/plzip
-					app-compression/pdlzip
-					app-compression/lzip
-				)" ;;
 			*.zst)               deps[zst]="app-compression/zstd" ;;
 			*.lha|*.lzh)         deps[lha]="app-compression/lha" ;;
 			*.lz4)               deps[lz4]="app-compression/lz4" ;;

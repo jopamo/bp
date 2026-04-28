@@ -18,10 +18,7 @@ LICENSE="GPL"
 SLOT="$(ver_cut 1-2)"
 KEYWORDS="amd64 arm64"
 
-DEPEND="
-	app-core/ed
-	app-util/bc
-"
+BDEPEND="app-core/bx"
 
 src_prepare() {
 	kernel-2_src_prepare

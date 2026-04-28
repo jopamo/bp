@@ -4,9 +4,10 @@ inherit meson python-any-r1
 
 DESCRIPTION="a fast cryptographic hash function"
 HOMEPAGE="https://github.com/BLAKE3-team/BLAKE3"
-SNAPSHOT=95018279eb46c7f58b026b8d65f827f120152462
-SRC_URI="https://github.com/jopamo/blake3/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+
+SNAPSHOT=3cfa221234172b117de2a5e227c8f7cf4e4e911f
+SRC_URI="https://gitlab.com/pjo/b3/-/archive/${SNAPSHOT}/b3-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/b3-${SNAPSHOT}"
 
 LICENSE="|| ( CC0-1.0 Apache-2.0 )"
 SLOT="0"

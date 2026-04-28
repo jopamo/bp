@@ -29,13 +29,67 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 		printf '%s\n' "${ref%-${version}}"
 	}
 
+	_lockstep_cargo_encode_segment() {
+		local value=${1}
+		local encoded= i char ord
+
+		LC_ALL=C
+		for (( i=0; i<${#value}; ++i )); do
+			char=${value:i:1}
+			printf -v ord '%03d' "'${char}"
+			encoded+="${ord}"
+		done
+
+		printf '%s\n' "${encoded}"
+	}
+
+	_lockstep_cargo_render_prerelease() {
+		local prerelease=${1}
+
+		if [[ ${prerelease} =~ ^(alpha|beta|pre|rc)[.-]?([0-9]+)?$ ]]; then
+			printf '_%s%s\n' "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]:-0}"
+			return
+		fi
+
+		printf '_pre%s\n' "$(_lockstep_cargo_encode_segment "${prerelease}")"
+	}
+
+	_lockstep_cargo_portage_version() {
+		local version=${1}
+		local core prerelease build tail
+
+		if [[ ${version} =~ ^([0-9]+(\.[0-9]+)*)(-([0-9A-Za-z.-]+))?(\+([0-9A-Za-z.-]+))?$ ]]; then
+			core=${BASH_REMATCH[1]}
+			prerelease=${BASH_REMATCH[4]}
+			build=${BASH_REMATCH[6]}
+			printf '%s' "${core}"
+			[[ -n ${prerelease} ]] && printf '%s' "$(_lockstep_cargo_render_prerelease "${prerelease}")"
+			[[ -n ${build} ]] && printf '_p%s' "$(_lockstep_cargo_encode_segment "${build}")"
+			printf '\n'
+			return
+		fi
+
+		if [[ ${version} =~ ^([0-9]+(\.[0-9]+)*)(.*)$ ]]; then
+			core=${BASH_REMATCH[1]}
+			tail=${BASH_REMATCH[3]}
+			printf '%s' "${core}"
+			[[ -n ${tail} ]] && printf '_p%s' "$(_lockstep_cargo_encode_segment "${tail}")"
+			printf '\n'
+			return
+		fi
+
+		die "unsupported cargo crate version for Portage atom rendering: ${version}"
+	}
+
 	_lockstep_cargo_dependency_atoms() {
-		local ref atoms=
+		local ref atoms= crate version
 
 		while IFS= read -r ref; do
 			ref=$(_lockstep_cargo_trim_ws "${ref}")
 			[[ -n ${ref} ]] || continue
-			atoms+=$'\n\t='"${ref}"
+			crate=$(_lockstep_cargo_ref_crate "${ref}")
+			version=$(_lockstep_cargo_ref_version "${ref}")
+			atoms+=$'\n\t='"rust-crates/${crate}-$(_lockstep_cargo_portage_version "${version}")"
 		done <<< "${CARGO_DEPS-}"
 
 		printf '%s\n' "${atoms}"

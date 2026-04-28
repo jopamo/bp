@@ -15,6 +15,7 @@ app-var
 bin
 core-perl
 dev-py
+dev-pypi
 dev-python
 dev-rust
 distfiles

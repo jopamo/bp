@@ -28,19 +28,19 @@ KEYWORDS="amd64 arm64"
 # there's an optional dep on rich for cute logs
 RDEPEND="
 	dev-py/vcs-versioning[${PYTHON_USEDEP}]
-	dev-python/packaging[${PYTHON_USEDEP}]
+	dev-py/packaging[${PYTHON_USEDEP}]
 	dev-py/setuptools[${PYTHON_USEDEP}]
 	$(python_gen_cond_dep '
-		dev-python/tomli[${PYTHON_USEDEP}]
-		dev-python/typing-extensions[${PYTHON_USEDEP}]
+		dev-py/tomli[${PYTHON_USEDEP}]
+		dev-py/typing-extensions[${PYTHON_USEDEP}]
 	' 3.10)
 "
 BDEPEND="
 	dev-py/vcs-versioning[${PYTHON_USEDEP}]
 	dev-py/setuptools[${PYTHON_USEDEP}]
 	test? (
-		dev-python/build[${PYTHON_USEDEP}]
-		dev-python/typing-extensions[${PYTHON_USEDEP}]
+		dev-py/build[${PYTHON_USEDEP}]
+		dev-py/typing-extensions[${PYTHON_USEDEP}]
 	)
 "
 
@@ -55,7 +55,7 @@ python_test() {
 		testing_scm/test_functions.py::test_dump_version_flake8
 	)
 
-	if has_version dev-python/nose; then
+	if has_version dev-py/nose; then
 		EPYTEST_DESELECT+=(
 			# https://bugs.gentoo.org/892639
 			testing_scm/test_integration.py::test_pyproject_support

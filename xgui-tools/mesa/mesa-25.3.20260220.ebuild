@@ -19,7 +19,7 @@ IUSE="wayland intel zink"
 DEPEND="
 	app-build/llvm
 	app-dev/glslang
-	dev-python/mako
+	dev-py/mako
 	lib-core/expat
 	lib-core/zlib
 	xgui-lib/libdrm
@@ -38,8 +38,8 @@ DEPEND="
 "
 
 BDEPEND="
-	dev-python/ply
-	dev-python/pyyaml
+	dev-py/ply
+	dev-py/pyyaml
 "
 
 #PATCHES=("${FILESDIR}"/build-fix.patch)

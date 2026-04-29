@@ -1,0 +1,70 @@
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_USE_PEP517=hatchling
+PYPI_VERIFY_REPO=https://github.com/psf/black
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+
+inherit distutils-r1 optfeature pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/click
+	dev-pypi/mypy-extensions
+	dev-pypi/packaging
+	dev-pypi/pathspec
+	dev-pypi/platformdirs
+	dev-pypi/pytokens
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="The uncompromising Python code formatter"
+HOMEPAGE="
+	https://black.readthedocs.io/en/stable/
+	https://github.com/psf/black/
+	https://pypi.org/project/black/
+"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+RDEPEND="
+	>=dev-py/click-8.0.0[${PYTHON_USEDEP}]
+	>=dev-py/mypy-extensions-0.4.3[${PYTHON_USEDEP}]
+	>=dev-py/packaging-22.0[${PYTHON_USEDEP}]
+	>=dev-py/pathspec-1.0.0[${PYTHON_USEDEP}]
+	>=dev-py/platformdirs-2[${PYTHON_USEDEP}]
+	>=dev-py/pytokens-0.3.0[${PYTHON_USEDEP}]
+"
+BDEPEND="
+	dev-py/hatch-fancy-pypi-readme[${PYTHON_USEDEP}]
+	dev-py/hatch-vcs[${PYTHON_USEDEP}]
+	test? (
+		>=dev-py/aiohttp-3.10[${PYTHON_USEDEP}]
+		dev-py/aiohttp-cors[${PYTHON_USEDEP}]
+		dev-py/colorama[${PYTHON_USEDEP}]
+	)
+"
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
+
+python_test() {
+	local EPYTEST_DESELECT=()
+
+	case ${EPYTHON} in
+		pypy3.11)
+			EPYTEST_DESELECT+=(
+				# https://github.com/psf/black/issues/4582
+				'tests/test_format.py::test_simple_format[backslash_before_indent]'
+				'tests/test_format.py::test_simple_format[form_feeds]'
+			)
+			;;
+	esac
+
+	epytest
+}
+
+pkg_postinst() {
+	optfeature "blackd - HTTP API for black" \
+		"dev-py/aiohttp dev-py/aiohttp-cors"
+}

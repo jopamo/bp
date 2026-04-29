@@ -83,7 +83,7 @@ inherit python-utils-r1
 #
 # Example:
 # @CODE
-# PYTHON_COMPAT_OVERRIDE='pypy' emerge -1v dev-python/bar
+# PYTHON_COMPAT_OVERRIDE='pypy' emerge -1v dev-py/bar
 # @CODE
 
 # @ECLASS_VARIABLE: PYTHON_REQ_USE
@@ -124,7 +124,7 @@ inherit python-utils-r1
 # Example value:
 # @CODE
 # python_single_target_python2_7? ( app-lang/python:2.7[gdbm] )
-# python_single_target_pypy? ( dev-python/pypy[gdbm] )
+# python_single_target_pypy? ( dev-py/pypy[gdbm] )
 # @CODE
 
 # @ECLASS_VARIABLE: PYTHON_SINGLE_USEDEP
@@ -139,7 +139,7 @@ inherit python-utils-r1
 #
 # Example use:
 # @CODE
-# RDEPEND="dev-python/foo[${PYTHON_SINGLE_USEDEP}]"
+# RDEPEND="dev-py/foo[${PYTHON_SINGLE_USEDEP}]"
 # @CODE
 #
 # Example value:
@@ -157,7 +157,7 @@ inherit python-utils-r1
 # Example use:
 # @CODE
 # RDEPEND="$(python_gen_cond_dep '
-#     dev-python/foo[${PYTHON_USEDEP}]
+#     dev-py/foo[${PYTHON_USEDEP}]
 #   ')"
 # @CODE
 #
@@ -304,15 +304,15 @@ python_gen_useflags() {
 # @CODE
 # PYTHON_COMPAT=( python{2_7,3_{3,4}} pypy )
 # RDEPEND="$(python_gen_cond_dep \
-#   'dev-python/unittest2[${PYTHON_USEDEP}]' python2_7 pypy )"
+#   'dev-py/unittest2[${PYTHON_USEDEP}]' python2_7 pypy )"
 # @CODE
 #
 # It will cause the variable to look like:
 # @CODE
 # RDEPEND="python_single_target_python2_7? (
-#     dev-python/unittest2[python_targets_python2_7(-)?,...] )
+#     dev-py/unittest2[python_targets_python2_7(-)?,...] )
 #	python_single_target_pypy? (
-#     dev-python/unittest2[python_targets_pypy(-)?,...] )"
+#     dev-py/unittest2[python_targets_pypy(-)?,...] )"
 # @CODE
 python_gen_cond_dep() {
 	debug-print-function ${FUNCNAME} "$@"
@@ -366,7 +366,7 @@ python_gen_cond_dep() {
 #   python_single_target_python2_7? (
 #     app-lang/python:2.7[xml(+)] )
 #	python_single_target_pypy? (
-#     dev-python/pypy[xml(+)] ) )"
+#     dev-py/pypy[xml(+)] ) )"
 # @CODE
 python_gen_impl_dep() {
 	debug-print-function ${FUNCNAME} "$@"

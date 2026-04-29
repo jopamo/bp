@@ -1,0 +1,43 @@
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_USE_PEP517=setuptools
+PYPI_PN="PyJWT"
+PYPI_VERIFY_REPO=https://github.com/jpadilla/pyjwt
+PYTHON_COMPAT=( python3_{11..14} )
+
+inherit distutils-r1 optfeature pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="JSON Web Token implementation in Python"
+HOMEPAGE="
+	https://github.com/jpadilla/pyjwt/
+	https://pypi.org/project/PyJWT/
+"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+RDEPEND="
+	!dev-py/python-jwt
+"
+BDEPEND="
+	test? (
+		>=app-crypto/cryptography-3.4.0[${PYTHON_USEDEP}]
+	)
+"
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
+
+EPYTEST_DESELECT=(
+	# Internet
+	tests/test_jwks_client.py::TestPyJWKClient::test_get_jwt_set_sslcontext_default
+)
+
+pkg_postinst() {
+	optfeature "cryptography" app-crypto/cryptography
+}

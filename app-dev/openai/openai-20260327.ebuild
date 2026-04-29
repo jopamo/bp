@@ -28,16 +28,16 @@ KEYWORDS="amd64 arm64"
 IUSE="datalib"
 
 RDEPEND="
-	dev-python/pydantic[${PYTHON_USEDEP}]
-	dev-python/typing-extensions[${PYTHON_USEDEP}]
-	>=dev-python/requests-2.20[${PYTHON_USEDEP}]
-	dev-python/tqdm[${PYTHON_USEDEP}]
-	dev-python/aiohttp[${PYTHON_USEDEP}]
+	dev-py/pydantic[${PYTHON_USEDEP}]
+	dev-py/typing-extensions[${PYTHON_USEDEP}]
+	>=dev-py/requests-2.20[${PYTHON_USEDEP}]
+	dev-py/tqdm[${PYTHON_USEDEP}]
+	dev-py/aiohttp[${PYTHON_USEDEP}]
 	datalib? (
 		dev-py/numpy[${PYTHON_USEDEP}]
-		>=dev-python/pandas-1.2.3[${PYTHON_USEDEP}]
-		>=dev-python/pandas-stubs-1.1.0.11[${PYTHON_USEDEP}]
-		>=dev-python/openpyxl-3.0.7[${PYTHON_USEDEP}]
+		>=dev-py/pandas-1.2.3[${PYTHON_USEDEP}]
+		>=dev-py/pandas-stubs-1.1.0.11[${PYTHON_USEDEP}]
+		>=dev-py/openpyxl-3.0.7[${PYTHON_USEDEP}]
 	)"
 
 DEPEND="${RDEPEND}"

@@ -21,15 +21,15 @@ IUSE="dnssec examples"
 
 RDEPEND="
 	dnssec? (
-		>=dev-python/cryptography-41[${PYTHON_USEDEP}]
+		>=dev-py/cryptography-41[${PYTHON_USEDEP}]
 	)
-	>=dev-python/idna-2.1[${PYTHON_USEDEP}]
+	>=dev-py/idna-2.1[${PYTHON_USEDEP}]
 "
 # note: skipping DoH test deps because they require Internet anyway
 BDEPEND="
 	test? (
-		>=dev-python/cryptography-41[${PYTHON_USEDEP}]
-		>=dev-python/quart-trio-0.11.0[${PYTHON_USEDEP}]
+		>=dev-py/cryptography-41[${PYTHON_USEDEP}]
+		>=dev-py/quart-trio-0.11.0[${PYTHON_USEDEP}]
 	)
 "
 

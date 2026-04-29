@@ -40,10 +40,10 @@ BDEPEND="
 	lapack? ( app-dev/pkgconf )
 	test? (
 		$(python_gen_cond_dep '
-			>=dev-python/cffi-1.14.0[${PYTHON_USEDEP}]
+			>=dev-py/cffi-1.14.0[${PYTHON_USEDEP}]
 		' 'python*')
-		dev-python/charset-normalizer[${PYTHON_USEDEP}]
-		>=dev-python/pytz-2019.3[${PYTHON_USEDEP}]
+		dev-py/charset-normalizer[${PYTHON_USEDEP}]
+		>=dev-py/pytz-2019.3[${PYTHON_USEDEP}]
 	)
 "
 

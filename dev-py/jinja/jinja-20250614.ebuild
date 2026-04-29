@@ -20,12 +20,12 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	>=dev-python/markupsafe-2.0[${PYTHON_USEDEP}]
+	>=dev-py/markupsafe-2.0[${PYTHON_USEDEP}]
 "
 
 distutils_enable_sphinx docs \
-	dev-python/sphinx-issues \
-	dev-python/pallets-sphinx-themes
+	dev-py/sphinx-issues \
+	dev-py/pallets-sphinx-themes
 distutils_enable_tests pytest
 
 # XXX: handle Babel better?
@@ -38,7 +38,7 @@ src_prepare() {
 }
 
 pkg_postinst() {
-	if ! has_version dev-python/Babel; then
-		elog "For i18n support, please emerge dev-python/Babel."
+	if ! has_version dev-py/Babel; then
+		elog "For i18n support, please emerge dev-py/Babel."
 	fi
 }

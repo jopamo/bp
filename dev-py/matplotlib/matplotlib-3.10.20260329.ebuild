@@ -43,20 +43,20 @@ DEPEND="
 
 RDEPEND="
     ${DEPEND}
-    >=dev-python/contourpy-1.0.1[${PYTHON_USEDEP}]
-    >=dev-python/cycler-0.10.0-r1[${PYTHON_USEDEP}]
-    >=dev-python/kiwisolver-1.3.1[${PYTHON_USEDEP}]
-    >=dev-python/packaging-20.0[${PYTHON_USEDEP}]
+    >=dev-py/contourpy-1.0.1[${PYTHON_USEDEP}]
+    >=dev-py/cycler-0.10.0-r1[${PYTHON_USEDEP}]
+    >=dev-py/kiwisolver-1.3.1[${PYTHON_USEDEP}]
+    >=dev-py/packaging-20.0[${PYTHON_USEDEP}]
     >=xgui-app/pillow-8[jpeg,webp,${PYTHON_USEDEP}]
-    >=dev-python/pyparsing-2.3.1[${PYTHON_USEDEP}]
-    >=dev-python/python-dateutil-2.7[${PYTHON_USEDEP}]
-    >=dev-python/pytz-2019.3[${PYTHON_USEDEP}]
-    cairo? ( dev-python/cairocffi[${PYTHON_USEDEP}] )
-    excel? ( dev-python/xlwt[${PYTHON_USEDEP}] )
+    >=dev-py/pyparsing-2.3.1[${PYTHON_USEDEP}]
+    >=dev-py/python-dateutil-2.7[${PYTHON_USEDEP}]
+    >=dev-py/pytz-2019.3[${PYTHON_USEDEP}]
+    cairo? ( dev-py/cairocffi[${PYTHON_USEDEP}] )
+    excel? ( dev-py/xlwt[${PYTHON_USEDEP}] )
     gtk3? (
-        >=dev-python/pygobject-3.40.1-r1:3[cairo?,${PYTHON_USEDEP}]
+        >=dev-py/pygobject-3.40.1-r1:3[cairo?,${PYTHON_USEDEP}]
     )
-    webagg? ( >=dev-python/tornado-6.0.4[${PYTHON_USEDEP}] )
+    webagg? ( >=dev-py/tornado-6.0.4[${PYTHON_USEDEP}] )
 "
 
 BDEPEND="
@@ -65,9 +65,9 @@ BDEPEND="
     >=dev-py/setuptools-scm-7[${PYTHON_USEDEP}]
     app-dev/pkgconf
     test? (
-        dev-python/psutil[${PYTHON_USEDEP}]
-        dev-python/pytest-rerunfailures[${PYTHON_USEDEP}]
-        >=dev-python/tornado-6.0.4[${PYTHON_USEDEP}]
+        dev-py/psutil[${PYTHON_USEDEP}]
+        dev-py/pytest-rerunfailures[${PYTHON_USEDEP}]
+        >=dev-py/tornado-6.0.4[${PYTHON_USEDEP}]
     )
 "
 

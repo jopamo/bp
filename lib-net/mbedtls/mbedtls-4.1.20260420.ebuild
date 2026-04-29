@@ -21,7 +21,7 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="dev-python/jsonschema"
+DEPEND="dev-py/jsonschema"
 
 src_prepare() {
 	rm -rf "${S}/framework" "${S}/tf-psa-crypto" || die

@@ -35,14 +35,14 @@ IUSE="ssl"
 # - 'ykman piv'
 RDEPEND="
 	app-crypto/ccid
-	>=dev-python/click-8.0[${PYTHON_USEDEP}]
+	>=dev-py/click-8.0[${PYTHON_USEDEP}]
 	app-crypto/cryptography[${PYTHON_USEDEP}]
-	dev-python/fido2:0/1.0[${PYTHON_USEDEP}]
-	dev-python/keyring[${PYTHON_USEDEP}]
+	dev-py/fido2:0/1.0[${PYTHON_USEDEP}]
+	dev-py/keyring[${PYTHON_USEDEP}]
 	dev-py/pyscard[${PYTHON_USEDEP}]
-	ssl? ( >=dev-python/pyopenssl-0.15.1[${PYTHON_USEDEP}] )"
+	ssl? ( >=dev-py/pyopenssl-0.15.1[${PYTHON_USEDEP}] )"
 BDEPEND="
-	test? ( dev-python/makefun[${PYTHON_USEDEP}] )
+	test? ( dev-py/makefun[${PYTHON_USEDEP}] )
 "
 
 distutils_enable_tests pytest

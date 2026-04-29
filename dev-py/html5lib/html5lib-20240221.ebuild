@@ -20,12 +20,12 @@ KEYWORDS="amd64 arm64"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/six-1.9[${PYTHON_USEDEP}]
-	dev-python/webencodings[${PYTHON_USEDEP}]
+	>=dev-py/six-1.9[${PYTHON_USEDEP}]
+	dev-py/webencodings[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	test? (
-		dev-python/pytest-expect[${PYTHON_USEDEP}]
+		dev-py/pytest-expect[${PYTHON_USEDEP}]
 	)
 "
 

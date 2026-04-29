@@ -1,5 +1,6 @@
 # lockstep-managed: cargo-crate
 EAPI=8
+LOCKSTEP_PAYLOAD_MODE="tree-blake3-v1"
 
 CRATE_NAME="wasip3"
 CRATE_VERSION="0.4.0+wasi-0.3.0-rc-2026-01-06"

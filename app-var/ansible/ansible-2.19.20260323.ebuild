@@ -21,15 +21,15 @@ KEYWORDS="amd64 arm64"
 RESTRICT="test"
 
 RDEPEND="
-	dev-python/paramiko[${PYTHON_USEDEP}]
+	dev-py/paramiko[${PYTHON_USEDEP}]
 	dev-py/jinja[${PYTHON_USEDEP}]
-	dev-python/pyyaml[${PYTHON_USEDEP}]
+	dev-py/pyyaml[${PYTHON_USEDEP}]
 	dev-py/setuptools[${PYTHON_USEDEP}]
 	app-crypto/cryptography[${PYTHON_USEDEP}]
-	dev-python/httplib2[${PYTHON_USEDEP}]
-	dev-python/six[${PYTHON_USEDEP}]
+	dev-py/httplib2[${PYTHON_USEDEP}]
+	dev-py/six[${PYTHON_USEDEP}]
 "
 DEPEND="
 	dev-py/setuptools[${PYTHON_USEDEP}]
-	>=dev-python/packaging-16.6[${PYTHON_USEDEP}]
+	>=dev-py/packaging-16.6[${PYTHON_USEDEP}]
 "

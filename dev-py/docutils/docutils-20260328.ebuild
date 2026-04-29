@@ -23,7 +23,7 @@ KEYWORDS="amd64 arm64"
 # Pillow is optional upstream; without it, docutils loses image size
 # probing for some writers when dimensions are not specified explicitly.
 RDEPEND="
-	dev-python/pygments[${PYTHON_USEDEP}]
+	dev-py/pygments[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	${RDEPEND}

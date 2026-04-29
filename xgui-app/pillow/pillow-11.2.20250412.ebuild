@@ -28,7 +28,7 @@ REQUIRED_USE="test? ( jpeg jpeg2k lcms tiff truetype )"
 RESTRICT="!test? ( test )"
 
 DEPEND="
-	dev-python/olefile[${PYTHON_USEDEP}]
+	dev-py/olefile[${PYTHON_USEDEP}]
 	jpeg? ( xmedia-lib/libjpeg-turbo )
 	jpeg2k? ( xmedia-lib/openjpeg )
 	lcms? ( xgui-lib/lcms )
@@ -43,11 +43,11 @@ DEPEND="
 "
 BDEPEND="
 	dev-py/setuptools[${PYTHON_USEDEP}]
-	dev-python/wheel[${PYTHON_USEDEP}]
+	dev-py/wheel[${PYTHON_USEDEP}]
 	test? (
-		dev-python/defusedxml[${PYTHON_USEDEP}]
-		dev-python/packaging[${PYTHON_USEDEP}]
-		dev-python/pytest-timeout[${PYTHON_USEDEP}]
+		dev-py/defusedxml[${PYTHON_USEDEP}]
+		dev-py/packaging[${PYTHON_USEDEP}]
+		dev-py/pytest-timeout[${PYTHON_USEDEP}]
 	)
 "
 

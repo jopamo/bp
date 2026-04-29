@@ -1,0 +1,40 @@
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_USE_PEP517=flit
+PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t )
+
+inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="Extended pickling support for Python objects"
+HOMEPAGE="
+	https://github.com/cloudpipe/cloudpickle/
+	https://pypi.org/project/cloudpickle/
+"
+SRC_URI="
+	https://github.com/cloudpipe/cloudpickle/archive/v${PV}.tar.gz
+		-> ${P}.gh.tar.gz
+"
+
+LICENSE="BSD"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+BDEPEND="
+	test? (
+		dev-py/psutil[${PYTHON_USEDEP}]
+	)
+"
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
+
+python_test() {
+	local -x PYTHONPATH=${PYTHONPATH}:tests/cloudpickle_testpkg
+	# -s unbreaks some tests
+	# https://github.com/cloudpipe/cloudpickle/issues/252
+	epytest -s
+}

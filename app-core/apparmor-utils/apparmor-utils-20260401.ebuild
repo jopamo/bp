@@ -27,7 +27,7 @@ DEPEND="${COMMON_DEPEND}
 RDEPEND="${COMMON_DEPEND}
 	~lib-core/libapparmor-${PV}[python,${PYTHON_USEDEP}]
 	~app-core/apparmor-${PV}
-	dev-python/psutil[${PYTHON_USEDEP}]"
+	dev-py/psutil[${PYTHON_USEDEP}]"
 
 src_prepare() {
 	default

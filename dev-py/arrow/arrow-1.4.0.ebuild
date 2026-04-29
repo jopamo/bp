@@ -1,0 +1,42 @@
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_USE_PEP517=flit
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+
+inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/python-dateutil
+	dev-pypi/tzdata
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="Better dates and times for Python"
+HOMEPAGE="
+	https://github.com/arrow-py/arrow/
+	https://pypi.org/project/arrow/
+"
+
+LICENSE="Apache-2.0"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+RDEPEND="
+	>=dev-py/python-dateutil-2.7.0[${PYTHON_USEDEP}]
+	dev-py/tzdata[${PYTHON_USEDEP}]
+"
+
+BDEPEND="
+	test? (
+		dev-py/pytz[${PYTHON_USEDEP}]
+		dev-py/simplejson[${PYTHON_USEDEP}]
+	)
+"
+
+EPYTEST_PLUGINS=( pytest-mock )
+distutils_enable_tests pytest
+
+src_prepare() {
+	sed -i -e '/addopts/d' tox.ini || die
+	distutils-r1_src_prepare
+}

@@ -1,0 +1,51 @@
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_EXT=1
+DISTUTILS_USE_PEP517=maturin
+PYPI_VERIFY_REPO=https://github.com/ijl/orjson
+PYTHON_COMPAT=( python3_{11..14} )
+
+# upstream is vendoring crates, so we don't need CRATES.
+RUST_MIN_VER="1.89.0"
+
+inherit cargo distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy"
+HOMEPAGE="
+	https://github.com/ijl/orjson/
+	https://pypi.org/project/orjson/
+"
+
+LICENSE="|| ( Apache-2.0 MIT )"
+# Dependent crate licenses
+LICENSE+="
+	Apache-2.0-with-LLVM-exceptions BSD Boost-1.0 MIT Unicode-3.0
+"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+BDEPEND="
+	>=dev-util/maturin-1.7.8[${PYTHON_USEDEP}]
+	test? (
+		dev-py/arrow[${PYTHON_USEDEP}]
+		dev-py/numpy[${PYTHON_USEDEP}]
+		dev-py/psutil[${PYTHON_USEDEP}]
+		dev-py/pytz[${PYTHON_USEDEP}]
+	)
+"
+
+QA_FLAGS_IGNORED=".*"
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
+
+src_unpack() {
+	pypi_src_unpack
+
+	# https://github.com/ijl/orjson/issues/613
+	cargo_gen_config
+}

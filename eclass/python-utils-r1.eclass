@@ -1181,7 +1181,7 @@ python_export_utf8_locale() {
 # @FUNCTION: build_sphinx
 # @USAGE: <directory>
 # @DESCRIPTION:
-# Build HTML documentation using dev-python/sphinx in the specified
+# Build HTML documentation using dev-py/sphinx in the specified
 # <directory>.  Takes care of disabling Intersphinx and appending
 # to HTML_DOCS.
 #
@@ -1309,7 +1309,7 @@ _python_check_occluded_packages() {
 # in ebuilds that are known to hang, or by user to prevent hangs
 # in automated test environments.  If this variable is set prior
 # to calling distutils_enable_tests in distutils-r1, a test dependency
-# on dev-python/pytest-timeout is added automatically.
+# on dev-py/pytest-timeout is added automatically.
 
 # @ECLASS_VARIABLE: EPYTEST_XDIST
 # @DEFAULT_UNSET
@@ -1317,7 +1317,7 @@ _python_check_occluded_packages() {
 # If set to a non-empty value, enables running tests in parallel
 # via pytest-xdist plugin.  If this variable is set prior to calling
 # distutils_enable_tests in distutils-r1, a test dependency
-# on dev-python/pytest-xdist is added automatically.
+# on dev-py/pytest-xdist is added automatically.
 
 # @ECLASS_VARIABLE: EPYTEST_JOBS
 # @USER_VARIABLE

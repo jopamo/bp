@@ -24,10 +24,10 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	dev-python/packaging[${PYTHON_USEDEP}]
+	dev-py/packaging[${PYTHON_USEDEP}]
 	$(python_gen_cond_dep '
-		dev-python/tomli[${PYTHON_USEDEP}]
-		dev-python/typing-extensions[${PYTHON_USEDEP}]
+		dev-py/tomli[${PYTHON_USEDEP}]
+		dev-py/typing-extensions[${PYTHON_USEDEP}]
 	' 3.10)
 "
 BDEPEND="

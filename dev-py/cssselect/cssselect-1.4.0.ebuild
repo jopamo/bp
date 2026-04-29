@@ -1,0 +1,37 @@
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_USE_PEP517=hatchling
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+
+inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="Parse CSS3 Selectors and translate them to XPath 1.0"
+HOMEPAGE="
+	https://cssselect.readthedocs.io/en/latest/
+	https://github.com/scrapy/cssselect/
+	https://pypi.org/project/cssselect/
+"
+SRC_URI="
+	https://github.com/scrapy/cssselect/archive/v${PV}.tar.gz
+		-> ${P}.gh.tar.gz
+"
+
+LICENSE="BSD"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+IUSE="test"
+RESTRICT="!test? ( test )"
+
+BDEPEND="
+	test? (
+		dev-py/lxml[${PYTHON_USEDEP}]
+	)
+"
+
+distutils_enable_sphinx docs \
+	dev-py/sphinx-rtd-theme
+distutils_enable_tests unittest

@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="pyte"
 DESCRIPTION="Simple VTXXX-compatible terminal emulator."
 HOMEPAGE="https://github.com/selectel/pyte"
 LICENSE="LGPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/ab/ab/b599762933eba04de7dc5b31ae083112a6c9a9db15b01d3109ad797559d9/pyte-0.8.2.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pyte-0.8.2"

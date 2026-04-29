@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="hatchling"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="httpx"
 DESCRIPTION="The next generation HTTP client."
 HOMEPAGE="https://github.com/encode/httpx"
 LICENSE="BSD-3-Clause"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/b1/df/48c586a5fe32a0f01324ee087459e112ebb7224f646c0b5023f5e79e9956/httpx-0.28.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/httpx-0.28.1"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="sse-starlette"
 DESCRIPTION="SSE plugin for Starlette"
 HOMEPAGE="https://pypi.org/project/sse-starlette/"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/e1/9a/f35932a8c0eb6b2287b66fa65a0321df8c84e4e355a659c1841a37c39fdb/sse_starlette-3.4.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/sse_starlette-3.4.1"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

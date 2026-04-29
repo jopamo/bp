@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="ipywidgets"
 DESCRIPTION="Jupyter interactive widgets"
 HOMEPAGE="http://jupyter.org"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/4c/ae/c5ce1edc1afe042eadb445e95b0671b03cee61895264357956e61c0d2ac0/ipywidgets-8.1.8.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/ipywidgets-8.1.8"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

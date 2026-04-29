@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="flit"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="pathspec"
 DESCRIPTION="Utility library for gitignore style pattern matching of file paths."
 HOMEPAGE="https://pypi.org/project/pathspec/"
 LICENSE="MPL-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/fa/36/e27608899f9b8d4dff0617b2d9ab17ca5608956ca44461ac14ac48b44015/pathspec-1.0.4.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pathspec-1.0.4"

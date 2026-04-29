@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="stack-data"
 DESCRIPTION="Extract data from python stack frames and tracebacks for informative displays"
 HOMEPAGE="http://github.com/alexmojaki/stack_data"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/28/e3/55dcc2cfbc3ca9c29519eb6884dd1415ecb53b0e934862d3559ddcb7e20b/stack_data-0.6.3.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/stack_data-0.6.3"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="hatchling"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="virtualenv"
 DESCRIPTION="Virtual Python Environment builder"
 HOMEPAGE="https://github.com/pypa/virtualenv"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/3f/8b/6331f7a7fe70131c301106ec1e7cf23e2501bf7d4ca3636805801ca191bb/virtualenv-21.3.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/virtualenv-21.3.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

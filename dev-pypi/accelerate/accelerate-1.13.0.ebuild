@@ -1,52 +1,31 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-PYTHON_COMPAT=( python3_{10..13} )
-DISTUTILS_USE_PEP517=setuptools
-DISTUTILS_SINGLE_IMPL=1
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
+
 inherit distutils-r1
 
-DESCRIPTION="Run your *raw* PyTorch training script on any kind of device"
+DESCRIPTION="Accelerate"
 HOMEPAGE="https://github.com/huggingface/accelerate"
-SRC_URI="https://github.com/huggingface/${PN}/archive/refs/tags/v${PV}.tar.gz
-	-> ${P}.gh.tar.gz"
-
-LICENSE="Apache-2.0"
+LICENSE="Apache"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="
-	dev-pypi/huggingface_hub[${PYTHON_SINGLE_USEDEP}]
-	dev-py/pytorch[${PYTHON_SINGLE_USEDEP}]
-	dev-py/caffe2[${PYTHON_SINGLE_USEDEP}]
-	$(python_gen_cond_dep '
-		dev-pypi/numpy[${PYTHON_USEDEP}]
-		dev-pypi/packaging[${PYTHON_USEDEP}]
-		dev-pypi/psutil[${PYTHON_USEDEP}]
-		dev-pypi/pyyaml[${PYTHON_USEDEP}]
-		dev-pypi/safetensors[${PYTHON_USEDEP}]
-	')
+SRC_URI="https://files.pythonhosted.org/packages/ca/14/787e5498cd062640f0f3d92ef4ae4063174f76f9afd29d13fc52a319daae/accelerate-1.13.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/accelerate-1.13.0"
+
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-py/pytorch
+	dev-pypi/huggingface-hub
+	dev-pypi/numpy
+	dev-pypi/packaging
+	dev-pypi/psutil
+	dev-pypi/pyyaml
+	dev-pypi/safetensors
 "
-DEPEND="${RDEPEND}"
-BDEPEND="test? (
-	$(python_gen_cond_dep '
-		dev-pypi/networkx[${PYTHON_USEDEP}]
-		dev-py/parameterized[${PYTHON_USEDEP}]
-		dev-py/clearml[${PYTHON_USEDEP}]
-	')
-	dev-py/caffe2[gloo]
-	dev-py/evaluate[${PYTHON_SINGLE_USEDEP}]
-	dev-py/torchdata[${PYTHON_SINGLE_USEDEP}]
-)"
-
-distutils_enable_tests pytest
-
-python_test() {
-	local EPYTEST_DESELECT=(
-		tests/test_modeling_utils.py::ModelingUtilsTester::test_infer_auto_device_map_with_buffer_check
-		tests/test_modeling_utils.py::ModelingUtilsTester::test_infer_auto_device_map_with_buffer_check_and_multi_devices
-		tests/test_modeling_utils.py::ModelingUtilsTester::test_infer_auto_device_map_with_fallback_allocation_and_buffers
-		tests/test_utils.py::UtilsTester::test_patch_environment_key_exists
-		tests/test_examples.py::FeatureExamplesTests
-	)
-	epytest tests
-}
+# lockstep-pypi-deps: end

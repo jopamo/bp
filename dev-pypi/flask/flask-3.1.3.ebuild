@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="flit"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="flask"
 DESCRIPTION="A simple framework for building complex web applications."
 HOMEPAGE="https://pypi.org/project/flask/"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/26/00/35d85dcce6c57fdc871f3867d465d780f302a175ea360f62533f12b27e2b/flask-3.1.3.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/flask-3.1.3"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

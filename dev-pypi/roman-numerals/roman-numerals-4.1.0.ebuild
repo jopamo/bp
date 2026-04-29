@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="flit"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="roman-numerals"
 DESCRIPTION="Manipulate well-formed Roman numerals"
 HOMEPAGE="https://pypi.org/project/roman-numerals/"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/ae/f9/41dc953bbeb056c17d5f7a519f50fdf010bd0553be2d630bc69d1e022703/roman_numerals-4.1.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/roman_numerals-4.1.0"

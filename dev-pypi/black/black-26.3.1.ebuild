@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="hatchling"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="black"
 DESCRIPTION="The uncompromising code formatter."
 HOMEPAGE="https://pypi.org/project/black/"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/e1/c5/61175d618685d42b005847464b8fb4743a67b1b8fdb75e50e5a96c31a27a/black-26.3.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/black-26.3.1"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

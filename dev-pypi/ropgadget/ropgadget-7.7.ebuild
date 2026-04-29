@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="ropgadget"
 DESCRIPTION="This tool lets you search your gadgets on your binaries to facilitate your ROP exploitation."
 HOMEPAGE="https://github.com/JonathanSalwan/ROPgadget"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/88/9a/d5290486bb97f2bc9f7801e90659c0b26707d7997d8ff851846efc869db7/ropgadget-7.7.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/ropgadget-7.7"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

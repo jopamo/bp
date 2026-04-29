@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="trio"
 DESCRIPTION="A friendly Python library for async concurrency and I/O"
 HOMEPAGE="https://github.com/python-trio/trio"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/52/b6/c744031c6f89b18b3f5f4f7338603ab381d740a7f45938c4607b2302481f/trio-0.33.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/trio-0.33.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="flit"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="arrow"
 DESCRIPTION="Better dates & times for Python"
 HOMEPAGE="https://pypi.org/project/arrow/"
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/b9/33/032cdc44182491aa708d06a68b62434140d8c50820a087fac7af37703357/arrow-1.4.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/arrow-1.4.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

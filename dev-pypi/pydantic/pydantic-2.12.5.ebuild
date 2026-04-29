@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="hatchling"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="pydantic"
 DESCRIPTION="Data validation using Python type hints"
 HOMEPAGE="https://github.com/pydantic/pydantic"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/69/44/36f1a6e523abc58ae5f928898e4aca2e0ea509b5aa6f6f392a5d882be928/pydantic-2.12.5.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pydantic-2.12.5"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

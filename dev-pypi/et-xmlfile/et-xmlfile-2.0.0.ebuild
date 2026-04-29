@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="et-xmlfile"
 DESCRIPTION="An implementation of lxml.xmlfile for the standard library"
 HOMEPAGE="https://foss.heptapod.net/openpyxl/et_xmlfile"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/d3/38/af70d7ab1ae9d4da450eeec1fa3918940a5fafb9055e934af8d6eb0c2313/et_xmlfile-2.0.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/et_xmlfile-2.0.0"

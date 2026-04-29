@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="jaraco-text"
 DESCRIPTION="Module for text manipulation"
 HOMEPAGE="https://pypi.org/project/jaraco-text/"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/f2/20/f071dfb40f06fd0395167a40218c10adb7164635f65ebdafe45e0c714935/jaraco_text-4.2.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/jaraco_text-4.2.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

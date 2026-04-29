@@ -1,2 +1,2 @@
-DIST charset_normalizer-3.4.6.tar.gz 143363 BLAKE3 fa0ec2b7344f33ccb2494bb03c318bf99fc7d097b62afa4002731e4bfd9be5c3
-DIST charset_normalizer-3.4.6.tar.gz.provenance 9540 BLAKE3 d1c9faccf4be58248b2e925b351dfb2ea6fd4f2b46466840daafa05cc8d575cf
+DIST charset-normalizer-3.4.6.tar.gz 143363 BLAKE3 fa0ec2b7344f33ccb2494bb03c318bf99fc7d097b62afa4002731e4bfd9be5c3
+DIST charset-normalizer-3.4.7.tar.gz 144271 BLAKE3 d83463ba63d4ace0765cf732840f4f7e6bed5e5db8667f40fe52aac5b9a78848

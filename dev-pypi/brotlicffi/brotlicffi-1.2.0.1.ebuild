@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="brotlicffi"
 DESCRIPTION="Python CFFI bindings to the Brotli library"
 HOMEPAGE="https://github.com/python-hyper/brotlicffi"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/8a/b6/017dc5f852ed9b8735af77774509271acbf1de02d238377667145fcee01d/brotlicffi-1.2.0.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/brotlicffi-1.2.0.1"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

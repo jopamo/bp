@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="pdm-backend"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="typer"
 DESCRIPTION="Typer, build great CLIs. Easy to code. Based on Python type hints."
 HOMEPAGE="https://github.com/fastapi/typer"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/f5/24/cb09efec5cc954f7f9b930bf8279447d24618bb6758d4f6adf2574c41780/typer-0.24.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/typer-0.24.1"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

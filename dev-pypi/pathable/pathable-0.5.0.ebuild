@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="poetry"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="pathable"
 DESCRIPTION="Object-oriented paths"
 HOMEPAGE="https://pypi.org/project/pathable/"
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/72/55/b748445cb4ea6b125626f15379be7c96d1035d4fa3e8fee362fa92298abf/pathable-0.5.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pathable-0.5.0"

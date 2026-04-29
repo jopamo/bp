@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="hatchling"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="ipykernel"
 DESCRIPTION="IPython Kernel for Jupyter"
 HOMEPAGE="https://ipython.org"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/ca/8d/b68b728e2d06b9e0051019640a40a9eb7a88fcd82c2e1b5ce70bef5ff044/ipykernel-7.2.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/ipykernel-7.2.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

@@ -1,16 +1,28 @@
-# lockstep-managed: dependency-ebuild
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_USE_PEP517=hatchling
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
+
+inherit distutils-r1
 # lockstep-pypi-managed: true
-EAPI=8
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="Jupyter Python Comm implementation, for usage in ipykernel, xeus-python"
+HOMEPAGE="
+	https://github.com/ipython/comm/
+	https://pypi.org/project/comm/
+"
+# no tests in sdist, as of 0.1.3
+SRC_URI="
+	https://github.com/ipython/comm/archive/v${PV}.tar.gz
+		-> ${P}.gh.tar.gz
+"
 
-PYTHON_COMPAT=( python3_{11..14} )
-
-DISTUTILS_USE_PEP517="hatchling"
-
-inherit distutils-r1 pypi
-
-PYPI_PN="comm"
-DESCRIPTION="Jupyter Python Comm implementation, for usage in ipykernel, xeus-python etc."
-HOMEPAGE="https://github.com/ipython/comm"
-LICENSE="metapackage"
+LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest

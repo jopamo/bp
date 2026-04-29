@@ -20,7 +20,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	>=dev-py/markupsafe-2.0[${PYTHON_USEDEP}]
+	>=dev-pypi/markupsafe-2.0[${PYTHON_USEDEP}]
 "
 
 distutils_enable_sphinx docs \

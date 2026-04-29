@@ -23,7 +23,7 @@ RDEPEND="
 	dnssec? (
 		>=dev-py/cryptography-41[${PYTHON_USEDEP}]
 	)
-	>=dev-py/idna-2.1[${PYTHON_USEDEP}]
+	>=dev-pypi/idna-2.1[${PYTHON_USEDEP}]
 "
 # note: skipping DoH test deps because they require Internet anyway
 BDEPEND="

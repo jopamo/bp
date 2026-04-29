@@ -1,22 +1,58 @@
-# lockstep-managed: dependency-ebuild
-# lockstep-pypi-managed: true
-EAPI=8
+# Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_{11..14} )
 
-DISTUTILS_USE_PEP517="setuptools"
+DISTUTILS_USE_PEP517=flit
+PYPI_PN=${PN/-/.}
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} python3_{13,14}t )
 
 inherit distutils-r1 pypi
-
-PYPI_PN="jaraco-functools"
-DESCRIPTION="Functools like those found in stdlib"
-HOMEPAGE="https://pypi.org/project/jaraco-functools/"
-LICENSE="metapackage"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
+# lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/more-itertools
 "
 # lockstep-pypi-deps: end
+DESCRIPTION="Additional functions used by other projects by developer jaraco"
+HOMEPAGE="
+	https://github.com/jaraco/jaraco.functools/
+	https://pypi.org/project/jaraco.functools/
+"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+RDEPEND="
+	>=dev-pypi/more-itertools-0.12.0-r1[${PYTHON_USEDEP}]
+"
+BDEPEND="
+	test? (
+		dev-pypi/jaraco-classes[${PYTHON_USEDEP}]
+	)
+"
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
+
+src_configure() {
+	grep -q 'build-backend = "setuptools' pyproject.toml ||
+		die "Upstream changed build-backend, recheck"
+	# write a custom pyproject.toml to ease setuptools bootstrap
+	cat > pyproject.toml <<-EOF || die
+		[build-system]
+		requires = ["flit_core >=3.2,<4"]
+		build-backend = "flit_core.buildapi"
+
+		[project]
+		name = "jaraco.functools"
+		version = "${PV}"
+		description = "Functools like those found in stdlib"
+	EOF
+}
+
+python_install() {
+	distutils-r1_python_install
+	# rename to workaround a bug in pkg_resources
+	# https://bugs.gentoo.org/834522
+	mv "${D}$(python_get_sitedir)"/jaraco{_,.}functools-${PV}.dist-info || die
+}

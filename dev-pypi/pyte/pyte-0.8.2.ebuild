@@ -1,0 +1,36 @@
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{11..14} )
+
+inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="Simple VTXXX-compatible terminal emulator"
+HOMEPAGE="
+	https://pypi.org/project/pyte/
+	https://github.com/selectel/pyte/
+"
+SRC_URI="
+	https://github.com/selectel/pyte/archive/${PV}.tar.gz
+		-> ${P}.gh.tar.gz
+"
+
+LICENSE="LGPL-3"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+RDEPEND="
+	dev-pypi/wcwidth[${PYTHON_USEDEP}]
+"
+
+distutils_enable_tests pytest
+
+python_prepare_all() {
+	# run pytest directly for tests
+	sed -i '/setup_requires/d' setup.py || die
+	distutils-r1_python_prepare_all
+}

@@ -25,17 +25,17 @@ KEYWORDS="amd64 arm64"
 RDEPEND="
 	dev-py/jinja[${PYTHON_USEDEP}]
 	dev-py/lxml[${PYTHON_USEDEP}]
-	dev-py/colorlog[${PYTHON_USEDEP}]
-	>=dev-py/pygments-2.13.0[${PYTHON_USEDEP}]
+	dev-pypi/colorlog[${PYTHON_USEDEP}]
+	>=dev-pypi/pygments-2.13.0[${PYTHON_USEDEP}]
 	$(python_gen_cond_dep '
-		dev-py/tomli[${PYTHON_USEDEP}]
+		dev-pypi/tomli[${PYTHON_USEDEP}]
 	' 3.10)
 "
 BDEPEND="
-	dev-py/hatch-fancy-pypi-readme[${PYTHON_USEDEP}]
+	dev-pypi/hatch-fancy-pypi-readme[${PYTHON_USEDEP}]
 	dev-py/setuptools-scm[${PYTHON_USEDEP}]
 	test? (
-		dev-py/pytest-timeout[${PYTHON_USEDEP}]
+		dev-pypi/pytest-timeout[${PYTHON_USEDEP}]
 		dev-py/yaxmldiff[${PYTHON_USEDEP}]
 	)
 "

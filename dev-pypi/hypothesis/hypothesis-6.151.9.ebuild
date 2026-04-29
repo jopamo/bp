@@ -1,0 +1,102 @@
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_USE_PEP517=setuptools
+CLI_COMPAT=( python3_{11..13} )
+PYTHON_COMPAT=( "${CLI_COMPAT[@]}" pypy3_11 python3_14 python3_{13,14}t )
+PYTHON_REQ_USE="threads(+),sqlite"
+
+inherit distutils-r1 optfeature
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/sortedcontainers
+"
+# lockstep-pypi-deps: end
+TAG=hypothesis-python-${PV}
+MY_P=hypothesis-${TAG}
+DESCRIPTION="A library for property based testing"
+HOMEPAGE="
+	https://github.com/HypothesisWorks/hypothesis/
+	https://pypi.org/project/hypothesis/
+"
+SRC_URI="
+	https://github.com/HypothesisWorks/hypothesis/archive/${TAG}.tar.gz
+		-> ${P}.gh.tar.gz
+"
+S="${WORKDIR}/${MY_P}/hypothesis-python"
+
+LICENSE="MPL-2.0"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+IUSE="cli"
+
+RDEPEND="
+	>=dev-pypi/sortedcontainers-2.1.0[${PYTHON_USEDEP}]
+	cli? (
+		$(python_gen_cond_dep '
+			dev-pypi/black[${PYTHON_USEDEP}]
+			dev-pypi/click[${PYTHON_USEDEP}]
+		' "${CLI_COMPAT[@]}")
+	)
+"
+BDEPEND="
+	test? (
+		>=dev-pypi/attrs-22.2.0[${PYTHON_USEDEP}]
+		dev-pypi/pexpect[${PYTHON_USEDEP}]
+		>=dev-pypi/pytest-8[${PYTHON_USEDEP}]
+	)
+"
+PDEPEND="
+	dev-py/hypothesis-gentoo[${PYTHON_USEDEP}]
+"
+
+EPYTEST_PLUGIN_LOAD_VIA_ENV=1
+EPYTEST_PLUGINS=( "${PN}" pytest-xdist )
+EPYTEST_RERUNS=5
+EPYTEST_XDIST=1
+distutils_enable_tests pytest
+
+python_test() {
+	# NB: paths need to be relative to pytest.ini,
+	# i.e. start with hypothesis-python/
+	local EPYTEST_DESELECT=()
+	case ${EPYTHON} in
+		python3.14t)
+			EPYTEST_DESELECT+=(
+				# TODO
+				'hypothesis-python/tests/cover/test_lambda_formatting.py::test_modifying_lambda_source_code_returns_unknown[False]'
+			)
+			;;
+	esac
+
+	local -x HYPOTHESIS_NO_PLUGINS=1
+	epytest -o filterwarnings= tests/{cover,pytest,quality}
+}
+
+src_install() {
+	local HAD_CLI=
+
+	distutils-r1_src_install
+
+	if [[ ! ${HAD_CLI} ]]; then
+		rm -r "${ED}/usr/bin" || die
+	fi
+}
+
+python_install() {
+	distutils-r1_python_install
+	if use cli && has "${EPYTHON}" "${CLI_COMPAT[@]/_/.}"; then
+		HAD_CLI=1
+	else
+		rm -r "${D}$(python_get_scriptdir)" || die
+	fi
+}
+
+pkg_postinst() {
+	optfeature "datetime support" dev-pypi/pytz
+	optfeature "dateutil support" dev-pypi/python-dateutil
+	optfeature "numpy support" dev-pypi/numpy
+	optfeature "django support" "dev-py/django dev-pypi/pytz"
+	optfeature "pandas support" dev-py/pandas
+	optfeature "pytest support" dev-pypi/pytest
+}

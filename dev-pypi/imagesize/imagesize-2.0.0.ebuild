@@ -1,16 +1,27 @@
-# lockstep-managed: dependency-ebuild
-# lockstep-pypi-managed: true
-EAPI=8
+# Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_{11..14} )
-
-DISTUTILS_USE_PEP517="setuptools"
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="Pure Python module for getting image size from png/jpeg/jpeg2000/gif files"
+HOMEPAGE="
+	https://github.com/shibukawa/imagesize_py/
+	https://pypi.org/project/imagesize/
+"
 
-PYPI_PN="imagesize"
-DESCRIPTION="Get image size from headers (BMP/PNG/JPEG/JPEG2000/GIF/TIFF/SVG/Netpbm/WebP/AVIF/HEIC/HEIF)"
-HOMEPAGE="https://github.com/shibukawa/imagesize_py"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+distutils_enable_tests pytest
+
+EPYTEST_DESELECT=(
+	# requires Internet
+	test/test_get_filelike.py::test_get_filelike
+)

@@ -1,22 +1,44 @@
-# lockstep-managed: dependency-ebuild
-# lockstep-pypi-managed: true
-EAPI=8
+# Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_{11..14} )
-
-DISTUTILS_USE_PEP517="setuptools"
+DISTUTILS_USE_PEP517=flit
+PYPI_PN=${PN/-/.}
+PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 
 inherit distutils-r1 pypi
-
-PYPI_PN="jaraco-collections"
-DESCRIPTION="Collection objects similar to those in stdlib by jaraco"
-HOMEPAGE="https://pypi.org/project/jaraco-collections/"
-LICENSE="metapackage"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
+# lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/jaraco-text
 "
 # lockstep-pypi-deps: end
+DESCRIPTION="Models and classes to supplement the stdlib collections module"
+HOMEPAGE="
+	https://github.com/jaraco/jaraco.collections/
+	https://pypi.org/project/jaraco.collections/
+"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+RDEPEND="
+	dev-pypi/jaraco-text[${PYTHON_USEDEP}]
+"
+
+distutils_enable_tests pytest
+
+src_configure() {
+	grep -q 'build-backend = "setuptools' pyproject.toml ||
+		die "Upstream changed build-backend, recheck"
+	# write a custom pyproject.toml to ease setuptools bootstrap
+	sed -i -e \
+		's/build-backend = .*/build-backend = "flit_core.buildapi"/' \
+		-e '/^name = /a\' -e "version = \"${PV}\"" \
+		-e '/^dynamic =/d' \
+		pyproject.toml || die
+}
+
+python_test() {
+	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
+	epytest
+}

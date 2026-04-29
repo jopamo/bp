@@ -1,16 +1,23 @@
-# lockstep-managed: dependency-ebuild
-# lockstep-pypi-managed: true
-EAPI=8
+# Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_{11..14} )
-
-DISTUTILS_USE_PEP517="setuptools"
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="ASN.1 library for Python"
+HOMEPAGE="
+	https://pypi.org/project/pyasn1/
+	https://github.com/pyasn1/pyasn1/
+"
 
-PYPI_PN="pyasn1"
-DESCRIPTION="Pure-Python implementation of ASN.1 types and DER/BER/CER codecs (X.208)"
-HOMEPAGE="https://github.com/pyasn1/pyasn1"
-LICENSE="BSD-2-Clause"
+LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+distutils_enable_tests unittest
+distutils_enable_sphinx "docs/source"

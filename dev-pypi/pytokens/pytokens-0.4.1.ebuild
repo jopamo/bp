@@ -1,16 +1,31 @@
-# lockstep-managed: dependency-ebuild
-# lockstep-pypi-managed: true
-EAPI=8
+# Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_{11..14} )
-
-DISTUTILS_USE_PEP517="setuptools"
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="A fast, spec compliant Python 3.13+ tokenizer that runs on older Pythons"
+HOMEPAGE="
+	https://github.com/tusharsadhwani/pytokens/
+	https://pypi.org/project/pytokens/
+"
 
-PYPI_PN="pytokens"
-DESCRIPTION="A Fast, spec compliant Python 3.14+ tokenizer that runs on older Pythons."
-HOMEPAGE="https://github.com/tusharsadhwani/pytokens"
-LICENSE="metapackage"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
+
+src_configure() {
+	export PYTOKENS_USE_MYPYC=0
+}
+
+python_test() {
+	epytest -o addopts=
+}

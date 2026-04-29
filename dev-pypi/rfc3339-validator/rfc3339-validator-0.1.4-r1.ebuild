@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="rfc3339-validator"
 DESCRIPTION="A pure python RFC3339 validator"
 HOMEPAGE="https://github.com/naimetti/rfc3339-validator"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/28/ea/a9387748e2d111c3c2b275ba970b735e04e15cdb1eb30693b6b5708c4dbd/rfc3339_validator-0.1.4.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/rfc3339_validator-0.1.4"

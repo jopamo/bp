@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="openpyxl"
 DESCRIPTION="A Python library to read/write Excel 2010 xlsx/xlsm files"
 HOMEPAGE="https://openpyxl.readthedocs.io"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/3d/f9/88d94a75de065ea32619465d2f77b29a0469500e99012523b91cc4141cd1/openpyxl-3.1.5.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/openpyxl-3.1.5"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

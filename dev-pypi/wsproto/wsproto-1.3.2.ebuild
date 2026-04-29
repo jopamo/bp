@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="wsproto"
 DESCRIPTION="Pure-Python WebSocket protocol implementation"
 HOMEPAGE="https://github.com/python-hyper/wsproto/"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/c7/79/12135bdf8b9c9367b8701c2c19a14c913c120b882d50b014ca0d38083c2c/wsproto-1.3.2.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/wsproto-1.3.2"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

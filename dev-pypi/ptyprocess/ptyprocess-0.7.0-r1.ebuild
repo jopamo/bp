@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="flit"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="ptyprocess"
 DESCRIPTION="Run a subprocess in a pseudo terminal"
 HOMEPAGE="https://github.com/pexpect/ptyprocess"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/20/e5/16ff212c1e452235a90aeb09066144d0c5a6a8c0834397e03f5224495c4e/ptyprocess-0.7.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/ptyprocess-0.7.0"

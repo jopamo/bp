@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="hatchling"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="hishel"
 DESCRIPTION="Elegant HTTP Caching for Python"
 HOMEPAGE="https://hishel.com"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/2d/7a/ef9231da56bc04000f7343831deb1946f5fc270213080fa212f61ddbfe0a/hishel-1.2.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/hishel-1.2.1"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

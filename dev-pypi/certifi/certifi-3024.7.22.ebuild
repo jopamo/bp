@@ -1,44 +1,19 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
+PYTHON_COMPAT=( python3_{11..14} )
 
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-MY_P=certifi-system-store-${PV}
-DESCRIPTION="A certifi hack to use system trust store on Linux/FreeBSD"
-HOMEPAGE="
-	https://github.com/projg2/certifi-system-store/
-	https://github.com/tiran/certifi-system-store/
-	https://pypi.org/project/certifi-system-store/
-"
-SRC_URI="
-	https://github.com/projg2/certifi-system-store/archive/v${PV}.tar.gz
-		-> ${MY_P}.gh.tar.gz
-"
-S=${WORKDIR}/${MY_P}
 
-LICENSE="MPL-2.0"
+DESCRIPTION="Lockstep-managed PyPI dependency certifi-system-store"
+HOMEPAGE="https://pypi.org/project/certifi-system-store/"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="
-	lib-net/ca-certificates
-"
-
-EPYTEST_IGNORE=(
-	# requires Internet
-	tests/test_requests.py
-)
-
-distutils_enable_tests pytest
-
-src_prepare() {
-	sed -i -e "s^/etc^${EPREFIX}/etc^" src/certifi/core.py || die
-	distutils-r1_src_prepare
-}
+SRC_URI="https://github.com/projg2/certifi-system-store/archive/v3024.7.22.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/certifi-system-store-3024.7.22"

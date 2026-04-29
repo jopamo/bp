@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="hatchling"
 DESCRIPTION="Modern, extensible Python build backend"
 HOMEPAGE="https://hatch.pypa.io/latest/"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/cf/9c/b4cfe330cd4f49cff17fd771154730555fa4123beb7f292cf0098b4e6c20/hatchling-1.29.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/hatchling-1.29.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

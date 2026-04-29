@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="hatchling"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="mcp"
 DESCRIPTION="Model Context Protocol SDK"
 HOMEPAGE="https://modelcontextprotocol.io"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/8b/eb/c0cfc62075dc6e1ec1c64d352ae09ac051d9334311ed226f1f425312848a/mcp-1.27.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/mcp-1.27.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

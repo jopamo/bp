@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="debugpy"
 DESCRIPTION="An implementation of the Debug Adapter Protocol for Python"
 HOMEPAGE="https://aka.ms/debugpy"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/e0/b7/cd8080344452e4874aae67c40d8940e2b4d47b01601a8fd9f44786c757c7/debugpy-1.8.20.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/debugpy-1.8.20"

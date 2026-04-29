@@ -1,42 +1,29 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-# sphinx-theme-builder is completely unusable, as it requires pinning
-# to a very-specific nodejs version number, and ofc loves fetching
-# everything from the Internet
+PYTHON_COMPAT=( python3_{11..14} )
 
-DISTUTILS_USE_PEP517=standalone
-PYTHON_COMPAT=( python3_{12..14} )
+DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-DESCRIPTION="Clean customisable Sphinx documentation theme"
-HOMEPAGE="
-	https://pypi.org/project/furo/
-	https://github.com/pradyunsg/furo/
-"
-SRC_URI="$(pypi_wheel_url)"
-S=${WORKDIR}
-
+DESCRIPTION="A clean customisable Sphinx documentation theme."
+HOMEPAGE="https://pypi.org/project/furo/"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="
-	dev-py/accessible-pygments[${PYTHON_USEDEP}]
-	dev-pypi/beautifulsoup4[${PYTHON_USEDEP}]
-	dev-pypi/sphinx[${PYTHON_USEDEP}]
-	dev-py/sphinx-basic-ng[${PYTHON_USEDEP}]
+SRC_URI="https://files.pythonhosted.org/packages/ec/20/5f5ad4da6a5a27c80f2ed2ee9aee3f9e36c66e56e21c00fde467b2f8f88f/furo-2025.12.19.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/furo-2025.12.19"
+
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/accessible-pygments
+	dev-pypi/beautifulsoup4
+	dev-pypi/pygments
+	dev-pypi/sphinx
+	dev-pypi/sphinx-basic-ng
 "
-
-distutils_enable_tests import-check
-
-src_unpack() {
-	if [[ ${PKGBUMPING} == ${PVR} ]]; then
-		unzip "${DISTDIR}/${A}" || die
-	fi
-}
-
-python_compile() {
-	distutils_wheel_install "${BUILD_DIR}/install" \
-		"${DISTDIR}/${P}-py3-none-any.whl"
-}
+# lockstep-pypi-deps: end

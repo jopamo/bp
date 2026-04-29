@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="jsonref"
 DESCRIPTION="jsonref is a library for automatic dereferencing of JSON Reference objects for Python."
 HOMEPAGE="https://pypi.org/project/jsonref/"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/aa/0d/c1f3277e90ccdb50d33ed5ba1ec5b3f0a242ed8c1b1a85d3afeb68464dca/jsonref-1.1.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/jsonref-1.1.0"

@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="regex"
 DESCRIPTION="Alternative regular expression module, to replace re."
 HOMEPAGE="https://github.com/mrabarnett/mrab-regex"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/cb/0e/3a246dbf05666918bd3664d9d787f84a9108f6f43cc953a077e4a7dfdb7e/regex-2026.4.4.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/regex-2026.4.4"

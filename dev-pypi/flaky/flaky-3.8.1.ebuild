@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="flaky"
 DESCRIPTION="Plugin for pytest that automatically reruns flaky tests."
 HOMEPAGE="https://github.com/box/flaky"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/5b/c5/ef69119a01427204ff2db5fc8f98001087bcce719bbb94749dcd7b191365/flaky-3.8.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/flaky-3.8.1"

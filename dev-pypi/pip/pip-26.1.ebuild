@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="flit"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="pip"
 DESCRIPTION="The PyPA recommended tool for installing Python packages."
 HOMEPAGE="https://pip.pypa.io/"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/73/7e/d2b04004e1068ad4fdfa2f227b839b5d03e602e47cdbbf49de71137c9546/pip-26.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pip-26.1"

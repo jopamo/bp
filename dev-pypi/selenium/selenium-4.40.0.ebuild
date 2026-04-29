@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="selenium"
 DESCRIPTION="Official Python bindings for Selenium WebDriver"
 HOMEPAGE="https://www.selenium.dev"
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/66/ef/a5727fa7b33d20d296322adf851b76072d8d3513e1b151969d3228437faf/selenium-4.40.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/selenium-4.40.0"
 
 BDEPEND="
 	dev-py/setuptools-rust[${PYTHON_USEDEP}]

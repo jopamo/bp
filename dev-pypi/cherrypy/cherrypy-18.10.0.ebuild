@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="cherrypy"
 DESCRIPTION="Object-Oriented HTTP framework"
 HOMEPAGE="https://www.cherrypy.dev"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/93/e8/2f7ef142d1962d08a8885c4c9942212abecad6a80ccdd1620fd1f5c993fd/cherrypy-18.10.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/cherrypy-18.10.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

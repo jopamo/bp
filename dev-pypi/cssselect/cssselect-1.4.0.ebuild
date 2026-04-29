@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="hatchling"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="cssselect"
 DESCRIPTION="cssselect parses CSS3 Selectors and translates them to XPath 1.0"
 HOMEPAGE="https://github.com/scrapy/cssselect"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/ec/2e/cdfd8b01c37cbf4f9482eefd455853a3cf9c995029a46acd31dfaa9c1dd6/cssselect-1.4.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/cssselect-1.4.0"

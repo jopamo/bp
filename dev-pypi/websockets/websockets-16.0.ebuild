@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="websockets"
 DESCRIPTION="An implementation of the WebSocket Protocol (RFC 6455 & 7692)"
 HOMEPAGE="https://github.com/python-websockets/websockets"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/04/24/4b2031d72e840ce4c1ccb255f693b15c334757fc50023e4db9537080b8c4/websockets-16.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/websockets-16.0"

@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="flit"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="sphinx"
 DESCRIPTION="Python documentation generator"
 HOMEPAGE="https://www.sphinx-doc.org/"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/cd/bd/f08eb0f4eed5c83f1ba2a3bd18f7745a2b1525fad70660a1c00224ec468a/sphinx-9.1.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/sphinx-9.1.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

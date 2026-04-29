@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="configargparse"
 DESCRIPTION="A drop-in replacement for argparse that allows options to also be set via config files and/or environment variables."
 HOMEPAGE="https://github.com/bw2/ConfigArgParse"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/3f/0b/30328302903c55218ffc5199646d0e9d28348ff26c02ba77b2ffc58d294a/configargparse-1.7.5.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/configargparse-1.7.5"

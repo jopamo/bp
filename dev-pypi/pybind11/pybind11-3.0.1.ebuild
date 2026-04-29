@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="scikit-build-core"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="pybind11"
 DESCRIPTION="Seamless operability between C++11 and Python"
 HOMEPAGE="https://github.com/pybind/pybind11"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/2f/7b/a6d8dcb83c457e24a9df1e4d8fd5fb8034d4bbc62f3c324681e8a9ba57c2/pybind11-3.0.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pybind11-3.0.1"

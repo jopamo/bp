@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="hatchling"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="python-discovery"
 DESCRIPTION="Python interpreter discovery"
 HOMEPAGE="https://github.com/tox-dev/python-discovery"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/de/ef/3bae0e537cfe91e8431efcba4434463d2c5a65f5a89edd47c6cf2f03c55f/python_discovery-1.2.2.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/python_discovery-1.2.2"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

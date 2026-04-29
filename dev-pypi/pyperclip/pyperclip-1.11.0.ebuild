@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="pyperclip"
 DESCRIPTION="A cross-platform clipboard module for Python. (Only handles plain text for now.)"
 HOMEPAGE="https://github.com/asweigart/pyperclip"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/e8/52/d87eba7cb129b81563019d1679026e7a112ef76855d6159d24754dbd2a51/pyperclip-1.11.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pyperclip-1.11.0"

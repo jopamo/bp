@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="sympy"
 DESCRIPTION="Computer algebra system (CAS) in Python"
 HOMEPAGE="https://sympy.org"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/83/d3/803453b36afefb7c2bb238361cd4ae6125a569b4db67cd9e79846ba2d68c/sympy-1.14.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/sympy-1.14.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

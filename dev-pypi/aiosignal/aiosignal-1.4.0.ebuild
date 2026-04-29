@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="aiosignal"
 DESCRIPTION="aiosignal: a list of registered asynchronous callbacks"
 HOMEPAGE="https://github.com/aio-libs/aiosignal"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/61/62/06741b579156360248d1ec624842ad0edf697050bbaf7c3e46394e106ad1/aiosignal-1.4.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/aiosignal-1.4.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

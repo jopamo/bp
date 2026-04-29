@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="pyxdg"
 DESCRIPTION="PyXDG contains implementations of freedesktop.org standards in python."
 HOMEPAGE="http://freedesktop.org/wiki/Software/pyxdg"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/b0/25/7998cd2dec731acbd438fbf91bc619603fc5188de0a9a17699a781840452/pyxdg-0.28.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pyxdg-0.28"

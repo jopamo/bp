@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="hatchling"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="trustme"
 DESCRIPTION="#1 quality TLS certs while you wait, for the discerning tester"
 HOMEPAGE="https://github.com/python-trio/trustme"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/4b/c5/931476f4cf1cd9e736f32651005078061a50dc164a2569fb874e00eb2786/trustme-1.2.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/trustme-1.2.1"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

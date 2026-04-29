@@ -1,45 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_EXT=1
-DISTUTILS_USE_PEP517=setuptools
-PYPI_VERIFY_REPO=https://github.com/mypyc/librt
 PYTHON_COMPAT=( python3_{11..14} )
 
-inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Mypyc runtime library"
-HOMEPAGE="
-	https://github.com/mypyc/librt/
-	https://pypi.org/project/librt/
-"
+DISTUTILS_USE_PEP517="setuptools"
 
-LICENSE="MIT PSF-2.4"
+inherit distutils-r1 pypi
+
+PYPI_PN="librt"
+DESCRIPTION="Mypyc runtime library"
+HOMEPAGE="https://github.com/mypyc/librt"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-BDEPEND="
-	test? (
-		dev-pypi/mypy-extensions[${PYTHON_USEDEP}]
-	)
-"
-
-EPYTEST_PLUGINS=()
-distutils_enable_tests pytest
-
-python_compile() {
-	# setuptools is broken for C extensions, bug #907718, bug #967476 etc.
-	distutils-r1_python_compile -j1
-}
-
-python_test() {
-	rm -rf librt || die
-	epytest smoke_tests.py
-}
-src_prepare() {
-    default
-    filter-flags -Wl,-z,defs
-}

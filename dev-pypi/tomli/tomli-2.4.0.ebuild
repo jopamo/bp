@@ -1,41 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
+PYTHON_COMPAT=( python3_{11..14} )
 
-DISTUTILS_USE_PEP517=no
-PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
+DISTUTILS_USE_PEP517="flit"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="A lil' TOML parser"
-HOMEPAGE="
-	https://pypi.org/project/tomli/
-	https://github.com/hukkin/tomli/
-"
-SRC_URI="
-	https://github.com/hukkin/tomli/archive/${PV}.tar.gz
-		-> ${P}.gh.tar.gz
-	$(pypi_wheel_url --unpack)
-"
 
-LICENSE="MIT"
+PYPI_PN="tomli"
+DESCRIPTION="A lil' TOML parser"
+HOMEPAGE="https://github.com/hukkin/tomli"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-BDEPEND="
-	app-compression/zip-utils
-"
-
-distutils_enable_tests unittest
-
-python_compile() {
-	python_domodule src/tomli "${WORKDIR}"/*.dist-info
-}
-
-python_install() {
-	distutils-r1_python_install
-	python_optimize
-}

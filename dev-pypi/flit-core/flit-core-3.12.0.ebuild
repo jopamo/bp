@@ -1,41 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
+PYTHON_COMPAT=( python3_{11..14} )
 
-DISTUTILS_USE_PEP517=standalone
-PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
+DISTUTILS_USE_PEP517="flit"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Simplified packaging of Python modules (core module)"
-HOMEPAGE="
-	https://pypi.org/project/flit-core/
-	https://github.com/pypa/flit/
-"
 
-LICENSE="BSD"
+PYPI_PN="flit-core"
+DESCRIPTION="Distribution-building parts of Flit. See flit package for more information"
+HOMEPAGE="https://pypi.org/project/flit-core/"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-BDEPEND="
-	test? ( dev-pypi/testpath[${PYTHON_USEDEP}] )
-"
-
-distutils_enable_tests pytest
-
-src_prepare() {
-	distutils-r1_src_prepare
-
-	# unbundle deps
-	rm -r flit_core/vendor || die
-	sed -i -e 's:from \.vendor ::' flit_core/*.py || die
-	sed -i -e '/license-files/d' pyproject.toml || die
-}
-
-python_test() {
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest
-}

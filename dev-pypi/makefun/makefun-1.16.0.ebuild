@@ -1,34 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} )
 
-inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Small library to dynamically create Python functions"
-HOMEPAGE="
-	https://pypi.org/project/makefun/
-	https://github.com/smarie/python-makefun/
-"
+DISTUTILS_USE_PEP517="setuptools"
 
-LICENSE="BSD"
+inherit distutils-r1 pypi
+
+PYPI_PN="makefun"
+DESCRIPTION="Small library to dynamically create python functions."
+HOMEPAGE="https://github.com/smarie/python-makefun"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-BDEPEND="
-	dev-py/setuptools-scm[${PYTHON_USEDEP}]
-	test? (
-		dev-py/pytest-asyncio[${PYTHON_USEDEP}]
-	)
-"
-
-distutils_enable_tests pytest
-
-python_test() {
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest -p asyncio --asyncio-mode=auto
-}

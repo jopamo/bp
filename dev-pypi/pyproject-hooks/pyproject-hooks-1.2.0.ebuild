@@ -1,36 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="flit"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Wrappers to build Python packages using PEP 517 hooks"
-HOMEPAGE="
-	https://pypi.org/project/pyproject-hooks/
-	https://github.com/pypa/pyproject-hooks/
-	https://pyproject-hooks.readthedocs.io/
-"
 
+PYPI_PN="pyproject-hooks"
+DESCRIPTION="Wrappers to call pyproject.toml-based build backend hooks."
+HOMEPAGE="https://pypi.org/project/pyproject-hooks/"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-BDEPEND="
-	test? (
-		dev-pypi/testpath[${PYTHON_USEDEP}]
-	)
-"
-
-distutils_enable_tests pytest
-
-EPYTEST_DESELECT=(
-	# fails due to setuptools 70.1
-	# https://bugs.gentoo.org/936052
-	# https://github.com/pypa/pyproject-hooks/issues/203
-	tests/test_call_hooks.py::test_setup_py
-)

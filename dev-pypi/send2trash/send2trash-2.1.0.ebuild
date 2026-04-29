@@ -1,24 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYPI_PN=Send2Trash
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Sends files to the Trash (or Recycle Bin)"
-HOMEPAGE="
-	https://github.com/arsenetar/send2trash/
-	https://pypi.org/project/Send2Trash/
-"
 
-LICENSE="BSD"
+PYPI_PN="send2trash"
+DESCRIPTION="Send file to trash natively under Mac OS X, Windows and Linux"
+HOMEPAGE="https://github.com/arsenetar/send2trash"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-EPYTEST_PLUGINS=()
-distutils_enable_tests pytest

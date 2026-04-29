@@ -1,24 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYPI_VERIFY_REPO=https://github.com/borntyping/python-colorlog
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Log formatting with colors"
-HOMEPAGE="
-	https://pypi.org/project/colorlog/
-	https://github.com/borntyping/python-colorlog/
-"
 
+PYPI_PN="colorlog"
+DESCRIPTION="Add colours to the output of Python's logging module."
+HOMEPAGE="https://github.com/borntyping/python-colorlog"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-EPYTEST_PLUGINS=()
-distutils_enable_tests pytest

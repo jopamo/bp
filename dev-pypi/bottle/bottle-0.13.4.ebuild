@@ -1,35 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
-
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
-
-inherit distutils-r1 optfeature pypi
+# lockstep-managed: dependency-ebuild
 # lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="A fast and simple micro-framework for small web-applications"
-HOMEPAGE="
-	https://bottlepy.org/
-	https://github.com/bottlepy/bottle/
-	https://pypi.org/project/bottle/
-"
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="bottle"
+DESCRIPTION="Fast and simple WSGI-framework for small web-applications."
+HOMEPAGE="http://bottlepy.org/"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="test"
-RESTRICT="!test? ( test )"
-
-BDEPEND="
-	test? (
-		dev-pypi/mako[${PYTHON_USEDEP}]
-	)
-"
-
-distutils_enable_tests unittest
-
-pkg_postinst() {
-	optfeature "Templating support" dev-pypi/mako
-}

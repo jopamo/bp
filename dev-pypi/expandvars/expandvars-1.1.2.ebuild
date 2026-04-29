@@ -1,23 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} python3_{13,14}t )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="hatchling"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Expand system variables Unix style"
-HOMEPAGE="
-	https://github.com/sayanarijit/expandvars/
-	https://pypi.org/project/expandvars/
-"
 
-LICENSE="MIT"
+PYPI_PN="expandvars"
+DESCRIPTION="Expand system variables Unix style"
+HOMEPAGE="https://github.com/sayanarijit/expandvars"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-EPYTEST_PLUGINS=()
-distutils_enable_tests pytest

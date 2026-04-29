@@ -1,40 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
+PYTHON_COMPAT=( python3_{11..14} )
 
-DISTUTILS_USE_PEP517=no
-PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
+DISTUTILS_USE_PEP517="flit"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="A library for installing Python wheels"
-HOMEPAGE="
-	https://pypi.org/project/installer/
-	https://github.com/pypa/installer/
-	https://installer.readthedocs.io/en/latest/
-"
-SRC_URI+="
-	$(pypi_wheel_url --unpack)
-"
 
+PYPI_PN="installer"
+DESCRIPTION="A library for installing Python wheels."
+HOMEPAGE="https://pypi.org/project/installer/"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-BDEPEND="
-	app-compression/zip-utils
-"
-
-distutils_enable_tests pytest
-
-python_compile() {
-	python_domodule src/installer "${WORKDIR}"/*.dist-info
-}
-
-python_install() {
-	distutils-r1_python_install
-	python_optimize
-}

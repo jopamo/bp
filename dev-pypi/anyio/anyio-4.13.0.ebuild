@@ -1,76 +1,23 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYPI_VERIFY_REPO=https://github.com/agronholm/anyio
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
+
+PYPI_PN="anyio"
+DESCRIPTION="High-level concurrency and networking framework on top of asyncio or Trio"
+HOMEPAGE="https://pypi.org/project/anyio/"
+LICENSE="metapackage"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/idna
 "
 # lockstep-pypi-deps: end
-DESCRIPTION="Compatibility layer for multiple asynchronous event loop implementations"
-HOMEPAGE="
-	https://github.com/agronholm/anyio/
-	https://pypi.org/project/anyio/
-"
-
-LICENSE="MIT"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
-RDEPEND="
-	>=dev-pypi/idna-2.8[${PYTHON_USEDEP}]
-	>=dev-pypi/truststore-0.9.1[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep '
-		>=dev-pypi/typing-extensions-4.5[${PYTHON_USEDEP}]
-	' 3.{11..12})
-"
-# On amd64, let's get more test coverage by dragging in uvloop, but let's
-# not bother on other arches where uvloop may not be supported.
-BDEPEND="
-	>=dev-py/setuptools-scm-6.4[${PYTHON_USEDEP}]
-	test? (
-		>=dev-py/blockbuster-1.5.23[${PYTHON_USEDEP}]
-		>=dev-pypi/exceptiongroup-1.2.0[${PYTHON_USEDEP}]
-		>=dev-pypi/psutil-5.9[${PYTHON_USEDEP}]
-		>=dev-pypi/trustme-1.0.0[${PYTHON_USEDEP}]
-		$(python_gen_cond_dep '
-			>=dev-pypi/trio-0.32.0[${PYTHON_USEDEP}]
-		' 3.{11..14})
-		amd64? (
-			$(python_gen_cond_dep '
-				>=dev-py/uvloop-0.22.1[${PYTHON_USEDEP}]
-			' python3_{11..14})
-		)
-	)
-"
-
-EPYTEST_PLUGINS=( hypothesis pytest-mock )
-distutils_enable_tests pytest
-distutils_enable_sphinx docs \
-	'>=dev-py/sphinx-rtd-theme-1.2.2' \
-	dev-py/sphinxcontrib-jquery \
-	dev-py/sphinx-autodoc-typehints \
-	dev-py/sphinx-tabs
-
-python_test() {
-	local EPYTEST_DESELECT=(
-		# requires link-local IPv6 interface
-		tests/test_sockets.py::TestTCPListener::test_bind_link_local
-	)
-
-	local filter=()
-	if ! has_version ">=dev-pypi/trio-0.26.1[${PYTHON_USEDEP}]"; then
-		filter+=( -k "not trio" )
-		EPYTEST_DESELECT+=(
-			tests/test_pytest_plugin.py::test_plugin
-			tests/test_pytest_plugin.py::test_autouse_async_fixture
-			tests/test_pytest_plugin.py::test_cancel_scope_in_asyncgen_fixture
-		)
-	fi
-
-	epytest -m 'not network' "${filter[@]}"
-}

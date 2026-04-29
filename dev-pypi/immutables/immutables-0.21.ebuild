@@ -1,51 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
-
-DISTUTILS_EXT=1
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
-
-inherit distutils-r1
+# lockstep-managed: dependency-ebuild
 # lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="A high-performance immutable mapping type for Python"
-HOMEPAGE="
-	https://github.com/MagicStack/immutables/
-	https://pypi.org/project/immutables/
-"
-SRC_URI="
-	https://github.com/MagicStack/${PN}/archive/v${PV}.tar.gz
-		-> ${P}.gh.tar.gz
-"
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-LICENSE="Apache-2.0"
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="immutables"
+DESCRIPTION="Immutable Collections"
+HOMEPAGE="https://pypi.org/project/immutables/"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="+native-extensions"
-
-distutils_enable_tests pytest
-
-src_prepare() {
-	sed -i -e '/mypy/d' tests/conftest.py || die
-	distutils-r1_src_prepare
-}
-
-python_compile() {
-	# upstream controls NDEBUG explicitly
-	use debug && local -x DEBUG_IMMUTABLES=1
-	local -x IMMUTABLES_EXT=$(usex native-extensions 1 0)
-
-	distutils-r1_python_compile
-}
-
-python_test() {
-	local EPYTEST_IGNORE=(
-		tests/test_mypy.py
-	)
-
-	rm -rf immutables || die
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest
-}

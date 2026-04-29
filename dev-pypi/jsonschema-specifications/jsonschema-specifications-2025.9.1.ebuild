@@ -1,32 +1,23 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=hatchling
-PYPI_VERIFY_REPO=https://github.com/python-jsonschema/jsonschema-specifications
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="hatchling"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
+
+PYPI_PN="jsonschema-specifications"
+DESCRIPTION="The JSON Schema meta-schemas and vocabularies, exposed as a Registry"
+HOMEPAGE="https://github.com/python-jsonschema/jsonschema-specifications"
+LICENSE="metapackage"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/referencing
 "
 # lockstep-pypi-deps: end
-DESCRIPTION="The JSON Schema meta-schemas and vocabularies, exposed as a Registry"
-HOMEPAGE="
-	https://github.com/python-jsonschema/jsonschema-specifications/
-	https://pypi.org/project/jsonschema-specifications/
-"
-
-LICENSE="MIT"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
-RDEPEND="
-	>=dev-pypi/referencing-0.31.0[${PYTHON_USEDEP}]
-"
-BDEPEND="
-	dev-pypi/hatch-vcs[${PYTHON_USEDEP}]
-"
-
-EPYTEST_PLUGINS=()
-distutils_enable_tests pytest

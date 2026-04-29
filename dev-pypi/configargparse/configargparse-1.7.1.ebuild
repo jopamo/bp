@@ -1,40 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} )
 
-inherit distutils-r1
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-MY_P=ConfigArgParse-${PV}
-DESCRIPTION="Drop-in replacement for argparse supporting config files and env variables"
-HOMEPAGE="
-	https://github.com/bw2/ConfigArgParse/
-	https://pypi.org/project/ConfigArgParse/"
-SRC_URI="
-	https://github.com/bw2/ConfigArgParse/archive/${PV}.tar.gz
-		-> ${MY_P}.gh.tar.gz
-"
-S=${WORKDIR}/${MY_P}
+DISTUTILS_USE_PEP517="setuptools"
 
+inherit distutils-r1 pypi
+
+PYPI_PN="configargparse"
+DESCRIPTION="A drop-in replacement for argparse that allows options to also be set via config files and/or environment variables."
+HOMEPAGE="https://github.com/bw2/ConfigArgParse"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="test"
-RESTRICT="!test? ( test )"
-
-BDEPEND="
-	test? (
-		dev-pypi/pyyaml[${PYTHON_USEDEP}]
-	)
-"
-
-distutils_enable_tests unittest
-
-src_test() {
-	local -x COLUMNS=80
-	distutils-r1_src_test
-}

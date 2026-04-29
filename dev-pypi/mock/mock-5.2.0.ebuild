@@ -1,24 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Rolling backport of unittest.mock for all Pythons"
-HOMEPAGE="
-	https://github.com/testing-cabal/mock/
-	https://pypi.org/project/mock/
-"
 
+PYPI_PN="mock"
+DESCRIPTION="Rolling backport of unittest.mock for all Pythons"
+HOMEPAGE="http://mock.readthedocs.org/en/latest/"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-distutils_enable_tests pytest
-
-DOCS=( CHANGELOG.rst README.rst )

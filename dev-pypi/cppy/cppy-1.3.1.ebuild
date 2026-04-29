@@ -1,30 +1,23 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
+
+PYPI_PN="cppy"
+DESCRIPTION="Lockstep-managed PyPI dependency cppy"
+HOMEPAGE="https://github.com/nucleic/cppy"
+LICENSE="metapackage"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/setuptools
 "
 # lockstep-pypi-deps: end
-DESCRIPTION="C++ header library which makes it easier to write Python extension modules"
-HOMEPAGE="
-	https://github.com/nucleic/cppy/
-	https://pypi.org/project/cppy/
-"
-
-LICENSE="BSD"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
-RDEPEND="
-	>=dev-pypi/setuptools-61.2[${PYTHON_USEDEP}]
-"
-BDEPEND="
-	${RDEPEND}
-"
-
-distutils_enable_tests pytest

@@ -1,40 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYPI_PN=${PN^}
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Python implementation of the markdown markup language"
-HOMEPAGE="
-	https://python-markdown.github.io/
-	https://pypi.org/project/Markdown/
-	https://github.com/Python-Markdown/markdown/
-"
 
-LICENSE="BSD"
+PYPI_PN="markdown"
+DESCRIPTION="Python implementation of John Gruber's Markdown."
+HOMEPAGE="https://Python-Markdown.github.io/"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="doc test"
-RESTRICT="!test? ( test )"
-
-BDEPEND="
-	test? (
-		dev-pypi/pygments[${PYTHON_USEDEP}]
-		dev-py/pytidylib[${PYTHON_USEDEP}]
-		dev-pypi/pyyaml[${PYTHON_USEDEP}]
-	)
-"
-
-distutils_enable_tests unittest
-
-python_install_all() {
-	use doc && dodoc -r docs/
-
-	distutils-r1_python_install_all
-}

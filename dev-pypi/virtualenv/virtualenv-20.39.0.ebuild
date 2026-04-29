@@ -1,12 +1,21 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=hatchling
-PYPI_VERIFY_REPO=https://github.com/pypa/virtualenv
-PYTHON_TESTED=( python3_{11..14} pypy3_11 )
-PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" python3_{13,14}t )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="hatchling"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
+
+PYPI_PN="virtualenv"
+DESCRIPTION="Virtual Python Environment builder"
+HOMEPAGE="https://github.com/pypa/virtualenv"
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/distlib
@@ -14,124 +23,3 @@ RDEPEND+="
 	dev-pypi/platformdirs
 "
 # lockstep-pypi-deps: end
-DESCRIPTION="Virtual Python Environment builder"
-HOMEPAGE="
-	https://virtualenv.pypa.io/en/stable/
-	https://pypi.org/project/virtualenv/
-	https://github.com/pypa/virtualenv/
-"
-
-LICENSE="MIT"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-IUSE="test"
-RESTRICT="!test? ( test )"
-
-RDEPEND="
-	>=dev-pypi/distlib-0.3.7[${PYTHON_USEDEP}]
-	>=dev-pypi/filelock-3.20.1[${PYTHON_USEDEP}]
-	>=dev-pypi/platformdirs-3.9.1[${PYTHON_USEDEP}]
-
-	dev-pypi/ensurepip-pip
-	>=dev-pypi/ensurepip-setuptools-70.1
-	dev-py/ensurepip-wheel
-"
-# coverage is used somehow magically in virtualenv, maybe it actually
-# tests something useful
-BDEPEND="
-	dev-pypi/hatch-vcs[${PYTHON_USEDEP}]
-	test? (
-		${RDEPEND}
-		$(python_gen_cond_dep '
-			dev-pypi/coverage[${PYTHON_USEDEP}]
-			>=dev-pypi/pip-22.2.1[${PYTHON_USEDEP}]
-			>=dev-py/pytest-mock-3.6.1[${PYTHON_USEDEP}]
-			dev-py/pytest-rerunfailures[${PYTHON_USEDEP}]
-			dev-pypi/pytest-timeout[${PYTHON_USEDEP}]
-			dev-pypi/pytest-xdist[${PYTHON_USEDEP}]
-			>=dev-pypi/setuptools-67.8[${PYTHON_USEDEP}]
-			dev-pypi/wheel[${PYTHON_USEDEP}]
-			>=dev-pypi/packaging-20.0[${PYTHON_USEDEP}]
-		' "${PYTHON_TESTED[@]}")
-		$(python_gen_cond_dep '
-			dev-py/time-machine[${PYTHON_USEDEP}]
-		' python3_{11..14})
-		$(python_gen_cond_dep '
-			>=dev-py/pytest-freezer-0.4.6[${PYTHON_USEDEP}]
-		' 'pypy3*')
-	)
-"
-
-src_prepare() {
-	local PATCHES=(
-		# use wheels from ensurepip bundle
-		"${FILESDIR}/${PN}-20.31.1-ensurepip.patch"
-	)
-
-	distutils-r1_src_prepare
-
-	# workaround test failures due to warnings from setuptools-scm, sigh
-	echo '[tool.setuptools_scm]' >> pyproject.toml || die
-
-	# remove useless pins
-	sed -i -e 's:,<[0-9.]*::' pyproject.toml || die
-
-	# remove bundled wheels
-	rm src/virtualenv/seed/wheels/embed/*.whl || die
-}
-
-python_test() {
-	if ! has "${EPYTHON}" "${PYTHON_TESTED[@]/_/.}"; then
-		einfo "Skipping testing on ${EPYTHON}"
-		return
-	fi
-
-	local EPYTEST_DESELECT=(
-		tests/unit/seed/embed/test_bootstrap_link_via_app_data.py::test_seed_link_via_app_data
-		# tests for old wheels with py3.7 support
-		tests/unit/seed/embed/test_pip_invoke.py::test_base_bootstrap_via_pip_invoke
-		tests/unit/seed/wheels/test_wheels_util.py::test_wheel_not_support
-		# broken by different wheel versions in ensurepip
-		tests/unit/seed/wheels/test_acquire_find_wheel.py::test_find_latest_string
-		tests/unit/seed/wheels/test_acquire_find_wheel.py::test_find_exact
-		tests/unit/seed/wheels/test_acquire_find_wheel.py::test_find_latest_none
-		tests/unit/seed/wheels/test_acquire.py::test_download_wheel_bad_output
-		# hangs on a busy system, sigh
-		tests/unit/test_util.py::test_reentrant_file_lock_is_thread_safe
-		# TODO
-		tests/unit/create/via_global_ref/test_build_c_ext.py::test_can_build_c_extensions
-		# random resource leaks or xdist
-		tests/unit/test_file_limit.py::test_too_many_open_files
-		# Internet
-		tests/unit/create/test_creator.py::test_create_distutils_cfg
-	)
-	case ${EPYTHON} in
-		pypy3.11)
-			EPYTEST_DESELECT+=(
-				# these don't like the executable called pypy3.11?
-				tests/unit/activation/test_bash.py::test_bash
-				tests/unit/activation/test_fish.py::test_fish
-				tests/unit/discovery/py_info/test_py_info.py::test_fallback_existent_system_executable
-			)
-			;;
-	esac
-
-	local -x TZ=UTC
-	local EPYTEST_PLUGINS=( pytest-{mock,rerunfailures} )
-	if [[ ${EPYTHON} == pypy3* ]]; then
-		EPYTEST_PLUGINS+=( pytest-freezer )
-	else
-		EPYTEST_PLUGINS+=( time-machine )
-	fi
-	local EPYTEST_RERUNS=5
-	local EPYTEST_TIMEOUT=180
-	local EPYTEST_XDIST=1
-	epytest -o addopts=
-}
-
-src_install() {
-	distutils-r1_src_install
-
-	# remove bundled wheels, we're using ensurepip bundle instead
-	find "${ED}" -name '*.whl' -delete || die
-}

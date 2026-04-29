@@ -1,47 +1,23 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
+
+PYPI_PN="pytest-timeout"
+DESCRIPTION="pytest plugin to abort hanging tests"
+HOMEPAGE="https://github.com/pytest-dev/pytest-timeout"
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/pytest
 "
 # lockstep-pypi-deps: end
-DESCRIPTION="pytest plugin to abort hanging tests"
-HOMEPAGE="
-	https://github.com/pytest-dev/pytest-timeout/
-	https://pypi.org/project/pytest-timeout/
-"
-
-LICENSE="MIT"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
-# do not rdepend on pytest, it won't be used without it anyway
-# pytest-cov used to test compatibility
-BDEPEND="
-	test? (
-		dev-pypi/pexpect[${PYTHON_USEDEP}]
-	)
-"
-
-EPYTEST_XDIST=1
-distutils_enable_tests pytest
-
-python_test() {
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	local -x PYTEST_PLUGINS=pytest_timeout
-
-	if has_version "dev-pypi/pytest-cov[${PYTHON_USEDEP}]"; then
-		PYTEST_PLUGINS+=,pytest_cov.plugin
-	else
-		EPYTEST_DESELECT+=(
-			test_pytest_timeout.py::test_cov
-		)
-	fi
-
-	epytest
-}

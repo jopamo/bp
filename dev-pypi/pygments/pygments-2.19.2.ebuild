@@ -1,61 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=hatchling
-PYPI_PN=${PN^}
-PYTHON_FULLY_TESTED=( python3_{11..14} pypy3_11 )
-PYTHON_COMPAT=( "${PYTHON_FULLY_TESTED[@]}" python3_{13,14}t )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="hatchling"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Pygments is a syntax highlighting package written in Python"
-HOMEPAGE="
-	https://pygments.org/
-	https://github.com/pygments/pygments/
-	https://pypi.org/project/Pygments/
-"
 
-LICENSE="BSD-2"
+PYPI_PN="pygments"
+DESCRIPTION="Pygments is a syntax highlighting package written in Python."
+HOMEPAGE="https://pygments.org"
+LICENSE="BSD-2-Clause"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-BDEPEND="
-	test? (
-		$(python_gen_cond_dep '
-			dev-py/lxml[${PYTHON_USEDEP}]
-			xgui-app/pillow[${PYTHON_USEDEP}]
-		' "${PYTHON_FULLY_TESTED[@]}")
-		dev-py/wcag-contrast-ratio[${PYTHON_USEDEP}]
-		virtual/ttf-fonts
-	)
-"
-
-EPYTEST_DESELECT=(
-	# fuzzing tests, very slow
-	tests/test_basic_api.py::test_random_input
-	# incompatibility with python-ctags3, apparently
-	# https://github.com/pygments/pygments/issues/2486
-	tests/test_html_formatter.py::test_ctags
-)
-
-EPYTEST_XDIST=1
-distutils_enable_tests pytest
-
-python_test() {
-	if [[ ${EPYTHON} == python3.14* ]] ; then
-		EPYTEST_IGNORE+=(
-			# https://github.com/python/cpython/issues/133653
-			# https://github.com/python/cpython/pull/133813
-			tests/test_cmdline.py
-		)
-	fi
-
-	epytest
-}
-
-src_install() {
-	distutils-r1_src_install
-}

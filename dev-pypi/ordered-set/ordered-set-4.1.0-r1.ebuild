@@ -1,23 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=flit
-PYPI_NO_NORMALIZE=1
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="flit"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="A mutable set that remembers the order of its entries"
-HOMEPAGE="
-	https://github.com/rspeer/ordered-set/
-	https://pypi.org/project/ordered-set/
-"
 
+PYPI_PN="ordered-set"
+DESCRIPTION="An OrderedSet is a custom MutableSet that remembers its order, so that every"
+HOMEPAGE="https://pypi.org/project/ordered-set/"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-distutils_enable_tests pytest

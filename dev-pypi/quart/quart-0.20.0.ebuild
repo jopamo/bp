@@ -1,10 +1,21 @@
-# Distributed under the terms of the GNU General Public License v2
-
-DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
-
-inherit distutils-r1
+# lockstep-managed: dependency-ebuild
 # lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
+
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="flit"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="quart"
+DESCRIPTION="A Python ASGI web framework with the same API as Flask"
+HOMEPAGE="https://pypi.org/project/quart/"
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/aiofiles
@@ -18,43 +29,3 @@ RDEPEND+="
 	dev-pypi/werkzeug
 "
 # lockstep-pypi-deps: end
-DESCRIPTION="A Python ASGI web microframework with the same API as Flask"
-HOMEPAGE="
-	https://github.com/pallets/quart/
-	https://pypi.org/project/Quart/
-"
-# no tests in sdist as of 0.20.0
-SRC_URI="
-	https://github.com/pallets/quart/archive/${PV}.tar.gz
-		-> ${P}.gh.tar.gz
-"
-
-LICENSE="MIT"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
-RDEPEND="
-	dev-pypi/aiofiles[${PYTHON_USEDEP}]
-	>=dev-pypi/blinker-1.6[${PYTHON_USEDEP}]
-	>=dev-pypi/click-8.0.0[${PYTHON_USEDEP}]
-	>=dev-pypi/flask-3.0.0[${PYTHON_USEDEP}]
-	>=dev-pypi/hypercorn-0.11.2[${PYTHON_USEDEP}]
-	dev-pypi/itsdangerous[${PYTHON_USEDEP}]
-	dev-py/jinja[${PYTHON_USEDEP}]
-	dev-pypi/markupsafe[${PYTHON_USEDEP}]
-	>=dev-pypi/werkzeug-3.0.0[${PYTHON_USEDEP}]
-"
-BDEPEND="
-	test? (
-		dev-pypi/hypothesis[${PYTHON_USEDEP}]
-		dev-py/pytest-asyncio[${PYTHON_USEDEP}]
-		dev-pypi/python-dotenv[${PYTHON_USEDEP}]
-	)
-"
-
-distutils_enable_tests pytest
-
-python_test() {
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest -o addopts= -p asyncio
-}

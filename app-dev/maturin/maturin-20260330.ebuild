@@ -457,7 +457,6 @@ CARGO_DEPS="
 	rust-crates/zstd-sys-2.0.16+zstd.1.5.7
 "
 # lockstep-cargo-deps: end
-
 DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_UPSTREAM_PEP517=standalone
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )

@@ -71,7 +71,6 @@ CARGO_DEPS="
 	rust-crates/zmij-1.0.21
 "
 # lockstep-cargo-deps: end
-
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
 

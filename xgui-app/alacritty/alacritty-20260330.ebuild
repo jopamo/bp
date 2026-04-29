@@ -292,7 +292,6 @@ CARGO_DEPS="
 	rust-crates/zerocopy-derive-0.8.27
 "
 # lockstep-cargo-deps: end
-
 inherit cargo lockstep-cargo
 
 DESCRIPTION="A cross-platform, OpenGL terminal emulator"

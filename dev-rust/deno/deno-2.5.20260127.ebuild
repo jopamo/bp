@@ -944,7 +944,6 @@ CARGO_DEPS="
 	rust-crates/zune-jpeg-0.4.13
 "
 # lockstep-cargo-deps: end
-
 BRANCH_NAME="v$(ver_cut 1-2)"
 
 inherit cargo lockstep-cargo

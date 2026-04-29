@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Small library to dynamically create Python functions"
 HOMEPAGE="
 	https://pypi.org/project/makefun/

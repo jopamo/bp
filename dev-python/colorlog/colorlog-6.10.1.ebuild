@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Log formatting with colors"
 HOMEPAGE="
 	https://pypi.org/project/colorlog/

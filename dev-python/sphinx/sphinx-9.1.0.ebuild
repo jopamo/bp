@@ -8,8 +8,14 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-py/docutils
+	dev-pypi/alabaster
+	dev-pypi/babel
+	dev-pypi/docutils
+	dev-pypi/imagesize
 	dev-pypi/jinja2
+	dev-pypi/packaging
+	dev-pypi/pygments
+	dev-pypi/requests
 	dev-pypi/roman-numerals
 	dev-pypi/snowballstemmer
 	dev-pypi/sphinxcontrib-applehelp
@@ -18,15 +24,8 @@ RDEPEND+="
 	dev-pypi/sphinxcontrib-jsmath
 	dev-pypi/sphinxcontrib-qthelp
 	dev-pypi/sphinxcontrib-serializinghtml
-	dev-python/alabaster
-	dev-python/babel
-	dev-python/imagesize
-	dev-python/packaging
-	dev-python/pygments
-	dev-python/requests
 "
 # lockstep-pypi-deps: end
-
 MY_P=${P/_}
 DESCRIPTION="Python documentation generator"
 HOMEPAGE="

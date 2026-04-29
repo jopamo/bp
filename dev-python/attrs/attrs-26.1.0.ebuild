@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Attributes without boilerplate"
 HOMEPAGE="
 	https://github.com/python-attrs/attrs/

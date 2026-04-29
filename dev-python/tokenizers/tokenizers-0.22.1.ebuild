@@ -198,10 +198,9 @@ inherit cargo lockstep-cargo distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/huggingface_hub
+	dev-pypi/huggingface-hub
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Implementation of today's most used tokenizers"
 HOMEPAGE="https://github.com/huggingface/tokenizers"
 SRC_URI="

@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Fast JSON schema validator for Python"
 HOMEPAGE="
 	https://github.com/horejsek/python-fastjsonschema/

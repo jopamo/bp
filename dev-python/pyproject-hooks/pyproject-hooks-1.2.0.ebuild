@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Wrappers to build Python packages using PEP 517 hooks"
 HOMEPAGE="
 	https://pypi.org/project/pyproject-hooks/

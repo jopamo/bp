@@ -7,10 +7,9 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/frozenlist
+	dev-pypi/frozenlist
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A list of registered asynchronous callbacks"
 HOMEPAGE="
 	https://pypi.org/project/aiosignal/

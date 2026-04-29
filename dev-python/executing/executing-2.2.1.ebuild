@@ -11,7 +11,6 @@ inherit distutils-r1 optfeature
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Get information about what a Python frame is currently doing"
 HOMEPAGE="
 	https://github.com/alexmojaki/executing/

@@ -8,13 +8,12 @@ inherit toolchain-funcs distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-py/lxml
+	dev-pypi/colorlog
 	dev-pypi/jinja2
-	dev-python/colorlog
-	dev-python/pygments
+	dev-pypi/lxml
+	dev-pypi/pygments
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A Python script for summarizing gcov data"
 HOMEPAGE="https://github.com/gcovr/gcovr"
 SRC_URI="https://github.com/gcovr/gcovr/archive/${PV}.tar.gz -> ${P}.gh.tar.gz"

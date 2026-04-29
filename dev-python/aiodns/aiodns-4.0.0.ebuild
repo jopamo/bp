@@ -8,10 +8,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/pycares
+	dev-pypi/pycares
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Simple DNS resolver for asyncio"
 HOMEPAGE="
 	https://pypi.org/project/aiodns/

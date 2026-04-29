@@ -6,7 +6,11 @@ PYPI_PN="Js2Py"
 PYTHON_COMPAT=( python3_{10..12} )
 
 inherit distutils-r1 pypi
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="JavaScript to Python Translator & JavaScript interpreter in Python"
 HOMEPAGE="http://piter.io/projects/js2py
 	https://github.com/PiotrDabkowski/Js2Py

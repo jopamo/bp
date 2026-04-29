@@ -4,7 +4,25 @@ PYTHON_COMPAT=( python3_{10..13} )
 DISTUTILS_USE_PEP517=hatchling
 
 inherit distutils-r1
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/anyio
+	dev-pypi/httpx
+	dev-pypi/httpx-sse
+	dev-pypi/jsonschema
+	dev-pypi/opentelemetry-api
+	dev-pypi/pydantic
+	dev-pypi/pydantic-settings
+	dev-pypi/pyjwt
+	dev-pypi/python-multipart
+	dev-pypi/sse-starlette
+	dev-pypi/starlette
+	dev-pypi/typing-extensions
+	dev-pypi/typing-inspection
+	dev-pypi/uvicorn
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="The official Python SDK for the Model Context Protocol"
 HOMEPAGE="https://github.com/modelcontextprotocol/python-sdk"
 SNAPSHOT=d5b9155f14ab3b4b203a47c55b53955b2d0bca09

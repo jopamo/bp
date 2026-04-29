@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Bash tab completion for argparse"
 HOMEPAGE="
 	https://github.com/kislyuk/argcomplete/

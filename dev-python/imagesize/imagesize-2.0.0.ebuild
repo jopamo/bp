@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Pure Python module for getting image size from png/jpeg/jpeg2000/gif files"
 HOMEPAGE="
 	https://github.com/shibukawa/imagesize_py/

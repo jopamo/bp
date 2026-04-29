@@ -7,10 +7,9 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/mdurl
+	dev-pypi/mdurl
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Python port of markdown-it, Markdown parser"
 HOMEPAGE="
 	https://pypi.org/project/markdown-it-py/

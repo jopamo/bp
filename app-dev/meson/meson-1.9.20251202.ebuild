@@ -6,7 +6,11 @@ SNAPSHOT=d11b8f26f372c844fcd24a82fa745244bb13c6e0
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1 doins
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Open source build system"
 HOMEPAGE="http://mesonbuild.com/"
 

@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A fast and thorough lazy object proxy"
 HOMEPAGE="
 	https://github.com/ionelmc/python-lazy-object-proxy/

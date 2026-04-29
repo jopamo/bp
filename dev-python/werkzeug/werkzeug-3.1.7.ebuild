@@ -8,10 +8,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/markupsafe
+	dev-pypi/markupsafe
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Collection of various utilities for WSGI applications"
 HOMEPAGE="
 	https://palletsprojects.com/p/werkzeug/

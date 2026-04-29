@@ -7,7 +7,11 @@ PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" pypy3 pypy3_11 python3_13 )
 PYTHON_REQ_USE="threads(+)"
 
 inherit distutils-r1 multiprocessing toolchain-funcs flag-o-matic
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 MY_P=${P/_rc/rc}
 DESCRIPTION="A Python to C compiler"
 HOMEPAGE="https://cython.org/"

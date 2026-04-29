@@ -18,9 +18,9 @@ KEYWORDS="amd64 arm64"
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/jupyter-core
-	dev-python/python-dateutil
-	dev-python/pyzmq
-	dev-python/tornado
-	dev-python/traitlets
+	dev-pypi/python-dateutil
+	dev-pypi/pyzmq
+	dev-pypi/tornado
+	dev-pypi/traitlets
 "
 # lockstep-pypi-deps: end

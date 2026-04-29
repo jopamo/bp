@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Automatically color Python's uncaught exception tracebacks"
 HOMEPAGE="
 	https://github.com/staticshock/colored-traceback.py/

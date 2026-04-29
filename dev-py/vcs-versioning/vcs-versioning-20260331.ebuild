@@ -3,7 +3,13 @@
 DISTUTILS_USE_PEP517=standalone
 
 inherit distutils-r1
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/setuptools-scm
+	dev-pypi/vcs-versioning
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Core vcs metadata/versioning library used by setuptools-scm"
 HOMEPAGE="https://github.com/pypa/setuptools-scm/"
 SNAPSHOT=efa2c855307ff1ae4b4e176e53cd5175a2b13f2f

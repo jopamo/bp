@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Rolling backport of unittest.mock for all Pythons"
 HOMEPAGE="
 	https://github.com/testing-cabal/mock/

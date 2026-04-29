@@ -4,7 +4,13 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{10..13} pypy3 )
 
 inherit distutils-r1
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/semantic-version
+	dev-pypi/setuptools
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="A plugin for setuptools to build Rust Python extensions"
 HOMEPAGE="https://github.com/PyO3/setuptools-rust/"
 SNAPSHOT=910fc604842ed37ed93aadbb5aef588af668d107

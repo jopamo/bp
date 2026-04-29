@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Typing stubs for setuptools"
 HOMEPAGE="https://pypi.org/project/types-setuptools/"
 

@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="General-purpose retrying library"
 HOMEPAGE="
 	https://github.com/groodt/retrying/

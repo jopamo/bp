@@ -11,7 +11,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Pygments is a syntax highlighting package written in Python"
 HOMEPAGE="
 	https://pygments.org/

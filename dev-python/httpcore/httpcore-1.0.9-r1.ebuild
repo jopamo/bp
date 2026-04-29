@@ -4,7 +4,13 @@ DISTUTILS_USE_PEP517=hatchling
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 optfeature
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/certifi
+	dev-pypi/h11
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="A minimal low-level HTTP client"
 HOMEPAGE="
 	https://www.encode.io/httpcore/

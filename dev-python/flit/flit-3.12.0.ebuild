@@ -4,6 +4,16 @@ DISTUTILS_USE_PEP517=flit
 PYTHON_COMPAT=( python3_{10..13} pypy3 pypy3_11 )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/docutils
+	dev-pypi/flit-core
+	dev-pypi/pip
+	dev-pypi/requests
+	dev-pypi/tomli-w
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Simplified packaging of Python modules"
 HOMEPAGE="

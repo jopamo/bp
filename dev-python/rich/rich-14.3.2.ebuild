@@ -7,11 +7,10 @@ inherit distutils-r1 optfeature
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/markdown-it-py
-	dev-python/pygments
+	dev-pypi/markdown-it-py
+	dev-pypi/pygments
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Python library for rendering rich text, tables, etc. to the terminal"
 HOMEPAGE="
 	https://github.com/Textualize/rich/

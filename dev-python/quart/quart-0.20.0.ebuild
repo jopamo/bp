@@ -7,18 +7,17 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	dev-pypi/aiofiles
+	dev-pypi/blinker
+	dev-pypi/click
+	dev-pypi/flask
+	dev-pypi/hypercorn
+	dev-pypi/itsdangerous
 	dev-pypi/jinja2
-	dev-python/aiofiles
-	dev-python/blinker
-	dev-python/click
-	dev-python/flask
-	dev-python/hypercorn
-	dev-python/itsdangerous
-	dev-python/markupsafe
-	dev-python/werkzeug
+	dev-pypi/markupsafe
+	dev-pypi/werkzeug
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A Python ASGI web microframework with the same API as Flask"
 HOMEPAGE="
 	https://github.com/pallets/quart/

@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A configurable sidebar-enabled Sphinx theme"
 HOMEPAGE="
 	https://github.com/sphinx-doc/alabaster/

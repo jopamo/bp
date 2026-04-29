@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Various helpers to pass trusted data to untrusted environments and back"
 HOMEPAGE="
 	https://palletsprojects.com/p/itsdangerous/

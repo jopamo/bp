@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 MY_P=${P/_p/.post}
 DESCRIPTION="Capture the outcome of Python function calls"
 HOMEPAGE="

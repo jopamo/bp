@@ -8,10 +8,9 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/installer
+	dev-pypi/installer
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A backend script to aid installing Python packages in Gentoo"
 HOMEPAGE="
 	https://pypi.org/project/gpep517/

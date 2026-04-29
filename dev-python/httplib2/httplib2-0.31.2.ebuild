@@ -7,10 +7,9 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/pyparsing
+	dev-pypi/pyparsing
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A comprehensive HTTP client library"
 HOMEPAGE="
 	https://pypi.org/project/httplib2/

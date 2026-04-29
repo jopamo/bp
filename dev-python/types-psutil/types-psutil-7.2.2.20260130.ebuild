@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Typing stubs for psutil"
 HOMEPAGE="https://pypi.org/project/types-psutil/"
 

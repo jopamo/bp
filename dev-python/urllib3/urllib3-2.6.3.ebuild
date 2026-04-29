@@ -13,7 +13,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 # The package has a test dependency on their own hypercorn fork.
 HYPERCORN_COMMIT=d1719f8c1570cbd8e6a3719ffdb14a4d72880abb
 DESCRIPTION="HTTP library with thread-safe connection pooling, file post, and more"

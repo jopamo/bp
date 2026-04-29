@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A fake file system that mocks the Python file system modules"
 HOMEPAGE="
 	https://github.com/pytest-dev/pyfakefs/

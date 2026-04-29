@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="ANSI escape character sequences for colored terminal text & cursor positioning"
 HOMEPAGE="
 	https://pypi.org/project/colorama/

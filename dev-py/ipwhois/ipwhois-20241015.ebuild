@@ -3,7 +3,11 @@
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Python module for retrieving and parsing whois data for IPv4 and IPv6 addresses"
 HOMEPAGE="https://github.com/secynic/ipwhois"
 

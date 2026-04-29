@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Backport of PEP 654 (exception groups)"
 HOMEPAGE="
 	https://github.com/agronholm/exceptiongroup/

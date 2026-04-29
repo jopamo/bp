@@ -5,7 +5,12 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 flag-o-matic
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/cffi
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Python binding to the Networking and Cryptography (NaCl) library"
 HOMEPAGE="https://github.com/pyca/pynacl/"
 SNAPSHOT=f0142f94faa7990f9f371d3e8ad35715ef8cc8c3

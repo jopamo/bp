@@ -8,10 +8,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/markupsafe
+	dev-pypi/markupsafe
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A Python templating language"
 HOMEPAGE="
 	https://www.makotemplates.org/

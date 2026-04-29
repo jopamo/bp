@@ -14,7 +14,6 @@ inherit cargo distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy"
 HOMEPAGE="
 	https://github.com/ijl/orjson/

@@ -3,7 +3,12 @@
 DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/jinja2
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Multi-Language Vulkan/GL/GLES/EGL/GLX/WGL Loader-Generator"
 HOMEPAGE="https://glad.dav1d.de/"
 SNAPSHOT=a4ca574522ff69d0bb584584977aa9a53ace29d9

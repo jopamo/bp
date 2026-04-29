@@ -1,0 +1,16 @@
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="websockets"
+DESCRIPTION="An implementation of the WebSocket Protocol (RFC 6455 & 7692)"
+HOMEPAGE="https://github.com/python-websockets/websockets"
+LICENSE="metapackage"
+SLOT="0"
+KEYWORDS="amd64 arm64"

@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A fast, spec compliant Python 3.13+ tokenizer that runs on older Pythons"
 HOMEPAGE="
 	https://github.com/tusharsadhwani/pytokens/

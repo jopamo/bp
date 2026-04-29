@@ -7,10 +7,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/packaging
+	dev-pypi/packaging
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A tool for resolving PEP 735 Dependency Group data"
 HOMEPAGE="
 	https://github.com/pypa/dependency-groups/

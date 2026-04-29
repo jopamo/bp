@@ -17,15 +17,15 @@ KEYWORDS="amd64 arm64"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	dev-pypi/cachetools
+	dev-pypi/colorama
+	dev-pypi/filelock
+	dev-pypi/packaging
+	dev-pypi/platformdirs
+	dev-pypi/pluggy
 	dev-pypi/pyproject-api
 	dev-pypi/python-discovery
-	dev-python/cachetools
-	dev-python/colorama
-	dev-python/filelock
-	dev-python/packaging
-	dev-python/platformdirs
-	dev-python/pluggy
-	dev-python/tomli-w
-	dev-python/virtualenv
+	dev-pypi/tomli-w
+	dev-pypi/virtualenv
 "
 # lockstep-pypi-deps: end

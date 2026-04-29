@@ -8,10 +8,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/jaraco-text
+	dev-pypi/jaraco-text
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Models and classes to supplement the stdlib collections module"
 HOMEPAGE="
 	https://github.com/jaraco/jaraco.collections/

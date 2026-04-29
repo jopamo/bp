@@ -10,7 +10,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A list-like structure which implements collections.abc.MutableSequence"
 HOMEPAGE="
 	https://pypi.org/project/frozenlist/

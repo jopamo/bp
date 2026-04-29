@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="World timezone definitions for Python"
 HOMEPAGE="
 	https://pythonhosted.org/pytz/

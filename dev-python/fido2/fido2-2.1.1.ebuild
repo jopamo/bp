@@ -7,10 +7,9 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	app-crypto/cryptography
+	dev-pypi/cryptography
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Python based FIDO 2.0 library"
 HOMEPAGE="
 	https://github.com/Yubico/python-fido2/

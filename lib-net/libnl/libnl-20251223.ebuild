@@ -1,7 +1,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
 inherit distutils-r1 autotools flag-o-matic qa-policy
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Libraries providing APIs to netlink protocol based Linux kernel interfaces"
 HOMEPAGE="http://www.infradead.org/~tgr/libnl/ https://github.com/thom311/libnl"
 SNAPSHOT=655a638d4e1f74be9256a3108ae2abb84827a9ce

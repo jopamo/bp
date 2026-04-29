@@ -5,7 +5,15 @@ PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 PYTHON_REQ_USE="threads(+)"
 
 inherit distutils-r1
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/bcrypt
+	dev-pypi/cryptography
+	dev-pypi/invoke
+	dev-pypi/pynacl
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="SSH2 protocol library"
 HOMEPAGE="
 	https://www.paramiko.org/

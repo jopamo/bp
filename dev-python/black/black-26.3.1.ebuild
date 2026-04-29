@@ -8,15 +8,14 @@ inherit distutils-r1 optfeature pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-py/mypy-extensions
-	dev-python/click
-	dev-python/packaging
-	dev-python/pathspec
-	dev-python/platformdirs
-	dev-python/pytokens
+	dev-pypi/click
+	dev-pypi/mypy-extensions
+	dev-pypi/packaging
+	dev-pypi/pathspec
+	dev-pypi/platformdirs
+	dev-pypi/pytokens
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="The uncompromising Python code formatter"
 HOMEPAGE="
 	https://black.readthedocs.io/en/stable/

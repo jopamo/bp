@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Python library providing a few tools handling SemVer in Python"
 HOMEPAGE="
 	https://github.com/rbarrois/python-semanticversion/

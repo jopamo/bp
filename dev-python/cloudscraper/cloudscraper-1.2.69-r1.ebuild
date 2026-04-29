@@ -4,7 +4,11 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{12..14} )
 
 inherit distutils-r1 optfeature
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="A Python module to bypass Cloudflare's anti-bot page"
 HOMEPAGE="
 	https://github.com/VeNoMouS/cloudscraper/

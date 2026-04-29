@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/httpx
-	dev-python/packaging
+	dev-pypi/httpx
+	dev-pypi/packaging
 "
 # lockstep-pypi-deps: end

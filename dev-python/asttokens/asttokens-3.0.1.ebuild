@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Annotate Python AST trees with source text and token information"
 HOMEPAGE="
 	https://github.com/gristlabs/asttokens/

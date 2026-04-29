@@ -7,10 +7,9 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/uc-micro-py
+	dev-pypi/uc-micro-py
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Links recognition library with full unicode support"
 HOMEPAGE="
 	https://github.com/tsutsu3/linkify-it-py/

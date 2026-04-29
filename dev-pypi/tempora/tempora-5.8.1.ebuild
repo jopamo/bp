@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/jaraco-functools
-	dev-python/python-dateutil
+	dev-pypi/jaraco-functools
+	dev-pypi/python-dateutil
 "
 # lockstep-pypi-deps: end

@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Rapid multi-Python deployment"
 HOMEPAGE="
 	https://codespeak.net/execnet/

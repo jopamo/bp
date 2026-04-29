@@ -9,11 +9,10 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	app-crypto/cryptography
-	dev-python/jeepney
+	dev-pypi/cryptography
+	dev-pypi/jeepney
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Python bindings to FreeDesktop.org Secret Service API"
 HOMEPAGE="
 	https://github.com/mitya57/secretstorage/

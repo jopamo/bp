@@ -7,14 +7,13 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/jaraco-classes
-	dev-python/jaraco-context
-	dev-python/jaraco-functools
-	dev-python/jeepney
-	dev-python/secretstorage
+	dev-pypi/jaraco-classes
+	dev-pypi/jaraco-context
+	dev-pypi/jaraco-functools
+	dev-pypi/jeepney
+	dev-pypi/secretstorage
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Provides access to the system keyring service"
 HOMEPAGE="
 	https://github.com/jaraco/keyring/

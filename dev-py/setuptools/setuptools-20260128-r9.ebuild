@@ -3,7 +3,11 @@
 DISTUTILS_USE_PEP517=standalone
 
 inherit distutils-r1 pypi
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Collection of extensions to Distutils"
 HOMEPAGE="https://github.com/pypa/setuptools/"
 SNAPSHOT=7308942329bff7078bff4e16b89964b2bc6df616

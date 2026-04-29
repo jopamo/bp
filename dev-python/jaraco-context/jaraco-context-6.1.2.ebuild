@@ -11,7 +11,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Context managers by jaraco"
 HOMEPAGE="
 	https://github.com/jaraco/jaraco.context/

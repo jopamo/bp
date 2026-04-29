@@ -4,7 +4,12 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/setuptools
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="C++ header library which makes it easier to write Python extension modules"
 HOMEPAGE="
 	https://github.com/nucleic/cppy/

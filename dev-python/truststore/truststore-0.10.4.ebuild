@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Verify certificates using native system trust stores"
 HOMEPAGE="
 	https://github.com/sethmlarson/truststore/

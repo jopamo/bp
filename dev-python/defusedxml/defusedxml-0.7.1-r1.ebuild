@@ -5,7 +5,11 @@ PYTHON_COMPAT=( python3_{10..12} pypy3 pypy3_11 )
 PYTHON_REQ_USE="xml(+)"
 
 inherit distutils-r1
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="XML bomb protection for Python stdlib modules, an xml serialiser"
 HOMEPAGE="
 	https://github.com/tiran/defusedxml/

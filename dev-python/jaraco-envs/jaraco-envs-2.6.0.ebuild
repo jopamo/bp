@@ -9,12 +9,11 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	dev-pypi/path
 	dev-pypi/tox
-	dev-python/path
-	dev-python/virtualenv
+	dev-pypi/virtualenv
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Classes for orchestrating Python (virtual) environments"
 HOMEPAGE="
 	https://github.com/jaraco/jaraco.envs/

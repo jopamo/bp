@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 MY_P=mypy_extensions-${PV}
 DESCRIPTION="Type system extensions for programs checked with mypy"
 HOMEPAGE="

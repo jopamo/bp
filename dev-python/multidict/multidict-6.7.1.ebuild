@@ -10,7 +10,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="multidict implementation"
 HOMEPAGE="
 	https://github.com/aio-libs/multidict/

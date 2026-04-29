@@ -8,11 +8,10 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/packaging
-	dev-python/pyproject-hooks
+	dev-pypi/packaging
+	dev-pypi/pyproject-hooks
 "
 # lockstep-pypi-deps: end
-
 MY_P=${P/_p/.post}
 DESCRIPTION="A simple, correct PEP517 package builder"
 HOMEPAGE="

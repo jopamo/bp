@@ -1,0 +1,23 @@
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="py-key-value-aio"
+DESCRIPTION="Async Key-Value Store - A pluggable interface for KV Stores"
+HOMEPAGE="https://pypi.org/project/py-key-value-aio/"
+LICENSE="Apache-2.0"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/beartype
+	dev-pypi/typing-extensions
+"
+# lockstep-pypi-deps: end

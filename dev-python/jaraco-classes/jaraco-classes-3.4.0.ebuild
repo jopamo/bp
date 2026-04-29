@@ -9,10 +9,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/more-itertools
+	dev-pypi/more-itertools
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Classes used by other projects by developer jaraco"
 HOMEPAGE="
 	https://github.com/jaraco/jaraco.classes/

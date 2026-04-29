@@ -7,12 +7,11 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/coverage
-	dev-python/pluggy
-	dev-python/pytest
+	dev-pypi/coverage
+	dev-pypi/pluggy
+	dev-pypi/pytest
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="pytest plugin for coverage reporting"
 HOMEPAGE="
 	https://github.com/pytest-dev/pytest-cov/

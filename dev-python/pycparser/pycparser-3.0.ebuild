@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="C parser and AST generator written in Python"
 HOMEPAGE="
 	https://github.com/eliben/pycparser/

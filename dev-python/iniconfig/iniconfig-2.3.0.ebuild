@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Brain-dead simple config-ini parsing"
 HOMEPAGE="
 	https://github.com/pytest-dev/iniconfig/

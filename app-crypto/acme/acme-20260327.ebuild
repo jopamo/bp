@@ -3,7 +3,16 @@
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/cryptography
+	dev-pypi/josepy
+	dev-pypi/pyopenssl
+	dev-pypi/pyrfc3339
+	dev-pypi/requests
+"
+# lockstep-pypi-deps: end
 PARENT_PN="certbot"
 PARENT_P="${PARENT_PN}-${PV}"
 

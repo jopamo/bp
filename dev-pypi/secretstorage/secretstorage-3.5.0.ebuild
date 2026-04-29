@@ -1,0 +1,23 @@
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="secretstorage"
+DESCRIPTION="Python bindings to FreeDesktop.org Secret Service API"
+HOMEPAGE="https://github.com/mitya57/secretstorage"
+LICENSE="metapackage"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/cryptography
+	dev-pypi/jeepney
+"
+# lockstep-pypi-deps: end

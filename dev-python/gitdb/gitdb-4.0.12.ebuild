@@ -7,10 +7,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/smmap
+	dev-pypi/smmap
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="GitDB is a pure-Python git object database"
 HOMEPAGE="
 	https://github.com/gitpython-developers/gitdb/

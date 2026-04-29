@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A platform independent file lock for Python"
 HOMEPAGE="
 	https://github.com/tox-dev/filelock/

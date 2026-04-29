@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 # see scripts/download_import_cldr.py
 CLDR_PV=46.0
 DESCRIPTION="Collection of tools for internationalizing Python applications"

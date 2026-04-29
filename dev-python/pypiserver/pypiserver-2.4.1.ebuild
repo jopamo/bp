@@ -4,6 +4,14 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/legacy-cgi
+	dev-pypi/packaging
+	dev-pypi/pip
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Minimal PyPI server"
 HOMEPAGE="

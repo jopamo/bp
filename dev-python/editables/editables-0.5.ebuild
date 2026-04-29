@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A Python library for creating 'editable wheels'"
 HOMEPAGE="
 	https://pypi.org/project/editables/

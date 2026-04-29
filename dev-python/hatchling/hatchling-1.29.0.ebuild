@@ -8,13 +8,12 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/packaging
-	dev-python/pathspec
-	dev-python/pluggy
-	dev-python/trove-classifiers
+	dev-pypi/packaging
+	dev-pypi/pathspec
+	dev-pypi/pluggy
+	dev-pypi/trove-classifiers
 "
 # lockstep-pypi-deps: end
-
 TAG=${P/-/-v}
 MY_P=hatch-${TAG}
 DESCRIPTION="Modern, extensible Python build backend"

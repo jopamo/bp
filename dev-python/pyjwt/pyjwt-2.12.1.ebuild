@@ -11,7 +11,6 @@ inherit distutils-r1 optfeature pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="JSON Web Token implementation in Python"
 HOMEPAGE="
 	https://github.com/jpadilla/pyjwt/

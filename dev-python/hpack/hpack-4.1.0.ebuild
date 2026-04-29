@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Pure-Python HPACK header compression"
 HOMEPAGE="
 	https://python-hyper.org/projects/hpack/en/latest/

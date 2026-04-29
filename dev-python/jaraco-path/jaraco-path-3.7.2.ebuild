@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Miscellaneous path functions"
 HOMEPAGE="
 	https://github.com/jaraco/jaraco.path/

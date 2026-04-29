@@ -9,13 +9,12 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/certifi
-	dev-python/charset-normalizer
-	dev-python/idna
-	dev-python/urllib3
+	dev-pypi/certifi
+	dev-pypi/charset-normalizer
+	dev-pypi/idna
+	dev-pypi/urllib3
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="HTTP library for human beings"
 HOMEPAGE="
 	https://requests.readthedocs.io/

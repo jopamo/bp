@@ -7,10 +7,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/requests
+	dev-pypi/requests
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="python-requests HTTP exchanges recorder"
 HOMEPAGE="
 	https://github.com/betamaxpy/betamax/

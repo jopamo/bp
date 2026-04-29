@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A module wrapper for os.path"
 HOMEPAGE="
 	https://github.com/jaraco/path/

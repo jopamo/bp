@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A pure-Python implementation of HTTP/1.1 inspired by hyper-h2"
 HOMEPAGE="
 	https://h11.readthedocs.io/en/latest/

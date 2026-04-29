@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Emoji for Python"
 HOMEPAGE="
 	https://github.com/carpedm20/emoji/

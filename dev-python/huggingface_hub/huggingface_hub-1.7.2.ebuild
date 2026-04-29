@@ -7,18 +7,17 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/filelock
-	dev-python/fsspec
-	dev-python/hf_xet
-	dev-python/httpx
-	dev-python/packaging
-	dev-python/pyyaml
-	dev-python/tqdm
-	dev-python/typer
-	dev-python/typing-extensions
+	dev-pypi/filelock
+	dev-pypi/fsspec
+	dev-pypi/hf-xet
+	dev-pypi/httpx
+	dev-pypi/packaging
+	dev-pypi/pyyaml
+	dev-pypi/tqdm
+	dev-pypi/typer
+	dev-pypi/typing-extensions
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="a client library to interact with the Hugging Face Hub"
 HOMEPAGE="
 	https://pypi.org/project/huggingface_hub/

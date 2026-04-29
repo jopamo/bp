@@ -18,7 +18,6 @@ inherit cargo distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="xet client tech, used in huggingface_hub"
 HOMEPAGE="https://github.com/huggingface/xet-core"
 SRC_URI="https://github.com/huggingface/xet-core/archive/refs/tags/v${PV}.tar.gz

@@ -12,7 +12,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Backport of CPython tarfile module (from Python 3.12)"
 HOMEPAGE="
 	https://github.com/jaraco/backports.tarfile/

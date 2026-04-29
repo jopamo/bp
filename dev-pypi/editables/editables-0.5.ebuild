@@ -1,26 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
-
-DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} python3_{13,14}t )
-
-inherit distutils-r1
+# lockstep-managed: dependency-ebuild
 # lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="A Python library for creating 'editable wheels'"
-HOMEPAGE="
-	https://pypi.org/project/editables/
-	https://github.com/pfmoore/editables/
-"
-SRC_URI="
-	https://github.com/pfmoore/editables/archive/${PV}.tar.gz
-		-> ${P}.gh.tar.gz
-"
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="flit"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="editables"
+DESCRIPTION="Editable installations"
+HOMEPAGE="https://pypi.org/project/editables/"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-distutils_enable_tests pytest

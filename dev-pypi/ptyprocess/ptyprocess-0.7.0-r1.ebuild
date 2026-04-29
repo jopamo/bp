@@ -1,29 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="flit"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Run a subprocess in a pseudo terminal"
-HOMEPAGE="
-	https://github.com/pexpect/ptyprocess/
-	https://pypi.org/project/ptyprocess/
-"
 
-LICENSE="ISC"
+PYPI_PN="ptyprocess"
+DESCRIPTION="Run a subprocess in a pseudo terminal"
+HOMEPAGE="https://github.com/pexpect/ptyprocess"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-distutils_enable_tests unittest
-
-src_prepare() {
-	distutils-r1_src_prepare
-
-	# https://github.com/pexpect/ptyprocess/pull/75
-	sed -i -e '/makeSuite/d' tests/test_invalid_binary.py || die
-}

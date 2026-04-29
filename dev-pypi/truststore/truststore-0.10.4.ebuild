@@ -1,41 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
-
-DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
-
-inherit distutils-r1
+# lockstep-managed: dependency-ebuild
 # lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Verify certificates using native system trust stores"
-HOMEPAGE="
-	https://github.com/sethmlarson/truststore/
-	https://pypi.org/project/truststore/
-"
-SRC_URI="
-	https://github.com/sethmlarson/truststore/archive/v${PV}.tar.gz
-		-> ${P}.gh.tar.gz
-"
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-LICENSE="MIT"
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="flit"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="truststore"
+DESCRIPTION="Verify certificates using native system trust stores"
+HOMEPAGE="https://pypi.org/project/truststore/"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-# The vast majority of tests require Internet access.
-PROPERTIES="test_network"
-RESTRICT="test"
-
-BDEPEND="
-	test? (
-		dev-pypi/aiohttp[${PYTHON_USEDEP}]
-		dev-pypi/httpx[${PYTHON_USEDEP}]
-		dev-pypi/pyopenssl[${PYTHON_USEDEP}]
-		dev-pypi/requests[${PYTHON_USEDEP}]
-		dev-pypi/trustme[${PYTHON_USEDEP}]
-		dev-pypi/urllib3[${PYTHON_USEDEP}]
-	)
-"
-
-EPYTEST_PLUGINS=( pytest-{asyncio,httpserver,rerunfailures} )
-distutils_enable_tests pytest

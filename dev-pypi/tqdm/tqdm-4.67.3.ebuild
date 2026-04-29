@@ -1,43 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYPI_VERIFY_REPO=https://github.com/tqdm/tqdm
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Add a progress meter to your loops in a second"
-HOMEPAGE="
-	https://github.com/tqdm/tqdm/
-	https://pypi.org/project/tqdm/
-"
 
-LICENSE="MIT"
+PYPI_PN="tqdm"
+DESCRIPTION="Fast, Extensible Progress Meter"
+HOMEPAGE="https://tqdm.github.io"
+LICENSE="MPL-2.0 MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="examples"
-
-BDEPEND="
-	dev-py/setuptools-scm[${PYTHON_USEDEP}]
-"
-
-EPYTEST_PLUGINS=( pytest-{asyncio,timeout} )
-distutils_enable_tests pytest
-
-EPYTEST_IGNORE=(
-	# Skip unpredictable performance tests
-	tests/tests_perf.py
-)
-
-python_install_all() {
-	doman tqdm/tqdm.1
-	if use examples; then
-		dodoc -r examples
-		docompress -x /usr/share/doc/${PF}/examples
-	fi
-	distutils-r1_python_install_all
-}

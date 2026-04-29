@@ -1,11 +1,21 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
-PYTHON_REQ_USE="threads(+)"
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
+
+PYPI_PN="ipywidgets"
+DESCRIPTION="Jupyter interactive widgets"
+HOMEPAGE="http://jupyter.org"
+LICENSE="metapackage"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/comm
@@ -15,49 +25,3 @@ RDEPEND+="
 	dev-pypi/widgetsnbextension
 "
 # lockstep-pypi-deps: end
-DESCRIPTION="IPython HTML widgets for Jupyter"
-HOMEPAGE="
-	https://ipywidgets.readthedocs.io/
-	https://github.com/jupyter-widgets/ipywidgets/
-	https://pypi.org/project/ipywidgets/
-"
-
-LICENSE="BSD"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
-RDEPEND="
-	>=dev-pypi/comm-0.1.3[${PYTHON_USEDEP}]
-	>=dev-py/ipython-genutils-0.2.0[${PYTHON_USEDEP}]
-	>=dev-pypi/traitlets-4.3.1[${PYTHON_USEDEP}]
-	>=dev-py/widgetsnbextension-4.0.14[${PYTHON_USEDEP}]
-	>=dev-py/jupyterlab-widgets-3.0.15[${PYTHON_USEDEP}]
-"
-BDEPEND="
-	test? (
-		dev-pypi/ipykernel[${PYTHON_USEDEP}]
-		dev-pypi/jsonschema[${PYTHON_USEDEP}]
-		dev-pypi/pytz[${PYTHON_USEDEP}]
-	)
-"
-PDEPEND="
-	>=dev-py/ipython-6.1.0[${PYTHON_USEDEP}]
-"
-
-EPYTEST_PLUGINS=()
-distutils_enable_tests pytest
-
-python_test() {
-	local EPYTEST_DESELECT=()
-
-	case ${EPYTHON} in
-		pypy3*)
-			EPYTEST_DESELECT+=(
-				# https://github.com/pypy/pypy/issues/4892
-				ipywidgets/widgets/tests/test_interaction.py::test_interact_noinspect
-			)
-			;;
-	esac
-
-	epytest
-}

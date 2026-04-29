@@ -1,46 +1,23 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_EXT=1
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
+
+PYPI_PN="xcffib"
+DESCRIPTION="xcffib is the XCB binding for python"
+HOMEPAGE="http://github.com/tych0/xcffib"
+LICENSE="metapackage"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/cffi
 "
 # lockstep-pypi-deps: end
-DESCRIPTION="A drop in replacement for xpyb, an XCB python binding"
-HOMEPAGE="
-	https://github.com/tych0/xcffib/
-	https://pypi.org/project/xcffib/
-"
-
-LICENSE="Apache-2.0"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
-DEPEND="
-	x11-libs/libxcb
-"
-RDEPEND="
-	$(python_gen_cond_dep '
-		>=dev-pypi/cffi-1.1.0:=[${PYTHON_USEDEP}]
-	' 'python*')
-	${DEPEND}
-"
-BDEPEND="
-	test? (
-		x11-base/xorg-server[xvfb]
-		x11-apps/xeyes
-	)
-"
-
-EPYTEST_PLUGINS=()
-distutils_enable_tests pytest
-
-python_test() {
-	rm -rf xcffib || die
-	epytest
-}

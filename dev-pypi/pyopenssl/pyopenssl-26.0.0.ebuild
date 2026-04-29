@@ -1,62 +1,23 @@
-# Distributed under the terms of the GNU General Public License v2
-
-DISTUTILS_USE_PEP517=setuptools
-PYPI_PN=pyOpenSSL
-PYPI_VERIFY_REPO=https://github.com/pyca/pyopenssl
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
-PYTHON_REQ_USE="threads(+)"
-
-inherit distutils-r1 toolchain-funcs pypi
+# lockstep-managed: dependency-ebuild
 # lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
+
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="pyopenssl"
+DESCRIPTION="Python wrapper module around the OpenSSL library"
+HOMEPAGE="https://pyopenssl.org/"
+LICENSE="metapackage"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/cryptography
 "
 # lockstep-pypi-deps: end
-DESCRIPTION="Python interface to the OpenSSL library"
-HOMEPAGE="
-	https://www.pyopenssl.org/
-	https://github.com/pyca/pyopenssl/
-	https://pypi.org/project/pyOpenSSL/
-"
-
-LICENSE="Apache-2.0"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
-RDEPEND="
-	<app-crypto/cryptography-47[${PYTHON_USEDEP}]
-	>=app-crypto/cryptography-45.0.7[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep '
-		>=dev-pypi/typing-extensions-4.9[${PYTHON_USEDEP}]
-	' 3.{11..12})
-"
-BDEPEND="
-	test? (
-		$(python_gen_cond_dep '
-			dev-pypi/cffi[${PYTHON_USEDEP}]
-		' 'python*')
-		dev-pypi/pretend[${PYTHON_USEDEP}]
-	)
-"
-
-distutils_enable_sphinx doc \
-	dev-py/sphinx-rtd-theme
-EPYTEST_PLUGINS=( pytest-rerunfailures )
-distutils_enable_tests pytest
-
-src_test() {
-	local -x TZ=UTC
-	local EPYTEST_DESELECT=(
-		tests/test_ssl.py::TestContext::test_set_default_verify_paths
-	)
-
-	if ! tc-has-64bit-time_t; then
-		einfo "time_t is smaller than 64 bits, will skip broken tests"
-		EPYTEST_DESELECT+=(
-			tests/test_crypto.py::TestX509StoreContext::test_verify_with_time
-		)
-	fi
-
-	distutils-r1_src_test
-}

@@ -1,40 +1,24 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=hatchling
-PYPI_VERIFY_REPO=https://github.com/python-jsonschema/referencing
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="hatchling"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
+
+PYPI_PN="referencing"
+DESCRIPTION="JSON Referencing + Python"
+HOMEPAGE="https://github.com/python-jsonschema/referencing"
+LICENSE="metapackage"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/attrs
 	dev-pypi/rpds-py
 "
 # lockstep-pypi-deps: end
-DESCRIPTION="Cross-specification JSON referencing (JSON Schema, OpenAPI...)"
-HOMEPAGE="
-	https://github.com/python-jsonschema/referencing/
-	https://pypi.org/project/referencing/
-"
-
-LICENSE="MIT"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
-RDEPEND="
-	>=dev-pypi/attrs-22.2.0[${PYTHON_USEDEP}]
-	>=dev-py/rpds-py-0.7.0[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep '
-		>=dev-pypi/typing-extensions-4.4.0[${PYTHON_USEDEP}]
-	' 3.{11..12})
-"
-BDEPEND="
-	dev-pypi/hatch-vcs[${PYTHON_USEDEP}]
-	test? (
-		dev-pypi/jsonschema[${PYTHON_USEDEP}]
-	)
-"
-
-EPYTEST_PLUGINS=( pytest-subtests )
-distutils_enable_tests pytest

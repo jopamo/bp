@@ -1,43 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Python Serial Port extension"
-HOMEPAGE="
-	https://github.com/pyserial/pyserial/
-	https://pypi.org/project/pyserial/
-"
 
+PYPI_PN="pyserial"
+DESCRIPTION="Python Serial Port Extension"
+HOMEPAGE="https://github.com/pyserial/pyserial"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="examples"
-
-DOCS=( CHANGES.rst README.rst )
-
-PATCHES=(
-	"${FILESDIR}/${P}-unittest-fix.patch"
-	"${FILESDIR}/${P}-glibc-2.42.patch"
-)
-
-distutils_enable_sphinx documentation --no-autodoc
-
-python_test() {
-	"${EPYTHON}" test/run_all_tests.py loop:// -v ||
-		die "Testing failed with ${EPYTHON}"
-}
-
-python_install_all() {
-	distutils-r1_python_install_all
-	if use examples; then
-		dodoc -r examples
-		docompress -x /usr/share/doc/${PF}/examples
-	fi
-}

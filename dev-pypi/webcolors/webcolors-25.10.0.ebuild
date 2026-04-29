@@ -1,23 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=pdm-backend
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="pdm-backend"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Color names and value formats defined by the HTML and CSS specifications"
-HOMEPAGE="
-	https://github.com/ubernostrum/webcolors/
-	https://pypi.org/project/webcolors/
-"
 
-LICENSE="BSD"
+PYPI_PN="webcolors"
+DESCRIPTION="A library for working with the color formats defined by HTML and CSS."
+HOMEPAGE="https://pypi.org/project/webcolors/"
+LICENSE="BSD-3-Clause"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-EPYTEST_PLUGINS=()
-distutils_enable_tests pytest

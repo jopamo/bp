@@ -1,42 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Python 2 and 3 compatibility library"
-HOMEPAGE="
-	https://github.com/benjaminp/six/
-	https://pypi.org/project/six/
-"
 
+PYPI_PN="six"
+DESCRIPTION="Python 2 and 3 compatibility utilities"
+HOMEPAGE="https://github.com/benjaminp/six"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-distutils_enable_sphinx documentation --no-autodoc
-distutils_enable_tests pytest
-
-python_test() {
-	local EPYTEST_DESELECT=(
-		# requires USE=gdb on CPython, no point in forcing the dep
-		# also missing on PyPy
-		'test_six.py::test_move_items[dbm_ndbm]'
-	)
-
-	case ${EPYTHON} in
-		python3.13*)
-			EPYTEST_DESELECT+=(
-				'test_six.py::test_move_items[tkinter_tix]'
-			)
-			;;
-	esac
-
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest
-}

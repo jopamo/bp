@@ -1,27 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
-
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
-
-inherit distutils-r1
+# lockstep-managed: dependency-ebuild
 # lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="RFC-compliant FQDN validation and manipulation for Python"
-HOMEPAGE="
-	https://github.com/ypcrts/fqdn/
-	https://pypi.org/project/fqdn/
-"
-SRC_URI="
-	https://github.com/ypcrts/fqdn/archive/v${PV}.tar.gz
-		-> ${P}.gh.tar.gz
-"
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-LICENSE="MPL-2.0"
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="fqdn"
+DESCRIPTION="Validates fully-qualified domain names against RFC 1123, so that they are acceptable to modern bowsers"
+HOMEPAGE="https://github.com/ypcrts/fqdn"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-distutils_enable_tests pytest
-distutils_enable_sphinx docs

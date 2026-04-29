@@ -1,10 +1,21 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( python3_{10..13} pypy3 pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="flit"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
+
+PYPI_PN="flit"
+DESCRIPTION="A simple packaging tool for simple packages."
+HOMEPAGE="https://pypi.org/project/flit/"
+LICENSE="metapackage"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/docutils
@@ -14,52 +25,3 @@ RDEPEND+="
 	dev-pypi/tomli-w
 "
 # lockstep-pypi-deps: end
-
-DESCRIPTION="Simplified packaging of Python modules"
-HOMEPAGE="
-	https://github.com/pypa/flit/
-	https://flit.readthedocs.io/
-	https://pypi.org/project/flit/
-"
-
-LICENSE="BSD"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
-RDEPEND="
-	dev-py/docutils[${PYTHON_USEDEP}]
-	>=dev-py/flit-core-${PV}[${PYTHON_USEDEP}]
-	dev-pypi/pip[${PYTHON_USEDEP}]
-	dev-pypi/requests[${PYTHON_USEDEP}]
-	dev-pypi/tomli-w[${PYTHON_USEDEP}]
-"
-BDEPEND="
-	${RDEPEND}
-	sys-apps/grep
-	test? (
-		dev-py/responses[${PYTHON_USEDEP}]
-		dev-pypi/testpath[${PYTHON_USEDEP}]
-	)
-"
-
-EPYTEST_DESELECT=(
-	# requires Internet
-	tests/test_config.py::test_invalid_classifier
-	# failing due to Gentoo pip patches
-	tests/test_install.py::InstallTests::test_install_data_dir
-	tests/test_install.py::InstallTests::test_install_module_pep621
-	tests/test_install.py::InstallTests::test_symlink_data_dir
-	tests/test_install.py::InstallTests::test_symlink_module_pep621
-)
-
-distutils_enable_tests pytest
-distutils_enable_sphinx doc \
-	dev-py/sphinxcontrib-github-alt \
-	dev-py/pygments-github-lexers \
-	dev-py/sphinx-rtd-theme
-
-src_prepare() {
-	# make sure system install is used
-	rm -r flit_core || die
-	distutils-r1_src_prepare
-}

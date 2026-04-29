@@ -1,32 +1,23 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=poetry
 PYTHON_COMPAT=( python3_{11..14} )
 
+DISTUTILS_USE_PEP517="poetry"
+
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
+
+PYPI_PN="josepy"
+DESCRIPTION="JOSE protocol implementation in Python"
+HOMEPAGE="https://github.com/certbot/josepy"
+LICENSE="metapackage"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/cryptography
 "
 # lockstep-pypi-deps: end
-DESCRIPTION="JOSE protocol implementation in Python"
-HOMEPAGE="
-	https://github.com/certbot/josepy/
-	https://pypi.org/project/josepy/
-"
-
-LICENSE="Apache-2.0"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
-RDEPEND="
-	>=app-crypto/cryptography-1.5[${PYTHON_USEDEP}]
-"
-
-distutils_enable_sphinx docs \
-	'>=dev-pypi/sphinx-4.3.0' \
-	'>=dev-py/sphinx-rtd-theme-1.0'
-
-EPYTEST_PLUGINS=()
-distutils_enable_tests pytest

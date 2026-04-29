@@ -1,46 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_EXT=1
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="A fast and thorough lazy object proxy"
-HOMEPAGE="
-	https://github.com/ionelmc/python-lazy-object-proxy/
-	https://pypi.org/project/lazy-object-proxy/
-	https://python-lazy-object-proxy.readthedocs.io/
-"
 
-LICENSE="BSD"
+PYPI_PN="lazy-object-proxy"
+DESCRIPTION="A fast and thorough lazy object proxy."
+HOMEPAGE="https://pypi.org/project/lazy-object-proxy/"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="+native-extensions"
-
-BDEPEND="
-	>=dev-py/setuptools-scm-8[${PYTHON_USEDEP}]
-"
-
-EPYTEST_PLUGINS=()
-distutils_enable_tests pytest
-
-python_prepare_all() {
-	distutils-r1_python_prepare_all
-
-	# No need to benchmark
-	sed \
-		-e '/benchmark/s:test_:_&:g' \
-		-e '/pytest.mark.benchmark/d' \
-		-i tests/test_lazy_object_proxy.py || die
-
-	if use native-extensions; then
-		unset SETUPPY_FORCE_PURE
-	else
-		export SETUPPY_FORCE_PURE=1
-	fi
-}

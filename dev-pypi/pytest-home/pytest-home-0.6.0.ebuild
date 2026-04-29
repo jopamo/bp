@@ -1,36 +1,23 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
+
+PYPI_PN="pytest-home"
+DESCRIPTION="Home directory fixtures"
+HOMEPAGE="https://pypi.org/project/pytest-home/"
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/pytest
 "
 # lockstep-pypi-deps: end
-DESCRIPTION="Home directory fixtures"
-HOMEPAGE="
-	https://github.com/jaraco/pytest-home/
-	https://pypi.org/project/pytest-home/
-"
-
-LICENSE="MIT"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
-RDEPEND="
-	dev-pypi/pytest[${PYTHON_USEDEP}]
-"
-BDEPEND="
-	
-"
-
-distutils_enable_tests pytest
-
-python_test() {
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	local -x PYTEST_PLUGINS=pytest_home.fixtures
-	epytest
-}

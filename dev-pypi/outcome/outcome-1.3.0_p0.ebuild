@@ -1,40 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
-
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
-
-inherit distutils-r1
+# lockstep-managed: dependency-ebuild
 # lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-MY_P=${P/_p/.post}
-DESCRIPTION="Capture the outcome of Python function calls"
-HOMEPAGE="
-	https://github.com/python-trio/outcome/
-	https://pypi.org/project/outcome/
-"
-SRC_URI="
-	https://github.com/python-trio/outcome/archive/v${PV/_p/.post}.tar.gz
-		-> ${MY_P}.gh.tar.gz
-"
-S=${WORKDIR}/${MY_P}
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-LICENSE="|| ( Apache-2.0 MIT )"
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="outcome"
+DESCRIPTION="Capture the outcome of Python function calls."
+HOMEPAGE="https://github.com/python-trio/outcome"
+LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-RDEPEND="
-	dev-pypi/attrs[${PYTHON_USEDEP}]
-"
-BDEPEND="
-	test? (
-		dev-py/pytest-asyncio[${PYTHON_USEDEP}]
-	)
-"
-
-distutils_enable_tests pytest
-distutils_enable_sphinx docs/source \
-	dev-py/sphinxcontrib-trio \
-	dev-py/sphinx-rtd-theme

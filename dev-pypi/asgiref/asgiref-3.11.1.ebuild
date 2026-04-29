@@ -1,24 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="ASGI utilities (successor to WSGI)"
-HOMEPAGE="
-	https://asgi.readthedocs.io/en/latest/
-	https://github.com/django/asgiref/
-	https://pypi.org/project/asgiref/
-"
 
-LICENSE="BSD"
+PYPI_PN="asgiref"
+DESCRIPTION="ASGI specs, helper code, and adapters"
+HOMEPAGE="https://github.com/django/asgiref/"
+LICENSE="BSD-3-Clause"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-EPYTEST_PLUGINS=( pytest-asyncio )
-distutils_enable_tests pytest

@@ -1,27 +1,23 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="flit"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
+
+PYPI_PN="dependency-groups"
+DESCRIPTION="A tool for resolving PEP 735 Dependency Group data"
+HOMEPAGE="https://pypi.org/project/dependency-groups/"
+LICENSE="metapackage"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/packaging
 "
 # lockstep-pypi-deps: end
-DESCRIPTION="A tool for resolving PEP 735 Dependency Group data"
-HOMEPAGE="
-	https://github.com/pypa/dependency-groups/
-	https://pypi.org/project/dependency-groups/
-"
-
-LICENSE="MIT"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
-RDEPEND="
-	dev-pypi/packaging[${PYTHON_USEDEP}]
-"
-
-distutils_enable_tests pytest

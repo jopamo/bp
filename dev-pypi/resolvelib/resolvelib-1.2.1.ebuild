@@ -1,34 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
-
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
-
-inherit distutils-r1
+# lockstep-managed: dependency-ebuild
 # lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
+
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="resolvelib"
 DESCRIPTION="Resolve abstract dependencies into concrete ones"
-HOMEPAGE="
-	https://github.com/sarugaku/resolvelib/
-	https://pypi.org/project/resolvelib/
-
-"
-SRC_URI="
-	https://github.com/sarugaku/resolvelib/archive/${PV}.tar.gz
-		-> ${P}.gh.tar.gz
-"
-
-LICENSE="ISC"
+HOMEPAGE="https://github.com/sarugaku/resolvelib"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-BDEPEND="
-	test? (
-		dev-pypi/packaging[${PYTHON_USEDEP}]
-	)
-"
-
-EPYTEST_PLUGINS=()
-distutils_enable_tests pytest

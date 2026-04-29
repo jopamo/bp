@@ -1,37 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
-
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} python3_{13,14}t )
-
-inherit distutils-r1
+# lockstep-managed: dependency-ebuild
 # lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Parser like ConfigParser but for updating configuration files"
-HOMEPAGE="
-	https://github.com/pyscaffold/configupdater/
-	https://pypi.org/project/ConfigUpdater/
-"
-SRC_URI="
-	https://github.com/pyscaffold/configupdater/archive/v${PV}.tar.gz
-		-> ${P}.gh.tar.gz
-"
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-LICENSE="MIT PSF-2 PYTHON"
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="configupdater"
+DESCRIPTION="Parser like ConfigParser but for updating configuration files"
+HOMEPAGE="https://github.com/pyscaffold/configupdater"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-BDEPEND="
-	dev-py/setuptools-scm[${PYTHON_USEDEP}]
-"
-
-distutils_enable_tests pytest
-
-export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
-
-src_prepare() {
-	distutils-r1_src_prepare
-	sed -i -e '/--cov/d' setup.cfg || die
-}

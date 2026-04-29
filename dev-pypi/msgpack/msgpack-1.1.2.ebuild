@@ -1,65 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_EXT=1
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="MessagePack (de)serializer for Python"
-HOMEPAGE="
-	https://msgpack.org/
-	https://github.com/msgpack/msgpack-python/
-	https://pypi.org/project/msgpack/
-"
 
-LICENSE="Apache-2.0"
+PYPI_PN="msgpack"
+DESCRIPTION="MessagePack serializer"
+HOMEPAGE="https://msgpack.org/"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="+native-extensions"
-
-# extension code is relying on CPython implementation details
-BDEPEND="
-	native-extensions? (
-		$(python_gen_cond_dep '
-			>=dev-py/cython-3.0.8[${PYTHON_USEDEP}]
-		' 'python*')
-	)
-"
-
-EPYTEST_PLUGINS=()
-distutils_enable_tests pytest
-
-python_prepare_all() {
-	# Remove pre-generated cython files
-	rm msgpack/_cmsgpack.c || die
-
-	# native-extensions are always disabled on PyPy
-	# https://github.com/msgpack/msgpack-python/blob/main/setup.py#L76
-	if ! use native-extensions; then
-		export MSGPACK_PUREPYTHON=1
-	fi
-
-	distutils-r1_python_prepare_all
-}
-
-python_configure() {
-	if [[ ${EPYTHON} == python* && ! -f msgpack/_cmsgpack.c ]] &&
-		use native-extensions
-	then
-		cython -v msgpack/_cmsgpack.pyx || die
-	fi
-}
-
-python_test() {
-	rm -rf msgpack || die
-	epytest
-}
-src_prepare() {
-    default
-    filter-flags -Wl,-z,defs
-}

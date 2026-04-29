@@ -1,58 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-PYTHON_COMPAT=( python3_{11..13} )
-PYPI_VERIFY_REPO=https://github.com/joblib/joblib
-DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Tools to provide lightweight pipelining in Python"
-HOMEPAGE="
-	https://joblib.readthedocs.io/en/latest/
-	https://github.com/joblib/joblib/
-	https://pypi.org/project/joblib/
-"
 
-LICENSE="BSD"
+PYPI_PN="joblib"
+DESCRIPTION="Lightweight pipelining with Python functions"
+HOMEPAGE="https://joblib.readthedocs.io"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-RDEPEND="
-	dev-pypi/cloudpickle[${PYTHON_USEDEP}]
-	dev-py/loky[${PYTHON_USEDEP}]
-"
-# joblib is imported by setup.py so we need ${RDEPEND}
-BDEPEND="
-	${RDEPEND}
-	test? (
-		dev-py/threadpoolctl[${PYTHON_USEDEP}]
-	)
-"
-
-EPYTEST_PLUGINS=( pytest-asyncio )
-distutils_enable_tests pytest
-
-EPYTEST_DESELECT=(
-	# https://github.com/joblib/joblib/issues/1362
-	joblib/test/test_memory.py::test_parallel_call_cached_function_defined_in_jupyter
-
-	# fails over warnings from numpy
-	joblib/test/test_numpy_pickle.py::test_joblib_pickle_across_python_versions
-	joblib/test/test_numpy_pickle.py::test_joblib_pickle_across_python_versions_with_mmap
-)
-
-python_prepare_all() {
-	# unbundle
-	rm -r joblib/externals || die
-	sed -e "/joblib.externals/d" -i pyproject.toml || die
-	find -name '*.py' -exec \
-		sed -e 's:\(joblib\)\?\.externals\.::' \
-			-e 's:from \.externals ::' \
-			-i {} + || die
-
-	distutils-r1_python_prepare_all
-}

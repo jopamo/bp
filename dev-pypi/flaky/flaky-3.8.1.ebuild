@@ -1,38 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..14} pypy3 pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Plugin for pytest that automatically reruns flaky tests"
-HOMEPAGE="
-	https://github.com/box/flaky/
-	https://pypi.org/project/flaky/
-"
 
-LICENSE="Apache-2.0"
+PYPI_PN="flaky"
+DESCRIPTION="Plugin for pytest that automatically reruns flaky tests."
+HOMEPAGE="https://github.com/box/flaky"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="test"
-RESTRICT="!test? ( test )"
-
-RDEPEND="
-	dev-pypi/pytest[${PYTHON_USEDEP}]
-"
-BDEPEND="
-	test? (
-		dev-pypi/genty[${PYTHON_USEDEP}]
-		dev-pypi/pytest[${PYTHON_USEDEP}]
-	)
-"
-
-python_test() {
-	epytest -k 'example and not options' --doctest-modules test/test_pytest/ || die
-	epytest -p no:flaky test/test_pytest/test_flaky_pytest_plugin.py || die
-	epytest --force-flaky --max-runs 2 test/test_pytest/test_pytest_options_example.py || die
-}

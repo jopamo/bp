@@ -1,40 +1,23 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
+
+PYPI_PN="xmlschema"
+DESCRIPTION="An XML Schema validator and decoder"
+HOMEPAGE="https://github.com/sissaschool/xmlschema"
+LICENSE="metapackage"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/elementpath
 "
 # lockstep-pypi-deps: end
-DESCRIPTION="An XML Schema validator and decoder"
-HOMEPAGE="
-	https://github.com/sissaschool/xmlschema/
-	https://pypi.org/project/xmlschema/
-"
-
-LICENSE="MIT"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-IUSE="test"
-RESTRICT="!test? ( test )"
-
-RDEPEND="
-	<dev-pypi/elementpath-6[${PYTHON_USEDEP}]
-	>=dev-pypi/elementpath-5.1.0[${PYTHON_USEDEP}]
-"
-BDEPEND="
-	>=dev-pypi/setuptools-77[${PYTHON_USEDEP}]
-	test? (
-		${RDEPEND}
-		dev-py/jinja[${PYTHON_USEDEP}]
-		dev-py/lxml[${PYTHON_USEDEP}]
-	)
-"
-
-python_test() {
-	"${EPYTHON}" tests/run_all_tests.py -v || die "Tests fail with ${EPYTHON}"
-}

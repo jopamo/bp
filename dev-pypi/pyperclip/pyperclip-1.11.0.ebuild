@@ -1,37 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} )
 
-inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="A cross-platform clipboard module for Python"
-HOMEPAGE="
-	https://github.com/asweigart/pyperclip/
-	https://pypi.org/project/pyperclip/
-"
+DISTUTILS_USE_PEP517="setuptools"
 
+inherit distutils-r1 pypi
+
+PYPI_PN="pyperclip"
+DESCRIPTION="A cross-platform clipboard module for Python. (Only handles plain text for now.)"
+HOMEPAGE="https://github.com/asweigart/pyperclip"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-RDEPEND="
-	|| (
-		x11-misc/xsel
-		x11-misc/xclip
-		kde-plasma/plasma-workspace
-		dev-py/pyqt5[${PYTHON_USEDEP}]
-		dev-py/qtpy[${PYTHON_USEDEP}]
-	)
-"
-
-src_prepare() {
-	# stupid windows
-	find -type f -exec sed -i -e 's:\r$::' {} + || die
-
-	distutils-r1_src_prepare
-}

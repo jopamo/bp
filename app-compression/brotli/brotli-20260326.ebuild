@@ -3,7 +3,11 @@
 DISTUTILS_OPTIONAL="1"
 
 inherit distutils-r1 cmake flag-o-matic qa-policy
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Generic-purpose lossless compression algorithm"
 HOMEPAGE="https://github.com/google/brotli"
 SNAPSHOT=5583858f76d244974672b902378f041ef3fdcac9

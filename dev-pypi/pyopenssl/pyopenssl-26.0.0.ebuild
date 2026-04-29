@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="pyopenssl"
 DESCRIPTION="Python wrapper module around the OpenSSL library"
 HOMEPAGE="https://pyopenssl.org/"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/8e/11/a62e1d33b373da2b2c2cd9eb508147871c80f12b1cacde3c5d314922afdd/pyopenssl-26.0.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pyopenssl-26.0.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

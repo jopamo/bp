@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="flit"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="flit"
 DESCRIPTION="A simple packaging tool for simple packages."
 HOMEPAGE="https://pypi.org/project/flit/"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/50/9c/0608c91a5b6c013c63548515ae31cff6399cd9ce891bd9daee8c103da09b/flit-3.12.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/flit-3.12.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

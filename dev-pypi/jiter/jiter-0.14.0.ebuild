@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="maturin"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="jiter"
 DESCRIPTION="Fast iterable JSON parser."
 HOMEPAGE="https://github.com/pydantic/jiter/"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/6e/c1/0cddc6eb17d4c53a99840953f95dd3accdc5cfc7a337b0e9b26476276be9/jiter-0.14.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/jiter-0.14.0"

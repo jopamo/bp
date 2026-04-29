@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="flit"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="itsdangerous"
 DESCRIPTION="Safely pass data to untrusted environments and back."
 HOMEPAGE="https://pypi.org/project/itsdangerous/"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/9c/cb/8ac0172223afbccb63986cc25049b154ecfb5e85932587206f42317be31d/itsdangerous-2.2.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/itsdangerous-2.2.0"

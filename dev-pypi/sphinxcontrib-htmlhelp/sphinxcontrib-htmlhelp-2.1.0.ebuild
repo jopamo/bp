@@ -7,11 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="flit"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="sphinxcontrib-htmlhelp"
 DESCRIPTION="sphinxcontrib-htmlhelp is a sphinx extension which renders HTML help files"
 HOMEPAGE="https://www.sphinx-doc.org/"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/43/93/983afd9aa001e5201eab16b5a444ed5b9b0a7a010541e0ddfbbfd0b2470c/sphinxcontrib_htmlhelp-2.1.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/sphinxcontrib_htmlhelp-2.1.0"

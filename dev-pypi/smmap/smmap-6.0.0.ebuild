@@ -1,22 +1,19 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} )
 
-inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="A pure Python implementation of a sliding window memory map manager"
-HOMEPAGE="
-	https://pypi.org/project/smmap/
-	https://github.com/gitpython-developers/smmap/
-"
+DISTUTILS_USE_PEP517="setuptools"
 
+inherit distutils-r1
+
+DESCRIPTION="A pure Python implementation of a sliding window memory map manager"
+HOMEPAGE="https://github.com/gitpython-developers/smmap"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-distutils_enable_tests unittest
+SRC_URI="https://files.pythonhosted.org/packages/c3/02/a17f48f783b2668bae4837385d073b98f8b3afdfd97a917e61b921e59d16/smmap-6.0.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/smmap-6.0.0"

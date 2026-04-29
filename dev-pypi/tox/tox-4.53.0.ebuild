@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="hatchling"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="tox"
 DESCRIPTION="tox is a generic virtualenv management and test command line tool"
 HOMEPAGE="http://tox.readthedocs.org"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/04/01/d87a00063fa670ce4c48a9706b615a95ddf2c9ef5558d43af6071f166fd4/tox-4.53.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/tox-4.53.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

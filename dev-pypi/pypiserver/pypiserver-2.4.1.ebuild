@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="pypiserver"
 DESCRIPTION="A minimal PyPI server for use with pip/easy_install."
 HOMEPAGE="https://github.com/pypiserver/pypiserver"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/92/3a/404aa89739305528a914497948c2444258889d28e68226c03d4b241940df/pypiserver-2.4.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pypiserver-2.4.1"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

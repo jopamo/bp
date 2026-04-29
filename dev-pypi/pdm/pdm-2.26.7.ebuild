@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="pdm-backend"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="pdm"
 DESCRIPTION="A modern Python package and dependency manager supporting the latest PEP standards"
 HOMEPAGE="https://pdm-project.org"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/3e/93/351311786812737232e8a218cc9f095e48f65f7cb7b075b447e833efe5f3/pdm-2.26.7.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pdm-2.26.7"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

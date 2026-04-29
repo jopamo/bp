@@ -7,14 +7,16 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="flit"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-PYPI_PN="quart"
 DESCRIPTION="A Python ASGI web framework with the same API as Flask"
 HOMEPAGE="https://pypi.org/project/quart/"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/1d/9d/12e1143a5bd2ccc05c293a6f5ae1df8fd94a8fc1440ecc6c344b2b30ce13/quart-0.20.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/quart-0.20.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

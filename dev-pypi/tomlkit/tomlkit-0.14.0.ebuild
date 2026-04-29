@@ -1,49 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="poetry"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Style preserving TOML library"
-HOMEPAGE="
-	https://github.com/python-poetry/tomlkit/
-	https://pypi.org/project/tomlkit/
-"
 
+PYPI_PN="tomlkit"
+DESCRIPTION="Style preserving TOML library"
+HOMEPAGE="https://github.com/sdispater/tomlkit"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-BDEPEND="
-	test? (
-		dev-pypi/pyyaml[${PYTHON_USEDEP}]
-	)
-"
-
-EPYTEST_PLUGINS=()
-distutils_enable_tests pytest
-
-src_configure() {
-	grep -q 'build-backend = "poetry' pyproject.toml ||
-		die "Upstream changed build-backend, recheck"
-	# write a custom pyproject.toml to ease setuptools bootstrap
-	cat > pyproject.toml <<-EOF || die
-		[build-system]
-		requires = ["flit_core >=3.2,<4"]
-		build-backend = "flit_core.buildapi"
-
-		[project]
-		name = "tomlkit"
-		version = "${PV}"
-		description = "Style preserving TOML library"
-	EOF
-
-	# some brilliant idea about forcing 1970 dates in sdist
-	# which are older than what zip can handle...
-	find -exec touch {} + || die
-}

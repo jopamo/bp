@@ -1,11 +1,21 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=pdm-backend
-PYPI_VERIFY_REPO=https://github.com/fastapi/typer
 PYTHON_COMPAT=( python3_{11..14} )
 
+DISTUTILS_USE_PEP517="pdm-backend"
+
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
+
+PYPI_PN="typer"
+DESCRIPTION="Typer, build great CLIs. Easy to code. Based on Python type hints."
+HOMEPAGE="https://github.com/fastapi/typer"
+LICENSE="metapackage"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/annotated-doc
@@ -14,59 +24,3 @@ RDEPEND+="
 	dev-pypi/shellingham
 "
 # lockstep-pypi-deps: end
-DESCRIPTION="Build great CLIs. Easy to code. Based on Python type hints"
-HOMEPAGE="
-	https://typer.tiangolo.com/
-	https://github.com/fastapi/typer/
-	https://pypi.org/project/typer/
-"
-
-LICENSE="MIT"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-IUSE="cli"
-
-RDEPEND="
-	>=dev-pypi/click-8.0.0[${PYTHON_USEDEP}]
-	>=dev-pypi/rich-10.11.0[${PYTHON_USEDEP}]
-	>=dev-pypi/shellingham-1.3.0[${PYTHON_USEDEP}]
-	>=dev-pypi/typing-extensions-3.7.4.3[${PYTHON_USEDEP}]
-	cli? ( !dev-lang/erlang )
-"
-BDEPEND="
-	test? (
-		dev-pypi/coverage[${PYTHON_USEDEP}]
-	)
-"
-
-EPYTEST_PLUGINS=()
-EPYTEST_XDIST=1
-distutils_enable_tests pytest
-
-src_prepare() {
-	distutils-r1_src_prepare
-
-	if ! use cli; then
-		sed -i -e '/typer\.cli/d' pyproject.toml || die
-	fi
-}
-
-python_test() {
-	# See scripts/tests.sh
-	local -x TERMINAL_WIDTH=3000
-	local -x _TYPER_FORCE_DISABLE_TERMINAL=1
-	local -x _TYPER_RUN_INSTALL_COMPLETION_TESTS=1
-
-	epytest
-}
-
-python_install() {
-	if use cli && [[ ! ${COMPLETIONS_INSTALLED} ]]; then
-		local -x _TYPER_COMPLETE_TEST_DISABLE_SHELL_DETECTION=1
-		newzshcomp - typer < <(typer --show-completion zsh || die)
-		newfishcomp - typer < <(typer --show-completion fish || die)
-		COMPLETIONS_INSTALLED=1
-	fi
-
-	distutils-r1_python_install
-}

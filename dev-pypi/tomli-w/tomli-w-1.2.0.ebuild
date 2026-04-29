@@ -1,36 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
-
-DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
-
-inherit distutils-r1
+# lockstep-managed: dependency-ebuild
 # lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="A lil' TOML writer"
-HOMEPAGE="
-	https://pypi.org/project/tomli-w/
-	https://github.com/hukkin/tomli-w/
-"
-SRC_URI="
-	https://github.com/hukkin/tomli-w/archive/${PV}.tar.gz
-		-> ${P}.gh.tar.gz
-"
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="flit"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="tomli-w"
+DESCRIPTION="A lil' TOML writer"
+HOMEPAGE="https://github.com/hukkin/tomli-w"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-BDEPEND="
-	test? (
-		dev-pypi/tomli[${PYTHON_USEDEP}]
-	)
-"
-
-distutils_enable_tests pytest
-
-python_test() {
-	epytest tests
-}

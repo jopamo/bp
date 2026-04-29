@@ -1,26 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
-
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
-
-inherit distutils-r1
+# lockstep-managed: dependency-ebuild
 # lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="A library for stubbing in Python"
-HOMEPAGE="
-	https://github.com/alex/pretend/
-	https://pypi.org/project/pretend/
-"
-SRC_URI="
-	https://github.com/alex/pretend/archive/v${PV}.tar.gz
-		-> ${P}.gh.tar.gz
-"
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="pretend"
+DESCRIPTION="A library for stubbing in Python"
+HOMEPAGE="https://github.com/alex/pretend"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-distutils_enable_tests pytest

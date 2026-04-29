@@ -1,54 +1,23 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="flit"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
+
+PYPI_PN="blessed"
+DESCRIPTION="Easy, practical library for making terminal apps, by providing an elegant, well-documented interface to Colors, Keyboard input, and screen Positioning capabilities."
+HOMEPAGE="https://github.com/jquast/blessed"
+LICENSE="metapackage"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/wcwidth
 "
 # lockstep-pypi-deps: end
-DESCRIPTION="Library for making terminal apps using colors, keyboard input and positioning"
-HOMEPAGE="
-	https://github.com/jquast/blessed/
-	https://pypi.org/project/blessed/
-"
-
-LICENSE="MIT"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
-RDEPEND="
-	>=dev-pypi/wcwidth-0.5[${PYTHON_USEDEP}]
-"
-
-distutils_enable_sphinx docs dev-py/sphinx-rtd-theme
-
-EPYTEST_PLUGINS=()
-# tests are flaky with xdist
-distutils_enable_tests pytest
-
-python_prepare_all() {
-	# Skip those extensions as they don't have a Gentoo package
-	# Remove calls to scripts that generate rst files because they
-	# are not present in the tarball
-	sed -e '/sphinxcontrib.manpage/d' -e '/sphinx_paramlinks/d' \
-		-e '/^for script in/,/runpy.run_path/d' \
-		-i docs/conf.py || die
-	distutils-r1_python_prepare_all
-}
-
-python_test() {
-	local EPYTEST_DESELECT=(
-		# fragile to timing
-		tests/test_sixel.py::test_sixel_height_and_width_fallback_to_xtwinops
-	)
-
-	# COLORTERM must not be truecolor
-	# See https://github.com/jquast/blessed/issues/162
-	local -x COLORTERM=
-	# Ignore coverage options
-	epytest --override-ini="addopts="
-}

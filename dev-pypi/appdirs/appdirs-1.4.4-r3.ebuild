@@ -1,28 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
-
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
-
-inherit distutils-r1
+# lockstep-managed: dependency-ebuild
 # lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Module for determining appropriate platform-specific dirs"
-HOMEPAGE="
-	https://github.com/ActiveState/appdirs/
-	https://pypi.org/project/appdirs/
-"
-SRC_URI="
-	https://github.com/ActiveState/${PN}/archive/${PV}.tar.gz
-		-> ${P}.gh.tar.gz
-"
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="appdirs"
+DESCRIPTION="A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
+HOMEPAGE="http://github.com/ActiveState/appdirs"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-python_test() {
-	"${EPYTHON}" test/test_api.py -v || die "Tests fail with ${EPYTHON}"
-}

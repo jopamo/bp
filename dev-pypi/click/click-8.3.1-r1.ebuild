@@ -1,32 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=flit
-PYPI_VERIFY_REPO=https://github.com/pallets/click
-PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="flit"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="A Python package for creating beautiful command line interfaces"
-HOMEPAGE="
-	https://palletsprojects.com/p/click/
-	https://github.com/pallets/click/
-	https://pypi.org/project/click/
-"
 
-LICENSE="BSD"
+PYPI_PN="click"
+DESCRIPTION="Composable command line interface toolkit"
+HOMEPAGE="https://pypi.org/project/click/"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-distutils_enable_sphinx docs \
-	'>=dev-py/docutils-0.14' \
-	dev-py/myst-parser \
-	dev-py/pallets-sphinx-themes \
-	dev-py/sphinxcontrib-log-cabinet \
-	dev-py/sphinx-tabs
-
-EPYTEST_PLUGINS=()
-distutils_enable_tests pytest

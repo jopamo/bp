@@ -1,64 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=flit
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="flit"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Low-level, pure Python DBus protocol wrapper"
-HOMEPAGE="
-	https://gitlab.com/takluyver/jeepney/
-	https://pypi.org/project/jeepney/
-"
 
-LICENSE="MIT"
+PYPI_PN="jeepney"
+DESCRIPTION="Low-level, pure Python DBus protocol wrapper."
+HOMEPAGE="https://pypi.org/project/jeepney/"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="examples"
-
-BDEPEND="
-	test? (
-		$(python_gen_cond_dep '
-			dev-py/async-timeout[${PYTHON_USEDEP}]
-		' 3.10)
-		>=dev-py/pytest-asyncio-0.7.1[${PYTHON_USEDEP}]
-		dev-pypi/testpath[${PYTHON_USEDEP}]
-		sys-apps/dbus
-	)
-"
-
-distutils_enable_tests pytest
-
-distutils_enable_sphinx docs \
-	dev-py/sphinx-rtd-theme
-
-src_test() {
-	local dbus_params=(
-		$(dbus-daemon --session --print-address --fork --print-pid)
-	)
-	local -x DBUS_SESSION_BUS_ADDRESS=${dbus_params[0]}
-
-	distutils-r1_src_test
-
-	kill "${dbus_params[1]}" || die
-}
-
-python_test() {
-	local EPYTEST_IGNORE=()
-	if ! has_version "dev-py/pytest-trio[${PYTHON_USEDEP}]"; then
-		EPYTEST_IGNORE+=( jeepney/io/tests/test_trio.py )
-	fi
-	epytest
-}
-
-python_install_all() {
-	if use examples; then
-		docompress -x "/usr/share/doc/${PF}/examples"
-		dodoc -r examples
-	fi
-	distutils-r1_python_install_all
-}

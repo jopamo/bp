@@ -1,39 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
+PYTHON_COMPAT=( python3_{11..14} )
 
-DISTUTILS_USE_PEP517=flit
-PYPI_VERIFY_REPO=https://github.com/pypa/packaging
-PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
+DISTUTILS_USE_PEP517="flit"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
+
+PYPI_PN="packaging"
 DESCRIPTION="Core utilities for Python packages"
-HOMEPAGE="
-	https://github.com/pypa/packaging/
-	https://pypi.org/project/packaging/
-"
-
-LICENSE="|| ( Apache-2.0 BSD-2 )"
+HOMEPAGE="https://pypi.org/project/packaging/"
+LICENSE="metapackage"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm arm64 ~hppa ~loong ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~arm64-macos ~x64-macos ~x64-solaris"
-
-RDEPEND="
-	!<dev-pypi/setuptools-67
-"
-DEPEND="
-	test? (
-		dev-pypi/pretend[${PYTHON_USEDEP}]
-		dev-pypi/tomli-w[${PYTHON_USEDEP}]
-	)
-"
-
-EPYTEST_PLUGINS=()
-distutils_enable_tests pytest
-
-python_test() {
-	epytest --capture=no
-}
+KEYWORDS="amd64 arm64"

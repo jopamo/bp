@@ -1,48 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYPI_NO_NORMALIZE=1
-PYPI_PN="Js2Py"
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="JavaScript to Python Translator & JavaScript interpreter in Python"
-HOMEPAGE="http://piter.io/projects/js2py
-	https://github.com/PiotrDabkowski/Js2Py
-	https://pypi.org/project/Js2Py/"
 
+PYPI_PN="js2py"
+DESCRIPTION="JavaScript to Python Translator & JavaScript interpreter written in 100% pure Python."
+HOMEPAGE="https://github.com/PiotrDabkowski/Js2Py"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-RESTRICT="test"
-
-RDEPEND="
-	>=dev-py/pyjsparser-2.5.1[${PYTHON_USEDEP}]
-	>=dev-pypi/tzlocal-1.2.0[${PYTHON_USEDEP}]
-	>=dev-pypi/six-1.10.0[${PYTHON_USEDEP}]
-"
-
-PATCHES=(
-	"${FILESDIR}/${PN}-0.74-CVE-2024-28397.patch"
-	"${FILESDIR}/${PN}-0.74-py312-load_attr.patch"
-)
-
-python_test() {
-	pushd ./tests >/dev/null || die
-
-	# run.py requires "node_failed.txt" file
-	touch ./node_failed.txt || die
-
-	# https://bugs.gentoo.org/831356
-	# make run.py return a non-zero exit code if any test failed
-	echo 'sys.exit(len(FAILING))' >> ./run.py || die
-
-	"${EPYTHON}" ./run.py || die "tests failed with ${EPYTHON}"
-
-	popd >/dev/null || die
-}

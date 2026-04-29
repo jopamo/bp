@@ -1,35 +1,23 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYPI_VERIFY_REPO=https://github.com/aio-libs/aiodns
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
+
+PYPI_PN="aiodns"
+DESCRIPTION="Simple DNS resolver for asyncio"
+HOMEPAGE="https://github.com/saghul/aiodns"
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/pycares
 "
 # lockstep-pypi-deps: end
-DESCRIPTION="Simple DNS resolver for asyncio"
-HOMEPAGE="
-	https://pypi.org/project/aiodns/
-	https://github.com/aio-libs/aiodns/
-"
-
-LICENSE="MIT"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-# Tests fail with network-sandbox, since they try to resolve google.com
-PROPERTIES="test? ( test_network )"
-RESTRICT="test"
-
-RDEPEND="=dev-pypi/pycares-5*[${PYTHON_USEDEP}]"
-DEPEND="${RDEPEND}"
-
-EPYTEST_PLUGINS=( pytest-asyncio )
-distutils_enable_tests pytest
-
-python_test() {
-	epytest --asyncio-mode=auto
-}

@@ -1,48 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=flit
-PYPI_VERIFY_REPO=https://github.com/pypa/trove-classifiers
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} python3_{13,14}t )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Canonical source for classifiers on PyPI (pypi.org)"
-HOMEPAGE="
-	https://github.com/pypa/trove-classifiers/
-	https://pypi.org/project/trove-classifiers/
-"
 
+PYPI_PN="trove-classifiers"
+DESCRIPTION="Canonical source for classifiers on PyPI (pypi.org)."
+HOMEPAGE="https://github.com/pypa/trove-classifiers"
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-EPYTEST_PLUGINS=()
-distutils_enable_tests pytest
-
-src_configure() {
-	grep -q 'build-backend = "setuptools' pyproject.toml ||
-		die "Upstream changed build-backend, recheck"
-	# write a custom pyproject.toml to ease hatchling bootstrap
-	cat > pyproject.toml <<-EOF || die
-		[build-system]
-		requires = ["flit_core >=3.2,<4"]
-		build-backend = "flit_core.buildapi"
-
-		[project]
-		name = "trove-classifiers"
-		version = "${PV}"
-		description = "Canonical source for classifiers on PyPI (pypi.org)."
-
-		[project.scripts]
-		trove-classifiers = "trove_classifiers.__main__:cli"
-	EOF
-}
-
-python_test() {
-	epytest
-	"${EPYTHON}" -m tests.lib || die
-}

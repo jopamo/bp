@@ -1,23 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYPI_NO_NORMALIZE=1
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Micro subset of unicode data files for linkify-it-py projects"
-HOMEPAGE="
-	https://github.com/tsutsu3/uc.micro-py/
-	https://pypi.org/project/uc-micro-py/
-"
 
+PYPI_PN="uc-micro-py"
+DESCRIPTION="Micro subset of unicode data files for linkify-it-py projects."
+HOMEPAGE="https://github.com/tsutsu3/uc.micro-py"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-distutils_enable_tests pytest

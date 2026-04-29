@@ -1,49 +1,23 @@
-# Distributed under the terms of the GNU General Public License v2
-
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
-
-inherit distutils-r1
+# lockstep-managed: dependency-ebuild
 # lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
+
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="openpyxl"
+DESCRIPTION="A Python library to read/write Excel 2010 xlsx/xlsm files"
+HOMEPAGE="https://openpyxl.readthedocs.io"
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/et-xmlfile
 "
 # lockstep-pypi-deps: end
-
-DESCRIPTION="Pure python reader and writer of Excel OpenXML files"
-HOMEPAGE="
-	https://openpyxl.readthedocs.io/en/stable/
-	https://foss.heptapod.net/openpyxl/openpyxl/
-"
-SRC_URI="
-	https://foss.heptapod.net/openpyxl/openpyxl/-/archive/${PV}/${P}.tar.bz2
-"
-
-LICENSE="MIT"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
-RDEPEND="
-	dev-py/et-xmlfile[${PYTHON_USEDEP}]
-"
-BDEPEND="
-	test? (
-		>=dev-py/lxml-5.0.3[${PYTHON_USEDEP}]
-		xgui-app/pillow[${PYTHON_USEDEP},tiff,jpeg]
-	)
-"
-
-distutils_enable_sphinx doc \
-	dev-py/sphinx-rtd-theme
-distutils_enable_tests pytest
-
-python_test() {
-	local EPYTEST_DESELECT=(
-		# GC assumptions (pypy)
-		openpyxl/tests/test_iter.py::test_file_descriptor_leak
-	)
-
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest
-}

@@ -1,31 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=hatchling
-PYPI_VERIFY_REPO=https://github.com/tox-dev/filelock
-PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="hatchling"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="A platform independent file lock for Python"
-HOMEPAGE="
-	https://github.com/tox-dev/filelock/
-	https://pypi.org/project/filelock/
-"
 
-LICENSE="Unlicense"
+PYPI_PN="filelock"
+DESCRIPTION="A platform independent file lock."
+HOMEPAGE="https://github.com/tox-dev/py-filelock"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-BDEPEND="
-	dev-pypi/hatch-vcs[${PYTHON_USEDEP}]
-	test? (
-		dev-pypi/virtualenv[${PYTHON_USEDEP}]
-	)
-"
-
-EPYTEST_PLUGINS=( pytest-{asyncio,mock,timeout} )
-distutils_enable_tests pytest

@@ -1,42 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYPI_PN=${PN^}
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="A Python package that generates fake data for you"
-HOMEPAGE="
-	https://github.com/joke2k/faker/
-	https://pypi.org/project/Faker/
-"
 
+PYPI_PN="faker"
+DESCRIPTION="Faker is a Python package that generates fake data for you."
+HOMEPAGE="https://github.com/joke2k/faker"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-RDEPEND="
-	!dev-ruby/faker
-"
-BDEPEND="
-	test? (
-		dev-pypi/freezegun[${PYTHON_USEDEP}]
-		xgui-app/pillow[${PYTHON_USEDEP},tiff]
-		dev-py/validators[${PYTHON_USEDEP}]
-	)
-"
-
-# note: tests are flaky with xdist
-EPYTEST_PLUGIN_LOAD_VIA_ENV=1
-EPYTEST_PLUGINS=( "${PN}" )
-distutils_enable_tests pytest
-
-python_test() {
-	epytest
-	epytest --exclusive-faker-session tests/pytest/session_overrides
-}

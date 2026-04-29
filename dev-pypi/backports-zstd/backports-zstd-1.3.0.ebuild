@@ -1,45 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_EXT=1
-DISTUTILS_USE_PEP517=setuptools
-PYPI_PN=${PN/-/.}
-PYPI_VERIFY_REPO=https://github.com/Rogdham/backports.zstd
-# this is a backport from py3.14, so don't add it
-PYTHON_COMPAT=( pypy3_11 python3_{11..13} )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Backport of PEP-784: adding Zstandard to the standard library"
-HOMEPAGE="
-	https://github.com/Rogdham/backports.zstd/
-	https://pypi.org/project/backports.zstd/
-"
 
-LICENSE="PSF-2"
+PYPI_PN="backports-zstd"
+DESCRIPTION="Backport of compression.zstd"
+HOMEPAGE="https://github.com/rogdham/backports.zstd"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-distutils_enable_tests unittest
-
-src_prepare() {
-	distutils-r1_src_prepare
-
-	# remove -flto and other forced cflags
-	sed -i -e 's:kwargs\["extra.*:pass:' setup.py || die
-
-	DISTUTILS_ARGS=(
-		--system-zstd
-	)
-}
-
-python_test() {
-	eunittest tests
-}
-src_prepare() {
-    default
-    filter-flags -Wl,-z,defs
-}

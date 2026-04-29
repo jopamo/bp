@@ -1,35 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Parsing and validation of URIs (RFC 3986) and IRIs (RFC 3987)"
-HOMEPAGE="
-	https://github.com/dgerber/rfc3987/
-	https://pypi.org/project/rfc3987/
-"
 
-LICENSE="GPL-3"
+PYPI_PN="rfc3987"
+DESCRIPTION="Parsing and validation of URIs (RFC 3986) and IRIs (RFC 3987)"
+HOMEPAGE="http://pypi.python.org/pypi/rfc3987"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-# dev-py/regex doesn't support pypy. The package falls back to re and has most
-# functionality without it.
-RDEPEND="
-	$(python_gen_cond_dep '
-		dev-py/regex[${PYTHON_USEDEP}]
-	' 'python*')
-"
-BDEPEND="
-	${RDEPEND}
-"
-
-python_test() {
-	"${EPYTHON}" -m doctest -v "${S}/${PN}.py" || die
-}

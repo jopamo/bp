@@ -1,57 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=hatchling
-PYPI_VERIFY_REPO=https://github.com/tomerfiliba/plumbum
 PYTHON_COMPAT=( python3_{11..14} )
 
-inherit distutils-r1 optfeature pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="A library for shell script-like programs in python"
-HOMEPAGE="
-	https://plumbum.readthedocs.io/en/latest/
-	https://github.com/tomerfiliba/plumbum/
-	https://pypi.org/project/plumbum/
-"
+DISTUTILS_USE_PEP517="hatchling"
 
-LICENSE="MIT"
+inherit distutils-r1 pypi
+
+PYPI_PN="plumbum"
+DESCRIPTION="Plumbum: shell combinators library"
+HOMEPAGE="https://github.com/tomerfiliba/plumbum"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-BDEPEND="
-	dev-pypi/hatch-vcs[${PYTHON_USEDEP}]
-	test? (
-		dev-pypi/psutil[${PYTHON_USEDEP}]
-	)
-"
-
-EPYTEST_PLUGINS=( pytest-{mock,timeout} )
-distutils_enable_tests pytest
-
-python_test() {
-	local EPYTEST_DESELECT=(
-		# Need sshd running
-		tests/test_remote.py
-		tests/test_utils.py
-		# Windows specific
-		tests/test_putty.py
-		# Needs sudo without password
-		tests/test_sudo.py
-		# Wrong assumptions about env handling
-		tests/test_env.py::TestEnv::test_change_env
-		tests/test_env.py::TestEnv::test_dictlike
-		tests/test_local.py::TestLocalPath::test_iterdir
-	)
-
-	epytest -o addopts=
-}
-
-pkg_postinst() {
-	optfeature "remote commands via ssh" dev-pypi/paramiko
-	optfeature "progress bars in jupyter" dev-pypi/ipywidgets
-	optfeature "colored output in jupyter" dev-py/ipython
-	optfeature "images on the command line" xgui-app/pillow
-}

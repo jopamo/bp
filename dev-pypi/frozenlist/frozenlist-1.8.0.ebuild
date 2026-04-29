@@ -1,58 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
-
-DISTUTILS_EXT=1
-DISTUTILS_USE_PEP517=standalone
-PYTHON_COMPAT=( python3_{11..14} python3_13t pypy3_11 )
-
-inherit distutils-r1
+# lockstep-managed: dependency-ebuild
 # lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="A list-like structure which implements collections.abc.MutableSequence"
-HOMEPAGE="
-	https://pypi.org/project/frozenlist/
-	https://github.com/aio-libs/frozenlist/
-"
-SRC_URI="
-	https://github.com/aio-libs/frozenlist/archive/v${PV}.tar.gz
-		-> ${P}.gh.tar.gz
-"
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="frozenlist"
+DESCRIPTION="A list-like structure which implements collections.abc.MutableSequence"
+HOMEPAGE="https://github.com/aio-libs/frozenlist"
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="+native-extensions"
-
-BDEPEND="
-	dev-pypi/expandvars[${PYTHON_USEDEP}]
-	dev-pypi/setuptools[${PYTHON_USEDEP}]
-	dev-pypi/wheel[${PYTHON_USEDEP}]
-	native-extensions? (
-		$(python_gen_cond_dep '
-			dev-py/cython[${PYTHON_USEDEP}]
-		' 'python*')
-	)
-"
-
-EPYTEST_PLUGINS=()
-distutils_enable_tests pytest
-
-python_compile() {
-	# pypy is not using the C extension
-	if ! use native-extensions || [[ ${EPYTHON} != python* ]]; then
-		local -x FROZENLIST_NO_EXTENSIONS=1
-	fi
-
-	distutils-r1_python_compile
-}
-
-python_test() {
-	rm -rf frozenlist || die
-	epytest -o addopts=
-}
-src_prepare() {
-    default
-    filter-flags -Wl,-z,defs
-}

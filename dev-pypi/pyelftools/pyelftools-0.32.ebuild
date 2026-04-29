@@ -1,31 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} )
 
-inherit distutils-r1
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="pure-Python library for analyzing ELF files and DWARF debugging information"
-HOMEPAGE="
-	https://pypi.org/project/pyelftools/
-	https://github.com/eliben/pyelftools/
-"
-# PyPI tarball lacks some test files
-SRC_URI="
-	https://github.com/eliben/pyelftools/archive/v${PV}.tar.gz
-		-> ${P}.gh.tar.gz
-"
+DISTUTILS_USE_PEP517="setuptools"
 
-LICENSE="public-domain"
+inherit distutils-r1 pypi
+
+PYPI_PN="pyelftools"
+DESCRIPTION="Library for analyzing ELF files and DWARF debugging information"
+HOMEPAGE="https://github.com/eliben/pyelftools"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-python_test() {
-	# readelf_tests often fails due to host `readelf` changing output format
-	"${EPYTHON}" test/run_all_unittests.py || die
-	"${EPYTHON}" test/run_examples_test.py || die
-}

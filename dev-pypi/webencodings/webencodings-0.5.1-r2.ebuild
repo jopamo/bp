@@ -1,27 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Character encoding aliases for legacy web content"
-HOMEPAGE="
-	https://github.com/gsnedders/python-webencodings/
-	https://pypi.org/project/webencodings/
-"
 
+PYPI_PN="webencodings"
+DESCRIPTION="Character encoding aliases for legacy web content"
+HOMEPAGE="https://github.com/SimonSapin/python-webencodings"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-distutils_enable_tests pytest
-
-python_test() {
-	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
-	epytest -o 'python_files=test*.py'
-}

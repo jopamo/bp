@@ -1,47 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="Python Lex-Yacc library"
-HOMEPAGE="
-	http://www.dabeaz.com/ply/
-	https://github.com/dabeaz/ply/
-	https://pypi.org/project/ply/
-"
-SRC_URI+=" https://dev.gentoo.org/~sam/distfiles/${CATEGORY}/${PN}/${P}-py3.12-assert.patch.xz"
 
+PYPI_PN="ply"
+DESCRIPTION="Python Lex & Yacc"
+HOMEPAGE="http://www.dabeaz.com/ply/"
 LICENSE="BSD"
-SLOT="0/${PV}"
+SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="examples"
-
-DOCS=( ANNOUNCE CHANGES TODO )
-
-PATCHES=(
-	"${FILESDIR}/3.6-picklefile-IOError.patch"
-	"${WORKDIR}/${P}-py3.12-assert.patch"
-)
-
-python_test() {
-	# Checks for pyc/pyo files
-	local -x PYTHONDONTWRITEBYTECODE=
-
-	cd test || die
-	local t
-	for t in testlex.py testyacc.py; do
-		"${EPYTHON}" "${t}" -v || die "${t} fails with ${EPYTHON}"
-	done
-}
-
-python_install_all() {
-	local HTML_DOCS=( doc/. )
-	use examples && dodoc -r example
-	distutils-r1_python_install_all
-}

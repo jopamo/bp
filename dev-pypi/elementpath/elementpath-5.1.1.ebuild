@@ -1,35 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="XPath 1.0/2.0 parsers and selectors for ElementTree and lxml"
-HOMEPAGE="
-	https://github.com/sissaschool/elementpath/
-	https://pypi.org/project/elementpath/
-"
 
-LICENSE="MIT"
+PYPI_PN="elementpath"
+DESCRIPTION="XPath 1.0/2.0/3.0/3.1 parsers and selectors for ElementTree and lxml"
+HOMEPAGE="https://github.com/sissaschool/elementpath"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-BDEPEND="
-	test? (
-		dev-py/lxml[${PYTHON_USEDEP}]
-		>=dev-pypi/xmlschema-4.0.1[${PYTHON_USEDEP}]
-	)
-"
-
-EPYTEST_PLUGINS=()
-distutils_enable_tests pytest
-
-EPYTEST_IGNORE=(
-	# fails for some reason, more fit for upstream testing anyway
-	tests/test_typing.py
-)

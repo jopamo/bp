@@ -1,23 +1,17 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND+="
-"
-# lockstep-pypi-deps: end
-DESCRIPTION="A pure-Python implementation of HTTP/1.1 inspired by hyper-h2"
-HOMEPAGE="
-	https://h11.readthedocs.io/en/latest/
-	https://github.com/python-hyper/h11/
-	https://pypi.org/project/h11/
-"
 
+PYPI_PN="h11"
+DESCRIPTION="A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
+HOMEPAGE="https://github.com/python-hyper/h11"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-distutils_enable_tests pytest

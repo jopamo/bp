@@ -8,11 +8,10 @@ inherit distutils-r1
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/pathable
-	dev-python/pyyaml
-	dev-python/referencing
+	dev-pypi/pyyaml
+	dev-pypi/referencing
 "
 # lockstep-pypi-deps: end
-
 MY_P=${P/_beta/b}
 DESCRIPTION="JSONSchema Spec with object-oriented paths"
 HOMEPAGE="

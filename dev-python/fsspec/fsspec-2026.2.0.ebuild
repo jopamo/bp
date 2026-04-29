@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 MY_P=filesystem_spec-${PV}
 DESCRIPTION="A specification that python filesystems should adhere to"
 HOMEPAGE="

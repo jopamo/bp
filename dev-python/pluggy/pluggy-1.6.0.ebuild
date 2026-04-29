@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Plugin and hook calling mechanisms for Python"
 HOMEPAGE="
 	https://pluggy.readthedocs.io/

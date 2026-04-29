@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 MY_P=ConfigArgParse-${PV}
 DESCRIPTION="Drop-in replacement for argparse supporting config files and env variables"
 HOMEPAGE="

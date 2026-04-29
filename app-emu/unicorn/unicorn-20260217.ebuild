@@ -4,7 +4,11 @@ DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_OPTIONAL=1
 
 inherit cmake distutils-r1 qa-policy
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="CPU emulator framework"
 HOMEPAGE="https://github.com/unicorn-engine/unicorn"
 SNAPSHOT=7c5db94191defc1e04a4f66f4eb1220903cba837

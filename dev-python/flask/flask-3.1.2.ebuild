@@ -7,15 +7,14 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	dev-pypi/blinker
+	dev-pypi/click
+	dev-pypi/itsdangerous
 	dev-pypi/jinja2
-	dev-python/blinker
-	dev-python/click
-	dev-python/itsdangerous
-	dev-python/markupsafe
-	dev-python/werkzeug
+	dev-pypi/markupsafe
+	dev-pypi/werkzeug
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A microframework based on Werkzeug, Jinja2 and good intentions"
 HOMEPAGE="
 	https://palletsprojects.com/p/flask/

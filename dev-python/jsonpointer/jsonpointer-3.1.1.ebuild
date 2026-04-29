@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Identify specific nodes in a JSON document (according to draft 08)"
 HOMEPAGE="
 	https://github.com/stefankoegl/python-json-pointer/

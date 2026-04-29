@@ -1,0 +1,23 @@
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="hatchling"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="httpcore"
+DESCRIPTION="A minimal low-level HTTP client."
+HOMEPAGE="https://www.encode.io/httpcore/"
+LICENSE="BSD"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/certifi
+	dev-pypi/h11
+"
+# lockstep-pypi-deps: end

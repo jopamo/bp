@@ -4,7 +4,11 @@ DISTUTILS_USE_PEP517=flit
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Python Documentation Utilities (reference reStructuredText impl.)"
 HOMEPAGE="https://docutils.sourceforge.io/"
 SNAPSHOT=22c7b979941782b1791e6e03b79fcf82889373de

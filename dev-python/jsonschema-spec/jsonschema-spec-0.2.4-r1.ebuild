@@ -4,7 +4,15 @@ DISTUTILS_USE_PEP517=poetry
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/pathable
+	dev-pypi/pyyaml
+	dev-pypi/referencing
+	dev-pypi/requests
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="JSONSchema Spec with object-oriented paths"
 HOMEPAGE="
 	https://pypi.org/project/jsonschema-spec/

@@ -10,10 +10,9 @@ inherit distutils-r1 toolchain-funcs pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	app-crypto/cryptography
+	dev-pypi/cryptography
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Python interface to the OpenSSL library"
 HOMEPAGE="
 	https://www.pyopenssl.org/

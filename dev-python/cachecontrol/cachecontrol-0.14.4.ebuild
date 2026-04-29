@@ -8,11 +8,10 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/msgpack
-	dev-python/requests
+	dev-pypi/msgpack
+	dev-pypi/requests
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="httplib2 caching for requests"
 HOMEPAGE="
 	https://pypi.org/project/CacheControl/

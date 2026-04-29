@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Color names and value formats defined by the HTML and CSS specifications"
 HOMEPAGE="
 	https://github.com/ubernostrum/webcolors/

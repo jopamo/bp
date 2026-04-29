@@ -7,14 +7,13 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/attrs
-	dev-python/idna
-	dev-python/outcome
-	dev-python/sniffio
-	dev-python/sortedcontainers
+	dev-pypi/attrs
+	dev-pypi/idna
+	dev-pypi/outcome
+	dev-pypi/sniffio
+	dev-pypi/sortedcontainers
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Python library for async concurrency and I/O"
 HOMEPAGE="
 	https://github.com/python-trio/trio/

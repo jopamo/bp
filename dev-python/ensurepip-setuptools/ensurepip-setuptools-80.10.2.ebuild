@@ -12,7 +12,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Shared setuptools wheel for ensurepip Python module"
 HOMEPAGE="
 	https://github.com/pypa/setuptools/

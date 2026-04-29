@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Backported and Experimental Type Hints for Python 3.7+"
 HOMEPAGE="
 	https://pypi.org/project/typing-extensions/

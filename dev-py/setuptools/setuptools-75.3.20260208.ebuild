@@ -5,7 +5,11 @@ BRANCH_NAME="maint/$(ver_cut 1-2)"
 DISTUTILS_USE_PEP517=standalone
 
 inherit distutils-r1 pypi
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Collection of extensions to Distutils"
 HOMEPAGE="https://github.com/pypa/setuptools/"
 SNAPSHOT=118f129dd0fb319058bd05f382c50188fd60a60e

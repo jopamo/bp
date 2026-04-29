@@ -7,10 +7,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	app-crypto/cryptography
+	dev-pypi/cryptography
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="JOSE protocol implementation in Python"
 HOMEPAGE="
 	https://github.com/certbot/josepy/

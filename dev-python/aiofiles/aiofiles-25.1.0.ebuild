@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="File support for asyncio"
 HOMEPAGE="
 	https://github.com/Tinche/aiofiles/

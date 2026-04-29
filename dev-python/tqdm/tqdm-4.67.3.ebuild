@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Add a progress meter to your loops in a second"
 HOMEPAGE="
 	https://github.com/tqdm/tqdm/

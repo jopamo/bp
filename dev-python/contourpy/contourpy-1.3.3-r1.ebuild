@@ -5,7 +5,12 @@ DISTUTILS_USE_PEP517=meson-python
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/numpy
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Python library for calculating contours in 2D quadrilateral grids"
 HOMEPAGE="
 	https://pypi.org/project/contourpy/

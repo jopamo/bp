@@ -11,7 +11,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Core utilities for Python packages"
 HOMEPAGE="
 	https://github.com/pypa/packaging/

@@ -17,6 +17,6 @@ KEYWORDS="amd64 arm64"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/urllib3
+	dev-pypi/urllib3
 "
 # lockstep-pypi-deps: end

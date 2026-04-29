@@ -4,7 +4,11 @@ DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1 pypi flag-o-matic
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Alternative regular expression module to replace re"
 HOMEPAGE="https://github.com/mrabarnett/mrab-regex/"
 SNAPSHOT=5d51c75da03116e08bb6fb537fae6d8c804cc92c

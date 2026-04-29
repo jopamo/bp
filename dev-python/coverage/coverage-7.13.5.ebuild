@@ -12,7 +12,6 @@ inherit distutils-r1 multiprocessing pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Code coverage measurement for Python"
 HOMEPAGE="
 	https://coverage.readthedocs.io/en/latest/

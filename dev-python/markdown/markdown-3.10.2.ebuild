@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Python implementation of the markdown markup language"
 HOMEPAGE="
 	https://python-markdown.github.io/

@@ -11,10 +11,9 @@ inherit distutils-r1 toolchain-funcs pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/pycparser
+	dev-pypi/pycparser
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Foreign Function Interface for Python calling C code"
 HOMEPAGE="
 	https://cffi.readthedocs.io/

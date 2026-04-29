@@ -12,7 +12,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Python web framework and asynchronous networking library"
 HOMEPAGE="
 	https://www.tornadoweb.org/

@@ -7,7 +7,11 @@ DISTUTILS_USE_PEP517=standalone
 PYTHON_COMPAT=( python3_{10..13} pypy3 )
 
 inherit distutils-r1 toolchain-funcs flag-o-matic
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Python Imaging Library (fork)"
 HOMEPAGE="https://python-pillow.org/"
 SNAPSHOT=339bc5db93bd95decf65a59fab273f300db6594d

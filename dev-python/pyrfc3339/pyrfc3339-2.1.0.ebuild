@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Generates and parses RFC 3339 timestamps"
 HOMEPAGE="
 	https://github.com/kurtraschke/pyRFC3339/

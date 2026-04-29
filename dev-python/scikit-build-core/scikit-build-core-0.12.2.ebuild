@@ -7,11 +7,10 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/packaging
-	dev-python/pathspec
+	dev-pypi/packaging
+	dev-pypi/pathspec
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Build backend for CMake based projects"
 HOMEPAGE="
 	https://github.com/scikit-build/scikit-build-core/

@@ -10,7 +10,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A high-performance immutable mapping type for Python"
 HOMEPAGE="
 	https://github.com/MagicStack/immutables/

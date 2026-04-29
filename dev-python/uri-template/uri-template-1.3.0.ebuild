@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 MY_P="uri-template-v${PV}"
 DESCRIPTION="URI Template expansion in strict adherence to RFC 6570"
 HOMEPAGE="

@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Micro subset of unicode data files for linkify-it-py projects"
 HOMEPAGE="
 	https://github.com/tsutsu3/uc.micro-py/

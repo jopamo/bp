@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Low-level, pure Python DBus protocol wrapper"
 HOMEPAGE="
 	https://gitlab.com/takluyver/jeepney/

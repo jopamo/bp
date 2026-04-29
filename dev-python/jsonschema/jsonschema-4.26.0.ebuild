@@ -8,13 +8,12 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-py/rpds-py
-	dev-python/attrs
-	dev-python/jsonschema-specifications
-	dev-python/referencing
+	dev-pypi/attrs
+	dev-pypi/jsonschema-specifications
+	dev-pypi/referencing
+	dev-pypi/rpds-py
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="An implementation of JSON-Schema validation for Python"
 HOMEPAGE="
 	https://pypi.org/project/jsonschema/

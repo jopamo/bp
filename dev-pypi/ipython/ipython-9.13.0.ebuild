@@ -19,13 +19,13 @@ KEYWORDS="amd64 arm64"
 RDEPEND+="
 	dev-pypi/decorator
 	dev-pypi/ipython-pygments-lexers
+	dev-pypi/jedi
 	dev-pypi/matplotlib-inline
+	dev-pypi/pexpect
 	dev-pypi/prompt-toolkit
+	dev-pypi/psutil
+	dev-pypi/pygments
 	dev-pypi/stack-data
-	dev-python/jedi
-	dev-python/pexpect
-	dev-python/psutil
-	dev-python/pygments
-	dev-python/traitlets
+	dev-pypi/traitlets
 "
 # lockstep-pypi-deps: end

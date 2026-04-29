@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/msgpack
-	dev-python/typing-extensions
+	dev-pypi/msgpack
+	dev-pypi/typing-extensions
 "
 # lockstep-pypi-deps: end

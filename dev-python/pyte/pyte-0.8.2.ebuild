@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Simple VTXXX-compatible terminal emulator"
 HOMEPAGE="
 	https://pypi.org/project/pyte/

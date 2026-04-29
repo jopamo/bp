@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="XPath 1.0/2.0 parsers and selectors for ElementTree and lxml"
 HOMEPAGE="
 	https://github.com/sissaschool/elementpath/

@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Reusable constraint types to use with typing.Annotated"
 HOMEPAGE="
 	https://github.com/annotated-types/annotated-types/

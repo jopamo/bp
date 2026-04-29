@@ -7,10 +7,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/pytest
+	dev-pypi/pytest
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="pytest plugin to abort hanging tests"
 HOMEPAGE="
 	https://github.com/pytest-dev/pytest-timeout/

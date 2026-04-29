@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A modern CSS selector implementation for BeautifulSoup"
 HOMEPAGE="
 	https://github.com/facelessuser/soupsieve/

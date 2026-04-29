@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Parser like ConfigParser but for updating configuration files"
 HOMEPAGE="
 	https://github.com/pyscaffold/configupdater/

@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A library for installing Python wheels"
 HOMEPAGE="
 	https://pypi.org/project/installer/

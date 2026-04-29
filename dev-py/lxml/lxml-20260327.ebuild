@@ -4,7 +4,11 @@ DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1 optfeature toolchain-funcs flag-o-matic
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="A Pythonic binding for the libxml2 and libxslt libraries"
 HOMEPAGE="https://lxml.de/"
 SNAPSHOT=0e2acd18104f3fb63a538624525eb1858c3825e7

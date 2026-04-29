@@ -4,7 +4,31 @@ PYTHON_COMPAT=( python3_{10..13} )
 DISTUTILS_USE_PEP517=hatchling
 
 inherit distutils-r1
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/authlib
+	dev-pypi/cyclopts
+	dev-pypi/exceptiongroup
+	dev-pypi/httpx
+	dev-pypi/jsonref
+	dev-pypi/jsonschema-path
+	dev-pypi/mcp
+	dev-pypi/openapi-pydantic
+	dev-pypi/opentelemetry-api
+	dev-pypi/packaging
+	dev-pypi/platformdirs
+	dev-pypi/py-key-value-aio
+	dev-pypi/pydantic
+	dev-pypi/pyperclip
+	dev-pypi/python-dotenv
+	dev-pypi/pyyaml
+	dev-pypi/rich
+	dev-pypi/uvicorn
+	dev-pypi/watchfiles
+	dev-pypi/websockets
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="The fast, Pythonic way to build MCP servers and clients"
 HOMEPAGE="https://gofastmcp.com/ https://pypi.org/project/fastmcp/"
 SNAPSHOT=b14b137fddc3145d6b4abd0b3a3f1a11dfc370b0

@@ -46,7 +46,6 @@ inherit distutils-r1 cargo
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Simple, safe way to store and distribute tensors"
 HOMEPAGE="
 	https://pypi.org/project/safetensors/

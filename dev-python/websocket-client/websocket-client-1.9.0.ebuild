@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="WebSocket client for python with hybi13 support"
 HOMEPAGE="
 	https://github.com/websocket-client/websocket-client/

@@ -3,7 +3,16 @@
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/cryptography
+	dev-pypi/josepy
+	dev-pypi/pyopenssl
+	dev-pypi/pyrfc3339
+	dev-pypi/requests
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Let’s Encrypt client to automate deployment of X.509 certificates"
 
 HOMEPAGE="https://github.com/certbot/certbot"

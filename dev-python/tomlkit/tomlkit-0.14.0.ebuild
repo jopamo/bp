@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Style preserving TOML library"
 HOMEPAGE="
 	https://github.com/python-poetry/tomlkit/

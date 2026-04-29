@@ -7,10 +7,9 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/hatchling
+	dev-pypi/hatchling
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Fancy PyPI READMEs with Hatch"
 HOMEPAGE="
 	https://pypi.org/project/hatch-fancy-pypi-readme/

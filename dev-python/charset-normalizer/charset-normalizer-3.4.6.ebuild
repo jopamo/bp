@@ -12,7 +12,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="The Real First Universal Charset Detector"
 HOMEPAGE="
 	https://pypi.org/project/charset-normalizer/

@@ -5,7 +5,16 @@ PYPI_PN="CherryPy"
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/cheroot
+	dev-pypi/jaraco-collections
+	dev-pypi/more-itertools
+	dev-pypi/portend
+	dev-pypi/zc-lockfile
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="CherryPy is a pythonic, object-oriented HTTP framework"
 HOMEPAGE="
 	https://cherrypy.dev/

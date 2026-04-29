@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Universal encoding detector"
 HOMEPAGE="
 	https://github.com/chardet/chardet/

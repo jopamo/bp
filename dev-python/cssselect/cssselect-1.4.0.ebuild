@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Parse CSS3 Selectors and translate them to XPath 1.0"
 HOMEPAGE="
 	https://cssselect.readthedocs.io/en/latest/

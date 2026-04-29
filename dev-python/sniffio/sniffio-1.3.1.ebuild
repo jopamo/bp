@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Sniff out which async library your code is running under"
 HOMEPAGE="
 	https://github.com/python-trio/sniffio/

@@ -7,13 +7,12 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	dev-pypi/h11
+	dev-pypi/h2
 	dev-pypi/priority
-	dev-python/h11
-	dev-python/h2
-	dev-python/wsproto
+	dev-pypi/wsproto
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A ASGI Server based on Hyper libraries and inspired by Gunicorn"
 HOMEPAGE="
 	https://github.com/pgjones/hypercorn/

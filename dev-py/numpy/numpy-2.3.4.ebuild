@@ -12,7 +12,6 @@ inherit distutils-r1 flag-o-matic pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Fast array and numerical python library"
 HOMEPAGE="https://numpy.org/"
 

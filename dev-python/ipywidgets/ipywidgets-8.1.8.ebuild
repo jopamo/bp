@@ -8,14 +8,13 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	dev-pypi/comm
 	dev-pypi/ipython
 	dev-pypi/jupyterlab-widgets
+	dev-pypi/traitlets
 	dev-pypi/widgetsnbextension
-	dev-python/comm
-	dev-python/traitlets
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="IPython HTML widgets for Jupyter"
 HOMEPAGE="
 	https://ipywidgets.readthedocs.io/

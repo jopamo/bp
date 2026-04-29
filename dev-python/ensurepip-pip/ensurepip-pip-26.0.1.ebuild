@@ -11,7 +11,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 FLIT_CORE_PV=3.12.0
 
 MY_P=${P#ensurepip-}

@@ -11,7 +11,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Mypyc runtime library"
 HOMEPAGE="
 	https://github.com/mypyc/librt/

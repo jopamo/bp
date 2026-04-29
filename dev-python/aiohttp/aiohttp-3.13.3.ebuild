@@ -9,16 +9,15 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/aiohappyeyeballs
-	dev-python/aiosignal
-	dev-python/attrs
-	dev-python/frozenlist
-	dev-python/multidict
-	dev-python/propcache
-	dev-python/yarl
+	dev-pypi/aiohappyeyeballs
+	dev-pypi/aiosignal
+	dev-pypi/attrs
+	dev-pypi/frozenlist
+	dev-pypi/multidict
+	dev-pypi/propcache
+	dev-pypi/yarl
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="HTTP client/server for asyncio"
 HOMEPAGE="
 	https://github.com/aio-libs/aiohttp/

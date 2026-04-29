@@ -8,11 +8,10 @@ inherit distutils-r1 optfeature pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/click
-	dev-python/h11
+	dev-pypi/click
+	dev-pypi/h11
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Lightning-fast ASGI server implementation"
 HOMEPAGE="
 	https://www.uvicorn.org/

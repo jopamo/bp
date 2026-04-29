@@ -7,31 +7,30 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	dev-pypi/blinker
+	dev-pypi/certifi
 	dev-pypi/dep-logic
+	dev-pypi/filelock
 	dev-pypi/findpython
 	dev-pypi/hishel
+	dev-pypi/httpcore
+	dev-pypi/httpx
 	dev-pypi/id
+	dev-pypi/installer
+	dev-pypi/packaging
 	dev-pypi/pbs-installer
+	dev-pypi/platformdirs
+	dev-pypi/pyproject-hooks
+	dev-pypi/python-dotenv
+	dev-pypi/resolvelib
+	dev-pypi/rich
+	dev-pypi/shellingham
+	dev-pypi/tomlkit
+	dev-pypi/truststore
 	dev-pypi/unearth
-	dev-python/blinker
-	dev-python/certifi
-	dev-python/filelock
-	dev-python/httpcore
-	dev-python/httpx
-	dev-python/installer
-	dev-python/packaging
-	dev-python/platformdirs
-	dev-python/pyproject-hooks
-	dev-python/python-dotenv
-	dev-python/resolvelib
-	dev-python/rich
-	dev-python/shellingham
-	dev-python/tomlkit
-	dev-python/truststore
-	dev-python/virtualenv
+	dev-pypi/virtualenv
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Python package and dependency manager supporting the latest PEP standards"
 HOMEPAGE="
 	https://pdm-project.org/

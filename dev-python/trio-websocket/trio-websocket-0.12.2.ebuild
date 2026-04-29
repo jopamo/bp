@@ -7,12 +7,11 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/outcome
-	dev-python/trio
-	dev-python/wsproto
+	dev-pypi/outcome
+	dev-pypi/trio
+	dev-pypi/wsproto
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="WebSocket client and server implementation for Python Trio"
 HOMEPAGE="
 	https://github.com/python-trio/trio-websocket/

@@ -9,7 +9,6 @@ inherit distutils-r1 optfeature pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A Python module to bypass Cloudflare's anti-bot page"
 HOMEPAGE="
 	https://github.com/VeNoMouS/cloudscraper/

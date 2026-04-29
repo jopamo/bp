@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Python 2 and 3 compatibility library"
 HOMEPAGE="
 	https://github.com/benjaminp/six/

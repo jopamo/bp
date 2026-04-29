@@ -10,7 +10,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 MY_P=kiwi-${PV}
 DESCRIPTION="An efficient C++ implementation of the Cassowary constraint solving algorithm"
 HOMEPAGE="

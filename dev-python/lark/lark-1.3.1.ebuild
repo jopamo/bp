@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Python module to propose a modern general-purpose parsing library for Python"
 HOMEPAGE="
 	https://github.com/lark-parser/lark/

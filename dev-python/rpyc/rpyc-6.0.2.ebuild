@@ -7,10 +7,9 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/plumbum
+	dev-pypi/plumbum
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Remote Python Call (RPyC), a transparent and symmetric RPC library"
 HOMEPAGE="https://rpyc.readthedocs.io/en/latest/
 	https://pypi.org/project/rpyc/

@@ -4,7 +4,13 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 pypi
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/packaging
+	dev-pypi/setuptools
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Automatically conversion of .ini/.cfg files to TOML equivalents"
 HOMEPAGE="
 	https://pypi.org/project/ini2toml/

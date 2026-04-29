@@ -4,7 +4,11 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 
 inherit distutils-r1
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 MY_P=python-${P}
 DESCRIPTION="Python library to sort collections and containers"
 HOMEPAGE="

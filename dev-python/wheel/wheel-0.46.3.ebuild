@@ -9,10 +9,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/packaging
+	dev-pypi/packaging
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A built-package format for Python"
 HOMEPAGE="
 	https://github.com/pypa/wheel/

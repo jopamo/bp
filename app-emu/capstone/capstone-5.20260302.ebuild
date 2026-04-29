@@ -1,7 +1,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
 inherit cmake distutils-r1 flag-o-matic
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DISTUTILS_EXT=1
 
 BRANCH_NAME="v$(ver_cut 1)"

@@ -4,7 +4,11 @@ DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1 flag-o-matic
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Smart card support in python"
 HOMEPAGE="https://github.com/LudovicRousseau/pyscard/"
 SNAPSHOT=3169140598dc9f28dd84d17471bde8d2b546fddc

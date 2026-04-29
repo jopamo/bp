@@ -7,10 +7,9 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/pyasn1
+	dev-pypi/pyasn1
 "
 # lockstep-pypi-deps: end
-
 MY_P=python-rsa-version-${PV}
 DESCRIPTION="Pure-Python RSA implementation"
 HOMEPAGE="

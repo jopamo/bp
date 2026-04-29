@@ -17,6 +17,6 @@ KEYWORDS="amd64 arm64"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-py/numpy
+	dev-pypi/numpy
 "
 # lockstep-pypi-deps: end

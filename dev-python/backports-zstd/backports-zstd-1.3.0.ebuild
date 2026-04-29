@@ -13,7 +13,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Backport of PEP-784: adding Zstandard to the standard library"
 HOMEPAGE="
 	https://github.com/Rogdham/backports.zstd/

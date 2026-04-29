@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Simple config file reader and writer"
 HOMEPAGE="
 	https://github.com/DiffSK/configobj/

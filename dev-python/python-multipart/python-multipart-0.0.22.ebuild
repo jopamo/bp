@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A streaming multipart parser for Python"
 HOMEPAGE="
 	https://github.com/Kludex/python-multipart/

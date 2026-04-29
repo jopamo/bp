@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Sends files to the Trash (or Recycle Bin)"
 HOMEPAGE="
 	https://github.com/arsenetar/send2trash/

@@ -11,7 +11,6 @@ inherit distutils-r1 optfeature pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Python tools to manipulate graphs and complex networks"
 HOMEPAGE="
 	https://networkx.org/

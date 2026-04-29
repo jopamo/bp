@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Simplified packaging of Python modules (core module)"
 HOMEPAGE="
 	https://pypi.org/project/flit-core/

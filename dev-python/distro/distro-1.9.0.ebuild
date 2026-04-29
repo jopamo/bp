@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Reliable machine-readable Linux distribution information for Python"
 HOMEPAGE="
 	https://distro.readthedocs.io/en/latest/

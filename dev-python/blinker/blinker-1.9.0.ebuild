@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Fast, simple object-to-object and broadcast signaling"
 HOMEPAGE="
 	https://github.com/pallets-eco/blinker/

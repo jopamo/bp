@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Tool to Detect Surrounding Shell"
 HOMEPAGE="
 	https://github.com/sarugaku/shellingham/

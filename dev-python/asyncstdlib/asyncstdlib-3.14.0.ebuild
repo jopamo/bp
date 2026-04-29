@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="The missing async toolbox"
 HOMEPAGE="
 	https://github.com/maxfischer2781/asyncstdlib/

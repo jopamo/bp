@@ -10,7 +10,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Library for building WebSocket servers and clients in Python"
 HOMEPAGE="
 	https://websockets.readthedocs.io/

@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Backport of pathlib-compatible object wrapper for zip files"
 HOMEPAGE="
 	https://github.com/jaraco/zipp/

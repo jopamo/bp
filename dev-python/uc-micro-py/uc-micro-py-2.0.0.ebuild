@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 MY_P=uc.micro-py-${PV}
 DESCRIPTION="Micro subset of unicode data files for linkify-it-py projects"
 HOMEPAGE="

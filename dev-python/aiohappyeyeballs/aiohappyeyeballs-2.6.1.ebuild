@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Happy Eyeballs for pre-resolved hosts"
 HOMEPAGE="
 	https://pypi.org/project/aiohappyeyeballs/

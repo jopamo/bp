@@ -8,7 +8,20 @@ DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=meson-python
 
 inherit distutils-r1 pypi flag-o-matic
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/contourpy
+	dev-pypi/cycler
+	dev-pypi/fonttools
+	dev-pypi/kiwisolver
+	dev-pypi/numpy
+	dev-pypi/packaging
+	dev-pypi/pillow
+	dev-pypi/pyparsing
+	dev-pypi/python-dateutil
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Pure Python plotting library with MATLAB-like syntax"
 HOMEPAGE="https://matplotlib.org/  https://github.com/matplotlib/matplotlib/  https://pypi.org/project/matplotlib/"
 SNAPSHOT=51c85f72d6b37cb1d83c56774aa7260a1cbbf5e3

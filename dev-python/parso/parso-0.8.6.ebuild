@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A python parser that supports error recovery and round-trip parsing"
 HOMEPAGE="
 	https://github.com/davidhalter/parso/

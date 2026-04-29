@@ -7,11 +7,10 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/hpack
-	dev-python/hyperframe
+	dev-pypi/hpack
+	dev-pypi/hyperframe
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="HTTP/2 State-Machine based protocol implementation"
 HOMEPAGE="
 	https://python-hyper.org/projects/h2/en/stable/

@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A lil' TOML parser"
 HOMEPAGE="
 	https://pypi.org/project/tomli/

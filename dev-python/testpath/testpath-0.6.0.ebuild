@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Test utilities for code working with files and commands"
 HOMEPAGE="
 	https://github.com/jupyter/testpath/

@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Utility library for gitignore style pattern matching of file paths"
 HOMEPAGE="
 	https://github.com/cpburnz/python-pathspec/

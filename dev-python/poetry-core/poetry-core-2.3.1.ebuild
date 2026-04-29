@@ -11,7 +11,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Poetry PEP 517 Build Backend"
 HOMEPAGE="
 	https://github.com/python-poetry/poetry-core/

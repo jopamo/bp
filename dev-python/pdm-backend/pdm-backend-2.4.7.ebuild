@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A PEP 517 backend for PDM that supports PEP 621 metadata"
 HOMEPAGE="
 	https://pypi.org/project/pdm-backend/

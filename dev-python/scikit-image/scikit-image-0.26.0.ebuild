@@ -9,17 +9,16 @@ inherit distutils-r1 optfeature pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-py/numpy
 	dev-pypi/imageio
 	dev-pypi/lazy-loader
+	dev-pypi/networkx
+	dev-pypi/numpy
+	dev-pypi/packaging
+	dev-pypi/pillow
 	dev-pypi/scipy
 	dev-pypi/tifffile
-	dev-python/networkx
-	dev-python/packaging
-	xgui-app/pillow
 "
 # lockstep-pypi-deps: end
-
 # the package refers to blobs directly, use the newest commit to get
 # them all
 TEST_DATA_COMMIT=5c090b56df3988d988ff97928e2ef2d2cbe38e1b

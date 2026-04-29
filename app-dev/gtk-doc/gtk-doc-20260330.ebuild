@@ -19,7 +19,7 @@ DEPEND="
 	app-dev/pkgconf
 	app-tex/docbook-xml-dtd
 	app-tex/docbook-xsl-stylesheets
-	dev-py/pygments
+	dev-pypi/pygments
 	lib-core/libxslt
 "
 

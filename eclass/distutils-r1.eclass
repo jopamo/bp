@@ -184,7 +184,7 @@
 # @DEFAULT_UNSET
 # @PRE_INHERIT
 # @DESCRIPTION:
-# Controls adding dev-py/setuptools dependency.  The allowed values
+# Controls adding dev-pypi/setuptools dependency.  The allowed values
 # are:
 #
 # - no -- do not add the dependency (pure distutils package)
@@ -271,23 +271,23 @@ _distutils_set_globals() {
 		fi
 
 		bdep='
-			>=dev-py/gpep517-16[${PYTHON_USEDEP}]
+			>=dev-pypi/gpep517-16[${PYTHON_USEDEP}]
 		'
 		case ${DISTUTILS_USE_PEP517} in
 			flit)
 				bdep+='
-					>=dev-py/flit-core-3.11.0[${PYTHON_USEDEP}]
+					>=dev-pypi/flit-core-3.11.0[${PYTHON_USEDEP}]
 				'
 				;;
 			flit_scm)
 				bdep+='
-					>=dev-py/flit-core-3.11.0[${PYTHON_USEDEP}]
+					>=dev-pypi/flit-core-3.11.0[${PYTHON_USEDEP}]
 					>=dev-py/flit-scm-1.7.0[${PYTHON_USEDEP}]
 				'
 				;;
 			hatchling)
 				bdep+='
-					>=dev-py/hatchling-1.27.0[${PYTHON_USEDEP}]
+					>=dev-pypi/hatchling-1.27.0[${PYTHON_USEDEP}]
 				'
 				;;
 			jupyter)
@@ -306,7 +306,7 @@ _distutils_set_globals() {
 				;;
 			meson-python)
 				bdep+='
-					>=dev-py/meson-python-0.17.1[${PYTHON_USEDEP}]
+					>=dev-pypi/meson-python-0.17.1[${PYTHON_USEDEP}]
 				'
 				;;
 			pbr)
@@ -316,22 +316,22 @@ _distutils_set_globals() {
 				;;
 			pdm-backend)
 				bdep+='
-					>=dev-py/pdm-backend-2.4.3[${PYTHON_USEDEP}]
+					>=dev-pypi/pdm-backend-2.4.3[${PYTHON_USEDEP}]
 				'
 				;;
 			poetry)
 				bdep+='
-					>=dev-py/poetry-core-2.1.1[${PYTHON_USEDEP}]
+					>=dev-pypi/poetry-core-2.1.1[${PYTHON_USEDEP}]
 				'
 				;;
 			scikit-build-core)
 				bdep+='
-					>=dev-py/scikit-build-core-0.10.7[${PYTHON_USEDEP}]
+					>=dev-pypi/scikit-build-core-0.10.7[${PYTHON_USEDEP}]
 				'
 				;;
 			setuptools)
 				bdep+='
-					>=dev-py/setuptools-78.1.0[${PYTHON_USEDEP}]
+					>=dev-pypi/setuptools-78.1.0[${PYTHON_USEDEP}]
 				'
 				;;
 			sip)
@@ -356,7 +356,7 @@ _distutils_set_globals() {
 			eqawarn "is enabled."
 		fi
 	else
-		local setuptools_dep='>=dev-py/setuptools-78.1.0[${PYTHON_USEDEP}]'
+		local setuptools_dep='>=dev-pypi/setuptools-78.1.0[${PYTHON_USEDEP}]'
 
 		case ${DISTUTILS_USE_SETUPTOOLS:-bdepend} in
 			no|manual)
@@ -532,7 +532,7 @@ distutils_enable_sphinx() {
 	_DISTUTILS_SPHINX_PLUGINS=( "${@}" )
 
 	local deps autodoc=1 d
-	deps=">=dev-py/sphinx-8.1.3[\${PYTHON_USEDEP}]"
+	deps=">=dev-pypi/sphinx-8.1.3[\${PYTHON_USEDEP}]"
 	for d; do
 		if [[ ${d} == --no-autodoc ]]; then
 			autodoc=
@@ -556,7 +556,7 @@ distutils_enable_sphinx() {
 			use doc || return 0
 
 			local p
-			for p in ">=dev-py/sphinx-8.1.3" \
+			for p in ">=dev-pypi/sphinx-8.1.3" \
 				"${_DISTUTILS_SPHINX_PLUGINS[@]}"
 			do
 				python_has_version "${p}[${PYTHON_USEDEP}]" ||
@@ -564,7 +564,7 @@ distutils_enable_sphinx() {
 			done
 		}
 	else
-		deps=">=dev-py/sphinx-8.1.3"
+		deps=">=dev-pypi/sphinx-8.1.3"
 	fi
 
 	sphinx_compile_all() {
@@ -606,7 +606,7 @@ distutils_enable_sphinx() {
 # - import-check: `pytest --import-check` fallback (for use when there are
 #   no tests to run)
 #
-# - pytest: dev-py/pytest
+# - pytest: dev-pypi/pytest
 #
 # - setup.py: setup.py test (no deps included; deprecated)
 #
@@ -637,12 +637,12 @@ distutils_enable_tests() {
 			test_pkgs+=' dev-py/pytest-import-check[${PYTHON_USEDEP}]'
 			;&
 		pytest)
-			test_pkgs+=' >=dev-py/pytest-7.4.4[${PYTHON_USEDEP}]'
+			test_pkgs+=' >=dev-pypi/pytest-7.4.4[${PYTHON_USEDEP}]'
 			if [[ -n ${EPYTEST_TIMEOUT} ]]; then
-				test_pkgs+=' dev-py/pytest-timeout[${PYTHON_USEDEP}]'
+				test_pkgs+=' dev-pypi/pytest-timeout[${PYTHON_USEDEP}]'
 			fi
 			if [[ ${EPYTEST_XDIST} ]]; then
-				test_pkgs+=' dev-py/pytest-xdist[${PYTHON_USEDEP}]'
+				test_pkgs+=' dev-pypi/pytest-xdist[${PYTHON_USEDEP}]'
 			fi
 
 			if [[ ! ${DISTUTILS_SINGLE_IMPL} ]]; then
@@ -846,8 +846,8 @@ _distutils-r1_print_package_versions() {
 
 	if [[ ${DISTUTILS_USE_PEP517} ]]; then
 		packages+=(
-			dev-py/gpep517
-			dev-py/installer
+			dev-pypi/gpep517
+			dev-pypi/installer
 		)
 		if [[ ${DISTUTILS_EXT} ]]; then
 			packages+=(
@@ -857,29 +857,29 @@ _distutils-r1_print_package_versions() {
 		case ${DISTUTILS_USE_PEP517} in
 			flit)
 				packages+=(
-					dev-py/flit-core
+					dev-pypi/flit-core
 				)
 				;;
 			flit_scm)
 				packages+=(
-					dev-py/flit-core
+					dev-pypi/flit-core
 					dev-py/flit-scm
 					dev-py/setuptools-scm
 				)
 				;;
 			hatchling)
 				packages+=(
-					dev-py/hatchling
-					dev-py/hatch-fancy-pypi-readme
-					dev-py/hatch-vcs
+					dev-pypi/hatchling
+					dev-pypi/hatch-fancy-pypi-readme
+					dev-pypi/hatch-vcs
 				)
 				;;
 			jupyter)
 				packages+=(
 					dev-py/jupyter-packaging
-					dev-py/setuptools
+					dev-pypi/setuptools
 					dev-py/setuptools-scm
-					dev-py/wheel
+					dev-pypi/wheel
 				)
 				;;
 			maturin)
@@ -892,38 +892,38 @@ _distutils-r1_print_package_versions() {
 				;;
 			meson-python)
 				packages+=(
-					dev-py/meson-python
+					dev-pypi/meson-python
 				)
 				;;
 			pbr)
 				packages+=(
 					dev-py/pbr
-					dev-py/setuptools
-					dev-py/wheel
+					dev-pypi/setuptools
+					dev-pypi/wheel
 				)
 				;;
 			pdm-backend)
 				packages+=(
-					dev-py/pdm-backend
-					dev-py/setuptools
+					dev-pypi/pdm-backend
+					dev-pypi/setuptools
 				)
 				;;
 			poetry)
 				packages+=(
-					dev-py/poetry-core
+					dev-pypi/poetry-core
 				)
 				;;
 			scikit-build-core)
 				packages+=(
-					dev-py/scikit-build-core
+					dev-pypi/scikit-build-core
 				)
 				;;
 			setuptools)
 				packages+=(
-					dev-py/setuptools
+					dev-pypi/setuptools
 					dev-py/setuptools-rust
 					dev-py/setuptools-scm
-					dev-py/wheel
+					dev-pypi/wheel
 				)
 				;;
 			sip)
@@ -945,7 +945,7 @@ _distutils-r1_print_package_versions() {
 				;;
 			*)
 				packages+=(
-					dev-py/setuptools
+					dev-pypi/setuptools
 				)
 				;;
 		esac

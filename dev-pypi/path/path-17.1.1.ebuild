@@ -1,16 +1,39 @@
-# lockstep-managed: dependency-ebuild
-# lockstep-pypi-managed: true
-EAPI=8
+# Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_{11..14} )
-
-DISTUTILS_USE_PEP517="setuptools"
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
-
-PYPI_PN="path"
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="A module wrapper for os.path"
-HOMEPAGE="https://pypi.org/project/path/"
-LICENSE="metapackage"
+HOMEPAGE="
+	https://github.com/jaraco/path/
+	https://pypi.org/project/path/
+"
+
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+RDEPEND="
+	dev-pypi/appdirs[${PYTHON_USEDEP}]
+"
+BDEPEND="
+	dev-py/setuptools-scm[${PYTHON_USEDEP}]
+	test? (
+		dev-pypi/more-itertools[${PYTHON_USEDEP}]
+		dev-pypi/packaging[${PYTHON_USEDEP}]
+	)
+"
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
+
+EPYTEST_DESELECT=(
+	# unreliable, not really meaningful for end users
+	test_path.py::TestPerformance
+)

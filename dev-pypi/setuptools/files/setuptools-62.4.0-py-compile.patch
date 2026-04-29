@@ -1,0 +1,71 @@
+diff --git a/setuptools/_distutils/command/build_py.py b/setuptools/_distutils/command/build_py.py
+--- a/setuptools/_distutils/command/build_py.py
++++ b/setuptools/_distutils/command/build_py.py
+@@ -319,11 +319,9 @@
+                     outputs.append(
+                         importlib.util.cache_from_source(filename, optimization='')
+                     )
+-                if self.optimize > 0:
++                for opt in range(1, self.optimize + 1):
+                     outputs.append(
+-                        importlib.util.cache_from_source(
+-                            filename, optimization=self.optimize
+-                        )
++                        importlib.util.cache_from_source(filename, optimization=opt)
+                     )
+ 
+         outputs += [
+@@ -395,10 +393,10 @@
+         # of the 'prefix' string.  Hmmm.
+         if self.compile:
+             byte_compile(files, optimize=0, force=self.force, prefix=prefix)
+-        if self.optimize > 0:
++        for opt in range(1, self.optimize + 1):
+             byte_compile(
+                 files,
+-                optimize=self.optimize,
++                optimize=opt,
+                 force=self.force,
+                 prefix=prefix,
+             )
+diff --git a/setuptools/_distutils/command/install_lib.py b/setuptools/_distutils/command/install_lib.py
+--- a/setuptools/_distutils/command/install_lib.py
++++ b/setuptools/_distutils/command/install_lib.py
+@@ -26,8 +26,8 @@
+     #   2) compile .pyc only (--compile --no-optimize; default)
+     #   3) compile .pyc and "opt-1" .pyc (--compile --optimize)
+     #   4) compile "opt-1" .pyc only (--no-compile --optimize)
+-    #   5) compile .pyc and "opt-2" .pyc (--compile --optimize-more)
+-    #   6) compile "opt-2" .pyc only (--no-compile --optimize-more)
++    #   5) compile .pyc, "opt-1" and "opt-2" .pyc (--compile --optimize-more)
++    #   6) compile "opt-1" and "opt-2" .pyc (--no-compile --optimize-more)
+     #
+     # The UI for this is two options, 'compile' and 'optimize'.
+     # 'compile' is strictly boolean, and only decides whether to
+@@ -143,10 +143,10 @@
+                 force=self.force,
+                 prefix=install_root,
+             )
+-        if self.optimize > 0:
++        for opt in range(1, self.optimize + 1):
+             byte_compile(
+                 files,
+-                optimize=self.optimize,
++                optimize=opt,
+                 force=self.force,
+                 prefix=install_root,
+                 verbose=self.verbose,
+@@ -180,11 +180,9 @@
+                 bytecode_files.append(
+                     importlib.util.cache_from_source(py_file, optimization='')
+                 )
+-            if self.optimize > 0:
++            for opt in range(1, self.optimize + 1):
+                 bytecode_files.append(
+-                    importlib.util.cache_from_source(
+-                        py_file, optimization=self.optimize
+-                    )
++                    importlib.util.cache_from_source(py_file, optimization=opt)
+                 )
+ 
+         return bytecode_files

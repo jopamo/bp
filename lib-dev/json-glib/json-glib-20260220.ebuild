@@ -20,7 +20,7 @@ DEPEND="${RDEPEND}
 	app-dev/gtk-doc-am
 	app-build/gettext
 	app-dev/pkgconf
-	dev-py/pygments
+	dev-pypi/pygments
 "
 
 src_configure() {

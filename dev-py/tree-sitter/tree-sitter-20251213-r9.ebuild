@@ -26,7 +26,7 @@ KEYWORDS="amd64 arm64"
 DEPEND=">=lib-dev/tree-sitter-0.23.0:="
 RDEPEND="${DEPEND}
 	$(python_gen_cond_dep '
-		dev-py/setuptools[${PYTHON_USEDEP}]
+		dev-pypi/setuptools[${PYTHON_USEDEP}]
 	' 3.12)
 "
 BDEPEND="

@@ -1,16 +1,23 @@
-# lockstep-managed: dependency-ebuild
-# lockstep-pypi-managed: true
-EAPI=8
+# Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_{11..14} )
-
-DISTUTILS_USE_PEP517="setuptools"
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="Reliable machine-readable Linux distribution information for Python"
+HOMEPAGE="
+	https://distro.readthedocs.io/en/latest/
+	https://github.com/python-distro/distro/
+	https://pypi.org/project/distro/
+"
 
-PYPI_PN="distro"
-DESCRIPTION="Distro - an OS platform information API"
-HOMEPAGE="https://github.com/python-distro/distro"
-LICENSE="metapackage"
+LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+distutils_enable_tests pytest

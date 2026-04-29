@@ -26,8 +26,8 @@ KEYWORDS="amd64 arm64"
 IUSE="test"
 
 RDEPEND="
-	>=dev-py/six-1.9[${PYTHON_USEDEP}]
-	dev-py/webencodings[${PYTHON_USEDEP}]
+	>=dev-pypi/six-1.9[${PYTHON_USEDEP}]
+	dev-pypi/webencodings[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	test? (

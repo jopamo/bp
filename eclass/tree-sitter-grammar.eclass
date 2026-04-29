@@ -34,7 +34,7 @@ for _BINDING in "${TS_BINDINGS[@]}"; do
 			REQUIRED_USE+=" python? ( ${PYTHON_REQUIRED_USE} )"
 			DEPEND+=" python? ( ${PYTHON_DEPS} )"
 			RDEPEND+=" python? ( ${PYTHON_DEPS} >=dev-py/tree-sitter-0.21.0[${PYTHON_USEDEP}] )"
-			BDEPEND+=" python? ( ${PYTHON_DEPS} ${DISTUTILS_DEPS} dev-py/wheel[${PYTHON_USEDEP}] )"
+			BDEPEND+=" python? ( ${PYTHON_DEPS} ${DISTUTILS_DEPS} dev-pypi/wheel[${PYTHON_USEDEP}] )"
 			;;
 		*)
 			log_err "Unknown binding: ${_BINDING}"

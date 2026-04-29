@@ -21,5 +21,5 @@ KEYWORDS="amd64 arm64"
 
 RESTRICT="test"
 RDEPEND="dev-py/dnspython[${PYTHON_USEDEP}]
-	dev-py/defusedxml[${PYTHON_USEDEP}]"
+	dev-pypi/defusedxml[${PYTHON_USEDEP}]"
 DEPEND="${RDEPEND}"

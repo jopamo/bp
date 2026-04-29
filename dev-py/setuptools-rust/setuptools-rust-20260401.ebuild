@@ -26,19 +26,19 @@ RESTRICT="!test? ( test )"
 
 RDEPEND="
 	virtual/rust
-	<dev-py/semantic-version-3[${PYTHON_USEDEP}]
-	>=dev-py/semantic-version-2.8.2[${PYTHON_USEDEP}]
-	>=dev-py/setuptools-62.4[${PYTHON_USEDEP}]
+	<dev-pypi/semantic-version-3[${PYTHON_USEDEP}]
+	>=dev-pypi/semantic-version-2.8.2[${PYTHON_USEDEP}]
+	>=dev-pypi/setuptools-62.4[${PYTHON_USEDEP}]
 "
 BDEPEND="
-	>=dev-py/setuptools-62.4[${PYTHON_USEDEP}]
+	>=dev-pypi/setuptools-62.4[${PYTHON_USEDEP}]
 	test? (
 		${RDEPEND}
-		dev-py/beautifulsoup4[${PYTHON_USEDEP}]
+		dev-pypi/beautifulsoup4[${PYTHON_USEDEP}]
 		$(python_gen_cond_dep '
-			dev-py/cffi[${PYTHON_USEDEP}]
+			dev-pypi/cffi[${PYTHON_USEDEP}]
 		' 'python*')
 		dev-py/lxml[${PYTHON_USEDEP}]
-		dev-py/pytest[${PYTHON_USEDEP}]
+		dev-pypi/pytest[${PYTHON_USEDEP}]
 	)
 "

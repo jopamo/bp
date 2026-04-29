@@ -1,0 +1,47 @@
+# Distributed under the terms of the GNU General Public License v2
+
+
+DISTUTILS_USE_PEP517=no
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} python3_{13,14}t )
+
+inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/installer
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="A backend script to aid installing Python packages in Gentoo"
+HOMEPAGE="
+	https://pypi.org/project/gpep517/
+	https://github.com/projg2/gpep517/
+"
+SRC_URI="
+	https://github.com/projg2/gpep517/archive/v${PV}.tar.gz
+		-> ${P}.gh.tar.gz
+"
+
+LICENSE="GPL-2+"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+RDEPEND="
+	>=dev-pypi/installer-0.5.0[${PYTHON_USEDEP}]
+"
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
+
+python_test() {
+	epytest -o tmp_path_retention_policy=all
+}
+
+python_install() {
+	python_domodule gpep517
+	python_newscript - gpep517 <<-EOF
+		#!${EPREFIX}/usr/bin/python
+		import sys
+		from gpep517.__main__ import main
+		sys.exit(main())
+	EOF
+}

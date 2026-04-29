@@ -45,7 +45,7 @@ BDEPEND="
     app-build/gettext
     app-dev/gperf
     app-dev/pkgconf
-    bootloader? ( dev-py/pyelftools )
+    bootloader? ( dev-pypi/pyelftools )
     dev-py/jinja
 "
 

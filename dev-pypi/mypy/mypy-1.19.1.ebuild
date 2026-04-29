@@ -1,0 +1,138 @@
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_EXT=1
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{11..14} )
+
+inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/librt
+	dev-pypi/mypy-extensions
+	dev-pypi/pathspec
+	dev-pypi/typing-extensions
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="Optional static typing for Python"
+HOMEPAGE="
+	https://www.mypy-lang.org/
+	https://github.com/python/mypy/
+	https://pypi.org/project/mypy/
+"
+SRC_URI="
+	https://github.com/python/mypy/archive/v${PV}.tar.gz
+		-> ${P}.gh.tar.gz
+"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+IUSE="+native-extensions"
+
+# stubgen collides with this package: https://bugs.gentoo.org/585594
+RDEPEND="
+	!dev-util/stubgen
+	>=dev-pypi/librt-0.6.2[${PYTHON_USEDEP}]
+	>=dev-pypi/mypy-extensions-1.0.0[${PYTHON_USEDEP}]
+	>=dev-pypi/pathspec-0.9.0[${PYTHON_USEDEP}]
+	>=dev-pypi/psutil-4[${PYTHON_USEDEP}]
+	>=dev-pypi/typing-extensions-4.6.0[${PYTHON_USEDEP}]
+"
+BDEPEND="
+	native-extensions? (
+		${RDEPEND}
+		dev-pypi/types-psutil[${PYTHON_USEDEP}]
+		dev-pypi/types-setuptools[${PYTHON_USEDEP}]
+	)
+	test? (
+		>=dev-pypi/attrs-18.0[${PYTHON_USEDEP}]
+		>=dev-pypi/filelock-3.3.0[${PYTHON_USEDEP}]
+		>=dev-py/lxml-4.9.1[${PYTHON_USEDEP}]
+	)
+"
+
+EPYTEST_PLUGINS=()
+EPYTEST_XDIST=1
+distutils_enable_tests pytest
+
+# frustratingly, mypyc produces non-deterministic output. If ccache is enabled it will be a waste of time,
+# but simultaneously it might trash your system and fill up the cache with a giant wave of non-reproducible
+# test files (https://github.com/mypyc/mypyc/issues/1014)
+export CCACHE_DISABLE=1
+
+PATCHES=(
+	"${FILESDIR}"/${PN}-1.14.0-no-werror.patch
+)
+
+src_prepare() {
+	sed -i \
+		-e 's:from pathspec\.patterns\.gitwildmatch import GitWildMatchPatternError:from pathspec.patterns.gitignore import GitIgnorePatternError as GitWildMatchPatternError:' \
+		mypy/modulefinder.py || die
+
+	distutils-r1_src_prepare
+
+	# don't force pytest-xdist, in case user asked for EPYTEST_JOBS=1
+	sed -i -e '/addopts/s:-nauto::' pyproject.toml || die
+
+
+    filter-flags -Wl,-z,defs
+}
+
+
+python_compile() {
+	local -x MYPY_USE_MYPYC=$(usex native-extensions 1 0)
+	distutils-r1_python_compile
+}
+
+python_test() {
+	local EPYTEST_DESELECT=(
+		# the majority of them require Internet (via pip)
+		mypy/test/testpep561.py
+		# known broken with assertions enabled
+		# https://github.com/python/mypy/issues/16043
+		mypyc/test/test_external.py::TestExternal::test_c_unit_test
+		mypyc/test/test_run.py::TestRun::run-classes.test::testDelException
+		mypyc/test/test_run.py::TestRun::run-floats.test::testFloatOps
+		mypyc/test/test_run.py::TestRun::run-i64.test::testI64GlueMethodsAndInheritance
+		mypyc/test/test_run.py::TestRunStrictDunderTyping::run-floats.test::testFloatOps_dunder_typing
+		# these assume that types-docutils are not installed
+		mypy/test/testpythoneval.py::PythonEvaluationSuite::pythoneval.test::testIgnoreImportIfNoPython3StubAvailable
+		mypy/test/testpythoneval.py::PythonEvaluationSuite::pythoneval.test::testNoPython3StubAvailable
+		# TODO
+		mypy/test/meta/test_parse_data.py
+		mypy/test/meta/test_update_data.py
+	)
+	case ${EPYTHON} in
+		python3.1[234])
+			EPYTEST_DESELECT+=(
+				# more assertions, sigh
+				mypyc/test/test_run.py::TestRun::run-async.test::testRunAsyncMiscTypesInEnvironment
+				mypyc/test/test_run.py::TestRun::run-bools.test::testBoolOps
+				mypyc/test/test_run.py::TestRun::run-i64.test::testI64BasicOps
+				mypyc/test/test_run.py::TestRun::run-i64.test::testI64DefaultArgValues
+				mypyc/test/test_run.py::TestRun::run-i64.test::testI64ErrorValuesAndUndefined
+			)
+			;;
+	esac
+
+	# Some mypy/test/testcmdline.py::PythonCmdlineSuite tests
+	# fail with high COLUMNS values
+	local -x COLUMNS=80
+
+	# The tests depend on having in-source compiled extensions if you want to
+	# test those compiled extensions. Various crucial test dependencies aren't
+	# installed. Even pyproject.toml is needed because that's where pytest args
+	# are in. Hack them into the build directory and delete them afterwards.
+	# See: https://github.com/python/mypy/issues/16143
+	local -x MYPY_TEST_PREFIX="${S}"
+	cd "${BUILD_DIR}/install$(python_get_sitedir)" || die
+	cp -r "${S}"/{conftest.py,pyproject.toml} . || die
+
+	local failed=
+	nonfatal epytest || failed=1
+
+	rm conftest.py pyproject.toml || die
+
+	[[ ${failed} ]] && die "epytest failed with ${EPYTHON}"
+}

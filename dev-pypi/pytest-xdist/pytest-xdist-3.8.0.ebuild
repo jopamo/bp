@@ -1,0 +1,45 @@
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
+
+inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/execnet
+	dev-pypi/pytest
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="Distributed testing and loop-on-failing modes"
+HOMEPAGE="
+	https://pypi.org/project/pytest-xdist/
+	https://github.com/pytest-dev/pytest-xdist/
+"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+RDEPEND="
+	>=dev-pypi/execnet-2.1[${PYTHON_USEDEP}]
+	dev-pypi/psutil[${PYTHON_USEDEP}]
+	>=dev-pypi/pytest-7.0.0[${PYTHON_USEDEP}]
+"
+
+BDEPEND="
+	dev-py/setuptools-scm[${PYTHON_USEDEP}]
+	test? (
+		dev-pypi/filelock[${PYTHON_USEDEP}]
+	)
+"
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
+
+python_test() {
+	# force loading necessary plugins in subprocesses
+	local -x PYTEST_PLUGINS=xdist.plugin,xdist.looponfail
+
+	epytest -o tmp_path_retention_count=1
+}

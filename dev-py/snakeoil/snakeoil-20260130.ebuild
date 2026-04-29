@@ -19,10 +19,10 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	dev-py/lazy-object-proxy[${PYTHON_USEDEP}]
+	dev-pypi/lazy-object-proxy[${PYTHON_USEDEP}]
 "
 BDEPEND="
-	>=dev-py/flit-core-3.8[${PYTHON_USEDEP}]
+	>=dev-pypi/flit-core-3.8[${PYTHON_USEDEP}]
 "
 
 src_prepare() {

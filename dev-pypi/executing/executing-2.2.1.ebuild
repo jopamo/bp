@@ -1,16 +1,60 @@
-# lockstep-managed: dependency-ebuild
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_TESTED=( python3_{11..14} )
+# pypy3.11: https://github.com/alexmojaki/executing/issues/92
+PYTHON_COMPAT=( "${PYTHON_TESTED[@]}" pypy3_11 )
+
+inherit distutils-r1 optfeature
 # lockstep-pypi-managed: true
-EAPI=8
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="Get information about what a Python frame is currently doing"
+HOMEPAGE="
+	https://github.com/alexmojaki/executing/
+	https://pypi.org/project/executing/
+"
+SRC_URI="
+	https://github.com/alexmojaki/executing/archive/v${PV}.tar.gz
+		-> ${P}.gh.tar.gz
+"
 
-PYTHON_COMPAT=( python3_{11..14} )
-
-DISTUTILS_USE_PEP517="setuptools"
-
-inherit distutils-r1 pypi
-
-PYPI_PN="executing"
-DESCRIPTION="Get the currently executing AST node of a frame, and other information"
-HOMEPAGE="https://github.com/alexmojaki/executing"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+BDEPEND="
+	dev-py/setuptools-scm[${PYTHON_USEDEP}]
+	test? (
+		>=dev-pypi/asttokens-2.1.0[${PYTHON_USEDEP}]
+		dev-py/littleutils[${PYTHON_USEDEP}]
+		dev-pypi/rich[${PYTHON_USEDEP}]
+	)
+"
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
+
+export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
+
+python_test() {
+	if ! has "${EPYTHON}" "${PYTHON_TESTED[@]/_/.}"; then
+		einfo "Skipping tests on ${EPYTHON}"
+		return
+	fi
+
+	local EPYTEST_DESELECT=()
+	if ! has_version "dev-py/ipython[${PYTHON_USEDEP}]"; then
+		EPYTEST_DESELECT+=(
+			tests/test_ipython.py
+		)
+	fi
+
+	epytest
+}
+
+pkg_postinst() {
+	optfeature "getting node's source code" dev-pypi/asttokens
+}

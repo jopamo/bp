@@ -25,7 +25,7 @@ IUSE="vim zsh"
 
 RESTRICT="test"
 
-DEPEND="dev-py/setuptools[${PYTHON_USEDEP}]"
+DEPEND="dev-pypi/setuptools[${PYTHON_USEDEP}]"
 
 python_test() {
 	${EPYTHON} run_tests.py || die

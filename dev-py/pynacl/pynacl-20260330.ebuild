@@ -27,15 +27,15 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 	$(python_gen_cond_dep '
-		>=dev-py/cffi-1.4.1[${PYTHON_USEDEP}]
+		>=dev-pypi/cffi-1.4.1[${PYTHON_USEDEP}]
 	' 'python*')
 "
 BDEPEND="
 	$(python_gen_cond_dep '
-		>=dev-py/cffi-1.4.1[${PYTHON_USEDEP}]
+		>=dev-pypi/cffi-1.4.1[${PYTHON_USEDEP}]
 	' 'python*')
 	test? (
-		>=dev-py/hypothesis-3.27.0[${PYTHON_USEDEP}]
+		>=dev-pypi/hypothesis-3.27.0[${PYTHON_USEDEP}]
 	)
 "
 

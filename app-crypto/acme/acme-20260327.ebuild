@@ -29,22 +29,22 @@ KEYWORDS="amd64 arm64"
 
 BDEPEND="
 	test? (
-		dev-py/pytest[${PYTHON_USEDEP}]
-		dev-py/pytest-xdist[${PYTHON_USEDEP}]
-		dev-py/typing-extensions[${PYTHON_USEDEP}]
+		dev-pypi/pytest[${PYTHON_USEDEP}]
+		dev-pypi/pytest-xdist[${PYTHON_USEDEP}]
+		dev-pypi/typing-extensions[${PYTHON_USEDEP}]
 	)
 "
 # The requirement is really 17.5.0 but easier to require latest stable >= 23.1.1
 # to avoid broken 23.1.0.
 RDEPEND="
-	dev-py/chardet[${PYTHON_USEDEP}]
+	dev-pypi/chardet[${PYTHON_USEDEP}]
 	>=app-crypto/cryptography-3.2.1[${PYTHON_USEDEP}]
-	>=dev-py/josepy-1.13.0[${PYTHON_USEDEP}]
-	>=dev-py/pyopenssl-23.1.1[${PYTHON_USEDEP}]
-	dev-py/pyrfc3339[${PYTHON_USEDEP}]
-	>=dev-py/pytz-2019.3[${PYTHON_USEDEP}]
-	>=dev-py/requests-2.20.0[${PYTHON_USEDEP}]
-	>=dev-py/requests-toolbelt-0.3.0[${PYTHON_USEDEP}]
+	>=dev-pypi/josepy-1.13.0[${PYTHON_USEDEP}]
+	>=dev-pypi/pyopenssl-23.1.1[${PYTHON_USEDEP}]
+	dev-pypi/pyrfc3339[${PYTHON_USEDEP}]
+	>=dev-pypi/pytz-2019.3[${PYTHON_USEDEP}]
+	>=dev-pypi/requests-2.20.0[${PYTHON_USEDEP}]
+	>=dev-pypi/requests-toolbelt-0.3.0[${PYTHON_USEDEP}]
 "
 
 distutils_enable_sphinx docs dev-py/sphinx-rtd-theme

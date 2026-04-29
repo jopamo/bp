@@ -5,7 +5,13 @@ PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 PYTHON_REQ_USE="xml(+)"
 
 inherit distutils-r1 pypi
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/six
+	dev-pypi/webencodings
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="HTML parser based on the HTML5 specification"
 HOMEPAGE="https://github.com/html5lib/html5lib-python/"
 

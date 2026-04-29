@@ -9,9 +9,9 @@ DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1 pypi
 
-PYPI_PN="capstone"
-DESCRIPTION="Capstone disassembly engine"
-HOMEPAGE="https://www.capstone-engine.org"
+PYPI_PN="webencodings"
+DESCRIPTION="Character encoding aliases for legacy web content"
+HOMEPAGE="https://github.com/SimonSapin/python-webencodings"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"

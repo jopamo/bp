@@ -1,6 +1,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 
 DISTUTILS_USE_PEP517=setuptools
 

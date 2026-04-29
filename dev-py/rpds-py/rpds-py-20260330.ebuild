@@ -25,7 +25,6 @@ CARGO_DEPS="
 	rust-crates/unicode-ident-1.0.22
 "
 # lockstep-cargo-deps: end
-
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=maturin
 

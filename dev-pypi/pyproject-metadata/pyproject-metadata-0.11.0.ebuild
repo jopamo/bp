@@ -1,22 +1,29 @@
-# lockstep-managed: dependency-ebuild
-# lockstep-pypi-managed: true
-EAPI=8
+# Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_{11..14} )
-
-DISTUTILS_USE_PEP517="flit"
+DISTUTILS_USE_PEP517=flit
+PYPI_VERIFY_REPO=https://github.com/pypa/pyproject-metadata
+PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 
 inherit distutils-r1 pypi
-
-PYPI_PN="pyproject-metadata"
-DESCRIPTION="PEP 621 metadata parsing"
-HOMEPAGE="https://github.com/pypa/pyproject-metadata"
-LICENSE="metapackage"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
+# lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/packaging
 "
 # lockstep-pypi-deps: end
+DESCRIPTION="PEP 621 metadata parsing"
+HOMEPAGE="
+	https://github.com/pypa/pyproject-metadata/
+	https://pypi.org/project/pyproject-metadata/
+"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+RDEPEND="
+	>=dev-pypi/packaging-23.2[${PYTHON_USEDEP}]
+"
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest

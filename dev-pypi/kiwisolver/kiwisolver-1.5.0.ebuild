@@ -1,16 +1,47 @@
-# lockstep-managed: dependency-ebuild
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_EXT=1
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+
+inherit distutils-r1
 # lockstep-pypi-managed: true
-EAPI=8
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
+MY_P=kiwi-${PV}
+DESCRIPTION="An efficient C++ implementation of the Cassowary constraint solving algorithm"
+HOMEPAGE="
+	https://github.com/nucleic/kiwi/
+	https://pypi.org/project/kiwisolver/
+"
+SRC_URI="
+	https://github.com/nucleic/kiwi/archive/${PV}.tar.gz -> ${MY_P}.gh.tar.gz
+"
+S=${WORKDIR}/${MY_P}
 
-PYTHON_COMPAT=( python3_{11..14} )
-
-DISTUTILS_USE_PEP517="setuptools"
-
-inherit distutils-r1 pypi
-
-PYPI_PN="kiwisolver"
-DESCRIPTION="A fast implementation of the Cassowary constraint solver"
-HOMEPAGE="https://github.com/nucleic/kiwi"
-LICENSE="metapackage"
+LICENSE="Clear-BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+COMMON_DEPEND="
+	>=dev-pypi/cppy-1.3.0[${PYTHON_USEDEP}]
+"
+
+RDEPEND="
+	${COMMON_DEPEND}
+"
+BDEPEND="
+	${COMMON_DEPEND}
+	>=dev-py/setuptools-scm-3.4.3[${PYTHON_USEDEP}]
+"
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
+
+export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
+src_prepare() {
+    default
+    filter-flags -Wl,-z,defs
+}

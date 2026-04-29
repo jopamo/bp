@@ -1,16 +1,36 @@
-# lockstep-managed: dependency-ebuild
-# lockstep-pypi-managed: true
-EAPI=8
+# Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_{11..14} )
-
-DISTUTILS_USE_PEP517="flit"
+DISTUTILS_USE_PEP517=flit
+PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="Backported and Experimental Type Hints for Python 3.7+"
+HOMEPAGE="
+	https://pypi.org/project/typing-extensions/
+	https://github.com/python/typing_extensions/
+"
 
-PYPI_PN="typing-extensions"
-DESCRIPTION="Backported and Experimental Type Hints for Python 3.9+"
-HOMEPAGE="https://pypi.org/project/typing-extensions/"
-LICENSE="metapackage"
+LICENSE="PSF-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+IUSE="test"
+RESTRICT="!test? ( test )"
+
+BDEPEND="
+	>=dev-pypi/flit-core-3.11[${PYTHON_USEDEP}]
+	test? (
+		dev-py/test[${PYTHON_USEDEP}]
+	)
+"
+
+distutils_enable_tests unittest
+
+python_test() {
+	cd src || die
+	eunittest
+}

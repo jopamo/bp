@@ -20,7 +20,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-RDEPEND="dev-py/colorama"
+RDEPEND="dev-pypi/colorama"
 
 src_prepare() {
 	default

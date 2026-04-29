@@ -25,12 +25,12 @@ KEYWORDS="amd64 arm64"
 RDEPEND="
 	${DEPEND}
 	$(python_gen_cond_dep '
-		>=dev-py/cffi-1.14.0-r2:=[${PYTHON_USEDEP}]
+		>=dev-pypi/cffi-1.14.0-r2:=[${PYTHON_USEDEP}]
 	' 'python*')
 "
 BDEPEND="
 	test? (
-		dev-py/hypothesis[${PYTHON_USEDEP}]
+		dev-pypi/hypothesis[${PYTHON_USEDEP}]
 	)
 "
 

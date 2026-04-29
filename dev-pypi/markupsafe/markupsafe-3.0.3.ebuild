@@ -1,16 +1,44 @@
-# lockstep-managed: dependency-ebuild
-# lockstep-pypi-managed: true
-EAPI=8
+# Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_{11..14} )
-
-DISTUTILS_USE_PEP517="setuptools"
+DISTUTILS_EXT=1
+DISTUTILS_USE_PEP517=setuptools
+PYPI_PN="MarkupSafe"
+PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="Implements a XML/HTML/XHTML Markup safe string for Python"
+HOMEPAGE="
+	https://palletsprojects.com/p/markupsafe/
+	https://github.com/pallets/markupsafe/
+	https://pypi.org/project/MarkupSafe/
+"
 
-PYPI_PN="markupsafe"
-DESCRIPTION="Safely add untrusted strings to HTML/XML markup."
-HOMEPAGE="https://pypi.org/project/markupsafe/"
-LICENSE="metapackage"
+LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+IUSE="+native-extensions"
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
+
+src_prepare() {
+	distutils-r1_src_prepare
+
+	if ! use native-extensions; then
+		sed -i -e '/run_setup/s:True:False:' setup.py || die
+	fi
+}
+
+python_compile() {
+	local -x CIBUILDWHEEL=1
+	distutils-r1_python_compile
+}
+src_prepare() {
+    default
+    filter-flags -Wl,-z,defs
+}

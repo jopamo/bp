@@ -1,16 +1,30 @@
-# lockstep-managed: dependency-ebuild
-# lockstep-pypi-managed: true
-EAPI=8
+# Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_{11..14} )
-
-DISTUTILS_USE_PEP517="setuptools"
+DISTUTILS_USE_PEP517=flit_scm
+PYPI_VERIFY_REPO=https://github.com/agronholm/exceptiongroup
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 pypi
-
-PYPI_PN="exceptiongroup"
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Backport of PEP 654 (exception groups)"
-HOMEPAGE="https://pypi.org/project/exceptiongroup/"
-LICENSE="MIT"
+HOMEPAGE="
+	https://github.com/agronholm/exceptiongroup/
+	https://pypi.org/project/exceptiongroup/
+"
+
+LICENSE="MIT PSF-2.4"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+RDEPEND="
+	$(python_gen_cond_dep '
+		>=dev-pypi/typing-extensions-4.6.0[${PYTHON_USEDEP}]
+	' 3.11 3.12)
+"
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest

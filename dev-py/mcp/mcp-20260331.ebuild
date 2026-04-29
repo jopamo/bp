@@ -34,19 +34,19 @@ SLOT="0"
 KEYWORDS="arm64 amd64"
 
 RDEPEND="
-	>=dev-py/anyio-4.5[${PYTHON_USEDEP}]
-	>=dev-py/httpx-0.27.1[${PYTHON_USEDEP}]
-	>=dev-py/pydantic-2.11.0[${PYTHON_USEDEP}]
-	>=dev-py/starlette-0.27[${PYTHON_USEDEP}]
-	>=dev-py/python-multipart-0.0.9[${PYTHON_USEDEP}]
-	>=dev-py/uvicorn-0.31.1[${PYTHON_USEDEP}]
-	>=dev-py/jsonschema-4.20.0[${PYTHON_USEDEP}]
-	>=dev-py/typing-extensions-4.9.0[${PYTHON_USEDEP}]
-	>=dev-py/typing-inspection-0.4.1[${PYTHON_USEDEP}]
+	>=dev-pypi/anyio-4.5[${PYTHON_USEDEP}]
+	>=dev-pypi/httpx-0.27.1[${PYTHON_USEDEP}]
+	>=dev-pypi/pydantic-2.11.0[${PYTHON_USEDEP}]
+	>=dev-pypi/starlette-0.27[${PYTHON_USEDEP}]
+	>=dev-pypi/python-multipart-0.0.9[${PYTHON_USEDEP}]
+	>=dev-pypi/uvicorn-0.31.1[${PYTHON_USEDEP}]
+	>=dev-pypi/jsonschema-4.20.0[${PYTHON_USEDEP}]
+	>=dev-pypi/typing-extensions-4.9.0[${PYTHON_USEDEP}]
+	>=dev-pypi/typing-inspection-0.4.1[${PYTHON_USEDEP}]
 "
 
 BDEPEND="
-	>=dev-py/hatchling-1.21.0[${PYTHON_USEDEP}]
+	>=dev-pypi/hatchling-1.21.0[${PYTHON_USEDEP}]
 "
 
 RESTRICT="test"

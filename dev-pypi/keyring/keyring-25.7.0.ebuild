@@ -1,20 +1,10 @@
-# lockstep-managed: dependency-ebuild
-# lockstep-pypi-managed: true
-EAPI=8
+# Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_{11..14} )
-
-DISTUTILS_USE_PEP517="setuptools"
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
-
-PYPI_PN="keyring"
-DESCRIPTION="Store and access your passwords safely."
-HOMEPAGE="https://pypi.org/project/keyring/"
-LICENSE="metapackage"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
+# lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/jaraco-classes
@@ -24,3 +14,45 @@ RDEPEND+="
 	dev-pypi/secretstorage
 "
 # lockstep-pypi-deps: end
+DESCRIPTION="Provides access to the system keyring service"
+HOMEPAGE="
+	https://github.com/jaraco/keyring/
+	https://pypi.org/project/keyring/
+"
+
+LICENSE="PSF-2"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+RDEPEND="
+	>=dev-pypi/secretstorage-3.2[${PYTHON_USEDEP}]
+	dev-pypi/jaraco-classes[${PYTHON_USEDEP}]
+	dev-pypi/jaraco-context[${PYTHON_USEDEP}]
+	dev-pypi/jaraco-functools[${PYTHON_USEDEP}]
+	>=dev-pypi/jeepney-0.4.2[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-pypi/importlib-metadata-4.11.4[${PYTHON_USEDEP}]
+	' 3.11)
+"
+BDEPEND="
+	dev-py/setuptools-scm[${PYTHON_USEDEP}]
+"
+
+EPYTEST_PLUGINS=( pyfakefs )
+distutils_enable_tests pytest
+
+python_test() {
+	local EPYTEST_DESELECT=(
+		# this test fails if importlib-metadata returns more than one
+		# entry, i.e. when keyring is installed already
+		tests/test_packaging.py::test_entry_point
+	)
+	local EPYTEST_IGNORE=(
+		# apparently does not unlock the keyring properly
+		tests/backends/test_libsecret.py
+		# hangs
+		tests/backends/test_kwallet.py
+	)
+
+	epytest -o addopts=
+}

@@ -1,16 +1,51 @@
-# lockstep-managed: dependency-ebuild
-# lockstep-pypi-managed: true
-EAPI=8
+# Distributed under the terms of the GNU General Public License v2
 
-PYTHON_COMPAT=( python3_{11..14} )
-
-DISTUTILS_USE_PEP517="hatchling"
+DISTUTILS_USE_PEP517=hatchling
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="A configuration system for Python applications"
+HOMEPAGE="
+	https://github.com/ipython/traitlets/
+	https://pypi.org/project/traitlets/
+"
 
-PYPI_PN="traitlets"
-DESCRIPTION="Traitlets Python configuration system"
-HOMEPAGE="https://github.com/ipython/traitlets"
-LICENSE="metapackage"
+LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+BDEPEND="
+	test? (
+		>=dev-pypi/argcomplete-2.0[${PYTHON_USEDEP}]
+		dev-py/pytest-mock[${PYTHON_USEDEP}]
+	)
+"
+
+distutils_enable_sphinx docs/source \
+	dev-py/myst-parser \
+	dev-py/pydata-sphinx-theme
+distutils_enable_tests pytest
+
+python_test() {
+	local EPYTEST_IGNORE=(
+		tests/test_typing.py
+	)
+
+	if [[ ${EPYTHON} == python3.14 ]]; then
+		# fails due to improved error messages in Python 3.14
+		# https://github.com/ipython/traitlets/issues/925
+		local EPYTEST_DESELECT=(
+			tests/config/test_argcomplete.py::TestArgcomplete::test_complete_simple_app
+			tests/config/test_argcomplete.py::TestArgcomplete::test_complete_custom_completers
+			tests/config/test_argcomplete.py::TestArgcomplete::test_complete_subcommands_subapp1
+		)
+	fi
+
+	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
+	epytest -p pytest_mock
+}

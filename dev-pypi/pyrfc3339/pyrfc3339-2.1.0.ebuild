@@ -1,16 +1,34 @@
-# lockstep-managed: dependency-ebuild
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
+
+inherit distutils-r1
 # lockstep-pypi-managed: true
-EAPI=8
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="Generates and parses RFC 3339 timestamps"
+HOMEPAGE="
+	https://github.com/kurtraschke/pyRFC3339/
+	https://pypi.org/project/pyRFC3339/
+"
+SRC_URI="
+	https://github.com/kurtraschke/pyRFC3339/archive/v${PV}.tar.gz
+		-> ${P}.gh.tar.gz
+"
+S=${WORKDIR}/pyRFC3339-${PV}
 
-PYTHON_COMPAT=( python3_{11..14} )
-
-DISTUTILS_USE_PEP517="setuptools"
-
-inherit distutils-r1 pypi
-
-PYPI_PN="pyrfc3339"
-DESCRIPTION="Generate and parse RFC 3339 timestamps"
-HOMEPAGE="https://github.com/kurtraschke/pyrfc3339"
-LICENSE="metapackage"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+BDEPEND="
+	>=dev-py/setuptools-scm-8[${PYTHON_USEDEP}]
+"
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
+
+export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}

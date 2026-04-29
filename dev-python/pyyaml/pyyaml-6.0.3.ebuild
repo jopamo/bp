@@ -10,7 +10,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 MY_P=${P/_}
 DESCRIPTION="YAML parser and emitter for Python"
 HOMEPAGE="

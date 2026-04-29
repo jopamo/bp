@@ -17,7 +17,7 @@ KEYWORDS="amd64 arm64"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/packaging
-	dev-python/platformdirs
+	dev-pypi/packaging
+	dev-pypi/platformdirs
 "
 # lockstep-pypi-deps: end

@@ -8,12 +8,11 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/idna
-	dev-python/multidict
-	dev-python/propcache
+	dev-pypi/idna
+	dev-pypi/multidict
+	dev-pypi/propcache
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Yet another URL library"
 HOMEPAGE="
 	https://github.com/aio-libs/yarl/

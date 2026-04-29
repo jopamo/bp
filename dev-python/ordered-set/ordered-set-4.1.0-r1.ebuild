@@ -5,7 +5,11 @@ PYPI_NO_NORMALIZE=1
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="A mutable set that remembers the order of its entries"
 HOMEPAGE="
 	https://github.com/rspeer/ordered-set/

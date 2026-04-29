@@ -7,12 +7,11 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	app-dev/meson
-	dev-python/packaging
-	dev-python/pyproject-metadata
+	dev-pypi/meson
+	dev-pypi/packaging
+	dev-pypi/pyproject-metadata
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Meson PEP 517 Python build backend"
 HOMEPAGE="
 	https://pypi.org/project/meson-python/

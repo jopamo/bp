@@ -4,7 +4,15 @@ DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=scikit-build-core
 
 inherit distutils-r1 cmake
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/diskcache
+	dev-pypi/jinja2
+	dev-pypi/numpy
+	dev-pypi/typing-extensions
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Python bindings for llama.cpp"
 HOMEPAGE="https://github.com/abetlen/llama-cpp-python"
 SNAPSHOT=7257ba95fbbf65201fd5bf4b7f0bdd1c701e1345

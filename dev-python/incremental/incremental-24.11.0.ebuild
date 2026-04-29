@@ -8,10 +8,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/packaging
+	dev-pypi/packaging
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Incremental is a small library that versions your Python projects"
 HOMEPAGE="
 	https://github.com/twisted/incremental/

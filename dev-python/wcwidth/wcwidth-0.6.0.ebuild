@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Measures number of Terminal column cells of wide-character codes"
 HOMEPAGE="
 	https://pypi.org/project/wcwidth/

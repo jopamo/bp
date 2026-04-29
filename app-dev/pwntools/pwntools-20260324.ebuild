@@ -3,7 +3,30 @@
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/capstone
+	dev-pypi/colored-traceback
+	dev-pypi/intervaltree
+	dev-pypi/mako
+	dev-pypi/packaging
+	dev-pypi/paramiko
+	dev-pypi/psutil
+	dev-pypi/pyelftools
+	dev-pypi/pygments
+	dev-pypi/pyserial
+	dev-pypi/pysocks
+	dev-pypi/python-dateutil
+	dev-pypi/requests
+	dev-pypi/ropgadget
+	dev-pypi/rpyc
+	dev-pypi/sortedcontainers
+	dev-pypi/unicorn
+	dev-pypi/unix-ar
+	dev-pypi/zstandard
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="CTF framework and exploit development library"
 HOMEPAGE="https://github.com/Gallopsled/pwntools"
 SNAPSHOT=fd3cf3d43f39d4b50c1d0f33875bdc733afb48fa

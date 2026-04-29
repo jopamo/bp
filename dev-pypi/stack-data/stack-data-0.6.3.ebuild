@@ -17,8 +17,8 @@ KEYWORDS="amd64 arm64"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	dev-pypi/asttokens
+	dev-pypi/executing
 	dev-pypi/pure-eval
-	dev-python/asttokens
-	dev-python/executing
 "
 # lockstep-pypi-deps: end

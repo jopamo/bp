@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Atomic file writes"
 HOMEPAGE="
 	https://github.com/untitaker/python-atomicwrites/

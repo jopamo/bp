@@ -7,10 +7,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/elementpath
+	dev-pypi/elementpath
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="An XML Schema validator and decoder"
 HOMEPAGE="
 	https://github.com/sissaschool/xmlschema/

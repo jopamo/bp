@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Pure-python utilities in the same spirit as the standard library"
 HOMEPAGE="https://boltons.readthedocs.io/"
 

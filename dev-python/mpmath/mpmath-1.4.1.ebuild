@@ -10,7 +10,6 @@ inherit distutils-r1 optfeature pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Python library for arbitrary-precision floating-point arithmetic"
 HOMEPAGE="
 	https://mpmath.org/

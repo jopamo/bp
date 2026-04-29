@@ -8,11 +8,10 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-py/rpds-py
-	dev-python/attrs
+	dev-pypi/attrs
+	dev-pypi/rpds-py
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Cross-specification JSON referencing (JSON Schema, OpenAPI...)"
 HOMEPAGE="
 	https://github.com/python-jsonschema/referencing/

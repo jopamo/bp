@@ -3,7 +3,12 @@
 DISTUTILS_USE_PEP517=flit
 
 inherit distutils-r1 pypi
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/markupsafe
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="A full-featured template engine for Python"
 HOMEPAGE="https://palletsprojects.com/p/jinja/"
 SNAPSHOT=5ef70112a1ff19c05324ff889dd30405b1002044

@@ -10,7 +10,6 @@ inherit distutils-r1 cmake flag-o-matic multiprocessing
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 MY_P=${P/_}
 DESCRIPTION="Seamless operability between C++11 and Python via lightweight bindings"
 HOMEPAGE="https://github.com/pybind/pybind11/"

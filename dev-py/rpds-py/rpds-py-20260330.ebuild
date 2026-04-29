@@ -4,7 +4,11 @@ DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=maturin
 
 inherit cargo distutils-r1
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Python bindings to Rust's persistent data structures (rpds)"
 HOMEPAGE="https://github.com/crate-py/rpds/"
 SNAPSHOT=bacd1f164afcdf1fdaaf30d9135d1acd1a38f9f2

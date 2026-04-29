@@ -7,11 +7,10 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/soupsieve
-	dev-python/typing-extensions
+	dev-pypi/soupsieve
+	dev-pypi/typing-extensions
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Pythonic idioms for iterating, searching, and modifying an HTML/XML parse tree"
 HOMEPAGE="https://www.crummy.com/software/BeautifulSoup/bs4/"
 

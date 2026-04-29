@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Python module for spawning child apps and responding to expected patterns"
 HOMEPAGE="
 	https://pexpect.readthedocs.io/

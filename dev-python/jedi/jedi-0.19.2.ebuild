@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 TYPESHED_P="typeshed-ae9d4f4b21bb5e1239816c301da7b1ea904b44c3"
 DJANGO_STUBS_P="django-stubs-3d2534ea8d8300c4c9db8f18e300355d5fd5488b"
 EGIT_COMMIT="82d1902f382ddac5b0e6647646b72f28a3181ec3"

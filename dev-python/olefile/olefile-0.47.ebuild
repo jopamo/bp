@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Python package to parse, read and write Microsoft OLE2 files"
 HOMEPAGE="
 	https://www.decalage.info/olefile/

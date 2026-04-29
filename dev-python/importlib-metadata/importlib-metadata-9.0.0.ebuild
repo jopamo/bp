@@ -10,10 +10,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/zipp
+	dev-pypi/zipp
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Read metadata from Python packages"
 HOMEPAGE="
 	https://github.com/python/importlib_metadata/

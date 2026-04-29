@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Plugin for pytest that automatically reruns flaky tests"
 HOMEPAGE="
 	https://github.com/box/flaky/

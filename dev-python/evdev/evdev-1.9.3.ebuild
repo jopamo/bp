@@ -10,7 +10,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 MY_P=python-evdev-${PV}
 DESCRIPTION="Python library for evdev bindings"
 HOMEPAGE="

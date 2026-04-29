@@ -17,6 +17,6 @@ KEYWORDS="amd64 arm64"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/markupsafe
+	dev-pypi/markupsafe
 "
 # lockstep-pypi-deps: end

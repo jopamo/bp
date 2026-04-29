@@ -9,10 +9,9 @@ inherit distutils-r1 optfeature
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/sortedcontainers
+	dev-pypi/sortedcontainers
 "
 # lockstep-pypi-deps: end
-
 TAG=hypothesis-python-${PV}
 MY_P=hypothesis-${TAG}
 DESCRIPTION="A library for property based testing"

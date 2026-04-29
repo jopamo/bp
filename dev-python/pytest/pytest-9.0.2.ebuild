@@ -9,13 +9,12 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/iniconfig
-	dev-python/packaging
-	dev-python/pluggy
-	dev-python/pygments
+	dev-pypi/iniconfig
+	dev-pypi/packaging
+	dev-pypi/pluggy
+	dev-pypi/pygments
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Simple powerful testing with Python"
 HOMEPAGE="
 	https://pytest.org/

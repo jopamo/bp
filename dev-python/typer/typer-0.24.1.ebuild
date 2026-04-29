@@ -9,12 +9,11 @@ inherit distutils-r1 pypi
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/annotated-doc
-	dev-python/click
-	dev-python/rich
-	dev-python/shellingham
+	dev-pypi/click
+	dev-pypi/rich
+	dev-pypi/shellingham
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Build great CLIs. Easy to code. Based on Python type hints"
 HOMEPAGE="
 	https://typer.tiangolo.com/

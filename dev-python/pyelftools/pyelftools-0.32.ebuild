@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="pure-Python library for analyzing ELF files and DWARF debugging information"
 HOMEPAGE="
 	https://pypi.org/project/pyelftools/

@@ -8,10 +8,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/cffi
+	dev-pypi/cffi
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A drop in replacement for xpyb, an XCB python binding"
 HOMEPAGE="
 	https://github.com/tych0/xcffib/

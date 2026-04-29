@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Python implementation of RFC6570, URI Template"
 HOMEPAGE="
 	https://uritemplate.readthedocs.io/en/latest/

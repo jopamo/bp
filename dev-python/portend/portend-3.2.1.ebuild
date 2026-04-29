@@ -10,7 +10,6 @@ RDEPEND+="
 	dev-pypi/tempora
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="TCP port monitoring utilities"
 HOMEPAGE="
 	https://github.com/jaraco/portend/

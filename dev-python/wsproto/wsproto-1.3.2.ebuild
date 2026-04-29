@@ -7,10 +7,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/h11
+	dev-pypi/h11
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="WebSockets state-machine based protocol implementation"
 HOMEPAGE="
 	https://github.com/python-hyper/wsproto/

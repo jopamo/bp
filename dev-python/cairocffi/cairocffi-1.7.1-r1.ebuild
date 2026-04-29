@@ -4,7 +4,12 @@ DISTUTILS_USE_PEP517=flit
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi 
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/cffi
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="CFFI-based drop-in replacement for Pycairo"
 HOMEPAGE="
 	https://github.com/Kozea/cairocffi/

@@ -11,13 +11,12 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	dev-pypi/distlib
+	dev-pypi/filelock
+	dev-pypi/platformdirs
 	dev-pypi/python-discovery
-	dev-python/distlib
-	dev-python/filelock
-	dev-python/platformdirs
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Virtual Python Environment builder"
 HOMEPAGE="
 	https://virtualenv.pypa.io/en/stable/

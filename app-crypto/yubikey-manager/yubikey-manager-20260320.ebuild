@@ -3,7 +3,17 @@
 DISTUTILS_USE_PEP517=poetry
 
 inherit distutils-r1
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/click
+	dev-pypi/cryptography
+	dev-pypi/fido2
+	dev-pypi/keyring
+	dev-pypi/pyscard
+	dev-pypi/python-pskc
+"
+# lockstep-pypi-deps: end
 MY_PN="${PN/-/_}"
 MY_P="${MY_PN}-${PV}"
 

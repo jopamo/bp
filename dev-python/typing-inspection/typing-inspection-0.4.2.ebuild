@@ -7,10 +7,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/typing-extensions
+	dev-pypi/typing-extensions
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Runtime typing introspection tools"
 HOMEPAGE="
 	https://github.com/pydantic/typing-inspection/

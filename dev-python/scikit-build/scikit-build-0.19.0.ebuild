@@ -4,7 +4,15 @@ DISTUTILS_USE_PEP517=hatchling
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 pypi
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/distro
+	dev-pypi/packaging
+	dev-pypi/setuptools
+	dev-pypi/wheel
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Improved build system generator for Python C/C++/Fortran/Cython extensions"
 HOMEPAGE="
 	https://github.com/scikit-build/scikit-build/

@@ -7,18 +7,17 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-py/numpy
-	dev-py/regex
-	dev-python/huggingface_hub
-	dev-python/packaging
-	dev-python/pyyaml
-	dev-python/safetensors
-	dev-python/tokenizers
-	dev-python/tqdm
-	dev-python/typer
+	dev-pypi/huggingface-hub
+	dev-pypi/numpy
+	dev-pypi/packaging
+	dev-pypi/pyyaml
+	dev-pypi/regex
+	dev-pypi/safetensors
+	dev-pypi/tokenizers
+	dev-pypi/tqdm
+	dev-pypi/typer
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="State-of-the-art Machine Learning for JAX, PyTorch and TensorFlow"
 HOMEPAGE="
 	https://pypi.org/project/transformers/

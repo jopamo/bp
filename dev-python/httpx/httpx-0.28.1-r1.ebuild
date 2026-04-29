@@ -4,7 +4,15 @@ DISTUTILS_USE_PEP517=hatchling
 PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 
 inherit distutils-r1 optfeature
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/anyio
+	dev-pypi/certifi
+	dev-pypi/httpcore
+	dev-pypi/idna
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Fully-featured HTTP client which provides sync and async APIs"
 HOMEPAGE="
 	https://www.python-httpx.org/

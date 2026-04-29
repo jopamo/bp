@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A utility belt for advanced users of python-requests"
 HOMEPAGE="
 	https://toolbelt.readthedocs.io/

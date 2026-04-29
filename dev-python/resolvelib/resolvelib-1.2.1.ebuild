@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Resolve abstract dependencies into concrete ones"
 HOMEPAGE="
 	https://github.com/sarugaku/resolvelib/

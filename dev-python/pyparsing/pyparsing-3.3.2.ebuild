@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Easy-to-use Python module for text parsing"
 HOMEPAGE="
 	https://github.com/pyparsing/pyparsing/

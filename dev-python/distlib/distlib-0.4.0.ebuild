@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Low-level components of distutils2/packaging"
 HOMEPAGE="
 	https://pypi.org/project/distlib/

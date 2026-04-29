@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Extended pickling support for Python objects"
 HOMEPAGE="
 	https://github.com/cloudpipe/cloudpickle/

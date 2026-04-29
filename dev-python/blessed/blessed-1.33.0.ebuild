@@ -7,10 +7,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/wcwidth
+	dev-pypi/wcwidth
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Library for making terminal apps using colors, keyboard input and positioning"
 HOMEPAGE="
 	https://github.com/jquast/blessed/

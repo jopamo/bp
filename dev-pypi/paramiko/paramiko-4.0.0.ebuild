@@ -1,0 +1,25 @@
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_USE_PEP517="setuptools"
+
+inherit distutils-r1 pypi
+
+PYPI_PN="paramiko"
+DESCRIPTION="SSH2 protocol library"
+HOMEPAGE="https://pypi.org/project/paramiko/"
+LICENSE="metapackage"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/bcrypt
+	dev-pypi/cryptography
+	dev-pypi/invoke
+	dev-pypi/pynacl
+"
+# lockstep-pypi-deps: end

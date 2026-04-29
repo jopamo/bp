@@ -3,7 +3,19 @@
 DISTUTILS_USE_PEP517=hatchling
 
 inherit distutils-r1 pypi
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/anyio
+	dev-pypi/distro
+	dev-pypi/httpx
+	dev-pypi/jiter
+	dev-pypi/pydantic
+	dev-pypi/sniffio
+	dev-pypi/tqdm
+	dev-pypi/typing-extensions
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Python client library for the OpenAI API"
 HOMEPAGE="https://github.com/openai/openai-python"
 SNAPSHOT=58184ad545ee2abd98e171ee09766f259d7f38cd

@@ -17,6 +17,6 @@ KEYWORDS="amd64 arm64"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/wcwidth
+	dev-pypi/wcwidth
 "
 # lockstep-pypi-deps: end

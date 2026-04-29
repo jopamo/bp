@@ -9,13 +9,12 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	dev-pypi/jaraco-context
+	dev-pypi/jaraco-functools
+	dev-pypi/more-itertools
 	dev-pypi/typer-slim
-	dev-python/jaraco-context
-	dev-python/jaraco-functools
-	dev-python/more-itertools
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Text utilities used by other projects by developer jaraco"
 HOMEPAGE="
 	https://github.com/jaraco/jaraco.text/

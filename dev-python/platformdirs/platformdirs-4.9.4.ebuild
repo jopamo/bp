@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A small Python module for determining appropriate platform-specific dirs"
 HOMEPAGE="
 	https://pypi.org/project/platformdirs/

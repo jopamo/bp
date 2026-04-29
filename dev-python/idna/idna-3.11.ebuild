@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Internationalized Domain Names in Applications (IDNA)"
 HOMEPAGE="
 	https://github.com/kjd/idna/

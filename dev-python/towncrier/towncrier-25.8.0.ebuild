@@ -7,11 +7,10 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	dev-pypi/click
 	dev-pypi/jinja2
-	dev-python/click
 "
 # lockstep-pypi-deps: end
-
 MY_P=${P/_}
 DESCRIPTION="Building newsfiles for your project"
 HOMEPAGE="

@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A cross-platform clipboard module for Python"
 HOMEPAGE="
 	https://github.com/asweigart/pyperclip/

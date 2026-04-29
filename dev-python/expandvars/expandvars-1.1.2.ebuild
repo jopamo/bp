@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Expand system variables Unix style"
 HOMEPAGE="
 	https://github.com/sayanarijit/expandvars/

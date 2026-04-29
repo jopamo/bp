@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="tzinfo object for the local timezone"
 HOMEPAGE="
 	https://github.com/regebro/tzlocal/

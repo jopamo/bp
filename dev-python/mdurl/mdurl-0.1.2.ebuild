@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Markdown URL utilities"
 HOMEPAGE="
 	https://pypi.org/project/mdurl/

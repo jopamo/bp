@@ -7,10 +7,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/python-dateutil
+	dev-pypi/python-dateutil
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Let your Python tests travel through time"
 HOMEPAGE="
 	https://github.com/spulec/freezegun/

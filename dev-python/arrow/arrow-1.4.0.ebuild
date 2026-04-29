@@ -7,11 +7,10 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/python-dateutil
-	dev-python/tzdata
+	dev-pypi/python-dateutil
+	dev-pypi/tzdata
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Better dates and times for Python"
 HOMEPAGE="
 	https://github.com/arrow-py/arrow/

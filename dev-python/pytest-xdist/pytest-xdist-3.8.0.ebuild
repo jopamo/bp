@@ -7,11 +7,10 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/execnet
-	dev-python/pytest
+	dev-pypi/execnet
+	dev-pypi/pytest
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Distributed testing and loop-on-failing modes"
 HOMEPAGE="
 	https://pypi.org/project/pytest-xdist/

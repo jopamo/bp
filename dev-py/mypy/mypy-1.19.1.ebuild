@@ -8,13 +8,12 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-py/mypy-extensions
-	dev-python/librt
-	dev-python/pathspec
-	dev-python/typing-extensions
+	dev-pypi/librt
+	dev-pypi/mypy-extensions
+	dev-pypi/pathspec
+	dev-pypi/typing-extensions
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Optional static typing for Python"
 HOMEPAGE="
 	https://www.mypy-lang.org/

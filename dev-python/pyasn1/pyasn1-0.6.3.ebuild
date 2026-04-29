@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="ASN.1 library for Python"
 HOMEPAGE="
 	https://pypi.org/project/pyasn1/

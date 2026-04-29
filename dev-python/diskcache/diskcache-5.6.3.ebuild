@@ -10,7 +10,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Disk and file backed cache"
 HOMEPAGE="
 	https://grantjenks.com/docs/diskcache/

@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Canonical source for classifiers on PyPI (pypi.org)"
 HOMEPAGE="
 	https://github.com/pypa/trove-classifiers/

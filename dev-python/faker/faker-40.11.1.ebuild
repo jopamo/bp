@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A Python package that generates fake data for you"
 HOMEPAGE="
 	https://github.com/joke2k/faker/

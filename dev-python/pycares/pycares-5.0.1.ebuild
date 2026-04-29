@@ -8,10 +8,9 @@ inherit distutils-r1 pypi flag-o-matic
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/cffi
+	dev-pypi/cffi
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Python interface for c-ares"
 HOMEPAGE="
 	https://github.com/saghul/pycares/

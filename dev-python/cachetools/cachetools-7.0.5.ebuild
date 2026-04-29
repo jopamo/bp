@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Extensible memoizing collections and decorators"
 HOMEPAGE="
 	https://github.com/tkem/cachetools/

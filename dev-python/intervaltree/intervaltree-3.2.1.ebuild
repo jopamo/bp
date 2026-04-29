@@ -7,10 +7,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/sortedcontainers
+	dev-pypi/sortedcontainers
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Editable interval tree data structure for Python 2 and 3"
 HOMEPAGE="
 	https://github.com/chaimleib/intervaltree/

@@ -8,15 +8,14 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/certifi
-	dev-python/trio
-	dev-python/trio-websocket
-	dev-python/typing-extensions
-	dev-python/urllib3
-	dev-python/websocket-client
+	dev-pypi/certifi
+	dev-pypi/trio
+	dev-pypi/trio-websocket
+	dev-pypi/typing-extensions
+	dev-pypi/urllib3
+	dev-pypi/websocket-client
 "
 # lockstep-pypi-deps: end
-
 # base releases are usually ${P}, followups ${P}-python
 TEST_TAG=${P}
 [[ ${PV} != *.0 ]] && TEST_TAG+=-python

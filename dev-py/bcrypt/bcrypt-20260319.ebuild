@@ -76,7 +76,11 @@ DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
 
 inherit cargo lockstep-cargo distutils-r1 pypi
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Modern password hashing for software and servers"
 HOMEPAGE="https://pypi.org/project/bcrypt/"
 SNAPSHOT=3191062a810ffb79aa48810f92371b1345bfa3b1

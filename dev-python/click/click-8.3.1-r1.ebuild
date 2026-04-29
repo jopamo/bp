@@ -5,7 +5,11 @@ PYPI_VERIFY_REPO=https://github.com/pallets/click
 PYTHON_COMPAT=( python3_{11..14} python3_{13,14}t pypy3_11 )
 
 inherit distutils-r1 pypi
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="A Python package for creating beautiful command line interfaces"
 HOMEPAGE="
 	https://palletsprojects.com/p/click/

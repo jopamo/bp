@@ -7,10 +7,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/pytest
+	dev-pypi/pytest
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Home directory fixtures"
 HOMEPAGE="
 	https://github.com/jaraco/pytest-home/

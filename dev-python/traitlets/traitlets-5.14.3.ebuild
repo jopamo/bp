@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A configuration system for Python applications"
 HOMEPAGE="
 	https://github.com/ipython/traitlets/

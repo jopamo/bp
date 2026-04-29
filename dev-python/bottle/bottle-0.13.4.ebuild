@@ -9,7 +9,6 @@ inherit distutils-r1 optfeature pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A fast and simple micro-framework for small web-applications"
 HOMEPAGE="
 	https://bottlepy.org/

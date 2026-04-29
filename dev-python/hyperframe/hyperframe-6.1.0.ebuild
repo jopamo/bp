@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="HTTP/2 framing layer for Python"
 HOMEPAGE="
 	https://python-hyper.org/projects/hyperframe/en/latest/

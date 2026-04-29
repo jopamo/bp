@@ -10,7 +10,6 @@ inherit distutils-r1 optfeature pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="A library for shell script-like programs in python"
 HOMEPAGE="
 	https://plumbum.readthedocs.io/en/latest/

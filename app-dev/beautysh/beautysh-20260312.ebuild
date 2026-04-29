@@ -3,7 +3,13 @@
 DISTUTILS_USE_PEP517=hatchling
 
 inherit distutils-r1
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/colorama
+	dev-pypi/editorconfig
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="A Bash beautifier for the masses"
 HOMEPAGE="https://github.com/lovesegfault/beautysh"
 SNAPSHOT=34c3b3da0233e76d7d1ad90a78f3679185ecf31c

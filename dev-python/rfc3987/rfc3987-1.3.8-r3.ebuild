@@ -4,7 +4,11 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
 inherit distutils-r1 pypi
-
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
 DESCRIPTION="Parsing and validation of URIs (RFC 3986) and IRIs (RFC 3987)"
 HOMEPAGE="
 	https://github.com/dgerber/rfc3987/

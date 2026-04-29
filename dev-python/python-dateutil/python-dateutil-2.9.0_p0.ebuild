@@ -9,10 +9,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/six
+	dev-pypi/six
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Extensions to the standard Python datetime module"
 HOMEPAGE="
 	https://dateutil.readthedocs.io/

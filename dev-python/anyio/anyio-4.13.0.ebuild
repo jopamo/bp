@@ -8,10 +8,9 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/idna
+	dev-pypi/idna
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Compatibility layer for multiple asynchronous event loop implementations"
 HOMEPAGE="
 	https://github.com/agronholm/anyio/

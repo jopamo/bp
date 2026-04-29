@@ -9,7 +9,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="More routines for operating on iterables, beyond itertools"
 HOMEPAGE="
 	https://github.com/more-itertools/more-itertools/

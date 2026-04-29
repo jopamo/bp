@@ -8,13 +8,12 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	dev-pypi/fastjsonschema
+	dev-pypi/jsonschema
 	dev-pypi/jupyter-core
-	dev-python/fastjsonschema
-	dev-python/jsonschema
-	dev-python/traitlets
+	dev-pypi/traitlets
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Reference implementation of the Jupyter Notebook format"
 HOMEPAGE="
 	https://jupyter.org/

@@ -8,21 +8,20 @@ inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	dev-pypi/comm
 	dev-pypi/debugpy
 	dev-pypi/ipython
 	dev-pypi/jupyter-client
 	dev-pypi/jupyter-core
 	dev-pypi/matplotlib-inline
 	dev-pypi/nest-asyncio
-	dev-python/comm
-	dev-python/packaging
-	dev-python/psutil
-	dev-python/pyzmq
-	dev-python/tornado
-	dev-python/traitlets
+	dev-pypi/packaging
+	dev-pypi/psutil
+	dev-pypi/pyzmq
+	dev-pypi/tornado
+	dev-pypi/traitlets
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="IPython Kernel for Jupyter"
 HOMEPAGE="
 	https://github.com/ipython/ipykernel/

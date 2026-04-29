@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Tools to provide lightweight pipelining in Python"
 HOMEPAGE="
 	https://joblib.readthedocs.io/en/latest/

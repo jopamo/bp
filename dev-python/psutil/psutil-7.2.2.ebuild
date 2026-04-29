@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Retrieve information on running processes and system utilization"
 HOMEPAGE="
 	https://github.com/giampaolo/psutil/

@@ -10,7 +10,6 @@ inherit distutils-r1 pypi
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Accelerated property cache"
 HOMEPAGE="
 	https://github.com/aio-libs/propcache/

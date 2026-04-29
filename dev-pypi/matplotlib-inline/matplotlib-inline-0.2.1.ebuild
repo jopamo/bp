@@ -17,6 +17,6 @@ KEYWORDS="amd64 arm64"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-python/traitlets
+	dev-pypi/traitlets
 "
 # lockstep-pypi-deps: end

@@ -9,7 +9,6 @@ inherit distutils-r1
 RDEPEND+="
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Jupyter Python Comm implementation, for usage in ipykernel, xeus-python"
 HOMEPAGE="
 	https://github.com/ipython/comm/

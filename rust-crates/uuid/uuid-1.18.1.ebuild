@@ -1,5 +1,6 @@
 # lockstep-managed: cargo-crate
 EAPI=8
+LOCKSTEP_PAYLOAD_MODE="tree-blake3-v1"
 
 CRATE_NAME="uuid"
 CRATE_VERSION="1.18.1"

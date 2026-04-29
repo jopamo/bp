@@ -1,5 +1,6 @@
 # lockstep-managed: cargo-crate
 EAPI=8
+LOCKSTEP_PAYLOAD_MODE="tree-blake3-v1"
 
 CRATE_NAME="windows_x86_64_gnu"
 CRATE_VERSION="0.42.2"

@@ -28,26 +28,26 @@ IUSE="selinux"
 
 BDEPEND="
 	test? (
-		dev-python/pytest[${PYTHON_USEDEP}]
-		dev-python/pytest-cov[${PYTHON_USEDEP}]
-		dev-python/pytest-xdist[${PYTHON_USEDEP}]
-		dev-python/typing-extensions[${PYTHON_USEDEP}]
+		dev-py/pytest[${PYTHON_USEDEP}]
+		dev-py/pytest-cov[${PYTHON_USEDEP}]
+		dev-py/pytest-xdist[${PYTHON_USEDEP}]
+		dev-py/typing-extensions[${PYTHON_USEDEP}]
 	)
 "
 
 # See certbot/setup.py for acme >= dep
 RDEPEND="
 	>=app-crypto/acme-${PV}[${PYTHON_USEDEP}]
-	>=dev-python/configargparse-1.5.3[${PYTHON_USEDEP}]
-	>=dev-python/configobj-5.0.6[${PYTHON_USEDEP}]
+	>=dev-py/configargparse-1.5.3[${PYTHON_USEDEP}]
+	>=dev-py/configobj-5.0.6[${PYTHON_USEDEP}]
 	>=app-crypto/cryptography-3.2.1[${PYTHON_USEDEP}]
-	>=dev-python/distro-1.0.1[${PYTHON_USEDEP}]
-	>=dev-python/josepy-1.13.0[${PYTHON_USEDEP}]
-	>=dev-python/parsedatetime-2.4[${PYTHON_USEDEP}]
-	dev-python/pyrfc3339[${PYTHON_USEDEP}]
-	>=dev-python/pytz-2019.3[${PYTHON_USEDEP}]
+	>=dev-py/distro-1.0.1[${PYTHON_USEDEP}]
+	>=dev-py/josepy-1.13.0[${PYTHON_USEDEP}]
+	>=dev-py/parsedatetime-2.4[${PYTHON_USEDEP}]
+	dev-py/pyrfc3339[${PYTHON_USEDEP}]
+	>=dev-py/pytz-2019.3[${PYTHON_USEDEP}]
 	selinux? ( sec-policy/selinux-certbot )
 "
 
-distutils_enable_sphinx docs dev-python/sphinx-rtd-theme
+distutils_enable_sphinx docs dev-py/sphinx-rtd-theme
 distutils_enable_tests pytest

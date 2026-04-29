@@ -35,22 +35,22 @@ BDEPEND="
 	doc? (
 		$(python_gen_any_dep '
 			dev-py/docutils[${PYTHON_USEDEP}]
-			dev-python/pygments[${PYTHON_USEDEP}]
-			dev-python/sphinx[${PYTHON_USEDEP}]
-			dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]
+			dev-py/pygments[${PYTHON_USEDEP}]
+			dev-py/sphinx[${PYTHON_USEDEP}]
+			dev-py/sphinx-rtd-theme[${PYTHON_USEDEP}]
 		')
 	)
 	test? (
-		dev-python/cssselect[${PYTHON_USEDEP}]
+		dev-py/cssselect[${PYTHON_USEDEP}]
 	)
 "
 
 python_check_deps() {
 	use doc || return 0
 	python_has_version -b "dev-py/docutils[${PYTHON_USEDEP}]" &&
-	python_has_version -b "dev-python/pygments[${PYTHON_USEDEP}]" &&
-	python_has_version -b "dev-python/sphinx[${PYTHON_USEDEP}]" &&
-	python_has_version -b "dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]"
+	python_has_version -b "dev-py/pygments[${PYTHON_USEDEP}]" &&
+	python_has_version -b "dev-py/sphinx[${PYTHON_USEDEP}]" &&
+	python_has_version -b "dev-py/sphinx-rtd-theme[${PYTHON_USEDEP}]"
 }
 
 python_prepare_all() {
@@ -107,7 +107,7 @@ python_install_all() {
 
 pkg_postinst() {
 	filter-flags -Wl,-z,defs
-	optfeature "Support for BeautifulSoup as a parser backend" dev-python/beautifulsoup4
-	optfeature "Translates CSS selectors to XPath 1.0 expressions" dev-python/cssselect
+	optfeature "Support for BeautifulSoup as a parser backend" dev-py/beautifulsoup4
+	optfeature "Translates CSS selectors to XPath 1.0 expressions" dev-py/cssselect
 	optfeature "Support for lxml.html.clean sanitizer" dev-py/lxml-html-clean
 }

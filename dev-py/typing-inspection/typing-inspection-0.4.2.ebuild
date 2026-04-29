@@ -1,0 +1,28 @@
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_USE_PEP517=hatchling
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
+
+inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/typing-extensions
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="Runtime typing introspection tools"
+HOMEPAGE="
+	https://github.com/pydantic/typing-inspection/
+	https://pypi.org/project/typing-inspection/
+"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+RDEPEND="
+	>=dev-py/typing-extensions-4.12.0[${PYTHON_USEDEP}]
+"
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest

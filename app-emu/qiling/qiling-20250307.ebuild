@@ -24,5 +24,5 @@ RDEPEND="
 	app-emu/capstone[python]
 	app-emu/keystone[python]
 	app-emu/unicorn[python]
-	dev-python/pyelftools
+	dev-py/pyelftools
 "

@@ -388,7 +388,7 @@ _pypi_set_globals() {
 		"
 		BDEPEND+="
 			verify-provenance? (
-				dev-python/pypi-attestations
+				dev-py/pypi-attestations
 			)
 		"
 	fi

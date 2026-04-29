@@ -76,7 +76,7 @@ inherit multibuild python-utils-r1
 #
 # Example:
 # @CODE
-# PYTHON_COMPAT_OVERRIDE='pypy python3_3' emerge -1v dev-python/foo
+# PYTHON_COMPAT_OVERRIDE='pypy python3_3' emerge -1v dev-py/foo
 # @CODE
 
 # @ECLASS_VARIABLE: PYTHON_REQ_USE
@@ -115,7 +115,7 @@ inherit multibuild python-utils-r1
 # Example value:
 # @CODE
 # python_targets_python2_7? ( app-lang/python:2.7[gdbm] )
-# python_targets_pypy? ( dev-python/pypy[gdbm] )
+# python_targets_pypy? ( dev-py/pypy[gdbm] )
 # @CODE
 
 # @ECLASS_VARIABLE: PYTHON_USEDEP
@@ -127,7 +127,7 @@ inherit multibuild python-utils-r1
 #
 # Example use:
 # @CODE
-# RDEPEND="dev-python/foo[${PYTHON_USEDEP}]"
+# RDEPEND="dev-py/foo[${PYTHON_USEDEP}]"
 # @CODE
 #
 # Example value:
@@ -148,7 +148,7 @@ inherit multibuild python-utils-r1
 # Example use:
 # @CODE
 # python_check_deps() {
-# 	python_has_version "dev-python/bar[${PYTHON_SINGLE_USEDEP}]"
+# 	python_has_version "dev-py/bar[${PYTHON_SINGLE_USEDEP}]"
 # }
 # @CODE
 #
@@ -351,15 +351,15 @@ python_gen_useflags() {
 # @CODE
 # PYTHON_COMPAT=( python{2_7,3_{3,4}} pypy )
 # RDEPEND="$(python_gen_cond_dep \
-#   'dev-python/unittest2[${PYTHON_USEDEP}]' python2_7 pypy )"
+#   'dev-py/unittest2[${PYTHON_USEDEP}]' python2_7 pypy )"
 # @CODE
 #
 # It will cause the variable to look like:
 # @CODE
 # RDEPEND="python_targets_python2_7? (
-#     dev-python/unittest2[python_targets_python2_7?] )
+#     dev-py/unittest2[python_targets_python2_7?] )
 #	python_targets_pypy? (
-#     dev-python/unittest2[python_targets_pypy?] )"
+#     dev-py/unittest2[python_targets_pypy?] )"
 # @CODE
 python_gen_cond_dep() {
 	debug-print-function ${FUNCNAME} "$@"
@@ -422,7 +422,7 @@ python_gen_cond_dep() {
 #   python_targets_python2_7? (
 #     app-lang/python:2.7[xml(+)] )
 #	python_targets_pypy? (
-#     dev-python/pypy[xml(+)] ) )"
+#     dev-py/pypy[xml(+)] ) )"
 # @CODE
 python_gen_impl_dep() {
 	debug-print-function ${FUNCNAME} "$@"
@@ -469,14 +469,14 @@ python_gen_impl_dep() {
 # Example use:
 # @CODE
 # BDEPEND="$(python_gen_any_dep '
-#	dev-python/foo[${PYTHON_SINGLE_USEDEP}]
-#	|| ( dev-python/bar[${PYTHON_USEDEP}]
-#		dev-python/baz[${PYTHON_USEDEP}] )' -2)"
+#	dev-py/foo[${PYTHON_SINGLE_USEDEP}]
+#	|| ( dev-py/bar[${PYTHON_USEDEP}]
+#		dev-py/baz[${PYTHON_USEDEP}] )' -2)"
 #
 # python_check_deps() {
-# 	python_has_version "dev-python/foo[${PYTHON_SINGLE_USEDEP}]" &&
-# 		{ python_has_version "dev-python/bar[${PYTHON_USEDEP}]" ||
-# 			python_has_version "dev-python/baz[${PYTHON_USEDEP}]"; }
+# 	python_has_version "dev-py/foo[${PYTHON_SINGLE_USEDEP}]" &&
+# 		{ python_has_version "dev-py/bar[${PYTHON_USEDEP}]" ||
+# 			python_has_version "dev-py/baz[${PYTHON_USEDEP}]"; }
 # }
 #
 # src_compile() {
@@ -493,15 +493,15 @@ python_gen_impl_dep() {
 # || (
 #	(
 #		app-lang/python:3.7
-#		dev-python/foo[python_single_target_python3_7(-)]
-#		|| ( dev-python/bar[python_targets_python3_7(-),-python_single_target_python3_7(-)]
-#			dev-python/baz[python_targets_python3_7(-),-python_single_target_python3_7(-)] )
+#		dev-py/foo[python_single_target_python3_7(-)]
+#		|| ( dev-py/bar[python_targets_python3_7(-),-python_single_target_python3_7(-)]
+#			dev-py/baz[python_targets_python3_7(-),-python_single_target_python3_7(-)] )
 #	)
 #	(
 #		app-lang/python:3.8
-#		dev-python/foo[python_single_target_python3_8(-)]
-#		|| ( dev-python/bar[python_targets_python3_8(-)]
-#			dev-python/baz[python_targets_python3_8(-)] )
+#		dev-py/foo[python_single_target_python3_8(-)]
+#		|| ( dev-py/bar[python_targets_python3_8(-)]
+#			dev-py/baz[python_targets_python3_8(-)] )
 #	)
 # )
 # @CODE
@@ -680,7 +680,7 @@ python_foreach_impl() {
 #
 # Pure mode example:
 # @CODE
-# BDEPEND="doc? ( dev-python/epydoc[$(python_gen_usedep 'python2*')] )"
+# BDEPEND="doc? ( dev-py/epydoc[$(python_gen_usedep 'python2*')] )"
 # REQUIRED_USE="doc? ( $(python_gen_useflags 'python2*') )"
 #
 # src_compile() {
@@ -695,11 +695,11 @@ python_foreach_impl() {
 # Any-of mode example:
 # @CODE
 # BDEPEND="doc? (
-#	$(python_gen_any_dep 'dev-python/epydoc[${PYTHON_USEDEP}]' 'python2*') )"
+#	$(python_gen_any_dep 'dev-py/epydoc[${PYTHON_USEDEP}]' 'python2*') )"
 #
 # python_check_deps() {
 # 	! use doc && return 0
-# 	python_has_version "dev-python/epydoc[${PYTHON_USEDEP}]"
+# 	python_has_version "dev-py/epydoc[${PYTHON_USEDEP}]"
 # }
 #
 # src_compile() {

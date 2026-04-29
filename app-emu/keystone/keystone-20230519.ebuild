@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 IUSE="python"
 
 DEPEND="
-	dev-python/pefile
+	dev-py/pefile
 "
 
 filter-flags -flto\*

@@ -1,0 +1,40 @@
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_USE_PEP517=hatchling
+PYPI_VERIFY_REPO=https://github.com/python-jsonschema/referencing
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
+
+inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/attrs
+	dev-pypi/rpds-py
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="Cross-specification JSON referencing (JSON Schema, OpenAPI...)"
+HOMEPAGE="
+	https://github.com/python-jsonschema/referencing/
+	https://pypi.org/project/referencing/
+"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+RDEPEND="
+	>=dev-py/attrs-22.2.0[${PYTHON_USEDEP}]
+	>=dev-py/rpds-py-0.7.0[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-py/typing-extensions-4.4.0[${PYTHON_USEDEP}]
+	' 3.{11..12})
+"
+BDEPEND="
+	dev-py/hatch-vcs[${PYTHON_USEDEP}]
+	test? (
+		dev-py/jsonschema[${PYTHON_USEDEP}]
+	)
+"
+
+EPYTEST_PLUGINS=( pytest-subtests )
+distutils_enable_tests pytest

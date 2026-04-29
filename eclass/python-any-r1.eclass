@@ -78,7 +78,7 @@ inherit python-utils-r1
 #
 # Example:
 # @CODE
-# PYTHON_COMPAT_OVERRIDE='pypy' emerge -1v dev-python/bar
+# PYTHON_COMPAT_OVERRIDE='pypy' emerge -1v dev-py/bar
 # @CODE
 
 # @ECLASS_VARIABLE: PYTHON_REQ_USE
@@ -131,7 +131,7 @@ inherit python-utils-r1
 # Example use:
 # @CODE
 # python_check_deps() {
-# 	python_has_version "dev-python/foo[${PYTHON_USEDEP}]"
+# 	python_has_version "dev-py/foo[${PYTHON_USEDEP}]"
 # }
 # @CODE
 #
@@ -153,7 +153,7 @@ inherit python-utils-r1
 # Example use:
 # @CODE
 # python_check_deps() {
-# 	python_has_version "dev-python/bar[${PYTHON_SINGLE_USEDEP}]"
+# 	python_has_version "dev-py/bar[${PYTHON_SINGLE_USEDEP}]"
 # }
 # @CODE
 #
@@ -217,14 +217,14 @@ unset -f _python_any_set_globals
 # Example use:
 # @CODE
 # BDEPEND="$(python_gen_any_dep '
-#	dev-python/foo[${PYTHON_SINGLE_USEDEP}]
-#	|| ( dev-python/bar[${PYTHON_USEDEP}]
-#		dev-python/baz[${PYTHON_USEDEP}] )')"
+#	dev-py/foo[${PYTHON_SINGLE_USEDEP}]
+#	|| ( dev-py/bar[${PYTHON_USEDEP}]
+#		dev-py/baz[${PYTHON_USEDEP}] )')"
 #
 # python_check_deps() {
-# 	python_has_version "dev-python/foo[${PYTHON_SINGLE_USEDEP}]" &&
-# 		{ python_has_version "dev-python/bar[${PYTHON_USEDEP}]" ||
-# 			python_has_version "dev-python/baz[${PYTHON_USEDEP}]"; }
+# 	python_has_version "dev-py/foo[${PYTHON_SINGLE_USEDEP}]" &&
+# 		{ python_has_version "dev-py/bar[${PYTHON_USEDEP}]" ||
+# 			python_has_version "dev-py/baz[${PYTHON_USEDEP}]"; }
 # }
 # @CODE
 #
@@ -233,15 +233,15 @@ unset -f _python_any_set_globals
 # || (
 #	(
 #		app-lang/python:3.7
-#		dev-python/foo[python_single_target_python3_7(-)]
-#		|| ( dev-python/bar[python_targets_python3_7(-)
-#			dev-python/baz[python_targets_python3_7(-) )
+#		dev-py/foo[python_single_target_python3_7(-)]
+#		|| ( dev-py/bar[python_targets_python3_7(-)
+#			dev-py/baz[python_targets_python3_7(-) )
 #	)
 #	(
 #		app-lang/python:3.8
-#		dev-python/foo[python_single_target_python3_8(-)]
-#		|| ( dev-python/bar[python_targets_python3_8(-)]
-#			dev-python/baz[python_targets_python3_8(-)] )
+#		dev-py/foo[python_single_target_python3_8(-)]
+#		|| ( dev-py/bar[python_targets_python3_8(-)]
+#			dev-py/baz[python_targets_python3_8(-)] )
 #	)
 # )
 # @CODE

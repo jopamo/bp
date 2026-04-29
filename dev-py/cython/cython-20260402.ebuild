@@ -31,8 +31,8 @@ PATCHES=(
 
 distutils_enable_sphinx docs \
 	dev-py/jinja \
-	dev-python/sphinx-issues \
-	dev-python/sphinx-tabs
+	dev-py/sphinx-issues \
+	dev-py/sphinx-tabs
 
 python_compile() {
 	filter-flags -Wl,-z,defs

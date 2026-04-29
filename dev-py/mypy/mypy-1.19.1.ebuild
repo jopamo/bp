@@ -33,21 +33,21 @@ IUSE="+native-extensions"
 # stubgen collides with this package: https://bugs.gentoo.org/585594
 RDEPEND="
 	!dev-util/stubgen
-	>=dev-python/librt-0.6.2[${PYTHON_USEDEP}]
+	>=dev-py/librt-0.6.2[${PYTHON_USEDEP}]
 	>=dev-py/mypy-extensions-1.0.0[${PYTHON_USEDEP}]
-	>=dev-python/pathspec-0.9.0[${PYTHON_USEDEP}]
-	>=dev-python/psutil-4[${PYTHON_USEDEP}]
-	>=dev-python/typing-extensions-4.6.0[${PYTHON_USEDEP}]
+	>=dev-py/pathspec-0.9.0[${PYTHON_USEDEP}]
+	>=dev-py/psutil-4[${PYTHON_USEDEP}]
+	>=dev-py/typing-extensions-4.6.0[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	native-extensions? (
 		${RDEPEND}
-		dev-python/types-psutil[${PYTHON_USEDEP}]
-		dev-python/types-setuptools[${PYTHON_USEDEP}]
+		dev-py/types-psutil[${PYTHON_USEDEP}]
+		dev-py/types-setuptools[${PYTHON_USEDEP}]
 	)
 	test? (
-		>=dev-python/attrs-18.0[${PYTHON_USEDEP}]
-		>=dev-python/filelock-3.3.0[${PYTHON_USEDEP}]
+		>=dev-py/attrs-18.0[${PYTHON_USEDEP}]
+		>=dev-py/filelock-3.3.0[${PYTHON_USEDEP}]
 		>=dev-py/lxml-4.9.1[${PYTHON_USEDEP}]
 	)
 "

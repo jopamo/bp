@@ -16,20 +16,20 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	virtual/ssl
-	>=dev-python/cffi-1.12[${PYTHON_USEDEP}]
-	>=dev-python/six-1.4.1[${PYTHON_USEDEP}]
+	>=dev-py/cffi-1.12[${PYTHON_USEDEP}]
+	>=dev-py/six-1.4.1[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
 	dev-py/setuptools[${PYTHON_USEDEP}]
-	dev-python/wheel[${PYTHON_USEDEP}]
+	dev-py/wheel[${PYTHON_USEDEP}]
 	test? (
-		>=dev-python/hypothesis-1.11.4[${PYTHON_USEDEP}]
-		dev-python/iso8601[${PYTHON_USEDEP}]
-		dev-python/pretend[${PYTHON_USEDEP}]
-		dev-python/pytz[${PYTHON_USEDEP}]
+		>=dev-py/hypothesis-1.11.4[${PYTHON_USEDEP}]
+		dev-py/iso8601[${PYTHON_USEDEP}]
+		dev-py/pretend[${PYTHON_USEDEP}]
+		dev-py/pytz[${PYTHON_USEDEP}]
 	)
 "
 

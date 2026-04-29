@@ -21,19 +21,19 @@ KEYWORDS="amd64 arm64"
 RDEPEND="
 	dev-py/html5lib[${PYTHON_USEDEP}]
 	dev-py/lxml[${PYTHON_USEDEP}]
-	>=dev-python/soupsieve-2.6[${PYTHON_USEDEP}]
-	>=dev-python/typing-extensions-4.0.0[${PYTHON_USEDEP}]
+	>=dev-py/soupsieve-2.6[${PYTHON_USEDEP}]
+	>=dev-py/typing-extensions-4.0.0[${PYTHON_USEDEP}]
 "
 # bs4 prefers cchardet > chardet > charset-normalizer
 # however, charset-normalizer causes test failures, so force the other two
-# dev-python/chardet[${PYTHON_USEDEP}]
+# dev-py/chardet[${PYTHON_USEDEP}]
 BDEPEND="
 	test? (
 		|| (
-			dev-python/faust-cchardet[${PYTHON_USEDEP}]
-			dev-python/chardet[${PYTHON_USEDEP}]
+			dev-py/faust-cchardet[${PYTHON_USEDEP}]
+			dev-py/chardet[${PYTHON_USEDEP}]
 		)
-		dev-python/packaging[${PYTHON_USEDEP}]
+		dev-py/packaging[${PYTHON_USEDEP}]
 	)
 "
 

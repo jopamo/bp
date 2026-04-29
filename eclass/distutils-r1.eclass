@@ -136,7 +136,7 @@
 #
 # - standalone - standalone/local build systems
 #
-# - uv-build - uv-build backend (using dev-python/uv)
+# - uv-build - uv-build backend (using dev-py/uv)
 #
 # The variable needs to be set before the inherit line.  If another
 # value than "standalone" and "no" is used, The eclass adds appropriate
@@ -184,7 +184,7 @@
 # @DEFAULT_UNSET
 # @PRE_INHERIT
 # @DESCRIPTION:
-# Controls adding dev-python/setuptools dependency.  The allowed values
+# Controls adding dev-py/setuptools dependency.  The allowed values
 # are:
 #
 # - no -- do not add the dependency (pure distutils package)
@@ -271,28 +271,28 @@ _distutils_set_globals() {
 		fi
 
 		bdep='
-			>=dev-python/gpep517-16[${PYTHON_USEDEP}]
+			>=dev-py/gpep517-16[${PYTHON_USEDEP}]
 		'
 		case ${DISTUTILS_USE_PEP517} in
 			flit)
 				bdep+='
-					>=dev-python/flit-core-3.11.0[${PYTHON_USEDEP}]
+					>=dev-py/flit-core-3.11.0[${PYTHON_USEDEP}]
 				'
 				;;
 			flit_scm)
 				bdep+='
-					>=dev-python/flit-core-3.11.0[${PYTHON_USEDEP}]
-					>=dev-python/flit-scm-1.7.0[${PYTHON_USEDEP}]
+					>=dev-py/flit-core-3.11.0[${PYTHON_USEDEP}]
+					>=dev-py/flit-scm-1.7.0[${PYTHON_USEDEP}]
 				'
 				;;
 			hatchling)
 				bdep+='
-					>=dev-python/hatchling-1.27.0[${PYTHON_USEDEP}]
+					>=dev-py/hatchling-1.27.0[${PYTHON_USEDEP}]
 				'
 				;;
 			jupyter)
 				bdep+='
-					>=dev-python/jupyter-packaging-0.12.3[${PYTHON_USEDEP}]
+					>=dev-py/jupyter-packaging-0.12.3[${PYTHON_USEDEP}]
 				'
 				;;
 			maturin)
@@ -306,27 +306,27 @@ _distutils_set_globals() {
 				;;
 			meson-python)
 				bdep+='
-					>=dev-python/meson-python-0.17.1[${PYTHON_USEDEP}]
+					>=dev-py/meson-python-0.17.1[${PYTHON_USEDEP}]
 				'
 				;;
 			pbr)
 				bdep+='
-					>=dev-python/pbr-6.1.1[${PYTHON_USEDEP}]
+					>=dev-py/pbr-6.1.1[${PYTHON_USEDEP}]
 				'
 				;;
 			pdm-backend)
 				bdep+='
-					>=dev-python/pdm-backend-2.4.3[${PYTHON_USEDEP}]
+					>=dev-py/pdm-backend-2.4.3[${PYTHON_USEDEP}]
 				'
 				;;
 			poetry)
 				bdep+='
-					>=dev-python/poetry-core-2.1.1[${PYTHON_USEDEP}]
+					>=dev-py/poetry-core-2.1.1[${PYTHON_USEDEP}]
 				'
 				;;
 			scikit-build-core)
 				bdep+='
-					>=dev-python/scikit-build-core-0.10.7[${PYTHON_USEDEP}]
+					>=dev-py/scikit-build-core-0.10.7[${PYTHON_USEDEP}]
 				'
 				;;
 			setuptools)
@@ -336,14 +336,14 @@ _distutils_set_globals() {
 				;;
 			sip)
 				bdep+='
-					>=dev-python/sip-6.10.0[${PYTHON_USEDEP}]
+					>=dev-py/sip-6.10.0[${PYTHON_USEDEP}]
 				'
 				;;
 			standalone)
 				;;
 			uv-build)
 				bdep+='
-					dev-python/uv-build[${PYTHON_USEDEP}]
+					dev-py/uv-build[${PYTHON_USEDEP}]
 				'
 				;;
 			*)
@@ -501,7 +501,7 @@ unset -f _distutils_set_globals
 # @USAGE: <subdir> [--no-autodoc | <plugin-pkgs>...]
 # @DESCRIPTION:
 # Set up IUSE, BDEPEND, python_check_deps() and python_compile_all() for
-# building HTML docs via dev-python/sphinx.  python_compile_all() will
+# building HTML docs via dev-py/sphinx.  python_compile_all() will
 # append to HTML_DOCS if docs are enabled.
 #
 # This helper is meant for the most common case, that is a single Sphinx
@@ -532,7 +532,7 @@ distutils_enable_sphinx() {
 	_DISTUTILS_SPHINX_PLUGINS=( "${@}" )
 
 	local deps autodoc=1 d
-	deps=">=dev-python/sphinx-8.1.3[\${PYTHON_USEDEP}]"
+	deps=">=dev-py/sphinx-8.1.3[\${PYTHON_USEDEP}]"
 	for d; do
 		if [[ ${d} == --no-autodoc ]]; then
 			autodoc=
@@ -556,7 +556,7 @@ distutils_enable_sphinx() {
 			use doc || return 0
 
 			local p
-			for p in ">=dev-python/sphinx-8.1.3" \
+			for p in ">=dev-py/sphinx-8.1.3" \
 				"${_DISTUTILS_SPHINX_PLUGINS[@]}"
 			do
 				python_has_version "${p}[${PYTHON_USEDEP}]" ||
@@ -564,7 +564,7 @@ distutils_enable_sphinx() {
 			done
 		}
 	else
-		deps=">=dev-python/sphinx-8.1.3"
+		deps=">=dev-py/sphinx-8.1.3"
 	fi
 
 	sphinx_compile_all() {
@@ -606,7 +606,7 @@ distutils_enable_sphinx() {
 # - import-check: `pytest --import-check` fallback (for use when there are
 #   no tests to run)
 #
-# - pytest: dev-python/pytest
+# - pytest: dev-py/pytest
 #
 # - setup.py: setup.py test (no deps included; deprecated)
 #
@@ -634,15 +634,15 @@ distutils_enable_tests() {
 	local test_pkgs=
 	case ${1} in
 		import-check)
-			test_pkgs+=' dev-python/pytest-import-check[${PYTHON_USEDEP}]'
+			test_pkgs+=' dev-py/pytest-import-check[${PYTHON_USEDEP}]'
 			;&
 		pytest)
-			test_pkgs+=' >=dev-python/pytest-7.4.4[${PYTHON_USEDEP}]'
+			test_pkgs+=' >=dev-py/pytest-7.4.4[${PYTHON_USEDEP}]'
 			if [[ -n ${EPYTEST_TIMEOUT} ]]; then
-				test_pkgs+=' dev-python/pytest-timeout[${PYTHON_USEDEP}]'
+				test_pkgs+=' dev-py/pytest-timeout[${PYTHON_USEDEP}]'
 			fi
 			if [[ ${EPYTEST_XDIST} ]]; then
-				test_pkgs+=' dev-python/pytest-xdist[${PYTHON_USEDEP}]'
+				test_pkgs+=' dev-py/pytest-xdist[${PYTHON_USEDEP}]'
 			fi
 
 			if [[ ! ${DISTUTILS_SINGLE_IMPL} ]]; then
@@ -751,7 +751,7 @@ distutils_install_for_testing() {
 # @DESCRIPTION:
 # Write the __init__.py file for the requested namespace into PEP517
 # install tree, in order to fix running tests when legacy namespace
-# packages are installed (dev-python/namespace-*).
+# packages are installed (dev-py/namespace-*).
 #
 # This function must only be used in python_test().  The created file
 # will automatically be removed upon leaving the test phase.
@@ -846,40 +846,40 @@ _distutils-r1_print_package_versions() {
 
 	if [[ ${DISTUTILS_USE_PEP517} ]]; then
 		packages+=(
-			dev-python/gpep517
-			dev-python/installer
+			dev-py/gpep517
+			dev-py/installer
 		)
 		if [[ ${DISTUTILS_EXT} ]]; then
 			packages+=(
-				dev-python/cython
+				dev-py/cython
 			)
 		fi
 		case ${DISTUTILS_USE_PEP517} in
 			flit)
 				packages+=(
-					dev-python/flit-core
+					dev-py/flit-core
 				)
 				;;
 			flit_scm)
 				packages+=(
-					dev-python/flit-core
-					dev-python/flit-scm
+					dev-py/flit-core
+					dev-py/flit-scm
 					dev-py/setuptools-scm
 				)
 				;;
 			hatchling)
 				packages+=(
-					dev-python/hatchling
-					dev-python/hatch-fancy-pypi-readme
-					dev-python/hatch-vcs
+					dev-py/hatchling
+					dev-py/hatch-fancy-pypi-readme
+					dev-py/hatch-vcs
 				)
 				;;
 			jupyter)
 				packages+=(
-					dev-python/jupyter-packaging
-					dev-python/setuptools
-					dev-python/setuptools-scm
-					dev-python/wheel
+					dev-py/jupyter-packaging
+					dev-py/setuptools
+					dev-py/setuptools-scm
+					dev-py/wheel
 				)
 				;;
 			maturin)
@@ -892,49 +892,49 @@ _distutils-r1_print_package_versions() {
 				;;
 			meson-python)
 				packages+=(
-					dev-python/meson-python
+					dev-py/meson-python
 				)
 				;;
 			pbr)
 				packages+=(
-					dev-python/pbr
-					dev-python/setuptools
-					dev-python/wheel
+					dev-py/pbr
+					dev-py/setuptools
+					dev-py/wheel
 				)
 				;;
 			pdm-backend)
 				packages+=(
-					dev-python/pdm-backend
-					dev-python/setuptools
+					dev-py/pdm-backend
+					dev-py/setuptools
 				)
 				;;
 			poetry)
 				packages+=(
-					dev-python/poetry-core
+					dev-py/poetry-core
 				)
 				;;
 			scikit-build-core)
 				packages+=(
-					dev-python/scikit-build-core
+					dev-py/scikit-build-core
 				)
 				;;
 			setuptools)
 				packages+=(
-					dev-python/setuptools
-					dev-python/setuptools-rust
-					dev-python/setuptools-scm
-					dev-python/wheel
+					dev-py/setuptools
+					dev-py/setuptools-rust
+					dev-py/setuptools-scm
+					dev-py/wheel
 				)
 				;;
 			sip)
 				packages+=(
-					dev-python/sip
+					dev-py/sip
 				)
 				;;
 			uv-build)
 				packages+=(
-					dev-python/uv
-					dev-python/uv-build
+					dev-py/uv
+					dev-py/uv-build
 				)
 				;;
 		esac
@@ -945,7 +945,7 @@ _distutils-r1_print_package_versions() {
 				;;
 			*)
 				packages+=(
-					dev-python/setuptools
+					dev-py/setuptools
 				)
 				;;
 		esac

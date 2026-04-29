@@ -1,0 +1,24 @@
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
+
+inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="Atomic file writes"
+HOMEPAGE="
+	https://github.com/untitaker/python-atomicwrites/
+	https://pypi.org/project/atomicwrites/
+"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+distutils_enable_tests pytest
+distutils_enable_sphinx docs \
+	dev-py/sphinx-rtd-theme

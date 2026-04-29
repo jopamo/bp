@@ -59,11 +59,11 @@ app-util/lshw
 app-var/hdparm
 app-var/perl-cleaner
 dev-py/beautifulsoup4
-dev-python/black
-dev-python/httpx
-dev-python/paramiko
-dev-python/pexpect
-dev-python/pip
+dev-py/black
+dev-py/httpx
+dev-py/paramiko
+dev-py/pexpect
+dev-py/pip
 dev-rust/fd
 dev-rust/ripgrep
 virtual/rust

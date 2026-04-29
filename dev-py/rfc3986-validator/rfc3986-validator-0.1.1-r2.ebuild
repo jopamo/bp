@@ -1,0 +1,36 @@
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
+
+inherit distutils-r1 pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="Pure python RFC3986 validator"
+HOMEPAGE="
+	https://pypi.org/project/rfc3986-validator/
+	https://github.com/naimetti/rfc3986-validator
+"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+# not a typo, it actually test-depends on rfc3987, and not rfc3986
+BDEPEND="
+	test? (
+		dev-py/hypothesis[${PYTHON_USEDEP}]
+		dev-py/rfc3987[${PYTHON_USEDEP}]
+	)
+"
+
+distutils_enable_tests pytest
+
+python_prepare_all() {
+	# remove dep on pytest-runner
+	sed -i -r "s:('|\")pytest-runner('|\")(,|)::" setup.py || die
+	distutils-r1_python_prepare_all
+}

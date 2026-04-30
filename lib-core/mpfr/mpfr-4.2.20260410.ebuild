@@ -6,7 +6,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="library for multiple-precision floating-point computations with exact rounding"
 HOMEPAGE="http://www.mpfr.org/"
-SNAPSHOT=1e0181f6eb42ab01ec9f0dadbec42b3676cd75c6
+SNAPSHOT=9e5ea96bfa25494f06214a7b0aa84f886f20441d
 SRC_URI="https://gitlab.inria.fr/mpfr/mpfr/-/archive/${SNAPSHOT}/mpfr-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/mpfr-${SNAPSHOT}
 

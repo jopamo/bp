@@ -13,7 +13,7 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 DESCRIPTION="A plugin for setuptools to build Rust Python extensions"
 HOMEPAGE="https://github.com/PyO3/setuptools-rust/"
-SNAPSHOT=910fc604842ed37ed93aadbb5aef588af668d107
+SNAPSHOT=0c847360d0f0f7807f809cbc380e13a7ad7d3148
 SRC_URI="https://github.com/PyO3/setuptools-rust/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/setuptools-rust-${SNAPSHOT}
 

@@ -13,6 +13,9 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 DESCRIPTION="A Python crypto and SSL toolkit"
 HOMEPAGE="https://gitlab.com/m2crypto/m2crypto/"
+SNAPSHOT=218c678c91baa204bb4dc3596620b1121e0d7cc9
+SRC_URI="https://gitlab.com/m2crypto/m2crypto/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="MIT openssl"
 SLOT="0"

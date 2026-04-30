@@ -4,7 +4,7 @@ inherit toolchain-funcs qa-policy
 
 DESCRIPTION="(FFmpeg) Libavcodec-SMASH decoder/demuxer wrapper library"
 HOMEPAGE="https://github.com/l-smash/l-smash"
-SNAPSHOT=30270d0d8b551b36b6f46c43bd3ffe997f13e157
+SNAPSHOT=04e39f1fb232c332d4b04a1043c02c7c2d282d00
 SRC_URI="https://github.com/vimeo/l-smash/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

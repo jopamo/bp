@@ -1,9 +1,10 @@
 # lockstep-managed: cargo-crate
 EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="winnow"
-CRATE_VERSION="0.7.14"
-CRATE_CHECKSUM="5a5364e9d77fcdeeaa6062ced926ee3381faa2ee02d3eb83a5c27a8825540829"
+CRATE_VERSION="1.0.1"
+CRATE_CHECKSUM="09dac053f1cd375980747450bfc7250c264eaae0583872e845c0c7cd578872b5"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
@@ -17,8 +18,11 @@ KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"
+	"ascii"
+	"binary"
 	"debug"
 	"default"
+	"parser"
 	"simd"
 	"std"
 	"unstable-doc"

@@ -2,7 +2,7 @@
 
 DESCRIPTION="hwdata files"
 HOMEPAGE="https://github.com/vcrhonek/hwdata"
-SNAPSHOT=be46d7186e918e62eb75de399e800145a781c8db
+SNAPSHOT=9ae3b9da5cbb93eed30f812aa7edb4b9ad3e3868
 SRC_URI="https://github.com/vcrhonek/hwdata/archive/${SNAPSHOT}.tar.gz -> hwdata-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/hwdata-${SNAPSHOT}
 

@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME=main
-SNAPSHOT=9205e0941b61a08614c27d891fa40e9d26d95557
+SNAPSHOT=29b8400ddc6cafcbb58988acbb77e7a7ea47e735
 
 DESCRIPTION="Text based document generation using Python"
 HOMEPAGE="https://asciidoc3.org/ https://gitlab.com/asciidoc3/asciidoc3/-/tree/${BRANCH_NAME}"

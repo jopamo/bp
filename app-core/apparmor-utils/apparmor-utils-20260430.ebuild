@@ -11,7 +11,7 @@ RDEPEND+="
 
 DESCRIPTION="Additional userspace utils to assist with AppArmor profile management"
 HOMEPAGE="https://gitlab.com/apparmor/apparmor/wikis/home"
-SNAPSHOT=fdb13a574b9c3abfd4a802b667062418e96f52c2
+SNAPSHOT=7ef79ae3edaa323e33f4bb057f5daee437cf4bac
 SRC_URI="https://gitlab.com/apparmor/apparmor/-/archive/${SNAPSHOT}/apparmor-${SNAPSHOT}.tar.bz2 -> apparmor-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/apparmor-${SNAPSHOT}"
 

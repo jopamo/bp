@@ -88,7 +88,7 @@ CARGO_DEPS="
 	rust-crates/shlex-1.3.0
 	rust-crates/strsim-0.11.1
 	rust-crates/syn-2.0.117
-	rust-crates/tempfile-3.26.0
+	rust-crates/tempfile-3.27.0
 	rust-crates/terminal_size-0.4.3
 	rust-crates/test-case-3.3.1
 	rust-crates/test-case-core-3.3.1
@@ -133,7 +133,7 @@ inherit cargo lockstep-cargo
 
 DESCRIPTION="A simple, fast and user-friendly alternative to gnu find"
 HOMEPAGE="https://github.com/sharkdp/fd"
-SNAPSHOT=866ba9bfd52b0a0fef537afee285d0c0703aa48e
+SNAPSHOT=2250bb0ad13bf2ab93f4d56977811e648b3f62dc
 SRC_URI="https://github.com/sharkdp/fd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

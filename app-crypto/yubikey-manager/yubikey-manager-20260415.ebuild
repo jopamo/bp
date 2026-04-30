@@ -19,7 +19,7 @@ MY_P="${MY_PN}-${PV}"
 
 DESCRIPTION="Python library and command line tool for configuring a YubiKey"
 HOMEPAGE="https://developers.yubico.com/yubikey-manager/"
-SNAPSHOT=9fe76be2cbf5e9a3b5a9a8d78411949a028b3745
+SNAPSHOT=f77ed0a22700fb73e8201200f65d3b4b57f6e7c0
 SRC_URI="https://github.com/Yubico/yubikey-manager/archive/${SNAPSHOT}.tar.gz -> yubikey-manager-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/yubikey-manager-${SNAPSHOT}"
 

@@ -1,9 +1,10 @@
 # lockstep-managed: cargo-crate
 EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="object"
-CRATE_VERSION="0.36.7"
-CRATE_CHECKSUM="62948e14d923ea95ea2c7c86c71013138b66525b86bdc08d2dcc262bdb497b87"
+CRATE_VERSION="0.38.1"
+CRATE_CHECKSUM="271638cd5fa9cca89c4c304675ca658efc4e64a66c716b7cfe1afb4b9611dbbc"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

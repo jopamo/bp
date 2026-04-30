@@ -6,7 +6,7 @@ inherit flag-o-matic toolchain-funcs qa-policy
 
 DESCRIPTION="full-strength general purpose cryptography library (including SSL and TLS)"
 HOMEPAGE="https://www.openssl.org/"
-SNAPSHOT=068f2ffafebc46d3e31cb91ea2be7ddc079edef7
+SNAPSHOT=7da5e7a1950fcc05c57b771904afc9f8917b2dbd
 SRC_URI="https://github.com/openssl/openssl/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/openssl-${SNAPSHOT}
 

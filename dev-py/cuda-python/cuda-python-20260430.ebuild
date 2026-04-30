@@ -4,10 +4,17 @@ DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/cuda-bindings
+	dev-pypi/cuda-pathfinder
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="NVIDIA CUDA Python Bindings"
 HOMEPAGE="https://github.com/NVIDIA/cuda-python"
-SNAPSHOT=64b8c0748e49489bf55e97f1e14dd78663a9d4cc
+SNAPSHOT=f77e0c823e3bce21ebd06a4b186ad573dd25cad7
 SRC_URI="https://github.com/NVIDIA/cuda-python/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}/cuda_python"
 

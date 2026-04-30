@@ -4,7 +4,7 @@ inherit meson
 
 DESCRIPTION="Epoxy is a library for handling OpenGL function pointer management for you"
 HOMEPAGE="https://github.com/anholt/libepoxy"
-SNAPSHOT=f089ad394ca716e5250b905c1e0427a75e6c682a
+SNAPSHOT=d1f952c4565c389d82fd1657153e84e050f35b27
 SRC_URI="https://github.com/anholt/libepoxy/archive/${SNAPSHOT}.tar.gz -> libepoxy-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libepoxy-${SNAPSHOT}"
 

@@ -180,7 +180,7 @@ inherit cargo lockstep-cargo
 
 DESCRIPTION="command-line benchmarking tool"
 HOMEPAGE="https://github.com/sharkdp/hyperfine"
-SNAPSHOT=327d5f4d9107141929f67f062bf9ef59f98b7399
+SNAPSHOT=f12f3d9f86f3643b3b7deace5e160b1f0f44d2b7
 SRC_URI="https://github.com/sharkdp/hyperfine/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -4,7 +4,7 @@ inherit cmake qa-policy
 
 DESCRIPTION="An open-source JPEG 2000 library"
 HOMEPAGE="http://www.openjpeg.org"
-SNAPSHOT=d33cbecc148d3affcdf403211fddc2cc5d442379
+SNAPSHOT=530bebdb3fb40ed177390ebc001ae56d7f14a667
 SRC_URI="https://github.com/uclouvain/openjpeg/archive/${SNAPSHOT}.tar.gz -> openjpeg-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/openjpeg-${SNAPSHOT}"
 

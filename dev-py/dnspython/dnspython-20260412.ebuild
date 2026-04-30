@@ -10,7 +10,7 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 DESCRIPTION="DNS toolkit for Python"
 HOMEPAGE="https://www.dnspython.org/"
-SNAPSHOT=f0dead006631c12a89cc4f15325d2d02b65379d8
+SNAPSHOT=d91f1ee30bcc68cb356d13b7c5f14b49e63c58bc
 SRC_URI="https://github.com/rthalley/dnspython/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

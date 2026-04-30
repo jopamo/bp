@@ -4,7 +4,7 @@ inherit autotools
 
 DESCRIPTION="MIT Kerberos V"
 HOMEPAGE="https://web.mit.edu/kerberos/www/"
-SNAPSHOT=c2697c127be660cfe2a623e153c347ade50f184b
+SNAPSHOT=0138cbef6c53e6f18cce768ad9e09d3217632312
 SRC_URI="https://github.com/krb5/krb5/archive/${SNAPSHOT}.tar.gz -> mit-krb5-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/krb5-${SNAPSHOT}/src"
 

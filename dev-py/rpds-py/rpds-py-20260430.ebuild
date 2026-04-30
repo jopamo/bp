@@ -10,11 +10,11 @@ CARGO_DEPS="
 	rust-crates/once_cell-1.21.3
 	rust-crates/portable-atomic-1.11.1
 	rust-crates/proc-macro2-1.0.103
-	rust-crates/pyo3-0.28.2
-	rust-crates/pyo3-build-config-0.28.2
-	rust-crates/pyo3-ffi-0.28.2
-	rust-crates/pyo3-macros-0.28.2
-	rust-crates/pyo3-macros-backend-0.28.2
+	rust-crates/pyo3-0.28.3
+	rust-crates/pyo3-build-config-0.28.3
+	rust-crates/pyo3-ffi-0.28.3
+	rust-crates/pyo3-macros-0.28.3
+	rust-crates/pyo3-macros-backend-0.28.3
 	rust-crates/python3-dll-a-0.2.14
 	rust-crates/quote-1.0.42
 	rust-crates/rpds-1.2.0
@@ -36,7 +36,7 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 DESCRIPTION="Python bindings to Rust's persistent data structures (rpds)"
 HOMEPAGE="https://github.com/crate-py/rpds/"
-SNAPSHOT=bacd1f164afcdf1fdaaf30d9135d1acd1a38f9f2
+SNAPSHOT=0783a5b5350597c687d64c91b0b8a623c4922fbc
 SRC_URI="https://github.com/crate-py/rpds/archive/${SNAPSHOT}.tar.gz -> rpds-py-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/rpds-${SNAPSHOT}"
 

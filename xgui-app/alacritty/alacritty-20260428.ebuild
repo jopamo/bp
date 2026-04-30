@@ -296,7 +296,7 @@ inherit cargo lockstep-cargo
 
 DESCRIPTION="A cross-platform, OpenGL terminal emulator"
 HOMEPAGE="https://github.com/alacritty/alacritty"
-SNAPSHOT=f99dc71708d31d5c32d4b3fa611f9a87bf22657e
+SNAPSHOT=9b7419c3e4086476967e37e64372f412d1ebaa2b
 SRC_URI="https://github.com/alacritty/alacritty/archive/${SNAPSHOT}.tar.gz -> alacritty-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/alacritty-${SNAPSHOT}"
 

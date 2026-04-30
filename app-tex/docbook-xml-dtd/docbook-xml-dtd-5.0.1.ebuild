@@ -4,7 +4,7 @@ inherit sgml-catalog-r1
 
 DESCRIPTION="Docbook DTD for XML"
 HOMEPAGE="https://docbook.org/"
-SRC_URI="https://docbook.org/xml/${PV}/docbook-${PV}.zip"
+SRC_URI="https://archive.docbook.org/xml/${PV}/docbook-${PV}.zip"
 
 S="${WORKDIR}/docbook-${PV}"
 LICENSE="docbook"

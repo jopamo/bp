@@ -5,7 +5,7 @@ inherit cmake
 DESCRIPTION="portable number theoretic multiple-precision integer library"
 HOMEPAGE="https://github.com/libtom/libtommath"
 
-SNAPSHOT=839ae9ea66718705fba2b5773d1bdfb2b457cea4
+SNAPSHOT=ae40a87a920099a7d9d00979570e0c8d917a1fd7
 SRC_URI="https://github.com/libtom/libtommath/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

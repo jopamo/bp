@@ -4,7 +4,7 @@ inherit edo
 
 DESCRIPTION="Shell script analysis tool"
 HOMEPAGE="https://www.shellcheck.net https://github.com/koalaman/shellcheck"
-SNAPSHOT=cd41f794383b6159757575c9debbf198426b21aa
+SNAPSHOT=766a8364d2ecdbe7487f963ee21de3c08c6938f7
 SRC_URI="https://github.com/koalaman/shellcheck/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

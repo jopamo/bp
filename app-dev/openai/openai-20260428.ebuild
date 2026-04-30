@@ -18,7 +18,7 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 DESCRIPTION="Python client library for the OpenAI API"
 HOMEPAGE="https://github.com/openai/openai-python"
-SNAPSHOT=58184ad545ee2abd98e171ee09766f259d7f38cd
+SNAPSHOT=94c88b80b9811f23c4494c414758358243d7e2e6
 SRC_URI="https://github.com/openai/openai-python/archive/${SNAPSHOT}.tar.gz -> openai-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/openai-python-${SNAPSHOT}"
 

@@ -10,7 +10,7 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 DESCRIPTION="identify a file's format by scanning binary data for patterns"
 HOMEPAGE="https://www.darwinsys.com/file/"
-SNAPSHOT=adfc2a0c50085e7a95f8814f817624b3c37034d2
+SNAPSHOT=0d8c41d7c6ab9306fad80f80f57189dde4f7cf75
 SRC_URI="https://github.com/file/file/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

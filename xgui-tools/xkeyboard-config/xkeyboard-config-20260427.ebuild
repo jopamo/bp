@@ -4,7 +4,7 @@ inherit meson
 
 DESCRIPTION="X keyboard configuration database"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/XKeyboardConfig"
-SNAPSHOT=a79055334104d382bd511760b67acf9a5a161361
+SNAPSHOT=5a8080faf918b68d51a4d1dec51a939ac4ce32d9
 SRC_URI="https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config/-/archive/${SNAPSHOT}/xkeyboard-config-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

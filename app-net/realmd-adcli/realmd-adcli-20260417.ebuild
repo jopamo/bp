@@ -9,7 +9,7 @@ if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/freedesktop/realmd-adcli"
 	inherit git-r3
 else
-SNAPSHOT=eaea8d0642410912ed9a746235b0bd5d221a957f
+SNAPSHOT=291aabe1cfd8561f83ca2a579de9cb8767d6345f
 	SRC_URI="https://gitlab.freedesktop.org/realmd/adcli/-/archive/${SNAPSHOT}/adcli-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
 	S="${WORKDIR}/realmd-adcli-${SNAPSHOT}"
 fi

@@ -11,7 +11,7 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 DESCRIPTION="Smart card support in python"
 HOMEPAGE="https://github.com/LudovicRousseau/pyscard/"
-SNAPSHOT=3169140598dc9f28dd84d17471bde8d2b546fddc
+SNAPSHOT=57f835738b8fa65597850e201289b81bbbbbe535
 SRC_URI="https://github.com/LudovicRousseau/pyscard/archive/${SNAPSHOT}.tar.gz -> pyscard-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/pyscard-${SNAPSHOT}"
 

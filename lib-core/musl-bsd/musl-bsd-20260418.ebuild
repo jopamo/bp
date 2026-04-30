@@ -4,7 +4,7 @@ inherit meson qa-policy
 
 DESCRIPTION="A standalone library to implement GNU libc's obstack and others"
 HOMEPAGE="https://github.com/jopamo/musl-bsd"
-SNAPSHOT=ab62557bb1af8450db37d329e1354537010ac285
+SNAPSHOT=e6f7f4880d53bc2902506ab504aebadb11f0e124
 SRC_URI="https://github.com/jopamo/musl-bsd/archive/${SNAPSHOT}.tar.gz -> musl-bsd-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/musl-bsd-${SNAPSHOT}
 

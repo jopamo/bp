@@ -10,6 +10,7 @@ RDEPEND+="
 	dev-pypi/authlib
 	dev-pypi/cyclopts
 	dev-pypi/exceptiongroup
+	dev-pypi/griffelib
 	dev-pypi/httpx
 	dev-pypi/jsonref
 	dev-pypi/jsonschema-path
@@ -22,8 +23,10 @@ RDEPEND+="
 	dev-pypi/pydantic
 	dev-pypi/pyperclip
 	dev-pypi/python-dotenv
+	dev-pypi/python-multipart
 	dev-pypi/pyyaml
 	dev-pypi/rich
+	dev-pypi/uncalled-for
 	dev-pypi/uvicorn
 	dev-pypi/watchfiles
 	dev-pypi/websockets
@@ -31,7 +34,7 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 DESCRIPTION="The fast, Pythonic way to build MCP servers and clients"
 HOMEPAGE="https://gofastmcp.com/ https://pypi.org/project/fastmcp/"
-SNAPSHOT=b14b137fddc3145d6b4abd0b3a3f1a11dfc370b0
+SNAPSHOT=d0315974fa844b2424c93f4ad43c8f2d543ff51a
 SRC_URI="https://github.com/jlowin/fastmcp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

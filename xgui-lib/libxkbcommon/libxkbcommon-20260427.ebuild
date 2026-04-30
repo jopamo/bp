@@ -4,7 +4,7 @@ inherit meson qa-policy
 
 DESCRIPTION="Keymap handling library for Wayland and X11 (xkbcommon)"
 HOMEPAGE="https://xkbcommon.org/"
-SNAPSHOT=48500df7160d0ec6278dfcec0665a7907cfdf302
+SNAPSHOT=19033ebb63ca80950b84b22f52de2eb1ecf6b095
 SRC_URI="https://github.com/xkbcommon/libxkbcommon/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libxkbcommon-${SNAPSHOT}
 

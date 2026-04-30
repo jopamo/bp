@@ -1,16 +1,17 @@
 # lockstep-managed: cargo-crate
 EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="zip"
-CRATE_VERSION="8.1.0"
-CRATE_CHECKSUM="6e499faf5c6b97a0d086f4a8733de6d47aee2252b8127962439d8d4311a73f72"
+CRATE_VERSION="8.5.1"
+CRATE_CHECKSUM="dcab981e19633ebcf0b001ddd37dd802996098bc1864f90b7c5d970ce76c1d59"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
 DESCRIPTION="Library to support the reading and writing of zip files."
-HOMEPAGE="https://github.com/zip-rs/zip2.git"
+HOMEPAGE="https://github.com/zip-rs/zip2"
 LICENSE="MIT"
 SLOT="${PV}"
 KEYWORDS="amd64 arm64"

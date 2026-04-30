@@ -4,7 +4,7 @@ inherit python-utils-r1
 
 DESCRIPTION="Automake files from gtk-doc"
 HOMEPAGE="https://www.gtk.org/gtk-doc/"
-SNAPSHOT=f3424c6ac21bad7e7f81d941860d134c978cf31d
+SNAPSHOT=cf004748a68e947e5cd995d3791c7b1ae2e0f2bf
 SRC_URI="https://gitlab.gnome.org/GNOME/gtk-doc/-/archive/${SNAPSHOT}/gtk-doc-${SNAPSHOT}.tar.bz2 -> gtk-doc-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/gtk-doc-${SNAPSHOT}"
 

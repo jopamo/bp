@@ -13,7 +13,7 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 DESCRIPTION="Python binding to the Networking and Cryptography (NaCl) library"
 HOMEPAGE="https://github.com/pyca/pynacl/"
-SNAPSHOT=f0142f94faa7990f9f371d3e8ad35715ef8cc8c3
+SNAPSHOT=676db55a7cd96ace2b0f3b97a4ad0ebd55f523aa
 SRC_URI="https://github.com/pyca/pynacl/archive/${SNAPSHOT}.tar.gz -> pynacl-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/pynacl-${SNAPSHOT}
 

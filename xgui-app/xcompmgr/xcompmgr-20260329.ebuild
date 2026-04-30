@@ -4,7 +4,7 @@ inherit autotools
 
 DESCRIPTION="sample X compositing manager"
 HOMEPAGE="https://gitlab.freedesktop.org/xorg/app/xcompmgr"
-SNAPSHOT=76c12c6116bfe0ff81541e99effc11a5d3d6d295
+SNAPSHOT=66bf84cf597ef36aec90b47ed6cddfefccf5290f
 SRC_URI="https://gitlab.freedesktop.org/xorg/app/xcompmgr/-/archive/${SNAPSHOT}/xcompmgr-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/xcompmgr-${SNAPSHOT}
 

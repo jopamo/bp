@@ -1,0 +1,17 @@
+# lockstep-managed: cargo-crate
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
+
+CRATE_NAME="num-conv"
+CRATE_VERSION="0.2.1"
+CRATE_CHECKSUM="c6673768db2d862beb9b39a78fdcb1a69439615d5794a1be50caa9bc92c81967"
+CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
+CRATE_SOURCE_KIND="registry"
+
+inherit cargo-crate
+
+DESCRIPTION="\`num_conv\` is a crate to convert between integer types without using \`as\` casts. This provides better certainty when refactoring, makes the exact behavior of code more explicit, and allows using turbofish syntax."
+HOMEPAGE="https://github.com/jhpratt/num-conv"
+LICENSE="|| ( MIT Apache-2.0 )"
+SLOT="${PV}"
+KEYWORDS="amd64 arm64"

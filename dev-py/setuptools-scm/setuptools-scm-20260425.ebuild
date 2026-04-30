@@ -6,13 +6,14 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-pypi/setuptools-scm
+	dev-pypi/packaging
+	dev-pypi/setuptools
 	dev-pypi/vcs-versioning
 "
 # lockstep-pypi-deps: end
 DESCRIPTION="Manage versions by scm tags via setuptools"
 HOMEPAGE="https://github.com/pypa/setuptools-scm/"
-SNAPSHOT=efa2c855307ff1ae4b4e176e53cd5175a2b13f2f
+SNAPSHOT=f53cf5c121851998a610822469ae90507006e044
 SRC_URI="https://github.com/pypa/setuptools-scm/archive/${SNAPSHOT}.tar.gz -> setuptools-scm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/setuptools-scm-${SNAPSHOT}/setuptools-scm"
 

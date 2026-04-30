@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="Tag Image File Format (TIFF) library"
 HOMEPAGE="http://libtiff.maptools.org"
-SNAPSHOT=ac6b201003b830589990f288317d03e74fb9e84e
+SNAPSHOT=c09bb267ca6fbc66ae0b18be05fffd5c4d3ebf3b
 SRC_URI="https://gitlab.com/libtiff/libtiff/-/archive/${SNAPSHOT}/libtiff-${SNAPSHOT}.tar.bz2 -> libtiff-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libtiff-${SNAPSHOT}"
 

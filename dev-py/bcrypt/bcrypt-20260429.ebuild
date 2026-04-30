@@ -6,7 +6,7 @@ CARGO_DEPS="
 	rust-crates/base64-0.22.1
 	rust-crates/bcrypt-0.19.0
 	rust-crates/bcrypt-pbkdf-0.10.0
-	rust-crates/bitflags-2.11.0
+	rust-crates/bitflags-2.11.1
 	rust-crates/block-buffer-0.10.4
 	rust-crates/blowfish-0.9.1
 	rust-crates/byteorder-1.5.0
@@ -20,14 +20,14 @@ CARGO_DEPS="
 	rust-crates/generic-array-0.14.7
 	rust-crates/getrandom-0.4.2
 	rust-crates/hashbrown-0.15.5
-	rust-crates/hashbrown-0.16.1
+	rust-crates/hashbrown-0.17.0
 	rust-crates/heck-0.5.0
 	rust-crates/id-arena-2.3.0
-	rust-crates/indexmap-2.13.0
+	rust-crates/indexmap-2.14.0
 	rust-crates/inout-0.1.4
 	rust-crates/itoa-1.0.18
 	rust-crates/leb128fmt-0.1.0
-	rust-crates/libc-0.2.183
+	rust-crates/libc-0.2.185
 	rust-crates/log-0.4.29
 	rust-crates/memchr-2.8.0
 	rust-crates/once_cell-1.21.4
@@ -35,14 +35,14 @@ CARGO_DEPS="
 	rust-crates/portable-atomic-1.13.1
 	rust-crates/prettyplease-0.2.37
 	rust-crates/proc-macro2-1.0.106
-	rust-crates/pyo3-0.28.2
-	rust-crates/pyo3-build-config-0.28.2
-	rust-crates/pyo3-ffi-0.28.2
-	rust-crates/pyo3-macros-0.28.2
-	rust-crates/pyo3-macros-backend-0.28.2
+	rust-crates/pyo3-0.28.3
+	rust-crates/pyo3-build-config-0.28.3
+	rust-crates/pyo3-ffi-0.28.3
+	rust-crates/pyo3-macros-0.28.3
+	rust-crates/pyo3-macros-backend-0.28.3
 	rust-crates/quote-1.0.45
 	rust-crates/r-efi-6.0.0
-	rust-crates/semver-1.0.27
+	rust-crates/semver-1.0.28
 	rust-crates/serde-1.0.228
 	rust-crates/serde_core-1.0.228
 	rust-crates/serde_derive-1.0.228
@@ -51,7 +51,7 @@ CARGO_DEPS="
 	rust-crates/subtle-2.6.1
 	rust-crates/syn-2.0.117
 	rust-crates/target-lexicon-0.13.5
-	rust-crates/typenum-1.19.0
+	rust-crates/typenum-1.20.0
 	rust-crates/unicode-ident-1.0.24
 	rust-crates/unicode-xid-0.2.6
 	rust-crates/version_check-0.9.5
@@ -82,7 +82,7 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 DESCRIPTION="Modern password hashing for software and servers"
 HOMEPAGE="https://pypi.org/project/bcrypt/"
-SNAPSHOT=3191062a810ffb79aa48810f92371b1345bfa3b1
+SNAPSHOT=da696bb414fd5531e844f4f145c4d56c9528db9b
 SRC_URI="https://github.com/pyca/bcrypt/archive/${SNAPSHOT}.tar.gz -> bcrypt-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/bcrypt-${SNAPSHOT}"
 

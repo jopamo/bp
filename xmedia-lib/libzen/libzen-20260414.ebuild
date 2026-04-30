@@ -4,7 +4,7 @@ inherit autotools flag-o-matic qa-policy
 
 DESCRIPTION="Shared library for libmediainfo and mediainfo"
 HOMEPAGE="https://github.com/MediaArea/ZenLib"
-SNAPSHOT=45c8e6594f9f263a010d3f592b56f39b8297785a
+SNAPSHOT=65458b340378ecfddd0fa14359a3c57c79257b3d
 SRC_URI="https://github.com/MediaArea/ZenLib/archive/${SNAPSHOT}.tar.gz -> ZenLib-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ZenLib-${SNAPSHOT}/Project/GNU/Library"
 

@@ -1,1 +1,2 @@
 DIST rustls-native-certs-0.7.0.crate 25071 BLAKE3 185938f640b2ad9805eb7fed8b821d22bb61fb96df6504986ce3d42b0fdedb79
+DIST rustls-native-certs-0.8.3.crate 30380 BLAKE3 e19a9dbc0649cb0c2b6ee9bd5b9b7990b352f41f6f4a0d8ecc97b5dd3d894a71

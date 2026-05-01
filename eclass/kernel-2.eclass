@@ -4,7 +4,7 @@
 # @MAINTAINER:
 # 1g4 Project <1g4@example.org>
 # @SUPPORTED_EAPIS: 7 8
-# @BLURB: Minimal eclass for kernel packages based on stable git branches
+# @BLURB: Minimal eclass for kernel packages based on kernel git snapshot tarballs
 
 inherit multiprocessing optfeature toolchain-funcs
 
@@ -35,7 +35,7 @@ esac
 # Fix permissions in tarball
 install_universal() {
 	chown -R 0:0 "${WORKDIR}"/* &>/dev/null
-	chmod -R a+r-w+X,u+w "${WORKDIR}"/*
+	chmod -R a+rX,u+w,go-w "${WORKDIR}"/* || die
 }
 
 # @FUNCTION: install_headers
@@ -52,11 +52,15 @@ install_headers() {
 # @FUNCTION: install_sources
 # @USAGE:
 # @DESCRIPTION:
-# Install sources from the stable git working tree
+# Install sources from the unpacked kernel source tree
 install_sources() {
+	local srcdir=${KERNEL_SRCDIR:-${S}}
+
+	[[ -n ${srcdir} && -d ${srcdir} ]] || die "kernel source directory not found: ${srcdir:-unset}"
+
 	einfo ">>> Copying sources ..."
 	install -d "${ED}/usr/src/linux-${PV}" || die
-	cp -a "${WORKDIR}"/stable-*/. "${ED}/usr/src/linux-${PV}" || die
+	cp -a "${srcdir}"/. "${ED}/usr/src/linux-${PV}" || die
 }
 
 # @FUNCTION: postinst_sources

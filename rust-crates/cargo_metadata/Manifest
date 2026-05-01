@@ -1,1 +1,3 @@
+DIST cargo_metadata-0.18.1.crate 24535 BLAKE3 15cb14e46ca7b12dcfb8facecf097c6c512ca9b7a5521529d466f7a277ad7a7d
 DIST cargo_metadata-0.21.0.crate 32697 BLAKE3 01f21d18fe9136bddb5ff82fdaa7a4daa61741576b58c3e45e18f4dc810a00ee
+DIST cargo_metadata-0.23.1.crate 30497 BLAKE3 0fb576234d980e887234483c377555e1efbc9affe61f085f60a228be0e772cfb

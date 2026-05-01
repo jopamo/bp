@@ -1,13 +1,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
-BRANCH_NAME="linux-$(ver_cut 1-2).y"
-SNAPSHOT=1fe06068166d4fc16722201f267b1fe19efad639
+BRANCH_NAME="snapshot"
+SNAPSHOT=715ee8d5cedb208dc14c11e8be19529a240b086a
 
 DESCRIPTION="Userland tools for Linux Performance Counters"
 HOMEPAGE="https://kernel.org/"
 
-SRC_URI="https://gitlab.com/linux-kernel/stable/-/archive/${SNAPSHOT}/stable-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/stable-${SNAPSHOT}/tools/perf"
+SRC_URI="https://gitlab.com/pjo/kone/-/archive/${SNAPSHOT}/kone-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/kone-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"

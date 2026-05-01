@@ -1,15 +1,18 @@
 # Distributed under the terms of the GNU General Public License v2
 
-BRANCH_NAME="linux-$(ver_cut 1-2).y"
-SNAPSHOT=1fe06068166d4fc16722201f267b1fe19efad639
+BRANCH_NAME="main"
+SNAPSHOT=715ee8d5cedb208dc14c11e8be19529a240b086a
 
+K_NOUSENAME="yes"
+K_NOSETEXTRAVERSION="yes"
 ETYPE="headers"
-H_SUPPORTEDARCH="amd64 arm64"
+
 inherit kernel-2
 
-HOMEPAGE="https://www.kernel.org"
-SRC_URI="https://gitlab.com/linux-kernel/stable/-/archive/${SNAPSHOT}/stable-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/stable-${SNAPSHOT}"
+DESCRIPTION="Linux kernel source code tree"
+HOMEPAGE="https://kernel.org/"
+SRC_URI="https://gitlab.com/pjo/kone/-/archive/${SNAPSHOT}/kone-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/kone-${SNAPSHOT}"
 
 SLOT="0"
 KEYWORDS="amd64 arm64"

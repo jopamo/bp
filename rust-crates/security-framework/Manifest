@@ -1,2 +1,4 @@
 DIST security-framework-2.10.0.crate 79723 BLAKE3 850db5fb4ef030a7cdd0a285c223ae14bf7fca410512a00cb7d17fd6b8bee786
+DIST security-framework-2.11.1.crate 80188 BLAKE3 8a0e440259d7cb4d6d728b771e677d5f2af415eac1f847ec84a22a027e6562e9
 DIST security-framework-3.3.0.crate 86425 BLAKE3 1ef2fda3f531e7caf50e8f38ecf44763e31a0f80dd8567280a44d1904425e70c
+DIST security-framework-3.7.0.crate 89115 BLAKE3 5d8aad830639ab13564f6c66bc9297c7bb5bc7f539b820d68e43f69e135a6e90

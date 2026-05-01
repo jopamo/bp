@@ -22,7 +22,6 @@ IUSE="build gentoo-dev ipc native-extensions
 	gentoo_repo +rsync-verify selinux test xattr"
 
 COMMON_DEPEND="
-	app-compression/tar
 	app-core/bash
 	app-core/findutils
 	app-core/sed

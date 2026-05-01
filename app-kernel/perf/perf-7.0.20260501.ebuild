@@ -32,7 +32,7 @@ src_prepare() {
 	default
 
 	# fix missing x86 asm headers in tools header layer for this snapshot
-	local ksrc=${WORKDIR}/stable-${SNAPSHOT}
+	local ksrc=${S}
 
 	if [[ -d ${ksrc}/arch/x86/include/asm ]] && [[ -d ${ksrc}/tools/include/asm ]] ; then
 		if [[ -f ${ksrc}/arch/x86/include/asm/asm.h ]] ; then

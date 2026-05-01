@@ -3,3 +3,4 @@ DIST toml_datetime-0.6.8.crate 12028 BLAKE3 3ed83537d6dca9d725b6a20834615465f756
 DIST toml_datetime-0.7.2.crate 17859 BLAKE3 68767a31691034e5cfa12f1cb99948bac4eaa32620caa265ef1d1d21af566025
 DIST toml_datetime-0.7.3.crate 17827 BLAKE3 db9228ed102333fdaea4eb819e9f0aed9c0d7888f1b98733c64ff3bf8479b890
 DIST toml_datetime-0.7.5+spec-1.1.0.crate 17975 BLAKE3 0a2bc0976c5aa7d8a154f9e42ad6d806341a94f9d10e97911125d8fbd46bbdc3
+DIST toml_datetime-1.1.1+spec-1.1.0.crate 17982 BLAKE3 984b55519a7be42dee0c2a902ed01a9cf4fbfa6f5e7d4cb59b8f13ddb1ed7a83

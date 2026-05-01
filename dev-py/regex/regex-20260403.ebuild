@@ -1,13 +1,14 @@
 # Distributed under the terms of the GNU General Public License v2
 
+EAPI=8
+
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1 pypi flag-o-matic
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
-RDEPEND+="
-"
+RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Alternative regular expression module to replace re"
 HOMEPAGE="https://github.com/mrabarnett/mrab-regex/"

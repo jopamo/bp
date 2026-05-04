@@ -30,7 +30,7 @@ PATCHES=(
 )
 
 distutils_enable_sphinx docs \
-	dev-py/jinja \
+	dev-pypi/jinja2 \
 	dev-py/sphinx-issues \
 	dev-py/sphinx-tabs
 

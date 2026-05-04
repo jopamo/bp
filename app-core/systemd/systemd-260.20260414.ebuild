@@ -46,7 +46,7 @@ BDEPEND="
     app-dev/gperf
     app-dev/pkgconf
     bootloader? ( dev-pypi/pyelftools )
-    dev-py/jinja
+    dev-pypi/jinja2
 "
 
 pkg_pretend() {

@@ -8,13 +8,10 @@ SRC_URI="https://github.com/liberationfonts/liberation-fonts/files/7261482/liber
 
 FONT_SUFFIX="ttf"
 FONT_CONF=( "${FILESDIR}/60-liberation.conf" )
+FONT_CONF_DEFAULT=( 60-liberation.conf )
 FONT_S="${WORKDIR}/${PN}-ttf-${PV}"
 S="${FONT_S}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-pkg_postinst() {
-	fc-cache -fv
-}

@@ -81,6 +81,9 @@ src_configure() {
 src_install() {
 	default
 
+	insinto /etc/gtk-2.0
+	doins "${FILESDIR}"/gtkrc
+
 	rm "${ED}"/usr/bin/gtk-update-icon-cache
 }
 

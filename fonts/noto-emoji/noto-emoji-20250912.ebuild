@@ -20,12 +20,9 @@ FONT_SUFFIX="ttf"
 FONT_CONF=(
 	"${FILESDIR}/66-emoji.conf"
 )
+FONT_CONF_DEFAULT=( 66-emoji.conf )
 
 src_prepare() {
 	rm Makefile
 	default
-}
-
-pkg_postinst() {
-	fc-cache -fv
 }

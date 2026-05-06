@@ -36,8 +36,13 @@ if [[ -z ${_LOCKSTEP_CARGO_CRATE_ECLASS} ]]; then
 		local target="${ED%/}${LOCKSTEP_CARGO_CRATE_ROOT}"
 
 		[[ -d ${vendor_dir} ]] || die "missing vendored crate directory: ${vendor_dir}"
+		chmod -R u+rwX,go+rX "${vendor_dir}" || die "failed normalizing source permissions for ${CRATE_NAME}-${CRATE_VERSION}"
 		mkdir -p "${target}" || die
-		cp -R "${vendor_dir}/." "${target}/" || die "failed installing ${CRATE_NAME}-${CRATE_VERSION}"
+		tar -C "${vendor_dir}" \
+			--exclude='.gitignore' \
+			--exclude='.gitattributes' \
+			--exclude='.gitmodules' \
+			-cf - . | tar -C "${target}" -xf - || die "failed installing ${CRATE_NAME}-${CRATE_VERSION}"
 		chmod -R u+rwX,go+rX "${target}" || die "failed normalizing permissions for ${CRATE_NAME}-${CRATE_VERSION}"
 	}
 

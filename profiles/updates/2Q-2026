@@ -343,6 +343,7 @@ move dev-py/elementpath dev-pypi/elementpath
 move dev-py/emoji dev-pypi/emoji
 move dev-py/ensurepip-pip dev-pypi/ensurepip-pip
 move dev-py/ensurepip-setuptools dev-pypi/ensurepip-setuptools
+move dev-py/setuptools dev-pypi/setuptools
 move dev-py/evdev dev-pypi/evdev
 move dev-py/exceptiongroup dev-pypi/exceptiongroup
 move dev-py/execnet dev-pypi/execnet

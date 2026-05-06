@@ -446,7 +446,7 @@ unpacker_src_uri_depends() {
 
 	for uri in "$@"; do
 		case ${uri,,} in
-			*.cpio.*|*.cpio)      deps[cpio]="app-compression/cpio" ;;
+			*.cpio.*|*.cpio)      deps[cpio]="app-core/bx" ;;
 			*.rar)               deps[rar]="app-compression/unrar" ;;
 			*.7z)                deps[7z]="app-compression/7zip" ;;
 			*.xz)                deps[xz]="app-compression/xz-utils" ;;

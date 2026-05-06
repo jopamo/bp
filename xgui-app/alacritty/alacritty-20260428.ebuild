@@ -311,8 +311,16 @@ src_compile() {
 }
 
 src_install() {
-		cargo install \
+		local -a build_mode=()
+		use debug && build_mode=( --debug )
+
+		mapfile -t common_args < <(_cargo_common_args)
+
+		cargo_env cargo install \
+			--frozen \
 			--path alacritty \
+			"${build_mode[@]}" \
+			"${common_args[@]}" \
 			--root="${ED}/usr" \
 			|| die "cargo install failed"
 

@@ -20,7 +20,7 @@ S="${WORKDIR}/authlib-1.7.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-pypi/cryptography
+	app-crypto/cryptography
 	dev-pypi/joserfc
 "
 # lockstep-pypi-deps: end

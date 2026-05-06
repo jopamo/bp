@@ -20,7 +20,7 @@ S="${WORKDIR}/secretstorage-3.5.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-pypi/cryptography
+	app-crypto/cryptography
 	dev-pypi/jeepney
 "
 # lockstep-pypi-deps: end

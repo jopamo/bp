@@ -22,6 +22,6 @@ RDEPEND+="
 	dev-pypi/bcrypt
 	app-crypto/cryptography
 	dev-pypi/invoke
-	dev-pypi/pynacl
+	dev-py/pynacl
 "
 # lockstep-pypi-deps: end

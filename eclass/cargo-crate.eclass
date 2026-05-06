@@ -37,7 +37,8 @@ if [[ -z ${_LOCKSTEP_CARGO_CRATE_ECLASS} ]]; then
 
 		[[ -d ${vendor_dir} ]] || die "missing vendored crate directory: ${vendor_dir}"
 		mkdir -p "${target}" || die
-		cp -pR "${vendor_dir}/." "${target}/" || die "failed installing ${CRATE_NAME}-${CRATE_VERSION}"
+		cp -R "${vendor_dir}/." "${target}/" || die "failed installing ${CRATE_NAME}-${CRATE_VERSION}"
+		chmod -R u+rwX,go+rX "${target}" || die "failed normalizing permissions for ${CRATE_NAME}-${CRATE_VERSION}"
 	}
 
 	EXPORT_FUNCTIONS src_unpack src_compile src_test src_install

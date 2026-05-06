@@ -23,7 +23,7 @@ CDEPEND="
 "
 
 RDEPEND="${CDEPEND}
-	app-compression/cpio
+	app-core/bx
 	>=app-core/bash-4.0:0
 	app-core/bx
 	>=app-core/util-linux-2.21

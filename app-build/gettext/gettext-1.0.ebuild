@@ -23,10 +23,6 @@ RDEPEND="
 "
 BDEPEND="app-compression/xz-utils"
 
-PATCHES=(
-	"${FILESDIR}/${P}-libtextstyle-iconv-ostream-flush-signature.patch"
-)
-
 src_prepare() {
 	append-flags -lm
 	filter-flags -Wl,-z,defs -flto*

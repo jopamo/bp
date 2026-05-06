@@ -320,7 +320,7 @@ cargo_toml.write_text(toml_text.replace(patch_block, "\n"))
 cargo_lock = Path("Cargo.lock")
 lock_text = cargo_lock.read_text()
 old = 'source = "git+https://github.com/quininer/x11-clipboard.git?rev=19ab2163cf0bd0db607e827a5214571990307866#19ab2163cf0bd0db607e827a5214571990307866"'
-new = 'source = "registry+https://github.com/rust-lang/crates.io-index"\\nchecksum = "662d74b3d77e396b8e5beb00b9cad6a9eccf40b2ef68cc858784b14c41d535a3"'
+new = 'source = "registry+https://github.com/rust-lang/crates.io-index"\nchecksum = "662d74b3d77e396b8e5beb00b9cad6a9eccf40b2ef68cc858784b14c41d535a3"'
 if old not in lock_text:
     raise SystemExit("missing expected git x11-clipboard lock entry in Cargo.lock")
 cargo_lock.write_text(lock_text.replace(old, new))

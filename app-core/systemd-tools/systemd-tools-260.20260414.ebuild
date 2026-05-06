@@ -31,7 +31,7 @@ DEPEND="
     virtual/ssl
 "
 BDEPEND="
-    dev-pypi/jinja2
+    dev-py/jinja
 "
 
 src_prepare() {

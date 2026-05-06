@@ -1,6 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 DISTUTILS_USE_PEP517=flit
+PYPI_PN="Jinja2"
 
 inherit distutils-r1 pypi
 # lockstep-pypi-managed: true

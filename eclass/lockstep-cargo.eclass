@@ -153,7 +153,8 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 
 			[[ -d ${source_dir} ]] || die "missing installed cargo crate package contents: ${source_dir}"
 			mkdir -p "${dest_dir}" || die
-			cp -pR "${source_dir}/." "${dest_dir}/" || die "failed staging ${ref}"
+			cp -R "${source_dir}/." "${dest_dir}/" || die "failed staging ${ref}"
+			chmod -R u+rwX,go+rX "${dest_dir}" || die "failed normalizing staged permissions for ${ref}"
 		done <<< "${CARGO_DEPS-}"
 	}
 

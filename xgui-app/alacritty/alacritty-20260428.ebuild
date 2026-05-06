@@ -306,6 +306,29 @@ KEYWORDS="amd64 arm64"
 
 RESTRICT="test"
 
+src_prepare() {
+	python - <<'PY' || die "failed removing git-only x11-clipboard override"
+from pathlib import Path
+
+cargo_toml = Path("Cargo.toml")
+toml_text = cargo_toml.read_text()
+patch_block = '\n# TODO: Validation of fix for #6978. Remove before next release and use released `x11-clipboard`.\n[patch.crates-io]\nx11-clipboard = { git = "https://github.com/quininer/x11-clipboard.git", rev = "19ab2163cf0bd0db607e827a5214571990307866" }\n'
+if patch_block not in toml_text:
+    raise SystemExit("missing expected x11-clipboard patch block in Cargo.toml")
+cargo_toml.write_text(toml_text.replace(patch_block, "\n"))
+
+cargo_lock = Path("Cargo.lock")
+lock_text = cargo_lock.read_text()
+old = 'source = "git+https://github.com/quininer/x11-clipboard.git?rev=19ab2163cf0bd0db607e827a5214571990307866#19ab2163cf0bd0db607e827a5214571990307866"'
+new = 'source = "registry+https://github.com/rust-lang/crates.io-index"\\nchecksum = "662d74b3d77e396b8e5beb00b9cad6a9eccf40b2ef68cc858784b14c41d535a3"'
+if old not in lock_text:
+    raise SystemExit("missing expected git x11-clipboard lock entry in Cargo.lock")
+cargo_lock.write_text(lock_text.replace(old, new))
+PY
+
+	default
+}
+
 src_compile() {
 		einfo "compiling in src_install"
 }

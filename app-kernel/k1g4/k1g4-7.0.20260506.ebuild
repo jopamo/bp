@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="main"
-SNAPSHOT=715ee8d5cedb208dc14c11e8be19529a240b086a
+SNAPSHOT=5935dff829bbc1f42a51ba3cdc53fb017bc40f43
 
 K_NOUSENAME="yes"
 K_NOSETEXTRAVERSION="yes"
@@ -25,4 +25,3 @@ src_prepare() {
 
 	#eapply "${FILESDIR}"/reg.patch
 }
-

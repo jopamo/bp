@@ -71,6 +71,8 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 	_lockstep_cargo_encode_segment() {
 		local value=${1}
 		local encoded= i char ord
+		local hash_hi=5381
+		local hash_lo=52711
 
 		LC_ALL=C
 		for (( i=0; i<${#value}; ++i )); do
@@ -78,6 +80,22 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 			printf -v ord '%03d' "'${char}"
 			encoded+="${ord}"
 		done
+
+		# Portage and gpkg can choke on absurdly long PVs when Cargo build
+		# metadata carries a full git describe string. Keep the legacy,
+		# reversible ASCII-decimal encoding for normal cases, but collapse
+		# pathological tails to a deterministic numeric digest computed with
+		# shell arithmetic, since global ebuild scope forbids external tools.
+		if [[ ${#encoded} -gt 96 ]] ; then
+			for (( i=0; i<${#value}; ++i )); do
+				char=${value:i:1}
+				printf -v ord '%d' "'${char}"
+				hash_hi=$(( ((hash_hi << 5) + hash_hi + ord) & 0x7fffffffffffffff ))
+				hash_lo=$(( (((hash_lo << 5) + hash_lo) ^ ord) & 0x7fffffffffffffff ))
+			done
+			printf '999%03d%019d%019d\n' "${#value}" "${hash_hi}" "${hash_lo}"
+			return
+		fi
 
 		printf '%s\n' "${encoded}"
 	}

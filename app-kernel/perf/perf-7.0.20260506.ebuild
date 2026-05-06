@@ -36,12 +36,12 @@ src_prepare() {
 
 	if [[ -d ${ksrc}/arch/x86/include/asm ]] && [[ -d ${ksrc}/tools/include/asm ]] ; then
 		if [[ -f ${ksrc}/arch/x86/include/asm/asm.h ]] ; then
-			ln -sf ../../arch/x86/include/asm/asm.h \
+			ln -sf ../../../arch/x86/include/asm/asm.h \
 				"${ksrc}"/tools/include/asm/asm.h || die
 		fi
 
 		if [[ -f ${ksrc}/arch/x86/include/asm/cmpxchg.h ]] ; then
-			ln -sf ../../arch/x86/include/asm/cmpxchg.h \
+			ln -sf ../../../arch/x86/include/asm/cmpxchg.h \
 				"${ksrc}"/tools/include/asm/cmpxchg.h || die
 		fi
 	fi
@@ -50,7 +50,7 @@ src_prepare() {
 	# so __cxa_demangle stays resolved even when libbfd/libiberty are linked
 	sed -i \
 		-e 's|\$(PERF_IN) \$(LIBS) -o \$@|$(PERF_IN) $(LIBS) -Wl,--push-state,--no-as-needed -lstdc++ -Wl,--pop-state -o $@|' \
-		Makefile.perf || die
+		tools/perf/Makefile.perf || die
 }
 
 src_compile() {
@@ -110,7 +110,7 @@ src_compile() {
 		)
 	fi
 
-	emake "${myemake[@]}" || die
+	emake -C tools/perf "${myemake[@]}" || die
 }
 
 src_install() {
@@ -170,7 +170,7 @@ src_install() {
 		)
 	fi
 
-	emake install \
+	emake -C tools/perf install \
 		"${myemake[@]}" \
 		DESTDIR="${D}" \
 		prefix=/usr \

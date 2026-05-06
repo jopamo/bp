@@ -19,10 +19,13 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 	GNUCONFIG_AUTO_DEPEND=no
 	inherit gnuconfig libtool
 
+	: "${AUTOMAKE_DEPEND:=app-build/automake}"
+	: "${AUTOCONF_DEPEND:=app-build/autoconf}"
+
 	AUTOTOOLS_DEPEND="
 		${GNUCONFIG_DEPEND}
-		${_automake_atom}
-		${_autoconf_atom}
+		${AUTOMAKE_DEPEND}
+		${AUTOCONF_DEPEND}
 		${_libtool_atom}
 	"
 	RDEPEND=""
@@ -30,8 +33,6 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 	: "${AUTOTOOLS_AUTO_DEPEND:=yes}"
 	[[ ${AUTOTOOLS_AUTO_DEPEND} != "no" ]] && BDEPEND=${AUTOTOOLS_DEPEND}
 	_AUTOTOOLS_AUTO_DEPEND=${AUTOTOOLS_AUTO_DEPEND}
-
-	unset _automake_atom _autoconf_atom
 
 	: "${AM_OPTS:=}"
 	: "${AT_NOEAUTOHEADER:=}"

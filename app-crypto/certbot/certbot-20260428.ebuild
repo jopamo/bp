@@ -9,7 +9,7 @@ RDEPEND+="
 	app-crypto/acme
 	dev-pypi/configargparse
 	dev-pypi/configobj
-	dev-pypi/cryptography
+	app-crypto/cryptography
 	dev-pypi/distro
 	dev-pypi/josepy
 	dev-pypi/parsedatetime

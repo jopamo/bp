@@ -7,7 +7,7 @@ inherit distutils-r1
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/click
-	dev-pypi/cryptography
+	app-crypto/cryptography
 	dev-pypi/fido2
 	dev-pypi/keyring
 	dev-pypi/pyscard

@@ -20,7 +20,7 @@ S="${WORKDIR}/python_pskc-1.4"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-pypi/cryptography
+	app-crypto/cryptography
 	dev-pypi/python-dateutil
 "
 # lockstep-pypi-deps: end

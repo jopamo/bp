@@ -13,7 +13,8 @@ _font_is_live_root() {
 FONT_SUFFIX=${FONT_SUFFIX:-}
 FONT_PN=${FONT_PN:-${PN}}
 FONTDIR=${FONTDIR:-/usr/share/fonts/${FONT_PN}}
-FONT_CONF=( "" )
+FONT_CONF=()
+FONT_CONF_DEFAULT=()
 
 if [[ ${CATEGORY}/${PN} != fonts/encodings ]]; then
 	IUSE+=" X"
@@ -49,11 +50,17 @@ font_xfont_config() {
 }
 
 font_fontconfig() {
-	[[ -n ${FONT_CONF[@]} ]] || return 0
+	(( ${#FONT_CONF[@]} )) || return 0
 	insinto /etc/fonts/conf.avail/
-	local c
+	dodir /etc/fonts/conf.d
+	local c base
 	for c in "${FONT_CONF[@]}"; do
-		[[ -e $c ]] && doins "$c"
+		[[ -e $c ]] || continue
+		doins "$c"
+		base=${c##*/}
+		if has "$c" "${FONT_CONF_DEFAULT[@]}" || has "$base" "${FONT_CONF_DEFAULT[@]}"; then
+			dosym ../conf.avail/${base} /etc/fonts/conf.d/${base}
+		fi
 	done
 }
 
@@ -124,13 +131,21 @@ _update_fontcache() {
 }
 
 font_pkg_postinst() {
-	if [[ -n ${FONT_CONF[@]} ]]; then
+	if (( ${#FONT_CONF[@]} )); then
 		local cf
-		elog "Installed fontconfig files:"
+		elog "Installed fontconfig files in /etc/fonts/conf.avail:"
 		for cf in "${FONT_CONF[@]}"; do
 			[[ -e ${EROOT}/etc/fonts/conf.avail/${cf##*/} ]] && elog "  ${cf##*/}"
 		done
-		elog "Use 'eselect fontconfig' to enable/disable them."
+		if (( ${#FONT_CONF_DEFAULT[@]} )); then
+			elog "Enabled by default in /etc/fonts/conf.d:"
+			for cf in "${FONT_CONF_DEFAULT[@]}"; do
+				[[ -e ${EROOT}/etc/fonts/conf.d/${cf##*/} ]] && elog "  ${cf##*/}"
+			done
+			elog "Remove the matching symlink in /etc/fonts/conf.d to disable them."
+		else
+			elog "Enable them by symlinking them from /etc/fonts/conf.avail into /etc/fonts/conf.d."
+		fi
 	fi
 	_update_fontcache
 }

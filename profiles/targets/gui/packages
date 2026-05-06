@@ -6,11 +6,8 @@
 *app-util/conky
 *app-var/usbutils
 *bin/firefox-nightly-bin
-*fonts/fira-code
 *fonts/font-alias
-*fonts/noto
-*fonts/noto-emoji
-*fonts/source-code-pro
+*fonts/font-policy
 *lib-core/libinput
 *virtual/rust
 *xgui-app/arqiver

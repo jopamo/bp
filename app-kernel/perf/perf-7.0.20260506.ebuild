@@ -31,19 +31,32 @@ RDEPEND="${DEPEND}"
 src_prepare() {
 	default
 
-	# fix missing x86 asm headers in tools header layer for this snapshot
+	# fix missing arch asm headers in the tools header layer for this snapshot
 	local ksrc=${S}
+	local perf_arch=${ARCH}
+	local tools_asm_dir
+	local hdr
 
-	if [[ -d ${ksrc}/arch/x86/include/asm ]] && [[ -d ${ksrc}/tools/include/asm ]] ; then
-		if [[ -f ${ksrc}/arch/x86/include/asm/asm.h ]] ; then
-			ln -sf ../../../arch/x86/include/asm/asm.h \
-				"${ksrc}"/tools/include/asm/asm.h || die
-		fi
+	[[ -n ${perf_arch} ]] || perf_arch=$(uname -m)
 
-		if [[ -f ${ksrc}/arch/x86/include/asm/cmpxchg.h ]] ; then
-			ln -sf ../../../arch/x86/include/asm/cmpxchg.h \
-				"${ksrc}"/tools/include/asm/cmpxchg.h || die
-		fi
+	case ${perf_arch} in
+		amd64|x86_64)
+			perf_arch=x86
+			;;
+		aarch64)
+			perf_arch=arm64
+			;;
+	esac
+
+	tools_asm_dir=${ksrc}/tools/arch/${perf_arch}/include/asm
+
+	if [[ -d ${tools_asm_dir} ]] && [[ -d ${ksrc}/tools/include/asm ]] ; then
+		for hdr in "${tools_asm_dir}"/* ; do
+			[[ -e ${hdr} ]] || continue
+			[[ -e ${ksrc}/tools/include/asm/${hdr##*/} ]] && continue
+			ln -sf ../../arch/${perf_arch}/include/asm/${hdr##*/} \
+				"${ksrc}"/tools/include/asm/${hdr##*/} || die
+		done
 	fi
 
 	# retain libstdc++ for the final perf link under global --as-needed/LTO

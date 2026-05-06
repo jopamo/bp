@@ -4,7 +4,7 @@ inherit toolchain-funcs qa-policy
 
 DESCRIPTION="Mozilla's Network Security Services library that implements PKI support"
 HOMEPAGE="http://www.mozilla.org/projects/security/pki/nss/"
-SNAPSHOT=97c0216f88e044e4ab31a37f13754f2a48198103
+SNAPSHOT=d10f0db611a40d583a0f86afbef6d6ad3d318346
 SRC_URI="https://github.com/nss-dev/nss/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
@@ -197,7 +197,7 @@ src_install() {
 	dodir /usr/lib
 	cp -rL */lib/* "${ED%/}"/usr/lib || die "copying shared libs failed"
 	local i
-	for i in crmf freebl nssb nssckfw ; do
+	for i in freebl nssb nssckfw ; do
 		cp -L */lib/lib${i}.a "${ED%/}"/usr/lib || die "copying libs failed"
 	done
 
@@ -222,7 +222,7 @@ src_install() {
 	insinto /usr/include/nss
 	doins public/nss/*.{h,api}
 	insinto /usr/include/nss/private
-	doins private/nss/{blapi,alghmac}.h
+	doins private/nss/{blapi,alghmac,cmac}.h
 
 	popd >/dev/null || die
 
@@ -232,7 +232,7 @@ src_install() {
 
 	if use utils; then
 			nssutils="addbuiltin atob baddbdir btoa certutil
-			cmsutil conflict crlutil derdump digest makepqg mangle modutil multinit
+			cmsutil crlutil derdump digest makepqg mangle modutil multinit
 			nonspr10 ocspclnt oidcalc p7content p7env p7sign p7verify pk11mode
 			pk12util pp rsaperf selfserv shlibsign signtool signver ssltap strsclnt
 			symkeyutil tstclnt vfychain vfyserv"

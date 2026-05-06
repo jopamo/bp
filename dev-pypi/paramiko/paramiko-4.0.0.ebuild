@@ -19,7 +19,7 @@ PYPI_PN="paramiko"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-pypi/bcrypt
+	dev-py/bcrypt
 	app-crypto/cryptography
 	dev-pypi/invoke
 	dev-py/pynacl

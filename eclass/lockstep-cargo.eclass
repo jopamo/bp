@@ -135,6 +135,18 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 		printf '%s\n' "${atoms}"
 	}
 
+	_lockstep_cargo_copy_tree() {
+		local source_dir=${1}
+		local dest_dir=${2}
+
+		mkdir -p "${dest_dir}" || die
+		tar -C "${source_dir}" \
+			--exclude='.gitignore' \
+			--exclude='.gitattributes' \
+			--exclude='.gitmodules' \
+			-cf - . | tar -C "${dest_dir}" -xf - || die "failed copying cargo crate payload from ${source_dir}"
+	}
+
 	_lockstep_cargo_populate_vendor() {
 		local ref crate version sysroot source_dir dest_dir
 
@@ -152,8 +164,7 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 			dest_dir="${ECARGO_VENDOR}/${crate}-${version}"
 
 			[[ -d ${source_dir} ]] || die "missing installed cargo crate package contents: ${source_dir}"
-			mkdir -p "${dest_dir}" || die
-			cp -R "${source_dir}/." "${dest_dir}/" || die "failed staging ${ref}"
+			_lockstep_cargo_copy_tree "${source_dir}" "${dest_dir}" || die "failed staging ${ref}"
 			chmod -R u+rwX,go+rX "${dest_dir}" || die "failed normalizing staged permissions for ${ref}"
 		done <<< "${CARGO_DEPS-}"
 	}

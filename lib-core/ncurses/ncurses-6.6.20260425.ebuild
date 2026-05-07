@@ -22,6 +22,8 @@ src_prepare() {
 		misc/gen-pkgconfig.in
 	sed -i 's/for opt in -L$libdir @EXTRA_PKG_LDFLAGS@ $LIBS/for opt in -L$libdir $LIBS/' \
 		misc/ncurses-config.in
+	sed -i '/^TABSIZE=/c\TABSIZE=$(awk '\''/^[[:space:]]*#/ || /^[[:space:]]*$/ { next } $1 ~ /^(capalias|infoalias|userdef|used_by)$/ { next } $3 ~ /^(bool|num|str)$/ { ++n } END { print n + 0 }'\'' "$@")' \
+		include/MKhashsize.sh || die
 }
 
 src_configure() {

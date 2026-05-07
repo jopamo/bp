@@ -64,7 +64,6 @@ dev-pypi/httpx
 dev-pypi/paramiko
 dev-pypi/pexpect
 dev-pypi/pip
-dev-rust/fd
-dev-rust/ripgrep
+app-core/bx
 virtual/rust
 "

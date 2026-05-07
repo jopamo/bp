@@ -218,6 +218,11 @@ move dev-python/retrying dev-pypi/retrying
 move dev-python/rfc3339-validator dev-pypi/rfc3339-validator
 move dev-python/rfc3986-validator dev-pypi/rfc3986-validator
 move dev-python/rfc3987 dev-pypi/rfc3987
+move app-core/findutils app-core/bx
+move app-core/grep app-core/bx
+move app-core/psmisc app-core/bx
+move dev-rust/fd app-core/bx
+move dev-rust/ripgrep app-core/bx
 move dev-python/rich dev-pypi/rich
 move dev-python/rpyc dev-pypi/rpyc
 move dev-python/rsa dev-pypi/rsa

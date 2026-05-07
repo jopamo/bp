@@ -22,7 +22,7 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 BDEPEND="
-	app-core/grep[pcre]
+	app-core/bx
 	app-build/llvm:*[bpf]
 	app-build/m4
 "

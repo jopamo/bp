@@ -28,7 +28,7 @@ DEPEND="
 	zlib? ( lib-core/zlib )
 "
 BDEPEND="
-	app-core/findutils
+	app-core/bx
 	app-dev/pkgconf
 "
 

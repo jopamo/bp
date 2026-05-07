@@ -23,7 +23,7 @@ IUSE="build gentoo-dev ipc native-extensions
 
 COMMON_DEPEND="
 	app-core/bash
-	app-core/findutils
+	app-core/bx
 	app-core/sed
 	app-crypto/blake3
 	app-crypto/gnupg

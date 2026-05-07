@@ -62,9 +62,11 @@ src_configure() {
 }
 
 src_compile() {
-	# ncurses source generation is race-prone under parallel make; generate
-	# these first in a single job, then build normally.
-	emake -j1 sources
+	# Generate headers/tables explicitly before the parallel build.  The top-level
+	# "sources" target is not enough here; we need the include/ headers and the
+	# ncurses/ generated sources in a known-good order.
+	emake -C include -j1 ncurses_def.h hashsize.h term.h curses.h
+	emake -C ncurses -j1 sources
 	default
 }
 

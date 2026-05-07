@@ -62,11 +62,26 @@ src_configure() {
 }
 
 src_compile() {
+	# Blow away generated files first.  If one of these was created during a bad
+	# partial build (especially hashsize.h), make may otherwise reuse it.
+	rm -f \
+		include/ncurses_def.h \
+		include/hashsize.h \
+		include/term.h \
+		include/curses.h \
+		ncurses/comp_captab.c \
+		ncurses/comp_userdefs.c \
+		ncurses/names.c \
+		ncurses/codes.c \
+		ncurses/lib_keyname.c \
+		ncurses/unctrl.c \
+		ncurses/init_keytry.h || die
+
 	# Generate headers/tables explicitly before the parallel build.  The top-level
 	# "sources" target is not enough here; we need the include/ headers and the
 	# ncurses/ generated sources in a known-good order.
 	emake -C include -j1 ncurses_def.h hashsize.h term.h curses.h
-	emake -C ncurses -j1 sources
+	emake -C ncurses -j1 comp_captab.c comp_userdefs.c names.c codes.c lib_keyname.c unctrl.c init_keytry.h
 	default
 }
 

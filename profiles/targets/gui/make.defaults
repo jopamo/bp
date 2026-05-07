@@ -8,7 +8,6 @@ cairo
 cli
 cups
 dbus
-dhcp4
 dri
 drm
 efi
@@ -34,7 +33,6 @@ ladspa
 lcms
 libinput
 libsamplerate
-lua
 machined
 mount
 mp3
@@ -70,7 +68,6 @@ user-namespaces
 webp
 video
 vst
-wasm
 X
 xcb
 xdg

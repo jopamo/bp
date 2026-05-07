@@ -31,6 +31,7 @@ src_configure() {
 	local myconf=(
 		"--with-build-cflags=${build_cflags}"
 		"--with-build-ldflags=${build_ldflags}"
+		--disable-big-strings
 		--disable-rpath-hack
 		--disable-setuid-environ
 		--disable-stripping

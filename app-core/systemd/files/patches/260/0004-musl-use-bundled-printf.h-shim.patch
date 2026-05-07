@@ -1,0 +1,57 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Codex <codex@openai.com>
+Date: Wed, 6 May 2026 09:04:00 -0500
+Subject: [PATCH] musl: use bundled printf.h shim
+
+The glibc-only <printf.h> header is not available on musl. This snapshot
+already ships a musl-compatible replacement in src/include/musl/printf.h, so
+use it when building against musl.
+---
+ src/basic/stdio-util.h | 6 +++++-
+ src/libc/musl/printf.c | 2 +-
+ src/test/test-printf.c | 2 +-
+ 3 files changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/src/basic/stdio-util.h b/src/basic/stdio-util.h
+index 1eec9356dc..21c0f93dd5 100644
+--- a/src/basic/stdio-util.h
++++ b/src/basic/stdio-util.h
+@@ -1,7 +1,11 @@
+ /* SPDX-License-Identifier: LGPL-2.1-or-later */
+ #pragma once
+ 
++#ifdef __GLIBC__
+ #include <printf.h>
++#else
++#include "../include/musl/printf.h"
++#endif
+ #include <stdio.h>
+ 
+ #include "basic-forward.h"
+diff --git a/src/libc/musl/printf.c b/src/libc/musl/printf.c
+index ac0b9076fd..c26b89e3d4 100644
+--- a/src/libc/musl/printf.c
++++ b/src/libc/musl/printf.c
+@@ -2,7 +2,7 @@
+ /* Copyright 2014 Emil Renner Berthing <systemd@esmil.dk> */
+ 
+ #include <limits.h>
+-#include <printf.h>
++#include "../../include/musl/printf.h"
+ #include <stdio.h>
+ #include <wchar.h>
+ 
+diff --git a/src/test/test-printf.c b/src/test/test-printf.c
+index 01f2676944..3ad507352d 100644
+--- a/src/test/test-printf.c
++++ b/src/test/test-printf.c
+@@ -1,6 +1,6 @@
+ /* SPDX-License-Identifier: LGPL-2.1-or-later */
+ 
+-#include <printf.h>
++#include "../include/musl/printf.h"
+ 
+ #include "string-util.h"
+ #include "tests.h"
+-- 
+2.49.0

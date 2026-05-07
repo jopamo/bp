@@ -26,7 +26,11 @@ src_prepare() {
 
 src_configure() {
 	qa-policy-configure
+	local build_cflags=${BUILD_CFLAGS:--O2}
+	local build_ldflags=${BUILD_LDFLAGS:-}
 	local myconf=(
+		"--with-build-cflags=${build_cflags}"
+		"--with-build-ldflags=${build_ldflags}"
 		--disable-rpath-hack
 		--disable-setuid-environ
 		--disable-stripping
@@ -54,6 +58,13 @@ src_configure() {
 	)
 
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_compile() {
+	# ncurses source generation is race-prone under parallel make; generate
+	# these first in a single job, then build normally.
+	emake -j1 sources
+	default
 }
 
 src_install() {

@@ -137,7 +137,6 @@ kernel-2_src_install() {
 	install_universal
 	[[ ${ETYPE} == headers ]] && install_headers
 	[[ ${ETYPE} == sources ]] && install_sources
-	dedup_symlink "${D}"
 }
 kernel-2_pkg_postinst() {
 	[[ ${ETYPE} == sources ]] && postinst_sources

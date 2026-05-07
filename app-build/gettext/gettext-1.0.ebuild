@@ -105,6 +105,5 @@ src_install() {
 	fi
 
 	cleanup_install
-	dedup_symlink "${ED}"
 	qa-policy-install
 }

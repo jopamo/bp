@@ -180,6 +180,8 @@ src_configure() {
         -Dtimesyncd=false
         -Dtmpfiles=true
         -Dtpm=true
+        -Dtests=false
+        -Dfuzz-tests=false
         -Dsbat-distro-url="https://1g4.org/"
     )
     meson_src_configure

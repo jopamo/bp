@@ -1,5 +1,4 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Codex <codex@openai.com>
 Date: Wed, 6 May 2026 09:04:00 -0500
 Subject: [PATCH] musl: use bundled printf.h shim
 
@@ -29,7 +28,7 @@ index 1eec9356dc..21c0f93dd5 100644
  
  #include "basic-forward.h"
 diff --git a/src/libc/musl/printf.c b/src/libc/musl/printf.c
-index ac0b9076fd..c26b89e3d4 100644
+index 8f3f9006e3..7391b0cccb 100644
 --- a/src/libc/musl/printf.c
 +++ b/src/libc/musl/printf.c
 @@ -2,7 +2,7 @@
@@ -38,8 +37,8 @@ index ac0b9076fd..c26b89e3d4 100644
  #include <limits.h>
 -#include <printf.h>
 +#include "../../include/musl/printf.h"
- #include <stdio.h>
- #include <wchar.h>
+ #include <stdint.h>
+ #include <string.h>
  
 diff --git a/src/test/test-printf.c b/src/test/test-printf.c
 index 01f2676944..3ad507352d 100644

@@ -62,6 +62,8 @@ src_configure() {
 }
 
 src_compile() {
+	local caplist="${S}/include/Caps ${S}/include/Caps-ncurses"
+
 	# Blow away generated files first.  If one of these was created during a bad
 	# partial build (especially hashsize.h), make may otherwise reuse it.
 	rm -f \
@@ -80,8 +82,10 @@ src_compile() {
 	# Generate headers/tables explicitly before the parallel build.  The top-level
 	# "sources" target is not enough here; we need the include/ headers and the
 	# ncurses/ generated sources in a known-good order.
-	emake -C include -j1 ncurses_def.h hashsize.h term.h curses.h
-	emake -C ncurses -j1 comp_captab.c comp_userdefs.c names.c codes.c lib_keyname.c unctrl.c init_keytry.h
+	emake -C include -j1 CAPLIST="${caplist}" ncurses_def.h hashsize.h term.h curses.h
+	emake -C ncurses -j1 CAPLIST="${caplist}" make_hash make_keys keys.list \
+		comp_captab.c comp_userdefs.c names.c codes.c lib_keyname.c \
+		unctrl.c init_keytry.h
 	default
 }
 

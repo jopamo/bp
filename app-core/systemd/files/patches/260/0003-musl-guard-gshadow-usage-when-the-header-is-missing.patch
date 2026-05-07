@@ -1,40 +1,15 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Codex <codex@openai.com>
-Date: Wed, 6 May 2026 08:55:00 -0500
+Date: Wed, 6 May 2026 09:21:00 -0500
 Subject: [PATCH] musl: guard gshadow usage when the header is missing
 
-Musl does not ship <gshadow.h>. Systemd already intends to disable gshadow
-support there, but this snapshot still reaches gshadow-gated code during the
-build. Make the source robust by treating gshadow support as unavailable when
+Musl does not ship <gshadow.h>. Systemd already disables gshadow support for
+musl at the meson level, but this snapshot still includes the header
+unconditionally from user-util.h. Treat gshadow support as unavailable when
 the header itself is missing.
 ---
- src/basic/user-util.c   | 4 ++--
- src/basic/user-util.h   | 8 +++++++-
- src/sysusers/sysusers.c | 4 ++--
- 3 files changed, 11 insertions(+), 5 deletions(-)
+ src/basic/user-util.h | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/src/basic/user-util.c b/src/basic/user-util.c
-index 2120c10430..6839ddb296 100644
---- a/src/basic/user-util.c
-+++ b/src/basic/user-util.c
-@@ -998,7 +998,7 @@ int putgrent_sane(const struct group *gr, FILE *stream) {
-         return 0;
- }
- 
--#if ENABLE_GSHADOW
-+#if GSHADOW_HEADER_AVAILABLE
- int putsgent_sane(const struct sgrp *sg, FILE *stream) {
-         assert(stream);
-         assert(sg);
-@@ -1050,7 +1050,7 @@ int fgetgrent_sane(FILE *stream, struct group **gr) {
-         return 1;
- }
- 
--#if ENABLE_GSHADOW
-+#if GSHADOW_HEADER_AVAILABLE
- int fgetsgent_sane(FILE *stream, struct sgrp **sg) {
-         assert(stream);
-         assert(sg);
 diff --git a/src/basic/user-util.h b/src/basic/user-util.h
 index 275e6ca6b2..9bbdc825d7 100644
 --- a/src/basic/user-util.h
@@ -56,36 +31,5 @@ index 275e6ca6b2..9bbdc825d7 100644
  #include <pwd.h>
  #include <shadow.h>
  
-@@ -136,7 +142,7 @@ int fgetgrent_sane(FILE *stream, struct group **gr);
- int putpwent_sane(const struct passwd *pw, FILE *stream);
- int putspent_sane(const struct spwd *sp, FILE *stream);
- int putgrent_sane(const struct group *gr, FILE *stream);
--#if ENABLE_GSHADOW
-+#if GSHADOW_HEADER_AVAILABLE
- int fgetsgent_sane(FILE *stream, struct sgrp **sg);
- int putsgent_sane(const struct sgrp *sg, FILE *stream);
- #endif
-diff --git a/src/sysusers/sysusers.c b/src/sysusers/sysusers.c
-index 6919f534cf..c91ac1e250 100644
---- a/src/sysusers/sysusers.c
-+++ b/src/sysusers/sysusers.c
-@@ -405,7 +405,7 @@ static int putgrent_with_members(
-         return putgrent_sane(g, group);
- }
- 
--#if ENABLE_GSHADOW
-+#if GSHADOW_HEADER_AVAILABLE
- static int putsgent_with_members(
-                 const Iterator *i,
-                 const struct sgrp *sg,
-@@ -854,7 +854,7 @@ static int write_temporary_shadow(
-         return 0;
- }
- 
--#if ENABLE_GSHADOW
-+#if GSHADOW_HEADER_AVAILABLE
- static int write_temporary_gshadow(
-                 const Context *c,
-                 const char * gshadow_path,
 -- 
 2.49.0

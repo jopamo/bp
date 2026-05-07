@@ -36,6 +36,8 @@ app-tex/hunspell minimal
 app-tex/poppler utils
 bin/nvidia-drivers driver kms uvm -kernel-open
 lib-core/libcap static-libs
+lib-core/libxcrypt static-libs
+lib-core/libxcrypt-compat static-libs
 lib-core/ncurses static-libs
 lib-core/libxml2 python
 lib-core/sqlite fts5 geopoly json rtree tempstore

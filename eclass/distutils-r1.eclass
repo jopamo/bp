@@ -271,7 +271,7 @@ _distutils_set_globals() {
 		fi
 
 		bdep='
-			>=dev-pypi/gpep517-16[${PYTHON_USEDEP}]
+			>=dev-py/gpep517-16[${PYTHON_USEDEP}]
 		'
 		case ${DISTUTILS_USE_PEP517} in
 			flit)
@@ -846,7 +846,7 @@ _distutils-r1_print_package_versions() {
 
 	if [[ ${DISTUTILS_USE_PEP517} ]]; then
 		packages+=(
-			dev-pypi/gpep517
+			dev-py/gpep517
 			dev-pypi/installer
 		)
 		if [[ ${DISTUTILS_EXT} ]]; then

@@ -1,3 +1,4 @@
 lib-net/nodejs icu
 lib-core/zlib minizip
-xmedia-app/mpv -vulkan
+xgui-app/wireshark lua
+xmedia-app/mpv -vulkan lua

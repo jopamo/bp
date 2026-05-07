@@ -21,7 +21,7 @@ IUSE="seccomp"
 
 RDEPEND="
 	app-compression/bzip2
-	app-core/dbus
+	virtual/dbus
 	fonts/fontconfig
 	lib-core/expat
 	lib-core/libcap

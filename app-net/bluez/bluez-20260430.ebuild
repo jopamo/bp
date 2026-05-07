@@ -25,10 +25,10 @@ DEPEND="
 	)
 	readline? ( lib-core/readline )
 	systemd? (
-		app-core/dbus[user-session=]
+		virtual/dbus[user-session=]
 		app-core/systemd
 	)
-	!systemd? ( app-core/dbus )
+	!systemd? ( virtual/dbus )
 	udev? ( app-core/systemd )
 "
 RDEPEND="${DEPEND}"

@@ -25,7 +25,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	app-core/dbus
+	virtual/dbus
 	app-tex/hunspell
 	fonts/fontconfig
 	lib-dev/dbus-glib

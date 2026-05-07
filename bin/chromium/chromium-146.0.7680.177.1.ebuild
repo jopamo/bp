@@ -29,7 +29,7 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	app-compression/bzip2
-	app-core/dbus
+	virtual/dbus
 	fonts/fontconfig
 	lib-core/expat
 	lib-core/libcap

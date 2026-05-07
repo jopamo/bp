@@ -35,7 +35,7 @@ RDEPEND="
 		xmedia-lib/libldac
 		xmedia-lib/opus
 	)
-	dbus? ( app-core/dbus )
+	dbus? ( virtual/dbus )
 	echo-cancel? ( media-libs/webrtc-audio-processing:0 )
 	extra? ( xgui-lib/libsndfile )
 	readline? ( lib-core/readline )

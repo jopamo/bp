@@ -18,7 +18,7 @@ IUSE="debug static-libs test"
 DEPEND="
 	lib-core/expat
 	lib-core/glib
-	app-core/dbus
+	virtual/dbus
 "
 
 BDEPEND="

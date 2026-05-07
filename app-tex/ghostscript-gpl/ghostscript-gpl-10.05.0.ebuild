@@ -24,7 +24,7 @@ DEPEND="
 	>=lib-core/zlib-1.2.7:=
 	xmedia-lib/libjpeg-turbo
 	cups? ( >=lib-print/cups-1.3.8 )
-	dbus? ( app-core/dbus )
+	dbus? ( virtual/dbus )
 	gtk? ( xgui-live-lib/gtk3 )
 	tiff? ( >=xmedia-lib/tiff-4.0.1:0= )
 	X? ( xgui-lib/libXt xgui-lib/libXext )

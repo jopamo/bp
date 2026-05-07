@@ -24,7 +24,7 @@ DEPEND="
 			app-core/acl
 			app-core/attr
 	)
-	dbus? ( app-core/dbus )
+	dbus? ( virtual/dbus )
 	pam? ( lib-core/pam )
 	ssl? ( lib-net/gnutls )
 	systemd? ( app-core/systemd )

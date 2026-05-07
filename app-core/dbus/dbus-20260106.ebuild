@@ -12,25 +12,19 @@ LICENSE="|| ( AFL-2.1 GPL-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="apparmor debug inotify static-libs systemd test tools user-session valgrind X"
+IUSE="apparmor debug inotify static-libs systemd test user-session valgrind"
 
 DEPEND="
 	lib-core/expat
 	apparmor? ( app-core/apparmor )
 	valgrind? ( app-dev/valgrind )
 	systemd? ( app-core/systemd )
-	X? (
-		xgui-lib/libX11
-		xgui-lib/libXt
-		)
 "
 BDEPEND="
 	app-build/autoconf-archive
 	app-dev/pkgconf
 "
-
-# out of sources build dir for make check
-TBD="${WORKDIR}/${P}-tests-build"
+RDEPEND="!app-core/dbus-x11"
 
 pkg_setup() {
 	CONFIG_CHECK="~EPOLL"
@@ -39,38 +33,28 @@ pkg_setup() {
 
 src_configure() {
 	qa-policy-configure
-	local rundir="/run"
 
 	local emesonargs=(
 		--localstatedir="${EPREFIX}/var"
-		-D asserts=false
-		-D checks=false
-		-D containers=false
-		-D dbus_user=messagebus
 		-D default_library=$(usex static-libs both shared)
 		-D kqueue=disabled
 		-D libaudit=disabled
 		-D message_bus=true
 		-D qt_help=disabled
-		-D runtime_dir="${EPREFIX}${rundir}"
 		-D selinux=disabled
-		-D session_socket_dir="${EPREFIX}"/tmp
-		-D system_pid_file="${EPREFIX}${rundir}"/dbus.pid
-		-D system_socket="${EPREFIX}${rundir}"/dbus/system_bus_socket
 		-D systemd_system_unitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 		-D systemd_user_unitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/user" "false")
+		-D tools=false
+		-D x11_autolaunch=disabled
 		-D xml_docs=disabled
-		-Dinstalled_tests=false
 		$(meson_feature apparmor)
 		$(meson_feature inotify)
 		$(meson_feature systemd)
 		$(meson_feature test modular_tests)
 		$(meson_feature valgrind)
-		$(meson_feature X x11_autolaunch)
 		$(meson_use debug stats)
 		$(meson_use debug verbose_mode)
-		$(meson_use systemd user_session)
-		$(meson_use tools)
+		$(meson_use user-session user_session)
 	)
 
 	meson_src_configure
@@ -79,23 +63,15 @@ src_configure() {
 src_install() {
 	meson_src_install
 
-	if use X; then
-		exeinto /etc/X11/xinit/xinitrc.d
-		doexe "${FILESDIR}"/80-dbus
-	fi
-
-	# needs to exist for dbus sessions to launch
-	keepdir /usr/share/dbus-1/services
-
-	# let the init script create the /var/run/dbus directory
-	rm -rf "${ED}"/var/run
+	# keep runtime state out of the image; create it via sysusers/tmpfiles
 	rm -rf "${ED}"/run
+	rm -rf "${ED}"/var/run
 	rm -rf "${ED}"/var/lib
 
-		cat > "${T}"/"${PN}"-sysusers <<- EOF || die
-			g messagebus 101 - -
-			u! messagebus 101:101 "D-Bus system message bus" / /usr/bin/nologin
-		EOF
+	cat > "${T}"/"${PN}"-sysusers <<- EOF || die
+		g messagebus 101 - -
+		u! messagebus 101:101 "D-Bus system message bus" / /usr/bin/nologin
+	EOF
 
 	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die
 		d /var/lib/dbus 0755 - - -

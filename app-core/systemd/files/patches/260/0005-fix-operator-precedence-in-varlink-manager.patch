@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Wed, 6 May 2026 09:48:00 -0500
+Subject: [PATCH] fix operator precedence in varlink-manager
+
+GCC on musl rejects this nested GNU ?: expression with -Wint-conversion
+because the conditional binds in an unintended way. Spell it out so the
+pointer-valued expression is unambiguous.
+---
+ src/core/varlink-manager.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/core/varlink-manager.c b/src/core/varlink-manager.c
+index 4b4f21adfb..7e38f4e969 100644
+--- a/src/core/varlink-manager.c
++++ b/src/core/varlink-manager.c
+@@ -386,7 +386,7 @@ static int vl_method_enqueue_marked_jobs_manager(sd_varlink *link, sd_json_varia
+                         if (!error_id)
+                                 error_id = varlink_error_id_from_bus_error(&bus_error);
+ 
+-                        const char *error_msg = bus_error.message ?: error_id ? NULL : STRERROR(r);
++                        const char *error_msg = bus_error.message ?: (error_id ? NULL : STRERROR(r));
+ 
+                         r = sd_varlink_replybo(link,
+                                                SD_JSON_BUILD_PAIR_STRING("unitID", u->id),
+-- 
+2.49.0

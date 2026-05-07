@@ -33,7 +33,7 @@ DEPEND="
     virtual/ssl
     apparmor? ( app-core/apparmor )
     bpf-framework? ( lib-net/libbpf )
-    dbus? ( app-core/dbus )
+    dbus? ( virtual/dbus )
     elfutils? ( virtual/libelf )
     gcrypt? ( lib-core/libgcrypt )
     kmod? ( app-core/kmod )

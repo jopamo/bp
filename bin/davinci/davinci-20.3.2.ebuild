@@ -35,7 +35,7 @@ app-compression/lz4
 
 app-crypto/mit-krb5
 
-app-core/dbus
+virtual/dbus
 app-core/util-linux
 app-dev/opencl-headers
 app-net/curl

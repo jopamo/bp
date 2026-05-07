@@ -1,4 +1,6 @@
+virtual/dbus user-session
 app-core/layout -server
+app-net/bluez user-session
 app-core/systemd logind sleep
 app-core/vim normal
 app-kernel/kernel-bin desktop

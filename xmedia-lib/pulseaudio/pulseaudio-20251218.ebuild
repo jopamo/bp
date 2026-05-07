@@ -35,7 +35,7 @@ DEPEND="
 	alsa? ( xgui-tools/alsa-lib )
 	glib? ( lib-core/glib )
 	jack? ( virtual/jack )
-	dbus? ( app-core/dbus )
+	dbus? ( virtual/dbus )
 	gtk? ( xgui-lib/gtk3 )
 	udev? ( app-core/systemd[hwdb(+)] )
 	lib-core/gdbm

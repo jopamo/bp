@@ -47,7 +47,7 @@ DEPEND="
 	)
 	udev? ( app-core/systemd )
 	systemd? (
-		app-core/dbus
+		virtual/dbus
 		app-core/systemd
 	)"
 BDEPEND="

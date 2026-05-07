@@ -19,7 +19,7 @@ IUSE="gssapi keep-la mysql postgres sqlite systemd opengl vulkan xkbcommon"
 REQUIRED_USE="xkbcommon"
 
 DEPEND="
-	app-core/dbus
+	virtual/dbus
 	lib-core/libpcre2
 	lib-core/zlib
 	lib-dev/double-conversion

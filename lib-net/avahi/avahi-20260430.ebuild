@@ -17,7 +17,7 @@ IUSE="static-libs test"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
-	app-core/dbus
+	virtual/dbus
 	lib-core/expat
 	lib-core/glib
 	lib-dev/libevent

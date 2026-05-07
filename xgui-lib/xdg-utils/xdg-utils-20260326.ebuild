@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	app-core/dbus
+	virtual/dbus
 	xgui-desktop/shared-mime-info
 	xgui-tools/xprop
 	xgui-tools/xset

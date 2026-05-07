@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# launch a per-session bus for startx/xinit setups that do not already have one
+
+dbuslaunch=$(command -v dbus-launch 2>/dev/null)
+if [ -n "$dbuslaunch" ] && [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
+	if [ -n "$command" ]; then
+		command="$dbuslaunch --exit-with-session $command"
+	else
+		eval "$("$dbuslaunch" --sh-syntax --exit-with-session)"
+	fi
+fi
+
+# upstream's user-bus guidance for X11 startup scripts is to update the
+# activation environment after the bus address and X11 variables are known
+dbusupdate=$(command -v dbus-update-activation-environment 2>/dev/null)
+if [ -n "$dbusupdate" ]; then
+	"$dbusupdate" --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY >/dev/null 2>&1 || true
+fi

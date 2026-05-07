@@ -24,7 +24,7 @@ RDEPEND="
 	xgui-lib/lcms
 
 	exif? ( xmedia-lib/libexif )
-	dbus? ( app-core/dbus )
+	dbus? ( virtual/dbus )
 	jpeg? ( xmedia-lib/libjpeg-turbo )
 	pdf? ( app-tex/mupdf )
 	postscript? ( app-tex/ghostscript-gpl[cups] )

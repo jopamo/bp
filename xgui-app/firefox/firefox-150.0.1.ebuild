@@ -13,6 +13,10 @@ SLOT="0"
 KEYWORDS="amd64"
 IUSE="wasm"
 
+BDEPEND="
+	app-core/dbus-x11
+"
+
 S="${WORKDIR}/firefox-${PV}"
 
 RESTRICT="network-sandbox"
@@ -21,7 +25,7 @@ RESTRICT="network-sandbox"
 GOOGLE_API_KEY="AIzaSyDwr302FpOSkGRpLlUpPThNTDPbXcIn_FM"
 
 # add real deps:
-# BDEPEND: rust, clang/llvm, nodejs, python, llvm-profdata, xvfb, dbus-run-session, sys-apps/findutils, etc
+# BDEPEND: rust, clang/llvm, nodejs, python, llvm-profdata, xvfb, sys-apps/findutils, etc
 # (we still do cargo-based cbindgen inside sandbox per your request)
 
 src_prepare() {

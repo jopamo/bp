@@ -18,7 +18,7 @@ tdls uncommon-eap-types wps"
 REQUIRED_USE="fasteap? ( !ssl ) smartcard? ( ssl )"
 
 CDEPEND="
-	dbus? ( app-core/dbus )
+	dbus? ( virtual/dbus )
 	lib-net/libnl
 	readline? (
 		virtual/curses

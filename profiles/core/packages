@@ -1,5 +1,7 @@
 *app-build/make
+*app-compression/cpio
 *app-compression/pigz
+*app-compression/tar
 *app-compression/xz-utils
 *app-compression/zip-utils
 *app-core/corepkg

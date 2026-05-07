@@ -501,7 +501,6 @@ meson_install() {
 	popd > /dev/null || die
 
 	cleanup_install
-	dedup_symlink "${D}"
 }
 
 # @FUNCTION: meson_src_install

@@ -91,5 +91,4 @@ src_install() {
 			"${ED}"/etc/lynx.cfg || die "lynx.cfg not found"
 
 	cleanup_install
-	dedup_symlink "${ED}"
 }

@@ -1785,7 +1785,6 @@ distutils-r1_python_install_all() {
 	_distutils-r1_check_all_phase_mismatch
 
 	cleanup_install
-	dedup_symlink "${ED}"
 }
 
 # @FUNCTION: distutils-r1_run_phase

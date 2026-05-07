@@ -696,7 +696,6 @@ cmake_src_install() {
 	fi
 
 	cleanup_install
-	dedup_symlink "${D}"
 }
 
 fi

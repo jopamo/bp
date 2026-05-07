@@ -82,7 +82,6 @@ rebar_src_install() {
 	fi
 
 	cleanup_install
-	dedup_symlink "${ED}"
 }
 
 fi

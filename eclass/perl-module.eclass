@@ -484,7 +484,6 @@ perl-module_src_install() {
 	esac
 
 	cleanup_install
-	dedup_symlink "${ED}"
 }
 
 # @FUNCTION: perl-module_pkg_postinst

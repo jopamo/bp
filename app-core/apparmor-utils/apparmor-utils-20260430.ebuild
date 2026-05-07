@@ -98,7 +98,6 @@ src_install() {
 		install
 	popd > /dev/null || die
 
-	dedup_symlink "${ED}"
 	cleanup_install
 	qa-policy-install
 }

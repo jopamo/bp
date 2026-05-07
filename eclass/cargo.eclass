@@ -219,8 +219,6 @@ if [[ -z ${_CARGO_VENDOR_ECLASS} ]]; then
 			|| die "cargo install failed"
 
 		rm -f "${ED}/usr/.crates*"
-
-		dedup_symlink "${ED}"
 	}
 
 	CARGO_CRATE_URIS=$(_cargo_build_uri_list)

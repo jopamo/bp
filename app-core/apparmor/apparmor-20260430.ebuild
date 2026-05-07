@@ -78,7 +78,6 @@ src_install() {
 	exeinto /usr/lib/apparmor/
 	doexe apparmor.systemd
 
-	dedup_symlink "${ED}"
 	cleanup_install
 	qa-policy-install
 }

@@ -168,5 +168,4 @@ src_install() {
   )
 
   cleanup_install
-  dedup_symlink "${ED}"
 }

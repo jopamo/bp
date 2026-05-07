@@ -37,7 +37,8 @@ src_install() {
 	dolib.so .libs/libcrypt.so.1.1.0
 	dolib.so .libs/libcrypt.so.1
 	if use static-libs ; then
-		dolib.a .libs/libcrypt.a
+		cp .libs/libcrypt.a .libs/libcrypt-compat.a || die
+		dolib.a .libs/libcrypt-compat.a
 	fi
 
 	qa-policy-install

@@ -1,2 +1,3 @@
 lib-net/nodejs icu
+lib-core/zlib minizip
 xmedia-app/mpv -vulkan

@@ -15,13 +15,12 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="apparmor binfmt blkid bootloader bpf-framework coredump devmode dbus
-dhcp4 elfutils efi gcrypt gshadow
+elfutils efi gcrypt gshadow
 +hostnamed +hwdb importd kmod ldconfig localed logind machined +networkd
 oomd pam pcre pstore resolve
 +userdb +vconsole"
 
-REQUIRED_USE="elibc_musl? ( !gshadow )
-	dhcp4? ( networkd )"
+REQUIRED_USE="elibc_musl? ( !gshadow )"
 
 DEPEND="
     app-core/acl
@@ -210,18 +209,6 @@ src_install() {
 	use networkd && keepdir /etc/systemd/network
 
 	use resolve && dosym -r /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
-
-	if use dhcp4; then
-		insinto /etc/systemd/network
-		printf '%s\n' \
-			'[Match]' \
-			'Name=en*' \
-			'' \
-			'[Network]' \
-			'DHCP=ipv4' \
-			> "${T}/ipv4dhcp.network" || die
-		doins "${T}/ipv4dhcp.network" || die
-	fi
 
 	local journald_conf="${ED}/etc/systemd/journald.conf"
 

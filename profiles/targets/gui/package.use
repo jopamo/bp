@@ -4,7 +4,6 @@ app-net/bluez user-session
 app-core/systemd logind sleep
 app-core/vim normal
 app-kernel/kernel-bin desktop
-lib-core/zlib minizip
 xgui-app/qbittorrent qt5
 #xgui-lib/gtk3 wayland
 xgui-lib/gtk4 vulkan

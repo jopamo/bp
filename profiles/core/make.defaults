@@ -40,6 +40,15 @@ ENV_UNSET="
     GOBIN
 "
 
+# Source-only tree packages: never build, fetch, or install binpkgs for them.
+EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} \
+    --buildpkg-exclude app-core/layout \
+    --buildpkg-exclude app-core/ugs \
+    --getbinpkg-exclude app-core/layout \
+    --getbinpkg-exclude app-core/ugs \
+    --usepkg-exclude app-core/layout \
+    --usepkg-exclude app-core/ugs"
+
 ###############################################################################
 # Toolchain policy (feature profiles can override these)
 ###############################################################################
@@ -104,7 +113,7 @@ USE="
     zstd          bsdtar        pie
     xxhash
 
-    dhcp          -dhcp-tools   -dhcp4
+    dhcp          -dhcp-tools
     iwlwifi       intel         scp
 
     caps          dbus          device-mapper

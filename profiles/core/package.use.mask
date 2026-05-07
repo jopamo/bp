@@ -1,0 +1,2 @@
+# Keep libxml2 lean and avoid ICU linkage here.
+lib-core/libxml2 icu

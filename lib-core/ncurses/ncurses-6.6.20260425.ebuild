@@ -26,6 +26,7 @@ src_prepare() {
 
 src_configure() {
 	qa-policy-configure
+	local build_dir="${WORKDIR}/build"
 	local build_cflags=${BUILD_CFLAGS:--O2}
 	local build_ldflags=${BUILD_LDFLAGS:-}
 	local myconf=(
@@ -58,42 +59,46 @@ src_configure() {
 		--without-manpages
 	)
 
+	mkdir -p "${build_dir}" || die
+	cd "${build_dir}" || die
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
 src_compile() {
+	local build_dir="${WORKDIR}/build"
 	local terminfo_caps="${S}/include/Caps"
 	local caplist="${S}/include/Caps ${S}/include/Caps-ncurses"
 
 	# Blow away generated files first.  If one of these was created during a bad
 	# partial build (especially hashsize.h), make may otherwise reuse it.
 	rm -f \
-		include/ncurses_def.h \
-		include/hashsize.h \
-		include/term.h \
-		include/curses.h \
-		ncurses/comp_captab.c \
-		ncurses/comp_userdefs.c \
-		ncurses/names.c \
-		ncurses/codes.c \
-		ncurses/lib_keyname.c \
-		ncurses/unctrl.c \
-		ncurses/init_keytry.h || die
+		"${build_dir}"/include/ncurses_def.h \
+		"${build_dir}"/include/hashsize.h \
+		"${build_dir}"/include/term.h \
+		"${build_dir}"/include/curses.h \
+		"${build_dir}"/ncurses/comp_captab.c \
+		"${build_dir}"/ncurses/comp_userdefs.c \
+		"${build_dir}"/ncurses/names.c \
+		"${build_dir}"/ncurses/codes.c \
+		"${build_dir}"/ncurses/lib_keyname.c \
+		"${build_dir}"/ncurses/unctrl.c \
+		"${build_dir}"/ncurses/init_keytry.h || die
 
 	# Generate headers/tables explicitly before the parallel build.  The top-level
 	# "sources" target is not enough here; we need the include/ headers and the
 	# ncurses/ generated sources in a known-good order.
-	emake -C include -j1 TERMINFO_CAPS="${terminfo_caps}" CAPLIST="${caplist}" \
+	emake -C "${build_dir}"/include -j1 TERMINFO_CAPS="${terminfo_caps}" CAPLIST="${caplist}" \
 		ncurses_def.h hashsize.h term.h curses.h
-	emake -C ncurses -j1 TERMINFO_CAPS="${terminfo_caps}" CAPLIST="${caplist}" \
+	emake -C "${build_dir}"/ncurses -j1 TERMINFO_CAPS="${terminfo_caps}" CAPLIST="${caplist}" \
 		make_hash make_keys keys.list \
 		comp_captab.c comp_userdefs.c names.c codes.c lib_keyname.c \
 		unctrl.c init_keytry.h
-	emake TERMINFO_CAPS="${terminfo_caps}" CAPLIST="${caplist}"
+	emake -C "${build_dir}" TERMINFO_CAPS="${terminfo_caps}" CAPLIST="${caplist}"
 }
 
 src_install() {
-	default
+	local build_dir="${WORKDIR}/build"
+	emake -C "${build_dir}" DESTDIR="${D}" install
 
 	local lib
 	for lib in ncurses "ncurses++" form panel menu tinfo; do

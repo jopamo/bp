@@ -160,6 +160,7 @@ src_configure() {
 		$(use_enable sanitize libsanitizer)
 		$(use_with isl)
 		$(use_with zstd)
+		libgo_cv_lib_setcontext_clobbers_tls=no
 	)
 
 	../configure "${myconf[@]}" || die

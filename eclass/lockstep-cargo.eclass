@@ -158,11 +158,25 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 		local dest_dir=${2}
 
 		mkdir -p "${dest_dir}" || die
-		tar -C "${source_dir}" \
-			--exclude='.gitignore' \
-			--exclude='.gitattributes' \
-			--exclude='.gitmodules' \
-			-cf - . | tar -C "${dest_dir}" -xf - || die "failed copying cargo crate payload from ${source_dir}"
+		tar -C "${source_dir}" -cf - . | tar -C "${dest_dir}" -xf - \
+			|| die "failed copying cargo crate payload from ${source_dir}"
+	}
+
+	_lockstep_cargo_extract_distfile() {
+		local crate=${1}
+		local version=${2}
+		local distfile="${DISTDIR}/${crate}-${version}.crate"
+		local extracted_dir="${ECARGO_VENDOR}/${crate}-${version}"
+		local package_checksum
+
+		[[ -f ${distfile} ]] || return 1
+		tar -C "${ECARGO_VENDOR}" -xzf "${distfile}" \
+			|| die "failed extracting cargo crate distfile ${distfile}"
+		[[ -d ${extracted_dir} ]] \
+			|| die "cargo crate distfile ${distfile} did not unpack to ${extracted_dir}"
+		package_checksum=$(sha256sum "${distfile}" | awk '{print $1}') || die
+		_cargo_write_checksum_file "${extracted_dir}" "${package_checksum}"
+		return 0
 	}
 
 	_lockstep_cargo_populate_vendor() {
@@ -181,8 +195,10 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 			source_dir="${sysroot}${LOCKSTEP_CARGO_PACKAGE_ROOT}/${crate}/${version}"
 			dest_dir="${ECARGO_VENDOR}/${crate}-${version}"
 
-			[[ -d ${source_dir} ]] || die "missing installed cargo crate package contents: ${source_dir}"
-			_lockstep_cargo_copy_tree "${source_dir}" "${dest_dir}" || die "failed staging ${ref}"
+			if ! _lockstep_cargo_extract_distfile "${crate}" "${version}"; then
+				[[ -d ${source_dir} ]] || die "missing installed cargo crate package contents: ${source_dir}"
+				_lockstep_cargo_copy_tree "${source_dir}" "${dest_dir}" || die "failed staging ${ref}"
+			fi
 			chmod -R u+rwX,go+rX "${dest_dir}" || die "failed normalizing staged permissions for ${ref}"
 		done <<< "${CARGO_DEPS-}"
 	}

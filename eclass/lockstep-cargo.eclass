@@ -165,10 +165,12 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 	_lockstep_cargo_package_checksum() {
 		local source_dir=${1}
 		local checksum_file="${source_dir}/.cargo-checksum.json"
-		local package_checksum
+		local json package_checksum
 
 		[[ -f ${checksum_file} ]] || die "missing cargo checksum metadata: ${checksum_file}"
-		package_checksum=$(sed -n 's/^{"package":"\\([^"]*\\)".*/\\1/p' "${checksum_file}")
+		json=$(tr -d '\n\r\t ' < "${checksum_file}") || die "failed reading ${checksum_file}"
+		package_checksum=${json#*\"package\":\"}
+		package_checksum=${package_checksum%%\"*}
 		[[ -n ${package_checksum} ]] || die "failed parsing package checksum from ${checksum_file}"
 		printf '%s\n' "${package_checksum}"
 	}

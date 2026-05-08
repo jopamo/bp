@@ -93,6 +93,7 @@ src_install() {
 
 		if use libxcrypt ; then
 			rm "${ED}"/usr/include/crypt.h || die
+			rm -f "${ED}"/usr/lib/libcrypt.a || die
 		fi
 	else
 		for i in linux asm asm-generic mtd ; do

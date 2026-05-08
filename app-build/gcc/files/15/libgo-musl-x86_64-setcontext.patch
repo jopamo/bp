@@ -1,0 +1,73 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: me <me@local>
+Date: Fri, 8 May 2026 12:00:00 -0500
+Subject: [PATCH] libgo: handle musl x86_64 SETCONTEXT_CLOBBERS_TLS
+
+On x86_64 musl, the libgo configure test can report that setcontext
+clobbers TLS, but Linux x86_64 ucontext_t does not expose %fsbase, so
+there is no runtime-side context fixup available.
+
+Teach configure to ignore that positive result for x86_64-linux-musl,
+and add a runtime x86_64 Linux fallback so stale cached configure
+results do not trip the unknown-case build failure.
+---
+diff --git a/libgo/configure b/libgo/configure
+index b1a2228fa1b..8dfa65bec2b 100755
+--- a/libgo/configure
++++ b/libgo/configure
+@@ -15955,6 +15955,10 @@ if ac_fn_c_try_run "$LINENO"; then :
+ else
+   libgo_cv_lib_setcontext_clobbers_tls=yes
+ fi
++case "$target:$ptr_type_size:$libgo_cv_lib_setcontext_clobbers_tls" in
++  x86_64*-*-linux-musl*:64:yes)
++    libgo_cv_lib_setcontext_clobbers_tls=no ;;
++esac
+ rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+   conftest.$ac_objext conftest.beam conftest.$ac_ext
+ fi
+diff --git a/libgo/configure.ac b/libgo/configure.ac
+index 0b05551aacb..e9cc7485697 100644
+--- a/libgo/configure.ac
++++ b/libgo/configure.ac
+@@ -799,6 +799,13 @@ main ()
+     libgo_cv_lib_setcontext_clobbers_tls=no ;;
+  esac
+ ])
++dnl Linux x86_64 ucontext_t does not carry the %fs base, so there is
++dnl no runtime-side context fixup to apply.  A positive result here on
++dnl musl/libucontext is a false positive from some other failure mode.
++case "$target:$ptr_type_size:$libgo_cv_lib_setcontext_clobbers_tls" in
++  x86_64*-*-linux-musl*:64:yes)
++    libgo_cv_lib_setcontext_clobbers_tls=no ;;
++esac
+ CFLAGS="$CFLAGS_hold"
+ LIBS="$LIBS_hold"
+ ])
+diff --git a/libgo/runtime/proc.c b/libgo/runtime/proc.c
+index 3a30748d329..2e1b45ffac9 100644
+--- a/libgo/runtime/proc.c
++++ b/libgo/runtime/proc.c
+@@ -106,6 +106,22 @@ fixcontext(ucontext_t* c)
+ 	c->uc_mcontext.gregs[REG_FSBASE] = fs;
+ }
+ 
++# elif defined(__x86_64__) && defined(__linux__)
++
++// Linux x86_64 ucontext_t does not expose the thread's %fs base.
++// If SETCONTEXT_CLOBBERS_TLS is defined here, there is nothing
++// runtime can patch in the saved context, so fall back to a no-op.
++
++static inline void
++initcontext(void)
++{
++}
++
++static inline void
++fixcontext(ucontext_t* c __attribute__ ((unused)))
++{
++}
++
+ # elif defined(__NetBSD__)
+ 
+ // NetBSD has a bug: setcontext clobbers tlsbase, we need to save

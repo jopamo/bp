@@ -115,6 +115,8 @@ kernel-mod_src_install() {
 	(( ${#_MODULES_INSTALL[@]} )) ||
 		die "${FUNCNAME[0]} was called without running kernel-mod_src_compile"
 
+	_modules_ensure_build_dirs
+
 	(
 		for mod in "${!_MODULES_INSTALL[@]}"; do
 			linux_moduleinto "${_MODULES_INSTALL[${mod}]}"
@@ -178,6 +180,7 @@ modules_post_process() {
 	debug-print-function ${FUNCNAME} "$@"
 	_modules_check_function ${#} 0 1 '[<path>]' || return 0
 	[[ ${EBUILD_PHASE} == install ]] || die "${FUNCNAME[0]} can only be called in the src_install phase"
+	_modules_ensure_build_dirs
 
 	local path=${ED}${1-/lib/modules/${KV_FULL}}
 	local -a mods
@@ -201,6 +204,13 @@ _modules_check_function() {
 	[[ ${#} == 0 || ${1} -ge ${2} && ( ! ${3} || ${1} -le ${3} ) ]] || die "Usage: ${FUNCNAME[1]} ${4-(no arguments)}"
 	[[ -v _MODULES_GLOBAL[ran:pkg_setup] ]] || \
 		die "${FUNCNAME[1]} was called without running kernel-mod_pkg_setup"
+}
+
+_modules_ensure_build_dirs() {
+	[[ -d ${T} ]] || mkdir -p "${T}" || die "failed recreating temp dir: ${T}"
+	[[ -d ${T}/logging ]] || mkdir -p "${T}/logging" || die "failed recreating logging dir: ${T}/logging"
+	[[ -z ${PORTAGE_BUILDDIR-} || -d ${PORTAGE_BUILDDIR}/.ipc ]] || \
+		mkdir -p "${PORTAGE_BUILDDIR}/.ipc" || die "failed recreating ipc dir: ${PORTAGE_BUILDDIR}/.ipc"
 }
 
 # @FUNCTION: _modules_check_migration

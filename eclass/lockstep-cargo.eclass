@@ -162,6 +162,17 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 			|| die "failed copying cargo crate payload from ${source_dir}"
 	}
 
+	_lockstep_cargo_package_checksum() {
+		local source_dir=${1}
+		local checksum_file="${source_dir}/.cargo-checksum.json"
+		local package_checksum
+
+		[[ -f ${checksum_file} ]] || die "missing cargo checksum metadata: ${checksum_file}"
+		package_checksum=$(sed -n 's/^{"package":"\\([^"]*\\)".*/\\1/p' "${checksum_file}")
+		[[ -n ${package_checksum} ]] || die "failed parsing package checksum from ${checksum_file}"
+		printf '%s\n' "${package_checksum}"
+	}
+
 	_lockstep_cargo_extract_distfile() {
 		local crate=${1}
 		local version=${2}
@@ -198,6 +209,7 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 			if ! _lockstep_cargo_extract_distfile "${crate}" "${version}"; then
 				[[ -d ${source_dir} ]] || die "missing installed cargo crate package contents: ${source_dir}"
 				_lockstep_cargo_copy_tree "${source_dir}" "${dest_dir}" || die "failed staging ${ref}"
+				_cargo_write_checksum_file "${dest_dir}" "$(_lockstep_cargo_package_checksum "${source_dir}")"
 			fi
 			chmod -R u+rwX,go+rX "${dest_dir}" || die "failed normalizing staged permissions for ${ref}"
 		done <<< "${CARGO_DEPS-}"

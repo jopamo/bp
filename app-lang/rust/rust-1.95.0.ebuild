@@ -9,7 +9,7 @@ S="${WORKDIR}/rustc-${PV}-src"
 
 LICENSE="MIT Apache-2.0"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 BDEPEND="
 	app-build/llvm

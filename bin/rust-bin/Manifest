@@ -1,4 +1,4 @@
-DIST rust-1.92.0-aarch64-unknown-linux-gnu.tar.gz 323227370 BLAKE3 5b08a7fd1675563bda592ae6f53e3b96760175adc6bb1d873d69c17387d6139c
-DIST rust-1.92.0-aarch64-unknown-linux-musl.tar.gz 464735418 BLAKE3 9134a5d85b26f69756e82a7ccfa21704dcd40a8301084bc64dd8c668bd07121c
-DIST rust-1.92.0-x86_64-unknown-linux-gnu.tar.gz 371265260 BLAKE3 509f48c5bb939f68ef1f794c81f12e9f8a09f1014eee52b8eda297356c469b95
-DIST rust-1.92.0-x86_64-unknown-linux-musl.tar.gz 548407999 BLAKE3 8a266e92e2033bdeb921e8433e63d5a551994bd4036debb3ab4bc01c9a53d909
+DIST rust-1.95.0-aarch64-unknown-linux-gnu.tar.gz 323770788 BLAKE3 ff970a52c223067ef46577c29aff3ec08f428eaf56d40633e4396506230c9831
+DIST rust-1.95.0-aarch64-unknown-linux-musl.tar.gz 465623100 BLAKE3 fd1e46f63d767417e24f0da9acd96e012839e2a3cafd48ebeb5704f030bdfb13
+DIST rust-1.95.0-x86_64-unknown-linux-gnu.tar.gz 376272008 BLAKE3 238ecf9bf787c947970976f94e7512a404d0daa0bc8529c29b25077bf7f313f3
+DIST rust-1.95.0-x86_64-unknown-linux-musl.tar.gz 553468823 BLAKE3 e7a9bbfe43be01db625802cfe9949a95d8fe6bde7881496cf4fe9a2a43183d22

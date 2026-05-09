@@ -2,8 +2,6 @@
 
 BRANCH_NAME="maint-$(ver_cut 1-2)"
 
-
-
 DESCRIPTION="Larry Wall's Practical Extraction and Report Language"
 HOMEPAGE="https://www.perl.org/"
 SNAPSHOT=5a1b4873d295859e25a4a885461ec7ae560c6d0f
@@ -38,20 +36,48 @@ src_prepare() {
 			"${S}/cnf/configure_tool.sh" || die
 	fi
 
-	# Make sources writable for patching
 	chmod +w "${S}"/*.c 2>/dev/null
 
 	default
 
-	# Remove bundled zlib/bzip2 sources and references
 	rm -rf cpan/Compress-Raw-Zlib/zlib-src
 	rm -rf cpan/Compress-Raw-Bzip2/bzip2-src
 	sed -i '/\(bzip2\|zlib\)-src/d' MANIFEST || die
 }
 
+_check_perl_config_h() {
+	[[ -f config.h ]] || die "Configure did not generate config.h"
+
+	local archline
+	archline="$(grep -m1 '^#define ARCHNAME ' config.h)" || die "missing ARCHNAME in config.h"
+
+	case "${archline}" in
+		*$'\n'*)
+			die "broken multiline ARCHNAME in config.h: ${archline}"
+			;;
+	esac
+
+	case "${archline}" in
+		'#define ARCHNAME "'*'"'*'/**/'*)
+			;;
+		*)
+			die "broken ARCHNAME in config.h: ${archline}"
+			;;
+	esac
+
+	if [[ ${archline} == *'"./'* || ${archline} == *$'\t./'* || ${archline} == *' ./'* ]]; then
+		die "ARCHNAME contains path fragments: ${archline}"
+	fi
+}
+
 src_configure() {
-	_privlib=/usr/share/perl5/core_perl
-	_archlib=/usr/lib/perl5/core_perl
+	local _privlib=/usr/share/perl5/core_perl
+	local _archlib=/usr/lib/perl5/core_perl
+
+	local perl_cpu="${CHOST%%-*}"
+	local perl_arch="${perl_cpu}-linux-thread-multi"
+
+	unset archname ARCHNAME
 
 	local common_args=(
 		-Dprefix="${EPREFIX}"/usr
@@ -77,6 +103,7 @@ src_configure() {
 		-Dman1ext='1'
 		-Dman3ext='3pm'
 		-Dcf_by='1g4'
+		-Darchname="${perl_arch}"
 		-Ud_csh
 		-Ud_fpos64_t
 		-Ud_off64_t
@@ -104,6 +131,8 @@ src_configure() {
 			-Doptimize="${CFLAGS}" \
 			"${common_args[@]}" || die "Configure failed"
 	fi
+
+	_check_perl_config_h
 }
 
 src_compile() {
@@ -112,14 +141,9 @@ src_compile() {
 	export BZIP2_LIB="${ESYSROOT}/usr/lib"
 	export BZIP2_INCLUDE="${ESYSROOT}/usr/include"
 
-	# language runtime flags
 	export CFLAGS="${CFLAGS//-Os/-O2}"
-	if [[ ${CBUILD} != ${CHOST} ]]; then
-		export CFLAGS="${CFLAGS} -D_GNU_SOURCE"
-		export HOSTCFLAGS="${HOSTCFLAGS} -D_GNU_SOURCE"
-	else
-		export CFLAGS="${CFLAGS} -flto=auto"
-	fi
+	export CFLAGS="${CFLAGS} -D_GNU_SOURCE"
+	export HOSTCFLAGS="${HOSTCFLAGS} -D_GNU_SOURCE"
 
 	emake libperl.so
 	emake
@@ -136,16 +160,14 @@ src_test() {
 src_install() {
 	emake DESTDIR="${D}" install.perl
 
-	# installperl may fallback from hardlink() to copy() when creating
-	# /usr/bin/perl, which can drop execute bits under umask 022.
 	[[ -e "${D}/usr/bin/perl" ]] && chmod 0755 "${D}/usr/bin/perl" || die
 
-	# Remove global flto in Config_heavy.pl
-	sed -i -e "s| -flto=auto||g" \
+	sed -i \
+		-e 's| -flto=auto||g' \
+		-e 's| -flto=[^ ]*||g' \
 		"${D}/usr/lib/perl5/core_perl/Config_heavy.pl" || die
 
-	# Fail if anything lands in /usr/local
-	if [[ -n $(find "${D}/usr/local" -type f) ]]; then
+	if [[ -d "${D}/usr/local" ]] && [[ -n $(find "${D}/usr/local" -type f -print -quit) ]]; then
 		die "files found under /usr/local"
 	fi
 

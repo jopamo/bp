@@ -3,12 +3,15 @@ set -euo pipefail
 
 # simple build helper for Meson, CMake, or Autotools
 # usage:
-#   ./build.sh                    # auto-detect, release
+#   ./build.sh                    # auto-detect, release, dynamic/shared preferred
 #   ./build.sh --debug            # full debug
 #   ./build.sh --fastdebug        # optimized+gdb/perf friendly
 #   ./build.sh --asan             # debug + ASan/UBSan
 #   ./build.sh --fastasan         # faster ASan/UBSan
-#   ./build.sh --cmake --fastasan # force CMake, fast ASan
+#   ./build.sh --static           # request static where supported
+#   ./build.sh --dynamic          # request dynamic/shared where supported
+#   ./build.sh --no-link-policy   # leave static/shared defaults untouched
+#   ./build.sh --cmake --fastasan
 #   ./build.sh --meson --debug
 #   ./build.sh --autotools --release
 
@@ -17,19 +20,28 @@ die() {
   exit 1
 }
 
+warn() {
+  echo "Warning: $*" >&2
+}
+
 usage() {
   cat <<EOF
-Usage: $0 [--cmake|--meson|--autotools] [--release|--debug|--fastdebug|--asan|--fastasan]
+Usage: $0 [--cmake|--meson|--autotools] [--release|--debug|--fastdebug|--asan|--fastasan] [--dynamic|--static|--no-link-policy]
 
-  --cmake      force CMake build
-  --meson      force Meson build
-  --autotools  force Autotools build (configure/make)
+  --cmake          force CMake build
+  --meson          force Meson build
+  --autotools      force Autotools build
 
-  --release    optimized release build (default)
-  --debug      full debug build (-O0 -g)
-  --fastdebug  optimized debug build (-O2 + line tables)
-  --asan       debug build with AddressSanitizer + UBSan
-  --fastasan   optimized build with AddressSanitizer + UBSan
+  --release        optimized release build, default
+  --debug          full debug build, -O0 -g
+  --fastdebug      optimized debug build, -O2 plus line tables
+  --asan           debug build with AddressSanitizer plus UBSan
+  --fastasan       optimized build with AddressSanitizer plus UBSan
+
+  --dynamic        prefer dynamic/shared linking where supported, default
+  --shared         alias for --dynamic
+  --static         request static linking where supported
+  --no-link-policy leave project static/shared defaults untouched
 
 Examples:
   $0
@@ -37,6 +49,9 @@ Examples:
   $0 --fastdebug
   $0 --asan
   $0 --fastasan
+  $0 --static
+  $0 --dynamic
+  $0 --no-link-policy
   $0 --cmake --fastasan
   $0 --meson --debug
   $0 --autotools --release
@@ -47,17 +62,44 @@ trap 'echo "Failed: ${BASH_COMMAND}" >&2' ERR
 
 build_system=auto
 config=release
+link_policy=dynamic
+MESON_PROJECT_OPTIONS_JSON_CACHE=
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --cmake)     build_system=cmake ;;
-    --meson)     build_system=meson ;;
-    --autotools) build_system=autotools ;;
-    --release)   config=release ;;
-    --debug)     config=debug ;;
-    --fastdebug) config=fastdebug ;;
-    --asan)      config=asan ;;
-    --fastasan)  config=fastasan ;;
+    --cmake)
+      build_system=cmake
+      ;;
+    --meson)
+      build_system=meson
+      ;;
+    --autotools)
+      build_system=autotools
+      ;;
+    --release)
+      config=release
+      ;;
+    --debug)
+      config=debug
+      ;;
+    --fastdebug)
+      config=fastdebug
+      ;;
+    --asan)
+      config=asan
+      ;;
+    --fastasan)
+      config=fastasan
+      ;;
+    --dynamic|--shared)
+      link_policy=dynamic
+      ;;
+    --static)
+      link_policy=static
+      ;;
+    --no-link-policy)
+      link_policy=none
+      ;;
     -h|--help)
       usage
       exit 0
@@ -69,7 +111,12 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
-# auto detect build system if not forced, prefer meson then cmake then autotools
+case "$config:$link_policy" in
+  asan:static|fastasan:static)
+    die "--static is not supported with sanitizer builds"
+    ;;
+esac
+
 if [[ "$build_system" == "auto" ]]; then
   if [[ -f meson.build ]]; then
     build_system=meson
@@ -78,11 +125,10 @@ if [[ "$build_system" == "auto" ]]; then
   elif [[ -x ./bootstrap || -x ./autogen.sh || -f configure.ac || -f configure.in || -f configure ]]; then
     build_system=autotools
   else
-    die "could not detect build system (no meson.build, CMakeLists.txt, bootstrap/autogen, or configure.ac)"
+    die "could not detect build system"
   fi
 fi
 
-# default to clang if not already set
 : "${CC:=clang}"
 : "${CXX:=clang++}"
 export CC CXX
@@ -93,14 +139,12 @@ else
   NPROC=1
 fi
 
-# frame pointers help perf/gdb/sanitizers unwind accurately on modern toolchains
 fp_flags='-fno-omit-frame-pointer -mno-omit-leaf-frame-pointer'
-
-# debug info flag for "fastdebug"
-# line tables are enough for perf/addr2line without huge DWARF
 dbg_fast='-gline-tables-only'
 
-# common sanitizer options for asan builds
+c_warnings='-Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes'
+cxx_warnings='-Wall -Wextra -Wpedantic -Wno-unused-parameter'
+
 asan_env='detect_leaks=1:halt_on_error=1:abort_on_error=1:malloc_context_size=30:fast_unwind_on_malloc=0:symbolize=1:strict_init_order=1:strict_string_checks=1:detect_stack_use_after_return=1:alloc_dealloc_mismatch=1:detect_container_overflow=1'
 ubsan_env='print_stacktrace=1:report_error_type=1:halt_on_error=1'
 lsan_env='print_suppressions=0:report_objects=1'
@@ -116,79 +160,596 @@ setup_sanitizer_env() {
   fi
 }
 
-cmake_build() {
+config_flags() {
   local cfg="$1"
-  local builddir
+  local -n out_builddir="$2"
+  local -n out_cflags="$3"
+  local -n out_cxxflags="$4"
+  local -n out_ldflags="$5"
+  local prefix="$6"
+
+  out_ldflags=""
 
   case "$cfg" in
     release)
-      builddir=build-cmake-release
-      rm -rf "$builddir"
-      cmake -S . -B "$builddir" \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_C_COMPILER="$CC" \
-        -DCMAKE_CXX_COMPILER="$CXX" \
-        -DCMAKE_C_FLAGS_RELEASE="-O2 -march=native $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
-        -DCMAKE_CXX_FLAGS_RELEASE="-O2 -march=native $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
-      cmake --build "$builddir" -j"$NPROC"
-      (cd "$builddir" && ctest --output-on-failure || true)
+      out_builddir="build-${prefix}-release"
+      out_cflags="-O2 -march=native $fp_flags $c_warnings"
+      out_cxxflags="-O2 -march=native $fp_flags $cxx_warnings"
       ;;
     debug)
-      builddir=build-cmake-debug
-      rm -rf "$builddir"
-      cmake -S . -B "$builddir" \
-        -DCMAKE_BUILD_TYPE=Debug \
-        -DCMAKE_C_COMPILER="$CC" \
-        -DCMAKE_CXX_COMPILER="$CXX" \
-        -DCMAKE_C_FLAGS_DEBUG="-g -O0 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
-        -DCMAKE_CXX_FLAGS_DEBUG="-g -O0 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
-      cmake --build "$builddir" -j"$NPROC"
-      (cd "$builddir" && ctest --output-on-failure || true)
+      out_builddir="build-${prefix}-debug"
+      out_cflags="-g -O0 $fp_flags $c_warnings"
+      out_cxxflags="-g -O0 $fp_flags $cxx_warnings"
       ;;
     fastdebug)
-      builddir=build-cmake-fastdebug
-      rm -rf "$builddir"
-      cmake -S . -B "$builddir" \
-        -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-        -DCMAKE_C_COMPILER="$CC" \
-        -DCMAKE_CXX_COMPILER="$CXX" \
-        -DCMAKE_C_FLAGS_RELWITHDEBINFO="-O2 -march=native $dbg_fast $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
-        -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O2 -march=native $dbg_fast $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
-      cmake --build "$builddir" -j"$NPROC"
-      (cd "$builddir" && ctest --output-on-failure || true)
+      out_builddir="build-${prefix}-fastdebug"
+      out_cflags="-O2 -march=native $dbg_fast $fp_flags $c_warnings"
+      out_cxxflags="-O2 -march=native $dbg_fast $fp_flags $cxx_warnings"
       ;;
     asan)
-      builddir=build-cmake-asan
-      rm -rf "$builddir"
+      out_builddir="build-${prefix}-asan"
       setup_sanitizer_env
-      cmake -S . -B "$builddir" \
-        -DCMAKE_BUILD_TYPE=Debug \
-        -DCMAKE_C_COMPILER="$CC" \
-        -DCMAKE_CXX_COMPILER="$CXX" \
-        -DCMAKE_C_FLAGS_DEBUG="-g -O1 $fp_flags -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes" \
-        -DCMAKE_CXX_FLAGS_DEBUG="-g -O1 $fp_flags -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes" \
-        -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address,undefined" \
-        -DCMAKE_SHARED_LINKER_FLAGS="-fsanitize=address,undefined"
-      cmake --build "$builddir" -j"$NPROC"
-      (cd "$builddir" && ctest --output-on-failure)
+      out_cflags="-g -O1 $fp_flags $c_warnings -fsanitize=address,undefined -fno-optimize-sibling-calls"
+      out_cxxflags="-g -O1 $fp_flags $cxx_warnings -fsanitize=address,undefined -fno-optimize-sibling-calls"
+      out_ldflags="-fsanitize=address,undefined"
       ;;
     fastasan)
-      builddir=build-cmake-fastasan
-      rm -rf "$builddir"
+      out_builddir="build-${prefix}-fastasan"
       setup_sanitizer_env
-      cmake -S . -B "$builddir" \
-        -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-        -DCMAKE_C_COMPILER="$CC" \
-        -DCMAKE_CXX_COMPILER="$CXX" \
-        -DCMAKE_C_FLAGS_RELWITHDEBINFO="-O1 -march=native $dbg_fast $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
-        -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O1 -march=native $dbg_fast $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
-        -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address,undefined" \
-        -DCMAKE_SHARED_LINKER_FLAGS="-fsanitize=address,undefined"
-      cmake --build "$builddir" -j"$NPROC"
-      (cd "$builddir" && ctest --output-on-failure)
+      out_cflags="-O1 -march=native $dbg_fast $fp_flags $c_warnings -fsanitize=address,undefined"
+      out_cxxflags="-O1 -march=native $dbg_fast $fp_flags $cxx_warnings -fsanitize=address,undefined"
+      out_ldflags="-fsanitize=address,undefined"
       ;;
     *)
-      die "Unknown CMake config: $cfg"
+      die "Unknown config: $cfg"
+      ;;
+  esac
+}
+
+tests_are_fatal() {
+  case "$1" in
+    asan|fastasan)
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+require_python3_for_meson_introspection() {
+  command -v python3 >/dev/null 2>&1 || die "python3 is required for Meson project option introspection"
+}
+
+meson_project_option_json() {
+  if [[ -z "$MESON_PROJECT_OPTIONS_JSON_CACHE" ]]; then
+    MESON_PROJECT_OPTIONS_JSON_CACHE="$(meson introspect --projectoptions . 2>/dev/null || true)"
+  fi
+
+  printf '%s\n' "$MESON_PROJECT_OPTIONS_JSON_CACHE"
+}
+
+meson_json_option_type() {
+  local opt="$1"
+  local json
+
+  require_python3_for_meson_introspection
+
+  json="$(meson_project_option_json)"
+  [[ -n "$json" ]] || return 1
+
+  python3 -c '
+import json
+import sys
+
+name = sys.argv[1]
+
+try:
+    data = json.load(sys.stdin)
+except Exception:
+    sys.exit(1)
+
+for item in data:
+    if item.get("name") == name:
+        opt_type = item.get("type", "unknown")
+        if opt_type == "bool":
+            opt_type = "boolean"
+        print(opt_type)
+        sys.exit(0)
+
+sys.exit(1)
+' "$opt" <<<"$json"
+}
+
+meson_json_option_has_choice() {
+  local opt="$1"
+  local choice="$2"
+  local json
+
+  require_python3_for_meson_introspection
+
+  json="$(meson_project_option_json)"
+  [[ -n "$json" ]] || return 1
+
+  python3 -c '
+import json
+import sys
+
+name = sys.argv[1]
+choice = sys.argv[2]
+
+try:
+    data = json.load(sys.stdin)
+except Exception:
+    sys.exit(1)
+
+for item in data:
+    if item.get("name") == name:
+        choices = item.get("choices") or []
+        sys.exit(0 if choice in choices else 1)
+
+sys.exit(1)
+' "$opt" "$choice" <<<"$json"
+}
+
+meson_source_option_type() {
+  local opt="$1"
+
+  require_python3_for_meson_introspection
+
+  python3 - "$opt" <<'PY'
+import pathlib
+import re
+import sys
+
+name = sys.argv[1]
+
+paths = []
+for filename in ("meson.options", "meson_options.txt"):
+    path = pathlib.Path(filename)
+    if path.exists():
+        paths.append(path)
+
+pattern = re.compile(
+    r"option\s*\(\s*['\"]" + re.escape(name) + r"['\"](?P<body>.*?)\)",
+    re.S,
+)
+
+for path in paths:
+    try:
+        text = path.read_text(errors="ignore")
+    except OSError:
+        continue
+
+    match = pattern.search(text)
+    if not match:
+        continue
+
+    body = match.group("body")
+    type_match = re.search(r"type\s*:\s*['\"]([^'\"]+)['\"]", body)
+
+    if type_match:
+        opt_type = type_match.group(1)
+        if opt_type == "bool":
+            opt_type = "boolean"
+        print(opt_type)
+        sys.exit(0)
+
+    print("unknown")
+    sys.exit(0)
+
+sys.exit(1)
+PY
+}
+
+meson_source_option_has_choice() {
+  local opt="$1"
+  local choice="$2"
+
+  require_python3_for_meson_introspection
+
+  python3 - "$opt" "$choice" <<'PY'
+import pathlib
+import re
+import sys
+
+name = sys.argv[1]
+choice = sys.argv[2]
+
+paths = []
+for filename in ("meson.options", "meson_options.txt"):
+    path = pathlib.Path(filename)
+    if path.exists():
+        paths.append(path)
+
+pattern = re.compile(
+    r"option\s*\(\s*['\"]" + re.escape(name) + r"['\"](?P<body>.*?)\)",
+    re.S,
+)
+
+for path in paths:
+    try:
+        text = path.read_text(errors="ignore")
+    except OSError:
+        continue
+
+    match = pattern.search(text)
+    if not match:
+        continue
+
+    body = match.group("body")
+    choices_match = re.search(r"choices\s*:\s*\[(.*?)\]", body, re.S)
+    if not choices_match:
+        sys.exit(1)
+
+    choices = re.findall(r"['\"]([^'\"]+)['\"]", choices_match.group(1))
+    sys.exit(0 if choice in choices else 1)
+
+sys.exit(1)
+PY
+}
+
+meson_project_option_type() {
+  local opt="$1"
+
+  meson_json_option_type "$opt" 2>/dev/null ||
+    meson_source_option_type "$opt" 2>/dev/null
+}
+
+meson_project_option_has_choice() {
+  local opt="$1"
+  local choice="$2"
+
+  meson_json_option_has_choice "$opt" "$choice" 2>/dev/null ||
+    meson_source_option_has_choice "$opt" "$choice" 2>/dev/null
+}
+
+meson_add_project_link_option() {
+  local -n out_args="$1"
+  local opt="$2"
+  local opt_type
+
+  opt_type="$(meson_project_option_type "$opt" || true)"
+  [[ -n "$opt_type" ]] || return 0
+
+  case "$link_policy:$opt_type" in
+    dynamic:feature)
+      out_args+=("-D${opt}=disabled")
+      ;;
+    static:feature)
+      out_args+=("-D${opt}=enabled")
+      ;;
+    dynamic:boolean)
+      out_args+=("-D${opt}=false")
+      ;;
+    static:boolean)
+      out_args+=("-D${opt}=true")
+      ;;
+    dynamic:combo)
+      if meson_project_option_has_choice "$opt" disabled; then
+        out_args+=("-D${opt}=disabled")
+      elif meson_project_option_has_choice "$opt" false; then
+        out_args+=("-D${opt}=false")
+      elif meson_project_option_has_choice "$opt" no; then
+        out_args+=("-D${opt}=no")
+      elif meson_project_option_has_choice "$opt" off; then
+        out_args+=("-D${opt}=off")
+      fi
+      ;;
+    static:combo)
+      if meson_project_option_has_choice "$opt" enabled; then
+        out_args+=("-D${opt}=enabled")
+      elif meson_project_option_has_choice "$opt" true; then
+        out_args+=("-D${opt}=true")
+      elif meson_project_option_has_choice "$opt" yes; then
+        out_args+=("-D${opt}=yes")
+      elif meson_project_option_has_choice "$opt" on; then
+        out_args+=("-D${opt}=on")
+      fi
+      ;;
+    *)
+      warn "Meson option ${opt} exists, but its type is not recognized: ${opt_type}"
+      ;;
+  esac
+}
+
+meson_link_setup_args() {
+  local args=()
+
+  case "$link_policy" in
+    none)
+      ;;
+    dynamic)
+      args+=(-Ddefault_library=shared -Dprefer_static=false)
+
+      meson_add_project_link_option args static_binary
+      meson_add_project_link_option args static_binaries
+      meson_add_project_link_option args build_static
+      meson_add_project_link_option args enable_static
+      meson_add_project_link_option args link_static
+      meson_add_project_link_option args static
+      ;;
+    static)
+      args+=(-Ddefault_library=static -Dprefer_static=true)
+
+      meson_add_project_link_option args static_binary
+      meson_add_project_link_option args static_binaries
+      meson_add_project_link_option args build_static
+      meson_add_project_link_option args enable_static
+      meson_add_project_link_option args link_static
+      meson_add_project_link_option args static
+      ;;
+    *)
+      die "unknown link policy: $link_policy"
+      ;;
+  esac
+
+  printf '%s\n' "${args[@]}"
+}
+
+meson_has_option() {
+  local builddir="$1"
+  local opt="$2"
+
+  meson configure "$builddir" 2>/dev/null |
+    awk -v opt="$opt" '$1 == opt { found = 1 } END { exit !found }'
+}
+
+meson_try_option_values() {
+  local builddir="$1"
+  local opt="$2"
+  shift 2
+
+  meson_has_option "$builddir" "$opt" || return 0
+
+  local value
+  for value in "$@"; do
+    if meson configure "$builddir" "-D${opt}=${value}" >/dev/null 2>&1; then
+      return 0
+    fi
+  done
+
+  warn "Meson option ${opt} exists, but none of the requested values worked"
+}
+
+apply_meson_link_policy() {
+  local builddir="$1"
+
+  case "$link_policy" in
+    none)
+      return 0
+      ;;
+    dynamic)
+      meson_try_option_values "$builddir" static_binary disabled false no off
+      meson_try_option_values "$builddir" static_binaries disabled false no off
+      meson_try_option_values "$builddir" build_static disabled false no off
+      meson_try_option_values "$builddir" enable_static disabled false no off
+      meson_try_option_values "$builddir" link_static false disabled no off
+      meson_try_option_values "$builddir" static false disabled no off
+      ;;
+    static)
+      meson_try_option_values "$builddir" static_binary enabled true yes on
+      meson_try_option_values "$builddir" static_binaries enabled true yes on
+      meson_try_option_values "$builddir" build_static enabled true yes on
+      meson_try_option_values "$builddir" enable_static enabled true yes on
+      meson_try_option_values "$builddir" link_static true enabled yes on
+      meson_try_option_values "$builddir" static true enabled yes on
+      ;;
+    *)
+      die "unknown link policy: $link_policy"
+      ;;
+  esac
+}
+
+cmake_link_setup_args() {
+  case "$link_policy" in
+    none)
+      ;;
+    dynamic)
+      printf '%s\n' -DBUILD_SHARED_LIBS=ON
+      ;;
+    static)
+      printf '%s\n' -DBUILD_SHARED_LIBS=OFF
+      ;;
+    *)
+      die "unknown link policy: $link_policy"
+      ;;
+  esac
+}
+
+cmake_cache_has() {
+  local builddir="$1"
+  local var="$2"
+
+  cmake -LAH -N "$builddir" 2>/dev/null |
+    awk -F: -v var="$var" '$1 == var { found = 1 } END { exit !found }'
+}
+
+cmake_set_if_present() {
+  local builddir="$1"
+  local var="$2"
+  local value="$3"
+
+  cmake_cache_has "$builddir" "$var" || return 0
+  cmake -S . -B "$builddir" "-D${var}=${value}" >/dev/null
+}
+
+apply_cmake_link_policy() {
+  local builddir="$1"
+
+  case "$link_policy" in
+    none)
+      return 0
+      ;;
+    dynamic)
+      cmake_set_if_present "$builddir" ENABLE_STATIC OFF
+      cmake_set_if_present "$builddir" BUILD_STATIC OFF
+      cmake_set_if_present "$builddir" BUILD_STATIC_LIBS OFF
+      cmake_set_if_present "$builddir" STATIC_BUILD OFF
+      cmake_set_if_present "$builddir" STATIC_BINARY OFF
+      cmake_set_if_present "$builddir" STATIC_BINARIES OFF
+      cmake_set_if_present "$builddir" BUILD_STATIC_BINARY OFF
+      cmake_set_if_present "$builddir" BUILD_STATIC_BINARIES OFF
+      cmake_set_if_present "$builddir" PREFER_STATIC OFF
+      ;;
+    static)
+      cmake_set_if_present "$builddir" ENABLE_STATIC ON
+      cmake_set_if_present "$builddir" BUILD_STATIC ON
+      cmake_set_if_present "$builddir" BUILD_STATIC_LIBS ON
+      cmake_set_if_present "$builddir" STATIC_BUILD ON
+      cmake_set_if_present "$builddir" STATIC_BINARY ON
+      cmake_set_if_present "$builddir" STATIC_BINARIES ON
+      cmake_set_if_present "$builddir" BUILD_STATIC_BINARY ON
+      cmake_set_if_present "$builddir" BUILD_STATIC_BINARIES ON
+      cmake_set_if_present "$builddir" PREFER_STATIC ON
+      ;;
+    *)
+      die "unknown link policy: $link_policy"
+      ;;
+  esac
+}
+
+configure_help_text() {
+  local configure="$1"
+
+  "$configure" --help=recursive 2>/dev/null ||
+    "$configure" --help 2>/dev/null ||
+    true
+}
+
+configure_supports_arg() {
+  local help_text="$1"
+  local arg="$2"
+
+  grep -F -- "$arg" <<<"$help_text" >/dev/null
+}
+
+add_configure_arg_if_supported() {
+  local -n out_args="$1"
+  local help_text="$2"
+  local arg="$3"
+
+  if configure_supports_arg "$help_text" "$arg"; then
+    out_args+=("$arg")
+  fi
+}
+
+autotools_link_args() {
+  local configure="$1"
+  local -n out_args="$2"
+
+  [[ "$link_policy" == none ]] && return 0
+
+  local help_text
+  help_text="$(configure_help_text "$configure")"
+
+  case "$link_policy" in
+    dynamic)
+      add_configure_arg_if_supported out_args "$help_text" --enable-shared
+      add_configure_arg_if_supported out_args "$help_text" --disable-static
+      add_configure_arg_if_supported out_args "$help_text" --disable-static-binary
+      add_configure_arg_if_supported out_args "$help_text" --disable-static-binaries
+      add_configure_arg_if_supported out_args "$help_text" --disable-static-bin
+      ;;
+    static)
+      add_configure_arg_if_supported out_args "$help_text" --disable-shared
+      add_configure_arg_if_supported out_args "$help_text" --enable-static
+      add_configure_arg_if_supported out_args "$help_text" --enable-static-binary
+      add_configure_arg_if_supported out_args "$help_text" --enable-static-binaries
+      add_configure_arg_if_supported out_args "$help_text" --enable-static-bin
+      ;;
+    *)
+      die "unknown link policy: $link_policy"
+      ;;
+  esac
+}
+
+cmake_build_type() {
+  case "$1" in
+    release)
+      printf '%s\n' Release
+      ;;
+    debug|asan)
+      printf '%s\n' Debug
+      ;;
+    fastdebug|fastasan)
+      printf '%s\n' RelWithDebInfo
+      ;;
+    *)
+      die "Unknown CMake config: $1"
+      ;;
+  esac
+}
+
+cmake_flags_var_suffix() {
+  case "$1" in
+    release)
+      printf '%s\n' RELEASE
+      ;;
+    debug|asan)
+      printf '%s\n' DEBUG
+      ;;
+    fastdebug|fastasan)
+      printf '%s\n' RELWITHDEBINFO
+      ;;
+    *)
+      die "Unknown CMake config: $1"
+      ;;
+  esac
+}
+
+cmake_build() {
+  local cfg="$1"
+  local builddir
+  local cflags
+  local cxxflags
+  local ldflags
+  local build_type
+  local suffix
+  local cmake_link_args=()
+
+  config_flags "$cfg" builddir cflags cxxflags ldflags cmake
+  build_type="$(cmake_build_type "$cfg")"
+  suffix="$(cmake_flags_var_suffix "$cfg")"
+
+  mapfile -t cmake_link_args < <(cmake_link_setup_args)
+
+  rm -rf "$builddir"
+
+  cmake -S . -B "$builddir" \
+    "${cmake_link_args[@]}" \
+    -DCMAKE_BUILD_TYPE="$build_type" \
+    -DCMAKE_C_COMPILER="$CC" \
+    -DCMAKE_CXX_COMPILER="$CXX" \
+    "-DCMAKE_C_FLAGS_${suffix}=$cflags" \
+    "-DCMAKE_CXX_FLAGS_${suffix}=$cxxflags" \
+    -DCMAKE_EXE_LINKER_FLAGS="$ldflags" \
+    -DCMAKE_SHARED_LINKER_FLAGS="$ldflags"
+
+  apply_cmake_link_policy "$builddir"
+
+  cmake --build "$builddir" -j"$NPROC"
+
+  if tests_are_fatal "$cfg"; then
+    (cd "$builddir" && ctest --output-on-failure)
+  else
+    (cd "$builddir" && ctest --output-on-failure || true)
+  fi
+}
+
+meson_build_type() {
+  case "$1" in
+    release)
+      printf '%s\n' release
+      ;;
+    debug|asan)
+      printf '%s\n' debug
+      ;;
+    fastdebug|fastasan)
+      printf '%s\n' debugoptimized
+      ;;
+    *)
+      die "Unknown Meson config: $1"
       ;;
   esac
 }
@@ -196,73 +757,45 @@ cmake_build() {
 meson_build() {
   local cfg="$1"
   local builddir
+  local cflags
+  local cxxflags
+  local ldflags
+  local build_type
+  local meson_link_args=()
+  local sanitize_args=()
+
+  config_flags "$cfg" builddir cflags cxxflags ldflags meson
+  build_type="$(meson_build_type "$cfg")"
+
+  mapfile -t meson_link_args < <(meson_link_setup_args)
 
   case "$cfg" in
-    release)
-      builddir=build-meson-release
-      rm -rf "$builddir"
-      meson setup "$builddir" . \
-        --buildtype=release \
-        -Dwarning_level=3 \
-        -Dc_args="-O2 -march=native $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
-        -Dcpp_args="-O2 -march=native $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
-      meson compile -C "$builddir" -j"$NPROC"
-      meson test -C "$builddir" --print-errorlogs || true
-      ;;
-    debug)
-      builddir=build-meson-debug
-      rm -rf "$builddir"
-      meson setup "$builddir" . \
-        --buildtype=debug \
-        -Dwarning_level=3 \
-        -Dc_args="-g -O0 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
-        -Dcpp_args="-g -O0 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
-      meson compile -C "$builddir" -j"$NPROC"
-      meson test -C "$builddir" --print-errorlogs || true
-      ;;
-    fastdebug)
-      builddir=build-meson-fastdebug
-      rm -rf "$builddir"
-      meson setup "$builddir" . \
-        --buildtype=debugoptimized \
-        -Dwarning_level=3 \
-        -Dc_args="-O2 -march=native $dbg_fast $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
-        -Dcpp_args="-O2 -march=native $dbg_fast $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
-      meson compile -C "$builddir" -j"$NPROC"
-      meson test -C "$builddir" --print-errorlogs || true
-      ;;
-    asan)
-      builddir=build-meson-asan
-      rm -rf "$builddir"
-      setup_sanitizer_env
-      meson setup "$builddir" . \
-        --buildtype=debug \
-        -Db_sanitize=address,undefined \
-        -Db_lundef=false \
-        -Dwarning_level=3 \
-        -Dc_args="-g -O1 $fp_flags -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes" \
-        -Dcpp_args="-g -O1 $fp_flags -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes"
-      meson compile -C "$builddir" -j"$NPROC"
-      meson test -C "$builddir" --print-errorlogs
-      ;;
-    fastasan)
-      builddir=build-meson-fastasan
-      rm -rf "$builddir"
-      setup_sanitizer_env
-      meson setup "$builddir" . \
-        --buildtype=debugoptimized \
-        -Db_sanitize=address,undefined \
-        -Db_lundef=false \
-        -Dwarning_level=3 \
-        -Dc_args="-O1 -march=native $dbg_fast $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes" \
-        -Dcpp_args="-O1 -march=native $dbg_fast $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
-      meson compile -C "$builddir" -j"$NPROC"
-      meson test -C "$builddir" --print-errorlogs
-      ;;
-    *)
-      die "Unknown Meson config: $cfg"
+    asan|fastasan)
+      sanitize_args=(-Db_sanitize=address,undefined -Db_lundef=false)
       ;;
   esac
+
+  rm -rf "$builddir"
+
+  echo "Meson link args: ${meson_link_args[*]}"
+
+  meson setup "$builddir" . \
+    "${meson_link_args[@]}" \
+    "${sanitize_args[@]}" \
+    --buildtype="$build_type" \
+    -Dwarning_level=3 \
+    -Dc_args="$cflags" \
+    -Dcpp_args="$cxxflags"
+
+  apply_meson_link_policy "$builddir"
+
+  meson compile -C "$builddir" -j"$NPROC"
+
+  if tests_are_fatal "$cfg"; then
+    meson test -C "$builddir" --print-errorlogs
+  else
+    meson test -C "$builddir" --print-errorlogs || true
+  fi
 }
 
 autotools_prepare() {
@@ -270,19 +803,23 @@ autotools_prepare() {
     ./bootstrap
     return
   fi
+
   if [[ -x ./autogen.sh ]]; then
     ./autogen.sh
     return
   fi
+
   if [[ -f configure ]]; then
     return
   fi
+
   if [[ -f configure.ac || -f configure.in ]]; then
     command -v autoreconf >/dev/null 2>&1 || die "autoreconf not found but configure.ac exists"
     autoreconf -fi
     [[ -f configure ]] || die "autoreconf did not produce ./configure"
     return
   fi
+
   die "autotools requested but no bootstrap/autogen/configure/configure.ac found"
 }
 
@@ -291,59 +828,47 @@ autotools_build() {
   local builddir
   local cflags
   local cxxflags
-  local ldflags=""
+  local ldflags
 
-  case "$cfg" in
-    release)
-      builddir=build-autotools-release
-      cflags="-O2 -march=native $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
-      cxxflags="$cflags"
-      ;;
-    debug)
-      builddir=build-autotools-debug
-      cflags="-g -O0 $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
-      cxxflags="$cflags"
-      ;;
-    fastdebug)
-      builddir=build-autotools-fastdebug
-      cflags="-O2 -march=native $dbg_fast $fp_flags -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
-      cxxflags="$cflags"
-      ;;
-    asan)
-      builddir=build-autotools-asan
-      setup_sanitizer_env
-      cflags="-g -O1 $fp_flags -Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-optimize-sibling-calls -Wno-unused-parameter -Wno-strict-prototypes"
-      cxxflags="$cflags"
-      ldflags="-fsanitize=address,undefined"
-      ;;
-    fastasan)
-      builddir=build-autotools-fastasan
-      setup_sanitizer_env
-      cflags="-O1 -march=native $dbg_fast $fp_flags -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-strict-prototypes"
-      cxxflags="$cflags"
-      ldflags="-fsanitize=address,undefined"
-      ;;
-    *)
-      die "Unknown Autotools config: $cfg"
-      ;;
-  esac
-
+  config_flags "$cfg" builddir cflags cxxflags ldflags autotools
   autotools_prepare
 
   rm -rf "$builddir"
   mkdir -p "$builddir"
 
   (
+    local configure_args=()
+
     cd "$builddir"
-    CFLAGS="$cflags" CXXFLAGS="$cxxflags" LDFLAGS="$ldflags" ../configure
+
+    autotools_link_args ../configure configure_args
+
+    CFLAGS="$cflags" \
+    CXXFLAGS="$cxxflags" \
+    LDFLAGS="$ldflags" \
+    ../configure "${configure_args[@]}"
+
     make -j"$NPROC"
-    make check -j"$NPROC" || true
+
+    if tests_are_fatal "$cfg"; then
+      make check -j"$NPROC"
+    else
+      make check -j"$NPROC" || true
+    fi
   )
 }
 
 case "$build_system" in
-  cmake)     cmake_build "$config" ;;
-  meson)     meson_build "$config" ;;
-  autotools) autotools_build "$config" ;;
-  *)         die "Internal error: unknown build system: $build_system" ;;
+  cmake)
+    cmake_build "$config"
+    ;;
+  meson)
+    meson_build "$config"
+    ;;
+  autotools)
+    autotools_build "$config"
+    ;;
+  *)
+    die "Internal error: unknown build system: $build_system"
+    ;;
 esac

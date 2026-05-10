@@ -58,7 +58,6 @@ app-server/lighttpd
 app-util/lshw
 app-var/hdparm
 app-var/perl-cleaner
-dev-pypi/beautifulsoup4
 dev-pypi/black
 dev-pypi/httpx
 dev-pypi/paramiko

@@ -17,3 +17,7 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/dd/9c/28b11f64e2425774efb21c206a6e952cfce6e3e2ef3e4b63cdae32ccd8a5/capstone-5.0.7.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/capstone-5.0.7"
+
+BDEPEND="
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+"

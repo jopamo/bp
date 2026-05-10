@@ -1,5 +1,6 @@
 # lockstep-managed: cargo-crate
 EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="zstd-safe"
 CRATE_VERSION="7.2.4"

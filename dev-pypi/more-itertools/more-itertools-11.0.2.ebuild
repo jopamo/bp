@@ -17,3 +17,7 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/a2/f7/139d22fef48ac78127d18e01d80cf1be40236ae489769d17f35c3d425293/more_itertools-11.0.2.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/more_itertools-11.0.2"
+
+BDEPEND="
+	dev-pypi/flit-core[${PYTHON_USEDEP}]
+"

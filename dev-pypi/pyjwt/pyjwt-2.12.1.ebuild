@@ -17,3 +17,7 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/c2/27/a3b6e5bf6ff856d2509292e95c8f57f0df7017cf5394921fc4e4ef40308a/pyjwt-2.12.1.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/pyjwt-2.12.1"
+
+BDEPEND="
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+"

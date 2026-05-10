@@ -17,3 +17,7 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/aa/c6/d1ddf4abb55e93cebc4f2ed8b5d6dbad109ecb8d63748dd2b20ab5e57ebe/psutil-7.2.2.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/psutil-7.2.2"
+
+BDEPEND="
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+"

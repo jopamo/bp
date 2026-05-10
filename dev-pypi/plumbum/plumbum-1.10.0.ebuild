@@ -17,3 +17,8 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/dc/c8/11a5f792704b70f071a3dbc329105a98e9cc8d25daaf09f733c44eb0ef8e/plumbum-1.10.0.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/plumbum-1.10.0"
+
+BDEPEND="
+	dev-pypi/hatch-vcs[${PYTHON_USEDEP}]
+	dev-pypi/hatchling[${PYTHON_USEDEP}]
+"

@@ -20,9 +20,15 @@ S="${WORKDIR}/jsonschema-4.26.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	dev-py/rpds-py
 	dev-pypi/attrs
 	dev-pypi/jsonschema-specifications
 	dev-pypi/referencing
-	dev-pypi/rpds-py
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/hatch-fancy-pypi-readme[${PYTHON_USEDEP}]
+	dev-pypi/hatch-vcs[${PYTHON_USEDEP}]
+	dev-pypi/hatchling[${PYTHON_USEDEP}]
+"

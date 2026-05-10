@@ -6,6 +6,7 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	dev-py/zstandard
 	dev-pypi/capstone
 	dev-pypi/colored-traceback
 	dev-pypi/intervaltree
@@ -23,7 +24,6 @@ RDEPEND+="
 	dev-pypi/sortedcontainers
 	dev-pypi/unicorn
 	dev-pypi/unix-ar
-	dev-pypi/zstandard
 "
 # lockstep-pypi-deps: end
 DESCRIPTION="CTF framework and exploit development library"

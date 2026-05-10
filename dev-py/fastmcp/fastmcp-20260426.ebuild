@@ -7,6 +7,7 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	dev-py/mcp
 	dev-pypi/authlib
 	dev-pypi/cyclopts
 	dev-pypi/exceptiongroup
@@ -14,7 +15,6 @@ RDEPEND+="
 	dev-pypi/httpx
 	dev-pypi/jsonref
 	dev-pypi/jsonschema-path
-	dev-pypi/mcp
 	dev-pypi/openapi-pydantic
 	dev-pypi/opentelemetry-api
 	dev-pypi/packaging

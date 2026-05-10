@@ -6,6 +6,8 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	dev-py/dnspython
+	dev-pypi/defusedxml
 "
 # lockstep-pypi-deps: end
 DESCRIPTION="Python module for retrieving and parsing whois data for IPv4 and IPv6 addresses"

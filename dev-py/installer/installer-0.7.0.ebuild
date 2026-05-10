@@ -7,8 +7,7 @@ PYTHON_COMPAT=( python3_{11..14} )
 inherit distutils-r1 pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
-RDEPEND+="
-"
+RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="A library for installing Python wheels"
 HOMEPAGE="

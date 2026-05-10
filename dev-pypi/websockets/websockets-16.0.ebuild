@@ -17,3 +17,7 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/04/24/4b2031d72e840ce4c1ccb255f693b15c334757fc50023e4db9537080b8c4/websockets-16.0.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/websockets-16.0"
+
+BDEPEND="
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+"

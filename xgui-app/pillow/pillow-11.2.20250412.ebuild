@@ -9,8 +9,7 @@ PYTHON_COMPAT=( python3_{10..13} pypy3 )
 inherit distutils-r1 toolchain-funcs flag-o-matic
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
-RDEPEND+="
-"
+RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Python Imaging Library (fork)"
 HOMEPAGE="https://python-pillow.org/"

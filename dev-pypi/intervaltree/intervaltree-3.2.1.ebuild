@@ -23,3 +23,8 @@ RDEPEND+="
 	dev-pypi/sortedcontainers
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/hatchling[${PYTHON_USEDEP}]
+	dev-pypi/uv-dynamic-versioning[${PYTHON_USEDEP}]
+"

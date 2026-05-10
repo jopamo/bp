@@ -1,1 +1,3 @@
 DIST bytecheck_derive-0.6.12.crate 5415 BLAKE3 10b3907d1231a166c049b022681cc2778f6e3754ab447ad3ff9e5befedd4cdef
+DIST bytecheck_derive-0.8.1.crate 8911 BLAKE3 ed3b3f0e3c3c5a74f77ae6843aeb44896ffc05c8836ca1c3566497069ca098aa
+DIST bytecheck_derive-0.8.2.crate 8933 BLAKE3 e8d96bfa9dcacb6abaa06d15d0dcadb4e44563bf3898c5603235bd24e1df5acf

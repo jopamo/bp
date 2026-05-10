@@ -23,3 +23,8 @@ RDEPEND+="
 	dev-pypi/idna
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+"

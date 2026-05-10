@@ -17,3 +17,7 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/65/ee/299d360cdc32edc7d2cf530f3accf79c4fca01e96ffc950d8a52213bd8e4/packaging-26.0.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/packaging-26.0"
+
+BDEPEND="
+	dev-pypi/flit-core[${PYTHON_USEDEP}]
+"

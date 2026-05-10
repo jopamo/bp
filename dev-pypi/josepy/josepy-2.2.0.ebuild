@@ -20,6 +20,10 @@ S="${WORKDIR}/josepy-2.2.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	app-crypto/cryptography
+	dev-pypi/cryptography
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/poetry-core[${PYTHON_USEDEP}]
+"

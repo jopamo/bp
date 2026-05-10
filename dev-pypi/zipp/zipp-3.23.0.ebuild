@@ -17,3 +17,9 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/e3/02/0f2892c661036d50ede074e376733dca2ae7c6eb617489437771209d4180/zipp-3.23.0.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/zipp-3.23.0"
+
+BDEPEND="
+	dev-pypi/coherent-licensed[${PYTHON_USEDEP}]
+	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+"

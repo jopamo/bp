@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="hatchling"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
 DESCRIPTION="Async dependency injection for Python functions"
 HOMEPAGE="https://pypi.org/project/uncalled-for/"
@@ -15,4 +15,10 @@ LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-PYPI_PN="uncalled-for"
+SRC_URI="https://files.pythonhosted.org/packages/e1/68/35c1d87e608940badbcfeb630347aa0509897284684f61fab6423d02b253/uncalled_for-0.3.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/uncalled_for-0.3.1"
+
+BDEPEND="
+	dev-pypi/hatch-vcs[${PYTHON_USEDEP}]
+	dev-pypi/hatchling[${PYTHON_USEDEP}]
+"

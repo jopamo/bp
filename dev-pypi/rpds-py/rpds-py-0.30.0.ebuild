@@ -17,3 +17,7 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/20/af/3f2f423103f1113b36230496629986e0ef7e199d2aa8392452b484b38ced/rpds_py-0.30.0.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/rpds_py-0.30.0"
+
+BDEPEND="
+	app-dev/maturin[${PYTHON_USEDEP}]
+"

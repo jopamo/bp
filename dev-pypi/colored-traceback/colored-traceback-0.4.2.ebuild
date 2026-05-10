@@ -17,3 +17,13 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/07/80/afcf567031ab8565f8f8d2bd14b007d313ea3258e50394e85b10a405099c/colored-traceback-0.4.2.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/colored-traceback-0.4.2"
+
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/pygments
+"
+# lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+"

@@ -23,3 +23,7 @@ RDEPEND+="
 	dev-pypi/anyio
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	app-dev/maturin[${PYTHON_USEDEP}]
+"

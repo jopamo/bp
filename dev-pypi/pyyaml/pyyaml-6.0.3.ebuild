@@ -6,7 +6,6 @@ MERGE_MANIFEST_MODE="tree-blake3-v1"
 PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
-DISTUTILS_UPSTREAM_PEP517="standalone"
 
 inherit distutils-r1
 
@@ -18,3 +17,8 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/05/8e/961c0007c59b8dd7729d542c61a4d537767a59645b82a0b521206e1e25c2/pyyaml-6.0.3.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/pyyaml-6.0.3"
+
+BDEPEND="
+	dev-pypi/cython[${PYTHON_USEDEP}]
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+"

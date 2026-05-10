@@ -1,5 +1,6 @@
 # lockstep-managed: cargo-crate
 EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="rayon-core"
 CRATE_VERSION="1.12.1"

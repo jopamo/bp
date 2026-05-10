@@ -24,3 +24,7 @@ RDEPEND+="
 	dev-pypi/starlette
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+"

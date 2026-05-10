@@ -17,3 +17,7 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/67/93/8f2c2075b180c12c1e9f6a09d1a985bc2036906b13dff1d8917e395f2048/pathable-0.4.4.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/pathable-0.4.4"
+
+BDEPEND="
+	dev-pypi/poetry-core[${PYTHON_USEDEP}]
+"

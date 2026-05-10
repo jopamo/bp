@@ -23,3 +23,8 @@ RDEPEND+="
 	dev-pypi/referencing
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/hatch-vcs[${PYTHON_USEDEP}]
+	dev-pypi/hatchling[${PYTHON_USEDEP}]
+"

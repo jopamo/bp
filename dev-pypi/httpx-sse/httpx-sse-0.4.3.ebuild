@@ -17,3 +17,9 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/0f/4c/751061ffa58615a32c31b2d82e8482be8dd4a89154f003147acee90f2be9/httpx_sse-0.4.3.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/httpx_sse-0.4.3"
+
+BDEPEND="
+	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+	dev-pypi/wheel[${PYTHON_USEDEP}]
+"

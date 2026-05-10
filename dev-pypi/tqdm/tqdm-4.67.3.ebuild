@@ -17,3 +17,8 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/09/a9/6ba95a270c6f1fbcd8dac228323f2777d886cb206987444e4bce66338dd4/tqdm-4.67.3.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/tqdm-4.67.3"
+
+BDEPEND="
+	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+"

@@ -17,9 +17,3 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/ff/46/dd499ec9038423421951e4fad73051febaa13d2df82b4064f87af8b8c0c3/pytz-2026.2.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/pytz-2026.2"
-
-src_prepare() {
-	eapply "${FILESDIR}"/pytz-2023.2-system-tzinfo.patch
-
-	distutils-r1_src_prepare
-}

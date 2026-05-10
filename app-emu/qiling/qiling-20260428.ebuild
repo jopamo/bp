@@ -4,6 +4,21 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	dev-pypi/capstone
+	dev-pypi/fuzzercorn
+	dev-pypi/gevent
+	dev-pypi/keystone-engine
+	dev-pypi/multiprocess
+	dev-pypi/pefile
+	dev-pypi/pyelftools
+	dev-pypi/python-fx
+	dev-pypi/python-registry
+	dev-pypi/pyyaml
+	dev-pypi/questionary
+	dev-pypi/r2libr
+	dev-pypi/termcolor
+	dev-pypi/unicorn
+	dev-pypi/unicornafl
 "
 # lockstep-pypi-deps: end
 DESCRIPTION="Advanced Binary Emulation Framework"

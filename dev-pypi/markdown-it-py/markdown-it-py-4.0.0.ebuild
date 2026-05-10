@@ -23,3 +23,7 @@ RDEPEND+="
 	dev-pypi/mdurl
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/flit-core[${PYTHON_USEDEP}]
+"

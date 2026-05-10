@@ -5,8 +5,7 @@ DISTUTILS_OPTIONAL=1
 inherit autotools distutils-r1 qa-policy
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
-RDEPEND+="
-"
+RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="identify a file's format by scanning binary data for patterns"
 HOMEPAGE="https://www.darwinsys.com/file/"

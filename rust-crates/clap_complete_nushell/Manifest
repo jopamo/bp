@@ -1,1 +1,3 @@
+DIST clap_complete_nushell-4.5.10.crate 35247 BLAKE3 664c8fe5deeed5b6869612b093b92d58ce2d0413913b58e3b98ac3b6b76d68a0
+DIST clap_complete_nushell-4.5.8.crate 35171 BLAKE3 375a05421a71d58bb3c56a7f3ed5d96ef66016003e72076e8c0338bf32672825
 DIST clap_complete_nushell-4.6.0.crate 36526 BLAKE3 1e8c91eed2c343c3caf6957c310c3baea2c507c1207fb0e48226e50c89e001c4

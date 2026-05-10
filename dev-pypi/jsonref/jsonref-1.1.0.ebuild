@@ -17,3 +17,7 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/aa/0d/c1f3277e90ccdb50d33ed5ba1ec5b3f0a242ed8c1b1a85d3afeb68464dca/jsonref-1.1.0.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/jsonref-1.1.0"
+
+BDEPEND="
+	dev-pypi/pdm-pep517[${PYTHON_USEDEP}]
+"

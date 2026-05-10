@@ -24,3 +24,7 @@ RDEPEND+="
 	dev-pypi/h11
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/hatchling[${PYTHON_USEDEP}]
+"

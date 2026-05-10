@@ -11,7 +11,6 @@ RDEPEND+="
 	dev-pypi/cuda-pathfinder
 "
 # lockstep-pypi-deps: end
-
 DESCRIPTION="NVIDIA CUDA Python Bindings"
 HOMEPAGE="https://github.com/NVIDIA/cuda-python"
 SNAPSHOT=f77e0c823e3bce21ebd06a4b186ad573dd25cad7

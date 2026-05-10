@@ -7,8 +7,8 @@ inherit distutils-r1 cmake
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-pypi/diskcache
 	dev-py/jinja
+	dev-pypi/diskcache
 	dev-pypi/numpy
 	dev-pypi/typing-extensions
 "

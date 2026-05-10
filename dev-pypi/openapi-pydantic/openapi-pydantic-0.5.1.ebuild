@@ -23,3 +23,7 @@ RDEPEND+="
 	dev-pypi/pydantic
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/poetry-core[${PYTHON_USEDEP}]
+"

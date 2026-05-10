@@ -17,3 +17,8 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/b5/f4/098d2270d52b41f1bd7db9fc288aaa0400cb48c2a3e2af6fa365d9720947/numpy-2.3.4.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/numpy-2.3.4"
+
+BDEPEND="
+	dev-pypi/cython[${PYTHON_USEDEP}]
+	dev-pypi/meson-python[${PYTHON_USEDEP}]
+"

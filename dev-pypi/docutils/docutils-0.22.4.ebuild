@@ -17,3 +17,7 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/ae/b6/03bb70946330e88ffec97aefd3ea75ba575cb2e762061e0e62a213befee8/docutils-0.22.4.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/docutils-0.22.4"
+
+BDEPEND="
+	dev-pypi/flit-core[${PYTHON_USEDEP}]
+"

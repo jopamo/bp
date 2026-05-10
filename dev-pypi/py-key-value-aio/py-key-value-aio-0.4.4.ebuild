@@ -24,3 +24,7 @@ RDEPEND+="
 	dev-pypi/typing-extensions
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/uv-build[${PYTHON_USEDEP}]
+"

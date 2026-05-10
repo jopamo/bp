@@ -20,7 +20,11 @@ S="${WORKDIR}/rich_rst-1.3.2"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-pypi/docutils
+	dev-py/docutils
 	dev-pypi/rich
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+"

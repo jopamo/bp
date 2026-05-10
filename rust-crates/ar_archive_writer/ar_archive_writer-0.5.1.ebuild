@@ -1,5 +1,6 @@
 # lockstep-managed: cargo-crate
 EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="ar_archive_writer"
 CRATE_VERSION="0.5.1"

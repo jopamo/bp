@@ -484,8 +484,7 @@ PYTHON_COMPAT=( pypy3_11 python3_{11..14} )
 inherit cargo lockstep-cargo distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
-RDEPEND+="
-"
+RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Build and publish crates with pyo3, rust-cpython and cffi bindings"
 HOMEPAGE="https://www.maturin.rs/"

@@ -26,3 +26,8 @@ RDEPEND+="
 	dev-pypi/idna
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/hatch-fancy-pypi-readme[${PYTHON_USEDEP}]
+	dev-pypi/hatchling[${PYTHON_USEDEP}]
+"

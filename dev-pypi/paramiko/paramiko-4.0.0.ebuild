@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
 DESCRIPTION="SSH2 protocol library"
 HOMEPAGE="https://pypi.org/project/paramiko/"
@@ -15,13 +15,18 @@ LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-PYPI_PN="paramiko"
+SRC_URI="https://files.pythonhosted.org/packages/1f/e7/81fdcbc7f190cdb058cffc9431587eb289833bdd633e2002455ca9bb13d4/paramiko-4.0.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/paramiko-4.0.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-py/bcrypt
-	app-crypto/cryptography
-	dev-pypi/invoke
 	dev-py/pynacl
+	dev-pypi/cryptography
+	dev-pypi/invoke
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+"

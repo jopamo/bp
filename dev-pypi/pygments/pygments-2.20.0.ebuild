@@ -17,3 +17,7 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/c3/b2/bc9c9196916376152d655522fdcebac55e66de6603a76a02bca1b6414f6c/pygments-2.20.0.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/pygments-2.20.0"
+
+BDEPEND="
+	dev-pypi/hatchling[${PYTHON_USEDEP}]
+"

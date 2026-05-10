@@ -23,3 +23,9 @@ RDEPEND+="
 	dev-pypi/packaging
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/packaging[${PYTHON_USEDEP}]
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+	dev-pypi/typing-extensions[${PYTHON_USEDEP}]
+"

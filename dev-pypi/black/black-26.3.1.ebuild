@@ -1,10 +1,23 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 PYTHON_COMPAT=( python3_{11..14} )
-DISTUTILS_USE_PEP517=hatchling
 
-inherit distutils-r1 pypi
-# lockstep-pypi-managed: true
+DISTUTILS_USE_PEP517="hatchling"
+
+inherit distutils-r1
+
+DESCRIPTION="The uncompromising code formatter."
+HOMEPAGE="https://pypi.org/project/black/"
+LICENSE="metapackage"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/e1/c5/61175d618685d42b005847464b8fb4743a67b1b8fdb75e50e5a96c31a27a/black-26.3.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/black-26.3.1"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/click
@@ -15,24 +28,9 @@ RDEPEND+="
 	dev-pypi/pytokens
 "
 # lockstep-pypi-deps: end
-DESCRIPTION="The uncompromising code formatter"
-HOMEPAGE="
-	https://black.readthedocs.io/
-	https://github.com/psf/black
-"
 
-LICENSE="MIT"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
-RDEPEND="
-	>=dev-pypi/click-8[${PYTHON_USEDEP}]
-	>=dev-pypi/mypy-extensions-0.4.3[${PYTHON_USEDEP}]
-	>=dev-pypi/packaging-22[${PYTHON_USEDEP}]
-	>=dev-pypi/pathspec-1[${PYTHON_USEDEP}]
-	>=dev-pypi/platformdirs-2[${PYTHON_USEDEP}]
-	>=dev-pypi/pytokens-0.4[${PYTHON_USEDEP}]
-	<dev-pypi/pytokens-0.5[${PYTHON_USEDEP}]
+BDEPEND="
+	dev-pypi/hatchling[${PYTHON_USEDEP}]
 "
 
 src_prepare() {

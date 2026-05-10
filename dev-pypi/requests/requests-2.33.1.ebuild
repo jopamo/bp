@@ -26,3 +26,7 @@ RDEPEND+="
 	dev-pypi/urllib3
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+"

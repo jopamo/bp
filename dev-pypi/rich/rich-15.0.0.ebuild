@@ -24,3 +24,7 @@ RDEPEND+="
 	dev-pypi/pygments
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/poetry-core[${PYTHON_USEDEP}]
+"

@@ -6,16 +6,18 @@ MERGE_MANIFEST_MODE="tree-blake3-v1"
 PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="flit"
-PYPI_PN="tomli_w"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
 DESCRIPTION="A lil' TOML writer"
-HOMEPAGE="
-	https://pypi.org/project/tomli-w/
-	https://github.com/hukkin/tomli-w/
-"
+HOMEPAGE="https://github.com/hukkin/tomli-w"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-S="${WORKDIR}/${PYPI_PN}-${PV}"
+
+SRC_URI="https://files.pythonhosted.org/packages/19/75/241269d1da26b624c0d5e110e8149093c759b7a286138f4efd61a60e75fe/tomli_w-1.2.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/tomli_w-1.2.0"
+
+BDEPEND="
+	dev-pypi/flit-core[${PYTHON_USEDEP}]
+"

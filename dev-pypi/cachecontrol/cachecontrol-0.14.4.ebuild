@@ -5,18 +5,18 @@ MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 PYTHON_COMPAT=( python3_{11..14} )
 
-DISTUTILS_USE_PEP517="uv-build"
+DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
 DESCRIPTION="httplib2 caching for requests"
-HOMEPAGE="
-	https://pypi.org/project/CacheControl/
-	https://github.com/psf/cachecontrol/
-"
-LICENSE="Apache-2.0"
+HOMEPAGE="https://pypi.org/project/CacheControl/"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/2d/f6/c972b32d80760fb79d6b9eeb0b3010a46b89c0b23cf6329417ff7886cd22/cachecontrol-0.14.4.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/cachecontrol-0.14.4"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
@@ -24,8 +24,7 @@ RDEPEND+="
 	dev-pypi/requests
 "
 # lockstep-pypi-deps: end
-RDEPEND="
-	>=dev-pypi/msgpack-0.5.2[${PYTHON_USEDEP}]
-	<dev-pypi/msgpack-2[${PYTHON_USEDEP}]
-	>=dev-pypi/requests-2.16.0[${PYTHON_USEDEP}]
+
+BDEPEND="
+	dev-py/uv-build[${PYTHON_USEDEP}]
 "

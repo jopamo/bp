@@ -1,11 +1,24 @@
-# Distributed under the terms of the GNU General Public License v2
+# lockstep-managed: dependency-ebuild
+# lockstep-pypi-managed: true
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 PYTHON_COMPAT=( python3_{11..14} )
 PYTHON_REQ_USE="ssl(+),threads(+)"
-DISTUTILS_USE_PEP517=flit
+
+DISTUTILS_USE_PEP517="flit"
 
 inherit distutils-r1 doins pypi
-# lockstep-pypi-managed: true
+
+DESCRIPTION="The PyPA recommended tool for installing Python packages."
+HOMEPAGE="https://pip.pypa.io/"
+LICENSE="metapackage"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+SRC_URI="https://files.pythonhosted.org/packages/b6/48/cb9b7a682f6fe01a4221e1728941dd4ac3cd9090a17db3779d6ff490b602/pip-26.1.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pip-26.1.1"
+
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/cachecontrol
@@ -25,35 +38,11 @@ RDEPEND+="
 	dev-pypi/typing-extensions
 "
 # lockstep-pypi-deps: end
-DESCRIPTION="The PyPA recommended tool for installing Python packages"
-HOMEPAGE="
-	https://pip.pypa.io/en/stable/
-	https://pypi.org/project/pip/
-	https://github.com/pypa/pip/
-"
 
-LICENSE="MIT"
-SLOT="0"
-KEYWORDS="amd64 arm64"
-
-RDEPEND="
-	>=dev-pypi/cachecontrol-0.14.4[${PYTHON_USEDEP}]
-	>=dev-pypi/dependency-groups-1.3.0[${PYTHON_USEDEP}]
-	>=dev-pypi/distlib-0.4.0[${PYTHON_USEDEP}]
-	>=dev-pypi/distro-1.9.0[${PYTHON_USEDEP}]
-	>=dev-pypi/msgpack-1.1.1[${PYTHON_USEDEP}]
-	>=dev-pypi/packaging-26.2[${PYTHON_USEDEP}]
-	>=dev-pypi/platformdirs-4.3.8[${PYTHON_USEDEP}]
-	>=dev-pypi/pyproject-hooks-1.2.0[${PYTHON_USEDEP}]
-	>=dev-pypi/requests-2.33.1[${PYTHON_USEDEP}]
-	>=dev-pypi/resolvelib-1.2.0[${PYTHON_USEDEP}]
-	>=dev-pypi/rich-14.1.0[${PYTHON_USEDEP}]
-	>=dev-pypi/setuptools-70.3.0[${PYTHON_USEDEP}]
-	>=dev-pypi/tomli-w-1.2.0[${PYTHON_USEDEP}]
-	>=dev-pypi/truststore-0.10.1[${PYTHON_USEDEP}]
-	>=dev-pypi/typing-extensions-4.13.2[${PYTHON_USEDEP}]
+BDEPEND="
+	${RDEPEND}
+	dev-pypi/flit-core[${PYTHON_USEDEP}]
 "
-BDEPEND="${RDEPEND}"
 
 python_prepare_all() {
 	eapply "${FILESDIR}"/pip-25.0.1-unbundle.patch

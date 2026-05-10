@@ -32,17 +32,64 @@ RDEPEND="
 	' 3.10)
 "
 BDEPEND="
-	dev-pypi/hatch-fancy-pypi-readme[${PYTHON_USEDEP}]
-	dev-py/setuptools-scm[${PYTHON_USEDEP}]
 	test? (
 		dev-pypi/pytest-timeout[${PYTHON_USEDEP}]
 		dev-py/yaxmldiff[${PYTHON_USEDEP}]
 	)
 "
 
-export SETUPTOOLS_SCM_PRETEND_VERSION=${PV}
-
 distutils_enable_tests pytest
+
+src_prepare() {
+	"${EPYTHON}" - <<-PY || die
+	import os
+	from pathlib import Path
+
+	path = Path("pyproject.toml")
+	text = path.read_text(encoding="utf-8")
+
+	text = text.replace(
+	    'requires = [\n    "hatchling==1.27.0",\n    "hatch-vcs==0.5.0",\n    "hatch-fancy-pypi-readme==25.1.0",\n]',
+	    'requires = ["hatchling==1.27.0"]',
+	)
+	text = text.replace(
+	    'dynamic = ["version", "readme"]',
+	    f'readme = "README.rst"\\nversion = "{os.environ["PV"]}"',
+	)
+
+	def drop_section(payload: str, header: str) -> str:
+	    lines = payload.splitlines()
+	    result = []
+	    skip = False
+	    for line in lines:
+	        if line.strip() == header:
+	            skip = True
+	            continue
+	        if skip and line.startswith("["):
+	            skip = False
+	        if not skip:
+	            result.append(line)
+	    return "\\n".join(result) + "\\n"
+
+	for header in (
+	    "[tool.hatch.metadata.hooks.fancy-pypi-readme]",
+	    "[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]",
+	    "[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]",
+	    "[tool.hatch.version]",
+	    "[tool.hatch.version.raw-options]",
+	    "[tool.hatch.build.hooks.vcs]",
+	):
+	    text = drop_section(text, header)
+
+	path.write_text(text, encoding="utf-8")
+	Path("src/gcovr/version.py").write_text(
+	    f'__version__ = "{os.environ["PV"]}"\\n',
+	    encoding="utf-8",
+	)
+	PY
+
+	distutils-r1_src_prepare
+}
 
 python_test() {
 	local -a test_build_deselect=(

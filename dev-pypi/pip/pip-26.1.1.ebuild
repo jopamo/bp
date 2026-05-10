@@ -4,7 +4,7 @@ PYTHON_COMPAT=( python3_{11..14} )
 PYTHON_REQ_USE="ssl(+),threads(+)"
 DISTUTILS_USE_PEP517=flit
 
-inherit distutils-r1 pypi shell-completion
+inherit distutils-r1 doins pypi
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
@@ -84,5 +84,6 @@ python_install_all() {
 	distutils-r1_python_install_all
 
 	newbashcomp completion.bash pip
-	newzshcomp completion.zsh _pip
+	insinto /usr/share/zsh/site-functions
+	newins completion.zsh _pip
 }

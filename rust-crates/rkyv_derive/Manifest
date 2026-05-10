@@ -1,3 +1,4 @@
 DIST rkyv_derive-0.7.45.crate 18972 BLAKE3 af40634a8c2bdfd985afc30d019c3a8cce3af1e2cb00b79f7ebd822e80af12fa
+DIST rkyv_derive-0.8.11.crate 22976 BLAKE3 e4a0d8f8d8eeb250f3616b918123aa3190035b9aeb83f96c0d4d0c4a27eadf41
 DIST rkyv_derive-0.8.14.crate 22652 BLAKE3 bcb5ffb4a98385ca12f1c6ab418fe32a990e6ea534bcc284a212a373a6fc81b2
 DIST rkyv_derive-0.8.16.crate 22649 BLAKE3 00c24856f33bf46dec9acc7371bf3c4d32af407d2e382eea5aa2ee2c81e23a34

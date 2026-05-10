@@ -43,12 +43,11 @@ RDEPEND="
 	>=app-crypto/acme-${PV}[${PYTHON_USEDEP}]
 	>=dev-pypi/configargparse-1.5.3[${PYTHON_USEDEP}]
 	>=dev-pypi/configobj-5.0.6[${PYTHON_USEDEP}]
-	>=app-crypto/cryptography-3.2.1[${PYTHON_USEDEP}]
+	>=app-crypto/cryptography-43.0.0[${PYTHON_USEDEP}]
 	>=dev-pypi/distro-1.0.1[${PYTHON_USEDEP}]
-	>=dev-pypi/josepy-1.13.0[${PYTHON_USEDEP}]
-	>=dev-pypi/parsedatetime-2.4[${PYTHON_USEDEP}]
+	>=dev-pypi/josepy-2.0.0[${PYTHON_USEDEP}]
+	>=dev-pypi/parsedatetime-2.6[${PYTHON_USEDEP}]
 	dev-pypi/pyrfc3339[${PYTHON_USEDEP}]
-	>=dev-pypi/pytz-2019.3[${PYTHON_USEDEP}]
 	selinux? ( sec-policy/selinux-certbot )
 "
 

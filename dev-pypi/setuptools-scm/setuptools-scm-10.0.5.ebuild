@@ -28,7 +28,5 @@ RDEPEND+="
 
 BDEPEND="
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
-	dev-pypi/tomli[${PYTHON_USEDEP}]
-	dev-pypi/typing-extensions[${PYTHON_USEDEP}]
 	dev-pypi/vcs-versioning[${PYTHON_USEDEP}]
 "

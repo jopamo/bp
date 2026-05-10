@@ -34,7 +34,6 @@ BDEPEND="
 	dev-pypi/mypy-extensions[${PYTHON_USEDEP}]
 	dev-pypi/pathspec[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
-	dev-pypi/tomli[${PYTHON_USEDEP}]
 	dev-pypi/types-psutil[${PYTHON_USEDEP}]
 	dev-pypi/types-setuptools[${PYTHON_USEDEP}]
 	dev-pypi/typing-extensions[${PYTHON_USEDEP}]

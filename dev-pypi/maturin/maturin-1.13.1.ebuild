@@ -21,5 +21,4 @@ S="${WORKDIR}/maturin-1.13.1"
 BDEPEND="
 	dev-py/setuptools-rust[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
-	dev-pypi/tomli[${PYTHON_USEDEP}]
 "

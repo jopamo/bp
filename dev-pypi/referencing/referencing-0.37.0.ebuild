@@ -20,7 +20,12 @@ S="${WORKDIR}/referencing-0.37.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	dev-py/rpds-py
 	dev-pypi/attrs
-	dev-pypi/rpds-py
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/hatch-vcs[${PYTHON_USEDEP}]
+	dev-pypi/hatchling[${PYTHON_USEDEP}]
+"

@@ -23,3 +23,7 @@ RDEPEND+="
 	dev-pypi/pycparser
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+"

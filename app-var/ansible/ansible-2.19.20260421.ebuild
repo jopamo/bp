@@ -5,8 +5,7 @@ BRANCH_NAME="stable-$(ver_cut 1-2)"
 inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
-RDEPEND+="
-"
+RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="a radically simple IT automation platform"
 HOMEPAGE="https://ansible.com/"

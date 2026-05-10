@@ -1,5 +1,6 @@
 # lockstep-managed: cargo-crate
 EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="icu_properties_data"
 CRATE_VERSION="2.0.1"

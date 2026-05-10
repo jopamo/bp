@@ -3,10 +3,8 @@
 inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
-RDEPEND+="
-"
+RDEPEND=""
 # lockstep-pypi-deps: end
-
 DISTUTILS_USE_PEP517=setuptools
 
 DESCRIPTION="A script for checking the hardening options in the Linux kernel config"

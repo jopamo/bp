@@ -1,5 +1,6 @@
 # lockstep-managed: cargo-crate
 EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="toml_datetime"
 CRATE_VERSION="0.7.5+spec-1.1.0"

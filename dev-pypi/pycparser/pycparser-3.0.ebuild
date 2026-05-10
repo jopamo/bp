@@ -17,3 +17,8 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/1b/7d/92392ff7815c21062bea51aa7b87d45576f649f16458d78b7cf94b9ab2e6/pycparser-3.0.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/pycparser-3.0"
+
+BDEPEND="
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+	dev-pypi/wheel[${PYTHON_USEDEP}]
+"

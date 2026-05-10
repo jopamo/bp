@@ -6,8 +6,7 @@ PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
-RDEPEND+="
-"
+RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Python Documentation Utilities (reference reStructuredText impl.)"
 HOMEPAGE="https://docutils.sourceforge.io/"

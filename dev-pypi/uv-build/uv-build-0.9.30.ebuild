@@ -9,14 +9,14 @@ DISTUTILS_USE_PEP517="maturin"
 
 inherit distutils-r1
 
-DESCRIPTION="An extremely fast Python package and project manager, written in Rust."
+DESCRIPTION="The uv build backend"
 HOMEPAGE="https://pypi.org/project/uv/"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/4e/a0/63cea38fe839fb89592728b91928ee6d15705f1376a7940fee5bbc77fea0/uv-0.9.30.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/uv-0.9.30"
+SRC_URI="https://files.pythonhosted.org/packages/ef/b0/dcd2fb2b9564f1c477abc90331571c06694a4871aba517223f5a6ab28f2b/uv_build-0.9.30.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/uv_build-0.9.30"
 
 BDEPEND="
 	app-dev/maturin[${PYTHON_USEDEP}]

@@ -6,8 +6,7 @@ DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1 flag-o-matic
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
-RDEPEND+="
-"
+RDEPEND=""
 # lockstep-pypi-deps: end
 MY_P=python-zstandard-${PV}
 DESCRIPTION="Zstandard Bindings for Python"

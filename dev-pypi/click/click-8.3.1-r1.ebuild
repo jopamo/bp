@@ -17,3 +17,7 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/3d/fa/656b739db8587d7b5dfa22e22ed02566950fbfbcdc20311993483657a5c0/click-8.3.1.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/click-8.3.1"
+
+BDEPEND="
+	dev-pypi/flit-core[${PYTHON_USEDEP}]
+"

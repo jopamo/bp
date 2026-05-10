@@ -9,10 +9,8 @@ GENTOO_DEPEND_ON_PERL="no"
 inherit autotools distutils-r1 flag-o-matic qa-policy
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
-RDEPEND+="
-"
+RDEPEND=""
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Library to support AppArmor userspace utilities"
 HOMEPAGE="https://gitlab.com/apparmor/apparmor/wikis/home"
 SNAPSHOT=7ef79ae3edaa323e33f4bb057f5daee437cf4bac

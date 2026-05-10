@@ -17,3 +17,7 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/f5/c4/c7f9e41bc2e5f8eeae4a08a01c91b2aea3dfab40a3e14b25e87e7db8d501/configobj-5.0.9.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/configobj-5.0.9"
+
+BDEPEND="
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+"

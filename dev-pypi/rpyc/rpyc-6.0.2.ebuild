@@ -23,3 +23,7 @@ RDEPEND+="
 	dev-pypi/plumbum
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/hatchling[${PYTHON_USEDEP}]
+"

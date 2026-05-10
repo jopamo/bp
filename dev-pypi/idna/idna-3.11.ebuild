@@ -17,3 +17,7 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/6f/6d/0703ccc57f3a7233505399edb88de3cbd678da106337b9fcde432b65ed60/idna-3.11.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/idna-3.11"
+
+BDEPEND="
+	dev-pypi/flit-core[${PYTHON_USEDEP}]
+"

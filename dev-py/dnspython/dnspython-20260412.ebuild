@@ -5,8 +5,7 @@ DISTUTILS_USE_PEP517=hatchling
 inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
-RDEPEND+="
-"
+RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="DNS toolkit for Python"
 HOMEPAGE="https://www.dnspython.org/"

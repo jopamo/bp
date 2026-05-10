@@ -23,3 +23,9 @@ RDEPEND+="
 	dev-pypi/six
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+	dev-pypi/wheel[${PYTHON_USEDEP}]
+"

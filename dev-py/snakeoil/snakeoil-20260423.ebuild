@@ -5,8 +5,7 @@ DISTUTILS_USE_PEP517=flit
 inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
-RDEPEND+="
-"
+RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="misc common functionality and useful optimizations"
 HOMEPAGE="https://github.com/pkgcore/snakeoil"

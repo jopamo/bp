@@ -9,11 +9,16 @@ DISTUTILS_USE_PEP517="setuptools"
 
 inherit distutils-r1
 
-DESCRIPTION="Lockstep-managed PyPI dependency certifi-system-store"
-HOMEPAGE="https://pypi.org/project/certifi-system-store/"
+DESCRIPTION="Lockstep-managed PyPI dependency certifi"
+HOMEPAGE="https://pypi.org/project/certifi/"
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 SRC_URI="https://github.com/projg2/certifi-system-store/archive/v3024.7.22.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/certifi-system-store-3024.7.22"
+
+BDEPEND="
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+	dev-pypi/wheel[${PYTHON_USEDEP}]
+"

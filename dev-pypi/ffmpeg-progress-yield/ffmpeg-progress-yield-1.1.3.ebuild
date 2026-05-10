@@ -23,3 +23,7 @@ RDEPEND+="
 	dev-pypi/tqdm
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/uv-build[${PYTHON_USEDEP}]
+"

@@ -17,3 +17,7 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/69/9b/f23807317a113dc36e74e75eb265a02dd1a4d9082abc3c1064acd22997c4/python_multipart-0.0.27.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/python_multipart-0.0.27"
+
+BDEPEND="
+	dev-pypi/hatchling[${PYTHON_USEDEP}]
+"

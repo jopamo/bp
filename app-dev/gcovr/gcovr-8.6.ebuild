@@ -8,9 +8,9 @@ inherit toolchain-funcs distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-pypi/colorlog
 	dev-py/jinja
-	dev-pypi/lxml
+	dev-py/lxml
+	dev-pypi/colorlog
 	dev-pypi/pygments
 "
 # lockstep-pypi-deps: end

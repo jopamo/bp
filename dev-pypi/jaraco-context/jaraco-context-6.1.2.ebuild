@@ -17,3 +17,9 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/af/50/4763cd07e722bb6285316d390a164bc7e479db9d90daa769f22578f698b4/jaraco_context-6.1.2.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/jaraco_context-6.1.2"
+
+BDEPEND="
+	dev-pypi/coherent-licensed[${PYTHON_USEDEP}]
+	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+"

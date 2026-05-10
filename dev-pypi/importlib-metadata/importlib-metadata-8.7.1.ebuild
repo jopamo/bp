@@ -23,3 +23,9 @@ RDEPEND+="
 	dev-pypi/zipp
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/coherent-licensed[${PYTHON_USEDEP}]
+	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+"

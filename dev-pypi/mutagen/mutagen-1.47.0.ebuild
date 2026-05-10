@@ -17,3 +17,13 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/81/e6/64bc71b74eef4b68e61eb921dcf72dabd9e4ec4af1e11891bbd312ccbb77/mutagen-1.47.0.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/mutagen-1.47.0"
+
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/python-afl
+"
+# lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/setuptools[${PYTHON_USEDEP}]
+"

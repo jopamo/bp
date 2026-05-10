@@ -1,9 +1,14 @@
 # Distributed under the terms of the GNU General Public License v2
+# lockstep-cargo-managed: true
+# lockstep-cargo-deps: begin
+CARGO_DEPS="
+"
+# lockstep-cargo-deps: end
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{10..13} pypy3 )
 
-inherit distutils-r1
+inherit cargo lockstep-cargo distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="

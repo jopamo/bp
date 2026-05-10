@@ -7,26 +7,13 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="standalone"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
-DESCRIPTION="Poetry PEP 517 build backend"
-HOMEPAGE="
-	https://github.com/python-poetry/poetry-core/
-	https://pypi.org/project/poetry-core/
-"
-LICENSE="MIT"
+DESCRIPTION="Poetry PEP 517 Build Backend"
+HOMEPAGE="https://github.com/python-poetry/poetry-core"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-# lockstep-pypi-deps: begin
-RDEPEND+="
-	dev-pypi/fastjsonschema
-	dev-pypi/lark
-	dev-pypi/packaging
-"
-# lockstep-pypi-deps: end
-RDEPEND="
-	>=dev-pypi/fastjsonschema-2.21.2[${PYTHON_USEDEP}]
-	>=dev-pypi/lark-1.3.1[${PYTHON_USEDEP}]
-	>=dev-pypi/packaging-26.2[${PYTHON_USEDEP}]
-"
+SRC_URI="https://files.pythonhosted.org/packages/39/46/7cc89b6ef47803528673585bfa40fa729a7050d9eaedeb7e7f5816300c88/poetry_core-2.3.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/poetry_core-2.3.1"

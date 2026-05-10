@@ -17,3 +17,7 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/50/79/66800aadf48771f6b62f7eb014e352e5d06856655206165d775e675a02c9/exceptiongroup-1.3.1.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/exceptiongroup-1.3.1"
+
+BDEPEND="
+	dev-py/flit-scm[${PYTHON_USEDEP}]
+"

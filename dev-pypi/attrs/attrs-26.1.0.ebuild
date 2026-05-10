@@ -17,3 +17,9 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/9a/8e/82a0fe20a541c03148528be8cac2408564a6c9a0cc7e9171802bc1d26985/attrs-26.1.0.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/attrs-26.1.0"
+
+BDEPEND="
+	dev-pypi/hatch-fancy-pypi-readme[${PYTHON_USEDEP}]
+	dev-pypi/hatch-vcs[${PYTHON_USEDEP}]
+	dev-pypi/hatchling[${PYTHON_USEDEP}]
+"

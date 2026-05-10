@@ -17,3 +17,9 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/c7/24/5f1b3bdffd70275f6661c76461e25f024d5a38a46f04aaca912426a2b1d3/urllib3-2.6.3.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/urllib3-2.6.3"
+
+BDEPEND="
+	dev-pypi/hatch-vcs[${PYTHON_USEDEP}]
+	dev-pypi/hatchling[${PYTHON_USEDEP}]
+	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
+"

@@ -3,8 +3,7 @@
 inherit cmake distutils-r1 flag-o-matic
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
-RDEPEND+="
-"
+RDEPEND=""
 # lockstep-pypi-deps: end
 DISTUTILS_EXT=1
 

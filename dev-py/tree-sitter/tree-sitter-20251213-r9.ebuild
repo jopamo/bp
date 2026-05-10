@@ -7,8 +7,7 @@ PYTHON_COMPAT=( python3_{10..13} )
 inherit distutils-r1 flag-o-matic
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
-RDEPEND+="
-"
+RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Python bindings to the Tree-sitter parsing library"
 HOMEPAGE="https://github.com/tree-sitter/py-tree-sitter/"

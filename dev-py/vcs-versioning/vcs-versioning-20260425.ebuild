@@ -6,7 +6,9 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	dev-py/vcs-versioning
 	dev-pypi/packaging
+	dev-pypi/setuptools
 "
 # lockstep-pypi-deps: end
 DESCRIPTION="Core vcs metadata/versioning library used by setuptools-scm"

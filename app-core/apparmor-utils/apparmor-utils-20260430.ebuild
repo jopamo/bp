@@ -5,10 +5,8 @@ PYTHON_COMPAT=( python3_{11..13} )
 inherit distutils-r1 toolchain-funcs desktop qa-policy
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
-RDEPEND+="
-"
+RDEPEND=""
 # lockstep-pypi-deps: end
-
 DESCRIPTION="Additional userspace utils to assist with AppArmor profile management"
 HOMEPAGE="https://gitlab.com/apparmor/apparmor/wikis/home"
 SNAPSHOT=7ef79ae3edaa323e33f4bb057f5daee437cf4bac

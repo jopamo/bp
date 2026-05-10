@@ -6,8 +6,7 @@ DISTUTILS_OPTIONAL=1
 inherit cmake distutils-r1 qa-policy
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
-RDEPEND+="
-"
+RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="CPU emulator framework"
 HOMEPAGE="https://github.com/unicorn-engine/unicorn"

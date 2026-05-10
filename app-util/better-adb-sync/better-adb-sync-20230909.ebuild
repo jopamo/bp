@@ -3,10 +3,8 @@
 inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
-RDEPEND+="
-"
+RDEPEND=""
 # lockstep-pypi-deps: end
-
 DISTUTILS_USE_PEP517=setuptools
 
 DESCRIPTION="Synchronize files between a PC and an Android device using ADB"

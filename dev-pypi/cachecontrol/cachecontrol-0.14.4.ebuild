@@ -26,5 +26,5 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 
 BDEPEND="
-	dev-py/uv-build[${PYTHON_USEDEP}]
+	dev-pypi/uv-build[${PYTHON_USEDEP}]
 "

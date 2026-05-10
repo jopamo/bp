@@ -343,7 +343,7 @@ _distutils_set_globals() {
 				;;
 			uv-build)
 				bdep+='
-					dev-py/uv-build[${PYTHON_USEDEP}]
+					dev-pypi/uv-build[${PYTHON_USEDEP}]
 				'
 				;;
 			*)
@@ -934,7 +934,7 @@ _distutils-r1_print_package_versions() {
 			uv-build)
 				packages+=(
 					dev-py/uv
-					dev-py/uv-build
+					dev-pypi/uv-build
 				)
 				;;
 		esac

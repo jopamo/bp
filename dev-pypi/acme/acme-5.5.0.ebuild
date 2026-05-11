@@ -20,7 +20,7 @@ S="${WORKDIR}/acme-5.5.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-pypi/cryptography
+	app-crypto/cryptography
 	dev-pypi/josepy
 	dev-pypi/pyopenssl
 	dev-pypi/pyrfc3339

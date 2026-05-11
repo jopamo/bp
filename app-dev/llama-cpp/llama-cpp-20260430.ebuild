@@ -16,7 +16,7 @@ IUSE="cuda systemd"
 
 DEPEND="
 	cuda? ( bin/nvidia-cuda )
-	lib-net/openssl
+	virtual/ssl
 	systemd? ( app-core/systemd )
 "
 RDEPEND="${DEPEND}"

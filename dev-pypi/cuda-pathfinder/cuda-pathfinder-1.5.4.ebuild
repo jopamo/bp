@@ -10,16 +10,9 @@ DISTUTILS_USE_PEP517="setuptools"
 inherit distutils-r1
 
 DESCRIPTION="Pathfinder for CUDA components"
-HOMEPAGE="https://github.com/NVIDIA/cuda-python"
-LICENSE="Apache-2.0"
+HOMEPAGE="https://pypi.org/project/cuda-pathfinder/"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://github.com/NVIDIA/cuda-python/archive/refs/tags/cuda-pathfinder-v1.5.4.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/cuda-python-cuda-pathfinder-v1.5.4/cuda_pathfinder"
-
-BDEPEND="
-	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
-	dev-pypi/setuptools[${PYTHON_USEDEP}]
-	dev-pypi/wheel[${PYTHON_USEDEP}]
-"
+SRC_URI="https://files.pythonhosted.org/packages/11/d0/c177e29701cf1d3008d7d2b16b5fc626592ce13bd535f8795c5f57187e0e/cuda_pathfinder-1.5.4-py3-none-any.whl -> ${P}.whl"

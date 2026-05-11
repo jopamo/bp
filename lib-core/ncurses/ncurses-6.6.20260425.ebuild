@@ -13,7 +13,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs"
+IUSE="+static-libs"
 
 src_prepare() {
 	default

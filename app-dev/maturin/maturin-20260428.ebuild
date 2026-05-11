@@ -498,11 +498,6 @@ KEYWORDS="amd64 arm64"
 
 RESTRICT="test network-sandbox"
 
-BDEPEND="
-	virtual/rust
-	dev-py/setuptools-rust
-"
-
 QA_FLAGS_IGNORED="usr/bin/maturin"
 
 src_prepare() {

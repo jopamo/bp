@@ -1,0 +1,38 @@
+diff --git a/src/pip/_internal/cli/main_parser.py b/src/pip/_internal/cli/main_parser.py
+index 5ade356b9..d07dfeab8 100644
+--- a/src/pip/_internal/cli/main_parser.py
++++ b/src/pip/_internal/cli/main_parser.py
+@@ -80,6 +80,11 @@ def parse_command(args: List[str]) -> Tuple[str, List[str]]:
+ 
+     # --python
+     if general_options.python and "_PIP_RUNNING_IN_SUBPROCESS" not in os.environ:
++        raise CommandError(
++            "--python option is not supported on Gentoo, as it requires bundled "
++            "dependencies that have been removed to improve security"
++        )
++
+         # Re-invoke pip using the specified Python interpreter
+         interpreter = identify_python_interpreter(general_options.python)
+         if interpreter is None:
+diff --git a/src/pip/_internal/commands/debug.py b/src/pip/_internal/commands/debug.py
+index 567ca967e..427bfcf04 100644
+--- a/src/pip/_internal/commands/debug.py
++++ b/src/pip/_internal/commands/debug.py
+@@ -6,7 +6,6 @@ from optparse import Values
+ from types import ModuleType
+ from typing import Any, Dict, List, Optional
+ 
+-import pip._vendor
+ from pip._vendor.certifi import where
+ from pip._vendor.packaging.version import parse as parse_version
+ 
+@@ -192,9 +191,7 @@ class DebugCommand(Command):
+         show_value("REQUESTS_CA_BUNDLE", os.environ.get("REQUESTS_CA_BUNDLE"))
+         show_value("CURL_CA_BUNDLE", os.environ.get("CURL_CA_BUNDLE"))
+         show_value("pip._vendor.certifi.where()", where())
+-        show_value("pip._vendor.DEBUNDLED", pip._vendor.DEBUNDLED)
+-
+-        show_vendor_versions()
++        show_value("pip._vendor.DEBUNDLED", True)
+ 
+         show_tags(options)

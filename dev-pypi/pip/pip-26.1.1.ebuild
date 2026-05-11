@@ -45,7 +45,7 @@ BDEPEND="
 "
 
 python_prepare_all() {
-	eapply "${FILESDIR}"/pip-25.0.1-unbundle.patch
+	eapply "${FILESDIR}"/pip-26.1.1-unbundle.patch
 
 	rm -r src/pip/_vendor || die
 	find -name '*.py' -exec sed -i \

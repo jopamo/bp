@@ -4,7 +4,6 @@
 CARGO_DEPS="
 "
 # lockstep-cargo-deps: end
-
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{10..13} pypy3 )
 

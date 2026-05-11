@@ -28,5 +28,5 @@ RDEPEND+="
 
 BDEPEND="
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
-	dev-pypi/vcs-versioning[${PYTHON_USEDEP}]
+	dev-py/vcs-versioning[${PYTHON_USEDEP}]
 "

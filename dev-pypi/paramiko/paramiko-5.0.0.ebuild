@@ -22,7 +22,7 @@ S="${WORKDIR}/paramiko-5.0.0"
 RDEPEND+="
 	dev-py/bcrypt
 	dev-py/pynacl
-	dev-pypi/cryptography
+	app-crypto/cryptography
 	dev-pypi/invoke
 "
 # lockstep-pypi-deps: end

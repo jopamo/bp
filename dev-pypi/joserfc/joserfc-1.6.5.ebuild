@@ -20,7 +20,7 @@ S="${WORKDIR}/joserfc-1.6.5"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-pypi/cryptography
+	app-crypto/cryptography
 "
 # lockstep-pypi-deps: end
 

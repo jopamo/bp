@@ -48,9 +48,9 @@ python_prepare_all() {
 	eapply "${FILESDIR}"/pip-26.1.1-unbundle.patch
 
 	rm -r src/pip/_vendor || die
-	find -name '*.py' -exec sed -i \
-		-e 's:from pip\\._vendor import:import:g' \
-		-e 's:from pip\\._vendor\\.:from :g' \
+	find "${S}" -name '*.py' -exec sed -i \
+		-e 's:from pip\._vendor import:import:g' \
+		-e 's:from pip\._vendor\.:from :g' \
 		{} + || die
 	sed -i \
 		-e '/src\/pip\/_vendor\/.*COPYING/d' \

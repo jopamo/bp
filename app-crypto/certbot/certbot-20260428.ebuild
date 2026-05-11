@@ -6,10 +6,10 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	app-crypto/cryptography
 	dev-pypi/acme
 	dev-pypi/configargparse
 	dev-pypi/configobj
-	dev-pypi/cryptography
 	dev-pypi/distro
 	dev-pypi/josepy
 	dev-pypi/parsedatetime

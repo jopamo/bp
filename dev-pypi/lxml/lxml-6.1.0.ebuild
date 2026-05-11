@@ -19,6 +19,6 @@ SRC_URI="https://files.pythonhosted.org/packages/28/30/9abc9e34c657c33834eaf6cd0
 S="${WORKDIR}/lxml-6.1.0"
 
 BDEPEND="
-	dev-pypi/cython[${PYTHON_USEDEP}]
+	dev-py/cython[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

@@ -28,7 +28,7 @@ RDEPEND+="
 
 BDEPEND="
 	dev-pypi/cffi[${PYTHON_USEDEP}]
-	dev-pypi/cython[${PYTHON_USEDEP}]
+	dev-py/cython[${PYTHON_USEDEP}]
 	dev-pypi/greenlet[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

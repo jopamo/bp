@@ -19,6 +19,6 @@ SRC_URI="https://files.pythonhosted.org/packages/05/8e/961c0007c59b8dd7729d542c6
 S="${WORKDIR}/pyyaml-6.0.3"
 
 BDEPEND="
-	dev-pypi/cython[${PYTHON_USEDEP}]
+	dev-py/cython[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

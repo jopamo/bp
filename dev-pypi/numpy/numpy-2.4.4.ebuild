@@ -19,6 +19,6 @@ SRC_URI="https://files.pythonhosted.org/packages/d7/9f/b8cef5bffa569759033adda94
 S="${WORKDIR}/numpy-2.4.4"
 
 BDEPEND="
-	dev-pypi/cython[${PYTHON_USEDEP}]
+	dev-py/cython[${PYTHON_USEDEP}]
 	dev-pypi/meson-python[${PYTHON_USEDEP}]
 "

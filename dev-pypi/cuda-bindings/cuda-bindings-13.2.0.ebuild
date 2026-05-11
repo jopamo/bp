@@ -10,23 +10,15 @@ DISTUTILS_USE_PEP517="setuptools"
 inherit distutils-r1
 
 DESCRIPTION="Python bindings for CUDA"
-HOMEPAGE="https://github.com/NVIDIA/cuda-python"
-LICENSE="LicenseRef-NVIDIA-SOFTWARE-LICENSE"
+HOMEPAGE="https://pypi.org/project/cuda-bindings/"
+LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://github.com/NVIDIA/cuda-python/archive/refs/tags/v13.2.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/cuda-python-13.2.0/cuda_bindings"
+SRC_URI="https://files.pythonhosted.org/packages/1a/fe/7351d7e586a8b4c9f89731bfe4cf0148223e8f9903ff09571f78b3fb0682/cuda_bindings-13.2.0-cp310-cp310-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl -> ${P}.whl"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/cuda-pathfinder
 "
 # lockstep-pypi-deps: end
-
-BDEPEND="
-	dev-pypi/cython[${PYTHON_USEDEP}]
-	dev-pypi/pyclibrary[${PYTHON_USEDEP}]
-	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
-	dev-pypi/setuptools[${PYTHON_USEDEP}]
-"

@@ -7,7 +7,7 @@ inherit distutils-r1
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	app-crypto/cryptography
-	dev-pypi/acme
+	app-crypto/acme
 	dev-pypi/configargparse
 	dev-pypi/configobj
 	dev-pypi/distro

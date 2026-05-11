@@ -27,5 +27,5 @@ RDEPEND+="
 
 BDEPEND="
 	dev-pypi/flit-core[${PYTHON_USEDEP}]
-	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
+	dev-py/setuptools-scm[${PYTHON_USEDEP}]
 "

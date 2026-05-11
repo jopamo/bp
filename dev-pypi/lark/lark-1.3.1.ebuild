@@ -19,6 +19,6 @@ SRC_URI="https://files.pythonhosted.org/packages/da/34/28fff3ab31ccff1fd4f6c7c7b
 S="${WORKDIR}/lark-1.3.1"
 
 BDEPEND="
-	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
+	dev-py/setuptools-scm[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

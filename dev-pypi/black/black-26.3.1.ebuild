@@ -34,6 +34,8 @@ BDEPEND="
 "
 
 python_prepare_all() {
+	python_setup "${DISTUTILS_ALL_SUBPHASE_IMPLS[@]}"
+
 	"${EPYTHON}" - <<-'PY' || die "failed to rewrite pyproject.toml for a static hatchling build"
 	import os
 	from pathlib import Path

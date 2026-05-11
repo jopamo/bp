@@ -52,7 +52,10 @@ python_prepare_all() {
 		-e 's:from pip\\._vendor import:import:g' \
 		-e 's:from pip\\._vendor\\.:from :g' \
 		{} + || die
-	sed -i -e '/_vendor.*\\(COPYING\\|LICENSE\\)/d' pyproject.toml || die
+	sed -i \
+		-e '/src\/pip\/_vendor\/.*COPYING/d' \
+		-e '/src\/pip\/_vendor\/.*LICENSE/d' \
+		pyproject.toml || die "failed to drop vendored license globs from pyproject.toml"
 
 	distutils-r1_python_prepare_all
 }

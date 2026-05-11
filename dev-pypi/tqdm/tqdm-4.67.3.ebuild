@@ -19,6 +19,6 @@ SRC_URI="https://files.pythonhosted.org/packages/09/a9/6ba95a270c6f1fbcd8dac2283
 S="${WORKDIR}/tqdm-4.67.3"
 
 BDEPEND="
-	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
+	dev-py/setuptools-scm[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

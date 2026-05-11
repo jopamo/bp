@@ -19,7 +19,7 @@ SRC_URI="https://files.pythonhosted.org/packages/0f/4c/751061ffa58615a32c31b2d82
 S="${WORKDIR}/httpx_sse-0.4.3"
 
 BDEPEND="
-	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
+	dev-py/setuptools-scm[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 	dev-pypi/wheel[${PYTHON_USEDEP}]
 "

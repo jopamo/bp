@@ -847,7 +847,7 @@ _distutils-r1_print_package_versions() {
 	if [[ ${DISTUTILS_USE_PEP517} ]]; then
 		packages+=(
 			dev-py/gpep517
-			dev-pypi/installer
+			dev-py/installer
 		)
 		if [[ ${DISTUTILS_EXT} ]]; then
 			packages+=(

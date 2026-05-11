@@ -29,7 +29,7 @@ DEPEND+="
     xgui-lib/libvdpau
 "
 RDEPEND+="
-    lib-net/openssl
+    virtual/ssl
     X? (
         lib-core/zlib
         xgui-lib/libdrm

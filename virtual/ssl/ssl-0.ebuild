@@ -4,9 +4,9 @@ DESCRIPTION="Openssl implementation virtual"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="libressl static-libs"
+IUSE="+libressl static-libs"
 
-RDEPEND="libressl? ( lib-net/libressl[static-libs?]
+RDEPEND="libressl? ( app-crypto/libressl2[static-libs?]
 			!lib-net/openssl )
 	!libressl? ( lib-net/openssl[static-libs?]
-			!lib-net/libressl )"
+			!app-crypto/libressl2 )"

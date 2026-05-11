@@ -56,9 +56,9 @@ src_configure() {
 		--with-wtmpdb
 		--without-audit
 		--without-rpath
+		--without-ssl-engine
 		$(use_with pam)
 		$(use_with ssl openssl)
-		$(use_with ssl ssl-engine)
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

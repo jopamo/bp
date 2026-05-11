@@ -1,7 +1,15 @@
 diff --git a/src/pip/_internal/cli/main_parser.py b/src/pip/_internal/cli/main_parser.py
-index 5ade356b9..d07dfeab8 100644
 --- a/src/pip/_internal/cli/main_parser.py
 +++ b/src/pip/_internal/cli/main_parser.py
+@@ -6,7 +6,7 @@ import subprocess
+ import subprocess
+ import sys
+ 
+-from pip._vendor.rich.markup import escape
++from rich.markup import escape
+ 
+ from pip._internal.build_env import get_runnable_pip
+ from pip._internal.cli import cmdoptions
 @@ -80,6 +80,11 @@ def parse_command(args: List[str]) -> Tuple[str, List[str]]:
  
      # --python
@@ -15,7 +23,6 @@ index 5ade356b9..d07dfeab8 100644
          interpreter = identify_python_interpreter(general_options.python)
          if interpreter is None:
 diff --git a/src/pip/_internal/commands/debug.py b/src/pip/_internal/commands/debug.py
-index 567ca967e..427bfcf04 100644
 --- a/src/pip/_internal/commands/debug.py
 +++ b/src/pip/_internal/commands/debug.py
 @@ -6,7 +6,6 @@ from optparse import Values

@@ -33,32 +33,48 @@ BDEPEND="
 	dev-pypi/hatchling[${PYTHON_USEDEP}]
 "
 
-src_prepare() {
-	"${EPYTHON}" - <<-'PY' || die
+python_prepare_all() {
+	"${EPYTHON}" - <<-'PY' || die "failed to rewrite pyproject.toml for a static hatchling build"
 	import os
 	from pathlib import Path
 
 	path = Path("pyproject.toml")
 	text = path.read_text(encoding="utf-8")
 
+	old_requires = 'requires = ["hatch-fancy-pypi-readme", "hatch-vcs>=0.3.0", "hatchling>=1.27.0"]'
+	if old_requires not in text:
+	    raise SystemExit("missing expected hatch build requirements in pyproject.toml")
 	text = text.replace(
-	    'requires = ["hatch-fancy-pypi-readme", "hatch-vcs>=0.3.0", "hatchling>=1.27.0"]',
+	    old_requires,
 	    'requires = ["hatchling>=1.27.0"]',
+	    1,
 	)
-	text = text.replace('dynamic = ["readme", "version"]', f'readme = "README.md"\nversion = "{os.environ["PV"]}"')
+
+	old_dynamic = 'dynamic = ["readme", "version"]'
+	if old_dynamic not in text:
+	    raise SystemExit("missing expected dynamic readme/version declaration in pyproject.toml")
+	text = text.replace(
+	    old_dynamic,
+	    f'readme = "README.md"\nversion = "{os.environ["PV"]}"',
+	    1,
+	)
 
 	def drop_section(payload: str, header: str) -> str:
 	    lines = payload.splitlines()
 	    result = []
 	    skip = False
+	    found = False
 	    for line in lines:
 	        if line.strip() == header:
 	            skip = True
+	            found = True
 	            continue
 	        if skip and line.startswith("["):
 	            skip = False
 	        if not skip:
 	            result.append(line)
+	    if not found:
+	        raise SystemExit(f"missing expected section: {header}")
 	    return "\n".join(result) + "\n"
 
 	for header in (
@@ -71,5 +87,5 @@ src_prepare() {
 	path.write_text(text, encoding="utf-8")
 	PY
 
-	distutils-r1_src_prepare
+	distutils-r1_python_prepare_all
 }

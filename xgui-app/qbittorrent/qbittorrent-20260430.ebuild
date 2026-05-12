@@ -29,6 +29,20 @@ pkg_setup() {
 	use createuser && enewuser qbittorrent -1 /usr/bin/nologin "/var/lib/qbittorrent" qbittorrent
 }
 
+src_prepare() {
+	grep -qE '^set\(minOpenSSLVersion[[:space:]]+3\.0\.2\)$' CMakeLists.txt \
+		|| die "qBittorrent OpenSSL minimum changed"
+
+	sed -i -E \
+		's/^set\(minOpenSSLVersion[[:space:]]+3\.0\.2\)$/set(minOpenSSLVersion 1.1.1)/' \
+		CMakeLists.txt || die
+
+	grep -qE '^set\(minOpenSSLVersion[[:space:]]+1\.1\.1\)$' CMakeLists.txt \
+		|| die "failed to lower qBittorrent OpenSSL minimum"
+
+	cmake_src_prepare
+}
+
 src_configure() {
 	replace-flags "-D_FORTIFY_SOURCE=3" "-D_FORTIFY_SOURCE=2"
 	filter-flags -flto*

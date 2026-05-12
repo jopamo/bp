@@ -128,6 +128,7 @@ src_configure() {
 		--disable-{binutils,etc,gas,gold,gprof,gprofng,ld}
 		--enable-64-bit-bfd
 		--enable-tui
+		--disable-sim
 		--with-separate-debug-dir="${EPREFIX}"/usr/lib/debug
 		--with-system-readline
 		--with-system-zlib

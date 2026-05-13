@@ -10,7 +10,6 @@
 *app-core/file
 *app-core/findutils
 *app-core/gawk
-*app-core/grep
 *app-core/git
 *app-core/kbd
 *app-core/layout

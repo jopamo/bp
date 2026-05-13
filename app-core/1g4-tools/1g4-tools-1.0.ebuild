@@ -56,7 +56,6 @@ app-net/socat
 app-net/tcpdump
 app-server/lighttpd
 app-util/lshw
-app-var/hdparm
 app-var/perl-cleaner
 dev-pypi/black
 dev-pypi/httpx

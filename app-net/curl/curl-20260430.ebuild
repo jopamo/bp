@@ -3,13 +3,13 @@
 inherit flag-o-matic autotools qa-policy
 
 DESCRIPTION="A command line tool and library for transferring data with URL syntax"
-HOMEPAGE="https://curl.haxx.se/"
+HOMEPAGE="https://curl.se/"
 
 if [[ ${PV} == *9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/curl/curl.git"
 else
-SNAPSHOT=91232fc2a23eb01e55fdbce17a412a0efcd414d3
+	SNAPSHOT=91232fc2a23eb01e55fdbce17a412a0efcd414d3
 	SRC_URI="https://github.com/curl/curl/archive/${SNAPSHOT}.tar.gz -> curl-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/curl-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"
@@ -18,7 +18,7 @@ fi
 LICENSE="MIT"
 SLOT="0"
 
-IUSE="adns brotli ipv6 ldap libpsl mbedtls ssh ssl static-libs test nghttp2 zlib zstd"
+IUSE="+cares ipv6 ldap +nghttp2 ssh static-libs test"
 
 QA_CONFIG_IMPL_DECL_SKIP=(
 	closesocket
@@ -27,20 +27,21 @@ QA_CONFIG_IMPL_DECL_SKIP=(
 	IoctlSocket
 )
 
+RDEPEND="
+	virtual/ssl
+	lib-core/zlib
+	cares? ( lib-net/c-ares[static-libs?] )
+	ldap? ( app-net/openldap )
+	nghttp2? ( lib-net/nghttp2[static-libs?] )
+	ssh? ( lib-net/libssh2[static-libs?] )
+"
+
 DEPEND="
-		lib-core/zlib
-		adns? ( lib-net/c-ares[static-libs?] )
-		brotli? ( app-compression/brotli )
-		ldap? ( app-net/openldap )
-		libpsl? ( lib-net/libpsl )
-		mbedtls? ( lib-net/mbedtls )
-		nghttp2? ( lib-net/nghttp2[static-libs?] )
-		ssh? ( lib-net/libssh[static-libs?] )
-		test? (
-			app-core/diffutils
-			app-lang/perl )
-		zlib? ( lib-core/zlib )
-		zstd? ( app-compression/zstd )
+	${RDEPEND}
+	test? (
+		app-core/diffutils
+		app-lang/perl
+	)
 "
 
 src_prepare() {
@@ -49,49 +50,41 @@ src_prepare() {
 	eautoreconf
 
 	filter-flags -Wl,-z,defs
-
-	#scripts/mk-ca-bundle.pl -k || die
 }
 
-	src_configure() {
-		local myconf=(
-			$(use_enable adns ares)
-			$(use_enable ipv6)
+src_configure() {
+	local myconf=(
+		--with-openssl
+		--with-zlib
+		--without-amissl
+		--without-brotli
+		--without-gnutls
+		--without-libpsl
+		--without-libssh
+		--without-mbedtls
+		--without-rustls
+		--without-schannel
+		--without-wolfssl
+		--without-zstd
+		--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt
+		--with-ca-path=/etc/ssl/certs
+		$(use_enable cares ares)
+		$(use_enable ipv6)
 		$(use_enable ldap ldaps)
 		$(use_enable ldap)
 		$(use_enable static-libs static)
-		$(use_with brotli)
-		$(use_with libpsl)
-		$(use_with mbedtls)
 		$(use_with nghttp2)
-		$(use_with ssh libssh)
-		$(use_with ssl)
-			$(use_with zlib)
-			$(use_with zstd)
-			$(usex adns --disable-threaded-resolver --enable-threaded-resolver)
-			--enable-versioned-symbols
-			--with-zlib
-		)
-		ECONF_SOURCE=${S} econf "${myconf[@]}"
+		$(use_with ssh libssh2)
+		$(usex cares --disable-threaded-resolver --enable-threaded-resolver)
+		--enable-versioned-symbols
+	)
+
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
 src_install() {
 	default
-
-	#insinto /etc/ssl/certs/
-	#newins ca-bundle.crt cacert.pem
-	#dosym -r /etc/ssl/certs/cacert.pem /etc/ssl/certs/ca-bundle.crt
-	#dosym -r /etc/ssl/certs/cacert.pem /etc/ssl/certs/ca-certificates.crt
-
-	#cat > "${T}"/99curl <<- EOF || die
-	#	SSL_CERT_FILE="/etc/ssl/certs/cacert.pem"
-	#	CURL_CA_BUNDLE="/etc/ssl/certs/cacert.pem"
-	#	GIT_SSL_CAINFO="/etc/ssl/certs/cacert.pem"
-	#	REQUESTS_CA_BUNDLE="/etc/ssl/certs/cacert.pem"
-	#EOF
-
-	#doenvd "${T}"/99curl
-
 	qa-policy-install
-	dobin scripts/mk-ca-bundle.pl
+
+	dodoc scripts/mk-ca-bundle.pl
 }

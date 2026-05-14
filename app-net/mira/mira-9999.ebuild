@@ -25,7 +25,7 @@ IUSE="debug ipv6 +static test http2 zlib zstd"
 LIB_DEPEND="
 	zlib? ( lib-core/zlib[static-libs(+)] )
 	zstd? ( app-compression/zstd[static-libs(+)] )
-	http2? ( lib-dev/nghttp2[static-libs(+)] )
+	http2? ( lib-net/nghttp2[static-libs(+)] )
 "
 
 DEPEND="

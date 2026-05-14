@@ -23,7 +23,7 @@ DEPEND="
 	lib-dev/json-c
 	lib-net/userspace-rcu
 	virtual/ssl
-	doh? ( lib-dev/nghttp2 )
+	doh? ( lib-net/nghttp2 )
 	geoip? ( lib-dev/maxminddb )
 "
 BDEPEND="app-dev/pkgconf"

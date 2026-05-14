@@ -13,6 +13,7 @@ RDEPEND="
 !elibc_musl? ( app-lang/go )
 app-build/gdb
 app-build/llvm
+app-core/bx
 app-core/lsof
 app-core/tmux
 app-crypto/certbot
@@ -26,6 +27,7 @@ app-dev/gcovr
 app-dev/intltool
 app-dev/jq
 app-dev/ropgadget
+app-dev/strace
 app-dev/valgrind
 app-emu/qemu
 app-emu/radare2
@@ -42,6 +44,7 @@ app-fs/sshfs
 app-fs/testdisk
 app-kernel/dracut
 app-kernel/kernel-hardening-checker
+app-kernel/perf
 app-net/aircrack-ng
 app-net/bind-tools
 app-net/dropbear
@@ -62,6 +65,5 @@ dev-pypi/httpx
 dev-pypi/paramiko
 dev-pypi/pexpect
 dev-pypi/pip
-app-core/bx
 virtual/rust
 "

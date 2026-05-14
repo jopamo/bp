@@ -24,7 +24,7 @@ IUSE="debug http2 ipv6 +static test zstd"
 
 RDEPEND="
 	static? (
-		app-net/curl[-shared,static-libs]
+		app-net/curl[static-libs(+)]
 		lib-core/zlib[static-libs(+)]
 		lib-net/c-ares[static-libs(+)]
 	)

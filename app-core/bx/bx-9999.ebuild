@@ -1,6 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit meson
+EAPI=8
+
+inherit meson qa-policy
 
 DESCRIPTION="multi-tool"
 HOMEPAGE="https://gitlab.com/pjo/bx"
@@ -18,4 +20,27 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="app-net/mira"
+IUSE="+static test"
+
+RDEPEND="
+	static? ( app-net/mira[static(+)] )
+	!static? ( app-net/mira[-static] )
+"
+DEPEND="${RDEPEND}"
+
+src_configure() {
+	qa-policy-configure
+
+	local emesonargs=(
+		$(meson_use test tests)
+		-Dmira_embed=enabled
+		-Dstatic_binary=$(usex static enabled disabled)
+	)
+
+	meson_src_configure
+}
+
+src_install() {
+	meson_src_install
+	qa-policy-install
+}

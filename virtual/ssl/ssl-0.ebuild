@@ -4,7 +4,7 @@ DESCRIPTION="LibreSSL2 implementation virtual"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="shared +static-libs"
+IUSE="+shared +static-libs"
 REQUIRED_USE="|| ( shared static-libs )"
 
 RDEPEND="app-crypto/libressl2[shared?,static-libs?]"

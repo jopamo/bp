@@ -18,7 +18,7 @@ fi
 LICENSE="MIT"
 SLOT="0"
 
-IUSE="+cares ipv6 ldap +nghttp2 shared ssh +static-libs test"
+IUSE="+cares ipv6 ldap +nghttp2 +shared ssh +static-libs test"
 REQUIRED_USE="
 	|| ( shared static-libs )
 	ldap? ( shared )

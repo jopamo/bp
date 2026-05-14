@@ -12,7 +12,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="shared +static-libs"
+IUSE="+shared +static-libs"
 REQUIRED_USE="|| ( shared static-libs )"
 
 src_configure() {

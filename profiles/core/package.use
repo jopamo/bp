@@ -28,7 +28,10 @@ app-lang/python-exec native-symlinks
 dev-pypi/httpx cli
 app-kernel/linux-firmware amd-ucode i915
 app-net/chrony cmdmon ntp phc refclock rtc
-app-net/curl adns static-libs
+app-crypto/libressl2 static-libs -shared
+app-core/bx static
+app-net/mira static
+app-net/curl cares static-libs -shared
 app-net/iputils arping ping tracepath
 app-net/nmap libssh2 nping nselib os-db scripts ncat
 app-server/nodejs icu node-snapshot

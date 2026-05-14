@@ -18,7 +18,11 @@ fi
 LICENSE="MIT"
 SLOT="0"
 
-IUSE="+cares ipv6 ldap +nghttp2 ssh static-libs test"
+IUSE="+cares ipv6 ldap +nghttp2 shared ssh +static-libs test"
+REQUIRED_USE="
+	|| ( shared static-libs )
+	ldap? ( shared )
+"
 
 QA_CONFIG_IMPL_DECL_SKIP=(
 	closesocket
@@ -28,12 +32,22 @@ QA_CONFIG_IMPL_DECL_SKIP=(
 )
 
 RDEPEND="
-	virtual/ssl
-	lib-core/zlib
-	cares? ( lib-net/c-ares[static-libs?] )
+	virtual/ssl[shared?,static-libs?]
+	static-libs? ( lib-core/zlib[static-libs(+)] )
+	!static-libs? ( lib-core/zlib )
+	cares? (
+		static-libs? ( lib-net/c-ares[static-libs(+)] )
+		!static-libs? ( lib-net/c-ares )
+	)
 	ldap? ( app-net/openldap )
-	nghttp2? ( lib-net/nghttp2[static-libs?] )
-	ssh? ( lib-net/libssh2[static-libs?] )
+	nghttp2? (
+		static-libs? ( lib-net/nghttp2[static-libs(+)] )
+		!static-libs? ( lib-net/nghttp2 )
+	)
+	ssh? (
+		static-libs? ( lib-misc/libssh2[static-libs(+)] )
+		!static-libs? ( lib-misc/libssh2 )
+	)
 "
 
 DEPEND="
@@ -54,6 +68,8 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
+		$(use_enable shared shared)
+		$(use_enable static-libs static)
 		--with-openssl
 		--with-zlib
 		--without-amissl
@@ -72,7 +88,6 @@ src_configure() {
 		$(use_enable ipv6)
 		$(use_enable ldap ldaps)
 		$(use_enable ldap)
-		$(use_enable static-libs static)
 		$(use_with nghttp2)
 		$(use_with ssh libssh2)
 		$(usex cares --disable-threaded-resolver --enable-threaded-resolver)

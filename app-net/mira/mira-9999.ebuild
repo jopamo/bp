@@ -20,34 +20,44 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug ipv6 +static test http2 zlib zstd"
+IUSE="debug http2 ipv6 +static test zstd"
 
-LIB_DEPEND="
-	zlib? ( lib-core/zlib[static-libs(+)] )
-	zstd? ( app-compression/zstd[static-libs(+)] )
-	http2? ( lib-net/nghttp2[static-libs(+)] )
+RDEPEND="
+	static? (
+		app-net/curl[-shared,static-libs]
+		lib-core/zlib[static-libs(+)]
+		lib-net/c-ares[static-libs(+)]
+	)
+	!static? (
+		app-net/curl[shared]
+		lib-core/zlib
+		lib-net/c-ares
+	)
+	ipv6? ( app-net/curl[ipv6] )
+	http2? (
+		app-net/curl[nghttp2]
+		static? ( lib-net/nghttp2[static-libs(+)] )
+		!static? ( lib-net/nghttp2 )
+	)
+	zstd? (
+		static? ( app-compression/zstd[static-libs(+)] )
+		!static? ( app-compression/zstd )
+	)
 "
 
 DEPEND="
-	app-net/curl
-	lib-net/c-ares
-	virtual/ssl
-
-	!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
-	static? ( ${LIB_DEPEND} )
-
+	${RDEPEND}
 	test? ( app-lang/python:3 )
 "
-RDEPEND="${DEPEND}"
 
 src_configure() {
 	qa-policy-configure
 
 	local emesonargs=(
 		$(meson_use debug debug)
+		$(meson_use http2 http2)
 		$(meson_use ipv6 ipv6)
 		$(meson_use test tests)
-		$(meson_use http2 http2)
 		$(meson_use zstd zstd)
 	)
 

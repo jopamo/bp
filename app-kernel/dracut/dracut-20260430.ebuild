@@ -38,18 +38,14 @@ DEPEND="${CDEPEND}
 	app-tex/docbook-xml-dtd
 	>=app-tex/docbook-xsl-stylesheets-1.75.2
 "
-BDEPEND="
-	virtual/rust
-"
 
 src_configure() {
-	export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER=clang
-
 	local myconf=(
 		--prefix="${EPREFIX}/usr"
 		--sysconfdir="${EPREFIX}/etc"
 		--systemdsystemunitdir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 		--disable-documentation
+		--disable-dracut-cpio
 	)
 
 	tc-export CC PKG_CONFIG

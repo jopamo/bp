@@ -19,7 +19,6 @@
 *app-core/shadow
 *app-core/ugs
 *app-core/util-linux
-*app-core/vim
 *app-crypto/blake3
 *app-core/bx
 *app-dev/patchelf

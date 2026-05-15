@@ -22,7 +22,6 @@ DEPEND="
 
 src_prepare() {
 	qa-policy-configure
-	use arm64 && filter-flags -flto*
 
 	default
 	eautoreconf
@@ -38,6 +37,7 @@ src_configure() {
     	--enable-fat
 		$(use_enable asm assembly)
 		$(use_enable static-libs static)
+		ABI=64
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

@@ -39,8 +39,10 @@ BDEPEND="
 
 distutils_enable_tests pytest
 
-src_prepare() {
-	"${EPYTHON}" - <<-PY || die
+python_prepare_all() {
+	python_setup "${DISTUTILS_ALL_SUBPHASE_IMPLS[@]}"
+
+	"${EPYTHON}" - <<-'PY' || die "failed to rewrite pyproject.toml for a static hatchling build"
 	import os
 	from pathlib import Path
 	import re
@@ -99,7 +101,7 @@ src_prepare() {
 	)
 	PY
 
-	distutils-r1_src_prepare
+	distutils-r1_python_prepare_all
 }
 
 python_test() {

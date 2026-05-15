@@ -37,6 +37,20 @@ go_arch() {
 	esac
 }
 
+go_prune_live_root() {
+	local live_root="${EROOT%/}/usr/lib/go"
+	local image_root="${ED%/}/usr/lib/go"
+	local rel
+
+	[[ -d ${live_root} && -d ${image_root} ]] || return 0
+
+	while IFS= read -r -d '' rel; do
+		rel=${rel#./}
+		[[ -e ${image_root}/${rel} || -L ${image_root}/${rel} ]] && continue
+		rm -rf "${live_root}/${rel}" || die "failed pruning stale Go path: ${live_root}/${rel}"
+	done < <(cd "${live_root}" && find . -mindepth 1 -depth -print0)
+}
+
 src_prepare() {
 	default
 	# app-build/gcc[go-bootstrap] installs a private GOROOT-like bootstrap tree
@@ -87,4 +101,8 @@ src_install() {
 		GOPATH=${EPREFIX}/usr/share/go
 	EOF
 	doenvd "${T}"/99go
+}
+
+pkg_preinst() {
+	go_prune_live_root
 }

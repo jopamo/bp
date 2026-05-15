@@ -39,69 +39,64 @@ BDEPEND="
 
 distutils_enable_tests pytest
 
-python_prepare_all() {
-	python_setup "${DISTUTILS_ALL_SUBPHASE_IMPLS[@]}"
-
-	"${EPYTHON}" - <<-'PY' || die "failed to rewrite pyproject.toml for a static hatchling build"
+_gcovr_write_static_pyproject() {
+	"${EPYTHON}" - <<-'PY' || die "failed to write a static pyproject.toml for hatchling"
 	import os
+	import textwrap
 	from pathlib import Path
-	import re
 
-	path = Path("pyproject.toml")
-	text = path.read_text(encoding="utf-8")
+	Path("pyproject.toml").write_text(
+	    textwrap.dedent(
+	        f"""\
+	        [build-system]
+	        requires = ["hatchling==1.27.0"]
+	        build-backend = "hatchling.build"
 
-	text, count = re.subn(
-	    r'requires = \[\s*(?P<hatchling>"hatchling[^"]*")\s*,\s*"hatch-vcs[^"]*"\s*,\s*"hatch-fancy-pypi-readme[^"]*"\s*,?\s*\]',
-	    r'requires = [\g<hatchling>]',
-	    text,
-	    count=1,
-	    flags=re.S,
+	        [project]
+	        name = "gcovr"
+	        version = "{os.environ["PV"]}"
+	        readme = "README.rst"
+	        license = "BSD-3-Clause"
+	        description = "Generate C/C++ code coverage reports with gcov"
+	        requires-python = ">=3.10"
+	        dependencies = [
+	            "jinja2",
+	            "lxml",
+	            "colorlog",
+	            "pygments>=2.13.0",
+	            "tomli >= 1.1.0 ; python_version < '3.11'",
+	        ]
+
+	        [project.scripts]
+	        gcovr = "gcovr.__main__:main"
+
+	        [tool.hatch.build.targets.wheel]
+	        packages = ["src/gcovr"]
+
+	        [tool.hatch.build.targets.sdist]
+	        include = ["src/gcovr/"]
+	        """
+	    ),
+	    encoding="utf-8",
 	)
-	if count != 1:
-	    raise SystemExit("failed to rewrite hatchling build requirements for an offline build")
-
-	text, count = re.subn(
-	    r'^dynamic = \["version", "readme"\]$',
-	    f'readme = "README.rst"\\nversion = "{os.environ["PV"]}"',
-	    text,
-	    count=1,
-	    flags=re.M,
-	)
-	if count != 1:
-	    raise SystemExit("failed to rewrite dynamic gcovr metadata for a static build")
-
-	def drop_section(payload: str, header: str) -> str:
-	    lines = payload.splitlines()
-	    result = []
-	    skip = False
-	    for line in lines:
-	        if line.strip() == header:
-	            skip = True
-	            continue
-	        if skip and line.startswith("["):
-	            skip = False
-	        if not skip:
-	            result.append(line)
-	    return "\\n".join(result) + "\\n"
-
-	for header in (
-	    "[tool.hatch.metadata.hooks.fancy-pypi-readme]",
-	    "[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]",
-	    "[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]",
-	    "[tool.hatch.version]",
-	    "[tool.hatch.version.raw-options]",
-	    "[tool.hatch.build.hooks.vcs]",
-	):
-	    text = drop_section(text, header)
-
-	path.write_text(text, encoding="utf-8")
 	Path("src/gcovr/version.py").write_text(
-	    f'__version__ = "{os.environ["PV"]}"\\n',
+	    f'__version__ = "{os.environ["PV"]}"\n',
 	    encoding="utf-8",
 	)
 	PY
+}
+
+python_prepare_all() {
+	python_setup "${DISTUTILS_ALL_SUBPHASE_IMPLS[@]}"
+
+	_gcovr_write_static_pyproject
 
 	distutils-r1_python_prepare_all
+}
+
+python_compile() {
+	_gcovr_write_static_pyproject
+	distutils-r1_python_compile
 }
 
 python_test() {

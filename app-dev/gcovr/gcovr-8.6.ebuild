@@ -1,8 +1,10 @@
 # Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-DISTUTILS_USE_PEP517=hatchling
-PYTHON_COMPAT=( python3_{10..12} )
+EAPI=8
+
+DISTUTILS_USE_PEP517="hatchling"
+PYTHON_COMPAT=( python3_{11..14} )
 
 inherit toolchain-funcs distutils-r1
 # lockstep-pypi-managed: true
@@ -27,9 +29,6 @@ RDEPEND="
 	dev-py/lxml[${PYTHON_USEDEP}]
 	dev-pypi/colorlog[${PYTHON_USEDEP}]
 	>=dev-pypi/pygments-2.13.0[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep '
-		dev-pypi/tomli[${PYTHON_USEDEP}]
-	' 3.10)
 "
 BDEPEND="
 	test? (
@@ -44,18 +43,30 @@ src_prepare() {
 	"${EPYTHON}" - <<-PY || die
 	import os
 	from pathlib import Path
+	import re
 
 	path = Path("pyproject.toml")
 	text = path.read_text(encoding="utf-8")
 
-	text = text.replace(
-	    'requires = [\n    "hatchling==1.27.0",\n    "hatch-vcs==0.5.0",\n    "hatch-fancy-pypi-readme==25.1.0",\n]',
-	    'requires = ["hatchling==1.27.0"]',
+	text, count = re.subn(
+	    r'requires = \[\s*(?P<hatchling>"hatchling[^"]*")\s*,\s*"hatch-vcs[^"]*"\s*,\s*"hatch-fancy-pypi-readme[^"]*"\s*,?\s*\]',
+	    r'requires = [\g<hatchling>]',
+	    text,
+	    count=1,
+	    flags=re.S,
 	)
-	text = text.replace(
-	    'dynamic = ["version", "readme"]',
+	if count != 1:
+	    raise SystemExit("failed to rewrite hatchling build requirements for an offline build")
+
+	text, count = re.subn(
+	    r'^dynamic = \["version", "readme"\]$',
 	    f'readme = "README.rst"\\nversion = "{os.environ["PV"]}"',
+	    text,
+	    count=1,
+	    flags=re.M,
 	)
+	if count != 1:
+	    raise SystemExit("failed to rewrite dynamic gcovr metadata for a static build")
 
 	def drop_section(payload: str, header: str) -> str:
 	    lines = payload.splitlines()

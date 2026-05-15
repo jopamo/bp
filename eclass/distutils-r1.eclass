@@ -1391,7 +1391,7 @@ distutils_pep517_install() {
 						"build.tool-args": ninjaopts,
 						"cmake.args": ";".join(sys.argv[1:]),
 						"cmake.build-type": "${CMAKE_BUILD_TYPE}",
-						"cmake.verbose": True,
+						"build.verbose": True,
 						"install.strip": False,
 					}))
 				EOF

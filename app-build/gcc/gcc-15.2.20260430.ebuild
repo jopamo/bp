@@ -192,6 +192,16 @@ src_install() {
 		doexe "${ED}/usr/bin/go"
 		doexe "${ED}/usr/bin/gofmt"
 
+		# Upstream gccgo bootstrap expects a GOROOT-like tree whose bin/go is
+		# the gccgo-backed go command. Keep the real binaries out of /usr/bin to
+		# avoid collisions with app-lang/go, but make /usr/lib/gccgo usable as
+		# GOROOT_BOOTSTRAP directly.
+		mkdir -p "${ED}"/usr/lib/gccgo/lib "${ED}"/usr/lib/gccgo/pkg "${ED}"/usr/lib/gccgo/src || die
+		dosym -r /usr/include /usr/lib/gccgo/include
+		dosym -r /usr/include /usr/lib/gccgo/pkg/include
+		dosym -r /usr/libexec /usr/lib/gccgo/libexec
+		dosym -r /usr/share /usr/lib/gccgo/share
+
 		cat > "${T}"/99gcc <<-EOF || die
 PATH=/usr/lib/gccgo/bin
 EOF

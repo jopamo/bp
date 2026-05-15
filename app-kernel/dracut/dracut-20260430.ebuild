@@ -1,12 +1,14 @@
 # Distributed under the terms of the GNU General Public License v2
 
+EAPI=8
+
 inherit linux-info toolchain-funcs
 
 DESCRIPTION="Generic initramfs generation tool"
 HOMEPAGE="https://dracut.wiki.kernel.org"
 SNAPSHOT=e1bf57a772198becf126aebdfd2240cebc49b2f3
 SRC_URI="https://github.com/dracut-ng/dracut-ng/archive/${SNAPSHOT}.tar.gz -> dracut-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/dracut-ng-${SNAPSHOT}"
+S="${WORKDIR}/dracut-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -35,6 +37,9 @@ DEPEND="${CDEPEND}
 	>=lib-core/libxslt-1.1.26
 	app-tex/docbook-xml-dtd
 	>=app-tex/docbook-xsl-stylesheets-1.75.2
+"
+BDEPEND="
+	virtual/rust
 "
 
 src_configure() {

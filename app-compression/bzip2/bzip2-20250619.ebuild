@@ -30,12 +30,21 @@ src_prepare() {
 	sed -i "s|gcc|${compiler}|g" Makefile-libbz2_so || die
 }
 
+bzip2_emake() {
+	emake \
+		CC="$(tc-getCC)" \
+		AR="$(tc-getAR)" \
+		RANLIB="$(tc-getRANLIB)" \
+		LDFLAGS="${LDFLAGS}" \
+		"$@"
+}
+
 src_compile() {
 	qa-policy-configure
-	use static-libs && emake
 
-	emake -f Makefile-libbz2_so
-	emake bzip2 bzip2recover
+	use static-libs && bzip2_emake libbz2.a
+	bzip2_emake -f Makefile-libbz2_so
+	bzip2_emake bzip2recover
 }
 
 src_install() {

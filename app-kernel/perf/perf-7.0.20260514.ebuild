@@ -87,6 +87,9 @@ src_compile() {
 		ARCH=${perf_arch}
 		WERROR=0
 		KBUILD_BUILD_TIMESTAMP="${perf_timestamp}"
+		# this snapshot's rust-backed test workload is broken and rust support
+		# only gates optional perf test workloads here, not the perf tool itself
+		NO_RUST=1
 		NO_AIO=1
 		NO_GTK2=1
 		NO_JVMTI=1
@@ -147,6 +150,8 @@ src_install() {
 		ARCH=${perf_arch}
 		WERROR=0
 		KBUILD_BUILD_TIMESTAMP="${perf_timestamp}"
+		# keep install in lockstep with compile feature selection
+		NO_RUST=1
 		NO_AIO=1
 		NO_GTK2=1
 		NO_JVMTI=1

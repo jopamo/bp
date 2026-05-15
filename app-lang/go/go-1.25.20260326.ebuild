@@ -23,7 +23,9 @@ QA_FLAGS_IGNORED='.*'
 RESTRICT="strip"
 
 go_arch() {
-	case "${CHOST}" in
+	local triple="${1:-${CHOST}}"
+
+	case "${triple}" in
 		*amd64*) echo amd64;;
 		*x86_64*) echo amd64;;
 		*arm64*) echo arm64;;
@@ -32,39 +34,30 @@ go_arch() {
 	esac
 }
 
-pkg_setup() {
-	export GOARCH="amd64"
-	export GOAMD64="v1"
-}
-
 src_prepare() {
 	default
-	export GOROOT_FINAL="/usr/lib/go"
-	export GOROOT_BOOTSTRAP="/usr/lib/go"
 }
 
 src_compile() {
-	export GOROOT_FINAL="${EPREFIX}/usr/lib/go"
-	export GOROOT="${PWD}"
-	export GOBIN="${GOROOT}/bin"
-	export GOHOSTARCH=$(go_arch ${CHOST})
+	export GOROOT_BOOTSTRAP="${BROOT%/}/usr/lib/go"
+	export GOHOSTARCH="$(go_arch "${CBUILD}")"
 	export GOHOSTOS=linux
-	export CC=$(tc-getBUILD_CC)
-	export GOARCH=$(go_arch)
+	export CC="$(tc-getBUILD_CC)"
+	export GOARCH="$(go_arch)"
 	export GOOS=linux
-	export CC_FOR_TARGET=$(tc-getCC)
-	export CXX_FOR_TARGET=$(tc-getCXX)
+	export CC_FOR_TARGET="$(tc-getCC)"
+	export CXX_FOR_TARGET="$(tc-getCXX)"
 	export GOCACHE="${T}/go-build"
 	export GOMODCACHE="${WORKDIR}/go-mod"
 
 	cd src || die "Failed to change directory to src"
-	./make.bash || die "Build failed"
+	bash ./make.bash || die "Build failed"
 }
 
 src_test() {
 	cd src
 	export GO_TEST_TIMEOUT_SCALE=3
-	PATH="${GOBIN}:${PATH}" \
+	PATH="${S}/bin:${PATH}" \
 	./run.bash --no-rebuild -v -v -v -k || die "tests failed"
 	cd ..
 	rm -fr pkg/*_race || die
@@ -73,7 +66,7 @@ src_test() {
 
 src_install() {
 	dodir /usr/lib/go
-	cp -a api bin lib pkg misc src test "${ED}"/usr/lib/go || die "Failed to copy Go files"
+	cp -a . "${ED}"/usr/lib/go || die "Failed to copy Go files"
 
 	find "${ED}"/usr/lib/go -iname testdata -type d -exec rm -rf {} +
 

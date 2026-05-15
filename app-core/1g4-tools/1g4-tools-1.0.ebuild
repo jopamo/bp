@@ -10,7 +10,7 @@ SLOT="6"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-!elibc_musl? ( app-lang/go )
+app-lang/go
 app-build/gdb
 app-build/llvm
 app-core/bx

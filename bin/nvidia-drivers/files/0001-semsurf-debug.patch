@@ -1,0 +1,123 @@
+diff --git a/kernel/nvidia-drm/nvidia-drm-fence.c b/kernel/nvidia-drm/nvidia-drm-fence.c
+index 7af1ed7f..8ef09a43 100644
+--- a/kernel/nvidia-drm/nvidia-drm-fence.c
++++ b/kernel/nvidia-drm/nvidia-drm-fence.c
+@@ -954,6 +954,7 @@ __nv_drm_semsurf_ctx_store_callback(
+     NvU64 oldWaitValue;
+     unsigned long flags;
+     bool installed = false;
++    NvBool canceled;
+ 
+     spin_lock_irqsave(&ctx->lock, flags);
+     if (ctx->current_wait_value == new_wait_value) {
+@@ -967,11 +968,22 @@ __nv_drm_semsurf_ctx_store_callback(
+     spin_unlock_irqrestore(&ctx->lock, flags);
+ 
+     if (oldCallback) {
+-        if (nvKms->unregisterSemaphoreSurfaceCallback(nv_dev->pDevice,
++        pr_err("nvidia-drm: semsurf replace-old-before-unregister wait=%llu nvkms=%px local=%px ctx=%px\n",
++               (unsigned long long)oldWaitValue, oldNvKmsCallback,
++               oldCallback, ctx);
++
++        canceled =
++            nvKms->unregisterSemaphoreSurfaceCallback(nv_dev->pDevice,
+                                                       ctx->pSemSurface,
+                                                       ctx->base.fenceSemIndex,
+                                                       oldWaitValue,
+-                                                      oldNvKmsCallback)) {
++                                                      oldNvKmsCallback);
++
++        pr_err("nvidia-drm: semsurf replace-old unregister=%d wait=%llu nvkms=%px local=%px ctx=%px\n",
++               canceled, (unsigned long long)oldWaitValue, oldNvKmsCallback,
++               oldCallback, ctx);
++
++        if (canceled) {
+             /*
+              * The old callback was successfully canceled, and its NVKMS and RM
+              * resources have been freed. Free its local tracking data.
+@@ -1006,6 +1018,7 @@ __nv_drm_semsurf_ctx_reg_callbacks(struct nv_drm_semsurf_fence_ctx *ctx)
+     NvU64 newWaitValue;
+     unsigned long newTimeout;
+     NvKmsKapiRegisterWaiterResult kapiRet;
++    NvBool canceled;
+ 
+     if (!newCallback) {
+         NV_DRM_DEV_LOG_ERR(
+@@ -1033,6 +1046,7 @@ __nv_drm_semsurf_ctx_reg_callbacks(struct nv_drm_semsurf_fence_ctx *ctx)
+         }
+ 
+         newCallback->wait_value = newWaitValue;
++        newNvKmsCallback = NULL;
+ 
+         /*
+          * Attempt to register a callback for the remaining fences. Note this
+@@ -1052,6 +1066,10 @@ __nv_drm_semsurf_ctx_reg_callbacks(struct nv_drm_semsurf_fence_ctx *ctx)
+                                                     newWaitValue,
+                                                     0,
+                                                     &newNvKmsCallback);
++
++        pr_err("nvidia-drm: semsurf reg ret=%d wait=%llu newNvKmsCallback=%px newCallback=%px ctx=%px\n",
++               kapiRet, (unsigned long long)newWaitValue, newNvKmsCallback,
++               newCallback, ctx);
+     } while (kapiRet == NVKMS_KAPI_REG_WAITER_ALREADY_SIGNALLED);
+ 
+     /* Can't deref newCallback at this point unless kapiRet indicates failure */
+@@ -1101,11 +1119,22 @@ __nv_drm_semsurf_ctx_reg_callbacks(struct nv_drm_semsurf_fence_ctx *ctx)
+          * Hence, it is safe to request cancellation of the callback and free
+          * the associated data if cancellation succeeds.
+          */
+-        if (nvKms->unregisterSemaphoreSurfaceCallback(nv_dev->pDevice,
++        pr_err("nvidia-drm: semsurf drop-before-store wait=%llu nvkms=%px local=%px ctx=%px\n",
++               (unsigned long long)newWaitValue, newNvKmsCallback,
++               newCallback, ctx);
++
++        canceled =
++            nvKms->unregisterSemaphoreSurfaceCallback(nv_dev->pDevice,
+                                                       ctx->pSemSurface,
+                                                       ctx->base.fenceSemIndex,
+                                                       newWaitValue,
+-                                                      newNvKmsCallback)) {
++                                                      newNvKmsCallback);
++
++        pr_err("nvidia-drm: semsurf drop-before-store unregister=%d wait=%llu nvkms=%px local=%px ctx=%px\n",
++               canceled, (unsigned long long)newWaitValue, newNvKmsCallback,
++               newCallback, ctx);
++
++        if (canceled) {
+             /* RM callback successfully canceled. Free local tracking data */
+             nv_drm_free(newCallback);
+         }
+@@ -1121,6 +1150,7 @@ static void __nv_drm_semsurf_fence_ctx_destroy(
+     struct NvKmsKapiSemaphoreSurfaceCallback *pendingNvKmsCallback;
+     NvU64 pendingWaitValue;
+     unsigned long flags;
++    NvBool canceled;
+ 
+     /*
+      * The workthread must be shut down before the timer is stopped to ensure
+@@ -1147,11 +1177,20 @@ static void __nv_drm_semsurf_fence_ctx_destroy(
+ 
+     if (pendingNvKmsCallback) {
+         WARN_ON(pendingWaitValue == 0);
+-        nvKms->unregisterSemaphoreSurfaceCallback(nv_dev->pDevice,
+-                                                  ctx->pSemSurface,
+-                                                  ctx->base.fenceSemIndex,
+-                                                  pendingWaitValue,
+-                                                  pendingNvKmsCallback);
++        pr_err("nvidia-drm: semsurf destroy pending wait=%llu nvkms=%px ctx=%px\n",
++               (unsigned long long)pendingWaitValue, pendingNvKmsCallback,
++               ctx);
++
++        canceled =
++            nvKms->unregisterSemaphoreSurfaceCallback(nv_dev->pDevice,
++                                                      ctx->pSemSurface,
++                                                      ctx->base.fenceSemIndex,
++                                                      pendingWaitValue,
++                                                      pendingNvKmsCallback);
++
++        pr_err("nvidia-drm: semsurf destroy unregister=%d wait=%llu nvkms=%px ctx=%px\n",
++               canceled, (unsigned long long)pendingWaitValue,
++               pendingNvKmsCallback, ctx);
+     }
+ 
+     nvKms->freeSemaphoreSurface(nv_dev->pDevice, ctx->pSemSurface);

@@ -23,8 +23,7 @@ IUSE="introspection static-libs"
 DEPEND="
 	app-core/attr
 	app-core/util-linux[mount]
-	app-tex/docbook-xml-dtd
-	app-tex/docbook-xsl-stylesheets
+	app-tex/docbookz
 	lib-core/libffi
 	lib-core/libpcre2
 	lib-core/libxslt

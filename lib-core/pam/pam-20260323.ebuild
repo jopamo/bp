@@ -16,8 +16,7 @@ IUSE="logind"
 
 BDEPEND="
 	app-build/flex
-	app-tex/docbook-sgml-dtd
-	app-tex/docbook-xml-dtd
+	app-tex/docbookz
 "
 
 DEPEND="lib-net/libtirpc"

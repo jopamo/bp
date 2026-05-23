@@ -14,8 +14,7 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="lib-core/glib"
 DEPEND="${RDEPEND}
-	app-tex/docbook-xml-dtd
-	app-tex/docbook-xsl-stylesheets
+	app-tex/docbookz
 	lib-core/libxslt
 	app-dev/gtk-doc-am
 	app-build/gettext

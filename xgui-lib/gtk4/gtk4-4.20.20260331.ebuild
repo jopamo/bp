@@ -48,8 +48,7 @@ DEPEND="${COMMON_DEPEND}
 	app-build/gettext
 	app-dev/gtk-doc-am
 	app-dev/pkgconf
-	app-tex/docbook-xml-dtd
-	app-tex/docbook-xsl-stylesheets
+	app-tex/docbookz
 	lib-core/libxslt
 	xgui-lib/at-spi2-core
 	X? ( xinerama? ( xgui-tools/xorgproto ) )"

@@ -47,7 +47,7 @@ CDEPEND="
 	systemd? ( app-core/systemd )
 "
 DEPEND="${CDEPEND}
-	app-tex/docbook-xsl-stylesheets
+	app-tex/docbookz
 	lib-core/libxslt
 	app-lang/python
 	lib-misc/rpcsvc-proto

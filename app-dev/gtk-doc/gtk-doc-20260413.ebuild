@@ -17,8 +17,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 DEPEND="
 	${PYTHON_DEPS}
 	app-dev/pkgconf
-	app-tex/docbook-xml-dtd
-	app-tex/docbook-xsl-stylesheets
+	app-tex/docbookz
 	dev-pypi/pygments
 	lib-core/libxslt
 "

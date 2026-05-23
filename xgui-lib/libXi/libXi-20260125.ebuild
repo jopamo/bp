@@ -19,6 +19,7 @@ DEPEND=">=xgui-lib/libX11-1.6.2
 	>=xgui-lib/libXext-1.3.2
 	>=xgui-lib/libXfixes-5.0.1
 	xgui-tools/xorgproto"
+BDEPEND="doc? ( app-tex/docbookz )"
 
 src_prepare() {
 	eautoreconf

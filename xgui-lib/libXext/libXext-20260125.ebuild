@@ -16,6 +16,7 @@ IUSE="doc static-libs"
 
 DEPEND=">=xgui-lib/libX11-1.6.2:=
 	xgui-tools/xorgproto"
+BDEPEND="doc? ( app-tex/docbookz )"
 
 src_prepare() {
 	eautoreconf

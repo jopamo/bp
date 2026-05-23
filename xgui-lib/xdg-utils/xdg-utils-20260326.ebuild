@@ -19,7 +19,7 @@ RDEPEND="
 	xgui-tools/xset
 "
 BDEPEND="
-	app-tex/xmlto
+	app-tex/docbookz
 	app-net/lynx
 "
 

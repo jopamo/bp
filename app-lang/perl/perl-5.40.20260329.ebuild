@@ -21,10 +21,9 @@ DEPEND="
 "
 
 PDEPEND="
-	app-tex/docbook-sgml-dtd
+	app-tex/docbookz
 	app-util/mandoc
 	app-core/help2man
-	app-tex/docbook-xsl-stylesheets
 "
 
 src_prepare() {

@@ -42,8 +42,7 @@ COMMON_DEPEND="
 	)
 "
 DEPEND="${COMMON_DEPEND}
-	app-tex/docbook-xsl-stylesheets
-	app-tex/docbook-xml-dtd
+	app-tex/docbookz
 	lib-core/libxslt
 	xgui-lib/at-spi2-core
 	app-dev/gtk-doc-am

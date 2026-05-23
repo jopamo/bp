@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="main"
-SNAPSHOT=edff5b65233c34b4106b50aedcac22cac2a19a14
+SNAPSHOT=6ccfd899b5e6c5140d46b9bcff121a4233bb6b33
 
 K_NOUSENAME="yes"
 K_NOSETEXTRAVERSION="yes"

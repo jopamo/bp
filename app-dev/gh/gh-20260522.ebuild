@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=611b01f6c88c76671131ffe11cb9bec8502721b5
+SNAPSHOT=e53ff321f06514b5ba290bbc4ef84f7e0efcd3dd
 SHORT=${SNAPSHOT:0:9}
 
 inherit flag-o-matic go-module

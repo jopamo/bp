@@ -10,7 +10,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="A Pythonic binding for the libxml2 and libxslt libraries"
 HOMEPAGE="https://lxml.de/"
-SNAPSHOT=64ed06c1a0c1833bfac99f209f16c3bdfddfde79
+SNAPSHOT=0e9989972a6c430277f962054db9c4cf19ec28c0
 SRC_URI="https://github.com/lxml/lxml/archive/${SNAPSHOT}.tar.gz -> lxml-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/lxml-${SNAPSHOT}
 

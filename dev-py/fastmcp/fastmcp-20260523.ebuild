@@ -6,35 +6,11 @@ DISTUTILS_USE_PEP517=hatchling
 inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
-RDEPEND+="
-	dev-py/mcp
-	dev-pypi/authlib
-	dev-pypi/cyclopts
-	dev-pypi/exceptiongroup
-	dev-pypi/griffelib
-	dev-pypi/httpx
-	dev-pypi/jsonref
-	dev-pypi/jsonschema-path
-	dev-pypi/openapi-pydantic
-	dev-pypi/opentelemetry-api
-	dev-pypi/packaging
-	dev-pypi/platformdirs
-	dev-pypi/py-key-value-aio
-	dev-pypi/pydantic
-	dev-pypi/pyperclip
-	dev-pypi/python-dotenv
-	dev-pypi/python-multipart
-	dev-pypi/pyyaml
-	dev-pypi/rich
-	dev-pypi/uncalled-for
-	dev-pypi/uvicorn
-	dev-pypi/watchfiles
-	dev-pypi/websockets
-"
+RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="The fast, Pythonic way to build MCP servers and clients"
 HOMEPAGE="https://gofastmcp.com/ https://pypi.org/project/fastmcp/"
-SNAPSHOT=d0315974fa844b2424c93f4ad43c8f2d543ff51a
+SNAPSHOT=2bff3725bf86efbed5562db4565353a953807454
 SRC_URI="https://github.com/jlowin/fastmcp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

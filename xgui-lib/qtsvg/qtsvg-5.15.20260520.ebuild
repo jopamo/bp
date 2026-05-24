@@ -7,7 +7,7 @@ inherit qmake-utils
 DESCRIPTION="SVG rendering library for the Qt5 framework"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=b74f7291f343dcbcb487b020868f042d8fe83098
+SNAPSHOT=d2abfb9cb1f036446e5913fadb0f065dab9f0159
 SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

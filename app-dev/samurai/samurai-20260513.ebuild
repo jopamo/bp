@@ -4,7 +4,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="ninja-compatible build tool written in C"
 HOMEPAGE="https://github.com/michaelforney/samurai"
-SNAPSHOT=c86dbc8b21a316ae851a7bd2affd02ae5391f822
+SNAPSHOT=531ba700c5fbbfd3d8e3ed91226d0c57134a6fb3
 SRC_URI="https://github.com/michaelforney/samurai/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/samurai-${SNAPSHOT}"
 

@@ -11,10 +11,10 @@ CARGO_DEPS="
 	rust-crates/blowfish-0.10.0
 	rust-crates/byteorder-1.5.0
 	rust-crates/cfg-if-1.0.4
-	rust-crates/cipher-0.5.1
+	rust-crates/cipher-0.5.2
 	rust-crates/cmov-0.5.3
 	rust-crates/cpufeatures-0.3.0
-	rust-crates/crypto-common-0.2.1
+	rust-crates/crypto-common-0.2.2
 	rust-crates/ctutils-0.4.2
 	rust-crates/digest-0.11.3
 	rust-crates/equivalent-1.0.2
@@ -23,7 +23,7 @@ CARGO_DEPS="
 	rust-crates/hashbrown-0.15.5
 	rust-crates/hashbrown-0.17.0
 	rust-crates/heck-0.5.0
-	rust-crates/hybrid-array-0.4.11
+	rust-crates/hybrid-array-0.4.12
 	rust-crates/id-arena-2.3.0
 	rust-crates/indexmap-2.14.0
 	rust-crates/inout-0.2.2
@@ -48,7 +48,7 @@ CARGO_DEPS="
 	rust-crates/serde-1.0.228
 	rust-crates/serde_core-1.0.228
 	rust-crates/serde_derive-1.0.228
-	rust-crates/serde_json-1.0.149
+	rust-crates/serde_json-1.0.150
 	rust-crates/sha2-0.11.0
 	rust-crates/subtle-2.6.1
 	rust-crates/syn-2.0.117
@@ -82,7 +82,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Modern password hashing for software and servers"
 HOMEPAGE="https://pypi.org/project/bcrypt/"
-SNAPSHOT=a2b6f8db4247616bbb6fcc381315868632479560
+SNAPSHOT=b8826fe42c8218329d9a5737624be5502253097a
 SRC_URI="https://github.com/pyca/bcrypt/archive/${SNAPSHOT}.tar.gz -> bcrypt-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/bcrypt-${SNAPSHOT}"
 

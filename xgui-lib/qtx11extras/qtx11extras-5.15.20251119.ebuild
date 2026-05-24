@@ -7,7 +7,7 @@ inherit qmake-utils
 DESCRIPTION="Linux/X11-specific support library for the Qt5 framework"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=c44c4fa86fa0794c25baef4ee1f6272aca8c511a
+SNAPSHOT=6695a3df4460577b3fcb5546b45a0c5cb3addac4
 SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

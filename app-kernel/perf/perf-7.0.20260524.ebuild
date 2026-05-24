@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="snapshot"
-SNAPSHOT=6ccfd899b5e6c5140d46b9bcff121a4233bb6b33
+SNAPSHOT=eed769dde58193f6ed6a99a3cec30c4ce458be85
 
 DESCRIPTION="Userland tools for Linux Performance Counters"
 HOMEPAGE="https://kernel.org/"

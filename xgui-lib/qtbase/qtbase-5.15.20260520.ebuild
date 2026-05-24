@@ -7,7 +7,7 @@ inherit flag-o-matic
 DESCRIPTION="Cross-platform application development framework"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=bebdfd54917e25d1c100e6bd9f5dd53c2e645fd8
+SNAPSHOT=fbed962c3195ab3952fa54d40e012ad1a4fdc42b
 SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

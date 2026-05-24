@@ -35,7 +35,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Python bindings to Rust's persistent data structures (rpds)"
 HOMEPAGE="https://github.com/crate-py/rpds/"
-SNAPSHOT=0783a5b5350597c687d64c91b0b8a623c4922fbc
+SNAPSHOT=be2aa5897510949c40c506d813ce18838f2d6477
 SRC_URI="https://github.com/crate-py/rpds/archive/${SNAPSHOT}.tar.gz -> rpds-py-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/rpds-${SNAPSHOT}"
 

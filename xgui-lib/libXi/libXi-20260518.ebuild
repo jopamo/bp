@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="X.Org Xi library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=3103b5849d89335fd57b08b91ad634216ed96073
+SNAPSHOT=f00f7e9140b4707775331950dd67851e55058c40
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXi/-/archive/${SNAPSHOT}/libXi-${SNAPSHOT}.tar.bz2 -> libXi-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxi-${SNAPSHOT}"
 

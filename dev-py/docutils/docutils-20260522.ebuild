@@ -10,7 +10,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Python Documentation Utilities (reference reStructuredText impl.)"
 HOMEPAGE="https://docutils.sourceforge.io/"
-SNAPSHOT=23dc78f7a233ec064b8d0375afe7bc5dd06bae99
+SNAPSHOT=a82d3378ea197e6ef0c361b9c7ac0ad9ca55e5c5
 SRC_URI="https://github.com/docutils/docutils/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}/docutils"
 

@@ -5,7 +5,7 @@ inherit flag-o-matic autotools qa-policy
 DESCRIPTION="Provides useful functions commonly found on BSD systems"
 HOMEPAGE="https://libbsd.freedesktop.org/wiki/"
 
-SNAPSHOT=22fddb16f8430d64b82a1ea08602be5e61ac203b
+SNAPSHOT=5d2dcb1b729d1faebc09aec5e78909efe10eed1d
 SRC_URI="https://github.com/guillemj/libbsd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

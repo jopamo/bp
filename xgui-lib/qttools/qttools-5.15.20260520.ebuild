@@ -7,7 +7,7 @@ inherit qmake-utils flag-o-matic
 DESCRIPTION="Qt Tools collection (Assistant, Designer, Linguist, etc.)"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=fa40a2d3373b89be0cd0a43fe0c1d047e3d34058
+SNAPSHOT=3e3ab58b40734a1b9bbb7e72b2969d1f752351b1
 SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

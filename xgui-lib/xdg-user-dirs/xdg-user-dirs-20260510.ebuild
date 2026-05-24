@@ -4,7 +4,7 @@ inherit autotools
 
 DESCRIPTION="a tool to help manage well known user directories"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/xdg-user-dirs/"
-SNAPSHOT=00feef745d692acb520bd08b0df0a8f1abc40ad1
+SNAPSHOT=be28eca1d1782901211be69bc4ada7353ac966a2
 SRC_URI="https://gitlab.freedesktop.org/xdg/xdg-user-dirs/-/archive/${SNAPSHOT}/xdg-user-dirs-${SNAPSHOT}.tar.bz2 -> xdg-user-dirs-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/xdg-user-dirs-${SNAPSHOT}"
 

@@ -4,7 +4,7 @@ inherit toolchain-funcs qa-policy
 
 DESCRIPTION="Open Firmware device tree compiler"
 HOMEPAGE="https://devicetree.org/ https://git.kernel.org/cgit/utils/dtc/dtc.git/"
-SNAPSHOT=47d7c01ba8a1241e919ab56dd01ba245b38fef8e
+SNAPSHOT=f57e7df35df4a301961cbbf9433ba4e85c2ee5ed
 SRC_URI="https://github.com/dgibson/dtc/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/dtc-${SNAPSHOT}
 

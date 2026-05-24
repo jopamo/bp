@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="VapourSynth library for video manipulation"
 HOMEPAGE="http://www.vapoursynth.com/"
-SNAPSHOT=7c014a375dad60c9f4362e91125257e1a9c8c6ca
+SNAPSHOT=58b2abdfcbb1c4e9bc99f0d498f8c8ee85bcc4a3
 SRC_URI="https://github.com/vapoursynth/vapoursynth/archive/${SNAPSHOT}.tar.gz -> vapoursynth-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/vapoursynth-${SNAPSHOT}"
 

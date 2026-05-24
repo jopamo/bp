@@ -6,7 +6,7 @@ inherit flag-o-matic meson
 
 DESCRIPTION="Typesafe callback system for standard C++"
 HOMEPAGE="https://libsigcplusplus.github.io/libsigcplusplus/"
-SNAPSHOT=127944e20626bee1a02c074650c1dbf762e81fd1
+SNAPSHOT=749a94144365a9cef39ce48f9ee79eb48dd4d5dd
 SRC_URI="https://github.com/libsigcplusplus/libsigcplusplus/archive/${SNAPSHOT}.tar.gz -> libsigc++-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libsigcplusplus-${SNAPSHOT}"
 

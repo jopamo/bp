@@ -7,16 +7,15 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="High-level concurrency and networking framework on top of asyncio or Trio"
 HOMEPAGE="https://pypi.org/project/anyio/"
-LICENSE="metapackage"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/19/14/2c5dd9f512b66549ae92767a9c7b330ae88e1932ca57876909410251fe13/anyio-4.13.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/anyio-4.13.0"
+PYPI_PN="anyio"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
@@ -25,6 +24,6 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 
 BDEPEND="
-	dev-py/setuptools-scm[${PYTHON_USEDEP}]
+	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

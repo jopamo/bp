@@ -5,7 +5,7 @@ inherit autotools qa-policy
 DESCRIPTION="Provides message digest functions found on BSD systems"
 HOMEPAGE="https://www.hadrons.org/software/libmd/"
 
-SNAPSHOT=d5b8e853989a73f8fff9dc4e00dccd0b691b84f9
+SNAPSHOT=90c4f432134c608c7e2b4dd0a1d7ca5c40b92c7a
 SRC_URI="https://github.com/guillemj/libmd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

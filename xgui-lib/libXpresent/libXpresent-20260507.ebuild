@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="X.Org Xpresent library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=4db278bcdb1bd11ef9312f64131b0f5e152ceeb2
+SNAPSHOT=091d658c935e55d99d2705609837e5faeaf78f58
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXpresent/-/archive/${SNAPSHOT}/libXpresent-${SNAPSHOT}.tar.bz2 -> libXpresent-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxpresent-${SNAPSHOT}"
 

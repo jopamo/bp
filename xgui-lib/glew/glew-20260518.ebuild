@@ -4,7 +4,7 @@ inherit toolchain-funcs qa-policy
 
 DESCRIPTION="The OpenGL Extension Wrangler Library"
 HOMEPAGE="http://glew.sourceforge.net/"
-SNAPSHOT=79cd72e8ec9a800624265f474c787a3d897f6195
+SNAPSHOT=77cc072d8a1389a5e20922da7f3b499967eef4d8
 SRC_URI="https://github.com/nigels-com/glew/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

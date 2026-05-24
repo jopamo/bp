@@ -2,7 +2,7 @@
 
 DESCRIPTION="small SSH 2 client/server designed for small memory environments"
 HOMEPAGE="https://matt.ucc.asn.au/dropbear/dropbear.html"
-SNAPSHOT=02bf2ec84b9d5c520787b193eff8d2e9a142c9d0
+SNAPSHOT=ee65bff1567576a223febcdd5ae552326a4da4b1
 SRC_URI="https://github.com/mkj/dropbear/archive/${SNAPSHOT}.tar.gz -> dropbear-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/dropbear-${SNAPSHOT}"
 

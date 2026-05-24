@@ -6,14 +6,12 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-py/vcs-versioning
 	dev-pypi/packaging
-	dev-pypi/setuptools
 "
 # lockstep-pypi-deps: end
 DESCRIPTION="Core vcs metadata/versioning library used by setuptools-scm"
 HOMEPAGE="https://github.com/pypa/setuptools-scm/"
-SNAPSHOT=f53cf5c121851998a610822469ae90507006e044
+SNAPSHOT=8ef96133af868a7cb8ea0f35fffd60fbc32fc815
 SRC_URI="https://github.com/pypa/setuptools-scm/archive/${SNAPSHOT}.tar.gz -> vcs-versioning-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/setuptools-scm-${SNAPSHOT}/vcs-versioning"
 

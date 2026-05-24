@@ -4,7 +4,7 @@ inherit meson flag-o-matic
 
 DESCRIPTION="A library for configuring and customizing font access"
 HOMEPAGE="http://fontconfig.org/"
-SNAPSHOT=9b53fa0c6e8a0a3dced6fc49792da77223f36c04
+SNAPSHOT=c215e6e012f006ba810c80a06c0a2177ac7f033d
 SRC_URI="https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/${SNAPSHOT}/fontconfig-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/fontconfig-${SNAPSHOT}"
 

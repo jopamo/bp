@@ -4,7 +4,7 @@ inherit autotools
 
 DESCRIPTION="property displayer for X"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=55a51e08787035786abc27b170beb0faacb6cd47
+SNAPSHOT=d727da3ea929a9bb6d5c3677019e34ba79258ff0
 SRC_URI="https://gitlab.freedesktop.org/xorg/app/xprop/-/archive/${SNAPSHOT}/xprop-${SNAPSHOT}.tar.bz2 -> xprop-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/xprop-${SNAPSHOT}"
 

@@ -12,7 +12,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Alternative regular expression module to replace re"
 HOMEPAGE="https://github.com/mrabarnett/mrab-regex/"
-SNAPSHOT=bc57b04b00de68590345ac2eb621b9a8dd222d7d
+SNAPSHOT=e57d185bb711729091907b23edac5dcba0426243
 SRC_URI="https://github.com/mrabarnett/mrab-regex/archive/${SNAPSHOT}.tar.gz -> regex-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/mrab-regex-${SNAPSHOT}"
 

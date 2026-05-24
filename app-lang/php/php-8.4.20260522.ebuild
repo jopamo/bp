@@ -34,7 +34,7 @@ DEPEND="
 	lib-core/gmp
 	lib-core/libedit
 	lib-core/libpcre
-	lib-dev/oniguruma
+	lib-dev/libonig
 	virtual/ssl
 "
 

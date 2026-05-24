@@ -14,11 +14,16 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs test"
 
+RDEPEND="lib-dev/libonig"
 DEPEND="
+	${RDEPEND}
 	app-build/bison
 	app-build/flex
 "
-BDEPEND="app-dev/patchelf"
+BDEPEND="
+	app-dev/patchelf
+	app-dev/pkgconf
+"
 
 PATCHES=(
 	"${FILESDIR}"/jq-1.6-r3-never-bundle-oniguruma.patch
@@ -30,7 +35,7 @@ RESTRICT="!test? ( test )"
 src_prepare() {
 	rm -rf vendor/oniguruma
 
-	sed -i '/test "x\$build_oniguruma" = xyes && test -f "${srcdir}\/vendor\/oniguruma\/configure.ac"/,/\)/d' configure.ac
+	sed -i '/test "x\$build_oniguruma" = xyes && test -f "${srcdir}\/vendor\/oniguruma\/configure.ac"/,/^[[:space:]]*])/d' configure.ac
 	sed -i '/onig_CFLAGS="-I\${srcdir}\/vendor\/oniguruma\/src"/d' configure.ac
 	sed -i '/onig_LDFLAGS="-L\${srcdir}\/vendor\/oniguruma\/src/d' configure.ac
 	sed -i '/AC_CONFIG_SUBDIRS(\[vendor\/oniguruma\])/d' configure.ac
@@ -61,7 +66,7 @@ src_configure() {
 		--disable-maintainer-mode
 		--enable-rpathhack
 		$(use_enable static-libs static)
-		--without-oniguruma
+		--with-oniguruma
 	)
 	econf "${econfargs[@]}"
 }

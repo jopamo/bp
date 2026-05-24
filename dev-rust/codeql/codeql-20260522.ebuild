@@ -17,6 +17,7 @@ CARGO_DEPS="
 	rust-crates/atomic-0.6.1
 	rust-crates/autocfg-1.5.0
 	rust-crates/base64-0.22.1
+	rust-crates/bindgen-0.72.1
 	rust-crates/bitflags-1.3.2
 	rust-crates/bitflags-2.9.4
 	rust-crates/borsh-1.5.7
@@ -28,7 +29,8 @@ CARGO_DEPS="
 	rust-crates/cargo-platform-0.2.0
 	rust-crates/cargo-util-schemas-0.8.2
 	rust-crates/cargo_metadata-0.21.0
-	rust-crates/cc-1.2.37
+	rust-crates/cc-1.2.61
+	rust-crates/cexpr-0.6.0
 	rust-crates/cfg-if-1.0.3
 	rust-crates/cfg_aliases-0.2.1
 	rust-crates/chalk-derive-0.103.0
@@ -38,11 +40,13 @@ CARGO_DEPS="
 	rust-crates/chalk-recursive-0.103.0
 	rust-crates/chalk-solve-0.103.0
 	rust-crates/chrono-0.4.42
+	rust-crates/clang-sys-1.8.1
 	rust-crates/clap-4.5.48
 	rust-crates/clap_builder-4.5.48
 	rust-crates/clap_derive-4.5.47
 	rust-crates/clap_lex-0.7.5
 	rust-crates/colorchoice-1.0.4
+	rust-crates/convert_case-0.8.0
 	rust-crates/core-foundation-sys-0.8.7
 	rust-crates/countme-3.0.1
 	rust-crates/cov-mark-2.1.0
@@ -72,12 +76,14 @@ CARGO_DEPS="
 	rust-crates/encoding_index_tests-0.1.4
 	rust-crates/equivalent-1.0.2
 	rust-crates/erased-serde-0.4.6
+	rust-crates/fastrand-2.4.1
 	rust-crates/figment-0.10.19
-	rust-crates/find-msvc-tools-0.1.1
+	rust-crates/find-msvc-tools-0.1.9
 	rust-crates/fixedbitset-0.4.2
 	rust-crates/flate2-1.1.2
 	rust-crates/fnv-1.0.7
 	rust-crates/foldhash-0.1.5
+	rust-crates/foldhash-0.2.0
 	rust-crates/form_urlencoded-1.2.2
 	rust-crates/fs-err-2.11.0
 	rust-crates/fsevent-sys-4.1.0
@@ -88,6 +94,8 @@ CARGO_DEPS="
 	rust-crates/hashbrown-0.12.3
 	rust-crates/hashbrown-0.14.5
 	rust-crates/hashbrown-0.15.5
+	rust-crates/hashbrown-0.16.1
+	rust-crates/hashbrown-0.17.1
 	rust-crates/hashlink-0.10.0
 	rust-crates/heck-0.5.0
 	rust-crates/hermit-abi-0.5.2
@@ -106,7 +114,8 @@ CARGO_DEPS="
 	rust-crates/idna-1.1.0
 	rust-crates/idna_adapter-1.2.1
 	rust-crates/indexmap-1.9.3
-	rust-crates/indexmap-2.11.4
+	rust-crates/indexmap-2.14.0
+	rust-crates/indoc-2.0.7
 	rust-crates/inlinable_string-0.1.15
 	rust-crates/inotify-0.11.0
 	rust-crates/inotify-sys-0.1.5
@@ -123,6 +132,7 @@ CARGO_DEPS="
 	rust-crates/la-arena-0.3.1
 	rust-crates/lazy_static-1.5.0
 	rust-crates/libc-0.2.175
+	rust-crates/libloading-0.8.9
 	rust-crates/line-index-0.1.2
 	rust-crates/litemap-0.8.0
 	rust-crates/lock_api-0.4.13
@@ -131,11 +141,13 @@ CARGO_DEPS="
 	rust-crates/matchers-0.2.0
 	rust-crates/memchr-2.7.5
 	rust-crates/memoffset-0.9.1
+	rust-crates/minimal-lexical-0.2.1
 	rust-crates/miniz_oxide-0.8.9
 	rust-crates/mio-1.0.4
 	rust-crates/miow-0.6.1
 	rust-crates/mustache-0.9.0
 	rust-crates/nohash-hasher-0.2.0
+	rust-crates/nom-7.1.3
 	rust-crates/notify-8.2.0
 	rust-crates/notify-types-2.0.0
 	rust-crates/nu-ansi-term-0.50.1
@@ -150,18 +162,24 @@ CARGO_DEPS="
 	rust-crates/papaya-0.2.3
 	rust-crates/parking_lot-0.12.4
 	rust-crates/parking_lot_core-0.9.11
+	rust-crates/pathdiff-0.2.3
 	rust-crates/pear-0.2.9
 	rust-crates/pear_codegen-0.2.9
 	rust-crates/percent-encoding-2.3.2
 	rust-crates/perf-event-0.4.7
 	rust-crates/perf-event-open-sys-1.0.1
 	rust-crates/petgraph-0.6.5
+	rust-crates/phf-0.13.1
+	rust-crates/phf_generator-0.13.1
+	rust-crates/phf_shared-0.13.1
 	rust-crates/pin-project-lite-0.2.16
 	rust-crates/pkg-config-0.3.32
 	rust-crates/portable-atomic-1.11.1
 	rust-crates/potential_utf-0.1.3
 	rust-crates/powerfmt-0.2.0
 	rust-crates/ppv-lite86-0.2.21
+	rust-crates/prettyplease-0.2.37
+	rust-crates/proc-macro-crate-3.5.0
 	rust-crates/proc-macro2-1.0.101
 	rust-crates/proc-macro2-diagnostics-0.10.1
 	rust-crates/quote-1.0.41
@@ -210,7 +228,12 @@ CARGO_DEPS="
 	rust-crates/regex-1.11.3
 	rust-crates/regex-automata-0.4.11
 	rust-crates/regex-syntax-0.8.6
+	rust-crates/relative-path-2.0.1
 	rust-crates/rowan-0.15.15
+	rust-crates/rquickjs-0.10.0
+	rust-crates/rquickjs-core-0.10.0
+	rust-crates/rquickjs-macro-0.10.0
+	rust-crates/rquickjs-sys-0.10.0
 	rust-crates/rustc-hash-1.1.0
 	rust-crates/rustc-hash-2.1.1
 	rust-crates/rustc-literal-escaper-0.0.4
@@ -227,7 +250,7 @@ CARGO_DEPS="
 	rust-crates/scoped-tls-1.0.1
 	rust-crates/scopeguard-1.2.0
 	rust-crates/seize-0.5.0
-	rust-crates/semver-1.0.26
+	rust-crates/semver-1.0.28
 	rust-crates/serde-1.0.228
 	rust-crates/serde-untagged-0.1.8
 	rust-crates/serde-value-0.7.0
@@ -241,6 +264,8 @@ CARGO_DEPS="
 	rust-crates/serde_yaml-0.9.34+deprecated
 	rust-crates/sharded-slab-0.1.7
 	rust-crates/shlex-1.3.0
+	rust-crates/siphasher-1.0.3
+	rust-crates/smallbitvec-2.6.1
 	rust-crates/smallvec-1.15.1
 	rust-crates/smol_str-0.3.2
 	rust-crates/stable_deref_trait-1.2.0
@@ -251,8 +276,8 @@ CARGO_DEPS="
 	rust-crates/temp-dir-0.1.16
 	rust-crates/text-size-1.1.1
 	rust-crates/thin-vec-0.2.14
-	rust-crates/thiserror-2.0.16
-	rust-crates/thiserror-impl-2.0.16
+	rust-crates/thiserror-2.0.18
+	rust-crates/thiserror-impl-2.0.18
 	rust-crates/thread_local-1.1.9
 	rust-crates/time-0.3.43
 	rust-crates/time-core-0.1.6
@@ -262,20 +287,25 @@ CARGO_DEPS="
 	rust-crates/toml-0.9.7
 	rust-crates/toml_datetime-0.6.11
 	rust-crates/toml_datetime-0.7.2
+	rust-crates/toml_datetime-1.1.1+spec-1.1.0
 	rust-crates/toml_edit-0.22.27
-	rust-crates/toml_parser-1.0.3
+	rust-crates/toml_edit-0.25.11+spec-1.1.0
+	rust-crates/toml_parser-1.1.2+spec-1.1.0
 	rust-crates/toml_write-0.1.2
 	rust-crates/toml_writer-1.0.3
+	rust-crates/topological-sort-0.2.2
 	rust-crates/tracing-0.1.41
 	rust-crates/tracing-attributes-0.1.30
 	rust-crates/tracing-core-0.1.34
 	rust-crates/tracing-flame-0.2.0
 	rust-crates/tracing-log-0.2.0
 	rust-crates/tracing-subscriber-0.3.20
-	rust-crates/tree-sitter-0.25.9
+	rust-crates/tree-sitter-0.26.8
 	rust-crates/tree-sitter-embedded-template-0.25.0
+	rust-crates/tree-sitter-generate-0.26.8
 	rust-crates/tree-sitter-json-0.24.8
 	rust-crates/tree-sitter-language-0.1.5
+	rust-crates/tree-sitter-python-0.23.6
 	rust-crates/tree-sitter-ql-0.23.1
 	rust-crates/tree-sitter-ruby-0.23.1
 	rust-crates/triomphe-0.1.14
@@ -285,6 +315,7 @@ CARGO_DEPS="
 	rust-crates/ungrammar-1.16.1
 	rust-crates/unicode-ident-1.0.19
 	rust-crates/unicode-properties-0.1.3
+	rust-crates/unicode-segmentation-1.13.2
 	rust-crates/unicode-xid-0.2.6
 	rust-crates/unsafe-libyaml-0.2.11
 	rust-crates/url-2.5.7
@@ -332,6 +363,7 @@ CARGO_DEPS="
 	rust-crates/windows_x86_64_msvc-0.52.6
 	rust-crates/windows_x86_64_msvc-0.53.0
 	rust-crates/winnow-0.7.13
+	rust-crates/winnow-1.0.2
 	rust-crates/wit-bindgen-0.45.1
 	rust-crates/writeable-0.6.1
 	rust-crates/yansi-1.0.1
@@ -353,7 +385,7 @@ inherit cargo lockstep-cargo
 
 DESCRIPTION="Security Scanner"
 HOMEPAGE="https://github.com/github/codeql"
-SNAPSHOT=154d213fd231e8d76d9c11ff4ac69842d0783d0b
+SNAPSHOT=491c373e07600e2cd15e8263b3f1a3f30b0f5ccb
 SRC_URI="https://github.com/github/codeql/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/codeql-${SNAPSHOT}"
 

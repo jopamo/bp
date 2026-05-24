@@ -6,8 +6,10 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
+	app-dev/ropgadget
+	app-emu/capstone
+	app-emu/unicorn
 	dev-py/zstandard
-	dev-pypi/capstone
 	dev-pypi/colored-traceback
 	dev-pypi/intervaltree
 	dev-pypi/mako
@@ -19,16 +21,14 @@ RDEPEND+="
 	dev-pypi/pyserial
 	dev-pypi/pysocks
 	dev-pypi/requests
-	dev-pypi/ropgadget
 	dev-pypi/rpyc
 	dev-pypi/sortedcontainers
-	dev-pypi/unicorn
 	dev-pypi/unix-ar
 "
 # lockstep-pypi-deps: end
 DESCRIPTION="CTF framework and exploit development library"
 HOMEPAGE="https://github.com/Gallopsled/pwntools"
-SNAPSHOT=52a354b3161c68d79c39840bcd2f22f73403190c
+SNAPSHOT=658479605b9e45730ed006675be6b1e1b062841d
 SRC_URI="https://github.com/Gallopsled/pwntools/archive/${SNAPSHOT}.tar.gz -> pwntools-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/pwntools-${SNAPSHOT}"
 

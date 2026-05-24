@@ -7,7 +7,7 @@ inherit qmake-utils
 DESCRIPTION="The QML and Quick modules for the Qt5 framework"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=f78bc0b2c6884fd730bf34a931870d67936cf01d
+SNAPSHOT=5bc1ac07b2d2c7839368084a4bb97e4c67eb8294
 SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

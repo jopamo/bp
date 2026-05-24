@@ -15,13 +15,20 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="curl static-libs +perl gitweb"
+REQUIRED_USE="
+	gitweb? ( perl )
+"
 
-DEPEND="
-	app-build/gettext
-	app-lang/python
-	app-net/curl
+RDEPEND="
+	curl? ( app-net/curl )
 	lib-core/libpcre2
 	lib-core/expat
+	perl? ( app-lang/perl )
+"
+DEPEND="
+	${RDEPEND}
+	app-build/gettext
+	app-lang/python
 "
 
 src_prepare() {
@@ -33,7 +40,7 @@ src_configure() {
 	qa-policy-configure
 	local myconf=(
 		--with-libpcre2
-		--with-curl
+		$(use_with curl)
 		--with-expat
 		--with-python=/usr/bin/python3
 		--without-openssl
@@ -42,11 +49,27 @@ src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
+src_compile() {
+	local emakeargs=(
+		NO_RUST=YesPlease
+	)
+
+	use perl || emakeargs+=( NO_PERL=YesPlease )
+	use gitweb || emakeargs+=( NO_GITWEB=YesPlease )
+
+	emake "${emakeargs[@]}" all
+}
+
 src_install() {
-	default
+	local emakeargs=(
+		NO_RUST=YesPlease
+	)
+
+	use perl || emakeargs+=( NO_PERL=YesPlease )
+	use gitweb || emakeargs+=( NO_GITWEB=YesPlease )
+
+	emake "${emakeargs[@]}" DESTDIR="${D}" install
 	use static-libs || find "${ED}" -name "*.a" -delete || die
-	use perl || rm -rf "${ED}"/usr/share/perl5 || die
-	use gitweb || rm -rf "${ED}"/usr/share/gitweb || die
 
 	insopts -m 0644
 	insinto /etc

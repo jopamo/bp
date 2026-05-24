@@ -25,7 +25,6 @@ app-dev/debootstrap
 app-dev/dwarves
 app-dev/gcovr
 app-dev/intltool
-app-dev/jq
 app-dev/ropgadget
 app-dev/strace
 app-dev/valgrind

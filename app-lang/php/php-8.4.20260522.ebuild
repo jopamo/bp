@@ -34,7 +34,6 @@ DEPEND="
 	lib-core/gmp
 	lib-core/libedit
 	lib-core/libpcre
-	lib-dev/libonig
 	virtual/ssl
 "
 
@@ -77,6 +76,7 @@ src_configure() {
 		--enable-cgi
 		--enable-dba=shared
 		--enable-mbstring
+		--disable-mbregex
 		--enable-pdo
 		--with-bz2
 		--with-curl

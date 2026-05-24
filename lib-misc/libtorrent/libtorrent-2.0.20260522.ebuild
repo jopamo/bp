@@ -6,10 +6,10 @@ inherit cmake flag-o-matic
 
 DESCRIPTION="C++ BitTorrent implementation focusing on efficiency and scalability"
 HOMEPAGE="http://libtorrent.org"
-SNAPSHOT=c4552f38c575275f50933f4c91ed7f745306d870
+SNAPSHOT=d3dac5dfcbf1825cd472d0d42f4897084783171d
 ASIO_GNUTLS_SNAPSHOT=a57d4d36923c5fafa9698e14be16b8bc2913700a
 TRY_SIGNAL_SNAPSHOT=105cce59972f925a33aa6b1c3109e4cd3caf583d
-LIBSIMULATOR_SNAPSHOT=94dc46cccb6fec42072cb193b8a92a1dc84efca0
+LIBSIMULATOR_SNAPSHOT=a52964c1a5c5de6d733fc82b7ca811980e33f0a1
 SRC_URI="
 	https://github.com/arvidn/libtorrent/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz
 	https://github.com/paullouisageneau/boost-asio-gnutls/archive/${ASIO_GNUTLS_SNAPSHOT}.tar.gz -> ${PN}-asio-gnutls-${ASIO_GNUTLS_SNAPSHOT}.tar.gz

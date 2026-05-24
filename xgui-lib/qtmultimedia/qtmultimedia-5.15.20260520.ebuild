@@ -7,7 +7,7 @@ inherit qmake-utils
 DESCRIPTION="Multimedia (audio, video, radio, camera) library for the Qt5 framework"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=ff83d119c75cd8406f73ccc08958fe36747e7390
+SNAPSHOT=8ddc44103baf166525d6650c842d7f08f651e7bb
 SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

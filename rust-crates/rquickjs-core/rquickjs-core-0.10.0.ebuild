@@ -1,0 +1,51 @@
+# lockstep-managed: cargo-crate
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
+
+CRATE_NAME="rquickjs-core"
+CRATE_VERSION="0.10.0"
+CRATE_CHECKSUM="bccb7121a123865c8ace4dea42e7ed84d78b90cbaf4ca32c59849d8d210c9672"
+CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
+CRATE_SOURCE_KIND="registry"
+
+inherit cargo-crate
+
+DESCRIPTION="High level bindings to the QuickJS JavaScript engine"
+HOMEPAGE="https://github.com/DelSkayn/rquickjs.git"
+LICENSE="MIT"
+SLOT="${PV}"
+KEYWORDS="amd64 arm64"
+
+CARGO_CRATE_FEATURES=(
+	"allocator"
+	"array-buffer"
+	"bindgen"
+	"chrono"
+	"classes"
+	"compile-tests"
+	"default"
+	"disable-assertions"
+	"doc-cfg"
+	"dump-atoms"
+	"dump-bytecode"
+	"dump-free"
+	"dump-gc"
+	"dump-gc-free"
+	"dump-leaks"
+	"dump-mem"
+	"dump-module-resolve"
+	"dump-objects"
+	"dump-promise"
+	"dump-read-object"
+	"dump-shapes"
+	"dyn-load"
+	"full"
+	"full-async"
+	"futures"
+	"loader"
+	"multi-ctx"
+	"parallel"
+	"properties"
+	"rust-alloc"
+	"std"
+)

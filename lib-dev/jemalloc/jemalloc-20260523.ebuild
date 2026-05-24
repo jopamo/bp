@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="Jemalloc is a general-purpose scalable concurrent allocator"
 HOMEPAGE="http://jemalloc.net/ https://github.com/jemalloc/jemalloc"
-SNAPSHOT=3a77966168b3c48437370e75e33159980e0fac89
+SNAPSHOT=136d342aa09434860846073b173f889d908bafec
 SRC_URI="https://github.com/jemalloc/jemalloc/archive/${SNAPSHOT}.tar.gz -> jemalloc-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/jemalloc-${SNAPSHOT}"
 

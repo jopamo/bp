@@ -25,7 +25,7 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 DESCRIPTION="The official Python SDK for the Model Context Protocol"
 HOMEPAGE="https://github.com/modelcontextprotocol/python-sdk"
-SNAPSHOT=3d7b311de07aade1281d18aa7b04689a81ab8793
+SNAPSHOT=e8e64842781c66b613872cf394de6e7d6f6925bf
 SRC_URI="https://github.com/modelcontextprotocol/python-sdk/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/python-sdk-${SNAPSHOT}"
 

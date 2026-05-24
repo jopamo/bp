@@ -4,7 +4,7 @@ inherit flag-o-matic qa-policy
 
 DESCRIPTION="A lightweight secured SOCKS5 proxy for embedded devices and low end boxes"
 HOMEPAGE="https://github.com/shadowsocks/shadowsocks-rust"
-SNAPSHOT=ebf12fbc3ae6cfe645770ba04b1b7b35e1f11751
+SNAPSHOT=4b666c134c828876db8a530c0055590cfed07f2b
 SRC_URI="https://github.com/shadowsocks/shadowsocks-rust/archive/${SNAPSHOT}.tar.gz -> shadowsocks-rust-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/shadowsocks-rust-${SNAPSHOT}"
 

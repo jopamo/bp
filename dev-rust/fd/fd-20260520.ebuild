@@ -17,10 +17,10 @@ CARGO_DEPS="
 	rust-crates/cc-1.2.56
 	rust-crates/cfg-if-1.0.4
 	rust-crates/cfg_aliases-0.2.1
-	rust-crates/clap-4.6.0
+	rust-crates/clap-4.6.1
 	rust-crates/clap_builder-4.6.0
-	rust-crates/clap_complete-4.6.0
-	rust-crates/clap_derive-4.6.0
+	rust-crates/clap_complete-4.6.2
+	rust-crates/clap_derive-4.6.1
 	rust-crates/clap_lex-1.0.0
 	rust-crates/colorchoice-1.0.4
 	rust-crates/crossbeam-channel-0.5.15
@@ -48,12 +48,12 @@ CARGO_DEPS="
 	rust-crates/indexmap-2.13.0
 	rust-crates/is_terminal_polyfill-1.70.2
 	rust-crates/itoa-1.0.17
-	rust-crates/jiff-0.2.23
-	rust-crates/jiff-static-0.2.23
+	rust-crates/jiff-0.2.24
+	rust-crates/jiff-static-0.2.24
 	rust-crates/jiff-tzdb-0.1.6
 	rust-crates/jiff-tzdb-platform-0.1.3
 	rust-crates/leb128fmt-0.1.0
-	rust-crates/libc-0.2.183
+	rust-crates/libc-0.2.186
 	rust-crates/libredox-0.1.14
 	rust-crates/linux-raw-sys-0.12.1
 	rust-crates/log-0.4.29
@@ -133,7 +133,7 @@ inherit cargo lockstep-cargo
 
 DESCRIPTION="A simple, fast and user-friendly alternative to gnu find"
 HOMEPAGE="https://github.com/sharkdp/fd"
-SNAPSHOT=2250bb0ad13bf2ab93f4d56977811e648b3f62dc
+SNAPSHOT=42b2ab8a84ddedf80eeed9079128c60161f64658
 SRC_URI="https://github.com/sharkdp/fd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

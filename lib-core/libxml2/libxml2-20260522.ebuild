@@ -4,7 +4,7 @@ inherit python-r1 autotools flag-o-matic prefix qa-policy
 
 DESCRIPTION="Version 2 of the library to manipulate XML files"
 HOMEPAGE="http://www.xmlsoft.org/"
-SNAPSHOT=61e5f3ea97609bb221a355579d2285ddd28d90d2
+SNAPSHOT=c2e233fc1b341685fc99621b2768b503f777a72e
 SRC_URI="https://gitlab.gnome.org/GNOME/libxml2/-/archive/${SNAPSHOT}/libxml2-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/libxml2-${SNAPSHOT}
 

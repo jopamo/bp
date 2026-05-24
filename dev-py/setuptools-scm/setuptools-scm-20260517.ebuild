@@ -13,7 +13,7 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 DESCRIPTION="Manage versions by scm tags via setuptools"
 HOMEPAGE="https://github.com/pypa/setuptools-scm/"
-SNAPSHOT=f53cf5c121851998a610822469ae90507006e044
+SNAPSHOT=8ef96133af868a7cb8ea0f35fffd60fbc32fc815
 SRC_URI="https://github.com/pypa/setuptools-scm/archive/${SNAPSHOT}.tar.gz -> setuptools-scm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/setuptools-scm-${SNAPSHOT}/setuptools-scm"
 

@@ -13,7 +13,7 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 DESCRIPTION="NVIDIA CUDA Python Bindings"
 HOMEPAGE="https://github.com/NVIDIA/cuda-python"
-SNAPSHOT=f77e0c823e3bce21ebd06a4b186ad573dd25cad7
+SNAPSHOT=11eb35f88082c988787c291b07e259d8084b7eb6
 SRC_URI="https://github.com/NVIDIA/cuda-python/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}/cuda_python"
 

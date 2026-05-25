@@ -15,7 +15,7 @@ LICENSE="Apache-2.0-with-LLVM-exceptions UoI-NCSA rc BSD public-domain"
 SLOT=0
 KEYWORDS="amd64 arm64"
 
-IUSE="amdgpu assertions bootstrap +clang-tools-extra bpf cuda debug libcxx libcxxabi libfuzzer nvptx orc sanitizers static_analyzer -sysclang syslibcxxabi test wasm xcore"
+IUSE="amdgpu assertions bootstrap +clang-tools-extra bpf cuda debug libcxx libcxxabi libfuzzer lto nvptx orc sanitizers static_analyzer -sysclang syslibcxxabi test wasm xcore"
 
 COMMON_DEPEND="
 	app-net/curl
@@ -229,7 +229,7 @@ src_configure() {
     local bootstrap=(
 		-DBOOTSTRAP_BOOTSTRAP_LLVM_ENABLE_LLD=ON
 		-DBOOTSTRAP_LLVM_ENABLE_LLD=ON
-		-DBOOTSTRAP_LLVM_ENABLE_LTO=Off
+		-DBOOTSTRAP_LLVM_ENABLE_LTO=$(usex lto ON Off)
 		-DCLANG_BOOTSTRAP_PASSTHROUGH=${bootstrap_passthrough_string}
 		-DCLANG_ENABLE_BOOTSTRAP=ON
     )
@@ -274,7 +274,7 @@ src_configure() {
         -DLLVM_ENABLE_LLD=ON
     )
 
-	local llvm_lto_mode=Off
+	local llvm_lto_mode=$(usex lto ON Off)
 
 	mycmakeargs=("${common[@]}")
 	mycmakeargs+=( -DLLVM_ENABLE_LTO=${llvm_lto_mode} )
@@ -319,6 +319,20 @@ src_configure() {
     qa-policy-configure
 
     cmake_src_configure
+}
+
+src_compile() {
+	if use libcxx && use syslibcxxabi; then
+		_cmake_check_build_dir
+		# compiler-rt can start before libc++ has copied its generated headers
+		# into the runtimes build tree, which leaves <new> and friends missing
+		# under -nostdinc++. Materialize them first to avoid the race.
+		pushd "${BUILD_DIR}"/runtimes/runtimes-bins > /dev/null || die
+		"${CMAKE_BINARY}" --build . --target generate-cxx-headers || die
+		popd > /dev/null || die
+	fi
+
+	cmake_src_compile
 }
 
 src_test() {

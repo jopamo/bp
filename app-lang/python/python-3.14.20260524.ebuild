@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="$(ver_cut 1-2)"
-SNAPSHOT=86ffaf125f50c56574fe936dd058fb8afc3b68db
+SNAPSHOT=229447af5854d1fb70d1481567607083e9c21dfa
 
 WANT_LIBTOOL="none"
 

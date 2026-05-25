@@ -326,10 +326,14 @@ src_compile() {
 		_cmake_check_build_dir
 		# compiler-rt can start before libc++ has copied its generated headers
 		# into the runtimes build tree, which leaves <new> and friends missing
-		# under -nostdinc++. Materialize them first to avoid the race.
-		pushd "${BUILD_DIR}"/runtimes/runtimes-bins > /dev/null || die
-		"${CMAKE_BINARY}" --build . --target generate-cxx-headers || die
-		popd > /dev/null || die
+		# under -nostdinc++. First force the runtimes external project to
+		# configure so its cache exists, then materialize the libc++ headers.
+		cmake_build runtimes-configure
+
+		local runtimes_build_dir="${BUILD_DIR}"/runtimes/runtimes-bins
+		[[ -f "${runtimes_build_dir}"/CMakeCache.txt ]] || die "Missing runtimes CMake cache: ${runtimes_build_dir}"
+		"${CMAKE_BINARY}" --build "${runtimes_build_dir}" --target generate-cxx-headers \
+			|| die "Failed to generate libc++ headers for compiler-rt"
 	fi
 
 	cmake_src_compile

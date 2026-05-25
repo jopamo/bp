@@ -188,6 +188,7 @@ _qa-policy-apply-defaults() {
 	: "${QA_POLICY_LINKER_EXPECTED:=auto}"
 	: "${QA_POLICY_LINKER_ALLOW:=}"
 	: "${QA_POLICY_LTO_FLAVOR:=auto}"
+	: "${QA_POLICY_LTO_CONFIGURE:=1}"
 	: "${QA_POLICY_LTO_STRIP_ARCHIVE_IR:=1}"
 	: "${QA_POLICY_ARCHIVE_ALLOW_THIN:=0}"
 	: "${QA_POLICY_ARCHIVE_DUPLICATE_MEMBER_ALLOW:=}"
@@ -243,6 +244,7 @@ _qa-policy-validate-config() {
 		QA_POLICY_SHOW_CLEAN \
 		QA_POLICY_SANITIZE \
 		QA_POLICY_ASSERT \
+		QA_POLICY_LTO_CONFIGURE \
 		QA_POLICY_LTO_STRIP_ARCHIVE_IR \
 		QA_POLICY_ARCHIVE_ALLOW_THIN \
 		QA_POLICY_ARCHIVE_REQUIRE_INDEX \
@@ -383,7 +385,11 @@ _qa-policy-discover-installed-files() {
 
 _qa-policy-run-configure() {
 	qa-linker-configure
-	qa-lto-configure
+	if [[ ${QA_POLICY_LTO_CONFIGURE} == 1 ]]; then
+		qa-lto-configure
+	else
+		filter-lto
+	fi
 }
 
 _qa-policy-maybe-finalize-early() {

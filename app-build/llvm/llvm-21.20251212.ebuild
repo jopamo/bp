@@ -192,11 +192,49 @@ src_configure() {
 		-DOCAMLFIND=NO
     )
 
+    local bootstrap_passthrough=(
+		CMAKE_INSTALL_PREFIX
+		CMAKE_VERBOSE_MAKEFILE
+    )
+
+    if use syslibcxxabi; then
+		bootstrap_passthrough+=(
+			CLANG_DEFAULT_CXX_STDLIB
+			CLANG_DEFAULT_RTLIB
+			CLANG_DEFAULT_UNWINDLIB
+			COMPILER_RT_CXX_LIBRARY
+			COMPILER_RT_USE_BUILTINS_LIBRARY
+			LIBCXXABI_ENABLE_SHARED
+			LIBCXXABI_ENABLE_STATIC
+			LIBCXXABI_ENABLE_STATIC_UNWINDER
+			LIBCXXABI_INCLUDE_TESTS
+			LIBCXXABI_LIBUNWIND_INCLUDES
+			LIBCXXABI_USE_COMPILER_RT
+			LIBCXXABI_USE_LLVM_UNWINDER
+			LIBCXX_CXX_ABI
+			LIBCXX_CXX_ABI_INCLUDE_PATHS
+			LIBCXX_CXX_ABI_LIBRARY_PATH
+			LIBCXX_ENABLE_ASSERTIONS
+			LIBCXX_ENABLE_LOCALIZATION
+			LIBCXX_ENABLE_NEW_DELETE_DEFINITIONS
+			LIBCXX_ENABLE_STATIC_ABI_LIBRARY
+			LIBCXX_HARDENING_MODE
+			LIBCXX_HAS_MUSL_LIBC
+			LIBCXX_INCLUDE_BENCHMARKS
+			LIBCXX_INCLUDE_TESTS
+			LIBUNWIND_USE_COMPILER_RT
+			LLVM_ENABLE_LIBCXX
+		)
+    fi
+
+    local bootstrap_passthrough_string=$(printf '%s;' "${bootstrap_passthrough[@]}")
+    bootstrap_passthrough_string=${bootstrap_passthrough_string%;}
+
     local bootstrap=(
 		-DBOOTSTRAP_BOOTSTRAP_LLVM_ENABLE_LLD=ON
 		-DBOOTSTRAP_LLVM_ENABLE_LLD=ON
 		-DBOOTSTRAP_LLVM_ENABLE_LTO=Thin
-		-DCLANG_BOOTSTRAP_PASSTHROUGH="CMAKE_INSTALL_PREFIX;CMAKE_VERBOSE_MAKEFILE"
+		-DCLANG_BOOTSTRAP_PASSTHROUGH=${bootstrap_passthrough_string}
 		-DCLANG_ENABLE_BOOTSTRAP=ON
     )
 
@@ -246,9 +284,7 @@ src_configure() {
         mycmakeargs+=("${sysclang[@]}")
     fi
 
-    if use bootstrap; then
-        mycmakeargs+=("${bootstrap[@]}")
-    elif use syslibcxxabi; then
+    if use syslibcxxabi; then
         use libcxx && mycmakeargs+=("${libcxx[@]}")
         mycmakeargs+=("${cxxabi[@]}" "${syslibcxxabi[@]}")
         if use libcxxabi; then
@@ -262,6 +298,11 @@ src_configure() {
         fi
     elif use libcxx; then
         mycmakeargs+=("${libcxx[@]}" "${cxxabi[@]}")
+    fi
+
+    if use bootstrap; then
+        use syslibcxxabi && mycmakeargs+=( -DBOOTSTRAP_LLVM_ENABLE_LIBCXX=ON )
+        mycmakeargs+=("${bootstrap[@]}")
     fi
 
     if use sysclang; then

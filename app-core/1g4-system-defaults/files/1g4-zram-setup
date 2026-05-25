@@ -1,0 +1,38 @@
+#!/bin/sh
+set -eu
+
+device=/dev/zram0
+priority=100
+algorithm=lz4
+size_percent=50
+
+if grep -q "^${device}[[:space:]]" /proc/swaps 2>/dev/null; then
+	exit 0
+fi
+
+if [ -w /sys/module/zswap/parameters/enabled ]; then
+	printf 'N\n' > /sys/module/zswap/parameters/enabled || true
+fi
+
+/usr/bin/modprobe zram num_devices=1 || true
+
+if [ ! -b "${device}" ]; then
+	echo "1g4-zram-setup: ${device} not present" >&2
+	exit 1
+fi
+
+if [ -r /sys/block/zram0/disksize ] && [ "$(cat /sys/block/zram0/disksize)" != "0" ]; then
+	if /usr/bin/blkid -p -s TYPE -o value "${device}" 2>/dev/null | grep -qx swap; then
+		exec /usr/bin/swapon --priority "${priority}" "${device}"
+	fi
+
+	echo "1g4-zram-setup: ${device} already configured; refusing to reset it" >&2
+	exit 0
+fi
+
+mem_total_kb=$(awk '/^MemTotal:/ { print $2; exit }' /proc/meminfo)
+size_bytes=$(( mem_total_kb * 1024 * size_percent / 100 ))
+
+/usr/bin/zramctl "${device}" --algorithm "${algorithm}" --size "${size_bytes}"
+/usr/bin/mkswap -f "${device}" >/dev/null
+exec /usr/bin/swapon --priority "${priority}" "${device}"

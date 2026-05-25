@@ -1,0 +1,15 @@
+[Unit]
+Description=Configure 1g4 default zram swap
+DefaultDependencies=no
+After=local-fs.target systemd-modules-load.service systemd-sysctl.service
+Before=sysinit.target swap.target shutdown.target
+Conflicts=shutdown.target
+ConditionVirtualization=!container
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/1g4-zram-setup
+RemainAfterExit=yes
+
+[Install]
+WantedBy=sysinit.target

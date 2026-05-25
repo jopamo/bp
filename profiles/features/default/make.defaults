@@ -2,9 +2,9 @@
 
 OPT_FLAGS="-O3 -pipe -Wall -Wformat -Wformat-security"
 GRAPHITE_FLAGS=""
-LTO_FLAGS="-flto=thin -fno-semantic-interposition"
+LTO_FLAGS="-flto -fno-semantic-interposition"
 LTO_COMPILE_FLAGS="${LTO_FLAGS}"
-LTO_LINK_FLAGS="-flto=thin -fuse-ld=lld -fno-semantic-interposition"
+LTO_LINK_FLAGS="${LTO_FLAGS}"
 
 BASE_FLAGS="${OPT_FLAGS} ${GRAPHITE_FLAGS} ${SECURITY_FLAGS} ${POSITION_FLAGS} ${LTO_COMPILE_FLAGS}"
 CFLAGS="${MARCH} ${BASE_FLAGS} ${REPRO_FLAGS}"

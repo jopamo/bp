@@ -10,8 +10,8 @@ inherit toolchain-funcs distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-py/jinja
-	dev-py/lxml
+	dev-pypi/jinja
+	dev-pypi/lxml
 	dev-pypi/colorlog
 	dev-pypi/pygments
 "
@@ -25,8 +25,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	dev-py/jinja[${PYTHON_USEDEP}]
-	dev-py/lxml[${PYTHON_USEDEP}]
+	dev-pypi/jinja[${PYTHON_USEDEP}]
+	dev-pypi/lxml[${PYTHON_USEDEP}]
 	dev-pypi/colorlog[${PYTHON_USEDEP}]
 	>=dev-pypi/pygments-2.13.0[${PYTHON_USEDEP}]
 "

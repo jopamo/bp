@@ -21,7 +21,7 @@ RESTRICT="!test? ( test )"
 BDEPEND="
 	app-dev/pkgconf
 	${PYTHON_DEPS}
-	$(python_gen_any_dep 'dev-py/docutils[${PYTHON_USEDEP}]')
+	$(python_gen_any_dep 'dev-pypi/docutils[${PYTHON_USEDEP}]')
 "
 RDEPEND="
 	lib-core/ncurses
@@ -49,7 +49,7 @@ DEPEND="${RDEPEND}"
 PDEPEND="xmedia-lib/wireplumber"
 
 python_check_deps() {
-	python_has_version "dev-py/docutils[${PYTHON_USEDEP}]"
+	python_has_version "dev-pypi/docutils[${PYTHON_USEDEP}]"
 }
 
 pkg_setup() {

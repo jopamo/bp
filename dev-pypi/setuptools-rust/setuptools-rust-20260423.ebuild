@@ -1,0 +1,49 @@
+# lockstep-managed: dependency-ebuild
+# Distributed under the terms of the GNU General Public License v2
+# lockstep-cargo-managed: true
+# lockstep-cargo-deps: begin
+CARGO_DEPS="
+"
+# lockstep-cargo-deps: end
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{10..13} pypy3 )
+
+inherit cargo lockstep-cargo distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/semantic-version
+	dev-pypi/setuptools
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="A plugin for setuptools to build Rust Python extensions"
+HOMEPAGE="https://github.com/PyO3/setuptools-rust/"
+SNAPSHOT=0c847360d0f0f7807f809cbc380e13a7ad7d3148
+SRC_URI="https://github.com/PyO3/setuptools-rust/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/setuptools-rust-${SNAPSHOT}
+
+# crates are used at test time only, update via pycargoebuild -L -i ...
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+IUSE="test"
+RESTRICT="!test? ( test )"
+
+RDEPEND="
+	virtual/rust
+	<dev-pypi/semantic-version-3[${PYTHON_USEDEP}]
+	>=dev-pypi/semantic-version-2.8.2[${PYTHON_USEDEP}]
+	>=dev-pypi/setuptools-62.4[${PYTHON_USEDEP}]
+"
+BDEPEND="
+	>=dev-pypi/setuptools-62.4[${PYTHON_USEDEP}]
+	test? (
+		${RDEPEND}
+		dev-pypi/beautifulsoup4[${PYTHON_USEDEP}]
+		$(python_gen_cond_dep '
+			dev-pypi/cffi[${PYTHON_USEDEP}]
+		' 'python*')
+		dev-pypi/lxml[${PYTHON_USEDEP}]
+		dev-pypi/pytest[${PYTHON_USEDEP}]
+	)
+"

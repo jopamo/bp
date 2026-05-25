@@ -25,6 +25,6 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 
 BDEPEND="
-	dev-py/setuptools-scm[${PYTHON_USEDEP}]
+	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

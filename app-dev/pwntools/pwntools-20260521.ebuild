@@ -9,7 +9,7 @@ RDEPEND+="
 	app-dev/ropgadget
 	app-emu/capstone
 	app-emu/unicorn
-	dev-py/zstandard
+	dev-pypi/zstandard
 	dev-pypi/colored-traceback
 	dev-pypi/intervaltree
 	dev-pypi/mako

@@ -7,7 +7,7 @@ inherit distutils-r1
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	app-crypto/cryptography
-	dev-py/pyscard
+	dev-pypi/pyscard
 	dev-pypi/click
 	dev-pypi/fido2
 	dev-pypi/keyring
@@ -39,7 +39,7 @@ RDEPEND="
 	app-crypto/cryptography[${PYTHON_USEDEP}]
 	dev-pypi/fido2:0/1.0[${PYTHON_USEDEP}]
 	dev-pypi/keyring[${PYTHON_USEDEP}]
-	dev-py/pyscard[${PYTHON_USEDEP}]
+	dev-pypi/pyscard[${PYTHON_USEDEP}]
 	ssl? ( >=dev-pypi/pyopenssl-0.15.1[${PYTHON_USEDEP}] )"
 BDEPEND="
 	test? ( dev-pypi/makefun[${PYTHON_USEDEP}] )

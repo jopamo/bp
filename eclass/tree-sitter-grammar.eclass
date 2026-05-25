@@ -33,7 +33,7 @@ for _BINDING in "${TS_BINDINGS[@]}"; do
 			IUSE+=" python"
 			REQUIRED_USE+=" python? ( ${PYTHON_REQUIRED_USE} )"
 			DEPEND+=" python? ( ${PYTHON_DEPS} )"
-			RDEPEND+=" python? ( ${PYTHON_DEPS} >=dev-py/tree-sitter-0.21.0[${PYTHON_USEDEP}] )"
+			RDEPEND+=" python? ( ${PYTHON_DEPS} >=dev-pypi/tree-sitter-0.21.0[${PYTHON_USEDEP}] )"
 			BDEPEND+=" python? ( ${PYTHON_DEPS} ${DISTUTILS_DEPS} dev-pypi/wheel[${PYTHON_USEDEP}] )"
 			;;
 		*)

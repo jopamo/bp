@@ -27,7 +27,7 @@ COMMON_DEPEND="
 	app-core/sed
 	app-crypto/blake3
 	app-crypto/gnupg
-	dev-py/lxml[${PYTHON_USEDEP}]
+	dev-pypi/lxml[${PYTHON_USEDEP}]
 "
 
 DEPEND="

@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="+bfd caps clang llvm"
 
-BDEPEND="dev-py/docutils"
+BDEPEND="dev-pypi/docutils"
 DEPEND="
 	lib-net/libbpf:=[static-libs]
 	lib-core/elfutils

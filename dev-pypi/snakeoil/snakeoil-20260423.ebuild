@@ -1,0 +1,32 @@
+# lockstep-managed: dependency-ebuild
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_USE_PEP517=flit
+
+inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND=""
+# lockstep-pypi-deps: end
+DESCRIPTION="misc common functionality and useful optimizations"
+HOMEPAGE="https://github.com/pkgcore/snakeoil"
+SNAPSHOT=b7f1668511bb9943df9158e512f844ea22c80145
+SRC_URI="https://github.com/pkgcore/snakeoil/archive/${SNAPSHOT}.tar.gz -> snakeoil-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/snakeoil-${SNAPSHOT}"
+
+LICENSE="BSD BSD-2 MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+RDEPEND="
+	dev-pypi/lazy-object-proxy[${PYTHON_USEDEP}]
+"
+BDEPEND="
+	>=dev-pypi/flit-core-3.8[${PYTHON_USEDEP}]
+"
+
+src_prepare() {
+	default
+
+	sed -i 's/self._parse_known_args(args, namespace)/self._parse_known_args(args, namespace, intermixed=False)/' src/snakeoil/cli/arghparse.py || die
+}

@@ -20,6 +20,6 @@ S="${WORKDIR}/unicorn-2.1.4"
 
 BDEPEND="
 	dev-pypi/build[${PYTHON_USEDEP}]
-	dev-py/setuptools-scm[${PYTHON_USEDEP}]
+	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

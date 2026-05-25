@@ -27,7 +27,7 @@ BDEPEND="
 	app-core/debianutils
 	app-dev/gtk-doc-am
 	app-dev/pkgconf
-	dev-py/docutils
+	dev-pypi/docutils
 	xgui-desktop/shared-mime-info
 "
 

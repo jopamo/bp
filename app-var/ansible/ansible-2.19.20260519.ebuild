@@ -21,7 +21,7 @@ RESTRICT="test"
 
 RDEPEND="
 	dev-pypi/paramiko[${PYTHON_USEDEP}]
-	dev-py/jinja[${PYTHON_USEDEP}]
+	dev-pypi/jinja[${PYTHON_USEDEP}]
 	dev-pypi/pyyaml[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 	app-crypto/cryptography[${PYTHON_USEDEP}]

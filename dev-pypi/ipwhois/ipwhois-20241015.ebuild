@@ -1,0 +1,28 @@
+# lockstep-managed: dependency-ebuild
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_USE_PEP517=setuptools
+
+inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/dnspython
+	dev-pypi/defusedxml
+"
+# lockstep-pypi-deps: end
+DESCRIPTION="Python module for retrieving and parsing whois data for IPv4 and IPv6 addresses"
+HOMEPAGE="https://github.com/secynic/ipwhois"
+
+SNAPSHOT=b8c79c4e902467ccac0d841ad6ef820b1627e357
+SRC_URI="https://github.com/secynic/ipwhois/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
+
+LICENSE="BSD"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+RESTRICT="test"
+RDEPEND="dev-pypi/dnspython[${PYTHON_USEDEP}]
+	dev-pypi/defusedxml[${PYTHON_USEDEP}]"
+DEPEND="${RDEPEND}"

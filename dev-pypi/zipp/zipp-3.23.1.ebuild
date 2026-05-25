@@ -20,6 +20,6 @@ S="${WORKDIR}/zipp-3.23.1"
 
 BDEPEND="
 	dev-pypi/coherent-licensed[${PYTHON_USEDEP}]
-	dev-py/setuptools-scm[${PYTHON_USEDEP}]
+	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

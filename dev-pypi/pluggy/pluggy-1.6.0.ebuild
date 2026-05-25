@@ -19,6 +19,6 @@ SRC_URI="https://files.pythonhosted.org/packages/f9/e2/3e91f31a7d2b083fe6ef3fa26
 S="${WORKDIR}/pluggy-1.6.0"
 
 BDEPEND="
-	dev-py/setuptools-scm[${PYTHON_USEDEP}]
+	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

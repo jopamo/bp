@@ -34,9 +34,27 @@ src_install() {
 	use static-libs || rm -f "${ED}"/usr/lib/libhunspell-1.7.a || die
 	use minimal && rm -f "${ED}"/usr/bin/{makealias,affixcompress,wordforms,ispellaff2myspell,wordlist2hunspell,munch,analyze,chmorph,unmunch,hunzip,hzip}
 
-	for x in libhunspell.so.1 libhunspell.so.1.0 libhunspell.so ; do
-		dosym -r /usr/lib/libhunspell-1.7.so.0.0.1 /usr/lib/${x}
+	local hunspell_devel_link= hunspell_soname_link= path=
+
+	for path in "${ED}"/usr/lib/libhunspell-*.so ; do
+		[[ -L ${path} ]] || continue
+		hunspell_devel_link="/usr/lib/${path##*/}"
+		break
 	done
+	[[ -n ${hunspell_devel_link} ]] || die "failed to find installed libhunspell linker symlink"
+
+	for path in "${ED}"/usr/lib/libhunspell-*.so.* ; do
+		[[ -L ${path} ]] || continue
+		[[ ${path##*.so.} =~ ^[0-9]+$ ]] || continue
+		hunspell_soname_link="/usr/lib/${path##*/}"
+		break
+	done
+	[[ -n ${hunspell_soname_link} ]] || die "failed to find installed libhunspell SONAME symlink"
+
+	for x in libhunspell.so.1 libhunspell.so.1.0 ; do
+		dosym -r "${hunspell_soname_link}" /usr/lib/${x}
+	done
+	dosym -r "${hunspell_devel_link}" /usr/lib/libhunspell.so
 
 	qa-policy-install
 }

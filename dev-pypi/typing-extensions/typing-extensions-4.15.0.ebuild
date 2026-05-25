@@ -11,7 +11,7 @@ inherit distutils-r1
 
 DESCRIPTION="Backported and Experimental Type Hints for Python 3.9+"
 HOMEPAGE="https://pypi.org/project/typing-extensions/"
-LICENSE="metapackage"
+LICENSE="PSF-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 

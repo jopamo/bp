@@ -83,8 +83,8 @@ _filter-hardened() {
 					is-flagq -fstrict-overflow || append-flags $(test-flags -fstrict-overflow)
 				fi
 				;;
-			-D_GLIBCXX_ASSERTIONS|-D_LIBCPP_ENABLE_ASSERTIONS|-D_LIBCPP_ENABLE_HARDENED_MODE)
-				tc-enables-cxx-assertions && append-cppflags -U_GLIBCXX_ASSERTIONS -U_LIBCPP_ENABLE_ASSERTIONS -U_LIBCPP_ENABLE_HARDENED_MODE
+			-D_GLIBCXX_ASSERTIONS|-D_GLIBCXX_ASSERTIONS=*|-D_LIBCPP_ENABLE_ASSERTIONS|-D_LIBCPP_ENABLE_ASSERTIONS=*|-D_LIBCPP_HARDENING_MODE=*|-D_LIBCPP_ENABLE_HARDENED_MODE)
+				tc-enables-cxx-assertions && append-cppflags -U_GLIBCXX_ASSERTIONS -U_LIBCPP_ENABLE_ASSERTIONS -U_LIBCPP_HARDENING_MODE -U_LIBCPP_ENABLE_HARDENED_MODE
 				;;
 			-D_FORTIFY_SOURCE=*)
 				tc-enables-fortify-source && append-cppflags -U_FORTIFY_SOURCE
@@ -119,7 +119,7 @@ filter-clang() {
 	replace-flags -O3 -O2;
 	replace-flags '-flto*' -flto;
 	filter-flags -fgraphite-identity -floop-nest-optimize -ftree-loop-distribution -fdevirtualize-at-ltrans -fipa-pta;
-	filter-flags -fuse-linker-plugin '-D_FORTIFY_SOURCE*' -D_GLIBCXX_ASSERTIONS '-Wl,-z,combreloc' '-Wl,-z,defs' '-Wl,-z,now';
+	filter-flags -fuse-linker-plugin '-D_FORTIFY_SOURCE*' '-D_GLIBCXX_ASSERTIONS*' '-D_LIBCPP_ENABLE_ASSERTIONS*' '-D_LIBCPP_HARDENING_MODE=*' '-Wl,-z,combreloc' '-Wl,-z,defs' '-Wl,-z,now';
 	filter-flags '-Wl,-z,relro' -fstack-clash-protection -fstack-protector-strong '-mbranch-protection*';
 	strip-flags
 }
@@ -133,7 +133,7 @@ filter-sanitizers() {
 filter-gcc() {
 	replace-flags -O3 -O2
 	filter-flags -fgraphite-identity -floop-nest-optimize -ftree-loop-distribution -fdevirtualize-at-ltrans -fipa-pta;
-	filter-flags -fuse-linker-plugin '-D_FORTIFY_SOURCE*' -D_GLIBCXX_ASSERTIONS '-Wl,-z,combreloc' '-Wl,-z,defs' '-Wl,-z,now';
+	filter-flags -fuse-linker-plugin '-D_FORTIFY_SOURCE*' '-D_GLIBCXX_ASSERTIONS*' '-D_LIBCPP_ENABLE_ASSERTIONS*' '-D_LIBCPP_HARDENING_MODE=*' '-Wl,-z,combreloc' '-Wl,-z,defs' '-Wl,-z,now';
 	filter-flags '-Wl,-z,relro' -fstack-clash-protection -fstack-protector-strong;
 }
 

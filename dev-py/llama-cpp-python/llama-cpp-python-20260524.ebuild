@@ -15,7 +15,7 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 DESCRIPTION="Python bindings for llama.cpp"
 HOMEPAGE="https://github.com/abetlen/llama-cpp-python"
-SNAPSHOT=52fe54bb99ddaa9f2723a1e27d8dbc574fa2d4cf
+SNAPSHOT=3bda091492113605e7b174798be1f1db5986cfaa
 SRC_URI="https://github.com/abetlen/llama-cpp-python/archive/${SNAPSHOT}.tar.gz -> llama-cpp-python-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/llama-cpp-python-${SNAPSHOT}
 

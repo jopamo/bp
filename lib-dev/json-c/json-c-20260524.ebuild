@@ -4,7 +4,7 @@ inherit cmake qa-policy
 
 DESCRIPTION="A JSON implementation in C"
 HOMEPAGE="https://github.com/json-c/json-c/wiki"
-SNAPSHOT=dee128f4d6dc0a305fc3d4b6a7ab3e3186a1306b
+SNAPSHOT=3e708e4c4f231f00e91efeb7d2cd1221aac165cb
 SRC_URI="https://github.com/json-c/json-c/archive/${SNAPSHOT}.tar.gz -> json-c-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/json-c-${SNAPSHOT}"
 

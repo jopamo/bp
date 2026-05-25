@@ -10,6 +10,7 @@ app-lang/python
 app-lang/perl
 app-dev/ccache
 app-build/gcc
+app-build/llvm
 app-dev/cmake
 app-dev/pkgconf
 app-core/layout

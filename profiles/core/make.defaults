@@ -72,9 +72,12 @@ LDFLAGS="${LTO_FLAGS} ${POSITION_FLAGS} \
     -Wl,-O1 \
     -Wl,-z,combreloc -Wl,-z,now -Wl,-z,relro -Wl,--as-needed"
 
-AR="gcc-ar"
-RANLIB="gcc-ranlib"
-NM="gcc-nm"
+# Keep archive/index tools generic so clang-first builds can switch to the
+# LLVM implementations without fighting hard GCC wrapper defaults, while GCC
+# bootstrap remains available when LLVM is not installed yet.
+AR="ar"
+RANLIB="ranlib"
+NM="nm"
 
 ###############################################################################
 # Python

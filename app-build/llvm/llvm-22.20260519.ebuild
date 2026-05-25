@@ -90,6 +90,15 @@ src_configure() {
     filter-lto
     #filter-sanitizers
 
+	local compiler_rt_build_libfuzzer=$(usex libfuzzer)
+	local compiler_rt_sanitizers_to_build=all
+	if use elibc_musl; then
+		# Keep the base musl bootstrap narrow for now. The exotic compiler-rt
+		# paths pull in extra libc++ header consumers and expose ordering bugs.
+		compiler_rt_build_libfuzzer=OFF
+		compiler_rt_sanitizers_to_build="asan;msan;tsan;safestack;cfi;scudo_standalone;ubsan_minimal;gwp_asan;asan_abi"
+	fi
+
     local LLVM_TARGETS=""
     local LLVM_RUNTIMES="libunwind;compiler-rt"
 
@@ -133,13 +142,14 @@ src_configure() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
 		-DCOMPILER_RT_BUILD_GWP_ASAN=OFF
-		-DCOMPILER_RT_BUILD_LIBFUZZER=$(usex libfuzzer)
+		-DCOMPILER_RT_BUILD_LIBFUZZER=${compiler_rt_build_libfuzzer}
 		-DCOMPILER_RT_BUILD_MEMPROF=OFF
 		-DCOMPILER_RT_BUILD_ORC=$(usex orc)
 		-DCOMPILER_RT_BUILD_PROFILE=OFF
 		-DCOMPILER_RT_BUILD_SANITIZERS=$(usex sanitizers)
 		-DCOMPILER_RT_BUILD_XRAY=OFF
 		-DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=${TUPLE}
+		-DCOMPILER_RT_SANITIZERS_TO_BUILD=${compiler_rt_sanitizers_to_build}
 		-DCOMPILER_RT_USE_LIBEXECINFO=OFF
 		-DCOMPILER_RT_USE_LLVM_UNWINDER=ON
 		-DENABLE_LINKER_BUILD_ID=ON

@@ -11,7 +11,7 @@ inherit distutils-r1
 
 DESCRIPTION="PEP 621 metadata parsing"
 HOMEPAGE="https://github.com/pypa/pyproject-metadata"
-LICENSE="metapackage"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 

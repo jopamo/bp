@@ -229,7 +229,7 @@ src_configure() {
     local bootstrap=(
 		-DBOOTSTRAP_BOOTSTRAP_LLVM_ENABLE_LLD=ON
 		-DBOOTSTRAP_LLVM_ENABLE_LLD=ON
-		-DBOOTSTRAP_LLVM_ENABLE_LTO=Thin
+		-DBOOTSTRAP_LLVM_ENABLE_LTO=Off
 		-DCLANG_BOOTSTRAP_PASSTHROUGH=${bootstrap_passthrough_string}
 		-DCLANG_ENABLE_BOOTSTRAP=ON
     )
@@ -275,12 +275,9 @@ src_configure() {
     )
 
 	local llvm_lto_mode=Off
-	if use sysclang; then
-		llvm_lto_mode=Thin
-	fi
 
 	mycmakeargs=("${common[@]}")
-	[[ ${llvm_lto_mode} != Off ]] && mycmakeargs+=( -DLLVM_ENABLE_LTO=${llvm_lto_mode} )
+	mycmakeargs+=( -DLLVM_ENABLE_LTO=${llvm_lto_mode} )
 
 	if use sysclang; then
         mycmakeargs+=("${sysclang[@]}")

@@ -51,9 +51,9 @@ src_prepare() {
 	append-flags -D__UAPI_DEF_IN6_ADDR=0 -D__UAPI_DEF_IN6_ADDR_ALT=0 -D__UAPI_DEF_SOCKADDR_IN6=0 -D__UAPI_DEF_IPV6_MREQ=0
 
 	if use elibc_musl; then
-		# prefer musl native functions and avoid libbsd fallback
+		# keep optional feature probes from leaking CFLAGS/LDLIBS into
+		# disabled configurations
 		eapply "${FILESDIR}"/iproute2-6.8.0-configure-nomagic-nolibbsd.patch
-		eapply "${FILESDIR}"/iproute2-6.8.0-disable-libbsd-fallback.patch
 
 		# guard SIOCGSTAMP redefs on musl to silence warnings without breaking non-musl
 		sed -Ei \

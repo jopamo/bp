@@ -22,6 +22,7 @@ COMMON_DEPEND="
 	lib-core/libedit
 	lib-core/libffi
 	lib-core/libxml2
+	elibc_musl? ( lib-core/musl-bsd )
 	lib-core/zlib
 	app-compression/zstd
 	virtual/curses
@@ -275,6 +276,19 @@ src_test() {
 
 src_install() {
     cmake_src_install
+
+	if use elibc_musl; then
+		cat > "${T}/${CHOST}.cfg" <<-EOF || die
+# Auto-load musl-bsd compatibility overlays and link shims for musl targets.
+-isystem
+/usr/lib/musl-bsd/overlay/include
+-Wl,--push-state,--as-needed
+-lmusl-bsd-compat
+-Wl,--pop-state
+EOF
+		insinto /usr/bin
+		doins "${T}/${CHOST}.cfg"
+	fi
 
 	dosym -r "/usr/lib/${TUPLE}/libunwind.a" "/usr/lib/libunwind.a"
 	dosym -r "/usr/lib/${TUPLE}/libunwind.so" "/usr/lib/libunwind.so"

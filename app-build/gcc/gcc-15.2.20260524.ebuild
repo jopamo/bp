@@ -36,6 +36,9 @@ DEPEND="
 	isl? ( lib-core/isl )
 	zstd? ( app-compression/zstd )
 "
+RDEPEND="${DEPEND}
+	elibc_musl? ( lib-core/musl-bsd )
+"
 BDEPEND="
 	app-build/bison
 	app-build/flex
@@ -186,6 +189,30 @@ src_install() {
 
 	dobin "${FILESDIR}"/c89
 	dobin "${FILESDIR}"/c99
+
+	if use elibc_musl; then
+		local gcc_specdir="${ED}/usr/lib/gcc/${CHOST}"
+		local gcc_verdir
+
+		gcc_verdir=$(find "${gcc_specdir}" -mindepth 1 -maxdepth 1 -type d | head -n1) || die
+		[[ -n ${gcc_verdir} ]] || die "failed to locate GCC version directory in ${gcc_specdir}"
+		[[ ! -e ${gcc_verdir}/specs ]] || die "unexpected existing specs file at ${gcc_verdir}/specs"
+
+		# Prepend the musl-bsd overlay so wrapper headers like <sys/mount.h>
+		# are visible without per-package CPPFLAGS or source patches, and
+		# auto-link the compat library so GNU/BSD replacement symbols resolve
+		# naturally.
+		cat > "${gcc_verdir}/specs" <<-EOF || die
+%rename cpp_unique_options old_cpp_unique_options
+%rename lib old_lib
+
+*cpp_unique_options:
+%(old_cpp_unique_options) %{!nostdinc:-isystem =/usr/lib/musl-bsd/overlay/include}
+
+*lib:
+%{!nostdlib:%{!nodefaultlibs:%{!nolibc:--push-state --as-needed -lmusl-bsd-compat --pop-state}}} %(old_lib)
+EOF
+	fi
 
 	if use go-bootstrap; then
 		exeinto /usr/lib/gccgo/bin

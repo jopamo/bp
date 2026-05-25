@@ -197,28 +197,6 @@ my_src_install() {
 }
 
 pkg_preinst() {
-	if ! use build && [[ -z ${ROOT} ]]; then
-		python_setup
-		local sitedir=$(python_get_sitedir)
-		[[ -d ${D}${sitedir} ]] || die "${D}${sitedir}: No such directory"
-		env -u DISTDIR \
-			-u corepkg_OVERRIDE_EPREFIX \
-			-u corepkg_REPOSITORIES \
-			-u PORTDIR \
-			-u PORTDIR_OVERLAY \
-			PYTHONPATH="${D}${sitedir}${PYTHONPATH:+:${PYTHONPATH}}" \
-			"${PYTHON}" -m corepkg._compat_upgrade.default_locations || die
-
-		env -u BINPKG_COMPRESS -u corepkg_REPOSITORIES \
-			PYTHONPATH="${D}${sitedir}${PYTHONPATH:+:${PYTHONPATH}}" \
-			"${PYTHON}" -m corepkg._compat_upgrade.binpkg_compression || die
-
-		env -u FEATURES -u corepkg_REPOSITORIES \
-			PYTHONPATH="${D}${sitedir}${PYTHONPATH:+:${PYTHONPATH}}" \
-			"${PYTHON}" -m corepkg._compat_upgrade.binpkg_multi_instance || die
-
-	fi
-
 	# elog dir must exist to avoid logrotate error for bug #415911.
 	# This code runs in preinst in order to bypass the mapping of
 	# corepkg:corepkg to root:root which happens after src_install.
@@ -235,12 +213,6 @@ pkg_postinst() {
 	local homedir="${privdir}/home"
 	local distdir="${EROOT%/}${EPREFIX}/var/cache/distfiles"
 	local distfiles_ownership_stamp="${privdir}/compat_upgrade/one_off/20260305_distfiles_ownership.done"
-
-	if ! use build && [[ -z ${ROOT} ]]; then
-		python_setup
-		env -u corepkg_REPOSITORIES \
-			"${PYTHON}" -m corepkg._compat_upgrade.one_off_runner || die
-	fi
 
 	sysusers_process
 	tmpfiles_process

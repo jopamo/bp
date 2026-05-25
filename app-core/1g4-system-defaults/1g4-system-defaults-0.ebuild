@@ -6,6 +6,7 @@ inherit doins
 
 DESCRIPTION="1g4 base system policy defaults"
 HOMEPAGE="https://1g4.org/"
+S=${WORKDIR}
 
 LICENSE="metapackage"
 SLOT="0"

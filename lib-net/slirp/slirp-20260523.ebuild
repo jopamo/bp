@@ -5,7 +5,6 @@ inherit meson qa-policy
 DESCRIPTION="A TCP-IP emulator used to provide virtual networking services"
 HOMEPAGE="https://gitlab.freedesktop.org/slirp/libslirp"
 
-UPSTREAM_PV=4.9.1
 SNAPSHOT=97b325339a1377249e68e6c58e9c15a6e1bba4c1
 SRC_URI="https://gitlab.freedesktop.org/slirp/libslirp/-/archive/${SNAPSHOT}/lib${PN}-${SNAPSHOT}.tar.bz2 -> lib${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/lib${PN}-${SNAPSHOT}
@@ -17,8 +16,12 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs valgrind"
 
 src_prepare() {
-	echo "${UPSTREAM_PV}.${PV}" > .tarball-version || die
-	echo -e "#!${BASH}\necho -n \$(cat '${S}/.tarball-version')" > build-aux/git-version-gen || die
+	local project_version=
+
+	project_version=$(sed -nE "/^[[:space:]]*version[[:space:]]*:/ { s/^[[:space:]]*version[[:space:]]*:[[:space:]]*['\\\"]([^'\\\"]+)['\\\"].*/\\1/p; q; }" meson.build) || die
+	[[ -n ${project_version} ]] || die "failed to extract project version from meson.build"
+
+	printf '%s\n' "${project_version}.${PV}" > .tarball-version || die
 	default
 }
 

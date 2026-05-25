@@ -306,14 +306,9 @@ src_install() {
 		dosym -r "/usr/lib/${TUPLE}/libc++abi.so.1" "/usr/lib/libc++abi.so.1"
 	fi
 
-	    if use syslibcxxabi; then
-			dosym -r "/usr/bin/clang" "/usr/bin/cc"
-			dosym -r "/usr/bin/clang" "/usr/bin/gcc"
-			dosym -r "/usr/bin/llvm-ar" "/usr/bin/ar"
-			dosym -r "/usr/bin/llvm-strip" "/usr/bin/strip"
-			dosym -r "/usr/bin/clang++" "/usr/bin/cxx"
-			dosym -r "/usr/bin/ld.lld" "/usr/bin/ld"
-	    fi
+	# Keep generic tool ownership with GCC/binutils during the transition.
+	# Clang-first selection is handled by profile and toolchain policy, not
+	# by colliding on /usr/bin/{cc,gcc,ar,ld,strip}.
 
 		local QA_POLICY_ARCHIVE_DUPLICATE_MEMBER_ALLOW="
 			/usr/lib/libclangCodeGen.a:AMDGPU.cpp.o

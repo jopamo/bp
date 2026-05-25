@@ -261,7 +261,13 @@ src_configure() {
         -DLLVM_ENABLE_LLD=ON
     )
 
+	local llvm_lto_mode=Off
+	if use sysclang; then
+		llvm_lto_mode=Thin
+	fi
+
 	mycmakeargs=("${common[@]}")
+	[[ ${llvm_lto_mode} != Off ]] && mycmakeargs+=( -DLLVM_ENABLE_LTO=${llvm_lto_mode} )
 
 	if use sysclang; then
         mycmakeargs+=("${sysclang[@]}")
@@ -299,7 +305,7 @@ src_configure() {
 
     use debug || local -x CPPFLAGS="${CPPFLAGS} -DNDEBUG"
 
-    local QA_POLICY_LTO_FLAVOR=fat+strip
+    local QA_POLICY_LTO_CONFIGURE=0
     qa-policy-configure
 
     cmake_src_configure

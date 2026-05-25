@@ -271,7 +271,7 @@ _distutils_set_globals() {
 		fi
 
 		bdep='
-			>=dev-py/gpep517-16[${PYTHON_USEDEP}]
+			>=dev-pypi/gpep517-16[${PYTHON_USEDEP}]
 		'
 		case ${DISTUTILS_USE_PEP517} in
 			flit)
@@ -846,12 +846,12 @@ _distutils-r1_print_package_versions() {
 
 	if [[ ${DISTUTILS_USE_PEP517} ]]; then
 		packages+=(
-			dev-py/gpep517
-			dev-py/installer
+			dev-pypi/gpep517
+			dev-pypi/installer
 		)
 		if [[ ${DISTUTILS_EXT} ]]; then
 			packages+=(
-				dev-py/cython
+				dev-pypi/cython
 			)
 		fi
 		case ${DISTUTILS_USE_PEP517} in
@@ -864,7 +864,7 @@ _distutils-r1_print_package_versions() {
 				packages+=(
 					dev-pypi/flit-core
 					dev-py/flit-scm
-					dev-py/setuptools-scm
+					dev-pypi/setuptools-scm
 				)
 				;;
 			hatchling)
@@ -878,7 +878,7 @@ _distutils-r1_print_package_versions() {
 				packages+=(
 					dev-py/jupyter-packaging
 					dev-pypi/setuptools
-					dev-py/setuptools-scm
+					dev-pypi/setuptools-scm
 					dev-pypi/wheel
 				)
 				;;
@@ -921,8 +921,8 @@ _distutils-r1_print_package_versions() {
 			setuptools)
 				packages+=(
 					dev-pypi/setuptools
-					dev-py/setuptools-rust
-					dev-py/setuptools-scm
+					dev-pypi/setuptools-rust
+					dev-pypi/setuptools-scm
 					dev-pypi/wheel
 				)
 				;;

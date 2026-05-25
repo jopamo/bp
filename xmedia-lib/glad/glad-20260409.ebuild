@@ -6,7 +6,7 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-py/jinja
+	dev-pypi/jinja
 "
 # lockstep-pypi-deps: end
 DESCRIPTION="Multi-Language Vulkan/GL/GLES/EGL/GLX/WGL Loader-Generator"

@@ -26,7 +26,7 @@ RDEPEND="python? ( ${PYTHON_DEPS} )"
 BDEPEND="
 	python? (
 		${DISTUTILS_DEPS}
-		>=dev-py/setuptools-scm-8[${PYTHON_USEDEP}]
+		>=dev-pypi/setuptools-scm-8[${PYTHON_USEDEP}]
 	)"
 
 RESTRICT="!test? ( test )"

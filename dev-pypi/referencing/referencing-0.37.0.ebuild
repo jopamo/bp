@@ -20,7 +20,7 @@ S="${WORKDIR}/referencing-0.37.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-py/rpds-py
+	dev-pypi/rpds-py
 	dev-pypi/attrs
 "
 # lockstep-pypi-deps: end

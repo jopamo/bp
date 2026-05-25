@@ -20,7 +20,7 @@ S="${WORKDIR}/jsonschema-4.26.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-py/rpds-py
+	dev-pypi/rpds-py
 	dev-pypi/attrs
 	dev-pypi/jsonschema-specifications
 	dev-pypi/referencing

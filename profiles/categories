@@ -14,7 +14,6 @@ app-util
 app-var
 bin
 core-perl
-dev-py
 dev-pypi
 dev-rust
 rust-crates

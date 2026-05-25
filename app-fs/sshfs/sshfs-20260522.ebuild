@@ -18,4 +18,4 @@ DEPEND="
 	app-net/openssh"
 
 BDEPEND="app-dev/pkgconf
-	dev-py/docutils"
+	dev-pypi/docutils"

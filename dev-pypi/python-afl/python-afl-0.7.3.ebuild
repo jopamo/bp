@@ -19,7 +19,7 @@ SRC_URI="https://files.pythonhosted.org/packages/9d/47/12d68610f99e2d60e31b6031f
 S="${WORKDIR}/python-afl-0.7.3"
 
 BDEPEND="
-	dev-py/cython[${PYTHON_USEDEP}]
+	dev-pypi/cython[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 	dev-pypi/wheel[${PYTHON_USEDEP}]
 "

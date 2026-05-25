@@ -20,7 +20,7 @@ S="${WORKDIR}/hatch_vcs-0.5.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-py/setuptools-scm
+	dev-pypi/setuptools-scm
 	dev-pypi/hatchling
 "
 # lockstep-pypi-deps: end

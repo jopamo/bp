@@ -19,6 +19,6 @@ SRC_URI="https://files.pythonhosted.org/packages/a2/87/a6771e1546d97e7e041b6ae58
 S="${WORKDIR}/sniffio-1.3.1"
 
 BDEPEND="
-	dev-py/setuptools-scm[${PYTHON_USEDEP}]
+	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

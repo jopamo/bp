@@ -1005,10 +1005,11 @@ gcc-specs-stack-check() {
 # @DESCRIPTION:
 # Return truth if the current compiler enables assertions in the C++ standard
 # library. For libstdc++, this is -D_GLIBCXX_ASSERTIONS, and for libcxx/libc++,
-# this is -D_LIBCPP_ENABLE_ASSERTIONS (deprecated) or -D_LIBCPP_ENABLE_HARDENED_MODE.
+# this is -D_LIBCPP_ENABLE_ASSERTIONS (deprecated) or
+# -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST.
 tc-enables-cxx-assertions() {
 	local -a flags=( ${CPPFLAGS-} ${CXXFLAGS-} )
-	tc-cpp-is-true "defined(_GLIBCXX_ASSERTIONS) || defined(_LIBCPP_ENABLE_ASSERTIONS) || defined(_LIBCPP_ENABLE_HARDENED_MODE)" "${flags[@]}"
+	tc-cpp-is-true "defined(_GLIBCXX_ASSERTIONS) || defined(_LIBCPP_ENABLE_ASSERTIONS) || defined(_LIBCPP_HARDENING_MODE) || defined(_LIBCPP_ENABLE_HARDENED_MODE)" "${flags[@]}"
 }
 
 # @FUNCTION: tc-enables-pie

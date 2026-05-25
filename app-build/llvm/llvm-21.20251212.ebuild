@@ -251,6 +251,7 @@ src_configure() {
     if use bootstrap; then
         mycmakeargs+=("${bootstrap[@]}")
     elif use syslibcxxabi; then
+        use libcxx && mycmakeargs+=("${libcxx[@]}")
         mycmakeargs+=("${cxxabi[@]}" "${syslibcxxabi[@]}")
     elif use libcxx; then
         mycmakeargs+=("${libcxx[@]}" "${cxxabi[@]}")

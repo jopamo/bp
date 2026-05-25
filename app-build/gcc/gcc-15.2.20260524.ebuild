@@ -201,16 +201,14 @@ src_install() {
 		# Prepend the musl-bsd overlay so wrapper headers like <sys/mount.h>
 		# are visible without per-package CPPFLAGS or source patches, and
 		# auto-link the compat library so GNU/BSD replacement symbols resolve
-		# naturally.
+		# naturally. Avoid %rename here: GCC reads the installed specs file
+		# early enough that renaming built-ins is fragile on some targets.
 		cat > "${gcc_verdir}/specs" <<-EOF || die
-%rename cpp_unique_options old_cpp_unique_options
-%rename lib old_lib
-
-*cpp_unique_options:
-%(old_cpp_unique_options) %{!nostdinc:-isystem =/usr/lib/musl-bsd/overlay/include}
+*cpp:
+%{posix:-D_POSIX_SOURCE} %{pthread:-D_REENTRANT} %{!nostdinc:-isystem =/usr/lib/musl-bsd/overlay/include}
 
 *lib:
-%{!nostdlib:%{!nodefaultlibs:%{!nolibc:--push-state --as-needed -lmusl-bsd-compat --pop-state}}} %(old_lib)
+%{!mandroid|tno-android-ld:%{pthread:-lpthread} %{shared:-lc}    %{!shared:%{profile:-lc_p}%{!profile:-lc}} %{!nostdlib:%{!nodefaultlibs:%{!nolibc: --push-state --as-needed -lmusl-bsd-compat --pop-state}}};:%{shared:-lc}    %{!shared:%{profile:-lc_p}%{!profile:-lc}} %{!static: -ldl}}
 EOF
 	fi
 

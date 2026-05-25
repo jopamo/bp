@@ -1,5 +1,5 @@
 virtual/dbus user-session
-app-core/layout -server
+app-core/1g4-system-defaults -server
 app-net/bluez user-session
 app-core/systemd logind sleep
 app-kernel/kernel-bin desktop

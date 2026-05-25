@@ -205,10 +205,8 @@ src_configure() {
 
     local syslibcxxabi=(
     	-DLLVM_ENABLE_LIBCXX=ON
-        -DLIBCXX_CXX_ABI=system-libcxxabi
         -DCLANG_DEFAULT_CXX_STDLIB=libc++
 		-DCOMPILER_RT_CXX_LIBRARY=libcxx
-		-DLIBCXX_CXX_ABI_INCLUDE_PATHS=ON
 		-DLIBCXXABI_USE_COMPILER_RT=ON
 		-DLIBCXXABI_USE_LLVM_UNWINDER=ON
 		-DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON
@@ -236,6 +234,15 @@ src_configure() {
     elif use syslibcxxabi; then
         use libcxx && mycmakeargs+=("${libcxx[@]}")
         mycmakeargs+=("${cxxabi[@]}" "${syslibcxxabi[@]}")
+        if use libcxxabi; then
+            mycmakeargs+=( -DLIBCXX_CXX_ABI=libcxxabi )
+        else
+            mycmakeargs+=(
+                -DLIBCXX_CXX_ABI=system-libcxxabi
+                -DLIBCXX_CXX_ABI_INCLUDE_PATHS=${EPREFIX}/usr/include/c++/v1
+                -DLIBCXX_CXX_ABI_LIBRARY_PATH=${EPREFIX}/usr/lib
+            )
+        fi
     elif use libcxx; then
         mycmakeargs+=("${libcxx[@]}" "${cxxabi[@]}")
     fi

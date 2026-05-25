@@ -14,7 +14,7 @@ RDEPEND=""
 MY_P=${P/_rc/rc}
 DESCRIPTION="A Python to C compiler"
 HOMEPAGE="https://cython.org/"
-SNAPSHOT=4f45a9c1f3dc0b007993130d60f474dbe607e88e
+SNAPSHOT=4f28bbb155cc024d6cdcf12f957e7802280e33b3
 SRC_URI="https://github.com/cython/cython/archive/${SNAPSHOT}.tar.gz -> cython-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/cython-${SNAPSHOT}"
 

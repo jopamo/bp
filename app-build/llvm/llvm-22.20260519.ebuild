@@ -163,7 +163,10 @@ src_configure() {
 		-DLIBUNWIND_SUPPORTS_FUNWIND_TABLES_FLAG=OFF
 		-DLIBUNWIND_USE_COMPILER_RT=ON
 		-DLLVM_APPEND_VC_REV=OFF
-		-DLLVM_BINUTILS_INCDIR="${EPREFIX}"/usr/include
+		# Do not build the GNU gold plugin in the LLVM-first toolchain. It
+		# depends on binutils plugin headers (plugin-api.h), which are no longer
+		# part of the base system.
+		-DLLVM_BINUTILS_INCDIR=
 		-DLLVM_BUILD_DOCS=OFF
 		-DLLVM_BUILD_LLVM_DYLIB=ON
 		-DLLVM_BUILD_TESTS=$(usex test)

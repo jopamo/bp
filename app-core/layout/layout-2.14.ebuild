@@ -103,6 +103,13 @@ src_install() {
 	done
 
 	dosym -r /usr/lib /lib
+	# Some third-party amd64 binaries hardcode /lib64/ld-linux-x86-64.so.2
+	# in PT_INTERP even on merged-/usr systems.
+	case ${ARCH} in
+		amd64)
+			dosym -r /usr/lib /lib64
+			;;
+	esac
 
 	keepdir /usr/local/lib
 	dosym -r /usr/local/lib /usr/local/lib64

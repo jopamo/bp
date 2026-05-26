@@ -22,7 +22,6 @@ DEPEND="
 
 PDEPEND="
 	app-tex/docbookz
-	app-util/mandoc
 	app-core/help2man
 "
 

@@ -19,6 +19,9 @@ LICENSE="|| ( MIT Apache-2.0 ) BSD-1 BSD-2 BSD-4 UoI-NCSA"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="clippy rls rustfmt"
+RDEPEND="
+	elibc_musl? ( app-build/llvm )
+"
 
 QA_PREBUILT="
 	opt/bin/.*
@@ -84,6 +87,16 @@ src_install() {
 	$(use arm64 && usex elibc_musl 'CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUSTFLAGS="-C target-feature=-crt-static"' '')
 	_EOF_
 	doenvd "${T}/50${P}"
+
+	if use elibc_musl; then
+		# Upstream musl std falls back to -lgcc_s for proc-macro / dylib links
+		# when crt-static is disabled. Point that lookup at the LLVM unwinder so
+		# rust-bin can bootstrap source Rust on GCC-free musl systems.
+		dosym -r /usr/lib/libunwind.so \
+			/opt/lib/rustlib/${rust_triple}/lib/libgcc_s.so
+		dosym -r /usr/lib/libunwind.so.1 \
+			/opt/lib/rustlib/${rust_triple}/lib/libgcc_s.so.1
+	fi
 
 	# Fix installation path issues for certain binaries
 	rm -f "${ED}/opt/lib/rustlib/${rust_triple}/bin/rust-llvm-dwp" || die

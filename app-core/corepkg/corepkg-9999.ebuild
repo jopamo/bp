@@ -123,10 +123,41 @@ my_src_install() {
 		"${D}$(python_get_sitedir)"
 		"${ED}/usr/lib/corepkg/${EPYTHON}"
 	)
+	local compat_dir
+	local compat_module
 	local entry line path ext page
 	local -a entries=()
 
 	meson_src_install
+
+	# Older installed corepkg revisions still invoke these no-op
+	# self-upgrade hooks during phase execution. Stage them here so
+	# upgrading corepkg itself does not explode before the new runtime
+	# has replaced the old helpers.
+	compat_dir="${D}$(python_get_sitedir)/corepkg/_compat_upgrade"
+	install -d "${compat_dir}" || die
+
+	cat > "${compat_dir}/__init__.py" <<-'EOF' || die
+	"""Temporary no-op shims for stale corepkg self-upgrade hooks."""
+	EOF
+
+	for compat_module in \
+		binpkg_compression \
+		binpkg_format \
+		binpkg_multi_instance \
+		default_locations \
+		one_off_runner
+	do
+		cat > "${compat_dir}/${compat_module}.py" <<-'EOF' || die
+		from __future__ import annotations
+
+		def main(argv: list[str] | None = None) -> int:
+		    return 0
+
+		if __name__ == "__main__":
+		    raise SystemExit(main())
+		EOF
+	done
 
 	if has_version "app-var/eselect" ; then
 		ewarn "One-off migration: app-var/eselect is installed, so bundled eselect is skipped for this merge."

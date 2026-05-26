@@ -68,6 +68,14 @@ src_prepare() {
 
 	sed -i -e "/'-O3'/d" common.gypi node.gypi || die
 
+	# Node 26 vendors LIEF -> spdlog -> bundled fmt that uses malloc/free
+	# without bringing the declarations into scope under clang/libc++.
+	sed -i \
+		-e '/#  include <cstring>/a #  include <cstdlib>  // std::malloc, std::free' \
+		-e 's/static_cast<T\\*>(malloc(/static_cast<T*>(std::malloc(/' \
+		-e 's/{ free(p); }/{ std::free(p); }/' \
+		deps/LIEF/third-party/spdlog/include/spdlog/fmt/bundled/format.h || die
+
 	# debug builds. change install path, remove optimisations and override buildtype
 	if use debug; then
 		sed -i -e "s|out/Release/|out/Debug/|g" tools/install.py || die

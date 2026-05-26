@@ -12,6 +12,14 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+src_prepare() {
+	default
+
+	# Upstream map exports pam_sm_chauthtok, but this PAM module does not define it
+	# lld rejects stale version-script exports instead of silently ignoring them
+	sed -i '/pam_sm_chauthtok;/d' src/pam_wtmpdb.map || die
+}
+
 src_configure() {
 	append-flags -D_GNU_SOURCE
 	append-cflags -include unistd.h

@@ -11,7 +11,6 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="
 app-lang/go
-app-build/gdb
 app-build/llvm
 app-core/bx
 app-core/lsof

@@ -29,6 +29,8 @@ DEPEND+="
     xgui-lib/libvdpau
 "
 RDEPEND+="
+    # NVIDIA ships glibc-linked userland tools (nvidia-smi, persistenced, etc).
+    elibc_musl? ( lib-core/musl-bsd )
     virtual/ssl
     X? (
         lib-core/zlib

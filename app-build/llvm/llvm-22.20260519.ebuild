@@ -39,10 +39,15 @@ QA_POLICY_SHEBANG_SANITIZE=1
 
 PATCHES=(
    "${FILESDIR}/install-prefix.patch"
-   "${FILESDIR}/musl-bsd-driver-integration.patch"
 )
 
 src_prepare() {
+    # S points at the llvm subproject, but this driver integration patch
+    # touches the sibling clang tree in the llvm-project monorepo.
+    pushd "${WORKDIR}/llvm-project-${SNAPSHOT}" >/dev/null || die
+    eapply "${FILESDIR}/musl-bsd-driver-integration.patch"
+    popd >/dev/null || die
+
     sed -i \
         -e 's/^[[:space:]]*virtual[[:space:]]\+BufferKind getBufferKind() const[[:space:]]*{/    BufferKind getBufferKind() const override {/' \
         tools/llvm-mc-assemble-fuzzer/llvm-mc-assemble-fuzzer.cpp || die

@@ -436,6 +436,18 @@ _lto-policy-relpath() {
 	printf '%s\n' "${file}"
 }
 
+_lto-policy-ranlib-reindex() {
+	local archive=$1
+	local rel=${2:-${archive}}
+	local -a ranlib_cmd=( $(tc-getRANLIB) )
+
+	if "${ranlib_cmd[@]}" -D "${archive}" >/dev/null 2>&1; then
+		return 0
+	fi
+
+	"${ranlib_cmd[@]}" "${archive}" || die "lto: ranlib failed for ${rel}"
+}
+
 # @FUNCTION: lto-postinstall-sanitize
 # @USAGE: [path] [more]
 # @DESCRIPTION:
@@ -453,11 +465,9 @@ lto-postinstall-sanitize() {
 		_lto-policy-strip-bytecode "${inputs[@]}"
 	fi
 
-	local ranlib_cmd
-	ranlib_cmd=$(tc-getRANLIB)
 	local archive
 	for archive in "${archives[@]}" ; do
-		"${ranlib_cmd}" "${archive}" || die "lto: ranlib failed for ${archive}"
+		_lto-policy-ranlib-reindex "${archive}" "${archive}"
 	done
 }
 

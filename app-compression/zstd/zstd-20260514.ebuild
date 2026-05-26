@@ -19,23 +19,32 @@ DEPEND="app-compression/xz-utils"
 src_compile() {
 	qa-policy-configure
 	local libdir="${EPREFIX}/usr/lib"
+	local ar=$(tc-getAR)
+	local ranlib=$(tc-getRANLIB)
+	local nm=$(tc-getNM)
 
 	emake \
 		CC="$(tc-getCC)" \
-		AR="$(tc-getAR)" \
+		AR="${ar}" \
+		RANLIB="${ranlib}" \
+		NM="${nm}" \
 		PREFIX="${EPREFIX}"/usr \
 		LIBDIR="${libdir}" zstd
 
 	emake -C lib \
 		CC="$(tc-getCC)" \
-		AR="$(tc-getAR)" \
+		AR="${ar}" \
+		RANLIB="${ranlib}" \
+		NM="${nm}" \
 		PREFIX="${EPREFIX}"/usr \
 		LIBDIR="${libdir}" libzstd
 
 	emake -C contrib/pzstd \
 		CC="$(tc-getCC)" \
 		CXX="$(tc-getCXX)" \
-		AR="$(tc-getAR)" \
+		AR="${ar}" \
+		RANLIB="${ranlib}" \
+		NM="${nm}" \
 		PREFIX="${EPREFIX}"/usr \
 		LIBDIR="${libdir}"
 
@@ -43,14 +52,23 @@ src_compile() {
 
 src_install() {
 	local libdir="${EPREFIX}/usr/lib"
+	local ar=$(tc-getAR)
+	local ranlib=$(tc-getRANLIB)
+	local nm=$(tc-getNM)
 
 	emake \
+		AR="${ar}" \
 		DESTDIR="${ED}" \
+		RANLIB="${ranlib}" \
+		NM="${nm}" \
 		PREFIX="${EPREFIX}"/usr \
 		LIBDIR="${libdir}" install
 
 	emake -C contrib/pzstd \
+		AR="${ar}" \
 		DESTDIR="${ED}" \
+		RANLIB="${ranlib}" \
+		NM="${nm}" \
 		PREFIX="${EPREFIX}"/usr \
 		LIBDIR="${libdir}" install
 

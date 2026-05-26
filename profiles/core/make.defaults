@@ -74,12 +74,12 @@ LDFLAGS="${LTO_LINK_FLAGS} ${POSITION_FLAGS} \
     -Wl,-O1 \
     -Wl,-z,combreloc -Wl,-z,now -Wl,-z,relro -Wl,--as-needed"
 
-# Keep archive/index tools generic so clang-first builds can switch to the
-# LLVM implementations without fighting hard GCC wrapper defaults, while GCC
-# bootstrap remains available when LLVM is not installed yet.
-AR="ar"
-RANLIB="ranlib"
-NM="nm"
+# LLVM is the primary toolchain now. Keep archive/index tools aligned with it
+# explicitly so package builds and QA post-processing do not drift back to GNU
+# binutils semantics during archive rewrite/fixup paths.
+AR="llvm-ar"
+RANLIB="llvm-ranlib"
+NM="llvm-nm"
 
 ###############################################################################
 # Python

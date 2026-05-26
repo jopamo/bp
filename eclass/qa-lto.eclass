@@ -10,7 +10,7 @@
 if [[ -z ${_QA_LTO_ECLASS:-} ]] ; then
 _QA_LTO_ECLASS=1
 
-inherit qa-report lto-policy
+inherit qa-report binutils-sanitizer lto-policy
 
 _QA_LTO_LAST_FLAVOR=
 
@@ -52,7 +52,7 @@ qa-lto-sanitize() {
 	qa-report-domain-begin lto
 
 	local -a archives=( "${QA_DISCOVER_ARCHIVES[@]}" )
-	local archive ranlib_cmd
+	local archive
 	local -i archives_scanned=${#archives[@]} archives_rewritten=0 ir_before=0 ir_after=0
 
 	if [[ ${#archives[@]} -gt 0 ]] && [[ ${QA_POLICY_LTO_STRIP_ARCHIVE_IR} == 1 ]]; then
@@ -66,9 +66,8 @@ qa-lto-sanitize() {
 		fi
 	fi
 
-	ranlib_cmd=$(tc-getRANLIB)
 	for archive in "${archives[@]}"; do
-		"${ranlib_cmd}" "${archive}" || die "qa-lto: ranlib failed for ${archive}"
+		_bu-ranlib-reindex "${archive}" "${archive}"
 		_lto-policy-has-ir "${archive}" && (( ir_after += 1 ))
 	done
 

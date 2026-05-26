@@ -495,6 +495,8 @@ _qa-policy-run-sanitize() {
 	qa-report-domain-stat libtool files_kept "${files_kept}"
 	qa-report-domain-stat libtool dependency_libs_cleaned "${dependency_libs_cleaned}"
 
+	# Rewrite/archive-mutation passes must run before the archive repair pass
+	# so armap/index fixups see the final archive contents.
 	if [[ ${QA_POLICY_LTO_MODE} != off ]]; then
 		qa-lto-sanitize
 	fi

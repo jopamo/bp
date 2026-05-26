@@ -93,7 +93,7 @@ tc-getPROG() { _tc-getPROG CHOST "$@"; }
 # @FUNCTION: tc-getAR
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the archiver
-tc-getAR() { tc-getPROG AR ar "$@"; }
+tc-getAR() { tc-getPROG AR "$(_tc-prefer-native-llvm_prog llvm-ar ar "$@")" "$@"; }
 # @FUNCTION: tc-getAS
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the assembler
@@ -117,31 +117,31 @@ tc-getLD() { tc-getPROG LD ld "$@"; }
 # @FUNCTION: tc-getSTRINGS
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the strings program
-tc-getSTRINGS() { tc-getPROG STRINGS strings "$@"; }
+tc-getSTRINGS() { tc-getPROG STRINGS "$(_tc-prefer-native-llvm_prog llvm-strings strings "$@")" "$@"; }
 # @FUNCTION: tc-getSTRIP
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the strip program
-tc-getSTRIP() { tc-getPROG STRIP strip "$@"; }
+tc-getSTRIP() { tc-getPROG STRIP "$(_tc-prefer-native-llvm_prog llvm-strip strip "$@")" "$@"; }
 # @FUNCTION: tc-getNM
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the symbol/object thingy
-tc-getNM() { tc-getPROG NM nm "$@"; }
+tc-getNM() { tc-getPROG NM "$(_tc-prefer-native-llvm_prog llvm-nm nm "$@")" "$@"; }
 # @FUNCTION: tc-getRANLIB
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the archive indexer
-tc-getRANLIB() { tc-getPROG RANLIB ranlib "$@"; }
+tc-getRANLIB() { tc-getPROG RANLIB "$(_tc-prefer-native-llvm_prog llvm-ranlib ranlib "$@")" "$@"; }
 # @FUNCTION: tc-getREADELF
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the ELF reader
-tc-getREADELF() { tc-getPROG READELF readelf "$@"; }
+tc-getREADELF() { tc-getPROG READELF "$(_tc-prefer-native-llvm_prog llvm-readelf readelf "$@")" "$@"; }
 # @FUNCTION: tc-getOBJCOPY
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the object copier
-tc-getOBJCOPY() { tc-getPROG OBJCOPY objcopy "$@"; }
+tc-getOBJCOPY() { tc-getPROG OBJCOPY "$(_tc-prefer-native-llvm_prog llvm-objcopy objcopy "$@")" "$@"; }
 # @FUNCTION: tc-getOBJDUMP
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the object dumper
-tc-getOBJDUMP() { tc-getPROG OBJDUMP objdump "$@"; }
+tc-getOBJDUMP() { tc-getPROG OBJDUMP "$(_tc-prefer-native-llvm_prog llvm-objdump objdump "$@")" "$@"; }
 # @FUNCTION: tc-getF77
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the Fortran 77 compiler
@@ -174,7 +174,7 @@ tc-getDLLWRAP() { tc-getPROG DLLWRAP dllwrap "$@"; }
 # @FUNCTION: tc-getBUILD_AR
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the archiver for building binaries to run on the build machine
-tc-getBUILD_AR() { tc-getBUILD_PROG AR ar "$@"; }
+tc-getBUILD_AR() { tc-getBUILD_PROG AR "$(_tc-prefer-build-llvm_prog llvm-ar ar "$@")" "$@"; }
 # @FUNCTION: tc-getBUILD_AS
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the assembler for building binaries to run on the build machine
@@ -198,27 +198,27 @@ tc-getBUILD_LD() { tc-getBUILD_PROG LD ld "$@"; }
 # @FUNCTION: tc-getBUILD_STRINGS
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the strings program for building binaries to run on the build machine
-tc-getBUILD_STRINGS() { tc-getBUILD_PROG STRINGS strings "$@"; }
+tc-getBUILD_STRINGS() { tc-getBUILD_PROG STRINGS "$(_tc-prefer-build-llvm_prog llvm-strings strings "$@")" "$@"; }
 # @FUNCTION: tc-getBUILD_STRIP
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the strip program for building binaries to run on the build machine
-tc-getBUILD_STRIP() { tc-getBUILD_PROG STRIP strip "$@"; }
+tc-getBUILD_STRIP() { tc-getBUILD_PROG STRIP "$(_tc-prefer-build-llvm_prog llvm-strip strip "$@")" "$@"; }
 # @FUNCTION: tc-getBUILD_NM
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the symbol/object thingy for building binaries to run on the build machine
-tc-getBUILD_NM() { tc-getBUILD_PROG NM nm "$@"; }
+tc-getBUILD_NM() { tc-getBUILD_PROG NM "$(_tc-prefer-build-llvm_prog llvm-nm nm "$@")" "$@"; }
 # @FUNCTION: tc-getBUILD_RANLIB
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the archive indexer for building binaries to run on the build machine
-tc-getBUILD_RANLIB() { tc-getBUILD_PROG RANLIB ranlib "$@"; }
+tc-getBUILD_RANLIB() { tc-getBUILD_PROG RANLIB "$(_tc-prefer-build-llvm_prog llvm-ranlib ranlib "$@")" "$@"; }
 # @FUNCTION: tc-getBUILD_READELF
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the ELF reader for building binaries to run on the build machine
-tc-getBUILD_READELF() { tc-getBUILD_PROG READELF readelf "$@"; }
+tc-getBUILD_READELF() { tc-getBUILD_PROG READELF "$(_tc-prefer-build-llvm_prog llvm-readelf readelf "$@")" "$@"; }
 # @FUNCTION: tc-getBUILD_OBJCOPY
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the object copier for building binaries to run on the build machine
-tc-getBUILD_OBJCOPY() { tc-getBUILD_PROG OBJCOPY objcopy "$@"; }
+tc-getBUILD_OBJCOPY() { tc-getBUILD_PROG OBJCOPY "$(_tc-prefer-build-llvm_prog llvm-objcopy objcopy "$@")" "$@"; }
 # @FUNCTION: tc-getBUILD_PKG_CONFIG
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the pkg-config tool for building binaries to run on the build machine

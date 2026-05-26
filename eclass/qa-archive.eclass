@@ -18,13 +18,12 @@ qa-archive-list() {
 
 qa-archive-fix-index() {
 	local archive=$1
-	local ar_cmd ranlib_cmd
+	local ar_cmd
 
 	ar_cmd=$(tc-getAR)
-	ranlib_cmd=$(tc-getRANLIB)
 
 	"${ar_cmd}" s "${archive}" >/dev/null 2>&1 || true
-	"${ranlib_cmd}" "${archive}" || die "qa-archive: ranlib failed for ${archive}"
+	_bu-ranlib-reindex "${archive}" "${archive}"
 }
 
 qa-archive-check-index() {

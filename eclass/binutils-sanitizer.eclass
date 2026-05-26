@@ -163,9 +163,28 @@ _bu-has-exported-symbols() {
 	grep -Eq '^[[:space:]]*[0-9a-fA-F]+[[:space:]]+[A-Za-z][[:space:]]' <<< "${nm_out}"
 }
 
-_bu-has-index() {
+_bu-print-armap() {
 	local archive=$1
 	local nm_cmd
+
+	nm_cmd=$(tc-getNM)
+	"${nm_cmd}" --print-armap "${archive}" 2>/dev/null
+}
+
+_bu-ranlib-reindex() {
+	local archive=$1
+	local rel=${2:-${archive}}
+	local -a ranlib_cmd=( $(tc-getRANLIB) )
+
+	if "${ranlib_cmd[@]}" -D "${archive}" >/dev/null 2>&1; then
+		return 0
+	fi
+
+	"${ranlib_cmd[@]}" "${archive}" || die "bu: ranlib failed for ${rel}"
+}
+
+_bu-has-index() {
+	local archive=$1
 	local nm_out
 
 	# Empty archives intentionally carry no symbol table. Treat them as
@@ -173,9 +192,8 @@ _bu-has-index() {
 	# empty libpthread.a/libdl.a do not fail QA.
 	_bu-is-empty-archive "${archive}" && return 0
 
-	nm_cmd=$(tc-getNM)
-	nm_out=$("${nm_cmd}" -s "${archive}" 2>/dev/null) || return 1
-	grep -q '^Archive index:' <<< "${nm_out}" && return 0
+	nm_out=$(_bu-print-armap "${archive}") || return 1
+	grep -Eq '^(Archive index:|Archive map)$' <<< "${nm_out}" && return 0
 
 	# Archives with no exported definitions may legitimately omit a symbol
 	# index (for example compiler-rt preinit stubs). Treat those as passing
@@ -249,6 +267,7 @@ _bu-convert-thin() {
 
 	"${ar_cmd}" crs "${tmpa}" "${copies[@]}" || die "bu: unable to rebuild ${archive}"
 	mv "${tmpa}" "${archive}" || die "bu: unable to replace ${archive}"
+	_bu-ranlib-reindex "${archive}" "${archive#${ED}}"
 	rm -rf "${tmpd}"
 }
 
@@ -343,9 +362,8 @@ bu-archive-fixup() {
 	mapfile -d '' -t archives < <(_bu-find-archives "$@")
 	[[ ${#archives[@]} -gt 0 ]] || return 0
 
-	local ar_cmd ranlib_cmd
+	local ar_cmd
 	ar_cmd=$(tc-getAR)
-	ranlib_cmd=$(tc-getRANLIB)
 
 	local archive rel thin
 	for archive in "${archives[@]}" ; do
@@ -361,7 +379,7 @@ bu-archive-fixup() {
 
 		if [[ ${BU_REINDEX_ALL} == 1 || ${BU_REQUIRE_INDEX} == 1 ]]; then
 			"${ar_cmd}" s "${archive}" >/dev/null 2>&1 || true
-			"${ranlib_cmd}" "${archive}" || die "bu: ranlib failed for ${rel}"
+			_bu-ranlib-reindex "${archive}" "${rel}"
 		fi
 	done
 }

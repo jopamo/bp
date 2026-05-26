@@ -50,7 +50,11 @@ src_prepare() {
 
 	filter-flags -fipa-pta -fgraphite-identity -floop-nest-optimize -ftree-loop-distribution
 
-	append-flags -fno-tree-ccp
+	if [[ $(tc-get-compiler-type) == gcc ]]; then
+		append-flags -fno-tree-ccp
+	else
+		filter-flags -fno-tree-ccp
+	fi
 
 	tc-export AR CC CXX PKG_CONFIG
 	export V=1

@@ -14,10 +14,6 @@ IUSE="static-libs"
 
 RDEPEND="!lib-core/glibc"
 
-PATCHES=(
-	"${FILESDIR}"/0001-usrmerge-runtime-install-dirs.patch
-)
-
 src_configure() {
 	qa-policy-configure
 	local emesonargs=(

@@ -4,9 +4,9 @@ EAPI=8
 
 inherit meson git-r3 qa-policy
 
-DESCRIPTION="LibreSSL2 OpenSSL-compatible SSL/TLS and crypto libraries"
-HOMEPAGE="https://gitlab.com/pjo/libressl2"
-EGIT_REPO_URI="https://gitlab.com/pjo/libressl2"
+DESCRIPTION="Vesk OpenSSL-compatible SSL/TLS and crypto libraries"
+HOMEPAGE="https://gitlab.com/pjo/vesk"
+EGIT_REPO_URI="https://gitlab.com/pjo/vesk"
 
 LICENSE="MIT"
 SLOT="0"

@@ -12,7 +12,7 @@ bp is short for 'backpack' to denote it being easier to move around on various c
 ## Features
 * supported arches: amd64 arm64
 * supported libc: glibc musl
-* supported ssl: libressl2
+* supported ssl: vesk
 * supported curses: ncurses netbsd-curses
 * bootstrap golang toolchain from source
 * bootstrap rust toolchain from source

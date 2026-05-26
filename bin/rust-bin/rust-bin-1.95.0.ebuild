@@ -24,15 +24,15 @@ RDEPEND="
 "
 
 QA_PREBUILT="
-	opt/bin/.*
-	opt/lib/.*.so
-	opt/libexec/.*
-	opt/lib/rustlib/.*/bin/.*
-	opt/lib/rustlib/.*/lib/.*
+	opt/rust/bin/.*
+	opt/rust/lib/.*.so
+	opt/rust/libexec/.*
+	opt/rust/lib/rustlib/.*/bin/.*
+	opt/rust/lib/rustlib/.*/lib/.*
 "
 
 RESTRICT="strip"
-QA_EXECSTACK="opt/lib/rustlib/*/lib*.rlib:lib.rmeta"
+QA_EXECSTACK="opt/rust/lib/rustlib/*/lib*.rlib:lib.rmeta"
 
 get_rust_triple() {
 	if use amd64; then
@@ -73,7 +73,7 @@ src_install() {
 	./install.sh \
 		--components="${components}" \
 		--disable-verify \
-		--prefix="${ED}/opt" \
+		--prefix="${ED}/opt/rust" \
 		--disable-ldconfig \
 		|| die
 
@@ -81,8 +81,9 @@ src_install() {
 	local rust_triple=$(get_rust_triple)
 
 	cat <<-_EOF_ > "${T}/50${P}"
-	LDPATH="${EPREFIX}/opt/lib/rustlib/${rust_triple}/lib"
-	MANPATH="${EPREFIX}/opt/share/man"
+	PATH="${EPREFIX}/opt/rust/bin"
+	LDPATH="${EPREFIX}/opt/rust/lib/rustlib/${rust_triple}/lib"
+	MANPATH="${EPREFIX}/opt/rust/share/man"
 	$(use amd64 && usex elibc_musl 'CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_RUSTFLAGS="-C target-feature=-crt-static"' '')
 	$(use arm64 && usex elibc_musl 'CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUSTFLAGS="-C target-feature=-crt-static"' '')
 	_EOF_
@@ -93,11 +94,11 @@ src_install() {
 		# when crt-static is disabled. Point that lookup at the LLVM unwinder so
 		# rust-bin can bootstrap source Rust on GCC-free musl systems.
 		dosym -r /usr/lib/libunwind.so \
-			/opt/lib/rustlib/${rust_triple}/lib/libgcc_s.so
+			/opt/rust/lib/rustlib/${rust_triple}/lib/libgcc_s.so
 		dosym -r /usr/lib/libunwind.so.1 \
-			/opt/lib/rustlib/${rust_triple}/lib/libgcc_s.so.1
+			/opt/rust/lib/rustlib/${rust_triple}/lib/libgcc_s.so.1
 	fi
 
 	# Fix installation path issues for certain binaries
-	rm -f "${ED}/opt/lib/rustlib/${rust_triple}/bin/rust-llvm-dwp" || die
+	rm -f "${ED}/opt/rust/lib/rustlib/${rust_triple}/bin/rust-llvm-dwp" || die
 }

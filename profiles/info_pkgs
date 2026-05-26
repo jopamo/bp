@@ -3,13 +3,11 @@
 app-core/bash
 app-build/autoconf
 app-build/automake
-app-build/binutils
 app-build/libtool
 app-build/make
 app-lang/python
 app-lang/perl
 app-dev/ccache
-app-build/gcc
 app-build/llvm
 app-dev/cmake
 app-dev/pkgconf

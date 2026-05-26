@@ -28,8 +28,9 @@ DEPEND+="
     app-core/kmod
     xgui-lib/libvdpau
 "
+# NVIDIA ships glibc-linked userland tools (nvidia-smi, persistenced, etc).
+# On musl, pull in the musl-bsd glibc-compat runtime explicitly.
 RDEPEND+="
-    # NVIDIA ships glibc-linked userland tools (nvidia-smi, persistenced, etc).
     elibc_musl? ( lib-core/musl-bsd )
     virtual/ssl
     X? (

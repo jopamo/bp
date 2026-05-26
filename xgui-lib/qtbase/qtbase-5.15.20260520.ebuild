@@ -2,7 +2,7 @@
 
 BRANCH_NAME="kde/$(ver_cut 1-2)"
 
-inherit flag-o-matic
+inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Cross-platform application development framework"
 HOMEPAGE="https://www.qt.io/"
@@ -52,6 +52,20 @@ PDEPEND="
 	xgui-lib/qtx11extras:$(ver_cut 1)
 "
 
+qtbase_qmakespec() {
+	if tc-is-clang; then
+		local cxx
+		cxx=$(tc-getCXX)
+		if "${cxx}" -E -x c++ - -v </dev/null 2>&1 | grep -q '/c++/v1'; then
+			echo linux-clang-libc++
+		else
+			echo linux-clang
+		fi
+	else
+		echo linux-g++
+	fi
+}
+
 src_prepare() {
 	filter-flags -flto*
 
@@ -70,7 +84,9 @@ src_prepare() {
 
 src_configure() {
 	local reduce_relocations="-reduce-relocations"
+	local qtplatform
 	[[ ${ARCH} == arm64 ]] && reduce_relocations=""
+	qtplatform=$(qtbase_qmakespec)
 
 	local myconf=(
 		-opensource -confirm-license
@@ -78,6 +94,7 @@ src_configure() {
 		-no-static
 		-no-framework
 		-no-rpath
+		-platform "${qtplatform}"
 		-prefix "${EPREFIX}"/usr
 		-docdir "${EPREFIX}"/usr/share/doc/qt$(ver_cut 1)
 		-headerdir "${EPREFIX}"/usr/include/qt$(ver_cut 1)
@@ -111,6 +128,7 @@ src_configure() {
 		$(usex vulkan -vulkan -no-vulkan)
 		$(usex xkbcommon -xkbcommon -no-xkbcommon)
     )
+	einfo "Using Qt platform spec: ${qtplatform}"
     einfo "Configuring with: ${myconf[@]}"
 	"${S}"/configure "${myconf[@]}" || die "configure failed"
 }

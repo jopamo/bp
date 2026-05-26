@@ -13,7 +13,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+bfd bpf +capstone debug"
+IUSE="bpf +capstone debug"
 RESTRICT="debug? ( strip )"
 
 DEPEND="
@@ -23,7 +23,6 @@ DEPEND="
 	lib-core/zlib
 	app-compression/xz-utils
 	app-compression/zstd
-	bfd? ( app-build/binutils )
 	bpf? ( lib-net/libbpf:= )
 "
 RDEPEND="${DEPEND}"
@@ -59,11 +58,6 @@ src_prepare() {
 		done
 	fi
 
-	# retain libstdc++ for the final perf link under global --as-needed/LTO
-	# so __cxa_demangle stays resolved even when libbfd/libiberty are linked
-	sed -i \
-		-e 's|\$(PERF_IN) \$(LIBS) -o \$@|$(PERF_IN) $(LIBS) -Wl,--push-state,--no-as-needed -lstdc++ -Wl,--pop-state -o $@|' \
-		tools/perf/Makefile.perf || die
 }
 
 src_compile() {
@@ -93,6 +87,7 @@ src_compile() {
 		NO_AIO=1
 		NO_GTK2=1
 		NO_JVMTI=1
+		NO_LIBBFD=1
 		NO_LIBBABELTRACE=1
 		NO_LIBDEBUGINFOD=1
 		NO_LIBLLVM=1
@@ -104,10 +99,6 @@ src_compile() {
 		NO_SLANG=1
 		BUILD_BPF_SKEL=0
 	)
-
-	if ! use bfd ; then
-		myemake+=( NO_LIBBFD=1 )
-	fi
 
 	if ! use bpf ; then
 		myemake+=( NO_LIBBPF=1 )
@@ -155,6 +146,7 @@ src_install() {
 		NO_AIO=1
 		NO_GTK2=1
 		NO_JVMTI=1
+		NO_LIBBFD=1
 		NO_LIBBABELTRACE=1
 		NO_LIBDEBUGINFOD=1
 		NO_LIBLLVM=1
@@ -166,10 +158,6 @@ src_install() {
 		NO_SLANG=1
 		BUILD_BPF_SKEL=0
 	)
-
-	if ! use bfd ; then
-		myemake+=( NO_LIBBFD=1 )
-	fi
 
 	if ! use bpf ; then
 		myemake+=( NO_LIBBPF=1 )

@@ -163,6 +163,7 @@ src_configure() {
 		tests = false
 		targets = "$(usex arm64 'AArch64' 'X86')"
 		$(usex arm64 "[target.aarch64-unknown-linux-$(usex elibc_musl musl gnu)]" "[target.x86_64-unknown-linux-$(usex elibc_musl musl gnu)]")
+		$(use elibc_musl && echo 'llvm-libunwind = "system"')
 		llvm-config = "/usr/bin/llvm-config"
 		linker = "clang"
 		cc = "clang"

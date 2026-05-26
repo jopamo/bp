@@ -15,6 +15,13 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 RDEPEND="!lib-core/glibc"
+PATCHES=(
+	"${FILESDIR}"/musl-bsd-35a76eb54d149f8163303f6a01b73fe129ab3697-build-fixes.patch
+)
+
+src_prepare() {
+	default
+}
 
 src_configure() {
 	qa-policy-configure

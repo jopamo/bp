@@ -57,6 +57,59 @@ _tc-prefer-build-llvm_prog() {
 	fi
 }
 
+_tc-prefer-native-llvm_cpp_prog() {
+	local fallback=$1
+	shift
+
+	if [[ $# -ne 0 ]]; then
+		if type -P "${1}-cpp" >/dev/null 2>&1; then
+			echo "cpp"
+		elif type -P "clang-cpp" >/dev/null 2>&1; then
+			echo "clang-cpp"
+		else
+			echo "${fallback}"
+		fi
+		return 0
+	fi
+
+	if declare -F tc-is-cross-compiler >/dev/null 2>&1 && tc-is-cross-compiler; then
+		echo "${fallback}"
+		return 0
+	fi
+
+	if type -P "cpp" >/dev/null 2>&1 || { [[ -n ${CHOST-} ]] && type -P "${CHOST}-cpp" >/dev/null 2>&1; }; then
+		echo "cpp"
+	elif type -P "clang-cpp" >/dev/null 2>&1; then
+		echo "clang-cpp"
+	else
+		echo "${fallback}"
+	fi
+}
+
+_tc-prefer-build-llvm_cpp_prog() {
+	local fallback=$1
+	shift
+
+	if [[ $# -ne 0 ]]; then
+		if type -P "${1}-cpp" >/dev/null 2>&1; then
+			echo "cpp"
+		elif type -P "clang-cpp" >/dev/null 2>&1; then
+			echo "clang-cpp"
+		else
+			echo "${fallback}"
+		fi
+		return 0
+	fi
+
+	if type -P "cpp" >/dev/null 2>&1 || { [[ -n ${CBUILD-} ]] && type -P "${CBUILD}-cpp" >/dev/null 2>&1; }; then
+		echo "cpp"
+	elif type -P "clang-cpp" >/dev/null 2>&1; then
+		echo "clang-cpp"
+	else
+		echo "${fallback}"
+	fi
+}
+
 
 # tc-getPROG <VAR [search vars]> <default> [tuple]
 _tc-getPROG() {
@@ -105,7 +158,7 @@ tc-getCC() { tc-getPROG CC "$(_tc-prefer-native-llvm_prog clang gcc "$@")" "$@";
 # @FUNCTION: tc-getCPP
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the C preprocessor
-tc-getCPP() { tc-getPROG CPP "$(tc-getCC "$@") -E" "$@"; }
+tc-getCPP() { tc-getPROG CPP "$(_tc-prefer-native-llvm_cpp_prog "$(tc-getCC "$@") -E" "$@")" "$@"; }
 # @FUNCTION: tc-getCXX
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the C++ compiler
@@ -186,7 +239,7 @@ tc-getBUILD_CC() { tc-getBUILD_PROG CC "$(_tc-prefer-build-llvm_prog clang gcc "
 # @FUNCTION: tc-getBUILD_CPP
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the C preprocessor for building binaries to run on the build machine
-tc-getBUILD_CPP() { tc-getBUILD_PROG CPP "$(tc-getBUILD_CC "$@") -E" "$@"; }
+tc-getBUILD_CPP() { tc-getBUILD_PROG CPP "$(_tc-prefer-build-llvm_cpp_prog "$(tc-getBUILD_CC "$@") -E" "$@")" "$@"; }
 # @FUNCTION: tc-getBUILD_CXX
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the C++ compiler for building binaries to run on the build machine

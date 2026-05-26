@@ -41,6 +41,14 @@ PATCHES=(
    "${FILESDIR}/install-prefix.patch"
 )
 
+_llvm_get_tuple() {
+	if command -v gcc >/dev/null 2>&1; then
+		gcc -dumpmachine
+	else
+		clang --print-target-triple
+	fi
+}
+
 src_prepare() {
     # S points at the llvm subproject, but this driver integration patch
     # touches the sibling clang tree in the llvm-project monorepo.
@@ -71,11 +79,7 @@ src_prepare() {
 src_configure() {
     export TUPLE
 
-    if command -v gcc >/dev/null 2>&1; then
-        TUPLE=$(gcc -dumpmachine)
-    else
-        TUPLE=$(clang --print-target-triple)
-    fi
+    TUPLE=$(_llvm_get_tuple)
 
 	if use syslibcxxabi; then
     	# link to compiler-rt
@@ -365,6 +369,31 @@ src_test() {
 
 src_install() {
     cmake_src_install
+
+	: "${TUPLE:=$(_llvm_get_tuple)}"
+
+	local clang_cpp_generic="${T}/clang-cpp"
+	local clang_cpp_target="${T}/${TUPLE}-cpp"
+
+	sed \
+		-e 's|@CLANG@|/usr/bin/clang|g' \
+		-e 's|@TARGET_FLAGS@||g' \
+		"${FILESDIR}/clang-cpp-wrapper.in" > "${clang_cpp_generic}" || die
+	chmod 0755 "${clang_cpp_generic}" || die
+
+	sed \
+		-e 's|@CLANG@|/usr/bin/clang|g' \
+		-e "s|@TARGET_FLAGS@|--target=${TUPLE}|g" \
+		"${FILESDIR}/clang-cpp-wrapper.in" > "${clang_cpp_target}" || die
+	chmod 0755 "${clang_cpp_target}" || die
+
+	rm -f "${ED}/usr/bin/clang-cpp" || die
+	exeinto /usr/bin
+	newexe "${clang_cpp_generic}" clang-cpp
+
+	exeinto /usr/libexec/llvm-wrappers
+	newexe "${clang_cpp_target}" "${TUPLE}-cpp"
+	dosym -r "/usr/libexec/llvm-wrappers/${TUPLE}-cpp" "/usr/bin/${TUPLE}-cpp"
 
 	dosym -r "/usr/lib/${TUPLE}/libunwind.a" "/usr/lib/libunwind.a"
 	dosym -r "/usr/lib/${TUPLE}/libunwind.so" "/usr/lib/libunwind.so"

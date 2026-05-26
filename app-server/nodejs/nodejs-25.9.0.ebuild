@@ -76,6 +76,37 @@ src_prepare() {
 		-e 's/{ free(p); }/{ std::free(p); }/' \
 		deps/LIEF/third-party/spdlog/include/spdlog/fmt/bundled/format.h || die
 
+	# Upstream forces -latomic for clang on all Linux targets. In an LLVM-first
+	# system without GCC's libatomic that creates a false hard dependency and
+	# explodes at link time on targets where clang can already lower the needed
+	# atomics inline. Keep the architecture-specific V8 fallback, but drop the
+	# unconditional clang-on-linux edge when the toolchain cannot actually link
+	# libatomic.
+	if ! test-flags-CCLD -latomic ; then
+		sed -i \
+			-e "/'OS==\"linux\" and clang==1'/,+2d" \
+			node.gyp || die "Failed to drop unconditional -latomic from node.gyp"
+		"${EPYTHON}" - <<'PY' || die "Failed to narrow V8 -latomic fallback"
+from pathlib import Path
+
+path = Path("tools/v8_gypfiles/v8.gyp")
+old = """        ['(OS=="linux" and clang==1) or (v8_current_cpu in ["mips64", "mips64el", "arm", "riscv64", "loong64"])', {
+          'link_settings': {
+            'libraries': ['-latomic', ],
+          },
+        }],"""
+new = """        ['v8_current_cpu in ["mips64", "mips64el", "arm", "riscv64", "loong64"]', {
+          'link_settings': {
+            'libraries': ['-latomic', ],
+          },
+        }],"""
+data = path.read_text()
+if old not in data:
+    raise SystemExit("expected V8 libatomic block not found")
+path.write_text(data.replace(old, new, 1))
+PY
+	fi
+
 	# debug builds. change install path, remove optimisations and override buildtype
 	if use debug; then
 		sed -i -e "s|out/Release/|out/Debug/|g" tools/install.py || die

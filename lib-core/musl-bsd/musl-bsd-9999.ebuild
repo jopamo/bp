@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit meson git-r3 qa-policy
+inherit meson git-r3 qa-policy toolchain-funcs
 
 DESCRIPTION="A standalone library to implement GNU libc's obstack and others"
 HOMEPAGE="https://github.com/jopamo/musl-bsd"
@@ -24,5 +24,8 @@ src_configure() {
 
 src_install() {
 	meson_src_install
+	if use static-libs; then
+		gen_usr_ldscript libmusl-bsd-compat.so
+	fi
 	qa-policy-install
 }

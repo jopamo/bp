@@ -1,0 +1,67 @@
+diff --git a/clang/include/clang/Options/Options.td b/clang/include/clang/Options/Options.td
+index b2b8dc5..0426bdb 100644
+--- a/clang/include/clang/Options/Options.td
++++ b/clang/include/clang/Options/Options.td
+@@ -3133,6 +3133,12 @@ def fxray_link_deps : Flag<["-"], "fxray-link-deps">, Group<f_Group>,
+   HelpText<"Link XRay runtime library when -fxray-instrument is specified (default)">;
+ def fno_xray_link_deps : Flag<["-"], "fno-xray-link-deps">, Group<f_Group>;
+ 
++def fmusl_bsd_load_compat : Flag<["-"], "fmusl-bsd-load-compat">,
++  Group<f_clang_Group>,
++  HelpText<"Keep libmusl-bsd-compat in the startup dependency set on musl targets so executables can host glibc-targeted DSOs loaded later">;
++def fno_musl_bsd_load_compat : Flag<["-"], "fno-musl-bsd-load-compat">,
++  Group<f_clang_Group>;
++
+ def fxray_instrumentation_bundle :
+   Joined<["-"], "fxray-instrumentation-bundle=">,
+   Group<f_Group>, Visibility<[ClangOption, CC1Option]>,
+diff --git a/clang/lib/Driver/ToolChains/Gnu.cpp b/clang/lib/Driver/ToolChains/Gnu.cpp
+index cb6a9b2..2ac22bd 100644
+--- a/clang/lib/Driver/ToolChains/Gnu.cpp
++++ b/clang/lib/Driver/ToolChains/Gnu.cpp
+@@ -532,8 +532,25 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+       if (Args.hasArg(options::OPT_fsplit_stack))
+         CmdArgs.push_back("--wrap=pthread_create");
+ 
+-      if (!Args.hasArg(options::OPT_nolibc))
++      if (!Args.hasArg(options::OPT_nolibc)) {
++        if (getToolChain().getTriple().isMusl()) {
++          const char *CompatLinkMode =
++              Args.hasFlag(options::OPT_fmusl_bsd_load_compat,
++                           options::OPT_fno_musl_bsd_load_compat, false)
++                  ? "--no-as-needed"
++                  : "--as-needed";
++
++          // Auto-link musl-bsd shims when directly referenced, and provide an
++          // explicit opt-in to keep the compat DSO in the startup dependency
++          // set for musl executables that will dlopen() glibc-targeted DSOs.
++          CmdArgs.push_back("--push-state");
++          CmdArgs.push_back(CompatLinkMode);
++          CmdArgs.push_back("-lmusl-bsd-compat");
++          CmdArgs.push_back("--pop-state");
++        }
++
+         CmdArgs.push_back("-lc");
++      }
+ 
+       // Add IAMCU specific libs, if needed.
+       if (IsIAMCU)
+diff --git a/clang/lib/Driver/ToolChains/Linux.cpp b/clang/lib/Driver/ToolChains/Linux.cpp
+index d525b41..860594f 100644
+--- a/clang/lib/Driver/ToolChains/Linux.cpp
++++ b/clang/lib/Driver/ToolChains/Linux.cpp
+@@ -765,6 +765,14 @@ void Linux::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
+   // TOOL_INCLUDE_DIR
+   AddMultilibIncludeArgs(DriverArgs, CC1Args);
+ 
++  // musl-bsd overlays glibc/BSD declarations onto musl. Keep local and
++  // target-specific toolchain headers ahead of it, but place the overlay
++  // before the libc include roots so wrappers like <sys/stat.h> and
++  // <gnu/libc-version.h> are found without per-package flags.
++  if (getTriple().isMusl())
++    addSystemInclude(DriverArgs, CC1Args,
++                     concat(SysRoot, "/usr/lib/musl-bsd/overlay/include"));
++
+   // Check for configure-time C include directories.
+   StringRef CIncludeDirs(C_INCLUDE_DIRS);
+   if (CIncludeDirs != "") {

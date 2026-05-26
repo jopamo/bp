@@ -39,6 +39,7 @@ QA_POLICY_SHEBANG_SANITIZE=1
 
 PATCHES=(
    "${FILESDIR}/install-prefix.patch"
+   "${FILESDIR}/musl-bsd-driver-integration.patch"
 )
 
 src_prepare() {
@@ -360,19 +361,6 @@ src_test() {
 src_install() {
     cmake_src_install
 
-	if use elibc_musl; then
-		cat > "${T}/${CHOST}.cfg" <<-EOF || die
-# Auto-load musl-bsd compatibility overlays and link shims for musl targets.
--isystem
-/usr/lib/musl-bsd/overlay/include
--Wl,--push-state,--as-needed
--lmusl-bsd-compat
--Wl,--pop-state
-EOF
-		insinto /usr/bin
-		doins "${T}/${CHOST}.cfg"
-	fi
-
 	dosym -r "/usr/lib/${TUPLE}/libunwind.a" "/usr/lib/libunwind.a"
 	dosym -r "/usr/lib/${TUPLE}/libunwind.so" "/usr/lib/libunwind.so"
 	dosym -r "/usr/lib/${TUPLE}/libunwind.so.1" "/usr/lib/libunwind.so.1"
@@ -409,4 +397,33 @@ EOF
 	"
 
 	qa-policy-install
+}
+
+pkg_postinst() {
+	use elibc_musl || return 0
+
+	local cfg="${EROOT%/}/usr/bin/${CHOST}.cfg"
+	local old_cfg_contents=$'# Auto-load musl-bsd compatibility overlays and link shims for musl targets.\n-isystem\n/usr/lib/musl-bsd/overlay/include\n-Wl,--push-state,--as-needed\n-lmusl-bsd-compat\n-Wl,--pop-state'
+	local cfg_contents
+
+	[[ -f ${cfg} ]] || return 0
+
+	if ! cfg_contents=$(<"${cfg}"); then
+		ewarn "Unable to read obsolete Clang config ${cfg}; remove it manually if it still overrides Clang defaults."
+		return 0
+	fi
+
+	if [[ ${cfg_contents} == "${old_cfg_contents}" ]]; then
+		if rm -f "${cfg}"; then
+			elog "Removed obsolete Clang config ${cfg}; musl-bsd integration is now built into the driver."
+			elog "Direct musl-bsd symbol users now auto-link via --as-needed, and musl executables that later dlopen glibc-targeted DSOs should be built with -fmusl-bsd-load-compat."
+		else
+			ewarn "Failed to remove obsolete Clang config ${cfg}."
+			ewarn "That file keeps the old musl-bsd integration path active and overrides the new driver behavior."
+		fi
+	else
+		ewarn "Leaving ${cfg} in place because its contents differ from the old auto-generated musl-bsd config."
+		ewarn "If you no longer want external Clang config injection, remove or update that file manually."
+		ewarn "The new built-in mode auto-links direct musl-bsd symbol users with --as-needed, and uses -fmusl-bsd-load-compat for executables that must host glibc-targeted DSOs."
+	fi
 }

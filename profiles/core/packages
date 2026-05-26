@@ -32,7 +32,6 @@
 *app-var/pax-utils
 *lib-core/wtmpdb
 *lib-net/ca-certificates
-*virtual/gcc
 *virtual/libc
 *virtual/libelf
 *virtual/linux-sources

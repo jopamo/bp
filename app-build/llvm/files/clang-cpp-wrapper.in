@@ -1,0 +1,44 @@
+#!/bin/sh
+
+need_stdin=1
+expect_arg=0
+after_double_dash=0
+
+for arg in "$@"; do
+	if [ "${after_double_dash}" -eq 1 ]; then
+		need_stdin=0
+		break
+	fi
+
+	if [ "${expect_arg}" -eq 1 ]; then
+		expect_arg=0
+		continue
+	fi
+
+	case ${arg} in
+		--)
+			after_double_dash=1
+			;;
+		-)
+			need_stdin=0
+			break
+			;;
+		-include|-imacros|-idirafter|-iprefix|-iwithprefix|-iwithprefixbefore|-isystem|-iquote|-o|-MF|-MT|-MQ|-x|-Xclang|-Xpreprocessor|--sysroot|-target|--target)
+			expect_arg=1
+			;;
+		-I*|-D*|-U*|-include*|-imacros*|-idirafter*|-iprefix*|-iwithprefix*|-iwithprefixbefore*|-isystem*|-iquote*|-o*|-MF*|-MT*|-MQ*|-x*|-Wp,*|--sysroot=*|-target=*|--target=*)
+			;;
+		-*)
+			;;
+		*)
+			need_stdin=0
+			break
+			;;
+	esac
+done
+
+if [ "${need_stdin}" -eq 1 ]; then
+	exec @CLANG@ @TARGET_FLAGS@ -E -x c "$@" -
+else
+	exec @CLANG@ @TARGET_FLAGS@ -E -x c "$@"
+fi

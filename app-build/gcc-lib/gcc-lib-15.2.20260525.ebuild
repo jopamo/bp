@@ -32,7 +32,6 @@ QA_GCC_WARN_SKIP=(
 DEPEND="
 	lib-core/mpc
 	lib-core/zlib
-	app-build/binutils
 	isl? ( lib-core/isl )
 	zstd? ( app-compression/zstd )
 "

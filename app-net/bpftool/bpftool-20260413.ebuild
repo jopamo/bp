@@ -12,14 +12,13 @@ LICENSE="|| ( GPL-2 BSD-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+bfd caps clang llvm"
+IUSE="caps clang llvm"
 
 BDEPEND="dev-pypi/docutils"
 DEPEND="
 	lib-net/libbpf:=[static-libs]
 	lib-core/elfutils
 	virtual/ssl:0=
-	bfd? ( app-build/binutils app-compression/zstd )
 	caps? ( lib-core/libcap )
 	clang? ( app-build/clang )
 	llvm? ( app-build/llvm:= )
@@ -39,21 +38,6 @@ src_prepare() {
 	# remove hardcoded/unhelpful flags from bpftool
 	sed -i -e '/CFLAGS += -O2/d' -e 's/-W //g' -e 's/-Wextra //g' src/Makefile || die
 
-	if use bfd; then
-		# keep probe and final libbfd links aligned with modern binutils static deps
-		sed -i \
-			-e 's/$(call libbfd_build,-lbfd -ldl))/$(call libbfd_build,-lbfd -ldl -lsframe -lzstd -lstdc++))/' \
-			-e 's/$(call libbfd_build,-lbfd -ldl -liberty))/$(call libbfd_build,-lbfd -ldl -liberty -lsframe -lzstd -lstdc++))/' \
-			-e 's/$(call libbfd_build,-lbfd -ldl -liberty -lz))/$(call libbfd_build,-lbfd -ldl -liberty -lz -lsframe -lzstd -lstdc++))/' \
-			src/Makefile.feature || die
-
-		sed -i \
-			-e 's/LIBS += -lbfd -ldl -lopcodes$/LIBS += -lbfd -ldl -lopcodes -lsframe -lzstd -lstdc++/' \
-			-e 's/LIBS += -lbfd -ldl -lopcodes -liberty$/LIBS += -lbfd -ldl -lopcodes -liberty -lsframe -lzstd -lstdc++/' \
-			-e 's/LIBS += -lbfd -ldl -lopcodes -liberty -lz$/LIBS += -lbfd -ldl -lopcodes -liberty -lz -lsframe -lzstd -lstdc++/' \
-			src/Makefile || die
-	fi
-
 	if ! use clang; then
 		# remove bpf target & add assembly annotations to fix CO-RE feature detection
 		sed -i -e 's/-target bpf/-dA/' src/Makefile.feature || die
@@ -72,11 +56,6 @@ bpftool_make() {
 	local libbpf_library=${BPFTOOL_LIBBPF_LIBRARY:-${EPREFIX}/usr/lib/libbpf.a}
 	local -a feature_tests=( libelf-zstd )
 	local -a feature_display=()
-
-	if use bfd; then
-		feature_tests+=( libbfd disassembler-four-args disassembler-init-styled )
-		feature_display+=( libbfd )
-	fi
 
 	use clang && {
 		feature_tests+=( clang-bpf-co-re )

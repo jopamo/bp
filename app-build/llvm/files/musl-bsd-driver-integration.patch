@@ -50,10 +50,26 @@ diff --git a/clang/lib/Driver/ToolChains/Linux.cpp b/clang/lib/Driver/ToolChains
 index d525b41..860594f 100644
 --- a/clang/lib/Driver/ToolChains/Linux.cpp
 +++ b/clang/lib/Driver/ToolChains/Linux.cpp
-@@ -765,6 +765,14 @@ void Linux::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
+@@ -765,6 +765,30 @@ void Linux::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
    // TOOL_INCLUDE_DIR
    AddMultilibIncludeArgs(DriverArgs, CC1Args);
  
++  // GCC-style hosted builds preinclude stdc-predef.h so libc can publish
++  // implementation contract macros such as __STDC_ISO_10646__. Clang does
++  // not do this by default, so musl targets can miss the wchar_t contract
++  // that projects like libedit validate before using wide-character APIs.
++  if (getTriple().isMusl() &&
++      DriverArgs.hasFlag(options::OPT_fhosted, options::OPT_ffreestanding,
++                         true) &&
++      !DriverArgs.hasArg(options::OPT_undef)) {
++    std::string StdCPredefInclude =
++        concat(SysRoot, "/usr/include/stdc-predef.h").str();
++    if (D.getVFS().exists(StdCPredefInclude)) {
++      CC1Args.push_back("-include");
++      CC1Args.push_back(DriverArgs.MakeArgString(StdCPredefInclude));
++    }
++  }
++
 +  // musl-bsd overlays glibc/BSD declarations onto musl. Keep local and
 +  // target-specific toolchain headers ahead of it, but place the overlay
 +  // before the libc include roots so wrappers like <sys/stat.h> and

@@ -442,6 +442,18 @@ src_install() {
 }
 
 pkg_postinst() {
+	local c99="${EROOT%/}/usr/bin/c99"
+
+	# Backfill the POSIX c99 frontend on LLVM-first systems, but do not
+	# trample an existing provider.
+	if [[ ! -e ${c99} && ! -L ${c99} ]]; then
+		cat > "${c99}" <<-'EOF' || die
+#!/bin/sh
+exec cc -std=c99 "$@"
+EOF
+		chmod 0755 "${c99}" || die
+	fi
+
 	use elibc_musl || return 0
 
 	local cfg="${EROOT%/}/usr/bin/${CHOST}.cfg"

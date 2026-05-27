@@ -51,6 +51,7 @@ src_configure() {
 		-D gssapi=disabled
 		-D idn=disabled
 		-D line=disabled
+		-D named-lto=disabled
 		-D stats-json=enabled
 		-D stats-xml=enabled
 		-D zlib=enabled

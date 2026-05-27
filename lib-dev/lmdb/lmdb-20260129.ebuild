@@ -2,6 +2,7 @@
 
 SNAPSHOT=69087ced3cb6082f7dcfb4fc2dcaa3b68a7e2e8c
 UPSTREAM_PV=0.9.35
+LMDB_SOVER=0
 
 inherit toolchain-funcs
 
@@ -15,6 +16,15 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
+
+src_prepare() {
+	default
+
+	sed -i \
+		-e 's!^SOEXT.*!SOEXT = .so.'"${LMDB_SOVER}"'!' \
+		-e 's!shared -o!shared -Wl,-soname,liblmdb.so.'"${LMDB_SOVER}"' -o!' \
+		Makefile || die
+}
 
 run_emake() {
 	emake \
@@ -32,11 +42,12 @@ run_emake() {
 }
 
 src_compile() {
-	run_emake liblmdb.so liblmdb.a mdb_stat mdb_copy mdb_dump mdb_load
+	run_emake liblmdb.so.${LMDB_SOVER} liblmdb.a mdb_stat mdb_copy mdb_dump mdb_load
 }
 
 src_install() {
 	run_emake DESTDIR="${ED}" install
+	dosym liblmdb.so.${LMDB_SOVER} /usr/lib/liblmdb.so
 
 	if ! use static-libs; then
 		rm -f "${ED}/usr/lib/liblmdb.a" || die

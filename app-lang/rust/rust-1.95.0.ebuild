@@ -223,7 +223,10 @@ src_configure() {
 		extended = true
 		cargo = "${RUST_BOOTSTRAP_CARGO}"
 		rustc = "${RUST_BOOTSTRAP_RUSTC}"
-		tools = ["cargo","clippy","src"]
+		# Keep the initial musl compiler package narrow. Clippy is a rustc-private
+		# tool and wants a coherent rustc_driver linkage layout; defer it until the
+		# compiler package is stable.
+		tools = ["cargo","src"]
 		#tools = ["cargo","clippy","rustdoc","rustfmt","rust-analyzer","rust-analyzer-proc-macro-srv","analysis","src"]
 		#tools = ["cargo","clippy","rustfmt","rust-analyzer","rust-analyzer-proc-macro-srv","analysis","src"]
 		vendor = true
@@ -257,7 +260,7 @@ src_compile() {
 		IFS=$'\n'
 		RUST_BACKTRACE=1 \
 		"${EPYTHON}" ./x.py build -vv --config="${S}/config.toml" \
-			--stage 2 compiler/rustc library src/tools/cargo src/tools/clippy \
+			--stage 2 compiler/rustc library src/tools/cargo \
 			-j$(makeopts_jobs) \
 		|| die
 	)

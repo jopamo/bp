@@ -68,7 +68,11 @@ rust_target_triple() {
 }
 
 rust_append_env_flag() {
-	local var=$1 flag=$2 value=${!var}
+	local var flag value
+
+	var=$1
+	flag=$2
+	value=${!var}
 
 	case " ${value} " in
 		*" ${flag} "*) ;;

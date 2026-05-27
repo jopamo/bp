@@ -135,6 +135,10 @@ PY
 		if compgen -G "${FILESDIR}/rust/*.patch" > /dev/null; then
 			eapply "${FILESDIR}"/rust/*.patch
 		fi
+		# rustc bootstrap on musl cannot build rustc_driver as a dylib.
+		sed -i \
+			-e '/^crate-type = \["dylib"\]$/d' \
+			compiler/rustc_driver/Cargo.toml || die
 		sed -i 's/base\.crt_static_default = true;/base\.crt_static_default = false;/g' \
 			compiler/rustc_target/src/spec/base/linux_musl.rs || die
 		sed -i 's/base\.crt_static_default = true;/base\.crt_static_default = false;/g' \
@@ -167,6 +171,9 @@ src_configure() {
 		llvm-config = "/usr/bin/llvm-config"
 		linker = "clang"
 		cc = "clang"
+		cxx = "clang++"
+		ar = "llvm-ar"
+		ranlib = "llvm-ranlib"
 		[build]
 		build-stage = 2
 		test-stage = 2

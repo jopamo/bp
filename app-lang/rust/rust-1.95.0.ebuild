@@ -63,8 +63,39 @@ rust_select_bootstrap() {
 	export RUST_BOOTSTRAP_BINDIR
 }
 
+rust_target_triple() {
+	usex arm64 aarch64-unknown-linux-$(usex elibc_musl musl gnu) x86_64-unknown-linux-$(usex elibc_musl musl gnu)
+}
+
+rust_append_env_flag() {
+	local var=$1 flag=$2 value=${!var}
+
+	case " ${value} " in
+		*" ${flag} "*) ;;
+		*)
+			printf -v "${var}" '%s' "${value:+${value} }${flag}"
+			export "${var}"
+			;;
+	esac
+}
+
+rust_export_target_env() {
+	local triple env_triple
+
+	triple="$(rust_target_triple)"
+	env_triple=${triple//-/_}
+
+	if use elibc_musl; then
+		rust_append_env_flag RUSTFLAGS_BOOTSTRAP -Ctarget-feature=-crt-static
+		rust_append_env_flag RUSTFLAGS_NOT_BOOTSTRAP -Ctarget-feature=-crt-static
+	fi
+
+	printf -v "RANLIB_${env_triple}" '%s' llvm-ranlib
+	export "RANLIB_${env_triple}"
+}
+
 rust_force_rust_lld() {
-	local TRIPLE="$(usex arm64 aarch64-unknown-linux-$(usex elibc_musl musl gnu) x86_64-unknown-linux-$(usex elibc_musl musl gnu))"
+	local TRIPLE="$(rust_target_triple)"
 
 	[[ -x ${RUST_SYSTEM_LLD} ]] || die "${RUST_SYSTEM_LLD} not found, emerge sys-devel/lld"
 
@@ -98,6 +129,8 @@ pkg_setup() {
 	export RUSTFLAGS="${RUSTFLAGS} -Clinker-features=-lld -Lnative=$("/usr/bin/llvm-config" --libdir)"
 	export CARGO_HTTP_CAINFO=/etc/ssl/certs/ca-certificates.crt
 	export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+
+	rust_export_target_env
 }
 
 src_prepare() {
@@ -161,6 +194,7 @@ src_configure() {
 		[llvm]
 		assertions = false
 		download-ci-llvm = false
+		link-shared = true
 		ninja = true
 		optimize = true
 		release-debuginfo = false
@@ -174,6 +208,7 @@ src_configure() {
 		cxx = "clang++"
 		ar = "llvm-ar"
 		ranlib = "llvm-ranlib"
+		$(use elibc_musl && echo 'crt-static = false')
 		[build]
 		build-stage = 2
 		test-stage = 2
@@ -212,6 +247,7 @@ src_configure() {
 src_compile() {
 	export PKG_CONFIG_ALLOW_CROSS=1
 	unset RUSTFLAGS
+	rust_export_target_env
 
 	(
 		IFS=$'\n'
@@ -224,6 +260,7 @@ src_compile() {
 }
 
 src_install() {
+	rust_export_target_env
 	rust_force_rust_lld
 
 	(

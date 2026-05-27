@@ -17,7 +17,7 @@ IUSE="fips doh geoip"
 
 DEPEND="
 	lib-core/libcap
-	lib-core/lmdb
+	lib-dev/lmdb
 	lib-core/libseccomp
 	lib-core/libxml2
 	lib-core/zlib

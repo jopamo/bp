@@ -63,7 +63,7 @@ index d525b41..860594f 100644
 +                         true) &&
 +      !DriverArgs.hasArg(options::OPT_undef)) {
 +    std::string StdCPredefInclude =
-+        concat(SysRoot, "/usr/include/stdc-predef.h").str();
++        concat(SysRoot, "/usr/include/stdc-predef.h");
 +    if (D.getVFS().exists(StdCPredefInclude)) {
 +      CC1Args.push_back("-include");
 +      CC1Args.push_back(DriverArgs.MakeArgString(StdCPredefInclude));

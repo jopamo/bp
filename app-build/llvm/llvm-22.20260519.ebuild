@@ -404,6 +404,14 @@ src_install() {
 		dosym -r "/usr/lib/${TUPLE}/libc++.so" "/usr/lib/libc++.so"
 		dosym -r "/usr/lib/${TUPLE}/libc++.so.1" "/usr/lib/libc++.so.1"
 		dosym -r "/usr/lib/${TUPLE}/libc++experimental.a" "/usr/lib/libc++experimental.a"
+
+		# libc++ includes <__config_site> from the generic include root, but on
+		# musl/native layouts the generated header can land only under the
+		# target-qualified include dir. Mirror it into the generic search root.
+		if [[ -e "${ED}/usr/include/${TUPLE}/c++/v1/__config_site" ]]; then
+			dosym -r "/usr/include/${TUPLE}/c++/v1/__config_site" \
+				"/usr/include/c++/v1/__config_site"
+		fi
 	fi
 
 	if use libcxxabi; then

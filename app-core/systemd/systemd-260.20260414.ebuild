@@ -132,8 +132,6 @@ src_configure() {
         -Ddns-over-tls=false
         $(usex devmode '-Dmode=developer' '-Dmode=release')
         $(usex elibc_musl '-Dlibc=musl' '-Dlibc=glibc')
-        -Dsysvinit-path=/etc/init.d
-        -Dsysvrcnd-path=/etc/rc.d
         -Dacl=enabled
         -Daudit=disabled
         -Dbacklight=false
@@ -148,8 +146,6 @@ src_configure() {
         -Dima=false
         -Dlibcurl=disabled
         -Dlibidn2=disabled
-        -Dlibidn=disabled
-        -Dlibiptc=disabled
         -Dlink-timesyncd-shared=false
         -Dhomed=disabled
         -Dman=disabled
@@ -167,7 +163,6 @@ src_configure() {
         -Dqrencode=disabled
         -Dquotacheck=false
         -Drandomseed=false
-        -Drc-local=""
         -Dseccomp=enabled
         -Dsmack=false
         -Dsplit-bin=false

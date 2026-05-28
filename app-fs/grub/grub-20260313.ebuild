@@ -96,6 +96,7 @@ src_prepare() {
 	eapply "${FILESDIR}/fix-libgcrypt-posix-wrap-implicit-grub-symbols.patch"
 	eapply "${FILESDIR}/fix-config-recursive-headers.patch"
 	eapply "${FILESDIR}/fix-config-symbol-probes-pie-safe.patch"
+	eapply "${FILESDIR}/fix-configure-nopie-detection.patch"
 
 	gl_stage_gnulib
 

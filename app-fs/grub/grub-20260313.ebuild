@@ -86,6 +86,7 @@ grub_configure() {
 	)
 
 	local ECONF_SOURCE="${S}"
+	rm -f config.cache || die
 	qa-policy-configure
 	econf "${myconf[@]}"
 }

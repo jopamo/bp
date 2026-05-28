@@ -23,3 +23,19 @@ KEYWORDS="amd64 arm64"
 DEPEND="app-server/nodejs"
 
 RESTRICT="test"
+
+python_compile() {
+	local npm_home
+	npm_home=$(mktemp -d "/tmp/${PF}-${EPYTHON}-npm.XXXXXX") || die
+
+	local -x HOME=${npm_home}
+	local -x XDG_CACHE_HOME=${HOME}/.cache
+	local -x npm_config_cache=${HOME}/.npm
+	local -x npm_config_update_notifier=false
+
+	local ret=0
+	distutils-r1_python_compile || ret=${?}
+
+	rm -rf "${npm_home}" || die
+	return ${ret}
+}

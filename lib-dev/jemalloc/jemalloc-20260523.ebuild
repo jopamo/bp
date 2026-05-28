@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit autotools qa-policy
+inherit autotools qa-policy toolchain-funcs
 
 DESCRIPTION="Jemalloc is a general-purpose scalable concurrent allocator"
 HOMEPAGE="http://jemalloc.net/ https://github.com/jemalloc/jemalloc"
@@ -29,6 +29,8 @@ src_prepare() {
 }
 
 src_configure() {
+	tc-is-clang && append-flags -Wno-error=fuse-ld-path
+
 	local myconf=(
 		$(use_enable static-libs static)
 		$(use_enable debug)

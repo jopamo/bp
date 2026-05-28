@@ -27,7 +27,7 @@
  @COND_ENABLE_EFIEMU_TRUE@	-rm -f $@
  @COND_ENABLE_EFIEMU_TRUE@	-rm -f $@.bin
 -@COND_ENABLE_EFIEMU_TRUE@	$(TARGET_CC) -m64 $(EFIEMU64_LINK_FORMAT) -nostdlib -static -Wl,-r -o $@.bin $^
-+@COND_ENABLE_EFIEMU_TRUE@	$(TARGET_CC) -m64 $(EFIEMU64_LINK_FORMAT) -nostdlib -static -no-pie -Wl,-r -o $@.bin $^
++@COND_ENABLE_EFIEMU_TRUE@	$(TARGET_CC) -m64 $(EFIEMU64_LINK_FORMAT) -nostdlib -static -Wl,-no-pie -Wl,-r -o $@.bin $^
  @COND_ENABLE_EFIEMU_TRUE@	if test "x$(EFIEMU64_LINK_FORMAT)" = x-arch,x86_64; then \
  @COND_ENABLE_EFIEMU_TRUE@	  $(TARGET_OBJCONV) -felf64 -nu -nd $@.bin $@ || exit 1; \
  @COND_ENABLE_EFIEMU_TRUE@	  rm -f $@.bin; \

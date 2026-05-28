@@ -17,7 +17,10 @@ IUSE="debug ucm"
 DEPEND="ucm? ( xmedia-app/alsa-ucm-conf )"
 
 src_prepare() {
-	use elibc_musl && cp "${FILESDIR}"/ucm_exec.c src/ucm/
+	if use elibc_musl; then
+		cp "${FILESDIR}"/ucm_exec.c src/ucm/ || die
+		eapply "${FILESDIR}"/${PN}-20260504-musl-lfs-compat.patch
+	fi
 	default
 	eautoreconf
 }

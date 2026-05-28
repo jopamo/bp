@@ -1,0 +1,13 @@
+diff --git a/include/local.h b/include/local.h
+index 8665b58..723ceae 100644
+--- a/include/local.h
++++ b/include/local.h
+@@ -81,7 +81,7 @@
+ #error "Unsupported endian..."
+ #endif
+ 
+-#ifndef HAVE_LFS
++#if !defined(HAVE_LFS) || !defined(_LARGEFILE64_SOURCE)
+ #define stat64 stat
+ #define lstat64 lstat
+ #define dirent64 dirent

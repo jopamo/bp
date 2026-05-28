@@ -25,6 +25,7 @@ src_prepare() {
 	sed -i -e "s:doc/valgrind:doc/${PF}:" docs/Makefile.am || die
 	sed -i -e 's:-arch \(i386\|x86_64\)::g' Makefile.all.am || die
 
+	eapply "${FILESDIR}"/${PN}-20260416-use-compiler-rtlib-path.patch
 	eapply "${FILESDIR}"/${PN}-3.7.0-respect-flags.patch
 
 	eapply_user

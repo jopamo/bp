@@ -8,7 +8,7 @@ V35ARM64_SNAPSHOT=adfc7238a27ef279cc83f3076c6b107573f75444
 QJS_SNAPSHOT=bb456249d34d8f3665d4f6aff3847fbd6c3e8b9d
 CAPSTONE_SNAPSHOT=32e7e6568be6d5774e8f31dd678b8828903769c7
 
-inherit flag-o-matic
+inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="unix-like reverse engineering framework and commandline tools"
 HOMEPAGE="https://www.radare.org"
@@ -50,7 +50,7 @@ src_prepare() {
 
 src_configure() {
 	filter-flags -Wl,-z,defs -flto*
-	append-flags -fno-ipa-sra
+	tc-is-clang || append-flags -fno-ipa-sra
 	filter-flags -fipa-pta
 
 	econf \

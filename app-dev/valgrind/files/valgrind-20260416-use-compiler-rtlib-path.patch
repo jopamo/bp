@@ -1,0 +1,45 @@
+diff --git a/Makefile.tool.am b/Makefile.tool.am
+index 8861a40..6833287 100644
+--- a/Makefile.tool.am
++++ b/Makefile.tool.am
+@@ -16,7 +16,7 @@ TOOL_DEPENDENCIES_@VGCONF_PLATFORM_SEC_CAPS@ = \
+ 	$(top_builddir)/VEX/libvex-@VGCONF_ARCH_SEC@-@VGCONF_OS@.a
+ endif
+ 
+-TOOL_LDADD_COMMON = -lgcc
++TOOL_LDADD_COMMON = @VGCONF_CRTLIB@
+ TOOL_LDADD_@VGCONF_PLATFORM_PRI_CAPS@ = \
+ 	$(TOOL_DEPENDENCIES_@VGCONF_PLATFORM_PRI_CAPS@) $(TOOL_LDADD_COMMON)
+ if VGCONF_HAVE_PLATFORM_SEC
+diff --git a/configure.ac b/configure.ac
+index c74bd4e..c74546f 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -147,6 +147,16 @@ else
+ fi
+ ]
+ AM_CONDITIONAL(COMPILER_IS_CLANG, test $is_clang = clang -o $is_clang = applellvm)
++
++AC_MSG_CHECKING([for compiler runtime archive])
++VGCONF_CRTLIB=`${CC} -print-libgcc-file-name 2>/dev/null`
++if test "x$VGCONF_CRTLIB" = x || test ! -f "$VGCONF_CRTLIB" ; then
++   VGCONF_CRTLIB='-lgcc'
++fi
++AC_MSG_RESULT([$VGCONF_CRTLIB])
++AC_SUBST(VGCONF_CRTLIB)
++
++
+ AM_CONDITIONAL(COMPILER_IS_ICC, test $is_clang = icc)
+ 
+ AC_CANONICAL_HOST
+diff --git a/valgrind.pc.in b/valgrind.pc.in
+index 90d4b16..b2f4df6 100644
+--- a/valgrind.pc.in
++++ b/valgrind.pc.in
+@@ -11,5 +11,5 @@ Name: Valgrind
+ Description: A dynamic binary instrumentation framework
+ Version: @VERSION@
+ Requires:
+-Libs: -L${libdir}/valgrind -lcoregrind-@VGCONF_ARCH_PRI@-@VGCONF_OS@ -lvex-@VGCONF_ARCH_PRI@-@VGCONF_OS@ -lgcc
++Libs: -L${libdir}/valgrind -lcoregrind-@VGCONF_ARCH_PRI@-@VGCONF_OS@ -lvex-@VGCONF_ARCH_PRI@-@VGCONF_OS@ @VGCONF_CRTLIB@
+ Cflags: -I${includedir}

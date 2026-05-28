@@ -20,9 +20,10 @@ LICENSE="unlicense"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="
-	xmedia-app/yt-dlp-ejs
+RDEPEND="
+	<xmedia-app/yt-dlp-ejs-9999
 "
+DEPEND="${RDEPEND}"
 
 python_install_all() {
 	distutils-r1_python_install_all

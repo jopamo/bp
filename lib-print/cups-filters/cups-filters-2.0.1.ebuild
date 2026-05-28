@@ -42,3 +42,9 @@ src_configure() {
 
 	CONFIG_SHELL="${BROOT}"/bin/bash econf "${myeconfargs[@]}"
 }
+
+src_install() {
+	# Upstream install rules are not parallel-safe: multiple install targets race
+	# on creating usr/{bin,libexec/cups/*,share/*} and fail on EEXIST.
+	emake -j1 DESTDIR="${ED}" install || die
+}

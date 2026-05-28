@@ -22,7 +22,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="app-server/nodejs"
 
-RESTRICT="test"
+RESTRICT="test network-sandbox"
 
 python_compile() {
 	local npm_home

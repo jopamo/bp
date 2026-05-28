@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit flag-o-matic linux-info user meson
+inherit flag-o-matic linux-info user meson toolchain-funcs
 
 DESCRIPTION="A networked sound server with an advanced plugin system"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/PulseAudio/"
@@ -74,6 +74,7 @@ src_configure() {
 	echo 17.9 > .tarball-version
 
 	filter-flags -Wl,-z,defs
+	tc-ld-is-lld && append-ldflags -Wl,--undefined-version
 
 	local emesonargs=(
 		$(meson_feature alsa)

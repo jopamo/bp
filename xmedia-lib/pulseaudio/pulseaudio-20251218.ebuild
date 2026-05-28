@@ -64,6 +64,12 @@ pkg_setup() {
 	enewgroup audio 18 # Just make sure it exists
 }
 
+src_prepare() {
+	use elibc_musl && eapply "${FILESDIR}"/${PN}-20251218-musl-padsp-stat64.patch
+
+	default
+}
+
 src_configure() {
 	echo 17.9 > .tarball-version
 

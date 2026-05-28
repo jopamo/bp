@@ -1,0 +1,81 @@
+diff --git a/src/utils/padsp.c b/src/utils/padsp.c
+--- a/src/utils/padsp.c
++++ b/src/utils/padsp.c
+@@ -128,10 +128,17 @@ static int (*_access)(const char *, int) = NULL;
+ static int (*_open64)(const char *, int, mode_t) = NULL;
+ static int (*___open64_2)(const char *, int) = NULL;
+ static FILE* (*_fopen64)(const char *path, const char *mode) = NULL;
++#ifdef __GLIBC__
+ static int (*_stat64)(const char *, struct stat64 *) = NULL;
+ #ifdef _STAT_VER
+ static int (*___xstat64)(int, const char *, struct stat64 *) = NULL;
+ #endif
++#else
++static int (*_stat64)(const char *, struct stat *) = NULL;
++#ifdef _STAT_VER
++static int (*___xstat64)(int, const char *, struct stat *) = NULL;
++#endif
++#endif
+ #endif
+ static int (*_fclose)(FILE *f) = NULL;
+ static int (*_access)(const char *, int) = NULL;
+@@ -207,6 +214,7 @@ do { \
+     pthread_mutex_unlock(&func_mutex); \
+ } while(0)
+ 
++#ifdef __GLIBC__
+ #define LOAD_STAT64_FUNC() \
+ do { \
+     pthread_mutex_lock(&func_mutex); \
+@@ -214,6 +222,15 @@ do { \
+         _stat64 = (int (*)(const char *, struct stat64 *)) dlsym_fn(RTLD_NEXT, "stat64"); \
+     pthread_mutex_unlock(&func_mutex); \
+ } while(0)
++#else
++#define LOAD_STAT64_FUNC() \
++do { \
++    pthread_mutex_lock(&func_mutex); \
++    if (!_stat64) \
++        _stat64 = (int (*)(const char *, struct stat *)) dlsym_fn(RTLD_NEXT, "stat64"); \
++    pthread_mutex_unlock(&func_mutex); \
++} while(0)
++#endif
+ 
+ #define LOAD_XSTAT_FUNC() \
+ do { \
+@@ -223,6 +240,7 @@ do { \
+     pthread_mutex_unlock(&func_mutex); \
+ } while(0)
+ 
++#ifdef __GLIBC__
+ #define LOAD_XSTAT64_FUNC() \
+ do { \
+     pthread_mutex_lock(&func_mutex); \
+@@ -230,6 +248,15 @@ do { \
+         ___xstat64 = (int (*)(int, const char *, struct stat64 *)) dlsym_fn(RTLD_NEXT, "__xstat64"); \
+     pthread_mutex_unlock(&func_mutex); \
+ } while(0)
++#else
++#define LOAD_XSTAT64_FUNC() \
++do { \
++    pthread_mutex_lock(&func_mutex); \
++    if (!___xstat64) \
++        ___xstat64 = (int (*)(int, const char *, struct stat *)) dlsym_fn(RTLD_NEXT, "__xstat64"); \
++    pthread_mutex_unlock(&func_mutex); \
++} while(0)
++#endif
+ 
+ #define LOAD_FOPEN_FUNC() \
+ do { \
+@@ -2635,7 +2662,11 @@ int __xstat(int ver, const char *pathname, struct stat *buf) {
+ 
+ #ifdef HAVE_OPEN64
+ 
++#ifdef __GLIBC__
+ int __xstat64(int ver, const char *pathname, struct stat64 *buf) {
++#else
++int __xstat64(int ver, const char *pathname, struct stat *buf) {
++#endif
+     debug(DEBUG_LEVEL_VERBOSE, __FILE__": __xstat64(%s)\n", pathname?pathname:"NULL");
+ 
+     if (!pathname ||

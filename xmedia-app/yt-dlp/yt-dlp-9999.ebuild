@@ -21,7 +21,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	<xmedia-app/yt-dlp-ejs-9999
+	xmedia-app/yt-dlp-ejs
 "
 DEPEND="${RDEPEND}"
 

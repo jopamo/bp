@@ -224,7 +224,6 @@ my_src_install() {
 	fi
 
 	python_optimize "${pydirs[@]}"
-	python_fix_shebang "${pydirs[@]}"
 }
 
 pkg_preinst() {

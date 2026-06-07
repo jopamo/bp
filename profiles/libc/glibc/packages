@@ -1,0 +1,3 @@
+# Keep the GNU compiler frontends installed so the generic cc/c++ names stay
+# GCC-backed on glibc profiles.
+*app-build/gcc

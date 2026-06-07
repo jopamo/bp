@@ -49,6 +49,18 @@ _llvm_get_tuple() {
 	fi
 }
 
+_llvm_make_tool_wrapper() {
+	local out=$1
+	local tool=$2
+	local tool_args=${3-}
+
+	sed \
+		-e "s|@TOOL@|${tool}|g" \
+		-e "s|@TOOL_ARGS@|${tool_args}|g" \
+		"${FILESDIR}/tool-wrapper.in" > "${out}" || die
+	chmod 0755 "${out}" || die
+}
+
 src_prepare() {
     # S points at the llvm subproject, but this driver integration patch
     # touches the sibling clang tree in the llvm-project monorepo.
@@ -395,6 +407,34 @@ src_install() {
 	newexe "${clang_cpp_target}" "${TUPLE}-cpp"
 	dosym -r "/usr/libexec/llvm-wrappers/${TUPLE}-cpp" "/usr/bin/${TUPLE}-cpp"
 
+	if use elibc_musl; then
+		local defaults_build_dir="${T}/llvm-defaults"
+		mkdir -p "${defaults_build_dir}" || die
+
+		_llvm_make_tool_wrapper "${defaults_build_dir}/cc" /usr/bin/clang "--target=${TUPLE}"
+		_llvm_make_tool_wrapper "${defaults_build_dir}/c++" /usr/bin/clang++ "--target=${TUPLE}"
+		_llvm_make_tool_wrapper "${defaults_build_dir}/cpp" "/usr/bin/${TUPLE}-cpp"
+		_llvm_make_tool_wrapper "${defaults_build_dir}/ld" /usr/bin/ld.lld
+		_llvm_make_tool_wrapper "${defaults_build_dir}/ar" /usr/bin/llvm-ar
+		_llvm_make_tool_wrapper "${defaults_build_dir}/ranlib" /usr/bin/llvm-ranlib
+		_llvm_make_tool_wrapper "${defaults_build_dir}/nm" /usr/bin/llvm-nm
+		_llvm_make_tool_wrapper "${defaults_build_dir}/strip" /usr/bin/llvm-strip
+		_llvm_make_tool_wrapper "${defaults_build_dir}/objcopy" /usr/bin/llvm-objcopy
+		_llvm_make_tool_wrapper "${defaults_build_dir}/objdump" /usr/bin/llvm-objdump
+		_llvm_make_tool_wrapper "${defaults_build_dir}/readelf" /usr/bin/llvm-readelf
+
+		exeinto /usr/libexec/llvm-defaults
+		local tool
+		for tool in cc c++ cpp ld ar ranlib nm strip objcopy objdump readelf; do
+			doexe "${defaults_build_dir}/${tool}"
+		done
+
+		cat > "${T}/05llvm-default-toolchain" <<-'EOF' || die
+PATH=/usr/libexec/llvm-defaults
+EOF
+		doenvd "${T}/05llvm-default-toolchain"
+	fi
+
 	dosym -r "/usr/lib/${TUPLE}/libunwind.a" "/usr/lib/libunwind.a"
 	dosym -r "/usr/lib/${TUPLE}/libunwind.so" "/usr/lib/libunwind.so"
 	dosym -r "/usr/lib/${TUPLE}/libunwind.so.1" "/usr/lib/libunwind.so.1"
@@ -420,9 +460,9 @@ src_install() {
 		dosym -r "/usr/lib/${TUPLE}/libc++abi.so.1" "/usr/lib/libc++abi.so.1"
 	fi
 
-	# Keep generic tool ownership with GCC/binutils during the transition.
-	# Clang-first selection is handled by profile and toolchain policy, not
-	# by colliding on /usr/bin/{cc,gcc,ar,ld,strip}.
+	# Keep /usr/bin ownership with GCC/binutils. Musl resolves the generic
+	# tool names through /usr/libexec/llvm-defaults via env.d, while glibc
+	# keeps the GNU toolchain as the default path resolution.
 
 	local QA_POLICY_ARCHIVE_DUPLICATE_MEMBER_ALLOW="
 		/usr/lib/libclangCodeGen.a:AMDGPU.cpp.o

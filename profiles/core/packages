@@ -1,3 +1,4 @@
+*app-build/binutils
 *app-build/make
 *app-build/llvm
 *app-compression/cpio

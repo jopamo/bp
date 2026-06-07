@@ -17,98 +17,9 @@
 if [[ -z ${_TOOLCHAIN_FUNCS_ECLASS:-} ]]; then
 _TOOLCHAIN_FUNCS_ECLASS=1
 
-
-# Prefer LLVM tools for native builds once clang is present, but keep GCC as
-# the bootstrap and cross-compilation fallback.
-_tc-prefer-native-llvm_prog() {
-	local preferred=$1 fallback=$2
-	shift 2
-
-	if [[ $# -ne 0 ]]; then
-		echo "${fallback}"
-		return 0
-	fi
-
-	if declare -F tc-is-cross-compiler >/dev/null 2>&1 && tc-is-cross-compiler; then
-		echo "${fallback}"
-		return 0
-	fi
-
-	if type -P "${preferred%% *}" >/dev/null 2>&1; then
-		echo "${preferred}"
-	else
-		echo "${fallback}"
-	fi
-}
-
-_tc-prefer-build-llvm_prog() {
-	local preferred=$1 fallback=$2
-	shift 2
-
-	if [[ $# -ne 0 ]]; then
-		echo "${fallback}"
-		return 0
-	fi
-
-	if type -P "${preferred%% *}" >/dev/null 2>&1; then
-		echo "${preferred}"
-	else
-		echo "${fallback}"
-	fi
-}
-
-_tc-prefer-native-llvm_cpp_prog() {
-	local fallback=$1
-	shift
-
-	if [[ $# -ne 0 ]]; then
-		if type -P "${1}-cpp" >/dev/null 2>&1; then
-			echo "cpp"
-		elif type -P "clang-cpp" >/dev/null 2>&1; then
-			echo "clang-cpp"
-		else
-			echo "${fallback}"
-		fi
-		return 0
-	fi
-
-	if declare -F tc-is-cross-compiler >/dev/null 2>&1 && tc-is-cross-compiler; then
-		echo "${fallback}"
-		return 0
-	fi
-
-	if type -P "cpp" >/dev/null 2>&1 || { [[ -n ${CHOST-} ]] && type -P "${CHOST}-cpp" >/dev/null 2>&1; }; then
-		echo "cpp"
-	elif type -P "clang-cpp" >/dev/null 2>&1; then
-		echo "clang-cpp"
-	else
-		echo "${fallback}"
-	fi
-}
-
-_tc-prefer-build-llvm_cpp_prog() {
-	local fallback=$1
-	shift
-
-	if [[ $# -ne 0 ]]; then
-		if type -P "${1}-cpp" >/dev/null 2>&1; then
-			echo "cpp"
-		elif type -P "clang-cpp" >/dev/null 2>&1; then
-			echo "clang-cpp"
-		else
-			echo "${fallback}"
-		fi
-		return 0
-	fi
-
-	if type -P "cpp" >/dev/null 2>&1 || { [[ -n ${CBUILD-} ]] && type -P "${CBUILD}-cpp" >/dev/null 2>&1; }; then
-		echo "cpp"
-	elif type -P "clang-cpp" >/dev/null 2>&1; then
-		echo "clang-cpp"
-	else
-		echo "${fallback}"
-	fi
-}
+# Default tool selection goes through the generic names (cc, c++, ar, ld,
+# etc.). Profile policy decides whether PATH resolves those names to GNU or
+# LLVM implementations.
 
 
 # tc-getPROG <VAR [search vars]> <default> [tuple]
@@ -146,7 +57,7 @@ tc-getPROG() { _tc-getPROG CHOST "$@"; }
 # @FUNCTION: tc-getAR
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the archiver
-tc-getAR() { tc-getPROG AR "$(_tc-prefer-native-llvm_prog llvm-ar ar "$@")" "$@"; }
+tc-getAR() { tc-getPROG AR ar "$@"; }
 # @FUNCTION: tc-getAS
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the assembler
@@ -154,15 +65,15 @@ tc-getAS() { tc-getPROG AS as "$@"; }
 # @FUNCTION: tc-getCC
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the C compiler
-tc-getCC() { tc-getPROG CC "$(_tc-prefer-native-llvm_prog clang gcc "$@")" "$@"; }
+tc-getCC() { tc-getPROG CC cc "$@"; }
 # @FUNCTION: tc-getCPP
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the C preprocessor
-tc-getCPP() { tc-getPROG CPP "$(_tc-prefer-native-llvm_cpp_prog "$(tc-getCC "$@") -E" "$@")" "$@"; }
+tc-getCPP() { tc-getPROG CPP "$(tc-getCC "$@") -E" "$@"; }
 # @FUNCTION: tc-getCXX
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the C++ compiler
-tc-getCXX() { tc-getPROG CXX "$(_tc-prefer-native-llvm_prog clang++ g++ "$@")" "$@"; }
+tc-getCXX() { tc-getPROG CXX c++ "$@"; }
 # @FUNCTION: tc-getLD
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the linker
@@ -170,31 +81,31 @@ tc-getLD() { tc-getPROG LD ld "$@"; }
 # @FUNCTION: tc-getSTRINGS
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the strings program
-tc-getSTRINGS() { tc-getPROG STRINGS "$(_tc-prefer-native-llvm_prog llvm-strings strings "$@")" "$@"; }
+tc-getSTRINGS() { tc-getPROG STRINGS strings "$@"; }
 # @FUNCTION: tc-getSTRIP
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the strip program
-tc-getSTRIP() { tc-getPROG STRIP "$(_tc-prefer-native-llvm_prog llvm-strip strip "$@")" "$@"; }
+tc-getSTRIP() { tc-getPROG STRIP strip "$@"; }
 # @FUNCTION: tc-getNM
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the symbol/object thingy
-tc-getNM() { tc-getPROG NM "$(_tc-prefer-native-llvm_prog llvm-nm nm "$@")" "$@"; }
+tc-getNM() { tc-getPROG NM nm "$@"; }
 # @FUNCTION: tc-getRANLIB
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the archive indexer
-tc-getRANLIB() { tc-getPROG RANLIB "$(_tc-prefer-native-llvm_prog llvm-ranlib ranlib "$@")" "$@"; }
+tc-getRANLIB() { tc-getPROG RANLIB ranlib "$@"; }
 # @FUNCTION: tc-getREADELF
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the ELF reader
-tc-getREADELF() { tc-getPROG READELF "$(_tc-prefer-native-llvm_prog llvm-readelf readelf "$@")" "$@"; }
+tc-getREADELF() { tc-getPROG READELF readelf "$@"; }
 # @FUNCTION: tc-getOBJCOPY
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the object copier
-tc-getOBJCOPY() { tc-getPROG OBJCOPY "$(_tc-prefer-native-llvm_prog llvm-objcopy objcopy "$@")" "$@"; }
+tc-getOBJCOPY() { tc-getPROG OBJCOPY objcopy "$@"; }
 # @FUNCTION: tc-getOBJDUMP
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the object dumper
-tc-getOBJDUMP() { tc-getPROG OBJDUMP "$(_tc-prefer-native-llvm_prog llvm-objdump objdump "$@")" "$@"; }
+tc-getOBJDUMP() { tc-getPROG OBJDUMP objdump "$@"; }
 # @FUNCTION: tc-getF77
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the Fortran 77 compiler
@@ -227,7 +138,7 @@ tc-getDLLWRAP() { tc-getPROG DLLWRAP dllwrap "$@"; }
 # @FUNCTION: tc-getBUILD_AR
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the archiver for building binaries to run on the build machine
-tc-getBUILD_AR() { tc-getBUILD_PROG AR "$(_tc-prefer-build-llvm_prog llvm-ar ar "$@")" "$@"; }
+tc-getBUILD_AR() { tc-getBUILD_PROG AR ar "$@"; }
 # @FUNCTION: tc-getBUILD_AS
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the assembler for building binaries to run on the build machine
@@ -235,15 +146,15 @@ tc-getBUILD_AS() { tc-getBUILD_PROG AS as "$@"; }
 # @FUNCTION: tc-getBUILD_CC
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the C compiler for building binaries to run on the build machine
-tc-getBUILD_CC() { tc-getBUILD_PROG CC "$(_tc-prefer-build-llvm_prog clang gcc "$@")" "$@"; }
+tc-getBUILD_CC() { tc-getBUILD_PROG CC cc "$@"; }
 # @FUNCTION: tc-getBUILD_CPP
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the C preprocessor for building binaries to run on the build machine
-tc-getBUILD_CPP() { tc-getBUILD_PROG CPP "$(_tc-prefer-build-llvm_cpp_prog "$(tc-getBUILD_CC "$@") -E" "$@")" "$@"; }
+tc-getBUILD_CPP() { tc-getBUILD_PROG CPP "$(tc-getBUILD_CC "$@") -E" "$@"; }
 # @FUNCTION: tc-getBUILD_CXX
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the C++ compiler for building binaries to run on the build machine
-tc-getBUILD_CXX() { tc-getBUILD_PROG CXX "$(_tc-prefer-build-llvm_prog clang++ g++ "$@")" "$@"; }
+tc-getBUILD_CXX() { tc-getBUILD_PROG CXX c++ "$@"; }
 # @FUNCTION: tc-getBUILD_LD
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the linker for building binaries to run on the build machine
@@ -251,27 +162,27 @@ tc-getBUILD_LD() { tc-getBUILD_PROG LD ld "$@"; }
 # @FUNCTION: tc-getBUILD_STRINGS
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the strings program for building binaries to run on the build machine
-tc-getBUILD_STRINGS() { tc-getBUILD_PROG STRINGS "$(_tc-prefer-build-llvm_prog llvm-strings strings "$@")" "$@"; }
+tc-getBUILD_STRINGS() { tc-getBUILD_PROG STRINGS strings "$@"; }
 # @FUNCTION: tc-getBUILD_STRIP
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the strip program for building binaries to run on the build machine
-tc-getBUILD_STRIP() { tc-getBUILD_PROG STRIP "$(_tc-prefer-build-llvm_prog llvm-strip strip "$@")" "$@"; }
+tc-getBUILD_STRIP() { tc-getBUILD_PROG STRIP strip "$@"; }
 # @FUNCTION: tc-getBUILD_NM
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the symbol/object thingy for building binaries to run on the build machine
-tc-getBUILD_NM() { tc-getBUILD_PROG NM "$(_tc-prefer-build-llvm_prog llvm-nm nm "$@")" "$@"; }
+tc-getBUILD_NM() { tc-getBUILD_PROG NM nm "$@"; }
 # @FUNCTION: tc-getBUILD_RANLIB
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the archive indexer for building binaries to run on the build machine
-tc-getBUILD_RANLIB() { tc-getBUILD_PROG RANLIB "$(_tc-prefer-build-llvm_prog llvm-ranlib ranlib "$@")" "$@"; }
+tc-getBUILD_RANLIB() { tc-getBUILD_PROG RANLIB ranlib "$@"; }
 # @FUNCTION: tc-getBUILD_READELF
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the ELF reader for building binaries to run on the build machine
-tc-getBUILD_READELF() { tc-getBUILD_PROG READELF "$(_tc-prefer-build-llvm_prog llvm-readelf readelf "$@")" "$@"; }
+tc-getBUILD_READELF() { tc-getBUILD_PROG READELF readelf "$@"; }
 # @FUNCTION: tc-getBUILD_OBJCOPY
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the object copier for building binaries to run on the build machine
-tc-getBUILD_OBJCOPY() { tc-getBUILD_PROG OBJCOPY "$(_tc-prefer-build-llvm_prog llvm-objcopy objcopy "$@")" "$@"; }
+tc-getBUILD_OBJCOPY() { tc-getBUILD_PROG OBJCOPY objcopy "$@"; }
 # @FUNCTION: tc-getBUILD_PKG_CONFIG
 # @USAGE: [toolchain prefix]
 # @RETURN: name of the pkg-config tool for building binaries to run on the build machine

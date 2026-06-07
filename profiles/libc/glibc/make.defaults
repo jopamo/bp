@@ -2,3 +2,7 @@
 
 PORTAGE_LIBC="glibc"
 ELIBC="glibc"
+
+# Keep the pre-LLVM GCC/libstdc++ hardening profile on glibc. This avoids
+# injecting libc++-only macros into the GNU default toolchain path.
+SECURITY_FLAGS="-D_GLIBCXX_ASSERTIONS -fstack-protector-strong -fstack-clash-protection -fexceptions -D_FORTIFY_SOURCE=3"

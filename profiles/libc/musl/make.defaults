@@ -3,6 +3,11 @@
 PORTAGE_LIBC="musl"
 ELIBC="musl"
 
+# Keep the LLVM/libc++ hardening profile on musl. This is the active baseline
+# for the musl wrapper toolchain and stays explicit here so glibc can diverge
+# cleanly.
+SECURITY_FLAGS="-D_GLIBCXX_ASSERTIONS=1 -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST -fstack-protector-strong -fstack-clash-protection -fexceptions -D_FORTIFY_SOURCE=3"
+
 # The wrapper directory is absent until app-build/llvm is installed; once it
 # appears, later package builds in the same transaction start resolving the
 # generic tool names through LLVM automatically.

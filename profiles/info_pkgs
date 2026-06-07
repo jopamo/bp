@@ -3,6 +3,7 @@
 app-core/bash
 app-build/autoconf
 app-build/automake
+app-build/binutils
 app-build/libtool
 app-build/make
 app-lang/python

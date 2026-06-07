@@ -1,2 +1,2 @@
-#mask will stabilizing
-#*app-build/llvm
+# LLVM is part of the core package set; musl only changes which generic tool
+# names resolve to it by default.

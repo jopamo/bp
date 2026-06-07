@@ -45,7 +45,6 @@ app-kernel/kernel-hardening-checker
 app-kernel/perf
 app-net/aircrack-ng
 app-net/bind-tools
-app-net/dropbear
 app-net/ethtool
 app-net/iftop
 app-net/iperf

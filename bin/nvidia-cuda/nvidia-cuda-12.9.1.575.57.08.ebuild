@@ -23,6 +23,25 @@ DEPEND="bin/nvidia-drivers"
 
 QA_PREBUILT="opt/cuda/*"
 
+src_prepare() {
+	local host_config
+	local patched=0
+
+	default
+
+	for host_config in builds/cuda_nvcc/targets/*/include/crt/host_config.h; do
+		[[ -f ${host_config} ]] || continue
+		grep -q '__GNUC__ > 14' "${host_config}" || die "Unexpected GCC guard in ${host_config}"
+		sed -i \
+			-e 's/__GNUC__ > 14/__GNUC__ > 15/' \
+			-e 's/gcc versions later than 14 are not supported/gcc versions later than 15 are not supported/' \
+			"${host_config}" || die "Failed to patch ${host_config} for GCC 15"
+		patched=1
+	done
+
+	[[ ${patched} -eq 1 ]] || die "Unable to find CUDA host_config.h to patch for GCC 15"
+}
+
 src_install() {
 	local cudadir=/opt/cuda
 	local ecudadir="${EPREFIX}${cudadir}"

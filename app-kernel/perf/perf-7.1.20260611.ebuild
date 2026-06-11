@@ -3,6 +3,8 @@
 BRANCH_NAME="snapshot"
 SNAPSHOT=cc6316e9d1cc563ad34a5ff474a24fc123270e8d
 
+inherit flag-o-matic toolchain-funcs
+
 DESCRIPTION="Userland tools for Linux Performance Counters"
 HOMEPAGE="https://kernel.org/"
 
@@ -77,8 +79,13 @@ src_compile() {
 
 	[[ -n ${perf_timestamp} ]] || perf_timestamp='1970-01-01 00:00:00 +0000'
 
+	filter-lto
+
 	local myemake=(
 		ARCH=${perf_arch}
+		CC="$(tc-getCC)"
+		CXX="$(tc-getCXX)"
+		EXTLIBS="-lstdc++"
 		WERROR=0
 		KBUILD_BUILD_TIMESTAMP="${perf_timestamp}"
 		# this snapshot's rust-backed test workload is broken and rust support
@@ -137,8 +144,13 @@ src_install() {
 
 	[[ -n ${perf_timestamp} ]] || perf_timestamp='1970-01-01 00:00:00 +0000'
 
+	filter-lto
+
 	local myemake=(
 		ARCH=${perf_arch}
+		CC="$(tc-getCC)"
+		CXX="$(tc-getCXX)"
+		EXTLIBS="-lstdc++"
 		WERROR=0
 		KBUILD_BUILD_TIMESTAMP="${perf_timestamp}"
 		# keep install in lockstep with compile feature selection

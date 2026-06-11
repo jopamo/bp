@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit cmake python-any-r1 udev
+inherit cmake doins python-any-r1
 
 DESCRIPTION="Userspace libraries and tools for RDMA, InfiniBand, and RoCE"
 HOMEPAGE="https://github.com/linux-rdma/rdma-core"

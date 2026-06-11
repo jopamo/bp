@@ -964,16 +964,29 @@ gcc-specs-stack-check() {
 	[[ "${directive/\{!fno-stack-check:}" != "${directive}" ]]
 }
 
+# Return truth if the current compiler enables assertions in libstdc++.
+tc-enables-libstdcxx-assertions() {
+	local -a flags=( ${CPPFLAGS-} ${CXXFLAGS-} )
+	tc-cpp-is-true "defined(_GLIBCXX_ASSERTIONS)" "${flags[@]}"
+}
+
+# Return truth if the current compiler enables assertions or hardening in
+# libc++.
+tc-enables-libcxx-assertions() {
+	local -a flags=( ${CPPFLAGS-} ${CXXFLAGS-} )
+	tc-cpp-is-true "defined(_LIBCPP_ENABLE_ASSERTIONS) || defined(_LIBCPP_HARDENING_MODE) || defined(_LIBCPP_ENABLE_HARDENED_MODE)" "${flags[@]}"
+}
+
 # @FUNCTION: tc-enables-cxx-assertions
 # @RETURN: Truth if the current compiler enables assertions in the C++ standard library
 # @DESCRIPTION:
 # Return truth if the current compiler enables assertions in the C++ standard
-# library. For libstdc++, this is -D_GLIBCXX_ASSERTIONS, and for libcxx/libc++,
-# this is -D_LIBCPP_ENABLE_ASSERTIONS (deprecated) or
-# -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST.
+# library. For libstdc++, this is -D_GLIBCXX_ASSERTIONS, and for libc++,
+# this is -D_LIBCPP_ENABLE_ASSERTIONS (deprecated),
+# -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST, or
+# -D_LIBCPP_ENABLE_HARDENED_MODE.
 tc-enables-cxx-assertions() {
-	local -a flags=( ${CPPFLAGS-} ${CXXFLAGS-} )
-	tc-cpp-is-true "defined(_GLIBCXX_ASSERTIONS) || defined(_LIBCPP_ENABLE_ASSERTIONS) || defined(_LIBCPP_HARDENING_MODE) || defined(_LIBCPP_ENABLE_HARDENED_MODE)" "${flags[@]}"
+	tc-enables-libstdcxx-assertions || tc-enables-libcxx-assertions
 }
 
 # @FUNCTION: tc-enables-pie

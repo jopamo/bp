@@ -22,7 +22,7 @@ RESTRICT="mirror strip"
 DEPEND="bin/nvidia-drivers"
 RDEPEND="
 	${DEPEND}
-	rdma? ( sys-cluster/rdma-core )
+	rdma? ( lib-net/rdma-core )
 "
 
 QA_PREBUILT="opt/cuda/*"

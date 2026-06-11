@@ -45,66 +45,85 @@ src_prepare() {
 src_install() {
 	local cudadir=/opt/cuda
 	local ecudadir="${EPREFIX}${cudadir}"
-	dodir ${cudadir}
-	into ${cudadir}
+	local target=x86_64-linux
+	local targetdir="${cudadir}/targets/${target}"
+
+	dodir "${cudadir}"
+	mkdir -p "${ED}${cudadir}" || die "mkdir ${ED}${cudadir} failed"
 
 	# Install standard sub packages
 	local builddirs=(
-		builds/cuda_{cccl,cudart,cuobjdump,cupti,cuxxfilt,nvcc,nvdisasm,nvml_dev,nvprune,nvrtc,nvtx,nvvp,opencl}
-		builds/lib{cublas,cufft,cufile,curand,cusolver,cusparse,npp,nvfatbin,nvfatbin,nvjitlink,nvjpeg}
+		builds/cuda_{cccl,cudart,cuobjdump,cupti,cuxxfilt,nvcc,nvdisasm,nvml_dev,nvprof,nvprune,nvrtc,nvtx,nvvp,opencl,profiler_api,sandbox_dev}
+		builds/lib{cublas,cufft,cufile,curand,cusolver,cusparse,npp,nvfatbin,nvjitlink,nvjpeg}
 		$(usex debugger "builds/cuda_gdb" "")
 	)
 
 	local d
 	for d in "${builddirs[@]}"; do
+		[[ -n ${d} ]] || continue
 		[[ -d ${d} ]] || die "Directory does not exist: ${d}"
 
-		if [[ -d ${d}/bin ]]; then
-			local f
-			for f in ${d}/bin/*; do
-				if [[ -f ${f} ]]; then
-					dobin "${f}"
-				else
-					insinto ${cudadir}/bin
-					doins -r "${f}"
-				fi
-			done
+		if [[ ${d} == builds/libcufile ]]; then
+			cp -an "${d}/targets" "${ED}${cudadir}/" || die "Failed to merge ${d}/targets into ${cudadir}"
+			mkdir -p "${ED}${cudadir}/gds" || die "mkdir ${ED}${cudadir}/gds failed"
+			cp -an "${d}/gds/cufile.json" "${d}/gds/EULA.txt" "${ED}${cudadir}/gds/" \
+				|| die "Failed to install libcufile GDS metadata"
+			cp -an "${d}/gds/doc" "${d}/gds/man" "${d}/gds/tools" "${ED}${cudadir}/gds/" \
+				|| die "Failed to install libcufile GDS trees"
+			cp -an "${d}/gds-${MYD}" "${ED}${cudadir}/" || die "Failed to install libcufile GDS versioned docs"
+			continue
 		fi
 
-		insinto ${cudadir}
-		if [[ -d ${d}/targets ]]; then
-			doins -r "${d}"/targets
+		if [[ ${d} == builds/cuda_gdb ]]; then
+			mkdir -p "${ED}${cudadir}/bin" || die "mkdir ${ED}${cudadir}/bin failed"
+			mkdir -p "${ED}${cudadir}/extras" || die "mkdir ${ED}${cudadir}/extras failed"
+			cp -an "${d}/bin/." "${ED}${cudadir}/bin/" || die "Failed to install cuda-gdb binaries"
+			cp -an "${d}/extras/Debugger" "${ED}${cudadir}/extras/" || die "Failed to install cuda-gdb extras"
+			cp -an "${d}/share" "${ED}${cudadir}/" || die "Failed to install cuda-gdb share data"
+			continue
 		fi
-		if [[ -d ${d}/share ]]; then
-			doins -r "${d}"/share
-		fi
-		if [[ -d ${d}/extras ]]; then
-			doins -r "${d}"/extras
-		fi
+
+		cp -an "${d}/." "${ED}${cudadir}/" || die "Failed to merge ${d} into ${cudadir}"
 	done
 
-	doins builds/EULA.txt
-	# nvml and nvvm need special handling
-	doins -r builds/cuda_nvcc/nvvm
-	exeinto ${cudadir}/nvvm/bin
-	doexe builds/cuda_nvcc/nvvm/bin/cicc
-
-	doins -r builds/cuda_nvml_dev/nvml
+	insinto "${cudadir}"
+	doins builds/EULA.txt builds/version.json
 
 	if use sanitizer; then
+		mkdir -p "${ED}${cudadir}/Sanitizer" || die "mkdir ${ED}${cudadir}/Sanitizer failed"
+		cp -a "${S}"/builds/cuda_sanitizer_api/compute-sanitizer/. "${ED}${cudadir}/Sanitizer/" \
+			|| die "Failed to install compute-sanitizer payload"
+		into "${cudadir}"
 		dobin "${S}"/builds/integration/Sanitizer/compute-sanitizer
-		doins -r "${S}"/builds/cuda_sanitizer_api/compute-sanitizer/
-		exeinto ${cudadir}/Sanitizer
-		doexe "${S}"/builds/cuda_sanitizer_api/compute-sanitizer/compute-sanitizer
 	fi
 
-	# Add include and lib symlinks
-	dosym -r ${cudadir}/targets/x86_64-linux/include ${cudadir}/include
-	dosym -r ${cudadir}/targets/x86_64-linux/lib ${cudadir}/lib
+	insinto "${cudadir}/pkgconfig"
+	doins "${FILESDIR}"/*.pc
+
+	[[ -e "${ED}${cudadir}/include" ]] || dosym -r "${targetdir}/include" "${cudadir}/include"
+	[[ -e "${ED}${cudadir}/lib64" ]] || dosym -r "${targetdir}/lib" "${cudadir}/lib64"
+	[[ -e "${ED}${cudadir}/lib" ]] || dosym -r "${targetdir}/lib" "${cudadir}/lib"
+	[[ -e "${ED}${targetdir}/lib64" ]] || dosym -r "${targetdir}/lib" "${targetdir}/lib64"
 
 	newenvd - 99cuda <<-EOF
+		CUDA_HOME=${ecudadir}
+		CUDA_PATH=${ecudadir}
+		CUDAToolkit_ROOT=${ecudadir}
+		CUDACXX=${ecudadir}/bin/nvcc
 		PATH=${ecudadir}/bin:${ecudadir}/nvvm/bin
-		LDPATH=${ecudadir}/lib:${ecudadir}/nvvm/lib64
+		ROOTPATH=${ecudadir}/bin:${ecudadir}/nvvm/bin
+		PKG_CONFIG_PATH=${ecudadir}/pkgconfig:${ecudadir}/pkg-config
+		LDPATH=${ecudadir}/lib64:${ecudadir}/lib:${ecudadir}/targets/${target}/lib:${ecudadir}/nvvm/lib64
+	EOF
+
+	insinto /etc/profile.d
+	newins - cuda.sh <<-EOF
+		export CUDA_HOME=${ecudadir}
+		export CUDA_PATH=${ecudadir}
+		export CUDAToolkit_ROOT=${ecudadir}
+		export CUDACXX=${ecudadir}/bin/nvcc
+		export PKG_CONFIG_PATH=${ecudadir}/pkgconfig:${ecudadir}/pkg-config:\${PKG_CONFIG_PATH}
+		export PATH=${ecudadir}/bin:${ecudadir}/nvvm/bin:\${PATH}
 	EOF
 
 	# Cuda prepackages libraries, don't revdep-build on them
@@ -112,4 +131,6 @@ src_install() {
 	newins - 80nvidia-cuda <<-EOF
 		SEARCH_DIRS_MASK="${ecudadir}"
 	EOF
+
+	fowners -R root:root "${cudadir}"
 }

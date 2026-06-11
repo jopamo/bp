@@ -56,8 +56,10 @@ EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} \
 OPT_FLAGS="-O2 -pipe"
 GRAPHITE_FLAGS=""
 POSITION_FLAGS="-fPIE -fPIC"
-SECURITY_FLAGS="-D_GLIBCXX_ASSERTIONS=1 -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST -fstack-protector-strong -fstack-clash-protection -fexceptions -D_FORTIFY_SOURCE=3"
-LTO_FLAGS=""
+SECURITY_FLAGS="-D_GLIBCXX_ASSERTIONS=1 -fstack-protector-strong -fstack-clash-protection -fexceptions -D_FORTIFY_SOURCE=3"
+
+# LTO is default policy
+LTO_FLAGS="-flto=auto -fno-semantic-interposition"
 LTO_COMPILE_FLAGS="${LTO_FLAGS}"
 LTO_LINK_FLAGS="${LTO_FLAGS}"
 
@@ -65,25 +67,31 @@ LTO_LINK_FLAGS="${LTO_FLAGS}"
 REPRO_FLAGS=""
 
 BASE_FLAGS="${OPT_FLAGS} ${GRAPHITE_FLAGS} ${SECURITY_FLAGS} ${POSITION_FLAGS} ${LTO_COMPILE_FLAGS}"
+
 CFLAGS="${MARCH} ${BASE_FLAGS} ${REPRO_FLAGS}"
 CXXFLAGS="${CFLAGS}"
-CPPFLAGS="${CFLAGS}"
 FFLAGS="${CFLAGS}"
 FCFLAGS="${CFLAGS}"
+
+# CPPFLAGS is preprocessor-only policy
+CPPFLAGS=""
+
 LDFLAGS="${LTO_LINK_FLAGS} ${POSITION_FLAGS} \
     -Wl,-O1 \
     -Wl,-z,combreloc -Wl,-z,now -Wl,-z,relro -Wl,--as-needed"
 
-# Always drive builds through the generic tool names. The active libc profile
-# decides what those names resolve to: musl prepends LLVM wrappers, glibc keeps
-# the GNU toolchain in the default path.
+# Always drive compile and final link steps through compiler drivers
 CC="cc"
 CXX="c++"
 CPP="cpp"
-LD="ld"
-AR="ar"
-RANLIB="ranlib"
-NM="nm"
+
+# Do not set LD globally; LTO final links must go through cc/c++
+
+# GCC LTO needs plugin-aware archive tools
+AR="gcc-ar"
+RANLIB="gcc-ranlib"
+NM="gcc-nm"
+
 STRIP="strip"
 OBJCOPY="objcopy"
 OBJDUMP="objdump"

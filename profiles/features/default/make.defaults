@@ -2,7 +2,7 @@
 
 OPT_FLAGS="-O3 -pipe -Wall -Wformat -Wformat-security"
 GRAPHITE_FLAGS=""
-LTO_FLAGS="-flto -fno-semantic-interposition"
+LTO_FLAGS="-flto=auto -fno-semantic-interposition"
 LTO_COMPILE_FLAGS="${LTO_FLAGS}"
 LTO_LINK_FLAGS="${LTO_FLAGS}"
 

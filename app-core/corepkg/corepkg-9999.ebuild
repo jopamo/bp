@@ -8,6 +8,7 @@ HOMEPAGE="https://gitlab.com/pjo/corepkg"
 if [[ ${PV} = *9999 ]]; then
 	EGIT_REPO_URI="https://gitlab.com/pjo/corepkg"
 	inherit git-r3
+	EGIT_COMMIT=3f1d71a8b30381f1585431ddf7fd2285559e885e
 else
 	SNAPSHOT=37832269366c74d1dc9039130f48787d5950a44c
 	SRC_URI="https://gitlab.com/pjo/corepkg/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"

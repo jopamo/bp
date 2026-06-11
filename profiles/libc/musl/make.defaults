@@ -12,6 +12,9 @@ SECURITY_FLAGS="-D_GLIBCXX_ASSERTIONS=1 -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENI
 # appears, later package builds in the same transaction start resolving the
 # generic tool names through LLVM automatically.
 PATH="/usr/libexec/llvm-defaults:${PATH}"
+AR="llvm-ar"
+RANLIB="llvm-ranlib"
+NM="llvm-nm"
 
 FEATURES="sandbox sfperms strict"
 

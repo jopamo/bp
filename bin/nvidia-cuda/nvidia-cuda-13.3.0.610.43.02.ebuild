@@ -15,12 +15,15 @@ SLOT="0"
 KEYWORDS="amd64"
 S="${WORKDIR}"
 
-IUSE="debugger sanitizer"
+IUSE="debugger rdma sanitizer"
 
 RESTRICT="mirror strip"
 
 DEPEND="bin/nvidia-drivers"
-RDEPEND="${DEPEND}"
+RDEPEND="
+	${DEPEND}
+	rdma? ( sys-cluster/rdma-core )
+"
 BDEPEND=""
 
 QA_PREBUILT="opt/cuda/*"
@@ -34,7 +37,8 @@ src_install() {
 
 	local builddirs=(
 		builds/{cccl,cuda_crt,cuda_ctadvisor,cuda_cudart,cuda_culibos,cuda_cuobjdump,cuda_cupti,cuda_cuxxfilt,cuda_nvcc,cuda_nvdisasm,cuda_nvml_dev,cuda_nvprune,cuda_nvrtc,cuda_nvtx,cuda_opencl,cuda_profiler_api,cuda_sandbox_dev,cuda_tileiras,libcublas,libcufft,libcurand,libcusolver,libcusparse,libnvfatbin,libnvjitlink,libnvjpeg,libnvptxcompiler,libnvvm}
-		builds/libcu{file,objclient}
+		builds/libcufile
+		$(usex rdma "builds/libcuobjclient" "")
 		$(usex debugger "builds/cuda_gdb" "")
 	)
 
@@ -47,6 +51,13 @@ src_install() {
 
 		if [[ ${d} == builds/libcufile ]]; then
 			cp -an "${d}/targets" "${ED}${cudadir}/" || die "Failed to merge ${d}/targets into ${cudadir}"
+			if ! use rdma; then
+				rm -f \
+					"${ED}${cudadir}/targets/${target}/lib/libcufile_rdma.so" \
+					"${ED}${cudadir}/targets/${target}/lib/libcufile_rdma.so."* \
+					"${ED}${cudadir}/targets/${target}/lib/libcufile_rdma_static.a" \
+					|| die "Failed to drop RDMA-only libcufile objects"
+			fi
 			mkdir -p "${ED}${cudadir}/gds" || die "mkdir ${ED}${cudadir}/gds failed"
 			cp -an "${d}/gds/cufile.json" "${d}/gds/EULA.txt" "${ED}${cudadir}/gds/" \
 				|| die "Failed to install libcufile GDS metadata"
@@ -86,6 +97,11 @@ src_install() {
 		into "${cudadir}"
 		dobin "${S}"/builds/integration/Sanitizer/compute-sanitizer
 	fi
+
+	rm -f \
+		"${ED}${targetdir}/lib/lib64" \
+		"${ED}${targetdir}/include/include" \
+		|| die "Failed to remove broken nested CUDA symlinks"
 
 	[[ -e "${ED}${cudadir}/include" ]] || dosym -r "${targetdir}/include" "${cudadir}/include"
 	[[ -e "${ED}${cudadir}/lib64" ]] || dosym -r "${targetdir}/lib" "${cudadir}/lib64"

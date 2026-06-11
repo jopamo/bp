@@ -1,2 +1,6 @@
 =lib-core/gdbm-1.25
 #>=app-lang/go-1.21.20240806
+
+# Musl profiles are LLVM-only.
+app-build/binutils
+app-build/gcc

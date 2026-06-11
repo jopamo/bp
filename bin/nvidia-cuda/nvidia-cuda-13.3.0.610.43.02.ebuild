@@ -20,45 +20,27 @@ IUSE="debugger sanitizer"
 RESTRICT="mirror strip"
 
 DEPEND="bin/nvidia-drivers"
+RDEPEND="${DEPEND}"
+BDEPEND=""
 
 QA_PREBUILT="opt/cuda/*"
-
-src_prepare() {
-	local host_config
-	local patched=0
-
-	default
-
-	for host_config in builds/cuda_nvcc/targets/*/include/crt/host_config.h; do
-		[[ -f ${host_config} ]] || continue
-		grep -q '__GNUC__ > 14' "${host_config}" || die "Unexpected GCC guard in ${host_config}"
-		sed -i \
-			-e 's/__GNUC__ > 14/__GNUC__ > 15/' \
-			-e 's/gcc versions later than 14 are not supported/gcc versions later than 15 are not supported/' \
-			"${host_config}" || die "Failed to patch ${host_config} for GCC 15"
-		patched=1
-	done
-
-	[[ ${patched} -eq 1 ]] || die "Unable to find CUDA host_config.h to patch for GCC 15"
-}
 
 src_install() {
 	local cudadir=/opt/cuda
 	local ecudadir="${EPREFIX}${cudadir}"
 	local target=x86_64-linux
 	local targetdir="${cudadir}/targets/${target}"
+	local d
+
+	local builddirs=(
+		builds/{cccl,cuda_crt,cuda_ctadvisor,cuda_cudart,cuda_culibos,cuda_cuobjdump,cuda_cupti,cuda_cuxxfilt,cuda_nvcc,cuda_nvdisasm,cuda_nvml_dev,cuda_nvprune,cuda_nvrtc,cuda_nvtx,cuda_opencl,cuda_profiler_api,cuda_sandbox_dev,cuda_tileiras,libcublas,libcufft,libcurand,libcusolver,libcusparse,libnvfatbin,libnvjitlink,libnvjpeg,libnvptxcompiler,libnvvm}
+		builds/libcu{file,objclient}
+		$(usex debugger "builds/cuda_gdb" "")
+	)
 
 	dodir "${cudadir}"
 	mkdir -p "${ED}${cudadir}" || die "mkdir ${ED}${cudadir} failed"
 
-	# Install standard sub packages
-	local builddirs=(
-		builds/cuda_{cccl,cudart,cuobjdump,cupti,cuxxfilt,nvcc,nvdisasm,nvml_dev,nvprof,nvprune,nvrtc,nvtx,nvvp,opencl,profiler_api,sandbox_dev}
-		builds/lib{cublas,cufft,cufile,curand,cusolver,cusparse,npp,nvfatbin,nvjitlink,nvjpeg}
-		$(usex debugger "builds/cuda_gdb" "")
-	)
-
-	local d
 	for d in "${builddirs[@]}"; do
 		[[ -n ${d} ]] || continue
 		[[ -d ${d} ]] || die "Directory does not exist: ${d}"
@@ -71,6 +53,14 @@ src_install() {
 			cp -an "${d}/gds/doc" "${d}/gds/man" "${d}/gds/tools" "${ED}${cudadir}/gds/" \
 				|| die "Failed to install libcufile GDS trees"
 			cp -an "${d}/gds-${MYD}" "${ED}${cudadir}/" || die "Failed to install libcufile GDS versioned docs"
+			continue
+		fi
+
+		if [[ ${d} == builds/libcuobjclient ]]; then
+			cp -an "${d}/targets" "${ED}${cudadir}/" || die "Failed to merge ${d}/targets into ${cudadir}"
+			mkdir -p "${ED}${cudadir}/gds" || die "mkdir ${ED}${cudadir}/gds failed"
+			cp -an "${d}/gds/cuobject" "${ED}${cudadir}/gds/" \
+				|| die "Failed to install libcuobjclient GDS docs"
 			continue
 		fi
 
@@ -97,12 +87,12 @@ src_install() {
 		dobin "${S}"/builds/integration/Sanitizer/compute-sanitizer
 	fi
 
-	insinto "${cudadir}/pkgconfig"
-	doins "${FILESDIR}"/*.pc
-
 	[[ -e "${ED}${cudadir}/include" ]] || dosym -r "${targetdir}/include" "${cudadir}/include"
 	[[ -e "${ED}${cudadir}/lib64" ]] || dosym -r "${targetdir}/lib" "${cudadir}/lib64"
 	[[ -e "${ED}${cudadir}/lib" ]] || dosym -r "${targetdir}/lib" "${cudadir}/lib"
+	if [[ -e "${ED}${cudadir}/pkg-config" && ! -e "${ED}${cudadir}/pkgconfig" ]]; then
+		dosym -r "${cudadir}/pkg-config" "${cudadir}/pkgconfig"
+	fi
 	[[ -e "${ED}${targetdir}/lib64" ]] || dosym -r "${targetdir}/lib" "${targetdir}/lib64"
 
 	newenvd - 99cuda <<-EOF
@@ -126,7 +116,6 @@ src_install() {
 		export PATH=${ecudadir}/bin:${ecudadir}/nvvm/bin:\${PATH}
 	EOF
 
-	# Cuda prepackages libraries, don't revdep-build on them
 	insinto /etc/revdep-rebuild
 	newins - 80nvidia-cuda <<-EOF
 		SEARCH_DIRS_MASK="${ecudadir}"

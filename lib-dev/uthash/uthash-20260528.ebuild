@@ -2,7 +2,7 @@
 
 DESCRIPTION="An easy-to-use hash implementation for C programmers"
 HOMEPAGE="https://troydhanson.github.io/uthash/index.html"
-SNAPSHOT=6d8573997c21f24c7e4ec9e48734b44f384170a1
+SNAPSHOT=5ada598b0d9799cd2555eb9c87fd8854b359c62c
 SRC_URI="https://github.com/troydhanson/uthash/archive/${SNAPSHOT}.tar.gz -> uthash-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/uthash-${SNAPSHOT}"
 

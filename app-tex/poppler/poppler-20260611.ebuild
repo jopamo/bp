@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit cmake flag-o-matic xdg-utils
+inherit cmake flag-o-matic toolchain-funcs xdg-utils
 
 DESCRIPTION="PDF rendering library based on the xpdf-3.0 code base"
 HOMEPAGE="https://poppler.freedesktop.org/"
@@ -16,7 +16,7 @@ IUSE="cairo curl cxx debug doc introspection jpeg jpeg2k png utils"
 
 RESTRICT="test"
 
-DEPEND="
+COMMON_DEPEND="
 	lib-dev/nss
 	fonts/fontconfig
 	xgui-lib/freetype
@@ -31,10 +31,10 @@ DEPEND="
 	jpeg2k? ( xmedia-lib/openjpeg )
 	png? ( xmedia-lib/libpng )
 "
+DEPEND="${COMMON_DEPEND}"
 RDEPEND="${COMMON_DEPEND}"
 
 PATCHES=(
-	"${FILESDIR}/poppler-0.57.0-disable-internal-jpx.patch"
 	"${FILESDIR}/poppler-20260226-splashoutputdev-init-color.patch"
 )
 
@@ -43,43 +43,41 @@ src_prepare() {
 
 	# Clang doesn't grok this flag, the configure nicely tests that, but
 	# cmake just uses it, so remove it if we use clang
-	if [[ ${CC} == clang ]] ; then
+	if tc-is-clang ; then
 		sed -i -e 's/-fno-check-new//' cmake/modules/PopplerMacros.cmake || die
 	fi
-
-	if ! grep -Fq 'cmake_policy(SET CMP0002 OLD)' CMakeLists.txt ; then
-		sed '/^cmake_minimum_required/acmake_policy(SET CMP0002 OLD)' \
-			-i CMakeLists.txt || die
-	else
-		einfo "policy(SET CMP0002 OLD) - workaround can be removed"
-	fi
-
-	# we need to up the C++ version, bug #622526, #643278
-	append-cxxflags -std=c++11
 }
 
 src_configure() {
 	export CMAKE_BUILD_TYPE=RELEASE
 	xdg_environment_reset
+	append-lfs-flags
 
 	local mycmakeargs=(
 		-DENABLE_BOOST=OFF
 		-DBUILD_CPP_TESTS=OFF
 		-DBUILD_GTK_TESTS=OFF
+		-DBUILD_MANUAL_TESTS=OFF
 		-DBUILD_QT5_TESTS=OFF
+		-DBUILD_QT6_TESTS=OFF
+		-DRUN_GPERF_IF_PRESENT=OFF
 		-DENABLE_CPP=$(usex cxx)
-		-DENABLE_DCTDECODER=$(usex jpeg libjpeg none)
 		-DENABLE_GPGME=OFF
+		-DENABLE_GLIB=$(usex cairo)
+		-DENABLE_GOBJECT_INTROSPECTION=$(usex introspection)
 		-DENABLE_LIBCURL=$(usex curl)
-		-DENABLE_LIBOPENJPEG=$(usex jpeg2k openjpeg2 none)
+		-DENABLE_LIBJPEG=$(usex jpeg)
+		-DENABLE_LIBOPENJPEG=$(usex jpeg2k)
+		-DENABLE_LCMS=OFF
+		-DENABLE_LIBTIFF=OFF
+		-DENABLE_NSS3=ON
 		-DENABLE_QT5=OFF
 		-DENABLE_QT6=OFF
 		-DENABLE_UNSTABLE_API_ABI_HEADERS=ON
 		-DENABLE_UTILS=$(usex utils)
-		-DWITH_Cairo=$(usex cairo)
-		-DWITH_GObjectIntrospection=$(usex introspection)
-		-DWITH_JPEG=$(usex jpeg)
-		-DWITH_PNG=$(usex png)
+		-DENABLE_ZLIB_UNCOMPRESS=OFF
+		-DCMAKE_DISABLE_FIND_PACKAGE_Cairo=$(usex cairo OFF ON)
+		-DCMAKE_DISABLE_FIND_PACKAGE_PNG=$(usex png OFF ON)
 	)
 
 	cmake_src_configure

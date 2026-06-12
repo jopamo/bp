@@ -205,10 +205,10 @@ CARGO_DEPS="
 	rust-crates/object-0.38.1
 	rust-crates/once_cell-1.21.4
 	rust-crates/once_cell_polyfill-1.70.2
-	rust-crates/openssl-0.10.79
+	rust-crates/openssl-0.10.80
 	rust-crates/openssl-macros-0.1.1
 	rust-crates/openssl-probe-0.2.1
-	rust-crates/openssl-sys-0.9.115
+	rust-crates/openssl-sys-0.9.116
 	rust-crates/option-ext-0.2.0
 	rust-crates/ordered-float-5.3.0
 	rust-crates/os_pipe-1.2.3
@@ -322,7 +322,7 @@ CARGO_DEPS="
 	rust-crates/subtle-2.6.1
 	rust-crates/syn-2.0.117
 	rust-crates/synstructure-0.13.2
-	rust-crates/tar-0.4.45
+	rust-crates/tar-0.4.46
 	rust-crates/target-lexicon-0.13.5
 	rust-crates/tempfile-3.27.0
 	rust-crates/termcolor-1.4.1
@@ -488,7 +488,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Build and publish crates with pyo3, rust-cpython and cffi bindings"
 HOMEPAGE="https://www.maturin.rs/"
-SNAPSHOT=d6278227e030e2e68d05857e1595c7ee9fda7330
+SNAPSHOT=eb745e08f3eb8c5499420ed1ff4bce974b2ec972
 SRC_URI="https://github.com/PyO3/maturin/archive/${SNAPSHOT}.tar.gz -> maturin-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/maturin-${SNAPSHOT}"
 

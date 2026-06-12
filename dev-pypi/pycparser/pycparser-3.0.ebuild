@@ -11,7 +11,7 @@ inherit distutils-r1
 
 DESCRIPTION="C parser in Python"
 HOMEPAGE="https://github.com/eliben/pycparser"
-LICENSE="metapackage"
+LICENSE="BSD-3-Clause"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 

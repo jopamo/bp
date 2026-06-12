@@ -6,7 +6,7 @@ inherit cmake flag-o-matic qa-policy toolchain-funcs
 
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
-SNAPSHOT=81c69e1404010ede8e16d7c975bb6e5bb17cb52c
+SNAPSHOT=e80beda6e2558f03f17351f6805e95c8687a82a9
 
 SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"

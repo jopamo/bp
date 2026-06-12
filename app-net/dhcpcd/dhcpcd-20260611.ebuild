@@ -4,7 +4,7 @@ inherit flag-o-matic user
 
 DESCRIPTION="A fully featured, yet light weight RFC2131 compliant DHCP client"
 HOMEPAGE="https://github.com/NetworkConfiguration/dhcpcd/ https://roy.marples.name/projects/dhcpcd/"
-SNAPSHOT=20ec0df64b3dddd6255a7e01c4808e73df9d7be1
+SNAPSHOT=82bbc038470df64c47b9dfdb989767f0b944992e
 SRC_URI="https://github.com/NetworkConfiguration/dhcpcd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/dhcpcd-${SNAPSHOT}"
 

@@ -11,7 +11,7 @@ inherit distutils-r1
 
 DESCRIPTION="JOSE protocol implementation in Python"
 HOMEPAGE="https://github.com/certbot/josepy"
-LICENSE="metapackage"
+LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 

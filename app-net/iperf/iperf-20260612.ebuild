@@ -5,7 +5,7 @@ inherit autotools
 DESCRIPTION="A TCP, UDP, and SCTP network bandwidth measurement tool"
 HOMEPAGE="https://github.com/esnet/iperf"
 EGIT_REPO_URI="https://github.com/esnet/iperf"
-SNAPSHOT=8a94f44cde986106abe8c8bf06d72d327570e34e
+SNAPSHOT=ad1d04dda837c578d3ae0f037bcda04cd057f73f
 SRC_URI="https://github.com/esnet/iperf/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/iperf-${SNAPSHOT}
 

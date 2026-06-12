@@ -19,7 +19,7 @@ CARGO_DEPS="
 	rust-crates/cfg_aliases-0.2.1
 	rust-crates/clap-4.6.1
 	rust-crates/clap_builder-4.6.0
-	rust-crates/clap_complete-4.6.2
+	rust-crates/clap_complete-4.6.5
 	rust-crates/clap_derive-4.6.1
 	rust-crates/clap_lex-1.0.0
 	rust-crates/colorchoice-1.0.4
@@ -35,7 +35,7 @@ CARGO_DEPS="
 	rust-crates/etcetera-0.11.0
 	rust-crates/faccess-0.2.4
 	rust-crates/fastrand-2.3.0
-	rust-crates/filetime-0.2.27
+	rust-crates/filetime-0.2.29
 	rust-crates/find-msvc-tools-0.1.9
 	rust-crates/foldhash-0.1.5
 	rust-crates/getrandom-0.4.2
@@ -48,33 +48,30 @@ CARGO_DEPS="
 	rust-crates/indexmap-2.13.0
 	rust-crates/is_terminal_polyfill-1.70.2
 	rust-crates/itoa-1.0.17
-	rust-crates/jiff-0.2.24
-	rust-crates/jiff-static-0.2.24
+	rust-crates/jiff-0.2.27
+	rust-crates/jiff-static-0.2.27
 	rust-crates/jiff-tzdb-0.1.6
 	rust-crates/jiff-tzdb-platform-0.1.3
 	rust-crates/leb128fmt-0.1.0
 	rust-crates/libc-0.2.186
-	rust-crates/libredox-0.1.14
 	rust-crates/linux-raw-sys-0.12.1
 	rust-crates/log-0.4.29
 	rust-crates/lscolors-0.21.0
 	rust-crates/memchr-2.8.0
 	rust-crates/nix-0.30.1
 	rust-crates/nix-0.31.2
-	rust-crates/normpath-1.5.0
+	rust-crates/normpath-1.5.1
 	rust-crates/nu-ansi-term-0.50.3
 	rust-crates/objc2-0.6.4
 	rust-crates/objc2-encode-4.1.0
 	rust-crates/once_cell-1.21.3
 	rust-crates/once_cell_polyfill-1.70.2
-	rust-crates/plain-0.2.3
 	rust-crates/portable-atomic-1.13.1
 	rust-crates/portable-atomic-util-0.2.5
 	rust-crates/prettyplease-0.2.37
 	rust-crates/proc-macro2-1.0.106
 	rust-crates/quote-1.0.45
 	rust-crates/r-efi-6.0.0
-	rust-crates/redox_syscall-0.7.3
 	rust-crates/regex-1.12.3
 	rust-crates/regex-automata-0.4.14
 	rust-crates/regex-syntax-0.8.10
@@ -93,8 +90,8 @@ CARGO_DEPS="
 	rust-crates/test-case-3.3.1
 	rust-crates/test-case-core-3.3.1
 	rust-crates/test-case-macros-3.3.1
-	rust-crates/tikv-jemalloc-sys-0.6.1+5.3.0-1-ge13ca993e8ccb9ba9847cc330696e02839f328f7
-	rust-crates/tikv-jemallocator-0.6.1
+	rust-crates/tikv-jemalloc-sys-0.7.1+5.3.1-0-g81034ce1f1373e37dc865038e1bc8eeecf559ce8
+	rust-crates/tikv-jemallocator-0.7.0
 	rust-crates/unicode-ident-1.0.24
 	rust-crates/unicode-xid-0.2.6
 	rust-crates/utf8parse-0.2.2
@@ -133,7 +130,7 @@ inherit cargo lockstep-cargo
 
 DESCRIPTION="A simple, fast and user-friendly alternative to gnu find"
 HOMEPAGE="https://github.com/sharkdp/fd"
-SNAPSHOT=42b2ab8a84ddedf80eeed9079128c60161f64658
+SNAPSHOT=25461e5ce13dc12ff2a75993285a87e99b33db2d
 SRC_URI="https://github.com/sharkdp/fd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

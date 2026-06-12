@@ -15,8 +15,8 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/35/68/175e7c07c5be13200387d5c0995b0da1e198e360047c08eb17d1002fcd92/trove_classifiers-2026.5.7.17.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/trove_classifiers-2026.5.7.17"
+SRC_URI="https://files.pythonhosted.org/packages/c2/e3/7ca82ee24c82d344584abd5b8637b3bd056f2900226e8d82fc22f1184b92/trove_classifiers-2026.6.1.19.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/trove_classifiers-2026.6.1.19"
 
 BDEPEND="
 	dev-pypi/calver[${PYTHON_USEDEP}]

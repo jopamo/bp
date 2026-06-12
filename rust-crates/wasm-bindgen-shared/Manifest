@@ -4,3 +4,4 @@ DIST wasm-bindgen-shared-0.2.105.crate 9269 BLAKE3 de6a14c9ea5063b9c10a16e86045a
 DIST wasm-bindgen-shared-0.2.114.crate 10538 BLAKE3 19d9efc8edb5dd97b1ed8d25250d39e8008a0ce745e4ae9a81fc19e7ba95b5e9
 DIST wasm-bindgen-shared-0.2.117.crate 10541 BLAKE3 95ea280523dfe7ea0745fc4c00f88a6ad8be08154b969b2dc8cebbdfd5891ce3
 DIST wasm-bindgen-shared-0.2.118.crate 10565 BLAKE3 af3cf04a9f1b7ac77b7f3b1692952c728adc5e9f9c1695af5e163d65786379b9
+DIST wasm-bindgen-shared-0.2.121.crate 11270 BLAKE3 3a2613cf029453ce1ee5a06490c6e722210239bea992784cb93316566df7fc10

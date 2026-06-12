@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit autotools
+inherit autotools doins
 
 DESCRIPTION="A tool for network monitoring and data acquisition"
 HOMEPAGE="https://www.tcpdump.org/ https://github.com/the-tcpdump-group/tcpdump"
@@ -13,6 +13,10 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="caps smi ssl samba suid test"
+
+QA_CONFIG_IMPL_DECL_SKIP=(
+	strchr
+)
 
 REQUIRED_USE="test? ( samba )"
 RESTRICT="!test? ( test )"

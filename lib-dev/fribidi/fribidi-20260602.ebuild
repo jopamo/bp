@@ -5,7 +5,7 @@ inherit meson flag-o-matic
 DESCRIPTION="A free implementation of the unicode bidirectional algorithm"
 HOMEPAGE="https://fribidi.org/"
 
-SNAPSHOT=5c85a174650ab8ef106ce85f13bcf2950d3fc65f
+SNAPSHOT=069a7e3d31e6aa74f2068a8e0804106ce7906639
 SRC_URI="https://github.com/fribidi/fribidi/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/fribidi-${SNAPSHOT}
 

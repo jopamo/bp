@@ -5,7 +5,7 @@ app-core/util-linux -audit -bash-completion -blkpr nls -selinux -slang -sysvinit
 
 
 
-app-build/llvm -assertions bootstrap bpf -debug libcxx libcxxabi -libfuzzer -lto orc sanitizers static_analyzer sysclang syslibcxxabi
+app-build/llvm -assertions bootstrap bpf -debug -libfuzzer -lto orc sanitizers static_analyzer sysclang
 app-compression/bzip2 static-libs
 app-compression/libarchive static-libs
 app-compression/lz4 static-libs

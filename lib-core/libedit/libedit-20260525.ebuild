@@ -4,7 +4,7 @@ inherit qa-policy
 
 DESCRIPTION="BSD replacement for libreadline"
 HOMEPAGE="https://thrysoee.dk/editline/"
-SNAPSHOT=cc5ed18287a67b097c36c2b9b27585e1f236f3ea
+SNAPSHOT=156e25a4379192551f57ee99a3cc5dbf62cc29d9
 SRC_URI="https://salsa.debian.org/debian/libedit/-/archive/${SNAPSHOT}/libedit-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libedit-${SNAPSHOT}"
 

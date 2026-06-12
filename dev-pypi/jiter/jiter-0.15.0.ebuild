@@ -9,16 +9,16 @@ CARGO_DEPS="
 	rust-crates/anstyle-1.0.14
 	rust-crates/anyhow-1.0.102
 	rust-crates/autocfg-1.5.0
-	rust-crates/bitflags-2.11.0
+	rust-crates/bitflags-2.11.1
 	rust-crates/bitvec-1.0.1
 	rust-crates/bumpalo-3.20.2
 	rust-crates/cast-0.3.0
-	rust-crates/cc-1.2.60
+	rust-crates/cc-1.2.62
 	rust-crates/cfg-if-1.0.4
 	rust-crates/ciborium-0.2.2
 	rust-crates/ciborium-io-0.2.2
 	rust-crates/ciborium-ll-0.2.2
-	rust-crates/clap-4.6.0
+	rust-crates/clap-4.6.1
 	rust-crates/clap_builder-4.6.0
 	rust-crates/clap_lex-1.1.0
 	rust-crates/codspeed-2.10.1
@@ -35,11 +35,14 @@ CARGO_DEPS="
 	rust-crates/find-msvc-tools-0.1.9
 	rust-crates/foldhash-0.1.5
 	rust-crates/funty-2.0.0
+	rust-crates/futures-core-0.3.32
+	rust-crates/futures-task-0.3.32
+	rust-crates/futures-util-0.3.32
 	rust-crates/getrandom-0.3.4
 	rust-crates/getrandom-0.4.2
 	rust-crates/half-2.7.1
 	rust-crates/hashbrown-0.15.5
-	rust-crates/hashbrown-0.17.0
+	rust-crates/hashbrown-0.17.1
 	rust-crates/heck-0.5.0
 	rust-crates/hermit-abi-0.5.2
 	rust-crates/id-arena-2.3.0
@@ -47,13 +50,13 @@ CARGO_DEPS="
 	rust-crates/is-terminal-0.4.17
 	rust-crates/itertools-0.10.5
 	rust-crates/itoa-1.0.18
-	rust-crates/js-sys-0.3.94
+	rust-crates/js-sys-0.3.98
 	rust-crates/lazy_static-1.5.0
 	rust-crates/leb128fmt-0.1.0
 	rust-crates/lexical-parse-float-1.0.6
 	rust-crates/lexical-parse-integer-1.0.6
 	rust-crates/lexical-util-1.0.7
-	rust-crates/libc-0.2.184
+	rust-crates/libc-0.2.186
 	rust-crates/log-0.4.29
 	rust-crates/memchr-2.8.0
 	rust-crates/num-bigint-0.4.6
@@ -62,6 +65,7 @@ CARGO_DEPS="
 	rust-crates/once_cell-1.21.4
 	rust-crates/oorandom-11.1.5
 	rust-crates/paste-1.0.15
+	rust-crates/pin-project-lite-0.2.17
 	rust-crates/plotters-0.3.7
 	rust-crates/plotters-backend-0.3.7
 	rust-crates/plotters-svg-0.3.7
@@ -78,7 +82,7 @@ CARGO_DEPS="
 	rust-crates/r-efi-5.3.0
 	rust-crates/r-efi-6.0.0
 	rust-crates/radium-0.7.0
-	rust-crates/rayon-1.11.0
+	rust-crates/rayon-1.12.0
 	rust-crates/rayon-core-1.13.0
 	rust-crates/regex-1.12.3
 	rust-crates/regex-automata-0.4.14
@@ -91,6 +95,7 @@ CARGO_DEPS="
 	rust-crates/serde_derive-1.0.228
 	rust-crates/serde_json-1.0.149
 	rust-crates/shlex-1.3.0
+	rust-crates/slab-0.4.12
 	rust-crates/smallvec-1.15.1
 	rust-crates/syn-2.0.117
 	rust-crates/tap-1.0.1
@@ -98,19 +103,19 @@ CARGO_DEPS="
 	rust-crates/tinytemplate-1.2.1
 	rust-crates/unicode-ident-1.0.24
 	rust-crates/unicode-xid-0.2.6
-	rust-crates/uuid-1.23.0
+	rust-crates/uuid-1.23.1
 	rust-crates/version_check-0.9.5
 	rust-crates/walkdir-2.5.0
-	rust-crates/wasip2-1.0.2+wasi-0.2.9
+	rust-crates/wasip2-1.0.3+wasi-0.2.9
 	rust-crates/wasip3-0.4.0+wasi-0.3.0-rc-2026-01-06
-	rust-crates/wasm-bindgen-0.2.117
-	rust-crates/wasm-bindgen-macro-0.2.117
-	rust-crates/wasm-bindgen-macro-support-0.2.117
-	rust-crates/wasm-bindgen-shared-0.2.117
+	rust-crates/wasm-bindgen-0.2.121
+	rust-crates/wasm-bindgen-macro-0.2.121
+	rust-crates/wasm-bindgen-macro-support-0.2.121
+	rust-crates/wasm-bindgen-shared-0.2.121
 	rust-crates/wasm-encoder-0.244.0
 	rust-crates/wasm-metadata-0.244.0
 	rust-crates/wasmparser-0.244.0
-	rust-crates/web-sys-0.3.94
+	rust-crates/web-sys-0.3.98
 	rust-crates/winapi-util-0.1.11
 	rust-crates/windows-link-0.2.1
 	rust-crates/windows-sys-0.59.0
@@ -125,6 +130,7 @@ CARGO_DEPS="
 	rust-crates/windows_x86_64_gnullvm-0.52.6
 	rust-crates/windows_x86_64_msvc-0.52.6
 	rust-crates/wit-bindgen-0.51.0
+	rust-crates/wit-bindgen-0.57.1
 	rust-crates/wit-bindgen-core-0.51.0
 	rust-crates/wit-bindgen-rust-0.51.0
 	rust-crates/wit-bindgen-rust-macro-0.51.0
@@ -147,12 +153,12 @@ inherit cargo lockstep-cargo distutils-r1
 
 DESCRIPTION="Fast iterable JSON parser."
 HOMEPAGE="https://github.com/pydantic/jiter/"
-LICENSE="metapackage"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/6e/c1/0cddc6eb17d4c53a99840953f95dd3accdc5cfc7a337b0e9b26476276be9/jiter-0.14.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/jiter-0.14.0"
+SRC_URI="https://files.pythonhosted.org/packages/66/b5/55f06bb281d92fb3cc86d14e1def2bd908bb77693183e7cb1f5a3c388b0c/jiter-0.15.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/jiter-0.15.0"
 
 BDEPEND="
 	app-dev/maturin[${PYTHON_USEDEP}]

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=69087ced3cb6082f7dcfb4fc2dcaa3b68a7e2e8c
+SNAPSHOT=a06bcbbd4d181f4ee5042deb89e493a8c465cef9
 UPSTREAM_PV=0.9.35
 LMDB_SOVER=0
 

@@ -11,7 +11,7 @@ inherit distutils-r1
 
 DESCRIPTION="Generate and parse RFC 3339 timestamps"
 HOMEPAGE="https://github.com/kurtraschke/pyrfc3339"
-LICENSE="metapackage"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 

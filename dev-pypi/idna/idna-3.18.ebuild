@@ -11,12 +11,12 @@ inherit distutils-r1
 
 DESCRIPTION="Internationalized Domain Names in Applications (IDNA)"
 HOMEPAGE="https://pypi.org/project/idna/"
-LICENSE="metapackage"
+LICENSE="BSD-3-Clause"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/05/b1/efac073e0c297ecf2fb33c346989a529d4e19164f1759102dee5953ee17e/idna-3.14.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/idna-3.14"
+SRC_URI="https://files.pythonhosted.org/packages/cd/63/9496c57188a2ee585e0f1db071d75089a11e98aa86eb99d9d7618fc1edce/idna-3.18.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/idna-3.18"
 
 BDEPEND="
 	dev-pypi/flit-core[${PYTHON_USEDEP}]

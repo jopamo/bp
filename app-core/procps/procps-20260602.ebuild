@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="standard informational utilities and process-handling tools"
 HOMEPAGE="https://gitlab.com/procps-ng/procps"
-SNAPSHOT=a611808f5be240e7745da50b2c2b07e1d7ba1428
+SNAPSHOT=2f5257647bb892ad895399c62b91a091553813c3
 SRC_URI="https://gitlab.com/procps-ng/procps/-/archive/${SNAPSHOT}/procps-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/procps-${SNAPSHOT}"
 

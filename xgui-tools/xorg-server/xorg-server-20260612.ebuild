@@ -6,7 +6,7 @@ inherit meson flag-o-matic
 
 DESCRIPTION="implementation of the X Window System display server"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=1e0c1fa0220128870ba3b927a6bf4d0eb0ffc399
+SNAPSHOT=d81babc1fa983402a20923f8e4a16c1ef5584f55
 SRC_URI="https://github.com/X11Libre/xserver/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/xserver-${SNAPSHOT}"
 

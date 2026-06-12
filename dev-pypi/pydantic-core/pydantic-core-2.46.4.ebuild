@@ -119,7 +119,7 @@ inherit cargo lockstep-cargo distutils-r1
 
 DESCRIPTION="Core functionality for Pydantic validation and serialization"
 HOMEPAGE="https://github.com/pydantic/pydantic"
-LICENSE="metapackage"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 

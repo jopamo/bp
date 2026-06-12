@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="Library implementing the SSH2 protocol"
 HOMEPAGE="http://www.libssh2.org/"
-SNAPSHOT=8bceba2dd259878b5330f4295941e5441238b73e
+SNAPSHOT=39cd3a82c7e07a08c1e218b91e69fd92d4f35ca3
 SRC_URI="https://github.com/libssh2/libssh2/archive/${SNAPSHOT}.tar.gz -> libssh2-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libssh2-${SNAPSHOT}"
 

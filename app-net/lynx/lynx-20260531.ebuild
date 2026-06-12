@@ -2,7 +2,7 @@
 
 DESCRIPTION="An excellent console-based web browser with ssl support"
 HOMEPAGE="https://lynx.invisible-island.net/"
-SNAPSHOT=2c8ee4383470d35272bd1868fc58e87c5b21fe15
+SNAPSHOT=29d5a703b02a2c137c8c03949ccfec74d6c17b8a
 SRC_URI="https://github.com/ThomasDickey/lynx-snapshots/archive/${SNAPSHOT}.tar.gz -> lynx-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/lynx-snapshots-${SNAPSHOT}"
 

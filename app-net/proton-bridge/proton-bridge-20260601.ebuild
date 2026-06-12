@@ -4,7 +4,7 @@ inherit go-module
 
 DESCRIPTION="Proton Mail Bridge application (CLI only)"
 HOMEPAGE="https://github.com/ProtonMail/proton-bridge"
-SNAPSHOT=0521645d8b13ac0738c93c6a9fc4f8b7f72192b8
+SNAPSHOT=1176fb90904d976bccbd57eda8cb31a2747895f2
 SRC_URI="https://github.com/ProtonMail/proton-bridge/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

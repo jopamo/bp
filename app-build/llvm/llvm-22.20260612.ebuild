@@ -61,6 +61,73 @@ _llvm_make_tool_wrapper() {
 	chmod 0755 "${out}" || die
 }
 
+_llvm_cmd_is_clang() {
+	local cmd=$1
+
+	case ${cmd##*/} in
+		clang|clang-[0-9]*|clang++|clang++-[0-9]*|clang-cpp|clang-cpp-[0-9]*)
+			return 0
+			;;
+	esac
+
+	return 1
+}
+
+_llvm_toolchain_usable() {
+	local cc_str=$1
+	local cxx_str=$2
+	local -a cc_cmd=( ${cc_str} )
+	local -a cxx_cmd=( ${cxx_str} )
+	local src_c="${T}/llvm-compiler-smoke.c"
+	local src_cxx="${T}/llvm-compiler-smoke.cpp"
+	local obj_c="${T}/llvm-compiler-smoke.c.o"
+	local obj_cxx="${T}/llvm-compiler-smoke.cpp.o"
+
+	[[ ${#cc_cmd[@]} -gt 0 && ${#cxx_cmd[@]} -gt 0 ]] || return 1
+	type -P "${cc_cmd[0]}" >/dev/null 2>&1 || return 1
+	type -P "${cxx_cmd[0]}" >/dev/null 2>&1 || return 1
+
+	printf '%s\n' 'int main(void) { return 0; }' > "${src_c}" || die
+	printf '%s\n' 'int main() { return 0; }' > "${src_cxx}" || die
+
+	"${cc_cmd[@]}" -c "${src_c}" -o "${obj_c}" >/dev/null 2>&1 || return 1
+	"${cxx_cmd[@]}" -c "${src_cxx}" -o "${obj_cxx}" >/dev/null 2>&1 || return 1
+}
+
+_llvm_export_gcc_fallback() {
+	local gcc gxx gar gnm granlib
+
+	for gcc in "${CHOST}-gcc" gcc; do
+		type -P "${gcc}" >/dev/null 2>&1 && break
+		gcc=
+	done
+	for gxx in "${CHOST}-g++" g++; do
+		type -P "${gxx}" >/dev/null 2>&1 && break
+		gxx=
+	done
+	[[ -n ${gcc} && -n ${gxx} ]] || return 1
+
+	for gar in "${CHOST}-gcc-ar" gcc-ar "${CHOST}-ar" ar; do
+		type -P "${gar}" >/dev/null 2>&1 && break
+		gar=
+	done
+	for gnm in "${CHOST}-gcc-nm" gcc-nm "${CHOST}-nm" nm; do
+		type -P "${gnm}" >/dev/null 2>&1 && break
+		gnm=
+	done
+	for granlib in "${CHOST}-gcc-ranlib" gcc-ranlib "${CHOST}-ranlib" ranlib; do
+		type -P "${granlib}" >/dev/null 2>&1 && break
+		granlib=
+	done
+
+	export CC=${gcc}
+	export CPP="${gcc} -E"
+	export CXX=${gxx}
+	[[ -n ${gar} ]] && export AR=${gar}
+	[[ -n ${gnm} ]] && export NM=${gnm}
+	[[ -n ${granlib} ]] && export RANLIB=${granlib}
+}
+
 src_prepare() {
     # S points at the llvm subproject, but this driver integration patch
     # touches the sibling clang tree in the llvm-project monorepo.
@@ -92,6 +159,30 @@ src_configure() {
     export TUPLE
 
     TUPLE=$(_llvm_get_tuple)
+
+	local sysclang_requested=0
+	local current_cc=$(tc-getCC)
+	local current_cxx=$(tc-getCXX)
+	local -a current_cc_cmd=( ${current_cc} )
+	local -a current_cxx_cmd=( ${current_cxx} )
+
+	use sysclang && sysclang_requested=1
+
+	if (( sysclang_requested )); then
+		if ! _llvm_toolchain_usable /usr/bin/clang /usr/bin/clang++; then
+			ewarn "USE=sysclang requested, but /usr/bin/clang or /usr/bin/clang++ is missing or unusable."
+			ewarn "Falling back to GCC for the build compiler."
+			_llvm_export_gcc_fallback || die "No usable GCC fallback found"
+			sysclang_requested=0
+		fi
+	elif { _llvm_cmd_is_clang "${current_cc_cmd[0]}" || _llvm_cmd_is_clang "${current_cxx_cmd[0]}"; } \
+		&& ! _llvm_toolchain_usable "${current_cc}" "${current_cxx}"; then
+		ewarn "Selected Clang toolchain is missing or unusable:"
+		ewarn "  CC=${current_cc}"
+		ewarn "  CXX=${current_cxx}"
+		ewarn "Falling back to GCC for the build compiler."
+		_llvm_export_gcc_fallback || die "No usable GCC fallback found"
+	fi
 
 	if use syslibcxxabi; then
     	# link to compiler-rt
@@ -314,7 +405,7 @@ src_configure() {
 	mycmakeargs=("${common[@]}")
 	mycmakeargs+=( -DLLVM_ENABLE_LTO=${llvm_lto_mode} )
 
-	if use sysclang; then
+	if (( sysclang_requested )); then
         mycmakeargs+=("${sysclang[@]}")
     fi
 
@@ -339,13 +430,17 @@ src_configure() {
         mycmakeargs+=("${bootstrap[@]}")
     fi
 
-    if use sysclang; then
-       local -x CC="clang"
-       local -x CPP="clang-cpp"
-       local -x CXX="clang++"
-       local -x AR="llvm-ar"
-       local -x NM="llvm-nm"
-       local -x RANLIB="llvm-ranlib"
+    if (( sysclang_requested )); then
+       local -x CC="/usr/bin/clang"
+       if [[ -x /usr/bin/clang-cpp ]]; then
+           local -x CPP="/usr/bin/clang-cpp"
+       else
+           local -x CPP="/usr/bin/clang -E"
+       fi
+       local -x CXX="/usr/bin/clang++"
+       local -x AR="/usr/bin/llvm-ar"
+       local -x NM="/usr/bin/llvm-nm"
+       local -x RANLIB="/usr/bin/llvm-ranlib"
     fi
 
     use debug || local -x CPPFLAGS="${CPPFLAGS} -DNDEBUG"

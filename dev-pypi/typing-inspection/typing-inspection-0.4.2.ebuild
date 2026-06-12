@@ -11,7 +11,7 @@ inherit distutils-r1
 
 DESCRIPTION="Runtime typing introspection tools"
 HOMEPAGE="https://github.com/pydantic/typing-inspection"
-LICENSE="metapackage"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 

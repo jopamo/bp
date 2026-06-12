@@ -2,6 +2,7 @@
 
 MANPATH="/usr/local/share/man:/usr/share/man"
 INFOPATH="/usr/share/info"
-LDPATH="/usr/lib"
+# Keep /usr/local first so locally installed shared libraries are visible to
+# the system dynamic linker without extra manual ld.so.conf edits.
+LDPATH="/usr/local/lib:/usr/lib"
 PATH="/usr/local/bin:/usr/bin:/opt/bin:/usr/local/sbin:/usr/sbin"
-

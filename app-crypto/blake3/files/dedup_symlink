@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 
+if [[ -r /etc/emoji-logging.sh ]]; then
+	# shellcheck source=/etc/emoji-logging.sh
+	source /etc/emoji-logging.sh || exit $?
+fi
+
+: "${EMOJI_OK:=false}"
+: "${ICON_DR:=[DRY-RUN]}"
+: "${ICON_FILE:=[F]}"
+: "${ICON_BYTE:=[B]}"
+: "${ICON_DUP:=[DUP]}"
+: "${ICON_SAVE:=[$]}"
+
 ROOT_DIR="."
 DRY_RUN=false
 

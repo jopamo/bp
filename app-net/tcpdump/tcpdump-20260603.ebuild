@@ -4,7 +4,7 @@ inherit autotools
 
 DESCRIPTION="A tool for network monitoring and data acquisition"
 HOMEPAGE="https://www.tcpdump.org/ https://github.com/the-tcpdump-group/tcpdump"
-SNAPSHOT=9ec690477640aa0134b2946662c048a6760aa816
+SNAPSHOT=8af86059ad1558f2f3c75fa1a96637607ab3bd88
 SRC_URI="https://github.com/the-tcpdump-group/tcpdump/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/tcpdump-${SNAPSHOT}
 

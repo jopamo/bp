@@ -6,7 +6,7 @@ inherit cmake flag-o-matic
 
 DESCRIPTION="Simple DirectMedia Layer"
 HOMEPAGE="https://libsdl.org/"
-SNAPSHOT=10a82990ee72cd0c1c9bd2d0dbbde0d9d4ee5814
+SNAPSHOT=402fc52af4e731184ad6a704068b5ccd27d8f1b8
 SRC_URI="https://github.com/libsdl-org/SDL/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/SDL-${SNAPSHOT}"
 

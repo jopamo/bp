@@ -1,12 +1,12 @@
 # Distributed under the terms of the GNU General Public License v2
 
-BRANCH_NAME="kf$(ver_cut 1)"
+BRANCH_NAME="master"
 
 inherit cmake
 
 DESCRIPTION="Framework providing access to properties and features of the window manager"
 HOMEPAGE="https://invent.kde.org/frameworks/kwindowsystem"
-SNAPSHOT=7b830723f199540e18330bb64a899f905275f956
+SNAPSHOT=9beda3c96988ef5a392c659a06f02bc4942fccbe
 SRC_URI="https://github.com/KDE/kwindowsystem/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/kwindowsystem-${SNAPSHOT}
 
@@ -19,7 +19,16 @@ IUSE="X"
 RESTRICT="test"
 
 DEPEND="
-	xgui-lib/qttools
+	xgui-lib/qtdeclarative:6
+	xgui-lib/qttools:6
 	xgui-tools/extra-cmake-modules
-	xgui-tools/plasma-wayland-protocols
 "
+
+src_configure() {
+	local mycmakeargs=(
+		-D KWINDOWSYSTEM_WAYLAND=OFF
+	)
+
+
+	cmake_src_configure
+}

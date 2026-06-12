@@ -2,7 +2,7 @@
 
 DESCRIPTION="ALSA Use Case Manager configuration"
 HOMEPAGE="http://www.alsa-project.org/"
-SNAPSHOT=e8737afe38dc6e87578cb28256427ee53a183f53
+SNAPSHOT=7e08d4e6b0c75bfee72abbc0b3ac7c7b6e6abec1
 SRC_URI="https://github.com/alsa-project/alsa-ucm-conf/archive/${SNAPSHOT}.tar.gz -> alsa-ucm-conf-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/alsa-ucm-conf-${SNAPSHOT}"
 

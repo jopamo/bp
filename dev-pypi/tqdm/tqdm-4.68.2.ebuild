@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
 DESCRIPTION="Fast, Extensible Progress Meter"
 HOMEPAGE="https://tqdm.github.io"
@@ -15,7 +15,8 @@ LICENSE="MPL-2.0 MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-PYPI_PN="tqdm"
+SRC_URI="https://files.pythonhosted.org/packages/85/05/0d5260f1f1ca784f4a4a0def9cbe6affe587f5b4025328d446c3d67765f4/tqdm-4.68.2.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/tqdm-4.68.2"
 
 BDEPEND="
 	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]

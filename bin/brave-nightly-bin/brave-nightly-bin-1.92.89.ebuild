@@ -8,8 +8,8 @@ HOMEPAGE="https://brave.com"
 BASE_URI="https://github.com/brave/brave-browser/releases/download"
 
 SRC_URI="
-	amd64? ( ${BASE_URI}/v${PV}/brave-browser-nightly_${PV}_amd64.deb -> ${PN}-${PV}-amd64.deb )
-	arm64? ( ${BASE_URI}/v${PV}/brave-browser-nightly_${PV}_arm64.deb -> ${PN}-${PV}-arm64.deb )
+	amd64? ( ${BASE_URI}/v${PV}/brave-origin-nightly_${PV}_amd64.deb -> ${PN}-${PV}-amd64.deb )
+	arm64? ( ${BASE_URI}/v${PV}/brave-origin-nightly_${PV}_arm64.deb -> ${PN}-${PV}-arm64.deb )
 "
 
 S="${WORKDIR}"
@@ -49,28 +49,52 @@ src_unpack() {
 }
 
 src_install() {
+	local brave_root
+	if [[ -d opt/brave.com/brave-origin-nightly ]]; then
+		brave_root=brave-origin-nightly
+	elif [[ -d opt/brave.com/brave-nightly ]]; then
+		brave_root=brave-nightly
+	else
+		die "unknown Brave nightly payload layout"
+	fi
+
+	local brave_exec=
+	local candidate
+	for candidate in brave-origin-nightly brave-browser-nightly brave; do
+		if [[ -x opt/brave.com/${brave_root}/${candidate} ]]; then
+			brave_exec=${candidate}
+			break
+		fi
+	done
+	[[ -n ${brave_exec} ]] || die "missing Brave nightly executable in payload"
+
 	mkdir -p "${ED}"/opt || die
 	cp -rp opt/brave.com "${ED}"/opt/ || die
 
 	dodir /usr/bin || die
-	cat > "${D}"/usr/bin/${PN} <<-'EOF' || die
-	#!/bin/sh
-	exec /opt/brave.com/brave-nightly/brave-browser-nightly "$@"
-	EOF
-	fperms 0755 /usr/bin/${PN}
+	local wrapper
+	for wrapper in ${PN} brave-origin-nightly brave-browser-nightly; do
+		cat > "${ED}"/usr/bin/${wrapper} <<-EOF || die
+		#!/bin/sh
+		exec /opt/brave.com/${brave_root}/${brave_exec} "\$@"
+		EOF
+		fperms 0755 /usr/bin/${wrapper}
+	done
 
-	fperms 0755 /opt/brave.com/brave-nightly/brave-browser-nightly
-	fperms 4755 /opt/brave.com/brave-nightly/chrome-sandbox
+	fperms 0755 /opt/brave.com/${brave_root}/${brave_exec}
+	fperms 4755 /opt/brave.com/${brave_root}/chrome-sandbox
 
-	if [[ -f usr/share/applications/brave-browser-nightly.desktop ]]; then
-		insopts -m 0644
-		insinto /usr/share/applications
-		doins usr/share/applications/brave-browser-nightly.desktop
-	elif [[ -f usr/share/applications/brave-browser.desktop ]]; then
-		insopts -m 0644
-		insinto /usr/share/applications
-		doins usr/share/applications/brave-browser.desktop
-	fi
+	insopts -m 0644
+	insinto /usr/share/applications
+	local desktop_file
+	for desktop_file in \
+		usr/share/applications/brave-origin-nightly.desktop \
+		usr/share/applications/com.brave.Origin.nightly.desktop \
+		usr/share/applications/brave-browser-nightly.desktop \
+		usr/share/applications/brave-browser.desktop
+	do
+		[[ -f ${desktop_file} ]] && doins "${desktop_file}"
+	done
 
 	if [[ -d usr/share/icons/hicolor ]]; then
 		insinto /usr/share/icons
@@ -86,5 +110,7 @@ src_install() {
 
 	insopts -m 0644
 	insinto /usr/share/pixmaps/
-	doins "${FILESDIR}"/brave.svg
+	newins "${FILESDIR}"/brave.svg ${PN}.svg
+	newins "${FILESDIR}"/brave.svg brave-origin-nightly.svg
+	newins "${FILESDIR}"/brave.svg brave-browser-nightly.svg
 }

@@ -6,7 +6,7 @@ inherit cmake flag-o-matic
 
 DESCRIPTION="C++ BitTorrent implementation focusing on efficiency and scalability"
 HOMEPAGE="http://libtorrent.org"
-SNAPSHOT=441ee908a35e93d2dc6d32b17383548a4065c2ec
+SNAPSHOT=8d58b0e78b9d646c3ccce433bc52d58f341908ed
 ASIO_GNUTLS_SNAPSHOT=a57d4d36923c5fafa9698e14be16b8bc2913700a
 TRY_SIGNAL_SNAPSHOT=105cce59972f925a33aa6b1c3109e4cd3caf583d
 LIBSIMULATOR_SNAPSHOT=dcb401642be66e36dd08283d852053c7381da585

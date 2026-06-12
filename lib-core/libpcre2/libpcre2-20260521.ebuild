@@ -5,7 +5,7 @@ inherit flag-o-matic autotools qa-policy
 DESCRIPTION="Perl-compatible regular expression library"
 HOMEPAGE="http://www.pcre.org/"
 SNAPSHOT=ff92e0b9cea5b5ae3af12ba930d03556684f098b
-SLJIT_SNAPSHOT=d9902b1ba06f477dcb89137dae8c8649fb58b7fb
+SLJIT_SNAPSHOT=d74aa8871c65c66d84b0c62a91839903d437356d
 
 SRC_URI="https://github.com/PCRE2Project/pcre2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 SRC_URI="https://github.com/PCRE2Project/pcre2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz

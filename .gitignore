@@ -2,6 +2,7 @@
 *.md
 !README.md
 !HACKING.md
+!LOCKSTEP.md
 
 # Editor files
 *~

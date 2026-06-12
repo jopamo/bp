@@ -16,3 +16,8 @@ bp is short for 'backpack' to denote it being easier to move around on various c
 * supported curses: ncurses netbsd-curses
 * bootstrap golang toolchain from source
 * bootstrap rust toolchain from source
+
+## Lockstep updates
+
+To bump packages in `bp` with the local `lockstep` tool, see
+[`LOCKSTEP.md`](LOCKSTEP.md).

@@ -1,4 +1,3 @@
-# lockstep-managed: dependency-ebuild
 # Distributed under the terms of the GNU General Public License v2
 
 DISTUTILS_EXT=1
@@ -6,10 +5,6 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{10..13} )
 
 inherit distutils-r1 flag-o-matic
-# lockstep-pypi-managed: true
-# lockstep-pypi-deps: begin
-RDEPEND=""
-# lockstep-pypi-deps: end
 DESCRIPTION="Python bindings to the Tree-sitter parsing library"
 HOMEPAGE="https://github.com/tree-sitter/py-tree-sitter/"
 

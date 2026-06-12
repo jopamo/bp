@@ -15,8 +15,8 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/5f/a4/98b9c7c6428a668bf7e42ebb7c79d576a1c3c1e3ae2d47e674b468388871/requests-2.33.1.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/requests-2.33.1"
+SRC_URI="https://files.pythonhosted.org/packages/ac/c3/e2a2b89f2d3e2179abd6d00ebd70bff6273f37fb3e0cc209f48b39d00cbf/requests-2.34.2.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/requests-2.34.2"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

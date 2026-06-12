@@ -2,7 +2,7 @@
 
 DESCRIPTION="FFmpeg version of headers required to interface with Nvidias codec APIs"
 HOMEPAGE="https://git.videolan.org/?p=ffmpeg/nv-codec-headers.git"
-SNAPSHOT=33a9ede8d9914299d9262539c576a15bd0a19621
+SNAPSHOT=1b5a81ada8874efb2af0534ffe74049c557e212d
 SRC_URI="https://github.com/FFmpeg/nv-codec-headers/archive/${SNAPSHOT}.tar.gz -> nv-codec-headers-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/nv-codec-headers-${SNAPSHOT}"
 

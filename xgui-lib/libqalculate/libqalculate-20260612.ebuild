@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="A modern multi-purpose calculator library"
 HOMEPAGE="https://qalculate.github.io/"
-SNAPSHOT=0373715e8c46ec81fd15874525bcbb028dbdeb77
+SNAPSHOT=b0b39fb5ca3ff2063cd6c85421beb0c3bd4dc945
 SRC_URI="https://github.com/Qalculate/libqalculate/archive/${SNAPSHOT}.tar.gz -> libqalculate-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libqalculate-${SNAPSHOT}"
 

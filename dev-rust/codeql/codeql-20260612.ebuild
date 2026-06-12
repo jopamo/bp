@@ -385,7 +385,7 @@ inherit cargo lockstep-cargo
 
 DESCRIPTION="Security Scanner"
 HOMEPAGE="https://github.com/github/codeql"
-SNAPSHOT=491c373e07600e2cd15e8263b3f1a3f30b0f5ccb
+SNAPSHOT=912dc9c0bd96b70922cdb161ab52c07c1827b8be
 SRC_URI="https://github.com/github/codeql/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/codeql-${SNAPSHOT}"
 

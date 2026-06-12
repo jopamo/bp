@@ -4,7 +4,7 @@
 
 DESCRIPTION="Intel ACPI Source Language (ASL) compiler"
 HOMEPAGE="https://www.acpica.org/downloads/"
-SNAPSHOT=09978440f059a058b9799a46acab97cd8dd1439b
+SNAPSHOT=0e82ee5071ef9d28ceb9eb4cd154630ca6ca2201
 SRC_URI="https://github.com/acpica/acpica/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

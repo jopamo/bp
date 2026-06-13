@@ -1,0 +1,1 @@
+app-lang/python:perf - Enable Linux perf profiling support with perf trampoline, frame pointers, and unstripped binaries.

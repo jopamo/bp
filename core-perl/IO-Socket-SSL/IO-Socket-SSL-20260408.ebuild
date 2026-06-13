@@ -10,3 +10,8 @@ S="${WORKDIR}/p5-io-socket-ssl-${SNAPSHOT}"
 
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+RDEPEND="
+	core-perl/Net-SSLeay
+"
+BDEPEND="${RDEPEND}"

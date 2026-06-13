@@ -23,7 +23,12 @@ RDEPEND="
 	curl? ( app-net/curl )
 	lib-core/libpcre2
 	lib-core/expat
-	perl? ( app-lang/perl )
+	perl? (
+		app-lang/perl
+		core-perl/Authen-SASL
+		core-perl/IO-Socket-SSL
+		core-perl/MailTools
+	)
 "
 DEPEND="
 	${RDEPEND}

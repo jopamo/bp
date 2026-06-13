@@ -31,9 +31,6 @@ src_configure() {
 		-D LLAMA_BUILD_TESTS=OFF
 		-D LLAMA_TESTS_INSTALL=OFF
 	)
-	if use cuda; then
-		mycmakeargs+=( -D CMAKE_CUDA_ARCHITECTURES="86" )
-	fi
 
 	cmake_src_configure
 }

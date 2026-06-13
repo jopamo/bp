@@ -1,7 +1,7 @@
 DIST charm.land%2Fbubbles%2Fv2%2F@v%2Fv2.1.0.mod 1275 BLAKE3 7f827e1a3a6ac3e0f6fcace20b34ebfeda4a14b1757538e7fbe955bda18f5882
 DIST charm.land%2Fbubbles%2Fv2%2F@v%2Fv2.1.0.zip 137690 BLAKE3 3553f401c657ab9c1d171e2517b3a32bc3064353f3aea4ca13a9a5647db250a4
-DIST charm.land%2Fbubbletea%2Fv2%2F@v%2Fv2.0.6.mod 1006 BLAKE3 ad28b8dbe3c941360083957be7ce37b51ad02ffb07fd48550cc604cf7254fa30
-DIST charm.land%2Fbubbletea%2Fv2%2F@v%2Fv2.0.6.zip 80436 BLAKE3 c9b5586839bcdd88244a48720e6090ae03cbb75f9085053500726ec994486492
+DIST charm.land%2Fbubbletea%2Fv2%2F@v%2Fv2.0.7.mod 1006 BLAKE3 955c3d7ec95ad1aa5882f8b472ca4d004dc1d52b605b473967253033c93bc16f
+DIST charm.land%2Fbubbletea%2Fv2%2F@v%2Fv2.0.7.zip 81921 BLAKE3 44aab3bdd50669080930196682a6b80d231de767a0929a53762fa37267dae4d6
 DIST charm.land%2Fhuh%2Fv2%2F@v%2Fv2.0.3.mod 1466 BLAKE3 5a86399a470ab8a6bed09ec0f3f53cdeb0d7568f19de14627b59983cc3f3050e
 DIST charm.land%2Fhuh%2Fv2%2F@v%2Fv2.0.3.zip 78759 BLAKE3 3e8ad49e95d116dbf3bb5a2741c381aa0c8eaed2dc4b53a38179834032cb42c8
 DIST charm.land%2Flipgloss%2Fv2%2F@v%2Fv2.0.3.mod 1046 BLAKE3 8df3979ac69dd107fcdf148af87538e6225414ddefaa0ea602e6e0250f7f740e
@@ -117,8 +117,8 @@ DIST github.com%2Fcharmbracelet%2Fglamour%2F@v%2Fv0.10.0.mod 1423 BLAKE3 fad7810
 DIST github.com%2Fcharmbracelet%2Fglamour%2F@v%2Fv0.10.0.zip 134290 BLAKE3 6c5ef16bf880e5105c9dd5662a5d1a94ab58b7c72551226400b4a72ff8c9b350
 DIST github.com%2Fcharmbracelet%2Flipgloss%2F@v%2Fv1.1.1-0.20250404203927-76690c660834.mod 992 BLAKE3 afc5ed1ac52d229db4f810b9a8cabcfc9b5ba70966f782ce38f7a83d04d2f530
 DIST github.com%2Fcharmbracelet%2Flipgloss%2F@v%2Fv1.1.1-0.20250404203927-76690c660834.zip 157589 BLAKE3 f8d797909cc961ddd3004e5810ffcd90275ea23a0b1b2e1969145f4014632af7
-DIST github.com%2Fcharmbracelet%2Fultraviolet%2F@v%2Fv0.0.0-20260416155717-489999b90468.mod 735 BLAKE3 48ed03a22eb02c7b038ed68deae9f626e32b655de14505ce7e642c6044dc6e3d
-DIST github.com%2Fcharmbracelet%2Fultraviolet%2F@v%2Fv0.0.0-20260416155717-489999b90468.zip 206301 BLAKE3 d9d1a348ee133dbadb24f9c9570ac3672cb78f639f397323b6bafb0b8c0ffd89
+DIST github.com%2Fcharmbracelet%2Fultraviolet%2F@v%2Fv0.0.0-20260525132238-948f4557a654.mod 677 BLAKE3 9720bb88f1bf0ed2958e241642b5cc781c863be8a2a9d659fa2a094c65b6a536
+DIST github.com%2Fcharmbracelet%2Fultraviolet%2F@v%2Fv0.0.0-20260525132238-948f4557a654.zip 206774 BLAKE3 0cf9eda067f332a112741e836a83f845780f131c423b9682140a8a33b49efb9f
 DIST github.com%2Fcharmbracelet%2Fx%2Fansi%2F@v%2Fv0.11.7.mod 275 BLAKE3 deff94ae393b3551e302dca1365b02f8268260575e92b154c994f7b81f90e00c
 DIST github.com%2Fcharmbracelet%2Fx%2Fansi%2F@v%2Fv0.11.7.zip 165425 BLAKE3 58b25e628915a80b676bed02b788df20b3d5e044d24395535c38fb1044b43545
 DIST github.com%2Fcharmbracelet%2Fx%2Fcellbuf%2F@v%2Fv0.0.15.mod 669 BLAKE3 323c747655fe905c11bbafb817d8a36ea45fab7ec3efd23fbbb7c19364d2ef3c
@@ -204,8 +204,8 @@ DIST github.com%2Fgabriel-vasile%2Fmimetype%2F@v%2Fv1.4.13.mod 143 BLAKE3 3499f4
 DIST github.com%2Fgabriel-vasile%2Fmimetype%2F@v%2Fv1.4.13.zip 861278 BLAKE3 7b067e8c0d5acd93de10021146992b5a672b65d4c5c5b49c2724968afb905bb8
 DIST github.com%2Fgdamore%2Fencoding%2F@v%2Fv1.0.1.mod 78 BLAKE3 3e8c4571afa539f126445c259fadc35b73c9cd782b0a9d122db30f1a049b7336
 DIST github.com%2Fgdamore%2Fencoding%2F@v%2Fv1.0.1.zip 25022 BLAKE3 3509990bb9641ab30805ab66820904d27b01fe47c6ecef4d143a699b364fddc1
-DIST github.com%2Fgdamore%2Ftcell%2Fv2%2F@v%2Fv2.13.9.mod 355 BLAKE3 50acde4d886ac0f1cfdf1e1b51d7869abe9ef707c5436f6a521a52aec9aa08cb
-DIST github.com%2Fgdamore%2Ftcell%2Fv2%2F@v%2Fv2.13.9.zip 266131 BLAKE3 97a29db6feca15ab201292dad09a0e36fffae04259bf3bec7e104ffc88448646
+DIST github.com%2Fgdamore%2Ftcell%2Fv2%2F@v%2Fv2.13.10.mod 355 BLAKE3 50acde4d886ac0f1cfdf1e1b51d7869abe9ef707c5436f6a521a52aec9aa08cb
+DIST github.com%2Fgdamore%2Ftcell%2Fv2%2F@v%2Fv2.13.10.zip 267818 BLAKE3 b6c2df244786e446bd75c05839865fffaddc79913a348b91206bd0bb4098e1ae
 DIST github.com%2Fgo-chi%2Fchi%2Fv5%2F@v%2Fv5.2.5.mod 149 BLAKE3 493e4fe125ecac99e215fdcbd80cb2d19908ef815a5aea8761f99af35cf11956
 DIST github.com%2Fgo-chi%2Fchi%2Fv5%2F@v%2Fv5.2.5.zip 112316 BLAKE3 fff8f4d1babae8a8584f8b0bc44f945e47f873206f3bb13c5ed899efd9d27765
 DIST github.com%2Fgo-jose%2Fgo-jose%2Fv4%2F@v%2Fv4.1.4.mod 48 BLAKE3 1644f9fee9a60c613bc0e6ae520c97265a20c8d31e6429ba4185a48a0c715bfa
@@ -378,8 +378,8 @@ DIST github.com%2Fletsencrypt%2Fboulder%2F@v%2Fv0.20260223.0.mod 4624 BLAKE3 821
 DIST github.com%2Fletsencrypt%2Fboulder%2F@v%2Fv0.20260223.0.zip 1516761 BLAKE3 3720ed8ce8ee78b08e917120246a5d8e029e5d550aa0e5f9adf81c4050a83843
 DIST github.com%2Flucasb-eyer%2Fgo-colorful%2F@v%2Fv1.4.0.mod 51 BLAKE3 27430576730bb7e62d2270193a4ef496877da08d63ed4b55ef0daf3943c2f0f3
 DIST github.com%2Flucasb-eyer%2Fgo-colorful%2F@v%2Fv1.4.0.zip 976519 BLAKE3 c45e8951b4ab3bc169051b4cc2c2f1840469690d11e1b66dff2fd35436b088b8
-DIST github.com%2Fmattn%2Fgo-colorable%2F@v%2Fv0.1.14.mod 121 BLAKE3 9e9ede56c55bca00add31590773046705f5ab1b2db96b4ae89891befc32cbb31
-DIST github.com%2Fmattn%2Fgo-colorable%2F@v%2Fv0.1.14.zip 13436 BLAKE3 e10540f16d0b4ac74dfe636cd6dbb92998b9d66ed87eb0cdf8fd1600c3ffe932
+DIST github.com%2Fmattn%2Fgo-colorable%2F@v%2Fv0.1.15.mod 121 BLAKE3 9e9ede56c55bca00add31590773046705f5ab1b2db96b4ae89891befc32cbb31
+DIST github.com%2Fmattn%2Fgo-colorable%2F@v%2Fv0.1.15.zip 13989 BLAKE3 c827af854684333ade4caff757334d526ed4cecb3fa4f80abf554fd7ce2bb7c0
 DIST github.com%2Fmattn%2Fgo-colorable%2F@v%2Fv0.1.2.mod 80 BLAKE3 26184427b80faf1e48e769f51223b3a4267f3f91dc0e401353a96a0cb27f47e9
 DIST github.com%2Fmattn%2Fgo-isatty%2F@v%2Fv0.0.22.mod 77 BLAKE3 4678ab52bd6b77cbb8f86b968384e8e9443b77fc6746757806c266d94ed990ee
 DIST github.com%2Fmattn%2Fgo-isatty%2F@v%2Fv0.0.22.zip 9030 BLAKE3 3a1ff534ac0ad2543b10ab2a3bbadb9f8ecca68ea3bc12bba9d7744eff00b5a1

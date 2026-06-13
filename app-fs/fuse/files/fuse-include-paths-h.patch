@@ -1,0 +1,9 @@
+--- a/util/fuser_conf.c
++++ b/util/fuser_conf.c
+@@ -19,6 +19,7 @@
+ #include <stdlib.h>
+ #include <errno.h>
+ #include <mntent.h>
++#include <paths.h>
+ #include <unistd.h>
+ #include <sys/fsuid.h>

@@ -29,7 +29,11 @@ RDEPEND="${DEPEND}"
 src_configure() {
 	addpredict "/proc/self/task"
 	qa-policy-configure
+	export NODE_ENV=development
 	export npm_config_cache="${T}/npm-cache"
+	export npm_config_include=dev
+	export npm_config_omit=
+	export npm_config_production=false
 	export npm_config_update_notifier=false
 	export npm_config_fund=false
 
@@ -63,7 +67,7 @@ src_compile() {
 		fi
 		if [[ -n ${PORTAGE_LOG_FILE} && -f ${PORTAGE_LOG_FILE} ]]; then
 			eerror "Recent UI provisioning lines from build log:"
-			grep -nE '(^-- UI:|npm|llama-ui-embed|tools/ui/dist)' "${PORTAGE_LOG_FILE}" | tail -n 120 >&2 || true
+			grep -nE '(^-- UI:|stderr:|npm|llama-ui-embed|tools/ui/dist)' "${PORTAGE_LOG_FILE}" | tail -n 160 >&2 || true
 		fi
 		die "llama-server built without embedded Web UI assets"
 	fi

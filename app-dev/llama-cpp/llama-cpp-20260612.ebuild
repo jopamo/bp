@@ -14,6 +14,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="cuda systemd"
 
+BDEPEND="
+	app-server/nodejs
+"
+
 DEPEND="
 	cuda? ( bin/nvidia-cuda )
 	virtual/ssl
@@ -28,11 +32,22 @@ src_configure() {
 	local mycmakeargs=(
 		-D GGML_CUDA=$(usex cuda ON OFF)
 		-D LLAMA_OPENSSL=ON
+		-D LLAMA_BUILD_UI=ON
 		-D LLAMA_BUILD_TESTS=OFF
 		-D LLAMA_TESTS_INSTALL=OFF
 	)
+	if use cuda; then
+		mycmakeargs+=( -D CMAKE_CUDA_ARCHITECTURES="120" )
+	fi
 
 	cmake_src_configure
+}
+
+src_compile() {
+	cmake_src_compile
+
+	strings "${BUILD_DIR}"/bin/llama-server | grep -Eq 'index\.html|loading\.html|manifest\.webmanifest' \
+		|| die "llama-server built without embedded Web UI assets"
 }
 
 src_install() {

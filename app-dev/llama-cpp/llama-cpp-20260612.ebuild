@@ -11,6 +11,7 @@ S="${WORKDIR}/llama.cpp-${SNAPSHOT}"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+RESTRICT="network-sandbox"
 
 IUSE="cuda systemd"
 
@@ -28,11 +29,15 @@ RDEPEND="${DEPEND}"
 src_configure() {
 	addpredict "/proc/self/task"
 	qa-policy-configure
+	export npm_config_cache="${T}/npm-cache"
+	export npm_config_update_notifier=false
+	export npm_config_fund=false
 
 	local mycmakeargs=(
 		-D GGML_CUDA=$(usex cuda ON OFF)
 		-D LLAMA_OPENSSL=ON
 		-D LLAMA_BUILD_UI=ON
+		-D LLAMA_USE_PREBUILT_UI=ON
 		-D LLAMA_BUILD_TESTS=OFF
 		-D LLAMA_TESTS_INSTALL=OFF
 	)
@@ -46,7 +51,7 @@ src_configure() {
 src_compile() {
 	cmake_src_compile
 
-	strings "${BUILD_DIR}"/bin/llama-server | grep -Eq 'index\.html|loading\.html|manifest\.webmanifest' \
+	grep -Eq '^#define LLAMA_UI_HAS_ASSETS 1$' "${BUILD_DIR}"/tools/ui/ui.h \
 		|| die "llama-server built without embedded Web UI assets"
 }
 

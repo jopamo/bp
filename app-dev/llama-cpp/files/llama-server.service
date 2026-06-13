@@ -13,18 +13,10 @@ WorkingDirectory=/opt/llm-models
 EnvironmentFile=/etc/llama-server/llama-server.env
 Environment=PATH=/opt/llm-models/.local/bin:/usr/local/bin:/usr/bin
 
-ExecStart=/bin/bash -lc 'exec llama-server \
-  --host 0.0.0.0 \
-  --port 8080 \
-  --gpu-layers "$GPU_LAYERS" \
-  --threads "$THREADS" \
-  --ctx-size "$CTX_SIZE" \
-  --temp "$TEMP" \
-  --top-p "$TOP_P" \
+ExecStart=/usr/bin/llama-server \
+  $LLAMA_SERVER_EXTRA_ARGS \
   --log-verbosity 0 \
-  --log-disable \
-  $EXTRA_FLAGS \
-  --model "$MODEL_PATH"'
+  --log-disable
 
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=process

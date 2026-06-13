@@ -1,8 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
 SNAPSHOT=a06bcbbd4d181f4ee5042deb89e493a8c465cef9
-UPSTREAM_PV=0.9.35
-LMDB_SOVER=0
 
 inherit toolchain-funcs
 
@@ -17,13 +15,21 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
+_lmdb_makefile_var() {
+	local var=$1
+
+	awk -F '=' -v var="${var}" '
+		$1 ~ "^[[:space:]]*" var "[[:space:]]*$" {
+			sub(/^[[:space:]]+/, "", $2)
+			sub(/[[:space:]]+$/, "", $2)
+			print $2
+			exit
+		}
+	' Makefile
+}
+
 src_prepare() {
 	default
-
-	sed -i \
-		-e 's!^SOEXT.*!SOEXT = .so.'"${LMDB_SOVER}"'!' \
-		-e 's!shared -o!shared -Wl,-soname,liblmdb.so.'"${LMDB_SOVER}"' -o!' \
-		Makefile || die
 }
 
 run_emake() {
@@ -42,12 +48,14 @@ run_emake() {
 }
 
 src_compile() {
-	run_emake liblmdb.so.${LMDB_SOVER} liblmdb.a mdb_stat mdb_copy mdb_dump mdb_load
+	run_emake all
 }
 
 src_install() {
+	local lmdb_version=$(_lmdb_makefile_var LMDB_VERSION)
+	[[ -n ${lmdb_version} ]] || die "Failed to detect LMDB_VERSION from Makefile"
+
 	run_emake DESTDIR="${ED}" install
-	dosym liblmdb.so.${LMDB_SOVER} /usr/lib/liblmdb.so
 
 	if ! use static-libs; then
 		rm -f "${ED}/usr/lib/liblmdb.a" || die
@@ -61,7 +69,7 @@ includedir=\${prefix}/include
 
 Name: lmdb
 Description: Lightning Memory-Mapped Database
-Version: ${UPSTREAM_PV}
+Version: ${lmdb_version}
 Libs: -L\${libdir} -llmdb
 Cflags: -I\${includedir}
 EOF

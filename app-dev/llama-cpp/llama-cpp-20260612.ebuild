@@ -51,8 +51,22 @@ src_configure() {
 src_compile() {
 	cmake_src_compile
 
-	grep -Eq '^#define LLAMA_UI_HAS_ASSETS 1$' "${BUILD_DIR}"/tools/ui/ui.h \
-		|| die "llama-server built without embedded Web UI assets"
+	if ! grep -Eq '^#define LLAMA_UI_HAS_ASSETS 1$' "${BUILD_DIR}"/tools/ui/ui.h; then
+		eerror "llama-server built without embedded Web UI assets"
+		if [[ -f ${BUILD_DIR}/tools/ui/ui.h ]]; then
+			eerror "tools/ui/ui.h:"
+			sed -n '1,40p' "${BUILD_DIR}"/tools/ui/ui.h >&2 || true
+		fi
+		if [[ -d ${BUILD_DIR}/tools/ui/dist ]]; then
+			eerror "tools/ui/dist contents:"
+			find "${BUILD_DIR}"/tools/ui/dist -maxdepth 3 -type f | sort >&2 || true
+		fi
+		if [[ -n ${PORTAGE_LOG_FILE} && -f ${PORTAGE_LOG_FILE} ]]; then
+			eerror "Recent UI provisioning lines from build log:"
+			grep -nE '(^-- UI:|npm|llama-ui-embed|tools/ui/dist)' "${PORTAGE_LOG_FILE}" | tail -n 120 >&2 || true
+		fi
+		die "llama-server built without embedded Web UI assets"
+	fi
 }
 
 src_install() {

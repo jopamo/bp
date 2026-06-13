@@ -56,7 +56,10 @@ src_test() {
 }
 
 src_install() {
-  mdadm_emake DESTDIR="${D}" install install-systemd
+  local install_targets=( install )
+  use systemd && install_targets+=( install-systemd )
+
+  mdadm_emake DESTDIR="${D}" STRIP="" "${install_targets[@]}"
   insinto etc/mdadm
   doins "${FILESDIR}/mdadm.conf"
 }

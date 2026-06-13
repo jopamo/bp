@@ -11,6 +11,7 @@ S="${WORKDIR}/libfuse-${SNAPSHOT}"
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="3"
 KEYWORDS="amd64 arm64"
+PATCHES=( "${FILESDIR}"/${PN}-clang-compat.patch )
 
 src_prepare() {
 	if use elibc_musl; then

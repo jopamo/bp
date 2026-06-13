@@ -1,0 +1,22 @@
+--- a/lib/fuse_service.c
++++ b/lib/fuse_service.c
+@@ -119,8 +119,8 @@
+ 	}
+ 	if (cmsg->cmsg_len != CMSG_LEN(sizeof(int))) {
+ 		fuse_log(FUSE_LOG_ERR,
+-			 "fuse: wrong service file reply control data size %zd, expected %zd\n",
+-			 cmsg->cmsg_len, CMSG_LEN(sizeof(int)));
++			 "fuse: wrong service file reply control data size %zu, expected %zu\n",
++			 (size_t)cmsg->cmsg_len, (size_t)CMSG_LEN(sizeof(int)));
+ 		return -EBADMSG;
+ 	}
+ 	if (cmsg->cmsg_level != SOL_SOCKET || cmsg->cmsg_type != SCM_RIGHTS) {
+@@ -417,7 +417,7 @@
+ 		return -ENOTSOCK;
+ 	}
+ 
+-	ret = getsockname(SD_LISTEN_FDS_START, &urk, &urklen);
++	ret = getsockname(SD_LISTEN_FDS_START, (struct sockaddr *)&urk, &urklen);
+ 	if (ret < 0) {
+ 		int error = errno;
+ 

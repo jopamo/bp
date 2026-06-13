@@ -9,6 +9,8 @@ DESCRIPTION="GitHub CLI"
 HOMEPAGE="https://github.com/cli/cli"
 SRC_URI="https://github.com/cli/cli/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 
+# lockstep-go-managed: true
+# lockstep-go-deps: begin
 EGO_SUM=(
 	"charm.land/bubbles/v2 v2.1.0"
 	"charm.land/bubbles/v2 v2.1.0/go.mod"
@@ -670,6 +672,7 @@ _GOMODULE_GOPROXY_BASEURI="https://proxy.golang.org"
 go-module_set_globals
 
 SRC_URI+=" ${EGO_SUM_SRC_URI}"
+# lockstep-go-deps: end
 S="${WORKDIR}/cli-${SNAPSHOT}"
 
 LICENSE="MIT Apache-2.0 BSD BSD-2 MPL-2.0"

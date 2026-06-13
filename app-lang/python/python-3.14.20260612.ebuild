@@ -23,9 +23,9 @@ LICENSE="PSF-2"
 SLOT="$(ver_cut 1-2)"
 #KEYWORDS="amd64 arm64"
 
-IUSE="bluetooth debug libedit ncurses pgo readline sqlite ssl static test tk valgrind xml"
+IUSE="bluetooth debug libedit ncurses perf pgo readline sqlite ssl static test tk valgrind xml"
 
-RESTRICT="test"
+RESTRICT="perf? ( strip ) test"
 
 DEPEND="
 	app-build/gettext
@@ -56,6 +56,15 @@ src_prepare() {
 
 	default
 
+	if use perf; then
+		# CPython limits perf trampoline support to *-gnu triplets even though
+		# the Linux x86_64/aarch64 trampoline code also works on musl.
+		sed -i \
+			-e 's/\[x86_64-linux-gnu\]/[x86_64-linux-*]/' \
+			-e 's/\[aarch64-linux-gnu\]/[aarch64-linux-*]/' \
+			configure.ac || die "failed to enable perf trampoline on Linux musl"
+	fi
+
 	# force correct number of jobs
 	# https://bugs.gentoo.org/737660
 	local jobs=$(makeopts_jobs "${MAKEOPTS}" "$(get_nproc)")
@@ -75,6 +84,10 @@ src_configure() {
 
 	append-flags -fwrapv
 	filter-flags -malign-double
+
+	if use perf; then
+		append-flags -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer
+	fi
 
 	if use pgo; then
 		local profile_task_flags=(

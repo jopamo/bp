@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="fips doh geoip"
 
-DEPEND="
+COMMON_DEPEND="
 	lib-core/libcap
 	lib-dev/lmdb
 	lib-core/libseccomp
@@ -27,6 +27,8 @@ DEPEND="
 	doh? ( lib-net/nghttp2 )
 	geoip? ( lib-dev/maxminddb )
 "
+RDEPEND="${COMMON_DEPEND}"
+DEPEND="${COMMON_DEPEND}"
 BDEPEND="app-dev/pkgconf"
 
 RESTRICT="test"

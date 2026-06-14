@@ -2,7 +2,7 @@
 
 SNAPSHOT=b07cc37ca64fe99260884e7325abc333374e098b
 
-inherit multibuild toolchain-funcs qa-policy gl
+inherit flag-o-matic multibuild toolchain-funcs qa-policy gl
 
 DESCRIPTION="GNU GRUB boot loader"
 HOMEPAGE="https://www.gnu.org/software/grub/"
@@ -53,22 +53,30 @@ grub_do_once() {
 	multibuild_for_best_variant run_in_build_dir "$@"
 }
 
+grub_assert_no_rejects() {
+	local -a rejects=()
+	local reject
+
+	while IFS= read -r -d '' reject; do
+		rejects+=( "${reject#${S}/}" )
+	done < <(find "${S}" -type f -name '*.rej' -print0)
+
+	[[ ${#rejects[@]} -eq 0 ]] || die "rejected hunks left behind: ${rejects[*]}"
+}
+
 grub_configure() {
-	local platform
+	local platform target
 
 	case ${MULTIBUILD_VARIANT} in
-		efi*) platform=efi ;;
+		efi-64)
+			platform=efi
+			target=x86_64
+			;;
+		efi*)
+			platform=efi
+			;;
 		guessed) ;;
 		*) platform=${MULTIBUILD_VARIANT} ;;
-	esac
-
-	case ${MULTIBUILD_VARIANT} in
-		*-64)
-			if [[ ${CTARGET:-${CHOST}} == i?86* ]]; then
-				local CTARGET=x86_64
-				local -x TARGET_CFLAGS="-Os -march=x86-64 ${TARGET_CFLAGS}"
-				local -x TARGET_CPPFLAGS="-march=x86-64 ${TARGET_CPPFLAGS}"
-			fi ;;
 	esac
 
 	local myconf=(
@@ -81,9 +89,11 @@ grub_configure() {
 		--disable-nls
 		--disable-grub-themes
 		--disable-grub-mkfont
-		${platform:+--with-platform=}${platform}
 		--disable-efiemu
 	)
+
+	[[ -n ${platform} ]] && myconf+=( --with-platform="${platform}" )
+	[[ -n ${target} ]] && myconf+=( --target="${target}" )
 
 	local ECONF_SOURCE="${S}"
 	rm -f config.cache || die
@@ -98,16 +108,19 @@ src_prepare() {
 	eapply "${FILESDIR}/fix-config-recursive-headers.patch"
 	eapply "${FILESDIR}/fix-config-symbol-probes-pie-safe.patch"
 	eapply "${FILESDIR}/fix-configure-nopie-detection.patch"
+	eapply "${FILESDIR}/fix-build-rules-nopie.patch"
+	eapply "${FILESDIR}/fix-bison-api-pure.patch"
 
 	gl_stage_gnulib
 
 	./bootstrap --skip-po --no-git --gnulib-srcdir="${S}/gnulib" || die
+	grub_assert_no_rejects
 
+	eapply "${FILESDIR}/fix-gnulib-width.patch"
 	eapply "${FILESDIR}/fix-filevercmp-static-assert.patch"
 	eapply "${FILESDIR}/fix-gl-extern-inline.patch"
 	eapply "${FILESDIR}/fix-config-util-guards.patch"
 	eapply "${FILESDIR}/fix-config-util-no-assert-in-freestanding.patch"
-	eapply "${FILESDIR}/fix-build-rules-nopie.patch"
 	eapply "${FILESDIR}"/fix-musl-dirent-static-assert.patch
 
 	default
@@ -116,16 +129,52 @@ src_prepare() {
 }
 
 src_configure() {
+	local saved_cflags=${CFLAGS}
+	local saved_cppflags=${CPPFLAGS}
+	local saved_ldflags=${LDFLAGS}
+	local saved_cxxflags=${CXXFLAGS}
+	local saved_fflags=${FFLAGS}
+	local saved_fcflags=${FCFLAGS}
+	local filter_cflags=( -fPIE -fpie -fPIC -fpic -fexceptions -flto\* -fuse-linker-plugin )
+	local filter_target_ldflags=( -flto\* -fuse-linker-plugin -pie -static-pie '-Wl,-pie' )
+	local filter_host_ldflags=( -flto\* -fuse-linker-plugin )
+
+	filter-flags "${filter_cflags[@]}"
+	filter-ldflags "${filter_target_ldflags[@]}"
+	local grub_cflags=${CFLAGS}
+	local grub_cppflags=${CPPFLAGS}
+	local grub_ldflags=${LDFLAGS}
+
+	CFLAGS=${saved_cflags}
+	CPPFLAGS=${saved_cppflags}
+	LDFLAGS=${saved_ldflags}
+	CXXFLAGS=${saved_cxxflags}
+	FFLAGS=${saved_fflags}
+	FCFLAGS=${saved_fcflags}
+
+	filter-flags "${filter_cflags[@]}"
+	filter-ldflags "${filter_host_ldflags[@]}"
+	local host_cflags=${CFLAGS}
+	local host_cppflags=${CPPFLAGS}
+	local host_ldflags=${LDFLAGS}
+
+	CFLAGS=${saved_cflags}
+	CPPFLAGS=${saved_cppflags}
+	LDFLAGS=${saved_ldflags}
+	CXXFLAGS=${saved_cxxflags}
+	FFLAGS=${saved_fflags}
+	FCFLAGS=${saved_fcflags}
+
 	export HOST_CCASFLAGS=${CCASFLAGS}
-	export HOST_CFLAGS=${CFLAGS}
-	export HOST_CPPFLAGS=${CPPFLAGS}
-	export HOST_LDFLAGS=${LDFLAGS}
+	export HOST_CFLAGS=${host_cflags}
+	export HOST_CPPFLAGS=${host_cppflags}
+	export HOST_LDFLAGS=${host_ldflags}
+	export TARGET_CFLAGS=${grub_cflags}
+	export TARGET_CPPFLAGS=${grub_cppflags}
+	export TARGET_LDFLAGS="${TARGET_LDFLAGS} ${grub_ldflags}"
 	unset CCASFLAGS CFLAGS CPPFLAGS LDFLAGS
 
 	use static && HOST_LDFLAGS+=" -static"
-
-	export TARGET_LDFLAGS="${TARGET_LDFLAGS} ${LDFLAGS}"
-	unset LDFLAGS
 
 	tc-export CC NM OBJCOPY RANLIB STRIP
 	tc-export BUILD_CC # Bug 485592

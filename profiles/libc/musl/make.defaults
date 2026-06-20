@@ -8,18 +8,19 @@ ELIBC="musl"
 # cleanly.
 SECURITY_FLAGS="-D_GLIBCXX_ASSERTIONS=1 -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST -fstack-protector-strong -fstack-clash-protection -fexceptions -D_FORTIFY_SOURCE=3"
 
-# The wrapper directory is absent until app-build/llvm is installed; once it
-# appears, later package builds in the same transaction start resolving the
-# generic tool names through LLVM automatically.
+# The wrapper directory is absent until app-build/llvm is installed. Keep tool
+# variables generic so the first LLVM bootstrap can use the existing GNU/binutils
+# toolchain, then let PATH resolve those same generic names through LLVM wrappers
+# once app-build/llvm has installed them.
 PATH="/usr/libexec/llvm-defaults:${PATH}"
-CPP="clang-cpp"
-AR="llvm-ar"
-RANLIB="llvm-ranlib"
-NM="llvm-nm"
-STRIP="llvm-strip"
-OBJCOPY="llvm-objcopy"
-OBJDUMP="llvm-objdump"
-READELF="llvm-readelf"
+CPP="cpp"
+AR="ar"
+RANLIB="ranlib"
+NM="nm"
+STRIP="strip"
+OBJCOPY="objcopy"
+OBJDUMP="objdump"
+READELF="readelf"
 
 FEATURES="sandbox sfperms strict"
 

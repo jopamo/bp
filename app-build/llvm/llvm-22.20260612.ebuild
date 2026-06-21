@@ -279,9 +279,6 @@ src_configure() {
 		-DCOMPILER_RT_BUILD_PROFILE=OFF
 		-DCOMPILER_RT_BUILD_SANITIZERS=$(usex sanitizers)
 		-DCOMPILER_RT_BUILD_XRAY=OFF
-		-DCOMPILER_RT_DEFAULT_TARGET_ONLY=${compiler_rt_default_target_only}
-		-DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=${TUPLE}
-		-DCOMPILER_RT_SANITIZERS_TO_BUILD=${compiler_rt_sanitizers_to_build}
 		-DCOMPILER_RT_USE_LIBEXECINFO=OFF
 		-DCOMPILER_RT_USE_LLVM_UNWINDER=ON
 		-DENABLE_LINKER_BUILD_ID=ON
@@ -420,6 +417,16 @@ src_configure() {
 	local llvm_lto_mode=$(usex lto ON Off)
 
 	mycmakeargs=("${common[@]}")
+	mycmakeargs+=(
+		-DCOMPILER_RT_DEFAULT_TARGET_ONLY=${compiler_rt_default_target_only}
+		-DCOMPILER_RT_SANITIZERS_TO_BUILD=${compiler_rt_sanitizers_to_build}
+	)
+	# In default-target-only mode compiler-rt derives its triple from
+	# CMAKE_C_COMPILER_TARGET and rejects an explicit
+	# COMPILER_RT_DEFAULT_TARGET_TRIPLE.
+	if [[ ${compiler_rt_default_target_only} != ON ]]; then
+		mycmakeargs+=( -DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=${TUPLE} )
+	fi
 	mycmakeargs+=( -DLLVM_ENABLE_LTO=${llvm_lto_mode} )
 	if [[ ${#runtimes_cmake_args[@]} -gt 0 ]]; then
 		local runtimes_cmake_args_string=$(printf '%s;' "${runtimes_cmake_args[@]}")

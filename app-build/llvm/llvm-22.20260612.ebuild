@@ -204,11 +204,18 @@ src_configure() {
     #filter-sanitizers
 
 	local compiler_rt_build_libfuzzer=$(usex libfuzzer)
+	local compiler_rt_default_target_only=OFF
 	local compiler_rt_sanitizers_to_build=all
 	if use elibc_musl; then
 		# Keep the base musl bootstrap narrow for now. The exotic compiler-rt
 		# paths pull in extra libc++ header consumers and expose ordering bugs.
 		compiler_rt_build_libfuzzer=OFF
+		# musl installs arch-specific register headers, so the x86 compiler-rt
+		# multilib probe can wander into i386 sanitizer builds on x86_64 and
+		# then explode on sys/user.h field mismatches (esp vs rsp). This distro
+		# is not shipping x86 multilib runtimes here anyway, so constrain
+		# compiler-rt to the default target on musl.
+		compiler_rt_default_target_only=ON
 		compiler_rt_sanitizers_to_build="asan;msan;tsan;safestack;cfi;scudo_standalone;ubsan_minimal;gwp_asan;asan_abi"
 	fi
 
@@ -272,6 +279,7 @@ src_configure() {
 		-DCOMPILER_RT_BUILD_PROFILE=OFF
 		-DCOMPILER_RT_BUILD_SANITIZERS=$(usex sanitizers)
 		-DCOMPILER_RT_BUILD_XRAY=OFF
+		-DCOMPILER_RT_DEFAULT_TARGET_ONLY=${compiler_rt_default_target_only}
 		-DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=${TUPLE}
 		-DCOMPILER_RT_SANITIZERS_TO_BUILD=${compiler_rt_sanitizers_to_build}
 		-DCOMPILER_RT_USE_LIBEXECINFO=OFF

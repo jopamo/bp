@@ -236,6 +236,17 @@ src_configure() {
     local LLVM_PROJECTS="llvm;clang;lld"
     use clang-tools-extra && LLVM_PROJECTS+=";clang-tools-extra"
 
+	local runtimes_cmake_args=()
+	if use elibc_musl; then
+		# During the first LLVM bootstrap on musl, the runtimes external
+		# project is configured with the just-built Clang before libunwind is
+		# installed. Executable try_compiles therefore fail by construction and
+		# poison basic flag probes such as -fno-exceptions and --unwindlib=none,
+		# which then trips libunwind's hard configure check. Keep these probes
+		# compile-only; the real runtime build still performs the actual links.
+		runtimes_cmake_args+=( -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY )
+	fi
+
     echo "Selected LLVM targets: ${LLVM_TARGETS}"
 	echo "Selected LLVM runtimes: ${LLVM_RUNTIMES}"
 	echo "Selected LLVM projects: ${LLVM_PROJECTS}"
@@ -402,6 +413,10 @@ src_configure() {
 
 	mycmakeargs=("${common[@]}")
 	mycmakeargs+=( -DLLVM_ENABLE_LTO=${llvm_lto_mode} )
+	if [[ ${#runtimes_cmake_args[@]} -gt 0 ]]; then
+		local runtimes_cmake_args_string=$(printf '%s;' "${runtimes_cmake_args[@]}")
+		mycmakeargs+=( -DRUNTIMES_CMAKE_ARGS="${runtimes_cmake_args_string%;}" )
+	fi
 
 	if (( sysclang_requested )); then
         mycmakeargs+=("${sysclang[@]}")

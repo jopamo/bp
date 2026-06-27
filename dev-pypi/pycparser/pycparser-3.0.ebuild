@@ -19,6 +19,7 @@ SRC_URI="https://files.pythonhosted.org/packages/1b/7d/92392ff7815c21062bea51aa7
 S="${WORKDIR}/pycparser-3.0"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 	dev-pypi/wheel[${PYTHON_USEDEP}]
 "

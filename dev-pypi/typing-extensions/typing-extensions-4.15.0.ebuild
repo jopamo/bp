@@ -20,4 +20,5 @@ S="${WORKDIR}/typing_extensions-4.15.0"
 
 BDEPEND="
 	dev-pypi/flit-core[${PYTHON_USEDEP}]
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 "

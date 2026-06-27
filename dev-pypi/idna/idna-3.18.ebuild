@@ -20,4 +20,5 @@ S="${WORKDIR}/idna-3.18"
 
 BDEPEND="
 	dev-pypi/flit-core[${PYTHON_USEDEP}]
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 "

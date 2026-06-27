@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=014ed4ce881fc3154c08e98e8d59c1b13c3f2f06
+SNAPSHOT=cd6f68470a86a6381d45680a71b95c30876180a9
 
 inherit autotools flag-o-matic qa-policy
 

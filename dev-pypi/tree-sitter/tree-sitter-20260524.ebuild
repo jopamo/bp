@@ -5,11 +5,15 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{10..13} )
 
 inherit distutils-r1 flag-o-matic
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND=""
+# lockstep-pypi-deps: end
 DESCRIPTION="Python bindings to the Tree-sitter parsing library"
 HOMEPAGE="https://github.com/tree-sitter/py-tree-sitter/"
 
 MY_PN="py-tree-sitter"
-SNAPSHOT=d07d07475597f92920f7f02c72b87a779333d90a
+SNAPSHOT=c680e3b51353d8e22b41414a74b538672ea7f59b
 SRC_URI="https://github.com/tree-sitter/py-tree-sitter/archive/${SNAPSHOT}.tar.gz -> ${MY_PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${MY_PN}-${SNAPSHOT}"
 

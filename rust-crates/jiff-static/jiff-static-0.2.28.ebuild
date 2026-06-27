@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="jiff-static"
-CRATE_VERSION="0.2.24"
-CRATE_CHECKSUM="e000de030ff8022ea1da3f466fbb0f3a809f5e51ed31f6dd931c35181ad8e6d7"
+CRATE_VERSION="0.2.28"
+CRATE_CHECKSUM="782d32378dddf207193ac91cefb848ad41abb58195c95168e1291227a0832b47"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

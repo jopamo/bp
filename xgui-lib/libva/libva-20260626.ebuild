@@ -4,7 +4,7 @@ inherit autotools
 
 DESCRIPTION="Video Acceleration (VA) API for Linux"
 HOMEPAGE="https://01.org/linuxmedia/vaapi"
-SNAPSHOT=ad64eb9b616d1b66afaf4cb9f0ea0b8e0ec1169c
+SNAPSHOT=52777b4fbd1e70f07a9515dacb0d007125199cb5
 SRC_URI="https://github.com/intel/libva/archive/${SNAPSHOT}.tar.gz -> libva-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libva-${SNAPSHOT}"
 

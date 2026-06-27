@@ -5,9 +5,9 @@ inherit cmake flag-o-matic
 DESCRIPTION="Cryptographic library for embedded systems"
 HOMEPAGE="https://tls.mbed.org/"
 
-SNAPSHOT=6b175d2404c215fb6ec1046cc7cf1de040292564
+SNAPSHOT=cc5f7bc061c0a8cb9b12d44fb88c11dfbee5d3ec
 FRAMEWORK_SNAPSHOT=e79f4fdd4877e79a92e6b1e5965132ff0c5cc729
-TF_PSA_CRYPTO_SNAPSHOT=0ef26791ceb1445b0563c40b8e2c073000245a7d
+TF_PSA_CRYPTO_SNAPSHOT=c35df962041731b08c6ff6a39a59e239c344e1ee
 MLDSA_NATIVE_SNAPSHOT=1e59cc840e2caeb11ea5daa5f42d1d540decfc5b
 SRC_URI="
 	https://github.com/Mbed-TLS/mbedtls/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz

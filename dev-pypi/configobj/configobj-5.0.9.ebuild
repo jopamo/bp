@@ -19,5 +19,6 @@ SRC_URI="https://files.pythonhosted.org/packages/f5/c4/c7f9e41bc2e5f8eeae4a08a01
 S="${WORKDIR}/configobj-5.0.9"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

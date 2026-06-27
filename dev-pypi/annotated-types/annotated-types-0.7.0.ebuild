@@ -19,5 +19,6 @@ SRC_URI="https://files.pythonhosted.org/packages/ee/67/531ea369ba64dcff5ec9c3402
 S="${WORKDIR}/annotated_types-0.7.0"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/hatchling[${PYTHON_USEDEP}]
 "

@@ -2,7 +2,7 @@
 
 DESCRIPTION="Updated config.sub and config.guess file from GNU"
 HOMEPAGE="https://savannah.gnu.org/projects/config"
-SNAPSHOT=a2287c3041a3f2a204eb942e09c015eab00dc7dd
+SNAPSHOT=428664896cf9e92d264976a960c76660938dffce
 SRC_URI="https://github.com/1g4-mirror/config/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/config-${SNAPSHOT}"
 

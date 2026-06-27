@@ -26,3 +26,7 @@ RDEPEND+="
 	dev-pypi/trove-classifiers
 "
 # lockstep-pypi-deps: end
+
+BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
+"

@@ -20,4 +20,5 @@ S="${WORKDIR}/pathspec-1.1.1"
 
 BDEPEND="
 	dev-pypi/flit-core[${PYTHON_USEDEP}]
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 "

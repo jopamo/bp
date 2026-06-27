@@ -6,12 +6,12 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-pypi/capstone
+	app-emu/capstone
 "
 # lockstep-pypi-deps: end
 DESCRIPTION="Search for gadgets in binaries to facilitate your ROP exploitation"
 HOMEPAGE="https://shell-storm.org/project/ROPgadget/"
-SNAPSHOT=4e5d4da5a92a723f823ee0dc00dc0cfcfabe19f1
+SNAPSHOT=b6e3fe31af46d7e045fef99a3ab19ccbcea5c2f6
 SRC_URI="https://github.com/JonathanSalwan/ROPgadget/archive/${SNAPSHOT}.tar.gz -> ropgadget-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ROPgadget-${SNAPSHOT}"
 

@@ -17,3 +17,7 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/b2/f2/fa88c58efb9a737c7e0e40e470edd0973fe33f0f277d24dcf17454b50974/poetry_core-2.4.1.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/poetry_core-2.4.1"
+
+BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
+"

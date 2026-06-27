@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="a program which helps to configure compiler and linker flags for development libraries"
 HOMEPAGE="https://git.sr.ht/~kaniini/pkgconf"
-SNAPSHOT=13d74ef437b431306a09cc8262832cb47b9922e2
+SNAPSHOT=7d0db26a7f0aa1156277f5c9c8bc6793aef473e9
 SRC_URI="https://github.com/pkgconf/pkgconf/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/pkgconf-${SNAPSHOT}"
 

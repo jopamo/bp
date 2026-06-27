@@ -19,5 +19,6 @@ SRC_URI="https://files.pythonhosted.org/packages/7e/99/7690b6d4034fffd95959cbe0c
 S="${WORKDIR}/markupsafe-3.0.3"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

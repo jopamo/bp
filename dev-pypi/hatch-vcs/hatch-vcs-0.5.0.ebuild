@@ -11,7 +11,7 @@ inherit distutils-r1
 
 DESCRIPTION="Hatch plugin for versioning with your preferred VCS"
 HOMEPAGE="https://pypi.org/project/hatch-vcs/"
-LICENSE="metapackage"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -20,11 +20,12 @@ S="${WORKDIR}/hatch_vcs-0.5.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-pypi/setuptools-scm
 	dev-pypi/hatchling
+	dev-pypi/setuptools-scm
 "
 # lockstep-pypi-deps: end
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/hatchling[${PYTHON_USEDEP}]
 "

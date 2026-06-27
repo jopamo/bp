@@ -4,7 +4,7 @@ inherit cmake flag-o-matic qa-policy
 
 DESCRIPTION="A completely OpenSourced alternative to the OpenGL Utility Toolkit (GLUT) library"
 HOMEPAGE="http://freeglut.sourceforge.net/"
-SNAPSHOT=a55bf46ec1edaf9d7125bd4667c40e234cbd9e42
+SNAPSHOT=80ba7028d0004769eda3a046c2969785adeeef82
 SRC_URI="https://github.com/freeglut/freeglut/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

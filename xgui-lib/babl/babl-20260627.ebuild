@@ -4,7 +4,7 @@ inherit meson
 
 DESCRIPTION="Pixel encoding and color space conversion engine"
 HOMEPAGE="https://gegl.org/babl/"
-SNAPSHOT=21add6becdfe612a27628a8726229c0dce662f32
+SNAPSHOT=43f501a1acd9ee46fbcc5822ed7a0dec539cc4cd
 SRC_URI="https://gitlab.gnome.org/GNOME/babl/-/archive/${SNAPSHOT}/babl-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

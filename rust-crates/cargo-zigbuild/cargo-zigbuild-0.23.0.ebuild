@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="cargo-zigbuild"
-CRATE_VERSION="0.22.2"
-CRATE_CHECKSUM="cd6351afb3f950c62e8d36f27d9089d65b91bf09eb1428eda58808557e8d15a9"
+CRATE_VERSION="0.23.0"
+CRATE_CHECKSUM="68c7df45b9d9934aaed5987fbf422b31419f81827b13a52251a61e1e772c6ff7"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

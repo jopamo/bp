@@ -1,0 +1,922 @@
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 9981d637f..e7c063880 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -33,6 +33,7 @@
+ #include <linux/percpu.h>
+ #include <linux/rculist.h>
+ #include <linux/workqueue.h>
++#include <linux/jump_label.h>
+ #include <linux/dynamic_queue_limits.h>
+ 
+ #include <net/net_namespace.h>
+@@ -3686,6 +3687,144 @@ static inline void dev_xmit_recursion_dec(void)
+ #endif
+ 
+ void __netif_schedule(struct Qdisc *q);
++#if IS_ENABLED(CONFIG_TRACEPOINTS)
++DECLARE_STATIC_KEY_FALSE(net_txq_trace_key);
++
++struct netdev_txq_trace_dql_snapshot {
++	u32 num_queued;
++	u32 num_completed;
++	u32 limit;
++	u32 adj_limit;
++	int avail;
++};
++
++static __always_inline bool netdev_txq_trace_enabled(void)
++{
++	return static_branch_unlikely(&net_txq_trace_key);
++}
++
++static __always_inline void
++netdev_txq_trace_snapshot_dql(const struct netdev_queue *txq,
++			      struct netdev_txq_trace_dql_snapshot *snap)
++{
++	if (!snap)
++		return;
++
++#ifdef CONFIG_BQL
++	if (!txq) {
++		snap->num_queued = 0;
++		snap->num_completed = 0;
++		snap->limit = 0;
++		snap->adj_limit = 0;
++		snap->avail = 0;
++		return;
++	}
++
++	snap->num_queued = READ_ONCE(txq->dql.num_queued);
++	snap->num_completed = READ_ONCE(txq->dql.num_completed);
++	snap->limit = READ_ONCE(txq->dql.limit);
++	snap->adj_limit = READ_ONCE(txq->dql.adj_limit);
++	snap->avail = dql_avail(&txq->dql);
++#else
++	snap->num_queued = 0;
++	snap->num_completed = 0;
++	snap->limit = 0;
++	snap->adj_limit = 0;
++	snap->avail = 0;
++#endif
++}
++
++void netdev_txq_trace_stop(
++	struct netdev_queue *txq, unsigned long caller,
++	unsigned long state_before, unsigned long state_after,
++	const struct netdev_txq_trace_dql_snapshot *snap);
++void netdev_txq_trace_wake(
++	struct netdev_queue *txq, unsigned long caller, bool did_wake,
++	unsigned long state_before, unsigned long state_after,
++	const struct netdev_txq_trace_dql_snapshot *snap);
++void netdev_txq_trace_schedule(
++	struct netdev_queue *txq, unsigned long caller, bool did_schedule,
++	unsigned long state_before, unsigned long state_after,
++	const struct netdev_txq_trace_dql_snapshot *snap);
++void netdev_txq_trace_reset(
++	struct netdev_queue *txq, unsigned long caller,
++	unsigned long state_before, unsigned long state_after,
++	const struct netdev_txq_trace_dql_snapshot *before,
++	const struct netdev_txq_trace_dql_snapshot *after);
++void netdev_txq_trace_sent(
++	struct netdev_queue *txq, unsigned long caller, unsigned int bytes,
++	bool xmit_more, bool doorbell,
++	unsigned long state_before, unsigned long state_after,
++	const struct netdev_txq_trace_dql_snapshot *before,
++	const struct netdev_txq_trace_dql_snapshot *after);
++void netdev_txq_trace_completed(
++	struct netdev_queue *txq, unsigned long caller,
++	unsigned int pkts, unsigned int bytes, bool stack_xoff_cleared,
++	unsigned long state_before, unsigned long state_after,
++	const struct netdev_txq_trace_dql_snapshot *before,
++	const struct netdev_txq_trace_dql_snapshot *after);
++#else
++struct netdev_txq_trace_dql_snapshot { };
++
++static __always_inline bool netdev_txq_trace_enabled(void)
++{
++	return false;
++}
++
++static __always_inline void
++netdev_txq_trace_snapshot_dql(const struct netdev_queue *txq,
++			      struct netdev_txq_trace_dql_snapshot *snap)
++{
++}
++
++static inline void netdev_txq_trace_stop(
++	struct netdev_queue *txq, unsigned long caller,
++	unsigned long state_before, unsigned long state_after,
++	const struct netdev_txq_trace_dql_snapshot *snap)
++{
++}
++
++static inline void netdev_txq_trace_wake(
++	struct netdev_queue *txq, unsigned long caller, bool did_wake,
++	unsigned long state_before, unsigned long state_after,
++	const struct netdev_txq_trace_dql_snapshot *snap)
++{
++}
++
++static inline void netdev_txq_trace_schedule(
++	struct netdev_queue *txq, unsigned long caller, bool did_schedule,
++	unsigned long state_before, unsigned long state_after,
++	const struct netdev_txq_trace_dql_snapshot *snap)
++{
++}
++
++static inline void netdev_txq_trace_reset(
++	struct netdev_queue *txq, unsigned long caller,
++	unsigned long state_before, unsigned long state_after,
++	const struct netdev_txq_trace_dql_snapshot *before,
++	const struct netdev_txq_trace_dql_snapshot *after)
++{
++}
++
++static inline void netdev_txq_trace_sent(
++	struct netdev_queue *txq, unsigned long caller, unsigned int bytes,
++	bool xmit_more, bool doorbell,
++	unsigned long state_before, unsigned long state_after,
++	const struct netdev_txq_trace_dql_snapshot *before,
++	const struct netdev_txq_trace_dql_snapshot *after)
++{
++}
++
++static inline void netdev_txq_trace_completed(
++	struct netdev_queue *txq, unsigned long caller,
++	unsigned int pkts, unsigned int bytes, bool stack_xoff_cleared,
++	unsigned long state_before, unsigned long state_after,
++	const struct netdev_txq_trace_dql_snapshot *before,
++	const struct netdev_txq_trace_dql_snapshot *after)
++{
++}
++#endif
++
+ void netif_schedule_queue(struct netdev_queue *txq);
+ 
+ static inline void netif_tx_schedule_all(struct net_device *dev)
+@@ -3748,6 +3887,15 @@ static inline void netif_tx_wake_all_queues(struct net_device *dev)
+ 
+ static __always_inline void netif_tx_stop_queue(struct netdev_queue *dev_queue)
+ {
++	bool trace = netdev_txq_trace_enabled();
++	unsigned long state_before = 0;
++	struct netdev_txq_trace_dql_snapshot snap;
++
++	if (trace) {
++		state_before = READ_ONCE(dev_queue->state);
++		netdev_txq_trace_snapshot_dql(dev_queue, &snap);
++	}
++
+ 	/* Paired with READ_ONCE() from dev_watchdog() */
+ 	WRITE_ONCE(dev_queue->trans_start, jiffies);
+ 
+@@ -3756,6 +3904,12 @@ static __always_inline void netif_tx_stop_queue(struct netdev_queue *dev_queue)
+ 
+ 	/* Must be an atomic op see netif_txq_try_stop() */
+ 	set_bit(__QUEUE_STATE_DRV_XOFF, &dev_queue->state);
++
++	if (trace)
++		netdev_txq_trace_stop(dev_queue,
++				      (unsigned long)__builtin_return_address(0),
++				      state_before,
++				      READ_ONCE(dev_queue->state), &snap);
+ }
+ 
+ /**
+@@ -3875,10 +4029,28 @@ static inline void netdev_tx_sent_queue(struct netdev_queue *dev_queue,
+ 					unsigned int bytes)
+ {
+ #ifdef CONFIG_BQL
++	bool trace = netdev_txq_trace_enabled();
++	unsigned long state_before = 0;
++	struct netdev_txq_trace_dql_snapshot before, after;
++
++	if (trace) {
++		state_before = READ_ONCE(dev_queue->state);
++		netdev_txq_trace_snapshot_dql(dev_queue, &before);
++	}
++
+ 	dql_queued(&dev_queue->dql, bytes);
+ 
+-	if (likely(dql_avail(&dev_queue->dql) >= 0))
++	if (likely(dql_avail(&dev_queue->dql) >= 0)) {
++		if (trace) {
++			netdev_txq_trace_snapshot_dql(dev_queue, &after);
++			netdev_txq_trace_sent(
++				dev_queue,
++				(unsigned long)__builtin_return_address(0),
++				bytes, false, true, state_before,
++				READ_ONCE(dev_queue->state), &before, &after);
++		}
+ 		return;
++	}
+ 
+ 	/* Paired with READ_ONCE() from dev_watchdog() */
+ 	WRITE_ONCE(dev_queue->trans_start, jiffies);
+@@ -3898,6 +4070,15 @@ static inline void netdev_tx_sent_queue(struct netdev_queue *dev_queue,
+ 	/* check again in case another CPU has just made room avail */
+ 	if (unlikely(dql_avail(&dev_queue->dql) >= 0))
+ 		clear_bit(__QUEUE_STATE_STACK_XOFF, &dev_queue->state);
++
++	if (trace) {
++		netdev_txq_trace_snapshot_dql(dev_queue, &after);
++		netdev_txq_trace_sent(
++			dev_queue,
++			(unsigned long)__builtin_return_address(0),
++			bytes, false, true, state_before,
++			READ_ONCE(dev_queue->state), &before, &after);
++	}
+ #endif
+ }
+ 
+@@ -3913,7 +4094,27 @@ static inline bool __netdev_tx_sent_queue(struct netdev_queue *dev_queue,
+ {
+ 	if (xmit_more) {
+ #ifdef CONFIG_BQL
++		bool trace = netdev_txq_trace_enabled();
++		unsigned long state_before = 0;
++		struct netdev_txq_trace_dql_snapshot before, after;
++		bool doorbell;
++
++		if (trace) {
++			state_before = READ_ONCE(dev_queue->state);
++			netdev_txq_trace_snapshot_dql(dev_queue, &before);
++		}
++
+ 		dql_queued(&dev_queue->dql, bytes);
++		doorbell = netif_tx_queue_stopped(dev_queue);
++		if (trace) {
++			netdev_txq_trace_snapshot_dql(dev_queue, &after);
++			netdev_txq_trace_sent(
++				dev_queue,
++				(unsigned long)__builtin_return_address(0),
++				bytes, true, doorbell, state_before,
++				READ_ONCE(dev_queue->state), &before, &after);
++		}
++		return doorbell;
+ #endif
+ 		return netif_tx_queue_stopped(dev_queue);
+ 	}
+@@ -3957,9 +4158,19 @@ static inline void netdev_tx_completed_queue(struct netdev_queue *dev_queue,
+ 					     unsigned int pkts, unsigned int bytes)
+ {
+ #ifdef CONFIG_BQL
++	bool trace = netdev_txq_trace_enabled();
++	unsigned long state_before = 0;
++	struct netdev_txq_trace_dql_snapshot before, after;
++	bool stack_xoff_cleared = false;
++
+ 	if (unlikely(!bytes))
+ 		return;
+ 
++	if (trace) {
++		state_before = READ_ONCE(dev_queue->state);
++		netdev_txq_trace_snapshot_dql(dev_queue, &before);
++	}
++
+ 	dql_completed(&dev_queue->dql, bytes);
+ 
+ 	/*
+@@ -3969,11 +4180,32 @@ static inline void netdev_tx_completed_queue(struct netdev_queue *dev_queue,
+ 	 */
+ 	smp_mb(); /* NOTE: netdev_txq_completed_mb() assumes this exists */
+ 
+-	if (unlikely(dql_avail(&dev_queue->dql) < 0))
++	if (unlikely(dql_avail(&dev_queue->dql) < 0)) {
++		if (trace) {
++			netdev_txq_trace_snapshot_dql(dev_queue, &after);
++			netdev_txq_trace_completed(
++				dev_queue,
++				(unsigned long)__builtin_return_address(0),
++				pkts, bytes, false, state_before,
++				READ_ONCE(dev_queue->state), &before,
++				&after);
++		}
+ 		return;
++	}
+ 
+-	if (test_and_clear_bit(__QUEUE_STATE_STACK_XOFF, &dev_queue->state))
++	if (test_and_clear_bit(__QUEUE_STATE_STACK_XOFF, &dev_queue->state)) {
++		stack_xoff_cleared = true;
+ 		netif_schedule_queue(dev_queue);
++	}
++
++	if (trace) {
++		netdev_txq_trace_snapshot_dql(dev_queue, &after);
++		netdev_txq_trace_completed(
++			dev_queue,
++			(unsigned long)__builtin_return_address(0),
++			pkts, bytes, stack_xoff_cleared, state_before,
++			READ_ONCE(dev_queue->state), &before, &after);
++	}
+ #endif
+ }
+ 
+@@ -3996,8 +4228,24 @@ static inline void netdev_completed_queue(struct net_device *dev,
+ static inline void netdev_tx_reset_queue(struct netdev_queue *q)
+ {
+ #ifdef CONFIG_BQL
++	bool trace = netdev_txq_trace_enabled();
++	unsigned long state_before = 0;
++	struct netdev_txq_trace_dql_snapshot before, after;
++
++	if (trace) {
++		state_before = READ_ONCE(q->state);
++		netdev_txq_trace_snapshot_dql(q, &before);
++	}
++
+ 	clear_bit(__QUEUE_STATE_STACK_XOFF, &q->state);
+ 	dql_reset(&q->dql);
++
++	if (trace) {
++		netdev_txq_trace_snapshot_dql(q, &after);
++		netdev_txq_trace_reset(
++			q, (unsigned long)__builtin_return_address(0),
++			state_before, READ_ONCE(q->state), &before, &after);
++	}
+ #endif
+ }
+ 
+diff --git a/include/trace/events/net.h b/include/trace/events/net.h
+index dbc2c5598..a2da1e6b7 100644
+--- a/include/trace/events/net.h
++++ b/include/trace/events/net.h
+@@ -126,8 +126,348 @@ TRACE_EVENT(net_dev_xmit_timeout,
+ 	),
+ 
+ 	TP_printk("dev=%s driver=%s queue=%d net_cookie=%llu",
+-		__get_str(name), __get_str(driver),
+-		__entry->queue_index, __entry->net_cookie)
++		  __get_str(name), __get_str(driver),
++		  __entry->queue_index, __entry->net_cookie)
++);
++
++DECLARE_EVENT_CLASS(net_dev_txq_state_template,
++
++	TP_PROTO(const struct netdev_queue *txq, u16 queue_index,
++		 unsigned long caller, bool effective,
++		 unsigned long state_before, unsigned long state_after,
++		 u32 num_queued, u32 num_completed, u32 inflight,
++		 u32 limit, u32 adj_limit, int avail),
++
++	TP_ARGS(txq, queue_index, caller, effective, state_before,
++		state_after, num_queued, num_completed, inflight,
++		limit, adj_limit, avail),
++
++	TP_STRUCT__entry(
++		__string(	name,		txq->dev->name		)
++		__string(	driver,		netdev_drivername(txq->dev))
++		__field(	u16,		queue_index		)
++		__field(	unsigned long,	caller			)
++		__field(	bool,		effective		)
++		__field(	unsigned long,	state_before		)
++		__field(	unsigned long,	state_after		)
++		__field(	unsigned long,	trans_start		)
++		__field(	u32,		num_queued		)
++		__field(	u32,		num_completed		)
++		__field(	u32,		inflight		)
++		__field(	u32,		limit			)
++		__field(	u32,		adj_limit		)
++		__field(	int,		avail			)
++		__field(	u64,		net_cookie		)
++	),
++
++	TP_fast_assign(
++		__assign_str(name);
++		__assign_str(driver);
++		__entry->queue_index = queue_index;
++		__entry->caller = caller;
++		__entry->effective = effective;
++		__entry->state_before = state_before;
++		__entry->state_after = state_after;
++		__entry->trans_start = READ_ONCE(txq->trans_start);
++		__entry->num_queued = num_queued;
++		__entry->num_completed = num_completed;
++		__entry->inflight = inflight;
++		__entry->limit = limit;
++		__entry->adj_limit = adj_limit;
++		__entry->avail = avail;
++		__entry->net_cookie = dev_net(txq->dev)->net_cookie;
++	),
++
++	TP_printk("dev=%s driver=%s queue=%u caller=%pS effective=%d state_before=%#lx state_after=%#lx trans_start=%lu num_queued=%u num_completed=%u inflight=%u limit=%u adj_limit=%u avail=%d net_cookie=%llu",
++		  __get_str(name), __get_str(driver), __entry->queue_index,
++		  (void *)__entry->caller, __entry->effective,
++		  __entry->state_before, __entry->state_after,
++		  __entry->trans_start, __entry->num_queued,
++		  __entry->num_completed, __entry->inflight,
++		  __entry->limit, __entry->adj_limit, __entry->avail,
++		  __entry->net_cookie)
++);
++
++DEFINE_EVENT(net_dev_txq_state_template, net_dev_txq_stop,
++
++	TP_PROTO(const struct netdev_queue *txq, u16 queue_index,
++		 unsigned long caller, bool effective,
++		 unsigned long state_before, unsigned long state_after,
++		 u32 num_queued, u32 num_completed, u32 inflight,
++		 u32 limit, u32 adj_limit, int avail),
++
++	TP_ARGS(txq, queue_index, caller, effective, state_before,
++		state_after, num_queued, num_completed, inflight,
++		limit, adj_limit, avail)
++);
++
++DEFINE_EVENT(net_dev_txq_state_template, net_dev_txq_wake,
++
++	TP_PROTO(const struct netdev_queue *txq, u16 queue_index,
++		 unsigned long caller, bool effective,
++		 unsigned long state_before, unsigned long state_after,
++		 u32 num_queued, u32 num_completed, u32 inflight,
++		 u32 limit, u32 adj_limit, int avail),
++
++	TP_ARGS(txq, queue_index, caller, effective, state_before,
++		state_after, num_queued, num_completed, inflight,
++		limit, adj_limit, avail)
++);
++
++DEFINE_EVENT(net_dev_txq_state_template, net_dev_txq_schedule,
++
++	TP_PROTO(const struct netdev_queue *txq, u16 queue_index,
++		 unsigned long caller, bool effective,
++		 unsigned long state_before, unsigned long state_after,
++		 u32 num_queued, u32 num_completed, u32 inflight,
++		 u32 limit, u32 adj_limit, int avail),
++
++	TP_ARGS(txq, queue_index, caller, effective, state_before,
++		state_after, num_queued, num_completed, inflight,
++		limit, adj_limit, avail)
++);
++
++TRACE_EVENT(net_dev_txq_reset,
++
++	TP_PROTO(const struct netdev_queue *txq, u16 queue_index,
++		 unsigned long caller, bool effective,
++		 unsigned long state_before, unsigned long state_after,
++		 u32 num_queued_before, u32 num_completed_before,
++		 u32 inflight_before, u32 limit_before, u32 adj_limit_before,
++		 int avail_before, u32 num_queued_after, u32 num_completed_after,
++		 u32 inflight_after, u32 limit_after, u32 adj_limit_after,
++		 int avail_after),
++
++	TP_ARGS(txq, queue_index, caller, effective, state_before,
++		state_after, num_queued_before, num_completed_before,
++		inflight_before, limit_before, adj_limit_before,
++		avail_before, num_queued_after, num_completed_after,
++		inflight_after, limit_after, adj_limit_after, avail_after),
++
++	TP_STRUCT__entry(
++		__string(	name,		txq->dev->name		)
++		__string(	driver,		netdev_drivername(txq->dev))
++		__field(	u16,		queue_index		)
++		__field(	unsigned long,	caller			)
++		__field(	bool,		effective		)
++		__field(	unsigned long,	state_before		)
++		__field(	unsigned long,	state_after		)
++		__field(	unsigned long,	trans_start		)
++		__field(	u32,		num_queued_before	)
++		__field(	u32,		num_completed_before	)
++		__field(	u32,		inflight_before		)
++		__field(	u32,		limit_before		)
++		__field(	u32,		adj_limit_before	)
++		__field(	int,		avail_before		)
++		__field(	u32,		num_queued_after	)
++		__field(	u32,		num_completed_after	)
++		__field(	u32,		inflight_after		)
++		__field(	u32,		limit_after		)
++		__field(	u32,		adj_limit_after		)
++		__field(	int,		avail_after		)
++		__field(	u64,		net_cookie		)
++	),
++
++	TP_fast_assign(
++		__assign_str(name);
++		__assign_str(driver);
++		__entry->queue_index = queue_index;
++		__entry->caller = caller;
++		__entry->effective = effective;
++		__entry->state_before = state_before;
++		__entry->state_after = state_after;
++		__entry->trans_start = READ_ONCE(txq->trans_start);
++		__entry->num_queued_before = num_queued_before;
++		__entry->num_completed_before = num_completed_before;
++		__entry->inflight_before = inflight_before;
++		__entry->limit_before = limit_before;
++		__entry->adj_limit_before = adj_limit_before;
++		__entry->avail_before = avail_before;
++		__entry->num_queued_after = num_queued_after;
++		__entry->num_completed_after = num_completed_after;
++		__entry->inflight_after = inflight_after;
++		__entry->limit_after = limit_after;
++		__entry->adj_limit_after = adj_limit_after;
++		__entry->avail_after = avail_after;
++		__entry->net_cookie = dev_net(txq->dev)->net_cookie;
++	),
++
++	TP_printk("dev=%s driver=%s queue=%u caller=%pS effective=%d state_before=%#lx state_after=%#lx trans_start=%lu nq_before=%u nc_before=%u inflight_before=%u limit_before=%u adj_before=%u avail_before=%d nq_after=%u nc_after=%u inflight_after=%u limit_after=%u adj_after=%u avail_after=%d net_cookie=%llu",
++		  __get_str(name), __get_str(driver), __entry->queue_index,
++		  (void *)__entry->caller, __entry->effective,
++		  __entry->state_before, __entry->state_after,
++		  __entry->trans_start, __entry->num_queued_before,
++		  __entry->num_completed_before, __entry->inflight_before,
++		  __entry->limit_before, __entry->adj_limit_before,
++		  __entry->avail_before, __entry->num_queued_after,
++		  __entry->num_completed_after, __entry->inflight_after,
++		  __entry->limit_after, __entry->adj_limit_after,
++		  __entry->avail_after, __entry->net_cookie)
++);
++
++TRACE_EVENT(net_dev_txq_sent,
++
++	TP_PROTO(const struct netdev_queue *txq, u16 queue_index,
++		 unsigned long caller, unsigned int bytes,
++		 bool xmit_more, bool doorbell,
++		 unsigned long state_before, unsigned long state_after,
++		 u32 num_queued_before, u32 num_completed_before,
++		 u32 inflight_before, u32 limit_before, u32 adj_limit_before,
++		 int avail_before, u32 num_queued_after, u32 num_completed_after,
++		 u32 inflight_after, u32 limit_after, u32 adj_limit_after,
++		 int avail_after),
++
++	TP_ARGS(txq, queue_index, caller, bytes, xmit_more, doorbell,
++		state_before, state_after, num_queued_before,
++		num_completed_before, inflight_before, limit_before,
++		adj_limit_before, avail_before, num_queued_after,
++		num_completed_after, inflight_after, limit_after,
++		adj_limit_after, avail_after),
++
++	TP_STRUCT__entry(
++		__string(	name,		txq->dev->name		)
++		__string(	driver,		netdev_drivername(txq->dev))
++		__field(	u16,		queue_index		)
++		__field(	unsigned long,	caller			)
++		__field(	unsigned int,	bytes			)
++		__field(	bool,		xmit_more		)
++		__field(	bool,		doorbell		)
++		__field(	unsigned long,	state_before		)
++		__field(	unsigned long,	state_after		)
++		__field(	u32,		num_queued_before	)
++		__field(	u32,		num_completed_before	)
++		__field(	u32,		inflight_before		)
++		__field(	u32,		limit_before		)
++		__field(	u32,		adj_limit_before	)
++		__field(	int,		avail_before		)
++		__field(	u32,		num_queued_after	)
++		__field(	u32,		num_completed_after	)
++		__field(	u32,		inflight_after		)
++		__field(	u32,		limit_after		)
++		__field(	u32,		adj_limit_after		)
++		__field(	int,		avail_after		)
++		__field(	u64,		net_cookie		)
++	),
++
++	TP_fast_assign(
++		__assign_str(name);
++		__assign_str(driver);
++		__entry->queue_index = queue_index;
++		__entry->caller = caller;
++		__entry->bytes = bytes;
++		__entry->xmit_more = xmit_more;
++		__entry->doorbell = doorbell;
++		__entry->state_before = state_before;
++		__entry->state_after = state_after;
++		__entry->num_queued_before = num_queued_before;
++		__entry->num_completed_before = num_completed_before;
++		__entry->inflight_before = inflight_before;
++		__entry->limit_before = limit_before;
++		__entry->adj_limit_before = adj_limit_before;
++		__entry->avail_before = avail_before;
++		__entry->num_queued_after = num_queued_after;
++		__entry->num_completed_after = num_completed_after;
++		__entry->inflight_after = inflight_after;
++		__entry->limit_after = limit_after;
++		__entry->adj_limit_after = adj_limit_after;
++		__entry->avail_after = avail_after;
++		__entry->net_cookie = dev_net(txq->dev)->net_cookie;
++	),
++
++	TP_printk("dev=%s driver=%s queue=%u caller=%pS bytes=%u xmit_more=%d doorbell=%d state_before=%#lx state_after=%#lx nq_before=%u nc_before=%u inflight_before=%u limit_before=%u adj_before=%u avail_before=%d nq_after=%u nc_after=%u inflight_after=%u limit_after=%u adj_after=%u avail_after=%d net_cookie=%llu",
++		  __get_str(name), __get_str(driver), __entry->queue_index,
++		  (void *)__entry->caller, __entry->bytes,
++		  __entry->xmit_more, __entry->doorbell,
++		  __entry->state_before, __entry->state_after,
++		  __entry->num_queued_before, __entry->num_completed_before,
++		  __entry->inflight_before, __entry->limit_before,
++		  __entry->adj_limit_before, __entry->avail_before,
++		  __entry->num_queued_after, __entry->num_completed_after,
++		  __entry->inflight_after, __entry->limit_after,
++		  __entry->adj_limit_after, __entry->avail_after,
++		  __entry->net_cookie)
++);
++
++TRACE_EVENT(net_dev_txq_completed,
++
++	TP_PROTO(const struct netdev_queue *txq, u16 queue_index,
++		 unsigned long caller, unsigned int pkts, unsigned int bytes,
++		 bool stack_xoff_cleared,
++		 unsigned long state_before, unsigned long state_after,
++		 u32 num_queued_before, u32 num_completed_before,
++		 u32 inflight_before, u32 limit_before, u32 adj_limit_before,
++		 int avail_before, u32 num_queued_after, u32 num_completed_after,
++		 u32 inflight_after, u32 limit_after, u32 adj_limit_after,
++		 int avail_after),
++
++	TP_ARGS(txq, queue_index, caller, pkts, bytes, stack_xoff_cleared,
++		state_before, state_after, num_queued_before,
++		num_completed_before, inflight_before, limit_before,
++		adj_limit_before, avail_before, num_queued_after,
++		num_completed_after, inflight_after, limit_after,
++		adj_limit_after, avail_after),
++
++	TP_STRUCT__entry(
++		__string(	name,		txq->dev->name		)
++		__string(	driver,		netdev_drivername(txq->dev))
++		__field(	u16,		queue_index		)
++		__field(	unsigned long,	caller			)
++		__field(	unsigned int,	pkts			)
++		__field(	unsigned int,	bytes			)
++		__field(	bool,		stack_xoff_cleared	)
++		__field(	unsigned long,	state_before		)
++		__field(	unsigned long,	state_after		)
++		__field(	u32,		num_queued_before	)
++		__field(	u32,		num_completed_before	)
++		__field(	u32,		inflight_before		)
++		__field(	u32,		limit_before		)
++		__field(	u32,		adj_limit_before	)
++		__field(	int,		avail_before		)
++		__field(	u32,		num_queued_after	)
++		__field(	u32,		num_completed_after	)
++		__field(	u32,		inflight_after		)
++		__field(	u32,		limit_after		)
++		__field(	u32,		adj_limit_after		)
++		__field(	int,		avail_after		)
++		__field(	u64,		net_cookie		)
++	),
++
++	TP_fast_assign(
++		__assign_str(name);
++		__assign_str(driver);
++		__entry->queue_index = queue_index;
++		__entry->caller = caller;
++		__entry->pkts = pkts;
++		__entry->bytes = bytes;
++		__entry->stack_xoff_cleared = stack_xoff_cleared;
++		__entry->state_before = state_before;
++		__entry->state_after = state_after;
++		__entry->num_queued_before = num_queued_before;
++		__entry->num_completed_before = num_completed_before;
++		__entry->inflight_before = inflight_before;
++		__entry->limit_before = limit_before;
++		__entry->adj_limit_before = adj_limit_before;
++		__entry->avail_before = avail_before;
++		__entry->num_queued_after = num_queued_after;
++		__entry->num_completed_after = num_completed_after;
++		__entry->inflight_after = inflight_after;
++		__entry->limit_after = limit_after;
++		__entry->adj_limit_after = adj_limit_after;
++		__entry->avail_after = avail_after;
++		__entry->net_cookie = dev_net(txq->dev)->net_cookie;
++	),
++
++	TP_printk("dev=%s driver=%s queue=%u caller=%pS pkts=%u bytes=%u stack_xoff_cleared=%d state_before=%#lx state_after=%#lx nq_before=%u nc_before=%u inflight_before=%u limit_before=%u adj_before=%u avail_before=%d nq_after=%u nc_after=%u inflight_after=%u limit_after=%u adj_after=%u avail_after=%d net_cookie=%llu",
++		  __get_str(name), __get_str(driver), __entry->queue_index,
++		  (void *)__entry->caller, __entry->pkts, __entry->bytes,
++		  __entry->stack_xoff_cleared, __entry->state_before,
++		  __entry->state_after, __entry->num_queued_before,
++		  __entry->num_completed_before, __entry->inflight_before,
++		  __entry->limit_before, __entry->adj_limit_before,
++		  __entry->avail_before, __entry->num_queued_after,
++		  __entry->num_completed_after, __entry->inflight_after,
++		  __entry->limit_after, __entry->adj_limit_after,
++		  __entry->avail_after, __entry->net_cookie)
+ );
+ 
+ DECLARE_EVENT_CLASS(net_dev_template,
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 4b3d5cfdf..55a0cc401 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -3417,18 +3417,45 @@ static struct dev_kfree_skb_cb *get_kfree_skb_cb(const struct sk_buff *skb)
+ 
+ void netif_schedule_queue(struct netdev_queue *txq)
+ {
++	bool trace = netdev_txq_trace_enabled();
++	unsigned long state_before = 0;
++	struct netdev_txq_trace_dql_snapshot snap;
++	bool did_schedule = false;
++
++	if (trace) {
++		state_before = READ_ONCE(txq->state);
++		netdev_txq_trace_snapshot_dql(txq, &snap);
++	}
++
+ 	rcu_read_lock();
+ 	if (!netif_xmit_stopped(txq)) {
+ 		struct Qdisc *q = rcu_dereference(txq->qdisc);
+ 
+ 		__netif_schedule(q);
++		did_schedule = true;
+ 	}
+ 	rcu_read_unlock();
++
++	if (trace)
++		netdev_txq_trace_schedule(
++			txq, (unsigned long)__builtin_return_address(0),
++			did_schedule, state_before, READ_ONCE(txq->state),
++			&snap);
+ }
+ EXPORT_SYMBOL(netif_schedule_queue);
+ 
+ void netif_tx_wake_queue(struct netdev_queue *dev_queue)
+ {
++	bool trace = netdev_txq_trace_enabled();
++	unsigned long state_before = 0;
++	struct netdev_txq_trace_dql_snapshot snap;
++	bool did_wake = false;
++
++	if (trace) {
++		state_before = READ_ONCE(dev_queue->state);
++		netdev_txq_trace_snapshot_dql(dev_queue, &snap);
++	}
++
+ 	if (test_and_clear_bit(__QUEUE_STATE_DRV_XOFF, &dev_queue->state)) {
+ 		struct Qdisc *q;
+ 
+@@ -3436,7 +3463,14 @@ void netif_tx_wake_queue(struct netdev_queue *dev_queue)
+ 		q = rcu_dereference(dev_queue->qdisc);
+ 		__netif_schedule(q);
+ 		rcu_read_unlock();
++		did_wake = true;
+ 	}
++
++	if (trace)
++		netdev_txq_trace_wake(
++			dev_queue, (unsigned long)__builtin_return_address(0),
++			did_wake, state_before, READ_ONCE(dev_queue->state),
++			&snap);
+ }
+ EXPORT_SYMBOL(netif_tx_wake_queue);
+ 
+diff --git a/net/core/net-traces.c b/net/core/net-traces.c
+index f2fa34b1d..8a445510f 100644
+--- a/net/core/net-traces.c
++++ b/net/core/net-traces.c
+@@ -21,6 +21,8 @@
+ #include <linux/workqueue.h>
+ #include <linux/netlink.h>
+ #include <linux/net_dropmon.h>
++#include <linux/moduleparam.h>
++#include <linux/jump_label.h>
+ #include <linux/slab.h>
+ 
+ #include <linux/unaligned.h>
+@@ -66,3 +68,148 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(tcp_bad_csum);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(udp_fail_queue_rcv_skb);
+ 
+ EXPORT_TRACEPOINT_SYMBOL_GPL(sk_data_ready);
++
++DEFINE_STATIC_KEY_FALSE(net_txq_trace_key);
++
++static bool net_txq_trace_param;
++
++static int net_txq_trace_enable_set(const char *val,
++				    const struct kernel_param *kp)
++{
++	bool enable;
++	int ret;
++
++	ret = kstrtobool(val, &enable);
++	if (ret)
++		return ret;
++
++	if (enable == READ_ONCE(net_txq_trace_param))
++		return 0;
++
++	if (enable)
++		static_branch_enable(&net_txq_trace_key);
++	else
++		static_branch_disable(&net_txq_trace_key);
++
++	WRITE_ONCE(net_txq_trace_param, enable);
++	return 0;
++}
++
++static const struct kernel_param_ops net_txq_trace_param_ops = {
++	.set = net_txq_trace_enable_set,
++	.get = param_get_bool,
++};
++
++module_param_cb(txq_trace_enable, &net_txq_trace_param_ops,
++		&net_txq_trace_param, 0600);
++MODULE_PARM_DESC(txq_trace_enable,
++		 "enable detailed TX queue/BQL kernel tracepoints");
++
++static u16 netdev_txq_trace_index(const struct netdev_queue *txq)
++{
++	if (!txq || !txq->dev || !txq->dev->_tx)
++		return 0;
++
++	return txq - txq->dev->_tx;
++}
++
++static u32
++netdev_txq_trace_inflight(const struct netdev_txq_trace_dql_snapshot *snap)
++{
++	if (!snap)
++		return 0;
++
++	return snap->num_queued >= snap->num_completed ?
++	       snap->num_queued - snap->num_completed : 0;
++}
++
++void netdev_txq_trace_stop(
++	struct netdev_queue *txq, unsigned long caller,
++	unsigned long state_before, unsigned long state_after,
++	const struct netdev_txq_trace_dql_snapshot *snap)
++{
++	trace_net_dev_txq_stop(txq, netdev_txq_trace_index(txq), caller, true,
++			       state_before, state_after, snap->num_queued,
++			       snap->num_completed,
++			       netdev_txq_trace_inflight(snap), snap->limit,
++			       snap->adj_limit, snap->avail);
++}
++
++void netdev_txq_trace_wake(
++	struct netdev_queue *txq, unsigned long caller, bool did_wake,
++	unsigned long state_before, unsigned long state_after,
++	const struct netdev_txq_trace_dql_snapshot *snap)
++{
++	trace_net_dev_txq_wake(txq, netdev_txq_trace_index(txq), caller,
++			       did_wake, state_before, state_after,
++			       snap->num_queued, snap->num_completed,
++			       netdev_txq_trace_inflight(snap), snap->limit,
++			       snap->adj_limit, snap->avail);
++}
++
++void netdev_txq_trace_schedule(
++	struct netdev_queue *txq, unsigned long caller, bool did_schedule,
++	unsigned long state_before, unsigned long state_after,
++	const struct netdev_txq_trace_dql_snapshot *snap)
++{
++	trace_net_dev_txq_schedule(txq, netdev_txq_trace_index(txq), caller,
++				   did_schedule, state_before, state_after,
++				   snap->num_queued, snap->num_completed,
++				   netdev_txq_trace_inflight(snap), snap->limit,
++				   snap->adj_limit, snap->avail);
++}
++
++void netdev_txq_trace_reset(
++	struct netdev_queue *txq, unsigned long caller,
++	unsigned long state_before, unsigned long state_after,
++	const struct netdev_txq_trace_dql_snapshot *before,
++	const struct netdev_txq_trace_dql_snapshot *after)
++{
++	trace_net_dev_txq_reset(txq, netdev_txq_trace_index(txq), caller, true,
++				state_before, state_after, before->num_queued,
++				before->num_completed,
++				netdev_txq_trace_inflight(before), before->limit,
++				before->adj_limit, before->avail,
++				after->num_queued, after->num_completed,
++				netdev_txq_trace_inflight(after), after->limit,
++				after->adj_limit, after->avail);
++}
++
++void netdev_txq_trace_sent(
++	struct netdev_queue *txq, unsigned long caller, unsigned int bytes,
++	bool xmit_more, bool doorbell,
++	unsigned long state_before, unsigned long state_after,
++	const struct netdev_txq_trace_dql_snapshot *before,
++	const struct netdev_txq_trace_dql_snapshot *after)
++{
++	trace_net_dev_txq_sent(txq, netdev_txq_trace_index(txq), caller,
++			       bytes, xmit_more, doorbell,
++			       state_before, state_after,
++			       before->num_queued, before->num_completed,
++			       netdev_txq_trace_inflight(before),
++			       before->limit, before->adj_limit,
++			       before->avail, after->num_queued,
++			       after->num_completed,
++			       netdev_txq_trace_inflight(after),
++			       after->limit, after->adj_limit, after->avail);
++}
++
++void netdev_txq_trace_completed(
++	struct netdev_queue *txq, unsigned long caller,
++	unsigned int pkts, unsigned int bytes, bool stack_xoff_cleared,
++	unsigned long state_before, unsigned long state_after,
++	const struct netdev_txq_trace_dql_snapshot *before,
++	const struct netdev_txq_trace_dql_snapshot *after)
++{
++	trace_net_dev_txq_completed(txq, netdev_txq_trace_index(txq), caller,
++				    pkts, bytes, stack_xoff_cleared,
++				    state_before, state_after,
++				    before->num_queued, before->num_completed,
++				    netdev_txq_trace_inflight(before),
++				    before->limit, before->adj_limit,
++				    before->avail, after->num_queued,
++				    after->num_completed,
++				    netdev_txq_trace_inflight(after),
++				    after->limit, after->adj_limit,
++				    after->avail);
++}

@@ -59,7 +59,7 @@ inherit cargo lockstep-cargo
 
 DESCRIPTION="ripgrep"
 HOMEPAGE="https://github.com/BurntSushi/ripgrep"
-SNAPSHOT=82313cf95849bfe425109ad9506a52154879b1b1
+SNAPSHOT=dfe4a81d2591daca76d25ae4e052c34b26578155
 SRC_URI="https://github.com/BurntSushi/ripgrep/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

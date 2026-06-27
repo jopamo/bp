@@ -5,7 +5,7 @@ inherit flag-o-matic qa-policy gl
 DESCRIPTION="Standard tool to compile source trees"
 HOMEPAGE="https://www.gnu.org/software/make/make.html"
 
-SNAPSHOT=c072587a609db822697f05b81316bdb862678282
+SNAPSHOT=b3802782de3eff2c0f1eda9e7c0befd8cd142162
 SRC_URI="https://github.com/1g4-mirror/make/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

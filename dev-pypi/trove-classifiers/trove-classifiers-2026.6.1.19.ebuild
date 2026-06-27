@@ -20,5 +20,6 @@ S="${WORKDIR}/trove_classifiers-2026.6.1.19"
 
 BDEPEND="
 	dev-pypi/calver[${PYTHON_USEDEP}]
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

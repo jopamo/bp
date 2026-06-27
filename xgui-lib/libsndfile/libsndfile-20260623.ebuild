@@ -4,7 +4,7 @@ inherit python-any-r1 cmake
 
 DESCRIPTION="A C library for reading and writing files containing sampled sound"
 HOMEPAGE="http://www.mega-nerd.com/libsndfile"
-SNAPSHOT=68f6c16fe1407eff4cdde158566694c3ed666c2f
+SNAPSHOT=ce173fbe60c3f352691cc6d1552174f19466b52f
 SRC_URI="https://github.com/libsndfile/libsndfile/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

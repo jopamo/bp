@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="astral-tokio-tar"
-CRATE_VERSION="0.6.2"
-CRATE_CHECKSUM="cb50a7aae84a03bf55b067832bc376f4961b790c97e64d3eacee97d389b90277"
+CRATE_VERSION="0.6.3"
+CRATE_CHECKSUM="08648fef353ab39a9d26f909ad53fc4f071be4c91853b78523f5cc3d9e5ebffd"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

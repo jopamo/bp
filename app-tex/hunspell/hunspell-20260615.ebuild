@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="The most popular spellchecking library"
 HOMEPAGE="http://hunspell.github.io/"
-SNAPSHOT=7515bda0ec7edd02e0827d6fa310128b11ce4860
+SNAPSHOT=c83e53fc456a14ff9bb0c572f7d688e88b346b75
 SRC_URI="https://github.com/hunspell/hunspell/archive/${SNAPSHOT}.tar.gz -> hunspell-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/hunspell-${SNAPSHOT}"
 

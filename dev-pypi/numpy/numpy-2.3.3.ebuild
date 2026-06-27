@@ -1,21 +1,21 @@
-# lockstep-managed: dependency-ebuild
 # Distributed under the terms of the GNU General Public License v2
 
-DISTUTILS_EXT=1
-DISTUTILS_USE_PEP517=meson-python
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-inherit distutils-r1 flag-o-matic git-r3
+PYTHON_COMPAT=( python3_{11..14} )
+
+DISTUTILS_EXT=1
+DISTUTILS_USE_PEP517="meson-python"
+
+inherit distutils-r1 flag-o-matic pypi
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND=""
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Fast array and numerical python library"
 HOMEPAGE="https://numpy.org/"
-
-EGIT_BRANCH="maintenance/$(ver_cut 1-2).x"
-EGIT_REPO_URI="https://github.com/numpy/numpy"
-
-#SNAPSHOT=bf272f83e63679da1cb35afab17e4443fda73b7f
-#SRC_URI="https://github.com/numpy/numpy/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-#S="${WORKDIR}/${PN}-${SNAPSHOT}"
-
 LICENSE="BSD"
 SLOT="0/2"
 KEYWORDS="amd64 arm64"
@@ -31,13 +31,15 @@ IUSE+="
 "
 
 # uses your ILP64 LAPACK which ships *64.pc and CBLAS headers
-RDEPEND="
+RDEPEND+="
 	lapack? ( lib-dev/lapack )
 "
+DEPEND="${RDEPEND}"
 BDEPEND="
 	${RDEPEND}
 	>=app-dev/meson-1.5.2
 	>=dev-pypi/cython-3.0.6[${PYTHON_USEDEP}]
+	>=dev-pypi/meson-python-0.15.0[${PYTHON_USEDEP}]
 	lapack? ( app-dev/pkgconf )
 	test? (
 		$(python_gen_cond_dep '
@@ -56,7 +58,7 @@ distutils_enable_tests pytest
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-2.3.2-no-detect.patch
-	
+	"${FILESDIR}"/${PN}-2.3.3-avx512f-only.patch
 )
 
 # tiny baseline per supported arch
@@ -70,7 +72,7 @@ _numpy_baseline() {
 
 python_configure_all() {
 	filter-flags -Wl,-z,defs
-	
+
 	# ensure meson sees system pkg-config dirs
 	local _pcpath="${EPREFIX}/usr/lib/pkgconfig:${EPREFIX}/usr/share/pkgconfig"
 

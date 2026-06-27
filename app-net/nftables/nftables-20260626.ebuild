@@ -4,7 +4,7 @@ inherit linux-info autotools qa-policy
 
 DESCRIPTION="Linux kernel firewall, NAT and packet mangling tools"
 HOMEPAGE="https://netfilter.org/projects/nftables/"
-SNAPSHOT=32e4705ce3979e2e9a0637e5578a7d96384c06e1
+SNAPSHOT=2afaf7b987b7d1c2456eb79f67e1e75b6f3ad828
 SRC_URI="https://github.com/1g4-mirror/nftables/archive/${SNAPSHOT}.tar.gz -> nftables-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/nftables-${SNAPSHOT}
 PATCHES=(

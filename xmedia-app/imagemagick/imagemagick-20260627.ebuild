@@ -2,7 +2,7 @@
 
 DESCRIPTION="A collection of tools and libraries for many image formats"
 HOMEPAGE="https://www.imagemagick.org/"
-SNAPSHOT=f413a880a58b6f45a37b9acd10f27abf4c1c311b
+SNAPSHOT=e587240602aaf1d82fbf8ef262b4936c12f110b7
 SRC_URI="https://github.com/ImageMagick/ImageMagick/archive/${SNAPSHOT}.tar.gz -> ImageMagick-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ImageMagick-${SNAPSHOT}"
 

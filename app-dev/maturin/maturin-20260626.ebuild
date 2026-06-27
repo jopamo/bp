@@ -34,11 +34,11 @@ CARGO_DEPS="
 	rust-crates/cargo-config2-0.1.44
 	rust-crates/cargo-cyclonedx-0.5.9
 	rust-crates/cargo-lock-10.1.0
-	rust-crates/cargo-options-0.7.6
+	rust-crates/cargo-options-0.8.1
 	rust-crates/cargo-platform-0.1.9
 	rust-crates/cargo-platform-0.3.2
-	rust-crates/cargo-xwin-0.22.0
-	rust-crates/cargo-zigbuild-0.22.2
+	rust-crates/cargo-xwin-0.23.0
+	rust-crates/cargo-zigbuild-0.23.0
 	rust-crates/cargo_metadata-0.18.1
 	rust-crates/cargo_metadata-0.23.1
 	rust-crates/cbindgen-0.29.2
@@ -238,7 +238,7 @@ CARGO_DEPS="
 	rust-crates/proc-macro2-1.0.106
 	rust-crates/psm-0.1.30
 	rust-crates/purl-0.1.6
-	rust-crates/pyo3-introspection-0.28.3
+	rust-crates/pyo3-introspection-0.29.0
 	rust-crates/pyproject-toml-0.13.7
 	rust-crates/python-pkginfo-0.6.8
 	rust-crates/quote-1.0.45
@@ -488,7 +488,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Build and publish crates with pyo3, rust-cpython and cffi bindings"
 HOMEPAGE="https://www.maturin.rs/"
-SNAPSHOT=eb745e08f3eb8c5499420ed1ff4bce974b2ec972
+SNAPSHOT=349a0249385d9773c860a9b81595a3507078a063
 SRC_URI="https://github.com/PyO3/maturin/archive/${SNAPSHOT}.tar.gz -> maturin-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/maturin-${SNAPSHOT}"
 

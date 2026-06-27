@@ -6,7 +6,7 @@ MAINPV=1.0.8
 
 DESCRIPTION="a high-quality data compressor"
 HOMEPAGE="https://sourceware.org/bzip2/"
-SNAPSHOT=af79253677ad98d6dfe11ea315ee9947d86586d3
+SNAPSHOT=f153ef257a8e8901d8f8ed96fd1a2467806e8755
 SRC_URI="https://github.com/1g4-mirror/bzip2/archive/${SNAPSHOT}.tar.gz -> bzip2-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/bzip2-${SNAPSHOT}"
 

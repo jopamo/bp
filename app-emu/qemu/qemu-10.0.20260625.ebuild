@@ -6,7 +6,7 @@ inherit flag-o-matic xdg
 
 DESCRIPTION="QEMU with enhanced support for multiple architectures and options"
 HOMEPAGE="https://www.qemu.org/"
-SNAPSHOT=4fef525eea261a68d369914af670174f162a2798
+SNAPSHOT=e3ad0582fdcec5c194835b0b4e8342cdc197b5cb
 SOFTFLOAT_SNAPSHOT=a0c6494cdc11865811dec815d5c0049fba9d82a8
 TESTFLOAT_SNAPSHOT=e7af9751d9f9fd3b47911f51a5cfd08af256a9ab
 SRC_URI="

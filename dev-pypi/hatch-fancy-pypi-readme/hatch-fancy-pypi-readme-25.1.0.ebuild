@@ -11,7 +11,7 @@ inherit distutils-r1
 
 DESCRIPTION="Fancy PyPI READMEs with Hatch"
 HOMEPAGE="https://pypi.org/project/hatch-fancy-pypi-readme/"
-LICENSE="metapackage"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -25,5 +25,6 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/hatchling[${PYTHON_USEDEP}]
 "

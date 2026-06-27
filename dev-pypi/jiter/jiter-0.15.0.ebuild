@@ -162,4 +162,5 @@ S="${WORKDIR}/jiter-0.15.0"
 
 BDEPEND="
 	app-dev/maturin[${PYTHON_USEDEP}]
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 "

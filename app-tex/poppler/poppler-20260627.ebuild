@@ -4,7 +4,7 @@ inherit cmake flag-o-matic toolchain-funcs xdg-utils
 
 DESCRIPTION="PDF rendering library based on the xpdf-3.0 code base"
 HOMEPAGE="https://poppler.freedesktop.org/"
-SNAPSHOT=3ef748f952ee82fe5153276aec8e67c0b1a5e9cc
+SNAPSHOT=b23024c43fa04d8f96f1ec09a6a6c25b4a035126
 SRC_URI="https://gitlab.freedesktop.org/poppler/poppler/-/archive/${SNAPSHOT}/poppler-${SNAPSHOT}.tar.bz2 -> poppler-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/poppler-${SNAPSHOT}"
 

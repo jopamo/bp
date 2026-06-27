@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="$(ver_cut 1-2).x"
-SNAPSHOT=0cf4e7814d6810ed3c454222bce3aa342d541681
+SNAPSHOT=e966de6dc87e3630f8948a2f64e2243948289c9d
 
 inherit linux-info user toolchain-funcs autotools flag-o-matic qa-policy
 

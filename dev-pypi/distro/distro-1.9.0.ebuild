@@ -19,5 +19,6 @@ SRC_URI="https://files.pythonhosted.org/packages/fc/f8/98eea607f65de6527f8a2e888
 S="${WORKDIR}/distro-1.9.0"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

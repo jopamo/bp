@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="master"
-SNAPSHOT=637f5c8696a6adc9b4519f1cd74aa78492266b7f
+SNAPSHOT=b460816602167718f78a6233164e8875f49b75b2
 
 inherit flag-o-matic prefix qa-policy
 

@@ -19,6 +19,7 @@ SRC_URI="https://files.pythonhosted.org/packages/53/0c/06f8b233b8fd13b9e5ee11424
 S="${WORKDIR}/urllib3-2.7.0"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/hatch-vcs[${PYTHON_USEDEP}]
 	dev-pypi/hatchling[${PYTHON_USEDEP}]
 	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]

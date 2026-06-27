@@ -19,5 +19,6 @@ SRC_URI="https://files.pythonhosted.org/packages/e7/a1/67fe25fac3c7642725500a3f6
 S="${WORKDIR}/charset_normalizer-3.4.7"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

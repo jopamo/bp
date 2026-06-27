@@ -4,7 +4,7 @@ inherit meson
 
 DESCRIPTION="VESA Coordinated Video Timings (CVT) modeline generation library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=bfca4a27f9e8bada2469573653da75536c578946
+SNAPSHOT=049b79b74a42dfdc5feea6dd9b98256269610935
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxcvt/-/archive/${SNAPSHOT}/libxcvt-${SNAPSHOT}.tar.bz2 -> libxcvt-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxcvt-${SNAPSHOT}"
 

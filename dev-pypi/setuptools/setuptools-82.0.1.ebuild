@@ -11,9 +11,13 @@ inherit distutils-r1
 
 DESCRIPTION="Most extensible Python build backend with support for C/C++ extension modules"
 HOMEPAGE="https://pypi.org/project/setuptools/"
-LICENSE="metapackage"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/4f/db/cfac1baf10650ab4d1c111714410d2fbb77ac5a616db26775db562c8fab2/setuptools-82.0.1.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/setuptools-82.0.1"
+
+BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
+"

@@ -19,5 +19,6 @@ SRC_URI="https://files.pythonhosted.org/packages/4a/96/0c57e3e228ffc54074867406b
 S="${WORKDIR}/calver-2025.10.20"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

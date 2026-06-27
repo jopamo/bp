@@ -19,6 +19,7 @@ SRC_URI="https://files.pythonhosted.org/packages/b4/7f/3c194647ecb80ada6937c38a1
 S="${WORKDIR}/pyrfc3339-2.1.0"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

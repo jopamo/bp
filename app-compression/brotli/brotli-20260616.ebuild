@@ -9,7 +9,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Generic-purpose lossless compression algorithm"
 HOMEPAGE="https://github.com/google/brotli"
-SNAPSHOT=f0328d1544dcd1a1f93996aeeeccf222657af25b
+SNAPSHOT=83fe766bc81f7911a78716b8d3b3d01367009995
 SRC_URI="https://github.com/google/brotli/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/brotli-${SNAPSHOT}
 

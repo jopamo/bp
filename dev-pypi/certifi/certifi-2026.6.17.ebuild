@@ -15,9 +15,10 @@ LICENSE="MPL-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/f3/ce/ee2ecad540810a79593028e88299baeae54d346cc7a0d94b6199988b89b1/certifi-2026.5.20.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/certifi-2026.5.20"
+SRC_URI="https://files.pythonhosted.org/packages/c9/c7/424b75da314c1045981bd9777432fad05a9e0c69daa4ed7e308bbaffe405/certifi-2026.6.17.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/certifi-2026.6.17"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

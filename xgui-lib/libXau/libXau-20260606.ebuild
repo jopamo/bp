@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="X.Org X authorization library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=03d51d05a093327e2889b8df2c32a58a4b381133
+SNAPSHOT=14ba0f63c4ba2229dd17574134332767bded9018
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXau/-/archive/${SNAPSHOT}/libXau-${SNAPSHOT}.tar.bz2 -> libXau-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxau-${SNAPSHOT}"
 

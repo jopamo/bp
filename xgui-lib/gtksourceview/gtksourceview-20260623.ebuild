@@ -4,7 +4,7 @@ inherit meson xdg
 
 DESCRIPTION="Syntax highlighting source code editor widget for GTK"
 HOMEPAGE="https://wiki.gnome.org/Projects/GtkSourceView"
-SNAPSHOT=05ffbbae6e6459a89eb6515be1a3531ab4e24362
+SNAPSHOT=232fe36403ef4b9c5248a22bc9d35bf14fc1292e
 SRC_URI="https://gitlab.gnome.org/GNOME/gtksourceview/-/archive/${SNAPSHOT}/gtksourceview-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/gtksourceview-${SNAPSHOT}"
 

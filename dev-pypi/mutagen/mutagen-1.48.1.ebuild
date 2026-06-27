@@ -7,22 +7,18 @@ PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517="setuptools"
 
-inherit distutils-r1 pypi
+inherit distutils-r1
 
 DESCRIPTION="read and write audio tags for many formats"
-HOMEPAGE="https://github.com/quodlibet/mutagen"
+HOMEPAGE="https://mutagen.readthedocs.io"
 LICENSE="GPL-2.0-or-later"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-PYPI_PN="mutagen"
-
-# lockstep-pypi-deps: begin
-RDEPEND+="
-	dev-pypi/python-afl
-"
-# lockstep-pypi-deps: end
+SRC_URI="https://files.pythonhosted.org/packages/df/70/1675da133ea92227da41bf5b24e1c66be597ff736a1533ade41da986852f/mutagen-1.48.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/mutagen-1.48.1"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

@@ -4,7 +4,7 @@ inherit autotools linux-info qa-policy
 
 DESCRIPTION="programming interface (API) to the in-kernel connection tracking state table"
 HOMEPAGE="https://www.netfilter.org/projects/libnetfilter_conntrack/"
-SNAPSHOT=7e5397b9167bdd7597be809b8f088ff333e1ad31
+SNAPSHOT=a88a64002a085959c280b33fb0eafe54429bf910
 SRC_URI="https://github.com/1g4-mirror/libnetfilter_conntrack/archive/${SNAPSHOT}.tar.gz -> libnetfilter_conntrack-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libnetfilter_conntrack-${SNAPSHOT}
 

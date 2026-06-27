@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=5ead48047608f4f985d6ba99686bfdb386494475
+SNAPSHOT=ac3a0f402316f8b1e29e6348f4a630adb6512539
 
 inherit go-module
 
@@ -13,8 +13,8 @@ SRC_URI="https://github.com/git-lfs/git-lfs/archive/${SNAPSHOT}.tar.gz -> ${PN}-
 EGO_SUM=(
 	"github.com/alexbrainman/sspi v0.0.0-20210105120005-909beea2cc74"
 	"github.com/alexbrainman/sspi v0.0.0-20210105120005-909beea2cc74/go.mod"
-	"github.com/avast/retry-go v2.4.2+incompatible"
-	"github.com/avast/retry-go v2.4.2+incompatible/go.mod"
+	"github.com/avast/retry-go v3.0.0+incompatible"
+	"github.com/avast/retry-go v3.0.0+incompatible/go.mod"
 	"github.com/cpuguy83/go-md2man/v2 v2.0.2/go.mod"
 	"github.com/davecgh/go-spew v1.1.0/go.mod"
 	"github.com/davecgh/go-spew v1.1.1"

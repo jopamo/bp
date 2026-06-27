@@ -1,8 +1,8 @@
-DIST git-lfs-5ead48047608f4f985d6ba99686bfdb386494475.tar.gz 731088 BLAKE3 639686fbd5a03b783fe07e725e27b1a9b0e75ebbc1e3d7eb1422c7b1cfc4c58d
+DIST git-lfs-ac3a0f402316f8b1e29e6348f4a630adb6512539.tar.gz 732015 BLAKE3 e930d0d8fe7c17b57bb2eb9df5331ea579b00dd3374af039c324399530228bc9
 DIST github.com%2Falexbrainman%2Fsspi%2F@v%2Fv0.0.0-20210105120005-909beea2cc74.mod 45 BLAKE3 96f50c24da82e713c136668be09cc1fc18ebce5e1284a647d50f294fe5ffaf9a
 DIST github.com%2Falexbrainman%2Fsspi%2F@v%2Fv0.0.0-20210105120005-909beea2cc74.zip 38804 BLAKE3 1f046f6958d9856bb32c369ae06131f97ef8dc7d771ddb010324acc590ff901f
-DIST github.com%2Favast%2Fretry-go%2F@v%2Fv2.4.2+incompatible.mod 33 BLAKE3 517ba085787a9aaefdf82131986e387fd200c3a0bbeba602a7eec2c6a95b280d
-DIST github.com%2Favast%2Fretry-go%2F@v%2Fv2.4.2+incompatible.zip 12642 BLAKE3 4d9ae76e5a527f4cbb237f045899723ec580fefcfaeb830dc4fea25239062fb6
+DIST github.com%2Favast%2Fretry-go%2F@v%2Fv3.0.0+incompatible.mod 33 BLAKE3 517ba085787a9aaefdf82131986e387fd200c3a0bbeba602a7eec2c6a95b280d
+DIST github.com%2Favast%2Fretry-go%2F@v%2Fv3.0.0+incompatible.zip 16357 BLAKE3 2a1373c0dde7dc5576af346bbc86c0a31a709119479b0480742890054fb6dddf
 DIST github.com%2Fcpuguy83%2Fgo-md2man%2Fv2%2F@v%2Fv2.0.2.mod 100 BLAKE3 14288d674f98ebe40281bd63b2b7ce131493a5321562430aa9f3db4f8885cf92
 DIST github.com%2Fdavecgh%2Fgo-spew%2F@v%2Fv1.1.0.mod 34 BLAKE3 36694e240a8af33d11475fda5b5a0c69927af55322c256a9bbbd77abb8d6c594
 DIST github.com%2Fdavecgh%2Fgo-spew%2F@v%2Fv1.1.1.mod 34 BLAKE3 36694e240a8af33d11475fda5b5a0c69927af55322c256a9bbbd77abb8d6c594

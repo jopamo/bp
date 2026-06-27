@@ -4,7 +4,7 @@ inherit cmake qa-policy
 
 DESCRIPTION="MMX, SSE, and SSE2 SIMD accelerated JPEG library"
 HOMEPAGE="https://libjpeg-turbo.org/"
-SNAPSHOT=25b62127312b5df12a9d3ed4a000595d796bfb78
+SNAPSHOT=01d607bd618334ccb5bfdd7e1891dda11d58036c
 SRC_URI="https://github.com/libjpeg-turbo/libjpeg-turbo/archive/${SNAPSHOT}.tar.gz -> libjpeg-turbo-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libjpeg-turbo-${SNAPSHOT}"
 

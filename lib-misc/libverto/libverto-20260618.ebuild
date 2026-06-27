@@ -5,7 +5,7 @@ inherit autotools qa-policy
 DESCRIPTION="an async event loop abstraction library"
 HOMEPAGE="https://github.com/latchset/libverto"
 
-SNAPSHOT=0dc4e8f1fc9184a2b45cb00e3c7aebcb9a1d53d3
+SNAPSHOT=8e944f22dcce2aa1f37c517e7881dd49d4d631ee
 SRC_URI="https://github.com/latchset/libverto/archive/${SNAPSHOT}.tar.gz -> libverto-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libverto-${SNAPSHOT}"
 

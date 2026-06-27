@@ -4,7 +4,7 @@ inherit flag-o-matic qa-policy toolchain-funcs
 
 DESCRIPTION="Free file archiver for extremely high compression"
 HOMEPAGE="https://www.7-zip.org/ https://sourceforge.net/projects/sevenzip/"
-SNAPSHOT=8c63d71ff886bda90c86db28466287f977374237
+SNAPSHOT=f9d78aff31a5f2521ae7ddbdc97c4a8855808959
 SRC_URI="https://github.com/ip7z/7zip/archive/${SNAPSHOT}.tar.gz -> 7zip-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/7zip-${SNAPSHOT}"
 

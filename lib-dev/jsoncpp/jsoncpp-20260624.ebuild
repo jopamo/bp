@@ -4,7 +4,7 @@ inherit cmake qa-policy
 
 DESCRIPTION="C++ JSON reader and writer"
 HOMEPAGE="https://github.com/open-source-parsers/jsoncpp"
-SNAPSHOT=d4d072177213b117fb81d4cfda140de090616161
+SNAPSHOT=b5ab350ff38ed25fa5b6e0dc30820f2215cad345
 SRC_URI="https://github.com/open-source-parsers/jsoncpp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/jsoncpp-${SNAPSHOT}
 

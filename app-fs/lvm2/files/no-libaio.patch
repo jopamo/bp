@@ -1,8 +1,7 @@
 diff --git a/lib/config/defaults.h b/lib/config/defaults.h
-index 0e0f178..eef9575 100644
 --- a/lib/config/defaults.h
 +++ b/lib/config/defaults.h
-@@ -68,7 +68,11 @@
+@@ -67,7 +67,11 @@
  #define DEFAULT_METADATA_READ_ONLY 0
  #define DEFAULT_LVDISPLAY_SHOWS_FULL_DEVICE_PATH 0
  #define DEFAULT_UNKNOWN_DEVICE_NAME "[unknown]"
@@ -15,7 +14,6 @@ index 0e0f178..eef9575 100644
  #define DEFAULT_SANLOCK_LV_EXTEND_MB 256
  #define DEFAULT_SANLOCK_ALIGN_SIZE 8 /* in MiB, applies to 4K disks only */
 diff --git a/lib/device/bcache.c b/lib/device/bcache.c
-index e1dbe0e..6017f4b 100644
 --- a/lib/device/bcache.c
 +++ b/lib/device/bcache.c
 @@ -27,7 +27,9 @@
@@ -28,17 +26,18 @@ index e1dbe0e..6017f4b 100644
  #include <unistd.h>
  #include <linux/fs.h>
  #include <sys/user.h>
-@@ -38,6 +40,9 @@
+@@ -38,6 +40,10 @@
  static int _fd_table_size = 0;
  static int *_fd_table = NULL;
  
 +static int _last_byte_di;
 +static uint64_t _last_byte_offset;
-+static int _last_byte_sector_size;
- 
- //----------------------------------------------------------------
- 
-@@ -58,6 +63,8 @@ static inline struct dm_list *_list_pop(struct dm_list *head)
++static size_t _last_byte_sector_size;
++
+ static inline int _di_valid(int di)
+ {
+ 	if (di < 0 || di >= _fd_table_size) {
+@@ -68,6 +74,8 @@
  
  //----------------------------------------------------------------
  
@@ -47,18 +46,18 @@ index e1dbe0e..6017f4b 100644
  struct control_block {
  	struct dm_list list;
  	void *context;
-@@ -166,10 +173,6 @@ static void _async_destroy(struct io_engine *ioe)
+@@ -176,10 +184,6 @@
  	free(e);
  }
  
 -static int _last_byte_di;
 -static uint64_t _last_byte_offset;
--static int _last_byte_sector_size;
+-static size_t _last_byte_sector_size;
 -
  static bool _async_issue(struct io_engine *ioe, enum dir d, int di,
  			 sector_t sb, sector_t se, void *data, void *context)
  {
-@@ -418,6 +421,15 @@ struct io_engine *create_async_io_engine(void)
+@@ -428,6 +432,15 @@
  	return &e->e;
  }
  

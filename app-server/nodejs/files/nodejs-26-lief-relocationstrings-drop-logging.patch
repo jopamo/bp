@@ -1,0 +1,10 @@
+diff --git a/deps/LIEF/src/ELF/RelocationStrings.cpp b/deps/LIEF/src/ELF/RelocationStrings.cpp
+--- a/deps/LIEF/src/ELF/RelocationStrings.cpp
++++ b/deps/LIEF/src/ELF/RelocationStrings.cpp
+@@ -15,7 +15,6 @@
+  */
+ #include "LIEF/ELF/Relocation.hpp"
+ #include "frozen.hpp"
+-#include "logging.hpp"
+ 
+ #define ELF_RELOC(X, _) std::pair(Relocation::TYPE::X, #X),

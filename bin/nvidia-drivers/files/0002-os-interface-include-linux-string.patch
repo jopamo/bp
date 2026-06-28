@@ -8,3 +8,15 @@ diff --git a/kernel-open/nvidia/os-interface.c b/kernel-open/nvidia/os-interface
  #if defined(CONFIG_LOCKDEP)
  #include <linux/lockdep.h>
  #endif // CONFIG_LOCKDEP
+@@ -761,7 +762,10 @@ void NV_API_CALL os_get_current_process_name(char *buf, NvU32 len)
+ {
++    if (len == 0)
++        return;
++
+     task_lock(current);
+-    strncpy(buf, current->comm, len - 1);
+-    buf[len - 1] = '\0';
++    memset(buf, 0, len);
++    strscpy(buf, current->comm, len);
+     task_unlock(current);
+ }

@@ -43,6 +43,10 @@ BDEPEND="
 	test? ( app-net/curl )
 "
 
+PATCHES=(
+	"${FILESDIR}"/nodejs-26-icu79-regexp-special-case.patch
+)
+
 src_prepare() {
 	sed -i -e "s/NODE_VERSION_IS_RELEASE\ 0/NODE_VERSION_IS_RELEASE\ 1/g" "src/node_version.h" || die
 

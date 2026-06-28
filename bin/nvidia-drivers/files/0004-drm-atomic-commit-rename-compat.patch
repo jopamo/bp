@@ -1,0 +1,70 @@
+diff --git a/kernel-open/conftest.sh b/kernel-open/conftest.sh
+index 386b324..27c0649 100755
+--- a/kernel-open/conftest.sh
++++ b/kernel-open/conftest.sh
+@@ -4281,6 +4281,23 @@ compile_test() {
+             compile_check_conftest "$CODE" "NV_DRM_FBDEV_TTM_SETUP_PRESENT" "" "functions"
+         ;;
+ 
++        drm_atomic_commit_put)
++            #
++            # Determine whether drm_atomic_commit_put() is present.
++            #
++            # Commit 5164f7e7ff8e ("drm: Rename struct drm_atomic_state to
++            # drm_atomic_commit") renamed drm_atomic_state_put() to
++            # drm_atomic_commit_put().
++            #
++            CODE="
++            #include <drm/drm_atomic.h>
++            void conftest_drm_atomic_commit_put(void) {
++                drm_atomic_commit_put();
++            }"
++
++            compile_check_conftest "$CODE" "NV_DRM_ATOMIC_COMMIT_PUT_PRESENT" "" "functions"
++        ;;
++
+         drm_client_setup)
+             #
+             # Determine whether drm_client_setup is present.
+diff --git a/kernel-open/nvidia-drm/nvidia-drm-conftest.h b/kernel-open/nvidia-drm/nvidia-drm-conftest.h
+--- a/kernel-open/nvidia-drm/nvidia-drm-conftest.h
++++ b/kernel-open/nvidia-drm/nvidia-drm-conftest.h
+@@ -89,4 +89,26 @@
+ 
++/*
++ * Commit 5164f7e7ff8e ("drm: Rename struct drm_atomic_state to
++ * drm_atomic_commit") renamed the top-level atomic state type and helpers.
++ * Keep using the legacy names throughout the NVIDIA DRM sources when
++ * building against kernels with the new API.
++ */
++#if defined(NV_DRM_ATOMIC_COMMIT_PUT_PRESENT)
++#define drm_atomic_state drm_atomic_commit
++#define drm_atomic_state_alloc drm_atomic_commit_alloc
++#define drm_atomic_state_init drm_atomic_commit_init
++#define drm_atomic_state_get drm_atomic_commit_get
++#define drm_atomic_state_put drm_atomic_commit_put
++#define drm_atomic_state_default_clear drm_atomic_commit_default_clear
++#define drm_atomic_state_default_release drm_atomic_commit_default_release
++#ifndef NV_DRM_CRTC_ATOMIC_CHECK_HAS_ATOMIC_STATE_ARG
++#define NV_DRM_CRTC_ATOMIC_CHECK_HAS_ATOMIC_STATE_ARG
++#endif
++#ifndef NV_DRM_PLANE_ATOMIC_CHECK_HAS_ATOMIC_STATE_ARG
++#define NV_DRM_PLANE_ATOMIC_CHECK_HAS_ATOMIC_STATE_ARG
++#endif
++#endif
++
+ /*
+  * Adapt to quirks in FreeBSD's Linux kernel compatibility layer.
+  */
+diff --git a/kernel-open/nvidia-drm/nvidia-drm-sources.mk b/kernel-open/nvidia-drm/nvidia-drm-sources.mk
+index e656f04..ac0d229 100644
+--- a/kernel-open/nvidia-drm/nvidia-drm-sources.mk
++++ b/kernel-open/nvidia-drm/nvidia-drm-sources.mk
+@@ -57,6 +57,7 @@ NV_CONFTEST_FUNCTION_COMPILE_TESTS += aperture_remove_conflicting_devices
+ NV_CONFTEST_FUNCTION_COMPILE_TESTS += aperture_remove_conflicting_pci_devices
+ NV_CONFTEST_FUNCTION_COMPILE_TESTS += drm_fbdev_generic_setup
+ NV_CONFTEST_FUNCTION_COMPILE_TESTS += drm_fbdev_ttm_setup
++NV_CONFTEST_FUNCTION_COMPILE_TESTS += drm_atomic_commit_put
+ NV_CONFTEST_FUNCTION_COMPILE_TESTS += drm_client_setup
+ NV_CONFTEST_FUNCTION_COMPILE_TESTS += drm_connector_attach_hdr_output_metadata_property
+ NV_CONFTEST_FUNCTION_COMPILE_TESTS += drm_plane_create_color_properties

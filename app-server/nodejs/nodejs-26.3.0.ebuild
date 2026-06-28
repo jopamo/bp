@@ -44,6 +44,7 @@ BDEPEND="
 "
 
 PATCHES=(
+	"${FILESDIR}"/nodejs-26-lief-relocationstrings-drop-logging.patch
 	"${FILESDIR}"/nodejs-26-icu79-regexp-special-case.patch
 )
 

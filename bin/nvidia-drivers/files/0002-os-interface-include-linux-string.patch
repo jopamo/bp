@@ -1,0 +1,10 @@
+diff --git a/kernel-open/nvidia/os-interface.c b/kernel-open/nvidia/os-interface.c
+--- a/kernel-open/nvidia/os-interface.c
++++ b/kernel-open/nvidia/os-interface.c
+@@ -40,5 +40,6 @@
+ #include <linux/pid.h>
+ #include <linux/pid_namespace.h>
++#include <linux/string.h>
+ #if defined(CONFIG_LOCKDEP)
+ #include <linux/lockdep.h>
+ #endif // CONFIG_LOCKDEP

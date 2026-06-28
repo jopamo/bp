@@ -1,0 +1,24 @@
+diff --git a/deps/v8/src/regexp/gen-regexp-special-case.cc b/deps/v8/src/regexp/gen-regexp-special-case.cc
+--- a/deps/v8/src/regexp/gen-regexp-special-case.cc
++++ b/deps/v8/src/regexp/gen-regexp-special-case.cc
+@@ -71,6 +71,11 @@ void PrintSpecial(std::ofstream& out) {
+     for (int32_t j = 0; j < current.getRangeCount(); j++) {
+       for (UChar32 c = current.getRangeStart(j); c <= current.getRangeEnd(j);
+            c++) {
++        // Non-unicode ignoreCase matching canonicalizes UTF-16 code units, not
++        // supplementary-plane code points. Newer ICU releases can surface
++        // non-BMP members here (for example U+1DF95 in the sharp-s closure),
++        // so skip them rather than tripping Canonicalize()'s BMP-only check.
++        if (c > 0xffff) continue;
+         if (c == i) {
+           continue;
+         }
+@@ -109,6 +114,7 @@ void PrintSpecial(std::ofstream& out) {
+       current.removeAll(ignore);
+       for (int32_t j = 0; j < current.getRangeCount(); j++) {
+         for (UChar32 c2 = current.getRangeStart(j);
+              c2 <= current.getRangeEnd(j); c2++) {
++          if (c2 > 0xffff) continue;
+           CHECK_EQ(canonical, RegExpCaseFolding::Canonicalize(c2));
+         }
+       }

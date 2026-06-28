@@ -1,0 +1,68 @@
+diff --git a/kernel-open/nvidia/linux_nvswitch.c b/kernel-open/nvidia/linux_nvswitch.c
+--- a/kernel-open/nvidia/linux_nvswitch.c
++++ b/kernel-open/nvidia/linux_nvswitch.c
+@@ -2059,7 +2059,7 @@
+         return -NVL_ERR_GENERIC;
+     }
+ 
+-    strncpy(regkey_val, regkey_val_start, regkey_val_len);
++    memcpy(regkey_val, regkey_val_start, regkey_val_len);
+     regkey_val[regkey_val_len] = '\0';
+ 
+     if (nvswitch_os_strtouint(regkey_val, data) != 0)
+@@ -2414,7 +2414,17 @@
+     NvLength length
+ )
+ {
+-    return strncpy(dest, src, length);
++    NvLength src_len;
++
++    if (length == 0)
++        return dest;
++
++    src_len = strnlen(src, length);
++    memcpy(dest, src, src_len);
++    if (src_len < length)
++        memset(dest + src_len, 0, length - src_len);
++
++    return dest;
+ }
+ 
+ int
+diff --git a/kernel-open/nvidia-modeset/nvidia-modeset-linux.c b/kernel-open/nvidia-modeset/nvidia-modeset-linux.c
+--- a/kernel-open/nvidia-modeset/nvidia-modeset-linux.c
++++ b/kernel-open/nvidia-modeset/nvidia-modeset-linux.c
+@@ -666,7 +666,17 @@
+ 
+ char* nvkms_strncpy(char *dest, const char *src, size_t n)
+ {
+-    return strncpy(dest, src, n);
++    size_t src_len;
++
++    if (n == 0)
++        return dest;
++
++    src_len = strnlen(src, n);
++    memcpy(dest, src, src_len);
++    if (src_len < n)
++        memset(dest + src_len, 0, n - src_len);
++
++    return dest;
+ }
+ 
+ void nvkms_usleep(NvU64 usec)
+diff --git a/kernel-open/nvidia-uvm/uvm_pmm_gpu.c b/kernel-open/nvidia-uvm/uvm_pmm_gpu.c
+--- a/kernel-open/nvidia-uvm/uvm_pmm_gpu.c
++++ b/kernel-open/nvidia-uvm/uvm_pmm_gpu.c
+@@ -2804,7 +2804,10 @@
+             size_t size;
+             size_t align;
+             if (level == 0) {
+-                strncpy(chunk_split_cache[level].name, "uvm_gpu_chunk_t", sizeof(chunk_split_cache[level].name) - 1);
++                snprintf(chunk_split_cache[level].name,
++                         sizeof(chunk_split_cache[level].name),
++                         "%s",
++                         "uvm_gpu_chunk_t");
+                 size = sizeof(uvm_gpu_chunk_t);
+                 align = __alignof__(uvm_gpu_chunk_t);
+             } else {

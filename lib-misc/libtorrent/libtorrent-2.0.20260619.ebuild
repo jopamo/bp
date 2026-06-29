@@ -2,7 +2,7 @@
 
 BRANCH_NAME="RC_$(ver_cut 1)_$(ver_cut 2)"
 
-inherit cmake flag-o-matic
+inherit cmake
 
 DESCRIPTION="C++ BitTorrent implementation focusing on efficiency and scalability"
 HOMEPAGE="http://libtorrent.org"
@@ -30,8 +30,6 @@ DEPEND="${RDEPEND}
 	app-crypto/botan
 	app-build/libtool
 "
-
-append-cxxflags -lboost_system
 
 src_prepare() {
 	rm -rf "${S}/deps/asio-gnutls" || die

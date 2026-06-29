@@ -51,6 +51,13 @@ src_install() {
 	local ecudadir="${EPREFIX}${cudadir}"
 	local target=x86_64-linux
 	local targetdir="${cudadir}/targets/${target}"
+	# CMake seeds CMAKE_CUDA_ARCHITECTURES from CUDAARCHS.  Keep the
+	# current 12Xa real Blackwell targets out of the distro default: nvcc's
+	# cicc can segfault while compiling heavy template users.  Keep Blackwell
+	# full-speed by shipping family PTX; the driver JITs native code for the
+	# installed GPU. Users can override CUDAARCHS for arch-specific SASS once
+	# the CUDA compiler path is fixed.
+	local cudaarches="75-virtual;80-virtual;86-real;89-real;90-virtual;120f-virtual"
 
 	dodir "${cudadir}"
 	mkdir -p "${ED}${cudadir}" || die "mkdir ${ED}${cudadir} failed"
@@ -126,6 +133,7 @@ src_install() {
 		CUDA_PATH=${ecudadir}
 		CUDAToolkit_ROOT=${ecudadir}
 		CUDACXX=${ecudadir}/bin/nvcc
+		CUDAARCHS=${cudaarches}
 		PATH=${ecudadir}/bin:${ecudadir}/nvvm/bin
 		ROOTPATH=${ecudadir}/bin:${ecudadir}/nvvm/bin
 		PKG_CONFIG_PATH=${ecudadir}/pkgconfig:${ecudadir}/pkg-config
@@ -138,6 +146,7 @@ src_install() {
 		export CUDA_PATH=${ecudadir}
 		export CUDAToolkit_ROOT=${ecudadir}
 		export CUDACXX=${ecudadir}/bin/nvcc
+		export CUDAARCHS='${cudaarches}'
 		export PKG_CONFIG_PATH=${ecudadir}/pkgconfig:${ecudadir}/pkg-config:\${PKG_CONFIG_PATH}
 		export PATH=${ecudadir}/bin:${ecudadir}/nvvm/bin:\${PATH}
 	EOF

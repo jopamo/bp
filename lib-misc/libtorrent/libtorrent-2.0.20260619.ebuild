@@ -9,7 +9,7 @@ HOMEPAGE="http://libtorrent.org"
 SNAPSHOT=6683f95153134a9cb93c1b7c3bdd05020d7efbf1
 ASIO_GNUTLS_SNAPSHOT=a57d4d36923c5fafa9698e14be16b8bc2913700a
 TRY_SIGNAL_SNAPSHOT=105cce59972f925a33aa6b1c3109e4cd3caf583d
-LIBSIMULATOR_SNAPSHOT=c2f3bbefe354905719a575ed11683b1ebbc42053
+LIBSIMULATOR_SNAPSHOT=a8b89f3eb9246ff7fbe7166a716d0039d42e8442
 SRC_URI="
 	https://github.com/arvidn/libtorrent/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz
 	https://github.com/paullouisageneau/boost-asio-gnutls/archive/${ASIO_GNUTLS_SNAPSHOT}.tar.gz -> ${PN}-asio-gnutls-${ASIO_GNUTLS_SNAPSHOT}.tar.gz

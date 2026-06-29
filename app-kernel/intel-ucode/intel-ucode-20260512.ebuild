@@ -2,7 +2,7 @@
 
 DESCRIPTION="Intel CPU microcode update blobs for early-boot loading"
 HOMEPAGE="https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files"
-SNAPSHOT=250941fb670645d7d91f761cc63656ad3a1ec367
+SNAPSHOT=98f8d817ca3d560c48ae988bd805d1b53b48a631
 SRC_URI="https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/Intel-Linux-Processor-Microcode-Data-Files-${SNAPSHOT}"
 

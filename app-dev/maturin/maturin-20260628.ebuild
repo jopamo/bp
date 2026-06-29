@@ -185,7 +185,7 @@ CARGO_DEPS="
 	rust-crates/mailparse-0.16.1
 	rust-crates/matchers-0.2.0
 	rust-crates/memchr-2.8.0
-	rust-crates/memmap2-0.9.10
+	rust-crates/memmap2-0.9.11
 	rust-crates/memo-map-0.3.3
 	rust-crates/mimalloc-0.1.49
 	rust-crates/mime-0.3.17
@@ -488,7 +488,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Build and publish crates with pyo3, rust-cpython and cffi bindings"
 HOMEPAGE="https://www.maturin.rs/"
-SNAPSHOT=349a0249385d9773c860a9b81595a3507078a063
+SNAPSHOT=7093fa762692420794b993a68a9186ba46713fb0
 SRC_URI="https://github.com/PyO3/maturin/archive/${SNAPSHOT}.tar.gz -> maturin-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/maturin-${SNAPSHOT}"
 

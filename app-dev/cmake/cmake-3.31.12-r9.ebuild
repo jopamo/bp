@@ -81,6 +81,30 @@ src_prepare() {
 
     cmake_src_prepare
 
+    # Rolling GCC snapshots can be identified by CMake but fail to publish
+    # CMAKE_CXX_STANDARD_COMPUTED_DEFAULT from the compiler-id probe.  Keep
+    # GNU C++ usable by falling back to CMake's own GNU default-standard table.
+    sed -i \
+        '/__compiler_check_default_language_standard(CXX 3.4 98 6.0 14 11.1 17)/i\
+if(NOT CMAKE_CXX_STANDARD_COMPUTED_DEFAULT OR NOT DEFINED CMAKE_CXX_EXTENSIONS_COMPUTED_DEFAULT)\
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")\
+    if(NOT DEFINED CMAKE_CXX_EXTENSIONS_COMPUTED_DEFAULT)\
+      set(CMAKE_CXX_EXTENSIONS_COMPUTED_DEFAULT ON)\
+    endif()\
+    if(NOT CMAKE_CXX_STANDARD_COMPUTED_DEFAULT)\
+      if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 11.1)\
+        set(CMAKE_CXX_STANDARD_COMPUTED_DEFAULT 17)\
+      elseif(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 6.0)\
+        set(CMAKE_CXX_STANDARD_COMPUTED_DEFAULT 14)\
+      elseif(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 3.4)\
+        set(CMAKE_CXX_STANDARD_COMPUTED_DEFAULT 98)\
+      endif()\
+    endif()\
+  endif()\
+endif()\
+' \
+        Modules/Compiler/GNU-CXX.cmake || die "GNU C++ default-standard fallback patch failed"
+
     # Add gcc libs to the default link paths
     sed -i \
         -e "s|@GENTOO_PORTAGE_GCCLIBDIR@|${EPREFIX}/usr/${CHOST}/lib/|g" \

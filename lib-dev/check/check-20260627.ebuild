@@ -5,7 +5,7 @@ inherit cmake flag-o-matic
 DESCRIPTION="A unit test framework for C"
 HOMEPAGE="https://github.com/libcheck/check"
 
-SNAPSHOT=fb77d3db72b985522813214cb206bc933220871c
+SNAPSHOT=18712be32b77e23d82a044d9290efad3b3ddf798
 SRC_URI="https://github.com/libcheck/check/archive/${SNAPSHOT}.tar.gz -> check-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/check-${SNAPSHOT}"
 

@@ -4,7 +4,7 @@ inherit flag-o-matic libtool toolchain-funcs qa-policy
 
 DESCRIPTION="A high-quality and portable font engine"
 HOMEPAGE="https://www.freetype.org/"
-SNAPSHOT=504707eb960bbb034a384ebca35f037b645f8266
+SNAPSHOT=12f5eb32aedb3e27d47c22b0447dc4363703ed94
 SRC_URI="https://github.com/freetype/freetype/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

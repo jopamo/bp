@@ -130,7 +130,7 @@ inherit cargo lockstep-cargo
 
 DESCRIPTION="A simple, fast and user-friendly alternative to gnu find"
 HOMEPAGE="https://github.com/sharkdp/fd"
-SNAPSHOT=a8a77d21621a11dbe499f1732331448c48ce9b76
+SNAPSHOT=95dc6454d5ca68ec84b8f0a3a42f3eccc8600df5
 SRC_URI="https://github.com/sharkdp/fd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

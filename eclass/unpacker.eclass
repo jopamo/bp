@@ -183,33 +183,47 @@ unpack_makeself() {
 	tar_magic=$(dd if="${tmp}" bs=1 skip=257 count=5 2>/dev/null)
 	rm -f "${tmp}"
 
-	case ${filetype} in
-		*tar\ archive*) decomp=cat ;;
-		bzip2*)         suffix=bz2 ;;
-		gzip*)          suffix=gz  ;;
-		compress*)      suffix=z   ;;
-		XZ*)            suffix=xz  ;;
-		Zstandard*)     suffix=zst ;;
-		lzop*)          suffix=lzo ;;
-		LZ4*)           suffix=lz4 ;;
-		"ASCII text"*)  decomp='base64 -d' ;;
-		data)
-			case ${magic} in
-				1f8b08*)                suffix=gz ;;
-				425a68*)                suffix=bz2 ;;
-				1f9d*|1fa0*)            suffix=z ;;
-				fd377a585a00*)          suffix=xz ;;
-				28b52ffd*)              suffix=zst ;;
-				894c5a4f000d0a1a0a*)    suffix=lzo ;;
-				04224d18*)              suffix=lz4 ;;
-				4c5a4950*)              suffix=lz ;;
-				*)
-					[[ ${tar_magic} == ustar* ]] && decomp=cat
-					;;
-			esac
+	case ${magic} in
+		1f8b08*)                suffix=gz ;;
+		425a68*)                suffix=bz2 ;;
+		1f9d*|1fa0*)            suffix=z ;;
+		fd377a585a00*)          suffix=xz ;;
+		28b52ffd*)              suffix=zst ;;
+		894c5a4f000d0a1a0a*)    suffix=lzo ;;
+		04224d18*)              suffix=lz4 ;;
+		4c5a4950*)              suffix=lz ;;
+		*)
+			[[ ${tar_magic} == ustar* ]] && decomp=cat
 			;;
-		*) ;;
 	esac
+
+	if [[ -z ${decomp} && -z ${suffix} ]]; then
+		case ${filetype} in
+			*tar\ archive*) decomp=cat ;;
+			bzip2*)         suffix=bz2 ;;
+			gzip*)          suffix=gz  ;;
+			compress*)      suffix=z   ;;
+			XZ*)            suffix=xz  ;;
+			Zstandard*)     suffix=zst ;;
+			lzop*)          suffix=lzo ;;
+			LZ4*)           suffix=lz4 ;;
+			"ASCII text"*)  decomp='base64 -d' ;;
+			data)
+				[[ ${tar_magic} == ustar* ]] && decomp=cat
+				;;
+			*) ;;
+		esac
+	fi
+
+	if [[ -z ${decomp} && -z ${suffix} ]]; then
+		case ${filetype} in
+			*\ gzip\ compressed\ data*) suffix=gz ;;
+			*\ bzip2\ compressed\ data*) suffix=bz2 ;;
+			*\ XZ\ compressed\ data*) suffix=xz ;;
+			*\ Zstandard\ compressed\ data*) suffix=zst ;;
+			*) ;;
+		esac
+	fi
 
 	[[ -n ${decomp} || -n ${suffix} ]] \
 		|| die "unpack_makeself: unknown payload type '${filetype}' in ${src##*/}"

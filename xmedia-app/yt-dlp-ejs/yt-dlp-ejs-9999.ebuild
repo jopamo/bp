@@ -22,7 +22,15 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="app-server/nodejs"
 
+BDEPEND="
+	dev-pypi/hatch-vcs[${PYTHON_USEDEP}]
+"
+
 RESTRICT="test network-sandbox"
+
+# hatch-vcs calls setuptools-scm without a dist_name override, so the generic
+# pretend-version variable is the reliable one here.
+export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
 
 python_compile() {
 	local npm_home

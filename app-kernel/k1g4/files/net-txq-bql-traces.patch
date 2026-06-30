@@ -763,12 +763,13 @@ index f2fa34b1d..8a445510f 100644
  #include <linux/slab.h>
  
  #include <linux/unaligned.h>
-@@ -66,3 +68,128 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(tcp_bad_csum);
+@@ -66,3 +68,135 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(tcp_bad_csum);
  EXPORT_TRACEPOINT_SYMBOL_GPL(udp_fail_queue_rcv_skb);
  
  EXPORT_TRACEPOINT_SYMBOL_GPL(sk_data_ready);
 +
 +DEFINE_STATIC_KEY_FALSE(net_txq_trace_key);
++EXPORT_SYMBOL_GPL(net_txq_trace_key);
 +
 +static bool net_txq_trace_param;
 +
@@ -833,6 +834,7 @@ index f2fa34b1d..8a445510f 100644
 +			       netdev_txq_trace_inflight(snap), snap->limit,
 +			       snap->adj_limit, snap->avail);
 +}
++EXPORT_SYMBOL_GPL(netdev_txq_trace_stop);
 +
 +void netdev_txq_trace_wake(
 +	struct netdev_queue *txq, unsigned long caller, bool did_wake,
@@ -845,6 +847,7 @@ index f2fa34b1d..8a445510f 100644
 +			       netdev_txq_trace_inflight(snap), snap->limit,
 +			       snap->adj_limit, snap->avail);
 +}
++EXPORT_SYMBOL_GPL(netdev_txq_trace_wake);
 +
 +void netdev_txq_trace_schedule(
 +	struct netdev_queue *txq, unsigned long caller, bool did_schedule,
@@ -857,6 +860,7 @@ index f2fa34b1d..8a445510f 100644
 +				   netdev_txq_trace_inflight(snap), snap->limit,
 +				   snap->adj_limit, snap->avail);
 +}
++EXPORT_SYMBOL_GPL(netdev_txq_trace_schedule);
 +
 +void netdev_txq_trace_reset(
 +	struct netdev_queue *txq, unsigned long caller,
@@ -867,6 +871,7 @@ index f2fa34b1d..8a445510f 100644
 +	trace_net_dev_txq_reset(txq, netdev_txq_trace_index(txq), caller, true,
 +				state_before, state_after, before, after);
 +}
++EXPORT_SYMBOL_GPL(netdev_txq_trace_reset);
 +
 +void netdev_txq_trace_sent(
 +	struct netdev_queue *txq, unsigned long caller, unsigned int bytes,
@@ -879,6 +884,7 @@ index f2fa34b1d..8a445510f 100644
 +			       bytes, xmit_more, doorbell, state_before,
 +			       state_after, before, after);
 +}
++EXPORT_SYMBOL_GPL(netdev_txq_trace_sent);
 +
 +void netdev_txq_trace_completed(
 +	struct netdev_queue *txq, unsigned long caller,
@@ -892,3 +898,4 @@ index f2fa34b1d..8a445510f 100644
 +				    state_before, state_after, before,
 +				    after);
 +}
++EXPORT_SYMBOL_GPL(netdev_txq_trace_completed);

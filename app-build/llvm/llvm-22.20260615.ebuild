@@ -252,6 +252,13 @@ src_configure() {
 		# which then trips libunwind's hard configure check. Keep these probes
 		# compile-only; the real runtime build still performs the actual links.
 		runtimes_cmake_args+=( -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY )
+		# But that compile-only mode also makes check_library_exists() lie:
+		# any referenced symbol appears "found" because no link ever happens.
+		# libc++abi then hard-defines HAVE___CXA_THREAD_ATEXIT_IMPL and later
+		# tries to link against glibc's __cxa_thread_atexit_impl, which musl
+		# does not provide. Force the cache back to reality on musl so
+		# libc++abi uses its weak-symbol/fallback path instead.
+		runtimes_cmake_args+=( -DLIBCXXABI_HAS_CXA_THREAD_ATEXIT_IMPL=OFF )
 	fi
 
     echo "Selected LLVM targets: ${LLVM_TARGETS}"

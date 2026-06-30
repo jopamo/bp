@@ -342,7 +342,7 @@ diff --git a/include/trace/events/net.h b/include/trace/events/net.h
 index dbc2c5598..a2da1e6b7 100644
 --- a/include/trace/events/net.h
 +++ b/include/trace/events/net.h
-@@ -126,8 +126,348 @@ TRACE_EVENT(net_dev_xmit_timeout,
+@@ -126,8 +126,340 @@ TRACE_EVENT(net_dev_xmit_timeout,
  	),
  
  	TP_printk("dev=%s driver=%s queue=%d net_cookie=%llu",
@@ -350,7 +350,7 @@ index dbc2c5598..a2da1e6b7 100644
 -		__entry->queue_index, __entry->net_cookie)
 +		  __get_str(name), __get_str(driver),
 +		  __entry->queue_index, __entry->net_cookie)
-+);
+ );
 +
 +DECLARE_EVENT_CLASS(net_dev_txq_state_template,
 +
@@ -454,17 +454,11 @@ index dbc2c5598..a2da1e6b7 100644
 +	TP_PROTO(const struct netdev_queue *txq, u16 queue_index,
 +		 unsigned long caller, bool effective,
 +		 unsigned long state_before, unsigned long state_after,
-+		 u32 num_queued_before, u32 num_completed_before,
-+		 u32 inflight_before, u32 limit_before, u32 adj_limit_before,
-+		 int avail_before, u32 num_queued_after, u32 num_completed_after,
-+		 u32 inflight_after, u32 limit_after, u32 adj_limit_after,
-+		 int avail_after),
++		 const struct netdev_txq_trace_dql_snapshot *before,
++		 const struct netdev_txq_trace_dql_snapshot *after),
 +
 +	TP_ARGS(txq, queue_index, caller, effective, state_before,
-+		state_after, num_queued_before, num_completed_before,
-+		inflight_before, limit_before, adj_limit_before,
-+		avail_before, num_queued_after, num_completed_after,
-+		inflight_after, limit_after, adj_limit_after, avail_after),
++		state_after, before, after),
 +
 +	TP_STRUCT__entry(
 +		__string(	name,		txq->dev->name		)
@@ -499,18 +493,22 @@ index dbc2c5598..a2da1e6b7 100644
 +		__entry->state_before = state_before;
 +		__entry->state_after = state_after;
 +		__entry->trans_start = READ_ONCE(txq->trans_start);
-+		__entry->num_queued_before = num_queued_before;
-+		__entry->num_completed_before = num_completed_before;
-+		__entry->inflight_before = inflight_before;
-+		__entry->limit_before = limit_before;
-+		__entry->adj_limit_before = adj_limit_before;
-+		__entry->avail_before = avail_before;
-+		__entry->num_queued_after = num_queued_after;
-+		__entry->num_completed_after = num_completed_after;
-+		__entry->inflight_after = inflight_after;
-+		__entry->limit_after = limit_after;
-+		__entry->adj_limit_after = adj_limit_after;
-+		__entry->avail_after = avail_after;
++		__entry->num_queued_before = before ? before->num_queued : 0;
++		__entry->num_completed_before = before ? before->num_completed : 0;
++		__entry->inflight_before = before &&
++			before->num_queued >= before->num_completed ?
++			before->num_queued - before->num_completed : 0;
++		__entry->limit_before = before ? before->limit : 0;
++		__entry->adj_limit_before = before ? before->adj_limit : 0;
++		__entry->avail_before = before ? before->avail : 0;
++		__entry->num_queued_after = after ? after->num_queued : 0;
++		__entry->num_completed_after = after ? after->num_completed : 0;
++		__entry->inflight_after = after &&
++			after->num_queued >= after->num_completed ?
++			after->num_queued - after->num_completed : 0;
++		__entry->limit_after = after ? after->limit : 0;
++		__entry->adj_limit_after = after ? after->adj_limit : 0;
++		__entry->avail_after = after ? after->avail : 0;
 +		__entry->net_cookie = dev_net(txq->dev)->net_cookie;
 +	),
 +
@@ -533,18 +531,11 @@ index dbc2c5598..a2da1e6b7 100644
 +		 unsigned long caller, unsigned int bytes,
 +		 bool xmit_more, bool doorbell,
 +		 unsigned long state_before, unsigned long state_after,
-+		 u32 num_queued_before, u32 num_completed_before,
-+		 u32 inflight_before, u32 limit_before, u32 adj_limit_before,
-+		 int avail_before, u32 num_queued_after, u32 num_completed_after,
-+		 u32 inflight_after, u32 limit_after, u32 adj_limit_after,
-+		 int avail_after),
++		 const struct netdev_txq_trace_dql_snapshot *before,
++		 const struct netdev_txq_trace_dql_snapshot *after),
 +
 +	TP_ARGS(txq, queue_index, caller, bytes, xmit_more, doorbell,
-+		state_before, state_after, num_queued_before,
-+		num_completed_before, inflight_before, limit_before,
-+		adj_limit_before, avail_before, num_queued_after,
-+		num_completed_after, inflight_after, limit_after,
-+		adj_limit_after, avail_after),
++		state_before, state_after, before, after),
 +
 +	TP_STRUCT__entry(
 +		__string(	name,		txq->dev->name		)
@@ -581,18 +572,22 @@ index dbc2c5598..a2da1e6b7 100644
 +		__entry->doorbell = doorbell;
 +		__entry->state_before = state_before;
 +		__entry->state_after = state_after;
-+		__entry->num_queued_before = num_queued_before;
-+		__entry->num_completed_before = num_completed_before;
-+		__entry->inflight_before = inflight_before;
-+		__entry->limit_before = limit_before;
-+		__entry->adj_limit_before = adj_limit_before;
-+		__entry->avail_before = avail_before;
-+		__entry->num_queued_after = num_queued_after;
-+		__entry->num_completed_after = num_completed_after;
-+		__entry->inflight_after = inflight_after;
-+		__entry->limit_after = limit_after;
-+		__entry->adj_limit_after = adj_limit_after;
-+		__entry->avail_after = avail_after;
++		__entry->num_queued_before = before ? before->num_queued : 0;
++		__entry->num_completed_before = before ? before->num_completed : 0;
++		__entry->inflight_before = before &&
++			before->num_queued >= before->num_completed ?
++			before->num_queued - before->num_completed : 0;
++		__entry->limit_before = before ? before->limit : 0;
++		__entry->adj_limit_before = before ? before->adj_limit : 0;
++		__entry->avail_before = before ? before->avail : 0;
++		__entry->num_queued_after = after ? after->num_queued : 0;
++		__entry->num_completed_after = after ? after->num_completed : 0;
++		__entry->inflight_after = after &&
++			after->num_queued >= after->num_completed ?
++			after->num_queued - after->num_completed : 0;
++		__entry->limit_after = after ? after->limit : 0;
++		__entry->adj_limit_after = after ? after->adj_limit : 0;
++		__entry->avail_after = after ? after->avail : 0;
 +		__entry->net_cookie = dev_net(txq->dev)->net_cookie;
 +	),
 +
@@ -616,18 +611,11 @@ index dbc2c5598..a2da1e6b7 100644
 +		 unsigned long caller, unsigned int pkts, unsigned int bytes,
 +		 bool stack_xoff_cleared,
 +		 unsigned long state_before, unsigned long state_after,
-+		 u32 num_queued_before, u32 num_completed_before,
-+		 u32 inflight_before, u32 limit_before, u32 adj_limit_before,
-+		 int avail_before, u32 num_queued_after, u32 num_completed_after,
-+		 u32 inflight_after, u32 limit_after, u32 adj_limit_after,
-+		 int avail_after),
++		 const struct netdev_txq_trace_dql_snapshot *before,
++		 const struct netdev_txq_trace_dql_snapshot *after),
 +
 +	TP_ARGS(txq, queue_index, caller, pkts, bytes, stack_xoff_cleared,
-+		state_before, state_after, num_queued_before,
-+		num_completed_before, inflight_before, limit_before,
-+		adj_limit_before, avail_before, num_queued_after,
-+		num_completed_after, inflight_after, limit_after,
-+		adj_limit_after, avail_after),
++		state_before, state_after, before, after),
 +
 +	TP_STRUCT__entry(
 +		__string(	name,		txq->dev->name		)
@@ -664,18 +652,22 @@ index dbc2c5598..a2da1e6b7 100644
 +		__entry->stack_xoff_cleared = stack_xoff_cleared;
 +		__entry->state_before = state_before;
 +		__entry->state_after = state_after;
-+		__entry->num_queued_before = num_queued_before;
-+		__entry->num_completed_before = num_completed_before;
-+		__entry->inflight_before = inflight_before;
-+		__entry->limit_before = limit_before;
-+		__entry->adj_limit_before = adj_limit_before;
-+		__entry->avail_before = avail_before;
-+		__entry->num_queued_after = num_queued_after;
-+		__entry->num_completed_after = num_completed_after;
-+		__entry->inflight_after = inflight_after;
-+		__entry->limit_after = limit_after;
-+		__entry->adj_limit_after = adj_limit_after;
-+		__entry->avail_after = avail_after;
++		__entry->num_queued_before = before ? before->num_queued : 0;
++		__entry->num_completed_before = before ? before->num_completed : 0;
++		__entry->inflight_before = before &&
++			before->num_queued >= before->num_completed ?
++			before->num_queued - before->num_completed : 0;
++		__entry->limit_before = before ? before->limit : 0;
++		__entry->adj_limit_before = before ? before->adj_limit : 0;
++		__entry->avail_before = before ? before->avail : 0;
++		__entry->num_queued_after = after ? after->num_queued : 0;
++		__entry->num_completed_after = after ? after->num_completed : 0;
++		__entry->inflight_after = after &&
++			after->num_queued >= after->num_completed ?
++			after->num_queued - after->num_completed : 0;
++		__entry->limit_after = after ? after->limit : 0;
++		__entry->adj_limit_after = after ? after->adj_limit : 0;
++		__entry->avail_after = after ? after->avail : 0;
 +		__entry->net_cookie = dev_net(txq->dev)->net_cookie;
 +	),
 +
@@ -690,7 +682,7 @@ index dbc2c5598..a2da1e6b7 100644
 +		  __entry->num_completed_after, __entry->inflight_after,
 +		  __entry->limit_after, __entry->adj_limit_after,
 +		  __entry->avail_after, __entry->net_cookie)
- );
++);
  
  DECLARE_EVENT_CLASS(net_dev_template,
 diff --git a/net/core/dev.c b/net/core/dev.c
@@ -771,7 +763,7 @@ index f2fa34b1d..8a445510f 100644
  #include <linux/slab.h>
  
  #include <linux/unaligned.h>
-@@ -66,3 +68,148 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(tcp_bad_csum);
+@@ -66,3 +68,128 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(tcp_bad_csum);
  EXPORT_TRACEPOINT_SYMBOL_GPL(udp_fail_queue_rcv_skb);
  
  EXPORT_TRACEPOINT_SYMBOL_GPL(sk_data_ready);
@@ -873,13 +865,7 @@ index f2fa34b1d..8a445510f 100644
 +	const struct netdev_txq_trace_dql_snapshot *after)
 +{
 +	trace_net_dev_txq_reset(txq, netdev_txq_trace_index(txq), caller, true,
-+				state_before, state_after, before->num_queued,
-+				before->num_completed,
-+				netdev_txq_trace_inflight(before), before->limit,
-+				before->adj_limit, before->avail,
-+				after->num_queued, after->num_completed,
-+				netdev_txq_trace_inflight(after), after->limit,
-+				after->adj_limit, after->avail);
++				state_before, state_after, before, after);
 +}
 +
 +void netdev_txq_trace_sent(
@@ -890,15 +876,8 @@ index f2fa34b1d..8a445510f 100644
 +	const struct netdev_txq_trace_dql_snapshot *after)
 +{
 +	trace_net_dev_txq_sent(txq, netdev_txq_trace_index(txq), caller,
-+			       bytes, xmit_more, doorbell,
-+			       state_before, state_after,
-+			       before->num_queued, before->num_completed,
-+			       netdev_txq_trace_inflight(before),
-+			       before->limit, before->adj_limit,
-+			       before->avail, after->num_queued,
-+			       after->num_completed,
-+			       netdev_txq_trace_inflight(after),
-+			       after->limit, after->adj_limit, after->avail);
++			       bytes, xmit_more, doorbell, state_before,
++			       state_after, before, after);
 +}
 +
 +void netdev_txq_trace_completed(
@@ -910,13 +889,6 @@ index f2fa34b1d..8a445510f 100644
 +{
 +	trace_net_dev_txq_completed(txq, netdev_txq_trace_index(txq), caller,
 +				    pkts, bytes, stack_xoff_cleared,
-+				    state_before, state_after,
-+				    before->num_queued, before->num_completed,
-+				    netdev_txq_trace_inflight(before),
-+				    before->limit, before->adj_limit,
-+				    before->avail, after->num_queued,
-+				    after->num_completed,
-+				    netdev_txq_trace_inflight(after),
-+				    after->limit, after->adj_limit,
-+				    after->avail);
++				    state_before, state_after, before,
++				    after);
 +}

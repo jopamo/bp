@@ -54,14 +54,14 @@ src_install() {
 	newexe "${FILESDIR}"/1g4-zram-setup 1g4-zram-setup
 
 	systemd_newunit "${FILESDIR}"/1g4-zram-setup.service 1g4-zram-setup.service
-	systemd_enable_service sysinit.target 1g4-zram-setup.service
+	systemd_enable_service swap.target 1g4-zram-setup.service
 }
 
 pkg_postinst() {
 	elog "Installed 1g4 zram defaults."
 	elog "The service is enabled for boot."
 	elog "This package does not reset or reconfigure active swap during merge."
-	elog "To apply on the running system explicitly:"
+	elog "To apply the updated unit wiring on a running system explicitly:"
 	elog "  systemctl daemon-reload"
-	elog "  systemctl start 1g4-zram-setup.service"
+	elog "  systemctl reenable 1g4-zram-setup.service"
 }

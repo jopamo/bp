@@ -156,117 +156,139 @@ src_prepare() {
 }
 
 src_configure() {
-    export TUPLE
+	export TUPLE
 
-    TUPLE=$(_llvm_get_tuple)
+	TUPLE=$(_llvm_get_tuple)
 
-	local sysclang_requested=0
-	local current_cc=$(tc-getCC)
-	local current_cxx=$(tc-getCXX)
-	local -a current_cc_cmd=( ${current_cc} )
-	local -a current_cxx_cmd=( ${current_cxx} )
+	local sysclang_requested=1
 
-	use sysclang && sysclang_requested=1
-
-	if (( sysclang_requested )); then
-		if ! _llvm_toolchain_usable /usr/bin/clang /usr/bin/clang++; then
-			ewarn "USE=sysclang requested, but /usr/bin/clang or /usr/bin/clang++ is missing or unusable."
-			ewarn "Falling back to GCC for the build compiler."
-			_llvm_export_gcc_fallback || die "No usable GCC fallback found"
-			sysclang_requested=0
-		fi
-	elif { _llvm_cmd_is_clang "${current_cc_cmd[0]}" || _llvm_cmd_is_clang "${current_cxx_cmd[0]}"; } \
-		&& ! _llvm_toolchain_usable "${current_cc}" "${current_cxx}"; then
-		ewarn "Selected Clang toolchain is missing or unusable:"
-		ewarn "  CC=${current_cc}"
-		ewarn "  CXX=${current_cxx}"
-		ewarn "Falling back to GCC for the build compiler."
-		_llvm_export_gcc_fallback || die "No usable GCC fallback found"
+	if ! _llvm_toolchain_usable /usr/bin/clang /usr/bin/clang++; then
+		die "LLVM-first build requested, but /usr/bin/clang or /usr/bin/clang++ is missing or unusable"
 	fi
 
+	local -x CC="/usr/bin/clang"
+	if [[ -x /usr/bin/clang-cpp ]]; then
+		local -x CPP="/usr/bin/clang-cpp"
+	else
+		local -x CPP="/usr/bin/clang -E"
+	fi
+	local -x CXX="/usr/bin/clang++"
+	local -x AS="/usr/bin/clang"
+	local -x LD="/usr/bin/ld.lld"
+	local -x AR="/usr/bin/llvm-ar"
+	local -x NM="/usr/bin/llvm-nm"
+	local -x RANLIB="/usr/bin/llvm-ranlib"
+	local -x STRIP="/usr/bin/llvm-strip"
+	local -x OBJCOPY="/usr/bin/llvm-objcopy"
+	local -x OBJDUMP="/usr/bin/llvm-objdump"
+	local -x READELF="/usr/bin/llvm-readelf"
+
 	if use syslibcxxabi; then
-    	# link to compiler-rt
-    	local use_compiler_rt=OFF
-    	[[ $(tc-get-c-rtlib) == compiler-rt ]] && use_compiler_rt=ON
+		use libcxx || die "USE=syslibcxxabi requires USE=libcxx for a GNU-free runtime stack"
 
-    	# bootstrap: cmake is unhappy if compiler can't link to stdlib
-    	local nolib_flags=( -nodefaultlibs -lc )
-    	if ! test_compiler; then
-        	if test_compiler "${nolib_flags[@]}"; then
-            	local -x LDFLAGS="${LDFLAGS} ${nolib_flags[*]}"
-            	ewarn "${CXX} seems to lack runtime, trying with ${nolib_flags[*]}"
-        	fi
-    	fi
-    fi
+		local use_compiler_rt=OFF
+		[[ $(tc-get-c-rtlib) == compiler-rt ]] && use_compiler_rt=ON
 
-    filter-clang
-    filter-lto
-    #filter-sanitizers
+		local nolib_flags=( -nodefaultlibs -lc )
+		if ! test_compiler; then
+			if test_compiler "${nolib_flags[@]}"; then
+				local -x LDFLAGS="${LDFLAGS} ${nolib_flags[*]}"
+				ewarn "${CXX} seems to lack runtime, trying with ${nolib_flags[*]}"
+			fi
+		fi
+	fi
+
+	filter-clang
+	filter-lto
+	#filter-sanitizers
 
 	local compiler_rt_build_libfuzzer=$(usex libfuzzer)
 	local compiler_rt_default_target_only=OFF
 	local compiler_rt_sanitizers_to_build=all
 	if use elibc_musl; then
-		# Keep the base musl bootstrap narrow for now. The exotic compiler-rt
-		# paths pull in extra libc++ header consumers and expose ordering bugs.
+		# Keep the base musl bootstrap narrow for now
 		compiler_rt_build_libfuzzer=OFF
-		# musl installs arch-specific register headers, so the x86 compiler-rt
-		# multilib probe can wander into i386 sanitizer builds on x86_64 and
-		# then explode on sys/user.h field mismatches (esp vs rsp). This distro
-		# is not shipping x86 multilib runtimes here anyway, so constrain
-		# compiler-rt to the default target on musl.
+
+		# Avoid unsupported musl multilib sanitizer probes
 		compiler_rt_default_target_only=ON
 		compiler_rt_sanitizers_to_build="asan;msan;tsan;safestack;cfi;scudo_standalone;ubsan_minimal;gwp_asan;asan_abi"
 	fi
 
-    local LLVM_TARGETS=""
-    local LLVM_RUNTIMES="libunwind;compiler-rt"
+	local LLVM_TARGETS=""
+	local LLVM_RUNTIMES
 
-    use libcxx && LLVM_RUNTIMES+=";libcxx"
-    use libcxxabi && LLVM_RUNTIMES+=";libcxxabi"
+	if use syslibcxxabi; then
+		LLVM_RUNTIMES="libunwind"
+		use libcxxabi && LLVM_RUNTIMES+=";libcxxabi"
+		LLVM_RUNTIMES+=";libcxx;compiler-rt"
+	else
+		LLVM_RUNTIMES="libunwind;compiler-rt"
+		use libcxx && LLVM_RUNTIMES+=";libcxx"
+		use libcxxabi && LLVM_RUNTIMES+=";libcxxabi"
+	fi
 
-    case "${CHOST}" in
-        *aarch64*) LLVM_TARGETS+="AArch64" ;;
-        *x86_64*)  LLVM_TARGETS+="X86" ;;
-        *)        die "Unsupported host architecture: ${CHOST}" ;;
-    esac
+	case "${CHOST}" in
+		*aarch64*) LLVM_TARGETS+="AArch64" ;;
+		*x86_64*)  LLVM_TARGETS+="X86" ;;
+		*)         die "Unsupported host architecture: ${CHOST}" ;;
+	esac
 
-    use amdgpu && LLVM_TARGETS+=";AMDGPU"
-    #use arm && LLVM_TARGETS+=";ARM"
-    use bpf && LLVM_TARGETS+=";BPF"
-    if use nvptx || use cuda; then
-        LLVM_TARGETS+=";NVPTX"
-    fi
-    use wasm && LLVM_TARGETS+=";WebAssembly"
-    use xcore && LLVM_TARGETS+=";XCore"
+	use amdgpu && LLVM_TARGETS+=";AMDGPU"
+	#use arm && LLVM_TARGETS+=";ARM"
+	use bpf && LLVM_TARGETS+=";BPF"
+	if use nvptx || use cuda; then
+		LLVM_TARGETS+=";NVPTX"
+	fi
+	use wasm && LLVM_TARGETS+=";WebAssembly"
+	use xcore && LLVM_TARGETS+=";XCore"
 
-    local LLVM_PROJECTS="llvm;clang;lld"
-    use clang-tools-extra && LLVM_PROJECTS+=";clang-tools-extra"
+	local LLVM_PROJECTS="llvm;clang;lld"
+	use clang-tools-extra && LLVM_PROJECTS+=";clang-tools-extra"
 
 	local runtimes_cmake_args=()
 	if use elibc_musl; then
-		# During the first LLVM bootstrap on musl, the runtimes external
-		# project is configured with the just-built Clang before libunwind is
-		# installed. Executable try_compiles therefore fail by construction and
-		# poison basic flag probes such as -fno-exceptions and --unwindlib=none,
-		# which then trips libunwind's hard configure check. Keep these probes
-		# compile-only; the real runtime build still performs the actual links.
+		# Keep runtime try_compile probes compile-only during musl bootstrap
 		runtimes_cmake_args+=( -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY )
-		# But that compile-only mode also makes check_library_exists() lie:
-		# any referenced symbol appears "found" because no link ever happens.
-		# libc++abi then hard-defines HAVE___CXA_THREAD_ATEXIT_IMPL and later
-		# tries to link against glibc's __cxa_thread_atexit_impl, which musl
-		# does not provide. Force the cache back to reality on musl so
-		# libc++abi uses its weak-symbol/fallback path instead.
+
+		# Do not let compile-only probes fake glibc __cxa_thread_atexit_impl on musl
 		runtimes_cmake_args+=( -DLIBCXXABI_HAS_CXA_THREAD_ATEXIT_IMPL=OFF )
 	fi
 
-    echo "Selected LLVM targets: ${LLVM_TARGETS}"
+	if use syslibcxxabi; then
+		runtimes_cmake_args+=(
+			-DCLANG_DEFAULT_CXX_STDLIB=libc++
+			-DCLANG_DEFAULT_RTLIB=compiler-rt
+			-DCLANG_DEFAULT_UNWINDLIB=libunwind
+			-DCOMPILER_RT_CXX_LIBRARY=libcxx
+			-DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON
+			-DCOMPILER_RT_USE_LLVM_UNWINDER=ON
+			-DSANITIZER_CXX_ABI=libc++
+			-DSANITIZER_TEST_CXX=libc++
+			-DLIBCXXABI_USE_COMPILER_RT=ON
+			-DLIBCXXABI_USE_LLVM_UNWINDER=ON
+			-DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON
+			-DLIBUNWIND_USE_COMPILER_RT=ON
+			-DLLVM_ENABLE_LIBCXX=ON
+		)
+
+		if use libcxxabi; then
+			runtimes_cmake_args+=( -DLIBCXX_CXX_ABI=libcxxabi )
+		else
+			runtimes_cmake_args+=(
+				-DLIBCXX_CXX_ABI=system-libcxxabi
+				-DLIBCXX_CXX_ABI_INCLUDE_PATHS="${EPREFIX}/usr/include/c++/v1"
+				-DLIBCXX_CXX_ABI_LIBRARY_PATH="${EPREFIX}/usr/lib"
+			)
+		fi
+	fi
+
+	echo "Selected LLVM targets: ${LLVM_TARGETS}"
 	echo "Selected LLVM runtimes: ${LLVM_RUNTIMES}"
 	echo "Selected LLVM projects: ${LLVM_PROJECTS}"
 
-    local common=(
+	local common=(
 		-DBUILD_SHARED_LIBS=OFF
+		-DCLANG_DEFAULT_LINKER=ld.lld
 		-DCLANG_DEFAULT_OPENMP_RUNTIME=libomp
 		-DCLANG_DEFAULT_PIE_ON_LINUX=ON
 		-DCLANG_DEFAULT_RTLIB=compiler-rt
@@ -276,9 +298,23 @@ src_configure() {
 		-DCLANG_ENABLE_STATIC_ANALYZER=$(usex static_analyzer)
 		-DCLANG_INCLUDE_TESTS=$(usex test)
 		-DCLANG_LINK_CLANG_DYLIB=ON
+		-DCMAKE_ASM_COMPILER=/usr/bin/clang
+		-DCMAKE_ASM_COMPILER_TARGET=${TUPLE}
+		-DCMAKE_AR=/usr/bin/llvm-ar
+		-DCMAKE_C_COMPILER=/usr/bin/clang
+		-DCMAKE_C_COMPILER_TARGET=${TUPLE}
+		-DCMAKE_CXX_COMPILER=/usr/bin/clang++
+		-DCMAKE_CXX_COMPILER_TARGET=${TUPLE}
 		-DCMAKE_CXX_STANDARD=17
 		-DCMAKE_INSTALL_LIBDIR=lib
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
+		-DCMAKE_LINKER=/usr/bin/ld.lld
+		-DCMAKE_NM=/usr/bin/llvm-nm
+		-DCMAKE_OBJCOPY=/usr/bin/llvm-objcopy
+		-DCMAKE_OBJDUMP=/usr/bin/llvm-objdump
+		-DCMAKE_RANLIB=/usr/bin/llvm-ranlib
+		-DCMAKE_READELF=/usr/bin/llvm-readelf
+		-DCMAKE_STRIP=/usr/bin/llvm-strip
 		-DCOMPILER_RT_BUILD_GWP_ASAN=OFF
 		-DCOMPILER_RT_BUILD_LIBFUZZER=${compiler_rt_build_libfuzzer}
 		-DCOMPILER_RT_BUILD_MEMPROF=OFF
@@ -297,9 +333,7 @@ src_configure() {
 		-DLIBUNWIND_INSTALL_HEADERS=ON
 		-DLIBUNWIND_USE_COMPILER_RT=ON
 		-DLLVM_APPEND_VC_REV=OFF
-		# Do not build the GNU gold plugin in the LLVM-first toolchain. It
-		# depends on binutils plugin headers (plugin-api.h), which are no longer
-		# part of the base system.
+		# Do not build the GNU gold plugin in the LLVM-first toolchain
 		-DLLVM_BINUTILS_INCDIR=
 		-DLLVM_BUILD_DOCS=OFF
 		-DLLVM_BUILD_LLVM_DYLIB=ON
@@ -314,6 +348,7 @@ src_configure() {
 		-DLLVM_ENABLE_LIBEDIT=ON
 		-DLLVM_ENABLE_LIBPFM=OFF
 		-DLLVM_ENABLE_LIBXML2=ON
+		-DLLVM_ENABLE_LLD=ON
 		-DLLVM_ENABLE_OCAMLDOC=OFF
 		-DLLVM_ENABLE_PER_TARGET_RUNTIME_DIR=ON
 		-DLLVM_ENABLE_PROJECTS="${LLVM_PROJECTS}"
@@ -332,21 +367,26 @@ src_configure() {
 		-DLLVM_OPTIMIZED_TABLEGEN=ON
 		-DLLVM_PARALLEL_LINK_JOBS=1
 		-DLLVM_TARGETS_TO_BUILD="${LLVM_TARGETS}"
+		-DLLVM_USE_LINKER=lld
 		-DOCAMLFIND=NO
-    )
+	)
 
-    local bootstrap_passthrough=(
+	local bootstrap_passthrough=(
 		CMAKE_INSTALL_PREFIX
 		CMAKE_VERBOSE_MAKEFILE
-    )
+		LLVM_USE_LINKER
+	)
 
-    if use syslibcxxabi; then
+	if use syslibcxxabi; then
 		bootstrap_passthrough+=(
 			CLANG_DEFAULT_CXX_STDLIB
 			CLANG_DEFAULT_RTLIB
 			CLANG_DEFAULT_UNWINDLIB
 			COMPILER_RT_CXX_LIBRARY
 			COMPILER_RT_USE_BUILTINS_LIBRARY
+			COMPILER_RT_USE_LLVM_UNWINDER
+			SANITIZER_CXX_ABI
+			SANITIZER_TEST_CXX
 			LIBCXXABI_ENABLE_SHARED
 			LIBCXXABI_ENABLE_STATIC
 			LIBCXXABI_ENABLE_STATIC_UNWINDER
@@ -368,19 +408,18 @@ src_configure() {
 			LIBUNWIND_USE_COMPILER_RT
 			LLVM_ENABLE_LIBCXX
 		)
-    fi
+	fi
 
-    local bootstrap_passthrough_string=$(printf '%s;' "${bootstrap_passthrough[@]}")
-    bootstrap_passthrough_string=${bootstrap_passthrough_string%;}
+	local bootstrap_passthrough_string=$(printf '%s;' "${bootstrap_passthrough[@]}")
+	bootstrap_passthrough_string=${bootstrap_passthrough_string%;}
 
-    local bootstrap=(
+	local bootstrap=(
 		-DBOOTSTRAP_BOOTSTRAP_LLVM_ENABLE_LLD=ON
 		-DBOOTSTRAP_LLVM_ENABLE_LLD=ON
 		-DBOOTSTRAP_LLVM_ENABLE_LTO=$(usex lto ON Off)
 		-DCLANG_BOOTSTRAP_PASSTHROUGH=${bootstrap_passthrough_string}
 		-DCLANG_ENABLE_BOOTSTRAP=ON
-    )
-
+	)
 
 	local cxxabi=(
 		-DLIBCXX_HAS_MUSL_LIBC=$(usex elibc_musl)
@@ -389,9 +428,9 @@ src_configure() {
 		-DLIBCXXABI_ENABLE_STATIC=ON
 		-DLIBCXXABI_INCLUDE_TESTS=OFF
 		-DLIBCXXABI_LIBUNWIND_INCLUDES="${EPREFIX}"/usr/include
-    )
+	)
 
-    local libcxx=(
+	local libcxx=(
 		-DLIBCXX_ENABLE_ASSERTIONS=$(usex assertions)
 		-DLIBCXX_ENABLE_LOCALIZATION=ON
 		-DLIBCXX_ENABLE_NEW_DELETE_DEFINITIONS=ON
@@ -399,27 +438,42 @@ src_configure() {
 		-DLIBCXX_INCLUDE_BENCHMARKS=OFF
 		-DLIBCXX_INCLUDE_TESTS=OFF
 		-DLIBCXX_HARDENING_MODE=fast
-    )
+	)
 
-    local syslibcxxabi=(
-    	-DLLVM_ENABLE_LIBCXX=ON
-        -DCLANG_DEFAULT_CXX_STDLIB=libc++
+	local syslibcxxabi=(
+		-DLLVM_ENABLE_LIBCXX=ON
+		-DCLANG_DEFAULT_CXX_STDLIB=libc++
+		-DCLANG_DEFAULT_RTLIB=compiler-rt
+		-DCLANG_DEFAULT_UNWINDLIB=libunwind
 		-DCOMPILER_RT_CXX_LIBRARY=libcxx
+		-DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON
+		-DCOMPILER_RT_USE_LLVM_UNWINDER=ON
+		-DSANITIZER_CXX_ABI=libc++
+		-DSANITIZER_TEST_CXX=libc++
 		-DLIBCXXABI_USE_COMPILER_RT=ON
 		-DLIBCXXABI_USE_LLVM_UNWINDER=ON
 		-DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON
-		-DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON
-    )
+	)
 
-    local sysclang=(
-        -DCLANG_DEFAULT_LINKER=/usr/bin/ld.lld
-        -DCMAKE_AR=/usr/bin/llvm-ar
-        -DCMAKE_C_COMPILER=/usr/bin/clang
-        -DCMAKE_CXX_COMPILER=/usr/bin/clang++
-        -DCMAKE_NM=/usr/bin/llvm-nm
-        -DCMAKE_RANLIB=/usr/bin/llvm-ranlib
-        -DLLVM_ENABLE_LLD=ON
-    )
+	local sysclang=(
+		-DCLANG_DEFAULT_LINKER=/usr/bin/ld.lld
+		-DCMAKE_AR=/usr/bin/llvm-ar
+		-DCMAKE_ASM_COMPILER=/usr/bin/clang
+		-DCMAKE_ASM_COMPILER_TARGET=${TUPLE}
+		-DCMAKE_C_COMPILER=/usr/bin/clang
+		-DCMAKE_C_COMPILER_TARGET=${TUPLE}
+		-DCMAKE_CXX_COMPILER=/usr/bin/clang++
+		-DCMAKE_CXX_COMPILER_TARGET=${TUPLE}
+		-DCMAKE_LINKER=/usr/bin/ld.lld
+		-DCMAKE_NM=/usr/bin/llvm-nm
+		-DCMAKE_OBJCOPY=/usr/bin/llvm-objcopy
+		-DCMAKE_OBJDUMP=/usr/bin/llvm-objdump
+		-DCMAKE_RANLIB=/usr/bin/llvm-ranlib
+		-DCMAKE_READELF=/usr/bin/llvm-readelf
+		-DCMAKE_STRIP=/usr/bin/llvm-strip
+		-DLLVM_ENABLE_LLD=ON
+		-DLLVM_USE_LINKER=lld
+	)
 
 	local llvm_lto_mode=$(usex lto ON Off)
 
@@ -428,62 +482,50 @@ src_configure() {
 		-DCOMPILER_RT_DEFAULT_TARGET_ONLY=${compiler_rt_default_target_only}
 		-DCOMPILER_RT_SANITIZERS_TO_BUILD=${compiler_rt_sanitizers_to_build}
 	)
-	# In default-target-only mode compiler-rt derives its triple from
-	# CMAKE_C_COMPILER_TARGET and rejects an explicit
-	# COMPILER_RT_DEFAULT_TARGET_TRIPLE.
+
+	# In default-target-only mode compiler-rt derives its triple from CMAKE_C_COMPILER_TARGET
 	if [[ ${compiler_rt_default_target_only} != ON ]]; then
 		mycmakeargs+=( -DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=${TUPLE} )
 	fi
+
 	mycmakeargs+=( -DLLVM_ENABLE_LTO=${llvm_lto_mode} )
+
 	if [[ ${#runtimes_cmake_args[@]} -gt 0 ]]; then
 		local runtimes_cmake_args_string=$(printf '%s;' "${runtimes_cmake_args[@]}")
 		mycmakeargs+=( -DRUNTIMES_CMAKE_ARGS="${runtimes_cmake_args_string%;}" )
 	fi
 
 	if (( sysclang_requested )); then
-        mycmakeargs+=("${sysclang[@]}")
-    fi
+		mycmakeargs+=("${sysclang[@]}")
+	fi
 
-    if use syslibcxxabi; then
-        use libcxx && mycmakeargs+=("${libcxx[@]}")
-        mycmakeargs+=("${cxxabi[@]}" "${syslibcxxabi[@]}")
-        if use libcxxabi; then
-            mycmakeargs+=( -DLIBCXX_CXX_ABI=libcxxabi )
-        else
-            mycmakeargs+=(
-                -DLIBCXX_CXX_ABI=system-libcxxabi
-                -DLIBCXX_CXX_ABI_INCLUDE_PATHS=${EPREFIX}/usr/include/c++/v1
-                -DLIBCXX_CXX_ABI_LIBRARY_PATH=${EPREFIX}/usr/lib
-            )
-        fi
-    elif use libcxx; then
-        mycmakeargs+=("${libcxx[@]}" "${cxxabi[@]}")
-    fi
+	if use syslibcxxabi; then
+		use libcxx && mycmakeargs+=("${libcxx[@]}")
+		mycmakeargs+=("${cxxabi[@]}" "${syslibcxxabi[@]}")
+		if use libcxxabi; then
+			mycmakeargs+=( -DLIBCXX_CXX_ABI=libcxxabi )
+		else
+			mycmakeargs+=(
+				-DLIBCXX_CXX_ABI=system-libcxxabi
+				-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${EPREFIX}/usr/include/c++/v1
+				-DLIBCXX_CXX_ABI_LIBRARY_PATH=${EPREFIX}/usr/lib
+			)
+		fi
+	elif use libcxx; then
+		mycmakeargs+=("${libcxx[@]}" "${cxxabi[@]}")
+	fi
 
-    if use bootstrap; then
-        use syslibcxxabi && mycmakeargs+=( -DBOOTSTRAP_LLVM_ENABLE_LIBCXX=ON )
-        mycmakeargs+=("${bootstrap[@]}")
-    fi
+	if use bootstrap; then
+		use syslibcxxabi && mycmakeargs+=( -DBOOTSTRAP_LLVM_ENABLE_LIBCXX=ON )
+		mycmakeargs+=("${bootstrap[@]}")
+	fi
 
-    if (( sysclang_requested )); then
-       local -x CC="/usr/bin/clang"
-       if [[ -x /usr/bin/clang-cpp ]]; then
-           local -x CPP="/usr/bin/clang-cpp"
-       else
-           local -x CPP="/usr/bin/clang -E"
-       fi
-       local -x CXX="/usr/bin/clang++"
-       local -x AR="/usr/bin/llvm-ar"
-       local -x NM="/usr/bin/llvm-nm"
-       local -x RANLIB="/usr/bin/llvm-ranlib"
-    fi
+	use debug || local -x CPPFLAGS="${CPPFLAGS} -DNDEBUG"
 
-    use debug || local -x CPPFLAGS="${CPPFLAGS} -DNDEBUG"
+	local QA_POLICY_LTO_CONFIGURE=0
+	qa-policy-configure
 
-    local QA_POLICY_LTO_CONFIGURE=0
-    qa-policy-configure
-
-    cmake_src_configure
+	cmake_src_configure
 }
 
 src_compile() {

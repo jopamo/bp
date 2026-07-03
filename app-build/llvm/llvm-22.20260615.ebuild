@@ -186,9 +186,6 @@ src_configure() {
 	if use syslibcxxabi; then
 		use libcxx || die "USE=syslibcxxabi requires USE=libcxx for a GNU-free runtime stack"
 
-		local use_compiler_rt=OFF
-		[[ $(tc-get-c-rtlib) == compiler-rt ]] && use_compiler_rt=ON
-
 		local nolib_flags=( -nodefaultlibs -lc )
 		if ! test_compiler; then
 			if test_compiler "${nolib_flags[@]}"; then
@@ -255,6 +252,18 @@ src_configure() {
 	fi
 
 	if use syslibcxxabi; then
+		# Force the runtimes subconfigure to stay on the pure LLVM stack even
+		# when an old CMakeCache previously detected a host libatomic.
+		runtimes_cmake_args+=(
+			-DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON
+			-DCOMPILER_RT_USE_LLVM_UNWINDER=ON
+			-DLIBCXX_HAS_ATOMIC_LIB=OFF
+			-DLIBCXX_USE_COMPILER_RT=ON
+			-DLIBCXXABI_USE_COMPILER_RT=ON
+			-DLIBCXXABI_USE_LLVM_UNWINDER=ON
+			-DLIBUNWIND_USE_COMPILER_RT=ON
+		)
+
 		runtimes_cmake_args+=(
 			-DCLANG_DEFAULT_CXX_STDLIB=libc++
 			-DCLANG_DEFAULT_RTLIB=compiler-rt
@@ -392,6 +401,7 @@ src_configure() {
 			LIBCXXABI_LIBUNWIND_INCLUDES
 			LIBCXXABI_USE_COMPILER_RT
 			LIBCXXABI_USE_LLVM_UNWINDER
+			LIBCXX_HAS_ATOMIC_LIB
 			LIBCXX_CXX_ABI
 			LIBCXX_CXX_ABI_INCLUDE_PATHS
 			LIBCXX_CXX_ABI_LIBRARY_PATH
@@ -399,6 +409,7 @@ src_configure() {
 			LIBCXX_ENABLE_LOCALIZATION
 			LIBCXX_ENABLE_NEW_DELETE_DEFINITIONS
 			LIBCXX_ENABLE_STATIC_ABI_LIBRARY
+			LIBCXX_USE_COMPILER_RT
 			LIBCXX_HARDENING_MODE
 			LIBCXX_HAS_MUSL_LIBC
 			LIBCXX_INCLUDE_BENCHMARKS
@@ -448,9 +459,12 @@ src_configure() {
 		-DCOMPILER_RT_USE_LLVM_UNWINDER=ON
 		-DSANITIZER_CXX_ABI=libc++
 		-DSANITIZER_TEST_CXX=libc++
+		-DLIBCXX_HAS_ATOMIC_LIB=OFF
+		-DLIBCXX_USE_COMPILER_RT=ON
 		-DLIBCXXABI_USE_COMPILER_RT=ON
 		-DLIBCXXABI_USE_LLVM_UNWINDER=ON
 		-DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON
+		-DLIBUNWIND_USE_COMPILER_RT=ON
 	)
 
 	local sysclang=(
@@ -521,6 +535,12 @@ src_configure() {
 
 	local QA_POLICY_LTO_CONFIGURE=0
 	qa-policy-configure
+
+	if use libcxx && use syslibcxxabi && [[ -d ${BUILD_DIR}/runtimes ]]; then
+		# libc++ can cache a stale positive libatomic probe here and keep
+		# re-injecting -latomic even after the host no longer provides it.
+		rm -rf "${BUILD_DIR}/runtimes" || die "Failed to clear stale LLVM runtimes cache"
+	fi
 
 	cmake_src_configure
 }

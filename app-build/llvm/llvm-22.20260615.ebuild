@@ -348,7 +348,6 @@ src_configure() {
 		-DLLVM_ENABLE_LIBEDIT=ON
 		-DLLVM_ENABLE_LIBPFM=OFF
 		-DLLVM_ENABLE_LIBXML2=ON
-		-DLLVM_ENABLE_LLD=ON
 		-DLLVM_ENABLE_OCAMLDOC=OFF
 		-DLLVM_ENABLE_PER_TARGET_RUNTIME_DIR=ON
 		-DLLVM_ENABLE_PROJECTS="${LLVM_PROJECTS}"
@@ -374,7 +373,6 @@ src_configure() {
 	local bootstrap_passthrough=(
 		CMAKE_INSTALL_PREFIX
 		CMAKE_VERBOSE_MAKEFILE
-		LLVM_USE_LINKER
 	)
 
 	if use syslibcxxabi; then
@@ -471,7 +469,6 @@ src_configure() {
 		-DCMAKE_RANLIB=/usr/bin/llvm-ranlib
 		-DCMAKE_READELF=/usr/bin/llvm-readelf
 		-DCMAKE_STRIP=/usr/bin/llvm-strip
-		-DLLVM_ENABLE_LLD=ON
 		-DLLVM_USE_LINKER=lld
 	)
 

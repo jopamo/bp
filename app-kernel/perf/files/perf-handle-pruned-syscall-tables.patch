@@ -45,3 +45,124 @@
         cat >> "$outfile" <<EOF
         {
  	      .num_to_name = syscall_num_to_name_$e_machine,
+--- a/tools/perf/arch/arm64/util/Build
++++ b/tools/perf/arch/arm64/util/Build
+@@ -1,6 +1,12 @@
++ifneq ($(wildcard $(srctree)/tools/perf/arch/arm/util/auxtrace.c),)
+ perf-util-y += ../../arm/util/auxtrace.o
++endif
++ifneq ($(wildcard $(srctree)/tools/perf/arch/arm/util/cs-etm.c),)
+ perf-util-y += ../../arm/util/cs-etm.o
++endif
++ifneq ($(wildcard $(srctree)/tools/perf/arch/arm/util/pmu.c),)
+ perf-util-y += ../../arm/util/pmu.o
++endif
+ perf-util-y += arm-spe.o
+ perf-util-y += header.o
+ perf-util-y += hisi-ptt.o
+--- a/tools/perf/util/perf-regs-arch/Build
++++ b/tools/perf/util/perf-regs-arch/Build
+@@ -1,9 +1,15 @@
+-perf-util-y += perf_regs_aarch64.o
+-perf-util-y += perf_regs_arm.o
+-perf-util-y += perf_regs_csky.o
+-perf-util-y += perf_regs_loongarch.o
+-perf-util-y += perf_regs_mips.o
+-perf-util-y += perf_regs_powerpc.o
+-perf-util-y += perf_regs_riscv.o
+-perf-util-y += perf_regs_s390.o
+-perf-util-y += perf_regs_x86.o
++define perf_reg_arch
++ifneq ($(wildcard $(srctree)/tools/perf/arch/$(1)/include/perf_regs.h),)
++perf-util-y += $(2).o
++endif
++endef
++
++$(eval $(call perf_reg_arch,arm64,perf_regs_aarch64))
++$(eval $(call perf_reg_arch,arm,perf_regs_arm))
++$(eval $(call perf_reg_arch,csky,perf_regs_csky))
++$(eval $(call perf_reg_arch,loongarch,perf_regs_loongarch))
++$(eval $(call perf_reg_arch,mips,perf_regs_mips))
++$(eval $(call perf_reg_arch,powerpc,perf_regs_powerpc))
++$(eval $(call perf_reg_arch,riscv,perf_regs_riscv))
++$(eval $(call perf_reg_arch,s390,perf_regs_s390))
++$(eval $(call perf_reg_arch,x86,perf_regs_x86))
+--- a/tools/perf/util/dwarf-regs-arch/Build
++++ b/tools/perf/util/dwarf-regs-arch/Build
+@@ -1,9 +1,15 @@
+-perf-util-$(CONFIG_LIBDW) += dwarf-regs-arm64.o
+-perf-util-$(CONFIG_LIBDW) += dwarf-regs-arm.o
+-perf-util-$(CONFIG_LIBDW) += dwarf-regs-csky.o
+-perf-util-$(CONFIG_LIBDW) += dwarf-regs-loongarch.o
+-perf-util-$(CONFIG_LIBDW) += dwarf-regs-mips.o
+-perf-util-$(CONFIG_LIBDW) += dwarf-regs-powerpc.o
+-perf-util-$(CONFIG_LIBDW) += dwarf-regs-riscv.o
+-perf-util-$(CONFIG_LIBDW) += dwarf-regs-s390.o
+-perf-util-$(CONFIG_LIBDW) += dwarf-regs-x86.o
++define dwarf_reg_arch
++ifneq ($(wildcard $(srctree)/arch/$(1)/include/uapi/asm/perf_regs.h),)
++perf-util-$(CONFIG_LIBDW) += $(2).o
++endif
++endef
++
++$(eval $(call dwarf_reg_arch,arm64,dwarf-regs-arm64))
++$(eval $(call dwarf_reg_arch,arm,dwarf-regs-arm))
++$(eval $(call dwarf_reg_arch,csky,dwarf-regs-csky))
++$(eval $(call dwarf_reg_arch,loongarch,dwarf-regs-loongarch))
++$(eval $(call dwarf_reg_arch,mips,dwarf-regs-mips))
++$(eval $(call dwarf_reg_arch,powerpc,dwarf-regs-powerpc))
++$(eval $(call dwarf_reg_arch,riscv,dwarf-regs-riscv))
++$(eval $(call dwarf_reg_arch,s390,dwarf-regs-s390))
++$(eval $(call dwarf_reg_arch,x86,dwarf-regs-x86))
+--- a/tools/perf/util/kvm-stat-arch/Build
++++ b/tools/perf/util/kvm-stat-arch/Build
+@@ -1,6 +1,18 @@
++ifneq ($(wildcard $(srctree)/arch/arm64),)
+ perf-util-$(CONFIG_LIBTRACEEVENT) += kvm-stat-arm64.o
++endif
++ifneq ($(wildcard $(srctree)/arch/loongarch),)
+ perf-util-$(CONFIG_LIBTRACEEVENT) += kvm-stat-loongarch.o
++endif
++ifneq ($(wildcard $(srctree)/arch/powerpc),)
+ perf-util-$(CONFIG_LIBTRACEEVENT) += kvm-stat-powerpc.o
++endif
++ifneq ($(wildcard $(srctree)/arch/riscv),)
+ perf-util-$(CONFIG_LIBTRACEEVENT) += kvm-stat-riscv.o
++endif
++ifneq ($(wildcard $(srctree)/arch/s390/include/uapi/asm/sie.h),)
+ perf-util-$(CONFIG_LIBTRACEEVENT) += kvm-stat-s390.o
++endif
++ifneq ($(wildcard $(srctree)/arch/x86/include/uapi/asm/kvm.h),)
+ perf-util-$(CONFIG_LIBTRACEEVENT) += kvm-stat-x86.o
++endif
+--- a/tools/perf/util/libunwind-arch/Build
++++ b/tools/perf/util/libunwind-arch/Build
+@@ -1,11 +1,18 @@
+ perf-util-$(CONFIG_LIBUNWIND) += libunwind-arch.o
+-perf-util-$(CONFIG_LIBUNWIND) += libunwind-arm64.o
+-perf-util-$(CONFIG_LIBUNWIND) += libunwind-arm.o
+-perf-util-$(CONFIG_LIBUNWIND) += libunwind-loongarch.o
+-perf-util-$(CONFIG_LIBUNWIND) += libunwind-mips.o
+-perf-util-$(CONFIG_LIBUNWIND) += libunwind-ppc32.o
+-perf-util-$(CONFIG_LIBUNWIND) += libunwind-ppc64.o
+-perf-util-$(CONFIG_LIBUNWIND) += libunwind-riscv.o
+-perf-util-$(CONFIG_LIBUNWIND) += libunwind-s390.o
+-perf-util-$(CONFIG_LIBUNWIND) += libunwind-i386.o
+-perf-util-$(CONFIG_LIBUNWIND) += libunwind-x86_64.o
++
++define libunwind_arch
++ifneq ($(wildcard $(srctree)/arch/$(1)/include/uapi/asm/perf_regs.h),)
++perf-util-$(CONFIG_LIBUNWIND) += $(2).o
++endif
++endef
++
++$(eval $(call libunwind_arch,arm64,libunwind-arm64))
++$(eval $(call libunwind_arch,arm,libunwind-arm))
++$(eval $(call libunwind_arch,loongarch,libunwind-loongarch))
++$(eval $(call libunwind_arch,mips,libunwind-mips))
++$(eval $(call libunwind_arch,powerpc,libunwind-ppc32))
++$(eval $(call libunwind_arch,powerpc,libunwind-ppc64))
++$(eval $(call libunwind_arch,riscv,libunwind-riscv))
++$(eval $(call libunwind_arch,s390,libunwind-s390))
++$(eval $(call libunwind_arch,x86,libunwind-i386))
++$(eval $(call libunwind_arch,x86,libunwind-x86_64))

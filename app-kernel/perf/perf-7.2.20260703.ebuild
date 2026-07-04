@@ -2,6 +2,7 @@
 
 BRANCH_NAME="snapshot"
 SNAPSHOT=467a108b6a9c39c7caceb923e406332f00758f4f
+PATCHES=( "${FILESDIR}"/perf-handle-pruned-syscall-tables.patch )
 
 inherit flag-o-matic toolchain-funcs
 

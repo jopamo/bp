@@ -1,0 +1,47 @@
+--- a/tools/perf/trace/beauty/syscalltbl.sh
++++ b/tools/perf/trace/beauty/syscalltbl.sh
+@@ -31,18 +31,32 @@
+ tools_dir=$1
+ outfile=$2
+ 
++generated_e_machines=
++
++table_generated() {
++	e_machine="$1"
++
++	case " $generated_e_machines " in
++	*" $e_machine "*) return 0 ;;
++	esac
++
++	return 1
++}
++
+ build_tables() {
+ 	infile="$1"
+ 	outfile="$2"
+ 	abis=$(echo "($3)" | tr ',' '|')
+ 	e_machine="$4"
+ 
+-	if [ ! -f "$infile" ]
+-	then
+-		echo "Missing file $infile"
+-		exit 1
++	if [ ! -f "$infile" ]; then
++		return 0
+ 	fi
+ 	sorted_table=$(mktemp /tmp/syscalltbl.XXXXXX)
++
++	if ! table_generated "$e_machine"; then
++		generated_e_machines="$generated_e_machines $e_machine"
++	fi
+ 	grep -E "^[0-9]+[[:space:]]+$abis" "$infile" | sort -n > "$sorted_table"
+ 
+ 	echo "static const char *const syscall_num_to_name_${e_machine}[] = {" >> "$outfile"
+@@ -180,6 +194,7 @@
+ build_outer_table() {
+        e_machine=$1
+        outfile="$2"
++       table_generated "$e_machine" || return 0
+        cat >> "$outfile" <<EOF
+        {
+ 	      .num_to_name = syscall_num_to_name_$e_machine,

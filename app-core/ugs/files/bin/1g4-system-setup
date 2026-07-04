@@ -765,22 +765,84 @@ validate_noncomment_lines() {
 	awk 'BEGIN { found=0 } /^[[:space:]]*($|#)/ { next } { found=1; exit 0 } END { exit(found ? 0 : 1) }' "${file}"
 }
 
+strip_wrapping_quotes() {
+	local value=${1-}
+	if [[ ${value} == \"*\" && ${value} == *\" ]]; then
+		printf '%s\n' "${value:1:${#value}-2}"
+	else
+		printf '%s\n' "${value}"
+	fi
+}
+
+verify_fstab_reference() {
+	local spec=${1}
+	local mountpoint=${2}
+	local fstype=${3}
+	local options=${4}
+	local value bind_source
+
+	case ${spec} in
+		UUID=*)
+			value=$(strip_wrapping_quotes "${spec#UUID=}")
+			if command -v blkid >/dev/null 2>&1; then
+				blkid -U "${value}" >/dev/null 2>&1 || die "/etc/fstab references missing UUID=${value}"
+			elif [[ -e /dev/disk/by-uuid/${value} ]]; then
+				:
+			else
+				die "cannot verify UUID=${value} from /etc/fstab"
+			fi
+			;;
+		PARTUUID=*)
+			value=$(strip_wrapping_quotes "${spec#PARTUUID=}")
+			if command -v blkid >/dev/null 2>&1; then
+				blkid -t "PARTUUID=${value}" >/dev/null 2>&1 || die "/etc/fstab references missing PARTUUID=${value}"
+			elif [[ -e /dev/disk/by-partuuid/${value} ]]; then
+				:
+			else
+				die "cannot verify PARTUUID=${value} from /etc/fstab"
+			fi
+			;;
+		LABEL=*)
+			value=$(strip_wrapping_quotes "${spec#LABEL=}")
+			if command -v blkid >/dev/null 2>&1; then
+				blkid -L "${value}" >/dev/null 2>&1 || die "/etc/fstab references missing LABEL=${value}"
+			elif [[ -e /dev/disk/by-label/${value} ]]; then
+				:
+			else
+				die "cannot verify LABEL=${value} from /etc/fstab"
+			fi
+			;;
+		PARTLABEL=*)
+			value=$(strip_wrapping_quotes "${spec#PARTLABEL=}")
+			if command -v blkid >/dev/null 2>&1; then
+				blkid -t "PARTLABEL=${value}" >/dev/null 2>&1 || die "/etc/fstab references missing PARTLABEL=${value}"
+			else
+				die "cannot verify PARTLABEL=${value} from /etc/fstab"
+			fi
+			;;
+		/*)
+			case ",${options}," in
+				*,bind,*|*,rbind,*)
+					bind_source=$(root_path "${spec}")
+					[[ -e ${bind_source} ]] || die "/etc/fstab bind source is missing: ${spec}"
+					;;
+			esac
+			;;
+	esac
+}
+
 validate_fstab() {
-	local file uuid
+	local file spec mountpoint fstype options dump pass extra
 	file=$(root_path /etc/fstab)
 	[[ -f ${file} ]] || die "/etc/fstab is missing"
 	if [[ ${MODE} == installed-host ]] && ! validate_noncomment_lines "${file}"; then
 		die "/etc/fstab has no real mount entries"
 	fi
-	while IFS= read -r uuid; do
-		if command -v blkid >/dev/null 2>&1; then
-			blkid -U "${uuid}" >/dev/null 2>&1 || die "/etc/fstab references missing UUID=${uuid}"
-		elif [[ -e /dev/disk/by-uuid/${uuid} ]]; then
-			:
-		else
-			die "cannot verify UUID=${uuid} from /etc/fstab"
-		fi
-	done < <(awk 'BEGIN { OFS="" } /^[[:space:]]*#/ || NF < 1 { next } $1 ~ /^UUID=/ { sub(/^UUID=/, "", $1); print $1 }' "${file}")
+	while read -r spec mountpoint fstype options dump pass extra; do
+		[[ -n ${spec:-} ]] || continue
+		[[ -z ${extra:-} ]] || die "/etc/fstab has an unparseable entry: ${spec} ${mountpoint} ${fstype} ..."
+		verify_fstab_reference "${spec}" "${mountpoint}" "${fstype}" "${options}"
+	done < <(awk '/^[[:space:]]*#/ || NF < 1 { next } { print }' "${file}")
 }
 
 validate_crypttab() {

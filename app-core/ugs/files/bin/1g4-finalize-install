@@ -56,6 +56,26 @@ root_path() {
 	fi
 }
 
+root_relative_path() {
+	local abs=${1-}
+	[[ $# -ge 1 ]] || die "root_relative_path requires a path"
+	if [[ ${ROOT} == / ]]; then
+		printf '/%s\n' "${abs#/}"
+	else
+		printf '/%s\n' "${abs#"${ROOT}/"}"
+	fi
+}
+
+target_hint_path() {
+	local rel=${1-}
+	[[ $# -ge 1 ]] || die "target_hint_path requires a path"
+	if [[ ${ROOT} == / ]]; then
+		printf '%s\n' "${rel}"
+	else
+		printf '%s%s\n' "${ROOT}" "${rel}"
+	fi
+}
+
 default_timezone() {
 	local tz
 	if [[ -r /etc/timezone ]]; then
@@ -171,21 +191,125 @@ fs_spec_from_fields() {
 	fi
 }
 
+mount_requires_fstab_entry() {
+	local rel=${1}
+	local fstype=${2}
+	case ${rel} in
+		/dev|/dev/*|/proc|/proc/*|/run|/run/*|/sys|/sys/*)
+			return 1
+			;;
+	esac
+	is_pseudo_fstype "${fstype}" && return 1
+	return 0
+}
+
+ensure_stable_fs_spec() {
+	local rel=${1}
+	local source=${2}
+	local spec=${3}
+	case ${source} in
+		/dev/*)
+			case ${spec} in
+				UUID=*|PARTUUID=*) return 0 ;;
+			esac
+			die "cannot generate a stable fstab entry for ${rel}: ${source} has no UUID/PARTUUID"
+			;;
+	esac
+}
+
+mount_has_option() {
+	local options=${1}
+	local needle=${2}
+	case ",${options}," in
+		*",${needle},"*) return 0 ;;
+		*) return 1 ;;
+	esac
+}
+
+mount_is_bind() {
+	local options=${1}
+	mount_has_option "${options}" bind || mount_has_option "${options}" rbind
+}
+
 passno_for_mount() {
 	local rel=${1}
 	local fstype=${2}
+	local options=${3:-}
+	if mount_is_bind "${options}"; then
+		printf '0\n'
+		return 0
+	fi
 	if [[ ${rel} == / ]]; then
 		printf '1\n'
 		return 0
 	fi
-	case ${fstype} in
-		msdos|ntfs|ntfs3|swap|vfat)
+	case ${rel}:${fstype} in
+		/boot/efi:*|*/swap:swap|*:swap)
 			printf '0\n'
 			;;
 		*)
 			printf '2\n'
 			;;
 	esac
+}
+
+normalize_fstab_options() {
+	local rel=${1}
+	local fstype=${2}
+	local options=${3}
+	local opt
+	local -a normalized=()
+	local saw_ro=no
+
+	if mount_is_bind "${options}"; then
+		IFS=, read -r -a _raw_opts <<< "${options}"
+		for opt in "${_raw_opts[@]}"; do
+			case ${opt} in
+				''|rw|relatime)
+					continue
+					;;
+				*)
+					normalized+=("${opt}")
+					;;
+			esac
+		done
+		if (( ${#normalized[@]} == 0 )); then
+			printf 'bind\n'
+			return 0
+		fi
+		printf '%s' "${normalized[0]}"
+		for opt in "${normalized[@]:1}"; do
+			printf ',%s' "${opt}"
+		done
+		printf '\n'
+		return 0
+	fi
+
+	IFS=, read -r -a _raw_opts <<< "${options}"
+	for opt in "${_raw_opts[@]}"; do
+		case ${opt} in
+			''|rw|relatime)
+				continue
+				;;
+			ro)
+				saw_ro=yes
+				;;
+			*)
+				normalized+=("${opt}")
+				;;
+		esac
+	done
+
+	if [[ ${saw_ro} == yes ]]; then
+		printf 'ro'
+	else
+		printf 'defaults'
+	fi
+
+	for opt in "${normalized[@]}"; do
+		printf ',%s' "${opt}"
+	done
+	printf '\n'
 }
 
 collect_mount_table() {
@@ -206,6 +330,42 @@ collect_mount_table() {
 	rm -f "${raw}"
 	[[ -s ${MOUNT_TABLE} ]] || die "could not build mount table for ${ROOT}"
 	awk -v root="${ROOT}" '$1 == root { found=1 } END { exit(found ? 0 : 1) }' "${MOUNT_TABLE}" || die "${ROOT} itself is not mounted"
+}
+
+preserve_existing_bind_mounts() {
+	local existing line_count=0
+	existing=$(root_path /etc/fstab)
+	[[ -f ${existing} ]] || return 0
+	while IFS= read -r line; do
+		PRESERVED_BIND_LINES+=("${line}")
+		line_count=$((line_count + 1))
+	done < <(
+		awk '
+			/^[[:space:]]*#/ || NF < 4 { next }
+			{
+				n = split($4, opts, ",")
+				for (i = 1; i <= n; ++i) {
+					if (opts[i] == "bind" || opts[i] == "rbind") {
+						print
+						next
+					}
+				}
+			}
+		' "${existing}"
+	)
+	(( line_count > 0 )) || return 0
+}
+
+append_preserved_bind_mounts() {
+	local line
+	(( ${#PRESERVED_BIND_LINES[@]} > 0 )) || return 0
+	{
+		printf '\n'
+		printf '# Preserved bind mounts from existing /etc/fstab.\n'
+		for line in "${PRESERVED_BIND_LINES[@]}"; do
+			printf '%s\n' "${line}"
+		done
+	} >> "${FSTAB_FILE}"
 }
 
 discover_crypt_ancestors() {
@@ -238,26 +398,40 @@ discover_crypt_ancestors() {
 }
 
 generate_fstab() {
-	local target source fstype options uuid partuuid rel spec passno line_count=0
+	local target source fstype options uuid partuuid rel spec passno fstab_options entry_source entry_type line_count=0
 	: > "${FSTAB_FILE}"
 	while read -r target source fstype options uuid partuuid; do
 		rel=$(mount_rel_path "${target}")
-		case ${rel} in
-			/dev|/dev/*|/proc|/proc/*|/run|/run/*|/sys|/sys/*)
-				continue
-				;;
-		esac
-		is_pseudo_fstype "${fstype}" && continue
+		mount_requires_fstab_entry "${rel}" "${fstype}" || continue
+		mount_is_bind "${options}" && continue
 		spec=$(fs_spec_from_fields "${source}" "${uuid:-}" "${partuuid:-}")
-		if [[ ${rel} == / && ${spec} != UUID=* && ${spec} != PARTUUID=* ]]; then
-			die "root filesystem under ${ROOT} has no UUID/PARTUUID; refusing to build an unstable kernel cmdline"
-		fi
-		passno=$(passno_for_mount "${rel}" "${fstype}")
-		printf '%s %s %s %s 0 %s\n' "${spec}" "${rel}" "${fstype}" "${options}" "${passno}" >> "${FSTAB_FILE}"
+		ensure_stable_fs_spec "${rel}" "${source}" "${spec}"
+		entry_source=${spec}
+		entry_type=${fstype}
+		passno=$(passno_for_mount "${rel}" "${fstype}" "${options}")
+		fstab_options=$(normalize_fstab_options "${rel}" "${fstype}" "${options}")
+		printf '%s %s %s %s 0 %s\n' "${entry_source}" "${rel}" "${entry_type}" "${fstab_options}" "${passno}" >> "${FSTAB_FILE}"
 		line_count=$((line_count + 1))
 		discover_crypt_ancestors "${source}"
 	done < "${MOUNT_TABLE}"
+	append_preserved_bind_mounts
 	(( line_count > 0 )) || die "failed to generate /etc/fstab contents"
+}
+
+validate_generated_fstab() {
+	local target source fstype options uuid partuuid rel spec entry_source entry_type
+	while read -r target source fstype options uuid partuuid; do
+		rel=$(mount_rel_path "${target}")
+		mount_requires_fstab_entry "${rel}" "${fstype}" || continue
+		mount_is_bind "${options}" && continue
+		spec=$(fs_spec_from_fields "${source}" "${uuid:-}" "${partuuid:-}")
+		entry_source=${spec}
+		entry_type=${fstype}
+		grep -qE "^[^[:space:]]+[[:space:]]+${rel//\//\\/}[[:space:]]+${entry_type//\//\\/}[[:space:]]" "${FSTAB_FILE}" || \
+			die "generated fstab is missing an entry for ${rel} (${entry_type})"
+		grep -qE "^${entry_source//\//\\/}[[:space:]]+${rel//\//\\/}[[:space:]]+${entry_type//\//\\/}[[:space:]]" "${FSTAB_FILE}" || \
+			die "generated fstab entry for ${rel} does not use the detected source ${entry_source}"
+	done < "${MOUNT_TABLE}"
 }
 
 write_crypttab() {
@@ -291,6 +465,41 @@ build_kernel_cmdline() {
 	fi
 }
 
+detect_kernel_installation() {
+	local image modules_dir
+	KERNEL_IMAGE=
+	KERNEL_MODULE_TREE=
+	KERNEL_MODULE_RELEASE=
+
+	if [[ -d $(root_path /boot) ]]; then
+		image=$(find "$(root_path /boot)" -maxdepth 1 -type f \( -name 'vmlinuz*' -o -name 'kernel*' -o -name 'bzImage*' \) -print -quit 2>/dev/null || true)
+		if [[ -n ${image} ]]; then
+			KERNEL_IMAGE=$(root_relative_path "${image}")
+		fi
+	fi
+
+	if [[ -d $(root_path /usr/lib/modules) ]]; then
+		modules_dir=$(find "$(root_path /usr/lib/modules)" -mindepth 1 -maxdepth 1 -type d -print -quit 2>/dev/null || true)
+	fi
+	if [[ -z ${modules_dir:-} && -d $(root_path /lib/modules) ]]; then
+		modules_dir=$(find "$(root_path /lib/modules)" -mindepth 1 -maxdepth 1 -type d -print -quit 2>/dev/null || true)
+	fi
+	if [[ -n ${modules_dir:-} ]]; then
+		KERNEL_MODULE_TREE=$(root_relative_path "${modules_dir}")
+		KERNEL_MODULE_RELEASE=${modules_dir##*/}
+	fi
+
+	if [[ -z ${KERNEL_IMAGE} && -z ${KERNEL_MODULE_TREE} ]]; then
+		die "no compiled/installed kernel detected under ${ROOT}: missing a kernel image in /boot and a kernel module tree in /usr/lib/modules or /lib/modules. Build/install a kernel before running $(basename "$0")."
+	fi
+	if [[ -z ${KERNEL_IMAGE} ]]; then
+		die "incomplete kernel install under ${ROOT}: kernel module tree ${KERNEL_MODULE_TREE} exists, but no kernel image was found in /boot. Install the kernel to /boot before running $(basename "$0")."
+	fi
+	if [[ -z ${KERNEL_MODULE_TREE} ]]; then
+		die "incomplete kernel install under ${ROOT}: kernel image ${KERNEL_IMAGE} exists, but no kernel module tree was found in /usr/lib/modules or /lib/modules. Install the kernel modules before running $(basename "$0")."
+	fi
+}
+
 detect_efi_directory() {
 	local target source fstype options uuid partuuid rel
 	while read -r target source fstype options uuid partuuid; do
@@ -298,10 +507,6 @@ detect_efi_directory() {
 		case ${rel}:${fstype} in
 			/boot/efi:vfat|/boot/efi:msdos|/boot/efi:fat)
 				printf '/boot/efi\n'
-				return 0
-				;;
-			/boot:vfat|/boot:msdos|/boot:fat)
-				printf '/boot\n'
 				return 0
 				;;
 		esac
@@ -362,6 +567,17 @@ default_grub_config_path() {
 	fi
 }
 
+build_target_command() {
+	local cmd="" arg
+	if [[ ${ROOT} != / ]]; then
+		printf -v cmd 'chroot %q ' "${ROOT}"
+	fi
+	for arg in "$@"; do
+		printf -v cmd '%s%q ' "${cmd}" "${arg}"
+	done
+	printf '%s\n' "${cmd% }"
+}
+
 build_boot_hooks() {
 	local efi_dir existing_cfg has_boot_entries=no
 	INITRAMFS_CMD=
@@ -370,7 +586,7 @@ build_boot_hooks() {
 	BOOTLOADER_CONFIG=
 
 	target_has_command dracut || die "target does not contain dracut; cannot build initramfs"
-	INITRAMFS_CMD="chroot \"${ROOT}\" dracut --force --regenerate-all"
+	INITRAMFS_CMD=$(build_target_command dracut --force --regenerate-all)
 
 	existing_cfg=$(detect_existing_bootloader_config || true)
 	if [[ ${existing_cfg} == __systemd_entries__ ]]; then
@@ -396,22 +612,22 @@ build_boot_hooks() {
 	fi
 
 	BOOTLOADER_CONFIG=$(default_grub_config_path)
-	BOOTLOADER_CONFIG_CMD="chroot \"${ROOT}\" grub-mkconfig -o \"${BOOTLOADER_CONFIG}\""
+	BOOTLOADER_CONFIG_CMD=$(build_target_command grub-mkconfig -o "${BOOTLOADER_CONFIG}")
 
 	if [[ -n ${GRUB_DEVICE} ]]; then
-		BOOTLOADER_INSTALL_CMD="chroot \"${ROOT}\" grub-install \"${GRUB_DEVICE}\""
+		BOOTLOADER_INSTALL_CMD=$(build_target_command grub-install "${GRUB_DEVICE}")
 		return 0
 	fi
 
 	efi_dir=$(detect_efi_directory || true)
 	if [[ -n ${efi_dir} ]]; then
 		GRUB_TARGET=${GRUB_TARGET:-$(default_grub_target)}
-		BOOTLOADER_INSTALL_CMD="chroot \"${ROOT}\" grub-install --target=${GRUB_TARGET} --efi-directory=${efi_dir} --bootloader-id=${GRUB_BOOT_ID}"
+		BOOTLOADER_INSTALL_CMD=$(build_target_command grub-install "--target=${GRUB_TARGET}" "--efi-directory=${efi_dir}" "--bootloader-id=${GRUB_BOOT_ID}")
 		return 0
 	fi
 
 	if [[ ${BOOTLOADER} == auto ]]; then
-		die "cannot infer a safe grub-install target; mount the EFI system partition at ${ROOT}/boot or ${ROOT}/boot/efi, or pass --grub-device"
+		die "cannot infer a safe grub-install target; mount the EFI system partition at $(target_hint_path /boot) or $(target_hint_path /boot/efi), or pass --grub-device"
 	fi
 	die "grub was requested but no EFI mount or --grub-device was provided"
 }
@@ -434,11 +650,15 @@ show_summary() {
 	Timezone:             ${TIMEZONE}
 	Network config:       $( [[ ${NO_NETWORK} == yes ]] && echo disabled || echo generated-networkd-dhcp )
 	LUKS detected:        ${LUKS_USED}
+	Kernel image:         ${KERNEL_IMAGE}
+	Kernel modules:       ${KERNEL_MODULE_TREE}
 	Kernel cmdline:       ${KERNEL_CMDLINE}
 	Initramfs hook:       ${INITRAMFS_CMD:-none}
 	Bootloader install:   ${BOOTLOADER_INSTALL_CMD:-none}
 	Bootloader config:    ${BOOTLOADER_CONFIG_CMD:-${BOOTLOADER_CONFIG:-none}}
 	EOF2
+	echo "Planned /etc/fstab:"
+	sed 's/^/  /' "${FSTAB_FILE}"
 }
 
 ROOT=
@@ -583,7 +803,9 @@ require_command blkid
 require_command lsblk
 require_command awk
 require_command sort
-require_command chroot
+if [[ ${ROOT} != / ]]; then
+	require_command chroot
+fi
 
 INTERACTIVE=no
 [[ ${YES} == yes ]] || { [[ -t 0 && -t 1 ]] && INTERACTIVE=yes; }
@@ -601,12 +823,6 @@ fi
 if [[ ${INTERACTIVE} == yes ]]; then
 	HOSTNAME=$(prompt_default 'Hostname' "${HOSTNAME}")
 	TIMEZONE=$(prompt_default 'Timezone' "${TIMEZONE}")
-	if [[ -z ${USER_PASSWORD_HASH} ]]; then
-		USER_PASSWORD_HASH=$(prompt_password_hash "Password for ${NORMAL_USER}" || true)
-	fi
-	if [[ -z ${ROOT_PASSWORD_HASH} ]]; then
-		ROOT_PASSWORD_HASH=$(prompt_password_hash 'Root password' || true)
-	fi
 fi
 
 [[ -n ${HOSTNAME} ]] || die "hostname must not be empty"
@@ -632,12 +848,25 @@ collect_mount_table
 
 declare -A CRYPT_UUID_BY_NAME=()
 declare -a CRYPT_ORDER=()
+declare -a PRESERVED_BIND_LINES=()
 LUKS_USED=no
 
+preserve_existing_bind_mounts
 generate_fstab
+validate_generated_fstab
 write_crypttab
 build_kernel_cmdline
+detect_kernel_installation
 build_boot_hooks
+
+if [[ ${INTERACTIVE} == yes ]]; then
+	if [[ -z ${USER_PASSWORD_HASH} ]]; then
+		USER_PASSWORD_HASH=$(prompt_password_hash "Password for ${NORMAL_USER}" || true)
+	fi
+	if [[ -z ${ROOT_PASSWORD_HASH} ]]; then
+		ROOT_PASSWORD_HASH=$(prompt_password_hash 'Root password' || true)
+	fi
+fi
 
 : > "${CONFIG_FILE}"
 write_config_var ONEG4_SETUP_HOSTNAME "${HOSTNAME}"

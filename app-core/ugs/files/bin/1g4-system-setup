@@ -526,6 +526,16 @@ user_exists() {
 	awk -F: -v user="${user}" '$1 == user { found=1 } END { exit(found ? 0 : 1) }' "$(passwd_file)"
 }
 
+user_uid() {
+	local user=${1}
+	awk -F: -v user="${user}" '$1 == user { print $3; found=1; exit } END { exit(found ? 0 : 1) }' "$(passwd_file)"
+}
+
+user_gid() {
+	local user=${1}
+	awk -F: -v user="${user}" '$1 == user { print $4; found=1; exit } END { exit(found ? 0 : 1) }' "$(passwd_file)"
+}
+
 create_group_if_missing() {
 	local group=${1}
 	[[ -n ${group} ]] || return 0
@@ -533,6 +543,17 @@ create_group_if_missing() {
 		require_command groupadd
 		groupadd -R "${ROOT}" "${group}" >/dev/null
 	fi
+}
+
+ensure_normal_user_home() {
+	local user=${1}
+	local home=${2}
+	local uid gid
+	[[ -n ${user} && -n ${home} ]] || return 0
+	uid=$(user_uid "${user}") || die "could not determine uid for ${user}"
+	gid=$(user_gid "${user}") || die "could not determine gid for ${user}"
+	install -d -m 0755 "$(root_path "${home}")"
+	chown "${uid}:${gid}" "$(root_path "${home}")"
 }
 
 create_or_update_normal_user() {
@@ -558,6 +579,7 @@ create_or_update_normal_user() {
 	else
 		useradd -R "${ROOT}" -m -d "${home}" -s "${shell}" -g "${primary}" "${group_list[@]}" "${user}" >/dev/null
 	fi
+	ensure_normal_user_home "${user}" "${home}"
 	if [[ -n ${ONEG4_SETUP_NORMAL_USER_PASSWORD_HASH:-} ]]; then
 		set_shadow_password "${user}" "${ONEG4_SETUP_NORMAL_USER_PASSWORD_HASH}"
 	fi

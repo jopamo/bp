@@ -15,3 +15,4 @@ xmedia-lib/libplacebo -vulkan
 xmedia-lib/x264 opencl
 xmedia-live-app/avidemux qt5
 xmedia-app/mpv -vulkan
+app-emu/qemu gtk

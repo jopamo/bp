@@ -187,6 +187,7 @@ src_install() {
 	use resolve && newsysusers "${FILESDIR}/resolve-sysusers" "${PN}-resolve.conf"
 	use networkd && newsysusers "${FILESDIR}/network-sysusers" "${PN}-network.conf"
 	use coredump && newsysusers "${FILESDIR}/coredump-sysusers" "${PN}-coredump.conf"
+	newtmpfiles "${FILESDIR}/1g4-journal-tmpfiles" 1g4-journal.conf
 
 	insinto /etc/systemd
 	use resolve && doins "${FILESDIR}/resolved.conf"
@@ -196,14 +197,12 @@ src_install() {
 
 	rm "${ED}/usr/share/factory/etc/issue" || die
 
-	keepdir /var/log/journal /var/lib/systemd
+	keepdir /var/lib/systemd
 	keepdir /etc/systemd/user
 
 	rm -rf "${ED}/etc/X11" "${ED}/etc/xdg" || die
 
 	use networkd && keepdir /etc/systemd/network
-
-	use resolve && dosym -r /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 
 	local journald_conf="${ED}/etc/systemd/journald.conf"
 
@@ -239,16 +238,84 @@ src_install() {
 	EOF
 
 	rm -rf "${ED}"/usr/share/mime
+
+	dodir /usr/lib/systemd/system-preset
+	cat > "${ED}/usr/lib/systemd/system-preset/90-systemd.preset" <<- EOF || die
+		# 1g4 system preset policy
+		enable remote-fs.target
+		enable remote-cryptsetup.target
+		enable remote-integritysetup.target
+		enable remote-veritysetup.target
+		enable machines.target
+		enable getty@.service
+		enable systemd-confext.service
+		enable systemd-journald-audit.socket
+		enable systemd-mountfsd.socket
+		enable systemd-network-generator.service
+		enable systemd-networkd.service
+		enable systemd-networkd-wait-online.service
+		enable systemd-nsresourced.socket
+		enable systemd-pstore.service
+		$(use resolve && echo enable systemd-resolved.service)
+		disable systemd-timesyncd.service
+		enable systemd-sysext.service
+		enable systemd-userdbd.socket
+		disable console-getty.service
+		disable debug-shell.service
+		disable exit.target
+		disable halt.target
+		disable kexec.target
+		disable poweroff.target
+		enable reboot.target
+		disable rescue.target
+		disable proc-sys-fs-binfmt_misc.mount
+		disable syslog.socket
+		disable systemd-boot-check-no-failures.service
+		disable systemd-journal-gatewayd.*
+		disable systemd-journal-remote.*
+		disable systemd-journal-upload.*
+		disable systemd-time-wait-sync.service
+	EOF
+
+	dodir /usr/lib/systemd/initrd-preset
+	cat > "${ED}/usr/lib/systemd/initrd-preset/90-systemd.preset" <<- EOF || die
+		# 1g4 initrd preset policy
+		enable systemd-journald-audit.socket
+		enable systemd-network-generator.service
+		enable systemd-networkd.service
+		enable systemd-networkd-wait-online.service
+		enable systemd-pstore.service
+		$(use resolve && echo enable systemd-resolved.service)
+		disable console-getty.service
+		disable debug-shell.service
+		disable exit.target
+		disable halt.target
+		disable kexec.target
+		disable poweroff.target
+		enable reboot.target
+		disable rescue.target
+		disable proc-sys-fs-binfmt_misc.mount
+		disable syslog.socket
+		disable systemd-boot-check-no-failures.service
+		disable systemd-journal-gatewayd.*
+		disable systemd-journal-remote.*
+		disable systemd-journal-upload.*
+		disable systemd-time-wait-sync.service
+	EOF
 }
 
 pkg_postinst() {
     sysusers_process
+    tmpfiles_process 1g4-journal.conf
 
     journalctl --update-catalog
 
     use hwdb && systemd-hwdb update --root="${EROOT%/}"
     udevadm control --reload
 
-    systemctl reenable getty@tty1.service remote-fs.target
-    use networkd && systemctl reenable systemd-networkd.service
+    if _doins_is_live_root; then
+        systemctl preset getty@tty1.service remote-fs.target
+        use networkd && systemctl preset systemd-networkd.service systemd-networkd-wait-online.service
+        use resolve && systemctl preset systemd-resolved.service
+    fi
 }

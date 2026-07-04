@@ -16,7 +16,7 @@ app-core/attr static-libs
 app-core/debianutils installkernel
 app-core/git curl
 app-core/kmod tools
-app-core/systemd logind
+app-core/systemd logind resolve
 app-crypto/blake3 shared
 app-crypto/botan boost lzma
 app-emu/capstone diet
@@ -27,7 +27,7 @@ app-fs/smartmontools daemon
 app-lang/python-exec native-symlinks
 dev-pypi/httpx cli
 app-kernel/linux-firmware amd-ucode i915
-app-net/chrony cmdmon ntp phc refclock rtc
+app-net/chrony cmdmon ntp phc refclock rtc systemd
 app-crypto/vesk static-libs shared
 app-core/bx static
 app-net/mira static

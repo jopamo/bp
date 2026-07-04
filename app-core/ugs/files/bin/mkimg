@@ -223,5 +223,12 @@ fi
 # start stage4 creation:
 if [ "$AGREE" == 'yes' ]
 then
+	if [ "${TARGET}" = "/" ]
+	then
+		echo "Warning: skipping rootfs finalization on the live root; validating current state only."
+		1g4-rootfs-policy validate "${TARGET}" bootable
+	else
+		1g4-rootfs-policy finalize "${TARGET}" bootable
+	fi
 	XZ_OPT="-e9" tar -cpP --ignore-failed-read "--xattrs-include='*.*'" --numeric-owner "${INCLUDES[@]}" "${EXCLUDES[@]}" "${OPTIONS[@]}" -f "$STAGE4_FILENAME" "${TARGET}"
 fi

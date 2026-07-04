@@ -1,6 +1,16 @@
 #!/bin/bash
 
-cp -L /etc/resolv.conf etc/
+if [[ -f /run/systemd/resolve/resolv.conf ]]; then
+	install -m0644 /run/systemd/resolve/resolv.conf etc/resolv.conf
+elif grep -qs '^# This is /run/systemd/resolve/stub-resolv.conf managed by man:systemd-resolved(8)\.' /etc/resolv.conf; then
+	if [[ -f usr/share/factory/etc/resolv.conf ]]; then
+		install -m0644 usr/share/factory/etc/resolv.conf etc/resolv.conf
+	else
+		: > etc/resolv.conf
+	fi
+else
+	cp -L /etc/resolv.conf etc/
+fi
 mount -t proc proc proc
 mount --rbind /sys sys
 mount --make-rslave sys

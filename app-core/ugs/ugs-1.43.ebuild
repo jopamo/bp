@@ -17,6 +17,7 @@ src_install() {
 	doins "${FILESDIR}/bashrc/eth.sh"
 
 	local bin_utils=(
+		1g4-rootfs-policy
 		dslam
 		efixperm
 		lighttpd_certs

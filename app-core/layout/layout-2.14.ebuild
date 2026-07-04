@@ -30,12 +30,9 @@ src_install() {
 	for d in log lib; do
 		diropts -m0755
 		dodir /var/$d
-		keepdir /var/$d
+		[[ ${d} == log ]] || keepdir /var/$d
 	done
 
-	keepdir /var/log/journal
-
-	keepdir /var/lib/machines
 	keepdir /etc/kernel/postinst.d
 
 	install -d -m555 "${ED}"/proc
@@ -87,7 +84,7 @@ src_install() {
 	doins 50layout
 
 	# setup /var
-	for d in local opt log/old lib/misc ; do
+	for d in local opt lib/misc ; do
 		install -d -m755 "${ED}"/var/$d
 		keepdir /var/$d
 	done

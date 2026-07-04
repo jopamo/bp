@@ -1,0 +1,65 @@
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="helper scripts"
+HOMEPAGE="https://1g4.org"
+
+LICENSE="MIT"
+SLOT="0"
+S=${WORKDIR}
+
+KEYWORDS="amd64 arm64"
+
+IUSE="video"
+
+src_install() {
+	# Optional bash helper fragments
+	insinto /etc/bash/bashrc.d
+	doins "${FILESDIR}/bashrc/eth.sh"
+
+	local bin_utils=(
+		1g4-finalize-install
+		1g4-rootfs-policy
+		1g4-system-setup
+		dslam
+		efixperm
+		lighttpd_certs
+		mkheaders
+		mkimg
+		build
+		mkstage
+		ubuntu_kernel
+		xbkup
+		xchroot
+		zgrep
+	)
+	for f in "${bin_utils[@]}"; do
+		dobin "${FILESDIR}/bin/$f"
+	done
+
+	insinto /usr/lib/systemd/system
+	insopts -m 0644
+	local systemd_services=(
+		daily-reboot.service
+		xdp-drop@.service
+		xdp-ddos@.service
+	)
+	for f in "${systemd_services[@]}"; do
+		doins "${FILESDIR}/services/$f"
+	done
+
+	local systemd_timers=(
+		daily-reboot.timer
+	)
+	for f in "${systemd_timers[@]}"; do
+		doins "${FILESDIR}/timers/$f"
+	done
+
+	if use video ; then
+		local video_bins=(
+			mkv2aac mkvengonly mux_mp4 normalize_audio x265_anime x265_film
+		)
+		for f in "${video_bins[@]}"; do
+			dobin "${FILESDIR}/video/$f"
+		done
+	fi
+}

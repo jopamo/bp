@@ -423,7 +423,7 @@ valid_machine_id() {
 }
 
 generate_machine_id_value() {
-	tr 'A-Z' 'a-z' < /proc/sys/kernel/random/uuid | tr -d '-\n'
+	tr 'A-Z' 'a-z' < /proc/sys/kernel/random/uuid | tr -d '\n-'
 }
 
 apply_machine_id() {

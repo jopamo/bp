@@ -500,6 +500,54 @@ detect_kernel_installation() {
 	fi
 }
 
+detect_bios_grub_target() {
+	local target source fstype options uuid partuuid rel candidate info type pkname
+
+	candidate=
+	while read -r target source fstype options uuid partuuid; do
+		rel=$(mount_rel_path "${target}")
+		case ${rel} in
+			/boot)
+				mount_requires_fstab_entry "${rel}" "${fstype}" || continue
+				mount_is_bind "${options}" && continue
+				candidate=${source}
+				break
+				;;
+		esac
+	done < "${MOUNT_TABLE}"
+
+	if [[ -z ${candidate} ]]; then
+		while read -r target source fstype options uuid partuuid; do
+			rel=$(mount_rel_path "${target}")
+			case ${rel} in
+				/)
+					mount_requires_fstab_entry "${rel}" "${fstype}" || continue
+					mount_is_bind "${options}" && continue
+					candidate=${source}
+					break
+					;;
+			esac
+		done < "${MOUNT_TABLE}"
+	fi
+
+	[[ -n ${candidate} && ${candidate} == /dev/* ]] || return 1
+	info=$(lsblk -ndo TYPE,PKNAME "${candidate}" 2>/dev/null | head -n1 || true)
+	[[ -n ${info} ]] || return 1
+	read -r type pkname <<< "${info}"
+	case ${type} in
+		part)
+			[[ -n ${pkname:-} ]] || return 1
+			printf '/dev/%s\n' "${pkname}"
+			return 0
+			;;
+		disk)
+			printf '%s\n' "${candidate}"
+			return 0
+			;;
+	esac
+	return 1
+}
+
 detect_efi_directory() {
 	local target source fstype options uuid partuuid rel
 	while read -r target source fstype options uuid partuuid; do
@@ -579,7 +627,7 @@ build_target_command() {
 }
 
 build_boot_hooks() {
-	local efi_dir existing_cfg has_boot_entries=no
+	local efi_dir existing_cfg has_boot_entries=no bios_target=
 	INITRAMFS_CMD=
 	BOOTLOADER_INSTALL_CMD=
 	BOOTLOADER_CONFIG_CMD=
@@ -626,8 +674,16 @@ build_boot_hooks() {
 		return 0
 	fi
 
+	if [[ -d $(root_path /usr/lib/grub/i386-pc) ]]; then
+		bios_target=$(detect_bios_grub_target || true)
+		if [[ -n ${bios_target} ]]; then
+			BOOTLOADER_INSTALL_CMD=$(build_target_command grub-install "${bios_target}")
+			return 0
+		fi
+	fi
+
 	if [[ ${BOOTLOADER} == auto ]]; then
-		die "cannot infer a safe grub-install target; mount the EFI system partition at $(target_hint_path /boot) or $(target_hint_path /boot/efi), or pass --grub-device"
+		die "cannot infer a safe grub-install target; mount the EFI system partition at $(target_hint_path /boot) or $(target_hint_path /boot/efi), or pass --grub-device. For legacy BIOS installs, keep /boot or / on a plain disk partition so $(basename "$0") can infer the parent disk."
 	fi
 	die "grub was requested but no EFI mount or --grub-device was provided"
 }

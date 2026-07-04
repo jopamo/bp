@@ -223,9 +223,9 @@ validate_enabled_preset_targets() {
 validate_resolv_conf() {
 	local resolv
 	resolv=$(root_path /etc/resolv.conf)
-	[[ -e ${resolv} ]] || die "/etc/resolv.conf is missing"
+	[[ -e ${resolv} || -L ${resolv} ]] || die "/etc/resolv.conf is missing"
 
-	if [[ -f ${resolv} ]] && grep -qs '^# This is /run/systemd/resolve/stub-resolv.conf managed by man:systemd-resolved(8)\.' "${resolv}"; then
+	if [[ ! -L ${resolv} && -f ${resolv} ]] && grep -qs '^# This is /run/systemd/resolve/stub-resolv.conf managed by man:systemd-resolved(8)\.' "${resolv}"; then
 		die "/etc/resolv.conf is a resolved stub regular file, expected a symlink or plain resolver file"
 	fi
 

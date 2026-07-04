@@ -151,6 +151,8 @@ mount_rel_path() {
 	local target=${1}
 	if [[ ${target} == ${ROOT} ]]; then
 		printf '/\n'
+	elif [[ ${ROOT} == / ]]; then
+		printf '%s\n' "${target}"
 	else
 		printf '/%s\n' "${target#"${ROOT}/"}"
 	fi
@@ -191,10 +193,16 @@ collect_mount_table() {
 	raw=$(mktemp)
 	findmnt -R -rno TARGET,SOURCE,FSTYPE,OPTIONS,UUID,PARTUUID --target "${ROOT}" > "${raw}" || die "failed to inspect mounted filesystems under ${ROOT}"
 	[[ -s ${raw} ]] || die "no mounted filesystems found under ${ROOT}"
-	awk -v root="${ROOT}" '$1 == root || index($1, root "/") == 1 { print }' "${raw}" |
-		awk '{ print length($1), $0 }' |
-		sort -n -k1,1 |
-		cut -d' ' -f2- > "${MOUNT_TABLE}"
+	if [[ ${ROOT} == / ]]; then
+		awk '{ print length($1), $0 }' "${raw}" |
+			sort -n -k1,1 |
+			cut -d' ' -f2- > "${MOUNT_TABLE}"
+	else
+		awk -v root="${ROOT}" '$1 == root || index($1, root "/") == 1 { print }' "${raw}" |
+			awk '{ print length($1), $0 }' |
+			sort -n -k1,1 |
+			cut -d' ' -f2- > "${MOUNT_TABLE}"
+	fi
 	rm -f "${raw}"
 	[[ -s ${MOUNT_TABLE} ]] || die "could not build mount table for ${ROOT}"
 	awk -v root="${ROOT}" '$1 == root { found=1 } END { exit(found ? 0 : 1) }' "${MOUNT_TABLE}" || die "${ROOT} itself is not mounted"

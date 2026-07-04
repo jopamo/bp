@@ -71,8 +71,6 @@ src_install() {
 	insinto /etc/chrony
 	doins "${FILESDIR}/chrony.conf"
 
-	keepdir /var/log/chrony
-
 	if use logrotate; then
 		insinto /etc/logrotate.d
 		newins "${S}/examples/chrony.logrotate" chrony
@@ -80,6 +78,10 @@ src_install() {
 
 	if use systemd; then
 		systemd_dounit "${FILESDIR}/chronyd.service"
+		dodir /usr/lib/systemd/system-preset
+		cat > "${ED}/usr/lib/systemd/system-preset/80-chrony.preset" <<- EOF || die
+			enable chronyd.service
+		EOF
 	fi
 
 		cat > "${T}"/"${PN}"-sysusers <<- EOF || die
@@ -89,6 +91,7 @@ src_install() {
 
 	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die
 		d /var/lib/chrony 0755 chrony chrony - -
+		d /var/log/chrony 0755 chrony chrony - -
 	EOF
 
 	newsysusers "${T}/${PN}-sysusers" "${PN}.conf"
@@ -98,4 +101,7 @@ src_install() {
 pkg_postinst() {
 	sysusers_process
 	tmpfiles_process
+	if _doins_is_live_root; then
+		use systemd && systemctl preset chronyd.service
+	fi
 }

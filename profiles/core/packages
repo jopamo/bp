@@ -30,6 +30,7 @@
 *app-net/iproute2
 *app-net/nftables
 *app-net/openssh
+*lib-core/tzdb
 *app-var/pax-utils
 *lib-core/wtmpdb
 *lib-net/ca-certificates

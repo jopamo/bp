@@ -318,21 +318,41 @@ write_keymap() {
 		"KEYMAP=${keymap}"
 }
 
+resolve_timezone_entry() {
+	local timezone=${1-}
+	local zoneinfo_root candidate
+	[[ -n ${timezone} ]] || return 1
+	case ${timezone} in
+		/*|*'..'*)
+			return 1
+			;;
+	esac
+	zoneinfo_root=$(root_path /usr/share/zoneinfo)
+	[[ -d ${zoneinfo_root} ]] || die "timezone data directory is missing: /usr/share/zoneinfo (install tzdata in ${ROOT})"
+	for candidate in "${timezone}" "Etc/${timezone}"; do
+		[[ -e ${zoneinfo_root}/${candidate} ]] || continue
+		printf '%s\n' "${candidate}"
+		return 0
+	done
+	return 1
+}
+
 write_timezone() {
 	local timezone=${ONEG4_SETUP_TIMEZONE:-}
-	local zoneinfo localtime
+	local zoneinfo localtime resolved
 	[[ -n ${timezone} ]] || return 0
-	zoneinfo=$(root_path "/usr/share/zoneinfo/${timezone}")
-	[[ -e ${zoneinfo} ]] || die "timezone data is missing: ${timezone}"
+	resolved=$(resolve_timezone_entry "${timezone}" || true)
+	[[ -n ${resolved} ]] || die "timezone data is missing for ${timezone} under /usr/share/zoneinfo in ${ROOT}; install tzdata or choose an available zone"
+	zoneinfo=$(root_path "/usr/share/zoneinfo/${resolved}")
 	localtime=$(root_path /etc/localtime)
 	install -d "$(dirname "${localtime}")"
 	rm -f "${localtime}"
 	if [[ ${ROOT} == / ]]; then
-		ln -snf "../usr/share/zoneinfo/${timezone}" "${localtime}"
+		ln -snf "../usr/share/zoneinfo/${resolved}" "${localtime}"
 	else
-		ln -snf "../usr/share/zoneinfo/${timezone}" "${localtime}"
+		ln -snf "../usr/share/zoneinfo/${resolved}" "${localtime}"
 	fi
-	printf '%s\n' "${timezone}" > "$(root_path /etc/timezone)"
+	printf '%s\n' "${resolved}" > "$(root_path /etc/timezone)"
 	chmod 0644 "$(root_path /etc/timezone)"
 }
 

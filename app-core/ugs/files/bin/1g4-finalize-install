@@ -97,6 +97,34 @@ default_timezone() {
 	printf 'UTC\n'
 }
 
+resolve_target_timezone() {
+	local timezone=${1-}
+	local zoneinfo_root candidate
+	[[ -n ${timezone} ]] || return 1
+	case ${timezone} in
+		/*|*'..'*)
+			return 1
+			;;
+	esac
+	zoneinfo_root=$(root_path /usr/share/zoneinfo)
+	[[ -d ${zoneinfo_root} ]] || die "target is missing /usr/share/zoneinfo; install lib-core/tzdb before running $(basename "$0")"
+	for candidate in "${timezone}" "Etc/${timezone}"; do
+		[[ -e ${zoneinfo_root}/${candidate} ]] || continue
+		printf '%s\n' "${candidate}"
+		return 0
+	done
+	return 1
+}
+
+normalize_target_timezone() {
+	local timezone=${1-}
+	local resolved
+	[[ -n ${timezone} ]] || die "timezone must not be empty"
+	resolved=$(resolve_target_timezone "${timezone}" || true)
+	[[ -n ${resolved} ]] || die "timezone data is missing for ${timezone} under $(target_hint_path /usr/share/zoneinfo); install lib-core/tzdb or choose an available zone"
+	printf '%s\n' "${resolved}"
+}
+
 default_login_user() {
 	local candidate=${SUDO_USER:-${USER:-}}
 	case ${candidate} in
@@ -883,6 +911,7 @@ fi
 
 [[ -n ${HOSTNAME} ]] || die "hostname must not be empty"
 [[ -n ${TIMEZONE} ]] || die "timezone must not be empty"
+TIMEZONE=$(normalize_target_timezone "${TIMEZONE}")
 
 TMPDIR=$(mktemp -d)
 cleanup() {

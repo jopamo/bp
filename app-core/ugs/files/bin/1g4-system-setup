@@ -1,0 +1,938 @@
+#!/bin/bash
+
+set -euo pipefail
+
+usage() {
+	cat <<-'USAGE'
+	Usage:
+	  1g4-system-setup finalize ROOT MODE [CONFIG]
+	  1g4-system-setup validate ROOT MODE [CONFIG]
+
+	MODE:
+	  installed-host   machine-specific installed system
+	  template         reusable template/stage tree
+	  live-rescue      bootable reusable live/rescue image
+
+	CONFIG:
+	  Optional shell fragment sourced before execution.
+	  Common variables:
+	    ONEG4_SETUP_HOSTNAME
+	    ONEG4_SETUP_LOCALE
+	    ONEG4_SETUP_KEYMAP
+	    ONEG4_SETUP_TIMEZONE
+	    ONEG4_SETUP_FSTAB_FILE / ONEG4_SETUP_FSTAB_TEXT
+	    ONEG4_SETUP_CRYPTTAB_FILE / ONEG4_SETUP_CRYPTTAB_TEXT
+	    ONEG4_SETUP_KERNEL_CMDLINE / ONEG4_SETUP_KERNEL_CMDLINE_FILE
+	    ONEG4_SETUP_NORMAL_USER
+	    ONEG4_SETUP_ROOT_PASSWORD_HASH
+	    ONEG4_SETUP_NETWORKD_CONFIG_FILE / ONEG4_SETUP_NETWORKD_CONFIG_TEXT
+	    ONEG4_SETUP_INITRAMFS_CMD
+	    ONEG4_SETUP_BOOTLOADER_INSTALL_CMD
+	    ONEG4_SETUP_BOOTLOADER_CONFIG_CMD
+	USAGE
+}
+
+die() {
+	echo "$(basename "$0"): $*" >&2
+	exit 1
+}
+
+log() {
+	echo "[$(basename "$0")] $*"
+}
+
+bool_is_true() {
+	case ${1:-} in
+		1|y|Y|yes|YES|true|TRUE|on|ON) return 0 ;;
+		*) return 1 ;;
+	esac
+}
+
+require_command() {
+	command -v "$1" >/dev/null 2>&1 || die "$1 is required"
+}
+
+choose_command() {
+	local candidate
+	for candidate in "$@"; do
+		if command -v "${candidate}" >/dev/null 2>&1; then
+			printf '%s\n' "${candidate}"
+			return 0
+		fi
+	done
+	return 1
+}
+
+[[ $# -ge 3 && $# -le 4 ]] || {
+	usage >&2
+	exit 2
+}
+
+ACTION=${1}
+ROOT=${2}
+MODE=${3}
+CONFIG=${4:-}
+
+case ${ACTION} in
+	finalize|validate) ;;
+	*)
+		usage >&2
+		exit 2
+		;;
+esac
+
+case ${MODE} in
+	installed-host|template|live-rescue) ;;
+	*)
+		usage >&2
+		exit 2
+		;;
+esac
+
+ROOT=${ROOT%/}
+[[ -n ${ROOT} ]] || ROOT=/
+[[ -d ${ROOT} ]] || die "root does not exist: ${ROOT}"
+
+if [[ -n ${CONFIG} ]]; then
+	[[ -f ${CONFIG} ]] || die "config does not exist: ${CONFIG}"
+	set -a
+	# shellcheck disable=SC1090
+	. "${CONFIG}"
+	set +a
+fi
+
+require_command systemctl
+require_command 1g4-rootfs-policy
+
+SYSUSERS_CMD=$(choose_command systemd-sysusers sysusers || true)
+TMPFILES_CMD=$(choose_command systemd-tmpfiles tmpfiles || true)
+
+root_path() {
+	local rel=${1-}
+	[[ $# -ge 1 ]] || die "root_path requires a path"
+	if [[ ${ROOT} == / ]]; then
+		printf '/%s\n' "${rel#/}"
+	else
+		printf '%s/%s\n' "${ROOT}" "${rel#/}"
+	fi
+}
+
+root_relative_path() {
+	local abs=${1-}
+	[[ $# -ge 1 ]] || die "root_relative_path requires a path"
+	if [[ ${ROOT} == / ]]; then
+		printf '/%s\n' "${abs#/}"
+	else
+		printf '/%s\n' "${abs#"${ROOT}/"}"
+	fi
+}
+
+systemctl_root() {
+	SYSTEMD_OFFLINE=1 systemctl --root="${ROOT}" --no-reload "$@"
+}
+
+path_recorded_in_vdb() {
+	local query=${1} contents had_nullglob=0
+	shopt -q nullglob || had_nullglob=1
+	shopt -s nullglob
+	for contents in "$(root_path /var/db/pkg)"/*/*/CONTENTS; do
+		[[ -f ${contents} ]] || continue
+		if awk -v path="${query}" '$2 == path { found=1; exit 0 } END { exit(found ? 0 : 1) }' "${contents}"; then
+			(( had_nullglob )) && shopt -u nullglob
+			return 0
+		fi
+	done
+	(( had_nullglob )) && shopt -u nullglob
+	return 1
+}
+
+has_unit() {
+	local unit=${1}
+	[[ -e $(root_path "/usr/lib/systemd/system/${unit}") ]] || [[ -e $(root_path "/etc/systemd/system/${unit}") ]]
+}
+
+unit_enabled() {
+	local unit=${1}
+	systemctl_root is-enabled "${unit}" >/dev/null 2>&1
+}
+
+has_exec() {
+	local rel=${1}
+	[[ -x $(root_path "${rel}") ]]
+}
+
+openssh_payload_ready() {
+	has_exec /usr/bin/ssh-keygen && has_unit sshd.service
+}
+
+networkd_payload_ready() {
+	has_unit systemd-networkd.service && has_exec /usr/lib/systemd/systemd-networkd
+}
+
+dbus_payload_ready() {
+	[[ -e $(root_path /usr/bin/dbus-daemon) ]] || path_recorded_in_vdb /usr/bin/dbus-daemon
+}
+
+systemd_payload_ready() {
+	[[ -d $(root_path /usr/lib/systemd/system) ]]
+}
+
+canonical_mode_defaults() {
+	case ${MODE} in
+		installed-host)
+			ROOTFS_MODE=bootable
+			DEFAULT_FIRST_BOOT=skip
+			DEFAULT_MACHINE_ID=generate
+			DEFAULT_SSH_HOST_KEYS=generate
+			DEFAULT_LOCK_ROOT=yes
+			DEFAULT_REQUIRE_NORMAL_USER=yes
+			DEFAULT_REQUIRE_BOOT_ASSETS=yes
+			ALLOW_PASSWORDLESS_ROOT_DEFAULT=no
+			;;
+		template)
+			ROOTFS_MODE=stage
+			DEFAULT_FIRST_BOOT=run
+			DEFAULT_MACHINE_ID=uninitialized
+			DEFAULT_SSH_HOST_KEYS=first-boot
+			DEFAULT_LOCK_ROOT=yes
+			DEFAULT_REQUIRE_NORMAL_USER=no
+			DEFAULT_REQUIRE_BOOT_ASSETS=no
+			ALLOW_PASSWORDLESS_ROOT_DEFAULT=no
+			;;
+		live-rescue)
+			ROOTFS_MODE=bootable
+			DEFAULT_FIRST_BOOT=run
+			DEFAULT_MACHINE_ID=uninitialized
+			DEFAULT_SSH_HOST_KEYS=first-boot
+			DEFAULT_LOCK_ROOT=no
+			DEFAULT_REQUIRE_NORMAL_USER=no
+			DEFAULT_REQUIRE_BOOT_ASSETS=yes
+			ALLOW_PASSWORDLESS_ROOT_DEFAULT=yes
+			;;
+	esac
+
+	ONEG4_SETUP_FIRST_BOOT=${ONEG4_SETUP_FIRST_BOOT:-${DEFAULT_FIRST_BOOT}}
+	ONEG4_SETUP_MACHINE_ID=${ONEG4_SETUP_MACHINE_ID:-${DEFAULT_MACHINE_ID}}
+	ONEG4_SETUP_SSH_HOST_KEYS=${ONEG4_SETUP_SSH_HOST_KEYS:-${DEFAULT_SSH_HOST_KEYS}}
+	ONEG4_SETUP_LOCK_ROOT=${ONEG4_SETUP_LOCK_ROOT:-${DEFAULT_LOCK_ROOT}}
+	ONEG4_SETUP_ALLOW_PASSWORDLESS_ROOT=${ONEG4_SETUP_ALLOW_PASSWORDLESS_ROOT:-${ALLOW_PASSWORDLESS_ROOT_DEFAULT}}
+	ONEG4_SETUP_REQUIRE_NORMAL_USER=${ONEG4_SETUP_REQUIRE_NORMAL_USER:-${DEFAULT_REQUIRE_NORMAL_USER}}
+	ONEG4_SETUP_REQUIRE_BOOT_ASSETS=${ONEG4_SETUP_REQUIRE_BOOT_ASSETS:-${DEFAULT_REQUIRE_BOOT_ASSETS}}
+	ONEG4_SETUP_KERNEL_CMDLINE_PATH=${ONEG4_SETUP_KERNEL_CMDLINE_PATH:-/etc/kernel/cmdline}
+	ONEG4_SETUP_NETWORKD_NAME=${ONEG4_SETUP_NETWORKD_NAME:-10-1g4-installer.network}
+	ONEG4_SETUP_NORMAL_USER_GROUP=${ONEG4_SETUP_NORMAL_USER_GROUP:-${ONEG4_SETUP_NORMAL_USER:-}}
+	if [[ -n ${ONEG4_SETUP_NORMAL_USER:-} && -z ${ONEG4_SETUP_NORMAL_USER_HOME:-} ]]; then
+		ONEG4_SETUP_NORMAL_USER_HOME="/home/${ONEG4_SETUP_NORMAL_USER}"
+	fi
+	ONEG4_SETUP_NORMAL_USER_SHELL=${ONEG4_SETUP_NORMAL_USER_SHELL:-/usr/bin/bash}
+
+	case ${ONEG4_SETUP_FIRST_BOOT} in
+		run|skip) ;;
+		*) die "ONEG4_SETUP_FIRST_BOOT must be run or skip" ;;
+	esac
+
+	case ${ONEG4_SETUP_MACHINE_ID} in
+		generate|missing|uninitialized|empty) ;;
+		*) die "ONEG4_SETUP_MACHINE_ID must be generate, missing, uninitialized, or empty" ;;
+	esac
+
+	case ${ONEG4_SETUP_SSH_HOST_KEYS} in
+		generate|first-boot|absent) ;;
+		*) die "ONEG4_SETUP_SSH_HOST_KEYS must be generate, first-boot, or absent" ;;
+	esac
+
+	if [[ ${MODE} == installed-host ]]; then
+		[[ ${ONEG4_SETUP_MACHINE_ID} == generate ]] || die "installed-host mode requires ONEG4_SETUP_MACHINE_ID=generate"
+		[[ ${ONEG4_SETUP_SSH_HOST_KEYS} == generate ]] || die "installed-host mode requires ONEG4_SETUP_SSH_HOST_KEYS=generate"
+	fi
+
+	if [[ ${MODE} != installed-host && ${ONEG4_SETUP_MACHINE_ID} == generate ]]; then
+		die "template/live-rescue mode must not generate a fixed machine-id"
+	fi
+
+	if [[ ${ONEG4_SETUP_FIRST_BOOT} == run && ${ONEG4_SETUP_MACHINE_ID} == empty ]]; then
+		die "empty machine-id suppresses ConditionFirstBoot and cannot be used with ONEG4_SETUP_FIRST_BOOT=run"
+	fi
+	if [[ ${ONEG4_SETUP_FIRST_BOOT} == skip && ${ONEG4_SETUP_MACHINE_ID} == missing ]]; then
+		die "missing machine-id would still trigger ConditionFirstBoot"
+	fi
+	if [[ ${ONEG4_SETUP_FIRST_BOOT} == skip && ${ONEG4_SETUP_MACHINE_ID} == uninitialized ]]; then
+		die "uninitialized machine-id would still trigger ConditionFirstBoot"
+	fi
+}
+
+managed_write() {
+	local dest=${1}
+	local mode_bits=${2}
+	local header=${3}
+	local source_file=${4:-}
+	local inline_text=${5:-}
+	local dir tmp
+
+	[[ -n ${dest} ]] || die "managed_write requires a destination"
+	if [[ -n ${source_file} && -n ${inline_text} ]]; then
+		die "both file and inline content were provided for ${dest}"
+	fi
+	if [[ -z ${source_file} && -z ${inline_text} ]]; then
+		return 1
+	fi
+
+	dir=$(dirname "${dest}")
+	install -d "${dir}"
+	tmp=$(mktemp)
+	if [[ -n ${header} ]]; then
+		printf '%s\n' "${header}" > "${tmp}"
+	fi
+	if [[ -n ${source_file} ]]; then
+		cat "${source_file}" >> "${tmp}"
+	else
+		printf '%s\n' "${inline_text}" >> "${tmp}"
+	fi
+	install -m "${mode_bits}" "${tmp}" "${dest}"
+	rm -f "${tmp}"
+	return 0
+}
+
+write_hostname() {
+	local hostname=${ONEG4_SETUP_HOSTNAME:-}
+	[[ -n ${hostname} ]] || return 0
+	printf '%s\n' "${hostname}" > "$(root_path /etc/hostname)"
+	chmod 0644 "$(root_path /etc/hostname)"
+}
+
+write_locale() {
+	local locale=${ONEG4_SETUP_LOCALE:-}
+	[[ -n ${locale} ]] || return 0
+	managed_write "$(root_path /etc/locale.conf)" 0644 \
+		'# Generated by 1g4 system setup.' \
+		'' \
+		"LANG=${locale}"
+}
+
+write_keymap() {
+	local keymap=${ONEG4_SETUP_KEYMAP:-}
+	[[ -n ${keymap} ]] || return 0
+	managed_write "$(root_path /etc/vconsole.conf)" 0644 \
+		'# Generated by 1g4 system setup.' \
+		'' \
+		"KEYMAP=${keymap}"
+}
+
+write_timezone() {
+	local timezone=${ONEG4_SETUP_TIMEZONE:-}
+	local zoneinfo localtime
+	[[ -n ${timezone} ]] || return 0
+	zoneinfo=$(root_path "/usr/share/zoneinfo/${timezone}")
+	[[ -e ${zoneinfo} ]] || die "timezone data is missing: ${timezone}"
+	localtime=$(root_path /etc/localtime)
+	install -d "$(dirname "${localtime}")"
+	rm -f "${localtime}"
+	if [[ ${ROOT} == / ]]; then
+		ln -snf "../usr/share/zoneinfo/${timezone}" "${localtime}"
+	else
+		ln -snf "../usr/share/zoneinfo/${timezone}" "${localtime}"
+	fi
+	printf '%s\n' "${timezone}" > "$(root_path /etc/timezone)"
+	chmod 0644 "$(root_path /etc/timezone)"
+}
+
+write_fstab() {
+	managed_write "$(root_path /etc/fstab)" 0644 \
+		'# Generated by 1g4 system setup.' \
+		"${ONEG4_SETUP_FSTAB_FILE:-}" \
+		"${ONEG4_SETUP_FSTAB_TEXT:-}" || true
+}
+
+write_crypttab() {
+	managed_write "$(root_path /etc/crypttab)" 0600 \
+		'# Generated by 1g4 system setup.' \
+		"${ONEG4_SETUP_CRYPTTAB_FILE:-}" \
+		"${ONEG4_SETUP_CRYPTTAB_TEXT:-}" || true
+}
+
+write_kernel_cmdline() {
+	managed_write "$(root_path "${ONEG4_SETUP_KERNEL_CMDLINE_PATH}")" 0644 \
+		'# Generated by 1g4 system setup.' \
+		"${ONEG4_SETUP_KERNEL_CMDLINE_FILE:-}" \
+		"${ONEG4_SETUP_KERNEL_CMDLINE:-}" || true
+}
+
+cleanup_legacy_networkd_config() {
+	local dir legacy rel
+	dir=$(root_path /etc/systemd/network)
+	[[ -d ${dir} ]] || return 0
+	for legacy in "${dir}/80-host0.network" "${dir}/80-1g4-default-dhcp.network"; do
+		[[ -e ${legacy} ]] || continue
+		rel=$(root_relative_path "${legacy}")
+		if path_recorded_in_vdb "${rel}"; then
+			continue
+		fi
+		if grep -qs '^# Generated by 1g4 rootfs finalizer\.$' "${legacy}" 2>/dev/null; then
+			rm -f "${legacy}"
+		fi
+	done
+}
+
+write_networkd_config() {
+	local dir dest dns_line source_file inline_text match_names dhcp ipv6ra
+	if [[ -z ${ONEG4_SETUP_NETWORKD_CONFIG_FILE:-} && -z ${ONEG4_SETUP_NETWORKD_CONFIG_TEXT:-} && -z ${ONEG4_SETUP_NETWORKD_MATCH_NAMES:-} && -z ${ONEG4_SETUP_NETWORKD_DHCP:-} && -z ${ONEG4_SETUP_NETWORKD_DNS:-} ]]; then
+		return 0
+	fi
+	networkd_payload_ready || die "networkd config requested but systemd-networkd payload is missing"
+	cleanup_legacy_networkd_config
+	dir=$(root_path /etc/systemd/network)
+	dest="${dir}/${ONEG4_SETUP_NETWORKD_NAME}"
+	source_file=${ONEG4_SETUP_NETWORKD_CONFIG_FILE:-}
+	inline_text=${ONEG4_SETUP_NETWORKD_CONFIG_TEXT:-}
+	if [[ -n ${source_file} || -n ${inline_text} ]]; then
+		managed_write "${dest}" 0644 '# Generated by 1g4 system setup.' "${source_file}" "${inline_text}"
+		return 0
+	fi
+	match_names=${ONEG4_SETUP_NETWORKD_MATCH_NAMES:-host0 en* eth*}
+	dhcp=${ONEG4_SETUP_NETWORKD_DHCP:-ipv4}
+	ipv6ra=${ONEG4_SETUP_NETWORKD_IPV6_ACCEPT_RA:-no}
+	dns_line=
+	if [[ -n ${ONEG4_SETUP_NETWORKD_DNS:-} ]]; then
+		dns_line=$(printf 'DNS=%s\n' "${ONEG4_SETUP_NETWORKD_DNS}")
+	fi
+	install -d "${dir}"
+	cat > "${dest}" <<-EOF2
+		# Generated by 1g4 system setup.
+		# Replace this file only with installer-owned or package-owned network policy.
+		[Match]
+		Name=${match_names}
+
+		[Network]
+		DHCP=${dhcp}
+		IPv6AcceptRA=${ipv6ra}
+		${dns_line}
+	EOF2
+	chmod 0644 "${dest}"
+}
+
+machine_id_contents() {
+	local file
+	file=$(root_path /etc/machine-id)
+	[[ -e ${file} ]] || return 1
+	tr -d '\n' < "${file}"
+}
+
+valid_machine_id() {
+	local value=${1:-}
+	[[ ${value} =~ ^[0-9a-f]{32}$ ]] && [[ ${value} != 00000000000000000000000000000000 ]]
+}
+
+generate_machine_id_value() {
+	tr 'A-Z' 'a-z' < /proc/sys/kernel/random/uuid | tr -d '-\n'
+}
+
+apply_machine_id() {
+	local file value
+	file=$(root_path /etc/machine-id)
+	install -d "$(dirname "${file}")"
+	case ${ONEG4_SETUP_MACHINE_ID} in
+		generate)
+			value=$(generate_machine_id_value)
+			valid_machine_id "${value}" || die "failed to generate a valid machine-id"
+			printf '%s\n' "${value}" > "${file}"
+			chmod 0644 "${file}"
+			;;
+		missing)
+			rm -f "${file}"
+			;;
+		uninitialized)
+			printf 'uninitialized\n' > "${file}"
+			chmod 0644 "${file}"
+			;;
+		empty)
+			: > "${file}"
+			chmod 0644 "${file}"
+			;;
+	esac
+}
+
+sync_dbus_machine_id() {
+	local dst
+	dbus_payload_ready || return 0
+	dst=$(root_path /var/lib/dbus/machine-id)
+	install -d "$(dirname "${dst}")"
+	rm -f "${dst}"
+	ln -snf /etc/machine-id "${dst}"
+}
+
+shadow_file() {
+	root_path /etc/shadow
+}
+
+passwd_file() {
+	root_path /etc/passwd
+}
+
+group_file() {
+	root_path /etc/group
+}
+
+ensure_shadow_entry() {
+	local user=${1}
+	grep -qE "^${user}:" "$(shadow_file)" || die "missing shadow entry for ${user}"
+}
+
+set_shadow_password() {
+	local user=${1}
+	local secret=${2}
+	local shadow tmp
+	shadow=$(shadow_file)
+	ensure_shadow_entry "${user}"
+	tmp=$(mktemp)
+	awk -F: -v OFS=: -v user="${user}" -v secret="${secret}" '
+		$1 == user { $2 = secret }
+		{ print }
+	' "${shadow}" > "${tmp}"
+	install -m 0600 "${tmp}" "${shadow}"
+	rm -f "${tmp}"
+}
+
+get_shadow_password() {
+	awk -F: '$1 == "root" { print $2; exit }' "$(shadow_file)"
+}
+
+group_exists() {
+	local group=${1}
+	awk -F: -v group="${group}" '$1 == group { found=1 } END { exit(found ? 0 : 1) }' "$(group_file)"
+}
+
+user_exists() {
+	local user=${1}
+	awk -F: -v user="${user}" '$1 == user { found=1 } END { exit(found ? 0 : 1) }' "$(passwd_file)"
+}
+
+create_group_if_missing() {
+	local group=${1}
+	[[ -n ${group} ]] || return 0
+	if ! group_exists "${group}"; then
+		require_command groupadd
+		groupadd -R "${ROOT}" "${group}" >/dev/null
+	fi
+}
+
+create_or_update_normal_user() {
+	local user home shell primary groups_csv group_list=()
+	user=${ONEG4_SETUP_NORMAL_USER:-}
+	[[ -n ${user} ]] || return 0
+	require_command useradd
+	require_command usermod
+	home=${ONEG4_SETUP_NORMAL_USER_HOME:-/home/${user}}
+	shell=${ONEG4_SETUP_NORMAL_USER_SHELL:-/usr/bin/bash}
+	primary=${ONEG4_SETUP_NORMAL_USER_GROUP:-${user}}
+	groups_csv=${ONEG4_SETUP_NORMAL_USER_GROUPS:-}
+	create_group_if_missing "${primary}"
+	if [[ -n ${groups_csv} ]]; then
+		local group
+		for group in ${groups_csv//,/ }; do
+			create_group_if_missing "${group}"
+		done
+		group_list=(-G "${groups_csv// /,}")
+	fi
+	if user_exists "${user}"; then
+		usermod -R "${ROOT}" -d "${home}" -s "${shell}" -g "${primary}" "${group_list[@]}" "${user}" >/dev/null
+	else
+		useradd -R "${ROOT}" -m -d "${home}" -s "${shell}" -g "${primary}" "${group_list[@]}" "${user}" >/dev/null
+	fi
+	if [[ -n ${ONEG4_SETUP_NORMAL_USER_PASSWORD_HASH:-} ]]; then
+		set_shadow_password "${user}" "${ONEG4_SETUP_NORMAL_USER_PASSWORD_HASH}"
+	fi
+}
+
+apply_root_account_policy() {
+	local root_hash
+	root_hash=${ONEG4_SETUP_ROOT_PASSWORD_HASH:-}
+	if [[ -n ${root_hash} ]]; then
+		set_shadow_password root "${root_hash}"
+		return 0
+	fi
+	if bool_is_true "${ONEG4_SETUP_ALLOW_PASSWORDLESS_ROOT}"; then
+		return 0
+	fi
+	if bool_is_true "${ONEG4_SETUP_LOCK_ROOT}"; then
+		set_shadow_password root '!'
+		return 0
+	fi
+	die "root would remain passwordless outside explicit live/rescue mode"
+}
+
+remove_ssh_host_keys() {
+	local dir
+	dir=$(root_path /etc/ssh)
+	[[ -d ${dir} ]] || return 0
+	rm -f "${dir}"/ssh_host_*_key "${dir}"/ssh_host_*_key.pub
+}
+
+write_ssh_firstboot_unit() {
+	local unit preset wants_dir preset_dir
+	unit=$(root_path /etc/systemd/system/1g4-ssh-hostkeys.service)
+	preset_dir=$(root_path /etc/systemd/system-preset)
+	wants_dir=$(root_path /etc/systemd/system/multi-user.target.wants)
+	install -d "$(dirname "${unit}")" "${preset_dir}" "${wants_dir}"
+	cat > "${unit}" <<-'EOF2'
+		# Generated by 1g4 system setup.
+		[Unit]
+		Description=Generate SSH host keys when missing
+		ConditionPathExistsGlob=!/etc/ssh/ssh_host_*_key
+		After=local-fs.target
+		Before=sshd.service
+
+		[Service]
+		Type=oneshot
+		ExecStart=/usr/bin/ssh-keygen -A
+
+		[Install]
+		WantedBy=multi-user.target
+	EOF2
+	chmod 0644 "${unit}"
+	cat > "${preset_dir}/80-1g4-system-setup.preset" <<-'EOF2'
+		# Generated by 1g4 system setup.
+		enable 1g4-ssh-hostkeys.service
+	EOF2
+	chmod 0644 "${preset_dir}/80-1g4-system-setup.preset"
+	ln -snf ../1g4-ssh-hostkeys.service "${wants_dir}/1g4-ssh-hostkeys.service"
+}
+
+remove_ssh_firstboot_unit() {
+	rm -f "$(root_path /etc/systemd/system/1g4-ssh-hostkeys.service)"
+	rm -f "$(root_path /etc/systemd/system/multi-user.target.wants/1g4-ssh-hostkeys.service)"
+	rm -f "$(root_path /etc/systemd/system-preset/80-1g4-system-setup.preset)"
+}
+
+apply_ssh_identity_policy() {
+	openssh_payload_ready || return 0
+	case ${ONEG4_SETUP_SSH_HOST_KEYS} in
+		generate)
+			remove_ssh_firstboot_unit
+			remove_ssh_host_keys
+			require_command ssh-keygen
+			ssh-keygen -A -f "${ROOT}" >/dev/null
+			;;
+		first-boot)
+			remove_ssh_host_keys
+			write_ssh_firstboot_unit
+			;;
+		absent)
+			remove_ssh_firstboot_unit
+			remove_ssh_host_keys
+			;;
+	esac
+}
+
+run_sysusers() {
+	[[ -n ${SYSUSERS_CMD} ]] || return 0
+	log "running ${SYSUSERS_CMD} --root=${ROOT}"
+	"${SYSUSERS_CMD}" --root="${ROOT}" >/dev/null
+}
+
+run_tmpfiles() {
+	[[ -n ${TMPFILES_CMD} ]] || return 0
+	log "running ${TMPFILES_CMD} --root=${ROOT} --create"
+	"${TMPFILES_CMD}" --root="${ROOT}" --create >/dev/null
+}
+
+run_depmod() {
+	local base dir version needs_depmod=no had_nullglob=0
+	shopt -q nullglob || had_nullglob=1
+	shopt -s nullglob
+	for base in "$(root_path /usr/lib/modules)" "$(root_path /lib/modules)"; do
+		[[ -d ${base} ]] || continue
+		for dir in "${base}"/*; do
+			[[ -d ${dir} ]] || continue
+			needs_depmod=yes
+			break
+		done
+	done
+	if [[ ${needs_depmod} != yes ]]; then
+		(( had_nullglob )) && shopt -u nullglob
+		return 0
+	fi
+	require_command depmod
+	for base in "$(root_path /usr/lib/modules)" "$(root_path /lib/modules)"; do
+		[[ -d ${base} ]] || continue
+		for dir in "${base}"/*; do
+			[[ -d ${dir} ]] || continue
+			version=${dir##*/}
+			log "running depmod for ${version}"
+			depmod -b "${ROOT}" "${version}" >/dev/null
+		done
+	done
+	(( had_nullglob )) && shopt -u nullglob
+	return 0
+}
+
+run_ldconfig() {
+	command -v ldconfig >/dev/null 2>&1 || return 0
+	[[ -d $(root_path /usr/lib) || -d $(root_path /lib) ]] || return 0
+	log "running ldconfig -r ${ROOT}"
+	ldconfig -r "${ROOT}" >/dev/null
+}
+
+run_hwdb_update() {
+	command -v systemd-hwdb >/dev/null 2>&1 || return 0
+	[[ -d $(root_path /usr/lib/udev/hwdb.d) ]] || return 0
+	log "running systemd-hwdb update --root=${ROOT}"
+	systemd-hwdb update --root="${ROOT}" >/dev/null
+}
+
+run_preset_all() {
+	systemd_payload_ready || return 0
+	log "running systemctl --root=${ROOT} preset-all"
+	systemctl_root preset-all >/dev/null
+}
+
+run_hook() {
+	local label=${1}
+	local cmd=${2:-}
+	[[ -n ${cmd} ]] || return 0
+	log "running ${label}"
+	ROOT="${ROOT}" MODE="${MODE}" bash -lc "${cmd}"
+}
+
+validate_machine_id() {
+	local file value
+	file=$(root_path /etc/machine-id)
+	if [[ ${MODE} == installed-host ]]; then
+		[[ -f ${file} ]] || die "installed-host mode requires /etc/machine-id"
+		value=$(machine_id_contents)
+		valid_machine_id "${value}" || die "installed-host mode requires a valid machine-id"
+		return 0
+	fi
+
+	if [[ ! -e ${file} ]]; then
+		[[ ${ONEG4_SETUP_FIRST_BOOT} == run ]] || die "missing /etc/machine-id suppresses the wrong first-boot semantics"
+		return 0
+	fi
+
+	value=$(machine_id_contents || true)
+	case ${value} in
+		'')
+			[[ ${ONEG4_SETUP_FIRST_BOOT} == skip ]] || die "empty /etc/machine-id suppresses ConditionFirstBoot unexpectedly"
+			;;
+		uninitialized)
+			[[ ${ONEG4_SETUP_FIRST_BOOT} == run ]] || die "uninitialized /etc/machine-id would still trigger ConditionFirstBoot"
+			;;
+		*)
+			valid_machine_id "${value}" && die "template/live-rescue mode must not ship a fixed machine-id"
+			die "unrecognized /etc/machine-id contents: ${value}"
+			;;
+	esac
+}
+
+validate_dbus_machine_id() {
+	local file machine target
+	dbus_payload_ready || return 0
+	file=$(root_path /var/lib/dbus/machine-id)
+	[[ -e ${file} || -L ${file} ]] || die "D-Bus is installed but /var/lib/dbus/machine-id is missing"
+	if [[ -L ${file} ]]; then
+		target=$(readlink "${file}")
+		case ${target} in
+			/etc/machine-id|../etc/machine-id|../../etc/machine-id) return 0 ;;
+			*) die "/var/lib/dbus/machine-id does not link to /etc/machine-id" ;;
+		esac
+	fi
+	[[ -e $(root_path /etc/machine-id) ]] || die "/var/lib/dbus/machine-id is a regular file but /etc/machine-id is missing"
+	cmp -s "${file}" "$(root_path /etc/machine-id)" || die "/var/lib/dbus/machine-id does not match /etc/machine-id"
+}
+
+validate_hostname() {
+	[[ ${MODE} == installed-host ]] || return 0
+	grep -q '[^[:space:]]' "$(root_path /etc/hostname)" || die "/etc/hostname is missing or empty"
+}
+
+validate_locale() {
+	[[ ${MODE} == installed-host ]] || return 0
+	grep -q '^LANG=[^[:space:]]\+$' "$(root_path /etc/locale.conf)" || die "/etc/locale.conf does not define LANG"
+}
+
+validate_keymap() {
+	[[ ${MODE} == installed-host ]] || return 0
+	grep -q '^KEYMAP=[^[:space:]]\+$' "$(root_path /etc/vconsole.conf)" || die "/etc/vconsole.conf does not define KEYMAP"
+}
+
+validate_timezone() {
+	[[ ${MODE} == installed-host ]] || return 0
+	[[ -e $(root_path /etc/localtime) ]] || die "/etc/localtime is missing"
+	grep -q '[^[:space:]]' "$(root_path /etc/timezone)" || die "/etc/timezone is missing or empty"
+}
+
+validate_noncomment_lines() {
+	local file=${1}
+	awk 'BEGIN { found=0 } /^[[:space:]]*($|#)/ { next } { found=1; exit 0 } END { exit(found ? 0 : 1) }' "${file}"
+}
+
+validate_fstab() {
+	local file uuid
+	file=$(root_path /etc/fstab)
+	[[ -f ${file} ]] || die "/etc/fstab is missing"
+	if [[ ${MODE} == installed-host ]] && ! validate_noncomment_lines "${file}"; then
+		die "/etc/fstab has no real mount entries"
+	fi
+	while IFS= read -r uuid; do
+		if command -v blkid >/dev/null 2>&1; then
+			blkid -U "${uuid}" >/dev/null 2>&1 || die "/etc/fstab references missing UUID=${uuid}"
+		elif [[ -e /dev/disk/by-uuid/${uuid} ]]; then
+			:
+		else
+			die "cannot verify UUID=${uuid} from /etc/fstab"
+		fi
+	done < <(awk 'BEGIN { OFS="" } /^[[:space:]]*#/ || NF < 1 { next } $1 ~ /^UUID=/ { sub(/^UUID=/, "", $1); print $1 }' "${file}")
+}
+
+validate_crypttab() {
+	local file
+	file=$(root_path /etc/crypttab)
+	if bool_is_true "${ONEG4_SETUP_LUKS_USED:-no}"; then
+		[[ -f ${file} ]] || die "LUKS was requested but /etc/crypttab is missing"
+		validate_noncomment_lines "${file}" || die "LUKS was requested but /etc/crypttab has no mappings"
+	fi
+}
+
+validate_kernel_cmdline() {
+	local file
+	file=$(root_path "${ONEG4_SETUP_KERNEL_CMDLINE_PATH}")
+	[[ ${MODE} == installed-host ]] || return 0
+	[[ -f ${file} ]] || die "kernel cmdline file is missing: ${ONEG4_SETUP_KERNEL_CMDLINE_PATH}"
+	grep -q '[^[:space:]#]' "${file}" || die "kernel cmdline file is empty: ${ONEG4_SETUP_KERNEL_CMDLINE_PATH}"
+}
+
+validate_root_password_policy() {
+	local secret
+	ensure_shadow_entry root
+	secret=$(get_shadow_password)
+	[[ -n ${secret} ]] || {
+		bool_is_true "${ONEG4_SETUP_ALLOW_PASSWORDLESS_ROOT}" && return 0
+		die "root is passwordless outside explicit live/rescue mode"
+	}
+}
+
+validate_normal_user() {
+	local user uid home shell
+	bool_is_true "${ONEG4_SETUP_REQUIRE_NORMAL_USER}" || return 0
+	user=${ONEG4_SETUP_NORMAL_USER:-}
+	if [[ -n ${user} ]]; then
+		user_exists "${user}" || die "normal login user is missing: ${user}"
+		home=$(awk -F: -v user="${user}" '$1 == user { print $6; exit }' "$(passwd_file)")
+		shell=$(awk -F: -v user="${user}" '$1 == user { print $7; exit }' "$(passwd_file)")
+		[[ -d $(root_path "${home}") ]] || die "normal login user home is missing: ${home}"
+		[[ -x $(root_path "${shell}") || -L $(root_path "${shell}") ]] || die "normal login user shell is missing: ${shell}"
+		return 0
+	fi
+	awk -F: '$3 >= 1000 && $7 !~ /(nologin|false)$/ { found=1 } END { exit(found ? 0 : 1) }' "$(passwd_file)" || die "installed-host mode requires at least one normal login user"
+}
+
+have_ssh_host_keys() {
+	compgen -G "$(root_path '/etc/ssh/ssh_host_*_key')" >/dev/null || compgen -G "$(root_path '/etc/ssh/ssh_host_*_key.pub')" >/dev/null
+}
+
+validate_ssh_identity() {
+	openssh_payload_ready || return 0
+	if [[ ${MODE} == installed-host ]]; then
+		have_ssh_host_keys || die "installed-host mode requires SSH host keys"
+		return 0
+	fi
+	have_ssh_host_keys && die "template/live-rescue mode must not ship SSH host keys"
+	if [[ ${ONEG4_SETUP_SSH_HOST_KEYS} == first-boot ]]; then
+		[[ -f $(root_path /etc/systemd/system/1g4-ssh-hostkeys.service) ]] || die "missing first-boot SSH host key unit"
+		unit_enabled 1g4-ssh-hostkeys.service || die "first-boot SSH host key unit is not enabled"
+	fi
+}
+
+validate_boot_assets() {
+	local cfg cfg_found=0
+	bool_is_true "${ONEG4_SETUP_REQUIRE_BOOT_ASSETS}" || return 0
+	if [[ -n ${ONEG4_SETUP_BOOTLOADER_CONFIG:-} ]]; then
+		[[ -e $(root_path "${ONEG4_SETUP_BOOTLOADER_CONFIG}") ]] || die "bootloader config is missing: ${ONEG4_SETUP_BOOTLOADER_CONFIG}"
+		cfg_found=1
+	else
+		for cfg in \
+			"$(root_path /boot/grub.cfg)" \
+			"$(root_path /boot/grub/grub.cfg)" \
+			"$(root_path /boot/grub2/grub.cfg)" \
+			"$(root_path /boot/loader/loader.conf)" \
+			"$(root_path /boot/extlinux/extlinux.conf)" \
+			"$(root_path /boot/syslinux/syslinux.cfg)"
+		do
+			if [[ -e ${cfg} ]]; then
+				cfg_found=1
+				break
+			fi
+		done
+		if (( ! cfg_found )) && compgen -G "$(root_path '/boot/loader/entries/*.conf')" >/dev/null; then
+			cfg_found=1
+		fi
+		(( cfg_found )) || die "bootloader config is missing"
+	fi
+	compgen -G "$(root_path '/boot/vmlinuz*')" >/dev/null || \
+	compgen -G "$(root_path '/boot/kernel*')" >/dev/null || \
+		die "kernel image is missing from /boot"
+	compgen -G "$(root_path '/boot/initramfs*')" >/dev/null || \
+	compgen -G "$(root_path '/boot/initrd*')" >/dev/null || \
+		die "initramfs is missing from /boot"
+	[[ -d $(root_path /usr/lib/modules) && -n $(find "$(root_path /usr/lib/modules)" -mindepth 1 -maxdepth 1 -type d -print -quit 2>/dev/null) ]] || \
+	[[ -d $(root_path /lib/modules) && -n $(find "$(root_path /lib/modules)" -mindepth 1 -maxdepth 1 -type d -print -quit 2>/dev/null) ]] || \
+		die "kernel module tree is missing"
+}
+
+finalize_system() {
+	apply_machine_id
+	sync_dbus_machine_id
+	write_hostname
+	write_locale
+	write_keymap
+	write_timezone
+	write_fstab
+	write_crypttab
+	write_kernel_cmdline
+	write_networkd_config
+	run_sysusers
+	create_or_update_normal_user
+	apply_root_account_policy
+	apply_ssh_identity_policy
+	1g4-rootfs-policy finalize "${ROOT}" "${ROOTFS_MODE}"
+	run_tmpfiles
+	run_depmod
+	run_ldconfig
+	run_hwdb_update
+	run_preset_all
+	if [[ ${MODE} == installed-host || ${MODE} == live-rescue ]]; then
+		run_hook initramfs "${ONEG4_SETUP_INITRAMFS_CMD:-}"
+		run_hook bootloader-install "${ONEG4_SETUP_BOOTLOADER_INSTALL_CMD:-}"
+		run_hook bootloader-config "${ONEG4_SETUP_BOOTLOADER_CONFIG_CMD:-}"
+	fi
+}
+
+validate_system() {
+	1g4-rootfs-policy validate "${ROOT}" "${ROOTFS_MODE}"
+	validate_machine_id
+	validate_dbus_machine_id
+	validate_hostname
+	validate_locale
+	validate_keymap
+	validate_timezone
+	validate_fstab
+	validate_crypttab
+	validate_kernel_cmdline
+	validate_root_password_policy
+	validate_normal_user
+	validate_ssh_identity
+	validate_boot_assets
+}
+
+canonical_mode_defaults
+
+case ${ACTION} in
+	finalize)
+		finalize_system
+		validate_system
+		log "finalized ${ROOT} (${MODE})"
+		;;
+	validate)
+		validate_system
+		log "validated ${ROOT} (${MODE})"
+		;;
+esac

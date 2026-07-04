@@ -1,0 +1,686 @@
+#!/bin/bash
+
+set -euo pipefail
+
+usage() {
+	cat <<-'USAGE'
+	Usage:
+	  1g4-finalize-install ROOT [options]
+
+	Finalize a mounted target root as an installed, boot-ready system.
+	This is the one-shot wrapper around 1g4-system-setup.
+
+	Options:
+	  --hostname NAME              default: 1g4
+	  --user NAME                  default: current non-root login user
+	  --user-shell PATH            default: /usr/bin/bash
+	  --groups CSV                 default: wheel,audio,video,input
+	  --locale LOCALE              default: C.UTF-8
+	  --keymap KEYMAP              default: us
+	  --timezone ZONE              default: host timezone or UTC
+	  --network-match GLOBS        default: host0 en* eth*
+	  --network-dns "IP ..."       optional DNS for generated networkd config
+	  --no-network                 do not generate installer-owned networkd config
+	  --kernel-extra STRING        default: quiet
+	  --bootloader auto|grub|none  default: auto
+	  --grub-device DEV            explicit BIOS/MBR grub-install target
+	  --grub-target TARGET         explicit grub --target
+	  --grub-boot-id ID            default: 1g4
+	  --root-password-hash HASH    use explicit root password hash
+	  --user-password-hash HASH    use explicit user password hash
+	  --yes                        accept defaults without prompts
+	  -h, --help                   show this help
+	USAGE
+}
+
+die() {
+	echo "$(basename "$0"): $*" >&2
+	exit 1
+}
+
+log() {
+	echo "[$(basename "$0")] $*"
+}
+
+require_command() {
+	command -v "$1" >/dev/null 2>&1 || die "$1 is required"
+}
+
+root_path() {
+	local rel=${1-}
+	[[ $# -ge 1 ]] || die "root_path requires a path"
+	if [[ ${ROOT} == / ]]; then
+		printf '/%s\n' "${rel#/}"
+	else
+		printf '%s/%s\n' "${ROOT}" "${rel#/}"
+	fi
+}
+
+default_timezone() {
+	local tz
+	if [[ -r /etc/timezone ]]; then
+		read -r tz < /etc/timezone || true
+		[[ -n ${tz:-} ]] && {
+			printf '%s\n' "${tz}"
+			return 0
+		}
+	fi
+	if [[ -L /etc/localtime ]]; then
+		tz=$(readlink /etc/localtime || true)
+		case ${tz} in
+			*/usr/share/zoneinfo/*)
+				printf '%s\n' "${tz##*/usr/share/zoneinfo/}"
+				return 0
+				;;
+		esac
+	fi
+	printf 'UTC\n'
+}
+
+default_login_user() {
+	local candidate=${SUDO_USER:-${USER:-}}
+	case ${candidate} in
+		''|root) return 1 ;;
+		*) printf '%s\n' "${candidate}" ;;
+	esac
+}
+
+prompt_default() {
+	local label=${1}
+	local default_value=${2:-}
+	local reply
+	if [[ -n ${default_value} ]]; then
+		read -r -p "${label} [${default_value}]: " reply || true
+		printf '%s\n' "${reply:-${default_value}}"
+	else
+		read -r -p "${label}: " reply || true
+		printf '%s\n' "${reply}"
+	fi
+}
+
+hash_password() {
+	local password=${1}
+	if command -v openssl >/dev/null 2>&1; then
+		printf '%s\n' "${password}" | openssl passwd -6 -stdin
+		return 0
+	fi
+	die "cannot hash passwords without openssl"
+}
+
+prompt_password_hash() {
+	local label=${1}
+	local pw1 pw2
+	while :; do
+		read -r -s -p "${label} (leave blank to skip): " pw1 || true
+		echo
+		if [[ -z ${pw1} ]]; then
+			printf '\n'
+			return 0
+		fi
+		read -r -s -p "Confirm ${label}: " pw2 || true
+		echo
+		[[ ${pw1} == ${pw2} ]] || {
+			echo "Passwords did not match." >&2
+			continue
+		}
+		hash_password "${pw1}"
+		return 0
+	done
+}
+
+target_has_command() {
+	local cmd=${1}
+	[[ -x $(root_path "/usr/bin/${cmd}") ]] || \
+	[[ -x $(root_path "/usr/sbin/${cmd}") ]] || \
+	[[ -x $(root_path "/bin/${cmd}") ]] || \
+	[[ -x $(root_path "/sbin/${cmd}") ]]
+}
+
+is_pseudo_fstype() {
+	case ${1} in
+		autofs|bpf|cgroup|cgroup2|configfs|debugfs|devpts|devtmpfs|efivarfs|fusectl|hugetlbfs|mqueue|nsfs|overlay|proc|pstore|ramfs|securityfs|squashfs|sysfs|tmpfs|tracefs)
+			return 0
+			;;
+		*)
+			return 1
+			;;
+	esac
+}
+
+mount_rel_path() {
+	local target=${1}
+	if [[ ${target} == ${ROOT} ]]; then
+		printf '/\n'
+	else
+		printf '/%s\n' "${target#"${ROOT}/"}"
+	fi
+}
+
+fs_spec_from_fields() {
+	local source=${1}
+	local uuid=${2}
+	local partuuid=${3}
+	if [[ -n ${uuid} && ${uuid} != '-' ]]; then
+		printf 'UUID=%s\n' "${uuid}"
+	elif [[ -n ${partuuid} && ${partuuid} != '-' ]]; then
+		printf 'PARTUUID=%s\n' "${partuuid}"
+	else
+		printf '%s\n' "${source}"
+	fi
+}
+
+passno_for_mount() {
+	local rel=${1}
+	local fstype=${2}
+	if [[ ${rel} == / ]]; then
+		printf '1\n'
+		return 0
+	fi
+	case ${fstype} in
+		msdos|ntfs|ntfs3|swap|vfat)
+			printf '0\n'
+			;;
+		*)
+			printf '2\n'
+			;;
+	esac
+}
+
+collect_mount_table() {
+	local raw
+	raw=$(mktemp)
+	findmnt -R -rno TARGET,SOURCE,FSTYPE,OPTIONS,UUID,PARTUUID --target "${ROOT}" > "${raw}" || die "failed to inspect mounted filesystems under ${ROOT}"
+	[[ -s ${raw} ]] || die "no mounted filesystems found under ${ROOT}"
+	awk -v root="${ROOT}" '$1 == root || index($1, root "/") == 1 { print }' "${raw}" |
+		awk '{ print length($1), $0 }' |
+		sort -n -k1,1 |
+		cut -d' ' -f2- > "${MOUNT_TABLE}"
+	rm -f "${raw}"
+	[[ -s ${MOUNT_TABLE} ]] || die "could not build mount table for ${ROOT}"
+	awk -v root="${ROOT}" '$1 == root { found=1 } END { exit(found ? 0 : 1) }' "${MOUNT_TABLE}" || die "${ROOT} itself is not mounted"
+}
+
+discover_crypt_ancestors() {
+	local source=${1}
+	local device info name type pkname backing luks_type luks_uuid
+	[[ ${source} == /dev/* ]] || return 0
+	device=$(readlink -f "${source}" 2>/dev/null || printf '%s\n' "${source}")
+	while [[ -n ${device} && ${device} == /dev/* ]]; do
+		info=$(lsblk -ndo NAME,TYPE,PKNAME "${device}" 2>/dev/null | head -n1 || true)
+		[[ -n ${info} ]] || break
+		read -r name type pkname <<< "${info}"
+		if [[ ${type} == crypt && -z ${CRYPT_UUID_BY_NAME[${name}]:-} ]]; then
+			backing=
+			if command -v cryptsetup >/dev/null 2>&1; then
+				backing=$(cryptsetup status "${name}" 2>/dev/null | awk '/^[[:space:]]*device:[[:space:]]*/ { print $2; exit }' || true)
+			fi
+			if [[ -n ${backing} ]]; then
+				luks_type=$(blkid -s TYPE -o value "${backing}" 2>/dev/null || true)
+				if [[ ${luks_type} == crypto_LUKS ]]; then
+					luks_uuid=$(blkid -s UUID -o value "${backing}" 2>/dev/null || true)
+					[[ -n ${luks_uuid} ]] || die "found LUKS device ${backing} for ${name} but could not read its UUID"
+					CRYPT_UUID_BY_NAME[${name}]=${luks_uuid}
+					CRYPT_ORDER+=("${name}")
+				fi
+			fi
+		fi
+		[[ -n ${pkname:-} ]] || break
+		device=/dev/${pkname}
+	done
+}
+
+generate_fstab() {
+	local target source fstype options uuid partuuid rel spec passno line_count=0
+	: > "${FSTAB_FILE}"
+	while read -r target source fstype options uuid partuuid; do
+		rel=$(mount_rel_path "${target}")
+		case ${rel} in
+			/dev|/dev/*|/proc|/proc/*|/run|/run/*|/sys|/sys/*)
+				continue
+				;;
+		esac
+		is_pseudo_fstype "${fstype}" && continue
+		spec=$(fs_spec_from_fields "${source}" "${uuid:-}" "${partuuid:-}")
+		if [[ ${rel} == / && ${spec} != UUID=* && ${spec} != PARTUUID=* ]]; then
+			die "root filesystem under ${ROOT} has no UUID/PARTUUID; refusing to build an unstable kernel cmdline"
+		fi
+		passno=$(passno_for_mount "${rel}" "${fstype}")
+		printf '%s %s %s %s 0 %s\n' "${spec}" "${rel}" "${fstype}" "${options}" "${passno}" >> "${FSTAB_FILE}"
+		line_count=$((line_count + 1))
+		discover_crypt_ancestors "${source}"
+	done < "${MOUNT_TABLE}"
+	(( line_count > 0 )) || die "failed to generate /etc/fstab contents"
+}
+
+write_crypttab() {
+	local name
+	: > "${CRYPTTAB_FILE}"
+	if (( ${#CRYPT_ORDER[@]} == 0 )); then
+		LUKS_USED=no
+		return 0
+	fi
+	for name in "${CRYPT_ORDER[@]}"; do
+		printf '%s UUID=%s none luks\n' "${name}" "${CRYPT_UUID_BY_NAME[${name}]}" >> "${CRYPTTAB_FILE}"
+	done
+	LUKS_USED=yes
+}
+
+build_kernel_cmdline() {
+	local target source fstype options uuid partuuid rel root_spec name extras
+	while read -r target source fstype options uuid partuuid; do
+		rel=$(mount_rel_path "${target}")
+		[[ ${rel} == / ]] || continue
+		root_spec=$(fs_spec_from_fields "${source}" "${uuid:-}" "${partuuid:-}")
+		break
+	done < "${MOUNT_TABLE}"
+	[[ -n ${root_spec:-} ]] || die "could not determine root filesystem spec"
+	KERNEL_CMDLINE="root=${root_spec} rw"
+	for name in "${CRYPT_ORDER[@]}"; do
+		KERNEL_CMDLINE+=" rd.luks.name=${CRYPT_UUID_BY_NAME[${name}]}=${name}"
+	done
+	if [[ -n ${KERNEL_EXTRA} ]]; then
+		KERNEL_CMDLINE+=" ${KERNEL_EXTRA}"
+	fi
+}
+
+detect_efi_directory() {
+	local target source fstype options uuid partuuid rel
+	while read -r target source fstype options uuid partuuid; do
+		rel=$(mount_rel_path "${target}")
+		case ${rel}:${fstype} in
+			/boot/efi:vfat|/boot/efi:msdos|/boot/efi:fat)
+				printf '/boot/efi\n'
+				return 0
+				;;
+			/boot:vfat|/boot:msdos|/boot:fat)
+				printf '/boot\n'
+				return 0
+				;;
+		esac
+	done < "${MOUNT_TABLE}"
+	if [[ -d $(root_path /boot/efi/EFI) ]]; then
+		printf '/boot/efi\n'
+		return 0
+	fi
+	if [[ -d $(root_path /boot/EFI) ]]; then
+		printf '/boot\n'
+		return 0
+	fi
+	return 1
+}
+
+detect_existing_bootloader_config() {
+	local candidate
+	for candidate in \
+		/boot/grub.cfg \
+		/boot/grub/grub.cfg \
+		/boot/grub2/grub.cfg \
+		/boot/loader/loader.conf \
+		/boot/extlinux/extlinux.conf \
+		/boot/syslinux/syslinux.cfg
+	do
+		if [[ -e $(root_path "${candidate}") ]]; then
+			printf '%s\n' "${candidate}"
+			return 0
+		fi
+	done
+	if compgen -G "$(root_path '/boot/loader/entries/*.conf')" >/dev/null; then
+		printf '__systemd_entries__\n'
+		return 0
+	fi
+	return 1
+}
+
+default_grub_target() {
+	local candidate
+	for candidate in x86_64-efi arm64-efi; do
+		[[ -d $(root_path "/usr/lib/grub/${candidate}") ]] && {
+			printf '%s\n' "${candidate}"
+			return 0
+		}
+	done
+	case $(uname -m) in
+		x86_64) printf 'x86_64-efi\n' ;;
+		aarch64|arm64) printf 'arm64-efi\n' ;;
+		*) die "could not infer a GRUB EFI target for $(uname -m); pass --grub-target" ;;
+	esac
+}
+
+default_grub_config_path() {
+	if [[ -d $(root_path /boot/grub2) ]]; then
+		printf '/boot/grub2/grub.cfg\n'
+	else
+		printf '/boot/grub/grub.cfg\n'
+	fi
+}
+
+build_boot_hooks() {
+	local efi_dir existing_cfg has_boot_entries=no
+	INITRAMFS_CMD=
+	BOOTLOADER_INSTALL_CMD=
+	BOOTLOADER_CONFIG_CMD=
+	BOOTLOADER_CONFIG=
+
+	target_has_command dracut || die "target does not contain dracut; cannot build initramfs"
+	INITRAMFS_CMD="chroot \"${ROOT}\" dracut --force --regenerate-all"
+
+	existing_cfg=$(detect_existing_bootloader_config || true)
+	if [[ ${existing_cfg} == __systemd_entries__ ]]; then
+		has_boot_entries=yes
+		existing_cfg=
+	fi
+
+	case ${BOOTLOADER} in
+		none)
+			BOOTLOADER_CONFIG=${existing_cfg:-}
+			return 0
+			;;
+		auto|grub) ;;
+		*) die "unsupported bootloader mode: ${BOOTLOADER}" ;;
+	esac
+
+	if ! target_has_command grub-install || ! target_has_command grub-mkconfig; then
+		if [[ ${BOOTLOADER} == auto && ( -n ${existing_cfg} || ${has_boot_entries} == yes ) ]]; then
+			BOOTLOADER_CONFIG=${existing_cfg}
+			return 0
+		fi
+		die "target does not contain grub-install and grub-mkconfig"
+	fi
+
+	BOOTLOADER_CONFIG=$(default_grub_config_path)
+	BOOTLOADER_CONFIG_CMD="chroot \"${ROOT}\" grub-mkconfig -o \"${BOOTLOADER_CONFIG}\""
+
+	if [[ -n ${GRUB_DEVICE} ]]; then
+		BOOTLOADER_INSTALL_CMD="chroot \"${ROOT}\" grub-install \"${GRUB_DEVICE}\""
+		return 0
+	fi
+
+	efi_dir=$(detect_efi_directory || true)
+	if [[ -n ${efi_dir} ]]; then
+		GRUB_TARGET=${GRUB_TARGET:-$(default_grub_target)}
+		BOOTLOADER_INSTALL_CMD="chroot \"${ROOT}\" grub-install --target=${GRUB_TARGET} --efi-directory=${efi_dir} --bootloader-id=${GRUB_BOOT_ID}"
+		return 0
+	fi
+
+	if [[ ${BOOTLOADER} == auto ]]; then
+		die "cannot infer a safe grub-install target; mount the EFI system partition at ${ROOT}/boot or ${ROOT}/boot/efi, or pass --grub-device"
+	fi
+	die "grub was requested but no EFI mount or --grub-device was provided"
+}
+
+write_config_var() {
+	local name=${1}
+	local value=${2}
+	printf '%s=%q\n' "${name}" "${value}" >> "${CONFIG_FILE}"
+}
+
+show_summary() {
+	cat <<-EOF2
+	Target root:          ${ROOT}
+	Hostname:             ${HOSTNAME}
+	Normal user:          ${NORMAL_USER}
+	User shell:           ${USER_SHELL}
+	Groups:               ${SUPPLEMENTARY_GROUPS}
+	Locale:               ${LOCALE}
+	Keymap:               ${KEYMAP}
+	Timezone:             ${TIMEZONE}
+	Network config:       $( [[ ${NO_NETWORK} == yes ]] && echo disabled || echo generated-networkd-dhcp )
+	LUKS detected:        ${LUKS_USED}
+	Kernel cmdline:       ${KERNEL_CMDLINE}
+	Initramfs hook:       ${INITRAMFS_CMD:-none}
+	Bootloader install:   ${BOOTLOADER_INSTALL_CMD:-none}
+	Bootloader config:    ${BOOTLOADER_CONFIG_CMD:-${BOOTLOADER_CONFIG:-none}}
+	EOF2
+}
+
+ROOT=
+HOSTNAME=
+NORMAL_USER=
+USER_SHELL=/usr/bin/bash
+SUPPLEMENTARY_GROUPS=wheel,audio,video,input
+LOCALE=C.UTF-8
+KEYMAP=us
+TIMEZONE=
+NETWORK_MATCH='host0 en* eth*'
+NETWORK_DNS=
+NO_NETWORK=no
+KERNEL_EXTRA=quiet
+BOOTLOADER=auto
+GRUB_DEVICE=
+GRUB_TARGET=
+GRUB_BOOT_ID=1g4
+ROOT_PASSWORD_HASH=
+USER_PASSWORD_HASH=
+YES=no
+
+while [[ $# -gt 0 ]]; do
+	case ${1} in
+		--hostname)
+			[[ $# -ge 2 ]] || die "--hostname requires an argument"
+			HOSTNAME=${2}
+			shift 2
+			;;
+		--user)
+			[[ $# -ge 2 ]] || die "--user requires an argument"
+			NORMAL_USER=${2}
+			shift 2
+			;;
+		--user-shell)
+			[[ $# -ge 2 ]] || die "--user-shell requires an argument"
+			USER_SHELL=${2}
+			shift 2
+			;;
+		--groups)
+			[[ $# -ge 2 ]] || die "--groups requires an argument"
+			SUPPLEMENTARY_GROUPS=${2}
+			shift 2
+			;;
+		--locale)
+			[[ $# -ge 2 ]] || die "--locale requires an argument"
+			LOCALE=${2}
+			shift 2
+			;;
+		--keymap)
+			[[ $# -ge 2 ]] || die "--keymap requires an argument"
+			KEYMAP=${2}
+			shift 2
+			;;
+		--timezone)
+			[[ $# -ge 2 ]] || die "--timezone requires an argument"
+			TIMEZONE=${2}
+			shift 2
+			;;
+		--network-match)
+			[[ $# -ge 2 ]] || die "--network-match requires an argument"
+			NETWORK_MATCH=${2}
+			shift 2
+			;;
+		--network-dns)
+			[[ $# -ge 2 ]] || die "--network-dns requires an argument"
+			NETWORK_DNS=${2}
+			shift 2
+			;;
+		--no-network)
+			NO_NETWORK=yes
+			shift
+			;;
+		--kernel-extra)
+			[[ $# -ge 2 ]] || die "--kernel-extra requires an argument"
+			KERNEL_EXTRA=${2}
+			shift 2
+			;;
+		--bootloader)
+			[[ $# -ge 2 ]] || die "--bootloader requires an argument"
+			BOOTLOADER=${2}
+			shift 2
+			;;
+		--grub-device)
+			[[ $# -ge 2 ]] || die "--grub-device requires an argument"
+			GRUB_DEVICE=${2}
+			shift 2
+			;;
+		--grub-target)
+			[[ $# -ge 2 ]] || die "--grub-target requires an argument"
+			GRUB_TARGET=${2}
+			shift 2
+			;;
+		--grub-boot-id)
+			[[ $# -ge 2 ]] || die "--grub-boot-id requires an argument"
+			GRUB_BOOT_ID=${2}
+			shift 2
+			;;
+		--root-password-hash)
+			[[ $# -ge 2 ]] || die "--root-password-hash requires an argument"
+			ROOT_PASSWORD_HASH=${2}
+			shift 2
+			;;
+		--user-password-hash)
+			[[ $# -ge 2 ]] || die "--user-password-hash requires an argument"
+			USER_PASSWORD_HASH=${2}
+			shift 2
+			;;
+		--yes)
+			YES=yes
+			shift
+			;;
+		-h|--help)
+			usage
+			exit 0
+			;;
+		--*)
+			die "unknown option: ${1}"
+			;;
+		*)
+			[[ -z ${ROOT} ]] || die "unexpected positional argument: ${1}"
+			ROOT=${1}
+			shift
+			;;
+	esac
+
+done
+
+[[ -n ${ROOT} ]] || {
+	usage >&2
+	exit 2
+}
+
+ROOT=${ROOT%/}
+[[ -n ${ROOT} ]] || ROOT=/
+[[ -d ${ROOT} ]] || die "root does not exist: ${ROOT}"
+ROOT=$(readlink -f "${ROOT}" 2>/dev/null || printf '%s\n' "${ROOT}")
+
+require_command 1g4-system-setup
+require_command findmnt
+require_command blkid
+require_command lsblk
+require_command awk
+require_command sort
+require_command chroot
+
+INTERACTIVE=no
+[[ ${YES} == yes ]] || { [[ -t 0 && -t 1 ]] && INTERACTIVE=yes; }
+
+HOSTNAME=${HOSTNAME:-1g4}
+TIMEZONE=${TIMEZONE:-$(default_timezone)}
+if [[ -z ${NORMAL_USER} ]]; then
+	NORMAL_USER=$(default_login_user || true)
+fi
+if [[ -z ${NORMAL_USER} && ${INTERACTIVE} == yes ]]; then
+	NORMAL_USER=$(prompt_default 'Normal user name' '')
+fi
+[[ -n ${NORMAL_USER} ]] || die "normal user is required; pass --user"
+
+if [[ ${INTERACTIVE} == yes ]]; then
+	HOSTNAME=$(prompt_default 'Hostname' "${HOSTNAME}")
+	TIMEZONE=$(prompt_default 'Timezone' "${TIMEZONE}")
+	if [[ -z ${USER_PASSWORD_HASH} ]]; then
+		USER_PASSWORD_HASH=$(prompt_password_hash "Password for ${NORMAL_USER}" || true)
+	fi
+	if [[ -z ${ROOT_PASSWORD_HASH} ]]; then
+		ROOT_PASSWORD_HASH=$(prompt_password_hash 'Root password' || true)
+	fi
+fi
+
+[[ -n ${HOSTNAME} ]] || die "hostname must not be empty"
+[[ -n ${TIMEZONE} ]] || die "timezone must not be empty"
+
+TMPDIR=$(mktemp -d)
+cleanup() {
+	local status=$?
+	if [[ ${status} -eq 0 ]]; then
+		rm -rf "${TMPDIR}"
+	else
+		echo "[$(basename "$0")] keeping temp files at ${TMPDIR}" >&2
+	fi
+}
+trap cleanup EXIT
+
+MOUNT_TABLE=${TMPDIR}/mounts
+FSTAB_FILE=${TMPDIR}/fstab
+CRYPTTAB_FILE=${TMPDIR}/crypttab
+CONFIG_FILE=${TMPDIR}/install.conf
+
+collect_mount_table
+
+declare -A CRYPT_UUID_BY_NAME=()
+declare -a CRYPT_ORDER=()
+LUKS_USED=no
+
+generate_fstab
+write_crypttab
+build_kernel_cmdline
+build_boot_hooks
+
+: > "${CONFIG_FILE}"
+write_config_var ONEG4_SETUP_HOSTNAME "${HOSTNAME}"
+write_config_var ONEG4_SETUP_LOCALE "${LOCALE}"
+write_config_var ONEG4_SETUP_KEYMAP "${KEYMAP}"
+write_config_var ONEG4_SETUP_TIMEZONE "${TIMEZONE}"
+write_config_var ONEG4_SETUP_FSTAB_FILE "${FSTAB_FILE}"
+write_config_var ONEG4_SETUP_KERNEL_CMDLINE "${KERNEL_CMDLINE}"
+write_config_var ONEG4_SETUP_NORMAL_USER "${NORMAL_USER}"
+write_config_var ONEG4_SETUP_NORMAL_USER_SHELL "${USER_SHELL}"
+write_config_var ONEG4_SETUP_NORMAL_USER_GROUPS "${SUPPLEMENTARY_GROUPS}"
+write_config_var ONEG4_SETUP_REQUIRE_NORMAL_USER yes
+write_config_var ONEG4_SETUP_REQUIRE_BOOT_ASSETS yes
+write_config_var ONEG4_SETUP_LUKS_USED "${LUKS_USED}"
+if [[ ${LUKS_USED} == yes ]]; then
+	write_config_var ONEG4_SETUP_CRYPTTAB_FILE "${CRYPTTAB_FILE}"
+fi
+if [[ ${NO_NETWORK} != yes ]]; then
+	write_config_var ONEG4_SETUP_NETWORKD_MATCH_NAMES "${NETWORK_MATCH}"
+	write_config_var ONEG4_SETUP_NETWORKD_DHCP ipv4
+	if [[ -n ${NETWORK_DNS} ]]; then
+		write_config_var ONEG4_SETUP_NETWORKD_DNS "${NETWORK_DNS}"
+	fi
+fi
+if [[ -n ${USER_PASSWORD_HASH} ]]; then
+	write_config_var ONEG4_SETUP_NORMAL_USER_PASSWORD_HASH "${USER_PASSWORD_HASH}"
+fi
+if [[ -n ${ROOT_PASSWORD_HASH} ]]; then
+	write_config_var ONEG4_SETUP_ROOT_PASSWORD_HASH "${ROOT_PASSWORD_HASH}"
+fi
+if [[ -n ${INITRAMFS_CMD} ]]; then
+	write_config_var ONEG4_SETUP_INITRAMFS_CMD "${INITRAMFS_CMD}"
+fi
+if [[ -n ${BOOTLOADER_INSTALL_CMD} ]]; then
+	write_config_var ONEG4_SETUP_BOOTLOADER_INSTALL_CMD "${BOOTLOADER_INSTALL_CMD}"
+fi
+if [[ -n ${BOOTLOADER_CONFIG_CMD} ]]; then
+	write_config_var ONEG4_SETUP_BOOTLOADER_CONFIG_CMD "${BOOTLOADER_CONFIG_CMD}"
+fi
+if [[ -n ${BOOTLOADER_CONFIG} ]]; then
+	write_config_var ONEG4_SETUP_BOOTLOADER_CONFIG "${BOOTLOADER_CONFIG}"
+fi
+
+show_summary
+if [[ ${INTERACTIVE} == yes ]]; then
+	read -r -p 'Continue and finalize install? [y/N]: ' reply || true
+	case ${reply} in
+		y|Y|yes|YES) ;;
+		*) die 'aborted' ;;
+	esac
+fi
+
+1g4-system-setup finalize "${ROOT}" installed-host "${CONFIG_FILE}"
+log "system is finalized and validated as boot-ready"

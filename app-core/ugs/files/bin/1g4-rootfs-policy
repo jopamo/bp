@@ -19,6 +19,10 @@ die() {
 	exit 1
 }
 
+warn() {
+	echo "$(basename "$0"): warning: $*" >&2
+}
+
 log() {
 	echo "[$(basename "$0")] $*"
 }
@@ -72,6 +76,34 @@ root_relative_path() {
 	else
 		printf '/%s\n' "${abs#"${ROOT}/"}"
 	fi
+}
+
+backup_path_state() {
+	local rel=${1}
+	local backup=${2}
+	local path
+	path=$(root_path "${rel}")
+	install -d "$(dirname "${backup}")"
+	if [[ -e ${path} || -L ${path} ]]; then
+		cp -a "${path}" "${backup}"
+	else
+		: > "${backup}.absent"
+	fi
+}
+
+restore_path_state() {
+	local rel=${1}
+	local backup=${2}
+	local path
+	path=$(root_path "${rel}")
+	if [[ -e ${backup}.absent ]]; then
+		rm -f "${path}"
+		return 0
+	fi
+	[[ -e ${backup} || -L ${backup} ]] || return 0
+	install -d "$(dirname "${path}")"
+	rm -f "${path}"
+	cp -a "${backup}" "${path}"
 }
 
 path_recorded_in_vdb() {
@@ -289,7 +321,17 @@ validate_network_policy() {
 }
 
 validate_contents_consistency() {
-	local contents type path _rest had_nullglob=0
+	local contents type path _rest had_nullglob=0 issues=0
+	local report_issue
+	report_issue() {
+		local message=${1}
+		if [[ ${MODE} == bootable ]]; then
+			warn "${message}"
+			issues=$((issues + 1))
+		else
+			die "${message}"
+		fi
+	}
 	shopt -q nullglob || had_nullglob=1
 	shopt -s nullglob
 	for contents in "$(root_path /var/db/pkg)"/*/*/CONTENTS; do
@@ -298,24 +340,43 @@ validate_contents_consistency() {
 			[[ -n ${path:-} ]] || continue
 			case ${path} in
 				/var/log/journal|/var/log/journal/*|/var/log/.keep_*|/var/log/old|/var/log/old/*)
-					die "volatile log path still recorded in CONTENTS: ${path} (${contents})"
+					report_issue "volatile log path still recorded in CONTENTS: ${path} (${contents})"
 					;;
 			esac
 			case ${path} in
 				/usr/share/man|/usr/share/man/*|/usr/share/doc|/usr/share/doc/*|/usr/share/info|/usr/share/info/*|/usr/share/gtk-doc|/usr/share/gtk-doc/*|/usr/share/ri|/usr/share/ri/*)
 					if [[ ! -e $(root_path "${path}") ]]; then
-						die "post-pruned path still recorded in CONTENTS: ${path} (${contents})"
+						report_issue "post-pruned path still recorded in CONTENTS: ${path} (${contents})"
 					fi
 					;;
 			esac
 		done < "${contents}"
 	done
 	(( had_nullglob )) && shopt -u nullglob
+	if [[ ${MODE} == bootable && ${issues} -gt 0 ]]; then
+		log "continuing despite ${issues} CONTENTS inconsistency warning(s) in bootable mode"
+	fi
 }
 
 finalize_root() {
 	apply_service_policy
 	finalize_resolv_conf
+}
+
+run_finalize_transaction() {
+	local txdir
+	txdir=$(mktemp -d)
+	backup_path_state /etc/resolv.conf "${txdir}/resolv.conf"
+	if ! (
+		finalize_root
+		validate_root
+	); then
+		restore_path_state /etc/resolv.conf "${txdir}/resolv.conf"
+		rm -rf "${txdir}"
+		return 1
+	fi
+	rm -rf "${txdir}"
+	return 0
 }
 
 validate_root() {
@@ -328,8 +389,7 @@ validate_root() {
 
 case ${ACTION} in
 	finalize)
-		finalize_root
-		validate_root
+		run_finalize_transaction
 		log "finalized ${ROOT} (${MODE})"
 		;;
 	validate)

@@ -227,8 +227,10 @@ then
 	then
 		echo "Warning: skipping rootfs finalization on the live root; validating current state only."
 		1g4-rootfs-policy validate "${TARGET}" bootable
+		1g4-system-setup validate "${TARGET}" installed-host
 	else
 		1g4-rootfs-policy finalize "${TARGET}" bootable
+		1g4-system-setup validate "${TARGET}" installed-host
 	fi
 	XZ_OPT="-e9" tar -cpP --ignore-failed-read "--xattrs-include='*.*'" --numeric-owner "${INCLUDES[@]}" "${EXCLUDES[@]}" "${OPTIONS[@]}" -f "$STAGE4_FILENAME" "${TARGET}"
 fi

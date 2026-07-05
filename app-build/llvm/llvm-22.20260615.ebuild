@@ -174,7 +174,7 @@ src_configure() {
 	fi
 	local -x CXX="/usr/bin/clang++"
 	local -x AS="/usr/bin/clang"
-	local -x LD="/usr/bin/ld.lld"
+	local -x LD="ld.lld"
 	local -x AR="/usr/bin/llvm-ar"
 	local -x NM="/usr/bin/llvm-nm"
 	local -x RANLIB="/usr/bin/llvm-ranlib"
@@ -317,7 +317,7 @@ src_configure() {
 		-DCMAKE_CXX_STANDARD=17
 		-DCMAKE_INSTALL_LIBDIR=lib
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
-		-DCMAKE_LINKER=/usr/bin/ld.lld
+		-DCMAKE_LINKER=ld.lld
 		-DCMAKE_NM=/usr/bin/llvm-nm
 		-DCMAKE_OBJCOPY=/usr/bin/llvm-objcopy
 		-DCMAKE_OBJDUMP=/usr/bin/llvm-objdump
@@ -468,7 +468,7 @@ src_configure() {
 	)
 
 	local sysclang=(
-		-DCLANG_DEFAULT_LINKER=/usr/bin/ld.lld
+		-DCLANG_DEFAULT_LINKER=ld.lld
 		-DCMAKE_AR=/usr/bin/llvm-ar
 		-DCMAKE_ASM_COMPILER=/usr/bin/clang
 		-DCMAKE_ASM_COMPILER_TARGET=${TUPLE}
@@ -476,7 +476,7 @@ src_configure() {
 		-DCMAKE_C_COMPILER_TARGET=${TUPLE}
 		-DCMAKE_CXX_COMPILER=/usr/bin/clang++
 		-DCMAKE_CXX_COMPILER_TARGET=${TUPLE}
-		-DCMAKE_LINKER=/usr/bin/ld.lld
+		-DCMAKE_LINKER=ld.lld
 		-DCMAKE_NM=/usr/bin/llvm-nm
 		-DCMAKE_OBJCOPY=/usr/bin/llvm-objcopy
 		-DCMAKE_OBJDUMP=/usr/bin/llvm-objdump

@@ -29,8 +29,6 @@ src_prepare() {
 }
 
 src_configure() {
-	tc-is-clang && append-flags -Wno-error=fuse-ld-path
-
 	local myconf=(
 		$(use_enable static-libs static)
 		$(use_enable debug)

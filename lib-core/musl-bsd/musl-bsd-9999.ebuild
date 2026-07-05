@@ -10,15 +10,10 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static-libs"
-
 RDEPEND="!lib-core/glibc"
 
 src_configure() {
 	qa-policy-configure
-	local emesonargs=(
-		-Ddefault_library=$(usex static-libs both shared)
-	)
 	meson_src_configure
 }
 

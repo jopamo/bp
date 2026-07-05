@@ -19,10 +19,13 @@ LICENSE="LGPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="jack ladspa lv2 test vst X"
+IUSE="jack +ladspa +lv2 test +vst X"
 
 
-REQUIRED_USE="test? ( jack )"
+REQUIRED_USE="
+	test? ( jack )
+	|| ( ladspa lv2 vst )
+"
 
 RESTRICT="!test? ( test )"
 
@@ -32,6 +35,29 @@ DEPEND="
 	ladspa? ( xmedia-lib/ladspa-sdk )
 "
 RDEPEND="${DEPEND}"
+
+_lsp_plugins_set_makeargs() {
+	local features=()
+
+	use jack && features+=( jack )
+	use ladspa && features+=( ladspa )
+	use lv2 && features+=( lv2 )
+	use vst && features+=( vst2 )
+	use X && features+=( xdg )
+
+	LSP_PLUGINS_MAKEARGS=(
+		FEATURES="${features[*]}"
+		PREFIX="/usr"
+		LIBDIR="/usr/lib"
+		CC="$(tc-getCC)"
+		CXX="$(tc-getCXX)"
+		LD="$(tc-getLD)"
+		CFLAGS_EXT="${CFLAGS}"
+		CXXFLAGS_EXT="${CXXFLAGS}"
+		LDFLAGS_EXT="$(raw-ldflags)"
+		VERBOSE=1
+	)
+}
 
 src_configure() {
 	# -Werror=odr
@@ -45,39 +71,16 @@ src_configure() {
 	# This was reported upstream but the ticket closed. Abandon hope.
 	filter-lto
 
-	use jack && MODULES+=" jack"
-	use ladspa && MODULES+=" ladspa"
-	use lv2 && MODULES+=" lv2"
-	use vst && MODULES+=" vst2"
-	use X && MODULES+=" xdg"
-	emake \
-		FEATURES="${MODULES}" \
-		PREFIX="/usr" \
-		LIBDIR="/usr/lib" \
-		CC="$(tc-getCC)" \
-		CXX="$(tc-getCXX)" \
-		LD="$(tc-getLD)" \
-		CFLAGS_EXT="${CFLAGS}" \
-		CXXFLAGS_EXT="${CXXFLAGS}" \
-		LDFLAGS_EXT="$(raw-ldflags)" \
-		VERBOSE=1 \
-		config
+	_lsp_plugins_set_makeargs
+	emake "${LSP_PLUGINS_MAKEARGS[@]}" config
 }
 
 src_compile() {
-	emake \
-		FEATURES="${MODULES}" \
-		PREFIX="/usr" \
-		LIBDIR="/usr/lib" \
-		CC="$(tc-getCC)" \
-		CXX="$(tc-getCXX)" \
-		LD="$(tc-getLD)" \
-		CFLAGS_EXT="${CFLAGS}" \
-		CXXFLAGS_EXT="${CXXFLAGS}" \
-		LDFLAGS_EXT="$(raw-ldflags)" \
-		VERBOSE=1
+	_lsp_plugins_set_makeargs
+	emake "${LSP_PLUGINS_MAKEARGS[@]}"
 }
 
 src_install() {
-	emake PREFIX="${ED}/usr" DESTDIR="${ED}" LIB_PATH="${ED}/usr/lib" VERBOSE=1 install
+	_lsp_plugins_set_makeargs
+	emake "${LSP_PLUGINS_MAKEARGS[@]}" DESTDIR="${ED}" install
 }

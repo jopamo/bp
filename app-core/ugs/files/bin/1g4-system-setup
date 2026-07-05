@@ -127,6 +127,34 @@ root_relative_path() {
 	fi
 }
 
+backup_path_state() {
+	local rel=${1}
+	local backup=${2}
+	local path
+	path=$(root_path "${rel}")
+	install -d "$(dirname "${backup}")"
+	if [[ -e ${path} || -L ${path} ]]; then
+		cp -a "${path}" "${backup}"
+	else
+		: > "${backup}.absent"
+	fi
+}
+
+restore_path_state() {
+	local rel=${1}
+	local backup=${2}
+	local path
+	path=$(root_path "${rel}")
+	if [[ -e ${backup}.absent ]]; then
+		rm -f "${path}"
+		return 0
+	fi
+	[[ -e ${backup} || -L ${backup} ]] || return 0
+	install -d "$(dirname "${path}")"
+	rm -f "${path}"
+	cp -a "${backup}" "${path}"
+}
+
 systemctl_root() {
 	SYSTEMD_OFFLINE=1 systemctl --root="${ROOT}" --no-reload "$@"
 }
@@ -1002,12 +1030,29 @@ finalize_system() {
 	run_depmod
 	run_ldconfig
 	run_hwdb_update
-	run_preset_all
 	if [[ ${MODE} == installed-host || ${MODE} == live-rescue ]]; then
 		run_hook initramfs "${ONEG4_SETUP_INITRAMFS_CMD:-}"
 		run_hook bootloader-install "${ONEG4_SETUP_BOOTLOADER_INSTALL_CMD:-}"
 		run_hook bootloader-config "${ONEG4_SETUP_BOOTLOADER_CONFIG_CMD:-}"
 	fi
+	1g4-rootfs-policy finalize "${ROOT}" "${ROOTFS_MODE}"
+	run_preset_all
+}
+
+run_finalize_transaction() {
+	local txdir
+	txdir=$(mktemp -d)
+	backup_path_state /etc/resolv.conf "${txdir}/resolv.conf"
+	if ! (
+		finalize_system
+		validate_system
+	); then
+		restore_path_state /etc/resolv.conf "${txdir}/resolv.conf"
+		rm -rf "${txdir}"
+		return 1
+	fi
+	rm -rf "${txdir}"
+	return 0
 }
 
 validate_system() {
@@ -1031,8 +1076,7 @@ canonical_mode_defaults
 
 case ${ACTION} in
 	finalize)
-		finalize_system
-		validate_system
+		run_finalize_transaction
 		log "finalized ${ROOT} (${MODE})"
 		;;
 	validate)

@@ -184,6 +184,22 @@ target_has_command() {
 	[[ -x $(root_path "/sbin/${cmd}") ]]
 }
 
+target_command_path() {
+	local cmd=${1}
+	local candidate
+	for candidate in \
+		"/usr/bin/${cmd}" \
+		"/usr/sbin/${cmd}" \
+		"/bin/${cmd}" \
+		"/sbin/${cmd}"
+	do
+		[[ -x $(root_path "${candidate}") ]] || continue
+		printf '%s\n' "${candidate}"
+		return 0
+	done
+	return 1
+}
+
 is_pseudo_fstype() {
 	case ${1} in
 		autofs|bpf|cgroup|cgroup2|configfs|debugfs|devpts|devtmpfs|efivarfs|fusectl|hugetlbfs|mqueue|nsfs|overlay|proc|pstore|ramfs|securityfs|squashfs|sysfs|tmpfs|tracefs)
@@ -654,6 +670,28 @@ build_target_command() {
 	printf '%s\n' "${cmd% }"
 }
 
+build_target_env_command() {
+	local cmd="" arg env_path env_cmd ldconfig_override=
+	env_path=/usr/bin:/usr/sbin:/bin:/sbin
+	if ! target_has_command ldconfig; then
+		ldconfig_override=DRACUT_LDCONFIG=/bin/true
+	fi
+	if [[ ${ROOT} != / ]]; then
+		env_cmd=$(target_command_path env || true)
+		[[ -n ${env_cmd} ]] || die "target does not contain env; cannot build hook command"
+		printf -v cmd 'chroot %q %q PATH=%q ' "${ROOT}" "${env_cmd}" "${env_path}"
+	else
+		printf -v cmd 'env PATH=%q ' "${env_path}"
+	fi
+	if [[ -n ${ldconfig_override} ]]; then
+		printf -v cmd '%s%q ' "${cmd}" "${ldconfig_override}"
+	fi
+	for arg in "$@"; do
+		printf -v cmd '%s%q ' "${cmd}" "${arg}"
+	done
+	printf '%s\n' "${cmd% }"
+}
+
 build_boot_hooks() {
 	local efi_dir existing_cfg has_boot_entries=no bios_target=
 	INITRAMFS_CMD=
@@ -662,7 +700,7 @@ build_boot_hooks() {
 	BOOTLOADER_CONFIG=
 
 	target_has_command dracut || die "target does not contain dracut; cannot build initramfs"
-	INITRAMFS_CMD=$(build_target_command dracut --force --regenerate-all)
+	INITRAMFS_CMD=$(build_target_env_command dracut --force --regenerate-all --no-uefi --no-ukify)
 
 	existing_cfg=$(detect_existing_bootloader_config || true)
 	if [[ ${existing_cfg} == __systemd_entries__ ]]; then

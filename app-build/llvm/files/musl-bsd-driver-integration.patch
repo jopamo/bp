@@ -19,7 +19,7 @@ diff --git a/clang/lib/Driver/ToolChains/Gnu.cpp b/clang/lib/Driver/ToolChains/G
 index cb6a9b2..2ac22bd 100644
 --- a/clang/lib/Driver/ToolChains/Gnu.cpp
 +++ b/clang/lib/Driver/ToolChains/Gnu.cpp
-@@ -532,8 +532,42 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+@@ -532,8 +532,46 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
        if (Args.hasArg(options::OPT_fsplit_stack))
          CmdArgs.push_back("--wrap=pthread_create");
  

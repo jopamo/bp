@@ -19,30 +19,39 @@ diff --git a/clang/lib/Driver/ToolChains/Gnu.cpp b/clang/lib/Driver/ToolChains/G
 index cb6a9b2..2ac22bd 100644
 --- a/clang/lib/Driver/ToolChains/Gnu.cpp
 +++ b/clang/lib/Driver/ToolChains/Gnu.cpp
-@@ -532,8 +532,37 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+@@ -532,8 +532,42 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
        if (Args.hasArg(options::OPT_fsplit_stack))
          CmdArgs.push_back("--wrap=pthread_create");
  
 -      if (!Args.hasArg(options::OPT_nolibc))
 +      if (!Args.hasArg(options::OPT_nolibc)) {
 +        if (getToolChain().getTriple().isMusl()) {
-+          std::string CompatLibPath =
-+              getToolChain().GetFilePath("libmusl-bsd-compat.so");
-+          if (CompatLibPath == "libmusl-bsd-compat.so")
++          const bool UseStaticCompat =
++              Args.hasArg(options::OPT_static) ||
++              Args.hasArg(options::OPT_static_pie);
++          std::string CompatLibPath = getToolChain().GetFilePath(
++              UseStaticCompat ? "libmusl-bsd-compat.a"
++                              : "libmusl-bsd-compat.so");
++          if (!UseStaticCompat &&
++              CompatLibPath == "libmusl-bsd-compat.so")
 +            CompatLibPath = getToolChain().GetFilePath("libmusl-bsd-compat.a");
 +
 +          if (CompatLibPath != "libmusl-bsd-compat.so" &&
 +              CompatLibPath != "libmusl-bsd-compat.a") {
 +            const char *CompatLinkMode =
-+                Args.hasFlag(options::OPT_fmusl_bsd_load_compat,
-+                             options::OPT_fno_musl_bsd_load_compat, false)
++                !UseStaticCompat &&
++                    Args.hasFlag(options::OPT_fmusl_bsd_load_compat,
++                                 options::OPT_fno_musl_bsd_load_compat,
++                                 false)
 +                    ? "--no-as-needed"
 +                    : "--as-needed";
 +
 +            // Auto-link musl-bsd shims when directly referenced, and provide
 +            // an explicit opt-in to keep the compat DSO in the startup
-+            // dependency set for musl executables that will dlopen()
-+            // glibc-targeted DSOs. Resolve the library to a concrete path so
++            // dependency set for dynamic musl executables that will dlopen()
++            // glibc-targeted DSOs. Static and static-pie links must resolve
++            // against the archive instead of forcing a shared object into a
++            // static link. Resolve the library to a concrete path so
 +            // target-prefixed linkers do not depend on ambient search paths,
 +            // and quietly skip the injection when the compat package is not
 +            // installed in the active sysroot yet (e.g. during bootstrap).

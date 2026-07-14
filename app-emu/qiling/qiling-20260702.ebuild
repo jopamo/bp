@@ -4,7 +4,8 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-pypi/capstone
+	app-emu/capstone
+	app-emu/unicorn
 	dev-pypi/fuzzercorn
 	dev-pypi/gevent
 	dev-pypi/keystone-engine
@@ -17,14 +18,13 @@ RDEPEND+="
 	dev-pypi/questionary
 	dev-pypi/r2libr
 	dev-pypi/termcolor
-	dev-pypi/unicorn
 	dev-pypi/unicornafl
 "
 # lockstep-pypi-deps: end
 DESCRIPTION="Advanced Binary Emulation Framework"
 HOMEPAGE="https://github.com/qilingframework/qiling"
 
-SNAPSHOT=a42fb2857955165f1c9e789d1888293e0a2368ea
+SNAPSHOT=499218bd1aa51655d0db41ccd158ac0f761aab81
 SRC_URI="https://github.com/qilingframework/qiling/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

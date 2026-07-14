@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="zerocopy-derive"
-CRATE_VERSION="0.8.48"
-CRATE_CHECKSUM="70e3cd084b1788766f53af483dd21f93881ff30d7320490ec3ef7526d203bad4"
+CRATE_VERSION="0.8.52"
+CRATE_CHECKSUM="1ae7f38b72ec2a254e2b87ef277cf2cd4fb97cbebf944faa6f33354da0867930"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

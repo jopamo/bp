@@ -11,12 +11,12 @@ inherit distutils-r1
 
 DESCRIPTION="Build backend for CMake based projects"
 HOMEPAGE="https://github.com/scikit-build/scikit-build-core"
-LICENSE="metapackage"
+LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/28/cd/9ebb50029b6d8a3ee9e38cdce514ebd70190ec1edf28ab0a1f66d0b84670/scikit_build_core-0.12.2.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/scikit_build_core-0.12.2"
+SRC_URI="https://files.pythonhosted.org/packages/8d/7c/0f69b0c7150ce4bcee78c199fe3b7e03a6e01578451bd5d5d1a58beb32f9/scikit_build_core-1.0.3.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/scikit_build_core-1.0.3"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
@@ -26,6 +26,9 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/hatch-vcs[${PYTHON_USEDEP}]
 	dev-pypi/hatchling[${PYTHON_USEDEP}]
 "
+
+export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"

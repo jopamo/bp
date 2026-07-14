@@ -11,7 +11,7 @@ inherit distutils-r1
 
 DESCRIPTION="Python bindings to FreeDesktop.org Secret Service API"
 HOMEPAGE="https://github.com/mitya57/secretstorage"
-LICENSE="metapackage"
+LICENSE="BSD-3-Clause"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -26,5 +26,6 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

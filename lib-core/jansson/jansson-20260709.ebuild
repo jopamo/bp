@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="C library for encoding, decoding and manipulating JSON data"
 HOMEPAGE="https://github.com/akheron/jansson"
-SNAPSHOT=a83a3476cdad203f6069a77adc7adf7acacb0236
+SNAPSHOT=851a2145e3256f2e67e5dfe24b0e456bf198b741
 SRC_URI="https://github.com/akheron/jansson/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -6,7 +6,7 @@ inherit go-module
 
 DESCRIPTION="A daemon to control runC"
 HOMEPAGE="https://containerd.io/"
-SNAPSHOT=ee6b4a83dfb5a01c216701b6da13b5efcb720599
+SNAPSHOT=dca26ac71ea170f61fc170e159332b94edf2a3f1
 SRC_URI="https://github.com/containerd/containerd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 # lockstep-go-managed: true
 # lockstep-go-deps: begin

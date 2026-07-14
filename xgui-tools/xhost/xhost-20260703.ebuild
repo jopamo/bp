@@ -5,7 +5,7 @@ inherit autotools
 DESCRIPTION="X server access control utility"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=e37840aa286cf09891798627366d94970118950c
+SNAPSHOT=101ebe8754637443b0fde22886c4962f638c0fe6
 SRC_URI="https://gitlab.freedesktop.org/xorg/app/xhost/-/archive/${SNAPSHOT}/xhost-${SNAPSHOT}.tar.bz2 -> xhost-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/xhost-${SNAPSHOT}"
 

@@ -19,5 +19,6 @@ SRC_URI="https://files.pythonhosted.org/packages/33/5f/2cdf6f7aca3b20d3f316e9f50
 S="${WORKDIR}/antlr4_python3_runtime-4.13.2"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

@@ -4,7 +4,7 @@ inherit autotools
 
 DESCRIPTION="X authority file utility"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=4589d34b6e49ca993ddba1339a56186d56767a4e
+SNAPSHOT=06c39dd0f7e19950e835a062edee8a2272e3270c
 SRC_URI="https://gitlab.freedesktop.org/xorg/app/xauth/-/archive/${SNAPSHOT}/xauth-${SNAPSHOT}.tar.bz2 -> xauth-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/xauth-${SNAPSHOT}"
 

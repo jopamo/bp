@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="jiff"
-CRATE_VERSION="0.2.27"
-CRATE_CHECKSUM="392c70591e8749fe235ddaf513e6f58b26bce3dcc16524cecc8936f75afa161e"
+CRATE_VERSION="0.2.29"
+CRATE_CHECKSUM="34f877a98676d2fb664698d74cc6a51ce6c484ce8c770f05d0108ec9090aeb46"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
@@ -19,6 +19,7 @@ KEYWORDS="amd64 arm64"
 CARGO_CRATE_FEATURES=(
 	"alloc"
 	"default"
+	"defmt"
 	"js"
 	"logging"
 	"perf-inline"

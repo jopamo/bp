@@ -19,5 +19,6 @@ SRC_URI="https://files.pythonhosted.org/packages/81/e1/56027a71e31b02ddc53c7d65b
 S="${WORKDIR}/dill-0.4.1"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

@@ -4,7 +4,7 @@ inherit autotools flag-o-matic qa-policy
 
 DESCRIPTION="X.Org X11 library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=b10abf6b99d5acf846c26f305f1a14a86360a96c
+SNAPSHOT=b5e4ac5b78befbe6d992e7005b62a0b0f53149da
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libX11/-/archive/${SNAPSHOT}/libX11-${SNAPSHOT}.tar.bz2 -> libX11-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libx11-${SNAPSHOT}"
 

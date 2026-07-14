@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="wasm-bindgen-macro-support"
-CRATE_VERSION="0.2.121"
-CRATE_CHECKSUM="d95a9ec35c64b2a7cb35d3fead40c4238d0940c86d107136999567a4703259f2"
+CRATE_VERSION="0.2.126"
+CRATE_CHECKSUM="f3997c7839262f4ef12cf90b818d6340c18e80f263f1a94bf157d0ec4420380e"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

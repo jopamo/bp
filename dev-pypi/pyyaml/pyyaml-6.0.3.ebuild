@@ -20,5 +20,6 @@ S="${WORKDIR}/pyyaml-6.0.3"
 
 BDEPEND="
 	dev-pypi/cython[${PYTHON_USEDEP}]
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

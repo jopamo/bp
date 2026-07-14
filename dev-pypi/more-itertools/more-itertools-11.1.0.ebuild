@@ -11,13 +11,14 @@ inherit distutils-r1
 
 DESCRIPTION="More routines for operating on iterables, beyond itertools"
 HOMEPAGE="https://github.com/more-itertools/more-itertools"
-LICENSE="metapackage"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/a2/f7/139d22fef48ac78127d18e01d80cf1be40236ae489769d17f35c3d425293/more_itertools-11.0.2.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/more_itertools-11.0.2"
+SRC_URI="https://files.pythonhosted.org/packages/de/1d/f4da6f02cdffe04d6362210b807146a26044c88d839208aec273bb0d9184/more_itertools-11.1.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/more_itertools-11.1.0"
 
 BDEPEND="
 	dev-pypi/flit-core[${PYTHON_USEDEP}]
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 "

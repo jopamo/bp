@@ -11,12 +11,12 @@ inherit distutils-r1
 
 DESCRIPTION="Foreign Function Interface for Python calling C code."
 HOMEPAGE="https://pypi.org/project/cffi/"
-LICENSE="MIT"
+LICENSE="MIT-0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/eb/56/b1ba7935a17738ae8453301356628e8147c79dbb825bcbc73dc7401f9846/cffi-2.0.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/cffi-2.0.0"
+SRC_URI="https://files.pythonhosted.org/packages/57/5f/ff100cae70ebe9d8df1c01a00e510e45d9adb5c1fdda84791b199141de97/cffi-2.1.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/cffi-2.1.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

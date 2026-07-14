@@ -28,6 +28,9 @@ CARGO_DEPS="
 	rust-crates/crossbeam-epoch-0.9.18
 	rust-crates/crossbeam-utils-0.8.21
 	rust-crates/ctrlc-3.5.2
+	rust-crates/defmt-1.1.0
+	rust-crates/defmt-macros-1.1.0
+	rust-crates/defmt-parser-1.0.0
 	rust-crates/diff-0.1.13
 	rust-crates/dispatch2-0.3.1
 	rust-crates/equivalent-1.0.2
@@ -44,12 +47,12 @@ CARGO_DEPS="
 	rust-crates/hashbrown-0.16.1
 	rust-crates/heck-0.5.0
 	rust-crates/id-arena-2.3.0
-	rust-crates/ignore-0.4.25
+	rust-crates/ignore-0.4.26
 	rust-crates/indexmap-2.13.0
 	rust-crates/is_terminal_polyfill-1.70.2
 	rust-crates/itoa-1.0.17
-	rust-crates/jiff-0.2.27
-	rust-crates/jiff-static-0.2.27
+	rust-crates/jiff-0.2.29
+	rust-crates/jiff-static-0.2.29
 	rust-crates/jiff-tzdb-0.1.6
 	rust-crates/jiff-tzdb-platform-0.1.3
 	rust-crates/leb128fmt-0.1.0
@@ -59,7 +62,7 @@ CARGO_DEPS="
 	rust-crates/lscolors-0.21.0
 	rust-crates/memchr-2.8.0
 	rust-crates/nix-0.30.1
-	rust-crates/nix-0.31.2
+	rust-crates/nix-0.31.3
 	rust-crates/normpath-1.5.1
 	rust-crates/nu-ansi-term-0.50.3
 	rust-crates/objc2-0.6.4
@@ -69,12 +72,14 @@ CARGO_DEPS="
 	rust-crates/portable-atomic-1.13.1
 	rust-crates/portable-atomic-util-0.2.5
 	rust-crates/prettyplease-0.2.37
+	rust-crates/proc-macro-error-attr2-2.0.0
+	rust-crates/proc-macro-error2-2.0.1
 	rust-crates/proc-macro2-1.0.106
 	rust-crates/quote-1.0.45
 	rust-crates/r-efi-6.0.0
-	rust-crates/regex-1.12.3
+	rust-crates/regex-1.12.4
 	rust-crates/regex-automata-0.4.14
-	rust-crates/regex-syntax-0.8.10
+	rust-crates/regex-syntax-0.8.11
 	rust-crates/rustix-1.1.4
 	rust-crates/same-file-1.0.6
 	rust-crates/semver-1.0.27
@@ -90,6 +95,8 @@ CARGO_DEPS="
 	rust-crates/test-case-3.3.1
 	rust-crates/test-case-core-3.3.1
 	rust-crates/test-case-macros-3.3.1
+	rust-crates/thiserror-2.0.18
+	rust-crates/thiserror-impl-2.0.18
 	rust-crates/tikv-jemalloc-sys-0.7.1+5.3.1-0-g81034ce1f1373e37dc865038e1bc8eeecf559ce8
 	rust-crates/tikv-jemallocator-0.7.0
 	rust-crates/unicode-ident-1.0.24
@@ -130,7 +137,7 @@ inherit cargo lockstep-cargo
 
 DESCRIPTION="A simple, fast and user-friendly alternative to gnu find"
 HOMEPAGE="https://github.com/sharkdp/fd"
-SNAPSHOT=95dc6454d5ca68ec84b8f0a3a42f3eccc8600df5
+SNAPSHOT=5a5852e15b44d4917a6098b1c01d3bb535b7717f
 SRC_URI="https://github.com/sharkdp/fd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

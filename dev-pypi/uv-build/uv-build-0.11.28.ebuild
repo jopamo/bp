@@ -11,16 +11,17 @@ CARGO_DEPS="
 	rust-crates/anstyle-parse-1.0.0
 	rust-crates/anstyle-query-1.1.5
 	rust-crates/anstyle-wincon-3.0.11
-	rust-crates/anyhow-1.0.102
+	rust-crates/anyhow-1.0.103
 	rust-crates/arcstr-1.2.0
-	rust-crates/arrayvec-0.7.6
+	rust-crates/arrayvec-0.7.7
 	rust-crates/astral-tokio-tar-0.6.3
-	rust-crates/astral-version-ranges-0.1.4
-	rust-crates/astral_async_zip-0.0.18
+	rust-crates/astral-version-ranges-0.2.0
+	rust-crates/astral_async_zip-0.0.20
 	rust-crates/async-compression-0.4.19
 	rust-crates/autocfg-1.5.0
 	rust-crates/backon-1.6.0
 	rust-crates/base64-0.22.1
+	rust-crates/bitflags-1.3.2
 	rust-crates/bitflags-2.13.0
 	rust-crates/block-buffer-0.10.4
 	rust-crates/boxcar-0.2.14
@@ -28,7 +29,7 @@ CARGO_DEPS="
 	rust-crates/bumpalo-3.20.2
 	rust-crates/bytecheck-0.8.2
 	rust-crates/bytecheck_derive-0.8.2
-	rust-crates/bytes-1.11.1
+	rust-crates/bytes-1.12.0
 	rust-crates/bzip2-0.5.2
 	rust-crates/bzip2-sys-0.1.13+1.0.8
 	rust-crates/cc-1.2.57
@@ -46,6 +47,9 @@ CARGO_DEPS="
 	rust-crates/csv-1.4.0
 	rust-crates/csv-core-0.1.13
 	rust-crates/data-encoding-2.11.0
+	rust-crates/defmt-1.1.0
+	rust-crates/defmt-macros-1.1.0
+	rust-crates/defmt-parser-1.0.0
 	rust-crates/digest-0.10.7
 	rust-crates/displaydoc-0.2.5
 	rust-crates/dunce-1.0.5
@@ -102,8 +106,8 @@ CARGO_DEPS="
 	rust-crates/is_terminal_polyfill-1.70.2
 	rust-crates/itertools-0.14.0
 	rust-crates/itoa-1.0.17
-	rust-crates/jiff-0.2.28
-	rust-crates/jiff-static-0.2.28
+	rust-crates/jiff-0.2.29
+	rust-crates/jiff-static-0.2.29
 	rust-crates/jiff-tzdb-0.1.6
 	rust-crates/jiff-tzdb-platform-0.1.3
 	rust-crates/jobserver-0.1.34
@@ -147,17 +151,19 @@ CARGO_DEPS="
 	rust-crates/portable-atomic-util-0.2.6
 	rust-crates/potential_utf-0.1.4
 	rust-crates/prettyplease-0.2.37
+	rust-crates/proc-macro-error-attr2-2.0.0
+	rust-crates/proc-macro-error2-2.0.1
 	rust-crates/proc-macro2-1.0.106
 	rust-crates/ptr_meta-0.3.1
 	rust-crates/ptr_meta_derive-0.3.1
-	rust-crates/quote-1.0.45
+	rust-crates/quote-1.0.46
 	rust-crates/quoted_printable-0.5.1
 	rust-crates/r-efi-5.3.0
 	rust-crates/rancor-0.1.1
 	rust-crates/redox_syscall-0.5.15
 	rust-crates/ref-cast-1.0.25
 	rust-crates/ref-cast-impl-1.0.25
-	rust-crates/reflink-copy-0.1.29
+	rust-crates/reflink-copy-0.1.30
 	rust-crates/regex-1.12.4
 	rust-crates/regex-automata-0.4.14
 	rust-crates/regex-syntax-0.8.11
@@ -197,7 +203,7 @@ CARGO_DEPS="
 	rust-crates/stable_deref_trait-1.2.1
 	rust-crates/strip-ansi-escapes-0.2.1
 	rust-crates/strsim-0.11.1
-	rust-crates/syn-2.0.117
+	rust-crates/syn-2.0.118
 	rust-crates/synstructure-0.13.2
 	rust-crates/temp-env-0.3.6
 	rust-crates/tempfile-3.27.0
@@ -236,7 +242,7 @@ CARGO_DEPS="
 	rust-crates/url-2.5.8
 	rust-crates/utf8_iter-1.0.4
 	rust-crates/utf8parse-0.2.2
-	rust-crates/uuid-1.23.3
+	rust-crates/uuid-1.23.4
 	rust-crates/valuable-0.1.1
 	rust-crates/version_check-0.9.5
 	rust-crates/vte-0.14.1
@@ -315,8 +321,8 @@ LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/60/2d/bdcad1d1c28f0cf2937adc85ec3d06e7ac49f35ca4bdaeb371fad7b3f166/uv_build-0.11.25.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/uv_build-0.11.25"
+SRC_URI="https://files.pythonhosted.org/packages/c8/38/8602c78e9df92ece7070ba765440dac3640920d49b00d19cd94173e4fb4b/uv_build-0.11.28.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/uv_build-0.11.28"
 
 BDEPEND="
 	app-dev/maturin[${PYTHON_USEDEP}]

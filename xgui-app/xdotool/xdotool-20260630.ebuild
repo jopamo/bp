@@ -4,7 +4,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="Simulate keyboard input and mouse activity, move and resize windows"
 HOMEPAGE="https://www.semicomplete.com/projects/xdotool/"
-SNAPSHOT=e354b69b858546e6bbcb7e117826337abf21e7e9
+SNAPSHOT=5c27b117c91bdc4d0f56a71ac4e78c04e4e60dba
 SRC_URI="https://github.com/jordansissel/xdotool/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -10,7 +10,7 @@ CARGO_DEPS="
 	rust-crates/anstyle-parse-1.0.0
 	rust-crates/anstyle-query-1.1.5
 	rust-crates/anstyle-wincon-3.0.11
-	rust-crates/anyhow-1.0.102
+	rust-crates/anyhow-1.0.103
 	rust-crates/ar_archive_writer-0.5.1
 	rust-crates/arwen-0.0.5
 	rust-crates/arwen-codesign-0.0.1-alpha.1
@@ -75,7 +75,7 @@ CARGO_DEPS="
 	rust-crates/crc32fast-1.5.0
 	rust-crates/crossbeam-channel-0.5.15
 	rust-crates/crossbeam-deque-0.8.6
-	rust-crates/crossbeam-epoch-0.9.18
+	rust-crates/crossbeam-epoch-0.9.20
 	rust-crates/crossbeam-utils-0.8.21
 	rust-crates/crypto-common-0.1.7
 	rust-crates/crypto-common-0.2.1
@@ -488,7 +488,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Build and publish crates with pyo3, rust-cpython and cffi bindings"
 HOMEPAGE="https://www.maturin.rs/"
-SNAPSHOT=7093fa762692420794b993a68a9186ba46713fb0
+SNAPSHOT=8f98161966d8b29a508015a91b8677d7031103e2
 SRC_URI="https://github.com/PyO3/maturin/archive/${SNAPSHOT}.tar.gz -> maturin-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/maturin-${SNAPSHOT}"
 

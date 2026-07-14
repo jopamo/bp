@@ -7,10 +7,10 @@ inherit distutils-r1
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	app-crypto/cryptography
-	dev-pypi/pyscard
 	dev-pypi/click
 	dev-pypi/fido2
 	dev-pypi/keyring
+	dev-pypi/pyscard
 	dev-pypi/python-pskc
 "
 # lockstep-pypi-deps: end
@@ -19,7 +19,7 @@ MY_P="${MY_PN}-${PV}"
 
 DESCRIPTION="Python library and command line tool for configuring a YubiKey"
 HOMEPAGE="https://developers.yubico.com/yubikey-manager/"
-SNAPSHOT=b0dbb7f17b333d7e94cfb5999c00b3f1a1d602aa
+SNAPSHOT=4ca60f706af930459138d8dc0f0f953480e1c7a4
 SRC_URI="https://github.com/Yubico/yubikey-manager/archive/${SNAPSHOT}.tar.gz -> yubikey-manager-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/yubikey-manager-${SNAPSHOT}"
 

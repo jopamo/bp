@@ -4,7 +4,7 @@ inherit meson
 
 DESCRIPTION="Minimal seat management daemon and universal library"
 HOMEPAGE="https://sr.ht/~kennylevinsen/seatd"
-SNAPSHOT=4bcdc81972157be5ac0265e8fab29617f0caa5ab
+SNAPSHOT=737d3ca4e63ae0f4ff38481628346da384d9f774
 SRC_URI="https://github.com/kennylevinsen/seatd/archive/${SNAPSHOT}.tar.gz -> seatd-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/seatd-${SNAPSHOT}"
 

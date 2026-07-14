@@ -11,7 +11,7 @@ inherit distutils-r1
 
 DESCRIPTION="Very basic event publishing system"
 HOMEPAGE="https://pypi.org/project/zope-event/"
-LICENSE="metapackage"
+LICENSE="ZPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -19,6 +19,7 @@ SRC_URI="https://files.pythonhosted.org/packages/93/41/faa10af34d48d9cd6fa0249a1
 S="${WORKDIR}/zope_event-6.2"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 	dev-pypi/wheel[${PYTHON_USEDEP}]
 "

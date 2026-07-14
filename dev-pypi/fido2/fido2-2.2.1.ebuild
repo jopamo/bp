@@ -15,8 +15,8 @@ LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/09/34/4837e2f5640baf61d8abd6125ccb6cc60b4b2933088528356ad6e781496f/fido2-2.2.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/fido2-2.2.0"
+SRC_URI="https://files.pythonhosted.org/packages/ba/ea/6f08c354b7aeb8019249d46a86c2153f8218499cced4d21bf16b6d49fc16/fido2-2.2.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/fido2-2.2.1"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
@@ -25,5 +25,6 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/poetry-core[${PYTHON_USEDEP}]
 "

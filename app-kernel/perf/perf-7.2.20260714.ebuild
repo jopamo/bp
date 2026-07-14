@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="snapshot"
-SNAPSHOT=e98265b928943fd8598202963ec2080eb66f1310
+SNAPSHOT=8f68a9e6f538834375a17fef1343a3f5268bc4e5
 PATCHES=( "${FILESDIR}"/perf-handle-pruned-syscall-tables.patch )
 
 inherit flag-o-matic toolchain-funcs

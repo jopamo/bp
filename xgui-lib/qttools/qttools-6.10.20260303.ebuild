@@ -8,7 +8,7 @@ DESCRIPTION="Qt Tools collection (Assistant, Designer, Linguist, etc.)"
 HOMEPAGE="https://www.qt.io/"
 
 SNAPSHOT=4b1a5798e42d9ca737cda924cceddd9db0cf1e01
-QLITEHTML_SNAPSHOT=266570412656ce7e1adff607fb351d9c09ca34db
+QLITEHTML_SNAPSHOT=57c70c40009e65f396133fe2fb8f84cb63681ada
 QTTOOLS_LITEHTML_SNAPSHOT=6ca1ab0419e770e6d35a1ef690238773a1dafcee
 SRC_URI="
 	https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2

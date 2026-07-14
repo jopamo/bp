@@ -11,7 +11,7 @@ BRANCH_NAME="v$(ver_cut 1)"
 
 DESCRIPTION="disassembly/disassembler framework + bindings"
 HOMEPAGE="http://www.capstone-engine.org/"
-SNAPSHOT=e17ee44a8307ea33375b4727ac4f987650bf7bed
+SNAPSHOT=f39c12aa3e0315ab065c3959242e70f4c4d6048e
 SRC_URI="https://github.com/capstone-engine/capstone/archive/${SNAPSHOT}.tar.gz -> capstone-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/capstone-${SNAPSHOT}"
 

@@ -5,7 +5,7 @@ inherit meson qa-policy
 DESCRIPTION="A TCP-IP emulator used to provide virtual networking services"
 HOMEPAGE="https://gitlab.freedesktop.org/slirp/libslirp"
 
-SNAPSHOT=d82ac5a853813d70cb990bc31d6faeffe8e4dc51
+SNAPSHOT=7c63245957d0646d963c56204d1885eda8df85a0
 SRC_URI="https://gitlab.freedesktop.org/slirp/libslirp/-/archive/${SNAPSHOT}/lib${PN}-${SNAPSHOT}.tar.bz2 -> lib${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/lib${PN}-${SNAPSHOT}
 

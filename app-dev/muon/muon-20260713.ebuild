@@ -4,7 +4,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="Implementation of the meson build system in C99"
 HOMEPAGE="https://muon.build https://github.com/muon-build/muon"
-SNAPSHOT=c3eef55354603d538882972fa600b8fe93293cf4
+SNAPSHOT=e851b53d310ed76cbb40f76f7424dbe57c5dc28e
 SRC_URI="https://github.com/muon-build/muon/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

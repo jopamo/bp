@@ -4,7 +4,7 @@ inherit flag-o-matic toolchain-funcs qa-policy
 
 DESCRIPTION="Hardware RNG based on CPU timing jitter"
 HOMEPAGE="https://github.com/smuellerDD/jitterentropy-library"
-SNAPSHOT=bea0a100f7538f88664b2443792c82741b2f2b3d
+SNAPSHOT=9f4655858298b81a51d77affa7a91fc524f582ba
 SRC_URI="https://github.com/smuellerDD/jitterentropy-library/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/jitterentropy-library-${SNAPSHOT}
 

@@ -4,7 +4,7 @@ inherit meson
 
 DESCRIPTION="EDID and DisplayID library"
 HOMEPAGE="https://gitlab.freedesktop.org/emersion/libdisplay-info/"
-SNAPSHOT=d77a2e5c1a962b02cff609dc05153eb0307e45e4
+SNAPSHOT=772d506015f4b6182f19ad879c2fbf28f41c9a6a
 SRC_URI="https://gitlab.freedesktop.org/emersion/libdisplay-info/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

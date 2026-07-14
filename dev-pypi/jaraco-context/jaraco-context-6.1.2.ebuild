@@ -11,7 +11,7 @@ inherit distutils-r1
 
 DESCRIPTION="Useful decorators and context managers"
 HOMEPAGE="https://pypi.org/project/jaraco-context/"
-LICENSE="metapackage"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -20,6 +20,9 @@ S="${WORKDIR}/jaraco_context-6.1.2"
 
 BDEPEND="
 	dev-pypi/coherent-licensed[${PYTHON_USEDEP}]
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "
+
+export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_JARACO_CONTEXT="${PV}"

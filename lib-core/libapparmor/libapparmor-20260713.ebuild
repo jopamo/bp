@@ -13,7 +13,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Library to support AppArmor userspace utilities"
 HOMEPAGE="https://gitlab.com/apparmor/apparmor/wikis/home"
-SNAPSHOT=621184c5fc466aeca9365f23c6cab31420217f2c
+SNAPSHOT=e50c3d49ad9bde6fa850966d6e0a7bbd21772506
 SRC_URI="https://gitlab.com/apparmor/apparmor/-/archive/${SNAPSHOT}/apparmor-${SNAPSHOT}.tar.bz2 -> apparmor-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/apparmor-${SNAPSHOT}/libraries/${PN}"
 

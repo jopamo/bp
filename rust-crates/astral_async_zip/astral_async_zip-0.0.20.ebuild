@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="astral_async_zip"
-CRATE_VERSION="0.0.18"
-CRATE_CHECKSUM="c15fc5b591f19dfbbbce736615908d74f1d9252bb34b231873cb995f2a997ffb"
+CRATE_VERSION="0.0.20"
+CRATE_CHECKSUM="bd939d79959c3f49a648a1d7857d63cc62548725a6b060b8dbf0ea5c92470b63"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

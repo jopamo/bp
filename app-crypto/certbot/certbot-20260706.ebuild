@@ -20,7 +20,7 @@ DESCRIPTION="Let’s Encrypt client to automate deployment of X.509 certificates
 
 HOMEPAGE="https://github.com/certbot/certbot"
 KEYWORDS="amd64 arm64"
-SNAPSHOT=f769e35e77f1fa21a75cd5418641502dad8a37c5
+SNAPSHOT=0265abfa62a4c1a8a1eeaf98dfc525a690bc287e
 SRC_URI="https://github.com/certbot/certbot/archive/${SNAPSHOT}.tar.gz -> certbot-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/certbot-${SNAPSHOT}/certbot"
 

@@ -19,5 +19,6 @@ SRC_URI="https://files.pythonhosted.org/packages/e8/52/d87eba7cb129b81563019d167
 S="${WORKDIR}/pyperclip-1.11.0"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

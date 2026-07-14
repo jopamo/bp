@@ -44,8 +44,8 @@ CARGO_DEPS="
 	rust-crates/syn-2.0.107
 	rust-crates/termcolor-1.4.1
 	rust-crates/textwrap-0.16.2
-	rust-crates/tikv-jemalloc-sys-0.6.1+5.3.0-1-ge13ca993e8ccb9ba9847cc330696e02839f328f7
-	rust-crates/tikv-jemallocator-0.6.1
+	rust-crates/tikv-jemalloc-sys-0.7.1+5.3.1-0-g81034ce1f1373e37dc865038e1bc8eeecf559ce8
+	rust-crates/tikv-jemallocator-0.7.0
 	rust-crates/unicode-ident-1.0.20
 	rust-crates/walkdir-2.5.0
 	rust-crates/wasip2-1.0.1+wasi-0.2.4
@@ -59,7 +59,7 @@ inherit cargo lockstep-cargo
 
 DESCRIPTION="ripgrep"
 HOMEPAGE="https://github.com/BurntSushi/ripgrep"
-SNAPSHOT=dfe4a81d2591daca76d25ae4e052c34b26578155
+SNAPSHOT=d5b85d44057ff729a89be9c6549958c45d95aa99
 SRC_URI="https://github.com/BurntSushi/ripgrep/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

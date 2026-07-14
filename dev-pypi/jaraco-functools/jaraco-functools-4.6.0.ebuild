@@ -11,12 +11,12 @@ inherit distutils-r1
 
 DESCRIPTION="Functools like those found in stdlib"
 HOMEPAGE="https://pypi.org/project/jaraco-functools/"
-LICENSE="metapackage"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/0f/27/056e0638a86749374d6f57d0b0db39f29509cce9313cf91bdc0ac4d91084/jaraco_functools-4.4.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/jaraco_functools-4.4.0"
+SRC_URI="https://files.pythonhosted.org/packages/6c/1f/c23395957d41ccf27c4e535c3d334c4051e5395b3752057ba4cbaec35c56/jaraco_functools-4.6.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/jaraco_functools-4.6.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
@@ -26,6 +26,9 @@ RDEPEND+="
 
 BDEPEND="
 	dev-pypi/coherent-licensed[${PYTHON_USEDEP}]
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "
+
+export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_JARACO_FUNCTOOLS="${PV}"

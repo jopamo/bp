@@ -20,4 +20,5 @@ S="${WORKDIR}/pyproject_hooks-1.2.0"
 
 BDEPEND="
 	dev-pypi/flit-core[${PYTHON_USEDEP}]
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 "

@@ -6,7 +6,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="high level interface to Linux seccomp filter"
 HOMEPAGE="https://github.com/seccomp/libseccomp"
-SNAPSHOT=4a3c05b08f53b492f63df1da217e88054f32fb90
+SNAPSHOT=90d3f7dd6f52dbf0f4a38ebd0657032b6ef05e6a
 SRC_URI="https://github.com/seccomp/libseccomp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libseccomp-${SNAPSHOT}"
 

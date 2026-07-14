@@ -7,7 +7,7 @@ inherit autotools qa-policy
 DESCRIPTION="A portable fork of NaCl, a higher-level cryptographic library"
 HOMEPAGE="https://github.com/jedisct1/libsodium"
 
-SNAPSHOT=83ee4408b72962a063d5237383fa9ee6aae08717
+SNAPSHOT=2ce4d906a68eae82b27b4867f3d4172ec508cb27
 SRC_URI="https://github.com/jedisct1/libsodium/archive/${SNAPSHOT}.tar.gz -> libsodium-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libsodium-${SNAPSHOT}"
 

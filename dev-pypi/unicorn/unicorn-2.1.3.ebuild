@@ -15,11 +15,15 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/b2/1b/b4248aa8422e86de690cf8e85cf8feae4c33405a097d1ebe71570bdaa6f5/unicorn-2.1.4.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/unicorn-2.1.4"
+SRC_URI="https://files.pythonhosted.org/packages/51/40/52d9961c488d9a45c7ed26f76b50e70f0d562d7fafd936121303cc7500ad/unicorn-2.1.3.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/unicorn-2.1.3"
 
 BDEPEND="
 	dev-pypi/build[${PYTHON_USEDEP}]
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
+	dev-pypi/wheel[${PYTHON_USEDEP}]
 "
+
+export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_UNICORN="${PV}"

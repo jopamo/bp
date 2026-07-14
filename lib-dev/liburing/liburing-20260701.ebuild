@@ -4,7 +4,7 @@ inherit toolchain-funcs qa-policy
 
 DESCRIPTION="Userspace library for efficient Linux io_uring support"
 HOMEPAGE="https://github.com/axboe/liburing"
-SNAPSHOT=d41bf9220ec39277ff235379e9089d9e0fd6c2a5
+SNAPSHOT=e50e32a6b9030faba2e30fa0ba999571a0cffe28
 SRC_URI="https://github.com/axboe/liburing/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

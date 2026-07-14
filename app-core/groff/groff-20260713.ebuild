@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=d043e8a1c98a2016a8539939a4cbfd99cabbbd77
+SNAPSHOT=5c0052e8b79f92ff363d77cec7640fe80f0af76e
 
 inherit flag-o-matic qa-policy gl
 

@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/20/27/1062fa31333dc3428a1f5f33cd6598b0552165ba679ca3ba116de42c9e8e/gevent-26.4.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/gevent-26.4.0"
+SRC_URI="https://files.pythonhosted.org/packages/c4/cb/98aa3a299e2fc4a2372b5d124863e02965b64579ffc29fe54d0641e65b2f/gevent-26.5.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/gevent-26.5.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
@@ -29,6 +29,7 @@ RDEPEND+="
 BDEPEND="
 	dev-pypi/cffi[${PYTHON_USEDEP}]
 	dev-pypi/cython[${PYTHON_USEDEP}]
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/greenlet[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

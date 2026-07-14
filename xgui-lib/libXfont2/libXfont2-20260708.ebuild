@@ -4,7 +4,7 @@ inherit autotools flag-o-matic qa-policy
 
 DESCRIPTION="X.Org Xfont library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=dd5ff35403e9dcf8acdd4c8879eed65268d3ef94
+SNAPSHOT=88b9df882c0ea91d7bb468aa4792ef1b6f13aa9d
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxfont/-/archive/${SNAPSHOT}/libxfont-${SNAPSHOT}.tar.bz2 -> libxfont-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxfont-${SNAPSHOT}"
 

@@ -19,5 +19,6 @@ SRC_URI="https://files.pythonhosted.org/packages/c8/e3/0a86276ad2c383ce08d76110a
 S="${WORKDIR}/pyfiglet-1.0.4"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

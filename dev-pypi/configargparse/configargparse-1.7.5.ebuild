@@ -17,11 +17,3 @@ KEYWORDS="amd64 arm64"
 
 SRC_URI="https://files.pythonhosted.org/packages/3f/0b/30328302903c55218ffc5199646d0e9d28348ff26c02ba77b2ffc58d294a/configargparse-1.7.5.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/configargparse-1.7.5"
-
-BDEPEND="
-	dev-pypi/gpep517[${PYTHON_USEDEP}]
-	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
-	dev-pypi/setuptools[${PYTHON_USEDEP}]
-"
-
-export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_CONFIGARGPARSE="${PV}"

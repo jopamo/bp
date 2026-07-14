@@ -4,7 +4,7 @@ inherit doins toolchain-funcs
 
 DESCRIPTION="NTP client and server programs"
 HOMEPAGE="https://chrony.tuxfamily.org/"
-SNAPSHOT=0c8a6da4eada661a68ac095789ae8acd7f2fb373
+SNAPSHOT=8382d3e7c7e58a5dd5d22caa3f19a502eec563b1
 SRC_URI="https://github.com/mlichvar/chrony/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/chrony-${SNAPSHOT}
 

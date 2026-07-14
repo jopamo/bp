@@ -30,3 +30,5 @@ BDEPEND="
 	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "
+
+export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_SETUPTOOLS_RUST="${PV}"

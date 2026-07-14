@@ -11,7 +11,7 @@ inherit distutils-r1
 
 DESCRIPTION="Low-level, pure Python DBus protocol wrapper."
 HOMEPAGE="https://pypi.org/project/jeepney/"
-LICENSE="metapackage"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -20,4 +20,5 @@ S="${WORKDIR}/jeepney-0.9.0"
 
 BDEPEND="
 	dev-pypi/flit-core[${PYTHON_USEDEP}]
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 "

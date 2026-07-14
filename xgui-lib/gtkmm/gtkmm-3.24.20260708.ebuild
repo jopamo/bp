@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="the C++ API for GTK"
 HOMEPAGE="https://github.com/GNOME/gtkmm"
-SNAPSHOT=b27c9d6b77903035b336e3dfad041718de1ecf59
+SNAPSHOT=75474176b9896a87d527e9e26e9e9664fc1fd193
 SRC_URI="https://github.com/GNOME/gtkmm/archive/${SNAPSHOT}.tar.gz -> gtkmm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/gtkmm-${SNAPSHOT}"
 

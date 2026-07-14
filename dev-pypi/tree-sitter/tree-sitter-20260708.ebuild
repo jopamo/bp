@@ -13,7 +13,7 @@ DESCRIPTION="Python bindings to the Tree-sitter parsing library"
 HOMEPAGE="https://github.com/tree-sitter/py-tree-sitter/"
 
 MY_PN="py-tree-sitter"
-SNAPSHOT=c680e3b51353d8e22b41414a74b538672ea7f59b
+SNAPSHOT=4fb9f66172ac6d4239b0d8c79092aacc57d93bbe
 SRC_URI="https://github.com/tree-sitter/py-tree-sitter/archive/${SNAPSHOT}.tar.gz -> ${MY_PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${MY_PN}-${SNAPSHOT}"
 

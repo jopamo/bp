@@ -4,7 +4,7 @@ inherit flag-o-matic qa-policy
 
 DESCRIPTION="User-land utilities for LVM2 (device-mapper) software"
 HOMEPAGE="https://sourceware.org/lvm2/"
-SNAPSHOT=7fa4616d8b8d8e3822035f116355817965ec0e75
+SNAPSHOT=6b11332fa68221e8e6042fa4da1d7f6d1aff03bc
 SRC_URI="https://github.com/1g4-mirror/lvm2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

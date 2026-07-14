@@ -11,13 +11,14 @@ inherit distutils-r1
 
 DESCRIPTION="Lightweight in-process concurrent programming"
 HOMEPAGE="https://greenlet.readthedocs.io"
-LICENSE="metapackage"
+LICENSE="MIT PSF-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/3c/3f/dbf99fb14bfeb88c28f16729215478c0e265cacd6dc22270c8f31bb6892f/greenlet-3.5.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/greenlet-3.5.0"
+SRC_URI="https://files.pythonhosted.org/packages/e2/f1/fbbfef6af0bad0548f09bc28948ea3c275b4edb19e17fc5ca9900a6a634d/greenlet-3.5.3.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/greenlet-3.5.3"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

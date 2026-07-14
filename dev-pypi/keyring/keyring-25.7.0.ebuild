@@ -11,7 +11,7 @@ inherit distutils-r1
 
 DESCRIPTION="Store and access your passwords safely."
 HOMEPAGE="https://pypi.org/project/keyring/"
-LICENSE="metapackage"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -30,6 +30,9 @@ RDEPEND+="
 
 BDEPEND="
 	dev-pypi/coherent-licensed[${PYTHON_USEDEP}]
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "
+
+export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_KEYRING="${PV}"

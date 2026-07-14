@@ -11,7 +11,7 @@ inherit distutils-r1
 
 DESCRIPTION="ANSI color formatting for output in terminal"
 HOMEPAGE="https://github.com/termcolor/termcolor"
-LICENSE="metapackage"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -19,6 +19,9 @@ SRC_URI="https://files.pythonhosted.org/packages/46/79/cf31d7a93a8fdc6aa0fbb665b
 S="${WORKDIR}/termcolor-3.3.0"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/hatch-vcs[${PYTHON_USEDEP}]
 	dev-pypi/hatchling[${PYTHON_USEDEP}]
 "
+
+export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"

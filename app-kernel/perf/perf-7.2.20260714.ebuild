@@ -2,7 +2,10 @@
 
 BRANCH_NAME="snapshot"
 SNAPSHOT=8f68a9e6f538834375a17fef1343a3f5268bc4e5
-PATCHES=( "${FILESDIR}"/perf-handle-pruned-syscall-tables.patch )
+PATCHES=(
+	"${FILESDIR}"/perf-handle-pruned-rust-demangler.patch
+	"${FILESDIR}"/perf-handle-pruned-syscall-tables.patch
+)
 
 inherit flag-o-matic toolchain-funcs
 

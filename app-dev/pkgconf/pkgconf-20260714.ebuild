@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit autotools qa-policy
+inherit meson qa-policy
 
 DESCRIPTION="a program which helps to configure compiler and linker flags for development libraries"
 HOMEPAGE="https://git.sr.ht/~kaniini/pkgconf"
@@ -16,18 +16,18 @@ IUSE="static-libs"
 
 RESTRICT="test"
 
-src_prepare() {
-	default
-	eautoreconf
-}
-
 src_configure() {
 	qa-policy-configure
-	default
+
+	local emesonargs=(
+		-Ddefault_library=$(usex static-libs both shared)
+	)
+
+	meson_src_configure
 }
 
 src_install() {
-	default
+	meson_src_install
 	dosym -r /usr/bin/pkgconf /usr/bin/pkg-config
 	qa-policy-install
 	use static-libs || find "${ED}" -name '*.a' -delete

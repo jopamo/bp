@@ -1,0 +1,96 @@
+--- a/tools/perf/util/Build
++++ b/tools/perf/util/Build
+@@ -247,13 +247,9 @@
+ perf-util-$(CONFIG_CXX_DEMANGLE) += demangle-cxx.o
+ perf-util-y += demangle-ocaml.o
+ perf-util-y += demangle-java.o
+-perf-util-y += demangle-rust-v0.o
+ perf-util-$(CONFIG_LIBLLVM) += llvm-c-helpers.o
+ 
+-CFLAGS_demangle-rust-v0.o += -Wno-shadow -Wno-declaration-after-statement \
+-    -Wno-switch-default -Wno-switch-enum -Wno-missing-field-initializers
+-
+ ifdef CONFIG_JITDUMP
+ perf-util-$(CONFIG_LIBELF) += jitdump.o
+ perf-util-$(CONFIG_LIBELF) += genelf.o
+ perf-util-$(CONFIG_LIBDW) += genelf_debug.o
+--- a/tools/perf/util/symbol.c
++++ b/tools/perf/util/symbol.c
+@@ -23,7 +23,6 @@
+ #include "demangle-cxx.h"
+ #include "demangle-java.h"
+ #include "demangle-ocaml.h"
+-#include "demangle-rust-v0.h"
+ #include "dso.h"
+ #include "util.h" // lsdir()
+ #include "event.h"
+@@ -2718,9 +2717,6 @@
+ 
+ char *dso__demangle_sym(struct dso *dso, int kmodule, const char *elf_name)
+ {
+-	struct demangle rust_demangle = {
+-		.style = DemangleStyleUnknown,
+-	};
+ 	char *demangled = NULL;
+ 
+ 	/*
+@@ -2731,29 +2727,6 @@
+ 	if (!want_demangle((dso && dso__kernel(dso)) || kmodule))
+ 		return demangled;
+ 
+-	rust_demangle_demangle(elf_name, &rust_demangle);
+-	if (rust_demangle_is_known(&rust_demangle)) {
+-		/* A rust mangled name. */
+-		if (rust_demangle.mangled_len == 0)
+-			return demangled;
+-
+-		for (size_t buf_len = roundup_pow_of_two(rust_demangle.mangled_len * 2);
+-		     buf_len < 1024 * 1024; buf_len += 32) {
+-			char *tmp = realloc(demangled, buf_len);
+-
+-			if (!tmp) {
+-				/* Failure to grow output buffer, return what is there. */
+-				return demangled;
+-			}
+-			demangled = tmp;
+-			if (rust_demangle_display_demangle(&rust_demangle, demangled, buf_len,
+-							   /*alternate=*/true) == OverflowOk)
+-				return demangled;
+-		}
+-		/* Buffer exceeded sensible bounds, return what is there. */
+-		return demangled;
+-	}
+-
+ 	demangled = cxx_demangle_sym(elf_name, verbose > 0, verbose > 0);
+ 	if (demangled)
+ 		return demangled;
+--- a/tools/perf/tests/Build
++++ b/tools/perf/tests/Build
+@@ -56,7 +56,6 @@
+ perf-test-y += api-io.o
+ perf-test-y += demangle-java-test.o
+ perf-test-y += demangle-ocaml-test.o
+-perf-test-y += demangle-rust-v0-test.o
+ perf-test-y += pfm.o
+ perf-test-y += parse-metric.o
+ perf-test-y += pe-file-parsing.o
+--- a/tools/perf/tests/builtin-test.c
++++ b/tools/perf/tests/builtin-test.c
+@@ -139,7 +139,6 @@
+ 	&suite__maps,
+ 	&suite__demangle_java,
+ 	&suite__demangle_ocaml,
+-	&suite__demangle_rust,
+ 	&suite__parse_metric,
+ 	&suite__pe_file_parsing,
+ 	&suite__expand_cgroup_events,
+--- a/tools/perf/tests/tests.h
++++ b/tools/perf/tests/tests.h
+@@ -168,7 +168,6 @@
+ DECLARE_SUITE(api_io);
+ DECLARE_SUITE(demangle_java);
+ DECLARE_SUITE(demangle_ocaml);
+-DECLARE_SUITE(demangle_rust);
+ DECLARE_SUITE(pfm);
+ DECLARE_SUITE(parse_metric);
+ DECLARE_SUITE(pe_file_parsing);

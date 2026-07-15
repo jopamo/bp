@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit autotools
+inherit meson
 
 DESCRIPTION="Display information utility for X"
 HOMEPAGE="https://www.x.org/wiki/"
@@ -31,23 +31,13 @@ DEPEND="${RDEPEND}
 	xgui-tools/xorgproto
 "
 
-src_prepare() {
-	eautoreconf
-	default
-}
-
 src_configure() {
-	local myconf=(
-		--bindir="${EPREFIX}"/usr/bin
-		--sbindir="${EPREFIX}"/usr/bin
-		--libdir="${EPREFIX}"/usr/lib
-		--libexecdir="${EPREFIX}"/usr/libexec
-		--sysconfdir="${EPREFIX}"/etc
-		--localstatedir="${EPREFIX}"/var
-		--without-xf86misc
-		$(use_with dga)
-		$(use_with dmx)
-		$(use_with xinerama)
+	local emesonargs=(
+		-Dxf86misc=disabled
+		$(meson_feature dga)
+		$(meson_feature dmx)
+		$(meson_feature xinerama)
 	)
-	ECONF_SOURCE=${S} econf "${myconf[@]}"
+
+	meson_src_configure
 }

@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="snapshot"
-SNAPSHOT=f6063ab07cd21bdf47e8a31a7b4fbbe5d9b08041
+SNAPSHOT=5fb9bc34db7cb3fe6a6acad33a251f2343a6a594
 PATCHES=(
 	"${FILESDIR}"/perf-handle-pruned-rust-demangler.patch
 	"${FILESDIR}"/perf-handle-pruned-syscall-tables.patch

@@ -4,7 +4,7 @@ inherit autotools doins flag-o-matic
 
 DESCRIPTION="CCID free software driver"
 HOMEPAGE="https://ccid.apdu.fr https://github.com/LudovicRousseau/CCID"
-SNAPSHOT=402069ce960941305fc411df064c684632cdf9b2
+SNAPSHOT=7bc89e3320b1a8de9228b7f9d27c06c944e3ded2
 SRC_URI="https://github.com/LudovicRousseau/ccid/archive/${SNAPSHOT}.tar.gz -> ccid-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/CCID-${SNAPSHOT}"
 

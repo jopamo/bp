@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/ee/67/531ea369ba64dcff5ec9c3402f9f51bf748cec26dde048a2f973a4eea7f5/annotated_types-0.7.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/annotated_types-0.7.0"
+SRC_URI="https://files.pythonhosted.org/packages/5f/56/a8120250d128bed162cd73c76d45f6ef9991f3e068f62a8ee060afa3104a/annotated_types-0.8.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/annotated_types-0.8.0"
 
 BDEPEND="
 	dev-pypi/gpep517[${PYTHON_USEDEP}]

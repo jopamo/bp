@@ -15,5 +15,5 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/b6/6b/80101e02ebacaf9232ecf32bf6a788d36b27d820ee02434746252569ef98/cython-3.2.8.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/cython-3.2.8"
+SRC_URI="https://files.pythonhosted.org/packages/f6/de/db48b8870e766cfea809986cc50c1e986c663a9ab7bafd0ac1a2512c4a26/cython-3.2.9.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/cython-3.2.9"

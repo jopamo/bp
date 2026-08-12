@@ -6,7 +6,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="A system-independent library for user-level network packet capture"
 HOMEPAGE="http://www.tcpdump.org/"
-SNAPSHOT=ffa5a2688bb3a76ba025ba13886f2ea8a5e01c7f
+SNAPSHOT=836d0fd02dde46db47468ee22049174f1fa3d038
 SRC_URI="https://github.com/the-tcpdump-group/libpcap/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libpcap-${SNAPSHOT}"
 

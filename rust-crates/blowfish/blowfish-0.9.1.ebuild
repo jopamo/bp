@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="blowfish"
-CRATE_VERSION="0.10.0"
-CRATE_CHECKSUM="62ce3946557b35e71d1bbe07ec385073ce9eda05043f95de134eb578fcf1a298"
+CRATE_VERSION="0.9.1"
+CRATE_CHECKSUM="e412e2cd0f2b2d93e02543ceae7917b3c70331573df19ee046bcbc35e45e87d7"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

@@ -4,7 +4,7 @@ inherit cmake qa-policy user
 
 DESCRIPTION="High-performance inference of large language models (llama.cpp)"
 HOMEPAGE="https://github.com/ggml-org/llama.cpp"
-SNAPSHOT=657e01125aa49577a62a5531fde24cbcc007006d
+SNAPSHOT=84e908c625fb60992b4cdef8180fb12fa9b4c4bf
 SRC_URI="https://github.com/ggml-org/llama.cpp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llama.cpp-${SNAPSHOT}"
 

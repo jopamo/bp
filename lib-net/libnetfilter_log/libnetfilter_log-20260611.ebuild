@@ -5,7 +5,7 @@ inherit linux-info flag-o-matic autotools qa-policy
 DESCRIPTION="interface to packets that have been logged by the kernel packet filter"
 HOMEPAGE="https://www.netfilter.org/projects/libnetfilter_log/"
 
-SNAPSHOT=248401076c063473314a589e16fcadaa294848a5
+SNAPSHOT=7ca38ff4414045021f3480573461bae2b73dd81d
 SRC_URI="https://github.com/1g4-mirror/libnetfilter_log/archive/${SNAPSHOT}.tar.gz -> libnetfilter_log-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libnetfilter_log-${SNAPSHOT}
 

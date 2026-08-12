@@ -4,7 +4,7 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Complete solution to record, convert and stream audio and video. Includes libavcodec"
 HOMEPAGE="http://ffmpeg.org/"
-SNAPSHOT=8bea614d987e481c5e912588c50dbdc9920f87f7
+SNAPSHOT=799cf2bc1658939432d3cd910c2e763541155e82
 SRC_URI="https://github.com/FFmpeg/FFmpeg/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/FFmpeg-${SNAPSHOT}"
 

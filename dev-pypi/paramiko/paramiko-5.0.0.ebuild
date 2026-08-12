@@ -11,7 +11,7 @@ inherit distutils-r1
 
 DESCRIPTION="SSH2 protocol library"
 HOMEPAGE="https://pypi.org/project/paramiko/"
-LICENSE="metapackage"
+LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -20,13 +20,14 @@ S="${WORKDIR}/paramiko-5.0.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-pypi/bcrypt
-	dev-pypi/pynacl
 	app-crypto/cryptography
+	dev-pypi/bcrypt
 	dev-pypi/invoke
+	dev-pypi/pynacl
 "
 # lockstep-pypi-deps: end
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

@@ -4,7 +4,7 @@ inherit meson
 
 DESCRIPTION="Internationalized text layout and rendering library"
 HOMEPAGE="http://www.pango.org/"
-SNAPSHOT=2b3ad511996d75b8d26bc0fae4f75374dfce9ffa
+SNAPSHOT=0b96e86efec3706601d7dc02b21c9bf19817c9de
 SRC_URI="https://github.com/GNOME/pango/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

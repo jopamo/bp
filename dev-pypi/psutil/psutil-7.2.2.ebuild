@@ -19,5 +19,6 @@ SRC_URI="https://files.pythonhosted.org/packages/aa/c6/d1ddf4abb55e93cebc4f2ed8b
 S="${WORKDIR}/psutil-7.2.2"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

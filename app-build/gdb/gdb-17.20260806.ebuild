@@ -8,7 +8,7 @@ inherit flag-o-matic python-single-r1 qa-policy toolchain-funcs
 
 DESCRIPTION="GNU debugger"
 HOMEPAGE="https://sourceware.org/gdb/"
-SNAPSHOT=165877974da10a5bfa477473b7562c0709303969
+SNAPSHOT=78003763dade2829edb59746bd8451533699e13d
 SRC_URI="https://github.com/1g4-mirror/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/binutils-gdb-${SNAPSHOT}"
 

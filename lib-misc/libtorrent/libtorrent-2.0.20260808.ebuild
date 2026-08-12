@@ -6,10 +6,10 @@ inherit cmake
 
 DESCRIPTION="C++ BitTorrent implementation focusing on efficiency and scalability"
 HOMEPAGE="http://libtorrent.org"
-SNAPSHOT=8606abafc8d0761d8022e092db9af8b3fdfff567
+SNAPSHOT=aab2a10e2f60d9eac78e885a696736d043527794
 ASIO_GNUTLS_SNAPSHOT=a57d4d36923c5fafa9698e14be16b8bc2913700a
 TRY_SIGNAL_SNAPSHOT=105cce59972f925a33aa6b1c3109e4cd3caf583d
-LIBSIMULATOR_SNAPSHOT=1c1b3d53519f5c88875908ec8e032256cd3b55c7
+LIBSIMULATOR_SNAPSHOT=8612ce3e4e105bae42476c9338c3cbf2ef4caf27
 SRC_URI="
 	https://github.com/arvidn/libtorrent/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz
 	https://github.com/paullouisageneau/boost-asio-gnutls/archive/${ASIO_GNUTLS_SNAPSHOT}.tar.gz -> ${PN}-asio-gnutls-${ASIO_GNUTLS_SNAPSHOT}.tar.gz

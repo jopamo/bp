@@ -11,7 +11,7 @@ inherit distutils-r1
 
 DESCRIPTION="Pythonic task execution"
 HOMEPAGE="https://pypi.org/project/invoke/"
-LICENSE="metapackage"
+LICENSE="BSD-2-Clause"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -19,5 +19,6 @@ SRC_URI="https://files.pythonhosted.org/packages/33/f6/227c48c5fe47fa178ccf1fda8
 S="${WORKDIR}/invoke-3.0.3"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

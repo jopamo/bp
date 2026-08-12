@@ -2,7 +2,7 @@
 
 DESCRIPTION="Utility to detect other OSs on a set of drives"
 HOMEPAGE="https://packages.debian.org/source/sid/os-prober"
-SNAPSHOT=59640ab01b620545bfe8c04adcdba8ab61f7df0e
+SNAPSHOT=9a94fb8c42043b0c9fe8fd3d3a20aa51a81fabbc
 SRC_URI="https://salsa.debian.org/installer-team/os-prober/-/archive/${SNAPSHOT}/os-prober-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -15,14 +15,15 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/25/e2/dfa73fe78f773018dcaebc6d09b819bc10d328ff5a6b4a66efa1e3d71f52/hatchling-1.31.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/hatchling-1.31.0"
+SRC_URI="https://files.pythonhosted.org/packages/69/08/33331757185504aae48b8d9bd78cec03a76e3aecfb52e549d05a2347c0dd/hatchling-1.32.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/hatchling-1.32.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/packaging
 	dev-pypi/pathspec
 	dev-pypi/pluggy
+	dev-pypi/tomlkit
 	dev-pypi/trove-classifiers
 "
 # lockstep-pypi-deps: end

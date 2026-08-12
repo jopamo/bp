@@ -1,2 +1,4 @@
+DIST pyo3-macros-backend-0.26.0.crate 81809 BLAKE3 6e260ad674e549d5f9cc667d9fc92cef5313ebcf9abe7b1086565ee4f4cb229a
 DIST pyo3-macros-backend-0.28.3.crate 88063 BLAKE3 a59f2347f6489e4d6c82955d64873bac257e814bdd627f7a79ad1353d46af177
 DIST pyo3-macros-backend-0.29.0.crate 91943 BLAKE3 16575615ea89caac459c17f0949576d125eaad3c6ac852b33703fd3dffd7c307
+DIST pyo3-macros-backend-0.29.2.crate 93749 BLAKE3 f4f1fc90dae0eb6fba7aa92add7274c42616fe0e5ed3a5abb51e07ed99207b6d

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=2e353cdb2c8b47f494e9512bb484fada2ff3148c
+SNAPSHOT=d3ca97ffe38a5442a36c25abe486902b0da4b29b
 
 inherit autotools flag-o-matic
 

@@ -4,7 +4,7 @@ inherit qa-policy gl
 
 DESCRIPTION="ASN.1 library"
 HOMEPAGE="https://www.gnu.org/software/libtasn1/"
-SNAPSHOT=2f560e2b0ddca402f8b19d8a7cfd02871ea26927
+SNAPSHOT=2b2065b2383aebe138c7d0f7b5646369e5f56ec3
 SRC_URI="https://gitlab.com/gnutls/libtasn1/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

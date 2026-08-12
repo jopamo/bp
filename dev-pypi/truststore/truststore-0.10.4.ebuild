@@ -11,7 +11,7 @@ inherit distutils-r1
 
 DESCRIPTION="Verify certificates using native system trust stores"
 HOMEPAGE="https://pypi.org/project/truststore/"
-LICENSE="metapackage"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -20,4 +20,5 @@ S="${WORKDIR}/truststore-0.10.4"
 
 BDEPEND="
 	dev-pypi/flit-core[${PYTHON_USEDEP}]
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 "

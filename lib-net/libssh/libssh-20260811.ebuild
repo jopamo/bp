@@ -4,7 +4,7 @@ inherit cmake multibuild qa-policy
 
 DESCRIPTION="Library implementing the SSH2 protocol"
 HOMEPAGE="http://www.libssh.org/"
-SNAPSHOT=08c7d67face0e504ae52a021206c3002f991d600
+SNAPSHOT=1dc52926c54b59ea7a3350a59a476bb76da3ff33
 SRC_URI="https://git.libssh.org/projects/libssh.git/snapshot/libssh-${SNAPSHOT}.tar.xz"
 S="${WORKDIR}/libssh-${SNAPSHOT}"
 PATCHES=(

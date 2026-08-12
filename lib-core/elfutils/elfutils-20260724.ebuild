@@ -4,7 +4,7 @@ inherit flag-o-matic autotools toolchain-funcs
 
 DESCRIPTION="Libraries/utilities to handle ELF objects (drop in replacement for libelf)"
 HOMEPAGE="http://elfutils.org/"
-SNAPSHOT=40d077029b3eeff5b4b71b1b0dd0892d0523350c
+SNAPSHOT=fb5473ac7368bbbbc2ea9d86241bd6c882e3fcb5
 SRC_URI="https://github.com/1g4-mirror/elfutils/archive/${SNAPSHOT}.tar.gz -> elfutils-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/elfutils-${SNAPSHOT}
 

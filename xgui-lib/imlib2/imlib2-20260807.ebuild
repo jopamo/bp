@@ -4,7 +4,7 @@ inherit flag-o-matic autotools qa-policy
 
 DESCRIPTION="Version 2 of an advanced replacement library for libraries like libXpm"
 HOMEPAGE="https://www.enlightenment.org/"
-SNAPSHOT=f7a61bff9f223e4bafe3d2a0a9f12aace02a7525
+SNAPSHOT=49e084c106474f818152a20ab877188d667e4d68
 SRC_URI="https://github.com/1g4-mirror/legacy-imlib2/archive/${SNAPSHOT}.tar.gz -> legacy-imlib2-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/legacy-imlib2-${SNAPSHOT}"
 

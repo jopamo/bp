@@ -15,8 +15,8 @@ LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/74/b7/da07bae88f5a9506b4def6f2f4903cf4c3b8831e560dba8fa18ca08f758f/pyopenssl-26.3.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/pyopenssl-26.3.0"
+SRC_URI="https://files.pythonhosted.org/packages/3f/e8/7325d258199b159eb2c03fe32107533e2832e70e63f4fb88a6aa00023201/pyopenssl-26.4.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pyopenssl-26.4.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

@@ -4,7 +4,7 @@ inherit flag-o-matic autotools qa-policy
 
 DESCRIPTION="Library to execute a function when a specific event occurs on a file descriptor"
 HOMEPAGE="http://libevent.org/"
-SNAPSHOT=e1f0335d2f3af1235421c939c62943bb99b3d652
+SNAPSHOT=c96ddc2727a4ed0ca744500efff7230316b4118d
 SRC_URI="https://github.com/libevent/libevent/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libevent-${SNAPSHOT}
 

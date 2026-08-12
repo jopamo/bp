@@ -5,7 +5,7 @@ inherit meson qa-policy
 DESCRIPTION="The OpenGL Utility Library"
 HOMEPAGE="https://cgit.freedesktop.org/mesa/glu/"
 
-SNAPSHOT=a2b96c7bba8db8fec3e02fb4227a7f7b02cabad1
+SNAPSHOT=2318f592b712724a48dd8561b8e7397bb91d7eb7
 SRC_URI="https://gitlab.freedesktop.org/mesa/glu/-/archive/${SNAPSHOT}/glu-${SNAPSHOT}.tar.bz2 -> glu-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/glu-${SNAPSHOT}"
 

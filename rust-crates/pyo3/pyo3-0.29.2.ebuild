@@ -1,0 +1,47 @@
+# lockstep-managed: cargo-crate
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
+
+CRATE_NAME="pyo3"
+CRATE_VERSION="0.29.2"
+CRATE_CHECKSUM="4688ddedf473e32662b9b067670129a8afb8c18e351482c70d62ba4a88171e8b"
+CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
+CRATE_SOURCE_KIND="registry"
+
+inherit cargo-crate
+
+DESCRIPTION="Bindings to Python interpreter"
+HOMEPAGE="https://github.com/pyo3/pyo3"
+LICENSE="|| ( MIT Apache-2.0 )"
+SLOT="${PV}"
+KEYWORDS="amd64 arm64"
+
+CARGO_CRATE_FEATURES=(
+	"abi3"
+	"abi3-py310"
+	"abi3-py311"
+	"abi3-py312"
+	"abi3-py313"
+	"abi3-py314"
+	"abi3-py315"
+	"abi3-py38"
+	"abi3-py39"
+	"abi3t"
+	"abi3t-py315"
+	"arc_lock"
+	"auto-initialize"
+	"bigdecimal"
+	"chrono-local"
+	"default"
+	"experimental-async"
+	"experimental-inspect"
+	"extension-module"
+	"full"
+	"generate-import-lib"
+	"macros"
+	"multiple-pymethods"
+	"nightly"
+	"num-bigint"
+	"parking_lot"
+	"py-clone"
+)

@@ -488,7 +488,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Build and publish crates with pyo3, rust-cpython and cffi bindings"
 HOMEPAGE="https://www.maturin.rs/"
-SNAPSHOT=8f98161966d8b29a508015a91b8677d7031103e2
+SNAPSHOT=15c064acd87a9db81d50f1426225102e8c846855
 SRC_URI="https://github.com/PyO3/maturin/archive/${SNAPSHOT}.tar.gz -> maturin-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/maturin-${SNAPSHOT}"
 

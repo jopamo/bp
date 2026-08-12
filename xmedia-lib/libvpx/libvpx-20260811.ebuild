@@ -4,7 +4,7 @@ inherit flag-o-matic qa-policy
 
 DESCRIPTION="WebM VP8 and VP9 Codec SDK"
 HOMEPAGE="https://www.webmproject.org"
-SNAPSHOT=c1f98b5fedfc5c302439587341082542d8e4fd2d
+SNAPSHOT=9cc8e1c18024d6b64422ecb7fdd7a43c8e873908
 SRC_URI="https://github.com/webmproject/libvpx/archive/${SNAPSHOT}.tar.gz -> libvpx-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libvpx-${SNAPSHOT}"
 

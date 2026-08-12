@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/09/95/c95bb74950763a163defcf4cedf6c5edfca1d623fd5031b76516ece85076/vcs_versioning-2.2.2.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/vcs_versioning-2.2.2"
+SRC_URI="https://files.pythonhosted.org/packages/3c/92/14277e46f415b6a01b6e94960cd6bc3acdc366e990d43ad71d63fef83d1b/vcs_versioning-2.2.4.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/vcs_versioning-2.2.4"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

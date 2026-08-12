@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="Userspace RCU (read-copy-update) library"
 HOMEPAGE="https://liburcu.org/"
-SNAPSHOT=3849619a288b47677ff8260f02db490b4c4646a6
+SNAPSHOT=645fdc9b720606440a3b1ed74ad394e8eaad796b
 SRC_URI="https://github.com/urcu/userspace-rcu/archive/${SNAPSHOT}.tar.gz -> userspace-rcu-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/userspace-rcu-${SNAPSHOT}"
 

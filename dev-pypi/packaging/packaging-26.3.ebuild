@@ -15,8 +15,8 @@ LICENSE="|| ( Apache-2.0 BSD-2-Clause )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/d7/f1/e7a6dd94a8d4a5626c03e4e99c87f241ba9e350cd9e6d75123f992427270/packaging-26.2.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/packaging-26.2"
+SRC_URI="https://files.pythonhosted.org/packages/7d/fa/3944b40b07da9ce895c0e6303a5ab7d53da063554f534556b134a54d6093/packaging-26.3.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/packaging-26.3"
 
 BDEPEND="
 	dev-pypi/flit-core[${PYTHON_USEDEP}]

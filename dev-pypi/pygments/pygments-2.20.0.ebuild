@@ -11,7 +11,7 @@ inherit distutils-r1
 
 DESCRIPTION="Pygments is a syntax highlighting package written in Python."
 HOMEPAGE="https://pygments.org"
-LICENSE="metapackage"
+LICENSE="BSD-2-Clause"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -19,5 +19,6 @@ SRC_URI="https://files.pythonhosted.org/packages/c3/b2/bc9c9196916376152d655522f
 S="${WORKDIR}/pygments-2.20.0"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/hatchling[${PYTHON_USEDEP}]
 "

@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/9f/67/d5611975faaa5e4a920f4b19e4caccd5df0facb925687850f1e45f5876f2/dunamai-1.26.1.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/dunamai-1.26.1"
+SRC_URI="https://files.pythonhosted.org/packages/12/18/020d3b27a10450ddb11429f637404e8ea67ecf4d9fd999d4f1d553f25506/dunamai-1.26.2.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/dunamai-1.26.2"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
@@ -25,5 +25,6 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/poetry-core[${PYTHON_USEDEP}]
 "

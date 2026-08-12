@@ -2,7 +2,7 @@
 
 DESCRIPTION="AppArmor security profiles"
 HOMEPAGE="https://gitlab.com/apparmor/apparmor/wikis/home"
-SNAPSHOT=e50c3d49ad9bde6fa850966d6e0a7bbd21772506
+SNAPSHOT=72eaab1b34961ba92b0486f65bc33db0578fbdcc
 SRC_URI="https://gitlab.com/apparmor/apparmor/-/archive/${SNAPSHOT}/apparmor-${SNAPSHOT}.tar.bz2 -> apparmor-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/apparmor-${SNAPSHOT}/profiles"
 

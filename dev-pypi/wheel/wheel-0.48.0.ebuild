@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/39/62/75f18a0f03b4219c456652c7780e4d749b929eb605c098ce3a5b6b6bc081/wheel-0.47.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/wheel-0.47.0"
+SRC_URI="https://files.pythonhosted.org/packages/d0/20/50ed6bdf27dec98b568a8ae25dc599f35baa3d9709f9e83fd1edb56b9a90/wheel-0.48.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/wheel-0.48.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

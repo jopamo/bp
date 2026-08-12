@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="$(ver_cut 1-2)"
 	inherit git-r3
 else
-SNAPSHOT=85ef200f0e167e0af5499c09528fb826dd95b9d5
+SNAPSHOT=92a82c1c1f139018697d0e104e3abe6aea85bb69
 	SRC_URI="https://github.com/erlang/otp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/otp-${SNAPSHOT}
 fi

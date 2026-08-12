@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/bd/2a/23f34ec9d04624958e137efdc394888716353190e75f25dd22c7a2c7a8aa/charset_normalizer-3.4.9.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/charset_normalizer-3.4.9"
+SRC_URI="https://files.pythonhosted.org/packages/cb/31/4971872b3ed8715346231fb6eb4da8fcba65a4143c189db151ee28a2812b/charset_normalizer-3.5.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/charset_normalizer-3.5.0"
 
 BDEPEND="
 	dev-pypi/gpep517[${PYTHON_USEDEP}]

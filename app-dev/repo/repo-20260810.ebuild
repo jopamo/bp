@@ -4,7 +4,7 @@ inherit python-r1
 
 DESCRIPTION="Google tool for managing git, particularly multiple repos"
 HOMEPAGE="https://gerrit.googlesource.com/git-repo"
-SNAPSHOT=0398c6718e8a17c374d868fbf253530bbc6ca13c
+SNAPSHOT=b85886fa9f5b4e2189cc5b2f40bd0a80459d4c77
 SRC_URI="https://github.com/GerritCodeReview/git-repo/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/git-repo-${SNAPSHOT}
 

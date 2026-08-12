@@ -8,7 +8,7 @@ CARGO_DEPS="
 	rust-crates/anstyle-parse-1.0.0
 	rust-crates/anstyle-query-1.1.5
 	rust-crates/anstyle-wincon-3.0.11
-	rust-crates/anyhow-1.0.102
+	rust-crates/anyhow-1.0.104
 	rust-crates/argmax-0.4.0
 	rust-crates/bitflags-1.3.2
 	rust-crates/bitflags-2.11.0
@@ -23,7 +23,7 @@ CARGO_DEPS="
 	rust-crates/clap_derive-4.6.1
 	rust-crates/clap_lex-1.0.0
 	rust-crates/colorchoice-1.0.4
-	rust-crates/crossbeam-channel-0.5.15
+	rust-crates/crossbeam-channel-0.5.16
 	rust-crates/crossbeam-deque-0.8.6
 	rust-crates/crossbeam-epoch-0.9.18
 	rust-crates/crossbeam-utils-0.8.21
@@ -42,12 +42,12 @@ CARGO_DEPS="
 	rust-crates/find-msvc-tools-0.1.9
 	rust-crates/foldhash-0.1.5
 	rust-crates/getrandom-0.4.2
-	rust-crates/globset-0.4.18
+	rust-crates/globset-0.4.19
 	rust-crates/hashbrown-0.15.5
 	rust-crates/hashbrown-0.16.1
 	rust-crates/heck-0.5.0
 	rust-crates/id-arena-2.3.0
-	rust-crates/ignore-0.4.26
+	rust-crates/ignore-0.4.31
 	rust-crates/indexmap-2.13.0
 	rust-crates/is_terminal_polyfill-1.70.2
 	rust-crates/itoa-1.0.17
@@ -56,7 +56,7 @@ CARGO_DEPS="
 	rust-crates/jiff-tzdb-0.1.6
 	rust-crates/jiff-tzdb-platform-0.1.3
 	rust-crates/leb128fmt-0.1.0
-	rust-crates/libc-0.2.186
+	rust-crates/libc-0.2.189
 	rust-crates/linux-raw-sys-0.12.1
 	rust-crates/log-0.4.29
 	rust-crates/lscolors-0.21.0
@@ -137,7 +137,7 @@ inherit cargo lockstep-cargo
 
 DESCRIPTION="A simple, fast and user-friendly alternative to gnu find"
 HOMEPAGE="https://github.com/sharkdp/fd"
-SNAPSHOT=5a5852e15b44d4917a6098b1c01d3bb535b7717f
+SNAPSHOT=ee20f426ddf338ac7ead5c5f00ea49258005caaf
 SRC_URI="https://github.com/sharkdp/fd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

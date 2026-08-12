@@ -6,7 +6,7 @@ inherit cmake qa-policy
 
 DESCRIPTION="Command-line tool for structural, content-preserving transformation of PDF files"
 HOMEPAGE="http://qpdf.sourceforge.net/"
-SNAPSHOT=a898bb3a7289d1d05789d6d3f0d5dd534943a8da
+SNAPSHOT=babad179ce5db9a21635c8d1ac17baa59637eada
 SRC_URI="https://github.com/qpdf/qpdf/archive/${SNAPSHOT}.tar.gz -> qpdf-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/qpdf-${SNAPSHOT}"
 

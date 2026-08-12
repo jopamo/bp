@@ -11,14 +11,17 @@ inherit distutils-r1
 
 DESCRIPTION="Plumbum: shell combinators library"
 HOMEPAGE="https://github.com/tomerfiliba/plumbum"
-LICENSE="metapackage"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/dc/c8/11a5f792704b70f071a3dbc329105a98e9cc8d25daaf09f733c44eb0ef8e/plumbum-1.10.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/plumbum-1.10.0"
+SRC_URI="https://files.pythonhosted.org/packages/6c/d2/578712a979a50e9aba08ea173a38e7598461130d3c9899f176373bc03280/plumbum-2.0.2.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/plumbum-2.0.2"
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/hatch-vcs[${PYTHON_USEDEP}]
 	dev-pypi/hatchling[${PYTHON_USEDEP}]
 "
+
+export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"

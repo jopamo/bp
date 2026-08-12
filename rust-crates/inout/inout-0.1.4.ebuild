@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="inout"
-CRATE_VERSION="0.2.2"
-CRATE_CHECKSUM="4250ce6452e92010fdf7268ccc5d14faa80bb12fc741938534c58f16804e03c7"
+CRATE_VERSION="0.1.4"
+CRATE_CHECKSUM="879f10e63c20629ecabbb64a8010319738c66a5cd0c29b02d63d272b03751d01"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
@@ -15,3 +15,7 @@ HOMEPAGE="https://github.com/RustCrypto/utils"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="${PV}"
 KEYWORDS="amd64 arm64"
+
+CARGO_CRATE_FEATURES=(
+	"std"
+)

@@ -4,7 +4,7 @@ inherit meson doins flag-o-matic
 
 DESCRIPTION="Y2038 safe wtmp implementation as PAM module using sqlite as database"
 HOMEPAGE="https://github.com/thkukuk/wtmpdb"
-SNAPSHOT=65cf6fefa813315f822eaacc47cceafdb1c26dba
+SNAPSHOT=89c0861f74e576c5ad0ec9f5302aa635a4e50dc6
 SRC_URI="https://github.com/thkukuk/wtmpdb/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

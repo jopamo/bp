@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="Stream-oriented XML parser library"
 HOMEPAGE="https://github.com/libexpat/libexpat"
-SNAPSHOT=551a88f879477e4fc2a396d88cbb461be11f04ce
+SNAPSHOT=b68595d07cc869af802964709dea6b232d39e56e
 SRC_URI="https://github.com/libexpat/libexpat/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libexpat-${SNAPSHOT}/expat
 

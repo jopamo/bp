@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="bcrypt-pbkdf"
-CRATE_VERSION="0.11.0"
-CRATE_CHECKSUM="144e573728da132683b9488acd528274c790e07fc06ff81ee29f9d8f8b1041e0"
+CRATE_VERSION="0.10.0"
+CRATE_CHECKSUM="6aeac2e1fe888769f34f05ac343bbef98b14d1ffb292ab69d4608b3abc86f2a2"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
@@ -19,5 +19,5 @@ KEYWORDS="amd64 arm64"
 CARGO_CRATE_FEATURES=(
 	"alloc"
 	"default"
-	"zeroize"
+	"std"
 )

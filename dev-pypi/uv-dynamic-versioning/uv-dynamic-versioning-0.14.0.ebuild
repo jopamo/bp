@@ -20,13 +20,14 @@ S="${WORKDIR}/uv_dynamic_versioning-0.14.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-pypi/jinja
 	dev-pypi/dunamai
 	dev-pypi/hatchling
+	dev-pypi/jinja
 	dev-pypi/tomlkit
 "
 # lockstep-pypi-deps: end
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/hatchling[${PYTHON_USEDEP}]
 "

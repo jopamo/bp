@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="iscsi client library and utilities"
 HOMEPAGE="https://github.com/sahlberg/libiscsi"
-SNAPSHOT=65ebd1415455d5016043a437aeec75e57b3bf043
+SNAPSHOT=1985697419d25a62a04e7454ca8185b854b66ad3
 SRC_URI="https://github.com/sahlberg/libiscsi/archive/${SNAPSHOT}.tar.gz -> libiscsi-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libiscsi-${SNAPSHOT}"
 

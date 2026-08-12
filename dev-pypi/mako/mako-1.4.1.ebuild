@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/00/62/791b31e69ae182791ec67f04850f2f062716bbd205483d63a215f3e062d3/mako-1.3.12.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/mako-1.3.12"
+SRC_URI="https://files.pythonhosted.org/packages/2a/12/b5fa2353e2754cd67fb9f83793fa48ff42c213a5da7e719869d2301f6ab8/mako-1.4.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/mako-1.4.1"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
@@ -25,6 +25,6 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 
 BDEPEND="
+	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
-	dev-pypi/wheel[${PYTHON_USEDEP}]
 "

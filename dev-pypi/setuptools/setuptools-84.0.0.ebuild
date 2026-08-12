@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/34/26/f5d29e25ffdb535afef2d35cdb55b325298f96debd670da4c325e08d70f4/setuptools-83.0.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/setuptools-83.0.0"
+SRC_URI="https://files.pythonhosted.org/packages/6d/44/f5da03a8ef95d369145c5bb53050e7877c9f3d312e128605fd9504829143/setuptools-84.0.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/setuptools-84.0.0"
 
 BDEPEND="
 	dev-pypi/gpep517[${PYTHON_USEDEP}]

@@ -15,8 +15,8 @@ LICENSE="MPL-2.0 MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/ae/5f/57ff8b434839e70dab45601284ea413e947a63799891b7553e5960a793a8/tqdm-4.68.4.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/tqdm-4.68.4"
+SRC_URI="https://files.pythonhosted.org/packages/21/3b/6c24bec5be5e743ffd99576daa5cc077722fc7d5bbc00bd133fa0c698dc6/tqdm-4.70.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/tqdm-4.70.0"
 
 BDEPEND="
 	dev-pypi/gpep517[${PYTHON_USEDEP}]

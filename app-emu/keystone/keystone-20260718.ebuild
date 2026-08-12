@@ -8,7 +8,7 @@ RDEPEND=""
 DESCRIPTION="Keystone assembler framework"
 HOMEPAGE="https://github.com/keystone-engine/keystone"
 
-SNAPSHOT=fb92f32391c6cced868252167509590319eeb58b
+SNAPSHOT=0d9567f08c0c23e8f604b2cad3d49450c93cfb40
 SRC_URI="https://github.com/keystone-engine/keystone/archive/${SNAPSHOT}.tar.gz -> keystone-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/keystone-${SNAPSHOT}"
 

@@ -6,7 +6,7 @@ inherit flag-o-matic qa-policy
 
 DESCRIPTION="QEMU with enhanced support for multiple architectures and options"
 HOMEPAGE="https://www.qemu.org/"
-SNAPSHOT=e3ad0582fdcec5c194835b0b4e8342cdc197b5cb
+SNAPSHOT=0a6a1c7d02e1ce0d4b3cd9619df3e58bf065ce8a
 SOFTFLOAT_SNAPSHOT=a0c6494cdc11865811dec815d5c0049fba9d82a8
 TESTFLOAT_SNAPSHOT=e7af9751d9f9fd3b47911f51a5cfd08af256a9ab
 SRC_URI="

@@ -2,7 +2,7 @@
 
 inherit meson flag-o-matic qa-policy
 
-DESCRIPTION="The GLib library of C routines"
+DESCRIPTION="The GLib 2.88 library of C routines"
 HOMEPAGE="https://www.gtk.org/"
 
 if [[ ${PV} = *9999 ]]; then

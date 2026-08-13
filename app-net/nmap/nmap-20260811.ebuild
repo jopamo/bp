@@ -48,18 +48,18 @@ src_configure() {
 		$(use_with ncat)
 		$(use_with nping)
 		$(use_with ssl openssl)
-		--cache-file="${S}"/config.cache
 		--disable-nls
-		--with-libpcap="${ESYSROOT}"/usr
+		--with-libpcap=yes
 		--with-libpcre="${ESYSROOT}"/usr
 		--with-zlib="${ESYSROOT}"/usr
 		--with-libssh2="${ESYSROOT}"/usr
-		--with-liblua="${ESYSROOT}"/usr
 		--with-liblua="${ESYSROOT}"/usr
 		--without-ndiff
 		--without-zenmap
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+	grep -qE '^#define HAVE_LIBPCAP[[:space:]]+1' config.h ||
+		die "Nmap did not select the system libpcap"
 
 	sed -i 's/int strlcat(char \*, const char \*, int);/size_t strlcat(char *, const char *, size_t);/' libdnet-stripped/include/config.h || die
 }

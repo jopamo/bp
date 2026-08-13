@@ -12,12 +12,9 @@ LICENSE="BSD"
 SLOT="0/5"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 gnutls lzma ssl static-libs test tools zstd"
+IUSE="bzip2 lzma ssl static-libs test tools zstd"
 
-REQUIRED_USE="
-	gnutls? ( ssl )
-	test? ( tools )
-"
+REQUIRED_USE="test? ( tools )"
 
 RESTRICT="!test? ( test )"
 
@@ -25,12 +22,7 @@ DEPEND="
 	lib-core/zlib
 	bzip2? ( app-compression/bzip2:= )
 	lzma? ( app-compression/xz-utils )
-	ssl? (
-		gnutls? (
-			virtual/gnutls:=
-		)
-		!gnutls? ( virtual/ssl:0= )
-	)
+	ssl? ( virtual/ssl:0= )
 	zstd? ( app-compression/zstd )
 "
 RDEPEND="${DEPEND}"
@@ -68,24 +60,11 @@ src_configure() {
 			)
 		fi
 
-		if use ssl; then
-			if use gnutls; then
-				mycmakeargs+=(
-					-DENABLE_GNUTLS=$(usex gnutls)
-					-DENABLE_OPENSSL=OFF
-				)
-			else
-				mycmakeargs+=(
-					-DENABLE_GNUTLS=OFF
-					-DENABLE_OPENSSL=ON
-				)
-			fi
-		else
-			mycmakeargs+=(
-				-DENABLE_GNUTLS=OFF
-				-DENABLE_OPENSSL=OFF
-			)
-		fi
+		mycmakeargs+=(
+			# libzip's GnuTLS backend directly consumes the public Nettle API.
+			-DENABLE_GNUTLS=OFF
+			-DENABLE_OPENSSL=$(usex ssl)
+		)
 		qa-policy-configure
 		cmake_src_configure
 	}

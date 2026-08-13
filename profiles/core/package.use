@@ -28,7 +28,7 @@ app-lang/python-exec native-symlinks
 dev-pypi/httpx cli
 app-kernel/linux-firmware amd-ucode i915
 app-net/chrony cmdmon ntp phc refclock rtc systemd
-app-crypto/vesk static-libs shared
+app-crypto/vesk gnutls static-libs shared
 app-core/bx static
 app-net/mira static
 app-net/curl cares static-libs shared
@@ -55,7 +55,6 @@ lib-core/sqlite fts5 geopoly json rtree tempstore
 lib-core/sqlite static-libs
 lib-core/zlib static-libs
 lib-misc/libssh2 static-libs
-lib-net/gnutls static-libs
 lib-net/nghttp2 static-libs
 lib-dev/tree-sitter-bash python
 lib-misc/xxhash static-libs
@@ -64,6 +63,7 @@ lib-net/nodejs icu
 lib-net/openssl static-libs
 lib-print/cups-filters foomatic
 virtual/curses static-libs
+virtual/gnutls static-libs
 xgui-app/pillow jpeg zlib -imagequant -jpeg2k -lcms -tiff -truetype -webp -xcb
 xgui-app/wireshark bcg729 capinfos caps captype ciscodump dcerpcidl2wrs dftest dpauxmon dumpcap editcap libssh mergecap mmdbresolve netlink plugins randpkt randpktdump rawshark reordercap sdjournal sharkd sshdump text2pcap tshark udpdump
 xgui-lib/freetype static-libs

@@ -27,7 +27,7 @@ CDEPEND="
 	ssl? (
 		gnutls? (
 			lib-core/libgcrypt
-			lib-net/gnutls
+			virtual/gnutls
 		)
 		!gnutls? ( virtual/ssl )
 	)

@@ -24,7 +24,7 @@ RDEPEND="
 		)
 		gnutls? (
 			lib-core/libgcrypt
-			lib-net/gnutls
+			virtual/gnutls
 		)
 	)"
 DEPEND="${RDEPEND}"

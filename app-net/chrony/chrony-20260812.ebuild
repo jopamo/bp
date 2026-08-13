@@ -12,14 +12,13 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="caps cmdmon ipv6 logrotate nettle ntp phc pps refclock rtc adns systemd"
+IUSE="caps cmdmon ipv6 logrotate ntp phc pps refclock rtc adns systemd"
 
 QA_CONFIG_IMPL_DECL_SKIP=(
 	recvmmsg
 )
 
 DEPEND="
-	nettle? ( lib-core/nettle )
 	app-compression/zstd
 	caps? ( lib-core/libcap )
 	lib-core/libseccomp
@@ -48,7 +47,7 @@ src_configure() {
 		$(usex caps '' --without-libcap)
 		$(usex cmdmon '' --disable-cmdmon)
 		$(usex ipv6 '' --disable-ipv6)
-		$(usex nettle '' --without-nettle)
+		--without-nettle
 		$(usex ntp '' --disable-ntp)
 		$(usex phc '' --disable-phc)
 		$(usex pps '' --disable-pps)

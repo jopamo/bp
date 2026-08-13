@@ -21,7 +21,7 @@ DEPEND="
 	nls? ( app-build/gettext )
 	pam? ( lib-core/pam )
 	python? ( ${PYTHON_DEPS} )
-	ssl? ( lib-net/gnutls )
+	ssl? ( virtual/gnutls )
 "
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"

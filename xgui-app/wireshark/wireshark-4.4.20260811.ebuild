@@ -43,7 +43,7 @@ DEPEND="
 	netlink? ( lib-net/libnl )
 	nghttp2? ( lib-net/nghttp2 )
 	sbc? ( xgui-lib/sbc )
-	ssl? ( lib-net/gnutls )
+	ssl? ( virtual/gnutls )
 	zlib? ( lib-core/zlib )
 	zstd? ( app-compression/zstd )
 "

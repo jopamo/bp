@@ -12,7 +12,7 @@ LICENSE="ISC LGPL-2.1+ LGPL-3+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="gnutls +shared +static-libs"
+IUSE="+gnutls +shared +static-libs"
 REQUIRED_USE="|| ( shared static-libs )"
 
 DEPEND="gnutls? ( lib-core/gmp )"

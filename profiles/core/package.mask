@@ -1,0 +1,2 @@
+# mbedTLS is not a supported distro TLS provider.
+lib-net/mbedtls

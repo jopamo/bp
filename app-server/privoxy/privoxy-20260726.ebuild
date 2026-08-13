@@ -14,9 +14,13 @@ KEYWORDS="amd64 arm64"
 
 IUSE="acl brotli client-tags compression editor extended-host-patterns
 extended-statistics external-filters +fast-redirects +force fuzz
-graceful-termination +image-blocking ipv6 +jit lfs +mbedtls openssl
+graceful-termination +image-blocking ipv6 +jit lfs
 png-images sanitize selinux ssl +stats toggle tools whitelists
 +zlib"
+
+DEPEND="
+	ssl? ( virtual/ssl )
+"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-3.0.32-gentoo.patch
@@ -45,7 +49,7 @@ sed -i 's/^ *addr_len = 0;/int addr_len = 0;/' filters.c
 src_configure() {
 	local myconf="--without-mbedtls --without-openssl"
 	if use ssl; then
-		myconf="$(use_with mbedtls) $(use_with openssl)"
+		myconf="--without-mbedtls --with-openssl"
 	fi
 	if use sanitize; then
 		myconf+=" --with-usan"

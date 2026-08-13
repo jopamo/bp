@@ -19,7 +19,7 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 dbi fam geoip krb5 ldap libunwind lua mbedtls mysql php
+IUSE="bzip2 dbi fam geoip krb5 ldap libunwind lua mysql php
 postgres ssl static systemd test webdav xattr xxhash zlib
 zstd"
 
@@ -32,7 +32,6 @@ DEPEND="
 	zstd? ( app-compression/zstd )
 	ldap?     ( app-net/openldap )
 	libunwind? ( lib-dev/libunwind )
-	mbedtls?  ( lib-net/mbedtls )
 	mysql?    ( app-server/mariadb )
 	php?      ( app-lang/php )
 	ssl? ( virtual/ssl )
@@ -51,7 +50,7 @@ src_configure() {
 		$(meson_feature ldap with_ldap)
 		$(meson_feature libunwind with_libunwind)
 		$(meson_use lua with_lua)
-		$(meson_use mbedtls with_mbedtls)
+		-Dwith_mbedtls=false
 		$(meson_feature mysql with_mysql)
 		$(meson_feature postgres with_pgsql)
 		$(meson_use ssl with_openssl)

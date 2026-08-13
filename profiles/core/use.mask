@@ -3,5 +3,7 @@ abi_x86_64
 abi_x86_x32
 amd64
 arm64
+# mbedTLS is not a supported distro TLS provider.
+mbedtls
 split-usr
 x86

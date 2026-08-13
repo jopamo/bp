@@ -131,7 +131,7 @@ has_exec() {
 	[[ -x $(root_path "${rel}") ]]
 }
 
-resolve_payload_ready() {
+resolved_stub_payload_ready() {
 	has_unit systemd-resolved.service &&
 	has_exec /usr/lib/systemd/systemd-resolved &&
 	has_exec /usr/bin/resolvectl
@@ -209,7 +209,7 @@ write_factory_resolv_conf() {
 finalize_resolv_conf() {
 	local dst
 	dst=$(root_path /etc/resolv.conf)
-	if resolve_payload_ready && [[ ${MODE} == bootable ]]; then
+	if resolved_stub_payload_ready && [[ ${MODE} == bootable ]]; then
 		install -d "$(dirname "${dst}")"
 		rm -f "${dst}"
 		ln -snf ../run/systemd/resolve/stub-resolv.conf "${dst}"
@@ -261,7 +261,7 @@ validate_resolv_conf() {
 		die "/etc/resolv.conf is a resolved stub regular file, expected a symlink or plain resolver file"
 	fi
 
-	if resolve_payload_ready; then
+	if resolved_stub_payload_ready; then
 		if [[ ${MODE} == bootable ]]; then
 			unit_enabled systemd-resolved.service || die "systemd-resolved.service is not enabled in a bootable resolved image"
 			[[ -L ${resolv} ]] || die "/etc/resolv.conf is not a symlink in a bootable resolved image"
@@ -271,7 +271,7 @@ validate_resolv_conf() {
 		fi
 	else
 		if unit_enabled systemd-resolved.service || unit_link_present systemd-resolved.service; then
-			die "systemd-resolved.service is enabled without resolved payload support"
+			die "systemd-resolved.service is enabled without resolved stub support"
 		fi
 		[[ ! -L ${resolv} ]] || die "/etc/resolv.conf is a symlink but this image does not expect runtime resolved stubs"
 	fi

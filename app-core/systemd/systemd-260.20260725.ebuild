@@ -150,6 +150,11 @@ src_configure() {
         -Dhomed=disabled
         -Dman=disabled
         -Dmicrohttpd=disabled
+        # Keep hostname resolution libc-neutral.  Both glibc and musl use
+        # /etc/hosts followed by DNS from /etc/resolv.conf; bootable images
+        # point that file at systemd-resolved's local stub.  These NSS
+        # modules are glibc-specific and are intentionally not part of the
+        # distro resolver ABI.
         -Dnss-myhostname=false
         -Dnss-mymachines=disabled
         -Dnss-resolve=disabled

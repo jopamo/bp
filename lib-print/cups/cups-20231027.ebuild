@@ -24,7 +24,7 @@ DEPEND="
 	)
 	dbus? ( virtual/dbus )
 	pam? ( lib-core/pam )
-	ssl? ( lib-net/gnutls )
+	ssl? ( virtual/gnutls )
 	systemd? ( app-core/systemd )
 	usb? ( lib-dev/libusb )
 "

@@ -12,7 +12,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+shared +static-libs"
+IUSE="gnutls +shared +static-libs"
 REQUIRED_USE="|| ( shared static-libs )"
 
 src_configure() {
@@ -21,6 +21,7 @@ src_configure() {
 	local emesonargs=(
 		-Ddefault_library=$(usex shared $(usex static-libs both shared) static)
 		-Ddefault_ca_file=/etc/ssl/certs/ca-certificates.crt
+		-Dgnutls=$(usex gnutls enabled disabled)
 		-Dopenssldir=/etc/ssl
 	)
 

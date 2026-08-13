@@ -27,8 +27,7 @@ DEPEND="
 	lzma? ( app-compression/xz-utils )
 	ssl? (
 		gnutls? (
-			lib-core/nettle:0=
-			lib-net/gnutls:=
+			virtual/gnutls:=
 		)
 		!gnutls? ( virtual/ssl:0= )
 	)

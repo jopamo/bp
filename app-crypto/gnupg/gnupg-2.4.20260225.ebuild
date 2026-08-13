@@ -25,7 +25,7 @@ DEPEND="
 	lib-core/libksba
 	lib-core/npth
 	lib-core/zlib
-	lib-net/gnutls
+	virtual/gnutls
 	bzip2? ( app-compression/bzip2 )
 	ldap? ( app-net/openldap )
 	readline? ( lib-core/readline )

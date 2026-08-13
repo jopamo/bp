@@ -88,7 +88,7 @@ DEPEND="
 	capstone? ( app-emu/capstone )
 	curl? ( app-net/curl )
 	curses? ( virtual/curses )
-	gnutls? ( lib-net/gnutls )
+	gnutls? ( virtual/gnutls )
 	gtk? ( xgui-lib/gtk3 )
 	lzo? ( app-compression/lzo )
 	numa? ( app-util/numactl )

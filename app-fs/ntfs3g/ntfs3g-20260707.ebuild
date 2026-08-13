@@ -25,7 +25,7 @@ DEPEND="
 	app-fs/fuse
 	ntfsdecrypt? (
 		lib-core/libgcrypt
-		lib-net/gnutls
+		virtual/gnutls
 	)"
 
 pkg_setup() {

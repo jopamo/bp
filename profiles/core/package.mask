@@ -1,2 +1,5 @@
 # mbedTLS is not a supported distro TLS provider.
 lib-net/mbedtls
+
+# Nettle is private implementation code inside Vesk.
+lib-core/nettle

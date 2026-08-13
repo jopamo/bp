@@ -12,4 +12,6 @@ LICENSE="GPL-2 LGPL-2.1"
 SLOT="3"
 KEYWORDS="amd64 arm64"
 
+DEPEND="virtual/ssl"
+
 filter-flags -Wl,-z,defs

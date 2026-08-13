@@ -102,7 +102,6 @@ src_configure() {
     # security and extensions
     $(meson_use xcsecurity)      # XACE/XC-Security
     -Ddpms=true                  # display power management
-    -Dxf86bigfont=false          # drop bigfont
     -Dscreensaver=true           # MIT-SCREEN-SAVER
     -Dxres=true                  # X-Resource extension
     -Dxinerama=true              # Xinerama protocol for multihead

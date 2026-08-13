@@ -17,6 +17,7 @@ IUSE="introspection test"
 DEPEND="
 	fonts/fontconfig
 	lib-dev/fribidi
+	>=lib-core/glib-2.88
 	xgui-lib/cairo
 	xgui-lib/freetype
 	xgui-lib/harfbuzz[glib(+),truetype(+)]

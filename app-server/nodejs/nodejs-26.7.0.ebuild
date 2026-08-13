@@ -26,7 +26,6 @@ REQUIRED_USE="
 
 RESTRICT="!test? ( test )"
 
-DEPEND="${RDEPEND}"
 RDEPEND="
 	app-compression/brotli
 	lib-dev/libuv
@@ -36,6 +35,7 @@ RDEPEND="
 	icu? ( lib-dev/icu )
 	ssl? ( virtual/ssl )
 "
+DEPEND="${RDEPEND}"
 BDEPEND="
 	${PYTHON_DEPS}
 	app-core/bx

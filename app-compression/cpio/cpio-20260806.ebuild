@@ -29,10 +29,6 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="test"
 
-PATCHES=(
-	"${FILESDIR}/${PN}-bootstrap-fixes.patch"
-)
-
 BDEPEND="
 	app-build/autoconf
 	app-build/automake

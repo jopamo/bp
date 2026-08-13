@@ -49,6 +49,15 @@ src_prepare() {
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib
 	src_bootstrap_sed
 
+	[[ -e lib/eloop-threshold.h ]] ||
+		die "gnulib did not generate eloop-threshold.h"
+	cat > lib/min-eloop-threshold.h <<-'EOF' || die
+	#ifndef MIN_ELOOP_THRESHOLD_H
+	#define MIN_ELOOP_THRESHOLD_H 1
+	#include "eloop-threshold.h"
+	#endif
+	EOF
+
 	sed -i "s/UNKNOWN/4.8.${PV}/g" {configure,build-aux/git-version-gen} || die
 }
 

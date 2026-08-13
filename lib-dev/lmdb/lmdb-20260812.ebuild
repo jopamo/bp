@@ -15,17 +15,16 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-_lmdb_makefile_var() {
-	local var=$1
-
-	awk -F '=' -v var="${var}" '
-		$1 ~ "^[[:space:]]*" var "[[:space:]]*$" {
-			sub(/^[[:space:]]+/, "", $2)
-			sub(/[[:space:]]+$/, "", $2)
-			print $2
-			exit
+_lmdb_version() {
+	awk '
+		$1 == "#define" && $2 == "MDB_VERSION_MAJOR" { major = $3 }
+		$1 == "#define" && $2 == "MDB_VERSION_MINOR" { minor = $3 }
+		$1 == "#define" && $2 == "MDB_VERSION_PATCH" { patch = $3 }
+		END {
+			if (major != "" && minor != "" && patch != "")
+				print major "." minor "." patch
 		}
-	' Makefile
+	' lmdb.h
 }
 
 src_prepare() {
@@ -52,8 +51,8 @@ src_compile() {
 }
 
 src_install() {
-	local lmdb_version=$(_lmdb_makefile_var LMDB_VERSION)
-	[[ -n ${lmdb_version} ]] || die "Failed to detect LMDB_VERSION from Makefile"
+	local lmdb_version=$(_lmdb_version)
+	[[ -n ${lmdb_version} ]] || die "Failed to detect LMDB version from lmdb.h"
 
 	run_emake DESTDIR="${ED}" install
 

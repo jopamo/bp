@@ -34,6 +34,13 @@ src_prepare() {
 
 	default
 
+	# Preserve pcap_version[] through Autoconf's m4 quoting.  Without this,
+	# current libpcap fails the suitability probe with newer compilers.
+	perl -0pi -e \
+		's/AC_RUN_IFELSE\(\[AC_LANG_PROGRAM\(\[\n/AC_RUN_IFELSE([AC_LANG_PROGRAM([[\n/g;
+		 s/^\], \[\n/]], [\n/gm' \
+		acinclude.m4 || die
+
 	sed -i \
 		-e '/AC_CONFIG_SUBDIRS(libz)/d' \
 		-e '/AC_CONFIG_SUBDIRS(libssh2)/d' \
@@ -58,7 +65,7 @@ src_configure() {
 		--without-zenmap
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
-	grep -qE '^#define HAVE_LIBPCAP[[:space:]]+1' config.h ||
+	grep -qE '^S\["LIBPCAP_LIBS"\]="-lpcap"$' config.status ||
 		die "Nmap did not select the system libpcap"
 
 	sed -i 's/int strlcat(char \*, const char \*, int);/size_t strlcat(char *, const char *, size_t);/' libdnet-stripped/include/config.h || die

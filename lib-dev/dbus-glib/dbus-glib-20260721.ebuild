@@ -38,6 +38,7 @@ src_configure() {
 		--disable-gtk-doc
 		$(use_enable debug asserts)
 		$(use_enable static-libs static)
+		$(use_enable test tests)
 	)
 
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"

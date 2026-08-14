@@ -20,6 +20,7 @@ src_install() {
 		1g4-finalize-install
 		1g4-rootfs-policy
 		1g4-system-setup
+		ssh-hostkeys
 		dslam
 		efixperm
 		lighttpd_certs
@@ -35,6 +36,9 @@ src_install() {
 	for f in "${bin_utils[@]}"; do
 		dobin "${FILESDIR}/bin/$f"
 	done
+
+	exeinto /usr/libexec/1g4
+	newexe "${FILESDIR}/bin/ssh-hostkeys" ssh-hostkeys
 
 	insinto /usr/lib/systemd/system
 	insopts -m 0644

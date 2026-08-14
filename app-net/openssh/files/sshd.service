@@ -2,14 +2,14 @@
 [Unit]
 Description=OpenSSH Daemon
 Documentation=man:sshd(8)
-Wants=sshdgenkeys.service
-After=sshdgenkeys.service
 After=network.target
 Requires=network.target
 StartLimitIntervalSec=60
 StartLimitBurst=3
 
 [Service]
+ExecStartPre=/usr/libexec/1g4/ssh-hostkeys ensure
+ExecStartPre=/usr/bin/sshd -t
 ExecStart=/usr/bin/sshd -D
 ExecReload=/usr/bin/kill -HUP $MAINPID
 KillMode=process

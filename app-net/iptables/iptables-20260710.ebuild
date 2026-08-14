@@ -12,11 +12,9 @@ LICENSE="GPL-2"
 SLOT="0/12"
 KEYWORDS="amd64 arm64"
 
-IUSE="conntrack ipv6 netlink nftables pcap static-libs"
+IUSE="ipv6 nftables pcap static-libs"
 
 RDEPEND="
-	conntrack? ( >=lib-net/libnetfilter_conntrack-1.0.6 )
-	netlink? ( lib-net/libnfnetlink )
 	nftables? (
 		>=lib-net/libmnl-1.0:0=
 		>=lib-net/libnftnl-1.0.5:0=
@@ -47,11 +45,6 @@ src_configure() {
 	# Hack around struct mismatches between userland & kernel for some ABIs. #472388
 	use amd64 && [[ ${ABI} == "x32" ]] && append-flags -fpack-struct
 
-	sed -i \
-		-e "/nfnetlink=[01]/s:=[01]:=$(usex netlink 1 0):" \
-		-e "/nfconntrack=[01]/s:=[01]:=$(usex conntrack 1 0):" \
-		configure || die
-
 	local myconf=(
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/bin
@@ -61,6 +54,8 @@ src_configure() {
 		--localstatedir="${EPREFIX}/var"
 		--enable-devel
 		--enable-shared
+		--disable-libnfnetlink
+		--disable-connlabel
 		$(use_enable nftables)
 		$(use_enable pcap bpf-compiler)
 		$(use_enable pcap nfsynproxy)

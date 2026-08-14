@@ -23,10 +23,11 @@ QA_PREBUILT="
 	opt/Signal/libffmpeg.so
 	opt/Signal/libvk_swiftshader.so
 	opt/Signal/libvulkan.so.1
-	opt/Signal/resources/app.asar.unpacked/node_modules/*
-	opt/Signal/signal-desktop
-	opt/Signal/swiftshader/libEGL.so
-	opt/Signal/swiftshader/libGLESv2.so"
+	opt/Signal/resources/app.asar.unpacked/node_modules/@signalapp/libsignal-client/prebuilds/linux-x64/@signalapp+libsignal-client.node
+	opt/Signal/resources/app.asar.unpacked/node_modules/@signalapp/ringrtc/build/linux/libringrtc-x64.node
+	opt/Signal/resources/app.asar.unpacked/node_modules/@signalapp/sqlcipher/prebuilds/linux-x64/@signalapp+sqlcipher.node
+	opt/Signal/resources/app.asar.unpacked/node_modules/fs-xattr/build/Release/xattr.node
+	opt/Signal/signal-desktop"
 
 src_prepare() {
 	default

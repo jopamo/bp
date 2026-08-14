@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit autotools
+inherit autotools qa-policy
 
 DESCRIPTION="Overwrite files with iterative patterns"
 HOMEPAGE="https://github.com/chaos/scrub"
@@ -19,4 +19,14 @@ src_prepare() {
 
 	default
 	eautoreconf
+}
+
+src_configure() {
+	qa-policy-configure
+	default
+}
+
+src_install() {
+	default
+	qa-policy-install
 }

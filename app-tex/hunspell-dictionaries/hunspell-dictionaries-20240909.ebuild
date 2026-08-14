@@ -1,5 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
+inherit qa-policy
+
 DESCRIPTION="The most popular spellchecking library dictionaries"
 HOMEPAGE="http://hunspell.github.io/"
 
@@ -11,8 +13,14 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+src_configure() {
+	qa-policy-configure
+}
+
 src_install() {
 	insinto /usr/share/hunspell
 	newins dictionaries/en/index.aff en-US.aff
 	newins dictionaries/en/index.dic en-US.dic
+
+	qa-policy-install
 }

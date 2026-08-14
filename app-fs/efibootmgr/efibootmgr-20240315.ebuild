@@ -1,10 +1,12 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=1904f9cd5a48207d49e393ac8de824f54ccfb697
+inherit qa-policy
+
+SNAPSHOT=0a85e9baaac8a34e4a0bb9c23dfcc9c4f759e061
 
 DESCRIPTION="User-space application to modify the EFI boot manager"
-HOMEPAGE="https://github.com/rhinstaller/efibootmgr"
-SRC_URI="https://github.com/rhboot/efibootmgr/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+HOMEPAGE="https://github.com/rhboot/efibootmgr"
+SRC_URI="https://github.com/rhboot/efibootmgr/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
 LICENSE="GPL-2"
@@ -16,6 +18,7 @@ DEPEND="
 	app-fs/efivar
 	lib-core/popt
 "
+BDEPEND="app-dev/pkgconf"
 
 
 src_prepare() {
@@ -24,6 +27,8 @@ src_prepare() {
 }
 
 src_compile() {
+	qa-policy-configure
+
 	emake \
 		libdir=/usr/lib \
 		sbindir=/usr/bin \
@@ -37,4 +42,6 @@ src_install() {
 		sbindir=/usr/bin \
 		EFIDIR=1g4 \
 		install
+
+	qa-policy-install
 }

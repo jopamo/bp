@@ -1,0 +1,285 @@
+#!/bin/bash
+
+set -euo pipefail
+
+KEY_DIR_REL=/etc/ssh
+REQUIRED_KEY_NAME=ssh_host_ed25519_key
+ABSENT_MARKER_REL=/etc/ssh/.1g4-hostkeys-absent
+LOCK_REL=/run/lock/1g4-ssh-hostkeys.lock
+
+die() {
+	echo "$(basename "$0"): $*" >&2
+	exit 1
+}
+
+usage() {
+	cat >&2 <<-'EOF'
+		Usage:
+		  ssh-hostkeys [--root ROOT] ensure
+		  ssh-hostkeys [--root ROOT] remove
+		  ssh-hostkeys [--root ROOT] validate [--sshd-test]
+	EOF
+}
+
+ROOT=/
+SSHD_TEST=no
+ACTION=
+
+while [[ $# -gt 0 ]]; do
+	case ${1} in
+		--root)
+			[[ $# -ge 2 ]] || die "--root requires a path"
+			ROOT=${2}
+			shift 2
+			;;
+		--sshd-test)
+			SSHD_TEST=yes
+			shift
+			;;
+		ensure|remove|validate)
+			[[ -z ${ACTION} ]] || die "only one operation may be specified"
+			ACTION=${1}
+			shift
+			;;
+		-h|--help)
+			usage
+			exit 0
+			;;
+		*)
+			usage
+			exit 2
+			;;
+	esac
+done
+
+[[ -n ${ACTION} ]] || {
+	usage
+	exit 2
+}
+
+ROOT=${ROOT%/}
+[[ -n ${ROOT} ]] || ROOT=/
+[[ -d ${ROOT} ]] || die "root does not exist: ${ROOT}"
+
+root_path() {
+	local rel=${1-}
+	printf '%s/%s\n' "${ROOT%/}" "${rel#/}"
+}
+
+if [[ ${ROOT} == / ]]; then
+	root_path() {
+		printf '/%s\n' "${1#/}"
+	}
+fi
+
+key_dir=$(root_path "${KEY_DIR_REL}")
+absent_marker=$(root_path "${ABSENT_MARKER_REL}")
+lock_path=$(root_path "${LOCK_REL}")
+
+ssh_keygen=$(command -v ssh-keygen || true)
+[[ -n ${ssh_keygen} ]] || die "ssh-keygen is required"
+
+key_dir_ready() {
+	if [[ ! -e ${key_dir} ]]; then
+		[[ ! -L ${key_dir} ]] || die "${KEY_DIR_REL} is a symlink"
+		install -d -m0755 "${key_dir}"
+		chown 0:0 "${key_dir}"
+		return 0
+	fi
+
+	[[ -d ${key_dir} && ! -L ${key_dir} ]] || die "${KEY_DIR_REL} is not a directory"
+	local uid gid mode
+	read -r uid gid mode < <(stat -c '%u %g %a' "${key_dir}")
+	[[ ${uid} == 0 && ${gid} == 0 ]] || die "${KEY_DIR_REL} is not root-owned"
+	(( 0${mode} & 0022 )) == 0 || die "${KEY_DIR_REL} is writable by group or other"
+}
+
+path_metadata_valid() {
+	local path=${1}
+	local expected_mode=${2}
+	local uid gid mode
+
+	[[ -f ${path} && ! -L ${path} ]] || die "host-key path is not a regular file: ${path}"
+	read -r uid gid mode < <(stat -c '%u %g %a' "${path}")
+	[[ ${uid} == 0 && ${gid} == 0 ]] || die "host-key file is not root-owned: ${path}"
+	if [[ ${expected_mode} == private ]]; then
+		(( 0${mode} & 0077 )) == 0 || die "private host key is accessible by group or other: ${path}"
+	else
+		(( 0${mode} & 0022 )) == 0 || die "public host key is writable by group or other: ${path}"
+	fi
+}
+
+key_material() {
+	local path=${1}
+	"${ssh_keygen}" -q -y -P '' -f "${path}" 2>/dev/null |
+		awk 'NF >= 2 { print $1 " " $2; exit }'
+}
+
+validate_public_sidecar() {
+	local private=${1}
+	local public=${private}.pub
+	local expected actual
+
+	[[ -e ${public} || -L ${public} ]] || return 0
+	path_metadata_valid "${public}" public
+	expected=$(key_material "${private}") || die "cannot derive public key from ${private}"
+	actual=$(awk 'NF >= 2 { print $1 " " $2; exit }' "${public}")
+	[[ -n ${actual} && ${actual} == "${expected}" ]] ||
+		die "public host key does not match its private key: ${public}"
+}
+
+validate_private_key() {
+	local private=${1}
+	path_metadata_valid "${private}" private
+	[[ -n $(key_material "${private}") ]] ||
+		die "cannot parse private host key: ${private}"
+	validate_public_sidecar "${private}"
+}
+
+validate_existing_keys() {
+	local key public private
+	local had_nullglob=0
+	local -a keys=() publics=()
+
+	shopt -q nullglob || had_nullglob=1
+	shopt -s nullglob
+	keys=("${key_dir}"/ssh_host_*_key)
+	publics=("${key_dir}"/ssh_host_*_key.pub)
+
+	for public in "${publics[@]}"; do
+		private=${public%.pub}
+		[[ -e ${private} || -L ${private} ]] ||
+			die "public-only SSH host-key state: ${public}"
+	done
+	for key in "${keys[@]}"; do
+		validate_private_key "${key}"
+	done
+
+	(( had_nullglob )) && shopt -u nullglob
+}
+
+required_key_path() {
+	printf '%s/%s\n' "${key_dir}" "${REQUIRED_KEY_NAME}"
+}
+
+policy_is_absent() {
+	[[ -e ${absent_marker} || -L ${absent_marker} ]]
+}
+
+with_lock() {
+	local lock_dir
+	lock_dir=$(dirname "${lock_path}")
+	install -d -m0755 "${lock_dir}"
+	exec 9>"${lock_path}"
+	command -v flock >/dev/null 2>&1 || die "flock is required"
+	flock -x 9
+}
+
+generate_required_key() {
+	local required=${1}
+	local temp_dir temp_key committed_private=no committed_public=no
+
+	temp_dir=$(mktemp -d "${key_dir}/.1g4-ssh-hostkeys.XXXXXX")
+	chown 0:0 "${temp_dir}"
+	chmod 0700 "${temp_dir}"
+	temp_key="${temp_dir}/${REQUIRED_KEY_NAME}"
+
+	if ! "${ssh_keygen}" -q -t ed25519 -N '' -C '' -f "${temp_key}" >/dev/null; then
+		rm -rf "${temp_dir}"
+		die "failed to generate ${REQUIRED_KEY_NAME}"
+	fi
+	chown 0:0 "${temp_key}" "${temp_key}.pub"
+	chmod 0600 "${temp_key}"
+	chmod 0644 "${temp_key}.pub"
+	validate_private_key "${temp_key}"
+
+	[[ ! -e ${required} && ! -L ${required} ]] ||
+		die "required host key appeared during generation: ${required}"
+	[[ ! -e ${required}.pub && ! -L ${required}.pub ]] ||
+		die "required public host key appeared during generation: ${required}.pub"
+
+	if ! mv "${temp_key}" "${required}"; then
+		rm -rf "${temp_dir}"
+		die "failed to install ${required}"
+	fi
+	committed_private=yes
+	if ! mv "${temp_key}.pub" "${required}.pub"; then
+		[[ ${committed_private} == yes ]] && rm -f "${required}"
+		rm -rf "${temp_dir}"
+		die "failed to install ${required}.pub"
+	fi
+	committed_public=yes
+	rm -rf "${temp_dir}"
+}
+
+ensure_keys() {
+	local required
+	key_dir_ready
+	policy_is_absent && die "SSH host-key policy is absent"
+	validate_existing_keys
+	required=$(required_key_path)
+	if [[ -e ${required} || -L ${required} ]]; then
+		validate_private_key "${required}"
+		return 0
+	fi
+	generate_required_key "${required}"
+	validate_private_key "${required}"
+}
+
+remove_keys() {
+	local key public
+	local had_nullglob=0
+	local -a keys=() publics=()
+
+	[[ -d ${key_dir} && ! -L ${key_dir} ]] || return 0
+	with_lock
+	shopt -q nullglob || had_nullglob=1
+	shopt -s nullglob
+	keys=("${key_dir}"/ssh_host_*_key)
+	publics=("${key_dir}"/ssh_host_*_key.pub)
+	for key in "${keys[@]}"; do
+		rm -f "${key}"
+	done
+	for public in "${publics[@]}"; do
+		rm -f "${public}"
+	done
+	(( had_nullglob )) && shopt -u nullglob
+}
+
+run_sshd_test() {
+	local sshd
+	if [[ ${ROOT} == / ]]; then
+		sshd=$(command -v sshd || true)
+		[[ -n ${sshd} ]] || die "sshd is required for validation"
+		"${sshd}" -t
+		return 0
+	fi
+
+	[[ -x $(root_path /usr/bin/sshd) ]] || die "target sshd is missing"
+	command -v chroot >/dev/null 2>&1 || die "chroot is required for target validation"
+	chroot "${ROOT}" /usr/bin/sshd -t
+}
+
+validate_keys() {
+	local required
+	key_dir_ready
+	policy_is_absent && die "SSH host-key policy is absent"
+	validate_existing_keys
+	required=$(required_key_path)
+	[[ -e ${required} && ! -L ${required} ]] ||
+		die "required host key is missing: ${required}"
+	validate_private_key "${required}"
+	[[ ${SSHD_TEST} == yes ]] && run_sshd_test
+}
+
+case ${ACTION} in
+	ensure)
+		ensure_keys
+		;;
+	remove)
+		remove_keys
+		;;
+	validate)
+		validate_keys
+		;;
+esac

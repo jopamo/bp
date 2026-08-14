@@ -1,10 +1,9 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit autotools
+inherit autotools qa-policy
 
 DESCRIPTION="Copy data from standard input to X clipboard"
 HOMEPAGE="https://github.com/astrand/xclip"
-SRC_URI="https://github.com/astrand/xclip/archive/${PV}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 
 SNAPSHOT=2c3b811002b35d3be7f39cc1145dd06bdb32e31c
 SRC_URI="https://github.com/astrand/xclip/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
@@ -25,6 +24,12 @@ DEPEND="
 "
 
 src_prepare() {
+	qa-policy-configure
 	default
 	eautoreconf
+}
+
+src_install() {
+	default
+	qa-policy-install
 }

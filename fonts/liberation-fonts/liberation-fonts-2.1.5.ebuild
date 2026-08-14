@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit font
+inherit font qa-policy
 
 DESCRIPTION="A Helvetica/Times/Courier replacement TrueType font set, courtesy of Red Hat"
 HOMEPAGE="https://pagure.io/liberation-fonts"
@@ -15,3 +15,12 @@ S="${FONT_S}"
 LICENSE="OFL-1.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+src_configure() {
+	qa-policy-configure
+}
+
+src_install() {
+	font_src_install
+	qa-policy-install
+}

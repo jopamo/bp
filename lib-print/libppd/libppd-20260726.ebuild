@@ -1,10 +1,12 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit autotools flag-o-matic
+inherit autotools flag-o-matic qa-policy
 
 DESCRIPTION="Legacy library for PPD files, split out of cups-filters"
 HOMEPAGE="https://github.com/OpenPrinting/libppd"
-SRC_URI="https://github.com/OpenPrinting/libppd/releases/download/${PV}/${P}.tar.xz"
+SNAPSHOT=fc41539f761286396a7df8aeeda762070192e37e
+SRC_URI="https://github.com/OpenPrinting/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
@@ -40,5 +42,11 @@ src_configure() {
 		--disable-acroread
 	)
 
+	qa-policy-configure
 	econf "${myeconfargs[@]}"
+}
+
+src_install() {
+	default
+	qa-policy-install
 }

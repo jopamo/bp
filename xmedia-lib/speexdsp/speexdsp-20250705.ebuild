@@ -3,7 +3,7 @@
 inherit autotools flag-o-matic qa-policy
 
 DESCRIPTION="Audio compression format designed for speech -- DSP"
-HOMEPAGE="https://www.speex.org/"
+HOMEPAGE="https://www.speex.org/ https://github.com/xiph/speexdsp"
 SNAPSHOT=7a158783df74efe7c2d1c6ee8363c1e695c71226
 SRC_URI="https://github.com/xiph/speexdsp/archive/${SNAPSHOT}.tar.gz -> speexdsp-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/speexdsp-${SNAPSHOT}"

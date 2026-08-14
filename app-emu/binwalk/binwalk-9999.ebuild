@@ -15,6 +15,14 @@ RESTRICT="test"
 replace-flags -Os -O3
 filter-flags -Os
 
+src_prepare() {
+	default
+
+	# The legacy kaleido_download feature runs a nested cargo install during
+	# the build and breaks offline/reproducible package builds.
+	sed -i 's/, "kaleido_download"//' Cargo.toml || die
+}
+
 src_install() {
 	newbin "$(cargo_target_dir)/binwalk" binwalk3
 }

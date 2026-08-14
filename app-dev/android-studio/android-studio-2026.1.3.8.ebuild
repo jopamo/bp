@@ -1,34 +1,18 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit desktop doins
+inherit desktop doins qa-policy
 
-QA_PREBUILT="
-	opt/${PN}/bin/*
-	opt/${PN}/jbr/bin/*
-	opt/${PN}/jbr/lib/*
-	opt/${PN}/jbr/lib/jli/*
-	opt/${PN}/jbr/lib/server/*
-	opt/${PN}/lib/pty4j-native/linux/*/*
-	opt/${PN}/plugins/android/resources/installer/*/*
-	opt/${PN}/plugins/android/resources/native/*
-	opt/${PN}/plugins/android/resources/perfetto/*/*
-	opt/${PN}/plugins/android/resources/screen-sharing-agent/*/*
-	opt/${PN}/plugins/android/resources/simpleperf/*/*
-	opt/${PN}/plugins/android/resources/trace_processor_daemon/*
-	opt/${PN}/plugins/android/resources/transport/*/*
-	opt/${PN}/plugins/android/resources/transport/native/agent/*/*
-	opt/${PN}/plugins/android-ndk/resources/lldb/android/*/*
-	opt/${PN}/plugins/android-ndk/resources/lldb/bin/*
-	opt/${PN}/plugins/android-ndk/resources/lldb/lib/python3.9/lib-dynload/*
-	opt/${PN}/plugins/android-ndk/resources/lldb/lib64/*
-	opt/${PN}/plugins/design-tools/resources/layoutlib/data/linux/lib64/*
-	opt/${PN}/plugins/c-clangd/bin/clang/linux/*/*
-	opt/${PN}/plugins/webp/lib/libwebp/linux/*
-"
+# The vendor-supplied IDE payload is intentionally opaque. Keep policy
+# coverage on bp-owned integration files while explicitly excluding the
+# bundled runtime and plugins from source-package assertions.
+QA_POLICY_SKIP_PATHS="^/opt/${PN}(/|$)"
+
+# Every file under /opt/${PN} is vendor-supplied and must remain untouched.
+QA_PREBUILT="opt/${PN}/*"
 
 DESCRIPTION="Android development environment based on IntelliJ IDEA"
 HOMEPAGE="https://developer.android.com/studio"
-SRC_URI="https://redirector.gvt1.com/edgedl/android/studio/ide-zips/${PV}/${P}-linux.tar.gz"
+SRC_URI="https://edgedl.me.gvt1.com/android/studio/ide-zips/${PV}/android-studio-quail3-patch1-linux.tar.gz -> ${P}-linux.tar.gz"
 S=${WORKDIR}/${PN}
 LICENSE="Apache-2.0 android BSD BSD-2 CDDL-1.1 CPL-0.5
 	EPL-1.0 GPL-2 GPL-2+ JDOM IJG LGPL-2.1 MIT
@@ -79,7 +63,7 @@ src_install() {
 	insinto "${dir}"
 	doins -r *
 
-	fperms 755 "${dir}"/bin/{fsnotifier,format.sh,game-tools.sh,inspect.sh,ltedit.sh,profiler.sh,studio,studio.sh,studio_safe.sh}
+	fperms 755 "${dir}"/bin/{fsnotifier,format.sh,game-tools.sh,inspect.sh,ltedit.sh,profiler.sh,studio,studio.sh}
 	fperms -R 755 "${dir}"/bin/{helpers,lldb}
 	fperms -R 755 "${dir}"/jbr/bin
 	fperms 755 "${dir}"/jbr/lib/{jexec,jspawnhelper}
@@ -90,7 +74,7 @@ src_install() {
 	fperms -R 755 "${dir}"/plugins/android/resources/trace_processor_daemon
 	fperms -R 755 "${dir}"/plugins/android/resources/transport/x86_64
 	fperms -R 755 "${dir}"/plugins/android-ndk/resources/lldb/{android,bin,lib,shared}
-	fperms 755 "${dir}"/plugins/c-clangd-plugin/bin/clang/linux/x64/bin/clangd
+	fperms 755 "${dir}"/plugins/cidr-clangd/bin/clang/linux/x64/bin/clangd
 	fperms -R 755 "${dir}"/plugins/terminal/shell-integrations/{,fish}
 
 	newicon "bin/studio.png" "${PN}.png"
@@ -106,6 +90,8 @@ src_install() {
 	# recommended by: https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit
 	mkdir -p "${D}/etc/sysctl.d/" || die
 	echo "fs.inotify.max_user_watches = 524288" > "${D}/etc/sysctl.d/30-android-studio-inotify-watches.conf" || die
+
+	qa-policy-install
 }
 
 pkg_postrm() {

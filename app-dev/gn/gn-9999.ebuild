@@ -34,8 +34,9 @@ src_configure() {
 		-e 's/-Wformat-security/-Wformat-security -Wno-error=format-security/g' \
 		|| die
 
+	# GCC 15 emits a libstdc++ -Wnonnull diagnostic in xcode_writer.cc.
 	find out -name '*.ninja' -print0 | xargs -0 sed -i \
-		-e 's/[[:space:]]-Werror[[:space:]]/ -Werror -Wno-error=comment /g' \
+		-e 's/[[:space:]]-Werror[[:space:]]/ -Werror -Wno-error=comment -Wno-error=nonnull /g' \
 		|| die
 
 	cat >out/last_commit_position.h <<-EOF || die

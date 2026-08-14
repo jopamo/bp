@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit toolchain-funcs flag-o-matic
+inherit toolchain-funcs flag-o-matic qa-policy
 
 DESCRIPTION="UASM is a free MASM-compatible assembler"
 HOMEPAGE="https://www.terraspace.co.uk/uasm.html"
@@ -24,6 +24,8 @@ src_prepare() {
 }
 
 src_compile() {
+	qa-policy-configure
+
 	append-cflags -fcommon
 	append-cflags -Wno-error=incompatible-pointer-types
 
@@ -35,4 +37,5 @@ src_compile() {
 
 src_install() {
 	dobin GccUnixR/uasm
+	qa-policy-install
 }
